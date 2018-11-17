@@ -28,8 +28,8 @@
 
 
 struct KisEmbeddedPatternManager::Private {
-    static KoPattern* tryLoadEmbeddedPattern(const KisPropertiesConfigurationSP setting) {
-        KoPattern *pattern = 0;
+    static KoPatternSP tryLoadEmbeddedPattern(const KisPropertiesConfigurationSP setting) {
+        KoPatternSP pattern;
 
         QByteArray ba = QByteArray::fromBase64(setting->getString("Texture/Pattern/Pattern").toLatin1());
         QImage img;
@@ -44,14 +44,14 @@ struct KisEmbeddedPatternManager::Private {
         }
 
         if (!img.isNull()) {
-            pattern = new KoPattern(img, name, KoResourceServerProvider::instance()->patternServer()->saveLocation());
+            pattern = KoPatternSP(new KoPattern(img, name, KoResourceServerProvider::instance()->patternServer()->saveLocation()));
         }
 
         return pattern;
     }
 };
 
-void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfigurationSP setting, const KoPattern *pattern)
+void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfigurationSP setting, const KoPatternSP pattern)
 {
     QByteArray patternMD5 = pattern->md5();
 
@@ -78,9 +78,9 @@ void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfigurationSP
     setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
 }
 
-KoPattern* KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesConfigurationSP setting)
+KoPatternSP KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesConfigurationSP setting)
 {
-    KoPattern *pattern = 0;
+    KoPatternSP pattern;
     KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
 
     QByteArray md5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());

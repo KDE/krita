@@ -82,12 +82,12 @@ public:
     void setDefaultValueScaleSteps(int num);
     void setShowBgColor(bool value);
     void setShowValueScaleNumbers(bool value);
-    void setGamutMask(KoGamutMask* gamutMask);
+    void setGamutMask(KoGamutMaskSP gamutMask);
     void setDirty();
     bool gamutMaskOn();
     void setGamutMaskOn(bool gamutMaskOn);
     void setEnforceGamutMask(bool enforce);
-    KoGamutMask* gamutMask();
+    KoGamutMaskSP gamutMask();
 
     void saveSettings();
     void loadSettings();
@@ -185,7 +185,7 @@ private:
     bool m_showBgColor;
 
     bool m_gamutMaskOn;
-    KoGamutMask* m_currentGamutMask;
+    KoGamutMaskSP m_currentGamutMask;
     bool m_enforceGamutMask;
     QSize m_renderAreaSize;
     bool m_maskPreviewActive;

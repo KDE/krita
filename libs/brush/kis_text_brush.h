@@ -83,7 +83,7 @@ public:
     void setScale(qreal _scale) override;
     void setSpacing(double _spacing) override;
 
-    KisBrush* clone() const override;
+    KisBrushSP clone() const override;
 
 private:
     QFont m_font;
@@ -92,5 +92,7 @@ private:
 private:
     KisTextBrushesPipe *m_brushesPipe;
 };
+
+typedef QSharedPointer<KisTextBrush> KisTextBrushSP;
 
 #endif

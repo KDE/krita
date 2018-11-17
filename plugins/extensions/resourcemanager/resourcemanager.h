@@ -37,7 +37,7 @@ class ResourceManager : public KisActionPlugin
 public:
     ResourceManager(QObject *parent, const QVariantList &);
     ~ResourceManager() override;
-    KisResourceBundle *saveBundle(const DlgCreateBundle &dlgCreateBundle);
+    KisResourceBundleSP saveBundle(const DlgCreateBundle &dlgCreateBundle);
 
 private Q_SLOTS:
     void slotCreateBundle();

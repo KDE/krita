@@ -378,12 +378,12 @@ quint32 KisAbrBrushCollection::abr_brush_load_v6(QDataStream & abr, AbrInfo *abr
     if (width < quint16_MAX && height < quint16_MAX) {
         // filename - filename of the file , e.g. test.abr
         // name - test_number_of_the_brush, e.g test_1, test_2
-        KisAbrBrush* abrBrush = 0;
+        KisAbrBrushSP abrBrush;
         if (m_abrBrushes.contains(name)) {
             abrBrush = m_abrBrushes[name];
         }
         else {
-            abrBrush = new KisAbrBrush(name, this);
+            abrBrush = KisAbrBrushSP(new KisAbrBrush(name, this));
             abrBrush->setMD5(md5());
         }
 
@@ -477,12 +477,12 @@ qint32 KisAbrBrushCollection::abr_brush_load_v12(QDataStream & abr, AbrInfo *abr
                 rle_decode(abr, buffer, height);
             }
 
-            KisAbrBrush* abrBrush = 0;
+            KisAbrBrushSP abrBrush;
             if (m_abrBrushes.contains(name)) {
                 abrBrush = m_abrBrushes[name];
             }
             else {
-                abrBrush = new KisAbrBrush(name, this);
+                abrBrush = KisAbrBrushSP(new KisAbrBrush(name, this));
                 abrBrush->setMD5(md5());
             }
 
@@ -533,13 +533,13 @@ KisAbrBrushCollection::KisAbrBrushCollection(const KisAbrBrushCollection& rhs)
          it != rhs.m_abrBrushes.end();
          ++it) {
 
-        m_abrBrushes.insert(it.key(), new KisAbrBrush(*it.value(), this));
+        m_abrBrushes.insert(it.key(), KisAbrBrushSP(new KisAbrBrush(*it.value(), this)));
     }
 }
 
-KisBrush* KisAbrBrushCollection::clone() const
+KisBrushSP KisAbrBrushCollection::clone() const
 {
-    return new KisAbrBrushCollection(*this);
+    return KisBrushSP(new KisAbrBrushCollection(*this));
 }
 
 bool KisAbrBrushCollection::load()

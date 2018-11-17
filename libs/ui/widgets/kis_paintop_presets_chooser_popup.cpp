@@ -96,10 +96,10 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     m_d->viewModeButton->setIcon(KisIconUtils::loadIcon("configure"));
 
 
-    connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SIGNAL(resourceSelected(KoResource*)));
-    connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceClicked(KoResource*)),
-            this, SIGNAL(resourceClicked(KoResource*))) ;
+    connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResourceSP )),
+            this, SIGNAL(resourceSelected(KoResourceSP )));
+    connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceClicked(KoResourceSP )),
+            this, SIGNAL(resourceClicked(KoResourceSP ))) ;
 
 
     connect (iconSizeSlider, SIGNAL(sliderMoved(int)),
@@ -148,7 +148,7 @@ void KisPaintOpPresetsChooserPopup::canvasResourceChanged(KisPaintOpPresetSP  pr
 {
     if (preset) {
         blockSignals(true);
-        m_d->uiWdgPaintOpPresets.wdgPresetChooser->setCurrentResource(preset.data());
+        m_d->uiWdgPaintOpPresets.wdgPresetChooser->setCurrentResource(preset);
         blockSignals(false);
     }
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();

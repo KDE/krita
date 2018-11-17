@@ -133,7 +133,7 @@ public:
 
 
     QStringList resourceTypes() const;
-    QList<KoResource*> resources(const QString &resType = QString()) const;
+    QList<KoResourceSP > resources(const QString &resType = QString()) const;
     int resourceCount() const;
 private:
 
@@ -156,5 +156,7 @@ private:
     QString m_bundleVersion;
 
 };
+
+typedef QSharedPointer<KisResourceBundle> KisResourceBundleSP;
 
 #endif // KORESOURCEBUNDLE_H

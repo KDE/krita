@@ -77,8 +77,6 @@ void KisDerivedResourcesTest::test()
 
     KisDocument* doc = createEmptyDocument();
 
-
-
     KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
     QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
     KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
@@ -93,12 +91,11 @@ void KisDerivedResourcesTest::test()
     KisPaintOpPresetSP preset;
     if (!presetFileName.isEmpty()) {
         QString fullFileName = TestUtil::fetchDataFileLazy(presetFileName);
-        preset = new KisPaintOpPreset(fullFileName);
+        preset = KisPaintOpPresetSP(new KisPaintOpPreset(fullFileName));
         bool presetValid = preset->load();
         Q_ASSERT(presetValid); Q_UNUSED(presetValid);
 
         i.setValue(preset);
-
     }
 
     QVERIFY(i.isValid());

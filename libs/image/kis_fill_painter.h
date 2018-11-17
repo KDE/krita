@@ -21,8 +21,9 @@
 
 #include <QRect>
 
-#include "KoColor.h"
-#include "KoColorSpaceRegistry.h"
+#include <KoColor.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoPattern.h>
 
 #include "kis_painter.h"
 #include "kis_types.h"
@@ -30,7 +31,7 @@
 
 #include <kritaimage_export.h>
 
-class KoPattern;
+
 class KisFilterConfiguration;
 
 // XXX: Filling should set dirty rect.
@@ -102,7 +103,7 @@ public:
      * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
      * entire rectangle.
      */
-    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPattern * pattern, const QPoint &offset = QPoint());
+    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPatternSP pattern, const QPoint &offset = QPoint());
 
     /**
      * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
@@ -113,7 +114,7 @@ public:
     /**
      * Overloaded version of the above function.
      */
-    void fillRect(const QRect& rc, const KoPattern * pattern, const QPoint &offset = QPoint());
+    void fillRect(const QRect& rc, const KoPatternSP pattern, const QPoint &offset = QPoint());
 
     /**
      * Fill the specified area with the output of the generator plugin that is configured

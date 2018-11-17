@@ -110,7 +110,8 @@ void KisSessionResource::restore()
         view->closeView();
     }
 
-    kisPart->setCurrentSession(this);
+    // XXX: SharedPtr breakage
+    kisPart->setCurrentSession(KisSessionResourceSP(this));
 }
 
 

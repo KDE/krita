@@ -126,7 +126,7 @@ PaletteDockerDock::PaletteDockerDock( )
 
     KisConfig cfg(true);
     QString defaultPaletteName = cfg.defaultPalette();
-    KoColorSet* defaultPalette = m_rServer->resourceByName(defaultPaletteName);
+    KoColorSetSP defaultPalette = m_rServer->resourceByName(defaultPaletteName);
     if (defaultPalette) {
         slotSetColorSet(defaultPalette);
     } else {
@@ -167,7 +167,7 @@ void PaletteDockerDock::slotAddPalette()
     m_paletteEditor->addPalette();
 }
 
-void PaletteDockerDock::slotRemovePalette(KoColorSet *cs)
+void PaletteDockerDock::slotRemovePalette(KoColorSetSP cs)
 {
     m_paletteEditor->removePalette(cs);
 }
@@ -177,7 +177,7 @@ void PaletteDockerDock::slotImportPalette()
     m_paletteEditor->importPalette();
 }
 
-void PaletteDockerDock::slotExportPalette(KoColorSet *palette)
+void PaletteDockerDock::slotExportPalette(KoColorSetSP palette)
 {
     KoFileDialog dialog(this, KoFileDialog::SaveFile, "Save Palette");
     dialog.setDefaultDir(palette->filename());
@@ -202,9 +202,9 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
     }
 
     if (m_activeDocument) {
-        for (KoColorSet * &cs : m_activeDocument->paletteList()) {
-            KoColorSet *tmpAddr = cs;
-            cs = new KoColorSet(*cs);
+        for (KoColorSetSP  &cs : m_activeDocument->paletteList()) {
+            KoColorSetSP tmpAddr = cs;
+            cs = KoColorSetSP(new KoColorSet(*cs));
             m_rServer->removeResourceFromServer(tmpAddr);
         }
     }
@@ -213,7 +213,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
         m_activeDocument = m_view->document();
         m_paletteEditor->setView(m_view);
 
-        for (KoColorSet *cs : m_activeDocument->paletteList()) {
+        for (KoColorSetSP cs : m_activeDocument->paletteList()) {
             m_rServer->addResource(cs);
         }
     }
@@ -229,8 +229,8 @@ void PaletteDockerDock::unsetCanvas()
     m_ui->paletteView->setDisplayRenderer(Q_NULLPTR);
     m_paletteEditor->setView(Q_NULLPTR);
 
-    for (KoResource *r : m_rServer->resources()) {
-        KoColorSet *c = static_cast<KoColorSet*>(r);
+    for (KoResourceSP r : m_rServer->resources()) {
+        KoColorSetSP c = r.staticCast<KoColorSet>();
         if (!c->isGlobal()) {
             m_rServer->removeResourceFromServer(c);
         }
@@ -240,7 +240,7 @@ void PaletteDockerDock::unsetCanvas()
     }
 }
 
-void PaletteDockerDock::slotSetColorSet(KoColorSet* colorSet)
+void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
 {
     if (colorSet && colorSet->isEditable()) {
         m_ui->bnAdd->setEnabled(true);
@@ -315,7 +315,7 @@ void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResource* workspace)
 {
     if (workspace->hasProperty("palette")) {
         KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-        KoColorSet* colorSet = rServer->resourceByName(workspace->getString("palette"));
+        KoColorSetSP colorSet = rServer->resourceByName(workspace->getString("palette"));
         if (colorSet) {
             slotSetColorSet(colorSet);
         }

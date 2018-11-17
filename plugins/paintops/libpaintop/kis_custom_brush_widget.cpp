@@ -158,7 +158,7 @@ void KisCustomBrushWidget::slotAddPredefined()
     // so to the other brush choosers can pick it up, if they want to
     if (m_rServerAdapter && m_brush) {
         qDebug() << "m_brush" << m_brush;
-        KisGbrBrush *resource = dynamic_cast<KisGbrBrush*>(m_brush->clone());
+        KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
         resource->setFilename(tempFileName);
 
         if (nameLineEdit->text().isEmpty()) {
@@ -192,7 +192,7 @@ void KisCustomBrushWidget::createBrush()
         m_image->unlock();
 
         if (!selection) {
-            m_brush = new KisGbrBrush(dev, 0, 0, m_image->width(), m_image->height());
+            m_brush = KisBrushSP(new KisGbrBrush(dev, 0, 0, m_image->width(), m_image->height()));
         }
         else {
             // apply selection mask
@@ -213,7 +213,7 @@ void KisCustomBrushWidget::createBrush()
             }
 
             QRect rc = dev->exactBounds();
-            m_brush = new KisGbrBrush(dev, rc.x(), rc.y(), rc.width(), rc.height());
+            m_brush = KisBrushSP(new KisGbrBrush(dev, rc.x(), rc.y(), rc.width(), rc.height()));
         }
 
     }
@@ -247,7 +247,7 @@ void KisCustomBrushWidget::createBrush()
         default: modes.push_back(KisParasite::Incremental);
         }
 
-        m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);
+        m_brush = KisBrushSP(new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes));
         m_image->unlock();
     }
 

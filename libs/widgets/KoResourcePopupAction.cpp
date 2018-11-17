@@ -73,8 +73,8 @@ KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceSe
         resourceModel->setColumnCount(1);
     }
 
-    KoResource *resource = 0;
-    QList<KoResource*> resources = resourceAdapter->resources();
+    KoResourceSP resource = 0;
+    QList<KoResourceSP> resources = resourceAdapter->resources();
     if (resources.count() > 0) {
         resource = resources.at(0);
         d->resourceList->setCurrentIndex(d->model->indexFromResource(resource));
@@ -125,7 +125,7 @@ void KoResourcePopupAction::setCurrentBackground(QSharedPointer<KoShapeBackgroun
     updateIcon();
 }
 
-void KoResourcePopupAction::setCurrentResource(KoResource *resource)
+void KoResourcePopupAction::setCurrentResource(KoResourceSP resource)
 {
     QModelIndex index = d->model->indexFromResource(resource);
     if (index.isValid()) {
@@ -134,12 +134,12 @@ void KoResourcePopupAction::setCurrentResource(KoResource *resource)
     }
 }
 
-KoResource* KoResourcePopupAction::currentResource() const
+KoResourceSP KoResourcePopupAction::currentResource() const
 {
     QModelIndex index = d->resourceList->currentIndex();
     if (!index.isValid()) return 0;
 
-    return static_cast<KoResource*>(index.internalPointer());
+    return QSharedPointer<KoResource>(static_cast<KoResource*>(index.internalPointer()));
 }
 
 void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)
@@ -150,10 +150,10 @@ void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)
 
     d->menu->hide();
 
-    KoResource *resource = static_cast<KoResource*>(modelIndex.internalPointer());
+    KoResourceSP resource = QSharedPointer<KoResource>(static_cast<KoResource*>(modelIndex.internalPointer()));
     if(resource) {
-        KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
-        KoPattern *pattern = dynamic_cast<KoPattern*>(resource);
+        KoAbstractGradientSP gradient = resource.dynamicCast<KoAbstractGradient>();
+        KoPatternSP pattern = resource.dynamicCast<KoPattern>();
         if (gradient) {
             QGradient *qg = gradient->toQGradient();
             qg->setCoordinateMode(QGradient::ObjectBoundingMode);

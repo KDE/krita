@@ -109,7 +109,7 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
         QString paletteName = cfg.readEntry("internal_selector_active_color_set", QString());
         KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-        KoColorSet *savedPal = rServer->resourceByName(paletteName);
+        KoColorSetSP savedPal = rServer->resourceByName(paletteName);
         if (savedPal) {
             this->slotChangePalette(savedPal);
         } else {
@@ -328,7 +328,7 @@ void KisDlgInternalColorSelector::slotSetColorFromHex()
     slotColorUpdated(m_d->sRGB);
 }
 
-void KisDlgInternalColorSelector::slotChangePalette(KoColorSet *set)
+void KisDlgInternalColorSelector::slotChangePalette(KoColorSetSP set)
 {
     if (!set) {
         return;

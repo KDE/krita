@@ -42,8 +42,8 @@ public Q_SLOTS:
     void slotThemeChanged();
 
 Q_SIGNALS:
-    void resourceSelected( KoResource * resource);
-    void resourceClicked( KoResource * resource);
+    void resourceSelected( KoResourceSP resource);
+    void resourceClicked( KoResourceSP resource);
     
 private Q_SLOTS:
     void slotThumbnailMode();

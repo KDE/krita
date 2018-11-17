@@ -22,13 +22,13 @@
 #include "kis_types.h"
 
 #include "kis_lod_transform.h"
-
+#include <KoPattern.h>
 
 struct psd_layer_effects_context;
 class psd_layer_effects_shadow_base;
 struct psd_layer_effects_overlay_base;
 class KisLayerStyleFilterEnvironment;
-class KoPattern;
+
 class KisMultipleProjection;
 
 
@@ -74,7 +74,7 @@ namespace KisLsUtils
                      const QRect &applyRect,
                      KisLayerStyleFilterEnvironment *env,
                      int scale,
-                     KoPattern *pattern,
+                     KoPatternSP pattern,
                      int horizontalPhase,
                      int verticalPhase,
                      bool alignWithLayer);

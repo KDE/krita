@@ -21,6 +21,7 @@
 #include "kis_color_selector_base.h"
 #include <KisColorSelectorConfiguration.h>
 
+#include <resources/KoGamutMask.h>
 
 class KisColorSelectorRing;
 class KisColorSelectorComponent;
@@ -50,7 +51,7 @@ public:
 public Q_SLOTS:
     void reset() override;
     void updateSettings() override;
-    void slotGamutMaskSet(KoGamutMask* gamutMask);
+    void slotGamutMaskSet(KoGamutMaskSP gamutMask);
     void slotGamutMaskUnset();
     void slotGamutMaskPreviewUpdate();
     void slotGamutMaskToggle(bool state);

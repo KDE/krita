@@ -124,7 +124,8 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(Ki
                     option.writeOptionSetting(prop->settings().data());
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            KisPaintOpPresetSP p = preset().toStrongRef();
+            QObject::connect(p->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -160,7 +161,8 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(Ki
                     return !option.useDensity;
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            KisPaintOpPresetSP p = preset().toStrongRef();
+            QObject::connect(p->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -198,7 +200,8 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(Ki
                     return option.useDensity;
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            KisPaintOpPresetSP p = preset().toStrongRef();
+            QObject::connect(p->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }

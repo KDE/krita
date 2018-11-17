@@ -64,7 +64,7 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     if (!index.isValid())
         return;
 
-    KoResource* workspace = static_cast<KoResource*>(index.internalPointer());
+    KoResourceSP workspace = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
 
     QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled) ? QPalette::Active : QPalette::Disabled;
     QPalette::ColorRole cr = (option.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text;
@@ -93,12 +93,12 @@ KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent)
     m_workspaceWidgets = createChooserWidgets(workspaceAdapter, i18n("Workspaces"));
     m_windowLayoutWidgets = createChooserWidgets(windowLayoutAdapter, i18n("Window layouts"));
 
-    connect(m_workspaceWidgets.itemChooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SLOT(workspaceSelected(KoResource*)));
+    connect(m_workspaceWidgets.itemChooser, SIGNAL(resourceSelected(KoResourceSP )),
+            this, SLOT(workspaceSelected(KoResourceSP )));
     connect(m_workspaceWidgets.saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSaveWorkspace()));
 
-    connect(m_windowLayoutWidgets.itemChooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SLOT(windowLayoutSelected(KoResource*)));
+    connect(m_windowLayoutWidgets.itemChooser, SIGNAL(resourceSelected(KoResourceSP )),
+            this, SLOT(windowLayoutSelected(KoResourceSP )));
     connect(m_windowLayoutWidgets.saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSaveWindowLayout()));
 }
 
@@ -146,7 +146,7 @@ void KisWorkspaceChooser::slotSaveWorkspace()
 
     KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
 
-    KisWorkspaceResource* workspace = new KisWorkspaceResource(QString());
+    KisWorkspaceResourceSP workspace(new KisWorkspaceResource(QString()));
     workspace->setDockerState(m_view->qtMainWindow()->saveState());
     m_view->resourceProvider()->notifySavingWorkspace(workspace);
     workspace->setValid(true);
@@ -173,15 +173,14 @@ void KisWorkspaceChooser::slotSaveWorkspace()
     rserver->addResource(workspace);
 }
 
-void KisWorkspaceChooser::workspaceSelected(KoResource *resource)
+void KisWorkspaceChooser::workspaceSelected(KoResourceSP resource)
 {
     if (!m_view->qtMainWindow()) {
         return;
     }
-    KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);
+    KisWorkspaceResourceSP workspace = resource.staticCast<KisWorkspaceResource>();
     KisMainWindow *mainWindow = qobject_cast<KisMainWindow*>(m_view->qtMainWindow());
     mainWindow->restoreWorkspace(workspace);
-
 }
 
 void KisWorkspaceChooser::slotSaveWindowLayout()
@@ -199,7 +198,7 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
     bool showImageInAllWindows = dlg.showImageInAllWindows();
     bool primaryWorkspaceFollowsFocus = dlg.primaryWorkspaceFollowsFocus();
 
-    auto *layout = KisWindowLayoutResource::fromCurrentWindows(name, KisPart::instance()->mainWindows(), showImageInAllWindows, primaryWorkspaceFollowsFocus, thisWindow);
+    KisWindowLayoutResourceSP layout = KisWindowLayoutResource::fromCurrentWindows(name, KisPart::instance()->mainWindows(), showImageInAllWindows, primaryWorkspaceFollowsFocus, thisWindow);
     layout->setValid(true);
 
     KisWindowLayoutManager::instance()->setShowImageInAllWindowsEnabled(showImageInAllWindows);
@@ -229,8 +228,8 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
     rserver->addResource(layout);
 }
 
-void KisWorkspaceChooser::windowLayoutSelected(KoResource * resource)
+void KisWorkspaceChooser::windowLayoutSelected(KoResourceSP resource)
 {
-    auto *layout = static_cast<KisWindowLayoutResource*>(resource);
+    KisWindowLayoutResourceSP layout = resource.staticCast<KisWindowLayoutResource>();
     layout->applyLayout();
 }

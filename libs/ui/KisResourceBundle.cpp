@@ -44,7 +44,7 @@
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_brush_server.h>
-
+#include <resources/KoGamutMask.h>
 #include <KritaVersionWrapper.h>
 
 KisResourceBundle::KisResourceBundle(QString const& fileName)
@@ -220,7 +220,7 @@ bool KisResourceBundle::loadFromDevice(QIODevice *)
     return false;
 }
 
-bool saveResourceToStore(KoResource *resource, KoStore *store, const QString &resType)
+bool saveResourceToStore(KoResourceSP resource, KoStore *store, const QString &resType)
 {
     if (!resource) {
         warnKrita << "No Resource";
@@ -294,7 +294,7 @@ bool KisResourceBundle::save()
         if (resType == "gradients") {
             KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
             Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-                KoResource *res = gradientServer->resourceByMD5(ref.md5sum);
+                KoResourceSP res = gradientServer->resourceByMD5(ref.md5sum);
                 if (!res) res = gradientServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res, store.data(), "gradients")) {
                     if (res) {
@@ -309,7 +309,7 @@ bool KisResourceBundle::save()
         else if (resType  == "patterns") {
             KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
             Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-                KoResource *res = patternServer->resourceByMD5(ref.md5sum);
+                KoResourceSP res = patternServer->resourceByMD5(ref.md5sum);
                 if (!res) res = patternServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res, store.data(), "patterns")) {
                     if (res) {
@@ -326,7 +326,7 @@ bool KisResourceBundle::save()
             Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KisBrushSP brush = brushServer->resourceByMD5(ref.md5sum);
                 if (!brush) brush = brushServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
-                KoResource *res = brush.data();
+                KoResourceSP res = brush;
                 if (!saveResourceToStore(res, store.data(), "brushes")) {
                     if (res) {
                         warnKrita << "Could not save resource" << resType << res->name();
@@ -340,7 +340,7 @@ bool KisResourceBundle::save()
         else if (resType  == "palettes") {
             KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
             Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-                KoResource *res = paletteServer->resourceByMD5(ref.md5sum);
+                KoResourceSP res = paletteServer->resourceByMD5(ref.md5sum);
                 if (!res) res = paletteServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res, store.data(), "palettes")) {
                     if (res) {
@@ -355,7 +355,7 @@ bool KisResourceBundle::save()
         else if (resType  == "workspaces") {
             KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
             Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-                KoResource *res = workspaceServer->resourceByMD5(ref.md5sum);
+                KoResourceSP res = workspaceServer->resourceByMD5(ref.md5sum);
                 if (!res) res = workspaceServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res, store.data(), "workspaces")) {
                     if (res) {
@@ -372,7 +372,7 @@ bool KisResourceBundle::save()
             Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KisPaintOpPresetSP res = paintoppresetServer->resourceByMD5(ref.md5sum);
                 if (!res) res = paintoppresetServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
-                if (!saveResourceToStore(res.data(), store.data(), "paintoppresets")) {
+                if (!saveResourceToStore(res, store.data(), "paintoppresets")) {
                     if (res) {
                         warnKrita << "Could not save resource" << resType << res->name();
                     }
@@ -385,7 +385,7 @@ bool KisResourceBundle::save()
         else if (resType  == "gamutmasks") {
             KoResourceServer<KoGamutMask>* gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
             Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-                KoResource *res = gamutMaskServer->resourceByMD5(ref.md5sum);
+                KoResourceSP res = gamutMaskServer->resourceByMD5(ref.md5sum);
                 if (!res) res = gamutMaskServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res, store.data(), "gamutmasks")) {
                     if (res) {
@@ -445,7 +445,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KoAbstractGradient *res = gradientServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+                KoAbstractGradientSP res = gradientServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -460,7 +460,7 @@ bool KisResourceBundle::install()
                 }
                 dbgResources << "\t\tresource:" << res->name();
 
-                KoAbstractGradient *res2 = gradientServer->resourceByName(res->name());
+                KoAbstractGradientSP res2 = gradientServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
                     gradientServer->addResource(res, false);//add it!
 
@@ -489,7 +489,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KoPattern *res = patternServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+                KoPatternSP res = patternServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -504,7 +504,7 @@ bool KisResourceBundle::install()
                 }
                 dbgResources << "\t\tresource:" << res->name();
 
-                KoPattern *res2 = patternServer->resourceByName(res->name());
+                KoPatternSP res2 = patternServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
                     patternServer->addResource(res, false);//add it!
 
@@ -566,9 +566,9 @@ bool KisResourceBundle::install()
                     }
 
                     Q_FOREACH (const QString &tag, ref.tagList) {
-                        brushServer->addTag(res.data(), tag);
+                        brushServer->addTag(res, tag);
                     }
-                    //brushServer->addTag(res.data(), name());
+                    //brushServer->addTag(res, name());
                 }
                 else {
                     //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
@@ -582,7 +582,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KoColorSet *res = paletteServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+                KoColorSetSP res = paletteServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
 
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
@@ -599,7 +599,7 @@ bool KisResourceBundle::install()
                 dbgResources << "\t\tresource:" << res->name();
 
                 //find the resource on the server
-                KoColorSet *res2 = paletteServer->resourceByName(res->name());
+                KoColorSetSP res2 = paletteServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
                     paletteServer->addResource(res, false);//add it!
 
@@ -627,7 +627,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KisWorkspaceResource *res = workspaceServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+                KisWorkspaceResourceSP res = workspaceServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
                     continue;
@@ -643,7 +643,7 @@ bool KisResourceBundle::install()
                 dbgResources << "\t\tresource:" << res->name();
 
                 //the following tries to find the resource by name.
-                KisWorkspaceResource *res2 = workspaceServer->resourceByName(res->name());
+                KisWorkspaceResourceSP res2 = workspaceServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
                     workspaceServer->addResource(res, false);//add it!
 
@@ -704,9 +704,9 @@ bool KisResourceBundle::install()
                     }
 
                     Q_FOREACH (const QString &tag, ref.tagList) {
-                        paintoppresetServer->addTag(res.data(), tag);
+                        paintoppresetServer->addTag(res, tag);
                     }
-                    //paintoppresetServer->addTag(res.data(), name());
+                    //paintoppresetServer->addTag(res, name());
                 }
                 else {
                     //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
@@ -721,7 +721,7 @@ bool KisResourceBundle::install()
                 if (resourceStore->isOpen()) resourceStore->close();
 
                 dbgResources << "\tInstalling" << ref.resourcePath;
-                KoGamutMask *res = gamutMaskServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+                KoGamutMaskSP res = gamutMaskServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
 
                 if (!res) {
                     warnKrita << "Could not create resource for" << ref.resourcePath;
@@ -738,7 +738,7 @@ bool KisResourceBundle::install()
                 dbgResources << "\t\tresource:" << res->name();
 
                 //find the resource on the server
-                KoGamutMask *res2 = gamutMaskServer->resourceByName(res->name());
+                KoGamutMaskSP res2 = gamutMaskServer->resourceByName(res->name());
                 if (!res2)  {//if it doesn't exist...
                     gamutMaskServer->addResource(res, false);//add it!
 
@@ -786,7 +786,7 @@ bool KisResourceBundle::uninstall()
     KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
     //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("gradients")) {
     Q_FOREACH (const QByteArray md5, m_gradientsMd5Installed) {
-        KoAbstractGradient *res = gradientServer->resourceByMD5(md5);
+        KoAbstractGradientSP res = gradientServer->resourceByMD5(md5);
         if (res) {
             gradientServer->removeResourceFromServer(res);
         }
@@ -795,7 +795,7 @@ bool KisResourceBundle::uninstall()
     KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
     //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("patterns")) {
     Q_FOREACH (const QByteArray md5, m_patternsMd5Installed) {
-        KoPattern *res = patternServer->resourceByMD5(md5);
+        KoPatternSP res = patternServer->resourceByMD5(md5);
         if (res) {
             patternServer->removeResourceFromServer(res);
         }
@@ -813,7 +813,7 @@ bool KisResourceBundle::uninstall()
     KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
     //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("palettes")) {
     Q_FOREACH (const QByteArray md5, m_palettesMd5Installed) {
-        KoColorSet *res = paletteServer->resourceByMD5(md5);
+        KoColorSetSP res = paletteServer->resourceByMD5(md5);
         if (res) {
             paletteServer->removeResourceFromServer(res);
         }
@@ -822,7 +822,7 @@ bool KisResourceBundle::uninstall()
     KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
     //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("workspaces")) {
     Q_FOREACH (const QByteArray md5, m_workspacesMd5Installed) {
-        KisWorkspaceResource *res = workspaceServer->resourceByMD5(md5);
+        KisWorkspaceResourceSP res = workspaceServer->resourceByMD5(md5);
         if (res) {
             workspaceServer->removeResourceFromServer(res);
         }
@@ -839,7 +839,7 @@ bool KisResourceBundle::uninstall()
     KoResourceServer<KoGamutMask>* gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
     //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("gamutmasks")) {
     Q_FOREACH (const QByteArray md5, m_gamutMasksMd5Installed) {
-        KoGamutMask *res = gamutMaskServer->resourceByMD5(md5);
+        KoGamutMaskSP res = gamutMaskServer->resourceByMD5(md5);
         if (res) {
             gamutMaskServer->removeResourceFromServer(res);
         }
@@ -896,45 +896,45 @@ QStringList KisResourceBundle::resourceTypes() const
     return m_manifest.types();
 }
 
-QList<KoResource*> KisResourceBundle::resources(const QString &resType) const
+QList<KoResourceSP> KisResourceBundle::resources(const QString &resType) const
 {
     QList<KisResourceBundleManifest::ResourceReference> references = m_manifest.files(resType);
 
-    QList<KoResource*> ret;
+    QList<KoResourceSP> ret;
     Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, references) {
         if (resType == "gradients") {
             KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
-            KoResource *res =  gradientServer->resourceByMD5(ref.md5sum);
+            KoResourceSP res =  gradientServer->resourceByMD5(ref.md5sum);
             if (res) ret << res;
         }
         else if (resType  == "patterns") {
             KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
-            KoResource *res =  patternServer->resourceByMD5(ref.md5sum);
+            KoResourceSP res =  patternServer->resourceByMD5(ref.md5sum);
             if (res) ret << res;
         }
         else if (resType  == "brushes") {
             KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
-            KoResource *res =  brushServer->resourceByMD5(ref.md5sum).data();
+            KoResourceSP res =  brushServer->resourceByMD5(ref.md5sum);
             if (res) ret << res;
         }
         else if (resType  == "palettes") {
             KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
-            KoResource *res =  paletteServer->resourceByMD5(ref.md5sum);
+            KoResourceSP res =  paletteServer->resourceByMD5(ref.md5sum);
             if (res) ret << res;
         }
         else if (resType  == "workspaces") {
             KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
-            KoResource *res =  workspaceServer->resourceByMD5(ref.md5sum);
+            KoResourceSP res =  workspaceServer->resourceByMD5(ref.md5sum);
             if (res) ret << res;
         }
         else if (resType  == "paintoppresets") {
             KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
             KisPaintOpPresetSP res =  paintoppresetServer->resourceByMD5(ref.md5sum);
-            if (res) ret << res.data();
+            if (res) ret << res;
         }
         else if (resType  == "gamutmasks") {
             KoResourceServer<KoGamutMask>* gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
-            KoResource *res =  gamutMaskServer->resourceByMD5(ref.md5sum);
+            KoResourceSP res =  gamutMaskServer->resourceByMD5(ref.md5sum);
             if (res) ret << res;
         }
     }

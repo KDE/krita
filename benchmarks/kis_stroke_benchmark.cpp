@@ -361,7 +361,7 @@ void KisStrokeBenchmark::predefinedBrushRL()
 
 inline void KisStrokeBenchmark::benchmarkLine(QString presetFileName)
 {
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
+    KisPaintOpPresetSP preset(new KisPaintOpPreset(m_dataPath + presetFileName));
     preset->load();
     m_painter->setPaintOpPreset(preset, m_layer, m_image);
 
@@ -386,7 +386,7 @@ void KisStrokeBenchmark::benchmarkCircle(QString presetFileName)
 {
     dbgKrita << "(circle)preset : " << presetFileName;
 
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
+    KisPaintOpPresetSP preset(new KisPaintOpPreset(m_dataPath + presetFileName));
     if (!preset->load()){
         dbgKrita << "Preset was not loaded";
         return;
@@ -437,7 +437,7 @@ QBENCHMARK{
 
 void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
 {
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
+    KisPaintOpPresetSP preset(new KisPaintOpPreset(m_dataPath + presetFileName));
     bool loadedOk = preset->load();
     if (!loadedOk){
         dbgKrita << "The preset was not loaded correctly. Done.";
@@ -464,7 +464,7 @@ void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
 
 void KisStrokeBenchmark::benchmarkStroke(QString presetFileName)
 {
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
+    KisPaintOpPresetSP preset(new KisPaintOpPreset(m_dataPath + presetFileName));
     bool loadedOk = preset->load();
     if (!loadedOk){
         dbgKrita << "The preset was not loaded correctly. Done.";
@@ -513,7 +513,7 @@ void KisStrokeBenchmark::benchmarkRand()
 void KisStrokeBenchmark::becnhmarkPresetCloning()
 {
     QString presetFileName = "spray_21_textures1.kpp";
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
+    KisPaintOpPresetSP preset(new KisPaintOpPreset(m_dataPath + presetFileName));
     bool loadedOk = preset->load();
     KIS_ASSERT_RECOVER_RETURN(loadedOk);
     KIS_ASSERT_RECOVER_RETURN(preset->settings());

@@ -25,7 +25,9 @@
 #include <KoToolBase.h>
 #include <KoID.h>
 #include <KoCanvasResourceProvider.h>
-#include <kritaui_export.h>
+#include <KoPattern.h>
+#include <KoAbstractGradient.h>
+
 #include <kis_types.h>
 
 #ifdef __GNUC__
@@ -37,8 +39,6 @@
 #define CHECK_MODE_SANITY_OR_RETURN(_mode) if (mode() != _mode) { WARN_WRONG_MODE(mode()); return; }
 
 class KoCanvasBase;
-class KoPattern;
-class KoAbstractGradient;
 class KisFilterConfiguration;
 class QPainter;
 class QPainterPath;
@@ -54,8 +54,8 @@ static const QString TOOL_TYPE_SELECTION = "5 Krita/Select";          // Tools t
 //activation id for Krita tools, Krita tools are always active and handle locked and invisible layers by themself
 static const QString KRITA_TOOL_ACTIVATION_ID = "flake/always";
 
-class  KRITAUI_EXPORT KisTool
-        : public KoToolBase
+#include <kritaui_export.h>
+class  KRITAUI_EXPORT KisTool : public KoToolBase
 {
     Q_OBJECT
 
@@ -262,8 +262,8 @@ protected:
     void notifyModified() const;
 
     KisImageWSP currentImage();
-    KoPattern* currentPattern();
-    KoAbstractGradient *currentGradient();
+    KoPatternSP currentPattern();
+    KoAbstractGradientSP currentGradient();
     KisNodeSP currentNode() const;
     KisNodeList selectedNodes() const;
     KoColor currentFgColor();

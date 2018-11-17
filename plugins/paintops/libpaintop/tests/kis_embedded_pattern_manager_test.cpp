@@ -31,7 +31,7 @@
 
 #include "sdk/tests/kistest.h"
 
-KoPattern *KisEmbeddedPatternManagerTest::createPattern()
+KoPatternSP KisEmbeddedPatternManagerTest::createPattern()
 {
     QImage image(512, 512, QImage::Format_ARGB32);
     image.fill(255);
@@ -39,35 +39,32 @@ KoPattern *KisEmbeddedPatternManagerTest::createPattern()
     QPainter gc(&image);
     gc.fillRect(100, 100, 312, 312, Qt::red);
 
-    KoPattern *pattern = new KoPattern(image,
+    KoPatternSP pattern (new KoPattern(image,
                                        "__test_pattern",
-                                       KoResourceServerProvider::instance()->patternServer()->saveLocation());
+                                       KoResourceServerProvider::instance()->patternServer()->saveLocation()));
     return pattern;
 }
 
 void KisEmbeddedPatternManagerTest::testRoundTrip()
 {
-    KoPattern *pattern = createPattern();
+    KoPatternSP pattern = createPattern();
 
     KisPropertiesConfigurationSP config(new KisPropertiesConfiguration);
 
     KisEmbeddedPatternManager::saveEmbeddedPattern(config, pattern);
 
-    KoPattern *newPattern = KisEmbeddedPatternManager::loadEmbeddedPattern(config);
+    KoPatternSP newPattern = KisEmbeddedPatternManager::loadEmbeddedPattern(config);
 
     QCOMPARE(newPattern->pattern(), pattern->pattern());
     QCOMPARE(newPattern->name(), pattern->name());
     QCOMPARE(QFileInfo(newPattern->filename()).fileName(),
              QFileInfo(pattern->filename()).fileName());
 
-    delete pattern;
-    // will be deleted by the server
-    // delete newPattern;
 }
 
 void KisEmbeddedPatternManagerTest::init()
 {
-    Q_FOREACH(KoPattern *pa, KoResourceServerProvider::instance()->patternServer()->resources()) {
+    Q_FOREACH(KoPatternSP pa, KoResourceServerProvider::instance()->patternServer()->resources()) {
         if (pa) {
             KoResourceServerProvider::instance()->patternServer()->removeResourceFile(pa->filename());
         }
@@ -99,7 +96,7 @@ KisPropertiesConfigurationSP KisEmbeddedPatternManagerTest::createXML(NameStatus
     }
 
     {
-        KoPattern *pattern = createPattern();
+        KoPatternSP pattern = createPattern();
 
         if (hasMd5) {
             QByteArray patternMD5 = pattern->md5();
@@ -112,16 +109,15 @@ KisPropertiesConfigurationSP KisEmbeddedPatternManagerTest::createXML(NameStatus
         buffer.open(QIODevice::WriteOnly);
         pattern->pattern().save(&buffer, "PNG");
         setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
-        delete pattern;
     }
 
 
     return setting;
 }
 
-KoPattern* findOnServer(QByteArray md5)
+KoPatternSP findOnServer(QByteArray md5)
 {
-    KoPattern *pattern = 0;
+    KoPatternSP pattern;
 
     if (!md5.isEmpty()) {
         return KoResourceServerProvider::instance()->patternServer()->resourceByMD5(md5);
@@ -132,15 +128,15 @@ KoPattern* findOnServer(QByteArray md5)
 
 void KisEmbeddedPatternManagerTest::checkOneConfig(NameStatus nameStatus, bool hasMd5, QString expectedName, bool isOnServer)
 {
-    QScopedPointer<KoPattern> basePattern(createPattern());
+    QSharedPointer<KoPattern> basePattern(createPattern());
 
-    KoPattern *initialPattern = findOnServer(basePattern->md5());
+    KoPatternSP initialPattern = findOnServer(basePattern->md5());
     QCOMPARE((bool)initialPattern, isOnServer);
 
     KisPropertiesConfigurationSP setting = createXML(nameStatus, hasMd5);
 
 
-    KoPattern *pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
+    KoPatternSP pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
 
     QVERIFY(pattern);
     QCOMPARE(pattern->pattern(), basePattern->pattern());

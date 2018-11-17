@@ -298,8 +298,8 @@ QList<QPointer<QWidget> > KarbonPatternTool::createOptionWidgets()
     KoResourceItemChooser *chooser = new KoResourceItemChooser(adapter, m_optionsWidget);
     chooser->setObjectName("KarbonPatternChooser");
 
-    connect(chooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SLOT(patternSelected(KoResource*)));
+    connect(chooser, SIGNAL(resourceSelected(KoResourceSP )),
+            this, SLOT(patternSelected(KoResourceSP )));
 
     m_optionsWidget->setWindowTitle(i18n("Pattern Options"));
     widgets.append(m_optionsWidget);
@@ -309,9 +309,9 @@ QList<QPointer<QWidget> > KarbonPatternTool::createOptionWidgets()
     return widgets;
 }
 
-void KarbonPatternTool::patternSelected(KoResource *resource)
+void KarbonPatternTool::patternSelected(KoResourceSP resource)
 {
-    KoPattern *currentPattern = dynamic_cast<KoPattern *>(resource);
+    KoPatternSP currentPattern = resource.dynamicCast<KoPattern>();
     if (!currentPattern || ! currentPattern->valid()) {
         return;
     }

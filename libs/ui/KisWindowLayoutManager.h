@@ -24,8 +24,9 @@
 #include <QVector>
 #include <QSize>
 
+#include <KisWindowLayoutResource.h>
+
 class QScreen;
-class KisWindowLayoutResource;
 class KisDocument;
 
 class KisWindowLayoutManager : public QObject
@@ -71,7 +72,7 @@ public:
 
     void activeDocumentChanged(KisDocument *document);
 
-    void setLastUsedLayout(const KisWindowLayoutResource *layout);
+    void setLastUsedLayout(KisWindowLayoutResourceSP layout);
 
 private Q_SLOTS:
     void slotFocusChanged(QWidget*, QWidget*);

@@ -31,9 +31,7 @@ KisBrushSP KisTextBrushFactory::createBrush(const QDomElement& brushDefinition)
     QString pipeMode = brushDefinition.attribute("pipe", "false");
     bool pipe = (pipeMode == "true") ? true : false;
 
-    KisBrushSP b = new KisTextBrush();
-
-    KisTextBrush *brush = dynamic_cast<KisTextBrush*>(b.data());
+    KisTextBrushSP brush = KisTextBrushSP(new KisTextBrush());
 
     brush->setText(text);
     brush->setFont(font);
@@ -41,6 +39,5 @@ KisBrushSP KisTextBrushFactory::createBrush(const QDomElement& brushDefinition)
     brush->setSpacing(spacing);
     brush->updateBrush();
 
-    return b;
-
+    return brush;
 }

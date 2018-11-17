@@ -21,6 +21,9 @@
 
 #include <QRect>
 
+#include "KoColorTransformation.h"
+#include <KoAbstractGradient.h>
+
 #include <kis_brush_based_paintop.h>
 #include <kis_types.h>
 #include <kis_pressure_size_option.h>
@@ -31,7 +34,6 @@
 #include <kis_pressure_gradient_option.h>
 #include <kis_pressure_hsv_option.h>
 
-#include "KoColorTransformation.h"
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"
 #include "kis_smudge_option.h"
@@ -39,7 +41,7 @@
 #include "KisPrecisePaintDeviceWrapper.h"
 
 class QPointF;
-class KoAbstractGradient;
+
 class KisBrushBasedPaintOpSettings;
 class KisPainter;
 class KoColorSpace;
@@ -72,7 +74,7 @@ private:
     QScopedPointer<KisPainter> m_smudgePainter;
     QScopedPointer<KisPainter> m_colorRatePainter;
     QScopedPointer<KisPainter> m_finalPainter;
-    const KoAbstractGradient* m_gradient {0};
+    KoAbstractGradientSP      m_gradient;
     KisPressureSizeOption     m_sizeOption;
     KisPressureOpacityOption  m_opacityOption;
     KisPressureSpacingOption  m_spacingOption;

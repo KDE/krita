@@ -64,9 +64,9 @@ private Q_SLOTS:
     void slotContextMenu(const QModelIndex &);
 
     void slotAddPalette();
-    void slotRemovePalette(KoColorSet *);
+    void slotRemovePalette(KoColorSetSP );
     void slotImportPalette();
-    void slotExportPalette(KoColorSet *);
+    void slotExportPalette(KoColorSetSP );
 
     void slotAddColor();
     void slotRemoveColor();
@@ -77,7 +77,7 @@ private Q_SLOTS:
     void slotPaletteIndexClicked(const QModelIndex &index);
     void slotPaletteIndexDoubleClicked(const QModelIndex &index);
     void slotNameListSelection(const KoColor &color);
-    void slotSetColorSet(KoColorSet* colorSet);
+    void slotSetColorSet(KoColorSetSP colorSet);
 
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
@@ -97,7 +97,7 @@ private /* member variables */:
     KoResourceServer<KoColorSet> * const m_rServer;
 
     QPointer<KisDocument> m_activeDocument;
-    QPointer<KoColorSet> m_currentColorSet;
+    QSharedPointer<KoColorSet> m_currentColorSet;
     QScopedPointer<KisPaletteEditor> m_paletteEditor;
 
     QScopedPointer<QAction> m_actAdd;

@@ -28,17 +28,17 @@ KoAbstractResourceServerAdapter::~KoAbstractResourceServerAdapter()
 {
 }
 
-void KoAbstractResourceServerAdapter::emitResourceAdded(KoResource* resource)
+void KoAbstractResourceServerAdapter::emitResourceAdded(KoResourceSP resource)
 {
     emit resourceAdded(resource);
 }
 
-void KoAbstractResourceServerAdapter::emitRemovingResource(KoResource* resource)
+void KoAbstractResourceServerAdapter::emitRemovingResource(KoResourceSP resource)
 {
     emit removingResource(resource);
 }
 
-void KoAbstractResourceServerAdapter::emitResourceChanged(KoResource* resource)
+void KoAbstractResourceServerAdapter::emitResourceChanged(KoResourceSP resource)
 {
     emit resourceChanged(resource);
 }

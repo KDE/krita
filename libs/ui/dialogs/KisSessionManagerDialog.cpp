@@ -42,7 +42,7 @@ void KisSessionManagerDialog::updateSessionList() {
     KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
 
     lstSessions->clear();
-    Q_FOREACH(KisSessionResource *session, server->resources()) {
+    Q_FOREACH(KisSessionResourceSP session, server->resources()) {
         lstSessions->addItem(session->name());
     }
 }
@@ -55,7 +55,7 @@ void KisSessionManagerDialog::slotNewSession()
     );
     if (name.isNull() || name.isEmpty()) return;
 
-    auto *session = new KisSessionResource(QString());
+    KisSessionResourceSP session(new KisSessionResource(QString()));
 
     KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
     QString saveLocation = server->saveLocation();
@@ -85,7 +85,7 @@ void KisSessionManagerDialog::slotRenameSession()
     );
     if (name.isNull() || name.isEmpty()) return;
 
-    KisSessionResource *session = getSelectedSession();
+    KisSessionResourceSP session = getSelectedSession();
     if (!session) return;
 
     session->setName(name);
@@ -102,7 +102,7 @@ void KisSessionManagerDialog::slotSessionDoubleClicked(QListWidgetItem* /*item*/
 
 void KisSessionManagerDialog::slotSwitchSession()
 {
-    KisSessionResource *session = getSelectedSession();
+    KisSessionResourceSP session = getSelectedSession();
 
     if (session) {
         bool closed = KisPart::instance()->closeSession(true);
@@ -112,7 +112,7 @@ void KisSessionManagerDialog::slotSwitchSession()
     }
 }
 
-KisSessionResource *KisSessionManagerDialog::getSelectedSession() const
+KisSessionResourceSP KisSessionManagerDialog::getSelectedSession() const
 {
     QListWidgetItem *item = lstSessions->currentItem();
     if (item) {
@@ -124,7 +124,7 @@ KisSessionResource *KisSessionManagerDialog::getSelectedSession() const
 
 void KisSessionManagerDialog::slotDeleteSession()
 {
-    KisSessionResource *session = getSelectedSession();
+    KisSessionResourceSP session = getSelectedSession();
     if (!session) return;
 
     if (QMessageBox::warning(this,

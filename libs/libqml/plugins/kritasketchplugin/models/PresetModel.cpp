@@ -47,7 +47,7 @@ public:
         QString defaultName = paintOp.id() + ".kpp";
         QString path = KoResourcePaths::findResource("kis_defaultpresets", defaultName);
 
-        KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
+        KisPaintOpPresetSP preset(new KisPaintOpPreset(path));
 
         if (!preset->load())
             preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp);

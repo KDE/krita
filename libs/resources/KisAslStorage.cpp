@@ -68,17 +68,17 @@ KisAslStorage::~KisAslStorage()
 
 }
 
-KisResourceStorage::ResourceItem KisAslStorage::resourceItem(const QString &url)
+KisResourceStorage::ResourceItem KisAslStorage::resourceItem(const QString &/*url*/)
 {
     return KisResourceStorage::ResourceItem();
 }
 
-KoResourceSP KisAslStorage::resource(const QString &url)
+KoResourceSP KisAslStorage::resource(const QString &/*url*/)
 {
     return 0;
 }
 
-QSharedPointer<KisResourceStorage::ResourceIterator> KisAslStorage::resources(const QString &resourceType)
+QSharedPointer<KisResourceStorage::ResourceIterator> KisAslStorage::resources(const QString &/*resourceType*/)
 {
     return QSharedPointer<KisResourceStorage::ResourceIterator>(new AslIterator);
 }

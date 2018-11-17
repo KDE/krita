@@ -44,8 +44,10 @@
 #include <kcombobox.h>
 #include <klocalizedstring.h>
 #include <QDialog>
+#include <QSharedPointer>
 #include <QSpinBox>
 
+#include <QSharedPointer>
 #include <QWidget>
 #include <QGridLayout>
 #include <QToolButton>
@@ -320,13 +322,13 @@ KoInteractionStrategy *KarbonFilterEffectsTool::createStrategy(KoPointerEvent *e
     return new FilterRegionEditStrategy(this, d->currentShape, d->currentEffect, mode);
 }
 
-void KarbonFilterEffectsTool::presetSelected(KoResource *resource)
+void KarbonFilterEffectsTool::presetSelected(KoResourceSP resource)
 {
     if (!d->currentShape) {
         return;
     }
 
-    FilterEffectResource *effectResource = dynamic_cast<FilterEffectResource *>(resource);
+    QSharedPointer<FilterEffectResource> effectResource = resource.dynamicCast<FilterEffectResource>();
     if (!effectResource) {
         return;
     }
@@ -472,11 +474,11 @@ QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
     d->filterSelector->setColumnCount(1);
     addFilterLayout->addWidget(new QLabel(i18n("Effects"), addFilterWidget), 0, 0);
     addFilterLayout->addWidget(d->filterSelector, 0, 1);
-    connect(d->filterSelector, SIGNAL(resourceSelected(KoResource*)),
-            this, SLOT(presetSelected(KoResource*)));
+    connect(d->filterSelector, SIGNAL(resourceSelected(KoResourceSP )),
+            this, SLOT(presetSelected(KoResourceSP )));
 
-    connect(d->filterSelector, SIGNAL(resourceApplied(KoResource*)),
-            this, SLOT(presetSelected(KoResource*)));
+    connect(d->filterSelector, SIGNAL(resourceApplied(KoResourceSP )),
+            this, SLOT(presetSelected(KoResourceSP )));
 
     QToolButton *editButton = new QToolButton(addFilterWidget);
     editButton->setIcon(koIcon("view-filter"));

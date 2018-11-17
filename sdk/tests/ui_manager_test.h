@@ -61,7 +61,7 @@ public:
         imageView = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
         view = new KisViewManager(mainWindow, mainWindow->actionCollection());
 
-        KoPattern *newPattern = new KoPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
+        KoPatternSP newPattern(new KoPattern(fetchDataFileLazy("HR_SketchPaper_01.pat")));
         newPattern->load();
         Q_ASSERT(newPattern->valid());
         view->resourceProvider()->slotPatternActivated(newPattern);

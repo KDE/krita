@@ -90,7 +90,7 @@ public:
     /**
      * Makes a copy of this brush.
      */
-    KisBrush* clone() const override;
+    KisBrushSP clone() const override;
 
     /**
      * @return default file extension for saving the brush
@@ -117,6 +117,8 @@ private:
     struct Private;
     Private* const d;
 };
+
+typedef QSharedPointer<KisGbrBrush> KisGbrBrushSP;
 
 #endif // KIS_GBR_BRUSH_
 

@@ -128,6 +128,7 @@ static inline uint qHash(const KoResource &resource)
 }
 
 typedef QSharedPointer<KoResource> KoResourceSP;
+Q_DECLARE_METATYPE(QSharedPointer<KoResource>)
 
 #endif // KORESOURCE_H_
 

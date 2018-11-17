@@ -20,18 +20,20 @@
 #ifndef KIS_PRESSURE_GRADIENT_OPTION_H
 #define KIS_PRESSURE_GRADIENT_OPTION_H
 
+#include <KoAbstractGradient.h>
+
 #include "kis_curve_option.h"
 #include <brushengine/kis_paint_information.h>
 #include <kritapaintop_export.h>
 
 class KoColor;
-class KoAbstractGradient;
+
 
 class PAINTOP_EXPORT KisPressureGradientOption: public KisCurveOption
 {
 public:
     KisPressureGradientOption();
-    void apply(KoColor& color, const KoAbstractGradient* gradient, const KisPaintInformation& info) const;
+    void apply(KoColor& color, const KoAbstractGradientSP gradient, const KisPaintInformation& info) const;
 };
 
 #endif // KIS_PRESSURE_GRADIENT_OPTION_H

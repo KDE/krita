@@ -49,7 +49,7 @@
 
 
 
-KoAbstractGradient* fetchGradientLazy(KoAbstractGradient *gradient,
+KoAbstractGradientSP fetchGradientLazy(KoAbstractGradientSP gradient,
                                       KisCanvasResourceProvider *resourceProvider)
 {
     if (!gradient) {
@@ -214,10 +214,10 @@ bool checkCustomNameAvailable(const QString &name)
 
     KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
 
-    KoResource *resource = server->resourceByName(customName);
+    KoResourceSP resource = server->resourceByName(customName);
     if (!resource) return true;
 
-    KisPSDLayerStyleCollectionResource *collection = dynamic_cast<KisPSDLayerStyleCollectionResource*>(resource);
+    KisPSDLayerStyleCollectionResourceSP collection = resource.dynamicCast<KisPSDLayerStyleCollectionResource>();
 
     Q_FOREACH (KisPSDLayerStyleSP style, collection->layerStyles()) {
         if (style->name() == name) {
@@ -455,7 +455,7 @@ void StylesSelector::refillCollections()
     QString previousCollection = ui.cmbStyleCollections->currentText();
 
     ui.cmbStyleCollections->clear();
-    Q_FOREACH (KoResource *res, KisResourceServerProvider::instance()->layerStyleCollectionServer()->resources()) {
+    Q_FOREACH (KoResourceSP res, KisResourceServerProvider::instance()->layerStyleCollectionServer()->resources()) {
         ui.cmbStyleCollections->addItem(res->name());
     }
 
@@ -495,8 +495,8 @@ void StylesSelector::notifyExternalStyleChanged(const QString &name, const QUuid
 void StylesSelector::loadStyles(const QString &name)
 {
     ui.listStyles->clear();
-    KoResource *res = KisResourceServerProvider::instance()->layerStyleCollectionServer()->resourceByName(name);
-    KisPSDLayerStyleCollectionResource *collection = dynamic_cast<KisPSDLayerStyleCollectionResource*>(res);
+    KoResourceSP res = KisResourceServerProvider::instance()->layerStyleCollectionServer()->resourceByName(name);
+    KisPSDLayerStyleCollectionResourceSP collection = res.dynamicCast<KisPSDLayerStyleCollectionResource>();
     if (collection) {
         Q_FOREACH (KisPSDLayerStyleSP style, collection->layerStyles()) {
             // XXX: also use the preview image, when we have one
@@ -520,8 +520,7 @@ void StylesSelector::loadCollection(const QString &fileName)
         return;
     }
 
-    KisPSDLayerStyleCollectionResource *collection =
-        new KisPSDLayerStyleCollectionResource(fileName);
+    KisPSDLayerStyleCollectionResourceSP collection = KisPSDLayerStyleCollectionResourceSP(new KisPSDLayerStyleCollectionResource(fileName));
 
     collection->load();
 
@@ -545,11 +544,11 @@ void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
     const QString saveLocation = server->saveLocation();
     const QString fullFilename = saveLocation + customName;
 
-    KoResource *resource = server->resourceByName(customName);
-    KisPSDLayerStyleCollectionResource *collection = 0;
+    KoResourceSP resource = server->resourceByName(customName);
+    KisPSDLayerStyleCollectionResourceSP collection;
 
     if (!resource) {
-        collection = new KisPSDLayerStyleCollectionResource("");
+        collection = KisPSDLayerStyleCollectionResourceSP(new KisPSDLayerStyleCollectionResource(""));
         collection->setName(customName);
         collection->setFilename(fullFilename);
 
@@ -558,8 +557,9 @@ void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
         collection->setLayerStyles(vector);
 
         server->addResource(collection);
-    } else {
-        collection = dynamic_cast<KisPSDLayerStyleCollectionResource*>(resource);
+    }
+    else {
+        collection = resource.dynamicCast<KisPSDLayerStyleCollectionResource>();
 
         KisPSDLayerStyleCollectionResource::StylesVector vector;
         vector = collection->layerStyles();
@@ -648,7 +648,7 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
     m_texture->ui.intDepth->setRange(-1000, 1000);
     m_texture->ui.intDepth->setSuffix(i18n(" %"));
 
-    connect(m_texture->ui.patternChooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(configChanged()));
+    connect(m_texture->ui.patternChooser, SIGNAL(resourceSelected(KoResourceSP )), SIGNAL(configChanged()));
     connect(m_texture->ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(m_texture->ui.intDepth, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(m_texture->ui.chkInvert, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
@@ -717,7 +717,7 @@ void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAn
     bevelAndEmboss->setAntiAliased(m_contour->ui.chkAntiAliased->isChecked());
     bevelAndEmboss->setContourRange(m_contour->ui.intRange->value());
 
-    bevelAndEmboss->setTexturePattern(static_cast<KoPattern*>(m_texture->ui.patternChooser->currentResource()));
+    bevelAndEmboss->setTexturePattern(m_texture->ui.patternChooser->currentResource().staticCast<KoPattern>());
     bevelAndEmboss->setTextureScale(m_texture->ui.intScale->value());
     bevelAndEmboss->setTextureDepth(m_texture->ui.intDepth->value());
     bevelAndEmboss->setTextureInvert(m_texture->ui.chkInvert->isChecked());
@@ -965,18 +965,18 @@ void DropShadow::fetchShadow(psd_layer_effects_shadow_common *shadow) const
 class GradientPointerConverter
 {
 public:
-    static KoAbstractGradientSP resourceToStyle(KoAbstractGradient *gradient) {
+    static KoAbstractGradientSP resourceToStyle(KoAbstractGradientSP gradient) {
         return gradient ? KoAbstractGradientSP(gradient->clone()) : KoAbstractGradientSP();
     }
 
-    static KoAbstractGradient* styleToResource(KoAbstractGradientSP gradient) {
+    static KoAbstractGradientSP styleToResource(KoAbstractGradientSP gradient) {
         if (!gradient) return 0;
 
         KoResourceServer<KoAbstractGradient> *server = KoResourceServerProvider::instance()->gradientServer();
-        KoAbstractGradient *resource = server->resourceByMD5(gradient->md5());
+        KoAbstractGradientSP resource = server->resourceByMD5(gradient->md5());
 
         if (!resource) {
-            KoAbstractGradient *clone = gradient->clone();
+            KoAbstractGradientSP clone = gradient->clone();
             clone->setName(findAvailableName(gradient->name()));
             server->addResource(clone, false);
             resource = clone;
@@ -1034,8 +1034,7 @@ void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overla
     ui.cmbCompositeOp->selectCompositeOp(KoID(config->blendMode()));
     ui.intOpacity->setValue(config->opacity());
 
-    KoAbstractGradient *gradient = fetchGradientLazy(
-        GradientPointerConverter::styleToResource(config->gradient()), m_resourceProvider);
+    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(config->gradient()), m_resourceProvider);
 
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
@@ -1141,8 +1140,7 @@ void InnerGlow::setConfig(const psd_layer_effects_glow_common *config)
     ui.bnColor->setColor(color);
     ui.radioGradient->setChecked(config->fillType() == psd_fill_gradient);
 
-    KoAbstractGradient *gradient = fetchGradientLazy(
-        GradientPointerConverter::styleToResource(config->gradient()), m_resourceProvider);
+    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(config->gradient()), m_resourceProvider);
 
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
@@ -1222,7 +1220,7 @@ PatternOverlay::PatternOverlay(QWidget *parent)
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
-    connect(ui.patternChooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(configChanged()));
+    connect(ui.patternChooser, SIGNAL(resourceSelected(KoResourceSP )), SIGNAL(configChanged()));
     connect(ui.chkLinkWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 }
@@ -1240,7 +1238,7 @@ void PatternOverlay::fetchPatternOverlay(psd_layer_effects_pattern_overlay *patt
 {
     pattern->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     pattern->setOpacity(ui.intOpacity->value());
-    pattern->setPattern(static_cast<KoPattern*>(ui.patternChooser->currentResource()));
+    pattern->setPattern(ui.patternChooser->currentResource().staticCast<KoPattern>());
     pattern->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());
     pattern->setScale(ui.intScale->value());
 }
@@ -1374,7 +1372,7 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
     connect(ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
-    connect(ui.patternChooser, SIGNAL(resourceSelected(KoResource*)), SIGNAL(configChanged()));
+    connect(ui.patternChooser, SIGNAL(resourceSelected(KoResourceSP )), SIGNAL(configChanged()));
     connect(ui.chkLinkWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.intScale_2, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
@@ -1397,7 +1395,6 @@ void Stroke::slotIntAngleChanged(int value)
 
 void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
 {
-
     ui.intSize->setValue(stroke->size());
     ui.cmbPosition->setCurrentIndex((int)stroke->position());
     ui.cmbCompositeOp->selectCompositeOp(KoID(stroke->blendMode()));
@@ -1408,8 +1405,7 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
     color.fromQColor(stroke->color());
     ui.bnColor->setColor(color);
 
-    KoAbstractGradient *gradient =
-        fetchGradientLazy(GradientPointerConverter::styleToResource(stroke->gradient()), m_resourceProvider);
+    KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(stroke->gradient()), m_resourceProvider);
 
     if (gradient) {
         ui.cmbGradient->setGradient(gradient);
@@ -1425,7 +1421,6 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
     ui.patternChooser->setCurrentPattern(stroke->pattern());
     ui.chkLinkWithLayer->setChecked(stroke->alignWithLayer());
     ui.intScale_2->setValue(stroke->scale());
-
 }
 
 void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
@@ -1446,7 +1441,7 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
     stroke->setAngle(ui.dialAngle->value());
     stroke->setScale(ui.intScale->value());
 
-    stroke->setPattern(static_cast<KoPattern*>(ui.patternChooser->currentResource()));
+    stroke->setPattern(ui.patternChooser->currentResource().staticCast<KoPattern>());
     stroke->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());
     stroke->setScale(ui.intScale->value());
 }

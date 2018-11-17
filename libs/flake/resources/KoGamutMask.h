@@ -97,4 +97,6 @@ private:
     Private* const d;
 };
 
+typedef QSharedPointer<KoGamutMask> KoGamutMaskSP;
+
 #endif // KOGAMUTMASK_H

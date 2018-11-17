@@ -39,7 +39,7 @@ KisStopGradientSliderWidget::KisStopGradientSliderWidget(QWidget *parent, Qt::Wi
     , m_drag(0)
 {
     QLinearGradient defaultGradient;
-    m_defaultGradient.reset(KoStopGradient::fromQGradient(&defaultGradient));
+    m_defaultGradient = KoStopGradient::fromQGradient(&defaultGradient);
 
     setGradientResource(0);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -66,9 +66,9 @@ int KisStopGradientSliderWidget::handleClickTolerance() const
     return m_handleSize.height();
 }
 
-void KisStopGradientSliderWidget::setGradientResource(KoStopGradient* gradient)
+void KisStopGradientSliderWidget::setGradientResource(KoStopGradientSP gradient)
 {
-    m_gradient = gradient ? gradient : m_defaultGradient.data();
+    m_gradient = gradient ? gradient : m_defaultGradient;
 
     if (m_gradient && m_selectedStop >= 0) {
         m_selectedStop = qBound(0, m_selectedStop, m_gradient->stops().size() - 1);

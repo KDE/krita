@@ -110,7 +110,7 @@ void KisPaletteModel::resetGroupNameRows()
     }
 }
 
-void KisPaletteModel::setPalette(KoColorSet* palette)
+void KisPaletteModel::setPalette(KoColorSetSP palette)
 {
     beginResetModel();
     m_colorSet = palette;
@@ -121,7 +121,7 @@ void KisPaletteModel::setPalette(KoColorSet* palette)
     emit sigPaletteChanged();
 }
 
-KoColorSet* KisPaletteModel::colorSet() const
+KoColorSetSP KisPaletteModel::colorSet() const
 {
     return m_colorSet;
 }

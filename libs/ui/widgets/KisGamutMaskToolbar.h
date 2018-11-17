@@ -37,10 +37,10 @@ public:
 
 Q_SIGNALS:
     void sigGamutMaskToggle(bool state);
-    void sigGamutMaskChanged(KoGamutMask*);
+    void sigGamutMaskChanged(KoGamutMaskSP);
 
 public Q_SLOTS:
-    void slotGamutMaskSet(KoGamutMask* mask);
+    void slotGamutMaskSet(KoGamutMaskSP mask);
     void slotGamutMaskUnset();
 
 private Q_SLOTS:
@@ -49,7 +49,7 @@ private Q_SLOTS:
 
 private:
     Ui_wdgGamutMaskToolbar* m_ui;
-    KoGamutMask* m_selectedMask;
+    KoGamutMaskSP m_selectedMask;
 
     QIcon m_iconMaskOff;
     QIcon m_iconMaskOn;

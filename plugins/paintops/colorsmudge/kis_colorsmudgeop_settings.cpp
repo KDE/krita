@@ -75,7 +75,8 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
                     option.writeOptionSetting(prop->settings().data());
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            KisPaintOpPresetSP p = preset().toStrongRef();
+            QObject::connect(p->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -87,7 +88,8 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
                     new KisSmudgeOption(),
                     settings, 0);
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            KisPaintOpPresetSP p = preset().toStrongRef();
+            QObject::connect(p->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -98,7 +100,8 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
                     new KisSmudgeRadiusOption(),
                     settings, 0);
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            KisPaintOpPresetSP p = preset().toStrongRef();
+            QObject::connect(p->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -110,7 +113,8 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
                     new KisRateOption("ColorRate", KisPaintOpOption::GENERAL, false),
                     settings, 0);
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            KisPaintOpPresetSP p = preset().toStrongRef();
+            QObject::connect(p->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }

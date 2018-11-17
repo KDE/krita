@@ -55,7 +55,7 @@ public:
 
 public:
     void setPaletteModel(KisPaletteModel *);
-    KoColorSet* palette() const { return m_colorSet; }
+    KoColorSetSP palette() const { return m_colorSet; }
     void setView(KisViewManager *);
 
 private Q_SLOTS:
@@ -85,7 +85,7 @@ private:
     QScopedPointer<QAction> m_actRenGroup;
     QScopedPointer<QButtonGroup> m_globalButtons;
     QScopedPointer<KisPaletteEditor> m_paletteEditor;
-    QPointer<KoColorSet> m_colorSet;
+    QSharedPointer<KoColorSet> m_colorSet;
     QString m_currentGroupOriginalName;
 
     QPalette m_normalPalette;

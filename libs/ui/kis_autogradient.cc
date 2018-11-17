@@ -32,7 +32,7 @@
 
 /****************************** KisAutogradient ******************************/
 
-KisAutogradient::KisAutogradient(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption)
+KisAutogradient::KisAutogradient(KoSegmentGradientSP gradient, QWidget *parent, const char* name, const QString& caption)
     : QWidget(parent)
     , m_autogradientResource(gradient)
 {

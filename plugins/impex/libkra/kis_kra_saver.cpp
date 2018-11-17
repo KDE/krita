@@ -159,7 +159,7 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
     if (m_d->doc->paletteList().size() == 0) {
         return true;
     }
-    for (const KoColorSet *palette : m_d->doc->paletteList()) {
+    for (const KoColorSetSP palette : m_d->doc->paletteList()) {
         if (!palette->isGlobal()) {
             if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
                 m_d->errorMessages << i18n("could not save palettes");
@@ -181,7 +181,7 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
 void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
 {
     QDomElement ePalette = doc.createElement(PALETTES);
-    for (const KoColorSet *palette : m_d->doc->paletteList()) {
+    for (const KoColorSetSP palette : m_d->doc->paletteList()) {
         if (!palette->isGlobal()) {
             QDomElement eFile =  doc.createElement("palette");
             eFile.setAttribute("filename", palette->filename());

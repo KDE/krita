@@ -231,8 +231,8 @@ void ArtisticColorSelectorDock::setViewManager(KisViewManager* kisview)
     m_selectorUI->colorSelector->setFgColor(m_resourceProvider->resourceManager()->foregroundColor());
     m_selectorUI->colorSelector->setBgColor(m_resourceProvider->resourceManager()->backgroundColor());
 
-    connect(m_resourceProvider, SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
-            this, SLOT(slotGamutMaskSet(KoGamutMask*)));
+    connect(m_resourceProvider, SIGNAL(sigGamutMaskChanged(KoGamutMaskSP)),
+            this, SLOT(slotGamutMaskSet(KoGamutMaskSP)));
 
     connect(m_resourceProvider, SIGNAL(sigGamutMaskUnset()),
             this, SLOT(slotGamutMaskUnset()));
@@ -420,7 +420,7 @@ void ArtisticColorSelectorDock::unsetCanvas()
     m_selectorUI->colorSelector->setColorConverter(KisDisplayColorConverter::dumbConverterInstance());
 }
 
-void ArtisticColorSelectorDock::slotGamutMaskSet(KoGamutMask *mask)
+void ArtisticColorSelectorDock::slotGamutMaskSet(KoGamutMaskSP mask)
 {
     if (!mask) {
         return;

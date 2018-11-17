@@ -22,7 +22,8 @@
 
 #include "KoInteractionTool.h"
 
-class KoResource;
+#include <KoResource.h>
+
 class KoInteractionStrategy;
 
 class KarbonFilterEffectsTool : public KoInteractionTool
@@ -62,7 +63,7 @@ private Q_SLOTS:
     void filterChanged();
     void filterSelected(int index);
     void selectionChanged();
-    void presetSelected(KoResource *resource);
+    void presetSelected(KoResourceSP resource);
     void regionXChanged(double x);
     void regionYChanged(double y);
     void regionWidthChanged(double width);

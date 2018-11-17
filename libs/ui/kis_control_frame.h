@@ -27,16 +27,17 @@
 #include <QKeyEvent>
 #include <QObject>
 
+#include <KoPattern.h>
+#include <KoAbstractGradient.h>
+
 class QWidget;
 class QTabWidget;
 
-class KoAbstractGradient;
 class KisGradientChooser;
 class KisPatternChooser;
 class KisPaintopBox;
 class KisViewManager;
 class KisIconWidget;
-class KoPattern;
 class KoDualColorButton;
 
 /**
@@ -59,8 +60,8 @@ public:
 
 private Q_SLOTS:
 
-    void slotSetPattern(KoPattern * pattern);
-    void slotSetGradient(KoAbstractGradient * gradient);
+    void slotSetPattern(KoPatternSP pattern);
+    void slotSetGradient(KoAbstractGradientSP gradient);
     void slotUpdateDisplayRenderer();
 
 private:

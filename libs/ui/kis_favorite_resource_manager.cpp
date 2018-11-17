@@ -217,7 +217,7 @@ void KisFavoriteResourceManager::slotChangeActivePaintop(int pos)
 {
     if (pos < 0 || pos >= m_favoritePresetsList.size()) return;
 
-    KoResource* resource = const_cast<KisPaintOpPreset*>(m_favoritePresetsList.at(pos).data());
+    KoResourceSP resource = m_favoritePresetsList.at(pos);;
     m_paintopBox->resourceSelected(resource);
 
     emit hidePalettes();
@@ -253,17 +253,17 @@ void KisFavoriteResourceManager::slotChangeFGColorSelector(KoColor c)
     emit sigChangeFGColorSelector(c);
 }
 
-void KisFavoriteResourceManager::removingResource(PointerType resource)
+void KisFavoriteResourceManager::removingResource(QSharedPointer<KisPaintOpPreset>  resource)
 {
     if (m_blockUpdates) {
         return;
     }
-    if (m_favoritePresetsList.contains(resource.data())) {
+    if (m_favoritePresetsList.contains(resource)) {
         updateFavoritePresets();
     }
 }
 
-void KisFavoriteResourceManager::resourceAdded(PointerType /*resource*/)
+void KisFavoriteResourceManager::resourceAdded(QSharedPointer<KisPaintOpPreset>  /*resource*/)
 {
     if (m_blockUpdates) {
         return;
@@ -271,7 +271,7 @@ void KisFavoriteResourceManager::resourceAdded(PointerType /*resource*/)
     updateFavoritePresets();
 }
 
-void KisFavoriteResourceManager::resourceChanged(PointerType /*resource*/)
+void KisFavoriteResourceManager::resourceChanged(QSharedPointer<KisPaintOpPreset>  /*resource*/)
 {
 }
 
@@ -327,7 +327,7 @@ void KisFavoriteResourceManager::updateFavoritePresets()
     QStringList presetFilenames = rServer->searchTag(m_currentTag);
     for(int i = 0; i < qMin(m_maxPresets, presetFilenames.size()); i++) {
         KisPaintOpPresetSP pr = rServer->resourceByFilename(presetFilenames.at(i));
-        m_favoritePresetsList.append(pr.data());
+        m_favoritePresetsList.append(pr);
         std::sort(m_favoritePresetsList.begin(), m_favoritePresetsList.end(), sortPresetByName);
     }
     emit updatePalettes();

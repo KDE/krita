@@ -45,7 +45,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_stopgradient_editor.h"
 
-KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradient* gradient, QWidget * parent, const char *name)
+KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget * parent, const char *name)
     : KoDialog(parent)
 {
     setCaption(i18n("Custom Gradient"));
@@ -54,11 +54,11 @@ KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradient* gradient, Q
     setObjectName(name);
     setModal(false);
 
-    KoStopGradient* stopGradient = dynamic_cast<KoStopGradient*>(gradient);
+    KoStopGradientSP stopGradient = gradient.dynamicCast<KoStopGradient>();
     if (stopGradient) {
         m_page = new KisStopGradientEditor(stopGradient, this, "autogradient", i18n("Custom Gradient"));
     }
-    KoSegmentGradient* segmentedGradient = dynamic_cast<KoSegmentGradient*>(gradient);
+    KoSegmentGradientSP segmentedGradient = gradient.dynamicCast<KoSegmentGradient>();
     if (segmentedGradient) {
         m_page = new KisAutogradient(segmentedGradient, this, "autogradient", i18n("Custom Gradient"));
     }
@@ -79,11 +79,11 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setColumnCount(1);
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SLOT(update(KoResource*)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResourceSP )),
+            this, SLOT(update(KoResourceSP )));
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SIGNAL(resourceSelected(KoResource*)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResourceSP )),
+            this, SIGNAL(resourceSelected(KoResourceSP )));
 
     QWidget* buttonWidget = new QWidget(this);
     QHBoxLayout* buttonLayout = new QHBoxLayout(buttonWidget);
@@ -129,12 +129,12 @@ KisGradientChooser::~KisGradientChooser()
 {
 }
 
-KoResource *KisGradientChooser::currentResource()
+KoResourceSP KisGradientChooser::currentResource()
 {
     return m_itemChooser->currentResource();
 }
 
-void KisGradientChooser::setCurrentResource(KoResource *resource)
+void KisGradientChooser::setCurrentResource(KoResourceSP resource)
 {
     m_itemChooser->setCurrentResource(resource);
 }
@@ -154,16 +154,16 @@ void KisGradientChooser::slotUpdateIcons()
     }
 }
 
-void KisGradientChooser::update(KoResource * resource)
+void KisGradientChooser::update(KoResourceSP resource)
 {
-    KoAbstractGradient *gradient = static_cast<KoAbstractGradient *>(resource);
+    KoAbstractGradientSP gradient = resource.staticCast<KoAbstractGradient>();
     m_lbName->setText(gradient ? i18n(gradient->name().toUtf8().data()) : "");
     m_editGradient->setEnabled(gradient && gradient->removable());
 }
 
 void KisGradientChooser::addStopGradient()
 {
-    KoStopGradient* gradient = new KoStopGradient("");
+    KoStopGradientSP gradient(new KoStopGradient(""));
 
     QList<KoGradientStop> stops;
     stops << KoGradientStop(0.0, KoColor(QColor(250, 250, 0), KoColorSpaceRegistry::instance()->rgb8())) << KoGradientStop(1.0,  KoColor(QColor(255, 0, 0, 255), KoColorSpaceRegistry::instance()->rgb8()));
@@ -174,13 +174,13 @@ void KisGradientChooser::addStopGradient()
 
 void KisGradientChooser::addSegmentedGradient()
 {
-    KoSegmentGradient* gradient = new KoSegmentGradient("");
+    KoSegmentGradientSP gradient(new KoSegmentGradient(""));
     gradient->createSegment(INTERP_LINEAR, COLOR_INTERP_RGB, 0.0, 1.0, 0.5, Qt::black, Qt::white);
     gradient->setName(i18n("unnamed"));
     addGradient(gradient);
 }
 
-void KisGradientChooser::addGradient(KoAbstractGradient* gradient)
+void KisGradientChooser::addGradient(KoAbstractGradientSP gradient)
 {
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
     QString saveLocation = rserver->saveLocation();
@@ -196,7 +196,7 @@ void KisGradientChooser::addGradient(KoAbstractGradient* gradient)
 
 void KisGradientChooser::editGradient()
 {
-    KisCustomGradientDialog dialog(static_cast<KoAbstractGradient*>(currentResource()), this, "autogradient");
+    KisCustomGradientDialog dialog(currentResource().staticCast<KoAbstractGradient>(), this, "autogradient");
     dialog.exec();
 }
 

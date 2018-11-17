@@ -260,37 +260,37 @@ QMap<QString, Resource *> Krita::resources(const QString &type) const
 
     if (type.toLower() == "pattern") {
         KoResourceServer<KoPattern>* server = KoResourceServerProvider::instance()->patternServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
+        Q_FOREACH (KoResourceSP res, server->resources()) {
             resources[res->name()] = new Resource(res);
         }
     }
     else if (type.toLower() == "gradient") {
         KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
+        Q_FOREACH (KoResourceSP res, server->resources()) {
             resources[res->name()] = new Resource(res);
         }
     }
     else if (type.toLower() == "brush") {
         KisBrushResourceServer* server = KisBrushServer::instance()->brushServer();
         Q_FOREACH (KisBrushSP res, server->resources()) {
-            resources[res->name()] = new Resource(res.data());
+            resources[res->name()] = new Resource(res);
         }
     }
     else if (type.toLower() == "preset") {
         KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
         Q_FOREACH (KisPaintOpPresetSP res, server->resources()) {
-            resources[res->name()] = new Resource(res.data());
+            resources[res->name()] = new Resource(res);
         }
     }
     else if (type.toLower() == "palette") {
         KoResourceServer<KoColorSet>* server = KoResourceServerProvider::instance()->paletteServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
+        Q_FOREACH (KoResourceSP res, server->resources()) {
             resources[res->name()] = new Resource(res);
         }
     }
     else if (type.toLower() == "workspace") {
         KoResourceServer< KisWorkspaceResource >* server = KisResourceServerProvider::instance()->workspaceServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
+        Q_FOREACH (KoResourceSP res, server->resources()) {
             resources[res->name()] = new Resource(res);
         }
     }

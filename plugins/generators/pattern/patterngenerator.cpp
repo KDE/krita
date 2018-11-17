@@ -99,7 +99,7 @@ void KoPatternGenerator::generate(KisProcessingInformation dstInfo,
     if (!config) return;
     QString patternName = config->getString("pattern", "Grid01.pat");
     KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer();
-    KoPattern *pattern = rserver->resourceByName(patternName);
+    KoPatternSP pattern = rserver->resourceByName(patternName);
 
 //    KoColor c = config->getColor("color");
 

@@ -38,7 +38,7 @@ QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
     if (!t->preset()) return m_parent->getProperty(name);
 
     // restores the dirty state on returns automagically
-    KisPaintOpPreset::DirtyStateSaver dirtyStateSaver(t->preset().data());
+    KisPaintOpPreset::DirtyStateSaver dirtyStateSaver(t->preset());
 
     if (m_lockedProperties->lockedProperties()) {
         if (m_lockedProperties->lockedProperties()->hasProperty(name)) {
@@ -72,7 +72,7 @@ void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant 
 
             if (!m_parent->hasProperty(name + "_previous")) {
                 // restores the dirty state on returns automagically
-                KisPaintOpPreset::DirtyStateSaver dirtyStateSaver(t->preset().data());
+                KisPaintOpPreset::DirtyStateSaver dirtyStateSaver(t->preset());
 
                 m_parent->setProperty(name + "_previous", m_parent->getProperty(name));
             }

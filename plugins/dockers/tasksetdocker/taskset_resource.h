@@ -45,4 +45,6 @@ private:
     QStringList m_actions;
 };
 
+typedef QSharedPointer<TasksetResource> TasksetResourceSP;
+
 #endif // TASKSET_RESOURCE_H

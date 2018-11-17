@@ -38,7 +38,6 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QToolButton>
-#include <QPointer>
 
 class KoColorPopupAction::KoColorPopupActionPrivate
 {
@@ -83,7 +82,7 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
     d->colorSetWidget = new KoColorSetWidget(widget);
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
 
-    QPointer<KoColorSet> defaultColorSet = rServer->resourceByName("Default");
+    KoColorSetSP defaultColorSet = rServer->resourceByName("Default");
     if (!defaultColorSet && rServer->resources().count() > 0) {
         defaultColorSet = rServer->resources().first();
     }

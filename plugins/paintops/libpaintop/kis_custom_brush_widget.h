@@ -63,7 +63,7 @@ private Q_SLOTS:
     void slotUpdateUseColorAsMask(bool useColorAsMask);
 
 Q_SIGNALS:
-    void sigNewPredefinedBrush(KoResource *);
+    void sigNewPredefinedBrush(KoResourceSP );
 
 private:
     void createBrush();

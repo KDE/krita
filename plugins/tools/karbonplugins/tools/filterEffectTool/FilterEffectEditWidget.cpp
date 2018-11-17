@@ -60,11 +60,11 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     presets->setDisplayMode(KoResourceSelector::TextMode);
     presets->setColumnCount(1);
 
-    connect(presets, SIGNAL(resourceSelected(KoResource*)),
-            this, SLOT(presetSelected(KoResource*)));
+    connect(presets, SIGNAL(resourceSelected(KoResourceSP )),
+            this, SLOT(presetSelected(KoResourceSP )));
 
-    connect(presets, SIGNAL(resourceApplied(KoResource*)),
-            this, SLOT(presetSelected(KoResource*)));
+    connect(presets, SIGNAL(resourceApplied(KoResourceSP )),
+            this, SLOT(presetSelected(KoResourceSP )));
 
     KoGenericRegistryModel<KoFilterEffectFactoryBase *> *filterEffectModel = new KoGenericRegistryModel<KoFilterEffectFactoryBase *>(KoFilterEffectRegistry::instance());
 
@@ -365,7 +365,7 @@ void FilterEffectEditWidget::addToPresets()
         return;
     }
 
-    FilterEffectResource *resource = FilterEffectResource::fromFilterEffectStack(m_effects);
+    QSharedPointer<FilterEffectResource> resource(FilterEffectResource::fromFilterEffectStack(m_effects));
     if (!resource) {
         return;
     }
@@ -386,10 +386,6 @@ void FilterEffectEditWidget::addToPresets()
 
     resource->setFilename(fileInfo.filePath());
     resource->setValid(true);
-
-    if (!server->addResource(resource)) {
-        delete resource;
-    }
 }
 
 void FilterEffectEditWidget::removeFromPresets()
@@ -406,7 +402,7 @@ void FilterEffectEditWidget::removeFromPresets()
         return;
     }
 
-    FilterEffectResource *resource = server->resources().at(presets->currentIndex());
+    QSharedPointer<FilterEffectResource> resource = server->resources().at(presets->currentIndex());
     if (!resource) {
         return;
     }
@@ -414,9 +410,9 @@ void FilterEffectEditWidget::removeFromPresets()
     server->removeResourceAndBlacklist(resource);
 }
 
-void FilterEffectEditWidget::presetSelected(KoResource *resource)
+void FilterEffectEditWidget::presetSelected(KoResourceSP resource)
 {
-    FilterEffectResource *effectResource = dynamic_cast<FilterEffectResource *>(resource);
+    QSharedPointer<FilterEffectResource> effectResource = resource.dynamicCast<FilterEffectResource>();
     if (!effectResource) {
         return;
     }

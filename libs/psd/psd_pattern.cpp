@@ -25,7 +25,7 @@
 
 struct PsdPattern::Private
 {
-    KoPattern *patternResource;
+    KoPatternSP patternResource;
 };
 
 PsdPattern::PsdPattern()
@@ -39,12 +39,12 @@ PsdPattern::~PsdPattern()
     delete d;
 }
 
-void PsdPattern::setPattern(KoPattern *pattern)
+void PsdPattern::setPattern(KoPatternSP pattern)
 {
     d->patternResource = pattern;
 }
 
-KoPattern *PsdPattern::pattern() const
+KoPatternSP PsdPattern::pattern() const
 {
     return d->patternResource;
 }

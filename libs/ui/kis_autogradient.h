@@ -23,17 +23,17 @@
 #include "ui_wdgautogradient.h"
 
 class KoGradientSegment;
-class KoSegmentGradient;
+#include<KoSegmentGradient.h>
 
 class KisAutogradient : public QWidget, public Ui::KisWdgAutogradient
 {
     Q_OBJECT
 
 public:
-    KisAutogradient(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption);
+    KisAutogradient(KoSegmentGradientSP gradient, QWidget *parent, const char* name, const QString& caption);
     void activate();
 private:
-    KoSegmentGradient* m_autogradientResource;
+    KoSegmentGradientSP m_autogradientResource;
 private Q_SLOTS:
     void slotSelectedSegment(KoGradientSegment* segment);
     void slotChangedSegment(KoGradientSegment* segment);

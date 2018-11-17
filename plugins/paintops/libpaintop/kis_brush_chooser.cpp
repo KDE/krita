@@ -77,7 +77,7 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     if (! index.isValid())
         return;
 
-    KisBrush *brush = static_cast<KisBrush*>(index.internalPointer());
+    KisBrushSP brush = KisBrushSP(static_cast<KisBrush*>(index.internalPointer()));
 
     QRect itemRect = option.rect;
     QImage thumbnail = brush->image();
@@ -158,7 +158,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     presetsLayout->addWidget(m_itemChooser);
 
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)), this, SLOT(updateBrushTip(KoResource*)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResourceSP )), this, SLOT(updateBrushTip(KoResourceSP )));
 
     stampButton->setIcon(KisIconUtils::loadIcon("list-add"));
     stampButton->setToolTip(i18n("Creates a brush tip from the current image selection."
@@ -199,18 +199,18 @@ void KisPredefinedBrushChooser::setBrush(KisBrushSP brush)
      */
 
     KisBrushResourceServer* server = KisBrushServer::instance()->brushServer();
-    KoResource *resource = server->resourceByFilename(brush->shortFilename()).data();
+    KoResourceSP resource = server->resourceByFilename(brush->shortFilename());
 
     if (!resource) {
-        resource = server->resourceByName(brush->name()).data();
+        resource = server->resourceByName(brush->name());
     }
 
     if (!resource) {
-        resource = brush.data();
+        resource = brush;
     }
 
     m_itemChooser->setCurrentResource(resource);
-    updateBrushTip(brush.data(), true);
+    updateBrushTip(brush, true);
 }
 
 void KisPredefinedBrushChooser::slotResetBrush()
@@ -223,7 +223,7 @@ void KisPredefinedBrushChooser::slotResetBrush()
      *       But it needs testing.
      */
 
-    KisBrush *brush = dynamic_cast<KisBrush *>(m_itemChooser->currentResource());
+    KisBrushSP brush = m_itemChooser->currentResource().dynamicCast<KisBrush>();
     if (brush) {
         brush->load();
         brush->setScale(1.0);
@@ -284,8 +284,8 @@ void KisPredefinedBrushChooser::slotOpenStampBrush()
     if(!m_stampBrushWidget) {
         m_stampBrushWidget = new KisCustomBrushWidget(this, i18n("Stamp"), m_image);
         m_stampBrushWidget->setModal(false);
-        connect(m_stampBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource*)),
-                                    SLOT(slotNewPredefinedBrush(KoResource*)));
+        connect(m_stampBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResourceSP )),
+                                    SLOT(slotNewPredefinedBrush(KoResourceSP )));
     }
 
     QDialog::DialogCode result = (QDialog::DialogCode)m_stampBrushWidget->exec();
@@ -299,8 +299,8 @@ void KisPredefinedBrushChooser::slotOpenClipboardBrush()
     if(!m_clipboardBrushWidget) {
         m_clipboardBrushWidget = new KisClipboardBrushWidget(this, i18n("Clipboard"), m_image);
         m_clipboardBrushWidget->setModal(true);
-        connect(m_clipboardBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource*)),
-                                        SLOT(slotNewPredefinedBrush(KoResource*)));
+        connect(m_clipboardBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResourceSP )),
+                                        SLOT(slotNewPredefinedBrush(KoResourceSP )));
     }
 
     QDialog::DialogCode result = (QDialog::DialogCode)m_clipboardBrushWidget->exec();
@@ -310,14 +310,14 @@ void KisPredefinedBrushChooser::slotOpenClipboardBrush()
     }
 }
 
-void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isChangingBrushPresets)
+void KisPredefinedBrushChooser::updateBrushTip(KoResourceSP resource, bool isChangingBrushPresets)
 {
 
 
     QString animatedBrushTipSelectionMode; // incremental, random, etc
 
     {
-        KisBrush* brush = dynamic_cast<KisBrush*>(resource);
+        KisBrushSP brush = resource.dynamicCast<KisBrush>();
         m_brush = brush ? brush->clone() : 0;
     }
 
@@ -337,7 +337,7 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isCha
 
             // cast to GIH brush and grab parasite name
             //m_brush
-            KisImagePipeBrush* pipeBrush = dynamic_cast<KisImagePipeBrush*>(resource);
+            KisImagePipeBrushSP pipeBrush = resource.dynamicCast<KisImagePipeBrush>();
             animatedBrushTipSelectionMode =  pipeBrush->parasiteSelection();
 
 
@@ -380,7 +380,7 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isCha
     }
 }
 
-void KisPredefinedBrushChooser::slotNewPredefinedBrush(KoResource *resource)
+void KisPredefinedBrushChooser::slotNewPredefinedBrush(KoResourceSP resource)
 {
     m_itemChooser->setCurrentResource(resource);
     updateBrushTip(resource);

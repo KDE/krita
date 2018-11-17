@@ -114,10 +114,12 @@ void KisPaintOpSettings::setOptionsWidget(KisPaintOpConfigWidget* widget)
 {
     d->settingsWidget = widget;
 }
+
 void KisPaintOpSettings::setPreset(KisPaintOpPresetWSP preset)
 {
     d->preset = preset;
 }
+
 KisPaintOpPresetWSP KisPaintOpSettings::preset() const
 {
     return d->preset;

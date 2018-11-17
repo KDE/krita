@@ -24,31 +24,31 @@
 PresetChooser::PresetChooser(QWidget *parent)
     : KisPresetChooser(parent)
 {
-    connect(this, SIGNAL(resourceSelected(KoResource*)), SLOT(slotResourceSelected(KoResource*)));
-    connect(this, SIGNAL(resourceClicked(KoResource*)), SLOT(slotResourceClicked(KoResource*)));
+    connect(this, SIGNAL(resourceSelected(KoResourceSP )), SLOT(slotResourceSelected(KoResourceSP )));
+    connect(this, SIGNAL(resourceClicked(KoResourceSP )), SLOT(slotResourceClicked(KoResourceSP )));
     showTaggingBar(true);
 }
 
 
 void PresetChooser::setCurrentPreset(Resource *resource)
 {
-    KoResource *r = resource->resource();
+    KoResourceSP r = resource->resource();
     setCurrentResource(r);
 }
 
 Resource *PresetChooser::currentPreset() const
 {
-    KoResource *r = currentResource();
+    KoResourceSP r = currentResource();
     return new Resource(r);
 }
 
-void PresetChooser::slotResourceSelected(KoResource *resource)
+void PresetChooser::slotResourceSelected(KoResourceSP resource)
 {
     Resource *r = new Resource(resource);
     emit presetSelected(r);
 }
 
-void PresetChooser::slotResourceClicked(KoResource *resource)
+void PresetChooser::slotResourceClicked(KoResourceSP resource)
 {
     Resource *r = new Resource(resource);
     emit presetClicked(r);

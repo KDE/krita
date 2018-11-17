@@ -11,8 +11,7 @@
 void KisAutoBrushFactoryTest::testXMLClone()
 {
     // Set up an autobrush.
-    KisBrushSP brush = new KisAutoBrush(new KisCircleMaskGenerator(20, 0.6, 0.8, 0.4, 3, true), 1.0,
-                                        0.0);
+    KisBrushSP brush(new KisAutoBrush(new KisCircleMaskGenerator(20, 0.6, 0.8, 0.4, 3, true), 1.0, 0.0));
     brush->setSpacing(0.15);
     brush->setAutoSpacing(true, 0.1);
 

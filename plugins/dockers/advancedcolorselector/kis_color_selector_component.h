@@ -62,7 +62,7 @@ public:
     /// returns true, if this component wants to grab the mouse (normally true, if containsPoint returns true)
     bool wantsGrab(int x, int y) {return containsPointInComponentCoords(x-m_x, y-m_y);}
 
-    void setGamutMask(KoGamutMask* gamutMask);
+    void setGamutMask(KoGamutMaskSP gamutMask);
     void unsetGamutMask();
     void updateGamutMaskPreview();
     void toggleGamutMask(bool state);
@@ -109,7 +109,7 @@ protected:
     Type m_type;
     KisColorSelector* m_parent;
     bool m_gamutMaskOn;
-    KoGamutMask* m_currentGamutMask;
+    KoGamutMaskSP m_currentGamutMask;
     bool m_maskPreviewActive;
     qreal m_lastX;
     qreal m_lastY;

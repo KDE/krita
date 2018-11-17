@@ -462,8 +462,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
     location = external ? QString() : uri;
     location += m_d->imageName + LAYER_STYLES_PATH;
     if (store->hasFile(location)) {
-        KisPSDLayerStyleCollectionResource *collection =
-            new KisPSDLayerStyleCollectionResource("Embedded Styles.asl");
+        KisPSDLayerStyleCollectionResourceSP collection(new KisPSDLayerStyleCollectionResource("Embedded Styles.asl"));
 
         collection->setName(i18nc("Auto-generated layer style collection name for embedded styles (collection)", "<%1> (embedded)", m_d->imageName));
 
@@ -492,7 +491,6 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
             collection->assignAllLayerStyles(image->root());
         } else {
             warnKrita << "WARNING: Couldn't load layer styles library from .kra!";
-            delete collection;
         }
     }
 
@@ -506,9 +504,9 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
 
 void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
 {
-    QList<KoColorSet*> list;
+    QList<KoColorSetSP> list;
     Q_FOREACH (const QString &filename, m_d->paletteFilenames) {
-        KoColorSet *newPalette = new KoColorSet(filename);
+        KoColorSetSP newPalette(new KoColorSet(filename));
         store->open(m_d->imageName + PALETTE_PATH + filename);
         QByteArray data = store->read(store->size());
         newPalette->fromByteArray(data);

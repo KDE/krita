@@ -69,7 +69,7 @@ KisDabCacheUtils::DabRenderingResources *testResourcesFactory()
         new KisDabCacheUtils::DabRenderingResources();
 
     KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 1.0, 1.0, 1.0, 2, false);
-    KisBrushSP brush = new KisAutoBrush(circle, 0.0, 0.0);
+    KisBrushSP brush(new KisAutoBrush(circle, 0.0, 0.0));
     resources->brush = brush;
 
     return resources;

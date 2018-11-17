@@ -202,7 +202,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.paintPresetIcon, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(paintPresetImage()));
 
-    connect(saveDialog, SIGNAL(resourceSelected(KoResource*)), this, SLOT(resourceSelected(KoResource*)));
+    connect(saveDialog, SIGNAL(resourceSelected(KoResourceSP )), this, SLOT(resourceSelected(KoResourceSP )));
 
     connect (m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton, SIGNAL(clicked(bool)),
              this, SLOT(slotRenameBrushActivated()));
@@ -265,8 +265,8 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 
     // preset widget connections
-    connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SIGNAL(signalResourceSelected(KoResource*)));
+    connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResourceSP )),
+            this, SIGNAL(signalResourceSelected(KoResourceSP )));
 
     connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
@@ -400,7 +400,7 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     newPreset->setValid(true);
     rServer->addResource(newPreset);
 
-    resourceSelected(newPreset.data()); // refresh and select our freshly renamed resource
+    resourceSelected(newPreset); // refresh and select our freshly renamed resource
 
 
     // Now blacklist the original file
@@ -545,7 +545,7 @@ void KisPaintOpPresetsPopup::setCreatingBrushFromScratch(bool enabled)
     m_d->isCreatingBrushFromScratch = enabled;
 }
 
-void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
+void KisPaintOpPresetsPopup::resourceSelected(KoResourceSP resource)
 {
     // this gets called every time the brush editor window is opened
     // TODO: this gets called multiple times whenever the preset is changed in the presets area
@@ -772,7 +772,7 @@ void KisPaintOpPresetsPopup::updateViewSettings()
 void KisPaintOpPresetsPopup::currentPresetChanged(KisPaintOpPresetSP preset)
 {
     if (preset) {
-        m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(preset.data());
+        m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(preset);
         setCurrentPaintOpId(preset->paintOp().id());
     }
 }

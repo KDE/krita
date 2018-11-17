@@ -88,7 +88,7 @@ public:
 
     void makeMaskImage() override;
 
-    KisBrush* clone() const override;
+    KisBrushSP clone() const override;
 
     QString defaultFileExtension() const override;
     void setAngle(qreal _angle) override;
@@ -109,7 +109,7 @@ public:
             double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const override;
 
 
-    QVector<KisGbrBrush*> brushes() const;
+    QVector<KisGbrBrushSP> brushes() const;
 
     const KisPipeBrushParasite &parasite() const;
 
@@ -126,7 +126,7 @@ protected:
 private:
     friend class KisImagePipeBrushTest;
 
-    KisGbrBrush* testingGetCurrentBrush(const KisPaintInformation& info) const;
+    KisGbrBrushSP testingGetCurrentBrush(const KisPaintInformation& info) const;
     void testingSelectNextBrush(const KisPaintInformation& info) const;
 
     bool initFromData(const QByteArray &data);
@@ -136,9 +136,8 @@ private:
 private:
     struct Private;
     Private * const m_d;
-
-
-
 };
+
+typedef QSharedPointer<KisImagePipeBrush> KisImagePipeBrushSP;
 
 #endif // KIS_IMAGEPIPE_BRUSH_

@@ -47,17 +47,17 @@ public:
     bool sortLayers() const;
     bool disregardOpacity() const;
     int fuzziness() const;
-    KoColorSet* palette() const;
+    KoColorSetSP palette() const;
 
 private Q_SLOTS:
 
     void applyClicked();
-    void slotSetPalette(KoColorSet *pal);
+    void slotSetPalette(KoColorSetSP pal);
 
 private:
     WdgLayerSplit *m_page {0};
     KisPaletteListWidget *m_colorSetChooser {0};
-    KoColorSet *m_palette {0};
+    KoColorSetSP m_palette {0};
 };
 
 #endif // DLG_LAYERSPLIT

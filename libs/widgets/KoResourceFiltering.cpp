@@ -173,7 +173,7 @@ void KoResourceFiltering::setFilters(const QString &searchString)
     setChanged();
 }
 
-bool KoResourceFiltering::presetMatchesSearch(KoResource * resource) const
+bool KoResourceFiltering::presetMatchesSearch(KoResourceSP resource) const
 {
     QList<QString> filteredList;
 
@@ -227,10 +227,10 @@ bool KoResourceFiltering::excludeFilterIsValid(const QString &exclusion)
     return true;
 }
 
-QList< KoResource* > KoResourceFiltering::filterResources(QList< KoResource* > resources)
+QList< KoResourceSP > KoResourceFiltering::filterResources(QList< KoResourceSP > resources)
 {
 
-    Q_FOREACH (KoResource* resource, resources) {
+    Q_FOREACH (KoResourceSP resource, resources) {
         if(!presetMatchesSearch(resource)) {
             resources.removeAll(resource);
         }

@@ -95,7 +95,7 @@ void sliceQImage(const QImage &image, QVector<QVector<QByteArray> > *dstPlanes, 
     }
 }
 
-void KisAslPatternsWriter::addPattern(const KoPattern *pattern)
+void KisAslPatternsWriter::addPattern(const KoPatternSP pattern)
 {
     {
         KisAslWriterUtils::OffsetStreamPusher<quint32> patternSizeField(m_device);

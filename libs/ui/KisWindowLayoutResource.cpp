@@ -154,12 +154,12 @@ KisWindowLayoutResource::KisWindowLayoutResource(const QString &filename)
 KisWindowLayoutResource::~KisWindowLayoutResource()
 {}
 
-KisWindowLayoutResource * KisWindowLayoutResource::fromCurrentWindows(
+KisWindowLayoutResourceSP KisWindowLayoutResource::fromCurrentWindows(
     const QString &filename, const QList<QPointer<KisMainWindow>> &mainWindows, bool showImageInAllWindows,
     bool primaryWorkspaceFollowsFocus, KisMainWindow *primaryWindow
 )
 {
-    auto resource = new KisWindowLayoutResource(filename);
+    KisWindowLayoutResourceSP resource(new KisWindowLayoutResource(filename));
     resource->setWindows(mainWindows);
     resource->d->showImageInAllWindows = showImageInAllWindows;
     resource->d->primaryWorkspaceFollowsFocus = primaryWorkspaceFollowsFocus;
@@ -172,7 +172,7 @@ void KisWindowLayoutResource::applyLayout()
     auto *kisPart = KisPart::instance();
     auto *layoutManager= KisWindowLayoutManager::instance();
 
-    layoutManager->setLastUsedLayout(this);
+    layoutManager->setLastUsedLayout(KisWindowLayoutResourceSP(this));
 
     QList<QPointer<KisMainWindow>> currentWindows = kisPart->mainWindows();
 

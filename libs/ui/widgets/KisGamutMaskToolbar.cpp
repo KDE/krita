@@ -48,17 +48,17 @@ KisGamutMaskToolbar::KisGamutMaskToolbar(QWidget* parent) : QWidget(parent)
 
 void KisGamutMaskToolbar::connectMaskSignals(KisCanvasResourceProvider* resourceProvider)
 {
-    connect(resourceProvider, SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
-            this, SLOT(slotGamutMaskSet(KoGamutMask*)));
+    connect(resourceProvider, SIGNAL(sigGamutMaskChanged(KoGamutMaskSP)),
+            this, SLOT(slotGamutMaskSet(KoGamutMaskSP)));
 
     connect(resourceProvider, SIGNAL(sigGamutMaskUnset()),
             this, SLOT(slotGamutMaskUnset()));
 
-    connect(this, SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
-            resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMask*)));
+    connect(this, SIGNAL(sigGamutMaskChanged(KoGamutMaskSP)),
+            resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMaskSP)));
 }
 
-void KisGamutMaskToolbar::slotGamutMaskSet(KoGamutMask *mask)
+void KisGamutMaskToolbar::slotGamutMaskSet(KoGamutMaskSP mask)
 {
     if (!mask) {
         return;

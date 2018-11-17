@@ -22,13 +22,15 @@
 
 #include <QWidget>
 #include <QScroller>
-#include <kritaui_export.h>
+
+#include <KoResource.h>
 #include <KoID.h>
 
 class KoAbstractResourceServerAdapter;
 class KisPresetDelegate;
 class KoResourceItemChooser;
-class KoResource;
+
+#include <kritaui_export.h>
 
 /**
  * A special type of item chooser that can contain extra widgets that show
@@ -54,8 +56,8 @@ public:
     void setViewMode(ViewMode mode);
     void showButtons(bool show);
 
-    void setCurrentResource(KoResource *resource);
-    KoResource* currentResource() const;
+    void setCurrentResource(KoResourceSP resource);
+    KoResourceSP currentResource() const;
     /// Sets the visibility of tagging klineEdits
     void showTaggingBar(bool show);
     KoResourceItemChooser *itemChooser();
@@ -65,8 +67,8 @@ public:
     int iconSize();
 
 Q_SIGNALS:
-    void resourceSelected(KoResource *resource);
-    void resourceClicked(KoResource *resource);
+    void resourceSelected(KoResourceSP resource);
+    void resourceClicked(KoResourceSP resource);
 
 public Q_SLOTS:
     void updateViewSettings();

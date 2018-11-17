@@ -37,7 +37,7 @@ class KisPaintOpConfigWidget;
  * user can now temporarily save any tweaks in the Preset throughout
  * the session. The Dirty Preset setting/unsetting is handled by KisPaintOpPresetSettings
  */
-class KRITAIMAGE_EXPORT KisPaintOpPreset : public KoResource, public KisShared
+class KRITAIMAGE_EXPORT KisPaintOpPreset : public KoResource
 {
 public:
 
@@ -92,17 +92,32 @@ public:
      */
     class KRITAIMAGE_EXPORT DirtyStateSaver {
     public:
+        DirtyStateSaver(KisPaintOpPresetSP preset)
+            : m_preset(preset)
+            , m_isDirty(preset->isPresetDirty())
+        {
+        }
+
+
+        /// Extra constructor to be called from KisPaintOpPreset itself
         DirtyStateSaver(KisPaintOpPreset *preset)
-            : m_preset(preset), m_isDirty(preset->isPresetDirty())
+            : m_parentPreset(preset)
+            , m_isDirty(preset->isPresetDirty())
         {
         }
 
         ~DirtyStateSaver() {
-            m_preset->setPresetDirty(m_isDirty);
+            if (m_preset) {
+                m_preset->setPresetDirty(m_isDirty);
+            }
+            else if (m_parentPreset) {
+                m_parentPreset->setPresetDirty(m_isDirty);
+            }
         }
 
     private:
-        KisPaintOpPreset *m_preset;
+        KisPaintOpPresetSP m_preset;
+        KisPaintOpPreset *m_parentPreset;
         bool m_isDirty;
     };
 
@@ -112,7 +127,7 @@ public:
      */
     class KRITAIMAGE_EXPORT UpdatedPostponer{
     public:
-        UpdatedPostponer(KisPaintOpPreset *preset);
+        UpdatedPostponer(KisPaintOpPresetSP preset);
 
         ~UpdatedPostponer();
 

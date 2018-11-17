@@ -65,7 +65,7 @@ protected:
     void showEvent(QShowEvent *);
 
 Q_SIGNALS:
-    void sigNewPredefinedBrush(KoResource *);
+    void sigNewPredefinedBrush(KoResourceSP );
 
 private:
     KisClipboard* m_clipboard;

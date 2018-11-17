@@ -43,4 +43,6 @@ private:
 };
 
 
+typedef QSharedPointer<KisSessionResource> KisSessionResourceSP;
+
 #endif

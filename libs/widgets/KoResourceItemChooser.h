@@ -32,6 +32,8 @@
 #include "kritawidgets_export.h"
 #include <QPushButton>
 
+#include <KoResource.h>
+
 class QModelIndex;
 class QAbstractProxyModel;
 class QAbstractItemDelegate;
@@ -39,7 +41,6 @@ class QAbstractButton;
 class QToolButton;
 class KoAbstractResourceServerAdapter;
 class KoResourceItemView;
-class KoResource;
 
 /**
  * A widget that contains a KoResourceChooser as well
@@ -72,10 +73,10 @@ public:
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResource *currentResource() const;
+    KoResourceSP currentResource() const;
 
     /// Sets the item representing the resource as selected
-    void setCurrentResource(KoResource *resource);
+    void setCurrentResource(KoResourceSP resource);
 
     /**
      * Sets the selected resource, does nothing if there is no valid item
@@ -114,10 +115,10 @@ public:
 
 Q_SIGNALS:
     /// Emitted when a resource was selected
-    void resourceSelected(KoResource *resource);
+    void resourceSelected(KoResourceSP resource);
     /// Emitted when an *already selected* resource is clicked
     /// again
-    void resourceClicked(KoResource *resource);
+    void resourceClicked(KoResourceSP resource);
     void splitterMoved();
 public Q_SLOTS:
     void slotButtonClicked(int button);
@@ -129,7 +130,7 @@ private Q_SLOTS:
     void contextMenuRequested(const QPoint &pos);
     void baseLengthChanged(int length);
     void updateView();
-    void slotBeforeResourcesLayoutReset(KoResource *activateAfterReset);
+    void slotBeforeResourcesLayoutReset(KoResourceSP activateAfterReset);
     void slotAfterResourcesLayoutReset();
 
 protected:
@@ -137,7 +138,7 @@ protected:
 
 private:
     void updateButtonState();
-    void updatePreview(KoResource *resource);
+    void updatePreview(KoResourceSP resource);
 
 
 
@@ -145,7 +146,7 @@ private:
 
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid
-    KoResource *resourceFromModelIndex(const QModelIndex &index) const;
+    KoResourceSP resourceFromModelIndex(const QModelIndex &index) const;
 
     class Private;
     Private *const d;

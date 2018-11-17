@@ -62,12 +62,11 @@ KisStopGradientEditor::KisStopGradientEditor(QWidget *parent)
     stopChanged(-1);
 }
 
-KisStopGradientEditor::KisStopGradientEditor(KoStopGradient* gradient, QWidget *parent, const char* name, const QString& caption)
+KisStopGradientEditor::KisStopGradientEditor(KoStopGradientSP gradient, QWidget *parent, const char* name, const QString& caption)
     : KisStopGradientEditor(parent)
 {
     setObjectName(name);
     setWindowTitle(caption);
-
     setGradient(gradient);
 }
 
@@ -80,7 +79,7 @@ void KisStopGradientEditor::setCompactMode(bool value)
     buttonReverseSecond->setVisible(value);
 }
 
-void KisStopGradientEditor::setGradient(KoStopGradient *gradient)
+void KisStopGradientEditor::setGradient(KoStopGradientSP gradient)
 {
     m_gradient = gradient;
     setEnabled(m_gradient);

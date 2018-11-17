@@ -47,8 +47,8 @@
 
 Q_GLOBAL_STATIC(KisResourceServerProvider, s_instance)
 
-typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
-typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
+typedef KoResourceServerSimpleConstruction<KisPaintOpPreset> KisPaintOpPresetResourceServer;
+typedef KoResourceServerAdapter<KisPaintOpPreset> KisPaintOpPresetResourceServerAdapter;
 
 KisResourceServerProvider::KisResourceServerProvider()
 {

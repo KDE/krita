@@ -55,12 +55,12 @@ public:
 
         KoCanvasResourceProvider *manager = utils::createResourceManager(image, fillNode);
 
-        KoPattern *newPattern = new KoPattern(TestUtil::fetchDataFileLazy("HR_SketchPaper_01.pat"));
+        KoPatternSP newPattern(new KoPattern(TestUtil::fetchDataFileLazy("HR_SketchPaper_01.pat")));
         newPattern->load();
         Q_ASSERT(newPattern->valid());
 
         QVariant v;
-        v.setValue(static_cast<void*>(newPattern));
+        v.setValue<KoPatternSP>(newPattern);
         manager->setResource(KisCanvasResourceProvider::CurrentPattern, v);
 
         KisResourcesSnapshotSP resources =

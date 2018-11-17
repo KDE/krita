@@ -26,7 +26,7 @@
 #include <QWidget>
 #include <QList>
 
-
+#include <KoResource.h>
 #include <KoID.h>
 #include <KoInputDevice.h>
 
@@ -40,13 +40,11 @@
 #include "kis_signal_compressor.h"
 
 
-
 class QToolButton;
 class QString;
 class QHBoxLayout;
 
 class KoColorSpace;
-class KoResource;
 class KoCanvasController;
 
 class KisViewManager;
@@ -108,7 +106,7 @@ public:
     KisPaintopBox(KisViewManager* view, QWidget* parent, const char* name);
     ~KisPaintopBox() override;
 
-    void restoreResource(KoResource* resource);
+    void restoreResource(KoResourceSP resource);
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
@@ -121,7 +119,7 @@ public Q_SLOTS:
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
     void slotCanvasResourceChanged(int key, const QVariant& v);
-    void resourceSelected(KoResource* resource);
+    void resourceSelected(KoResourceSP resource);
 
     /// This should take care of creating a new brush preset from scratch
     /// It will either load the default brush preset for the engine,

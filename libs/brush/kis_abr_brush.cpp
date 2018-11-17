@@ -61,9 +61,9 @@ KisAbrBrush::KisAbrBrush(const KisAbrBrush& rhs, KisAbrBrushCollection *parent)
 {
 }
 
-KisBrush* KisAbrBrush::clone() const
+KisBrushSP KisAbrBrush::clone() const
 {
-    return new KisAbrBrush(*this);
+    return KisBrushSP(new KisAbrBrush(*this));
 }
 
 bool KisAbrBrush::load()

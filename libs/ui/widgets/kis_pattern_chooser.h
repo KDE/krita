@@ -19,11 +19,14 @@
 #define KIS_PATTERN_CHOOSER_H_
 
 #include <QFrame>
+
+#include <KoResource.h>
+
 #include <kritaui_export.h>
 
 class KSqueezedTextLabel;
 class KoResourceItemChooser;
-class KoResource;
+
 
 class KRITAUI_EXPORT KisPatternChooser : public QFrame
 {
@@ -36,8 +39,8 @@ public:
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResource *currentResource();
-    void setCurrentPattern(KoResource *resource);
+    KoResourceSP currentResource();
+    void setCurrentPattern(KoResourceSP resource);
     void setCurrentItem(int row, int column);
     void setGrayscalePreview(bool grayscale);
     /// determines whether the preview right or below the splitter
@@ -46,12 +49,12 @@ public:
 Q_SIGNALS:
 
     /// Emitted when a resource was selected
-    void resourceSelected(KoResource *resource);
+    void resourceSelected(KoResourceSP resource);
     void updateItemSize();
 
 private Q_SLOTS:
 
-    void update(KoResource *resource);
+    void update(KoResourceSP resource);
 
 private:
 

@@ -57,25 +57,23 @@ KisBrushImport::~KisBrushImport()
 
 KisImportExportFilter::ConversionStatus KisBrushImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP /*configuration*/)
 {
-    KisBrush *brush;
+    KisBrushSP brush;
 
     if (mimeType() == "image/x-gimp-brush") {
-        brush = new KisGbrBrush(filename());
+        brush = KisBrushSP(new KisGbrBrush(filename()));
     }
     else if (mimeType() == "image/x-gimp-brush-animated") {
-        brush = new KisImagePipeBrush(filename());
+        brush = KisBrushSP(new KisImagePipeBrush(filename()));
     }
     else {
         return KisImportExportFilter::BadMimeType;
     }
 
     if (!brush->loadFromDevice(io)) {
-        delete brush;
         return KisImportExportFilter::InvalidFormat;
     }
 
     if (!brush->valid()) {
-        delete brush;
         return KisImportExportFilter::InvalidFormat;
     }
 
@@ -90,11 +88,11 @@ KisImportExportFilter::ConversionStatus KisBrushImport::convert(KisDocument *doc
     KisImageSP image = new KisImage(document->createUndoStore(), brush->width(), brush->height(), colorSpace, brush->name());
     image->setProperty("brushspacing", brush->spacing());
 
-    KisImagePipeBrush *pipeBrush = dynamic_cast<KisImagePipeBrush*>(brush);
+    KisImagePipeBrushSP pipeBrush = brush.dynamicCast<KisImagePipeBrush>();
     if (pipeBrush) {
-        QVector<KisGbrBrush*> brushes = pipeBrush->brushes();
+        QVector<KisGbrBrushSP> brushes = pipeBrush->brushes();
         for(int i = brushes.size(); i > 0; i--) {
-            KisGbrBrush *subbrush = brushes.at(i - 1);
+            KisGbrBrushSP subbrush = brushes.at(i - 1);
             const KoColorSpace *subColorSpace = 0;
             if (brush->hasColor()) {
                 subColorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -116,7 +114,6 @@ KisImportExportFilter::ConversionStatus KisBrushImport::convert(KisDocument *doc
     }
 
     document->setCurrentImage(image);
-    delete brush;
     return KisImportExportFilter::OK;
 
 }

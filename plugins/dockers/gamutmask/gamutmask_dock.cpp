@@ -100,7 +100,7 @@ GamutMaskDock::GamutMaskDock()
     connect(m_dockerUI->bnPreviewMask        , SIGNAL(clicked())                        , SLOT(slotGamutMaskPreview()));
 
     connect(m_dockerUI->bnMaskEditor          , SIGNAL(clicked())               , SLOT(slotGamutMaskEdit()));
-    connect(m_dockerUI->maskChooser, SIGNAL(sigGamutMaskSelected(KoGamutMask*)), SLOT(slotGamutMaskSelected(KoGamutMask*)));
+    connect(m_dockerUI->maskChooser, SIGNAL(sigGamutMaskSelected(KoGamutMaskSP)), SLOT(slotGamutMaskSelected(KoGamutMaskSP)));
     connect(m_dockerUI->bnMaskNew          , SIGNAL(clicked())               , SLOT(slotGamutMaskCreateNew()));
     connect(m_dockerUI->bnMaskDelete          , SIGNAL(clicked())               , SLOT(slotGamutMaskDelete()));
     connect(m_dockerUI->bnMaskDuplicate       , SIGNAL(clicked())               , SLOT(slotGamutMaskDuplicate()));
@@ -120,8 +120,8 @@ void GamutMaskDock::setViewManager(KisViewManager* kisview)
 
     selectMask(m_resourceProvider->currentGamutMask());
 
-    connect(this, SIGNAL(sigGamutMaskSet(KoGamutMask*)), m_resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMask*)));
-    connect(this, SIGNAL(sigGamutMaskChanged(KoGamutMask*)), m_resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMask*)));
+    connect(this, SIGNAL(sigGamutMaskSet(KoGamutMaskSP)), m_resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMaskSP)));
+    connect(this, SIGNAL(sigGamutMaskChanged(KoGamutMaskSP)), m_resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMaskSP)));
     connect(this, SIGNAL(sigGamutMaskUnset()), m_resourceProvider, SLOT(slotGamutMaskUnset()));
     connect(this, SIGNAL(sigGamutMaskPreviewUpdate()), m_resourceProvider, SLOT(slotGamutMaskPreviewUpdate()));
     connect(KisPart::instance(), SIGNAL(sigDocumentRemoved(QString)), this, SLOT(slotDocumentRemoved(QString)));
@@ -226,7 +226,7 @@ void GamutMaskDock::cancelMaskEdit()
     closeMaskDocument();
 }
 
-void GamutMaskDock::selectMask(KoGamutMask *mask, bool notifyItemChooser)
+void GamutMaskDock::selectMask(KoGamutMaskSP mask, bool notifyItemChooser)
 {
     if (!mask) {
         return;
@@ -340,16 +340,16 @@ int GamutMaskDock::saveOrCancel(QMessageBox::StandardButton defaultAction)
     return response;
 }
 
-KoGamutMask *GamutMaskDock::createMaskResource(KoGamutMask* sourceMask, QString newTitle)
+KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QString newTitle)
 {
     m_creatingNewMask = true;
 
-    KoGamutMask* newMask = nullptr;
+    KoGamutMaskSP newMask;
     if (sourceMask) {
-        newMask = new KoGamutMask(sourceMask);
+        newMask = KoGamutMaskSP(new KoGamutMask(sourceMask.data()));
         newMask->setImage(sourceMask->image());
     } else {
-        newMask = new KoGamutMask();
+        newMask = KoGamutMaskSP(new KoGamutMask());
 
         QString defaultPreviewPath = KoResourcePaths::findResource("gamutmasks", "empty_mask_preview.png");
         KIS_SAFE_ASSERT_RECOVER_NOOP(!(defaultPreviewPath.isEmpty() || defaultPreviewPath.isNull() || !QFile::exists(defaultPreviewPath)));
@@ -468,7 +468,7 @@ void GamutMaskDock::slotGamutMaskSave()
 
     if (m_selectedMask->title() != newTitle) {
         // title has changed, rename
-        KoGamutMask* newMask = createMaskResource(m_selectedMask, newTitle);
+        KoGamutMaskSP newMask = createMaskResource(m_selectedMask, newTitle);
 
         // delete old mask and select new
         deleteMask();
@@ -501,7 +501,7 @@ void GamutMaskDock::slotGamutMaskPreview()
     emit sigGamutMaskPreviewUpdate();
 }
 
-void GamutMaskDock::slotGamutMaskSelected(KoGamutMask *mask)
+void GamutMaskDock::slotGamutMaskSelected(KoGamutMaskSP mask)
 {
     if (!m_selfSelectingMask) {
         if (m_maskDocument) {
@@ -532,7 +532,7 @@ void GamutMaskDock::unsetResourceServer()
     rServer->removeObserver(this);
 }
 
-void GamutMaskDock::removingResource(KoGamutMask *resource)
+void GamutMaskDock::removingResource(KoGamutMaskSP resource)
 {
     // if deleting previously set mask, notify selectors to unset their mask
     if (resource == m_resourceProvider->currentGamutMask()) {
@@ -541,7 +541,7 @@ void GamutMaskDock::removingResource(KoGamutMask *resource)
     }
 }
 
-void GamutMaskDock::resourceChanged(KoGamutMask *resource)
+void GamutMaskDock::resourceChanged(KoGamutMaskSP resource)
 {
     // if currently set mask has been changed, notify selectors
     if (resource == m_resourceProvider->currentGamutMask()) {
@@ -551,7 +551,7 @@ void GamutMaskDock::resourceChanged(KoGamutMask *resource)
 
 void GamutMaskDock::slotGamutMaskCreateNew()
 {
-    KoGamutMask* newMask = createMaskResource(nullptr, "new mask");
+    KoGamutMaskSP newMask = createMaskResource(nullptr, "new mask");
     selectMask(newMask);
 
     bool editorOpened = openMaskEditor();
@@ -566,7 +566,7 @@ void GamutMaskDock::slotGamutMaskDuplicate()
         return;
     }
 
-    KoGamutMask* newMask = createMaskResource(m_selectedMask, m_selectedMask->title());
+    KoGamutMaskSP newMask = createMaskResource(m_selectedMask, m_selectedMask->title());
     selectMask(newMask);
 
     bool editorOpened = openMaskEditor();

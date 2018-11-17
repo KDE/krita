@@ -47,7 +47,7 @@ private Q_SLOTS:
     void recordClicked();
     void saveClicked();
     void clearClicked();
-    void resourceSelected( KoResource * resource );
+    void resourceSelected( KoResourceSP resource );
 
 private:
     QPointer<KisCanvas2> m_canvas;

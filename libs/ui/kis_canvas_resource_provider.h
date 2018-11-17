@@ -24,19 +24,22 @@
 #include <KoColor.h>
 #include <KoID.h>
 #include <KoCanvasResourceProvider.h>
+#include <KoResource.h>
 
 #include "kis_types.h"
 #include "kritaui_export.h"
 
-class KisWorkspaceResource;
+#include <KoPattern.h>
+#include <KoAbstractGradient.h>
+#include <resources/KoGamutMask.h>
+#include <kis_workspace_resource.h>
+
 class KoColorProfile;
 class KoAbstractGradient;
-class KoResource;
 
 class KoCanvasBase;
 class KisViewManager;
-class KoPattern;
-class KoGamutMask;
+
 class KisFilterConfiguration;
 
 #include <kis_abstract_perspective_grid.h>
@@ -107,15 +110,15 @@ public:
     bool eraserMode() const;
     void setEraserMode(bool value);
 
-    KoPattern *currentPattern() const;
+    KoPatternSP currentPattern() const;
 
-    KoAbstractGradient *currentGradient() const;
+    KoAbstractGradientSP currentGradient() const;
 
     KisImageWSP currentImage() const;
 
     KisNodeSP currentNode() const;
 
-    KoGamutMask* currentGamutMask() const;
+    KoGamutMaskSP currentGamutMask() const;
 
     KisPaintOpPresetSP currentPreset() const;
     void setPaintOpPreset(const KisPaintOpPresetSP preset);
@@ -168,21 +171,21 @@ public:
     bool disablePressure() const;
 
     ///Notify that the workspace is saved and settings should be saved to it
-    void notifySavingWorkspace(KisWorkspaceResource* workspace);
+    void notifySavingWorkspace(KisWorkspaceResourceSP workspace);
 
     ///Notify that the workspace is loaded and settings can be read
-    void notifyLoadingWorkspace(KisWorkspaceResource* workspace);
+    void notifyLoadingWorkspace(KisWorkspaceResourceSP workspace);
 
 public Q_SLOTS:
 
     void slotSetFGColor(const KoColor& c);
     void slotSetBGColor(const KoColor& c);
-    void slotPatternActivated(KoResource *pattern);
-    void slotGradientActivated(KoResource *gradient);
+    void slotPatternActivated(KoResourceSP pattern);
+    void slotGradientActivated(KoResourceSP gradient);
     void slotNodeActivated(const KisNodeSP node);
     void slotPainting();
 
-    void slotGamutMaskActivated(KoGamutMask* mask);
+    void slotGamutMaskActivated(KoGamutMaskSP mask);
     void slotGamutMaskUnset();
     void slotGamutMaskPreviewUpdate();
 
@@ -209,21 +212,21 @@ Q_SIGNALS:
 
     void sigFGColorChanged(const KoColor &);
     void sigBGColorChanged(const KoColor &);
-    void sigGradientChanged(KoAbstractGradient *);
-    void sigPatternChanged(KoPattern *);
+    void sigGradientChanged(KoAbstractGradientSP);
+    void sigPatternChanged(KoPatternSP);
     void sigNodeChanged(const KisNodeSP);
     void sigDisplayProfileChanged(const KoColorProfile *);
     void sigFGColorUsed(const KoColor&);
     void sigOnScreenResolutionChanged(qreal scaleX, qreal scaleY);
     void sigOpacityChanged(qreal);
-    void sigSavingWorkspace(KisWorkspaceResource* workspace);
-    void sigLoadingWorkspace(KisWorkspaceResource* workspace);
+    void sigSavingWorkspace(KisWorkspaceResourceSP workspace);
+    void sigLoadingWorkspace(KisWorkspaceResourceSP workspace);
 
     void mirrorModeChanged();
     void moveMirrorVerticalCenter();
     void moveMirrorHorizontalCenter();
 
-    void sigGamutMaskChanged(KoGamutMask* mask);
+    void sigGamutMaskChanged(KoGamutMaskSP mask);
     void sigGamutMaskUnset();
     void sigGamutMaskPreviewUpdate();
 

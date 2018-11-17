@@ -77,7 +77,7 @@ void KisPaletteComboBox::slotPaletteChanged()
     m_groupMapMap.clear();
     m_idxSwatchMap.clear();
 
-    if (QPointer<KoColorSet>(m_model->colorSet()).isNull()) { return; }
+    if (QSharedPointer<KoColorSet>(m_model->colorSet()).isNull()) { return; }
 
     for (const QString &groupName : m_model->colorSet()->getGroupNames()) {
         QVector<SwatchInfoType> infoList;

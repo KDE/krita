@@ -20,9 +20,10 @@
 
 #include <kis_popup_button.h>
 
+#include <KoAbstractGradient.h>
+
 class KoResource;
 class KisGradientChooser;
-class KoAbstractGradient;
 
 /**
  * @brief The KisCmbGradient class allows the user to select a gradient.
@@ -33,8 +34,8 @@ class KisCmbGradient : public KisPopupButton
 public:
     explicit KisCmbGradient(QWidget *parent = 0);
 
-    void setGradient(KoAbstractGradient *gradient);
-    KoAbstractGradient *gradient() const;
+    void setGradient(KoAbstractGradientSP gradient);
+    KoAbstractGradientSP gradient() const;
 
     QSize sizeHint() const override;
 
@@ -43,11 +44,11 @@ protected:
 
 Q_SIGNALS:
 
-    void gradientChanged(KoAbstractGradient*);
+    void gradientChanged(KoAbstractGradientSP);
 
 private Q_SLOTS:
 
-    void gradientSelected(KoResource *resource);
+    void gradientSelected(KoResourceSP resource);
 
 private:
     KisGradientChooser *m_gradientChooser;

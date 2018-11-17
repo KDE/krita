@@ -61,7 +61,7 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
                                               int poolLimitMiB,
                                               int index)
 {
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(QString(FILES_DATA_DIR) + QDir::separator() + presetFileName);
+    KisPaintOpPresetSP preset(new KisPaintOpPreset(QString(FILES_DATA_DIR) + QDir::separator() + presetFileName));
     LOAD_PRESET_OR_RETURN(preset, presetFileName);
 
 

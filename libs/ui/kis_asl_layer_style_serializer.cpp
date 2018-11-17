@@ -236,9 +236,9 @@ QString strokeFillTypeToString(psd_fill_type position)
     return result;
 }
 
-QVector<KoPattern*> KisAslLayerStyleSerializer::fetchAllPatterns(KisPSDLayerStyle *style) const
+QVector<KoPatternSP> KisAslLayerStyleSerializer::fetchAllPatterns(KisPSDLayerStyle *style) const
 {
-    QVector <KoPattern*> allPatterns;
+    QVector <KoPatternSP> allPatterns;
 
     if (style->patternOverlay()->effectEnabled()) {
         allPatterns << style->patternOverlay()->pattern();
@@ -259,7 +259,7 @@ QVector<KoPattern*> KisAslLayerStyleSerializer::fetchAllPatterns(KisPSDLayerStyl
     return allPatterns;
 }
 
-QString fetchPatternUuidSafe(KoPattern *pattern, QHash<KoPattern*, QString> patternToUuid)
+QString fetchPatternUuidSafe(KoPatternSP pattern, QHash<KoPatternSP, QString> patternToUuid)
 {
     if (patternToUuid.contains(pattern)) {
         return patternToUuid[pattern];
@@ -273,20 +273,20 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
 {
     KIS_ASSERT_RECOVER(!m_stylesVector.isEmpty()) { return QDomDocument(); }
 
-    QVector<KoPattern*> allPatterns;
+    QVector<KoPatternSP> allPatterns;
 
     Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
         allPatterns += fetchAllPatterns(style.data());
     }
 
-    QHash<KoPattern*, QString> patternToUuidMap;
+    QHash<KoPatternSP, QString> patternToUuidMap;
 
     KisAslXmlWriter w;
 
     if (!allPatterns.isEmpty()) {
         w.enterList("Patterns");
 
-        Q_FOREACH (KoPattern *pattern, allPatterns) {
+        Q_FOREACH (KoPatternSP pattern, allPatterns) {
             if (pattern) {
                 if (!patternToUuidMap.contains(pattern)) {
                     QString uuid = w.writePattern("", pattern);
@@ -848,19 +848,19 @@ inline QString _prepaddr(const QString &pref, const QString &addr) {
 
 #define CONN_PATTERN(addr, method, object, type, prefix)                       \
     {                                                                  \
-        boost::function<void (KoPattern*)> setter =    \
+        boost::function<void (KoPatternSP)> setter =    \
             std::bind(&type::method, object, _1);                     \
         m_catcher.subscribePatternRef(_prepaddr(prefix, addr), std::bind(&KisAslLayerStyleSerializer::assignPatternObject, this, _1, _2, setter)); \
     }
 
-void KisAslLayerStyleSerializer::registerPatternObject(const KoPattern *pattern) {
+void KisAslLayerStyleSerializer::registerPatternObject(const KoPatternSP pattern) {
     QString uuid = KisAslWriterUtils::getPatternUuidLazy(pattern);
 
     if (m_patternsStore.contains(uuid)) {
         warnKrita << "WARNING: ASL style contains a duplicated pattern!" << ppVar(pattern->name()) << ppVar(m_patternsStore[uuid]->name());
     } else {
         KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
-        KoPattern *patternToAdd = server->resourceByMD5(pattern->md5());
+        KoPatternSP patternToAdd = server->resourceByMD5(pattern->md5());
 
         if (!patternToAdd) {
             patternToAdd = pattern->clone();
@@ -873,18 +873,18 @@ void KisAslLayerStyleSerializer::registerPatternObject(const KoPattern *pattern)
 
 void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid,
                                                      const QString &patternName,
-                                                     boost::function<void (KoPattern *)> setPattern)
+                                                     boost::function<void (KoPatternSP )> setPattern)
 {
     Q_UNUSED(patternName);
 
-    KoPattern *pattern = m_patternsStore[patternUuid];
+    KoPatternSP pattern = m_patternsStore[patternUuid];
 
     if (!pattern) {
-        warnKrita << "WARNING: ASL style contains inexistent pattern reference!";
+        warnKrita << "WARNING: ASL style contains non-existent pattern reference!";
 
         QImage dumbImage(32, 32, QImage::Format_ARGB32);
         dumbImage.fill(Qt::red);
-        KoPattern *dumbPattern = new KoPattern(dumbImage, "invalid", "");
+        KoPatternSP dumbPattern(new KoPattern(dumbImage, "invalid", ""));
         registerPatternObject(dumbPattern);
         pattern = dumbPattern;
     }

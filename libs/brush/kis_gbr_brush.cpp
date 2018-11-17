@@ -463,9 +463,9 @@ void KisGbrBrush::makeMaskImage()
     clearBrushPyramid();
 }
 
-KisBrush* KisGbrBrush::clone() const
+KisBrushSP KisGbrBrush::clone() const
 {
-    return new KisGbrBrush(*this);
+    return KisBrushSP(new KisGbrBrush(*this));
 }
 
 void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const

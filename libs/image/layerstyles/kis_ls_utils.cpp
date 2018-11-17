@@ -379,7 +379,7 @@ namespace KisLsUtils
                      const QRect &applyRect,
                      KisLayerStyleFilterEnvironment *env,
                      int scale,
-                     KoPattern *pattern,
+                     KoPatternSP pattern,
                      int horizontalPhase,
                      int verticalPhase,
                      bool alignWithLayer)
@@ -475,7 +475,7 @@ namespace KisLsUtils
             /* end of copy paste from libpsd */
 
             KisGradientPainter gc(fillDevice);
-            gc.setGradient(config->gradient().data());
+            gc.setGradient(config->gradient());
             QPointF gradStart;
             QPointF gradEnd;
             KisGradientPainter::enumGradientRepeat repeat =

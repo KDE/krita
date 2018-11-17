@@ -73,7 +73,7 @@ void KisClipboardBrushWidget::slotCreateBrush()
         if (pd) {
             QRect rc = pd->exactBounds();
 
-            m_brush = new KisGbrBrush(pd, rc.x(), rc.y(), rc.width(), rc.height());
+            m_brush = KisBrushSP(new KisGbrBrush(pd, rc.x(), rc.y(), rc.width(), rc.height()));
 
             m_brush->setSpacing(spacingWidget->spacing());
             m_brush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
@@ -87,7 +87,7 @@ void KisClipboardBrushWidget::slotCreateBrush()
         preview->setText(i18n("Nothing copied\n to Clipboard"));
     }
 
-    if(m_brush == 0) {
+    if (!m_brush) {
         buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     } else {        
         buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
@@ -137,7 +137,7 @@ void KisClipboardBrushWidget::slotAddPredefined()
     tempFileName = fileInfo.filePath();
 
     if (m_rServerAdapter) {
-        KisGbrBrush *resource = dynamic_cast<KisGbrBrush*>(m_brush->clone());
+        KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
         resource->setFilename(tempFileName);
 
         if (nameEdit->text().isEmpty()) {

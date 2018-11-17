@@ -37,7 +37,7 @@ typedef boost::function<void (bool)> ASLCallbackBoolean;
 typedef boost::function<void (const QColor &)> ASLCallbackColor;
 typedef boost::function<void (const QPointF &)> ASLCallbackPoint;
 typedef boost::function<void (const QString &, const QVector<QPointF> &)> ASLCallbackCurve;
-typedef boost::function<void (const KoPattern *)> ASLCallbackPattern;
+typedef boost::function<void (const KoPatternSP )> ASLCallbackPattern;
 typedef boost::function<void (const QString &, const QString &)> ASLCallbackPatternRef;
 typedef boost::function<void (KoAbstractGradientSP)> ASLCallbackGradient;
 typedef boost::function<void ()> ASLCallbackNewStyle;
@@ -58,7 +58,7 @@ public:
     void addColor(const QString &path, const QColor &value) override;
     void addPoint(const QString &path, const QPointF &value) override;
     void addCurve(const QString &path, const QString &name, const QVector<QPointF> &points) override;
-    void addPattern(const QString &path, const KoPattern *pattern) override;
+    void addPattern(const QString &path, const KoPatternSP pattern) override;
     void addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName) override;
     void addGradient(const QString &path, KoAbstractGradientSP gradient) override;
     void newStyleStarted() override;

@@ -146,13 +146,13 @@ void KisControlFrame::slotUpdateDisplayRenderer()
     }
 }
 
-void KisControlFrame::slotSetPattern(KoPattern * pattern)
+void KisControlFrame::slotSetPattern(KoPatternSP pattern)
 {
     m_patternWidget->slotSetItem(pattern);
     m_patternChooser->setCurrentPattern(pattern);
 }
 
-void KisControlFrame::slotSetGradient(KoAbstractGradient * gradient)
+void KisControlFrame::slotSetGradient(KoAbstractGradientSP gradient)
 {
     m_gradientWidget->slotSetItem(gradient);
 }
@@ -183,14 +183,14 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
     customPatterns->setFont(m_font);
     m_patternsTab->addTab(customPatterns, i18n("Custom Pattern"));
 
-    connect(m_patternChooser, SIGNAL(resourceSelected(KoResource*)),
-            view->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
+    connect(m_patternChooser, SIGNAL(resourceSelected(KoResourceSP )),
+            view->resourceProvider(), SLOT(slotPatternActivated(KoResourceSP )));
 
-    connect(customPatterns, SIGNAL(activatedResource(KoResource*)),
-            view->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
+    connect(customPatterns, SIGNAL(activatedResource(KoResourceSP )),
+            view->resourceProvider(), SLOT(slotPatternActivated(KoResourceSP )));
 
-    connect(view->resourceProvider(), SIGNAL(sigPatternChanged(KoPattern*)),
-            this, SLOT(slotSetPattern(KoPattern*)));
+    connect(view->resourceProvider(), SIGNAL(sigPatternChanged(KoPatternSP)),
+            this, SLOT(slotSetPattern(KoPatternSP)));
 
     m_patternChooser->setCurrentItem(0, 0);
     if (m_patternChooser->currentResource() && view->resourceProvider()) {
@@ -224,8 +224,8 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
     m_gradientChooser->setFont(m_font);
     m_gradientTab->addTab(m_gradientChooser, i18n("Gradients"));
 
-    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResource*)),
-            view->resourceProvider(), SLOT(slotGradientActivated(KoResource*)));
+    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP )),
+            view->resourceProvider(), SLOT(slotGradientActivated(KoResourceSP )));
 
     connect (view->mainWindow(), SIGNAL(themeChanged()), m_gradientChooser, SLOT(slotUpdateIcons()));
 

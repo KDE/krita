@@ -327,7 +327,7 @@ public:
 
     KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
 
-    QList<KoColorSet*> paletteList;
+    QList<KoColorSetSP> paletteList;
 
     KisGridConfig gridConfig;
 
@@ -1500,12 +1500,12 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
     d->gridConfig = config;
 }
 
-QList<KoColorSet *> &KisDocument::paletteList()
+QList<KoColorSetSP > &KisDocument::paletteList()
 {
     return d->paletteList;
 }
 
-void KisDocument::setPaletteList(const QList<KoColorSet *> &paletteList)
+void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList)
 {
     d->paletteList = paletteList;
 }

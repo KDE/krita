@@ -38,23 +38,23 @@ public:
     ~KoAbstractResourceServerAdapter() override;
 
     virtual void connectToResourceServer() = 0;
-    virtual QList<KoResource*> resources() = 0;
+    virtual QList<KoResourceSP> resources() = 0;
 
-    virtual QList<KoResource*> serverResources() = 0;
+    virtual QList<KoResourceSP> serverResources() = 0;
 
-    virtual bool addResource(KoResource* resource) = 0;
-    virtual bool removeResource(KoResource* resource) = 0;
+    virtual bool addResource(KoResourceSP resource) = 0;
+    virtual bool removeResource(KoResourceSP resource) = 0;
     virtual void removeResourceFile(const QString & filename) = 0;
     virtual void importResourceFile(const QString & filename, bool fileCreation = true) = 0;
     virtual QString extensions() const = 0;
     virtual void setCurrentTag(const QString& currentTag) = 0;
     virtual void enableResourceFiltering(bool tagSearch) = 0;
     virtual void updateServer() = 0;
-    virtual QStringList assignedTagsList(KoResource* resource) = 0;
+    virtual QStringList assignedTagsList(KoResourceSP resource) = 0;
     virtual QStringList tagNamesList() = 0;
     virtual void addTag(const QString& tag) = 0;
-    virtual void addTag(KoResource* resource, const QString& tag) = 0;
-    virtual void deleteTag(KoResource* resource, const QString& tag) = 0;
+    virtual void addTag(KoResourceSP resource, const QString& tag) = 0;
+    virtual void deleteTag(KoResourceSP resource, const QString& tag) = 0;
     virtual void searchTextChanged(const QString& searchString) = 0;
     // these call the server.
     virtual void tagCategoryMembersChanged() = 0;
@@ -71,17 +71,17 @@ public:
     virtual bool sortingEnabled() const = 0;
 
 Q_SIGNALS:
-    void resourceAdded(KoResource*);
-    void removingResource(KoResource*);
-    void resourceChanged(KoResource*);
+    void resourceAdded(KoResourceSP );
+    void removingResource(KoResourceSP );
+    void resourceChanged(KoResourceSP );
     void tagsWereChanged();
     void tagCategoryWasAdded(const QString& tag);
     void tagCategoryWasRemoved(const QString& tag);
 
 protected:
-    void emitResourceAdded(KoResource* resource);
-    void emitRemovingResource(KoResource* resource);
-    void emitResourceChanged(KoResource* resource);
+    void emitResourceAdded(KoResourceSP resource);
+    void emitRemovingResource(KoResourceSP resource);
+    void emitResourceChanged(KoResourceSP resource);
     void emitTagsWereChanged();
     void emitTagCategoryWasAdded(const QString& tag);
     void emitTagCategoryWasRemoved(const QString& tag);
@@ -91,11 +91,10 @@ protected:
  * The KoResourceServerAdapter provides adapter to a specific resource server
  * It provides a resource type independent interface to the server.
  */
-template <class T, class Policy = PointerStoragePolicy<T> >
-    class KoResourceServerAdapter : public KoAbstractResourceServerAdapter, public KoResourceServerObserver<T, Policy>
+template <class T>
+    class KoResourceServerAdapter : public KoAbstractResourceServerAdapter, public KoResourceServerObserver<T>
 {
-    typedef KoResourceServer<T, Policy> ServerType;
-    typedef typename Policy::PointerType PointerType;
+    typedef KoResourceServer<T> ServerType;
 public:
     KoResourceServerAdapter(ServerType* resourceServer, QObject *parent = 0)
         : KoAbstractResourceServerAdapter(parent)
@@ -134,22 +133,22 @@ public:
             m_resourceServer->addObserver(this);
     }
 
-    QList<KoResource*> resources() override
+    QList<KoResourceSP > resources() override
     {
         if (! m_resourceServer)
-            return QList<KoResource*>();
+            return QList<KoResourceSP >();
 
         bool cacheDirty = serverResourceCacheInvalid();
         if (cacheDirty) {
-            QList<PointerType> serverResources =
+            QList<QSharedPointer<T>> serverResources =
                 m_sortingEnabled ?
                 m_resourceServer->sortedResources() :
                 m_resourceServer->resources();
 
             m_serverResources.clear();
 
-            Q_FOREACH (PointerType resource, serverResources) {
-                m_serverResources.append(Policy::toResourcePointer(resource));
+            Q_FOREACH (QSharedPointer<T> resource, serverResources) {
+                m_serverResources.append(resource);
             }
             serverResourceCacheInvalid(false);
 
@@ -163,12 +162,12 @@ public:
         return m_serverResources;
     }
 
-    bool addResource(KoResource* resource) override
+    bool addResource(KoResourceSP resource) override
     {
         if (! m_resourceServer)
             return false;
 
-        T* res = dynamic_cast<T*>(resource);
+        QSharedPointer<T> res = resource.dynamicCast<T>();
         if (res) {
             return m_resourceServer->addResource(res);
         }
@@ -176,16 +175,14 @@ public:
         return false;
     }
 
-    bool removeResource(KoResource* resource) override
+    bool removeResource(KoResourceSP resource) override
     {
         if (! m_resourceServer)
             return false;
 
-        T* res = dynamic_cast<T*>(resource);
+        QSharedPointer<T> res = resource.dynamicCast<T>();
         if (res) {
-
             return m_resourceServer->removeResourceAndBlacklist(res);
-
         }
 
         return false;
@@ -207,23 +204,23 @@ public:
         m_resourceServer->removeResourceFile(filename);
     }
 
-    void resourceAdded(PointerType resource) override {
+    void resourceAdded(QSharedPointer<T> resource) override {
         serverResourceCacheInvalid(true);
-        emitResourceAdded(Policy::toResourcePointer(resource));
+        emitResourceAdded(resource);
     }
 
-    void removingResource(PointerType resource) override {
+    void removingResource(QSharedPointer<T> resource) override {
         serverResourceCacheInvalid(true);
-        emitRemovingResource(Policy::toResourcePointer(resource));
+        emitRemovingResource(resource);
     }
 
-    void resourceChanged(PointerType resource) override {
+    void resourceChanged(QSharedPointer<T> resource) override {
         serverResourceCacheInvalid(true);
-        emitResourceChanged(Policy::toResourcePointer(resource));
+        emitResourceChanged(resource);
     }
 
-    void resourceChangedNoCacheInvalidation(PointerType resource) {
-        emitResourceChanged(Policy::toResourcePointer(resource));
+    void resourceChangedNoCacheInvalidation(QSharedPointer<T> resource) {
+        emitResourceChanged(resource);
     }
 
     void syncTaggedResourceView() override {
@@ -260,7 +257,7 @@ public:
         emitRemovingResource(0);
     }
 
-    QStringList assignedTagsList(KoResource* resource) override {
+    QStringList assignedTagsList(KoResourceSP resource) override {
         return m_resourceServer->assignedTagsList(resource);
     }
 
@@ -272,11 +269,11 @@ public:
         m_resourceServer->addTag(0, tag);
     }
 
-    void addTag(KoResource* resource, const QString& tag) override {
+    void addTag(KoResourceSP resource, const QString& tag) override {
         m_resourceServer->addTag(resource, tag);
     }
 
-    void deleteTag(KoResource* resource, const QString& tag) override {
+    void deleteTag(KoResourceSP resource, const QString& tag) override {
         m_resourceServer->delTag(resource, tag);
     }
 
@@ -305,7 +302,7 @@ public:
     void tagCategoryRemoved(const QString& tag) override {
         m_resourceServer->tagCategoryRemoved(tag);
     }
-    QList<KoResource*> serverResources() override {
+    QList<KoResourceSP > serverResources() override {
         return m_serverResources;
     }
 
@@ -344,8 +341,8 @@ private:
     ServerType* m_resourceServer;
     unsigned int m_changeCounter;
     unsigned int m_oldChangeCounter;
-    QList<KoResource*> m_serverResources;
-    QList<KoResource*> m_filteredResources;
+    QList<KoResourceSP > m_serverResources;
+    QList<KoResourceSP > m_filteredResources;
     bool m_enableFiltering;
     bool m_sortingEnabled;
 };

@@ -187,13 +187,13 @@ void KisPresetSaveWidget::savePreset()
 
         // add backup resource to the blacklist
         rServer->addResource(oldPreset);
-        rServer->removeResourceAndBlacklist(oldPreset.data());
+        rServer->removeResourceAndBlacklist(oldPreset);
 
 
         QStringList tags;
-        tags = rServer->assignedTagsList(curPreset.data());
+        tags = rServer->assignedTagsList(curPreset);
         Q_FOREACH (const QString & tag, tags) {
-            rServer->addTag(oldPreset.data(), tag);
+            rServer->addTag(oldPreset, tag);
         }
     }
 
@@ -210,21 +210,21 @@ void KisPresetSaveWidget::savePreset()
         // keep tags if we are saving over existing preset
         if (isSavingOverExistingPreset) {
             QStringList tags;
-            tags = rServer->assignedTagsList(curPreset.data());
+            tags = rServer->assignedTagsList(curPreset);
             Q_FOREACH (const QString & tag, tags) {
-                rServer->addTag(newPreset.data(), tag);
+                rServer->addTag(newPreset, tag);
             }
         }
 
         rServer->addResource(newPreset);
 
         // trying to get brush preset to load after it is created
-        emit resourceSelected(newPreset.data());
+        emit resourceSelected(newPreset);
     }
     else { // saving a preset that is replacing an existing one
 
         if (curPreset->filename().contains(saveLocation) == false || curPreset->filename().contains(presetName) == false) {
-            rServer->removeResourceAndBlacklist(curPreset.data());
+            rServer->removeResourceAndBlacklist(curPreset);
             curPreset->setFilename(currentPresetFileName);
             curPreset->setName(presetName);
         }
@@ -232,7 +232,7 @@ void KisPresetSaveWidget::savePreset()
         if (!rServer->resourceByFilename(curPreset->filename())){
             //this is necessary so that we can get the preset afterwards.
             rServer->addResource(curPreset, false, false);
-            rServer->removeFromBlacklist(curPreset.data());
+            rServer->removeFromBlacklist(curPreset);
         }
         if (curPreset->image().isNull()) {
             curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());

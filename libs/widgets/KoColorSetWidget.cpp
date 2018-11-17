@@ -31,7 +31,6 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QDir>
-#include <QPointer>
 #include <QScrollArea>
 #include <QGroupBox>
 #include <QVBoxLayout>
@@ -134,7 +133,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
             SLOT(slotNameListSelection(KoColor)));
 
     d->rServer = KoResourceServerProvider::instance()->paletteServer();
-    QPointer<KoColorSet> defaultColorSet = d->rServer->resourceByName("Default");
+    KoColorSetSP defaultColorSet = d->rServer->resourceByName("Default");
     if (!defaultColorSet && d->rServer->resources().count() > 0) {
         defaultColorSet = d->rServer->resources().first();
     }
@@ -146,16 +145,16 @@ KoColorSetWidget::~KoColorSetWidget()
     delete d;
 }
 
-void KoColorSetWidget::setColorSet(QPointer<KoColorSet> colorSet)
+void KoColorSetWidget::setColorSet(KoColorSetSP colorSet)
 {
     if (!colorSet) return;
     if (colorSet == d->colorSet) return;
 
-    d->paletteView->paletteModel()->setPalette(colorSet.data());
+    d->paletteView->paletteModel()->setPalette(colorSet);
     d->colorSet = colorSet;
 }
 
-KoColorSet* KoColorSetWidget::colorSet()
+KoColorSetSP KoColorSetWidget::colorSet()
 {
     return d->colorSet;
 }
@@ -202,7 +201,7 @@ void KoColorSetWidget::slotPatchTriggered(KoColorPatch *patch)
     }
 }
 
-void KoColorSetWidget::slotPaletteChoosen(KoColorSet *colorSet)
+void KoColorSetWidget::slotPaletteChoosen(KoColorSetSP colorSet)
 {
     d->colorSet = colorSet;
     d->paletteView->paletteModel()->setPalette(colorSet);

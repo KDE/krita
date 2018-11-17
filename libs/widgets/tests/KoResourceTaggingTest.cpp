@@ -25,6 +25,7 @@
 #include <WidgetsDebug.h>
 
 #include <KoResource.h>
+#include <KoPattern.h>
 #include "KoResourceServerProvider.h"
 
 #include "sdk/tests/kistest.h"
@@ -65,7 +66,7 @@ void KoResourceTaggingTest::testTagging()
 {
     KoResourceServer<KoPattern>* patServer = KoResourceServerProvider::instance()->patternServer();
     KoResourceTagStore tagStore(patServer);
-    KoResource *res = patServer->resources().first();
+    KoResourceSP res = patServer->resources().first();
     QVERIFY(res);
     QVERIFY(patServer->resourceByFilename(res->shortFilename()) == res);
 
@@ -73,7 +74,7 @@ void KoResourceTaggingTest::testTagging()
     QVERIFY(tagStore.tagNamesList().size() == 1);
     QStringList resources = tagStore.searchTag("test1");
     QVERIFY(resources.size() == 1);
-    KoResource *res2 = patServer->resourceByFilename(resources.first());
+    KoResourceSP res2 = patServer->resourceByFilename(resources.first());
     QVERIFY(res == res2);
 
     tagStore.addTag(res, "test2");
@@ -116,7 +117,7 @@ void KoResourceTaggingTest::testReadWriteXML()
     KoResourceServer<KoPattern>* patServer = KoResourceServerProvider::instance()->patternServer();
     KoResourceTagStore tagStore(patServer);
 
-    QList<KoPattern*> patterns = patServer->resources();
+    QList<KoPatternSP> patterns = patServer->resources();
     Q_ASSERT(patterns.size() > 5);
     tagStore.addTag(patterns[0], "test0");
     tagStore.addTag(patterns[1], "test1");

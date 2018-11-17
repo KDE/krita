@@ -224,8 +224,8 @@ typedef KisSharedPtr<KisRandomSubAccessor> KisRandomSubAccessorSP;
 typedef QVector<QPointF> vQPointF;
 
 class KisPaintOpPreset;
-typedef KisSharedPtr<KisPaintOpPreset> KisPaintOpPresetSP;
-typedef KisWeakSharedPtr<KisPaintOpPreset> KisPaintOpPresetWSP;
+typedef QSharedPointer<KisPaintOpPreset> KisPaintOpPresetSP;
+typedef QWeakPointer<KisPaintOpPreset> KisPaintOpPresetWSP;
 
 template <typename T>
 class KisPinnedSharedPtr;

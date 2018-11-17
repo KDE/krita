@@ -27,7 +27,7 @@ public:
     /// Construct brush to load filename later as brush
     KisSvgBrush(const QString& filename);
     KisSvgBrush(const KisSvgBrush& rhs);
-    KisBrush* clone() const override;
+    KisBrushSP clone() const override;
 
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;

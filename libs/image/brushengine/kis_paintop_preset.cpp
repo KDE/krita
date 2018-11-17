@@ -133,13 +133,14 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     if (m_d->settings) {
         oldOptionsWidget = m_d->settings->optionsWidget();
         m_d->settings->setOptionsWidget(0);
-        m_d->settings->setPreset(0);
+        m_d->settings->setPreset(QWeakPointer<KisPaintOpPreset>());
         m_d->settings = 0;
     }
 
     if (settings) {
         m_d->settings = settings->clone();
-        m_d->settings->setPreset(KisPaintOpPresetWSP(this));
+        QSharedPointer<KisPaintOpPreset> sp(this);
+        m_d->settings->setPreset(QWeakPointer<KisPaintOpPreset>(sp));
 
         if (oldOptionsWidget) {
             m_d->settings->setOptionsWidget(oldOptionsWidget);
@@ -399,7 +400,7 @@ KisPaintOpPresetSP KisPaintOpPreset::createMaskingPreset() const
     KisPaintOpPresetSP result;
 
     if (m_d->settings && m_d->settings->hasMaskingSettings()) {
-        result = new KisPaintOpPreset();
+        result.reset(new KisPaintOpPreset());
         result->setSettings(m_d->settings->createMaskingSettings());
         if (!result->valid()) {
             result.clear();
@@ -409,7 +410,7 @@ KisPaintOpPresetSP KisPaintOpPreset::createMaskingPreset() const
     return result;
 }
 
-KisPaintOpPreset::UpdatedPostponer::UpdatedPostponer(KisPaintOpPreset *preset)
+KisPaintOpPreset::UpdatedPostponer::UpdatedPostponer(KisPaintOpPresetSP preset)
     : m_updateProxy(preset->updateProxyNoCreate())
 {
     if (m_updateProxy) {

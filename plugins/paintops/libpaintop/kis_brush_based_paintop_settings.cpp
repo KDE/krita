@@ -27,6 +27,7 @@
 #include "kis_signals_blocker.h"
 #include "kis_brush_option.h"
 #include <KisPaintopSettingsIds.h>
+#include <kis_paintop_preset.h>
 
 struct BrushReader {
     BrushReader(const KisBrushBasedPaintOpSettings *parent)
@@ -252,7 +253,8 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                     s->setAngle(kisDegreesToRadians(prop->value().toReal()));
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            KisPaintOpPresetSP p = preset().toStrongRef();
+            QObject::connect(p->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -279,7 +281,8 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                     s->setAutoSpacing(prop->value().toBool(), s->autoSpacingCoeff());
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            KisPaintOpPresetSP p = preset().toStrongRef();
+            QObject::connect(p->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }
@@ -318,7 +321,8 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                     }
                 });
 
-            QObject::connect(preset()->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
+            KisPaintOpPresetSP p = preset().toStrongRef();
+            QObject::connect(p->updateProxy(), SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
             props << toQShared(prop);
         }

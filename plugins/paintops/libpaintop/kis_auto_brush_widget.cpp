@@ -184,7 +184,7 @@ void KisAutoBrushWidget::paramChanged()
     }
     Q_CHECK_PTR(kas);
 
-    m_autoBrush = new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI, inputRandomness->value() / 100.0, density->value() / 100.0);
+    m_autoBrush = KisBrushSP(new KisAutoBrush(kas, inputAngle->value() / 180.0 * M_PI, inputRandomness->value() / 100.0, density->value() / 100.0));
     m_autoBrush->setSpacing(spacingWidget->spacing());
     m_autoBrush->setAutoSpacing(spacingWidget->autoSpacingActive(), spacingWidget->autoSpacingCoeff());
     m_brush = m_autoBrush->image();

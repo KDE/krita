@@ -66,8 +66,9 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     if (!index.isValid())
         return;
 
-    KoResource* resource = static_cast<KoResource*>(index.internalPointer());
-    KoGamutMask* mask = static_cast<KoGamutMask*>(resource);
+    KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
+
+    KoGamutMaskSP mask = resource.staticCast<KoGamutMask>();
 
     if (!mask) {
         return;
@@ -193,7 +194,7 @@ KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
     layout->addWidget(m_itemChooser);
     setLayout(layout);
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)), this, SLOT(resourceSelected(KoResource*)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResourceSP )), this, SLOT(resourceSelected(KoResourceSP )));
 }
 
 KisGamutMaskChooser::~KisGamutMaskChooser()
@@ -201,7 +202,7 @@ KisGamutMaskChooser::~KisGamutMaskChooser()
 
 }
 
-void KisGamutMaskChooser::setCurrentResource(KoResource *resource)
+void KisGamutMaskChooser::setCurrentResource(KoResourceSP resource)
 {
     m_itemChooser->setCurrentResource(resource);
 }
@@ -235,9 +236,9 @@ void KisGamutMaskChooser::updateViewSettings()
     }
 }
 
-void KisGamutMaskChooser::resourceSelected(KoResource* resource)
+void KisGamutMaskChooser::resourceSelected(KoResourceSP resource)
 {
-    emit sigGamutMaskSelected(static_cast<KoGamutMask*>(resource));
+    emit sigGamutMaskSelected(resource.staticCast<KoGamutMask>());
 }
 
 void KisGamutMaskChooser::slotSetModeThumbnail()

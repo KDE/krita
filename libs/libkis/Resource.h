@@ -22,8 +22,7 @@
 #include <kis_types.h>
 #include "kritalibkis_export.h"
 #include "libkis.h"
-
-class KoResource;
+#include <KoResource.h>
 
 /**
  * A Resource represents a gradient, pattern, brush tip, brush preset, palette or 
@@ -44,7 +43,7 @@ class KRITALIBKIS_EXPORT Resource : public QObject
     Q_OBJECT
 
 public:
-    explicit Resource(KoResource *resource, QObject *parent = 0);
+    explicit Resource(KoResourceSP resource, QObject *parent = 0);
     ~Resource() override;
     bool operator==(const Resource &other) const;
     bool operator!=(const Resource &other) const;
@@ -111,7 +110,7 @@ private:
     friend class PresetChooser;
     friend class View;
     friend class Palette;
-    KoResource *resource() const;
+    KoResourceSP resource() const;
 
     struct Private;
     const Private *const d;

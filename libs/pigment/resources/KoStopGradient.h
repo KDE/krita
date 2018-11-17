@@ -41,7 +41,7 @@ public:
 
     bool operator==(const KoStopGradient &rhs) const;
 
-    KoAbstractGradient* clone() const override;
+    KoAbstractGradientSP clone() const override;
 
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
@@ -55,7 +55,7 @@ public:
     void colorAt(KoColor&, qreal t) const override;
 
     /// Creates KoStopGradient from a QGradient
-    static KoStopGradient * fromQGradient(const QGradient * gradient);
+    static QSharedPointer<KoStopGradient> fromQGradient(const QGradient *gradient);
 
     /// Sets the gradient stops
     void setStops(QList<KoGradientStop> stops);
@@ -92,6 +92,8 @@ private:
     void parseSvgGradient(const QDomElement& element);
     void parseSvgColor(QColor &color, const QString &s);
 };
+
+typedef QSharedPointer<KoStopGradient> KoStopGradientSP;
 
 #endif // KOSTOPGRADIENT_H
 

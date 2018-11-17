@@ -21,10 +21,12 @@
 #define _KARBONPATTERNTOOL_H_
 
 #include <KoToolBase.h>
+#include <KoResource.h>
+
 #include <QMap>
 
 class QPainter;
-class KoResource;
+
 class KarbonPatternEditStrategyBase;
 class KarbonPatternOptionsWidget;
 class KoShape;
@@ -54,7 +56,7 @@ protected:
     QList<QPointer<QWidget> > createOptionWidgets() override;
 
 private Q_SLOTS:
-    void patternSelected(KoResource *resource);
+    void patternSelected(KoResourceSP resource);
     void initialize();
     /// updates options widget from selected pattern
     void updateOptionsWidget();

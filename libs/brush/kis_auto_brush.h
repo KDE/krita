@@ -36,7 +36,7 @@ public:
 
     KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density = 1.0);
     KisAutoBrush(const KisAutoBrush& rhs);
-    KisBrush* clone() const override;
+    KisBrushSP clone() const override;
 
     ~KisAutoBrush() override;
 

@@ -54,7 +54,7 @@ public:
 
     void addPalette();
     void importPalette();
-    void removePalette(KoColorSet *);
+    void removePalette(KoColorSetSP );
 
     /**
      * @brief rowNumberOfGroup

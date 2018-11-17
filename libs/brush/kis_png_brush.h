@@ -27,7 +27,7 @@ public:
     /// Construct brush to load filename later as brush
     KisPngBrush(const QString& filename);
     KisPngBrush(const KisPngBrush &rhs);
-    KisBrush* clone() const override;
+    KisBrushSP clone() const override;
 
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;

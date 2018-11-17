@@ -361,14 +361,14 @@ bool tryParseDescriptor(const QDomElement &el,
         if (!patternUuid.isEmpty() && !patternData.isEmpty()) {
             QString fileName = QString("%1.pat").arg(patternUuid);
 
-            QScopedPointer<KoPattern> pattern(new KoPattern(fileName));
+            QSharedPointer<KoPattern> pattern(new KoPattern(fileName));
 
             QBuffer buffer(&patternData);
             buffer.open(QIODevice::ReadOnly);
 
             pattern->loadPatFromDevice(&buffer);
 
-            catcher.addPattern(path, pattern.data());
+            catcher.addPattern(path, pattern);
         } else {
             warnKrita << "WARNING: failed to load KisPattern XML section!" << ppVar(patternUuid);
         }

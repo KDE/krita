@@ -28,14 +28,14 @@
 #include <kis_workspace_resource.h>
 
 struct Resource::Private {
-    Private(KoResource *_resource)
+    Private(KoResourceSP _resource)
         : resource(_resource)
     {}
 
-    KoResource *resource {0};
+    KoResourceSP resource {0};
 };
 
-Resource::Resource(KoResource *resource, QObject *parent)
+Resource::Resource(KoResourceSP resource, QObject *parent)
     : QObject(parent)
     , d(new Private(resource))
 {
@@ -59,12 +59,12 @@ bool Resource::operator!=(const Resource &other) const
 QString Resource::type() const
 {
     if (!d->resource) return QString();
-    if (dynamic_cast<KoPattern*>(d->resource)) return "pattern";
-    else if (dynamic_cast<KoAbstractGradient*>(d->resource)) return "gradient";
-    else if (dynamic_cast<KisBrush*>(d->resource)) return "brush";
-    else if (dynamic_cast<KisPaintOpPreset*>(d->resource)) return "preset";
-    else if (dynamic_cast<KoColorSet*>(d->resource)) return "palette";
-    else if (dynamic_cast<KisWorkspaceResource*>(d->resource)) return "workspace";
+    if (d->resource.dynamicCast<KoPattern>()) return "pattern";
+    else if (d->resource.dynamicCast<KoAbstractGradient>()) return "gradient";
+    else if (d->resource.dynamicCast<KisBrush>()) return "brush";
+    else if (d->resource.dynamicCast<KisPaintOpPreset>()) return "preset";
+    else if (d->resource.dynamicCast<KoColorSet>()) return "palette";
+    else if (d->resource.dynamicCast<KisWorkspaceResource>()) return "workspace";
     else return "";
 }
 
@@ -118,7 +118,7 @@ bool Resource::setData(QByteArray data)
     return d->resource->loadFromDevice(&buf);
 }
 
-KoResource *Resource::resource() const
+KoResourceSP Resource::resource() const
 {
     return d->resource;
 }

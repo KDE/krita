@@ -75,15 +75,15 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     m_ui->viewPalette->setLayout(new QHBoxLayout(m_ui->viewPalette));
     m_ui->viewPalette->layout()->addWidget(m_d->itemChooser.data());
 
-    connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResource*)), SLOT(slotPaletteResourceSelected(KoResource*)));
+    connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResourceSP )), SLOT(slotPaletteResourceSelected(KoResourceSP )));
 }
 
 KisPaletteListWidget::~KisPaletteListWidget()
 { }
 
-void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
+void KisPaletteListWidget::slotPaletteResourceSelected(KoResourceSP r)
 {
-    KoColorSet *g = static_cast<KoColorSet*>(r);
+    KoColorSetSP g = r.staticCast<KoColorSet>();
     emit sigPaletteSelected(g);
     if (!m_d->allowModification) { return; }
     if (g->isEditable()) {
@@ -104,7 +104,7 @@ void KisPaletteListWidget::slotRemove()
 {
     if (!m_d->allowModification) { return; }
     if (m_d->itemChooser->currentResource()) {
-        KoColorSet *cs = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
+        KoColorSetSP cs = m_d->itemChooser->currentResource().staticCast<KoColorSet>();
         emit sigRemovePalette(cs);
     }
     m_d->itemChooser->setCurrentItem(0, 0);
@@ -120,7 +120,7 @@ void KisPaletteListWidget::slotImport()
 void KisPaletteListWidget::slotExport()
 {
     if (!m_d->allowModification) { return; }
-    emit sigExportPalette(static_cast<KoColorSet*>(m_d->itemChooser->currentResource()));
+    emit sigExportPalette(m_d->itemChooser->currentResource().staticCast<KoColorSet>());
 }
 
 void KisPaletteListWidget::setAllowModification(bool allowModification)
@@ -129,7 +129,7 @@ void KisPaletteListWidget::setAllowModification(bool allowModification)
     m_ui->bnAdd->setEnabled(allowModification);
     m_ui->bnImport->setEnabled(allowModification);
     m_ui->bnExport->setEnabled(allowModification);
-    KoColorSet *cs = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
+    KoColorSetSP cs = m_d->itemChooser->currentResource().staticCast<KoColorSet>();
     m_ui->bnRemove->setEnabled(allowModification && cs && cs->isEditable());
 }
 
@@ -156,15 +156,15 @@ KisPaletteListWidgetPrivate::Delegate::~Delegate()
 {  }
 
 void KisPaletteListWidgetPrivate::Delegate::paint(QPainter * painter,
-                                                    const QStyleOptionViewItem & option,
-                                                    const QModelIndex & index) const
+                                                  const QStyleOptionViewItem & option,
+                                                  const QModelIndex & index) const
 {
     painter->save();
     if (!index.isValid())
         return;
 
-    KoResource* resource = static_cast<KoResource*>(index.internalPointer());
-    KoColorSet* colorSet = static_cast<KoColorSet*>(resource);
+    KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
+    KoColorSetSP colorSet = resource.staticCast<KoColorSet>();
 
     QRect previewRect(option.rect.x() + 2,
                       option.rect.y() + 2,
@@ -190,7 +190,7 @@ void KisPaletteListWidgetPrivate::Delegate::paint(QPainter * painter,
 }
 
 inline QSize KisPaletteListWidgetPrivate::Delegate::sizeHint(const QStyleOptionViewItem & option,
-                                                               const QModelIndex &) const
+                                                             const QModelIndex &) const
 {
     return option.decorationSize;
 }

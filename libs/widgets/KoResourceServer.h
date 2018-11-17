@@ -35,7 +35,6 @@
 #include <QTemporaryFile>
 #include <QDomDocument>
 #include "KoResource.h"
-#include "KoResourceServerPolicies.h"
 #include "KoResourceServerObserver.h"
 #include "KoResourceTagStore.h"
 #include "KoResourcePaths.h"
@@ -99,8 +98,8 @@ protected:
     QStringList m_blackListFileNames;
 
     friend class KoResourceTagStore;
-    virtual KoResource *byMd5(const QByteArray &md5) const = 0;
-    virtual KoResource *byFileName(const QString &fileName) const = 0;
+    virtual KoResourceSP byMd5(const QByteArray &md5) const = 0;
+    virtual KoResourceSP byFileName(const QString &fileName) const = 0;
 
 private:
     QString m_type;
@@ -116,29 +115,14 @@ protected:
  * KoResourceServer manages the resources of one type. It stores,
  * loads and saves the resources.  To keep track of changes the server
  * can be observed with a KoResourceServerObserver
- *
- * The \p Policy template parameter defines the way how the lifetime
-
- * of a resource is handled.  There are to predefined policies:
-
- *
- *   o PointerStoragePolicy --- usual pointers with ownership over
- *                              the resource.
-
- *   o SharedPointerStoragePolicy --- shared pointers. The server does no
- *                                    extra handling for the lifetime of
- *                                    the resource.
- *
- * Use the former for usual resources and the latter for shared pointer based
- * ones.
  */
 
-template <class T, class Policy = PointerStoragePolicy<T> >
+template <class T>
 class KoResourceServer : public KoResourceServerBase
 {
 public:
-    typedef typename Policy::PointerType PointerType;
-    typedef KoResourceServerObserver<T, Policy> ObserverType;
+    typedef KoResourceServerObserver<T> ObserverType;
+
     KoResourceServer(const QString& type, const QString& extensions)
         : KoResourceServerBase(type, extensions)
     {
@@ -156,13 +140,7 @@ public:
         Q_FOREACH (ObserverType* observer, m_observers) {
             observer->unsetResourceServer();
         }
-
-        Q_FOREACH (PointerType res, m_resources) {
-            Policy::deleteResource(res);
-        }
-
         m_resources.clear();
-
     }
 
     int resourceCount() const override {
@@ -175,7 +153,7 @@ public:
      * be loaded or and invalid aren't added to the server.
      * @param filenames list of filenames to be loaded
      */
-    void loadResources(QStringList filenames) override {
+    void loadResources(QStringList /*filenames*/) override {
     }
 
     void loadTags() {
@@ -187,7 +165,7 @@ public:
     }
 
     /// Adds an already loaded resource to the server
-    bool addResource(PointerType resource, bool save = true, bool infront = false) {
+    bool addResource(QSharedPointer<T> resource, bool save = true, bool infront = false) {
         if (!resource->valid()) {
             warnWidgets << "Tried to add an invalid resource!";
             return false;
@@ -243,7 +221,7 @@ public:
     /**
      * Removes a given resource from the blacklist.
      */
-    bool removeFromBlacklist(PointerType resource) {
+    bool removeFromBlacklist(QSharedPointer<T> resource) {
         if (m_blackListFileNames.contains(resource->filename())) {
             m_blackListFileNames.removeAll(resource->filename());
             writeBlackListFile();
@@ -253,7 +231,7 @@ public:
     }
 
     /// Remove a resource from Resource Server but not from a file
-    bool removeResourceFromServer(PointerType resource){
+    bool removeResourceFromServer(QSharedPointer<T> resource){
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
         }
@@ -264,13 +242,12 @@ public:
         m_tagStore->removeResource(resource);
         notifyRemovingResource(resource);
 
-        Policy::deleteResource(resource);
         return true;
     }
 
     /// Remove a resource from the resourceserver and blacklist it
 
-    bool removeResourceAndBlacklist(PointerType resource) {
+    bool removeResourceAndBlacklist(QSharedPointer<T> resource) {
 
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
@@ -284,17 +261,14 @@ public:
 
         m_blackListFileNames.append(resource->filename());
         writeBlackListFile();
-        Policy::deleteResource(resource);
         return true;
     }
 
-    QList<PointerType> resources() {
-        m_loadLock.lock();
-        QList<PointerType> resourceList = m_resources;
-        Q_FOREACH (PointerType r, m_resourceBlackList) {
-            resourceList.removeOne(r);
+    QList<QSharedPointer<T>> resources() {
+        QList<QSharedPointer<T>> resourceList;
+        for (int row = 0; row < m_resourceModel.rowCount(); ++row) {
+            resourceList << m_resourceModel.resourceForIndex(m_resourceModel.index(row, 0)).dynamicCast<T>();
         }
-        m_loadLock.unlock();
         return resourceList;
     }
 
@@ -317,11 +291,10 @@ public:
         if ( fi.size() == 0)
             return false;
 
-        PointerType resource = createResource( filename );
+        QSharedPointer<T> resource = createResource( filename );
         resource->load();
         if (!resource->valid()) {
             warnWidgets << "Import failed! Resource is not valid";
-            Policy::deleteResource(resource);
 
             return false;
 
@@ -341,12 +314,6 @@ public:
             }
             resource->setFilename(fileInfo.filePath());
         }
-
-
-        if(!addResource(resource)) {
-            Policy::deleteResource(resource);
-        }
-
         return true;
     }
 
@@ -355,7 +322,7 @@ public:
     {
         QFileInfo fi(filename);
 
-        PointerType resource = resourceByFilename(fi.fileName());
+        QSharedPointer<T> resource = resourceByFilename(fi.fileName());
         if (!resource) {
             warnWidgets << "Resource file do not exist ";
             return;
@@ -376,7 +343,7 @@ public:
             m_observers.append(observer);
 
             if(notifyLoadedResources) {
-                Q_FOREACH (PointerType resource, m_resourcesByFilename) {
+                Q_FOREACH (QSharedPointer<T> resource, m_resourcesByFilename) {
                     observer->resourceAdded(resource);
 
                 }
@@ -398,33 +365,34 @@ public:
         m_observers.removeAt( index );
     }
 
-    PointerType resourceByFilename(const QString& filename) const
+    QSharedPointer<T> resourceByFilename(const QString& /*filename*/) const
     {
-        if (m_resourcesByFilename.contains(filename)) {
-            return m_resourcesByFilename[filename];
-        }
+//        if (m_resourcesByFilename.contains(filename)) {
+//            return m_resourcesByFilename[filename];
+//        }
         return 0;
     }
 
 
-    PointerType resourceByName( const QString& name ) const
+    QSharedPointer<T> resourceByName( const QString& /*name */) const
     {
-        if (m_resourcesByName.contains(name)) {
-            return m_resourcesByName[name];
-        }
+//        if (m_resourcesByName.contains(name)) {
+//            return m_resourcesByName[name];
+//        }
         return 0;
     }
 
-    PointerType resourceByMD5(const QByteArray& md5) const
+    QSharedPointer<T> resourceByMD5(const QByteArray& /*md5*/) const
     {
-        return m_resourcesByMd5.value(md5);
+//        return m_resourcesByMd5.value(md5);
+        return 0;
     }
 
     /**
      * Call after changing the content of a resource;
      * Notifies the connected views.
      */
-    void updateResource( PointerType resource )
+    void updateResource(QSharedPointer<T> resource)
     {
         notifyResourceChanged(resource);
     }
@@ -465,13 +433,13 @@ public:
     }
 
     // don't use these method directly since it doesn't update views!
-    void addTag( KoResource* resource,const QString& tag)
+    void addTag(KoResourceSP resource, const QString& tag)
     {
-        m_tagStore->addTag(resource,tag);
+        m_tagStore->addTag(resource, tag);
     }
 
     // don't use these method directly since it doesn't update views!
-    void delTag( KoResource* resource,const QString& tag)
+    void delTag(KoResourceSP resource, const QString& tag)
     {
         m_tagStore->delTag(resource, tag);
     }
@@ -511,7 +479,7 @@ public:
         return m_tagStore->searchTag(query);
     }
 
-    QStringList assignedTagsList(KoResource* resource) const
+    QStringList assignedTagsList(KoResourceSP resource) const
     {
         return m_tagStore->assignedTagsList(resource);
     }
@@ -522,19 +490,19 @@ public:
      * Override to create more resources from the file.
      * @param filename the filename of the resource or resource collection
      */
-    virtual QList<PointerType> createResources( const QString & filename )
+    virtual QList<QSharedPointer<T>> createResources( const QString & filename )
     {
-        QList<PointerType> createdResources;
+        QList<QSharedPointer<T>> createdResources;
         createdResources.append(createResource(filename));
         return createdResources;
     }
 
-    virtual PointerType createResource( const QString & filename ) = 0;
+    virtual QSharedPointer<T> createResource( const QString & filename ) = 0;
 
     /// Return the currently stored resources in alphabetical order, overwrite for customized sorting
-    virtual QList<PointerType> sortedResources()
+    virtual QList<QSharedPointer<T>> sortedResources()
     {
-        QMap<QString, PointerType> sortedNames;
+        QMap<QString, QSharedPointer<T>> sortedNames;
         Q_FOREACH (const QString &name, m_resourcesByName.keys()) {
             sortedNames.insert(name.toLower(), m_resourcesByName[name]);
         }
@@ -543,21 +511,21 @@ public:
 
 protected:
 
-    void notifyResourceAdded(PointerType resource)
+    void notifyResourceAdded(QSharedPointer<T> resource)
     {
         Q_FOREACH (ObserverType* observer, m_observers) {
             observer->resourceAdded(resource);
         }
     }
 
-    void notifyRemovingResource(PointerType resource)
+    void notifyRemovingResource(QSharedPointer<T> resource)
     {
         Q_FOREACH (ObserverType* observer, m_observers) {
             observer->removingResource(resource);
         }
     }
 
-    void notifyResourceChanged(PointerType resource)
+    void notifyResourceChanged(QSharedPointer<T> resource)
     {
         Q_FOREACH (ObserverType* observer, m_observers) {
             observer->resourceChanged(resource);
@@ -651,25 +619,25 @@ protected:
 
 protected:
 
-    KoResource* byMd5(const QByteArray &md5) const override
+    KoResourceSP byMd5(const QByteArray &/*md5*/) const override
     {
-        return Policy::toResourcePointer(resourceByMD5(md5));
+        return 0;//Policy::toResourcePointer(resourceByMD5(md5));
     }
 
-    KoResource* byFileName(const QString &fileName) const override
+    KoResourceSP byFileName(const QString &/*fileName*/) const override
     {
-        return Policy::toResourcePointer(resourceByFilename(fileName));
+        return 0;//Policy::toResourcePointer(resourceByFilename(fileName));
     }
 
 private:
-    void addResourceToMd5Registry(PointerType resource) {
+    void addResourceToMd5Registry(QSharedPointer<T> resource) {
         const QByteArray md5 = resource->md5();
         if (!md5.isEmpty()) {
             m_resourcesByMd5.insert(md5, resource);
         }
     }
 
-    void removeResourceFromMd5Registry(PointerType resource) {
+    void removeResourceFromMd5Registry(QSharedPointer<T> resource) {
         const QByteArray md5 = resource->md5();
         if (!md5.isEmpty()) {
             m_resourcesByMd5.remove(md5);
@@ -678,29 +646,29 @@ private:
 
 private:
 
-    QHash<QString, PointerType> m_resourcesByName;
-    QHash<QString, PointerType> m_resourcesByFilename;
-    QHash<QByteArray, PointerType> m_resourcesByMd5;
+    QHash<QString, QSharedPointer<T>> m_resourcesByName;
+    QHash<QString, QSharedPointer<T>> m_resourcesByFilename;
+    QHash<QByteArray, QSharedPointer<T>> m_resourcesByMd5;
 
-    QList<PointerType> m_resourceBlackList;
-    QList<PointerType> m_resources; ///< list of resources in order of addition
+    QList<QSharedPointer<T>> m_resourceBlackList;
+    QList<QSharedPointer<T>> m_resources; ///< list of resources in order of addition
     QList<ObserverType*> m_observers;
     QString m_blackListFile;
     KoResourceTagStore* m_tagStore;
 
 };
 
-template <class T, class Policy = PointerStoragePolicy<T> >
-class KoResourceServerSimpleConstruction : public KoResourceServer<T, Policy>
+template <class T>
+class KoResourceServerSimpleConstruction : public KoResourceServer<T>
 {
 public:
     KoResourceServerSimpleConstruction(const QString& type, const QString& extensions)
-        : KoResourceServer<T, Policy>(type, extensions)
+        : KoResourceServer<T>(type, extensions)
     {
     }
 
-    typename KoResourceServer<T, Policy>::PointerType createResource( const QString & filename ) override {
-        return new T(filename);
+    QSharedPointer<T> createResource( const QString & filename ) override {
+        return QSharedPointer<T>(new T(filename));
     }
 };
 

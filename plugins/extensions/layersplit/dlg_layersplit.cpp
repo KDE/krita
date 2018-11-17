@@ -61,7 +61,7 @@ DlgLayerSplit::DlgLayerSplit()
 
     QString paletteName = cfg.readEntry<QString>("layersplit/paletteName", i18n("Default"));
     KoResourceServer<KoColorSet> *pserver = KoResourceServerProvider::instance()->paletteServer();
-    KoColorSet *pal = pserver->resourceByName(paletteName);
+    KoColorSetSP pal = pserver->resourceByName(paletteName);
     if (pal) {
         m_palette = pal;
         m_page->paletteChooser->setText(pal->name());
@@ -132,12 +132,12 @@ int DlgLayerSplit::fuzziness() const
 
 }
 
-KoColorSet *DlgLayerSplit::palette() const
+KoColorSetSP DlgLayerSplit::palette() const
 {
     return m_palette;
 }
 
-void DlgLayerSplit::slotSetPalette(KoColorSet *pal)
+void DlgLayerSplit::slotSetPalette(KoColorSetSP pal)
 {
     if (pal) {
         m_palette = pal;

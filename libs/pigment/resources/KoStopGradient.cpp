@@ -58,9 +58,9 @@ bool KoStopGradient::operator==(const KoStopGradient &rhs) const
         m_stops == rhs.m_stops;
 }
 
-KoAbstractGradient* KoStopGradient::clone() const
+KoAbstractGradientSP KoStopGradient::clone() const
 {
-    return new KoStopGradient(*this);
+    return KoAbstractGradientSP(new KoStopGradient(*this));
 }
 
 bool KoStopGradient::load()
@@ -222,12 +222,12 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
     }
 }
 
-KoStopGradient * KoStopGradient::fromQGradient(const QGradient * gradient)
+QSharedPointer<KoStopGradient> KoStopGradient::fromQGradient(const QGradient *gradient)
 {
     if (! gradient)
-        return 0;
+        return QSharedPointer<KoStopGradient>(0);
 
-    KoStopGradient * newGradient = new KoStopGradient(QString());
+    QSharedPointer<KoStopGradient> newGradient(new KoStopGradient(QString()));
     newGradient->setType(gradient->type());
     newGradient->setSpread(gradient->spread());
 
@@ -255,8 +255,7 @@ KoStopGradient * KoStopGradient::fromQGradient(const QGradient * gradient)
         break;
     }
     default:
-        delete newGradient;
-        return 0;
+        return QSharedPointer<KoStopGradient>(0);;
     }
 
     Q_FOREACH (const QGradientStop & stop, gradient->stops()) {

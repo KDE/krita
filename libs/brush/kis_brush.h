@@ -51,7 +51,7 @@ enum enumBrushType {
 static const qreal DEFAULT_SOFTNESS_FACTOR = 1.0;
 
 class KisBrush;
-typedef KisSharedPtr<KisBrush> KisBrushSP;
+typedef QSharedPointer<KisBrush> KisBrushSP;
 
 /**
  * KisBrush is the base class for brush resources. A brush resource
@@ -339,7 +339,7 @@ public:
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
-    virtual KisBrush* clone() const = 0;
+    virtual KisBrushSP clone() const = 0;
 
 protected:
 

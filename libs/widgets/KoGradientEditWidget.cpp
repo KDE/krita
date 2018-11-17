@@ -386,15 +386,13 @@ void KoGradientEditWidget::addGradientToPredefs()
     }
     gradient->setSpread(m_spread);
     gradient->setStops(m_stops);
-    KoStopGradient * g = KoStopGradient::fromQGradient(gradient);
+    QSharedPointer<KoStopGradient> stopGradient = KoStopGradient::fromQGradient(gradient);
     delete gradient;
-    if (! g)
+    if (!stopGradient) {
         return;
-    g->setFilename(fileInfo.filePath());
-    g->setValid(true);
-
-    if (! server->addResource(g))
-        delete g;
+    }
+    stopGradient->setFilename(fileInfo.filePath());
+    stopGradient->setValid(true);
 }
 
 void KoGradientEditWidget::stopChanged()

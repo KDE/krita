@@ -261,7 +261,7 @@ public:
     explicit KoSegmentGradient(const QString &file = QString());
     ~KoSegmentGradient() override;
 
-    KoAbstractGradient* clone() const override;
+    KoAbstractGradientSP clone() const override;
 
     /// reimplemented
     bool load() override;
@@ -426,6 +426,8 @@ protected:
     private:
     bool init();
 };
+
+typedef QSharedPointer<KoSegmentGradient> KoSegmentGradientSP;
 
 #endif // KOSEGMENTGRADIENT_H
 

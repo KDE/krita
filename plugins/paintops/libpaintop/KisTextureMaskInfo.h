@@ -27,7 +27,8 @@
 
 #include <boost/operators.hpp>
 
-class KoPattern;
+#include <KoPattern.h>
+
 class KisTextureMaskInfo;
 
 class KisTextureMaskInfo : public boost::equality_comparable<KisTextureMaskInfo>
@@ -57,7 +58,7 @@ public:
 private:
     int m_levelOfDetail = 0;
 
-    KoPattern *m_pattern = 0;
+    KoPatternSP m_pattern = 0;
 
     qreal m_scale = 1.0;
     qreal m_brightness = 0.0;

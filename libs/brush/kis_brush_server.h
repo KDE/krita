@@ -28,8 +28,8 @@
 #include "kritabrush_export.h"
 #include "kis_brush.h"
 
-typedef KoResourceServer<KisBrush, SharedPointerStoragePolicy<KisBrushSP> > KisBrushResourceServer;
-typedef KoResourceServerAdapter<KisBrush, SharedPointerStoragePolicy<KisBrushSP> > KisBrushResourceServerAdapter;
+typedef KoResourceServer<KisBrush> KisBrushResourceServer;
+typedef KoResourceServerAdapter<KisBrush> KisBrushResourceServerAdapter;
 
 /**
  *

@@ -46,9 +46,9 @@ public:
     KritaGradientMapFilterConfiguration();
     ~KritaGradientMapFilterConfiguration() override;
 
-    virtual void setGradient(const KoResource* gradient);
+    virtual void setGradient(const KoResourceSP gradient);
 
-    virtual const KoResource* gradient() const;
+    virtual const KoResourceSP gradient() const;
 
 private:
     KoResource const* m_gradient;
@@ -67,7 +67,7 @@ public:
     WdgGradientMap *m_page;
     KoResourcePopupAction *m_gradientPopUp;
     KisSignalCompressor *m_gradientChangedCompressor;
-    KoStopGradient *m_activeGradient;
+    KoStopGradientSP m_activeGradient;
     void setView(KisViewManager *view) override;
 private Q_SLOTS:
     void setAbstractGradientToEditor();

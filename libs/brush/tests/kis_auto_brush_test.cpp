@@ -42,7 +42,7 @@ void KisAutoBrushTest::testCreation()
 void KisAutoBrushTest::testMaskGeneration()
 {
     KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 1.0, 1.0, 1.0, 2, false);
-    KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
+    KisBrushSP a(new KisAutoBrush(circle, 0.0, 0.0));
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5);
@@ -102,7 +102,7 @@ static void dabSizeHelper(KisBrushSP const& brush,
 void KisAutoBrushTest::testDabSize()
 {
     KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 0.5, 1.0, 1.0, 2, false);
-    KisBrushSP a = new KisAutoBrush(circle, 0.0, 0.0);
+    KisBrushSP a(new KisAutoBrush(circle, 0.0, 0.0));
     QCOMPARE(a->width(), 10);
     QCOMPARE(a->height(), 5);
 
@@ -176,7 +176,7 @@ void KisAutoBrushTest::testClone()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
 
     KisCircleMaskGenerator* circle = new KisCircleMaskGenerator(10, 0.7, 0.85, 0.5, 2, true);
-    KisBrushSP brush = new KisAutoBrush(circle, 0.5, 0.0);
+    KisBrushSP brush(new KisAutoBrush(circle, 0.5, 0.0));
 
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5);
 

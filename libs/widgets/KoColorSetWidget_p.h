@@ -34,7 +34,6 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QDir>
-#include <QPointer>
 #include <QScrollArea>
 #include <QComboBox>
 
@@ -54,7 +53,7 @@ class KisPaletteView;
 class Q_DECL_HIDDEN KoColorSetWidget::KoColorSetWidgetPrivate {
 public:
     KoColorSetWidget *thePublic;
-    QPointer<KoColorSet> colorSet;
+    KoColorSetSP colorSet;
 
     KisPaletteView *paletteView;
     KisPaletteListWidget *paletteChooser;

@@ -22,6 +22,7 @@
 #include "kritaui_export.h"
 
 #include <QVector>
+#include <QSharedPointer>
 
 class KisFreehandStrokeInfo;
 class KisPaintInformation;
@@ -35,9 +36,7 @@ class KoColor;
 class KisRunnableStrokeJobData;
 
 class KisPaintOpPreset;
-template<class T>
-class KisSharedPtr;
-typedef KisSharedPtr<KisPaintOpPreset> KisPaintOpPresetSP;
+typedef QSharedPointer<KisPaintOpPreset> KisPaintOpPresetSP;
 
 
 class KRITAUI_EXPORT KisMaskedFreehandStrokePainter

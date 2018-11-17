@@ -81,10 +81,10 @@ KoResourceSelector::KoResourceSelector( QSharedPointer<KoAbstractResourceServerA
     connect( this, SIGNAL(currentIndexChanged(int)),
              this, SLOT(indexChanged(int)) );
 
-    connect(resourceAdapter.data(), SIGNAL(resourceAdded(KoResource*)),
-            this, SLOT(resourceAdded(KoResource*)));
-    connect(resourceAdapter.data(), SIGNAL(removingResource(KoResource*)),
-            this, SLOT(resourceRemoved(KoResource*)));
+    connect(resourceAdapter.data(), SIGNAL(resourceAdded(KoResourceSP )),
+            this, SLOT(resourceAdded(KoResourceSP )));
+    connect(resourceAdapter.data(), SIGNAL(removingResource(KoResourceSP )),
+            this, SLOT(resourceRemoved(KoResourceSP )));
 }
 
 KoResourceSelector::~KoResourceSelector()
@@ -128,7 +128,7 @@ void KoResourceSelector::mousePressEvent( QMouseEvent * event )
         if( ! index.isValid() )
             return;
 
-        KoResource * resource = static_cast<KoResource*>( index.internalPointer() );
+        KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
         if( resource )
             emit resourceApplied( resource );
     }
@@ -151,10 +151,10 @@ void KoResourceSelector::setResourceAdapter(QSharedPointer<KoAbstractResourceSer
     setModel(new KoLegacyResourceModel(resourceAdapter, this));
     d->updateIndex(this);
 
-    connect(resourceAdapter.data(), SIGNAL(resourceAdded(KoResource*)),
-            this, SLOT(resourceAdded(KoResource*)));
-    connect(resourceAdapter.data(), SIGNAL(removingResource(KoResource*)),
-            this, SLOT(resourceRemoved(KoResource*)));
+    connect(resourceAdapter.data(), SIGNAL(resourceAdded(KoResourceSP )),
+            this, SLOT(resourceAdded(KoResourceSP )));
+    connect(resourceAdapter.data(), SIGNAL(removingResource(KoResourceSP )),
+            this, SLOT(resourceRemoved(KoResourceSP )));
 }
 
 void KoResourceSelector::setDisplayMode(DisplayMode mode)
@@ -194,20 +194,21 @@ void KoResourceSelector::setRowHeight( int rowHeight )
 void KoResourceSelector::indexChanged( int )
 {
     QModelIndex index = view()->currentIndex();
-    if( ! index.isValid() )
+    if(!index.isValid()) {
         return;
-
-    KoResource * resource = static_cast<KoResource*>( index.internalPointer() );
-    if( resource )
+    }
+    KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
+    if (resource) {
         emit resourceSelected( resource );
+    }
 }
 
-void KoResourceSelector::resourceAdded(KoResource*)
+void KoResourceSelector::resourceAdded(KoResourceSP )
 {
     d->updateIndex(this);
 }
 
-void KoResourceSelector::resourceRemoved(KoResource*)
+void KoResourceSelector::resourceRemoved(KoResourceSP )
 {
     d->updateIndex(this);
 }

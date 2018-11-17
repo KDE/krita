@@ -44,4 +44,6 @@ private:
     QByteArray m_dockerState;
 };
 
+typedef QSharedPointer<KisWorkspaceResource> KisWorkspaceResourceSP;
+
 #endif // KIS_WORKSPACE_RESOURCE_H

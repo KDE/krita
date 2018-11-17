@@ -28,8 +28,8 @@ public:
     PsdPattern();
     ~PsdPattern();
 
-    void setPattern(KoPattern *pattern);
-    KoPattern *pattern() const;
+    void setPattern(KoPatternSP pattern);
+    KoPatternSP pattern() const;
 
     bool psd_write_pattern(QIODevice* io);
     bool psd_read_pattern(QIODevice* io);

@@ -130,7 +130,7 @@ Qt::DropActions SvgCollectionModel::supportedDragActions() const
     return Qt::CopyAction;
 }
 
-void SvgCollectionModel::setSvgSymbolCollectionResource(KoSvgSymbolCollectionResource *resource)
+void SvgCollectionModel::setSvgSymbolCollectionResource(QSharedPointer<KoSvgSymbolCollectionResource> resource)
 {
     m_symbolCollection = resource;
 }
@@ -174,7 +174,7 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     connect(m_wdgSvgCollection->cmbCollections, SIGNAL(activated(int)), SLOT(collectionActivated(int)));
 
     KoResourceServer<KoSvgSymbolCollectionResource>  *svgCollectionProvider = KoResourceServerProvider::instance()->svgSymbolCollectionServer();
-    Q_FOREACH(KoSvgSymbolCollectionResource *r, svgCollectionProvider->resources()) {
+    Q_FOREACH(QSharedPointer<KoSvgSymbolCollectionResource> r, svgCollectionProvider->resources()) {
         m_wdgSvgCollection->cmbCollections->addSqueezedItem(r->name());
         SvgCollectionModel *model = new SvgCollectionModel();
         model->setSvgSymbolCollectionResource(r);

@@ -343,8 +343,7 @@ KisImageBuilder_Result PSDLoader::decode(QIODevice *io)
     }
 
     if (!allStylesForServer.isEmpty()) {
-        KisPSDLayerStyleCollectionResource *collection =
-            new KisPSDLayerStyleCollectionResource("Embedded PSD Styles.asl");
+        KisPSDLayerStyleCollectionResourceSP collection(new KisPSDLayerStyleCollectionResource("Embedded PSD Styles.asl"));
 
         collection->setName(i18nc("Auto-generated layer style collection name for embedded styles (collection)", "<%1> (embedded)", m_image->objectName()));
         KIS_SAFE_ASSERT_RECOVER_NOOP(!collection->valid());

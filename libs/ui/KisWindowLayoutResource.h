@@ -22,18 +22,21 @@
 #include <KoResource.h>
 #include <KisMainWindow.h>
 
+class KisWindowLayoutResource;
+typedef QSharedPointer<KisWindowLayoutResource> KisWindowLayoutResourceSP;
+
 class KisWindowLayoutResource : public KoResource
 {
 public:
     explicit KisWindowLayoutResource(const QString &filename);
     ~KisWindowLayoutResource() override;
 
-    static KisWindowLayoutResource * fromCurrentWindows(
-        const QString &filename, const QList<QPointer<KisMainWindow>> &mainWindows,
-        bool showImageInAllWindows,
-        bool primaryWorkspaceFollowsFocus,
-        KisMainWindow *primaryWindow
-    );
+    static KisWindowLayoutResourceSP fromCurrentWindows (
+            const QString &filename, const QList<QPointer<KisMainWindow>> &mainWindows,
+            bool showImageInAllWindows,
+            bool primaryWorkspaceFollowsFocus,
+            KisMainWindow *primaryWindow
+            );
 
     void applyLayout();
 
@@ -57,5 +60,6 @@ private:
 
     QScopedPointer<Private> d;
 };
+
 
 #endif

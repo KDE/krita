@@ -40,10 +40,10 @@ public:
     ~KisColorsetChooser() override;
 
 Q_SIGNALS:
-    void paletteSelected(KoColorSet* colorSet);
+    void paletteSelected(KoColorSetSP colorSet);
 
 private Q_SLOTS:
-    void resourceSelected(KoResource* resource);
+    void resourceSelected(KoResourceSP resource);
     void slotSave();
 
 private:

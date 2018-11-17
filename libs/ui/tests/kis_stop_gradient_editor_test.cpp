@@ -30,11 +30,11 @@
 void KisStopGradientEditorTest::test()
 {
     QLinearGradient gradient;
-    QScopedPointer<KoStopGradient> koGradient(KoStopGradient::fromQGradient(&gradient));
+    QSharedPointer<KoStopGradient> koGradient(KoStopGradient::fromQGradient(&gradient));
     QDialog dlg;
 
     KisStopGradientEditor *widget = new KisStopGradientEditor(&dlg);
-    widget->setGradient(koGradient.data());
+    widget->setGradient(koGradient);
 
     QVBoxLayout *layout = new QVBoxLayout(&dlg);
     layout->setContentsMargins(0,0,0,0);

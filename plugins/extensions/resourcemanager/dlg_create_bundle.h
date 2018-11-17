@@ -21,7 +21,7 @@
 
 #include <KoDialog.h>
 
-class KisResourceBundle;
+#include <KisResourceBundle.h>
 
 namespace Ui
 {
@@ -33,7 +33,7 @@ class DlgCreateBundle : public KoDialog
     Q_OBJECT
 
 public:
-    explicit DlgCreateBundle(KisResourceBundle *bundle = 0, QWidget *parent = 0);
+    explicit DlgCreateBundle(KisResourceBundleSP bundle = nullptr, QWidget *parent = 0);
     ~DlgCreateBundle() override;
 
     QString bundleName() const;
@@ -77,7 +77,7 @@ private:
 
     QString m_previewImage;
 
-    KisResourceBundle *m_bundle;
+    KisResourceBundleSP m_bundle;
 };
 
 #endif // KOBUNDLECREATIONWIDGET_H

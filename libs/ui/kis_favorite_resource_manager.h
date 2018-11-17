@@ -26,12 +26,13 @@
 #include "KoResourceServerObserver.h"
 
 #include <KoColor.h>
+#include <KoResource.h>
 
 class QString;
 class KisPaintopBox;
 class KisPaintOpPreset;
 
-class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> >
+class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset>
 {
     Q_OBJECT
 
@@ -54,9 +55,9 @@ public:
     const KoColor& recentColorAt(int pos);
 
     // Reimplemented from KoResourceServerObserver
-    void removingResource(PointerType resource) override;
-    void resourceAdded(PointerType resource) override;
-    void resourceChanged(PointerType resource) override;
+    void removingResource(QSharedPointer<KisPaintOpPreset> resource) override;
+    void resourceAdded(QSharedPointer<KisPaintOpPreset> resource) override;
+    void resourceChanged(QSharedPointer<KisPaintOpPreset> resource) override;
     void syncTaggedResourceView() override;
     void syncTagAddition(const QString& tag) override;
     void syncTagRemoval(const QString& tag) override;

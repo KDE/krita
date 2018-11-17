@@ -49,8 +49,8 @@ struct KisResourcesSnapshot::Private {
     KisDefaultBoundsBaseSP bounds;
     KoColor currentFgColor;
     KoColor currentBgColor;
-    KoPattern *currentPattern = 0;
-    KoAbstractGradient *currentGradient;
+    KoPatternSP currentPattern;
+    KoAbstractGradientSP currentGradient;
     KisPaintOpPresetSP currentPaintOpPreset;
     KisNodeSP currentNode;
     qreal currentExposure;
@@ -83,8 +83,8 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->bounds = bounds;
     m_d->currentFgColor = resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
     m_d->currentBgColor = resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
-    m_d->currentPattern = resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPattern*>();
-    m_d->currentGradient = resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<KoAbstractGradient*>();
+    m_d->currentPattern = resourceManager->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPatternSP>();
+    m_d->currentGradient = resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<KoAbstractGradientSP>();
 
     /**
      * We should deep-copy the preset, so that long-running actions
@@ -340,7 +340,7 @@ QString KisResourcesSnapshot::compositeOpId() const
     return m_d->compositeOpId;
 }
 
-KoPattern* KisResourcesSnapshot::currentPattern() const
+KoPatternSP KisResourcesSnapshot::currentPattern() const
 {
     return m_d->currentPattern;
 }

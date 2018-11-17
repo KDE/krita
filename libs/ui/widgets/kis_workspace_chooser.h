@@ -22,13 +22,14 @@
 #define KIS_WORKSPACE_CHOOSER_H
 
 #include <QWidget>
+#include <KoResource.h>
 
 class QLineEdit;
 class QPushButton;
 class QGridLayout;
 class KoResourceItemChooser;
 class KisViewManager;
-class KoResource;
+
 class KoAbstractResourceServerAdapter;
 
 class KisWorkspaceChooser : public QWidget
@@ -40,10 +41,10 @@ public:
 
 private Q_SLOTS:
     void slotSaveWorkspace();
-    void workspaceSelected( KoResource * resource );
+    void workspaceSelected( KoResourceSP resource );
 
     void slotSaveWindowLayout();
-    void windowLayoutSelected( KoResource * resource );
+    void windowLayoutSelected( KoResourceSP resource );
 
 private:
     struct ChooserWidgets

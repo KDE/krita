@@ -141,8 +141,8 @@ public /* methods */:
 
     KisSwatch getEntry(const QModelIndex &index) const;
 
-    void setPalette(KoColorSet* colorSet);
-    KoColorSet* colorSet() const;
+    void setPalette(KoColorSetSP colorSet);
+    KoColorSetSP colorSet() const;
 
     QModelIndex indexForClosest(const KoColor &compare);
     int indexRowForInfo(const KisSwatchGroup::SwatchInfo &info);
@@ -169,7 +169,7 @@ private /* methods */:
 
 
 private /* member variables */:
-    QPointer<KoColorSet> m_colorSet;
+    QSharedPointer<KoColorSet> m_colorSet;
     QPointer<const KoColorDisplayRendererInterface> m_displayRenderer;
     QMap<int, QString> m_rowGroupNameMap;
 

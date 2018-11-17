@@ -96,7 +96,7 @@ KoCanvasResourceProvider* utils::createResourceManager(KisImageWSP image,
 
     if (!presetFileName.isEmpty()) {
         QString fullFileName = TestUtil::fetchDataFileLazy(presetFileName);
-        preset = new KisPaintOpPreset(fullFileName);
+        preset = KisPaintOpPresetSP(new KisPaintOpPreset(fullFileName));
         bool presetValid = preset->load();
         Q_ASSERT(presetValid); Q_UNUSED(presetValid);
 

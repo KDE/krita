@@ -384,9 +384,9 @@ QString KoPattern::defaultFileExtension() const
     return QString(".pat");
 }
 
-KoPattern* KoPattern::clone() const
+KoPatternSP KoPattern::clone() const
 {
-    KoPattern* pat = new KoPattern(filename());
+    KoPatternSP pat(new KoPattern(filename()));
     pat->setPatternImage(pattern());
     pat->setName(name());
     return pat;

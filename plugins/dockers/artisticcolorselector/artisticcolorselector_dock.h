@@ -62,7 +62,7 @@ private Q_SLOTS:
     void slotPreferenceChanged();
     void slotResetDefaultSettings();
     void slotGamutMaskToggle(bool value);
-    void slotGamutMaskSet(KoGamutMask* mask);
+    void slotGamutMaskSet(KoGamutMaskSP mask);
     void slotGamutMaskUnset();
     void slotGamutMaskPreviewUpdate();
     void slotSelectorSettingsChanged();
@@ -74,7 +74,7 @@ private:
     ArtisticColorSelectorUI* m_selectorUI;
     ARCSSettingsUI* m_preferencesUI;
     WheelPreferencesPopupUI* m_wheelPrefsUI;
-    KoGamutMask* m_selectedMask;
+    KoGamutMaskSP m_selectedMask;
 
     QIcon m_iconMaskOff;
     QIcon m_iconMaskOn;

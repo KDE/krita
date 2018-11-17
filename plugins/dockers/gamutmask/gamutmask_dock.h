@@ -55,16 +55,16 @@ public:
 
 public: // KoResourceServerObserver
     void unsetResourceServer() override;
-    void resourceAdded(KoGamutMask* /*resource*/) override {};
-    void removingResource(KoGamutMask* resource) override;
-    void resourceChanged(KoGamutMask* resource) override;
+    void resourceAdded(KoGamutMaskSP /*resource*/) override {}
+    void removingResource(KoGamutMaskSP resource) override;
+    void resourceChanged(KoGamutMaskSP resource) override;
     void syncTaggedResourceView() override {}
     void syncTagAddition(const QString&) override {}
     void syncTagRemoval(const QString&) override {}
 
 Q_SIGNALS:
-    void sigGamutMaskSet(KoGamutMask* mask);
-    void sigGamutMaskChanged(KoGamutMask* mask);
+    void sigGamutMaskSet(KoGamutMaskSP mask);
+    void sigGamutMaskChanged(KoGamutMaskSP mask);
     void sigGamutMaskUnset();
     void sigGamutMaskPreviewUpdate();
 
@@ -72,7 +72,7 @@ private Q_SLOTS:
     void slotGamutMaskEdit();
     void slotGamutMaskSave();
     void slotGamutMaskCancelEdit();
-    void slotGamutMaskSelected(KoGamutMask* mask);
+    void slotGamutMaskSelected(KoGamutMaskSP mask);
     void slotGamutMaskPreview();
     void slotGamutMaskCreateNew();
     void slotGamutMaskDuplicate();
@@ -86,7 +86,7 @@ private:
     void closeMaskDocument();
     bool openMaskEditor();
     void cancelMaskEdit();
-    void selectMask(KoGamutMask* mask, bool notifyItemChooser = true);
+    void selectMask(KoGamutMaskSP mask, bool notifyItemChooser = true);
     bool saveSelectedMaskResource();
     void deleteMask();
     int getUserFeedback(QString text, QString informativeText = "",
@@ -96,7 +96,7 @@ private:
 
     int saveOrCancel(QMessageBox::StandardButton defaultAction = QMessageBox::Save);
 
-    KoGamutMask* createMaskResource(KoGamutMask* sourceMask, QString newTitle);
+    KoGamutMaskSP createMaskResource(KoGamutMaskSP sourceMask, QString newTitle);
 
     QPair<QString, QFileInfo> resolveMaskTitle(QString suggestedTitle);
 
@@ -114,7 +114,7 @@ private:
     GamutMaskChooserUI* m_dockerUI;
     KoResourceItemChooser* m_maskChooser;
 
-    KoGamutMask* m_selectedMask;
+    KoGamutMaskSP m_selectedMask;
     QRegExpValidator* m_maskTitleValidator;
 
     KisDocument* m_maskDocument;

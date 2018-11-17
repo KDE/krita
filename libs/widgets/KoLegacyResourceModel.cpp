@@ -34,12 +34,12 @@ KoLegacyResourceModel::KoLegacyResourceModel(QSharedPointer<KoAbstractResourceSe
 {
     Q_ASSERT(m_resourceAdapter);
     m_resourceAdapter->connectToResourceServer();
-    connect(m_resourceAdapter.data(), SIGNAL(resourceAdded(KoResource*)),
-            this, SLOT(resourceAdded(KoResource*)));
-    connect(m_resourceAdapter.data(), SIGNAL(removingResource(KoResource*)),
-            this, SLOT(resourceRemoved(KoResource*)));
-    connect(m_resourceAdapter.data(), SIGNAL(resourceChanged(KoResource*)),
-            this, SLOT(resourceChanged(KoResource*)));
+    connect(m_resourceAdapter.data(), SIGNAL(resourceAdded(KoResourceSP)),
+            this, SLOT(resourceAdded(KoResourceSP)));
+    connect(m_resourceAdapter.data(), SIGNAL(removingResource(KoResourceSP)),
+            this, SLOT(resourceRemoved(KoResourceSP)));
+    connect(m_resourceAdapter.data(), SIGNAL(resourceChanged(KoResourceSP)),
+            this, SLOT(resourceChanged(KoResourceSP)));
     connect(m_resourceAdapter.data(), SIGNAL(tagsWereChanged()),
             this, SLOT(tagBoxEntryWasModified()));
     connect(m_resourceAdapter.data(), SIGNAL(tagCategoryWasAdded(QString)),
@@ -80,7 +80,7 @@ QVariant KoLegacyResourceModel::data( const QModelIndex &index, int role ) const
     {
         case Qt::DisplayRole:
         {
-            KoResource * resource = static_cast<KoResource*>(index.internalPointer());
+            KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
             if( ! resource )
                 return QVariant();
             QString resName = i18n( resource->name().toUtf8().data());
@@ -89,7 +89,7 @@ QVariant KoLegacyResourceModel::data( const QModelIndex &index, int role ) const
         }
         case KoLegacyResourceModel::TagsRole:
         {
-            KoResource * resource = static_cast<KoResource*>(index.internalPointer());
+            KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
             if( ! resource )
                 return QVariant();
             if (m_resourceAdapter->assignedTagsList(resource).count()) {
@@ -101,7 +101,7 @@ QVariant KoLegacyResourceModel::data( const QModelIndex &index, int role ) const
         }
         case Qt::DecorationRole:
         {
-            KoResource * resource = static_cast<KoResource*>(index.internalPointer());
+            KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
             if( ! resource )
                 return QVariant();
 
@@ -109,7 +109,7 @@ QVariant KoLegacyResourceModel::data( const QModelIndex &index, int role ) const
         }
         case KoLegacyResourceModel::LargeThumbnailRole:
         {
-            KoResource * resource = static_cast<KoResource*>(index.internalPointer());
+            KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
             if( ! resource )
                 return QVariant();
 
@@ -138,14 +138,15 @@ QVariant KoLegacyResourceModel::data( const QModelIndex &index, int role ) const
 QModelIndex KoLegacyResourceModel::index ( int row, int column, const QModelIndex & ) const
 {
     int index = row * m_columnCount + column;
-    const QList<KoResource*> resources = m_resourceAdapter->resources();
-    if( index >= resources.count() || index < 0)
+    const QList<KoResourceSP> resources = m_resourceAdapter->resources();
+    if( index >= resources.count() || index < 0) {
         return QModelIndex();
+    }
 
-    return createIndex( row, column, resources[index] );
+    return createIndex(row, column, resources[index].data());
 }
 
-void KoLegacyResourceModel::doSafeLayoutReset(KoResource *activateAfterReformat)
+void KoLegacyResourceModel::doSafeLayoutReset(KoResourceSP activateAfterReformat)
 {
     emit beforeResourcesLayoutReset(activateAfterReformat);
     beginResetModel();
@@ -164,7 +165,7 @@ void KoLegacyResourceModel::setColumnCount( int columnCount )
     }
 }
 
-void KoLegacyResourceModel::resourceAdded(KoResource *resource)
+void KoLegacyResourceModel::resourceAdded(KoResourceSP resource)
 {
     int newIndex = m_resourceAdapter->resources().indexOf(resource);
     if (newIndex >= 0) {
@@ -172,13 +173,13 @@ void KoLegacyResourceModel::resourceAdded(KoResource *resource)
     }
 }
 
-void KoLegacyResourceModel::resourceRemoved(KoResource *resource)
+void KoLegacyResourceModel::resourceRemoved(KoResourceSP resource)
 {
     Q_UNUSED(resource);
     doSafeLayoutReset(0);
 }
 
-void KoLegacyResourceModel::resourceChanged(KoResource* resource)
+void KoLegacyResourceModel::resourceChanged(KoResourceSP resource)
 {
     int resourceIndex = m_resourceAdapter->resources().indexOf(resource);
     int row = resourceIndex / columnCount();
@@ -208,7 +209,7 @@ void KoLegacyResourceModel::tagBoxEntryWasRemoved(const QString& tag)
     emit tagBoxEntryRemoved(tag);
 }
 
-QModelIndex KoLegacyResourceModel::indexFromResource(KoResource* resource) const
+QModelIndex KoLegacyResourceModel::indexFromResource(KoResourceSP resource) const
 {
     int resourceIndex = m_resourceAdapter->resources().indexOf(resource);
     if (columnCount() > 0) {
@@ -234,7 +235,7 @@ void KoLegacyResourceModel::importResourceFile(const QString & filename, bool fi
     m_resourceAdapter->importResourceFile(filename, fileCreation);
 }
 
-bool KoLegacyResourceModel::removeResource(KoResource* resource)
+bool KoLegacyResourceModel::removeResource(KoResourceSP resource)
 {
     return m_resourceAdapter->removeResource(resource);
 }
@@ -244,18 +245,18 @@ void KoLegacyResourceModel::removeResourceFile(const QString &filename)
     m_resourceAdapter->removeResourceFile(filename);
 }
 
-QStringList KoLegacyResourceModel::assignedTagsList(KoResource *resource) const
+QStringList KoLegacyResourceModel::assignedTagsList(KoResourceSP resource) const
 {
     return m_resourceAdapter->assignedTagsList(resource);
 }
 
-void KoLegacyResourceModel::addTag(KoResource* resource, const QString& tag)
+void KoLegacyResourceModel::addTag(KoResourceSP resource, const QString& tag)
 {
     m_resourceAdapter->addTag(resource, tag);
     emit tagBoxEntryAdded(tag);
 }
 
-void KoLegacyResourceModel::deleteTag(KoResource *resource, const QString &tag)
+void KoLegacyResourceModel::deleteTag(KoResourceSP resource, const QString &tag)
 {
     m_resourceAdapter->deleteTag(resource, tag);
 }
@@ -296,7 +297,7 @@ int KoLegacyResourceModel::resourcesCount() const
     return m_resourceAdapter->resources().count();
 }
 
-QList<KoResource *> KoLegacyResourceModel::currentlyVisibleResources() const
+QList<KoResourceSP > KoLegacyResourceModel::currentlyVisibleResources() const
 {
   return m_resourceAdapter->resources();
 }
@@ -321,7 +322,7 @@ QString KoLegacyResourceModel::serverType() const
     return m_resourceAdapter->serverType();
 }
 
-QList< KoResource* > KoLegacyResourceModel::serverResources() const
+QList< KoResourceSP > KoLegacyResourceModel::serverResources() const
 {
     return m_resourceAdapter->serverResources();
 }

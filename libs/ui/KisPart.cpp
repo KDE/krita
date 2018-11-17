@@ -99,7 +99,7 @@ public:
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
 
-    KisSessionResource *currentSession = nullptr;
+    KisSessionResourceSP currentSession;
     bool closingSession{false};
     QScopedPointer<KisSessionManagerDialog> sessionManager;
 
@@ -552,8 +552,8 @@ bool KisPart::restoreSession(const QString &sessionName)
 {
     if (sessionName.isNull()) return false;
 
-    KoResourceServer<KisSessionResource> * rserver = KisResourceServerProvider::instance()->sessionServer();
-    auto *session = rserver->resourceByName(sessionName);
+    KoResourceServer<KisSessionResource> *rserver = KisResourceServerProvider::instance()->sessionServer();
+    KisSessionResourceSP session = rserver->resourceByName(sessionName);
     if (!session || !session->valid()) return false;
 
     session->restore();
@@ -561,7 +561,7 @@ bool KisPart::restoreSession(const QString &sessionName)
     return true;
 }
 
-void KisPart::setCurrentSession(KisSessionResource *session)
+void KisPart::setCurrentSession(KisSessionResourceSP session)
 {
     d->currentSession = session;
 }

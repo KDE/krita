@@ -32,6 +32,7 @@
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 #include "KisView.h"
+#include <kis_workspace_resource.h>
 
 class QCloseEvent;
 class QMoveEvent;
@@ -46,7 +47,7 @@ class QDockWidget;
 class KisView;
 class KisViewManager;
 class KoCanvasController;
-class KisWorkspaceResource;
+
 
 /**
  * @brief Main window for Krita
@@ -177,7 +178,7 @@ public:
      * @param state the saved state
      * @return TRUE on success
      */
-    bool restoreWorkspace(KisWorkspaceResource *workspace);
+    bool restoreWorkspace(KisWorkspaceResourceSP workspace);
     bool restoreWorkspaceState(const QByteArray &state);
 
     static void swapWorkspaces(KisMainWindow *a, KisMainWindow *b);

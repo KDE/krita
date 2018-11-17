@@ -21,7 +21,8 @@
 #include <QDockWidget>
 #include <kis_mainwindow_observer.h>
 
-class KoPattern;
+#include <KoPattern.h>
+
 class KisPatternChooser;
 
 class PatternDockerDock : public QDockWidget, public KisMainwindowObserver {
@@ -35,7 +36,7 @@ public:
 
     QString observerName() override { return "PatternDockerDock"; }
 public Q_SLOTS:
-    void patternChanged(KoPattern *pattern);
+    void patternChanged(KoPatternSP pattern);
 private Q_SLOTS:
 
 private:

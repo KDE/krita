@@ -52,7 +52,7 @@ private Q_SLOTS:
     void connectionCreated(ConnectionSource source, ConnectionTarget target);
     void addToPresets();
     void removeFromPresets();
-    void presetSelected(KoResource *resource);
+    void presetSelected(KoResourceSP resource);
     void filterChanged();
     void sceneSelectionChanged();
     void defaultSourceChanged(int);

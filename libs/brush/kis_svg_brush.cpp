@@ -39,9 +39,9 @@ KisSvgBrush::KisSvgBrush(const KisSvgBrush& rhs)
 {
 }
 
-KisBrush* KisSvgBrush::clone() const
+KisBrushSP KisSvgBrush::clone() const
 {
-    return new KisSvgBrush(*this);
+    return KisBrushSP(new KisSvgBrush(*this));
 }
 
 bool KisSvgBrush::load()

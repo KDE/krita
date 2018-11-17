@@ -57,8 +57,8 @@ KisTextureOption::KisTextureOption()
     setObjectName("KisTextureOption");
     setConfigurationPage(m_textureOptions);
 
-    connect(m_textureOptions->textureSelectorWidget, SIGNAL(resourceSelected(KoResource*)), SLOT(resetGUI(KoResource*)));
-    connect(m_textureOptions->textureSelectorWidget, SIGNAL(resourceSelected(KoResource*)), SLOT(emitSettingChanged()));
+    connect(m_textureOptions->textureSelectorWidget, SIGNAL(resourceSelected(KoResourceSP )), SLOT(resetGUI(KoResourceSP )));
+    connect(m_textureOptions->textureSelectorWidget, SIGNAL(resourceSelected(KoResourceSP )), SLOT(emitSettingChanged()));
     connect(m_textureOptions->scaleSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->brightnessSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->contrastSlider, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));
@@ -84,7 +84,7 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
 {
      m_textureOptions->textureSelectorWidget->blockSignals(true); // Checking
     if (!m_textureOptions->textureSelectorWidget->currentResource()) return;
-    KoPattern *pattern = static_cast<KoPattern*>(m_textureOptions->textureSelectorWidget->currentResource());
+    KoPatternSP pattern = m_textureOptions->textureSelectorWidget->currentResource().staticCast<KoPattern>();
     m_textureOptions->textureSelectorWidget->blockSignals(false); // Checking
     if (!pattern) return;
 
@@ -152,10 +152,10 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     if (!isChecked()) {
         return;
     }
-    KoPattern *pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
+    KoPatternSP pattern = KisEmbeddedPatternManager::loadEmbeddedPattern(setting);
 
     if (!pattern) {
-        pattern = static_cast<KoPattern*>(m_textureOptions->textureSelectorWidget->currentResource());
+        pattern =m_textureOptions->textureSelectorWidget->currentResource().staticCast<KoPattern>();
     }
 
     m_textureOptions->textureSelectorWidget->setCurrentPattern(pattern);
@@ -181,9 +181,9 @@ void KisTextureOption::lodLimitations(KisPaintopLodLimitations *l) const
 }
 
 
-void KisTextureOption::resetGUI(KoResource* res)
+void KisTextureOption::resetGUI(KoResourceSP res)
 {
-    KoPattern *pattern = static_cast<KoPattern *>(res);
+    KoPatternSP pattern = res.staticCast<KoPattern>();
     if (!pattern) return;
 
     m_textureOptions->offsetSliderX->setRange(0, pattern->pattern().width() / 2);

@@ -23,7 +23,7 @@
 
 #include "ui_wdgsessionmanager.h"
 
-class KisSessionResource;
+#include <KisSessionResource.h>
 
 class KisSessionManagerDialog : public QDialog, Ui::DlgSessionManager
 {
@@ -44,7 +44,7 @@ private Q_SLOTS:
 private:
     void updateSessionList();
 
-    KisSessionResource *getSelectedSession() const;
+    KisSessionResourceSP getSelectedSession() const;
 };
 
 #endif

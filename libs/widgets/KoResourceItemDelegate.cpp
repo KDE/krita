@@ -27,12 +27,12 @@ KoResourceItemDelegate::KoResourceItemDelegate( QObject * parent )
 {
 }
 
-void KoResourceItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+void KoResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem & option, const QModelIndex &index) const
 {
     if( ! index.isValid() )
         return;
 
-    KoResource * resource = static_cast<KoResource*>( index.internalPointer() );
+    KoResourceSP resource = KoResourceSP(static_cast<KoResource*>( index.internalPointer()));
     if (!resource)
         return;
 
@@ -43,7 +43,7 @@ void KoResourceItemDelegate::paint( QPainter * painter, const QStyleOptionViewIt
 
     QRect innerRect = option.rect.adjusted( 2, 1, -2, -1 );
 
-    KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>( resource );
+    KoAbstractGradientSP gradient = resource.dynamicCast<KoAbstractGradient>();
     if (gradient) {
         QGradient * g = gradient->toQGradient();
 

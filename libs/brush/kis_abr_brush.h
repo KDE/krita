@@ -46,7 +46,7 @@ public:
     KisAbrBrush(const QString& filename, KisAbrBrushCollection *parent);
     KisAbrBrush(const KisAbrBrush& rhs);
     KisAbrBrush(const KisAbrBrush& rhs, KisAbrBrushCollection *parent);
-    KisBrush* clone() const override;
+    KisBrushSP clone() const override;
 
     bool load() override;
 
@@ -72,6 +72,8 @@ public:
 private:
     KisAbrBrushCollection *m_parent;
 };
+
+typedef QSharedPointer<KisAbrBrush> KisAbrBrushSP;
 
 #endif // KIS_ABR_BRUSH_
 

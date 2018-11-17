@@ -94,7 +94,7 @@ void KisColorSelectorComponent::setDirty()
     m_dirty = true;
 }
 
-void KisColorSelectorComponent::setGamutMask(KoGamutMask *gamutMask)
+void KisColorSelectorComponent::setGamutMask(KoGamutMaskSP gamutMask)
 {
     m_currentGamutMask = gamutMask;
     m_gamutMaskOn = true;

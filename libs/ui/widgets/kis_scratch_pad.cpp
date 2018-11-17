@@ -477,7 +477,7 @@ void KisScratchPad::fillGradient()
     if(!m_paintLayer) return;
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
-    KoAbstractGradient* gradient = m_resourceProvider->currentGradient();
+    KoAbstractGradientSP gradient = m_resourceProvider->currentGradient();
     QRect gradientRect = widgetToDocument().mapRect(rect());
 
     paintDevice->clear();

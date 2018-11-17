@@ -24,6 +24,7 @@
 #include <QColor>
 #include <QVector>
 #include <QScopedPointer>
+#include <QSharedPointer>
 
 #include <KoResource.h>
 #include "KoColor.h"
@@ -35,9 +36,8 @@
  * Open Gimp, Photoshop or RIFF palette files. This is a straight port
  * from the Gimp.
  */
-class KRITAPIGMENT_EXPORT KoColorSet : public QObject, public KoResource
+class KRITAPIGMENT_EXPORT KoColorSet :public KoResource
 {
-    Q_OBJECT
 public:
     static const QString GLOBAL_GROUP_NAME;
     static const QString KPL_VERSION_ATTR;
@@ -213,4 +213,7 @@ private:
     const QScopedPointer<Private> d;
 
 };
+
+typedef QSharedPointer<KoColorSet> KoColorSetSP;
+
 #endif // KOCOLORSET

@@ -33,7 +33,7 @@ public:
         serverAdaptor->connectToResourceServer();
     }
     KoResourceServerAdapter<KoColorSet>* serverAdaptor;
-    KoColorSet* currentSet;
+    KoColorSetSP currentSet;
 };
 
 PaletteModel::PaletteModel(QObject *parent)
@@ -106,16 +106,17 @@ QVariant PaletteModel::headerData(int section, Qt::Orientation orientation, int 
 
 void PaletteModel::itemActivated(int index)
 {
-    QList<KoResource*> resources = d->serverAdaptor->resources();
+    QList<KoResourceSP > resources = d->serverAdaptor->resources();
     if (index >= 0 && index < resources.count())
     {
-        d->currentSet = dynamic_cast<KoColorSet*>(resources.at(index));
+        d->currentSet = resources.at(index).dynamicCast<KoColorSet>();
         emit colorSetChanged();
     }
 }
 
 QObject* PaletteModel::colorSet() const
 {
-    return d->currentSet;
+    // XXX SharedPtr We need to wrap KoColorSet
+    return 0;// d->currentSet;
 }
 

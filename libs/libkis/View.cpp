@@ -113,20 +113,20 @@ void View::activateResource(Resource *resource)
     if (!d->view) return;
     if (!resource) return;
 
-    KoResource *r= resource->resource();
+    KoResourceSP r = resource->resource();
     if (!r) return;
 
-    if (dynamic_cast<KoPattern*>(r)) {
+    if (r.dynamicCast<KoPattern>()) {
         QVariant v;
-        v.setValue(static_cast<void*>(r));
+        v.setValue<KoResourceSP>(r);
         d->view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::CurrentPattern, v);
     }
-    else if (dynamic_cast<KoAbstractGradient*>(r)) {
+    else if (r.dynamicCast<KoAbstractGradient>()) {
         QVariant v;
-        v.setValue(static_cast<void*>(r));
+        v.setValue<KoResourceSP>(r);
         d->view->canvasBase()->resourceManager()->setResource(KisCanvasResourceProvider::CurrentGradient, v);
     }
-    else if (dynamic_cast<KisPaintOpPreset*>(r)) {
+    else if (r.dynamicCast<KisPaintOpPreset>()) {
         d->view->viewManager()->paintOpBox()->resourceSelected(r);
     }
 
@@ -159,7 +159,7 @@ void View::setBackGroundColor(ManagedColor *color)
 Resource *View::currentBrushPreset() const
 {
     if (!d->view) return 0;
-    return new Resource(d->view->resourceProvider()->currentPreset().data());
+    return new Resource(d->view->resourceProvider()->currentPreset());
 }
 
 void View::setCurrentBrushPreset(Resource *resource)

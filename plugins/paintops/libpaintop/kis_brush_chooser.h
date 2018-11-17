@@ -68,8 +68,8 @@ private Q_SLOTS:
     void slotOpenClipboardBrush();
     void slotImportNewBrushResource();
     void slotDeleteBrushResource();
-    void slotNewPredefinedBrush(KoResource *);
-    void updateBrushTip(KoResource *, bool isChangingBrushPresets = false);
+    void slotNewPredefinedBrush(KoResourceSP );
+    void updateBrushTip(KoResourceSP , bool isChangingBrushPresets = false);
 
 Q_SIGNALS:
 

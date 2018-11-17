@@ -94,11 +94,10 @@ void testShapedGradientPainterImpl(const QPolygonF &selectionPolygon,
     testGradient.setColorAt(0.5, Qt::green);
     testGradient.setColorAt(1.0, Qt::black);
     testGradient.setSpread(QGradient::ReflectSpread);
-    QScopedPointer<KoStopGradient> gradient(
-        KoStopGradient::fromQGradient(&testGradient));
+    QSharedPointer<KoStopGradient> gradient(KoStopGradient::fromQGradient(&testGradient));
 
     KisGradientPainter gc(dev, selection);
-    gc.setGradient(gradient.data());
+    gc.setGradient(gradient);
     gc.setGradientShape(KisGradientPainter::GradientShapePolygonal);
 
     gc.paintGradient(selectionPolygon.boundingRect().topLeft(),

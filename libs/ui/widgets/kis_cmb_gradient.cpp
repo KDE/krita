@@ -31,23 +31,23 @@ KisCmbGradient::KisCmbGradient(QWidget *parent)
     : KisPopupButton(parent)
     , m_gradientChooser(new KisGradientChooser(this))
 {
-    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResource*)), SLOT(gradientSelected(KoResource*)));
+    connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP )), SLOT(gradientSelected(KoResourceSP )));
     setPopupWidget(m_gradientChooser);
 }
 
-void KisCmbGradient::setGradient(KoAbstractGradient *gradient)
+void KisCmbGradient::setGradient(KoAbstractGradientSP gradient)
 {
     m_gradientChooser->setCurrentResource(gradient);
 }
 
-KoAbstractGradient *KisCmbGradient::gradient() const
+KoAbstractGradientSP KisCmbGradient::gradient() const
 {
-    return dynamic_cast<KoAbstractGradient*>(m_gradientChooser->currentResource());
+    return m_gradientChooser->currentResource().dynamicCast<KoAbstractGradient>();
 }
 
-void KisCmbGradient::gradientSelected(KoResource *resource)
+void KisCmbGradient::gradientSelected(KoResourceSP resource)
 {
-    KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
+    KoAbstractGradientSP gradient = resource.dynamicCast<KoAbstractGradient>();
     if (!gradient) return;
 
     QImage pm = gradient->generatePreview(iconSize().width(), iconSize().height());

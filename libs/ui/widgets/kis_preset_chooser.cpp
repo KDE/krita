@@ -156,19 +156,18 @@ public:
     }
     ~KisPresetProxyAdapter() override {}
 
-    QList< KoResource* > resources() override {
+    QList< KoResourceSP > resources() override {
 
-        QList<KoResource*> serverResources =
+        QList<KoResourceSP > serverResources =
             KisPaintOpPresetResourceServerAdapter::resources();
 
         if (m_paintopID.isEmpty()) {
             return serverResources;
         }
 
-        QList<KoResource*> resources;
-        Q_FOREACH (KoResource *resource, serverResources) {
-            KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(resource);
-
+        QList<KoResourceSP > resources;
+        Q_FOREACH (KoResourceSP resource, serverResources) {
+            KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
             if (preset && preset->paintOp().id() == m_paintopID) {
                 resources.append(preset);
             }
@@ -223,10 +222,10 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
                     this, SLOT(slotScrollerStateChanged(QScroller::State)));
         }
     }
-    connect(m_chooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SIGNAL(resourceSelected(KoResource*)));
-    connect(m_chooser, SIGNAL(resourceClicked(KoResource*)),
-            this, SIGNAL(resourceClicked(KoResource*)));
+    connect(m_chooser, SIGNAL(resourceSelected(KoResourceSP )),
+            this, SIGNAL(resourceSelected(KoResourceSP )));
+    connect(m_chooser, SIGNAL(resourceClicked(KoResourceSP )),
+            this, SIGNAL(resourceClicked(KoResourceSP )));
 
     m_mode = THUMBNAIL;
 
@@ -291,7 +290,7 @@ void KisPresetChooser::updateViewSettings()
     }
 }
 
-void KisPresetChooser::setCurrentResource(KoResource *resource)
+void KisPresetChooser::setCurrentResource(KoResourceSP resource)
 {
     /**
      * HACK ALERT: here we use a direct call to an adapter to notify the view
@@ -304,7 +303,7 @@ void KisPresetChooser::setCurrentResource(KoResource *resource)
      */
     if (resource == currentResource()) {
         KisPresetProxyAdapter *adapter = static_cast<KisPresetProxyAdapter*>(m_adapter.data());
-        KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(resource);
+        KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
         if (preset) {
             adapter->resourceChangedNoCacheInvalidation(preset);
         }
@@ -313,7 +312,7 @@ void KisPresetChooser::setCurrentResource(KoResource *resource)
     m_chooser->setCurrentResource(resource);
 }
 
-KoResource* KisPresetChooser::currentResource() const
+KoResourceSP KisPresetChooser::currentResource() const
 {
     return m_chooser->currentResource();
 }

@@ -22,7 +22,8 @@
 
 #include <kis_popup_button.h>
 
-class KoResource;
+#include <KoResource.h>
+
 class KoAbstractResourceServerAdapter;
 
 /**
@@ -42,15 +43,15 @@ public:
      */
     void setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter> adapter);
 public Q_SLOTS:
-    void slotSetItem(KoResource * resource);
-    void slotAdapterResourceChanged(KoResource * resource);
-    void slotAdapterResourceRemoved(KoResource * resource);
+    void slotSetItem(KoResourceSP resource);
+    void slotAdapterResourceChanged(KoResourceSP resource);
+    void slotAdapterResourceRemoved(KoResourceSP resource);
 
 protected:
     void paintEvent(QPaintEvent *) override;
 
 private:
-    KoResource *m_resource;
+    KoResourceSP m_resource;
     QSharedPointer<KoAbstractResourceServerAdapter> m_adapter;
 };
 

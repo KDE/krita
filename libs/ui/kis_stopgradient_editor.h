@@ -23,8 +23,7 @@
 #include "kritaui_export.h"
 #include "ui_wdgstopgradienteditor.h"
 #include <boost/optional.hpp>
-
-class KoStopGradient;
+#include <KoStopGradient.h>
 
 class KRITAUI_EXPORT KisStopGradientEditor : public QWidget, public Ui::KisWdgStopGradientEditor
 {
@@ -32,11 +31,11 @@ class KRITAUI_EXPORT KisStopGradientEditor : public QWidget, public Ui::KisWdgSt
 
 public:
     KisStopGradientEditor(QWidget *parent);
-    KisStopGradientEditor(KoStopGradient* gradient, QWidget *parent, const char* name, const QString& caption);
+    KisStopGradientEditor(KoStopGradientSP gradient, QWidget *parent, const char* name, const QString& caption);
 
     void setCompactMode(bool value);
 
-    void setGradient(KoStopGradient* gradient);
+    void setGradient(KoStopGradientSP gradient);
 
     void notifyGlobalColorChanged(const KoColor &color);
 
@@ -46,7 +45,7 @@ Q_SIGNALS:
     void sigGradientChanged();
 
 private:
-     KoStopGradient* m_gradient;
+     KoStopGradientSP m_gradient;
 private Q_SLOTS:
     void stopChanged(int stop);
     void colorChanged(const KoColor& color);

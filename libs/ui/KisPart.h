@@ -29,6 +29,8 @@
 #include <QUrl>
 #include <QUuid>
 
+#include <KisSessionResource.h>
+
 #include "kritaui_export.h"
 #include <KConfigCore/kconfiggroup.h>
 #include <KoConfig.h>
@@ -43,7 +45,7 @@ class KisView;
 class KisDocument;
 class KisIdleWatcher;
 class KisAnimationCachePopulator;
-class KisSessionResource;
+
 
 /**
  * KisPart is the Great Deku Tree of Krita.
@@ -246,7 +248,7 @@ public:
      */
     bool restoreSession(const QString &sessionName);
 
-    void setCurrentSession(KisSessionResource *session);
+    void setCurrentSession(KisSessionResourceSP session);
 
     /**
      * Attempts to save the session and close all windows.

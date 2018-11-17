@@ -22,11 +22,15 @@
 #include <kritapigment_export.h>
 
 #include <QMetaType>
+#include <QSharedPointer>
+
+class KoPattern;
+typedef QSharedPointer<KoPattern> KoPatternSP;
+
 
 /// Write API docs here
 class KRITAPIGMENT_EXPORT KoPattern : public KoResource
 {
-
 public:
 
     /**
@@ -56,7 +60,7 @@ public:
 
     KoPattern& operator=(const KoPattern& pattern);
 
-    KoPattern* clone() const;
+    KoPatternSP clone() const;
 
     /**
      * @brief pattern the actual pattern image
@@ -75,6 +79,8 @@ private:
 };
 
 Q_DECLARE_METATYPE(KoPattern*)
+
+Q_DECLARE_METATYPE(QSharedPointer<KoPattern>)
 
 #endif // KOPATTERN_H
 

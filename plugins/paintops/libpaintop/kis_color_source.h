@@ -23,11 +23,11 @@
 #include <QRect>
 
 #include <KoColor.h>
+#include <KoAbstractGradient.h>
 
 #include <kis_types.h>
 #include <kritapaintop_export.h>
 
-class KoAbstractGradient;
 class KoColorTransformation;
 class KisPaintInformation;
 
@@ -97,11 +97,11 @@ private:
 class PAINTOP_EXPORT KisGradientColorSource : public KisUniformColorSource
 {
 public:
-    KisGradientColorSource(const KoAbstractGradient* gradient, const KoColorSpace* workingCS);
+    KisGradientColorSource(const KoAbstractGradientSP gradient, const KoColorSpace* workingCS);
     ~KisGradientColorSource() override;
     void selectColor(double mix, const KisPaintInformation &pi) override;
 private:
-    const KoAbstractGradient* m_gradient;
+    const KoAbstractGradientSP m_gradient;
 };
 
 class PAINTOP_EXPORT KisUniformRandomColorSource : public KisUniformColorSource

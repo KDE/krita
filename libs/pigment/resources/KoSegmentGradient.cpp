@@ -73,9 +73,9 @@ KoSegmentGradient::KoSegmentGradient(const KoSegmentGradient &rhs)
     }
 }
 
-KoAbstractGradient* KoSegmentGradient::clone() const
+KoAbstractGradientSP KoSegmentGradient::clone() const
 {
-    return new KoSegmentGradient(*this);
+    return KoAbstractGradientSP(new KoSegmentGradient(*this));
 }
 
 bool KoSegmentGradient::load()

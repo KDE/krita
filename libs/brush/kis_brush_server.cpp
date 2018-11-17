@@ -84,7 +84,7 @@ private:
         if (fileExtension == "abr") {
             KisAbrBrushCollection collection(filename);
             collection.load();
-            Q_FOREACH (KisAbrBrush * abrBrush, collection.brushes()) {
+            Q_FOREACH (KisAbrBrushSP abrBrush, collection.brushes()) {
 //                abrBrush->setBrushTipImage(QImage());
                 brushes.append(abrBrush);
                 addTag(abrBrush, collection.filename());
@@ -97,25 +97,25 @@ private:
     }
 
     ///Reimplemented
-    KisBrushSP createResource(const QString & filename) override {
+    KisBrushSP createResource(const QString & /*filename*/) override {
+        return 0;
+//        QString fileExtension = QFileInfo(filename).suffix().toLower();
 
-        QString fileExtension = QFileInfo(filename).suffix().toLower();
+//        KisBrushSP brush;
 
-        KisBrushSP brush;
-
-        if (fileExtension == "gbr") {
-            brush = new KisGbrBrush(filename);
-        }
-        else if (fileExtension == "gih") {
-            brush = new KisImagePipeBrush(filename);
-        }
-        else if (fileExtension == "png") {
-            brush = new KisPngBrush(filename);
-        }
-        else if (fileExtension == "svg") {
-            brush = new KisSvgBrush(filename);
-        }
-        return brush;
+//        if (fileExtension == "gbr") {
+//            brush = KisBrushSP(new KisGbrBrush(filename));
+//        }
+//        else if (fileExtension == "gih") {
+//            brush = KisBrushSP(new KisImagePipeBrush(filename));
+//        }
+//        else if (fileExtension == "png") {
+//            brush = KisBrushSP(new KisPngBrush(filename));
+//        }
+//        else if (fileExtension == "svg") {
+//            brush = KisBrushSP(new KisSvgBrush(filename));
+//        }
+//        return brush;
     }
 };
 

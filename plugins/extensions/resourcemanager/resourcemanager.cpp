@@ -132,11 +132,11 @@ void ResourceManager::slotCreateBundle()
     saveBundle(dlgCreateBundle);
 }
 
-KisResourceBundle *ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateBundle)
+KisResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateBundle)
 {
     QString bundlePath =  dlgCreateBundle.saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle";
 
-    KisResourceBundle *newBundle = new KisResourceBundle(bundlePath);
+    KisResourceBundleSP newBundle(new KisResourceBundle(bundlePath));
 
     newBundle->addMeta("name", dlgCreateBundle.bundleName());
     newBundle->addMeta("author", dlgCreateBundle.authorName());
@@ -148,32 +148,32 @@ KisResourceBundle *ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
 
     QStringList res = dlgCreateBundle.selectedBrushes();
     Q_FOREACH (const QString &r, res) {
-        KoResource *res = d->brushServer->resourceByFilename(r).data();
+        KoResourceSP res = d->brushServer->resourceByFilename(r);
         newBundle->addResource("brushes", res->filename(), d->brushServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedGradients();
     Q_FOREACH (const QString &r, res) {
-        KoResource *res = d->gradientServer->resourceByFilename(r);
+        KoResourceSP res = d->gradientServer->resourceByFilename(r);
         newBundle->addResource("gradients", res->filename(), d->gradientServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPalettes();
     Q_FOREACH (const QString &r, res) {
-        KoResource *res = d->paletteServer->resourceByFilename(r);
+        KoResourceSP res = d->paletteServer->resourceByFilename(r);
         newBundle->addResource("palettes", res->filename(), d->paletteServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPatterns();
     Q_FOREACH (const QString &r, res) {
-        KoResource *res = d->patternServer->resourceByFilename(r);
+        KoResourceSP res = d->patternServer->resourceByFilename(r);
         newBundle->addResource("patterns", res->filename(), d->patternServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPresets();
     Q_FOREACH (const QString &r, res) {
         KisPaintOpPresetSP preset = d->paintopServer->resourceByFilename(r);
-        KoResource *res = preset.data();
+        KoResourceSP res = preset;
         newBundle->addResource("paintoppresets", res->filename(), d->paintopServer->assignedTagsList(res), res->md5());
         KisPaintOpSettingsSP settings = preset->settings();
 
@@ -182,7 +182,7 @@ KisResourceBundle *ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
         KritaUtils::makeContainerUnique(requiredFiles);
 
         Q_FOREACH (const QString &brushFile, requiredFiles) {
-            KisBrush *brush = d->brushServer->resourceByFilename(brushFile).data();
+            KisBrushSP brush = d->brushServer->resourceByFilename(brushFile);
             if (brush) {
                 newBundle->addResource("brushes", brushFile, d->brushServer->assignedTagsList(brush), brush->md5());
             } else {
@@ -193,13 +193,13 @@ KisResourceBundle *ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
 
     res = dlgCreateBundle.selectedWorkspaces();
     Q_FOREACH (const QString &r, res) {
-        KoResource *res = d->workspaceServer->resourceByFilename(r);
+        KoResourceSP res = d->workspaceServer->resourceByFilename(r);
         newBundle->addResource("workspaces", res->filename(), d->workspaceServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedGamutMasks();
     Q_FOREACH (const QString &r, res) {
-        KoResource *res = d->gamutMaskServer->resourceByFilename(r);
+        KoResourceSP res = d->gamutMaskServer->resourceByFilename(r);
         newBundle->addResource("gamutmasks", res->filename(), d->gamutMaskServer->assignedTagsList(res), res->md5());
     }
 
@@ -276,7 +276,7 @@ void ResourceManager::slotImportBundles()
 {
     QStringList resources = importResources(i18n("Import Bundles"), QStringList() << "application/x-krita-bundle");
     Q_FOREACH (const QString &res, resources) {
-        KisResourceBundle *bundle = KisResourceBundleServerProvider::instance()->resourceBundleServer()->createResource(res);
+        KisResourceBundleSP bundle = KisResourceBundleServerProvider::instance()->resourceBundleServer()->createResource(res);
         bundle->load();
         if (bundle->valid()) {
             if (!bundle->install()) {

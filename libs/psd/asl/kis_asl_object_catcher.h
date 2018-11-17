@@ -20,13 +20,15 @@
 #define __KIS_ASL_OBJECT_CATCHER_H
 
 #include <QVector>
-#include "kritapsd_export.h"
+
+#include <KoPattern.h>
 
 class QString;
 class QColor;
 class QPointF;
-class KoPattern;
 class KoAbstractGradient;
+
+#include "kritapsd_export.h"
 
 template<class T> class QSharedPointer;
 typedef QSharedPointer<KoAbstractGradient> KoAbstractGradientSP;
@@ -46,7 +48,7 @@ public:
     virtual void addColor(const QString &path, const QColor &value);
     virtual void addPoint(const QString &path, const QPointF &value);
     virtual void addCurve(const QString &path, const QString &name, const QVector<QPointF> &points);
-    virtual void addPattern(const QString &path, const KoPattern *pattern);
+    virtual void addPattern(const QString &path, const KoPatternSP pattern);
     virtual void addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName);
     virtual void addGradient(const QString &path, KoAbstractGradientSP gradient);
 

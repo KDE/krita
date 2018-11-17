@@ -198,7 +198,7 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
         ent.setColor(m_pickedColor);
         // We don't ask for a name, too intrusive here
 
-        KoColorSet *palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
+        KoColorSetSP palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
         palette->add(ent);
 
         if (!palette->save()) {
@@ -282,9 +282,9 @@ QWidget* KisToolColorPicker::createOptionWidget()
         return m_optionsWidget;
     }
 
-    QList<KoColorSet*> palettes = srv->resources();
+    QList<KoColorSetSP> palettes = srv->resources();
 
-    Q_FOREACH (KoColorSet *palette, palettes) {
+    Q_FOREACH (KoColorSetSP palette, palettes) {
         if (palette) {
             m_optionsWidget->cmbPalette->addSqueezedItem(palette->name());
             m_palettes.append(palette);
@@ -348,9 +348,9 @@ void KisToolColorPicker::slotSetColorSource(int value)
     m_config->sampleMerged = value == SAMPLE_MERGED;
 }
 
-void KisToolColorPicker::slotAddPalette(KoResource *resource)
+void KisToolColorPicker::slotAddPalette(KoResourceSP resource)
 {
-    KoColorSet *palette = dynamic_cast<KoColorSet*>(resource);
+    KoColorSetSP palette = resource.dynamicCast<KoColorSet>();
     if (palette) {
         m_optionsWidget->cmbPalette->addSqueezedItem(palette->name());
         m_palettes.append(palette);

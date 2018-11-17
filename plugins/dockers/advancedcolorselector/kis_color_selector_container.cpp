@@ -144,8 +144,8 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
             connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
         }
 
-        connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
-                m_colorSelector, SLOT(slotGamutMaskSet(KoGamutMask*)));
+        connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskChanged(KoGamutMaskSP)),
+                m_colorSelector, SLOT(slotGamutMaskSet(KoGamutMaskSP)));
 
         connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskUnset()),
                 m_colorSelector, SLOT(slotGamutMaskUnset()));

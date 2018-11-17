@@ -25,8 +25,9 @@
 
 #include <QList>
 
+#include <KoResource.h>
+
 class KoResourceServerBase;
-class KoResource;
 class QStringList;
 class QString;
 
@@ -44,14 +45,14 @@ public:
     void rebuildCurrentTagFilenames();
     void setResourceServer(KoResourceServerBase *resourceServer);
     void setFilters(const QString& searchString);
-    QList<KoResource*> filterResources(QList< KoResource* > resources);
+    QList<KoResourceSP > filterResources(QList< KoResourceSP > resources);
     void setInclusions(const QStringList &inclusions);
     void setExclusions(const QStringList &exclusions);
 
 private:
 
     void setDoneFiltering();
-    bool presetMatchesSearch(KoResource * resource) const;
+    bool presetMatchesSearch(KoResourceSP resource) const;
     void setChanged();
     bool excludeFilterIsValid(const QString &exclusion);
     bool matchesResource(const QStringList& filtered,const QStringList &filterList) const;

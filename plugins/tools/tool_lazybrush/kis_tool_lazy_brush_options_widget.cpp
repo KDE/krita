@@ -49,7 +49,7 @@ struct KisToolLazyBrushOptionsWidget::Private
     KisSignalAutoConnectionsStore maskSignals;
     KisColorizeMaskSP activeMask;
 
-    KoColorSet colorSet;
+    KoColorSetSP colorSet {new KoColorSet(QString())};
     int transparentColorIndex;
 
     KisSignalCompressor baseNodeChangedCompressor;
@@ -116,9 +116,9 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
 
     m_d->provider = provider;
 
-    m_d->colorSet.setIsGlobal(false);
-    m_d->colorSet.setIsEditable(true);
-    m_d->colorModel->setPalette(&m_d->colorSet);
+    m_d->colorSet->setIsGlobal(false);
+    m_d->colorSet->setIsEditable(true);
+    m_d->colorModel->setPalette(m_d->colorSet);
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
@@ -297,8 +297,8 @@ void KisToolLazyBrushOptionsWidget::slotMakeTransparent(bool value)
     KisColorizeMask::KeyStrokeColors colors;
 
     int i = 0;
-    Q_FOREACH (const QString &groupName, m_d->colorSet.getGroupNames()) {
-        KisSwatchGroup *group = m_d->colorSet.getGroup(groupName);
+    Q_FOREACH (const QString &groupName, m_d->colorSet->getGroupNames()) {
+        KisSwatchGroup *group = m_d->colorSet->getGroup(groupName);
         Q_FOREACH (const KisSwatchGroup::SwatchInfo &info, group->infoList()) {
             colors.colors << info.swatch.color();
             if (activeSwatch == info.swatch) { activeIndex = i; }

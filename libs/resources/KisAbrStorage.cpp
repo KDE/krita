@@ -65,18 +65,18 @@ KisAbrStorage::~KisAbrStorage()
 
 }
 
-KisResourceStorage::ResourceItem KisAbrStorage::resourceItem(const QString &url)
+KisResourceStorage::ResourceItem KisAbrStorage::resourceItem(const QString &/*url*/)
 {
     return KisResourceStorage::ResourceItem();
 }
 
 
-KoResourceSP KisAbrStorage::resource(const QString &url)
+KoResourceSP KisAbrStorage::resource(const QString &/*url*/)
 {
     return 0;
 }
 
-QSharedPointer<KisResourceStorage::ResourceIterator> KisAbrStorage::resources(const QString &resourceType)
+QSharedPointer<KisResourceStorage::ResourceIterator> KisAbrStorage::resources(const QString &/*resourceType*/)
 {
     return QSharedPointer<KisResourceStorage::ResourceIterator>(new AbrIterator);
 }

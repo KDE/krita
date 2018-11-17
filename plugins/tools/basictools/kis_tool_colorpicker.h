@@ -28,8 +28,7 @@
 #include "kis_tool.h"
 #include <kis_icon.h>
 
-class KoResource;
-class KoColorSet;
+#include <KoColorSet.h>
 
 namespace KisToolUtils {
 struct ColorPickerConfig;
@@ -95,7 +94,7 @@ public Q_SLOTS:
     void slotSetAddPalette(bool);
     void slotChangeRadius(int);
     void slotChangeBlend(int);
-    void slotAddPalette(KoResource* resource);
+    void slotAddPalette(KoResourceSP resource);
     void slotSetColorSource(int value);
 
 private:
@@ -116,7 +115,7 @@ private:
 
     ColorPickerOptionsWidget *m_optionsWidget;
 
-    QList<KoColorSet*> m_palettes;
+    QList<KoColorSetSP> m_palettes;
 };
 
 class KisToolColorPickerFactory : public KoToolFactoryBase

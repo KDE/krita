@@ -36,8 +36,8 @@ class KisWorkspaceResource;
 class KisSessionResource;
 class KisPSDLayerStyleCollectionResource;
 
-typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
-typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
+typedef KoResourceServerSimpleConstruction<KisPaintOpPreset> KisPaintOpPresetResourceServer;
+typedef KoResourceServerAdapter<KisPaintOpPreset> KisPaintOpPresetResourceServerAdapter;
 
 class KRITAUI_EXPORT KisResourceServerProvider : public QObject
 {

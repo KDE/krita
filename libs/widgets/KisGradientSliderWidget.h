@@ -24,10 +24,12 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 
+#include <KoSegmentGradient.h>
+
 class QAction;
 class QMenu;
+
 class KoGradientSegment;
-class KoSegmentGradient;
 
 #include "kritawidgets_export.h"
 
@@ -43,10 +45,8 @@ public:
 
 public:
     void paintEvent(QPaintEvent *) override;
-    void setGradientResource(KoSegmentGradient* agr);
-    KoGradientSegment* selectedSegment() {
-        return m_selectedSegment;
-    }
+    void setGradientResource(KoSegmentGradientSP agr);
+    KoGradientSegment *selectedSegment() { return m_selectedSegment; }
 
 Q_SIGNALS:
     void sigSelectedSegment(KoGradientSegment*);
@@ -80,7 +80,7 @@ private:
         REMOVE_SEGMENT
     };
 
-    KoSegmentGradient* m_autogradientResource;
+    KoSegmentGradientSP m_autogradientResource;
     KoGradientSegment* m_currentSegment;
     KoGradientSegment* m_selectedSegment;
     QMenu* m_segmentMenu;

@@ -117,7 +117,7 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     itemChooser->showTaggingBar(true);
     chooserButton->setPopupWidget(itemChooser);
 
-    connect(itemChooser, SIGNAL(resourceSelected(KoResource*)), this, SLOT(resourceSelected(KoResource*)));
+    connect(itemChooser, SIGNAL(resourceSelected(KoResourceSP )), this, SLOT(resourceSelected(KoResourceSP )));
 
     setWidget(widget);
 
@@ -191,7 +191,7 @@ void TasksetDockerDock::saveClicked()
         return;
     }
 
-    TasksetResource* taskset = new TasksetResource(QString());
+    TasksetResourceSP taskset(new TasksetResource(QString()));
 
     QStringList actionNames;
     Q_FOREACH (QAction* action, m_model->actions()) {
@@ -227,14 +227,14 @@ void TasksetDockerDock::clearClicked()
     m_model->clear();
 }
 
-void TasksetDockerDock::resourceSelected(KoResource* resource)
+void TasksetDockerDock::resourceSelected(KoResourceSP resource)
 {
     if(!m_canvas) {
         return;
     }
     m_model->clear();
     saveButton->setEnabled(true);
-    Q_FOREACH (const QString& actionName, static_cast<TasksetResource*>(resource)->actionList()) {
+    Q_FOREACH (const QString& actionName, resource.staticCast<TasksetResource>()->actionList()) {
         QAction* action = m_canvas->viewManager()->actionCollection()->action(actionName);
         if(action) {
             m_model->addAction(action);

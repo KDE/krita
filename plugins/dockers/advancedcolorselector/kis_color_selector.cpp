@@ -153,7 +153,7 @@ void KisColorSelector::updateSettings()
     setConfiguration(KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelectorConfiguration().toString())));
 }
 
-void KisColorSelector::slotGamutMaskSet(KoGamutMask *gamutMask)
+void KisColorSelector::slotGamutMaskSet(KoGamutMaskSP gamutMask)
 {
     m_mainComponent->setGamutMask(gamutMask);
     m_subComponent->setGamutMask(gamutMask);

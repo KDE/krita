@@ -39,7 +39,7 @@ public:
     explicit KoAbstractGradient(const QString &filename);
     ~KoAbstractGradient() override;
 
-    virtual KoAbstractGradient* clone() const = 0;
+    virtual KoAbstractGradientSP clone() const = 0;
 
     bool load() override {
         return false;
@@ -89,5 +89,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(KoAbstractGradient*)
+Q_DECLARE_METATYPE(QSharedPointer<KoAbstractGradient>)
+
 
 #endif // KOABSTRACTGRADIENT_H

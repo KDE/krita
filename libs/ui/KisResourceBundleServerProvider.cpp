@@ -44,7 +44,7 @@ KisResourceBundleServerProvider::KisResourceBundleServerProvider()
 //    qDebug() << "Bundle files to load" << files;
     m_resourceBundleServer->loadResources(files);
 
-    Q_FOREACH (KisResourceBundle *bundle, m_resourceBundleServer->resources()) {
+    Q_FOREACH (KisResourceBundleSP bundle, m_resourceBundleServer->resources()) {
         if (!bundle->install()) {
             warnKrita << "Could not install resources for bundle" << bundle->name();
         }

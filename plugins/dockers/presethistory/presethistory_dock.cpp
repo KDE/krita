@@ -110,7 +110,7 @@ void PresetHistoryDock::presetSelected(QListWidgetItem *item)
         QVariant v = item->data(Qt::UserRole);
         KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
         m_block = true;
-        m_canvas->viewManager()->paintOpBox()->resourceSelected(preset.data());
+        m_canvas->viewManager()->paintOpBox()->resourceSelected(preset);
         m_block = false;
     }
 }

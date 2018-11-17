@@ -139,7 +139,7 @@ bool KoResourceBundle::loadFromDevice(QIODevice *)
     return false;
 }
 
-bool saveResourceToStore(KoResource *resource, KoStore *store, const QString &resType)
+bool saveResourceToStore(KoResourceSP resource, KoStore *store, const QString &resType)
 {
     if (!resource) {
         qWarning() << "No Resource";
@@ -213,7 +213,7 @@ bool KoResourceBundle::save()
     //        if (resType == "gradients") {
     //            KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
     //            Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-    //                KoResource *res = gradientServer->resourceByMD5(ref.md5sum);
+    //                KoResourceSP res = gradientServer->resourceByMD5(ref.md5sum);
     //                if (!res) res = gradientServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
     //                if (!saveResourceToStore(res, store.data(), "gradients")) {
     //                    if (res) {
@@ -228,7 +228,7 @@ bool KoResourceBundle::save()
     //        else if (resType  == "patterns") {
     //            KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
     //            Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-    //                KoResource *res = patternServer->resourceByMD5(ref.md5sum);
+    //                KoResourceSP res = patternServer->resourceByMD5(ref.md5sum);
     //                if (!res) res = patternServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
     //                if (!saveResourceToStore(res, store.data(), "patterns")) {
     //                    if (res) {
@@ -245,7 +245,7 @@ bool KoResourceBundle::save()
     //            Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
     //                KisBrushSP brush = brushServer->resourceByMD5(ref.md5sum);
     //                if (!brush) brush = brushServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
-    //                KoResource *res = brush.data();
+    //                KoResourceSP res = brush.data();
     //                if (!saveResourceToStore(res, store.data(), "brushes")) {
     //                    if (res) {
     //                        qWarning() << "Could not save resource" << resType << res->name();
@@ -259,7 +259,7 @@ bool KoResourceBundle::save()
     //        else if (resType  == "palettes") {
     //            KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
     //            Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-    //                KoResource *res = paletteServer->resourceByMD5(ref.md5sum);
+    //                KoResourceSP res = paletteServer->resourceByMD5(ref.md5sum);
     //                if (!res) res = paletteServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
     //                if (!saveResourceToStore(res, store.data(), "palettes")) {
     //                    if (res) {
@@ -274,7 +274,7 @@ bool KoResourceBundle::save()
     //        else if (resType  == "workspaces") {
     //            KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
     //            Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
-    //                KoResource *res = workspaceServer->resourceByMD5(ref.md5sum);
+    //                KoResourceSP res = workspaceServer->resourceByMD5(ref.md5sum);
     //                if (!res) res = workspaceServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
     //                if (!saveResourceToStore(res, store.data(), "workspaces")) {
     //                    if (res) {

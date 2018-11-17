@@ -26,8 +26,10 @@
 
 #include "kritawidgets_export.h"
 
+#include <KoColorSet.h>
+
 class KoResource;
-class KoColorSet;
+
 
 class KisPaletteListWidgetPrivate;
 
@@ -42,11 +44,11 @@ public:
     void setAllowModification(bool allowModification);
 
 Q_SIGNALS:
-    void sigPaletteSelected(KoColorSet*);
+    void sigPaletteSelected(KoColorSetSP);
     void sigAddPalette();
-    void sigRemovePalette(KoColorSet *);
+    void sigRemovePalette(KoColorSetSP);
     void sigImportPalette();
-    void sigExportPalette(KoColorSet *);
+    void sigExportPalette(KoColorSetSP);
 
 public Q_SLOTS:
 
@@ -54,7 +56,7 @@ private /* methods */:
     QString newPaletteFileName();
 
 private Q_SLOTS:
-    void slotPaletteResourceSelected(KoResource *);
+    void slotPaletteResourceSelected(KoResourceSP);
     void slotAdd();
     void slotRemove();
     void slotImport();

@@ -115,9 +115,9 @@ KisAutoBrush::KisAutoBrush(const KisAutoBrush& rhs)
 {
 }
 
-KisBrush* KisAutoBrush::clone() const
+KisBrushSP KisAutoBrush::clone() const
 {
-    return new KisAutoBrush(*this);
+    return KisBrushSP(new KisAutoBrush(*this));
 }
 
 /* It's difficult to predict the mask height when exaclty when there are

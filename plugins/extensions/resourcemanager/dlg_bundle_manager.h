@@ -58,13 +58,13 @@ private:
     QWidget *m_page;
     Ui::WdgDlgBundleManager *m_ui;
 
-    void fillListWidget(QList<KisResourceBundle*> bundles, QListWidget *w);
+    void fillListWidget(QList<KisResourceBundleSP> bundles, QListWidget *w);
     void refreshListData();
 
-    QMap<QString, KisResourceBundle*> m_blacklistedBundles;
-    QMap<QString, KisResourceBundle*> m_activeBundles;
+    QMap<QString, KisResourceBundleSP> m_blacklistedBundles;
+    QMap<QString, KisResourceBundleSP> m_activeBundles;
 
-    KisResourceBundle *m_currentBundle;
+    KisResourceBundleSP m_currentBundle;
     KisActionManager *m_actionManager;
     ResourceManager *m_resourceManager;
 };

@@ -25,8 +25,9 @@
 #include <WidgetsDebug.h>
 #include "kritawidgets_export.h"
 
+#include <KoResource.h>
+
 class KoResourceServerBase;
-class KoResource;
 class QStringList;
 class QString;
 
@@ -44,17 +45,17 @@ public:
     explicit KoResourceTagStore(KoResourceServerBase *resourceServer);
     ~KoResourceTagStore();
 
-    QStringList assignedTagsList(const KoResource *resource) const;
+    QStringList assignedTagsList(const KoResourceSP resource) const;
 
     /// remote the given resource from the tagstore
-    void removeResource(const KoResource *resource);
+    void removeResource(const KoResourceSP resource);
 
     /// Add the given tag to the tag store. The resource can be empty, in which case
     /// the tag is added but unused
-    void addTag(KoResource* resource, const QString& tag);
+    void addTag(KoResourceSP resource, const QString& tag);
 
     /// Remove the given tag for the given resource. It will be blacklisted if there are no users left.
-    void delTag(KoResource* resource, const QString& tag);
+    void delTag(KoResourceSP resource, const QString& tag);
 
     /// Remove the tag altogether. It will be blacklisted, too.
     void delTag(const QString& tag);

@@ -219,7 +219,7 @@ void KisColorSelector::setInverseSaturation(bool inverse)
     }
 }
 
-void KisColorSelector::setGamutMask(KoGamutMask* gamutMask)
+void KisColorSelector::setGamutMask(KoGamutMaskSP gamutMask)
 {
     if (!gamutMask) {
         return;
@@ -248,7 +248,7 @@ void KisColorSelector::setDirty()
     update();
 }
 
-KoGamutMask* KisColorSelector::gamutMask()
+KoGamutMaskSP KisColorSelector::gamutMask()
 {
     return m_currentGamutMask;
 }

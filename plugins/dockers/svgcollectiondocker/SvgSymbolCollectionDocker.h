@@ -45,9 +45,9 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     Qt::DropActions supportedDragActions() const override;
 public:
-    void setSvgSymbolCollectionResource(KoSvgSymbolCollectionResource *resource);
+    void setSvgSymbolCollectionResource(QSharedPointer<KoSvgSymbolCollectionResource> resource);
 private:
-    KoSvgSymbolCollectionResource *m_symbolCollection;
+    QSharedPointer<KoSvgSymbolCollectionResource> m_symbolCollection;
 };
 
 

@@ -21,7 +21,7 @@
 
 #include <QtTest>
 
-class KisImagePipeBrush;
+#include <kis_imagepipe_brush.h>
 
 class KisImagePipeBrushTest : public QObject
 {
@@ -36,7 +36,7 @@ private Q_SLOTS:
     void testTextBrushPiped();
 
 private:
-    void checkConsistency(KisImagePipeBrush *brush);
+    void checkConsistency(KisImagePipeBrushSP brush);
 };
 
 #endif /* __KIS_IMAGEPIPE_BRUSH_TEST_H */

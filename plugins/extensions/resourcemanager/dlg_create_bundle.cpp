@@ -47,7 +47,7 @@
 
 #define ICON_SIZE 48
 
-DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
+DlgCreateBundle::DlgCreateBundle(KisResourceBundleSP bundle, QWidget *parent)
     : KoDialog(parent)
     , m_ui(new Ui::WdgDlgCreateBundle)
     , m_bundle(bundle)
@@ -80,7 +80,7 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
 
         Q_FOREACH (const QString & resType, bundle->resourceTypes()) {
             if (resType == "gradients") {
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
                         m_selectedGradients << res->shortFilename();
                     }
@@ -88,7 +88,7 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
 
             }
             else if (resType  == "patterns") {
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
                         m_selectedPatterns << res->shortFilename();
                     }
@@ -96,7 +96,7 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
 
             }
             else if (resType  == "brushes") {
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
                         m_selectedBrushes << res->shortFilename();
                     }
@@ -104,7 +104,7 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
 
             }
             else if (resType  == "palettes") {
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
                         m_selectedPalettes << res->shortFilename();
                     }
@@ -112,7 +112,7 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
 
             }
             else if (resType  == "workspaces") {
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
                         m_selectedWorkspaces << res->shortFilename();
                     }
@@ -120,14 +120,14 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
 
             }
             else if (resType  == "paintoppresets") {
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
                         m_selectedPresets << res->shortFilename();
                     }
                 }
             }
             else if (resType  == "gamutmasks") {
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
                         m_selectedGamutMasks << res->shortFilename();
                     }
@@ -376,7 +376,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     }
     else if (resourceType == "gradients") {
         KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
+        Q_FOREACH (KoResourceSP res, server->resources()) {
             if (res->filename()!="Foreground to Transparent" && res->filename()!="Foreground to Background") {
             //technically we should read from the file-name whether or not the file can be opened, but this works for now. The problem is making sure that bundle-resource know where they are stored.//
             //dbgKrita<<res->filename();
@@ -394,7 +394,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     }
     else if (resourceType == "patterns") {
         KoResourceServer<KoPattern>* server = KoResourceServerProvider::instance()->patternServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
+        Q_FOREACH (KoResourceSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
@@ -408,7 +408,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     }
     else if (resourceType == "palettes") {
         KoResourceServer<KoColorSet>* server = KoResourceServerProvider::instance()->paletteServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
+        Q_FOREACH (KoResourceSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
@@ -422,7 +422,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     }
     else if (resourceType == "workspaces") {
         KoResourceServer<KisWorkspaceResource>* server = KisResourceServerProvider::instance()->workspaceServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
+        Q_FOREACH (KoResourceSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 
@@ -436,7 +436,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     }
     else if (resourceType == "gamutmasks") {
         KoResourceServer<KoGamutMask>* server = KoResourceServerProvider::instance()->gamutMaskServer();
-        Q_FOREACH (KoResource *res, server->resources()) {
+        Q_FOREACH (KoResourceSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());
 

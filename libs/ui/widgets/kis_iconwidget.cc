@@ -33,7 +33,7 @@ KisIconWidget::KisIconWidget(QWidget *parent, const char *name)
     m_resource = 0;
 }
 
-void KisIconWidget::slotSetItem(KoResource * resource)
+void KisIconWidget::slotSetItem(KoResourceSP resource)
 {
     m_resource = resource;
     update();
@@ -93,18 +93,18 @@ void KisIconWidget::setResourceAdapter(QSharedPointer<KoAbstractResourceServerAd
     Q_ASSERT(adapter);
     m_adapter = adapter;
     m_adapter->connectToResourceServer();
-    connect(m_adapter.data(), SIGNAL(resourceChanged(KoResource*)), this, SLOT(slotAdapterResourceChanged(KoResource*)));
-    connect(m_adapter.data(), SIGNAL(removingResource(KoResource*)), this, SLOT(slotAdapterResourceRemoved(KoResource*)));
+    connect(m_adapter.data(), SIGNAL(resourceChanged(KoResourceSP )), this, SLOT(slotAdapterResourceChanged(KoResourceSP )));
+    connect(m_adapter.data(), SIGNAL(removingResource(KoResourceSP )), this, SLOT(slotAdapterResourceRemoved(KoResourceSP )));
 }
 
-void KisIconWidget::slotAdapterResourceChanged(KoResource* resource)
+void KisIconWidget::slotAdapterResourceChanged(KoResourceSP resource)
 {
     if (m_resource == resource) {
         update();
     }
 }
 
-void KisIconWidget::slotAdapterResourceRemoved(KoResource* resource)
+void KisIconWidget::slotAdapterResourceRemoved(KoResourceSP resource)
 {
     if (m_resource == resource) {
         m_resource = 0;

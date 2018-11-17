@@ -1562,7 +1562,7 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
     return success;
 }
 
-bool KisMainWindow::restoreWorkspace(KisWorkspaceResource *workspace)
+bool KisMainWindow::restoreWorkspace(KisWorkspaceResourceSP workspace)
 {
     bool success = restoreWorkspaceState(workspace->dockerState());
 
@@ -2181,7 +2181,7 @@ void KisMainWindow::updateWindowMenu()
         if (name.isEmpty()) return;
         auto rserver = KisResourceServerProvider::instance()->workspaceServer();
 
-        KisWorkspaceResource* workspace = new KisWorkspaceResource("");
+        KisWorkspaceResourceSP workspace(new KisWorkspaceResource(""));
         workspace->setDockerState(m_this->saveState());
         d->viewManager->resourceProvider()->notifySavingWorkspace(workspace);
         workspace->setValid(true);

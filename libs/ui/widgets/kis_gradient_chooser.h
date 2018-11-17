@@ -23,14 +23,16 @@
 #include <QFrame>
 #include <QToolButton>
 #include <kritaui_export.h>
+#include <KoResource.h>
+#include <KoAbstractGradient.h>
+#include <KoStopGradient.h>
+#include <KoSegmentGradient.h>
 
-class KoAbstractGradient;
-class KoStopGradient;
 class KisViewManager;
 class QLabel;
 class QPushButton;
 class KisAutogradient;
-class KoResource;
+
 class KoResourceItemChooser;
 
 class KisCustomGradientDialog : public KoDialog
@@ -40,7 +42,7 @@ class KisCustomGradientDialog : public KoDialog
 
 public:
 
-    KisCustomGradientDialog(KoAbstractGradient* gradient, QWidget * parent, const char *name);
+    KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget * parent, const char *name);
 
 private:
 
@@ -59,26 +61,26 @@ public:
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResource *currentResource();
-    void setCurrentResource(KoResource *resource);
+    KoResourceSP currentResource();
+    void setCurrentResource(KoResourceSP resource);
 
     void setCurrentItem(int row, int column);
 
 Q_SIGNALS:
     /// Emitted when a resource was selected
-    void resourceSelected(KoResource * resource);
+    void resourceSelected(KoResourceSP resource);
 
 public Q_SLOTS:
     void slotUpdateIcons();
 
 private Q_SLOTS:
-    virtual void update(KoResource * resource);
+    virtual void update(KoResourceSP resource);
     void addStopGradient();
     void addSegmentedGradient();
     void editGradient();
 
 private:
-      void addGradient(KoAbstractGradient* gradient);
+      void addGradient(KoAbstractGradientSP gradient);
 private:
     QLabel *m_lbName;
     KoResourceItemChooser * m_itemChooser;

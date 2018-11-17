@@ -22,10 +22,9 @@
 
 #include "kritawidgets_export.h"
 #include <QComboBox>
-
+#include <KoResource.h>
 class QMouseEvent;
 class KoAbstractResourceServerAdapter;
-class KoResource;
 
 /**
  * A custom combobox widget for selecting resource items like gradients or patterns.
@@ -69,10 +68,10 @@ public:
 
 Q_SIGNALS:
     /// Emitted when a resource was selected
-    void resourceSelected( KoResource * resource );
+    void resourceSelected( KoResourceSP resource );
 
     /// Is emitted when the user has clicked on the current resource
-    void resourceApplied( KoResource * resource );
+    void resourceApplied( KoResourceSP resource );
 
 protected:
     /// reimplemented
@@ -84,8 +83,8 @@ protected:
 
 private Q_SLOTS:
     void indexChanged( int index );
-    void resourceAdded(KoResource*);
-    void resourceRemoved(KoResource*);
+    void resourceAdded(KoResourceSP );
+    void resourceRemoved(KoResourceSP );
 private:
     class Private;
     Private * const d;

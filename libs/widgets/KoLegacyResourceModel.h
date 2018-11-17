@@ -22,8 +22,9 @@
 #define KOLEGACYRESOURCEMODEL_H
 
 #include <QSharedPointer>
-
 #include "QAbstractTableModel"
+
+#include <KoResource.h>
 
 #include "kritawidgets_export.h"
 
@@ -57,17 +58,17 @@ public:
         TagsRole
     };
 
-    QModelIndex indexFromResource(KoResource* resource) const;
+    QModelIndex indexFromResource(KoResourceSP resource) const;
 
     /// facade for KoAbstractResourceServerAdapter
     QString extensions() const;
     void importResourceFile(const QString &filename);
     void importResourceFile(const QString &filename, bool fileCreation);
-    bool removeResource(KoResource* resource);
+    bool removeResource(KoResourceSP resource);
     void removeResourceFile(const QString & filename);
-    QStringList assignedTagsList(KoResource *resource) const;
-    void addTag(KoResource* resource, const QString& tag);
-    void deleteTag( KoResource* resource, const QString& tag);
+    QStringList assignedTagsList(KoResourceSP resource) const;
+    void addTag(KoResourceSP resource, const QString& tag);
+    void deleteTag( KoResourceSP resource, const QString& tag);
     QStringList tagNamesList() const;
     QStringList searchTag(const QString& lineEditText);
     void enableResourceFiltering(bool enable);
@@ -75,8 +76,8 @@ public:
     void searchTextChanged(const QString& searchString);
     void updateServer();
     int resourcesCount() const;
-    QList<KoResource *> currentlyVisibleResources() const;
-    QList<KoResource *> serverResources() const;
+    QList<KoResourceSP > currentlyVisibleResources() const;
+    QList<KoResourceSP > serverResources() const;
     void tagCategoryMembersChanged();
     void tagCategoryAdded(const QString& tag);
     void tagCategoryRemoved(const QString& tag);
@@ -89,16 +90,16 @@ Q_SIGNALS:
     void tagBoxEntryAdded(const QString& tag);
     void tagBoxEntryRemoved(const QString& tag);
 
-    void beforeResourcesLayoutReset(KoResource *activateAfterReformat);
+    void beforeResourcesLayoutReset(KoResourceSP activateAfterReformat);
     void afterResourcesLayoutReset();
 
 private:
-    void doSafeLayoutReset(KoResource *activateAfterReformat);
+    void doSafeLayoutReset(KoResourceSP activateAfterReformat);
 
 private Q_SLOTS:
-    void resourceAdded(KoResource *resource);
-    void resourceRemoved(KoResource *resource);
-    void resourceChanged(KoResource *resource);
+    void resourceAdded(KoResourceSP resource);
+    void resourceRemoved(KoResourceSP resource);
+    void resourceChanged(KoResourceSP resource);
     void tagBoxEntryWasModified();
     void tagBoxEntryWasAdded(const QString& tag);
     void tagBoxEntryWasRemoved(const QString& tag);

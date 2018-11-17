@@ -21,10 +21,7 @@
 
 #include "kritapaintop_export.h"
 #include <kis_types.h>
-
-
-class KisBrush;
-typedef KisSharedPtr<KisBrush> KisBrushSP;
+#include <kis_brush.h>
 
 struct PAINTOP_EXPORT KisMaskingBrushOptionProperties
 {

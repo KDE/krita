@@ -59,7 +59,7 @@ KoResourceTagStore::~KoResourceTagStore()
     delete d;
 }
 
-QStringList KoResourceTagStore::assignedTagsList(const KoResource* resource) const
+QStringList KoResourceTagStore::assignedTagsList(const KoResourceSP resource) const
 {
     if (!resource) return QStringList();
 
@@ -69,7 +69,7 @@ QStringList KoResourceTagStore::assignedTagsList(const KoResource* resource) con
     return tags;
 }
 
-void KoResourceTagStore::removeResource(const KoResource *resource)
+void KoResourceTagStore::removeResource(const KoResourceSP resource)
 {
     QStringList tags = assignedTagsList(resource);
 
@@ -94,7 +94,7 @@ QStringList KoResourceTagStore::tagNamesList() const
     return tagList;
 }
 
-void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
+void KoResourceTagStore::addTag(KoResourceSP resource, const QString& tag)
 {
 //    if (d->resourceServer->type() == "paintoppresets" && resource) {
 //        qDebug() << "\t\t\taddTag" << tag << resource->filename() << d->tagList[tag] << d->md5ToTag.value(resource->md5()) << d->identifierToTag.values(resource->filename());
@@ -131,7 +131,7 @@ void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
 
 }
 
-void KoResourceTagStore::delTag(KoResource* resource, const QString& tag)
+void KoResourceTagStore::delTag(KoResourceSP resource, const QString& tag)
 {
     int res = d->md5ToTag.remove(resource->md5(), tag);
     res += d->identifierToTag.remove(resource->filename(), tag);
@@ -168,23 +168,23 @@ QStringList KoResourceTagStore::searchTag(const QString& query) const
         return QStringList();
     }
 
-    QSet<const KoResource*> resources;
+    QSet<const KoResourceSP> resources;
 
     Q_FOREACH (QString tag, tagsList) {
         Q_FOREACH (const QByteArray &md5, d->md5ToTag.keys(tag)) {
-            KoResource *res = d->resourceServer->byMd5(md5);
+            KoResourceSP res = d->resourceServer->byMd5(md5);
             if (res)
                 resources << res;
         }
         Q_FOREACH (const QString &identifier, d->identifierToTag.keys(tag)) {
-            KoResource *res = d->resourceServer->byFileName(identifier);
+            KoResourceSP res = d->resourceServer->byFileName(identifier);
             if (res)
                 resources << res;
         }
     }
 
     QStringList filenames;
-    Q_FOREACH (const KoResource *res, resources) {
+    Q_FOREACH (const KoResourceSP res, resources) {
         if (res) {
             filenames << res->shortFilename();
         }
@@ -232,22 +232,22 @@ void KoResourceTagStore::writeXMLFile(const QString &tagstore)
     root = doc.createElement("tags");
     doc.appendChild(root);
 
-    QSet<KoResource*> taggedResources;
+    QSet<KoResourceSP> taggedResources;
     Q_FOREACH (const QByteArray &md5, d->md5ToTag.keys()) {
-        KoResource *res = d->resourceServer->byMd5(md5);
+        KoResourceSP res = d->resourceServer->byMd5(md5);
         if (res) {
             taggedResources << res;
         }
     }
 
     Q_FOREACH (const QString &identifier, d->identifierToTag.keys()) {
-        KoResource *res = d->resourceServer->byFileName(identifier);
+        KoResourceSP res = d->resourceServer->byFileName(identifier);
         if (res) {
             taggedResources << res;
         }
     }
 
-    Q_FOREACH (const KoResource *res, taggedResources) {
+    Q_FOREACH (const KoResourceSP res, taggedResources) {
 
         QDomElement resourceEl = doc.createElement("resource");
         resourceEl.setAttribute("identifier", res->filename().replace(QDir::homePath(), QString("~")));
@@ -342,8 +342,8 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
         QDomElement element = resourceNodesList.at(i).toElement();
         if (element.tagName() == "resource") {
 
-            KoResource *resByMd5 = 0;
-            KoResource *resByFileName = 0;
+            KoResourceSP resByMd5 = 0;
+            KoResourceSP resByFileName = 0;
 
             if (element.hasAttribute("md5")) {
                 resourceMD5 = QByteArray::fromBase64(element.attribute("md5").toLatin1());
@@ -374,7 +374,7 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
                 }
             }
             else {
-                KoResource *res = 0;
+                KoResourceSP res = 0;
 
                 if (resByMd5 && resByFileName && (resByMd5 != resByFileName)) {
                     warnWidgets << "MD5sum and filename point to different resources -- was the resource renamed? We go with md5";

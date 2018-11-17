@@ -52,13 +52,13 @@ struct Q_DECL_HIDDEN KisPainter::Private {
     FillStyle                   fillStyle;
     StrokeStyle                 strokeStyle;
     bool                        antiAliasPolygonFill;
-    const KoPattern*           pattern;
+    KoPatternSP                 pattern;
     QPointF                     duplicateOffset;
     quint32                     pixelSize;
     const KoColorSpace*         colorSpace;
     KoColorProfile*             profile;
     const KoCompositeOp*        compositeOp;
-    const KoAbstractGradient*   gradient;
+    KoAbstractGradientSP        gradient;
     KisPaintOpPresetSP          paintOpPreset;
     QImage                      polygonMaskImage;
     QPainter*                   maskPainter;

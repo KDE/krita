@@ -59,5 +59,7 @@ private:
 
 };
 
+typedef QSharedPointer<KisPSDLayerStyleCollectionResource> KisPSDLayerStyleCollectionResourceSP;
+
 
 #endif // KIS_PSD_LAYER_STYLE_RESOURCE_H

@@ -30,11 +30,13 @@
 #include <kis_types.h>
 #include <kis_shared.h>
 #include <brushengine/kis_paint_information.h>
+#include <kis_abr_brush.h>
+
 
 class QString;
 class QIODevice;
 
-class KisAbrBrush;
+
 struct AbrInfo;
 
 /**
@@ -50,7 +52,7 @@ public:
     /// Construct brush to load filename later as brush
     KisAbrBrushCollection(const QString& filename);
 
-    KisBrush* clone() const override;
+    KisBrushSP clone() const override;
 
     ~KisAbrBrushCollection() override {}
 
@@ -72,7 +74,7 @@ public:
      */
     QString defaultFileExtension() const override;
 
-    QList<KisAbrBrush*> brushes() {
+    QList<KisAbrBrushSP> brushes() {
         return m_abrBrushes.values();
     }
 
@@ -86,7 +88,7 @@ private:
     qint32 abr_brush_load(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
     qint32 abr_brush_load_v12(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
     quint32 abr_brush_load_v6(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
-    QMap<QString, KisAbrBrush*> m_abrBrushes;
+    QMap<QString, KisAbrBrushSP> m_abrBrushes;
 };
 
 #endif

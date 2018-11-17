@@ -48,19 +48,19 @@ public:
 
 
 private:
-    void registerPatternObject(const KoPattern *pattern);
+    void registerPatternObject(const KoPatternSP pattern);
 
     void assignPatternObject(const QString &patternUuid,
                              const QString &patternName,
-                             boost::function<void (KoPattern *)> setPattern);
+                             boost::function<void (KoPatternSP )> setPattern);
 
-    QVector<KoPattern*> fetchAllPatterns(KisPSDLayerStyle *style) const;
+    QVector<KoPatternSP> fetchAllPatterns(KisPSDLayerStyle *style) const;
 
     void newStyleStarted(bool isPsdStructure);
     void connectCatcherToStyle(KisPSDLayerStyle *style, const QString &prefix);
 
 private:
-    QHash<QString, KoPattern*> m_patternsStore;
+    QHash<QString, KoPatternSP> m_patternsStore;
 
     KisAslCallbackObjectCatcher m_catcher;
     QVector<KisPSDLayerStyleSP> m_stylesVector;

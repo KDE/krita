@@ -27,24 +27,23 @@
 #include <QLineEdit>
 #include <QPushButton>
 
-class KoResource;
-
+#include <KoResource.h>
 
 class ContextMenuExistingTagAction : public QAction
 {
     Q_OBJECT
 public:
-    explicit ContextMenuExistingTagAction( KoResource * resource, QString tag, QObject* parent = 0);
+    explicit ContextMenuExistingTagAction( KoResourceSP resource, QString tag, QObject* parent = 0);
     ~ContextMenuExistingTagAction() override;
 
 Q_SIGNALS:
-    void triggered(KoResource * resource, QString tag);
+    void triggered(KoResourceSP resource, QString tag);
 
 protected Q_SLOTS:
     void onTriggered();
 
 private:
-    KoResource * m_resource;
+    KoResourceSP m_resource;
     QString m_tag;
 };
 
@@ -82,17 +81,17 @@ class NewTagAction : public KoLineEditAction
 {
     Q_OBJECT
 public:
-    explicit NewTagAction (KoResource* resource, QMenu* parent);
+    explicit NewTagAction (KoResourceSP resource, QMenu* parent);
     ~NewTagAction() override;
 
     Q_SIGNALS:
-    void triggered(KoResource * resource, const QString &tag);
+    void triggered(KoResourceSP resource, const QString &tag);
 
 protected Q_SLOTS:
     void onTriggered(const QString& tagName);
 
 private:
-    KoResource * m_resource;
+    KoResourceSP m_resource;
 };
 
 class KoResourceItemChooserContextMenu :  public QMenu
@@ -101,7 +100,7 @@ class KoResourceItemChooserContextMenu :  public QMenu
 public:
     explicit KoResourceItemChooserContextMenu
     (
-        KoResource* resource,
+        KoResourceSP resource,
         const QStringList& resourceTags,
         const QString& currentlySelectedTag,
         const QStringList& allTags
@@ -110,11 +109,11 @@ public:
 
 Q_SIGNALS:
     /// Emitted when a resource should be added to an existing tag.
-    void resourceTagAdditionRequested(KoResource* resource, const QString& tag);
+    void resourceTagAdditionRequested(KoResourceSP resource, const QString& tag);
     /// Emitted when a resource should be removed from an existing tag.
-    void resourceTagRemovalRequested(KoResource* resource, const QString& tag);
+    void resourceTagRemovalRequested(KoResourceSP resource, const QString& tag);
     /// Emitted when a resource should be added to a new tag, which will need to be created.
-    void resourceAssignmentToNewTagRequested(KoResource* resource, const QString& tag);
+    void resourceAssignmentToNewTagRequested(KoResourceSP resource, const QString& tag);
 
 };
 

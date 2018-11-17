@@ -171,7 +171,7 @@ private Q_SLOTS:
      */
     void slotSetColorFromHex();
 
-    void slotChangePalette(KoColorSet *set);
+    void slotChangePalette(KoColorSetSP set);
 
 protected:
     void showEvent(QShowEvent *event) override;

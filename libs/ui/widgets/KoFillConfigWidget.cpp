@@ -196,7 +196,7 @@ public:
     KisAcyclicSignalConnector resourceManagerAcyclicConnector;
     KoFillConfigWidget::StyleButton selectedFillIndex;
 
-    QSharedPointer<KoStopGradient> activeGradient;
+    KoStopGradientSP activeGradient;
     KisSignalCompressor gradientChangedCompressor;
     KoFlake::FillVariant fillVariant;
 
@@ -387,7 +387,7 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
             d->ui->wdgGradientEditor->notifyGlobalColorChanged(color);
         }
     } else if (key == KisCanvasResourceProvider::CurrentGradient) {
-        KoResource *gradient = value.value<KoAbstractGradient*>();
+        KoResourceSP gradient = value.value<KoAbstractGradientSP>();
         const int checkedId = d->group->checkedId();
 
         if (gradient && (checkedId < 0 || checkedId == None || checkedId == Gradient)) {
@@ -575,7 +575,7 @@ void KoFillConfigWidget::slotSavePredefinedGradientClicked()
     const QString saveLocation = server->saveLocation();
     d->activeGradient->setFilename(saveLocation + d->activeGradient->name() + d->activeGradient->defaultFileExtension());
 
-    KoAbstractGradient *newGradient = d->activeGradient->clone();
+    KoAbstractGradientSP newGradient = d->activeGradient->clone();
     server->addResource(newGradient);
 
     d->gradientAction->setCurrentResource(newGradient);
@@ -628,9 +628,9 @@ void KoFillConfigWidget::uploadNewGradientBackground(const QGradient *gradient)
 
     d->ui->wdgGradientEditor->setGradient(0);
 
-    d->activeGradient.reset(KoStopGradient::fromQGradient(gradient));
+    d->activeGradient = KoStopGradient::fromQGradient(gradient);
 
-    d->ui->wdgGradientEditor->setGradient(d->activeGradient.data());
+    d->ui->wdgGradientEditor->setGradient(d->activeGradient);
     d->ui->cmbGradientType->setCurrentIndex(d->activeGradient->type() != QGradient::LinearGradient);
     d->ui->cmbGradientRepeat->setCurrentIndex(int(d->activeGradient->spread()));
 }
@@ -755,7 +755,7 @@ bool KoFillConfigWidget::checkNewFillModeIsSame(const KoShapeFillWrapper &w) con
         retval = d->selectedFillIndex == Solid && w.color() == d->colorAction->currentColor();
         break;
     case KoFlake::Gradient: {
-        QScopedPointer<KoStopGradient> newGradient(KoStopGradient::fromQGradient(w.gradient()));
+        KoStopGradientSP newGradient(KoStopGradient::fromQGradient(w.gradient()));
 
         retval = d->selectedFillIndex == Gradient && *newGradient == *d->activeGradient;
         break;

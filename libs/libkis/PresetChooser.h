@@ -68,8 +68,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotResourceSelected(KoResource *resource);
-    void slotResourceClicked(KoResource *resource);
+    void slotResourceSelected(KoResourceSP resource);
+    void slotResourceClicked(KoResourceSP resource);
 };
 
 #endif // PRESETCHOOSER_H

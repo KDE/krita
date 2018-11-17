@@ -100,7 +100,7 @@ void DlgBundleManager::refreshListData()
     m_ui->listActive->clear();
 
     Q_FOREACH (const QString &f, bundleServer->blackListedFiles()) {
-        KisResourceBundle *bundle = new KisResourceBundle(f);
+        KisResourceBundleSP bundle(new KisResourceBundle(f));
         bundle->load();
         if (bundle->valid()) {
             bundle->setInstalled(false);
@@ -109,7 +109,7 @@ void DlgBundleManager::refreshListData()
     }
     fillListWidget(m_blacklistedBundles.values(), m_ui->listInactive);
 
-    Q_FOREACH (KisResourceBundle *bundle, bundleServer->resources()) {
+    Q_FOREACH (KisResourceBundleSP bundle, bundleServer->resources()) {
         if (bundle->valid()) {
             m_activeBundles[bundle->filename()] = bundle;
         }
@@ -125,14 +125,14 @@ void DlgBundleManager::accept()
         QListWidgetItem *item = m_ui->listActive->item(i);
         QByteArray ba = item->data(Qt::UserRole).toByteArray();
         QString name = item->text();
-        KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
+        KisResourceBundleSP bundle = bundleServer->resourceByMD5(ba);
         QMessageBox bundleFeedback;
         bundleFeedback.setIcon(QMessageBox::Warning);
         QString feedback = "bundlefeedback";
 
         if (!bundle) {
             // Get it from the blacklisted bundles
-            Q_FOREACH (KisResourceBundle *b2, m_blacklistedBundles.values()) {
+            Q_FOREACH (KisResourceBundleSP b2, m_blacklistedBundles.values()) {
                 if (b2->md5() == ba) {
                     bundle = b2;
                     break;
@@ -184,7 +184,7 @@ void DlgBundleManager::accept()
     for (int i = 0; i < m_ui->listInactive->count(); ++i) {
         QListWidgetItem *item = m_ui->listInactive->item(i);
         QByteArray ba = item->data(Qt::UserRole).toByteArray();
-        KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
+        KisResourceBundleSP bundle = bundleServer->resourceByMD5(ba);
         bool isKrits3Bundle = false;
         if (bundle) {
             if (bundle->filename().contains("Krita_3_Default_Resources.bundle")) {
@@ -240,11 +240,11 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
 
         QByteArray ba = current->data(Qt::UserRole).toByteArray();
         KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
-        KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
+        KisResourceBundleSP bundle = bundleServer->resourceByMD5(ba);
 
         if (!bundle) {
             // Get it from the blacklisted bundles
-            Q_FOREACH (KisResourceBundle *b2, m_blacklistedBundles.values()) {
+            Q_FOREACH (KisResourceBundleSP b2, m_blacklistedBundles.values()) {
                 if (b2->md5() == ba) {
                     bundle = b2;
                     break;
@@ -302,7 +302,7 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
 
                 m_ui->listBundleContents->addTopLevelItem(toplevel);
 
-                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
                         QTreeWidgetItem *i = new QTreeWidgetItem();
                         i->setIcon(0, QIcon(QPixmap::fromImage(res->image())));
@@ -337,12 +337,12 @@ void DlgBundleManager::editBundle()
     }
 }
 
-void DlgBundleManager::fillListWidget(QList<KisResourceBundle *> bundles, QListWidget *w)
+void DlgBundleManager::fillListWidget(QList<KisResourceBundleSP> bundles, QListWidget *w)
 {
     w->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     w->setSelectionMode(QAbstractItemView::MultiSelection);
 
-    Q_FOREACH (KisResourceBundle *bundle, bundles) {
+    Q_FOREACH (KisResourceBundleSP bundle, bundles) {
         QPixmap pixmap(ICON_SIZE, ICON_SIZE);
         pixmap.fill(Qt::gray);
         if (!bundle->image().isNull()) {

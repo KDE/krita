@@ -28,6 +28,8 @@
 
 #include <QObject>
 
+#include <KoResource.h>
+
 class QWidget;
 class QStringList;
 class QString;
@@ -36,7 +38,7 @@ class QPoint;
 class KoTagFilterWidget;
 class KoTagChooserWidget;
 class KoLegacyResourceModel;
-class KoResource;
+
 
 /**
  * @brief The KoResourceTaggingManager class is ...
@@ -53,7 +55,7 @@ public:
     ~KoResourceTaggingManager() override;
     void showTaggingBar(bool show);
     QStringList availableTags() const;
-    void contextMenuRequested(KoResource* currentResource, QPoint pos);
+    void contextMenuRequested(KoResourceSP currentResource, QPoint pos);
     void allowTagModification( bool set );
     bool allowTagModification();
     KoTagFilterWidget* tagFilterWidget();
@@ -67,24 +69,24 @@ private Q_SLOTS:
 
     void undeleteTag(const QString& tagToUndelete);
     void purgeTagUndeleteList();
-    void contextCreateNewTag(KoResource* resource, const QString& tag);
+    void contextCreateNewTag(KoResourceSP resource, const QString& tag);
     void contextCreateNewTag(const QString& tag);
     void syncTagBoxEntryRemoval(const QString& tag);
     void syncTagBoxEntryAddition(const QString& tag);
     void syncTagBoxEntries();
     void tagSaveButtonPressed();
-    void contextRemoveTagFromResource(KoResource* resource, const QString& tag);
-    void contextAddTagToResource(KoResource* resource, const QString& tag);
+    void contextRemoveTagFromResource(KoResourceSP resource, const QString& tag);
+    void contextAddTagToResource(KoResourceSP resource, const QString& tag);
     void renameTag(const QString &oldName, const QString &newName);
     void tagChooserIndexChanged(const QString& lineEditText);
     void tagSearchLineEditTextChanged(const QString& lineEditText);
     void removeTagFromComboBox(const QString& tag);
 
 private:
-    void contextMenuRequested(KoResource* resource, const QStringList& resourceTags, const QPoint& pos);
+    void contextMenuRequested(KoResourceSP resource, const QStringList& resourceTags, const QPoint& pos);
     void enableContextMenu(bool enable);
-    void removeResourceTag(KoResource* resource, const QString& tagName);
-    void addResourceTag(KoResource* resource, const QString& tagName);
+    void removeResourceTag(KoResourceSP resource, const QString& tagName);
+    void addResourceTag(KoResourceSP resource, const QString& tagName);
     void updateTaggedResourceView();
     class Private;
     Private* const d;

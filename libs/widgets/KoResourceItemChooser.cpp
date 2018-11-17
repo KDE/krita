@@ -91,7 +91,7 @@ public:
     bool synced;
     bool updatesBlocked;
 
-    KoResource *savedResourceWhileReset;
+    KoResourceSP savedResourceWhileReset;
 
     QList<QAbstractButton*> customButtons;
 };
@@ -105,7 +105,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->splitter = new QSplitter(this);
 
     d->model = new KoLegacyResourceModel(resourceAdapter, this);
-    connect(d->model, SIGNAL(beforeResourcesLayoutReset(KoResource*)), SLOT(slotBeforeResourcesLayoutReset(KoResource*)));
+    connect(d->model, SIGNAL(beforeResourcesLayoutReset(KoResourceSP )), SLOT(slotBeforeResourcesLayoutReset(KoResourceSP )));
     connect(d->model, SIGNAL(afterResourcesLayoutReset()), SLOT(slotAfterResourcesLayoutReset()));
 
     d->view = new KoResourceItemView(this);
@@ -226,7 +226,7 @@ void KoResourceItemChooser::slotButtonClicked(int button)
         int column = index.column();
         if (index.isValid()) {
 
-            KoResource *resource = resourceFromModelIndex(index);
+            KoResourceSP resource = resourceFromModelIndex(index);
             if (resource) {
                 d->model->removeResource(resource);
             }
@@ -298,7 +298,7 @@ void KoResourceItemChooser::setItemDelegate(QAbstractItemDelegate *delegate)
     d->view->setItemDelegate(delegate);
 }
 
-KoResource *KoResourceItemChooser::currentResource() const
+KoResourceSP KoResourceItemChooser::currentResource() const
 {
     QModelIndex index = d->view->currentIndex();
     if (index.isValid()) {
@@ -307,7 +307,7 @@ KoResource *KoResourceItemChooser::currentResource() const
     return 0;
 }
 
-void KoResourceItemChooser::setCurrentResource(KoResource *resource)
+void KoResourceItemChooser::setCurrentResource(KoResourceSP resource)
 {
     // don't update if the change came from the same chooser
     if (d->updatesBlocked) {
@@ -320,7 +320,7 @@ void KoResourceItemChooser::setCurrentResource(KoResource *resource)
     updatePreview(index.isValid() ? resource : 0);
 }
 
-void KoResourceItemChooser::slotBeforeResourcesLayoutReset(KoResource *activateAfterReset)
+void KoResourceItemChooser::slotBeforeResourcesLayoutReset(KoResourceSP activateAfterReset)
 {
     d->savedResourceWhileReset = activateAfterReset ? activateAfterReset : currentResource();
 }
@@ -371,7 +371,7 @@ void KoResourceItemChooser::activated(const QModelIndex &index)
 {
     if (!index.isValid()) return;
 
-    KoResource *resource = 0;
+    KoResourceSP resource = 0;
 
     if (index.isValid()) {
         resource = resourceFromModelIndex(index);
@@ -394,7 +394,7 @@ void KoResourceItemChooser::clicked(const QModelIndex &index)
 {
     Q_UNUSED(index);
 
-    KoResource *resource = currentResource();
+    KoResourceSP resource = currentResource();
     if (resource) {
         emit resourceClicked(resource);
     }
@@ -406,7 +406,7 @@ void KoResourceItemChooser::updateButtonState()
     if (! removeButton)
         return;
 
-    KoResource *resource = currentResource();
+    KoResourceSP resource = currentResource();
     if (resource) {
         removeButton->setEnabled(!resource->permanent());
         return;
@@ -414,7 +414,7 @@ void KoResourceItemChooser::updateButtonState()
     removeButton->setEnabled(false);
 }
 
-void KoResourceItemChooser::updatePreview(KoResource *resource)
+void KoResourceItemChooser::updatePreview(KoResourceSP resource)
 {
     if (!d->usePreview) return;
 
@@ -463,7 +463,7 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
 
 }
 
-KoResource *KoResourceItemChooser::resourceFromModelIndex(const QModelIndex &index) const
+KoResourceSP KoResourceItemChooser::resourceFromModelIndex(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
@@ -472,10 +472,10 @@ KoResource *KoResourceItemChooser::resourceFromModelIndex(const QModelIndex &ind
     if (proxyModel) {
         //Get original model index, because proxy models destroy the internalPointer
         QModelIndex originalIndex = proxyModel->mapToSource(index);
-        return static_cast<KoResource *>(originalIndex.internalPointer());
+        return KoResourceSP(static_cast<KoResource*>(originalIndex.internalPointer()));
     }
 
-    return static_cast<KoResource *>(index.internalPointer());
+    return KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
 }
 
 QSize KoResourceItemChooser::viewSize() const

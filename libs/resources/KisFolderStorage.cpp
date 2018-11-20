@@ -184,7 +184,7 @@ KoResourceSP KisFolderStorage::resource(const QString &url)
 {
     QFileInfo fi(url);
     const QString resourceType = fi.path().split("/").last();
-    KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->get(resourceType);
+    KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, KisMimeDatabase::mimeTypeForFile(url, false));
     Q_ASSERT(loader);
     QFile f(url);
     f.open(QFile::ReadOnly);

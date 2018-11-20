@@ -22,7 +22,9 @@
 #include <QScopedPointer>
 #include <QObject>
 
-
+/**
+ * @brief The KisPaintopSettingsUpdateProxy class
+ */
 class KisPaintopSettingsUpdateProxy : public QObject
 {
     Q_OBJECT
@@ -30,6 +32,8 @@ class KisPaintopSettingsUpdateProxy : public QObject
 public:
     KisPaintopSettingsUpdateProxy(QObject *parent = 0);
     ~KisPaintopSettingsUpdateProxy() override;
+
+    void setPresetDirty(bool dirty);
 
     void notifySettingsChanged();
     void notifyUniformPropertiesChanged();

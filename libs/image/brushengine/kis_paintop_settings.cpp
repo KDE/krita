@@ -28,6 +28,7 @@
 #include <KoCompositeOpRegistry.h>
 #include <KoViewConverter.h>
 
+#include "kis_paintop_preset.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
 #include "kis_painter.h"
@@ -55,7 +56,7 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
 
     QPointer<KisPaintOpConfigWidget> settingsWidget;
     QString modelName;
-    KisPaintOpPresetWSP preset;
+    QPointer<KisPaintopSettingsUpdateProxy> updateProxy;
     QList<KisUniformPaintOpPropertyWSP> uniformProperties;
 
     bool disableDirtyNotifications;
@@ -78,23 +79,13 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
         bool m_oldNotificationsState;
         Q_DISABLE_COPY(DirtyNotificationsLocker)
     };
-
-    KisPaintopSettingsUpdateProxy* updateProxyNoCreate() const {
-        auto presetSP = preset.toStrongRef();
-        return presetSP ? presetSP->updateProxyNoCreate() : 0;
-    }
-
-    KisPaintopSettingsUpdateProxy* updateProxyCreate() const {
-        auto presetSP = preset.toStrongRef();
-        return presetSP ? presetSP->updateProxy() : 0;
-    }
 };
 
 
 KisPaintOpSettings::KisPaintOpSettings()
     : d(new Private)
 {
-    d->preset = 0;
+    d->updateProxy = 0;
 }
 
 KisPaintOpSettings::~KisPaintOpSettings()
@@ -106,7 +97,7 @@ KisPaintOpSettings::KisPaintOpSettings(const KisPaintOpSettings &rhs)
     , d(new Private)
 {
     d->settingsWidget = 0;
-    d->preset = rhs.preset();
+    d->updateProxy = rhs.updateProxy();
     d->modelName = rhs.modelName();
 }
 
@@ -115,14 +106,14 @@ void KisPaintOpSettings::setOptionsWidget(KisPaintOpConfigWidget* widget)
     d->settingsWidget = widget;
 }
 
-void KisPaintOpSettings::setPreset(KisPaintOpPresetWSP preset)
+void KisPaintOpSettings::setUpdateProxy(const QPointer<KisPaintopSettingsUpdateProxy> proxy)
 {
-    d->preset = preset;
+    d->updateProxy = proxy;
 }
 
-KisPaintOpPresetWSP KisPaintOpSettings::preset() const
+QPointer<KisPaintopSettingsUpdateProxy> KisPaintOpSettings::updateProxy() const
 {
-    return d->preset;
+    return d->updateProxy;
 }
 
 bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &paintInformation, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode)
@@ -189,7 +180,7 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
         i.next();
         settings->setProperty(i.key(), QVariant(i.value()));
     }
-    settings->setPreset(this->preset());
+    settings->setUpdateProxy(this->updateProxy());
     return settings;
 }
 
@@ -457,11 +448,9 @@ void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirror
 
 void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
 {
-    if (value != KisPropertiesConfiguration::getProperty(name) &&
-            !d->disableDirtyNotifications) {
-        KisPaintOpPresetSP presetSP = preset().toStrongRef();
-        if (presetSP) {
-            presetSP->setPresetDirty(true);
+    if (value != KisPropertiesConfiguration::getProperty(name) && !d->disableDirtyNotifications) {
+        if (d->updateProxy) {
+            d->updateProxy->setPresetDirty(true);
         }
     }
 
@@ -472,10 +461,8 @@ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & valu
 
 void KisPaintOpSettings::onPropertyChanged()
 {
-    KisPaintopSettingsUpdateProxy *proxy = d->updateProxyNoCreate();
-
-    if (proxy) {
-        proxy->notifySettingsChanged();
+    if (d->updateProxy) {
+        d->updateProxy->notifySettingsChanged();
     }
 }
 
@@ -515,9 +502,9 @@ QList<KisUniformPaintOpPropertySP> KisPaintOpSettings::uniformProperties(KisPain
     if (props.isEmpty()) {
         using namespace KisStandardUniformPropertiesFactory;
 
-        props.append(createProperty(opacity, settings, d->updateProxyCreate()));
-        props.append(createProperty(size, settings, d->updateProxyCreate()));
-        props.append(createProperty(flow, settings, d->updateProxyCreate()));
+        props.append(createProperty(opacity, settings, d->updateProxy));
+        props.append(createProperty(size, settings, d->updateProxy));
+        props.append(createProperty(flow, settings, d->updateProxy));
 
         d->uniformProperties = listStrongToWeak(props);
     }

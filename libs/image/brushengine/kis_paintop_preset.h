@@ -19,6 +19,8 @@
 #ifndef KIS_PAINTOP_PRESET_H
 #define KIS_PAINTOP_PRESET_H
 
+#include <QPointer>
+
 #include <KoResource.h>
 #include "KoID.h"
 
@@ -26,8 +28,8 @@
 #include "kis_shared.h"
 #include "kritaimage_export.h"
 #include <brushengine/kis_uniform_paintop_property.h>
+#include <kis_paintop_settings_update_proxy.h>
 
-class KisPaintopSettingsUpdateProxy;
 class KisPaintOpConfigWidget;
 
 /**
@@ -37,52 +39,10 @@ class KisPaintOpConfigWidget;
  * user can now temporarily save any tweaks in the Preset throughout
  * the session. The Dirty Preset setting/unsetting is handled by KisPaintOpPresetSettings
  */
-class KRITAIMAGE_EXPORT KisPaintOpPreset : public KoResource
+class KRITAIMAGE_EXPORT KisPaintOpPreset : public QObject, public KoResource
 {
+    Q_OBJECT
 public:
-
-    KisPaintOpPreset();
-
-    KisPaintOpPreset(const QString& filename);
-
-    ~KisPaintOpPreset() override;
-
-    KisPaintOpPresetSP clone() const;
-
-    /// set the id of the paintop plugin
-    void setPaintOp(const KoID & paintOp);
-
-    /// return the id of the paintop plugin
-    KoID paintOp() const;
-
-    /// replace the current settings object with the specified settings
-    void setSettings(KisPaintOpSettingsSP settings);
-    void setOriginalSettings(KisPaintOpSettingsSP originalSettings);
-
-    /// return the settings that define this paintop preset
-    KisPaintOpSettingsSP settings() const;
-    KisPaintOpSettingsSP originalSettings() const;
-
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-
-    bool save() override;
-    bool saveToDevice(QIODevice* dev) const override;
-
-    void toXML(QDomDocument& doc, QDomElement& elt) const;
-
-    void fromXML(const QDomElement& elt);
-
-    bool removable() const {
-        return true;
-    }
-
-    QString defaultFileExtension() const override {
-        return ".kpp";
-    }
-    void setPresetDirty(bool value);
-
-    bool isPresetDirty() const;
 
     /**
      * Never use manual save/restore calls to
@@ -132,13 +92,58 @@ public:
         ~UpdatedPostponer();
 
     private:
-        KisPaintopSettingsUpdateProxy *m_updateProxy;
+        QPointer<KisPaintopSettingsUpdateProxy> m_updateProxy;
     };
+
+public:
+
+    KisPaintOpPreset();
+
+    KisPaintOpPreset(const QString& filename);
+
+    ~KisPaintOpPreset() override;
+
+    KisPaintOpPresetSP clone() const;
+
+    /// set the id of the paintop plugin
+    void setPaintOp(const KoID & paintOp);
+
+    /// return the id of the paintop plugin
+    KoID paintOp() const;
+
+    /// replace the current settings object with the specified settings
+    void setSettings(KisPaintOpSettingsSP settings);
+    void setOriginalSettings(KisPaintOpSettingsSP originalSettings);
+
+    /// return the settings that define this paintop preset
+    KisPaintOpSettingsSP settings() const;
+    KisPaintOpSettingsSP originalSettings() const;
+
+    bool load() override;
+    bool loadFromDevice(QIODevice *dev) override;
+
+    bool save() override;
+    bool saveToDevice(QIODevice* dev) const override;
+
+    void toXML(QDomDocument& doc, QDomElement& elt) const;
+
+    void fromXML(const QDomElement& elt);
+
+    bool removable() const {
+        return true;
+    }
+
+    QString defaultFileExtension() const override {
+        return ".kpp";
+    }
+    void setPresetDirty(bool value);
+
+    bool isPresetDirty() const;
 
     void setOptionsWidget(KisPaintOpConfigWidget *widget);
 
-    KisPaintopSettingsUpdateProxy* updateProxy() const;
-    KisPaintopSettingsUpdateProxy* updateProxyNoCreate() const;
+    QPointer<KisPaintopSettingsUpdateProxy> updateProxy() const;
+    QPointer<KisPaintopSettingsUpdateProxy> updateProxyNoCreate() const;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties();
 

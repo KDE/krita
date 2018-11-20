@@ -20,6 +20,7 @@
 
 #include "kis_signal_compressor.h"
 
+#include <kis_paintop_preset.h>
 
 struct KisPaintopSettingsUpdateProxy::Private
 {
@@ -44,6 +45,14 @@ KisPaintopSettingsUpdateProxy::KisPaintopSettingsUpdateProxy(QObject *parent)
 
 KisPaintopSettingsUpdateProxy::~KisPaintopSettingsUpdateProxy()
 {
+}
+
+void KisPaintopSettingsUpdateProxy::setPresetDirty(bool dirty)
+{
+    KisPaintOpPreset *preset = qobject_cast<KisPaintOpPreset*>(parent());
+    if (preset) {
+        preset->setPresetDirty(dirty);
+    }
 }
 
 void KisPaintopSettingsUpdateProxy::notifySettingsChanged()

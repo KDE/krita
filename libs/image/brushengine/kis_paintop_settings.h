@@ -251,9 +251,9 @@ public:
 
     QString effectivePaintOpCompositeOp();
 
-    void setPreset(KisPaintOpPresetWSP preset);
+    void setUpdateProxy(const QPointer<KisPaintopSettingsUpdateProxy> proxy);
 
-    KisPaintOpPresetWSP preset() const;
+    QPointer<KisPaintopSettingsUpdateProxy> updateProxy() const;
 
     /**
      * @return filename of the 3D brush model, empty if no brush is set

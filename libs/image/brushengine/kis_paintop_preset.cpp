@@ -40,14 +40,12 @@
 
 struct Q_DECL_HIDDEN KisPaintOpPreset::Private {
     Private()
-        : settings(0),
-          dirtyPreset(false)
     {
     }
 
-    KisPaintOpSettingsSP settings;
-    bool dirtyPreset;
-    QScopedPointer<KisPaintopSettingsUpdateProxy> updateProxy;
+    KisPaintOpSettingsSP settings {0};
+    bool dirtyPreset {false};
+    QPointer<KisPaintopSettingsUpdateProxy> updateProxy {0};
 };
 
 
@@ -82,7 +80,7 @@ KisPaintOpPresetSP KisPaintOpPreset::clone() const
     preset->setPaintOp(paintOp());
     preset->setName(name());
     preset->setImage(image());
-    preset->settings()->setPreset(KisPaintOpPresetWSP(preset));
+    preset->settings()->setUpdateProxy(updateProxy());
 
     Q_ASSERT(preset->valid());
 
@@ -133,14 +131,13 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     if (m_d->settings) {
         oldOptionsWidget = m_d->settings->optionsWidget();
         m_d->settings->setOptionsWidget(0);
-        m_d->settings->setPreset(QWeakPointer<KisPaintOpPreset>());
+        m_d->settings->setUpdateProxy(updateProxy());
         m_d->settings = 0;
     }
 
     if (settings) {
         m_d->settings = settings->clone();
-        QSharedPointer<KisPaintOpPreset> sp(this);
-        m_d->settings->setPreset(QWeakPointer<KisPaintOpPreset>(sp));
+        m_d->settings->setUpdateProxy(updateProxy());
 
         if (oldOptionsWidget) {
             m_d->settings->setOptionsWidget(oldOptionsWidget);
@@ -372,17 +369,17 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
 
 }
 
-KisPaintopSettingsUpdateProxy* KisPaintOpPreset::updateProxy() const
+QPointer<KisPaintopSettingsUpdateProxy> KisPaintOpPreset::updateProxy() const
 {
     if (!m_d->updateProxy) {
-        m_d->updateProxy.reset(new KisPaintopSettingsUpdateProxy());
+        m_d->updateProxy = new KisPaintopSettingsUpdateProxy(const_cast<KisPaintOpPreset*>(this));
     }
-    return m_d->updateProxy.data();
+    return m_d->updateProxy;
 }
 
-KisPaintopSettingsUpdateProxy* KisPaintOpPreset::updateProxyNoCreate() const
+QPointer<KisPaintopSettingsUpdateProxy> KisPaintOpPreset::updateProxyNoCreate() const
 {
-    return m_d->updateProxy.data();
+    return m_d->updateProxy;
 }
 
 QList<KisUniformPaintOpPropertySP> KisPaintOpPreset::uniformProperties()

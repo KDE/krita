@@ -37,7 +37,6 @@
 #include "RecentImageImageProvider.h"
 #include "RecentFileManager.h"
 #include "IconImageProvider.h"
-#include "KisMultiFeedRSSModel.h"
 #include "FileSystemModel.h"
 #include "CompositeOpModel.h"
 #include "KeyboardModel.h"
@@ -83,10 +82,7 @@ static QObject *provideKritaRssModelObject(QQmlEngine *engine, QJSEngine *script
     Q_UNUSED(engine)
     Q_UNUSED(scriptEngine)
 
-    MultiFeedRssModel *rssModel = new MultiFeedRssModel;
-    rssModel->addFeed(QLatin1String("https://krita.org/en/feed/"));
-
-    return rssModel;
+    return 0;
 }
 
 
@@ -118,7 +114,6 @@ void KritaSketchPlugin::registerTypes(const char* uri)
 
     qmlRegisterSingletonType<Constants>("org.krita.sketch", 1, 0, "Constants", provideConstantsObject);
     qmlRegisterSingletonType<KritaNamespace>("org.krita.sketch", 1, 0, "Krita", provideKritaNamespaceObject);
-    qmlRegisterSingletonType<MultiFeedRssModel>("org.krita.sketch", 1, 0, "KritaFeedRssModel", provideKritaRssModelObject);
 
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 }

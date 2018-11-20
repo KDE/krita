@@ -710,28 +710,6 @@
        </layout>
       </item>
       <item row="1" column="3">
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="QLabel" name="lblNews">
-          <property name="font">
-           <font>
-            <pointsize>18</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>News</string>
-          </property>
-          <property name="margin">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="KisNewsWidget" name="newsWidget" native="true"/>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="4">
        <spacer name="horizontalSpacer_9">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -762,14 +740,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KisNewsWidget</class>
-   <extends>QWidget</extends>
-   <header>widgets/KisNewsWidget.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

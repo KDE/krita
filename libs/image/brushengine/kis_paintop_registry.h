@@ -64,7 +64,7 @@ public:
      * with the specified parent as widget parent. Returns 0 if there
      * are no settings available for the given device.
      */
-    KisPaintOpSettingsSP settings(const KoID& id) const;
+    KisPaintOpSettingsSP createSettings(const KoID& id) const;
 
     /**
      * @return a default preset for the given paintop.

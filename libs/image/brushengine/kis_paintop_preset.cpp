@@ -323,7 +323,7 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
 
     KoID id(paintopid, QString());
 
-    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id);
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->createSettings(id);
     if (!settings) {
         setValid(false);
         warnKrita << "Could not load settings for preset" << paintopid;

@@ -120,7 +120,7 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const KisPaintOpPresetSP preset, KisPai
     return paintOp(preset->paintOp().id(), preset->settings(), painter, node, image);
 }
 
-KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id) const
+KisPaintOpSettingsSP KisPaintOpRegistry::createSettings(const KoID& id) const
 {
     KisPaintOpFactory *f = value(id.id());
     Q_ASSERT(f);
@@ -134,7 +134,7 @@ KisPaintOpSettingsSP KisPaintOpRegistry::settings(const KoID& id) const
 
 KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id) const
 {
-    KisPaintOpSettingsSP s = settings(id);
+    KisPaintOpSettingsSP s = createSettings(id);
     if (s.isNull()) {
         return KisPaintOpPresetSP();
     }

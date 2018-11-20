@@ -160,7 +160,7 @@ KisPaintOpSettingsSP KisPaintOpSettings::createMaskingSettings() const
 
     const KoID pixelBrushId(KisPaintOpUtils::MaskingBrushPaintOpId, QString());
 
-    KisPaintOpSettingsSP maskingSettings = KisPaintOpRegistry::instance()->settings(pixelBrushId);
+    KisPaintOpSettingsSP maskingSettings = KisPaintOpRegistry::instance()->createSettings(pixelBrushId);
     this->getPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, maskingSettings);
 
     const bool useMasterSize = this->getBool(KisPaintOpUtils::MaskingBrushUseMasterSizeTag, true);
@@ -183,7 +183,7 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
     if (paintopID.isEmpty())
         return 0;
 
-    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(KoID(paintopID));
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->createSettings(KoID(paintopID));
     QMapIterator<QString, QVariant> i(getProperties());
     while (i.hasNext()) {
         i.next();

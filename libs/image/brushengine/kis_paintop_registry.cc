@@ -60,7 +60,7 @@ void KisPaintOpRegistry::initRegistry()
 
     Q_FOREACH (const QString & id, keys()) {
         KisPaintOpFactory *factory = get(id);
-        if (!factory->settings()) {
+        if (!factory->createSettings()) {
             toBeRemoved << id;
         } else {
             factory->processAfterLoading();
@@ -125,7 +125,7 @@ KisPaintOpSettingsSP KisPaintOpRegistry::createSettings(const KoID& id) const
     KisPaintOpFactory *f = value(id.id());
     Q_ASSERT(f);
     if (f) {
-        KisPaintOpSettingsSP settings = f->settings();
+        KisPaintOpSettingsSP settings = f->createSettings();
         settings->setProperty("paintop", id.id());
         return settings;
     }

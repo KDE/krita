@@ -96,7 +96,7 @@ public:
         return op;
     }
 
-    KisPaintOpSettingsSP settings() override {
+    KisPaintOpSettingsSP createSettings() override {
         KisPaintOpSettingsSP settings = new OpSettings();
         settings->setModelName(m_model);
         return settings;

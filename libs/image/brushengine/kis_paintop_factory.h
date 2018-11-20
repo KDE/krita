@@ -85,7 +85,7 @@ public:
     /**
      * Create and return an settings object for this paintop.
      */
-    virtual KisPaintOpSettingsSP settings() = 0;
+    virtual KisPaintOpSettingsSP createSettings() = 0;
 
     /**
      * create a widget that can display paintop settings

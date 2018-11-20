@@ -109,6 +109,7 @@ public:
     KoResourceSP load(const QString &name, QIODevice &dev) override
     {
         QSharedPointer<T> resource = QSharedPointer<T>::create(name);
+        Q_ASSERT(dev.isOpen() && dev.isReadable());
         if (resource->loadFromDevice(&dev)) {
             return resource;
         }

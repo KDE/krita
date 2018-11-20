@@ -182,12 +182,15 @@ KisResourceStorage::ResourceItem KisFolderStorage::resourceItem(const QString &u
 
 KoResourceSP KisFolderStorage::resource(const QString &url)
 {
-    QFileInfo fi(url);
+    QFileInfo fi(location() + '/' + url);
     const QString resourceType = fi.path().split("/").last();
-    KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, KisMimeDatabase::mimeTypeForFile(url, false));
+    KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, KisMimeDatabase::mimeTypeForFile(fi.absoluteFilePath(), false));
     Q_ASSERT(loader);
-    QFile f(url);
-    f.open(QFile::ReadOnly);
+    QFile f(fi.absoluteFilePath());
+    if (!f.open(QFile::ReadOnly)) {
+        qWarning() << "Could not open" << fi << "for reading";
+        return 0;
+    }
     KoResourceSP res = loader->load(url, f);
     f.close();
     return res;

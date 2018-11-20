@@ -377,7 +377,7 @@ void KisViewManager::slotViewRemoved(KisView *view)
         d->statusBar.hideAllStatusBarItems();
     }
 
-    KisConfig cfg(false);
+    KisConfig cfg;
     if (resourceProvider() && resourceProvider()->currentPreset()) {
         cfg.writeEntry("LastPreset", resourceProvider()->currentPreset()->name());
     }

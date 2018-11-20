@@ -89,7 +89,7 @@ public:
      * Load this resource.
      * @return a resource if loading the resource succeeded, 0 otherwise
      */
-    virtual KoResourceSP load(const QString &name, QIODevice &dev) { Q_UNUSED(name); Q_UNUSED(dev); return 0; };
+    virtual KoResourceSP load(const QString &name, QIODevice &dev) { Q_UNUSED(name); Q_UNUSED(dev); return 0; }
 
 private:
     QString m_resourceSubType;

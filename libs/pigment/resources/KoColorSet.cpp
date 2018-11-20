@@ -80,7 +80,7 @@ const QString KoColorSet::KPL_PALETTE_TAG = "ColorSet";
 
 KoColorSet::KoColorSet(const QString& filename)
     : KoResource(filename)
-    , d(new Private(QSharedPointer<KoColorSet>(this)))
+    , d(new Private(this))
 {
     if (!filename.isEmpty()) {
         QFileInfo f(filename);
@@ -91,7 +91,7 @@ KoColorSet::KoColorSet(const QString& filename)
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
     : KoResource(rhs)
-    , d(new Private(QSharedPointer<KoColorSet>(this)))
+    , d(new Private(this))
 {
     d->paletteType = rhs.d->paletteType;
     d->data = rhs.d->data;
@@ -464,7 +464,7 @@ KisSwatchGroup::SwatchInfo KoColorSet::getClosestColorInfo(KoColor compare, bool
 
 /********************************KoColorSet::Private**************************/
 
-KoColorSet::Private::Private(KoColorSetSP a_colorSet)
+KoColorSet::Private::Private(KoColorSet *a_colorSet)
     : colorSet(a_colorSet)
     , isGlobal(true)
     , isEditable(false)
@@ -507,7 +507,7 @@ KoColorSet::PaletteType KoColorSet::Private::detectFormat(const QString &fileNam
     return KoColorSet::UNKNOWN;
 }
 
-void KoColorSet::Private::scribusParseColor(KoColorSetSP set, QXmlStreamReader *xml)
+void KoColorSet::Private::scribusParseColor(KoColorSet *set, QXmlStreamReader *xml)
 {
     KisSwatch colorEntry;
     // It's a color, retrieve it
@@ -601,7 +601,7 @@ void KoColorSet::Private::scribusParseColor(KoColorSetSP set, QXmlStreamReader *
     }
 }
 
-bool KoColorSet::Private::loadScribusXmlPalette(KoColorSetSP set, QXmlStreamReader *xml)
+bool KoColorSet::Private::loadScribusXmlPalette(KoColorSet *set, QXmlStreamReader *xml)
 {
 
     //1. Get name

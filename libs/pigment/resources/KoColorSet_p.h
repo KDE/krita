@@ -27,7 +27,7 @@ private:
     typedef KisSwatchGroup::SwatchInfo SwatchInfoType;
 
 public:
-    Private(KoColorSetSP a_colorSet);
+    Private(KoColorSet *a_colorSet);
 
 public:
     KisSwatchGroup &global() {
@@ -51,7 +51,7 @@ public:
     bool loadKpl();
 
 public:
-    KoColorSetSP colorSet;
+    KoColorSet *colorSet;
     KoColorSet::PaletteType paletteType;
     QByteArray data;
     QString comment;
@@ -62,8 +62,8 @@ public:
 
 private:
     KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &ba);
-    void scribusParseColor(KoColorSetSP set, QXmlStreamReader *xml);
-    bool loadScribusXmlPalette(KoColorSetSP set, QXmlStreamReader *xml);
+    void scribusParseColor(KoColorSet *set, QXmlStreamReader *xml);
+    bool loadScribusXmlPalette(KoColorSet *set, QXmlStreamReader *xml);
     quint16 readShort(QIODevice *io);
 
     void saveKplGroup(QDomDocument &doc, QDomElement &groupEle,

@@ -71,27 +71,32 @@ int KoLegacyResourceModel::columnCount ( const QModelIndex & ) const
     return m_columnCount;
 }
 
-QVariant KoLegacyResourceModel::data( const QModelIndex &index, int role ) const
+QVariant KoLegacyResourceModel::data(const QModelIndex &index, int role) const
 {
-    if( ! index.isValid() )
-         return QVariant();
+    if (!index.isValid()) {
+        return QVariant();
+    }
 
-    switch( role )
+    int i = index.row() * m_columnCount + index.column();
+    const QList<KoResourceSP> resources = m_resourceAdapter->resources();
+    if (i >= resources.count() || i < 0) {
+        return QVariant();
+    }
+
+    KoResourceSP resource = resources[i];
+    if (!resource) {
+        return QVariant();
+    }
+
+    switch (role)
     {
         case Qt::DisplayRole:
         {
-            KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
-            if( ! resource )
-                return QVariant();
             QString resName = i18n( resource->name().toUtf8().data());
-
             return QVariant( resName );
         }
         case KoLegacyResourceModel::TagsRole:
         {
-            KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
-            if( ! resource )
-                return QVariant();
             if (m_resourceAdapter->assignedTagsList(resource).count()) {
                 QString taglist = m_resourceAdapter->assignedTagsList(resource).join("</li><li>");
                 return QString("<li>%2</li>").arg(taglist);
@@ -101,18 +106,10 @@ QVariant KoLegacyResourceModel::data( const QModelIndex &index, int role ) const
         }
         case Qt::DecorationRole:
         {
-            KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
-            if( ! resource )
-                return QVariant();
-
             return QVariant( resource->image() );
         }
         case KoLegacyResourceModel::LargeThumbnailRole:
         {
-            KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
-            if( ! resource )
-                return QVariant();
-
             QSize imageSize = resource->image().size();
             QSize thumbSize( 100, 100 );
             if(imageSize.height() > thumbSize.height() || imageSize.width() > thumbSize.width()) {
@@ -139,11 +136,11 @@ QModelIndex KoLegacyResourceModel::index ( int row, int column, const QModelInde
 {
     int index = row * m_columnCount + column;
     const QList<KoResourceSP> resources = m_resourceAdapter->resources();
-    if( index >= resources.count() || index < 0) {
+    if (index >= resources.count() || index < 0) {
         return QModelIndex();
     }
 
-    return createIndex(row, column, resources[index].data());
+    return createIndex(row, column);
 }
 
 void KoLegacyResourceModel::doSafeLayoutReset(KoResourceSP activateAfterReformat)

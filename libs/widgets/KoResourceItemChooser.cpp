@@ -94,6 +94,8 @@ public:
     KoResourceSP savedResourceWhileReset;
 
     QList<QAbstractButton*> customButtons;
+
+    QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter;
 };
 
 KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent, bool usePreview)
@@ -101,6 +103,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     , d(new Private())
 {
     Q_ASSERT(resourceAdapter);
+     d->resourceAdapter = resourceAdapter;
 
     d->splitter = new QSplitter(this);
 
@@ -465,17 +468,18 @@ void KoResourceItemChooser::updatePreview(KoResourceSP resource)
 
 KoResourceSP KoResourceItemChooser::resourceFromModelIndex(const QModelIndex &index) const
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
         return 0;
-
-    const QAbstractProxyModel *proxyModel = dynamic_cast<const QAbstractProxyModel *>(index.model());
-    if (proxyModel) {
-        //Get original model index, because proxy models destroy the internalPointer
-        QModelIndex originalIndex = proxyModel->mapToSource(index);
-        return KoResourceSP(static_cast<KoResource*>(originalIndex.internalPointer()));
     }
 
-    return KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
+    int i = index.row() * d->model->columnCount() + index.column();
+    const QList<KoResourceSP> resources = d->resourceAdapter->resources();
+    if (i >= resources.count() || i < 0) {
+        return 0;
+    }
+
+    return resources[i];
+
 }
 
 QSize KoResourceItemChooser::viewSize() const

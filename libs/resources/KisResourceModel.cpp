@@ -149,7 +149,6 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
     if (pos) {
         QString storageLocation = d->query.value("location").toString();
         QString resourceLocation = d->query.value("filename").toString();
-        qDebug() << storageLocation << resourceLocation;
         resource = KisResourceLocator::instance()->resource(storageLocation, resourceLocation);
     }
     return resource;

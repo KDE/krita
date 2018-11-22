@@ -67,7 +67,7 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     }
 
     {
-        KisResourceModel *resourcesModel = new KisResourceModel("paintoppresets");
+        KisResourceModel *resourcesModel = new KisResourceModel("gradients");
         m_page->tableResources->setModel(resourcesModel);
         m_page->tableResources->hideColumn(0);
         m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);;

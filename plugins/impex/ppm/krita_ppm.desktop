@@ -1,6 +1,6 @@
 [Desktop Entry]
 Categories=Qt;KDE;Office;Graphics;
-Exec=krita %f
+Exec=krita %F
 GenericName=
 Icon=calligrakrita
 MimeType=image/x-portable-pixmap;image/x-portable-graymap;image/x-portable-bitmap;

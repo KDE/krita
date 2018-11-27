@@ -51,9 +51,9 @@ QXcbConnection::QXcbConnection(bool canGrabServer, const char *displayName)
     : m_connection(0)
     , m_canGrabServer(canGrabServer)
     , m_displayName(displayName ? QByteArray(displayName) : qgetenv("DISPLAY"))
-#ifdef XCB_USE_XLIB
+    #ifdef XCB_USE_XLIB
     , m_xlib_display(0)
-#endif
+    #endif
 {
     m_connection = QX11Info::connection();
     m_xlib_display = QX11Info::display();
@@ -588,8 +588,8 @@ void QWindowSystemInterface::handleTabletEvent(QWindow *w, const QPointF &local,
     qint64 timestamp = g_eventTimer.msecsSinceReference() + g_eventTimer.elapsed();
 
     QWindowSystemInterfacePrivate::TabletEvent *e =
-        new QWindowSystemInterfacePrivate::TabletEvent(w, timestamp, local, global, device, pointerType, buttons, pressure,
-                                                       xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
+            new QWindowSystemInterfacePrivate::TabletEvent(w, timestamp, local, global, device, pointerType, buttons, pressure,
+                                                           xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
 
     processTabletEvent(e);
 }
@@ -776,7 +776,8 @@ void processWheelEvent(QWindowSystemInterfacePrivate::WheelEvent *e)
 
     //if (window->d_func()->blockedByModalWindow) {
     if (QGuiApplication::modalWindow() &&
-        QGuiApplication::modalWindow() != window) {
+            QGuiApplication::modalWindow() != window &&
+            QGuiApplication::modalWindow() != window->parent(QWindow::IncludeTransients)) {
 
         // a modal window is blocking this window, don't allow wheel events through
         return;

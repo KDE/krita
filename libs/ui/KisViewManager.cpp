@@ -214,6 +214,8 @@ public:
     KisAction *zoomOut;
     KisAction *softProof;
     KisAction *gamutCheck;
+    KisAction *toggleFgBg;
+    KisAction *resetFgBg;
 
     KisSelectionManager selectionManager;
     KisGuidesManager guidesManager;
@@ -735,6 +737,13 @@ void KisViewManager::createActions()
 
     d->showPixelGrid = actionManager()->createAction("view_pixel_grid");
     slotUpdatePixelGridAction();
+
+    d->toggleFgBg = actionManager()->createAction("toggle_fg_bg");
+    connect(d->toggleFgBg, SIGNAL(triggered(bool)), this, SLOT(slotToggleFgBg()));
+
+    d->resetFgBg =  actionManager()->createAction("reset_fg_bg");
+    connect(d->resetFgBg, SIGNAL(triggered(bool)), this, SLOT(slotResetFgBg()));
+
 }
 
 void KisViewManager::setupManagers()
@@ -1407,3 +1416,28 @@ void KisViewManager::slotActivateTransformTool()
 
     KoToolManager::instance()->switchToolRequested("KisToolTransform");
 }
+
+void KisViewManager::slotToggleFgBg()
+{
+
+    KoColor newFg = d->canvasResourceManager.backgroundColor();
+    KoColor newBg = d->canvasResourceManager.foregroundColor();
+
+    /**
+     * NOTE: Some of color selectors do not differentiate foreground
+     *       and background colors, so if one wants them to end up
+     *       being set up to foreground color, it should be set the
+     *       last.
+     */
+    d->canvasResourceManager.setBackgroundColor(newBg);
+    d->canvasResourceManager.setForegroundColor(newFg);
+}
+
+void KisViewManager::slotResetFgBg()
+{
+    // see a comment in slotToggleFgBg()
+    d->canvasResourceManager.setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
+    d->canvasResourceManager.setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
+}
+
+

@@ -244,7 +244,8 @@ private Q_SLOTS:
     void slotUpdatePixelGridAction();
     void slotSaveShowRulersState(bool value);
     void slotSaveRulersTrackMouseState(bool value);
-
+    void slotToggleFgBg();
+    void slotResetFgBg();
 private:
     void createActions();
     void setupManagers();

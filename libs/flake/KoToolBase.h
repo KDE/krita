@@ -532,8 +532,6 @@ private:
      */
     void setToolId(const QString &id);
 
-
-
     KoToolBase();
     KoToolBase(const KoToolBase&);
     KoToolBase& operator=(const KoToolBase&);

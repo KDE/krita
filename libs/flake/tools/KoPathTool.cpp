@@ -115,73 +115,34 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
         , m_currentStrategy(0)
         , m_activatedTemporarily(false)
 {
-    QActionGroup *points = new QActionGroup(this);
+    m_points = new QActionGroup(this);
     // m_pointTypeGroup->setExclusive(true);
-    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
-    m_actionPathPointCorner = actionRegistry->makeQAction("pathpoint-corner", this);
-    addAction("pathpoint-corner", m_actionPathPointCorner);
+
+    m_actionPathPointCorner = action("pathpoint-corner");
     m_actionPathPointCorner->setData(KoPathPointTypeCommand::Corner);
-    points->addAction(m_actionPathPointCorner);
+    m_points->addAction(m_actionPathPointCorner);
 
-    m_actionPathPointSmooth = actionRegistry->makeQAction("pathpoint-smooth", this);
-    addAction("pathpoint-smooth", m_actionPathPointSmooth);
+    m_actionPathPointSmooth = action("pathpoint-smooth");
     m_actionPathPointSmooth->setData(KoPathPointTypeCommand::Smooth);
-    points->addAction(m_actionPathPointSmooth);
+    m_points->addAction(m_actionPathPointSmooth);
 
-    m_actionPathPointSymmetric = actionRegistry->makeQAction("pathpoint-symmetric", this);
-    addAction("pathpoint-symmetric", m_actionPathPointSymmetric);
+    m_actionPathPointSymmetric = action("pathpoint-symmetric");
     m_actionPathPointSymmetric->setData(KoPathPointTypeCommand::Symmetric);
-    points->addAction(m_actionPathPointSymmetric);
+    m_points->addAction(m_actionPathPointSymmetric);
 
-    m_actionCurvePoint = actionRegistry->makeQAction("pathpoint-curve", this);
-    addAction("pathpoint-curve", m_actionCurvePoint);
-    connect(m_actionCurvePoint, SIGNAL(triggered()), this, SLOT(pointToCurve()));
-
-    m_actionLinePoint = actionRegistry->makeQAction("pathpoint-line", this);
-    addAction("pathpoint-line", m_actionLinePoint);
-    connect(m_actionLinePoint, SIGNAL(triggered()), this, SLOT(pointToLine()));
-
-    m_actionLineSegment = actionRegistry->makeQAction("pathsegment-line", this);
-    addAction("pathsegment-line", m_actionLineSegment);
-    connect(m_actionLineSegment, SIGNAL(triggered()), this, SLOT(segmentToLine()));
-
-    m_actionCurveSegment = actionRegistry->makeQAction("pathsegment-curve", this);
-    addAction("pathsegment-curve", m_actionCurveSegment);
-    connect(m_actionCurveSegment, SIGNAL(triggered()), this, SLOT(segmentToCurve()));
-
-    m_actionAddPoint = actionRegistry->makeQAction("pathpoint-insert", this);
-    addAction("pathpoint-insert", m_actionAddPoint);
-    connect(m_actionAddPoint, SIGNAL(triggered()), this, SLOT(insertPoints()));
-
-    m_actionRemovePoint = actionRegistry->makeQAction("pathpoint-remove", this);
-    addAction("pathpoint-remove", m_actionRemovePoint);
-    connect(m_actionRemovePoint, SIGNAL(triggered()), this, SLOT(removePoints()));
-
-    m_actionBreakPoint = actionRegistry->makeQAction("path-break-point", this);
-    addAction("path-break-point", m_actionBreakPoint);
-    connect(m_actionBreakPoint, SIGNAL(triggered()), this, SLOT(breakAtPoint()));
-
-    m_actionBreakSegment = actionRegistry->makeQAction("path-break-segment", this);
-    addAction("path-break-segment", m_actionBreakSegment);
-    connect(m_actionBreakSegment, SIGNAL(triggered()), this, SLOT(breakAtSegment()));
-
-    m_actionJoinSegment = actionRegistry->makeQAction("pathpoint-join", this);
-    addAction("pathpoint-join", m_actionJoinSegment);
-    connect(m_actionJoinSegment, SIGNAL(triggered()), this, SLOT(joinPoints()));
-
-    m_actionMergePoints = actionRegistry->makeQAction("pathpoint-merge", this);
-    addAction("pathpoint-merge", m_actionMergePoints);
-    connect(m_actionMergePoints, SIGNAL(triggered()), this, SLOT(mergePoints()));
-
-    m_actionConvertToPath = actionRegistry->makeQAction("convert-to-path", this);
-    addAction("convert-to-path", m_actionConvertToPath);
-    connect(m_actionConvertToPath, SIGNAL(triggered()), this, SLOT(convertToPath()));
+    m_actionCurvePoint = action("pathpoint-curve");
+    m_actionLinePoint = action("pathpoint-line");
+    m_actionLineSegment = action("pathsegment-line");
+    m_actionCurveSegment = action("pathsegment-curve");
+    m_actionAddPoint = action("pathpoint-insert");
+    m_actionRemovePoint = action("pathpoint-remove");
+    m_actionBreakPoint = action("path-break-point");
+    m_actionBreakSegment = action("path-break-segment");
+    m_actionJoinSegment = action("pathpoint-join");
+    m_actionMergePoints = action("pathpoint-merge");
+    m_actionConvertToPath = action("convert-to-path");
 
     m_contextMenu.reset(new QMenu());
-
-
-    connect(points, SIGNAL(triggered(QAction*)), this, SLOT(pointTypeChanged(QAction*)));
-    connect(&m_pointSelection, SIGNAL(selectionChanged()), this, SLOT(pointSelectionChanged()));
 
     QBitmap b = QBitmap::fromData(QSize(16, 16), needle_bits);
     QBitmap m = b.createHeuristicMask(false);
@@ -974,6 +935,21 @@ void KoPathTool::activate(ToolActivation activation, const QSet<KoShape*> &shape
     m_shapeFillResourceConnector.connectToCanvas(d->canvas);
 
     initializeWithShapes(shapes.toList());
+
+    connect(m_actionCurvePoint, SIGNAL(triggered()), this, SLOT(pointToCurve()), Qt::UniqueConnection);
+    connect(m_actionLinePoint, SIGNAL(triggered()), this, SLOT(pointToLine()), Qt::UniqueConnection);
+    connect(m_actionLineSegment, SIGNAL(triggered()), this, SLOT(segmentToLine()), Qt::UniqueConnection);
+    connect(m_actionCurveSegment, SIGNAL(triggered()), this, SLOT(segmentToCurve()), Qt::UniqueConnection);
+    connect(m_actionAddPoint, SIGNAL(triggered()), this, SLOT(insertPoints()), Qt::UniqueConnection);
+    connect(m_actionRemovePoint, SIGNAL(triggered()), this, SLOT(removePoints()), Qt::UniqueConnection);
+    connect(m_actionBreakPoint, SIGNAL(triggered()), this, SLOT(breakAtPoint()), Qt::UniqueConnection);
+    connect(m_actionBreakSegment, SIGNAL(triggered()), this, SLOT(breakAtSegment()), Qt::UniqueConnection);
+    connect(m_actionJoinSegment, SIGNAL(triggered()), this, SLOT(joinPoints()), Qt::UniqueConnection);
+    connect(m_actionMergePoints, SIGNAL(triggered()), this, SLOT(mergePoints()), Qt::UniqueConnection);
+    connect(m_actionConvertToPath, SIGNAL(triggered()), this, SLOT(convertToPath()), Qt::UniqueConnection);
+    connect(m_points, SIGNAL(triggered(QAction*)), this, SLOT(pointTypeChanged(QAction*)), Qt::UniqueConnection);
+    connect(&m_pointSelection, SIGNAL(selectionChanged()), this, SLOT(pointSelectionChanged()), Qt::UniqueConnection);
+
 }
 
 void KoPathTool::slotSelectionChanged()
@@ -1172,6 +1148,20 @@ void KoPathTool::deactivate()
     delete m_currentStrategy;
     m_currentStrategy = 0;
     d->canvas->snapGuide()->reset();
+
+    disconnect(m_actionCurvePoint, 0, this, 0);
+    disconnect(m_actionLinePoint, 0, this, 0);
+    disconnect(m_actionLineSegment, 0, this, 0);
+    disconnect(m_actionCurveSegment, 0, this, 0);
+    disconnect(m_actionAddPoint, 0, this, 0);
+    disconnect(m_actionRemovePoint, 0, this, 0);
+    disconnect(m_actionBreakPoint, 0, this, 0);
+    disconnect(m_actionBreakSegment, 0, this, 0);
+    disconnect(m_actionJoinSegment, 0, this, 0);
+    disconnect(m_actionMergePoints, 0, this, 0);
+    disconnect(m_actionConvertToPath, 0, this, 0);
+    disconnect(m_points, 0, this, 0);
+    disconnect(&m_pointSelection, 0, this, 0);
 
     KoToolBase::deactivate();
 }

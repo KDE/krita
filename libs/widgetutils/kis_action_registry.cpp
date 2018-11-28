@@ -193,7 +193,8 @@ QAction * KisActionRegistry::makeQAction(const QString &name, QObject *parent)
 {
     QAction * a = new QAction(parent);
     if (!d->actionInfoList.contains(name)) {
-        dbgAction << "Warning: requested data for unknown action" << name;
+        qWarning() << "Warning: requested data for unknown action" << name;
+        a->setObjectName(name);
         return a;
     }
 

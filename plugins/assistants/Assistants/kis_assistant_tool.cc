@@ -932,7 +932,7 @@ QWidget *KisAssistantTool::createOptionWidget()
 
         connect(m_options.vanishingPointAngleSpinbox, SIGNAL(valueChanged(double)), this, SLOT(slotChangeVanishingPointAngle(double)));
 
-        ENTER_FUNCTION() << ppVar(m_canvas) << ppVar(m_canvas && m_canvas->paintingAssistantsDecoration());
+        //ENTER_FUNCTION() << ppVar(m_canvas) << ppVar(m_canvas && m_canvas->paintingAssistantsDecoration());
 
         // initialize UI elements with existing data if possible
         if (m_canvas && m_canvas->paintingAssistantsDecoration()) {
@@ -941,7 +941,7 @@ QWidget *KisAssistantTool::createOptionWidget()
             QColor opaqueColor = color;
             opaqueColor.setAlpha(255);
 
-            ENTER_FUNCTION() << ppVar(opaqueColor);
+            //ENTER_FUNCTION() << ppVar(opaqueColor);
 
             m_options.assistantsColor->setColor(opaqueColor);
             m_options.customAssistantColorButton->setColor(opaqueColor);

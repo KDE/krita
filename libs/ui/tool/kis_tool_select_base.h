@@ -75,51 +75,27 @@ class KisToolSelectBase : public BaseClass
 public:
 
     KisToolSelectBase(KoCanvasBase* canvas, const QString toolName)
-        :BaseClass(canvas),
-         m_widgetHelper(toolName),
-         m_selectionActionAlternate(SELECTION_DEFAULT)
+        : BaseClass(canvas)
+        , m_widgetHelper(toolName)
+        , m_selectionActionAlternate(SELECTION_DEFAULT)
     {
         KisSelectionModifierMapper::instance();
-        initShortcuts();
     }
 
     KisToolSelectBase(KoCanvasBase* canvas, const QCursor cursor, const QString toolName)
-        :BaseClass(canvas, cursor),
-         m_widgetHelper(toolName),
-         m_selectionActionAlternate(SELECTION_DEFAULT)
+        : BaseClass(canvas, cursor)
+        , m_widgetHelper(toolName)
+        , m_selectionActionAlternate(SELECTION_DEFAULT)
     {
         KisSelectionModifierMapper::instance();
-        initShortcuts();
     }
 
     KisToolSelectBase(KoCanvasBase* canvas, QCursor cursor, QString toolName, KisTool *delegateTool)
-        :BaseClass(canvas, cursor, delegateTool),
-         m_widgetHelper(toolName),
-         m_selectionActionAlternate(SELECTION_DEFAULT)
+        : BaseClass(canvas, cursor, delegateTool)
+        , m_widgetHelper(toolName)
+        , m_selectionActionAlternate(SELECTION_DEFAULT)
     {
         KisSelectionModifierMapper::instance();
-        initShortcuts();
-    }
-
-    void initShortcuts()
-    {
-        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-        KisViewManager* viewManager = kiscanvas->viewManager();
-        KisActionManager *manager = viewManager->actionManager();
-
-        KisAction *action = 0;
-
-        action = manager->createAction("selection_tool_mode_add");
-        this->addAction(action->objectName(), action);
-
-        action = manager->createAction("selection_tool_mode_replace");
-        this->addAction(action->objectName(), action);
-
-        action = manager->createAction("selection_tool_mode_subtract");
-        this->addAction(action->objectName(), action);
-
-        action = manager->createAction("selection_tool_mode_intersect");
-        this->addAction(action->objectName(), action);
     }
 
     void updateActionShortcutToolTips() {

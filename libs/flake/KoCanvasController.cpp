@@ -112,9 +112,6 @@ QPoint KoCanvasController::documentOffset() const
     return d->documentOffset;
 }
 
-
-
-
 KoCanvasControllerProxyObject::KoCanvasControllerProxyObject(KoCanvasController *controller, QObject *parent)
     : QObject(parent)
     , m_canvasController(controller)

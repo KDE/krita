@@ -31,6 +31,7 @@
 #include <QCursor>
 #include <KoShapeFillResourceConnector.h>
 
+class QActionGroup;
 class QButtonGroup;
 class KoCanvasBase;
 class KoInteractionStrategy;
@@ -134,7 +135,7 @@ private:
     KoInteractionStrategy *m_currentStrategy; ///< the rubber selection strategy
 
     QButtonGroup *m_pointTypeGroup;
-
+    QActionGroup *m_points;
     QAction *m_actionPathPointCorner;
     QAction *m_actionPathPointSmooth;
     QAction *m_actionPathPointSymmetric;

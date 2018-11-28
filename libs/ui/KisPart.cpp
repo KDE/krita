@@ -434,10 +434,6 @@ void KisPart::openExistingFile(const QUrl &url)
 void KisPart::updateShortcuts()
 {
     // Update any non-UI actionCollections.  That includes:
-    //  - Shortcuts called inside of tools
-    //  - Perhaps other things?
-    KoToolManager::instance()->updateToolShortcuts();
-
     // Now update the UI actions.
     Q_FOREACH (KisMainWindow *mainWindow, d->mainWindows) {
         KActionCollection *ac = mainWindow->actionCollection();
@@ -453,7 +449,7 @@ void KisPart::updateShortcuts()
             QString strippedTooltip = action->toolTip().remove(QRegExp("\\s\\(.*\\)"));
 
             // Now update the tooltips with the new shortcut info.
-            if(action->shortcut() == QKeySequence(0))
+            if (action->shortcut() == QKeySequence(0))
                 action->setToolTip(strippedTooltip);
             else
                 action->setToolTip( strippedTooltip + " (" + action->shortcut().toString() + ")");

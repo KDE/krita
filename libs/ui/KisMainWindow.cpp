@@ -59,9 +59,9 @@
 #include <QStackedWidget>
 #include <QProxyStyle>
 #include <QScreen>
+#include <QAction>
 
 #include <kactioncollection.h>
-#include <QAction>
 #include <kactionmenu.h>
 #include <kis_debug.h>
 #include <kedittoolbar.h>
@@ -72,9 +72,7 @@
 #include <input/kis_input_manager.h>
 #include "kis_selection_manager.h"
 #include "kis_icon_utils.h"
-
 #include <krecentfilesaction.h>
-#include <KoResourcePaths.h>
 #include <ktoggleaction.h>
 #include <ktoolbar.h>
 #include <kmainwindow.h>
@@ -85,6 +83,9 @@
 #include <kwindowconfig.h>
 #include <kformat.h>
 
+#include <KoResourcePaths.h>
+#include <KoToolFactoryBase.h>
+#include <KoToolRegistry.h>
 #include "KoDockFactoryBase.h"
 #include "KoDocumentInfoDlg.h"
 #include "KoDocumentInfo.h"
@@ -327,7 +328,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
 
     actionCollection()->addAssociatedWidget(this);
-
     KoPluginLoader::instance()->load("Krita/ViewPlugin", "Type == 'Service' and ([X-Krita-Version] == 28)", KoPluginLoader::PluginsConfig(), d->viewManager, false);
 
     // Load the per-application plugins (Right now, only Python) We do this only once, when the first mainwindow is being created.
@@ -361,7 +361,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         d->dockWidgetMenu->addAction(dockwidgetActions[title]);
     }
 
-
     Q_FOREACH (QDockWidget *wdg, dockWidgets()) {
         if ((wdg->features() & QDockWidget::DockWidgetClosable) == 0) {
             wdg->setVisible(true);
@@ -374,6 +373,11 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         if (mainwindowObserver) {
             mainwindowObserver->setViewManager(d->viewManager);
         }
+    }
+
+    // Load all the actions from the tool plugins
+    Q_FOREACH(KoToolFactoryBase *toolFactory, KoToolRegistry::instance()->values()) {
+        toolFactory->createActions(actionCollection());
     }
 
     d->mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -523,23 +527,21 @@ KisMainWindow::~KisMainWindow()
 //    Q_FOREACH (QAction *ac, actionCollection()->actions()) {
 //        QAction *action = qobject_cast<QAction*>(ac);
 //        if (action) {
-//        dbgKrita << "<Action"
-//                 << "name=" << action->objectName()
-//                 << "icon=" << action->icon().name()
-//                 << "text="  << action->text().replace("&", "&amp;")
-//                 << "whatsThis="  << action->whatsThis()
-//                 << "toolTip="  << action->toolTip().replace("<html>", "").replace("</html>", "")
-//                 << "iconText="  << action->iconText().replace("&", "&amp;")
-//                 << "shortcut="  << action->shortcut(QAction::ActiveShortcut).toString()
-//                 << "defaultShortcut="  << action->shortcut(QAction::DefaultShortcut).toString()
-//                 << "isCheckable="  << QString((action->isChecked() ? "true" : "false"))
-//                 << "statusTip=" << action->statusTip()
-//                 << "/>"   ;
+//        qDebug() << "<Action"
+//                 << "\n\tname=" << action->objectName()
+//                 << "\n\ticon=" << action->icon().name()
+//                 << "\n\ttext="  << action->text().replace("&", "&amp;")
+//                 << "\n\twhatsThis="  << action->whatsThis()
+//                 << "\n\ttoolTip="  << action->toolTip().replace("<html>", "").replace("</html>", "")
+//                 << "\n\ticonText="  << action->iconText().replace("&", "&amp;")
+//                 << "\n\tshortcut="  << action->shortcut().toString()
+//                 << "\n\tisCheckable="  << QString((action->isChecked() ? "true" : "false"))
+//                 << "\n\tstatusTip=" << action->statusTip()
+//                 << "\n/>\n"   ;
 //        }
 //        else {
-//            dbgKrita << "Got a QAction:" << ac->objectName();
+//            dbgKrita << "Got a non-qaction:" << ac->objectName();
 //        }
-
 //    }
 
     // The doc and view might still exist (this is the case when closing the window)

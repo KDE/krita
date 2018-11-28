@@ -24,10 +24,13 @@
 #include "kritaflake_export.h"
 
 #include <QString>
+#include <QList>
 
 class KoCanvasBase;
 class KoToolBase;
 class QKeySequence;
+class KActionCollection;
+class QAction;
 
 /**
  * A factory for KoToolBase objects.
@@ -62,6 +65,12 @@ public:
      */
     explicit KoToolFactoryBase(const QString &id);
     virtual ~KoToolFactoryBase();
+
+    /**
+     * Create the actions for this tool. Actions are unique per window, not per
+     * tool instance; tool instances are unique per view/canvas.
+     */
+    QList<QAction *> createActions(KActionCollection *actionCollection);
 
     /**
      * Instantiate a new tool
@@ -199,28 +208,33 @@ public:
     void setShortcut(const QKeySequence & shortcut);
 
 protected:
+
     /**
      * Set the tooltip to be used for this tool
      * @param tooltip the tooltip
      */
     void setToolTip(const QString &tooltip);
+
     /**
      * Set the toolType. used to group tools in the toolbox
      * @param toolType the toolType
      */
     void setSection(const QString &section);
+
     /**
      * Set an icon to be used in the toolBox.
      * @param iconName the basename (without extension) of the icon
      */
     void setIconName(const char *iconName);
     void setIconName(const QString &iconName);
+
     /**
      * Set the priority of this tool, as it is shown in the toolBox; lower number means
      * it will be show more to the front of the list.
      * @param newPriority the priority
      */
     void setPriority(int newPriority);
+
     /**
      * Set the id of the shape we can process.
      * This is the Id, as passed to the constructor of a KoShapeFactoryBase, that the tool
@@ -230,6 +244,14 @@ protected:
      * @see activationShapeId()
      */
     void setActivationShapeId(const QString &activationShapeId);
+
+    /**
+     * @brief createActionsImpl should be reimplemented if the tool needs any actions.
+     * The actions should have a valid objectName().
+     *
+     * @return the list of actions this tool wishes to be available.
+     */
+    virtual QList<QAction *> createActionsImpl();
 
 
 private:

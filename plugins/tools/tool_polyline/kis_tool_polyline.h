@@ -45,12 +45,12 @@ protected Q_SLOTS:
 
 #include "KoToolFactoryBase.h"
 
-class KisToolPolylineFactory : public KoToolFactoryBase
+class KisToolPolylineFactory : public KisToolPolyLineFactoryBase
 {
 
 public:
     KisToolPolylineFactory()
-            : KoToolFactoryBase("KisToolPolyline") {
+            : KisToolPolyLineFactoryBase("KisToolPolyline") {
         setToolTip(i18n("Polyline Tool: Shift-mouseclick ends the polyline."));
         setSection(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

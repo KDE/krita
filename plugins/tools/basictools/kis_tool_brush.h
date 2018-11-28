@@ -23,7 +23,7 @@
 
 #include <QSignalMapper>
 
-#include "KoToolFactoryBase.h"
+#include "KisToolPaintFactoryBase.h"
 
 #include <flake/kis_node_shape.h>
 #include <kis_icon.h>
@@ -114,34 +114,34 @@ Q_SIGNALS:
     void stabilizeSensorsChanged();
 
 private:
-    void addSmoothingAction(int enumId, const QString &id, const QString &name, const QIcon &icon, KActionCollection *globalCollection);
+    void addSmoothingAction(int enumId, const QString &id);
 
 private:
-    QComboBox *m_cmbSmoothingType;
+    QComboBox *m_cmbSmoothingType {0};
 
-    QCheckBox *m_chkAssistant;
-    KisSliderSpinBox *m_sliderMagnetism;
-    QCheckBox *m_chkOnlyOneAssistant;
-    KisDoubleSliderSpinBox *m_sliderSmoothnessDistance;
-    KisDoubleSliderSpinBox *m_sliderTailAggressiveness;
-    QCheckBox *m_chkSmoothPressure;
-    QCheckBox *m_chkUseScalableDistance;
+    QCheckBox *m_chkAssistant {0};
+    KisSliderSpinBox *m_sliderMagnetism {0};
+    QCheckBox *m_chkOnlyOneAssistant {0};
+    KisDoubleSliderSpinBox *m_sliderSmoothnessDistance {0};
+    KisDoubleSliderSpinBox *m_sliderTailAggressiveness {0};
+    QCheckBox *m_chkSmoothPressure {0};
+    QCheckBox *m_chkUseScalableDistance {0};
 
-    QCheckBox *m_chkStabilizeSensors;
-    QCheckBox *m_chkDelayDistance;
-    KisDoubleSliderSpinBox *m_sliderDelayDistance;
+    QCheckBox *m_chkStabilizeSensors {0};
+    QCheckBox *m_chkDelayDistance {0};
+    KisDoubleSliderSpinBox *m_sliderDelayDistance {0};
 
-    QCheckBox *m_chkFinishStabilizedCurve;
+    QCheckBox *m_chkFinishStabilizedCurve {0};
     QSignalMapper m_signalMapper;
 };
 
 
-class KisToolBrushFactory : public KoToolFactoryBase
+class KisToolBrushFactory : public KisToolPaintFactoryBase
 {
 
 public:
     KisToolBrushFactory()
-            : KoToolFactoryBase("KritaShape/KisToolBrush") {
+            : KisToolPaintFactoryBase("KritaShape/KisToolBrush") {
 
         setToolTip(i18n("Freehand Brush Tool"));
 
@@ -158,6 +158,8 @@ public:
     KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolBrush(canvas);
     }
+
+    QList<QAction *> createActionsImpl() override;
 
 };
 

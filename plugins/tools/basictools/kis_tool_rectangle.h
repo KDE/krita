@@ -26,7 +26,7 @@
 
 #include "kis_tool_shape.h"
 #include "kis_types.h"
-#include "KoToolFactoryBase.h"
+#include "KisSelectionToolFactoryBase.h"
 #include "flake/kis_node_shape.h"
 #include <kis_tool_rectangle_base.h>
 #include <kis_icon.h>
@@ -51,12 +51,12 @@ protected Q_SLOTS:
     void resetCursorStyle() override;
 };
 
-class KisToolRectangleFactory : public KoToolFactoryBase
+class KisToolRectangleFactory : public KisSelectionToolFactoryBase
 {
 
 public:
     KisToolRectangleFactory()
-            : KoToolFactoryBase("KritaShape/KisToolRectangle") {
+            : KisSelectionToolFactoryBase("KritaShape/KisToolRectangle") {
         setToolTip(i18n("Rectangle Tool"));
 
         setSection(TOOL_TYPE_SHAPE);

@@ -79,7 +79,7 @@ public:
      *
      * N.B. this action will not be saved in the registry.
      */
-    QAction *makeQAction(const QString &name, QObject *parent);
+    QAction *makeQAction(const QString &name, QObject *parent = 0);
 
     /**
      * Fills the standard QAction properties of an action.

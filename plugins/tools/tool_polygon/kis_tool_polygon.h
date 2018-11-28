@@ -44,12 +44,12 @@ protected Q_SLOTS:
 
 #include "KoToolFactoryBase.h"
 
-class KisToolPolygonFactory : public KoToolFactoryBase
+class KisToolPolygonFactory : public KisToolPolyLineFactoryBase
 {
 
 public:
     KisToolPolygonFactory()
-            : KoToolFactoryBase("KisToolPolygon") {
+            : KisToolPolyLineFactoryBase("KisToolPolygon") {
         setToolTip(i18n("Polygon Tool: Shift-mouseclick ends the polygon."));
         setSection(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

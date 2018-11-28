@@ -1,3 +1,4 @@
+
 /****************************************************************************
 **
 ** Copyright (C) 2015 The Qt Company Ltd.
@@ -777,7 +778,7 @@ void processWheelEvent(QWindowSystemInterfacePrivate::WheelEvent *e)
     //if (window->d_func()->blockedByModalWindow) {
     if (QGuiApplication::modalWindow() &&
             QGuiApplication::modalWindow() != window &&
-            QGuiApplication::modalWindow() != window->parent(QWindow::IncludeTransients)) {
+            QGuiApplication::modalWindow() != window->transientParent()) {
 
         // a modal window is blocking this window, don't allow wheel events through
         return;

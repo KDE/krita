@@ -512,7 +512,6 @@ QWidget * KisToolPaint::createOptionWidget()
 
     m_optionsWidgetLayout = new QGridLayout();
     m_optionsWidgetLayout->setColumnStretch(1, 1);
-
     verticalLayout->addLayout(m_optionsWidgetLayout);
     m_optionsWidgetLayout->setContentsMargins(0,0,0,0);
     m_optionsWidgetLayout->setSpacing(5);
@@ -520,8 +519,7 @@ QWidget * KisToolPaint::createOptionWidget()
     if (!quickHelp().isEmpty()) {
         QPushButton *push = new QPushButton(KisIconUtils::loadIcon("help-contents"), QString(), optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
-
-        QHBoxLayout *hLayout = new QHBoxLayout(optionWidget);
+        QHBoxLayout *hLayout = new QHBoxLayout();
         hLayout->addWidget(push);
         hLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         verticalLayout->addLayout(hLayout);

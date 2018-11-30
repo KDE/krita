@@ -98,6 +98,7 @@ void KisColorPatches::paintEvent(QPaintEvent* e)
     }
 
     QWidget::paintEvent(e);
+
 }
 
 void KisColorPatches::wheelEvent(QWheelEvent* event)
@@ -131,7 +132,8 @@ void KisColorPatches::resizeEvent(QResizeEvent* event)
         setMaximumWidth(minimumWidth());
     }
 
-    if(m_allowScrolling == false && event->oldSize() != event->size()) {
+
+    if (m_allowScrolling == false && event->oldSize() != event->size()) {
         if(m_direction == Horizontal) {
             setMaximumHeight(heightForWidth(width()));
             setMinimumHeight(heightForWidth(width()));
@@ -262,7 +264,6 @@ void KisColorPatches::updateSettings()
         m_direction=Vertical;
     else
         m_direction=Horizontal;
-
     m_allowScrolling=cfg.readEntry(m_configPrefix+"Scrolling", true);
     m_numCols=cfg.readEntry(m_configPrefix+"NumCols", 1);
     m_numRows=cfg.readEntry(m_configPrefix+"NumRows", 1);
@@ -304,6 +305,7 @@ void KisColorPatches::updateSettings()
         m_scrollValue = 0;
     }
 
+
     QResizeEvent dummy(size(), QSize(-1,-1));
     resizeEvent(&dummy);
 
@@ -325,7 +327,7 @@ int KisColorPatches::heightForWidth(int width) const
 {
     int numPatchesInARow = width / m_patchWidth;
     int numRows = qMax((fieldCount() - 1), 1) / qMax(numPatchesInARow + 1, 1);
-    return numRows * m_patchHeight;
+    return qMax(numRows * m_patchHeight, m_patchHeight);
 }
 
 int KisColorPatches::widthForHeight(int height) const
@@ -341,7 +343,7 @@ int KisColorPatches::widthForHeight(int height) const
 
     int numCols = (fieldCount() - 1) / (numPatchesInACol + 1);
 
-    return numCols*m_patchWidth;
+    return qMax(numCols*m_patchWidth, m_patchWidth);
 }
 
 int KisColorPatches::fieldCount() const

@@ -105,7 +105,7 @@ public:
 
         QMap<QKeySequence, QStringList> shortcutMap;
 
-        ////qDebug() << "................... activating tool" << activeToolId;
+        //qDebug() << "................... activating tool" << activeToolId;
 
         Q_FOREACH(QAction *action, windowActionCollection->actions()) {
 
@@ -127,11 +127,14 @@ public:
             }
 
             Q_FOREACH(QKeySequence keySequence, action->shortcuts()) {
-                if (shortcutMap.contains(keySequence)) {
-                    shortcutMap[keySequence].append(action->objectName());
-                }
-                else {
-                    shortcutMap[keySequence] = QStringList() << action->objectName();
+                // After loading a custom shortcut profile, shortcuts can be defined as an empty string, which is not an empty shortcut
+                if (keySequence.toString() != "") {
+                    if (shortcutMap.contains(keySequence)) {
+                        shortcutMap[keySequence].append(action->objectName());
+                    }
+                    else {
+                        shortcutMap[keySequence] = QStringList() << action->objectName();
+                    }
                 }
             }
         }
@@ -149,7 +152,7 @@ public:
                 }
                 Q_FOREACH(const QString &action, actions) {
                     if (toolActionFound && globalActions.contains(action)) {
-                                                //qDebug() << "\tdisabling global action" << action;
+                        //qDebug() << "\tdisabling global action" << action;
                         windowActionCollection->action(action)->setEnabled(false);
                         disabledGlobalActions << action;
                     }

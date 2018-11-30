@@ -160,7 +160,7 @@ extern "C" int main(int argc, char **argv)
         QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
         singleApplication = kritarc.value("EnableSingleApplication", true).toBool();
 #if QT_VERSION >= 0x050600
-        if (kritarc.value("EnableHiDPI", false).toBool()) {
+        if (kritarc.value("EnableHiDPI", true).toBool()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
         if (!qgetenv("KRITA_HIDPI").isEmpty()) {

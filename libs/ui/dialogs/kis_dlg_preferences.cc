@@ -143,7 +143,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
-    m_chkHiDPI->setChecked(kritarc.value("EnableHiDPI", false).toBool());
+    m_chkHiDPI->setChecked(kritarc.value("EnableHiDPI", true).toBool());
 
     m_chkSingleApplication->setChecked(kritarc.value("EnableSingleApplication", true).toBool());
 

@@ -474,6 +474,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     QList<QAction *> toolbarList;
     Q_FOREACH (QWidget* it, guiFactory()->containers("ToolBar")) {
         KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
+        toolBar->setMovable(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
 
         if (toolBar) {
             if (toolBar->objectName() == "BrushesAndStuff") {
@@ -490,6 +491,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
             warnUI << "Toolbar list contains a " << it->metaObject()->className() << " which is not a toolbar!";
         }
     }
+
+    KToolBar::setToolBarsLocked(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
     plugActionList("toolbarlist", toolbarList);
     d->toolbarList = toolbarList;
 
@@ -1924,7 +1927,6 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
     bool lockAllDockers = KisConfig().readEntry<bool>("LockAllDockerPanels", false);
-
 
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();

@@ -28,7 +28,26 @@
 
 class KisKeyframeChannel;
 
-class KRITAIMAGE_EXPORT KisKeyframe
+class KRITAIMAGE_EXPORT KisKeyframeBase
+{
+public:
+    KisKeyframeBase(KisKeyframeChannel *channel, int time);
+    virtual ~KisKeyframeBase();
+
+    KisKeyframeChannel *channel() const;
+
+    int time() const;
+    void setTime(int time);
+
+    virtual QRect affectedRect() const = 0;
+    virtual KisKeyframeSP getOriginalKeyframeFor(int time) const = 0;
+
+private:
+    struct Private;
+    QScopedPointer<Private> m_d;
+
+};
+class KRITAIMAGE_EXPORT KisKeyframe : public KisKeyframeBase
 {
 public:
     enum InterpolationMode {
@@ -43,16 +62,13 @@ public:
     };
 
     KisKeyframe(KisKeyframeChannel *channel, int time);
-    virtual ~KisKeyframe();
+    ~KisKeyframe() override;
 
     /**
      * Create a copy of the keyframe for insertion into given channel.
      * Used when constructing a copy of a keyframe channel.
      */
     virtual KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const = 0;
-
-    int time() const;
-    void setTime(int time);
 
     void setInterpolationMode(InterpolationMode mode);
     InterpolationMode interpolationMode() const;
@@ -64,10 +80,10 @@ public:
 
     int colorLabel() const;
     void setColorLabel(int label);
-    virtual bool hasContent() const; // does any content exist in keyframe, or is it empty?
-    virtual QRect affectedRect() const = 0;
 
-    KisKeyframeChannel *channel() const;
+    virtual bool hasContent() const; // does any content exist in keyframe, or is it empty?
+
+    KisKeyframeSP getOriginalKeyframeFor(int time) const override;
 
 protected:
     KisKeyframe(const KisKeyframe *rhs, KisKeyframeChannel *channel);
@@ -77,6 +93,8 @@ private:
     QScopedPointer<Private> m_d;
 };
 
+Q_DECLARE_METATYPE(KisKeyframeBase*)
+Q_DECLARE_METATYPE(KisKeyframeBaseSP)
 Q_DECLARE_METATYPE(KisKeyframe*)
 Q_DECLARE_METATYPE(KisKeyframeSP)
 #endif

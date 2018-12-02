@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_image_config.h"
 #include "kis_keyframe.h"
+#include "kis_image_config.h"
 #include "kis_keyframe_channel.h"
 #include "kis_types.h"
 
@@ -25,36 +25,62 @@
 
 struct KisKeyframeSPStaticRegistrar {
     KisKeyframeSPStaticRegistrar() {
+        qRegisterMetaType<KisKeyframeBaseSP>("KisKeyframeBaseSP");
         qRegisterMetaType<KisKeyframeSP>("KisKeyframeSP");
     }
 };
 static KisKeyframeSPStaticRegistrar __registrar;
 
-
-struct KisKeyframe::Private
+struct KisKeyframeBase::Private
 {
     QPointer<KisKeyframeChannel> channel;
     int time;
 
-    InterpolationMode interpolationMode;
-    InterpolationTangentsMode tangentsMode;
-    QPointF leftTangent;
-    QPointF rightTangent;
-    int colorLabel{0};
-
     Private(KisKeyframeChannel *channel, int time)
-        : channel(channel), time(time), interpolationMode(Constant)
+        : channel(channel), time(time)
     {}
 };
 
-KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time)
+KisKeyframeBase::KisKeyframeBase(KisKeyframeChannel *channel, int time)
     : m_d(new Private(channel, time))
+{}
+
+KisKeyframeBase::~KisKeyframeBase() = default;
+
+KisKeyframeChannel *KisKeyframeBase::channel() const
+{
+    return m_d->channel;
+}
+
+int KisKeyframeBase::time() const
+{
+    return m_d->time;
+}
+
+void KisKeyframeBase::setTime(int time)
+{
+    m_d->time = time;
+}
+
+struct KisKeyframe::Private
+{
+    InterpolationMode interpolationMode{Constant};
+    InterpolationTangentsMode tangentsMode{Smooth};
+    QPointF leftTangent;
+    QPointF rightTangent;
+    int colorLabel{0};
+};
+
+KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time)
+    : KisKeyframeBase(channel, time)
+    , m_d(new Private())
 {
     m_d->colorLabel = KisImageConfig(true).defaultFrameColorLabel();
 }
 
 KisKeyframe::KisKeyframe(const KisKeyframe *rhs, KisKeyframeChannel *channel)
-    : m_d(new Private(channel, rhs->time()))
+    : KisKeyframeBase(channel, rhs->time())
+    , m_d(new Private())
 {
     m_d->interpolationMode = rhs->m_d->interpolationMode;
     m_d->tangentsMode = rhs->m_d->tangentsMode;
@@ -65,16 +91,6 @@ KisKeyframe::KisKeyframe(const KisKeyframe *rhs, KisKeyframeChannel *channel)
 
 KisKeyframe::~KisKeyframe()
 {}
-
-int KisKeyframe::time() const
-{
-    return m_d->time;
-}
-
-void KisKeyframe::setTime(int time)
-{
-    m_d->time = time;
-}
 
 void KisKeyframe::setInterpolationMode(KisKeyframe::InterpolationMode mode)
 {
@@ -126,7 +142,7 @@ bool KisKeyframe::hasContent() const {
     return true;
 }
 
-KisKeyframeChannel *KisKeyframe::channel() const
+KisKeyframeSP KisKeyframe::getOriginalKeyframeFor(int) const
 {
-    return m_d->channel;
+    return channel()->keyframeAt(this->time());
 }

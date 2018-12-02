@@ -25,10 +25,10 @@ class KisTimeSpan;
 class KisFrameSet;
 class KisRepeatFrame;
 
-class KRITAIMAGE_EXPORT KisAnimationCycle {
+class KRITAIMAGE_EXPORT KisAnimationCycle : public KisKeyframeBase {
 
 public:
-    KisAnimationCycle(KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe);
+    KisAnimationCycle(KisKeyframeChannel *channel, KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe);
 
     KisKeyframeSP firstSourceKeyframe() const;
     KisKeyframeSP lastSourceKeyframe() const;
@@ -39,27 +39,29 @@ public:
     void removeRepeat(QSharedPointer<KisRepeatFrame> repeat);
     const QVector<QWeakPointer<KisRepeatFrame>>& repeats() const;
 
+    QRect affectedRect() const override;
+    KisKeyframeSP getOriginalKeyframeFor(int time) const override;
+
     KisFrameSet instancesWithin(KisKeyframeSP original, KisTimeSpan range) const;
 
 private:
     friend class KisKeyframeChannel;
-    void setFirstKeyframe(KisKeyframeSP keyframe);
-    void setLastKeyframe(KisKeyframeSP keyframe);
 
     KisKeyframeSP m_firstSourceKeyframe, m_lastSourceKeyframe;
     QVector<QWeakPointer<KisRepeatFrame>> m_repeats;
 };
 
-class KRITAIMAGE_EXPORT KisRepeatFrame : public KisKeyframe
+class KRITAIMAGE_EXPORT KisRepeatFrame : public KisKeyframeBase
 {
 public:
     KisRepeatFrame(KisKeyframeChannel *channel, int time, QSharedPointer<KisAnimationCycle> cycle);
 
     QSharedPointer<KisAnimationCycle> cycle() const;
+
     QRect affectedRect() const override;
-    KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const override;
+
     int getOriginalTimeFor(int time) const;
-    KisKeyframeSP getOriginalKeyframeFor(int time) const;
+    KisKeyframeSP getOriginalKeyframeFor(int time) const override;
 
     /// Returns the earliest time the original frame appears in this repeat, or -1 if it never does.
     int firstInstanceOf(int originalTime) const;
@@ -76,7 +78,11 @@ public:
      */
     int nextVisibleFrame(int time) const;
 
-    static bool isRepeat(KisKeyframeSP keyframe);
+    /**
+     * Finds the time of the next keyframe if any.
+     * Returns -1 if the cycle continues indefinitely.
+     */
+    int end() const;
 
 private:
     QSharedPointer<KisAnimationCycle> m_cycle;

@@ -21,20 +21,11 @@
 #include "kis_time_range.h"
 #include "kis_keyframe_channel.h"
 
-KisAnimationCycle::KisAnimationCycle(KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe)
-        : m_firstSourceKeyframe(firstKeyframe)
+KisAnimationCycle::KisAnimationCycle(KisKeyframeChannel *channel, KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe)
+        : KisKeyframeBase(channel, firstKeyframe->time())
+        , m_firstSourceKeyframe(firstKeyframe)
         , m_lastSourceKeyframe(lastKeyframe)
 {}
-
-void KisAnimationCycle::setFirstKeyframe(KisKeyframeSP keyframe)
-{
-    m_firstSourceKeyframe = keyframe;
-}
-
-void KisAnimationCycle::setLastKeyframe(KisKeyframeSP keyframe)
-{
-    m_lastSourceKeyframe = keyframe;
-}
 
 KisKeyframeSP KisAnimationCycle::firstSourceKeyframe() const
 {
@@ -96,7 +87,8 @@ KisFrameSet KisAnimationCycle::instancesWithin(KisKeyframeSP original, KisTimeSp
             auto repeat = repeatFrame.toStrongRef();
             if (!repeat) continue;
 
-            KisKeyframeSP terminatingKey = repeat->channel()->nextKeyframe(*repeat);
+            // FIXME! KisKeyframeSP terminatingKey = repeat->channel()->nextKeyframe(*repeat);
+            KisKeyframeSP terminatingKey = KisKeyframeSP();
 
             if (range.isEmpty()) {
                 if (terminatingKey) {
@@ -129,21 +121,26 @@ KisFrameSet KisAnimationCycle::instancesWithin(KisKeyframeSP original, KisTimeSp
     return frames;
 }
 
-
-KisKeyframeSP KisRepeatFrame::cloneFor(KisKeyframeChannel *channel) const
+QRect KisAnimationCycle::affectedRect() const
 {
-    const int cycleBeginTime = m_cycle->firstSourceKeyframe()->time();
-    QSharedPointer<KisAnimationCycle> targetCycle = channel->cycleAt(cycleBeginTime);
-    return toQShared(new KisRepeatFrame(channel, time(), targetCycle));
+    QRect rect;
+
+    KisKeyframeSP keyframe = m_firstSourceKeyframe;
+    do {
+        rect |= keyframe->affectedRect();
+        keyframe = channel()->nextKeyframe(keyframe);
+    } while (keyframe && keyframe != m_lastSourceKeyframe);
+
+    return rect;
 }
 
-bool KisRepeatFrame::isRepeat(KisKeyframeSP keyframe)
+KisKeyframeSP KisAnimationCycle::getOriginalKeyframeFor(int time) const
 {
-    return dynamic_cast<KisRepeatFrame*>(keyframe.data()) != nullptr;
+    return channel()->activeKeyframeAt(time);
 }
 
 KisRepeatFrame::KisRepeatFrame(KisKeyframeChannel *channel, int time, QSharedPointer<KisAnimationCycle> cycle)
-        : KisKeyframe(channel, time)
+        : KisKeyframeBase(channel, time)
         , m_cycle(cycle)
 {}
 
@@ -154,15 +151,7 @@ QSharedPointer<KisAnimationCycle> KisRepeatFrame::cycle() const
 
 QRect KisRepeatFrame::affectedRect() const
 {
-    KisKeyframeSP keyframe = m_cycle->firstSourceKeyframe();
-
-    QRect rect;
-    while (!keyframe.isNull() && keyframe->time() <= m_cycle->lastSourceKeyframe()->time()) {
-        rect |= keyframe->affectedRect();
-        keyframe = channel()->nextKeyframe(keyframe);
-    }
-
-    return rect;
+    return m_cycle->affectedRect();
 }
 
 int KisRepeatFrame::getOriginalTimeFor(int time) const
@@ -182,12 +171,10 @@ int KisRepeatFrame::firstInstanceOf(int originalTime) const
     KisTimeSpan originalRange = m_cycle->originalRange();
     const int timeWithinCycle = originalTime - originalRange.start();
 
-    const int first = this->time() + timeWithinCycle;
+    const int first = time() + timeWithinCycle;
 
-    const KisKeyframeSP next = channel()->nextKeyframe(*this);
-    if (next && next->time() < first) return -1;
-
-    return first;
+    const int endTime = end();
+    return (endTime == -1 || first <= endTime) ? first : -1;
 }
 
 int KisRepeatFrame::previousVisibleFrame(int time) const
@@ -214,8 +201,12 @@ int KisRepeatFrame::nextVisibleFrame(int time) const
     const int durationOfOriginalKeyframe = originalEnd + 1 - originalStart;
     const int nextFrameTime = time + durationOfOriginalKeyframe;
 
-    const KisKeyframeSP next = channel()->nextKeyframe(*this);
-    if (next && next->time() <= nextFrameTime) return -1;
+    const int endTime = end();
+    return (endTime == -1 || nextFrameTime < endTime) ? nextFrameTime : -1;
+}
 
-    return nextFrameTime;
+int KisRepeatFrame::end() const
+{
+    // TODO: implement
+    return -1;
 }

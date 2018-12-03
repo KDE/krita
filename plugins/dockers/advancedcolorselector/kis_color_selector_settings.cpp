@@ -432,7 +432,7 @@ void KisColorSelectorSettings::loadPreferences()
     a = cfg.readEntry("commonColorsAlignment", false);
     ui->commonColorsAlignVertical->setChecked(a);
     ui->commonColorsAlignHorizontal->setChecked(!a);
-    ui->commonColorsAllowScrolling->setChecked(cfg.readEntry("commonColorsScrolling", false));
+    ui->commonColorsAllowScrolling->setChecked(cfg.readEntry("commonColorsScrolling", true));
     ui->commonColorsNumCols->setValue(cfg.readEntry("commonColorsNumCols", 1));
     ui->commonColorsNumRows->setValue(cfg.readEntry("commonColorsNumRows", 1));
     ui->commonColorsPatchCount->setValue(cfg.readEntry("commonColorsCount", 12));
@@ -546,7 +546,7 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->commonColorsShow->setChecked(true);
     ui->commonColorsAlignVertical->setChecked(false);
     ui->commonColorsAlignHorizontal->setChecked(true);
-    ui->commonColorsAllowScrolling->setChecked(false);
+    ui->commonColorsAllowScrolling->setChecked(true);
     ui->commonColorsNumCols->setValue(1);
     ui->commonColorsNumRows->setValue(1);
     ui->commonColorsPatchCount->setValue(12);

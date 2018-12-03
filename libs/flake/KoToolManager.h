@@ -216,9 +216,6 @@ public:
      */
     QList<KoToolAction*> toolActionList() const;
 
-    /// Update the internal shortcuts of each tool. (Activation shortcuts are exposed already.)
-    void updateToolShortcuts();
-
     /// Request tool activation for the given canvas controller
     void requestToolActivation(KoCanvasController *controller);
 

@@ -308,10 +308,6 @@ protected Q_SLOTS:
      */
     virtual void resetCursorStyle();
 
-private Q_SLOTS:
-    void slotToggleFgBg();
-    void slotResetFgBg();
-
 private:
     struct Private;
     Private* const d;

@@ -65,49 +65,12 @@ KisToolMove::KisToolMove(KoCanvasBase * canvas)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
+    m_showCoordinatesAction = action("movetool-show-coordinates");
+    createOptionWidget();
+
     setObjectName("tool_move");
-    m_optionsWidget = 0;
-    QAction *a;
 
-    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
-    a = actionRegistry->makeQAction("movetool-move-up", this);
-    addAction("movetool-move-up", a);
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Up, false);});
-
-    a = actionRegistry->makeQAction("movetool-move-down", this);
-    addAction("movetool-move-down", a);
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Down, false);});
-
-    a = actionRegistry->makeQAction("movetool-move-left", this);
-    addAction("movetool-move-left", a);
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Left, false);});
-
-    a = actionRegistry->makeQAction("movetool-move-right", this);
-    addAction("movetool-move-right", a);
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Right, false);});
-
-    a = actionRegistry->makeQAction("movetool-move-up-more", this);
-    addAction("movetool-move-up-more", a);
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Up, true);});
-
-    a = actionRegistry->makeQAction("movetool-move-down-more", this);
-    addAction("movetool-move-down-more", a);
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Down, true);});
-
-    a = actionRegistry->makeQAction("movetool-move-left-more", this);
-    addAction("movetool-move-left-more", a);
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Left, true);});
-
-    a = actionRegistry->makeQAction("movetool-move-right-more", this);
-    addAction("movetool-move-right-more", a);
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Right, true);});
-
-    m_showCoordinatesAction = actionRegistry->makeQAction("movetool-show-coordinates", this);
-    addAction("movetool-show-coordinates", m_showCoordinatesAction);
-
-    connect(&m_changesTracker,
-            SIGNAL(sigConfigChanged(KisToolChangesTrackerDataSP)),
-            SLOT(slotTrackerChangedConfig(KisToolChangesTrackerDataSP)));
+    m_showCoordinatesAction = action("movetool-show-coordinates");
 
     connect(&m_updateCursorCompressor, SIGNAL(timeout()), this, SLOT(resetCursorStyle()));
 }
@@ -301,7 +264,38 @@ void KisToolMove::moveDiscrete(MoveDirection direction, bool big)
 void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisTool::activate(toolActivation, shapes);
-    QRect totalBounds;
+
+    QAction *a = action("movetool-move-up");
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Up, false);});
+
+    a = action("movetool-move-down");
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Down, false);});
+
+    a = action("movetool-move-left");
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Left, false);});
+
+    a = action("movetool-move-right");
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Right, false);});
+
+    a = action("movetool-move-up-more");
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Up, true);});
+
+    a = action("movetool-move-down-more");
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Down, true);});
+
+    a = action("movetool-move-left-more");
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Left, true);});
+
+    a = action("movetool-move-right-more");
+    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Right, true);});
+
+    connect(m_showCoordinatesAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(setShowCoordinates(bool)), Qt::UniqueConnection);
+    connect(m_optionsWidget, SIGNAL(showCoordinatesChanged(bool)), m_showCoordinatesAction, SLOT(setChecked(bool)), Qt::UniqueConnection);
+
+    connect(&m_changesTracker,
+            SIGNAL(sigConfigChanged(KisToolChangesTrackerDataSP)),
+            SLOT(slotTrackerChangedConfig(KisToolChangesTrackerDataSP)));
+
 
     slotNodeChanged(this->selectedNodes());
 }
@@ -341,6 +335,33 @@ void KisToolMove::initHandles(const KisNodeList &nodes)
 
 void KisToolMove::deactivate()
 {
+    QAction *a = action("movetool-move-up");
+    disconnect(a, 0, this, 0);
+
+    a = action("movetool-move-down");
+    disconnect(a, 0, this, 0);
+
+    a = action("movetool-move-left");
+    disconnect(a, 0, this, 0);
+
+    a = action("movetool-move-right");
+    disconnect(a, 0, this, 0);
+
+    a = action("movetool-move-up-more");
+    disconnect(a, 0, this, 0);
+
+    a = action("movetool-move-down-more");
+    disconnect(a, 0, this, 0);
+
+    a = action("movetool-move-left-more");
+    disconnect(a, 0, this, 0);
+
+    a = action("movetool-move-right-more");
+    disconnect(a, 0, this, 0);
+
+    disconnect(m_showCoordinatesAction, 0, this, 0);
+    disconnect(m_optionsWidget, 0, this, 0);
+
     endStroke();
     KisTool::deactivate();
 }
@@ -537,9 +558,6 @@ QWidget* KisToolMove::createOptionWidget()
 
     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
 
-    connect(m_showCoordinatesAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(setShowCoordinates(bool)));
-    connect(m_optionsWidget, SIGNAL(showCoordinatesChanged(bool)), m_showCoordinatesAction, SLOT(setChecked(bool)));
-
     m_showCoordinatesAction->setChecked(m_optionsWidget->showCoordinates());
 
     m_optionsWidget->slotSetTranslate(m_handlesRect.topLeft() + currentOffset());
@@ -625,4 +643,23 @@ void KisToolMove::slotNodeChanged(KisNodeList nodes)
 
     initHandles(nodes);
     notifyGuiAfterMove(false);
+}
+
+QList<QAction *> KisToolMoveFactory::createActionsImpl()
+{
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
+
+    actions << actionRegistry->makeQAction("movetool-move-up");
+    actions << actionRegistry->makeQAction("movetool-move-down");
+    actions << actionRegistry->makeQAction("movetool-move-left");
+    actions << actionRegistry->makeQAction("movetool-move-right");
+    actions << actionRegistry->makeQAction("movetool-move-up-more");
+    actions << actionRegistry->makeQAction("movetool-move-down-more");
+    actions << actionRegistry->makeQAction("movetool-move-left-more");
+    actions << actionRegistry->makeQAction("movetool-move-right-more");
+    actions << actionRegistry->makeQAction("movetool-show-coordinates");
+
+    return actions;
+
 }

@@ -89,14 +89,14 @@ private:
 };
 
 
-#include "KoToolFactoryBase.h"
+#include "KisToolPaintFactoryBase.h"
 
-class KisToolFillFactory : public KoToolFactoryBase
+class KisToolFillFactory : public KisToolPaintFactoryBase
 {
 
 public:
     KisToolFillFactory()
-            : KoToolFactoryBase("KritaFill/KisToolFill") {
+            : KisToolPaintFactoryBase("KritaFill/KisToolFill") {
         setToolTip(i18n("Fill Tool"));
         setSection(TOOL_TYPE_FILL);
         setPriority(0);

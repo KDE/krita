@@ -21,7 +21,7 @@
 #ifndef KIS_TOOL_MOVE_H_
 #define KIS_TOOL_MOVE_H_
 
-#include <KoToolFactoryBase.h>
+#include <KisToolPaintFactoryBase.h>
 #include <kis_types.h>
 #include <kis_tool.h>
 #include <flake/kis_node_shape.h>
@@ -103,7 +103,7 @@ public:
     void paint(QPainter& gc, const KoViewConverter &converter) override;
     void initHandles(const KisNodeList &nodes);
 
-    QWidget* createOptionWidget() override;
+    QWidget *createOptionWidget() override;
     void updateUIUnit(int newUnit);
 
     MoveToolMode moveToolMode() const;
@@ -142,7 +142,7 @@ private Q_SLOTS:
 
 private:
 
-    MoveToolOptionsWidget* m_optionsWidget;
+    MoveToolOptionsWidget* m_optionsWidget {0};
     QPoint m_dragStart; ///< Point where current cursor dragging began
     QPoint m_accumulatedOffset; ///< Total offset including multiple clicks, up/down/left/right keys, etc. added together
 
@@ -152,9 +152,9 @@ private:
 
     int m_resolution;
 
-    QAction *m_showCoordinatesAction;
+    QAction *m_showCoordinatesAction {0};
 
-    KisCanvas2* m_canvas;
+    KisCanvas2 *m_canvas {0};
 
     QPoint m_dragPos;
     QRect m_handlesRect;
@@ -166,12 +166,12 @@ private:
 };
 
 
-class KisToolMoveFactory : public KoToolFactoryBase
+class KisToolMoveFactory : public KisToolPaintFactoryBase
 {
 
 public:
     KisToolMoveFactory()
-            : KoToolFactoryBase("KritaTransform/KisToolMove") {
+            : KisToolPaintFactoryBase("KritaTransform/KisToolMove") {
         setToolTip(i18n("Move Tool"));
         setSection(TOOL_TYPE_TRANSFORM);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
@@ -186,6 +186,7 @@ public:
         return new KisToolMove(canvas);
     }
 
+    QList<QAction *> createActionsImpl() override;
 };
 
 #endif // KIS_TOOL_MOVE_H_

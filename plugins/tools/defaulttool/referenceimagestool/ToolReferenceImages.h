@@ -29,6 +29,7 @@
 #include <kis_canvas2.h>
 
 #include <defaulttool/DefaultTool.h>
+#include <defaulttool/DefaultToolFactory.h>
 
 class ToolReferenceImagesWidget;
 class KisReferenceImagesLayer;
@@ -81,11 +82,11 @@ private:
 };
 
 
-class ToolReferenceImagesFactory : public KoToolFactoryBase
+class ToolReferenceImagesFactory : public DefaultToolFactory
 {
 public:
     ToolReferenceImagesFactory()
-    : KoToolFactoryBase("ToolReferenceImages") {
+    : DefaultToolFactory("ToolReferenceImages") {
         setToolTip(i18n("Reference Images Tool"));
         setSection(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("krita_tool_reference_images"));
@@ -99,6 +100,8 @@ public:
     KoToolBase * createTool(KoCanvasBase * canvas) override {
         return new ToolReferenceImages(canvas);
     }
+
+    QList<QAction *> createActionsImpl() override;
 
 };
 

@@ -308,7 +308,7 @@ void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeFilterProxyModel> fi
         if (idx.isValid()) {
             nodeView->setExpanded(idx, !node->collapsed());
         }
-        if (node->childCount() > 0) {
+        if (!node->collapsed() && node->childCount() > 0) {
             expandNodesRecursively(node, filteringModel, nodeView);
         }
         node = node->nextSibling();

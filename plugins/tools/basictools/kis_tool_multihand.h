@@ -31,7 +31,6 @@ class QStackedWidget;
 class KisSliderSpinBox;
 class KisToolMultihandHelper;
 
-
 class KisToolMultihand : public KisToolBrush
 {
     Q_OBJECT
@@ -93,12 +92,12 @@ private:
 };
 
 
-class KisToolMultiBrushFactory : public KoToolFactoryBase
+class KisToolMultiBrushFactory : public KisToolPaintFactoryBase
 {
 
 public:
     KisToolMultiBrushFactory()
-            : KoToolFactoryBase("KritaShape/KisToolMultiBrush") {
+        : KisToolPaintFactoryBase("KritaShape/KisToolMultiBrush") {
 
         setToolTip(i18n("Multibrush Tool"));
 

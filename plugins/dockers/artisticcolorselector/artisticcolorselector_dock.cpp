@@ -450,7 +450,7 @@ void ArtisticColorSelectorDock::slotGamutMaskUnset()
 
 void ArtisticColorSelectorDock::slotGamutMaskPreviewUpdate()
 {
-    m_selectorUI->colorSelector->update();
+    m_selectorUI->colorSelector->setDirty();
 }
 
 void ArtisticColorSelectorDock::slotSelectorSettingsChanged()

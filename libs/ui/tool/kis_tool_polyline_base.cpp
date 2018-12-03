@@ -44,9 +44,6 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolyline
       m_type(type),
       m_closeSnappingActivated(false)
 {
-    QAction *undo_polygon_selection =
-        KisActionRegistry::instance()->makeQAction("undo_polygon_selection", this);
-    addAction("undo_polygon_selection", undo_polygon_selection);
 }
 
 

@@ -1211,18 +1211,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="invert_selection">
-      <icon></icon>
-      <text>&amp;Invert Selection</text>
-      <whatsThis></whatsThis>
-      <toolTip>Invert Selection</toolTip>
-      <iconText>Invert Selection</iconText>
-      <activationFlags>10000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut>Ctrl+I</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="convert_to_vector_selection">
       <icon></icon>
       <text>&amp;Convert to Vector Selection</text>

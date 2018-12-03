@@ -169,6 +169,7 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile_info_pool.cpp
     opengl/KisOpenGLUpdateInfoBuilder.cpp
     kis_fps_decoration.cpp
+
     tool/KisToolChangesTracker.cpp
     tool/KisToolChangesTrackerData.cpp
     tool/kis_selection_tool_helper.cpp
@@ -204,7 +205,8 @@ set(kritaui_LIB_SRCS
     tool/strokes/KisMaskingBrushRenderer.cpp
     tool/strokes/KisMaskingBrushCompositeOpFactory.cpp
     tool/strokes/move_stroke_strategy.cpp
-
+    tool/KisSelectionToolFactoryBase.cpp
+    tool/KisToolPaintFactoryBase.cpp
 
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp

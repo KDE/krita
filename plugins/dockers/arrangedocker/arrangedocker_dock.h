@@ -37,6 +37,7 @@ public:
 
 private Q_SLOTS:
     void slotToolChanged();
+    void slotToolChanged(QString toolId);
 
 private:
     ArrangeDockerWidget *m_configWidget;

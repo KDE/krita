@@ -21,7 +21,7 @@
 
 #include "kis_tool_freehand.h"
 
-#include "KoToolFactoryBase.h"
+#include "KisToolPaintFactoryBase.h"
 #include "KoPointerEvent.h"
 
 #include <flake/kis_node_shape.h>
@@ -140,19 +140,16 @@ private:
 };
 
 
-class KisToolDynaFactory : public KoToolFactoryBase
+class KisToolDynaFactory : public KisToolPaintFactoryBase
 {
 
 public:
     KisToolDynaFactory()
-            : KoToolFactoryBase("KritaShape/KisToolDyna") {
+            : KisToolPaintFactoryBase("KritaShape/KisToolDyna") {
 
         setToolTip(i18n("Dynamic Brush Tool"));
-
-        // Temporarily
         setSection(TOOL_TYPE_SHAPE);
         setIconName(koIconNameCStr("krita_tool_dyna"));
-        // TODO
         //setShortcut(QKeySequence(Qt::Key_F));
         setPriority(10);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
@@ -160,7 +157,7 @@ public:
 
     ~KisToolDynaFactory() override {}
 
-    KoToolBase * createTool(KoCanvasBase *canvas) override {
+    KoToolBase *createTool(KoCanvasBase *canvas) override {
         return new KisToolDyna(canvas);
     }
 

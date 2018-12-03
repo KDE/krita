@@ -188,6 +188,12 @@ private:
     friend class SelectionHandler;
 
     DefaultToolTabbedWidget *m_tabbedOptionWidget;
+
+    QSignalMapper *m_alignSignalsMapper {0};
+    QSignalMapper *m_distributeSignalsMapper {0};
+    QSignalMapper *m_transformSignalsMapper {0};
+    QSignalMapper *m_booleanSignalsMapper {0};
 };
+
 
 #endif

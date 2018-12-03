@@ -293,10 +293,10 @@ public:
     virtual void setVastScrolling(qreal factor) = 0;
 
    /**
-     * Returns the action collection for the canvas
-     * @returns action collection for this canvas, can be 0
+     * Returns the action collection for the window
+     * @returns action collection for this window, can be 0
      */
-    virtual KActionCollection* actionCollection() const;
+    KActionCollection* actionCollection() const;
 
     QPoint documentOffset() const;
 

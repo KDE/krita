@@ -23,6 +23,7 @@
 #include <QElapsedTimer>
 #include <QPushButton>
 #include <QSlider>
+#include <QGraphicsOpacityEffect>
 #include "KisViewManager.h"
 #include "kactioncollection.h"
 #include "kis_tool_button.h"
@@ -134,6 +135,8 @@ private:
     QRect m_resetCanvasRotationIndicatorRect;
     bool m_isOverCanvasRotationIndicator {false};
     bool m_isRotatingCanvasIndicator {false};
+    bool m_isZoomingCanvas {false};
+
 
     KisHighlightedToolButton *mirrorMode {0};
     KisHighlightedToolButton *canvasOnlyButton {0};
@@ -142,6 +145,9 @@ private:
     int zoomSliderMinValue {10};
     int zoomSliderMaxValue {200};
     KisAcyclicSignalConnector *m_acyclicConnector = 0;
+
+    // updates the transparency and effects of the whole widget
+    QGraphicsOpacityEffect *opacityChange {0};
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);
@@ -175,6 +181,10 @@ private Q_SLOTS:
     void slotCanvasonlyModeClicked();
     void slotZoomToOneHundredPercentClicked();
     void slotZoomSliderChanged(int zoom);
+
+    void slotZoomSliderPressed();
+    void slotZoomSliderReleased();
+
 };
 
 #endif // KIS_POPUP_PALETTE_H

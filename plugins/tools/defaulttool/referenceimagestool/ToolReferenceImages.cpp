@@ -30,6 +30,7 @@
 #include <KoShapeController.h>
 #include <KoFileDialog.h>
 
+#include <kis_action_registry.h>
 #include <kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
 #include <KisViewManager.h>
@@ -261,4 +262,28 @@ KisDocument *ToolReferenceImages::document() const
 {
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     return kisCanvas->imageView()->document();
+}
+
+QList<QAction *> ToolReferenceImagesFactory::createActionsImpl()
+{
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+    QList<QAction *> actions = DefaultToolFactory::createActionsImpl();
+
+    actions << actionRegistry->makeQAction("object_order_front");
+    actions << actionRegistry->makeQAction("object_order_raise");
+    actions << actionRegistry->makeQAction("object_order_lower");
+    actions << actionRegistry->makeQAction("object_order_back");
+    actions << actionRegistry->makeQAction("object_group");
+    actions << actionRegistry->makeQAction("object_ungroup");
+    actions << actionRegistry->makeQAction("object_transform_rotate_90_cw");
+    actions << actionRegistry->makeQAction("object_transform_rotate_90_ccw");
+    actions << actionRegistry->makeQAction("object_transform_rotate_180");
+    actions << actionRegistry->makeQAction("object_transform_mirror_horizontally");
+    actions << actionRegistry->makeQAction("object_transform_mirror_vertically");
+    actions << actionRegistry->makeQAction("object_transform_reset");
+    actions << actionRegistry->makeQAction("object_unite");
+    actions << actionRegistry->makeQAction("object_intersect");
+    actions << actionRegistry->makeQAction("object_subtract");
+    actions << actionRegistry->makeQAction("object_split");
+    return actions;
 }

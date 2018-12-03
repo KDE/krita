@@ -104,23 +104,6 @@ KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     }
 
     KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
-    KisActionManager *actionManager = kiscanvas->viewManager()->actionManager();
-
-    // XXX: Perhaps a better place for these?
-    if (!actionManager->actionByName("increase_brush_size")) {
-        KisAction *increaseBrushSize = new KisAction(i18n("Increase Brush Size"));
-        increaseBrushSize->setShortcut(Qt::Key_BracketRight);
-        actionManager->addAction("increase_brush_size", increaseBrushSize);
-    }
-
-    if (!actionManager->actionByName("decrease_brush_size")) {
-        KisAction *decreaseBrushSize = new KisAction(i18n("Decrease Brush Size"));
-        decreaseBrushSize->setShortcut(Qt::Key_BracketLeft);
-        actionManager->addAction("decrease_brush_size", decreaseBrushSize);
-    }
-
-    addAction("increase_brush_size", dynamic_cast<QAction *>(actionManager->actionByName("increase_brush_size")));
-    addAction("decrease_brush_size", dynamic_cast<QAction *>(actionManager->actionByName("decrease_brush_size")));
 
     connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->resourceProvider(), SLOT(slotPainting()));
 
@@ -512,7 +495,6 @@ QWidget * KisToolPaint::createOptionWidget()
 
     m_optionsWidgetLayout = new QGridLayout();
     m_optionsWidgetLayout->setColumnStretch(1, 1);
-
     verticalLayout->addLayout(m_optionsWidgetLayout);
     m_optionsWidgetLayout->setContentsMargins(0,0,0,0);
     m_optionsWidgetLayout->setSpacing(5);
@@ -520,8 +502,7 @@ QWidget * KisToolPaint::createOptionWidget()
     if (!quickHelp().isEmpty()) {
         QPushButton *push = new QPushButton(KisIconUtils::loadIcon("help-contents"), QString(), optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
-
-        QHBoxLayout *hLayout = new QHBoxLayout(optionWidget);
+        QHBoxLayout *hLayout = new QHBoxLayout();
         hLayout->addWidget(push);
         hLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         verticalLayout->addLayout(hLayout);

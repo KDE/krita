@@ -26,8 +26,9 @@
 #include "kis_raster_keyframe_channel.h"
 #include "kis_node.h"
 #include "kis_time_range.h"
+#include "kis_animation_cycle.h"
 #include "kundo2command.h"
-
+#include "kis_pointer_utils.h"
 
 #include <KoColorSpaceRegistry.h>
 
@@ -269,18 +270,18 @@ void KisKeyframingTest::testRasterChannel()
 void KisKeyframingTest::testChannelSignals()
 {
     KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID(""), -17, 31, 0);
-    KisKeyframeSP key;
-    KisKeyframeSP resKey;
+    KisKeyframeBaseSP key;
+    KisKeyframeBaseSP resKey;
 
-    qRegisterMetaType<KisKeyframeSP>("KisKeyframeSP");
-    QSignalSpy spyPreAdd(channel, SIGNAL(sigKeyframeAboutToBeAdded(KisKeyframeSP)));
-    QSignalSpy spyPostAdd(channel, SIGNAL(sigKeyframeAdded(KisKeyframeSP)));
+    qRegisterMetaType<KisKeyframeBaseSP>("KisKeyframeBaseSP");
+    QSignalSpy spyPreAdd(channel, SIGNAL(sigKeyframeAboutToBeAdded(KisKeyframeBaseSP)));
+    QSignalSpy spyPostAdd(channel, SIGNAL(sigKeyframeAdded(KisKeyframeBaseSP)));
 
-    QSignalSpy spyPreRemove(channel, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframeSP)));
-    QSignalSpy spyPostRemove(channel, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)));
+    QSignalSpy spyPreRemove(channel, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframeBaseSP)));
+    QSignalSpy spyPostRemove(channel, SIGNAL(sigKeyframeRemoved(KisKeyframeBaseSP)));
 
-    QSignalSpy spyPreMove(channel, SIGNAL(sigKeyframeAboutToBeMoved(KisKeyframeSP,int)));
-    QSignalSpy spyPostMove(channel, SIGNAL(sigKeyframeMoved(KisKeyframeSP,int)));
+    QSignalSpy spyPreMove(channel, SIGNAL(sigKeyframeAboutToBeMoved(KisKeyframeBaseSP,int)));
+    QSignalSpy spyPostMove(channel, SIGNAL(sigKeyframeMoved(KisKeyframeBaseSP,int)));
 
     QVERIFY(spyPreAdd.isValid());
     QVERIFY(spyPostAdd.isValid());
@@ -299,9 +300,9 @@ void KisKeyframingTest::testChannelSignals()
     QCOMPARE(spyPreAdd.count(), 1);
     QCOMPARE(spyPostAdd.count(), 1);
 
-    resKey = spyPreAdd.at(0).at(0).value<KisKeyframeSP>();
+    resKey = spyPreAdd.at(0).at(0).value<KisKeyframeBaseSP>();
     QVERIFY(resKey == key);
-    resKey = spyPostAdd.at(0).at(0).value<KisKeyframeSP>();
+    resKey = spyPostAdd.at(0).at(0).value<KisKeyframeBaseSP>();
     QVERIFY(resKey == key);
 
     // Moving a keyframe
@@ -312,10 +313,10 @@ void KisKeyframingTest::testChannelSignals()
     QCOMPARE(spyPreMove.count(), 1);
     QCOMPARE(spyPostMove.count(), 1);
 
-    resKey = spyPreMove.at(0).at(0).value<KisKeyframeSP>();
+    resKey = spyPreMove.at(0).at(0).value<KisKeyframeBaseSP>();
     QVERIFY(resKey == key);
     QCOMPARE(spyPreMove.at(0).at(1).toInt(), 15);
-    resKey = spyPostMove.at(0).at(0).value<KisKeyframeSP>();
+    resKey = spyPostMove.at(0).at(0).value<KisKeyframeBaseSP>();
     QVERIFY(resKey == key);
 
     // No-op move (no signals)
@@ -554,7 +555,8 @@ void KisKeyframingTest::testCycles()
     QCOMPARE(channel->cycledRangeAt(10), KisTimeSpan(10, 19));
     QCOMPARE(channel->cycledRangeAt(19), KisTimeSpan(10, 19));
 
-    channel->addRepeat(30, frame10);
+    QSharedPointer<KisRepeatFrame> repeatFrame = toQShared(new KisRepeatFrame(channel, 30, channel->cycleAt(10)));
+    KisReplaceKeyframeCommand(channel, 30, repeatFrame, nullptr).redo();
 
     // Repeats also resolve to the original cycled range
     QCOMPARE(channel->cycledRangeAt(29), KisTimeSpan());

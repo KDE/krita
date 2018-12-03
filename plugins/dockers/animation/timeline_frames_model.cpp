@@ -37,6 +37,7 @@
 #include "kis_signal_compressor.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_keyframe_channel.h"
+#include "kis_keyframe_commands.h"
 #include "kundo2command.h"
 #include "kis_post_execution_undo_adapter.h"
 #include <commands/kis_node_property_list_command.h>
@@ -1001,10 +1002,10 @@ bool TimelineFramesModel::defineCycles(int timeFrom, int timeTo, QSet<int> rows)
                 KisKeyframeSP lastKeyframe = contentChannel->activeKeyframeAt(timeTo);
 
                 if (!firstKeyframe.isNull() && !lastKeyframe.isNull()) {
-                    contentChannel->createCycle(firstKeyframe, lastKeyframe, parentCommand);
+                    KisDefineCycleCommand *createCycle = contentChannel->createCycle(firstKeyframe, lastKeyframe, parentCommand);
 
                     if (contentChannel->keyframeAt(timeTo + 1).isNull()) {
-                        contentChannel->addRepeat(timeTo + 1, firstKeyframe, parentCommand);
+                        contentChannel->addRepeat(createCycle->cycle(), timeTo + 1, parentCommand);
                     }
                 }
             }
@@ -1061,12 +1062,10 @@ void TimelineFramesModel::addRepeatAt(QModelIndex location)
         KisKeyframeChannel *contentChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
         if (contentChannel) {
             for (int t = location.column(); t >= 0; t--) {
-                const KisTimeSpan cycled = contentChannel->cycledRangeAt(t);
-                if (!cycled.isEmpty()) {
+                const QSharedPointer<KisAnimationCycle> cycle = contentChannel->cycleAt(t);
+                if (cycle) {
                     KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Add animation repeat"));
-
-                    KisKeyframeSP sourceKeyframe = contentChannel->activeKeyframeAt(cycled.start());
-                    contentChannel->addRepeat(location.column(), sourceKeyframe, parentCommand);
+                    contentChannel->addRepeat(cycle, location.column(), parentCommand);
                     KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
 
                     return;

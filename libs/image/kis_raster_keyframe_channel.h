@@ -31,7 +31,7 @@ public:
     KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, KisNode *newParentNode, const KisPaintDeviceWSP newPaintDevice);
     ~KisRasterKeyframeChannel() override;
 
-    KisKeyframeSP linkKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0) override;
+    KisKeyframeSP linkKeyframe(const KisKeyframeBaseSP keyframe, int newTime, KUndo2Command *parentCommand = 0) override;
 
 public:
     /**

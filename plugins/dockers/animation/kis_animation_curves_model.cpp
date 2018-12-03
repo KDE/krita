@@ -404,7 +404,7 @@ QMap<QString, KisKeyframeChannel *> KisAnimationCurvesModel::channelsAt(QModelIn
     return list;
 }
 
-void KisAnimationCurvesModel::slotKeyframeChanged(KisKeyframeSP keyframe)
+void KisAnimationCurvesModel::slotKeyframeChanged(KisKeyframeBaseSP keyframe)
 {
     int row = m_d->rowForChannel(keyframe->channel());
     QModelIndex changedIndex = index(row, keyframe->time());

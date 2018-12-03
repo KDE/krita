@@ -24,32 +24,29 @@
 class KRITAIMAGE_EXPORT KisReplaceKeyframeCommand : public KUndo2Command
 {
 public:
-    KisReplaceKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeSP keyframe, KUndo2Command *parentCommand);
+    KisReplaceKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeBaseSP keyframe, KUndo2Command *parentCommand);
 
     void redo() override;
     void undo() override;
 
 private:
-    void doSwap(bool insert);
-
-private:
     KisKeyframeChannel *m_channel;
     int m_time;
-    KisKeyframeSP m_keyframe;
-    KisKeyframeSP m_existingKeyframe;
+    KisKeyframeBaseSP m_keyframe;
+    KisKeyframeBaseSP m_existingKeyframe;
 };
 
 class KRITAIMAGE_EXPORT KisMoveFrameCommand : public KUndo2Command
 {
 public:
-    KisMoveFrameCommand(KisKeyframeChannel *channel, KisKeyframeSP keyframe, int oldTime, int newTime, KUndo2Command *parentCommand);
+    KisMoveFrameCommand(KisKeyframeChannel *channel, KisKeyframeBaseSP keyframe, int oldTime, int newTime, KUndo2Command *parentCommand);
 
     void redo() override;
     void undo() override;
 
 private:
     KisKeyframeChannel *m_channel;
-    KisKeyframeSP m_keyframe;
+    KisKeyframeBaseSP m_keyframe;
     int m_oldTime;
     int m_newTime;
 };
@@ -57,21 +54,23 @@ private:
 class KRITAIMAGE_EXPORT KisSwapFramesCommand : public KUndo2Command
 {
 public:
-    KisSwapFramesCommand(KisKeyframeChannel *channel, KisKeyframeSP lhsFrame, KisKeyframeSP rhsFrame, KUndo2Command *parentCommand);
+    KisSwapFramesCommand(KisKeyframeChannel *channel, KisKeyframeBaseSP lhsFrame, KisKeyframeBaseSP rhsFrame, KUndo2Command *parentCommand);
 
     void redo() override;
     void undo() override;
 
 private:
     KisKeyframeChannel *m_channel;
-    KisKeyframeSP m_lhsFrame;
-    KisKeyframeSP m_rhsFrame;
+    KisKeyframeBaseSP m_lhsFrame;
+    KisKeyframeBaseSP m_rhsFrame;
 };
 
 class KRITAIMAGE_EXPORT KisDefineCycleCommand : public KUndo2Command
 {
 public:
     KisDefineCycleCommand(KisKeyframeChannel *channel, QSharedPointer<KisAnimationCycle> cycle, bool undefine, KUndo2Command *parentCommand);
+
+    QSharedPointer<KisAnimationCycle> cycle() const;
 
     void redo() override;
     void undo() override;

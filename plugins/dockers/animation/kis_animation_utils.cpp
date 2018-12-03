@@ -73,9 +73,9 @@ namespace KisAnimationUtils {
                 }
 
                 if (copy) {
-                    if (!channel->keyframeAt(time)) {
-                        KisKeyframeSP srcFrame = channel->activeKeyframeAt(time);
-                        channel->copyKeyframe(srcFrame, time, cmd.data());
+                    if (!channel->itemAt(time)) {
+                        KisKeyframeBaseSP srcFrame = channel->activeItemAt(time);
+                        channel->copyItem(srcFrame, time, cmd.data());
                         result = true;
                     }
                 } else {

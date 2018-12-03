@@ -88,7 +88,7 @@ protected:
     QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const override;
 
 private Q_SLOTS:
-    void slotKeyframeChanged(KisKeyframeSP keyframe);
+    void slotKeyframeChanged(KisKeyframeBaseSP keyframe);
 
 private:
     struct Private;

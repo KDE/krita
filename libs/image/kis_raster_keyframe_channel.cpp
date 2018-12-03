@@ -123,8 +123,11 @@ KisRasterKeyframeChannel::~KisRasterKeyframeChannel()
 {
 }
 
-KisKeyframeSP KisRasterKeyframeChannel::linkKeyframe(const KisKeyframeSP sourceKeyframe, int newTime, KUndo2Command *parentCommand)
+KisKeyframeSP KisRasterKeyframeChannel::linkKeyframe(const KisKeyframeBaseSP source, int newTime, KUndo2Command *parentCommand)
 {
+    KisKeyframeSP sourceKeyframe = source.dynamicCast<KisKeyframe>();
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(sourceKeyframe, KisKeyframeSP());
+
     const int frame = frameId(sourceKeyframe);
     KisKeyframeSP newKeyframe = toQShared(new KisRasterKeyframe(this, newTime, frame));
     m_d->frameInstances[frame].append(newKeyframe);
@@ -356,11 +359,6 @@ KisFrameSet KisRasterKeyframeChannel::affectedFrames(int time) const
 KisFrameSet KisRasterKeyframeChannel::identicalFrames(int time, KisTimeSpan range) const
 {
     const int frameId = frameIdAt(time);
-
-    if (frameId < 0) {
-        // Not a raster frame (e.g. repeat of a cycle)
-        return KisKeyframeChannel::affectedFrames(time);
-    }
 
     KisFrameSet frames;
     Q_FOREACH(KisKeyframeSP keyframe, m_d->frameInstances[frameId]) {

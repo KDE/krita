@@ -34,6 +34,7 @@ class KisTimeSpan;
 class KisAnimationCycle;
 class KisRepeatFrame;
 class KisVisibleKeyframeIterator;
+class KisDefineCycleCommand;
 
 class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
 {
@@ -67,15 +68,18 @@ public:
     KisNodeWSP node() const;
 
     KisKeyframeSP addKeyframe(int time, KUndo2Command *parentCommand = 0);
-    bool deleteKeyframe(KisKeyframeSP keyframe, KUndo2Command *parentCommand = 0);
-    bool moveKeyframe(KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
+    bool deleteKeyframe(KisKeyframeBaseSP keyframe, KUndo2Command *parentCommand = 0);
+    bool moveKeyframe(KisKeyframeBaseSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
     bool swapFrames(int lhsTime, int rhsTime, KUndo2Command *parentCommand = 0);
+    KisKeyframeBaseSP copyItem(const KisKeyframeBaseSP item, int newTime, KUndo2Command *parentCommand = 0);
     KisKeyframeSP copyKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
-    virtual KisKeyframeSP linkKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
+    KisKeyframeSP copyAsKeyframe(const KisKeyframeBaseSP item, int originalTime, int newTime, KUndo2Command *parentCommand = 0);
+    virtual KisKeyframeSP linkKeyframe(const KisKeyframeBaseSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
     KisKeyframeSP copyExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
-    KUndo2Command * createCycle(KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe, KUndo2Command *parentCommand = 0);
+
+    KisDefineCycleCommand * createCycle(KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe, KUndo2Command *parentCommand = 0);
     KUndo2Command * deleteCycle(QSharedPointer<KisAnimationCycle> cycle, KUndo2Command *parentCommand = 0);
-    KisKeyframeSP addRepeat(int time, KisKeyframeSP source, KUndo2Command *parentCommand = 0);
+    QSharedPointer<KisRepeatFrame> addRepeat(QSharedPointer<KisAnimationCycle> cycle, int time, KUndo2Command *parentCommand);
 
     bool swapExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
 
@@ -87,9 +91,14 @@ public:
     KisKeyframeSP firstKeyframe() const;
     KisKeyframeSP nextKeyframe(KisKeyframeSP keyframe) const;
     KisKeyframeSP previousKeyframe(KisKeyframeSP keyframe) const;
-    KisKeyframeSP nextKeyframe(const KisKeyframe &keyframe) const;
-    KisKeyframeSP previousKeyframe(const KisKeyframe &keyframe) const;
+    KisKeyframeSP nextKeyframe(const KisKeyframeBase &keyframe) const;
+    KisKeyframeSP previousKeyframe(const KisKeyframeBase &keyframe) const;
     KisKeyframeSP lastKeyframe() const;
+
+    KisKeyframeBaseSP itemAt(int time) const;
+    KisKeyframeBaseSP activeItemAt(int time) const;
+    KisKeyframeBaseSP nextItem(const KisKeyframeBase &item) const;
+    KisKeyframeBaseSP previousItem(const KisKeyframeBase &item) const;
 
     KisVisibleKeyframeIterator visibleKeyframesFrom(int time) const;
 
@@ -98,7 +107,17 @@ public:
      * @arg time a time at any frame within the original cycle or any repeat of it.
      */
     KisTimeSpan cycledRangeAt(int time) const;
+
+    /**
+     * Finds the cycle defined at time, if any.
+     * @arg time a time within the original range of the cycle.
+     */
     QSharedPointer<KisAnimationCycle> cycleAt(int time) const;
+
+    /**
+     * Finds the repeat of a cycle at the time, if any.
+     */
+    QSharedPointer<KisRepeatFrame> activeRepeatAt(int time) const;
 
     /**
      * Finds the span of time of the keyframe active at given time.
@@ -145,20 +164,19 @@ public:
     int currentTime() const;
 
 Q_SIGNALS:
-    void sigKeyframeAboutToBeAdded(KisKeyframeSP keyframe);
-    void sigKeyframeAdded(KisKeyframeSP keyframe);
-    void sigKeyframeAboutToBeRemoved(KisKeyframeSP keyframe);
-    void sigKeyframeRemoved(KisKeyframeSP keyframe);
-    void sigKeyframeAboutToBeMoved(KisKeyframeSP keyframe, int toTime);
-    void sigKeyframeMoved(KisKeyframeSP keyframe, int fromTime);
-    void sigKeyframeChanged(KisKeyframeSP keyframe);
+    void sigKeyframeAboutToBeAdded(KisKeyframeBaseSP keyframe);
+    void sigKeyframeAdded(KisKeyframeBaseSP keyframe);
+    void sigKeyframeAboutToBeRemoved(KisKeyframeBaseSP keyframe);
+    void sigKeyframeRemoved(KisKeyframeBaseSP keyframe);
+    void sigKeyframeAboutToBeMoved(KisKeyframeBaseSP keyframe, int toTime);
+    void sigKeyframeMoved(KisKeyframeBaseSP keyframe, int fromTime);
+    void sigKeyframeChanged(KisKeyframeBaseSP keyframe);
 
 protected:
     typedef QMap<int, KisKeyframeSP> KeyframesMap;
 
     KeyframesMap &keys();
     const KeyframesMap &constKeys() const;
-    KeyframesMap::const_iterator activeKeyIterator(int time) const;
 
     virtual KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand) = 0;
     virtual void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) = 0;
@@ -172,17 +190,15 @@ protected:
     void workaroundBrokenFrameTimeBug(int *time);
 
 private:
-    KisKeyframeSP replaceKeyframeAt(int time, KisKeyframeSP newKeyframe);
-    void insertKeyframeLogical(KisKeyframeSP keyframe);
-    void removeKeyframeLogical(KisKeyframeSP keyframe);
-    bool deleteKeyframeImpl(KisKeyframeSP keyframe, KUndo2Command *parentCommand, bool recreate);
-    void moveKeyframeImpl(KisKeyframeSP keyframe, int newTime);
-    void swapKeyframesImpl(KisKeyframeSP lhsKeyframe, KisKeyframeSP rhsKeyframe);
+    KisKeyframeBaseSP replaceKeyframeAt(int time, KisKeyframeBaseSP newKeyframe);
+    void insertKeyframeLogical(KisKeyframeBaseSP keyframe);
+    void removeKeyframeLogical(KisKeyframeBaseSP keyframe);
+    bool deleteKeyframeImpl(KisKeyframeBaseSP keyframe, KUndo2Command *parentCommand, bool recreate);
+    void moveKeyframeImpl(KisKeyframeBaseSP keyframe, int newTime);
+    void swapKeyframesImpl(KisKeyframeBaseSP lhsKeyframe, KisKeyframeBaseSP rhsKeyframe);
 
     void addCycle(QSharedPointer<KisAnimationCycle> cycle);
     void removeCycle(QSharedPointer<KisAnimationCycle> cycle);
-
-    KisKeyframeSP loadRepeatFrame(const QDomElement &keyframeNode, const QMap<int, QSharedPointer<KisAnimationCycle>> &cyclesByFirstKeyframe);
 
     friend class KisMoveFrameCommand;
     friend class KisReplaceKeyframeCommand;
@@ -190,7 +206,7 @@ private:
     friend class KisDefineCycleCommand;
 
 private:
-    KisKeyframeSP insertKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);
+    KisKeyframeSP insertKeyframe(int time, const KisKeyframeBaseSP copySrc, KUndo2Command *parentCommand);
 
     struct Private;
     QScopedPointer<Private> m_d;

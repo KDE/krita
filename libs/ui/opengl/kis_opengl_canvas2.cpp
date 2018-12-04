@@ -167,6 +167,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
 #endif
     setAttribute(Qt::WA_InputMethodEnabled, false);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
+    setTextureFormat(GL_RGBA16F);
 
     setDisplayFilterImpl(colorConverter->displayFilter(), true);
 

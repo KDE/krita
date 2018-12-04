@@ -288,6 +288,10 @@ void KisOpenGL::setDefaultFormat(bool enableDebug, bool debugSynchronous)
 #endif
     format.setDepthBufferSize(24);
     format.setStencilBufferSize(8);
+    format.setRedBufferSize(16);
+    format.setGreenBufferSize(16);
+    format.setBlueBufferSize(16);
+    format.setColorSpace(QSurfaceFormat::scRGBColorSpace);
     format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     format.setSwapInterval(0); // Disable vertical refresh syncing
     isDebugEnabled = enableDebug;

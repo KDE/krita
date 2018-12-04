@@ -31,7 +31,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(DbExplorerFactory, "kritadbexplorer.json", registerPlugin<DbExplorer>();)
 
 DbExplorer::DbExplorer(QObject *parent, const QVariantList &)
-        : KisActionPlugin(parent)
+    : KisActionPlugin(parent)
 {
     KisAction *action  = createAction("dbexplorer");
     connect(action, SIGNAL(triggered()), this, SLOT(slotDbExplorer()));

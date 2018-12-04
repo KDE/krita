@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (c) 1999 Carsten Pfeiffer (pfeiffer@kde.org)
+ * Copyright (c) 2002 Igor Jansen (rm@kde.org)
+ * Copyright (c) 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -15,31 +17,24 @@
  * along with this library; see the file COPYING.LIB.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- */
+*/
 
-#ifndef KOCHECKERBOARDPAINTER_H
-#define KOCHECKERBOARDPAINTER_H
+#ifndef KISICONTOOLTIP_H
+#define KISICONTOOLTIP_H
 
-#include <QPixmap>
-#include <QColor>
-#include "kritawidgets_export.h"
+#include "KoItemToolTip.h"
 
-class QPainter;
+#include "kritaresourcewidgets_export.h"
 
-class KRITAWIDGETS_EXPORT KoCheckerBoardPainter
+class KRITARESOURCEWIDGETS_EXPORT KisIconToolTip: public KoItemToolTip
 {
-public:
-    explicit KoCheckerBoardPainter( int checkerSize );
-    void setCheckerColors( const QColor &lightColor, const QColor &darkColor );
-    void setCheckerSize( int checkerSize );
-    void paint( QPainter &painter, const QRectF &rect ) const;
 
-private:
-    void createChecker();
-    int m_checkerSize;
-    QPixmap m_checker;
-    QColor m_lightColor;
-    QColor m_darkColor;
+public:
+    KisIconToolTip();
+    ~KisIconToolTip() override;
+
+protected:
+    QTextDocument *createDocument( const QModelIndex &index ) override;
 };
 
-#endif // KOCHECKERBOARDPAINTER_H
+#endif // KOICONTOOLTIP_H

@@ -43,10 +43,10 @@ const QByteArray KisTag::s_defaultResources {"Default Resources"};
 class KisTag::Private {
 public:
     bool valid {false};
-    QString url;
-    QString name;
-    QString comment;
-    QStringList defaultResources;
+    QString url; // This is the actual tag
+    QString name; // The translated tag name
+    QString comment; // The translated tag comment
+    QStringList defaultResources; // The list of resources as defined in the tag file
     KEntryMap map;
 };
 

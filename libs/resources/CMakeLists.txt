@@ -24,7 +24,7 @@ set(kritaresources_LIB_SRCS
     KoMD5Generator.cpp
     KoHashGeneratorProvider.cpp
     KoResourcePaths.cpp
-    
+
     kconfigini.cpp
     kconfigdata.cpp
     kconfigbackend.cpp

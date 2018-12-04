@@ -21,7 +21,7 @@
 #define KO_ITEM_TOOLTIP_H
 
 #include <QFrame>
-#include "kritawidgets_export.h"
+#include "kritawidgetutils_export.h"
 
 class QStyleOptionViewItem;
 class QModelIndex;
@@ -32,10 +32,8 @@ class QTextDocument;
  * the contents of the data pointed to by something that contains a
  * QModelIndex. Subclasses need to use this data to create a
  * QTextDocument that is formatted to provide the complete tooltip.
- *
- * (KoItemToolTip is currently used in kopainter/KoResourceChooser)
  */
-class KRITAWIDGETS_EXPORT KoItemToolTip : public QFrame
+class KRITAWIDGETUTILS_EXPORT KoItemToolTip : public QFrame
 {
     Q_OBJECT
 public:

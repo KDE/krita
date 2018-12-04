@@ -30,7 +30,6 @@ set(kritawidgets_LIB_SRCS
     KoColorSlider.cpp
     KoTriangleColorSelector.cpp
     KoResourcePopupAction.cpp
-    KoIconToolTip.cpp
     KoResourceItemChooser.cpp
     KoResourceItemChooserSync.cpp
     KoResourceSelector.cpp
@@ -39,8 +38,6 @@ set(kritawidgets_LIB_SRCS
     KoResourceItemView.cpp
     KoResourceTagStore.cpp
     KoRuler.cpp
-    KoItemToolTip.cpp
-    KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp
     KoResourceServerProvider.cpp
     KoLineStyleSelector.cpp
@@ -48,6 +45,7 @@ set(kritawidgets_LIB_SRCS
     KoLineStyleModel.cpp
     KoResourceFiltering.cpp
     KoTitledTabWidget.cpp
+    KoIconToolTip.cpp
 
     KoToolBoxButton.cpp
     KoToolBox.cpp

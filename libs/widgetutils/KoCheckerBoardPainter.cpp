@@ -20,33 +20,35 @@
 #include "KoCheckerBoardPainter.h"
 #include <QPainter>
 
-KoCheckerBoardPainter::KoCheckerBoardPainter( int checkerSize )
-: m_checkerSize(checkerSize), m_lightColor( Qt::lightGray ), m_darkColor( Qt::darkGray )
+KoCheckerBoardPainter::KoCheckerBoardPainter(int checkerSize)
+    : m_checkerSize(checkerSize)
+    , m_lightColor(Qt::lightGray)
+    , m_darkColor(Qt::darkGray)
 {
     createChecker();
 }
 
-void KoCheckerBoardPainter::setCheckerColors( const QColor &lightColor, const QColor &darkColor )
+void KoCheckerBoardPainter::setCheckerColors(const QColor &lightColor, const QColor &darkColor)
 {
     m_lightColor = lightColor;
     m_darkColor = darkColor;
     createChecker();
 }
 
-void KoCheckerBoardPainter::setCheckerSize( int checkerSize )
+void KoCheckerBoardPainter::setCheckerSize(int checkerSize)
 {
     m_checkerSize = checkerSize;
     createChecker();
 }
 
-void KoCheckerBoardPainter::paint( QPainter &painter, const QRectF &rect ) const
+void KoCheckerBoardPainter::paint(QPainter &painter, const QRectF &rect) const
 {
-    painter.fillRect( rect, QBrush(m_checker));
+    painter.fillRect(rect, QBrush(m_checker));
 }
 
 void KoCheckerBoardPainter::createChecker()
 {
-    m_checker = QPixmap( 2*m_checkerSize, 2*m_checkerSize );
+    m_checker = QPixmap(2 * m_checkerSize, 2 * m_checkerSize);
     QPainter p(&m_checker);
     p.fillRect(0, 0, m_checkerSize, m_checkerSize, m_lightColor);
     p.fillRect(m_checkerSize, 0, m_checkerSize, m_checkerSize, m_darkColor);

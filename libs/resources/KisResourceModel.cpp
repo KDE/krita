@@ -46,6 +46,7 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
                              ",      resources.thumbnail\n"
                              ",      resources.status\n"
                              ",      storages.location\n"
+                             ",      resource_types.name as resource_type\n"
                              "FROM   resources\n"
                              ",      resource_types\n"
                              ",      storages\n"
@@ -91,22 +92,24 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
         case Qt::DisplayRole:
         {
             switch(index.column()) {
-            case 0:
+            case Id:
                 return d->query.value("id");
-            case 1:
+            case StorageId:
                 return d->query.value("storage_id");
-            case 2:
+            case Name:
                 return d->query.value("name");
-            case 3:
+            case Filename:
                 return d->query.value("filename");
-            case 4:
+            case Tooltip:
                 return d->query.value("tooltip");
-            case 5:
+            case Thumbnail:
                 ;
-            case 6:
+            case Status:
                 return d->query.value("status");
-            case 7:
+            case Location:
                 return d->query.value("location");
+            case ResourceType:
+                return d->query.value("resource_type");
             default:
                 ;
             };
@@ -129,6 +132,22 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             /* Falls through. */
         case Qt::WhatsThisRole:
             return d->query.value("tooltip");
+        case Qt::UserRole + Id:
+            return d->query.value("id");
+        case Qt::UserRole + StorageId:
+            return d->query.value("storage_id");
+        case Qt::UserRole + Name:
+            return d->query.value("name");
+        case Qt::UserRole + Filename:
+            return d->query.value("filename");
+        case Qt::UserRole + Tooltip:
+            return d->query.value("tooltip");
+        case Qt::UserRole + Status:
+            return d->query.value("status");
+        case Qt::UserRole + Location:
+            return d->query.value("location");
+        case Qt::UserRole + ResourceType:
+            return d->query.value("resource_type");
         default:
             ;
         }

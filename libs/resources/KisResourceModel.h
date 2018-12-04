@@ -47,7 +47,9 @@ public:
         Filename,
         Tooltip,
         Thumbnail,
-        Status
+        Status,
+        Location,
+        ResourceType
     };
 
     KisResourceModel(const QString &resourceType, QObject *parent = 0);

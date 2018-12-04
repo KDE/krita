@@ -1,5 +1,7 @@
-/*
- * Copyright (C) 2015 Boudewijn Rempt <boud@valdyas.org>
+/* This file is part of the KDE project
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
+ * Copyright (c) 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,33 +18,55 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOTABLEVIEW_H
-#define KOTABLEVIEW_H
+
+#ifndef KISRESOURCEITEMVIEW_H
+#define KISRESOURCEITEMVIEW_H
 
 #include <QTableView>
 #include <QScroller>
 
-#include "kritawidgets_export.h"
 #include <KisKineticScroller.h>
+
+#include "KisIconToolTip.h"
 
 class QEvent;
 class QModelIndex;
 
-/**
- * @brief The KoTableView class provides a QTableView with fixed columns or rows
- */
-class KRITAWIDGETS_EXPORT KoTableView: public QTableView
+/// The resource view
+class KisResourceItemView : public QTableView
 {
     Q_OBJECT
 
 public:
+
     enum ViewMode {
         FIXED_COLUMNS,  /// The number of columns is fixed
         FIXED_ROWS     /// The number of rows is fixed
     };
 
-    explicit KoTableView(QWidget *parent = 0);
-    ~KoTableView() override {}
+    explicit KisResourceItemView(QWidget *parent = 0);
+    ~KisResourceItemView() override { disconnect(); }
+
+public Q_SLOTS:
+    void slotScrollerStateChange(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
+
+Q_SIGNALS:
+
+    void sigSizeChanged();
+
+Q_SIGNALS:
+
+    void currentResourceChanged(const QModelIndex &);
+    void currentResourceClicked(const QModelIndex &);
+
+    void contextMenuRequested(const QPoint &);
+
+protected:
+    void contextMenuEvent(QContextMenuEvent *event) override;
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
+
+    void mousePressEvent(QMouseEvent *event) override;
+    bool viewportEvent(QEvent *event) override;
 
     /**
      * This will draw a number of rows based on the number of columns if m_viewMode is FIXED_COLUMNS
@@ -54,15 +78,14 @@ public:
 
     void updateView();
 
-public Q_SLOTS:
-    void slotScrollerStateChange(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
 
-Q_SIGNALS:
-
-    void sigSizeChanged();
+private Q_SLOTS:
+    void slotItemClicked(const QModelIndex &index);
 
 private:
+    KisIconToolTip m_tip;
+    QModelIndex m_beforeClickIndex;
     ViewMode m_viewMode;
 };
 
-#endif // KOTABLEVIEW_H
+#endif // KORESOURCEITEMVIEW_H

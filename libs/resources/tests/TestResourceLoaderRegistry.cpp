@@ -44,7 +44,9 @@ void TestResourceLoaderRegistry::testRegistry()
     QVERIFY(reg->count() == 1);
 
     KisResourceLoaderBase *l2 = reg->get("dummy");
-    QFile f;
+    QByteArray ba;
+    QBuffer f(&ba);
+    f.open(QFile::ReadOnly);
     KoResourceSP res = l2->load("test", f);
     QVERIFY(res.data());
     QVERIFY(dynamic_cast<DummyResource*>(res.data()));

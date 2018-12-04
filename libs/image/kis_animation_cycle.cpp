@@ -39,7 +39,7 @@ KisKeyframeSP KisAnimationCycle::lastSourceKeyframe() const
 
 KisTimeSpan KisAnimationCycle::originalRange() const
 {
-    const KisKeyframeSP firstAfterCycle = m_lastSourceKeyframe->channel()->nextKeyframe(m_lastSourceKeyframe);
+    const KisKeyframeBaseSP firstAfterCycle = m_lastSourceKeyframe->channel()->nextItem(*m_lastSourceKeyframe);
 
     KisTimeSpan range;
     if (firstAfterCycle.isNull()) {
@@ -76,7 +76,7 @@ KisFrameSet KisAnimationCycle::instancesWithin(KisKeyframeSP original, KisTimeSp
     KisFrameSet frames;
 
     const int originalTime = original->time();
-    const KisKeyframeSP next = original->channel()->nextKeyframe(original);
+    const KisKeyframeBaseSP next = original->channel()->nextItem(*original);
     const int frameDuration = (next.isNull()) ? -1 : next->time() - originalTime;
     const int interval = duration();
 
@@ -87,25 +87,28 @@ KisFrameSet KisAnimationCycle::instancesWithin(KisKeyframeSP original, KisTimeSp
             auto repeat = repeatFrame.toStrongRef();
             if (!repeat) continue;
 
-            // FIXME! KisKeyframeSP terminatingKey = repeat->channel()->nextKeyframe(*repeat);
-            KisKeyframeSP terminatingKey = KisKeyframeSP();
+            const int endTime = repeat->end();
 
             if (range.isEmpty()) {
-                if (terminatingKey) {
-                    range = KisTimeSpan(0, terminatingKey->time() -1);
+                if (endTime != -1) {
+                    range = KisTimeSpan(0, endTime - 1);
                 } else {
                     infiniteFrom = repeat->firstInstanceOf(originalTime);
                     continue;
                 }
             }
 
-            KisTimeSpan repeatRange = terminatingKey ? range.truncateLeft(terminatingKey->time() - 1) : range;
+            KisTimeSpan repeatRange = (endTime != -1) ? range & KisTimeSpan(repeat->time(), endTime) : range.truncateRight(repeat->time());
             int firstInstance = repeat->firstInstanceOf(originalTime);
-            if (firstInstance < repeatRange.start()) firstInstance += (range.start() - firstInstance) / interval * interval;
+            if (firstInstance == -1) continue;
+
+            if (firstInstance < repeatRange.start()) {
+                firstInstance += interval * ((range.start() - firstInstance) / interval);
+            }
 
             for (int repeatTime = firstInstance; repeatTime <= repeatRange.end(); repeatTime += interval) {
-                const int repeatEndTime = (frameDuration != -1 && repeatTime + frameDuration - 1 <= repeatRange.end()) ?
-                                          repeatTime + frameDuration - 1 : repeatRange.end();
+                bool endsWithinRange = frameDuration != -1 && repeatTime + frameDuration - 1 <= repeatRange.end();
+                const int repeatEndTime = endsWithinRange ? (repeatTime + frameDuration - 1) : repeatRange.end();
                 spans.append(KisTimeSpan(repeatTime, repeatEndTime));
             }
         }
@@ -151,7 +154,15 @@ QSharedPointer<KisAnimationCycle> KisRepeatFrame::cycle() const
 
 QRect KisRepeatFrame::affectedRect() const
 {
-    return m_cycle->affectedRect();
+    KisKeyframeSP keyframe = m_cycle->firstSourceKeyframe();
+
+    QRect rect;
+    while (!keyframe.isNull() && keyframe->time() <= m_cycle->lastSourceKeyframe()->time()) {
+        rect |= keyframe->affectedRect();
+        keyframe = channel()->nextKeyframe(keyframe);
+    }
+
+    return rect;
 }
 
 int KisRepeatFrame::getOriginalTimeFor(int time) const
@@ -171,10 +182,12 @@ int KisRepeatFrame::firstInstanceOf(int originalTime) const
     KisTimeSpan originalRange = m_cycle->originalRange();
     const int timeWithinCycle = originalTime - originalRange.start();
 
-    const int first = time() + timeWithinCycle;
+    const int first = this->time() + timeWithinCycle;
 
-    const int endTime = end();
-    return (endTime == -1 || first <= endTime) ? first : -1;
+    const KisKeyframeSP next = channel()->nextKeyframe(*this);
+    if (next && next->time() < first) return -1;
+
+    return first;
 }
 
 int KisRepeatFrame::previousVisibleFrame(int time) const
@@ -207,6 +220,6 @@ int KisRepeatFrame::nextVisibleFrame(int time) const
 
 int KisRepeatFrame::end() const
 {
-    // TODO: implement
-    return -1;
+    const KisKeyframeBaseSP next = channel()->nextItem(*this);
+    return next ? next->time() - 1 : -1;
 }

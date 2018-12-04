@@ -99,25 +99,21 @@ struct TimelineFramesModel::Private
     }
 
     bool frameExists(int row, int column) const {
-        KisNodeDummy *dummy = converter->dummyFromRow(row);
-        if (!dummy) return false;
+        KisKeyframeChannel *primaryChannel = getChannel(row, KisKeyframeChannel::Content.id());
 
-        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
-        return (primaryChannel && primaryChannel->keyframeAt(column));
+        return (primaryChannel && primaryChannel->itemAt(column));
     }
 
     bool frameHasContent(int row, int column) {
-
-        KisNodeDummy *dummy = converter->dummyFromRow(row);
-
-        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        KisKeyframeChannel *primaryChannel = getChannel(row, KisKeyframeChannel::Content.id());
         if (!primaryChannel) return false;
 
         // first check if we are a key frame
-        KisKeyframeSP frame = primaryChannel->activeKeyframeAt(column);
+        KisKeyframeBaseSP frame = primaryChannel->activeItemAt(column);
         if (!frame) return false;
 
-        return frame->hasContent();
+        const KisKeyframe *keyframe = dynamic_cast<KisKeyframe*>(frame.data());
+        return keyframe && keyframe->hasContent();
     }
 
     bool specialKeyframeExists(int row, int column) {
@@ -143,26 +139,20 @@ struct TimelineFramesModel::Private
     }
 
     int frameColorLabel(int row, int column) {
-        KisNodeDummy *dummy = converter->dummyFromRow(row);
-        if (!dummy) return -1;
-
-        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        KisKeyframeChannel *primaryChannel = getChannel(row, KisKeyframeChannel::Content.id());
         if (!primaryChannel) return -1;
 
-        KisKeyframeSP frame = primaryChannel->activeKeyframeAt(column);
+        KisKeyframeSP frame = primaryChannel->visibleKeyframeAt(column);
         if (!frame) return -1;
 
         return frame->colorLabel();
     }
 
     void setFrameColorLabel(int row, int column, int color) {
-        KisNodeDummy *dummy = converter->dummyFromRow(row);
-        if (!dummy) return;
-
-        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        KisKeyframeChannel *primaryChannel = getChannel(row, KisKeyframeChannel::Content.id());
         if (!primaryChannel) return;
 
-        KisKeyframeSP frame = primaryChannel->keyframeAt(column);
+        KisKeyframeSP frame = primaryChannel->visibleKeyframeAt(column);
         if (!frame) return;
 
         frame->setColorLabel(color);
@@ -175,24 +165,22 @@ struct TimelineFramesModel::Private
     }
 
     CycleMode frameCycleMode(int row, int time) const{
-        KisNodeDummy *dummy = converter->dummyFromRow(row);
-        if (!dummy) return NoCycle;
-
-        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        KisKeyframeChannel *primaryChannel = getChannel(row, KisKeyframeChannel::Content.id());
         if (!primaryChannel) return NoCycle;
 
-        KisTimeSpan cycle = primaryChannel->cycledRangeAt(time);
-        KisKeyframeSP keyframe = primaryChannel->activeKeyframeAt(time);
-        KisRepeatFrame *repeatFrame = dynamic_cast<KisRepeatFrame*>(keyframe.data());
+        const QSharedPointer<KisAnimationCycle> cycle = primaryChannel->cycleAt(time);
+        const QSharedPointer<KisRepeatFrame> repeat = primaryChannel->activeRepeatAt(time);
 
-        if (repeatFrame){
-            const int originalTime = repeatFrame->getOriginalTimeFor(time);
-            if (cycle.start() == originalTime) return BeginsRepeat;
-            if (cycle.end() == originalTime) return EndsRepeat;
+        if (repeat) {
+            const KisTimeSpan range = repeat->cycle()->originalRange();
+            const int originalTime = repeat->getOriginalTimeFor(time);
+            if (originalTime == range.start()) return BeginsRepeat;
+            if (originalTime == range.end()) return EndsRepeat;
             return ContinuesRepeat;
-        } else if (cycle.contains(time)) {
-            if (cycle.start() == time) return BeginsCycle;
-            if (cycle.end() == time) return EndsCycle;
+        } else if (cycle) {
+            const KisTimeSpan range = cycle->originalRange();
+            if (time == range.start()) return BeginsCycle;
+            if (time == range.end()) return EndsCycle;
             return ContinuesCycle;
         }
 
@@ -247,6 +235,13 @@ struct TimelineFramesModel::Private
 
         return true;
     }
+
+    KisKeyframeChannel *getChannel(int row, const QString &channelId) const {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return nullptr;
+        return dummy->node()->getKeyframeChannel(channelId);
+    }
+
 };
 
 TimelineFramesModel::TimelineFramesModel(QObject *parent)
@@ -901,7 +896,7 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
     {
         KisImageBarrierLockerWithFeedback locker(m_d->image);
 
-        QSet<KisKeyframeSP> uniqueKeyframesInSelection;
+        QSet<KisKeyframeBaseSP> uniqueKeyframesInSelection;
 
         int minSelectedTime = std::numeric_limits<int>::max();
 
@@ -913,20 +908,20 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
             if (!channel) continue;
 
             minSelectedTime = qMin(minSelectedTime, index.column());
-            KisKeyframeSP keyFrame = channel->activeKeyframeAt(index.column());
+            KisKeyframeBaseSP keyFrame = channel->activeItemAt(index.column());
 
             if (keyFrame) {
                 uniqueKeyframesInSelection.insert(keyFrame);
             }
         }
 
-        QList<KisKeyframeSP> keyframesToMove;
+        QList<KisKeyframeBaseSP> keyframesToMove;
 
         for (auto it = uniqueKeyframesInSelection.begin(); it != uniqueKeyframesInSelection.end(); ++it) {
-            KisKeyframeSP keyframe = *it;
+            KisKeyframeBaseSP keyframe = *it;
 
             KisKeyframeChannel *channel = keyframe->channel();
-            KisKeyframeSP nextKeyframe = channel->nextKeyframe(keyframe);
+            KisKeyframeBaseSP nextKeyframe = channel->nextItem(*keyframe);
 
             if (nextKeyframe) {
                 keyframesToMove << nextKeyframe;
@@ -934,7 +929,7 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
         }
 
         std::sort(keyframesToMove.begin(), keyframesToMove.end(),
-            [] (KisKeyframeSP lhs, KisKeyframeSP rhs) {
+            [] (KisKeyframeBaseSP lhs, KisKeyframeBaseSP rhs) {
                 return lhs->time() > rhs->time();
             });
 
@@ -946,13 +941,13 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
             setLastVisibleFrame(columnCount() + count);
         }
 
-        Q_FOREACH (KisKeyframeSP keyframe, keyframesToMove) {
+        Q_FOREACH (KisKeyframeBaseSP keyframe, keyframesToMove) {
             int plannedFrameMove = count;
 
             if (count < 0) {
                 KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(keyframe->time() > 0, false);
 
-                KisKeyframeSP prevFrame = keyframe->channel()->previousKeyframe(keyframe);
+                KisKeyframeBaseSP prevFrame = keyframe->channel()->previousItem(*keyframe);
                 KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(prevFrame, false);
 
                 plannedFrameMove = qMax(count, prevFrame->time() - keyframe->time() + 1);
@@ -1004,7 +999,7 @@ bool TimelineFramesModel::defineCycles(int timeFrom, int timeTo, QSet<int> rows)
                 if (!firstKeyframe.isNull() && !lastKeyframe.isNull()) {
                     KisDefineCycleCommand *createCycle = contentChannel->createCycle(firstKeyframe, lastKeyframe, parentCommand);
 
-                    if (contentChannel->keyframeAt(timeTo + 1).isNull()) {
+                    if (contentChannel->itemAt(timeTo + 1).isNull()) {
                         contentChannel->addRepeat(createCycle->cycle(), timeTo + 1, parentCommand);
                     }
                 }

@@ -230,12 +230,6 @@ KisKeyframeSP KisKeyframeChannel::addKeyframe(int time, KUndo2Command *parentCom
     return insertKeyframe(time, KisKeyframeSP(), parentCommand);
 }
 
-KisKeyframeSP KisKeyframeChannel::copyKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand)
-{
-    LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);
-    return insertKeyframe(newTime, keyframe, parentCommand);
-}
-
 KisKeyframeBaseSP KisKeyframeChannel::copyItem(const KisKeyframeBaseSP item, int newTime, KUndo2Command *parentCommand)
 {
     LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);

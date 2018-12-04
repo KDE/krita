@@ -130,7 +130,7 @@ namespace KisAnimationUtils {
                     }
                     if (!channel) continue;
 
-                    KisKeyframeSP keyframe = channel->keyframeAt(time);
+                    KisKeyframeBaseSP keyframe = channel->itemAt(time);
                     if (!keyframe) continue;
 
                     channel->deleteKeyframe(keyframe, cmd.data());
@@ -213,11 +213,11 @@ namespace KisAnimationUtils {
         if (srcNode == dstNode) {
             if (!srcChannel) return; // TODO: add warning!
 
-            KisKeyframeSP srcKeyframe = srcChannel->keyframeAt(srcTime);
-            KisKeyframeSP dstKeyFrame = srcChannel->keyframeAt(dstTime);
+            KisKeyframeBaseSP srcKeyframe = srcChannel->itemAt(srcTime);
+            KisKeyframeBaseSP dstKeyFrame = srcChannel->itemAt(dstTime);
             if (srcKeyframe) {
                 if (action == CopyKeyframes) {
-                    srcChannel->copyKeyframe(srcKeyframe, dstTime, parentCommand);
+                    srcChannel->copyItem(srcKeyframe, dstTime, parentCommand);
                 } else if (action == LinkKeyframes) {
                     srcChannel->linkKeyframe(srcKeyframe, dstTime, parentCommand);
                 } else {

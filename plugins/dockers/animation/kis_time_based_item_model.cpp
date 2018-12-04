@@ -267,7 +267,7 @@ bool KisTimeBasedItemModel::removeFrames(const QModelIndexList &indexes)
         Q_FOREACH (const QModelIndex &index, indexes) {
             int time = index.column();
             Q_FOREACH(KisKeyframeChannel *channel, channelsAt(index)) {
-                if (channel->keyframeAt(time)) {
+                if (channel->itemAt(time)) {
                     frameItems << KisAnimationUtils::FrameItem(channel->node(), channel->id(), index.column());
                 }
             }
@@ -305,7 +305,7 @@ KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList 
         if (!srcNode || !dstNode) return 0;
 
         Q_FOREACH(KisKeyframeChannel *channel, channelsAt(srcIndex)) {
-            if (moveEmptyFrames || channel->keyframeAt(srcIndex.column())) {
+            if (moveEmptyFrames || channel->itemAt(srcIndex.column())) {
                 srcFrameItems << KisAnimationUtils::FrameItem(srcNode, channel->id(), srcIndex.column());
                 dstFrameItems << KisAnimationUtils::FrameItem(dstNode, channel->id(), dstIndex.column());
             }

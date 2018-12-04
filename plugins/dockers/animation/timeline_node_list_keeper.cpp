@@ -146,11 +146,11 @@ void TimelineNodeListKeeper::Private::tryConnectDummy(KisNodeDummy *dummy)
     if (connectionsSet.contains(dummy)) return;
 
     Q_FOREACH(KisKeyframeChannel *channel, channels) {
-        connect(channel, SIGNAL(sigKeyframeAdded(KisKeyframeSP)),
+        connect(channel, SIGNAL(sigKeyframeAdded(KisKeyframeBaseSP)),
                 &dummiesUpdateMapper, SLOT(map()));
-        connect(channel, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframeSP)),
+        connect(channel, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframeBaseSP)),
                 &dummiesUpdateMapper, SLOT(map()));
-        connect(channel, SIGNAL(sigKeyframeMoved(KisKeyframeSP,int)),
+        connect(channel, SIGNAL(sigKeyframeMoved(KisKeyframeBaseSP,int)),
                 &dummiesUpdateMapper, SLOT(map()));
 
         dummiesUpdateMapper.setMapping(channel, (QObject*)dummy);

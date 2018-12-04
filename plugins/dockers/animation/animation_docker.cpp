@@ -271,13 +271,13 @@ void AnimationDocker::slotPreviousKeyFrame()
 
     if (!content) return;
 
-    KisKeyframeSP dstKeyframe;
-    KisKeyframeSP keyframe = content->keyframeAt(time);
+    KisKeyframeBaseSP dstKeyframe;
+    KisKeyframeBaseSP keyframe = content->itemAt(time);
 
     if (!keyframe) {
-        dstKeyframe = content->activeKeyframeAt(time);
+        dstKeyframe = content->activeItemAt(time);
     } else {
-        dstKeyframe = content->previousKeyframe(keyframe);
+        dstKeyframe = content->previousItem(*keyframe);
     }
 
     if (dstKeyframe) {
@@ -300,11 +300,11 @@ void AnimationDocker::slotNextKeyFrame()
 
     if (!content) return;
 
-    KisKeyframeSP dstKeyframe;
-    KisKeyframeSP keyframe = content->activeKeyframeAt(time);
+    KisKeyframeBaseSP  dstKeyframe;
+    KisKeyframeBaseSP  keyframe = content->activeItemAt(time);
 
     if (keyframe) {
-        dstKeyframe = content->nextKeyframe(keyframe);
+        dstKeyframe = content->nextItem(*keyframe);
     }
 
     if (dstKeyframe) {

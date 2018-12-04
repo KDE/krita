@@ -77,7 +77,7 @@ void KisKeyframingTest::testScalarChannel()
 
     // Copying a keyframe
 
-    KisKeyframeSP key2 = channel->copyKeyframe(key, 13);
+    KisKeyframeSP key2 = channel->copyAsKeyframe(key, 2, 13);
     QVERIFY(key2 != 0);
     QVERIFY(channel->keyframeAt(13) == key2);
     QCOMPARE(channel->scalarValue(key2), 7.0);
@@ -232,7 +232,7 @@ void KisKeyframingTest::testRasterChannel()
 
     // Duplicate keyframe
 
-    KisKeyframeSP key_20 = channel->copyKeyframe(key_0, 20);
+    KisKeyframeSP key_20 = channel->copyAsKeyframe(key_0, 0, 20);
     bounds->testingSetTime(20);
     QImage thumb3a = dev->createThumbnail(50, 50);
 

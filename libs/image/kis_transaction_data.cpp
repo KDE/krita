@@ -90,7 +90,7 @@ void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int
 
     if (!keyframe) {
         keyframe = channel->visibleKeyframeAt(time);
-        KisKeyframeSP newKeyframe = channel->copyKeyframe(keyframe, time, &newFrameCommand);
+        KisKeyframeSP newKeyframe = channel->copyAsKeyframe(keyframe, time, time, &newFrameCommand);
         newKeyframe->setColorLabel(KisImageConfig(true).defaultFrameColorLabel());
     }
 }

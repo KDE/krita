@@ -858,7 +858,7 @@ namespace KisLayerUtils {
         void applyKeyframeColorLabel(KisKeyframeSP dstKeyframe) {
             Q_FOREACH(KisNodeSP srcNode, m_info->allSrcNodes()) {
                 Q_FOREACH(KisKeyframeChannel *channel, srcNode->keyframeChannels().values()) {
-                    KisKeyframeSP keyframe = channel->keyframeAt(m_frame);
+                    KisKeyframeSP keyframe = channel->visibleKeyframeAt(m_frame);
                     if (!keyframe.isNull() && keyframe->colorLabel() != 0) {
                         dstKeyframe->setColorLabel(keyframe->colorLabel());
                         return;

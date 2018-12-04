@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TestTagLoader.h"
+#include "TestTag.h"
 #include <QTest>
 #include <QBuffer>
 
@@ -30,7 +30,7 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
 #endif
 
-void TestTagLoader ::testLoadTag()
+void TestTag::testLoadTag()
 {
     KisTag tagLoader;
     QFile f(QString(FILES_DATA_DIR) + "paintoppresets/test.tag");
@@ -64,7 +64,7 @@ void TestTagLoader ::testLoadTag()
 
 }
 
-void TestTagLoader::testSaveTag()
+void TestTag::testSaveTag()
 {
     KisTag tag1;
     QFile f(QString(FILES_DATA_DIR) + "paintoppresets/test.tag");
@@ -96,5 +96,5 @@ void TestTagLoader::testSaveTag()
 
 }
 
-QTEST_MAIN(TestTagLoader)
+QTEST_MAIN(TestTag)
 

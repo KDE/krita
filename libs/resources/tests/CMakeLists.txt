@@ -13,7 +13,7 @@ ecm_add_tests(
     TestResourceLocator
     TestResourceStorage
     TestFolderStorage
-    TestTagLoader
+    TestTag
     TestBundleStorage
     TestResourceModel
     NAME_PREFIX "libs-kritaresources-"

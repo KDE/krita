@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef TESTTAGLOADER_H
-#define TESTTAGLOADER_H
+#ifndef TESTTAG_H
+#define TESTTAG_H
 
 #include <QObject>
 
-class TestTagLoader : public QObject
+class TestTag: public QObject
 {
     Q_OBJECT
 private Q_SLOTS:

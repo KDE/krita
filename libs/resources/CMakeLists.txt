@@ -16,6 +16,7 @@ set(kritaresources_LIB_SRCS
     KisFolderStorage.cpp
 
     KisTag.cpp
+    KisTagModel.cpp
 
     KoResource.cpp
     KoResourceBundle.cpp

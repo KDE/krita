@@ -206,6 +206,7 @@ private:
 
 private:
     KisKeyframeSP insertKeyframe(int time, const KisKeyframeBaseSP copySrc, KUndo2Command *parentCommand);
+    QSharedPointer<KisAnimationCycle> loadCycle(const QDomElement &cycleElement);
 
     struct Private;
     QScopedPointer<Private> m_d;

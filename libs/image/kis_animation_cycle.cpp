@@ -58,6 +58,7 @@ int KisAnimationCycle::duration() const
 
 void KisAnimationCycle::addRepeat(QSharedPointer<KisRepeatFrame> repeat)
 {
+    if (m_repeats.contains(repeat)) return;
     m_repeats.append(repeat);
 }
 

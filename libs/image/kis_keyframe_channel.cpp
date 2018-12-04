@@ -136,6 +136,11 @@ struct KisKeyframeChannel::Private
 
     void addCycle(QSharedPointer<KisAnimationCycle> cycle) {
         cycles.insert(cycle->time(), cycle);
+
+        Q_FOREACH(QWeakPointer<KisRepeatFrame> repeatWP, cycle->repeats()) {
+            KisKeyframeBaseSP repeat = repeatWP.toStrongRef();
+            if (repeat) add(repeat);
+        }
     }
 
     void removeCycle(QSharedPointer<KisAnimationCycle> cycle) {
@@ -711,29 +716,31 @@ QDomElement KisKeyframeChannel::toXML(QDomDocument doc, const QString &layerFile
 
     channelElement.setAttribute("name", id());
 
-    Q_FOREACH (const QSharedPointer<KisAnimationCycle> cycle, m_d->cycles.values()) {
-        QDomElement cycleElement = doc.createElement("cycle");
-        cycleElement.setAttribute("firstKeyframe", cycle->firstSourceKeyframe()->time());
-        cycleElement.setAttribute("lastKeyframe", cycle->lastSourceKeyframe()->time());
-        channelElement.appendChild(cycleElement);
-    }
-
     Q_FOREACH (KisKeyframeSP keyframe, m_d->keys.values()) {
         QDomElement keyframeElement = doc.createElement("keyframe");
         keyframeElement.setAttribute("time", keyframe->time());
         keyframeElement.setAttribute("color-label", keyframe->colorLabel());
 
-        KisRepeatFrame *repeat = dynamic_cast<KisRepeatFrame*>(keyframe.data());
-        if (repeat) {
-            keyframeElement.setAttribute("type", "repeat");
-
-            const int sourceTime = repeat->cycle()->firstSourceKeyframe()->time();
-            keyframeElement.setAttribute("cycle", sourceTime);
-        } else {
-            saveKeyframe(keyframe, keyframeElement, layerFilename);
-        }
+        saveKeyframe(keyframe, keyframeElement, layerFilename);
 
         channelElement.appendChild(keyframeElement);
+    }
+
+    Q_FOREACH (const QSharedPointer<KisAnimationCycle> cycle, m_d->cycles.values()) {
+        QDomElement cycleElement = doc.createElement("cycle");
+        cycleElement.setAttribute("firstKeyframe", cycle->firstSourceKeyframe()->time());
+        cycleElement.setAttribute("lastKeyframe", cycle->lastSourceKeyframe()->time());
+
+        Q_FOREACH (auto repeatWP, cycle->repeats()) {
+            const QSharedPointer<KisRepeatFrame> repeat = repeatWP.toStrongRef();
+            if (!repeat) continue;
+
+            QDomElement repeatElement = doc.createElement("repeat");
+            repeatElement.setAttribute("time", repeat->time());
+            cycleElement.appendChild(repeatElement);
+        }
+
+        channelElement.appendChild(cycleElement);
     }
 
     return channelElement;
@@ -741,35 +748,13 @@ QDomElement KisKeyframeChannel::toXML(QDomDocument doc, const QString &layerFile
 
 void KisKeyframeChannel::loadXML(const QDomElement &channelNode)
 {
-    QMap<int, QSharedPointer<KisAnimationCycle>> cyclesByFirstKeyframe;
-    QMap<int, QSharedPointer<KisAnimationCycle>> cyclesByLastKeyframe;
-
-    for (QDomElement childNode = channelNode.firstChildElement(); !childNode.isNull(); childNode = childNode.nextSiblingElement()) {
-        const QString nodeName = childNode.nodeName().toUpper();
-        if (nodeName == "CYCLE") {
-            const int firstKeyframeTime = childNode.attribute("firstKeyframe", "-1").toInt();
-            const int lastKeyframeTime = childNode.attribute("lastKeyframe", "-1").toInt();
-
-            if (firstKeyframeTime >= 0 && lastKeyframeTime > firstKeyframeTime) {
-                QSharedPointer<KisAnimationCycle> cycle = toQShared(new KisAnimationCycle(this, KisKeyframeSP(), KisKeyframeSP()));
-                cyclesByFirstKeyframe.insert(firstKeyframeTime, cycle);
-                cyclesByLastKeyframe.insert(lastKeyframeTime, cycle);
-            }
-        }
-    }
-
     for (QDomElement childNode = channelNode.firstChildElement(); !childNode.isNull(); childNode = childNode.nextSiblingElement()) {
         const QString nodeName = childNode.nodeName().toUpper();
         if (nodeName == "KEYFRAME") {
             const QString keyframeType = childNode.attribute("type", "").toUpper();
 
             KisKeyframeSP keyframe;
-            if (keyframeType == "REPEAT") {
-                // FIXME
-                //keyframe = loadRepeatFrame(childNode, cyclesByFirstKeyframe);
-            } else {
-                keyframe = loadKeyframe(childNode);
-            }
+            keyframe = loadKeyframe(childNode);
 
             KIS_SAFE_ASSERT_RECOVER(keyframe) { continue; }
 
@@ -778,17 +763,48 @@ void KisKeyframeChannel::loadXML(const QDomElement &channelNode)
             }
 
             m_d->add(keyframe);
+        }
+    }
 
-            const int time = keyframe->time();
-            if (cyclesByFirstKeyframe.contains(time)) {
-                //cyclesByFirstKeyframe[time]->setFirstKeyframe(keyframe);
-                addCycle(cyclesByFirstKeyframe[time]);
-            }
-            if (cyclesByLastKeyframe.contains(time)) {
-                //cyclesByLastKeyframe[time]->setLastKeyframe(keyframe);
+    for (QDomElement childNode = channelNode.firstChildElement(); !childNode.isNull(); childNode = childNode.nextSiblingElement()) {
+        if (childNode.nodeName().toUpper() == "CYCLE") {
+            QSharedPointer<KisAnimationCycle> cycle = loadCycle(childNode);
+            if (cycle) {
+                m_d->addCycle(cycle);
             }
         }
     }
+}
+
+QSharedPointer<KisAnimationCycle> KisKeyframeChannel::loadCycle(const QDomElement &cycleElement)
+{
+    const int firstKeyframeTime = cycleElement.attribute("firstKeyframe", "-1").toInt();
+    const int lastKeyframeTime = cycleElement.attribute("lastKeyframe", "-1").toInt();
+
+    if (firstKeyframeTime < 0 || lastKeyframeTime <= firstKeyframeTime) {
+        qWarning() << "Invalid cycle range: " << firstKeyframeTime << "to" << lastKeyframeTime;
+        return nullptr;
+    }
+
+    const KisKeyframeSP firstKeyframe = keyframeAt(firstKeyframeTime);
+    const KisKeyframeSP lastKeyframe = keyframeAt(lastKeyframeTime);
+
+    if (!firstKeyframe || !lastKeyframe) {
+        qWarning() << "Could not find defining keyframes for cycle " << firstKeyframeTime << "to" << lastKeyframeTime;
+        return nullptr;
+    }
+
+    QSharedPointer<KisAnimationCycle> cycle = toQShared(new KisAnimationCycle(this, firstKeyframe, lastKeyframe));
+
+    for (QDomElement grandChildNode = cycleElement.firstChildElement(); !grandChildNode.isNull(); grandChildNode = grandChildNode.nextSiblingElement()) {
+        if (grandChildNode.nodeName().toUpper() == "REPEAT") {
+            const int time = grandChildNode.attribute("time").toInt();
+            const QSharedPointer<KisRepeatFrame> repeat = toQShared(new KisRepeatFrame(this, time, cycle));
+            m_d->add(repeat);
+        }
+    }
+
+    return cycle;
 }
 
 bool KisKeyframeChannel::swapExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand)

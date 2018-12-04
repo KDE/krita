@@ -49,7 +49,8 @@ public:
         Thumbnail,
         Status,
         Location,
-        ResourceType
+        ResourceType,
+        Tags
     };
 
     KisResourceModel(const QString &resourceType, QObject *parent = 0);

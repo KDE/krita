@@ -22,8 +22,10 @@
 #include <QBuffer>
 #include <QImage>
 #include <QtSql>
+#include <QStringList>
 
 #include <KisResourceLocator.h>
+#include <KisResourceCacheDb.h>
 
 struct KisResourceModel::Private {
     QSqlQuery query;
@@ -148,6 +150,12 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             return d->query.value("location");
         case Qt::UserRole + ResourceType:
             return d->query.value("resource_type");
+        case Qt::UserRole + Tags:
+        {
+            QStringList tags;
+            // XXX
+            return QVariant::fromValue<QStringList>(tags);
+        }
         default:
             ;
         }

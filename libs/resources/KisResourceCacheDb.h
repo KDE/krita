@@ -80,7 +80,6 @@ private:
     static bool deleteStorage(KisResourceStorageSP storage);
     static bool synchronizeStorage(KisResourceStorageSP storage);
 
-
     static QString makeRelative(QString location);
     static QString makeAbsolute(const QString &location);
 

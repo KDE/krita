@@ -25,6 +25,8 @@
 #include <QUrl>
 #include <QModelIndex>
 
+#include <KisResourceModel.h>
+
 #include <klocalizedstring.h>
 
 KisIconToolTip::KisIconToolTip()
@@ -45,11 +47,11 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
     QString name = index.data(Qt::DisplayRole).toString();
 
     QString tags;
-//    QString tagsData = index.data(KoLegacyResourceModel::TagsRole).toString();
-//    if (tagsData.length() > 0) {
-//        const QString list = QString("<ul style=\"list-style-type: none; margin: 0px;\">%1</ul> ").arg(tagsData);
-//        tags = QString("<p><table><tr><td>%1:</td><td>%2</td></tr></table></p>").arg(i18n("Tags"), list);
-//    }
+    QString tagsData = index.data(Qt::UserRole + KisResourceModel::Tags).join(", ");
+    if (tagsData.length() > 0) {
+        const QString list = QString("<ul style=\"list-style-type: none; margin: 0px;\">%1</ul> ").arg(tagsData);
+        tags = QString("<p><table><tr><td>%1:</td><td>%2</td></tr></table></p>").arg(i18n("Tags"), list);
+    }
 
     const QString image = QString("<center><img src=\"data:thumbnail\"></center>");
     const QString body = QString("<h3 align=\"center\">%1</h3>%2%3").arg(name, image, tags);

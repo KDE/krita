@@ -34,6 +34,9 @@
 #include "canvas/kis_canvas2.h"
 #include "KisViewManager.h"
 
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
 KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
 {
     m_page = new WdgSelectionOptions(this);
@@ -75,6 +78,9 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
     connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SLOT(hideActionsForSelectionMode(int)));
     connect(m_page->chkAntiAliasing, SIGNAL(toggled(bool)), this, SIGNAL(antiAliasSelectionChanged(bool)));
+
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
+    m_page->chkAntiAliasing->setChecked(cfg.readEntry("antiAliasSelection", true));
 }
 
 KisSelectionOptions::~KisSelectionOptions()

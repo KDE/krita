@@ -30,7 +30,7 @@
 struct KisResourceModel::Private {
     QSqlQuery query;
     QString resourceType;
-    int columnCount {7};
+    int columnCount {9};
     int cachedRowCount {-1};
 };
 
@@ -40,32 +40,8 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
     , d(new Private)
 {
     d->resourceType = resourceType;
-    bool r = d->query.prepare("SELECT resources.id\n"
-                             ",      resources.storage_id\n"
-                             ",      resources.name\n"
-                             ",      resources.filename\n"
-                             ",      resources.tooltip\n"
-                             ",      resources.thumbnail\n"
-                             ",      resources.status\n"
-                             ",      storages.location\n"
-                             ",      resource_types.name as resource_type\n"
-                             "FROM   resources\n"
-                             ",      resource_types\n"
-                             ",      storages\n"
-                             "WHERE  resources.resource_type_id = resource_types.id\n"
-                             "AND    resources.storage_id = storages.id\n"
-                             "AND    resource_types.name = :resource_type\n"
-                             "AND    resources.status = 1\n"
-                             "AND    storages.active = 1");
-    if (!r) {
-        qWarning() << "Could not prepare KisResourceModel query" << d->query.lastError();
-    }
-    d->query.bindValue(":resource_type", resourceType);
-    r = d->query.exec();
-    if (!r) {
-        qWarning() << "Could not select" << resourceType << "resources" << d->query.lastError();
-    }
-    Q_ASSERT(d->query.isSelect());
+
+    prepareQuery();
 }
 
 KisResourceModel::~KisResourceModel()
@@ -180,6 +156,41 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
         resource = KisResourceLocator::instance()->resource(storageLocation, resourceLocation);
     }
     return resource;
+
+}
+
+bool KisResourceModel::prepareQuery(const QStringList &tags)
+{
+    beginResetModel();
+    bool r = d->query.prepare("SELECT resources.id\n"
+                             ",      resources.storage_id\n"
+                             ",      resources.name\n"
+                             ",      resources.filename\n"
+                             ",      resources.tooltip\n"
+                             ",      resources.thumbnail\n"
+                             ",      resources.status\n"
+                             ",      storages.location\n"
+                             ",      resource_types.name as resource_type\n"
+                             "FROM   resources\n"
+                             ",      resource_types\n"
+                             ",      storages\n"
+                             "WHERE  resources.resource_type_id = resource_types.id\n"
+                             "AND    resources.storage_id = storages.id\n"
+                             "AND    resource_types.name = :resource_type\n"
+                             "AND    resources.status = 1\n"
+                             "AND    storages.active = 1");
+    if (!r) {
+        qWarning() << "Could not prepare KisResourceModel query" << d->query.lastError();
+    }
+    d->query.bindValue(":resource_type", d->resourceType);
+    r = d->query.exec();
+    if (!r) {
+        qWarning() << "Could not select" << d->resourceType << "resources" << d->query.lastError();
+    }
+    d->cachedRowCount = -1;
+    endResetModel();
+
+    return r;
 
 }
 

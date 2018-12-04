@@ -17,7 +17,133 @@
  */
 #include "KisTagModel.h"
 
-KisTagModel::KisTagModel()
-{
+#include <QtSql>
+#include <QStringList>
 
+#include <klocalizedstring.h>
+
+#include <KisResourceLocator.h>
+#include <KisResourceCacheDb.h>
+
+
+struct KisTagModel::Private {
+    QSqlQuery query;
+    QString resourceType;
+    int columnCount {1};
+    int cachedRowCount {-1};
+    int fakeRowsCount {1};
+};
+
+
+KisTagModel::KisTagModel(const QString &resourceType, QObject *parent)
+    : QAbstractItemModel(parent)
+    , d(new Private())
+{
+    d->resourceType = resourceType;
+    prepareQuery();
+}
+
+int KisTagModel::rowCount(const QModelIndex &/*parent*/) const
+{
+    if (d->cachedRowCount < 0) {
+        QSqlQuery q;
+        q.prepare("SELECT count(*)\n"
+                  "FROM   tags\n"
+                  ",      resource_types\n"
+                  "WHERE  active = 1\n"
+                  "AND    tags.resource_type_id = resource_types.id\n"
+                  "AND    resource_types.name = :resource_type");
+        q.bindValue(":resource_type", d->resourceType);
+        q.exec();
+        q.first();
+
+        const_cast<KisTagModel*>(this)->d->cachedRowCount = q.value(0).toInt() + d->fakeRowsCount;
+    }
+
+    return d->cachedRowCount;
+}
+
+int KisTagModel::columnCount(const QModelIndex &/*parent*/) const
+{
+    return d->columnCount;
+}
+
+QVariant KisTagModel::data(const QModelIndex &index, int role) const
+{
+    QVariant v;
+    if (!index.isValid()) return v;
+
+    if (index.row() > rowCount()) return v;
+    if (index.column() > d->columnCount) return v;
+
+    bool pos = const_cast<KisTagModel*>(this)->d->query.seek(index.row() - d->fakeRowsCount);
+
+    // The first row is All
+    // XXX: Should we also add an All Untagged?
+    if (index.row() < d->fakeRowsCount) {
+        switch(role) {
+        case Qt::DisplayRole:   // fallthrough
+        case Qt::ToolTipRole:   // fallthrough
+        case Qt::StatusTipRole: // fallthrough
+        case Qt::WhatsThisRole:
+            return i18n("All");
+        case Qt::UserRole + Id:
+            return "-1";
+        case Qt::UserRole + Url:
+            return "All";
+        case Qt::UserRole + ResourceType:
+            return d->query.value("resource_type");
+        default:
+            ;
+        }
+
+    }
+    else if (pos) {
+        switch(role) {
+        case Qt::DisplayRole:
+            return d->query.value("name");
+        case Qt::ToolTipRole:   // fallthrough
+        case Qt::StatusTipRole: // fallthrough
+        case Qt::WhatsThisRole:
+            return d->query.value("comment");
+        case Qt::UserRole + Id:
+            return d->query.value("id");
+        case Qt::UserRole + Url:
+            return d->query.value("url");
+        case Qt::UserRole + ResourceType:
+            return d->query.value("resource_type");
+        default:
+            ;
+        }
+    }
+    return v;
+}
+
+bool KisTagModel::prepareQuery()
+{
+    beginResetModel();
+    bool r = d->query.prepare("SELECT tags.id\n"
+                              ",       tags.url\n"
+                              ",       tags.name\n"
+                              ",       tags.comment\n"
+                              ",       resource_types.name as resource_type\n"
+                              "FROM    tags\n"
+                              ",       resource_types\n"
+                              "WHERE   tags.resource_type_id = resource_types.id\n"
+                              "AND     resource_types.name = :resource_type\n"
+                              "AND     tags.active = 1");
+
+    if (!r) {
+        qWarning() << "Could not prepare KisTagModel query" << d->query.lastError();
+    }
+
+    r = d->query.exec();
+
+    if (!r) {
+        qWarning() << "Could not select tags";
+    }
+    d->cachedRowCount = -1;
+    endResetModel();
+
+    return r;
 }

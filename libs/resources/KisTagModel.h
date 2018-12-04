@@ -24,8 +24,31 @@
 
 class KisTagModel : public QAbstractItemModel
 {
+    Q_OBJECT
 public:
-    KisTagModel();
+
+    enum Columns {
+        Id = 0,
+        Url,
+        Name,
+        Comment,
+        ResourceType
+    };
+
+    KisTagModel(const QString &resourceType, QObject *parent);
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+
+
+private:
+
+    bool prepareQuery();
+
+    struct Private;
+    Private* const d;
+
 };
 
 #endif // KOTAGMODEL_H

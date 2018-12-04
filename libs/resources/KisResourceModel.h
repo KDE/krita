@@ -62,11 +62,15 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
 
+
     // Resources API
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const;
 
 
 private:
+
+    bool prepareQuery(const QStringList &tags = QStringList());
+
     struct Private;
     Private* const d;
 

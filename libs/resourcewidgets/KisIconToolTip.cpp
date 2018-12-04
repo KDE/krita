@@ -47,7 +47,7 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
     QString name = index.data(Qt::DisplayRole).toString();
 
     QString tags;
-    QString tagsData = index.data(Qt::UserRole + KisResourceModel::Tags).join(", ");
+    QString tagsData = index.data(Qt::UserRole + KisResourceModel::Tags).toStringList().join(", ");
     if (tagsData.length() > 0) {
         const QString list = QString("<ul style=\"list-style-type: none; margin: 0px;\">%1</ul> ").arg(tagsData);
         tags = QString("<p><table><tr><td>%1:</td><td>%2</td></tr></table></p>").arg(i18n("Tags"), list);

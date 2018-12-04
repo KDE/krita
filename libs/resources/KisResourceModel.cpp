@@ -52,7 +52,8 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
                              "WHERE  resources.resource_type_id = resource_types.id\n"
                              "AND    resources.storage_id = storages.id\n"
                              "AND    resource_types.name = :resource_type\n"
-                             "AND    resources.status = 1");
+                             "AND    resources.status = 1\n"
+                             "AND    storages.active = 1");
     if (!r) {
         qWarning() << "Could not prepare KisResourceModel query" << d->query.lastError();
     }

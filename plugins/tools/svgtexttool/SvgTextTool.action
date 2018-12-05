@@ -2,7 +2,7 @@
 <ActionCollection version="2" name="SVG Tools">
   <Actions category="Text Tool">
     <text>SVG Text Tool</text>
-    <Action name="KritaTransform/KisToolMove">
+    <Action name="SvgTextTool">
       <icon></icon>
       <text>Text Tool</text>
       <whatsThis></whatsThis>

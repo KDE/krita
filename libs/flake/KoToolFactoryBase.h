@@ -202,12 +202,13 @@ public:
         return "dynamic";
     }
 
+protected:
+
+
     /**
      * Set the default shortcut for activation of this tool.
      */
     void setShortcut(const QKeySequence & shortcut);
-
-protected:
 
     /**
      * Set the tooltip to be used for this tool

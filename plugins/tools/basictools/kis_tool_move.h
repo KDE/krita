@@ -177,7 +177,7 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(3);
         setIconName(koIconNameCStr("krita_tool_move"));
-        setShortcut(QKeySequence( Qt::Key_T));
+        setShortcut(QKeySequence(Qt::Key_T));
     }
 
     ~KisToolMoveFactory() override {}

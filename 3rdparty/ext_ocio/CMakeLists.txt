@@ -8,7 +8,7 @@ if (MINGW)
 ExternalProject_Add(
     ext_ocio
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/imageworks/OpenColorIO/archive/v1.1.0.zip
+    URL http://files.kde.org/krita/build/dependencies/OpenColorIO-1.1.0.zip
     URL_MD5 aa52d77b6a4e03017beefaefa613b49f
 
     INSTALL_DIR ${EXTPREFIX_ocio}
@@ -23,8 +23,8 @@ else()
 ExternalProject_Add(
     ext_ocio
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/imageworks/OpenColorIO/archive/v1.1.0.zip
-    URL_MD5 aa52d77b6a4e03017beefaefa613b49f
+    URL http://files.kde.org/krita/build/dependencies/OpenColorIO-1.1.0.tar.gz
+    URL_MD5 802d8f5b1d1fe316ec5f76511aa611b8
 
     INSTALL_DIR ${EXTPREFIX_ocio}
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/warnings.diff

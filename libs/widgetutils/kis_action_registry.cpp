@@ -350,7 +350,7 @@ void KisActionRegistry::Private::loadActionFiles()
                     }
 
                     else if (actionInfoList.contains(name)) {
-                        qWarning << "NOT COOL: Duplicated action name from xml data: " << name;
+                        qWarning() << "NOT COOL: Duplicated action name from xml data: " << name;
                     }
 
                     else {

@@ -93,7 +93,10 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     fragSource.append("#define texture3D texture\n");
 #else
     if (KisOpenGL::hasOpenGLES()) {
-        fragSource.append("#version 300 es\nprecision mediump float;\n");
+        fragSource.append(
+                    "#version 300 es\n"
+                    "precision mediump float;"
+                    "precision mediump sampler3D;");
     } else {
         fragSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
     }

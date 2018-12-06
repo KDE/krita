@@ -23,6 +23,9 @@
 
 #include "ui_WdgDbExplorer.h"
 
+class KisResourceModel;
+class KisTagModel;
+class KisResourceTypeModel;
 
 class WdgDbExplorer : public QWidget, public Ui::WdgDbExplorer
 {
@@ -40,8 +43,18 @@ class DlgDbExplorer: public KoDialog
 public:
     DlgDbExplorer(QWidget * parent = 0);
     ~DlgDbExplorer() override;
+
+private Q_SLOTS:
+
+    void slotRvResourceTypeSelected(int index);
+    void slotRvTagSelected(int index);
+
 private:
-    WdgDbExplorer *m_page;
+    WdgDbExplorer *m_page {0};
+
+    KisResourceModel *m_resourceModel {0};
+    KisTagModel *m_tagModel {0};
+    KisResourceTypeModel *m_resourceTypeModel {0};
 };
 
 #endif // DLG_DBEXPLORER

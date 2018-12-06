@@ -184,7 +184,7 @@ bool KisResourceModel::prepareQuery(const QStringList &tags)
     d->query.bindValue(":resource_type", d->resourceType);
     r = d->query.exec();
     if (!r) {
-        qWarning() << "Could not select" << d->resourceType << "resources" << d->query.lastError();
+        qWarning() << "Could not select" << d->resourceType << "resources" << d->query.lastError() << d->query.boundValues();
     }
     d->cachedRowCount = -1;
     endResetModel();

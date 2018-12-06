@@ -37,11 +37,15 @@ public:
     };
 
     KisTagModel(const QString &resourceType, QObject *parent = 0);
+    ~KisTagModel() override;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
 
+// KisTagModel API
+
+    void setResourceType(const QString &resourceType);
 
 private:
 

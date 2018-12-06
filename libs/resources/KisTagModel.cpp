@@ -28,7 +28,7 @@
 struct KisTagModel::Private {
     QSqlQuery query;
     QString resourceType;
-    int columnCount {1};
+    int columnCount {5};
     int cachedRowCount {-1};
     int fakeRowsCount {1};
 };
@@ -39,7 +39,14 @@ KisTagModel::KisTagModel(const QString &resourceType, QObject *parent)
     , d(new Private())
 {
     d->resourceType = resourceType;
-    prepareQuery();
+    if (!d->resourceType.isEmpty()) {
+        prepareQuery();
+    }
+}
+
+KisTagModel::~KisTagModel()
+{
+    delete d;
 }
 
 int KisTagModel::rowCount(const QModelIndex &/*parent*/) const
@@ -117,6 +124,12 @@ QVariant KisTagModel::data(const QModelIndex &index, int role) const
         }
     }
     return v;
+}
+
+void KisTagModel::setResourceType(const QString &resourceType)
+{
+    d->resourceType = resourceType;
+    prepareQuery();
 }
 
 bool KisTagModel::prepareQuery()

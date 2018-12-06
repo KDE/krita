@@ -35,10 +35,19 @@ public:
     };
 
     KisResourceTypeModel(QObject *parent = 0);
+    ~KisResourceTypeModel() override;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
+
+private:
+
+    bool prepareQuery();
+
+    struct Private;
+    Private* const d;
+
 };
 
 #endif // KISRESOURCETYPEMODEL_H

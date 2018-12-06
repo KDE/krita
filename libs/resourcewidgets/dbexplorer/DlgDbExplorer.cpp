@@ -24,10 +24,12 @@
 #include <QDataWidgetMapper>
 #include <QTableView>
 #include <QtSql>
+#include <QStyledItemDelegate>
 
 #include <TableModel.h>
 #include <KisResourceModel.h>
-
+#include <KisResourceTypeModel.h>
+#include <KisTagModel.h>
 
 DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     : KoDialog(parent)
@@ -112,8 +114,41 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     }
 
 
+    {
+        m_resourceTypeModel = new KisResourceTypeModel(this);
+        m_page->cmbRvResourceTypes->setModelColumn(KisResourceTypeModel::Name);
+        m_page->cmbRvResourceTypes->setModel(m_resourceTypeModel);
+        //m_page->cmbRvResourceTypes->setItemDelegate(new QStyledItemDelegate(this));
+        connect(m_page->cmbRvResourceTypes, SIGNAL(activated(int)), SLOT(slotRvResourceTypeSelected(int)));
+
+        qDebug() << "combobox count" << m_page->cmbRvResourceTypes->count();
+
+
+        m_tagModel = new KisTagModel("", this);
+        m_page->cmbRvTags->setModelColumn(KisTagModel::Name);
+        m_page->cmbRvTags->setModel(m_tagModel);
+        connect(m_page->cmbRvTags, SIGNAL(activated(int)), SLOT(slotRvTagSelected(int)));
+
+        m_resourceModel = 0;
+
+
+        m_page->cmbRvResourceTypes->setCurrentIndex(0);
+
+    }
+
 }
 
 DlgDbExplorer::~DlgDbExplorer()
 {
+}
+
+void DlgDbExplorer::slotRvResourceTypeSelected(int index)
+{
+    QModelIndex idx = m_page->cmbRvResourceTypes->model()->index(index, KisResourceTypeModel::ResourceType);
+    m_tagModel->setResourceType(idx.data(Qt::DisplayRole).toString());
+}
+
+void DlgDbExplorer::slotRvTagSelected(int index)
+{
+    qDebug() << "selected tag" << index;
 }

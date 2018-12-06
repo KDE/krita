@@ -41,7 +41,6 @@
 #include <kis_icon.h>
 #include <kis_config.h>
 #include <kis_node_manager.h>
-#include <kis_workspace_resource.h>
 #include <kis_canvas_resource_provider.h>
 #include <KisMainWindow.h>
 #include <KisViewManager.h>
@@ -114,11 +113,11 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_ui->paletteView, SIGNAL(pressed(QModelIndex)), SLOT(slotContextMenu(QModelIndex)));
 
     m_paletteChooser->setAllowModification(true);
-    connect(m_paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), SLOT(slotSetColorSet(KoColorSet*)));
+    connect(m_paletteChooser, SIGNAL(sigPaletteSelected(KoColorSetSP)), SLOT(slotSetColorSet(KoColorSetSP)));
     connect(m_paletteChooser, SIGNAL(sigAddPalette()), SLOT(slotAddPalette()));
     connect(m_paletteChooser, SIGNAL(sigImportPalette()), SLOT(slotImportPalette()));
-    connect(m_paletteChooser, SIGNAL(sigRemovePalette(KoColorSet*)), SLOT(slotRemovePalette(KoColorSet*)));
-    connect(m_paletteChooser, SIGNAL(sigExportPalette(KoColorSet*)), SLOT(slotExportPalette(KoColorSet*)));
+    connect(m_paletteChooser, SIGNAL(sigRemovePalette(KoColorSetSP)), SLOT(slotRemovePalette(KoColorSetSP)));
+    connect(m_paletteChooser, SIGNAL(sigExportPalette(KoColorSetSP)), SLOT(slotExportPalette(KoColorSetSP)));
 
     m_ui->bnColorSets->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
     m_ui->bnColorSets->setToolTip(i18n("Choose palette"));
@@ -145,10 +144,10 @@ void PaletteDockerDock::setViewManager(KisViewManager* kisview)
 {
     m_view = kisview;
     m_resourceProvider = kisview->resourceProvider();
-    connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)),
-            SLOT(saveToWorkspace(KisWorkspaceResource*)));
-    connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)),
-            SLOT(loadFromWorkspace(KisWorkspaceResource*)));
+    connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResourceSP)),
+            SLOT(saveToWorkspace(KisWorkspaceResourceSP)));
+    connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResourceSP)),
+            SLOT(loadFromWorkspace(KisWorkspaceResourceSP)));
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),
             m_ui->paletteView, SLOT(slotFGColorChanged(KoColor)));
 
@@ -304,14 +303,14 @@ void PaletteDockerDock::setFGColorByPalette(const KisSwatch &entry)
     }
 }
 
-void PaletteDockerDock::saveToWorkspace(KisWorkspaceResource* workspace)
+void PaletteDockerDock::saveToWorkspace(KisWorkspaceResourceSP workspace)
 {
     if (!m_currentColorSet.isNull()) {
         workspace->setProperty("palette", m_currentColorSet->name());
     }
 }
 
-void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResource* workspace)
+void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResourceSP workspace)
 {
     if (workspace->hasProperty("palette")) {
         KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();

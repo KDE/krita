@@ -36,10 +36,10 @@
 #include <kis_canvas2.h>
 #include <kis_mainwindow_observer.h>
 #include <KisView.h>
+#include <kis_workspace_resource.h>
 
 class KisViewManager;
 class KisCanvasResourceProvider;
-class KisWorkspaceResource;
 class KisPaletteListWidget;
 class KisPaletteModel;
 
@@ -79,8 +79,8 @@ private Q_SLOTS:
     void slotNameListSelection(const KoColor &color);
     void slotSetColorSet(KoColorSetSP colorSet);
 
-    void saveToWorkspace(KisWorkspaceResource* workspace);
-    void loadFromWorkspace(KisWorkspaceResource* workspace);
+    void saveToWorkspace(KisWorkspaceResourceSP workspace);
+    void loadFromWorkspace(KisWorkspaceResourceSP workspace);
 
 private:
     void setEntryByForeground(const QModelIndex &index);

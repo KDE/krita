@@ -229,8 +229,8 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
 
     connect (view->mainWindow(), SIGNAL(themeChanged()), m_gradientChooser, SLOT(slotUpdateIcons()));
 
-    connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradient*)),
-            this, SLOT(slotSetGradient(KoAbstractGradient*)));
+    connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradientSP)),
+            this, SLOT(slotSetGradient(KoAbstractGradientSP)));
 
     m_gradientChooser->setCurrentItem(0, 0);
     if (m_gradientChooser->currentResource() && view->resourceProvider())

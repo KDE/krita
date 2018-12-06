@@ -37,9 +37,12 @@ SmallColorSelectorDock::SmallColorSelectorDock()
     layout->addWidget(m_smallColorWidget);
     layout->addStretch(1);
     setWidget(page);
-    m_smallColorWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+    m_smallColorWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     connect(m_smallColorWidget, SIGNAL(colorChanged(QColor)),
             this, SLOT(colorChangedProxy(QColor)));
+
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
+            m_smallColorWidget, SLOT(update()));
 
     setWindowTitle(i18n("Small Color Selector"));
 }

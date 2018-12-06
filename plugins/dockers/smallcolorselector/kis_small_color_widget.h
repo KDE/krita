@@ -18,9 +18,9 @@
 #ifndef _KIS_SMALL_COLOR_WIDGET_H_
 #define _KIS_SMALL_COLOR_WIDGET_H_
 
-#include <QWidget>
+#include <QOpenGLWidget>
 
-class KisSmallColorWidget : public QWidget
+class KisSmallColorWidget : public QOpenGLWidget
 {
     Q_OBJECT
 public:
@@ -32,6 +32,11 @@ public:
     void mouseReleaseEvent(QMouseEvent * event) override;
     void mousePressEvent(QMouseEvent * event) override;
     void mouseMoveEvent(QMouseEvent * event) override;
+
+    QSize sizeHint() const override;
+    bool hasHeightForWidth() const override;
+    int heightForWidth(int width) const override;
+
 public:
     int hue() const;
     int value() const;
@@ -45,7 +50,7 @@ Q_SIGNALS:
     void colorChanged(const QColor&);
 private:
     void tellColorChanged();
-    void updateParameters();
+    void updateParameters(const QSize &size);
     void generateRubber();
     void generateSquare();
     void selectColorAt(int _x, int _y);

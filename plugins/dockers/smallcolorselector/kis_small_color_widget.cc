@@ -23,6 +23,8 @@
 
 #include <KoColorConversions.h>
 
+#include "kis_debug.h"
+
 enum CurrentHandle {
     NoHandle,
     HueHandle,
@@ -48,20 +50,25 @@ struct KisSmallColorWidget::Private {
     QTimer updateTimer;
 };
 
-KisSmallColorWidget::KisSmallColorWidget(QWidget* parent) : QWidget(parent), d(new Private)
+KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
+    : QOpenGLWidget(parent),
+      d(new Private)
 {
-    setMinimumHeight(50);
+    setTextureFormat(GL_RGBA16F);
+
     d->hue = 0;
     d->value = 0;
     d->saturation = 0;
     d->updateAllowed = true;
     d->handle = NoHandle;
-    updateParameters();
+    updateParameters(QSize(1,1));
     d->lastX = -1;
     d->lastY = -1;
     d->updateTimer.setInterval(1);
     d->updateTimer.setSingleShot(true);
     connect(&(d->updateTimer), SIGNAL(timeout()), this, SLOT(update()));
+
+    setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
 }
 
 KisSmallColorWidget::~KisSmallColorWidget()
@@ -158,23 +165,41 @@ void KisSmallColorWidget::paintEvent(QPaintEvent * event)
     p.end();
 }
 
-void KisSmallColorWidget::resizeEvent(QResizeEvent * event)
+QSize KisSmallColorWidget::sizeHint() const
 {
-    QWidget::resizeEvent(event);
-    setMaximumHeight(50);
-    updateParameters();
-    generateRubber();
-    generateSquare();
+    const int preferredWidth = 200;
+    return QSize(preferredWidth, heightForWidth(preferredWidth));
 }
 
-void KisSmallColorWidget::updateParameters()
+bool KisSmallColorWidget::hasHeightForWidth() const
+{
+    return true;
+}
+
+int KisSmallColorWidget::heightForWidth(int width) const
+{
+    return d->rectangleWidthProportion * width + 2 * d->margin;
+}
+
+void KisSmallColorWidget::resizeEvent(QResizeEvent * event)
+{
+    QOpenGLWidget::resizeEvent(event);
+
+    updateParameters(event->size());
+    generateRubber();
+    generateSquare();
+
+    update();
+}
+
+void KisSmallColorWidget::updateParameters(const QSize &size)
 {
     d->margin = 5;
     d->rectangleWidthProportion = 0.3;
-    d->rectangleWidth = qMax((int)(width() * d->rectangleWidthProportion) , height());
-    d->rectangleHeight = height();
-    d->rubberWidth = width() - d->rectangleWidth - d->margin;
-    d->rubberHeight = height();
+    d->rectangleWidth = qMax((int)(size.width() * d->rectangleWidthProportion) , size.height());
+    d->rectangleHeight = size.height();
+    d->rubberWidth = size.width() - d->rectangleWidth - d->margin;
+    d->rubberHeight = size.height();
     d->squareHandleSize = 10.0;
 }
 
@@ -214,7 +239,7 @@ void KisSmallColorWidget::mouseReleaseEvent(QMouseEvent * event)
         selectColorAt(event->x(), event->y());
         d->handle = NoHandle;
     } else {
-        QWidget::mouseReleaseEvent(event);
+        QOpenGLWidget::mouseReleaseEvent(event);
     }
 }
 
@@ -224,7 +249,7 @@ void KisSmallColorWidget::mousePressEvent(QMouseEvent * event)
         d->handle = NoHandle;
         selectColorAt(event->x(), event->y());
     } else {
-        QWidget::mousePressEvent(event);
+        QOpenGLWidget::mousePressEvent(event);
     }
 }
 
@@ -233,7 +258,7 @@ void KisSmallColorWidget::mouseMoveEvent(QMouseEvent * event)
     if (event->buttons() & Qt::LeftButton) {
         selectColorAt(event->x(), event->y());
     } else {
-        QWidget::mouseMoveEvent(event);
+        QOpenGLWidget::mouseMoveEvent(event);
     }
 }
 

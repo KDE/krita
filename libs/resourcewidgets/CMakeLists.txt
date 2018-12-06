@@ -1,3 +1,5 @@
+add_subdirectory(dbexplorer)
+
 set(kritaresourcewidgets_LIB_SRCS
     KisResourceItemDelegate.cpp
     KisResourceItemView.cpp

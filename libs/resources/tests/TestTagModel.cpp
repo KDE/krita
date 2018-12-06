@@ -92,7 +92,7 @@ void TestTagModel::testRowCount()
 
     KisTagModel tagModel(resourceType);
     // There is always an "All" tag in the first row
-    QCOMPARE(tagModel.rowCount(), rowCount);
+    QCOMPARE(tagModel.rowCount(), rowCount + 1);
 }
 
 void TestTagModel::testData()

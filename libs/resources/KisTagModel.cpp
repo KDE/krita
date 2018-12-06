@@ -70,14 +70,13 @@ int KisTagModel::columnCount(const QModelIndex &/*parent*/) const
 QVariant KisTagModel::data(const QModelIndex &index, int role) const
 {
     QVariant v;
-    if (!index.isValid()) return v;
 
+    if (!index.isValid()) return v;
     if (index.row() > rowCount()) return v;
     if (index.column() > d->columnCount) return v;
 
     // The first row is All
     // XXX: Should we also add an "All Untagged"?
-
     if (index.row() < d->fakeRowsCount) {
         switch(role) {
         case Qt::DisplayRole:   // fallthrough
@@ -91,13 +90,12 @@ QVariant KisTagModel::data(const QModelIndex &index, int role) const
             return "All";
         }
         case Qt::UserRole + ResourceType:
-            return d->query.value("resource_type");
+            return d->resourceType;
         default:
             ;
         }
     }
     else {
-
         bool pos = const_cast<KisTagModel*>(this)->d->query.seek(index.row() - d->fakeRowsCount);
         if (pos) {
             switch(role) {
@@ -138,6 +136,8 @@ bool KisTagModel::prepareQuery()
     if (!r) {
         qWarning() << "Could not prepare KisTagModel query" << d->query.lastError();
     }
+
+    d->query.bindValue(":resource_type", d->resourceType);
 
     r = d->query.exec();
 

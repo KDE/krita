@@ -35,7 +35,7 @@ void TestFolderStorage ::testStorage()
 {
     KisFolderStorage folderStorage(QString(FILES_DATA_DIR));
 
-    KisResourceLoaderRegistry::instance()->add("brushes", new KisResourceLoader<DummyResource>("dummy", "brushes", QStringList() << "image/x-gimp-brush"));
+    KisResourceLoaderRegistry::instance()->add("brushes", new KisResourceLoader<DummyResource>("dummy", "brushes", i18n("Brush tips"), QStringList() << "image/x-gimp-brush"));
     QSharedPointer<KisResourceStorage::ResourceIterator> iter = folderStorage.resources("brushes");
     QVERIFY(iter->hasNext());
     int count = 0;

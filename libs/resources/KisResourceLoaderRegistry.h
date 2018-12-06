@@ -55,13 +55,12 @@ public:
      */
     QStringList resourceTypes() const;
 
-private:
-
     /**
      * @return a list of loader plugins that can handle the resources stored in the folder. A folder can contain multiple subtypes.
      */
     QVector<KisResourceLoaderBase*> resourceTypeLoaders(const QString &resourceType) const;
 
+private:
 
     KisResourceLoaderRegistry(QObject *parent);
     KisResourceLoaderRegistry(const KisResourceLoaderRegistry&);

@@ -8,6 +8,7 @@ set(kritaresources_LIB_SRCS
     KisResourceLocator.cpp
     KisResourceStorage.cpp
     KisResourceModel.cpp
+    KisResourceTypeModel.cpp
 
     KisStoragePlugin.cpp
     KisAbrStorage.cpp

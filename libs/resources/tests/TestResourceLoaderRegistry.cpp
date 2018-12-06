@@ -39,7 +39,7 @@ void TestResourceLoaderRegistry::testRegistry()
 {
     KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
 
-    KisResourceLoader<DummyResource> *loader = new KisResourceLoader<DummyResource>("dummy", "dummy", QStringList() << "x-dummy");
+    KisResourceLoader<DummyResource> *loader = new KisResourceLoader<DummyResource>("dummy", "dummy", i18n("Dummy"), QStringList() << "x-dummy");
     reg->add(loader);
     QVERIFY(reg->count() == 1);
 

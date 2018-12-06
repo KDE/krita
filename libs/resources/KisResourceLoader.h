@@ -27,6 +27,7 @@
 #include <QSharedPointer>
 
 #include <KoResource.h>
+#include <KoID.h>
 
 #include <kritaresources_export.h>
 
@@ -40,11 +41,12 @@ class KRITARESOURCES_EXPORT KisResourceLoaderBase
 {
 public:
 
-    KisResourceLoaderBase(const QString &resourceSubType, const QString &resourceType, const QStringList &mimetypes)
+    KisResourceLoaderBase(const QString &resourceSubType, const QString &resourceType, const QString &name, const QStringList &mimetypes)
     {
         m_resourceSubType = resourceSubType;
         m_resourceType = resourceType;
         m_mimetypes = mimetypes;
+        m_name = name;
     }
 
     virtual ~KisResourceLoaderBase()
@@ -85,6 +87,12 @@ public:
         return m_resourceSubType;
     }
 
+    /// The user-friendly name of the category
+    QString name() const
+    {
+        return m_name;
+    }
+
     /**
      * Load this resource.
      * @return a resource if loading the resource succeeded, 0 otherwise
@@ -95,14 +103,15 @@ private:
     QString m_resourceSubType;
     QString m_resourceType;
     QStringList m_mimetypes;
+    QString m_name;
 
 };
 
 template<typename T>
 class KRITARESOURCES_EXPORT KisResourceLoader : public KisResourceLoaderBase {
 public:
-    KisResourceLoader(const QString &id, const QString &folder, const QStringList &mimetypes)
-        : KisResourceLoaderBase(id, folder, mimetypes)
+    KisResourceLoader(const QString &id, const QString &folder, const QString &name, const QStringList &mimetypes)
+        : KisResourceLoaderBase(id, folder, name, mimetypes)
     {
     }
 

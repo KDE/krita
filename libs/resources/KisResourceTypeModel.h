@@ -15,41 +15,30 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KISTAGMODEL_H
-#define KISTAGMODEL_H
+#ifndef KISRESOURCETYPEMODEL_H
+#define KISRESOURCETYPEMODEL_H
 
-#include <QObject>
 #include <QAbstractTableModel>
+#include <QObject>
 
 #include "kritaresources_export.h"
 
-class KRITARESOURCES_EXPORT KisTagModel : public QAbstractTableModel
+class KRITARESOURCES_EXPORT KisResourceTypeModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
 
     enum Columns {
         Id = 0,
-        Url,
+        ResourceType,
         Name,
-        Comment,
-        ResourceType
     };
 
-    KisTagModel(const QString &resourceType, QObject *parent = 0);
+    KisResourceTypeModel(QObject *parent = 0);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
-
-
-private:
-
-    bool prepareQuery();
-
-    struct Private;
-    Private* const d;
-
 };
 
-#endif // KOTAGMODEL_H
+#endif // KISRESOURCETYPEMODEL_H

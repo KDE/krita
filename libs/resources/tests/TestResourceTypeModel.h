@@ -15,41 +15,25 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KISTAGMODEL_H
-#define KISTAGMODEL_H
+#ifndef TESTRESOURCETYPEMODEL_H
+#define TESTRESOURCETYPEMODEL_H
 
 #include <QObject>
-#include <QAbstractTableModel>
+class KisResourceLocator;
 
-#include "kritaresources_export.h"
-
-class KRITARESOURCES_EXPORT KisTagModel : public QAbstractTableModel
+class TestResourceTypeModel : public QObject
 {
     Q_OBJECT
-public:
-
-    enum Columns {
-        Id = 0,
-        Url,
-        Name,
-        Comment,
-        ResourceType
-    };
-
-    KisTagModel(const QString &resourceType, QObject *parent = 0);
-
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex &index, int role) const override;
-
-
+private Q_SLOTS:
+    void initTestCase();
+    void testRowCount();
+    void testData();
+    void cleanupTestCase();
 private:
 
-    bool prepareQuery();
-
-    struct Private;
-    Private* const d;
-
+    QString m_srcLocation;
+    QString m_dstLocation;
+    KisResourceLocator *m_locator;
 };
 
-#endif // KOTAGMODEL_H
+#endif

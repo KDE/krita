@@ -297,17 +297,17 @@ bool KisApplication::loadResources()
 {
     KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
 
-    reg->add(new KisResourceLoader<KisPaintOpPreset>("paintoppresets", "paintoppresets",  QStringList() << "application/x-krita-paintoppreset"));
+    reg->add(new KisResourceLoader<KisPaintOpPreset>("paintoppresets", "paintoppresets", i18n("Brush presets"), QStringList() << "application/x-krita-paintoppreset"));
 
-    reg->add(new KisResourceLoader<KisGbrBrush>("gbr_brushes", "brushes", QStringList() << "image/x-gimp-brush"));
-    reg->add(new KisResourceLoader<KisImagePipeBrush>("gih_brushes", "brushes", QStringList() << "image/x-gimp-brush-animated"));
-    reg->add(new KisResourceLoader<KisSvgBrush>("svg_brushes", "brushes", QStringList() << "image/svg+xml"));
-    reg->add(new KisResourceLoader<KisPngBrush>("png_brushes", "brushes", QStringList() << "image/png"));
+    reg->add(new KisResourceLoader<KisGbrBrush>("gbr_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/x-gimp-brush"));
+    reg->add(new KisResourceLoader<KisImagePipeBrush>("gih_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/x-gimp-brush-animated"));
+    reg->add(new KisResourceLoader<KisSvgBrush>("svg_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/svg+xml"));
+    reg->add(new KisResourceLoader<KisPngBrush>("png_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/png"));
 
-    reg->add(new KisResourceLoader<KoSegmentGradient>("segmented_gradients", "gradients", QStringList() << "application/x-gimp-gradient"));
-    reg->add(new KisResourceLoader<KoStopGradient>("stop_gradients", "gradients", QStringList() << "application/x-karbon-gradient" << "image/svg+xml"));
+    reg->add(new KisResourceLoader<KoSegmentGradient>("segmented_gradients", "gradients", i18n("Gradients"), QStringList() << "application/x-gimp-gradient"));
+    reg->add(new KisResourceLoader<KoStopGradient>("stop_gradients", "gradients", i18n("Gradients"), QStringList() << "application/x-karbon-gradient" << "image/svg+xml"));
 
-    reg->add(new KisResourceLoader<KoColorSet>("palettes", "palettes",
+    reg->add(new KisResourceLoader<KoColorSet>("palettes", "palettes", i18n("Palettes"),
                                      QStringList() << KisMimeDatabase::mimeTypeForSuffix("kpl")
                                                << KisMimeDatabase::mimeTypeForSuffix("gpl")
                                                << KisMimeDatabase::mimeTypeForSuffix("pal")
@@ -325,12 +325,12 @@ bool KisApplication::loadResources()
     }
     allImageMimes << KisMimeDatabase::mimeTypeForSuffix("pat");
 
-    reg->add(new KisResourceLoader<KoPattern>("patterns", "patterns", allImageMimes));
-    reg->add(new KisResourceLoader<KisWorkspaceResource>("workspaces", "workspaces", QStringList() << "application/x-krita-workspace"));
-    reg->add(new KisResourceLoader<KoSvgSymbolCollectionResource>("symbols", "symbols", QStringList() << "image/svg+xml"));
-    reg->add(new KisResourceLoader<KisWindowLayoutResource>("windowlayouts", "sessions", QStringList() << "application/x-krita-windowlayout"));
-    reg->add(new KisResourceLoader<KisSessionResource>("sessions", "sessions", QStringList() << "application/x-krita-session"));
-    reg->add(new KisResourceLoader<KoGamutMask>("gamutmasks", "gamutmasks", QStringList() << "application/x-krita-gamutmask"));
+    reg->add(new KisResourceLoader<KoPattern>("patterns", "patterns", i18n("Patterns"), allImageMimes));
+    reg->add(new KisResourceLoader<KisWorkspaceResource>("workspaces", "workspaces", i18n("Workspaces"), QStringList() << "application/x-krita-workspace"));
+    reg->add(new KisResourceLoader<KoSvgSymbolCollectionResource>("symbols", "symbols", i18n("SVG symbol libraries"), QStringList() << "image/svg+xml"));
+    reg->add(new KisResourceLoader<KisWindowLayoutResource>("windowlayouts", "windowlayouts", i18n("Window layouts"), QStringList() << "application/x-krita-windowlayout"));
+    reg->add(new KisResourceLoader<KisSessionResource>("sessions", "sessions", i18n("Sessions"), QStringList() << "application/x-krita-session"));
+    reg->add(new KisResourceLoader<KoGamutMask>("gamutmasks", "gamutmasks", i18n("Gamut masks"), QStringList() << "application/x-krita-gamutmask"));
 
     if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), i18n("Could not create the resources cache database. Krita will quit now."));

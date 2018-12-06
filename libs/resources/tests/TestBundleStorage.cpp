@@ -31,17 +31,17 @@
 void TestBundleStorage::initTestCase()
 {
     KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
-    reg->add(new KisResourceLoader<DummyResource>("gbr_brushes", "brushes", QStringList() << "image/x-gimp-brush"));
-    reg->add(new KisResourceLoader<DummyResource>("gih_brushes", "brushes", QStringList() << "image/x-gimp-brush-animated"));
-    reg->add(new KisResourceLoader<DummyResource>("svg_brushes", "brushes", QStringList() << "image/svg+xml"));
-    reg->add(new KisResourceLoader<DummyResource>("png_brushes", "brushes", QStringList() << "image/png"));
-    reg->add("brushes", new KisResourceLoader<DummyResource>("paintoppresets", "paintoppresets",  QStringList() << "application/x-krita-paintoppreset"));
+    reg->add(new KisResourceLoader<DummyResource>("gbr_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/x-gimp-brush"));
+    reg->add(new KisResourceLoader<DummyResource>("gih_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/x-gimp-brush-animated"));
+    reg->add(new KisResourceLoader<DummyResource>("svg_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/svg+xml"));
+    reg->add(new KisResourceLoader<DummyResource>("png_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/png"));
+    reg->add(new KisResourceLoader<DummyResource>("paintoppresets", "paintoppresets",  i18n("Brush presets"), QStringList() << "application/x-krita-paintoppreset"));
     QList<QByteArray> src = QImageReader::supportedMimeTypes();
     QStringList allImageMimes;
     Q_FOREACH(const QByteArray ba, src) {
         allImageMimes << QString::fromUtf8(ba);
     }
-    reg->add(new KisResourceLoader<DummyResource>("patterns", "patterns", allImageMimes));
+    reg->add(new KisResourceLoader<DummyResource>("patterns", "patterns", i18n("Patterns"), allImageMimes));
 }
 
 void TestBundleStorage::testMetaData()

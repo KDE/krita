@@ -40,7 +40,6 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
     , d(new Private)
 {
     d->resourceType = resourceType;
-
     prepareQuery();
 }
 

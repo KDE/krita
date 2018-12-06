@@ -662,7 +662,7 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
 {
     {
         QSqlQuery q;
-        if (!q.prepare("DELETE FROM resources"
+        if (!q.prepare("DELETE FROM resources\n"
                        "WHERE resource_id IN (SELECT versioned_resources.resource_id\n"
                        "                      WHERE  versioned_resources.storage_id = (SELECT storages.storage_id\n"
                        "                                                              WHERE storages.location = :location)\n"

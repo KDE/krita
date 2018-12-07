@@ -43,6 +43,9 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
 
     setMainWidget(m_page);
 
+    m_resourceTypeModel = new KisResourceTypeModel(this);
+
+
     {
         TableModel *storagesModel = new TableModel(this, QSqlDatabase::database());
         TableDelegate *storagesDelegate = new TableDelegate(m_page->tableStorages);
@@ -73,6 +76,9 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         m_page->tableResources->setModel(resourcesModel);
         m_page->tableResources->hideColumn(0);
         m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);;
+
+        m_page->cmbResourceTypes->setModel(m_resourceTypeModel);
+        m_page->cmbResourceTypes->setModelColumn(KisResourceTypeModel::Name);
     }
 
     {
@@ -115,14 +121,9 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
 
 
     {
-        m_resourceTypeModel = new KisResourceTypeModel(this);
-//        m_page->cmbRvResourceTypes->addItems(QStringList() << "bla" << "asdsad" << "Adasd" << "wrwerwe");
-        m_page->cmbRvResourceTypes->setModelColumn(KisResourceTypeModel::Name);
         m_page->cmbRvResourceTypes->setModel(m_resourceTypeModel);
-        m_page->cmbRvResourceTypes->setItemDelegate(new KisResourceTypeDelegate(this));
+        m_page->cmbRvResourceTypes->setModelColumn(KisResourceTypeModel::Name);
         connect(m_page->cmbRvResourceTypes, SIGNAL(activated(int)), SLOT(slotRvResourceTypeSelected(int)));
-
-        qDebug() << "combobox count" << m_page->cmbRvResourceTypes->count();
 
         m_tagModel = new KisTagModel("", this);
         m_page->cmbRvTags->setModelColumn(KisTagModel::Name);
@@ -130,7 +131,6 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         connect(m_page->cmbRvTags, SIGNAL(activated(int)), SLOT(slotRvTagSelected(int)));
 
         m_resourceModel = 0;
-
 
         m_page->cmbRvResourceTypes->setCurrentIndex(0);
 

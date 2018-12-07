@@ -24,17 +24,6 @@
 
 #include "kritaresources_export.h"
 
-class KRITARESOURCES_EXPORT KisResourceTypeDelegate : public QStyledItemDelegate
-{
-  Q_OBJECT
-public:
-    KisResourceTypeDelegate(QObject *parent = 0);
-    ~KisResourceTypeDelegate() override;
-
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-
-};
-
 class KRITARESOURCES_EXPORT KisResourceTypeModel : public QAbstractTableModel
 {
     Q_OBJECT

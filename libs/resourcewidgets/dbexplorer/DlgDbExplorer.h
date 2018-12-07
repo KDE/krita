@@ -27,6 +27,8 @@ class KisResourceModel;
 class KisTagModel;
 class KisResourceTypeModel;
 
+
+
 class WdgDbExplorer : public QWidget, public Ui::WdgDbExplorer
 {
     Q_OBJECT

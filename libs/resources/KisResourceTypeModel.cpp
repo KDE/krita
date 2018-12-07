@@ -21,27 +21,6 @@
 #include "KisResourceLoader.h"
 #include "KisResourceLoaderRegistry.h"
 
-
-
-KisResourceTypeDelegate::KisResourceTypeDelegate(QObject *parent)
-    : QStyledItemDelegate(parent)
-{
-
-}
-
-KisResourceTypeDelegate::~KisResourceTypeDelegate()
-{
-
-}
-
-QSize KisResourceTypeDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    QSize sz = QStyledItemDelegate::sizeHint(option, index);
-    qDebug() << "delegate size" << sz;
-    return sz;
-}
-
-
 struct KisResourceTypeModel::Private {
     int cachedRowCount {-1};
     QSqlQuery query;
@@ -92,8 +71,6 @@ QVariant KisResourceTypeModel::data(const QModelIndex &index, int role) const
 
     bool pos = d->query.seek(index.row());
 
-    qDebug() << "KisResourceTypeModel::data" << pos << index.row() << index.column() << role << ":" << Name;
-
     if (pos) {
         QString id = d->query.value("id").toString();
         QString resourceType = d->query.value("name").toString();
@@ -102,20 +79,15 @@ QVariant KisResourceTypeModel::data(const QModelIndex &index, int role) const
         Q_ASSERT(loaders.size() > 0);
         name = loaders.first()->name();
 
-        qDebug() << id << resourceType << name;
-
         switch(role) {
         case Qt::DisplayRole:
         {
             switch(index.column()) {
             case Id:
-                qDebug() << "Id" << id;
                 return id;
             case ResourceType:
-                qDebug() << "resourcetype" << resourceType;
                 return resourceType;
             case Name:
-                qDebug() << "Name" << name;
                 return name;
             }
         }

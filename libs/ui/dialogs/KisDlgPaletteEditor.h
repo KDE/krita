@@ -27,6 +27,8 @@
 #include <QSet>
 #include <QButtonGroup>
 
+#include <KoColorSet.h>
+
 #include "kritaui_export.h"
 
 class QAction;

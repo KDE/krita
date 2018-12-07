@@ -21,6 +21,27 @@
 #include "KisResourceLoader.h"
 #include "KisResourceLoaderRegistry.h"
 
+
+
+KisResourceTypeDelegate::KisResourceTypeDelegate(QObject *parent)
+    : QStyledItemDelegate(parent)
+{
+
+}
+
+KisResourceTypeDelegate::~KisResourceTypeDelegate()
+{
+
+}
+
+QSize KisResourceTypeDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    QSize sz = QStyledItemDelegate::sizeHint(option, index);
+    qDebug() << "delegate size" << sz;
+    return sz;
+}
+
+
 struct KisResourceTypeModel::Private {
     int cachedRowCount {-1};
     QSqlQuery query;

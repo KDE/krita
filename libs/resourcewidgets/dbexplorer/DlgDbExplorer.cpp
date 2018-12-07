@@ -116,13 +116,13 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
 
     {
         m_resourceTypeModel = new KisResourceTypeModel(this);
+//        m_page->cmbRvResourceTypes->addItems(QStringList() << "bla" << "asdsad" << "Adasd" << "wrwerwe");
         m_page->cmbRvResourceTypes->setModelColumn(KisResourceTypeModel::Name);
         m_page->cmbRvResourceTypes->setModel(m_resourceTypeModel);
-        //m_page->cmbRvResourceTypes->setItemDelegate(new QStyledItemDelegate(this));
+        m_page->cmbRvResourceTypes->setItemDelegate(new KisResourceTypeDelegate(this));
         connect(m_page->cmbRvResourceTypes, SIGNAL(activated(int)), SLOT(slotRvResourceTypeSelected(int)));
 
         qDebug() << "combobox count" << m_page->cmbRvResourceTypes->count();
-
 
         m_tagModel = new KisTagModel("", this);
         m_page->cmbRvTags->setModelColumn(KisTagModel::Name);

@@ -108,7 +108,7 @@ private:
 };
 
 template<typename T>
-class KRITARESOURCES_EXPORT KisResourceLoader : public KisResourceLoaderBase {
+class KisResourceLoader : public KisResourceLoaderBase {
 public:
     KisResourceLoader(const QString &id, const QString &folder, const QString &name, const QStringList &mimetypes)
         : KisResourceLoaderBase(id, folder, name, mimetypes)

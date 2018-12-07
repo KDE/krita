@@ -188,7 +188,7 @@ KoResourceSP KisFolderStorage::resource(const QString &url)
     Q_ASSERT(loader);
     QFile f(fi.absoluteFilePath());
     if (!f.open(QFile::ReadOnly)) {
-        qWarning() << "Could not open" << fi << "for reading";
+        qWarning() << "Could not open" << fi.absoluteFilePath() << "for reading";
         return 0;
     }
     KoResourceSP res = loader->load(url, f);

@@ -42,7 +42,7 @@
 #include <sys/types.h> // uid_t
 #include <fcntl.h> // open
 
-KCONFIGCORE_EXPORT bool kde_kiosk_exception = false; // flag to disable kiosk restrictions
+bool kde_kiosk_exception = false; // flag to disable kiosk restrictions
 
 static QByteArray lookup(const KConfigIniBackend::BufferFragment &fragment, QHash<KConfigIniBackend::BufferFragment, QByteArray> *cache)
 {

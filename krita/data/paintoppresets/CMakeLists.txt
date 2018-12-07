@@ -5,7 +5,7 @@ b\)_Basic-5_Size_default.kpp
 DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)
 
 install( FILES
-    "* Favorites.tag"
+    "Favorites.tag"
     "Pixel Art.tag"
     Digital.tag        
     Erasers.tag

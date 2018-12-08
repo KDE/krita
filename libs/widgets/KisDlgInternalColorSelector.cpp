@@ -283,7 +283,8 @@ void KisDlgInternalColorSelector::updateAllElements(QObject *source)
         m_d->hexColorInput->update();
     }
 
-    if (source != m_ui->paletteBox) {
+    KConfigGroup group(KSharedConfig::openConfig(), "");
+    if (source != m_ui->paletteBox && group.readEntry("colorsettings/forcepalettecolors", false)) {
         m_ui->paletteBox->selectClosestColor(m_d->currentColor);
     }
 

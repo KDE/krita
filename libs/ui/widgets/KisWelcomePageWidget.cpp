@@ -19,6 +19,7 @@
 
 #include "KisWelcomePageWidget.h"
 #include <QDebug>
+#include <QFileInfo>
 #include <QDesktopServices>
 #include "kis_action_manager.h"
 #include "kactioncollection.h"
@@ -37,11 +38,11 @@
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
 {
-   setupUi(this);
+    setupUi(this);
 
-   recentDocumentsListView->setDragEnabled(false);
-   recentDocumentsListView->viewport()->setAutoFillBackground(false);
-   recentDocumentsListView->setSpacing(2);
+    recentDocumentsListView->setDragEnabled(false);
+    recentDocumentsListView->viewport()->setAutoFillBackground(false);
+    recentDocumentsListView->setSpacing(2);
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()
@@ -165,44 +166,46 @@ void KisWelcomePageWidget::populateRecentDocuments()
 {
     // grab recent files data
     recentFilesModel = new QStandardItemModel();
-    int recentDocumentsIterator = mainWindow->recentFilesUrls().length() > 5 ? 5 : mainWindow->recentFilesUrls().length(); // grab at most 5
+    QList<QUrl> recentDocuments  = mainWindow->recentFilesUrls();
+    int recentDocumentsCount = recentDocuments.length() > 5 ? 5 : recentDocuments.length(); // grab at most 5
 
-    for (int i = 0; i < recentDocumentsIterator; i++ ) {
+    for (int i = 0; i < recentDocumentsCount; i++ ) {
 
-       QStandardItem *recentItem = new QStandardItem(1,2); // 1 row, 1 column
-       QString recentFileUrlPath = mainWindow->recentFilesUrls().at(i).toString();
-       QString fileName = recentFileUrlPath.split("/").last();
+        QStandardItem *recentItem = new QStandardItem(1,2); // 1 row, 1 column
+        QString recentFileUrlPath = recentDocuments.at(i).toLocalFile();
+        QString fileName = recentFileUrlPath.split("/").last();
+
+        if (QFileInfo(recentFileUrlPath).exists()) {
+            // get thumbnail -- almost all Krita-supported formats save a thumbnail
+            // this was mostly copied from the KisAutoSaveRecovery file
+            QScopedPointer<KoStore> store(KoStore::createStore(QUrl::fromLocalFile(recentFileUrlPath), KoStore::Read));
+
+            if (store) {
+                if (store->open(QString("Thumbnails/thumbnail.png"))
+                        || store->open(QString("preview.png"))) {
+
+                    QByteArray bytes = store->read(store->size());
+                    store->close();
+                    QImage img;
+                    img.loadFromData(bytes);
+                    recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
+
+                }
+                else {
+                    recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
+                }
+
+            }
+        }
+        else {
+            recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
+        }
 
 
-       // get thumbnail -- almost all Krita-supported formats save a thumbnail
-       // this was mostly copied from the KisAutoSaveRecovery file
-       QScopedPointer<KoStore> store(KoStore::createStore(QUrl(recentFileUrlPath), KoStore::Read));
-
-       if (store) {
-           if (store->open(QString("Thumbnails/thumbnail.png"))
-              || store->open(QString("preview.png"))) {
-
-               QByteArray bytes = store->read(store->size());
-               store->close();
-               QImage img;
-               img.loadFromData(bytes);
-               recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
-
-           }
-           else {
-               recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
-           }
-
-       }
-       else {
-           recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
-       }
-
-
-       // set the recent object with the data
-       recentItem->setText(fileName); // what to display for the item
-       recentItem->setToolTip(recentFileUrlPath);
-       recentFilesModel->appendRow(recentItem);
+        // set the recent object with the data
+        recentItem->setText(fileName); // what to display for the item
+        recentItem->setToolTip(recentFileUrlPath);
+        recentFilesModel->appendRow(recentItem);
 
 
     }

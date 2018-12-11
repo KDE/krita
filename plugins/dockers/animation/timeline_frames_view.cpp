@@ -33,6 +33,7 @@
 #include <QInputDialog>
 #include <QClipboard>
 #include <QMimeData>
+#include "config-qtmultimedia.h"
 
 #include "KSharedConfig"
 

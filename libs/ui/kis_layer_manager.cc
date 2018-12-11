@@ -666,10 +666,14 @@ KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode, c
 KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
+    QColor currentForeground = m_view->resourceProvider()->fgColor().toQColor();
 
     KisDlgGeneratorLayer dlg(image->nextLayerName(), m_view, m_view->mainWindow());
-    dlg.resize(dlg.minimumSizeHint());
+    KisFilterConfigurationSP defaultConfig = dlg.configuration();
+    defaultConfig->setProperty("color", currentForeground);
+    dlg.setConfiguration(defaultConfig);
 
+    dlg.resize(dlg.minimumSizeHint());
     if (dlg.exec() == QDialog::Accepted) {
         KisSelectionSP selection = m_view->selection();
         KisFilterConfigurationSP  generator = dlg.configuration();

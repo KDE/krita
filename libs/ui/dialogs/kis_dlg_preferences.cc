@@ -838,6 +838,12 @@ void PerformanceTab::load(bool requestDefault)
         chkBackgroundCacheGeneration->setChecked(cfg2.calculateAnimationCacheInBackground(requestDefault));
     }
 
+#ifdef Q_OS_WIN
+    optOnDisk->setChecked(false);
+    optOnDisk->setEnabled(false);
+    optInMemory->setEnabled(false);
+#endif
+
     if (cfg.useOnDiskAnimationCacheSwapping(requestDefault)) {
         optOnDisk->setChecked(true);
     } else {

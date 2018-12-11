@@ -527,7 +527,11 @@ void KisImageConfig::setFpsLimit(int value)
 
 bool KisImageConfig::useOnDiskAnimationCacheSwapping(bool defaultValue) const
 {
+#ifdef Q_OS_WIN
+    return false;
+#else
     return defaultValue ? true : m_config.readEntry("useOnDiskAnimationCacheSwapping", true);
+#endif
 }
 
 void KisImageConfig::setUseOnDiskAnimationCacheSwapping(bool value)

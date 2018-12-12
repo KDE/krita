@@ -200,7 +200,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
         QStandardItem *recentItem = new QStandardItem(1,2); // 1 row, 1 column
         recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
 
-        QString recentFileUrlPath = m_mainWindow->recentFilesUrls().at(i).toString();
+        QString recentFileUrlPath = m_mainWindow->recentFilesUrls().at(i).toLocalFile();
         QString fileName = recentFileUrlPath.split("/").last();
 
         if (m_thumbnailMap.contains(recentFileUrlPath)) {
@@ -209,7 +209,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
         else {
             if (QFileInfo(recentFileUrlPath).exists()) {
                 if (recentFileUrlPath.endsWith("ora") || recentFileUrlPath.endsWith("kra")) {
-                    QScopedPointer<KoStore> store(KoStore::createStore(QUrl(recentFileUrlPath), KoStore::Read));
+                    QScopedPointer<KoStore> store(KoStore::createStore(QUrl::fromLocalFile(recentFileUrlPath), KoStore::Read));
                     if (store) {
                         if (store->open(QString("Thumbnails/thumbnail.png"))
                                 || store->open(QString("preview.png"))) {
@@ -224,8 +224,9 @@ void KisWelcomePageWidget::populateRecentDocuments()
                     }
                 }
                 else {
-                    QImage img(QUrl(recentFileUrlPath).toLocalFile());
+                    QImage img;
                     img.setDevicePixelRatio(devicePixelRatioF());
+                    img.load(recentFileUrlPath);
                     if (!img.isNull()) {
                         recentItem->setIcon(QIcon(QPixmap::fromImage(img.scaledToWidth(48))));
                     }
@@ -254,7 +255,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
 void KisWelcomePageWidget::recentDocumentClicked(QModelIndex index)
 {
     QString fileUrl = index.data(Qt::ToolTipRole).toString();
-    m_mainWindow->openDocument(QUrl(fileUrl), KisMainWindow::None );
+    m_mainWindow->openDocument(QUrl::fromLocalFile(fileUrl), KisMainWindow::None );
 }
 
 

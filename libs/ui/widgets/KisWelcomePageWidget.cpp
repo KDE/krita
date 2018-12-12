@@ -176,7 +176,6 @@ void KisWelcomePageWidget::populateRecentDocuments()
         QUrl recentFileUrl = recentDocuments.at(i);
         QString fileName = recentFileUrl.toLocalFile().split("/").last();
 
-        qDebug() << ">>>" << QFileInfo(recentFileUrl.toLocalFile()).exists() << recentFileUrl << recentFileUrl.toString() << recentFileUrl.toLocalFile();
 
         if (QFileInfo(recentFileUrl.toLocalFile()).exists()) {
             // get thumbnail -- almost all Krita-supported formats save a thumbnail

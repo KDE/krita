@@ -54,7 +54,6 @@ private Q_SLOTS:
 private:
     WdgDbExplorer *m_page {0};
 
-    KisResourceModel *m_resourceModel {0};
     KisTagModel *m_tagModel {0};
     KisResourceTypeModel *m_resourceTypeModel {0};
 };

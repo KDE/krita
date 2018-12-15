@@ -11,6 +11,7 @@ add_library(kritadbexplorer MODULE ${kritadbexplorer_SOURCES})
 target_link_libraries(kritadbexplorer 
     PRIVATE
         kritaresources
+        kritaresourcewidgets
         kritaui
         Qt5::Core
         Qt5::Widgets

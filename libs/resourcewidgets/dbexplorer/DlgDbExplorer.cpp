@@ -28,7 +28,7 @@
 
 #include <TableModel.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>.h>
+#include <KisResourceModelProvider.h>
 #include <KisResourceTypeModel.h>
 #include <KisTagModel.h>
 
@@ -78,7 +78,7 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         m_page->tableResources->hideColumn(0);
         m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);;
 
-        m_page->cmbResourceTypes->setModel(m_resourceTypeModel);
+        m_page->cmbResourceTypes->setModel(KisResourceModelProvider::resourceModel("gradients"));
         m_page->cmbResourceTypes->setModelColumn(KisResourceTypeModel::Name);
     }
 
@@ -130,8 +130,6 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         m_page->cmbRvTags->setModel(m_tagModel);
         connect(m_page->cmbRvTags, SIGNAL(activated(int)), SLOT(slotRvTagSelected(int)));
 
-        m_resourceModel = 0;
-
         m_page->cmbRvResourceTypes->setCurrentIndex(0);
 
     }
@@ -145,7 +143,10 @@ DlgDbExplorer::~DlgDbExplorer()
 void DlgDbExplorer::slotRvResourceTypeSelected(int index)
 {
     QModelIndex idx = m_page->cmbRvResourceTypes->model()->index(index, KisResourceTypeModel::ResourceType);
+    QString resourceType = idx.data(Qt::DisplayRole).toString();
+    qDebug() << resourceType;
     m_tagModel->setResourceType(idx.data(Qt::DisplayRole).toString());
+    m_page->resourceItemView->setModel(KisResourceModelProvider::resourceModel(resourceType));
 }
 
 void DlgDbExplorer::slotRvTagSelected(int index)

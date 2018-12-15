@@ -48,7 +48,9 @@ KisResourceItemView::KisResourceItemView(QWidget *parent)
 
 bool KisResourceItemView::viewportEvent(QEvent *event)
 {
-    if (event->type() == QEvent::ToolTip && model()) {
+    if (!model()) return true;
+
+    if (event->type() == QEvent::ToolTip) {
         QHelpEvent *he = static_cast<QHelpEvent *>(event);
         QStyleOptionViewItem option = viewOptions();
         QModelIndex index = model()->buddy(indexAt(he->pos()));
@@ -66,7 +68,8 @@ void KisResourceItemView::selectionChanged(const QItemSelection &selected, const
 {
     if (selected.isEmpty()) {
         emit currentResourceChanged(QModelIndex());
-    } else {
+    }
+    else {
         emit currentResourceChanged(selected.indexes().first());
     }
 }
@@ -82,7 +85,6 @@ void KisResourceItemView::slotItemClicked(const QModelIndex &index)
     if (m_beforeClickIndex == index) {
         emit currentResourceClicked(index);
     }
-
     m_beforeClickIndex = QModelIndex();
 }
 
@@ -96,7 +98,6 @@ void KisResourceItemView::resizeEvent(QResizeEvent *event)
 {
     QTableView::resizeEvent(event);
     updateView();
-
     emit sigSizeChanged();
 }
 
@@ -122,6 +123,8 @@ void KisResourceItemView::setViewMode(ViewMode mode)
 
 void KisResourceItemView::updateView()
 {
+    if (!model()) return;
+
     int columnCount = model()->columnCount(QModelIndex());
     int rowCount = model()->rowCount(QModelIndex());
     int rowHeight, columnWidth;

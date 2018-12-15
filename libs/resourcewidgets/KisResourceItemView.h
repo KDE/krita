@@ -32,8 +32,10 @@
 class QEvent;
 class QModelIndex;
 
+#include "kritaresourcewidgets_export.h"
+
 /// The resource view
-class KisResourceItemView : public QTableView
+class KRITARESOURCEWIDGETS_EXPORT KisResourceItemView : public QTableView
 {
     Q_OBJECT
 

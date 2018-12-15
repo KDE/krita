@@ -7,6 +7,7 @@ set(kritaresources_LIB_SRCS
     KisResourceLocator.cpp
     KisResourceStorage.cpp
     KisResourceModel.cpp
+    KisTagFilterResourceProxyModel.cpp
     KisResourceModelProvider.cpp
     KisResourceTypeModel.cpp
 

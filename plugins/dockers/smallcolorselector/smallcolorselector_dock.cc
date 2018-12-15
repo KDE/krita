@@ -18,7 +18,7 @@
 #include "smallcolorselector_dock.h"
 
 #include <klocalizedstring.h>
-#include <KoCanvasBase.h>
+#include "kis_canvas2.h"
 
 #include "kis_small_color_widget.h"
 #include "kis_canvas_resource_provider.h"
@@ -37,9 +37,9 @@ SmallColorSelectorDock::SmallColorSelectorDock()
     layout->addWidget(m_smallColorWidget);
     layout->addStretch(1);
     setWidget(page);
-    m_smallColorWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    connect(m_smallColorWidget, SIGNAL(colorChanged(QColor)),
-            this, SLOT(colorChangedProxy(QColor)));
+    m_smallColorWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    connect(m_smallColorWidget, SIGNAL(koColorChanged(KoColor)),
+            this, SLOT(colorChangedProxy(KoColor)));
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             m_smallColorWidget, SLOT(update()));
@@ -53,26 +53,30 @@ void SmallColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-        m_smallColorWidget->setQColor(Qt::black);
+        m_smallColorWidget->setColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
+        m_smallColorWidget->setDisplayColorConverter(0);
     }
     m_canvas = canvas;
     if (m_canvas && m_canvas->resourceManager()) {
         connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
                 this, SLOT(canvasResourceChanged(int,QVariant)));
-        m_smallColorWidget->setQColor(m_canvas->resourceManager()->foregroundColor().toQColor());
+
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
+        m_smallColorWidget->setDisplayColorConverter(kisCanvas->displayColorConverter());
+        m_smallColorWidget->setColor(m_canvas->resourceManager()->foregroundColor());
     }
 }
 
-void SmallColorSelectorDock::colorChangedProxy(const QColor& c)
+void SmallColorSelectorDock::colorChangedProxy(const KoColor& c)
 {
     if (m_canvas)
-        m_canvas->resourceManager()->setForegroundColor(KoColor(c , KoColorSpaceRegistry::instance()->rgb8()));
+        m_canvas->resourceManager()->setForegroundColor(c);
 }
 
 void SmallColorSelectorDock::canvasResourceChanged(int key, const QVariant& v)
 {
     if (key == KoCanvasResourceProvider::ForegroundColor) {
-        m_smallColorWidget->setQColor(v.value<KoColor>().toQColor());
+        m_smallColorWidget->setColor(v.value<KoColor>());
     }
 }
 

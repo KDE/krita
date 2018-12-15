@@ -18,42 +18,50 @@
 #ifndef _KIS_SMALL_COLOR_WIDGET_H_
 #define _KIS_SMALL_COLOR_WIDGET_H_
 
-#include <QOpenGLWidget>
+#include <QWidget>
 
-class KisSmallColorWidget : public QOpenGLWidget
+class KoColor;
+class KisDisplayColorConverter;
+class KisGLImageWidget;
+
+class KisSmallColorWidget : public QWidget
 {
     Q_OBJECT
 public:
     KisSmallColorWidget(QWidget* parent);
     ~KisSmallColorWidget() override;
 public:
-    void paintEvent(QPaintEvent * event) override;
     void resizeEvent(QResizeEvent * event) override;
-    void mouseReleaseEvent(QMouseEvent * event) override;
-    void mousePressEvent(QMouseEvent * event) override;
-    void mouseMoveEvent(QMouseEvent * event) override;
 
-    QSize sizeHint() const override;
-    bool hasHeightForWidth() const override;
-    int heightForWidth(int width) const override;
+    void setDisplayColorConverter(KisDisplayColorConverter *converter);
 
 public:
-    int hue() const;
-    int value() const;
-    int saturation() const;
-    QColor color() const;
+
 public Q_SLOTS:
-    void setHue(int h);
-    void setHSV(int h, int s, int v);
-    void setQColor(const QColor&);
+    void setHue(qreal h);
+    void setHSV(qreal h, qreal s, qreal v, bool notifyChanged = true);
+    void setColor(const KoColor &color);
+
+    void slotUpdatePalettes();
+    void updateSVPalette();
+
 Q_SIGNALS:
-    void colorChanged(const QColor&);
+    void koColorChanged(const KoColor&);
+
+private Q_SLOTS:
+    void slotHueSliderChanged(const QPointF &pos);
+    void slotValueSliderChanged(const QPointF &pos);
+    void slotUpdateDynamicRange(int maxLuminance);
+    void slotDisplayConfigurationChanged();
+
 private:
     void tellColorChanged();
-    void updateParameters(const QSize &size);
-    void generateRubber();
-    void generateSquare();
-    void selectColorAt(int _x, int _y);
+    void updateHuePalette();
+
+    template<class FillPolicy>
+    void uploadPaletteData(KisGLImageWidget *widget, const QSize &size);
+
+
 private:
     struct Private;
     Private* const d;

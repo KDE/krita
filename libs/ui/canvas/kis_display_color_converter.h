@@ -64,6 +64,11 @@ public:
     QColor toQColor(const KoColor &c) const;
     KoColor approximateFromRenderedQColor(const QColor &c) const;
 
+    bool canSkipDisplayConversion(const KoColorSpace *cs) const;
+    KoColor applyDisplayFiltering(const KoColor &c, bool alreadyInF32) const;
+    void applyDisplayFilteringF32(KisFixedPaintDeviceSP device);
+
+
     /**
      * Converts the exactBounds() (!) of the \p srcDevice into QImage
      * properly rendered into display RGB space. Please note that the
@@ -96,7 +101,8 @@ Q_SIGNALS:
 private:
     // is not possible to implement!
     KoColor toKoColor(const QColor &c);
-
+    template <class Policy>
+    typename Policy::Result convertToDisplayImpl(const KoColor &srcColor, bool alreadyInDestinationF32 = false) const;
 
 private:
     Q_PRIVATE_SLOT(m_d, void slotCanvasResourceChanged(int key, const QVariant &v));

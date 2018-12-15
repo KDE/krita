@@ -46,7 +46,7 @@ public Q_SLOTS:
     void updateSVPalette();
 
 Q_SIGNALS:
-    void koColorChanged(const KoColor&);
+    void colorChanged(const KoColor&);
 
 private Q_SLOTS:
     void slotHueSliderChanged(const QPointF &pos);

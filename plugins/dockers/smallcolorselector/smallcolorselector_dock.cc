@@ -38,7 +38,7 @@ SmallColorSelectorDock::SmallColorSelectorDock()
     layout->addStretch(1);
     setWidget(page);
     m_smallColorWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    connect(m_smallColorWidget, SIGNAL(koColorChanged(KoColor)),
+    connect(m_smallColorWidget, SIGNAL(colorChanged(KoColor)),
             this, SLOT(colorChangedProxy(KoColor)));
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),

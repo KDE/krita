@@ -444,7 +444,7 @@ void KisSmallColorWidget::tellColorChanged()
 
     KoColor c(cs);
     cs->fromNormalisedChannelsValue(c.data(), values);
-    emit koColorChanged(c);
+    emit colorChanged(c);
 
     d->updateAllowed = true;
 }

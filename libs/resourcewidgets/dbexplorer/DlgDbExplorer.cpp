@@ -28,6 +28,7 @@
 
 #include <TableModel.h>
 #include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>.h>
 #include <KisResourceTypeModel.h>
 #include <KisTagModel.h>
 
@@ -44,7 +45,7 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     setMainWidget(m_page);
 
     m_resourceTypeModel = new KisResourceTypeModel(this);
-
+    m_tagModel = new KisTagModel("", this);
 
     {
         TableModel *storagesModel = new TableModel(this, QSqlDatabase::database());
@@ -72,7 +73,7 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     }
 
     {
-        KisResourceModel *resourcesModel = new KisResourceModel("gradients");
+        KisResourceModel *resourcesModel = KisResourceModelProvider::resourceModel("gradients");
         m_page->tableResources->setModel(resourcesModel);
         m_page->tableResources->hideColumn(0);
         m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);;
@@ -125,7 +126,6 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         m_page->cmbRvResourceTypes->setModelColumn(KisResourceTypeModel::Name);
         connect(m_page->cmbRvResourceTypes, SIGNAL(activated(int)), SLOT(slotRvResourceTypeSelected(int)));
 
-        m_tagModel = new KisTagModel("", this);
         m_page->cmbRvTags->setModelColumn(KisTagModel::Name);
         m_page->cmbRvTags->setModel(m_tagModel);
         connect(m_page->cmbRvTags, SIGNAL(activated(int)), SLOT(slotRvTagSelected(int)));

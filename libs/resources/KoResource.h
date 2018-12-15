@@ -22,6 +22,7 @@
 #include <QImage>
 #include <QString>
 #include <QHash>
+#include <QSharedPointer>
 
 #include <kritaresources_export.h>
 

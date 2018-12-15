@@ -39,6 +39,7 @@
 #include "KoResourceTagStore.h"
 #include "KoResourcePaths.h"
 #include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -60,7 +61,7 @@ public:
     * @param extensions the file extensions separate by ':', e.g. "*.kgr:*.svg:*.ggr"
     */
     KoResourceServerBase(const QString& type, const QString& extensions)
-        : m_resourceModel(type)
+        : m_resourceModel(KisResourceModelProvider::resourceModel(type))
         , m_type(type)
         , m_extensions(extensions)
     {
@@ -94,7 +95,7 @@ public:
 
 protected:
 
-    KisResourceModel m_resourceModel;
+    KisResourceModel *m_resourceModel {0};
     QStringList m_blackListFileNames;
 
     friend class KoResourceTagStore;
@@ -144,7 +145,7 @@ public:
     }
 
     int resourceCount() const override {
-        return m_resourceModel.rowCount();
+        return m_resourceModel->rowCount();
     }
 
     /**
@@ -266,8 +267,8 @@ public:
 
     QList<QSharedPointer<T>> resources() {
         QList<QSharedPointer<T>> resourceList;
-        for (int row = 0; row < m_resourceModel.rowCount(); ++row) {
-            resourceList << m_resourceModel.resourceForIndex(m_resourceModel.index(row, 0)).dynamicCast<T>();
+        for (int row = 0; row < m_resourceModel->rowCount(); ++row) {
+            resourceList << m_resourceModel->resourceForIndex(m_resourceModel->index(row, 0)).dynamicCast<T>();
         }
         return resourceList;
     }

@@ -218,7 +218,7 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
      * Compress the events if the tool doesn't need high resolution input
      */
 // See https://bugreports.qt.io/browse/QTBUG-72488    
-#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 3)
     if ((event->type() == QEvent::MouseMove ||
          event->type() == QEvent::TabletMove) &&
             (!d->matcher.supportsHiResInputEvents() ||
@@ -239,12 +239,12 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
 
         retval = true;
     } else {
-#endif        
+#endif
         slotCompressedMoveEvent();
         retval = d->handleCompressedTabletEvent(event);
-#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)    
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 3)
     }
-#endif    
+#endif
 
     return retval;
 }

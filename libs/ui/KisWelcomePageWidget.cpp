@@ -20,6 +20,8 @@
 #include "KisWelcomePageWidget.h"
 #include <QDebug>
 #include <QDesktopServices>
+#include <QFileInfo>
+
 #include "kis_action_manager.h"
 #include "kactioncollection.h"
 #include "kis_action.h"
@@ -198,36 +200,39 @@ void KisWelcomePageWidget::populateRecentDocuments()
         QStandardItem *recentItem = new QStandardItem(1,2); // 1 row, 1 column
         recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
 
-        QString recentFileUrlPath = m_mainWindow->recentFilesUrls().at(i).toString();
+        QString recentFileUrlPath = m_mainWindow->recentFilesUrls().at(i).toLocalFile();
         QString fileName = recentFileUrlPath.split("/").last();
 
         if (m_thumbnailMap.contains(recentFileUrlPath)) {
             recentItem->setIcon(m_thumbnailMap[recentFileUrlPath]);
         }
         else {
-            if (recentFileUrlPath.endsWith("ora") || recentFileUrlPath.endsWith("kra")) {
-                QScopedPointer<KoStore> store(KoStore::createStore(QUrl(recentFileUrlPath), KoStore::Read));
-                if (store) {
-                    if (store->open(QString("Thumbnails/thumbnail.png"))
-                            || store->open(QString("preview.png"))) {
+            if (QFileInfo(recentFileUrlPath).exists()) {
+                if (recentFileUrlPath.endsWith("ora") || recentFileUrlPath.endsWith("kra")) {
+                    QScopedPointer<KoStore> store(KoStore::createStore(QUrl::fromLocalFile(recentFileUrlPath), KoStore::Read));
+                    if (store) {
+                        if (store->open(QString("Thumbnails/thumbnail.png"))
+                                || store->open(QString("preview.png"))) {
 
-                        QByteArray bytes = store->read(store->size());
-                        store->close();
-                        QImage img;
-                        img.loadFromData(bytes);
-                        img.setDevicePixelRatio(devicePixelRatioF());
-                        recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
+                            QByteArray bytes = store->read(store->size());
+                            store->close();
+                            QImage img;
+                            img.loadFromData(bytes);
+                            img.setDevicePixelRatio(devicePixelRatioF());
+                            recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
+                        }
                     }
                 }
-            }
-            else {
-                QImage img(QUrl(recentFileUrlPath).toLocalFile());
-                img.setDevicePixelRatio(devicePixelRatioF());
-                if (!img.isNull()) {
-                    recentItem->setIcon(QIcon(QPixmap::fromImage(img.scaledToWidth(48))));
+                else {
+                    QImage img;
+                    img.setDevicePixelRatio(devicePixelRatioF());
+                    img.load(recentFileUrlPath);
+                    if (!img.isNull()) {
+                        recentItem->setIcon(QIcon(QPixmap::fromImage(img.scaledToWidth(48))));
+                    }
                 }
+                m_thumbnailMap[recentFileUrlPath] = recentItem->icon();
             }
-            m_thumbnailMap[recentFileUrlPath] = recentItem->icon();
         }
 
         // set the recent object with the data
@@ -250,7 +255,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
 void KisWelcomePageWidget::recentDocumentClicked(QModelIndex index)
 {
     QString fileUrl = index.data(Qt::ToolTipRole).toString();
-    m_mainWindow->openDocument(QUrl(fileUrl), KisMainWindow::None );
+    m_mainWindow->openDocument(QUrl::fromLocalFile(fileUrl), KisMainWindow::None );
 }
 
 

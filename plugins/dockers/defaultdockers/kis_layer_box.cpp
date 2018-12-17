@@ -262,7 +262,6 @@ KisLayerBox::KisLayerBox()
 
     m_wdgLayerBox->configureLayerDockerToolbar->setMenu(configureMenu);
     m_wdgLayerBox->configureLayerDockerToolbar->setIcon(KisIconUtils::loadIcon("configure"));
-    m_wdgLayerBox->configureLayerDockerToolbar->setIconSize(QSize(13, 13));
 
     m_wdgLayerBox->configureLayerDockerToolbar->setPopupMode(QToolButton::InstantPopup);
 

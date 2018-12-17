@@ -29,7 +29,6 @@
 #include <QUuid>
 #include <QInputDialog>
 
-
 #include <KoColorPopupButton.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoResourceServerProvider.h>
@@ -46,7 +45,6 @@
 #include "kis_canvas_resource_provider.h"
 
 #include <KoFileDialog.h>
-
 
 
 KoAbstractGradientSP fetchGradientLazy(KoAbstractGradientSP gradient,
@@ -616,13 +614,10 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
     ui.intOpacity2->setRange(0, 100);
     ui.intOpacity2->setSuffix(i18n(" %"));
 
-    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
-    connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
-    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), SLOT(slotGlobalLightToggled()));
+    ui.angleSelector->enableGlobalLight(true);
+    connect(ui.angleSelector, SIGNAL(globalAngleChanged(int)), SIGNAL(globalAngleChanged(int)));
+    connect(ui.angleSelector, SIGNAL(configChanged()), SIGNAL(configChanged()));
 
-    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
-    connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
-    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.intAltitude, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbContour, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.chkAntiAliased, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
@@ -664,9 +659,9 @@ void BevelAndEmboss::setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bev
     ui.intSize->setValue(bevelAndEmboss->size());
     ui.intSoften->setValue(bevelAndEmboss->soften());
 
-    ui.dialAngle->setValue(bevelAndEmboss->angle());
-    ui.intAngle->setValue(bevelAndEmboss->angle());
-    ui.chkUseGlobalLight->setChecked(bevelAndEmboss->useGlobalLight());
+    ui.angleSelector->setValue(bevelAndEmboss->angle());
+    ui.angleSelector->setUseGlobalLight(bevelAndEmboss->useGlobalLight());
+
     ui.intAltitude->setValue(bevelAndEmboss->altitude());
     // FIXME: curve editing
     // ui.cmbContour;
@@ -702,8 +697,8 @@ void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAn
     bevelAndEmboss->setSize(ui.intSize->value());
     bevelAndEmboss->setSoften(ui.intSoften->value());
 
-    bevelAndEmboss->setAngle(ui.dialAngle->value());
-    bevelAndEmboss->setUseGlobalLight(ui.chkUseGlobalLight->isChecked());
+    bevelAndEmboss->setAngle(ui.angleSelector->value());
+    bevelAndEmboss->setUseGlobalLight(ui.angleSelector->useGlobalLight());
     bevelAndEmboss->setAltitude(ui.intAltitude->value());
     bevelAndEmboss->setGlossAntiAliased(ui.chkAntiAliased->isChecked());
     bevelAndEmboss->setHighlightBlendMode(ui.cmbHighlightMode->selectedCompositeOp().id());
@@ -724,32 +719,6 @@ void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAn
     bevelAndEmboss->setTextureAlignWithLayer(m_texture->ui.chkLinkWithLayer->isChecked());
 }
 
-void BevelAndEmboss::slotDialAngleChanged(int value)
-{
-    KisSignalsBlocker b(ui.intAngle);
-    ui.intAngle->setValue(value);
-
-    if (ui.chkUseGlobalLight->isChecked()) {
-        emit globalAngleChanged(value);
-    }
-}
-
-void BevelAndEmboss::slotIntAngleChanged(int value)
-{
-    KisSignalsBlocker b(ui.dialAngle);
-    ui.dialAngle->setValue(value);
-
-    if (ui.chkUseGlobalLight->isChecked()) {
-        emit globalAngleChanged(value);
-    }
-}
-
-void BevelAndEmboss::slotGlobalLightToggled()
-{
-    if (ui.chkUseGlobalLight->isChecked()) {
-        emit globalAngleChanged(ui.intAngle->value());
-    }
-}
 
 /********************************************************************/
 /***** Texture          *********************************************/
@@ -849,18 +818,14 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
     ui.intNoise->setRange(0, 100);
     ui.intNoise->setSuffix(i18n(" %"));
 
-    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
-    connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
-    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), SLOT(slotGlobalLightToggled()));
+    ui.angleSelector->enableGlobalLight(true);
+    connect(ui.angleSelector, SIGNAL(globalAngleChanged(int)), SIGNAL(globalAngleChanged(int)));
+    connect(ui.angleSelector, SIGNAL(configChanged()), SIGNAL(configChanged()));
 
     // connect everything to configChanged() signal
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.bnColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
-
-    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
-    connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
-    connect(ui.chkUseGlobalLight, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
 
     connect(ui.intDistance, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.intSpread, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -879,33 +844,6 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
     }
 }
 
-void DropShadow::slotDialAngleChanged(int value)
-{
-    KisSignalsBlocker b(ui.intAngle);
-    ui.intAngle->setValue(value);
-
-    if (ui.chkUseGlobalLight->isChecked()) {
-        emit globalAngleChanged(value);
-    }
-}
-
-void DropShadow::slotIntAngleChanged(int value)
-{
-    KisSignalsBlocker b(ui.dialAngle);
-    ui.dialAngle->setValue(value);
-
-    if (ui.chkUseGlobalLight->isChecked()) {
-        emit globalAngleChanged(value);
-    }
-}
-
-void DropShadow::slotGlobalLightToggled()
-{
-    if (ui.chkUseGlobalLight->isChecked()) {
-        emit globalAngleChanged(ui.intAngle->value());
-    }
-}
-
 void DropShadow::setShadow(const psd_layer_effects_shadow_common *shadow)
 {
     ui.cmbCompositeOp->selectCompositeOp(KoID(shadow->blendMode()));
@@ -914,9 +852,8 @@ void DropShadow::setShadow(const psd_layer_effects_shadow_common *shadow)
     color.fromQColor(shadow->color());
     ui.bnColor->setColor(color);
 
-    ui.dialAngle->setValue(shadow->angle());
-    ui.intAngle->setValue(shadow->angle());
-    ui.chkUseGlobalLight->setChecked(shadow->useGlobalLight());
+    ui.angleSelector->setValue(shadow->angle());
+    ui.angleSelector->setUseGlobalLight(shadow->useGlobalLight());
 
     ui.intDistance->setValue(shadow->distance());
     ui.intSpread->setValue(shadow->spread());
@@ -942,8 +879,8 @@ void DropShadow::fetchShadow(psd_layer_effects_shadow_common *shadow) const
     shadow->setOpacity(ui.intOpacity->value());
     shadow->setColor(ui.bnColor->color().toQColor());
 
-    shadow->setAngle(ui.dialAngle->value());
-    shadow->setUseGlobalLight(ui.chkUseGlobalLight->isChecked());
+    shadow->setAngle(ui.angleSelector->value());
+    shadow->setUseGlobalLight(ui.angleSelector->useGlobalLight());
 
     shadow->setDistance(ui.intDistance->value());
     shadow->setSpread(ui.intSpread->value());
@@ -1015,8 +952,7 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
     ui.intScale->setRange(0, 100);
     ui.intScale->setSuffix(i18n(" %"));
 
-    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
-    connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
+    connect(ui.angleSelector, SIGNAL(configChanged()), SIGNAL(configChanged()));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -1024,8 +960,6 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
     connect(ui.chkReverse, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.cmbStyle, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.chkAlignWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
-    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
-    connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 }
 
@@ -1043,8 +977,7 @@ void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overla
     ui.chkReverse->setChecked(config->reverse());
     ui.cmbStyle->setCurrentIndex((int)config->style());
     ui.chkAlignWithLayer->setCheckable(config->alignWithLayer());
-    ui.dialAngle->setValue(config->angle());
-    ui.intAngle->setValue(config->angle());
+    ui.angleSelector->setValue(config->angle());
     ui.intScale->setValue(config->scale());
 }
 
@@ -1056,21 +989,10 @@ void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *c
     config->setReverse(ui.chkReverse->isChecked());
     config->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
     config->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
-    config->setAngle(ui.dialAngle->value());
+    config->setAngle(ui.angleSelector->value());
     config->setScale(ui.intScale->value());
 }
 
-void GradientOverlay::slotDialAngleChanged(int value)
-{
-    KisSignalsBlocker b(ui.intAngle);
-    ui.intAngle->setValue(value);
-}
-
-void GradientOverlay::slotIntAngleChanged(int value)
-{
-    KisSignalsBlocker b(ui.dialAngle);
-    ui.dialAngle->setValue(value);
-}
 
 /********************************************************************/
 /***** Innner Glow      *********************************************/
@@ -1262,15 +1184,11 @@ Satin::Satin(QWidget *parent)
     ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(i18n(" px"));
 
-    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
-    connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
-
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.bnColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
-    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
-    connect(ui.intAngle, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
+    connect(ui.angleSelector, SIGNAL(configChanged()), SIGNAL(configChanged()));
     connect(ui.intDistance, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.intSize, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
@@ -1278,18 +1196,6 @@ Satin::Satin(QWidget *parent)
     connect(ui.chkAntiAliased, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.chkInvert, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
 
-}
-
-void Satin::slotDialAngleChanged(int value)
-{
-    KisSignalsBlocker b(ui.intAngle);
-    ui.intAngle->setValue(value);
-}
-
-void Satin::slotIntAngleChanged(int value)
-{
-    KisSignalsBlocker b(ui.dialAngle);
-    ui.dialAngle->setValue(value);
 }
 
 void Satin::setSatin(const psd_layer_effects_satin *satin)
@@ -1300,8 +1206,7 @@ void Satin::setSatin(const psd_layer_effects_satin *satin)
     ui.bnColor->setColor(color);
     ui.intOpacity->setValue(satin->opacity());
 
-    ui.dialAngle->setValue(satin->angle());
-    ui.intAngle->setValue(satin->angle());
+    ui.angleSelector->setValue(satin->angle());
 
     ui.intDistance->setValue(satin->distance());
     ui.intSize->setValue(satin->size());
@@ -1320,7 +1225,7 @@ void Satin::fetchSatin(psd_layer_effects_satin *satin) const
     satin->setOpacity(ui.intOpacity->value());
     satin->setColor(ui.bnColor->color().toQColor());
 
-    satin->setAngle(ui.dialAngle->value());
+    satin->setAngle(ui.angleSelector->value());
 
     satin->setDistance(ui.intDistance->value());
     satin->setSize(ui.intSize->value());
@@ -1368,30 +1273,17 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     connect(ui.chkReverse, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.cmbStyle, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.chkAlignWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
-    connect(ui.dialAngle, SIGNAL(valueChanged(int)), SLOT(slotDialAngleChanged(int)));
-    connect(ui.intAngle, SIGNAL(valueChanged(int)), SLOT(slotIntAngleChanged(int)));
     connect(ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
     connect(ui.patternChooser, SIGNAL(resourceSelected(KoResourceSP )), SIGNAL(configChanged()));
+    connect(ui.angleSelector, SIGNAL(configChanged()), SIGNAL(configChanged()));
+
     connect(ui.chkLinkWithLayer, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
     connect(ui.intScale_2, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
     // cold initialization
     ui.fillStack->setCurrentIndex(ui.cmbFillType->currentIndex());
 }
-
-void Stroke::slotDialAngleChanged(int value)
-{
-    KisSignalsBlocker b(ui.intAngle);
-    ui.intAngle->setValue(value);
-}
-
-void Stroke::slotIntAngleChanged(int value)
-{
-    KisSignalsBlocker b(ui.dialAngle);
-    ui.dialAngle->setValue(value);
-}
-
 
 void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
 {
@@ -1414,8 +1306,7 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
     ui.chkReverse->setChecked(stroke->antiAliased());
     ui.cmbStyle->setCurrentIndex((int)stroke->style());
     ui.chkAlignWithLayer->setCheckable(stroke->alignWithLayer());
-    ui.dialAngle->setValue(stroke->angle());
-    ui.intAngle->setValue(stroke->angle());
+    ui.angleSelector->setValue(stroke->angle());
     ui.intScale->setValue(stroke->scale());
 
     ui.patternChooser->setCurrentPattern(stroke->pattern());
@@ -1438,7 +1329,7 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
     stroke->setReverse(ui.chkReverse->isChecked());
     stroke->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
     stroke->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
-    stroke->setAngle(ui.dialAngle->value());
+    stroke->setAngle(ui.angleSelector->value());
     stroke->setScale(ui.intScale->value());
 
     stroke->setPattern(ui.patternChooser->currentResource().staticCast<KoPattern>());

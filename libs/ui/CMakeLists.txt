@@ -263,7 +263,8 @@ set(kritaui_LIB_SRCS
     widgets/KoDualColorButton.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
-    
+    widgets/KisLayerStyleAngleSelector.cpp
+
     KisPaletteEditor.cpp
     dialogs/KisDlgPaletteEditor.cpp
 
@@ -528,6 +529,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     layerstyles/WdgStroke.ui
     layerstyles/wdgstylesselector.ui
     layerstyles/wdgTexture.ui
+    layerstyles/wdgKisLayerStyleAngleSelector.ui
 
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui

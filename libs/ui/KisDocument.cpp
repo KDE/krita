@@ -49,6 +49,9 @@
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
+#include <kis_generator_layer.h>
+#include <kis_generator_registry.h>
+#include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kbackup.h>
 
@@ -1631,14 +1634,13 @@ bool KisDocument::openUrlInternal(const QUrl &url)
 bool KisDocument::newImage(const QString& name,
                            qint32 width, qint32 height,
                            const KoColorSpace* cs,
-                           const KoColor &bgColor, bool backgroundAsLayer,
+                           const KoColor &bgColor, KisConfig::BackgroundStyle bgStyle,
                            int numberOfLayers,
                            const QString &description, const double imageResolution)
 {
     Q_ASSERT(cs);
 
     KisImageSP image;
-    KisPaintLayerSP layer;
 
     if (!cs) return false;
 
@@ -1655,26 +1657,36 @@ bool KisDocument::newImage(const QString& name,
     documentInfo()->setAboutInfo("title", name);
     documentInfo()->setAboutInfo("abstract", description);
 
-    layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
-    Q_CHECK_PTR(layer);
+    KisLayerSP layer;
+    if (bgStyle == KisConfig::RASTER_LAYER || bgStyle == KisConfig::FILL_LAYER) {
+        KoColor strippedAlpha = bgColor;
+        strippedAlpha.setOpacity(OPACITY_OPAQUE_U8);
 
-    if (backgroundAsLayer) {
-        image->setDefaultProjectionColor(KoColor(cs));
-
-        if (bgColor.opacityU8() == OPACITY_OPAQUE_U8) {
-            layer->paintDevice()->setDefaultPixel(bgColor);
-        } else {
-            // Hack: with a semi-transparent background color, the projection isn't composited right if we just set the default pixel
-            KisFillPainter painter;
-            painter.begin(layer->paintDevice());
-            painter.fillRect(0, 0, width, height, bgColor, bgColor.opacityU8());
+        if (bgStyle == KisConfig::RASTER_LAYER) {
+            layer = new KisPaintLayer(image.data(), "Background", OPACITY_OPAQUE_U8, cs);;
+            layer->paintDevice()->setDefaultPixel(strippedAlpha);
+        } else if (bgStyle == KisConfig::FILL_LAYER) {
+            KisFilterConfigurationSP filter_config = KisGeneratorRegistry::instance()->get("color")->defaultConfiguration();
+            filter_config->setProperty("color", strippedAlpha.toQColor());
+            layer = new KisGeneratorLayer(image.data(), "Background Fill", filter_config, image->globalSelection());
         }
-    } else {
-        image->setDefaultProjectionColor(bgColor);
+
+        layer->setOpacity(bgColor.opacityU8());
+
+        if (numberOfLayers > 1) {
+            //Lock bg layer if others are present.
+            layer->setUserLocked(true);
+        }
     }
+    else { // KisConfig::CANVAS_COLOR (needs an unlocked starting layer).
+        image->setDefaultProjectionColor(bgColor);
+        layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
+    }
+
+    Q_CHECK_PTR(layer);
+    image->addNode(layer.data(), image->rootLayer().data());
     layer->setDirty(QRect(0, 0, width, height));
 
-    image->addNode(layer.data(), image->rootLayer().data());
     setCurrentImage(image);
 
     for(int i = 1; i < numberOfLayers; ++i) {

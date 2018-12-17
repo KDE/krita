@@ -1555,7 +1555,7 @@ void KisConfig::setDefaultBackgroundColor(QColor value)
 
 KisConfig::BackgroundStyle KisConfig::defaultBackgroundStyle(bool defaultValue) const
 {
-  return (KisConfig::BackgroundStyle)(defaultValue ? LAYER : m_cfg.readEntry("BackgroundStyleForNewImage", (int)LAYER));
+  return (KisConfig::BackgroundStyle)(defaultValue ? RASTER_LAYER : m_cfg.readEntry("BackgroundStyleForNewImage", (int)RASTER_LAYER));
 }
 
 void KisConfig::setDefaultBackgroundStyle(KisConfig::BackgroundStyle value)

@@ -40,6 +40,7 @@
 #include <KisReferenceImage.h>
 #include <kis_debug.h>
 #include <KisImportExportUtils.h>
+#include <kis_config.h>
 
 #include "kritaui_export.h"
 
@@ -531,7 +532,7 @@ public:
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
-    bool newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, bool backgroundAsLayer,
+    bool newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, KisConfig::BackgroundStyle bgStyle,
                   int numberOfLayers, const QString &imageDescription, const double imageResolution);
 
     bool isSaving() const;

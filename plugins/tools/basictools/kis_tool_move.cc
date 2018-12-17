@@ -564,7 +564,7 @@ QWidget* KisToolMove::createOptionWidget()
 
     connect(m_optionsWidget, SIGNAL(sigSetTranslateX(int)), SLOT(moveBySpinX(int)));
     connect(m_optionsWidget, SIGNAL(sigSetTranslateY(int)), SLOT(moveBySpinY(int)));
-    connect(m_optionsWidget, SIGNAL(sigRequestCommitOffsetChanges()), this, SLOT(commitChanges()));
+    connect(m_optionsWidget, SIGNAL(sigRequestCommitOffsetChanges()), this, SLOT(commitChanges()), Qt::UniqueConnection);
 
     connect(this, SIGNAL(moveInNewPosition(QPoint)), m_optionsWidget, SLOT(slotSetTranslate(QPoint)));
 

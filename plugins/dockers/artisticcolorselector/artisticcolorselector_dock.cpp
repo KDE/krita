@@ -232,13 +232,13 @@ void ArtisticColorSelectorDock::setViewManager(KisViewManager* kisview)
     m_selectorUI->colorSelector->setBgColor(m_resourceProvider->resourceManager()->backgroundColor());
 
     connect(m_resourceProvider, SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
-            this, SLOT(slotGamutMaskSet(KoGamutMask*)));
+            this, SLOT(slotGamutMaskSet(KoGamutMask*)), Qt::UniqueConnection);
 
     connect(m_resourceProvider, SIGNAL(sigGamutMaskUnset()),
-            this, SLOT(slotGamutMaskUnset()));
+            this, SLOT(slotGamutMaskUnset()), Qt::UniqueConnection);
 
     connect(m_resourceProvider, SIGNAL(sigGamutMaskPreviewUpdate()),
-            this, SLOT(slotGamutMaskPreviewUpdate()));
+            this, SLOT(slotGamutMaskPreviewUpdate()), Qt::UniqueConnection);
 
     m_selectorUI->gamutMaskToolbar->connectMaskSignals(m_resourceProvider);
 }
@@ -403,10 +403,10 @@ void ArtisticColorSelectorDock::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-                SLOT(slotCanvasResourceChanged(int,QVariant)));
+                SLOT(slotCanvasResourceChanged(int,QVariant)), Qt::UniqueConnection);
 
         connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()),
-                SLOT(slotSelectorSettingsChanged()));
+                SLOT(slotSelectorSettingsChanged()), Qt::UniqueConnection);
 
         m_selectorUI->colorSelector->setColorConverter(m_canvas->displayColorConverter());
         setEnabled(true);

@@ -107,7 +107,7 @@ void KisSpecificColorSelectorWidget::setDisplayConverter(KisDisplayColorConverte
 
     if (m_displayConverter) {
         m_converterConnection.clear();
-        m_converterConnection.addConnection(m_displayConverter, SIGNAL(displayConfigurationChanged()), this, SLOT(rereadCurrentColorSpace()));
+        m_converterConnection.addConnection(m_displayConverter, SIGNAL(displayConfigurationChanged()), this, SLOT(rereadCurrentColorSpace()), Qt::UniqueConnection);
     }
 
     rereadCurrentColorSpace(needsForceUpdate);

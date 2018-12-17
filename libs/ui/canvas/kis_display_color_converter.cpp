@@ -106,7 +106,7 @@ struct KisDisplayColorConverter::Private
               m_resourceManager(resourceManager)
         {
             displayColorConverter->connect(displayColorConverter, SIGNAL(displayConfigurationChanged()),
-                            this, SIGNAL(displayConfigurationChanged()));
+                            this, SIGNAL(displayConfigurationChanged()), Qt::UniqueConnection);
         }
 
         QImage convertToQImage(const KoColorSpace *srcColorSpace, const quint8 *data, qint32 width, qint32 height) const override {

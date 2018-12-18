@@ -46,10 +46,10 @@ public:
             if (se->isAmbiguous()) {
                 KMessageBox::information(
                     0,  // No widget to be seen around here
-                    i18n("XXXX The key sequence '%1' is ambiguous. Use the 'Keyboard Shortcuts'\n"
+                    i18n("The key sequence '%1' is ambiguous. Use the 'Keyboard Shortcuts'\n"
                          "tab in 'Settings->Configure Krita...' dialog to solve the ambiguity.\n"
-                         "No action will be triggered. %2",
-                         se->key().toString(QKeySequence::NativeText), se->shortcutId()),
+                         "No action will be triggered.",
+                         se->key().toString(QKeySequence::NativeText)),
                     i18n("Ambiguous shortcut detected"));
                 return true;
             }

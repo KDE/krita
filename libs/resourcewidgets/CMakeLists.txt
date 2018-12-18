@@ -4,6 +4,7 @@ set(kritaresourcewidgets_LIB_SRCS
     KisResourceItemDelegate.cpp
     KisResourceItemView.cpp
     KisIconToolTip.cpp
+    KisGridView.cpp
 )
 
 add_library(kritaresourcewidgets SHARED ${kritaresourcewidgets_LIB_SRCS})

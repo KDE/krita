@@ -100,8 +100,25 @@ void AnimaterionRenderer::slotRenderAnimation()
                 .arg(sequenceConfig->getString("basename"))
                 .arg(extension);
 
+        /**
+         * Check if the dimensions make sense before we even try to batch save.
+         */
+        KisPropertiesConfigurationSP encoderConfig = dlgAnimationRenderer.getEncoderConfiguration();
+        if ((image->height()%2 || image->width()%2)
+                && (encoderConfig->getString("mimetype") == "video/mp4" ||
+                    encoderConfig->getString("mimetype") == "video/x-matroska")) {
+            QString m = "Mastroska (.mkv)";
+            if (encoderConfig->getString("mimetype")== "video/mp4") {
+                m = "Mpeg4 (.mp4)";
+            }
+            qWarning() << m <<"requires width and height to be even, resize and try again!";
+            doc->setErrorMessage(i18n("%1 requires width and height to be even numbers.  Please resize or crop the image before exporting.", m));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
+            return;
+        }
 
         const bool batchMode = false; // TODO: fetch correctly!
+
         KisAsyncAnimationFramesSaveDialog exporter(doc->image(),
                                                    KisTimeRange::fromTime(sequenceConfig->getInt("first_frame"), sequenceConfig->getInt("last_frame")),
                                                    baseFileName,

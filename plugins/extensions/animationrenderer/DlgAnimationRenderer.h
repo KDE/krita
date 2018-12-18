@@ -73,6 +73,15 @@ private Q_SLOTS:
 
     void selectRenderType(int i);
     void selectRenderOptions();
+    /**
+     * @brief createEncoderWidget
+     * creates a new settings widget for the filetype.
+     */
+    void createEncoderWidget(int index);
+    /**
+     * @brief sequenceMimeTypeSelected
+     * calls the dialog for the export widget.
+     */
     void sequenceMimeTypeSelected();
     void ffmpegLocationChanged(const QString&);
 

@@ -282,6 +282,7 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getFrameExportConfiguration()
 {
     if (m_frameExportConfigWidget) {
         KisPropertiesConfigurationSP cfg = m_frameExportConfigWidget->configuration();
+        qDebug()<<Q_FUNC_INFO<<cfg;
         cfg->setProperty("basename", m_page->txtBasename->text());
         cfg->setProperty("directory", fetchRenderingDirectory());
         cfg->setProperty("first_frame", m_page->intStart->value());
@@ -334,8 +335,16 @@ KisPropertiesConfigurationSP DlgAnimationRenderer::getEncoderConfiguration() con
     cfg->setProperty("first_frame", m_page->intStart->value());
     cfg->setProperty("last_frame", m_page->intEnd->value());
     cfg->setProperty("framerate", m_page->intFramesPerSecond->value());
-    cfg->setProperty("height", m_page->intHeight->value());
-    cfg->setProperty("width", m_page->intWidth->value());
+    int height = m_page->intHeight->value();
+    if (height % 2) {
+        height += 1;
+    }
+    cfg->setProperty("height", height);
+    int width = m_page->intWidth->value();
+    if (width % 2) {
+        width += 1;
+    }
+    cfg->setProperty("width", width);
     cfg->setProperty("sequence_start", m_page->sequenceStart->value());
     cfg->setProperty("include_audio", m_page->chkIncludeAudio->isChecked());
 
@@ -372,25 +381,26 @@ void DlgAnimationRenderer::selectRenderType(int index)
     m_page->videoFilename->setMimeTypeFilters(QStringList() << mimetype, mimetype);
 
     m_page->videoFilename->setFileName(m_defaultFileName + "." + KisMimeDatabase::suffixesForMimeType(mimetype).first());
+    createEncoderWidget(index);
 }
 
 void DlgAnimationRenderer::selectRenderOptions()
 {
     int index = m_page->cmbRenderType->currentIndex();
-
     if (m_encoderConfigWidget) {
         m_encoderConfigWidget->deleteLater();
         m_encoderConfigWidget = 0;
     }
 
     if (index >= m_renderFilters.size()) return;
+    if (!m_encoderConfigWidget) {
+        createEncoderWidget(index);
+    }
 
     QSharedPointer<KisImportExportFilter> filter = m_renderFilters[index];
     QString mimetype = m_page->cmbRenderType->itemData(index).toString();
     if (filter) {
-        m_encoderConfigWidget = filter->createConfigurationWidget(0, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
         if (m_encoderConfigWidget) {
-            m_encoderConfigWidget->setConfiguration(filter->lastSavedConfiguration("", mimetype.toLatin1()));
             KoDialog dlg(this);
             dlg.setMainWidget(m_encoderConfigWidget);
             dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
@@ -408,6 +418,23 @@ void DlgAnimationRenderer::selectRenderOptions()
         m_encoderConfigWidget = 0;
     }
 
+}
+
+void DlgAnimationRenderer::createEncoderWidget(int index)
+{
+    if (m_encoderConfigWidget) {
+        m_encoderConfigWidget->deleteLater();
+        m_encoderConfigWidget = 0;
+    }
+    if (index >= m_renderFilters.size()) return;
+    QSharedPointer<KisImportExportFilter> filter = m_renderFilters[index];
+    QString mimetype = m_page->cmbRenderType->itemData(index).toString();
+    if (filter) {
+        m_encoderConfigWidget = filter->createConfigurationWidget(0, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
+        if (m_encoderConfigWidget) {
+            m_encoderConfigWidget->setConfiguration(filter->lastSavedConfiguration("", mimetype.toLatin1()));
+        }
+    }
 }
 
 void DlgAnimationRenderer::sequenceMimeTypeSelected()

@@ -405,7 +405,7 @@ void DlgAnimationRenderer::selectRenderOptions()
             dlg.setMainWidget(m_encoderConfigWidget);
             dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
             if (!dlg.exec()) {
-                m_encoderConfigWidget->setConfiguration(filter->lastSavedConfiguration());
+                m_encoderConfigWidget->setConfiguration(filter->lastSavedConfiguration("", mimetype.toLatin1()));
             } else {
                 KisConfig(false).setExportConfiguration(mimetype.toLatin1(), m_encoderConfigWidget->configuration());
             }
@@ -461,12 +461,12 @@ void DlgAnimationRenderer::sequenceMimeTypeSelected()
             dlg.setMainWidget(m_frameExportConfigWidget);
             dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
             if (!dlg.exec()) {
-                config = filter->lastSavedConfiguration();
+                config = filter->lastSavedConfiguration("", mimetype.toLatin1());
                 if (config) {
                     KisImportExportManager::fillStaticExportConfigurationProperties(config, m_image);
                 }
 
-                m_frameExportConfigWidget->setConfiguration(filter->lastSavedConfiguration());
+                m_frameExportConfigWidget->setConfiguration(filter->lastSavedConfiguration("", mimetype.toLatin1()));
             }
             m_frameExportConfigWidget->hide();
             m_frameExportConfigWidget->setParent(0);

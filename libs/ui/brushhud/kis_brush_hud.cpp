@@ -212,6 +212,7 @@ void KisBrushHud::updateProperties()
     }
 
     m_d->propertiesLayout->addStretch();
+    resize(sizeHint());
 }
 
 void KisBrushHud::showEvent(QShowEvent *event)

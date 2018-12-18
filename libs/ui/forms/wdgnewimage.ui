@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>491</height>
+    <height>512</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -41,7 +41,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <property name="sizePolicy">
@@ -495,7 +495,7 @@
             <string>Use background color and opacity to create a background fill layer. The color for this layer can be reconfigured in the layer's properties.</string>
            </property>
            <property name="text">
-            <string>As &amp;fill layer</string>
+            <string>As fill la&amp;yer</string>
            </property>
           </widget>
          </item>
@@ -640,15 +640,15 @@
    <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>KisColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kis_color_button.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kis_color_button.h</header>
   </customwidget>
   <customwidget>
    <class>KisColorSpaceSelector</class>

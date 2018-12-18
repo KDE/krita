@@ -288,7 +288,7 @@ private:
     QPointer<KoSelection> m_selection;
 };
 
-DefaultTool::DefaultTool(KoCanvasBase *canvas)
+DefaultTool::DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy)
     : KoInteractionTool(canvas)
     , m_lastHandle(KoFlake::NoHandle)
     , m_hotPosition(KoFlake::TopLeft)
@@ -340,7 +340,9 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     m_sizeCursors[6] = Qt::SizeHorCursor;
     m_sizeCursors[7] = Qt::SizeFDiagCursor;
 
-    connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(updateActions()));
+    if (connectToSelectedShapesProxy) {
+        connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(updateActions()));
+    }
 }
 
 DefaultTool::~DefaultTool()

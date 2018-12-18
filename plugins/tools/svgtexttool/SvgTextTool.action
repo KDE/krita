@@ -8,7 +8,7 @@
       <whatsThis></whatsThis>
       <toolTip>Text Tool</toolTip>
       <iconText>Text Tool</iconText>
-      <shortcut>CTRL+T</shortcut>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>

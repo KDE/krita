@@ -559,7 +559,7 @@ Node* Node::mergeDown()
     return new Node(d->image, d->node->prevSibling());
 }
 
-void Node::scaleNode(const QPointF &origin, int width, int height, QString strategy)
+void Node::scaleNode(QPointF origin, int width, int height, QString strategy)
 {
     if (!d->node) return;
     if (!qobject_cast<KisLayer*>(d->node.data())) return;

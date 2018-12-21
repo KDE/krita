@@ -449,6 +449,43 @@ bool KisOpenGLImageTextures::setInternalColorManagementActive(bool value)
     return needsFinalRegeneration;
 }
 
+namespace {
+void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesInfo, KoID &destinationColorDepthId)
+{
+    if (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3()) {
+        texturesInfo.internalFormat = GL_RGBA16F;
+        dbgUI << "Using half (GLES or GL3)";
+    } else if (ctx->hasExtension("GL_ARB_texture_float")) {
+        texturesInfo.internalFormat = GL_RGBA16F_ARB;
+        dbgUI << "Using ARB half";
+    }
+    else if (ctx->hasExtension("GL_ATI_texture_float")) {
+        texturesInfo.internalFormat = GL_RGBA_FLOAT16_ATI;
+        dbgUI << "Using ATI half";
+    }
+
+    bool haveBuiltInOpenExr = false;
+#ifdef HAVE_OPENEXR
+    haveBuiltInOpenExr = true;
+#endif
+
+    if (haveBuiltInOpenExr && (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3())) {
+        texturesInfo.type = GL_HALF_FLOAT;
+        destinationColorDepthId = Float16BitsColorDepthID;
+        dbgUI << "Pixel type half (GLES or GL3)";
+    } else if (haveBuiltInOpenExr && ctx->hasExtension("GL_ARB_half_float_pixel")) {
+        texturesInfo.type = GL_HALF_FLOAT_ARB;
+        destinationColorDepthId = Float16BitsColorDepthID;
+        dbgUI << "Pixel type half";
+    } else {
+        texturesInfo.type = GL_FLOAT;
+        destinationColorDepthId = Float32BitsColorDepthID;
+        dbgUI << "Pixel type float";
+    }
+    texturesInfo.format = GL_RGBA;
+}
+}
+
 void KisOpenGLImageTextures::updateTextureFormat()
 {
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
@@ -482,38 +519,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
 
     if (colorModelId == RGBAColorModelID) {
         if (colorDepthId == Float16BitsColorDepthID) {
-
-            if (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3()) {
-                m_texturesInfo.internalFormat = GL_RGBA16F;
-                dbgUI << "Using half (GLES or GL3)";
-            } else if (ctx->hasExtension("GL_ARB_texture_float")) {
-                m_texturesInfo.internalFormat = GL_RGBA16F_ARB;
-                dbgUI << "Using ARB half";
-            }
-            else if (ctx->hasExtension("GL_ATI_texture_float")) {
-                m_texturesInfo.internalFormat = GL_RGBA_FLOAT16_ATI;
-                dbgUI << "Using ATI half";
-            }
-
-            bool haveBuiltInOpenExr = false;
-#ifdef HAVE_OPENEXR
-            haveBuiltInOpenExr = true;
-#endif
-
-            if (haveBuiltInOpenExr && (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3())) {
-                m_texturesInfo.type = GL_HALF_FLOAT;
-                destinationColorDepthId = Float16BitsColorDepthID;
-                dbgUI << "Pixel type half (GLES or GL3)";
-            } else if (haveBuiltInOpenExr && ctx->hasExtension("GL_ARB_half_float_pixel")) {
-                m_texturesInfo.type = GL_HALF_FLOAT_ARB;
-                destinationColorDepthId = Float16BitsColorDepthID;
-                dbgUI << "Pixel type half";
-            } else {
-                m_texturesInfo.type = GL_FLOAT;
-                destinationColorDepthId = Float32BitsColorDepthID;
-                dbgUI << "Pixel type float";
-            }
-            m_texturesInfo.format = GL_RGBA;
+            initializeRGBA16FTextures(ctx, m_texturesInfo, destinationColorDepthId);
         }
         else if (colorDepthId == Float32BitsColorDepthID) {
             if (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3()) {
@@ -550,6 +556,9 @@ void KisOpenGLImageTextures::updateTextureFormat()
             m_texturesInfo.format = GL_BGRA;
             destinationColorDepthId = Integer16BitsColorDepthID;
             dbgUI << "Using conversion to 16 bits rgba";
+        } else if (colorDepthId == Float16BitsColorDepthID && KisOpenGL::hasOpenGLES()) {
+            // TODO: try removing opengl es limit
+            initializeRGBA16FTextures(ctx, m_texturesInfo, destinationColorDepthId);
         }
         // TODO: for ANGLE, see if we can convert to 16f to support 10-bit display
     }

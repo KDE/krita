@@ -646,7 +646,9 @@ void KisDisplayColorConverter::applyDisplayFilteringF32(KisFixedPaintDeviceSP de
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(device->colorSpace()->colorDepthId() == Float32BitsColorDepthID);
     KIS_SAFE_ASSERT_RECOVER_RETURN(device->colorSpace()->colorModelId() == RGBAColorModelID);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(device->colorSpace()->profile()->uniqueId() == m_d->paintingColorSpace->profile()->uniqueId());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(
+        m_d->paintingColorSpace->colorModelId() != RGBAColorModelID ||
+        device->colorSpace()->profile()->uniqueId() == m_d->paintingColorSpace->profile()->uniqueId());
 
     if (!m_d->useOcio()) {
         if (m_d->monitorProfile) {
@@ -676,6 +678,11 @@ void KisDisplayColorConverter::applyDisplayFilteringF32(KisFixedPaintDeviceSP de
         }
 
         m_d->displayFilter->filter(device->data(), device->bounds().width() * device->bounds().height());
+
+        // HACK ALERT!
+        if (m_d->expectedOcioOutputColorSpace && m_d->displayFilter->useInternalColorManagement()) {
+            device->convertTo(m_d->expectedOcioOutputColorSpace);
+        }
     }
 }
 

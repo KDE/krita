@@ -135,9 +135,8 @@ void KisGLImageWidget::updateVerticesBuffer(const QRect &rect)
 
 void KisGLImageWidget::paintGL()
 {
-    ENTER_FUNCTION() << this << ppVar(context());
-
     const QColor bgColor = palette().background().color();
+    // TODO: fix conversion to the destination surface space
     //glClearColor(bgColor.redF(), bgColor.greenF(), bgColor.blueF(), 1.0f);
     glClearColor(0.3, 0.2, 0.8, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -220,15 +219,11 @@ void KisGLImageWidget::loadImage(const KisGLImageF16 &image)
 
 void KisGLImageWidget::paintEvent(QPaintEvent *event)
 {
-    ENTER_FUNCTION();
-
     QOpenGLWidget::paintEvent(event);
 }
 
 void KisGLImageWidget::resizeEvent(QResizeEvent *event)
 {
-    ENTER_FUNCTION() << event->size();
-
     updateVerticesBuffer(QRect(QPoint(),event->size()));
     QOpenGLWidget::resizeEvent(event);
 }

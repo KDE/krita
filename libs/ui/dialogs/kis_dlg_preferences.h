@@ -278,6 +278,7 @@ public:
     void setDefault();
 protected Q_SLOTS:
     void slotUseOpenGLToggled(bool isChecked);
+    void slotPreferredSurfaceFormatChanged(int index);
 
 public:
 };

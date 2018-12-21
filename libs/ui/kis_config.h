@@ -33,6 +33,7 @@
 class KoColorProfile;
 class KoColorSpace;
 class KisSnapConfig;
+class QSettings;
 
 class KRITAUI_EXPORT KisConfig
 {
@@ -578,6 +579,16 @@ public:
     bool activateTransformToolAfterPaste(bool defaultValue = false) const;
     void setActivateTransformToolAfterPaste(bool value);
     
+    enum RootSurfaceFormat {
+        BT709_G22 = 0,
+        BT709_G10,
+        BT2020_PQ
+    };
+    RootSurfaceFormat rootSurfaceFormat(bool defaultValue = false) const;
+    void setRootSurfaceFormat(RootSurfaceFormat value);
+
+    static RootSurfaceFormat rootSurfaceFormat(QSettings *displayrc, bool defaultValue = false);
+    static void setRootSurfaceFormat(QSettings *displayrc, RootSurfaceFormat value);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

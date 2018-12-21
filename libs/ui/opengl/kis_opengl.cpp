@@ -37,6 +37,7 @@
 
 #include <kis_debug.h>
 #include <kis_config.h>
+#include "KisOpenGLModeProber.h"
 
 #include <boost/optional.hpp>
 
@@ -270,7 +271,7 @@ bool KisOpenGL::needsPixmapCacheWorkaround()
     return NeedsPixmapCacheWorkaround;
 }
 
-void KisOpenGL::setDefaultFormat(bool enableDebug, bool debugSynchronous)
+void KisOpenGL::setDefaultFormat(bool enableDebug, bool debugSynchronous, QSettings *kritadisplayrc)
 {
     if (defaultFormatIsSet) {
         return;
@@ -288,10 +289,12 @@ void KisOpenGL::setDefaultFormat(bool enableDebug, bool debugSynchronous)
 #endif
     format.setDepthBufferSize(24);
     format.setStencilBufferSize(8);
-    format.setRedBufferSize(16);
-    format.setGreenBufferSize(16);
-    format.setBlueBufferSize(16);
-    format.setColorSpace(QSurfaceFormat::scRGBColorSpace);
+
+    if (kritadisplayrc) {
+        KisConfig::RootSurfaceFormat rootSurfaceFormat = KisConfig::rootSurfaceFormat(kritadisplayrc);
+        KisOpenGLModeProber::initSurfaceFormatFromConfig(rootSurfaceFormat, &format);
+    }
+
     format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     format.setSwapInterval(0); // Disable vertical refresh syncing
     isDebugEnabled = enableDebug;

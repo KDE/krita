@@ -97,6 +97,12 @@
    </item>
    <item row="9" column="0">
     <widget class="QTreeWidget" name="listViewChannels">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize">
       <size>
        <width>0</width>

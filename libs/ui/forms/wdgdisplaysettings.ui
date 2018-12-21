@@ -165,6 +165,63 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="grpHDRSettings">
+     <property name="title">
+      <string>HDR</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Display Format:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="lblCurrentDisplayFormat">
+        <property name="text">
+         <string>Current Display Format</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Current Output Format:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="lblCurrentRootSurfaceFormat">
+        <property name="text">
+         <string>Current Surface Value</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>Preferred Output Format:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="cmbPreferedRootSurfaceFormat"/>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="QLabel" name="lblHDRWarning">
+        <property name="text">
+         <string>HDR Warning..................................</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <layout class="QGridLayout" name="options2GridLayout">
      <property name="topMargin">
       <number>15</number>
@@ -460,14 +517,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kis_color_button.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisIntParseSpinBox</class>
    <extends>QSpinBox</extends>
    <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kis_color_button.h</header>
   </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>

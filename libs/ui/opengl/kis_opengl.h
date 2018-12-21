@@ -28,6 +28,7 @@
 class QOpenGLContext;
 class QString;
 class QStringList;
+class QSettings;
 
 /**
  * This class manages a shared OpenGL context and provides utility
@@ -100,7 +101,7 @@ public:
      */
     static bool needsPixmapCacheWorkaround();
 
-    static void setDefaultFormat(bool enableDebug = false, bool debugSynchronous = false);
+    static void setDefaultFormat(bool enableDebug = false, bool debugSynchronous = false, QSettings *kritadisplayrc = 0);
 
 private:
 

@@ -43,6 +43,7 @@
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 #include <QMessageBox>
+#include "KisOpenGLModeProber.h"
 
 #ifndef Q_OS_OSX
 #include <QOpenGLFunctions_2_1>
@@ -167,7 +168,10 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
 #endif
     setAttribute(Qt::WA_InputMethodEnabled, false);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
-    setTextureFormat(GL_RGBA16F);
+
+    if (KisOpenGLModeProber::instance()->useHDRMode()) {
+        setTextureFormat(GL_RGBA16F);
+    }
 
     setDisplayFilterImpl(colorConverter->displayFilter(), true);
 

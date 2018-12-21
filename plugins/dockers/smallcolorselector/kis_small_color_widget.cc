@@ -37,6 +37,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_fixed_paint_device.h"
+#include <opengl/KisOpenGLModeProber.h>
 
 
 struct KisSmallColorWidget::Private {
@@ -55,6 +56,7 @@ struct KisSmallColorWidget::Private {
     KisDisplayColorConverter *displayColorConverter = 0;
     KisSignalAutoConnectionsStore colorConverterConnections;
     bool hasHDR = false;
+    bool hasHardwareHDR = false;
 
     qreal effectiveRelativeDynamicRange() const {
         return hasHDR ? currentRelativeDynamicRange : 1.0;
@@ -79,7 +81,7 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
     d->valueSliderUpdateCompressor = new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE, this);
     connect(d->valueSliderUpdateCompressor, SIGNAL(timeout()), SLOT(updateSVPalette()));
 
-    const QSurfaceFormat::ColorSpace colorSpace = QSurfaceFormat::scRGBColorSpace;
+    const QSurfaceFormat::ColorSpace colorSpace = QSurfaceFormat::DefaultColorSpace;
 
     d->hueWidget = new KisClickableGLImageWidget(colorSpace, this);
     d->hueWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -91,20 +93,27 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
     d->valueWidget->setHandlePaintingStrategy(new KisClickableGLImageWidget::CircularHandleStrategy);
     connect(d->valueWidget, SIGNAL(selected(const QPointF&)), SLOT(slotValueSliderChanged(const QPointF&)));
 
-    d->dynamicRange = new KisSliderSpinBox(this);
-    d->dynamicRange->setRange(80, 10000);
-    d->dynamicRange->setExponentRatio(3.0);
-    d->dynamicRange->setSingleStep(1);
-    d->dynamicRange->setPageStep(100);
-    d->dynamicRange->setSuffix("cd/m²");
-    d->dynamicRange->setValue(80.0 * d->currentRelativeDynamicRange);
-    connect(d->dynamicRange, SIGNAL(valueChanged(int)), SLOT(slotUpdateDynamicRange(int)));
+    d->hasHardwareHDR = KisOpenGLModeProber::instance()->useHDRMode();
+
+    if (d->hasHardwareHDR) {
+        d->dynamicRange = new KisSliderSpinBox(this);
+        d->dynamicRange->setRange(80, 10000);
+        d->dynamicRange->setExponentRatio(3.0);
+        d->dynamicRange->setSingleStep(1);
+        d->dynamicRange->setPageStep(100);
+        d->dynamicRange->setSuffix("cd/m²");
+        d->dynamicRange->setValue(80.0 * d->currentRelativeDynamicRange);
+        connect(d->dynamicRange, SIGNAL(valueChanged(int)), SLOT(slotUpdateDynamicRange(int)));
+    }
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(d->hueWidget, 0);
     layout->addWidget(d->valueWidget, 1);
-    layout->addSpacing(16);
-    layout->addWidget(d->dynamicRange, 0);
+
+    if (d->dynamicRange) {
+        layout->addSpacing(16);
+        layout->addWidget(d->dynamicRange, 0);
+    }
     setLayout(layout);
 
     slotUpdatePalettes();
@@ -147,9 +156,11 @@ void KisSmallColorWidget::setColor(const KoColor &color)
 {
     if (!d->updateAllowed) return;
 
-    KIS_SAFE_ASSERT_RECOVER(d->hasHDR == d->dynamicRange->isEnabled()) {
+    KIS_SAFE_ASSERT_RECOVER(!d->dynamicRange || d->hasHDR == d->dynamicRange->isEnabled()) {
         slotDisplayConfigurationChanged();
     }
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!d->hasHDR || d->hasHardwareHDR);
 
     const KoColorSpace *cs = d->displayColorConverter->paintingColorSpace();
     if (cs->colorModelId() != RGBAColorModelID) {
@@ -235,18 +246,31 @@ void KisSmallColorWidget::uploadPaletteData(KisGLImageWidget *widget, const QSiz
     const float yPortionCoeff = 1.0 / image.height();
     const float rangeCoeff = d->effectiveRelativeDynamicRange();
 
-    const KoColorSpace *cs = d->displayColorConverter ? d->displayColorConverter->paintingColorSpace() : 0;
+    const KoColorSpace *generationColorSpace = d->displayColorConverter ? d->displayColorConverter->paintingColorSpace() : 0;
+    const KoColorSpace *outputColorSpace = KoColorSpaceRegistry::instance()->
+            colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(),
+                       KoColorSpaceRegistry::instance()->rgb8()->profile());
 
-    if (!cs || cs->colorModelId() != RGBAColorModelID) {
-        cs = KoColorSpaceRegistry::instance()->
-            colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id());
-    } else if (cs->colorDepthId() != Float32BitsColorDepthID) {
-        cs = KoColorSpaceRegistry::instance()->
-            colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), cs->profile());
+    QSurfaceFormat::ColorSpace surfaceColorSpace = KisOpenGLModeProber::instance()->surfaceformatInUse().colorSpace();
+
+    if (surfaceColorSpace == QSurfaceFormat::sRGBColorSpace) {
+        // use the default one!
+    } else if (surfaceColorSpace == QSurfaceFormat::scRGBColorSpace) {
+        // p709-g10
+        outputColorSpace = KoColorSpaceRegistry::instance()->
+                colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id());
+    } else if (surfaceColorSpace == QSurfaceFormat::bt2020PQColorSpace) {
+        qWarning() << "Small Color Selector: output for p2020-pq is not fully supported";
     }
 
+    if (!generationColorSpace || generationColorSpace->colorModelId() != RGBAColorModelID) {
+        generationColorSpace = outputColorSpace;
+    } else if (generationColorSpace->colorDepthId() != Float32BitsColorDepthID) {
+        generationColorSpace = KoColorSpaceRegistry::instance()->
+            colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), generationColorSpace->profile());
+    }
 
-    if (!d->displayColorConverter || d->displayColorConverter->canSkipDisplayConversion(cs)) {
+    if (!d->displayColorConverter || d->displayColorConverter->canSkipDisplayConversion(generationColorSpace)) {
         half *pixelPtr = image.data();
 
         for (int y = 0; y < image.height(); y++) {
@@ -269,7 +293,7 @@ void KisSmallColorWidget::uploadPaletteData(KisGLImageWidget *widget, const QSiz
     } else {
         KIS_SAFE_ASSERT_RECOVER_RETURN(d->displayColorConverter);
 
-        KisFixedPaintDeviceSP device = new KisFixedPaintDevice(cs);
+        KisFixedPaintDeviceSP device = new KisFixedPaintDevice(generationColorSpace);
         device->setRect(QRect(QPoint(), image.size()));
         device->reallocateBufferWithoutInitialization();
         float *devicePtr = reinterpret_cast<float*>(device->data());
@@ -289,6 +313,12 @@ void KisSmallColorWidget::uploadPaletteData(KisGLImageWidget *widget, const QSiz
         }
 
         d->displayColorConverter->applyDisplayFilteringF32(device);
+
+        /**
+         * TODO: theoretically, we could skip this step, because the surface format
+         * should coincide with the one of the image
+         */
+        device->convertTo(outputColorSpace);
 
         half *imagePtr = image.data();
         devicePtr = reinterpret_cast<float*>(device->data());
@@ -391,7 +421,7 @@ void KisSmallColorWidget::slotDisplayConfigurationChanged()
 {
     d->hasHDR = false;
 
-    if (d->displayColorConverter) {
+    if (d->hasHardwareHDR && d->displayColorConverter) {
         const KoColorSpace *cs = d->displayColorConverter->paintingColorSpace();
 
         d->hasHDR = cs->colorModelId() == RGBAColorModelID &&
@@ -400,7 +430,9 @@ void KisSmallColorWidget::slotDisplayConfigurationChanged()
                  cs->colorDepthId() == Float64BitsColorDepthID);
     }
 
-    d->dynamicRange->setEnabled(d->hasHDR);
+    if (d->dynamicRange) {
+        d->dynamicRange->setEnabled(d->hasHDR);
+    }
     d->hueWidget->setUseHandleOpacity(!d->hasHDR);
     d->valueWidget->setUseHandleOpacity(!d->hasHDR);
 

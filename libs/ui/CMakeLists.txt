@@ -168,6 +168,8 @@ set(kritaui_LIB_SRCS
     opengl/kis_opengl_shader_loader.cpp
     opengl/kis_texture_tile_info_pool.cpp
     opengl/KisOpenGLUpdateInfoBuilder.cpp
+    opengl/KisOpenGLModeProber.cpp
+    opengl/KisScreenInformationAdapter.cpp
     kis_fps_decoration.cpp
 
     tool/KisToolChangesTracker.cpp

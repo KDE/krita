@@ -176,7 +176,7 @@ extern "C" int main(int argc, char **argv)
             openGLDebugSynchronous = true;
         }
 
-        KisOpenGL::setDefaultFormat(enableOpenGLDebug, openGLDebugSynchronous);
+        KisOpenGL::setDefaultFormat(enableOpenGLDebug, openGLDebugSynchronous, &kritarc);
 
 #ifdef Q_OS_WIN
         QString preferredOpenGLRenderer = kritarc.value("OpenGLRenderer", "auto").toString();

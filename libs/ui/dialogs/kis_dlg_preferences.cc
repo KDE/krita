@@ -926,6 +926,36 @@ void PerformanceTab::slotFrameClonesLimitChanged(int value)
 //---------------------------------------------------------------------------------------------------
 
 #include "KoColor.h"
+#include "opengl/KisOpenGLModeProber.h"
+#include "opengl/KisScreenInformationAdapter.h"
+#include <QOpenGLContext>
+#include <QScreen>
+
+QString colorSpaceString(QSurfaceFormat::ColorSpace cs, int depth)
+{
+    const QString csString =
+        cs == QSurfaceFormat::bt2020PQColorSpace ? "Rec. 2020 PQ" :
+        cs == QSurfaceFormat::scRGBColorSpace ? "Rec. 709 Linear" :
+        cs == QSurfaceFormat::sRGBColorSpace ? "sRGB" :
+        cs == QSurfaceFormat::DefaultColorSpace ? "sRGB" :
+        "Unknown Color Space";
+
+    return QString("%1 (%2 bit)").arg(csString).arg(depth);
+}
+
+int formatToIndex(KisConfig::RootSurfaceFormat fmt)
+{
+    return fmt == KisConfig::BT2020_PQ ? 1 :
+           fmt == KisConfig::BT709_G10 ? 2 :
+           0;
+}
+
+KisConfig::RootSurfaceFormat indexToFormat(int value)
+{
+    return value == 1 ? KisConfig::BT2020_PQ :
+           value == 2 ? KisConfig::BT709_G10 :
+           KisConfig::BT709_G22;
+}
 
 DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     : WdgDisplaySettings(parent, name)
@@ -988,6 +1018,53 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         // Don't show the high quality filtering mode if it's not available
         if (!KisOpenGL::supportsLoD()) {
             cmbFilterMode->removeItem(3);
+        }
+    }
+
+    lblCurrentDisplayFormat->setText("");
+    lblCurrentRootSurfaceFormat->setText("");
+    lblHDRWarning->setText("");
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::sRGBColorSpace, 8));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::bt2020PQColorSpace, 10));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::scRGBColorSpace, 16));
+    cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(KisConfig::BT709_G22));
+    slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
+
+    QOpenGLContext *context = QOpenGLContext::currentContext();
+    if (context) {
+        QScreen *screen = QGuiApplication::screenAt(rect().center());
+        KisScreenInformationAdapter adapter(context);
+        if (screen && adapter.isValid()) {
+            KisScreenInformationAdapter::ScreenInfo info = adapter.infoForScreen(screen);
+            if (info.isValid()) {
+                QStringList toolTip;
+
+                toolTip << i18n("Display Id: %1", info.screen->name());
+                toolTip << i18n("Display Name: %1 %2", info.screen->manufacturer(), info.screen->model());
+                toolTip << i18n("Min Luminance: %1", info.minLuminance);
+                toolTip << i18n("Max Luminance: %1", info.maxLuminance);
+                toolTip << i18n("Max Full Frame Luminance: %1", info.maxFullFrameLuminance);
+                toolTip << i18n("Red Primary: %1, %2", info.redPrimary[0], info.redPrimary[1]);
+                toolTip << i18n("Green Primary: %1, %2", info.greenPrimary[0], info.greenPrimary[1]);
+                toolTip << i18n("Blue Primary: %1, %2", info.bluePrimary[0], info.bluePrimary[1]);
+                toolTip << i18n("White Point: %1, %2", info.whitePoint[0], info.whitePoint[1]);
+
+                lblCurrentDisplayFormat->setToolTip(toolTip.join('\n'));
+                lblCurrentDisplayFormat->setText(colorSpaceString(info.colorSpace, info.bitsPerColor));
+            } else {
+                lblCurrentDisplayFormat->setToolTip("");
+                lblCurrentDisplayFormat->setText(i18n("Unknown"));
+            }
+            grpHDRSettings->setEnabled(info.isValid());
+
+            const QSurfaceFormat currentFormat = KisOpenGLModeProber::instance()->surfaceformatInUse();
+            lblCurrentRootSurfaceFormat->setText(colorSpaceString(currentFormat.colorSpace(), currentFormat.redBufferSize()));
+            cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(cfg.rootSurfaceFormat()));
+
+            connect(cmbPreferedRootSurfaceFormat, SIGNAL(currentIndexChanged(int)), SLOT(slotPreferredSurfaceFormatChanged(int)));
+            slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
+        } else {
+            grpHDRSettings->setEnabled(false);
         }
     }
 
@@ -1096,6 +1173,9 @@ void DisplaySettingsTab::setDefault()
     gridColor.fromQColor(cfg.getPixelGridColor(true));
     pixelGridColorButton->setColor(gridColor);
     pixelGridDrawingThresholdBox->setValue(cfg.getPixelGridDrawingThreshold(true) * 100);
+
+    cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(KisConfig::BT709_G22));
+    slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
 }
 
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
@@ -1103,6 +1183,28 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
     chkUseTextureBuffer->setEnabled(isChecked);
     chkDisableVsync->setEnabled(isChecked);
     cmbFilterMode->setEnabled(isChecked);
+}
+
+void DisplaySettingsTab::slotPreferredSurfaceFormatChanged(int index)
+{
+    Q_UNUSED(index);
+
+    QOpenGLContext *context = QOpenGLContext::currentContext();
+    if (context) {
+        QScreen *screen = QGuiApplication::screenAt(rect().center());
+        KisScreenInformationAdapter adapter(context);
+        if (adapter.isValid()) {
+            KisScreenInformationAdapter::ScreenInfo info = adapter.infoForScreen(screen);
+            if (info.isValid()) {
+                if (cmbPreferedRootSurfaceFormat->currentIndex() != formatToIndex(KisConfig::BT709_G22) &&
+                    info.colorSpace == QSurfaceFormat::sRGBColorSpace) {
+                    lblHDRWarning->setText(i18n("WARNING: current display doesn't support HDR rendering"));
+                } else {
+                    lblHDRWarning->setText("");
+                }
+            }
+        }
+    }
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -1412,6 +1514,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
         cfg.setDisableVSync(dialog->m_displaySettings->chkDisableVsync->isChecked());
+        cfg.setRootSurfaceFormat(&kritarc, indexToFormat(dialog->m_displaySettings->cmbPreferedRootSurfaceFormat->currentIndex()));
 
         cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());
         cfg.setScrollingCheckers(dialog->m_displaySettings->chkMoving->isChecked());

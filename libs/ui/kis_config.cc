@@ -2004,6 +2004,45 @@ void KisConfig::setActivateTransformToolAfterPaste(bool value)
     m_cfg.writeEntry("activateTransformToolAfterPaste", value);
 }
 
+KisConfig::RootSurfaceFormat KisConfig::rootSurfaceFormat(bool defaultValue) const
+{
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+
+    return rootSurfaceFormat(&kritarc, defaultValue);
+}
+
+void KisConfig::setRootSurfaceFormat(KisConfig::RootSurfaceFormat value)
+{
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+
+    setRootSurfaceFormat(&kritarc, value);
+}
+
+KisConfig::RootSurfaceFormat KisConfig::rootSurfaceFormat(QSettings *displayrc, bool defaultValue)
+{
+    QString textValue = "bt709-g22";
+
+    if (!defaultValue) {
+        textValue = displayrc->value("rootSurfaceFormat", textValue).toString();
+    }
+
+    return textValue == "bt709-g10" ? BT709_G10 :
+           textValue == "bt2020-pq" ? BT2020_PQ :
+           BT709_G22;
+}
+
+void KisConfig::setRootSurfaceFormat(QSettings *displayrc, KisConfig::RootSurfaceFormat value)
+{
+    const QString textValue =
+        value == BT709_G10 ? "bt709-g10" :
+        value == BT2020_PQ ? "bt2020-pq" :
+        "bt709-g22";
+
+    displayrc->setValue("rootSurfaceFormat", textValue);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

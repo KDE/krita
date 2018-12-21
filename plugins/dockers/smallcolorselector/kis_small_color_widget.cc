@@ -381,7 +381,7 @@ void KisSmallColorWidget::slotUpdateDynamicRange(int maxLuminance)
 
     HSVToRGB(denormHue, saturation, value, &r, &g, &b);
 
-    const qreal transformCoeff = newRange / oldRange;
+    const qreal transformCoeff = oldRange / newRange;
 
     r = qBound(0.0, r * transformCoeff, 1.0);
     g = qBound(0.0, g * transformCoeff, 1.0);

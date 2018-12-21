@@ -34,6 +34,7 @@ class KoColorProfile;
 class KoColorSpace;
 class KisSnapConfig;
 class QSettings;
+class KisOcioConfiguration;
 
 class KRITAUI_EXPORT KisConfig
 {
@@ -373,6 +374,9 @@ public:
     bool levelOfDetailEnabled(bool defaultValue = false) const;
     void setLevelOfDetailEnabled(bool value);
 
+    KisOcioConfiguration ocioConfiguration(bool defaultValue = false) const;
+    void setOcioConfiguration(const KisOcioConfiguration &cfg);
+
     enum OcioColorManagementMode {
         INTERNAL = 0,
         OCIO_CONFIG,
@@ -381,12 +385,6 @@ public:
 
     OcioColorManagementMode ocioColorManagementMode(bool defaultValue = false) const;
     void setOcioColorManagementMode(OcioColorManagementMode mode) const;
-
-    QString ocioConfigurationPath(bool defaultValue = false) const;
-    void setOcioConfigurationPath(const QString &path) const;
-
-    QString ocioLutPath(bool defaultValue = false) const;
-    void setOcioLutPath(const QString &path) const;
 
     int ocioLutEdgeSize(bool defaultValue = false) const;
     void setOcioLutEdgeSize(int value);

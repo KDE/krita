@@ -56,6 +56,7 @@
 
 #include "ocio_display_filter.h"
 #include "black_white_point_chooser.h"
+#include "KisOcioConfiguration.h"
 
 
 OCIO::ConstConfigRcPtr defaultRawProfile()
@@ -107,12 +108,12 @@ LutDockerDock::LutDockerDock()
     connect(m_chkUseOcio, SIGNAL(toggled(bool)), SLOT(updateDisplaySettings()));
     connect(m_colorManagement, SIGNAL(currentIndexChanged(int)), SLOT(slotColorManagementModeChanged()));
 
-    m_txtConfigurationPath->setText(cfg.ocioConfigurationPath());
-
     m_bnSelectConfigurationFile->setToolTip(i18n("Select custom configuration file."));
     connect(m_bnSelectConfigurationFile,SIGNAL(clicked()), SLOT(selectOcioConfiguration()));
 
-    m_txtLut->setText(cfg.ocioLutPath());
+    KisOcioConfiguration ocioOptions = cfg.ocioConfiguration();
+    m_txtConfigurationPath->setText(ocioOptions.configurationPath);
+    m_txtLut->setText(ocioOptions.lutPath);
 
     m_bnSelectLut->setToolTip(i18n("Select LUT file"));
     connect(m_bnSelectLut, SIGNAL(clicked()), SLOT(selectLut()));
@@ -345,14 +346,14 @@ void LutDockerDock::enableControls()
     if (!canDoExternalColorCorrection) {
         KisSignalsBlocker colorManagementBlocker(m_colorManagement);
         Q_UNUSED(colorManagementBlocker);
-        m_colorManagement->setCurrentIndex((int) KisConfig::INTERNAL);
+        m_colorManagement->setCurrentIndex((int) KisOcioConfiguration::INTERNAL);
     }
 
     bool ocioEnabled = m_chkUseOcio->isChecked();
     m_colorManagement->setEnabled(ocioEnabled && canDoExternalColorCorrection);
 
     bool externalColorManagementEnabled =
-        m_colorManagement->currentIndex() != (int)KisConfig::INTERNAL;
+        m_colorManagement->currentIndex() != (int)KisOcioConfiguration::INTERNAL;
 
     m_lblInputColorSpace->setEnabled(ocioEnabled && externalColorManagementEnabled);
     m_cmbInputColorSpace->setEnabled(ocioEnabled && externalColorManagementEnabled);
@@ -363,7 +364,7 @@ void LutDockerDock::enableControls()
     m_lblLook->setEnabled(ocioEnabled && externalColorManagementEnabled);
     m_cmbLook->setEnabled(ocioEnabled && externalColorManagementEnabled);
 
-    bool enableConfigPath = m_colorManagement->currentIndex() == (int) KisConfig::OCIO_CONFIG;
+    bool enableConfigPath = m_colorManagement->currentIndex() == (int) KisOcioConfiguration::OCIO_CONFIG;
 
     lblConfig->setEnabled(ocioEnabled && enableConfigPath);
     m_txtConfigurationPath->setEnabled(ocioEnabled && enableConfigPath);
@@ -404,7 +405,7 @@ void LutDockerDock::updateDisplaySettings()
         displayFilter->whitePoint = m_bwPointChooser->whitePoint();
 
         displayFilter->forceInternalColorManagement =
-            m_colorManagement->currentIndex() == (int)KisConfig::INTERNAL;
+            m_colorManagement->currentIndex() == (int)KisOcioConfiguration::INTERNAL;
 
         displayFilter->setLockCurrentColorVisualRepresentation(m_btnConvertCurrentColor->isChecked());
 
@@ -419,10 +420,18 @@ void LutDockerDock::updateDisplaySettings()
 
 void LutDockerDock::writeControls()
 {
-    KisConfig cfg(true);
+    KisOcioConfiguration ocioOptions;
+    ocioOptions.mode = (KisOcioConfiguration::Mode)m_colorManagement->currentIndex();
+    ocioOptions.configurationPath = m_txtConfigurationPath->text();
+    ocioOptions.lutPath = m_txtLut->text();
+    ocioOptions.inputColorSpace = m_cmbInputColorSpace->currentText();
+    ocioOptions.displayDevice = m_cmbDisplayDevice->currentText();
+    ocioOptions.displayView = m_cmbView->currentText();
+    ocioOptions.look = m_cmbLook->currentText();
 
+    KisConfig cfg(false);
     cfg.setUseOcio(m_chkUseOcio->isChecked());
-    cfg.setOcioColorManagementMode((KisConfig::OcioColorManagementMode) m_colorManagement->currentIndex());
+    cfg.setOcioConfiguration(ocioOptions);
     cfg.setOcioLockColorVisualRepresentation(m_btnConvertCurrentColor->isChecked());
 }
 
@@ -445,8 +454,6 @@ void LutDockerDock::selectOcioConfiguration()
     QFile f(filename);
     if (f.exists()) {
         m_txtConfigurationPath->setText(filename);
-        KisConfig cfg(false);
-        cfg.setOcioConfigurationPath(filename);
         writeControls();
         resetOcioConfiguration();
     }
@@ -455,16 +462,17 @@ void LutDockerDock::selectOcioConfiguration()
 void LutDockerDock::resetOcioConfiguration()
 {
     KisConfig cfg(true);
+    KisOcioConfiguration ocioOptions = cfg.ocioConfiguration();
     m_ocioConfig.reset();
 
     try {
-        if (cfg.ocioColorManagementMode() == KisConfig::INTERNAL) {
+        if (ocioOptions.mode == KisOcioConfiguration::INTERNAL) {
             m_ocioConfig = defaultRawProfile();
-        } else if (cfg.ocioColorManagementMode() == KisConfig::OCIO_ENVIRONMENT) {
+        } else if (ocioOptions.mode == KisOcioConfiguration::OCIO_ENVIRONMENT) {
             m_ocioConfig = OCIO::Config::CreateFromEnv();
         }
-        else if (cfg.ocioColorManagementMode() == KisConfig::OCIO_CONFIG) {
-            QString configFile = cfg.ocioConfigurationPath();
+        else if (ocioOptions.mode == KisOcioConfiguration::OCIO_CONFIG) {
+            QString configFile = ocioOptions.configurationPath;
 
             if (QFile::exists(configFile)) {
                 m_ocioConfig = OCIO::Config::CreateFromFile(configFile.toUtf8());
@@ -495,10 +503,12 @@ void LutDockerDock::refillControls()
 
     KIS_ASSERT_RECOVER_RETURN(m_ocioConfig);
 
+    KisConfig cfg(true);
+    KisOcioConfiguration ocioOptions = cfg.ocioConfiguration();
+
     { // Color Management Mode
-        KisConfig cfg(true);
         KisSignalsBlocker modeBlocker(m_colorManagement);
-        m_colorManagement->setCurrentIndex((int) cfg.ocioColorManagementMode());
+        m_colorManagement->setCurrentIndex((int) ocioOptions.mode);
     }
 
     { // Exposure
@@ -537,10 +547,13 @@ void LutDockerDock::refillControls()
             itemsList << QString::fromUtf8(colorSpace->getName());
         }
 
+        KisSignalsBlocker inputCSBlocker(m_cmbInputColorSpace);
+
         if (itemsList != m_cmbInputColorSpace->originalTexts()) {
-            KisSignalsBlocker inputCSBlocker(m_cmbInputColorSpace);
             m_cmbInputColorSpace->resetOriginalTexts(itemsList);
         }
+
+        m_cmbInputColorSpace->setCurrent(ocioOptions.inputColorSpace);
     }
 
     { // Display Device
@@ -550,15 +563,17 @@ void LutDockerDock::refillControls()
             itemsList << QString::fromUtf8(m_ocioConfig->getDisplay(i));
         }
 
+        KisSignalsBlocker displayDeviceLocker(m_cmbDisplayDevice);
+
         if (itemsList != m_cmbDisplayDevice->originalTexts()) {
-            KisSignalsBlocker displayDeviceLocker(m_cmbDisplayDevice);
             m_cmbDisplayDevice->resetOriginalTexts(itemsList);
         }
+
+        m_cmbDisplayDevice->setCurrent(ocioOptions.displayDevice);
     }
 
     { // Lock Current Color
         KisSignalsBlocker locker(m_btnConvertCurrentColor);
-        KisConfig cfg(true);
         m_btnConvertCurrentColor->setChecked(cfg.ocioLockColorVisualRepresentation());
     }
 
@@ -572,10 +587,13 @@ void LutDockerDock::refillControls()
         }
         itemsList << i18nc("Item to indicate no look transform being selected","None");
 
+        KisSignalsBlocker LookComboLocker(m_cmbLook);
+
         if (itemsList != m_cmbLook->originalTexts()) {
-            KisSignalsBlocker LookComboLocker(m_cmbLook);
             m_cmbLook->resetOriginalTexts(itemsList);
         }
+
+        m_cmbLook->setCurrent(ocioOptions.look);
     }
     updateDisplaySettings();
 }
@@ -593,6 +611,10 @@ void LutDockerDock::refillViewCombobox()
     for (int j = 0; j < numViews; ++j) {
         m_cmbView->addSqueezedItem(QString::fromUtf8(m_ocioConfig->getView(display, j)));
     }
+
+    KisConfig cfg(true);
+    KisOcioConfiguration ocioOptions = cfg.ocioConfiguration();
+    m_cmbView->setCurrent(ocioOptions.displayView);
 }
 
 void LutDockerDock::selectLut()
@@ -608,8 +630,7 @@ void LutDockerDock::selectLut()
     QFile f(filename);
     if (f.exists() && filename != m_txtLut->text()) {
         m_txtLut->setText(filename);
-        KisConfig cfg(false);
-        cfg.setOcioLutPath(filename);
+        writeControls();
         updateDisplaySettings();
     }
 }

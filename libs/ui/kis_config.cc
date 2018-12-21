@@ -49,6 +49,7 @@
 #include <config-ocio.h>
 
 #include <kis_color_manager.h>
+#include <KisOcioConfiguration.h>
 
 KisConfig::KisConfig(bool readOnly)
     : m_cfg( KSharedConfig::openConfig()->group(""))
@@ -1364,36 +1365,46 @@ void KisConfig::setLevelOfDetailEnabled(bool value)
     m_cfg.writeEntry("levelOfDetailEnabled", value);
 }
 
+KisOcioConfiguration KisConfig::ocioConfiguration(bool defaultValue) const
+{
+    KisOcioConfiguration cfg;
+
+    if (!defaultValue) {
+        cfg.mode = (KisOcioConfiguration::Mode)m_cfg.readEntry("Krita/Ocio/OcioColorManagementMode", 0);
+        cfg.configurationPath = m_cfg.readEntry("Krita/Ocio/OcioConfigPath", QString());
+        cfg.lutPath = m_cfg.readEntry("Krita/Ocio/OcioLutPath", QString());
+        cfg.inputColorSpace = m_cfg.readEntry("Krita/Ocio/InputColorSpace", QString());
+        cfg.displayDevice = m_cfg.readEntry("Krita/Ocio/DisplayDevice", QString());
+        cfg.displayView = m_cfg.readEntry("Krita/Ocio/DisplayView", QString());
+        cfg.look = m_cfg.readEntry("Krita/Ocio/DisplayLook", QString());
+    }
+
+    return cfg;
+}
+
+void KisConfig::setOcioConfiguration(const KisOcioConfiguration &cfg)
+{
+    m_cfg.writeEntry("Krita/Ocio/OcioColorManagementMode", (int) cfg.mode);
+    m_cfg.writeEntry("Krita/Ocio/OcioConfigPath", cfg.configurationPath);
+    m_cfg.writeEntry("Krita/Ocio/OcioLutPath", cfg.lutPath);
+    m_cfg.writeEntry("Krita/Ocio/InputColorSpace", cfg.inputColorSpace);
+    m_cfg.writeEntry("Krita/Ocio/DisplayDevice", cfg.displayDevice);
+    m_cfg.writeEntry("Krita/Ocio/DisplayView", cfg.displayView);
+    m_cfg.writeEntry("Krita/Ocio/DisplayLook", cfg.look);
+}
+
 KisConfig::OcioColorManagementMode
 KisConfig::ocioColorManagementMode(bool defaultValue) const
 {
+    // FIXME: this option duplicates ocioConfiguration(), please deprecate it
     return (OcioColorManagementMode)(defaultValue ? INTERNAL
                                                   : m_cfg.readEntry("Krita/Ocio/OcioColorManagementMode", (int) INTERNAL));
 }
 
 void KisConfig::setOcioColorManagementMode(OcioColorManagementMode mode) const
 {
+    // FIXME: this option duplicates ocioConfiguration(), please deprecate it
     m_cfg.writeEntry("Krita/Ocio/OcioColorManagementMode", (int) mode);
-}
-
-QString KisConfig::ocioConfigurationPath(bool defaultValue) const
-{
-    return (defaultValue ? QString() : m_cfg.readEntry("Krita/Ocio/OcioConfigPath", QString()));
-}
-
-void KisConfig::setOcioConfigurationPath(const QString &path) const
-{
-    m_cfg.writeEntry("Krita/Ocio/OcioConfigPath", path);
-}
-
-QString KisConfig::ocioLutPath(bool defaultValue) const
-{
-    return (defaultValue ? QString() : m_cfg.readEntry("Krita/Ocio/OcioLutPath", QString()));
-}
-
-void KisConfig::setOcioLutPath(const QString &path) const
-{
-    m_cfg.writeEntry("Krita/Ocio/OcioLutPath", path);
 }
 
 int KisConfig::ocioLutEdgeSize(bool defaultValue) const

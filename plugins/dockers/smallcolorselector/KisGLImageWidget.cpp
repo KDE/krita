@@ -168,8 +168,6 @@ void KisGLImageWidget::paintGL()
 
     if (!m_texture.isCreated()) return;
 
-    glViewport(0, 0, width(), height());
-
     m_vao.bind();
     m_shader.bind();
 

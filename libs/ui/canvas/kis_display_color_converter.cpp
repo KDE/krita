@@ -431,9 +431,7 @@ struct WriteToQColorPolicy {
         const float *p = values.constData();
 
         if (!expectedOcioOutputColorSpace) {
-            return finalIsRgba(baseColorSpace) ?
-                floatArrayToQColor<true>(p) :
-                floatArrayToQColor<false>(p);
+            return floatArrayToQColor<true>(p);
         } else {
             const KoColorSpace *sRGB = KoColorSpaceRegistry::instance()->rgb8();
             QVector<quint8> dstPixelData(4);
@@ -500,6 +498,11 @@ typename Policy::Result KisDisplayColorConverter::convertToDisplayImpl(const KoC
         int numChannels = srcCS->channelCount();
         QVector<float> normalizedChannels(numChannels);
         srcCS->normalisedChannelsValue(c.data(), normalizedChannels);
+
+        if (!finalIsRgba(srcCS)) {
+            std::swap(normalizedChannels[0], normalizedChannels[2]);
+        }
+
         m_d->displayFilter->filter((quint8*)normalizedChannels.data(), 1);
 
         return Policy::convertWhenOcio(normalizedChannels, m_d->expectedOcioOutputColorSpace, srcCS);
@@ -524,7 +527,7 @@ KoColor KisDisplayColorConverter::applyDisplayFiltering(const KoColor &c, bool a
 
 bool KisDisplayColorConverter::canSkipDisplayConversion(const KoColorSpace *cs) const
 {
-    return !m_d->useOcio() &&
+    return !m_d->useOcio() && !m_d->expectedOcioOutputColorSpace &&
         cs->colorModelId() == m_d->monitorColorSpace->colorModelId() &&
         (!!cs->profile() == !!m_d->monitorColorSpace->profile()) &&
         (!cs->profile() ||
@@ -556,21 +559,19 @@ KisDisplayColorConverter::Private::convertToQImageDirect(KisPaintDeviceSP device
     if (!expectedOcioOutputColorSpace) {
         while (it.nextPixel()) {
             cs->normalisedChannelsValue(it.rawDataConst(), normalizedChannels);
+
+            if (!flipToBgra) {
+                std::swap(normalizedChannels[0], normalizedChannels[2]);
+            }
+
             displayFilter->filter((quint8*)normalizedChannels.data(), 1);
 
             const float *p = normalizedChannels.constData();
 
-            if (flipToBgra) {
-                dstPtr[0] = KoColorSpaceMaths<float, quint8>::scaleToA(p[2]);
-                dstPtr[1] = KoColorSpaceMaths<float, quint8>::scaleToA(p[1]);
-                dstPtr[2] = KoColorSpaceMaths<float, quint8>::scaleToA(p[0]);
-                dstPtr[3] = KoColorSpaceMaths<float, quint8>::scaleToA(p[3]);
-            } else {
-                dstPtr[0] = KoColorSpaceMaths<float, quint8>::scaleToA(p[0]);
-                dstPtr[1] = KoColorSpaceMaths<float, quint8>::scaleToA(p[1]);
-                dstPtr[2] = KoColorSpaceMaths<float, quint8>::scaleToA(p[2]);
-                dstPtr[3] = KoColorSpaceMaths<float, quint8>::scaleToA(p[3]);
-            }
+            dstPtr[0] = KoColorSpaceMaths<float, quint8>::scaleToA(p[2]);
+            dstPtr[1] = KoColorSpaceMaths<float, quint8>::scaleToA(p[1]);
+            dstPtr[2] = KoColorSpaceMaths<float, quint8>::scaleToA(p[0]);
+            dstPtr[3] = KoColorSpaceMaths<float, quint8>::scaleToA(p[3]);
 
             dstPtr += 4;
         }
@@ -579,6 +580,11 @@ KisDisplayColorConverter::Private::convertToQImageDirect(KisPaintDeviceSP device
 
         while (it.nextPixel()) {
             cs->normalisedChannelsValue(it.rawDataConst(), normalizedChannels);
+
+            if (!flipToBgra) {
+                std::swap(normalizedChannels[0], normalizedChannels[2]);
+            }
+
             displayFilter->filter((quint8*)normalizedChannels.data(), 1);
 
             expectedOcioOutputColorSpace->
@@ -651,6 +657,12 @@ void KisDisplayColorConverter::applyDisplayFilteringF32(KisFixedPaintDeviceSP de
                     m_d->monitorProfile);
 
             device->convertTo(monitorColorSpaceF32, m_d->renderingIntent, m_d->conversionFlags);
+        }
+
+        // TODO: this conversion doesn't look to be correct in the case
+        //       when we have !useOcio && !m_d->monitorProfile && paintingColorSpace != rgb-8bit
+        if (m_d->expectedOcioOutputColorSpace) {
+            device->convertTo(m_d->expectedOcioOutputColorSpace);
         }
     } else {
         if (m_d->monitorProfile && m_d->displayFilter->useInternalColorManagement()) {

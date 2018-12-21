@@ -153,8 +153,7 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
             if (tileInfo->valid()) {
                 tileInfo->retrieveData(projection, channelFlags, m_d->onlyOneChannelSelected, m_d->selectedChannelIndex);
 
-                // TODO: remove this hack when HDR/OCIO support is implemented
-                if (0 && convertColorSpace) {
+                if (convertColorSpace) {
                     if (m_d->proofingTransform) {
                         tileInfo->proofTo(m_d->conversionOptions.m_destinationColorSpace, m_d->proofingConfig->conversionFlags, m_d->proofingTransform.data());
                     } else {

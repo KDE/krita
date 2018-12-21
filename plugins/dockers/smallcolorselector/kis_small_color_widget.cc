@@ -314,12 +314,6 @@ void KisSmallColorWidget::uploadPaletteData(KisGLImageWidget *widget, const QSiz
 
         d->displayColorConverter->applyDisplayFilteringF32(device);
 
-        /**
-         * TODO: theoretically, we could skip this step, because the surface format
-         * should coincide with the one of the image
-         */
-        device->convertTo(outputColorSpace);
-
         half *imagePtr = image.data();
         devicePtr = reinterpret_cast<float*>(device->data());
 

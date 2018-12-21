@@ -32,6 +32,7 @@
 #include "kis_image.h"
 #include "kis_config.h"
 #include "KisPart.h"
+#include "KisOpenGLModeProber.h"
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
@@ -354,6 +355,9 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
     m_renderingIntent = renderingIntent;
     m_conversionFlags = conversionFlags;
 
+
+    // FIXME: perhaps this call is not needed, because the options will
+    //        be set in updateTextureFormat()
     m_updateInfoBuilder.setConversionOptions(
         ConversionOptions(m_tilesDestinationColorSpace,
                           m_renderingIntent,
@@ -467,8 +471,9 @@ void KisOpenGLImageTextures::updateTextureFormat()
         }
     }
 
-    KoID colorModelId = m_image->colorSpace()->colorModelId();
-    KoID colorDepthId = m_image->colorSpace()->colorDepthId();
+    const bool useHDRMode = KisOpenGLModeProber::instance()->useHDRMode();
+    const KoID colorModelId = m_image->colorSpace()->colorModelId();
+    const KoID colorDepthId = useHDRMode ? Float16BitsColorDepthID : m_image->colorSpace()->colorDepthId();
 
     KoID destinationColorModelId = RGBAColorModelID;
     KoID destinationColorDepthId = Integer8BitsColorDepthID;

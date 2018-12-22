@@ -68,7 +68,7 @@ void KisPaletteComboBox::setCompanionView(KisPaletteView *view)
     connect(view, SIGNAL(sigIndexSelected(QModelIndex)),
             SLOT(slotSwatchSelected(QModelIndex)));
     connect(this, SIGNAL(sigColorSelected(KoColor)),
-            view, SLOT(slotFGColorChanged(KoColor)));
+            view, SLOT(slotSelectColor(KoColor)));
 }
 
 void KisPaletteComboBox::slotPaletteChanged()

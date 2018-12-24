@@ -66,10 +66,34 @@
 #include "kis_clipboard.h"
 #include <kis_cursor_override_hijacker.h>
 #include "kis_undo_stores.h"
+#include "half.h"
 
 namespace
 {
 
+inline float applySmpte2048Curve(float x) {
+    const float m1 = 2610.0 / 4096.0 / 4.0;
+    const float m2 = 2523.0 / 4096.0 * 128.0;
+    const float a1 = 3424.0 / 4096.0;
+    const float c2 = 2413.0 / 4096.0 * 32.0;
+    const float c3 = 2392.0 / 4096.0 * 32.0;
+    const float a4 = 1.0;
+    const float x_p = powf(0.008 * x, m1);
+    const float res = powf((a1 + c2 * x_p) / (a4 + c3 * x_p), m2);
+    return res;
+}
+
+inline float removeSmpte2048Curve(float x) {
+    const float m1_r = 4096.0 * 4.0 / 2610.0;
+    const float m2_r = 4096.0 / 2523.0 / 128.0;
+    const float a1 = 3424.0 / 4096.0;
+    const float c2 = 2413.0 / 4096.0 * 32.0;
+    const float c3 = 2392.0 / 4096.0 * 32.0;
+
+    const float x_p = powf(x, m2_r);
+    const float res = powf(qMax(0.0f, x_p - a1) / (c2 - c3 * x_p), m1_r);
+    return res * 125.0f;
+}
 
 int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
 {
@@ -409,6 +433,28 @@ void _flush_fn(png_structp png_ptr)
     Q_UNUSED(png_ptr);
 }
 
+struct ConvertP2020PQU16ToP2020LinearF16 : public KoColorTransformation
+{
+    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override {
+        const quint16 *srcPtr = reinterpret_cast<const quint16*>(src);
+        half *dstPtr = reinterpret_cast<half*>(dst);
+
+        const float normIntCoeff = 1.0f / 65535.0f;
+
+        for (int i = 0; i < nPixels; i++) {
+            dstPtr[0] = removeSmpte2048Curve(srcPtr[0] * normIntCoeff);
+            dstPtr[1] = removeSmpte2048Curve(srcPtr[1] * normIntCoeff);
+            dstPtr[2] = removeSmpte2048Curve(srcPtr[2] * normIntCoeff);
+            dstPtr[3] = srcPtr[3] * normIntCoeff;
+
+            std::swap(dstPtr[0], dstPtr[2]);
+
+            srcPtr += 4;
+            dstPtr += 4;
+        }
+    }
+
+};
 
 KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 {
@@ -551,6 +597,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         }
     }
 
+    bool loadedImageIsHDR = false;
     const KoColorProfile* profile = 0;
     if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
         QByteArray profile_rawdata;
@@ -565,6 +612,8 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
             }
         }
+
+        loadedImageIsHDR = strcmp(profile_name, "ITUR_2100_PQ_FULL") == 0;
     }
     else {
         dbgFile << "no embedded profile, will use the default profile";
@@ -595,8 +644,25 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
 
     // Retrieve a pointer to the colorspace
-    const KoColorSpace* cs;
-    if (profile && profile->isSuitableForOutput()) {
+    QScopedPointer<KoColorTransformation> locallyStoredTransform;
+    KoColorTransformation* transform = 0;
+    const KoColorSpace* cs = 0;
+
+    if (loadedImageIsHDR &&
+        csName.first == RGBAColorModelID.id() &&
+        csName.second == Integer16BitsColorDepthID.id()) {
+
+        const KoColorSpace *p2020CS = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id(), "Rec2020-elle-V4-g10.icc");
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(p2020CS, KisImageBuilder_RESULT_FAILURE);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(p2020CS->profile(), KisImageBuilder_RESULT_FAILURE);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(p2020CS->profile()->name() == "Rec2020-elle-V4-g10.icc", KisImageBuilder_RESULT_FAILURE);
+
+        locallyStoredTransform.reset(new ConvertP2020PQU16ToP2020LinearF16());
+        transform = locallyStoredTransform.data();
+
+        cs = p2020CS;
+
+    } else if (profile && profile->isSuitableForOutput()) {
         dbgFile << "image has embedded profile: " << profile->name() << "\n";
         cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile);
     }
@@ -608,17 +674,17 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         } else {
             cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, 0);
         }
+
+        //TODO: two fixes : one tell the user about the problem and ask for a solution, and two once the kocolorspace include KoColorTransformation, use that instead of hacking a lcms transformation
+        // Create the cmsTransform if needed
+        if (profile) {
+            transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        }
     }
 
     if (cs == 0) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
-    }
-    //TODO: two fixes : one tell the user about the problem and ask for a solution, and two once the kocolorspace include KoColorTransformation, use that instead of hacking a lcms transformation
-    // Create the cmsTransform if needed
-    KoColorTransformation* transform = 0;
-    if (profile && !profile->isSuitableForOutput()) {
-        transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     }
 
     // Creating the KisImageSP
@@ -719,24 +785,24 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 do {
                     quint16 *d = reinterpret_cast<quint16 *>(it->rawData());
                     d[0] = *(src++);
-                    if (transform) transform->transform(reinterpret_cast<quint8*>(d), reinterpret_cast<quint8*>(d), 1);
                     if (hasalpha) {
                         d[1] = *(src++);
                     } else {
                         d[1] = quint16_MAX;
                     }
+                    if (transform) transform->transform(reinterpret_cast<quint8*>(d), reinterpret_cast<quint8*>(d), 1);
                 } while (it->nextPixel());
             } else  {
                 KisPNGReadStream stream(row_pointer, color_nb_bits);
                 do {
                     quint8 *d = it->rawData();
                     d[0] = (quint8)(stream.nextValue() * coeff);
-                    if (transform) transform->transform(d, d, 1);
                     if (hasalpha) {
                         d[1] = (quint8)(stream.nextValue() * coeff);
                     } else {
                         d[1] = UCHAR_MAX;
                     }
+                    if (transform) transform->transform(d, d, 1);
                 } while (it->nextPixel());
             }
             // FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits"
@@ -750,9 +816,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     d[2] = *(src++);
                     d[1] = *(src++);
                     d[0] = *(src++);
-                    if (transform) transform->transform(reinterpret_cast<quint8 *>(d), reinterpret_cast<quint8*>(d), 1);
                     if (hasalpha) d[3] = *(src++);
                     else d[3] = quint16_MAX;
+                    if (transform) transform->transform(reinterpret_cast<quint8 *>(d), reinterpret_cast<quint8*>(d), 1);
                 } while (it->nextPixel());
             } else {
                 KisPNGReadStream stream(row_pointer, color_nb_bits);
@@ -761,9 +827,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     d[2] = (quint8)(stream.nextValue() * coeff);
                     d[1] = (quint8)(stream.nextValue() * coeff);
                     d[0] = (quint8)(stream.nextValue() * coeff);
-                    if (transform) transform->transform(d, d, 1);
                     if (hasalpha) d[3] = (quint8)(stream.nextValue() * coeff);
                     else d[3] = UCHAR_MAX;
+                    if (transform) transform->transform(d, d, 1);
                 } while (it->nextPixel());
             }
             break;
@@ -883,18 +949,6 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const QString &filename, const
     KisImageBuilder_Result result = buildFile(&fp, imageRect, xRes, yRes, device, annotationsStart, annotationsEnd, options, metaData);
 
     return result;
-}
-
-inline float applySmpte2048Curve(float x) {
-    const float m1 = 2610.0 / 4096.0 / 4.0;
-    const float m2 = 2523.0 / 4096.0 * 128.0;
-    const float a1 = 3424.0 / 4096.0;
-    const float c2 = 2413.0 / 4096.0 * 32.0;
-    const float c3 = 2392.0 / 4096.0 * 32.0;
-    const float a4 = 1.0;
-    const float x_p = powf(0.008 * x, m1);
-    const float res = powf((a1 + c2 * x_p) / (a4 + c3 * x_p), m2);
-    return res;
 }
 
 KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)

@@ -885,6 +885,18 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const QString &filename, const
     return result;
 }
 
+inline float applySmpte2048Curve(float x) {
+    const float m1 = 2610.0 / 4096.0 / 4.0;
+    const float m2 = 2523.0 / 4096.0 * 128.0;
+    const float a1 = 3424.0 / 4096.0;
+    const float c2 = 2413.0 / 4096.0 * 32.0;
+    const float c3 = 2392.0 / 4096.0 * 32.0;
+    const float a4 = 1.0;
+    const float x_p = powf(0.008 * x, m1);
+    const float res = powf((a1 + c2 * x_p) / (a4 + c3 * x_p), m2);
+    return res;
+}
+
 KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
     if (!device)
@@ -903,13 +915,61 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     if (device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
             || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
             || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID) {
-        const KoColorSpace *dstcs = KoColorSpaceRegistry::instance()->colorSpace(device->colorSpace()->colorModelId().id(), Integer16BitsColorDepthID.id(), device->colorSpace()->profile());
-        KisPaintDeviceSP tmp = new KisPaintDevice(dstcs);
-        KisPainter gc(tmp);
-        gc.bitBlt(imageRect.topLeft(), device, imageRect);
-        gc.end();
-        device = tmp;
+
+        if (options.saveAsHDR) {
+            const KoColorSpace *p2020CS = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), "Rec2020-elle-V4-g10.icc");
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(p2020CS, KisImageBuilder_RESULT_FAILURE);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(p2020CS->profile(), KisImageBuilder_RESULT_FAILURE);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(p2020CS->profile()->name() == "Rec2020-elle-V4-g10.icc", KisImageBuilder_RESULT_FAILURE);
+
+            KisPaintDeviceSP p2020g10 = new KisPaintDevice(device->colorSpace());
+            p2020g10->makeCloneFromRough(device, imageRect);
+            delete p2020g10->convertTo(p2020CS);
+
+            const KoColorSpace *dstCS = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), "High Dynamic Range UHDTV Wide Color Gamut Display (Rec. 2020) - SMPTE ST 2084 PQ EOTF");
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(dstCS, KisImageBuilder_RESULT_FAILURE);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(dstCS->profile(), KisImageBuilder_RESULT_FAILURE);
+
+            KisPaintDeviceSP p2020pq = new KisPaintDevice(dstCS);
+
+            KisSequentialConstIterator srcIt(p2020g10, imageRect);
+            KisSequentialIterator dstIt(p2020pq, imageRect);
+
+            while (srcIt.nextPixel() && dstIt.nextPixel()) {
+                const float *srcPtr = reinterpret_cast<const float*>(srcIt.rawDataConst());
+                quint16 *dstPtr = reinterpret_cast<quint16*>(dstIt.rawData());
+
+                dstPtr[2] = qMin(1.0f, applySmpte2048Curve(srcPtr[0])) * 65535.0f;
+                dstPtr[1] = qMin(1.0f, applySmpte2048Curve(srcPtr[1])) * 65535.0f;
+                dstPtr[0] = qMin(1.0f, applySmpte2048Curve(srcPtr[2])) * 65535.0f;
+
+                dstPtr[3] = srcPtr[3] * 65535.0f;
+            }
+
+            device = p2020pq;
+
+        } else {
+            const KoColorSpace *dstCS = KoColorSpaceRegistry::instance()->colorSpace(device->colorSpace()->colorModelId().id(), Integer16BitsColorDepthID.id(), device->colorSpace()->profile());
+            KisPaintDeviceSP tmp = new KisPaintDevice(device->colorSpace());
+            tmp->makeCloneFromRough(device, imageRect);
+            delete tmp->convertTo(dstCS);
+            device = tmp;
+        }
+    } else {
+        KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR) {
+            options.saveAsHDR = false;
+        }
     }
+
+
+    KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.forceSRGB) {
+        options.forceSRGB = false;
+    }
+
+    KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.tryToSaveAsIndexed) {
+        options.tryToSaveAsIndexed = false;
+    }
+
     QStringList colormodels = QStringList() << RGBAColorModelID.id() << GrayAColorModelID.id();
     if (options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
@@ -1018,6 +1078,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
     int interlacetype = options.interlace ? PNG_INTERLACE_ADAM7 : PNG_INTERLACE_NONE;
 
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(color_type >= 0, KisImageBuilder_RESULT_FAILURE);
+
     png_set_IHDR(png_ptr, info_ptr,
                  imageRect.width(),
                  imageRect.height(),
@@ -1082,10 +1144,13 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     if (!sRGB || options.saveSRGBProfile) {
 
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-        png_set_iCCP(png_ptr, info_ptr, (png_const_charp)"icc", PNG_COMPRESSION_TYPE_BASE, (png_const_bytep)colorProfileData.constData(), colorProfileData . size());
+        const char *typeString = !options.saveAsHDR ? "icc" : "ITUR_2100_PQ_FULL";
+        png_set_iCCP(png_ptr, info_ptr, (png_const_charp)typeString, PNG_COMPRESSION_TYPE_BASE, (png_const_bytep)colorProfileData.constData(), colorProfileData . size());
 #else
         // older version of libpng has a problem with constness on the parameters
-        char typeString[] = "icc";
+        char typeStringICC[] = "icc";
+        char typeStringHDR[] = "ITUR_2100_PQ_FULL";
+        char *typeString = !options.saveAsHDR ? typeStringICC : typeStringHDR;
         png_set_iCCP(png_ptr, info_ptr, typeString, PNG_COMPRESSION_TYPE_BASE, colorProfileData.data(), colorProfileData . size());
 #endif
     }

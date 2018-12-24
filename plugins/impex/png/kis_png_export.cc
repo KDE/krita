@@ -73,6 +73,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *docum
     options.forceSRGB = configuration->getBool("forceSRGB", true);
     options.storeAuthor = configuration->getBool("storeAuthor", false);
     options.storeMetaData = configuration->getBool("storeMetaData", false);
+    options.saveAsHDR = configuration->getBool("saveAsHDR", false);
 
     vKisAnnotationSP_it beginIt = image->beginAnnotations();
     vKisAnnotationSP_it endIt = image->endAnnotations();
@@ -119,6 +120,7 @@ KisPropertiesConfigurationSP KisPNGExport::defaultConfiguration(const QByteArray
     cfg->setProperty("transparencyFillcolor", v);
     cfg->setProperty("saveSRGBProfile", false);
     cfg->setProperty("forceSRGB", true);
+    cfg->setProperty("saveAsHDR", false);
     cfg->setProperty("storeMetaData", false);
     cfg->setProperty("storeAuthor", false);
 
@@ -140,6 +142,14 @@ void KisPNGExport::initializeCapabilities()
             << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
             << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID);
     addSupportedColorModels(supportedColorModels, "PNG");
+}
+
+KisWdgOptionsPNG::KisWdgOptionsPNG(QWidget *parent)
+    : KisConfigWidget(parent)
+{
+    setupUi(this);
+
+    connect(chkSaveAsHDR, SIGNAL(toggled(bool)), this, SLOT(slotUseHDRChanged(bool)));
 }
 
 void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
@@ -181,6 +191,9 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     //chkForceSRGB->setEnabled(!sRGB);
     chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
 
+    chkSaveAsHDR->setChecked(cfg->getBool("saveAsHDR", false));
+    slotUseHDRChanged(chkSaveAsHDR->isChecked());
+
     chkAuthor->setChecked(cfg->getBool("storeAuthor", false));
     chkMetaData->setChecked(cfg->getBool("storeMetaData", false));
 
@@ -198,11 +211,13 @@ KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
     bool alpha = this->alpha->isChecked();
     bool interlace = interlacing->isChecked();
     int compression = (int)compressionLevel->value();
-    bool tryToSaveAsIndexed = this->tryToSaveAsIndexed->isChecked();
-    bool saveSRGB = chkSRGB->isChecked();
-    bool forceSRGB = chkForceSRGB->isChecked();
+    bool saveAsHDR = chkSaveAsHDR->isChecked();
+    bool tryToSaveAsIndexed = !saveAsHDR && this->tryToSaveAsIndexed->isChecked();
+    bool saveSRGB = !saveAsHDR && chkSRGB->isChecked();
+    bool forceSRGB = !saveAsHDR && chkForceSRGB->isChecked();
     bool storeAuthor = chkAuthor->isChecked();
     bool storeMetaData = chkMetaData->isChecked();
+
 
     QVariant transparencyFillcolor;
     transparencyFillcolor.setValue(bnTransparencyFillColor->color());
@@ -212,6 +227,7 @@ KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
     cfg->setProperty("compression", compression);
     cfg->setProperty("interlaced", interlace);
     cfg->setProperty("transparencyFillcolor", transparencyFillcolor);
+    cfg->setProperty("saveAsHDR", saveAsHDR);
     cfg->setProperty("saveSRGBProfile", saveSRGB);
     cfg->setProperty("forceSRGB", forceSRGB);
     cfg->setProperty("storeAuthor", storeAuthor);
@@ -223,6 +239,13 @@ KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
 void KisWdgOptionsPNG::on_alpha_toggled(bool checked)
 {
     bnTransparencyFillColor->setEnabled(!checked);
+}
+
+void KisWdgOptionsPNG::slotUseHDRChanged(bool value)
+{
+    tryToSaveAsIndexed->setDisabled(value);
+    chkForceSRGB->setDisabled(value);
+    chkSRGB->setDisabled(value);
 }
 
 #include "kis_png_export.moc"

@@ -55,6 +55,7 @@ struct KisPNGOptions {
         , forceSRGB(false)
         , storeMetaData(false)
         , storeAuthor(false)
+        , saveAsHDR(false)
         , transparencyFillColor(Qt::white)
     {}
 
@@ -69,6 +70,7 @@ struct KisPNGOptions {
     bool forceSRGB;
     bool storeMetaData;
     bool storeAuthor;
+    bool saveAsHDR;
     QList<const KisMetaData::Filter*> filters;
     QColor transparencyFillColor;
 

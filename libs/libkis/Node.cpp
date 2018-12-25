@@ -52,6 +52,7 @@
 #include <kis_keyframe.h>
 #include "kis_selection.h"
 
+#include "InfoObject.h"
 #include "Krita.h"
 #include "Node.h"
 #include "Channel.h"
@@ -515,7 +516,7 @@ Node* Node::duplicate()
     return new Node(d->image, d->node->clone());
 }
 
-bool Node::save(const QString &filename, double xRes, double yRes)
+bool Node::save(const QString &filename, double xRes, double yRes, const InfoObject &exportConfiguration)
 {
     if (!d->node) return false;
     if (filename.isEmpty()) return false;
@@ -540,7 +541,7 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     dst->cropImage(bounds);
     dst->initialRefreshGraph();
 
-    bool r = doc->exportDocumentSync(QUrl::fromLocalFile(filename), mimeType.toLatin1());
+    bool r = doc->exportDocumentSync(QUrl::fromLocalFile(filename), mimeType.toLatin1(), exportConfiguration.configuration());
     if (!r) {
         qWarning() << doc->errorMessage();
     }

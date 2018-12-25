@@ -53,6 +53,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     chkWorkRecursively->setChecked(workRecursively);
     connect(chkWorkRecursively, SIGNAL(toggled(bool)), this, SIGNAL(sigRestartTransform()));
+    connect(changeGranularity,SIGNAL(valueChanged(int)),this,SLOT(slotGranularityChanged(int)));
 
     // Init Filter  combo
     cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
@@ -1293,5 +1294,13 @@ void KisToolTransformConfigWidget::slotEditCagePoints(bool value)
     config->refTransformedPoints() = config->origPoints();
 
     config->setEditingTransformPoints(value);
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotGranularityChanged(int value)
+{
+    if (m_uiSlotsBlocked) return;
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setPixelPrecision(value);
     notifyConfigChanged();
 }

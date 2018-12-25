@@ -92,6 +92,14 @@ public:
         m_mode = mode;
     }
 
+    inline int pixelPrecision() const {
+        return m_pixelPrecision;
+    }
+
+    inline void setPixelPrecision(int precision) {
+        m_pixelPrecision = precision;
+    }
+
     //warp-related
     inline int numPoints() const {
         KIS_ASSERT_RECOVER_NOOP(m_origPoints.size() == m_transfPoints.size());
@@ -330,6 +338,7 @@ private:
      * operations should revert to it.
      */
     QScopedPointer<ToolTransformArgs> m_continuedTransformation;
+    int m_pixelPrecision;
 };
 
 #endif // TOOL_TRANSFORM_ARGS_H_

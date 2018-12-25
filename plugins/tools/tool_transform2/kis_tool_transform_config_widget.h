@@ -112,6 +112,8 @@ public Q_SLOTS:
 
     void notifyEditingFinished();
 
+    void slotGranularityChanged(int value);
+
 private:
     // rad being in |R, the returned value is in [0; 360]
     double radianToDegree(double rad);

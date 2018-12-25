@@ -560,6 +560,12 @@ void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, 
     parent = activeNode;
     above = parent->lastChild();
 
+    if (parent->inherits("KisGroupLayer") && parent->collapsed()) {
+      above = parent;
+      parent = parent->parent();
+      return;
+    }
+
     while (parent &&
            (!parent->allowAsChild(node) || parent->userLocked())) {
 

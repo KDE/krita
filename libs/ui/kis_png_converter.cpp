@@ -71,30 +71,6 @@
 namespace
 {
 
-inline float applySmpte2048Curve(float x) {
-    const float m1 = 2610.0 / 4096.0 / 4.0;
-    const float m2 = 2523.0 / 4096.0 * 128.0;
-    const float a1 = 3424.0 / 4096.0;
-    const float c2 = 2413.0 / 4096.0 * 32.0;
-    const float c3 = 2392.0 / 4096.0 * 32.0;
-    const float a4 = 1.0;
-    const float x_p = powf(0.008 * x, m1);
-    const float res = powf((a1 + c2 * x_p) / (a4 + c3 * x_p), m2);
-    return res;
-}
-
-inline float removeSmpte2048Curve(float x) {
-    const float m1_r = 4096.0 * 4.0 / 2610.0;
-    const float m2_r = 4096.0 / 2523.0 / 128.0;
-    const float a1 = 3424.0 / 4096.0;
-    const float c2 = 2413.0 / 4096.0 * 32.0;
-    const float c3 = 2392.0 / 4096.0 * 32.0;
-
-    const float x_p = powf(x, m2_r);
-    const float res = powf(qMax(0.0f, x_p - a1) / (c2 - c3 * x_p), m1_r);
-    return res * 125.0f;
-}
-
 int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
 {
 
@@ -433,29 +409,6 @@ void _flush_fn(png_structp png_ptr)
     Q_UNUSED(png_ptr);
 }
 
-struct ConvertP2020PQU16ToP2020LinearF16 : public KoColorTransformation
-{
-    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override {
-        const quint16 *srcPtr = reinterpret_cast<const quint16*>(src);
-        half *dstPtr = reinterpret_cast<half*>(dst);
-
-        const float normIntCoeff = 1.0f / 65535.0f;
-
-        for (int i = 0; i < nPixels; i++) {
-            dstPtr[0] = removeSmpte2048Curve(srcPtr[0] * normIntCoeff);
-            dstPtr[1] = removeSmpte2048Curve(srcPtr[1] * normIntCoeff);
-            dstPtr[2] = removeSmpte2048Curve(srcPtr[2] * normIntCoeff);
-            dstPtr[3] = srcPtr[3] * normIntCoeff;
-
-            std::swap(dstPtr[0], dstPtr[2]);
-
-            srcPtr += 4;
-            dstPtr += 4;
-        }
-    }
-
-};
-
 KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 {
     dbgFile << "Start decoding PNG File";
@@ -644,23 +597,36 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
 
     // Retrieve a pointer to the colorspace
-    QScopedPointer<KoColorTransformation> locallyStoredTransform;
-    KoColorTransformation* transform = 0;
+    QScopedPointer<KoColorConversionTransformation> locallyStoredTransform;
+    KoColorConversionTransformation* transform = 0;
     const KoColorSpace* cs = 0;
 
     if (loadedImageIsHDR &&
         csName.first == RGBAColorModelID.id() &&
         csName.second == Integer16BitsColorDepthID.id()) {
 
-        const KoColorSpace *p2020CS = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id(), "Rec2020-elle-V4-g10.icc");
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(p2020CS, KisImageBuilder_RESULT_FAILURE);
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(p2020CS->profile(), KisImageBuilder_RESULT_FAILURE);
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(p2020CS->profile()->name() == "Rec2020-elle-V4-g10.icc", KisImageBuilder_RESULT_FAILURE);
+        const KoColorSpace *p2020G10CS =
+            KoColorSpaceRegistry::instance()->colorSpace(
+                RGBAColorModelID.id(),
+                Float16BitsColorDepthID.id(),
+                KoColorSpaceRegistry::instance()->p2020G10Profile());
 
-        locallyStoredTransform.reset(new ConvertP2020PQU16ToP2020LinearF16());
+        const KoColorSpace *p2020PQCS =
+            KoColorSpaceRegistry::instance()->colorSpace(
+                RGBAColorModelID.id(),
+                Integer16BitsColorDepthID.id(),
+                KoColorSpaceRegistry::instance()->p2020G10Profile());
+
+
+        locallyStoredTransform.reset(
+            p2020PQCS->createColorConverter(
+                p2020G10CS,
+                KoColorConversionTransformation::internalRenderingIntent(),
+                KoColorConversionTransformation::internalConversionFlags()));
+
         transform = locallyStoredTransform.data();
 
-        cs = p2020CS;
+        cs = p2020G10CS;
 
     } else if (profile && profile->isSuitableForOutput()) {
         dbgFile << "image has embedded profile: " << profile->name() << "\n";
@@ -790,7 +756,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     } else {
                         d[1] = quint16_MAX;
                     }
-                    if (transform) transform->transform(reinterpret_cast<quint8*>(d), reinterpret_cast<quint8*>(d), 1);
+                    if (transform) transform->transformInPlace(reinterpret_cast<quint8*>(d), reinterpret_cast<quint8*>(d), 1);
                 } while (it->nextPixel());
             } else  {
                 KisPNGReadStream stream(row_pointer, color_nb_bits);
@@ -802,7 +768,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     } else {
                         d[1] = UCHAR_MAX;
                     }
-                    if (transform) transform->transform(d, d, 1);
+                    if (transform) transform->transformInPlace(d, d, 1);
                 } while (it->nextPixel());
             }
             // FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits"
@@ -818,7 +784,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     d[0] = *(src++);
                     if (hasalpha) d[3] = *(src++);
                     else d[3] = quint16_MAX;
-                    if (transform) transform->transform(reinterpret_cast<quint8 *>(d), reinterpret_cast<quint8*>(d), 1);
+                    if (transform) transform->transformInPlace(reinterpret_cast<quint8 *>(d), reinterpret_cast<quint8*>(d), 1);
                 } while (it->nextPixel());
             } else {
                 KisPNGReadStream stream(row_pointer, color_nb_bits);
@@ -829,7 +795,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     d[0] = (quint8)(stream.nextValue() * coeff);
                     if (hasalpha) d[3] = (quint8)(stream.nextValue() * coeff);
                     else d[3] = UCHAR_MAX;
-                    if (transform) transform->transform(d, d, 1);
+                    if (transform) transform->transformInPlace(d, d, 1);
                 } while (it->nextPixel());
             }
             break;
@@ -970,45 +936,26 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
             || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
             || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID) {
 
+        const KoColorSpace *dstCS =
+            KoColorSpaceRegistry::instance()->colorSpace(
+                device->colorSpace()->colorModelId().id(),
+                Integer16BitsColorDepthID.id(),
+                device->colorSpace()->profile());
+
         if (options.saveAsHDR) {
-            const KoColorSpace *p2020CS = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), "Rec2020-elle-V4-g10.icc");
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(p2020CS, KisImageBuilder_RESULT_FAILURE);
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(p2020CS->profile(), KisImageBuilder_RESULT_FAILURE);
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(p2020CS->profile()->name() == "Rec2020-elle-V4-g10.icc", KisImageBuilder_RESULT_FAILURE);
-
-            KisPaintDeviceSP p2020g10 = new KisPaintDevice(device->colorSpace());
-            p2020g10->makeCloneFromRough(device, imageRect);
-            delete p2020g10->convertTo(p2020CS);
-
-            const KoColorSpace *dstCS = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), "High Dynamic Range UHDTV Wide Color Gamut Display (Rec. 2020) - SMPTE ST 2084 PQ EOTF");
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(dstCS, KisImageBuilder_RESULT_FAILURE);
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(dstCS->profile(), KisImageBuilder_RESULT_FAILURE);
-
-            KisPaintDeviceSP p2020pq = new KisPaintDevice(dstCS);
-
-            KisSequentialConstIterator srcIt(p2020g10, imageRect);
-            KisSequentialIterator dstIt(p2020pq, imageRect);
-
-            while (srcIt.nextPixel() && dstIt.nextPixel()) {
-                const float *srcPtr = reinterpret_cast<const float*>(srcIt.rawDataConst());
-                quint16 *dstPtr = reinterpret_cast<quint16*>(dstIt.rawData());
-
-                dstPtr[2] = qMin(1.0f, applySmpte2048Curve(srcPtr[0])) * 65535.0f;
-                dstPtr[1] = qMin(1.0f, applySmpte2048Curve(srcPtr[1])) * 65535.0f;
-                dstPtr[0] = qMin(1.0f, applySmpte2048Curve(srcPtr[2])) * 65535.0f;
-
-                dstPtr[3] = srcPtr[3] * 65535.0f;
-            }
-
-            device = p2020pq;
-
-        } else {
-            const KoColorSpace *dstCS = KoColorSpaceRegistry::instance()->colorSpace(device->colorSpace()->colorModelId().id(), Integer16BitsColorDepthID.id(), device->colorSpace()->profile());
-            KisPaintDeviceSP tmp = new KisPaintDevice(device->colorSpace());
-            tmp->makeCloneFromRough(device, imageRect);
-            delete tmp->convertTo(dstCS);
-            device = tmp;
+            dstCS =
+                KoColorSpaceRegistry::instance()->colorSpace(
+                        RGBAColorModelID.id(),
+                        Integer16BitsColorDepthID.id(),
+                        KoColorSpaceRegistry::instance()->p2020PQProfile());
         }
+
+        KisPaintDeviceSP tmp = new KisPaintDevice(device->colorSpace());
+        tmp->makeCloneFromRough(device, imageRect);
+        delete tmp->convertTo(dstCS);
+
+        device = tmp;
+
     } else {
         KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR) {
             options.saveAsHDR = false;

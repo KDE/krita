@@ -592,11 +592,7 @@ set_package_properties(Eigen3 PROPERTIES
 ##
 ## Test for exiv2
 ##
-find_package(Exiv2 0.16 REQUIRED)
-set_package_properties(Exiv2 PROPERTIES
-    DESCRIPTION "Image metadata library and tools"
-    URL "http://www.exiv2.org"
-    PURPOSE "Required by Krita")
+find_package(LibExiv2 0.16 REQUIRED)
 
 ##
 ## Test for lcms

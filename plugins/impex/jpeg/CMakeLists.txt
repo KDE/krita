@@ -4,7 +4,6 @@ set(ICCJPEG_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/lcms")
 
 include_directories(
     ${ICCJPEG_SOURCE_DIR}
-    ${EXIV2_INCLUDE_DIR}
 )
 
 include_directories(SYSTEM
@@ -25,7 +24,7 @@ set(kritajpegimport_SOURCES
 
 add_library(kritajpegimport MODULE ${kritajpegimport_SOURCES})
 
-target_link_libraries(kritajpegimport kritaui  ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
+target_link_libraries(kritajpegimport kritaui  ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} LibExiv2::LibExiv2 )
 
 install(TARGETS kritajpegimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
@@ -38,7 +37,7 @@ ki18n_wrap_ui(kritajpegexport_SOURCES kis_wdg_options_jpeg.ui )
 
 add_library(kritajpegexport MODULE ${kritajpegexport_SOURCES})
 
-target_link_libraries(kritajpegexport kritaui kritaimpex ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} )
+target_link_libraries(kritajpegexport kritaui kritaimpex ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} LibExiv2::LibExiv2 )
 
 install(TARGETS kritajpegexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( PROGRAMS  krita_jpeg.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

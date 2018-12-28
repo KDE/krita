@@ -149,3 +149,4 @@ X-KDE-NativeMimeType=application/x-krita
 X-KDE-ExtraNativeMimeTypes=
 StartupNotify=true
 X-Krita-Version=28
+StartupWMClass=krita

@@ -74,14 +74,6 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SIGNAL(modeChanged(int)));
     connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SLOT(hideActionsForSelectionMode(int)));
-
-
-    KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
-    m_page->chkAntiAliasing->setChecked(cfg.readEntry("antiAliasSelection", true));
-
-    connect(m_page->chkAntiAliasing, SIGNAL(toggled(bool)), this, SIGNAL(antiAliasSelectionChanged(bool)));
-
-
 }
 
 KisSelectionOptions::~KisSelectionOptions()

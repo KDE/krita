@@ -131,7 +131,7 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
                 }
                 Q_ASSERT(structureSchema);
                 QList<KisMetaData::Value> array = value.asArray();
-                for (int idx = 0; idx < array.size(); ++idx) {
+                for (int idx = 0; idx < array.count(); ++idx) {
                     saveStructure(xmpData_, QString("%1[%2]").arg(entry.name()).arg(idx + 1), prefix, array[idx].asStructure(), structureSchema);
                 }
             } else {

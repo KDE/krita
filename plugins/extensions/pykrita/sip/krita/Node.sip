@@ -55,9 +55,9 @@ public Q_SLOTS:
     QPoint position() const;
     bool remove();
     Node *duplicate() /Factory/;
-    void save(const QString &filename, double xRes, double yRes);
+    void save(const QString &filename, double xRes, double yRes, const InfoObject & exportConfiguration);
     Node *mergeDown() /Factory/;
-    void scaleNode(const QPointF &origin, int width, int height, QString strategy);
+    void scaleNode(QPointF origin, int width, int height, QString strategy);
     void rotateNode(double radians);
     void cropNode(int x, int y, int w, int h);
     void shearNode(double angleX, double angleY);

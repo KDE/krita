@@ -242,11 +242,6 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "pat";
         s_mimeDatabase << mimeType;
 
-        mimeType.mimeType = "application/x-karbon-gradient";
-        mimeType.description = i18nc("description of a file type", "Karbon Gradients");
-        mimeType.suffixes = QStringList() << "kgr";
-        s_mimeDatabase << mimeType;
-
         mimeType.mimeType = "application/x-krita-bundle";
         mimeType.description = i18nc("description of a file type", "Krita Resource Bundle");
         mimeType.suffixes = QStringList() << "bundle";

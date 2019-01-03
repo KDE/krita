@@ -55,7 +55,7 @@ public:
      * and handled by interaction strategies of type KoInteractionStrategy.
      * @param canvas the canvas this tool will be working for.
      */
-    explicit DefaultTool(KoCanvasBase *canvas);
+    explicit DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy = false);
     ~DefaultTool() override;
 
     enum CanvasResource {

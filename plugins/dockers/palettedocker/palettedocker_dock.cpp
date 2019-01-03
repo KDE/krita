@@ -75,6 +75,7 @@ PaletteDockerDock::PaletteDockerDock( )
     , m_actRemove(new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete color")))
     , m_actModify(new QAction(KisIconUtils::loadIcon("edit-rename"), i18n("Modify this spot")))
     , m_actEditPalette(new QAction(KisIconUtils::loadIcon("groupLayer"), i18n("Edit this palette")))
+    , m_colorSelfUpdate(false)
 {
     QWidget *mainWidget = new QWidget(this);
     setWidget(mainWidget);
@@ -149,7 +150,7 @@ void PaletteDockerDock::setViewManager(KisViewManager* kisview)
     connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResourceSP)),
             SLOT(loadFromWorkspace(KisWorkspaceResourceSP)));
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),
-            m_ui->paletteView, SLOT(slotFGColorChanged(KoColor)));
+            this, SLOT(slotFGColorResourceChanged(KoColor)));
 
     kisview->nodeManager()->disconnect(m_model);
 }
@@ -299,7 +300,9 @@ void PaletteDockerDock::slotRemoveColor()
 void PaletteDockerDock::setFGColorByPalette(const KisSwatch &entry)
 {
     if (m_resourceProvider) {
+        m_colorSelfUpdate = true;
         m_resourceProvider->setFGColor(entry.color());
+        m_colorSelfUpdate = false;
     }
 }
 
@@ -318,6 +321,13 @@ void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResourceSP workspace)
         if (colorSet) {
             slotSetColorSet(colorSet);
         }
+    }
+}
+
+void PaletteDockerDock::slotFGColorResourceChanged(const KoColor &color)
+{
+    if (!m_colorSelfUpdate) {
+        m_ui->paletteView->slotFGColorResourceChanged(color);
     }
 }
 
@@ -366,5 +376,7 @@ void PaletteDockerDock::slotEditEntry()
 
 void PaletteDockerDock::slotNameListSelection(const KoColor &color)
 {
+    m_colorSelfUpdate = true;
     m_resourceProvider->setFGColor(color);
+    m_colorSelfUpdate = false;
 }

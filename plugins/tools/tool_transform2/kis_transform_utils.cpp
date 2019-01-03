@@ -265,7 +265,7 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
         KisCageTransformWorker worker(device,
                                       config.origPoints(),
                                       updater,
-                                      8);
+                                      config.pixelPrecision());
 
         worker.prepareTransform();
         worker.setTransformedCage(config.transfPoints());
@@ -327,7 +327,7 @@ QRect KisTransformUtils::needRect(const ToolTransformArgs &config,
         KisCageTransformWorker worker(0,
                                       config.origPoints(),
                                       0,
-                                      8);
+                                      config.pixelPrecision());
         worker.setTransformedCage(config.transfPoints());
         result = worker.approxNeedRect(rc, srcBounds);
     } else if (config.mode() == ToolTransformArgs::LIQUIFY) {
@@ -359,7 +359,7 @@ QRect KisTransformUtils::changeRect(const ToolTransformArgs &config,
         KisCageTransformWorker worker(0,
                                       config.origPoints(),
                                       0,
-                                      8);
+                                      config.pixelPrecision());
 
         worker.setTransformedCage(config.transfPoints());
         result = worker.approxChangeRect(rc);

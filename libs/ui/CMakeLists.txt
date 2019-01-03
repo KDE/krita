@@ -1,6 +1,5 @@
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
-    ${EXIV2_INCLUDE_DIR}
 )
 
 include_directories(SYSTEM
@@ -544,7 +543,7 @@ add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
 target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
-                      kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils kritaresources ${PNG_LIBRARIES} ${EXIV2_LIBRARIES}
+                      kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils kritaresources ${PNG_LIBRARIES} LibExiv2::LibExiv2
 )
 
 if (HAVE_QT_MULTIMEDIA)

@@ -825,6 +825,9 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         QString templateName = templateInfo.readUrl();
         QUrl templateURL;
         templateURL.setPath(templateBase.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path() + '/' + templateName);
+        if (templateURL.scheme().isEmpty()) {
+            templateURL.setScheme("file");
+        }
 
         KisMainWindow::OpenFlags batchFlags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
         if (mainWindow->openDocument(templateURL, KisMainWindow::Import | batchFlags)) {

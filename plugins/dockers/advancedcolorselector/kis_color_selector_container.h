@@ -62,6 +62,7 @@ private:
     KisGamutMaskToolbar* m_gamutMaskToolbar;
 
     int m_onDockerResizeSetting;
+    bool m_showColorSelector;
 
     QBoxLayout* m_widgetLayout;
 

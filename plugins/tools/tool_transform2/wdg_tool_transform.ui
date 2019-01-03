@@ -38,21 +38,6 @@
    <enum>Qt::LeftToRight</enum>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
-   <property name="spacing">
-    <number>0</number>
-   </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="bottomMargin">
@@ -250,7 +235,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="freeTransformWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -1434,7 +1419,7 @@
             </size>
            </property>
            <property name="text">
-            <string>&amp;Flexibility:</string>
+            <string>Fle&amp;xibility:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1516,7 +1501,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Subd&amp;ivide</string>
+               <string>Subdi&amp;vide</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -1642,6 +1627,12 @@
       </layout>
      </widget>
      <widget class="QWidget" name="cageTransformPage">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
         <widget class="QLabel" name="cageTransformDirections">
@@ -1669,7 +1660,7 @@
           <bool>true</bool>
          </property>
          <property name="text">
-          <string>De&amp;form Layer</string>
+          <string>Defor&amp;m Layer</string>
          </property>
          <attribute name="buttonGroup">
           <string notr="true">cageTransformButtonGroup</string>
@@ -1677,7 +1668,58 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_4">
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Minimum</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Adjust Granularity</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="changeGranularity">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Set Granularity</string>
+         </property>
+         <property name="inputMethodHints">
+          <set>Qt::ImhNone</set>
+         </property>
+         <property name="maximum">
+          <number>20</number>
+         </property>
+         <property name="value">
+          <number>8</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -2200,8 +2242,8 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="freeTransformRadioGroup"/>
   <buttongroup name="cageTransformButtonGroup"/>
+  <buttongroup name="freeTransformRadioGroup"/>
   <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

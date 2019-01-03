@@ -120,11 +120,11 @@ void GamutMaskDock::setViewManager(KisViewManager* kisview)
 
     selectMask(m_resourceProvider->currentGamutMask());
 
-    connect(this, SIGNAL(sigGamutMaskSet(KoGamutMaskSP)), m_resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMaskSP)));
-    connect(this, SIGNAL(sigGamutMaskChanged(KoGamutMaskSP)), m_resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMaskSP)));
-    connect(this, SIGNAL(sigGamutMaskUnset()), m_resourceProvider, SLOT(slotGamutMaskUnset()));
-    connect(this, SIGNAL(sigGamutMaskPreviewUpdate()), m_resourceProvider, SLOT(slotGamutMaskPreviewUpdate()));
-    connect(KisPart::instance(), SIGNAL(sigDocumentRemoved(QString)), this, SLOT(slotDocumentRemoved(QString)));
+    connect(this, SIGNAL(sigGamutMaskSet(KoGamutMaskSP)), m_resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMaskSP)), Qt::UniqueConnection);
+    connect(this, SIGNAL(sigGamutMaskChanged(KoGamutMaskSP)), m_resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMaskSP)), Qt::UniqueConnection);
+    connect(this, SIGNAL(sigGamutMaskUnset()), m_resourceProvider, SLOT(slotGamutMaskUnset()), Qt::UniqueConnection);
+    connect(this, SIGNAL(sigGamutMaskPreviewUpdate()), m_resourceProvider, SLOT(slotGamutMaskPreviewUpdate()), Qt::UniqueConnection);
+    connect(KisPart::instance(), SIGNAL(sigDocumentRemoved(QString)), this, SLOT(slotDocumentRemoved(QString)), Qt::UniqueConnection);
 }
 
 void GamutMaskDock::slotGamutMaskEdit()

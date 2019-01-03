@@ -82,6 +82,8 @@ private Q_SLOTS:
     void saveToWorkspace(KisWorkspaceResourceSP workspace);
     void loadFromWorkspace(KisWorkspaceResourceSP workspace);
 
+    void slotFGColorResourceChanged(const KoColor& color);
+
 private:
     void setEntryByForeground(const QModelIndex &index);
     void setFGColorByPalette(const KisSwatch &entry);
@@ -105,6 +107,8 @@ private /* member variables */:
     QScopedPointer<QAction> m_actModify;
     QScopedPointer<QAction> m_actEditPalette;
     QMenu m_viewContextMenu;
+
+    bool m_colorSelfUpdate;
 };
 
 

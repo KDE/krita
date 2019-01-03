@@ -475,9 +475,11 @@ public Q_SLOTS:
      * @param filename the filename including extension
      * @param xRes the horizontal resolution in pixels per pt (there are 72 pts in an inch)
      * @param yRes the horizontal resolution in pixels per pt (there are 72 pts in an inch)
+     * @param exportConfiguration a configuration object appropriate to the file format.
+     * See Document->exportImage for InfoObject details.
      * @return true if saving succeeded, false if it failed.
      */
-    bool save(const QString &filename, double xRes, double yRes);
+    bool save(const QString &filename, double xRes, double yRes, const InfoObject &exportConfiguration);
 
     /**
      * @brief mergeDown merges the given node with the first visible node underneath this node in the layerstack.
@@ -501,7 +503,7 @@ public Q_SLOTS:
      * <li>Mitchell</li>
      * </ul>
      */
-    void scaleNode(const QPointF &origin, int width, int height, QString strategy);
+    void scaleNode(QPointF origin, int width, int height, QString strategy);
 
     /**
      * @brief rotateNode rotate this layer by the given radians.

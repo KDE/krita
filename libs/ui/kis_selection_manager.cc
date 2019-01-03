@@ -238,7 +238,7 @@ void KisSelectionManager::setView(QPointer<KisView>imageView)
 
     m_imageView = imageView;
     if (m_imageView) {
-        connect(m_imageView->canvasBase()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+        connect(m_imageView->canvasBase()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()), Qt::UniqueConnection);
 
         KisSelectionDecoration* decoration = qobject_cast<KisSelectionDecoration*>(m_imageView->canvasBase()->decoration("selection").data());
         if (!decoration) {

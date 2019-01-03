@@ -106,8 +106,8 @@ void KisCurveWidget::setupInOutControls(QSpinBox *in, QSpinBox *out, int inMin, 
     d->m_intIn->setRange(d->m_inMin, d->m_inMax);
     d->m_intOut->setRange(d->m_outMin, d->m_outMax);
 
-    connect(d->m_intIn, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
-    connect(d->m_intOut, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
+    connect(d->m_intIn, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)), Qt::UniqueConnection);
+    connect(d->m_intOut, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)), Qt::UniqueConnection);
     d->syncIOControls();
 
 }

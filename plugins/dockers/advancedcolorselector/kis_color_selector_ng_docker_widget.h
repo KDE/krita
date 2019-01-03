@@ -21,6 +21,8 @@
 
 #include <QWidget>
 #include <QPointer>
+#include <QToolButton>
+
 #include <kis_canvas2.h>
 
 class QAction;
@@ -57,8 +59,14 @@ private:
     QAction * m_colorHistoryAction;
     QAction * m_commonColorsAction;
 
+    QHBoxLayout* m_widgetLayout;
+    QVBoxLayout* m_mainLayout;
+    QHBoxLayout* m_horizontalPatchesContainer;
+    QVBoxLayout* m_sidebarLayout;
+
     QHBoxLayout* m_verticalColorPatchesLayout; // vertical color patches should be added here
     QVBoxLayout* m_horizontalColorPatchesLayout;//horizontal ----------"----------------------
+    QToolButton* m_fallbackSettingsButton;
 
     QPointer<KisCanvas2> m_canvas;
 

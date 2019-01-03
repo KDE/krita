@@ -42,7 +42,7 @@
 #include "KisReferenceImageCollection.h"
 
 ToolReferenceImages::ToolReferenceImages(KoCanvasBase * canvas)
-    : DefaultTool(canvas)
+    : DefaultTool(canvas, false)
 {
     setObjectName("ToolReferenceImages");
 }

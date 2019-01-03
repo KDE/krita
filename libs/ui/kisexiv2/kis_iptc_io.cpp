@@ -126,7 +126,7 @@ bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
             }
         }
     }
-#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 17
+#if !EXIV2_TEST_VERSION(0,18,0)
     Exiv2::DataBuf rawData = iptcData.copy();
 #else
     Exiv2::DataBuf rawData = Exiv2::IptcParser::encode(iptcData);
@@ -167,7 +167,7 @@ bool KisIptcIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
     ioDevice->open(QIODevice::ReadOnly);
     QByteArray arr = ioDevice->readAll();
     Exiv2::IptcData iptcData;
-#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 17
+#if !EXIV2_TEST_VERSION(0,18,0)
     iptcData.load((const Exiv2::byte*)arr.data(), arr.size());
 #else
     Exiv2::IptcParser::decode(iptcData, (const Exiv2::byte*)arr.data(), arr.size());

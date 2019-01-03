@@ -40,9 +40,9 @@ struct KisMaskingBrushOption::Private
     Private()
         : ui(new QWidget())
     {
-        QVBoxLayout *l  = new QVBoxLayout(ui.data());
+        QVBoxLayout *l  = new QVBoxLayout();
 
-        QHBoxLayout *compositeOpLayout = new QHBoxLayout(ui.data());
+        QHBoxLayout *compositeOpLayout = new QHBoxLayout();
         compositeSelector = new QComboBox(ui.data());
 
         const QStringList supportedComposites = KisMaskingBrushCompositeOpFactory::supportedCompositeOpIds();

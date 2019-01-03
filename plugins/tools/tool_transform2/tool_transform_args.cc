@@ -246,6 +246,7 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     , m_shearX(shearX)
     , m_shearY(shearY)
     , m_liquifyProperties(new KisLiquifyProperties())
+    , m_pixelPrecision(8)
 {
     setFilterId(filterId);
 }

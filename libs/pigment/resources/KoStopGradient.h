@@ -30,7 +30,7 @@
 typedef QPair<qreal, KoColor> KoGradientStop;
 
 /**
- * Resource for colorstop based gradients like Karbon gradients and SVG gradients
+ * Resource for colorstop based gradients like SVG gradients
  */
 class KRITAPIGMENT_EXPORT KoStopGradient : public KoAbstractGradient, public boost::equality_comparable<KoStopGradient>
 {
@@ -84,9 +84,6 @@ protected:
     QPointF m_focalPoint;
 
 private:
-
-    void loadKarbonGradient(QIODevice *file);
-    void parseKarbonGradient(const QDomElement& element);
 
     void loadSvgGradient(QIODevice *file);
     void parseSvgGradient(const QDomElement& element);

@@ -65,16 +65,19 @@ bool Imagesplit::saveAsImage(const QRect &imgSize, const QString &mimeType, cons
 
     KisDocument *document = KisPart::instance()->createDocument();
 
-    KisImageSP dst = new KisImage(document->createUndoStore(), imgSize.width(), imgSize.height(), image->colorSpace(), image->objectName());
-    dst->setResolution(image->xRes(), image->yRes());
-    document->setCurrentImage(dst);
+    { // make sure dst is deleted before calling 'delete exportDocument',
+      // since KisDocument checks that its image is properly deref()'d.
+      KisImageSP dst = new KisImage(document->createUndoStore(), imgSize.width(), imgSize.height(), image->colorSpace(), image->objectName());
+      dst->setResolution(image->xRes(), image->yRes());
+      document->setCurrentImage(dst);
 
-    KisPaintLayer* paintLayer = new KisPaintLayer(dst, dst->nextLayerName(), 255);
-    KisPainter gc(paintLayer->paintDevice());
-    gc.bitBlt(QPoint(0, 0), image->projection(), imgSize);
+      KisPaintLayer* paintLayer = new KisPaintLayer(dst, dst->nextLayerName(), 255);
+      KisPainter gc(paintLayer->paintDevice());
+      gc.bitBlt(QPoint(0, 0), image->projection(), imgSize);
 
-    dst->addNode(paintLayer, KisNodeSP(0));
-    dst->refreshGraph();
+      dst->addNode(paintLayer, KisNodeSP(0));
+      dst->refreshGraph();
+    }
     document->setFileBatchMode(true);
     if (!document->exportDocumentSync(QUrl::fromLocalFile(url), mimeType.toLatin1())) {
         if (document->errorMessage().isEmpty()) {

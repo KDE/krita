@@ -58,7 +58,7 @@ public:
     /**
     * Constructs a KoResourceServerBase
     * @param resource type, has to be the same as used by KoResourcePaths
-    * @param extensions the file extensions separate by ':', e.g. "*.kgr:*.svg:*.ggr"
+    * @param extensions the file extensions separate by ':', e.g. *.svg:*.ggr"
     */
     KoResourceServerBase(const QString& type, const QString& extensions)
         : m_type(type)
@@ -76,7 +76,7 @@ public:
 
     /**
     * File extensions for resources of the server
-    * @returns the file extensions separated by ':', e.g. "*.kgr:*.svg:*.ggr"
+    * @returns the file extensions separated by ':', e.g. "*.svg:*.ggr"
     */
     QString extensions() const { return m_extensions; }
 

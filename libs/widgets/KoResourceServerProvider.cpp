@@ -129,7 +129,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
     d->patternServer->loadResources(blacklistFileNames(d->patternServer->fileNames(), d->patternServer->blackListedFiles()));
 
-    d->gradientServer = new GradientResourceServer("ko_gradients", "*.kgr:*.svg:*.ggr");
+    d->gradientServer = new GradientResourceServer("ko_gradients", "*.svg:*.ggr");
     d->gradientServer->loadResources(blacklistFileNames(d->gradientServer->fileNames(), d->gradientServer->blackListedFiles()));
 
     d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>("ko_palettes", "*.kpl:*.gpl:*.pal:*.act:*.aco:*.css:*.colors:*.xml:*.sbz");

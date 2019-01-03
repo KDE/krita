@@ -131,7 +131,7 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
                 }
                 Q_ASSERT(structureSchema);
                 QList<KisMetaData::Value> array = value.asArray();
-                for (int idx = 0; idx < array.count(); ++idx) {
+                for (int idx = 0; idx < array.size(); ++idx) {
                     saveStructure(xmpData_, QString("%1[%2]").arg(entry.name()).arg(idx + 1), prefix, array[idx].asStructure(), structureSchema);
                 }
             } else {
@@ -276,7 +276,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 const Exiv2::XmpArrayValue* xav = dynamic_cast<const Exiv2::XmpArrayValue*>(value.get());
                 Q_ASSERT(xav);
                 QList<KisMetaData::Value> array;
-                for (int i = 0; i < xav->size(); ++i) {
+                for (int i = 0; i < xav->count(); ++i) {
                     QString value = QString::fromStdString(xav->toString(i));
                     if (parser) {
                         array.push_back(parser->parse(value));

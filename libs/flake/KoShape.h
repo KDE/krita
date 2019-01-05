@@ -412,7 +412,7 @@ public:
     /**
      * Set the side text should flow around this shape.
      * @param side the requested side
-     * @param runThrought run through the foreground or background or...
+     * @param runThrough run through the foreground or background or...
      */
     void setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrough = Background);
 
@@ -505,7 +505,7 @@ public:
     /**
      * Set the minimum height of the shape.
      * Currently it's not respected but only for informational purpose
-     * @param minimumShapeHeight the minimum height of the frame.
+     * @param height the minimum height of the frame.
      */
     void setMinimumHeight(qreal height);
 

@@ -276,7 +276,6 @@ Q_SIGNALS:
     /**
      * Emitted after the selection changed to state which unique shape-types are now
      * in the selection.
-     * @param canvas the currently active canvas.
      * @param types a list of string that are the shape types of the selected objects.
      */
     void toolCodesSelected(const QList<QString> &types);

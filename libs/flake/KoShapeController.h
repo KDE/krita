@@ -89,7 +89,8 @@ public:
     /**
      * @brief Add shapes to the document, skipping any dialogs or other user interaction.
      *
-     * @param shapes to add to the document
+     * @param shape  the shape to add to the document
+     * @param parentShape the parent shape
      * @param parent the parent command if the resulting command is a compound undo command.
      *
      * @return command which will insert the shapes into the document. The command is not yet executed.

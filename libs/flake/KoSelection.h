@@ -75,7 +75,6 @@ public:
      * the selection.
      *
      * @param shape the shape to add to the selection
-     * @param recursive enables recursively selecting shapes of parent groups
      */
     void select(KoShape *shape);
 
@@ -91,7 +90,6 @@ public:
      * from the selection.
      *
      * @param shape the shape to remove from the selection
-     * @param recursive enables recursively deselecting shapes of parent groups
      */
     void deselect(KoShape *shape);
 
@@ -124,8 +122,6 @@ public:
 
     /**
      * Return the first selected shape, or 0 if there is nothing selected.
-     * @param strip if StrippedSelection, the returned list will not include any children
-     *    of a grouped shape if the group-parent is itself also in the set.
      */
     KoShape *firstSelectedShape() const;
 

@@ -191,10 +191,10 @@ public:
     /**
      * Convenience method that uses QPoint and QRect.
      *
-     * @param pos the destination coordinate, it replaces @param dstX and @param dstY.
+     * @param pos the destination coordinate, it replaces @p dstX and @p dstY.
      * @param srcDev the source device.
-     * @param srcRect the rectangle describing the area to blast from @param srcDev into the current paint device.
-     * @param srcRect replaces @param srcX, @param srcY, @param srcWidth and @param srcHeight.
+     * @param srcRect the rectangle describing the area to blast from @p srcDev into the current paint device.
+     * @p srcRect replaces @p srcX, @p srcY, @p srcWidth and @p srcHeight.
      *
      */
     void bitBlt(const QPoint & pos, const KisPaintDeviceSP srcDev, const QRect & srcRect);
@@ -218,10 +218,10 @@ public:
     /**
      * Convenience method that uses QPoint and QRect.
      *
-     * @param pos the destination coordinate, it replaces @param dstX and @param dstY.
+     * @param pos the destination coordinate, it replaces @p dstX and @p dstY.
      * @param srcDev the source device.
      * @param srcRect the rectangle describing the area to blast from @param srcDev into the current paint device.
-     * @param srcRect replaces @param srcX, @param srcY, @param srcWidth and @param srcHeight.
+     * @p srcRect replaces @p srcX, @p srcY, @p srcWidth and @p srcHeight.
      *
      */
     void bitBltOldData(const QPoint & pos, const KisPaintDeviceSP srcDev, const QRect & srcRect);
@@ -261,8 +261,8 @@ public:
                                   qint32 srcWidth, qint32 srcHeight);
 
     /**
-     * Convenience method that assumes @param selX, @param selY, @param srcX and @param srcY are
-     * equal to 0. Best used when @param selection and the desired area of @param srcDev have exactly
+     * Convenience method that assumes @p selX, @p selY, @p srcX and @p srcY are
+     * equal to 0. Best used when @p selection and the desired area of @p srcDev have exactly
      * the same dimensions and are specially made for each other.
      *
      * @param dstX the destination x-coordinate
@@ -308,10 +308,10 @@ public:
     /**
      * Convenience method that uses QPoint and QRect.
      *
-     * @param pos the destination coordinate, it replaces @param dstX and @param dstY.
+     * @param pos the destination coordinate, it replaces @p dstX and @p dstY.
      * @param srcDev the source device.
-     * @param srcRect the rectangle describing the area to blast from @param srcDev into the current paint device.
-     * @param srcRect replaces @param srcX, @param srcY, @param srcWidth and @param srcHeight.
+     * @param srcRect the rectangle describing the area to blast from @p srcDev into the current paint device.
+     * @param srcRect replaces @p srcX, @p srcY, @p srcWidth and @p srcHeight.
      *
      */
     void bltFixed(const QPoint & pos, const KisFixedPaintDeviceSP srcDev, const QRect & srcRect);
@@ -352,8 +352,8 @@ public:
                                     quint32 srcWidth, quint32 srcHeight);
 
     /**
-     * Convenience method that assumes @param selX, @param selY, @param srcX and @param srcY are
-     * equal to 0. Best used when @param selection and @param srcDev have exactly the same
+     * Convenience method that assumes @p selX, @p selY, @p srcX and @p srcY are
+     * equal to 0. Best used when @p selection and @p srcDev have exactly the same
      * dimensions and are specially made for each other.
      *
      * @param dstX the destination x-coordinate
@@ -369,8 +369,8 @@ public:
                                     quint32 srcWidth, quint32 srcHeight);
 
     /**
-     * fills a region of width @param width and height @param height of the current
-     * paint device with the color @param color. @param x and @param y set the x and y positions of the
+     * fills a region of width @p width and height @p height of the current
+     * paint device with the color @p color. @p x and @p y set the x and y positions of the
      * origin top-left corner.
      *
      * @param x the destination x-coordinate
@@ -542,7 +542,8 @@ public:
     /**
      * Fills the portion of an area enclosed by the given QPainterPath
      *
-     * \param rect the portion of the path to fill
+     * \param path the portion of the path to fill
+     * \param requestedRect the rectangle containing the area
      */
     void fillPainterPath(const QPainterPath& path, const QRect &requestedRect);
 
@@ -592,7 +593,7 @@ public:
 
     /**
      * Paint an unstroked wide line from the specified start to the specified
-     * end position with width varying from @param w1 at the start to @param w2 at
+     * end position with width varying from @p start at the start to @p end at
      * the end.
      *
      * XXX: the width should be set in doubles, not integers.
@@ -607,7 +608,7 @@ public:
      * An empty channelFlags parameter means that all channels are
      * affected.
      *
-     * @param the bit array that masks the source channels; only
+     * @param channelFlags the bit array that masks the source channels; only
      * the channels where the corresponding bit is true will will be
      * composited onto the destination device.
      */
@@ -617,7 +618,7 @@ public:
     QBitArray channelFlags();
 
     /**
-     * Set the paintop preset to use. If @param image is given,
+     * Set the paintop preset to use. If @p image is given,
      * the paintop will be created using this image as parameter.
      * Some paintops really want to know about the image they work
      * for, e.g. the clone paintop.

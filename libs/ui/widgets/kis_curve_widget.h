@@ -131,7 +131,7 @@ public:
 
     /**
      * Replace the current curve with a curve specified by the curve defined by the control
-     * points in @param inlist.
+     * points in @p inlist.
      */
     void setCurve(KisCubicCurve inlist);
 

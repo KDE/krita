@@ -137,8 +137,9 @@ public /* methods */:
 
     /**
      * @brief getColorGlobal
-     * A function for getting a color based on a global index. Useful for itterating through all color entries.
-     * @param globalIndex the global index over the whole palette.
+     * A function for getting a color based on a global index. Useful for iterating through all color entries.
+     * @param x the global x index over the whole palette.
+     * @param y the global y index over the whole palette.
      * @return the entry.
      */
     KisSwatch getColorGlobal(quint32 x, quint32 y) const;
@@ -146,8 +147,9 @@ public /* methods */:
     /**
      * @brief getColorGroup
      * A function for getting the color from a specific group.
-     * @param groupName the name of the group, will give unosrted when not defined.
-     * @param index the index within the group.
+     * @param x the x index over the group.
+     * @param y the y index over the group.
+     * @param groupName the name of the group, will give unsorted when not defined.
      * @return the entry
      */
     KisSwatch getColorGroup(quint32 x, quint32 y, QString groupName);
@@ -201,7 +203,7 @@ public /* methods */:
      * @brief getIndexClosestColor
      * function that matches the color to all colors in the colorset, and returns the index
      * of the closest match.
-     * @param color the color you wish to compare.
+     * @param compare the color you wish to compare.
      * @param useGivenColorSpace whether to use the color space of the color given
      * when the two colors' colorspaces don't match. Else it'll use the entry's colorspace.
      * @return returns the int of the closest match.

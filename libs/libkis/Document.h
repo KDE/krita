@@ -92,7 +92,7 @@ public Q_SLOTS:
     bool batchmode() const;
 
     /**
-     * Set batchmode to @param value. If batchmode is true, then there should be no popups
+     * Set batchmode to @p value. If batchmode is true, then there should be no popups
      * or dialogs shown to the user.
      */
     void setBatchmode(bool value);
@@ -282,12 +282,12 @@ public Q_SLOTS:
     void setHeight(int value);
 
     /**
-     * @return the name of the document. This is the title field in the @see documentInfo
+     * @return the name of the document. This is the title field in the @ref documentInfo
      */
     QString name() const;
 
     /**
-     * @brief setName sets the name of the document to @param value. This is the title field in the @see documentInfo
+     * @brief setName sets the name of the document to @p value. This is the title field in the @ref documentInfo
      */
     void setName(QString value);
 
@@ -336,7 +336,7 @@ public Q_SLOTS:
     int xOffset() const;
 
     /**
-     * @brief setXOffset sets the left edge of the canvas to @param x.
+     * @brief setXOffset sets the left edge of the canvas to @p x.
      */
     void setXOffset(int x);
 
@@ -346,7 +346,7 @@ public Q_SLOTS:
     int yOffset() const;
 
     /**
-     * @brief setYOffset sets the top edge of the canvas to @param y.
+     * @brief setYOffset sets the top edge of the canvas to @p y.
      */
     void setYOffset(int y);
 
@@ -521,8 +521,8 @@ public Q_SLOTS:
     bool save();
 
     /**
-     * @brief saveAs save the document under the @param filename. The document's
-     * filename will be reset to @param filename.
+     * @brief saveAs save the document under the @p filename. The document's
+     * filename will be reset to @p filename.
      * @param filename the new filename (full path) for the document
      * @return true if saving succeeded, false otherwise.
      */
@@ -711,13 +711,13 @@ print(root.childNodes())
     /**
      * @brief setHorizontalGuides
      * replace all existing horizontal guides with the entries in the list.
-     * @param list a list of floats containing the new guides.
+     * @param lines a list of floats containing the new guides.
      */
     void setHorizontalGuides(const QList<qreal> &lines);
     /**
      * @brief setVerticalGuides
      * replace all existing horizontal guides with the entries in the list.
-     * @param list a list of floats containing the new guides.
+     * @param lines a list of floats containing the new guides.
      */
     void setVerticalGuides(const QList<qreal> &lines);
 

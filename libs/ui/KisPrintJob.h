@@ -44,7 +44,7 @@ class KRITAUI_EXPORT KisPrintJob : public QObject
 public:
     /**
      * Constructor.
-     * @param parent the parent qobject that is passed for memory management purposes.
+     * @param image the image that is passed for management purposes.
      */
     explicit KisPrintJob(KisImageWSP image);
     ~KisPrintJob() override;

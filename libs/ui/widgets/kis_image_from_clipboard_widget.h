@@ -35,7 +35,7 @@ public:
     /**
      * Constructor. Please note that this class is being used/created by KisDoc.
      * @param parent the parent widget
-     * @param doc the document that wants to be altered
+     * @param imageName the document that wants to be altered
      */
     KisImageFromClipboard(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
     ~KisImageFromClipboard() override;

@@ -67,7 +67,7 @@ public:
 
     /**
      * assignment operator to copy the data from the param color into this one.
-     * @param other the color we are going to copy
+     * @param rhs the color we are going to copy
      * @return this color
      */
     inline KoColor &operator=(const KoColor &rhs) {

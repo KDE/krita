@@ -60,16 +60,16 @@ public:
 
     /**
      * Copy the given paint device contents into the specified frame
-     * @param dstFrameId ID of the frame to be overwritten (must exist)
      * @param srcFrameId ID of the frame to copy from (must exist)
-     * @param sourceDevice paint device to copy from
+     * @param dstFrameId ID of the frame to be overwritten (must exist)
+     * @param srcDevice paint device to copy from
      */
     void uploadFrame(int srcFrameId, int dstFrameId, KisPaintDeviceSP srcDevice);
 
     /**
      * Copy the given paint device contents into the specified frame
      * @param dstFrameId ID of the frame to be overwritten (must exist)
-     * @param sourceDevice paint device to copy from
+     * @param srcDevice paint device to copy from
      */
     void uploadFrame(int dstFrameId, KisPaintDeviceSP srcDevice);
 

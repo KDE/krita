@@ -50,7 +50,7 @@ public Q_SLOTS:
     qreal zoomLevel() const;
 
     /**
-     * @brief setZoomLevel set the zoomlevel to the given @param value. 1.0 is 100%.
+     * @brief setZoomLevel set the zoomlevel to the given @p value. 1.0 is 100%.
      */
     void setZoomLevel(qreal value);
 

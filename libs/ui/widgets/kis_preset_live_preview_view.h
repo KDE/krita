@@ -62,7 +62,7 @@ public:
     /**
      * @brief set the current preset from resource manager for the live preview to use.
      * Good to call this every stroke update in case the preset has changed
-     * @param the current preset from the resource manager
+     * @param preset the current preset from the resource manager
      */
     void setCurrentPreset(KisPaintOpPresetSP preset);
     void updateStroke();

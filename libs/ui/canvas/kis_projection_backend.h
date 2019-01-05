@@ -85,7 +85,7 @@ public:
     virtual KisImagePatch getNearestPatch(KisPPUpdateInfoSP info) = 0;
 
     /**
-     * Draws a piece of original image onto @gc's canvas
+     * Draws a piece of original image onto @p gc 's canvas
      * @param info.imageRect - area in KisImage pixels where to read from
      * @param info.viewportRect - area in canvas pixels where to write to
      * If info.imageRect and info.viewportRect don't agree, the image

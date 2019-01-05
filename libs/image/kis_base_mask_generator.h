@@ -52,11 +52,14 @@ public:
 public:
 
     /**
-     * This function creates an auto brush shape with the following value :
-     * @param w width
-     * @param h height
-     * @param fh horizontal fade (fh \< w / 2 )
-     * @param fv vertical fade (fv \< h / 2 )
+     * This function creates an auto brush shape with the following values:
+     * @param radius radius
+     * @param ratio aspect ratio
+     * @param fh horizontal fade
+     * @param fv vertical fade
+     * @param spikes number of spikes
+     * @param antialiasEdges whether to antialias edges
+     * @param id the brush identifier
      */
     KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges, Type type, const KoID& id = DefaultId);
     KisMaskGenerator(const KisMaskGenerator &rhs);

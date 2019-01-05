@@ -65,8 +65,8 @@ class KRITAUI_EXPORT KisViewManager : public QObject
 public:
     /**
      * Construct a new view on the krita document.
-     * @param document   the document we show.
      * @param parent   a parent widget we show ourselves in.
+     * @param actionCollection an action collection.
      */
     KisViewManager(QWidget *parent, KActionCollection *actionCollection);
     ~KisViewManager() override;

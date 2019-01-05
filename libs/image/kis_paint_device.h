@@ -495,7 +495,7 @@ public:
 
     /**
      * Fill this paint device with the data from image; starting at (offsetX, offsetY)
-     * @param srcProfileName name of the RGB profile to interpret the image as. 0 is interpreted as sRGB
+     * @param profile name of the RGB profile to interpret the image as. 0 is interpreted as sRGB
      */
     void convertFromQImage(const QImage& image, const KoColorProfile *profile, qint32 offsetX = 0, qint32 offsetY = 0);
 
@@ -539,9 +539,10 @@ public:
      * the aspect ratio. The width and height of the returned device
      * won't exceed \p maxw and \p maxw, but they may be smaller.
      *
-     * @param maxw: maximum width
-     * @param maxh: maximum height
-     * @param rect: only this rect will be used for the thumbnail
+     * @param w maximum width
+     * @param h maximum height
+     * @param rect only this rect will be used for the thumbnail
+     * @param outputRect output rectangle
      *
      */
     KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect = QRect(), QRect outputRect = QRect()) const;
@@ -720,7 +721,6 @@ public:
     /**
      * Create a keyframe channel for the content on this device.
      * @param id identifier for the channel
-     * @param node the parent node for the channel
      * @return keyframe channel or 0 if there is not one
      */
     KisRasterKeyframeChannel *createKeyframeChannel(const KoID &id);
@@ -786,20 +786,19 @@ public:
      * Create an iterator that will "artificially" extend the paint device with the
      * value of the border when trying to access values outside the range of data.
      *
-     * @param rc indicates the rectangle that truly contains data
+     * @param _dataWidth indicates the rectangle that truly contains data
      */
     KisRepeatHLineConstIteratorSP createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth) const;
     /**
      * Create an iterator that will "artificially" extend the paint device with the
      * value of the border when trying to access values outside the range of data.
      *
-     * @param rc indicates the rectangle that truly contains data
+     * @param _dataWidth indicates the rectangle that truly contains data
      */
     KisRepeatVLineConstIteratorSP createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth) const;
 
     /**
      * This function create a random accessor which can easily access to sub pixel values.
-     * @param selection an up-to-date selection that has the same origin as the paint device
      */
     KisRandomSubAccessorSP createRandomSubAccessor() const;
 

@@ -123,7 +123,7 @@ public:
      *
      * @sa tableAttributes()
      *
-     * @param a pointer to the table that should be dumped.
+     * @param table pointer to the table that should be dumped.
      * @param out output stream to dump to.
      */
     static void dumpTable(const QTextTable *table, QTextStream &out);
@@ -239,7 +239,7 @@ public:
      *
      * <pre>"key=value key2=value2 ..."</pre>
      *
-     * @param tableStyle the table cell style from which properties should be fetched.
+     * @param tableCellStyle the table cell style from which properties should be fetched.
      * @return the formatted attribute string.
      */
     static QString tableCellAttributes(const KoTableCellStyle &tableCellStyle);
@@ -263,7 +263,7 @@ public:
      *
      * <pre>"key=value key2=value2 ..."</pre>
      *
-     * @param format the text frame format from which properties should be fetched.
+     * @param frameFormat the text frame format from which properties should be fetched.
      * @return the formatted attribute string.
      */
     static QString frameAttributes(const QTextFrameFormat &frameFormat);
@@ -275,7 +275,7 @@ public:
      *
      * <pre>"key=value key2=value2 ..."</pre>
      *
-     * @param format the character format of the object from which properties should be fetched.
+     * @param textFormat the character format of the object from which properties should be fetched.
      * @return the formatted attribute string.
      */
     static QString inlineObjectAttributes(const QTextCharFormat &textFormat);

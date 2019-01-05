@@ -48,7 +48,6 @@ public:
 
     /**
      * @brief ResourceBundleManifest : Ctor
-     * @param xmlName the name of the XML file to be created
      */
     KisResourceBundleManifest();
 
@@ -72,7 +71,8 @@ public:
      * @brief addTag : Add a file tag as a child of the fileType tag.
      * @param fileType the type of the file to be added
      * @param fileName the name of the file to be added
-     * @param emptyFile true if the file is empty
+     * @param tagFileList list of the tags
+     * @param md5 MD5 checksum
      * @return the element corresponding to the created tag.
      */
     void addResource(const QString &fileType, const QString &fileName, const QStringList &tagFileList, const QByteArray &md5);

@@ -85,7 +85,7 @@ public:
     /**
      * Initialize the converter.
      * @param doc the KisDocument related to the image, can be null if you don't have a KisDocument
-     * @param adapter the undo adapter to be used by the image, can be null if you don't want to use an undo adapter
+     * @param batchMode whether to use the batch mode
      */
     KisPNGConverter(KisDocument *doc, bool batchMode = false);
     ~KisPNGConverter() override;
@@ -93,7 +93,7 @@ public:
     /**
      * Load an image from an URL. If the image is not on a local drive, the image is first downloaded to a
      * temporary location.
-     * @param uri the url of the image
+     * @param filename the file name of the image
      */
     KisImageBuilder_Result buildImage(const QString &filename);
     /**
@@ -103,7 +103,7 @@ public:
     KisImageBuilder_Result buildImage(QIODevice* iod);
     /**
      * Save a layer to a PNG
-     * @param uri the url of the destination file
+     * @param filename the name of the destination file
      * @param device the paint device to save
      * @param annotationsStart an iterator on the first annotation
      * @param annotationsEnd an iterator on the last annotation

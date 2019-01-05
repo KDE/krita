@@ -101,7 +101,7 @@ public: // KoToolSelection overloads
     bool hasSelection() const;
 
     /** returns true if the current cursor position is protected from editing
-     * @param cached use cached value if available.
+     * @param useCached use cached value if available.
      */
     bool isEditProtected(bool useCached = false) const;
 
@@ -225,7 +225,7 @@ public Q_SLOTS:
     /**
      * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
      * @param inliner the object to insert.
-     * @param cmd a parent command for the commands created by this methods. If present, the commands
+     * @param parent a parent command for the commands created by this methods. If present, the commands
      *    will not be added to the document's undo stack automatically.
      */
     void insertInlineObject(KoInlineObject *inliner, KUndo2Command *parent = 0);

@@ -41,7 +41,8 @@ class KRITAUI_EXPORT KisResourceBundle : public KoResource
 
 public:
     /**
-     * @brief ResourceBundle : Ctor * @param bundlePath the path of the bundle
+     * @brief ResourceBundle : Ctor *
+     * @param bundlePath the path of the bundle
      */
     KisResourceBundle(QString const& fileName);
 

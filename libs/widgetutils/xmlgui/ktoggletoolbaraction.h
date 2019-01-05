@@ -55,16 +55,17 @@ public:
      * toolbar in an xml ui file, or a toolbar programmatically
      * created with that name.
      *
-     * @param The action's parent object.
+     * @param parent The action's parent object.
      */
     KToggleToolBarAction(const char *toolBarName, const QString &text, QObject *parent);
 
     /**
-     * Create a KToggleToolbarAction that manages the @param toolBar.
+     * Create a KToggleToolbarAction that manages the @p toolBar.
      * This can be either the name of a toolbar in an xml ui file,
      * or a toolbar programmatically created with that name.
      *
      * @param toolBar the toolbar to be managed
+     * @param text The action's text
      * @param parent The action's parent object.
      */
     KToggleToolBarAction(KToolBar *toolBar, const QString &text, QObject *parent);

@@ -72,7 +72,7 @@ public:
 
     /**
      * Set the color profile of the display device.
-     * @param profile The color profile of the display device
+     * @param monitorProfile The color profile of the display device
      */
     void setMonitorProfile(const KoColorProfile *monitorProfile,
                            KoColorConversionTransformation::Intent renderingIntent,
@@ -80,7 +80,7 @@ public:
 
     /**
      * Complete initialization can only happen once an OpenGL context has been created.
-     * @param f Pointer to OpenGL functions. They must already be ininitialized.
+     * @param f Pointer to OpenGL functions. They must already be initialized.
      */
     void initGL(QOpenGLFunctions *f);
 

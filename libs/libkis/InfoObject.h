@@ -49,9 +49,9 @@ public:
     QMap<QString, QVariant> properties() const;
 
     /**
-     * Add all properties in the @param propertyMap to this InfoObject
+     * Add all properties in the @p propertyMap to this InfoObject
      */
-    void setProperties(QMap<QString, QVariant> proprertyMap);
+    void setProperties(QMap<QString, QVariant> propertyMap);
 
 public Q_SLOTS:
     /**

@@ -21,6 +21,8 @@
 
 #include "kis_icon_utils.h"
 
+#include <QAction>
+
 #include "input/kis_abstract_input_action.h"
 #include "input/kis_input_profile_manager.h"
 #include "kis_action_shortcuts_model.h"

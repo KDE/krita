@@ -24,6 +24,7 @@
 #include <QCompleter>
 #include <QMenu>
 #include <QWidgetAction>
+#include <QSlider>
 
 #include <resources/KoResource.h>
 #include <KoResourceItemChooser.h>

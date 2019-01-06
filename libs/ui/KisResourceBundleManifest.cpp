@@ -22,7 +22,6 @@
 #include <QDomElement>
 #include <QDomNode>
 #include <QDomNodeList>
-#include <QForeachContainer>
 
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>

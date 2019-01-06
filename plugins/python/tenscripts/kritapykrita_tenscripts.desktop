@@ -36,5 +36,5 @@ Comment[pt]=Um 'plugin' em Python para criar dez acções e atribuí-las a progr
 Comment[sv]=Ett Python-baserat insticksprogram för att skapa tio åtgärder och tilldela dem till Python-skript
 Comment[uk]=Скрипт на основі Python для створення десяти дій і прив'язування до них скриптів Python
 Comment[x-test]=xxA Python-based plugin for creating ten actions and assign them to Python scriptsxx
-Comment[zh_CN]=基于 Python 的可创建十个操作并将它们指定到其它 Python 脚本的插件
+Comment[zh_CN]=基于 Python 的用于创建十个操作并将它们指定到特定 Python 脚本的插件
 Comment[zh_TW]=基於 Python 的外掛程式，用於建立 10 個動作並且將它們指定給 Python 腳本

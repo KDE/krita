@@ -69,7 +69,7 @@ class KoTableCellStyle;
  *
  * will result in this output:
  *
- * <pre>
+ * @verbatim
  * <document defaultfont="Sans Serif,9,-1,5,50,0,0,0,0,0">
  *   <frame margin="4" top-margin="4" bottom-margin="4" left-margin="4" right-margin="4" border-style="Outset">
  *     <block type="char">
@@ -85,7 +85,7 @@ class KoTableCellStyle;
  *     </block>
  *   </frame>
  * </document>
- * </pre>
+ * @endverbatim
  *
  * @sa dumpDocument(), dumpFrame(), dumpBlock()
  */

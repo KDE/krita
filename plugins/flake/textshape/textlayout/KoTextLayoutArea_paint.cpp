@@ -507,7 +507,7 @@ void KoTextLayoutArea::decorateListLabel(QPainter *painter, const KoTextBlockDat
 /**
  * Draw a line. Typically meant to underline text or similar.
  * @param painter the painter to paint on.
- * @painter color the pen color to for the decoratoin line
+ * @param color the pen color to for the decoration line
  * @param type The type
  * @param style the type of line to draw.
  * @param width The thickness of the line, in pixels (the painter will be prescaled to points coordinate system).

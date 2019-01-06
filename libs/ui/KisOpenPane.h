@@ -43,7 +43,7 @@ public:
     /**
      * Constructor
      * @param parent the parent widget.
-     * @param mimeType the template-type (group) that should be selected on creation.
+     * @param mimeFilter the template-type (group) that should be selected on creation.
      * @param templatesResourcePath the path to the templates.
      */
     KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const QString& templatesResourcePath = QString());

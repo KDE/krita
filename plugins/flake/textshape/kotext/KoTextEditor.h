@@ -159,15 +159,15 @@ private:
 
 public Q_SLOTS:
 
-    /// This adds the \ref command to the calligra undo stack.
+    /// This adds the \p command to the calligra undo stack.
     ///
     /// From this point forward all text manipulation is placed in the qt text systems internal
-    /// undostack while also adding representative subcommands to \ref command.
+    /// undostack while also adding representative subcommands to \p command.
     ///
-    /// The \ref command is not redone as part of this process.
+    /// The \p command is not redone as part of this process.
     ///
-    /// Note: Be aware that many KoTextEditor methods start their own commands thus terminating
-    /// the recording of this \ref command. Only use QTextCursor manipulation (with all the issues
+    /// \note Be aware that many KoTextEditor methods start their own commands thus terminating
+    /// the recording of this \p command. Only use QTextCursor manipulation (with all the issues
     /// that brings) or only use KoTextEditor methods that don't start their own command.
     ///
     /// The recording is automatically terminated when another command is added, which as mentioned
@@ -176,12 +176,12 @@ public Q_SLOTS:
 
     /// This instantly "redo" the command thus placing all the text manipulation the "redo" does
     /// (should be implemented with a "first redo" pattern) in the qt text systems internal
-    /// undostack while also adding representative subcommands to \ref command.
+    /// undostack while also adding representative subcommands to \p command.
     ///
-    /// When \ref command is done "redoing" no further text manipulation is added as subcommands.
+    /// When \p command is done "redoing" no further text manipulation is added as subcommands.
     ///
-    /// \ref command is not put on the calligra undo stack. That is the responsibility of the
-    /// caller, or the caller can choose to quickly undo and then delete the \ref command.
+    /// \p command is not put on the calligra undo stack. That is the responsibility of the
+    /// caller, or the caller can choose to quickly undo and then delete the \p command.
     void instantlyExecuteCommand(KUndo2Command *command);
 
     void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const KUndo2MagicString &title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);

@@ -34,6 +34,7 @@
 class KisSwatch;
 
 /**
+ * @class PaletteView
  * @brief The PaletteView class is a wrapper around a MVC method for handling
  * palettes. This class shows a nice widget that can drag and drop, edit colors in a colorset
  * and will handle adding and removing entries if you'd like it to.

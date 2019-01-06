@@ -44,9 +44,9 @@ public:
      * @param node the name of the adjustment node
      * @param nfi filter interface
      * @param paintDevice the paint device that is used as source for the preview
+     * @param layerName the name of the layer
      * @param caption the caption for the dialog -- create or properties
      * @param parent the widget parent of this dialog
-     * @param name the QObject name, if any
      */
     KisDlgAdjustmentLayer(KisNodeSP node,
                           KisNodeFilterInterface* nfi,

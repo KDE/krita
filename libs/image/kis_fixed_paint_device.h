@@ -59,7 +59,7 @@ public:
      * setRect sets the rect of the fixed paint device to rect.
      * This will _not_ create the associated data area.
      *
-     * @rect the bounds in pixels. The x,y of the rect represent the origin
+     * @param rc the bounds in pixels. The x,y of the rect represent the origin
      * of the fixed paint device.
      */
     void setRect(const QRect& rc);

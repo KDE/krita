@@ -399,12 +399,12 @@ public:
      * @enum StandardCaptionFlag
      * Used to specify how to construct a window caption
      *
-     * @value AppName Indicates that the method shall include
+     * @var AppName Indicates that the method shall include
      * the application name when making the caption string.
-     * @value Modified Causes a 'modified' sign will be included in the
+     * @var Modified Causes a 'modified' sign will be included in the
      * returned string. This is useful when indicating that a file is
      * modified, i.e., it contains data that has not been saved.
-     * @value HIGCompliant The base minimum flags required to align a
+     * @var HIGCompliant The base minimum flags required to align a
      * caption with the KDE Human Interface Guidelines
      */
     enum CaptionFlag {

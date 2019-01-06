@@ -203,12 +203,12 @@ public:
      * Serialize this color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
      *
-     * This function doesn't create the <color /> element but rather the <CMYK />,
-     * <sRGB />, <RGB /> ... elements. It is assumed that colorElt is the <color />
+     * This function doesn't create the \<color /\> element but rather the \<CMYK /\>,
+     * \<sRGB /\>, \<RGB /\> ... elements. It is assumed that colorElt is the \<color /\>
      * element.
      *
      * @param colorElt root element for the serialization, it is assumed that this
-     *                 element is <color />
+     *                 element is \<color /\>
      * @param doc is the document containing colorElt
      */
     void toXML(QDomDocument& doc, QDomElement& colorElt) const;
@@ -217,7 +217,7 @@ public:
      * Unserialize a color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
      *
-     * @param elt the element to unserialize (<CMYK />, <sRGB />, <RGB />)
+     * @param elt the element to unserialize (\<CMYK /\>, \<sRGB /\>, \<RGB /\>)
      * @param bitDepthId the bit depth is unspecified by the spec, this allow to select
      *                   a preferred bit depth for creating the KoColor object (if that
      *                   bit depth isn't available, this function will randomly select
@@ -231,7 +231,7 @@ public:
      * Unserialize a color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
      *
-     * @param elt the element to unserialize (<CMYK />, <sRGB />, <RGB />)
+     * @param elt the element to unserialize (\<CMYK /\>, \<sRGB /\>, \<RGB /\>)
      * @param bitDepthId the bit depth is unspecified by the spec, this allow to select
      *                   a preferred bit depth for creating the KoColor object (if that
      *                   bit depth isn't available, this function will randomly select

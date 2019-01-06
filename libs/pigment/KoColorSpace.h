@@ -552,13 +552,13 @@ public:
      * Serialize this color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
      *
-     * This function doesn't create the <color /> element but rather the <CMYK />,
-     * <sRGB />, <RGB /> ... elements. It is assumed that colorElt is the <color />
+     * This function doesn't create the \<color /\> element but rather the \<CMYK /\>,
+     * \<sRGB /\>, \<RGB /\> ... elements. It is assumed that colorElt is the \<color /\>
      * element.
      *
      * @param pixel buffer to serialized
      * @param colorElt root element for the serialization, it is assumed that this
-     *                 element is <color />
+     *                 element is \<color /\>
      * @param doc is the document containing colorElt
      */
     virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const = 0;
@@ -568,7 +568,7 @@ public:
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
      *
      * @param pixel buffer where the color will be unserialized
-     * @param elt the element to unserialize (<CMYK />, <sRGB />, <RGB />)
+     * @param elt the element to unserialize (\<CMYK /\>, \<sRGB /\>, \<RGB /\>)
      * @return the unserialize color, or an empty color object if the function failed
      *         to unserialize the color
      */

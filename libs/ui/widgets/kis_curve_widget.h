@@ -137,15 +137,15 @@ public:
 
     /**
      * Connect/disconnect external spinboxes to the curve
-     * @inMin/@inMax - is the range for input values
-     * @outMin/@outMax - is the range for output values
+     * @p inMin / @p inMax - is the range for input values
+     * @p outMin / @p outMax - is the range for output values
      */
     void setupInOutControls(QSpinBox *in, QSpinBox *out, int inMin, int inMax, int outMin, int outMax);
     void dropInOutControls();
 
     /**
      * Handy function that creates new point in the middle
-     * of the curve and sets focus on the m_intIn field,
+     * of the curve and sets focus on the @p m_intIn field,
      * so the user can move this point anywhere in a moment
      */
     void addPointInTheMiddle();

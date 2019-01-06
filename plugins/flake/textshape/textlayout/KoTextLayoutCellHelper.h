@@ -49,28 +49,28 @@ public:
     /**
      * Paint the borders.
      *
-     * @painter the painter to draw with.
-     * @bounds the bounding rectangle to draw.
-     * @blanks a painterpath where blank borders should be added to.
+     * @param painter the painter to draw with.
+     * @param bounds the bounding rectangle to draw.
+     * @param blanks a painterpath where blank borders should be added to.
      */
     void paintBorders(QPainter &painter, const QRectF &bounds, QVector<QLineF> *blanks) const;
 
     /**
      * Paint the diagonal borders.
      *
-     * @painter the painter to draw with.
-     * @bounds the bounding rectangle to draw.
+     * @param painter the painter to draw with.
+     * @param bounds the bounding rectangle to draw.
      */
     void paintDiagonalBorders(QPainter &painter, const QRectF &bounds) const;
 
     /**
      * Paint the top border.
      *
-     * @painter the painter to draw with.
-     * @x the x position.
-     * @y the y position.
-     * @w the width.
-     * @blanks a painterpath where blank borders should be added to.
+     * @param painter the painter to draw with.
+     * @param x the x position.
+     * @param y the y position.
+     * @param w the width.
+     * @param blanks a painterpath where blank borders should be added to.
      */
     void drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *blanks = 0) const;
 
@@ -78,33 +78,33 @@ public:
      * Paint the border that is shared.
      * It only draws the thickest and it always draws it below the y position.
      *
-     * @painter the painter to draw with.
-     * @x the x position.
-     * @y the y position.
-     * @w the width.
-     * @blanks a painterpath where blank borders should be added to.
+     * @param painter the painter to draw with.
+     * @param x the x position.
+     * @param y the y position.
+     * @param w the width.
+     * @param blanks a painterpath where blank borders should be added to.
      */
     void drawSharedHorizontalBorder(QPainter &painter, const KoTableCellStyle &styleBelow,  qreal x, qreal y, qreal w, QVector<QLineF> *blanks = 0) const;
 
     /**
      * Paint the bottom border.
      *
-     * @painter the painter to draw with.
-     * @x the x position.
-     * @y the y position.
-     * @w the width.
-     * @blanks a painterpath where blank borders should be added to.
+     * @param painter the painter to draw with.
+     * @param x the x position.
+     * @param y the y position.
+     * @param w the width.
+     * @param blanks a painterpath where blank borders should be added to.
      */
     void drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *blanks = 0) const;
 
     /**
      * Paint the leftmost border.
      *
-     * @painter the painter to draw with.
-     * @x the x position.
-     * @y the y position.
-     * @h the height.
-     * @blanks a painterpath where blank borders should be added to.
+     * @param painter the painter to draw with.
+     * @param x the x position.
+     * @param y the y position.
+     * @param h the height.
+     * @param blanks a painterpath where blank borders should be added to.
      */
     void drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QVector<QLineF> *blanks = 0) const;
 
@@ -112,22 +112,22 @@ public:
      * Paint the border that is shared.
      * It only draws the thickest and it always draws it below the y position.
      *
-     * @painter the painter to draw with.
-     * @x the x position.
-     * @y the y position.
-     * @h the height.
-     * @blanks a painterpath where blank borders should be added to.
+     * @param painter the painter to draw with.
+     * @param x the x position.
+     * @param y the y position.
+     * @param h the height.
+     * @param blanks a painterpath where blank borders should be added to.
      */
     void drawSharedVerticalBorder(QPainter &painter, const KoTableCellStyle &styleRight,  qreal x, qreal y, qreal h, QVector<QLineF> *blanks = 0) const;
 
     /**
      * Paint the rightmost border.
      *
-     * @painter the painter to draw with.
-     * @x the x position.
-     * @y the y position.
-     * @h the height.
-     * @blanks a painterpath where blank borders should be added to.
+     * @param painter the painter to draw with.
+     * @param x the x position.
+     * @param y the y position.
+     * @param h the height.
+     * @param blanks a painterpath where blank borders should be added to.
      */
     void drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QVector<QLineF> *blanks = 0) const;
 

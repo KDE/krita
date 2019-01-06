@@ -278,10 +278,10 @@ public:
                                   qint32 srcWidth, qint32 srcHeight);
 
     /**
-     * Blast a region of srcWidth @param srcWidth and srcHeight @param srcHeight from @param srcDev onto the current
-     * paint device. @param srcX and @param srcY set the x and y positions of the
-     * origin top-left corner, @param dstX and @param dstY those of the destination.
-     * @param srcDev is a \ref KisFixedPaintDevice: this means that @param srcDev must have the same
+     * Blast a region of srcWidth @p srcWidth and srcHeight @p srcHeight from @p srcDev onto the current
+     * paint device. @p srcX and @p srcY set the x and y positions of the
+     * origin top-left corner, @p dstX and @p dstY those of the destination.
+     * @p srcDev is a @ref KisFixedPaintDevice : this means that @p srcDev must have the same
      * colorspace as the destination device.
      *
      * @param dstX the destination x-coordinate
@@ -317,20 +317,20 @@ public:
     void bltFixed(const QPoint & pos, const KisFixedPaintDeviceSP srcDev, const QRect & srcRect);
 
     /**
-     * Blasts a @param selection of srcWidth @param srcWidth and srcHeight @param srcHeight
-     * of @param srcDev on the current paint device. There is parameters to control
-     * the top-left corner of the area in each respective paint device (@param dstX,
-     * @param dstY, @param srcX, @param srcY).
-     * @param selection can be used as a mask to shape @param srcDev to something
+     * Blasts a @p selection of srcWidth @p srcWidth and srcHeight @p srcHeight
+     * of @p srcDev on the current paint device. There is parameters to control
+     * the top-left corner of the area in each respective paint device (@p dstX,
+     * @p dstY, @p srcX, @p srcY).
+     * @p selection can be used as a mask to shape @p srcDev to something
      * interesting in the same step it is rendered to the current paint device.
-     * @param srcDev is a \ref KisFixedPaintDevice: this means that @param srcDev
+     * @p srcDev is a @ref KisFixedPaintDevice : this means that @p srcDev
      * must have the same colorspace as the destination device.
-     * @param selection 's colorspace must be alpha8 (the colorspace for
+     * @p selection 's colorspace must be alpha8 (the colorspace for
      * selections/transparency).
      * The rectangle formed by the respective top-left coordinates of each device
-     * and @param srcWidth and @param srcHeight must not go beyond their limits, and
+     * and @p srcWidth and @p srcHeight must not go beyond their limits, and
      * they must be different from zero.
-     * @param selection and KisPainter's selection (the user selection) are
+     * @p selection and KisPainter's selection (the user selection) are
      * fused together through the composite operation COMPOSITE_MULT.
      *
      * @param dstX the destination x-coordinate

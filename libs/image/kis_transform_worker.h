@@ -103,8 +103,8 @@ public:
      * TS - shear origin transpose
      * S  - shear itself (shearX * shearY)
      * SC - scale
-     * R  - rotation (@rotation parameter)
-     * T  - transpose (@xtranslate, @ytranslate)
+     * R  - rotation (@p rotation parameter)
+     * T  - transpose (@p xtranslate, @p ytranslate)
      *
      * WARNING: due to some rounding problems in the worker
      * the work it does does not correspond to the matrix exactly!

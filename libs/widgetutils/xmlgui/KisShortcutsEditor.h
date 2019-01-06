@@ -119,7 +119,7 @@ public:
     ~KisShortcutsEditor() override;
 
     /**
-     * @ret true if there are unsaved changes.
+     * @return @c true if there are unsaved changes.
      */
     bool isModified() const;
 

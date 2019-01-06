@@ -32,7 +32,7 @@ class KoSvgTextChunkShapeLayoutInterface;
 /**
  * KoSvgTextChunkShape is an elementary block of SVG text object.
  *
- * KoSvgTextChunkShape represents either a <tspan> or <text> element of SVG.
+ * KoSvgTextChunkShape represents either a \<tspan\> or \<text\> element of SVG.
  * The chunk shape uses flake hierarchy to represent the DOM hierarchy of the
  * supplied text. All the attributes of text blocks can be fetched using
  * textProperties() method.
@@ -49,8 +49,8 @@ class KoSvgTextChunkShapeLayoutInterface;
  * KoSvgTextChunkShape! The chunk shape is **not** a "text chunk" in SVG's
  * definition. According to SVG, "text chunk" is a set of characters anchored to
  * a specific absolute position on canvas. And KoSvgTextChunkShape is just one
- * <tspan> or <text> element. Obviously, one <tspan> can contain multiple "text
- * chunks" and, vice versa, a "text chunk" can spread onto multiple <span>'s.
+ * \<tspan\> or \<text\> element. Obviously, one \<tspan\> can contain multiple "text
+ * chunks" and, vice versa, a "text chunk" can spread onto multiple \<span\>'s.
  */
 class KRITAFLAKE_EXPORT KoSvgTextChunkShape : public KoShapeContainer, public SvgShape
 {
@@ -131,7 +131,7 @@ public:
      * itself, of an "intermediate chunk" that doesn't contain any text itself,
      * but works as a group for a set of child chunks, which might be either
      * text (leaf) or intermediate chunks. Such groups are needed to define a
-     * common text style for a group of '<tspan>' objects.
+     * common text style for a group of '\<tspan\>' objects.
      *
      * @return true if the chunk is a "text chunk" false if it is "intermediate chunk"
      */

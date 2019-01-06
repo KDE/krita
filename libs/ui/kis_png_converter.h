@@ -104,12 +104,14 @@ public:
     /**
      * Save a layer to a PNG
      * @param filename the name of the destination file
+     * @param imageRect the image rectangle to save
+     * @param xRes resolution along x axis
+     * @param yRes resolution along y axis
      * @param device the paint device to save
      * @param annotationsStart an iterator on the first annotation
      * @param annotationsEnd an iterator on the last annotation
-     * @param compression a number between 0 and 9 to specify the compression rate (9 is most compressed)
-     * @param interlace set to true if you want to generate an interlaced png
-     * @param alpha set to true if you want to save the alpha channel
+     * @param options PNG formatting options
+     * @param metadata image metadata
      */
     KisImageBuilder_Result buildFile(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
     KisImageBuilder_Result buildFile(QIODevice*, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);

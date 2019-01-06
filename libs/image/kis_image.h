@@ -729,9 +729,7 @@ Q_SIGNALS:
 
     /**
      *  Emitted whenever an action has caused the image to be
-     *  recomposited.
-     *
-     * @param rc The rect that has been recomposited.
+     *  recomposited. Parameter is the rect that has been recomposited.
      */
     void sigImageUpdated(const QRect &);
 

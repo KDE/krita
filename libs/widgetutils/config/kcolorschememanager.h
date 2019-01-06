@@ -109,8 +109,8 @@ public Q_SLOTS:
      * Installs the KColorScheme as the QApplication's QPalette.
      *
      * @param index The index for the KColorScheme to activate.
-     * The index must reference the QAbstractItemModel provided by @link model
-     * @see model()
+     * The index must reference the QAbstractItemModel provided by @c model
+     * @see model
      */
     void activateScheme(const QModelIndex &index);
 

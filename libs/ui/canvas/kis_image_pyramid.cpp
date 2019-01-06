@@ -57,7 +57,7 @@
 #define isOdd(x) ((x) & 0x01)
 
 /**
- * Aligns @value to the lowest integer not smaller than @value and
+ * Aligns @p value to the lowest integer not smaller than @p value and
  * that is a divident of alignment
  */
 inline void alignByPow2Hi(qint32 &value, qint32 alignment)
@@ -68,7 +68,7 @@ inline void alignByPow2Hi(qint32 &value, qint32 alignment)
 }
 
 /**
- * Aligns @value to the lowest integer not smaller than @value and
+ * Aligns @p value to the lowest integer not smaller than @p value and
  * that is, increased by one, a divident of alignment
  */
 inline void alignByPow2ButOneHi(qint32 &value, qint32 alignment)
@@ -78,8 +78,8 @@ inline void alignByPow2ButOneHi(qint32 &value, qint32 alignment)
 }
 
 /**
- * Aligns @value to the highest integer not exceeding @value and
- * that is a divident of @alignment
+ * Aligns @p value to the highest integer not exceeding @p value and
+ * that is a divident of @p alignment
  */
 inline void alignByPow2Lo(qint32 &value, qint32 alignment)
 {

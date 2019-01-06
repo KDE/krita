@@ -321,9 +321,6 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     d->canvasResourceProvider.setFGColor(cfg.readKoColor("LastForeGroundColor",foreground));
     KoColor background(Qt::white, cs);
     d->canvasResourceProvider.setBGColor(cfg.readKoColor("LastBackGroundColor",background));
-
-
-
 }
 
 
@@ -336,7 +333,7 @@ KisViewManager::~KisViewManager()
     }
 
     cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
-
+    cfg.writeEntry("CanvasOnlyActive", false); // We never restart in CavnasOnlyMode
     delete d;
 }
 
@@ -1144,12 +1141,14 @@ void KisViewManager::showStatusBar(bool toggled)
 void KisViewManager::switchCanvasOnly(bool toggled)
 {
     KisConfig cfg(false);
-    KisMainWindow* main = mainWindow();
+    KisMainWindow *main = mainWindow();
 
     if(!main) {
         dbgUI << "Unable to switch to canvas-only mode, main window not found";
         return;
     }
+
+    cfg.writeEntry("CanvasOnlyActive", toggled);
 
     if (toggled) {
         d->canvasState = qtMainWindow()->saveState();

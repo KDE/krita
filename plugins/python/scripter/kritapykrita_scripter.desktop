@@ -40,5 +40,5 @@ Comment[sv]=Insticksprogram för att köra godtycklig Python-kod
 Comment[tr]=Geçici Python kodu çalıştırmak için eklenti
 Comment[uk]=Додаток для виконання апріорного коду Python
 Comment[x-test]=xxPlugin to execute ad-hoc Python codexx
-Comment[zh_CN]=执行现场编写的 Python 代码的插件
+Comment[zh_CN]=用于执行当场编写的 Python 代码的插件
 Comment[zh_TW]=外掛程式，用於執行特定 Python 程式碼

@@ -1042,6 +1042,7 @@ public:
      * In this case it can be shown on screen probably partially but it should really not be printed
      * until it is fully done processing.
      * Warning! This method can be blocking for a long time
+     * @param converter    The converter
      * @param asynchronous If set to true the processing will can take place in a different thread and the
      *                     function will not block until the shape is finished.
      *                     In case of printing Flake will call this method from a non-main thread and only
@@ -1286,6 +1287,7 @@ protected:
      * A hook that allows inheriting classes to do something after a KoShape property changed
      * This is called whenever the shape, position rotation or scale properties were altered.
      * @param type an indicator which type was changed.
+     * @param shape the shape.
      */
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
 

@@ -417,8 +417,12 @@ public Q_SLOTS:
     bool close();
 
     /**
-     * @brief crop the image to rectangle described by @param x, @param y,
-     * @param w and @param h
+     * @brief crop the image to rectangle described by @p x, @p y,
+     * @p w and @p h
+     * @param x x coordinate of the top left corner
+     * @param y y coordinate of the top left corner
+     * @param w width
+     * @param h height
      */
     void crop(int x, int y, int w, int h);
 

@@ -111,7 +111,7 @@ public:
      * @param annotationsStart an iterator on the first annotation
      * @param annotationsEnd an iterator on the last annotation
      * @param options PNG formatting options
-     * @param metadata image metadata
+     * @param metaData image metadata
      */
     KisImageBuilder_Result buildFile(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
     KisImageBuilder_Result buildFile(QIODevice*, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);

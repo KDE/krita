@@ -59,6 +59,7 @@ public:
      * @param fv vertical fade
      * @param spikes number of spikes
      * @param antialiasEdges whether to antialias edges
+     * @param type type
      * @param id the brush identifier
      */
     KisMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges, Type type, const KoID& id = DefaultId);

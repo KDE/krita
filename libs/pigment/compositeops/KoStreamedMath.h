@@ -129,7 +129,7 @@ static inline Vc::float_v fetch_mask_8(const quint8 *data) {
  *            1) Fetching aligned data with unaligned instruction
  *               degrades performance.
  *            2) Fetching unaligned data with aligned instruction
- *               causes #GP (General Protection Exception)
+ *               causes \#GP (General Protection Exception)
  */
 template <bool aligned>
 static inline Vc::float_v fetch_alpha_32(const quint8 *data) {
@@ -153,7 +153,7 @@ static inline Vc::float_v fetch_alpha_32(const quint8 *data) {
  *            1) Fetching aligned data with unaligned instruction
  *               degrades performance.
  *            2) Fetching unaligned data with aligned instruction
- *               causes #GP (General Protection Exception)
+ *               causes \#GP (General Protection Exception)
  */
 template <bool aligned>
 static inline void fetch_colors_32(const quint8 *data,

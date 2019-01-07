@@ -39,6 +39,7 @@ public:
      * Constructor
      * @param name The name that will be shown in the ui
      * @param image The image the command will be working on.
+     * @param parent The parent command.
      */
     KisImageCommand(const KUndo2MagicString& name, KisImageWSP image, KUndo2Command *parent = 0);
     ~KisImageCommand() override;

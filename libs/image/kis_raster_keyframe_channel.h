@@ -49,6 +49,7 @@ public:
      * Copy the content of the sourceDevice into a new keyframe at given time
      * @param time position of new keyframe
      * @param sourceDevice source for content
+     * @param parentCommand parent command used for stacking
      */
     void importFrame(int time, KisPaintDeviceSP sourceDevice, KUndo2Command *parentCommand);
 

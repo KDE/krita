@@ -48,6 +48,7 @@ public:
     /**
      * Delete the frame with given id
      * @param frame frame ID
+     * @param parentCommand parent command
      */
     void deleteFrame(int frame, KUndo2Command *parentCommand);
 

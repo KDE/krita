@@ -495,7 +495,10 @@ public:
 
     /**
      * Fill this paint device with the data from image; starting at (offsetX, offsetY)
+     * @param image the image
      * @param profile name of the RGB profile to interpret the image as. 0 is interpreted as sRGB
+     * @param offsetX x offset
+     * @param offsetY y offset
      */
     void convertFromQImage(const QImage& image, const KoColorProfile *profile, qint32 offsetX = 0, qint32 offsetY = 0);
 

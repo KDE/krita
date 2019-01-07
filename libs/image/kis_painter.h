@@ -409,8 +409,10 @@ public:
      * Convenience method for renderMirrorMask(), allows to choose whether
      * we need to preserve our fixed mask or do the transformations in-place.
      *
-     * @param rc rectangle area covered by dab
+     * @param rc rectangular area covered by dab
      * @param dab the device to render
+     * @param sx x coordinate of the top left corner of the area
+     * @param sy y coordinate of the top left corner of the area
      * @param mask mask to use for rendering
      * @param preserveMask states whether a temporary device should be
      *                    created to do the transformations
@@ -458,10 +460,10 @@ public:
                    KisDistanceInformation *currentDistance);
 
     /**
-     * Draw a Bezier curve between pos1 and pos2 using control points 1 and 2.
+     * Draw a Bezier curve between @p pi1 and @p pi2 using control points @p control1 and @p control2.
      * If savedDist is less than zero, the brush is painted at pos1 before being
      * painted along the curve using the spacing setting.
-     * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
+     * @return the drag distance, that is the remains of the distance between @p pi1 and @p pi2 not covered
      * because the currently set brush has a spacing greater than that distance.
      */
     void paintBezierCurve(const KisPaintInformation &pi1,
@@ -471,7 +473,7 @@ public:
                           KisDistanceInformation *currentDistance);
     /**
      * Fill the given vector points with the points needed to draw the Bezier curve between
-     * pos1 and pos2 using control points 1 and 2, excluding the final pos2.
+     * @p pos1 and @p pos2 using control points @p control1 and @p control2, excluding the final pos2.
      */
     void getBezierCurvePoints(const QPointF &pos1,
                               const QPointF &control1,

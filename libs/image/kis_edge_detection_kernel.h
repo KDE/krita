@@ -90,6 +90,7 @@ public:
      * have a different sampling for the eventual edge detection.
      * @param channelFlags the affected channels.
      * @param progressUpdater the progress updater if it exists.
+     * @param output the output mode.
      * @param writeToAlpha whether or not to have the result applied to the transparency than the color channels,
      * this is useful for fringe effects.
      */

@@ -165,7 +165,13 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
         }
     } else if(d->firstAssistant) {
         //make sure there's a first assistant to begin with.//
-        best = d->firstAssistant->adjustPosition(point, strokeBegin);
+        QPointF newpoint = d->firstAssistant->adjustPosition(point, strokeBegin);
+        // BUGFIX: 402535
+        // assistants might return (NaN,NaN), must always check for that
+        if (newpoint.x() == newpoint.x()) {
+            // not a NaN
+            best = newpoint;
+        }
     } else {
         d->aFirstStroke=false;
     }

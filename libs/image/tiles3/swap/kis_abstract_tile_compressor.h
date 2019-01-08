@@ -56,13 +56,16 @@ public:
     virtual bool readTile(QIODevice *stream, KisTiledDataManager *dm) = 0;
 
     /**
-     * Compresses a \a tileData and writes it into the \a buffer.
+     * Compresses a \p tileData and writes it into the \p buffer.
      * The buffer must be at least tileDataBufferSize() bytes long.
      * Actual number of bytes written is returned using out-parameter
-     * \a bytesWritten
+     * \p bytesWritten
      *
      * \param tileData an existing tile data. It should be created
      * and acquired by the caller.
+     * \param buffer the buffer
+     * \param bufferSize the size of the buffer
+     * \param bytesWritten the number of written bytes
      *
      * \see tileDataBufferSize()
      */
@@ -70,9 +73,11 @@ public:
                                   qint32 bufferSize, qint32 &bytesWritten) = 0;
 
     /**
-     * Decompresses a \a tileData from a given \a buffer.
+     * Decompresses a \p tileData from a given \p buffer.
      *
-     * \param tileData an existing tile data wrere the result
+     * \param buffer the buffer
+     * \param bufferSize the size of the buffer
+     * \param tileData an existing tile data where the result
      * will be written to. It should be created and acquired
      * by the caller.
      *

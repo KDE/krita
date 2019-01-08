@@ -112,7 +112,8 @@ public:
      * @param type the edge detection filter.
      * @param channelToConvert the channel to use as a grayscale.
      * @param channelOrder the order in which the xyz coordinates ought to be written to the pixels.
-     * @param channelFlags
+     * @param channelFlip whether to flip the channels
+     * @param channelFlags the channel flags
      * @param progressUpdater
      */
     static void convertToNormalMap(KisPaintDeviceSP device,

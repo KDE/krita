@@ -165,6 +165,8 @@ public:
      * @param dstProfile RGB profile to use in conversion. May be 0, in which
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
+     * @param renderingIntent The rendering intent of conversion.
+     * @param conversionFlags The conversion flags.
      */
     virtual QImage convertToQImage(const KoColorProfile *dstProfile,
                                    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),

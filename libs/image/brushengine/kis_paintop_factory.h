@@ -65,6 +65,7 @@ public:
      * Create a KisPaintOp with the given settings and painter.
      * @param settings the settings associated with the input device
      * @param painter the painter used to draw
+     * @param node the node used to draw
      * @param image the image used to draw
      */
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image) = 0;

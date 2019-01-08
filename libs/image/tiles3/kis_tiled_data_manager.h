@@ -271,6 +271,11 @@ public:
      * Copy the bytes in the specified rect to a vector. The caller is responsible
      * for managing the vector.
      *
+     * \param bytes the bytes
+     * \param x x of top left corner
+     * \param y y of top left corner
+     * \param w width
+     * \param h height
      * \param dataRowStride is the step (in bytes) which should be
      *                      added to \p bytes pointer to get to the
      *                      next row
@@ -285,6 +290,11 @@ public:
      * not enough bytes, the rest of the rect will be filled with the default value
      * given (by default, 0);
      *
+     * \param bytes the bytes
+     * \param x x of top left corner
+     * \param y y of top left corner
+     * \param w width
+     * \param h height
      * \param dataRowStride is the step (in bytes) which should be
      *                      added to \p bytes pointer to get to the
      *                      next row

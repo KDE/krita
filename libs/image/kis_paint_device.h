@@ -505,13 +505,15 @@ public:
     /**
      * Create an RGBA QImage from a rectangle in the paint device.
      *
+     * @param dstProfile RGB profile to use in conversion. May be 0, in which
+     * case it's up to the color strategy to choose a profile (most
+     * like sRGB).
      * @param x Left coordinate of the rectangle
      * @param y Top coordinate of the rectangle
      * @param w Width of the rectangle in pixels
      * @param h Height of the rectangle in pixels
-     * @param dstProfile RGB profile to use in conversion. May be 0, in which
-     * case it's up to the color strategy to choose a profile (most
-     * like sRGB).
+     * @param renderingIntent Rendering intent
+     * @param conversionFlags Conversion flags
      */
     QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h,
                            KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
@@ -532,6 +534,8 @@ public:
      * @param dstProfile RGB profile to use in conversion. May be 0, in which
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
+     * @param renderingIntent Rendering intent
+     * @param conversionFlags Conversion flags
      */
     QImage convertToQImage(const KoColorProfile *  dstProfile,
                            KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
@@ -560,6 +564,8 @@ public:
      * @param maxh: maximum height
      * @param rect: only this rect will be used for the thumbnail
      * @param oversample: ratio used for antialiasing
+     * @param renderingIntent Rendering intent
+     * @param conversionFlags Conversion flags
      */
     QImage createThumbnail(qint32 maxw, qint32 maxh, QRect rect, qreal oversample = 1,
                            KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
@@ -789,6 +795,9 @@ public:
      * Create an iterator that will "artificially" extend the paint device with the
      * value of the border when trying to access values outside the range of data.
      *
+     * @param x x of top left corner
+     * @param y y of top left corner
+     * @param w width of the border
      * @param _dataWidth indicates the rectangle that truly contains data
      */
     KisRepeatHLineConstIteratorSP createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth) const;
@@ -796,6 +805,9 @@ public:
      * Create an iterator that will "artificially" extend the paint device with the
      * value of the border when trying to access values outside the range of data.
      *
+     * @param x x of top left corner
+     * @param y y of top left corner
+     * @param h height of the border
      * @param _dataWidth indicates the rectangle that truly contains data
      */
     KisRepeatVLineConstIteratorSP createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth) const;

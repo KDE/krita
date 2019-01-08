@@ -31,6 +31,7 @@ class KRITAIMAGE_EXPORT KisMemoryWindow
 public:
     /**
      * @param swapDir If the dir doesn't exist, it'll be created, if it's empty QDir::tempPath will be used.
+     * @param writeWindowSize write window size.
      */
     KisMemoryWindow(const QString &swapDir, quint64 writeWindowSize = DEFAULT_WINDOW_SIZE);
     ~KisMemoryWindow();

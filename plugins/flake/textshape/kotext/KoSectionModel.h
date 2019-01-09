@@ -76,16 +76,16 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    /// Creates KoSection in position of @param cursor with some allowed name
+    /// Creates KoSection in position of @p cursor with some allowed name
     KoSection *createSection(const QTextCursor &cursor, KoSection *parent);
 
-    /// Creates KoSection in position of @param cursor with specified @param name
+    /// Creates KoSection in position of @p cursor with specified @p name
     KoSection *createSection(const QTextCursor &cursor, KoSection *parent, const QString &name);
 
-    /// Creates KoSectionEnd in pair for a @param section
+    /// Creates KoSectionEnd in pair for a @p section
     KoSectionEnd *createSectionEnd(KoSection *section);
 
-    /** Tries to set @param section name to @param name
+    /** Tries to set @p section name to @p name
      * @return @c false if there is a section with such name
      * and new name isn't accepted and @c true otherwise.
      */
@@ -106,7 +106,7 @@ public:
     /// Setting all sections end bound cursor to move with text inserting.
     void allowMovingEndBound();
 
-    /// Finds index of @param child inside his parent.
+    /// Finds index of @p child inside his parent.
     int findRowOfChild(KoSection *child) const;
 
 private:
@@ -116,15 +116,17 @@ private:
     friend class NewSectionCommand;
 
     /**
-     * Inserts @param section to it's parent (should be
-     * stored in @param section already) in position childIdx.
-     * Affects only Model Level(@see KoSectionModel).
+     * Inserts @p section to it's parent (should be
+     * stored in @p section already) in position childIdx.
+     * Affects only Model Level
+     * @see KoSectionModel
      */
     void insertToModel(KoSection* section, int childIdx);
     /**
-     * Deletes @param section from it's parent (should be
-     * stored in @param section already).
-     * Affects only Model Level(@see KoSectionModel).
+     * Deletes @p section from it's parent (should be
+     * stored in @p section already).
+     * Affects only Model Level
+     * @see KoSectionModel
      */
     void deleteFromModel(KoSection *section);
 

@@ -145,12 +145,14 @@ public:
      * This is for the cursor not to change when selecting
      * black, white, and desaturated values. Will not change the non-native values.
      * @param hsx the hsx value.
+     * @param wrangler defines whether this docker will update luminosity if there's not at the least 3\% more variation
      */
     void setHSX(QVector <qreal> hsx, bool wrangler=false);
     /**
      * @brief getHSX sets the sat and hue so they won't
      * switch around much.
      * @param hsx the hsx values.
+     * @param wrangler defines whether this docker will update luminosity if there's not at the least 3\% more variation
      * @return returns hsx, corrected.
      */
     QVector <qreal> getHSX(QVector <qreal> hsx, bool wrangler= false);

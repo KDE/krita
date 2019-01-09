@@ -335,6 +335,7 @@ public Q_SLOTS:
      * Warning: From the outside this method should only be used with a parent command
      * and only if there is a selection
      * @param previous should be true if act like backspace
+     * @param parent the parent command used for stacking
      */
     void deleteChar(bool previous, KUndo2Command *parent = 0);
 
@@ -392,6 +393,7 @@ public Q_SLOTS:
      * Sets the width of a table column.
      * @param table is the table to be adjusted.
      * @param column the column that is to be adjusted.
+     * @param parentCommand the parent command used for stacking.
      */
     void adjustTableColumnWidth(QTextTable *table, int column, qreal width, KUndo2Command *parentCommand = 0);
 
@@ -399,6 +401,8 @@ public Q_SLOTS:
      * Sets the height of a table row.
      * @param table is the table to be adjusted.
      * @param row the row that is to be adjusted.
+     * @param height the row height.
+     * @param parentCommand the parent command used for stacking.
      */
     void adjustTableRowHeight(QTextTable *table, int row, qreal height, KUndo2Command *parentCommand = 0);
 
@@ -413,8 +417,10 @@ public Q_SLOTS:
     /**
      * Sets the border formatting of a side in a table cell.
      * @param table is the table to be adjusted.
-     * @param column the column coordinate of the cell that is to be adjusted.
      * @param row the row coordinate of the cell that is to be adjusted.
+     * @param column the column coordinate of the cell that is to be adjusted.
+     * @param cellSide the side border of the cell.
+     * @param data the border data.
      */
     void setTableBorderData(QTextTable *table, int row, int column, KoBorder::BorderSide cellSide,
                 const KoBorder::BorderData &data);

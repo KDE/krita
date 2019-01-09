@@ -305,6 +305,7 @@ public:
      * @param height in pixels
      * @param dstProfile destination profile
      * @param renderingIntent the rendering intent
+     * @param conversionFlags conversion flags
      */
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    const KoColorProfile *  dstProfile,

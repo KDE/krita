@@ -79,6 +79,7 @@ public:
      * It only draws the thickest and it always draws it below the y position.
      *
      * @param painter the painter to draw with.
+     * @param styleBelow the table cell style.
      * @param x the x position.
      * @param y the y position.
      * @param w the width.
@@ -110,9 +111,10 @@ public:
 
     /**
      * Paint the border that is shared.
-     * It only draws the thickest and it always draws it below the y position.
+     * It only draws the thickest and it always draws it to the right of the x position.
      *
      * @param painter the painter to draw with.
+     * @param styleRight the table cell style.
      * @param x the x position.
      * @param y the y position.
      * @param h the height.

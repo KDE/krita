@@ -117,7 +117,7 @@ public /* methods */:
      *
      * A non-global color set, on contrary, would be stored in a kra file,
      * and would only be opened when that file is opened by Krita.
-     * @return
+     * @return @c true if the set is global
      */
     bool isGlobal() const;
     void setIsGlobal(bool);
@@ -129,7 +129,8 @@ public /* methods */:
     bool fromByteArray(QByteArray &data);
 
     /**
-     * @brief add Add a color to the palette.
+     * @brief Add a color to the palette.
+     * @param c the swatch
      * @param groupName color to add the group to. If empty, it will be added to the unsorted.
      */
     void add(const KisSwatch &, const QString &groupName = GLOBAL_GROUP_NAME);

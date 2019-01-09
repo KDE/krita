@@ -59,7 +59,14 @@ public:
     void cursorMoved(const QPointF &cursorPos);
 
     /**
-     * @param pixelCoords - The position of the KoPointerEvent, in pixel coordinates.
+     * @param even The event
+     * @param pixelCoords The position of the KoPointerEvent, in pixel coordinates.
+     * @param resourceManager The canvas resource manager
+     * @param image The image
+     * @param currentNode The current node
+     * @param strokesFacade The strokes facade
+     * @param overrideNode The override node
+     * @param bounds The bounds
      */
     void initPaint(KoPointerEvent *event,
                    const QPointF &pixelCoords,

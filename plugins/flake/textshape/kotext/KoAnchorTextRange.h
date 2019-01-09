@@ -59,6 +59,7 @@ public:
     /**
      * Constructor for a char or paragraph anchor.
      * @param parent the shape anchor.
+     * @param cursor the text cursor.
      */
     KoAnchorTextRange(KoShapeAnchor *parent, const QTextCursor &cursor);
     ~KoAnchorTextRange() override;

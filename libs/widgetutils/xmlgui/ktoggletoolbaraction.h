@@ -51,10 +51,12 @@ class KRITAWIDGETUTILS_EXPORT KToggleToolBarAction : public KToggleAction
 public:
     /**
      * Create a KToggleToolbarAction that manages the toolbar
-     * named toolBarName. This can be either the name of a
+     * named @p toolBarName. This can be either the name of a
      * toolbar in an xml ui file, or a toolbar programmatically
      * created with that name.
      *
+     * @param toolBarName The toolbar name.
+     * @param text The toolbar hint text.
      * @param parent The action's parent object.
      */
     KToggleToolBarAction(const char *toolBarName, const QString &text, QObject *parent);

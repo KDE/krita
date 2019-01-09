@@ -375,6 +375,8 @@ public:
      * Retrieve the requested shade color, using the specified color as the
      * base color and the specified contrast.
      *
+     * @param color the shade color
+     * @param role the shade role
      * @param contrast Amount roughly specifying the contrast by which to
      * adjust the base color, between -1.0 and 1.0 (values between 0.0 and 1.0
      * correspond to the value from KColorScheme::contrastF)
@@ -516,9 +518,11 @@ public:
      * from the system color scheme. The state effects from the given KConfig
      * are used (if null, the system state effects are used).
      *
+     * @param brush The foreground brush
      * @param background The background brush (or color) corresponding to the
      * KColorScheme::NormalBackground role and QPalette::Active state for this
      * foreground/decoration color.
+     * @param config The configuration.
      */
     explicit KStatefulBrush(const QBrush &, const QBrush &background,
                             KSharedConfigPtr = KSharedConfigPtr());

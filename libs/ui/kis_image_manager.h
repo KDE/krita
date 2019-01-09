@@ -56,6 +56,7 @@ public Q_SLOTS:
      * layers.
      *
      * @param url the url to the image file
+     * @param layerType the layer type
      * @return the number of layers added
      */
     qint32 importImage(const QUrl &url, const QString &layerType = "KisPaintLayer");

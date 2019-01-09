@@ -41,6 +41,7 @@ public:
     /**
      * Create a new generator layer
      * @param name the proposed name for this layer
+     * @param view the view manager
      * @param parent the widget parent of this dialog
      */
     KisDlgGeneratorLayer(const QString & name, KisViewManager *view, QWidget *parent);

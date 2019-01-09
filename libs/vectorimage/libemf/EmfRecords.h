@@ -55,6 +55,7 @@ public:
        Constructor for record type
 
        \param stream the stream to read the record structure from
+       \param recordSize the size of one record
     */
     BitBltRecord( QDataStream &stream, quint32 recordSize );
     ~BitBltRecord();
@@ -150,6 +151,7 @@ public:
        Constructor for record type
 
        \param stream the stream to read the record structure from
+       \param recordSize the size of one record
     */
     StretchDiBitsRecord( QDataStream &stream, quint32 recordSize );
     ~StretchDiBitsRecord();

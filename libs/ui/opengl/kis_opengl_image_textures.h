@@ -50,6 +50,8 @@ public:
      * Obtain a KisOpenGLImageTextures object for the given image.
      * @param image The image
      * @param monitorProfile The profile of the display device
+     * @param renderingIntent The rendering intent
+     * @param conversionFlags The color conversion flags
      */
     static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image,
                                                      const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent,

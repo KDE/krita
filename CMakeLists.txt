@@ -264,7 +264,6 @@ include(GenerateExportHeader)
 include(ECMMarkAsTest)
 include(ECMInstallIcons)
 
-include(CMakeDependentOption)
 include(CMakePackageConfigHelpers)
 include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
@@ -407,20 +406,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 option(KRITA_DEVS "For Krita developers. This modifies the DEBUG build type to use -O3 -g, while still enabling Q_ASSERT. This is necessary because the Qt5 cmake modules normally append QT_NO_DEBUG to any build type that is not labeled Debug")
-CMAKE_DEPENDENT_OPTION(KRITA_DEVS_SANITIZER "Activate ASAN memory sanitizer for the build (available only with KRITA_DEVS)" ON
-                       "KRITA_DEVS" OFF)
-
 if (KRITA_DEVS)
-    if (NOT KRITA_DEVS_SANITIZER)
-        set(CMAKE_CXX_FLAGS_DEBUG "-O3 -g " CACHE STRING "" FORCE)
-    else()
-        set(CMAKE_CXX_FLAGS_DEBUG "-O3 -g -fsanitize=address -lasan -fno-omit-frame-pointer" CACHE STRING "" FORCE)
-        set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-O3 -g -fsanitize=address -lasan -fno-omit-frame-pointer" CACHE STRING "" FORCE)
-        set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "-O3 -g -fsanitize=address -lasan -fno-omit-frame-pointer" CACHE STRING "" FORCE)
-        set(CMAKE_C_FLAGS_DEBUG "-O3 -g -fsanitize=address -lasan -fno-omit-frame-pointer" CACHE STRING "" FORCE)
-        set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "-O3 -g -fsanitize=address -lasan -fno-omit-frame-pointer" CACHE STRING "" FORCE)
-        set(CMAKE_STATIC_LINKER_FLAGS_DEBUG "-O3 -g -fsanitize=address -lasan -fno-omit-frame-pointer" CACHE STRING "" FORCE)
-    endif()
+    set(CMAKE_CXX_FLAGS_DEBUG "-O3 -g" CACHE STRING "" FORCE)
 endif()
 
 if(UNIX)
@@ -440,11 +427,6 @@ if(MINGW)
     string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
     string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
 endif(MINGW)
-
-if (KRITA_DEVS_SANITIZER)
-    string(REPLACE "-Wl,--no-undefined" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
-    string(REPLACE "-Wl,--no-undefined" "" CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
-endif()
 
 # enable exceptions globally
 kde_enable_exceptions()

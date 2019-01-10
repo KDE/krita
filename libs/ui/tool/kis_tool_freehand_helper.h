@@ -59,7 +59,7 @@ public:
     void cursorMoved(const QPointF &cursorPos);
 
     /**
-     * @param even The event
+     * @param event The event
      * @param pixelCoords The position of the KoPointerEvent, in pixel coordinates.
      * @param resourceManager The canvas resource manager
      * @param image The image

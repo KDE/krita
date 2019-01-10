@@ -393,6 +393,7 @@ public Q_SLOTS:
      * Sets the width of a table column.
      * @param table is the table to be adjusted.
      * @param column the column that is to be adjusted.
+     * @param width the new width of the column.
      * @param parentCommand the parent command used for stacking.
      */
     void adjustTableColumnWidth(QTextTable *table, int column, qreal width, KUndo2Command *parentCommand = 0);

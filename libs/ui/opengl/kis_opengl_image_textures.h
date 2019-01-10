@@ -75,6 +75,8 @@ public:
     /**
      * Set the color profile of the display device.
      * @param monitorProfile The color profile of the display device
+     * @param renderingIntent The rendering intent
+     * @param conversionFlags The color conversion flags
      */
     void setMonitorProfile(const KoColorProfile *monitorProfile,
                            KoColorConversionTransformation::Intent renderingIntent,

@@ -46,6 +46,7 @@ public:
      * @param nfi the node filter interface
      * @param paintDevice the painting device
      * @param view the view manager
+     * @param configuration filter configuration
      * @param layerName the name of the adjustment layer
      * @param caption the caption for the dialog -- create or properties
      * @param parent the widget parent of this dialog

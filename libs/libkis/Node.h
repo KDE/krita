@@ -313,6 +313,11 @@ public Q_SLOTS:
     bool visible() const;
 
     /**
+     * Check to see if frame number on layer is a keyframe
+     */
+    bool hasKeyframeAtTime(int frameNumber);
+
+    /**
      * Set the visibility of the current node to @param visible
      */
     void setVisible(bool visible);

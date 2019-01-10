@@ -87,11 +87,15 @@ class LcmsRGBP2020PQColorSpaceFactoryWrapper : public BaseColorSpaceFactory
     {
         QList<KoColorConversionTransformationFactory *> list;
 
-        // we skip direct conversions to RGB U8, because it cannot fit linear color space
-        list << new LcmsFromRGBP2020PQTransformationFactory<RelatedColorSpaceType, KoBgrU16Traits>();
+        /**
+         * We explicitly disable direct conversions to/from integer color spaces, because
+         * they may cause the the conversion system to choose them as an intermediate
+         * color space for the conversion chain, e.g.
+         * p709-g10 F32 -> p2020-g10 U16 -> Rec2020-pq U16, which is incorrect and loses
+         * all the HDR data
+         */
         list << new LcmsFromRGBP2020PQTransformationFactory<RelatedColorSpaceType, KoRgbF16Traits>();
         list << new LcmsFromRGBP2020PQTransformationFactory<RelatedColorSpaceType, KoRgbF32Traits>();
-        list << new LcmsToRGBP2020PQTransformationFactory<RelatedColorSpaceType, KoBgrU16Traits>();
         list << new LcmsToRGBP2020PQTransformationFactory<RelatedColorSpaceType, KoRgbF16Traits>();
         list << new LcmsToRGBP2020PQTransformationFactory<RelatedColorSpaceType, KoRgbF32Traits>();
 

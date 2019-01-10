@@ -227,7 +227,10 @@ public:
     }
 
     bool conserveDynamicRange() const override {
-        return true;
+        return
+            srcColorDepthId() == Float16BitsColorDepthID.id() ||
+            srcColorDepthId() == Float32BitsColorDepthID.id() ||
+            srcColorDepthId() == Float64BitsColorDepthID.id();
     }
 
     KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,

@@ -79,6 +79,14 @@ struct ApplySmpte2048Policy {
     }
 };
 
+template <typename src_channel_type,
+          typename dst_channel_type>
+struct NoopPolicy {
+    static ALWAYS_INLINE dst_channel_type process(src_channel_type value) {
+        return KoColorSpaceMaths<src_channel_type, dst_channel_type>::scaleToA(value);
+    }
+};
+
 }
 
 template<typename SrcCSTraits,
@@ -122,7 +130,7 @@ struct ApplyRgbShaper : public KoColorConversionTransformation
 
 };
 
-template<class ParentColorSpace>
+template<class ParentColorSpace, class DstColorSpaceTraits = typename DstTraitsForSource<typename ParentColorSpace::ColorSpaceTraits>::result>
 class LcmsFromRGBP2020PQTransformationFactory : public KoColorConversionTransformationFactory
 {
 public:
@@ -131,7 +139,7 @@ public:
                                                  colorDepthIdForChannelType<typename ParentColorSpace::ColorSpaceTraits::channels_type>().id(),
                                                  "High Dynamic Range UHDTV Wide Color Gamut Display (Rec. 2020) - SMPTE ST 2084 PQ EOTF",
                                                  RGBAColorModelID.id(),
-                                                 colorDepthIdForChannelType<typename DstTraitsForSource<typename ParentColorSpace::ColorSpaceTraits>::result::channels_type>().id(),
+                                                 colorDepthIdForChannelType<typename DstColorSpaceTraits::channels_type>().id(),
                                                  "Rec2020-elle-V4-g10.icc")
     {
     }
@@ -141,7 +149,10 @@ public:
     }
 
     bool conserveDynamicRange() const override {
-        return true;
+        return
+            dstColorDepthId() == Float16BitsColorDepthID.id() ||
+            dstColorDepthId() == Float32BitsColorDepthID.id() ||
+            dstColorDepthId() == Float64BitsColorDepthID.id();
     }
 
     KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
@@ -151,7 +162,7 @@ public:
     {
         return new ApplyRgbShaper<
                 typename ParentColorSpace::ColorSpaceTraits,
-                typename DstTraitsForSource<typename ParentColorSpace::ColorSpaceTraits>::result,
+                DstColorSpaceTraits,
                 RemoveSmpte2048Policy>(srcColorSpace,
                                        dstColorSpace,
                                        renderingIntent,
@@ -159,13 +170,13 @@ public:
     }
 };
 
-template<class ParentColorSpace>
+template<class ParentColorSpace, class DstColorSpaceTraits = typename DstTraitsForSource<typename ParentColorSpace::ColorSpaceTraits>::result>
 class LcmsToRGBP2020PQTransformationFactory : public KoColorConversionTransformationFactory
 {
 public:
     LcmsToRGBP2020PQTransformationFactory()
         : KoColorConversionTransformationFactory(RGBAColorModelID.id(),
-                                                 colorDepthIdForChannelType<typename DstTraitsForSource<typename ParentColorSpace::ColorSpaceTraits>::result::channels_type>().id(),
+                                                 colorDepthIdForChannelType<typename DstColorSpaceTraits::channels_type>().id(),
                                                  "Rec2020-elle-V4-g10.icc",
                                                  RGBAColorModelID.id(),
                                                  colorDepthIdForChannelType<typename ParentColorSpace::ColorSpaceTraits::channels_type>().id(),
@@ -187,12 +198,50 @@ public:
                                                                KoColorConversionTransformation::ConversionFlags conversionFlags) const override
     {
         return new ApplyRgbShaper<
-                typename DstTraitsForSource<typename ParentColorSpace::ColorSpaceTraits>::result,
+                DstColorSpaceTraits,
                 typename ParentColorSpace::ColorSpaceTraits,
                 ApplySmpte2048Policy>(srcColorSpace,
                                       dstColorSpace,
                                       renderingIntent,
                                       conversionFlags);
+    }
+};
+
+template<class ParentColorSpace, class DstColorSpaceTraits>
+class LcmsScaleRGBP2020PQTransformationFactory : public KoColorConversionTransformationFactory
+{
+public:
+    LcmsScaleRGBP2020PQTransformationFactory()
+        : KoColorConversionTransformationFactory(RGBAColorModelID.id(),
+                                                 colorDepthIdForChannelType<typename ParentColorSpace::ColorSpaceTraits::channels_type>().id(),
+                                                 "High Dynamic Range UHDTV Wide Color Gamut Display (Rec. 2020) - SMPTE ST 2084 PQ EOTF",
+                                                 RGBAColorModelID.id(),
+                                                 colorDepthIdForChannelType<typename DstColorSpaceTraits::channels_type>().id(),
+                                                 "High Dynamic Range UHDTV Wide Color Gamut Display (Rec. 2020) - SMPTE ST 2084 PQ EOTF")
+    {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(srcColorDepthId() != dstColorDepthId());
+    }
+
+    bool conserveColorInformation() const override {
+        return true;
+    }
+
+    bool conserveDynamicRange() const override {
+        return true;
+    }
+
+    KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
+                                                               const KoColorSpace* dstColorSpace,
+                                                               KoColorConversionTransformation::Intent renderingIntent,
+                                                               KoColorConversionTransformation::ConversionFlags conversionFlags) const override
+    {
+        return new ApplyRgbShaper<
+                typename ParentColorSpace::ColorSpaceTraits,
+                DstColorSpaceTraits,
+                NoopPolicy>(srcColorSpace,
+                            dstColorSpace,
+                            renderingIntent,
+                            conversionFlags);
     }
 };
 

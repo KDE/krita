@@ -23,6 +23,7 @@
 #include <ImfRgba.h>
 
 #include <KoColorConversions.h>
+#include <KoColorProfile.h>
 
 #include "kis_debug.h"
 #include "kis_assert.h"
@@ -53,13 +54,42 @@ struct KisSmallColorWidget::Private {
     int huePreferredHeight = 32;
     KisSliderSpinBox *dynamicRange = 0;
     qreal currentRelativeDynamicRange = 1.0;
-    KisDisplayColorConverter *displayColorConverter = 0;
+    KisDisplayColorConverter *displayColorConverter = KisDisplayColorConverter::dumbConverterInstance();
     KisSignalAutoConnectionsStore colorConverterConnections;
     bool hasHDR = false;
     bool hasHardwareHDR = false;
 
     qreal effectiveRelativeDynamicRange() const {
         return hasHDR ? currentRelativeDynamicRange : 1.0;
+    }
+
+    const KoColorSpace *outputColorSpace() {
+        return
+            KoColorSpaceRegistry::instance()->
+                colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(),
+                           displayColorConverter->openGLCanvasSurfaceProfile());
+    }
+
+    const KoColorSpace *generationColorSpace() {
+        const KoColorSpace *result = displayColorConverter->paintingColorSpace();
+
+        if (!result || result->colorModelId() != RGBAColorModelID) {
+            result = outputColorSpace();
+        } else if (result->colorDepthId() != Float32BitsColorDepthID) {
+            result = KoColorSpaceRegistry::instance()->
+                colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), result->profile());
+        }
+
+        // PQ color space we deliniearize into linear one
+        if (result->colorModelId() == RGBAColorModelID &&
+            result->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId()) {
+
+            result = KoColorSpaceRegistry::instance()->
+                    colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(),
+                               KoColorSpaceRegistry::instance()->p2020G10Profile());
+        }
+
+        return result;
     }
 };
 
@@ -162,10 +192,8 @@ void KisSmallColorWidget::setColor(const KoColor &color)
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(!d->hasHDR || d->hasHardwareHDR);
 
-    const KoColorSpace *cs = d->displayColorConverter->paintingColorSpace();
-    if (cs->colorModelId() != RGBAColorModelID) {
-        cs = KoColorSpaceRegistry::instance()->rgb8();
-    }
+    const KoColorSpace *cs = d->generationColorSpace();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(cs);
 
     KoColor newColor(color);
     newColor.convertTo(cs);
@@ -246,31 +274,9 @@ void KisSmallColorWidget::uploadPaletteData(KisGLImageWidget *widget, const QSiz
     const float yPortionCoeff = 1.0 / image.height();
     const float rangeCoeff = d->effectiveRelativeDynamicRange();
 
-    const KoColorSpace *generationColorSpace = d->displayColorConverter ? d->displayColorConverter->paintingColorSpace() : 0;
-    const KoColorSpace *outputColorSpace = KoColorSpaceRegistry::instance()->
-            colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(),
-                       KoColorSpaceRegistry::instance()->rgb8()->profile());
+    const KoColorSpace *generationColorSpace = d->generationColorSpace();
 
-    QSurfaceFormat::ColorSpace surfaceColorSpace = KisOpenGLModeProber::instance()->surfaceformatInUse().colorSpace();
-
-    if (surfaceColorSpace == QSurfaceFormat::sRGBColorSpace) {
-        // use the default one!
-    } else if (surfaceColorSpace == QSurfaceFormat::scRGBColorSpace) {
-        // p709-g10
-        outputColorSpace = KoColorSpaceRegistry::instance()->
-                colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id());
-    } else if (surfaceColorSpace == QSurfaceFormat::bt2020PQColorSpace) {
-        qWarning() << "Small Color Selector: output for p2020-pq is not fully supported";
-    }
-
-    if (!generationColorSpace || generationColorSpace->colorModelId() != RGBAColorModelID) {
-        generationColorSpace = outputColorSpace;
-    } else if (generationColorSpace->colorDepthId() != Float32BitsColorDepthID) {
-        generationColorSpace = KoColorSpaceRegistry::instance()->
-            colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), generationColorSpace->profile());
-    }
-
-    if (!d->displayColorConverter || d->displayColorConverter->canSkipDisplayConversion(generationColorSpace)) {
+    if (d->displayColorConverter->canSkipDisplayConversion(generationColorSpace)) {
         half *pixelPtr = image.data();
 
         for (int y = 0; y < image.height(); y++) {
@@ -400,6 +406,10 @@ void KisSmallColorWidget::setDisplayColorConverter(KisDisplayColorConverter *con
 {
     d->colorConverterConnections.clear();
 
+    if (!converter) {
+        converter = KisDisplayColorConverter::dumbConverterInstance();
+    }
+
     d->displayColorConverter = converter;
 
     if (d->displayColorConverter) {
@@ -415,13 +425,14 @@ void KisSmallColorWidget::slotDisplayConfigurationChanged()
 {
     d->hasHDR = false;
 
-    if (d->hasHardwareHDR && d->displayColorConverter) {
+    if (d->hasHardwareHDR) {
         const KoColorSpace *cs = d->displayColorConverter->paintingColorSpace();
 
         d->hasHDR = cs->colorModelId() == RGBAColorModelID &&
                 (cs->colorDepthId() == Float16BitsColorDepthID ||
                  cs->colorDepthId() == Float32BitsColorDepthID ||
-                 cs->colorDepthId() == Float64BitsColorDepthID);
+                 cs->colorDepthId() == Float64BitsColorDepthID ||
+                 cs->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile());
     }
 
     if (d->dynamicRange) {
@@ -449,10 +460,8 @@ void KisSmallColorWidget::tellColorChanged()
         b *= rangeCoeff;
     }
 
-    const KoColorSpace *cs = d->displayColorConverter->paintingColorSpace();
-    if (cs->colorModelId() != RGBAColorModelID) {
-        cs = KoColorSpaceRegistry::instance()->rgb8();
-    }
+    const KoColorSpace *cs = d->generationColorSpace();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(cs);
 
     QVector<float> values(4);
 

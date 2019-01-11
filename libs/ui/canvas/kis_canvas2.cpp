@@ -1040,7 +1040,7 @@ void KisCanvas2::slotConfigChanged()
     m_d->vastScrolling = cfg.vastScrolling();
 
     resetCanvas(cfg.useOpenGL());
-    slotSetDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(this->canvasWidget())));
+    setDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(this->canvasWidget())));
 
     initializeFpsDecoration();
 }
@@ -1052,7 +1052,7 @@ void KisCanvas2::refetchDataFromImage()
     startUpdateInPatches(image->bounds());
 }
 
-void KisCanvas2::slotSetDisplayProfile(const KoColorProfile *monitorProfile)
+void KisCanvas2::setDisplayProfile(const KoColorProfile *monitorProfile)
 {
     if (m_d->displayColorConverter.monitorProfile() == monitorProfile) return;
 
@@ -1061,7 +1061,7 @@ void KisCanvas2::slotSetDisplayProfile(const KoColorProfile *monitorProfile)
     {
         KisImageSP image = this->image();
         KisImageBarrierLocker l(image);
-        m_d->canvasWidget->setDisplayProfile(&m_d->displayColorConverter);
+        m_d->canvasWidget->setDisplayColorConverter(&m_d->displayColorConverter);
     }
 
     refetchDataFromImage();

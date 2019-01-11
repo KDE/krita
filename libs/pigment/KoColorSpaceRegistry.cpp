@@ -652,6 +652,11 @@ const KoColorProfile *KoColorSpaceRegistry::p709G10Profile() const
     return profileByName("sRGB-elle-V2-g10.icc");
 }
 
+const KoColorProfile *KoColorSpaceRegistry::p709SRGBProfile() const
+{
+    return profileByName("sRGB-elle-V2-srgbtrc.icc");
+}
+
 QList<KoID> KoColorSpaceRegistry::colorModelsList(ColorSpaceListVisibility option) const
 {
     QReadLocker l(&d->registrylock);

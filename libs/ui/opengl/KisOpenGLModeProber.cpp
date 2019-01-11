@@ -28,6 +28,22 @@ QSurfaceFormat KisOpenGLModeProber::surfaceformatInUse() const
     return QSurfaceFormat::defaultFormat();
 }
 
+const KoColorProfile *KisOpenGLModeProber::rootSurfaceColorProfile() const
+{
+    const QSurfaceFormat::ColorSpace surfaceColorSpace = surfaceformatInUse().colorSpace();
+    const KoColorProfile *profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+
+    if (surfaceColorSpace == QSurfaceFormat::sRGBColorSpace) {
+        // use the default one!
+    } else if (surfaceColorSpace == QSurfaceFormat::scRGBColorSpace) {
+        profile = KoColorSpaceRegistry::instance()->p709G10Profile();
+    } else if (surfaceColorSpace == QSurfaceFormat::bt2020PQColorSpace) {
+        profile = KoColorSpaceRegistry::instance()->p2020PQProfile();
+    }
+
+    return profile;
+}
+
 void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceFormat config,
                                                       QSurfaceFormat *format)
 {
@@ -60,7 +76,7 @@ bool KisOpenGLModeProber::isFormatHDR(const QSurfaceFormat &format)
         format.redBufferSize() == 10 &&
         format.greenBufferSize() == 10 &&
         format.blueBufferSize() == 10 &&
-        format.alphaBufferSize() == 10;
+        format.alphaBufferSize() == 2;
 
     bool isBt709G10 =
         format.colorSpace() == QSurfaceFormat::scRGBColorSpace &&
@@ -68,7 +84,6 @@ bool KisOpenGLModeProber::isFormatHDR(const QSurfaceFormat &format)
         format.greenBufferSize() == 16 &&
         format.blueBufferSize() == 16 &&
         format.alphaBufferSize() == 16;
-
 
     return isBt2020PQ || isBt709G10;
 }

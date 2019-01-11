@@ -308,6 +308,12 @@ public:
     const KoColorProfile *p709G10Profile() const;
 
     /**
+     * Convenience method to get a standard profile for Rec. 709 sRGB-tone-
+     * response-curve profile
+     */
+    const KoColorProfile *p709SRGBProfile() const;
+
+    /**
      * @return the list of available color models
      */
     QList<KoID> colorModelsList(ColorSpaceListVisibility option) const;

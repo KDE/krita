@@ -5,6 +5,8 @@
 #include "kis_config.h"
 #include <QSurfaceFormat>
 
+class KoColorProfile;
+
 class KRITAUI_EXPORT KisOpenGLModeProber
 {
 public:
@@ -15,6 +17,8 @@ public:
 
     bool useHDRMode() const;
     QSurfaceFormat surfaceformatInUse() const;
+
+    const KoColorProfile *rootSurfaceColorProfile() const;
 
 public:
     static void initSurfaceFormatFromConfig(KisConfig::RootSurfaceFormat config,

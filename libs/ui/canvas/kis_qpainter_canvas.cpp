@@ -169,7 +169,7 @@ void KisQPainterCanvas::channelSelectionChanged(const QBitArray &channelFlags)
     m_d->prescaledProjection->setChannelFlags(channelFlags);
 }
 
-void KisQPainterCanvas::setDisplayProfile(KisDisplayColorConverter *colorConverter)
+void KisQPainterCanvas::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
 {
     Q_ASSERT(m_d->prescaledProjection);
     m_d->prescaledProjection->setMonitorProfile(colorConverter->monitorProfile(),

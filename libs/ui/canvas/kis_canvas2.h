@@ -265,10 +265,6 @@ public Q_SLOTS:
 
     void channelSelectionChanged();
 
-    /**
-     * Called whenever the display monitor profile resource changes
-     */
-    void slotSetDisplayProfile(const KoColorProfile *profile);
     void startUpdateInPatches(const QRect &imageRect);
 
     void slotTrySwitchShapeManager();
@@ -334,6 +330,7 @@ private:
     void updateCanvasWidgetImpl(const QRect &rc = QRect());
     void setCanvasWidget(KisAbstractCanvasWidget *widget);
     void resetCanvas(bool useOpenGL);
+    void setDisplayProfile(const KoColorProfile *profile);
 
     void notifyLevelOfDetailChange();
 

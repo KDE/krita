@@ -94,6 +94,8 @@ public:
 
     QSharedPointer<KisDisplayFilter> displayFilter() const;
     const KoColorProfile* monitorProfile() const;
+    const KoColorProfile* openGLCanvasSurfaceProfile() const;
+    bool isHDRMode() const;
 
 Q_SIGNALS:
     void displayConfigurationChanged();

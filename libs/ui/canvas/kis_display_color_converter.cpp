@@ -67,7 +67,7 @@ struct KisDisplayColorConverter::Private
         if (format.colorSpace() == QSurfaceFormat::scRGBColorSpace) {
             expectedOcioOutputColorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id());
         } else if (format.colorSpace() == QSurfaceFormat::bt2020PQColorSpace) {
-            // TODO: make switchable depending on the OpenGL surface type
+            expectedOcioOutputColorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), KoColorSpaceRegistry::instance()->p2020PQProfile());
         }
 
         useHDRMode = KisOpenGLModeProber::instance()->useHDRMode();
@@ -310,7 +310,7 @@ void KisDisplayColorConverter::setMonitorProfile(const KoColorProfile *monitorPr
 {
     if (m_d->useHDRMode) {
         // we don't use ICCcolor management in HDR mode
-        monitorProfile = 0;
+        monitorProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
     }
 
 
@@ -391,6 +391,18 @@ QSharedPointer<KisDisplayFilter> KisDisplayColorConverter::displayFilter() const
 const KoColorProfile* KisDisplayColorConverter::monitorProfile() const
 {
     return m_d->monitorProfile;
+}
+
+const KoColorProfile* KisDisplayColorConverter::openGLCanvasSurfaceProfile() const
+{
+    return m_d->useHDRMode ?
+        KisOpenGLModeProber::instance()->rootSurfaceColorProfile() :
+        monitorProfile();
+}
+
+bool KisDisplayColorConverter::isHDRMode() const
+{
+    return  m_d->useHDRMode;
 }
 
 bool finalIsRgba(const KoColorSpace *cs)
@@ -527,11 +539,13 @@ KoColor KisDisplayColorConverter::applyDisplayFiltering(const KoColor &c, bool a
 
 bool KisDisplayColorConverter::canSkipDisplayConversion(const KoColorSpace *cs) const
 {
+    const KoColorProfile *displayProfile = this->openGLCanvasSurfaceProfile();
+
     return !m_d->useOcio() && !m_d->expectedOcioOutputColorSpace &&
-        cs->colorModelId() == m_d->monitorColorSpace->colorModelId() &&
-        (!!cs->profile() == !!m_d->monitorColorSpace->profile()) &&
+        cs->colorModelId() == RGBAColorModelID &&
+        (!!cs->profile() == !!displayProfile) &&
         (!cs->profile() ||
-         cs->profile()->uniqueId() == m_d->monitorColorSpace->profile()->uniqueId());
+         cs->profile()->uniqueId() == displayProfile->uniqueId());
 }
 
 
@@ -612,6 +626,8 @@ QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice) const
     }
 
     if (!m_d->useOcio()) {
+        ENTER_FUNCTION() << ppVar(m_d->monitorProfile->name());
+
         return device->convertToQImage(m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
     } else {
         if (m_d->displayFilter->useInternalColorManagement()) {
@@ -646,9 +662,6 @@ void KisDisplayColorConverter::applyDisplayFilteringF32(KisFixedPaintDeviceSP de
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(device->colorSpace()->colorDepthId() == Float32BitsColorDepthID);
     KIS_SAFE_ASSERT_RECOVER_RETURN(device->colorSpace()->colorModelId() == RGBAColorModelID);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(
-        m_d->paintingColorSpace->colorModelId() != RGBAColorModelID ||
-        device->colorSpace()->profile()->uniqueId() == m_d->paintingColorSpace->profile()->uniqueId());
 
     if (!m_d->useOcio()) {
         if (m_d->monitorProfile) {
@@ -675,6 +688,14 @@ void KisDisplayColorConverter::applyDisplayFilteringF32(KisFixedPaintDeviceSP de
                     m_d->monitorProfile);
 
             device->convertTo(srcCS, m_d->renderingIntent, m_d->conversionFlags);
+        } else if (*device->colorSpace() != *m_d->paintingColorSpace) {
+            const KoColorSpace *imageCS =
+                KoColorSpaceRegistry::instance()->colorSpace(
+                    RGBAColorModelID.id(),
+                    Float32BitsColorDepthID.id(),
+                    m_d->paintingColorSpace->profile());
+
+            device->convertTo(imageCS);
         }
 
         m_d->displayFilter->filter(device->data(), device->bounds().width() * device->bounds().height());

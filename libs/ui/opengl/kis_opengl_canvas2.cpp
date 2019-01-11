@@ -152,7 +152,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
 
     d->openGLImageTextures =
             KisOpenGLImageTextures::getImageTextures(image,
-                                                     colorConverter->monitorProfile(),
+                                                     colorConverter->openGLCanvasSurfaceProfile(),
                                                      colorConverter->renderingIntent(),
                                                      colorConverter->conversionFlags());
 
@@ -884,9 +884,9 @@ void KisOpenGLCanvas2::renderDecorations(QPainter *painter)
 }
 
 
-void KisOpenGLCanvas2::setDisplayProfile(KisDisplayColorConverter *colorConverter)
+void KisOpenGLCanvas2::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
 {
-    d->openGLImageTextures->setMonitorProfile(colorConverter->monitorProfile(),
+    d->openGLImageTextures->setMonitorProfile(colorConverter->openGLCanvasSurfaceProfile(),
                                               colorConverter->renderingIntent(),
                                               colorConverter->conversionFlags());
 }

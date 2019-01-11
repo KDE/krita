@@ -945,21 +945,15 @@ QString colorSpaceString(QSurfaceFormat::ColorSpace cs, int depth)
 
 int formatToIndex(KisConfig::RootSurfaceFormat fmt)
 {
-    // FIXME: bt2020-pq is disabled for now, because it is not supported
-    //        by color selectors properly
-
-    return /* fmt == KisConfig::BT2020_PQ ? 2 : */
-           fmt == KisConfig::BT709_G10 ? 1 :
+    return fmt == KisConfig::BT2020_PQ ? 1 :
+           fmt == KisConfig::BT709_G10 ? 2 :
            0;
 }
 
 KisConfig::RootSurfaceFormat indexToFormat(int value)
 {
-    // FIXME: bt2020-pq is disabled for now, because it is not supported
-    //        by color selectors properly
-
-    return /* value == 2 ? KisConfig::BT2020_PQ : */
-           value == 1 ? KisConfig::BT709_G10 :
+    return value == 1 ? KisConfig::BT2020_PQ :
+           value == 2 ? KisConfig::BT709_G10 :
            KisConfig::BT709_G22;
 }
 
@@ -1031,9 +1025,8 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     lblCurrentRootSurfaceFormat->setText("");
     lblHDRWarning->setText("");
     cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::sRGBColorSpace, 8));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::bt2020PQColorSpace, 10));
     cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::scRGBColorSpace, 16));
-    // FIXME: disabled, because of color selectors
-    // cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::bt2020PQColorSpace, 10));
     cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(KisConfig::BT709_G22));
     slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
 

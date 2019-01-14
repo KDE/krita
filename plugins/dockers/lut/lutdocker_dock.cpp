@@ -424,10 +424,10 @@ void LutDockerDock::writeControls()
     ocioOptions.mode = (KisOcioConfiguration::Mode)m_colorManagement->currentIndex();
     ocioOptions.configurationPath = m_txtConfigurationPath->text();
     ocioOptions.lutPath = m_txtLut->text();
-    ocioOptions.inputColorSpace = m_cmbInputColorSpace->currentText();
-    ocioOptions.displayDevice = m_cmbDisplayDevice->currentText();
-    ocioOptions.displayView = m_cmbView->currentText();
-    ocioOptions.look = m_cmbLook->currentText();
+    ocioOptions.inputColorSpace = m_cmbInputColorSpace->itemHighlighted();
+    ocioOptions.displayDevice = m_cmbDisplayDevice->itemHighlighted();
+    ocioOptions.displayView = m_cmbView->itemHighlighted();
+    ocioOptions.look = m_cmbLook->itemHighlighted();
 
     KisConfig cfg(false);
     cfg.setUseOcio(m_chkUseOcio->isChecked());

@@ -49,13 +49,13 @@ public:
     QMap<QString, QVariant> properties() const;
 
     /**
-     * Add all properties in the @param propertyMap to this InfoObject
+     * Add all properties in the @p propertyMap to this InfoObject
      */
-    void setProperties(QMap<QString, QVariant> proprertyMap);
+    void setProperties(QMap<QString, QVariant> propertyMap);
 
 public Q_SLOTS:
     /**
-     * set the property identified by @key to @value
+     * set the property identified by @p key to @p value
      *
      * If you want create a property that represents a color, you can use a QColor
      * or hex string, as defined in http://doc.qt.io/qt-5/qcolor.html#setNamedColor.

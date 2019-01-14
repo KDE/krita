@@ -58,6 +58,7 @@ public:
     int visibilityColumnWidth() const;
     int indentation() const;
 
+    QRect relVisibilityRect() const;
     QRect relThumbnailRect() const;
     QRect relDecorationRect() const;
     QRect relExpandButtonRect() const;

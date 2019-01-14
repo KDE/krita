@@ -122,7 +122,7 @@ KRITATEXT_EXPORT KoTextBreakProperty textBreakFromString(const QString &textBrea
 /// convert the KoTextBreakProperty enum to the string version of text break (as specified in ODF)
 KRITATEXT_EXPORT QString textBreakToString (KoTextBreakProperty textBreak);
 
-///@TODO: move to KoUnit ?
+///TODO: move to KoUnit ?
 KRITATEXT_EXPORT QTextLength parseLength (const QString &length);
 }
 

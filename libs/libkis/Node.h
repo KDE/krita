@@ -313,6 +313,11 @@ public Q_SLOTS:
     bool visible() const;
 
     /**
+     * Check to see if frame number on layer is a keyframe
+     */
+    bool hasKeyframeAtTime(int frameNumber);
+
+    /**
      * Set the visibility of the current node to @param visible
      */
     void setVisible(bool visible);
@@ -489,8 +494,9 @@ public Q_SLOTS:
 
     /**
      * @brief scaleNode
-     * @param width
-     * @param height
+     * @param origin the origin point
+     * @param width the width
+     * @param height the height
      * @param strategy the scaling strategy. There's several ones amongst these that aren't available in the regular UI.
      * <ul>
      * <li>Hermite</li>

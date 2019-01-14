@@ -91,7 +91,7 @@ public Q_SLOTS:
      *     propertize the action if any .action file is present
      * @param text The user-visible text of the action. If empty, the text from the
      *    .action file is used.
-     * @param menu a /-separated string that describes which menu the action should
+     * @param menuLocation a /-separated string that describes which menu the action should
      *     be places in. Default is "tools/scripts"
      * @return the new action.
      */

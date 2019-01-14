@@ -55,7 +55,13 @@ public:
     /**
      * Constructor. Please note that this class is being used/created by KisDoc.
      * @param parent the parent widget
-     * @param doc the document that wants to be altered
+     * @param defWidth The defined width
+     * @param defHeight The defined height
+     * @param resolution The image resolution
+     * @param defColorModel The defined color model
+     * @param defColorDepth The defined color depth
+     * @param defColorProfile The defined color profile
+     * @param imageName the document that wants to be altered
      */
     KisCustomImageWidget(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
     ~KisCustomImageWidget() override;

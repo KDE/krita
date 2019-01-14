@@ -53,7 +53,7 @@ public:
 
     /**
      * Parses the given string containing a percentage number.
-     * @param s the input string containing the percentage
+     * @param value the input number containing the percentage
      * @return the percentage number normalized to 0..100
      */
     static QString toPercentage(qreal value);

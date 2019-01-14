@@ -523,6 +523,20 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         d->tabSwitchCompressor.reset(
             new KisSignalCompressorWithParam<int>(500, callback, KisSignalCompressor::FIRST_INACTIVE));
     }
+
+
+    if (cfg.readEntry("CanvasOnlyActive", false)) {
+        QString currentWorkspace = cfg.readEntry<QString>("CurrentWorkspace", "Default");
+        KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
+        KisWorkspaceResource* workspace = rserver->resourceByName(currentWorkspace);
+        if (workspace) {
+            restoreWorkspace(workspace);
+        }
+        cfg.writeEntry("CanvasOnlyActive", false);
+        menuBar()->setVisible(true);
+    }
+
+
 }
 
 KisMainWindow::~KisMainWindow()

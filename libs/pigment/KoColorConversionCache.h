@@ -43,6 +43,8 @@ public:
      * or create one.
      * @param src source color space
      * @param dst destination color space
+     * @param _renderingIntent rendering intent
+     * @param conversionFlags conversion flags
      */
     KoCachedColorConversionTransformation cachedConverter(const KoColorSpace* src,
                                                           const KoColorSpace* dst,

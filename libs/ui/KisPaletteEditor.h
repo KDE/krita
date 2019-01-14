@@ -70,7 +70,7 @@ public:
     QString oldNameFromNewName(const QString &newName) const;
     /**
      * @brief duplicateExistsFilename
-     * @param name
+     * @param filename the name of the file
      * @param global if this filename is going to be used for a global palette
      * @return true if the a palette in the resource system that has filename
      * name already exists else false
@@ -84,9 +84,7 @@ public:
 
     /**
      * @brief addGroup
-     * @param name original group name
-     * @param rowNumber
-     * @return new group's name if change accpeted, empty string if cancelled
+     * @return new group's name if change accepted, empty string if cancelled
      */
     QString addGroup();
     /**

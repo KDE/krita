@@ -45,6 +45,7 @@ public Q_SLOTS:
     QString type() const;
     QIcon icon() const;
     bool visible() const;
+    bool hasKeyframeAtTime(int frameNumber);
     void setVisible(bool value);
     QByteArray pixelData(int x, int y, int w, int h) const;
     QByteArray pixelDataAtTime(int x, int y, int w, int h, int time) const;

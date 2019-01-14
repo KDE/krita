@@ -50,6 +50,8 @@ public:
      * Obtain a KisOpenGLImageTextures object for the given image.
      * @param image The image
      * @param monitorProfile The profile of the display device
+     * @param renderingIntent The rendering intent
+     * @param conversionFlags The color conversion flags
      */
     static KisOpenGLImageTexturesSP getImageTextures(KisImageWSP image,
                                                      const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent,
@@ -72,7 +74,9 @@ public:
 
     /**
      * Set the color profile of the display device.
-     * @param profile The color profile of the display device
+     * @param monitorProfile The color profile of the display device
+     * @param renderingIntent The rendering intent
+     * @param conversionFlags The color conversion flags
      */
     void setMonitorProfile(const KoColorProfile *monitorProfile,
                            KoColorConversionTransformation::Intent renderingIntent,
@@ -80,7 +84,7 @@ public:
 
     /**
      * Complete initialization can only happen once an OpenGL context has been created.
-     * @param f Pointer to OpenGL functions. They must already be ininitialized.
+     * @param f Pointer to OpenGL functions. They must already be initialized.
      */
     void initGL(QOpenGLFunctions *f);
 

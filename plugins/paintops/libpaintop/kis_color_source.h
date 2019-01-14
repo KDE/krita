@@ -45,6 +45,7 @@ public:
     /**
      * This is function is called to initialize the color that will be used for the dab.
      * @param mix is a parameter between 0.0 and 1.0
+     * @param pi paint information
      */
     virtual void selectColor(double mix, const KisPaintInformation &pi) = 0;
     /**

@@ -23,9 +23,10 @@
 #include <opengl/kis_opengl.h>
 #include <KritaVersionWrapper.h>
 #include <QSysInfo>
-
+#include <kis_image_config.h>
 #include <QDesktopWidget>
 #include <QClipboard>
+#include <QThread>
 
 #include "kis_document_aware_spin_box_unit_manager.h"
 
@@ -44,6 +45,8 @@ DlgBugInfo::DlgBugInfo(QWidget *parent)
     setMainWidget(m_page);
 
     QString info;
+
+    // NOTE: This is intentionally not translated!
 
     // Krita version info
     info.append("Krita");
@@ -65,12 +68,16 @@ DlgBugInfo::DlgBugInfo(QWidget *parent)
     info.append("\n  Pretty Productname: ").append(QSysInfo::prettyProductName());
     info.append("\n  Product Type: ").append(QSysInfo::productType());
     info.append("\n  Product Version: ").append(QSysInfo::productVersion());
-    info.append("\n");
+    info.append("\n\n");
 
     // OpenGL information
     info.append("\n").append(KisOpenGL::getDebugText());
-
-    // Installation information
+    info.append("\n\n");
+    // Hardware information
+    info.append("Hardware Information");
+    info.append(QString("\n Memory: %1").arg(KisImageConfig(true).totalRAM() / 1024)).append(" Gb");
+    info.append(QString("\n Cores: %1").arg(QThread::idealThreadCount()));
+    info.append("\n Swap: ").append(KisImageConfig(true).swapDir());
 
     // calculate a default height for the widget
     int wheight = m_page->sizeHint().height();

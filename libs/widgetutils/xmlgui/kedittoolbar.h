@@ -116,7 +116,7 @@ public:
      * false is if your application does not use the global resource
      * file at all (very rare).
      *
-     * @param xmlfile The application's local resource file.
+     * @param file The application's local resource file.
      * @param global If @p true, then the global resource file will also
      *               be parsed.
      */
@@ -126,7 +126,7 @@ public:
      * Sets the default toolbar which will be auto-selected for all
      * KEditToolBar instances. Can be overridden on a per-dialog basis
      * by calling setDefaultToolBar( const QString& ) on the dialog.
-     *   @param  toolbarName  the name of the tool bar
+     *   @param  toolBarName  the name of the tool bar
      */
     static void setGlobalDefaultToolBar(const char *toolBarName); // TODO should be const QString&
 

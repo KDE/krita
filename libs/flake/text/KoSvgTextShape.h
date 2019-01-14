@@ -30,7 +30,7 @@ class KoSvgTextShapePrivate;
 
 #define KoSvgTextShape_SHAPEID "KoSvgTextShapeID"
 /**
- * KoSvgTextShape is a root chunk of the <text> element subtree.
+ * KoSvgTextShape is a root chunk of the \<text\> element subtree.
  */
 class KRITAFLAKE_EXPORT KoSvgTextShape : public KoSvgTextChunkShape
 {

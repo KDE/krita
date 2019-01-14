@@ -403,7 +403,7 @@ inline QPointF QWindowsTabletDeviceData::scaleCoordinates(int coordX, int coordY
 
 
 /*!
-  \class QWindowsWinTab32DLL QWindowsTabletSupport
+  \class QWindowsWinTab32DLL
   \brief Functions from wintabl32.dll shipped with WACOM tablets used by QWindowsTabletSupport.
 
   \internal

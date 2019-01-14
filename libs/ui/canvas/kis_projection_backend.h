@@ -85,13 +85,13 @@ public:
     virtual KisImagePatch getNearestPatch(KisPPUpdateInfoSP info) = 0;
 
     /**
-     * Draws a piece of original image onto @gc's canvas
-     * @param info.imageRect - area in KisImage pixels where to read from
-     * @param info.viewportRect - area in canvas pixels where to write to
+     * Draws a piece of original image onto @p gc 's canvas
+     * @p info.imageRect - area in KisImage pixels where to read from
+     * @p info.viewportRect - area in canvas pixels where to write to
      * If info.imageRect and info.viewportRect don't agree, the image
      * will be scaled
-     * @param info.borderWidth has the same meaning as in getNearestPatch
-     * @param info.renderHints - hints, transmitted to QPainter during darwing
+     * @p info.borderWidth has the same meaning as in getNearestPatch
+     * @p info.renderHints - hints, transmitted to QPainter during darwing
      */
     virtual void drawFromOriginalImage(QPainter& gc,
                                        KisPPUpdateInfoSP info) = 0;

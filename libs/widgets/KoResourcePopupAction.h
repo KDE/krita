@@ -41,6 +41,7 @@ public:
     /**
      * Constructs a KoResourcePopupAction (gradient or pattern) with the specified parent.
      *
+     * @param gradientResourceAdapter pointer to the gradient or pattern
      * @param parent The parent for this action.
      */
     explicit KoResourcePopupAction(QSharedPointer<KoAbstractResourceServerAdapter>gradientResourceAdapter, QObject *parent = 0);

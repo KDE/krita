@@ -41,7 +41,8 @@ class KRITAUI_EXPORT KisResourceBundle : public KoResource
 
 public:
     /**
-     * @brief ResourceBundle : Ctor * @param bundlePath the path of the bundle
+     * @brief ResourceBundle : Ctor *
+     * @param fileName the path of the bundle
      */
     KisResourceBundle(QString const& fileName);
 
@@ -90,9 +91,11 @@ public:
     const QString getMeta(const QString &type, const QString &defaultValue = QString()) const;
 
     /**
-     * @brief addFile : Add a file to the bundle
+     * @brief Add a file to the bundle
      * @param fileType type of the resource file
      * @param filePath path of the resource file
+     * @param fileTagList the list of tags
+     * @param md5sum the file MD5 checksum
      */
     void addResource(QString fileType, QString filePath, QStringList fileTagList, const QByteArray md5sum);
 

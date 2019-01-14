@@ -532,14 +532,14 @@ void KisAnimationPlayer::uploadFrame(int frame, bool forceSyncAudio)
     }
 
     if (useFallbackUploadMethod) {
+        // no OpenGL cache or the frame just not cached yet
         m_d->useFastFrameUpload = false;
 
         m_d->canvas->image()->barrierLock(true);
         m_d->canvas->image()->unlock();
-
-        // no OpenGL cache or the frame just not cached yet
-        animationInterface->switchCurrentTimeAsync(frame);
     }
+
+    animationInterface->switchCurrentTimeAsync(frame);
 
     if (!m_d->realFpsTimer.isValid()) {
         m_d->realFpsTimer.start();

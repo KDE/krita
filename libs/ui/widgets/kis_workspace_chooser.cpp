@@ -178,6 +178,8 @@ void KisWorkspaceChooser::workspaceSelected(KoResourceSP resource)
     if (!m_view->qtMainWindow()) {
         return;
     }
+    KisConfig cfg(false);
+    cfg.writeEntry("CurrentWorkspace", resource->name());
     KisWorkspaceResourceSP workspace = resource.staticCast<KisWorkspaceResource>();
     KisMainWindow *mainWindow = qobject_cast<KisMainWindow*>(m_view->qtMainWindow());
     mainWindow->restoreWorkspace(workspace);

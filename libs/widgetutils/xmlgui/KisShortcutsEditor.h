@@ -119,7 +119,7 @@ public:
     ~KisShortcutsEditor() override;
 
     /**
-     * @ret true if there are unsaved changes.
+     * @return @c true if there are unsaved changes.
      */
     bool isModified() const;
 
@@ -142,6 +142,7 @@ public:
      * Insert an action collection, i.e. add all its actions to the ones
      * already associated with the KisShortcutsEditor object.
      *
+     * @param collection the action collection.
      * @param title subtree title of this collection of shortcut.
      */
     void addCollection(KActionCollection *, const QString &title = QString());

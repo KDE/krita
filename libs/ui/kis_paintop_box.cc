@@ -559,6 +559,8 @@ void KisPaintopBox::newOptionWidgets(const QList<QPointer<QWidget> > &optionWidg
 
 void KisPaintopBox::resourceSelected(KoResourceSP resource)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_optionWidget);
+
     m_presetsPopup->setCreatingBrushFromScratch(false); // show normal UI elements when we are not creating
 
     KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();

@@ -100,7 +100,7 @@ public:
      * the bookmarkmanager if it is a bookmark. This is not done smart: you might end up
      * with dangling start or end bookmarks.
      * Should really only be called by KoTextEditor's delete commands
-     * @param the object to be removed
+     * @param object the object to be removed
      */
     void removeInlineObject(KoInlineObject *object);
 

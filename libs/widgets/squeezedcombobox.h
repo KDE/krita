@@ -71,7 +71,7 @@ public:
     bool contains(const QString & text) const;
 
     /**
-     * Returns index of a orinal text, -1 if the text isn't found
+     * Returns index of a original text, -1 if the text isn't found
      * @param text the original (not-squeezed) text to search for
      */
     qint32 findOriginalText(const QString & text) const;
@@ -89,11 +89,12 @@ public:
 
     /**
      * This inserts a item to the list. See QComboBox::insertItem()
-     * for detaills. Please do not use QComboBox::insertItem() to this
+     * for details. Please do not use QComboBox::insertItem() to this
      * widget, as that will fail.
      * @param newItem the original (long version) of the item which needs
      *                to be added to the combobox
      * @param index the position in the widget.
+     * @param userData the user data.
      */
     void insertSqueezedItem(const QString& newItem, int index, QVariant userData = QVariant());
     void insertSqueezedItem(const QIcon &icon, const QString& newItem, int index, QVariant userData = QVariant());
@@ -102,13 +103,16 @@ public:
      * Append an item.
      * @param newItem the original (long version) of the item which needs
      *                to be added to the combobox
+     * @param userData the user data.
      */
     void addSqueezedItem(const QString& newItem, QVariant userData = QVariant());
 
     /**
      * Append an item.
+     * @param icon    the item icon
      * @param newItem the original (long version) of the item which needs
      *                to be added to the combobox
+     * @param userData the user data
      */
     void addSqueezedItem(const QIcon &icon, const QString& newItem, QVariant userData = QVariant());
 

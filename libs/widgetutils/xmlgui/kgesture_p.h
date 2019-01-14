@@ -158,7 +158,8 @@ public:
 
     /**
      * Creates a new gesture consisting of given buttons.
-     * @param description create gesture according to this
+     * @param hold create gesture according to this hold
+     * @param thenPush create gesture according to this push
      */
     KRockerGesture(enum Qt::MouseButton hold, enum Qt::MouseButton thenPush);
 

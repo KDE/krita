@@ -114,7 +114,7 @@ public:
 
     /**
      * This method allows to perform custom operation when the visitor reaches a QTextTableCell
-     * @param visitedTable pointer to the currently visited cell object
+     * @param visitedCell pointer to the currently visited cell object
      * @param visitingMode flag, marks if the cell is just partly visited or entirely
      */
     virtual void visitTableCell(QTextTableCell *visitedCell, ObjectVisitingMode visitingMode)

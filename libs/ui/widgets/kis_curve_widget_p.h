@@ -102,11 +102,11 @@ public:
 
 
     /**
-     * Check whether newly created/moved point @pt doesn't overlap
-     * with any of existing ones from @m_points and adjusts its coordinates.
-     * @skipIndex is the index of the point, that shouldn't be taken
+     * Check whether newly created/moved point @p pt doesn't overlap
+     * with any of existing ones from @p m_points and adjusts its coordinates.
+     * @p skipIndex is the index of the point, that shouldn't be taken
      * into account during the search
-     * (e.g. because it's @pt itself)
+     * (e.g. because it's @p pt itself)
      *
      * Returns false in case the point can't be placed anywhere
      * without overlapping
@@ -120,7 +120,7 @@ public:
     void syncIOControls();
 
     /**
-     * Find the nearest point to @pt from m_points
+     * Find the nearest point to @p pt from m_points
      */
     int nearestPointInRange(QPointF pt, int wWidth, int wHeight) const;
 

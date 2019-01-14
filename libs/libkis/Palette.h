@@ -136,7 +136,7 @@ public:
     void addEntry(Swatch entry, QString groupName = QString());
     /**
      * @brief removeEntry
-     * remove the entry at @param index from the group @param groupName.
+     * remove the entry at @p index from the group @p groupName.
      */
     void removeEntry(int index, const QString &groupName);
 

@@ -302,13 +302,13 @@ public:
      * @param dst the destination that will be draw on the image, and this function
      *            will edit its alpha channel
      * @param coloringInfo coloring information that will be copied on the dab, it can be null
-     * @param scale a scale applied on the alpha mask
-     * @param angle a rotation applied on the alpha mask
+     * @param shape a shape applied on the alpha mask
      * @param info the painting information (this is only and should only be used by
      *             KisImagePipeBrush and only to be backward compatible with the Gimp,
      *             KisImagePipeBrush is ignoring scale and angle information)
      * @param subPixelX sub position of the brush (contained between 0.0 and 1.0)
      * @param subPixelY sub position of the brush (contained between 0.0 and 1.0)
+     * @param softnessFactor softness factor of the brush
      *
      * @return a mask computed from the grey-level values of the
      * pixels in the brush.

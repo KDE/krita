@@ -85,7 +85,7 @@ public:
     /**
      * Initialize the converter.
      * @param doc the KisDocument related to the image, can be null if you don't have a KisDocument
-     * @param adapter the undo adapter to be used by the image, can be null if you don't want to use an undo adapter
+     * @param batchMode whether to use the batch mode
      */
     KisPNGConverter(KisDocument *doc, bool batchMode = false);
     ~KisPNGConverter() override;
@@ -93,7 +93,7 @@ public:
     /**
      * Load an image from an URL. If the image is not on a local drive, the image is first downloaded to a
      * temporary location.
-     * @param uri the url of the image
+     * @param filename the file name of the image
      */
     KisImageBuilder_Result buildImage(const QString &filename);
     /**
@@ -103,13 +103,15 @@ public:
     KisImageBuilder_Result buildImage(QIODevice* iod);
     /**
      * Save a layer to a PNG
-     * @param uri the url of the destination file
+     * @param filename the name of the destination file
+     * @param imageRect the image rectangle to save
+     * @param xRes resolution along x axis
+     * @param yRes resolution along y axis
      * @param device the paint device to save
      * @param annotationsStart an iterator on the first annotation
      * @param annotationsEnd an iterator on the last annotation
-     * @param compression a number between 0 and 9 to specify the compression rate (9 is most compressed)
-     * @param interlace set to true if you want to generate an interlaced png
-     * @param alpha set to true if you want to save the alpha channel
+     * @param options PNG formatting options
+     * @param metaData image metadata
      */
     KisImageBuilder_Result buildFile(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
     KisImageBuilder_Result buildFile(QIODevice*, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);

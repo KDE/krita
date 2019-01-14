@@ -12,6 +12,7 @@
   <developer_name xml:lang="en-GB">Krita Foundation</developer_name>
   <developer_name xml:lang="es">Fundación Krita</developer_name>
   <developer_name xml:lang="eu">Krita Fundazioa</developer_name>
+  <developer_name xml:lang="fi">Krita Foundation</developer_name>
   <developer_name xml:lang="fr">La Fondation Krita</developer_name>
   <developer_name xml:lang="gl">Fundación Krita</developer_name>
   <developer_name xml:lang="id">Asas Krita</developer_name>
@@ -36,6 +37,7 @@
   <name xml:lang="en-GB">Krita</name>
   <name xml:lang="es">Krita</name>
   <name xml:lang="eu">Krita</name>
+  <name xml:lang="fi">Krita</name>
   <name xml:lang="fr">Krita</name>
   <name xml:lang="gl">Krita</name>
   <name xml:lang="id">Krita</name>
@@ -252,6 +254,7 @@
   <project_group>KDE</project_group>
   <provides>
     <binary>krita</binary>
+    <id>org.kde.krita.desktop</id>
   </provides>
   <releases>
     <release date="2018-01-11" version="4.0.0.51 (beta 1)"/>

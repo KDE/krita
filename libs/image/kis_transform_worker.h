@@ -80,7 +80,7 @@ public:
      * Offset the specified device with wrapping around edges of rect specified as QRect(0,0,wrapSize.width, wrapSize.height)*
      * @param device device to be offset
      * @param offsetPosition position where the new origin will be
-     * @param wrapSize width and height of the wrap edge, usual scenario is to use canvas width&height
+     * @param wrapRect width and height of the wrap edge, usual scenario is to use canvas width&height
      *
      **/
     static void offset(KisPaintDeviceSP device, const QPoint &offsetPosition, const QRect &wrapRect);
@@ -103,8 +103,8 @@ public:
      * TS - shear origin transpose
      * S  - shear itself (shearX * shearY)
      * SC - scale
-     * R  - rotation (@rotation parameter)
-     * T  - transpose (@xtranslate, @ytranslate)
+     * R  - rotation (@p rotation parameter)
+     * T  - transpose (@p xtranslate, @p ytranslate)
      *
      * WARNING: due to some rounding problems in the worker
      * the work it does does not correspond to the matrix exactly!

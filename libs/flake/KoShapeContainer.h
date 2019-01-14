@@ -177,6 +177,7 @@ public:
      *
      * @param painter used for painting the shape
      * @param converter to convert between internal and view coordinates.
+     * @param paintcontext the painting context
      * @see applyConversion()
      */
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) = 0;

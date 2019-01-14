@@ -46,10 +46,12 @@ class KoAnchorInlineObjectPrivate;
  * The anchored-shape can be repositioned on the canvas if the text is relayouted (for example after
  * editing the text. This is dependent on how the text layout is implemented.
  *
- * Steps to use a KoAnchorInlineObject are; <ol>
+ * Steps to use a KoAnchorInlineObject are
+ * <ol>
  * <li> Create KoShapeAnchor *anchor = new KoShapeAnchor(shape);
  * <li> Use anchor->loadOdf() to load additional attributes like the "text:anchor-type"
  * <li> if type is as-char create KoAnchorInlineObject *anchorObj = new KoAnchorInlineObject(anchor);
+ * </ol>
  */
 class KRITATEXT_EXPORT KoAnchorInlineObject : public KoInlineObject, public KoShapeAnchor::TextLocation
 {

@@ -87,12 +87,7 @@ protected:
      *
      * @param hasDabInCache shows if the caller has something in its cache
      * @param resources rendering resources available for this dab
-     * @param color current painting color
-     * @param cursorPoint cursor point at which the dab should be painted
-     * @param shape dab shape requested by the caller. It will be modified before
-     *              generation to accommodate the mirroring and rotation options.
-     * @param info painting info associated with the dab
-     * @param softnessFactor softness factor
+     * @param request the request information
      * @param di (OUT) calculated dab generation information
      * @param shouldUseCache (OUT) shows whether the caller *must* use cache or not
      */

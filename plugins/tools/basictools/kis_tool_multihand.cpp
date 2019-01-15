@@ -16,7 +16,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "kis_tool_multihand.h"
 
 #include <QTransform>
@@ -53,7 +52,8 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
       m_mirrorHorizontally(false),
       m_showAxes(false),
       m_translateRadius(100),
-      m_setupAxesFlag(false)
+      m_setupAxesFlag(false),
+      m_addSubbrushesMode(false)
     , customUI(0)
 {
 
@@ -72,13 +72,17 @@ KisToolMultihand::~KisToolMultihand()
 {
 }
 
-
-
 void KisToolMultihand::beginPrimaryAction(KoPointerEvent *event)
 {
     if(m_setupAxesFlag) {
         setMode(KisTool::OTHER);
         m_axesPoint = convertToPixelCoord(event->point);
+        requestUpdateOutline(event->point, 0);
+        updateCanvas();
+    }
+    else if (m_addSubbrushesMode){
+        QPointF newPoint = convertToPixelCoord(event->point);
+        m_subbrOriginalLocations << newPoint;
         requestUpdateOutline(event->point, 0);
         updateCanvas();
     }
@@ -96,6 +100,7 @@ void KisToolMultihand::continuePrimaryAction(KoPointerEvent *event)
         updateCanvas();
     }
     else {
+        requestUpdateOutline(event->point, 0);
         KisToolFreehand::continuePrimaryAction(event);
     }
 }
@@ -112,31 +117,97 @@ void KisToolMultihand::endPrimaryAction(KoPointerEvent *event)
     }
 }
 
+void KisToolMultihand::beginAlternateAction(KoPointerEvent* event, AlternateAction action)
+{
+    if (action != ChangeSize || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
+        KisToolBrush::beginAlternateAction(event, action);
+        return;
+    }
+    setMode(KisTool::OTHER_1);
+    m_axesPoint = convertToPixelCoord(event->point);
+    requestUpdateOutline(event->point, 0);
+    updateCanvas();
+}
+
+void KisToolMultihand::continueAlternateAction(KoPointerEvent* event, AlternateAction action)
+{
+    if (action != ChangeSize || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
+        KisToolBrush::continueAlternateAction(event, action);
+        return;
+    }
+    if (mode() == KisTool::OTHER_1) {
+        m_axesPoint = convertToPixelCoord(event->point);
+        requestUpdateOutline(event->point, 0);
+        updateCanvas();
+    }
+}
+
+void KisToolMultihand::endAlternateAction(KoPointerEvent* event, AlternateAction action)
+{
+    if (action != ChangeSize || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
+        KisToolBrush::continueAlternateAction(event, action);
+        return;
+    }
+    if (mode() == KisTool::OTHER_1) {
+        setMode(KisTool::HOVER_MODE);
+    }
+}
+
+void KisToolMultihand::mouseMoveEvent(KoPointerEvent* event)
+{
+    if (mode() == HOVER_MODE) {
+        m_lastToolPos=convertToPixelCoord(event->point);
+    }
+    KisToolBrush::mouseMoveEvent(event);
+}
+
 void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
 {
+    QPainterPath path;
+    if (m_transformMode == COPYTRANSLATE) {
+        for (QPointF dPos : m_subbrOriginalLocations) {
+            if (m_addSubbrushesMode) {
+                path.addEllipse(dPos, 10, 10); // Show subbrush reference locations
+                path.moveTo(dPos.x() - 15, dPos.y());
+                path.lineTo(dPos.x() + 15, dPos.y());
+                path.moveTo(dPos.x(), dPos.y() - 15);
+                path.lineTo(dPos.x(), dPos.y() + 15);
+            }
+            else {
+                // Show where subbrush strokes are predicted to land 
+                path += m_currentOutline.translated(dPos - m_axesPoint);
+            }
+        }
+        if (m_addSubbrushesMode) {
+            // add a cross shape to the main tool outline as well
+            
+            path.moveTo(m_lastToolPos.x() - 15, m_lastToolPos.y());
+            path.lineTo(m_lastToolPos.x() + 15, m_lastToolPos.y());
+            path.moveTo(m_lastToolPos.x(), m_lastToolPos.y() - 15);
+            path.lineTo(m_lastToolPos.x(), m_lastToolPos.y() + 15);
+        }
+    }
     if(m_setupAxesFlag) {
         int diagonal = (currentImage()->height() + currentImage()->width());
 
-        QPainterPath path;
         path.moveTo(m_axesPoint.x()-diagonal*cos(m_angle), m_axesPoint.y()-diagonal*sin(m_angle));
         path.lineTo(m_axesPoint.x()+diagonal*cos(m_angle), m_axesPoint.y()+diagonal*sin(m_angle));
         path.moveTo(m_axesPoint.x()-diagonal*cos(m_angle+M_PI_2), m_axesPoint.y()-diagonal*sin(m_angle+M_PI_2));
         path.lineTo(m_axesPoint.x()+diagonal*cos(m_angle+M_PI_2), m_axesPoint.y()+diagonal*sin(m_angle+M_PI_2));
-        paintToolOutline(&gc, pixelToView(path));
     }
     else {
         KisToolFreehand::paint(gc, converter);
-        if(m_showAxes){
+        // Force paint axeslines of "origin" point when in COPYTRANSLATE addSubbrushes mode.
+        if(m_showAxes || (m_transformMode == COPYTRANSLATE && m_addSubbrushesMode)){
             int diagonal = (currentImage()->height() + currentImage()->width());
 
-            QPainterPath path;
             path.moveTo(m_axesPoint.x()-diagonal*cos(m_angle), m_axesPoint.y()-diagonal*sin(m_angle));
             path.lineTo(m_axesPoint.x()+diagonal*cos(m_angle), m_axesPoint.y()+diagonal*sin(m_angle));
             path.moveTo(m_axesPoint.x()-diagonal*cos(m_angle+M_PI_2), m_axesPoint.y()-diagonal*sin(m_angle+M_PI_2));
             path.lineTo(m_axesPoint.x()+diagonal*cos(m_angle+M_PI_2), m_axesPoint.y()+diagonal*sin(m_angle+M_PI_2));
-            paintToolOutline(&gc, pixelToView(path));
         }
     }
+    paintToolOutline(&gc, pixelToView(path));
 }
 
 void KisToolMultihand::initTransformations()
@@ -222,7 +293,7 @@ void KisToolMultihand::initTransformations()
             }
         }
     }
-    else /* if(m_transformationNode == TRANSLATE) */ {
+    else if(m_transformMode == TRANSLATE) {
         /**
          * TODO: currently, the seed is the same for all the
          * strokes
@@ -243,6 +314,14 @@ void KisToolMultihand::initTransformations()
             transformations << m;
             m.reset();
         }
+    } else if (m_transformMode == COPYTRANSLATE) {
+        transformations << m;
+        for (QPointF dPos : m_subbrOriginalLocations) {
+            QPointF resPos = dPos-m_axesPoint; // Calculate the difference between subbrush reference position and "origin" reference
+            m.translate(resPos.x(), resPos.y());
+            transformations << m;
+            m.reset();
+        }
     }
 
     m_helper->setupTransformations(transformations);
@@ -255,7 +334,7 @@ QWidget* KisToolMultihand::createOptionWidget()
     customUI = new KisToolMultiHandConfigWidget();
 
     // brush smoothing option.
-    customUI->layout()->addWidget(widget);
+    //customUI->layout()->addWidget(widget);
     customUI->smoothingOptionsLayout->addWidget(widget);
 
 
@@ -274,6 +353,7 @@ QWidget* KisToolMultihand::createOptionWidget()
     customUI->multihandTypeCombobox->addItem(i18n("Mirror"),int(MIRROR));
     customUI->multihandTypeCombobox->addItem(i18n("Translate"),int(TRANSLATE));
     customUI->multihandTypeCombobox->addItem(i18n("Snowflake"),int(SNOWFLAKE));
+    customUI->multihandTypeCombobox->addItem(i18n("Copy Translate"),int(COPYTRANSLATE));
     connect(customUI->multihandTypeCombobox,SIGNAL(currentIndexChanged(int)),this, SLOT(slotSetTransformMode(int)));
     customUI->multihandTypeCombobox->setCurrentIndex(m_configGroup.readEntry("transformMode", 0));
     slotSetTransformMode(customUI->multihandTypeCombobox->currentIndex());
@@ -284,8 +364,6 @@ QWidget* KisToolMultihand::createOptionWidget()
     customUI->axisRotationSpinbox->setRange(0.0, 90.0, 1);
     customUI->axisRotationSpinbox->setValue(m_configGroup.readEntry("axesAngle", 0.0));
     connect( customUI->axisRotationSpinbox, SIGNAL(valueChanged(qreal)),this, SLOT(slotSetAxesAngle(qreal)));
-
-
 
 
     // symmetry mode options
@@ -307,6 +385,9 @@ QWidget* KisToolMultihand::createOptionWidget()
 
     connect(customUI->translationRadiusSpinbox,SIGNAL(valueChanged(int)),this,SLOT(slotSetTranslateRadius(int)));
 
+    // Copy translate mode options and actions
+    connect(customUI->addSubbrushButton, &QPushButton::clicked, this, &KisToolMultihand::slotAddSubbrushesMode);
+    connect(customUI->removeSubbrushButton, &QPushButton::clicked, this, &KisToolMultihand::slotRemoveAllSubbrushes);
 
     // snowflake re-uses the existing options, so there is no special parameters for that...
 
@@ -374,22 +455,33 @@ void KisToolMultihand::slotSetTransformMode(int index)
     customUI->radiusLabel->setVisible(false);
     customUI->brushCountSpinBox->setVisible(false);
     customUI->brushesLabel->setVisible(false);
+    customUI->subbrushLabel->setVisible(false);
+    customUI->addSubbrushButton->setVisible(false);
+    customUI->removeSubbrushButton->setVisible(false);
 
     // turn on what we need
-    if (index == int(MIRROR)) {
+    if (index == MIRROR) {
          customUI->horizontalCheckbox->setVisible(true);
          customUI->verticalCheckbox->setVisible(true);
     }
 
-     if (index == int(TRANSLATE)) {
-         customUI->translationRadiusSpinbox->setVisible(true);
-         customUI->radiusLabel->setVisible(true);
-     }
-
-     if (index == int(SYMMETRY) || index == int(SNOWFLAKE) || index == int(TRANSLATE) ) {
+    else if (index == TRANSLATE) {
+        customUI->translationRadiusSpinbox->setVisible(true);
+        customUI->radiusLabel->setVisible(true);
         customUI->brushCountSpinBox->setVisible(true);
         customUI->brushesLabel->setVisible(true);
      }
+
+    else if (index == SYMMETRY || index == SNOWFLAKE || index == TRANSLATE ) {
+        customUI->brushCountSpinBox->setVisible(true);
+        customUI->brushesLabel->setVisible(true);
+     }
+    
+    else if (index == COPYTRANSLATE) {
+        customUI->subbrushLabel->setVisible(true);
+        customUI->addSubbrushButton->setVisible(true);
+        customUI->removeSubbrushButton->setVisible(true);
+    }
 
 }
 
@@ -417,5 +509,17 @@ void KisToolMultihand::slotSetTranslateRadius(int radius)
 {
     m_translateRadius = radius;
     m_configGroup.writeEntry("translateRadius", radius);
+}
+
+void KisToolMultihand::slotAddSubbrushesMode(bool checked)
+{
+    m_addSubbrushesMode = checked;
+    updateCanvas();
+}
+
+void KisToolMultihand::slotRemoveAllSubbrushes()
+{
+    m_subbrOriginalLocations.clear();
+    updateCanvas();
 }
 

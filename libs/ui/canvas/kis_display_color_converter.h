@@ -30,7 +30,7 @@
 class KoColor;
 class KoColorProfile;
 class KoCanvasResourceProvider;
-
+class KoID;
 
 /**
  * Special helper class that provides primitives for converting colors when
@@ -53,6 +53,8 @@ public:
     KisDisplayColorConverter(KoCanvasResourceProvider *resourceManager, QObject *parent);
     ~KisDisplayColorConverter() override;
 
+    void setImage(KisImageSP image);
+
     static KisDisplayColorConverter* dumbConverterInstance();
 
     KoColorDisplayRendererInterface* displayRendererInterface() const;
@@ -65,8 +67,8 @@ public:
     KoColor approximateFromRenderedQColor(const QColor &c) const;
 
     bool canSkipDisplayConversion(const KoColorSpace *cs) const;
-    KoColor applyDisplayFiltering(const KoColor &c, bool alreadyInF32) const;
-    void applyDisplayFilteringF32(KisFixedPaintDeviceSP device);
+    KoColor applyDisplayFiltering(const KoColor &srcColor, const KoID &bitDepthId) const;
+    void applyDisplayFilteringF32(KisFixedPaintDeviceSP device, const KoID &bitDepthId) const;
 
 
     /**
@@ -110,6 +112,7 @@ private:
     Q_PRIVATE_SLOT(m_d, void slotCanvasResourceChanged(int key, const QVariant &v));
     Q_PRIVATE_SLOT(m_d, void selectPaintingColorSpace());
     Q_PRIVATE_SLOT(m_d, void slotUpdateCurrentNodeColorSpace());
+    Q_PRIVATE_SLOT(m_d, void slotUpdateImageColorSpace());
 
 private:
     struct Private;

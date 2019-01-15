@@ -133,6 +133,12 @@ public:
     void convertTo(const KoColorSpace * dstColorSpace = 0,
                    KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
                    KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
+
+    /**
+     * Set color profile for the device without converting actual pixel data
+     */
+    void setProfile(const KoColorProfile *profile);
+
     /**
      * Fill this paint device with the data from image
      *

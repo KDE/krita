@@ -561,6 +561,7 @@ void KisCanvas2::initializeImage()
 {
     KisImageSP image = m_d->view->image();
 
+    m_d->displayColorConverter.setImage(image);
     m_d->coordinatesConverter->setImage(image);
     m_d->toolProxy.initializeImage(image);
 

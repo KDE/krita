@@ -250,7 +250,7 @@ void KisToolColorPicker::displayPickedColor()
         }
 
         KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        KoColor newColor = kritaCanvas->displayColorConverter()->applyDisplayFiltering(m_pickedColor, false);
+        KoColor newColor = kritaCanvas->displayColorConverter()->applyDisplayFiltering(m_pickedColor, Float32BitsColorDepthID);
         QVector<float> values(4);
         newColor.colorSpace()->normalisedChannelsValue(newColor.data(), values);
 

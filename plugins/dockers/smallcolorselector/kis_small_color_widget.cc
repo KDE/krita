@@ -318,7 +318,7 @@ void KisSmallColorWidget::uploadPaletteData(KisGLImageWidget *widget, const QSiz
             }
         }
 
-        d->displayColorConverter->applyDisplayFilteringF32(device);
+        d->displayColorConverter->applyDisplayFilteringF32(device, Float32BitsColorDepthID);
 
         half *imagePtr = image.data();
         devicePtr = reinterpret_cast<float*>(device->data());

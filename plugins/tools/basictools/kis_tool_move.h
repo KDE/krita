@@ -154,8 +154,6 @@ private:
 
     QAction *m_showCoordinatesAction {0};
 
-    KisCanvas2 *m_canvas {0};
-
     QPoint m_dragPos;
     QRect m_handlesRect;
 

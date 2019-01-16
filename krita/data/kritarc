@@ -475,4 +475,4 @@ enable_quick_settings_docker=true
 enable_scripter=true
 enable_tenbrushes=true
 enable_tenscripts=true
-
+enable_plugin_importer=true

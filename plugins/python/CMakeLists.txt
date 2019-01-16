@@ -91,6 +91,7 @@ install_pykrita_plugin(lastdocumentsdocker)
 # install_pykrita_plugin(scriptdocker)
 install_pykrita_plugin(comics_project_management_tools)
 install_pykrita_plugin(krita_script_starter)
+install_pykrita_plugin(plugin_importer)
 
 # if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)
 #     install_pykrita_plugin(cmake_utils)
@@ -102,6 +103,7 @@ install( FILES
     hello/hello.action
     tenbrushes/tenbrushes.action
     tenscripts/tenscripts.action
+    plugin_importer/plugin_importer.action
 DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
 
 install(

@@ -19,7 +19,70 @@
 
 #include "KisGridView.h"
 
-KisGridView::KisGridView()
+struct Q_DECL_HIDDEN KisGridView::Private {
+
+};
+
+KisGridView::KisGridView(QWidget *parent)
+    : QAbstractItemView(parent)
+    , d(new Private)
 {
 
 }
+
+KisGridView::~KisGridView()
+{
+
+}
+
+QModelIndex KisGridView::indexAt(const QPoint &point) const
+{
+    return QModelIndex();
+}
+
+void KisGridView::scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint hint)
+{
+
+}
+
+QRect KisGridView::visualRect(const QModelIndex &index) const
+{
+    return QRect();
+}
+
+void KisGridView::paintEvent(QPaintEvent *event)
+{
+
+}
+
+
+int KisGridView::horizontalOffset() const
+{
+    return 0;
+}
+
+bool KisGridView::isIndexHidden(const QModelIndex &index) const
+{
+    return true;
+}
+
+QModelIndex KisGridView::moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
+{
+    return QModelIndex();
+}
+
+void KisGridView::setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags flags)
+{
+
+}
+
+int KisGridView::verticalOffset() const
+{
+    return 0;
+}
+
+QRegion KisGridView::visualRegionForSelection(const QItemSelection &selection) const
+{
+    return QRegion();
+}
+

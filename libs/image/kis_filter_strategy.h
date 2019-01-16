@@ -51,9 +51,6 @@ public:
     qint32 intSupport() {
         return intSupportVal;
     }
-    virtual bool boxSpecial() {
-        return false;
-    }
     virtual QString description() {
         return QString();
     }
@@ -104,9 +101,6 @@ public:
 
     qint32 intValueAt(qint32 t) const override;
     qreal valueAt(qreal t) const override;
-    bool boxSpecial() override {
-        return true;
-    }
 };
 
 class KRITAIMAGE_EXPORT KisBilinearFilterStrategy : public KisFilterStrategy

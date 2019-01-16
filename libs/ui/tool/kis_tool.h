@@ -288,14 +288,15 @@ protected:
     void blockUntilOperationsFinishedForced();
 
 protected:
-    enum ToolMode {
+    enum ToolMode: int {
         HOVER_MODE,
         PAINT_MODE,
         SECONDARY_PAINT_MODE,
         MIRROR_AXIS_SETUP_MODE,
         GESTURE_MODE,
         PAN_MODE,
-        OTHER // not used now
+        OTHER, // tool-specific modes, like multibrush's symmetry axis setup
+        OTHER_1
     };
 
     virtual void setMode(ToolMode mode);

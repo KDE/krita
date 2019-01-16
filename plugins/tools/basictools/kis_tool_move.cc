@@ -59,20 +59,37 @@ struct KisToolMoveState : KisToolChangesTrackerData, boost::equality_comparable<
 };
 
 
-KisToolMove::KisToolMove(KoCanvasBase * canvas)
-    : KisTool(canvas, KisCursor::moveCursor()),
-      m_updateCursorCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
+KisToolMove::KisToolMove(KoCanvasBase *canvas)
+    : KisTool(canvas, KisCursor::moveCursor())
+    , m_updateCursorCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
 {
-    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-
-    m_showCoordinatesAction = action("movetool-show-coordinates");
-    createOptionWidget();
-
     setObjectName("tool_move");
 
     m_showCoordinatesAction = action("movetool-show-coordinates");
-
+    m_showCoordinatesAction = action("movetool-show-coordinates");
     connect(&m_updateCursorCompressor, SIGNAL(timeout()), this, SLOT(resetCursorStyle()));
+
+    m_optionsWidget = new MoveToolOptionsWidget(0, currentImage()->xRes(), toolId());
+
+    // See https://bugs.kde.org/show_bug.cgi?id=316896
+    QWidget *specialSpacer = new QWidget(m_optionsWidget);
+    specialSpacer->setObjectName("SpecialSpacer");
+    specialSpacer->setFixedSize(0, 0);
+    m_optionsWidget->layout()->addWidget(specialSpacer);
+
+    m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
+
+    m_showCoordinatesAction->setChecked(m_optionsWidget->showCoordinates());
+
+    m_optionsWidget->slotSetTranslate(m_handlesRect.topLeft() + currentOffset());
+
+    connect(m_optionsWidget, SIGNAL(sigSetTranslateX(int)), SLOT(moveBySpinX(int)), Qt::UniqueConnection);
+    connect(m_optionsWidget, SIGNAL(sigSetTranslateY(int)), SLOT(moveBySpinY(int)), Qt::UniqueConnection);
+    connect(m_optionsWidget, SIGNAL(sigRequestCommitOffsetChanges()), this, SLOT(commitChanges()), Qt::UniqueConnection);
+
+    connect(this, SIGNAL(moveInNewPosition(QPoint)), m_optionsWidget, SLOT(slotSetTranslate(QPoint)), Qt::UniqueConnection);
+
+    connect(qobject_cast<KisCanvas2*>(canvas)->viewManager()->nodeManager(), SIGNAL(sigUiNeedChangeSelectedNodes(KisNodeList)), this, SLOT(slotNodeChanged(KisNodeList)), Qt::UniqueConnection);
 }
 
 KisToolMove::~KisToolMove()
@@ -87,7 +104,7 @@ void KisToolMove::resetCursorStyle()
     if (!isActive()) return;
     KisImageSP image = this->image();
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image, currentNode(), this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image, currentNode(), canvas()->resourceManager());
     KisSelectionSP selection = resources->activeSelection();
     KisNodeList nodes = fetchSelectedNodes(moveToolMode(), &m_lastCursorPos, selection);
 
@@ -127,7 +144,7 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
     KisImageSP image = this->image();
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image, currentNode(), this->canvas()->resourceManager());
+        new KisResourcesSnapshot(image, currentNode(), canvas()->resourceManager());
     KisSelectionSP selection = resources->activeSelection();
 
     KisNodeList nodes = fetchSelectedNodes(mode, pos, selection);
@@ -455,7 +472,7 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
         m_dragPos = QPoint();
         m_dragStart = QPoint();
     }
-    m_canvas->updateCanvas();
+    qobject_cast<KisCanvas2*>(canvas())->updateCanvas();
 }
 
 void KisToolMove::continueAction(KoPointerEvent *event)
@@ -471,7 +488,7 @@ void KisToolMove::continueAction(KoPointerEvent *event)
     drag(pos);
     notifyGuiAfterMove();
 
-    m_canvas->updateCanvas();
+    qobject_cast<KisCanvas2*>(canvas())->updateCanvas();
 }
 
 void KisToolMove::endAction(KoPointerEvent *event)
@@ -491,7 +508,7 @@ void KisToolMove::endAction(KoPointerEvent *event)
 
     notifyGuiAfterMove();
 
-    m_canvas->updateCanvas();
+    qobject_cast<KisCanvas2*>(canvas())->updateCanvas();
 }
 
 void KisToolMove::drag(const QPoint& newPos)
@@ -514,7 +531,7 @@ void KisToolMove::endStroke()
     m_changesTracker.reset();
     m_currentlyProcessingNodes.clear();
     m_accumulatedOffset = QPoint();
-    m_canvas->updateCanvas();
+    qobject_cast<KisCanvas2*>(canvas())->updateCanvas();
 }
 
 void KisToolMove::slotTrackerChangedConfig(KisToolChangesTrackerDataSP state)
@@ -541,38 +558,11 @@ void KisToolMove::cancelStroke()
     m_currentlyProcessingNodes.clear();
     m_accumulatedOffset = QPoint();
     notifyGuiAfterMove();
-    m_canvas->updateCanvas();
+    qobject_cast<KisCanvas2*>(canvas())->updateCanvas();
 }
 
 QWidget* KisToolMove::createOptionWidget()
 {
-    if (!currentImage())
-        return 0;
-
-    m_optionsWidget = new MoveToolOptionsWidget(0, currentImage()->xRes(), toolId());
-    // See https://bugs.kde.org/show_bug.cgi?id=316896
-    QWidget *specialSpacer = new QWidget(m_optionsWidget);
-    specialSpacer->setObjectName("SpecialSpacer");
-    specialSpacer->setFixedSize(0, 0);
-    m_optionsWidget->layout()->addWidget(specialSpacer);
-
-    m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
-
-    m_showCoordinatesAction->setChecked(m_optionsWidget->showCoordinates());
-
-    m_optionsWidget->slotSetTranslate(m_handlesRect.topLeft() + currentOffset());
-
-    connect(m_optionsWidget, SIGNAL(sigSetTranslateX(int)), SLOT(moveBySpinX(int)));
-    connect(m_optionsWidget, SIGNAL(sigSetTranslateY(int)), SLOT(moveBySpinY(int)));
-    connect(m_optionsWidget, SIGNAL(sigRequestCommitOffsetChanges()), this, SLOT(commitChanges()), Qt::UniqueConnection);
-
-    connect(this, SIGNAL(moveInNewPosition(QPoint)), m_optionsWidget, SLOT(slotSetTranslate(QPoint)));
-
-    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-
-    connect(kisCanvas->viewManager()->nodeManager(), SIGNAL(sigUiNeedChangeSelectedNodes(KisNodeList)),
-            this, SLOT(slotNodeChanged(KisNodeList)));
-
     return m_optionsWidget;
 }
 

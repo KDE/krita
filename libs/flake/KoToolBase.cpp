@@ -176,8 +176,9 @@ void KoToolBase::useCursor(const QCursor &cursor)
 QList<QPointer<QWidget> > KoToolBase::optionWidgets()
 {
     Q_D(KoToolBase);
-    if (d->optionWidgets.empty()) {
+    if (!d->optionWidgetsCreated) {
         d->optionWidgets = createOptionWidgets();
+        d->optionWidgetsCreated = true;
     }
     return d->optionWidgets;
 }

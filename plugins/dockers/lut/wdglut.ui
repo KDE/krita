@@ -130,7 +130,7 @@
          </widget>
         </item>
         <item row="8" column="0">
-         <widget class="QLabel" name="label_7">
+         <widget class="QLabel" name="m_lblExposure">
           <property name="text">
            <string>Exposure:</string>
           </property>
@@ -261,7 +261,7 @@
          </widget>
         </item>
         <item row="9" column="0">
-         <widget class="QLabel" name="label_8">
+         <widget class="QLabel" name="m_lblGamma">
           <property name="text">
            <string>Gamma:</string>
           </property>

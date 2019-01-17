@@ -57,6 +57,7 @@
 #include "ocio_display_filter.h"
 #include "black_white_point_chooser.h"
 #include "KisOcioConfiguration.h"
+#include <opengl/KisOpenGLModeProber.h>
 
 
 OCIO::ConstConfigRcPtr defaultRawProfile()
@@ -349,10 +350,10 @@ void LutDockerDock::enableControls()
         m_colorManagement->setCurrentIndex((int) KisOcioConfiguration::INTERNAL);
     }
 
-    bool ocioEnabled = m_chkUseOcio->isChecked();
+    const bool ocioEnabled = m_chkUseOcio->isChecked();
     m_colorManagement->setEnabled(ocioEnabled && canDoExternalColorCorrection);
 
-    bool externalColorManagementEnabled =
+    const bool externalColorManagementEnabled =
         m_colorManagement->currentIndex() != (int)KisOcioConfiguration::INTERNAL;
 
     m_lblInputColorSpace->setEnabled(ocioEnabled && externalColorManagementEnabled);
@@ -363,6 +364,25 @@ void LutDockerDock::enableControls()
     m_cmbView->setEnabled(ocioEnabled && externalColorManagementEnabled);
     m_lblLook->setEnabled(ocioEnabled && externalColorManagementEnabled);
     m_cmbLook->setEnabled(ocioEnabled && externalColorManagementEnabled);
+
+    const bool exposureManagementEnabled =
+        externalColorManagementEnabled ||
+        KisOpenGLModeProber::instance()->surfaceformatInUse().colorSpace() == QSurfaceFormat::scRGBColorSpace;
+
+    m_exposureDoubleWidget->setEnabled(exposureManagementEnabled);
+    m_gammaDoubleWidget->setEnabled(exposureManagementEnabled);
+    m_lblExposure->setEnabled(exposureManagementEnabled);
+    m_lblGamma->setEnabled(exposureManagementEnabled);
+
+    QString exposureToolTip;
+
+    if (!exposureManagementEnabled) {
+        exposureToolTip = i18nc("@info:tooltip", "Exposure and Gamma corrections are disabled in Internal mode. Switch to OCIO mode to use them");
+    }
+    m_exposureDoubleWidget->setToolTip(exposureToolTip);
+    m_gammaDoubleWidget->setToolTip(exposureToolTip);
+    m_lblExposure->setToolTip(exposureToolTip);
+    m_lblGamma->setToolTip(exposureToolTip);
 
     bool enableConfigPath = m_colorManagement->currentIndex() == (int) KisOcioConfiguration::OCIO_CONFIG;
 
@@ -397,8 +417,8 @@ void LutDockerDock::updateDisplaySettings()
         displayFilter->displayDevice = m_ocioConfig->getDisplay(m_cmbDisplayDevice->currentIndex());
         displayFilter->view = m_ocioConfig->getView(displayFilter->displayDevice, m_cmbView->currentIndex());
         displayFilter->look = m_ocioConfig->getLookNameByIndex(m_cmbLook->currentIndex());
-        displayFilter->gamma = m_gammaDoubleWidget->value();
-        displayFilter->exposure = m_exposureDoubleWidget->value();
+        displayFilter->gamma = m_gammaDoubleWidget->isEnabled() ? m_gammaDoubleWidget->value() : 1.0;
+        displayFilter->exposure = m_exposureDoubleWidget->isEnabled() ? m_exposureDoubleWidget->value() : 0.0;
         displayFilter->swizzle = (OCIO_CHANNEL_SWIZZLE)m_cmbComponents->currentIndex();
 
         displayFilter->blackPoint = m_bwPointChooser->blackPoint();

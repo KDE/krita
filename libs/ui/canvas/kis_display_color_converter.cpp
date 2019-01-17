@@ -116,6 +116,16 @@ struct KisDisplayColorConverter::Private
                     openGLSurfaceProfile());
     }
 
+    const KoColorSpace* intermediateColorSpace() const {
+        // the color space where we apply exposure and
+        // gamma should always be linear
+        return KoColorSpaceRegistry::instance()->
+                colorSpace(
+                    RGBAColorModelID.id(),
+                    Float32BitsColorDepthID.id(),
+                    KoColorSpaceRegistry::instance()->p2020G10Profile());
+    }
+
     const KoColorProfile *monitorProfile;
 
     KoColorConversionTransformation::Intent renderingIntent;
@@ -266,7 +276,7 @@ void KisDisplayColorConverter::Private::updateIntermediateFgColor(const KoColor 
     KIS_ASSERT_RECOVER_RETURN(displayFilter);
 
     KoColor color = srcColor;
-    color.convertTo(ocioInputColorSpace());
+    color.convertTo(intermediateColorSpace());
     displayFilter->approximateForwardTransformation(color.data(), 1);
     intermediateFgColor = color;
 }
@@ -568,7 +578,7 @@ KoColor KisDisplayColorConverter::Private::approximateFromQColor(const QColor &q
     if (!useOcio()) {
         return KoColor(qcolor, paintingColorSpace);
     } else {
-        KoColor color(qcolor, ocioInputColorSpace());
+        KoColor color(qcolor, intermediateColorSpace());
         displayFilter->approximateInverseTransformation(color.data(), 1);
         color.convertTo(paintingColorSpace);
         return color;
@@ -583,7 +593,7 @@ QColor KisDisplayColorConverter::Private::approximateToQColor(const KoColor &src
     KoColor color(srcColor);
 
     if (useOcio()) {
-        color.convertTo(ocioInputColorSpace());
+        color.convertTo(intermediateColorSpace());
         displayFilter->approximateForwardTransformation(color.data(), 1);
     }
 

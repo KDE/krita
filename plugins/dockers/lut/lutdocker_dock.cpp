@@ -237,7 +237,16 @@ void LutDockerDock::slotShowBWConfiguration()
 
 bool LutDockerDock::canChangeExposureAndGamma() const
 {
-    return m_chkUseOcio->isChecked() && m_ocioConfig;
+    if (!m_chkUseOcio->isChecked() || !m_ocioConfig) return false;
+
+    const bool externalColorManagementEnabled =
+        m_colorManagement->currentIndex() != (int)KisOcioConfiguration::INTERNAL;
+
+    const bool exposureManagementEnabled =
+        externalColorManagementEnabled ||
+        KisOpenGLModeProber::instance()->surfaceformatInUse().colorSpace() == QSurfaceFormat::scRGBColorSpace;
+
+    return exposureManagementEnabled;
 }
 
 qreal LutDockerDock::currentExposure() const
@@ -365,9 +374,7 @@ void LutDockerDock::enableControls()
     m_lblLook->setEnabled(ocioEnabled && externalColorManagementEnabled);
     m_cmbLook->setEnabled(ocioEnabled && externalColorManagementEnabled);
 
-    const bool exposureManagementEnabled =
-        externalColorManagementEnabled ||
-        KisOpenGLModeProber::instance()->surfaceformatInUse().colorSpace() == QSurfaceFormat::scRGBColorSpace;
+    const bool exposureManagementEnabled = canChangeExposureAndGamma();
 
     m_exposureDoubleWidget->setEnabled(exposureManagementEnabled);
     m_gammaDoubleWidget->setEnabled(exposureManagementEnabled);

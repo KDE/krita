@@ -432,7 +432,7 @@ void KisSmallColorWidget::slotDisplayConfigurationChanged()
                 (cs->colorDepthId() == Float16BitsColorDepthID ||
                  cs->colorDepthId() == Float32BitsColorDepthID ||
                  cs->colorDepthId() == Float64BitsColorDepthID ||
-                 cs->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile());
+                 cs->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId());
     }
 
     if (d->dynamicRange) {

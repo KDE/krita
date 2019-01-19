@@ -164,50 +164,121 @@ void KisToolMultihand::mouseMoveEvent(KoPointerEvent* event)
 void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
 {
     QPainterPath path;
-    if (m_transformMode == COPYTRANSLATE) {
-        for (QPointF dPos : m_subbrOriginalLocations) {
-            if (m_addSubbrushesMode) {
-                path.addEllipse(dPos, 10, 10); // Show subbrush reference locations
-                path.moveTo(dPos.x() - 15, dPos.y());
-                path.lineTo(dPos.x() + 15, dPos.y());
-                path.moveTo(dPos.x(), dPos.y() - 15);
-                path.lineTo(dPos.x(), dPos.y() + 15);
-            }
-            else {
-                // Show where subbrush strokes are predicted to land 
-                path += m_currentOutline.translated(dPos - m_axesPoint);
-            }
-        }
-        if (m_addSubbrushesMode) {
-            // add a cross shape to the main tool outline as well
-            
-            path.moveTo(m_lastToolPos.x() - 15, m_lastToolPos.y());
-            path.lineTo(m_lastToolPos.x() + 15, m_lastToolPos.y());
-            path.moveTo(m_lastToolPos.x(), m_lastToolPos.y() - 15);
-            path.lineTo(m_lastToolPos.x(), m_lastToolPos.y() + 15);
-        }
-    }
-    if(m_setupAxesFlag) {
-        int diagonal = (currentImage()->height() + currentImage()->width());
 
-        path.moveTo(m_axesPoint.x()-diagonal*cos(m_angle), m_axesPoint.y()-diagonal*sin(m_angle));
-        path.lineTo(m_axesPoint.x()+diagonal*cos(m_angle), m_axesPoint.y()+diagonal*sin(m_angle));
-        path.moveTo(m_axesPoint.x()-diagonal*cos(m_angle+M_PI_2), m_axesPoint.y()-diagonal*sin(m_angle+M_PI_2));
-        path.lineTo(m_axesPoint.x()+diagonal*cos(m_angle+M_PI_2), m_axesPoint.y()+diagonal*sin(m_angle+M_PI_2));
-    }
-    else {
-        KisToolFreehand::paint(gc, converter);
-        // Force paint axeslines of "origin" point when in COPYTRANSLATE addSubbrushes mode.
-        if(m_showAxes || (m_transformMode == COPYTRANSLATE && m_addSubbrushesMode)){
-            int diagonal = (currentImage()->height() + currentImage()->width());
+    if (m_showAxes) {
+        int axisLength = currentImage()->height() + currentImage()->width();
 
-            path.moveTo(m_axesPoint.x()-diagonal*cos(m_angle), m_axesPoint.y()-diagonal*sin(m_angle));
-            path.lineTo(m_axesPoint.x()+diagonal*cos(m_angle), m_axesPoint.y()+diagonal*sin(m_angle));
-            path.moveTo(m_axesPoint.x()-diagonal*cos(m_angle+M_PI_2), m_axesPoint.y()-diagonal*sin(m_angle+M_PI_2));
-            path.lineTo(m_axesPoint.x()+diagonal*cos(m_angle+M_PI_2), m_axesPoint.y()+diagonal*sin(m_angle+M_PI_2));
+        // add division guide lines if using multiple brushes
+        if ((m_handsCount > 1 && m_transformMode == SYMMETRY) ||
+            (m_handsCount > 1 && m_transformMode == SNOWFLAKE) ) {
+
+            qreal axesAngle = 360.0 / float(m_handsCount);
+            float currentAngle = 0.0;
+            float startingInsetLength = 20; // don't start each line at the origin so we can see better when all points converge
+
+            // draw lines radiating from the origin
+            for( int i=0; i < m_handsCount; i++) {
+
+                currentAngle = i*axesAngle;
+
+                // convert angles to radians since cos and sin need that
+                currentAngle = currentAngle * 0.017453 + m_angle; // m_angle is current rotation set on UI
+
+                QPoint startingSpot = QPoint(m_axesPoint.x()+ (cos(currentAngle)*startingInsetLength), m_axesPoint.y()+ (sin(currentAngle))*startingInsetLength );
+                path.moveTo(startingSpot.x(), startingSpot.y());
+                QPointF symmetryLinePoint(m_axesPoint.x()+ (cos(currentAngle)*axisLength), m_axesPoint.y()+ (sin(currentAngle))*axisLength );
+                path.lineTo(symmetryLinePoint);
+            }
+
+        }
+        else if(m_transformMode == MIRROR) {
+
+            if (m_mirrorHorizontally) {
+                path.moveTo(m_axesPoint.x()-axisLength*cos(m_angle+M_PI_2), m_axesPoint.y()-axisLength*sin(m_angle+M_PI_2));
+                path.lineTo(m_axesPoint.x()+axisLength*cos(m_angle+M_PI_2), m_axesPoint.y()+axisLength*sin(m_angle+M_PI_2));
+            }
+
+            if(m_mirrorVertically) {
+                path.moveTo(m_axesPoint.x()-axisLength*cos(m_angle), m_axesPoint.y()-axisLength*sin(m_angle));
+                path.lineTo(m_axesPoint.x()+axisLength*cos(m_angle), m_axesPoint.y()+axisLength*sin(m_angle));
+            }
+        }
+        else if (m_transformMode == COPYTRANSLATE) {
+
+            int ellipsePreviewSize = 10;
+            // draw ellipse at origin to emphasize this is a drawing point
+            path.addEllipse(m_axesPoint.x()-(ellipsePreviewSize),
+                            m_axesPoint.y()-(ellipsePreviewSize),
+                            ellipsePreviewSize*2,
+                            ellipsePreviewSize*2);
+
+            for (QPointF dPos : m_subbrOriginalLocations) {
+                path.addEllipse(dPos, ellipsePreviewSize, ellipsePreviewSize);  // Show subbrush reference locations while in add mode
+            }
+
+            // draw the horiz/vertical line for axis  origin
+            path.moveTo(m_axesPoint.x()-axisLength*cos(m_angle), m_axesPoint.y()-axisLength*sin(m_angle));
+            path.lineTo(m_axesPoint.x()+axisLength*cos(m_angle), m_axesPoint.y()+axisLength*sin(m_angle));
+            path.moveTo(m_axesPoint.x()-axisLength*cos(m_angle+M_PI_2), m_axesPoint.y()-axisLength*sin(m_angle+M_PI_2));
+            path.lineTo(m_axesPoint.x()+axisLength*cos(m_angle+M_PI_2), m_axesPoint.y()+axisLength*sin(m_angle+M_PI_2));
+
+        }
+        else {
+
+            // draw the horiz/vertical line for axis  origin
+            path.moveTo(m_axesPoint.x()-axisLength*cos(m_angle), m_axesPoint.y()-axisLength*sin(m_angle));
+            path.lineTo(m_axesPoint.x()+axisLength*cos(m_angle), m_axesPoint.y()+axisLength*sin(m_angle));
+            path.moveTo(m_axesPoint.x()-axisLength*cos(m_angle+M_PI_2), m_axesPoint.y()-axisLength*sin(m_angle+M_PI_2));
+            path.lineTo(m_axesPoint.x()+axisLength*cos(m_angle+M_PI_2), m_axesPoint.y()+axisLength*sin(m_angle+M_PI_2));
+        }
+
+    } else {
+
+        // not showing axis
+        if (m_transformMode == COPYTRANSLATE) {
+
+            for (QPointF dPos : m_subbrOriginalLocations) {
+                // Show subbrush reference locations while in add mode
+                if (m_addSubbrushesMode) {
+                    path.addEllipse(dPos, 10, 10);
+                }
+            }
         }
     }
+
+    KisToolFreehand::paint(gc, converter);
+
+    // origin point preview line/s
+    gc.save();
+    QPen outlinePen;
+    outlinePen.setColor(QColor(100,100,100,150));
+    outlinePen.setStyle(Qt::PenStyle::SolidLine);
+    gc.setPen(outlinePen);
     paintToolOutline(&gc, pixelToView(path));
+    gc.restore();
+
+
+    // fill in a dot for the origin if showing axis
+    if (m_showAxes) {
+        // draw a dot at the origin point to help with precisly moving
+        QPainterPath dotPath;
+        int dotRadius = 4;
+        dotPath.moveTo(m_axesPoint.x(), m_axesPoint.y());
+        dotPath.addEllipse(m_axesPoint.x()- dotRadius*0.25, m_axesPoint.y()- dotRadius*0.25, dotRadius, dotRadius); // last 2 parameters are dot's size
+
+        QBrush fillBrush;
+        fillBrush.setColor(QColor(255, 255, 255, 255));
+        fillBrush.setStyle(Qt::SolidPattern);
+        gc.fillPath(pixelToView(dotPath), fillBrush);
+
+
+        // add slight offset circle for contrast to help show it on
+        dotPath = QPainterPath(); // resets path
+        dotPath.addEllipse(m_axesPoint.x() - dotRadius*0.75, m_axesPoint.y()- dotRadius*0.75, dotRadius, dotRadius); // last 2 parameters are dot's size
+        fillBrush.setColor(QColor(120, 120, 120, 255));
+        gc.fillPath(pixelToView(dotPath), fillBrush);
+    }
+
 }
 
 void KisToolMultihand::initTransformations()
@@ -432,6 +503,7 @@ void KisToolMultihand::slotSetHandsCount(int count)
 {
     m_handsCount = count;
     m_configGroup.writeEntry("handsCount", count);
+    updateCanvas();
 }
 
 void KisToolMultihand::slotSetAxesAngle(qreal angle)
@@ -496,12 +568,14 @@ void KisToolMultihand::slotSetAxesVisible(bool vis)
 void KisToolMultihand::slotSetMirrorVertically(bool mirror)
 {
     m_mirrorVertically = mirror;
+    updateCanvas();
     m_configGroup.writeEntry("mirrorVertically", mirror);
 }
 
 void KisToolMultihand::slotSetMirrorHorizontally(bool mirror)
 {
     m_mirrorHorizontally = mirror;
+    updateCanvas();
     m_configGroup.writeEntry("mirrorHorizontally", mirror);
 }
 

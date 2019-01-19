@@ -69,7 +69,7 @@ struct KisDisplayColorConverter::Private
     const KoColorSpace *nodeColorSpace;
     const KoColorSpace *paintingColorSpace;
 
-    const KoColorProfile* ocioInputProfile = 0;
+    const KoColorProfile* inputImageProfile = 0;
 
     const KoColorProfile* qtWidgetsProfile() const {
         return useHDRMode ? KoColorSpaceRegistry::instance()->p709SRGBProfile() : monitorProfile;
@@ -79,9 +79,13 @@ struct KisDisplayColorConverter::Private
         return useHDRMode ? KisOpenGLModeProber::instance()->rootSurfaceColorProfile() : monitorProfile;
     }
 
+    const KoColorProfile* ocioInputProfile() const {
+        return displayFilter && displayFilter->useInternalColorManagement() ?
+                    openGLSurfaceProfile() : inputImageProfile;
+    }
+
     const KoColorProfile* ocioOutputProfile() const {
-        return displayFilter && !displayFilter->useInternalColorManagement() ?
-                    openGLSurfaceProfile() : ocioInputProfile;
+        return openGLSurfaceProfile();
     }
 
     const KoColorSpace* ocioInputColorSpace() const {
@@ -89,7 +93,7 @@ struct KisDisplayColorConverter::Private
                 colorSpace(
                     RGBAColorModelID.id(),
                     Float32BitsColorDepthID.id(),
-                    ocioInputProfile);
+                    ocioInputProfile());
     }
 
     const KoColorSpace* ocioOutputColorSpace() const {
@@ -222,7 +226,7 @@ KisDisplayColorConverter::KisDisplayColorConverter(KoCanvasResourceProvider *res
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(selectPaintingColorSpace()));
 
-    m_d->ocioInputProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+    m_d->inputImageProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
     m_d->setCurrentNode(0);
     setMonitorProfile(0);
     setDisplayFilter(QSharedPointer<KisDisplayFilter>(0));
@@ -233,7 +237,7 @@ KisDisplayColorConverter::KisDisplayColorConverter()
 {
     setDisplayFilter(QSharedPointer<KisDisplayFilter>(0));
 
-    m_d->ocioInputProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+    m_d->inputImageProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
     m_d->paintingColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 
     m_d->setCurrentNode(0);
@@ -295,7 +299,7 @@ void KisDisplayColorConverter::Private::slotUpdateImageColorSpace()
 {
     if (!image) return;
 
-    ocioInputProfile =
+    inputImageProfile =
         image->colorSpace()->colorModelId() == RGBAColorModelID ?
         image->colorSpace()->profile() :
         KoColorSpaceRegistry::instance()->p709SRGBProfile();

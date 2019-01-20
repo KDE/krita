@@ -845,12 +845,20 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
 {
     processInputMethodEvent(event);
 }
-
+#include <KoColorModelStandardIds.h>
 void KisOpenGLCanvas2::renderCanvasGL()
 {
-    // Draw the border (that is, clear the whole widget to the border color)
-    QColor widgetBackgroundColor = borderColor();
-    glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
+    {
+        // Draw the border (that is, clear the whole widget to the border color)
+        QColor widgetBackgroundColor = borderColor();
+        KoColor convertedBackgroudColor =
+            canvas()->displayColorConverter()->applyDisplayFiltering(
+                KoColor(widgetBackgroundColor, KoColorSpaceRegistry::instance()->rgb8()),
+                Float32BitsColorDepthID);
+        const float *pixel = reinterpret_cast<const float*>(convertedBackgroudColor.data());
+        glClearColor(pixel[0], pixel[1], pixel[2], 1.0);
+    }
+
     glClear(GL_COLOR_BUFFER_BIT);
 
     if ((d->displayFilter && d->displayFilter->updateShader()) ||

@@ -586,6 +586,7 @@ void KisCanvas2::connectCurrentCanvas()
         m_d->prescaledProjection->setImage(image);
     }
 
+    m_d->displayColorConverter.notifyOpenGLCanvasIsActive(m_d->currentCanvasIsOpenGL);
     startResizingImage();
     setLodAllowedInCanvas(m_d->lodAllowedInImage);
 

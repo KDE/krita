@@ -76,7 +76,7 @@ struct KisDisplayColorConverter::Private
     }
 
     const KoColorProfile* openGLSurfaceProfile() const {
-        return useHDRMode ? KisOpenGLModeProber::instance()->rootSurfaceColorProfile() : monitorProfile;
+        return useHDRMode && openGLCanvasIsActive ? KisOpenGLModeProber::instance()->rootSurfaceColorProfile() : monitorProfile;
     }
 
     const KoColorProfile* ocioInputProfile() const {
@@ -142,7 +142,7 @@ struct KisDisplayColorConverter::Private
     KisImageSP image;
 
     bool useHDRMode = false;
-
+    bool openGLCanvasIsActive = false;
 
     inline KoColor approximateFromQColor(const QColor &qcolor);
     inline QColor approximateToQColor(const KoColor &color);
@@ -458,6 +458,13 @@ bool KisDisplayColorConverter::isHDRMode() const
 {
     return  m_d->useHDRMode;
 }
+
+void KisDisplayColorConverter::notifyOpenGLCanvasIsActive(bool value)
+{
+    m_d->openGLCanvasIsActive = value;
+    emit displayConfigurationChanged();
+}
+
 
 QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor) const
 {

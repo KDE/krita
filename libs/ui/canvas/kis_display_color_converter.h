@@ -99,6 +99,8 @@ public:
     const KoColorProfile* openGLCanvasSurfaceProfile() const;
     bool isHDRMode() const;
 
+    void notifyOpenGLCanvasIsActive(bool value);
+
 Q_SIGNALS:
     void displayConfigurationChanged();
 

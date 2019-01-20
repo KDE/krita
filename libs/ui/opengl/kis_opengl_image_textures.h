@@ -147,7 +147,7 @@ protected:
                            KoColorConversionTransformation::Intent renderingIntent,
                            KoColorConversionTransformation::ConversionFlags conversionFlags);
 
-    void createImageTextureTiles();
+    void recreateImageTextureTiles();
 
     void destroyImageTextureTiles();
 

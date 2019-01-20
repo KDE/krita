@@ -110,7 +110,7 @@ void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f)
     m_updateInfoBuilder.setTextureInfoPool(s_poolRegistry.getPool(m_texturesInfo.width, m_texturesInfo.height));
 
     m_glFuncs->glGenTextures(1, &m_checkerTexture);
-    createImageTextureTiles();
+    recreateImageTextureTiles();
 
     KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds(), m_image);
     recalculateCache(info, false);
@@ -176,7 +176,7 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
     }
 }
 
-void KisOpenGLImageTextures::createImageTextureTiles()
+void KisOpenGLImageTextures::recreateImageTextureTiles()
 {
 
     destroyImageTextureTiles();
@@ -340,7 +340,7 @@ void KisOpenGLImageTextures::updateConfig(bool useBuffer, int NumMipmapLevels)
 
 void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
 {
-    createImageTextureTiles();
+    recreateImageTextureTiles();
 }
 
 KisOpenGLUpdateInfoBuilder &KisOpenGLImageTextures::updateInfoBuilder()
@@ -355,15 +355,7 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
     m_renderingIntent = renderingIntent;
     m_conversionFlags = conversionFlags;
 
-
-    // FIXME: perhaps this call is not needed, because the options will
-    //        be set in updateTextureFormat()
-    m_updateInfoBuilder.setConversionOptions(
-        ConversionOptions(m_tilesDestinationColorSpace,
-                          m_renderingIntent,
-                          m_conversionFlags));
-
-    createImageTextureTiles();
+    recreateImageTextureTiles();
 }
 
 void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
@@ -440,7 +432,7 @@ bool KisOpenGLImageTextures::setInternalColorManagementActive(bool value)
 
     if (needsFinalRegeneration) {
         m_internalColorManagementActive = value;
-        createImageTextureTiles();
+        recreateImageTextureTiles();
 
         // at this point the value of m_internalColorManagementActive might
         // have been forcely reverted to 'false' in case of some problems

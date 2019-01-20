@@ -564,7 +564,7 @@ void KisCanvas2::initializeImage()
 {
     KisImageSP image = m_d->view->image();
 
-    m_d->displayColorConverter.setImage(image);
+    m_d->displayColorConverter.setImageColorSpace(image->colorSpace());
     m_d->coordinatesConverter->setImage(image);
     m_d->toolProxy.initializeImage(image);
 
@@ -576,6 +576,9 @@ void KisCanvas2::initializeImage()
     connect(image, SIGNAL(sigProofingConfigChanged()), SLOT(slotChangeProofingConfig()));
     connect(image, SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(startResizingImage()), Qt::DirectConnection);
     connect(image->undoAdapter(), SIGNAL(selectionChanged()), SLOT(slotTrySwitchShapeManager()));
+
+    connect(image, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()));
+    connect(image, SIGNAL(sigProfileChanged(const KoColorProfile*)), SLOT(slotImageColorSpaceChanged()));
 
     connectCurrentCanvas();
 }
@@ -617,6 +620,8 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
 
 void KisCanvas2::startUpdateInPatches(const QRect &imageRect)
 {
+    ENTER_FUNCTION();
+
     /**
      * We don't do patched loading for openGL canvas, becasue it loads
      * the tiles, which are bascially "patches". Therefore, big chunks
@@ -653,6 +658,21 @@ void KisCanvas2::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter
 QSharedPointer<KisDisplayFilter> KisCanvas2::displayFilter() const
 {
     return m_d->displayColorConverter.displayFilter();
+}
+
+void KisCanvas2::slotImageColorSpaceChanged()
+{
+    ENTER_FUNCTION();
+
+    KisImageSP image = this->image();
+
+    m_d->view->viewManager()->blockUntilOperationsFinishedForced(image);
+
+    m_d->displayColorConverter.setImageColorSpace(image->colorSpace());
+
+    image->barrierLock();
+    m_d->canvasWidget->notifyImageColorSpaceChanged(image->colorSpace());
+    image->unlock();
 }
 
 KisDisplayColorConverter* KisCanvas2::displayColorConverter() const

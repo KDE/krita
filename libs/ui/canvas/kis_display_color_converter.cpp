@@ -148,7 +148,6 @@ struct KisDisplayColorConverter::Private
     inline QColor approximateToQColor(const KoColor &color);
 
     void slotCanvasResourceChanged(int key, const QVariant &v);
-    void slotUpdateImageColorSpace();
     void slotUpdateCurrentNodeColorSpace();
     void selectPaintingColorSpace();
 
@@ -248,17 +247,16 @@ KisDisplayColorConverter::~KisDisplayColorConverter()
 {
 }
 
-void KisDisplayColorConverter::setImage(KisImageSP image)
+void KisDisplayColorConverter::setImageColorSpace(const KoColorSpace *cs)
 {
-    if (m_d->image) {
-        disconnect(image, 0, this, 0);
-    }
+    m_d->inputImageProfile =
+        cs->colorModelId() == RGBAColorModelID ?
+        cs->profile() :
+        KoColorSpaceRegistry::instance()->p709SRGBProfile();
 
-    m_d->image = image;
-    connect(image, SIGNAL(sigProfileChanged(const KoColorProfile*)), SLOT(slotUpdateImageColorSpace()));
-    connect(image, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotUpdateImageColorSpace()));
-    m_d->slotUpdateImageColorSpace();
+    emit displayConfigurationChanged();
 }
+
 
 KisDisplayColorConverter* KisDisplayColorConverter::dumbConverterInstance()
 {
@@ -293,18 +291,6 @@ void KisDisplayColorConverter::Private::slotCanvasResourceChanged(int key, const
     } else if (useOcio() && key == KoCanvasResourceProvider::ForegroundColor) {
         updateIntermediateFgColor(v.value<KoColor>());
     }
-}
-
-void KisDisplayColorConverter::Private::slotUpdateImageColorSpace()
-{
-    if (!image) return;
-
-    inputImageProfile =
-        image->colorSpace()->colorModelId() == RGBAColorModelID ?
-        image->colorSpace()->profile() :
-        KoColorSpaceRegistry::instance()->p709SRGBProfile();
-
-    emit q->displayConfigurationChanged();
 }
 
 void KisDisplayColorConverter::Private::slotUpdateCurrentNodeColorSpace()

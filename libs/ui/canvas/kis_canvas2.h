@@ -304,6 +304,7 @@ private Q_SLOTS:
 
     void slotReferenceImagesChanged();
 
+    void slotImageColorSpaceChanged();
 public:
 
     bool isPopupPaletteVisible() const;

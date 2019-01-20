@@ -60,7 +60,6 @@ KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMa
 KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
-    , m_tilesDestinationColorSpace(0)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
     , m_glFuncs(0)
@@ -84,7 +83,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_monitorProfile(monitorProfile)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
-    , m_tilesDestinationColorSpace(0)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
     , m_glFuncs(0)
@@ -182,7 +180,10 @@ void KisOpenGLImageTextures::recreateImageTextureTiles()
     destroyImageTextureTiles();
     updateTextureFormat();
 
-    if (!m_tilesDestinationColorSpace) {
+    const KoColorSpace *tilesDestinationColorSpace =
+        m_updateInfoBuilder.destinationColorSpace();
+
+    if (!tilesDestinationColorSpace) {
         qDebug() << "No destination colorspace!!!!";
         return;
     }
@@ -195,7 +196,7 @@ void KisOpenGLImageTextures::recreateImageTextureTiles()
     m_numCols = lastCol + 1;
 
     // Default color is transparent black
-    const int pixelSize = m_tilesDestinationColorSpace->pixelSize();
+    const int pixelSize = tilesDestinationColorSpace->pixelSize();
     QByteArray emptyTileData((m_texturesInfo.width) * (m_texturesInfo.height) * pixelSize, 0);
 
     KisConfig config(true);
@@ -356,6 +357,15 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
     m_conversionFlags = conversionFlags;
 
     recreateImageTextureTiles();
+}
+
+bool KisOpenGLImageTextures::setImageColorSpace(const KoColorSpace *cs)
+{
+    Q_UNUSED(cs);
+    // TODO: implement lazy update: do not re-upload textures when not needed
+
+    recreateImageTextureTiles();
+    return true;
 }
 
 void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
@@ -590,13 +600,13 @@ void KisOpenGLImageTextures::updateTextureFormat()
      *       would not be called when not needed (DK)
      */
 
-    m_tilesDestinationColorSpace =
+    const KoColorSpace *tilesDestinationColorSpace =
             KoColorSpaceRegistry::instance()->colorSpace(destinationColorModelId.id(),
                                                          destinationColorDepthId.id(),
                                                          profile);
 
     m_updateInfoBuilder.setConversionOptions(
-        ConversionOptions(m_tilesDestinationColorSpace,
+        ConversionOptions(tilesDestinationColorSpace,
                           m_renderingIntent,
                           m_conversionFlags));
 }

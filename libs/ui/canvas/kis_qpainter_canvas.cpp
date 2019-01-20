@@ -185,6 +185,13 @@ void KisQPainterCanvas::setDisplayFilter(QSharedPointer<KisDisplayFilter> displa
         canvas()->startUpdateInPatches(canvas()->image()->bounds());
 }
 
+void KisQPainterCanvas::notifyImageColorSpaceChanged(const KoColorSpace *cs)
+{
+    Q_UNUSED(cs);
+    // FIXME: on color space change the data is refetched multiple
+    //        times by different actors!
+    canvas()->startUpdateInPatches(canvas()->image()->bounds());
+}
 
 void KisQPainterCanvas::setWrapAroundViewingMode(bool value)
 {

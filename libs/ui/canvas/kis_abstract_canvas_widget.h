@@ -31,6 +31,7 @@ class KoToolProxy;
 class KisDisplayFilter;
 class KisDisplayColorConverter;
 class QBitArray;
+class KoColorSpace;
 
 #include "kis_types.h"
 #include "kis_ui_types.h"
@@ -62,6 +63,9 @@ public:
 
     /// set the specified display filter on the canvas
     virtual void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) = 0;
+
+    /// set/update the color space of the attached image
+    virtual void notifyImageColorSpaceChanged(const KoColorSpace *cs) = 0;
 
     virtual void setWrapAroundViewingMode(bool value) = 0;
 

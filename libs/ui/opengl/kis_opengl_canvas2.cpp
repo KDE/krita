@@ -209,6 +209,16 @@ void KisOpenGLCanvas2::setDisplayFilterImpl(QSharedPointer<KisDisplayFilter> dis
     }
 }
 
+void KisOpenGLCanvas2::notifyImageColorSpaceChanged(const KoColorSpace *cs)
+{
+    // FIXME: on color space change the data is refetched multiple
+    //        times by different actors!
+
+    if (d->openGLImageTextures->setImageColorSpace(cs)) {
+        canvas()->startUpdateInPatches(canvas()->image()->bounds());
+    }
+}
+
 void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
 {
     d->wrapAroundMode = value;

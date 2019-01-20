@@ -54,6 +54,7 @@ public:
     ~KisDisplayColorConverter() override;
 
     void setImage(KisImageSP image);
+    void setImageColorSpace(const KoColorSpace *cs);
 
     static KisDisplayColorConverter* dumbConverterInstance();
 
@@ -114,7 +115,6 @@ private:
     Q_PRIVATE_SLOT(m_d, void slotCanvasResourceChanged(int key, const QVariant &v));
     Q_PRIVATE_SLOT(m_d, void selectPaintingColorSpace());
     Q_PRIVATE_SLOT(m_d, void slotUpdateCurrentNodeColorSpace());
-    Q_PRIVATE_SLOT(m_d, void slotUpdateImageColorSpace());
 
 private:
     struct Private;

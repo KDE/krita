@@ -532,22 +532,25 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     KisConfig cfg(true);
     QDesktopWidget dw;
     const KoColorProfile *profile = cfg.displayProfile(dw.screenNumber(imageView()));
+    m_d->displayColorConverter.notifyOpenGLCanvasIsActive(useOpenGL && KisOpenGL::hasOpenGL());
     m_d->displayColorConverter.setMonitorProfile(profile);
 
+    if (useOpenGL && !KisOpenGL::hasOpenGL()) {
+        warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
+        useOpenGL = false;
+    }
+
+    m_d->displayColorConverter.notifyOpenGLCanvasIsActive(useOpenGL);
+
     if (useOpenGL) {
-        if (KisOpenGL::hasOpenGL()) {
-            createOpenGLCanvas();
-            if (cfg.canvasState() == "OPENGL_FAILED") {
-                // Creating the opengl canvas failed, fall back
-                warnKrita << "OpenGL Canvas initialization returned OPENGL_FAILED. Falling back to QPainter.";
-                createQPainterCanvas();
-            }
-        } else {
-            warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
+        createOpenGLCanvas();
+        if (cfg.canvasState() == "OPENGL_FAILED") {
+            // Creating the opengl canvas failed, fall back
+            warnKrita << "OpenGL Canvas initialization returned OPENGL_FAILED. Falling back to QPainter.";
+            m_d->displayColorConverter.notifyOpenGLCanvasIsActive(false);
             createQPainterCanvas();
         }
-    }
-    else {
+    } else {
         createQPainterCanvas();
     }
 
@@ -586,7 +589,6 @@ void KisCanvas2::connectCurrentCanvas()
         m_d->prescaledProjection->setImage(image);
     }
 
-    m_d->displayColorConverter.notifyOpenGLCanvasIsActive(m_d->currentCanvasIsOpenGL);
     startResizingImage();
     setLodAllowedInCanvas(m_d->lodAllowedInImage);
 

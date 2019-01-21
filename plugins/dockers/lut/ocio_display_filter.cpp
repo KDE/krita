@@ -267,7 +267,12 @@ void OcioDisplayFilter::updateProcessor()
 
 bool OcioDisplayFilter::updateShader()
 {
-    if (KisOpenGL::hasOpenGL3()) {
+    if (KisOpenGL::hasOpenGLES()) {
+        QOpenGLExtraFunctions *f = QOpenGLContext::currentContext()->extraFunctions();
+        if (f) {
+            return updateShaderImpl(f);
+        }
+    } else if (KisOpenGL::hasOpenGL3()) {
         QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
         if (f) {
             return updateShaderImpl(f);

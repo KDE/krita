@@ -489,6 +489,8 @@ QByteArray Node::projectionPixelData(int x, int y, int w, int h) const
     if (!d->node) return ba;
 
     KisPaintDeviceSP dev = d->node->projection();
+    if (!dev) return ba;
+
     ba.resize(w * h * dev->pixelSize());
     dev->readBytes(reinterpret_cast<quint8*>(ba.data()), x, y, w, h);
     return ba;

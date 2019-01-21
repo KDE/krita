@@ -216,20 +216,23 @@ void Node::setColorLabel(int index)
 QString Node::colorDepth() const
 {
     if (!d->node) return "";
-    return d->node->colorSpace()->colorDepthId().id();
+    if (!d->node->projection()) return d->node->colorSpace()->colorDepthId().id();
+    return d->node->projection()->colorSpace()->colorDepthId().id();
 }
 
 QString Node::colorModel() const
 {
     if (!d->node) return "";
-    return d->node->colorSpace()->colorModelId().id();
+    if (!d->node->projection()) return d->node->colorSpace()->colorModelId().id();
+    return d->node->projection()->colorSpace()->colorModelId().id();
 }
 
 
 QString Node::colorProfile() const
 {
     if (!d->node) return "";
-    return d->node->colorSpace()->profile()->name();
+    if (!d->node->projection()) return d->node->colorSpace()->profile()->name();
+    return d->node->projection()->colorSpace()->profile()->name();
 }
 
 bool Node::setColorProfile(const QString &colorProfile)

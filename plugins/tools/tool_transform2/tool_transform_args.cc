@@ -48,6 +48,8 @@ ToolTransformArgs::ToolTransformArgs()
     , m_shearX(0.0)
     , m_shearY(0.0)
     , m_liquifyProperties(new KisLiquifyProperties())
+    , m_pixelPrecision(8)
+    , m_previewPixelPrecision(16)
 {
     KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
     QString savedFilterId = configGroup.readEntry("filterId", "Bicubic");
@@ -96,6 +98,8 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_filter = args.m_filter;
     m_flattenedPerspectiveTransform = args.m_flattenedPerspectiveTransform;
     m_editTransformPoints = args.m_editTransformPoints;
+    m_pixelPrecision = 8;
+    m_previewPixelPrecision = 16;
 
     if (args.m_liquifyWorker) {
         m_liquifyWorker.reset(new KisLiquifyTransformWorker(*args.m_liquifyWorker.data()));
@@ -166,7 +170,9 @@ bool ToolTransformArgs::operator==(const ToolTransformArgs& other) const
 
         ((m_liquifyWorker && other.m_liquifyWorker &&
           *m_liquifyWorker == *other.m_liquifyWorker)
-         || m_liquifyWorker == other.m_liquifyWorker);
+         || m_liquifyWorker == other.m_liquifyWorker) &&
+            m_pixelPrecision == other.m_pixelPrecision &&
+            m_previewPixelPrecision == other.m_previewPixelPrecision;
 }
 
 bool ToolTransformArgs::isSameMode(const ToolTransformArgs& other) const
@@ -247,6 +253,7 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     , m_shearY(shearY)
     , m_liquifyProperties(new KisLiquifyProperties())
     , m_pixelPrecision(8)
+    , m_previewPixelPrecision(16)
 {
     setFilterId(filterId);
 }

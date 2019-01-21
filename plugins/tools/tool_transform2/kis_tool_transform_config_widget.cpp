@@ -53,7 +53,18 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     chkWorkRecursively->setChecked(workRecursively);
     connect(chkWorkRecursively, SIGNAL(toggled(bool)), this, SIGNAL(sigRestartTransform()));
-    connect(changeGranularity,SIGNAL(valueChanged(int)),this,SLOT(slotGranularityChanged(int)));
+
+    // Granularity can only be specified in the power of 2's
+    QStringList granularityValues{"4","8","16","32"};
+    changeGranularity->addItems(granularityValues);
+    changeGranularity->setCurrentIndex(1);
+    granularityPreview->addItems(granularityValues);
+    granularityPreview->setCurrentIndex(2);
+
+    connect(changeGranularity,SIGNAL(currentIndexChanged(QString)),
+            this,SLOT(slotGranularityChanged(QString)));
+    connect(granularityPreview, SIGNAL(currentIndexChanged(QString)),
+            this,SLOT(slotPreviewGranularityChanged(QString)));
 
     // Init Filter  combo
     cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
@@ -1297,10 +1308,20 @@ void KisToolTransformConfigWidget::slotEditCagePoints(bool value)
     notifyConfigChanged();
 }
 
-void KisToolTransformConfigWidget::slotGranularityChanged(int value)
+void KisToolTransformConfigWidget::slotGranularityChanged(QString value)
 {
     if (m_uiSlotsBlocked) return;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(value.toInt() > 1);
     ToolTransformArgs *config = m_transaction->currentConfig();
-    config->setPixelPrecision(value);
+    config->setPixelPrecision(value.toInt());
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotPreviewGranularityChanged(QString value)
+{
+    if (m_uiSlotsBlocked) return;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(value.toInt() > 1);
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setPreviewPixelPrecision(value.toInt());
     notifyConfigChanged();
 }

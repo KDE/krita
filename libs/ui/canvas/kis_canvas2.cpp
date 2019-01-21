@@ -620,8 +620,6 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
 
 void KisCanvas2::startUpdateInPatches(const QRect &imageRect)
 {
-    ENTER_FUNCTION();
-
     /**
      * We don't do patched loading for openGL canvas, becasue it loads
      * the tiles, which are bascially "patches". Therefore, big chunks
@@ -662,8 +660,6 @@ QSharedPointer<KisDisplayFilter> KisCanvas2::displayFilter() const
 
 void KisCanvas2::slotImageColorSpaceChanged()
 {
-    ENTER_FUNCTION();
-
     KisImageSP image = this->image();
 
     m_d->view->viewManager()->blockUntilOperationsFinishedForced(image);

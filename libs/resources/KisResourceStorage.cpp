@@ -22,7 +22,7 @@
 #include <QFileInfo>
 #include <QDebug>
 
-#include <kzip.h>
+#include <quazip.h>
 
 #include "KisStoragePlugin.h"
 #include "KisFolderStorage.h"
@@ -56,7 +56,7 @@ KisResourceStorage::KisResourceStorage(const QString &location)
             d->storagePlugin.reset(new KisBundleStorage(location));
             d->storageType = StorageType::Bundle;
             // XXX: should we also check whether there's a valid metadata entry? Or is this enough?
-            d->valid = (fi.isReadable() && KZip(d->location).open(QIODevice::ReadOnly));
+            d->valid = (fi.isReadable() && QuaZip(d->location).open(QIODevice::ReadOnly));
         }
         else if (d->location.endsWith(".abr")) {
             d->storagePlugin.reset(new KisAbrStorage(location));

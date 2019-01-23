@@ -1,3 +1,5 @@
+include_directories(${QUAZIP_INCLUDE_DIRS})
+
 add_subdirectory(tests)
 
 set(kritaresources_LIB_SRCS
@@ -53,6 +55,7 @@ target_link_libraries(kritaresources
         KF5::CoreAddons
         KF5::I18n
         KF5::Archive
+        ${QUAZIP_LIBRARIES}
 )
 
 set_target_properties(kritaresources PROPERTIES

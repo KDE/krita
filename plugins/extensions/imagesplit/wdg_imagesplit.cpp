@@ -38,6 +38,7 @@ WdgImagesplit::WdgImagesplit(QWidget* parent)
     intHorizontalSplitLines->setValue(cfg.horizontalSplitLines());
     intVerticalSplitLines->setValue(cfg.verticalSplitLines());
 
+    chkHorizontal->setChecked(true);
     chkAutoSave->setChecked(true);
 }
 

@@ -43,20 +43,26 @@ public:
      * @param name the proposed name for this layer
      * @param view the view manager
      * @param parent the widget parent of this dialog
+     * @param glayer optional generator layer for editing
+     * @param previousConfig optional configuration of layer being edited.
      */
-    KisDlgGeneratorLayer(const QString & name, KisViewManager *view, QWidget *parent);
+    KisDlgGeneratorLayer(const QString & defaultLayerName, KisViewManager *arg_view, QWidget *parent, KisGeneratorLayerSP glayer, const KisFilterConfigurationSP previousConfig);
+    ~KisDlgGeneratorLayer() override;
 
     void setConfiguration(const KisFilterConfigurationSP  config);
     KisFilterConfigurationSP  configuration() const;
     QString layerName() const;
 
 protected Q_SLOTS:
-
     void slotNameChanged(const QString &);
 
 private:
-
     Ui_WdgDlgGeneratorLayer dlgWidget;
+    KisGeneratorLayerSP layer;
+    KisFilterConfigurationSP configBefore;
+    KisViewManager *m_view;
+    bool isEditing;
+
     bool m_customName;
     bool m_freezeName;
 };

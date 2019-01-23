@@ -30,9 +30,12 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
+#include <commands/kis_change_filter_command.h>
+#include <kis_generator_layer.h>
 #include <KisViewManager.h>
+#include <KisDocument.h>
 
-KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, KisViewManager *view, QWidget *parent)
+KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewManager *view, QWidget *parent, KisGeneratorLayerSP glayer = 0, const KisFilterConfigurationSP previousConfig = 0)
         : KoDialog(parent)
         , m_customName(false)
         , m_freezeName(false)
@@ -40,14 +43,54 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & name, KisViewManager 
 
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
-    QWidget * page = new QWidget(this);
+    isEditing = glayer && previousConfig;
+
+    if(isEditing){
+        setModal(false);
+        layer = glayer;
+        configBefore = previousConfig;
+    }
+
+    QWidget *page = new QWidget(this);
+
+    m_view = view;
     dlgWidget.setupUi(page);
-    dlgWidget.wdgGenerator->initialize(view);
+    dlgWidget.wdgGenerator->initialize(m_view);
 
     setMainWidget(page);
-    dlgWidget.txtLayerName->setText(name);
+    dlgWidget.txtLayerName->setText( isEditing ? layer->name() : defaultName );
     connect(dlgWidget.txtLayerName, SIGNAL(textChanged(QString)),
             this, SLOT(slotNameChanged(QString)));
+}
+
+KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
+{
+    /*Editing a layer should be using the show function with automatic deletion on close.
+     *Because of this, the action should be taken care of when the window is closed and
+     *the user has accepted the changes.*/
+    if(isEditing && result() == QDialog::Accepted) {
+
+        layer->setName(layerName());
+
+        KisFilterConfigurationSP configAfter(configuration());
+        Q_ASSERT(configAfter);
+        QString xmlBefore = configBefore->toXML();
+        QString xmlAfter = configAfter->toXML();
+
+        if(xmlBefore != xmlAfter) {
+            KisChangeFilterCmd *cmd
+                    = new KisChangeFilterCmd(layer,
+                                             configBefore->name(),
+                                             xmlBefore,
+                                             configAfter->name(),
+                                             xmlAfter,
+                                             true);
+
+            m_view->undoAdapter()->addCommand(cmd);
+            m_view->document()->setModified(true);
+        }
+
+    }
 }
 
 void KisDlgGeneratorLayer::slotNameChanged(const QString & text)

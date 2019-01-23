@@ -292,40 +292,21 @@ void KisLayerManager::layerProperties()
         }
     }
     else if (glayer && !multipleLayersSelected) {
-
-        KisDlgGeneratorLayer dlg(glayer->name(), m_view, m_view->mainWindow());
-        dlg.setCaption(i18n("Fill Layer Properties"));
-
         KisFilterConfigurationSP configBefore(glayer->filter());
         Q_ASSERT(configBefore);
         QString xmlBefore = configBefore->toXML();
 
-        dlg.setConfiguration(configBefore.data());
-        dlg.resize(dlg.minimumSizeHint());
+        KisDlgGeneratorLayer *dlg = new KisDlgGeneratorLayer(glayer->name(), m_view, m_view->mainWindow(), glayer, configBefore);
+        dlg->setCaption(i18n("Fill Layer Properties"));
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
 
-        if (dlg.exec() == QDialog::Accepted) {
+        dlg->setConfiguration(configBefore.data());
+        dlg->resize(dlg->minimumSizeHint());
 
-            glayer->setName(dlg.layerName());
+        Qt::WindowFlags flags = dlg->windowFlags();
+        dlg->setWindowFlags(flags | Qt::WindowStaysOnTopHint | Qt::Dialog);
+        dlg->show();
 
-            KisFilterConfigurationSP configAfter(dlg.configuration());
-            Q_ASSERT(configAfter);
-            QString xmlAfter = configAfter->toXML();
-
-            if(xmlBefore != xmlAfter) {
-                KisChangeFilterCmd *cmd
-                        = new KisChangeFilterCmd(glayer,
-                                                 configBefore->name(),
-                                                 xmlBefore,
-                                                 configAfter->name(),
-                                                 xmlAfter,
-                                                 true);
-                // FIXME: check whether is needed
-                cmd->redo();
-                m_view->undoAdapter()->addCommand(cmd);
-                m_view->document()->setModified(true);
-            }
-
-        }
     }  else if (flayer && !multipleLayersSelected){
         QString basePath = QFileInfo(m_view->document()->url().toLocalFile()).absolutePath();
         QString fileNameOld = flayer->fileName();
@@ -674,7 +655,8 @@ KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
     KisImageWSP image = m_view->image();
     QColor currentForeground = m_view->resourceProvider()->fgColor().toQColor();
 
-    KisDlgGeneratorLayer dlg(image->nextLayerName(), m_view, m_view->mainWindow());
+
+    KisDlgGeneratorLayer dlg(image->nextLayerName(), m_view, m_view->mainWindow(), 0, 0);
     KisFilterConfigurationSP defaultConfig = dlg.configuration();
     defaultConfig->setProperty("color", currentForeground);
     dlg.setConfiguration(defaultConfig);

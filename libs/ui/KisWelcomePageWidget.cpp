@@ -209,7 +209,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
         else {
             if (QFileInfo(recentFileUrlPath).exists()) {
                 if (recentFileUrlPath.endsWith("ora") || recentFileUrlPath.endsWith("kra")) {
-                    QScopedPointer<KoStore> store(KoStore::createStore(QUrl::fromLocalFile(recentFileUrlPath), KoStore::Read));
+                    QScopedPointer<KoStore> store(KoStore::createStore(recentFileUrlPath, KoStore::Read));
                     if (store) {
                         if (store->open(QString("Thumbnails/thumbnail.png"))
                                 || store->open(QString("preview.png"))) {

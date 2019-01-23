@@ -288,7 +288,7 @@ void ParagraphBulletsNumbers::styleChanged(int index)
         case KoListStyle::AlphaLowerItem:
         case KoListStyle::UpperAlphaItem:
             showLetterSynchronization = true;
-        // fall through
+        Q_FALLTHROUGH();
         default:
             widget.levels->setEnabled(true);
             widget.startValue->setEnabled(true);

@@ -100,6 +100,14 @@ public:
         m_pixelPrecision = precision;
     }
 
+    inline int previewPixelPrecision() const {
+        return m_previewPixelPrecision;
+    }
+
+    inline void setPreviewPixelPrecision(int precision) {
+        m_previewPixelPrecision = precision;
+    }
+
     //warp-related
     inline int numPoints() const {
         KIS_ASSERT_RECOVER_NOOP(m_origPoints.size() == m_transfPoints.size());
@@ -338,7 +346,10 @@ private:
      * operations should revert to it.
      */
     QScopedPointer<ToolTransformArgs> m_continuedTransformation;
+
+    //PixelPrecision should always be in powers of 2
     int m_pixelPrecision;
+    int m_previewPixelPrecision;
 };
 
 #endif // TOOL_TRANSFORM_ARGS_H_

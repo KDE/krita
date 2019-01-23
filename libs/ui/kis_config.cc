@@ -2004,6 +2004,16 @@ void KisConfig::setActivateTransformToolAfterPaste(bool value)
     m_cfg.writeEntry("activateTransformToolAfterPaste", value);
 }
 
+bool KisConfig::useZip64(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("UseZip64", false);
+}
+
+void KisConfig::setUseZip64(bool value)
+{
+    m_cfg.writeEntry("UseZip64", value);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

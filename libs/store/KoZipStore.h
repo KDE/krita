@@ -33,12 +33,7 @@ public:
                bool writeMimetype = true);
     KoZipStore(QIODevice *dev, Mode mode, const QByteArray & appIdentification,
                bool writeMimetype = true);
-    /**
-     * QUrl-constructor
-     * @todo saving not completely implemented (fixed temporary file)
-     */
-    KoZipStore(QWidget* window, const QUrl &_url, const QString & _filename, Mode _mode,
-               const QByteArray & appIdentification, bool writeMimetype = true);
+
     ~KoZipStore() override;
 
     void setCompressionEnabled(bool e) override;

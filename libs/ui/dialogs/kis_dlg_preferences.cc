@@ -192,6 +192,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_autosaveCheckBox->setChecked(autosaveInterval > 0);
 
     m_chkCompressKra->setChecked(cfg.compressKra());
+    chkZip64->setChecked(cfg.useZip64());
 
     m_backupFileCheckBox->setChecked(cfg.backupFile());
 
@@ -256,6 +257,7 @@ void GeneralTab::setDefault()
     m_backgroundimage->setText(cfg.getMDIBackgroundImage(true));
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages(true));
     m_chkCompressKra->setChecked(cfg.compressKra(true));
+    chkZip64->setChecked(cfg.useZip64(true));
     m_chkHiDPI->setChecked(false);
     m_chkSingleApplication->setChecked(true);
 
@@ -337,6 +339,11 @@ bool GeneralTab::showCanvasMessages()
 bool GeneralTab::compressKra()
 {
     return m_chkCompressKra->isChecked();
+}
+
+bool GeneralTab::useZip64()
+{
+    return chkZip64->isChecked();
 }
 
 bool GeneralTab::toolOptionsInDocker()
@@ -1355,6 +1362,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
         cfg.setShowCanvasMessages(dialog->m_general->showCanvasMessages());
         cfg.setCompressKra(dialog->m_general->compressKra());
+        cfg.setUseZip64(dialog->m_general->useZip64());
 
         const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
         QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);

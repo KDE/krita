@@ -1,7 +1,7 @@
 /**
  * \mainpage
  *
- * KritaStore is a library which contains a wrapper around karchive
+ * KritaStore is a library which contains a wrapper around quazip
  */
 
 // DOXYGEN_SET_PROJECT_NAME = KritaStore

@@ -327,7 +327,6 @@ bool KoStorePrivate::extractFile(const QString &srcName, QIODevice &buffer)
         q->close();
         return false;
     }
-    // ### This could use KArchive::copy or something, no?
 
     QByteArray data;
     data.resize(8 * 1024);

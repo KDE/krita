@@ -43,7 +43,7 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    DEPENDS ext_karchive
+    DEPENDS ext_extra_cmake_modules
 )
 
 

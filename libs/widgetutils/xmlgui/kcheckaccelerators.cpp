@@ -129,7 +129,7 @@ bool KCheckAccelerators::eventFilter(QObject *obj, QEvent *e)
         if (!static_cast<QChildEvent *>(e)->child()->isWidgetType()) {
             break;
         }
-    // fall-through
+        Q_FALLTHROUGH();
     case QEvent::Resize:
     case QEvent::LayoutRequest:
     case QEvent::WindowActivate:

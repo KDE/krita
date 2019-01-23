@@ -102,7 +102,7 @@ QVariant DocumentListModel::data(const QModelIndex &index, int role) const
     const DocumentInfo &info = d->currentDocumentInfos[row];
 
     switch (role) {
-        case FileNameRole: // intentional fall through
+        case FileNameRole: Q_FALLTHROUGH();
         case Qt::DisplayRole: return info.fileName;
         case FilePathRole: return info.filePath;
         case DocTypeRole: return info.docType;

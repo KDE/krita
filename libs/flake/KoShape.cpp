@@ -2246,7 +2246,6 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
                 escapeDirection = "down";
                 break;
             default:
-                // fall through
                 break;
             }
             if(!escapeDirection.isEmpty()) {
@@ -2282,7 +2281,6 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
                 alignment = "bottom-right";
                 break;
             default:
-                // fall through
                 break;
             }
             if(!alignment.isEmpty()) {

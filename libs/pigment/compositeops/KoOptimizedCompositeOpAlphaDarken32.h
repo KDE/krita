@@ -31,13 +31,11 @@ struct AlphaDarkenCompositor32 {
     struct OptionalParams {
         OptionalParams(const KoCompositeOp::ParameterInfo& params)
             : flow(params.flow),
-              averageOpacity(*params.lastOpacity * params.flow),
-              premultipliedOpacity(params.opacity * params.flow)
+              averageOpacity(*params.lastOpacity)
         {
         }
         float flow;
         float averageOpacity;
-        float premultipliedOpacity;
     };
 
     /**
@@ -59,12 +57,7 @@ struct AlphaDarkenCompositor32 {
         Vc::float_v src_alpha;
         Vc::float_v dst_alpha;
 
-        // we don't use directly passed value
-        Q_UNUSED(opacity);
-
-        // instead we should use opacity premultiplied by flow
-        opacity = oparams.premultipliedOpacity;
-        Vc::float_v opacity_vec(255.0 * oparams.premultipliedOpacity);
+        Vc::float_v opacity_vec(255.0 * opacity);
 
         Vc::float_v average_opacity_vec(255.0 * oparams.averageOpacity);
         Vc::float_v flow_norm_vec(oparams.flow);
@@ -170,8 +163,7 @@ struct AlphaDarkenCompositor32 {
         if (oparams.flow == 1.0) {
             dst_alpha = fullFlowAlpha;
         } else {
-            Vc::float_v zeroFlowAlpha = src_alpha + dst_alpha -
-                dst_blend * dst_alpha;
+            Vc::float_v zeroFlowAlpha = dst_alpha;
             dst_alpha = (fullFlowAlpha - zeroFlowAlpha) * flow_norm_vec + zeroFlowAlpha;
         }
 
@@ -195,9 +187,6 @@ struct AlphaDarkenCompositor32 {
         float dstAlphaNorm = dstAlphaInt ? dstAlphaInt * uint8Rec1 : 0.0;
         float srcAlphaNorm;
         float mskAlphaNorm;
-
-        Q_UNUSED(opacity);
-        opacity = oparams.premultipliedOpacity;
 
         if (haveMask) {
             mskAlphaNorm = float(*mask) * uint8Rec2 * src[alpha_pos];
@@ -234,7 +223,7 @@ struct AlphaDarkenCompositor32 {
         if (flow == 1.0) {
             dstAlpha = fullFlowAlpha * uint8Max;
         } else {
-            float zeroFlowAlpha = unionShapeOpacity(srcAlphaNorm, dstAlphaNorm);
+            float zeroFlowAlpha = dstAlphaNorm;
             dstAlpha = lerp(zeroFlowAlpha, fullFlowAlpha, flow) * uint8Max;
         }
 

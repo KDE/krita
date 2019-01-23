@@ -648,6 +648,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doExportImpl(con
         } else {
 #ifdef USE_QSAVEFILE
             if (!file.commit()) {
+                qWarning() << "Could not commit QSaveFile";
                 QString error = file.errorString();
                 if (error.isEmpty()) {
                     error = i18n("Could not write to %1.", location);

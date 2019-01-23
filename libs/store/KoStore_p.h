@@ -70,11 +70,7 @@ public:
     bool extractFile(const QString &sourceName, QIODevice &buffer);
 
     KoStore *q;
-    /**
-     * original URL of the remote file
-     * (undefined for a local file)
-     */
-    QUrl url;
+
     QString localFileName;
     QWidget *window;
 

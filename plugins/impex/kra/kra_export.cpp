@@ -62,10 +62,10 @@ KisImportExportFilter::ConversionStatus KraExport::convert(KisDocument *document
     KisImageBuilder_Result res = kraConverter.buildFile(io, filename());
 
     if (res == KisImageBuilder_RESULT_OK) {
-        dbgFile << "success !";
+        dbgFile << "KraExport::convert success !";
         return KisImportExportFilter::OK;
     }
-    dbgFile << " Result =" << res;
+    dbgFile << "KraExport::convert result =" << res;
     return KisImportExportFilter::InternalError;
 }
 

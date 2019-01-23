@@ -208,3 +208,4 @@ if (NOT APPLE)
 endif ()
 
 add_subdirectory(ext_giflib)
+add_subdirectory(ext_quazip)

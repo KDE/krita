@@ -579,6 +579,8 @@ public:
     bool activateTransformToolAfterPaste(bool defaultValue = false) const;
     void setActivateTransformToolAfterPaste(bool value);
     
+    bool useZip64(bool defaultValue = false) const;
+    void setUseZip64(bool value);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

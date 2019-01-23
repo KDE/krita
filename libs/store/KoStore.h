@@ -74,31 +74,6 @@ public:
                                 const QByteArray &appIdentification = QByteArray(),
                                 Backend backend = Auto, bool writeMimetype = true);
 
-    /**
-     * Open a store (i.e. the representation on disk of a Krita document).
-     *
-     * @param url URL of the file to open
-     * @param mode if KoStore::Read, open an existing store to read it.
-     *             if KoStore::Write, create or replace a store.
-     * @param backend the backend to use for the data storage.
-     * Auto means automatically-determined for reading,
-     * and the current format (now Zip) for writing.
-     *
-     * @param appIdentification the application's mimetype,
-     * to be written in the file for "mime-magic" identification.
-     * Only meaningful if mode is Write, and if backend!=Directory.
-     *
-     * If the file is remote, the backend Directory cannot be used!
-     *
-     * @param writeMimetype If true, some backends (notably the Zip
-     * store) will write a file called 'mimetype' automatically and
-     * fill it with data from the appIdentification. This is only
-     * applicable if Mode is set to Write.
-     *
-     * @bug saving not completely implemented (fixed temporary file)
-     */
-    static KoStore *createStore(const QUrl &url, Mode mode,
-                                const QByteArray &appIdentification = QByteArray(), Backend backend = Auto, bool writeMimetype = true);
 
     /**
      * Destroys the store (i.e. closes the file on the hard disk)

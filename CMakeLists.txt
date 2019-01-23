@@ -275,7 +275,6 @@ include(KDECompilerSettings)
 # do not reorder to be alphabetical: this is the order in which the frameworks
 # depend on each other.
 find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
-        Archive
         Config
         WidgetsAddons
         Completion
@@ -699,6 +698,20 @@ set_package_properties(Poppler PROPERTIES
     URL "http://poppler.freedesktop.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita PDF filter.")
+
+
+##
+## Test for quazip
+## 
+find_package(QuaZip 0.7)
+set_package_properties(QuaZip PROPERTIES
+    DESCRIPTION "A library for reading and writing zip files"
+    URL "https://stachenov.github.io/quazip/"
+    TYPE REQUIRED
+    PURPOSE "Needed for reading and writing KRA and ORA files"
+)
+
+
 
 ##
 ## Test for Atomics

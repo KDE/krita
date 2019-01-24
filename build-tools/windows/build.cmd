@@ -708,6 +708,7 @@ set EXT_TARGETS=patch png2ico zlib lzma gettext qt boost eigen3 exiv2 fftw3 ilmb
 set EXT_TARGETS=%EXT_TARGETS% jpeg lcms2 ocio openexr png tiff gsl vc libraw
 set EXT_TARGETS=%EXT_TARGETS% giflib freetype poppler kwindowsystem drmingw gmic
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
+set EXT_TARGETS=%EXT_TARGETS% quazip
 
 for %%a in (%EXT_TARGETS%) do (
     echo Building ext_%%a...

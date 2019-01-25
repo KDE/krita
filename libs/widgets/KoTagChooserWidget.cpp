@@ -68,7 +68,7 @@ KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
     this->setEnabled(true);
     clear();
 
-    connect(d->comboBox, SIGNAL(currentIndexChanged(QString)),
+    connect(d->comboBox, SIGNAL(currentTextChanged(QString)),
             this, SIGNAL(tagChosen(QString)));
 
     connect(d->tagToolButton, SIGNAL(popupMenuAboutToShow()),

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>499</width>
-    <height>709</height>
+    <height>751</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1741,8 +1741,8 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>17</width>
-           <height>411</height>
+           <width>20</width>
+           <height>10</height>
           </size>
          </property>
         </spacer>
@@ -2258,8 +2258,8 @@
  <resources/>
  <connections/>
  <buttongroups>
+  <buttongroup name="freeTransformRadioGroup"/>
   <buttongroup name="cageTransformButtonGroup"/>
   <buttongroup name="buttonGroup"/>
-  <buttongroup name="freeTransformRadioGroup"/>
  </buttongroups>
 </ui>

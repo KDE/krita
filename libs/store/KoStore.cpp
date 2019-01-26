@@ -120,6 +120,8 @@ bool KoStore::open(const QString & _name)
     // This also converts from relative to absolute, i.e. merges the currentPath()
     d->fileName = d->toExternalNaming(_name);
 
+    debugStore << "KOStore" << _name << d->fileName;
+
     if (d->isOpen) {
         warnStore << "Store is already opened, missing close";
         return false;

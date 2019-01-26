@@ -401,7 +401,6 @@ if(WIN32)
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
         input/wintab/kis_tablet_support_win8.cpp
-        opengl/kis_opengl_win.cpp
         )
 endif()
 

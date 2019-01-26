@@ -965,38 +965,44 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     const QString rendererOpenGLText = i18nc("canvas renderer", "OpenGL");
 #ifdef Q_OS_WIN
     const QString rendererAngleText = i18nc("canvas renderer", "Direct3D 11 via ANGLE");
-    cmbRenderer->clear();
+
+    lblCurrentRenderer->setText(KisOpenGL::hasOpenGLES() ? rendererAngleText : rendererOpenGLText);
+
+    cmbPreferredRenderer->clear();
     QString qtPreferredRendererText;
-    if (KisOpenGL::getQtPreferredOpenGLRenderer() == KisOpenGL::RendererAngle) {
+    if (KisOpenGL::getQtPreferredOpenGLRenderer() == KisOpenGL::RendererOpenGLES) {
         qtPreferredRendererText = rendererAngleText;
     } else {
         qtPreferredRendererText = rendererOpenGLText;
     }
-    cmbRenderer->addItem(i18nc("canvas renderer", "Auto (%1)", qtPreferredRendererText), KisOpenGL::RendererAuto);
-    cmbRenderer->setCurrentIndex(0);
+    cmbPreferredRenderer->addItem(i18nc("canvas renderer", "Auto (%1)", qtPreferredRendererText), KisOpenGL::RendererAuto);
+    cmbPreferredRenderer->setCurrentIndex(0);
     if (KisOpenGL::getSupportedOpenGLRenderers() & KisOpenGL::RendererDesktopGL) {
-        cmbRenderer->addItem(rendererOpenGLText, KisOpenGL::RendererDesktopGL);
-        if (KisOpenGL::getNextUserOpenGLRendererConfig() == KisOpenGL::RendererDesktopGL) {
-            cmbRenderer->setCurrentIndex(cmbRenderer->count() - 1);
+        cmbPreferredRenderer->addItem(rendererOpenGLText, KisOpenGL::RendererDesktopGL);
+        if (KisOpenGL::getUserPreferredOpenGLRendererConfig() == KisOpenGL::RendererDesktopGL) {
+            cmbPreferredRenderer->setCurrentIndex(cmbPreferredRenderer->count() - 1);
         }
     }
-    if (KisOpenGL::getSupportedOpenGLRenderers() & KisOpenGL::RendererAngle) {
-        cmbRenderer->addItem(rendererAngleText, KisOpenGL::RendererAngle);
-        if (KisOpenGL::getNextUserOpenGLRendererConfig() == KisOpenGL::RendererAngle) {
-            cmbRenderer->setCurrentIndex(cmbRenderer->count() - 1);
+    if (KisOpenGL::getSupportedOpenGLRenderers() & KisOpenGL::RendererOpenGLES) {
+        cmbPreferredRenderer->addItem(rendererAngleText, KisOpenGL::RendererOpenGLES);
+        if (KisOpenGL::getUserPreferredOpenGLRendererConfig() == KisOpenGL::RendererOpenGLES) {
+            cmbPreferredRenderer->setCurrentIndex(cmbPreferredRenderer->count() - 1);
         }
     }
 #else
-    lblRenderer->setEnabled(false);
-    cmbRenderer->setEnabled(false);
-    cmbRenderer->clear();
-    cmbRenderer->addItem(rendererOpenGLText);
-    cmbRenderer->setCurrentIndex(0);
+    lblPreferredRenderer->setEnabled(false);
+    cmbPreferredRenderer->setEnabled(false);
+    cmbPreferredRenderer->clear();
+    cmbPreferredRenderer->addItem(rendererOpenGLText);
+    cmbPreferredRenderer->setCurrentIndex(0);
+
+    const QString rendererOpenGLESText = i18nc("canvas renderer", "OpenGL ES");
+    lblCurrentRenderer->setText(KisOpenGL::hasOpenGLES() ? rendererOpenGLESText : rendererOpenGLText);
 #endif
 
 #ifdef Q_OS_WIN
     if (!(KisOpenGL::getSupportedOpenGLRenderers() &
-            (KisOpenGL::RendererDesktopGL | KisOpenGL::RendererAngle))) {
+            (KisOpenGL::RendererDesktopGL | KisOpenGL::RendererOpenGLES))) {
 #else
     if (!KisOpenGL::hasOpenGL()) {
 #endif
@@ -1055,17 +1061,17 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
                 lblCurrentDisplayFormat->setToolTip("");
                 lblCurrentDisplayFormat->setText(i18n("Unknown"));
             }
-            grpHDRSettings->setEnabled(info.isValid());
-
-            const QSurfaceFormat currentFormat = KisOpenGLModeProber::instance()->surfaceformatInUse();
-            lblCurrentRootSurfaceFormat->setText(colorSpaceString(currentFormat.colorSpace(), currentFormat.redBufferSize()));
-            cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(cfg.rootSurfaceFormat()));
-
-            connect(cmbPreferedRootSurfaceFormat, SIGNAL(currentIndexChanged(int)), SLOT(slotPreferredSurfaceFormatChanged(int)));
-            slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
         } else {
-            grpHDRSettings->setEnabled(false);
+            lblCurrentDisplayFormat->setToolTip("");
+            lblCurrentDisplayFormat->setText(i18n("Unknown"));
         }
+
+        const QSurfaceFormat currentFormat = KisOpenGLModeProber::instance()->surfaceformatInUse();
+        lblCurrentRootSurfaceFormat->setText(colorSpaceString(currentFormat.colorSpace(), currentFormat.redBufferSize()));
+        cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(cfg.rootSurfaceFormat()));
+
+        connect(cmbPreferedRootSurfaceFormat, SIGNAL(currentIndexChanged(int)), SLOT(slotPreferredSurfaceFormatChanged(int)));
+        slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
     }
 
     const QStringList openglWarnings = KisOpenGL::getOpenGLWarnings();
@@ -1128,10 +1134,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 void DisplaySettingsTab::setDefault()
 {
     KisConfig cfg(true);
-    cmbRenderer->setCurrentIndex(0);
+    cmbPreferredRenderer->setCurrentIndex(0);
 #ifdef Q_OS_WIN
     if (!(KisOpenGL::getSupportedOpenGLRenderers() &
-            (KisOpenGL::RendererDesktopGL | KisOpenGL::RendererAngle))) {
+            (KisOpenGL::RendererDesktopGL | KisOpenGL::RendererOpenGLES))) {
 #else
     if (!KisOpenGL::hasOpenGL()) {
 #endif
@@ -1500,12 +1506,9 @@ bool KisDlgPreferences::editPreferences()
 #ifdef Q_OS_WIN
         {
             KisOpenGL::OpenGLRenderer renderer = static_cast<KisOpenGL::OpenGLRenderer>(
-                    dialog->m_displaySettings->cmbRenderer->itemData(
-                            dialog->m_displaySettings->cmbRenderer->currentIndex()).toInt());
-            KisOpenGL::setNextUserOpenGLRendererConfig(renderer);
-            const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-            QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
-            kritarc.setValue("OpenGLRenderer", KisOpenGL::convertOpenGLRendererToConfig(renderer));
+                    dialog->m_displaySettings->cmbPreferredRenderer->itemData(
+                            dialog->m_displaySettings->cmbPreferredRenderer->currentIndex()).toInt());
+            KisOpenGL::setUserPreferredOpenGLRendererConfig(renderer);
         }
 #endif
         if (!cfg.useOpenGL() && dialog->m_displaySettings->grpOpenGL->isChecked())

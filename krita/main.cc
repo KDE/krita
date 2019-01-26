@@ -176,19 +176,30 @@ extern "C" int main(int argc, char **argv)
             openGLDebugSynchronous = true;
         }
 
-        KisOpenGL::setDefaultFormat(enableOpenGLDebug, openGLDebugSynchronous, &kritarc);
+        KisConfig::RootSurfaceFormat rootSurfaceFormat = KisConfig::rootSurfaceFormat(&kritarc);
+        KisOpenGL::OpenGLRenderer preferredRenderer = KisOpenGL::RendererAuto;
 
 #ifdef Q_OS_WIN
-        QString preferredOpenGLRenderer = kritarc.value("OpenGLRenderer", "auto").toString();
+        const QString preferredRendererString = kritarc.value("OpenGLRenderer", "auto").toString();
+        preferredRenderer = KisOpenGL::convertConfigToOpenGLRenderer(preferredRendererString);
 
         // Force ANGLE to use Direct3D11. D3D9 doesn't support OpenGL ES 3 and WARP
         //  might get weird crashes atm.
         qputenv("QT_ANGLE_PLATFORM", "d3d11");
+#endif
 
-        // Probe QPA auto OpenGL detection
-        char *fakeArgv[2] = { argv[0], nullptr }; // Prevents QCoreApplication from modifying the real argc/argv
-        KisOpenGL::probeWindowsQpaOpenGL(1, fakeArgv, preferredOpenGLRenderer);
+        const QSurfaceFormat format =
+            KisOpenGL::selectSurfaceFormat(preferredRenderer, rootSurfaceFormat, enableOpenGLDebug);
 
+        if (format.renderableType() == QSurfaceFormat::OpenGLES) {
+            QCoreApplication::setAttribute(Qt::AA_UseOpenGLES, true);
+        } else {
+            QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL, true);
+        }
+        KisOpenGL::setDefaultSurfaceFormat(format);
+        KisOpenGL::setDebugSynchronous(openGLDebugSynchronous);
+
+#ifdef Q_OS_WIN
         // HACK: https://bugs.kde.org/show_bug.cgi?id=390651
         resetRotation();
 #endif

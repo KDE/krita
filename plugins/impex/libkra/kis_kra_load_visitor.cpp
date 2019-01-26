@@ -70,6 +70,7 @@ using namespace KRA;
 
 QString expandEncodedDirectory(const QString& _intern)
 {
+
     QString intern = _intern;
 
     QString result;
@@ -84,6 +85,8 @@ QString expandEncodedDirectory(const QString& _intern)
     if (!intern.isEmpty() && QChar(intern.at(0)).isDigit())
         result += "part";
     result += intern;
+
+
     return result;
 }
 
@@ -105,9 +108,7 @@ KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP image,
     , m_shapeController(shapeController)
 {
     m_store->pushDirectory();
-    if (m_name.startsWith("/")) {
-        m_name.remove(0, 1);
-    }
+
     if (!m_store->enterDirectory(m_name)) {
         QStringList directories = m_store->directoryList();
         dbgKrita << directories;
@@ -190,7 +191,6 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
 {
     loadNodeKeyframes(layer);
 
-    dbgFile << "Visit: " << layer->name() << " colorSpace: " << layer->colorSpace()->id();
     if (!loadPaintDevice(layer->paintDevice(), getLocation(layer))) {
         return false;
     }

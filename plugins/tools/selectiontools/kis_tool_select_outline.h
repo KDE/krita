@@ -25,7 +25,7 @@
 #define KIS_TOOL_SELECT_OUTLINE_H_
 
 #include <QPoint>
-#include <KoToolFactoryBase.h>
+#include "KisSelectionToolFactoryBase.h"
 #include <kis_tool_select_base.h>
 #include <kis_icon.h>
 
@@ -68,11 +68,11 @@ private:
     QPointF m_lastCursorPos;
 };
 
-class KisToolSelectOutlineFactory : public KoToolFactoryBase
+class KisToolSelectOutlineFactory : public KisSelectionToolFactoryBase
 {
 public:
     KisToolSelectOutlineFactory()
-        : KoToolFactoryBase("KisToolSelectOutline")
+        : KisSelectionToolFactoryBase("KisToolSelectOutline")
     {
         setToolTip(i18n("Outline Selection Tool"));
         setSection(TOOL_TYPE_SELECTION);

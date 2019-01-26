@@ -25,7 +25,7 @@
 
 #include "kis_tool_shape.h"
 #include "kis_types.h"
-#include "KisSelectionToolFactoryBase.h"
+#include "KisToolPaintFactoryBase.h"
 #include "flake/kis_node_shape.h"
 #include <kis_tool_ellipse_base.h>
 #include <kis_icon.h>
@@ -48,12 +48,12 @@ protected:
     void finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY) override;
 };
 
-class KisToolEllipseFactory : public KisSelectionToolFactoryBase
+class KisToolEllipseFactory : public KisToolPaintFactoryBase
 {
 
 public:
     KisToolEllipseFactory()
-            : KisSelectionToolFactoryBase("KritaShape/KisToolEllipse") {
+            : KisToolPaintFactoryBase("KritaShape/KisToolEllipse") {
         setToolTip(i18n("Ellipse Tool"));
         setSection(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

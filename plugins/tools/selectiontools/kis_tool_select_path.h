@@ -21,7 +21,7 @@
 #define KIS_TOOL_SELECT_PATH_H_
 
 #include <KoCreatePathTool.h>
-#include <KoToolFactoryBase.h>
+#include <KisSelectionToolFactoryBase.h>
 #include "kis_tool_select_base.h"
 #include "kis_delegated_tool.h"
 
@@ -84,11 +84,11 @@ protected:
     QList<QPointer<QWidget> > createOptionWidgets() override;
 };
 
-class KisToolSelectPathFactory : public KoToolFactoryBase
+class KisToolSelectPathFactory : public KisSelectionToolFactoryBase
 {
 public:
     KisToolSelectPathFactory()
-        : KoToolFactoryBase("KisToolSelectPath") {
+        : KisSelectionToolFactoryBase("KisToolSelectPath") {
         setToolTip(i18n("Bezier Curve Selection Tool"));
         setSection(TOOL_TYPE_SELECTION);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

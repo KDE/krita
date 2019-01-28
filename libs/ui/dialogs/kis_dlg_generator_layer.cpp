@@ -61,6 +61,7 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewM
     dlgWidget.txtLayerName->setText( isEditing ? layer->name() : defaultName );
     connect(dlgWidget.txtLayerName, SIGNAL(textChanged(QString)),
             this, SLOT(slotNameChanged(QString)));
+    connect(dlgWidget.wdgGenerator, SIGNAL(previewConfiguration()), this, SLOT(previewGenerator()));
 }
 
 KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
@@ -77,7 +78,7 @@ KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
         QString xmlBefore = configBefore->toXML();
         QString xmlAfter = configAfter->toXML();
 
-        if(xmlBefore != xmlAfter) {
+        if (xmlBefore != xmlAfter) {
             KisChangeFilterCmd *cmd
                     = new KisChangeFilterCmd(layer,
                                              configBefore->name(),
@@ -89,7 +90,9 @@ KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
             m_view->undoAdapter()->addCommand(cmd);
             m_view->document()->setModified(true);
         }
-
+    }
+    else if(isEditing && result() == QDialog::Rejected){
+        layer->setFilter(configBefore);
     }
 }
 
@@ -100,6 +103,12 @@ void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
 
     m_customName = !text.isEmpty();
     enableButtonOk(m_customName);
+}
+
+void KisDlgGeneratorLayer::previewGenerator()
+{
+    if (isEditing && layer)
+        layer->setFilter(configuration());
 }
 
 void KisDlgGeneratorLayer::setConfiguration(const KisFilterConfigurationSP  config)

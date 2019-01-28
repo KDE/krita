@@ -55,6 +55,7 @@ public:
 
 protected Q_SLOTS:
     void slotNameChanged(const QString &);
+    void previewGenerator();
 
 private:
     Ui_WdgDlgGeneratorLayer dlgWidget;

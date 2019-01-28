@@ -186,7 +186,10 @@ QList<QPointer<QWidget> > KoToolBase::optionWidgets()
 QAction *KoToolBase::action(const QString &name) const
 {
     Q_D(const KoToolBase);
-    return d->canvas->canvasController()->actionCollection()->action(name);
+    if (d->canvas && d->canvas->canvasController() && d->canvas->canvasController()) {
+        return d->canvas->canvasController()->actionCollection()->action(name);
+    }
+    return 0;
 }
 
 QWidget * KoToolBase::createOptionWidget()

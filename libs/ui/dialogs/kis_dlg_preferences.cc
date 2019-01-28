@@ -1037,6 +1037,11 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
 
     QOpenGLContext *context = QOpenGLContext::currentContext();
+
+    if (!context) {
+        context = QOpenGLContext::globalShareContext();
+    }
+
     if (context) {
         QScreen *screen = QGuiApplication::screenAt(rect().center());
         KisScreenInformationAdapter adapter(context);
@@ -1064,6 +1069,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         } else {
             lblCurrentDisplayFormat->setToolTip("");
             lblCurrentDisplayFormat->setText(i18n("Unknown"));
+            qWarning() << "Failed to fetch display info:" << adapter.errorString();
         }
 
         const QSurfaceFormat currentFormat = KisOpenGLModeProber::instance()->surfaceformatInUse();

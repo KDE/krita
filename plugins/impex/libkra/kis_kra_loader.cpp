@@ -200,7 +200,6 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
 {
     QString attr;
     KisImageSP image = 0;
-    QString name;
     qint32 width;
     qint32 height;
     QString profileProductName;
@@ -216,6 +215,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             m_d->errorMessages << i18n("Image does not have a name.");
             return KisImageSP(0);
         }
+
 
         if ((attr = element.attribute(WIDTH)).isNull()) {
             m_d->errorMessages << i18n("Image does not specify a width.");
@@ -297,10 +297,10 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
 
         if (m_d->document) {
-            image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
+            image = new KisImage(m_d->document->createUndoStore(), width, height, cs, m_d->imageName);
         }
         else {
-            image = new KisImage(0, width, height, cs, name);
+            image = new KisImage(0, width, height, cs, m_d->imageName);
         }
         image->setResolution(xres, yres);
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
@@ -776,8 +776,8 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image)
     node->setUseInTimeline(timelineEnabled);
 
     if (node->inherits("KisPaintLayer")) {
-        KisPaintLayer* layer            = qobject_cast<KisPaintLayer*>(node.data());
-        QBitArray      channelLockFlags = stringToFlags(element.attribute(CHANNEL_LOCK_FLAGS, ""), colorSpace->channelCount());
+        KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(node.data());
+        QBitArray channelLockFlags = stringToFlags(element.attribute(CHANNEL_LOCK_FLAGS, ""), colorSpace->channelCount());
         layer->setChannelLockFlags(channelLockFlags);
 
         bool onionEnabled = element.attribute(ONION_SKIN_ENABLED, "0") == "0" ? false : true;

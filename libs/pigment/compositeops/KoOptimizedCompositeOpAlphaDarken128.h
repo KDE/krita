@@ -29,11 +29,13 @@ struct AlphaDarkenCompositor128 {
     struct OptionalParams {
         OptionalParams(const KoCompositeOp::ParameterInfo& params)
         : flow(params.flow)
-        , averageOpacity(*params.lastOpacity)
+        , averageOpacity(*params.lastOpacity * params.flow)
+        , premultipliedOpacity(params.opacity * params.flow)
         {
         }
         float flow;
         float averageOpacity;
+        float premultipliedOpacity;
     };
 
     struct Pixel {
@@ -81,7 +83,12 @@ struct AlphaDarkenCompositor128 {
             msk_norm_alpha = src_alpha;
         }
 
-        Vc::float_v opacity_vec(opacity);
+        // we don't use directly passed value
+        Q_UNUSED(opacity);
+
+        // instead we should use opacity premultiplied by flow
+        opacity = oparams.premultipliedOpacity;
+        Vc::float_v opacity_vec(oparams.premultipliedOpacity);
 
         src_alpha = msk_norm_alpha * opacity_vec;
 
@@ -135,7 +142,7 @@ struct AlphaDarkenCompositor128 {
             dst_alpha = fullFlowAlpha;
         }
         else {
-            Vc::float_v zeroFlowAlpha = dst_alpha;
+            Vc::float_v zeroFlowAlpha = src_alpha + dst_alpha - src_alpha * dst_alpha;
             Vc::float_v flow_norm_vec(oparams.flow);
             dst_alpha = (fullFlowAlpha - zeroFlowAlpha) * flow_norm_vec + zeroFlowAlpha;
         }
@@ -158,6 +165,9 @@ struct AlphaDarkenCompositor128 {
 
         const float uint8Rec1 = 1.0 / 255.0;
         float mskAlphaNorm = haveMask ? float(*mask) * uint8Rec1 * src[alpha_pos] : src[alpha_pos];
+
+        Q_UNUSED(opacity);
+        opacity = oparams.premultipliedOpacity;
 
         float srcAlphaNorm = mskAlphaNorm * opacity;
 
@@ -185,7 +195,7 @@ struct AlphaDarkenCompositor128 {
         if (flow == 1.0) {
             dst[alpha_pos] = fullFlowAlpha;
         } else {
-            float zeroFlowAlpha = dstAlphaNorm;
+            float zeroFlowAlpha = unionShapeOpacity(srcAlphaNorm, dstAlphaNorm);
             dst[alpha_pos] = lerp(zeroFlowAlpha, fullFlowAlpha, flow);
         }
     }

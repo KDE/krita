@@ -132,7 +132,8 @@ class PluginImporter:
     def get_source_module(self, name):
         namelist = self.archive.namelist()
         for filename in namelist:
-            if filename.endswith('/%s/' % name):
+            if (filename.endswith('/%s/' % name)
+                    or filename == '%s/' % name):
                 # Sanity check: There should be an __init__.py inside
                 if ('%s__init__.py' % filename) in namelist:
                     return filename

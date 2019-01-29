@@ -19,7 +19,7 @@
 #ifndef KIS_TOOL_SELECT_SIMILAR_H_
 #define KIS_TOOL_SELECT_SIMILAR_H_
 
-#include <KoToolFactoryBase.h>
+#include <KisSelectionToolFactoryBase.h>
 #include <kis_icon.h>
 #include <kconfig.h>
 #include "kis_tool_select_base.h"
@@ -52,11 +52,11 @@ private:
 };
 
 
-class KisToolSelectSimilarFactory : public KoToolFactoryBase
+class KisToolSelectSimilarFactory : public KisSelectionToolFactoryBase
 {
 public:
     KisToolSelectSimilarFactory()
-        : KoToolFactoryBase("KisToolSelectSimilar")
+        : KisSelectionToolFactoryBase("KisToolSelectSimilar")
     {
         setToolTip(i18n("Similar Color Selection Tool"));
         setSection(TOOL_TYPE_SELECTION);

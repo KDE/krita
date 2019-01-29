@@ -42,9 +42,8 @@ QList<QAction *> KisSelectionToolFactoryBase::createActionsImpl()
 }
 
 KisToolPolyLineFactoryBase::KisToolPolyLineFactoryBase(const QString &id)
-    : KisSelectionToolFactoryBase(id)
+    : KisToolPaintFactoryBase(id)
 {
-
 }
 
 KisToolPolyLineFactoryBase::~KisToolPolyLineFactoryBase()
@@ -55,7 +54,7 @@ KisToolPolyLineFactoryBase::~KisToolPolyLineFactoryBase()
 QList<QAction *> KisToolPolyLineFactoryBase::createActionsImpl()
 {
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
-    QList<QAction *> actions = KisSelectionToolFactoryBase::createActionsImpl();
+    QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
 
     actions << actionRegistry->makeQAction("undo_polygon_selection");
     actions << actionRegistry->makeQAction("selection_tool_mode_add");

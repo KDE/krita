@@ -24,7 +24,7 @@
 #ifndef KIS_TOOL_SELECT_POLYGONAL_H_
 #define KIS_TOOL_SELECT_POLYGONAL_H_
 
-#include "KoToolFactoryBase.h"
+#include "KisSelectionToolFactoryBase.h"
 #include "kis_tool_polyline_base.h"
 #include <kis_tool_select_base.h>
 #include "kis_selection_tool_config_widget_helper.h"
@@ -54,11 +54,11 @@ public:
 
 
 
-class KisToolSelectPolygonalFactory : public KoToolFactoryBase
+class KisToolSelectPolygonalFactory : public KisSelectionToolFactoryBase
 {
 public:
     KisToolSelectPolygonalFactory()
-        : KoToolFactoryBase("KisToolSelectPolygonal")
+        : KisSelectionToolFactoryBase("KisToolSelectPolygonal")
     {
         setToolTip(i18n("Polygonal Selection Tool"));
         setSection(TOOL_TYPE_SELECTION);

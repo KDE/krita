@@ -56,32 +56,36 @@ void KisSwapFramesCommand::undo()
     m_channel->swapKeyframesImpl(m_lhsFrame, m_rhsFrame);
 }
 
-KisDefineCycleCommand::KisDefineCycleCommand(KisKeyframeChannel *channel, QSharedPointer<KisAnimationCycle> cycle, bool undefine, KUndo2Command *parentCommand)
+KisDefineCycleCommand::KisDefineCycleCommand(QSharedPointer<KisAnimationCycle> oldCycle, QSharedPointer<KisAnimationCycle> newCycle, KUndo2Command *parentCommand)
     : KUndo2Command(parentCommand)
-    , m_channel(channel)
-    , m_cycle(cycle)
-    , m_undefine(undefine)
+    , m_channel(oldCycle ? oldCycle->channel() : newCycle->channel())
+    , m_oldCycle(oldCycle)
+    , m_newCycle(newCycle)
 {}
 
 void KisDefineCycleCommand::redo()
 {
-    if (m_undefine) {
-        m_channel->removeCycle(m_cycle);
-    } else {
-        m_channel->addCycle(m_cycle);
+    if (m_oldCycle) {
+        m_channel->removeCycle(m_oldCycle);
+    }
+
+    if (m_newCycle) {
+        m_channel->addCycle(m_newCycle);
     }
 }
 
 void KisDefineCycleCommand::undo()
 {
-    if (m_undefine) {
-        m_channel->addCycle(m_cycle);
-    } else {
-        m_channel->removeCycle(m_cycle);
+    if (m_newCycle) {
+        m_channel->removeCycle(m_newCycle);
+    }
+
+    if (m_oldCycle) {
+        m_channel->addCycle(m_oldCycle);
     }
 }
 
 QSharedPointer<KisAnimationCycle> KisDefineCycleCommand::cycle() const
 {
-    return m_cycle;
+    return m_newCycle;
 }

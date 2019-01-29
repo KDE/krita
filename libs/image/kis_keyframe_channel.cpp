@@ -872,7 +872,7 @@ KisKeyframeSP KisKeyframeChannel::copyExternalKeyframe(KisKeyframeChannel *srcCh
 KisDefineCycleCommand * KisKeyframeChannel::createCycle(KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe, KUndo2Command *parentCommand)
 {
     const QSharedPointer<KisAnimationCycle> cycle = toQShared(new KisAnimationCycle(this, firstKeyframe, lastKeyframe));
-    return new KisDefineCycleCommand(this, cycle, false, parentCommand);
+    return new KisDefineCycleCommand(nullptr, cycle, parentCommand);
 }
 
 void KisKeyframeChannel::addCycle(QSharedPointer<KisAnimationCycle> cycle)
@@ -882,7 +882,7 @@ void KisKeyframeChannel::addCycle(QSharedPointer<KisAnimationCycle> cycle)
 
 KUndo2Command* KisKeyframeChannel::deleteCycle(QSharedPointer<KisAnimationCycle> cycle, KUndo2Command *parentCommand)
 {
-    KisDefineCycleCommand *defineCycleCommand = new KisDefineCycleCommand(this, cycle, true, parentCommand);
+    KisDefineCycleCommand *defineCycleCommand = new KisDefineCycleCommand(cycle, nullptr, parentCommand);
 
     // Remove repeats of the cycle
     Q_FOREACH(QWeakPointer<KisRepeatFrame> repeatWP, cycle->repeats()) {

@@ -68,7 +68,7 @@ private:
 class KRITAIMAGE_EXPORT KisDefineCycleCommand : public KUndo2Command
 {
 public:
-    KisDefineCycleCommand(KisKeyframeChannel *channel, QSharedPointer<KisAnimationCycle> cycle, bool undefine, KUndo2Command *parentCommand);
+    KisDefineCycleCommand(QSharedPointer<KisAnimationCycle> oldCycle, QSharedPointer<KisAnimationCycle> newCycle, KUndo2Command *parentCommand);
 
     QSharedPointer<KisAnimationCycle> cycle() const;
 
@@ -77,8 +77,8 @@ public:
 
 private:
     KisKeyframeChannel *m_channel;
-    QSharedPointer<KisAnimationCycle> m_cycle;
-    bool m_undefine;
+    QSharedPointer<KisAnimationCycle> m_oldCycle;
+    QSharedPointer<KisAnimationCycle> m_newCycle;
 };
 
 #endif

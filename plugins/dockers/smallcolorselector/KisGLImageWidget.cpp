@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QResizeEvent>
 #include "kis_debug.h"
+#include <config-hdr.h>
 
 #include "KisGLImageF16.h"
 
@@ -40,7 +41,10 @@ KisGLImageWidget::KisGLImageWidget(QSurfaceFormat::ColorSpace colorSpace,
       m_texture(QOpenGLTexture::Target2D)
 {
     setTextureFormat(GL_RGBA16F);
+
+#ifdef HAVE_HDR
     setTextureColorSpace(colorSpace);
+#endif
 
     setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
 }

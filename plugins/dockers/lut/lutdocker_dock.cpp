@@ -17,6 +17,7 @@
  */
 
 #include "lutdocker_dock.h"
+#include <config-hdr.h>
 
 #include <sstream>
 
@@ -243,8 +244,11 @@ bool LutDockerDock::canChangeExposureAndGamma() const
         m_colorManagement->currentIndex() != (int)KisOcioConfiguration::INTERNAL;
 
     const bool exposureManagementEnabled =
-        externalColorManagementEnabled ||
-        KisOpenGLModeProber::instance()->surfaceformatInUse().colorSpace() == QSurfaceFormat::scRGBColorSpace;
+        externalColorManagementEnabled
+#ifdef HAVE_HDR
+            || KisOpenGLModeProber::instance()->surfaceformatInUse().colorSpace() == QSurfaceFormat::scRGBColorSpace
+#endif
+            ;
 
     return exposureManagementEnabled;
 }

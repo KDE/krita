@@ -34,7 +34,7 @@ extern "C" int main(int argc, char **argv)
     qsrand(time(0));
     KLocalizedString::setApplicationDomain("kritarunner");
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
-    KisOpenGL::setDefaultFormat();
+    KisOpenGL::testingInitializeDefaultSurfaceFormat();
 
 
     // first create the application so we can create a pixmap

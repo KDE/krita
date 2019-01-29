@@ -1,5 +1,7 @@
 add_subdirectory(defaultdockers)
-add_subdirectory(smallcolorselector)
+if(HAVE_OPENEXR)
+    add_subdirectory(smallcolorselector)
+endif()
 add_subdirectory(specificcolorselector)
 add_subdirectory(digitalmixer)
 add_subdirectory(advancedcolorselector)

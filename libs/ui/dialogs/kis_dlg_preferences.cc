@@ -21,6 +21,7 @@
 
 #include "kis_dlg_preferences.h"
 
+#include <config-hdr.h>
 #include <opengl/kis_opengl.h>
 
 #include <QBitmap>
@@ -934,8 +935,10 @@ void PerformanceTab::slotFrameClonesLimitChanged(int value)
 QString colorSpaceString(QSurfaceFormat::ColorSpace cs, int depth)
 {
     const QString csString =
+#ifdef HAVE_HDR
         cs == QSurfaceFormat::bt2020PQColorSpace ? "Rec. 2020 PQ" :
         cs == QSurfaceFormat::scRGBColorSpace ? "Rec. 709 Linear" :
+#endif
         cs == QSurfaceFormat::sRGBColorSpace ? "sRGB" :
         cs == QSurfaceFormat::DefaultColorSpace ? "sRGB" :
         "Unknown Color Space";
@@ -964,14 +967,16 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 
     const QString rendererOpenGLText = i18nc("canvas renderer", "OpenGL");
 #ifdef Q_OS_WIN
-    const QString rendererAngleText = i18nc("canvas renderer", "Direct3D 11 via ANGLE");
-
-    lblCurrentRenderer->setText(KisOpenGL::hasOpenGLES() ? rendererAngleText : rendererOpenGLText);
+    const QString rendererOpenGLESText = i18nc("canvas renderer", "Direct3D 11 via ANGLE");
+#else
+    const QString rendererOpenGLESText = i18nc("canvas renderer", "OpenGL ES");
+#endif
+    lblCurrentRenderer->setText(KisOpenGL::hasOpenGLES() ? rendererOpenGLESText : rendererOpenGLText);
 
     cmbPreferredRenderer->clear();
     QString qtPreferredRendererText;
     if (KisOpenGL::getQtPreferredOpenGLRenderer() == KisOpenGL::RendererOpenGLES) {
-        qtPreferredRendererText = rendererAngleText;
+        qtPreferredRendererText = rendererOpenGLESText;
     } else {
         qtPreferredRendererText = rendererOpenGLText;
     }
@@ -983,29 +988,18 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
             cmbPreferredRenderer->setCurrentIndex(cmbPreferredRenderer->count() - 1);
         }
     }
+
+#ifdef Q_OS_WIN
     if (KisOpenGL::getSupportedOpenGLRenderers() & KisOpenGL::RendererOpenGLES) {
-        cmbPreferredRenderer->addItem(rendererAngleText, KisOpenGL::RendererOpenGLES);
+        cmbPreferredRenderer->addItem(rendererOpenGLESText, KisOpenGL::RendererOpenGLES);
         if (KisOpenGL::getUserPreferredOpenGLRendererConfig() == KisOpenGL::RendererOpenGLES) {
             cmbPreferredRenderer->setCurrentIndex(cmbPreferredRenderer->count() - 1);
         }
     }
-#else
-    lblPreferredRenderer->setEnabled(false);
-    cmbPreferredRenderer->setEnabled(false);
-    cmbPreferredRenderer->clear();
-    cmbPreferredRenderer->addItem(rendererOpenGLText);
-    cmbPreferredRenderer->setCurrentIndex(0);
-
-    const QString rendererOpenGLESText = i18nc("canvas renderer", "OpenGL ES");
-    lblCurrentRenderer->setText(KisOpenGL::hasOpenGLES() ? rendererOpenGLESText : rendererOpenGLText);
 #endif
 
-#ifdef Q_OS_WIN
     if (!(KisOpenGL::getSupportedOpenGLRenderers() &
-            (KisOpenGL::RendererDesktopGL | KisOpenGL::RendererOpenGLES))) {
-#else
-    if (!KisOpenGL::hasOpenGL()) {
-#endif
+          (KisOpenGL::RendererDesktopGL | KisOpenGL::RendererOpenGLES))) {
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
@@ -1031,8 +1025,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     lblCurrentRootSurfaceFormat->setText("");
     lblHDRWarning->setText("");
     cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::sRGBColorSpace, 8));
+#ifdef HAVE_HDR
     cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::bt2020PQColorSpace, 10));
     cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::scRGBColorSpace, 16));
+#endif
     cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(KisConfig::BT709_G22));
     slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
 
@@ -1079,6 +1075,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         connect(cmbPreferedRootSurfaceFormat, SIGNAL(currentIndexChanged(int)), SLOT(slotPreferredSurfaceFormatChanged(int)));
         slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
     }
+
+#ifndef HAVE_HDR
+    grpHDRSettings->setVisible(false);
+#endif
 
     const QStringList openglWarnings = KisOpenGL::getOpenGLWarnings();
     if (openglWarnings.isEmpty()) {
@@ -1141,12 +1141,8 @@ void DisplaySettingsTab::setDefault()
 {
     KisConfig cfg(true);
     cmbPreferredRenderer->setCurrentIndex(0);
-#ifdef Q_OS_WIN
     if (!(KisOpenGL::getSupportedOpenGLRenderers() &
             (KisOpenGL::RendererDesktopGL | KisOpenGL::RendererOpenGLES))) {
-#else
-    if (!KisOpenGL::hasOpenGL()) {
-#endif
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
@@ -1509,14 +1505,13 @@ bool KisDlgPreferences::editPreferences()
 
         dialog->m_performanceSettings->save();
 
-#ifdef Q_OS_WIN
         {
             KisOpenGL::OpenGLRenderer renderer = static_cast<KisOpenGL::OpenGLRenderer>(
                     dialog->m_displaySettings->cmbPreferredRenderer->itemData(
                             dialog->m_displaySettings->cmbPreferredRenderer->currentIndex()).toInt());
             KisOpenGL::setUserPreferredOpenGLRendererConfig(renderer);
         }
-#endif
+
         if (!cfg.useOpenGL() && dialog->m_displaySettings->grpOpenGL->isChecked())
             cfg.setCanvasState("TRY_OPENGL");
         cfg.setUseOpenGL(dialog->m_displaySettings->grpOpenGL->isChecked());

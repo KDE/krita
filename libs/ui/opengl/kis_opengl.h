@@ -48,7 +48,6 @@ public:
     };
 public:
 
-#ifdef Q_OS_WIN
     enum OpenGLRenderer {
         RendererNone = 0x00,
         RendererAuto = 0x01,
@@ -70,7 +69,6 @@ public:
     static void setUserPreferredOpenGLRendererConfig(OpenGLRenderer renderer);
     static QString convertOpenGLRendererToConfig(OpenGLRenderer renderer);
     static OpenGLRenderer convertConfigToOpenGLRenderer(QString renderer);
-#endif
 
     /// Request OpenGL version 3.2
     static void initialize();

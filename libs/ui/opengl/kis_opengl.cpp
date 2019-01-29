@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <config-hdr.h>
 #include "opengl/kis_opengl.h"
 #include "opengl/kis_opengl_p.h"
 
@@ -129,17 +130,20 @@ void KisOpenGL::initialize()
     debugOut << "\n     Supports deprecated functions" << openGLCheckResult->supportsDeprecatedFunctions();
     debugOut << "\n     is OpenGL ES:" << openGLCheckResult->isOpenGLES();
 
-#ifdef Q_OS_WIN
     debugOut << "\n\nQPA OpenGL Detection Info";
     debugOut << "\n  supportsDesktopGL:" << bool(g_supportedRenderers & RendererDesktopGL);
+#ifdef Q_OS_WIN
     debugOut << "\n  supportsAngleD3D11:" << bool(g_supportedRenderers & RendererOpenGLES);
     debugOut << "\n  isQtPreferAngle:" << bool(g_rendererPreferredByQt == RendererOpenGLES);
+#else
+    debugOut << "\n  supportsOpenGLES:" << bool(g_supportedRenderers & RendererOpenGLES);
+    debugOut << "\n  isQtPreferOpenGLES:" << bool(g_rendererPreferredByQt == RendererOpenGLES);
+#endif
     debugOut << "\n== log ==\n";
     debugOut.noquote();
     debugOut << g_surfaceFormatDetectionLog;
     debugOut.resetFormat();
     debugOut << "\n== end log ==";
-#endif
 
     dbgOpenGL.noquote().nospace() << g_debugText;
 
@@ -510,8 +514,13 @@ public:
 
 private:
     bool isHDRFormat(const QSurfaceFormat &f) const {
+#ifdef HAVE_HDR
         return f.colorSpace() == QSurfaceFormat::bt2020PQColorSpace ||
             f.colorSpace() == QSurfaceFormat::scRGBColorSpace;
+#else
+        Q_UNUSED(f);
+        return false;
+#endif
     }
 
     bool isBlacklisted(const QSurfaceFormat &f) const {
@@ -523,8 +532,12 @@ private:
     }
 
     bool doPreferHDR() const {
+#ifdef HAVE_HDR
         return m_preferredColorSpace == QSurfaceFormat::bt2020PQColorSpace ||
             m_preferredColorSpace == QSurfaceFormat::scRGBColorSpace;
+#else
+        return false;
+#endif
     }
 
     bool isPreferredColorSpace(const QSurfaceFormat::ColorSpace cs) const {
@@ -566,7 +579,12 @@ QSurfaceFormat KisOpenGL::selectSurfaceFormat(KisOpenGL::OpenGLRenderer preferre
     using Info = boost::optional<KisOpenGLModeProber::Result>;
 
     QVector<QSurfaceFormat::RenderableType> renderers({QSurfaceFormat::OpenGLES, QSurfaceFormat::OpenGL});
+
+#ifdef HAVE_HDR
     QVector<KisConfig::RootSurfaceFormat> formatSymbols({KisConfig::BT709_G22, KisConfig::BT709_G10, KisConfig::BT2020_PQ});
+#else
+    QVector<KisConfig::RootSurfaceFormat> formatSymbols({KisConfig::BT709_G22});
+#endif
 
     QVector<QSurfaceFormat> preferredFormats;
     Q_FOREACH (const QSurfaceFormat::RenderableType renderer, renderers) {
@@ -583,9 +601,17 @@ QSurfaceFormat KisOpenGL::selectSurfaceFormat(KisOpenGL::OpenGLRenderer preferre
 
     FormatPositionLess compareOp;
     compareOp.setPreferredRendererByQt(info->isOpenGLES() ? QSurfaceFormat::OpenGLES : QSurfaceFormat::OpenGL);
-    compareOp.setPreferredColorSpace(preferredRootSurfaceFormat == KisConfig::BT709_G22 ? QSurfaceFormat::sRGBColorSpace :
-                                     preferredRootSurfaceFormat == KisConfig::BT709_G10 ? QSurfaceFormat::scRGBColorSpace :
-                                     QSurfaceFormat::bt2020PQColorSpace);
+
+#ifdef HAVE_HDR
+    compareOp.setPreferredColorSpace(
+        preferredRootSurfaceFormat == KisConfig::BT709_G22 ? QSurfaceFormat::sRGBColorSpace :
+        preferredRootSurfaceFormat == KisConfig::BT709_G10 ? QSurfaceFormat::scRGBColorSpace :
+        QSurfaceFormat::bt2020PQColorSpace);
+#else
+    Q_UNUSED(preferredRootSurfaceFormat);
+    compareOp.setPreferredColorSpace(QSurfaceFormat::sRGBColorSpace);
+#endif
+
 #ifdef Q_OS_WIN
     compareOp.setPreferredRendererByHDR(QSurfaceFormat::OpenGLES);
 #endif
@@ -646,6 +672,8 @@ QSurfaceFormat KisOpenGL::selectSurfaceFormat(KisOpenGL::OpenGLRenderer preferre
         Info info = KisOpenGLModeProber::instance()->probeFormat(format);
 
         if (info && info->isSupportedVersion()) {
+
+#ifdef Q_OS_WIN
             // HACK: Block ANGLE with Direct3D9
             //       Direct3D9 does not give OpenGL ES 3.0
             //       Some versions of ANGLE returns OpenGL version 3.0 incorrectly
@@ -657,6 +685,7 @@ QSurfaceFormat KisOpenGL::selectSurfaceFormat(KisOpenGL::OpenGLRenderer preferre
 
                 continue;
             }
+#endif
 
             dbgDetection() << "Found format:" << format;
             dbgDetection() << "   " << format.renderableType();

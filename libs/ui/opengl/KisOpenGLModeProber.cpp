@@ -1,5 +1,6 @@
 #include "KisOpenGLModeProber.h"
 
+#include <config-hdr.h>
 #include <QApplication>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
@@ -43,10 +44,12 @@ const KoColorProfile *KisOpenGLModeProber::rootSurfaceColorProfile() const
 
     if (surfaceColorSpace == QSurfaceFormat::sRGBColorSpace) {
         // use the default one!
+#ifdef HAVE_HDR
     } else if (surfaceColorSpace == QSurfaceFormat::scRGBColorSpace) {
         profile = KoColorSpaceRegistry::instance()->p709G10Profile();
     } else if (surfaceColorSpace == QSurfaceFormat::bt2020PQColorSpace) {
         profile = KoColorSpaceRegistry::instance()->p2020PQProfile();
+#endif
     }
 
     return profile;
@@ -155,7 +158,9 @@ bool KisOpenGLModeProber::fuzzyCompareColorSpaces(const QSurfaceFormat::ColorSpa
 void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceFormat config,
                                                       QSurfaceFormat *format)
 {
+#ifdef HAVE_HDR
     if (config == KisConfig::BT2020_PQ) {
+
         format->setRedBufferSize(10);
         format->setGreenBufferSize(10);
         format->setBlueBufferSize(10);
@@ -167,7 +172,16 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
         format->setBlueBufferSize(16);
         format->setAlphaBufferSize(16);
         format->setColorSpace(QSurfaceFormat::scRGBColorSpace);
-    } else {
+    } else
+#else
+    if (config == KisConfig::BT2020_PQ) {
+        qWarning() << "WARNING: Bt.2020 PQ surface type is not supoprted by this build of Krita";
+    } else if (config == KisConfig::BT709_G10) {
+        qWarning() << "WARNING: scRGB surface type is not supoprted by this build of Krita";
+    }
+#endif
+
+    {
         format->setRedBufferSize(8);
         format->setGreenBufferSize(8);
         format->setBlueBufferSize(8);
@@ -179,6 +193,8 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
 
 bool KisOpenGLModeProber::isFormatHDR(const QSurfaceFormat &format)
 {
+#ifdef HAVE_HDR
+
     bool isBt2020PQ =
         format.colorSpace() == QSurfaceFormat::bt2020PQColorSpace &&
         format.redBufferSize() == 10 &&
@@ -194,6 +210,9 @@ bool KisOpenGLModeProber::isFormatHDR(const QSurfaceFormat &format)
         format.alphaBufferSize() == 16;
 
     return isBt2020PQ || isBt709G10;
+#else
+    return false;
+#endif
 }
 
 KisOpenGLModeProber::Result::Result(QOpenGLContext &context) {

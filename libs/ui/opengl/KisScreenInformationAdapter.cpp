@@ -3,16 +3,24 @@
 #include "kis_debug.h"
 #include <QOpenGLContext>
 
-//#include <QtGui/5.11.2/QtGui/qpa/qplatformnativeinterface.h>
-#include <QtGui/5.12.0/QtGui/qpa/qplatformnativeinterface.h>
 #include <QGuiApplication>
 #include <QWindow>
+
+#include <config-hdr.h>
+
+#ifdef Q_OS_WIN
+#if (QT_VERSION == QT_VERSION_CHECK(5, 11, 2))
+#include <QtGui/5.11.2/QtGui/qpa/qplatformnativeinterface.h>
+#elif (QT_VERSION == QT_VERSION_CHECK(5, 12, 0))
+#include <QtGui/5.12.0/QtGui/qpa/qplatformnativeinterface.h>
+#endif
+
 #include <d3d11.h>
 #include <wrl/client.h>
 #include <dxgi1_6.h>
 #include "EGL/egl.h"
 #include "EGL/eglext.h"
-
+#endif
 
 namespace {
 struct EGLException {
@@ -36,7 +44,9 @@ void getProcAddressSafe(QOpenGLContext *context, const char *funcName, FuncType 
     }
 }
 
+#ifdef Q_OS_WIN
 typedef const char *(EGLAPIENTRYP PFNEGLQUERYSTRINGPROC) (EGLDisplay dpy, EGLint name);
+#endif
 }
 
 
@@ -47,7 +57,9 @@ struct KisScreenInformationAdapter::Private
     QOpenGLContext *context;
     QString errorString;
 
+#ifdef Q_OS_WIN
     Microsoft::WRL::ComPtr<IDXGIAdapter1> dxgiAdapter;
+#endif
 };
 
 KisScreenInformationAdapter::KisScreenInformationAdapter(QOpenGLContext *context)
@@ -66,6 +78,8 @@ void KisScreenInformationAdapter::Private::initialize(QOpenGLContext *newContext
     errorString.clear();
 
     try {
+
+#ifdef Q_OS_WIN
 
         if (!context->isOpenGLES()) {
             throw EGLException("the context is not OpenGL ES");
@@ -140,16 +154,27 @@ void KisScreenInformationAdapter::Private::initialize(QOpenGLContext *newContext
 
             this->dxgiAdapter = dxgiAdapter;
         }
+
+#else
+        throw EGLException("current platform doesn't support fetching display information");
+#endif
+
     } catch (EGLException &e) {
         this->context = 0;
         this->errorString = e.what();
+#ifdef Q_OS_WIN
         this->dxgiAdapter.Reset();
+#endif
     }
 }
 
 bool KisScreenInformationAdapter::isValid() const
 {
+#ifdef Q_OS_WIN
     return m_d->context && m_d->dxgiAdapter;
+#else
+    return false;
+#endif
 }
 
 QString KisScreenInformationAdapter::errorString() const
@@ -160,6 +185,8 @@ QString KisScreenInformationAdapter::errorString() const
 KisScreenInformationAdapter::ScreenInfo KisScreenInformationAdapter::infoForScreen(QScreen *screen) const
 {
     ScreenInfo info;
+
+#ifdef Q_OS_WIN
 
     QPlatformNativeInterface *nativeInterface = qGuiApp->platformNativeInterface();
     HMONITOR monitor = reinterpret_cast<HMONITOR>(nativeInterface->nativeResourceForScreen("handle", screen));
@@ -203,9 +230,17 @@ KisScreenInformationAdapter::ScreenInfo KisScreenInformationAdapter::infoForScre
                 if (desc.ColorSpace == DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709) {
                     info.colorSpace = QSurfaceFormat::sRGBColorSpace;
                 } else if (desc.ColorSpace == DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709) {
+#ifdef HAVE_HDR
                     info.colorSpace = QSurfaceFormat::scRGBColorSpace;
+#else
+                    qWarning("WARNING: scRGB display color space is not supported by Qt's build");
+#endif
                 } else if (desc.ColorSpace == DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020) {
+#ifdef HAVE_HDR
                     info.colorSpace = QSurfaceFormat::bt2020PQColorSpace;
+#else
+                    qWarning("WARNING: bt2020-pq display color space is not supported by Qt's build");
+#endif
                 } else {
                     qWarning("WARNING: unknown display color space! 0x%X", desc.ColorSpace);
                 }
@@ -217,6 +252,8 @@ KisScreenInformationAdapter::ScreenInfo KisScreenInformationAdapter::infoForScre
         i++;
     }
 
+#endif
+    Q_UNUSED(screen);
     return info;
 }
 

@@ -2,7 +2,7 @@
 #define KISGLIMAGEF16_H
 
 #include <QSharedDataPointer>
-#include <openexr/half.h>
+#include <half.h>
 #include <boost/operators.hpp>
 
 class QSize;

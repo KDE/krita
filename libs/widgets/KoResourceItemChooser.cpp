@@ -364,12 +364,6 @@ void KoResourceItemChooser::setCurrentItem(int row, int column)
     }
 }
 
-void KoResourceItemChooser::setProxyModel(QAbstractProxyModel *proxyModel)
-{
-    proxyModel->setSourceModel(d->model);
-    d->view->setModel(proxyModel);
-}
-
 void KoResourceItemChooser::activated(const QModelIndex &index)
 {
     if (!index.isValid()) return;

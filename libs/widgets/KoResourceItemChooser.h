@@ -99,9 +99,6 @@ public:
     /// sets the visibility of tagging KlineEdits.
     void showTaggingBar(bool show);
 
-    ///Set a proxy model with will be used to filter the resources
-    void setProxyModel(QAbstractProxyModel *proxyModel);
-
     QSize viewSize() const;
 
     KoResourceItemView *itemView() const;

@@ -72,6 +72,19 @@ public:
     KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolSelectPolygonal(canvas);
     }
+
+    QList<QAction *> createActionsImpl()
+    {
+        KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+        QList<QAction *> actions = KisSelectionToolFactoryBase::createActionsImpl();
+
+        actions << actionRegistry->makeQAction("undo_polygon_selection");
+        actions << actionRegistry->makeQAction("selection_tool_mode_add");
+
+        return actions;
+    }
+
+
 };
 
 #endif //__selecttoolpolygonal_h__

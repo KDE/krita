@@ -57,7 +57,7 @@ public:
 
         qint32        srcInc       = (params.srcRowStride == 0) ? 0 : channels_nb;
         channels_type flow         = scale<channels_type>(params.flow);
-        channels_type opacity      = mul(flow, scale<channels_type>(params.opacity));
+        channels_type opacity      = scale<channels_type>(params.opacity);
         quint8*       dstRowStart  = params.dstRowStart;
         const quint8* srcRowStart  = params.srcRowStart;
         const quint8* maskRowStart = params.maskRowStart;
@@ -89,7 +89,7 @@ public:
 
                 if(alpha_pos != -1) {
                     channels_type fullFlowAlpha;
-                    channels_type averageOpacity = mul(flow, scale<channels_type>(*params.lastOpacity));
+                    channels_type averageOpacity = scale<channels_type>(*params.lastOpacity);
 
                     if (averageOpacity > opacity) {
                         channels_type reverseBlend = KoColorSpaceMaths<channels_type>::divide(dstAlpha, averageOpacity);
@@ -101,8 +101,10 @@ public:
                     if (params.flow == 1.0) {
                         dstAlpha = fullFlowAlpha;
                     } else {
-                        channels_type zeroFlowAlpha = unionShapeOpacity(srcAlpha, dstAlpha);
+                        channels_type zeroFlowAlpha = dstAlpha;
                         dstAlpha = lerp(zeroFlowAlpha, fullFlowAlpha, flow);
+
+
                     }
 
                     dst[alpha_pos] = dstAlpha;

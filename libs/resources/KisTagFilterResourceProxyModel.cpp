@@ -29,7 +29,6 @@ KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
     , d(new Private)
 {
-
 }
 
 KisTagFilterResourceProxyModel::~KisTagFilterResourceProxyModel()
@@ -41,7 +40,6 @@ void KisTagFilterResourceProxyModel::setTag(const QString& tag)
 {
     d->tag = tag;
 }
-
 
 bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const
 {

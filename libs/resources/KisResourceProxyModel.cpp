@@ -18,19 +18,30 @@
  */
 #include "KisResourceProxyModel.h"
 
-KisResourceProxyModel::KisResourceProxyModel()
-{
+#include <KisResourceModel.h>
 
+struct KisResourceProxyModel::Private {
+    int rowStride {1};
+};
+
+KisResourceProxyModel::KisResourceProxyModel(QObject *parent)
+    : QAbstractProxyModel(parent)
+    , d(new Private)
+{
 }
 
 KisResourceProxyModel::~KisResourceProxyModel()
 {
+}
 
+void KisResourceProxyModel::setRowStride(int rowStride)
+{
+    d->rowStride = rowStride;
 }
 
 QModelIndex KisResourceProxyModel::index(int row, int column, const QModelIndex &parent) const
 {
-    return QModelIndex();
+    return sourceModel()->index(row * d->rowStride + column, 0, parent);
 }
 
 QModelIndex KisResourceProxyModel::parent(const QModelIndex &child) const
@@ -40,19 +51,18 @@ QModelIndex KisResourceProxyModel::parent(const QModelIndex &child) const
 
 int KisResourceProxyModel::rowCount(const QModelIndex &parent) const
 {
-    return 0;
+    return sourceModel()->rowCount(parent) / d->rowStride;
 }
 
 
 int KisResourceProxyModel::columnCount(const QModelIndex &parent) const
 {
-    return 0;
+    return d->rowStride;
 }
-
 
 QModelIndex KisResourceProxyModel::mapToSource(const QModelIndex &proxyIndex) const
 {
-    return QModelIndex();
+    return sourceModel()->index(proxyIndex.row() * d->rowStride + proxyIndex.column(), 0, QModelIndex());
 }
 
 QModelIndex KisResourceProxyModel::mapFromSource(const QModelIndex &sourceIndex) const

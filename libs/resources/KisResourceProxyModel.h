@@ -21,14 +21,27 @@
 
 #include <QAbstractProxyModel>
 #include <QObject>
+#include <QScopedPointer>
 
-class KisResourceProxyModel : public QAbstractProxyModel
+#include "kritaresources_export.h"
+
+class KisResourceModel;
+
+/**
+ * @brief The KisResourceProxyModel class can be used in the grid
+ * based resource widgets.
+ */
+class KRITARESOURCES_EXPORT KisResourceProxyModel : public QAbstractProxyModel
 {
     Q_OBJECT
 public:
-    KisResourceProxyModel();
+    KisResourceProxyModel(QObject *parent = 0);
     ~KisResourceProxyModel() override;
     // QAbstractItemModel interface
+
+    /// Set the number of items in a row
+    void setRowStride(int rowStride);
+
 public:
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;
     QModelIndex parent(const QModelIndex &child) const override;
@@ -39,6 +52,11 @@ public:
 public:
     QModelIndex mapToSource(const QModelIndex &proxyIndex) const override;
     QModelIndex mapFromSource(const QModelIndex &sourceIndex) const override;
+
+private:
+    struct Private;
+    const QScopedPointer<Private> d;
+
 };
 
 #endif // KISRESOURCEPROXYMODEL_H

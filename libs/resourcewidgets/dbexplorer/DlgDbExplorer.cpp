@@ -28,6 +28,8 @@
 
 #include <TableModel.h>
 #include <KisResourceModel.h>
+#include <KisResourceProxyModel.h>
+#include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisResourceTypeModel.h>
 #include <KisTagModel.h>
@@ -146,7 +148,17 @@ void DlgDbExplorer::slotRvResourceTypeSelected(int index)
     QString resourceType = idx.data(Qt::DisplayRole).toString();
     qDebug() << resourceType;
     m_tagModel->setResourceType(idx.data(Qt::DisplayRole).toString());
-    m_page->resourceItemView->setModel(KisResourceModelProvider::resourceModel(resourceType));
+
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
+
+    KisResourceProxyModel *resourceProxyModel = new KisResourceProxyModel(this);
+    resourceProxyModel->setSourceModel(resourceModel);
+    resourceProxyModel->setRowStride(10);
+
+    KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(this);
+    tagFilterModel->setSourceModel(resourceProxyModel);
+
+    m_page->resourceItemView->setModel(tagFilterModel);
 }
 
 void DlgDbExplorer::slotRvTagSelected(int index)

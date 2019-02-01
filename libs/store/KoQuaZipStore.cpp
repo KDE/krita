@@ -222,7 +222,7 @@ bool KoQuaZipStore::openRead(const QString &name)
     debugStore << "openRead" << name << fixedPath << currentPath();
 
     if (!dd->archive->setCurrentFile(fixedPath)) {
-        qWarning() << "\t\tCould not set current file" << dd->archive->getZipError() << fixedPath;
+        //qWarning() << "\t\tCould not set current file" << dd->archive->getZipError() << fixedPath;
         return false;
     }
 

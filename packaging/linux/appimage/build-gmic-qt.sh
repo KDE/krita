@@ -42,6 +42,6 @@ cp $BUILD_PREFIX/deps-build/ext_gmic/gmic-qt/resources/gmic_hat.png $BUILD_PREFI
 linuxdeployqt $BUILD_PREFIX/gmic_qt_krita.appdir/usr/bin/gmic_krita_qt.desktop -verbose=2 -bundle-non-qt-libs -appimage
 
 # Make sure it has a consistent name too
-mv gmic_krita_qt-x86_64.AppImage gmic_krita_qt-x86_64.appimage
+mv gmic_krita_qt*x86_64.AppImage gmic_krita_qt-2.4.2-x86_64.appimage
 
  

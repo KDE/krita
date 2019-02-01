@@ -38,7 +38,7 @@
 #include "compositeops/KoCompositeOpDestinationIn.h"
 #include "compositeops/KoCompositeOpDestinationAtop.h"
 #include "compositeops/KoCompositeOpGreater.h"
-
+#include "compositeops/KoAlphaDarkenParamsWrapper.h"
 #include "KoOptimizedCompositeOpFactory.h"
 
 namespace _Private {
@@ -53,7 +53,11 @@ template<class Traits>
 struct OptimizedOpsSelector
 {
     static KoCompositeOp* createAlphaDarkenOp(const KoColorSpace *cs) {
-        return new KoCompositeOpAlphaDarken<Traits>(cs);
+        if (useCreamyAlphaDarken()) {
+            return new KoCompositeOpAlphaDarken<Traits, KoAlphaDarkenParamsWrapperCreamy>(cs);
+        } else {
+            return new KoCompositeOpAlphaDarken<Traits, KoAlphaDarkenParamsWrapperHard>(cs);
+        }
     }
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
         return new KoCompositeOpOver<Traits>(cs);
@@ -64,7 +68,9 @@ template<>
 struct OptimizedOpsSelector<KoBgrU8Traits>
 {
     static KoCompositeOp* createAlphaDarkenOp(const KoColorSpace *cs) {
-        return KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
+        return useCreamyAlphaDarken() ?
+            KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy32(cs) :
+            KoOptimizedCompositeOpFactory::createAlphaDarkenOpHard32(cs);
     }
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
         return KoOptimizedCompositeOpFactory::createOverOp32(cs);
@@ -75,7 +81,9 @@ template<>
 struct OptimizedOpsSelector<KoLabU8Traits>
 {
     static KoCompositeOp* createAlphaDarkenOp(const KoColorSpace *cs) {
-        return KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
+        return useCreamyAlphaDarken() ?
+            KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy32(cs) :
+            KoOptimizedCompositeOpFactory::createAlphaDarkenOpHard32(cs);
     }
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
         return KoOptimizedCompositeOpFactory::createOverOp32(cs);
@@ -86,7 +94,9 @@ template<>
 struct OptimizedOpsSelector<KoRgbF32Traits>
 {
     static KoCompositeOp* createAlphaDarkenOp(const KoColorSpace *cs) {
-        return new KoCompositeOpAlphaDarken<KoRgbF32Traits>(cs);
+        return useCreamyAlphaDarken() ?
+            KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy128(cs) :
+            KoOptimizedCompositeOpFactory::createAlphaDarkenOpHard128(cs);
     }
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
         return KoOptimizedCompositeOpFactory::createOverOp128(cs);
@@ -249,6 +259,12 @@ void addStandardCompositeOps(KoColorSpace* cs)
 
     _Private::AddGeneralOps<_Traits_, useGeneralOps>::add(cs);
     _Private::AddRGBOps    <_Traits_, useRGBOps    >::add(cs);
+}
+
+template<class _Traits_>
+KoCompositeOp* createAlphaDarkenCompositeOp(const KoColorSpace *cs)
+{
+    return _Private::OptimizedOpsSelector<_Traits_>::createAlphaDarkenOp(cs);
 }
 
 #endif

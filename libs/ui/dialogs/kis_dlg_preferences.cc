@@ -152,6 +152,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     // Tools tab
     //
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
+    cmbFlowMode->setCurrentIndex((int)!cfg.readEntry<bool>("useCreamyAlphaDarken", true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
     chkEnableTranformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste());
@@ -245,6 +246,7 @@ void GeneralTab::setDefault()
 
     m_chkHiDPI->setChecked(true);
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
+    cmbFlowMode->setCurrentIndex(0);
     m_groupBoxKineticScrollingSettings->setChecked(cfg.kineticScrollingEnabled(true));
     m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture(true));
     m_kineticScrollingSensitivitySlider->setValue(cfg.kineticScrollingSensitivity(true));
@@ -1352,6 +1354,8 @@ bool KisDlgPreferences::editPreferences()
         kritarc.setValue("EnableSingleApplication", dialog->m_general->m_chkSingleApplication->isChecked());
 
         cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
+
+        cfg.writeEntry<bool>("useCreamyAlphaDarken", (bool)!dialog->m_general->cmbFlowMode->currentIndex());
 
         cfg.setKineticScrollingEnabled(dialog->m_general->kineticScrollingEnabled());
         cfg.setKineticScrollingGesture(dialog->m_general->kineticScrollingGesture());

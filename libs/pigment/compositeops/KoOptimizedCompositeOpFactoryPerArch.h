@@ -29,13 +29,19 @@ class KoColorSpace;
 
 
 template<Vc::Implementation _impl>
-class KoOptimizedCompositeOpAlphaDarken32;
+class KoOptimizedCompositeOpAlphaDarkenCreamy32;
+
+template<Vc::Implementation _impl>
+class KoOptimizedCompositeOpAlphaDarkenHard32;
 
 template<Vc::Implementation _impl>
 class KoOptimizedCompositeOpOver32;
 
 template<Vc::Implementation _impl>
-class KoOptimizedCompositeOpAlphaDarken128;
+class KoOptimizedCompositeOpAlphaDarkenHard128;
+
+template<Vc::Implementation _impl>
+class KoOptimizedCompositeOpAlphaDarkenCreamy128;
 
 template<Vc::Implementation _impl>
 class KoOptimizedCompositeOpOver128;

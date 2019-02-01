@@ -133,14 +133,12 @@ struct ExrPaintLayerSaveInfo {
 struct EXRConverter::Private {
     Private()
         : doc(0)
-        , alphaWasModified(false)
         , showNotifications(false)
     {}
 
     KisImageSP image;
     KisDocument *doc;
 
-    bool alphaWasModified;
     bool showNotifications;
 
     QString errorMessage;
@@ -838,23 +836,6 @@ KisImageBuilder_Result EXRConverter::decode(const QString &filename)
     }
     // Set projectionColor to opaque
     d->image->setDefaultProjectionColor(KoColor(Qt::transparent, colorSpace));
-
-    // After reading the image, notify the user about changed alpha.
-    if (d->alphaWasModified) {
-        QString msg =
-                i18nc("@info",
-                      "The image contains pixels with zero alpha channel and non-zero "
-                      "color channels. Krita has modified those pixels to have "
-                      "at least some alpha. The initial values will <i>not</i> "
-                      "be reverted on saving the image back."
-                      "<br/><br/>"
-                      "This will hardly make any visual difference just keep it in mind.");
-        if (d->showNotifications) {
-            QMessageBox::information(0, i18nc("@title:window", "EXR image has been modified"), msg);
-        } else {
-            warnKrita << "WARNING:" << msg;
-        }
-    }
 
     if (!extraLayersInfo.isNull()) {
         KisExrLayersSorter sorter(extraLayersInfo, d->image);

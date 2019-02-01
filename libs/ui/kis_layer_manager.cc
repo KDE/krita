@@ -195,9 +195,9 @@ void KisLayerManager::updateGUI()
     const bool isGroupLayer = layer && layer->inherits("KisGroupLayer");
 
     m_imageMergeLayer->setText(
-        isGroupLayer ?
-            i18nc("@action:inmenu", "Merge Group") :
-            i18nc("@action:inmenu", "Merge with Layer Below"));
+                isGroupLayer ?
+                    i18nc("@action:inmenu", "Merge Group") :
+                    i18nc("@action:inmenu", "Merge with Layer Below"));
     m_flattenLayer->setVisible(!isGroupLayer);
 
     if (m_view->statusBar())
@@ -215,9 +215,9 @@ void KisLayerManager::imageResizeToActiveLayer()
             image->cropImage(cropRect);
         } else {
             m_view->showFloatingMessage(
-                i18nc("floating message in layer manager",
-                      "Layer is empty "),
-                QIcon(), 2000, KisFloatingMessage::Low);
+                        i18nc("floating message in layer manager",
+                              "Layer is empty "),
+                        QIcon(), 2000, KisFloatingMessage::Low);
         }
     }
 }
@@ -268,12 +268,12 @@ void KisLayerManager::layerProperties()
 
             if(xmlBefore != xmlAfter) {
                 KisChangeFilterCmd *cmd
-                   = new KisChangeFilterCmd(alayer,
-                                             configBefore->name(),
-                                             xmlBefore,
-                                             configAfter->name(),
-                                             xmlAfter,
-                                             false);
+                        = new KisChangeFilterCmd(alayer,
+                                                 configBefore->name(),
+                                                 xmlBefore,
+                                                 configAfter->name(),
+                                                 xmlAfter,
+                                                 false);
                 // FIXME: check whether is needed
                 cmd->redo();
                 m_view->undoAdapter()->addCommand(cmd);
@@ -329,12 +329,12 @@ void KisLayerManager::layerProperties()
             if (fileNameOld!= fileNameNew || scalingMethodOld != scalingMethodNew) {
                 KisChangeFileLayerCmd *cmd
                         = new KisChangeFileLayerCmd(flayer,
-                                                basePath,
-                                                fileNameOld,
-                                                scalingMethodOld,
-                                                basePath,
-                                                fileNameNew,
-                                                scalingMethodNew);
+                                                    basePath,
+                                                    fileNameOld,
+                                                    scalingMethodOld,
+                                                    basePath,
+                                                    fileNameNew,
+                                                    scalingMethodNew);
                 m_view->undoAdapter()->addCommand(cmd);
             }
         }
@@ -365,7 +365,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
 
 
     KisPaintDeviceSP srcDevice =
-        source->paintDevice() ? source->projection() : source->original();
+            source->paintDevice() ? source->projection() : source->original();
 
     bool putBehind = false;
     QString newCompositeOp = source->compositeOpId();
@@ -383,7 +383,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     KisPaintDeviceSP clone;
 
     if (*srcDevice->colorSpace() !=
-        *srcDevice->compositionSourceColorSpace()) {
+            *srcDevice->compositionSourceColorSpace()) {
 
         clone = new KisPaintDevice(srcDevice->compositionSourceColorSpace());
 
@@ -427,7 +427,7 @@ void KisLayerManager::convertGroupToAnimated()
     KisPaintLayerSP animatedLayer = new KisPaintLayer(m_view->image(), group->name(), OPACITY_OPAQUE_U8);
     animatedLayer->enableAnimation();
     KisRasterKeyframeChannel *contentChannel = dynamic_cast<KisRasterKeyframeChannel*>(
-            animatedLayer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true));
+                animatedLayer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true));
     KIS_ASSERT_RECOVER_RETURN(contentChannel);
 
     KisNodeSP child = group->firstChild();
@@ -542,9 +542,9 @@ void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, 
     above = parent->lastChild();
 
     if (parent->inherits("KisGroupLayer") && parent->collapsed()) {
-      above = parent;
-      parent = parent->parent();
-      return;
+        above = parent;
+        parent = parent->parent();
+        return;
     }
 
     while (parent &&
@@ -556,7 +556,7 @@ void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, 
 
     if (!parent) {
         warnKrita << "KisLayerManager::adjustLayerPosition:"
-                   << "No node accepted newly created node";
+                  << "No node accepted newly created node";
 
         parent = m_view->image()->root();
         above = parent->lastChild();
@@ -713,7 +713,7 @@ bool tryMergeSelectionMasks(KisNodeSP currentNode, KisImageSP image)
 
     KisNodeSP prevNode = currentNode->prevSibling();
     if (isSelectionMask(currentNode) &&
-        prevNode && isSelectionMask(prevNode)) {
+            prevNode && isSelectionMask(prevNode)) {
 
         QList<KisNodeSP> mergedNodes;
         mergedNodes.append(currentNode);
@@ -753,11 +753,11 @@ void KisLayerManager::mergeLayer()
     if (!m_view->blockUntilOperationsFinished(image)) return;
 
     QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
-      if (selectedNodes.size() > 1) {
+    if (selectedNodes.size() > 1) {
         image->mergeMultipleLayers(selectedNodes, m_view->activeNode());
     }
 
-      else if (tryMergeSelectionMasks(m_view->activeNode(), image)) {
+    else if (tryMergeSelectionMasks(m_view->activeNode(), image)) {
         // already done!
     } else if (tryFlattenGroupLayer(m_view->activeNode(), image)) {
         // already done!
@@ -768,9 +768,9 @@ void KisLayerManager::mergeLayer()
         if (!prevLayer) return;
         if (prevLayer->userLocked()) {
             m_view->showFloatingMessage(
-                i18nc("floating message in layer manager",
-                      "Layer is locked "),
-                QIcon(), 2000, KisFloatingMessage::Low);
+                        i18nc("floating message in layer manager",
+                              "Layer is locked "),
+                        QIcon(), 2000, KisFloatingMessage::Low);
         }
 
         else if (layer->metaData()->isEmpty() && prevLayer->metaData()->isEmpty()) {
@@ -951,7 +951,7 @@ void KisLayerManager::layerStyle()
         KisPSDLayerStyleSP newStyle = dlg.style();
 
         KUndo2CommandSP command = toQShared(
-            new KisSetLayerStyleCommand(layer, oldStyle, newStyle));
+                    new KisSetLayerStyleCommand(layer, oldStyle, newStyle));
 
         image->postExecutionUndoAdapter()->addCommand(command);
     }

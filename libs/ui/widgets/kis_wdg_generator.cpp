@@ -92,6 +92,7 @@ void KisWdgGenerator::initialize(KisViewManager *view)
         KisGeneratorItem * item = new KisGeneratorItem(generator->name(),
                 d->uiWdgGenerators.lstGenerators,
                 QListWidgetItem::UserType + 1);
+
         item->generator = generator;
     }
     connect(d->uiWdgGenerators.lstGenerators, SIGNAL(currentRowChanged(int)),
@@ -116,6 +117,7 @@ void KisWdgGenerator::setConfiguration(const KisFilterConfigurationSP  config)
             if (wdg) {
                 wdg->setConfiguration(config);
             }
+
             return;
         }
     }
@@ -156,6 +158,9 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
                                           d->uiWdgGenerators.centralWidgetHolder);
         } else {
             d->centralWidget = widget;
+
+            connect( widget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(previewConfiguration()));
+
             widget->setView(d->view);
             widget->setConfiguration(d->currentGenerator->defaultConfiguration());
         }

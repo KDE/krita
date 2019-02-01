@@ -25,8 +25,12 @@
 #include <QDir>
 #include <QUrl>
 
+#include <KoStore.h>
+
+#include <kis_paint_layer.h>
+#include <kis_group_layer.h>
 #include "KisDocument.h"
-#include "kis_image.h"
+#include <kis_image.h>
 #include "kis_signal_compressor.h"
 #include "KisPart.h"
 
@@ -188,11 +192,11 @@ void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
     m_d->fileChangedFlag = false;
 
     m_d->temporaryPath =
-        QDir::tempPath() + QDir::separator() +
-        QString("krita_file_layer_copy_%1_%2.%3")
-        .arg(QApplication::applicationPid())
-        .arg(qrand())
-        .arg(initialFileInfo.suffix());
+            QDir::tempPath() + QDir::separator() +
+            QString("krita_file_layer_copy_%1_%2.%3")
+            .arg(QApplication::applicationPid())
+            .arg(qrand())
+            .arg(initialFileInfo.suffix());
 
     QFile::copy(m_d->path, m_d->temporaryPath);
 
@@ -212,13 +216,32 @@ void KisSafeDocumentLoader::delayedLoadStart()
     bool successfullyLoaded = false;
 
     if (!m_d->fileChangedFlag &&
-        originalInfo.size() == m_d->initialFileSize &&
-        originalInfo.lastModified() == m_d->initialFileTimeStamp &&
-        tempInfo.size() == m_d->initialFileSize) {
+            originalInfo.size() == m_d->initialFileSize &&
+            originalInfo.lastModified() == m_d->initialFileTimeStamp &&
+            tempInfo.size() == m_d->initialFileSize) {
 
         m_d->doc.reset(KisPart::instance()->createDocument());
-        successfullyLoaded = m_d->doc->openUrl(QUrl::fromLocalFile(m_d->temporaryPath),
-                                               KisDocument::DontAddToRecent);
+
+        if (m_d->path.toLower().endsWith("ora") || m_d->path.toLower().endsWith("kra")) {
+            QScopedPointer<KoStore> store(KoStore::createStore(m_d->temporaryPath, KoStore::Read));
+            if (store) {
+                if (store->open(QString("mergedimage.png"))) {
+                    QByteArray bytes = store->read(store->size());
+                    store->close();
+                    QImage mergedImage;
+                    mergedImage.loadFromData(bytes);
+                    KisImageSP image = new KisImage(0, mergedImage.width(), mergedImage.height(), KoColorSpaceRegistry::instance()->rgb8(), "");
+                    KisPaintLayerSP layer = new KisPaintLayer(image, "", OPACITY_OPAQUE_U8);
+                    layer->paintDevice()->convertFromQImage(mergedImage, 0);
+                    image->addNode(layer, image->rootLayer());
+                    m_d->doc->setCurrentImage(image);
+                }
+            }
+        }
+        else {
+            successfullyLoaded = m_d->doc->openUrl(QUrl::fromLocalFile(m_d->temporaryPath),
+                                                   KisDocument::DontAddToRecent);
+        }
     } else {
         dbgKrita << "File was modified externally. Restarting.";
         dbgKrita << ppVar(m_d->fileChangedFlag);

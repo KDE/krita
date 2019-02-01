@@ -46,7 +46,7 @@ public:
      * @param glayer optional generator layer for editing
      * @param previousConfig optional configuration of layer being edited.
      */
-    KisDlgGeneratorLayer(const QString defaultLayerName, KisViewManager *arg_view, QWidget *parent, KisGeneratorLayerSP glayer, const KisFilterConfigurationSP previousConfig);
+    KisDlgGeneratorLayer(const QString & defaultLayerName, KisViewManager *arg_view, QWidget *parent, KisGeneratorLayerSP glayer, const KisFilterConfigurationSP previousConfig);
     ~KisDlgGeneratorLayer() override;
 
     void setConfiguration(const KisFilterConfigurationSP  config);
@@ -55,6 +55,7 @@ public:
 
 protected Q_SLOTS:
     void slotNameChanged(const QString &);
+    void previewGenerator();
 
 private:
     Ui_WdgDlgGeneratorLayer dlgWidget;

@@ -35,6 +35,7 @@
 #include "KoCompositeOpCopy2.h"
 #include "KoCompositeOpAlphaDarken.h"
 #include "KoCompositeOpBase.h"
+#include "KoCompositeOps.h"
 #include <colorprofiles/KoDummyColorProfile.h>
 
 namespace {
@@ -91,7 +92,7 @@ KoAlphaColorSpaceImpl<_CSTrait>::KoAlphaColorSpaceImpl()
     m_compositeOps << new KoCompositeOpOver<_CSTrait>(this)
                    << new KoCompositeOpErase<_CSTrait>(this)
                    << new KoCompositeOpCopy2<_CSTrait>(this)
-                   << new KoCompositeOpAlphaDarken<_CSTrait>(this)
+                   << createAlphaDarkenCompositeOp<_CSTrait>(this)
                    << new AlphaColorSpaceMultiplyOp<_CSTrait>(this);
 
     Q_FOREACH (KoCompositeOp *op, m_compositeOps) {

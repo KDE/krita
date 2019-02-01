@@ -494,12 +494,12 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
     }
 
     params.channelFlags = QBitArray();
-    typename Compositor::OptionalParams optionalParams(params);
+    typename Compositor::ParamsWrapper paramsWrapper(params);
 
     // The error count is needed as 38.5 gets rounded to 38 instead of 39 in the vc version.
     int errorcount = 0;
     for (int i = 0; i < numBlocks; i++) {
-        Compositor::template compositeVector<true,true, Vc::CurrentImplementation::current()>(src1, dst1, msk1, params.opacity, optionalParams);
+        Compositor::template compositeVector<true,true, Vc::CurrentImplementation::current()>(src1, dst1, msk1, params.opacity, paramsWrapper);
         for (int j = 0; j < vecSize; j++) {
 
             //if (8 * i + j == 7080) {
@@ -508,7 +508,7 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
             //    dbgKrita << "msk:" << msk2[0];
             //}
 
-            Compositor::template compositeOnePixelScalar<true, Vc::CurrentImplementation::current()>(src2, dst2, msk2, params.opacity, optionalParams);
+            Compositor::template compositeOnePixelScalar<true, Vc::CurrentImplementation::current()>(src2, dst2, msk2, params.opacity, paramsWrapper);
 
             bool compareResult = true;
             if (pixelSize == 4) {
@@ -642,7 +642,7 @@ void KisCompositionBenchmark::compareAlphaDarkenOps()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
-    KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
+    KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoBgrU8Traits, KoAlphaDarkenParamsWrapperCreamy>(cs);
 
     QVERIFY(compareTwoOps(true, opAct, opExp));
 
@@ -654,7 +654,7 @@ void KisCompositionBenchmark::compareRgbF32AlphaDarkenOps()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
     KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenOp128(cs);
-    KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoRgbF32Traits>(cs);
+    KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoRgbF32Traits, KoAlphaDarkenParamsWrapperCreamy>(cs);
 
     QVERIFY(compareTwoOps(true, opAct, opExp));
 
@@ -666,7 +666,7 @@ void KisCompositionBenchmark::compareAlphaDarkenOpsNoMask()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
-    KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
+    KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoBgrU8Traits, KoAlphaDarkenParamsWrapperCreamy>(cs);
 
     QVERIFY(compareTwoOps(false, opAct, opExp));
 
@@ -713,7 +713,7 @@ void KisCompositionBenchmark::compareRgbF32OverOps()
 void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenLegacy()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoCompositeOp *op = new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
+    KoCompositeOp *op = new KoCompositeOpAlphaDarken<KoBgrU8Traits, KoAlphaDarkenParamsWrapperCreamy>(cs);
     benchmarkCompositeOp(op, "Legacy");
     delete op;
 }
@@ -745,7 +745,7 @@ void KisCompositionBenchmark::testRgb8CompositeOverOptimized()
 void KisCompositionBenchmark::testRgbF32CompositeAlphaDarkenLegacy()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
-    KoCompositeOp *op = new KoCompositeOpAlphaDarken<KoRgbF32Traits>(cs);
+    KoCompositeOp *op = new KoCompositeOpAlphaDarken<KoRgbF32Traits, KoAlphaDarkenParamsWrapperCreamy>(cs);
     benchmarkCompositeOp(op, "Legacy");
     delete op;
 }

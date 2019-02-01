@@ -30,6 +30,8 @@
 
 #include <QTemporaryFile>
 #include <QTextCodec>
+#include <QByteArray>
+#include <QBuffer>
 
 #include <KConfig>
 #include <KSharedConfig>
@@ -44,6 +46,8 @@ struct KoQuaZipStore::Private {
     QuaZipFile *currentFile {0};
     int compressionLevel {Z_DEFAULT_COMPRESSION};
     bool usingSaveFile {false};
+    QByteArray cache;
+    QBuffer buffer;
 };
 
 
@@ -112,7 +116,7 @@ qint64 KoQuaZipStore::write(const char *_data, qint64 _len)
     }
 
     d->size += _len;
-    if (dd->currentFile->write(_data, _len)) {    // writeData returns a bool!
+    if (dd->buffer.write(_data, _len)) {    // writeData returns a bool!
         return _len;
     }
     return 0;
@@ -191,6 +195,11 @@ bool KoQuaZipStore::openWrite(const QString &name)
     if (!r) {
         qWarning() << "Could not open" << name << dd->currentFile->getZipError();
     }
+
+    dd->cache = QByteArray();
+    dd->buffer.setBuffer(&dd->cache);
+    dd->buffer.open(QBuffer::WriteOnly);
+
     return r;
 }
 
@@ -213,7 +222,7 @@ bool KoQuaZipStore::openRead(const QString &name)
     debugStore << "openRead" << name << fixedPath << currentPath();
 
     if (!dd->archive->setCurrentFile(fixedPath)) {
-        qWarning() << "\t\tCould not set current file" << dd->archive->getZipError();
+        //qWarning() << "\t\tCould not set current file" << dd->archive->getZipError() << fixedPath;
         return false;
     }
 
@@ -230,9 +239,16 @@ bool KoQuaZipStore::openRead(const QString &name)
 bool KoQuaZipStore::closeWrite()
 {
     Q_D(KoStore);
+
+    bool r = true;
+    if (!dd->currentFile->write(dd->cache)) {
+        qWarning() << "Could not write buffer to the file";
+        r = false;
+    }
+    dd->buffer.close();
     dd->currentFile->close();
     d->stream = 0;
-    return dd->currentFile->getZipError() == ZIP_OK;
+    return (r && dd->currentFile->getZipError() == ZIP_OK);
 }
 
 bool KoQuaZipStore::closeRead()

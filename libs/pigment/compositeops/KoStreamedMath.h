@@ -62,7 +62,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
     quint8*       dstRowStart  = params.dstRowStart;
     const quint8* maskRowStart = params.maskRowStart;
     const quint8* srcRowStart  = params.srcRowStart;
-    typename Compositor::OptionalParams optionalParams(params);
+    typename Compositor::ParamsWrapper paramsWrapper(params);
 
     for(quint32 r=params.rows; r>0; --r) {
         const quint8 *mask = maskRowStart;
@@ -72,7 +72,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
         int blockRest = params.cols;
 
         for(int i = 0; i < blockRest; i++) {
-            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, optionalParams);
+            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, paramsWrapper);
             src += srcLinearInc;
             dst += linearInc;
 
@@ -227,7 +227,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
     quint8*       dstRowStart  = params.dstRowStart;
     const quint8* maskRowStart = params.maskRowStart;
     const quint8* srcRowStart  = params.srcRowStart;
-    typename Compositor::OptionalParams optionalParams(params);
+    typename Compositor::ParamsWrapper paramsWrapper(params);
 
     if (!params.srcRowStride) {
         if (pixelSize == 4) {
@@ -308,7 +308,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
 #endif
 
         for(int i = 0; i < blockAlign; i++) {
-            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, optionalParams);
+            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, paramsWrapper);
             src += srcLinearInc;
             dst += linearInc;
 
@@ -318,7 +318,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
         }
 
         for (int i = 0; i < blockAlignedVector; i++) {
-            Compositor::template compositeVector<useMask, true, _impl>(src, dst, mask, params.opacity, optionalParams);
+            Compositor::template compositeVector<useMask, true, _impl>(src, dst, mask, params.opacity, paramsWrapper);
             src += srcVectorInc;
             dst += vectorInc;
 
@@ -328,7 +328,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
         }
 
         for (int i = 0; i < blockUnalignedVector; i++) {
-            Compositor::template compositeVector<useMask, false, _impl>(src, dst, mask, params.opacity, optionalParams);
+            Compositor::template compositeVector<useMask, false, _impl>(src, dst, mask, params.opacity, paramsWrapper);
             src += srcVectorInc;
             dst += vectorInc;
 
@@ -339,7 +339,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
 
 
         for(int i = 0; i < blockRest; i++) {
-            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, optionalParams);
+            Compositor::template compositeOnePixelScalar<useMask, _impl>(src, dst, mask, params.opacity, paramsWrapper);
             src += srcLinearInc;
             dst += linearInc;
 

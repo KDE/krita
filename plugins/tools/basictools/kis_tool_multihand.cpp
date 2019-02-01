@@ -184,9 +184,9 @@ void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
                 // convert angles to radians since cos and sin need that
                 currentAngle = currentAngle * 0.017453 + m_angle; // m_angle is current rotation set on UI
 
-                QPoint startingSpot = QPoint(m_axesPoint.x()+ (cos(currentAngle)*startingInsetLength), m_axesPoint.y()+ (sin(currentAngle))*startingInsetLength );
+                QPoint startingSpot = QPoint(m_axesPoint.x()+ (sin(currentAngle)*startingInsetLength), m_axesPoint.y()- (cos(currentAngle))*startingInsetLength );
                 path.moveTo(startingSpot.x(), startingSpot.y());
-                QPointF symmetryLinePoint(m_axesPoint.x()+ (cos(currentAngle)*axisLength), m_axesPoint.y()+ (sin(currentAngle))*axisLength );
+                QPointF symmetryLinePoint(m_axesPoint.x()+ (sin(currentAngle)*axisLength), m_axesPoint.y()- (cos(currentAngle))*axisLength );
                 path.lineTo(symmetryLinePoint);
             }
 

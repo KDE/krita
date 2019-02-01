@@ -35,7 +35,7 @@
 #include <KisViewManager.h>
 #include <KisDocument.h>
 
-KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString defaultName, KisViewManager *view, QWidget *parent, KisGeneratorLayerSP glayer = 0, const KisFilterConfigurationSP previousConfig = 0)
+KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString & defaultName, KisViewManager *view, QWidget *parent, KisGeneratorLayerSP glayer = 0, const KisFilterConfigurationSP previousConfig = 0)
         : KoDialog(parent)
         , m_customName(false)
         , m_freezeName(false)
@@ -61,6 +61,7 @@ KisDlgGeneratorLayer::KisDlgGeneratorLayer(const QString defaultName, KisViewMan
     dlgWidget.txtLayerName->setText( isEditing ? layer->name() : defaultName );
     connect(dlgWidget.txtLayerName, SIGNAL(textChanged(QString)),
             this, SLOT(slotNameChanged(QString)));
+    connect(dlgWidget.wdgGenerator, SIGNAL(previewConfiguration()), this, SLOT(previewGenerator()));
 }
 
 KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
@@ -77,7 +78,7 @@ KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
         QString xmlBefore = configBefore->toXML();
         QString xmlAfter = configAfter->toXML();
 
-        if(xmlBefore != xmlAfter) {
+        if (xmlBefore != xmlAfter) {
             KisChangeFilterCmd *cmd
                     = new KisChangeFilterCmd(layer,
                                              configBefore->name(),
@@ -85,12 +86,13 @@ KisDlgGeneratorLayer::~KisDlgGeneratorLayer()
                                              configAfter->name(),
                                              xmlAfter,
                                              true);
-            // FIXME: check whether is needed
-            cmd->redo();
+
             m_view->undoAdapter()->addCommand(cmd);
             m_view->document()->setModified(true);
         }
-
+    }
+    else if(isEditing && result() == QDialog::Rejected){
+        layer->setFilter(configBefore);
     }
 }
 
@@ -101,6 +103,12 @@ void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
 
     m_customName = !text.isEmpty();
     enableButtonOk(m_customName);
+}
+
+void KisDlgGeneratorLayer::previewGenerator()
+{
+    if (isEditing && layer)
+        layer->setFilter(configuration());
 }
 
 void KisDlgGeneratorLayer::setConfiguration(const KisFilterConfigurationSP  config)

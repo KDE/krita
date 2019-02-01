@@ -365,137 +365,130 @@
       <attribute name="title">
        <string>Tools</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_4">
-       <item row="1" column="1">
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <property name="spacing">
-          <number>10</number>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string>Tool Options Location (needs restart)</string>
          </property>
-         <property name="leftMargin">
-          <number>10</number>
-         </property>
-         <property name="topMargin">
-          <number>10</number>
-         </property>
-         <property name="rightMargin">
-          <number>10</number>
-         </property>
-         <property name="bottomMargin">
-          <number>10</number>
-         </property>
-         <item>
-          <widget class="QGroupBox" name="groupBox_4">
-           <property name="title">
-            <string>Tool Options Location (needs restart)</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <item>
-             <widget class="QRadioButton" name="m_radioToolOptionsInDocker">
-              <property name="text">
-               <string>In Doc&amp;ker</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="m_radioToolOptionsInToolbar">
-              <property name="text">
-               <string>I&amp;n Toolbar</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="m_chkSwitchSelectionCtrlAlt">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QRadioButton" name="m_radioToolOptionsInDocker">
+            <property name="text">
+             <string>In Doc&amp;ker</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="m_radioToolOptionsInToolbar">
+            <property name="text">
+             <string>I&amp;n Toolbar</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <layout class="QFormLayout" name="formLayout_4">
+         <item row="0" column="0">
+          <widget class="QLabel" name="lblFlowMode">
            <property name="text">
-            <string>Switch Control/Alt Selection Modifiers</string>
+            <string>Brush Flow Mode (needs restart):</string>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QCheckBox" name="chkEnableTouch">
-           <property name="text">
-            <string>Enable Touch Painting</string>
-           </property>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="cmbFlowMode">
+           <item>
+            <property name="text">
+             <string>Creamy (Krita 4.2+)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Hard (Krita 4.1 and earlier versions)</string>
+            </property>
+           </item>
           </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="chkEnableTranformToolAfterPaste">
-           <property name="text">
-            <string>Activate transform tool after pasting</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="m_groupBoxKineticScrollingSettings">
-           <property name="title">
-            <string>Kinetic Scrolling (needs restart)</string>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayoutKineticScrollingSettings">
-            <item>
-             <widget class="QComboBox" name="m_cmbKineticScrollingGesture"/>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayoutKineticScrollingSensitivity">
-              <item>
-               <widget class="QLabel" name="labelKineticScrollingSensitivity">
-                <property name="text">
-                 <string>Sensitivity:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="KisSliderSpinBox" name="m_kineticScrollingSensitivitySlider" native="true"/>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="m_chkKineticScrollingHideScrollbars">
-              <property name="text">
-               <string>Hide Scrollbars</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </item>
-       <item row="1" column="2">
-        <spacer name="horizontalSpacer_6">
+       <item>
+        <widget class="QCheckBox" name="m_chkSwitchSelectionCtrlAlt">
+         <property name="text">
+          <string>Switch Control/Alt Selection Modifiers</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chkEnableTouch">
+         <property name="text">
+          <string>Enable Touch Painting</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chkEnableTranformToolAfterPaste">
+         <property name="text">
+          <string>Activate transform tool after pasting</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="m_groupBoxKineticScrollingSettings">
+         <property name="title">
+          <string>Kinetic Scrolling (needs restart)</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayoutKineticScrollingSettings">
+          <item>
+           <widget class="QComboBox" name="m_cmbKineticScrollingGesture"/>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayoutKineticScrollingSensitivity">
+            <item>
+             <widget class="QLabel" name="labelKineticScrollingSensitivity">
+              <property name="text">
+               <string>Sensitivity:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="KisSliderSpinBox" name="m_kineticScrollingSensitivitySlider" native="true"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="m_chkKineticScrollingHideScrollbars">
+            <property name="text">
+             <string>Hide Scrollbars</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>40</width>
-           <height>20</height>
+           <width>250</width>
+           <height>71</height>
           </size>
          </property>
         </spacer>

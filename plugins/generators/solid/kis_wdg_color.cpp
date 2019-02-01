@@ -33,6 +33,7 @@ KisWdgColor::KisWdgColor(QWidget* parent, const KoColorSpace *cs)
     m_widget = new Ui_WdgColorOptions();
     m_widget->setupUi(this);
     m_cs = cs;
+    connect(m_widget->bnColor, SIGNAL(changed(const KoColor&)), this, SIGNAL(sigConfigurationUpdated()));
 }
 
 KisWdgColor::~KisWdgColor()

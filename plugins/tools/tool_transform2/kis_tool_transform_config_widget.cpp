@@ -625,6 +625,9 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
             else
                  cageDeformRadio->setChecked(true);
 
+            changeGranularity->setCurrentIndex(log2(config.pixelPrecision()) - 2);
+            granularityPreview->setCurrentIndex(log2(config.previewPixelPrecision()) - 2);
+
         }
 
     } else if (config.mode() == ToolTransformArgs::LIQUIFY) {

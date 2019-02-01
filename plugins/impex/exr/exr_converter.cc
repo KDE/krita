@@ -295,39 +295,15 @@ struct GrayPixelWrapper
 template <class WrapperType>
 void EXRConverter::Private::unmultiplyAlpha(typename WrapperType::pixel_type *pixel)
 {
-    typedef typename WrapperType::pixel_type pixel_type;
     typedef typename WrapperType::channel_type channel_type;
 
     WrapperType srcPixel(*pixel);
 
-    if (!srcPixel.checkMultipliedColorsConsistent()) {
-
-        channel_type newAlpha = srcPixel.alpha();
-
-        pixel_type __dstPixelData;
-        WrapperType dstPixel(__dstPixelData);
-
-        /**
-         * Division by a tiny alpha may result in an overflow of half
-         * value. That is why we use safe iterational approach.
-         */
-        while (1) {
-            dstPixel.setUnmultiplied(srcPixel.pixel, newAlpha);
-
-            if (dstPixel.checkUnmultipliedColorsConsistent(srcPixel.pixel)) {
-                break;
-            }
-
-            newAlpha += alphaEpsilon<channel_type>();
-            alphaWasModified = true;
-        }
-
-        *pixel = dstPixel.pixel;
-
-
-    } else if (srcPixel.alpha() > 0.0) {
-        srcPixel.setUnmultiplied(srcPixel.pixel, srcPixel.alpha());
+    channel_type newAlpha = alphaEpsilon<channel_type>();
+    if (srcPixel.alpha() > newAlpha){
+        newAlpha = srcPixel.alpha();
     }
+    srcPixel.setUnmultiplied(srcPixel.pixel, newAlpha);
 }
 
 template <typename T, typename Pixel, int size, int alphaPos>

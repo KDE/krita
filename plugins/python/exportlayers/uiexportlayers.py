@@ -169,7 +169,8 @@ class UIExportLayers(object):
 
                 layerFileName = '{0}{1}/{2}.{3}'.format(self.directoryTextField.text(),
                                                         parentDir, node.name(), _fileFormat)
-                node.save(layerFileName, self.xResSpinBox.value(), self.yResSpinBox.value())
+                node.save(layerFileName, self.xResSpinBox.value(),
+                          self.yResSpinBox.value(), krita.InfoObject())
 
             if node.childNodes():
                 self._exportLayers(node, fileFormat, newDir)

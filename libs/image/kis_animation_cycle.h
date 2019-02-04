@@ -30,6 +30,8 @@ class KRITAIMAGE_EXPORT KisAnimationCycle : public KisKeyframeBase {
 public:
     KisAnimationCycle(KisKeyframeChannel *channel, KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe);
 
+    KisAnimationCycle(const KisAnimationCycle &cycle, KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe);
+
     KisKeyframeSP firstSourceKeyframe() const;
     KisKeyframeSP lastSourceKeyframe() const;
     KisTimeSpan originalRange() const;

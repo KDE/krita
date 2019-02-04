@@ -21,6 +21,23 @@
 #include "kundo2command.h"
 #include "kritaimage_export.h"
 
+namespace KisKeyframeCommands
+{
+    struct KRITAIMAGE_EXPORT KeyframeMove
+    {
+        KisKeyframeBaseSP keyframe;
+        int oldTime, newTime;
+
+        KeyframeMove() = default;
+        KeyframeMove(KisKeyframeBaseSP keyframe, int newTime);
+    };
+
+    /**
+     * Returns either a new command for operations needed to move the keyframes or null if the operation is invalid against the current state of the channel
+     */
+    KRITAIMAGE_EXPORT KUndo2CommandSP tryMoveKeyframes(KisKeyframeChannel *channel, QVector<KeyframeMove> moves, KUndo2Command *parentCommand);
+}
+
 class KRITAIMAGE_EXPORT KisReplaceKeyframeCommand : public KUndo2Command
 {
 public:

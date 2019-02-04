@@ -101,6 +101,8 @@ public:
 
     KisVisibleKeyframeIterator visibleKeyframesFrom(int time) const;
 
+    QList<QSharedPointer<KisAnimationCycle>> cycles() const;
+
     /**
      * Finds the original range of the cycle defined or repeated at the given time.
      * @arg time a time at any frame within the original cycle or any repeat of it.
@@ -199,6 +201,7 @@ private:
     void addCycle(QSharedPointer<KisAnimationCycle> cycle);
     void removeCycle(QSharedPointer<KisAnimationCycle> cycle);
 
+    friend class KisMoveKeyframesCommand;
     friend class KisMoveFrameCommand;
     friend class KisReplaceKeyframeCommand;
     friend class KisSwapFramesCommand;

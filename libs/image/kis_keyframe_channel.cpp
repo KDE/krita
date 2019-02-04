@@ -553,6 +553,11 @@ KisVisibleKeyframeIterator KisKeyframeChannel::visibleKeyframesFrom(int time) co
     return KisVisibleKeyframeIterator(visibleKeyframeAt(time));
 }
 
+QList<QSharedPointer<KisAnimationCycle>> KisKeyframeChannel::cycles() const
+{
+    return m_d->cycles.values();
+}
+
 KisTimeSpan KisKeyframeChannel::cycledRangeAt(int time) const
 {
     QSharedPointer<KisRepeatFrame> repeat = activeRepeatAt(time);

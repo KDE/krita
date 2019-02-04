@@ -27,6 +27,13 @@ KisAnimationCycle::KisAnimationCycle(KisKeyframeChannel *channel, KisKeyframeSP 
         , m_lastSourceKeyframe(lastKeyframe)
 {}
 
+KisAnimationCycle::KisAnimationCycle(const KisAnimationCycle &cycle, KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe)
+    : KisKeyframeBase(cycle.channel(), firstKeyframe->time())
+    , m_firstSourceKeyframe(firstKeyframe)
+    , m_lastSourceKeyframe(lastKeyframe)
+    , m_repeats(cycle.m_repeats)
+{}
+
 KisKeyframeSP KisAnimationCycle::firstSourceKeyframe() const
 {
     return m_firstSourceKeyframe;

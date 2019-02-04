@@ -78,11 +78,11 @@ public:
         // Calculate changed area as the union of the current and previous keyframe.
         // This makes sure there are no artifacts left over from the previous frame
         // where the new one doesn't cover the area.
-        KisKeyframeSP neighbor = ch->previousKeyframe(*this);
+        KisKeyframeSP neighbor = ch->previousKeyframe(time());
 
         // Using the *next* keyframe at the start of the timeline avoids artifacts
         // when deleting or moving the first key
-        if (neighbor.isNull()) neighbor = ch->nextKeyframe(*this);
+        if (neighbor.isNull()) neighbor = ch->nextKeyframe(time());
 
         QRect rect = ch_d->paintDevice->framesInterface()->frameBounds(frameId);
 

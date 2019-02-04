@@ -185,7 +185,7 @@ int KisRepeatFrame::firstInstanceOf(int originalTime) const
 
     const int first = this->time() + timeWithinCycle;
 
-    const KisKeyframeSP next = channel()->nextKeyframe(*this);
+    const KisKeyframeSP next = channel()->nextKeyframe(time());
     if (next && next->time() < first) return -1;
 
     return first;

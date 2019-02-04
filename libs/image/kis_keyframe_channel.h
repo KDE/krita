@@ -90,8 +90,8 @@ public:
     KisKeyframeSP firstKeyframe() const;
     KisKeyframeSP nextKeyframe(KisKeyframeSP keyframe) const;
     KisKeyframeSP previousKeyframe(KisKeyframeSP keyframe) const;
-    KisKeyframeSP nextKeyframe(const KisKeyframeBase &keyframe) const;
-    KisKeyframeSP previousKeyframe(const KisKeyframeBase &keyframe) const;
+    KisKeyframeSP nextKeyframe(int time) const;
+    KisKeyframeSP previousKeyframe(int time) const;
     KisKeyframeSP lastKeyframe() const;
 
     KisKeyframeBaseSP itemAt(int time) const;

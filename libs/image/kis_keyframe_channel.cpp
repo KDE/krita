@@ -477,10 +477,10 @@ KisKeyframeSP KisKeyframeChannel::firstKeyframe() const
 
 KisKeyframeSP KisKeyframeChannel::nextKeyframe(KisKeyframeSP keyframe) const
 {
-    return nextKeyframe(*keyframe);
+    return nextKeyframe(keyframe->time());
 }
 
-KisKeyframeSP KisKeyframeChannel::nextKeyframe(const KisKeyframeBase &keyframe) const
+KisKeyframeSP KisKeyframeChannel::nextKeyframe(int time) const
 {
     KeyframesMap::const_iterator i = KisCollectionUtils::firstAfter(m_d->keys, time);
     if (i == m_d->keys.constEnd()) return KisKeyframeSP(0);
@@ -489,10 +489,10 @@ KisKeyframeSP KisKeyframeChannel::nextKeyframe(const KisKeyframeBase &keyframe) 
 
 KisKeyframeSP KisKeyframeChannel::previousKeyframe(KisKeyframeSP keyframe) const
 {
-    return previousKeyframe(*keyframe);
+    return previousKeyframe(keyframe->time());
 }
 
-KisKeyframeSP KisKeyframeChannel::previousKeyframe(const KisKeyframeBase &keyframe) const
+KisKeyframeSP KisKeyframeChannel::previousKeyframe(int time) const
 {
     KeyframesMap::const_iterator i = KisCollectionUtils::lastBefore(m_d->keys, time);
     if (i == m_d->keys.constEnd()) return KisKeyframeSP(0);
@@ -527,7 +527,7 @@ KisKeyframeBaseSP KisKeyframeChannel::activeItemAt(int time) const
 
 KisKeyframeBaseSP KisKeyframeChannel::nextItem(const KisKeyframeBase &item) const
 {
-    const KisKeyframeSP keyframe = nextKeyframe(item);
+    const KisKeyframeSP keyframe = nextKeyframe(item.time());
 
     auto repeatIter = KisCollectionUtils::firstAfter(m_d->repeats, item.time());
     const auto repeat = (repeatIter != m_d->repeats.constEnd()) ? repeatIter.value() : QSharedPointer<KisRepeatFrame>();
@@ -539,7 +539,7 @@ KisKeyframeBaseSP KisKeyframeChannel::nextItem(const KisKeyframeBase &item) cons
 
 KisKeyframeBaseSP KisKeyframeChannel::previousItem(const KisKeyframeBase &item) const
 {
-    const KisKeyframeSP keyframe = previousKeyframe(item);
+    const KisKeyframeSP keyframe = previousKeyframe(item.time());
 
     auto repeatIter = KisCollectionUtils::lastBefore(m_d->repeats, item.time());
     const auto repeat = (repeatIter != m_d->repeats.constEnd()) ? repeatIter.value() : QSharedPointer<KisRepeatFrame>();
@@ -998,7 +998,7 @@ KisVisibleKeyframeIterator& KisVisibleKeyframeIterator::operator--()
         }
     }
 
-    m_keyframe = m_channel->previousKeyframe(*m_keyframe);
+    m_keyframe = m_channel->previousKeyframe(m_keyframe->time());
     if (!m_keyframe) return invalidate();
 
     m_time = m_keyframe->time();
@@ -1017,7 +1017,7 @@ KisVisibleKeyframeIterator& KisVisibleKeyframeIterator::operator++()
         }
     }
 
-    m_keyframe = m_channel->nextKeyframe(*m_keyframe);
+    m_keyframe = m_channel->nextKeyframe(m_keyframe->time());
     if (!m_keyframe) return invalidate();
 
     m_time = m_keyframe->time();

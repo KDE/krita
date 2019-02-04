@@ -99,4 +99,4 @@ cd $BUILD_PREFIX
 
 # Generate a new name for the Appimage file and rename it accordingly
 APPIMAGE=krita-"$VERSION"-x86_64.appimage
-mv Krita-x86_64.AppImage $APPIMAGE
+mv Krita*AppImage $APPIMAGE

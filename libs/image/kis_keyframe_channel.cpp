@@ -20,6 +20,7 @@
 #include "KoID.h"
 #include "kis_global.h"
 #include "kis_node.h"
+#include "KisCollectionUtils.h"
 #include "kis_time_range.h"
 #include "kundo2command.h"
 #include "kis_keyframe_commands.h"
@@ -59,7 +60,7 @@ typename QMap<int, T>::const_iterator findActive(const QMap<int, T> &map, int ma
 template<class T>
 typename QMap<int, T>::const_iterator findPrevious(const QMap<int, T> &map, int currentKey)
 {
-    typename QMap<int, T>::const_iterator active = findActive(map, currentKey);
+    typename QMap<int, T>::const_iterator active = lastBeforeOrAt(map, currentKey);
     if (active == map.constEnd()) return map.constEnd();
 
     if (currentKey > active.key()) return active;
@@ -449,7 +450,7 @@ KisKeyframeSP KisKeyframeChannel::keyframeAt(int time) const
 
 KisKeyframeSP KisKeyframeChannel::activeKeyframeAt(int time) const
 {
-    KeyframesMap::const_iterator i = findActive(m_d->keys, time);
+    KeyframesMap::const_iterator i = KisCollectionUtils::lastBeforeOrAt(m_d->keys, time);
     if (i != m_d->keys.constEnd()) {
         return i.value();
     }
@@ -481,7 +482,7 @@ KisKeyframeSP KisKeyframeChannel::nextKeyframe(KisKeyframeSP keyframe) const
 
 KisKeyframeSP KisKeyframeChannel::nextKeyframe(const KisKeyframeBase &keyframe) const
 {
-    KeyframesMap::const_iterator i = findNext(m_d->keys, keyframe.time());
+    KeyframesMap::const_iterator i = KisCollectionUtils::firstAfter(m_d->keys, time);
     if (i == m_d->keys.constEnd()) return KisKeyframeSP(0);
     return i.value();
 }
@@ -493,7 +494,7 @@ KisKeyframeSP KisKeyframeChannel::previousKeyframe(KisKeyframeSP keyframe) const
 
 KisKeyframeSP KisKeyframeChannel::previousKeyframe(const KisKeyframeBase &keyframe) const
 {
-    KeyframesMap::const_iterator i = findPrevious(m_d->keys, keyframe.time());
+    KeyframesMap::const_iterator i = KisCollectionUtils::lastBefore(m_d->keys, time);
     if (i == m_d->keys.constEnd()) return KisKeyframeSP(0);
     return i.value();
 }
@@ -528,7 +529,7 @@ KisKeyframeBaseSP KisKeyframeChannel::nextItem(const KisKeyframeBase &item) cons
 {
     const KisKeyframeSP keyframe = nextKeyframe(item);
 
-    auto repeatIter = findNext(m_d->repeats, item.time());
+    auto repeatIter = KisCollectionUtils::firstAfter(m_d->repeats, item.time());
     const auto repeat = (repeatIter != m_d->repeats.constEnd()) ? repeatIter.value() : QSharedPointer<KisRepeatFrame>();
 
     if (keyframe && (!repeat || repeat->time() > keyframe->time())) return keyframe;
@@ -540,7 +541,7 @@ KisKeyframeBaseSP KisKeyframeChannel::previousItem(const KisKeyframeBase &item) 
 {
     const KisKeyframeSP keyframe = previousKeyframe(item);
 
-    auto repeatIter = findPrevious(m_d->repeats, item.time());
+    auto repeatIter = KisCollectionUtils::lastBefore(m_d->repeats, item.time());
     const auto repeat = (repeatIter != m_d->repeats.constEnd()) ? repeatIter.value() : QSharedPointer<KisRepeatFrame>();
     if (keyframe && (!repeat || repeat->time() > keyframe->time())) return keyframe;
 
@@ -567,7 +568,7 @@ QSharedPointer<KisAnimationCycle> KisKeyframeChannel::cycleAt(int time) const
 {
     if (m_d->cycles.isEmpty()) return QSharedPointer<KisAnimationCycle>();
 
-    const auto it = findActive(m_d->cycles, time);
+    const auto it = KisCollectionUtils::lastBeforeOrAt(m_d->cycles, time);
     if (it == m_d->cycles.constEnd()) return QSharedPointer<KisAnimationCycle>();
 
     const KisKeyframeBaseSP next = nextItem(*it.value()->lastSourceKeyframe());
@@ -578,7 +579,7 @@ QSharedPointer<KisAnimationCycle> KisKeyframeChannel::cycleAt(int time) const
 
 QSharedPointer<KisRepeatFrame> KisKeyframeChannel::activeRepeatAt(int time) const
 {
-    const auto repeat = findActive(m_d->repeats, time);
+    const auto repeat = KisCollectionUtils::lastBeforeOrAt(m_d->repeats, time);
     if (repeat == m_d->repeats.constEnd()) return QSharedPointer<KisRepeatFrame>();
 
     const KisKeyframeSP lastKeyframe = activeKeyframeAt(time);
@@ -636,7 +637,7 @@ KisFrameSet KisKeyframeChannel::affectedFrames(int time) const
 {
     if (m_d->keys.isEmpty()) return KisFrameSet::infiniteFrom(0);
 
-    KeyframesMap::const_iterator active = findActive(m_d->keys, time);
+    KeyframesMap::const_iterator active = KisCollectionUtils::lastBeforeOrAt(m_d->keys, time);
     KeyframesMap::const_iterator next;
 
     int from;
@@ -682,7 +683,7 @@ KisFrameSet KisKeyframeChannel::identicalFrames(int time, const KisTimeSpan rang
         return identicalFrames(original->time(), range);
     }
 
-    KeyframesMap::const_iterator active = findActive(m_d->keys, time);
+    KeyframesMap::const_iterator active = KisCollectionUtils::lastBeforeOrAt(m_d->keys, time);
 
     const QSharedPointer<KisAnimationCycle> cycle = cycleAt(time);
     if (cycle) {

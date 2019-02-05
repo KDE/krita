@@ -145,7 +145,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
     m_chkHiDPI->setChecked(kritarc.value("EnableHiDPI", true).toBool());
-
+    chkUsageLogging->setChecked(kritarc.value("LogUsage", true).toBool());
     m_chkSingleApplication->setChecked(kritarc.value("EnableSingleApplication", true).toBool());
 
     //
@@ -245,6 +245,7 @@ void GeneralTab::setDefault()
     m_chkSingleApplication->setChecked(true);
 
     m_chkHiDPI->setChecked(true);
+    chkUsageLogging->setChecked(true);
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
     cmbFlowMode->setCurrentIndex(0);
     m_groupBoxKineticScrollingSettings->setChecked(cfg.kineticScrollingEnabled(true));
@@ -1352,6 +1353,7 @@ bool KisDlgPreferences::editPreferences()
         QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
         kritarc.setValue("EnableHiDPI", dialog->m_general->m_chkHiDPI->isChecked());
         kritarc.setValue("EnableSingleApplication", dialog->m_general->m_chkSingleApplication->isChecked());
+        kritarc.setValue("LogUsage", dialog->m_general->chkUsageLogging->isChecked());
 
         cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
 

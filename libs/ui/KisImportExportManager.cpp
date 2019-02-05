@@ -40,6 +40,7 @@
 #include <ksqueezedtextlabel.h>
 #include <kpluginfactory.h>
 
+#include <KisUsageLogger.h>
 #include <KoFileDialog.h>
 #include <kis_icon_utils.h>
 #include <KoDialog.h>
@@ -277,7 +278,6 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
     // export configuration is supported for export only
     KIS_SAFE_ASSERT_RECOVER_NOOP(direction == Export || !bool(exportConfiguration));
 
-
     QString typeName = mimeType;
     if (typeName.isEmpty()) {
         typeName = KisMimeDatabase::mimeTypeForFile(location, direction == KisImportExportManager::Export ? false : true);
@@ -338,10 +338,18 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
                 direction == Import || direction == Export,
                 KisImportExportFilter::BadConversionGraph);
 
-
-
     ConversionResult result = KisImportExportFilter::OK;
     if (direction == Import) {
+
+        KisUsageLogger::log(QString("Importing %1 to %2. Location: %3. Real location: %4. Batchmode: %5")
+                            .arg(QString::fromLatin1(from))
+                            .arg(QString::fromLatin1(to))
+                            .arg(location)
+                            .arg(realLocation)
+                            .arg(batchMode()));
+
+
+
         // async importing is not yet supported!
         KIS_SAFE_ASSERT_RECOVER_NOOP(!isAsync);
 
@@ -371,6 +379,16 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         if (!batchMode() && !askUser) {
             return KisImportExportFilter::UserCancelled;
         }
+
+        KisUsageLogger::log(QString("Converting from %1 to %2. Location: %3. Real location: %4. Batchmode: %5. Configuration: %6")
+                            .arg(QString::fromLatin1(from))
+                            .arg(QString::fromLatin1(to))
+                            .arg(location)
+                            .arg(realLocation)
+                            .arg(batchMode())
+                            .arg(exportConfiguration ? exportConfiguration->toXML() : "none"));
+
+
 
         if (isAsync) {
             result = QtConcurrent::run(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));

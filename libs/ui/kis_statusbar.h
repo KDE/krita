@@ -133,6 +133,8 @@ private:
     QIcon m_memoryStatusIcon;
 
     QVector<StatusBarItem> m_statusBarItems;
+
+    bool m_memoryWarningLogged {false};
 };
 
 #endif

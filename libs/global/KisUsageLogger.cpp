@@ -43,7 +43,7 @@ struct KisUsageLogger::Private {
 KisUsageLogger::KisUsageLogger()
     : d(new Private)
 {
-    d->logFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/krita.log");
+    d->logFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log");
 
     rotateLog();
     d->logFile.open(QFile::Append);

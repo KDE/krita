@@ -26,11 +26,9 @@
 #include "kis_tablet_support_win.h"
 
 #include <kis_debug.h>
-#include <KisUsageLogger.h>
 #include <QApplication>
 #include <QGuiApplication>
 #include <QDesktopWidget>
-#include <QBuffer>
 
 // #include <qpa/qwindowsysteminterface.h>
 // #include <qpa/qplatformscreen.h>
@@ -112,32 +110,23 @@ HWND createDummyWindow(const QString &className, const wchar_t *windowName, WNDP
 
 void printContext(const LOGCONTEXT &lc)
 {
-    QByteArray ba;
-    QBuffer buf(&ba);
-    buf.open(QBuffer::WriteOnly);
+    dbgTablet << "# Getting current context data:";
+    dbgTablet << ppVar(lc.lcName);
+    dbgTablet << ppVar(lc.lcDevice);
+    dbgTablet << ppVar(lc.lcInOrgX);
+    dbgTablet << ppVar(lc.lcInOrgY);
+    dbgTablet << ppVar(lc.lcInExtX);
+    dbgTablet << ppVar(lc.lcInExtY);
+    dbgTablet << ppVar(lc.lcOutOrgX);
+    dbgTablet << ppVar(lc.lcOutOrgY);
+    dbgTablet << ppVar(lc.lcOutExtX);
+    dbgTablet << ppVar(lc.lcOutExtY);
+    dbgTablet << ppVar(lc.lcSysOrgX);
+    dbgTablet << ppVar(lc.lcSysOrgY);
+    dbgTablet << ppVar(lc.lcSysExtX);
+    dbgTablet << ppVar(lc.lcSysExtY);
 
-    buf << "\nTablet context data:\n ";
-    buf << ppVar(lc.lcName) << "\n ";
-    buf << ppVar(lc.lcDevice) << "\n ";
-    buf << ppVar(lc.lcInOrgX) << "\n ";
-    buf << ppVar(lc.lcInOrgY) << "\n ";
-    buf << ppVar(lc.lcInExtX) << "\n ";
-    buf << ppVar(lc.lcInExtY) << "\n ";
-    buf << ppVar(lc.lcOutOrgX) << "\n ";
-    buf << ppVar(lc.lcOutOrgY) << "\n ";
-    buf << ppVar(lc.lcOutExtX) << "\n ";
-    buf << ppVar(lc.lcOutExtY) << "\n ";
-    buf << ppVar(lc.lcSysOrgX) << "\n ";
-    buf << ppVar(lc.lcSysOrgY) << "\n ";
-    buf << ppVar(lc.lcSysExtX) << "\n ";
-    buf << ppVar(lc.lcSysExtY) << "\n ";
-
-    buf << "Qt Desktop Geometry" << QApplication::desktop()->geometry()  << "\n ";
-
-    buf.close();
-
-    dbgTablet << buf;
-    KisUsageLogger::write(QString::fromUtf8(ba));
+    dbgTablet << "Qt Desktop Geometry" << QApplication::desktop()->geometry();
 }
 
 

@@ -38,6 +38,8 @@
 #include <kis_debug.h>
 #include <kis_config.h>
 
+#include <KisUsageLogger.h>
+
 #include <boost/optional.hpp>
 
 #ifndef GL_RENDERER
@@ -107,15 +109,18 @@ void KisOpenGL::initialize()
     QOpenGLContext context;
     if (!context.create()) {
         qDebug() << "OpenGL context cannot be created";
+        KisUsageLogger::log("OpenGL context cannot be created");
         return;
     }
     if (!context.isValid()) {
         qDebug() << "OpenGL context is not valid";
+        KisUsageLogger::log("OpenGL context is not valid");
         return;
     }
 
     if (!context.makeCurrent(&surface)) {
         qDebug() << "OpenGL context cannot be made current";
+        KisUsageLogger::log("OpenGL context cannot be made current");
         return;
     }
 
@@ -123,7 +128,7 @@ void KisOpenGL::initialize()
     openGLCheckResult = OpenGLCheckResult(context);
     debugText.clear();
     QDebug debugOut(&debugText);
-    debugOut << "OpenGL Info";
+    debugOut << "OpenGL Info\n";
     debugOut << "\n  Vendor: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VENDOR));
     debugOut << "\n  Renderer: " << openGLCheckResult->rendererString();
     debugOut << "\n  Version: " << openGLCheckResult->driverVersionString();
@@ -138,7 +143,7 @@ void KisOpenGL::initialize()
     appendPlatformOpenGLDebugText(debugOut);
 
     dbgOpenGL.noquote() << debugText;
-
+    KisUsageLogger::write(debugText);
 }
 
 void KisOpenGL::initializeContext(QOpenGLContext *ctx)

@@ -396,15 +396,16 @@ public:
     static int groupSpacingHint();
 
     /**
-     * @enum StandardCaptionFlag
+     * @enum CaptionFlag
      * Used to specify how to construct a window caption
      *
-     * @var AppName Indicates that the method shall include
+     * @var NoCaptionFlags Indicates that the method has no caption flags.
+     * @var AppNameCaption Indicates that the method shall include
      * the application name when making the caption string.
-     * @var Modified Causes a 'modified' sign will be included in the
+     * @var ModifiedCaption Causes a 'modified' sign will be included in the
      * returned string. This is useful when indicating that a file is
      * modified, i.e., it contains data that has not been saved.
-     * @var HIGCompliant The base minimum flags required to align a
+     * @var HIGCompliantCaption The base minimum flags required to align a
      * caption with the KDE Human Interface Guidelines
      */
     enum CaptionFlag {

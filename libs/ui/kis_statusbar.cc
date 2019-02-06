@@ -36,6 +36,8 @@
 #include <KoToolManager.h>
 #include <KoViewConverter.h>
 
+#include <KisUsageLogger.h>
+
 #include <kis_icon_utils.h>
 
 #include <kis_types.h>
@@ -46,6 +48,7 @@
 #include "kis_memory_statistics_server.h"
 
 #include "KisView.h"
+#include "KisDocument.h"
 #include "KisViewManager.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_progress_widget.h"
@@ -297,12 +300,19 @@ void KisStatusBar::updateMemoryStatus()
     if (stats.imageSize > warnLevel ||
             stats.realMemorySize > warnLevel) {
 
+        if (!m_memoryWarningLogged) {
+            m_memoryWarningLogged = true;
+            KisUsageLogger::log(QString("WARNING: %1 is running out of memory:%2\n").arg(m_imageView->document()->url().toLocalFile()).arg(longStats));
+        }
+
         icon = KisIconUtils::loadIcon("dialog-warning");
         QString suffix =
                 i18nc("tooltip on statusbar memory reporting button",
                       "\n\nWARNING:\tOut of memory! Swapping has been started.\n"
                       "\t\tPlease configure more RAM for Krita in Settings dialog");
         longStats += suffix;
+
+
     }
 
     m_shortMemoryTag = shortStats;

@@ -28,6 +28,7 @@ private Q_SLOTS:
     void testFreeTransform();
     void testWarp();
     void testLiquify();
+    void testCage();
 };
 
 #endif /* __TEST_SAVE_LOAD_TRANSFORM_ARGS_H */

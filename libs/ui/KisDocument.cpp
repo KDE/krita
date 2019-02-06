@@ -47,6 +47,7 @@
 #include <KoStoreDevice.h>
 #include <KoDialog.h>
 
+#include <KisUsageLogger.h>
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <kis_generator_layer.h>
@@ -77,6 +78,7 @@
 #include <QFutureWatcher>
 
 // Krita Image
+#include <kis_image_animation_interface.h>
 #include <kis_config.h>
 #include <flake/kis_shape_layer.h>
 #include <kis_group_layer.h>
@@ -532,7 +534,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
 
     KisConfig cfg(true);
     if (cfg.backupFile() && filePathInfo.exists()) {
-        KBackup::backupFile(job.filePath);
+        KBackup::numberedBackupFile(job.filePath);
     }
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!job.mimeType.isEmpty(), false);
@@ -563,6 +565,16 @@ bool KisDocument::exportDocument(const QUrl &url, const QByteArray &mimeType, bo
         flags |= SaveShowWarnings;
     }
 
+    KisUsageLogger::log(QString("Exporting Document: %1 as %2. %3 * %4 pixels, %5 layers, %6 frames, %7 framerate. Export configuration: %8")
+                        .arg(url.toLocalFile())
+                        .arg(QString::fromLatin1(mimeType))
+                        .arg(d->image->width())
+                        .arg(d->image->height())
+                        .arg(d->image->nlayers())
+                        .arg(d->image->animationInterface()->totalLength())
+                        .arg(d->image->animationInterface()->framerate())
+                        .arg(exportConfiguration ? exportConfiguration->toXML() : "No configuration"));
+
     return exportDocumentImpl(KritaUtils::ExportFileJob(url.toLocalFile(),
                                                         mimeType,
                                                         flags),
@@ -570,11 +582,23 @@ bool KisDocument::exportDocument(const QUrl &url, const QByteArray &mimeType, bo
 
 }
 
-bool KisDocument::saveAs(const QUrl &url, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+bool KisDocument::saveAs(const QUrl &_url, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
     using namespace KritaUtils;
 
-    return exportDocumentImpl(ExportFileJob(url.toLocalFile(),
+    KisUsageLogger::log(QString("Saving Document %9 as %1 (mime: %2). %3 * %4 pixels, %5 layers.  %6 frames, %7 framerate. Export configuration: %8")
+                        .arg(_url.toLocalFile())
+                        .arg(QString::fromLatin1(mimeType))
+                        .arg(d->image->width())
+                        .arg(d->image->height())
+                        .arg(d->image->nlayers())
+                        .arg(d->image->animationInterface()->totalLength())
+                        .arg(d->image->animationInterface()->framerate())
+                        .arg(exportConfiguration ? exportConfiguration->toXML() : "No configuration")
+                        .arg(url().toLocalFile()));
+
+
+    return exportDocumentImpl(ExportFileJob(_url.toLocalFile(),
                                             mimeType,
                                             showWarnings ? SaveShowWarnings : SaveNone),
                               exportConfiguration);
@@ -812,6 +836,11 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportFilter::Co
     KIS_SAFE_ASSERT_RECOVER_RETURN(d->backgroundSaveJob.isValid());
     const KritaUtils::ExportFileJob job = d->backgroundSaveJob;
     d->backgroundSaveJob = KritaUtils::ExportFileJob();
+
+    KisUsageLogger::log(QString("Completed saving %1 (mime: %2). Result: %3")
+                        .arg(job.filePath)
+                        .arg(QString::fromLatin1(job.mimeType))
+                        .arg(status != KisImportExportFilter::OK ? exportErrorToUserMessage(status, errorMessage) : "OK"));
 
     emit sigCompleteBackgroundSaving(job, status, errorMessage);
 }
@@ -1702,6 +1731,14 @@ bool KisDocument::newImage(const QString& name,
     cfg.defColorModel(image->colorSpace()->colorModelId().id());
     cfg.setDefaultColorDepth(image->colorSpace()->colorDepthId().id());
     cfg.defColorProfile(image->colorSpace()->profile()->name());
+
+    KisUsageLogger::log(i18n("Created image \"%1\", %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8"
+                             , name
+                             , width, height
+                             , imageResolution * 72.0
+                             , image->colorSpace()->colorModelId().name(), image->colorSpace()->colorDepthId().name()
+                             , image->colorSpace()->profile()->name()
+                             , numberOfLayers));
 
     QApplication::restoreOverrideCursor();
 

@@ -1,0 +1,115 @@
+#!/usr/bin/perl
+#
+# Copyright 2019 Harald Sitter <sitter@kde.org>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 3 of
+# the License or any later version accepted by the membership of
+# KDE e.V. (or its successor approved by the membership of KDE
+# e.V.), which shall act as a proxy defined in Section 14 of
+# version 3 of the license.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+use strict;
+
+my $debug = 0;
+if (defined $ENV{'LOCALE_DEBUG'}) {
+  $debug = 1;
+}
+
+my $config_dir = ($ENV{'XDG_CONFIG_HOME'} or "$ENV{'HOME'}/.config");
+my $conf="$config_dir/klanguageoverridesrc";
+
+my @languages = ('C.UTF-8');
+
+sub debug {
+  print(@_) if $debug;
+}
+
+# Grab langs from languageoverrides file (in-app language switch feature).
+if (-e $conf) {
+  my $group;
+  open my $ini, '<', $conf or die "Can't open $conf: $!\n";
+  while (<$ini>) { # loops in $_
+    chomp;
+    my $keyword;
+    my $value;
+    if (/^\s*\[(.+)\].*/) {
+        $group = $1;
+    } elsif (/^([^=]+?)\s*=\s*(.*?)\s*$/) { # https://code-maven.com/slides/perl-programming/solution-parse-ini-file
+      if ($group ne 'Language') {
+        next;
+      }
+      $keyword = $1;
+      $value = $2;
+      my $pattern = '@ByteArray\((.+)\)';
+      (my $langs = $value) =~ s/$pattern/$1/g;
+      push @languages, split(/:/, $langs);
+      # print("-- keyword: $1 -- value: $2\n");
+    }
+  }
+  close($ini);
+}
+
+# Grab values from ENV.
+push @languages, ($ENV{'LANG'} or 'C.UTF-8');
+foreach my $key (sort keys %ENV) {
+  my $needle = 'LC_';
+  if (substr($key, 0, length($needle)) eq $needle) {
+    push @languages, $ENV{$key};
+  }
+}
+if (my $language = $ENV{'LANGUAGE'}) {
+  push @languages, split(':', $language);
+}
+push @languages, ($ENV{'LANG'} or 'C.UTF-8');
+
+# Uniqify; can't really use any perl modules as the base requirements of KF5 are
+# mostly perl core only.
+@languages = do { my %seen; grep { !$seen{$_}++ } @languages };
+
+# Generate as necessary.
+# Note: this actually generates invalid stuff as well (e.g. fr.UTF-8) while we
+#   apparently do not need these there isn't much of a downside to generate them
+#   lest something in glibc falls over if the language is entirely unknown in
+#   the locpath. I should point out that we can't actually get from
+#   language-only settings (as seen in klanguageoverrides) to full locales, so
+#   there is no other option here anyway.
+my $env_locpath = $ENV{'LOCPATH'} or die "LOCPATH not set";
+my @locpaths = split(/:/, $env_locpath);
+my $master_locpath = $locpaths[0];
+foreach my $lang (@languages) {
+  my ($locale, $encoding) = split(/\./, $lang);
+  $encoding //= 'UTF-8';
+  debug("lang: $lang loc: $locale, char: $encoding\n");
+
+  my $found = 0;
+  foreach my $locpath (@locpaths) {
+    my $loc_target = "$locpath/$locale.$encoding";
+    debug("checking $loc_target\n");
+    if (-e $loc_target) {
+      debug("exists! skipping\n");
+      $found = 1;
+      last;
+    }
+  }
+  next if $found;
+  my $target = "$master_locpath/$locale.$encoding";
+
+  debug("generating $target\n");
+  # localedef will exit !0 for unknown reasons, even when everything was
+  # generated fine.
+  #  may be: /snap/krita/32/usr/share/i18n/locales/iso14651_t1_common:7120: LC_COLLATE: symbol `pure-ta-zh' not known
+  system('localedef', '-i', $locale, '-f', $encoding, $target);
+}
+
+# use Data::Dumper;
+# print Dumper(@languages);

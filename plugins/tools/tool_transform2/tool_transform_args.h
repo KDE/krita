@@ -78,7 +78,8 @@ public:
                       KisWarpTransformWorker::WarpType warpType,
                       double alpha,
                       bool defaultPoints,
-                      const QString &filterId);
+                      const QString &filterId,
+                      int pixelPrecision, int previewPixelPrecision);
     ~ToolTransformArgs();
     ToolTransformArgs& operator=(const ToolTransformArgs& args);
 

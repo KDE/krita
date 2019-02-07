@@ -571,7 +571,7 @@ set_package_properties(PythonLibrary PROPERTIES
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYTHONLIBS_FOUND HAVE_PYTHONLIBS)
 
-find_package(SIP "4.18.0")
+find_package(SIP "4.19.13")
 set_package_properties(SIP PROPERTIES
     DESCRIPTION "Support for generating SIP Python bindings"
     URL "https://www.riverbankcomputing.com/software/sip/download"

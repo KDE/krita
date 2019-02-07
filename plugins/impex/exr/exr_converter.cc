@@ -222,6 +222,16 @@ static inline T alphaNoiseThreshold()
     return static_cast<T>(0.01); // 1%
 }
 
+static inline bool qFuzzyCompare(half p1, half p2)
+{
+    return std::abs(p1 - p2) < float(HALF_EPSILON);
+}
+
+static inline bool qFuzzyIsNull(half h)
+{
+    return std::abs(h) < float(HALF_EPSILON);
+}
+
 template <typename T>
 struct RgbPixelWrapper
 {
@@ -235,25 +245,27 @@ struct RgbPixelWrapper
     }
 
     inline bool checkMultipliedColorsConsistent() const {
-        return !(pixel.a < alphaEpsilon<T>() &&
-                 (pixel.r > 0.0 ||
-                  pixel.g > 0.0 ||
-                  pixel.b > 0.0));
+        return !(std::abs(pixel.a) < alphaEpsilon<T>() &&
+                 (!qFuzzyIsNull(pixel.r) ||
+                  !qFuzzyIsNull(pixel.g) ||
+                  !qFuzzyIsNull(pixel.b)));
     }
 
     inline bool checkUnmultipliedColorsConsistent(const Rgba<T> &mult) const {
-        const T alpha = pixel.a;
+        const T alpha = std::abs(pixel.a);
 
-        return abs(alpha) >= alphaNoiseThreshold<T>() ||
-                (pixel.r * alpha == mult.r &&
-                 pixel.g * alpha == mult.g &&
-                 pixel.b * alpha == mult.b);
+        return alpha >= alphaNoiseThreshold<T>() ||
+                (qFuzzyCompare(T(pixel.r * alpha), mult.r) &&
+                 qFuzzyCompare(T(pixel.g * alpha), mult.g) &&
+                 qFuzzyCompare(T(pixel.b * alpha), mult.b));
     }
 
-    inline void setUnmultiplied(const Rgba<T> &mult, qreal newAlpha) {
-        pixel.r = mult.r / newAlpha;
-        pixel.g = mult.g / newAlpha;
-        pixel.b = mult.b / newAlpha;
+    inline void setUnmultiplied(const Rgba<T> &mult, T newAlpha) {
+        const T absoluteAlpha = std::abs(newAlpha);
+
+        pixel.r = mult.r / absoluteAlpha;
+        pixel.g = mult.g / absoluteAlpha;
+        pixel.b = mult.b / absoluteAlpha;
         pixel.a = newAlpha;
     }
 
@@ -273,19 +285,21 @@ struct GrayPixelWrapper
     }
 
     inline bool checkMultipliedColorsConsistent() const {
-        return !(pixel.alpha < alphaEpsilon<T>() &&
-                 pixel.gray > 0.0);
+        return !(std::abs(pixel.alpha) < alphaEpsilon<T>() &&
+                 !qFuzzyIsNull(pixel.gray));
     }
 
     inline bool checkUnmultipliedColorsConsistent(const pixel_type &mult) const {
-        const T alpha = pixel.alpha;
+        const T alpha = std::abs(pixel.alpha);
 
         return alpha >= alphaNoiseThreshold<T>() ||
-                pixel.gray * alpha == mult.gray;
+                qFuzzyCompare(T(pixel.gray * alpha), mult.gray);
     }
 
-    inline void setUnmultiplied(const pixel_type &mult, qreal newAlpha) {
-        pixel.gray = mult.gray / newAlpha;
+    inline void setUnmultiplied(const pixel_type &mult, T newAlpha) {
+        const T absoluteAlpha = std::abs(newAlpha);
+
+        pixel.gray = mult.gray / absoluteAlpha;
         pixel.alpha = newAlpha;
     }
 

@@ -1,14 +1,17 @@
-'''
-This script is licensed CC 0 1.0, so that you can learn from it.
+# This script is licensed CC 0 1.0, so that you can learn from it.
 
------- CC 0 1.0 ---------------
+# ------ CC 0 1.0 ---------------
 
-The person who associated a work with this deed has dedicated the work to the public domain by waiving all of his or her rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law.
+# The person who associated a work with this deed has dedicated the
+# work to the public domain by waiving all of his or her rights to the
+# work worldwide under copyright law, including all related and
+# neighboring rights, to the extent allowed by law.
 
-You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.
+# You can copy, modify, distribute and perform the work, even for
+# commercial purposes, all without asking permission.
 
-https://creativecommons.org/publicdomain/zero/1.0/legalcode
-'''
+# https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
 from . import exportlayersdialog
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QFormLayout, QListWidget, QHBoxLayout,
@@ -17,7 +20,6 @@ from PyQt5.QtWidgets import (QFormLayout, QListWidget, QHBoxLayout,
                              QMessageBox, QFileDialog, QCheckBox, QSpinBox,
                              QComboBox)
 import os
-import errno
 import krita
 
 
@@ -36,14 +38,17 @@ class UIExportLayers(object):
         self.widgetDocuments = QListWidget()
         self.directoryTextField = QLineEdit()
         self.directoryDialogButton = QPushButton(i18n("..."))
-        self.exportFilterLayersCheckBox = QCheckBox(i18n("Export filter layers"))
+        self.exportFilterLayersCheckBox = QCheckBox(
+            i18n("Export filter layers"))
         self.batchmodeCheckBox = QCheckBox(i18n("Export in batchmode"))
-        self.ignoreInvisibleLayersCheckBox = QCheckBox(i18n("Ignore invisible layers"))
+        self.ignoreInvisibleLayersCheckBox = QCheckBox(
+            i18n("Ignore invisible layers"))
         self.xResSpinBox = QSpinBox()
         self.yResSpinBox = QSpinBox()
         self.formatsComboBox = QComboBox()
 
-        self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        self.buttonBox = QDialogButtonBox(
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
 
         self.kritaInstance = krita.Krita.instance()
         self.documentsList = []
@@ -57,7 +62,8 @@ class UIExportLayers(object):
         self.buttonBox.rejected.connect(self.mainDialog.close)
 
         self.mainDialog.setWindowModality(Qt.NonModal)
-        self.widgetDocuments.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.widgetDocuments.setSizeAdjustPolicy(
+            QAbstractScrollArea.AdjustToContents)
 
     def initialize(self):
         self.loadDocuments()
@@ -82,10 +88,12 @@ class UIExportLayers(object):
         self.resolutionLayout.addWidget(self.yResSpinBox)
 
         self.formLayout.addRow(i18n("Documents:"), self.documentLayout)
-        self.formLayout.addRow(i18n("Initial directory:"), self.directorySelectorLayout)
+        self.formLayout.addRow(
+            i18n("Initial directory:"), self.directorySelectorLayout)
         self.formLayout.addRow(i18n("Export options:"), self.optionsLayout)
         self.formLayout.addRow(i18n("Resolution:"), self.resolutionLayout)
-        self.formLayout.addRow(i18n("Images extensions:"), self.formatsComboBox)
+        self.formLayout.addRow(
+            i18n("Images extensions:"), self.formatsComboBox)
 
         self.line = QFrame()
         self.line.setFrameShape(QFrame.HLine)
@@ -104,7 +112,10 @@ class UIExportLayers(object):
     def loadDocuments(self):
         self.widgetDocuments.clear()
 
-        self.documentsList = [document for document in self.kritaInstance.documents() if document.fileName()]
+        self.documentsList = [
+            document for document in self.kritaInstance.documents()
+            if document.fileName()
+        ]
 
         for document in self.documentsList:
             self.widgetDocuments.addItem(document.fileName())
@@ -113,8 +124,12 @@ class UIExportLayers(object):
         self.loadDocuments()
 
     def confirmButton(self):
-        selectedPaths = [item.text() for item in self.widgetDocuments.selectedItems()]
-        selectedDocuments = [document for document in self.documentsList for path in selectedPaths if path == document.fileName()]
+        selectedPaths = [
+            item.text() for item in self.widgetDocuments.selectedItems()]
+        selectedDocuments = [
+            document for document in self.documentsList
+            for path in selectedPaths if path == document.fileName()
+        ]
 
         self.msgBox = QMessageBox(self.mainDialog)
         if not selectedDocuments:
@@ -128,7 +143,8 @@ class UIExportLayers(object):
 
     def mkdir(self, directory):
         target_directory = self.directoryTextField.text() + directory
-        if os.path.exists(target_directory) and os.path.isdir(target_directory):
+        if (os.path.exists(target_directory)
+                and os.path.isdir(target_directory)):
             return
 
         try:
@@ -139,11 +155,14 @@ class UIExportLayers(object):
     def export(self, document):
         Application.setBatchmode(self.batchmodeCheckBox.isChecked())
 
-        documentName = document.fileName() if document.fileName() else 'Untitled'
+        documentName = document.fileName() if document.fileName() else 'Untitled'  # noqa: E501
         fileName, extension = os.path.splitext(os.path.basename(documentName))
         self.mkdir('/' + fileName)
 
-        self._exportLayers(document.rootNode(), self.formatsComboBox.currentText(), '/' + fileName)
+        self._exportLayers(
+            document.rootNode(),
+            self.formatsComboBox.currentText(),
+            '/' + fileName)
         Application.setBatchmode(True)
 
     def _exportLayers(self, parentNode, fileFormat, parentDir):
@@ -155,9 +174,11 @@ class UIExportLayers(object):
             if node.type() == 'grouplayer':
                 newDir = os.path.join(parentDir, node.name())
                 self.mkdir(newDir)
-            elif not self.exportFilterLayersCheckBox.isChecked() and 'filter' in node.type():
+            elif (not self.exportFilterLayersCheckBox.isChecked()
+                  and 'filter' in node.type()):
                 continue
-            elif self.ignoreInvisibleLayersCheckBox.isChecked() and not node.visible():
+            elif (self.ignoreInvisibleLayersCheckBox.isChecked()
+                  and not node.visible()):
                 continue
             else:
                 nodeName = node.name()
@@ -167,8 +188,9 @@ class UIExportLayers(object):
                 elif '[png]' in nodeName:
                     _fileFormat = 'png'
 
-                layerFileName = '{0}{1}/{2}.{3}'.format(self.directoryTextField.text(),
-                                                        parentDir, node.name(), _fileFormat)
+                layerFileName = '{0}{1}/{2}.{3}'.format(
+                    self.directoryTextField.text(),
+                    parentDir, node.name(), _fileFormat)
                 node.save(layerFileName, self.xResSpinBox.value(),
                           self.yResSpinBox.value(), krita.InfoObject())
 
@@ -176,7 +198,11 @@ class UIExportLayers(object):
                 self._exportLayers(node, fileFormat, newDir)
 
     def _selectDir(self):
-        directory = QFileDialog.getExistingDirectory(self.mainDialog, i18n("Select a Folder"), os.path.expanduser("~"), QFileDialog.ShowDirsOnly)
+        directory = QFileDialog.getExistingDirectory(
+            self.mainDialog,
+            i18n("Select a Folder"),
+            os.path.expanduser("~"),
+            QFileDialog.ShowDirsOnly)
         self.directoryTextField.setText(directory)
 
     def _setResolution(self, index):

@@ -39,6 +39,7 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Don-t-request-the-MIME-image-every-time-Windows-asks.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Hack-always-return-we-support-DIBV5.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Fix-debug-on-openGL-ES.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-cumulative-patch-for-hdr.patch
 
       INSTALL_DIR ${EXTPREFIX_qt}
       CONFIGURE_COMMAND <SOURCE_DIR>/configure.bat ${_QT_conf}

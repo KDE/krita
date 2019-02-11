@@ -1,0 +1,26 @@
+From 4c1e4e693307c3169c6db488ad6bf6cff6aae864 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 11 Feb 2019 18:07:20 +0300
+Subject: [PATCH 4/4] Fix debug on openGL ES
+
+Change-Id: I08d1adf87b305c380a0f2177edf4ff9de109e4d6
+---
+ src/gui/opengl/qopengldebug.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/gui/opengl/qopengldebug.cpp b/src/gui/opengl/qopengldebug.cpp
+index 2e628a2bd5..9f1bb76869 100644
+--- a/src/gui/opengl/qopengldebug.cpp
++++ b/src/gui/opengl/qopengldebug.cpp
+@@ -1366,7 +1366,7 @@ bool QOpenGLDebugLogger::initialize()
+ 
+ #define GET_DEBUG_PROC_ADDRESS(procName) \
+     d->procName = reinterpret_cast< qt_ ## procName ## _t >( \
+-        d->context->getProcAddress(#procName) \
++        d->context->getProcAddress(d->context->isOpenGLES() ? (#procName "KHR") : (#procName)) \
+     );
+ 
+     GET_DEBUG_PROC_ADDRESS(glDebugMessageControl);
+-- 
+2.20.1.windows.1
+

@@ -423,10 +423,12 @@ if exist "%WindowsSdkDir%\" (
     pushd "%WindowsSdkDir%"
     if exist "bin\x64\fxc.exe" (
         set HAVE_FXC_EXE=1
+        if "%WindowsSdkVerBinPath%" != "" set "WindowsSdkVerBinPath=%WindowsSdkDir%"
     ) else (
         for /f "delims=" %%a in ('dir /a:d /b "bin\10.*"') do (
             if exist "bin\%%a\x64\fxc.exe" (
                 set HAVE_FXC_EXE=1
+                if "%WindowsSdkVerBinPath%" != "" set "WindowsSdkVerBinPath=%WindowsSdkDir%\bin\%%a\"
             )
         )
     )

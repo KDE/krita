@@ -13,6 +13,8 @@
 #include <QtGui/5.11.2/QtGui/qpa/qplatformnativeinterface.h>
 #elif (QT_VERSION == QT_VERSION_CHECK(5, 12, 0))
 #include <QtGui/5.12.0/QtGui/qpa/qplatformnativeinterface.h>
+#elif (QT_VERSION == QT_VERSION_CHECK(5, 13, 0))
+#include <QtGui/5.13.0/QtGui/qpa/qplatformnativeinterface.h>
 #endif
 
 #include <d3d11.h>

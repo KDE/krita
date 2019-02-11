@@ -1,19 +1,19 @@
-From 674cfce97c4972176d2bcb55d7013c0ac2190029 Mon Sep 17 00:00:00 2001
+From 9081571e58ceeaa4c623c83ecb41b04dfc7d90f9 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Tue, 21 Jun 2016 14:50:07 +0300
-Subject: [PATCH 1/2] Don't request the MIME image every time Windows asks for
+Subject: [PATCH 2/4] Don't request the MIME image every time Windows asks for
  the list of supported types
 
 Change-Id: I05516d83dc4e0f192bc94f92cefc722f25dae4d4
 ---
- qtbase/src/plugins/platforms/windows/qwindowsmime.cpp | 9 ++++++---
+ src/plugins/platforms/windows/qwindowsmime.cpp | 9 ++++++---
  1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowsmime.cpp b/qtbase/src/plugins/platforms/windows/qwindowsmime.cpp
-index a8264b5..90d646b 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowsmime.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowsmime.cpp
-@@ -1081,12 +1081,15 @@ bool QWindowsMimeImage::canConvertToMime(const QString &mimeType, IDataObject *p
+diff --git a/src/plugins/platforms/windows/qwindowsmime.cpp b/src/plugins/platforms/windows/qwindowsmime.cpp
+index ff0dccb0d9..a702a2a90f 100644
+--- a/src/plugins/platforms/windows/qwindowsmime.cpp
++++ b/src/plugins/platforms/windows/qwindowsmime.cpp
+@@ -1082,12 +1082,15 @@ bool QWindowsMimeImage::canConvertToMime(const QString &mimeType, IDataObject *p
  bool QWindowsMimeImage::canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const
  {
      int cf = getCf(formatetc);
@@ -33,5 +33,5 @@ index a8264b5..90d646b 100644
  
  bool QWindowsMimeImage::convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM * pmedium) const
 -- 
-2.6.4
+2.20.1.windows.1
 

@@ -1,7 +1,7 @@
 SET(EXTPREFIX_qt  "${EXTPREFIX}")
 if (WIN32)
     list(APPEND _QT_conf -skip qt3d -skip qtactiveqt -skip qtcanvas3d
-        -skip qtconnectivity -skip qtdoc -skip qtenginio -skip qtgraphicaleffects
+        -skip qtconnectivity -skip qtdoc -skip qtgraphicaleffects
         -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland
         -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview
         -skip qtxmlpatterns -no-sql-sqlite -nomake examples -nomake tools
@@ -60,7 +60,7 @@ elseif (NOT APPLE)
       URL_MD5 c5e275ab0ed7ee61d0f4b82cd471770d
       #PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt-no-motion-compression.diff
 
-      CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -verbose -nomake examples -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtandroidextras -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth  -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard
+      CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -verbose -nomake examples -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtgraphicaleffects -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtandroidextras -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth  -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard
       INSTALL_DIR ${EXTPREFIX_qt}
 
       BUILD_COMMAND $(MAKE)
@@ -204,7 +204,7 @@ else( APPLE )
 
         INSTALL_DIR ${EXTPREFIX_qt}
         CONFIGURE_COMMAND <SOURCE_DIR>/configure 
-        -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdoc -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland
+        -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdoc -skip qtgraphicaleffects -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland
             -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -no-sql-sqlite -skip qtcharts -skip qtdatavis3d  -skip qtgamepad -skip qtnetworkauth -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -nomake examples -nomake tools -no-compile-examples -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -no-icu -no-mtdev -system-zlib -qt-pcre -opensource -confirm-license  -prefix ${EXTPREFIX_qt}
         BUILD_COMMAND ${PARALLEL_MAKE}
         INSTALL_COMMAND make install

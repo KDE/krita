@@ -137,6 +137,7 @@ const QString COLORBYTEDATA = "ColorData";
 const QString SIMPLECOLORDATA = "SimpleColorData"; // easier 8-bit color data that works well with XML
 const QString GLOBALASSISTANTSCOLOR = "GlobalAssistantsColor";
 const QString PALETTES = "Palettes";
+const QString MIRROR_AXIS = "MirrorAxis";
 }
 
 

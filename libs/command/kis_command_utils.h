@@ -92,8 +92,8 @@ namespace KisCommandUtils
         SkipFirstRedoBase(bool skipFirstRedo, KUndo2Command *parent = 0);
         SkipFirstRedoBase(bool skipFirstRedo, const KUndo2MagicString &text, KUndo2Command *parent = 0);
 
-        void redo() final;
-        void undo() final;
+        void redo() override final;
+        void undo() override final;
 
         void setSkipOneRedo(bool value);
 

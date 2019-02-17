@@ -21,35 +21,32 @@
 
 #include <functional>
 
-
 template <class ParentClass>
-class KisCallbackBasedPaintopProperty : public ParentClass
+class KRITAIMAGE_EXPORT KisCallbackBasedPaintopProperty : public ParentClass
 {
 public:
     KisCallbackBasedPaintopProperty(typename ParentClass::Type type,
                                     const QString &id,
                                     const QString &name,
                                     KisPaintOpSettingsRestrictedSP settings,
-                                    QObject *parent)
-        : ParentClass(type, id, name, settings, parent) {}
+                                    QObject *parent);
 
     KisCallbackBasedPaintopProperty(const QString &id,
                                 const QString &name,
                                 KisPaintOpSettingsRestrictedSP settings,
-                                QObject *parent)
-    : ParentClass(id, name, settings, parent) {}
+                                QObject *parent);
 
     typedef std::function<void (KisUniformPaintOpProperty*)> Callback;
     typedef std::function<bool (const KisUniformPaintOpProperty*)> VisibleCallback;
 
-    void setReadCallback(Callback func) { m_readFunc = func; }
-    void setWriteCallback(Callback func) { m_writeFunc = func; }
-    void setIsVisibleCallback(VisibleCallback func) { m_visibleFunc = func; }
+    void setReadCallback(Callback func);
+    void setWriteCallback(Callback func);
+    void setIsVisibleCallback(VisibleCallback func);
 
 protected:
-    void readValueImpl() override { if (m_readFunc) m_readFunc(this); }
-    void writeValueImpl() override { if (m_writeFunc) m_writeFunc(this); }
-    bool isVisible() const override { return m_visibleFunc ? m_visibleFunc(this) : true; }
+    void readValueImpl() override;
+    void writeValueImpl() override;
+    bool isVisible() const override;
 
 private:
     Callback m_readFunc;

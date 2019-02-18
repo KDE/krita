@@ -597,7 +597,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
 
     // Retrieve a pointer to the colorspace
-    QScopedPointer<KoColorConversionTransformation> locallyStoredTransform;
     KoColorConversionTransformation* transform = 0;
     const KoColorSpace* cs = 0;
 
@@ -605,28 +604,13 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         csName.first == RGBAColorModelID.id() &&
         csName.second == Integer16BitsColorDepthID.id()) {
 
-        const KoColorSpace *p2020G10CS =
-            KoColorSpaceRegistry::instance()->colorSpace(
-                RGBAColorModelID.id(),
-                Float16BitsColorDepthID.id(),
-                KoColorSpaceRegistry::instance()->p2020G10Profile());
-
         const KoColorSpace *p2020PQCS =
             KoColorSpaceRegistry::instance()->colorSpace(
                 RGBAColorModelID.id(),
                 Integer16BitsColorDepthID.id(),
                 KoColorSpaceRegistry::instance()->p2020PQProfile());
 
-
-        locallyStoredTransform.reset(
-            p2020PQCS->createColorConverter(
-                p2020G10CS,
-                KoColorConversionTransformation::internalRenderingIntent(),
-                KoColorConversionTransformation::internalConversionFlags()));
-
-        transform = locallyStoredTransform.data();
-
-        cs = p2020G10CS;
+        cs = p2020PQCS;
 
     } else if (profile && profile->isSuitableForOutput()) {
         dbgFile << "image has embedded profile: " << profile->name() << "\n";

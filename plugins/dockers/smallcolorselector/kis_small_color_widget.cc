@@ -34,6 +34,7 @@
 #include "KisClickableGLImageWidget.h"
 #include "kis_display_color_converter.h"
 #include "kis_signal_auto_connection.h"
+#include "kis_signal_compressor_with_param.h"
 
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceRegistry.h>
@@ -51,6 +52,7 @@ struct KisSmallColorWidget::Private {
     KisClickableGLImageWidget *valueWidget;
     KisSignalCompressor *resizeUpdateCompressor;
     KisSignalCompressor *valueSliderUpdateCompressor;
+    KisSignalCompressorWithParam<int> *dynamicRangeCompressor;
     int huePreferredHeight = 32;
     KisSliderSpinBox *dynamicRange = 0;
     qreal currentRelativeDynamicRange = 1.0;
@@ -111,6 +113,14 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
     d->valueSliderUpdateCompressor = new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE, this);
     connect(d->valueSliderUpdateCompressor, SIGNAL(timeout()), SLOT(updateSVPalette()));
 
+    {
+        using namespace std::placeholders;
+        std::function<void (qreal)> callback(
+                    std::bind(&KisSmallColorWidget::updateDynamicRange, this, _1));
+        d->dynamicRangeCompressor = new KisSignalCompressorWithParam<int>(50, callback);
+
+    }
+
     const QSurfaceFormat::ColorSpace colorSpace = QSurfaceFormat::DefaultColorSpace;
 
     d->hueWidget = new KisClickableGLImageWidget(colorSpace, this);
@@ -133,7 +143,7 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
         d->dynamicRange->setPageStep(100);
         d->dynamicRange->setSuffix("cd/m²");
         d->dynamicRange->setValue(80.0 * d->currentRelativeDynamicRange);
-        connect(d->dynamicRange, SIGNAL(valueChanged(int)), SLOT(slotUpdateDynamicRange(int)));
+        connect(d->dynamicRange, SIGNAL(valueChanged(int)), SLOT(slotInitiateUpdateDynamicRange(int)));
     }
 
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -220,7 +230,7 @@ void KisSmallColorWidget::setColor(const KoColor &color)
             rangeCoeff = std::max({r, g, b}) * 1.10f;
 
             const int newMaxLuminance = qRound(80.0 * rangeCoeff);
-            slotUpdateDynamicRange(newMaxLuminance);
+            updateDynamicRange(newMaxLuminance);
             d->dynamicRange->setValue(newMaxLuminance);
         }
 
@@ -341,15 +351,17 @@ void KisSmallColorWidget::uploadPaletteData(KisGLImageWidget *widget, const QSiz
 
 void KisSmallColorWidget::updateHuePalette()
 {
-    uploadPaletteData<FillHPolicy>(d->hueWidget, QSize(width(), d->huePreferredHeight));
+    uploadPaletteData<FillHPolicy>(d->hueWidget, QSize(d->hueWidget->width(), d->huePreferredHeight));
 }
 
 void KisSmallColorWidget::updateSVPalette()
 {
-    // TODO: make preferred size be different from image size,
-    //       so that we could create the image of the exact size we need
-    //KisGLImageF16 image(d->valueWidget->size());
-    uploadPaletteData<FillSVPolicy>(d->valueWidget, size());
+    const int maxSize = 256;
+    QSize newSize = d->valueWidget->size();
+    newSize.rwidth() = qMin(maxSize, newSize.width());
+    newSize.rheight() = qMin(maxSize, newSize.height());
+
+    uploadPaletteData<FillSVPolicy>(d->valueWidget, newSize);
 }
 
 void KisSmallColorWidget::slotHueSliderChanged(const QPointF &pos)
@@ -373,7 +385,12 @@ void KisSmallColorWidget::slotValueSliderChanged(const QPointF &pos)
     }
 }
 
-void KisSmallColorWidget::slotUpdateDynamicRange(int maxLuminance)
+void KisSmallColorWidget::slotInitiateUpdateDynamicRange(int maxLuminance)
+{
+    d->dynamicRangeCompressor->start(maxLuminance);
+}
+
+void KisSmallColorWidget::updateDynamicRange(int maxLuminance)
 {
     const qreal oldRange = d->currentRelativeDynamicRange;
     const qreal newRange = qreal(maxLuminance) / 80.0;

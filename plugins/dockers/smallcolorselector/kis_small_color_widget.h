@@ -51,8 +51,11 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotHueSliderChanged(const QPointF &pos);
     void slotValueSliderChanged(const QPointF &pos);
-    void slotUpdateDynamicRange(int maxLuminance);
+    void slotInitiateUpdateDynamicRange(int maxLuminance);
     void slotDisplayConfigurationChanged();
+
+private:
+    void updateDynamicRange(int maxLuminance);
 
 private:
     void tellColorChanged();

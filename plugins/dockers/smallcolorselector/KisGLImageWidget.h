@@ -31,13 +31,16 @@ public:
 
 public Q_SLOTS:
 
+private Q_SLOTS:
+    void slotOpenGLContextDestroyed();
+
 private:
     void updateVerticesBuffer(const QRect &rect);
 
 private:
     KisGLImageF16 m_sourceImage;
 
-    QOpenGLShaderProgram m_shader;
+    QScopedPointer<QOpenGLShaderProgram> m_shader;
     QOpenGLVertexArrayObject m_vao;
     QOpenGLBuffer m_verticesBuffer;
     QOpenGLBuffer m_textureVerticesBuffer;

@@ -53,6 +53,9 @@ void KisGLImageWidget::initializeGL()
 {
     initializeOpenGLFunctions();
 
+    connect(context(), SIGNAL(aboutToBeDestroyed()), SLOT(slotOpenGLContextDestroyed()));
+    m_shader.reset(new QOpenGLShaderProgram);
+
     QFile vertexShaderFile(QString(":/") + "kis_gl_image_widget.vert");
     vertexShaderFile.open(QIODevice::ReadOnly);
     QString vertSource = vertexShaderFile.readAll();
@@ -75,27 +78,27 @@ void KisGLImageWidget::initializeGL()
         fragSource.prepend(versionDefinition);
     }
 
-    if (!m_shader.addShaderFromSourceCode(QOpenGLShader::Vertex, vertSource)) {
+    if (!m_shader->addShaderFromSourceCode(QOpenGLShader::Vertex, vertSource)) {
         qDebug() << "Could not add vertex code";
         return;
     }
 
-    if (!m_shader.addShaderFromSourceCode(QOpenGLShader::Fragment, fragSource)) {
+    if (!m_shader->addShaderFromSourceCode(QOpenGLShader::Fragment, fragSource)) {
         qDebug() << "Could not add fragment code";
         return;
     }
 
-    if (!m_shader.link()) {
+    if (!m_shader->link()) {
         qDebug() << "Could not link";
         return;
     }
 
-    if (!m_shader.bind()) {
+    if (!m_shader->bind()) {
         qDebug() << "Could not bind";
         return;
     }
 
-    m_shader.release();
+    m_shader->release();
 
 
     m_vao.create();
@@ -120,6 +123,20 @@ void KisGLImageWidget::initializeGL()
     if (!m_sourceImage.isNull()) {
         loadImage(m_sourceImage);
     }
+}
+
+void KisGLImageWidget::slotOpenGLContextDestroyed()
+{
+    this->makeCurrent();
+
+    m_shader.reset();
+    m_texture.destroy();
+    m_verticesBuffer.destroy();
+    m_textureVerticesBuffer.destroy();
+    m_vao.destroy();
+    m_havePendingTextureUpdate = false;
+
+    this->doneCurrent();
 }
 
 void KisGLImageWidget::updateVerticesBuffer(const QRect &rect)
@@ -172,7 +189,7 @@ void KisGLImageWidget::paintGL()
     if (!m_texture.isCreated()) return;
 
     m_vao.bind();
-    m_shader.bind();
+    m_shader->bind();
 
     {
         QMatrix4x4 projectionMatrix;
@@ -184,16 +201,16 @@ void KisGLImageWidget::paintGL()
         QTransform transform; // TODO: noop!
         viewProjectionMatrix = projectionMatrix * QMatrix4x4(transform);
 
-        m_shader.setUniformValue("viewProjectionMatrix", viewProjectionMatrix);
+        m_shader->setUniformValue("viewProjectionMatrix", viewProjectionMatrix);
     }
 
-    m_shader.enableAttributeArray("vertexPosition");
+    m_shader->enableAttributeArray("vertexPosition");
     m_verticesBuffer.bind();
-    m_shader.setAttributeBuffer("vertexPosition", GL_FLOAT, 0, 3);
+    m_shader->setAttributeBuffer("vertexPosition", GL_FLOAT, 0, 3);
 
-    m_shader.enableAttributeArray("texturePosition");
+    m_shader->enableAttributeArray("texturePosition");
     m_textureVerticesBuffer.bind();
-    m_shader.setAttributeBuffer("texturePosition", GL_FLOAT, 0, 2);
+    m_shader->setAttributeBuffer("texturePosition", GL_FLOAT, 0, 2);
 
     glActiveTexture(GL_TEXTURE0);
     m_texture.bind();
@@ -204,7 +221,7 @@ void KisGLImageWidget::paintGL()
     m_verticesBuffer.release();
     m_textureVerticesBuffer.release();
     m_texture.release();
-    m_shader.release();
+    m_shader->release();
     m_vao.release();
 }
 

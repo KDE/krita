@@ -47,9 +47,9 @@ struct KisSmallColorWidget::Private {
     qreal value; // 0 ... 1.0
     qreal saturation; // 0 ... 1.0
     bool updateAllowed;
-    QTimer updateTimer;
     KisClickableGLImageWidget *hueWidget;
     KisClickableGLImageWidget *valueWidget;
+    KisSignalCompressor *repaintCompressor;
     KisSignalCompressor *resizeUpdateCompressor;
     KisSignalCompressor *valueSliderUpdateCompressor;
     KisSignalCompressor *colorChangedSignalCompressor;
@@ -104,9 +104,9 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
     d->value = 0;
     d->saturation = 0;
     d->updateAllowed = true;
-    d->updateTimer.setInterval(1);
-    d->updateTimer.setSingleShot(true);
-    connect(&(d->updateTimer), SIGNAL(timeout()), this, SLOT(update()));
+
+    d->repaintCompressor = new KisSignalCompressor(20, KisSignalCompressor::FIRST_ACTIVE, this);
+    connect(d->repaintCompressor, SIGNAL(timeout()), SLOT(update()));
 
     d->resizeUpdateCompressor = new KisSignalCompressor(200, KisSignalCompressor::FIRST_ACTIVE, this);
     connect(d->resizeUpdateCompressor, SIGNAL(timeout()), SLOT(slotUpdatePalettes()));
@@ -174,7 +174,7 @@ void KisSmallColorWidget::setHue(qreal h)
     d->hue = h;
     d->colorChangedSignalCompressor->start();
     d->valueSliderUpdateCompressor->start();
-    d->updateTimer.start();
+    d->repaintCompressor->start();
 }
 
 void KisSmallColorWidget::setHSV(qreal h, qreal s, qreal v, bool notifyChanged)
@@ -193,7 +193,7 @@ void KisSmallColorWidget::setHSV(qreal h, qreal s, qreal v, bool notifyChanged)
     if(newH) {
         d->valueSliderUpdateCompressor->start();
     }
-    d->updateTimer.start();
+    d->repaintCompressor->start();
 }
 
 void KisSmallColorWidget::setColor(const KoColor &color)

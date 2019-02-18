@@ -150,3 +150,5 @@ X-KDE-ExtraNativeMimeTypes=
 StartupNotify=true
 X-Krita-Version=28
 StartupWMClass=krita
+# Always be the preferred handler for .kra files
+InitialPreference=99

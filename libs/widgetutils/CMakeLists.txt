@@ -48,7 +48,6 @@ set(kritawidgetutils_LIB_SRCS
     xmlgui/kaboutkdedialog_p.cpp
     xmlgui/kactioncategory.cpp
     xmlgui/kactioncollection.cpp
-    xmlgui/kactionconflictdetector.cpp
     xmlgui/kbugreport.cpp
     xmlgui/kcheckaccelerators.cpp
     xmlgui/kedittoolbar.cpp

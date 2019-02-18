@@ -1104,6 +1104,39 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     }*/
 
 
+    /** TODO: Firefox still opens the image incorrectly if there is gAMA+cHRM tags
+     * present. According to the standard it should use iCCP tag with higher priority,
+     * but it doesn't:
+     *
+     * "When the iCCP chunk is present, PNG decoders that recognize it and are capable
+     *  of colour management [ICC] shall ignore the gAMA and cHRM chunks and use
+     *  the iCCP chunk instead and interpret it according to [ICC-1] and [ICC-1A]"
+     */
+
+#if 0
+    if (options.saveAsHDR) {
+        // https://www.w3.org/TR/PNG/#11gAMA
+#if defined(PNG_GAMMA_SUPPORTED)
+        // the values are set in accurdance of HDR-PNG standard:
+        // https://www.w3.org/TR/png-hdr-pq/
+
+        png_set_gAMA_fixed(png_ptr, info_ptr, 15000);
+        dbgFile << "gAMA" << "(Rec 2100)";
+#endif
+
+#if defined PNG_cHRM_SUPPORTED
+        png_set_cHRM_fixed(png_ptr, info_ptr,
+                           31270, 32900, // white point
+                           70800, 29200, // red
+                           17000, 79700, // green
+                           13100, 4600 // blue
+                           );
+        dbgFile << "cHRM" << "(Rec 2100)";
+#endif
+    }
+#endif
+
+
     // we should ensure we don't access non-existing palette object
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(palette || color_type != PNG_COLOR_TYPE_PALETTE, KisImageBuilder_RESULT_FAILURE);
 

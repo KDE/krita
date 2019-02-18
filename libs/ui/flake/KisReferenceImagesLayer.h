@@ -24,6 +24,8 @@
 
 #include <kis_types.h>
 
+class KisDocument;
+
 class KRITAUI_EXPORT KisReferenceImagesLayer : public KisShapeLayer
 {
     Q_OBJECT

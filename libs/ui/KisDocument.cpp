@@ -394,11 +394,11 @@ public:
     }
 
     ~StrippedSafeSavingLocker() {
-         if (m_locked) {
-             m_imageLock.unlock();
-             m_savingLock.unlock();
-         }
-     }
+        if (m_locked) {
+            m_imageLock.unlock();
+            m_savingLock.unlock();
+        }
+    }
 
     bool successfullyLocked() const {
         return m_locked;
@@ -423,9 +423,9 @@ KisDocument::KisDocument()
     KisResourceServerProvider::instance();
 
     d->shapeController = new KisShapeController(this, d->nserver),
-    d->koShapeController = new KoShapeController(0, d->shapeController),
+            d->koShapeController = new KoShapeController(0, d->shapeController),
 
-    slotConfigChanged();
+            slotConfigChanged();
 }
 
 KisDocument::KisDocument(const KisDocument &rhs)
@@ -438,9 +438,9 @@ KisDocument::KisDocument(const KisDocument &rhs)
     setObjectName(rhs.objectName());
 
     d->shapeController = new KisShapeController(this, d->nserver),
-    d->koShapeController = new KoShapeController(0, d->shapeController),
+            d->koShapeController = new KoShapeController(0, d->shapeController),
 
-    slotConfigChanged();
+            slotConfigChanged();
 
     // clone the image with keeping the GUIDs of the layers intact
     // NOTE: we expect the image to be locked!
@@ -534,20 +534,43 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
 
     KisConfig cfg(true);
     if (cfg.backupFile() && filePathInfo.exists()) {
-        KBackup::numberedBackupFile(job.filePath);
+
+        QString backupDir;
+
+        switch(cfg.readEntry<int>("backupfilelocation", 0)) {
+        case 1:
+            backupDir = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+            break;
+        case 2:
+            backupDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+            break;
+        default:
+            // Do nothing: the empty string is user file location
+            break;
+        }
+
+        int numOfBackupsKept = cfg.readEntry<int>("numberofbackupfiles", 1);
+        QString suffix = cfg.readEntry<QString>("backupfilesuffix", "~");
+
+        if (numOfBackupsKept == 1) {
+            KBackup::simpleBackupFile(job.filePath, backupDir, suffix);
+        }
+        else if (numOfBackupsKept > 2) {
+            KBackup::numberedBackupFile(job.filePath, backupDir, suffix, numOfBackupsKept);
+        }
     }
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!job.mimeType.isEmpty(), false);
 
     const QString actionName =
-        job.flags & KritaUtils::SaveIsExporting ?
-        i18n("Exporting Document...") :
-        i18n("Saving Document...");
+            job.flags & KritaUtils::SaveIsExporting ?
+                i18n("Exporting Document...") :
+                i18n("Saving Document...");
 
     bool started =
-        initiateSavingInBackground(actionName,
-                                   this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob,KisImportExportFilter::ConversionStatus,QString)),
-                                   job, exportConfiguration);
+            initiateSavingInBackground(actionName,
+                                       this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob,KisImportExportFilter::ConversionStatus,QString)),
+                                       job, exportConfiguration);
 
     if (!started) {
         emit canceled(QString());
@@ -738,7 +761,7 @@ bool KisDocument::exportDocumentSync(const QUrl &url, const QByteArray &mimeType
     const QString fileName = url.toLocalFile();
 
     KisImportExportFilter::ConversionStatus status =
-        d->importExportManager->
+            d->importExportManager->
             exportDocument(fileName, fileName, mimeType, false, exportConfiguration);
 
     d->savingImage = 0;
@@ -796,12 +819,12 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
             receiverObject, receiverMethod, Qt::UniqueConnection);
 
     bool started =
-        d->backgroundSaveDocument->startExportInBackground(actionName,
-                                                           job.filePath,
-                                                           job.filePath,
-                                                           job.mimeType,
-                                                           job.flags & KritaUtils::SaveShowWarnings,
-                                                           exportConfiguration);
+            d->backgroundSaveDocument->startExportInBackground(actionName,
+                                                               job.filePath,
+                                                               job.filePath,
+                                                               job.mimeType,
+                                                               job.flags & KritaUtils::SaveShowWarnings,
+                                                               exportConfiguration);
 
     if (!started) {
         // the state should have been deinitialized in slotChildCompletedSavingInBackground()
@@ -939,12 +962,12 @@ bool KisDocument::startExportInBackground(const QString &actionName,
 
     KisImportExportFilter::ConversionStatus initializationStatus;
     d->childSavingFuture =
-        d->importExportManager->exportDocumentAsyc(location,
-                                                   realLocation,
-                                                   mimeType,
-                                                   initializationStatus,
-                                                   showWarnings,
-                                                   exportConfiguration);
+            d->importExportManager->exportDocumentAsyc(location,
+                                                       realLocation,
+                                                       mimeType,
+                                                       initializationStatus,
+                                                       showWarnings,
+                                                       exportConfiguration);
 
     if (initializationStatus != KisImportExportFilter::ConversionStatus::OK) {
         if (d->savingUpdater) {
@@ -973,7 +996,7 @@ void KisDocument::finishExportInBackground()
     }
 
     KisImportExportFilter::ConversionStatus status =
-        d->childSavingFuture.result();
+            d->childSavingFuture.result();
     const QString errorMessage = this->errorMessage();
 
     d->savingImage.clear();
@@ -1062,23 +1085,25 @@ QString KisDocument::generateAutoSaveFileName(const QString & path) const
 
     // Using the extension allows to avoid relying on the mime magic when opening
     const QString extension (".kra");
-    QRegularExpression autosavePattern("^\\..+-autosave.kra$");
+    QString prefix = KisConfig(true).readEntry<bool>("autosavefileshidden") ? QString(".") : QString();
+    QRegularExpression autosavePattern1("^\\..+-autosave.kra$");
+    QRegularExpression autosavePattern2("^.+-autosave.kra$");
 
     QFileInfo fi(path);
     QString dir = fi.absolutePath();
     QString filename = fi.fileName();
 
-    if (path.isEmpty() || autosavePattern.match(filename).hasMatch()) {
+    if (path.isEmpty() || autosavePattern1.match(filename).hasMatch() || autosavePattern2.match(filename).hasMatch()) {
         // Never saved?
 #ifdef Q_OS_WIN
         // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)
-        retval = QString("%1%2.%3-%4-%5-autosave%6").arg(QDir::tempPath()).arg(QDir::separator()).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension);
+        retval = QString("%1%2%7%3-%4-%5-autosave%6").arg(QDir::tempPath()).arg(QDir::separator()).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension).arg(prefix);
 #else
         // On Linux, use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
-        retval = QString("%1%2.%3-%4-%5-autosave%6").arg(QDir::homePath()).arg(QDir::separator()).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension);
+        retval = QString("%1%2%7%3-%4-%5-autosave%6").arg(QDir::homePath()).arg(QDir::separator()).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension).arg(prefix);
 #endif
     } else {
-        retval = QString("%1%2.%3-autosave%4").arg(dir).arg(QDir::separator()).arg(filename).arg(extension);
+        retval = QString("%1%2%5%3-autosave%4").arg(dir).arg(QDir::separator()).arg(filename).arg(extension).arg(prefix);
     }
 
     //qDebug() << "generateAutoSaveFileName() for path" << path << ":" << retval;
@@ -1454,14 +1479,19 @@ void KisDocument::removeAutoSaveFiles(const QString &autosaveBaseName, bool wasR
         QFile::remove(asf);
     }
 
-    QRegularExpression autosavePattern("^\\..+-autosave.kra$");
+    QList<QRegularExpression> expressions;
 
-    if (wasRecovered &&
-        !autosaveBaseName.isEmpty() &&
-        autosavePattern.match(QFileInfo(autosaveBaseName).fileName()).hasMatch() &&
-        QFile::exists(autosaveBaseName)) {
+    expressions << QRegularExpression("^\\..+-autosave.kra$")
+                << QRegularExpression("^.+-autosave.kra$");
 
-        QFile::remove(autosaveBaseName);
+    Q_FOREACH(const QRegularExpression &rex, expressions) {
+        if (wasRecovered &&
+                !autosaveBaseName.isEmpty() &&
+                rex.match(QFileInfo(autosaveBaseName).fileName()).hasMatch() &&
+                QFile::exists(autosaveBaseName)) {
+
+            QFile::remove(autosaveBaseName);
+        }
     }
 }
 

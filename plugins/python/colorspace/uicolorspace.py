@@ -1,24 +1,30 @@
-'''
-This script is licensed CC 0 1.0, so that you can learn from it.
+# This script is licensed CC 0 1.0, so that you can learn from it.
 
------- CC 0 1.0 ---------------
+# ------ CC 0 1.0 ---------------
 
-The person who associated a work with this deed has dedicated the work to the public domain by waiving all of his or her rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law.
+# The person who associated a work with this deed has dedicated the
+# work to the public domain by waiving all of his or her rights to the
+# work worldwide under copyright law, including all related and
+# neighboring rights, to the extent allowed by law.
 
-You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.
+# You can copy, modify, distribute and perform the work, even for
+# commercial purposes, all without asking permission.
 
-https://creativecommons.org/publicdomain/zero/1.0/legalcode
-'''
+# https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
 from . import colorspacedialog
-from .components import colormodelcombobox, colordepthcombobox, colorprofilecombobox
+from .components import (
+    colordepthcombobox,
+    colormodelcombobox,
+    colorprofilecombobox,
+)
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QFormLayout, QListWidget, QListWidgetItem,
-                             QAbstractItemView, QComboBox, QDialogButtonBox,
+from PyQt5.QtWidgets import (QFormLayout, QListWidget,
+                             QAbstractItemView, QDialogButtonBox,
                              QVBoxLayout, QFrame, QMessageBox, QPushButton,
-                             QHBoxLayout, QAbstractScrollArea)
+                             QAbstractScrollArea)
 from PyQt5.QtGui import QIcon
 import krita
-from . import resources_rc
 
 
 class UIColorSpace(object):
@@ -28,12 +34,15 @@ class UIColorSpace(object):
         self.mainLayout = QVBoxLayout(self.mainDialog)
         self.formLayout = QFormLayout()
         self.documentLayout = QVBoxLayout()
-        self.refreshButton = QPushButton(QIcon(':/icons/refresh.svg'), i18n("Refresh"))
+        self.refreshButton = QPushButton(QIcon(':/icons/refresh.svg'),
+                                         i18n("Refresh"))
         self.widgetDocuments = QListWidget()
         self.colorModelComboBox = colormodelcombobox.ColorModelComboBox(self)
         self.colorDepthComboBox = colordepthcombobox.ColorDepthComboBox(self)
-        self.colorProfileComboBox = colorprofilecombobox.ColorProfileComboBox(self)
-        self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        self.colorProfileComboBox = \
+            colorprofilecombobox.ColorProfileComboBox(self)
+        self.buttonBox = QDialogButtonBox(
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
 
         self.kritaInstance = krita.Krita.instance()
         self.documentsList = []
@@ -47,7 +56,8 @@ class UIColorSpace(object):
 
         self.mainDialog.setWindowModality(Qt.NonModal)
         self.widgetDocuments.setSelectionMode(QAbstractItemView.MultiSelection)
-        self.widgetDocuments.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+        self.widgetDocuments.setSizeAdjustPolicy(
+            QAbstractScrollArea.AdjustToContents)
 
     def initialize(self):
         self.loadDocuments()
@@ -61,7 +71,8 @@ class UIColorSpace(object):
         self.formLayout.addRow(i18n("Documents:"), self.documentLayout)
         self.formLayout.addRow(i18n("Color model:"), self.colorModelComboBox)
         self.formLayout.addRow(i18n("Color depth:"), self.colorDepthComboBox)
-        self.formLayout.addRow(i18n("Color profile:"), self.colorProfileComboBox)
+        self.formLayout.addRow(i18n("Color profile:"),
+                               self.colorProfileComboBox)
 
         self.line = QFrame()
         self.line.setFrameShape(QFrame.HLine)
@@ -86,7 +97,8 @@ class UIColorSpace(object):
         self.colorDepthComboBox.clear()
 
         colorModel = self.colorModelComboBox.currentText()
-        self.colorDepthsList = sorted(self.kritaInstance.colorDepths(colorModel))
+        self.colorDepthsList = sorted(
+            self.kritaInstance.colorDepths(colorModel))
 
         self.colorDepthComboBox.addItems(self.colorDepthsList)
 
@@ -95,14 +107,18 @@ class UIColorSpace(object):
 
         colorModel = self.colorModelComboBox.currentText()
         colorDepth = self.colorDepthComboBox.currentText()
-        self.colorProfilesList = sorted(self.kritaInstance.profiles(colorModel, colorDepth))
+        self.colorProfilesList = sorted(
+            self.kritaInstance.profiles(colorModel, colorDepth))
 
         self.colorProfileComboBox.addItems(self.colorProfilesList)
 
     def loadDocuments(self):
         self.widgetDocuments.clear()
 
-        self.documentsList = [document for document in self.kritaInstance.documents() if document.fileName()]
+        self.documentsList = [
+            document for document in self.kritaInstance.documents()
+            if document.fileName()
+        ]
 
         for document in self.documentsList:
             self.widgetDocuments.addItem(document.fileName())
@@ -111,13 +127,18 @@ class UIColorSpace(object):
         self.loadDocuments()
 
     def confirmButton(self):
-        selectedPaths = [item.text() for item in self.widgetDocuments.selectedItems()]
-        selectedDocuments = [document for document in self.documentsList for path in selectedPaths if path == document.fileName()]
+        selectedPaths = [
+            item.text() for item in self.widgetDocuments.selectedItems()]
+        selectedDocuments = [
+            document for document in self.documentsList
+            for path in selectedPaths if path == document.fileName()
+        ]
 
         self.msgBox = QMessageBox(self.mainDialog)
         if selectedDocuments:
             self.convertColorSpace(selectedDocuments)
-            self.msgBox.setText(i18n("The selected documents has been converted."))
+            self.msgBox.setText(
+                i18n("The selected documents has been converted."))
         else:
             self.msgBox.setText(i18n("Select at least one document."))
         self.msgBox.exec_()

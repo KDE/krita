@@ -44,6 +44,8 @@ bool KisReferenceImageCollection::save(QIODevice *io)
     QDomElement root = doc.createElement("referenceimages");
     doc.insertBefore(root, QDomNode());
 
+    std::sort(references.begin(), references.end(), KoShape::compareShapeZIndex);
+
     int nextId = 0;
     Q_FOREACH(KisReferenceImage *reference, references) {
         reference->saveXml(doc, root, nextId++);

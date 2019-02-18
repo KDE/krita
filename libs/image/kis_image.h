@@ -38,7 +38,6 @@
 
 #include <kritaimage_export.h>
 
-class KisDocument;
 class KoColorSpace;
 class KoColor;
 

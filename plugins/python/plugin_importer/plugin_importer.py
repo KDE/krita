@@ -157,8 +157,8 @@ class PluginImporter:
             config.read_string(
                 self.archive.read(desktop_filename).decode('utf-8'))
         except ConfigParserError as e:
-                raise PluginReadError(
-                    '%s: %s' % (i18n('Desktop file'), str(e)))
+            raise PluginReadError(
+                '%s: %s' % (i18n('Desktop file'), str(e)))
         return config
 
     def get_plugin_info(self):

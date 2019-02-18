@@ -588,10 +588,6 @@ namespace KisLayerUtils {
 
     }
 
-    KisLayerSP constructDefaultLayer(KisImageSP image) {
-        return new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
-    }
-
     RemoveNodeHelper::~RemoveNodeHelper()
     {
     }
@@ -632,7 +628,7 @@ namespace KisLayerUtils {
         }
 
         if (lastLayer) {
-            KisLayerSP newLayer = constructDefaultLayer(image);
+            KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
             addCommandImpl(new KisImageLayerAddCommand(image, newLayer,
                                                        image->root(),
                                                        KisNodeSP(),

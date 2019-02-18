@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>759</width>
+    <width>552</width>
     <height>468</height>
    </rect>
   </property>
@@ -495,6 +495,187 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>File Handling</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QGroupBox" name="m_autosaveCheckBox">
+         <property name="title">
+          <string>Enable Autosaving</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QFormLayout" name="formLayout_6">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Autosave Interval:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="KisIntParseSpinBox" name="m_autosaveSpinBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>75</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="suffix">
+             <string comment="Suffix: “Every x min”"> min</string>
+            </property>
+            <property name="prefix">
+             <string comment="Prefix: “Every x min”">Every </string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>1440</number>
+            </property>
+            <property name="singleStep">
+             <number>5</number>
+            </property>
+            <property name="value">
+             <number>15</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="chkHideAutosaveFiles">
+            <property name="text">
+             <string>Unnamed autosave files are hidden by default</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="m_backupFileCheckBox">
+         <property name="title">
+          <string>Create a Backup File on Saving</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QFormLayout" name="formLayout_5">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Backup File Location</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="cmbBackupFileLocation">
+            <item>
+             <property name="text">
+              <string>Same Folder as Original File</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>User Folder</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Temporary File Location</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Backup File Suffix:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="txtBackupFileSuffix">
+            <property name="text">
+             <string>~</string>
+            </property>
+            <property name="maxLength">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Number of Backup Files Kept:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSpinBox" name="intNumBackupFiles">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="value">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Kra File Compression</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="m_chkCompressKra">
+            <property name="text">
+             <string>Compress .kra files more (slows loading/saving)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="chkZip64">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Only use this option for &lt;span style=&quot; font-weight:600;&quot;&gt;very&lt;/span&gt; large files: larger than 4 GiB on disk.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Use Zip64 (for very large files: cannot be opened in versions of Krita older than 4.2.0)</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="Miscellaneous">
       <attribute name="title">
        <string>Miscellaneous</string>
@@ -509,7 +690,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>When Krita starts</string>
+          <string>When Krita starts:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -526,96 +707,14 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="chkSaveSessionOnQuit">
-         <property name="text">
-          <string>Save session when Krita closes</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="lbl_autosave">
-         <property name="text">
-          <string>Autosave:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QCheckBox" name="m_autosaveCheckBox">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string comment="Checkbox after “Autosave:”">Enabled</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KisIntParseSpinBox" name="m_autosaveSpinBox">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>75</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="suffix">
-            <string comment="Suffix: “Every x min”"> min</string>
-           </property>
-           <property name="prefix">
-            <string comment="Prefix: “Every x min”">Every </string>
-           </property>
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="maximum">
-            <number>1440</number>
-           </property>
-           <property name="singleStep">
-            <number>5</number>
-           </property>
-           <property name="value">
-            <number>15</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
        <item row="3" column="1">
-        <widget class="QCheckBox" name="m_chkCompressKra">
-         <property name="text">
-          <string>Compress .kra files more (slows loading/saving)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QCheckBox" name="m_backupFileCheckBox">
-         <property name="text">
-          <string>Create backup file </string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="1">
         <widget class="QCheckBox" name="m_chkConvertOnImport">
          <property name="text">
           <string>On importing images as layers, convert to the image colorspace</string>
          </property>
         </widget>
        </item>
-       <item row="10" column="0">
+       <item row="5" column="0">
         <widget class="QLabel" name="label">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -631,7 +730,7 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="1">
+       <item row="5" column="1">
         <widget class="KisIntParseSpinBox" name="m_undoStackSize">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -659,7 +758,7 @@
          </property>
         </widget>
        </item>
-       <item row="11" column="0">
+       <item row="6" column="0">
         <widget class="QLabel" name="label_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -668,21 +767,53 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Number of Palette Presets</string>
+          <string>Number of Palette Presets:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item row="13" column="1">
+       <item row="6" column="1">
+        <widget class="KisIntParseSpinBox" name="m_favoritePresetsSpinBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>75</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="minimum">
+          <number>10</number>
+         </property>
+         <property name="maximum">
+          <number>30</number>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
         <widget class="QCheckBox" name="chkShowRootLayer">
          <property name="text">
           <string>Show root layer</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="1">
+       <item row="9" column="1">
+        <widget class="QCheckBox" name="chkUsageLogging">
+         <property name="text">
+          <string>Enable Logging for bug reports</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="1">
         <widget class="QCheckBox" name="m_chkNativeFileDialog">
          <property name="toolTip">
           <string>Warning: if you enable this setting and the file dialogs do weird stuff, do not report a bug.</string>
@@ -692,14 +823,14 @@
          </property>
         </widget>
        </item>
-       <item row="17" column="0">
+       <item row="12" column="0">
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>Maximum brush size:</string>
          </property>
         </widget>
        </item>
-       <item row="17" column="1">
+       <item row="12" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QSpinBox" name="intMaxBrushSize">
@@ -735,7 +866,7 @@
          </item>
         </layout>
        </item>
-       <item row="18" column="1">
+       <item row="13" column="1">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -748,45 +879,10 @@
          </property>
         </spacer>
        </item>
-       <item row="11" column="1">
-        <widget class="KisIntParseSpinBox" name="m_favoritePresetsSpinBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>75</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="minimum">
-          <number>10</number>
-         </property>
-         <property name="maximum">
-          <number>30</number>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QCheckBox" name="chkZip64">
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Only use this option for &lt;span style=&quot; font-weight:600;&quot;&gt;very&lt;/span&gt; large files: larger than 4 GiB on disk.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="chkSaveSessionOnQuit">
          <property name="text">
-          <string>Use Zip64 (for very large files: cannot be opened in versions of Krita older than 4.2.0)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="1">
-        <widget class="QCheckBox" name="chkUsageLogging">
-         <property name="text">
-          <string>Enable Logging for bug reports</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
+          <string>Save session when Krita closes</string>
          </property>
         </widget>
        </item>
@@ -815,22 +911,5 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>m_autosaveCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>m_autosaveSpinBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

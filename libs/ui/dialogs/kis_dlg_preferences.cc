@@ -90,6 +90,29 @@
 #  include <kis_tablet_support_win8.h>
 #endif
 
+struct BackupSuffixValidator : public QValidator {
+    BackupSuffixValidator(QObject *parent)
+        : QValidator(parent)
+        , invalidCharacters(QStringList()
+                            << "0" << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9"
+                            << "/" << "\\" << ":" << ";" << " ")
+    {}
+
+    ~BackupSuffixValidator() override {}
+
+    const QStringList invalidCharacters;
+
+    State validate(QString &line, int &/*pos*/) const override
+    {
+        Q_FOREACH(const QString invalidChar, invalidCharacters) {
+            if (line.contains(invalidChar)) {
+                return Invalid;
+            }
+        }
+        return Acceptable;
+    }
+};
+
 
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     : WdgGeneralSettings(_parent, _name)
@@ -169,6 +192,24 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_kineticScrollingSensitivitySlider->setValue(cfg.kineticScrollingSensitivity());
     m_chkKineticScrollingHideScrollbars->setChecked(cfg.kineticScrollingHiddenScrollbars());
 
+    //
+    // File handling
+    //
+    int autosaveInterval = cfg.autoSaveInterval();
+    //convert to minutes
+    m_autosaveSpinBox->setValue(autosaveInterval / 60);
+    m_autosaveCheckBox->setChecked(autosaveInterval > 0);
+    chkHideAutosaveFiles->setChecked(cfg.readEntry<bool>("autosavefileshidden", true));
+
+    m_chkCompressKra->setChecked(cfg.compressKra());
+    chkZip64->setChecked(cfg.useZip64());
+
+    m_backupFileCheckBox->setChecked(cfg.backupFile());
+    cmbBackupFileLocation->setCurrentIndex(cfg.readEntry<int>("backupfilelocation", 0));
+    txtBackupFileSuffix->setText(cfg.readEntry<QString>("backupfilesuffix", "~"));
+    QValidator *validator = new BackupSuffixValidator(txtBackupFileSuffix);
+    txtBackupFileSuffix->setValidator(validator);
+    intNumBackupFiles->setValue(cfg.readEntry<int>("numberofbackupfiles", 1));
 
     //
     // Miscellaneous
@@ -179,16 +220,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     cmbStartupSession->setCurrentIndex(cfg.sessionOnStartup());
 
     chkSaveSessionOnQuit->setChecked(cfg.saveSessionOnQuit(false));
-
-    int autosaveInterval = cfg.autoSaveInterval();
-    //convert to minutes
-    m_autosaveSpinBox->setValue(autosaveInterval / 60);
-    m_autosaveCheckBox->setChecked(autosaveInterval > 0);
-
-    m_chkCompressKra->setChecked(cfg.compressKra());
-    chkZip64->setChecked(cfg.useZip64());
-
-    m_backupFileCheckBox->setChecked(cfg.backupFile());
 
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
 
@@ -223,8 +254,15 @@ void GeneralTab::setDefault()
     m_autosaveCheckBox->setChecked(cfg.autoSaveInterval(true) > 0);
     //convert to minutes
     m_autosaveSpinBox->setValue(cfg.autoSaveInterval(true) / 60);
+    chkHideAutosaveFiles->setChecked(true);
+
     m_undoStackSize->setValue(cfg.undoStackLimit(true));
+
     m_backupFileCheckBox->setChecked(cfg.backupFile(true));
+    cmbBackupFileLocation->setCurrentIndex(0);
+    txtBackupFileSuffix->setText("~");
+    intNumBackupFiles->setValue(1);
+
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting(true));
     m_changeBrushOutline->setChecked(!cfg.forceAlwaysFullSizedOutline(true));
 
@@ -1344,7 +1382,13 @@ bool KisDlgPreferences::editPreferences()
         cfg.setMDIBackgroundColor(dialog->m_general->m_mdiColor->color().toQColor());
         cfg.setMDIBackgroundImage(dialog->m_general->m_backgroundimage->text());
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
+        cfg.writeEntry("autosavefileshidden", dialog->m_general->chkHideAutosaveFiles->isChecked());
+
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
+        cfg.writeEntry("backupfilelocation", dialog->m_general->cmbBackupFileLocation->currentIndex());
+        cfg.writeEntry("backupfilesuffix", dialog->m_general->txtBackupFileSuffix->text());
+        cfg.writeEntry("numberofbackupfiles", dialog->m_general->intNumBackupFiles->value());
+
         cfg.setShowCanvasMessages(dialog->m_general->showCanvasMessages());
         cfg.setCompressKra(dialog->m_general->compressKra());
         cfg.setUseZip64(dialog->m_general->useZip64());

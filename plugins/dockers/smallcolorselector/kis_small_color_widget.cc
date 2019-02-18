@@ -52,6 +52,7 @@ struct KisSmallColorWidget::Private {
     KisClickableGLImageWidget *valueWidget;
     KisSignalCompressor *resizeUpdateCompressor;
     KisSignalCompressor *valueSliderUpdateCompressor;
+    KisSignalCompressor *colorChangedSignalCompressor;
     KisSignalCompressorWithParam<int> *dynamicRangeCompressor;
     int huePreferredHeight = 32;
     KisSliderSpinBox *dynamicRange = 0;
@@ -113,6 +114,9 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
     d->valueSliderUpdateCompressor = new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE, this);
     connect(d->valueSliderUpdateCompressor, SIGNAL(timeout()), SLOT(updateSVPalette()));
 
+    d->colorChangedSignalCompressor = new KisSignalCompressor(20, KisSignalCompressor::FIRST_ACTIVE, this);
+    connect(d->colorChangedSignalCompressor, SIGNAL(timeout()), SLOT(slotTellColorChanged()));
+
     {
         using namespace std::placeholders;
         std::function<void (qreal)> callback(
@@ -168,7 +172,7 @@ void KisSmallColorWidget::setHue(qreal h)
 {
     h = qBound(0.0, h, 1.0);
     d->hue = h;
-    tellColorChanged();
+    d->colorChangedSignalCompressor->start();
     d->valueSliderUpdateCompressor->start();
     d->updateTimer.start();
 }
@@ -184,7 +188,7 @@ void KisSmallColorWidget::setHSV(qreal h, qreal s, qreal v, bool notifyChanged)
     d->saturation = s;
     // TODO: remove and make acyclic!
     if (notifyChanged) {
-        tellColorChanged();
+        d->colorChangedSignalCompressor->start();
     }
     if(newH) {
         d->valueSliderUpdateCompressor->start();
@@ -462,7 +466,7 @@ void KisSmallColorWidget::slotDisplayConfigurationChanged()
     // TODO: also set the currently selected color again
 }
 
-void KisSmallColorWidget::tellColorChanged()
+void KisSmallColorWidget::slotTellColorChanged()
 {
     d->updateAllowed = false;
 

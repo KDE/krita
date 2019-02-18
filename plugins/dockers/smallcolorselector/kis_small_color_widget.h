@@ -48,17 +48,20 @@ public Q_SLOTS:
 Q_SIGNALS:
     void colorChanged(const KoColor&);
 
+    void sigTellColorChangedInternal();
+
 private Q_SLOTS:
     void slotHueSliderChanged(const QPointF &pos);
     void slotValueSliderChanged(const QPointF &pos);
     void slotInitiateUpdateDynamicRange(int maxLuminance);
     void slotDisplayConfigurationChanged();
+    void slotTellColorChanged();
 
 private:
     void updateDynamicRange(int maxLuminance);
 
 private:
-    void tellColorChanged();
+
     void updateHuePalette();
 
     template<class FillPolicy>

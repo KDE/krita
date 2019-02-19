@@ -1,5 +1,6 @@
 *.orig
 __pycache__
+*.egg-info
 *.trace
 build
 qtcreator-build

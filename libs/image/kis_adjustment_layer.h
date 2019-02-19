@@ -18,7 +18,7 @@
  */
 
 /**
- * @file
+ * @file kis_adjustment_layer.h
  * This file is part of the Krita calligra application. It handles
  * a contains a KisFilter OR a KisLayer, and this class is created
  * to influence the rendering of layers below this one. Can also
@@ -39,7 +39,9 @@
 class KisFilterConfiguration;
 
 /**
- * @class KisAdjustmentLayer Contains a KisFilter and a KisSelection.
+ * @class KisAdjustmentLayer
+ * @brief Contains a KisFilter and a KisSelection.
+ * 
  * If the selection is present, it is a mask used by the adjustment layer
  * to know where to apply the filter, thus the  combination is used
  * to influence the rendering of the layers under this layer

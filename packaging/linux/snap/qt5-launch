@@ -8,7 +8,8 @@ else
   ARCH="$SNAP_ARCH-linux-gnu"
 fi
 
-export LD_LIBRARY_PATH=$SNAP/usr/lib/$ARCH:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$SNAP/lib:$SNAP/lib/$ARCH:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$SNAP/usr/lib:$SNAP/usr/lib/$ARCH:$LD_LIBRARY_PATH
 
 # XKB config
 export XKB_CONFIG_ROOT=$SNAP/usr/share/X11/xkb
@@ -17,38 +18,82 @@ export XKB_CONFIG_ROOT=$SNAP/usr/share/X11/xkb
 export LD_LIBRARY_PATH=$SNAP/usr/lib/$ARCH/mesa:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$SNAP/usr/lib/$ARCH/mesa-egl:$LD_LIBRARY_PATH
 
+# libGL Drivers
+export LIBGL_DRIVERS_PATH=$SNAP/usr/lib/$ARCH/dri
+export LD_LIBRARY_PATH=$LIBGL_DRIVERS_PATH:$LD_LIBRARY_PATH
+
+# Grab proprietary nvidia mount when possible.
+# https://bugs.launchpad.net/snappy/+bug/1588192
+export LD_LIBRARY_PATH=/var/lib/snapd/lib/gl:$LD_LIBRARY_PATH
+
+# Pulseaudio plugins
+export LD_LIBRARY_PATH=$SNAP/usr/lib/$ARCH/pulseaudio:$LD_LIBRARY_PATH
+
 # XDG Config
-export XDG_CONFIG_DIRS=$SNAP/etc:$XDG_CONFIG_DIRS
+export XDG_CONFIG_DIRS=$SNAP/etc:${XDG_CONFIG_DIRS:-/etc/xdg}
 
 # Note: this doesn't seem to work, QML's LocalStorage either ignores
 # or fails to use $SNAP_USER_DATA if defined here
-export XDG_DATA_DIRS=$SNAP/usr/share:$XDG_DATA_DIRS
+export XDG_DATA_DIRS=$SNAP/usr/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}
+
+# Set XDG_DATA_HOME to local path, dependent on snap version
+export XDG_DATA_HOME=$SNAP_USER_DATA/.local/share
+mkdir -p $XDG_DATA_HOME
+
+export XDG_CONFIG_HOME=$SNAP_USER_DATA/.config
+mkdir -p $XDG_CONFIG_HOME
+
+if [ -e $SNAP_USER_DATA/.local/config/kdeglobals ]; then
+  # Migrate legacy path previously (incorrectly) used for configs.
+  # The current var $HOME/.config is in line with the XDG default.
+  cp -rv $SNAP_USER_DATA/.local/config/. $XDG_CONFIG_HOME
+  rm -rv $SNAP_USER_DATA/.local/config/
+fi
+
+export XDG_CACHE_HOME=$SNAP_USER_DATA/.cache
+mkdir -p $XDG_CACHE_HOME
+
+export XDG_RUNTIME_DIR=$SNAP_USER_DATA/.local/var/run/$UID
+mkdir -p $XDG_RUNTIME_DIR
 
 # Font Config
 export FONTCONFIG_PATH=$SNAP/etc/fonts/config.d
-export FONTCONFIG_FILE=$SNAP/etc/fonts/fonts.conf
+export FONTCONFIG_FILE=$XDG_CONFIG_HOME/fontconfig/fonts.conf
 
-# Tell libGL where to find the drivers
-export LIBGL_DRIVERS_PATH=$SNAP/usr/lib/$ARCH/dri
+REALHOME=`getent passwd $UID | cut -d ':' -f 6`
+# Keep an array of data dirs, for looping through them
+IFS=':' read -r -a data_dirs_array <<< "$XDG_DATA_DIRS"
 
-# Necessary for the SDK to find the translations directory
-export APP_DIR=$SNAP
+function make_user_fontconfig {
+  echo "<fontconfig>"
+  if [ -d $REALHOME/.local/share/fonts ]; then
+    echo "  <dir>$REALHOME/.local/share/fonts</dir>"
+  fi
+  if [ -d $REALHOME/.fonts ]; then
+    echo "  <dir>$REALHOME/.fonts</dir>"
+  fi
+  for d in "${data_dirs_array[@]}"; do
+    if [ -d "$d/fonts" ]; then
+      echo "  <dir>$d/fonts</dir>"
+    fi
+  done
+  echo '  <include ignore_missing="yes">conf.d</include>'
+  # We need to include this default cachedir first so that caching
+  # works: without it, fontconfig will try to write to the real user home
+  # cachedir and be blocked by AppArmor.
+  echo '  <cachedir prefix="xdg">fontconfig</cachedir>'
+  if [ -d $REALHOME/.cache/fontconfig ]; then
+    echo "  <cachedir>$REALHOME/.cache/fontconfig</cachedir>"
+  fi
+  echo "</fontconfig>"
+}
 
-# Set XDG_DATA_HOME to local path, dependent on snap version
-export XDG_DATA_HOME=$SNAP_USER_DATA/.local-$SNAP_VERSION/share
-export XDG_DATA_DIRS=$XDG_DATA_HOME:$XDG_DATA_DIRS
-mkdir -p $XDG_DATA_HOME
-
-# Set cache folder to local path, dependent on snap version
-export XDG_CACHE_HOME=$SNAP_USER_DATA/.cache-$SNAP_VERSION
-mkdir -p $XDG_CACHE_HOME
-
-# Not good, needed for fontconfig and themes
-ln -sf $SNAP/usr/share/{fontconfig,fonts,fonts-*,themes} $XDG_DATA_HOME
-
-# Qt Platform to Mir
-export QTCHOOSER_NO_GLOBAL_DIR=1
-export QT_SELECT=snappy-qt5
+# This relies on the desktop, x11, or unity7 interface from what I can tell.
+# We'll configure the in-snap fontconfig to look in the outside resoruces,
+# the outside resources are made readable by the aforementioned interfaces.
+rm -rf $XDG_DATA_HOME/{fontconfig,fonts,fonts-*,themes,.themes}
+mkdir -p $XDG_CONFIG_HOME/fontconfig
+make_user_fontconfig > $FONTCONFIG_FILE
 
 # Qt Libs
 export LD_LIBRARY_PATH=$SNAP/usr/lib/$ARCH/qt5/libs:$LD_LIBRARY_PATH
@@ -62,16 +107,61 @@ export QML2_IMPORT_PATH=$QML2_IMPORT_PATH:$SNAP/lib/$ARCH
 # Removes Qt warning: Could not find a location
 # of the system Compose files
 export QTCOMPOSE=$SNAP/usr/share/X11/locale
-
-export DESKTOP_SESSION=ubuntu
-export XDG_SESSION_DESKTOP=ubuntu
-export XDG_CURRENT_DESKTOP=kde
-export QT_QPA_PLATFORMTHEME=appmenu-qt5
 export QT_XKB_CONFIG_ROOT=/usr/share/X11/xkb
+
+# FIXME: it's unclear if we actually need to force plasma theming, even without
+#   gtk integration theme Qt should probably figure out a sane style. Needs
+#   testing though.
+export KDE_FULL_SESSION=true
+export DESKTOP_SESSION=${DESKTOP_SESSION:-/usr/share/xsessions/plasma}
+export XDG_SESSION_DESKTOP=${XDG_SESSION_DESKTOP:-KDE}
+export XDG_CURRENT_DESKTOP=${XDG_CURRENT_DESKTOP:-KDE}
+export QT_QPA_PLATFORMTHEME=${QT_QPA_PLATFORMTHEME:-kde}
 
 # ensure that our HW/opengl libs are before the snap specific libs
 export LD_LIBRARY_PATH=$SNAP_LIBRARY_PATH:$LD_LIBRARY_PATH
 
+# KDE specific
+## Do not start slaves through klauncher but fork them directly.
+export KDE_FORK_SLAVES=1
+## Neon PATCH! make KIO look for slaves in a dynamic location depending on $SNAP
+## FIXME: should be made a : separated list so we can look in $SNAP and $KF5!
+export KF5_LIBEXEC_DIR=$SNAP/usr/lib/$ARCH/libexec/kf5
+
+# Link icons into home so (xcursor) can find its cursor theme.
+mkdir -p $HOME/.icons
+ln -fs $SNAP/usr/share/icons/* $HOME/.icons
+
+# Make sure QtChooser isn't being terrible to us
+export QTCHOOSER_NO_GLOBAL_DIR=1
+export QT_SELECT=5
+# qtchooser hardcodes reference paths, we'll need to rewrite them properly
+[ -d $XDG_CONFIG_HOME/qtchooser ] || mkdir -p $XDG_CONFIG_HOME/qtchooser
+echo "$SNAP/usr/lib/qt5/bin" > $XDG_CONFIG_HOME/qtchooser/5.conf
+echo "$SNAP/usr/lib/$ARCH" >> $XDG_CONFIG_HOME/qtchooser/5.conf
+echo "$SNAP/usr/lib/qt5/bin" > $XDG_CONFIG_HOME/qtchooser/default.conf
+echo "$SNAP/usr/lib/$ARCH" >> $XDG_CONFIG_HOME/qtchooser/default.conf
+
+# This relies on qtbase patch
+# 0001-let-qlibraryinfo-fall-back-to-locate-qt.conf-via-XDG.patch
+# to make QLibraryInfo look in XDG_* locations for qt.conf. The paths configured
+# here are applied to everything that uses QLibraryInfo as final fallback and
+# has no XDG_* fallback before that. Currently the most interesting offender
+# is QtWebEngine which will not work unless the Data path is correctly set.
+cat << EOF > $XDG_CONFIG_HOME/qt.conf
+[Paths]
+Data = $SNAP/usr/share/qt5/
+Translations = $SNAP/usr/share/qt5/translations
+EOF
+
+# requires `locales, libc-bin` being stage-packages
+if [ -e $SNAP/usr/share/i18n ]; then
+  export I18NPATH=$SNAP/usr/share/i18n
+  locpath=$XDG_DATA_HOME/locale
+  mkdir -p $locpath
+  export LOCPATH=$locpath:/usr/lib/locale # core snap contains C.UTF-8 already
+  LC_ALL=C.UTF-8 $SNAP/bin/kf5-locale-gen || exit 1
+fi
+
 cd $SNAP
 exec "$@"
-

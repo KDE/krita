@@ -203,10 +203,14 @@ QItemSelectionModel::SelectionFlags KisNodeView::selectionCommand(const QModelIn
 
     return QAbstractItemView::selectionCommand(index, event);
 }
+
 QRect KisNodeView::visualRect(const QModelIndex &index) const
 {
     QRect rc = QTreeView::visualRect(index);
-    rc.setLeft(0);
+    if (layoutDirection() == Qt::RightToLeft)
+        rc.setRight(width());
+    else
+        rc.setLeft(0);
     return rc;
 }
 
@@ -220,8 +224,10 @@ QModelIndex KisNodeView::indexAt(const QPoint &point) const
     KisNodeViewColorScheme scm;
 
     QModelIndex index = QTreeView::indexAt(point);
-    if (!index.isValid() && point.x() < scm.visibilityColumnWidth()) {
-        index = QTreeView::indexAt(point + QPoint(scm.visibilityColumnWidth(), 0));
+    if (!index.isValid()) {
+        // Middle is a good position for both LTR and RTL layouts
+        // First reset x, then get the x in the middle
+        index = QTreeView::indexAt(point - QPoint(point.x(), 0) + QPoint(width() / 2, 0));
     }
 
     return index;

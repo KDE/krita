@@ -25,18 +25,17 @@
 
 #include "kis_update_info.h"
 
+typedef QList<KisUpdateInfoSP> KisUpdateInfoList;
 
 class KisCanvasUpdatesCompressor
 {
-    typedef QList<KisUpdateInfoSP> UpdateInfoList;
-
 public:
     bool putUpdateInfo(KisUpdateInfoSP info);
-    KisUpdateInfoSP takeUpdateInfo();
+    void takeUpdateInfo(KisUpdateInfoList &list);
 
 private:
     QMutex m_mutex;
-    UpdateInfoList m_updatesList;
+    KisUpdateInfoList m_updatesList;
 };
 
 #endif /* __KIS_CANVAS_UPDATES_COMPRESSOR_H */

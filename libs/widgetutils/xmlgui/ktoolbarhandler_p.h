@@ -37,13 +37,13 @@ class ToolBarHandler : public QObject, public KXMLGUIClient
 public:
     /**
      * Creates a new tool bar handler for the supplied
-     * @param mainWindow.
+     * @p mainWindow.
      */
     explicit ToolBarHandler(KXmlGuiWindow *mainWindow);
 
     /**
      * Creates a new tool bar handler for the supplied
-     * @param mainWindow and with the supplied parent.
+     * @p mainWindow and with the supplied @p parent.
      */
     ToolBarHandler(KXmlGuiWindow *mainWindow, QObject *parent);
 

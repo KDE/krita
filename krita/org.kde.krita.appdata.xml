@@ -12,8 +12,10 @@
   <developer_name xml:lang="en-GB">Krita Foundation</developer_name>
   <developer_name xml:lang="es">Fundación Krita</developer_name>
   <developer_name xml:lang="eu">Krita Fundazioa</developer_name>
+  <developer_name xml:lang="fi">Krita Foundation</developer_name>
   <developer_name xml:lang="fr">La Fondation Krita</developer_name>
   <developer_name xml:lang="gl">Fundación Krita</developer_name>
+  <developer_name xml:lang="id">Asas Krita</developer_name>
   <developer_name xml:lang="it">Fondazione Krita</developer_name>
   <developer_name xml:lang="nl">Krita Foundation</developer_name>
   <developer_name xml:lang="pl">Fundacja Krity</developer_name>
@@ -35,6 +37,7 @@
   <name xml:lang="en-GB">Krita</name>
   <name xml:lang="es">Krita</name>
   <name xml:lang="eu">Krita</name>
+  <name xml:lang="fi">Krita</name>
   <name xml:lang="fr">Krita</name>
   <name xml:lang="gl">Krita</name>
   <name xml:lang="id">Krita</name>
@@ -155,7 +158,7 @@
     <p xml:lang="fr">Krita est un très bon choix pour créer des concepts arts, des bandes-dessinées, des textures de rendu et des peintures. Krita prend en charge plusieurs espaces de couleurs comme RVB et CMJN avec les canaux de 8 et 16 bits entiers ainsi que les canaux de 16 et 32 bits flottants.</p>
     <p xml:lang="gl">Krita é unha gran opción para crear arte conceptual, texturas para renderización e pinturas mate. Krita permite usar moitos espazos de cores como RGB e CMYK con canles de 8 e 16 bits, así como canles de coma flotante de 16 e 32 bits.</p>
     <p xml:lang="ia">Krita es un grande selection pro crear arte de concepto, comics, texturas pro rendering e picturas opac. Krita supporta multe spatios de colores como RGB e CMYK con canales de integer a  8 e 16 bits, como anque canales floating point a 16 e 32 bits.</p>
-    <p xml:lang="id">Krita adalah pilihan yang cocok untuk menciptakan konsep seni, komik, tekstur untuk rendering dan lukisan matte. Krita mendukung banyak ruang warna seperti RGB dan CMYK pada channel integer 8 dan 16 bit, serta 16 dan 32 bit channel titik mengambang.</p>
+    <p xml:lang="id">Krita adalah pilihan yang cocok untuk menciptakan konsep seni, komik, tekstur untuk rendering dan lukisan matte. Krita mendukung banyak ruang warna seperti RGB dan CMYK pada channel integer 8 dan 16 bit, serta channel floating point 16 dan 32 bit.</p>
     <p xml:lang="it">Krita rappresenta una scelta ottimale per  la creazione di arte concettuale, fumetti e texture per il rendering e il matte painting. Krita supporta molti spazi colori come RGB e CMYK a 8 e 16 bit per canali interi e 16 e 32 bit per canali a virgola mobile.</p>
     <p xml:lang="ja">コンセプトアート、コミック、3DCG 用テクスチャ、マットペイントを制作する方にとって、Krita は最適な選択です。Krita は、8/16 ビット整数/チャンネル、および 16/32 ビット浮動小数点/チャンネルの RGB や CMYK をはじめ、さまざまな色空間をサポートしています。</p>
     <p xml:lang="nl">Krita is een goede keuze voor het maken van kunstconcepten, strips, textuur voor weergeven en matte schilderijen. Krita ondersteunt vele kleurruimten zoals RGB en CMYK in 8 en 16 bits kanalen met gehele getallen, evenals 16 en 32 bits kanalen met drijvende komma.</p>
@@ -251,6 +254,7 @@
   <project_group>KDE</project_group>
   <provides>
     <binary>krita</binary>
+    <id>org.kde.krita.desktop</id>
   </provides>
   <releases>
     <release date="2018-01-11" version="4.0.0.51 (beta 1)"/>

@@ -40,9 +40,11 @@ class KoColorSpace;
 class KRITAPIGMENT_EXPORT KoOptimizedCompositeOpFactory
 {
 public:
-    static KoCompositeOp* createAlphaDarkenOp32(const KoColorSpace *cs);
+    static KoCompositeOp* createAlphaDarkenOpHard32(const KoColorSpace *cs);
+    static KoCompositeOp* createAlphaDarkenOpCreamy32(const KoColorSpace *cs);
     static KoCompositeOp* createOverOp32(const KoColorSpace *cs);
-    static KoCompositeOp* createAlphaDarkenOp128(const KoColorSpace *cs);
+    static KoCompositeOp* createAlphaDarkenOpHard128(const KoColorSpace *cs);
+    static KoCompositeOp* createAlphaDarkenOpCreamy128(const KoColorSpace *cs);
     static KoCompositeOp* createOverOp128(const KoColorSpace *cs);
 };
 

@@ -60,9 +60,9 @@
 
     This enum describes the available lock modes.
 
-    \value ReadLock A read lock.
-    \value WriteLock A write lock.
-    \value NoLock Neither a read lock nor a write lock.
+    \var ReadLock A read lock.
+    \var WriteLock A write lock.
+    \var NoLock Neither a read lock nor a write lock.
 */
 
 /*!

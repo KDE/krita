@@ -97,7 +97,7 @@ public:
     virtual QRect neededRect(const QRect & rect, const KisFilterConfigurationSP config, int lod) const;
 
     /**
-    * Similar to \ref neededRect: some filters will alter a lot of pixels that are
+    * Similar to @ref neededRect : some filters will alter a lot of pixels that are
     * near to each other at the same time. So when you changed a single rectangle
     * in a device, the actual rectangle that will feel the influence of this change
     * might be bigger. Use this function to determine that rect.

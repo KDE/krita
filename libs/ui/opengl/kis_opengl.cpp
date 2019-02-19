@@ -40,6 +40,7 @@
 #include <kis_config.h>
 #include "KisOpenGLModeProber.h"
 
+#include <KisUsageLogger.h>
 #include <boost/optional.hpp>
 #include "kis_assert.h"
 #include <QRegularExpression>
@@ -117,7 +118,7 @@ void KisOpenGL::initialize()
 
     g_debugText.clear();
     QDebug debugOut(&g_debugText);
-    debugOut << "OpenGL Info";
+    debugOut << "OpenGL Info\n";
     debugOut << "\n  Vendor: " << openGLCheckResult->vendorString();
     debugOut << "\n  Renderer: " << openGLCheckResult->rendererString();
     debugOut << "\n  Version: " << openGLCheckResult->driverVersionString();
@@ -146,6 +147,7 @@ void KisOpenGL::initialize()
     debugOut << "\n== end log ==";
 
     dbgOpenGL.noquote().nospace() << g_debugText;
+    KisUsageLogger::write(g_debugText);
 
     // Check if we have a bugged driver that needs fence workaround
     bool isOnX11 = false;

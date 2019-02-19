@@ -665,20 +665,24 @@ void KisApplication::checkAutosaveFiles()
 {
     if (d->batchRun) return;
 
-    // Check for autosave files from a previous run. There can be several, and
-    // we want to offer a restore for every one. Including a nice thumbnail!
-
-    QStringList filters;
-    filters << QString(".krita-*-*-autosave.kra");
-
 #ifdef Q_OS_WIN
     QDir dir = QDir::temp();
 #else
     QDir dir = QDir::home();
 #endif
 
+    // Check for autosave files from a previous run. There can be several, and
+    // we want to offer a restore for every one. Including a nice thumbnail!
+
+    // Hidden autosave files
+    QStringList filters = QStringList() << QString(".krita-*-*-autosave.kra");
+
     // all autosave files for our application
     QStringList autosaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
+
+    // Visibile autosave files
+    filters = QStringList() << QString("krita-*-*-autosave.kra");
+    autosaveFiles += dir.entryList(filters, QDir::Files);
 
     // Allow the user to make their selection
     if (autosaveFiles.size() > 0) {
@@ -757,6 +761,9 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         QString templateName = templateInfo.readUrl();
         QUrl templateURL;
         templateURL.setPath(templateBase.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path() + '/' + templateName);
+        if (templateURL.scheme().isEmpty()) {
+            templateURL.setScheme("file");
+        }
 
         KisMainWindow::OpenFlags batchFlags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
         if (mainWindow->openDocument(templateURL, KisMainWindow::Import | batchFlags)) {

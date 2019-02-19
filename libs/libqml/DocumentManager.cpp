@@ -124,7 +124,7 @@ void DocumentManager::delayedNewDocument()
         qc.setAlpha(0);
         KoColor bgColor(qc, cs);
 
-        d->document->newImage("New Image", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8(), bgColor, true, 2, "", d->newDocResolution);
+        d->document->newImage("New Image", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8(), bgColor, KisConfig::RASTER_LAYER, 2, "", d->newDocResolution);
         d->document->resetURL();
     }
     else if (d->newDocOptions.contains("template")) {
@@ -167,7 +167,7 @@ void DocumentManager::delayedNewDocument()
         background.setAlphaF(d->newDocOptions.value("backgroundOpacity", 1.0f).toFloat());
         KoColor bg(background, cs);
 
-        d->document->newImage(name, width, height, cs, bg, true, 1, "", res);
+        d->document->newImage(name, width, height, cs, bg, KisConfig::RASTER_LAYER, 1, "", res);
         d->document->resetURL();
     }
 

@@ -66,6 +66,7 @@ public:
     * @param controller the canvasController
     * @param zoomHandler the zoom handler (viewconverter with setter methods)
     * @param actionCollection the action collection where the KoZoomAction is added to
+    * @param parent the parent QObject
     */
     KoZoomController(KoCanvasController *controller,
                      KoZoomHandler *zoomHandler,

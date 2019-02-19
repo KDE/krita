@@ -40,6 +40,7 @@ public:
 
     /**
      * Create a new file layer
+     * @param basePath the base path of the layer
      * @param name the proposed name for this layer
      * @param parent the widget parent of this dialog
      */

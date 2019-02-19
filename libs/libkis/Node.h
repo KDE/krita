@@ -313,6 +313,11 @@ public Q_SLOTS:
     bool visible() const;
 
     /**
+     * Check to see if frame number on layer is a keyframe
+     */
+    bool hasKeyframeAtTime(int frameNumber);
+
+    /**
      * Set the visibility of the current node to @param visible
      */
     void setVisible(bool visible);
@@ -475,9 +480,11 @@ public Q_SLOTS:
      * @param filename the filename including extension
      * @param xRes the horizontal resolution in pixels per pt (there are 72 pts in an inch)
      * @param yRes the horizontal resolution in pixels per pt (there are 72 pts in an inch)
+     * @param exportConfiguration a configuration object appropriate to the file format.
+     * See Document->exportImage for InfoObject details.
      * @return true if saving succeeded, false if it failed.
      */
-    bool save(const QString &filename, double xRes, double yRes);
+    bool save(const QString &filename, double xRes, double yRes, const InfoObject &exportConfiguration);
 
     /**
      * @brief mergeDown merges the given node with the first visible node underneath this node in the layerstack.
@@ -487,8 +494,9 @@ public Q_SLOTS:
 
     /**
      * @brief scaleNode
-     * @param width
-     * @param height
+     * @param origin the origin point
+     * @param width the width
+     * @param height the height
      * @param strategy the scaling strategy. There's several ones amongst these that aren't available in the regular UI.
      * <ul>
      * <li>Hermite</li>
@@ -501,7 +509,7 @@ public Q_SLOTS:
      * <li>Mitchell</li>
      * </ul>
      */
-    void scaleNode(const QPointF &origin, int width, int height, QString strategy);
+    void scaleNode(QPointF origin, int width, int height, QString strategy);
 
     /**
      * @brief rotateNode rotate this layer by the given radians.

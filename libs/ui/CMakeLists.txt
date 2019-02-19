@@ -1,6 +1,5 @@
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
-    ${EXIV2_INCLUDE_DIR}
 )
 
 include_directories(SYSTEM
@@ -266,7 +265,8 @@ set(kritaui_LIB_SRCS
     widgets/KoDualColorButton.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
-    
+    widgets/KisLayerStyleAngleSelector.cpp
+
     KisPaletteEditor.cpp
     dialogs/KisDlgPaletteEditor.cpp
 
@@ -530,6 +530,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     layerstyles/WdgStroke.ui
     layerstyles/wdgstylesselector.ui
     layerstyles/wdgTexture.ui
+    layerstyles/wdgKisLayerStyleAngleSelector.ui
 
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
@@ -544,7 +545,7 @@ add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
 target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
-                      kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES}
+                      kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} LibExiv2::LibExiv2
 )
 
 if (HAVE_QT_MULTIMEDIA)

@@ -188,7 +188,7 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
                 SLOT(canvasResourceChanged(int,QVariant)), Qt::UniqueConnection);
 
         connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()),
-                SLOT(reset()));
+                SLOT(reset()), Qt::UniqueConnection);
 
         connect(canvas->imageView()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)),
                 this,                               SLOT(updateLastUsedColorPreview(KoColor)), Qt::UniqueConnection);

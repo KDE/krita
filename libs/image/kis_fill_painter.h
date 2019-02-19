@@ -201,7 +201,7 @@ public:
         m_sizemod = sizemod;
     }
     
-    /** Sets how much to auto-grow or shrink (if @param sizemod is negative) the selection
+    /** Sets how much to auto-grow or shrink (if @p sizemod is negative) the selection
     flood before painting, this affects every fill operation except fillRect */
     int sizemod() {
         return m_sizemod;

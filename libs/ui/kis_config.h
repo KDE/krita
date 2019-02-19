@@ -434,8 +434,9 @@ public:
     void setDefaultBackgroundColor(QColor value);
 
     enum BackgroundStyle {
-        LAYER = 0,
-        PROJECTION = 1
+        RASTER_LAYER = 0,
+        CANVAS_COLOR = 1,
+        FILL_LAYER = 2
     };
 
     BackgroundStyle defaultBackgroundStyle(bool defaultValue = false) const;
@@ -587,6 +588,9 @@ public:
 
     static RootSurfaceFormat rootSurfaceFormat(QSettings *displayrc, bool defaultValue = false);
     static void setRootSurfaceFormat(QSettings *displayrc, RootSurfaceFormat value);
+
+    bool useZip64(bool defaultValue = false) const;
+    void setUseZip64(bool value);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

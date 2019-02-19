@@ -73,6 +73,7 @@ public:
     /**
      * This function initializes a wavelet structure
      * @param lay the layer that will be used for the transformation
+     * @param rect the rectangular for transformation
      */
     inline KisWavelet* initWavelet(KisPaintDeviceSP lay, const QRect&);
 
@@ -81,6 +82,7 @@ public:
     /**
      * This function reconstruct the layer from the information of a wavelet
      * @param src layer from which the wavelet will be computed
+     * @param rect the rectangular for reconstruction
      * @param buff if set to 0, the buffer will be initialized by the function,
      * you might want to give a buff to the function if you want to use the same buffer
      * in transformToWavelet and in untransformToWavelet, use initWavelet to initialize
@@ -91,6 +93,7 @@ public:
     /**
      * This function reconstruct the layer from the information of a wavelet
      * @param dst layer on which the wavelet will be untransform
+     * @param rect the rectangular for reconstruction
      * @param wav the wavelet
      * @param buff if set to 0, the buffer will be initialized by the function,
      * you might want to give a buff to the function if you want to use the same buffer

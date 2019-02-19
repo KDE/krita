@@ -2,13 +2,13 @@
 <ActionCollection version="2" name="SVG Tools">
   <Actions category="Text Tool">
     <text>SVG Text Tool</text>
-    <Action name="KritaTransform/KisToolMove">
+    <Action name="SvgTextTool">
       <icon></icon>
       <text>Text Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Text Tool</toolTip>
       <iconText>Text Tool</iconText>
-      <shortcut>CTRL+T</shortcut>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>

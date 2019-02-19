@@ -31,7 +31,6 @@
 DlgImagesplit::DlgImagesplit(KisViewManager* view, const QString &suffix, QStringList listMimeFilter, int defaultMimeIndex)
     : KoDialog(view->mainWindow())
 {
-
     m_page = new WdgImagesplit(this);
 
     setCaption(i18n("Image Split"));
@@ -79,6 +78,14 @@ void DlgImagesplit::lineEditEnable()
 bool DlgImagesplit::autoSave()
 {
     if (m_page->chkAutoSave->isChecked())
+        return true;
+    else
+        return false;
+}
+
+bool DlgImagesplit::sortHorizontal()
+{
+    if (m_page->chkHorizontal->isChecked())
         return true;
     else
         return false;

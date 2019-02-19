@@ -196,6 +196,7 @@ public:
      * Returns the tool for the given tool id. The tool may be 0
      * @param canvas the canvas that is a child of a previously registered controller
      *    who's tool you want.
+     * @param id the tool identifier
      * @see addController()
      */
     KoToolBase *toolById(KoCanvasBase *canvas, const QString &id) const;
@@ -276,7 +277,6 @@ Q_SIGNALS:
     /**
      * Emitted after the selection changed to state which unique shape-types are now
      * in the selection.
-     * @param canvas the currently active canvas.
      * @param types a list of string that are the shape types of the selected objects.
      */
     void toolCodesSelected(const QList<QString> &types);

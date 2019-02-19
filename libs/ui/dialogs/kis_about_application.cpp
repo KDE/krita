@@ -28,6 +28,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QDate>
 #include <QApplication>
 #include <QFile>
 #include <QDesktopServices>
@@ -35,7 +36,10 @@
 #include <klocalizedstring.h>
 
 #include "../../krita/data/splash/splash_screen.xpm"
+#include "../../krita/data/splash/splash_holidays.xpm"
 #include "../../krita/data/splash/splash_screen_x2.xpm"
+#include "../../krita/data/splash/splash_holidays_x2.xpm"
+
 #include "kis_splash_screen.h"
 
 KisAboutApplication::KisAboutApplication(QWidget *parent)
@@ -47,8 +51,17 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     vlayout->setMargin(0);
     QTabWidget *wdgTab = new QTabWidget;
     vlayout->addWidget(wdgTab);
+    KisSplashScreen *splash = 0;
 
-    KisSplashScreen *splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_screen_xpm), QPixmap(splash_screen_x2_xpm), true);
+    QDate currentDate = QDate::currentDate();
+    if (currentDate > QDate(currentDate.year(), 12, 4) ||
+            currentDate < QDate(currentDate.year(), 1, 9)) {
+        splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_holidays_xpm), QPixmap(splash_holidays_x2_xpm));
+    }
+    else {
+        splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_screen_xpm), QPixmap(splash_screen_x2_xpm));
+    }
+
     splash->setWindowFlags(Qt::Widget);
     splash->displayLinks(true);
     splash->setFixedSize(splash->sizeHint());

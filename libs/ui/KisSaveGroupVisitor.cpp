@@ -104,18 +104,18 @@ bool KisSaveGroupVisitor::visit(KisGroupLayer *layer)
         QRect r = m_image->bounds();
 
         KisDocument *exportDocument = KisPart::instance()->createDocument();
+        { // make sure dst is deleted before calling 'delete exportDocument',
+          // since KisDocument checks that its image is properly deref()'d.
+          KisImageSP dst = new KisImage(exportDocument->createUndoStore(), r.width(), r.height(), m_image->colorSpace(), layer->name());
+          dst->setResolution(m_image->xRes(), m_image->yRes());
+          exportDocument->setCurrentImage(dst);
+          KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", layer->opacity());
+          KisPainter gc(paintLayer->paintDevice());
+          gc.bitBlt(QPoint(0, 0), layer->projection(), r);
+          dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
 
-        KisImageSP dst = new KisImage(exportDocument->createUndoStore(), r.width(), r.height(), m_image->colorSpace(), layer->name());
-        dst->setResolution(m_image->xRes(), m_image->yRes());
-        exportDocument->setCurrentImage(dst);
-        KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", layer->opacity());
-        KisPainter gc(paintLayer->paintDevice());
-        gc.bitBlt(QPoint(0, 0), layer->projection(), r);
-        dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
-
-        dst->refreshGraph();
-
-
+          dst->refreshGraph();
+        }
 
         QString path = m_path + "/" + m_baseName + "_" + layer->name().replace(' ', '_') + '.' + m_extension;
         QUrl url = QUrl::fromLocalFile(path);

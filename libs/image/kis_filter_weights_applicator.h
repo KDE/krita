@@ -52,13 +52,13 @@ namespace tmp {
  * and offset (\p dx) parameters.
  *
  * Notation:
- * <pixel_name>_l -- leftmost border of the pixel
- * <pixel_name>_c -- center of the pixel
+ * \<pixel_name\>_l -- leftmost border of the pixel
+ * \<pixel_name\>_c -- center of the pixel
  *
  *
  * Example calculation of an offset (see calculateBlendSpan()):
  * scale = 0.5;
- * offset = <very small value>
+ * offset = \<very small value\>
  *
  *                    +------ dst_l
  *                    |
@@ -77,11 +77,11 @@ namespace tmp {
  *                       |++--- offset (near zero, measured in dst coordinates)
  *                       |
  *                       +-- _l position of the pixel, which is considered
- *                           cetral in the weights buffer
+ *                           central in the weights buffer
  *
  * Another example calculation of an offset (see calculateBlendSpan()):
  * scale = 0.5;
- * offset = <high value near 0.5>
+ * offset = \<high value near 0.5\>
  *
  *                      +------ dst_l
  *                      |
@@ -100,7 +100,7 @@ namespace tmp {
  *                          +|-+--- offset (near 0.5, measured in dst coordinates)
  *                           |
  *                           +-- _l position of the pixel, which is considered
- *                               cetral in the weights buffer
+ *                               central in the weights buffer
  */
 
 class KisFilterWeightsApplicator

@@ -210,6 +210,22 @@ void KisPaletteView::slotFGColorChanged(const KoColor &color)
     }
 }
 
+void KisPaletteView::slotFGColorResourceChanged(const KoColor& color)
+{
+    // This slot is called, because fg color was changed in the resource manager.
+    // To enable re-picking the swatch color again, we reset currentIndex
+    // of the selectionModel. We are not clearing the selection itself,
+    // so the user can see the swatch selected previously.
+    // See bug 402072
+    selectionModel()->clearCurrentIndex();
+    slotFGColorChanged(color);
+}
+
+void KisPaletteView::slotSelectColor(const KoColor &color)
+{
+    selectClosestColor(color);
+}
+
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 {
     if (m_d->model) {

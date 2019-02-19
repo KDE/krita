@@ -17,7 +17,6 @@
 #include "kis_xmp_io.h"
 
 #include <string>
-#include <exiv2/xmp.hpp>
 
 #include "kis_exiv2.h"
 
@@ -277,9 +276,8 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 const Exiv2::XmpArrayValue* xav = dynamic_cast<const Exiv2::XmpArrayValue*>(value.get());
                 Q_ASSERT(xav);
                 QList<KisMetaData::Value> array;
-                for (std::vector< std::string >::const_iterator it = xav->value_.begin();
-                        it != xav->value_.end(); ++it) {
-                    QString value = it->c_str();
+                for (int i = 0; i < xav->count(); ++i) {
+                    QString value = QString::fromStdString(xav->toString(i));
                     if (parser) {
                         array.push_back(parser->parse(value));
                     } else {

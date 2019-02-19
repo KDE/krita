@@ -47,7 +47,7 @@ DefaultToolFactory::~DefaultToolFactory()
 
 KoToolBase *DefaultToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new DefaultTool(canvas);
+    return new DefaultTool(canvas, true);
 }
 
 QList<QAction *> DefaultToolFactory::createActionsImpl()

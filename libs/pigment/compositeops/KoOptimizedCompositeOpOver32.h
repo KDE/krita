@@ -60,8 +60,8 @@ struct OptiDiv {
 
 template<typename channels_type, typename pixel_type, bool alphaLocked, bool allChannelsFlag>
 struct OverCompositor32 {
-    struct OptionalParams {
-        OptionalParams(const KoCompositeOp::ParameterInfo& params)
+    struct ParamsWrapper {
+        ParamsWrapper(const KoCompositeOp::ParameterInfo& params)
             : channelFlags(params.channelFlags)
         {
         }
@@ -70,7 +70,7 @@ struct OverCompositor32 {
 
     // \see docs in AlphaDarkenCompositor32
     template<bool haveMask, bool src_aligned, Vc::Implementation _impl>
-    static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const OptionalParams &oparams)
+    static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const ParamsWrapper &oparams)
     {
         Q_UNUSED(oparams);
 
@@ -160,7 +160,7 @@ struct OverCompositor32 {
     }
 
     template <bool haveMask, Vc::Implementation _impl>
-    static ALWAYS_INLINE void compositeOnePixelScalar(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, const OptionalParams &oparams)
+    static ALWAYS_INLINE void compositeOnePixelScalar(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, const ParamsWrapper &oparams)
     {
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;

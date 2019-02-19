@@ -48,6 +48,8 @@ ToolTransformArgs::ToolTransformArgs()
     , m_shearX(0.0)
     , m_shearY(0.0)
     , m_liquifyProperties(new KisLiquifyProperties())
+    , m_pixelPrecision(8)
+    , m_previewPixelPrecision(16)
 {
     KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
     QString savedFilterId = configGroup.readEntry("filterId", "Bicubic");
@@ -96,6 +98,8 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_filter = args.m_filter;
     m_flattenedPerspectiveTransform = args.m_flattenedPerspectiveTransform;
     m_editTransformPoints = args.m_editTransformPoints;
+    m_pixelPrecision = args.pixelPrecision();
+    m_previewPixelPrecision = args.previewPixelPrecision();
 
     if (args.m_liquifyWorker) {
         m_liquifyWorker.reset(new KisLiquifyTransformWorker(*args.m_liquifyWorker.data()));
@@ -166,7 +170,9 @@ bool ToolTransformArgs::operator==(const ToolTransformArgs& other) const
 
         ((m_liquifyWorker && other.m_liquifyWorker &&
           *m_liquifyWorker == *other.m_liquifyWorker)
-         || m_liquifyWorker == other.m_liquifyWorker);
+         || m_liquifyWorker == other.m_liquifyWorker) &&
+            m_pixelPrecision == other.m_pixelPrecision &&
+            m_previewPixelPrecision == other.m_previewPixelPrecision;
 }
 
 bool ToolTransformArgs::isSameMode(const ToolTransformArgs& other) const
@@ -227,7 +233,8 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
                                      KisWarpTransformWorker::WarpType warpType,
                                      double alpha,
                                      bool defaultPoints,
-                                     const QString &filterId)
+                                     const QString &filterId,
+                                     int pixelPrecision, int previewPixelPrecision)
     : m_mode(mode)
     , m_defaultPoints(defaultPoints)
     , m_origPoints {QVector<QPointF>()}
@@ -246,6 +253,8 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     , m_shearX(shearX)
     , m_shearY(shearY)
     , m_liquifyProperties(new KisLiquifyProperties())
+    , m_pixelPrecision(pixelPrecision)
+    , m_previewPixelPrecision(previewPixelPrecision)
 {
     setFilterId(filterId);
 }
@@ -358,6 +367,11 @@ void ToolTransformArgs::toXML(QDomElement *e) const
         KisDomUtils::saveValue(&warpEl, "warpType", (int)m_warpType); // limited!
         KisDomUtils::saveValue(&warpEl, "alpha", m_alpha);
 
+        if(m_mode == CAGE){
+            KisDomUtils::saveValue(&warpEl,"pixelPrecision",m_pixelPrecision);
+            KisDomUtils::saveValue(&warpEl,"previewPixelPrecision",m_previewPixelPrecision);
+        }
+
     } else if (m_mode == LIQUIFY) {
         QDomElement liqEl = doc.createElement("liquify_transform");
         e->appendChild(liqEl);
@@ -436,6 +450,12 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
 
             KisDomUtils::loadValue(warpEl, "warpType", &warpType) &&
             KisDomUtils::loadValue(warpEl, "alpha", &args.m_alpha);
+
+        if(args.m_mode == CAGE){
+            result = result &&
+                    KisDomUtils::loadValue(warpEl, "pixelPrecision", &args.m_pixelPrecision) &&
+                    KisDomUtils::loadValue(warpEl, "previewPixelPrecision", &args.m_previewPixelPrecision);
+        }
 
         if (result && warpType >= 0 && warpType < KisWarpTransformWorker::N_MODES) {
             args.m_warpType = (KisWarpTransformWorker::WarpType_) warpType;

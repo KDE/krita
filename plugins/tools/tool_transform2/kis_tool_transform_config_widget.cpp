@@ -54,6 +54,18 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     chkWorkRecursively->setChecked(workRecursively);
     connect(chkWorkRecursively, SIGNAL(toggled(bool)), this, SIGNAL(sigRestartTransform()));
 
+    // Granularity can only be specified in the power of 2's
+    QStringList granularityValues{"4","8","16","32"};
+    changeGranularity->addItems(granularityValues);
+    changeGranularity->setCurrentIndex(1);
+    granularityPreview->addItems(granularityValues);
+    granularityPreview->setCurrentIndex(2);
+
+    connect(changeGranularity,SIGNAL(currentIndexChanged(QString)),
+            this,SLOT(slotGranularityChanged(QString)));
+    connect(granularityPreview, SIGNAL(currentIndexChanged(QString)),
+            this,SLOT(slotPreviewGranularityChanged(QString)));
+
     // Init Filter  combo
     cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     cmbFilter->setCurrent("Bicubic");
@@ -612,6 +624,9 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
                 cageAddEditRadio->setChecked(true);
             else
                  cageDeformRadio->setChecked(true);
+
+            changeGranularity->setCurrentIndex(log2(config.pixelPrecision()) - 2);
+            granularityPreview->setCurrentIndex(log2(config.previewPixelPrecision()) - 2);
 
         }
 
@@ -1293,5 +1308,23 @@ void KisToolTransformConfigWidget::slotEditCagePoints(bool value)
     config->refTransformedPoints() = config->origPoints();
 
     config->setEditingTransformPoints(value);
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotGranularityChanged(QString value)
+{
+    if (m_uiSlotsBlocked) return;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(value.toInt() > 1);
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setPixelPrecision(value.toInt());
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotPreviewGranularityChanged(QString value)
+{
+    if (m_uiSlotsBlocked) return;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(value.toInt() > 1);
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setPreviewPixelPrecision(value.toInt());
     notifyConfigChanged();
 }

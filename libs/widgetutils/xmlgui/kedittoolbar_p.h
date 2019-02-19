@@ -149,7 +149,6 @@ public:
      * ...
      * \endcode
      *
-     * @param factory Your application's factory object
      * @param parent This widget's parent
      */
     explicit KEditToolBarWidget(QWidget *parent = 0L);

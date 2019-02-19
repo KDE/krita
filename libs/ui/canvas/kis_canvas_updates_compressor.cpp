@@ -25,7 +25,7 @@ bool KisCanvasUpdatesCompressor::putUpdateInfo(KisUpdateInfoSP info)
     if (newUpdateRect.isEmpty()) return false;
 
     QMutexLocker l(&m_mutex);
-    UpdateInfoList::iterator it = m_updatesList.begin();
+    KisUpdateInfoList::iterator it = m_updatesList.begin();
 
     while (it != m_updatesList.end()) {
         if (levelOfDetail == (*it)->levelOfDetail() &&
@@ -47,8 +47,10 @@ bool KisCanvasUpdatesCompressor::putUpdateInfo(KisUpdateInfoSP info)
     return m_updatesList.size() <= 1;
 }
 
-KisUpdateInfoSP KisCanvasUpdatesCompressor::takeUpdateInfo()
+void KisCanvasUpdatesCompressor::takeUpdateInfo(KisUpdateInfoList &list)
 {
+    KIS_SAFE_ASSERT_RECOVER(list.isEmpty()) { list.clear(); }
+
     QMutexLocker l(&m_mutex);
-    return !m_updatesList.isEmpty() ? m_updatesList.takeFirst() : 0;
+    m_updatesList.swap(list);
 }

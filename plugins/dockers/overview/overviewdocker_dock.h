@@ -20,11 +20,14 @@
 
 #include <QPointer>
 #include <QDockWidget>
+#include <kis_slider_spin_box.h>
 #include <KoCanvasObserverBase.h>
 
 #include <kis_canvas2.h>
 
 class QVBoxLayout;
+class QHBoxLayout;
+class QToolButton;
 class OverviewWidget;
 
 class OverviewDockerDock : public QDockWidget, public KoCanvasObserverBase {
@@ -35,10 +38,17 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
+public Q_SLOTS:
+    void rotateCanvasView(qreal rotation);
+    void updateSlider();
+
 private:
     QVBoxLayout *m_layout;
+    QHBoxLayout *m_horizontalLayout;
     OverviewWidget *m_overviewWidget;
     QWidget *m_zoomSlider;
+    KisDoubleSliderSpinBox *m_rotateSlider;
+    QToolButton *m_mirrorCanvas;
     QPointer<KisCanvas2> m_canvas;
 };
 

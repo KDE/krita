@@ -1,0 +1,17 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5d8a5cc..d53548a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -54,7 +54,11 @@ endif(UNIX OR MINGW)
+ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+ 
+ set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)")
+-set(LIB_DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Library directory name" FORCE)
++if (WIN32)
++    set(LIB_DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" CACHE STRING "Library directory name" FORCE)
++else()
++    set(LIB_DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Library directory name" FORCE)
++endif()
+ set(QUAZIP_LIB_TARGET_NAME quazip${QUAZIP_LIB_VERSION_SUFFIX} CACHE
+     INTERNAL "Target name of libquazip" FORCE)
+ 

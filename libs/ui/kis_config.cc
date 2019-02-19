@@ -1566,7 +1566,7 @@ void KisConfig::setDefaultBackgroundColor(QColor value)
 
 KisConfig::BackgroundStyle KisConfig::defaultBackgroundStyle(bool defaultValue) const
 {
-  return (KisConfig::BackgroundStyle)(defaultValue ? LAYER : m_cfg.readEntry("BackgroundStyleForNewImage", (int)LAYER));
+  return (KisConfig::BackgroundStyle)(defaultValue ? RASTER_LAYER : m_cfg.readEntry("BackgroundStyleForNewImage", (int)RASTER_LAYER));
 }
 
 void KisConfig::setDefaultBackgroundStyle(KisConfig::BackgroundStyle value)
@@ -2052,6 +2052,16 @@ void KisConfig::setRootSurfaceFormat(QSettings *displayrc, KisConfig::RootSurfac
         "bt709-g22";
 
     displayrc->setValue("rootSurfaceFormat", textValue);
+}
+
+bool KisConfig::useZip64(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("UseZip64", false);
+}
+
+void KisConfig::setUseZip64(bool value)
+{
+    m_cfg.writeEntry("UseZip64", value);
 }
 
 #include <QDomDocument>

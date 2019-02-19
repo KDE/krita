@@ -86,8 +86,8 @@ void MoveToolOptionsWidget::updateUIUnit(int newUnit)
     spinMoveStep->setValue(valueForUI);
     spinMoveStep->blockSignals(false);
 
-    connect(translateXBox, SIGNAL(editingFinished()), SIGNAL(sigRequestCommitOffsetChanges()));
-    connect(translateYBox, SIGNAL(editingFinished()), SIGNAL(sigRequestCommitOffsetChanges()));
+    connect(translateXBox, SIGNAL(editingFinished()), SIGNAL(sigRequestCommitOffsetChanges()), Qt::UniqueConnection);
+    connect(translateYBox, SIGNAL(editingFinished()), SIGNAL(sigRequestCommitOffsetChanges()), Qt::UniqueConnection);
 }
 
 void MoveToolOptionsWidget::on_spinMoveStep_valueChanged(double UIMoveStep)

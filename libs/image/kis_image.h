@@ -38,7 +38,6 @@
 
 #include <kritaimage_export.h>
 
-class KisDocument;
 class KoColorSpace;
 class KoColor;
 
@@ -79,7 +78,7 @@ class KRITAIMAGE_EXPORT KisImage : public QObject,
 
 public:
 
-    /// @param colorSpace can be null. in that case it will be initialised to a default color space.
+    /// @p colorSpace can be null. In that case, it will be initialised to a default color space.
     KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace, const QString& name);
     ~KisImage() override;
 
@@ -254,6 +253,7 @@ public:
      * The method will **drop** all the layer data outside \p newRect. Neither
      * image nor a layer will be moved anywhere
      *
+     * @param node node to crop
      * @param newRect the rectangle of the layer which will be cut-out
      *
      * Please note that the actual operation starts asynchronously in
@@ -278,8 +278,11 @@ public:
     /**
      * @brief start asynchronous operation on scaling a subtree of nodes starting at \p node
      * @param node node to scale
-     * @param scaleX, @param scaleY scale coefficient to be applied to the node
+     * @param center the center of the scaling
+     * @param scaleX x-scale coefficient to be applied to the node
+     * @param scaleY y-scale coefficient to be applied to the node
      * @param filterStrategy filtering strategy
+     * @param selection the selection we based on
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the image having new size
@@ -307,6 +310,7 @@ public:
      *
      * @param node the root of the subtree to rotate
      * @param radians rotation angle in radians
+     * @param selection the selection we based on
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the operation being completed
@@ -319,7 +323,7 @@ public:
      *
      * The image is resized to fit the sheared polygon
      *
-     * @param angleX, @param angleY are given in degrees.
+     * @p angleX, @p angleY are given in degrees.
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the operation being completed
@@ -333,7 +337,9 @@ public:
      * The image is not resized!
      *
      * @param node the root of the subtree to rotate
-     * @param angleX, @param angleY are given in degrees.
+     * @param angleX x-shear given in degrees.
+     * @param angleY y-shear given in degrees.
+     * @param selection the selection we based on
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the operation being completed
@@ -352,7 +358,7 @@ public:
      * Set the color space of  the projection (and the root layer)
      * to dstColorSpace. No conversion is done for other layers,
      * their colorspace can differ.
-     * NOTE: Note conversion is done, only regeneration, so no rendering
+     * @note No conversion is done, only regeneration, so no rendering
      * intent needed
      */
     void convertProjectionColorSpace(const KoColorSpace *dstColorSpace);
@@ -722,9 +728,7 @@ Q_SIGNALS:
 
     /**
      *  Emitted whenever an action has caused the image to be
-     *  recomposited.
-     *
-     * @param rc The rect that has been recomposited.
+     *  recomposited. Parameter is the rect that has been recomposited.
      */
     void sigImageUpdated(const QRect &);
 

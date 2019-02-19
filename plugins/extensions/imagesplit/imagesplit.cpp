@@ -65,16 +65,19 @@ bool Imagesplit::saveAsImage(const QRect &imgSize, const QString &mimeType, cons
 
     KisDocument *document = KisPart::instance()->createDocument();
 
-    KisImageSP dst = new KisImage(document->createUndoStore(), imgSize.width(), imgSize.height(), image->colorSpace(), image->objectName());
-    dst->setResolution(image->xRes(), image->yRes());
-    document->setCurrentImage(dst);
+    { // make sure dst is deleted before calling 'delete exportDocument',
+      // since KisDocument checks that its image is properly deref()'d.
+      KisImageSP dst = new KisImage(document->createUndoStore(), imgSize.width(), imgSize.height(), image->colorSpace(), image->objectName());
+      dst->setResolution(image->xRes(), image->yRes());
+      document->setCurrentImage(dst);
 
-    KisPaintLayer* paintLayer = new KisPaintLayer(dst, dst->nextLayerName(), 255);
-    KisPainter gc(paintLayer->paintDevice());
-    gc.bitBlt(QPoint(0, 0), image->projection(), imgSize);
+      KisPaintLayer* paintLayer = new KisPaintLayer(dst, dst->nextLayerName(), 255);
+      KisPainter gc(paintLayer->paintDevice());
+      gc.bitBlt(QPoint(0, 0), image->projection(), imgSize);
 
-    dst->addNode(paintLayer, KisNodeSP(0));
-    dst->refreshGraph();
+      dst->addNode(paintLayer, KisNodeSP(0));
+      dst->refreshGraph();
+    }
     document->setFileBatchMode(true);
     if (!document->exportDocumentSync(QUrl::fromLocalFile(url), mimeType.toLatin1())) {
         if (document->errorMessage().isEmpty()) {
@@ -99,13 +102,14 @@ void Imagesplit::slotImagesplit()
     // Getting all mime types and converting them into names which are displayed at combo box
     QStringList listMimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
     QString defaultMime = QString::fromLatin1(viewManager()->document()->mimeType());
+    if (defaultMime.isEmpty()) defaultMime = QString::fromLatin1(viewManager()->document()->nativeFormatMimeType());
     int defaultMimeIndex = 0;
 
     listMimeFilter.sort();
     QStringList filteredMimeTypes;
     QStringList listFileType;
     int i = 0;
-    Q_FOREACH (const QString & mimeType, listMimeFilter) {
+    Q_FOREACH (const QString &mimeType, listMimeFilter) {
         listFileType.append(KisMimeDatabase::descriptionForMimeType(mimeType));
         filteredMimeTypes.append(mimeType);
         if (mimeType == defaultMime) {
@@ -134,6 +138,12 @@ void Imagesplit::slotImagesplit()
 
 
         bool stop = false;
+
+        QString mimeType;
+        QString filepath;
+        QString homepath;
+        QString suffix;
+
         if (dlgImagesplit->autoSave()) {
             KoFileDialog dialog(viewManager()->mainWindow(), KoFileDialog::OpenDirectory, "OpenDocument");
             dialog.setCaption(i18n("Save Image on Split"));
@@ -146,59 +156,73 @@ void Imagesplit::slotImagesplit()
 
             if (directory.isEmpty())
                 return;
-            for (int i = 0, k = 1; i < (numVerticalLines + 1); i++) {
-                for (int j = 0; j < (numHorizontalLines + 1); j++, k++) {
-                    QString mimeTypeSelected = listMimeFilter.at(dlgImagesplit->cmbIndex);
-                    QString homepath = directory.toLocalFile();
-                    QString suffix = KisMimeDatabase::suffixesForMimeType(mimeTypeSelected).first();
-                    qDebug() << "suffix" << suffix;
-                    if (suffix.startsWith("*.")) {
-                        suffix = suffix.remove(0, 1);
-                    }
-                    qDebug() << "\tsuffix" << suffix;
-                    if (!suffix.startsWith(".")) {
-                        suffix = suffix.prepend('.');
-                    }
-                    qDebug() << "\tsuffix" << suffix;
-                    QString fileName = dlgImagesplit->suffix() + '_' + QString::number(k) + suffix;
-                    QString url = homepath  + '/' + fileName;
-                    if (!saveAsImage(QRect((i * img_width), (j * img_height), img_width, img_height), listMimeFilter.at(dlgImagesplit->cmbIndex), url)) {
-                        stop = true;
-                        break;
-                    }
-                }
-                if (stop) {
-                    break;
-                }
+
+            mimeType = listMimeFilter.at(dlgImagesplit->cmbIndex);
+            homepath = directory.toLocalFile();
+            suffix = KisMimeDatabase::suffixesForMimeType(mimeType).first();
+            if (suffix.startsWith("*.")) {
+                suffix = suffix.remove(0, 1);
             }
+            if (!suffix.startsWith(".")) {
+                suffix = suffix.prepend('.');
+            }
+	    }
+
+        int outerLoop;
+        int innerLoop;
+
+        if (dlgImagesplit->sortHorizontal()) {
+            outerLoop = numHorizontalLines + 1;
+            innerLoop = numVerticalLines + 1;
         }
         else {
+            outerLoop = numVerticalLines + 1;
+            innerLoop = numHorizontalLines + 1;
+        }
 
-            for (int i = 0; i < (numVerticalLines + 1); i++) {
-                for (int j = 0; j < (numHorizontalLines + 1); j++) {
+
+        for (int i = 0, k = 1; i < outerLoop; i++) {
+            for (int j = 0; j < innerLoop; j++, k++) {
+                int row;
+                int column;
+                if (dlgImagesplit->sortHorizontal()) {
+                    row = i;
+                    column = j;
+                }
+                else {
+                    row = j;
+                    column = i;
+                }
+
+                if (dlgImagesplit->autoSave()) {
+                    QString fileName = dlgImagesplit->suffix() + '_' + QString::number(k) + suffix;
+                    filepath = homepath  + '/' + fileName;
+		            mimeType = listMimeFilter.at(dlgImagesplit->cmbIndex);
+	            }
+                else {
                     KoFileDialog dialog(viewManager()->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
                     dialog.setCaption(i18n("Save Image on Split"));
                     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
                     dialog.setMimeTypeFilters(listMimeFilter, defaultMime);
 
                     QUrl url = QUrl::fromUserInput(dialog.filename());
+                    filepath = url.toLocalFile();
 
-                    QString mimefilter = KisMimeDatabase::mimeTypeForFile(url.toLocalFile(), false);
+                    mimeType = KisMimeDatabase::mimeTypeForFile(url.toLocalFile(), false);
 
                     if (url.isEmpty())
                         return;
-                    if (!saveAsImage(QRect((i * img_width), (j * img_height), img_width, img_height), mimefilter, url.toLocalFile())) {
-                        stop = true;
-                        break;
-                    }
+
                 }
-                if (stop) {
+                if (!saveAsImage(QRect((column * img_width), (row * img_height), img_width, img_height), mimeType, filepath)) {
+                    stop = true;
                     break;
                 }
             }
-
+            if (stop) {
+                break;
+            }
         }
-
     }
     delete dlgImagesplit;
 }

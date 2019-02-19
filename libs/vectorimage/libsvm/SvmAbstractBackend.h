@@ -82,7 +82,7 @@ public:
        (unfilled polyline).
 
        \param context the graphics context to be used when drawing the polyline
-       \param polygon the sequence of points that describe the line
+       \param polyline the sequence of points that describe the line
 
        \note the line is not meant to be closed nor filled, i.e. do
        not connect the last point to the first point.

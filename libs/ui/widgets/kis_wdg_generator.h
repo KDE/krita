@@ -24,6 +24,7 @@
 
 class KisFilterConfiguration;
 class KisViewManager;
+class KoColor;
 
 /**
  * A widget that allows users to select a generator and
@@ -51,9 +52,10 @@ public:
 
     KisFilterConfigurationSP  configuration();
 
+Q_SIGNALS:
+    void previewConfiguration();
 
 private Q_SLOTS:
-
     void slotGeneratorActivated(int);
 
 private:

@@ -151,8 +151,10 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
 
     KisConfig::BackgroundStyle bgStyle = cfg.defaultBackgroundStyle();
 
-    if (bgStyle == KisConfig::LAYER) {
-      radioBackgroundAsLayer->setChecked(true);
+    if (bgStyle == KisConfig::RASTER_LAYER) {
+      radioBackgroundAsRaster->setChecked(true);
+    } else if (bgStyle == KisConfig::FILL_LAYER) {
+      radioBackgroundAsFill->setChecked(true);
     } else {
       radioBackgroundAsProjection->setChecked(true);
     }
@@ -258,7 +260,6 @@ void KisCustomImageWidget::createImage()
 
 KisDocument* KisCustomImageWidget::createNewImage()
 {
-
     const KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
 
     if (cs->colorModelId() == RGBAColorModelID &&
@@ -303,15 +304,20 @@ KisDocument* KisCustomImageWidget::createNewImage()
     qc.setAlpha(backgroundOpacity());
     KoColor bgColor(qc, cs);
 
-    bool backgroundAsLayer = radioBackgroundAsLayer->isChecked();
+    KisConfig::BackgroundStyle bgStyle = KisConfig::CANVAS_COLOR;
+    if( radioBackgroundAsRaster->isChecked() ){
+        bgStyle = KisConfig::RASTER_LAYER;
+    } else if( radioBackgroundAsFill->isChecked() ){
+        bgStyle = KisConfig::FILL_LAYER;
+    }
 
-    doc->newImage(txtName->text(), width, height, cs, bgColor, backgroundAsLayer, intNumLayers->value(), txtDescription->toPlainText(), resolution);
+    doc->newImage(txtName->text(), width, height, cs, bgColor, bgStyle, intNumLayers->value(), txtDescription->toPlainText(), resolution);
 
     KisConfig cfg(true);
     cfg.setNumDefaultLayers(intNumLayers->value());
     cfg.setDefaultBackgroundOpacity(backgroundOpacity());
     cfg.setDefaultBackgroundColor(cmbColor->color().toQColor());
-    cfg.setDefaultBackgroundStyle(backgroundAsLayer ? KisConfig::LAYER : KisConfig::PROJECTION);
+    cfg.setDefaultBackgroundStyle(bgStyle);
 
     return doc;
 }

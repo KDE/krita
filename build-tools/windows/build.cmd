@@ -710,6 +710,7 @@ set EXT_TARGETS=patch png2ico zlib lzma gettext qt boost eigen3 exiv2 fftw3 ilmb
 set EXT_TARGETS=%EXT_TARGETS% jpeg lcms2 ocio openexr png tiff gsl vc libraw
 set EXT_TARGETS=%EXT_TARGETS% giflib freetype poppler kwindowsystem drmingw gmic
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
+set EXT_TARGETS=%EXT_TARGETS% quazip
 
 for %%a in (%EXT_TARGETS%) do (
     echo Building ext_%%a...
@@ -735,6 +736,20 @@ if errorlevel 1 (
 )
 
 echo Running CMake for Krita...
+echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
+    -DBoost_DEBUG=OFF ^
+    -DBOOST_INCLUDEDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/include ^
+    -DBOOST_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
+    -DBOOST_LIBRARYDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/lib ^
+    -DCMAKE_PREFIX_PATH=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
+    -DCMAKE_INSTALL_PREFIX=%BUILDDIR_KRITA_INSTALL_CMAKE% ^
+    -DBUILD_TESTING=OFF ^
+    -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
+    -DFOUNDATION_BUILD=ON ^
+    -Wno-dev ^
+    -G "MinGW Makefiles" ^
+    -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
+
 "%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DBoost_DEBUG=OFF ^
     -DBOOST_INCLUDEDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/include ^

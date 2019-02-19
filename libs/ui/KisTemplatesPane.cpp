@@ -81,21 +81,16 @@ KisTemplatesPane::KisTemplatesPane(QWidget* parent, const QString& header,
         item->setData(preview, Qt::UserRole + 2);
         rootItem->appendRow(item);
 
-        if (d->m_alwaysUseTemplate == t->file()) {
-            selectItem = item;
-        }
-        else {
-            if (templateFileInfo.exists()) {
-                if (!selectItem && (t->file() == fullTemplateName)) {
-                    selectItem = item;
-                }
-            }
-            else {
-                if (!selectItem && QFileInfo(t->file()).fileName() == templateFileInfo.fileName()) {
-                    selectItem = item;
-                }
-            }
-        }
+		if (templateFileInfo.exists()) {
+			if (!selectItem && (t->file() == fullTemplateName)) {
+				selectItem = item;
+			}
+		}
+		else {
+			if (!selectItem && QFileInfo(t->file()).fileName() == templateFileInfo.fileName()) {
+				selectItem = item;
+			}
+		}
 
         if (defaultTemplate && (t->file() == defaultTemplate->file())) {
             defaultItem = item;

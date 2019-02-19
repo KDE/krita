@@ -32,6 +32,7 @@
 #include <QSettings>
 #include <QByteArray>
 #include <QMessageBox>
+#include <QThread>
 
 #if QT_VERSION >= 0x050900
 #include <QOperatingSystemVersion>
@@ -54,6 +55,8 @@
 #include "KisApplicationArguments.h"
 #include <opengl/kis_opengl.h>
 #include "input/KisQtWidgetsTweaker.h"
+#include <KisUsageLogger.h>
+#include <kis_image_config.h>
 
 #if defined Q_OS_WIN
 #include <windows.h>
@@ -152,21 +155,22 @@ extern "C" int main(int argc, char **argv)
 #endif
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
 
     bool singleApplication = true;
     bool enableOpenGLDebug = false;
     bool openGLDebugSynchronous = false;
+    bool logUsage = true;
     {
-        QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+
         singleApplication = kritarc.value("EnableSingleApplication", true).toBool();
-#if QT_VERSION >= 0x050600
         if (kritarc.value("EnableHiDPI", true).toBool()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
         if (!qgetenv("KRITA_HIDPI").isEmpty()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
-#endif
+
         if (!qgetenv("KRITA_OPENGL_DEBUG").isEmpty()) {
             enableOpenGLDebug = true;
         } else {
@@ -178,6 +182,8 @@ extern "C" int main(int argc, char **argv)
 
         KisConfig::RootSurfaceFormat rootSurfaceFormat = KisConfig::rootSurfaceFormat(&kritarc);
         KisOpenGL::OpenGLRenderer preferredRenderer = KisOpenGL::RendererAuto;
+
+        logUsage = kritarc.value("LogUsage", true).toBool();
 
         const QString preferredRendererString = kritarc.value("OpenGLRenderer", "auto").toString();
         preferredRenderer = KisOpenGL::convertConfigToOpenGLRenderer(preferredRendererString);
@@ -203,6 +209,10 @@ extern "C" int main(int argc, char **argv)
         // HACK: https://bugs.kde.org/show_bug.cgi?id=390651
         resetRotation();
 #endif
+    }
+
+    if (logUsage) {
+        KisUsageLogger::initialize();
     }
 
 
@@ -467,11 +477,22 @@ extern "C" int main(int argc, char **argv)
     QObject::connect(&app, SIGNAL(fileOpenRequest(QString)),
                      &app, SLOT(fileOpenRequested(QString)));
 
+    // Hardware information
+    KisUsageLogger::write("\nHardware Information\n");
+    KisUsageLogger::write(QString("  GPU Acceleration: %1").arg(kritarc.value("OpenGLRenderer", "auto").toString()));
+    KisUsageLogger::write(QString("  Memory: %1 Mb").arg(KisImageConfig(true).totalRAM()));
+    KisUsageLogger::write(QString("  Number of Cores: %1").arg(QThread::idealThreadCount()));
+    KisUsageLogger::write(QString("  Swap Location: %1\n").arg(KisImageConfig(true).swapDir()));
+
     int state = app.exec();
 
     {
         QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
         kritarc.setValue("canvasState", "OPENGL_SUCCESS");
+    }
+
+    if (logUsage) {
+        KisUsageLogger::close();
     }
 
     return state;

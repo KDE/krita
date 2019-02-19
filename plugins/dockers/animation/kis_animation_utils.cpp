@@ -85,9 +85,14 @@ namespace KisAnimationUtils {
                             //shortcut: clearing the image instead
                             KisPaintDeviceSP device = node->paintDevice();
                             if (device) {
+                                const QRect dirtyRect = device->extent();
+
                                 KisTransaction transaction(kundo2_i18n("Clear"), device, cmd.data());
                                 device->clear();
                                 (void) transaction.endAndTake(); // saved as 'parent'
+
+                                node->setDirty(dirtyRect);
+
                                 result = true;
                             }
                         }

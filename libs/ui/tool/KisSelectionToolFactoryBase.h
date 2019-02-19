@@ -31,7 +31,7 @@ protected:
     QList<QAction *> createActionsImpl() override;
 };
 
-class KRITAUI_EXPORT KisToolPolyLineFactoryBase : public KisSelectionToolFactoryBase
+class KRITAUI_EXPORT KisToolPolyLineFactoryBase : public KisToolPaintFactoryBase
 {
 public:
     explicit KisToolPolyLineFactoryBase(const QString &id);

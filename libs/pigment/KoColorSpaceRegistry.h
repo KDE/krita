@@ -29,6 +29,7 @@
 #include <KoGenericRegistry.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceFactory.h>
+#include <KoConfig.h>
 
 class KoColorProfile;
 class KoColorConversionSystem;
@@ -239,7 +240,6 @@ public:
      */
     const KoColorSpace *alpha8();
     const KoColorSpace *alpha16();
-#include <KoConfig.h>
 #ifdef HAVE_OPENEXR
     const KoColorSpace *alpha16f();
 #endif

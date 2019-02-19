@@ -23,9 +23,14 @@
 #include <opengl/kis_opengl.h>
 #include <KritaVersionWrapper.h>
 #include <QSysInfo>
-
+#include <kis_image_config.h>
 #include <QDesktopWidget>
 #include <QClipboard>
+#include <QThread>
+#include <QFile>
+#include <QFileInfo>
+#include <QSettings>
+#include <QStandardPaths>
 
 #include "kis_document_aware_spin_box_unit_manager.h"
 
@@ -45,33 +50,50 @@ DlgBugInfo::DlgBugInfo(QWidget *parent)
 
     QString info;
 
-    // Krita version info
-    info.append("Krita");
-    info.append("\n  Version: ").append(KritaVersionWrapper::versionString(true));
-    info.append("\n\n");
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
 
-    info.append("Qt");
-    info.append("\n  Version (compiled): ").append(QT_VERSION_STR);
-    info.append("\n  Version (loaded): ").append(qVersion());
-    info.append("\n\n");
+    if (!kritarc.value("LogUsage", true).toBool() || !QFileInfo(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log").exists()) {
 
-    // OS information
-    info.append("OS Information");
-    info.append("\n  Build ABI: ").append(QSysInfo::buildAbi());
-    info.append("\n  Build CPU: ").append(QSysInfo::buildCpuArchitecture());
-    info.append("\n  CPU: ").append(QSysInfo::currentCpuArchitecture());
-    info.append("\n  Kernel Type: ").append(QSysInfo::kernelType());
-    info.append("\n  Kernel Version: ").append(QSysInfo::kernelVersion());
-    info.append("\n  Pretty Productname: ").append(QSysInfo::prettyProductName());
-    info.append("\n  Product Type: ").append(QSysInfo::productType());
-    info.append("\n  Product Version: ").append(QSysInfo::productVersion());
-    info.append("\n");
+        // NOTE: This is intentionally not translated!
 
-    // OpenGL information
-    info.append("\n").append(KisOpenGL::getDebugText());
+        // Krita version info
+        info.append("Krita");
+        info.append("\n  Version: ").append(KritaVersionWrapper::versionString(true));
+        info.append("\n\n");
 
-    // Installation information
+        info.append("Qt");
+        info.append("\n  Version (compiled): ").append(QT_VERSION_STR);
+        info.append("\n  Version (loaded): ").append(qVersion());
+        info.append("\n\n");
 
+        // OS information
+        info.append("OS Information");
+        info.append("\n  Build ABI: ").append(QSysInfo::buildAbi());
+        info.append("\n  Build CPU: ").append(QSysInfo::buildCpuArchitecture());
+        info.append("\n  CPU: ").append(QSysInfo::currentCpuArchitecture());
+        info.append("\n  Kernel Type: ").append(QSysInfo::kernelType());
+        info.append("\n  Kernel Version: ").append(QSysInfo::kernelVersion());
+        info.append("\n  Pretty Productname: ").append(QSysInfo::prettyProductName());
+        info.append("\n  Product Type: ").append(QSysInfo::productType());
+        info.append("\n  Product Version: ").append(QSysInfo::productVersion());
+        info.append("\n\n");
+
+        // OpenGL information
+        info.append("\n").append(KisOpenGL::getDebugText());
+        info.append("\n\n");
+        // Hardware information
+        info.append("Hardware Information");
+        info.append(QString("\n Memory: %1").arg(KisImageConfig(true).totalRAM() / 1024)).append(" Gb");
+        info.append(QString("\n Cores: %1").arg(QThread::idealThreadCount()));
+        info.append("\n Swap: ").append(KisImageConfig(true).swapDir());
+    }
+    else {
+        QFile f(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log");
+        f.open(QFile::ReadOnly);
+        info = QString::fromUtf8(f.readAll());
+        f.close();
+    }
     // calculate a default height for the widget
     int wheight = m_page->sizeHint().height();
     m_page->txtBugInfo->setText(info);

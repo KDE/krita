@@ -105,13 +105,13 @@ public:
     QRect dirtyImageRectVar;
 
     /**
-     * Rect of KisImage corresponding to @viewportRect.
+     * Rect of KisImage corresponding to @ref viewportRect .
      * It is cropped and aligned corresponding to the canvas.
      */
     QRect imageRect;
 
     /**
-     * Rect of canvas widget corresponding to @imageRect
+     * Rect of canvas widget corresponding to @ref imageRect
      */
     QRectF viewportRect;
 

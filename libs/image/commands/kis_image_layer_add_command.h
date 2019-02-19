@@ -34,7 +34,11 @@ public:
     /**
      * Constructor
      * @param image The image the command will be working on.
-     * @param layer the layer to add
+     * @param layer The layer to add
+     * @param parent The parent node
+     * @param aboveThis The node above this
+     * @param doRedoUpdates Whether to make the redo updates
+     * @param doUndoUpdates Whether to make the undo updates
      */
     KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, KisNodeSP aboveThis, bool doRedoUpdates = true, bool doUndoUpdates = true);
     KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, quint32 index, bool doRedoUpdates = true, bool doUndoUpdates = true);

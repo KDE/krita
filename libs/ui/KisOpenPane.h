@@ -42,8 +42,9 @@ class KisOpenPane : public QDialog
 public:
     /**
      * Constructor
-     * @param parent the parent widget
-     * @param templateType the template-type (group) that should be selected on creation.
+     * @param parent the parent widget.
+     * @param mimeFilter the template-type (group) that should be selected on creation.
+     * @param templatesResourcePath the path to the templates.
      */
     KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const QString& templatesResourcePath = QString());
     ~KisOpenPane() override;

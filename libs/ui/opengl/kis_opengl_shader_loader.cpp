@@ -101,7 +101,6 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
         // OpenColorIO doesn't support the new GLSL version yet.
         fragSource.append("#define texture2D texture\n");
         fragSource.append("#define texture3D texture\n");
-
     } else {
         fragSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
     }

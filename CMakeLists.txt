@@ -168,12 +168,6 @@ if (WIN32)
     endif (MINGW)
 endif ()
 
-if (UNIX AND NOT APPLE)
-option(USE_QT_XCB "Do not use Krita's forked XCB connection and tablet support on X11, but leave everything to Qt." OFF)
-configure_file(config_use_qt_xcb.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_use_qt_xcb.h)
-add_feature_info("Use Qt's XCB and Tablet support on X11" USE_QT_XCB "Do not use Krita's forked XCB connection and tablet support on X11, but leave everything to Qt.")
-endif()
-
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
 configure_file(config-hide-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hide-safe-asserts.h)
 add_feature_info("Hide Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
@@ -279,7 +273,6 @@ include(KDECompilerSettings)
 # do not reorder to be alphabetical: this is the order in which the frameworks
 # depend on each other.
 find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
-        Archive
         Config
         WidgetsAddons
         Completion
@@ -312,6 +305,16 @@ find_package(Qt5 ${MIN_QT_VERSION}
         Test
         Concurrent
 )
+
+if (UNIX AND NOT APPLE)
+    if (${Qt5_VERSION} VERSION_GREATER "5.11")
+        set (USE_QT_XCB ON)
+    else()
+        option(USE_QT_XCB "Do not use Krita's forked XCB connection and tablet support on X11, but leave everything to Qt." OFF)
+        add_feature_info("Use Qt's XCB and Tablet support on X11" USE_QT_XCB "Do not use Krita's forked XCB connection and tablet support on X11, but leave everything to Qt.")
+    endif()
+    configure_file(config_use_qt_xcb.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_use_qt_xcb.h)
+endif()
 
 include (MacroAddFileDependencies)
 include (MacroBoolTo01)
@@ -572,7 +575,7 @@ set_package_properties(PythonLibrary PROPERTIES
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYTHONLIBS_FOUND HAVE_PYTHONLIBS)
 
-find_package(SIP "4.18.0")
+find_package(SIP "4.19.13")
 set_package_properties(SIP PROPERTIES
     DESCRIPTION "Support for generating SIP Python bindings"
     URL "https://www.riverbankcomputing.com/software/sip/download"
@@ -611,11 +614,7 @@ set_package_properties(Eigen3 PROPERTIES
 ##
 ## Test for exiv2
 ##
-find_package(Exiv2 0.16 REQUIRED)
-set_package_properties(Exiv2 PROPERTIES
-    DESCRIPTION "Image metadata library and tools"
-    URL "http://www.exiv2.org"
-    PURPOSE "Required by Krita")
+find_package(LibExiv2 0.16 REQUIRED)
 
 ##
 ## Test for lcms
@@ -707,6 +706,25 @@ set_package_properties(Poppler PROPERTIES
     URL "http://poppler.freedesktop.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita PDF filter.")
+
+
+##
+## Test for quazip
+## 
+find_package(QuaZip 0.6)
+set_package_properties(QuaZip PROPERTIES
+    DESCRIPTION "A library for reading and writing zip files"
+    URL "https://stachenov.github.io/quazip/"
+    TYPE REQUIRED
+    PURPOSE "Needed for reading and writing KRA and ORA files"
+)
+
+
+
+##
+## Test for Atomics
+##
+include(CheckAtomic)
 
  ############################
 #############################

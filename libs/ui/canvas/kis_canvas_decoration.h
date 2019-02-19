@@ -57,9 +57,12 @@ public:
     bool visible() const;
 
     /**
-     * Will paint the decoration on the QPainter, if the visible is set to true.
+     * Will paint the decoration on the QPainter, if the visible is set to @c true.
      *
+     * @param gc the painter
      * @param updateRect dirty rect in document pixels
+     * @param converter coordinate converter
+     * @param canvas the canvas
      */
     void paint(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 

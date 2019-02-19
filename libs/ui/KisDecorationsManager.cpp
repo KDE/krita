@@ -85,7 +85,7 @@ void KisDecorationsManager::setView(QPointer<KisView> imageView)
     }
 
     if (m_imageView && referenceImagesDecoration()) {
-        connect(m_toggleReferenceImages, SIGNAL(triggered(bool)), referenceImagesDecoration(), SLOT(setVisible(bool)));
+        connect(m_toggleReferenceImages, SIGNAL(triggered(bool)), referenceImagesDecoration(), SLOT(setVisible(bool)), Qt::UniqueConnection);
     }
 
 

@@ -223,7 +223,7 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
             readLine.rewind();
             field = readLine.nextField();
             step = 4;
-            /* Falls through */
+            Q_FALLTHROUGH();
 
         case 4 :    //level header
 
@@ -266,7 +266,7 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
 
             step = 5;
 
-            /* Falls through */
+            Q_FALLTHROUGH();
 
         case 5 :    //frames
 

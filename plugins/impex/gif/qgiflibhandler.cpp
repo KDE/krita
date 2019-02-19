@@ -90,7 +90,7 @@ bool QGIFLibHandler::read ( QImage * image )
             leftCol = gifFile->Image.Left;
             width = gifFile->Image.Width;
             height = gifFile->Image.Height;
-            qDebug("Image %d at (%d, %d) [%dx%d]", ++imageNum, leftCol, topRow, width, height);
+            //qDebug("Image %d at (%d, %d) [%dx%d]", ++imageNum, leftCol, topRow, width, height);
             if (gifFile->Image.Left + width > gifFile->SWidth ||
                     gifFile->Image.Top + height > gifFile->SHeight)
             {

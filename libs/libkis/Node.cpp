@@ -52,6 +52,7 @@
 #include <kis_keyframe.h>
 #include "kis_selection.h"
 
+#include "InfoObject.h"
 #include "Krita.h"
 #include "Node.h"
 #include "Channel.h"
@@ -215,20 +216,23 @@ void Node::setColorLabel(int index)
 QString Node::colorDepth() const
 {
     if (!d->node) return "";
-    return d->node->colorSpace()->colorDepthId().id();
+    if (!d->node->projection()) return d->node->colorSpace()->colorDepthId().id();
+    return d->node->projection()->colorSpace()->colorDepthId().id();
 }
 
 QString Node::colorModel() const
 {
     if (!d->node) return "";
-    return d->node->colorSpace()->colorModelId().id();
+    if (!d->node->projection()) return d->node->colorSpace()->colorModelId().id();
+    return d->node->projection()->colorSpace()->colorModelId().id();
 }
 
 
 QString Node::colorProfile() const
 {
     if (!d->node) return "";
-    return d->node->colorSpace()->profile()->name();
+    if (!d->node->projection()) return d->node->colorSpace()->profile()->name();
+    return d->node->projection()->colorSpace()->profile()->name();
 }
 
 bool Node::setColorProfile(const QString &colorProfile)
@@ -420,6 +424,24 @@ bool Node::visible() const
     return d->node->visible();
 }
 
+bool Node::hasKeyframeAtTime(int frameNumber)
+{
+    if (!d->node || !d->node->isAnimated()) return false;
+
+    KisRasterKeyframeChannel *rkc = dynamic_cast<KisRasterKeyframeChannel*>(d->node->getKeyframeChannel(KisKeyframeChannel::Content.id()));
+    if (!rkc) return false;
+
+    KisKeyframeSP timeOfCurrentKeyframe = rkc->keyframeAt(frameNumber);
+
+    if (!timeOfCurrentKeyframe) {
+        return false;
+    }
+
+    // do an assert just to be careful
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(timeOfCurrentKeyframe->time() == frameNumber, false);
+    return true;
+}
+
 void Node::setVisible(bool visible)
 {
     if (!d->node) return;
@@ -470,6 +492,8 @@ QByteArray Node::projectionPixelData(int x, int y, int w, int h) const
     if (!d->node) return ba;
 
     KisPaintDeviceSP dev = d->node->projection();
+    if (!dev) return ba;
+
     ba.resize(w * h * dev->pixelSize());
     dev->readBytes(reinterpret_cast<quint8*>(ba.data()), x, y, w, h);
     return ba;
@@ -515,7 +539,7 @@ Node* Node::duplicate()
     return new Node(d->image, d->node->clone());
 }
 
-bool Node::save(const QString &filename, double xRes, double yRes)
+bool Node::save(const QString &filename, double xRes, double yRes, const InfoObject &exportConfiguration)
 {
     if (!d->node) return false;
     if (filename.isEmpty()) return false;
@@ -540,7 +564,7 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     dst->cropImage(bounds);
     dst->initialRefreshGraph();
 
-    bool r = doc->exportDocumentSync(QUrl::fromLocalFile(filename), mimeType.toLatin1());
+    bool r = doc->exportDocumentSync(QUrl::fromLocalFile(filename), mimeType.toLatin1(), exportConfiguration.configuration());
     if (!r) {
         qWarning() << doc->errorMessage();
     }
@@ -559,7 +583,7 @@ Node* Node::mergeDown()
     return new Node(d->image, d->node->prevSibling());
 }
 
-void Node::scaleNode(const QPointF &origin, int width, int height, QString strategy)
+void Node::scaleNode(QPointF origin, int width, int height, QString strategy)
 {
     if (!d->node) return;
     if (!qobject_cast<KisLayer*>(d->node.data())) return;

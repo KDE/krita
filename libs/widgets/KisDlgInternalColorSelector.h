@@ -95,7 +95,8 @@ public:
      * the KoColor you want.
      * @param color - The current color. Make sure this is in the color space you want your
      * end color to be in.
-     * @param chooseAlpha - Whether or not the alpha-choosing functionality should be used.
+     * @param parent parent widget.
+     * @param caption the dialog caption.
      */
     static KoColor getModalColorDialog(const KoColor color, QWidget* parent = Q_NULLPTR, QString caption = QString());
 

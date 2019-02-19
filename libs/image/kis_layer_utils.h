@@ -133,8 +133,6 @@ namespace KisLayerUtils
         KisImageSP m_image;
     };
 
-    KRITAIMAGE_EXPORT KisLayerSP constructDefaultLayer(KisImageSP image);
-
     class KRITAIMAGE_EXPORT RemoveNodeHelper {
     public:
         virtual ~RemoveNodeHelper();

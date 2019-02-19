@@ -77,19 +77,19 @@ public:
     /**
      * add an entry with a dialog window.
      * @warning deprecated.
-     * kept for compatibility with @ref PaletteView in @ref libkis
+     * kept for compatibility with PaletteView in libkis
      */
     bool addEntryWithDialog(KoColor color);
     /**
      * remove entry with a dialog window.(Necessary for groups.
      * @warning deprecated.
-     * kept for compatibility with @ref PaletteView in @ref libkis
+     * kept for compatibility with PaletteView in libkis
      */
     bool removeEntryWithDialog(QModelIndex index);
     /**
      * add entry with a dialog window.
      * @warning deprecated.
-     * kept for compatibility with @ref PaletteView in @ref libkis
+     * kept for compatibility with PaletteView in libkis
      */
     bool addGroupWithDialog();
 
@@ -103,6 +103,18 @@ public Q_SLOTS:
      *  This doesn't update the foreground color, just the visual selection.
      */
     void slotFGColorChanged(const KoColor &);
+
+    /**
+     * @brief slot that reacts to color changes in resource manager
+     * @param color
+     */
+    void slotFGColorResourceChanged(const KoColor& color);
+
+    /**
+      * Slot that selects the right index for provided color.
+      * Called from KisPaletteComboBox when user selects color in the dropdown.
+      */
+    void slotSelectColor(const KoColor& color);
 
     void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
 

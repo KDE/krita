@@ -166,9 +166,9 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
             return new Exiv2::ValueType<Exiv2::URational>(Exiv2::URational(value.asRational().numerator, value.asRational().denominator));
         }
     case KisMetaData::Value::OrderedArray:
-        /* Falls through */
+        Q_FALLTHROUGH();
     case KisMetaData::Value::UnorderedArray:
-        /* Falls through */
+        Q_FALLTHROUGH();
     case KisMetaData::Value::AlternativeArray: {
         switch (type) {
         case Exiv2::unsignedByte:

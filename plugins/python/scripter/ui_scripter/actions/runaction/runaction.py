@@ -95,6 +95,9 @@ class RunAction(QAction):
                 globals_dict = {"__name__": EXEC_NAMESPACE}
                 exec(code, globals_dict)
 
+        except SystemExit:
+            # user typed quit() or exit()
+            self.scripter.uicontroller.closeScripter()
         except Exception:
             # Provide context (line number and text) for an error that is caught.
             # Ordinarily, syntax and Indent errors are caught during initial

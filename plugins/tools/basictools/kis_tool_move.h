@@ -154,8 +154,6 @@ private:
 
     QAction *m_showCoordinatesAction {0};
 
-    KisCanvas2 *m_canvas {0};
-
     QPoint m_dragPos;
     QRect m_handlesRect;
 
@@ -177,7 +175,7 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(3);
         setIconName(koIconNameCStr("krita_tool_move"));
-        setShortcut(QKeySequence( Qt::Key_T));
+        setShortcut(QKeySequence(Qt::Key_T));
     }
 
     ~KisToolMoveFactory() override {}

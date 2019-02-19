@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>462</height>
+    <height>512</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -383,7 +383,7 @@
        <item row="3" column="1">
         <widget class="QLabel" name="lblOpacity">
          <property name="text">
-          <string>Ima&amp;ge Background Opacity:</string>
+          <string>Background Opacity:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -401,6 +401,9 @@
            <height>0</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Number of layers that the image will start with, including optional background layer.</string>
+         </property>
          <property name="minimum">
           <number>1</number>
          </property>
@@ -415,7 +418,7 @@
        <item row="2" column="1">
         <widget class="QLabel" name="lblColor">
          <property name="text">
-          <string>Image Bac&amp;kground Color:</string>
+          <string>Bac&amp;kground Color:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -467,16 +470,32 @@
        <item row="4" column="2">
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QRadioButton" name="radioBackgroundAsLayer">
+          <widget class="QRadioButton" name="radioBackgroundAsRaster">
+           <property name="toolTip">
+            <string>Use background color and opacity to create a background raster layer.</string>
+           </property>
            <property name="text">
-            <string>As fi&amp;rst layer</string>
+            <string>As &amp;raster layer</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QRadioButton" name="radioBackgroundAsProjection">
+           <property name="toolTip">
+            <string>Use background color and opacity as the base canvas color. This can be reconfigured in `Image &gt; Properties.`</string>
+           </property>
            <property name="text">
             <string>As can&amp;vas color</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioBackgroundAsFill">
+           <property name="toolTip">
+            <string>Use background color and opacity to create a background fill layer. The color for this layer can be reconfigured in the layer's properties.</string>
+           </property>
+           <property name="text">
+            <string>As fill la&amp;yer</string>
            </property>
           </widget>
          </item>
@@ -497,7 +516,7 @@
           </size>
          </property>
          <property name="toolTip">
-          <string>Reset the image background color in the Image Properties dialog</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -556,6 +575,9 @@
        </item>
        <item row="0" column="2">
         <widget class="QLineEdit" name="txtName">
+         <property name="toolTip">
+          <string/>
+         </property>
          <property name="text">
           <string>untitled-1</string>
          </property>
@@ -618,15 +640,15 @@
    <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>KisColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kis_color_button.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kis_color_button.h</header>
   </customwidget>
   <customwidget>
    <class>KisColorSpaceSelector</class>
@@ -654,7 +676,7 @@
   <tabstop>bnPortrait</tabstop>
   <tabstop>intNumLayers</tabstop>
   <tabstop>cmbColor</tabstop>
-  <tabstop>radioBackgroundAsLayer</tabstop>
+  <tabstop>radioBackgroundAsRaster</tabstop>
   <tabstop>radioBackgroundAsProjection</tabstop>
   <tabstop>txtDescription</tabstop>
  </tabstops>

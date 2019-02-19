@@ -170,6 +170,7 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("onDockerResize", ui->dockerResizeOptionsComboBox->currentIndex());
     cfg.writeEntry("zoomSelectorOptions", ui->zoomSelectorOptionComboBox->currentIndex() );
     cfg.writeEntry("zoomSize", ui->popupSize->value());
+    cfg.writeEntry("showColorSelector", ui->chkShowColorSelector->isChecked());
 
     bool useCustomColorSpace =  ui->useDifferentColorSpaceCheckbox->isChecked();
     const KoColorSpace* colorSpace = useCustomColorSpace ? ui->colorSpace->currentColorSpace() : 0;
@@ -358,8 +359,6 @@ void KisColorSelectorSettings::changedACSLastUsedColorAlignment(bool toggled)
     ui->lastUsedColorsNumRows->setEnabled(toggled);
 }
 
-
-
 void KisColorSelectorSettings::changedACSShadeSelectorType(int index)
 {
 
@@ -399,7 +398,7 @@ void KisColorSelectorSettings::loadPreferences()
     ui->dockerResizeOptionsComboBox->setCurrentIndex(  (int)cfg.readEntry("onDockerResize", 0) );
     ui->zoomSelectorOptionComboBox->setCurrentIndex(   (int) cfg.readEntry("zoomSelectorOptions", 0) );
     ui->popupSize->setValue(cfg.readEntry("zoomSize", 280));
-
+    ui->chkShowColorSelector->setChecked((bool) cfg.readEntry("showColorSelector", true));
 
     {
         KisConfig kisconfig(true);
@@ -525,6 +524,7 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->dockerResizeOptionsComboBox->setCurrentIndex(0);
     ui->zoomSelectorOptionComboBox->setCurrentIndex(0);
     ui->popupSize->setValue(280);
+    ui->chkShowColorSelector->setChecked(true);
 
 
     ui->useDifferentColorSpaceCheckbox->setChecked(false);

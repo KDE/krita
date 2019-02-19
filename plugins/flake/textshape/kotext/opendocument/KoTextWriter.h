@@ -43,6 +43,7 @@ public:
     * Constructor.
     *
     * @param context The context the KoTextWriter is called in
+    * @param rdfData The RDF data
     */
     explicit KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData = 0);
 

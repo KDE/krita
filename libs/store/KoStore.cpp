@@ -22,7 +22,7 @@
 #include "KoStore.h"
 #include "KoStore_p.h"
 
-#include "KoZipStore.h"
+#include "KoQuaZipStore.h"
 #include "KoDirectoryStore.h"
 
 #include <QBuffer>
@@ -64,7 +64,7 @@ KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArr
     }
     switch (backend) {
     case Zip:
-        return new KoZipStore(fileName, mode, appIdentification, writeMimetype);
+        return new KoQuaZipStore(fileName, mode, appIdentification, writeMimetype);
     case Directory:
         return new KoDirectoryStore(fileName /* should be a dir name.... */, mode, writeMimetype);
     default:
@@ -90,17 +90,11 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
         errorStore << "Can't create a Directory store for a memory buffer!" << endl;
         return 0;
     case Zip:
-        return new KoZipStore(device, mode, appIdentification, writeMimetype);
+        return new KoQuaZipStore(device, mode, appIdentification, writeMimetype);
     default:
         warnStore << "Unsupported backend requested for KoStore : " << backend;
         return 0;
     }
-}
-
-KoStore* KoStore::createStore(const QUrl &url, Mode mode, const QByteArray & appIdentification, Backend backend, bool writeMimetype)
-{
-    Q_ASSERT(url.isLocalFile());
-    return createStore(url.toLocalFile(), mode,  appIdentification, backend, writeMimetype);
 }
 
 namespace
@@ -125,6 +119,8 @@ bool KoStore::open(const QString & _name)
     Q_D(KoStore);
     // This also converts from relative to absolute, i.e. merges the currentPath()
     d->fileName = d->toExternalNaming(_name);
+
+    debugStore << "KOStore" << _name << d->fileName;
 
     if (d->isOpen) {
         warnStore << "Store is already opened, missing close";
@@ -168,15 +164,12 @@ bool KoStore::isOpen() const
 bool KoStore::close()
 {
     Q_D(KoStore);
-    debugStore << "Closing";
-
     if (!d->isOpen) {
         warnStore << "You must open before closing";
         return false;
     }
 
     bool ret = d->mode == Write ? closeWrite() : closeRead();
-
     delete d->stream;
     d->stream = 0;
     d->isOpen = false;
@@ -336,7 +329,6 @@ bool KoStorePrivate::extractFile(const QString &srcName, QIODevice &buffer)
         q->close();
         return false;
     }
-    // ### This could use KArchive::copy or something, no?
 
     QByteArray data;
     data.resize(8 * 1024);

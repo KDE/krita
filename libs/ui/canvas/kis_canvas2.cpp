@@ -813,7 +813,15 @@ void KisCanvas2::updateCanvasProjection()
     bool shouldExplicitlyIssueUpdates = false;
 
     QVector<KisUpdateInfoSP> infoObjects;
-    while (KisUpdateInfoSP info = m_d->projectionUpdatesCompressor.takeUpdateInfo()) {
+    KisUpdateInfoList originalInfoObjects;
+    m_d->projectionUpdatesCompressor.takeUpdateInfo(originalInfoObjects);
+
+    for (auto it = originalInfoObjects.constBegin();
+         it != originalInfoObjects.constEnd();
+         ++it) {
+
+        KisUpdateInfoSP info = *it;
+
         const KisMarkerUpdateInfo *batchInfo = dynamic_cast<const KisMarkerUpdateInfo*>(info.data());
         if (batchInfo) {
             if (!infoObjects.isEmpty()) {

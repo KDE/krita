@@ -745,9 +745,7 @@ void SvgTextEditor::setSettings()
                 writingSystems.append(QString::number(item->data().toInt()));
             }
         }
-        if (!writingSystems.isEmpty()) {
-            cfg.writeEntry("selectedWritingSystems", writingSystems.join(','));
-        }
+        cfg.writeEntry("selectedWritingSystems", writingSystems.join(','));
 
         if (textSettings.radioRichText->isChecked()) {
             cfg.writeEntry("EditorMode", (int)Richtext);

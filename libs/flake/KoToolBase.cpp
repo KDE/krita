@@ -176,8 +176,9 @@ void KoToolBase::useCursor(const QCursor &cursor)
 QList<QPointer<QWidget> > KoToolBase::optionWidgets()
 {
     Q_D(KoToolBase);
-    if (d->optionWidgets.empty()) {
+    if (!d->optionWidgetsCreated) {
         d->optionWidgets = createOptionWidgets();
+        d->optionWidgetsCreated = true;
     }
     return d->optionWidgets;
 }
@@ -185,7 +186,10 @@ QList<QPointer<QWidget> > KoToolBase::optionWidgets()
 QAction *KoToolBase::action(const QString &name) const
 {
     Q_D(const KoToolBase);
-    return d->canvas->canvasController()->actionCollection()->action(name);
+    if (d->canvas && d->canvas->canvasController() && d->canvas->canvasController()) {
+        return d->canvas->canvasController()->actionCollection()->action(name);
+    }
+    return 0;
 }
 
 QWidget * KoToolBase::createOptionWidget()

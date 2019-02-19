@@ -63,7 +63,7 @@ public:
      * @param element The element from the DOM tree describing the
      *                container (use it to access container specified
      *                attributes or child elements)
-     * @param action The action created for this container; used for e.g. passing to removeContainer.
+     * @param containerAction The action created for this container; used for e.g. passing to removeContainer.
      */
     virtual QWidget *createContainer(QWidget *parent, int index,
                                      const QDomElement &element, QAction *&containerAction);

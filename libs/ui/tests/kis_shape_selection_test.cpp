@@ -42,7 +42,7 @@ void KisShapeSelectionTest::testAddChild()
     QColor qc(Qt::white);
     qc.setAlpha(0);
     KoColor bgColor(qc, cs);
-    doc->newImage("test", 300, 300, cs, bgColor, true, 1, "test", 100);
+    doc->newImage("test", 300, 300, cs, bgColor, KisConfig::CANVAS_COLOR, 1, "test", 100);
     KisImageSP image = doc->image();
 
     KisSelectionSP selection = new KisSelection();

@@ -20,10 +20,12 @@
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QToolButton>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+#include <kis_icon_utils.h>
 
 #include <QAction>
 #include <kactioncollection.h>
@@ -48,8 +50,13 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     QWidget(parent),
     m_colorHistoryAction(0),
     m_commonColorsAction(0),
+    m_widgetLayout(0),
+    m_mainLayout(0),
+    m_horizontalPatchesContainer(0),
+    m_sidebarLayout(0),
     m_verticalColorPatchesLayout(0),
     m_horizontalColorPatchesLayout(0),
+    m_fallbackSettingsButton(new QToolButton(this)),
     m_canvas(0)
 {
     setAutoFillBackground(true);
@@ -63,16 +70,47 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
 
     //shade selector
 
+    // fallback settings button when the color selector is disabled
+    m_fallbackSettingsButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_fallbackSettingsButton->setIconSize(QSize(22,22));
+    m_fallbackSettingsButton->setAutoRaise(true);
+    m_fallbackSettingsButton->hide();
+
     //layout
+    m_widgetLayout = new QHBoxLayout();
+    m_widgetLayout->setSpacing(0);
+    m_widgetLayout->setMargin(0);
+
+    m_mainLayout = new QVBoxLayout();
+    m_mainLayout->setSpacing(0);
+    m_mainLayout->setMargin(0);
+
+    m_horizontalPatchesContainer = new QHBoxLayout();
+    m_horizontalPatchesContainer->setSpacing(0);
+    m_horizontalPatchesContainer->setMargin(0);
+
+    m_sidebarLayout = new QVBoxLayout();
+    m_sidebarLayout->setSpacing(0);
+    m_sidebarLayout->setMargin(0);
+
     m_verticalColorPatchesLayout = new QHBoxLayout();
     m_verticalColorPatchesLayout->setSpacing(0);
     m_verticalColorPatchesLayout->setMargin(0);
-    m_verticalColorPatchesLayout->addWidget(m_colorSelectorContainer);
 
-    m_horizontalColorPatchesLayout = new QVBoxLayout(this);
+    m_horizontalColorPatchesLayout = new QVBoxLayout();
     m_horizontalColorPatchesLayout->setSpacing(0);
     m_horizontalColorPatchesLayout->setMargin(0);
-    m_horizontalColorPatchesLayout->addLayout(m_verticalColorPatchesLayout);
+
+    m_horizontalPatchesContainer->addLayout(m_horizontalColorPatchesLayout);
+
+    m_mainLayout->addWidget(m_colorSelectorContainer);
+    m_mainLayout->addLayout(m_horizontalPatchesContainer);
+
+    m_sidebarLayout->addLayout(m_verticalColorPatchesLayout);
+
+    m_widgetLayout->addLayout(m_mainLayout);
+    m_widgetLayout->addLayout(m_sidebarLayout);
+    setLayout(m_widgetLayout);
 
     updateLayout();
 
@@ -99,6 +137,7 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     m_commonColorsAction = KisActionRegistry::instance()->makeQAction("show_common_colors", this);
     connect(m_commonColorsAction, SIGNAL(triggered()), m_commonColorsWidget, SLOT(showPopup()), Qt::UniqueConnection);
 
+    connect(m_fallbackSettingsButton, SIGNAL(clicked()), this, SLOT(openSettings()));
 }
 
 void KisColorSelectorNgDockerWidget::unsetCanvas()
@@ -133,7 +172,7 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
         actionCollection->addAction("show_color_history", m_colorHistoryAction);
         actionCollection->addAction("show_common_colors", m_commonColorsAction);
 
-        connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), m_colorSelectorContainer, SLOT(slotUpdateIcons()));
+        connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), m_colorSelectorContainer, SLOT(slotUpdateIcons()), Qt::UniqueConnection);
     }
 
     reactOnLayerChange();
@@ -154,6 +193,7 @@ void KisColorSelectorNgDockerWidget::updateLayout()
 {
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
+    bool showColorSelector = (bool) cfg.readEntry("showColorSelector", true);
 
     //color patches
     bool m_lastColorsShow = cfg.readEntry("lastUsedColorsShow", true);
@@ -170,11 +210,13 @@ void KisColorSelectorNgDockerWidget::updateLayout()
     else
         m_commonColorsDirection=KisColorPatches::Horizontal;
 
-
     m_verticalColorPatchesLayout->removeWidget(m_colorHistoryWidget);
     m_verticalColorPatchesLayout->removeWidget(m_commonColorsWidget);
     m_horizontalColorPatchesLayout->removeWidget(m_colorHistoryWidget);
     m_horizontalColorPatchesLayout->removeWidget(m_commonColorsWidget);
+
+    m_sidebarLayout->removeWidget(m_fallbackSettingsButton);
+    m_mainLayout->removeWidget(m_fallbackSettingsButton);
 
     if(m_lastColorsShow==false)
         m_colorHistoryWidget->hide();
@@ -188,6 +230,9 @@ void KisColorSelectorNgDockerWidget::updateLayout()
         m_commonColorsWidget->show();
     }
 
+
+    bool fallbackSettingsButtonVertical = true;
+
     if(m_lastColorsShow && m_lastColorsDirection==KisColorPatches::Vertical) {
         m_verticalColorPatchesLayout->addWidget(m_colorHistoryWidget);
     }
@@ -198,10 +243,29 @@ void KisColorSelectorNgDockerWidget::updateLayout()
 
     if(m_lastColorsShow && m_lastColorsDirection==KisColorPatches::Horizontal) {
         m_horizontalColorPatchesLayout->addWidget(m_colorHistoryWidget);
+        fallbackSettingsButtonVertical = false;
     }
 
     if(m_commonColorsShow && m_commonColorsDirection==KisColorPatches::Horizontal) {
         m_horizontalColorPatchesLayout->addWidget(m_commonColorsWidget);
+        fallbackSettingsButtonVertical = false;
+    }
+
+    // prefer the vertical column, if patch components have different layout
+    if (m_commonColorsDirection != m_lastColorsDirection) {
+        fallbackSettingsButtonVertical = true;
+    }
+
+    if (!showColorSelector) {
+        if (fallbackSettingsButtonVertical) {
+            m_sidebarLayout->addWidget(m_fallbackSettingsButton);
+        } else {
+            m_horizontalPatchesContainer->addWidget(m_fallbackSettingsButton);
+        }
+
+        m_fallbackSettingsButton->show();
+    } else {
+        m_fallbackSettingsButton->hide();
     }
 
     updateGeometry();

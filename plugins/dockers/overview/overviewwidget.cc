@@ -63,11 +63,12 @@ struct OverviewThumbnailStrokeStrategy::Private {
     class FinishProcessing : public KisStrokeJobData
     {
     public:
-        FinishProcessing(KisPaintDeviceSP _thumbDev)
+        FinishProcessing(KisPaintDeviceSP _thumbDev, const QSize& _thumbnailSize)
             : KisStrokeJobData(SEQUENTIAL),
-              thumbDev(_thumbDev)
+              thumbDev(_thumbDev), thumbnailSize(_thumbnailSize)
         {}
         KisPaintDeviceSP thumbDev;
+        QSize thumbnailSize;
     };
 };
 
@@ -319,7 +320,7 @@ QList<KisStrokeJobData *> OverviewThumbnailStrokeStrategy::createJobsData(KisPai
     Q_FOREACH (const QRect &tileRectangle, tileRects) {
         jobsData << new OverviewThumbnailStrokeStrategy::Private::ProcessData(dev, thumbDev, thumbnailOversampledSize, tileRectangle);
     }
-    jobsData << new OverviewThumbnailStrokeStrategy::Private::FinishProcessing(thumbDev);
+    jobsData << new OverviewThumbnailStrokeStrategy::Private::FinishProcessing(thumbDev, thumbnailSize);
 
     return jobsData;
 }
@@ -358,7 +359,8 @@ void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                   &updater, KisFilterStrategyRegistry::instance()->value("Bilinear"));
         worker.run();
 
-        overviewImage = d_fp->thumbDev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());
+        overviewImage = d_fp->thumbDev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile(),
+                                                        QRect(QPoint(0,0), d_fp->thumbnailSize));
         emit thumbnailUpdated(overviewImage);
         return;
     }

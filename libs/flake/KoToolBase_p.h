@@ -76,6 +76,7 @@ public:
     }
 
     QList<QPointer<QWidget> > optionWidgets; ///< the optionwidgets associated with this tool
+    bool optionWidgetsCreated {false};
     QCursor currentCursor;
     QString toolId;
     KoToolBase *q;

@@ -23,7 +23,7 @@
 #ifndef __KIS_TOOL_SELECT_CONTIGUOUS_H__
 #define __KIS_TOOL_SELECT_CONTIGUOUS_H__
 
-#include "KoToolFactoryBase.h"
+#include "KisSelectionToolFactoryBase.h"
 #include "kis_tool_select_base.h"
 #include <kis_icon.h>
 #include <kconfig.h>
@@ -72,11 +72,11 @@ private:
     KConfigGroup m_configGroup;
 };
 
-class KisToolSelectContiguousFactory : public KoToolFactoryBase
+class KisToolSelectContiguousFactory : public KisSelectionToolFactoryBase
 {
 public:
     KisToolSelectContiguousFactory()
-        : KoToolFactoryBase("KisToolSelectContiguous")
+        : KisSelectionToolFactoryBase("KisToolSelectContiguous")
     {
         setToolTip(i18n("Contiguous Selection Tool"));
         setSection(TOOL_TYPE_SELECTION);

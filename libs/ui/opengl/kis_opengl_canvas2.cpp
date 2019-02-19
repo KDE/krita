@@ -44,6 +44,7 @@
 #include <QOpenGLBuffer>
 #include <QMessageBox>
 #include "KisOpenGLModeProber.h"
+#include <KoColorModelStandardIds.h>
 
 #ifndef Q_OS_OSX
 #include <QOpenGLFunctions_2_1>
@@ -855,7 +856,7 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
 {
     processInputMethodEvent(event);
 }
-#include <KoColorModelStandardIds.h>
+
 void KisOpenGLCanvas2::renderCanvasGL()
 {
     {

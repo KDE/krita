@@ -31,7 +31,7 @@
 class QOpenGLContext;
 class QString;
 class QStringList;
-class QSettings;
+class QSurfaceFormat;
 
 /**
  * This class manages a shared OpenGL context and provides utility

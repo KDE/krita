@@ -742,7 +742,7 @@ inline T cfPNormA(T src, T dst) {
     using namespace Arithmetic;
     //This is also known as P-Norm mode with factor of 2.3333 See IMBLEND image blending mode samples, and please see imblend.m file found on Additional Blending Mode thread at Phabricator. 1/2.3333 is .42875...
     
-    return clamp<T>(pow(pow(dst,2.3333333333333333)+pow(src,2.3333333333333333),0.428571428571434)); 
+    return clamp<T>(pow(pow((float)dst, 2.3333333333333333) + pow((float)src, 2.3333333333333333), 0.428571428571434)); 
 }
 
 template<class T>

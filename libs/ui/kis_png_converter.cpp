@@ -66,7 +66,6 @@
 #include "kis_clipboard.h"
 #include <kis_cursor_override_hijacker.h>
 #include "kis_undo_stores.h"
-#include "half.h"
 
 namespace
 {

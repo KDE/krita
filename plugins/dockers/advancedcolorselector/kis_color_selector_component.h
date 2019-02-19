@@ -57,7 +57,7 @@ public:
     virtual void setColor(const KoColor& color) = 0;
 
     /// force subsequent redraw of the component
-    void setDirty();
+    virtual void setDirty();
 
     /// returns true, if this component wants to grab the mouse (normally true, if containsPoint returns true)
     bool wantsGrab(int x, int y) {return containsPointInComponentCoords(x-m_x, y-m_y);}
@@ -93,6 +93,11 @@ protected:
     /// values for the subclasses are provided in component coordinates, eg (0,0) is top left of component
     virtual bool containsPointInComponentCoords(int x, int y) const;
 
+    /// a subclass can implement this method to note that the point, although it is in
+    /// containsPointInComponentCoords area, still cannot be selected as a color (e.g.
+    /// it is masked out). Default implementation always returns true.
+    virtual bool allowsColorSelectionAtPoint(const QPoint &pt) const;
+
     // Workaround for Bug 287001
     void setLastMousePosition(int x, int y);
 
@@ -120,6 +125,7 @@ private:
     int m_height;
     bool m_dirty;
     const KoColorSpace* m_lastColorSpace;
+    KoColor m_lastSelectedColor;
 };
 
 #endif // KIS_COLOR_SELECTOR_COMPONENT_H

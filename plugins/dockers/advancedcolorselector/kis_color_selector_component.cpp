@@ -77,9 +77,11 @@ void KisColorSelectorComponent::mouseEvent(int x, int y)
     int newX=qBound(0, (x-m_x), width());
     int newY=qBound(0, (y-m_y), height());
 
-    selectColor(newX, newY);
-    m_lastX=newX;
-    m_lastY=newY;
+    if (allowsColorSelectionAtPoint(QPoint(x, y))) {
+        m_lastSelectedColor = selectColor(newX, newY);
+        m_lastX=newX;
+        m_lastY=newY;
+    }
 }
 
 const KoColorSpace* KisColorSelectorComponent::colorSpace() const
@@ -92,6 +94,7 @@ const KoColorSpace* KisColorSelectorComponent::colorSpace() const
 void KisColorSelectorComponent::setDirty()
 {
     m_dirty = true;
+    setColor(m_lastSelectedColor);
 }
 
 void KisColorSelectorComponent::setGamutMask(KoGamutMask *gamutMask)
@@ -131,6 +134,11 @@ bool KisColorSelectorComponent::containsPointInComponentCoords(int x, int y) con
         return true;
     else
         return false;
+}
+
+bool KisColorSelectorComponent::allowsColorSelectionAtPoint(const QPoint &pt) const
+{
+    return true;
 }
 
 KoColor KisColorSelectorComponent::currentColor()
@@ -228,6 +236,11 @@ void KisColorSelectorComponent::setConfiguration(Parameter param, Type type)
 {
     m_parameter = param;
     m_type = type;
+}
+
+void KisColorSelectorComponent::setColor(const KoColor &color)
+{
+    m_lastSelectedColor = color;
 }
 
 void KisColorSelectorComponent::setLastMousePosition(int x, int y)

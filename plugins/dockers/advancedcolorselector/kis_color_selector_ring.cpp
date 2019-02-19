@@ -117,7 +117,7 @@ KoColor KisColorSelectorRing::selectColor(int x, int y)
     m_lastHue=hue;
     emit update();
 
-    return KoColor();
+    return m_parent->converter()->fromHsvF(hue, 1.0, 1.0);
 }
 
 void KisColorSelectorRing::setColor(const KoColor &color)
@@ -133,6 +133,8 @@ void KisColorSelectorRing::setColor(const KoColor &color)
     }
 
     emit update();
+
+    KisColorSelectorComponent::setColor(color);
 }
 
 void KisColorSelectorRing::paintCache()

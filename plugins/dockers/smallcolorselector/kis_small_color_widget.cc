@@ -283,6 +283,8 @@ struct FillSVPolicy {
 template<class FillPolicy>
 void KisSmallColorWidget::uploadPaletteData(KisGLImageWidget *widget, const QSize &size)
 {
+    if (size.isEmpty()) return;
+
     KisGLImageF16 image(size);
     const float xPortionCoeff = 1.0 / image.width();
     const float yPortionCoeff = 1.0 / image.height();

@@ -54,7 +54,7 @@ public:
     void setConfiguration(Parameter param, Type type);
 
     /// set the color, blibs etc
-    virtual void setColor(const KoColor& color) = 0;
+    virtual void setColor(const KoColor& color);
 
     /// force subsequent redraw of the component
     virtual void setDirty();

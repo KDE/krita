@@ -103,6 +103,8 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
         m_rotateSlider->setPrefix(i18n("Rotation: "));
         m_rotateSlider->setSuffix("°");
         connect(m_rotateSlider, SIGNAL(valueChanged(qreal)), this, SLOT(rotateCanvasView(qreal)), Qt::UniqueConnection);
+        connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(updateSlider()));
+
         m_mirrorCanvas = new QToolButton();
         QList<QAction *> actions = m_canvas->viewManager()->actionCollection()->actions();
         Q_FOREACH(QAction* action, actions) {

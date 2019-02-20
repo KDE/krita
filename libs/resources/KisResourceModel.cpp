@@ -93,7 +93,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
         }
         case Qt::DecorationRole:
         {
-            if (index.column() == 5) {
+            if (index.column() == Thumbnail) {
                 QByteArray ba = d->query.value("thumbnail").toByteArray();
                 QBuffer buf(&ba);
                 buf.open(QBuffer::ReadOnly);

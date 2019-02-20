@@ -263,6 +263,7 @@ set(kritaui_LIB_SRCS
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
     widgets/KisLayerStyleAngleSelector.cpp
+    widgets/KisMemoryReportButton.cpp
 
     KisPaletteEditor.cpp
     dialogs/KisDlgPaletteEditor.cpp

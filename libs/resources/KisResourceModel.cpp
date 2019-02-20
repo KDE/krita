@@ -119,6 +119,15 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             return d->query.value("filename");
         case Qt::UserRole + Tooltip:
             return d->query.value("tooltip");
+        case Qt::UserRole + Thumbnail:
+        {
+            QByteArray ba = d->query.value("thumbnail").toByteArray();
+            QBuffer buf(&ba);
+            buf.open(QBuffer::ReadOnly);
+            QImage img;
+            img.load(&buf, "PNG");
+            return QVariant::fromValue<QImage>(img);
+        }
         case Qt::UserRole + Status:
             return d->query.value("status");
         case Qt::UserRole + Location:

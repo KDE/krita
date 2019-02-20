@@ -51,7 +51,9 @@ public:
         Status,
         Location,
         ResourceType,
-        Tags
+        Tags,
+        /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
+        LargeThumbnail = Qt::UserRole + 1
     };
 
 private:

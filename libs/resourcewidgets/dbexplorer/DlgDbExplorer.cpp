@@ -33,6 +33,7 @@
 #include <KisResourceModelProvider.h>
 #include <KisResourceTypeModel.h>
 #include <KisTagModel.h>
+#include <KisResourceItemDelegate.h>
 
 DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     : KoDialog(parent)
@@ -133,7 +134,10 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         connect(m_page->cmbRvTags, SIGNAL(activated(int)), SLOT(slotRvTagSelected(int)));
 
         m_page->cmbRvResourceTypes->setCurrentIndex(0);
+        slotRvResourceTypeSelected(0);
 
+        m_page->resourceItemView->setItemDelegate(new KisResourceItemDelegate(this));
+        m_page->resourceItemView->setSelectionMode(QAbstractItemView::SingleSelection);
     }
 
 }

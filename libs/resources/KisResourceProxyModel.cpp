@@ -18,6 +18,7 @@
  */
 #include "KisResourceProxyModel.h"
 
+#include <QDebug>
 #include <qmath.h>
 
 #include <KisResourceModel.h>
@@ -59,6 +60,7 @@ QModelIndex KisResourceProxyModel::parent(const QModelIndex& child) const
     return QModelIndex();
 }
 
+
 int KisResourceProxyModel::rowCount(const QModelIndex& parent) const
 {
     if (!sourceModel())  return 0;
@@ -68,7 +70,7 @@ int KisResourceProxyModel::rowCount(const QModelIndex& parent) const
     return row;
 }
 
-int KisResourceProxyModel::columnCount(const QModelIndex& parent) const
+int KisResourceProxyModel::columnCount(const QModelIndex& /*parent*/) const
 {
     return d->rowStride;
 }

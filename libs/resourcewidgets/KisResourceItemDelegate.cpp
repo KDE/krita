@@ -21,6 +21,7 @@
 #include "KisResourceItemDelegate.h"
 
 #include <QPainter>
+#include <QDebug>
 
 #include "KisResourceModel.h"
 
@@ -43,7 +44,6 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
     QRect innerRect = option.rect.adjusted(2, 1, -2, -1);
 
     QImage thumbnail = index.data(Qt::DecorationRole).value<QImage>();
-
     QSize imageSize = thumbnail.size();
 
     if (imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width()) {
@@ -56,20 +56,27 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
         int thumbH = static_cast<int>(imageSize.height() * scale);
         thumbnail = thumbnail.scaled(thumbW, thumbH, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
+
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-
-    if (thumbnail.hasAlphaChannel()) {
-        QString resourceType = index.data(Qt::UserRole + KisResourceModel::ResourceType).toString();
-        // XXX: don't use a hardcoded string here to identify the resource type
-        if (resourceType == "gradients") {
-            m_checkerPainter.paint(*painter, innerRect);
-        }
-        else {
-            painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
-        }
+    QString resourceType = index.data(Qt::UserRole + KisResourceModel::ResourceType).toString();
+    // XXX: don't use a hardcoded string here to identify the resource type
+    if (resourceType == "gradients") {
+        m_checkerPainter.paint(*painter, innerRect);
     }
-    painter->fillRect(innerRect, QBrush(thumbnail));
+    else {
+        painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
+    }
+
+    QPoint topleft(innerRect.topLeft());
+
+    if (thumbnail.width() < innerRect.width()) {
+        topleft.setX(topleft.x() + (innerRect.width() - thumbnail.width()) / 2);
+    }
+    if (thumbnail.height() < innerRect.height()) {
+        topleft.setY(topleft.y() + (innerRect.height() - thumbnail.height()) / 2);
+    }
+    painter->drawImage(topleft, thumbnail);
 
     painter->restore();
 }

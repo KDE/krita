@@ -155,14 +155,15 @@ void DlgDbExplorer::slotRvResourceTypeSelected(int index)
 
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
 
+    KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(this);
+    tagFilterModel->setSourceModel(resourceModel);
+
     KisResourceProxyModel *resourceProxyModel = new KisResourceProxyModel(this);
-    resourceProxyModel->setSourceModel(resourceModel);
+    resourceProxyModel->setSourceModel(tagFilterModel);
     resourceProxyModel->setRowStride(10);
 
-    KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(this);
-    tagFilterModel->setSourceModel(resourceProxyModel);
 
-    m_page->resourceItemView->setModel(tagFilterModel);
+    m_page->resourceItemView->setModel(resourceProxyModel);
 }
 
 void DlgDbExplorer::slotRvTagSelected(int index)

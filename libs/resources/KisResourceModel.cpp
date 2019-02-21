@@ -167,7 +167,7 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
 
 }
 
-bool KisResourceModel::prepareQuery(const QStringList &tags)
+bool KisResourceModel::prepareQuery()
 {
     beginResetModel();
     bool r = d->query.prepare("SELECT resources.id\n"

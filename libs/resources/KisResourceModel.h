@@ -53,7 +53,7 @@ public:
         ResourceType,
         Tags,
         /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
-        LargeThumbnail = Qt::UserRole + 1
+        LargeThumbnail
     };
 
 private:
@@ -77,7 +77,7 @@ public:
 
 private:
 
-    bool prepareQuery(const QStringList &tags = QStringList());
+    bool prepareQuery();
 
     struct Private;
     Private *const d;

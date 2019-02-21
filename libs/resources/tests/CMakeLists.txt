@@ -16,6 +16,8 @@ ecm_add_tests(
     TestTag
     TestBundleStorage
     TestResourceModel
+    TestResourceProxyModel
+    TestTagFilterResourceProxyModel
     TestTagModel
     TestResourceTypeModel
     NAME_PREFIX "libs-kritaresources-"

@@ -64,6 +64,7 @@ QModelIndex KisResourceProxyModel::parent(const QModelIndex& child) const
 int KisResourceProxyModel::rowCount(const QModelIndex& parent) const
 {
     if (!sourceModel())  return 0;
+
     int row;
     int col;
     proxyRow(sourceModel()->rowCount(parent), row, col);

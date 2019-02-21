@@ -16,13 +16,14 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
-
 #include "KisTagFilterResourceProxyModel.h"
+
+#include <QDebug>
+#include <KisResourceModel.h>
 
 struct KisTagFilterResourceProxyModel::Private
 {
-    QString tag;
+    QStringList tags;
 };
 
 KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(QObject *parent)
@@ -38,20 +39,39 @@ KisTagFilterResourceProxyModel::~KisTagFilterResourceProxyModel()
 
 void KisTagFilterResourceProxyModel::setTag(const QString& tag)
 {
-    d->tag = tag;
+    d->tags = tag.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
 }
 
-bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const
+bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
 {
     return true;
 }
 
 bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
-    return true;
+    if (d->tags.isEmpty()) return true;
+
+    QModelIndex idx = sourceModel()->index(source_row, KisResourceModel::Name, source_parent);
+
+    QStringList tags = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Tags).toStringList();
+    QSet<QString> tagResult = tags.toSet().subtract(tags.toSet());
+    if (!tagResult.isEmpty()) {
+        return true;
+    }
+
+    QString name = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
+    Q_FOREACH(const QString &tag, d->tags) {
+        if (name.startsWith(tag)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool KisTagFilterResourceProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
-    return true;
+    QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisResourceModel::Name).toString();
+    QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisResourceModel::Name).toString();
+    return nameLeft < nameRight;
 }

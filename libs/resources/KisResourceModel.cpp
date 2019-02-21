@@ -28,7 +28,8 @@
 #include <KisResourceCacheDb.h>
 
 struct KisResourceModel::Private {
-    QSqlQuery query;
+    QSqlQuery resourcesQuery;
+    QSqlQuery tagQuery;
     QString resourceType;
     int columnCount {9};
     int cachedRowCount {-1};
@@ -41,6 +42,19 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
 {
     d->resourceType = resourceType;
     prepareQuery();
+
+    bool r = d->tagQuery.prepare("SELECT tags.url\n"
+                                 ",      tags.name\n"
+                                 ",      tags.comment\n"
+                                 "FROM   tags\n"
+                                 ",      resource_tags"
+                                 "WHERE  tags.active > 0\n"
+                                 "AND    tags.id = resource_tags.tag_id\n"
+                                 "AND    resouce_tags.resource_id = :resource_id\n");
+    if (!r)  {
+        qWarning() << "Could not prepare TagsForResource query" << d->tagQuery.lastError();
+    }
+
 }
 
 KisResourceModel::~KisResourceModel()
@@ -62,7 +76,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
     if (index.row() > rowCount()) return v;
     if (index.column() > d->columnCount) return v;
 
-    bool pos = const_cast<KisResourceModel*>(this)->d->query.seek(index.row());
+    bool pos = const_cast<KisResourceModel*>(this)->d->resourcesQuery.seek(index.row());
 
     if (pos) {
         switch(role) {
@@ -70,23 +84,23 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
         {
             switch(index.column()) {
             case Id:
-                return d->query.value("id");
+                return d->resourcesQuery.value("id");
             case StorageId:
-                return d->query.value("storage_id");
+                return d->resourcesQuery.value("storage_id");
             case Name:
-                return d->query.value("name");
+                return d->resourcesQuery.value("name");
             case Filename:
-                return d->query.value("filename");
+                return d->resourcesQuery.value("filename");
             case Tooltip:
-                return d->query.value("tooltip");
+                return d->resourcesQuery.value("tooltip");
             case Thumbnail:
                 ;
             case Status:
-                return d->query.value("status");
+                return d->resourcesQuery.value("status");
             case Location:
-                return d->query.value("location");
+                return d->resourcesQuery.value("location");
             case ResourceType:
-                return d->query.value("resource_type");
+                return d->resourcesQuery.value("resource_type");
             default:
                 ;
             };
@@ -94,7 +108,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
         case Qt::DecorationRole:
         {
             if (index.column() == Thumbnail) {
-                QByteArray ba = d->query.value("thumbnail").toByteArray();
+                QByteArray ba = d->resourcesQuery.value("thumbnail").toByteArray();
                 QBuffer buf(&ba);
                 buf.open(QBuffer::ReadOnly);
                 QImage img;
@@ -108,20 +122,20 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
         case Qt::StatusTipRole:
             /* Falls through. */
         case Qt::WhatsThisRole:
-            return d->query.value("tooltip");
+            return d->resourcesQuery.value("tooltip");
         case Qt::UserRole + Id:
-            return d->query.value("id");
+            return d->resourcesQuery.value("id");
         case Qt::UserRole + StorageId:
-            return d->query.value("storage_id");
+            return d->resourcesQuery.value("storage_id");
         case Qt::UserRole + Name:
-            return d->query.value("name");
+            return d->resourcesQuery.value("name");
         case Qt::UserRole + Filename:
-            return d->query.value("filename");
+            return d->resourcesQuery.value("filename");
         case Qt::UserRole + Tooltip:
-            return d->query.value("tooltip");
+            return d->resourcesQuery.value("tooltip");
         case Qt::UserRole + Thumbnail:
         {
-            QByteArray ba = d->query.value("thumbnail").toByteArray();
+            QByteArray ba = d->resourcesQuery.value("thumbnail").toByteArray();
             QBuffer buf(&ba);
             buf.open(QBuffer::ReadOnly);
             QImage img;
@@ -129,16 +143,15 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             return QVariant::fromValue<QImage>(img);
         }
         case Qt::UserRole + Status:
-            return d->query.value("status");
+            return d->resourcesQuery.value("status");
         case Qt::UserRole + Location:
-            return d->query.value("location");
+            return d->resourcesQuery.value("location");
         case Qt::UserRole + ResourceType:
-            return d->query.value("resource_type");
+            return d->resourcesQuery.value("resource_type");
         case Qt::UserRole + Tags:
         {
-            QStringList tags;
-            // XXX
-            return QVariant::fromValue<QStringList>(tags);
+            QStringList tags = tagsForResource(d->resourcesQuery.value("id").toInt());
+            return tags;
         }
         default:
             ;
@@ -157,10 +170,10 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
     if (index.row() > rowCount()) return resource;
     if (index.column() > d->columnCount) return resource;
 
-    bool pos = const_cast<KisResourceModel*>(this)->d->query.seek(index.row());
+    bool pos = const_cast<KisResourceModel*>(this)->d->resourcesQuery.seek(index.row());
     if (pos) {
-        QString storageLocation = d->query.value("location").toString();
-        QString resourceLocation = d->query.value("filename").toString();
+        QString storageLocation = d->resourcesQuery.value("location").toString();
+        QString resourceLocation = d->resourcesQuery.value("filename").toString();
         resource = KisResourceLocator::instance()->resource(storageLocation, resourceLocation);
     }
     return resource;
@@ -170,36 +183,53 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
 bool KisResourceModel::prepareQuery()
 {
     beginResetModel();
-    bool r = d->query.prepare("SELECT resources.id\n"
-                             ",      resources.storage_id\n"
-                             ",      resources.name\n"
-                             ",      resources.filename\n"
-                             ",      resources.tooltip\n"
-                             ",      resources.thumbnail\n"
-                             ",      resources.status\n"
-                             ",      storages.location\n"
-                             ",      resource_types.name as resource_type\n"
-                             "FROM   resources\n"
-                             ",      resource_types\n"
-                             ",      storages\n"
-                             "WHERE  resources.resource_type_id = resource_types.id\n"
-                             "AND    resources.storage_id = storages.id\n"
-                             "AND    resource_types.name = :resource_type\n"
-                             "AND    resources.status = 1\n"
-                             "AND    storages.active = 1");
+    bool r = d->resourcesQuery.prepare("SELECT resources.id\n"
+                                        ",      resources.storage_id\n"
+                                        ",      resources.name\n"
+                                        ",      resources.filename\n"
+                                        ",      resources.tooltip\n"
+                                        ",      resources.thumbnail\n"
+                                        ",      resources.status\n"
+                                        ",      storages.location\n"
+                                        ",      resource_types.name as resource_type\n"
+                                        "FROM   resources\n"
+                                        ",      resource_types\n"
+                                        ",      storages\n"
+                                        "WHERE  resources.resource_type_id = resource_types.id\n"
+                                        "AND    resources.storage_id = storages.id\n"
+                                        "AND    resource_types.name = :resource_type\n"
+                                        "AND    resources.status = 1\n"
+                                        "AND    storages.active = 1");
     if (!r) {
-        qWarning() << "Could not prepare KisResourceModel query" << d->query.lastError();
+        qWarning() << "Could not prepare KisResourceModel query" << d->resourcesQuery.lastError();
     }
-    d->query.bindValue(":resource_type", d->resourceType);
-    r = d->query.exec();
+    d->resourcesQuery.bindValue(":resource_type", d->resourceType);
+    r = d->resourcesQuery.exec();
     if (!r) {
-        qWarning() << "Could not select" << d->resourceType << "resources" << d->query.lastError() << d->query.boundValues();
+        qWarning() << "Could not select" << d->resourceType << "resources" << d->resourcesQuery.lastError() << d->resourcesQuery.boundValues();
     }
     d->cachedRowCount = -1;
     endResetModel();
 
     return r;
 
+}
+
+QStringList KisResourceModel::tagsForResource(int resourceId) const
+{
+    d->tagQuery.bindValue(":resource_id", resourceId);
+    bool r = d->tagQuery.exec();
+    if (!r) {
+        qWarning() << "Could not select tags for" << resourceId << d->tagQuery.lastError() << d->tagQuery.boundValues();
+    }
+    QStringList tags;
+    while (d->tagQuery.next()) {
+        qDebug() << d->tagQuery.value(0).toString()
+                 << d->tagQuery.value(1).toString()
+                 << d->tagQuery.value(2).toString();
+        tags << d->tagQuery.value(1).toString();
+    }
+    return tags;
 }
 
 int KisResourceModel::rowCount(const QModelIndex &) const

@@ -78,6 +78,7 @@ public:
 private:
 
     bool prepareQuery();
+    QStringList tagsForResource(int resourceId) const;
 
     struct Private;
     Private *const d;

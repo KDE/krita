@@ -1,34 +1,41 @@
-'''
-This script is licensed CC 0 1.0, so that you can learn from it.
+# This script is licensed CC 0 1.0, so that you can learn from it.
 
------- CC 0 1.0 ---------------
+# ------ CC 0 1.0 ---------------
 
-The person who associated a work with this deed has dedicated the work to the public domain by waiving all of his or her rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law.
+# The person who associated a work with this deed has dedicated the
+# work to the public domain by waiving all of his or her rights to the
+# work worldwide under copyright law, including all related and
+# neighboring rights, to the extent allowed by law.
 
-You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.
+# You can copy, modify, distribute and perform the work, even for
+# commercial purposes, all without asking permission.
 
-https://creativecommons.org/publicdomain/zero/1.0/legalcode
-'''
-#
-# This is a simple example of a Python script for Krita.
-# It demonstrates how to set up a custom extension and a custom docker!
-#
+# https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
+"""
+This is a simple example of a Python script for Krita.
+It demonstrates how to set up a custom extension and a custom docker!
+"""
+
 
 from PyQt5.QtWidgets import QWidget, QLabel, QMessageBox
-from krita import (Krita, Extension, DockWidget,
-                   DockWidgetFactory, DockWidgetFactoryBase)
+from krita import Extension, DockWidget
 
 
 def hello():
     """
     Show a test message box.
     """
-    QMessageBox.information(QWidget(), i18n("Test"), i18n("Hello! This is Krita version %s") % Application.version())
+    QMessageBox.information(
+        QWidget(),
+        i18n("Test"),
+        i18n("Hello! This is Krita version %s") % Application.version())
 
 
 class HelloExtension(Extension):
     """
-    HelloExtension is a small example extension demonstrating basic Python scripting support in Krita!
+    HelloExtension is a small example extension demonstrating basic
+    Python scripting support in Krita!
     """
 
     def __init__(self, parent):
@@ -50,10 +57,6 @@ class HelloExtension(Extension):
         """
         action = window.createAction("hello_python", i18n("Hello"))
         action.triggered.connect(hello)
-
-
-# Initialize and add the extension
-Scripter.addExtension(HelloExtension(Krita.instance()))
 
 
 class HelloDocker(DockWidget):
@@ -82,7 +85,3 @@ class HelloDocker(DockWidget):
         Parameter `canvas` can be null if the last document is closed
         """
         self._label.setText("HelloDocker: canvas changed")
-
-
-# Register the docker so Krita can use it!
-Application.addDockWidgetFactory(DockWidgetFactory("hello", DockWidgetFactoryBase.DockRight, HelloDocker))

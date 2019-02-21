@@ -1,2 +1,5 @@
-# let's make a module
-from .filtermanager import *
+import krita
+from .filtermanager import FilterManagerExtension
+
+
+Scripter.addExtension(FilterManagerExtension(krita.Krita.instance()))

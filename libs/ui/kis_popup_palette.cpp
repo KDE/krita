@@ -194,19 +194,16 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     vLayout->addLayout(hLayout);
 
     mirrorMode = new KisHighlightedToolButton(this);
-    mirrorMode->setCheckable(true);
     mirrorMode->setFixedSize(35, 35);
 
     mirrorMode->setToolTip(i18n("Mirror Canvas"));
-    connect(mirrorMode, SIGNAL(clicked(bool)), this, SLOT(slotmirroModeClicked()));
-
+    mirrorMode->setDefaultAction(m_actionCollection->action("mirror_canvas"));
 
     canvasOnlyButton = new KisHighlightedToolButton(this);
-    canvasOnlyButton->setCheckable(true);
     canvasOnlyButton->setFixedSize(35, 35);
 
     canvasOnlyButton->setToolTip(i18n("Canvas Only"));
-    connect(canvasOnlyButton, SIGNAL(clicked(bool)), this, SLOT(slotCanvasonlyModeClicked()));
+    canvasOnlyButton->setDefaultAction(m_actionCollection->action("view_show_canvas_only"));
 
     zoomToOneHundredPercentButton = new QPushButton(this);
     zoomToOneHundredPercentButton->setText(i18n("100%"));
@@ -346,10 +343,7 @@ void KisPopupPalette::adjustLayout(const QPoint &p)
 
 void KisPopupPalette::slotUpdateIcons()
 {
-    zoomToOneHundredPercentButton->setIcon(KisIconUtils::loadIcon("zoom-original"));
-    canvasOnlyButton->setIcon(KisIconUtils::loadIcon("document-new"));
-    mirrorMode->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
-    m_settingsButton->setIcon(KisIconUtils::loadIcon("configure"));
+    zoomToOneHundredPercentButton->setIcon(m_actionCollection->action("zoom_to_100pct")->icon());
     m_brushHud->updateIcons();
     m_brushHudButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-left"), KisIconUtils::loadIcon("arrow-right"));
 }
@@ -799,22 +793,6 @@ void KisPopupPalette::slotShowTagsPopup()
     } else {
         QWhatsThis::showText(QCursor::pos(),
                              i18n("There are no tags available to show in this popup. To add presets, you need to tag them and then select the tag here."));
-    }
-}
-
-void KisPopupPalette::slotmirroModeClicked() {
-    QAction *action = m_actionCollection->action("mirror_canvas");
-
-    if (action) {
-        action->trigger();
-    }
-}
-
-void KisPopupPalette::slotCanvasonlyModeClicked() {
-    QAction *action = m_actionCollection->action("view_show_canvas_only");
-
-    if (action) {
-        action->trigger();
     }
 }
 

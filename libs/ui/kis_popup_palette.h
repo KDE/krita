@@ -177,8 +177,6 @@ private Q_SLOTS:
     void slotHide() { showPopupPalette(false); }
     void slotShowTagsPopup();
     void showHudWidget(bool visible);
-    void slotmirroModeClicked();
-    void slotCanvasonlyModeClicked();
     void slotZoomToOneHundredPercentClicked();
     void slotZoomSliderChanged(int zoom);
 

@@ -160,7 +160,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     setSelectedColor(-1);
 
     m_brushHud = new KisBrushHud(provider, parent);
-    m_brushHud->setMaximumHeight(m_popupPaletteSize);
+    m_brushHud->setFixedHeight(int(m_popupPaletteSize));
     m_brushHud->setVisible(false);
 
     const int auxButtonSize = 35;

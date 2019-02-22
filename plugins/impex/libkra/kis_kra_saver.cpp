@@ -61,6 +61,8 @@
 #include "kis_guides_config.h"
 #include "KisProofingConfiguration.h"
 
+#include <KisMirrorAxisConfig.h>
+
 #include <QFileInfo>
 #include <QDir>
 
@@ -138,6 +140,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     saveAssistantsList(doc, imageElement);
     saveGrid(doc, imageElement);
     saveGuides(doc, imageElement);
+    saveMirrorAxis(doc, imageElement);
     saveAudio(doc, imageElement);
     savePalettesToXML(doc, imageElement);
 
@@ -477,6 +480,18 @@ bool KisKraSaver::saveGuides(QDomDocument& doc, QDomElement& element)
     if (!guides.isDefault()) {
         QDomElement guidesElement = guides.saveToXml(doc, "guides");
         element.appendChild(guidesElement);
+    }
+
+    return true;
+}
+
+bool KisKraSaver::saveMirrorAxis(QDomDocument &doc, QDomElement &element)
+{
+    KisMirrorAxisConfig mirrorAxisConfig = m_d->doc->mirrorAxisConfig();
+
+    if (!mirrorAxisConfig.isDefault()) {
+        QDomElement mirrorAxisElement = mirrorAxisConfig.saveToXml(doc, MIRROR_AXIS);
+        element.appendChild(mirrorAxisElement);
     }
 
     return true;

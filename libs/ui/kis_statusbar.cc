@@ -57,6 +57,8 @@
 #include "KisMainWindow.h"
 #include "kis_config.h"
 
+#include "widgets/KisMemoryReportButton.h"
+
 enum {
     IMAGE_SIZE_ID,
     POINTER_POSITION_ID
@@ -112,7 +114,7 @@ void KisStatusBar::setup()
     m_progressUpdater.reset(new KisProgressUpdater(m_progress, m_progress->progressProxy()));
     m_progressUpdater->setAutoNestNames(true);
 
-    m_memoryReportBox = new QPushButton();
+    m_memoryReportBox = new KisMemoryReportButton();
     m_memoryReportBox->setObjectName("memoryReportBox");
     m_memoryReportBox->setFlat(true);
     m_memoryReportBox->setContentsMargins(5, 5, 5, 5);
@@ -318,6 +320,10 @@ void KisStatusBar::updateMemoryStatus()
     m_shortMemoryTag = shortStats;
     m_longMemoryTag = longStats;
     m_memoryStatusIcon = icon;
+
+    m_memoryReportBox->setMaximumMemory(stats.totalMemoryLimit);
+    m_memoryReportBox->setCurrentMemory(stats.totalMemorySize);
+    m_memoryReportBox->setImageWeight(stats.imageSize);
 
     emit memoryStatusUpdated();
 }

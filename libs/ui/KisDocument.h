@@ -64,6 +64,7 @@ class KisUndoStore;
 class KisPart;
 class KisGridConfig;
 class KisGuidesConfig;
+class KisMirrorAxisConfig;
 class QDomDocument;
 class KisReferenceImagesLayer;
 
@@ -350,8 +351,12 @@ public:
     const KisGuidesConfig& guidesConfig() const;
     void setGuidesConfig(const KisGuidesConfig &data);
 
+
     QList<KoColorSetSP > &paletteList();
     void setPaletteList(const QList<KoColorSetSP > &paletteList);
+
+    const KisMirrorAxisConfig& mirrorAxisConfig() const;
+    void setMirrorAxisConfig(const KisMirrorAxisConfig& config);
 
     void clearUndoHistory();
 
@@ -451,6 +456,8 @@ Q_SIGNALS:
     void sigCompleteBackgroundSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
 
     void sigReferenceImagesChanged();
+
+    void sigMirrorAxisConfigChanged();
 
 private Q_SLOTS:
     void finishExportInBackground();

@@ -43,7 +43,8 @@ set(kritaui_LIB_SRCS
     canvas/kis_snap_config.cpp
     canvas/kis_snap_line_strategy.cpp
     canvas/KisSnapPointStrategy.cpp
-    dialogs/kis_about_application.cpp
+	canvas/KisMirrorAxisConfig.cpp
+	dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
     dialogs/kis_dlg_filter.cpp
@@ -263,6 +264,7 @@ set(kritaui_LIB_SRCS
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
     widgets/KisLayerStyleAngleSelector.cpp
+    widgets/KisMemoryReportButton.cpp
 
     KisPaletteEditor.cpp
     dialogs/KisDlgPaletteEditor.cpp

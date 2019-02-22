@@ -882,6 +882,14 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
             m_disablePressureAction->setChecked(value.toBool());
         }
 
+        if (key == KisCanvasResourceProvider::MirrorHorizontal) {
+            m_hMirrorAction->setChecked(value.toBool());
+        }
+
+        if (key == KisCanvasResourceProvider::MirrorVertical) {
+            m_vMirrorAction->setChecked(value.toBool());
+        }
+
         sender()->blockSignals(false);
     }
 }

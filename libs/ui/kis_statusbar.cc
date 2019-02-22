@@ -307,7 +307,7 @@ void KisStatusBar::updateMemoryStatus()
             KisUsageLogger::log(QString("WARNING: %1 is running out of memory:%2\n").arg(m_imageView->document()->url().toLocalFile()).arg(longStats));
         }
 
-        icon = KisIconUtils::loadIcon("dialog-warning");
+        icon = KisIconUtils::loadIcon("warning");
         QString suffix =
                 i18nc("tooltip on statusbar memory reporting button",
                       "\n\nWARNING:\tOut of memory! Swapping has been started.\n"

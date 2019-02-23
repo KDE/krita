@@ -161,7 +161,6 @@ struct AddGeneralOps<Traits, true>
          add<&cfSuperLight<Arg> >(cs, COMPOSITE_SUPER_LIGHT  , i18n("Super Light") , KoCompositeOp::categoryLight());
          add<&cfTintIFSIllusions<Arg>     >(cs, COMPOSITE_TINT_IFS_ILLUSIONS     , i18n("Tint (IFS Illusions)")    , KoCompositeOp::categoryLight());
          add<&cfFogLightenIFSIllusions<Arg>     >(cs, COMPOSITE_FOG_LIGHTEN_IFS_ILLUSIONS     , i18n("Fog Lighten (IFS Illusions)")    , KoCompositeOp::categoryLight());
-         add<&cfColorDodgeLogarithmic<Arg>  >(cs, COMPOSITE_DODGE_LOGARITHMIC       , i18n("Color Dodge - Logarithmic") , KoCompositeOp::categoryLight());
          add<&cfEasyDodge<Arg>  >(cs, COMPOSITE_EASY_DODGE       , i18n("Easy Dodge") , KoCompositeOp::categoryLight());
 
          add<&cfColorBurn<Arg>  >(cs, COMPOSITE_BURN        , i18n("Color Burn") , KoCompositeOp::categoryDark());
@@ -170,7 +169,6 @@ struct AddGeneralOps<Traits, true>
          add<&cfGammaDark<Arg>  >(cs, COMPOSITE_GAMMA_DARK  , i18n("Gamma Dark") , KoCompositeOp::categoryDark());
          add<&cfShadeIFSIllusions<Arg>     >(cs, COMPOSITE_SHADE_IFS_ILLUSIONS     , i18n("Shade (IFS_Illusions)")    , KoCompositeOp::categoryDark());
          add<&cfFogDarkenIFSIllusions<Arg>     >(cs, COMPOSITE_FOG_DARKEN_IFS_ILLUSIONS     , i18n("Fog Darken (IFS Illusions)")    , KoCompositeOp::categoryDark());
-         add<&cfColorBurnLogarithmic<Arg>  >(cs, COMPOSITE_BURN_LOGARITHMIC        , i18n("Color Burn - Logarithmic") , KoCompositeOp::categoryDark());
          add<&cfEasyBurn<Arg>  >(cs, COMPOSITE_EASY_BURN        , i18n("Easy Burn") , KoCompositeOp::categoryDark());
 
          add<&cfAddition<Arg>        >(cs, COMPOSITE_ADD             , i18n("Addition")         , KoCompositeOp::categoryArithmetic());

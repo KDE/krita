@@ -897,29 +897,6 @@ inline T cfModuloContinuous(T src, T dst) {
 }
 
 template<class T>
-inline T cfColorBurnLogarithmic(T src, T dst) {
-    using namespace Arithmetic;
-    //Also known as Darken from EffectBank/Illusions.hu. IFS Illusions had used this blending mode.
-    
-    qreal fsrc = scale<qreal>(src);
-    qreal fdst = scale<qreal>(dst);
-    
-    if (inv(fdst) == zeroValue<T>()) {
-    return scale<T>(log2(1.0 + abs(fsrc)/abs(inv(.999999))/8));
-    }  
-    
-    return scale<T>(log2(1.0 + abs(fsrc)/abs(inv(fdst))/8)); 
-}
-
-template<class T>
-inline T cfColorDodgeLogarithmic(T src, T dst) {
-    using namespace Arithmetic;
-    //Also known as Lighten from EffectBank/Illusions.hu. IFS Illusions had used this blending mode.
-        
-    return inv(cfColorBurnLogarithmic(inv(src),inv(dst))); 
-}
-
-template<class T>
 inline T cfEasyDodge(T src, T dst) {
     using namespace Arithmetic;
     // The 13 divided by 15 can be adjusted to taste. See imgblend.m

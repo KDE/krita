@@ -833,6 +833,10 @@ class comics_project_manager_docker(DockWidget):
                         # we cannot check from here whether the file in question has been renamed or deleted.
                         self.pagesModel.removeRow(index.row())
                         return
+                    else:
+                        # Krita will trigger the filesystemwatcher when doing backupfiles,
+                        # so ensure the file is still watched if it exists.
+                        self.pagesWatcher.addPath(url)
                     pageItem = self.pagesModel.itemFromIndex(index)
                     page = zipfile.ZipFile(url, "r")
                     dataList = self.get_description_and_title(page.read("documentinfo.xml"))

@@ -562,7 +562,7 @@
   <Actions category="View">
     <text>View</text>
     <Action name="view_show_canvas_only">
-      <icon></icon>
+      <icon>document-new</icon>
       <text>&amp;Show Canvas Only</text>
       <whatsThis></whatsThis>
       <toolTip>Show just the canvas or the whole window</toolTip>

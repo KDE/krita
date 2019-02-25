@@ -61,7 +61,7 @@ if (APPLE)
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
-
+    add_definitions(-Wno-suggest-override)
 endif()
 
  ######################

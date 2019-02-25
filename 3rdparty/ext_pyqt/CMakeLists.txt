@@ -7,8 +7,8 @@ if (UNIX)
     endif()
     ExternalProject_Add( ext_pyqt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.9.2.zip
-        URL_MD5 67eacf2f486f77136c9758e03fe6889e
+        URL https://www.riverbankcomputing.com/static/Downloads/PyQt5/PyQt5_gpl-5.12.zip
+        URL_MD5 102062aff7435c03114e02c456dfd01f
         
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py --confirm-license --qmake ${PREFIX_ext_pyqt}/bin/qmake --sip ${PREFIX_ext_pyqt}/bin/sip --sip-incdir ${PREFIX_ext_pyqt}/include --sipdir ${PREFIX_ext_pyqt}/share/sip
         BUILD_COMMAND make
@@ -36,8 +36,8 @@ elseif(MINGW)
     )
     ExternalProject_Add( ext_pyqt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.9.2.zip
-        URL_MD5 67eacf2f486f77136c9758e03fe6889e
+        URL https://www.riverbankcomputing.com/static/Downloads/PyQt5/PyQt5_gpl-5.12.tar.gz
+        URL_MD5 757161fc19a2da788962fbc5d18480c0
         PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/pyqt-configure-fix.patch
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_PYQT_conf}

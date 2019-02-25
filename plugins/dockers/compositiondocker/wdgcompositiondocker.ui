@@ -30,23 +30,23 @@
    </item>
    <item row="1" column="3">
     <widget class="QPushButton" name="exportButton">
+     <property name="toolTip">
+      <string>Export checked compositions.</string>
+     </property>
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
    <item row="0" column="0" colspan="4">
-    <widget class="QListView" name="compositionView"/>
+    <widget class="QListView" name="compositionView">
+     <property name="toolTip">
+      <string>Checked compositions will be exported, unchecked won't.</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -93,7 +93,6 @@ const QString COMPOSITE_PENUMBRAD     = "penumbra d";
 
 const QString COMPOSITE_DARKEN      = "darken";
 const QString COMPOSITE_BURN        = "burn";//this is also known as 'color burn'.
-const QString COMPOSITE_BURN_LOGARITHMIC        = "burn_logarithmic";
 const QString COMPOSITE_LINEAR_BURN = "linear_burn";
 const QString COMPOSITE_GAMMA_DARK  = "gamma_dark";
 const QString COMPOSITE_SHADE_IFS_ILLUSIONS = "shade_ifs_illusions";
@@ -102,7 +101,6 @@ const QString COMPOSITE_EASY_BURN        = "easy burn";
 
 const QString COMPOSITE_LIGHTEN      = "lighten";
 const QString COMPOSITE_DODGE        = "dodge";
-const QString COMPOSITE_DODGE_LOGARITHMIC        = "dodge_logarithmic";
 const QString COMPOSITE_LINEAR_DODGE = "linear_dodge";
 const QString COMPOSITE_SCREEN       = "screen";
 const QString COMPOSITE_HARD_LIGHT   = "hard_light";

@@ -1,8 +1,8 @@
 SET(PREFIX_ext_poppler "${EXTPREFIX}" )
 ExternalProject_Add( ext_poppler
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL https://poppler.freedesktop.org/poppler-0.62.0.tar.xz
-	URL_MD5 42b801f2defaccb6b6cf1bf783ee1552
+	URL https://poppler.freedesktop.org/poppler-0.74.0.tar.xz
+	URL_MD5 1ce581bde2f23fa55bee13d8c61ac0df
 	
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/no_tests.diff
 

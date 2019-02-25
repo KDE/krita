@@ -236,6 +236,17 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
             settings->setProperty("brush_definition", d.toString());
         }
     }
+
+    // Preset preview cannot display gradient color source: there is
+    // no resource manager for KisResourcesSnapshot, therefore gradient is nullptr.
+    // BUG: 385521 (Selecting "Gradient" in brush editor crashes krita)
+    if (m_currentPreset->paintOp().id() == "paintbrush") {
+        QString colorSourceType = settings->getString("ColorSource/Type", "plain");
+        if (colorSourceType == "gradient") {
+            settings->setProperty("ColorSource/Type", "plain");
+        }
+    }
+
     proxy_preset->setSettings(settings);
 
 

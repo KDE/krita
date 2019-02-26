@@ -558,9 +558,6 @@ public:
     bool stabilizerDelayedPaint(bool defaultValue = false) const;
     void setStabilizerDelayedPaint(bool value);
 
-    QString customFFMpegPath(bool defaultValue = false) const;
-    void setCustomFFMpegPath(const QString &value) const;
-
     bool showBrushHud(bool defaultValue = false) const;
     void setShowBrushHud(bool value);
 

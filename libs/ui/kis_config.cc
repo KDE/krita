@@ -1951,16 +1951,6 @@ void KisConfig::setStabilizerDelayedPaint(bool value)
     m_cfg.writeEntry("stabilizerDelayedPaint", value);
 }
 
-QString KisConfig::customFFMpegPath(bool defaultValue) const
-{
-    return defaultValue ? QString() : m_cfg.readEntry("ffmpegExecutablePath", QString());
-}
-
-void KisConfig::setCustomFFMpegPath(const QString &value) const
-{
-    m_cfg.writeEntry("ffmpegExecutablePath", value);
-}
-
 bool KisConfig::showBrushHud(bool defaultValue) const
 {
     return defaultValue ? false : m_cfg.readEntry("showBrushHud", false);

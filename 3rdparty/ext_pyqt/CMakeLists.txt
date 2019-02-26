@@ -19,6 +19,7 @@ if (UNIX)
         UPDATE_COMMAND ""
     )
 elseif(MINGW)
+
     list(APPEND _PYQT_conf
         --confirm-license
         --target-py-version 3.6
@@ -32,7 +33,7 @@ elseif(MINGW)
         --destdir ${PREFIX_ext_pyqt}/lib/krita-python-libs
         --stubsdir ${PREFIX_ext_pyqt}/lib/krita-python-libs/PyQt5
         --no-qml-plugin --no-python-dbus --no-qsci-api --no-tools
-        --disable QtSql --disable QtTest --disable QtWinExtras
+        --disable QtSql --disable QtTest --disable QtWinExtras --disable QtHelp
     )
     ExternalProject_Add( ext_pyqt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -42,7 +43,7 @@ elseif(MINGW)
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_PYQT_conf}
         BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} CXXFLAGS=-D_hypot=hypot LDFLAGS=${SECURITY_SHARED_LINKER_FLAGS}
-        INSTALL_COMMAND mingw32-make -j${SUBMAKE_JOBS} install
+        INSTALL_COMMAND mingw32-make install
         
         BUILD_IN_SOURCE 1
 

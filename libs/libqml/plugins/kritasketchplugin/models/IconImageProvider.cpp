@@ -30,6 +30,10 @@ IconImageProvider::IconImageProvider()
 QImage IconImageProvider::requestImage(const QString &id, QSize */*size*/, const QSize &requestedSize)
 {
     QIcon icon = KisIconUtils::loadIcon(id);
-    Q_ASSERT(!icon.isNull());
+    if (icon.isNull()) {
+        QImage img = QImage(requestedSize, QImage::Format_ARGB32);
+        img.fill(Qt::transparent);
+        return img;
+    }
     return icon.pixmap(requestedSize).toImage();
 }

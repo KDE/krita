@@ -21,6 +21,8 @@
 #include <QVariant>
 
 #include <KisActionPlugin.h>
+class KisAnimationRenderingOptions;
+class KisDocument;
 
 class AnimaterionRenderer : public KisActionPlugin
 {
@@ -49,6 +51,9 @@ private Q_SLOTS:
      * KisVideoExport object as defined in plugins/extensions/impex.
      */
     void slotRenderSequenceAgain();
+
+private:
+    void renderAnimationImpl(KisDocument *doc, KisAnimationRenderingOptions encoderOptions);
 
 };
 

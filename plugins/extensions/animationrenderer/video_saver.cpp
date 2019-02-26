@@ -36,6 +36,7 @@
 
 #include "kis_config.h"
 
+#include "KisAnimationRenderingOptions.h"
 #include <QFileSystemWatcher>
 #include <QProcess>
 #include <QProgressDialog>
@@ -186,12 +187,10 @@ private:
 };
 
 
-VideoSaver::VideoSaver(KisDocument *doc, const QString &ffmpegPath, bool batchMode)
+VideoSaver::VideoSaver(KisDocument *doc, bool batchMode)
     : m_image(doc->image())
     , m_doc(doc)
     , m_batchMode(batchMode)
-    , m_ffmpegPath(ffmpegPath)
-    , m_runner(new KisFFMpegRunner(ffmpegPath))
 {
 }
 
@@ -204,83 +203,51 @@ KisImageSP VideoSaver::image()
     return m_image;
 }
 
-bool VideoSaver::hasFFMpeg() const
+KisImageBuilder_Result VideoSaver::encode(const QString &savedFilesMask, const KisAnimationRenderingOptions &options)
 {
-    return !m_ffmpegPath.isEmpty();
-}
-
-KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisPropertiesConfigurationSP configuration)
-{
-
-    qDebug() << "ffmpeg" << m_ffmpegPath << "filename" << filename << "configuration" << configuration->toXML();
-
-    if (m_ffmpegPath.isEmpty()) {
-        m_ffmpegPath = configuration->getString("ffmpeg_path");
-        if (!QFileInfo(m_ffmpegPath).exists()) {
-            m_doc->setErrorMessage(i18n("ffmpeg could not be found at %1", m_ffmpegPath));
-            return KisImageBuilder_RESULT_FAILURE;
-        }
+    if (!QFileInfo(options.ffmpegPath).exists()) {
+        m_doc->setErrorMessage(i18n("ffmpeg could not be found at %1", options.ffmpegPath));
+        return KisImageBuilder_RESULT_FAILURE;
     }
 
     KisImageBuilder_Result result = KisImageBuilder_RESULT_OK;
 
-    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("first_frame"));
-    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("last_frame"));
-    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("height"));
-    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("width"));
-    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("include_audio"));
-    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("directory"));
-    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("framerate"));
-
     KisImageAnimationInterface *animation = m_image->animationInterface();
-    const KisTimeRange fullRange = animation->fullClipRange();
-    const int frameRate = configuration->getInt("framerate", animation->framerate());
 
-    const int sequenceNumberingOffset = configuration->getInt("sequence_start", 0);
-    const KisTimeRange clipRange(sequenceNumberingOffset + configuration->getInt("first_frame", fullRange.start()),
-                                 sequenceNumberingOffset + configuration->getInt("last_frame", fullRange.end())
-    );
-
-    const bool includeAudio = configuration->getBool("include_audio", true);
-
-    const int exportHeight = configuration->getInt("height", int(m_image->height()));
-    const int exportWidth = configuration->getInt("width", int(m_image->width()));
+    const int sequenceNumberingOffset = options.sequenceStart;
+    const KisTimeRange clipRange(sequenceNumberingOffset + options.firstFrame,
+                                 sequenceNumberingOffset + options.lastFrame);
 
      // export dimensions could be off a little bit, so the last force option tweaks the pixels for the export to work
-    const QString exportDimensions = QString("scale=w=").append(QString::number(exportWidth)).append(":h=")
-            .append(QString::number(exportHeight)).append(":force_original_aspect_ratio=decrease");
+    const QString exportDimensions =
+        QString("scale=w=")
+            .append(QString::number(options.width))
+            .append(":h=")
+            .append(QString::number(options.height))
+            .append(":force_original_aspect_ratio=decrease");
 
 
-    const QDir framesDir(configuration->getString("directory"));
+    const QString resultFile = options.resolveAbsoluteVideoFilePath();
+    const QDir videoDir(QFileInfo(resultFile).absolutePath());
 
-    QString resultFile;
-    if (QFileInfo(filename).isAbsolute()) {
-        resultFile = filename;
-    }
-    else {
-        resultFile = framesDir.absolutePath() + "/" + filename;
-    }
     const QFileInfo info(resultFile);
     const QString suffix = info.suffix().toLower();
-
-    const QString palettePath = framesDir.filePath("palette.png");
-
-    const QString savedFilesMask = configuration->getString("savedFilesMask");
-
-    const QStringList additionalOptionsList = configuration->getString("customUserOptions").split(' ', QString::SkipEmptyParts);
+    const QString palettePath = videoDir.filePath("palette.png");
+    const QStringList additionalOptionsList = options.customFFMpegOptions.split(' ', QString::SkipEmptyParts);
+    QScopedPointer<KisFFMpegRunner> runner(new KisFFMpegRunner(options.ffmpegPath));
 
     if (suffix == "gif") {
         {
             QStringList args;
-            args << "-r" << QString::number(frameRate)
+            args << "-r" << QString::number(options.frameRate)
                  << "-start_number" << QString::number(clipRange.start())
                  << "-i" << savedFilesMask
                  << "-vf" << "palettegen"
                  << "-y" << palettePath;
 
             KisImageBuilder_Result result =
-                m_runner->runFFMpeg(args, i18n("Fetching palette..."),
-                                    framesDir.filePath("log_generate_palette_gif.log"),
+                runner->runFFMpeg(args, i18n("Fetching palette..."),
+                                    videoDir.filePath("log_generate_palette_gif.log"),
                                     clipRange.duration());
 
             if (result != KisImageBuilder_RESULT_OK) {
@@ -290,7 +257,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
 
         {
             QStringList args;
-            args << "-r" << QString::number(frameRate)
+            args << "-r" << QString::number(options.frameRate)
                  << "-start_number" << QString::number(clipRange.start())
                  << "-i" << savedFilesMask
                  << "-i" << palettePath
@@ -299,7 +266,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
                  << "-y" << resultFile;
 
             // if we are exporting out at a different image size, we apply scaling filter
-            if (m_image->height() != exportHeight || m_image->width() != exportWidth) {
+            if (m_image->width() != options.width || m_image->height() != options.height) {
                 args << "-vf" << exportDimensions;
             }
 
@@ -307,8 +274,8 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
             dbgFile << "savedFilesMask" << savedFilesMask << "start" << QString::number(clipRange.start()) << "duration" << clipRange.duration();
 
             KisImageBuilder_Result result =
-                m_runner->runFFMpeg(args, i18n("Encoding frames..."),
-                                    framesDir.filePath("log_encode_gif.log"),
+                runner->runFFMpeg(args, i18n("Encoding frames..."),
+                                    videoDir.filePath("log_encode_gif.log"),
                                     clipRange.duration());
 
             if (result != KisImageBuilder_RESULT_OK) {
@@ -317,14 +284,12 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
         }
     } else {
         QStringList args;
-        args << "-r" << QString::number(frameRate)
+        args << "-r" << QString::number(options.frameRate)
              << "-start_number" << QString::number(clipRange.start())
              << "-i" << savedFilesMask;
 
-
-
         QFileInfo audioFileInfo = animation->audioChannelFileName();
-        if (includeAudio && audioFileInfo.exists()) {
+        if (options.includeAudio && audioFileInfo.exists()) {
             const int msecStart = clipRange.start() * 1000 / animation->framerate();
             const int msecDuration = clipRange.duration() * 1000 / animation->framerate();
 
@@ -341,26 +306,38 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
 
         // if we are exporting out at a different image size, we apply scaling filter
         // export options HAVE to go after input options, so make sure this is after the audio import
-        if (m_image->height() != exportHeight || m_image->width() != exportWidth) {
+        if (m_image->width() != options.width || m_image->height() != options.height) {
             args << "-vf" << exportDimensions;
         }
-
 
         args << additionalOptionsList
              << "-y" << resultFile;
 
 
-        result = m_runner->runFFMpeg(args, i18n("Encoding frames..."),
-                                     framesDir.filePath("log_encode.log"),
+        result = runner->runFFMpeg(args, i18n("Encoding frames..."),
+                                     videoDir.filePath("log_encode.log"),
                                      clipRange.duration());
     }
 
     return result;
 }
 
-void VideoSaver::cancel()
+KisImportExportFilter::ConversionStatus VideoSaver::convert(KisDocument *document, const QString &savedFilesMask, const KisAnimationRenderingOptions &options, bool batchMode)
 {
-    m_runner->cancel();
+    VideoSaver videoSaver(document, batchMode);
+    KisImageBuilder_Result res = videoSaver.encode(savedFilesMask, options);
+
+    if (res == KisImageBuilder_RESULT_OK) {
+        return KisImportExportFilter::OK;
+
+    } else if (res == KisImageBuilder_RESULT_CANCEL) {
+        return KisImportExportFilter::ProgressCancelled;
+
+    }else {
+        document->setErrorMessage(i18n("FFMpeg failed to convert the image sequence. Check the logfile in your output directory for more information."));
+    }
+
+    return KisImportExportFilter::InternalError;
 }
 
 #include "video_saver.moc"

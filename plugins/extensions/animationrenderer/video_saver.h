@@ -24,18 +24,17 @@
 
 #include "kis_types.h"
 
-#include <kis_properties_configuration.h>
 #include "KisImageBuilderResult.h"
-#include "kritavideoexport_export.h"
+#include <KisImportExportFilter.h>
 
 class KisFFMpegRunner;
 
 /* The KisImageBuilder_Result definitions come from kis_png_converter.h here */
 
 class KisDocument;
+class KisAnimationRenderingOptions;
 
-class KRITAVIDEOEXPORT_EXPORT VideoSaver : public QObject {
-
+class VideoSaver : public QObject {
     Q_OBJECT
 public:
     /**
@@ -46,7 +45,7 @@ public:
      * @param ffmpegPath the path to the ffmpeg executable.
      * @param batchMode whether Krita is in batchmde and we can thus not show gui widgets.
      */
-    VideoSaver(KisDocument* doc, const QString &ffmpegPath, bool batchMode);
+    VideoSaver(KisDocument* doc, bool batchMode);
     ~VideoSaver() override;
 
     /**
@@ -61,19 +60,14 @@ public:
      * @param configuration the configuration
      * @return whether it is successful or had another failure.
      */
-    KisImageBuilder_Result encode(const QString &filename, KisPropertiesConfigurationSP configuration);
+    KisImageBuilder_Result encode(const QString &savedFilesMask, const KisAnimationRenderingOptions &options);
 
-    bool hasFFMpeg() const;
-
-private Q_SLOTS:
-    void cancel();
+    static KisImportExportFilter::ConversionStatus convert(KisDocument *document, const QString &savedFilesMask, const KisAnimationRenderingOptions &options, bool batchMode);
 
 private:
     KisImageSP m_image;
     KisDocument* m_doc;
     bool m_batchMode;
-    QString m_ffmpegPath;
-    QScopedPointer<KisFFMpegRunner> m_runner;
 };
 
 #endif

@@ -35,18 +35,26 @@ class VideoExportOptionsDialog : public KisConfigWidget
     Q_OBJECT
 
 public:
-    enum CodecIndex {
+    enum ContainerType {
+        DEFAULT,
+        OGV
+    };
+
+    enum CodecPageIndex {
         CODEC_H264 = 0,
+        CODEC_H265,
         CODEC_THEORA
     };
 
 public:
-    explicit VideoExportOptionsDialog(QWidget *parent = 0);
+    explicit VideoExportOptionsDialog(ContainerType containerType, QWidget *parent = 0);
     ~VideoExportOptionsDialog() override;
 
-    void setCodec(CodecIndex index);
+    void setSupportsHDR(bool value);
 
     QStringList customUserOptions() const;
+    QString customUserOptionsString() const;
+    bool forceHDRModeForFrames() const;
 
     void setConfiguration(const KisPropertiesConfigurationSP  config) override;
     KisPropertiesConfigurationSP configuration() const override;
@@ -56,11 +64,18 @@ private Q_SLOTS:
     void slotSaveCustomLine();
     void slotResetCustomLine();
 
+    void slotCodecSelected(int index);
+
+    void slotH265ProfileChanged(int index);
+    void slotEditHDRMetadata();
+
 private:
     Ui::VideoExportOptionsDialog *ui;
 
 private:
     QStringList generateCustomLine() const;
+
+    QString currentCodecId() const;
 
 private:
     struct Private;

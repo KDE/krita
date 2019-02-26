@@ -42,7 +42,6 @@ add_subdirectory(tga)
 add_subdirectory(heightmap)
 add_subdirectory(brush)
 add_subdirectory(spriter)
-add_subdirectory(video)
 add_subdirectory(kra)
 
 if (GIF_FOUND)

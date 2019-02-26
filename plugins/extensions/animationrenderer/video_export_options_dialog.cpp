@@ -23,6 +23,8 @@
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+#include "VideoHDRMetadataOptionsDialog.h"
+#include "KisHDRMetadataOptions.h"
 
 
 struct VideoExportOptionsDialog::Private
@@ -89,6 +91,8 @@ struct VideoExportOptionsDialog::Private
     ContainerType containerType;
 
     QString currentCustomLine;
+
+    KisHDRMetadataOptions hdrMetadataOptions;
 };
 
 void populateComboWithKoIds(QComboBox *combo, const QVector<KoID> &ids, int defaultIndex)
@@ -186,6 +190,8 @@ KisPropertiesConfigurationSP VideoExportOptionsDialog::configuration() const
     cfg->setProperty("TheoraBitrate", ui->intBitrate->value());
     cfg->setProperty("CustomLineValue", ui->txtCustomLine->text());
     cfg->setProperty("customUserOptions", customUserOptions().join(' '));
+
+    cfg->setPrefixedProperties("hdrMetadata/", m_d->hdrMetadataOptions.toProperties());
 
     return cfg;
 }
@@ -289,6 +295,10 @@ void VideoExportOptionsDialog::setConfiguration(const KisPropertiesConfiguration
     slotCodecSelected(index);
 
     slotH265ProfileChanged(ui->cmbProfileH265->currentIndex());
+
+    KisPropertiesConfigurationSP metadataProperties = new KisPropertiesConfiguration();
+    cfg->getPrefixedProperties("hdrMetadata/", metadataProperties);
+    m_d->hdrMetadataOptions.fromProperties(metadataProperties);
 }
 
 QStringList VideoExportOptionsDialog::generateCustomLine() const
@@ -345,36 +355,8 @@ QStringList VideoExportOptionsDialog::generateCustomLine() const
         }
 
         if (enableHDR) {
-            const int r_x = 0.708 * 50000;
-            const int r_y = 0.292 * 50000;
-            const int g_x = 0.170 * 50000;
-            const int g_y = 0.797 * 50000;
-            const int b_x = 0.131 * 50000;
-            const int b_y = 0.046 * 50000;
-            const int w_x = 0.3127 * 50000;
-            const int w_y = 0.3290 * 50000;
-
-            const int minLightness = 0.01 * 10000;
-            const int maxLightness = 1000 * 10000;
-
-            const int maxCLL = 1000;
-            const int maxFALL = 80;
-
-            const QString x265Params =
-                    QString("master-display=R(%1,%2)G(%3,%4)B(%5,%6)WP(%7,%8)L(%9,%10):"
-                            "max-cll=%11,%12:"
-                            "colorprim=bt2020:"
-                            "colormatrix=bt2020c:"
-                            "transfer=smpte2084:"
-                            "range=full")
-                    .arg(r_x).arg(r_y)
-                    .arg(g_x).arg(g_y)
-                    .arg(b_x).arg(b_y)
-                    .arg(w_x).arg(w_y)
-                    .arg(minLightness).arg(maxLightness)
-                    .arg(maxCLL).arg(maxFALL);
-
-            options << "-x265-params" << x265Params;
+            const QString metadataLine = m_d->hdrMetadataOptions.generateFFMpegOptions();
+            options << metadataLine.split(" ");
         }
 
     } else if (currentCodecId() == "libtheora") {
@@ -415,5 +397,10 @@ void VideoExportOptionsDialog::slotH265ProfileChanged(int index)
 
 void VideoExportOptionsDialog::slotEditHDRMetadata()
 {
-    ENTER_FUNCTION();
+    VideoHDRMetadataOptionsDialog dlg(this);
+    dlg.setHDRMetadataOptions(m_d->hdrMetadataOptions);
+
+    if (dlg.exec() == QDialog::Accepted) {
+        m_d->hdrMetadataOptions = dlg.hdrMetadataOptions();
+    }
 }

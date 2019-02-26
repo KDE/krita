@@ -359,7 +359,8 @@ public:
     QStringList favoriteCompositeOps(bool defaultValue = false) const;
     void setFavoriteCompositeOps(const QStringList& compositeOps) const;
 
-    QString exportConfiguration(const QString &filterId, bool defaultValue = false) const;
+    QString exportConfigurationXML(const QString &filterId, bool defaultValue = false) const;
+    KisPropertiesConfigurationSP exportConfiguration(const QString &filterId, bool defaultValue = false) const;
     void setExportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const;
 
     QString importConfiguration(const QString &filterId, bool defaultValue = false) const;

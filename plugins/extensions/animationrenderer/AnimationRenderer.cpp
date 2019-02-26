@@ -93,8 +93,7 @@ void AnimaterionRenderer::slotRenderSequenceAgain()
 
     KisConfig cfg(true);
 
-    KisPropertiesConfigurationSP settings = new KisPropertiesConfiguration();
-    settings->fromXML(cfg.exportConfiguration("ANIMATION_EXPORT"));
+    KisPropertiesConfigurationSP settings = cfg.exportConfiguration("ANIMATION_EXPORT");
 
     KisAnimationRenderingOptions encoderOptions;
     encoderOptions.fromProperties(settings);

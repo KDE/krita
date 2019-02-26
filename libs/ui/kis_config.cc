@@ -1308,9 +1308,17 @@ void KisConfig::setFavoriteCompositeOps(const QStringList& compositeOps) const
     m_cfg.writeEntry("favoriteCompositeOps", compositeOps);
 }
 
-QString KisConfig::exportConfiguration(const QString &filterId, bool defaultValue) const
+QString KisConfig::exportConfigurationXML(const QString &filterId, bool defaultValue) const
 {
     return (defaultValue ? QString() : m_cfg.readEntry("ExportConfiguration-" + filterId, QString()));
+}
+
+KisPropertiesConfigurationSP KisConfig::exportConfiguration(const QString &filterId, bool defaultValue) const
+{
+    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
+    const QString xmlData = exportConfigurationXML(filterId, defaultValue);
+    cfg->fromXML(xmlData);
+    return cfg;
 }
 
 void KisConfig::setExportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const

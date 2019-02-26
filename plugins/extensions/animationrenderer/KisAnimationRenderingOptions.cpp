@@ -82,7 +82,7 @@ KisPropertiesConfigurationSP KisAnimationRenderingOptions::toProperties() const
 void KisAnimationRenderingOptions::fromProperties(KisPropertiesConfigurationSP config)
 {
     basename = config->getPropertyLazy("basename", basename);
-    lastDocuemntPath = config->getPropertyLazy("last_document_path", QString());
+    lastDocuemntPath = config->getPropertyLazy("last_document_path", "");
     directory = config->getPropertyLazy("directory", directory);
     firstFrame = config->getPropertyLazy("first_frame", 0);
     lastFrame = config->getPropertyLazy("last_frame", 0);
@@ -93,13 +93,13 @@ void KisAnimationRenderingOptions::fromProperties(KisPropertiesConfigurationSP c
     shouldEncodeVideo = config->getPropertyLazy("encode_video", false);
     shouldDeleteSequence = config->getPropertyLazy("delete_sequence", false);
 
-    ffmpegPath = config->getPropertyLazy("ffmpeg_path", QString());
+    ffmpegPath = config->getPropertyLazy("ffmpeg_path", "");
     frameRate = config->getPropertyLazy("framerate", 25);
     height = config->getPropertyLazy("height", 0);
     width = config->getPropertyLazy("width", 0);
     includeAudio = config->getPropertyLazy("include_audio", true);
-    videoFileName = config->getPropertyLazy("filename", QString());
-    customFFMpegOptions = config->getPropertyLazy("custom_ffmpeg_options", QString());
+    videoFileName = config->getPropertyLazy("filename", "");
+    customFFMpegOptions = config->getPropertyLazy("custom_ffmpeg_options", "");
 
     frameExportConfig = new KisPropertiesConfiguration();
     frameExportConfig->setPrefixedProperties("frame_export/", frameExportConfig);

@@ -917,7 +917,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
     if (device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
             || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
-            || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID) {
+            || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID
+            || options.saveAsHDR) {
 
         const KoColorSpace *dstCS =
             KoColorSpaceRegistry::instance()->colorSpace(
@@ -939,15 +940,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
         device = tmp;
 
-    } else {
-        KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR ||
-                                (device->colorSpace()->profile() &&
-                                 device->colorSpace()->profile()->uniqueId() ==
-                                 KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId())) {
-            options.saveAsHDR = false;
-        }
     }
-
 
     KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.forceSRGB) {
         options.forceSRGB = false;

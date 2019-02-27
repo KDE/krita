@@ -7,6 +7,7 @@ set(kritaselectiontools_SOURCES
     kis_tool_select_outline.cc
     kis_tool_select_path.cc
     kis_tool_select_similar.cc
+    kis_tool_select_magnetic.cc
     kis_selection_modifier_mapper.cc
 )
 
@@ -26,5 +27,6 @@ install( FILES
         KisToolSelectRectangular.action
         KisToolSelectOutline.action
         KisToolSelectPath.action
+        KisToolSelectMagnetic.action
     DESTINATION  ${DATA_INSTALL_DIR}/krita/actions
 )

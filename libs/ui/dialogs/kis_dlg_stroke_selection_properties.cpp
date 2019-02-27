@@ -43,7 +43,7 @@
 #include "kis_config.h"
 #include "kis_signal_compressor.h"
 #include "widgets/kis_cmb_idlist.h"
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 #include "kis_layer_utils.h"
 #include <kis_ls_utils.h>
 #include "kis_canvas_resource_provider.h"

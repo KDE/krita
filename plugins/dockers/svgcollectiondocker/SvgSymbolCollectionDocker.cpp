@@ -26,7 +26,7 @@
 #include <QMimeData>
 #include <QDomDocument>
 #include <QDomElement>
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 #include <QWidgetAction>
 #include <QMenu>
 

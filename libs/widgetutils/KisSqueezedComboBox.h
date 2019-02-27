@@ -17,10 +17,8 @@
  *
  * ============================================================ */
 
-/** @file squeezedcombobox.h */
-
-#ifndef SQUEEZEDCOMBOBOX_H
-#define SQUEEZEDCOMBOBOX_H
+#ifndef KISSQUEEZEDCOMBOBOX_H
+#define KISSQUEEZEDCOMBOBOX_H
 
 class QTimer;
 class QResizeEvent;
@@ -32,9 +30,9 @@ class QWidget;
 #include <QWidget>
 #include <QIcon>
 
-#include "kritawidgets_export.h"
+#include "kritawidgetutils_export.h"
 
-/** @class SqueezedComboBox
+/** @class KisSqueezedComboBox
  *
  * This widget is a QComboBox, but then a little bit
  * different. It only shows the right part of the items
@@ -42,10 +40,10 @@ class QWidget;
  * possible to show the complete item, it will be shortened
  * and "..." will be prepended.
  *
- * @image html squeezedcombobox.png "This is how it looks"
+ * @image html KisSqueezedComboBox.png "This is how it looks"
  * @author Tom Albers
  */
-class KRITAWIDGETS_EXPORT SqueezedComboBox : public QComboBox
+class KRITAWIDGETUTILS_EXPORT KisSqueezedComboBox : public QComboBox
 {
     Q_OBJECT
 
@@ -56,11 +54,11 @@ public:
      * @param parent parent widget
      * @param name name to give to the widget
      */
-    SqueezedComboBox(QWidget *parent = 0, const char *name = 0);
+    KisSqueezedComboBox(QWidget *parent = 0, const char *name = 0);
     /**
      * destructor
      */
-    ~SqueezedComboBox() override;
+    ~KisSqueezedComboBox() override;
 
     /**
      *

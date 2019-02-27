@@ -64,7 +64,7 @@
 #include <KoResourcePaths.h>
 #include "kis_action_registry.h"
 #include <kis_image.h>
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 #include "kis_clipboard.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "KoColorSpace.h"
@@ -514,7 +514,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         QLabel *lbl = new QLabel(i18nc("The number of the screen", "Screen %1:", i + 1));
         m_monitorProfileLabels << lbl;
-        SqueezedComboBox *cmb = new SqueezedComboBox();
+        KisSqueezedComboBox *cmb = new KisSqueezedComboBox();
         cmb->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
         monitorProfileGrid->addRow(lbl, cmb);
         m_monitorProfileWidgets << cmb;

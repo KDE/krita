@@ -23,6 +23,7 @@ set(kritawidgetutils_LIB_SRCS
     KoFileDialog.cpp
     KoResourcePaths.cpp
     KisKineticScroller.cpp
+    KisSqueezedComboBox.cpp
 
     kis_num_parser.cpp
     kis_spin_box_unit_manager.cpp

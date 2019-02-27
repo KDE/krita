@@ -21,7 +21,7 @@
 #define KIS_FONT_FAMILY_COMBO_BOX_H
 
 #include<QObject>
-#include<squeezedcombobox.h>
+#include<KisSqueezedComboBox.h>
 #include<QList>
 #include<QFont>
 #include<QFontDatabase>

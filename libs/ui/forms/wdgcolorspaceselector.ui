@@ -75,7 +75,7 @@
       </widget>
      </item>
      <item>
-      <widget class="SqueezedComboBox" name="cmbProfile">
+      <widget class="KisSqueezedComboBox" name="cmbProfile">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -109,9 +109,9 @@
    <header>widgets/kis_cmb_idlist.h</header>
   </customwidget>
   <customwidget>
-   <class>SqueezedComboBox</class>
+   <class>KisSqueezedComboBox</class>
    <extends>QComboBox</extends>
-   <header>squeezedcombobox.h</header>
+   <header>KisSqueezedComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

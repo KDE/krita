@@ -45,7 +45,7 @@
 #include "kis_config_notifier.h"
 #include "kis_color_input.h"
 #include "kis_icon_utils.h"
-#include "squeezedcombobox.h"
+#include "KisSqueezedComboBox.h"
 
 std::function<KisScreenColorPickerBase *(QWidget *)> KisDlgInternalColorSelector::s_screenColorPickerFactory = 0;
 

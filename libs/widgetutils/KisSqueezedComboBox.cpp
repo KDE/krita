@@ -17,8 +17,8 @@
  *
  * ============================================================ */
 
-#include "squeezedcombobox.h"
-/** @file squeezedcombobox.cpp */
+#include "KisSqueezedComboBox.h"
+/** @file KisSqueezedComboBox.cpp */
 
 // Qt includes.
 
@@ -29,7 +29,7 @@
 #include <QApplication>
 #include <QResizeEvent>
 
-SqueezedComboBox::SqueezedComboBox(QWidget *parent, const char *name)
+KisSqueezedComboBox::KisSqueezedComboBox(QWidget *parent, const char *name)
         : QComboBox(parent)
 {
     setObjectName(name);
@@ -40,12 +40,12 @@ SqueezedComboBox::SqueezedComboBox(QWidget *parent, const char *name)
             SLOT(slotTimeOut()));
 }
 
-SqueezedComboBox::~SqueezedComboBox()
+KisSqueezedComboBox::~KisSqueezedComboBox()
 {
     delete m_timer;
 }
 
-bool SqueezedComboBox::contains(const QString& _text) const
+bool KisSqueezedComboBox::contains(const QString& _text) const
 {
     if (_text.isEmpty())
         return false;
@@ -59,7 +59,7 @@ bool SqueezedComboBox::contains(const QString& _text) const
     return false;
 }
 
-qint32 SqueezedComboBox::findOriginalText(const QString& text) const
+qint32 KisSqueezedComboBox::findOriginalText(const QString& text) const
 {
     for (int i = 0; i < m_originalItems.size(); i++) {
         if(m_originalItems.value(i) == text) {
@@ -69,12 +69,12 @@ qint32 SqueezedComboBox::findOriginalText(const QString& text) const
     return -1;
 }
 
-QStringList SqueezedComboBox::originalTexts() const
+QStringList KisSqueezedComboBox::originalTexts() const
 {
     return m_originalItems.values();
 }
 
-void SqueezedComboBox::resetOriginalTexts(const QStringList &texts)
+void KisSqueezedComboBox::resetOriginalTexts(const QStringList &texts)
 {
     if (texts == m_originalItems.values()) return;
 
@@ -86,7 +86,7 @@ void SqueezedComboBox::resetOriginalTexts(const QStringList &texts)
     }
 }
 
-QSize SqueezedComboBox::sizeHint() const
+QSize KisSqueezedComboBox::sizeHint() const
 {
     ensurePolished();
     QFontMetrics fm = fontMetrics();
@@ -101,29 +101,29 @@ QSize SqueezedComboBox::sizeHint() const
                                      QSize(maxW, maxH), this).expandedTo(QApplication::globalStrut());
 }
 
-void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index, QVariant userData)
+void KisSqueezedComboBox::insertSqueezedItem(const QString& newItem, int index, QVariant userData)
 {
     m_originalItems[index] = newItem;
     QComboBox::insertItem(index, squeezeText(newItem, this), userData);
 }
 
-void SqueezedComboBox::insertSqueezedItem(const QIcon &icon, const QString &newItem, int index, QVariant userData)
+void KisSqueezedComboBox::insertSqueezedItem(const QIcon &icon, const QString &newItem, int index, QVariant userData)
 {
     m_originalItems[index] = newItem;
     QComboBox::insertItem(index, icon, squeezeText(newItem, this), userData);
 }
 
-void SqueezedComboBox::addSqueezedItem(const QString& newItem, QVariant userData)
+void KisSqueezedComboBox::addSqueezedItem(const QString& newItem, QVariant userData)
 {
     insertSqueezedItem(newItem, count(), userData);
 }
 
-void SqueezedComboBox::addSqueezedItem(const QIcon &icon, const QString &newItem, QVariant userData)
+void KisSqueezedComboBox::addSqueezedItem(const QIcon &icon, const QString &newItem, QVariant userData)
 {
     insertSqueezedItem(icon, newItem, count(), userData);
 }
 
-void SqueezedComboBox::setCurrent(const QString& itemText)
+void KisSqueezedComboBox::setCurrent(const QString& itemText)
 {
     qint32 itemIndex = findOriginalText(itemText);
     if (itemIndex >= 0) {
@@ -131,12 +131,12 @@ void SqueezedComboBox::setCurrent(const QString& itemText)
     }
 }
 
-void SqueezedComboBox::resizeEvent(QResizeEvent *)
+void KisSqueezedComboBox::resizeEvent(QResizeEvent *)
 {
     m_timer->start(200);
 }
 
-void SqueezedComboBox::slotTimeOut()
+void KisSqueezedComboBox::slotTimeOut()
 {
     for (QMap<int, QString>::iterator it = m_originalItems.begin() ; it != m_originalItems.end();
             ++it) {
@@ -144,7 +144,7 @@ void SqueezedComboBox::slotTimeOut()
     }
 }
 
-QString SqueezedComboBox::squeezeText(const QString& original, const QWidget *widget)
+QString KisSqueezedComboBox::squeezeText(const QString& original, const QWidget *widget)
 {
     // not the complete widgetSize is usable. Need to compensate for that.
     int widgetSize = widget->width() - 30;
@@ -166,13 +166,13 @@ QString SqueezedComboBox::squeezeText(const QString& original, const QWidget *wi
     return sqItem;
 }
 
-QString SqueezedComboBox::itemHighlighted()
+QString KisSqueezedComboBox::itemHighlighted()
 {
     int curItem = currentIndex();
     return m_originalItems[curItem];
 }
 
-void SqueezedComboBox::removeSqueezedItem(int index)
+void KisSqueezedComboBox::removeSqueezedItem(int index)
 {
     removeItem(index);
     m_originalItems.remove(index);

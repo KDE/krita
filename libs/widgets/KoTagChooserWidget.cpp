@@ -30,7 +30,7 @@
 #include <QGridLayout>
 
 #include <klocalizedstring.h>
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 
 #include <KoIcon.h>
 
@@ -41,7 +41,7 @@
 class Q_DECL_HIDDEN KoTagChooserWidget::Private
 {
 public:
-    SqueezedComboBox* comboBox;
+    KisSqueezedComboBox* comboBox;
     KoTagToolButton* tagToolButton;
     QStringList readOnlyTags;
     QStringList tags;
@@ -50,7 +50,7 @@ public:
 KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
   , d(new Private())
 {
-    d->comboBox = new SqueezedComboBox(this);
+    d->comboBox = new KisSqueezedComboBox(this);
     d->comboBox->setToolTip(i18n("Tag"));
     d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed );
 

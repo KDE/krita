@@ -3,7 +3,7 @@
 
 #include <QtTest>
 
-class SqueezedComboBoxTest : public QObject
+class TestSqueezedComboBox : public QObject
 {
     Q_OBJECT
 

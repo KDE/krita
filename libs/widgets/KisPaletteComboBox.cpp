@@ -29,7 +29,7 @@
 #include "KisPaletteComboBox.h"
 
 KisPaletteComboBox::KisPaletteComboBox(QWidget *parent)
-    : SqueezedComboBox(parent)
+    : KisSqueezedComboBox(parent)
     , m_model(Q_NULLPTR)
 {
     setEditable(true);

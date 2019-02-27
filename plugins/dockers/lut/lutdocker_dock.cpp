@@ -51,7 +51,7 @@
 #include <kis_config_notifier.h>
 #include <widgets/kis_double_widget.h>
 #include <kis_image.h>
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 #include "kis_signals_blocker.h"
 #include "krita_utils.h"
 

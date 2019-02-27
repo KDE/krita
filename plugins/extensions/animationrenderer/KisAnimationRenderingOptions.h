@@ -50,8 +50,13 @@ struct KisAnimationRenderingOptions
     QString customFFMpegOptions;
     KisPropertiesConfigurationSP frameExportConfig;
 
+    QString resolveAbsoluteDocumentFilePath(const QString &documentPath) const;
+    QString resolveAbsoluteVideoFilePath(const QString &documentPath) const;
+    QString resolveAbsoluteFramesDirectory(const QString &documentPath) const;
+
     QString resolveAbsoluteVideoFilePath() const;
     QString resolveAbsoluteFramesDirectory() const;
+
 
     enum RenderMode {
         RENDER_FRAMES_ONLY,

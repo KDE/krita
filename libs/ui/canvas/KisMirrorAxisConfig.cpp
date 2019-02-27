@@ -34,6 +34,7 @@ public:
         , handleSize(32.f)
         , horizontalHandlePosition(64.f)
         , verticalHandlePosition(64.f)
+        , axisPosition(QPointF(0.f,0.f))
     {}
 
     bool operator==(const Private& rhs) {

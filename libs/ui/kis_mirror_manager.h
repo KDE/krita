@@ -55,7 +55,7 @@ private:
     QPointer<KisView> m_imageView;
     QAction *m_mirrorCanvas;
     KisMirrorAxis* hasDecoration();
-    const KisMirrorAxisConfig &mirrorAxisConfig() const;
+    void setDecorationConfig();
 };
 
 #endif // KIS__MANAGER_H

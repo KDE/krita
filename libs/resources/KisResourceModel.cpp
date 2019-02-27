@@ -93,7 +93,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
                 return d->resourcesQuery.value("filename");
             case Tooltip:
                 return d->resourcesQuery.value("tooltip");
-            case Thumbnail:
+            case Image:
                 ;
             case Status:
                 return d->resourcesQuery.value("status");
@@ -107,7 +107,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
         }
         case Qt::DecorationRole:
         {
-            if (index.column() == Thumbnail) {
+            if (index.column() == Image) {
                 QByteArray ba = d->resourcesQuery.value("thumbnail").toByteArray();
                 QBuffer buf(&ba);
                 buf.open(QBuffer::ReadOnly);
@@ -133,7 +133,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             return d->resourcesQuery.value("filename");
         case Qt::UserRole + Tooltip:
             return d->resourcesQuery.value("tooltip");
-        case Qt::UserRole + Thumbnail:
+        case Qt::UserRole + Image:
         {
             QByteArray ba = d->resourcesQuery.value("thumbnail").toByteArray();
             QBuffer buf(&ba);
@@ -178,6 +178,21 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
     }
     return resource;
 
+}
+
+QModelIndex KisResourceModel::indexFromResource(KoResourceSP resource) const
+{
+    return QModelIndex();
+}
+
+bool KisResourceModel::importResourceFile(const QString &filename)
+{
+    return false;
+}
+
+bool KisResourceModel::removeResource(const QModelIndex &index)
+{
+    return false;
 }
 
 bool KisResourceModel::prepareQuery()

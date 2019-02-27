@@ -1,9 +1,16 @@
 add_subdirectory(dbexplorer)
 
 set(kritaresourcewidgets_LIB_SRCS
+    KisIconToolTip.cpp
+    KisResourceItemChooserContextMenu.cpp
+    KisResourceItemChooser.cpp
+    KisResourceItemChooserSync.cpp
     KisResourceItemDelegate.cpp
     KisResourceItemView.cpp
-    KisIconToolTip.cpp
+    KisTagChooserWidget.cpp
+    KisTagFilterWidget.cpp
+    KisTagToolButton.cpp
+    KisResourceTaggingManager.cpp
 )
 
 add_library(kritaresourcewidgets SHARED ${kritaresourcewidgets_LIB_SRCS})
@@ -23,6 +30,7 @@ target_link_libraries(kritaresourcewidgets
         kritaresources
         kritawidgetutils
         KF5::ConfigCore
+        KF5::WidgetsAddons
         KF5::CoreAddons
         KF5::I18n
 )

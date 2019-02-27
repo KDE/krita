@@ -184,7 +184,7 @@ void KisResourceProxyModel::setSourceModel(QAbstractItemModel* newSourceModel)
 QModelIndex KisResourceProxyModel::mapToSource(const QModelIndex& proxyIndex) const
 {
     if (!sourceModel()) return QModelIndex();
-    return sourceModel()->index(sourceRow(proxyIndex.row(), proxyIndex.column()), KisResourceModel::Thumbnail);
+    return sourceModel()->index(sourceRow(proxyIndex.row(), proxyIndex.column()), KisResourceModel::Image);
 }
 
 QModelIndex KisResourceProxyModel::mapFromSource(const QModelIndex& sourceIndex) const

@@ -88,7 +88,7 @@
 
 #include <klocalizedstring.h>
 #include <kundo2stack.h>
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 
 #include "slider_and_spin_box_sync.h"
 

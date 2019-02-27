@@ -64,6 +64,9 @@ Q_SIGNALS:
     void contextMenuRequested(const QPoint &);
 
 protected:
+
+    friend class KisResourceItemChooser;
+
     void contextMenuEvent(QContextMenuEvent *event) override;
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
 

@@ -47,7 +47,7 @@ public:
         Name,
         Filename,
         Tooltip,
-        Thumbnail,
+        Image,
         Status,
         Location,
         ResourceType,
@@ -73,7 +73,14 @@ public:
 
     // Resources API
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const;
+    QModelIndex indexFromResource(KoResourceSP resource) const;
+    bool importResourceFile(const QString &filename);
+    bool removeResource(const QModelIndex &index);
 
+Q_SIGNALS:
+
+    void beforeResourcesLayoutReset(QModelIndex);
+    void afterResourcesLayoutReset();
 
 private:
 

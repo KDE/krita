@@ -8,8 +8,8 @@ if (UNIX)
 
   ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://files.kde.org/krita/build/dependencies/sip-4.19.6.tar.gz
-        URL_MD5 6be5cb2c43915ed450a9f74ec110dada
+        URL https://www.riverbankcomputing.com/static/Downloads/sip/sip-4.19.14.tar.gz
+        URL_MD5 bba62b2ea7e16193c7dfcfadb8dd0d05
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/sip -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.5
         BUILD_COMMAND make
@@ -30,8 +30,8 @@ elseif (MINGW)
     )
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://files.kde.org/krita/build/dependencies/sip-4.19.6.zip
-        URL_MD5 6a4080268c2aa9225965415fe8706967
+        URL https://www.riverbankcomputing.com/static/Downloads/sip/sip-4.19.14.tar.gz
+        URL_MD5 bba62b2ea7e16193c7dfcfadb8dd0d05
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_SIP_conf}
         BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} LDFLAGS=${SECURITY_SHARED_LINKER_FLAGS}

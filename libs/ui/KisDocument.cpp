@@ -121,6 +121,8 @@
 #include "kis_async_action_feedback.h"
 #include "KisCloneDocumentStroke.h"
 
+#include <KisMirrorAxisConfig.h>
+
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but QUrl didn't like it,
@@ -256,6 +258,7 @@ public:
         , autoSaveTimer(new QTimer(q))
         , undoStack(new UndoStack(q))
         , guidesConfig(rhs.guidesConfig)
+        , mirrorAxisConfig(rhs.mirrorAxisConfig)
         , m_bAutoDetectedMime(rhs.m_bAutoDetectedMime)
         , m_url(rhs.m_url)
         , m_file(rhs.m_file)
@@ -302,6 +305,7 @@ public:
     KUndo2Stack *undoStack = 0;
 
     KisGuidesConfig guidesConfig;
+    KisMirrorAxisConfig mirrorAxisConfig;
 
     bool m_bAutoDetectedMime = false; // whether the mimetype in the arguments was detected by the part itself
     QUrl m_url; // local url - the one displayed to the user.
@@ -1583,6 +1587,23 @@ void KisDocument::setGuidesConfig(const KisGuidesConfig &data)
 
     d->guidesConfig = data;
     emit sigGuidesConfigChanged(d->guidesConfig);
+}
+
+const KisMirrorAxisConfig& KisDocument::mirrorAxisConfig() const
+{
+    return d->mirrorAxisConfig;
+}
+
+void KisDocument::setMirrorAxisConfig(const KisMirrorAxisConfig &config)
+{
+    if (d->mirrorAxisConfig == config) {
+        return;
+    }
+
+    d->mirrorAxisConfig = config;
+    setModified(true);
+
+    emit sigMirrorAxisConfigChanged();
 }
 
 void KisDocument::resetURL() {

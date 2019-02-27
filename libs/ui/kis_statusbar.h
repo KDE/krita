@@ -34,6 +34,7 @@ class KSqueezedTextLabel;
 class KisViewManager;
 class KisProgressWidget;
 class KoProgressUpdater;
+class KisMemoryReportButton;
 
 #include "kritaui_export.h"
 
@@ -122,7 +123,7 @@ private:
     QScopedPointer<KoProgressUpdater> m_progressUpdater;
 
     QToolButton *m_selectionStatus;
-    QPushButton *m_memoryReportBox;
+    KisMemoryReportButton *m_memoryReportBox;
     QLabel *m_pointerPositionLabel;
 
     KSqueezedTextLabel *m_statusBarStatusLabel;

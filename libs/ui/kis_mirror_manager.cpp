@@ -30,8 +30,23 @@
 
 #include "kis_canvas2.h"
 #include "kis_mirror_axis.h"
+#include <KisMirrorAxisConfig.h>
+#include <KisDocument.h>
+#include <kis_signals_blocker.h>
+
+class KisMirrorManager::Private
+{
+public:
+    Private()
+        : mirrorAxisDecoration(nullptr)
+    {}
+
+    KisMirrorAxis* mirrorAxisDecoration;
+//    KisMirrorAxisConfig mirrorAxisConfig() {}
+};
 
 KisMirrorManager::KisMirrorManager(KisViewManager* view) : QObject(view)
+    , d(new Private())
     , m_imageView(0)
 {
 }
@@ -56,14 +71,20 @@ void KisMirrorManager::setView(QPointer<KisView> imageView)
 {
     if (m_imageView) {
         m_mirrorCanvas->disconnect();
+        m_imageView->document()->disconnect();
     }
     m_imageView = imageView;
     if (m_imageView)  {
         connect(m_mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(m_imageView->canvasController()), SLOT(mirrorCanvas(bool)));
+        connect(m_imageView->document(), SIGNAL(sigMirrorAxisConfigChanged()), this, SLOT(slotDocumentConfigChanged()), Qt::UniqueConnection);
 
         if (!hasDecoration()) {
-            m_imageView->canvasBase()->addDecoration(new KisMirrorAxis(m_imageView->viewManager()->resourceProvider(), m_imageView));
+            d->mirrorAxisDecoration = new KisMirrorAxis(m_imageView->viewManager()->resourceProvider(), m_imageView);
+            connect(d->mirrorAxisDecoration, SIGNAL(sigConfigChanged()), this, SLOT(slotMirrorAxisConfigChanged()), Qt::UniqueConnection);
+            m_imageView->canvasBase()->addDecoration(d->mirrorAxisDecoration);
         }
+
+        d->mirrorAxisDecoration->setMirrorAxisConfig(mirrorAxisConfig());
     }
     updateAction();
 }
@@ -80,10 +101,28 @@ void KisMirrorManager::updateAction()
     }
 }
 
+void KisMirrorManager::slotDocumentConfigChanged()
+{
+    d->mirrorAxisDecoration->setMirrorAxisConfig(mirrorAxisConfig());
+}
+
+void KisMirrorManager::slotMirrorAxisConfigChanged()
+{
+    if (m_imageView) {
+        KisSignalsBlocker blocker(m_imageView->document());
+        m_imageView->document()->setMirrorAxisConfig(d->mirrorAxisDecoration->mirrorAxisConfig());
+    }
+}
+
 KisMirrorAxis* KisMirrorManager::hasDecoration() {
 
     if (m_imageView && m_imageView->canvasBase() && m_imageView->canvasBase()->decoration("mirror_axis")) {
         return dynamic_cast<KisMirrorAxis*>(m_imageView->canvasBase()->decoration("mirror_axis").data());
     }
     return 0;
+}
+
+const KisMirrorAxisConfig& KisMirrorManager::mirrorAxisConfig() const
+{
+    return m_imageView->document()->mirrorAxisConfig();
 }

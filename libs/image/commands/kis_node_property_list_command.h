@@ -31,6 +31,7 @@ public:
     /**
      * Constructor
      * @param node the layer to add
+     * @param newPropertyList the property list to which the node to be added
      */
     KisNodePropertyListCommand(KisNodeSP node, KisBaseNode::PropertyList newPropertyList);
 

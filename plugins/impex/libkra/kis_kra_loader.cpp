@@ -87,6 +87,7 @@
 #include "KisProofingConfiguration.h"
 #include "kis_layer_properties_icons.h"
 #include "kis_node_view_color_scheme.h"
+#include "KisMirrorAxisConfig.h"
 
 /*
 
@@ -356,6 +357,8 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             loadGrid(e);
         } else if (e.tagName() == "guides") {
             loadGuides(e);
+        } else if (e.tagName() == MIRROR_AXIS) {
+            loadMirrorAxis(e);
         } else if (e.tagName() == "assistants") {
             loadAssistantsList(e);
         } else if (e.tagName() == "audio") {
@@ -1178,6 +1181,17 @@ void KisKraLoader::loadGuides(const KoXmlElement& elem)
     KisGuidesConfig guides;
     guides.loadFromXml(domElement);
     m_d->document->setGuidesConfig(guides);
+}
+
+void KisKraLoader::loadMirrorAxis(const KoXmlElement &elem)
+{
+    QDomDocument dom;
+    KoXml::asQDomElement(dom, elem);
+    QDomElement domElement = dom.firstChildElement();
+
+    KisMirrorAxisConfig mirrorAxis;
+    mirrorAxis.loadFromXml(domElement);
+    m_d->document->setMirrorAxisConfig(mirrorAxis);
 }
 
 void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)

@@ -57,6 +57,8 @@
 #include "KisMainWindow.h"
 #include "kis_config.h"
 
+#include "widgets/KisMemoryReportButton.h"
+
 enum {
     IMAGE_SIZE_ID,
     POINTER_POSITION_ID
@@ -112,7 +114,7 @@ void KisStatusBar::setup()
     m_progressUpdater.reset(new KisProgressUpdater(m_progress, m_progress->progressProxy()));
     m_progressUpdater->setAutoNestNames(true);
 
-    m_memoryReportBox = new QPushButton();
+    m_memoryReportBox = new KisMemoryReportButton();
     m_memoryReportBox->setObjectName("memoryReportBox");
     m_memoryReportBox->setFlat(true);
     m_memoryReportBox->setContentsMargins(5, 5, 5, 5);
@@ -230,7 +232,7 @@ void KisStatusBar::imageSizeChanged()
     if (image) {
         qint32 w = image->width();
         qint32 h = image->height();
-        sizeText = QString("%1 x %2 (%3)").arg(w).arg(h).arg(m_shortMemoryTag);
+        sizeText = QString("%1 &x %2 (%3)").arg(w).arg(h).arg(m_shortMemoryTag);
     } else {
         sizeText = m_shortMemoryTag;
     }
@@ -305,7 +307,7 @@ void KisStatusBar::updateMemoryStatus()
             KisUsageLogger::log(QString("WARNING: %1 is running out of memory:%2\n").arg(m_imageView->document()->url().toLocalFile()).arg(longStats));
         }
 
-        icon = KisIconUtils::loadIcon("dialog-warning");
+        icon = KisIconUtils::loadIcon("warning");
         QString suffix =
                 i18nc("tooltip on statusbar memory reporting button",
                       "\n\nWARNING:\tOut of memory! Swapping has been started.\n"
@@ -318,6 +320,10 @@ void KisStatusBar::updateMemoryStatus()
     m_shortMemoryTag = shortStats;
     m_longMemoryTag = longStats;
     m_memoryStatusIcon = icon;
+
+    m_memoryReportBox->setMaximumMemory(stats.totalMemoryLimit);
+    m_memoryReportBox->setCurrentMemory(stats.totalMemorySize);
+    m_memoryReportBox->setImageWeight(stats.imageSize);
 
     emit memoryStatusUpdated();
 }

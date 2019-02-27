@@ -63,13 +63,6 @@ ecm_add_test( kis_node_juggler_compressed_test.cpp  ../../../sdk/tests/testutil.
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
-set(kis_node_view_test_SRCS kis_node_view_test.cpp  ../../../sdk/tests/testutil.cpp)
-qt5_add_resources(kis_node_view_test_SRCS ${krita_QRCS})
-ecm_add_test(${kis_node_view_test_SRCS}
-    TEST_NAME kis_node_view_test
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "libs-ui-")
-
 ecm_add_test(
     kis_input_manager_test.cpp ../../../sdk/tests/testutil.cpp
     TEST_NAME KisInputManagerTest

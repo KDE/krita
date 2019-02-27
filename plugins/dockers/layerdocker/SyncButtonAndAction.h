@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __SYNC_BUTTON_AND_ACTION_H
-#define __SYNC_BUTTON_AND_ACTION_H
+#ifndef SYNC_BUTTON_AND_ACTION_H
+#define SYNC_BUTTON_AND_ACTION_H
 
 #include <QPointer>
 #include <QAbstractButton>

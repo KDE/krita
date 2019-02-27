@@ -15,27 +15,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "defaultdockers.h"
+#ifndef _DEFAULT_DOCKERS_H
+#define _DEFAULT_DOCKERS_H
+
+#include <QObject>
+#include <QVariant>
 
 
-#include <kpluginfactory.h>
-
-#include <KoDockFactoryBase.h>
-#include <KoDockRegistry.h>
-#include "kis_debug.h"
-
-#include "kis_layer_box.h"
-
-K_PLUGIN_FACTORY_WITH_JSON(KritaDefaultDockersPluginFactory, "kritadefaultdockers.json", registerPlugin<KritaDefaultDockersPlugin>();)
-
-KritaDefaultDockersPlugin::KritaDefaultDockersPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent)
+/**
+ * Template of view plugin
+ */
+class KritaLayerDockerPlugin : public QObject
 {
-    KoDockRegistry::instance()->add(new KisLayerBoxFactory());
-}
+    Q_OBJECT
+public:
+    KritaLayerDockerPlugin(QObject *parent, const QVariantList &);
+    ~KritaLayerDockerPlugin() override;
 
-KritaDefaultDockersPlugin::~KritaDefaultDockersPlugin()
-{
-}
+};
 
-#include "defaultdockers.moc"
+#endif

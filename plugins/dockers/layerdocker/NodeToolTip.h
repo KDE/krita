@@ -25,16 +25,16 @@
 class KisNodeModel;
 
 /**
- * A default tooltip for a KisNodeView that shows a thumbnail
+ * A default tooltip for a NodeView that shows a thumbnail
  * image and the list of properties associated with a node.
  */
-class KisNodeToolTip: public KoItemToolTip
+class NodeToolTip: public KoItemToolTip
 {
     Q_OBJECT
 
 public:
-    KisNodeToolTip();
-    ~KisNodeToolTip() override;
+    NodeToolTip();
+    ~NodeToolTip() override;
 
 protected:
     QTextDocument *createDocument(const QModelIndex &index) override;

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_node_view_test.h"
+#include "TestNodeView.h"
 
 #include <QTest>
 #include <QDialog>
@@ -24,7 +24,7 @@
 #include <QGridLayout>
 #include <QLabel>
 
-#include <KisNodeView.h>
+#include <NodeView.h>
 
 #include "KisDocument.h"
 #include "KisPart.h"
@@ -39,7 +39,7 @@
 //#define ENABLE_GUI_TESTS
 
 
-void KisNodeViewTest::init()
+void NodeViewTest::init()
 {
     m_doc = KisPart::instance()->createDocument();
 
@@ -49,7 +49,7 @@ void KisNodeViewTest::init()
     initBase();
 }
 
-void KisNodeViewTest::cleanup()
+void NodeViewTest::cleanup()
 {
     cleanupBase();
 
@@ -59,7 +59,7 @@ void KisNodeViewTest::cleanup()
 }
 
 
-void KisNodeViewTest::testLayers()
+void NodeViewTest::testLayers()
 {
 #ifndef ENABLE_GUI_TESTS
     return;
@@ -72,7 +72,7 @@ void KisNodeViewTest::testLayers()
     dlg.setFont(font);
 
     KisNodeModel *model = new KisNodeModel(this);
-    KisNodeView *view = new KisNodeView(&dlg);
+    NodeView *view = new NodeView(&dlg);
 
     view->setModel(model);
 
@@ -105,7 +105,7 @@ void KisNodeViewTest::testLayers()
 
 #include "kis_color_label_selector_widget.h"
 
-void KisNodeViewTest::testColorLabels()
+void NodeViewTest::testColorLabels()
 {
 #ifndef ENABLE_GUI_TESTS
     return;
@@ -130,4 +130,4 @@ void KisNodeViewTest::testColorLabels()
     dlg.exec();
 }
 
-KISTEST_MAIN(KisNodeViewTest)
+KISTEST_MAIN(NodeViewTest)

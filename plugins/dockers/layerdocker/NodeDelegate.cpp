@@ -19,10 +19,10 @@
   Boston, MA 02110-1301, USA.
 */
 #include "kis_config.h"
-#include "KisNodeDelegate.h"
+#include "NodeDelegate.h"
 #include "kis_node_model.h"
-#include "KisNodeToolTip.h"
-#include "KisNodeView.h"
+#include "NodeToolTip.h"
+#include "NodeView.h"
 #include "KisPart.h"
 #include "input/kis_input_manager.h"
 
@@ -48,14 +48,14 @@ typedef KisBaseNode::Property* OptionalProperty;
 
 #include <kis_base_node.h>
 
-class KisNodeDelegate::Private
+class NodeDelegate::Private
 {
 public:
     Private() : view(0), edit(0) { }
 
-    KisNodeView *view;
+    NodeView *view;
     QPointer<QWidget> edit;
-    KisNodeToolTip tip;
+    NodeToolTip tip;
 
     QColor checkersColor1;
     QColor checkersColor2;
@@ -68,7 +68,7 @@ public:
     void toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty prop, bool controlPressed, const QModelIndex &index);
 };
 
-KisNodeDelegate::KisNodeDelegate(KisNodeView *view, QObject *parent)
+NodeDelegate::NodeDelegate(NodeView *view, QObject *parent)
     : QAbstractItemDelegate(parent)
     , d(new Private)
 {
@@ -79,19 +79,19 @@ KisNodeDelegate::KisNodeDelegate(KisNodeView *view, QObject *parent)
     slotConfigChanged();
 }
 
-KisNodeDelegate::~KisNodeDelegate()
+NodeDelegate::~NodeDelegate()
 {
     delete d;
 }
 
-QSize KisNodeDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize NodeDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(index);
     KisNodeViewColorScheme scm;
     return QSize(option.rect.width(), scm.rowHeight());
 }
 
-void KisNodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QModelIndex &index) const
+void NodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QModelIndex &index) const
 {
     p->save();
 
@@ -121,7 +121,7 @@ void KisNodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QM
     p->restore();
 }
 
-void KisNodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void NodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QModelIndex tmp = index.parent();
 
@@ -189,7 +189,7 @@ void KisNodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option
      p->setOpacity(oldOpacity);
 }
 
-void KisNodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void NodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     KisNodeViewColorScheme scm;
     const int label = index.data(KisNodeModel::ColorLabelIndexRole).toInt();
@@ -217,7 +217,7 @@ void KisNodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &op
     p->fillRect(optionRect, color);
 }
 
-void KisNodeDelegate::drawFrame(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void NodeDelegate::drawFrame(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     KisNodeViewColorScheme scm;
 
@@ -281,7 +281,7 @@ void KisNodeDelegate::drawFrame(QPainter *p, const QStyleOptionViewItem &option,
     p->setPen(oldPen);
 }
 
-QRect KisNodeDelegate::thumbnailClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QRect NodeDelegate::thumbnailClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(index);
     KisNodeViewColorScheme scm;
@@ -300,7 +300,7 @@ QRect KisNodeDelegate::thumbnailClickRect(const QStyleOptionViewItem &option, co
     return rc;
 }
 
-void KisNodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void NodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     KisNodeViewColorScheme scm;
 
@@ -335,7 +335,7 @@ void KisNodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &opt
     KritaUtils::renderExactRect(p, borderRect, scm.gridColor(option, d->view));
 }
 
-QRect KisNodeDelegate::iconsRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QRect NodeDelegate::iconsRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     KisNodeViewColorScheme scm;
 
@@ -359,7 +359,7 @@ QRect KisNodeDelegate::iconsRect(const QStyleOptionViewItem &option, const QMode
     return fitRect;
 }
 
-QRect KisNodeDelegate::textRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QRect NodeDelegate::textRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     KisNodeViewColorScheme scm;
 
@@ -381,7 +381,7 @@ QRect KisNodeDelegate::textRect(const QStyleOptionViewItem &option, const QModel
     return rc;
 }
 
-void KisNodeDelegate::drawText(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void NodeDelegate::drawText(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     KisNodeViewColorScheme scm;
     const QRect rc = textRect(option, index).adjusted(scm.textMargin(), 0,
@@ -404,7 +404,7 @@ void KisNodeDelegate::drawText(QPainter *p, const QStyleOptionViewItem &option, 
     p->setOpacity(oldOpacity);
 }
 
-QList<OptionalProperty> KisNodeDelegate::Private::rightmostProperties(const KisBaseNode::PropertyList &props) const
+QList<OptionalProperty> NodeDelegate::Private::rightmostProperties(const KisBaseNode::PropertyList &props) const
 {
     QList<OptionalProperty> list;
     QList<OptionalProperty> prependList;
@@ -447,14 +447,14 @@ QList<OptionalProperty> KisNodeDelegate::Private::rightmostProperties(const KisB
     return prependList + list;
 }
 
-int KisNodeDelegate::Private::numProperties(const QModelIndex &index) const
+int NodeDelegate::Private::numProperties(const QModelIndex &index) const
 {
     KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
     QList<OptionalProperty> realProps = rightmostProperties(props);
     return realProps.size();
 }
 
-OptionalProperty KisNodeDelegate::Private::findProperty(KisBaseNode::PropertyList &props, const OptionalProperty &refProp) const
+OptionalProperty NodeDelegate::Private::findProperty(KisBaseNode::PropertyList &props, const OptionalProperty &refProp) const
 {
     KisBaseNode::PropertyList::iterator it = props.begin();
     KisBaseNode::PropertyList::iterator end = props.end();
@@ -467,7 +467,7 @@ OptionalProperty KisNodeDelegate::Private::findProperty(KisBaseNode::PropertyLis
     return 0;
 }
 
-OptionalProperty KisNodeDelegate::Private::findVisibilityProperty(KisBaseNode::PropertyList &props) const
+OptionalProperty NodeDelegate::Private::findVisibilityProperty(KisBaseNode::PropertyList &props) const
 {
     KisBaseNode::PropertyList::iterator it = props.begin();
     KisBaseNode::PropertyList::iterator end = props.end();
@@ -480,7 +480,7 @@ OptionalProperty KisNodeDelegate::Private::findVisibilityProperty(KisBaseNode::P
     return 0;
 }
 
-void KisNodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void NodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     KisNodeViewColorScheme scm;
     const QRect rc = iconsRect(option, index);
@@ -530,7 +530,7 @@ void KisNodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option,
     p->setPen(oldPen);
 }
 
-QRect KisNodeDelegate::visibilityClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QRect NodeDelegate::visibilityClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(index);
     KisNodeViewColorScheme scm;
@@ -551,7 +551,7 @@ QRect KisNodeDelegate::visibilityClickRect(const QStyleOptionViewItem &option, c
     return rc;
 }
 
-QRect KisNodeDelegate::decorationClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QRect NodeDelegate::decorationClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(index);
     KisNodeViewColorScheme scm;
@@ -571,7 +571,7 @@ QRect KisNodeDelegate::decorationClickRect(const QStyleOptionViewItem &option, c
     return rc;
 }
 
-void KisNodeDelegate::drawVisibilityIconHijack(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void NodeDelegate::drawVisibilityIconHijack(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     /**
      * Small hack Alert:
@@ -610,7 +610,7 @@ void KisNodeDelegate::drawVisibilityIconHijack(QPainter *p, const QStyleOptionVi
 // //     // p->restore();
 }
 
-void KisNodeDelegate::drawDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void NodeDelegate::drawDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     KisNodeViewColorScheme scm;
     QIcon icon = index.data(Qt::DecorationRole).value<QIcon>();
@@ -636,7 +636,7 @@ void KisNodeDelegate::drawDecoration(QPainter *p, const QStyleOptionViewItem &op
     }
 }
 
-void KisNodeDelegate::drawExpandButton(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void NodeDelegate::drawExpandButton(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(index);
     KisNodeViewColorScheme scm;
@@ -660,7 +660,7 @@ void KisNodeDelegate::drawExpandButton(QPainter *p, const QStyleOptionViewItem &
     p->drawPixmap(rc.bottomLeft()-QPoint(0, scm.decorationSize()-1), pixmap);
 }
 
-void KisNodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty clickedProperty, bool controlPressed, const QModelIndex &index)
+void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty clickedProperty, bool controlPressed, const QModelIndex &index)
 {
     QAbstractItemModel *model = view->model();
 
@@ -712,7 +712,7 @@ void KisNodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, 
 }
 
 
-bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
+bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
     KisNodeViewColorScheme scm;
 
@@ -834,15 +834,15 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
     return false;
 }
 
-QWidget *KisNodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
+QWidget *NodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
 {
     d->edit = new QLineEdit(parent);
     d->edit->setFocusPolicy(Qt::StrongFocus);
-    d->edit->installEventFilter(const_cast<KisNodeDelegate*>(this)); //hack?
+    d->edit->installEventFilter(const_cast<NodeDelegate*>(this)); //hack?
     return d->edit;
 }
 
-void KisNodeDelegate::setEditorData(QWidget *widget, const QModelIndex &index) const
+void NodeDelegate::setEditorData(QWidget *widget, const QModelIndex &index) const
 {
     QLineEdit *edit = qobject_cast<QLineEdit*>(widget);
     Q_ASSERT(edit);
@@ -850,7 +850,7 @@ void KisNodeDelegate::setEditorData(QWidget *widget, const QModelIndex &index) c
     edit->setText(index.data(Qt::DisplayRole).toString());
 }
 
-void KisNodeDelegate::setModelData(QWidget *widget, QAbstractItemModel *model, const QModelIndex &index) const
+void NodeDelegate::setModelData(QWidget *widget, QAbstractItemModel *model, const QModelIndex &index) const
 {
     QLineEdit *edit = qobject_cast<QLineEdit*>(widget);
     Q_ASSERT(edit);
@@ -858,7 +858,7 @@ void KisNodeDelegate::setModelData(QWidget *widget, QAbstractItemModel *model, c
     model->setData(index, edit->text(), Qt::DisplayRole);
 }
 
-void KisNodeDelegate::updateEditorGeometry(QWidget *widget, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void NodeDelegate::updateEditorGeometry(QWidget *widget, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(index);
     widget->setGeometry(option.rect);
@@ -868,7 +868,7 @@ void KisNodeDelegate::updateEditorGeometry(QWidget *widget, const QStyleOptionVi
 // PROTECTED
 
 
-bool KisNodeDelegate::eventFilter(QObject *object, QEvent *event)
+bool NodeDelegate::eventFilter(QObject *object, QEvent *event)
 {
     switch (event->type()) {
     case QEvent::MouseButtonPress: {
@@ -941,7 +941,7 @@ bool KisNodeDelegate::eventFilter(QObject *object, QEvent *event)
 // PRIVATE
 
 
-QStyleOptionViewItem KisNodeDelegate::getOptions(const QStyleOptionViewItem &o, const QModelIndex &index)
+QStyleOptionViewItem NodeDelegate::getOptions(const QStyleOptionViewItem &o, const QModelIndex &index)
 {
     QStyleOptionViewItem option = o;
     QVariant v = index.data(Qt::FontRole);
@@ -962,7 +962,7 @@ QStyleOptionViewItem KisNodeDelegate::getOptions(const QStyleOptionViewItem &o, 
    return option;
 }
 
-void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void NodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QVariant value = index.data(KisNodeModel::ProgressRole);
     if (!value.isNull() && (value.toInt() >= 0 && value.toInt() <= 100)) {
@@ -1001,7 +1001,7 @@ void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &o
     }
 }
 
-void KisNodeDelegate::slotConfigChanged()
+void NodeDelegate::slotConfigChanged()
 {
     KisConfig cfg(true);
 
@@ -1009,7 +1009,7 @@ void KisNodeDelegate::slotConfigChanged()
     d->checkersColor2 = cfg.checkersColor2();
 }
 
-void KisNodeDelegate::slotUpdateIcon()
+void NodeDelegate::slotUpdateIcon()
 {
    KisLayerPropertiesIcons::instance()->updateIcons();
 }

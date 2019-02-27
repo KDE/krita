@@ -1,7 +1,7 @@
 {
-    "Id": "Default Dockers",
+    "Id": "Layer Docker",
     "Type": "Service",
-    "X-KDE-Library": "kritadefaultdockers",
+    "X-KDE-Library": "kritalayerdocker",
     "X-KDE-ServiceTypes": [
         "Krita/Dock"
     ],

@@ -219,7 +219,7 @@
       </widget>
      </item>
      <item>
-      <widget class="SqueezedComboBox" name="cmbPalette"/>
+      <widget class="KisSqueezedComboBox" name="cmbPalette"/>
      </item>
     </layout>
    </item>
@@ -259,9 +259,9 @@
    <header>kis_slider_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>SqueezedComboBox</class>
+   <class>KisSqueezedComboBox</class>
    <extends>QComboBox</extends>
-   <header>squeezedcombobox.h</header>
+   <header>KisSqueezedComboBox.h</header>
   </customwidget>
   <customwidget>
    <class>KisIntParseSpinBox</class>

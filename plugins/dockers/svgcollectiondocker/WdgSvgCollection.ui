@@ -14,7 +14,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="SqueezedComboBox" name="cmbCollections"/>
+      <widget class="KisSqueezedComboBox" name="cmbCollections"/>
      </item>
      <item>
       <widget class="QToolButton" name="vectorPresetsConfigureButton">
@@ -32,9 +32,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>SqueezedComboBox</class>
+   <class>KisSqueezedComboBox</class>
    <extends>QComboBox</extends>
-   <header>squeezedcombobox.h</header>
+   <header>KisSqueezedComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

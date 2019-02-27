@@ -1,14 +1,14 @@
 
 
 
-#include "squeezedcombobox_test.h"
+#include "TestSqueezedComboBox.h"
 #include <QTest>
 
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 
-void SqueezedComboBoxTest::testContains()
+void TestSqueezedComboBox::testContains()
 {
-    SqueezedComboBox *comboBox = new SqueezedComboBox();
+    KisSqueezedComboBox *comboBox = new KisSqueezedComboBox();
 
     const int comboBoxWidth = 10;
     const int comboBoxHeight = 50;
@@ -27,5 +27,5 @@ void SqueezedComboBoxTest::testContains()
     QVERIFY(comboBox->contains(testItemText));
 }
 
-QTEST_MAIN(SqueezedComboBoxTest)
+QTEST_MAIN(TestSqueezedComboBox)
 

@@ -340,10 +340,6 @@ set(kritaui_LIB_SRCS
     KisDetailsPane.cpp
     KisDocument.cpp
     KisCloneDocumentStroke.cpp
-    KisNodeDelegate.cpp
-    kis_node_view_visibility_delegate.cpp
-    KisNodeToolTip.cpp
-    KisNodeView.cpp
     kis_node_view_color_scheme.cpp
     KisImportExportFilter.cpp
     KisFilterEntry.cpp
@@ -540,8 +536,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
 )
 
-
-QT5_WRAP_CPP(kritaui_HEADERS_MOC KisNodePropertyAction_p.h)
 
 add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)

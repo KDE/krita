@@ -129,7 +129,6 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     }
 
     m_page->videoFilename->setMode(KoFileDialog::SaveFile);
-    m_page->videoFilename->setStartDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
 
     connect(m_page->bnExportOptions, SIGNAL(clicked()), this, SLOT(sequenceMimeTypeSelected()));
     connect(m_page->bnRenderOptions, SIGNAL(clicked()), this, SLOT(selectRenderOptions()));
@@ -196,10 +195,12 @@ void DlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeType
 
 void DlgAnimationRenderer::loadAnimationOptions(const KisAnimationRenderingOptions &options)
 {
+    const QString documentPath = m_doc->localFilePath();
+
     m_page->txtBasename->setText(options.basename);
 
     if (!options.lastDocuemntPath.isEmpty() &&
-            options.lastDocuemntPath == m_doc->localFilePath()) {
+            options.lastDocuemntPath == documentPath) {
 
         m_page->intStart->setValue(options.firstFrame);
         m_page->intEnd->setValue(options.lastFrame);
@@ -207,7 +208,12 @@ void DlgAnimationRenderer::loadAnimationOptions(const KisAnimationRenderingOptio
         m_page->intWidth->setValue(options.width);
         m_page->intHeight->setValue(options.height);
         m_page->intFramesPerSecond->setValue(options.frameRate);
+
+        m_page->videoFilename->setStartDir(options.resolveAbsoluteDocumentFilePath(documentPath));
         m_page->videoFilename->setFileName(options.videoFileName);
+
+        m_page->dirRequester->setStartDir(options.resolveAbsoluteDocumentFilePath(documentPath));
+        m_page->dirRequester->setFileName(options.directory);
     } else {
         m_page->intStart->setValue(m_image->animationInterface()->playbackRange().start());
         m_page->intEnd->setValue(m_image->animationInterface()->playbackRange().end());
@@ -215,10 +221,13 @@ void DlgAnimationRenderer::loadAnimationOptions(const KisAnimationRenderingOptio
         m_page->intWidth->setValue(m_image->width());
         m_page->intHeight->setValue(m_image->height());
         m_page->intFramesPerSecond->setValue(m_image->animationInterface()->framerate());
-        m_page->videoFilename->setFileName(defaultVideoFileName(m_doc, options.videoMimeType));
-    }
 
-    m_page->dirRequester->setFileName(options.directory);
+        m_page->videoFilename->setStartDir(options.resolveAbsoluteDocumentFilePath(documentPath));
+        m_page->videoFilename->setFileName(defaultVideoFileName(m_doc, options.videoMimeType));
+
+        m_page->dirRequester->setStartDir(options.resolveAbsoluteDocumentFilePath(documentPath));
+        m_page->dirRequester->setFileName(options.directory);
+    }
 
     for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
         if (m_page->cmbMimetype->itemData(i).toString() == options.frameMimeType) {
@@ -256,6 +265,7 @@ void DlgAnimationRenderer::loadAnimationOptions(const KisAnimationRenderingOptio
                                       &m_forceHDRVideo);
     }
 
+    m_page->ffmpegLocation->setStartDir(QFileInfo(m_doc->localFilePath()).path());
     m_page->ffmpegLocation->setFileName(findFFMpeg(options.ffmpegPath));
 }
 

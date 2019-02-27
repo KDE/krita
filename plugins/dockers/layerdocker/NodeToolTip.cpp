@@ -16,7 +16,7 @@
   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
   Boston, MA 02110-1301, USA.
 */
-#include "KisNodeToolTip.h"
+#include "NodeToolTip.h"
 #include "kis_node_model.h"
 
 #include <QImage>
@@ -27,15 +27,15 @@
 
 #include <kis_base_node.h>
 
-KisNodeToolTip::KisNodeToolTip()
+NodeToolTip::NodeToolTip()
 {
 }
 
-KisNodeToolTip::~KisNodeToolTip()
+NodeToolTip::~NodeToolTip()
 {
 }
 
-QTextDocument *KisNodeToolTip::createDocument(const QModelIndex &index)
+QTextDocument *NodeToolTip::createDocument(const QModelIndex &index)
 {
     QTextDocument *doc = new QTextDocument(this);
 

@@ -23,6 +23,7 @@
 #include <QDebug>
 
 #include "KoIcon.h"
+#include <KisFileUtils.h>
 
 KisFileNameRequester::KisFileNameRequester(QWidget *parent)
     : QWidget(parent)
@@ -55,7 +56,6 @@ void KisFileNameRequester::setConfigurationName(const QString &name)
 void KisFileNameRequester::setFileName(const QString &path)
 {
     m_ui->txtFileName->setText(path);
-    m_basePath = path;
     emit fileSelected(path);
 }
 
@@ -91,13 +91,15 @@ void KisFileNameRequester::slotSelectFile()
     {
         dialog.setCaption(i18n("Select a directory to load..."));
     }
-    if (m_basePath.isEmpty()) {
-        dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
-    }
-    else {
-        dialog.setDefaultDir(m_basePath);
-    }
 
+    const QString basePath =
+        KritaUtils::resolveAbsoluteFilePath(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
+                                            m_basePath);
+
+    const QString filePath =
+        KritaUtils::resolveAbsoluteFilePath(basePath, m_ui->txtFileName->text());
+
+    dialog.setDefaultDir(filePath, true);
     dialog.setMimeTypeFilters(m_mime_filter_list, m_mime_default_filter);
 
     QString newFileName = dialog.filename();

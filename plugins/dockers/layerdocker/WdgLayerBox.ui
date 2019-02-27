@@ -123,7 +123,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="KisNodeView" name="listLayers" native="true">
+      <widget class="NodeView" name="listLayers" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -321,9 +321,9 @@
    <header>kis_slider_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>KisNodeView</class>
+   <class>NodeView</class>
    <extends></extends>
-   <header location="global">KisNodeView.h</header>
+   <header location="global">NodeView.h</header>
   </customwidget>
   <customwidget>
    <class>KisToolButton</class>

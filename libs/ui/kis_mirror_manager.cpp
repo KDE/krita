@@ -42,7 +42,6 @@ public:
     {}
 
     KisMirrorAxis* mirrorAxisDecoration;
-//    KisMirrorAxisConfig mirrorAxisConfig() {}
 };
 
 KisMirrorManager::KisMirrorManager(KisViewManager* view) : QObject(view)
@@ -84,8 +83,9 @@ void KisMirrorManager::setView(QPointer<KisView> imageView)
             m_imageView->canvasBase()->addDecoration(d->mirrorAxisDecoration);
         }
 
-        d->mirrorAxisDecoration->setMirrorAxisConfig(mirrorAxisConfig());
+        setDecorationConfig();
     }
+
     updateAction();
 }
 
@@ -103,12 +103,12 @@ void KisMirrorManager::updateAction()
 
 void KisMirrorManager::slotDocumentConfigChanged()
 {
-    d->mirrorAxisDecoration->setMirrorAxisConfig(mirrorAxisConfig());
+    setDecorationConfig();
 }
 
 void KisMirrorManager::slotMirrorAxisConfigChanged()
 {
-    if (m_imageView) {
+    if (m_imageView && m_imageView->document()) {
         KisSignalsBlocker blocker(m_imageView->document());
         m_imageView->document()->setMirrorAxisConfig(d->mirrorAxisDecoration->mirrorAxisConfig());
     }
@@ -122,7 +122,10 @@ KisMirrorAxis* KisMirrorManager::hasDecoration() {
     return 0;
 }
 
-const KisMirrorAxisConfig& KisMirrorManager::mirrorAxisConfig() const
+void KisMirrorManager::setDecorationConfig()
 {
-    return m_imageView->document()->mirrorAxisConfig();
+    if (m_imageView && m_imageView->document()) {
+        KisMirrorAxisConfig config = m_imageView->document()->mirrorAxisConfig();
+        d->mirrorAxisDecoration->setMirrorAxisConfig(config);
+    }
 }

@@ -16,31 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_NODE_VIEW_TEST_H
-#define __KIS_NODE_VIEW_TEST_H
+#ifndef __NODE_VIEW_VISIBILITY_DELEGATE_H
+#define __NODE_VIEW_VISIBILITY_DELEGATE_H
 
-#include <QtTest>
-#include "empty_nodes_test.h"
-
-class KisDocument;
-class KisNameServer;
-class KisShapeController;
+#include <QAbstractItemDelegate>
 
 
-class KisNodeViewTest : public QObject, public TestUtil::EmptyNodesTest
+class NodeViewVisibilityDelegate : public QAbstractItemDelegate
 {
-    Q_OBJECT
-private Q_SLOTS:
-    void init();
-    void cleanup();
+public:
+    NodeViewVisibilityDelegate(QObject *parent);
+    ~NodeViewVisibilityDelegate() override;
 
-    void testLayers();
-    void testColorLabels();
-
-private:
-    KisDocument *m_doc;
-    KisNameServer *m_nameServer;
-    KisShapeController *m_shapeController;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 };
 
-#endif /* __KIS_NODE_VIEW_TEST_H */
+#endif

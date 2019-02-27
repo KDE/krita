@@ -21,24 +21,24 @@
 #define KIS_DOCUMENT_SECTION_DELEGATE_H
 
 #include <QAbstractItemDelegate>
-class KisNodeView;
+class NodeView;
 
 class KisNodeModel;
 
 /**
- * See KisNodeModel and KisNodeView.
+ * See KisNodeModel and NodeView.
  *
  * A delegate provides the gui machinery, using Qt's model/view terminology.
- * This class is owned by KisNodeView to do the work of generating the
+ * This class is owned by NodeView to do the work of generating the
  * graphical representation of each item.
  */
-class KisNodeDelegate: public QAbstractItemDelegate
+class NodeDelegate: public QAbstractItemDelegate
 {
     Q_OBJECT
 
 public:
-    explicit KisNodeDelegate(KisNodeView *view, QObject *parent = 0);
-    ~KisNodeDelegate() override;
+    explicit NodeDelegate(NodeView *view, QObject *parent = 0);
+    ~NodeDelegate() override;
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
@@ -56,7 +56,7 @@ protected:
 
 private:
     typedef KisNodeModel Model;
-    typedef KisNodeView View;
+    typedef NodeView View;
     class Private;
     Private* const d;
 

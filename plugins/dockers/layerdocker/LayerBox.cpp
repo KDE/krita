@@ -1,5 +1,5 @@
 /*
- *  kis_layer_box.cc - part of Krita aka Krayon aka KimageShop
+ *  LayerBox.cc - part of Krita aka Krayon aka KimageShop
  *
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
@@ -22,8 +22,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_layer_box.h"
-
+#include "LayerBox.h"
 
 #include <QToolButton>
 #include <QLayout>
@@ -43,12 +42,12 @@
 #include <QLabel>
 #include <QMenu>
 #include <QWidgetAction>
+#include <QProxyStyle>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 
 #include <kis_icon.h>
-#include <KisNodeView.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 #include <KisDocument.h>
@@ -66,7 +65,7 @@
 #include <kis_image_animation_interface.h>
 #include <KoProperties.h>
 
-#include "kis_action.h"
+#include <kis_action.h>
 #include "kis_action_manager.h"
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_slider_spin_box.h"
@@ -81,7 +80,6 @@
 #include "kis_config.h"
 #include "KisView.h"
 #include "krita_utils.h"
-#include "sync_button_and_action.h"
 #include "kis_color_label_selector_widget.h"
 #include "kis_signals_blocker.h"
 #include "kis_color_filter_combo.h"
@@ -94,14 +92,15 @@
 
 #include "kis_layer_utils.h"
 
-#include "ui_wdglayerbox.h"
+#include "ui_WdgLayerBox.h"
+#include "NodeView.h"
+#include "SyncButtonAndAction.h"
 
-#include <QProxyStyle>
 
-class KisLayerBoxStyle : public QProxyStyle
+class LayerBoxStyle : public QProxyStyle
 {
 public:
-    KisLayerBoxStyle(QStyle *baseStyle = 0) : QProxyStyle(baseStyle) {}
+    LayerBoxStyle(QStyle *baseStyle = 0) : QProxyStyle(baseStyle) {}
 
     void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
                        QPainter *painter, const QWidget *widget) const
@@ -131,7 +130,7 @@ public:
     }
 };
 
-inline void KisLayerBox::connectActionToButton(KisViewManager* viewManager, QAbstractButton *button, const QString &id)
+inline void LayerBox::connectActionToButton(KisViewManager* viewManager, QAbstractButton *button, const QString &id)
 {
     if (!viewManager || !button) return;
 
@@ -144,14 +143,14 @@ inline void KisLayerBox::connectActionToButton(KisViewManager* viewManager, QAbs
     connect(viewManager->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateIcons()));
 }
 
-inline void KisLayerBox::addActionToMenu(QMenu *menu, const QString &id)
+inline void LayerBox::addActionToMenu(QMenu *menu, const QString &id)
 {
     if (m_canvas) {
         menu->addAction(m_canvas->viewManager()->actionManager()->actionByName(id));
     }
 }
 
-KisLayerBox::KisLayerBox()
+LayerBox::LayerBox()
     : QDockWidget(i18n("Layers"))
     , m_canvas(0)
     , m_wdgLayerBox(new Ui_WdgLayerBox)
@@ -167,7 +166,7 @@ KisLayerBox::KisLayerBox()
 
     m_wdgLayerBox->setupUi(mainWidget);
 
-    m_wdgLayerBox->listLayers->setStyle(new KisLayerBoxStyle(m_wdgLayerBox->listLayers->style()));
+    m_wdgLayerBox->listLayers->setStyle(new LayerBoxStyle(m_wdgLayerBox->listLayers->style()));
 
     connect(m_wdgLayerBox->listLayers,
             SIGNAL(contextMenuRequested(QPoint,QModelIndex)),
@@ -244,7 +243,7 @@ KisLayerBox::KisLayerBox()
     // this connection should be done *after* the setModel() call to
     // happen later than the internal selection model
     connect(m_filteringModel.data(), &KisNodeFilterProxyModel::rowsAboutToBeRemoved,
-            this, &KisLayerBox::slotAboutToRemoveRows);
+            this, &LayerBox::slotAboutToRemoveRows);
 
     connect(m_wdgLayerBox->cmbFilter, SIGNAL(selectedColorsChanged()), SLOT(updateLayerFiltering()));
 
@@ -287,13 +286,13 @@ KisLayerBox::KisLayerBox()
     connect(&m_thumbnailSizeCompressor, SIGNAL(timeout()), SLOT(slotUpdateThumbnailIconSize()));
 }
 
-KisLayerBox::~KisLayerBox()
+LayerBox::~LayerBox()
 {
     delete m_wdgLayerBox;
 }
 
 
-void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeFilterProxyModel> filteringModel, KisNodeView *nodeView)
+void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeFilterProxyModel> filteringModel, NodeView *nodeView)
 {
     if (!root) return;
     if (filteringModel.isNull()) return;
@@ -315,7 +314,7 @@ void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeFilterProxyModel> fi
     nodeView->blockSignals(false);
 }
 
-void KisLayerBox::slotAddLayerBnClicked()
+void LayerBox::slotAddLayerBnClicked()
 {
     if (m_canvas) {
         KisNodeList nodes = m_nodeManager->selectedNodes();
@@ -330,7 +329,7 @@ void KisLayerBox::slotAddLayerBnClicked()
     }
 }
 
-void KisLayerBox::setViewManager(KisViewManager* kisview)
+void LayerBox::setViewManager(KisViewManager* kisview)
 {
     m_nodeManager = kisview->nodeManager();
 
@@ -370,7 +369,7 @@ void KisLayerBox::setViewManager(KisViewManager* kisview)
     connect(action, SIGNAL(triggered()), this, SLOT(slotLowerClicked()));
 }
 
-void KisLayerBox::setCanvas(KoCanvasBase *canvas)
+void LayerBox::setCanvas(KoCanvasBase *canvas)
 {
     if (m_canvas == canvas)
         return;
@@ -421,7 +420,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
         // cold start
         if (m_nodeManager) {
             setCurrentNode(m_nodeManager->activeNode());
-            // Connection KisNodeManager -> KisLayerBox
+            // Connection KisNodeManager -> LayerBox
             connect(m_nodeManager, SIGNAL(sigUiNeedChangeActiveNode(KisNodeSP)),
                     this, SLOT(setCurrentNode(KisNodeSP)));
 
@@ -433,12 +432,12 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
             setCurrentNode(m_canvas->imageView()->currentNode());
         }
 
-        // Connection KisLayerBox -> KisNodeManager (isolate layer)
+        // Connection LayerBox -> KisNodeManager (isolate layer)
         connect(m_nodeModel, SIGNAL(toggleIsolateActiveNode()),
                 m_nodeManager, SLOT(toggleIsolateActiveNode()));
 
         KisImageAnimationInterface *animation = m_image->animationInterface();
-        connect(animation, &KisImageAnimationInterface::sigUiTimeChanged, this, &KisLayerBox::slotImageTimeChanged);
+        connect(animation, &KisImageAnimationInterface::sigUiTimeChanged, this, &LayerBox::slotImageTimeChanged);
 
         expandNodesRecursively(m_image->rootLayer(), m_filteringModel, m_wdgLayerBox->listLayers);
         m_wdgLayerBox->listLayers->scrollTo(m_wdgLayerBox->listLayers->currentIndex());
@@ -462,7 +461,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 }
 
 
-void KisLayerBox::unsetCanvas()
+void LayerBox::unsetCanvas()
 {
     setEnabled(false);
     if (m_canvas) {
@@ -478,12 +477,12 @@ void KisLayerBox::unsetCanvas()
     m_canvas = 0;
 }
 
-void KisLayerBox::notifyImageDeleted()
+void LayerBox::notifyImageDeleted()
 {
     setCanvas(0);
 }
 
-void KisLayerBox::updateUI()
+void LayerBox::updateUI()
 {
     if (!m_canvas) return;
     if (!m_nodeManager) return;
@@ -501,7 +500,7 @@ void KisLayerBox::updateUI()
                 watchOpacityChannel(opacityChannel);
             } else {
                 watchOpacityChannel(0);
-                connect(activeNode.data(), &KisNode::keyframeChannelAdded, this, &KisLayerBox::slotKeyframeChannelAdded);
+                connect(activeNode.data(), &KisNode::keyframeChannelAdded, this, &LayerBox::slotKeyframeChannelAdded);
             }
         }
     }
@@ -547,7 +546,7 @@ void KisLayerBox::updateUI()
  * This method is called *only* when non-GUI code requested the
  * change of the current node
  */
-void KisLayerBox::setCurrentNode(KisNodeSP node)
+void LayerBox::setCurrentNode(KisNodeSP node)
 {
     m_filteringModel->setActiveNode(node);
 
@@ -556,7 +555,7 @@ void KisLayerBox::setCurrentNode(KisNodeSP node)
     updateUI();
 }
 
-void KisLayerBox::slotModelReset()
+void LayerBox::slotModelReset()
 {
     if(m_nodeModel->hasDummiesFacade()) {
         QItemSelection selection;
@@ -574,7 +573,7 @@ void KisLayerBox::slotModelReset()
     updateUI();
 }
 
-void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
+void LayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 {
     KoID opId = KoCompositeOpRegistry::instance().getKoID(compositeOp->id());
 
@@ -584,7 +583,7 @@ void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 }
 
 // range: 0-100
-void KisLayerBox::slotSetOpacity(double opacity)
+void LayerBox::slotSetOpacity(double opacity)
 {
     Q_ASSERT(opacity >= 0 && opacity <= 100);
     m_wdgLayerBox->doubleOpacity->blockSignals(true);
@@ -592,7 +591,7 @@ void KisLayerBox::slotSetOpacity(double opacity)
     m_wdgLayerBox->doubleOpacity->blockSignals(false);
 }
 
-void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &index)
+void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &index)
 {
     KisNodeList nodes = m_nodeManager->selectedNodes();
     KisNodeSP activeNode = m_nodeManager->activeNode();
@@ -685,40 +684,40 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
     }
 }
 
-void KisLayerBox::slotMinimalView()
+void LayerBox::slotMinimalView()
 {
-    m_wdgLayerBox->listLayers->setDisplayMode(KisNodeView::MinimalMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(NodeView::MinimalMode);
 }
 
-void KisLayerBox::slotDetailedView()
+void LayerBox::slotDetailedView()
 {
-    m_wdgLayerBox->listLayers->setDisplayMode(KisNodeView::DetailedMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(NodeView::DetailedMode);
 }
 
-void KisLayerBox::slotThumbnailView()
+void LayerBox::slotThumbnailView()
 {
-    m_wdgLayerBox->listLayers->setDisplayMode(KisNodeView::ThumbnailMode);
+    m_wdgLayerBox->listLayers->setDisplayMode(NodeView::ThumbnailMode);
 }
 
-void KisLayerBox::slotRmClicked()
+void LayerBox::slotRmClicked()
 {
     if (!m_canvas) return;
     m_nodeManager->removeNode();
 }
 
-void KisLayerBox::slotRaiseClicked()
+void LayerBox::slotRaiseClicked()
 {
     if (!m_canvas) return;
     m_nodeManager->raiseNode();
 }
 
-void KisLayerBox::slotLowerClicked()
+void LayerBox::slotLowerClicked()
 {
     if (!m_canvas) return;
     m_nodeManager->lowerNode();
 }
 
-void KisLayerBox::slotPropertiesClicked()
+void LayerBox::slotPropertiesClicked()
 {
     if (!m_canvas) return;
     if (KisNodeSP active = m_nodeManager->activeNode()) {
@@ -726,7 +725,7 @@ void KisLayerBox::slotPropertiesClicked()
     }
 }
 
-void KisLayerBox::slotCompositeOpChanged(int index)
+void LayerBox::slotCompositeOpChanged(int index)
 {
     Q_UNUSED(index);
     if (!m_canvas) return;
@@ -735,7 +734,7 @@ void KisLayerBox::slotCompositeOpChanged(int index)
     m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(compositeOp));
 }
 
-void KisLayerBox::slotOpacityChanged()
+void LayerBox::slotOpacityChanged()
 {
     if (!m_canvas) return;
     m_blockOpacityUpdate = true;
@@ -743,13 +742,13 @@ void KisLayerBox::slotOpacityChanged()
     m_blockOpacityUpdate = false;
 }
 
-void KisLayerBox::slotOpacitySliderMoved(qreal opacity)
+void LayerBox::slotOpacitySliderMoved(qreal opacity)
 {
     m_newOpacity = opacity;
     m_opacityDelayTimer.start(200);
 }
 
-void KisLayerBox::slotCollapsed(const QModelIndex &index)
+void LayerBox::slotCollapsed(const QModelIndex &index)
 {
     KisNodeSP node = m_filteringModel->nodeFromIndex(index);
     if (node) {
@@ -757,7 +756,7 @@ void KisLayerBox::slotCollapsed(const QModelIndex &index)
     }
 }
 
-void KisLayerBox::slotExpanded(const QModelIndex &index)
+void LayerBox::slotExpanded(const QModelIndex &index)
 {
     KisNodeSP node = m_filteringModel->nodeFromIndex(index);
     if (node) {
@@ -765,7 +764,7 @@ void KisLayerBox::slotExpanded(const QModelIndex &index)
     }
 }
 
-void KisLayerBox::slotSelectOpaque()
+void LayerBox::slotSelectOpaque()
 {
     if (!m_canvas) return;
     QAction *action = m_canvas->viewManager()->actionManager()->actionByName("selectopaque");
@@ -774,7 +773,7 @@ void KisLayerBox::slotSelectOpaque()
     }
 }
 
-void KisLayerBox::slotNodeCollapsedChanged()
+void LayerBox::slotNodeCollapsedChanged()
 {
     expandNodesRecursively(m_image->rootLayer(), m_filteringModel, m_wdgLayerBox->listLayers);
 }
@@ -784,7 +783,7 @@ inline bool isSelectionMask(KisNodeSP node)
     return dynamic_cast<KisSelectionMask*>(node.data());
 }
 
-KisNodeSP KisLayerBox::findNonHidableNode(KisNodeSP startNode)
+KisNodeSP LayerBox::findNonHidableNode(KisNodeSP startNode)
 {
     if (KisNodeManager::isNodeHidden(startNode, true) &&
             startNode->parent() &&
@@ -817,7 +816,7 @@ KisNodeSP KisLayerBox::findNonHidableNode(KisNodeSP startNode)
     return startNode;
 }
 
-void KisLayerBox::slotEditGlobalSelection(bool showSelections)
+void LayerBox::slotEditGlobalSelection(bool showSelections)
 {
     KisNodeSP lastActiveNode = m_nodeManager->activeNode();
     KisNodeSP activateNode = lastActiveNode;
@@ -895,7 +894,7 @@ void KisLayerBox::slotEditGlobalSelection(bool showSelections)
 
 }
 
-void KisLayerBox::selectionChanged(const QModelIndexList selection)
+void LayerBox::selectionChanged(const QModelIndexList selection)
 {
     if (!m_nodeManager) return;
 
@@ -922,7 +921,7 @@ void KisLayerBox::selectionChanged(const QModelIndexList selection)
     updateUI();
 }
 
-void KisLayerBox::slotAboutToRemoveRows(const QModelIndex &parent, int start, int end)
+void LayerBox::slotAboutToRemoveRows(const QModelIndex &parent, int start, int end)
 {
     /**
      * Qt has changed its behavior when deleting an item. Previously
@@ -956,7 +955,7 @@ void KisLayerBox::slotAboutToRemoveRows(const QModelIndex &parent, int start, in
     }
 }
 
-void KisLayerBox::slotNodeManagerChangedSelection(const KisNodeList &nodes)
+void LayerBox::slotNodeManagerChangedSelection(const KisNodeList &nodes)
 {
     if (!m_nodeManager) return;
 
@@ -979,17 +978,17 @@ void KisLayerBox::slotNodeManagerChangedSelection(const KisNodeList &nodes)
     model->select(selection, QItemSelectionModel::ClearAndSelect);
 }
 
-void KisLayerBox::updateThumbnail()
+void LayerBox::updateThumbnail()
 {
     m_wdgLayerBox->listLayers->updateNode(m_wdgLayerBox->listLayers->currentIndex());
 }
 
-void KisLayerBox::slotRenameCurrentNode()
+void LayerBox::slotRenameCurrentNode()
 {
     m_wdgLayerBox->listLayers->edit(m_wdgLayerBox->listLayers->currentIndex());
 }
 
-void KisLayerBox::slotColorLabelChanged(int label)
+void LayerBox::slotColorLabelChanged(int label)
 {
     KisNodeList nodes = m_nodeManager->selectedNodes();
 
@@ -1003,25 +1002,25 @@ void KisLayerBox::slotColorLabelChanged(int label)
     }
 }
 
-void KisLayerBox::updateAvailableLabels()
+void LayerBox::updateAvailableLabels()
 {
     if (!m_image) return;
     m_wdgLayerBox->cmbFilter->updateAvailableLabels(m_image->root());
 }
 
-void KisLayerBox::updateLayerFiltering()
+void LayerBox::updateLayerFiltering()
 {
     m_filteringModel->setAcceptedLabels(m_wdgLayerBox->cmbFilter->selectedColors());
 }
 
-void KisLayerBox::slotKeyframeChannelAdded(KisKeyframeChannel *channel)
+void LayerBox::slotKeyframeChannelAdded(KisKeyframeChannel *channel)
 {
     if (channel->id() == KisKeyframeChannel::Opacity.id()) {
         watchOpacityChannel(channel);
     }
 }
 
-void KisLayerBox::watchOpacityChannel(KisKeyframeChannel *channel)
+void LayerBox::watchOpacityChannel(KisKeyframeChannel *channel)
 {
     if (m_opacityChannel) {
         m_opacityChannel->disconnect(this);
@@ -1036,26 +1035,26 @@ void KisLayerBox::watchOpacityChannel(KisKeyframeChannel *channel)
     }
 }
 
-void KisLayerBox::slotOpacityKeyframeChanged(KisKeyframeSP keyframe)
+void LayerBox::slotOpacityKeyframeChanged(KisKeyframeSP keyframe)
 {
     Q_UNUSED(keyframe);
     if (m_blockOpacityUpdate) return;
     updateUI();
 }
 
-void KisLayerBox::slotOpacityKeyframeMoved(KisKeyframeSP keyframe, int fromTime)
+void LayerBox::slotOpacityKeyframeMoved(KisKeyframeSP keyframe, int fromTime)
 {
     Q_UNUSED(fromTime);
     slotOpacityKeyframeChanged(keyframe);
 }
 
-void KisLayerBox::slotImageTimeChanged(int time)
+void LayerBox::slotImageTimeChanged(int time)
 {
     Q_UNUSED(time);
     updateUI();
 }
 
-void KisLayerBox::slotUpdateIcons() {
+void LayerBox::slotUpdateIcons() {
     m_wdgLayerBox->bnAdd->setIcon(KisIconUtils::loadIcon("addlayer"));
     m_wdgLayerBox->bnRaise->setIcon(KisIconUtils::loadIcon("arrowupblr"));
     m_wdgLayerBox->bnDelete->setIcon(KisIconUtils::loadIcon("deletelayer"));
@@ -1067,7 +1066,7 @@ void KisLayerBox::slotUpdateIcons() {
     m_wdgLayerBox->listLayers->slotUpdateIcons();
 }
 
-void KisLayerBox::slotUpdateThumbnailIconSize()
+void LayerBox::slotUpdateThumbnailIconSize()
 {
     KisConfig cfg(false);
     cfg.setLayerThumbnailSize(thumbnailSizeSlider->value());
@@ -1079,4 +1078,4 @@ void KisLayerBox::slotUpdateThumbnailIconSize()
 }
 
 
-#include "moc_kis_layer_box.cpp"
+#include "moc_LayerBox.cpp"

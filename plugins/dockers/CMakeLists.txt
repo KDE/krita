@@ -1,4 +1,4 @@
-add_subdirectory(defaultdockers)
+add_subdirectory(layerdocker)
 if(HAVE_OPENEXR)
     add_subdirectory(smallcolorselector)
 endif()

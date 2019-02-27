@@ -22,7 +22,6 @@
 
 #include <QTreeView>
 #include <QScroller>
-#include "kritaui_export.h"
 
 class QStyleOptionViewItem;
 class KisNodeModel;
@@ -41,7 +40,7 @@ class KisNodeModel;
  *
  * This widget should work correctly in your Qt designer .ui file.
  */
-class KRITAUI_EXPORT KisNodeView: public QTreeView
+class NodeView: public QTreeView
 {
     Q_OBJECT
 Q_SIGNALS:
@@ -55,10 +54,10 @@ Q_SIGNALS:
 public:
 
     /**
-     * Create a new KisNodeView.
+     * Create a new NodeView.
      */
-    explicit KisNodeView(QWidget *parent = 0);
-    ~KisNodeView() override;
+    explicit NodeView(QWidget *parent = 0);
+    ~NodeView() override;
 
     /// how items should be displayed
     enum DisplayMode {
@@ -88,7 +87,7 @@ public:
     /**
      * Set the display mode of the view to one of the options.
      *
-     * @param mode The KisNodeView::DisplayMode mode
+     * @param mode The NodeView::DisplayMode mode
      */
     void setDisplayMode(DisplayMode mode);
 
@@ -108,7 +107,7 @@ public:
      *
      * For instance
      @code
-     KisNodeView * nodeView;
+     NodeView * nodeView;
      QModelIndex index = getCurrentNode();
      QMenu menu;
      if (index.isValid()) {

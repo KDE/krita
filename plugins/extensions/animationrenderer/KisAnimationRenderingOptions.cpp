@@ -21,7 +21,8 @@
 
 #include <QStandardPaths>
 #include <QFileInfo>
-#include <QDir>
+
+#include <KisFileUtils.h>
 
 KisAnimationRenderingOptions::KisAnimationRenderingOptions()
     : videoMimeType("video/mp4"),
@@ -32,28 +33,38 @@ KisAnimationRenderingOptions::KisAnimationRenderingOptions()
 
 }
 
-inline QString composePath(const QString &pathChunk, const QString &fileNameChunk)
+QString KisAnimationRenderingOptions::resolveAbsoluteDocumentFilePath(const QString &documentPath) const
 {
-    if (QFileInfo(fileNameChunk).isAbsolute()) {
-        return fileNameChunk;
-    }
-
-    return QFileInfo(QDir(QFileInfo(pathChunk).absolutePath()),
-                     fileNameChunk).absoluteFilePath();
+    return
+        !documentPath.isEmpty() ?
+        documentPath :
+        QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
 }
 
-QString KisAnimationRenderingOptions::resolveAbsoluteVideoFilePath() const
+QString KisAnimationRenderingOptions::resolveAbsoluteVideoFilePath(const QString &documentPath) const
 {
-    return composePath(lastDocuemntPath, videoFileName);
+    const QString basePath = resolveAbsoluteDocumentFilePath(documentPath);
+    return KritaUtils::resolveAbsoluteFilePath(basePath, videoFileName);
 }
 
-QString KisAnimationRenderingOptions::resolveAbsoluteFramesDirectory() const
+QString KisAnimationRenderingOptions::resolveAbsoluteFramesDirectory(const QString &documentPath) const
 {
     if (renderMode() == RENDER_VIDEO_ONLY) {
         return QFileInfo(resolveAbsoluteVideoFilePath()).absolutePath();
     }
 
-    return composePath(lastDocuemntPath, directory);
+    const QString basePath = resolveAbsoluteDocumentFilePath(documentPath);
+    return KritaUtils::resolveAbsoluteFilePath(basePath, directory);
+}
+
+QString KisAnimationRenderingOptions::resolveAbsoluteVideoFilePath() const
+{
+    return resolveAbsoluteVideoFilePath(lastDocuemntPath);
+}
+
+QString KisAnimationRenderingOptions::resolveAbsoluteFramesDirectory() const
+{
+    return resolveAbsoluteFramesDirectory(lastDocuemntPath);
 }
 
 KisAnimationRenderingOptions::RenderMode KisAnimationRenderingOptions::renderMode() const

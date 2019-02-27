@@ -16,20 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_NODE_VIEW_VISIBILITY_DELEGATE_H
-#define __KIS_NODE_VIEW_VISIBILITY_DELEGATE_H
+#include "NodeViewVisibilityDelegate.h"
 
-#include <QAbstractItemDelegate>
+#include "kis_node_view_color_scheme.h"
 
 
-class KisNodeViewVisibilityDelegate : public QAbstractItemDelegate
+NodeViewVisibilityDelegate::NodeViewVisibilityDelegate(QObject *parent)
+    : QAbstractItemDelegate(parent)
 {
-public:
-    KisNodeViewVisibilityDelegate(QObject *parent);
-    ~KisNodeViewVisibilityDelegate() override;
+}
 
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-};
+NodeViewVisibilityDelegate::~NodeViewVisibilityDelegate()
+{
+}
 
-#endif /* __KIS_NODE_VIEW_VISIBILITY_DELEGATE_H */
+void NodeViewVisibilityDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    Q_UNUSED(painter);
+    Q_UNUSED(option);
+    Q_UNUSED(index);
+}
+
+QSize NodeViewVisibilityDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    Q_UNUSED(index);
+
+    KisNodeViewColorScheme scm;
+    return QSize(option.rect.width(), scm.rowHeight());
+}

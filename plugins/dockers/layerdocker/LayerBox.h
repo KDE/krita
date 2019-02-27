@@ -1,5 +1,5 @@
 /*
- *  kis_layer_box.h - part of Krita aka Krayon aka KimageShop
+ *  LayerBox.h - part of Krita aka Krayon aka KimageShop
  *
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
@@ -66,16 +66,16 @@ class KisSelectionActionsAdapter;
  * This widget adds docking functionality and command buttons.
  *
  */
-class KisLayerBox : public QDockWidget, public KisMainwindowObserver
+class LayerBox : public QDockWidget, public KisMainwindowObserver
 {
 
     Q_OBJECT
 
 public:
 
-    KisLayerBox();
-    ~KisLayerBox() override;
-    QString observerName() override { return "KisLayerBox"; }
+    LayerBox();
+    ~LayerBox() override;
+    QString observerName() override { return "LayerBox"; }
     /// reimplemented from KisMainwindowObserver
     void setViewManager(KisViewManager* kisview) override;
     void setCanvas(KoCanvasBase *canvas) override;
@@ -173,18 +173,18 @@ private:
     bool m_blockOpacityUpdate {false};
 };
 
-class KisLayerBoxFactory : public KoDockFactoryBase
+class LayerBoxFactory : public KoDockFactoryBase
 {
 
 public:
-    KisLayerBoxFactory() { }
+    LayerBoxFactory() { }
 
     QString id() const override {
-        return QString("KisLayerBox");
+        return QString("LayerBox");
     }
 
     QDockWidget* createDockWidget() override {
-        KisLayerBox * dockWidget = new KisLayerBox();
+        LayerBox * dockWidget = new LayerBox();
 
         dockWidget->setObjectName(id());
 

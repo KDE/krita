@@ -16,6 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "sync_button_and_action.h"
+#ifndef __KIS_NODE_VIEW_TEST_H
+#define __KIS_NODE_VIEW_TEST_H
 
-// just for the moc's sake...
+#include <QtTest>
+#include "empty_nodes_test.h"
+
+class KisDocument;
+class KisNameServer;
+class KisShapeController;
+
+
+class NodeViewTest : public QObject, public TestUtil::EmptyNodesTest
+{
+    Q_OBJECT
+private Q_SLOTS:
+    void init();
+    void cleanup();
+
+    void testLayers();
+    void testColorLabels();
+
+private:
+    KisDocument *m_doc;
+    KisNameServer *m_nameServer;
+    KisShapeController *m_shapeController;
+};
+
+#endif /* __KIS_NODE_VIEW_TEST_H */

@@ -175,6 +175,8 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
         QString storageLocation = d->resourcesQuery.value("location").toString();
         QString resourceLocation = d->resourcesQuery.value("filename").toString();
         resource = KisResourceLocator::instance()->resource(storageLocation, resourceLocation);
+        resource->setResourceId(index.row());
+
     }
     return resource;
 
@@ -182,6 +184,9 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
 
 QModelIndex KisResourceModel::indexFromResource(KoResourceSP resource) const
 {
+    if (resource->resourceId() >= 0 && resource->resourceId() < rowCount()) {
+        return createIndex(resource->resourceId(), 0);
+    }
     return QModelIndex();
 }
 

@@ -102,6 +102,15 @@ public:
     bool permanent() const;
     void setPermanent(bool permanent);
 
+    /// @return the unique id of the resource in the resource database
+    int resourceId() const;
+
+private:
+
+    friend class KisResourceModel;
+    void setResourceId(int id);
+
+
 protected:
 
     /// override generateMD5 and in your resource subclass

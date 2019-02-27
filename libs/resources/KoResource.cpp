@@ -36,6 +36,7 @@ struct Q_DECL_HIDDEN KoResource::Private {
     QByteArray md5;
     QImage image;
     bool permanent;
+    int resourceId {-1};
 };
 
 KoResource::KoResource(const QString& filename)
@@ -162,5 +163,15 @@ bool KoResource::permanent() const
 void KoResource::setPermanent(bool permanent)
 {
     d->permanent = permanent;
+}
+
+int KoResource::resourceId() const
+{
+    return d->resourceId;
+}
+
+void KoResource::setResourceId(int id)
+{
+    d->resourceId = id;
 }
 

@@ -61,7 +61,7 @@
 #include <KoCompositeOp.h>
 #include <KoDockRegistry.h>
 #include <KoProperties.h>
-#include <KoResourceItemChooserSync.h>
+#include <KisResourceItemChooserSync.h>
 #include <KoSelection.h>
 #include <KoStore.h>
 #include <KoToolManager.h>
@@ -332,7 +332,7 @@ KisViewManager::~KisViewManager()
         cfg.writeKoColor("LastBackGroundColor",resourceProvider()->bgColor());
     }
 
-    cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
+    cfg.writeEntry("baseLength", KisResourceItemChooserSync::instance()->baseLength());
     cfg.writeEntry("CanvasOnlyActive", false); // We never restart in CavnasOnlyMode
     delete d;
 }

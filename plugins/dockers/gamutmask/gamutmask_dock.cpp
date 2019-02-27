@@ -33,7 +33,7 @@
 #include <kis_node_selection_adapter.h>
 #include <kis_group_layer.h>
 #include <KisView.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemChooser.h>
 
 #include <QWidget>
 #include <QMenu>

@@ -28,8 +28,8 @@
 
 #include "KisPaletteListWidget.h"
 #include "KoLegacyResourceModel.h"
-#include "KoResourceItemView.h"
-#include "KoResourceItemChooser.h"
+#include "KisResourceItemView.h"
+#include "KisResourceItemChooser.h"
 #include "KoResourceServer.h"
 #include "KoResourceServerAdapter.h"
 #include "KoResourceServerProvider.h"
@@ -48,7 +48,7 @@ struct KisPaletteListWidgetPrivate
     QPointer<KisPaletteListWidget> c;
 
     QSharedPointer<KoResourceServerAdapter<KoColorSet> > rAdapter;
-    QSharedPointer<KoResourceItemChooser> itemChooser;
+    QSharedPointer<KisResourceItemChooser> itemChooser;
 
     QScopedPointer<Model> model;
     QScopedPointer<Delegate> delegate;

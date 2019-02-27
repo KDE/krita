@@ -29,7 +29,7 @@
 #include <resources/KoGamutMask.h>
 #include <KisDocument.h>
 #include <kis_types.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemChooser.h>
 
 #include <kis_mainwindow_observer.h>
 

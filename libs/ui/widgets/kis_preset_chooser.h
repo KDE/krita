@@ -28,7 +28,7 @@
 
 class KoAbstractResourceServerAdapter;
 class KisPresetDelegate;
-class KoResourceItemChooser;
+class KisResourceItemChooser;
 
 #include <kritaui_export.h>
 
@@ -60,7 +60,7 @@ public:
     KoResourceSP currentResource() const;
     /// Sets the visibility of tagging klineEdits
     void showTaggingBar(bool show);
-    KoResourceItemChooser *itemChooser();
+    KisResourceItemChooser *itemChooser();
     void setPresetFilter(const QString& paintOpId);
 
     /// get the base size for the icons. Used by the slider in the view options
@@ -88,7 +88,7 @@ protected:
     void resizeEvent(QResizeEvent* event) override;
 
 private:
-    KoResourceItemChooser *m_chooser;
+    KisResourceItemChooser *m_chooser;
     KisPresetDelegate* m_delegate;
     ViewMode m_mode;
     QSharedPointer<KoAbstractResourceServerAdapter> m_adapter;

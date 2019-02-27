@@ -33,7 +33,7 @@ class QLabel;
 class QPushButton;
 class KisAutogradient;
 
-class KoResourceItemChooser;
+class KisResourceItemChooser;
 
 class KisCustomGradientDialog : public KoDialog
 {
@@ -83,7 +83,7 @@ private:
       void addGradient(KoAbstractGradientSP gradient);
 private:
     QLabel *m_lbName;
-    KoResourceItemChooser * m_itemChooser;
+    KisResourceItemChooser * m_itemChooser;
 
     QToolButton* m_addGradient;
     QPushButton* m_editGradient;

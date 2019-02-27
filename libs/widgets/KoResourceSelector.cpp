@@ -20,8 +20,8 @@
 #include "KoResourceSelector.h"
 #include <KoResourceServerAdapter.h>
 #include <KoLegacyResourceModel.h>
-#include <KoResourceItemView.h>
-#include <KoResourceItemDelegate.h>
+#include <KisResourceItemView.h>
+#include <KisResourceItemDelegate.h>
 #include <QPainter>
 #include <QTableView>
 #include <QListView>
@@ -72,9 +72,9 @@ KoResourceSelector::KoResourceSelector( QSharedPointer<KoAbstractResourceServerA
 {
     Q_ASSERT(resourceAdapter);
 
-    setView( new KoResourceItemView(this) );
+    setView( new KisResourceItemView(this) );
     setModel( new KoLegacyResourceModel(resourceAdapter, this) );
-    setItemDelegate( new KoResourceItemDelegate( this ) );
+    setItemDelegate( new KisResourceItemDelegate( this ) );
     setMouseTracking(true);
     d->updateIndex(this);
 
@@ -164,8 +164,8 @@ void KoResourceSelector::setDisplayMode(DisplayMode mode)
 
     switch(mode) {
     case ImageMode:
-        setItemDelegate(new KoResourceItemDelegate(this));
-        setView( new KoResourceItemView(this) );
+        setItemDelegate(new KisResourceItemDelegate(this));
+        setView( new KisResourceItemView(this) );
         break;
     case TextMode:
         setItemDelegate(new QStyledItemDelegate(this));

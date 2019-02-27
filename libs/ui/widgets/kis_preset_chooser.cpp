@@ -34,11 +34,11 @@
 #include <KisKineticScroller.h>
 
 #include <KoIcon.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemChooser.h>
 #include <KoLegacyResourceModel.h>
 #include <KoResourceServerAdapter.h>
-#include <KoResourceItemChooserSync.h>
-#include "KoResourceItemView.h"
+#include <KisResourceItemChooserSync.h>
+#include "KisResourceItemView.h"
 
 #include <brushengine/kis_paintop_settings.h>
 #include <brushengine/kis_paintop_preset.h>
@@ -206,7 +206,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
 
     m_adapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KisPresetProxyAdapter(rserver));
 
-    m_chooser = new KoResourceItemChooser(m_adapter, this);
+    m_chooser = new KisResourceItemChooser(m_adapter->serverType(), false, this);
     m_chooser->setObjectName("ResourceChooser");
     m_chooser->setColumnCount(10);
     m_chooser->setRowHeight(50);
@@ -276,7 +276,7 @@ void KisPresetChooser::updateViewSettings()
         m_chooser->setColumnCount(1);
         m_chooser->setColumnWidth(m_chooser->width());
 
-        KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+        KisResourceItemChooserSync* chooserSync = KisResourceItemChooserSync::instance();
         m_chooser->setRowHeight(chooserSync->baseLength());
         m_delegate->setShowText(true);
     } else if (m_mode == STRIP) {
@@ -322,7 +322,7 @@ void KisPresetChooser::showTaggingBar(bool show)
     m_chooser->showTaggingBar(show);
 }
 
-KoResourceItemChooser *KisPresetChooser::itemChooser()
+KisResourceItemChooser *KisPresetChooser::itemChooser()
 {
     return m_chooser;
 }
@@ -340,14 +340,14 @@ void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 
 void KisPresetChooser::setIconSize(int newSize)
 {
-    KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+    KisResourceItemChooserSync* chooserSync = KisResourceItemChooserSync::instance();
     chooserSync->setBaseLength(newSize);
     updateViewSettings();
 }
 
 int KisPresetChooser::iconSize()
 {
-    KoResourceItemChooserSync* chooserSync = KoResourceItemChooserSync::instance();
+    KisResourceItemChooserSync* chooserSync = KisResourceItemChooserSync::instance();
 
     return chooserSync->baseLength();
 }

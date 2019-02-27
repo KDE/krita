@@ -138,7 +138,7 @@ void KisPaletteListWidget::setAllowModification(bool allowModification)
 KisPaletteListWidgetPrivate::KisPaletteListWidgetPrivate(KisPaletteListWidget *a_c)
     : c(a_c)
     , rAdapter(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer()))
-    , itemChooser(new KoResourceItemChooser(rAdapter, a_c))
+    , itemChooser(new KisResourceItemChooser(rAdapter->serverType(), false, a_c))
     , model(new Model(rAdapter, a_c))
     , delegate(new Delegate(a_c))
 {  }

@@ -29,7 +29,7 @@
 
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 #include <kis_icon_utils.h>
 #include <kis_config.h>
@@ -153,7 +153,7 @@ KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
 
     KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoGamutMask>(rServer));
-    m_itemChooser = new KoResourceItemChooser(adapter, this);
+    m_itemChooser = new KisResourceItemChooser(adapter->serverType(), false, this);
     m_itemChooser->setItemDelegate(m_delegate);
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->showButtons(false);

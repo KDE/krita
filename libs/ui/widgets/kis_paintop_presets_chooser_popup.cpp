@@ -27,7 +27,7 @@
 #include <QSlider>
 
 #include <KoResource.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemChooser.h>
 
 #include <ui_wdgpaintoppresets.h>
 #include <kis_config.h>

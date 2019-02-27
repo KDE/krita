@@ -31,8 +31,8 @@
 
 #include <klocalizedstring.h>
 
-#include <KoResourceItemChooser.h>
-#include <KoResourceItemView.h>
+#include <KisResourceItemChooser.h>
+#include <KisResourceItemView.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResource.h>
 
@@ -112,7 +112,7 @@ KisWorkspaceChooser::ChooserWidgets KisWorkspaceChooser::createChooserWidgets(QS
     titleLabel->setFont(titleFont);
     titleLabel->setText(title);
 
-    widgets.itemChooser = new KoResourceItemChooser(adapter, this);
+    widgets.itemChooser = new KisResourceItemChooser(adapter->serverType(), false, this);
     widgets.itemChooser->setItemDelegate(new KisWorkspaceDelegate(this));
     widgets.itemChooser->setFixedSize(250, 250);
     widgets.itemChooser->setRowHeight(30);

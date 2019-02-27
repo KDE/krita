@@ -29,11 +29,11 @@
 #include <resources/KoAbstractGradient.h>
 #include <KoResource.h>
 #include <resources/KoSegmentGradient.h>
-#include <KoResourceItemView.h>
+#include <KisResourceItemView.h>
 #include <KisKineticScroller.h>
 #include <KoStopGradient.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemChooser.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>
 #include <kis_icon.h>
@@ -73,7 +73,7 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
 
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
-    m_itemChooser = new KoResourceItemChooser(adapter, this);
+    m_itemChooser = new KisResourceItemChooser(adapter->serverType(), false, this);
 
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->setFixedSize(250, 250);

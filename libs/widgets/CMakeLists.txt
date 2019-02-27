@@ -7,11 +7,6 @@ set(kritawidgets_LIB_SRCS
     KoVBox.cpp
     KoDialog.cpp
     KoZoomWidget.cpp
-    KoTagToolButton.cpp
-    KoTagChooserWidget.cpp
-    KoTagFilterWidget.cpp
-    KoResourceTaggingManager.cpp
-    KoResourceItemChooserContextMenu.cpp
     KoAspectButton.cpp
     KoPagePreviewWidget.cpp
     KoSliderCombo.cpp
@@ -30,12 +25,8 @@ set(kritawidgets_LIB_SRCS
     KoColorSlider.cpp
     KoTriangleColorSelector.cpp
     KoResourcePopupAction.cpp
-    KoResourceItemChooser.cpp
-    KoResourceItemChooserSync.cpp
     KoResourceSelector.cpp
     KoLegacyResourceModel.cpp
-    KoResourceItemDelegate.cpp
-    KoResourceItemView.cpp
     KoResourceTagStore.cpp
     KoRuler.cpp
     KoResourceServerAdapter.cpp
@@ -61,7 +52,6 @@ set(kritawidgets_LIB_SRCS
     KoMarkerItemDelegate.cpp
 
     KoDocumentInfoDlg.cpp
-    KoTableView.cpp
 
     WidgetsDebug.cpp
 
@@ -119,6 +109,7 @@ target_link_libraries(kritawidgets
     kritapigment
     kritawidgetutils
     kritaresources
+    kritaresourcewidgets
     Qt5::PrintSupport
     KF5::CoreAddons
     KF5::ConfigGui

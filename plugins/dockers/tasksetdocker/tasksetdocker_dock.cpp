@@ -31,7 +31,7 @@
 #include <kis_icon.h>
 
 #include <KoCanvasBase.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 #include <KisResourceLoader.h>
@@ -109,7 +109,7 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     m_rserver->loadResources(KoResourceServerProvider::blacklistFileNames(m_rserver->fileNames(), m_rserver->blackListedFiles()));
     m_rserver->loadTags();
 
-    KoResourceItemChooser* itemChooser = new KoResourceItemChooser(adapter, this);
+    KisResourceItemChooser* itemChooser = new KisResourceItemChooser(adapter->serverType(), false, this);
     itemChooser->setItemDelegate(new KisTasksetResourceDelegate(this));
     itemChooser->setFixedSize(500, 250);
     itemChooser->setRowHeight(30);

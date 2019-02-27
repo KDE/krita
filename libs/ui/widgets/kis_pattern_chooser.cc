@@ -27,7 +27,7 @@
 #include <QShowEvent>
 
 #include <klocalizedstring.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 
@@ -47,7 +47,7 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
 
     KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoPattern>(rserver));
-    m_itemChooser = new KoResourceItemChooser(adapter, this, true);
+    m_itemChooser = new KisResourceItemChooser(adapter->serverType(), true, this);
     m_itemChooser->setPreviewTiled(true);
     m_itemChooser->setPreviewOrientation(Qt::Horizontal);
     m_itemChooser->showTaggingBar(true);

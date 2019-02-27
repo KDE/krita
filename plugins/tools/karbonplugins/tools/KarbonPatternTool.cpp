@@ -34,7 +34,7 @@
 #include <KoShapeController.h>
 #include <KoResource.h>
 #include <KoResourceServerProvider.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 
 #include <klocalizedstring.h>
@@ -295,7 +295,7 @@ QList<QPointer<QWidget> > KarbonPatternTool::createOptionWidgets()
 
     KoResourceServer<KoPattern> *rserver = KoResourceServerProvider::instance()->patternServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoPattern>(rserver));
-    KoResourceItemChooser *chooser = new KoResourceItemChooser(adapter, m_optionsWidget);
+    KisResourceItemChooser *chooser = new KisResourceItemChooser(adapter->serverType(), false, m_optionsWidget);
     chooser->setObjectName("KarbonPatternChooser");
 
     connect(chooser, SIGNAL(resourceSelected(KoResourceSP )),

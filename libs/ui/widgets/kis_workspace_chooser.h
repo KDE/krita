@@ -27,7 +27,7 @@
 class QLineEdit;
 class QPushButton;
 class QGridLayout;
-class KoResourceItemChooser;
+class KisResourceItemChooser;
 class KisViewManager;
 
 class KoAbstractResourceServerAdapter;
@@ -49,7 +49,7 @@ private Q_SLOTS:
 private:
     struct ChooserWidgets
     {
-        KoResourceItemChooser *itemChooser;
+        KisResourceItemChooser *itemChooser;
         QLineEdit *nameEdit;
         QPushButton *saveButton;
     };

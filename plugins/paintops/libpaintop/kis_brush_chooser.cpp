@@ -38,8 +38,8 @@
 #include <kconfiggroup.h>
 #include <KisKineticScroller.h>
 
-#include <KoResourceItemView.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemView.h>
+#include <KisResourceItemChooser.h>
 
 #include <kis_icon.h>
 #include "kis_brush_server.h"
@@ -133,7 +133,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
     QSharedPointer<KisBrushResourceServerAdapter> adapter(new KisBrushResourceServerAdapter(rServer));
 
-    m_itemChooser = new KoResourceItemChooser(adapter, this);
+    m_itemChooser = new KisResourceItemChooser(adapter->serverType(), false, this);
     m_itemChooser->setObjectName("brush_selector");
 
     m_itemChooser->showTaggingBar(true);
@@ -403,11 +403,11 @@ void KisPredefinedBrushChooser::setImage(KisImageWSP image)
 }
 
 void KisPredefinedBrushChooser::slotImportNewBrushResource() {
-    m_itemChooser->slotButtonClicked(KoResourceItemChooser::Button_Import);
+    m_itemChooser->slotButtonClicked(KisResourceItemChooser::Button_Import);
 }
 
 void KisPredefinedBrushChooser::slotDeleteBrushResource() {
-    m_itemChooser->slotButtonClicked(KoResourceItemChooser::Button_Remove);
+    m_itemChooser->slotButtonClicked(KisResourceItemChooser::Button_Remove);
 }
 
 

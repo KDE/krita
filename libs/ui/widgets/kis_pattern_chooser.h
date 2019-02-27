@@ -25,7 +25,7 @@
 #include <kritaui_export.h>
 
 class KSqueezedTextLabel;
-class KoResourceItemChooser;
+class KisResourceItemChooser;
 
 
 class KRITAUI_EXPORT KisPatternChooser : public QFrame
@@ -59,7 +59,7 @@ private Q_SLOTS:
 private:
 
     KSqueezedTextLabel *m_lblName;
-    KoResourceItemChooser *m_itemChooser;
+    KisResourceItemChooser *m_itemChooser;
 };
 
 #endif // KIS_PATTERN_CHOOSER_H_

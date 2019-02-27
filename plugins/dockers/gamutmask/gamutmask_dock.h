@@ -31,7 +31,7 @@
 #include <KisDocument.h>
 #include <KisView.h>
 #include <kis_types.h>
-#include <KoResourceItemChooser.h>
+#include <KisResourceItemChooser.h>
 
 #include <kis_mainwindow_observer.h>
 
@@ -112,7 +112,7 @@ private:
     bool m_selfSelectingMask;
 
     GamutMaskChooserUI* m_dockerUI;
-    KoResourceItemChooser* m_maskChooser;
+    KisResourceItemChooser* m_maskChooser;
 
     KoGamutMaskSP m_selectedMask;
     QRegExpValidator* m_maskTitleValidator;

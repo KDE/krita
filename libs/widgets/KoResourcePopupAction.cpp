@@ -21,9 +21,9 @@
 #include "KoResourcePopupAction.h"
 
 #include "KoResourceServerAdapter.h"
-#include "KoResourceItemView.h"
+#include "KisResourceItemView.h"
 #include "KoLegacyResourceModel.h"
-#include "KoResourceItemDelegate.h"
+#include "KisResourceItemDelegate.h"
 #include <KoResource.h>
 #include "KoCheckerBoardPainter.h"
 #include "KoShapeBackground.h"
@@ -47,7 +47,7 @@ class KoResourcePopupAction::Private
 public:
     QMenu *menu = 0;
     KoLegacyResourceModel *model = 0;
-    KoResourceItemView *resourceList = 0;
+    KisResourceItemView *resourceList = 0;
     QSharedPointer<KoShapeBackground> background;
     KoImageCollection *imageCollection = 0;
     KoCheckerBoardPainter checkerPainter {4};
@@ -63,11 +63,11 @@ KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceSe
     QWidget *widget = new QWidget();
     QWidgetAction *wdgAction = new QWidgetAction(this);
 
-    d->resourceList = new KoResourceItemView(widget);
+    d->resourceList = new KisResourceItemView(widget);
 
     d->model = new KoLegacyResourceModel(resourceAdapter, widget);
     d->resourceList->setModel(d->model);
-    d->resourceList->setItemDelegate(new KoResourceItemDelegate(widget));
+    d->resourceList->setItemDelegate(new KisResourceItemDelegate(widget));
     KoLegacyResourceModel * resourceModel = qobject_cast<KoLegacyResourceModel*>(d->resourceList->model());
     if (resourceModel) {
         resourceModel->setColumnCount(1);

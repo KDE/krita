@@ -36,7 +36,7 @@ class KisDoubleSliderSpinBox;
 class KisSpacingSelectionWidget;
 class KisCustomBrushWidget;
 class KisClipboardBrushWidget;
-class KoResourceItemChooser;
+class KisResourceItemChooser;
 class KoResource;
 
 
@@ -77,7 +77,7 @@ Q_SIGNALS:
 
 private:
     KisBrushSP m_brush;
-    KoResourceItemChooser* m_itemChooser;
+    KisResourceItemChooser* m_itemChooser;
     KisImageWSP m_image;
     KisCustomBrushWidget* m_stampBrushWidget;
     KisClipboardBrushWidget* m_clipboardBrushWidget;

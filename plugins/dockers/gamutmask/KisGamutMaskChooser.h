@@ -20,7 +20,7 @@
 
 #include <QWidget>
 
-class KoResourceItemChooser;
+class KisResourceItemChooser;
 #include <KoResource.h>
 #include <resources/KoGamutMask.h>
 
@@ -54,7 +54,7 @@ private Q_SLOTS:
 private:
     void setViewMode(ViewMode mode);
     void updateViewSettings();
-    KoResourceItemChooser* m_itemChooser;
+    KisResourceItemChooser* m_itemChooser;
     KisGamutMaskDelegate* m_delegate;
     ViewMode m_mode;
 };

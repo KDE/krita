@@ -26,7 +26,7 @@
 class QSpinBox;
 class KoColorSet;
 class QLineEdit;
-class KoResourceItemChooser;
+class KisResourceItemChooser;
 class KoResource;
 
 #include "kritawidgets_export.h"
@@ -47,7 +47,7 @@ private Q_SLOTS:
     void slotSave();
 
 private:
-    KoResourceItemChooser * m_itemChooser;
+    KisResourceItemChooser * m_itemChooser;
     QLineEdit* m_nameEdit;
     QSpinBox* m_columnEdit;
 };

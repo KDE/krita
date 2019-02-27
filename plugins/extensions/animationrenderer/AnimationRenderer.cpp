@@ -112,7 +112,7 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
 
 
     /**
-     * The dialog should endure that the size of the video is even
+     * The dialog should ensure that the size of the video is even
      */
     KIS_SAFE_ASSERT_RECOVER(
         !((encoderOptions.width & 0x1 || encoderOptions.height & 0x1)
@@ -121,6 +121,24 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
 
         encoderOptions.width = encoderOptions.width + (encoderOptions.width & 0x1);
         encoderOptions.height = encoderOptions.height + (encoderOptions.height & 0x1);
+    }
+
+    const QSize scaledSize =
+        doc->image()->bounds().size().scaled(
+            encoderOptions.width, encoderOptions.height,
+            Qt::KeepAspectRatio);
+
+    if ((scaledSize.width() & 0x1 || scaledSize.height() & 0x1)
+            && (encoderOptions.videoMimeType == "video/mp4" ||
+                encoderOptions.videoMimeType == "video/x-matroska")) {
+        QString m = "Mastroska (.mkv)";
+        if (encoderOptions.videoMimeType == "video/mp4") {
+            m = "Mpeg4 (.mp4)";
+        }
+        qWarning() << m <<"requires width and height to be even, resize and try again!";
+        doc->setErrorMessage(i18n("%1 requires width and height to be even numbers.  Please resize or crop the image before exporting.", m));
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
+        return;
     }
 
     const bool batchMode = false; // TODO: fetch correctly!

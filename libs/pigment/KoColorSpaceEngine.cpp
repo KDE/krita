@@ -50,6 +50,15 @@ const QString& KoColorSpaceEngine::name() const
     return d->name;
 }
 
+bool KoColorSpaceEngine::supportsColorSpace(const QString &colorModelId, const QString &colorDepthId, const KoColorProfile *profile) const
+{
+    Q_UNUSED(colorModelId);
+    Q_UNUSED(colorDepthId);
+    Q_UNUSED(profile);
+
+    return true;
+}
+
 KoColorSpaceEngineRegistry::KoColorSpaceEngineRegistry()
 {
 }

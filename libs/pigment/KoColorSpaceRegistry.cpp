@@ -637,6 +637,26 @@ const KoColorSpace * KoColorSpaceRegistry::lab16(const KoColorProfile * profile)
     return d->colorSpace1(KoLabColorSpace::colorSpaceId(), profile);
 }
 
+const KoColorProfile *KoColorSpaceRegistry::p2020G10Profile() const
+{
+    return profileByName("Rec2020-elle-V4-g10.icc");
+}
+
+const KoColorProfile *KoColorSpaceRegistry::p2020PQProfile() const
+{
+    return profileByName("High Dynamic Range UHDTV Wide Color Gamut Display (Rec. 2020) - SMPTE ST 2084 PQ EOTF");
+}
+
+const KoColorProfile *KoColorSpaceRegistry::p709G10Profile() const
+{
+    return profileByName("sRGB-elle-V2-g10.icc");
+}
+
+const KoColorProfile *KoColorSpaceRegistry::p709SRGBProfile() const
+{
+    return profileByName("sRGB-elle-V2-srgbtrc.icc");
+}
+
 QList<KoID> KoColorSpaceRegistry::colorModelsList(ColorSpaceListVisibility option) const
 {
     QReadLocker l(&d->registrylock);

@@ -137,11 +137,11 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-      <Action name="render_image_sequence_again">
+      <Action name="render_animation_again">
       <icon></icon>
-      <text>&amp;Render Image Sequence Again</text>
+      <text>&amp;Render Animation Again</text>
       <whatsThis></whatsThis>
-      <toolTip>Render Animation to Image Sequence Again</toolTip>
+      <toolTip>Render Animation Again</toolTip>
       <iconText>Render Animation</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -562,7 +562,7 @@
   <Actions category="View">
     <text>View</text>
     <Action name="view_show_canvas_only">
-      <icon></icon>
+      <icon>document-new</icon>
       <text>&amp;Show Canvas Only</text>
       <whatsThis></whatsThis>
       <toolTip>Show just the canvas or the whole window</toolTip>

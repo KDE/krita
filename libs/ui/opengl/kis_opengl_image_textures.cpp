@@ -32,6 +32,7 @@
 #include "kis_image.h"
 #include "kis_config.h"
 #include "KisPart.h"
+#include "KisOpenGLModeProber.h"
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
@@ -59,7 +60,6 @@ KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMa
 KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
-    , m_tilesDestinationColorSpace(0)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
     , m_glFuncs(0)
@@ -83,7 +83,6 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_monitorProfile(monitorProfile)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
-    , m_tilesDestinationColorSpace(0)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
     , m_glFuncs(0)
@@ -109,7 +108,7 @@ void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f)
     m_updateInfoBuilder.setTextureInfoPool(s_poolRegistry.getPool(m_texturesInfo.width, m_texturesInfo.height));
 
     m_glFuncs->glGenTextures(1, &m_checkerTexture);
-    createImageTextureTiles();
+    recreateImageTextureTiles();
 
     KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds(), m_image);
     recalculateCache(info, false);
@@ -175,13 +174,16 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
     }
 }
 
-void KisOpenGLImageTextures::createImageTextureTiles()
+void KisOpenGLImageTextures::recreateImageTextureTiles()
 {
 
     destroyImageTextureTiles();
     updateTextureFormat();
 
-    if (!m_tilesDestinationColorSpace) {
+    const KoColorSpace *tilesDestinationColorSpace =
+        m_updateInfoBuilder.destinationColorSpace();
+
+    if (!tilesDestinationColorSpace) {
         qDebug() << "No destination colorspace!!!!";
         return;
     }
@@ -194,7 +196,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     m_numCols = lastCol + 1;
 
     // Default color is transparent black
-    const int pixelSize = m_tilesDestinationColorSpace->pixelSize();
+    const int pixelSize = tilesDestinationColorSpace->pixelSize();
     QByteArray emptyTileData((m_texturesInfo.width) * (m_texturesInfo.height) * pixelSize, 0);
 
     KisConfig config(true);
@@ -339,7 +341,7 @@ void KisOpenGLImageTextures::updateConfig(bool useBuffer, int NumMipmapLevels)
 
 void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
 {
-    createImageTextureTiles();
+    recreateImageTextureTiles();
 }
 
 KisOpenGLUpdateInfoBuilder &KisOpenGLImageTextures::updateInfoBuilder()
@@ -354,12 +356,16 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
     m_renderingIntent = renderingIntent;
     m_conversionFlags = conversionFlags;
 
-    m_updateInfoBuilder.setConversionOptions(
-        ConversionOptions(m_tilesDestinationColorSpace,
-                          m_renderingIntent,
-                          m_conversionFlags));
+    recreateImageTextureTiles();
+}
 
-    createImageTextureTiles();
+bool KisOpenGLImageTextures::setImageColorSpace(const KoColorSpace *cs)
+{
+    Q_UNUSED(cs);
+    // TODO: implement lazy update: do not re-upload textures when not needed
+
+    recreateImageTextureTiles();
+    return true;
 }
 
 void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
@@ -436,13 +442,50 @@ bool KisOpenGLImageTextures::setInternalColorManagementActive(bool value)
 
     if (needsFinalRegeneration) {
         m_internalColorManagementActive = value;
-        createImageTextureTiles();
+        recreateImageTextureTiles();
 
         // at this point the value of m_internalColorManagementActive might
         // have been forcely reverted to 'false' in case of some problems
     }
 
     return needsFinalRegeneration;
+}
+
+namespace {
+void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesInfo, KoID &destinationColorDepthId)
+{
+    if (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3()) {
+        texturesInfo.internalFormat = GL_RGBA16F;
+        dbgUI << "Using half (GLES or GL3)";
+    } else if (ctx->hasExtension("GL_ARB_texture_float")) {
+        texturesInfo.internalFormat = GL_RGBA16F_ARB;
+        dbgUI << "Using ARB half";
+    }
+    else if (ctx->hasExtension("GL_ATI_texture_float")) {
+        texturesInfo.internalFormat = GL_RGBA_FLOAT16_ATI;
+        dbgUI << "Using ATI half";
+    }
+
+    bool haveBuiltInOpenExr = false;
+#ifdef HAVE_OPENEXR
+    haveBuiltInOpenExr = true;
+#endif
+
+    if (haveBuiltInOpenExr && (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3())) {
+        texturesInfo.type = GL_HALF_FLOAT;
+        destinationColorDepthId = Float16BitsColorDepthID;
+        dbgUI << "Pixel type half (GLES or GL3)";
+    } else if (haveBuiltInOpenExr && ctx->hasExtension("GL_ARB_half_float_pixel")) {
+        texturesInfo.type = GL_HALF_FLOAT_ARB;
+        destinationColorDepthId = Float16BitsColorDepthID;
+        dbgUI << "Pixel type half";
+    } else {
+        texturesInfo.type = GL_FLOAT;
+        destinationColorDepthId = Float32BitsColorDepthID;
+        dbgUI << "Pixel type float";
+    }
+    texturesInfo.format = GL_RGBA;
+}
 }
 
 void KisOpenGLImageTextures::updateTextureFormat()
@@ -467,8 +510,9 @@ void KisOpenGLImageTextures::updateTextureFormat()
         }
     }
 
-    KoID colorModelId = m_image->colorSpace()->colorModelId();
-    KoID colorDepthId = m_image->colorSpace()->colorDepthId();
+    const bool useHDRMode = KisOpenGLModeProber::instance()->useHDRMode();
+    const KoID colorModelId = m_image->colorSpace()->colorModelId();
+    const KoID colorDepthId = useHDRMode ? Float16BitsColorDepthID : m_image->colorSpace()->colorDepthId();
 
     KoID destinationColorModelId = RGBAColorModelID;
     KoID destinationColorDepthId = Integer8BitsColorDepthID;
@@ -477,38 +521,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
 
     if (colorModelId == RGBAColorModelID) {
         if (colorDepthId == Float16BitsColorDepthID) {
-
-            if (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3()) {
-                m_texturesInfo.internalFormat = GL_RGBA16F;
-                dbgUI << "Using half (GLES or GL3)";
-            } else if (ctx->hasExtension("GL_ARB_texture_float")) {
-                m_texturesInfo.internalFormat = GL_RGBA16F_ARB;
-                dbgUI << "Using ARB half";
-            }
-            else if (ctx->hasExtension("GL_ATI_texture_float")) {
-                m_texturesInfo.internalFormat = GL_RGBA_FLOAT16_ATI;
-                dbgUI << "Using ATI half";
-            }
-
-            bool haveBuiltInOpenExr = false;
-#ifdef HAVE_OPENEXR
-            haveBuiltInOpenExr = true;
-#endif
-
-            if (haveBuiltInOpenExr && (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3())) {
-                m_texturesInfo.type = GL_HALF_FLOAT;
-                destinationColorDepthId = Float16BitsColorDepthID;
-                dbgUI << "Pixel type half (GLES or GL3)";
-            } else if (haveBuiltInOpenExr && ctx->hasExtension("GL_ARB_half_float_pixel")) {
-                m_texturesInfo.type = GL_HALF_FLOAT_ARB;
-                destinationColorDepthId = Float16BitsColorDepthID;
-                dbgUI << "Pixel type half";
-            } else {
-                m_texturesInfo.type = GL_FLOAT;
-                destinationColorDepthId = Float32BitsColorDepthID;
-                dbgUI << "Pixel type float";
-            }
-            m_texturesInfo.format = GL_RGBA;
+            initializeRGBA16FTextures(ctx, m_texturesInfo, destinationColorDepthId);
         }
         else if (colorDepthId == Float32BitsColorDepthID) {
             if (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3()) {
@@ -545,6 +558,9 @@ void KisOpenGLImageTextures::updateTextureFormat()
             m_texturesInfo.format = GL_BGRA;
             destinationColorDepthId = Integer16BitsColorDepthID;
             dbgUI << "Using conversion to 16 bits rgba";
+        } else if (colorDepthId == Float16BitsColorDepthID && KisOpenGL::hasOpenGLES()) {
+            // TODO: try removing opengl es limit
+            initializeRGBA16FTextures(ctx, m_texturesInfo, destinationColorDepthId);
         }
         // TODO: for ANGLE, see if we can convert to 16f to support 10-bit display
     }
@@ -584,13 +600,13 @@ void KisOpenGLImageTextures::updateTextureFormat()
      *       would not be called when not needed (DK)
      */
 
-    m_tilesDestinationColorSpace =
+    const KoColorSpace *tilesDestinationColorSpace =
             KoColorSpaceRegistry::instance()->colorSpace(destinationColorModelId.id(),
                                                          destinationColorDepthId.id(),
                                                          profile);
 
     m_updateInfoBuilder.setConversionOptions(
-        ConversionOptions(m_tilesDestinationColorSpace,
+        ConversionOptions(tilesDestinationColorSpace,
                           m_renderingIntent,
                           m_conversionFlags));
 }

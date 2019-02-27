@@ -65,6 +65,8 @@
 #include "colorspaces/ycbcr_u16/YCbCrU16ColorSpace.h"
 #include "colorspaces/ycbcr_f32/YCbCrF32ColorSpace.h"
 
+#include "LcmsRGBP2020PQColorSpace.h"
+
 #include <KoConfig.h>
 
 #ifdef HAVE_OPENEXR
@@ -166,14 +168,14 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     KoColorProfile *rgbProfile = LcmsColorProfileContainer::createFromLcmsProfile(cmsCreate_sRGBProfile());
     registry->addProfile(rgbProfile);
 
-    registry->add(new RgbU8ColorSpaceFactory());
-    registry->add(new RgbU16ColorSpaceFactory());
+    registry->add(new LcmsRGBP2020PQColorSpaceFactoryWrapper<RgbU8ColorSpaceFactory>());
+    registry->add(new LcmsRGBP2020PQColorSpaceFactoryWrapper<RgbU16ColorSpaceFactory>());
 #ifdef HAVE_LCMS24
 #ifdef HAVE_OPENEXR
-    registry->add(new RgbF16ColorSpaceFactory());
+    registry->add(new LcmsRGBP2020PQColorSpaceFactoryWrapper<RgbF16ColorSpaceFactory>());
 #endif
 #endif
-    registry->add(new RgbF32ColorSpaceFactory());
+    registry->add(new LcmsRGBP2020PQColorSpaceFactoryWrapper<RgbF32ColorSpaceFactory>());
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>

@@ -33,85 +33,37 @@
  */
 
 template <typename T>
-class KisSliderBasedPaintOpProperty : public KisUniformPaintOpProperty
+class KRITAIMAGE_EXPORT KisSliderBasedPaintOpProperty : public KisUniformPaintOpProperty
 {
 public:
     KisSliderBasedPaintOpProperty(Type type,
                                   const QString &id,
                                   const QString &name,
                                   KisPaintOpSettingsRestrictedSP settings,
-                                  QObject *parent)
-        : KisUniformPaintOpProperty(type, id, name, settings, parent),
-        m_min(T(0)),
-        m_max(T(100)),
-        m_singleStep(T(1)),
-        m_pageStep(T(10)),
-        m_exponentRatio(1.0),
-        m_decimals(2)
-    {
-    }
+                                  QObject *parent);
 
     KisSliderBasedPaintOpProperty(const QString &id,
                                   const QString &name,
                                   KisPaintOpSettingsRestrictedSP settings,
-                                  QObject *parent)
-        : KisUniformPaintOpProperty(Int, id, name, settings, parent),
-        m_min(T(0)),
-        m_max(T(100)),
-        m_singleStep(T(1)),
-        m_pageStep(T(10)),
-        m_exponentRatio(1.0),
-        m_decimals(2)
-    {
-        qFatal("Should have never been called!");
-    }
+                                  QObject *parent);
 
-    T min() const {
-        return m_min;
-    }
-    T max() const {
-        return m_max;
-    }
-    void setRange(T min, T max) {
-        m_min = min;
-        m_max = max;
-    }
 
-    T singleStep() const {
-        return m_singleStep;
-    }
-    void setSingleStep(T value) {
-        m_singleStep = value;
-    }
+    T min() const;
+    T max() const;
+    void setRange(T min, T max);
 
-    T pageStep() const {
-        return m_pageStep;
-    }
-    void setPageStep(T value) {
-        m_pageStep = value;
-    }
+    T singleStep() const;
+    void setSingleStep(T value);
+    T pageStep() const;
+    void setPageStep(T value);
 
-    qreal exponentRatio() const {
-        return m_exponentRatio;
-    }
-    void setExponentRatio(qreal value) {
-        m_exponentRatio = value;
-    }
+    qreal exponentRatio() const;
+    void setExponentRatio(qreal value);
+    int decimals() const;
+    void setDecimals(int value);
 
-    int decimals() const {
-        return m_decimals;
-    }
-    void setDecimals(int value) {
-        m_decimals = value;
-    }
-
-    QString suffix() const {
-        return m_suffix;
-    }
-    void setSuffix(QString value) {
-        m_suffix = value;
-    }
-
+    QString suffix() const;
+    void setSuffix(QString value);
 
 private:
     T m_min;
@@ -127,10 +79,10 @@ private:
 
 #include "kis_callback_based_paintop_property.h"
 
-extern template class KRITAIMAGE_EXPORT KisSliderBasedPaintOpProperty<int>;
-extern template class KRITAIMAGE_EXPORT KisSliderBasedPaintOpProperty<qreal>;
-extern template class KRITAIMAGE_EXPORT KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<int>>;
-extern template class KRITAIMAGE_EXPORT KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<qreal>>;
+extern template class KisSliderBasedPaintOpProperty<int>;
+extern template class KisSliderBasedPaintOpProperty<qreal>;
+extern template class KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<int>>;
+extern template class KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<qreal>>;
 
 typedef KisSliderBasedPaintOpProperty<int> KisIntSliderBasedPaintOpProperty;
 typedef KisSliderBasedPaintOpProperty<qreal> KisDoubleSliderBasedPaintOpProperty;

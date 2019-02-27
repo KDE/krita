@@ -23,11 +23,15 @@
 #include <QtGlobal>
 #include <QFlags>
 
+#include <QSurfaceFormat>
+#include "kis_config.h"
+
 #include "kritaui_export.h"
 
 class QOpenGLContext;
 class QString;
 class QStringList;
+class QSurfaceFormat;
 
 /**
  * This class manages a shared OpenGL context and provides utility
@@ -44,27 +48,27 @@ public:
     };
 public:
 
-#ifdef Q_OS_WIN
     enum OpenGLRenderer {
         RendererNone = 0x00,
         RendererAuto = 0x01,
         RendererDesktopGL = 0x02,
-        RendererAngle = 0x04,
+        RendererOpenGLES = 0x04,
     };
     Q_DECLARE_FLAGS(OpenGLRenderers, OpenGLRenderer);
 
-    // Probe the Windows platform abstraction layer for OpenGL detection
-    static void probeWindowsQpaOpenGL(int argc, char **argv, QString userRendererConfigString);
+    static QSurfaceFormat selectSurfaceFormat(KisOpenGL::OpenGLRenderer preferredRenderer,
+                                              KisConfig::RootSurfaceFormat preferredRootSurfaceFormat,
+                                              bool enableDebug);
+
+    static void setDefaultSurfaceFormat(const QSurfaceFormat &format);
 
     static OpenGLRenderer getCurrentOpenGLRenderer();
     static OpenGLRenderer getQtPreferredOpenGLRenderer();
     static OpenGLRenderers getSupportedOpenGLRenderers();
-    static OpenGLRenderer getUserOpenGLRendererConfig();
-    static OpenGLRenderer getNextUserOpenGLRendererConfig();
-    static void setNextUserOpenGLRendererConfig(OpenGLRenderer renderer);
+    static OpenGLRenderer getUserPreferredOpenGLRendererConfig();
+    static void setUserPreferredOpenGLRendererConfig(OpenGLRenderer renderer);
     static QString convertOpenGLRendererToConfig(OpenGLRenderer renderer);
     static OpenGLRenderer convertConfigToOpenGLRenderer(QString renderer);
-#endif
 
     /// Request OpenGL version 3.2
     static void initialize();
@@ -100,10 +104,11 @@ public:
      */
     static bool needsPixmapCacheWorkaround();
 
-    static void setDefaultFormat(bool enableDebug = false, bool debugSynchronous = false);
+    static void testingInitializeDefaultSurfaceFormat();
+    static void setDebugSynchronous(bool value);
 
 private:
-
+    static void fakeInitWindowsOpenGL(KisOpenGL::OpenGLRenderers supportedRenderers, KisOpenGL::OpenGLRenderer preferredByQt);
 
     KisOpenGL();
 

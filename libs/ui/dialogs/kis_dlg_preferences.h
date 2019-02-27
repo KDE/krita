@@ -31,7 +31,7 @@
 #include <kis_config.h>
 
 #include "kis_global.h"
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 
 #include "ui_wdggeneralsettings.h"
 #include "ui_wdgdisplaysettings.h"
@@ -174,7 +174,7 @@ public:
     WdgColorSettings  *m_page;
     QButtonGroup m_pasteBehaviourGroup;
     QList<QLabel*> m_monitorProfileLabels;
-    QList<SqueezedComboBox*> m_monitorProfileWidgets;
+    QList<KisSqueezedComboBox*> m_monitorProfileWidgets;
 };
 
 //=======================
@@ -279,6 +279,7 @@ public:
     void setDefault();
 protected Q_SLOTS:
     void slotUseOpenGLToggled(bool isChecked);
+    void slotPreferredSurfaceFormatChanged(int index);
 
 public:
 };

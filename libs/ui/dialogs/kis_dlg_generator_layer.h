@@ -40,8 +40,8 @@ public:
 
     /**
      * Create a new generator layer
-     * @param name the proposed name for this layer
-     * @param view the view manager
+     * @param defaultLayerName the proposed name for this layer
+     * @param arg_view the view manager
      * @param parent the widget parent of this dialog
      * @param glayer optional generator layer for editing
      * @param previousConfig optional configuration of layer being edited.

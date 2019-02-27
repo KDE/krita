@@ -116,7 +116,7 @@ struct Q_DECL_HIDDEN KisSafeTransform::Private
             prevCross = cross;
         }
 
-        if (!result.isClosed()) {
+        if (result.size() > 0 && !result.isClosed()) {
             result << result.first();
         }
 

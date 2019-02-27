@@ -186,7 +186,7 @@ KisPropertiesConfigurationSP KisImportExportFilter::defaultConfiguration(const Q
 KisPropertiesConfigurationSP KisImportExportFilter::lastSavedConfiguration(const QByteArray &from, const QByteArray &to) const
 {
     KisPropertiesConfigurationSP cfg = defaultConfiguration(from, to);
-    const QString filterConfig = KisConfig(true).exportConfiguration(to);
+    const QString filterConfig = KisConfig(true).exportConfigurationXML(to);
     if (cfg && !filterConfig.isEmpty()) {
         cfg->fromXML(filterConfig, false);
     }

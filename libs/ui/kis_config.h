@@ -33,6 +33,8 @@
 class KoColorProfile;
 class KoColorSpace;
 class KisSnapConfig;
+class QSettings;
+class KisOcioConfiguration;
 
 class KRITAUI_EXPORT KisConfig
 {
@@ -357,7 +359,8 @@ public:
     QStringList favoriteCompositeOps(bool defaultValue = false) const;
     void setFavoriteCompositeOps(const QStringList& compositeOps) const;
 
-    QString exportConfiguration(const QString &filterId, bool defaultValue = false) const;
+    QString exportConfigurationXML(const QString &filterId, bool defaultValue = false) const;
+    KisPropertiesConfigurationSP exportConfiguration(const QString &filterId, bool defaultValue = false) const;
     void setExportConfiguration(const QString &filterId, KisPropertiesConfigurationSP properties) const;
 
     QString importConfiguration(const QString &filterId, bool defaultValue = false) const;
@@ -372,6 +375,9 @@ public:
     bool levelOfDetailEnabled(bool defaultValue = false) const;
     void setLevelOfDetailEnabled(bool value);
 
+    KisOcioConfiguration ocioConfiguration(bool defaultValue = false) const;
+    void setOcioConfiguration(const KisOcioConfiguration &cfg);
+
     enum OcioColorManagementMode {
         INTERNAL = 0,
         OCIO_CONFIG,
@@ -380,12 +386,6 @@ public:
 
     OcioColorManagementMode ocioColorManagementMode(bool defaultValue = false) const;
     void setOcioColorManagementMode(OcioColorManagementMode mode) const;
-
-    QString ocioConfigurationPath(bool defaultValue = false) const;
-    void setOcioConfigurationPath(const QString &path) const;
-
-    QString ocioLutPath(bool defaultValue = false) const;
-    void setOcioLutPath(const QString &path) const;
 
     int ocioLutEdgeSize(bool defaultValue = false) const;
     void setOcioLutEdgeSize(int value);
@@ -558,9 +558,6 @@ public:
     bool stabilizerDelayedPaint(bool defaultValue = false) const;
     void setStabilizerDelayedPaint(bool value);
 
-    QString customFFMpegPath(bool defaultValue = false) const;
-    void setCustomFFMpegPath(const QString &value) const;
-
     bool showBrushHud(bool defaultValue = false) const;
     void setShowBrushHud(bool value);
 
@@ -579,6 +576,17 @@ public:
     bool activateTransformToolAfterPaste(bool defaultValue = false) const;
     void setActivateTransformToolAfterPaste(bool value);
     
+    enum RootSurfaceFormat {
+        BT709_G22 = 0,
+        BT709_G10,
+        BT2020_PQ
+    };
+    RootSurfaceFormat rootSurfaceFormat(bool defaultValue = false) const;
+    void setRootSurfaceFormat(RootSurfaceFormat value);
+
+    static RootSurfaceFormat rootSurfaceFormat(QSettings *displayrc, bool defaultValue = false);
+    static void setRootSurfaceFormat(QSettings *displayrc, RootSurfaceFormat value);
+
     bool useZip64(bool defaultValue = false) const;
     void setUseZip64(bool value);
 

@@ -102,6 +102,7 @@ void appendPlatformOpenGLDebugText(QDebug &/*debugOut*/) {}
 #endif
 
 void appendOpenGLWarningString(KLocalizedString warning);
+void overrideOpenGLWarningString(QVector<KLocalizedString> warnings);
 
 bool isDefaultFormatSet();
 

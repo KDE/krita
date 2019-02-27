@@ -70,7 +70,6 @@
 namespace
 {
 
-
 int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
 {
 
@@ -409,7 +408,6 @@ void _flush_fn(png_structp png_ptr)
     Q_UNUSED(png_ptr);
 }
 
-
 KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 {
     dbgFile << "Start decoding PNG File";
@@ -551,6 +549,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         }
     }
 
+    bool loadedImageIsHDR = false;
     const KoColorProfile* profile = 0;
     if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
         QByteArray profile_rawdata;
@@ -565,6 +564,8 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
             }
         }
+
+        loadedImageIsHDR = strcmp(profile_name, "ITUR_2100_PQ_FULL") == 0;
     }
     else {
         dbgFile << "no embedded profile, will use the default profile";
@@ -595,8 +596,22 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     }
 
     // Retrieve a pointer to the colorspace
-    const KoColorSpace* cs;
-    if (profile && profile->isSuitableForOutput()) {
+    KoColorConversionTransformation* transform = 0;
+    const KoColorSpace* cs = 0;
+
+    if (loadedImageIsHDR &&
+        csName.first == RGBAColorModelID.id() &&
+        csName.second == Integer16BitsColorDepthID.id()) {
+
+        const KoColorSpace *p2020PQCS =
+            KoColorSpaceRegistry::instance()->colorSpace(
+                RGBAColorModelID.id(),
+                Integer16BitsColorDepthID.id(),
+                KoColorSpaceRegistry::instance()->p2020PQProfile());
+
+        cs = p2020PQCS;
+
+    } else if (profile && profile->isSuitableForOutput()) {
         dbgFile << "image has embedded profile: " << profile->name() << "\n";
         cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile);
     }
@@ -608,17 +623,17 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         } else {
             cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, 0);
         }
+
+        //TODO: two fixes : one tell the user about the problem and ask for a solution, and two once the kocolorspace include KoColorTransformation, use that instead of hacking a lcms transformation
+        // Create the cmsTransform if needed
+        if (profile) {
+            transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        }
     }
 
     if (cs == 0) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
-    }
-    //TODO: two fixes : one tell the user about the problem and ask for a solution, and two once the kocolorspace include KoColorTransformation, use that instead of hacking a lcms transformation
-    // Create the cmsTransform if needed
-    KoColorTransformation* transform = 0;
-    if (profile && !profile->isSuitableForOutput()) {
-        transform = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, profile)->createColorConverter(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     }
 
     // Creating the KisImageSP
@@ -719,24 +734,24 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 do {
                     quint16 *d = reinterpret_cast<quint16 *>(it->rawData());
                     d[0] = *(src++);
-                    if (transform) transform->transform(reinterpret_cast<quint8*>(d), reinterpret_cast<quint8*>(d), 1);
                     if (hasalpha) {
                         d[1] = *(src++);
                     } else {
                         d[1] = quint16_MAX;
                     }
+                    if (transform) transform->transformInPlace(reinterpret_cast<quint8*>(d), reinterpret_cast<quint8*>(d), 1);
                 } while (it->nextPixel());
             } else  {
                 KisPNGReadStream stream(row_pointer, color_nb_bits);
                 do {
                     quint8 *d = it->rawData();
                     d[0] = (quint8)(stream.nextValue() * coeff);
-                    if (transform) transform->transform(d, d, 1);
                     if (hasalpha) {
                         d[1] = (quint8)(stream.nextValue() * coeff);
                     } else {
                         d[1] = UCHAR_MAX;
                     }
+                    if (transform) transform->transformInPlace(d, d, 1);
                 } while (it->nextPixel());
             }
             // FIXME:should be able to read 1 and 4 bits depth and scale them to 8 bits"
@@ -750,9 +765,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     d[2] = *(src++);
                     d[1] = *(src++);
                     d[0] = *(src++);
-                    if (transform) transform->transform(reinterpret_cast<quint8 *>(d), reinterpret_cast<quint8*>(d), 1);
                     if (hasalpha) d[3] = *(src++);
                     else d[3] = quint16_MAX;
+                    if (transform) transform->transformInPlace(reinterpret_cast<quint8 *>(d), reinterpret_cast<quint8*>(d), 1);
                 } while (it->nextPixel());
             } else {
                 KisPNGReadStream stream(row_pointer, color_nb_bits);
@@ -761,9 +776,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                     d[2] = (quint8)(stream.nextValue() * coeff);
                     d[1] = (quint8)(stream.nextValue() * coeff);
                     d[0] = (quint8)(stream.nextValue() * coeff);
-                    if (transform) transform->transform(d, d, 1);
                     if (hasalpha) d[3] = (quint8)(stream.nextValue() * coeff);
                     else d[3] = UCHAR_MAX;
+                    if (transform) transform->transformInPlace(d, d, 1);
                 } while (it->nextPixel());
             }
             break;
@@ -902,14 +917,39 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
     if (device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
             || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
-            || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID) {
-        const KoColorSpace *dstcs = KoColorSpaceRegistry::instance()->colorSpace(device->colorSpace()->colorModelId().id(), Integer16BitsColorDepthID.id(), device->colorSpace()->profile());
-        KisPaintDeviceSP tmp = new KisPaintDevice(dstcs);
-        KisPainter gc(tmp);
-        gc.bitBlt(imageRect.topLeft(), device, imageRect);
-        gc.end();
+            || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID
+            || options.saveAsHDR) {
+
+        const KoColorSpace *dstCS =
+            KoColorSpaceRegistry::instance()->colorSpace(
+                device->colorSpace()->colorModelId().id(),
+                Integer16BitsColorDepthID.id(),
+                device->colorSpace()->profile());
+
+        if (options.saveAsHDR) {
+            dstCS =
+                KoColorSpaceRegistry::instance()->colorSpace(
+                        RGBAColorModelID.id(),
+                        Integer16BitsColorDepthID.id(),
+                        KoColorSpaceRegistry::instance()->p2020PQProfile());
+        }
+
+        KisPaintDeviceSP tmp = new KisPaintDevice(device->colorSpace());
+        tmp->makeCloneFromRough(device, imageRect);
+        delete tmp->convertTo(dstCS);
+
         device = tmp;
+
     }
+
+    KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.forceSRGB) {
+        options.forceSRGB = false;
+    }
+
+    KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.tryToSaveAsIndexed) {
+        options.tryToSaveAsIndexed = false;
+    }
+
     QStringList colormodels = QStringList() << RGBAColorModelID.id() << GrayAColorModelID.id();
     if (options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
@@ -1018,6 +1058,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
     int interlacetype = options.interlace ? PNG_INTERLACE_ADAM7 : PNG_INTERLACE_NONE;
 
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(color_type >= 0, KisImageBuilder_RESULT_FAILURE);
+
     png_set_IHDR(png_ptr, info_ptr,
                  imageRect.width(),
                  imageRect.height(),
@@ -1036,6 +1078,39 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     /*if (!options.saveSRGBProfile && sRGB) {
         png_set_sRGB_gAMA_and_cHRM(png_ptr, info_ptr, PNG_sRGB_INTENT_PERCEPTUAL);
     }*/
+
+
+    /** TODO: Firefox still opens the image incorrectly if there is gAMA+cHRM tags
+     * present. According to the standard it should use iCCP tag with higher priority,
+     * but it doesn't:
+     *
+     * "When the iCCP chunk is present, PNG decoders that recognize it and are capable
+     *  of colour management [ICC] shall ignore the gAMA and cHRM chunks and use
+     *  the iCCP chunk instead and interpret it according to [ICC-1] and [ICC-1A]"
+     */
+
+#if 0
+    if (options.saveAsHDR) {
+        // https://www.w3.org/TR/PNG/#11gAMA
+#if defined(PNG_GAMMA_SUPPORTED)
+        // the values are set in accurdance of HDR-PNG standard:
+        // https://www.w3.org/TR/png-hdr-pq/
+
+        png_set_gAMA_fixed(png_ptr, info_ptr, 15000);
+        dbgFile << "gAMA" << "(Rec 2100)";
+#endif
+
+#if defined PNG_cHRM_SUPPORTED
+        png_set_cHRM_fixed(png_ptr, info_ptr,
+                           31270, 32900, // white point
+                           70800, 29200, // red
+                           17000, 79700, // green
+                           13100, 4600 // blue
+                           );
+        dbgFile << "cHRM" << "(Rec 2100)";
+#endif
+    }
+#endif
 
 
     // we should ensure we don't access non-existing palette object
@@ -1082,10 +1157,13 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     if (!sRGB || options.saveSRGBProfile) {
 
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-        png_set_iCCP(png_ptr, info_ptr, (png_const_charp)"icc", PNG_COMPRESSION_TYPE_BASE, (png_const_bytep)colorProfileData.constData(), colorProfileData . size());
+        const char *typeString = !options.saveAsHDR ? "icc" : "ITUR_2100_PQ_FULL";
+        png_set_iCCP(png_ptr, info_ptr, (png_const_charp)typeString, PNG_COMPRESSION_TYPE_BASE, (png_const_bytep)colorProfileData.constData(), colorProfileData . size());
 #else
         // older version of libpng has a problem with constness on the parameters
-        char typeString[] = "icc";
+        char typeStringICC[] = "icc";
+        char typeStringHDR[] = "ITUR_2100_PQ_FULL";
+        char *typeString = !options.saveAsHDR ? typeStringICC : typeStringHDR;
         png_set_iCCP(png_ptr, info_ptr, typeString, PNG_COMPRESSION_TYPE_BASE, colorProfileData.data(), colorProfileData . size());
 #endif
     }

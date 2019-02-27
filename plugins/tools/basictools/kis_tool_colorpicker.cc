@@ -188,6 +188,9 @@ void KisToolColorPicker::continuePrimaryAction(KoPointerEvent *event)
     displayPickedColor();
 }
 
+#include "kis_canvas2.h"
+#include "kis_display_color_converter.h"
+
 void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
@@ -205,6 +208,7 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
         }
     }
+
 }
 
 struct PickedChannel {
@@ -243,6 +247,17 @@ void KisToolColorPicker::displayPickedColor()
             QTreeWidgetItem *item = new QTreeWidgetItem(m_optionsWidget->listViewChannels);
             item->setText(0, pc.name);
             item->setText(1, pc.valueText);
+        }
+
+        KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        KoColor newColor = kritaCanvas->displayColorConverter()->applyDisplayFiltering(m_pickedColor, Float32BitsColorDepthID);
+        QVector<float> values(4);
+        newColor.colorSpace()->normalisedChannelsValue(newColor.data(), values);
+
+        for (int i = 0; i < values.size(); i++) {
+            QTreeWidgetItem *item = new QTreeWidgetItem(m_optionsWidget->listViewChannels);
+            item->setText(0, QString("DisplayCh%1").arg(i));
+            item->setText(1, QString::number(values[i]));
         }
     }
 }

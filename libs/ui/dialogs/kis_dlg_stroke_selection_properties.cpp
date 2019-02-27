@@ -43,7 +43,7 @@
 #include "kis_config.h"
 #include "kis_signal_compressor.h"
 #include "widgets/kis_cmb_idlist.h"
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 #include "kis_layer_utils.h"
 #include <kis_ls_utils.h>
 #include "kis_canvas_resource_provider.h"
@@ -66,9 +66,7 @@ KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    QString filterConfig = KisConfig(true).exportConfiguration("StrokeSelection");
-    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
-    cfg->fromXML(filterConfig);
+    KisPropertiesConfigurationSP cfg = KisConfig(true).exportConfiguration("StrokeSelection");
 
     auto &m_options = m_page->m_options;
     m_options.color = cfg->getColor("color");

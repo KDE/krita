@@ -194,8 +194,6 @@ void KisColorSelector::hasAtLeastOneDocument(bool value)
 
 void KisColorSelector::reset()
 {
-    KisColorSelectorBase::reset();
-
     if (m_mainComponent) {
         m_mainComponent->setDirty();
     }
@@ -203,6 +201,8 @@ void KisColorSelector::reset()
     if (m_subComponent) {
         m_subComponent->setDirty();
     }
+
+    KisColorSelectorBase::reset();
 }
 
 void KisColorSelector::paintEvent(QPaintEvent* e)

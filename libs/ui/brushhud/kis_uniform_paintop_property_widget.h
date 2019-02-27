@@ -50,10 +50,6 @@ class KisSliderSpinBox;
 class KisDoubleSliderSpinBox;
 class QCheckBox;
 
-template <typename T> class KisSliderBasedPaintOpProperty;
-typedef KisSliderBasedPaintOpProperty<int> KisIntSliderBasedPaintOpProperty;
-typedef KisSliderBasedPaintOpProperty<qreal> KisDoubleSliderBasedPaintOpProperty;
-
 class KisUniformPaintOpPropertyIntSlider : public KisUniformPaintOpPropertyWidget
 {
     Q_OBJECT

@@ -1,0 +1,37 @@
+From 9081571e58ceeaa4c623c83ecb41b04dfc7d90f9 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Tue, 21 Jun 2016 14:50:07 +0300
+Subject: [PATCH 2/4] Don't request the MIME image every time Windows asks for
+ the list of supported types
+
+Change-Id: I05516d83dc4e0f192bc94f92cefc722f25dae4d4
+---
+ src/plugins/platforms/windows/qwindowsmime.cpp | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowsmime.cpp b/src/plugins/platforms/windows/qwindowsmime.cpp
+index ff0dccb0d9..a702a2a90f 100644
+--- a/src/plugins/platforms/windows/qwindowsmime.cpp
++++ b/src/plugins/platforms/windows/qwindowsmime.cpp
+@@ -1082,12 +1082,15 @@ bool QWindowsMimeImage::canConvertToMime(const QString &mimeType, IDataObject *p
+ bool QWindowsMimeImage::canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const
+ {
+     int cf = getCf(formatetc);
++
++    if (cf != CF_DIBV5 && cf != CF_DIB && cf != CF_PNG)
++        return false;
++
+     if (!mimeData->hasImage())
+         return false;
++
+     const QImage image = qvariant_cast<QImage>(mimeData->imageData());
+-    if (image.isNull())
+-        return false;
+-    return cf == CF_DIBV5 || (cf == CF_DIB) || cf == int(CF_PNG);
++    return !image.isNull();
+ }
+ 
+ bool QWindowsMimeImage::convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM * pmedium) const
+-- 
+2.20.1.windows.1
+

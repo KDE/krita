@@ -334,3 +334,9 @@ quint32 IccColorSpaceEngine::computeColorSpaceType(const KoColorSpace *cs) const
         return depthType | modelType;
     }
 }
+
+bool IccColorSpaceEngine::supportsColorSpace(const QString &colorModelId, const QString &colorDepthId, const KoColorProfile *profile) const
+{
+    Q_UNUSED(colorDepthId);
+    return colorModelId != RGBAColorModelID.id() || !profile || profile->name() != "High Dynamic Range UHDTV Wide Color Gamut Display (Rec. 2020) - SMPTE ST 2084 PQ EOTF";
+}

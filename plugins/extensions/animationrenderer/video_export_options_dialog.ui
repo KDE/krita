@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>VideoExportOptionsDialog</class>
+ <widget class="QWidget" name="VideoExportOptionsDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>273</width>
+    <height>323</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,1">
+   <item>
+    <widget class="QComboBox" name="cmbCodec"/>
+   </item>
+   <item>
+    <widget class="QStackedWidget" name="stackedWidget">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="pgH264">
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblCRFH264">
+         <property name="text">
+          <string>Constant Rate Factor:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="KisSliderSpinBox" name="intCRFH264" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblPresetH264">
+         <property name="text">
+          <string>Preset:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="cmbPresetH264"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lblProfileH264">
+         <property name="text">
+          <string>Profile:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="cmbProfileH264"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lblTuneH264">
+         <property name="text">
+          <string>Tune:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QComboBox" name="cmbTuneH264"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="pgH265">
+      <layout class="QFormLayout" name="formLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblCRFH265">
+         <property name="text">
+          <string>Constant Rate Factor:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="KisSliderSpinBox" name="intCRFH265" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblPresetH265">
+         <property name="text">
+          <string>Preset:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="cmbPresetH265"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lblProfileH265">
+         <property name="text">
+          <string>Profile:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="cmbProfileH265"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lblTuneH265">
+         <property name="text">
+          <string>Tune:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QComboBox" name="cmbTuneH265"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QCheckBox" name="chkUseHDRMetadata">
+         <property name="text">
+          <string>HDR Mode</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QPushButton" name="btnHdrMetadata">
+         <property name="text">
+          <string>HDR Metadata...</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="pgTheora">
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Bitrate:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="KisSliderSpinBox" name="intBitrate" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QCheckBox" name="chkCustomLine">
+       <property name="text">
+        <string>Custom Options:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLineEdit" name="txtCustomLine">
+         <property name="toolTip">
+          <string>Add any ffmpeg filtering options here. It will be put between source and destination streams of the ffmpeg</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnResetCustomLine">
+         <property name="text">
+          <string>Reset</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::MinimumExpanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>44</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

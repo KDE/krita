@@ -23,6 +23,7 @@
 #define KIS_COMPOSITEOP_WIDGETS_H_
 
 #include <QComboBox>
+#include <KisSqueezedComboBox.h>
 #include <kritaui_export.h>
 #include "kis_categorized_list_view.h"
 
@@ -44,7 +45,7 @@ private:
 };
 
 
-class KRITAUI_EXPORT KisCompositeOpComboBox: public QComboBox
+class KRITAUI_EXPORT KisCompositeOpComboBox: public KisSqueezedComboBox
 {
     Q_OBJECT
 public:

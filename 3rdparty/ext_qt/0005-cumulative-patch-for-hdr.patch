@@ -1,0 +1,4574 @@
+From 94a1fa7324a4c4b65f28426755428cd4ded01cfb Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sat, 8 Dec 2018 15:35:43 +0300
+Subject: [PATCH 05/20] Unconditionally enable D3D11_1
+
+I don't know why we apply the patch that disables it on MinGW. Perhaps
+we should abandone it.
+
+# Conflicts:
+#	src/3rdparty/angle/src/common/platform.h
+---
+ src/3rdparty/angle/src/common/platform.h | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
+
+diff --git a/src/3rdparty/angle/src/common/platform.h b/src/3rdparty/angle/src/common/platform.h
+index fb251da579..89359f954e 100644
+--- a/src/3rdparty/angle/src/common/platform.h
++++ b/src/3rdparty/angle/src/common/platform.h
+@@ -59,12 +59,22 @@
+ #   endif
+ 
+ #   if defined(ANGLE_ENABLE_D3D11)
+-#include <d3d10_1.h>
+-#include <d3d11.h>
+-#include <d3d11_3.h>
+-#include <d3dcompiler.h>
+-#include <dxgi.h>
+-#include <dxgi1_2.h>
++#       include <d3d10_1.h>
++#       include <d3d11.h>
++#       include <dxgi.h>
++#      if defined(__MINGW32__) && !defined(__d3d11sdklayers_h__)
++#          define ANGLE_MINGW32_COMPAT
++#      endif
++//#      if defined(_MSC_VER) && _MSC_VER >= 1800
++#          define ANGLE_ENABLE_D3D11_1
++//#      endif
++#      if defined(ANGLE_ENABLE_D3D11_1)
++#       include <d3d11_1.h>
++#       include <d3d11_3.h>
++#       include <dxgi1_2.h>
++#       include <dxgi1_4.h> // TODO: This is actually D3D12!!!
++#      endif
++#       include <d3dcompiler.h>
+ #   endif
+ 
+ #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
+-- 
+2.20.1.windows.1
+
+
+From 3a3352f55fbfa2e45da41a5fb89ea9d66064409d Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sat, 8 Dec 2018 18:03:58 +0300
+Subject: [PATCH 06/20] Implement proper color management selection and
+ activation
+
+1) D3D11 implementation of angle now supports GL_RGB10_A2 format
+
+2) Technically, Angle's EGL implementation now supports the following
+   display extensions:
+     * EGL_KHR_gl_colorspace
+     * EGL_EXT_gl_colorspace_scrgb_linear
+     * EGL_EXT_gl_colorspace_bt2020_pq
+
+3) D3D11 implementation of angle now supports GL_COLOR_SPACE attribute,
+   which allows selection one of four color modes:
+     * Linear --- just pass-through data to GPU
+     * sRGB --- p709-g22 color space. WARNING: in 8-bit mode the system
+       becomes clever and automatically converts linear framebuffer
+       attachments to sRGB space, as per EGL_KHR_gl_colorspace definition.
+       It is not possible to select sRGB without this extra "feature".
+     * scRGB --- p709-g10 color space. This mode is the only mode
+       supported in f16-bit mode (and it is also not supported in other
+       bit depths).
+     * bt2020-pq --- p2020-pq color space. Supported only in 10-bit mode.
+
+4) QSurfaceFormat now supports setting color spaces from the list above
+
+5) SwapChain is now created in DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL mode:
+     * because non-flip mode is considered deprecated and HDR is not
+       supported in it;
+     * because in flip-discard mode partial updates from
+       SwapChain11::present() are not supported and return an error,
+       which is never checked :)
+
+# Conflicts:
+#	src/3rdparty/angle/src/libANGLE/Caps.cpp
+#	src/3rdparty/angle/src/libANGLE/Caps.h
+#	src/3rdparty/angle/src/libANGLE/renderer/d3d/DisplayD3D.cpp
+#	src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
+#	src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
+#	src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
+#	src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+#	src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
+#	src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+#	src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
+#	src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
+#	src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
+#	src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
+#	src/gui/opengl/qopenglframebufferobject.cpp
+---
+ src/3rdparty/angle/src/libANGLE/Caps.cpp      |  8 +-
+ src/3rdparty/angle/src/libANGLE/Caps.h        |  9 ++
+ .../src/libANGLE/renderer/d3d/RendererD3D.h   |  3 +-
+ .../src/libANGLE/renderer/d3d/SurfaceD3D.cpp  | 26 +++++-
+ .../src/libANGLE/renderer/d3d/SurfaceD3D.h    |  1 +
+ .../renderer/d3d/d3d11/Renderer11.cpp         | 18 +++-
+ .../libANGLE/renderer/d3d/d3d11/Renderer11.h  |  4 +-
+ .../renderer/d3d/d3d11/SwapChain11.cpp        | 90 ++++++++++++++++++-
+ .../libANGLE/renderer/d3d/d3d11/SwapChain11.h |  4 +-
+ .../d3d/d3d11/win32/NativeWindow11Win32.cpp   | 18 +++-
+ .../libANGLE/renderer/d3d/d3d9/Renderer9.cpp  |  4 +-
+ .../libANGLE/renderer/d3d/d3d9/Renderer9.h    |  3 +-
+ .../angle/src/libANGLE/validationEGL.cpp      | 26 ++++++
+ src/gui/kernel/qsurfaceformat.cpp             | 11 +++
+ src/gui/kernel/qsurfaceformat.h               |  4 +-
+ src/gui/opengl/qopenglframebufferobject.cpp   |  7 +-
+ .../platforms/windows/qwindowseglcontext.cpp  | 33 ++++++-
+ .../platforms/windows/qwindowseglcontext.h    |  2 +-
+ .../platforms/windows/qwindowsopenglcontext.h |  2 +-
+ .../platforms/windows/qwindowswindow.cpp      |  8 +-
+ 20 files changed, 256 insertions(+), 25 deletions(-)
+
+diff --git a/src/3rdparty/angle/src/libANGLE/Caps.cpp b/src/3rdparty/angle/src/libANGLE/Caps.cpp
+index 44da2bbe27..2088457458 100644
+--- a/src/3rdparty/angle/src/libANGLE/Caps.cpp
++++ b/src/3rdparty/angle/src/libANGLE/Caps.cpp
+@@ -1101,7 +1101,10 @@ DisplayExtensions::DisplayExtensions()
+       displayTextureShareGroup(false),
+       createContextClientArrays(false),
+       programCacheControl(false),
+-      robustResourceInitialization(false)
++      robustResourceInitialization(false),
++      colorspaceSRGB(false),
++      colorspaceSCRGBLinear(false),
++      colorspaceBt2020PQ(false)
+ {
+ }
+ 
+@@ -1146,6 +1149,9 @@ std::vector<std::string> DisplayExtensions::getStrings() const
+     InsertExtensionString("EGL_ANGLE_create_context_client_arrays",              createContextClientArrays,          &extensionStrings);
+     InsertExtensionString("EGL_ANGLE_program_cache_control",                     programCacheControl,                &extensionStrings);
+     InsertExtensionString("EGL_ANGLE_robust_resource_initialization",            robustResourceInitialization,       &extensionStrings);
++    InsertExtensionString("EGL_KHR_gl_colorspace",                               colorspaceSRGB,                     &extensionStrings);
++    InsertExtensionString("EGL_EXT_gl_colorspace_scrgb_linear",                  colorspaceSCRGBLinear,              &extensionStrings);
++    InsertExtensionString("EGL_EXT_gl_colorspace_bt2020_pq",                     colorspaceBt2020PQ,                 &extensionStrings);
+     // TODO(jmadill): Enable this when complete.
+     //InsertExtensionString("KHR_create_context_no_error",                       createContextNoError,               &extensionStrings);
+     // clang-format on
+diff --git a/src/3rdparty/angle/src/libANGLE/Caps.h b/src/3rdparty/angle/src/libANGLE/Caps.h
+index 64bdf97112..8157af5800 100644
+--- a/src/3rdparty/angle/src/libANGLE/Caps.h
++++ b/src/3rdparty/angle/src/libANGLE/Caps.h
+@@ -692,6 +692,15 @@ struct DisplayExtensions
+ 
+     // EGL_ANGLE_robust_resource_initialization
+     bool robustResourceInitialization;
++
++    // EGL_KHR_gl_colorspace
++    bool colorspaceSRGB;
++
++    // EGL_EXT_gl_colorspace_scrgb_linear
++    bool colorspaceSCRGBLinear;
++
++    // EGL_EXT_gl_colorspace_bt2020_pq
++    bool colorspaceBt2020PQ;
+ };
+ 
+ struct DeviceExtensions
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
+index dcc98f2ec6..b8ee635625 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
+@@ -130,7 +130,8 @@ class RendererD3D : public BufferFactoryD3D, public MultisampleTextureInitialize
+                                           GLenum backBufferFormat,
+                                           GLenum depthBufferFormat,
+                                           EGLint orientation,
+-                                          EGLint samples) = 0;
++                                          EGLint samples,
++                                          EGLint colorSpace) = 0;
+     virtual egl::Error getD3DTextureInfo(const egl::Config *configuration,
+                                          IUnknown *d3dTexture,
+                                          EGLint *width,
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
+index 7657aef79e..efd4dd1a24 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
+@@ -22,6 +22,27 @@
+ namespace rx
+ {
+ 
++GLenum renderTargetFormatFromColorSpace(egl::Display *display, GLenum baseFormat, EGLint colorSpace)
++{
++    GLenum result = baseFormat;
++
++    /**
++     * If sRGB extension is supported, we should change the surface format
++     * to a specific one that does support automated gamma conversion.
++     *
++     * TODO: openGL doesn't support BGRA-sRGB texture format, so creation of
++     *       textures in this format technically is not supported!
++     */
++    if (display->getExtensions().colorspaceSRGB &&
++        baseFormat == GL_RGBA8_OES &&
++        colorSpace == EGL_GL_COLORSPACE_SRGB_KHR)
++    {
++        result = GL_SRGB8_ALPHA8;
++    }
++
++    return result;
++}
++
+ SurfaceD3D::SurfaceD3D(const egl::SurfaceState &state,
+                        RendererD3D *renderer,
+                        egl::Display *display,
+@@ -34,7 +55,8 @@ SurfaceD3D::SurfaceD3D(const egl::SurfaceState &state,
+       mDisplay(display),
+       mFixedSize(window == nullptr || attribs.get(EGL_FIXED_SIZE_ANGLE, EGL_FALSE) == EGL_TRUE),
+       mOrientation(static_cast<EGLint>(attribs.get(EGL_SURFACE_ORIENTATION_ANGLE, 0))),
+-      mRenderTargetFormat(state.config->renderTargetFormat),
++      mColorSpace(static_cast<EGLint>(attribs.get(EGL_GL_COLORSPACE_KHR, EGL_GL_COLORSPACE_LINEAR_KHR))),
++      mRenderTargetFormat(renderTargetFormatFromColorSpace(display, state.config->renderTargetFormat, mColorSpace)),
+       mDepthStencilFormat(state.config->depthStencilFormat),
+       mSwapChain(nullptr),
+       mSwapIntervalDirty(true),
+@@ -148,7 +170,7 @@ egl::Error SurfaceD3D::resetSwapChain(const egl::Display *display)
+ 
+     mSwapChain =
+         mRenderer->createSwapChain(mNativeWindow, mShareHandle, mD3DTexture, mRenderTargetFormat,
+-                                   mDepthStencilFormat, mOrientation, mState.config->samples);
++                                   mDepthStencilFormat, mOrientation, mState.config->samples, mColorSpace);
+     if (!mSwapChain)
+     {
+         return egl::EglBadAlloc();
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
+index 01d2573244..ccb793d423 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
+@@ -90,6 +90,7 @@ class SurfaceD3D : public SurfaceImpl
+ 
+     bool mFixedSize;
+     GLint mOrientation;
++    EGLint mColorSpace;
+ 
+     GLenum mRenderTargetFormat;
+     GLenum mDepthStencilFormat;
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+index b0ef9abddc..ac46690090 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+@@ -465,6 +465,7 @@ Renderer11::Renderer11(egl::Display *display)
+     mRenderer11DeviceCaps.supportsConstantBufferOffsets = false;
+     mRenderer11DeviceCaps.supportsVpRtIndexWriteFromVertexShader = false;
+     mRenderer11DeviceCaps.supportsDXGI1_2               = false;
++    mRenderer11DeviceCaps.supportsDXGI1_4               = false;
+     mRenderer11DeviceCaps.B5G6R5support                 = 0;
+     mRenderer11DeviceCaps.B4G4R4A4support               = 0;
+     mRenderer11DeviceCaps.B5G5R5A1support               = 0;
+@@ -918,6 +919,7 @@ egl::Error Renderer11::initializeDevice()
+ 
+     // Gather stats on DXGI and D3D feature level
+     ANGLE_HISTOGRAM_BOOLEAN("GPU.ANGLE.SupportsDXGI1_2", mRenderer11DeviceCaps.supportsDXGI1_2);
++    ANGLE_HISTOGRAM_BOOLEAN("GPU.ANGLE.SupportsDXGI1_4", mRenderer11DeviceCaps.supportsDXGI1_4);
+ 
+     ANGLEFeatureLevel angleFeatureLevel = GetANGLEFeatureLevel(mRenderer11DeviceCaps.featureLevel);
+ 
+@@ -999,9 +1001,15 @@ void Renderer11::populateRenderer11DeviceCaps()
+                              &mRenderer11DeviceCaps.B5G5R5A1support,
+                              &mRenderer11DeviceCaps.B5G5R5A1maxSamples);
+ 
++//#if defined(ANGLE_ENABLE_D3D11_1)
+     IDXGIAdapter2 *dxgiAdapter2 = d3d11::DynamicCastComObject<IDXGIAdapter2>(mDxgiAdapter);
+     mRenderer11DeviceCaps.supportsDXGI1_2 = (dxgiAdapter2 != nullptr);
+     SafeRelease(dxgiAdapter2);
++
++    IDXGIAdapter3 *dxgiAdapter3 = d3d11::DynamicCastComObject<IDXGIAdapter3>(mDxgiAdapter);
++    mRenderer11DeviceCaps.supportsDXGI1_4 = (dxgiAdapter3 != nullptr);
++    SafeRelease(dxgiAdapter3);
++//#endif
+ }
+ 
+ gl::SupportedSampleSet Renderer11::generateSampleSetForEGLConfig(
+@@ -1241,6 +1249,11 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
+ 
+     // All D3D feature levels support robust resource init
+     outExtensions->robustResourceInitialization = true;
++
++    // color space selection is always supported in DirectX11
++    outExtensions->colorspaceSRGB = true;
++    outExtensions->colorspaceSCRGBLinear = true;
++    outExtensions->colorspaceBt2020PQ = true;
+ }
+ 
+ gl::Error Renderer11::flush()
+@@ -1436,10 +1449,11 @@ SwapChainD3D *Renderer11::createSwapChain(NativeWindowD3D *nativeWindow,
+                                           GLenum backBufferFormat,
+                                           GLenum depthBufferFormat,
+                                           EGLint orientation,
+-                                          EGLint samples)
++                                          EGLint samples,
++                                          EGLint colorSpace)
+ {
+     return new SwapChain11(this, GetAs<NativeWindow11>(nativeWindow), shareHandle, d3dTexture,
+-                           backBufferFormat, depthBufferFormat, orientation, samples);
++                           backBufferFormat, depthBufferFormat, orientation, samples, colorSpace);
+ }
+ 
+ void *Renderer11::getD3DDevice()
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
+index a8c24e681b..3516bf779d 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
+@@ -49,6 +49,7 @@ struct Renderer11DeviceCaps
+ 
+     D3D_FEATURE_LEVEL featureLevel;
+     bool supportsDXGI1_2;                // Support for DXGI 1.2
++    bool supportsDXGI1_4;               // Support for DXGI 1.4
+     bool supportsClearView;              // Support for ID3D11DeviceContext1::ClearView
+     bool supportsConstantBufferOffsets;  // Support for Constant buffer offset
+     bool supportsVpRtIndexWriteFromVertexShader;  // VP/RT can be selected in the Vertex Shader
+@@ -138,7 +139,8 @@ class Renderer11 : public RendererD3D
+                                   GLenum backBufferFormat,
+                                   GLenum depthBufferFormat,
+                                   EGLint orientation,
+-                                  EGLint samples) override;
++                                  EGLint samples,
++                                  EGLint colorSpace) override;
+     egl::Error getD3DTextureInfo(const egl::Config *configuration,
+                                  IUnknown *d3dTexture,
+                                  EGLint *width,
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+index dcfd06484d..8f72c5c9aa 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+@@ -18,6 +18,8 @@
+ #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
+ #include "third_party/trace_event/trace_event.h"
+ 
++#include <Dxgi1_5.h>
++
+ // Precompiled shaders
+ #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough2d11vs.h"
+ #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2d11ps.h"
+@@ -56,12 +58,14 @@ SwapChain11::SwapChain11(Renderer11 *renderer,
+                          GLenum backBufferFormat,
+                          GLenum depthBufferFormat,
+                          EGLint orientation,
+-                         EGLint samples)
++                         EGLint samples,
++                         EGLint colorSpace)
+     : SwapChainD3D(shareHandle, d3dTexture, backBufferFormat, depthBufferFormat),
+       mRenderer(renderer),
+       mWidth(-1),
+       mHeight(-1),
+       mOrientation(orientation),
++      mColorSpace(colorSpace),
+       mAppCreatedShareHandle(mShareHandle != nullptr),
+       mSwapInterval(0),
+       mPassThroughResourcesInit(false),
+@@ -620,10 +624,94 @@ EGLint SwapChain11::reset(const gl::Context *context,
+             mSwapChain1 = d3d11::DynamicCastComObject<IDXGISwapChain1>(mSwapChain);
+         }
+ 
++        if (mRenderer->getRenderer11DeviceCaps().supportsDXGI1_4)
++        {
++#if defined(ANGLE_ENABLE_D3D11_1)
++            IDXGISwapChain3 *swapChain3 = d3d11::DynamicCastComObject<IDXGISwapChain3>(mSwapChain);
++
++            printf("*** EGL colorSpace: 0x%X\n", mColorSpace);
++            printf("*** EGL format: 0x%X\n", mOffscreenRenderTargetFormat);
++            printf("*** Native format: 0x%X\n", getSwapChainNativeFormat());
++
++            if (mColorSpace != EGL_GL_COLORSPACE_LINEAR_KHR) {
++                DXGI_COLOR_SPACE_TYPE nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709;
++                switch (mColorSpace)
++                {
++                case EGL_GL_COLORSPACE_SRGB_KHR:
++                    nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709;
++                    break;
++                case EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT:
++                    nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709;
++                    break;
++                case EGL_GL_COLORSPACE_BT2020_PQ_EXT:
++                    nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020;
++                    break;
++                default:
++                    ASSERT(0 && "Unsupported colorspace requested");
++                }
++
++                printf("*** Native colorSpace: 0x%X\n", nativeColorSpace);
++
++                UINT supported = 0;
++                result = swapChain3->CheckColorSpaceSupport(nativeColorSpace, &supported);
++                ASSERT(SUCCEEDED(result));
++                if (!(supported & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT)) {
++                    SafeRelease(swapChain3);
++                    return EGL_BAD_MATCH;
++                }
++
++                result = swapChain3->SetColorSpace1(nativeColorSpace);
++                ASSERT(SUCCEEDED(result));
++            }
++
++            SafeRelease(swapChain3);
++
++#if 0
++
++            IDXGISwapChain4 *swapChain4 = d3d11::DynamicCastComObject<IDXGISwapChain4>(mSwapChain);
++
++            DXGI_HDR_METADATA_HDR10 md;
++            md.RedPrimary[0] = 0.680 * 50000;
++            md.RedPrimary[1] = 0.320 * 50000;
++            md.GreenPrimary[0] = 0.265 * 50000;
++            md.GreenPrimary[1] = 0.690 * 50000;
++            md.BluePrimary[0] = 0.150 * 50000;
++            md.BluePrimary[1] = 0.060 * 50000;
++            md.WhitePoint[0] = 0.3127 * 50000;
++            md.WhitePoint[1] = 0.3290 * 50000;
++            md.MaxMasteringLuminance = 1000 * 10000;
++            md.MinMasteringLuminance = 0.001 * 10000;
++            md.MaxContentLightLevel = 1000;
++            md.MaxFrameAverageLightLevel = 200;
++            result = swapChain4->SetHDRMetaData(DXGI_HDR_METADATA_TYPE_HDR10, sizeof(md), &md);
++            printf("*** Result hdr 0x%X\n", result);
++            SafeRelease(swapChain4);
++#endif
++#endif
++        }
++
+         ID3D11Texture2D *backbufferTex = nullptr;
+         result                         = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
+                                        reinterpret_cast<LPVOID *>(&backbufferTex));
+         ASSERT(SUCCEEDED(result));
++
++        // TODO: recover rendering to sRGB
++        //
++        // D3D11_RENDER_TARGET_VIEW_DESC offscreenRTVDesc;
++        // offscreenRTVDesc.Format = getSwapChainNativeFormat();
++        //
++        // if (mColorSpace == EGL_GL_COLORSPACE_SRGB_KHR) {
++        //     if (offscreenRTVDesc.Format == DXGI_FORMAT_R8G8B8A8_UNORM) {
++        //         offscreenRTVDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
++        //     }
++        //
++        //     if (offscreenRTVDesc.Format == DXGI_FORMAT_B8G8R8A8_UNORM) {
++        //         offscreenRTVDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
++        //     }
++        // }
++        //
++        // printf("*** Render target format: 0x%X\n", offscreenRTVDesc.Format);
++
+         const auto &format =
+             d3d11::Format::Get(mOffscreenRenderTargetFormat, mRenderer->getRenderer11DeviceCaps());
+         mBackBufferTexture.set(backbufferTex, format);
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
+index eca068210b..2a4b9ba274 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
+@@ -28,7 +28,8 @@ class SwapChain11 final : public SwapChainD3D
+                 GLenum backBufferFormat,
+                 GLenum depthBufferFormat,
+                 EGLint orientation,
+-                EGLint samples);
++                EGLint samples,
++                EGLint colorSpace);
+     ~SwapChain11() override;
+ 
+     EGLint resize(const gl::Context *context,
+@@ -93,6 +94,7 @@ class SwapChain11 final : public SwapChainD3D
+     EGLint mWidth;
+     EGLint mHeight;
+     const EGLint mOrientation;
++    EGLint mColorSpace;
+     bool mAppCreatedShareHandle;
+     unsigned int mSwapInterval;
+     bool mPassThroughResourcesInit;
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
+index 5394e3d3e7..c81b33fee9 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
+@@ -158,9 +158,9 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
+         swapChainDesc.SampleDesc.Quality    = 0;
+         swapChainDesc.BufferUsage =
+             DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT | DXGI_USAGE_BACK_BUFFER;
+-        swapChainDesc.BufferCount   = 1;
++        swapChainDesc.BufferCount   = 2;
+         swapChainDesc.Scaling       = DXGI_SCALING_STRETCH;
+-        swapChainDesc.SwapEffect    = DXGI_SWAP_EFFECT_SEQUENTIAL;
++        swapChainDesc.SwapEffect    = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+         swapChainDesc.AlphaMode     = DXGI_ALPHA_MODE_UNSPECIFIED;
+         swapChainDesc.Flags         = 0;
+         IDXGISwapChain1 *swapChain1 = nullptr;
+@@ -176,7 +176,7 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
+     }
+ 
+     DXGI_SWAP_CHAIN_DESC swapChainDesc               = {};
+-    swapChainDesc.BufferCount                        = 1;
++    swapChainDesc.BufferCount                        = 2;
+     swapChainDesc.BufferDesc.Format                  = format;
+     swapChainDesc.BufferDesc.Width                   = width;
+     swapChainDesc.BufferDesc.Height                  = height;
+@@ -191,7 +191,17 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
+     swapChainDesc.SampleDesc.Count   = samples;
+     swapChainDesc.SampleDesc.Quality = 0;
+     swapChainDesc.Windowed           = TRUE;
+-    swapChainDesc.SwapEffect         = DXGI_SWAP_EFFECT_DISCARD;
++
++    /**
++     * NOTE1: in flip-discard mode the swap chain doesn't support partial
++     *       presentatiopn with Present1() call. Though it is not a big
++     *       problem, because in case DXGI 1.2 is supported this code is
++     *       unreachable.
++     *
++     * NOTE2: in non-flip mode HDR rendering is not supported, so use it
++     *        bt default
++     */
++    swapChainDesc.SwapEffect         = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+ 
+     HRESULT result = factory->CreateSwapChain(device, &swapChainDesc, swapChain);
+     if (SUCCEEDED(result))
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
+index 75c6298868..58596169a8 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
+@@ -718,8 +718,10 @@ SwapChainD3D *Renderer9::createSwapChain(NativeWindowD3D *nativeWindow,
+                                          GLenum backBufferFormat,
+                                          GLenum depthBufferFormat,
+                                          EGLint orientation,
+-                                         EGLint samples)
++                                         EGLint samples,
++                                         EGLint colorSpace)
+ {
++    UNUSED_VARIABLE(colorSpace);
+     return new SwapChain9(this, GetAs<NativeWindow9>(nativeWindow), shareHandle, d3dTexture,
+                           backBufferFormat, depthBufferFormat, orientation);
+ }
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
+index 9ddee45f0f..ce4bb201e5 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
+@@ -92,7 +92,8 @@ class Renderer9 : public RendererD3D
+                                   GLenum backBufferFormat,
+                                   GLenum depthBufferFormat,
+                                   EGLint orientation,
+-                                  EGLint samples) override;
++                                  EGLint samples,
++                                  EGLint colorSpace) override;
+     egl::Error getD3DTextureInfo(const egl::Config *configuration,
+                                  IUnknown *d3dTexture,
+                                  EGLint *width,
+diff --git a/src/3rdparty/angle/src/libANGLE/validationEGL.cpp b/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
+index 13a3a9e280..3f6a426320 100644
+--- a/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
++++ b/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
+@@ -885,6 +885,32 @@ Error ValidateCreateWindowSurface(Display *display, Config *config, EGLNativeWin
+                                               "either EGL_TRUE or EGL_FALSE.";
+               }
+               break;
++          case EGL_GL_COLORSPACE:
++
++              if (!displayExtensions.colorspaceSRGB)
++              {
++                  return Error(EGL_BAD_ATTRIBUTE, "EGL_KHR_gl_colorspace is not supported on this platform.");
++              }
++
++              if (value == EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT)
++              {
++                  if (!displayExtensions.colorspaceSCRGBLinear)
++                  {
++                      return Error(EGL_BAD_ATTRIBUTE, "EGL_EXT_gl_colorspace_scrgb_linear is not supported on this platform.");
++                  }
++              }
++              else if (value == EGL_GL_COLORSPACE_BT2020_PQ_EXT)
++              {
++                  if (!displayExtensions.colorspaceBt2020PQ)
++                  {
++                      return Error(EGL_BAD_ATTRIBUTE, "EGL_EXT_gl_colorspace_bt2020_pq is not supported on this platform.");
++                  }
++              }
++              else if (value != EGL_GL_COLORSPACE_SRGB_KHR && value != EGL_GL_COLORSPACE_LINEAR_KHR)
++              {
++                  return Error(EGL_BAD_ATTRIBUTE);
++              }
++              break;
+ 
+           default:
+               return EglBadAttribute();
+diff --git a/src/gui/kernel/qsurfaceformat.cpp b/src/gui/kernel/qsurfaceformat.cpp
+index 1a814ec21f..fc8b9c4f43 100644
+--- a/src/gui/kernel/qsurfaceformat.cpp
++++ b/src/gui/kernel/qsurfaceformat.cpp
+@@ -221,6 +221,17 @@ public:
+     set, the window will be created with an sRGB-capable default
+     framebuffer. Note that some platforms may return windows with a sRGB-capable
+     default framebuffer even when not requested explicitly.
++
++    \value scRGBColorSpace When \c{EGL_EXT_gl_colorspace_scrgb_linear}
++    is supported by the platform and this value is set, the window will
++    be created with an scRGB-capable default framebuffer. Note that some
++    platforms may return windows with a scRGB-capable default framebuffer
++    even when not requested explicitly. It usually happens when the application
++    requests 16-bit surface format.
++
++    \value bt2020PQColorSpace When \c{EGL_EXT_gl_colorspace_bt2020_pq}
++    is supported by the platform and this value is set, the window will
++    be created with an bt2020 PQ default framebuffer.
+  */
+ 
+ /*!
+diff --git a/src/gui/kernel/qsurfaceformat.h b/src/gui/kernel/qsurfaceformat.h
+index ed63eb8bbf..9ba6a29b7a 100644
+--- a/src/gui/kernel/qsurfaceformat.h
++++ b/src/gui/kernel/qsurfaceformat.h
+@@ -87,7 +87,9 @@ public:
+ 
+     enum ColorSpace {
+         DefaultColorSpace,
+-        sRGBColorSpace
++        sRGBColorSpace,
++        scRGBColorSpace,
++        bt2020PQColorSpace
+     };
+     Q_ENUM(ColorSpace)
+ 
+diff --git a/src/gui/opengl/qopenglframebufferobject.cpp b/src/gui/opengl/qopenglframebufferobject.cpp
+index cae3d516c4..ccdccb637a 100644
+--- a/src/gui/opengl/qopenglframebufferobject.cpp
++++ b/src/gui/opengl/qopenglframebufferobject.cpp
+@@ -545,10 +545,13 @@ void QOpenGLFramebufferObjectPrivate::initTexture(int idx)
+     ColorAttachment &color(colorAttachments[idx]);
+ 
+     GLuint pixelType = GL_UNSIGNED_BYTE;
+-    if (color.internalFormat == GL_RGB10_A2 || color.internalFormat == GL_RGB10)
++    if (color.internalFormat == GL_RGB10_A2 || color.internalFormat == GL_RGB10) {
+         pixelType = GL_UNSIGNED_INT_2_10_10_10_REV;
+-    else if (color.internalFormat == GL_RGB16  || color.internalFormat == GL_RGBA16)
++    } else if (color.internalFormat == GL_RGB16  || color.internalFormat == GL_RGBA16) {
+         pixelType = GL_UNSIGNED_SHORT;
++    } else if (color.internalFormat == GL_RGBA16F) {
++        pixelType = GL_HALF_FLOAT;
++    }
+ 
+     funcs.glTexImage2D(target, 0, color.internalFormat, color.size.width(), color.size.height(), 0,
+                        GL_RGBA, pixelType, NULL);
+diff --git a/src/plugins/platforms/windows/qwindowseglcontext.cpp b/src/plugins/platforms/windows/qwindowseglcontext.cpp
+index 52f3c56beb..18a55c9e1f 100644
+--- a/src/plugins/platforms/windows/qwindowseglcontext.cpp
++++ b/src/plugins/platforms/windows/qwindowseglcontext.cpp
+@@ -297,11 +297,36 @@ QWindowsOpenGLContext *QWindowsEGLStaticContext::createContext(QOpenGLContext *c
+     return new QWindowsEGLContext(this, context->format(), context->shareHandle());
+ }
+ 
+-void *QWindowsEGLStaticContext::createWindowSurface(void *nativeWindow, void *nativeConfig, int *err)
++void *QWindowsEGLStaticContext::createWindowSurface(void *nativeWindow, void *nativeConfig,
++                                                    QSurfaceFormat::ColorSpace colorSpace, int *err)
+ {
+     *err = 0;
++
++    EGLint eglColorSpace = EGL_GL_COLORSPACE_LINEAR_KHR;
++
++    switch (colorSpace) {
++    case QSurfaceFormat::DefaultColorSpace:
++        break;
++    case QSurfaceFormat::sRGBColorSpace:
++        eglColorSpace = EGL_GL_COLORSPACE_SRGB_KHR;
++        break;
++    case QSurfaceFormat::scRGBColorSpace:
++        eglColorSpace = EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT;
++        break;
++    case QSurfaceFormat::bt2020PQColorSpace:
++        eglColorSpace = EGL_GL_COLORSPACE_BT2020_PQ_EXT;
++        break;
++    }
++
++    // TODO: check if the attribute is actually suportef by the implementation
++    const EGLint attributes[] = {
++        EGL_GL_COLORSPACE, eglColorSpace,
++        EGL_NONE
++    };
++
+     EGLSurface surface = libEGL.eglCreateWindowSurface(m_display, nativeConfig,
+-                                                       static_cast<EGLNativeWindowType>(nativeWindow), 0);
++                                                       static_cast<EGLNativeWindowType>(nativeWindow),
++                                                       attributes);
+     if (surface == EGL_NO_SURFACE) {
+         *err = libEGL.eglGetError();
+         qWarning("%s: Could not create the EGL window surface: 0x%x", __FUNCTION__, *err);
+@@ -349,6 +374,7 @@ QSurfaceFormat QWindowsEGLStaticContext::formatFromConfig(EGLDisplay display, EG
+     format.setSamples(sampleCount);
+     format.setStereo(false);
+     format.setSwapInterval(referenceFormat.swapInterval());
++    format.setColorSpace(referenceFormat.colorSpace());
+ 
+     // Clear the EGL error state because some of the above may
+     // have errored out because the attribute is not applicable
+@@ -378,7 +404,6 @@ QSurfaceFormat QWindowsEGLStaticContext::formatFromConfig(EGLDisplay display, EG
+     \internal
+     \ingroup qt-lighthouse-win
+ */
+-
+ QWindowsEGLContext::QWindowsEGLContext(QWindowsEGLStaticContext *staticContext,
+                                        const QSurfaceFormat &format,
+                                        QPlatformOpenGLContext *share)
+@@ -477,6 +502,8 @@ bool QWindowsEGLContext::makeCurrent(QPlatformSurface *surface)
+             // Simulate context loss as the context is useless.
+             QWindowsEGLStaticContext::libEGL.eglDestroyContext(m_eglDisplay, m_eglContext);
+             m_eglContext = EGL_NO_CONTEXT;
++        } else if (err == EGL_BAD_MATCH) {
++            qCDebug(lcQpaGl) << "Got bad match in createWindowSurface() for context" << this << "Check color space configuration.";
+         }
+         return false;
+     }
+diff --git a/src/plugins/platforms/windows/qwindowseglcontext.h b/src/plugins/platforms/windows/qwindowseglcontext.h
+index 8a1e1ddae8..4f0c2c88ef 100644
+--- a/src/plugins/platforms/windows/qwindowseglcontext.h
++++ b/src/plugins/platforms/windows/qwindowseglcontext.h
+@@ -121,7 +121,7 @@ public:
+     void *moduleHandle() const override { return libGLESv2.moduleHandle(); }
+     QOpenGLContext::OpenGLModuleType moduleType() const override { return QOpenGLContext::LibGLES; }
+ 
+-    void *createWindowSurface(void *nativeWindow, void *nativeConfig, int *err) override;
++    void *createWindowSurface(void *nativeWindow, void *nativeConfig, QSurfaceFormat::ColorSpace colorSpace, int *err) override;
+     void destroyWindowSurface(void *nativeSurface) override;
+ 
+     QSurfaceFormat formatFromConfig(EGLDisplay display, EGLConfig config, const QSurfaceFormat &referenceFormat);
+diff --git a/src/plugins/platforms/windows/qwindowsopenglcontext.h b/src/plugins/platforms/windows/qwindowsopenglcontext.h
+index cc6d93d35e..61c0e28767 100644
+--- a/src/plugins/platforms/windows/qwindowsopenglcontext.h
++++ b/src/plugins/platforms/windows/qwindowsopenglcontext.h
+@@ -63,7 +63,7 @@ public:
+ 
+     // If the windowing system interface needs explicitly created window surfaces (like EGL),
+     // reimplement these.
+-    virtual void *createWindowSurface(void * /*nativeWindow*/, void * /*nativeConfig*/, int * /*err*/) { return 0; }
++    virtual void *createWindowSurface(void * /*nativeWindow*/, void * /*nativeConfig*/, QSurfaceFormat::ColorSpace /*colorSpace*/, int * /*err*/) { return 0; }
+     virtual void destroyWindowSurface(void * /*nativeSurface*/) { }
+ 
+ protected:
+diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
+index f340f16679..702e788ccc 100644
+--- a/src/plugins/platforms/windows/qwindowswindow.cpp
++++ b/src/plugins/platforms/windows/qwindowswindow.cpp
+@@ -2726,9 +2726,13 @@ void *QWindowsWindow::surface(void *nativeConfig, int *err)
+     return 0;
+ #endif
+ #ifndef QT_NO_OPENGL
++
++
++
+     if (!m_surface) {
+-        if (QWindowsStaticOpenGLContext *staticOpenGLContext = QWindowsIntegration::staticOpenGLContext())
+-            m_surface = staticOpenGLContext->createWindowSurface(m_data.hwnd, nativeConfig, err);
++        if (QWindowsStaticOpenGLContext *staticOpenGLContext = QWindowsIntegration::staticOpenGLContext()) {
++            m_surface = staticOpenGLContext->createWindowSurface(m_data.hwnd, nativeConfig, m_format.colorSpace(), err);
++        }
+     }
+ 
+     return m_surface;
+-- 
+2.20.1.windows.1
+
+
+From ed5a3b9bbc973399094f100fa7a3b35067e47aeb Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Thu, 22 Nov 2018 15:47:48 +0300
+Subject: [PATCH 07/20] Implement color conversion for the backing store
+ texture
+
+If the window surface is not in sRGB mode, then the backing store
+surface should be converted into the destinations color space.
+
+This patch adds the most popular color space transitions into
+QOpenGLTextureBlitter.
+---
+ src/gui/opengl/qopengltextureblitter.cpp   | 180 ++++++++++++++++++---
+ src/gui/opengl/qopengltextureblitter.h     |  12 +-
+ src/gui/painting/qplatformbackingstore.cpp |   7 +
+ 3 files changed, 179 insertions(+), 20 deletions(-)
+
+diff --git a/src/gui/opengl/qopengltextureblitter.cpp b/src/gui/opengl/qopengltextureblitter.cpp
+index b65df9dc82..819c1855b2 100644
+--- a/src/gui/opengl/qopengltextureblitter.cpp
++++ b/src/gui/opengl/qopengltextureblitter.cpp
+@@ -131,13 +131,59 @@ static const char vertex_shader[] =
+     "}";
+ 
+ static const char fragment_shader[] =
+-    "varying highp vec2 uv;"
+-    "uniform sampler2D textureSampler;"
+-    "uniform bool swizzle;"
+-    "uniform highp float opacity;"
++    "varying highp vec2 uv;\n"
++    "uniform sampler2D textureSampler;\n"
++    "uniform bool swizzle;\n"
++    "uniform highp float opacity;\n"
++    "#if defined SRGB_TO_SCRGB || defined SRGB_TO_BT2020PQ\n"
++    "highp vec4 sRgbToLinear(highp vec4 sRGB)\n"
++    "{\n"
++    "   bvec4 cutoff = lessThan(sRGB, vec4(0.04045));\n"
++    "   const highp vec2 a1 = vec2(0.055, 0.0);\n"
++    "   const highp vec2 c2 = vec2(1.055, 1.0);\n"
++    "   const highp vec2 m3 = vec2(2.4, 1.0);\n"
++    "   const highp vec2 c4 = vec2(12.92, 1.0);\n"
++    "   highp vec4 higher = pow((sRGB + a1.xxxy) / c2.xxxy, m3.xxxy);\n"
++    "   highp vec4 lower = sRGB / c4.xxxy;\n"
++    "   return mix(higher, lower, vec4(cutoff));\n"
++    "}\n"
++    "#endif\n"
++    "#if defined SRGB_TO_BT2020PQ\n"
++    "highp vec4 applySmpte2084Curve(highp vec4 L)\n"
++    "{"
++    "   const highp vec2 m1 = vec2(2610.0 / 4096.0 / 4.0, 1.0);\n"
++    "   const highp vec2 m2 = vec2(2523.0 / 4096.0 * 128.0, 1.0);\n"
++    "   const highp vec2 a1 = vec2(3424.0 / 4096.0, 0.0);\n"
++    "   const highp vec2 c2 = vec2(2413.0 / 4096.0 * 32.0, 1.0);\n"
++    "   const highp vec2 c3 = vec2(2392.0 / 4096.0 * 32.0, 1.0);\n"
++    "   const highp vec2 a4 = vec2(1.0, 0.0);\n"
++    "   highp vec4 Lp = pow(L, m1.xxxy);\n"
++    "   highp vec4 res = pow((a1.xxxy + c2.xxxy * Lp) / (a4.xxxy + c3.xxxy * Lp), m2.xxxy);\n"
++    "   return res;"
++    "}\n"
++    ""
++    "highp vec4 sRgbToBt2020pq(highp vec4 value)\n"
++    "{\n"
++    "   value = sRgbToLinear(value);"
++    "   const highp mat4 convMat = "
++    "      mat4(0.627402, 0.069095, 0.016394, 0.0,"
++    "           0.329292, 0.919544, 0.088028, 0.0,"
++    "           0.043306, 0.011360, 0.895578, 0.0,"
++    "           0.0,      0.0,      0.0,      1.0);"
++    ""
++    "   value = convMat * value;\n"
++    "   return applySmpte2084Curve(0.008 * value);"
++    "}\n"
++    "#endif\n"
++    "\n"
+     "void main() {"
+     "   highp vec4 tmpFragColor = texture2D(textureSampler,uv);"
+-    "   tmpFragColor.a *= opacity;"
++    "   tmpFragColor.a *= opacity;\n"
++    "#if defined SRGB_TO_SCRGB\n"
++    "   tmpFragColor = sRgbToLinear(tmpFragColor);\n"
++    "#elif defined SRGB_TO_BT2020PQ\n"
++    "   tmpFragColor = sRgbToBt2020pq(tmpFragColor);\n"
++    "#endif\n"
+     "   gl_FragColor = swizzle ? tmpFragColor.bgra : tmpFragColor;"
+     "}";
+ 
+@@ -187,6 +233,23 @@ private:
+     GLenum m_target;
+ };
+ 
++class ColorSpaceConversion : public QPair<QSurfaceFormat::ColorSpace, QSurfaceFormat::ColorSpace>
++{
++public:
++    ColorSpaceConversion() { };
++    ColorSpaceConversion(QSurfaceFormat::ColorSpace srcColorSpace,
++                         QSurfaceFormat::ColorSpace dstColorSpace)
++        : QPair(srcColorSpace, dstColorSpace)
++    { }
++
++    QSurfaceFormat::ColorSpace source() const {
++        return first;
++    }
++    QSurfaceFormat::ColorSpace destination() const {
++        return second;
++    }
++};
++
+ class QOpenGLTextureBlitterPrivate
+ {
+ public:
+@@ -197,16 +260,25 @@ public:
+     };
+ 
+     enum ProgramIndex {
+-        TEXTURE_2D,
+-        TEXTURE_EXTERNAL_OES
++        TEXTURE_2D = 0,
++        TEXTURE_2D_SRGB_TO_SCRGB,
++        TEXTURE_2D_SRGB_TO_BT2020PQ,
++        TEXTURE_EXTERNAL_OES,
++
++        PROGRAM_COUNT
+     };
+ 
+     QOpenGLTextureBlitterPrivate() :
+         swizzle(false),
+         opacity(1.0f),
+         vao(new QOpenGLVertexArrayObject),
+-        currentTarget(TEXTURE_2D)
+-    { }
++        currentTarget(GL_NONE),
++        colorSpaceConversion(0)
++    {
++        supportedColorSpaceConversions << ColorSpaceConversion(QSurfaceFormat::DefaultColorSpace, QSurfaceFormat::DefaultColorSpace);
++        supportedColorSpaceConversions << ColorSpaceConversion(QSurfaceFormat::sRGBColorSpace, QSurfaceFormat::scRGBColorSpace);
++        supportedColorSpaceConversions << ColorSpaceConversion(QSurfaceFormat::sRGBColorSpace, QSurfaceFormat::bt2020PQColorSpace);
++    }
+ 
+     bool buildProgram(ProgramIndex idx, const char *vs, const char *fs);
+ 
+@@ -214,6 +286,7 @@ public:
+     void blit(GLuint texture, const QMatrix4x4 &vertexTransform, QOpenGLTextureBlitter::Origin origin);
+ 
+     void prepareProgram(const QMatrix4x4 &vertexTransform);
++    int calcColorSpaceConversionIndex(QSurfaceFormat::ColorSpace srcColorSpace, QSurfaceFormat::ColorSpace dstColorSpace);
+ 
+     QOpenGLBuffer vertexBuffer;
+     QOpenGLBuffer textureBuffer;
+@@ -239,18 +312,47 @@ public:
+         bool swizzle;
+         float opacity;
+         TextureMatrixUniform textureMatrixUniformState;
+-    } programs[2];
++    } programs[PROGRAM_COUNT];
+     bool swizzle;
+     float opacity;
+     QScopedPointer<QOpenGLVertexArrayObject> vao;
+     GLenum currentTarget;
++
++    int colorSpaceConversion;
++    QVector<ColorSpaceConversion> supportedColorSpaceConversions;
+ };
+ 
+-static inline QOpenGLTextureBlitterPrivate::ProgramIndex targetToProgramIndex(GLenum target)
++int QOpenGLTextureBlitterPrivate::calcColorSpaceConversionIndex(QSurfaceFormat::ColorSpace srcColorSpace, QSurfaceFormat::ColorSpace dstColorSpace)
++{
++    // TODO: auto-detect destination color space of the surface
++    //       in case of default color space
++
++    // disable color management if at least one of the color
++    // spaces is declared as default
++    if (srcColorSpace == QSurfaceFormat::DefaultColorSpace ||
++        dstColorSpace == QSurfaceFormat::DefaultColorSpace) {
++
++        return 0;
++    }
++
++    // disable color management if source and destination color
++    // spaces are the same
++    if (srcColorSpace == dstColorSpace) {
++        return 0;
++    }
++
++    ColorSpaceConversion conversion(srcColorSpace, dstColorSpace);
++    return supportedColorSpaceConversions.indexOf(conversion);
++}
++
++static inline QOpenGLTextureBlitterPrivate::ProgramIndex targetToProgramIndex(GLenum target, int colorSpaceConversion)
+ {
+     switch (target) {
+-    case GL_TEXTURE_2D:
+-        return QOpenGLTextureBlitterPrivate::TEXTURE_2D;
++    case GL_TEXTURE_2D: {
++        QOpenGLTextureBlitterPrivate::ProgramIndex index(
++                 int(QOpenGLTextureBlitterPrivate::TEXTURE_2D) + colorSpaceConversion);
++        return index;
++    }
+     case GL_TEXTURE_EXTERNAL_OES:
+         return QOpenGLTextureBlitterPrivate::TEXTURE_EXTERNAL_OES;
+     default:
+@@ -261,7 +363,7 @@ static inline QOpenGLTextureBlitterPrivate::ProgramIndex targetToProgramIndex(GL
+ 
+ void QOpenGLTextureBlitterPrivate::prepareProgram(const QMatrix4x4 &vertexTransform)
+ {
+-    Program *program = &programs[targetToProgramIndex(currentTarget)];
++    Program *program = &programs[targetToProgramIndex(currentTarget, colorSpaceConversion)];
+ 
+     vertexBuffer.bind();
+     program->glProgram->setAttributeBuffer(program->vertexCoordAttribPos, GL_FLOAT, 0, 3, 0);
+@@ -293,7 +395,7 @@ void QOpenGLTextureBlitterPrivate::blit(GLuint texture,
+     TextureBinder binder(currentTarget, texture);
+     prepareProgram(vertexTransform);
+ 
+-    Program *program = &programs[targetToProgramIndex(currentTarget)];
++    Program *program = &programs[targetToProgramIndex(currentTarget, colorSpaceConversion)];
+     program->glProgram->setUniformValue(program->textureTransformUniformPos, textureTransform);
+     program->textureMatrixUniformState = User;
+ 
+@@ -307,7 +409,7 @@ void QOpenGLTextureBlitterPrivate::blit(GLuint texture,
+     TextureBinder binder(currentTarget, texture);
+     prepareProgram(vertexTransform);
+ 
+-    Program *program = &programs[targetToProgramIndex(currentTarget)];
++    Program *program = &programs[targetToProgramIndex(currentTarget, colorSpaceConversion)];
+     if (origin == QOpenGLTextureBlitter::OriginTopLeft) {
+         if (program->textureMatrixUniformState != IdentityFlipped) {
+             QMatrix3x3 flipped;
+@@ -408,6 +510,18 @@ bool QOpenGLTextureBlitter::create()
+     } else {
+         if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_2D, vertex_shader, fragment_shader))
+             return false;
++
++        // TODO: create non-default transformations on-demand
++        {
++            const QString shader = QString("#define SRGB_TO_SCRGB\n %1").arg(fragment_shader);
++            if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_2D_SRGB_TO_SCRGB, vertex_shader, shader.toLatin1().constData()))
++                return false;
++        }
++        {
++            const QString shader = QString("#define SRGB_TO_BT2020PQ\n %1").arg(fragment_shader);
++            if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_2D_SRGB_TO_BT2020PQ, vertex_shader, shader.toLatin1().constData()))
++                return false;
++        }
+         if (supportsExternalOESTarget())
+             if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_EXTERNAL_OES, vertex_shader, fragment_shader_external_oes))
+                 return false;
+@@ -455,6 +569,8 @@ void QOpenGLTextureBlitter::destroy()
+         return;
+     Q_D(QOpenGLTextureBlitter);
+     d->programs[QOpenGLTextureBlitterPrivate::TEXTURE_2D].glProgram.reset();
++    d->programs[QOpenGLTextureBlitterPrivate::TEXTURE_2D_SRGB_TO_SCRGB].glProgram.reset();
++    d->programs[QOpenGLTextureBlitterPrivate::TEXTURE_2D_SRGB_TO_BT2020PQ].glProgram.reset();
+     d->programs[QOpenGLTextureBlitterPrivate::TEXTURE_EXTERNAL_OES].glProgram.reset();
+     d->vertexBuffer.destroy();
+     d->textureBuffer.destroy();
+@@ -484,15 +600,26 @@ bool QOpenGLTextureBlitter::supportsExternalOESTarget() const
+ 
+     \sa release(), blit()
+  */
+-void QOpenGLTextureBlitter::bind(GLenum target)
++void QOpenGLTextureBlitter::bind(GLenum target,
++                                 QSurfaceFormat::ColorSpace srcColorSpace,
++                                 QSurfaceFormat::ColorSpace dstColorSpace)
+ {
+     Q_D(QOpenGLTextureBlitter);
+ 
+     if (d->vao->isCreated())
+         d->vao->bind();
+ 
++    const int index = d->calcColorSpaceConversionIndex(srcColorSpace, dstColorSpace);
++
++    if (index >= 0) {
++        d->colorSpaceConversion = index;
++    } else {
++        qWarning() << "QOpenGLTextureBlitter::bind(): color space conversion is not supported" << srcColorSpace << dstColorSpace;
++        d->colorSpaceConversion = 0; // noop conversion
++    }
++
+     d->currentTarget = target;
+-    QOpenGLTextureBlitterPrivate::Program *p = &d->programs[targetToProgramIndex(target)];
++    QOpenGLTextureBlitterPrivate::Program *p = &d->programs[targetToProgramIndex(target, d->colorSpaceConversion)];
+     p->glProgram->bind();
+ 
+     d->vertexBuffer.bind();
+@@ -506,6 +633,21 @@ void QOpenGLTextureBlitter::bind(GLenum target)
+     d->textureBuffer.release();
+ }
+ 
++void QOpenGLTextureBlitter::rebind(GLenum target, QSurfaceFormat::ColorSpace srcColorSpace, QSurfaceFormat::ColorSpace dstColorSpace)
++{
++    Q_D(QOpenGLTextureBlitter);
++
++    if (d->vao->isCreated() &&
++        d->currentTarget == target &&
++        d->colorSpaceConversion == d->calcColorSpaceConversionIndex(srcColorSpace, dstColorSpace)) {
++
++        // the blitter is already configured in the correct state, so just skip it
++        return;
++    }
++
++    bind(target, srcColorSpace, dstColorSpace);
++}
++
+ /*!
+     Unbinds the graphics resources used by the blitter.
+ 
+@@ -514,7 +656,7 @@ void QOpenGLTextureBlitter::bind(GLenum target)
+ void QOpenGLTextureBlitter::release()
+ {
+     Q_D(QOpenGLTextureBlitter);
+-    d->programs[targetToProgramIndex(d->currentTarget)].glProgram->release();
++    d->programs[targetToProgramIndex(d->currentTarget, d->colorSpaceConversion)].glProgram->release();
+     if (d->vao->isCreated())
+         d->vao->release();
+ }
+diff --git a/src/gui/opengl/qopengltextureblitter.h b/src/gui/opengl/qopengltextureblitter.h
+index 2f7c6b1a0a..3c87e4e2b5 100644
+--- a/src/gui/opengl/qopengltextureblitter.h
++++ b/src/gui/opengl/qopengltextureblitter.h
+@@ -48,6 +48,9 @@
+ #include <QtGui/QMatrix3x3>
+ #include <QtGui/QMatrix4x4>
+ 
++// TODO: less includes!!!
++#include <QSurfaceFormat>
++
+ QT_BEGIN_NAMESPACE
+ 
+ class QOpenGLTextureBlitterPrivate;
+@@ -69,7 +72,14 @@ public:
+ 
+     bool supportsExternalOESTarget() const;
+ 
+-    void bind(GLenum target = GL_TEXTURE_2D);
++    void bind(GLenum target = GL_TEXTURE_2D,
++              QSurfaceFormat::ColorSpace srcColorSpace = QSurfaceFormat::DefaultColorSpace,
++              QSurfaceFormat::ColorSpace dstColorSpace = QSurfaceFormat::DefaultColorSpace);
++
++    void rebind(GLenum target = GL_TEXTURE_2D,
++                QSurfaceFormat::ColorSpace srcColorSpace = QSurfaceFormat::DefaultColorSpace,
++                QSurfaceFormat::ColorSpace dstColorSpace = QSurfaceFormat::DefaultColorSpace);
++
+     void release();
+ 
+     void setRedBlueSwizzle(bool swizzle);
+diff --git a/src/gui/painting/qplatformbackingstore.cpp b/src/gui/painting/qplatformbackingstore.cpp
+index 3081a4b1b6..a9b7bd39a2 100644
+--- a/src/gui/painting/qplatformbackingstore.cpp
++++ b/src/gui/painting/qplatformbackingstore.cpp
+@@ -300,6 +300,8 @@ static void blitTextureForWidget(const QPlatformTextureList *textures, int idx,
+     if (srgb && canUseSrgb)
+         funcs->glEnable(GL_FRAMEBUFFER_SRGB);
+ 
++    // TODO: fetch real color space from the widget!!!
++    blitter->rebind(GL_TEXTURE_2D, QSurfaceFormat::DefaultColorSpace, window->format().colorSpace());
+     blitter->blit(textures->textureId(idx), target, source);
+ 
+     if (srgb && canUseSrgb)
+@@ -432,6 +434,11 @@ void QPlatformBackingStore::composeAndFlush(QWindow *window, const QRegion &regi
+         funcs->glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+ 
+     if (textureId) {
++        // GUI texture is always in sRGB color space
++        d_ptr->blitter->rebind(GL_TEXTURE_2D,
++                               QSurfaceFormat::sRGBColorSpace,
++                               window->format().colorSpace());
++
+         if (d_ptr->needsSwizzle)
+             d_ptr->blitter->setRedBlueSwizzle(true);
+         // The backingstore is for the entire tlw.
+-- 
+2.20.1.windows.1
+
+
+From d6c4a34a4a12704e9130ffdc1356dd3f4ef5bc37 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Thu, 22 Nov 2018 16:03:28 +0300
+Subject: [PATCH 08/20] Fix compilation
+
+---
+ src/gui/opengl/qopengltextureblitter.cpp | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/gui/opengl/qopengltextureblitter.cpp b/src/gui/opengl/qopengltextureblitter.cpp
+index 819c1855b2..69f9708469 100644
+--- a/src/gui/opengl/qopengltextureblitter.cpp
++++ b/src/gui/opengl/qopengltextureblitter.cpp
+@@ -349,8 +349,9 @@ static inline QOpenGLTextureBlitterPrivate::ProgramIndex targetToProgramIndex(GL
+ {
+     switch (target) {
+     case GL_TEXTURE_2D: {
+-        QOpenGLTextureBlitterPrivate::ProgramIndex index(
+-                 int(QOpenGLTextureBlitterPrivate::TEXTURE_2D) + colorSpaceConversion);
++        QOpenGLTextureBlitterPrivate::ProgramIndex index =
++            QOpenGLTextureBlitterPrivate::ProgramIndex(
++                int(QOpenGLTextureBlitterPrivate::TEXTURE_2D) + colorSpaceConversion);
+         return index;
+     }
+     case GL_TEXTURE_EXTERNAL_OES:
+-- 
+2.20.1.windows.1
+
+
+From b484b5e627042396a1ba652b5df09e22e362f421 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Wed, 28 Nov 2018 23:17:05 +0300
+Subject: [PATCH 09/20] Implement QOpenGLWidget::setTextureColorSpace()
+
+This special method notifies the composing system if it should
+apply any color conversion when merging this widget's texture into
+the root surface of the window.
+---
+ src/gui/opengl/qopengltextureblitter.cpp      | 48 +++++++++++++++++--
+ src/gui/painting/qplatformbackingstore.cpp    | 13 +++--
+ src/gui/painting/qplatformbackingstore.h      |  4 +-
+ .../qopenglcompositorbackingstore.cpp         |  2 +-
+ src/widgets/kernel/qopenglwidget.cpp          | 45 ++++++++++++++++-
+ src/widgets/kernel/qopenglwidget.h            |  3 ++
+ src/widgets/kernel/qwidget_p.h                |  1 +
+ src/widgets/kernel/qwidgetbackingstore.cpp    |  2 +-
+ 8 files changed, 106 insertions(+), 12 deletions(-)
+
+diff --git a/src/gui/opengl/qopengltextureblitter.cpp b/src/gui/opengl/qopengltextureblitter.cpp
+index 69f9708469..5d0abb0dd8 100644
+--- a/src/gui/opengl/qopengltextureblitter.cpp
++++ b/src/gui/opengl/qopengltextureblitter.cpp
+@@ -135,7 +135,20 @@ static const char fragment_shader[] =
+     "uniform sampler2D textureSampler;\n"
+     "uniform bool swizzle;\n"
+     "uniform highp float opacity;\n"
+-    "#if defined SRGB_TO_SCRGB || defined SRGB_TO_BT2020PQ\n"
++    "#if defined SCRGB_TO_SRGB\n"
++    "highp vec4 linearToSRGB(highp vec4 value)\n"
++    "{\n"
++    "   bvec4 cutoff = lessThan(value, vec4(0.0031308));\n"
++    "   const highp vec2 a1 = vec2(0.055, 0.0);\n"
++    "   const highp vec2 c2 = vec2(1.055, 1.0);\n"
++    "   const highp vec2 m3 = vec2(2.4, 1.0);\n"
++    "   const highp vec2 c4 = vec2(12.92, 1.0);\n"
++    "   highp vec4 higher = c2.xxxy * pow(value, 1.0 / m3.xxxy) - a1.xxxy;\n"
++    "   highp vec4 lower = value * c4.xxxy;\n"
++    "   return mix(higher, lower, vec4(cutoff));\n"
++    "}\n"
++    "#endif\n"
++    "#if defined SRGB_TO_SCRGB || defined SRGB_TO_BT2020PQ || defined SCRGB_TO_BT2020PQ\n"
+     "highp vec4 sRgbToLinear(highp vec4 sRGB)\n"
+     "{\n"
+     "   bvec4 cutoff = lessThan(sRGB, vec4(0.04045));\n"
+@@ -148,7 +161,7 @@ static const char fragment_shader[] =
+     "   return mix(higher, lower, vec4(cutoff));\n"
+     "}\n"
+     "#endif\n"
+-    "#if defined SRGB_TO_BT2020PQ\n"
++    "#if defined SRGB_TO_BT2020PQ || defined SCRGB_TO_BT2020PQ\n"
+     "highp vec4 applySmpte2084Curve(highp vec4 L)\n"
+     "{"
+     "   const highp vec2 m1 = vec2(2610.0 / 4096.0 / 4.0, 1.0);\n"
+@@ -161,10 +174,10 @@ static const char fragment_shader[] =
+     "   highp vec4 res = pow((a1.xxxy + c2.xxxy * Lp) / (a4.xxxy + c3.xxxy * Lp), m2.xxxy);\n"
+     "   return res;"
+     "}\n"
+-    ""
+-    "highp vec4 sRgbToBt2020pq(highp vec4 value)\n"
++    "#endif\n"
++    "#if defined SRGB_TO_BT2020PQ || defined SCRGB_TO_BT2020PQ\n"
++    "highp vec4 scRgbToBt2020pq(highp vec4 value)\n"
+     "{\n"
+-    "   value = sRgbToLinear(value);"
+     "   const highp mat4 convMat = "
+     "      mat4(0.627402, 0.069095, 0.016394, 0.0,"
+     "           0.329292, 0.919544, 0.088028, 0.0,"
+@@ -175,6 +188,13 @@ static const char fragment_shader[] =
+     "   return applySmpte2084Curve(0.008 * value);"
+     "}\n"
+     "#endif\n"
++    "#if defined SRGB_TO_BT2020PQ\n"
++    "highp vec4 sRgbToBt2020pq(highp vec4 value)\n"
++    "{\n"
++    "   value = sRgbToLinear(value);"
++    "   return scRgbToBt2020pq(value);"
++    "}\n"
++    "#endif\n"
+     "\n"
+     "void main() {"
+     "   highp vec4 tmpFragColor = texture2D(textureSampler,uv);"
+@@ -183,6 +203,10 @@ static const char fragment_shader[] =
+     "   tmpFragColor = sRgbToLinear(tmpFragColor);\n"
+     "#elif defined SRGB_TO_BT2020PQ\n"
+     "   tmpFragColor = sRgbToBt2020pq(tmpFragColor);\n"
++    "#elif defined SCRGB_TO_BT2020PQ\n"
++    "   tmpFragColor = scRgbToBt2020pq(tmpFragColor);\n"
++    "#elif defined SCRGB_TO_SRGB\n"
++    "   tmpFragColor = linearToSRGB(tmpFragColor);\n"
+     "#endif\n"
+     "   gl_FragColor = swizzle ? tmpFragColor.bgra : tmpFragColor;"
+     "}";
+@@ -262,7 +286,9 @@ public:
+     enum ProgramIndex {
+         TEXTURE_2D = 0,
+         TEXTURE_2D_SRGB_TO_SCRGB,
++        TEXTURE_2D_SCRGB_TO_SRGB,
+         TEXTURE_2D_SRGB_TO_BT2020PQ,
++        TEXTURE_2D_SCRGB_TO_BT2020PQ,
+         TEXTURE_EXTERNAL_OES,
+ 
+         PROGRAM_COUNT
+@@ -277,7 +303,9 @@ public:
+     {
+         supportedColorSpaceConversions << ColorSpaceConversion(QSurfaceFormat::DefaultColorSpace, QSurfaceFormat::DefaultColorSpace);
+         supportedColorSpaceConversions << ColorSpaceConversion(QSurfaceFormat::sRGBColorSpace, QSurfaceFormat::scRGBColorSpace);
++        supportedColorSpaceConversions << ColorSpaceConversion(QSurfaceFormat::scRGBColorSpace, QSurfaceFormat::sRGBColorSpace);
+         supportedColorSpaceConversions << ColorSpaceConversion(QSurfaceFormat::sRGBColorSpace, QSurfaceFormat::bt2020PQColorSpace);
++        supportedColorSpaceConversions << ColorSpaceConversion(QSurfaceFormat::scRGBColorSpace, QSurfaceFormat::bt2020PQColorSpace);
+     }
+ 
+     bool buildProgram(ProgramIndex idx, const char *vs, const char *fs);
+@@ -518,11 +546,21 @@ bool QOpenGLTextureBlitter::create()
+             if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_2D_SRGB_TO_SCRGB, vertex_shader, shader.toLatin1().constData()))
+                 return false;
+         }
++        {
++            const QString shader = QString("#define SCRGB_TO_SRGB\n %1").arg(fragment_shader);
++            if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_2D_SCRGB_TO_SRGB, vertex_shader, shader.toLatin1().constData()))
++                return false;
++        }
+         {
+             const QString shader = QString("#define SRGB_TO_BT2020PQ\n %1").arg(fragment_shader);
+             if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_2D_SRGB_TO_BT2020PQ, vertex_shader, shader.toLatin1().constData()))
+                 return false;
+         }
++        {
++            const QString shader = QString("#define SCRGB_TO_BT2020PQ\n %1").arg(fragment_shader);
++            if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_2D_SCRGB_TO_BT2020PQ, vertex_shader, shader.toLatin1().constData()))
++                return false;
++        }
+         if (supportsExternalOESTarget())
+             if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_EXTERNAL_OES, vertex_shader, fragment_shader_external_oes))
+                 return false;
+diff --git a/src/gui/painting/qplatformbackingstore.cpp b/src/gui/painting/qplatformbackingstore.cpp
+index a9b7bd39a2..4be3950f9a 100644
+--- a/src/gui/painting/qplatformbackingstore.cpp
++++ b/src/gui/painting/qplatformbackingstore.cpp
+@@ -132,6 +132,7 @@ struct QBackingstoreTextureInfo
+     QRect rect;
+     QRect clipRect;
+     QPlatformTextureList::Flags flags;
++    QSurfaceFormat::ColorSpace colorSpace;
+ };
+ 
+ Q_DECLARE_TYPEINFO(QBackingstoreTextureInfo, Q_MOVABLE_TYPE);
+@@ -181,6 +182,12 @@ QPlatformTextureList::Flags QPlatformTextureList::flags(int index) const
+     return d->textures.at(index).flags;
+ }
+ 
++QSurfaceFormat::ColorSpace QPlatformTextureList::colorSpace(int index) const
++{
++    Q_D(const QPlatformTextureList);
++    return d->textures.at(index).colorSpace;
++}
++
+ QRect QPlatformTextureList::geometry(int index) const
+ {
+     Q_D(const QPlatformTextureList);
+@@ -209,7 +216,7 @@ bool QPlatformTextureList::isLocked() const
+ }
+ 
+ void QPlatformTextureList::appendTexture(void *source, GLuint textureId, const QRect &geometry,
+-                                         const QRect &clipRect, Flags flags)
++                                         const QRect &clipRect, Flags flags, QSurfaceFormat::ColorSpace colorSpace)
+ {
+     Q_D(QPlatformTextureList);
+     QBackingstoreTextureInfo bi;
+@@ -218,6 +225,7 @@ void QPlatformTextureList::appendTexture(void *source, GLuint textureId, const Q
+     bi.rect = geometry;
+     bi.clipRect = clipRect;
+     bi.flags = flags;
++    bi.colorSpace = colorSpace;
+     d->textures.append(bi);
+ }
+ 
+@@ -300,8 +308,7 @@ static void blitTextureForWidget(const QPlatformTextureList *textures, int idx,
+     if (srgb && canUseSrgb)
+         funcs->glEnable(GL_FRAMEBUFFER_SRGB);
+ 
+-    // TODO: fetch real color space from the widget!!!
+-    blitter->rebind(GL_TEXTURE_2D, QSurfaceFormat::DefaultColorSpace, window->format().colorSpace());
++    blitter->rebind(GL_TEXTURE_2D, textures->colorSpace(idx), window->format().colorSpace());
+     blitter->blit(textures->textureId(idx), target, source);
+ 
+     if (srgb && canUseSrgb)
+diff --git a/src/gui/painting/qplatformbackingstore.h b/src/gui/painting/qplatformbackingstore.h
+index de5ba964dc..f8887bd4cd 100644
+--- a/src/gui/painting/qplatformbackingstore.h
++++ b/src/gui/painting/qplatformbackingstore.h
+@@ -95,11 +95,13 @@ public:
+     QRect clipRect(int index) const;
+     void *source(int index);
+     Flags flags(int index) const;
++    QSurfaceFormat::ColorSpace colorSpace(int index) const;
+     void lock(bool on);
+     bool isLocked() const;
+ 
+     void appendTexture(void *source, GLuint textureId, const QRect &geometry,
+-                       const QRect &clipRect = QRect(), Flags flags = 0);
++                       const QRect &clipRect = QRect(), Flags flags = 0,
++                       QSurfaceFormat::ColorSpace colorSpace = QSurfaceFormat::DefaultColorSpace);
+     void clear();
+ 
+  Q_SIGNALS:
+diff --git a/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp b/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp
+index 40400e2a19..5d44e62455 100644
+--- a/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp
++++ b/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp
+@@ -230,7 +230,7 @@ void QOpenGLCompositorBackingStore::composeAndFlush(QWindow *window, const QRegi
+     m_textures->clear();
+     for (int i = 0; i < textures->count(); ++i)
+         m_textures->appendTexture(textures->source(i), textures->textureId(i), textures->geometry(i),
+-                                  textures->clipRect(i), textures->flags(i));
++                                  textures->clipRect(i), textures->flags(i), textures->colorSpace(i));
+ 
+     updateTexture();
+     m_textures->appendTexture(nullptr, m_bsTexture, window->geometry());
+diff --git a/src/widgets/kernel/qopenglwidget.cpp b/src/widgets/kernel/qopenglwidget.cpp
+index 89f860150f..0abf707e01 100644
+--- a/src/widgets/kernel/qopenglwidget.cpp
++++ b/src/widgets/kernel/qopenglwidget.cpp
+@@ -568,7 +568,8 @@ public:
+           updateBehavior(QOpenGLWidget::NoPartialUpdate),
+           requestedSamples(0),
+           inPaintGL(false),
+-          textureFormat(0)
++          textureFormat(0),
++          textureColorSpace(QSurfaceFormat::DefaultColorSpace)
+     {
+         requestedFormat = QSurfaceFormat::defaultFormat();
+     }
+@@ -578,6 +579,7 @@ public:
+ 
+     GLuint textureId() const override;
+     QPlatformTextureList::Flags textureListFlags() override;
++    QSurfaceFormat::ColorSpace colorSpace() const override;
+ 
+     void initialize();
+     void invokeUserPaint();
+@@ -609,6 +611,7 @@ public:
+     int requestedSamples;
+     bool inPaintGL;
+     GLenum textureFormat;
++    QSurfaceFormat::ColorSpace textureColorSpace;
+ };
+ 
+ void QOpenGLWidgetPaintDevicePrivate::beginPaint()
+@@ -695,6 +698,11 @@ QPlatformTextureList::Flags QOpenGLWidgetPrivate::textureListFlags()
+     return flags;
+ }
+ 
++QSurfaceFormat::ColorSpace QOpenGLWidgetPrivate::colorSpace() const
++{
++    return textureColorSpace;
++}
++
+ void QOpenGLWidgetPrivate::reset()
+ {
+     Q_Q(QOpenGLWidget);
+@@ -1115,6 +1123,41 @@ void QOpenGLWidget::setTextureFormat(GLenum texFormat)
+     d->textureFormat = texFormat;
+ }
+ 
++/*!
++    \return the declared color space of the internal texture of the widget.
++
++    The texture's color space will be used when composing the widget
++    into the root window surface.
++
++    \note when the color space is set to QSurfaceFormat::DefaultColorSpace,
++    color conversion is effectively disabled.
++
++    \since 5.99
++ */
++QSurfaceFormat::ColorSpace QOpenGLWidget::textureColorSpace() const
++{
++    Q_D(const QOpenGLWidget);
++    return d->textureColorSpace;
++}
++
++/*!
++    Sets a custom color space for the internal texture of the widget
++
++    The color space of the texture will be compared against the color
++    space of the root surface and conversion will be performed if needed.
++
++    \note setting the color space to QSurfaceFormat::DefaultColorSpace will
++    effectively disable color conversion when composing this texture on
++    screen.
++
++    \since 5.99
++ */
++void QOpenGLWidget::setTextureColorSpace(QSurfaceFormat::ColorSpace colorSpace)
++{
++    Q_D(QOpenGLWidget);
++    d->textureColorSpace = colorSpace;
++}
++
+ /*!
+     \return the active internal texture format if the widget has already
+     initialized, the requested format if one was set but the widget has not yet
+diff --git a/src/widgets/kernel/qopenglwidget.h b/src/widgets/kernel/qopenglwidget.h
+index 9eb4a9ba5a..eff2d9796d 100644
+--- a/src/widgets/kernel/qopenglwidget.h
++++ b/src/widgets/kernel/qopenglwidget.h
+@@ -75,6 +75,9 @@ public:
+     GLenum textureFormat() const;
+     void setTextureFormat(GLenum texFormat);
+ 
++    QSurfaceFormat::ColorSpace textureColorSpace() const;
++    void setTextureColorSpace(QSurfaceFormat::ColorSpace colorSpace);
++
+     bool isValid() const;
+ 
+     void makeCurrent();
+diff --git a/src/widgets/kernel/qwidget_p.h b/src/widgets/kernel/qwidget_p.h
+index 6f1ce67c4c..c6f84972c3 100644
+--- a/src/widgets/kernel/qwidget_p.h
++++ b/src/widgets/kernel/qwidget_p.h
+@@ -653,6 +653,7 @@ public:
+             ? QPlatformTextureList::StacksOnTop
+             : QPlatformTextureList::Flags(0);
+     }
++    virtual QSurfaceFormat::ColorSpace colorSpace() const { return QSurfaceFormat::DefaultColorSpace; }
+     virtual QImage grabFramebuffer() { return QImage(); }
+     virtual void beginBackingStorePainting() { }
+     virtual void endBackingStorePainting() { }
+diff --git a/src/widgets/kernel/qwidgetbackingstore.cpp b/src/widgets/kernel/qwidgetbackingstore.cpp
+index a32eb2a03b..db60338034 100644
+--- a/src/widgets/kernel/qwidgetbackingstore.cpp
++++ b/src/widgets/kernel/qwidgetbackingstore.cpp
+@@ -1007,7 +1007,7 @@ static void findTextureWidgetsRecursively(QWidget *tlw, QWidget *widget, QPlatfo
+     if (wd->renderToTexture) {
+         QPlatformTextureList::Flags flags = wd->textureListFlags();
+         const QRect rect(widget->mapTo(tlw, QPoint()), widget->size());
+-        widgetTextures->appendTexture(widget, wd->textureId(), rect, wd->clipRect(), flags);
++        widgetTextures->appendTexture(widget, wd->textureId(), rect, wd->clipRect(), flags, wd->colorSpace());
+     }
+ 
+     for (int i = 0; i < wd->children.size(); ++i) {
+-- 
+2.20.1.windows.1
+
+
+From add34922934b971b33f1da610ddaf5aba36c0348 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Tue, 4 Dec 2018 20:11:34 +0300
+Subject: [PATCH 10/20] Return QScreen's HMONITOR handle via
+ QPlatformNativeInterface
+
+It is needed to be able to fetch extra information about the display via
+DXGI interface.
+---
+ .../windows/qwindowsnativeinterface.cpp          | 16 ++++++++++++++++
+ .../platforms/windows/qwindowsnativeinterface.h  |  1 +
+ src/plugins/platforms/windows/qwindowsscreen.cpp |  5 +++++
+ src/plugins/platforms/windows/qwindowsscreen.h   |  2 ++
+ 4 files changed, 24 insertions(+)
+
+diff --git a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp b/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
+index de11356fd4..0b762206a2 100644
+--- a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
++++ b/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
+@@ -40,6 +40,7 @@
+ #include "qwindowsnativeinterface.h"
+ #include "qwindowsclipboard.h"
+ #include "qwindowswindow.h"
++#include "qwindowsscreen.h"
+ #include "qwindowscontext.h"
+ #include "qwindowscursor.h"
+ #include "qwindowsopenglcontext.h"
+@@ -124,6 +125,21 @@ void *QWindowsNativeInterface::nativeResourceForWindow(const QByteArray &resourc
+     return 0;
+ }
+ 
++void *QWindowsNativeInterface::nativeResourceForScreen(const QByteArray &resource, QScreen *screen)
++{
++    if (!screen || !screen->handle()) {
++        qWarning("%s: '%s' requested for null screen or screen without handle.", __FUNCTION__, resource.constData());
++        return 0;
++    }
++    QWindowsScreen *bs = static_cast<QWindowsScreen *>(screen->handle());
++    int type = resourceType(resource);
++    if (type == HandleType)
++        return bs->handle();
++
++    qWarning("%s: Invalid key '%s' requested.", __FUNCTION__, resource.constData());
++    return 0;
++}
++
+ #ifndef QT_NO_CURSOR
+ void *QWindowsNativeInterface::nativeResourceForCursor(const QByteArray &resource, const QCursor &cursor)
+ {
+diff --git a/src/plugins/platforms/windows/qwindowsnativeinterface.h b/src/plugins/platforms/windows/qwindowsnativeinterface.h
+index d085a4afb3..bd7cad01c1 100644
+--- a/src/plugins/platforms/windows/qwindowsnativeinterface.h
++++ b/src/plugins/platforms/windows/qwindowsnativeinterface.h
+@@ -73,6 +73,7 @@ public:
+     void *nativeResourceForContext(const QByteArray &resource, QOpenGLContext *context) override;
+ #endif
+     void *nativeResourceForWindow(const QByteArray &resource, QWindow *window) override;
++    void *nativeResourceForScreen(const QByteArray &resource, QScreen *screen) override;
+ #ifndef QT_NO_CURSOR
+     void *nativeResourceForCursor(const QByteArray &resource, const QCursor &cursor) override;
+ #endif
+diff --git a/src/plugins/platforms/windows/qwindowsscreen.cpp b/src/plugins/platforms/windows/qwindowsscreen.cpp
+index 2eaf386d42..620828d597 100644
+--- a/src/plugins/platforms/windows/qwindowsscreen.cpp
++++ b/src/plugins/platforms/windows/qwindowsscreen.cpp
+@@ -321,6 +321,11 @@ void QWindowsScreen::handleChanges(const QWindowsScreenData &newData)
+     }
+ }
+ 
++HMONITOR QWindowsScreen::handle() const
++{
++    return m_data.hMonitor;
++}
++
+ QRect QWindowsScreen::virtualGeometry(const QPlatformScreen *screen) // cf QScreen::virtualGeometry()
+ {
+     QRect result;
+diff --git a/src/plugins/platforms/windows/qwindowsscreen.h b/src/plugins/platforms/windows/qwindowsscreen.h
+index 824bcb1ad6..33c9effa2a 100644
+--- a/src/plugins/platforms/windows/qwindowsscreen.h
++++ b/src/plugins/platforms/windows/qwindowsscreen.h
+@@ -104,6 +104,8 @@ public:
+ 
+     inline void handleChanges(const QWindowsScreenData &newData);
+ 
++    HMONITOR handle() const;
++
+ #ifndef QT_NO_CURSOR
+     QPlatformCursor *cursor() const override { return m_cursor.data(); }
+     const CursorPtr &cursorPtr() const { return m_cursor; }
+-- 
+2.20.1.windows.1
+
+
+From 9189775b9060c0399334d2744d31c9d119ab7dd2 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Thu, 6 Dec 2018 16:16:27 +0300
+Subject: [PATCH 11/20] Fix notification of QDockWidget when it gets undocked
+
+Before the patch the notification was emitted only when the docker
+was attached to the panel or changed a position on it.
+---
+ src/widgets/widgets/qdockwidget.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/widgets/widgets/qdockwidget.cpp b/src/widgets/widgets/qdockwidget.cpp
+index 6c871aae2c..19fc2d1677 100644
+--- a/src/widgets/widgets/qdockwidget.cpp
++++ b/src/widgets/widgets/qdockwidget.cpp
+@@ -1171,6 +1171,8 @@ void QDockWidgetPrivate::setWindowState(bool floating, bool unplug, const QRect
+             QMainWindowLayout *mwlayout = qt_mainwindow_layout_from_dock(q);
+             if (mwlayout)
+                 emit q->dockLocationChanged(mwlayout->dockWidgetArea(q));
++        } else {
++            emit q->dockLocationChanged(Qt::NoDockWidgetArea);
+         }
+     }
+ 
+-- 
+2.20.1.windows.1
+
+
+From 5fdb36fef8f866b34f5a0884b0a0e33107ee4a76 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 10 Dec 2018 11:33:00 +0300
+Subject: [PATCH 12/20] Fix D3D shader compiler location when using Qt 5.12 on
+ MinGW 7.3
+
+For some reason this patch was removed in Qt 5.12, which caused a
+regression on MinGW 7.3, which still points to an older version
+of HLSL dll.
+---
+ ...ically-load-D3D-compiler-from-a-list.patch | 62 +++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+ create mode 100644 src/angle/patches/0002-ANGLE-Dynamically-load-D3D-compiler-from-a-list.patch
+
+diff --git a/src/angle/patches/0002-ANGLE-Dynamically-load-D3D-compiler-from-a-list.patch b/src/angle/patches/0002-ANGLE-Dynamically-load-D3D-compiler-from-a-list.patch
+new file mode 100644
+index 0000000000..9503ae1090
+--- /dev/null
++++ b/src/angle/patches/0002-ANGLE-Dynamically-load-D3D-compiler-from-a-list.patch
+@@ -0,0 +1,62 @@
++From 7dd1de8a519324e6ec7dbfede1b446980cb5954f Mon Sep 17 00:00:00 2001
++From: Oliver Wolff <oliver.wolff@theqtcompany.com>
++Date: Tue, 1 Mar 2016 13:28:02 +0100
++Subject: [PATCH 2/7] ANGLE: Dynamically load D3D compiler from a list
++
++If the default compiler cannot be found, load it from a list of DLL names,
++including a non-versioned proxy DLL provided by Qt. On Desktop Windows,
++the default compiler can also be specified by an environment variable,
++QT_D3DCOMPILER_DLL.
++
++Change-Id: Ic6d6e37095b838b8a636b029b72467f156b850cb
++---
++ .../src/libANGLE/renderer/d3d/HLSLCompiler.cpp     | 26 ++++++++++++++++++++++
++ 1 file changed, 26 insertions(+)
++
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/HLSLCompiler.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/HLSLCompiler.cpp
++index e8b1af3..0d298bb 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/HLSLCompiler.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/HLSLCompiler.cpp
++@@ -12,6 +12,10 @@
++ #include "libANGLE/histogram_macros.h"
++ #include "third_party/trace_event/trace_event.h"
++ 
+++#ifndef QT_D3DCOMPILER_DLL
+++#define QT_D3DCOMPILER_DLL D3DCOMPILER_DLL
+++#endif
+++
++ #if ANGLE_APPEND_ASSEMBLY_TO_SHADER_DEBUG_INFO == ANGLE_ENABLED
++ namespace
++ {
++@@ -128,6 +132,28 @@ gl::Error HLSLCompiler::initialize()
++     }
++ #endif  // ANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES
++ 
+++    // Load the compiler DLL specified by the environment, or default to QT_D3DCOMPILER_DLL
+++    const wchar_t *defaultCompiler = _wgetenv(L"QT_D3DCOMPILER_DLL");
+++    if (!defaultCompiler)
+++        defaultCompiler = QT_D3DCOMPILER_DLL;
+++
+++    const wchar_t *compilerDlls[] = {
+++        defaultCompiler,
+++        L"d3dcompiler_47.dll",
+++        L"d3dcompiler_46.dll",
+++        L"d3dcompiler_43.dll",
+++        0
+++    };
+++
+++    // Load the first available known compiler DLL
+++    for (int i = 0; compilerDlls[i]; ++i)
+++    {
+++        mD3DCompilerModule = LoadLibrary(compilerDlls[i]);
+++        if (mD3DCompilerModule)
+++            break;
+++    }
+++
+++
++     if (!mD3DCompilerModule)
++     {
++         // Load the version of the D3DCompiler DLL associated with the Direct3D version ANGLE was built with.
++-- 
++2.7.0.windows.1
++
+-- 
+2.20.1.windows.1
+
+
+From 6224b96ddc2fd90dc41ee683d5f97475b0e25824 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 10 Dec 2018 11:33:09 +0300
+Subject: [PATCH 13/20] Fix misprint
+
+---
+ src/angle/patches/0001-Fix-build-for-MinGW.patch | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/src/angle/patches/0001-Fix-build-for-MinGW.patch b/src/angle/patches/0001-Fix-build-for-MinGW.patch
+index 186acd39dc..26098c528a 100644
+--- a/src/angle/patches/0001-Fix-build-for-MinGW.patch
++++ b/src/angle/patches/0001-Fix-build-for-MinGW.patch
+@@ -8,7 +8,7 @@ SSE is not properly supported for Mingw yet.
+  src/common/platform.h | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+-diff --git a/src/3rdparty/angle/src/common/platform.h b/src/3rdparty/angle/srccommon/platform.h
++diff --git a/src/3rdparty/angle/src/common/platform.h b/src/3rdparty/angle/src/common/platform.h
+ index 0065fd2..47cd57b 100644
+ --- a/src/3rdparty/angle/src/common/platform.h
+ +++ b/src/3rdparty/angle/src/common/platform.h
+@@ -21,6 +21,5 @@ index 0065fd2..47cd57b 100644
+  #include <x86intrin.h>
+  #define ANGLE_USE_SSE
+  #endif
+--- 
++--
+ 2.10.2.windows.1
+-
+-- 
+2.20.1.windows.1
+
+
+From 88950ea2006ad815e6f50f24862438d283f689e8 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 14 Jan 2019 12:32:34 +0300
+Subject: [PATCH 14/20] Fix rendering of Qt widgets on Rec 2020 PQ surface
+
+The channels should be swizzled into RGBA *before* applying the
+color space conversion matrix. Otherwise the colors will be skewed,
+because the conversion function for R and B channels is not the same.
+---
+ src/gui/opengl/qopengltextureblitter.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/gui/opengl/qopengltextureblitter.cpp b/src/gui/opengl/qopengltextureblitter.cpp
+index 5d0abb0dd8..5f6dbff292 100644
+--- a/src/gui/opengl/qopengltextureblitter.cpp
++++ b/src/gui/opengl/qopengltextureblitter.cpp
+@@ -199,6 +199,7 @@ static const char fragment_shader[] =
+     "void main() {"
+     "   highp vec4 tmpFragColor = texture2D(textureSampler,uv);"
+     "   tmpFragColor.a *= opacity;\n"
++    "   tmpFragColor = swizzle ? tmpFragColor.bgra : tmpFragColor;\n"
+     "#if defined SRGB_TO_SCRGB\n"
+     "   tmpFragColor = sRgbToLinear(tmpFragColor);\n"
+     "#elif defined SRGB_TO_BT2020PQ\n"
+@@ -208,7 +209,7 @@ static const char fragment_shader[] =
+     "#elif defined SCRGB_TO_SRGB\n"
+     "   tmpFragColor = linearToSRGB(tmpFragColor);\n"
+     "#endif\n"
+-    "   gl_FragColor = swizzle ? tmpFragColor.bgra : tmpFragColor;"
++    "   gl_FragColor = tmpFragColor;"
+     "}";
+ 
+ static const char fragment_shader_external_oes[] =
+-- 
+2.20.1.windows.1
+
+
+From 68a113ed266f344a898933c2c4a3686afc6609de Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Wed, 23 Jan 2019 23:58:40 +0300
+Subject: [PATCH 15/20] Implement API for requesting if current EGL
+ implementation supports color spaces
+
+QOpenGLContext::isSurfaceColorSpaceSupported() returns if the color
+space is supported.
+
+TODO: implement this feature for other implementation, which are not EGL.
+---
+ src/3rdparty/angle/src/common/platform.h      |  7 +--
+ .../renderer/d3d/d3d11/Renderer11.cpp         | 10 ++--
+ .../renderer/d3d/d3d11/SwapChain11.cpp        |  7 ++-
+ src/gui/kernel/qopenglcontext.cpp             | 16 +++++
+ src/gui/kernel/qopenglcontext.h               |  1 +
+ src/gui/kernel/qplatformopenglcontext.cpp     | 12 ++++
+ src/gui/kernel/qplatformopenglcontext.h       |  2 +
+ .../platforms/windows/qwindowseglcontext.cpp  | 58 ++++++++++++++++---
+ .../platforms/windows/qwindowseglcontext.h    | 10 ++++
+ 9 files changed, 100 insertions(+), 23 deletions(-)
+
+diff --git a/src/3rdparty/angle/src/common/platform.h b/src/3rdparty/angle/src/common/platform.h
+index 89359f954e..265f49f875 100644
+--- a/src/3rdparty/angle/src/common/platform.h
++++ b/src/3rdparty/angle/src/common/platform.h
+@@ -65,15 +65,10 @@
+ #      if defined(__MINGW32__) && !defined(__d3d11sdklayers_h__)
+ #          define ANGLE_MINGW32_COMPAT
+ #      endif
+-//#      if defined(_MSC_VER) && _MSC_VER >= 1800
+-#          define ANGLE_ENABLE_D3D11_1
+-//#      endif
+-#      if defined(ANGLE_ENABLE_D3D11_1)
+ #       include <d3d11_1.h>
+ #       include <d3d11_3.h>
+ #       include <dxgi1_2.h>
+-#       include <dxgi1_4.h> // TODO: This is actually D3D12!!!
+-#      endif
++#       include <dxgi1_4.h> // WARNING: This is actually D3D12!
+ #       include <d3dcompiler.h>
+ #   endif
+ 
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+index ac46690090..f0e497b52f 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+@@ -1001,7 +1001,6 @@ void Renderer11::populateRenderer11DeviceCaps()
+                              &mRenderer11DeviceCaps.B5G5R5A1support,
+                              &mRenderer11DeviceCaps.B5G5R5A1maxSamples);
+ 
+-//#if defined(ANGLE_ENABLE_D3D11_1)
+     IDXGIAdapter2 *dxgiAdapter2 = d3d11::DynamicCastComObject<IDXGIAdapter2>(mDxgiAdapter);
+     mRenderer11DeviceCaps.supportsDXGI1_2 = (dxgiAdapter2 != nullptr);
+     SafeRelease(dxgiAdapter2);
+@@ -1009,7 +1008,6 @@ void Renderer11::populateRenderer11DeviceCaps()
+     IDXGIAdapter3 *dxgiAdapter3 = d3d11::DynamicCastComObject<IDXGIAdapter3>(mDxgiAdapter);
+     mRenderer11DeviceCaps.supportsDXGI1_4 = (dxgiAdapter3 != nullptr);
+     SafeRelease(dxgiAdapter3);
+-//#endif
+ }
+ 
+ gl::SupportedSampleSet Renderer11::generateSampleSetForEGLConfig(
+@@ -1250,10 +1248,10 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
+     // All D3D feature levels support robust resource init
+     outExtensions->robustResourceInitialization = true;
+ 
+-    // color space selection is always supported in DirectX11
+-    outExtensions->colorspaceSRGB = true;
+-    outExtensions->colorspaceSCRGBLinear = true;
+-    outExtensions->colorspaceBt2020PQ = true;
++    // color space selection supported in DXGI 1.4 only
++    outExtensions->colorspaceSRGB = mRenderer11DeviceCaps.supportsDXGI1_4;
++    outExtensions->colorspaceSCRGBLinear = mRenderer11DeviceCaps.supportsDXGI1_4;
++    outExtensions->colorspaceBt2020PQ = mRenderer11DeviceCaps.supportsDXGI1_4;
+ }
+ 
+ gl::Error Renderer11::flush()
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+index 8f72c5c9aa..fc967b90d0 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+@@ -18,7 +18,10 @@
+ #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
+ #include "third_party/trace_event/trace_event.h"
+ 
+-#include <Dxgi1_5.h>
++#if 0
++// used only for HDR metadata configuration options
++#include <dxgi1_5.h>
++#endif
+ 
+ // Precompiled shaders
+ #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough2d11vs.h"
+@@ -626,7 +629,6 @@ EGLint SwapChain11::reset(const gl::Context *context,
+ 
+         if (mRenderer->getRenderer11DeviceCaps().supportsDXGI1_4)
+         {
+-#if defined(ANGLE_ENABLE_D3D11_1)
+             IDXGISwapChain3 *swapChain3 = d3d11::DynamicCastComObject<IDXGISwapChain3>(mSwapChain);
+ 
+             printf("*** EGL colorSpace: 0x%X\n", mColorSpace);
+@@ -686,7 +688,6 @@ EGLint SwapChain11::reset(const gl::Context *context,
+             result = swapChain4->SetHDRMetaData(DXGI_HDR_METADATA_TYPE_HDR10, sizeof(md), &md);
+             printf("*** Result hdr 0x%X\n", result);
+             SafeRelease(swapChain4);
+-#endif
+ #endif
+         }
+ 
+diff --git a/src/gui/kernel/qopenglcontext.cpp b/src/gui/kernel/qopenglcontext.cpp
+index c5d5490ea0..9f1e7e3768 100644
+--- a/src/gui/kernel/qopenglcontext.cpp
++++ b/src/gui/kernel/qopenglcontext.cpp
+@@ -1311,6 +1311,22 @@ bool QOpenGLContext::isOpenGLES() const
+     return format().renderableType() == QSurfaceFormat::OpenGLES;
+ }
+ 
++/*!
++  Returns \c true if the platform supports creation of surfaces with a color space
++  tag. Such surfaces will be converted by the display color space automatically by
++  the platform.
++
++  The value is controlled by the platform plugin in use and may also depend on the
++  graphics drivers.
++
++  \since 5.XX
++ */
++bool QOpenGLContext::isSurfaceColorSpaceSupported(QSurfaceFormat::ColorSpace colorSpace) const
++{
++    Q_D(const QOpenGLContext);
++    return d->platformGLContext->isSurfaceColorSpaceSupported(colorSpace);
++}
++
+ /*!
+   Returns \c true if the platform supports OpenGL rendering outside the main (gui)
+   thread.
+diff --git a/src/gui/kernel/qopenglcontext.h b/src/gui/kernel/qopenglcontext.h
+index 9cfaa52f17..1256ab8b5a 100644
+--- a/src/gui/kernel/qopenglcontext.h
++++ b/src/gui/kernel/qopenglcontext.h
+@@ -210,6 +210,7 @@ public:
+     static OpenGLModuleType openGLModuleType();
+ 
+     bool isOpenGLES() const;
++    bool isSurfaceColorSpaceSupported(QSurfaceFormat::ColorSpace colorSpace) const;
+ 
+     static bool supportsThreadedOpenGL();
+     static QOpenGLContext *globalShareContext();
+diff --git a/src/gui/kernel/qplatformopenglcontext.cpp b/src/gui/kernel/qplatformopenglcontext.cpp
+index 07b5a0dda6..72fb818df1 100644
+--- a/src/gui/kernel/qplatformopenglcontext.cpp
++++ b/src/gui/kernel/qplatformopenglcontext.cpp
+@@ -165,4 +165,16 @@ bool QPlatformOpenGLContext::parseOpenGLVersion(const QByteArray &versionString,
+     return (majorOk && minorOk);
+ }
+ 
++/*!
++    Reimplement in subclass if your platform supports setting a color space for the
++    surface.
++
++    The default implementation returns false.
++*/
++bool QPlatformOpenGLContext::isSurfaceColorSpaceSupported(QSurfaceFormat::ColorSpace colorSpace)
++{
++    Q_UNUSED(colorSpace);
++    return false;
++}
++
+ QT_END_NAMESPACE
+diff --git a/src/gui/kernel/qplatformopenglcontext.h b/src/gui/kernel/qplatformopenglcontext.h
+index f307cc14f9..52e744ab29 100644
+--- a/src/gui/kernel/qplatformopenglcontext.h
++++ b/src/gui/kernel/qplatformopenglcontext.h
+@@ -90,6 +90,8 @@ public:
+ 
+     static bool parseOpenGLVersion(const QByteArray &versionString, int &major, int &minor);
+ 
++    virtual bool isSurfaceColorSpaceSupported(QSurfaceFormat::ColorSpace colorSpace);
++
+ private:
+     friend class QOpenGLContext;
+ 
+diff --git a/src/plugins/platforms/windows/qwindowseglcontext.cpp b/src/plugins/platforms/windows/qwindowseglcontext.cpp
+index 18a55c9e1f..7ca8917e34 100644
+--- a/src/plugins/platforms/windows/qwindowseglcontext.cpp
++++ b/src/plugins/platforms/windows/qwindowseglcontext.cpp
+@@ -151,8 +151,9 @@ bool QWindowsLibEGL::init()
+     eglGetCurrentDisplay = RESOLVE((EGLDisplay (EGLAPIENTRY *)(void)), eglGetCurrentDisplay);
+     eglSwapBuffers = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay , EGLSurface)), eglSwapBuffers);
+     eglGetProcAddress = RESOLVE((QFunctionPointer (EGLAPIENTRY * )(const char *)), eglGetProcAddress);
++    eglQueryString = RESOLVE((const char* (EGLAPIENTRY *)(EGLDisplay, EGLint)), eglQueryString);
+ 
+-    if (!eglGetError || !eglGetDisplay || !eglInitialize || !eglGetProcAddress)
++    if (!eglGetError || !eglGetDisplay || !eglInitialize || !eglGetProcAddress || !eglQueryString)
+         return false;
+ 
+     eglGetPlatformDisplayEXT = 0;
+@@ -197,8 +198,15 @@ bool QWindowsLibGLESv2::init()
+ }
+ 
+ QWindowsEGLStaticContext::QWindowsEGLStaticContext(EGLDisplay display)
+-    : m_display(display)
++    : m_display(display),
++      m_hasSRGBColorSpaceSupport(false),
++      m_hasSCRGBColorSpaceSupport(false),
++      m_hasBt2020PQColorSpaceSupport(false)
+ {
++    const char *eglExtensions = libEGL.eglQueryString(display, EGL_EXTENSIONS);
++    m_hasSRGBColorSpaceSupport = strstr(eglExtensions, "EGL_KHR_gl_colorspace") != nullptr;
++    m_hasSCRGBColorSpaceSupport = strstr(eglExtensions, "EGL_EXT_gl_colorspace_scrgb_linear") != nullptr;
++    m_hasBt2020PQColorSpaceSupport = strstr(eglExtensions, "EGL_EXT_gl_colorspace_bt2020_pq") != nullptr;
+ }
+ 
+ bool QWindowsEGLStaticContext::initializeAngle(QWindowsOpenGLTester::Renderers preferredType, HDC dc,
+@@ -303,30 +311,42 @@ void *QWindowsEGLStaticContext::createWindowSurface(void *nativeWindow, void *na
+     *err = 0;
+ 
+     EGLint eglColorSpace = EGL_GL_COLORSPACE_LINEAR_KHR;
++    bool colorSpaceSupported = false;
+ 
+     switch (colorSpace) {
+     case QSurfaceFormat::DefaultColorSpace:
++        colorSpaceSupported = m_hasSRGBColorSpaceSupport;
+         break;
+     case QSurfaceFormat::sRGBColorSpace:
+         eglColorSpace = EGL_GL_COLORSPACE_SRGB_KHR;
++        colorSpaceSupported = m_hasSRGBColorSpaceSupport;
+         break;
+     case QSurfaceFormat::scRGBColorSpace:
+         eglColorSpace = EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT;
++        colorSpaceSupported = m_hasSCRGBColorSpaceSupport;
+         break;
+     case QSurfaceFormat::bt2020PQColorSpace:
+         eglColorSpace = EGL_GL_COLORSPACE_BT2020_PQ_EXT;
++        colorSpaceSupported = m_hasBt2020PQColorSpaceSupport;
+         break;
+     }
+ 
+-    // TODO: check if the attribute is actually suportef by the implementation
+-    const EGLint attributes[] = {
+-        EGL_GL_COLORSPACE, eglColorSpace,
+-        EGL_NONE
+-    };
++    QVector<EGLint> attributes;
++
++    if (colorSpaceSupported) {
++        attributes << EGL_GL_COLORSPACE << eglColorSpace;
++    }
++
++    attributes << EGL_NONE;
++
++    if (!colorSpaceSupported && colorSpace != QSurfaceFormat::DefaultColorSpace) {
++        qWarning().nospace() << __FUNCTION__ << ": Requested color space is not supported by EGL implementation: " << colorSpace << " (egl: 0x" << hex << eglColorSpace << ")";
++    }
++
+ 
+     EGLSurface surface = libEGL.eglCreateWindowSurface(m_display, nativeConfig,
+                                                        static_cast<EGLNativeWindowType>(nativeWindow),
+-                                                       attributes);
++                                                       attributes.constData());
+     if (surface == EGL_NO_SURFACE) {
+         *err = libEGL.eglGetError();
+         qWarning("%s: Could not create the EGL window surface: 0x%x", __FUNCTION__, *err);
+@@ -764,6 +784,28 @@ QFunctionPointer QWindowsEGLContext::getProcAddress(const char *procName)
+     return procAddress;
+ }
+ 
++bool QWindowsEGLContext::isSurfaceColorSpaceSupported(QSurfaceFormat::ColorSpace colorSpace)
++{
++    bool supported = false;
++
++    switch (colorSpace) {
++    case QSurfaceFormat::DefaultColorSpace:
++        supported = true;
++        break;
++    case QSurfaceFormat::sRGBColorSpace:
++        supported = m_staticContext->hasSRGBColorSpaceSupport();
++        break;
++    case QSurfaceFormat::scRGBColorSpace:
++        supported = m_staticContext->hasSCRGBColorSpaceSupport();
++        break;
++    case QSurfaceFormat::bt2020PQColorSpace:
++        supported = m_staticContext->hasBt2020PQColorSpaceSupport();
++        break;
++    }
++
++    return supported;
++}
++
+ static QVector<EGLint> createConfigAttributesFromFormat(const QSurfaceFormat &format)
+ {
+     int redSize     = format.redBufferSize();
+diff --git a/src/plugins/platforms/windows/qwindowseglcontext.h b/src/plugins/platforms/windows/qwindowseglcontext.h
+index 4f0c2c88ef..cf088e7c15 100644
+--- a/src/plugins/platforms/windows/qwindowseglcontext.h
++++ b/src/plugins/platforms/windows/qwindowseglcontext.h
+@@ -80,6 +80,7 @@ struct QWindowsLibEGL
+     QFunctionPointer (EGLAPIENTRY *eglGetProcAddress)(const char *procname);
+ 
+     EGLDisplay (EGLAPIENTRY * eglGetPlatformDisplayEXT)(EGLenum platform, void *native_display, const EGLint *attrib_list);
++    const char* (EGLAPIENTRY * eglQueryString)(EGLDisplay dpy, EGLint name);
+ 
+ private:
+ #if !defined(QT_STATIC) || defined(QT_OPENGL_DYNAMIC)
+@@ -129,12 +130,19 @@ public:
+     static QWindowsLibEGL libEGL;
+     static QWindowsLibGLESv2 libGLESv2;
+ 
++    bool hasSRGBColorSpaceSupport() { return m_hasSRGBColorSpaceSupport; }
++    bool hasSCRGBColorSpaceSupport() { return m_hasSCRGBColorSpaceSupport; }
++    bool hasBt2020PQColorSpaceSupport() { return m_hasBt2020PQColorSpaceSupport; }
++
+ private:
+     explicit QWindowsEGLStaticContext(EGLDisplay display);
+     static bool initializeAngle(QWindowsOpenGLTester::Renderers preferredType, HDC dc,
+                                 EGLDisplay *display, EGLint *major, EGLint *minor);
+ 
+     const EGLDisplay m_display;
++    bool m_hasSRGBColorSpaceSupport;
++    bool m_hasSCRGBColorSpaceSupport;
++    bool m_hasBt2020PQColorSpaceSupport;
+ };
+ 
+ class QWindowsEGLContext : public QWindowsOpenGLContext
+@@ -158,6 +166,8 @@ public:
+     void *nativeDisplay() const override { return m_eglDisplay; }
+     void *nativeConfig() const override { return m_eglConfig; }
+ 
++    bool isSurfaceColorSpaceSupported(QSurfaceFormat::ColorSpace colorSpace) override;
++
+ private:
+     EGLConfig chooseConfig(const QSurfaceFormat &format);
+ 
+-- 
+2.20.1.windows.1
+
+
+From 1d69e29db52ed5039feedf2fea51af9f37d42eb3 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 28 Jan 2019 12:55:35 +0300
+Subject: [PATCH 16/20] Fix Angle to work correctly on Windows 7
+
+"Flip" modes are not available on older versions of DirectX,
+so it is not safe to request it as a fallback case.
+---
+ .../renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
+index c81b33fee9..794ab971ab 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
+@@ -146,6 +146,9 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
+ 
+     // Use IDXGIFactory2::CreateSwapChainForHwnd if DXGI 1.2 is available to create a
+     // DXGI_SWAP_EFFECT_SEQUENTIAL swap chain.
++    //
++    // NOTE: in non-flip mode HDR rendering is not supported, so use it
++    //       by default
+     IDXGIFactory2 *factory2 = d3d11::DynamicCastComObject<IDXGIFactory2>(factory);
+     if (factory2 != nullptr)
+     {
+@@ -193,21 +196,20 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
+     swapChainDesc.Windowed           = TRUE;
+ 
+     /**
+-     * NOTE1: in flip-discard mode the swap chain doesn't support partial
++     * NOTE: in discard mode the swap chain doesn't support partial
+      *       presentatiopn with Present1() call. Though it is not a big
+      *       problem, because in case DXGI 1.2 is supported this code is
+      *       unreachable.
+-     *
+-     * NOTE2: in non-flip mode HDR rendering is not supported, so use it
+-     *        bt default
+      */
+-    swapChainDesc.SwapEffect         = DXGI_SWAP_EFFECT_FLIP_DISCARD;
++    swapChainDesc.SwapEffect         = DXGI_SWAP_EFFECT_DISCARD;
+ 
+     HRESULT result = factory->CreateSwapChain(device, &swapChainDesc, swapChain);
++
+     if (SUCCEEDED(result))
+     {
+         factory->MakeWindowAssociation(getNativeWindow(), DXGI_MWA_NO_ALT_ENTER);
+     }
++
+     return result;
+ }
+ 
+-- 
+2.20.1.windows.1
+
+
+From 9b08f39610885381c61a3314ed40e658d2ddcaae Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 28 Jan 2019 14:39:47 +0300
+Subject: [PATCH 17/20] Allow color space selection attributes for
+ eglCreatePbufferSurface
+
+Notes:
+
+eglCreatePixmapSurface() is not implemented in Angle, so the support is
+not added.
+
+eglCreatePlatformWindowSurface() and eglCreatePlatformPixmapSurface()
+do not have support for color spaces according to the extension wording
+(and they are also not supported by Angle :) )
+---
+ .../angle/src/libANGLE/validationEGL.cpp      | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/src/3rdparty/angle/src/libANGLE/validationEGL.cpp b/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
+index 3f6a426320..1e9535ee1c 100644
+--- a/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
++++ b/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
+@@ -1003,6 +1003,33 @@ Error ValidateCreatePbufferSurface(Display *display, Config *config, const Attri
+               }
+               break;
+ 
++        case EGL_GL_COLORSPACE:
++
++            if (!displayExtensions.colorspaceSRGB)
++            {
++                return Error(EGL_BAD_ATTRIBUTE, "EGL_KHR_gl_colorspace is not supported on this platform.");
++            }
++
++            if (value == EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT)
++            {
++                if (!displayExtensions.colorspaceSCRGBLinear)
++                {
++                    return Error(EGL_BAD_ATTRIBUTE, "EGL_EXT_gl_colorspace_scrgb_linear is not supported on this platform.");
++                }
++            }
++            else if (value == EGL_GL_COLORSPACE_BT2020_PQ_EXT)
++            {
++                if (!displayExtensions.colorspaceBt2020PQ)
++                {
++                    return Error(EGL_BAD_ATTRIBUTE, "EGL_EXT_gl_colorspace_bt2020_pq is not supported on this platform.");
++                }
++            }
++            else if (value != EGL_GL_COLORSPACE_SRGB_KHR && value != EGL_GL_COLORSPACE_LINEAR_KHR)
++            {
++                return Error(EGL_BAD_ATTRIBUTE);
++            }
++            break;
++
+           default:
+               return EglBadAttribute();
+         }
+-- 
+2.20.1.windows.1
+
+
+From 14d1b9c586003fbc446abb32f36de7fa2972b5a9 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sun, 10 Feb 2019 22:55:59 +0300
+Subject: [PATCH 18/20] Implement a manual test for checking is HDR features
+ work
+
+Test plan:
+
+1) Run without arguments: `hdr-openglwidget.exe`
+   It should show you three rectangles: the left one should be HDR'ly
+   bright, the other ones should be SDR'ly dim and look exactly the same.
+
+3) Run in Bt. 2020 PQ mode: `hdr-openglwidget.exe --bt2020pq`
+   The result should look exactly the same.
+
+4) Run in SDR sRGB mode: `hdr-openglwidget.exe --srgb`.
+   All three images should look SDR'ly dim.
+
+NOTE:
+Please note that the current implementation of SDR compositing
+in QOpenGLTextureBlitter doesn't support user configuration for
+SDR brightness from the system. This API is available for UWP
+applications only. It means that when changing "SDR brightness"
+slider in Windows' settings, the brightness of our SDR widget
+will not change. More that that, it might even be different from
+teh brightness of other SDr applications.
+
+Change-Id: Idccc790937c9061ec618ab21f6b71bd0620cd2cc
+---
+ .../hdr-qopenglwidget/KisGLImageF16.cpp       | 131 +++++++++
+ .../manual/hdr-qopenglwidget/KisGLImageF16.h  |  68 +++++
+ .../hdr-qopenglwidget/KisGLImageWidget.cpp    | 252 ++++++++++++++++++
+ .../hdr-qopenglwidget/KisGLImageWidget.h      |  77 ++++++
+ .../hdr-qopenglwidget/hdr-openglwidget.pro    |  20 ++
+ .../kis_gl_image_widget.frag                  |  23 ++
+ .../hdr-qopenglwidget/kis_gl_image_widget.qrc |   6 +
+ .../kis_gl_image_widget.vert                  |  17 ++
+ tests/manual/hdr-qopenglwidget/main.cpp       | 153 +++++++++++
+ .../hdr-qopenglwidget/openglprobeutils.cpp    | 139 ++++++++++
+ .../hdr-qopenglwidget/openglprobeutils.h      |  42 +++
+ tests/manual/hdr-qopenglwidget/window.cpp     | 219 +++++++++++++++
+ tests/manual/hdr-qopenglwidget/window.h       |  69 +++++
+ 13 files changed, 1216 insertions(+)
+ create mode 100644 tests/manual/hdr-qopenglwidget/KisGLImageF16.cpp
+ create mode 100644 tests/manual/hdr-qopenglwidget/KisGLImageF16.h
+ create mode 100644 tests/manual/hdr-qopenglwidget/KisGLImageWidget.cpp
+ create mode 100644 tests/manual/hdr-qopenglwidget/KisGLImageWidget.h
+ create mode 100644 tests/manual/hdr-qopenglwidget/hdr-openglwidget.pro
+ create mode 100644 tests/manual/hdr-qopenglwidget/kis_gl_image_widget.frag
+ create mode 100644 tests/manual/hdr-qopenglwidget/kis_gl_image_widget.qrc
+ create mode 100644 tests/manual/hdr-qopenglwidget/kis_gl_image_widget.vert
+ create mode 100644 tests/manual/hdr-qopenglwidget/main.cpp
+ create mode 100644 tests/manual/hdr-qopenglwidget/openglprobeutils.cpp
+ create mode 100644 tests/manual/hdr-qopenglwidget/openglprobeutils.h
+ create mode 100644 tests/manual/hdr-qopenglwidget/window.cpp
+ create mode 100644 tests/manual/hdr-qopenglwidget/window.h
+
+diff --git a/tests/manual/hdr-qopenglwidget/KisGLImageF16.cpp b/tests/manual/hdr-qopenglwidget/KisGLImageF16.cpp
+new file mode 100644
+index 0000000000..a84b676f5b
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/KisGLImageF16.cpp
+@@ -0,0 +1,131 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "KisGLImageF16.h"
++
++#include <QByteArray>
++#include <QSize>
++
++struct KisGLImageF16::Private : public QSharedData
++{
++    QSize size;
++    QByteArray data;
++};
++
++KisGLImageF16::KisGLImageF16()
++    : m_d(new Private)
++{
++}
++
++KisGLImageF16::KisGLImageF16(const QSize &size, bool clearPixels)
++    : m_d(new Private)
++{
++    resize(size, clearPixels);
++}
++
++KisGLImageF16::KisGLImageF16(int width, int height, bool clearPixels)
++    : KisGLImageF16(QSize(width, height), clearPixels)
++{
++}
++
++KisGLImageF16::KisGLImageF16(const KisGLImageF16 &rhs)
++    : m_d(rhs.m_d)
++{
++}
++
++KisGLImageF16 &KisGLImageF16::operator=(const KisGLImageF16 &rhs)
++{
++    m_d = rhs.m_d;
++}
++
++bool operator==(const KisGLImageF16 &lhs, const KisGLImageF16 &rhs)
++{
++    return lhs.m_d == rhs.m_d;
++}
++
++bool operator!=(const KisGLImageF16 &lhs, const KisGLImageF16 &rhs)
++{
++    return !(lhs == rhs);
++}
++
++KisGLImageF16::~KisGLImageF16()
++{
++}
++
++void KisGLImageF16::clearPixels()
++{
++    if (!m_d->data.isEmpty()) {
++        m_d->data.fill(0);
++    }
++}
++
++void KisGLImageF16::resize(const QSize &size, bool clearPixels)
++{
++    const int pixelSize = 2 * 4;
++
++    m_d->size = size;
++    m_d->data.resize(size.width() * size.height() * pixelSize);
++
++    if (clearPixels) {
++        m_d->data.fill(0);
++    }
++}
++
++const qfloat16 *KisGLImageF16::constData() const
++{
++    Q_ASSERT(!m_d->data.isNull());
++    return reinterpret_cast<const qfloat16*>(m_d->data.data());
++}
++
++qfloat16 *KisGLImageF16::data()
++{
++    m_d->data.detach();
++    Q_ASSERT(!m_d->data.isNull());
++
++    return reinterpret_cast<qfloat16*>(m_d->data.data());
++}
++
++QSize KisGLImageF16::size() const
++{
++    return m_d->size;
++}
++
++int KisGLImageF16::width() const
++{
++    return m_d->size.width();
++}
++
++int KisGLImageF16::height() const
++{
++    return m_d->size.height();
++}
++
++bool KisGLImageF16::isNull() const
++{
++    return m_d->data.isNull();
++}
+diff --git a/tests/manual/hdr-qopenglwidget/KisGLImageF16.h b/tests/manual/hdr-qopenglwidget/KisGLImageF16.h
+new file mode 100644
+index 0000000000..335e42ee68
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/KisGLImageF16.h
+@@ -0,0 +1,68 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef KISGLIMAGEF16_H
++#define KISGLIMAGEF16_H
++
++#include <QSharedDataPointer>
++#include <QFloat16>
++
++class QSize;
++
++class KisGLImageF16
++{
++public:
++    KisGLImageF16();
++    KisGLImageF16(const QSize &size, bool clearPixels = false);
++    KisGLImageF16(int width, int height, bool clearPixels = false);
++    KisGLImageF16(const KisGLImageF16 &rhs);
++    KisGLImageF16& operator=(const KisGLImageF16 &rhs);
++
++    friend bool operator==(const KisGLImageF16 &lhs, const KisGLImageF16 &rhs);
++    friend bool operator!=(const KisGLImageF16 &lhs, const KisGLImageF16 &rhs);
++
++    ~KisGLImageF16();
++
++    void clearPixels();
++    void resize(const QSize &size, bool clearPixels = false);
++
++    const qfloat16* constData() const;
++    qfloat16* data();
++
++    QSize size() const;
++    int width() const;
++    int height() const;
++
++    bool isNull() const;
++
++private:
++    struct Private;
++    QSharedDataPointer<Private> m_d;
++};
++
++#endif // KISGLIMAGEF16_H
+diff --git a/tests/manual/hdr-qopenglwidget/KisGLImageWidget.cpp b/tests/manual/hdr-qopenglwidget/KisGLImageWidget.cpp
+new file mode 100644
+index 0000000000..da36ac1619
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/KisGLImageWidget.cpp
+@@ -0,0 +1,252 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "KisGLImageWidget.h"
++
++#include <QPainter>
++#include <QFile>
++#include <QResizeEvent>
++
++#include "KisGLImageF16.h"
++
++namespace {
++inline void rectToVertices(QVector3D* vertices, const QRectF &rc)
++{
++    vertices[0] = QVector3D(rc.left(),  rc.bottom(), 0.f);
++    vertices[1] = QVector3D(rc.left(),  rc.top(),    0.f);
++    vertices[2] = QVector3D(rc.right(), rc.bottom(), 0.f);
++    vertices[3] = QVector3D(rc.left(),  rc.top(), 0.f);
++    vertices[4] = QVector3D(rc.right(), rc.top(), 0.f);
++    vertices[5] = QVector3D(rc.right(), rc.bottom(),    0.f);
++}
++
++inline void rectToTexCoords(QVector2D* texCoords, const QRectF &rc)
++{
++    texCoords[0] = QVector2D(rc.left(), rc.bottom());
++    texCoords[1] = QVector2D(rc.left(), rc.top());
++    texCoords[2] = QVector2D(rc.right(), rc.bottom());
++    texCoords[3] = QVector2D(rc.left(), rc.top());
++    texCoords[4] = QVector2D(rc.right(), rc.top());
++    texCoords[5] = QVector2D(rc.right(), rc.bottom());
++}
++}
++
++KisGLImageWidget::KisGLImageWidget(QWidget *parent)
++    : KisGLImageWidget(QSurfaceFormat::sRGBColorSpace, parent)
++{
++}
++
++KisGLImageWidget::KisGLImageWidget(QSurfaceFormat::ColorSpace colorSpace,
++                                   QWidget *parent)
++    : QOpenGLWidget(parent),
++      m_texture(QOpenGLTexture::Target2D)
++{
++
++    qDebug() << "Crating gl widget";
++
++    setTextureFormat(GL_RGBA16F);
++    setTextureColorSpace(colorSpace);
++
++    setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
++}
++
++void KisGLImageWidget::initializeGL()
++{
++    initializeOpenGLFunctions();
++
++    qDebug() << "Initialized with format:" << context()->format();
++
++    QFile vertexShaderFile(QString(":/") + "kis_gl_image_widget.vert");
++    vertexShaderFile.open(QIODevice::ReadOnly);
++    QString vertSource = vertexShaderFile.readAll();
++
++    QFile fragShaderFile(QString(":/") + "kis_gl_image_widget.frag");
++    fragShaderFile.open(QIODevice::ReadOnly);
++    QString fragSource = fragShaderFile.readAll();
++
++    if (context()->isOpenGLES()) {
++        const char *versionHelper = "#define USE_OPENGLES\n";
++        vertSource.prepend(versionHelper);
++        fragSource.prepend(versionHelper);
++
++        const char *versionDefinition = "#version 100\n";
++        vertSource.prepend(versionDefinition);
++        fragSource.prepend(versionDefinition);
++    } else {
++        const char *versionDefinition = "#version 330 core\n";
++        vertSource.prepend(versionDefinition);
++        fragSource.prepend(versionDefinition);
++    }
++
++    if (!m_shader.addShaderFromSourceCode(QOpenGLShader::Vertex, vertSource)) {
++        qDebug() << "Could not add vertex code";
++        return;
++    }
++
++    if (!m_shader.addShaderFromSourceCode(QOpenGLShader::Fragment, fragSource)) {
++        qDebug() << "Could not add fragment code";
++        return;
++    }
++
++    if (!m_shader.link()) {
++        qDebug() << "Could not link";
++        return;
++    }
++
++    if (!m_shader.bind()) {
++        qDebug() << "Could not bind";
++        return;
++    }
++
++    m_shader.release();
++
++
++    m_vao.create();
++    m_vao.bind();
++
++    m_verticesBuffer.create();
++    updateVerticesBuffer(this->rect());
++
++    QVector<QVector2D> textureVertices(6);
++    rectToTexCoords(textureVertices.data(), QRect(0.0, 0.0, 1.0, 1.0));
++
++    m_textureVerticesBuffer.create();
++    m_textureVerticesBuffer.bind();
++    m_textureVerticesBuffer.setUsagePattern(QOpenGLBuffer::DynamicDraw);
++    m_textureVerticesBuffer.allocate(2 * 3 * sizeof(QVector2D));
++    m_verticesBuffer.write(0, textureVertices.data(), m_textureVerticesBuffer.size());
++    m_textureVerticesBuffer.release();
++
++    m_vao.release();
++
++
++    if (!m_sourceImage.isNull()) {
++        loadImage(m_sourceImage);
++    }
++}
++
++void KisGLImageWidget::updateVerticesBuffer(const QRect &rect)
++{
++    if (!m_vao.isCreated() || !m_verticesBuffer.isCreated()) return;
++
++    QVector<QVector3D> vertices(6);
++    rectToVertices(vertices.data(), rect);
++
++    m_verticesBuffer.bind();
++    m_verticesBuffer.setUsagePattern(QOpenGLBuffer::DynamicDraw);
++    m_verticesBuffer.allocate(2 * 3 * sizeof(QVector3D));
++    m_verticesBuffer.write(0, vertices.data(), m_verticesBuffer.size());
++    m_verticesBuffer.release();
++}
++
++
++void KisGLImageWidget::paintGL()
++{
++    const QColor bgColor = palette().background().color();
++    glClearColor(bgColor.redF(), bgColor.greenF(), bgColor.blueF(), 1.0f);
++    glClear(GL_COLOR_BUFFER_BIT);
++
++    if (!m_texture.isCreated()) return;
++
++    glViewport(0, 0, width(), height());
++
++    m_vao.bind();
++    m_shader.bind();
++
++    {
++        QMatrix4x4 projectionMatrix;
++        projectionMatrix.setToIdentity();
++        projectionMatrix.ortho(0, width(), height(), 0, -1, 1);
++        QMatrix4x4 viewProjectionMatrix;
++
++        // use a QTransform to scale, translate, rotate your view
++        QTransform transform; // TODO: noop!
++        viewProjectionMatrix = projectionMatrix * QMatrix4x4(transform);
++
++        m_shader.setUniformValue("viewProjectionMatrix", viewProjectionMatrix);
++    }
++
++    m_shader.enableAttributeArray("vertexPosition");
++    m_verticesBuffer.bind();
++    m_shader.setAttributeBuffer("vertexPosition", GL_FLOAT, 0, 3);
++
++    m_shader.enableAttributeArray("texturePosition");
++    m_textureVerticesBuffer.bind();
++    m_shader.setAttributeBuffer("texturePosition", GL_FLOAT, 0, 2);
++
++    glActiveTexture(GL_TEXTURE0);
++    m_texture.bind();
++
++    // draw 2 triangles = 6 vertices starting at offset 0 in the buffer
++    glDrawArrays(GL_TRIANGLES, 0, 6);
++
++    m_verticesBuffer.release();
++    m_textureVerticesBuffer.release();
++    m_texture.release();
++    m_shader.release();
++    m_vao.release();
++}
++
++void KisGLImageWidget::loadImage(const KisGLImageF16 &image)
++{
++    if (m_sourceImage != image) {
++        m_sourceImage = image;
++    }
++
++    if (m_vao.isCreated()) {
++        m_texture.setFormat(QOpenGLTexture::RGBA16F);
++        m_texture.setSize(image.width(), image.height());
++        m_texture.allocateStorage(QOpenGLTexture::RGBA, QOpenGLTexture::Float16);
++        m_texture.setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
++        m_texture.setMagnificationFilter(QOpenGLTexture::Linear);
++        m_texture.setData(QOpenGLTexture::RGBA, QOpenGLTexture::Float16, image.constData());
++        updateGeometry();
++    }
++}
++
++void KisGLImageWidget::paintEvent(QPaintEvent *event)
++{
++    QOpenGLWidget::paintEvent(event);
++}
++
++void KisGLImageWidget::resizeEvent(QResizeEvent *event)
++{
++    updateVerticesBuffer(QRect(QPoint(),event->size()));
++    QOpenGLWidget::resizeEvent(event);
++}
++
++QSize KisGLImageWidget::sizeHint() const
++{
++    return m_sourceImage.size();
++}
++
++KisGLImageF16 KisGLImageWidget::image() const
++{
++    return m_sourceImage;
++}
++
+diff --git a/tests/manual/hdr-qopenglwidget/KisGLImageWidget.h b/tests/manual/hdr-qopenglwidget/KisGLImageWidget.h
+new file mode 100644
+index 0000000000..e807064cb4
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/KisGLImageWidget.h
+@@ -0,0 +1,77 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef KISGLIMAGEWIDGET_H
++#define KISGLIMAGEWIDGET_H
++
++#include <QOpenGLWidget>
++#include <QOpenGLFunctions>
++#include <QOpenGLTexture>
++#include <QOpenGLShaderProgram>
++#include <QOpenGLVertexArrayObject>
++#include <QOpenGLBuffer>
++#include <QTransform>
++#include <KisGLImageF16.h>
++
++
++class KisGLImageWidget : public QOpenGLWidget, protected QOpenGLFunctions
++{
++    Q_OBJECT
++public:
++    KisGLImageWidget(QWidget *parent = nullptr);
++    KisGLImageWidget(QSurfaceFormat::ColorSpace colorSpace,
++                     QWidget *parent = nullptr);
++
++    void initializeGL() override;
++    void paintGL() override;
++
++    void loadImage(const KisGLImageF16 &image);
++
++    void paintEvent(QPaintEvent *event) override;
++    void resizeEvent(QResizeEvent *event) override;
++
++    QSize sizeHint() const override;
++
++    KisGLImageF16 image() const;
++
++public Q_SLOTS:
++
++private:
++    void updateVerticesBuffer(const QRect &rect);
++
++private:
++    KisGLImageF16 m_sourceImage;
++
++    QOpenGLShaderProgram m_shader;
++    QOpenGLVertexArrayObject m_vao;
++    QOpenGLBuffer m_verticesBuffer;
++    QOpenGLBuffer m_textureVerticesBuffer;
++    QOpenGLTexture m_texture;
++};
++
++#endif // KISGLIMAGEWIDGET_H
+diff --git a/tests/manual/hdr-qopenglwidget/hdr-openglwidget.pro b/tests/manual/hdr-qopenglwidget/hdr-openglwidget.pro
+new file mode 100644
+index 0000000000..b418e54b43
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/hdr-openglwidget.pro
+@@ -0,0 +1,20 @@
++QT += widgets widgets-private gui-private core-private
++
++TARGET = hdr-openglwidget
++TEMPLATE = app
++
++SOURCES += main.cpp \
++        #hdr-openglwidget.cpp \
++        openglprobeutils.cpp \
++        KisGLImageWidget.cpp \
++        KisGLImageF16.cpp \
++        window.cpp
++
++HEADERS  += \
++#hdr-openglwidget.h \
++    openglprobeutils.h \
++    KisGLImageWidget.h \
++    KisGLImageF16.h \
++    window.h
++
++RESOURCES += kis_gl_image_widget.qrc
+diff --git a/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.frag b/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.frag
+new file mode 100644
+index 0000000000..57475a31dc
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.frag
+@@ -0,0 +1,23 @@
++#ifndef USE_OPENGLES
++#define INATTR in
++#define OUTATTR out
++#define DECLARE_OUT_VAR out vec4 f_fragColor;
++#define OUT_VAR f_fragColor
++#define highp
++#define texture2D texture
++#else
++#define INATTR varying
++#define DECLARE_OUT_VAR
++#define OUT_VAR gl_FragColor
++#endif
++// vertices datas
++INATTR highp vec4 textureCoordinates;
++uniform sampler2D f_tileTexture;
++DECLARE_OUT_VAR
++
++void main()
++{
++    // get the fragment color from the tile texture
++    highp vec4 color = texture2D(f_tileTexture, textureCoordinates.st);
++    OUT_VAR = vec4(color);  
++}
+diff --git a/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.qrc b/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.qrc
+new file mode 100644
+index 0000000000..ab5b5719a9
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.qrc
+@@ -0,0 +1,6 @@
++<RCC>
++    <qresource prefix="/">
++        <file>kis_gl_image_widget.frag</file>
++        <file>kis_gl_image_widget.vert</file>
++    </qresource>
++</RCC>
+diff --git a/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.vert b/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.vert
+new file mode 100644
+index 0000000000..9578f47945
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.vert
+@@ -0,0 +1,17 @@
++#ifndef USE_OPENGLES
++#define INATTR in
++#define OUTATTR out
++#define highp
++#else
++#define INATTR attribute
++#define OUTATTR varying
++#endif
++uniform mat4 viewProjectionMatrix;
++INATTR highp vec3 vertexPosition;
++INATTR highp vec2 texturePosition;
++OUTATTR highp vec4 textureCoordinates;
++void main()
++{
++   textureCoordinates = vec4(texturePosition.x, texturePosition.y, 0.0, 1.0);
++   gl_Position = viewProjectionMatrix * vec4(vertexPosition.x, vertexPosition.y, 0.0, 1.0);
++}
+diff --git a/tests/manual/hdr-qopenglwidget/main.cpp b/tests/manual/hdr-qopenglwidget/main.cpp
+new file mode 100644
+index 0000000000..d5bae17734
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/main.cpp
+@@ -0,0 +1,153 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include <QApplication>
++#include "window.h"
++
++#include "openglprobeutils.h"
++#include <QDebug>
++
++QSurfaceFormat generateSurfaceFormat(QSurfaceFormat::RenderableType renderer,
++                                     QSurfaceFormat::ColorSpace colorSpace,
++                                     int bitDepth)
++{
++    QSurfaceFormat format;
++#ifdef Q_OS_OSX
++    format.setVersion(3, 2);
++    format.setProfile(QSurfaceFormat::CoreProfile);
++#else
++    format.setVersion(3, 0);
++    format.setProfile(QSurfaceFormat::CoreProfile);
++#endif
++    format.setDepthBufferSize(24);
++    format.setStencilBufferSize(8);
++
++    switch (bitDepth) {
++    case 8:
++        format.setRedBufferSize(8);
++        format.setGreenBufferSize(8);
++        format.setBlueBufferSize(8);
++        format.setAlphaBufferSize(8);
++        break;
++    case 10:
++        format.setRedBufferSize(10);
++        format.setGreenBufferSize(10);
++        format.setBlueBufferSize(10);
++        format.setAlphaBufferSize(2);
++        break;
++    case 16:
++        format.setRedBufferSize(16);
++        format.setGreenBufferSize(16);
++        format.setBlueBufferSize(16);
++        format.setAlphaBufferSize(16);
++        break;
++    default:
++        qFatal("Unsupported surface bit depth %d", bitDepth);
++    }
++
++    format.setRenderableType(renderer);
++    format.setColorSpace(colorSpace);
++
++    format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
++    format.setSwapInterval(0); // Disable vertical refresh syncing
++
++    return format;
++}
++
++int main(int argc, char *argv[])
++{
++    QVector<QSurfaceFormat> allFormats;
++
++    QVector<QSurfaceFormat::RenderableType> availableRenderers;
++    availableRenderers << QSurfaceFormat::OpenGL;
++    availableRenderers << QSurfaceFormat::OpenGLES;
++
++    for (QSurfaceFormat::RenderableType renderer : availableRenderers) {
++        allFormats << generateSurfaceFormat(renderer, QSurfaceFormat::sRGBColorSpace, 8);
++        allFormats << generateSurfaceFormat(renderer, QSurfaceFormat::bt2020PQColorSpace, 8);
++        allFormats << generateSurfaceFormat(renderer, QSurfaceFormat::sRGBColorSpace, 10);
++        allFormats << generateSurfaceFormat(renderer, QSurfaceFormat::bt2020PQColorSpace, 10);
++        allFormats << generateSurfaceFormat(renderer, QSurfaceFormat::scRGBColorSpace, 16);
++    }
++
++    for (QSurfaceFormat format : allFormats) {
++        qDebug() << "Probing: " << format;
++        bool result = OpenGLProbeUtils::probeFormat(format, true);
++        qDebug() << "    result:" << result;
++    }
++
++
++    if (argc > 1 && !strcmp(argv[1], "--sharecontext")) {
++        qDebug("Requesting all contexts to share");
++        QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
++    }
++
++    QApplication a(argc, argv);
++
++    QSurfaceFormat::RenderableType renderer = QSurfaceFormat::OpenGLES;
++    QSurfaceFormat::ColorSpace colorSpace = QSurfaceFormat::scRGBColorSpace;
++    int bitDepth = 16;
++
++
++    if (QCoreApplication::arguments().contains(QLatin1String("--scrgb"))) {
++        colorSpace = QSurfaceFormat::scRGBColorSpace;
++        bitDepth = 16;
++    } else if (QCoreApplication::arguments().contains(QLatin1String("--bt2020pq"))) {
++        colorSpace = QSurfaceFormat::bt2020PQColorSpace;
++        bitDepth = 10;
++    } else if (QCoreApplication::arguments().contains(QLatin1String("--srgb"))) {
++        colorSpace = QSurfaceFormat::sRGBColorSpace;
++        bitDepth = 8;
++    }
++
++    if (QCoreApplication::arguments().contains(QLatin1String("--opengl"))) {
++        renderer = QSurfaceFormat::OpenGL;
++    } else if (QCoreApplication::arguments().contains(QLatin1String("--opengles"))) {
++        renderer = QSurfaceFormat::OpenGLES;
++    }
++
++    QSurfaceFormat format = generateSurfaceFormat(renderer, colorSpace, bitDepth);
++
++    if (QCoreApplication::arguments().contains(QLatin1String("--multisample"))) {
++        format.setSamples(4);
++    }
++
++    if (format.renderableType() == QSurfaceFormat::OpenGL) {
++        QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL, true);
++    } else if (format.renderableType() == QSurfaceFormat::OpenGLES) {
++        QCoreApplication::setAttribute(Qt::AA_UseOpenGLES, true);
++    }
++
++    qDebug() << "Requesting" << format.renderableType() << format;
++    QSurfaceFormat::setDefaultFormat(format);
++
++    Window window;
++    window.show();
++
++    return a.exec();
++}
+diff --git a/tests/manual/hdr-qopenglwidget/openglprobeutils.cpp b/tests/manual/hdr-qopenglwidget/openglprobeutils.cpp
+new file mode 100644
+index 0000000000..687cc08904
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/openglprobeutils.cpp
+@@ -0,0 +1,139 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "openglprobeutils.h"
++
++#include <QApplication>
++#include <QSurfaceFormat>
++#include <QOpenGLContext>
++#include <QDebug>
++#include <QWindow>
++
++namespace OpenGLProbeUtils {
++
++namespace {
++
++struct AppAttributeSetter
++{
++    AppAttributeSetter(Qt::ApplicationAttribute attribute, bool useOpenGLES)
++        : m_attribute(attribute),
++          m_oldValue(QCoreApplication::testAttribute(attribute))
++    {
++        QCoreApplication::setAttribute(attribute, useOpenGLES);
++    }
++
++    ~AppAttributeSetter() {
++        QCoreApplication::setAttribute(m_attribute, m_oldValue);
++    }
++
++private:
++    Qt::ApplicationAttribute m_attribute;
++    bool m_oldValue = false;
++};
++
++struct SurfaceFormatSetter
++{
++    SurfaceFormatSetter(const QSurfaceFormat &format)
++        : m_oldFormat(QSurfaceFormat::defaultFormat())
++    {
++        QSurfaceFormat::setDefaultFormat(format);
++    }
++
++    ~SurfaceFormatSetter() {
++        QSurfaceFormat::setDefaultFormat(m_oldFormat);
++    }
++
++private:
++    QSurfaceFormat m_oldFormat;
++};
++
++}
++
++bool fuzzyCompareColorSpaces(const QSurfaceFormat::ColorSpace &lhs, const QSurfaceFormat::ColorSpace &rhs)
++{
++    return lhs == rhs ||
++        ((lhs == QSurfaceFormat::DefaultColorSpace ||
++          lhs == QSurfaceFormat::sRGBColorSpace) &&
++         (rhs == QSurfaceFormat::DefaultColorSpace ||
++          rhs == QSurfaceFormat::sRGBColorSpace));
++}
++
++bool probeFormat(const QSurfaceFormat &format, bool adjustGlobalState)
++{
++    QScopedPointer<AppAttributeSetter> sharedContextSetter;
++    QScopedPointer<AppAttributeSetter> glSetter;
++    QScopedPointer<AppAttributeSetter> glesSetter;
++    QScopedPointer<SurfaceFormatSetter> formatSetter;
++    QScopedPointer<QApplication> application;
++
++    if (adjustGlobalState) {
++        sharedContextSetter.reset(new AppAttributeSetter(Qt::AA_ShareOpenGLContexts, false));
++
++        if (format.renderableType() != QSurfaceFormat::DefaultRenderableType) {
++            glSetter.reset(new AppAttributeSetter(Qt::AA_UseDesktopOpenGL, format.renderableType() != QSurfaceFormat::OpenGLES));
++            glesSetter.reset(new AppAttributeSetter(Qt::AA_UseOpenGLES, format.renderableType() == QSurfaceFormat::OpenGLES));
++        }
++
++        formatSetter.reset(new SurfaceFormatSetter(format));
++
++        int argc = 1;
++        QByteArray data("krita");
++        char *argv = data.data();
++        application.reset(new QApplication(argc, &argv));
++    }
++
++    QWindow surface;
++    surface.setFormat(format);
++    surface.setSurfaceType(QSurface::OpenGLSurface);
++    surface.create();
++    QOpenGLContext context;
++    context.setFormat(format);
++
++
++    if (!context.create()) {
++        qCritical() << "OpenGL context cannot be created";
++        return false;
++    }
++    if (!context.isValid()) {
++        qCritical() << "OpenGL context is not valid while checking Qt's OpenGL status";
++        return false;
++    }
++    if (!context.makeCurrent(&surface)) {
++        qCritical() << "OpenGL context cannot be made current";
++        return false;
++    }
++
++    if (!fuzzyCompareColorSpaces(context.format().colorSpace(), format.colorSpace())) {
++        qCritical() << "Failed to create an OpenGL context with requested color space. Requested:" << format.colorSpace() << "Actual:" << context.format().colorSpace();
++        return false;
++    }
++
++    return true;
++}
++
++}
+diff --git a/tests/manual/hdr-qopenglwidget/openglprobeutils.h b/tests/manual/hdr-qopenglwidget/openglprobeutils.h
+new file mode 100644
+index 0000000000..3b2f1ec3d0
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/openglprobeutils.h
+@@ -0,0 +1,42 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef OPENGLPROBEUTILS_H
++#define OPENGLPROBEUTILS_H
++
++#include <QSurfaceFormat>
++
++namespace OpenGLProbeUtils
++{
++
++bool fuzzyCompareColorSpaces(const QSurfaceFormat::ColorSpace &lhs, const QSurfaceFormat::ColorSpace &rhs);
++bool probeFormat(const QSurfaceFormat &format, bool adjustGlobalState);
++
++};
++
++#endif // OPENGLPROBEUTILS_H
+diff --git a/tests/manual/hdr-qopenglwidget/window.cpp b/tests/manual/hdr-qopenglwidget/window.cpp
+new file mode 100644
+index 0000000000..5729660a4f
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/window.cpp
+@@ -0,0 +1,219 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "window.h"
++
++#include "KisGLImageWidget.h"
++#include "KisGLImageF16.h"
++
++#include <cmath>
++
++#include <QMenu>
++#include <QMenuBar>
++#include <QToolBar>
++#include <QAction>
++#include <QDebug>
++
++#include <QVBoxLayout>
++#include <QHBoxLayout>
++#include <QLabel>
++
++#include <cmath>
++
++
++Window::Window()
++{
++    setWindowTitle("16 bit float QOpenGLWidget test");
++    QMenu *menu = menuBar()->addMenu("File");
++    QToolBar *tb = addToolBar("File");
++
++    m_quitAction = new QAction("Quit", this);
++    connect(m_quitAction, SIGNAL(triggered(bool)), this, SLOT(close()));
++    menu->addAction(m_quitAction);
++    tb->addAction(m_quitAction);
++
++    QWidget *centralWidget = new QWidget(this);
++    QVBoxLayout *layout = new QVBoxLayout(centralWidget);
++
++    QHBoxLayout *hLayout = new QHBoxLayout(centralWidget);
++
++    m_imageWidget = new KisGLImageWidget(QSurfaceFormat::scRGBColorSpace, this);
++    m_imageWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
++    hLayout->addWidget(m_imageWidget, 0, Qt::AlignLeft);
++
++    m_imageWidgetSdr = new KisGLImageWidget(QSurfaceFormat::scRGBColorSpace, this);
++    m_imageWidgetSdr->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
++    hLayout->addWidget(m_imageWidgetSdr, 0, Qt::AlignLeft);
++
++    QImage image(QSize(255,255), QImage::Format_ARGB32);
++    image.fill(Qt::red);
++
++    QLabel *label = new QLabel(this);
++    label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
++    hLayout->addWidget(label, 0, Qt::AlignLeft);
++
++    m_imageWidget->loadImage(initializeImage(false));
++    m_imageWidgetSdr->loadImage(initializeImage(true));
++    label->setPixmap(QPixmap::fromImage(convertToQImage(m_imageWidget->image())));
++
++    layout->addLayout(hLayout);
++
++    m_lblContextInfo = new QLabel(this);
++    layout->addWidget(m_lblContextInfo);
++
++    QLabel *lblNotes = new QLabel(this);
++    lblNotes->setWordWrap(true);
++    lblNotes->setText("* In SDR display mode all three images should look exactly the same\n"
++                      "* In HDR display mode: image 1 should look brighter than the others "
++                      "(it is HDR), images 2 and 3 should have exactly the same brightness and look");
++
++    layout->addWidget(lblNotes);
++
++    centralWidget->setLayout(layout);
++    setCentralWidget(centralWidget);
++}
++
++inline qfloat16 floatToFloat16(float x) {
++    qfloat16 result;
++    qFloatToFloat16(&result, &x, 1);
++    return result;
++}
++
++inline float float16ToFloat(qfloat16 x) {
++    float result;
++    qFloatFromFloat16(&result, &x, 1);
++    return result;
++}
++
++
++KisGLImageF16 Window::initializeImage(bool cropRange) const
++{
++    const int size = 256;
++    KisGLImageF16 image(size, size);
++    image.clearPixels();
++    qfloat16 *pixelPtr = image.data();
++
++    for (int y = 0; y < size; y++) {
++        for (int x = 0; x < size; x++) {
++            qfloat16 *pxl = reinterpret_cast<qfloat16*>(pixelPtr);
++
++            float hdrRedValue = 25.0f * std::pow(float(x) / size, 5.0f);
++
++            if (cropRange) {
++                hdrRedValue = qMin(hdrRedValue, 1.0f);
++            }
++
++            pxl[0] = floatToFloat16(hdrRedValue);
++
++            if (y > size / 2) {
++                const float portion = (float(y) / size - 0.5f) * 2.0f;
++                const float value = qMin(1.0f, 0.2f + 1.8f * portion);
++
++                pxl[1] = floatToFloat16(value);
++                pxl[2] = floatToFloat16(value);
++            } else {
++                pxl[1] = floatToFloat16(0.2);
++                pxl[2] = floatToFloat16(0.2);
++            }
++
++            pxl[3] = floatToFloat16(1.0);
++
++            pixelPtr += 4;
++        }
++    }
++
++    return image;
++}
++
++inline float linearToSRGB(float value)
++{
++    if (value <= 0.0f) {
++        value = 0.0f;
++    } else if (value < 0.0031308f) {
++        value = value * 12.92f;
++    } else if (value < 1.0f) {
++        value = std::pow(value, 0.41666f) * 1.055f - 0.055f;
++    } else {
++        value = 1.0f;
++    }
++    return value;
++}
++
++QImage Window::convertToQImage(const KisGLImageF16 &image) const
++{
++    const QSize size = image.size();
++    const qfloat16 *pixelPtr = image.constData();
++
++    QImage qimage(size, QImage::Format_ARGB32);
++    quint8 *qimagePixelPtr = qimage.bits();
++
++
++    for (int y = 0; y < size.height(); y++) {
++        for (int x = 0; x < size.width(); x++) {
++            const qfloat16 *srcPxl = pixelPtr;
++            quint8 *dstPxl = qimagePixelPtr;
++
++            auto convertChannel = [] (qfloat16 x) {
++                float value = float16ToFloat(x);
++                return quint8(linearToSRGB(value) * 255.0f);
++            };
++
++            dstPxl[0] =  convertChannel(srcPxl[2]);
++            dstPxl[1] =  convertChannel(srcPxl[1]);
++            dstPxl[2] =  convertChannel(srcPxl[0]);
++            dstPxl[3] =  convertChannel(srcPxl[3]);
++
++            pixelPtr += 4;
++            qimagePixelPtr += 4;
++        }
++    }
++
++    return qimage;
++}
++
++void Window::updateSurfaceInfo()
++{
++    const QSurfaceFormat format = m_imageWidget->context()->format();
++
++    m_lblContextInfo->setText(
++        QString("renderer: %1\ncolorSpace: %2\n\n")
++                .arg(format.renderableType() == QSurfaceFormat::OpenGL ? "openGL" : "openGL ES")
++                .arg(format.colorSpace() == QSurfaceFormat::sRGBColorSpace ? "sRGB" :
++                     format.colorSpace() == QSurfaceFormat::scRGBColorSpace ? "scRGB" :
++                     format.colorSpace() == QSurfaceFormat::bt2020PQColorSpace ? "Bt. 2020 PQ" :
++                     "unknown"));
++}
++
++void Window::showEvent(QShowEvent *ev)
++{
++    QMainWindow::showEvent(ev);
++
++    if (m_lblContextInfo->text().isEmpty()) {
++        updateSurfaceInfo();
++    }
++}
+diff --git a/tests/manual/hdr-qopenglwidget/window.h b/tests/manual/hdr-qopenglwidget/window.h
+new file mode 100644
+index 0000000000..fd8e5c0393
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/window.h
+@@ -0,0 +1,69 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef WINDOW_H
++#define WINDOW_H
++
++#include <QMainWindow>
++
++class QAction;
++
++class GLWidget;
++class KisGLImageWidget;
++class KisGLImageF16;
++class QLabel;
++
++class Window : public QMainWindow
++{
++    Q_OBJECT
++
++public:
++    Window();
++
++    void showEvent(QShowEvent *ev) override;
++
++public Q_SLOTS:
++
++
++private:
++    KisGLImageF16 initializeImage(bool cropRange) const;
++    QImage convertToQImage(const KisGLImageF16 &image) const;
++
++    void updateSurfaceInfo();
++
++private:
++    GLWidget *m_glWidget {0};
++    QAction *m_openAction {0};
++    QAction *m_quitAction {0};
++    KisGLImageWidget *m_imageWidget;
++    KisGLImageWidget *m_imageWidgetSdr;
++    QLabel *m_lblContextInfo;
++
++};
++
++#endif
+-- 
+2.20.1.windows.1
+
+
+From c7a81bd92463649423ecbdad9fdd09b1c0ce0720 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 11 Feb 2019 13:30:28 +0300
+Subject: [PATCH 19/20] Remove isSurfaceColorSpaceSupported() interface
+
+Anyway, it is not a 100% guarantee of the color space support,
+the user still has to probe the specific mode.
+
+The amount of work to support that on all the platforms overweights
+the benefits.
+
+Change-Id: I0f6f49e3aceecda57e438d6d9422301e3b8daa51
+---
+ src/gui/kernel/qopenglcontext.cpp             | 16 --------------
+ src/gui/kernel/qopenglcontext.h               |  1 -
+ src/gui/kernel/qplatformopenglcontext.cpp     | 12 ----------
+ src/gui/kernel/qplatformopenglcontext.h       |  2 --
+ .../platforms/windows/qwindowseglcontext.cpp  | 22 -------------------
+ .../platforms/windows/qwindowseglcontext.h    |  6 -----
+ 6 files changed, 59 deletions(-)
+
+diff --git a/src/gui/kernel/qopenglcontext.cpp b/src/gui/kernel/qopenglcontext.cpp
+index 9f1e7e3768..c5d5490ea0 100644
+--- a/src/gui/kernel/qopenglcontext.cpp
++++ b/src/gui/kernel/qopenglcontext.cpp
+@@ -1311,22 +1311,6 @@ bool QOpenGLContext::isOpenGLES() const
+     return format().renderableType() == QSurfaceFormat::OpenGLES;
+ }
+ 
+-/*!
+-  Returns \c true if the platform supports creation of surfaces with a color space
+-  tag. Such surfaces will be converted by the display color space automatically by
+-  the platform.
+-
+-  The value is controlled by the platform plugin in use and may also depend on the
+-  graphics drivers.
+-
+-  \since 5.XX
+- */
+-bool QOpenGLContext::isSurfaceColorSpaceSupported(QSurfaceFormat::ColorSpace colorSpace) const
+-{
+-    Q_D(const QOpenGLContext);
+-    return d->platformGLContext->isSurfaceColorSpaceSupported(colorSpace);
+-}
+-
+ /*!
+   Returns \c true if the platform supports OpenGL rendering outside the main (gui)
+   thread.
+diff --git a/src/gui/kernel/qopenglcontext.h b/src/gui/kernel/qopenglcontext.h
+index 1256ab8b5a..9cfaa52f17 100644
+--- a/src/gui/kernel/qopenglcontext.h
++++ b/src/gui/kernel/qopenglcontext.h
+@@ -210,7 +210,6 @@ public:
+     static OpenGLModuleType openGLModuleType();
+ 
+     bool isOpenGLES() const;
+-    bool isSurfaceColorSpaceSupported(QSurfaceFormat::ColorSpace colorSpace) const;
+ 
+     static bool supportsThreadedOpenGL();
+     static QOpenGLContext *globalShareContext();
+diff --git a/src/gui/kernel/qplatformopenglcontext.cpp b/src/gui/kernel/qplatformopenglcontext.cpp
+index 72fb818df1..07b5a0dda6 100644
+--- a/src/gui/kernel/qplatformopenglcontext.cpp
++++ b/src/gui/kernel/qplatformopenglcontext.cpp
+@@ -165,16 +165,4 @@ bool QPlatformOpenGLContext::parseOpenGLVersion(const QByteArray &versionString,
+     return (majorOk && minorOk);
+ }
+ 
+-/*!
+-    Reimplement in subclass if your platform supports setting a color space for the
+-    surface.
+-
+-    The default implementation returns false.
+-*/
+-bool QPlatformOpenGLContext::isSurfaceColorSpaceSupported(QSurfaceFormat::ColorSpace colorSpace)
+-{
+-    Q_UNUSED(colorSpace);
+-    return false;
+-}
+-
+ QT_END_NAMESPACE
+diff --git a/src/gui/kernel/qplatformopenglcontext.h b/src/gui/kernel/qplatformopenglcontext.h
+index 52e744ab29..f307cc14f9 100644
+--- a/src/gui/kernel/qplatformopenglcontext.h
++++ b/src/gui/kernel/qplatformopenglcontext.h
+@@ -90,8 +90,6 @@ public:
+ 
+     static bool parseOpenGLVersion(const QByteArray &versionString, int &major, int &minor);
+ 
+-    virtual bool isSurfaceColorSpaceSupported(QSurfaceFormat::ColorSpace colorSpace);
+-
+ private:
+     friend class QOpenGLContext;
+ 
+diff --git a/src/plugins/platforms/windows/qwindowseglcontext.cpp b/src/plugins/platforms/windows/qwindowseglcontext.cpp
+index 7ca8917e34..3db723acee 100644
+--- a/src/plugins/platforms/windows/qwindowseglcontext.cpp
++++ b/src/plugins/platforms/windows/qwindowseglcontext.cpp
+@@ -784,28 +784,6 @@ QFunctionPointer QWindowsEGLContext::getProcAddress(const char *procName)
+     return procAddress;
+ }
+ 
+-bool QWindowsEGLContext::isSurfaceColorSpaceSupported(QSurfaceFormat::ColorSpace colorSpace)
+-{
+-    bool supported = false;
+-
+-    switch (colorSpace) {
+-    case QSurfaceFormat::DefaultColorSpace:
+-        supported = true;
+-        break;
+-    case QSurfaceFormat::sRGBColorSpace:
+-        supported = m_staticContext->hasSRGBColorSpaceSupport();
+-        break;
+-    case QSurfaceFormat::scRGBColorSpace:
+-        supported = m_staticContext->hasSCRGBColorSpaceSupport();
+-        break;
+-    case QSurfaceFormat::bt2020PQColorSpace:
+-        supported = m_staticContext->hasBt2020PQColorSpaceSupport();
+-        break;
+-    }
+-
+-    return supported;
+-}
+-
+ static QVector<EGLint> createConfigAttributesFromFormat(const QSurfaceFormat &format)
+ {
+     int redSize     = format.redBufferSize();
+diff --git a/src/plugins/platforms/windows/qwindowseglcontext.h b/src/plugins/platforms/windows/qwindowseglcontext.h
+index cf088e7c15..9f7742e6fb 100644
+--- a/src/plugins/platforms/windows/qwindowseglcontext.h
++++ b/src/plugins/platforms/windows/qwindowseglcontext.h
+@@ -130,10 +130,6 @@ public:
+     static QWindowsLibEGL libEGL;
+     static QWindowsLibGLESv2 libGLESv2;
+ 
+-    bool hasSRGBColorSpaceSupport() { return m_hasSRGBColorSpaceSupport; }
+-    bool hasSCRGBColorSpaceSupport() { return m_hasSCRGBColorSpaceSupport; }
+-    bool hasBt2020PQColorSpaceSupport() { return m_hasBt2020PQColorSpaceSupport; }
+-
+ private:
+     explicit QWindowsEGLStaticContext(EGLDisplay display);
+     static bool initializeAngle(QWindowsOpenGLTester::Renderers preferredType, HDC dc,
+@@ -166,8 +162,6 @@ public:
+     void *nativeDisplay() const override { return m_eglDisplay; }
+     void *nativeConfig() const override { return m_eglConfig; }
+ 
+-    bool isSurfaceColorSpaceSupported(QSurfaceFormat::ColorSpace colorSpace) override;
+-
+ private:
+     EGLConfig chooseConfig(const QSurfaceFormat &format);
+ 
+-- 
+2.20.1.windows.1
+
+
+From d0d158d5b884399d3e64688069f7519dd61acfb4 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 11 Feb 2019 17:23:36 +0300
+Subject: [PATCH 20/20] Add a cumulative patch for Angle for HDR support
+
+The patch basically is an essence of all the previous commits, but
+saved in a repository to make updating Angle easier in the future.
+
+Change-Id: I8d2424237d1b834d920eb6908d018677840afb5c
+---
+ ...013-Add-HDR-surface-support-to-Angle.patch | 797 ++++++++++++++++++
+ 1 file changed, 797 insertions(+)
+ create mode 100644 src/angle/patches/0013-Add-HDR-surface-support-to-Angle.patch
+
+diff --git a/src/angle/patches/0013-Add-HDR-surface-support-to-Angle.patch b/src/angle/patches/0013-Add-HDR-surface-support-to-Angle.patch
+new file mode 100644
+index 0000000000..8181e86080
+--- /dev/null
++++ b/src/angle/patches/0013-Add-HDR-surface-support-to-Angle.patch
+@@ -0,0 +1,797 @@
++From 5b9ff2aea11612b2ef2202261fe9f383fc9fceaf Mon Sep 17 00:00:00 2001
++From: Dmitry Kazakov <dimula73@gmail.com>
++Date: Sat, 8 Dec 2018 15:35:43 +0300
++Subject: [PATCH 1/5] Unconditionally enable D3D11_1
++
++Just a temparary change. Proper configuration will be
++implemented later.
++
++Change-Id: I68204a5db6bbd7066a83a8d1d021ce76cd1cf6f6
++---
++ src/3rdparty/angle/src/common/platform.h | 22 ++++++++++++++++------
++ 1 file changed, 16 insertions(+), 6 deletions(-)
++
++diff --git a/src/3rdparty/angle/src/common/platform.h b/src/3rdparty/angle/src/common/platform.h
++index fb251da579..89359f954e 100644
++--- a/src/3rdparty/angle/src/common/platform.h
+++++ b/src/3rdparty/angle/src/common/platform.h
++@@ -59,12 +59,22 @@
++ #   endif
++ 
++ #   if defined(ANGLE_ENABLE_D3D11)
++-#include <d3d10_1.h>
++-#include <d3d11.h>
++-#include <d3d11_3.h>
++-#include <d3dcompiler.h>
++-#include <dxgi.h>
++-#include <dxgi1_2.h>
+++#       include <d3d10_1.h>
+++#       include <d3d11.h>
+++#       include <dxgi.h>
+++#      if defined(__MINGW32__) && !defined(__d3d11sdklayers_h__)
+++#          define ANGLE_MINGW32_COMPAT
+++#      endif
+++//#      if defined(_MSC_VER) && _MSC_VER >= 1800
+++#          define ANGLE_ENABLE_D3D11_1
+++//#      endif
+++#      if defined(ANGLE_ENABLE_D3D11_1)
+++#       include <d3d11_1.h>
+++#       include <d3d11_3.h>
+++#       include <dxgi1_2.h>
+++#       include <dxgi1_4.h> // TODO: This is actually D3D12!!!
+++#      endif
+++#       include <d3dcompiler.h>
++ #   endif
++ 
++ #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
++-- 
++2.20.1.windows.1
++
++
++From 5c9267ec3b777aa7a9fce5c85004ac091b96dd6b Mon Sep 17 00:00:00 2001
++From: Dmitry Kazakov <dimula73@gmail.com>
++Date: Sat, 8 Dec 2018 18:03:58 +0300
++Subject: [PATCH 2/5] Implement proper color management selection and
++ activation
++
++1) D3D11 implementation of angle now supports GL_RGB10_A2 format
++
++2) Technically, Angle's EGL implementation now supports the following
++   display extensions:
++     * EGL_KHR_gl_colorspace
++     * EGL_EXT_gl_colorspace_scrgb_linear
++     * EGL_EXT_gl_colorspace_bt2020_pq
++
++3) D3D11 implementation of angle now supports GL_COLOR_SPACE attribute,
++   which allows selection one of four color modes:
++     * Linear --- just pass-through data to GPU
++     * sRGB --- p709-g22 color space. WARNING: in 8-bit mode the system
++       becomes clever and automatically converts linear framebuffer
++       attachments to sRGB space, as per EGL_KHR_gl_colorspace definition.
++       It is not possible to select sRGB without this extra "feature".
++     * scRGB --- p709-g10 color space. This mode is the only mode
++       supported in f16-bit mode (and it is also not supported in other
++       bit depths).
++     * bt2020-pq --- p2020-pq color space. Supported only in 10-bit mode.
++
++4) QSurfaceFormat now supports setting color spaces from the list above
++
++5) SwapChain is now created in DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL mode:
++     * because non-flip mode is considered deprecated and HDR is not
++       supported in it;
++     * because in flip-discard mode partial updates from
++       SwapChain11::present() are not supported and return an error,
++       which is never checked :)
++
++Change-Id: I8bdcbf092ae149b67247e8e41502916cedc200df
++---
++ src/3rdparty/angle/src/libANGLE/Caps.cpp      |  8 +-
++ src/3rdparty/angle/src/libANGLE/Caps.h        |  9 ++
++ .../src/libANGLE/renderer/d3d/RendererD3D.h   |  3 +-
++ .../src/libANGLE/renderer/d3d/SurfaceD3D.cpp  | 26 +++++-
++ .../src/libANGLE/renderer/d3d/SurfaceD3D.h    |  1 +
++ .../renderer/d3d/d3d11/Renderer11.cpp         | 18 +++-
++ .../libANGLE/renderer/d3d/d3d11/Renderer11.h  |  4 +-
++ .../renderer/d3d/d3d11/SwapChain11.cpp        | 90 ++++++++++++++++++-
++ .../libANGLE/renderer/d3d/d3d11/SwapChain11.h |  4 +-
++ .../d3d/d3d11/win32/NativeWindow11Win32.cpp   | 18 +++-
++ .../libANGLE/renderer/d3d/d3d9/Renderer9.cpp  |  4 +-
++ .../libANGLE/renderer/d3d/d3d9/Renderer9.h    |  3 +-
++ .../angle/src/libANGLE/validationEGL.cpp      | 26 ++++++
++ 13 files changed, 199 insertions(+), 15 deletions(-)
++
++diff --git a/src/3rdparty/angle/src/libANGLE/Caps.cpp b/src/3rdparty/angle/src/libANGLE/Caps.cpp
++index 44da2bbe27..2088457458 100644
++--- a/src/3rdparty/angle/src/libANGLE/Caps.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/Caps.cpp
++@@ -1101,7 +1101,10 @@ DisplayExtensions::DisplayExtensions()
++       displayTextureShareGroup(false),
++       createContextClientArrays(false),
++       programCacheControl(false),
++-      robustResourceInitialization(false)
+++      robustResourceInitialization(false),
+++      colorspaceSRGB(false),
+++      colorspaceSCRGBLinear(false),
+++      colorspaceBt2020PQ(false)
++ {
++ }
++ 
++@@ -1146,6 +1149,9 @@ std::vector<std::string> DisplayExtensions::getStrings() const
++     InsertExtensionString("EGL_ANGLE_create_context_client_arrays",              createContextClientArrays,          &extensionStrings);
++     InsertExtensionString("EGL_ANGLE_program_cache_control",                     programCacheControl,                &extensionStrings);
++     InsertExtensionString("EGL_ANGLE_robust_resource_initialization",            robustResourceInitialization,       &extensionStrings);
+++    InsertExtensionString("EGL_KHR_gl_colorspace",                               colorspaceSRGB,                     &extensionStrings);
+++    InsertExtensionString("EGL_EXT_gl_colorspace_scrgb_linear",                  colorspaceSCRGBLinear,              &extensionStrings);
+++    InsertExtensionString("EGL_EXT_gl_colorspace_bt2020_pq",                     colorspaceBt2020PQ,                 &extensionStrings);
++     // TODO(jmadill): Enable this when complete.
++     //InsertExtensionString("KHR_create_context_no_error",                       createContextNoError,               &extensionStrings);
++     // clang-format on
++diff --git a/src/3rdparty/angle/src/libANGLE/Caps.h b/src/3rdparty/angle/src/libANGLE/Caps.h
++index 64bdf97112..8157af5800 100644
++--- a/src/3rdparty/angle/src/libANGLE/Caps.h
+++++ b/src/3rdparty/angle/src/libANGLE/Caps.h
++@@ -692,6 +692,15 @@ struct DisplayExtensions
++ 
++     // EGL_ANGLE_robust_resource_initialization
++     bool robustResourceInitialization;
+++
+++    // EGL_KHR_gl_colorspace
+++    bool colorspaceSRGB;
+++
+++    // EGL_EXT_gl_colorspace_scrgb_linear
+++    bool colorspaceSCRGBLinear;
+++
+++    // EGL_EXT_gl_colorspace_bt2020_pq
+++    bool colorspaceBt2020PQ;
++ };
++ 
++ struct DeviceExtensions
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
++index dcc98f2ec6..b8ee635625 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
++@@ -130,7 +130,8 @@ class RendererD3D : public BufferFactoryD3D, public MultisampleTextureInitialize
++                                           GLenum backBufferFormat,
++                                           GLenum depthBufferFormat,
++                                           EGLint orientation,
++-                                          EGLint samples) = 0;
+++                                          EGLint samples,
+++                                          EGLint colorSpace) = 0;
++     virtual egl::Error getD3DTextureInfo(const egl::Config *configuration,
++                                          IUnknown *d3dTexture,
++                                          EGLint *width,
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
++index 7657aef79e..efd4dd1a24 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
++@@ -22,6 +22,27 @@
++ namespace rx
++ {
++ 
+++GLenum renderTargetFormatFromColorSpace(egl::Display *display, GLenum baseFormat, EGLint colorSpace)
+++{
+++    GLenum result = baseFormat;
+++
+++    /**
+++     * If sRGB extension is supported, we should change the surface format
+++     * to a specific one that does support automated gamma conversion.
+++     *
+++     * TODO: openGL doesn't support BGRA-sRGB texture format, so creation of
+++     *       textures in this format technically is not supported!
+++     */
+++    if (display->getExtensions().colorspaceSRGB &&
+++        baseFormat == GL_RGBA8_OES &&
+++        colorSpace == EGL_GL_COLORSPACE_SRGB_KHR)
+++    {
+++        result = GL_SRGB8_ALPHA8;
+++    }
+++
+++    return result;
+++}
+++
++ SurfaceD3D::SurfaceD3D(const egl::SurfaceState &state,
++                        RendererD3D *renderer,
++                        egl::Display *display,
++@@ -34,7 +55,8 @@ SurfaceD3D::SurfaceD3D(const egl::SurfaceState &state,
++       mDisplay(display),
++       mFixedSize(window == nullptr || attribs.get(EGL_FIXED_SIZE_ANGLE, EGL_FALSE) == EGL_TRUE),
++       mOrientation(static_cast<EGLint>(attribs.get(EGL_SURFACE_ORIENTATION_ANGLE, 0))),
++-      mRenderTargetFormat(state.config->renderTargetFormat),
+++      mColorSpace(static_cast<EGLint>(attribs.get(EGL_GL_COLORSPACE_KHR, EGL_GL_COLORSPACE_LINEAR_KHR))),
+++      mRenderTargetFormat(renderTargetFormatFromColorSpace(display, state.config->renderTargetFormat, mColorSpace)),
++       mDepthStencilFormat(state.config->depthStencilFormat),
++       mSwapChain(nullptr),
++       mSwapIntervalDirty(true),
++@@ -148,7 +170,7 @@ egl::Error SurfaceD3D::resetSwapChain(const egl::Display *display)
++ 
++     mSwapChain =
++         mRenderer->createSwapChain(mNativeWindow, mShareHandle, mD3DTexture, mRenderTargetFormat,
++-                                   mDepthStencilFormat, mOrientation, mState.config->samples);
+++                                   mDepthStencilFormat, mOrientation, mState.config->samples, mColorSpace);
++     if (!mSwapChain)
++     {
++         return egl::EglBadAlloc();
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
++index 01d2573244..ccb793d423 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
++@@ -90,6 +90,7 @@ class SurfaceD3D : public SurfaceImpl
++ 
++     bool mFixedSize;
++     GLint mOrientation;
+++    EGLint mColorSpace;
++ 
++     GLenum mRenderTargetFormat;
++     GLenum mDepthStencilFormat;
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
++index b0ef9abddc..ac46690090 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
++@@ -465,6 +465,7 @@ Renderer11::Renderer11(egl::Display *display)
++     mRenderer11DeviceCaps.supportsConstantBufferOffsets = false;
++     mRenderer11DeviceCaps.supportsVpRtIndexWriteFromVertexShader = false;
++     mRenderer11DeviceCaps.supportsDXGI1_2               = false;
+++    mRenderer11DeviceCaps.supportsDXGI1_4               = false;
++     mRenderer11DeviceCaps.B5G6R5support                 = 0;
++     mRenderer11DeviceCaps.B4G4R4A4support               = 0;
++     mRenderer11DeviceCaps.B5G5R5A1support               = 0;
++@@ -918,6 +919,7 @@ egl::Error Renderer11::initializeDevice()
++ 
++     // Gather stats on DXGI and D3D feature level
++     ANGLE_HISTOGRAM_BOOLEAN("GPU.ANGLE.SupportsDXGI1_2", mRenderer11DeviceCaps.supportsDXGI1_2);
+++    ANGLE_HISTOGRAM_BOOLEAN("GPU.ANGLE.SupportsDXGI1_4", mRenderer11DeviceCaps.supportsDXGI1_4);
++ 
++     ANGLEFeatureLevel angleFeatureLevel = GetANGLEFeatureLevel(mRenderer11DeviceCaps.featureLevel);
++ 
++@@ -999,9 +1001,15 @@ void Renderer11::populateRenderer11DeviceCaps()
++                              &mRenderer11DeviceCaps.B5G5R5A1support,
++                              &mRenderer11DeviceCaps.B5G5R5A1maxSamples);
++ 
+++//#if defined(ANGLE_ENABLE_D3D11_1)
++     IDXGIAdapter2 *dxgiAdapter2 = d3d11::DynamicCastComObject<IDXGIAdapter2>(mDxgiAdapter);
++     mRenderer11DeviceCaps.supportsDXGI1_2 = (dxgiAdapter2 != nullptr);
++     SafeRelease(dxgiAdapter2);
+++
+++    IDXGIAdapter3 *dxgiAdapter3 = d3d11::DynamicCastComObject<IDXGIAdapter3>(mDxgiAdapter);
+++    mRenderer11DeviceCaps.supportsDXGI1_4 = (dxgiAdapter3 != nullptr);
+++    SafeRelease(dxgiAdapter3);
+++//#endif
++ }
++ 
++ gl::SupportedSampleSet Renderer11::generateSampleSetForEGLConfig(
++@@ -1241,6 +1249,11 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
++ 
++     // All D3D feature levels support robust resource init
++     outExtensions->robustResourceInitialization = true;
+++
+++    // color space selection is always supported in DirectX11
+++    outExtensions->colorspaceSRGB = true;
+++    outExtensions->colorspaceSCRGBLinear = true;
+++    outExtensions->colorspaceBt2020PQ = true;
++ }
++ 
++ gl::Error Renderer11::flush()
++@@ -1436,10 +1449,11 @@ SwapChainD3D *Renderer11::createSwapChain(NativeWindowD3D *nativeWindow,
++                                           GLenum backBufferFormat,
++                                           GLenum depthBufferFormat,
++                                           EGLint orientation,
++-                                          EGLint samples)
+++                                          EGLint samples,
+++                                          EGLint colorSpace)
++ {
++     return new SwapChain11(this, GetAs<NativeWindow11>(nativeWindow), shareHandle, d3dTexture,
++-                           backBufferFormat, depthBufferFormat, orientation, samples);
+++                           backBufferFormat, depthBufferFormat, orientation, samples, colorSpace);
++ }
++ 
++ void *Renderer11::getD3DDevice()
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
++index a8c24e681b..3516bf779d 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
++@@ -49,6 +49,7 @@ struct Renderer11DeviceCaps
++ 
++     D3D_FEATURE_LEVEL featureLevel;
++     bool supportsDXGI1_2;                // Support for DXGI 1.2
+++    bool supportsDXGI1_4;               // Support for DXGI 1.4
++     bool supportsClearView;              // Support for ID3D11DeviceContext1::ClearView
++     bool supportsConstantBufferOffsets;  // Support for Constant buffer offset
++     bool supportsVpRtIndexWriteFromVertexShader;  // VP/RT can be selected in the Vertex Shader
++@@ -138,7 +139,8 @@ class Renderer11 : public RendererD3D
++                                   GLenum backBufferFormat,
++                                   GLenum depthBufferFormat,
++                                   EGLint orientation,
++-                                  EGLint samples) override;
+++                                  EGLint samples,
+++                                  EGLint colorSpace) override;
++     egl::Error getD3DTextureInfo(const egl::Config *configuration,
++                                  IUnknown *d3dTexture,
++                                  EGLint *width,
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
++index dcfd06484d..8f72c5c9aa 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
++@@ -18,6 +18,8 @@
++ #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
++ #include "third_party/trace_event/trace_event.h"
++ 
+++#include <Dxgi1_5.h>
+++
++ // Precompiled shaders
++ #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough2d11vs.h"
++ #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2d11ps.h"
++@@ -56,12 +58,14 @@ SwapChain11::SwapChain11(Renderer11 *renderer,
++                          GLenum backBufferFormat,
++                          GLenum depthBufferFormat,
++                          EGLint orientation,
++-                         EGLint samples)
+++                         EGLint samples,
+++                         EGLint colorSpace)
++     : SwapChainD3D(shareHandle, d3dTexture, backBufferFormat, depthBufferFormat),
++       mRenderer(renderer),
++       mWidth(-1),
++       mHeight(-1),
++       mOrientation(orientation),
+++      mColorSpace(colorSpace),
++       mAppCreatedShareHandle(mShareHandle != nullptr),
++       mSwapInterval(0),
++       mPassThroughResourcesInit(false),
++@@ -620,10 +624,94 @@ EGLint SwapChain11::reset(const gl::Context *context,
++             mSwapChain1 = d3d11::DynamicCastComObject<IDXGISwapChain1>(mSwapChain);
++         }
++ 
+++        if (mRenderer->getRenderer11DeviceCaps().supportsDXGI1_4)
+++        {
+++#if defined(ANGLE_ENABLE_D3D11_1)
+++            IDXGISwapChain3 *swapChain3 = d3d11::DynamicCastComObject<IDXGISwapChain3>(mSwapChain);
+++
+++            printf("*** EGL colorSpace: 0x%X\n", mColorSpace);
+++            printf("*** EGL format: 0x%X\n", mOffscreenRenderTargetFormat);
+++            printf("*** Native format: 0x%X\n", getSwapChainNativeFormat());
+++
+++            if (mColorSpace != EGL_GL_COLORSPACE_LINEAR_KHR) {
+++                DXGI_COLOR_SPACE_TYPE nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709;
+++                switch (mColorSpace)
+++                {
+++                case EGL_GL_COLORSPACE_SRGB_KHR:
+++                    nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709;
+++                    break;
+++                case EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT:
+++                    nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709;
+++                    break;
+++                case EGL_GL_COLORSPACE_BT2020_PQ_EXT:
+++                    nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020;
+++                    break;
+++                default:
+++                    ASSERT(0 && "Unsupported colorspace requested");
+++                }
+++
+++                printf("*** Native colorSpace: 0x%X\n", nativeColorSpace);
+++
+++                UINT supported = 0;
+++                result = swapChain3->CheckColorSpaceSupport(nativeColorSpace, &supported);
+++                ASSERT(SUCCEEDED(result));
+++                if (!(supported & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT)) {
+++                    SafeRelease(swapChain3);
+++                    return EGL_BAD_MATCH;
+++                }
+++
+++                result = swapChain3->SetColorSpace1(nativeColorSpace);
+++                ASSERT(SUCCEEDED(result));
+++            }
+++
+++            SafeRelease(swapChain3);
+++
+++#if 0
+++
+++            IDXGISwapChain4 *swapChain4 = d3d11::DynamicCastComObject<IDXGISwapChain4>(mSwapChain);
+++
+++            DXGI_HDR_METADATA_HDR10 md;
+++            md.RedPrimary[0] = 0.680 * 50000;
+++            md.RedPrimary[1] = 0.320 * 50000;
+++            md.GreenPrimary[0] = 0.265 * 50000;
+++            md.GreenPrimary[1] = 0.690 * 50000;
+++            md.BluePrimary[0] = 0.150 * 50000;
+++            md.BluePrimary[1] = 0.060 * 50000;
+++            md.WhitePoint[0] = 0.3127 * 50000;
+++            md.WhitePoint[1] = 0.3290 * 50000;
+++            md.MaxMasteringLuminance = 1000 * 10000;
+++            md.MinMasteringLuminance = 0.001 * 10000;
+++            md.MaxContentLightLevel = 1000;
+++            md.MaxFrameAverageLightLevel = 200;
+++            result = swapChain4->SetHDRMetaData(DXGI_HDR_METADATA_TYPE_HDR10, sizeof(md), &md);
+++            printf("*** Result hdr 0x%X\n", result);
+++            SafeRelease(swapChain4);
+++#endif
+++#endif
+++        }
+++
++         ID3D11Texture2D *backbufferTex = nullptr;
++         result                         = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
++                                        reinterpret_cast<LPVOID *>(&backbufferTex));
++         ASSERT(SUCCEEDED(result));
+++
+++        // TODO: recover rendering to sRGB
+++        //
+++        // D3D11_RENDER_TARGET_VIEW_DESC offscreenRTVDesc;
+++        // offscreenRTVDesc.Format = getSwapChainNativeFormat();
+++        //
+++        // if (mColorSpace == EGL_GL_COLORSPACE_SRGB_KHR) {
+++        //     if (offscreenRTVDesc.Format == DXGI_FORMAT_R8G8B8A8_UNORM) {
+++        //         offscreenRTVDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+++        //     }
+++        //
+++        //     if (offscreenRTVDesc.Format == DXGI_FORMAT_B8G8R8A8_UNORM) {
+++        //         offscreenRTVDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
+++        //     }
+++        // }
+++        //
+++        // printf("*** Render target format: 0x%X\n", offscreenRTVDesc.Format);
+++
++         const auto &format =
++             d3d11::Format::Get(mOffscreenRenderTargetFormat, mRenderer->getRenderer11DeviceCaps());
++         mBackBufferTexture.set(backbufferTex, format);
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
++index eca068210b..2a4b9ba274 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
++@@ -28,7 +28,8 @@ class SwapChain11 final : public SwapChainD3D
++                 GLenum backBufferFormat,
++                 GLenum depthBufferFormat,
++                 EGLint orientation,
++-                EGLint samples);
+++                EGLint samples,
+++                EGLint colorSpace);
++     ~SwapChain11() override;
++ 
++     EGLint resize(const gl::Context *context,
++@@ -93,6 +94,7 @@ class SwapChain11 final : public SwapChainD3D
++     EGLint mWidth;
++     EGLint mHeight;
++     const EGLint mOrientation;
+++    EGLint mColorSpace;
++     bool mAppCreatedShareHandle;
++     unsigned int mSwapInterval;
++     bool mPassThroughResourcesInit;
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
++index 5394e3d3e7..c81b33fee9 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
++@@ -158,9 +158,9 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
++         swapChainDesc.SampleDesc.Quality    = 0;
++         swapChainDesc.BufferUsage =
++             DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT | DXGI_USAGE_BACK_BUFFER;
++-        swapChainDesc.BufferCount   = 1;
+++        swapChainDesc.BufferCount   = 2;
++         swapChainDesc.Scaling       = DXGI_SCALING_STRETCH;
++-        swapChainDesc.SwapEffect    = DXGI_SWAP_EFFECT_SEQUENTIAL;
+++        swapChainDesc.SwapEffect    = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
++         swapChainDesc.AlphaMode     = DXGI_ALPHA_MODE_UNSPECIFIED;
++         swapChainDesc.Flags         = 0;
++         IDXGISwapChain1 *swapChain1 = nullptr;
++@@ -176,7 +176,7 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
++     }
++ 
++     DXGI_SWAP_CHAIN_DESC swapChainDesc               = {};
++-    swapChainDesc.BufferCount                        = 1;
+++    swapChainDesc.BufferCount                        = 2;
++     swapChainDesc.BufferDesc.Format                  = format;
++     swapChainDesc.BufferDesc.Width                   = width;
++     swapChainDesc.BufferDesc.Height                  = height;
++@@ -191,7 +191,17 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
++     swapChainDesc.SampleDesc.Count   = samples;
++     swapChainDesc.SampleDesc.Quality = 0;
++     swapChainDesc.Windowed           = TRUE;
++-    swapChainDesc.SwapEffect         = DXGI_SWAP_EFFECT_DISCARD;
+++
+++    /**
+++     * NOTE1: in flip-discard mode the swap chain doesn't support partial
+++     *       presentatiopn with Present1() call. Though it is not a big
+++     *       problem, because in case DXGI 1.2 is supported this code is
+++     *       unreachable.
+++     *
+++     * NOTE2: in non-flip mode HDR rendering is not supported, so use it
+++     *        bt default
+++     */
+++    swapChainDesc.SwapEffect         = DXGI_SWAP_EFFECT_FLIP_DISCARD;
++ 
++     HRESULT result = factory->CreateSwapChain(device, &swapChainDesc, swapChain);
++     if (SUCCEEDED(result))
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
++index 75c6298868..58596169a8 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
++@@ -718,8 +718,10 @@ SwapChainD3D *Renderer9::createSwapChain(NativeWindowD3D *nativeWindow,
++                                          GLenum backBufferFormat,
++                                          GLenum depthBufferFormat,
++                                          EGLint orientation,
++-                                         EGLint samples)
+++                                         EGLint samples,
+++                                         EGLint colorSpace)
++ {
+++    UNUSED_VARIABLE(colorSpace);
++     return new SwapChain9(this, GetAs<NativeWindow9>(nativeWindow), shareHandle, d3dTexture,
++                           backBufferFormat, depthBufferFormat, orientation);
++ }
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
++index 9ddee45f0f..ce4bb201e5 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
++@@ -92,7 +92,8 @@ class Renderer9 : public RendererD3D
++                                   GLenum backBufferFormat,
++                                   GLenum depthBufferFormat,
++                                   EGLint orientation,
++-                                  EGLint samples) override;
+++                                  EGLint samples,
+++                                  EGLint colorSpace) override;
++     egl::Error getD3DTextureInfo(const egl::Config *configuration,
++                                  IUnknown *d3dTexture,
++                                  EGLint *width,
++diff --git a/src/3rdparty/angle/src/libANGLE/validationEGL.cpp b/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
++index 13a3a9e280..3f6a426320 100644
++--- a/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
++@@ -885,6 +885,32 @@ Error ValidateCreateWindowSurface(Display *display, Config *config, EGLNativeWin
++                                               "either EGL_TRUE or EGL_FALSE.";
++               }
++               break;
+++          case EGL_GL_COLORSPACE:
+++
+++              if (!displayExtensions.colorspaceSRGB)
+++              {
+++                  return Error(EGL_BAD_ATTRIBUTE, "EGL_KHR_gl_colorspace is not supported on this platform.");
+++              }
+++
+++              if (value == EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT)
+++              {
+++                  if (!displayExtensions.colorspaceSCRGBLinear)
+++                  {
+++                      return Error(EGL_BAD_ATTRIBUTE, "EGL_EXT_gl_colorspace_scrgb_linear is not supported on this platform.");
+++                  }
+++              }
+++              else if (value == EGL_GL_COLORSPACE_BT2020_PQ_EXT)
+++              {
+++                  if (!displayExtensions.colorspaceBt2020PQ)
+++                  {
+++                      return Error(EGL_BAD_ATTRIBUTE, "EGL_EXT_gl_colorspace_bt2020_pq is not supported on this platform.");
+++                  }
+++              }
+++              else if (value != EGL_GL_COLORSPACE_SRGB_KHR && value != EGL_GL_COLORSPACE_LINEAR_KHR)
+++              {
+++                  return Error(EGL_BAD_ATTRIBUTE);
+++              }
+++              break;
++ 
++           default:
++               return EglBadAttribute();
++-- 
++2.20.1.windows.1
++
++
++From b99e1010b22bb678e441814e42913e0b2c40f083 Mon Sep 17 00:00:00 2001
++From: Dmitry Kazakov <dimula73@gmail.com>
++Date: Wed, 23 Jan 2019 23:58:40 +0300
++Subject: [PATCH 3/5] Implement API for requesting if current EGL
++ implementation supports color spaces
++
++QOpenGLContext::isSurfaceColorSpaceSupported() returns if the color
++space is supported.
++
++Change-Id: Ib823270a388f6cfc85511f24ba777bca019edd3e
++TODO: implement this feature for other implementation, which are not EGL.
++---
++ src/3rdparty/angle/src/common/platform.h               |  7 +------
++ .../src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp     | 10 ++++------
++ .../src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp    |  7 ++++---
++ 3 files changed, 9 insertions(+), 15 deletions(-)
++
++diff --git a/src/3rdparty/angle/src/common/platform.h b/src/3rdparty/angle/src/common/platform.h
++index 89359f954e..265f49f875 100644
++--- a/src/3rdparty/angle/src/common/platform.h
+++++ b/src/3rdparty/angle/src/common/platform.h
++@@ -65,15 +65,10 @@
++ #      if defined(__MINGW32__) && !defined(__d3d11sdklayers_h__)
++ #          define ANGLE_MINGW32_COMPAT
++ #      endif
++-//#      if defined(_MSC_VER) && _MSC_VER >= 1800
++-#          define ANGLE_ENABLE_D3D11_1
++-//#      endif
++-#      if defined(ANGLE_ENABLE_D3D11_1)
++ #       include <d3d11_1.h>
++ #       include <d3d11_3.h>
++ #       include <dxgi1_2.h>
++-#       include <dxgi1_4.h> // TODO: This is actually D3D12!!!
++-#      endif
+++#       include <dxgi1_4.h> // WARNING: This is actually D3D12!
++ #       include <d3dcompiler.h>
++ #   endif
++ 
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
++index ac46690090..f0e497b52f 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
++@@ -1001,7 +1001,6 @@ void Renderer11::populateRenderer11DeviceCaps()
++                              &mRenderer11DeviceCaps.B5G5R5A1support,
++                              &mRenderer11DeviceCaps.B5G5R5A1maxSamples);
++ 
++-//#if defined(ANGLE_ENABLE_D3D11_1)
++     IDXGIAdapter2 *dxgiAdapter2 = d3d11::DynamicCastComObject<IDXGIAdapter2>(mDxgiAdapter);
++     mRenderer11DeviceCaps.supportsDXGI1_2 = (dxgiAdapter2 != nullptr);
++     SafeRelease(dxgiAdapter2);
++@@ -1009,7 +1008,6 @@ void Renderer11::populateRenderer11DeviceCaps()
++     IDXGIAdapter3 *dxgiAdapter3 = d3d11::DynamicCastComObject<IDXGIAdapter3>(mDxgiAdapter);
++     mRenderer11DeviceCaps.supportsDXGI1_4 = (dxgiAdapter3 != nullptr);
++     SafeRelease(dxgiAdapter3);
++-//#endif
++ }
++ 
++ gl::SupportedSampleSet Renderer11::generateSampleSetForEGLConfig(
++@@ -1250,10 +1248,10 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
++     // All D3D feature levels support robust resource init
++     outExtensions->robustResourceInitialization = true;
++ 
++-    // color space selection is always supported in DirectX11
++-    outExtensions->colorspaceSRGB = true;
++-    outExtensions->colorspaceSCRGBLinear = true;
++-    outExtensions->colorspaceBt2020PQ = true;
+++    // color space selection supported in DXGI 1.4 only
+++    outExtensions->colorspaceSRGB = mRenderer11DeviceCaps.supportsDXGI1_4;
+++    outExtensions->colorspaceSCRGBLinear = mRenderer11DeviceCaps.supportsDXGI1_4;
+++    outExtensions->colorspaceBt2020PQ = mRenderer11DeviceCaps.supportsDXGI1_4;
++ }
++ 
++ gl::Error Renderer11::flush()
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
++index 8f72c5c9aa..fc967b90d0 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
++@@ -18,7 +18,10 @@
++ #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
++ #include "third_party/trace_event/trace_event.h"
++ 
++-#include <Dxgi1_5.h>
+++#if 0
+++// used only for HDR metadata configuration options
+++#include <dxgi1_5.h>
+++#endif
++ 
++ // Precompiled shaders
++ #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough2d11vs.h"
++@@ -626,7 +629,6 @@ EGLint SwapChain11::reset(const gl::Context *context,
++ 
++         if (mRenderer->getRenderer11DeviceCaps().supportsDXGI1_4)
++         {
++-#if defined(ANGLE_ENABLE_D3D11_1)
++             IDXGISwapChain3 *swapChain3 = d3d11::DynamicCastComObject<IDXGISwapChain3>(mSwapChain);
++ 
++             printf("*** EGL colorSpace: 0x%X\n", mColorSpace);
++@@ -686,7 +688,6 @@ EGLint SwapChain11::reset(const gl::Context *context,
++             result = swapChain4->SetHDRMetaData(DXGI_HDR_METADATA_TYPE_HDR10, sizeof(md), &md);
++             printf("*** Result hdr 0x%X\n", result);
++             SafeRelease(swapChain4);
++-#endif
++ #endif
++         }
++ 
++-- 
++2.20.1.windows.1
++
++
++From 40b70067421d48c22e1c7059c416d51e19724558 Mon Sep 17 00:00:00 2001
++From: Dmitry Kazakov <dimula73@gmail.com>
++Date: Mon, 28 Jan 2019 12:55:35 +0300
++Subject: [PATCH 4/5] Fix Angle to work correctly on Windows 7
++
++"Flip" modes are not available on older versions of DirectX,
++so it is not safe to request it as a fallback case.
++
++Change-Id: I3f00e64e5a11a8c5ef2dab9b27a5d9e677f1ed58
++---
++ .../renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp | 12 +++++++-----
++ 1 file changed, 7 insertions(+), 5 deletions(-)
++
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
++index c81b33fee9..794ab971ab 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
++@@ -146,6 +146,9 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
++ 
++     // Use IDXGIFactory2::CreateSwapChainForHwnd if DXGI 1.2 is available to create a
++     // DXGI_SWAP_EFFECT_SEQUENTIAL swap chain.
+++    //
+++    // NOTE: in non-flip mode HDR rendering is not supported, so use it
+++    //       by default
++     IDXGIFactory2 *factory2 = d3d11::DynamicCastComObject<IDXGIFactory2>(factory);
++     if (factory2 != nullptr)
++     {
++@@ -193,21 +196,20 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
++     swapChainDesc.Windowed           = TRUE;
++ 
++     /**
++-     * NOTE1: in flip-discard mode the swap chain doesn't support partial
+++     * NOTE: in discard mode the swap chain doesn't support partial
++      *       presentatiopn with Present1() call. Though it is not a big
++      *       problem, because in case DXGI 1.2 is supported this code is
++      *       unreachable.
++-     *
++-     * NOTE2: in non-flip mode HDR rendering is not supported, so use it
++-     *        bt default
++      */
++-    swapChainDesc.SwapEffect         = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+++    swapChainDesc.SwapEffect         = DXGI_SWAP_EFFECT_DISCARD;
++ 
++     HRESULT result = factory->CreateSwapChain(device, &swapChainDesc, swapChain);
+++
++     if (SUCCEEDED(result))
++     {
++         factory->MakeWindowAssociation(getNativeWindow(), DXGI_MWA_NO_ALT_ENTER);
++     }
+++
++     return result;
++ }
++ 
++-- 
++2.20.1.windows.1
++
++
++From b3aab4c1f7efc3b074bb50dc5a2eab0b5d735b63 Mon Sep 17 00:00:00 2001
++From: Dmitry Kazakov <dimula73@gmail.com>
++Date: Mon, 28 Jan 2019 14:39:47 +0300
++Subject: [PATCH 5/5] Allow color space selection attributes for
++ eglCreatePbufferSurface
++
++Notes:
++
++eglCreatePixmapSurface() is not implemented in Angle, so the support is
++not added.
++
++eglCreatePlatformWindowSurface() and eglCreatePlatformPixmapSurface()
++do not have support for color spaces according to the extension wording
++(and they are also not supported by Angle :) )
++
++Change-Id: Ic780a96c6a7e98fba7524fbabc6043ea2de435b0
++---
++ .../angle/src/libANGLE/validationEGL.cpp      | 27 +++++++++++++++++++
++ 1 file changed, 27 insertions(+)
++
++diff --git a/src/3rdparty/angle/src/libANGLE/validationEGL.cpp b/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
++index 3f6a426320..1e9535ee1c 100644
++--- a/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
++@@ -1003,6 +1003,33 @@ Error ValidateCreatePbufferSurface(Display *display, Config *config, const Attri
++               }
++               break;
++ 
+++        case EGL_GL_COLORSPACE:
+++
+++            if (!displayExtensions.colorspaceSRGB)
+++            {
+++                return Error(EGL_BAD_ATTRIBUTE, "EGL_KHR_gl_colorspace is not supported on this platform.");
+++            }
+++
+++            if (value == EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT)
+++            {
+++                if (!displayExtensions.colorspaceSCRGBLinear)
+++                {
+++                    return Error(EGL_BAD_ATTRIBUTE, "EGL_EXT_gl_colorspace_scrgb_linear is not supported on this platform.");
+++                }
+++            }
+++            else if (value == EGL_GL_COLORSPACE_BT2020_PQ_EXT)
+++            {
+++                if (!displayExtensions.colorspaceBt2020PQ)
+++                {
+++                    return Error(EGL_BAD_ATTRIBUTE, "EGL_EXT_gl_colorspace_bt2020_pq is not supported on this platform.");
+++                }
+++            }
+++            else if (value != EGL_GL_COLORSPACE_SRGB_KHR && value != EGL_GL_COLORSPACE_LINEAR_KHR)
+++            {
+++                return Error(EGL_BAD_ATTRIBUTE);
+++            }
+++            break;
+++
++           default:
++               return EglBadAttribute();
++         }
++-- 
++2.20.1.windows.1
++
+-- 
+2.20.1.windows.1
+

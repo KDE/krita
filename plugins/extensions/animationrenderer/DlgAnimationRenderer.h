@@ -24,12 +24,15 @@
 #include "ui_wdg_animationrenderer.h"
 
 #include <QSharedPointer>
+#include <QScopedPointer>
 #include <kis_types.h>
 
 class KisDocument;
 class KisImportExportFilter;
 class KisConfigWidget;
 class QHBoxLayout;
+class VideoSaver;
+class KisAnimationRenderingOptions;
 
 class WdgAnimationRenderer : public QWidget, public Ui::WdgAnimaterionRenderer
 {
@@ -53,37 +56,17 @@ public:
     DlgAnimationRenderer(KisDocument *doc, QWidget *parent = 0);
     ~DlgAnimationRenderer() override;
 
-    KisPropertiesConfigurationSP getSequenceConfiguration() const;
-    void setSequenceConfiguration(KisPropertiesConfigurationSP  cfg);
-
-    KisPropertiesConfigurationSP getFrameExportConfiguration() const;
-
-    KisPropertiesConfigurationSP getVideoConfiguration() const;
-    void setVideoConfiguration(KisPropertiesConfigurationSP cfg);
-
-    KisPropertiesConfigurationSP getEncoderConfiguration() const;
-    void setEncoderConfiguration(KisPropertiesConfigurationSP cfg);
-
-    QSharedPointer<KisImportExportFilter> encoderFilter() const;
-
-    // fires when the render animation action is called. makes sure the correct export type is selected for the UI
-    void updateExportUIOptions();
+    KisAnimationRenderingOptions getEncoderOptions() const;
 
 private Q_SLOTS:
 
     void selectRenderType(int i);
     void selectRenderOptions();
     /**
-     * @brief createEncoderWidget
-     * creates a new settings widget for the filetype.
-     */
-    void createEncoderWidget(int index);
-    /**
      * @brief sequenceMimeTypeSelected
      * calls the dialog for the export widget.
      */
     void sequenceMimeTypeSelected();
-    void ffmpegLocationChanged(const QString&);
 
     void slotLockAspectRatioDimensionsWidth(int width);
     void slotLockAspectRatioDimensionsHeight(int height);
@@ -94,22 +77,29 @@ private Q_SLOTS:
 protected Q_SLOTS:
 
     void slotButtonClicked(int button) override;
+    void slotDialogAccepted();
 
 private:
-    QString fetchRenderingDirectory() const;
-    QString fetchRenderingFileName() const;
+    void loadAnimationOptions(const KisAnimationRenderingOptions &options);
+
+    static QString defaultVideoFileName(KisDocument *doc, const QString &mimeType);
+
+    static void getDefaultVideoEncoderOptions(const QString &mimeType,
+                                              KisPropertiesConfigurationSP cfg,
+                                              QString *customFFMpegOptionsString,
+                                              bool *forceHDRVideo);
 
 private:
 
-    static QString findFFMpeg();
+    static QString findFFMpeg(const QString &customLocation);
 
     KisImageSP m_image;
     KisDocument *m_doc;
     WdgAnimationRenderer *m_page {0};
-    QList<QSharedPointer<KisImportExportFilter>> m_renderFilters;
-    KisConfigWidget *m_encoderConfigWidget {0};
-    KisConfigWidget *m_frameExportConfigWidget {0};
-    QString m_defaultFileName;
+    KisPropertiesConfigurationSP m_frameExportConfig;
+
+    QString m_customFFMpegOptionsString;
+    bool m_forceHDRVideo = false;
 };
 
 #endif // DLG_ANIMATIONRENDERERIMAGE

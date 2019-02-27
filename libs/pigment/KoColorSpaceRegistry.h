@@ -291,6 +291,29 @@ public:
     const KoColorSpace * lab16(const KoColorProfile * profile);
 
     /**
+     * Convenience method to get a standard profile for Rec.2020 linear light
+     * color space
+     */
+    const KoColorProfile *p2020G10Profile() const;
+
+    /**
+     * Convenience method to get a standard profile for Rec.2020 PQ color space
+     */
+    const KoColorProfile *p2020PQProfile() const;
+
+    /**
+     * Convenience method to get a standard profile for Rec. 709 linear light
+     * color space
+     */
+    const KoColorProfile *p709G10Profile() const;
+
+    /**
+     * Convenience method to get a standard profile for Rec. 709 sRGB-tone-
+     * response-curve profile
+     */
+    const KoColorProfile *p709SRGBProfile() const;
+
+    /**
      * @return the list of available color models
      */
     QList<KoID> colorModelsList(ColorSpaceListVisibility option) const;

@@ -33,7 +33,7 @@
 #include <QFormLayout>
 #include <QLineEdit>
 
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 #include <klocalizedstring.h>
 #include <KoResourceServerProvider.h>
 #include <KoColorSpaceRegistry.h>

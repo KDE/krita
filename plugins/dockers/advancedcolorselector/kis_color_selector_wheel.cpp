@@ -177,6 +177,8 @@ void KisColorSelectorWheel::setColor(const KoColor &color)
 
         setLastMousePosition(pos.x(), pos.y());
     }
+
+    KisColorSelectorComponent::setColor(color);
 }
 
 void KisColorSelectorWheel::paint(QPainter* painter)
@@ -257,18 +259,6 @@ void KisColorSelectorWheel::paint(QPainter* painter)
     }
 }
 
-void KisColorSelectorWheel::mouseEvent(int x, int y)
-{
-    int newX=qBound(0, (x-m_x), width());
-    int newY=qBound(0, (y-m_y), height());
-
-    if (coordIsClear(newX,newY)) {
-        selectColor(newX, newY);
-        m_lastX=newX;
-        m_lastY=newY;
-    }
-}
-
 KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
 {
     KoColor color(Qt::transparent, m_parent->colorSpace());
@@ -327,15 +317,9 @@ KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
     return color;
 }
 
-bool KisColorSelectorWheel::coordIsClear(int x, int y)
+bool KisColorSelectorWheel::allowsColorSelectionAtPoint(const QPoint &pt) const
 {
-    bool retval = false;
-    if (m_gamutMaskOn && m_currentGamutMask) {
-        bool isClear = m_currentGamutMask->coordIsClear(m_toRenderArea.map(QPointF(x,y)), *m_viewConverter, m_maskPreviewActive);
-        retval = (isClear) ? true : false;
-    } else {
-        retval = true;
-    }
-
-    return retval;
+    return !m_gamutMaskOn || !m_currentGamutMask ||
+        m_currentGamutMask->coordIsClear(m_toRenderArea.map(QPointF(pt)),
+                                         *m_viewConverter, m_maskPreviewActive);
 }

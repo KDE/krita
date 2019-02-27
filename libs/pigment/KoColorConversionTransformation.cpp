@@ -68,6 +68,17 @@ KoColorConversionTransformation::ConversionFlags KoColorConversionTransformation
     return d->conversionFlags;
 }
 
+void KoColorConversionTransformation::transformInPlace(const quint8 *src, quint8 *dst, qint32 nPixels) const
+{
+    if (src != dst) {
+        transform(src, dst, nPixels);
+    } else {
+        QByteArray buffer(srcColorSpace()->pixelSize() * nPixels, 0);
+        transform(src, reinterpret_cast<quint8*>(buffer.data()), nPixels);
+        memcpy(dst, buffer.data(), buffer.size());
+    }
+}
+
 void KoColorConversionTransformation::setSrcColorSpace(const KoColorSpace* cs) const
 {
     Q_ASSERT(*d->srcColorSpace == *cs);

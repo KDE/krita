@@ -83,6 +83,12 @@ public:
                            KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
+     * Update the textures when the color space of the image changes.
+     * @return true when a full data refetch should be initiated by the caller
+     */
+    bool setImageColorSpace(const KoColorSpace *cs);
+
+    /**
      * Complete initialization can only happen once an OpenGL context has been created.
      * @param f Pointer to OpenGL functions. They must already be initialized.
      */
@@ -151,7 +157,7 @@ protected:
                            KoColorConversionTransformation::Intent renderingIntent,
                            KoColorConversionTransformation::ConversionFlags conversionFlags);
 
-    void createImageTextureTiles();
+    void recreateImageTextureTiles();
 
     void destroyImageTextureTiles();
 
@@ -170,13 +176,6 @@ private:
     const KoColorProfile *m_monitorProfile;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
-
-    /**
-     * If the destination color space coincides with the one of the image,
-     * then effectively, there is no conversion happens. That is used
-     * for working with OCIO.
-     */
-    const KoColorSpace *m_tilesDestinationColorSpace;
 
     /**
      * Shows whether the internal color management should be enabled or not.

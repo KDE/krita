@@ -30,17 +30,14 @@ class KisWdgOptionsPNG : public KisConfigWidget, public Ui::KisWdgOptionsPNG
     Q_OBJECT
 
 public:
-    KisWdgOptionsPNG(QWidget *parent)
-        : KisConfigWidget(parent)
-    {
-        setupUi(this);
-    }
+    KisWdgOptionsPNG(QWidget *parent);
 
     void setConfiguration(const KisPropertiesConfigurationSP  config) override;
     KisPropertiesConfigurationSP configuration() const override;
 
 private Q_SLOTS:
     void on_alpha_toggled(bool checked);
+    void slotUseHDRChanged(bool value);
 };
 
 class KisPNGExport : public KisImportExportFilter

@@ -49,6 +49,9 @@ template<class _CSTrait>
 class KoColorSpaceAbstract : public KoColorSpace
 {
 public:
+    typedef _CSTrait ColorSpaceTraits;
+
+public:
     KoColorSpaceAbstract(const QString &id, const QString &name) :
         KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>()) {
     }

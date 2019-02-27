@@ -423,10 +423,12 @@ if exist "%WindowsSdkDir%\" (
     pushd "%WindowsSdkDir%"
     if exist "bin\x64\fxc.exe" (
         set HAVE_FXC_EXE=1
+        if "%WindowsSdkVerBinPath%" == "" set "WindowsSdkVerBinPath=%WindowsSdkDir%"
     ) else (
         for /f "delims=" %%a in ('dir /a:d /b "bin\10.*"') do (
             if exist "bin\%%a\x64\fxc.exe" (
                 set HAVE_FXC_EXE=1
+                if "%WindowsSdkVerBinPath%" == "" set "WindowsSdkVerBinPath=%WindowsSdkDir%\bin\%%a\"
             )
         )
     )
@@ -744,6 +746,7 @@ echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DBUILD_TESTING=OFF ^
     -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
     -DFOUNDATION_BUILD=ON ^
+    -DHAVE_HDR=ON ^
     -Wno-dev ^
     -G "MinGW Makefiles" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
@@ -758,6 +761,7 @@ echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DBUILD_TESTING=OFF ^
     -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
     -DFOUNDATION_BUILD=ON ^
+    -DHAVE_HDR=ON ^
     -Wno-dev ^
     -G "MinGW Makefiles" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%

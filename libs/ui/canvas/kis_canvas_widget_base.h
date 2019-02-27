@@ -46,10 +46,6 @@ public: // KisAbstractCanvasWidget
 
     KoToolProxy *toolProxy() const override;
 
-
-    /// set the specified display filter on the canvas
-    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) override = 0;
-
     /**
      * Draw the specified decorations on the view.
      */

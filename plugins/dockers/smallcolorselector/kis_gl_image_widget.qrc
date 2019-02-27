@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>kis_gl_image_widget.frag</file>
+        <file>kis_gl_image_widget.vert</file>
+    </qresource>
+</RCC>

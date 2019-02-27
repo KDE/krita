@@ -54,7 +54,7 @@ public:
     void setConfiguration(Parameter param, Type type);
 
     /// set the color, blibs etc
-    virtual void setColor(const KoColor& color) = 0;
+    virtual void setColor(const KoColor& color);
 
     /// force subsequent redraw of the component
     void setDirty();
@@ -93,6 +93,11 @@ protected:
     /// values for the subclasses are provided in component coordinates, eg (0,0) is top left of component
     virtual bool containsPointInComponentCoords(int x, int y) const;
 
+    /// a subclass can implement this method to note that the point, although it is in
+    /// containsPointInComponentCoords area, still cannot be selected as a color (e.g.
+    /// it is masked out). Default implementation always returns true.
+    virtual bool allowsColorSelectionAtPoint(const QPoint &pt) const;
+
     // Workaround for Bug 287001
     void setLastMousePosition(int x, int y);
 
@@ -120,6 +125,7 @@ private:
     int m_height;
     bool m_dirty;
     const KoColorSpace* m_lastColorSpace;
+    KoColor m_lastSelectedColor;
 };
 
 #endif // KIS_COLOR_SELECTOR_COMPONENT_H

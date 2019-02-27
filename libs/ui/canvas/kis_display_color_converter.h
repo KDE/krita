@@ -30,7 +30,7 @@
 class KoColor;
 class KoColorProfile;
 class KoCanvasResourceProvider;
-
+class KoID;
 
 /**
  * Special helper class that provides primitives for converting colors when
@@ -53,6 +53,9 @@ public:
     KisDisplayColorConverter(KoCanvasResourceProvider *resourceManager, QObject *parent);
     ~KisDisplayColorConverter() override;
 
+    void setImage(KisImageSP image);
+    void setImageColorSpace(const KoColorSpace *cs);
+
     static KisDisplayColorConverter* dumbConverterInstance();
 
     KoColorDisplayRendererInterface* displayRendererInterface() const;
@@ -63,6 +66,11 @@ public:
 
     QColor toQColor(const KoColor &c) const;
     KoColor approximateFromRenderedQColor(const QColor &c) const;
+
+    bool canSkipDisplayConversion(const KoColorSpace *cs) const;
+    KoColor applyDisplayFiltering(const KoColor &srcColor, const KoID &bitDepthId) const;
+    void applyDisplayFilteringF32(KisFixedPaintDeviceSP device, const KoID &bitDepthId) const;
+
 
     /**
      * Converts the exactBounds() (!) of the \p srcDevice into QImage
@@ -89,6 +97,10 @@ public:
 
     QSharedPointer<KisDisplayFilter> displayFilter() const;
     const KoColorProfile* monitorProfile() const;
+    const KoColorProfile* openGLCanvasSurfaceProfile() const;
+    bool isHDRMode() const;
+
+    void notifyOpenGLCanvasIsActive(bool value);
 
 Q_SIGNALS:
     void displayConfigurationChanged();
@@ -96,7 +108,8 @@ Q_SIGNALS:
 private:
     // is not possible to implement!
     KoColor toKoColor(const QColor &c);
-
+    template <class Policy>
+    typename Policy::Result convertToDisplayImpl(const KoColor &srcColor, bool alreadyInDestinationF32 = false) const;
 
 private:
     Q_PRIVATE_SLOT(m_d, void slotCanvasResourceChanged(int key, const QVariant &v));

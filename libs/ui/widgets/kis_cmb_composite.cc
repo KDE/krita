@@ -57,7 +57,7 @@ KoID KisCompositeOpListWidget::selectedCompositeOp() const {
 // ---- KisCompositeOpComboBox -------------------------------------------------------- //
 
 KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
-    QComboBox(parent),
+    KisSqueezedComboBox(parent),
     m_model(new KisSortedCompositeOpListModel(this)),
     m_allowToHidePopup(true)
 {

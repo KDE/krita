@@ -38,7 +38,9 @@
 #include <KoLegacyResourceModel.h>
 #include <KoResourceServerAdapter.h>
 #include <KisResourceItemChooserSync.h>
-#include "KisResourceItemView.h"
+#include <KisResourceItemView.h>
+#include <KisResourceModel.h>
+#include <KisResourceLocator.h>
 
 #include <brushengine/kis_paintop_settings.h>
 #include <brushengine/kis_paintop_preset.h>
@@ -82,11 +84,16 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     if (! index.isValid())
         return;
 
-    KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(index.internalPointer());
+    bool dirty = index.data(Qt::UserRole + KisResourceModel::Dirty).toBool();
+    QImage preview = index.data(Qt::DecorationRole).value<QImage>();
+    QString filename = index.data(Qt::UserRole + KisResourceModel::Filename).toString();
+    QString location = index.data(Qt::UserRole + KisResourceModel::Location).toString();
 
-    QImage preview = preset->image();
+    // XXX: We should be able to get all interesting data without actually loading the preset, but that's not possible yet.
+    KoResourceSP resource = KisResourceLocator::instance()->resource(location, filename);
+    KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(resource.data());
 
-    if(preview.isNull()) {
+    if (preview.isNull()) {
         return;
     }
 
@@ -94,14 +101,15 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     if (!m_showText) {
         painter->drawImage(paintRect.x(), paintRect.y(),
                            preview.scaled(paintRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-    } else {
+    }
+    else {
         QSize pixSize(paintRect.height(), paintRect.height());
         painter->drawImage(paintRect.x(), paintRect.y(),
                            preview.scaled(pixSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
         // Put an asterisk after the preset if it is dirty. This will help in case the pixmap icon is too small
-         QString dirtyPresetIndicator = QString("");
-        if (m_useDirtyPresets && preset->isDirty()) {
+        QString dirtyPresetIndicator = QString("");
+        if (m_useDirtyPresets && dirty) {
             dirtyPresetIndicator = QString("*");
         }
 
@@ -117,11 +125,11 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
         painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, brushSizeText); // brush size
 
-        QString presetDisplayName = preset->name().replace("_", " "); // don't need underscores that might be part of the file name
+        QString presetDisplayName = index.data(Qt::UserRole + KisResourceModel::Name).toString().replace("_", " "); // don't need underscores that might be part of the file name
         painter->drawText(pixSize.width() + 40, option.rect.y() + option.rect.height() - 10, presetDisplayName.append(dirtyPresetIndicator));
 
     }
-    if (m_useDirtyPresets && preset->isDirty()) {
+    if (m_useDirtyPresets && dirty) {
         const QIcon icon = KisIconUtils::loadIcon(koIconName("dirty-preset"));
         QPixmap pixmap = icon.pixmap(QSize(15,15));
         painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
@@ -131,6 +139,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         const QIcon icon = KisIconUtils::loadIcon("broken-preset");
         icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
     }
+
     if (option.state & QStyle::State_Selected) {
         painter->setCompositionMode(QPainter::CompositionMode_HardLight);
         painter->setOpacity(1.0);
@@ -141,7 +150,8 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         painter->setPen(QPen(option.palette.highlight(), 4, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
         QRect selectedBorder = option.rect.adjusted(2 , 2, -2, -2); // constrict the rectangle so it doesn't bleed into other presets
         painter->drawRect(selectedBorder);
-       }
+    }
+
     painter->restore();
 }
 

@@ -354,7 +354,7 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
         img = image();
     }
 
-    m_d->dirtyPreset = false;
+    const_cast<KisPaintOpPreset*>(this)->setDirty(false);
 
     KoResource::saveToDevice(dev);
 

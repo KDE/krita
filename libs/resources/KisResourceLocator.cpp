@@ -135,6 +135,20 @@ QString KisResourceLocator::resourceLocationBase() const
     return d->resourceLocation;
 }
 
+bool KisResourceLocator::resourceCached(QString storageLocation, const QString &resourceLocation) const
+{
+    if (storageLocation.isEmpty()) {
+        storageLocation = resourceLocationBase();
+    }
+    else {
+        storageLocation = resourceLocationBase() + '/' + storageLocation;
+    }
+
+    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceLocation);
+
+    return d->resourceCache.contains(key);
+}
+
 KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString &resourceLocation)
 {
     if (storageLocation.isEmpty()) {

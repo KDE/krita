@@ -153,6 +153,22 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             QStringList tags = tagsForResource(d->resourcesQuery.value("id").toInt());
             return tags;
         }
+        case Qt::UserRole + Dirty:
+        {
+            QString storageLocation = d->resourcesQuery.value("location").toString();
+            QString resourceLocation = d->resourcesQuery.value("filename").toString();
+
+            // An uncached resource has not been loaded, so it cannot be dirty
+            if (!KisResourceLocator::instance()->resourceCached(storageLocation, resourceLocation)) {
+                return false;
+            }
+            else {
+                // Now we have to check the resource, but that's cheap since it's been loaded in any case
+                KoResourceSP resource = resourceForIndex(index);
+                return resource->isDirty();
+            }
+        }
+
         default:
             ;
         }

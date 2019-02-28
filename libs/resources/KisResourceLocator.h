@@ -64,6 +64,8 @@ public:
 
     QString resourceLocationBase() const;
 
+    KoResourceSP resource(QString storageLocation, const QString &resourceLocationBase);
+
 Q_SIGNALS:
 
     void progressMessage(const QString&);
@@ -72,7 +74,8 @@ private:
 
     friend class KisResourceModel;
 
-    KoResourceSP resource(QString storageLocation, const QString &resourceLocationBase);
+    /// @return true if the resource is present in the cache, false if it hasn't been loaded
+    bool resourceCached(QString storageLocation, const QString &resourceLocationBase) const;
 
     friend class TestResourceLocator;
 

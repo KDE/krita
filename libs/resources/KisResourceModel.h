@@ -53,7 +53,9 @@ public:
         ResourceType,
         Tags,
         /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
-        LargeThumbnail
+        LargeThumbnail,
+        /// A dirty resource is one that has been modified locally but not saved
+        Dirty
     };
 
 private:

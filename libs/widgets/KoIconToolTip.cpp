@@ -24,7 +24,7 @@
 #include <QTextDocument>
 #include <QUrl>
 
-#include <KoLegacyResourceModel.h>
+#include <KisResourceModel.h>
 #include <klocalizedstring.h>
 
 // #include <WidgetsDebug.h>
@@ -41,7 +41,7 @@ QTextDocument *KoIconToolTip::createDocument( const QModelIndex &index )
 {
     QTextDocument *doc = new QTextDocument( this );
 
-    QImage thumb = index.data( KoLegacyResourceModel::LargeThumbnailRole ).value<QImage>();
+    QImage thumb = index.data(Qt::UserRole + KisResourceModel::LargeThumbnail).value<QImage>();
     doc->addResource( QTextDocument::ImageResource, QUrl( "data:thumbnail" ), thumb );
 
     QString name = index.data( Qt::DisplayRole ).toString();

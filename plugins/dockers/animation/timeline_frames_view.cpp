@@ -53,7 +53,7 @@
 #include <kis_image_config.h>
 
 #include <KoFileDialog.h>
-#include <KoIconToolTip.h>
+#include <KisIconToolTip.h>
 
 typedef QPair<QRect, QModelIndex> QItemViewPaintPair;
 typedef QList<QItemViewPaintPair> QItemViewPaintPairs;
@@ -116,7 +116,7 @@ struct TimelineFramesView::Private
     QItemViewPaintPairs draggablePaintPairs(const QModelIndexList &indexes, QRect *r) const;
     QPixmap renderToPixmap(const QModelIndexList &indexes, QRect *r) const;
 
-    KoIconToolTip tip;
+    KisIconToolTip tip;
 
     KisActionManager *actionMan = 0;
 };

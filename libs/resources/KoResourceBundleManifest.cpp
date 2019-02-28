@@ -31,6 +31,8 @@
 
 #include <kis_debug.h>
 
+#include "KisResourceTypes.h"
+
 QString resourceTypeToManifestType(const QString &type) {
     if (type.startsWith("ko_")) {
         return type.mid(3);
@@ -44,7 +46,7 @@ QString resourceTypeToManifestType(const QString &type) {
 }
 
 QString manifestTypeToResourceType(const QString &type) {
-    if (type == "patterns" || type == "gradients" || type == "palettes") {
+    if (type == ResourceType::Patterns || type == ResourceType::Gradients || type == ResourceType::Palettes) {
         return "ko_" + type;
     }
     else {

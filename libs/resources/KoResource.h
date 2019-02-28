@@ -24,6 +24,8 @@
 #include <QHash>
 #include <QSharedPointer>
 
+#include "KisResourceTypes.h"
+
 #include <kritaresources_export.h>
 
 class QDomDocument;

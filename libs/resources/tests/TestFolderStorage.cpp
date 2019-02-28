@@ -35,8 +35,8 @@ void TestFolderStorage ::testStorage()
 {
     KisFolderStorage folderStorage(QString(FILES_DATA_DIR));
 
-    KisResourceLoaderRegistry::instance()->add("brushes", new KisResourceLoader<DummyResource>("dummy", "brushes", i18n("Brush tips"), QStringList() << "image/x-gimp-brush"));
-    QSharedPointer<KisResourceStorage::ResourceIterator> iter = folderStorage.resources("brushes");
+    KisResourceLoaderRegistry::instance()->add(ResourceType::Brushes, new KisResourceLoader<DummyResource>("dummy", ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/x-gimp-brush"));
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter = folderStorage.resources(ResourceType::Brushes);
     QVERIFY(iter->hasNext());
     int count = 0;
     while (iter->hasNext()) {
@@ -50,7 +50,7 @@ void TestFolderStorage ::testStorage()
 void TestFolderStorage::testTagIterator()
 {
     KisFolderStorage folderStorage(QString(FILES_DATA_DIR));
-    QSharedPointer<KisResourceStorage::TagIterator> iter = folderStorage.tags("paintoppresets");
+    QSharedPointer<KisResourceStorage::TagIterator> iter = folderStorage.tags(ResourceType::PaintOpPresets);
     QVERIFY(iter->hasNext());
     int count = 0;
     while (iter->hasNext()) {

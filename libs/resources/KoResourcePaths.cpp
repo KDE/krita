@@ -191,52 +191,52 @@ QString KoResourcePaths::getApplicationRoot()
     return getInstallationPrefix();
 }
 
-void KoResourcePaths::addResourceType(const char *type, const char *basetype,
+void KoResourcePaths::addResourceType(const QString &type, const char *basetype,
                                       const QString &relativeName, bool priority)
 {
-    s_instance->addResourceTypeInternal(QString::fromLatin1(type), QString::fromLatin1(basetype), relativeName, priority);
+    s_instance->addResourceTypeInternal(type, QString::fromLatin1(basetype), relativeName, priority);
 }
 
-void KoResourcePaths::addResourceDir(const char *type, const QString &dir, bool priority)
+void KoResourcePaths::addResourceDir(const QString &type, const QString &dir, bool priority)
 {
-    s_instance->addResourceDirInternal(QString::fromLatin1(type), dir, priority);
+    s_instance->addResourceDirInternal(type, dir, priority);
 }
 
-QString KoResourcePaths::findResource(const char *type, const QString &fileName)
+QString KoResourcePaths::findResource(const QString &type, const QString &fileName)
 {
-    return cleanup(s_instance->findResourceInternal(QString::fromLatin1(type), fileName));
+    return cleanup(s_instance->findResourceInternal(type, fileName));
 }
 
-QStringList KoResourcePaths::findDirs(const char *type)
+QStringList KoResourcePaths::findDirs(const QString &type)
 {
-    return cleanupDirs(s_instance->findDirsInternal(QString::fromLatin1(type)));
+    return cleanupDirs(s_instance->findDirsInternal(type));
 }
 
-QStringList KoResourcePaths::findAllResources(const char *type,
+QStringList KoResourcePaths::findAllResources(const QString &type,
                                               const QString &filter,
                                               SearchOptions options)
 {
-    return cleanup(s_instance->findAllResourcesInternal(QString::fromLatin1(type), filter, options));
+    return cleanup(s_instance->findAllResourcesInternal(type, filter, options));
 }
 
-QStringList KoResourcePaths::resourceDirs(const char *type)
+QStringList KoResourcePaths::resourceDirs(const QString &type)
 {
-    return cleanupDirs(s_instance->resourceDirsInternal(QString::fromLatin1(type)));
+    return cleanupDirs(s_instance->resourceDirsInternal(type));
 }
 
-QString KoResourcePaths::saveLocation(const char *type, const QString &suffix, bool create)
+QString KoResourcePaths::saveLocation(const QString &type, const QString &suffix, bool create)
 {
-    return cleanupDirs(s_instance->saveLocationInternal(QString::fromLatin1(type), suffix, create));
+    return cleanupDirs(s_instance->saveLocationInternal(type, suffix, create));
 }
 
-QString KoResourcePaths::locate(const char *type, const QString &filename)
+QString KoResourcePaths::locate(const QString &type, const QString &filename)
 {
-    return cleanup(s_instance->locateInternal(QString::fromLatin1(type), filename));
+    return cleanup(s_instance->locateInternal(type, filename));
 }
 
-QString KoResourcePaths::locateLocal(const char *type, const QString &filename, bool createDir)
+QString KoResourcePaths::locateLocal(const QString &type, const QString &filename, bool createDir)
 {
-    return cleanup(s_instance->locateLocalInternal(QString::fromLatin1(type), filename, createDir));
+    return cleanup(s_instance->locateLocalInternal(type, filename, createDir));
 }
 
 void KoResourcePaths::addResourceTypeInternal(const QString &type, const QString &basetype,

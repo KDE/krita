@@ -58,7 +58,7 @@
 
 void KisKraSaverTest::initTestCase()
 {
-    KoResourcePaths::addResourceDir("patterns", QString(SYSTEM_RESOURCES_DATA_DIR) + "/patterns");
+    KoResourcePaths::addResourceDir(ResourceType::Patterns, QString(SYSTEM_RESOURCES_DATA_DIR) + "/patterns");
 
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();

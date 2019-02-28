@@ -36,7 +36,7 @@ class KisIconWidget : public KisPopupButton
     Q_OBJECT
 
 public:
-    KisIconWidget(QWidget *parent = 0, const char *name = 0);
+    KisIconWidget(QWidget *parent = 0, const QString &name = 0);
 
     /**
      * Set an resource server adapter that the widget will observe.

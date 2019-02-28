@@ -389,8 +389,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     view->actionCollection()->addAction("mirror_actions", action);
 
     action = new QWidgetAction(this);
-    KisActionRegistry::instance()->propertizeAction("workspaces", action);
-    view->actionCollection()->addAction("workspaces", action);
+    KisActionRegistry::instance()->propertizeAction(ResourceType::Workspaces, action);
+    view->actionCollection()->addAction(ResourceType::Workspaces, action);
     action->setDefaultWidget(m_workspaceWidget);
 
     if (!cfg.toolOptionsInDocker()) {

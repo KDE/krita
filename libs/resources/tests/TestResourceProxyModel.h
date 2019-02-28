@@ -21,6 +21,8 @@
 #include <QObject>
 #include <QtSql>
 
+#include "KisResourceTypes.h"
+
 class KisResourceLocator;
 class TestResourceProxyModel : public QObject
 {
@@ -37,7 +39,7 @@ private:
     QString m_dstLocation;
 
     KisResourceLocator *m_locator;
-    const QString resourceType = "paintoppresets";
+    const QString resourceType = ResourceType::PaintOpPresets;
 
 };
 

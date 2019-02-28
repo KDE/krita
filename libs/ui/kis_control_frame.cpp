@@ -77,12 +77,12 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     setObjectName(name);
     m_font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 
-    m_patternWidget = new KisIconWidget(parent, "patterns");
+    m_patternWidget = new KisIconWidget(parent, ResourceType::Patterns);
     m_patternWidget->setToolTip(i18n("Fill Patterns"));
     m_patternWidget->setFixedSize(32, 32);
 
-    m_gradientWidget = new KisIconWidget(parent, "gradients");
-    m_gradientWidget->setToolTip(i18n("Gradients"));
+    m_gradientWidget = new KisIconWidget(parent, ResourceType::Gradients);
+    m_gradientWidget->setToolTip(i18n("Fill Gradients"));
     m_gradientWidget->setFixedSize(32, 32);
 
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
@@ -97,12 +97,12 @@ void KisControlFrame::setup(QWidget *parent)
 
     QWidgetAction *action  = new QWidgetAction(this);
     action->setText(i18n("&Patterns"));
-    m_viewManager->actionCollection()->addAction("patterns", action);
+    m_viewManager->actionCollection()->addAction(ResourceType::Patterns, action);
     action->setDefaultWidget(m_patternWidget);
 
     action = new QWidgetAction(this);
     action->setText(i18n("&Gradients"));
-    m_viewManager->actionCollection()->addAction("gradients", action);
+    m_viewManager->actionCollection()->addAction(ResourceType::Gradients, action);
     action->setDefaultWidget(m_gradientWidget);
 
 

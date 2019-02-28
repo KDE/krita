@@ -166,7 +166,7 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
 //    debugFlake << "Loaded" << filename() << "\n\t"
 //             << "Title" << parser.documentTitle() << "\n\t"
 //             << "Description" << parser.documentDescription()
-//             << "\n\tgot" << d->symbols.size() << "symbols"
+//             << "\n\tgot" << d->symbols.size() << ResourceType::Symbols
 //             << d->symbols[0]->shape->outlineRect()
 //             << d->symbols[0]->shape->size();
 

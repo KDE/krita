@@ -133,7 +133,7 @@ void KisAslParserTest::testASLXMLWriter()
     KoPatternSP testPattern1(new KoPattern(testImage, "Some very nice name ;)", ""));
     KoPatternSP testPattern2(new KoPattern(testImage, "Another very nice name ;P", ""));
 
-    w.enterList("Patterns");
+    w.enterList(ResourceType::Patterns);
     w.writePattern("", testPattern1);
     w.writePattern("", testPattern2);
     w.leaveList();

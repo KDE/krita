@@ -24,16 +24,16 @@
 #include "FilterAddCommand.h"
 #include "FilterRemoveCommand.h"
 #include "FilterStackSetCommand.h"
-#include "KoGenericRegistryModel.h"
-#include "KoFilterEffectRegistry.h"
-#include "KoFilterEffect.h"
-#include "KoFilterEffectStack.h"
-#include "KoFilterEffectConfigWidgetBase.h"
-#include "KoFilterEffectFactoryBase.h"
-#include "KoShape.h"
-#include "KoCanvasBase.h"
-#include "KoLegacyResourceModel.h"
-#include "KoResourceServerAdapter.h"
+
+#include <KoGenericRegistryModel.h>
+#include <KoFilterEffectRegistry.h>
+#include <KoFilterEffect.h>
+#include <KoFilterEffectStack.h>
+#include <KoFilterEffectConfigWidgetBase.h>
+#include <KoFilterEffectFactoryBase.h>
+#include <KoShape.h>
+#include <KoCanvasBase.h>
+#include <KoResourceServerAdapter.h>
 
 #include <KoIcon.h>
 

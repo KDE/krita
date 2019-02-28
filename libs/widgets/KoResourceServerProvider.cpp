@@ -29,12 +29,12 @@
 #include <QStandardPaths>
 #include <QGlobalStatic>
 
-
 #include <resources/KoSegmentGradient.h>
 #include <resources/KoStopGradient.h>
 #include "KoColorSpaceRegistry.h"
 #include "KoResourcePaths.h"
 #include <iostream>
+
 using namespace std;
 
 class GradientResourceServer : public KoResourceServer<KoAbstractGradient> {
@@ -128,19 +128,19 @@ struct Q_DECL_HIDDEN KoResourceServerProvider::Private
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 {
-    d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>("patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
+    d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>(ResourceType::Patterns, "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
     d->patternServer->loadResources(blacklistFileNames(d->patternServer->fileNames(), d->patternServer->blackListedFiles()));
 
-    d->gradientServer = new GradientResourceServer("gradients", "*.svg:*.ggr");
+    d->gradientServer = new GradientResourceServer(ResourceType::Gradients, "*.svg:*.ggr");
     d->gradientServer->loadResources(blacklistFileNames(d->gradientServer->fileNames(), d->gradientServer->blackListedFiles()));
 
-    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>("palettes", "*.kpl:*.gpl:*.pal:*.act:*.aco:*.css:*.colors:*.xml:*.sbz");
+    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>(ResourceType::Palettes, "*.kpl:*.gpl:*.pal:*.act:*.aco:*.css:*.colors:*.xml:*.sbz");
     d->paletteServer->loadResources(blacklistFileNames(d->paletteServer->fileNames(), d->paletteServer->blackListedFiles()));
 
-    d->svgSymbolCollectionServer = new KoResourceServerSimpleConstruction<KoSvgSymbolCollectionResource>("symbols", "*.svg");
+    d->svgSymbolCollectionServer = new KoResourceServerSimpleConstruction<KoSvgSymbolCollectionResource>(ResourceType::Symbols, "*.svg");
     d->svgSymbolCollectionServer->loadResources(blacklistFileNames(d->svgSymbolCollectionServer->fileNames(), d->svgSymbolCollectionServer->blackListedFiles()));
 
-    d->gamutMaskServer = new KoResourceServerSimpleConstruction<KoGamutMask>("gamutmasks", "*.kgm");
+    d->gamutMaskServer = new KoResourceServerSimpleConstruction<KoGamutMask>(ResourceType::GamutMasks, "*.kgm");
     d->gamutMaskServer->loadResources(blacklistFileNames(d->gamutMaskServer->fileNames(), d->gamutMaskServer->blackListedFiles()));
 }
 

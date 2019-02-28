@@ -54,16 +54,16 @@ KisResourceServerProvider::KisResourceServerProvider()
 {
     KisBrushServer *brushServer = KisBrushServer::instance();
 
-    m_paintOpPresetServer = new KisPaintOpPresetResourceServer("paintoppresets", "*.kpp");
+    m_paintOpPresetServer = new KisPaintOpPresetResourceServer(ResourceType::PaintOpPresets, "*.kpp");
     m_paintOpPresetServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_paintOpPresetServer->fileNames(), m_paintOpPresetServer->blackListedFiles()));
 
-    m_workspaceServer = new KoResourceServerSimpleConstruction<KisWorkspaceResource>("workspaces", "*.kws");
+    m_workspaceServer = new KoResourceServerSimpleConstruction<KisWorkspaceResource>(ResourceType::Workspaces, "*.kws");
     m_workspaceServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_workspaceServer->fileNames(), m_workspaceServer->blackListedFiles()));
 
-    m_windowLayoutServer = new KoResourceServerSimpleConstruction<KisWindowLayoutResource>("windowlayouts", "*.kwl");
+    m_windowLayoutServer = new KoResourceServerSimpleConstruction<KisWindowLayoutResource>(ResourceType::WindowLayouts, "*.kwl");
     m_windowLayoutServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_windowLayoutServer->fileNames(), m_windowLayoutServer->blackListedFiles()));
 
-    m_sessionServer = new KoResourceServerSimpleConstruction<KisSessionResource>("sessions", "*.ksn");
+    m_sessionServer = new KoResourceServerSimpleConstruction<KisSessionResource>(ResourceType::Sessions, "*.ksn");
     m_sessionServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_sessionServer->fileNames(), m_sessionServer->blackListedFiles()));
 
     m_layerStyleCollectionServer = new KoResourceServerSimpleConstruction<KisPSDLayerStyleCollectionResource>("psd_layer_style_collections", "*.asl");

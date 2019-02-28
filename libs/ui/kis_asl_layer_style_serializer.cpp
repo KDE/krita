@@ -284,7 +284,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
     KisAslXmlWriter w;
 
     if (!allPatterns.isEmpty()) {
-        w.enterList("Patterns");
+        w.enterList(ResourceType::Patterns);
 
         Q_FOREACH (KoPatternSP pattern, allPatterns) {
             if (pattern) {

@@ -76,12 +76,12 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     }
 
     {
-        KisResourceModel *resourcesModel = KisResourceModelProvider::resourceModel("gradients");
+        KisResourceModel *resourcesModel = KisResourceModelProvider::resourceModel(ResourceType::Gradients);
         m_page->tableResources->setModel(resourcesModel);
         m_page->tableResources->hideColumn(0);
         m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);;
 
-        m_page->cmbResourceTypes->setModel(KisResourceModelProvider::resourceModel("gradients"));
+        m_page->cmbResourceTypes->setModel(KisResourceModelProvider::resourceModel(ResourceType::Gradients));
         m_page->cmbResourceTypes->setModelColumn(KisResourceTypeModel::Name);
     }
 

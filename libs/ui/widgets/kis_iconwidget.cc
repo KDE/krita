@@ -26,7 +26,7 @@
 #include <KoResourceServerAdapter.h>
 
 
-KisIconWidget::KisIconWidget(QWidget *parent, const char *name)
+KisIconWidget::KisIconWidget(QWidget *parent, const QString &name)
     : KisPopupButton(parent)
 {
     setObjectName(name);

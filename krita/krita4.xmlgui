@@ -386,8 +386,8 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
   </ToolBar>
   <ToolBar name="BrushesAndStuff" position="top">
     <Text>Brushes and Stuff</Text>
-    <Action name="gradients"/>
-    <Action name="patterns"/>
+    <Action name=ResourceType::Gradients/>
+    <Action name=ResourceType::Patterns/>
     <Separator/>
     <Action name="dual"/>
     <Separator/>
@@ -400,6 +400,6 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     <Action name="mirror_actions"/>
     <Action name="expanding_spacer_1"/>
     <Action name="select_layout"/>
-    <Action name="workspaces"/>
+    <Action name=ResourceType::Workspaces/>
   </ToolBar>
 </kpartgui>

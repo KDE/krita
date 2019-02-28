@@ -31,17 +31,17 @@
 void TestBundleStorage::initTestCase()
 {
     KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
-    reg->add(new KisResourceLoader<DummyResource>("gbr_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/x-gimp-brush"));
-    reg->add(new KisResourceLoader<DummyResource>("gih_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/x-gimp-brush-animated"));
-    reg->add(new KisResourceLoader<DummyResource>("svg_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/svg+xml"));
-    reg->add(new KisResourceLoader<DummyResource>("png_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/png"));
-    reg->add(new KisResourceLoader<DummyResource>("paintoppresets", "paintoppresets",  i18n("Brush presets"), QStringList() << "application/x-krita-paintoppreset"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceSubType::GbrBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/x-gimp-brush"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceSubType::GihBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/x-gimp-brush-animated"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceSubType::SvgBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/svg+xml"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceSubType::PngBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/png"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceType::PaintOpPresets, ResourceType::PaintOpPresets,  i18n("Brush presets"), QStringList() << "application/x-krita-paintoppreset"));
     QList<QByteArray> src = QImageReader::supportedMimeTypes();
     QStringList allImageMimes;
     Q_FOREACH(const QByteArray ba, src) {
         allImageMimes << QString::fromUtf8(ba);
     }
-    reg->add(new KisResourceLoader<DummyResource>("patterns", "patterns", i18n("Patterns"), allImageMimes));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceType::Patterns, ResourceType::Patterns, i18n("Patterns"), allImageMimes));
 }
 
 void TestBundleStorage::testMetaData()
@@ -60,7 +60,7 @@ void TestBundleStorage::testMetaData()
 void TestBundleStorage::testResourceIterator()
 {
     KisBundleStorage storage(KRITA_SOURCE_DIR + QString("/krita/data/bundles/Krita_4_Default_Resources.bundle"));
-    QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage.resources("brushes");
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage.resources(ResourceType::Brushes);
     QVERIFY(iter->hasNext());
     int count = 0;
     while (iter->hasNext()) {
@@ -75,7 +75,7 @@ void TestBundleStorage::testResourceIterator()
 void TestBundleStorage::testTagIterator()
 {
     KisBundleStorage storage(KRITA_SOURCE_DIR + QString("/krita/data/bundles/Krita_4_Default_Resources.bundle"));
-    QSharedPointer<KisResourceStorage::TagIterator> iter = storage.tags("paintoppresets");
+    QSharedPointer<KisResourceStorage::TagIterator> iter = storage.tags(ResourceType::PaintOpPresets);
     QVERIFY(iter->hasNext());
     int count = 0;
     while (iter->hasNext()) {

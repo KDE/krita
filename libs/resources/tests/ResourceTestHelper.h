@@ -26,7 +26,7 @@
 #include <KisResourceLoaderRegistry.h>
 
 #include <KisResourceCacheDb.h>
-
+#include "KisResourceTypes.h"
 #include <DummyResource.h>
 
 
@@ -59,14 +59,14 @@ void rmTestDb() {
 void createDummyLoaderRegistry() {
 
     KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
-    reg->add(new KisResourceLoader<DummyResource>("paintoppresets", "paintoppresets",  i18n("Brush presets"), QStringList() << "application/x-krita-paintoppreset"));
-    reg->add(new KisResourceLoader<DummyResource>("gbr_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/x-gimp-brush"));
-    reg->add(new KisResourceLoader<DummyResource>("gih_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/x-gimp-brush-animated"));
-    reg->add(new KisResourceLoader<DummyResource>("svg_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/svg+xml"));
-    reg->add(new KisResourceLoader<DummyResource>("png_brushes", "brushes", i18n("Brush tips"), QStringList() << "image/png"));
-    reg->add(new KisResourceLoader<DummyResource>("segmented_gradients", "gradients", i18n("Gradients"), QStringList() << "application/x-gimp-gradient"));
-    reg->add(new KisResourceLoader<DummyResource>("stop_gradients", "gradients", i18n("Gradients"), QStringList() << "application/x-karbon-gradient" << "image/svg+xml"));
-    reg->add(new KisResourceLoader<DummyResource>("palettes", "palettes", i18n("Palettes"),
+    reg->add(new KisResourceLoader<DummyResource>(ResourceType::PaintOpPresets, ResourceType::PaintOpPresets,  i18n("Brush presets"), QStringList() << "application/x-krita-paintoppreset"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceSubType::GbrBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/x-gimp-brush"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceSubType::GihBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/x-gimp-brush-animated"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceSubType::SvgBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/svg+xml"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceSubType::PngBrushes, ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/png"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceSubType::SegmentedGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "application/x-gimp-gradient"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceSubType::StopGradients, ResourceType::Gradients, i18n("Gradients"), QStringList() << "application/x-karbon-gradient" << "image/svg+xml"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceType::Palettes, ResourceType::Palettes, i18n("Palettes"),
                                                   QStringList() << KisMimeDatabase::mimeTypeForSuffix("kpl")
                                                   << KisMimeDatabase::mimeTypeForSuffix("gpl")
                                                   << KisMimeDatabase::mimeTypeForSuffix("pal")
@@ -84,12 +84,12 @@ void createDummyLoaderRegistry() {
     }
     allImageMimes << KisMimeDatabase::mimeTypeForSuffix("pat");
 
-    reg->add(new KisResourceLoader<DummyResource>("patterns", "patterns", i18n("Patterns"), allImageMimes));
-    reg->add(new KisResourceLoader<DummyResource>("workspaces", "workspaces", i18n("Workspaces"), QStringList() << "application/x-krita-workspace"));
-    reg->add(new KisResourceLoader<DummyResource>("symbols", "symbols", i18n("SVG symbol libraries"), QStringList() << "image/svg+xml"));
-    reg->add(new KisResourceLoader<DummyResource>("windowlayouts", "windowlayouts", i18n("Window layouts"), QStringList() << "application/x-krita-windowlayout"));
-    reg->add(new KisResourceLoader<DummyResource>("sessions", "sessions", i18n("Sessions"), QStringList() << "application/x-krita-session"));
-    reg->add(new KisResourceLoader<DummyResource>("gamutmasks", "gamutmasks", i18n("Gamut masks"), QStringList() << "application/x-krita-gamutmask"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceType::Patterns, ResourceType::Patterns, i18n("Patterns"), allImageMimes));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceType::Workspaces, ResourceType::Workspaces, i18n("Workspaces"), QStringList() << "application/x-krita-workspace"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceType::Symbols, ResourceType::Symbols, i18n("SVG symbol libraries"), QStringList() << "image/svg+xml"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceType::WindowLayouts, ResourceType::WindowLayouts, i18n("Window layouts"), QStringList() << "application/x-krita-windowlayout"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceType::Sessions, ResourceType::Sessions, i18n("Sessions"), QStringList() << "application/x-krita-session"));
+    reg->add(new KisResourceLoader<DummyResource>(ResourceType::GamutMasks, ResourceType::GamutMasks, i18n("Gamut masks"), QStringList() << "application/x-krita-gamutmask"));
 
 }
 

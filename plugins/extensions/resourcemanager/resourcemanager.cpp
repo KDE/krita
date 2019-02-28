@@ -149,32 +149,32 @@ KisResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreate
     QStringList res = dlgCreateBundle.selectedBrushes();
     Q_FOREACH (const QString &r, res) {
         KoResourceSP res = d->brushServer->resourceByFilename(r);
-        newBundle->addResource("brushes", res->filename(), d->brushServer->assignedTagsList(res), res->md5());
+        newBundle->addResource(ResourceType::Brushes, res->filename(), d->brushServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedGradients();
     Q_FOREACH (const QString &r, res) {
         KoResourceSP res = d->gradientServer->resourceByFilename(r);
-        newBundle->addResource("gradients", res->filename(), d->gradientServer->assignedTagsList(res), res->md5());
+        newBundle->addResource(ResourceType::Gradients, res->filename(), d->gradientServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPalettes();
     Q_FOREACH (const QString &r, res) {
         KoResourceSP res = d->paletteServer->resourceByFilename(r);
-        newBundle->addResource("palettes", res->filename(), d->paletteServer->assignedTagsList(res), res->md5());
+        newBundle->addResource(ResourceType::Palettes, res->filename(), d->paletteServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPatterns();
     Q_FOREACH (const QString &r, res) {
         KoResourceSP res = d->patternServer->resourceByFilename(r);
-        newBundle->addResource("patterns", res->filename(), d->patternServer->assignedTagsList(res), res->md5());
+        newBundle->addResource(ResourceType::Patterns, res->filename(), d->patternServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedPresets();
     Q_FOREACH (const QString &r, res) {
         KisPaintOpPresetSP preset = d->paintopServer->resourceByFilename(r);
         KoResourceSP res = preset;
-        newBundle->addResource("paintoppresets", res->filename(), d->paintopServer->assignedTagsList(res), res->md5());
+        newBundle->addResource(ResourceType::PaintOpPresets, res->filename(), d->paintopServer->assignedTagsList(res), res->md5());
         KisPaintOpSettingsSP settings = preset->settings();
 
         QStringList requiredFiles = settings->getStringList(KisPaintOpUtils::RequiredBrushFilesListTag);
@@ -184,7 +184,7 @@ KisResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreate
         Q_FOREACH (const QString &brushFile, requiredFiles) {
             KisBrushSP brush = d->brushServer->resourceByFilename(brushFile);
             if (brush) {
-                newBundle->addResource("brushes", brushFile, d->brushServer->assignedTagsList(brush), brush->md5());
+                newBundle->addResource(ResourceType::Brushes, brushFile, d->brushServer->assignedTagsList(brush), brush->md5());
             } else {
                 qWarning() << "There is no brush with name" << brushFile;
             }
@@ -194,13 +194,13 @@ KisResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreate
     res = dlgCreateBundle.selectedWorkspaces();
     Q_FOREACH (const QString &r, res) {
         KoResourceSP res = d->workspaceServer->resourceByFilename(r);
-        newBundle->addResource("workspaces", res->filename(), d->workspaceServer->assignedTagsList(res), res->md5());
+        newBundle->addResource(ResourceType::Workspaces, res->filename(), d->workspaceServer->assignedTagsList(res), res->md5());
     }
 
     res = dlgCreateBundle.selectedGamutMasks();
     Q_FOREACH (const QString &r, res) {
         KoResourceSP res = d->gamutMaskServer->resourceByFilename(r);
-        newBundle->addResource("gamutmasks", res->filename(), d->gamutMaskServer->assignedTagsList(res), res->md5());
+        newBundle->addResource(ResourceType::GamutMasks, res->filename(), d->gamutMaskServer->assignedTagsList(res), res->md5());
     }
 
     newBundle->addMeta("fileName", bundlePath);

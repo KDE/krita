@@ -528,7 +528,7 @@ QDomDocument readFileImpl(QIODevice *device)
 
             QDomElement patternsRoot = doc.createElement("node");
             patternsRoot.setAttribute("type", "List");
-            patternsRoot.setAttribute("key", "Patterns");
+            patternsRoot.setAttribute("key", ResourceType::Patterns);
             root.appendChild(patternsRoot);
 
             try {
@@ -640,7 +640,7 @@ QDomDocument KisAslReader::readPsdSectionPattern(QIODevice *device, qint64 bytes
     QDomElement pat = doc.createElement("node");
     root.appendChild(pat);
 
-    pat.setAttribute("classId", "Patterns");
+    pat.setAttribute("classId", ResourceType::Patterns);
     pat.setAttribute("type", "Descriptor");
     pat.setAttribute("name", "");
 

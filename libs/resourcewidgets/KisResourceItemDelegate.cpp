@@ -61,7 +61,7 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 
     QString resourceType = index.data(Qt::UserRole + KisResourceModel::ResourceType).toString();
     // XXX: don't use a hardcoded string here to identify the resource type
-    if (resourceType == "gradients") {
+    if (resourceType == ResourceType::Gradients) {
         m_checkerPainter.paint(*painter, innerRect);
     }
     else {

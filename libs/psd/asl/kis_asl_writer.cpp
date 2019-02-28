@@ -42,7 +42,7 @@ void parseElement(const QDomElement &el, QIODevice *device, bool forceTypeInfo =
     QString key = el.attribute("key", "");
 
     // should be filtered on a higher level
-    KIS_ASSERT_RECOVER_RETURN(key != "Patterns");
+    KIS_ASSERT_RECOVER_RETURN(key != ResourceType::Patterns);
 
     if (type == "Descriptor") {
         if (!key.isEmpty()) {
@@ -196,7 +196,7 @@ void writeFileImpl(QIODevice *device, const QDomDocument &doc)
             QDomElement el = child.toElement();
             QString key = el.attribute("key", "");
 
-            if (key != "Patterns") break;
+            if (key != ResourceType::Patterns) break;
 
             child = child.nextSibling();
         }
@@ -245,7 +245,7 @@ void writePsdLfx2SectionImpl(QIODevice *device, const QDomDocument &doc)
         QDomElement el = child.toElement();
         QString key = el.attribute("key", "");
 
-        if (key != "Patterns") break;
+        if (key != ResourceType::Patterns) break;
 
         child = child.nextSibling();
     }

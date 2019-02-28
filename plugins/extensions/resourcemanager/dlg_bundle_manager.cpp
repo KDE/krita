@@ -277,25 +277,25 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
             Q_FOREACH (const QString & resType, bundle->resourceTypes()) {
 
                 QTreeWidgetItem *toplevel = new QTreeWidgetItem();
-                if (resType == "gradients") {
+                if (resType == ResourceType::Gradients) {
                     toplevel->setText(0, i18n("Gradients"));
                 }
-                else if (resType  == "patterns") {
+                else if (resType  == ResourceType::Patterns) {
                     toplevel->setText(0, i18n("Patterns"));
                 }
-                else if (resType  == "brushes") {
+                else if (resType  == ResourceType::Brushes) {
                     toplevel->setText(0, i18n("Brushes"));
                 }
-                else if (resType  == "palettes") {
+                else if (resType  == ResourceType::Palettes) {
                     toplevel->setText(0, i18n("Palettes"));
                 }
-                else if (resType  == "workspaces") {
+                else if (resType  == ResourceType::Workspaces) {
                     toplevel->setText(0, i18n("Workspaces"));
                 }
-                else if (resType  == "paintoppresets") {
+                else if (resType  == ResourceType::PaintOpPresets) {
                     toplevel->setText(0, i18n("Brush Presets"));
                 }
-                else if (resType  == "gamutmasks") {
+                else if (resType  == ResourceType::GamutMasks) {
                     toplevel->setText(0, i18n("Gamut Masks"));
                 }
 

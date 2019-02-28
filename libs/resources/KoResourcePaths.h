@@ -72,7 +72,7 @@ public:
      * @param priority if true, the directory is added before any other,
      * otherwise after
      */
-    static void addResourceType(const char *type, const char *basetype,
+    static void addResourceType(const QString &type, const char *basetype,
                                 const QString &relativeName, bool priority = true);
 
 
@@ -91,7 +91,7 @@ public:
      * @param priority if true, the directory is added before any other,
      * otherwise after
      */
-    static void addResourceDir(const char *type, const QString &dir, bool priority = true);
+    static void addResourceDir(const QString &type, const QString &dir, bool priority = true);
 
     /**
      * Tries to find a resource in the following order:
@@ -117,7 +117,7 @@ public:
      *         argument, or QString() if not found.
      */
 
-    static QString findResource(const char *type, const QString &fileName);
+    static QString findResource(const QString &type, const QString &fileName);
 
     /**
      * Tries to find all directories whose names consist of the
@@ -137,7 +137,7 @@ public:
      * @return A list of matching directories, or an empty
      *         list if the resource specified is not found.
      */
-    static QStringList findDirs(const char *type);
+    static QStringList findDirs(const QString &type);
 
     /**
      * Tries to find all resources with the specified type.
@@ -158,7 +158,7 @@ public:
      * @return List of all the files whose filename matches the
      *         specified filter.
      */
-    static QStringList findAllResources(const char *type,
+    static QStringList findAllResources(const QString &type,
                                         const QString &filter = QString(),
                                         SearchOptions options = NoSearchOptions);
 
@@ -170,7 +170,7 @@ public:
      * Note, that the directories are assured to exist beside the save
      * location, which may not exist, but is returned anyway.
      */
-    static QStringList resourceDirs(const char *type);
+    static QStringList resourceDirs(const QString &type);
 
     /**
      * Finds a location to save files into for the given type
@@ -189,7 +189,7 @@ public:
      * @return A path where resources of the specified type should be
      *         saved, or QString() if the resource type is unknown.
      */
-    static QString saveLocation(const char *type, const QString &suffix = QString(), bool create = true);
+    static QString saveLocation(const QString &type, const QString &suffix = QString(), bool create = true);
 
     /**
      * This function is just for convenience. It simply calls
@@ -201,7 +201,7 @@ public:
      * @return A full path to the filename specified in the second
      *         argument, or QString() if not found
      **/
-    static QString locate(const char *type, const QString &filename);
+    static QString locate(const QString &type, const QString &filename);
 
     /**
      * This function is much like locate. However it returns a
@@ -216,7 +216,7 @@ public:
      * @return A full path to the filename specified in the second
      *         argument, or QString() if not found
      **/
-    static QString locateLocal(const char *type, const QString &filename, bool createDir = false);
+    static QString locateLocal(const QString &type, const QString &filename, bool createDir = false);
 
 private:
 

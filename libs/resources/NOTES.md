@@ -6,16 +6,14 @@ DONE
  * folder storage class
  * tag loading from desktop files`
  * updating the cache db with changes done directly on the resources folder
-
-DOING
-
+ * bundle storage class
  * Database explorer ui
+ * models for integrating with the ui
 
 TODO
  
- * bundle storage class
  * asl storage class
  * abr storage class
- * models for integrating with the ui
  * adding/updating/removing resources from the ui
  * adding/removing tags from the ui
+ * database migration and versioning

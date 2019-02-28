@@ -106,10 +106,10 @@ public:
     int resourceId() const;
 
     /// Mark the preset as modified but not saved
-    virtual void setDirty(bool value);
+    void setDirty(bool value);
 
     /// @return true if the preset has been modified, but not saved
-    virtual bool isDirty() const;
+    bool isDirty() const;
 
 private:
 

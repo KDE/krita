@@ -100,12 +100,6 @@ public:
         return ".kpp";
     }
 
-    /// Mark the preset as modified but not saved
-    void setDirty(bool value) override;
-
-    /// @return true if the preset has been modified, but not saved
-    bool isDirty() const override;
-
     void setOptionsWidget(KisPaintOpConfigWidget *widget);
 
     QPointer<KisPaintopSettingsUpdateProxy> updateProxy() const;

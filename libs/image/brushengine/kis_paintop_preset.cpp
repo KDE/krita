@@ -46,7 +46,6 @@ struct Q_DECL_HIDDEN KisPaintOpPreset::Private {
     }
 
     KisPaintOpSettingsSP settings {0};
-    bool dirtyPreset {false};
     QPointer<KisPaintopSettingsUpdateProxy> updateProxy {0};
 };
 
@@ -87,15 +86,6 @@ KisPaintOpPresetSP KisPaintOpPreset::clone() const
     Q_ASSERT(preset->valid());
 
     return preset;
-}
-void KisPaintOpPreset::setDirty(bool value)
-{
-    m_d->dirtyPreset = value;
-}
-
-bool KisPaintOpPreset::isDirty() const
-{
-    return m_d->dirtyPreset;
 }
 
 void KisPaintOpPreset::setPaintOp(const KoID & paintOp)

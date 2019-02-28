@@ -45,43 +45,6 @@ class KRITAIMAGE_EXPORT KisPaintOpPreset : public QObject, public KoResource
 public:
 
     /**
-     * Never use manual save/restore calls to
-     * isPresetDirty()/setPresetDirty()! They will lead to
-     * hard-to-tack-down bugs when the dirty state will not be
-     * restored on jumps like 'return', 'break' or exception.
-     */
-    class KRITAIMAGE_EXPORT DirtyStateSaver {
-    public:
-        DirtyStateSaver(KisPaintOpPresetSP preset)
-            : m_preset(preset)
-            , m_isDirty(preset->isDirty())
-        {
-        }
-
-
-        /// Extra constructor to be called from KisPaintOpPreset itself
-        DirtyStateSaver(KisPaintOpPreset *preset)
-            : m_parentPreset(preset)
-            , m_isDirty(preset->isDirty())
-        {
-        }
-
-        ~DirtyStateSaver() {
-            if (m_preset) {
-                m_preset->setDirty(m_isDirty);
-            }
-            else if (m_parentPreset) {
-                m_parentPreset->setDirty(m_isDirty);
-            }
-        }
-
-    private:
-        KisPaintOpPresetSP m_preset;
-        KisPaintOpPreset *m_parentPreset;
-        bool m_isDirty;
-    };
-
-    /**
      * @brief The UpdatedPostponer class
      * @see KisPaintopSettingsUpdateProxy::postponeSettingsChanges()
      */
@@ -138,10 +101,10 @@ public:
     }
 
     /// Mark the preset as modified but not saved
-    void setDirty(bool value);
+    void setDirty(bool value) override;
 
     /// @return true if the preset has been modified, but not saved
-    bool isDirty() const;
+    bool isDirty() const override;
 
     void setOptionsWidget(KisPaintOpConfigWidget *widget);
 

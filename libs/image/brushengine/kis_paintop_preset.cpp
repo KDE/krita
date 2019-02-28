@@ -27,6 +27,8 @@
 #include <QDomDocument>
 #include <QBuffer>
 
+#include <KisResourceDirtyStateSaver.h>
+
 #include <brushengine/kis_paintop_settings.h>
 #include "kis_paintop_registry.h"
 #include "kis_painter.h"
@@ -124,7 +126,8 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
     Q_ASSERT(settings);
     Q_ASSERT(!settings->getString("paintop", QString()).isEmpty());
 
-    DirtyStateSaver dirtyStateSaver(this);
+    KisResourceDirtyStateSaver dirtyStateSaver(this);
+    Q_UNUSED(dirtyStateSaver);
 
     KisPaintOpConfigWidget *oldOptionsWidget = 0;
 

@@ -37,6 +37,7 @@ struct Q_DECL_HIDDEN KoResource::Private {
     QImage image;
     bool permanent;
     int resourceId {-1};
+    bool dirty;
 };
 
 KoResource::KoResource(const QString& filename)
@@ -168,6 +169,16 @@ void KoResource::setPermanent(bool permanent)
 int KoResource::resourceId() const
 {
     return d->resourceId;
+}
+
+void KoResource::setDirty(bool value)
+{
+    d->dirty = value;
+}
+
+bool KoResource::isDirty() const
+{
+    return d->dirty;
 }
 
 void KoResource::setResourceId(int id)

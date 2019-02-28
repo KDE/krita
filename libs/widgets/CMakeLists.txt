@@ -36,7 +36,6 @@ set(kritawidgets_LIB_SRCS
     KoLineStyleModel.cpp
     KoResourceFiltering.cpp
     KoTitledTabWidget.cpp
-    KoIconToolTip.cpp
 
     KoToolBoxButton.cpp
     KoToolBox.cpp

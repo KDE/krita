@@ -27,7 +27,9 @@
 
 #include <colorspaces/rgb_u8/RgbU8ColorSpace.h>
 #include <colorspaces/rgb_u16/RgbU16ColorSpace.h>
+#ifdef HAVE_OPENEXR
 #include <colorspaces/rgb_f16/RgbF16ColorSpace.h>
+#endif
 #include <colorspaces/rgb_f32/RgbF32ColorSpace.h>
 
 
@@ -63,6 +65,10 @@ struct DstTraitsForSource {
     typedef KoRgbF32Traits result;
 };
 
+/**
+ * If half format is present, we use it instead
+ */
+#ifdef HAVE_OPENEXR
 template <>
 struct DstTraitsForSource<KoBgrU16Traits> {
     typedef KoRgbF16Traits result;
@@ -72,6 +78,7 @@ template <>
 struct DstTraitsForSource<KoBgrU8Traits> {
     typedef KoRgbF16Traits result;
 };
+#endif
 
 template <typename src_channel_type,
           typename dst_channel_type>

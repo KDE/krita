@@ -100,6 +100,20 @@ public:
         return ".kpp";
     }
 
+    /**
+     * @brief The UpdatedPostponer class
+     * @see KisPaintopSettingsUpdateProxy::postponeSettingsChanges()
+     */
+    class KRITAIMAGE_EXPORT UpdatedPostponer{
+    public:
+        UpdatedPostponer(KisPaintOpPreset *preset);
+
+        ~UpdatedPostponer();
+
+    private:
+        KisPaintopSettingsUpdateProxy *m_updateProxy;
+    };
+
     void setOptionsWidget(KisPaintOpConfigWidget *widget);
 
     QPointer<KisPaintopSettingsUpdateProxy> updateProxy() const;

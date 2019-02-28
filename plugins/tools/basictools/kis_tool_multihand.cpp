@@ -145,7 +145,7 @@ void KisToolMultihand::continueAlternateAction(KoPointerEvent* event, AlternateA
 void KisToolMultihand::endAlternateAction(KoPointerEvent* event, AlternateAction action)
 {
     if (action != ChangeSize || m_transformMode != COPYTRANSLATE || !m_addSubbrushesMode) {
-        KisToolBrush::continueAlternateAction(event, action);
+        KisToolBrush::endAlternateAction(event, action);
         return;
     }
     if (mode() == KisTool::OTHER_1) {

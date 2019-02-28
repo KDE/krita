@@ -19,9 +19,14 @@
 #ifndef LCMSRGBP2020PQCOLORSPACE_H
 #define LCMSRGBP2020PQCOLORSPACE_H
 
+
 #include <colorspaces/rgb_u8/RgbU8ColorSpace.h>
 #include <colorspaces/rgb_u16/RgbU16ColorSpace.h>
+
+#ifdef HAVE_OPENEXR
 #include <colorspaces/rgb_f16/RgbF16ColorSpace.h>
+#endif
+
 #include <colorspaces/rgb_f32/RgbF32ColorSpace.h>
 
 #include "KoColorConversionTransformationFactory.h"
@@ -42,10 +47,12 @@ struct ColorSpaceFromFactory<RgbU16ColorSpaceFactory> {
   typedef RgbU16ColorSpace type;
 };
 
+#ifdef HAVE_OPENEXR
 template<>
 struct ColorSpaceFromFactory<RgbF16ColorSpaceFactory> {
   typedef RgbF16ColorSpace type;
 };
+#endif
 
 template<>
 struct ColorSpaceFromFactory<RgbF32ColorSpaceFactory> {
@@ -57,8 +64,13 @@ struct ColorSpaceFromFactory<RgbF32ColorSpaceFactory> {
  */
 template<class T> struct NextTrait { using type = void; };
 template<> struct NextTrait<KoBgrU8Traits> { using type = KoBgrU16Traits; };
+
+#ifdef HAVE_OPENEXR
 template<> struct NextTrait<KoBgrU16Traits> { using type = KoRgbF16Traits; };
 template<> struct NextTrait<KoRgbF16Traits> { using type = KoRgbF32Traits; };
+#else
+template<> struct NextTrait<KoBgrU16Traits> { using type = KoRgbF32Traits; };
+#endif
 
 /**
  * Recursively add bit-depths conversions to the color space. We add only
@@ -114,7 +126,9 @@ class LcmsRGBP2020PQColorSpaceFactoryWrapper : public BaseColorSpaceFactory
          */
         list << new LcmsFromRGBP2020PQTransformationFactory<RelatedColorSpaceType, KoRgbF16Traits>();
         list << new LcmsFromRGBP2020PQTransformationFactory<RelatedColorSpaceType, KoRgbF32Traits>();
+#ifdef HAVE_OPENEXR
         list << new LcmsToRGBP2020PQTransformationFactory<RelatedColorSpaceType, KoRgbF16Traits>();
+#endif
         list << new LcmsToRGBP2020PQTransformationFactory<RelatedColorSpaceType, KoRgbF32Traits>();
 
         // internally, we can convert to RGB U8 if needed

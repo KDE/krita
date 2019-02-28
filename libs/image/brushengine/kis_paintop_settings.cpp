@@ -450,7 +450,7 @@ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & valu
 {
     if (value != KisPropertiesConfiguration::getProperty(name) && !d->disableDirtyNotifications) {
         if (d->updateProxy) {
-            d->updateProxy->setPresetDirty(true);
+            d->updateProxy->setDirty(true);
         }
     }
 

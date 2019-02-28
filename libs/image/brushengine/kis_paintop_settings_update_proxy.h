@@ -33,7 +33,7 @@ public:
     KisPaintopSettingsUpdateProxy(QObject *parent = 0);
     ~KisPaintopSettingsUpdateProxy() override;
 
-    void setPresetDirty(bool dirty);
+    void setDirty(bool dirty);
 
     void notifySettingsChanged();
     void notifyUniformPropertiesChanged();

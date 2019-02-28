@@ -47,11 +47,11 @@ KisPaintopSettingsUpdateProxy::~KisPaintopSettingsUpdateProxy()
 {
 }
 
-void KisPaintopSettingsUpdateProxy::setPresetDirty(bool dirty)
+void KisPaintopSettingsUpdateProxy::setDirty(bool dirty)
 {
     KisPaintOpPreset *preset = qobject_cast<KisPaintOpPreset*>(parent());
     if (preset) {
-        preset->setPresetDirty(dirty);
+        preset->setDirty(dirty);
     }
 }
 

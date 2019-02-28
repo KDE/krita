@@ -54,7 +54,7 @@ public:
     public:
         DirtyStateSaver(KisPaintOpPresetSP preset)
             : m_preset(preset)
-            , m_isDirty(preset->isPresetDirty())
+            , m_isDirty(preset->isDirty())
         {
         }
 
@@ -62,16 +62,16 @@ public:
         /// Extra constructor to be called from KisPaintOpPreset itself
         DirtyStateSaver(KisPaintOpPreset *preset)
             : m_parentPreset(preset)
-            , m_isDirty(preset->isPresetDirty())
+            , m_isDirty(preset->isDirty())
         {
         }
 
         ~DirtyStateSaver() {
             if (m_preset) {
-                m_preset->setPresetDirty(m_isDirty);
+                m_preset->setDirty(m_isDirty);
             }
             else if (m_parentPreset) {
-                m_parentPreset->setPresetDirty(m_isDirty);
+                m_parentPreset->setDirty(m_isDirty);
             }
         }
 
@@ -136,9 +136,12 @@ public:
     QString defaultFileExtension() const override {
         return ".kpp";
     }
-    void setPresetDirty(bool value);
 
-    bool isPresetDirty() const;
+    /// Mark the preset as modified but not saved
+    void setDirty(bool value);
+
+    /// @return true if the preset has been modified, but not saved
+    bool isDirty() const;
 
     void setOptionsWidget(KisPaintOpConfigWidget *widget);
 

@@ -35,6 +35,8 @@
 #include "kis_image.h"
 #include "kis_image_config.h"
 #include "kis_memory_statistics_server.h"
+#include "kis_signal_compressor.h"
+#include <boost/optional.hpp>
 
 #include <vector>
 #include <memory>
@@ -77,7 +79,8 @@ struct KisAsyncAnimationRenderDialogBase::Private
     Private(const QString &_actionTitle, KisImageSP _image, int _busyWait)
         : actionTitle(_actionTitle),
           image(_image),
-          busyWait(_busyWait)
+          busyWait(_busyWait),
+          progressDialogCompressor(40, KisSignalCompressor::FIRST_ACTIVE)
     {
     }
 
@@ -99,6 +102,12 @@ struct KisAsyncAnimationRenderDialogBase::Private
     Result result = RenderComplete;
     QRegion regionOfInterest;
 
+    KisSignalCompressor progressDialogCompressor;
+    using ProgressData = QPair<int, QString>;
+    boost::optional<ProgressData> progressData;
+    int progressDialogReentrancyCounter = 0;
+
+
     int numDirtyFramesLeft() const {
         return stillDirtyFrames.size() + framesInProgress.size();
     }
@@ -108,6 +117,8 @@ struct KisAsyncAnimationRenderDialogBase::Private
 KisAsyncAnimationRenderDialogBase::KisAsyncAnimationRenderDialogBase(const QString &actionTitle, KisImageSP image, int busyWait)
     : m_d(new Private(actionTitle, image, busyWait))
 {
+    connect(&m_d->progressDialogCompressor, SIGNAL(timeout()),
+            SLOT(slotUpdateCompressedProgressData()), Qt::QueuedConnection);
 }
 
 KisAsyncAnimationRenderDialogBase::~KisAsyncAnimationRenderDialogBase()
@@ -322,8 +333,13 @@ void KisAsyncAnimationRenderDialogBase::updateProgressLabel()
                                      estimatedTimeString,
                                      m_d->memoryLimitReached ? memoryLimitMessage : QString()));
     if (m_d->progressDialog) {
-        m_d->progressDialog->setLabelText(progressLabel);
-        m_d->progressDialog->setValue(processedFramesCount);
+        /**
+         * We should avoid reentrancy caused by explicit
+         * QApplication::processEvents() in QProgressDialog::setValue(), so use
+         * a compressor instead
+         */
+        m_d->progressData = Private::ProgressData(processedFramesCount, progressLabel);
+        m_d->progressDialogCompressor.start();
     }
 
     if (!m_d->numDirtyFramesLeft()) {
@@ -331,7 +347,32 @@ void KisAsyncAnimationRenderDialogBase::updateProgressLabel()
     }
 }
 
+void KisAsyncAnimationRenderDialogBase::slotUpdateCompressedProgressData()
+{
+    /**
+     * Qt's implementation of QProgressDialog is a bit weird: it calls
+     * QApplication::processEvents() from inside setValue(), which means
+     * that our update method may reenter multiple times.
+     *
+     * This code avoids reentering by using a compresson and an explicit
+     * entrance counter.
+     */
 
+    if (m_d->progressDialogReentrancyCounter > 0) {
+        m_d->progressDialogCompressor.start();
+        return;
+    }
+
+    if (m_d->progressDialog && m_d->progressData) {
+        m_d->progressDialogReentrancyCounter++;
+
+        m_d->progressDialog->setLabelText(m_d->progressData->second);
+        m_d->progressDialog->setValue(m_d->progressData->first);
+        m_d->progressData = boost::none;
+
+        m_d->progressDialogReentrancyCounter--;
+    }
+}
 
 void KisAsyncAnimationRenderDialogBase::setBatchMode(bool value)
 {

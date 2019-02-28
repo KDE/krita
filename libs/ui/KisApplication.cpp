@@ -89,7 +89,6 @@
 #include "kis_spin_box_unit_manager.h"
 #include "kis_document_aware_spin_box_unit_manager.h"
 #include "KisViewManager.h"
-#include "kis_workspace_resource.h"
 #include <KritaVersionWrapper.h>
 #include <dialogs/KisSessionManagerDialog.h>
 

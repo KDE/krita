@@ -459,7 +459,7 @@ void KisPaintOpSettings::setProperty(const QString & name, const QVariant & valu
             !d->disableDirtyNotifications) {
         KisPaintOpPresetSP presetSP = preset().toStrongRef();
         if (presetSP) {
-            presetSP->setPresetDirty(true);
+            presetSP->setDirty(true);
         }
     }
 

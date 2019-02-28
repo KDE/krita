@@ -396,7 +396,7 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     newPreset->setFilename(renamedPresetPathAndFile); // this also contains the path
     newPreset->setName(renamedPresetName);
     newPreset->setImage(curPreset->image()); // use existing thumbnail (might not need to do this)
-    newPreset->setPresetDirty(false);
+    newPreset->setDirty(false);
     newPreset->setValid(true);
     rServer->addResource(newPreset);
 
@@ -832,7 +832,7 @@ void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
         m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setVisible(false);
         m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setVisible(false);
     } else {
-        bool isPresetDirty = m_d->resourceProvider->currentPreset()->isPresetDirty();
+        bool isPresetDirty = m_d->resourceProvider->currentPreset()->isDirty();
 
         // don't need to reload or overwrite a clean preset
         m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setVisible(isPresetDirty);

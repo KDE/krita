@@ -75,7 +75,7 @@ KisPaintOpPresetSP KisPaintOpPreset::clone() const
     if (settings()) {
         preset->setSettings(settings()); // the settings are cloned inside!
     }
-    preset->setPresetDirty(isPresetDirty());
+    preset->setDirty(isDirty());
     // only valid if we could clone the settings
     preset->setValid(settings());
 
@@ -88,12 +88,12 @@ KisPaintOpPresetSP KisPaintOpPreset::clone() const
 
     return preset;
 }
-void KisPaintOpPreset::setPresetDirty(bool value)
+void KisPaintOpPreset::setDirty(bool value)
 {
     m_d->dirtyPreset = value;
 }
 
-bool KisPaintOpPreset::isPresetDirty() const
+bool KisPaintOpPreset::isDirty() const
 {
     return m_d->dirtyPreset;
 }
@@ -219,7 +219,7 @@ bool KisPaintOpPreset::load()
     delete dev;
 
     setValid(res);
-    setPresetDirty(false);
+    setDirty(false);
     return res;
 
 }

@@ -9,6 +9,7 @@ DONE
  * bundle storage class
  * Database explorer ui
  * models for integrating with the ui
+ * implement dirty resources mechanism
 
 TODO
  
@@ -17,3 +18,4 @@ TODO
  * adding/updating/removing resources from the ui
  * adding/removing tags from the ui
  * database migration and versioning
+ * fix loading the actual preset in the preset delegate

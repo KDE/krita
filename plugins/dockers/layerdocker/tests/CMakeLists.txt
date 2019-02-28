@@ -5,9 +5,9 @@ include_directories(${CMAKE_SOURCE_DIR}/libs/image/metadata
 include(ECMAddTests)
 
 macro_add_unittest_definitions()
-qt5_add_resources(kis_node_view_test_SRCS ${krita_QRCS})
-ecm_add_test(${kis_node_view_test_SRCS}
-    TEST_NAME TestNodeView
+
+ecm_add_test(
+    TestNodeView.cpp
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "plugins-dockers-layerdocker-")
 

@@ -44,7 +44,7 @@ public:
      * @param gradientResourceAdapter pointer to the gradient or pattern
      * @param parent The parent for this action.
      */
-    explicit KoResourcePopupAction(QSharedPointer<KoAbstractResourceServerAdapter>gradientResourceAdapter, QObject *parent = 0);
+    explicit KoResourcePopupAction(const QString &resourceType, QObject *parent = 0);
 
     /**
      * Destructor

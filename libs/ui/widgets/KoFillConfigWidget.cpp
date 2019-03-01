@@ -286,8 +286,7 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     QSharedPointer<KoAbstractResourceServerAdapter> gradientResourceAdapter(
                 new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer()));
 
-    d->gradientAction = new KoResourcePopupAction(gradientResourceAdapter,
-                                                  d->ui->btnChoosePredefinedGradient);
+    d->gradientAction = new KoResourcePopupAction(ResourceType::Gradients, d->ui->btnChoosePredefinedGradient);
 
     d->gradientAction->setToolTip(i18n("Change filling gradient"));
     d->ui->btnChoosePredefinedGradient->setDefaultAction(d->gradientAction);
@@ -305,16 +304,15 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
 
     deactivate();
 
-#if 0
-
+/*
     // Pattern selector
     QSharedPointer<KoAbstractResourceServerAdapter>patternResourceAdapter(new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer()));
-    d->patternAction = new KoResourcePopupAction(patternResourceAdapter, d->colorButton);
+    d->patternAction = new KoResourcePopupAction(ResourceType::Patterns, d->colorButton);
     d->patternAction->setToolTip(i18n("Change the filling pattern"));
     connect(d->patternAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground>)), this, SLOT(patternChanged(QSharedPointer<KoShapeBackground>)));
     connect(d->colorButton, SIGNAL(iconSizeChanged()), d->patternAction, SLOT(updateIcon()));
+*/
 
-#endif
 
 }
 

@@ -212,11 +212,8 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     setObjectName(name);
     QVBoxLayout * layout = new QVBoxLayout(this);
     layout->setMargin(0);
-    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
 
-    m_adapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KisPresetProxyAdapter(rserver));
-
-    m_chooser = new KisResourceItemChooser(m_adapter->serverType(), false, this);
+    m_chooser = new KisResourceItemChooser(ResourceType::PaintOpPresets, false, this);
     m_chooser->setObjectName("ResourceChooser");
     m_chooser->setColumnCount(10);
     m_chooser->setRowHeight(50);

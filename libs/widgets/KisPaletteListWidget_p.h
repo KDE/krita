@@ -9,7 +9,6 @@
 #include <QAction>
 
 #include "KisPaletteListWidget.h"
-#include "KoResourceModel.h"
 #include "KoResourceItemView.h"
 #include "KoResourceItemChooser.h"
 #include "KoResourceServer.h"
@@ -32,7 +31,6 @@ struct KisPaletteListWidgetPrivate
     QSharedPointer<KoResourceServerAdapter<KoColorSet> > rAdapter;
     QSharedPointer<KoResourceItemChooser> itemChooser;
 
-    QScopedPointer<Model> model;
     QScopedPointer<Delegate> delegate;
 
     QScopedPointer<QAction> actAdd;
@@ -51,17 +49,5 @@ public:
                const QStyleOptionViewItem & option,
                const QModelIndex & index) const override;
     QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override;
-};
-
-class KisPaletteListWidgetPrivate::Model : public KoResourceModel
-{
-public:
-    Model(const QSharedPointer<KoResourceServerAdapter<KoColorSet> > &rAdapter, QObject *parent = Q_NULLPTR)
-        : KoResourceModel(rAdapter, parent)
-    { }
-    ~Model() override { }
-
-    Qt::ItemFlags flags(const QModelIndex &index) const override
-    { return KoResourceModel::flags(index) | Qt::ItemIsUserCheckable; }
 };
 #endif // KISPALETTELISTWIDGET_P_H

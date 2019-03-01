@@ -23,6 +23,8 @@
 #include <QString>
 #include <QDebug>
 
+#include <KisMimeDatabase.h>
+
 KisResourceLoaderRegistry::KisResourceLoaderRegistry(QObject *parent)
     : QObject(parent)
 {
@@ -70,6 +72,18 @@ QStringList KisResourceLoaderRegistry::filters(const QString &resourceType) cons
     r.removeDuplicates();
     r.sort();
     return r;
+}
+
+QStringList KisResourceLoaderRegistry::mimeTypes(const QString &resourceType) const
+{
+    QStringList extensions = KisResourceLoaderRegistry::instance()->filters(resourceType);
+    QStringList mimeTypes;
+    Q_FOREACH(const QString &extension, extensions) {
+        mimeTypes << KisMimeDatabase::mimeTypeForSuffix(extension);
+    }
+    mimeTypes.removeDuplicates();
+    mimeTypes.sort();
+    return mimeTypes;
 }
 
 

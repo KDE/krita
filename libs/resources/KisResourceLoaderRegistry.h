@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QSet>
+#include <QStringList>
 
 #include <KoGenericRegistry.h>
 #include "KisResourceLoader.h"
@@ -46,9 +47,14 @@ public:
     KisResourceLoaderBase *loader(const QString &resourceType, const QString &mimetype) const;
 
     /**
-     * @return a list of extensions that can be present for the given resource type
+     * @return a list of filename extensions that can be present for the given resource type
      */
     QStringList filters(const QString &resourceType) const;
+
+    /**
+     * @return a list of mimetypes that can be loaded for the given resourde type
+     */
+    QStringList mimeTypes(const QString &resourceType) const;
 
     /**
      * @return the list of folders for which resource loaders have been registered

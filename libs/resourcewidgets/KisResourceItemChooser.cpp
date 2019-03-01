@@ -465,7 +465,7 @@ KoResourceSP KisResourceItemChooser::resourceFromModelIndex(const QModelIndex &i
     if (!index.isValid()) {
         return 0;
     }
-    return d->resourceModel->resourceForIndex(d->resourceProxyModel->mapToSource(d->tagFilterProxyModel->mapToSource(index)));
+    return d->resourceModel->resourceForIndex(d->tagFilterProxyModel->mapToSource(d->resourceProxyModel->mapToSource(index)));
 }
 
 QSize KisResourceItemChooser::viewSize() const

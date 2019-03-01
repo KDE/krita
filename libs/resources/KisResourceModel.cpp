@@ -195,7 +195,6 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
 
     }
     return resource;
-
 }
 
 QModelIndex KisResourceModel::indexFromResource(KoResourceSP resource) const
@@ -208,11 +207,36 @@ QModelIndex KisResourceModel::indexFromResource(KoResourceSP resource) const
 
 bool KisResourceModel::importResourceFile(const QString &filename)
 {
+    beginResetModel();
+    endResetModel();
     return false;
 }
 
 bool KisResourceModel::removeResource(const QModelIndex &index)
 {
+    beginResetModel();
+    endResetModel();
+    return false;
+}
+
+bool KisResourceModel::addResource(KoResourceSP resource)
+{
+    beginResetModel();
+    endResetModel();
+    return false;
+}
+
+bool KisResourceModel::updateResource(KoResourceSP resource)
+{
+    beginResetModel();
+    endResetModel();
+    return false;
+}
+
+bool KisResourceModel::removeResource(KoResourceSP resource)
+{
+    beginResetModel();
+    endResetModel();
     return false;
 }
 

@@ -25,7 +25,7 @@
 #include <QStringList>
 #include <QString>
 
-#include <kritaresources_export.h>
+#include "kritaresources_export.h"
 
 #include <KisResourceStorage.h>
 

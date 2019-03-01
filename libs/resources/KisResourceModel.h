@@ -67,17 +67,23 @@ public:
 
     ~KisResourceModel() override;
 
-    // QAbstractItemModel API
+// QAbstractItemModel API
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
 
-    // Resources API
+// Resources API
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const;
     QModelIndex indexFromResource(KoResourceSP resource) const;
-    bool importResourceFile(const QString &filename);
+
     bool removeResource(const QModelIndex &index);
+
+    bool importResourceFile(const QString &filename);
+
+    bool addResource(KoResourceSP resource);
+    bool updateResource(KoResourceSP resource);
+    bool removeResource(KoResourceSP resource);
 
 Q_SIGNALS:
 

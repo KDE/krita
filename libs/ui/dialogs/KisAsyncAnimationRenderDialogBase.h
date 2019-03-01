@@ -116,6 +116,7 @@ private Q_SLOTS:
     void slotFrameCancelled(int frame);
 
     void slotCancelRegeneration();
+    void slotUpdateCompressedProgressData();
 
 private:
     void tryInitiateFrameRegeneration();

@@ -29,7 +29,8 @@ set(karbon_tools_SOURCES
    filterEffectTool/FilterEffectResource.cpp
    filterEffectTool/FilterResourceServerProvider.cpp
    filterEffectTool/FilterRegionEditStrategy.cpp
-    KarbonPatternOptionsWidget.cpp
+   filterEffectTool/KoResourceSelector.cpp
+   KarbonPatternOptionsWidget.cpp
 )
 
 ki18n_wrap_ui(karbon_tools_SOURCES

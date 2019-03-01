@@ -44,7 +44,6 @@
 #include <kis_icon.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
-#include <KoResourceSelector.h>
 #include <KoResourceServerAdapter.h>
 #include <KoToolManager.h>
 #include <KoColorSpaceRegistry.h>

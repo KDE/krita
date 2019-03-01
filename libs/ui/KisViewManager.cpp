@@ -304,7 +304,7 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
             d->controlFrame.paintopBox(), SLOT(slotToolChanged(KoCanvasController*,int)));
 
     connect(&d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
-            resourceProvider(), SLOT(slotNodeActivated(KisNodeSP)));
+            canvasResourceProvider(), SLOT(slotNodeActivated(KisNodeSP)));
 
     connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(slotViewAdded(KisView*)));
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(slotViewRemoved(KisView*)));
@@ -327,9 +327,9 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
 KisViewManager::~KisViewManager()
 {
     KisConfig cfg(false);
-    if (resourceProvider() && resourceProvider()->currentPreset()) {
-        cfg.writeKoColor("LastForeGroundColor",resourceProvider()->fgColor());
-        cfg.writeKoColor("LastBackGroundColor",resourceProvider()->bgColor());
+    if (canvasResourceProvider() && canvasResourceProvider()->currentPreset()) {
+        cfg.writeKoColor("LastForeGroundColor",canvasResourceProvider()->fgColor());
+        cfg.writeKoColor("LastBackGroundColor",canvasResourceProvider()->bgColor());
     }
 
     cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
@@ -378,8 +378,8 @@ void KisViewManager::slotViewRemoved(KisView *view)
     }
 
     KisConfig cfg(false);
-    if (resourceProvider() && resourceProvider()->currentPreset()) {
-        cfg.writeEntry("LastPreset", resourceProvider()->currentPreset()->name());
+    if (canvasResourceProvider() && canvasResourceProvider()->currentPreset()) {
+        cfg.writeEntry("LastPreset", canvasResourceProvider()->currentPreset()->name());
     }
 }
 
@@ -503,11 +503,11 @@ void KisViewManager::setCurrentView(KisView *view)
 
         d->viewConnections.addUniqueConnection(
                     image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),
-                    resourceProvider(), SLOT(slotImageSizeChanged()));
+                    canvasResourceProvider(), SLOT(slotImageSizeChanged()));
 
         d->viewConnections.addUniqueConnection(
                     image(), SIGNAL(sigResolutionChanged(double,double)),
-                    resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+                    canvasResourceProvider(), SLOT(slotOnScreenResolutionChanged()));
 
         d->viewConnections.addUniqueConnection(
                     image(), SIGNAL(sigNodeChanged(KisNodeSP)),
@@ -516,14 +516,14 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(
                     d->currentImageView->zoomManager()->zoomController(),
                     SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
-                    resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+                    canvasResourceProvider(), SLOT(slotOnScreenResolutionChanged()));
 
     }
 
     d->actionManager.updateGUI();
 
-    resourceProvider()->slotImageSizeChanged();
-    resourceProvider()->slotOnScreenResolutionChanged();
+    canvasResourceProvider()->slotImageSizeChanged();
+    canvasResourceProvider()->slotOnScreenResolutionChanged();
 
     Q_EMIT viewChanged();
 }
@@ -545,7 +545,7 @@ KisImageWSP KisViewManager::image() const
     return 0;
 }
 
-KisCanvasResourceProvider * KisViewManager::resourceProvider()
+KisCanvasResourceProvider * KisViewManager::canvasResourceProvider()
 {
     return &d->canvasResourceProvider;
 }

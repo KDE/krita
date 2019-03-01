@@ -82,7 +82,7 @@ void KisDerivedResourcesTest::test()
     KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
     QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
     KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
-    KoCanvasResourceProvider *manager = viewManager->resourceProvider()->resourceManager();
+    KoCanvasResourceProvider *manager = viewManager->canvasResourceProvider()->resourceManager();
 
     QApplication::processEvents();
 

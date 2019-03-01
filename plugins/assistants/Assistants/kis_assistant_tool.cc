@@ -538,7 +538,7 @@ void KisAssistantTool::addAssistant()
 
     KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(m_newAssistant.data());
     if (grid) {
-        m_canvas->viewManager()->resourceProvider()->addPerspectiveGrid(grid);
+        m_canvas->viewManager()->canvasResourceProvider()->addPerspectiveGrid(grid);
     }
     m_newAssistant.clear();
 }
@@ -547,7 +547,7 @@ void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
 {
     KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
     if (grid) {
-        m_canvas->viewManager()->resourceProvider()->removePerspectiveGrid(grid);
+        m_canvas->viewManager()->canvasResourceProvider()->removePerspectiveGrid(grid);
     }
     m_canvas->paintingAssistantsDecoration()->removeAssistant(assistant);
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
@@ -688,7 +688,7 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 
 void KisAssistantTool::removeAllAssistants()
 {
-    m_canvas->viewManager()->resourceProvider()->clearPerspectiveGrids();
+    m_canvas->viewManager()->canvasResourceProvider()->clearPerspectiveGrids();
     m_canvas->paintingAssistantsDecoration()->removeAll();
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
     m_canvas->updateCanvas();
@@ -799,7 +799,7 @@ void KisAssistantTool::loadAssistants()
                         m_canvas->paintingAssistantsDecoration()->addAssistant(assistant);
                         KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
                         if (grid) {
-                            m_canvas->viewManager()->resourceProvider()->addPerspectiveGrid(grid);
+                            m_canvas->viewManager()->canvasResourceProvider()->addPerspectiveGrid(grid);
                         }
                     } else {
                         errors = true;

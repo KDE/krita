@@ -148,7 +148,7 @@ void KisWorkspaceChooser::slotSaveWorkspace()
 
     KisWorkspaceResource* workspace = new KisWorkspaceResource(QString());
     workspace->setDockerState(m_view->qtMainWindow()->saveState());
-    m_view->resourceProvider()->notifySavingWorkspace(workspace);
+    m_view->canvasResourceProvider()->notifySavingWorkspace(workspace);
     workspace->setValid(true);
     QString saveLocation = rserver->saveLocation();
     QString name = m_workspaceWidgets.nameEdit->text();

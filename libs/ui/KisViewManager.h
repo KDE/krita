@@ -87,7 +87,7 @@ public:  // Krita specific interfaces
 
     /// The resource provider contains all per-view settings, such as
     /// current color, current paint op etc.
-    KisCanvasResourceProvider *resourceProvider();
+    KisCanvasResourceProvider *canvasResourceProvider();
 
     /// Return the canvasbase class
     KisCanvas2 *canvasBase() const;

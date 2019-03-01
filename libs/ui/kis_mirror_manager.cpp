@@ -78,7 +78,7 @@ void KisMirrorManager::setView(QPointer<KisView> imageView)
         connect(m_imageView->document(), SIGNAL(sigMirrorAxisConfigChanged()), this, SLOT(slotDocumentConfigChanged()), Qt::UniqueConnection);
 
         if (!hasDecoration()) {
-            d->mirrorAxisDecoration = new KisMirrorAxis(m_imageView->viewManager()->resourceProvider(), m_imageView);
+            d->mirrorAxisDecoration = new KisMirrorAxis(m_imageView->viewManager()->canvasResourceProvider(), m_imageView);
             connect(d->mirrorAxisDecoration, SIGNAL(sigConfigChanged()), this, SLOT(slotMirrorAxisConfigChanged()), Qt::UniqueConnection);
             m_imageView->canvasBase()->addDecoration(d->mirrorAxisDecoration);
         }

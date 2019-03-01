@@ -105,7 +105,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
 
     KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
 
-    connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->resourceProvider(), SLOT(slotPainting()));
+    connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->canvasResourceProvider(), SLOT(slotPainting()));
 
     m_colorPickerDelayTimer.setSingleShot(true);
     connect(&m_colorPickerDelayTimer, SIGNAL(timeout()), this, SLOT(activatePickColorDelayed()));
@@ -157,7 +157,7 @@ void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> 
         connect(action("decrease_brush_size"), SIGNAL(triggered()), SLOT(decreaseBrushSize()), Qt::UniqueConnection);
     }
 
-    KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->resourceProvider();
+    KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider();
     m_oldOpacity = provider->opacity();
     provider->setOpacity(m_localOpacity);
 }
@@ -169,7 +169,7 @@ void KisToolPaint::deactivate()
         disconnect(action("decrease_brush_size"), 0, this, 0);
     }
 
-    KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->resourceProvider();
+    KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider();
     m_localOpacity = provider->opacity();
     provider->setOpacity(m_oldOpacity);
 

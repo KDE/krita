@@ -145,16 +145,16 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
             connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
         }
 
-        connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
+        connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
                 m_colorSelector, SLOT(slotGamutMaskSet(KoGamutMask*)), Qt::UniqueConnection);
 
-        connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskUnset()),
+        connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigGamutMaskUnset()),
                 m_colorSelector, SLOT(slotGamutMaskUnset()), Qt::UniqueConnection);
 
-        connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskPreviewUpdate()),
+        connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigGamutMaskPreviewUpdate()),
                 m_colorSelector, SLOT(slotGamutMaskPreviewUpdate()), Qt::UniqueConnection);
 
-        m_gamutMaskToolbar->connectMaskSignals(m_canvas->viewManager()->resourceProvider());
+        m_gamutMaskToolbar->connectMaskSignals(m_canvas->viewManager()->canvasResourceProvider());
 
         // gamut mask connections
         connect(m_gamutMaskToolbar, SIGNAL(sigGamutMaskToggle(bool)), m_colorSelector, SLOT(slotGamutMaskToggle(bool)), Qt::UniqueConnection);
@@ -209,7 +209,7 @@ void KisColorSelectorContainer::updateSettings()
 void KisColorSelectorContainer::reactOnLayerChange()
 {
     if (m_canvas) {
-        KisNodeSP node = m_canvas->viewManager()->resourceProvider()->currentNode();
+        KisNodeSP node = m_canvas->viewManager()->canvasResourceProvider()->currentNode();
         if (node) {
             KisPaintDeviceSP device = node->paintDevice();
             if (device) {

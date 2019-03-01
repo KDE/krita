@@ -67,8 +67,8 @@ void SpecificColorSelectorDock::unsetCanvas()
 void SpecificColorSelectorDock::setViewManager(KisViewManager* kisview)
 {
     m_view = kisview;
-    connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_colorSelector, SLOT(setColor(KoColor)));
-    connect(m_colorSelector, SIGNAL(colorChanged(KoColor)), m_view->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
+    connect(m_view->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_colorSelector, SLOT(setColor(KoColor)));
+    connect(m_colorSelector, SIGNAL(colorChanged(KoColor)), m_view->canvasResourceProvider(), SLOT(slotSetFGColor(KoColor)));
 }
 
 #include "moc_specificcolorselector_dock.cpp"

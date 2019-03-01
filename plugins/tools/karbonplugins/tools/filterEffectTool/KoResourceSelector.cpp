@@ -66,7 +66,7 @@ KoResourceSelector::KoResourceSelector(QWidget * parent )
     : QComboBox(parent), d(new Private())
 {
     setView(new KisResourceItemView(this));
-    d->model = KisResourceModelProvider::instance()->resourceModel(ResourceType::FilterEffects);
+    d->model = KisResourceModelProvider::resourceModel(ResourceType::FilterEffects);
     d->proxyModel = new KisResourceProxyModel(this);
     d->proxyModel->setSourceModel(d->model);
     setModel(d->proxyModel);

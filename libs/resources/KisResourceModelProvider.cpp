@@ -40,16 +40,11 @@ KisResourceModelProvider::~KisResourceModelProvider()
     delete d;
 }
 
-KisResourceModelProvider *KisResourceModelProvider::instance()
-{
-    return s_instance;
-}
-
 KisResourceModel *KisResourceModelProvider::resourceModel(const QString &resourceType)
 {
-    if (!instance()->d->resourceModels.contains(resourceType)) {
-       instance()->d->resourceModels[resourceType] = new KisResourceModel(resourceType);
+    if (!s_instance->d->resourceModels.contains(resourceType)) {
+       s_instance->d->resourceModels[resourceType] = new KisResourceModel(resourceType);
     }
-    return instance()->d->resourceModels[resourceType];
+    return s_instance->d->resourceModels[resourceType];
 }
 

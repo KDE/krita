@@ -30,8 +30,6 @@ public:
     KisResourceModelProvider();
     ~KisResourceModelProvider();
 
-    static KisResourceModelProvider *instance();
-
     static KisResourceModel *resourceModel(const QString &resourceType);
 
 private:

@@ -300,7 +300,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
 {
-    d->workspacemodel = KisResourceModelProvider::instance()->resourceModel(ResourceType::Workspaces);
+    d->workspacemodel = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
     connect(d->workspacemodel, SIGNAL(afterResourcesLayoutReset()), this, SLOT(updateWindowMenu()));
 
     d->viewManager = new KisViewManager(this, actionCollection());

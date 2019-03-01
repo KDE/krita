@@ -71,9 +71,7 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     setObjectName(name);
     m_lbName = new QLabel();
 
-    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
-    m_itemChooser = new KisResourceItemChooser(adapter->serverType(), false, this);
+    m_itemChooser = new KisResourceItemChooser(ResourceType::Gradients, false, this);
 
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->setFixedSize(250, 250);

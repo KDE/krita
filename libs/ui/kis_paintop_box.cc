@@ -87,7 +87,7 @@
 
 KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *name)
     : QWidget(parent)
-    , m_resourceProvider(view->resourceProvider())
+    , m_resourceProvider(view->canvasResourceProvider())
     , m_optionWidget(0)
     , m_toolOptionsPopupButton(0)
     , m_brushEditorPopupButton(0)
@@ -463,7 +463,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_sliderChooser[2]->getWidget<KisDoubleSliderSpinBox>("size")   , SIGNAL(valueChanged(qreal)), SLOT(slotSlider3Changed()));
 
     //Needed to connect canvas to favorite resource manager
-    connect(m_viewManager->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), SLOT(slotUnsetEraseMode()));
+    connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), SLOT(slotUnsetEraseMode()));
 
 
     connect(m_resourceProvider, SIGNAL(sigFGColorUsed(KoColor)), m_favoriteResourceManager, SLOT(slotAddRecentColor(KoColor)));
@@ -843,7 +843,7 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
 {
     if (m_viewManager) {
         sender()->blockSignals(true);
-        KisPaintOpPresetSP preset = m_viewManager->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        KisPaintOpPresetSP preset = m_viewManager->canvasResourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         if (preset && m_resourceProvider->currentPreset()->name() != preset->name()) {
             QString compositeOp = preset->settings()->getString("CompositeOp");
             updateCompositeOp(compositeOp);

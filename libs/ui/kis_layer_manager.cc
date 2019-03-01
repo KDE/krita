@@ -150,7 +150,7 @@ void KisLayerManager::activateLayer(KisLayerSP layer)
         emit sigLayerActivated(layer);
         layersUpdated();
         if (layer) {
-            m_view->resourceProvider()->slotNodeActivated(layer.data());
+            m_view->canvasResourceProvider()->slotNodeActivated(layer.data());
         }
     }
 }
@@ -655,7 +655,7 @@ KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode, c
 KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
-    QColor currentForeground = m_view->resourceProvider()->fgColor().toQColor();
+    QColor currentForeground = m_view->canvasResourceProvider()->fgColor().toQColor();
 
 
     KisDlgGeneratorLayer dlg(image->nextLayerName(), m_view, m_view->mainWindow(), 0, 0);
@@ -943,7 +943,7 @@ void KisLayerManager::layerStyle()
         oldStyle = toQShared(new KisPSDLayerStyle());
     }
 
-    KisDlgLayerStyle dlg(oldStyle->clone(), m_view->resourceProvider());
+    KisDlgLayerStyle dlg(oldStyle->clone(), m_view->canvasResourceProvider());
 
     std::function<void ()> updateCall(std::bind(updateLayerStyles, layer, &dlg));
     SignalToFunctionProxy proxy(updateCall);

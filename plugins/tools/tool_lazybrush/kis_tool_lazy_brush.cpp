@@ -80,7 +80,7 @@ void KisToolLazyBrush::activate(ToolActivation activation, const QSet<KoShape*> 
 {
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
     m_d->toolConnections.addUniqueConnection(
-        kiscanvas->viewManager()->resourceProvider(), SIGNAL(sigNodeChanged(KisNodeSP)),
+        kiscanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigNodeChanged(KisNodeSP)),
         this, SLOT(slotCurrentNodeChanged(KisNodeSP)));
 
 
@@ -324,7 +324,7 @@ QWidget * KisToolLazyBrush::createOptionWidget()
 {
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
 
-    QWidget *optionsWidget = new KisToolLazyBrushOptionsWidget(kiscanvas->viewManager()->resourceProvider(), 0);
+    QWidget *optionsWidget = new KisToolLazyBrushOptionsWidget(kiscanvas->viewManager()->canvasResourceProvider(), 0);
     optionsWidget->setObjectName(toolId() + "option widget");
 
     // // See https://bugs.kde.org/show_bug.cgi?id=316896

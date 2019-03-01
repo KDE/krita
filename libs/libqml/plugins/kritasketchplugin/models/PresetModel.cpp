@@ -70,7 +70,7 @@ public:
         preset->settings()->setNode(view->resourceProvider()->currentNode());
 #endif
 
-        view->resourceProvider()->setPaintOpPreset(preset);
+        view->canvasResourceProvider()->setPaintOpPreset(preset);
     }
 };
 

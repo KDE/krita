@@ -116,7 +116,7 @@ GamutMaskDock::~GamutMaskDock()
 
 void GamutMaskDock::setViewManager(KisViewManager* kisview)
 {
-    m_resourceProvider = kisview->resourceProvider();
+    m_resourceProvider = kisview->canvasResourceProvider();
 
     selectMask(m_resourceProvider->currentGamutMask());
 

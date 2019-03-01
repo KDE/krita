@@ -608,7 +608,7 @@ void KisSelectionManager::paintSelectedShapes()
     KisFigurePaintingToolHelper helper(actionName,
                                        image,
                                        paintLayer.data(),
-                                       m_view->resourceProvider()->resourceManager(),
+                                       m_view->canvasResourceProvider()->resourceManager(),
                                        KisPainter::StrokeStyleBrush,
                                        KisPainter::FillStyleNone);
 
@@ -647,7 +647,7 @@ void KisSelectionManager::slotStrokeSelection()
 
         return;
     }
-    KisNodeSP currentNode = m_view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
+    KisNodeSP currentNode = m_view->canvasResourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
     bool isVectorLayer = false;
     if (currentNode->inherits("KisShapeLayer")) {
         isVectorLayer = true;

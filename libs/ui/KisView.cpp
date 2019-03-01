@@ -428,7 +428,7 @@ KisCanvasController *KisView::canvasController() const
 KisCanvasResourceProvider *KisView::resourceProvider() const
 {
     if (d->viewManager) {
-        return d->viewManager->resourceProvider();
+        return d->viewManager->canvasResourceProvider();
     }
     return 0;
 }

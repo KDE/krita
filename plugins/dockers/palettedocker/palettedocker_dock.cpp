@@ -144,7 +144,7 @@ PaletteDockerDock::~PaletteDockerDock()
 void PaletteDockerDock::setViewManager(KisViewManager* kisview)
 {
     m_view = kisview;
-    m_resourceProvider = kisview->resourceProvider();
+    m_resourceProvider = kisview->canvasResourceProvider();
     connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResourceSP)),
             SLOT(saveToWorkspace(KisWorkspaceResourceSP)));
     connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResourceSP)),

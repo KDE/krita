@@ -227,7 +227,7 @@ ArtisticColorSelectorDock::~ArtisticColorSelectorDock()
 
 void ArtisticColorSelectorDock::setViewManager(KisViewManager* kisview)
 {
-    m_resourceProvider = kisview->resourceProvider();
+    m_resourceProvider = kisview->canvasResourceProvider();
     m_selectorUI->colorSelector->setFgColor(m_resourceProvider->resourceManager()->foregroundColor());
     m_selectorUI->colorSelector->setBgColor(m_resourceProvider->resourceManager()->backgroundColor());
 

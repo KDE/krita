@@ -217,7 +217,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
                                        kundo2_i18n("Flood Fill Layer"));
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(view->image(), node, view->resourceProvider()->resourceManager());
+        new KisResourcesSnapshot(view->image(), node, view->canvasResourceProvider()->resourceManager());
     if (!fillSource.contains("opacity")) {
         resources->setOpacity(1.0);
     }
@@ -241,7 +241,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
 
     applicator.end();
 
-    view->resourceProvider()->slotPainting();
+    view->canvasResourceProvider()->slotPainting();
 }
 
 void KisClearActionFactory::run(KisViewManager *view)
@@ -571,9 +571,9 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
     QPainterPath outline = pixelSelection->outlineCache();
     QColor color = params.color.toQColor();
 
-    KisNodeSP currentNode = view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
+    KisNodeSP currentNode = view->canvasResourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
     if (!currentNode->inherits("KisShapeLayer") && currentNode->paintDevice()) {
-        KoCanvasResourceProvider * rManager = view->resourceProvider()->resourceManager();
+        KoCanvasResourceProvider * rManager = view->canvasResourceProvider()->resourceManager();
         KisPainter::StrokeStyle strokeStyle =  KisPainter::StrokeStyleBrush;
         KisPainter::FillStyle fillStyle =  params.fillStyle();
 
@@ -628,10 +628,10 @@ void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelec
         pixelSelection->recalculateOutlineCache();
     }
 
-    KisNodeSP currentNode = view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
+    KisNodeSP currentNode = view->canvasResourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
     if (!currentNode->inherits("KisShapeLayer") && currentNode->paintDevice())
     {
-        KoCanvasResourceProvider * rManager = view->resourceProvider()->resourceManager();
+        KoCanvasResourceProvider * rManager = view->canvasResourceProvider()->resourceManager();
         QPainterPath outline = pixelSelection->outlineCache();
         KisPainter::StrokeStyle strokeStyle =  KisPainter::StrokeStyleBrush;
         KisPainter::FillStyle fillStyle =  KisPainter::FillStyleNone;

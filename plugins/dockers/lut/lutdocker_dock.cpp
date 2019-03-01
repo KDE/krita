@@ -311,7 +311,7 @@ void LutDockerDock::slotImageColorSpaceChanged()
 void LutDockerDock::exposureValueChanged(double exposure)
 {
     if (m_canvas && !m_draggingSlider) {
-        m_canvas->viewManager()->resourceProvider()->setHDRExposure(exposure);
+        m_canvas->viewManager()->canvasResourceProvider()->setHDRExposure(exposure);
         updateDisplaySettings();
     }
 }
@@ -331,7 +331,7 @@ void LutDockerDock::exposureSliderReleased()
 void LutDockerDock::gammaValueChanged(double gamma)
 {
     if (m_canvas && !m_draggingSlider) {
-        m_canvas->viewManager()->resourceProvider()->setHDRGamma(gamma);
+        m_canvas->viewManager()->canvasResourceProvider()->setHDRGamma(gamma);
         updateDisplaySettings();
     }
 }
@@ -529,7 +529,7 @@ void LutDockerDock::refillControls()
 {
     if (!m_canvas) return;
     if (!m_canvas->viewManager()) return;
-    if (!m_canvas->viewManager()->resourceProvider()) return;
+    if (!m_canvas->viewManager()->canvasResourceProvider()) return;
     if (!m_canvas->viewManager()->image()) return;
 
     KIS_ASSERT_RECOVER_RETURN(m_ocioConfig);
@@ -544,12 +544,12 @@ void LutDockerDock::refillControls()
 
     { // Exposure
         KisSignalsBlocker exposureBlocker(m_exposureDoubleWidget);
-        m_exposureDoubleWidget->setValue(m_canvas->viewManager()->resourceProvider()->HDRExposure());
+        m_exposureDoubleWidget->setValue(m_canvas->viewManager()->canvasResourceProvider()->HDRExposure());
     }
 
     { // Gamma
         KisSignalsBlocker gammaBlocker(m_gammaDoubleWidget);
-        m_gammaDoubleWidget->setValue(m_canvas->viewManager()->resourceProvider()->HDRGamma());
+        m_gammaDoubleWidget->setValue(m_canvas->viewManager()->canvasResourceProvider()->HDRGamma());
     }
 
     { // Components

@@ -277,7 +277,7 @@ void KisFilterManager::apply(KisFilterConfigurationSP filterConfig)
     }
 
     KoCanvasResourceProvider *resourceManager =
-        d->view->resourceProvider()->resourceManager();
+        d->view->canvasResourceProvider()->resourceManager();
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image,

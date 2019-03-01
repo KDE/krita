@@ -74,7 +74,7 @@ public:
         if (!view)
             return;
 
-        KisNodeSP node = view->resourceProvider()->currentNode();
+        KisNodeSP node = view->canvasResourceProvider()->currentNode();
 
         if (node && node->paintDevice())
         {
@@ -86,7 +86,7 @@ public:
                 q->setEraserMode(compositeOpID == COMPOSITE_ERASE);
                 currentPreset->settings()->setProperty("CompositeOp", compositeOpID);
                 //m_optionWidget->setConfiguration(m_activePreset->settings().data());
-                view->resourceProvider()->setCurrentCompositeOp(compositeOpID);
+                view->canvasResourceProvider()->setCurrentCompositeOp(compositeOpID);
                 prevCompositeOpID = currentCompositeOpID;
                 currentCompositeOpID = compositeOpID;
             }
@@ -113,7 +113,7 @@ public:
         }
         if (view)
         {
-            view->resourceProvider()->setOpacity(opacity);
+            view->canvasResourceProvider()->setOpacity(opacity);
         }
     }
 };
@@ -316,15 +316,15 @@ void CompositeOpModel::changePaintopValue(QString propertyName, QVariant value)
 bool CompositeOpModel::mirrorHorizontally() const
 {
     if (d->view)
-        return d->view->resourceProvider()->mirrorHorizontal();
+        return d->view->canvasResourceProvider()->mirrorHorizontal();
     return false;
 }
 
 void CompositeOpModel::setMirrorHorizontally(bool newMirrorHorizontally)
 {
-    if (d->view && d->view->resourceProvider()->mirrorHorizontal() != newMirrorHorizontally)
+    if (d->view && d->view->canvasResourceProvider()->mirrorHorizontal() != newMirrorHorizontally)
     {
-        d->view->resourceProvider()->setMirrorHorizontal(newMirrorHorizontally);
+        d->view->canvasResourceProvider()->setMirrorHorizontal(newMirrorHorizontally);
         emit mirrorHorizontallyChanged();
     }
 }
@@ -332,15 +332,15 @@ void CompositeOpModel::setMirrorHorizontally(bool newMirrorHorizontally)
 bool CompositeOpModel::mirrorVertically() const
 {
     if (d->view)
-        return d->view->resourceProvider()->mirrorVertical();
+        return d->view->canvasResourceProvider()->mirrorVertical();
     return false;
 }
 
 void CompositeOpModel::setMirrorVertically(bool newMirrorVertically)
 {
-    if (d->view && d->view->resourceProvider()->mirrorVertical() != newMirrorVertically)
+    if (d->view && d->view->canvasResourceProvider()->mirrorVertical() != newMirrorVertically)
     {
-        d->view->resourceProvider()->setMirrorVertical(newMirrorVertically);
+        d->view->canvasResourceProvider()->setMirrorVertical(newMirrorVertically);
         emit mirrorVerticallyChanged();
     }
 }
@@ -391,7 +391,7 @@ void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)
 
 void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
 {
-    if (d->view && d->view->canvasBase() && d->view->canvasBase()->resourceManager() && d->view->resourceProvider()) {
+    if (d->view && d->view->canvasBase() && d->view->canvasBase()->resourceManager() && d->view->canvasResourceProvider()) {
 
         if (key == KisCanvasResourceProvider::MirrorHorizontal) {
             emit mirrorHorizontallyChanged();
@@ -428,7 +428,7 @@ void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
                 d->opacity = 1;
             }
 
-            d->view->resourceProvider()->setOpacity(d->opacity);
+            d->view->canvasResourceProvider()->setOpacity(d->opacity);
             emit opacityChanged();
             emit opacityEnabledChanged();
 

@@ -1520,7 +1520,7 @@ void KisMainWindow::slotShowSessionManager() {
 
 KoCanvasResourceProvider *KisMainWindow::resourceManager() const
 {
-    return d->viewManager->resourceProvider()->resourceManager();
+    return d->viewManager->canvasResourceProvider()->resourceManager();
 }
 
 int KisMainWindow::viewCount() const
@@ -2196,7 +2196,7 @@ void KisMainWindow::updateWindowMenu()
 
         KisWorkspaceResourceSP workspace(new KisWorkspaceResource(""));
         workspace->setDockerState(m_this->saveState());
-        d->viewManager->resourceProvider()->notifySavingWorkspace(workspace);
+        d->viewManager->canvasResourceProvider()->notifySavingWorkspace(workspace);
         workspace->setValid(true);
         QString saveLocation = rserver->saveLocation();
 

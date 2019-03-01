@@ -193,8 +193,8 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
         connect(canvas->imageView()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)),
                 this,                               SLOT(updateLastUsedColorPreview(KoColor)), Qt::UniqueConnection);
 
-        if (m_canvas->viewManager() && m_canvas->viewManager()->resourceProvider()) {
-            setColor(Acs::currentColor(m_canvas->viewManager()->resourceProvider(), Acs::Foreground));
+        if (m_canvas->viewManager() && m_canvas->viewManager()->canvasResourceProvider()) {
+            setColor(Acs::currentColor(m_canvas->viewManager()->canvasResourceProvider(), Acs::Foreground));
         }
     }
     if (m_popup) {

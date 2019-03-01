@@ -45,9 +45,7 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
     m_lblName = new KSqueezedTextLabel(this);
     m_lblName->setTextElideMode(Qt::ElideLeft);
 
-    KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoPattern>(rserver));
-    m_itemChooser = new KisResourceItemChooser(adapter->serverType(), true, this);
+    m_itemChooser = new KisResourceItemChooser(ResourceType::Patterns, true, this);
     m_itemChooser->setPreviewTiled(true);
     m_itemChooser->setPreviewOrientation(Qt::Horizontal);
     m_itemChooser->showTaggingBar(true);

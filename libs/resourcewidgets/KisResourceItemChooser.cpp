@@ -217,13 +217,7 @@ KisResourceItemChooser::~KisResourceItemChooser()
 void KisResourceItemChooser::slotButtonClicked(int button)
 {
     if (button == Button_Import) {
-
-        QStringList extensions = KisResourceLoaderRegistry::instance()->filters(d->resourceType);
-        QStringList mimeTypes;
-        Q_FOREACH(const QString &extension, extensions) {
-            mimeTypes << KisMimeDatabase::mimeTypeForSuffix(extension);
-        }
-
+        QStringList mimeTypes = KisResourceLoaderRegistry::instance()->mimeTypes(d->resourceType);
         KoFileDialog dialog(0, KoFileDialog::OpenFiles, "OpenDocument");
         dialog.setMimeTypeFilters(mimeTypes);
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));

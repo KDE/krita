@@ -35,7 +35,6 @@
 
 #include <KoIcon.h>
 #include <KisResourceItemChooser.h>
-#include <KoLegacyResourceModel.h>
 #include <KoResourceServerAdapter.h>
 #include <KisResourceItemChooserSync.h>
 #include <KisResourceItemView.h>

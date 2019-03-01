@@ -30,8 +30,6 @@ class QGridLayout;
 class KisResourceItemChooser;
 class KisViewManager;
 
-class KoAbstractResourceServerAdapter;
-
 class KisWorkspaceChooser : public QWidget
 {
     Q_OBJECT
@@ -60,7 +58,7 @@ private:
     ChooserWidgets m_workspaceWidgets;
     ChooserWidgets m_windowLayoutWidgets;
 
-    ChooserWidgets createChooserWidgets(QSharedPointer<KoAbstractResourceServerAdapter> adapter, const QString &title);
+    ChooserWidgets createChooserWidgets(const QString &resourceType, const QString &title);
 };
 
 #endif // KIS_WORKSPACE_CHOOSER_H

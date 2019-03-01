@@ -25,7 +25,6 @@ set(kritawidgets_LIB_SRCS
     KoColorSlider.cpp
     KoTriangleColorSelector.cpp
     KoResourcePopupAction.cpp
-    KoLegacyResourceModel.cpp
     KoResourceTagStore.cpp
     KoRuler.cpp
     KoResourceServerAdapter.cpp

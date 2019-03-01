@@ -33,7 +33,6 @@ set(kritawidgets_LIB_SRCS
     KoIconToolTip.cpp
     KoResourceItemChooser.cpp
     KoResourceItemChooserSync.cpp
-    KoResourceSelector.cpp
     KoResourceModel.cpp
     KoResourceItemDelegate.cpp
     KoResourceItemView.cpp

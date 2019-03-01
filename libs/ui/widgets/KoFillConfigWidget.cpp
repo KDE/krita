@@ -37,7 +37,6 @@
 #include <KoColorPopupAction.h>
 #include "KoResourceServerProvider.h"
 #include "KoResourceServerAdapter.h"
-#include "KoResourceSelector.h"
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>

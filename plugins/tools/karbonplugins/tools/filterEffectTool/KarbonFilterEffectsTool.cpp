@@ -458,10 +458,6 @@ QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets;
 
-    FilterResourceServerProvider *serverProvider = FilterResourceServerProvider::instance();
-    KoResourceServer<FilterEffectResource> *server = serverProvider->filterEffectServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<FilterEffectResource>(server));
-
     //---------------------------------------------------------------------
 
     QWidget *addFilterWidget = new QWidget();
@@ -469,7 +465,7 @@ QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
     QGridLayout *addFilterLayout = new QGridLayout(addFilterWidget);
 
     d->filterSelector = new KoResourceSelector(addFilterWidget);
-    d->filterSelector->setResourceAdapter(adapter);
+
     d->filterSelector->setDisplayMode(KoResourceSelector::TextMode);
     d->filterSelector->setColumnCount(1);
     addFilterLayout->addWidget(new QLabel(i18n("Effects"), addFilterWidget), 0, 0);

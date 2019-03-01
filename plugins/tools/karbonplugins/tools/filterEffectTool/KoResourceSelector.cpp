@@ -18,8 +18,10 @@
  */
 
 #include "KoResourceSelector.h"
-#include <KoResourceServerAdapter.h>
-#include <KoLegacyResourceModel.h>
+
+#include <KisResourceModel.h>
+#include <KisResourceProxyModel.h>
+#include <KisResourceModelProvider.h>
 #include <KisResourceItemView.h>
 #include <KisResourceItemDelegate.h>
 #include <QPainter>
@@ -36,10 +38,12 @@ class Q_DECL_HIDDEN KoResourceSelector::Private
 public:
     Private() : displayMode(ImageMode) {}
     DisplayMode displayMode;
+    KisResourceModel *model;
+    KisResourceProxyModel *proxyModel;
 
     void updateIndex( KoResourceSelector * me )
     {
-        KoLegacyResourceModel * resourceModel = qobject_cast<KoLegacyResourceModel*>(me->model());
+        KisResourceModel *resourceModel = qobject_cast<KisResourceModel*>(me->model());
         if (!resourceModel)
             return;
         if (!resourceModel->rowCount())
@@ -58,33 +62,20 @@ public:
     }
 };
 
-KoResourceSelector::KoResourceSelector(QWidget * parent)
-    : QComboBox( parent ), d( new Private() )
+KoResourceSelector::KoResourceSelector(QWidget * parent )
+    : QComboBox(parent), d(new Private())
 {
-    connect( this, SIGNAL(currentIndexChanged(int)),
-             this, SLOT(indexChanged(int)) );
-
-    setMouseTracking(true);
-}
-
-KoResourceSelector::KoResourceSelector( QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget * parent )
-    : QComboBox( parent ), d( new Private() )
-{
-    Q_ASSERT(resourceAdapter);
-
-    setView( new KisResourceItemView(this) );
-    setModel( new KoLegacyResourceModel(resourceAdapter, this) );
-    setItemDelegate( new KisResourceItemDelegate( this ) );
+    setView(new KisResourceItemView(this));
+    d->model = KisResourceModelProvider::instance()->resourceModel(ResourceType::FilterEffects);
+    d->proxyModel = new KisResourceProxyModel(this);
+    d->proxyModel->setSourceModel(d->model);
+    setModel(d->proxyModel);
+    setItemDelegate(new KisResourceItemDelegate(this));
     setMouseTracking(true);
     d->updateIndex(this);
 
     connect( this, SIGNAL(currentIndexChanged(int)),
              this, SLOT(indexChanged(int)) );
-
-    connect(resourceAdapter.data(), SIGNAL(resourceAdded(KoResourceSP )),
-            this, SLOT(resourceAdded(KoResourceSP )));
-    connect(resourceAdapter.data(), SIGNAL(removingResource(KoResourceSP )),
-            this, SLOT(resourceRemoved(KoResourceSP )));
 }
 
 KoResourceSelector::~KoResourceSelector()
@@ -145,17 +136,6 @@ void KoResourceSelector::mouseMoveEvent( QMouseEvent * event )
         unsetCursor();
 }
 
-void KoResourceSelector::setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter>resourceAdapter)
-{
-    Q_ASSERT(resourceAdapter);
-    setModel(new KoLegacyResourceModel(resourceAdapter, this));
-    d->updateIndex(this);
-
-    connect(resourceAdapter.data(), SIGNAL(resourceAdded(KoResourceSP )),
-            this, SLOT(resourceAdded(KoResourceSP )));
-    connect(resourceAdapter.data(), SIGNAL(removingResource(KoResourceSP )),
-            this, SLOT(resourceRemoved(KoResourceSP )));
-}
 
 void KoResourceSelector::setDisplayMode(DisplayMode mode)
 {
@@ -179,9 +159,7 @@ void KoResourceSelector::setDisplayMode(DisplayMode mode)
 
 void KoResourceSelector::setColumnCount( int columnCount )
 {
-    KoLegacyResourceModel * resourceModel = qobject_cast<KoLegacyResourceModel*>(model());
-    if (resourceModel)
-        resourceModel->setColumnCount( columnCount );
+    d->proxyModel->setRowStride(columnCount);
 }
 
 void KoResourceSelector::setRowHeight( int rowHeight )
@@ -197,18 +175,8 @@ void KoResourceSelector::indexChanged( int )
     if(!index.isValid()) {
         return;
     }
-    KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
+    KoResourceSP resource = d->model->resourceForIndex(d->proxyModel->mapToSource(index));
     if (resource) {
         emit resourceSelected( resource );
     }
-}
-
-void KoResourceSelector::resourceAdded(KoResourceSP )
-{
-    d->updateIndex(this);
-}
-
-void KoResourceSelector::resourceRemoved(KoResourceSP )
-{
-    d->updateIndex(this);
 }

@@ -43,18 +43,8 @@ public:
      */
     explicit KoResourceSelector(QWidget *parent = 0);
 
-    /**
-     * Constructs a new resource selector showing the resources of the given resource adapter.
-     * @param resourceAdapter the resource adapter providing the resources to display
-     * @param parent the parent widget
-     */
-    explicit KoResourceSelector( QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget * parent = 0 );
-
     /// Destroys the resource selector
     ~KoResourceSelector() override;
-
-    /// Sets the resource adaptor to get resources from
-    void setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter>resourceAdapter);
 
     /// Sets the display mode
     void setDisplayMode(DisplayMode mode);
@@ -82,8 +72,7 @@ protected:
 
 private Q_SLOTS:
     void indexChanged( int index );
-    void resourceAdded(KoResourceSP );
-    void resourceRemoved(KoResourceSP );
+
 private:
     class Private;
     Private * const d;

@@ -52,11 +52,6 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
 {
     setupUi(this);
 
-    FilterResourceServerProvider *serverProvider = FilterResourceServerProvider::instance();
-    KoResourceServer<FilterEffectResource> *server = serverProvider->filterEffectServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<FilterEffectResource>(server));
-
-    presets->setResourceAdapter(adapter);
     presets->setDisplayMode(KoResourceSelector::TextMode);
     presets->setColumnCount(1);
 

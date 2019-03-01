@@ -102,7 +102,9 @@
 #include <KoPluginLoader.h>
 #include <KoColorSpaceEngine.h>
 #include <KoUpdater.h>
-#include <KoLegacyResourceModel.h>
+#include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>
+#include <KisResourceLoaderRegistry.h>
 
 #include <brushengine/kis_paintop_settings.h>
 #include "dialogs/kis_about_application.h"
@@ -245,7 +247,7 @@ public:
     KHelpMenu *helpMenu  {0};
 
     KRecentFilesAction *recentFiles {0};
-    KoLegacyResourceModel *workspacemodel {0};
+    KisResourceModel *workspacemodel {0};
 
     QScopedPointer<KisUndoActionsUpdateManager> undoActionsUpdateManager;
 
@@ -298,11 +300,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
 {
-    auto rserver = KisResourceServerProvider::instance()->workspaceServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
-    d->workspacemodel = new KoLegacyResourceModel(adapter, this);
-    connect(d->workspacemodel, &KoLegacyResourceModel::afterResourcesLayoutReset, this, [&]() { updateWindowMenu(); });
-
+    d->workspacemodel = KisResourceModelProvider::instance()->resourceModel(ResourceType::Workspaces);
+    connect(d->workspacemodel, SIGNAL(afterResourcesLayoutReset()), this, SLOT(updateWindowMenu()));
 
     d->viewManager = new KisViewManager(this, actionCollection());
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
@@ -2176,13 +2175,9 @@ void KisMainWindow::updateWindowMenu()
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&Import Workspace...")),
             &QAction::triggered,
             this,
-            [&]() {
-        QString extensions = d->workspacemodel->extensions();
-        QStringList mimeTypes;
-        for(const QString &suffix : extensions.split(":")) {
-            mimeTypes << KisMimeDatabase::mimeTypeForSuffix(suffix);
-        }
-
+            [&]()
+    {
+        QStringList mimeTypes = KisResourceLoaderRegistry::instance()->mimeTypes(ResourceType::Workspaces);
         KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
         dialog.setMimeTypeFilters(mimeTypes);
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));

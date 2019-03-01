@@ -62,6 +62,9 @@ public:
     /// Sets number of columns in the view and causes the number of rows to be calculated accordingly
     void setColumnCount(int columnCount);
 
+    /// return the number of rows in the view
+    int rowCount() const;
+
     /// Sets number of rows in the view and causes the number of columns to be calculated accordingly
     void setRowCount(int rowCount);
 

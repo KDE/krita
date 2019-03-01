@@ -25,15 +25,12 @@
 #include <QPointer>
 #include <QCheckBox>
 #include <QAction>
+#include <QPainter>
 
-#include "KisPaletteListWidget.h"
-#include "KoLegacyResourceModel.h"
-#include "KisResourceItemView.h"
-#include "KisResourceItemChooser.h"
-#include "KoResourceServer.h"
-#include "KoResourceServerAdapter.h"
-#include "KoResourceServerProvider.h"
-#include "KoColorSet.h"
+#include <KisPaletteListWidget.h>
+#include <KisResourceItemView.h>
+#include <KisResourceItemChooser.h>
+#include <KoColorSet.h>
 
 struct KisPaletteListWidgetPrivate
 {
@@ -47,10 +44,8 @@ struct KisPaletteListWidgetPrivate
 
     QPointer<KisPaletteListWidget> c;
 
-    QSharedPointer<KoResourceServerAdapter<KoColorSet> > rAdapter;
     QSharedPointer<KisResourceItemChooser> itemChooser;
 
-    QScopedPointer<Model> model;
     QScopedPointer<Delegate> delegate;
 
     QScopedPointer<QAction> actAdd;
@@ -71,15 +66,4 @@ public:
     QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override;
 };
 
-class KisPaletteListWidgetPrivate::Model : public KoLegacyResourceModel
-{
-public:
-    Model(const QSharedPointer<KoResourceServerAdapter<KoColorSet> > &rAdapter, QObject *parent = Q_NULLPTR)
-        : KoLegacyResourceModel(rAdapter, parent)
-    { }
-    ~Model() override { }
-
-    Qt::ItemFlags flags(const QModelIndex &index) const override
-    { return KoLegacyResourceModel::flags(index) | Qt::ItemIsUserCheckable; }
-};
 #endif // KISPALETTELISTWIDGET_P_H

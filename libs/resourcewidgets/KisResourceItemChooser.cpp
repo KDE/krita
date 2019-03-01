@@ -287,6 +287,11 @@ void KisResourceItemChooser::setColumnCount(int columnCount)
     d->resourceProxyModel->setRowStride(columnCount);
 }
 
+int KisResourceItemChooser::rowCount() const
+{
+    return d->resourceProxyModel->rowCount();
+}
+
 void KisResourceItemChooser::setRowHeight(int rowHeight)
 {
     d->view->verticalHeader()->setDefaultSectionSize(rowHeight);

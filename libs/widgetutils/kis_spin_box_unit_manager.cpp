@@ -368,7 +368,7 @@ qreal KisSpinBoxUnitManager::getConversionFactor(int dim, QString symbol) const
             if (! ok) {
                 break;
             }
-            factor = unit.toUserValue(1.0);
+            factor = unit.ptToUnit(1.0, unit); // use the precise function
         } while (0) ;
         break;
 

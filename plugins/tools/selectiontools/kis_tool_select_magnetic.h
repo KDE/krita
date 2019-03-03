@@ -37,6 +37,8 @@ public:
     void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter) override;
     void addPathShape(KoPathShape* pathShape) override;
 
+    friend class KisToolSelectMagnetic;
+
     using KoCreatePathTool::createOptionWidgets;
     using KoCreatePathTool::endPathWithoutLastPoint;
     using KoCreatePathTool::endPath;
@@ -95,7 +97,7 @@ public:
         setToolTip(i18n("Magnetic Selection Tool"));
         setSection(TOOL_TYPE_SELECTION);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIconName(koIconNameCStr("tool_path_selection"));
+        setIconName(koIconNameCStr("tool_magnetic_selection"));
         setPriority(6);
     }
 

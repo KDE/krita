@@ -219,6 +219,6 @@ namespace KisLayerUtils
     KisNodeSP KRITAIMAGE_EXPORT findNodeByUuid(KisNodeSP root, const QUuid &uuid);
 
     KisImageSP KRITAIMAGE_EXPORT findImageByHierarchy(KisNodeSP node);
-};
+}
 
 #endif /* __KIS_LAYER_UTILS_H */

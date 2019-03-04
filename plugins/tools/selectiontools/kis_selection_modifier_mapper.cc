@@ -39,7 +39,7 @@
 #include "kis_config_notifier.h"
 #include "kis_config.h"
 
-Q_GLOBAL_STATIC(KisSelectionModifierMapper, s_instance);
+Q_GLOBAL_STATIC(KisSelectionModifierMapper, s_instance)
 
 
 // This numerically serializes modifier flags... let's keep it around for later.

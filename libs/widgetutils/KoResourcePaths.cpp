@@ -30,7 +30,7 @@
 #include "kis_debug.h"
 
 
-Q_GLOBAL_STATIC(KoResourcePaths, s_instance);
+Q_GLOBAL_STATIC(KoResourcePaths, s_instance)
 
 static QString cleanup(const QString &path)
 {

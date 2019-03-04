@@ -62,7 +62,7 @@ private:
     KisOptimizedByteArray::MemoryAllocatorSP m_allocator;
 };
 
-Q_GLOBAL_STATIC(DefaultMemoryAllocatorStore, s_instance);
+Q_GLOBAL_STATIC(DefaultMemoryAllocatorStore, s_instance)
 
 DefaultMemoryAllocatorStore *DefaultMemoryAllocatorStore::instance()
 {

@@ -57,7 +57,7 @@ struct KisATanTable {
     qreal* ATanTable;
 };
 
-Q_GLOBAL_STATIC(KisATanTable, kisATanTable);
+Q_GLOBAL_STATIC(KisATanTable, kisATanTable)
 
 /// private functions
 

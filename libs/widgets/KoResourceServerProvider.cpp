@@ -153,7 +153,7 @@ KoResourceServerProvider::~KoResourceServerProvider()
     delete d;
 }
 
-Q_GLOBAL_STATIC(KoResourceServerProvider, s_instance);
+Q_GLOBAL_STATIC(KoResourceServerProvider, s_instance)
 
 KoResourceServerProvider* KoResourceServerProvider::instance()
 {

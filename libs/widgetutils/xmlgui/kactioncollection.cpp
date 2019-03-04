@@ -146,7 +146,7 @@ KActionCategory *KActionCollection::getCategory(const QString &name) {
         category = new KActionCategory(name, this);
     }
     return category;
-};
+}
 
 
 void KActionCollection::clear()

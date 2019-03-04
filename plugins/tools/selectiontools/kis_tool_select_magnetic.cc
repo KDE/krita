@@ -35,7 +35,7 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase * canvas)
     : KisToolSelectBase<KisDelegatedSelectMagneticWrapper>(canvas,
                                                        KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
                                                        i18n("Select path"),
-                                                           dynamic_cast<KisTool*> (new __KisToolSelectMagneticLocalTool(canvas, this)))
+                                                           (KisTool*) (new __KisToolSelectMagneticLocalTool(canvas, this)))
 {
 }
 

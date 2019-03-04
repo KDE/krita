@@ -59,7 +59,7 @@ struct KisDelegatedSelectMagneticWrapper : public DelegatedSelectMagneticTool {
     KisDelegatedSelectMagneticWrapper(KoCanvasBase *canvas,
                                   const QCursor &cursor,
                                   KisTool* delegateTool)
-        : DelegatedSelectMagneticTool(canvas, cursor, dynamic_cast<__KisToolSelectMagneticLocalTool*>(delegateTool))
+        : DelegatedSelectMagneticTool(canvas, cursor, (__KisToolSelectMagneticLocalTool*)delegateTool)
     {
     }
 

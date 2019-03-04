@@ -61,7 +61,7 @@ struct DefaultKoColorInitializer
     KoColor *value = 0;
 };
 
-Q_GLOBAL_STATIC(DefaultKoColorInitializer, s_defaultKoColor);
+Q_GLOBAL_STATIC(DefaultKoColorInitializer, s_defaultKoColor)
 
 }
 

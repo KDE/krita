@@ -93,6 +93,6 @@ namespace KisLazyFillTools
         qreal fuzzyRadius = 0;
         qreal cleanUpAmount = 0.0;
     };
-};
+}
 
 #endif /* __KIS_LAZY_FILL_TOOLS_H */

@@ -37,7 +37,6 @@
 #include <QLocale>
 #include <QMessageBox>
 #include <QProcessEnvironment>
-#include <QSettings>
 #include <QStringList>
 #include <QStyle>
 #include <QStyleFactory>

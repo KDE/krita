@@ -55,6 +55,7 @@ TimelineRulerHeader::TimelineRulerHeader(QWidget *parent)
 {
     setSectionResizeMode(QHeaderView::Fixed);
     setDefaultSectionSize(18);
+    setMinimumSectionSize(8);
 }
 
 TimelineRulerHeader::~TimelineRulerHeader()

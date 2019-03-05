@@ -218,8 +218,8 @@ bool LcmsColorProfileContainer::init()
 
         } else if (cmsIsTag(d->profile, cmsSigGrayTRCTag)) {
             d->grayTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGrayTRCTag));
-            d->grayTRCReverse = cmsReverseToneCurve(d->grayTRC);
-            d->hasTRC = true;
+            if (d->grayTRC) d->grayTRCReverse = cmsReverseToneCurve(d->grayTRC);
+            d->hasTRC = (d->grayTRC && d->grayTRCReverse);
         } else {
             d->hasTRC = false;
         }

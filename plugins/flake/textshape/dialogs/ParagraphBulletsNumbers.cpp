@@ -154,7 +154,7 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level)
         case KoListStyle::ListTab:
             widget.doubleSpinBox->setEnabled(true);
             widget.labelFollowedBy->setCurrentIndex(0);
-            widget.doubleSpinBox->setValue(KoUnit::toCentimeter(llp.tabStopPosition()));
+            widget.doubleSpinBox->setValue(KoUnit(KoUnit::Centimeter).toUserValue(llp.tabStopPosition()));
             break;
         case KoListStyle::Space:
             widget.doubleSpinBox->setEnabled(false);
@@ -168,8 +168,8 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level)
             Q_ASSERT(false);
         }
 
-        widget.doubleSpinBox_2->setValue(KoUnit::toCentimeter(llp.margin()));
-        widget.doubleSpinBox_3->setValue(KoUnit::toCentimeter(llp.margin()) + KoUnit::toCentimeter(llp.textIndent()));
+        widget.doubleSpinBox_2->setValue(KoUnit(KoUnit::Centimeter).toUserValue(llp.margin()));
+        widget.doubleSpinBox_3->setValue(KoUnit(KoUnit::Centimeter).toUserValue(llp.margin()) + KoUnit(KoUnit::Centimeter).toUserValue(llp.textIndent()));
     }
 
     // *** features not in GUI;

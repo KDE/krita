@@ -119,6 +119,7 @@ public:
         virtual ~NodeManipulationInterface() {}
         virtual KisLayerSP addPaintLayer() const = 0;
         virtual void removeNode(KisNodeSP node) const = 0;
+        virtual bool setNodeProperties(KisNodeSP node, KisImageSP image, KisBaseNode::PropertyList properties) const = 0;
     };
 
     /**

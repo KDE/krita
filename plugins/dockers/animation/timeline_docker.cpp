@@ -78,6 +78,11 @@ struct NodeManagerInterface : TimelineFramesModel::NodeManipulationInterface
         m_manager->removeSingleNode(node);
     }
 
+    bool setNodeProperties(KisNodeSP node, KisImageSP image, KisBaseNode::PropertyList properties) const override
+    {
+        return m_manager->trySetNodeProperties(node, image, properties);
+    }
+
 private:
     KisNodeManager *m_manager;
 };

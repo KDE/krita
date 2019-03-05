@@ -85,6 +85,8 @@
 #include "KisView.h"
 
 #include <kis_signals_blocker.h>
+#include <libs/image/kis_layer_properties_icons.h>
+#include <libs/image/commands/kis_node_property_list_command.h>
 
 struct KisNodeManager::Private {
 
@@ -828,6 +830,26 @@ bool KisNodeManager::isNodeHidden(KisNodeSP node, bool isGlobalSelectionHidden)
     }
 
     return false;
+}
+
+bool KisNodeManager::trySetNodeProperties(KisNodeSP node, KisImageSP image, KisBaseNode::PropertyList properties) const
+{
+    const KisPaintLayer *paintLayer = dynamic_cast<KisPaintLayer*>(node.data());
+    if (paintLayer) {
+        const auto onionSkinOn = KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::onionSkins, true);
+
+        if (properties.contains(onionSkinOn)) {
+            const KisPaintDeviceSP &paintDevice = paintLayer->paintDevice();
+            if (paintDevice && paintDevice->defaultPixel().opacityU8() == 255) {
+                m_d->view->showFloatingMessage(i18n("Onion skins require a layer with transparent background."), QIcon());
+                return false;
+            }
+        }
+    }
+
+    KisNodePropertyListCommand::setNodePropertiesNoUndo(node, image, properties);
+
+    return true;
 }
 
 void KisNodeManager::nodeOpacityChanged(qreal opacity, bool finalChange)

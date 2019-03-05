@@ -597,7 +597,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         {
             // don't record undo/redo for visibility, locked or alpha locked changes
             KisBaseNode::PropertyList proplist = value.value<KisBaseNode::PropertyList>();
-            KisNodePropertyListCommand::setNodePropertiesNoUndo(node, m_d->image, proplist);
+            m_d->nodeManager->trySetNodeProperties(node, m_d->image, proplist);
             shouldUpdateRecursively = true;
 
             break;

@@ -126,6 +126,7 @@ bool LcmsColorProfileContainer::init()
 
     d->profile = cmsOpenProfileFromMem((void *)d->data->rawData().constData(), d->data->rawData().size());
 
+
 #ifndef NDEBUG
     if (d->data->rawData().size() == 4096) {
         qWarning() << "Profile has a size of 4096, which is suspicious and indicates a possible misuse of QIODevice::read(int), check your code.";
@@ -210,10 +211,10 @@ bool LcmsColorProfileContainer::init()
             d->redTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigRedTRCTag));
             d->greenTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGreenTRCTag));
             d->blueTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigBlueTRCTag));
-            d->redTRCReverse = cmsReverseToneCurve(d->redTRC);
-            d->greenTRCReverse = cmsReverseToneCurve(d->greenTRC);
-            d->blueTRCReverse = cmsReverseToneCurve(d->blueTRC);
-            d->hasTRC = true;
+            if (d->redTRC) d->redTRCReverse = cmsReverseToneCurve(d->redTRC);
+            if (d->greenTRC) d->greenTRCReverse = cmsReverseToneCurve(d->greenTRC);
+            if (d->blueTRC) d->blueTRCReverse = cmsReverseToneCurve(d->blueTRC);
+            d->hasTRC = (d->redTRC && d->greenTRC && d->blueTRC && d->redTRCReverse && d->greenTRCReverse && d->blueTRCReverse);
 
         } else if (cmsIsTag(d->profile, cmsSigGrayTRCTag)) {
             d->grayTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGrayTRCTag));

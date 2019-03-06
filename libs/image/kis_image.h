@@ -28,7 +28,6 @@
 
 #include <KoColorConversionTransformation.h>
 
-#include "kis_paint_device.h" // msvc cannot handle forward declarations, so include kis_paint_device here
 #include "kis_types.h"
 #include "kis_shared.h"
 #include "kis_node_graph_listener.h"
@@ -53,6 +52,7 @@ class KisSpontaneousJob;
 class KisImageAnimationInterface;
 class KUndo2MagicString;
 class KisProofingConfiguration;
+class KisPaintDevice;
 
 namespace KisMetaData
 {

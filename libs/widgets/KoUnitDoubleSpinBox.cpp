@@ -114,7 +114,7 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
         warnWidgets << "Not a number: " << number;
         return QValidator::Invalid;
     }
-    newVal = KoUnit::ptToUnit( newVal, d->unit );
+    newVal = d->unit.toUserValuePrecise(newVal);
     //input = textFromValue( newVal ); // don't overwrite for now; the effect is not exactly what I expect...
 
     return QValidator::Acceptable;
@@ -149,7 +149,7 @@ void KoUnitDoubleSpinBox::setUnit( const KoUnit &unit )
 
     QDoubleSpinBox::setSingleStep( step );
     d->unit = unit;
-    QDoubleSpinBox::setValue( KoUnit::ptToUnit( oldvalue, unit ) );
+    QDoubleSpinBox::setValue(unit.toUserValuePrecise(oldvalue));
     setSuffix(unit.symbol().prepend(QLatin1Char(' ')));
 }
 

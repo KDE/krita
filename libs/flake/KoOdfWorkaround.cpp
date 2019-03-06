@@ -235,7 +235,7 @@ void KoOdfWorkaround::fixGluePointPosition(QString &positionString, KoShapeLoadi
     KoOdfLoadingContext::GeneratorType type(context.odfLoadingContext().generatorType());
     if (type == KoOdfLoadingContext::OpenOffice && !positionString.endsWith('%')) {
         const qreal pos = KoUnit::parseValue(positionString);
-        positionString = QString("%1%%").arg(KoUnit::toMillimeter(pos));
+        positionString = QString("%1%%").arg(KoUnit(KoUnit::Millimeter).toUserValue(pos));
     }
 }
 

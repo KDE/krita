@@ -147,6 +147,11 @@ struct TestingInterface : TimelineFramesModel::NodeManipulationInterface
             new KisImageLayerRemoveCommand(m_image, node));
     }
 
+    bool setNodeProperties(KisNodeSP, KisImageSP, KisBaseNode::PropertyList) const override
+    {
+        return false;
+    }
+
 private:
     KisImageSP m_image;
 };

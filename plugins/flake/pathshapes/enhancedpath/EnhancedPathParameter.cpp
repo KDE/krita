@@ -132,11 +132,11 @@ qreal EnhancedPathNamedParameter::evaluate()
         break;
     case IdentifierLogwidth:
         // TODO: ? viewBox does not have any unit or const relation to mm
-        return KoUnit::toMillimeter(viewBox.width()) * 100;
+        return KoUnit(KoUnit::Millimeter).toUserValue(viewBox.width()) * 100;
         break;
     case IdentifierLogheight:
         // TODO: ? viewBox does not have any unit or const relation to mm
-        return KoUnit::toMillimeter(viewBox.height()) * 100;
+        return KoUnit(KoUnit::Millimeter).toUserValue(viewBox.height()) * 100;
         break;
     default:
         break;

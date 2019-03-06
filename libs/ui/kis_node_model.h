@@ -36,6 +36,7 @@ class KisNodeSelectionAdapter;
 class KisNodeInsertionAdapter;
 class KisSelectionActionsAdapter;
 class KisNodeDisplayModeAdapter;
+class KisNodeManager;
 
 /**
  * KisNodeModel offers a Qt model-view compatible view of the node
@@ -113,10 +114,8 @@ public: // from QAbstractItemModel
     void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
                           KisImageWSP image,
                           KisShapeController *shapeController,
-                          KisNodeSelectionAdapter *nodeSelectionAdapter,
-                          KisNodeInsertionAdapter *nodeInsertionAdapter,
                           KisSelectionActionsAdapter *selectionActionsAdapter,
-                          KisNodeDisplayModeAdapter *nodeDisplayModeAdapter);
+                          KisNodeManager *nodeManager);
     KisNodeSP nodeFromIndex(const QModelIndex &index) const;
     QModelIndex indexFromNode(KisNodeSP node) const;
 

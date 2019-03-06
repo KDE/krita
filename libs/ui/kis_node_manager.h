@@ -22,6 +22,7 @@
 #include <QList>
 
 #include "kis_types.h"
+#include "kis_base_node.h"
 #include <kritaui_export.h>
 
 class KActionCollection;
@@ -109,6 +110,8 @@ public:
     KisNodeDisplayModeAdapter* nodeDisplayModeAdapter() const;
 
     static bool isNodeHidden(KisNodeSP node, bool isGlobalSelectionHidden);
+
+    bool trySetNodeProperties(KisNodeSP node, KisImageSP image, KisBaseNode::PropertyList properties) const;
 
 public Q_SLOTS:
 

@@ -173,7 +173,7 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
 
-        KisNodePropertyListCommand::setNodePropertiesNoUndo(dummy->node(), image, props);
+        nodeInterface->setNodeProperties(dummy->node(), image, props);
         return true;
     }
 

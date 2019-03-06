@@ -212,7 +212,7 @@ void KisCustomImageWidget::widthUnitChanged(int index)
         doubleWidth->setDecimals(2);
     }
 
-    doubleWidth->setValue(KoUnit::ptToUnit(m_width, m_widthUnit));
+    doubleWidth->setValue(m_widthUnit.toUserValuePrecise(m_width));
 
     doubleWidth->blockSignals(false);
     changeDocumentInfoLabel();
@@ -236,7 +236,7 @@ void KisCustomImageWidget::heightUnitChanged(int index)
         doubleHeight->setDecimals(2);
     }
 
-    doubleHeight->setValue(KoUnit::ptToUnit(m_height, m_heightUnit));
+    doubleHeight->setValue(m_heightUnit.toUserValuePrecise(m_height));
 
     doubleHeight->blockSignals(false);
     changeDocumentInfoLabel();
@@ -297,8 +297,8 @@ KisDocument* KisCustomImageWidget::createNewImage()
     double resolution;
     resolution = doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
 
-    width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
-    height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
+    width = static_cast<qint32>(0.5  + KoUnit(KoUnit::Pixel, resolution).toUserValuePrecise(m_width));
+    height = static_cast<qint32>(0.5 + KoUnit(KoUnit::Pixel, resolution).toUserValuePrecise(m_height));
 
     QColor qc = cmbColor->color().toQColor();
     qc.setAlpha(backgroundOpacity());
@@ -499,8 +499,8 @@ void KisCustomImageWidget::changeDocumentInfoLabel()
     double resolution;
     resolution = doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
 
-    width = static_cast<qint64>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
-    height = static_cast<qint64>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
+    width = static_cast<qint64>(0.5  + KoUnit(KoUnit::Pixel, resolution).toUserValuePrecise(m_width));
+    height = static_cast<qint64>(0.5 + KoUnit(KoUnit::Pixel, resolution).toUserValuePrecise(m_height));
 
     qint64 layerSize = width * height;
     const KoColorSpace *cs = colorSpaceSelector->currentColorSpace();

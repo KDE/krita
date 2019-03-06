@@ -445,6 +445,8 @@ class comicsExporter():
         if "translate" in transform:
             transform = transform.replace('translate(', '')
             for c in transform[:-1].split(" "):
+                if "," in c:
+                    c = c.replace(",", "")
                 coord.append(float(c))
             if len(coord) < 2:
                 coord.append(coord[0])
@@ -452,6 +454,8 @@ class comicsExporter():
         if "matrix" in transform:
             transform = transform.replace('matrix(', '')
             for c in transform[:-1].split(" "):
+                if "," in c:
+                    c = c.replace(",", "")
                 coord.append(float(c))
             adjust = QTransform(coord[0], coord[1], coord[2], coord[3], coord[4], coord[5])
         path = QPainterPath()

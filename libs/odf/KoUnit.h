@@ -56,6 +56,20 @@ constexpr qreal POINT_TO_CC(qreal px) {return (px)*0.077880997;}
 constexpr qreal PI_TO_POINT(qreal pi) {return (pi)*12;}
 constexpr qreal CC_TO_POINT(qreal cc) {return (cc)*12.840103;}
 
+
+static const qreal PT_ROUNDING {1000.0};
+//static const qreal PX_ROUNDING {1000.0}; // pixel value is not to be rounded
+
+static const qreal CM_ROUNDING {10000.0};
+static const qreal DM_ROUNDING {10000.0};
+static const qreal MM_ROUNDING {10000.0};
+
+static const qreal IN_ROUNDING {100000.0};
+
+static const qreal PI_ROUNDING {100000.0}; // pico
+static const qreal CC_ROUNDING {100000.0}; // cicero
+
+
 /**
  * %Calligra stores everything in pt (using "qreal") internally.
  * When displaying a value to the user, the value is converted to the user's unit
@@ -125,85 +139,35 @@ public:
     void setFactor(qreal factor) {
         m_pixelConversion = factor;
     }
-    /**
-     * Prepare ptValue to be displayed in pt
-     * This method will round to 0.001 precision
-     */
-    static qreal toPoint(qreal ptValue) {
-        // No conversion, only rounding (to 0.001 precision)
-        return floor(ptValue * 1000.0) / 1000.0;
-    }
 
-    /**
-     * Prepare ptValue to be displayed in mm
-     * This method will round to 0.0001 precision, use POINT_TO_MM() for lossless conversion.
-     */
-    static qreal toMillimeter(qreal ptValue) {
-        // "mm" values are rounded to 0.0001 millimeters
-        return floor(POINT_TO_MM(ptValue) * 10000.0) / 10000.0;
-    }
-
-    /**
-     * Prepare ptValue to be displayed in cm
-     * This method will round to 0.0001 precision, use POINT_TO_CM() for lossless conversion.
-     */
-    static qreal toCentimeter(qreal ptValue) {
-        return floor(POINT_TO_CM(ptValue) * 10000.0) / 10000.0;
-    }
-
-    /**
-     * Prepare ptValue to be displayed in dm
-     * This method will round to 0.0001 precision, use POINT_TO_DM() for lossless conversion.
-     */
-    static qreal toDecimeter(qreal ptValue) {
-        return floor(POINT_TO_DM(ptValue) * 10000.0) / 10000.0;
-    }
-
-    /**
-     * Prepare ptValue to be displayed in inch
-     * This method will round to 0.00001 precision, use POINT_TO_INCH() for lossless conversion.
-     */
-    static qreal toInch(qreal ptValue) {
-        // "in" values are rounded to 0.00001 inches
-        return floor(POINT_TO_INCH(ptValue) * 100000.0) / 100000.0;
-    }
-
-    /**
-     * Prepare ptValue to be displayed in pica
-     * This method will round to 0.00001 precision, use POINT_TO_PI() for lossless conversion.
-     */
-    static qreal toPica(qreal ptValue) {
-        // "pi" values are rounded to 0.00001 inches
-        return floor(POINT_TO_PI(ptValue) * 100000.0) / 100000.0;
-    }
-
-    /**
-     * Prepare ptValue to be displayed in cicero
-     * This method will round to 0.00001 precision, use POINT_TO_CC() for lossless conversion.
-     */
-    static qreal toCicero(qreal ptValue) {
-        // "cc" values are rounded to 0.00001 inches
-        return floor(POINT_TO_CC(ptValue) * 100000.0) / 100000.0;
-    }
 
     /**
      * convert the given value directly from one unit to another
      */
     static qreal convertFromUnitToUnit(const qreal value, const KoUnit &fromUnit, const KoUnit &toUnit, qreal factor = 1.0);
 
-
     /**
-     * This method is the one to use to display a value in a dialog
-     * \return the value @p ptValue converted to unit and rounded, ready to be displayed
+     * Convert the value @p ptValue to the unit and round it.
+     * This method is meant to be used to display a value in a dialog.
+     * \return the converted and rounded value
      */
-    qreal toUserValue(qreal ptValue) const;
 
+    qreal toUserValueRounded(const qreal value) const;
     /**
-     * Convert the value @p ptValue to a given unit @p unit
-     * Unlike KoUnit::ptToUnit the return value remains unrounded, so that it can be used in complex calculation
+     * Convert the value @p ptValue to the unit (without rounding)
+     * This method is meant to be used in complex calculations.
      * \return the converted value
      */
-    static qreal ptToUnit(const qreal ptValue, const KoUnit &unit);
+    qreal toUserValuePrecise(const qreal ptValue) const;
+
+    /**
+     * Convert the value @p ptValue with or with rounding as indicated by @p rounding.
+     * This method is a proxy to toUserValuePrecise and toUserValueRounded.
+     * \return the value @p ptValue converted to unit
+     */
+    qreal toUserValue(qreal ptValue, bool rounding = true) const;
+
+
 
     /// This method is the one to use to display a value in a dialog
     /// @return the value @p ptValue converted the unit and rounded, ready to be displayed

@@ -48,6 +48,7 @@
 #include "kis_model_index_converter_show_all.h"
 #include "kis_node_selection_adapter.h"
 #include "kis_node_insertion_adapter.h"
+#include "kis_node_manager.h"
 #include <KisSelectionActionsAdapter.h>
 #include <KisNodeDisplayModeAdapter.h>
 
@@ -65,6 +66,7 @@ struct KisNodeModel::Private
     KisNodeInsertionAdapter *nodeInsertionAdapter = 0;
     KisSelectionActionsAdapter *selectionActionsAdapter = 0;
     KisNodeDisplayModeAdapter *nodeDisplayModeAdapter = 0;
+    KisNodeManager *nodeManager = 0;
 
     KisSignalAutoConnectionsStore nodeDisplayModeAdapterConnections;
 
@@ -261,21 +263,20 @@ void KisNodeModel::connectDummies(KisNodeDummy *dummy, bool needConnect)
 void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
                                     KisImageWSP image,
                                     KisShapeController *shapeController,
-                                    KisNodeSelectionAdapter *nodeSelectionAdapter,
-                                    KisNodeInsertionAdapter *nodeInsertionAdapter,
                                     KisSelectionActionsAdapter *selectionActionsAdapter,
-                                    KisNodeDisplayModeAdapter *nodeDisplayModeAdapter)
+                                    KisNodeManager *nodeManager)
 {
     QPointer<KisDummiesFacadeBase> oldDummiesFacade(m_d->dummiesFacade);
     KisShapeController  *oldShapeController = m_d->shapeController;
 
     m_d->shapeController = shapeController;
-    m_d->nodeSelectionAdapter = nodeSelectionAdapter;
-    m_d->nodeInsertionAdapter = nodeInsertionAdapter;
+    m_d->nodeManager = nodeManager;
+    m_d->nodeSelectionAdapter = nodeManager ? nodeManager->nodeSelectionAdapter() : nullptr;
+    m_d->nodeInsertionAdapter = nodeManager ? nodeManager->nodeInsertionAdapter() : nullptr;
     m_d->selectionActionsAdapter = selectionActionsAdapter;
 
     m_d->nodeDisplayModeAdapterConnections.clear();
-    m_d->nodeDisplayModeAdapter = nodeDisplayModeAdapter;
+    m_d->nodeDisplayModeAdapter = nodeManager ? nodeManager->nodeDisplayModeAdapter() : nullptr;
     if (m_d->nodeDisplayModeAdapter) {
         m_d->nodeDisplayModeAdapterConnections.addConnection(
             m_d->nodeDisplayModeAdapter, SIGNAL(sigNodeDisplayModeChanged(bool,bool)),
@@ -596,7 +597,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         {
             // don't record undo/redo for visibility, locked or alpha locked changes
             KisBaseNode::PropertyList proplist = value.value<KisBaseNode::PropertyList>();
-            KisNodePropertyListCommand::setNodePropertiesNoUndo(node, m_d->image, proplist);
+            m_d->nodeManager->trySetNodeProperties(node, m_d->image, proplist);
             shouldUpdateRecursively = true;
 
             break;

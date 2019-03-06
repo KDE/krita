@@ -23,10 +23,13 @@
 
 #include <resources/KoAbstractGradient.h>
 #include <resources/KoStopGradient.h>
-#include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
+
 #include <KoSliderCombo.h>
 #include <KoColorPopupAction.h>
+
+#include <KisResourceModelProvider.h>
+#include <KisResourceModel.h>
+#include <KisResourceTypes.h>
 
 #include <klocalizedstring.h>
 
@@ -358,16 +361,6 @@ void KoGradientEditWidget::opacityChanged(qreal value, bool final)
 
 void KoGradientEditWidget::addGradientToPredefs()
 {
-    KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
-
-    QString savePath = server->saveLocation();
-
-    int i = 1;
-    QFileInfo fileInfo;
-
-    do {
-        fileInfo.setFile(savePath + QString("%1.svg").arg(i++, 4, 10, QChar('0')));
-    } while (fileInfo.exists());
 
     QGradient * gradient = 0;
     switch (m_type) {
@@ -386,13 +379,17 @@ void KoGradientEditWidget::addGradientToPredefs()
     }
     gradient->setSpread(m_spread);
     gradient->setStops(m_stops);
-    QSharedPointer<KoStopGradient> stopGradient = KoStopGradient::fromQGradient(gradient);
+    KoStopGradientSP stopGradient = KoStopGradient::fromQGradient(gradient);
+
     delete gradient;
     if (!stopGradient) {
         return;
     }
-    stopGradient->setFilename(fileInfo.filePath());
+    stopGradient->setFilename(QString());
     stopGradient->setValid(true);
+
+    KisResourceModel *gradientModel = KisResourceModelProvider::resourceModel(ResourceType::Gradients);
+    gradientModel->addResource(stopGradient);
 }
 
 void KoGradientEditWidget::stopChanged()

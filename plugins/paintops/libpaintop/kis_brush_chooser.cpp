@@ -130,10 +130,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     QObject::connect(useColorAsMaskCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
 
-    KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
-    QSharedPointer<KisBrushResourceServerAdapter> adapter(new KisBrushResourceServerAdapter(rServer));
-
-    m_itemChooser = new KisResourceItemChooser(adapter->serverType(), false, this);
+    m_itemChooser = new KisResourceItemChooser(ResourceType::Brushes, false, this);
     m_itemChooser->setObjectName("brush_selector");
 
     m_itemChooser->showTaggingBar(true);

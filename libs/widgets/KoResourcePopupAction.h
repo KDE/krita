@@ -1,6 +1,7 @@
-/* This file is part of the KDE project
+/*
  * Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
  * Copyright (C) 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * Copyright (C) 2019 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +29,6 @@
 #include <KoResource.h>
 
 class KoShapeBackground;
-class KoAbstractResourceServerAdapter;
 class QModelIndex;
 
 #include "kritawidgets_export.h"

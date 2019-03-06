@@ -1,6 +1,7 @@
-/* This file is part of the KDE project
+/*
  * Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
  * Copyright (C) 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * Copyright (C) 2019 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,7 +21,6 @@
 
 #include "KoResourcePopupAction.h"
 
-#include <KoResourceServerAdapter.h>
 #include <KisResourceItemView.h>
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
@@ -68,17 +68,8 @@ KoResourcePopupAction::KoResourcePopupAction(const QString &resourceType, QObjec
     d->model = KisResourceModelProvider::resourceModel(resourceType);
     d->resourceList->setModel(d->model);
     d->resourceList->setItemDelegate(new KisResourceItemDelegate(widget));
-
-/* All of this seems to be happening just to set the listview on the first row?
-
-    KoResourceSP resource = 0;
-    QList<KoResourceSP> resources = resourceType->resources();
-    if (resources.count() > 0) {
-        resource = resources.at(0);
-        d->resourceList->setCurrentIndex(d->model->indexFromResource(resource));
-        indexChanged(d->resourceList->currentIndex());
-    }
-*/
+    d->resourceList->setCurrentIndex(d->model->index(0, 0));
+    indexChanged(d->resourceList->currentIndex());
     QHBoxLayout *layout = new QHBoxLayout(widget);
     layout->addWidget(d->resourceList);
     widget->setLayout(layout);

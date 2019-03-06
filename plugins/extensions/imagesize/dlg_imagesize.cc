@@ -38,7 +38,7 @@
 #include "kis_double_parse_unit_spin_box.h"
 #include "kis_document_aware_spin_box_unit_manager.h"
 
-static const int maxImagePixelSize = 90000;
+static const int maxImagePixelSize = 100000000;
 
 static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
 static const QString percentStr(i18n("Percent (%)"));

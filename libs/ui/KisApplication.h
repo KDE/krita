@@ -94,7 +94,7 @@ public:
     bool notify(QObject *receiver, QEvent *event) override;
 
     void addResourceTypes();
-    bool loadResources();
+    bool registerResources();
     void loadResourceTags();
     void loadPlugins();
     void loadGuiPlugins();

@@ -68,7 +68,7 @@ extern "C" int main(int argc, char **argv)
 
     KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
     app.addResourceTypes();
-    app.loadResources();
+    app.registerResources();
     app.loadPlugins();
 
 

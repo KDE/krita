@@ -291,7 +291,7 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/gamutmasks/");
 }
 
-bool KisApplication::loadResources()
+bool KisApplication::registerResources()
 {
     KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
 
@@ -484,7 +484,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     loadPlugins();
 
     // Load all resources
-    if (!loadResources()) {
+    if (!registerResources()) {
         return false;
     }
 

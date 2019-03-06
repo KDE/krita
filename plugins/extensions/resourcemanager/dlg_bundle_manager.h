@@ -50,7 +50,6 @@ private Q_SLOTS:
     void editBundle();
     void slotImportResource();
     void slotCreateBundle();
-    void slotDeleteBackupFiles();
     void slotOpenResourceFolder();
 
 private:

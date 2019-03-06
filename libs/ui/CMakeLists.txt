@@ -56,7 +56,6 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
     dialogs/slider_and_spin_box_sync.cpp
-    dialogs/kis_dlg_blacklist_cleanup.cpp
     dialogs/kis_dlg_layer_style.cpp
     dialogs/kis_dlg_png_import.cpp
     dialogs/kis_dlg_import_image_sequence.cpp
@@ -492,7 +491,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgpresetselectorstrip.ui
     forms/wdgsavebrushpreset.ui
     forms/wdgpreseticonlibrary.ui
-    forms/wdgdlgblacklistcleanup.ui
     forms/wdgrectangleconstraints.ui
     forms/wdgimportimagesequence.ui
     forms/wdgstrokeselectionproperties.ui

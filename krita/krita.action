@@ -14,18 +14,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="edit_blacklist_cleanup">
-      <icon></icon>
-      <text>Cleanup removed files...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Cleanup removed files</toolTip>
-      <iconText>Cleanup removed files</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="windows_cascade">
       <icon></icon>
       <text>C&amp;ascade</text>

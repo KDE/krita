@@ -76,7 +76,6 @@
 #include "canvas/kis_canvas2.h"
 #include "canvas/kis_canvas_controller.h"
 #include "canvas/kis_grid_manager.h"
-#include "dialogs/kis_dlg_blacklist_cleanup.h"
 #include "input/kis_input_profile_manager.h"
 #include "kis_action_manager.h"
 #include "kis_action.h"
@@ -710,9 +709,6 @@ void KisViewManager::createActions()
         a->setDefaultShortcut(QKeySequence());
     }
 
-    a = actionManager()->createAction("edit_blacklist_cleanup");
-    connect(a, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
-
     actionManager()->createAction("ruler_pixel_multiple2");
     d->showRulersAction = actionManager()->createAction("view_ruler");
     d->showRulersAction->setChecked(cfg.showRulers());
@@ -771,12 +767,6 @@ void KisViewManager::setupManagers()
 void KisViewManager::updateGUI()
 {
     d->guiUpdateCompressor.start();
-}
-
-void KisViewManager::slotBlacklistCleanup()
-{
-    KisDlgBlacklistCleanup dialog;
-    dialog.exec();
 }
 
 KisNodeManager * KisViewManager::nodeManager() const

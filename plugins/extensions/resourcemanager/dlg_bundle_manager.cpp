@@ -407,14 +407,6 @@ void DlgBundleManager::slotCreateBundle() {
     }
 }
 
-void DlgBundleManager::slotDeleteBackupFiles() {
-
-    if (m_actionManager) {
-        KisAction *action = m_actionManager->actionByName("edit_blacklist_cleanup");
-        action->trigger();
-    }
-}
-
 void DlgBundleManager::slotOpenResourceFolder() {
 
     if (m_actionManager) {

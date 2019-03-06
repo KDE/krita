@@ -55,11 +55,6 @@ public:
     KoResourceServer<KisSessionResource>* sessionServer();
     KoResourceServer<KisPSDLayerStyleCollectionResource>* layerStyleCollectionServer();
 
-    void brushBlacklistCleanup();
-
-Q_SIGNALS:
-    void notifyBrushBlacklistCleanup();
-
 private:
 
     KisResourceServerProvider(const KisResourceServerProvider&);

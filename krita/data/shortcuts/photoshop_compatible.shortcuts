@@ -1,4 +1,4 @@
-[Shortcuts]
+black[Shortcuts]
 activateNextLayer=Alt+]
 activatePreviousLayer=Alt+[
 add_blank_frame=none
@@ -59,7 +59,6 @@ delete_keyframe=none
 deselect=Ctrl+D
 dual=none
 duplicatelayer=Ctrl+J
-edit_blacklist_cleanup=none
 edit_copy=Ctrl+C
 edit_cut=Ctrl+X
 edit_deselect_all=Ctrl+Shift+A

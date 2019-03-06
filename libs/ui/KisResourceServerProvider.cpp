@@ -69,9 +69,6 @@ KisResourceServerProvider::KisResourceServerProvider()
     m_layerStyleCollectionServer = new KoResourceServerSimpleConstruction<KisPSDLayerStyleCollectionResource>("psd_layer_style_collections", "*.asl");
     m_layerStyleCollectionServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_layerStyleCollectionServer->fileNames(), m_layerStyleCollectionServer->blackListedFiles()));
 
-    connect(this, SIGNAL(notifyBrushBlacklistCleanup()),
-            brushServer, SLOT(slotRemoveBlacklistedResources()));
-
 }
 
 KisResourceServerProvider::~KisResourceServerProvider()
@@ -114,7 +111,3 @@ KoResourceServer<KisPSDLayerStyleCollectionResource> *KisResourceServerProvider:
     return m_layerStyleCollectionServer;
 }
 
-void KisResourceServerProvider::brushBlacklistCleanup()
-{
-    emit notifyBrushBlacklistCleanup();
-}

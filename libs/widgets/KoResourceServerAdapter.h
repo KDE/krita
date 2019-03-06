@@ -65,8 +65,6 @@ public:
     virtual QStringList searchTag(const QString& lineEditText) = 0;
     virtual void configureFilters(int filterType, bool enable) = 0;
 
-    virtual QString serverType() const { return QString(); }
-
     virtual void setSortingEnabled(bool value) = 0;
     virtual bool sortingEnabled() const = 0;
 
@@ -112,14 +110,6 @@ public:
     {
         if (m_resourceServer)
             m_resourceServer->removeObserver(this);
-    }
-
-    QString serverType() const override
-    {
-        if (m_resourceServer) {
-            return m_resourceServer->type();
-        }
-        return KoAbstractResourceServerAdapter::serverType();
     }
 
     void unsetResourceServer() override

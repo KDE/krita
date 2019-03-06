@@ -95,7 +95,6 @@ public:
 
     void addResourceTypes();
     bool registerResources();
-    void loadResourceTags();
     void loadPlugins();
     void loadGuiPlugins();
     void initializeGlobals(const KisApplicationArguments &args);

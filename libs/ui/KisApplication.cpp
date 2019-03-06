@@ -362,23 +362,6 @@ bool KisApplication::registerResources()
     return true;
 }
 
-void KisApplication::loadResourceTags()
-{
-    //    qDebug() << "loadResourceTags()";
-
-    KoResourceServerProvider::instance()->patternServer()->loadTags();
-    KoResourceServerProvider::instance()->gradientServer()->loadTags();
-    KoResourceServerProvider::instance()->paletteServer()->loadTags();
-    KoResourceServerProvider::instance()->svgSymbolCollectionServer()->loadTags();
-    KisBrushServer::instance()->brushServer()->loadTags();
-    KisResourceServerProvider::instance()->workspaceServer()->loadTags();
-    KisResourceServerProvider::instance()->layerStyleCollectionServer()->loadTags();
-    KisResourceBundleServerProvider::instance()->resourceBundleServer()->loadTags();
-    KisResourceServerProvider::instance()->paintOpPresetServer()->loadTags();
-
-    KisResourceServerProvider::instance()->paintOpPresetServer()->clearOldSystemTags();
-}
-
 void KisApplication::loadPlugins()
 {
     //    qDebug() << "loadPlugins();";
@@ -487,9 +470,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     if (!registerResources()) {
         return false;
     }
-
-    // Load all the tags
-    loadResourceTags();
 
     // Load the gui plugins
     loadGuiPlugins();

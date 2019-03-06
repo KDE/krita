@@ -311,7 +311,7 @@ void KisPresetChooser::setCurrentResource(KoResourceSP resource)
     if (resource == currentResource()) {
         KisPresetProxyAdapter *adapter = static_cast<KisPresetProxyAdapter*>(m_adapter.data());
         KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
-        if (preset) {
+        if (adapter && preset) {
             adapter->resourceChangedNoCacheInvalidation(preset);
         }
     }
@@ -339,7 +339,7 @@ void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 {
     KisPresetProxyAdapter *adapter = static_cast<KisPresetProxyAdapter*>(m_adapter.data());
 
-    if (adapter->currentPaintOpId() != paintOpId) {
+    if (adapter && adapter->currentPaintOpId() != paintOpId) {
         adapter->setPresetFilter(paintOpId);
         updateViewSettings();
     }
@@ -355,7 +355,6 @@ void KisPresetChooser::setIconSize(int newSize)
 int KisPresetChooser::iconSize()
 {
     KisResourceItemChooserSync* chooserSync = KisResourceItemChooserSync::instance();
-
     return chooserSync->baseLength();
 }
 

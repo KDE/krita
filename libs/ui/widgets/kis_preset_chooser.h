@@ -88,10 +88,10 @@ protected:
     void resizeEvent(QResizeEvent* event) override;
 
 private:
-    KisResourceItemChooser *m_chooser;
-    KisPresetDelegate* m_delegate;
+    KisResourceItemChooser *m_chooser {0};
+    KisPresetDelegate* m_delegate {0};
     ViewMode m_mode;
-    QSharedPointer<KoAbstractResourceServerAdapter> m_adapter;
+    QSharedPointer<KoAbstractResourceServerAdapter> m_adapter {0};
 };
 
 #endif // KIS_ITEM_CHOOSER_H_

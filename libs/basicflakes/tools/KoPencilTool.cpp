@@ -448,6 +448,11 @@ KoShapeStrokeSP KoPencilTool::createStroke()
     return stroke;
 }
 
+KoPathShape * KoPencilTool::path()
+{
+    return m_shape;
+}
+
 KoPathPoint* KoPencilTool::endPointAtPosition(const QPointF &position)
 {
     QRectF roi = handleGrabRect(position);

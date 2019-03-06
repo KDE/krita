@@ -66,14 +66,28 @@ QList<QPointer<QWidget> > KisToolPencil::createOptionWidgets()
 __KisToolPencilLocalTool::__KisToolPencilLocalTool(KoCanvasBase * canvas, KisToolPencil* parentTool)
     : KoPencilTool(canvas), m_parentTool(parentTool) {}
 
-void __KisToolPencilLocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
+void __KisToolPencilLocalTool::paint(QPainter &painter, const KoViewConverter &converter)
+{
+    if (m_parentTool->strokeStyle() == KisPainter::StrokeStyleNone) {
+        paintPath(path(), painter, converter);
+    } else {
+        KoPencilTool::paint(painter, converter);
+    }
+}
+
+
+
+void __KisToolPencilLocalTool::paintPath(KoPathShape *pathShape, QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
+    if (!pathShape) {
+        return;
+    }
 
     QTransform matrix;
     matrix.scale(m_parentTool->image()->xRes(), m_parentTool->image()->yRes());
-    matrix.translate(pathShape.position().x(), pathShape.position().y());
-    m_parentTool->paintToolOutline(&painter, m_parentTool->pixelToView(matrix.map(pathShape.outline())));
+    matrix.translate(pathShape->position().x(), pathShape->position().y());
+    m_parentTool->paintToolOutline(&painter, m_parentTool->pixelToView(matrix.map(pathShape->outline())));
 }
 
 void __KisToolPencilLocalTool::addPathShape(KoPathShape* pathShape, bool closePath)

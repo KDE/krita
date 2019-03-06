@@ -59,6 +59,7 @@ protected:
     virtual void addPathShape(KoPathShape* path, bool closePath);
 
     KoShapeStrokeSP createStroke();
+    KoPathShape * path();
     void setFittingError(qreal fittingError);
     qreal getFittingError();
 

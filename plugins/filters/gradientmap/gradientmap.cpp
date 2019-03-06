@@ -27,7 +27,6 @@
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>
 #include <KoGradientBackground.h>
-#include <KoResourceServerAdapter.h>
 
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaGradientMapFactory, "kritagradientmap.json", registerPlugin<KritaGradientMap>();)
@@ -41,13 +40,12 @@ KritaGradientMapConfigWidget::KritaGradientMapConfigWidget(QWidget *parent, KisP
     Q_CHECK_PTR(l);
     l->addWidget(m_page);
     l->setContentsMargins(0, 0, 0, 0);
-    KoResourceServerProvider *serverProvider = KoResourceServerProvider::instance();
-    QSharedPointer<KoAbstractResourceServerAdapter> gradientResourceAdapter(
-                new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer()));
+
     m_gradientChangedCompressor = new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE);
 
     m_gradientPopUp = new KoResourcePopupAction(ResourceType::Gradients, m_page->btnGradientChooser);
-    m_activeGradient = KoStopGradient::fromQGradient(gradientResourceAdapter->resources().first().dynamicCast<KoAbstractGradient>()->toQGradient());
+
+    m_activeGradient = KoStopGradient::fromQGradient(m_gradientPopUp->currentResource().dynamicCast<KoAbstractGradient>()->toQGradient());
     m_page->gradientEditor->setGradient(m_activeGradient);
     m_page->gradientEditor->setCompactMode(true);
     m_page->gradientEditor->setEnabled(true);

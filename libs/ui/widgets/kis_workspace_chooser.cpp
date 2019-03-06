@@ -144,9 +144,7 @@ void KisWorkspaceChooser::slotSaveWorkspace()
 
     QString name = m_workspaceWidgets.nameEdit->text();
 
-    bool newName = false;
     if (name.isEmpty()) {
-        newName = true;
         name = i18n("Workspace");
     }
 
@@ -189,10 +187,7 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
     KisWindowLayoutManager::instance()->setShowImageInAllWindowsEnabled(showImageInAllWindows);
     KisWindowLayoutManager::instance()->setPrimaryWorkspaceFollowsFocus(primaryWorkspaceFollowsFocus, thisWindow->id());
 
-
-    bool newName = false;
     if (name.isEmpty()) {
-        newName = true;
         name = i18n("Window Layout");
     }
 

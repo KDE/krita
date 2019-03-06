@@ -144,13 +144,13 @@ void KisControlFrame::slotUpdateDisplayRenderer()
 
 void KisControlFrame::slotSetPattern(KoPatternSP pattern)
 {
-    m_patternWidget->setResource(pattern);
+    m_patternWidget->setThumbnail(pattern->image());
     m_patternChooser->setCurrentPattern(pattern);
 }
 
 void KisControlFrame::slotSetGradient(KoAbstractGradientSP gradient)
 {
-    m_gradientWidget->setResource(gradient);
+    m_gradientWidget->setThumbnail(gradient->image());
 }
 
 void KisControlFrame::createPatternsChooser(KisViewManager * view)

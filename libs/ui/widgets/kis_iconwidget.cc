@@ -22,9 +22,6 @@
 #include <QPainter>
 #include <QIcon>
 #include <QStyleOption>
-#include <KoResource.h>
-#include <KoResourceServerAdapter.h>
-
 
 KisIconWidget::KisIconWidget(QWidget *parent, const QString &name)
     : KisPopupButton(parent)
@@ -32,9 +29,9 @@ KisIconWidget::KisIconWidget(QWidget *parent, const QString &name)
     setObjectName(name);
 }
 
-void KisIconWidget::slotResource(KoResourceSP resource)
+void KisIconWidget::setThumbnail(const QImage &thumbnail)
 {
-    m_resource = resource;
+    m_thumbnail = thumbnail;
     update();
 }
 
@@ -64,20 +61,19 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
     p.setBrush(this->palette().background());
     p.drawRect(QRect(0,0,cw,ch));
 
-    if (m_resource) {
+    if (!m_thumbnail.isNull()) {
         QImage img = QImage(iconWidth, iconHeight, QImage::Format_ARGB32);
         img.fill(Qt::transparent);
-        if (m_resource->image().width()<iconWidth ||
-                m_resource->image().height()<iconHeight) {
+        if (m_thumbnail.width() < iconWidth || m_thumbnail.height() < iconHeight) {
             QPainter paint2;
             paint2.begin(&img);
-            for (int x=0; x< iconWidth; x+=m_resource->image().width()) {
-                for (int y=0; y< iconHeight; y+=m_resource->image().height()) {
-                    paint2.drawImage(x, y, m_resource->image());
+            for (int x = 0; x < iconWidth; x += m_thumbnail.width()) {
+                for (int y = 0; y < iconHeight; y+= m_thumbnail.height()) {
+                    paint2.drawImage(x, y, m_thumbnail);
                 }
             }
         } else {
-            img = m_resource->image().scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            img = m_thumbnail.scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         p.drawImage(QRect(border, border, iconWidth, iconHeight), img);
     } else if (!icon().isNull()) {

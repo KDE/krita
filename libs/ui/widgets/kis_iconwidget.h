@@ -22,7 +22,7 @@
 
 #include <kis_popup_button.h>
 
-#include <KoResource.h>
+#include <QImage>
 
 
 /**
@@ -37,13 +37,13 @@ class KisIconWidget : public KisPopupButton
 public:
     KisIconWidget(QWidget *parent = 0, const QString &name = 0);
 
-    void slotResource(KoResourceSP resource);
+    void setThumbnail(const QImage &thumbnail);
 
 protected:
     void paintEvent(QPaintEvent *) override;
 
 private:
-    KoResourceSP m_resource;
+    QImage m_thumbnail;
 };
 
 #endif // KIS_ICONWIDGET_H_

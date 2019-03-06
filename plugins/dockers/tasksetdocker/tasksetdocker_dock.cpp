@@ -33,10 +33,8 @@
 #include <KoCanvasBase.h>
 #include <KisResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
-#include <KoResourceServerProvider.h>
 #include <KisResourceLoader.h>
 #include <KisResourceLoaderRegistry.h>
-#include <KisResourceServerProvider.h>
 #include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <KisMainWindow.h>
@@ -99,17 +97,8 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
 
     chooserButton->setIcon(KisIconUtils::loadIcon("edit-copy"));
 
-    KisResourceLoaderRegistry::instance()->add(new KisResourceLoader<TasksetResource>("taskset", "taskset", i18n("Task sets"), QStringList() << "application/x-krita-taskset"));
-
-    m_rserver = new KoResourceServerSimpleConstruction<TasksetResource>("kis_taskset", "*.kts");
-    if (!QFileInfo(m_rserver->saveLocation()).exists()) {
-        QDir().mkpath(m_rserver->saveLocation());
-    }
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<TasksetResource>(m_rserver));
-    m_rserver->loadResources(KoResourceServerProvider::blacklistFileNames(m_rserver->fileNames(), m_rserver->blackListedFiles()));
-    m_rserver->loadTags();
-
-    KisResourceItemChooser* itemChooser = new KisResourceItemChooser(adapter->serverType(), false, this);
+    KisResourceLoaderRegistry::instance()->add(new KisResourceLoader<TasksetResource>(ResourceType::TaskSets, ResourceType::TaskSets, i18n("Task sets"), QStringList() << "application/x-krita-taskset"));
+    KisResourceItemChooser* itemChooser = new KisResourceItemChooser(ResourceType::TaskSets, false, this);
     itemChooser->setItemDelegate(new KisTasksetResourceDelegate(this));
     itemChooser->setFixedSize(500, 250);
     itemChooser->setRowHeight(30);

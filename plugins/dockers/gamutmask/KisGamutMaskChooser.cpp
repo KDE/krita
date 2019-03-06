@@ -27,10 +27,7 @@
 #include <QTextDocument>
 #include <QTextLayout>
 
-#include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
 #include <KisResourceItemChooser.h>
-#include <KoResourceServerAdapter.h>
 #include <kis_icon_utils.h>
 #include <kis_config.h>
 
@@ -151,9 +148,7 @@ KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
 {
     m_delegate = new KisGamutMaskDelegate(this);
 
-    KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoGamutMask>(rServer));
-    m_itemChooser = new KisResourceItemChooser(adapter->serverType(), false, this);
+    m_itemChooser = new KisResourceItemChooser(ResourceType::GamutMasks, false, this);
     m_itemChooser->setItemDelegate(m_delegate);
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->showButtons(false);

@@ -114,8 +114,8 @@ KisResourceTaggingManager::~KisResourceTaggingManager()
 
 void KisResourceTaggingManager::showTaggingBar(bool show)
 {
-//    show ? d->tagFilter->show() : d->tagFilter->hide();
-//    show ? d->tagChooser->show() : d->tagChooser->hide();
+    show ? d->tagFilter->show() : d->tagFilter->hide();
+    show ? d->tagChooser->show() : d->tagChooser->hide();
 
 //    blockSignals(!show);
 

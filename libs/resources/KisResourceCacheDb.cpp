@@ -35,7 +35,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey {"ResourceCacheDbDirectory"};
 const QString KisResourceCacheDb::resourceCacheDbFilename {"resourcecache.sqlite"};
-const QString KisResourceCacheDb::databaseVersion {"0.0.1"};
+const QString KisResourceCacheDb::databaseVersion {"0.0.2"};
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 
 bool KisResourceCacheDb::s_valid {false};
@@ -80,7 +80,8 @@ QSqlError initDb(const QString &location)
                                        << "tags"
                                        << "resources"
                                        << "versioned_resources"
-                                       << "resource_tags";
+                                       << "resource_tags"
+                                       << "resource_metadata";
 
     QStringList dbTables;
     // Verify whether we should recreate the database
@@ -399,9 +400,9 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     }
     else {
         QSqlQuery q;
-        r = q.prepare("INSERT INTO resources "
-                      "(storage_id, resource_type_id, name, filename, tooltip, thumbnail, status)"
-                      "VALUES"
+        r = q.prepare("INSERT INTO resources \n"
+                      "(storage_id, resource_type_id, name, filename, tooltip, thumbnail, status) \n"
+                      "VALUES \n"
                       "((SELECT id FROM storages WHERE location = :storage_location), (SELECT id FROM resource_types WHERE name = :resource_type), :name, :filename, :tooltip, :thumbnail, :status);");
 
         if (!r) {

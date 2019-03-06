@@ -38,6 +38,7 @@ struct Q_DECL_HIDDEN KoResource::Private {
     bool permanent;
     int resourceId {-1};
     bool dirty;
+    QMap<QString, QVariant> metadata;
 };
 
 KoResource::KoResource(const QString& filename)
@@ -179,6 +180,16 @@ void KoResource::setDirty(bool value)
 bool KoResource::isDirty() const
 {
     return d->dirty;
+}
+
+void KoResource::addMetaData(QString key, QVariant value)
+{
+    d->metadata.insert(key, value);
+}
+
+QMap<QString, QVariant> KoResource::metadata() const
+{
+    return d->metadata;
 }
 
 void KoResource::setResourceId(int id)

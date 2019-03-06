@@ -113,6 +113,12 @@ public:
     /// @return true if the preset has been modified, but not saved
     bool isDirty() const;
 
+    /// store the given key, value pair in the resource
+    void addMetaData(QString key, QVariant value);
+
+    /// get a map with all the metadata
+    QMap<QString, QVariant> metadata() const;
+
 private:
 
     friend class KisResourceModel;

@@ -84,10 +84,6 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     m_gradientWidget = new KisIconWidget(parent, "gradients");
     m_gradientWidget->setToolTip(i18n("Gradients"));
     m_gradientWidget->setFixedSize(32, 32);
-
-    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
-    m_gradientWidget->setResourceAdapter(adapter);
 }
 
 void KisControlFrame::setup(QWidget *parent)
@@ -148,13 +144,13 @@ void KisControlFrame::slotUpdateDisplayRenderer()
 
 void KisControlFrame::slotSetPattern(KoPattern * pattern)
 {
-    m_patternWidget->slotSetItem(pattern);
+    m_patternWidget->setResource(pattern);
     m_patternChooser->setCurrentPattern(pattern);
 }
 
 void KisControlFrame::slotSetGradient(KoAbstractGradient * gradient)
 {
-    m_gradientWidget->slotSetItem(gradient);
+    m_gradientWidget->setResource(gradient);
 }
 
 void KisControlFrame::createPatternsChooser(KisViewManager * view)

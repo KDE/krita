@@ -638,7 +638,7 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 
     // load the current brush engine icon for the brush editor toolbar button
 
-    m_brushEditorPopupButton->slotSetItem(preset.data());
+    m_brushEditorPopupButton->setResource(preset.data());
     m_presetsPopup->setCurrentPaintOpId(paintop.id());
 
 

@@ -23,7 +23,6 @@
 #include <kis_popup_button.h>
 
 class KoResource;
-class KoAbstractResourceServerAdapter;
 
 /**
  * The icon widget is used in the control box where the current color and brush
@@ -36,22 +35,13 @@ class KisIconWidget : public KisPopupButton
 
 public:
     KisIconWidget(QWidget *parent = 0, const char *name = 0);
-
-    /**
-     * Set an resource server adapter that the widget will observe.
-     */
-    void setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter> adapter);
-public Q_SLOTS:
-    void slotSetItem(KoResource * resource);
-    void slotAdapterResourceChanged(KoResource * resource);
-    void slotAdapterResourceRemoved(KoResource * resource);
+    void setResource(KoResource * resource);
 
 protected:
     void paintEvent(QPaintEvent *) override;
 
 private:
     KoResource *m_resource;
-    QSharedPointer<KoAbstractResourceServerAdapter> m_adapter;
 };
 
 #endif // KIS_ICONWIDGET_H_

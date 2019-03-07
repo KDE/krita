@@ -42,7 +42,7 @@
 
 #include <kis_psd_layer_style_resource.h>
 
-#include <kis_brush_server.h>
+#include <KoResourceServer.h>
 
 Q_GLOBAL_STATIC(KisResourceServerProvider, s_instance)
 

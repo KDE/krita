@@ -274,8 +274,7 @@ public:
         return 0;
     }
 
-    QSharedPointer<T> resourceByMD5(const QByteArray& /*md5*/) const
-    {
+    QSharedPointer<T> resourceByMD5(const QByteArray& /*md5*/) const {
 //        return m_resourcesByMd5.value(md5);
         return 0;
     }

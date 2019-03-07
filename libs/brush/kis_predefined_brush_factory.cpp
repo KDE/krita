@@ -19,7 +19,7 @@
 #include "kis_predefined_brush_factory.h"
 
 #include <QDomDocument>
-#include "kis_brush_server.h"
+#include "KisBrushServerProvider.h"
 #include "kis_gbr_brush.h"
 #include <kis_dom_utils.h>
 
@@ -35,7 +35,7 @@ QString KisPredefinedBrushFactory::id() const
 
 KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefinition)
 {
-    KoResourceServer<KisBrush> *rServer = KisBrushServer::instance()->brushServer();
+    KoResourceServer<KisBrush> *rServer = KisBrushServerProvider::instance()->brushServer();
     QString brushFileName = brushDefinition.attribute("filename", "");
     KisBrushSP brush = rServer->resourceByFilename(brushFileName);
 

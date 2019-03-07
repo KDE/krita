@@ -34,7 +34,7 @@
 #include "kis_global.h"
 #include <brushengine/kis_paintop_registry.h>
 #include "KisBrushOpSettings.h"
-#include "kis_brush_server.h"
+#include "KisBrushServerProvider.h"
 #include "kis_duplicateop_settings_widget.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(DefaultPaintOpsPluginFactory, "kritadefaultpaintops.json", registerPlugin<DefaultPaintOpsPlugin>();)

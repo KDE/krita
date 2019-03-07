@@ -42,7 +42,7 @@
 #include <KisResourceItemChooser.h>
 
 #include <kis_icon.h>
-#include "kis_brush_server.h"
+#include "KisBrushServerProvider.h"
 #include "widgets/kis_slider_spin_box.h"
 #include "widgets/kis_multipliers_double_slider_spinbox.h"
 #include "kis_spacing_selection_widget.h"
@@ -195,7 +195,7 @@ void KisPredefinedBrushChooser::setBrush(KisBrushSP brush)
      * select nothing.
      */
 
-    KoResourceServer<KisBrush>* server = KisBrushServer::instance()->brushServer();
+    KoResourceServer<KisBrush>* server = KisBrushServerProvider::instance()->brushServer();
     KoResourceSP resource = server->resourceByFilename(brush->shortFilename());
 
     if (!resource) {

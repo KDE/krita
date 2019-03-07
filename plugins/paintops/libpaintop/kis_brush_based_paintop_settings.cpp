@@ -22,7 +22,7 @@
 #include <kis_airbrush_option_widget.h>
 #include "kis_brush_based_paintop_options_widget.h"
 #include <kis_boundary.h>
-#include "kis_brush_server.h"
+#include "KisBrushServerProvider.h"
 #include <QLineF>
 #include "kis_signals_blocker.h"
 #include "kis_brush_option.h"
@@ -146,7 +146,7 @@ bool KisBrushBasedPaintOpSettings::isValid() const
 
     Q_FOREACH (const QString &file, files) {
         if (!file.isEmpty()) {
-            KisBrushSP brush = KisBrushServer::instance()->brushServer()->resourceByFilename(file);
+            KisBrushSP brush = KisBrushServerProvider::instance()->brushServer()->resourceByFilename(file);
             if (!brush) {
                 return false;
             }
@@ -157,7 +157,7 @@ bool KisBrushBasedPaintOpSettings::isValid() const
 }
 bool KisBrushBasedPaintOpSettings::isLoadable()
 {
-    return (KisBrushServer::instance()->brushServer()->resources().count() > 0);
+    return (KisBrushServerProvider::instance()->brushServer()->resources().count() > 0);
 }
 
 void KisBrushBasedPaintOpSettings::setAngle(qreal value)

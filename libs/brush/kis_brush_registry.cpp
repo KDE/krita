@@ -26,7 +26,7 @@
 
 #include <kis_debug.h>
 
-#include "kis_brush_server.h"
+#include "KoResourceServer.h"
 #include "kis_auto_brush_factory.h"
 #include "kis_text_brush_factory.h"
 #include "kis_predefined_brush_factory.h"
@@ -36,7 +36,6 @@ Q_GLOBAL_STATIC(KisBrushRegistry, s_instance)
 
 KisBrushRegistry::KisBrushRegistry()
 {
-    KisBrushServer::instance();
 }
 
 KisBrushRegistry::~KisBrushRegistry()

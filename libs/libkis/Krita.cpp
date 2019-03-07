@@ -50,7 +50,7 @@
 #include <KisResourceServerProvider.h>
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
-#include <kis_brush_server.h>
+#include <KisBrushServerProvider.h>
 #include <KoResourceServerProvider.h>
 #include <kis_action_registry.h>
 #include <kis_icon_utils.h>
@@ -271,7 +271,7 @@ QMap<QString, Resource *> Krita::resources(const QString &type) const
         }
     }
     else if (type.toLower() == "brush") {
-        KoResourceServer<KisBrush>* server = KisBrushServer::instance()->brushServer();
+        KoResourceServer<KisBrush>* server = KisBrushServerProvider::instance()->brushServer();
         Q_FOREACH (KisBrushSP res, server->resources()) {
             resources[res->name()] = new Resource(res);
         }

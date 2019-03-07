@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_BRUSH_SERVER_H
-#define KIS_BRUSH_SERVER_H
+#ifndef KIS_BRUSH_SERVER_PROVIDER_H
+#define KIS_BRUSH_SERVER_PROVIDER_H
 
 #include <QString>
 #include <QStringList>
@@ -30,22 +30,23 @@
 /**
  *
  */
-class BRUSH_EXPORT KisBrushServer : public QObject
+class BRUSH_EXPORT KisBrushServerProvider : public QObject
 {
 
     Q_OBJECT
 
 public:
-    KisBrushServer();
-    ~KisBrushServer() override;
+    KisBrushServerProvider();
+    ~KisBrushServerProvider() override;
+
     KoResourceServer<KisBrush>* brushServer();
 
-    static KisBrushServer* instance();
+    static KisBrushServerProvider* instance();
 
 private:
 
-    KisBrushServer(const KisBrushServer&);
-    KisBrushServer operator=(const KisBrushServer&);
+    KisBrushServerProvider(const KisBrushServerProvider&);
+    KisBrushServerProvider operator=(const KisBrushServerProvider&);
 
     KoResourceServer<KisBrush>* m_brushServer;
 };

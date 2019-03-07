@@ -29,7 +29,7 @@
 #include <resources/KoPattern.h>
 #include <resources/KoAbstractGradient.h>
 
-#include "kis_brush_server.h"
+#include "KisBrushServerProvider.h"
 #include "KisResourceServerProvider.h"
 #include <brushengine/kis_paintop_preset.h>
 #include "kis_workspace_resource.h"

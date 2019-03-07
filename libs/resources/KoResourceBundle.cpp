@@ -241,7 +241,7 @@ bool KoResourceBundle::save()
     //            }
     //        }
     //        else if (resType  == ResourceType::Brushes) {
-    //            KoResourceServer<KisBrush>* brushServer = KisBrushServer::instance()->brushServer();
+    //            KoResourceServer<KisBrush>* brushServer = KisBrushServerProvider::instance()->brushServer();
     //            Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
     //                KisBrushSP brush = brushServer->resourceByMD5(ref.md5sum);
     //                if (!brush) brush = brushServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());

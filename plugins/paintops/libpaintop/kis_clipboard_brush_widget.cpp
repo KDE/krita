@@ -34,7 +34,7 @@
 #include "kis_clipboard.h"
 #include "kis_paint_device.h"
 #include "kis_gbr_brush.h"
-#include "kis_brush_server.h"
+#include "KisBrushServerProvider.h"
 
 KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString &caption, KisImageWSP image)
     : KisWdgClipboardBrush(parent), m_image(image)
@@ -45,7 +45,7 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
     preview->setStyleSheet("border: 2px solid #222; border-radius: 4px; padding: 5px; font: normal 10px;");
 
 
-    m_rServer = KisBrushServer::instance()->brushServer();
+    m_rServer = KisBrushServerProvider::instance()->brushServer();
 
     m_brush = 0;
 

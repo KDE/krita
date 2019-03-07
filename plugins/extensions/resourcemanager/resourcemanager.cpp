@@ -44,7 +44,7 @@
 #include <KisResourceServerProvider.h>
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
-#include <kis_brush_server.h>
+#include <KisBrushServerProvider.h>
 #include <kis_paintop_settings.h>
 #include "dlg_bundle_manager.h"
 #include "dlg_create_bundle.h"
@@ -57,7 +57,7 @@ public:
 
     Private()
     {
-        brushServer = KisBrushServer::instance()->brushServer();
+        brushServer = KisBrushServerProvider::instance()->brushServer();
         paintopServer = KisResourceServerProvider::instance()->paintOpPresetServer();
         gradientServer = KoResourceServerProvider::instance()->gradientServer();
         patternServer = KoResourceServerProvider::instance()->patternServer();

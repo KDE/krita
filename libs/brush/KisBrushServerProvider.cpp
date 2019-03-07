@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kis_brush_server.h"
+#include "KisBrushServerProvider.h"
 
 #include <QDir>
 #include <QApplication>
@@ -24,47 +24,28 @@
 #include <KoResourcePaths.h>
 
 #include <KoResource.h>
-#include <KoResourceServerProvider.h>
 
 #include <kis_debug.h>
 
-#include "kis_abr_brush.h"
-#include "kis_abr_brush_collection.h"
-#include "kis_gbr_brush.h"
-#include "kis_imagepipe_brush.h"
-#include "kis_png_brush.h"
-#include "kis_svg_brush.h"
-
-Q_GLOBAL_STATIC(KisBrushServer, s_instance)
+Q_GLOBAL_STATIC(KisBrushServerProvider, s_instance)
 
 
-class BrushResourceServer : public KoResourceServer<KisBrush>
+KisBrushServerProvider::KisBrushServerProvider()
 {
-
-public:
-
-    BrushResourceServer()
-        : KoResourceServer<KisBrush>(ResourceType::Brushes)
-    {
-    }
-};
-
-KisBrushServer::KisBrushServer()
-{
-    m_brushServer = new BrushResourceServer();
+    m_brushServer = new KoResourceServer<KisBrush>(ResourceType::Brushes);
 }
 
-KisBrushServer::~KisBrushServer()
+KisBrushServerProvider::~KisBrushServerProvider()
 {
     delete m_brushServer;
 }
 
-KisBrushServer* KisBrushServer::instance()
+KisBrushServerProvider* KisBrushServerProvider::instance()
 {
     return s_instance;
 }
 
-KoResourceServer<KisBrush>* KisBrushServer::brushServer()
+KoResourceServer<KisBrush>* KisBrushServerProvider::brushServer()
 {
     return m_brushServer;
 }

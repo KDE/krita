@@ -43,7 +43,7 @@
 #include <KisResourceServerProvider.h>
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
-#include <kis_brush_server.h>
+#include <KisBrushServerProvider.h>
 #include <resources/KoGamutMask.h>
 #include <KritaVersionWrapper.h>
 
@@ -322,7 +322,7 @@ bool KisResourceBundle::save()
             }
         }
         else if (resType  == ResourceType::Brushes) {
-            KoResourceServer<KisBrush>* brushServer = KisBrushServer::instance()->brushServer();
+            KoResourceServer<KisBrush>* brushServer = KisBrushServerProvider::instance()->brushServer();
             Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KisBrushSP brush = brushServer->resourceByMD5(ref.md5sum);
                 if (!brush) brush = brushServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
@@ -469,7 +469,7 @@ QList<KoResourceSP> KisResourceBundle::resources(const QString &resType) const
             if (res) ret << res;
         }
         else if (resType  == ResourceType::Brushes) {
-            KoResourceServer<KisBrush> *brushServer = KisBrushServer::instance()->brushServer();
+            KoResourceServer<KisBrush> *brushServer = KisBrushServerProvider::instance()->brushServer();
             KoResourceSP res =  brushServer->resourceByMD5(ref.md5sum);
             if (res) ret << res;
         }

@@ -39,7 +39,7 @@
 #include <KisResourceServerProvider.h>
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
-#include <kis_brush_server.h>
+#include <KisBrushServerProvider.h>
 
 #include <kis_config.h>
 
@@ -347,7 +347,7 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     m_ui->tableSelected->clear();
 
     if (resourceType == ResourceType::Brushes) {
-        KoResourceServer<KisBrush> *server = KisBrushServer::instance()->brushServer();
+        KoResourceServer<KisBrush> *server = KisBrushServerProvider::instance()->brushServer();
         Q_FOREACH (KisBrushSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
             item->setData(Qt::UserRole, res->shortFilename());

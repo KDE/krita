@@ -40,7 +40,7 @@
 #include "kis_imagepipe_brush.h"
 #include <kis_fixed_paint_device.h>
 
-#include "kis_brush_server.h"
+#include "KisBrushServerProvider.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include <kis_selection.h>
@@ -56,7 +56,7 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     preview->setFixedSize(preview->size());
     preview->setStyleSheet("border: 2px solid #222; border-radius: 4px; padding: 5px; font: normal 10px;");
 
-    m_rServer = KisBrushServer::instance()->brushServer();
+    m_rServer = KisBrushServerProvider::instance()->brushServer();
 
     m_brush = 0;
 

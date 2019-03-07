@@ -425,7 +425,6 @@ namespace KisLayerUtils {
 
         void populateChildCommands() override {
             QString mergedLayerName;
-
             if (m_name.isEmpty()){
                 const QString mergedLayerSuffix = i18n("Merged");
                 mergedLayerName = m_info->mergedNodes.first()->name();
@@ -724,12 +723,44 @@ namespace KisLayerUtils {
                 putAfter = nodesToDelete.last();
             }
 
-            // Add the new merged node on top of the active node -- checking
-            // whether the parent is going to be deleted
-            parent = putAfter->parent();
-            while (parent && nodesToDelete.contains(parent)) {
-                parent = parent->parent();
+            // Add the new merged node on top of the active node
+            // -- checking all parents if they are included in nodesToDelete
+            // Not every descendant is included in nodesToDelete even if in fact
+            //   they are going to be deleted, so we need to check it.
+            // If we consider the path from root to the putAfter node,
+            //    if there are any nodes marked for deletion, any node afterwards
+            //    is going to be deleted, too.
+            //   example:      root . . . . . ! ! . . ! ! ! ! . . . . putAfter
+            //   it should be: root . . . . . ! ! ! ! ! ! ! ! ! ! ! ! !putAfter
+            //   and here:     root . . . . X ! ! . . ! ! ! ! . . . . putAfter
+            //   you can see which node is "the perfect ancestor"
+            //   (marked X; called "parent" in the function arguments).
+
+            KisNodeSP node = putAfter->parent();
+            bool foundDeletedAncestor = false;
+            KisNodeSP lastPerfectAncestor = nullptr;
+
+            while (node) {
+
+                if (nodesToDelete.contains(node)
+                        && !nodesToDelete.contains(node->parent())) {
+                    foundDeletedAncestor = true;
+                    lastPerfectAncestor = node->parent();
+                    // Here node is to be deleted and its parent is not,
+                    // so its parent is the one of the first not deleted (="perfect") ancestors.
+                    // We need the one that is closest to the top (root)
+                }
+
+                node = node->parent();
             }
+
+            if (foundDeletedAncestor) {
+                parent = lastPerfectAncestor;
+            }
+            else {
+                parent = putAfter->parent(); // putAfter (and none of its ancestors) is to be deleted, so its parent is the first not deleted ancestor
+            }
+
         }
 
         void populateChildCommands() override {

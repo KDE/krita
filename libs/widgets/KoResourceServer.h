@@ -347,14 +347,4 @@ private:
 
 };
 
-template <class T>
-class KoResourceServerSimpleConstruction : public KoResourceServer<T>
-{
-public:
-    KoResourceServerSimpleConstruction(const QString& type)
-        : KoResourceServer<T>(type)
-    {
-    }
-};
-
 #endif // KORESOURCESERVER_H

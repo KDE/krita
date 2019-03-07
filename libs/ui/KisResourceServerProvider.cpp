@@ -46,15 +46,15 @@
 
 Q_GLOBAL_STATIC(KisResourceServerProvider, s_instance)
 
-typedef KoResourceServerSimpleConstruction<KisPaintOpPreset> KisPaintOpPresetResourceServer;
+typedef KoResourceServer<KisPaintOpPreset> KisPaintOpPresetResourceServer;
 
 KisResourceServerProvider::KisResourceServerProvider()
 {
     m_paintOpPresetServer = new KisPaintOpPresetResourceServer(ResourceType::PaintOpPresets);
-    m_workspaceServer = new KoResourceServerSimpleConstruction<KisWorkspaceResource>(ResourceType::Workspaces);
-    m_windowLayoutServer = new KoResourceServerSimpleConstruction<KisWindowLayoutResource>(ResourceType::WindowLayouts);
-    m_sessionServer = new KoResourceServerSimpleConstruction<KisSessionResource>(ResourceType::Sessions);
-    m_layerStyleCollectionServer = new KoResourceServerSimpleConstruction<KisPSDLayerStyleCollectionResource>("psd_layer_style_collections");
+    m_workspaceServer = new KoResourceServer<KisWorkspaceResource>(ResourceType::Workspaces);
+    m_windowLayoutServer = new KoResourceServer<KisWindowLayoutResource>(ResourceType::WindowLayouts);
+    m_sessionServer = new KoResourceServer<KisSessionResource>(ResourceType::Sessions);
+    m_layerStyleCollectionServer = new KoResourceServer<KisPSDLayerStyleCollectionResource>("psd_layer_style_collections");
 }
 
 KisResourceServerProvider::~KisResourceServerProvider()

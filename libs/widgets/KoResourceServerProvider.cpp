@@ -133,11 +133,11 @@ struct Q_DECL_HIDDEN KoResourceServerProvider::Private
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 {
-    d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>(ResourceType::Patterns);
+    d->patternServer = new KoResourceServer<KoPattern>(ResourceType::Patterns);
     d->gradientServer = new GradientResourceServer(ResourceType::Gradients);
-    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>(ResourceType::Palettes);
-    d->svgSymbolCollectionServer = new KoResourceServerSimpleConstruction<KoSvgSymbolCollectionResource>(ResourceType::Symbols);
-    d->gamutMaskServer = new KoResourceServerSimpleConstruction<KoGamutMask>(ResourceType::GamutMasks);
+    d->paletteServer = new KoResourceServer<KoColorSet>(ResourceType::Palettes);
+    d->svgSymbolCollectionServer = new KoResourceServer<KoSvgSymbolCollectionResource>(ResourceType::Symbols);
+    d->gamutMaskServer = new KoResourceServer<KoGamutMask>(ResourceType::GamutMasks);
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()

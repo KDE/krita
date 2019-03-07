@@ -50,11 +50,11 @@ typedef KoResourceServerSimpleConstruction<KisPaintOpPreset> KisPaintOpPresetRes
 
 KisResourceServerProvider::KisResourceServerProvider()
 {
-    m_paintOpPresetServer = new KisPaintOpPresetResourceServer(ResourceType::PaintOpPresets, "*.kpp");
-    m_workspaceServer = new KoResourceServerSimpleConstruction<KisWorkspaceResource>(ResourceType::Workspaces, "*.kws");
-    m_windowLayoutServer = new KoResourceServerSimpleConstruction<KisWindowLayoutResource>(ResourceType::WindowLayouts, "*.kwl");
-    m_sessionServer = new KoResourceServerSimpleConstruction<KisSessionResource>(ResourceType::Sessions, "*.ksn");
-    m_layerStyleCollectionServer = new KoResourceServerSimpleConstruction<KisPSDLayerStyleCollectionResource>("psd_layer_style_collections", "*.asl");
+    m_paintOpPresetServer = new KisPaintOpPresetResourceServer(ResourceType::PaintOpPresets);
+    m_workspaceServer = new KoResourceServerSimpleConstruction<KisWorkspaceResource>(ResourceType::Workspaces);
+    m_windowLayoutServer = new KoResourceServerSimpleConstruction<KisWindowLayoutResource>(ResourceType::WindowLayouts);
+    m_sessionServer = new KoResourceServerSimpleConstruction<KisSessionResource>(ResourceType::Sessions);
+    m_layerStyleCollectionServer = new KoResourceServerSimpleConstruction<KisPSDLayerStyleCollectionResource>("psd_layer_style_collections");
 }
 
 KisResourceServerProvider::~KisResourceServerProvider()

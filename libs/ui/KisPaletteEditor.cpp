@@ -116,7 +116,7 @@ void KisPaletteEditor::addPalette()
     newColorSet->setValid(true);
     newColorSet->setName(le.text());
     m_d->rServer->addResource(newColorSet);
-    m_d->rServer->removeFromBlacklist(newColorSet);
+    //m_d->rServer->removeFromBlacklist(newColorSet);
 
     uploadPaletteList();
 }
@@ -145,7 +145,7 @@ void KisPaletteEditor::importPalette()
     }
     colorSet->setIsGlobal(false);
     m_d->rServer->addResource(colorSet);
-    m_d->rServer->removeFromBlacklist(colorSet);
+    //m_d->rServer->removeFromBlacklist(colorSet);
 
     uploadPaletteList();
 }
@@ -559,7 +559,7 @@ void KisPaletteEditor::setGlobal()
 
     colorSet->setFilename(fileInfo.filePath());
     colorSet->setIsGlobal(true);
-    m_d->rServer->removeFromBlacklist(colorSet);
+    //m_d->rServer->removeFromBlacklist(colorSet);
     if (!colorSet->save()) {
         QMessageBox message;
         message.setWindowTitle(i18n("Saving palette failed"));

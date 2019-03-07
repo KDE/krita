@@ -42,9 +42,6 @@ public:
 
     static KisBrushServer* instance();
 
-public Q_SLOTS:
-    void slotRemoveBlacklistedResources();
-
 private:
 
     KisBrushServer(const KisBrushServer&);

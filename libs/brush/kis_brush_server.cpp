@@ -44,7 +44,7 @@ class BrushResourceServer : public KoResourceServer<KisBrush>
 public:
 
     BrushResourceServer()
-        : KoResourceServer<KisBrush>(ResourceType::Brushes, "*.gbr:*.gih:*.abr:*.png:*.svg")
+        : KoResourceServer<KisBrush>(ResourceType::Brushes)
     {
     }
 
@@ -138,9 +138,3 @@ KoResourceServer<KisBrush>* KisBrushServer::brushServer()
 {
     return m_brushServer;
 }
-
-void KisBrushServer::slotRemoveBlacklistedResources()
-{
-    m_brushServer->removeBlackListedFiles();
-}
-

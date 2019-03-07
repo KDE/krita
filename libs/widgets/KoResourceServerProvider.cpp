@@ -41,8 +41,10 @@ class GradientResourceServer : public KoResourceServer<KoAbstractGradient> {
 
 public:
 
-    GradientResourceServer(const QString& type, const QString& extensions) :
-            KoResourceServer<KoAbstractGradient>(type, extensions) , m_foregroundToTransparent(0) , m_foregroundToBackground(0)
+    GradientResourceServer(const QString& type)
+        : KoResourceServer<KoAbstractGradient>(type)
+        , m_foregroundToTransparent(0)
+        , m_foregroundToBackground(0)
     {
         insertSpecialGradients();
     }
@@ -131,11 +133,11 @@ struct Q_DECL_HIDDEN KoResourceServerProvider::Private
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 {
-    d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>(ResourceType::Patterns, "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
-    d->gradientServer = new GradientResourceServer(ResourceType::Gradients, "*.svg:*.ggr");
-    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>(ResourceType::Palettes, "*.kpl:*.gpl:*.pal:*.act:*.aco:*.css:*.colors:*.xml:*.sbz");
-    d->svgSymbolCollectionServer = new KoResourceServerSimpleConstruction<KoSvgSymbolCollectionResource>(ResourceType::Symbols, "*.svg");
-    d->gamutMaskServer = new KoResourceServerSimpleConstruction<KoGamutMask>(ResourceType::GamutMasks, "*.kgm");
+    d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>(ResourceType::Patterns);
+    d->gradientServer = new GradientResourceServer(ResourceType::Gradients);
+    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>(ResourceType::Palettes);
+    d->svgSymbolCollectionServer = new KoResourceServerSimpleConstruction<KoSvgSymbolCollectionResource>(ResourceType::Symbols);
+    d->gamutMaskServer = new KoResourceServerSimpleConstruction<KoGamutMask>(ResourceType::GamutMasks);
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()

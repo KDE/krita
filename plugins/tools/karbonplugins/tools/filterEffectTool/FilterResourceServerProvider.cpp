@@ -34,7 +34,7 @@ FilterResourceServerProvider *FilterResourceServerProvider::m_singleton = 0;
 
 FilterResourceServerProvider::FilterResourceServerProvider()
 {
-    m_filterEffectServer = new KoResourceServerSimpleConstruction<FilterEffectResource>(ResourceType::FilterEffects, "*.svg");
+    m_filterEffectServer = new KoResourceServerSimpleConstruction<FilterEffectResource>(ResourceType::FilterEffects);
     if (!QFileInfo(m_filterEffectServer->saveLocation()).exists()) {
         QDir().mkpath(m_filterEffectServer->saveLocation());
     }

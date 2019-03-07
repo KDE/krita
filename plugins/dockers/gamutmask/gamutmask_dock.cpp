@@ -366,7 +366,7 @@ KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QStrin
     newMask->setValid(true);
 
     KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
-    rServer->removeFromBlacklist(newMask);
+    //rServer->removeFromBlacklist(newMask);
     rServer->addResource(newMask, false);
 
     return newMask;

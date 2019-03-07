@@ -322,7 +322,7 @@ bool KisResourceBundle::save()
             }
         }
         else if (resType  == ResourceType::Brushes) {
-            KisBrushResourceServer* brushServer = KisBrushServer::instance()->brushServer();
+            KoResourceServer<KisBrush>* brushServer = KisBrushServer::instance()->brushServer();
             Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
                 KisBrushSP brush = brushServer->resourceByMD5(ref.md5sum);
                 if (!brush) brush = brushServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
@@ -524,7 +524,7 @@ bool KisResourceBundle::install()
             }
         }
         else if (resType  == ResourceType::Brushes) {
-            KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
+            KoResourceServer<KisBrush> *brushServer = KisBrushServer::instance()->brushServer();
             Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
 
                 if (resourceStore->isOpen()) resourceStore->close();
@@ -801,7 +801,7 @@ bool KisResourceBundle::uninstall()
         }
     }
 
-    KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
+    KoResourceServer<KisBrush> *brushServer = KisBrushServer::instance()->brushServer();
     //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(ResourceType::Brushes)) {
     Q_FOREACH (const QByteArray md5, m_brushesMd5Installed) {
         KisBrushSP res = brushServer->resourceByMD5(md5);
@@ -913,7 +913,7 @@ QList<KoResourceSP> KisResourceBundle::resources(const QString &resType) const
             if (res) ret << res;
         }
         else if (resType  == ResourceType::Brushes) {
-            KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
+            KoResourceServer<KisBrush> *brushServer = KisBrushServer::instance()->brushServer();
             KoResourceSP res =  brushServer->resourceByMD5(ref.md5sum);
             if (res) ret << res;
         }

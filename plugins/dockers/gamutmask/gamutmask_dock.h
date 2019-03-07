@@ -25,7 +25,6 @@
 
 #include <KoCanvasObserverBase.h>
 #include <KoResourceServerProvider.h>
-#include <KoResourceServerAdapter.h>
 #include <KoResourceServerObserver.h>
 #include <resources/KoGamutMask.h>
 #include <KisDocument.h>

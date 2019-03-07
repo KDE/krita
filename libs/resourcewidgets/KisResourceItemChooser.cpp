@@ -75,6 +75,7 @@ public:
     KisResourceModel *resourceModel {0};
     KisResourceProxyModel *resourceProxyModel {0};
     KisTagFilterResourceProxyModel *tagFilterProxyModel {0};
+    QSortFilterProxyModel *extraFilterModel {0};
 
     KisResourceTaggingManager *tagManager {0};
     KisResourceItemView *view {0};
@@ -101,10 +102,13 @@ public:
 
 };
 
-KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool usePreview, QWidget *parent)
+KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool usePreview, QWidget *parent, QSortFilterProxyModel *extraFilterProxy)
     : QWidget(parent)
     , d(new Private(resourceType))
 {
+    d->extraFilterModel = extraFilterProxy;
+    d->extraFilterModel->setParent(this);
+
     d->splitter = new QSplitter(this);
 
     d->resourceModel = KisResourceModelProvider::resourceModel(resourceType);
@@ -112,8 +116,17 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(this);
     d->tagFilterProxyModel->setSourceModel(d->resourceModel);
 
+
     d->resourceProxyModel = new KisResourceProxyModel(this);
-    d->resourceProxyModel->setSourceModel(d->tagFilterProxyModel);
+
+    if (d->extraFilterModel) {
+        d->extraFilterModel->setSourceModel(d->resourceModel);
+        d->resourceProxyModel->setSourceModel(d->extraFilterModel);
+    }
+    else {
+        d->resourceProxyModel->setSourceModel(d->tagFilterProxyModel);
+    }
+
     d->resourceProxyModel->setRowStride(10);
 
     connect(d->resourceModel, SIGNAL(beforeResourcesLayoutReset(QModelIndex)), SLOT(slotBeforeResourcesLayoutReset(QModelIndex)));
@@ -543,6 +556,7 @@ bool KisResourceItemChooser::eventFilter(QObject *object, QEvent *event)
     }
     return QObject::eventFilter(object, event);
 }
+
 
 void KisResourceItemChooser::resizeEvent(QResizeEvent *event)
 {

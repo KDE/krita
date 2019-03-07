@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QShowEvent>
 
-#include <KoResourceServerAdapter.h>
+#include <KoResourceServer.h>
 
 #include "ui_wdgcustompattern.h"
 
@@ -59,9 +59,9 @@ private Q_SLOTS:
 
 private:
     void createPattern();
-    KisViewManager* m_view;
+    KisViewManager* m_view {0};
     KoPatternSP m_pattern;
-    QSharedPointer<KoAbstractResourceServerAdapter> m_rServerAdapter;
+    KoResourceServer<KoPattern>* m_rServer {0};
 };
 
 

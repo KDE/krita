@@ -42,6 +42,11 @@ void KisTagFilterResourceProxyModel::setTag(const QString& tag)
     d->tags = tag.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
 }
 
+QVariant KisTagFilterResourceProxyModel::data(const QModelIndex &index, int role) const
+{
+    return sourceModel()->data(mapToSource(index), role);
+}
+
 bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
 {
     return true;

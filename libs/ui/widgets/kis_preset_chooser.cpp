@@ -27,6 +27,7 @@
 #include <QAbstractItemDelegate>
 #include <QStyleOptionViewItem>
 #include <QSortFilterProxyModel>
+#include <KisResourceModel.h>
 #include <QApplication>
 
 #include <kis_config.h>
@@ -35,7 +36,6 @@
 
 #include <KoIcon.h>
 #include <KisResourceItemChooser.h>
-#include <KoResourceServerAdapter.h>
 #include <KisResourceItemChooserSync.h>
 #include <KisResourceItemView.h>
 #include <KisResourceModel.h>
@@ -155,55 +155,67 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     painter->restore();
 }
 
-class KisPresetProxyAdapter : public KisPaintOpPresetResourceServerAdapter
+class KisPresetChooser::PaintOpFilterModel : public QSortFilterProxyModel
 {
-
+    Q_OBJECT
 public:
-    KisPresetProxyAdapter(KisPaintOpPresetResourceServer* resourceServer)
-        : KisPaintOpPresetResourceServerAdapter(resourceServer)
+
+    PaintOpFilterModel(QObject *parent = 0)
+        : QSortFilterProxyModel(parent)
     {
-        setSortingEnabled(true);
     }
-    ~KisPresetProxyAdapter() override {}
 
-    QList< KoResourceSP > resources() override {
 
-        QList<KoResourceSP > serverResources =
-            KisPaintOpPresetResourceServerAdapter::resources();
+    ~PaintOpFilterModel() override
+    {
+    }
 
-        if (m_paintopID.isEmpty()) {
-            return serverResources;
+    void setPaintOpId(const QString &id)
+    {
+        m_id = id;
+    }
+
+    QString currentPaintOpId() const
+    {
+        return m_id;
+    }
+
+    // QSortFilterProxyModel interface
+protected:
+
+    QVariant data(const QModelIndex &index, int role) const
+    {
+        return sourceModel()->data(mapToSource(index), role);
+    }
+
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override
+    {
+        if (m_id.isEmpty()) return true;
+
+        QModelIndex idx = sourceModel()->index(source_row, 0, source_parent);
+        QMap<QString, QVariant> metadata = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::MetaData).toMap();
+        if (metadata.contains("paintopid")) {
+            return (metadata["paintopid"].toString() == m_id);
         }
 
-        QList<KoResourceSP > resources;
-        Q_FOREACH (KoResourceSP resource, serverResources) {
-            KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
-            if (preset && preset->paintOp().id() == m_paintopID) {
-                resources.append(preset);
-            }
-        }
-        return resources;
+        return false;
     }
 
-    ///Set id for paintop to be accept by the proxy model, if not filter is set all
-    ///presets will be shown.
-    void setPresetFilter(const QString& paintOpId)
+    bool filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const override
     {
-        m_paintopID = paintOpId;
-        invalidate();
+        return true;
     }
 
-    ///Resets the model connected to the adapter
-    void invalidate() {
-        emitRemovingResource(0);
-    }
-
-    QString currentPaintOpId() const {
-        return m_paintopID;
+    bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override
+    {
+        QString nameLeft = sourceModel()->data(source_left, Qt::UserRole + KisResourceModel::Name).toString();
+        QString nameRight = sourceModel()->data(source_right, Qt::UserRole + KisResourceModel::Name).toString();
+        return nameLeft < nameRight;
     }
 
 private:
-    QString m_paintopID;
+
+    QString m_id;
 };
 
 KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
@@ -213,7 +225,9 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     QVBoxLayout * layout = new QVBoxLayout(this);
     layout->setMargin(0);
 
-    m_chooser = new KisResourceItemChooser(ResourceType::PaintOpPresets, false, this);
+    m_paintOpFilterModel = new PaintOpFilterModel();
+
+    m_chooser = new KisResourceItemChooser(ResourceType::PaintOpPresets, false, this, m_paintOpFilterModel);
     m_chooser->setObjectName("ResourceChooser");
     m_chooser->setColumnCount(10);
     m_chooser->setRowHeight(50);
@@ -278,7 +292,8 @@ void KisPresetChooser::updateViewSettings()
     if (m_mode == THUMBNAIL) {
         m_chooser->setSynced(true);
         m_delegate->setShowText(false);
-    } else if (m_mode == DETAIL) {
+    }
+    else if (m_mode == DETAIL) {
         m_chooser->setSynced(false);
         m_chooser->setColumnCount(1);
         m_chooser->setColumnWidth(m_chooser->width());
@@ -286,7 +301,8 @@ void KisPresetChooser::updateViewSettings()
         KisResourceItemChooserSync* chooserSync = KisResourceItemChooserSync::instance();
         m_chooser->setRowHeight(chooserSync->baseLength());
         m_delegate->setShowText(true);
-    } else if (m_mode == STRIP) {
+    }
+    else if (m_mode == STRIP) {
         m_chooser->setSynced(false);
         m_chooser->setRowCount(1);
         m_chooser->itemView()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -299,23 +315,6 @@ void KisPresetChooser::updateViewSettings()
 
 void KisPresetChooser::setCurrentResource(KoResourceSP resource)
 {
-    /**
-     * HACK ALERT: here we use a direct call to an adapter to notify the view
-     *             that the preset might have changed its dirty state. This state
-     *             doesn't affect the filtering so the server's cache must not be
-     *             invalidated!
-     *
-     *             Ideally, we should call some method of KoResourceServer instead,
-     *             but it seems like a bit too much effort for such a small fix.
-     */
-    if (resource == currentResource()) {
-        KisPresetProxyAdapter *adapter = static_cast<KisPresetProxyAdapter*>(m_adapter.data());
-        KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
-        if (adapter && preset) {
-            adapter->resourceChangedNoCacheInvalidation(preset);
-        }
-    }
-
     m_chooser->setCurrentResource(resource);
 }
 
@@ -337,10 +336,8 @@ KisResourceItemChooser *KisPresetChooser::itemChooser()
 
 void KisPresetChooser::setPresetFilter(const QString& paintOpId)
 {
-    KisPresetProxyAdapter *adapter = static_cast<KisPresetProxyAdapter*>(m_adapter.data());
-
-    if (adapter && adapter->currentPaintOpId() != paintOpId) {
-        adapter->setPresetFilter(paintOpId);
+    if (m_paintOpFilterModel && m_paintOpFilterModel->currentPaintOpId() != paintOpId) {
+        m_paintOpFilterModel->setPaintOpId(paintOpId);
         updateViewSettings();
     }
 }
@@ -371,3 +368,5 @@ void KisPresetChooser::slotScrollerStateChanged(QScroller::State state)
 {
     KisKineticScroller::updateCursor(this, state);
 }
+
+#include "kis_preset_chooser.moc"

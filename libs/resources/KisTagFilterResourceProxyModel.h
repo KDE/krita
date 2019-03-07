@@ -27,6 +27,7 @@
 
 class KRITARESOURCES_EXPORT KisTagFilterResourceProxyModel : public QSortFilterProxyModel
 {
+    Q_OBJECT
 public:
     KisTagFilterResourceProxyModel(QObject *parent = 0);
     ~KisTagFilterResourceProxyModel() override;
@@ -39,6 +40,7 @@ protected:
      */
     void setTag(const QString& tag);
 
+    QVariant data(const QModelIndex &index, int role) const override;
     bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
@@ -47,7 +49,6 @@ private:
     Private *const d;
 
     Q_DISABLE_COPY(KisTagFilterResourceProxyModel)
-
 };
 
 #endif // KISTAGFILTERRESOURCEPROXYMODEL_H

@@ -21,7 +21,6 @@
 #include <KoCanvasResourceProvider.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerObserver.h>
-#include <KoResourceServerAdapter.h>
 #include <KoCanvasBase.h>
 #include <kis_canvas2.h>
 #include <KoColor.h>

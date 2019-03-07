@@ -24,7 +24,6 @@
 #define KIS_RESOURCESERVERPROVIDER_H_
 
 #include <KoResourceServer.h>
-#include <KoResourceServerAdapter.h>
 #include <KisResourceBundleServerProvider.h>
 
 #include <brushengine/kis_paintop_preset.h>
@@ -37,7 +36,6 @@ class KisSessionResource;
 class KisPSDLayerStyleCollectionResource;
 
 typedef KoResourceServerSimpleConstruction<KisPaintOpPreset> KisPaintOpPresetResourceServer;
-typedef KoResourceServerAdapter<KisPaintOpPreset> KisPaintOpPresetResourceServerAdapter;
 
 class KRITAUI_EXPORT KisResourceServerProvider : public QObject
 {

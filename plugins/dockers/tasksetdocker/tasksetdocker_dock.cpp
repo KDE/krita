@@ -32,7 +32,6 @@
 
 #include <KoCanvasBase.h>
 #include <KisResourceItemChooser.h>
-#include <KoResourceServerAdapter.h>
 #include <KisResourceLoader.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisViewManager.h>

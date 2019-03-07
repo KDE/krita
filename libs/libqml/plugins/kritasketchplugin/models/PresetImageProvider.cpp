@@ -18,7 +18,6 @@
 
 #include "PresetImageProvider.h"
 
-#include <KoResourceServerAdapter.h>
 #include <KisResourceServerProvider.h>
 #include <brushengine/kis_paintop_preset.h>
 

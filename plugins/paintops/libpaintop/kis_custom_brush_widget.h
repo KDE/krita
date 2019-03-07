@@ -22,11 +22,10 @@
 #include <QObject>
 #include <QShowEvent>
 
-#include <KoResourceServerAdapter.h>
-
 #include "ui_wdgcustombrush.h"
 #include <kis_types.h>
 #include <kis_brush.h>
+#include <KoResourceServer.h>
 
 const QString TEMPORARY_FILENAME = "/tmp/temporaryKritaBrush.gbr";
 const QString TEMPORARY_BRUSH_NAME = "Temporary custom brush";
@@ -34,6 +33,7 @@ const double DEFAULT_SPACING = 0.25;
 
 
 class KoResource;
+
 
 class KisWdgCustomBrush : public QDialog, public Ui::KisWdgCustomBrush
 {
@@ -72,7 +72,7 @@ private:
     KisImageWSP m_image;
     KisBrushSP m_brush;
 
-    QSharedPointer<KoAbstractResourceServerAdapter> m_rServerAdapter;
+    KoResourceServer<KisBrush> *m_rServer {0};
 };
 
 

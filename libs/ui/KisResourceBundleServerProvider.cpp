@@ -33,7 +33,6 @@
 #include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
-#include <KoResourceServerAdapter.h>
 
 Q_GLOBAL_STATIC(KisResourceBundleServerProvider, s_instance)
 

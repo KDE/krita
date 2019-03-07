@@ -35,7 +35,6 @@
 #include "FilterStackSetCommand.h"
 #include "FilterRegionChangeCommand.h"
 #include "FilterRegionEditStrategy.h"
-#include "KoResourceServerAdapter.h"
 #include "KoResourceSelector.h"
 #include <KoPointerEvent.h>
 

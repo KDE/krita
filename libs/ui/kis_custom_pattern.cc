@@ -44,7 +44,8 @@
 #include "kis_paint_layer.h"
 
 KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisViewManager* view)
-    : KisWdgCustomPattern(parent, name), m_view(view)
+    : KisWdgCustomPattern(parent, name)
+    , m_view(view)
 {
     Q_ASSERT(m_view);
     setWindowTitle(caption);
@@ -53,8 +54,7 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
 
     preview->setScaledContents(true);
 
-    KoResourceServer<KoPattern>* rServer = KoResourceServerProvider::instance()->patternServer();
-    m_rServerAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoPattern>(rServer));
+    m_rServer = KoResourceServerProvider::instance()->patternServer();
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(patternButton, SIGNAL(pressed()), this, SLOT(slotUsePattern()));
@@ -106,7 +106,6 @@ void KisCustomPattern::slotAddPredefined()
     // Save in the directory that is likely to be: ~/.kde/share/apps/krita/patterns
     // a unique file with this pattern name
     QString dir = KoResourceServerProvider::instance()->patternServer()->saveLocation();
-    QString extension;
 
     QString tempFileName;
     {
@@ -121,7 +120,7 @@ void KisCustomPattern::slotAddPredefined()
 
     // Add it to the pattern server, so that it automatically gets to the mediators, and
     // so to the other pattern choosers can pick it up, if they want to
-    m_rServerAdapter->addResource(m_pattern->clone());
+    m_rServer->addResource(m_pattern->clone().dynamicCast<KoPattern>());
 }
 
 void KisCustomPattern::slotUsePattern()

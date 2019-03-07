@@ -28,7 +28,6 @@
 
 #include <klocalizedstring.h>
 #include <KisResourceItemChooser.h>
-#include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 
 #include "kis_signals_blocker.h"

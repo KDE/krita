@@ -19,14 +19,11 @@
 #ifndef KIS_CLIPBOARD_BRUSH_WIDGET_H
 #define KIS_CLIPBOARD_BRUSH_WIDGET_H
 
-//Qt includes
 #include <QObject>
 #include <QShowEvent>
 
-//Calligra includes
-#include <KoResourceServerAdapter.h>
+#include <KoResourceServer.h>
 
-//Krita includes
 #include <kis_types.h>
 #include <kis_brush.h>
 #include "ui_wdgclipboardbrush.h"
@@ -72,7 +69,7 @@ private:
     KisPaintDeviceSP pd;
     KisImageWSP m_image;
     KisBrushSP m_brush;
-    QSharedPointer<KoAbstractResourceServerAdapter> m_rServerAdapter;
+    KoResourceServer<KisBrush> *m_rServer;
 };
 
 #endif // KIS_CLIPBOARD_BRUSH_WIDGET_H

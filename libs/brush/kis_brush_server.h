@@ -23,13 +23,9 @@
 #include <QList>
 
 #include <KoResourceServer.h>
-#include <KoResourceServerAdapter.h>
 
 #include "kritabrush_export.h"
 #include "kis_brush.h"
-
-typedef KoResourceServer<KisBrush> KisBrushResourceServer;
-typedef KoResourceServerAdapter<KisBrush> KisBrushResourceServerAdapter;
 
 /**
  *
@@ -42,7 +38,7 @@ class BRUSH_EXPORT KisBrushServer : public QObject
 public:
     KisBrushServer();
     ~KisBrushServer() override;
-    KisBrushResourceServer* brushServer();
+    KoResourceServer<KisBrush>* brushServer();
 
     static KisBrushServer* instance();
 
@@ -54,7 +50,7 @@ private:
     KisBrushServer(const KisBrushServer&);
     KisBrushServer operator=(const KisBrushServer&);
 
-    KisBrushResourceServer* m_brushServer;
+    KoResourceServer<KisBrush>* m_brushServer;
 };
 
 #endif

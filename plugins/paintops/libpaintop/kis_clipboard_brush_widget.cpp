@@ -45,8 +45,7 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
     preview->setStyleSheet("border: 2px solid #222; border-radius: 4px; padding: 5px; font: normal 10px;");
 
 
-    KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
-    m_rServerAdapter = QSharedPointer<KisBrushResourceServerAdapter>(new KisBrushResourceServerAdapter(rServer));
+    m_rServer = KisBrushServer::instance()->brushServer();
 
     m_brush = 0;
 
@@ -136,7 +135,7 @@ void KisClipboardBrushWidget::slotAddPredefined()
     }
     tempFileName = fileInfo.filePath();
 
-    if (m_rServerAdapter) {
+    if (m_rServer) {
         KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
         resource->setFilename(tempFileName);
 
@@ -150,7 +149,7 @@ void KisClipboardBrushWidget::slotAddPredefined()
         if (colorAsmask->isChecked()) {
             resource->makeMaskImage();
         }
-        m_rServerAdapter->addResource(resource);
+        m_rServer->addResource(resource.dynamicCast<KisBrush>());
         emit sigNewPredefinedBrush(resource);
     }
 

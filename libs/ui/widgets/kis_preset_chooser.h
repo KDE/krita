@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <QScroller>
+#include <QPointer>
 
 #include <KoResource.h>
 #include <KoID.h>
@@ -29,6 +30,7 @@
 class KoAbstractResourceServerAdapter;
 class KisPresetDelegate;
 class KisResourceItemChooser;
+
 
 #include <kritaui_export.h>
 
@@ -91,7 +93,10 @@ private:
     KisResourceItemChooser *m_chooser {0};
     KisPresetDelegate* m_delegate {0};
     ViewMode m_mode;
-    QSharedPointer<KoAbstractResourceServerAdapter> m_adapter {0};
+
+    class PaintOpFilterModel;
+    QPointer<PaintOpFilterModel> m_paintOpFilterModel;
+
 };
 
 #endif // KIS_ITEM_CHOOSER_H_

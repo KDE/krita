@@ -39,7 +39,7 @@ class QAbstractProxyModel;
 class QAbstractItemDelegate;
 class QAbstractButton;
 class QToolButton;
-
+class QSortFilterProxyModel;
 class KisResourceItemView;
 
 #include "kritaresourcewidgets_export.h"
@@ -56,7 +56,8 @@ public:
     enum Buttons { Button_Import, Button_Remove };
 
     /// \p usePreview shows the aside preview with the resource's image
-    explicit KisResourceItemChooser(const QString &resourceType, bool usePreview = false, QWidget *parent = 0);
+    /// \p extraFilterProxy is an extra filter proxy model for additional filtering. KisResourceItemChooser will take over ownership
+    explicit KisResourceItemChooser(const QString &resourceType, bool usePreview = false, QWidget *parent = 0, QSortFilterProxyModel *extraFilterProxy = 0);
     ~KisResourceItemChooser() override;
 
     /// Sets number of columns in the view and causes the number of rows to be calculated accordingly

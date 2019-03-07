@@ -168,6 +168,13 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
                 return resource->isDirty();
             }
         }
+        case Qt::UserRole + MetaData:
+        {
+            qDebug() << "REMINDER: implement KoResourceMetadata properly!";
+            QMap<QString, QVariant> r;
+            r.insert("paintopid", "paintbrush");
+            return r;
+        }
 
         default:
             ;

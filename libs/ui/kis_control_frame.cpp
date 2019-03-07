@@ -43,7 +43,6 @@
 #include <KoDualColorButton.h>
 #include <resources/KoAbstractGradient.h>
 #include <KoResourceServer.h>
-#include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_image.h>

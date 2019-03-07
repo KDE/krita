@@ -33,7 +33,6 @@
 #include <KoFilterEffectFactoryBase.h>
 #include <KoShape.h>
 #include <KoCanvasBase.h>
-#include <KoResourceServerAdapter.h>
 
 #include <KoIcon.h>
 

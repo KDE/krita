@@ -38,13 +38,13 @@
 Q_GLOBAL_STATIC(KisBrushServer, s_instance)
 
 
-class BrushResourceServer : public KisBrushResourceServer
+class BrushResourceServer : public KoResourceServer<KisBrush>
 {
 
 public:
 
     BrushResourceServer()
-        : KisBrushResourceServer(ResourceType::Brushes, "*.gbr:*.gih:*.abr:*.png:*.svg")
+        : KoResourceServer<KisBrush>(ResourceType::Brushes, "*.gbr:*.gih:*.abr:*.png:*.svg")
     {
     }
 
@@ -67,7 +67,7 @@ public:
         }
         else {
 
-            return KisBrushResourceServer::importResourceFile(filename, fileCreation);
+            return KoResourceServer<KisBrush>::importResourceFile(filename, fileCreation);
 
         }
         qApp->processEvents(QEventLoop::AllEvents);
@@ -135,7 +135,7 @@ KisBrushServer* KisBrushServer::instance()
     return s_instance;
 }
 
-KisBrushResourceServer* KisBrushServer::brushServer()
+KoResourceServer<KisBrush>* KisBrushServer::brushServer()
 {
     return m_brushServer;
 }

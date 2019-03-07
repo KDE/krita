@@ -56,8 +56,7 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     preview->setFixedSize(preview->size());
     preview->setStyleSheet("border: 2px solid #222; border-radius: 4px; padding: 5px; font: normal 10px;");
 
-    KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
-    m_rServerAdapter = QSharedPointer<KisBrushResourceServerAdapter>(new KisBrushResourceServerAdapter(rServer));
+    m_rServer = KisBrushServer::instance()->brushServer();
 
     m_brush = 0;
 
@@ -156,7 +155,7 @@ void KisCustomBrushWidget::slotAddPredefined()
 
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
-    if (m_rServerAdapter && m_brush) {
+    if (m_rServer && m_brush) {
         qDebug() << "m_brush" << m_brush;
         KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
         resource->setFilename(tempFileName);
@@ -171,8 +170,7 @@ void KisCustomBrushWidget::slotAddPredefined()
         if (colorAsMask->isChecked()) {
             resource->makeMaskImage();
         }
-
-        m_rServerAdapter->addResource(resource);
+        m_rServer->addResource(resource.dynamicCast<KisBrush>());
         emit sigNewPredefinedBrush(resource);
     }
 

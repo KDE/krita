@@ -55,7 +55,9 @@ public:
         /// A larger thumbnail for displaying in a tooltip. 200x200 or so.
         LargeThumbnail,
         /// A dirty resource is one that has been modified locally but not saved
-        Dirty
+        Dirty,
+        /// MetaData is a map of key, value pairs that is associated with this resource
+        MetaData
     };
 
 private:

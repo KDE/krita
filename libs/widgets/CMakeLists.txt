@@ -27,7 +27,6 @@ set(kritawidgets_LIB_SRCS
     KoResourcePopupAction.cpp
     KoResourceTagStore.cpp
     KoRuler.cpp
-    KoResourceServerAdapter.cpp
     KoResourceServerProvider.cpp
     KoLineStyleSelector.cpp
     KoLineStyleItemDelegate.cpp

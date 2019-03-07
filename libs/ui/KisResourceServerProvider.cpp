@@ -33,7 +33,6 @@
 #include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
-#include <KoResourceServerAdapter.h>
 
 #include <resources/KoPattern.h>
 #include <brushengine/kis_paintop_preset.h>
@@ -48,12 +47,9 @@
 Q_GLOBAL_STATIC(KisResourceServerProvider, s_instance)
 
 typedef KoResourceServerSimpleConstruction<KisPaintOpPreset> KisPaintOpPresetResourceServer;
-typedef KoResourceServerAdapter<KisPaintOpPreset> KisPaintOpPresetResourceServerAdapter;
 
 KisResourceServerProvider::KisResourceServerProvider()
 {
-    KisBrushServer *brushServer = KisBrushServer::instance();
-
     m_paintOpPresetServer = new KisPaintOpPresetResourceServer(ResourceType::PaintOpPresets, "*.kpp");
     m_paintOpPresetServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_paintOpPresetServer->fileNames(), m_paintOpPresetServer->blackListedFiles()));
 

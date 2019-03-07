@@ -43,7 +43,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
-#include <KoResourceServerAdapter.h>
 
 #include <kis_palette_view.h>
 #include <KisPaletteDelegate.h>

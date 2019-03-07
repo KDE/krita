@@ -18,7 +18,6 @@
 
 #include "PresetModel.h"
 
-#include <KoResourceServerAdapter.h>
 #include <KisResourceServerProvider.h>
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>

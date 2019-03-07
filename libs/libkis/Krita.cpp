@@ -271,7 +271,7 @@ QMap<QString, Resource *> Krita::resources(const QString &type) const
         }
     }
     else if (type.toLower() == "brush") {
-        KisBrushResourceServer* server = KisBrushServer::instance()->brushServer();
+        KoResourceServer<KisBrush>* server = KisBrushServer::instance()->brushServer();
         Q_FOREACH (KisBrushSP res, server->resources()) {
             resources[res->name()] = new Resource(res);
         }

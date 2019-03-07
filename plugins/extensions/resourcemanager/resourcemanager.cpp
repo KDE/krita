@@ -66,7 +66,7 @@ public:
         gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
     }
 
-    KisBrushResourceServer* brushServer;
+    KoResourceServer<KisBrush>* brushServer;
     KisPaintOpPresetResourceServer * paintopServer;
     KoResourceServer<KoAbstractGradient>* gradientServer;
     KoResourceServer<KoPattern> *patternServer;

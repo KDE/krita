@@ -107,7 +107,9 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     , d(new Private(resourceType))
 {
     d->extraFilterModel = extraFilterProxy;
-    d->extraFilterModel->setParent(this);
+    if (d->extraFilterModel) {
+        d->extraFilterModel->setParent(this);
+    }
 
     d->splitter = new QSplitter(this);
 

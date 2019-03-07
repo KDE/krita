@@ -31,7 +31,6 @@
 #include "LayerCompositeDetails.h"
 #include "PaletteColorsModel.h"
 #include "RecentImagesModel.h"
-#include "PaletteModel.h"
 #include "PresetModel.h"
 #include "PresetImageProvider.h"
 #include "RecentImageImageProvider.h"
@@ -98,7 +97,6 @@ void KritaSketchPlugin::registerTypes(const char* uri)
     qmlRegisterType<ColorSelectorItem>("org.krita.sketch", 1, 0, "ColorSelectorItem");
     qmlRegisterType<CurveEditorItem>("org.krita.sketch", 1, 0, "CurveEditorItem");
     qmlRegisterType<DocumentListModel>("org.krita.sketch", 1, 0, "DocumentListModel");
-    qmlRegisterType<PaletteModel>("org.krita.sketch", 1, 0, "PaletteModel");
     qmlRegisterType<PaletteColorsModel>("org.krita.sketch", 1, 0, "PaletteColorsModel");
     qmlRegisterType<PresetModel>("org.krita.sketch", 1, 0, "PresetModel");
     qmlRegisterType<KisSketchView>("org.krita.sketch", 1, 0, "SketchView");

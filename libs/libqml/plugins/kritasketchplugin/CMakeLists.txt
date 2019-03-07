@@ -29,7 +29,6 @@ set(kritasketch_kritaintegrationmodels_SRCS
     models/LayerModel.cpp
     models/LayerThumbProvider.cpp
     models/PaletteColorsModel.cpp
-    models/PaletteModel.cpp
     models/PresetImageProvider.cpp
     models/PresetModel.cpp
     models/RecentImageImageProvider.cpp

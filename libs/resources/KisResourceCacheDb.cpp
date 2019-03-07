@@ -51,7 +51,8 @@ QSqlError initDb(const QString &location)
                                      << i18n("Folder")
                                      << i18n("Bundle")
                                      << i18n("Abobe Brush Library")
-                                     << i18n("Adobe Style Library");
+                                     << i18n("Adobe Style Library")
+                                     << i18n("Memory");
 
     if (!QSqlDatabase::connectionNames().isEmpty()) {
         infoResources << "Already connected to resource cache database";

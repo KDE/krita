@@ -122,7 +122,6 @@ private:
 KisBrushServer::KisBrushServer()
 {
     m_brushServer = new BrushResourceServer();
-    m_brushServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_brushServer->fileNames(), m_brushServer->blackListedFiles()));
 }
 
 KisBrushServer::~KisBrushServer()

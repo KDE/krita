@@ -71,7 +71,6 @@ public:
     virtual ~KoResourceServerBase() {}
 
     virtual int resourceCount() const = 0;
-    virtual void loadResources(QStringList filenames) = 0;
     virtual QStringList blackListedFiles() = 0;
     virtual QStringList queryResources(const QString &query) const = 0;
     QString type() const { return m_type; }
@@ -146,15 +145,6 @@ public:
 
     int resourceCount() const override {
         return m_resourceModel->rowCount();
-    }
-
-    /**
-     * Loads a set of resources and adds them to the resource server.
-     * If a filename appears twice the resource will only be added once. Resources that can't
-     * be loaded or and invalid aren't added to the server.
-     * @param filenames list of filenames to be loaded
-     */
-    void loadResources(QStringList /*filenames*/) override {
     }
 
     void loadTags() {

@@ -94,7 +94,11 @@ public:
 
     /// Remove a resource from Resource Server but not from a file
     bool removeResourceFromServer(QSharedPointer<T> resource){
-        return m_resourceModel->removeResource(resource);
+        if (m_resourceModel->removeResource(resource)) {
+            notifyRemovingResource(resource);
+            return true;
+        }
+        return false;
     }
 
     QList<QSharedPointer<T>> resources() {
@@ -116,7 +120,7 @@ public:
      * @param filename file name of the resource file to be imported
      * @param fileCreation decides whether to create the file in the saveLocation() directory
      */
-    bool importResourceFile(const QString & filename , bool fileCreation=true) {
+    bool importResourceFile(const QString & filename, bool fileCreation=true) {
 
 //        QFileInfo fi(filename);
 //        if (!fi.exists())

@@ -179,35 +179,35 @@ public:
      */
     virtual bool importResourceFile(const QString & filename , bool fileCreation=true) {
 
-        QFileInfo fi(filename);
-        if (!fi.exists())
-            return false;
-        if ( fi.size() == 0)
-            return false;
+//        QFileInfo fi(filename);
+//        if (!fi.exists())
+//            return false;
+//        if ( fi.size() == 0)
+//            return false;
 
-        QSharedPointer<T> resource = createResource( filename );
-        resource->load();
-        if (!resource->valid()) {
-            warnWidgets << "Import failed! Resource is not valid";
+//        QSharedPointer<T> resource = createResource( filename );
+//        resource->load();
+//        if (!resource->valid()) {
+//            warnWidgets << "Import failed! Resource is not valid";
 
-            return false;
+//            return false;
 
-        }
+//        }
 
-        if (fileCreation) {
-            Q_ASSERT(!resource->defaultFileExtension().isEmpty());
-            Q_ASSERT(!saveLocation().isEmpty());
+//        if (fileCreation) {
+//            Q_ASSERT(!resource->defaultFileExtension().isEmpty());
+//            Q_ASSERT(!saveLocation().isEmpty());
 
-            QString newFilename = saveLocation() + fi.baseName() + resource->defaultFileExtension();
-            QFileInfo fileInfo(newFilename);
+//            QString newFilename = saveLocation() + fi.baseName() + resource->defaultFileExtension();
+//            QFileInfo fileInfo(newFilename);
 
-            int i = 1;
-            while (fileInfo.exists()) {
-                fileInfo.setFile(saveLocation() + fi.baseName() + QString("%1").arg(i) + resource->defaultFileExtension());
-                i++;
-            }
-            resource->setFilename(fileInfo.filePath());
-        }
+//            int i = 1;
+//            while (fileInfo.exists()) {
+//                fileInfo.setFile(saveLocation() + fi.baseName() + QString("%1").arg(i) + resource->defaultFileExtension());
+//                i++;
+//            }
+//            resource->setFilename(fileInfo.filePath());
+//        }
         return true;
     }
 
@@ -308,9 +308,6 @@ public:
         return QStringList(); //m_tagStore->assignedTagsList(resource);
     }
 
-
-    virtual QSharedPointer<T> createResource(const QString & filename) = 0;
-
     /// Return the currently stored resources in alphabetical order, overwrite for customized sorting
     virtual QList<QSharedPointer<T>> sortedResources()
     {
@@ -357,10 +354,6 @@ public:
     KoResourceServerSimpleConstruction(const QString& type)
         : KoResourceServer<T>(type)
     {
-    }
-
-    QSharedPointer<T> createResource( const QString & filename ) override {
-        return QSharedPointer<T>(new T(filename));
     }
 };
 

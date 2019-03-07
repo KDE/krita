@@ -86,7 +86,7 @@ private:
 
     friend class KoResourceBundle;
 
-    KoAbstractGradientSP createResource( const QString & filename ) override {
+    KoAbstractGradientSP createResource( const QString & filename ) {
 
         QString fileExtension;
         int index = filename.lastIndexOf('.');

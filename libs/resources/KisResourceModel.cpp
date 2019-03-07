@@ -226,7 +226,7 @@ bool KisResourceModel::removeResource(const QModelIndex &index)
     return false;
 }
 
-bool KisResourceModel::addResource(KoResourceSP resource)
+bool KisResourceModel::addResource(KoResourceSP resource, bool save)
 {
     beginResetModel();
     endResetModel();

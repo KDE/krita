@@ -83,7 +83,13 @@ public:
 
     bool importResourceFile(const QString &filename);
 
-    bool addResource(KoResourceSP resource);
+    /**
+     * @brief addResource adds the given resource to the database.
+     * @param resource the resource.
+     * @param save if true, save the resource to the default storage, if false, the resource will not exist the next time Krita is started.
+     * @return
+     */
+    bool addResource(KoResourceSP resource, bool save = true);
     bool updateResource(KoResourceSP resource);
     bool removeResource(KoResourceSP resource);
 

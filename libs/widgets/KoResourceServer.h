@@ -47,58 +47,33 @@
 
 class KoResource;
 
-/**
- * KoResourceServerBase is the base class of all resource servers
- */
-class KRITAWIDGETS_EXPORT KoResourceServerBase {
-
-public:
-    /**
-    * Constructs a KoResourceServerBase
-    * @param type type, has to be the same as used by KoResourcePaths
-    */
-    KoResourceServerBase(const QString& type)
-        : m_resourceModel(KisResourceModelProvider::resourceModel(type))
-        , m_type(type)
-    {
-        qDebug() << "Creating KoResourceServerBase" << m_type;
-    }
-
-    virtual ~KoResourceServerBase() {}
-
-    virtual int resourceCount() const = 0;
-
-protected:
-
-    KisResourceModel *m_resourceModel {0};
-    QString m_type;
-};
 
 /**
  * KoResourceServer manages the resources of one type. It stores,
  * loads and saves the resources.  To keep track of changes the server
  * can be observed with a KoResourceServerObserver
  */
-
 template <class T>
-class KoResourceServer : public KoResourceServerBase
+class KoResourceServer
 {
 public:
+
     typedef KoResourceServerObserver<T> ObserverType;
 
     KoResourceServer(const QString& type)
-        : KoResourceServerBase(type)
+        : m_resourceModel(KisResourceModelProvider::resourceModel(type))
+        , m_type(type)
     {
     }
 
-    ~KoResourceServer() override
+    virtual ~KoResourceServer()
     {
         Q_FOREACH (ObserverType* observer, m_observers) {
             observer->unsetResourceServer();
         }
     }
 
-    int resourceCount() const override {
+    int resourceCount() const {
         return m_resourceModel->rowCount();
     }
 
@@ -131,7 +106,7 @@ public:
     }
 
     /// Returns path where to save user defined and imported resources to
-    virtual QString saveLocation() {
+    QString saveLocation() {
         return KoResourcePaths::saveLocation(m_type.toLatin1());
     }
 
@@ -141,7 +116,7 @@ public:
      * @param filename file name of the resource file to be imported
      * @param fileCreation decides whether to create the file in the saveLocation() directory
      */
-    virtual bool importResourceFile(const QString & filename , bool fileCreation=true) {
+    bool importResourceFile(const QString & filename , bool fileCreation=true) {
 
 //        QFileInfo fi(filename);
 //        if (!fi.exists())
@@ -307,7 +282,8 @@ protected:
 private:
 
     QList<ObserverType*> m_observers;
-
+    KisResourceModel *m_resourceModel {0};
+    QString m_type;
 };
 
 #endif // KORESOURCESERVER_H

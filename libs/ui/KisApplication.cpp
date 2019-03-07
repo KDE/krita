@@ -80,7 +80,7 @@
 #include "KisApplicationArguments.h"
 #include <kis_debug.h>
 #include "kis_action_registry.h"
-#include <kis_brush_server.h>
+#include <KoResourceServer.h>
 #include <KisResourceServerProvider.h>
 #include <KoResourceServerProvider.h>
 #include "kis_image_barrier_locker.h"
@@ -341,22 +341,6 @@ bool KisApplication::registerResources()
         QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("\n\nKrita will quit now."));
         return false;
     }
-
-
-    setSplashScreenLoadingText(i18n("Loading Resources..."));
-    processEvents();
-    KoResourceServerProvider::instance();
-
-    setSplashScreenLoadingText(i18n("Loading Brush Presets..."));
-    processEvents();
-    KisResourceServerProvider::instance();
-
-    setSplashScreenLoadingText(i18n("Loading Brushes..."));
-    processEvents();
-    KisBrushServer::instance()->brushServer();
-
-    setSplashScreenLoadingText(i18n("Loading Bundles..."));
-    processEvents();
 
     return true;
 }

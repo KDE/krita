@@ -158,11 +158,6 @@ void KisPaletteEditor::removePalette(KoColorSetSP cs)
         return;
     }
 
-    if (cs->isGlobal()) {
-        m_d->rServer->removeResourceAndBlacklist(cs);
-        QFile::remove(cs->filename());
-        return;
-    }
     m_d->rServer->removeResourceFromServer(cs);
     uploadPaletteList();
 }

@@ -25,7 +25,6 @@
 #ifndef KORESOURCESERVER_H
 #define KORESOURCESERVER_H
 
-#include <QMutex>
 #include <QString>
 #include <QStringList>
 #include <QList>
@@ -110,52 +109,17 @@ public:
             return false;
         }
 
-        if (save) {
-            QFileInfo fileInfo(resource->filename());
-
-            QDir d(fileInfo.path());
-            if (!d.exists()) {
-                d.mkdir(fileInfo.path());
-            }
-
-            if (fileInfo.exists()) {
-                QString filename = fileInfo.path() + "/" + fileInfo.baseName() + "XXXXXX" + "." + fileInfo.suffix();
-                debugWidgets << "fileName is " << filename;
-                QTemporaryFile file(filename);
-                if (file.open()) {
-                    debugWidgets << "now " << file.fileName();
-                    resource->setFilename(file.fileName());
-                }
-            }
-
-            if (!resource->save()) {
-                warnWidgets << "Could not save resource!";
-                return false;
-            }
+        if (m_resourceModel->addResource(resource, save)) {
+            notifyResourceAdded(resource);
+            return true;
         }
 
-        Q_ASSERT(!resource->filename().isEmpty() || !resource->name().isEmpty());
-        if (resource->filename().isEmpty()) {
-            resource->setFilename(resource->name());
-        }
-        else if (resource->name().isEmpty()) {
-            resource->setName(resource->filename());
-        }
-
-        notifyResourceAdded(resource);
-
-        return true;
+        return false;
     }
 
     /// Remove a resource from Resource Server but not from a file
     bool removeResourceFromServer(QSharedPointer<T> resource){
-        return true;
-    }
-
-    /// Remove a resource from the resourceserver and blacklist it
-
-    bool removeResourceAndBlacklist(QSharedPointer<T> resource) {
-        return true;
+        return m_resourceModel->removeResource(resource);
     }
 
     QList<QSharedPointer<T>> resources() {

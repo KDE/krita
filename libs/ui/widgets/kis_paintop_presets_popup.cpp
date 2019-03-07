@@ -324,7 +324,7 @@ void KisPaintOpPresetsPopup::slotBlackListCurrentPreset()
     KisPaintOpPresetSP curPreset = m_d->resourceProvider->currentPreset();
 
     if (rServer->resourceByName(curPreset->name())) {
-        rServer->removeResourceAndBlacklist(curPreset);
+        rServer->removeResourceFromServer(curPreset);
     }
 }
 
@@ -405,7 +405,7 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
 
     // Now blacklist the original file
     if (rServer->resourceByName(originalPresetName)) {
-        rServer->removeResourceAndBlacklist(curPreset);
+        rServer->removeResourceFromServer(curPreset);
     }
 
     m_d->favoriteResManager->setBlockUpdates(false);

@@ -286,7 +286,7 @@ bool GamutMaskDock::saveSelectedMaskResource()
 void GamutMaskDock::deleteMask()
 {
     KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
-    rServer->removeResourceAndBlacklist(m_selectedMask);
+    rServer->removeResourceFromServer(m_selectedMask);
     m_selectedMask = nullptr;
 }
 

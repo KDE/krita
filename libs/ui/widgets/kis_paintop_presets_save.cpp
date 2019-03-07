@@ -186,8 +186,9 @@ void KisPresetSaveWidget::savePreset()
         oldPreset->setValid(true);
 
         // add backup resource to the blacklist
-        rServer->addResource(oldPreset);
-        rServer->removeResourceAndBlacklist(oldPreset);
+        qDebug() << "Broken stuff going on in KisPresetSaveWidget::savePreset";
+//        rServer->addResource(oldPreset);
+//        rServer->removeResource(oldPreset);
 
 
         QStringList tags;
@@ -223,8 +224,9 @@ void KisPresetSaveWidget::savePreset()
     }
     else { // saving a preset that is replacing an existing one
 
+        qDebug() << "KisPresetSaveWidget::save: broken resource stuff going on. Manual blacklisting and updating or resources";
         if (curPreset->filename().contains(saveLocation) == false || curPreset->filename().contains(presetName) == false) {
-            rServer->removeResourceAndBlacklist(curPreset);
+            rServer->removeResourceFromServer(curPreset);
             curPreset->setFilename(currentPresetFileName);
             curPreset->setName(presetName);
         }
@@ -232,7 +234,6 @@ void KisPresetSaveWidget::savePreset()
         if (!rServer->resourceByFilename(curPreset->filename())){
             //this is necessary so that we can get the preset afterwards.
             rServer->addResource(curPreset, false);
-            //rServer->removeFromBlacklist(curPreset);
         }
         if (curPreset->image().isNull()) {
             curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());

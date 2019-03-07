@@ -387,10 +387,12 @@ void FilterEffectEditWidget::removeFromPresets()
     if (!presets->count()) {
         return;
     }
+
     FilterResourceServerProvider *serverProvider = FilterResourceServerProvider::instance();
     if (!serverProvider) {
         return;
     }
+
     KoResourceServer<FilterEffectResource> *server = serverProvider->filterEffectServer();
     if (!server) {
         return;
@@ -401,7 +403,7 @@ void FilterEffectEditWidget::removeFromPresets()
         return;
     }
 
-    server->removeResourceAndBlacklist(resource);
+    server->removeResourceFromServer(resource);
 }
 
 void FilterEffectEditWidget::presetSelected(KoResourceSP resource)

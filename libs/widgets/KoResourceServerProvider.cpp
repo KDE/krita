@@ -49,6 +49,9 @@ public:
 
     void insertSpecialGradients()
     {
+        qDebug() << "insertSpecialGradients broken because we don't have a list we can insert in front of anymore";
+
+
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
         QList<KoGradientStop> stops;
 
@@ -60,7 +63,7 @@ public:
         gradient->setStops(stops);
         gradient->setValid(true);
         gradient->setPermanent(true);
-        addResource(gradient, false, true);
+        addResource(gradient, false);
         m_foregroundToTransparent = gradient;
 
         gradient.reset(new KoStopGradient());
@@ -73,7 +76,7 @@ public:
         gradient->setStops(stops);
         gradient->setValid(true);
         gradient->setPermanent(true);
-        addResource(gradient, false, true);
+        addResource(gradient, false);
         m_foregroundToBackground = gradient;
     }
 

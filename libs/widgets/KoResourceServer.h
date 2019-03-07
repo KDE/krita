@@ -156,7 +156,7 @@ public:
     }
 
     /// Adds an already loaded resource to the server
-    bool addResource(QSharedPointer<T> resource, bool save = true, bool infront = false) {
+    bool addResource(QSharedPointer<T> resource, bool save = true) {
         if (!resource->valid()) {
             warnWidgets << "Tried to add an invalid resource!";
             return false;
@@ -197,12 +197,6 @@ public:
         m_resourcesByFilename[resource->shortFilename()] = resource;
         addResourceToMd5Registry(resource);
         m_resourcesByName[resource->name()] = resource;
-        if (infront) {
-            m_resources.insert(0, resource);
-        }
-        else {
-            m_resources.append(resource);
-        }
 
         notifyResourceAdded(resource);
 

@@ -56,7 +56,7 @@ KisConfig::KisConfig(bool readOnly)
     , m_readOnly(readOnly)
 {
     if (!readOnly) {
-        KIS_SAFE_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(qApp && qApp->thread() == QThread::currentThread());
     }
 }
 
@@ -64,7 +64,7 @@ KisConfig::~KisConfig()
 {
     if (m_readOnly) return;
 
-    if (qApp->thread() != QThread::currentThread()) {
+    if (qApp && qApp->thread() != QThread::currentThread()) {
         dbgKrita << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Called from:" << kisBacktrace();
         return;
     }

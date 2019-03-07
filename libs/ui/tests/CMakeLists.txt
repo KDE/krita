@@ -14,7 +14,6 @@ ecm_add_tests(
     kis_coordinates_converter_test.cpp
     kis_grid_config_test.cpp
     kis_stabilized_events_sampler_test.cpp
-    kis_derived_resources_test.cpp
     kis_brush_hud_properties_config_test.cpp
     kis_shape_commands_test.cpp
     kis_shape_layer_test.cpp
@@ -175,3 +174,8 @@ krita_add_broken_unit_test(
     NAME_PREFIX "libs-ui-")
 
 
+krita_add_broken_unit_test(
+    kis_derived_resources_test.cpp
+    TEST_NAME kis_derived_resources_test
+    LINK_LIBRARIES kritaui Qt5::Test
+    NAME_PREFIX "libs-ui-")

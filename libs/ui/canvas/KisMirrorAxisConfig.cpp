@@ -95,6 +95,9 @@ KisMirrorAxisConfig &KisMirrorAxisConfig::operator=(const KisMirrorAxisConfig &r
 
 bool KisMirrorAxisConfig::operator==(const KisMirrorAxisConfig &rhs) const
 {
+    KIS_ASSERT(d);
+    KIS_ASSERT(rhs.d);
+
     return *d == *rhs.d;
 }
 

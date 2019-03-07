@@ -73,16 +73,6 @@ public:
     bool saveToDevice(QIODevice* dev) const override;
 
     /**
-     * @brief install : Install the contents of the resource bundle.
-     */
-    bool install();
-
-    /**
-     * @brief uninstall : Uninstall the resource bundle.
-     */
-    bool uninstall();
-
-    /**
      * @brief addMeta : Add a Metadata to the resource
      * @param type type of the metadata
      * @param value value of the metadata
@@ -100,17 +90,6 @@ public:
     void addResource(QString fileType, QString filePath, QStringList fileTagList, const QByteArray md5sum);
 
     QList<QString> getTagsList();
-
-    /**
-     * @brief isInstalled
-     * @return true if the bundle is installed, false otherwise.
-     */
-    bool isInstalled();
-    /**
-     * @brief setInstalled
-     * This allows you to set installed or uninstalled upon loading. This is used with blacklists.
-     */
-    void setInstalled(bool install);
 
     void setThumbnail(QString);
 

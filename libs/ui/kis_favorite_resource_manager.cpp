@@ -34,6 +34,7 @@
 #include "kis_min_heap.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
+#include <kis_paintop_preset.h>
 
 class KisFavoriteResourceManager::ColorDataList
 {
@@ -323,13 +324,13 @@ void KisFavoriteResourceManager::updateFavoritePresets()
 {
 
     m_favoritePresetsList.clear();
-    KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    QStringList presetFilenames = rServer->searchTag(m_currentTag);
-    for(int i = 0; i < qMin(m_maxPresets, presetFilenames.size()); i++) {
-        KisPaintOpPresetSP pr = rServer->resourceByFilename(presetFilenames.at(i));
-        m_favoritePresetsList.append(pr);
-        std::sort(m_favoritePresetsList.begin(), m_favoritePresetsList.end(), sortPresetByName);
-    }
+//    KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+//    QStringList presetFilenames = rServer->searchTag(m_currentTag);
+//    for(int i = 0; i < qMin(m_maxPresets, presetFilenames.size()); i++) {
+//        KisPaintOpPresetSP pr = rServer->resourceByFilename(presetFilenames.at(i));
+//        m_favoritePresetsList.append(pr);
+//        std::sort(m_favoritePresetsList.begin(), m_favoritePresetsList.end(), sortPresetByName);
+//    }
     emit updatePalettes();
 }
 

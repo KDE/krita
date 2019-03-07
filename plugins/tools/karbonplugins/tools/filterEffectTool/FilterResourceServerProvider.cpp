@@ -38,7 +38,6 @@ FilterResourceServerProvider::FilterResourceServerProvider()
     if (!QFileInfo(m_filterEffectServer->saveLocation()).exists()) {
         QDir().mkpath(m_filterEffectServer->saveLocation());
     }
-    m_filterEffectServer->loadTags();
 }
 
 FilterResourceServerProvider::~FilterResourceServerProvider()

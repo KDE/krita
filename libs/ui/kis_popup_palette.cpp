@@ -18,29 +18,30 @@
    Boston, MA 02110-1301, USA.
 
 */
+#include <QtGui>
+#include <QMenu>
+#include <QWhatsThis>
+#include <QVBoxLayout>
+#include <QElapsedTimer>
+
+#include <KisTagModel.h>
 
 #include "kis_canvas2.h"
 #include "kis_config.h"
 #include "kis_popup_palette.h"
 #include "kis_favorite_resource_manager.h"
 #include "kis_icon_utils.h"
-#include "KisResourceServerProvider.h"
 #include <kis_canvas_resource_provider.h>
 #include <KoTriangleColorSelector.h>
 #include <KisVisualColorSelector.h>
 #include <kis_config_notifier.h>
-#include <QtGui>
-#include <QMenu>
-#include <QWhatsThis>
-#include <QVBoxLayout>
-#include <QElapsedTimer>
 #include "kis_signal_compressor.h"
 #include "brushhud/kis_brush_hud.h"
 #include "brushhud/kis_round_hud_button.h"
 #include "kis_signals_blocker.h"
 #include "kis_canvas_controller.h"
 #include "kis_acyclic_signal_connector.h"
-
+#include <kis_paintop_preset.h>
 
 class PopupColorTriangle : public KoTriangleColorSelector
 {
@@ -776,24 +777,31 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
 
 void KisPopupPalette::slotShowTagsPopup()
 {
-    KisPaintOpPresetResourceServer *rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    QStringList tags = rServer->tagNamesList();
-    std::sort(tags.begin(), tags.end());
+//    KisTagModel *model = new KisTagModel(ResourceType::PaintOpPresets);
+//    QSet<QString> tags;
+//    for (int i = 0; i < model.rowCount(); ++i) {
+//        QModelIndex idx = model.index(i, 0);
+//        tags << model.data(idx, Qt::DisplayRole).toString();
+//    }
 
-    if (!tags.isEmpty()) {
-        QMenu menu;
-        Q_FOREACH (const QString& tag, tags) {
-            menu.addAction(tag);
-        }
+//    std::sort(tags.begin(), tags.end());
 
-        QAction *action = menu.exec(QCursor::pos());
-        if (action) {
-            m_resourceManager->setCurrentTag(action->text());
-        }
-    } else {
-        QWhatsThis::showText(QCursor::pos(),
-                             i18n("There are no tags available to show in this popup. To add presets, you need to tag them and then select the tag here."));
-    }
+//    if (!tags.isEmpty()) {
+//        QMenu menu;
+//        Q_FOREACH (const QString& tag, tags) {
+//            menu.addAction(tag);
+//        }
+
+//        QAction *action = menu.exec(QCursor::pos());
+//        if (action) {
+//            m_resourceManager->setCurrentTag(action->text());
+//        }
+//    } else {
+//        QWhatsThis::showText(QCursor::pos(),
+//                             i18n("There are no tags available to show in this popup. To add presets, you need to tag them and then select the tag here."));
+//    }
+
+//    delete model;
 }
 
 void KisPopupPalette::slotZoomToOneHundredPercentClicked() {

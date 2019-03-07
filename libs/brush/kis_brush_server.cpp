@@ -77,7 +77,7 @@ public:
 private:
 
     ///Reimplemented
-    QList<KisBrushSP> createResources(const QString & filename) override {
+    QList<KisBrushSP> createResources(const QString & filename) {
         QList<KisBrushSP> brushes;
 
         QString fileExtension = QFileInfo(filename).suffix().toLower();

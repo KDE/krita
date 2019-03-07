@@ -36,7 +36,6 @@
 #include <QDomDocument>
 #include "KoResource.h"
 #include "KoResourceServerObserver.h"
-#include "KoResourceTagStore.h"
 #include "KoResourcePaths.h"
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
@@ -69,18 +68,10 @@ public:
     virtual ~KoResourceServerBase() {}
 
     virtual int resourceCount() const = 0;
-    virtual QStringList queryResources(const QString &query) const = 0;
-    QString type() const { return m_type; }
 
 protected:
 
     KisResourceModel *m_resourceModel {0};
-
-    friend class KoResourceTagStore;
-    virtual KoResourceSP byMd5(const QByteArray &md5) const = 0;
-    virtual KoResourceSP byFileName(const QString &fileName) const = 0;
-
-private:
     QString m_type;
 };
 
@@ -99,32 +90,17 @@ public:
     KoResourceServer(const QString& type)
         : KoResourceServerBase(type)
     {
-        m_blackListFile = KoResourcePaths::locateLocal("data", type + ".blacklist");
-        m_tagStore = new KoResourceTagStore(this);
     }
 
     ~KoResourceServer() override
     {
-        if (m_tagStore) {
-            delete m_tagStore;
-        }
-
         Q_FOREACH (ObserverType* observer, m_observers) {
             observer->unsetResourceServer();
         }
-        m_resources.clear();
     }
 
     int resourceCount() const override {
         return m_resourceModel->rowCount();
-    }
-
-    void loadTags() {
-        m_tagStore->loadTags();
-    }
-
-    void clearOldSystemTags() {
-        m_tagStore->clearOldSystemTags();
     }
 
     /// Adds an already loaded resource to the server
@@ -166,10 +142,6 @@ public:
             resource->setName(resource->filename());
         }
 
-        m_resourcesByFilename[resource->shortFilename()] = resource;
-        addResourceToMd5Registry(resource);
-        m_resourcesByName[resource->name()] = resource;
-
         notifyResourceAdded(resource);
 
         return true;
@@ -177,32 +149,12 @@ public:
 
     /// Remove a resource from Resource Server but not from a file
     bool removeResourceFromServer(QSharedPointer<T> resource){
-        if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
-            return false;
-        }
-        removeResourceFromMd5Registry(resource);
-        m_resourcesByName.remove(resource->name());
-        m_resourcesByFilename.remove(resource->shortFilename());
-        m_resources.removeAt(m_resources.indexOf(resource));
-        m_tagStore->removeResource(resource);
-        notifyRemovingResource(resource);
-
         return true;
     }
 
     /// Remove a resource from the resourceserver and blacklist it
 
     bool removeResourceAndBlacklist(QSharedPointer<T> resource) {
-
-        if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
-            return false;
-        }
-        removeResourceFromMd5Registry(resource);
-        m_resourcesByName.remove(resource->name());
-        m_resourcesByFilename.remove(resource->shortFilename());
-        m_resources.removeAt(m_resources.indexOf(resource));
-        m_tagStore->removeResource(resource);
-        notifyRemovingResource(resource);
         return true;
     }
 
@@ -216,7 +168,7 @@ public:
 
     /// Returns path where to save user defined and imported resources to
     virtual QString saveLocation() {
-        return KoResourcePaths::saveLocation(type().toLatin1());
+        return KoResourcePaths::saveLocation(m_type.toLatin1());
     }
 
     /**
@@ -284,10 +236,10 @@ public:
             m_observers.append(observer);
 
             if(notifyLoadedResources) {
-                Q_FOREACH (QSharedPointer<T> resource, m_resourcesByFilename) {
-                    observer->resourceAdded(resource);
+//                Q_FOREACH (QSharedPointer<T> resource, ByFilename) {
+//                    observer->resourceAdded(resource);
 
-                }
+//                }
             }
         }
     }
@@ -337,85 +289,35 @@ public:
         notifyResourceChanged(resource);
     }
 
-    QStringList tagNamesList() const
-    {
-        return m_tagStore->tagNamesList();
-    }
 
     // don't use these method directly since it doesn't update views!
     void addTag(KoResourceSP resource, const QString& tag)
     {
-        m_tagStore->addTag(resource, tag);
+//        m_tagStore->addTag(resource, tag);
     }
 
     // don't use these method directly since it doesn't update views!
     void delTag(KoResourceSP resource, const QString& tag)
     {
-        m_tagStore->delTag(resource, tag);
+//        m_tagStore->delTag(resource, tag);
     }
 
-    QStringList searchTag(const QString& lineEditText)
-    {
-        return m_tagStore->searchTag(lineEditText);
-    }
-
-    void tagCategoryAdded(const QString& tag)
-    {
-        m_tagStore->serializeTags();
-        Q_FOREACH (ObserverType* observer, m_observers) {
-            observer->syncTagAddition(tag);
-        }
-    }
-
-    void tagCategoryRemoved(const QString& tag)
-    {
-        m_tagStore->delTag(tag);
-        m_tagStore->serializeTags();
-        Q_FOREACH (ObserverType* observer, m_observers) {
-            observer->syncTagRemoval(tag);
-        }
-    }
-
-    void tagCategoryMembersChanged()
-    {
-        m_tagStore->serializeTags();
-        Q_FOREACH (ObserverType* observer, m_observers) {
-            observer->syncTaggedResourceView();
-        }
-    }
-
-    QStringList queryResources(const QString &query) const override
-    {
-        return m_tagStore->searchTag(query);
-    }
 
     QStringList assignedTagsList(KoResourceSP resource) const
     {
-        return m_tagStore->assignedTagsList(resource);
+        return QStringList(); //m_tagStore->assignedTagsList(resource);
     }
 
 
-    /**
-     * Create one or more resources from a single file. By default one resource is created.
-     * Override to create more resources from the file.
-     * @param filename the filename of the resource or resource collection
-     */
-    virtual QList<QSharedPointer<T>> createResources( const QString & filename )
-    {
-        QList<QSharedPointer<T>> createdResources;
-        createdResources.append(createResource(filename));
-        return createdResources;
-    }
-
-    virtual QSharedPointer<T> createResource( const QString & filename ) = 0;
+    virtual QSharedPointer<T> createResource(const QString & filename) = 0;
 
     /// Return the currently stored resources in alphabetical order, overwrite for customized sorting
     virtual QList<QSharedPointer<T>> sortedResources()
     {
         QMap<QString, QSharedPointer<T>> sortedNames;
-        Q_FOREACH (const QString &name, m_resourcesByName.keys()) {
-            sortedNames.insert(name.toLower(), m_resourcesByName[name]);
-        }
+//        Q_FOREACH (const QString &name, m_resourcesByName.keys()) {
+//            sortedNames.insert(name.toLower(), m_resourcesByName[name]);
+//        }
         return sortedNames.values();
     }
 
@@ -442,89 +344,9 @@ protected:
         }
     }
 
-    /// Reads the xml file and returns the filenames as a list
-    QStringList readBlackListFile()
-    {
-        QStringList filenameList;
-
-        QFile f(m_blackListFile);
-        if (!f.open(QIODevice::ReadOnly)) {
-            return filenameList;
-        }
-
-        QDomDocument doc;
-        if (!doc.setContent(&f)) {
-            warnWidgets << "The file could not be parsed.";
-            return filenameList;
-        }
-
-        QDomElement root = doc.documentElement();
-        if (root.tagName() != "resourceFilesList") {
-            warnWidgets << "The file doesn't seem to be of interest.";
-            return filenameList;
-        }
-
-        QDomElement file = root.firstChildElement("file");
-
-        while (!file.isNull()) {
-            QDomNode n = file.firstChild();
-            QDomElement e = n.toElement();
-            if (e.tagName() == "name") {
-                // If the krita bundle has landed in the blacklist, skip it.
-                if (type() == "kis_resourcebundles") {
-//                    qDebug() << "Checking for not reading bundle" << e.text();
-                    if (e.text().endsWith("Krita_3_Default_Resources.bundle")) {
-                        file = file.nextSiblingElement("file");
-                    }
-                }
-                filenameList.append(e.text().replace(QString("~"), QDir::homePath()));
-            }
-            file = file.nextSiblingElement("file");
-        }
-//        if (type() == "kis_resourcebundles") {
-//            qDebug() << "Read bundle blacklist" << filenameList;
-//        }
-        return filenameList;
-    }
-
-protected:
-
-    KoResourceSP byMd5(const QByteArray &/*md5*/) const override
-    {
-        return 0;//Policy::toResourcePointer(resourceByMD5(md5));
-    }
-
-    KoResourceSP byFileName(const QString &/*fileName*/) const override
-    {
-        return 0;//Policy::toResourcePointer(resourceByFilename(fileName));
-    }
-
-private:
-    void addResourceToMd5Registry(QSharedPointer<T> resource) {
-        const QByteArray md5 = resource->md5();
-        if (!md5.isEmpty()) {
-            m_resourcesByMd5.insert(md5, resource);
-        }
-    }
-
-    void removeResourceFromMd5Registry(QSharedPointer<T> resource) {
-        const QByteArray md5 = resource->md5();
-        if (!md5.isEmpty()) {
-            m_resourcesByMd5.remove(md5);
-        }
-    }
-
 private:
 
-    QHash<QString, QSharedPointer<T>> m_resourcesByName;
-    QHash<QString, QSharedPointer<T>> m_resourcesByFilename;
-    QHash<QByteArray, QSharedPointer<T>> m_resourcesByMd5;
-
-    QList<QSharedPointer<T>> m_resourceBlackList;
-    QList<QSharedPointer<T>> m_resources; ///< list of resources in order of addition
     QList<ObserverType*> m_observers;
-    QString m_blackListFile;
-    KoResourceTagStore* m_tagStore;
 
 };
 

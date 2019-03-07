@@ -94,112 +94,112 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
 
 void DlgBundleManager::refreshListData()
 {
-    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
+//    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
 
-    m_ui->listInactive->clear();
-    m_ui->listActive->clear();
+//    m_ui->listInactive->clear();
+//    m_ui->listActive->clear();
 
-    Q_FOREACH (const QString &f, bundleServer->blackListedFiles()) {
-        KisResourceBundleSP bundle(new KisResourceBundle(f));
-        bundle->load();
-        if (bundle->valid()) {
-            bundle->setInstalled(false);
-            m_blacklistedBundles[f] = bundle;
-        }
-    }
-    fillListWidget(m_blacklistedBundles.values(), m_ui->listInactive);
+//    Q_FOREACH (const QString &f, bundleServer->blackListedFiles()) {
+//        KisResourceBundleSP bundle(new KisResourceBundle(f));
+//        bundle->load();
+//        if (bundle->valid()) {
+//            bundle->setInstalled(false);
+//            m_blacklistedBundles[f] = bundle;
+//        }
+//    }
+//    fillListWidget(m_blacklistedBundles.values(), m_ui->listInactive);
 
-    Q_FOREACH (KisResourceBundleSP bundle, bundleServer->resources()) {
-        if (bundle->valid()) {
-            m_activeBundles[bundle->filename()] = bundle;
-        }
-    }
-    fillListWidget(m_activeBundles.values(), m_ui->listActive);
+//    Q_FOREACH (KisResourceBundleSP bundle, bundleServer->resources()) {
+//        if (bundle->valid()) {
+//            m_activeBundles[bundle->filename()] = bundle;
+//        }
+//    }
+//    fillListWidget(m_activeBundles.values(), m_ui->listActive);
 }
 
 void DlgBundleManager::accept()
 {
-    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
+//    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
 
-    for (int i = 0; i < m_ui->listActive->count(); ++i) {
-        QListWidgetItem *item = m_ui->listActive->item(i);
-        QByteArray ba = item->data(Qt::UserRole).toByteArray();
-        QString name = item->text();
-        KisResourceBundleSP bundle = bundleServer->resourceByMD5(ba);
-        QMessageBox bundleFeedback;
-        bundleFeedback.setIcon(QMessageBox::Warning);
-        QString feedback = "bundlefeedback";
+//    for (int i = 0; i < m_ui->listActive->count(); ++i) {
+//        QListWidgetItem *item = m_ui->listActive->item(i);
+//        QByteArray ba = item->data(Qt::UserRole).toByteArray();
+//        QString name = item->text();
+//        KisResourceBundleSP bundle = bundleServer->resourceByMD5(ba);
+//        QMessageBox bundleFeedback;
+//        bundleFeedback.setIcon(QMessageBox::Warning);
+//        QString feedback = "bundlefeedback";
 
-        if (!bundle) {
-            // Get it from the blacklisted bundles
-            Q_FOREACH (KisResourceBundleSP b2, m_blacklistedBundles.values()) {
-                if (b2->md5() == ba) {
-                    bundle = b2;
-                    break;
-                }
-            }
-        }
+//        if (!bundle) {
+//            // Get it from the blacklisted bundles
+//            Q_FOREACH (KisResourceBundleSP b2, m_blacklistedBundles.values()) {
+//                if (b2->md5() == ba) {
+//                    bundle = b2;
+//                    break;
+//                }
+//            }
+//        }
 
-        if (bundle) {
-            bool isKrita3Bundle = false;
-            if (bundle->filename().endsWith("Krita_3_Default_Resources.bundle")) {
-                isKrita3Bundle = true;
-                KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
-                group.writeEntry("HideKrita3Bundle", false);
-            }
-            else {
-                if (!bundle->isInstalled()) {
-                    bundle->install();
-                    //this removes the bundle from the blacklist and add it to the server without saving or putting it in front//
-                    if (!bundleServer->addResource(bundle, false, false)){
+//        if (bundle) {
+//            bool isKrita3Bundle = false;
+//            if (bundle->filename().endsWith("Krita_3_Default_Resources.bundle")) {
+//                isKrita3Bundle = true;
+//                KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
+//                group.writeEntry("HideKrita3Bundle", false);
+//            }
+//            else {
+//                if (!bundle->isInstalled()) {
+//                    bundle->install();
+//                    //this removes the bundle from the blacklist and add it to the server without saving or putting it in front//
+//                    if (!bundleServer->addResource(bundle, false)){
 
-                        feedback = i18n("Couldn't add bundle \"%1\" to resource server", name);
-                        bundleFeedback.setText(feedback);
-                        bundleFeedback.exec();
-                    }
-                    if (!isKrita3Bundle) {
-                        if (!bundleServer->removeFromBlacklist(bundle)) {
-                            feedback = i18n("Couldn't remove bundle \"%1\" from blacklist", name);
-                            bundleFeedback.setText(feedback);
-                            bundleFeedback.exec();
-                        }
-                    }
-                }
-                else {
-                    if (!isKrita3Bundle) {
-                        bundleServer->removeFromBlacklist(bundle);
-                    }
-                    //let's assume that bundles that exist and are installed have to be removed from the blacklist, and if they were already this returns false, so that's not a problem.
-                }
-            }
-        }
-        else{
-            QString feedback = i18n("Bundle \"%1\" doesn't exist!", name);
-            bundleFeedback.setText(feedback);
-            bundleFeedback.exec();
+//                        feedback = i18n("Couldn't add bundle \"%1\" to resource server", name);
+//                        bundleFeedback.setText(feedback);
+//                        bundleFeedback.exec();
+//                    }
+//                    if (!isKrita3Bundle) {
+//                        if (!bundleServer->removeFromBlacklist(bundle)) {
+//                            feedback = i18n("Couldn't remove bundle \"%1\" from blacklist", name);
+//                            bundleFeedback.setText(feedback);
+//                            bundleFeedback.exec();
+//                        }
+//                    }
+//                }
+//                else {
+//                    if (!isKrita3Bundle) {
+//                        bundleServer->removeFromBlacklist(bundle);
+//                    }
+//                    //let's assume that bundles that exist and are installed have to be removed from the blacklist, and if they were already this returns false, so that's not a problem.
+//                }
+//            }
+//        }
+//        else{
+//            QString feedback = i18n("Bundle \"%1\" doesn't exist!", name);
+//            bundleFeedback.setText(feedback);
+//            bundleFeedback.exec();
 
-        }
-    }
+//        }
+//    }
 
-    for (int i = 0; i < m_ui->listInactive->count(); ++i) {
-        QListWidgetItem *item = m_ui->listInactive->item(i);
-        QByteArray ba = item->data(Qt::UserRole).toByteArray();
-        KisResourceBundleSP bundle = bundleServer->resourceByMD5(ba);
-        bool isKrits3Bundle = false;
-        if (bundle) {
-            if (bundle->filename().contains("Krita_3_Default_Resources.bundle")) {
-                isKrits3Bundle = true;
-                KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
-                group.writeEntry("HideKrita3Bundle", true);
-            }
-            if (bundle->isInstalled()) {
-                bundle->uninstall();
-                if (!isKrits3Bundle) {
-                    bundleServer->removeResourceAndBlacklist(bundle);
-                }
-            }
-        }
-    }
+//    for (int i = 0; i < m_ui->listInactive->count(); ++i) {
+//        QListWidgetItem *item = m_ui->listInactive->item(i);
+//        QByteArray ba = item->data(Qt::UserRole).toByteArray();
+//        KisResourceBundleSP bundle = bundleServer->resourceByMD5(ba);
+//        bool isKrits3Bundle = false;
+//        if (bundle) {
+//            if (bundle->filename().contains("Krita_3_Default_Resources.bundle")) {
+//                isKrits3Bundle = true;
+//                KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
+//                group.writeEntry("HideKrita3Bundle", true);
+//            }
+//            if (bundle->isInstalled()) {
+//                bundle->uninstall();
+//                if (!isKrits3Bundle) {
+//                    bundleServer->removeResourceAndBlacklist(bundle);
+//                }
+//            }
+//        }
+//    }
 
 
     KoDialog::accept();
@@ -239,8 +239,8 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
     else {
 
         QByteArray ba = current->data(Qt::UserRole).toByteArray();
-        KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
-        KisResourceBundleSP bundle = bundleServer->resourceByMD5(ba);
+//        KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
+        KisResourceBundleSP bundle; // = bundleServer->resourceByMD5(ba);
 
         if (!bundle) {
             // Get it from the blacklisted bundles

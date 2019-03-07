@@ -231,7 +231,7 @@ void KisPresetSaveWidget::savePreset()
 
         if (!rServer->resourceByFilename(curPreset->filename())){
             //this is necessary so that we can get the preset afterwards.
-            rServer->addResource(curPreset, false, false);
+            rServer->addResource(curPreset, false);
             rServer->removeFromBlacklist(curPreset);
         }
         if (curPreset->image().isNull()) {

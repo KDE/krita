@@ -357,7 +357,6 @@ bool KisApplication::registerResources()
 
     setSplashScreenLoadingText(i18n("Loading Bundles..."));
     processEvents();
-    KisResourceBundleServerProvider::instance();
 
     return true;
 }

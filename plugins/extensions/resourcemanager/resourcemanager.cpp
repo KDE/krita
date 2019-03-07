@@ -211,14 +211,14 @@ KisResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreate
     }
     else {
         newBundle->setValid(true);
-        if (QDir(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation()) != QDir(QFileInfo(bundlePath).path())) {
-            newBundle->setFilename(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle");
-        }
-        if (KisResourceBundleServerProvider::instance()->resourceBundleServer()->resourceByName(newBundle->name())) {
-            KisResourceBundleServerProvider::instance()->resourceBundleServer()->removeResourceFromServer(
-                        KisResourceBundleServerProvider::instance()->resourceBundleServer()->resourceByName(newBundle->name()));
-        }
-        KisResourceBundleServerProvider::instance()->resourceBundleServer()->addResource(newBundle, true);
+//        if (QDir(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation()) != QDir(QFileInfo(bundlePath).path())) {
+//            newBundle->setFilename(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle");
+//        }
+//        if (KisResourceBundleServerProvider::instance()->resourceBundleServer()->resourceByName(newBundle->name())) {
+//            KisResourceBundleServerProvider::instance()->resourceBundleServer()->removeResourceFromServer(
+//                        KisResourceBundleServerProvider::instance()->resourceBundleServer()->resourceByName(newBundle->name()));
+//        }
+//        KisResourceBundleServerProvider::instance()->resourceBundleServer()->addResource(newBundle, true);
         newBundle->load();
     }
 
@@ -273,32 +273,32 @@ void ResourceManager::slotImportGradients()
 
 void ResourceManager::slotImportBundles()
 {
-    QStringList resources = importResources(i18n("Import Bundles"), QStringList() << "application/x-krita-bundle");
-    Q_FOREACH (const QString &res, resources) {
-        KisResourceBundleSP bundle = KisResourceBundleServerProvider::instance()->resourceBundleServer()->createResource(res);
-        bundle->load();
-        if (bundle->valid()) {
-            if (!bundle->install()) {
-                QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not install the resources for bundle %1.", res));
-            }
-        }
-        else {
-            QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not load bundle %1.", res));
-        }
+//    QStringList resources = importResources(i18n("Import Bundles"), QStringList() << "application/x-krita-bundle");
+//    Q_FOREACH (const QString &res, resources) {
+//        KisResourceBundleSP bundle = KisResourceBundleServerProvider::instance()->resourceBundleServer()->createResource(res);
+//        bundle->load();
+//        if (bundle->valid()) {
+//            if (!bundle->install()) {
+//                QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not install the resources for bundle %1.", res));
+//            }
+//        }
+//        else {
+//            QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not load bundle %1.", res));
+//        }
 
-        QFileInfo fi(res);
-        QString newFilename = KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + bundle->defaultFileExtension();
-        QFileInfo fileInfo(newFilename);
+//        QFileInfo fi(res);
+//        QString newFilename = KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + bundle->defaultFileExtension();
+//        QFileInfo fileInfo(newFilename);
 
-        int i = 1;
-        while (fileInfo.exists()) {
-            fileInfo.setFile(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
-            i++;
-        }
-        bundle->setFilename(fileInfo.filePath());
-        QFile::copy(res, newFilename);
-        KisResourceBundleServerProvider::instance()->resourceBundleServer()->addResource(bundle, false);
-    }
+//        int i = 1;
+//        while (fileInfo.exists()) {
+//            fileInfo.setFile(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
+//            i++;
+//        }
+//        bundle->setFilename(fileInfo.filePath());
+//        QFile::copy(res, newFilename);
+//        KisResourceBundleServerProvider::instance()->resourceBundleServer()->addResource(bundle, false);
+//    }
 }
 
 void ResourceManager::slotImportPatterns()

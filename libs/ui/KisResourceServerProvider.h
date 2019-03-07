@@ -24,7 +24,6 @@
 #define KIS_RESOURCESERVERPROVIDER_H_
 
 #include <KoResourceServer.h>
-#include <KisResourceBundleServerProvider.h>
 
 #include <brushengine/kis_paintop_preset.h>
 

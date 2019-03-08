@@ -198,8 +198,8 @@ else( APPLE )
         LOG_INSTALL         ON
         BUILD_IN_SOURCE     ON
 
-       URL https://download.qt.io/archive/qt/5.12/5.12.1/single/qt-everywhere-src-5.12.1.zip
-       URL_HASH SHA1=5ba3e56475912e8784f825fd8d0d139ec5eca8b3
+       URL https://download.qt.io/archive/qt/5.12/5.12.1/single/qt-everywhere-src-5.12.1.tar.xz
+       URL_HASH MD5=6a37466c8c40e87d4a19c3f286ec2542
 
         INSTALL_DIR ${EXTPREFIX_qt}
         CONFIGURE_COMMAND <SOURCE_DIR>/configure

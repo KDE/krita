@@ -45,9 +45,6 @@ public:
     using KoCreatePathTool::cancelPath;
     using KoCreatePathTool::removeLastPoint;
 
-protected:
-    void paintOutline(QPainter *painter, const QPainterPath &path, qreal width);
-
 private:
     KisToolSelectMagnetic* const m_selectionTool;
 };
@@ -65,9 +62,11 @@ struct KisDelegatedSelectMagneticWrapper : public DelegatedSelectMagneticTool {
 
     // If an event is explicitly forwarded only as an action (e.g. shift-click is captured by "change size")
     // we will receive a primary action but no mousePressEvent.  Thus these events must be explicitly forwarded.
-    void beginPrimaryAction(KoPointerEvent *event) override;
-    void continuePrimaryAction(KoPointerEvent *event) override;
-    void endPrimaryAction(KoPointerEvent *event) override;
+    void beginPrimaryAction(KoPointerEvent *event) override { mousePressEvent(event); }
+
+    void continuePrimaryAction(KoPointerEvent *event) override { mouseMoveEvent(event); }
+
+    void endPrimaryAction(KoPointerEvent *event) override { mouseReleaseEvent(event); }
 
     bool hasUserInteractionRunning() const;
 };

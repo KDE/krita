@@ -52,8 +52,6 @@ public:
     void resetCursorStyle();
 };
 
-
-
 class KisToolSelectPolygonalFactory : public KisSelectionToolFactoryBase
 {
 public:

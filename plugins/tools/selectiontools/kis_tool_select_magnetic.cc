@@ -33,7 +33,7 @@
 
 KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase * canvas)
     : KisToolSelectBase<KisDelegatedSelectMagneticWrapper>(canvas,
-                                                       KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
+                                                       KisCursor::load("tool_magnetic_selection_cursor.svg", 0, 0),
                                                        i18n("Select path"),
                                                            (KisTool*) (new __KisToolSelectMagneticLocalTool(canvas, this)))
 {
@@ -90,18 +90,6 @@ QList<QPointer<QWidget> > KisToolSelectMagnetic::createOptionWidgets()
     return filteredWidgets;
 }
 
-void KisDelegatedSelectMagneticWrapper::beginPrimaryAction(KoPointerEvent *event) {
-    mousePressEvent(event);
-}
-
-void KisDelegatedSelectMagneticWrapper::continuePrimaryAction(KoPointerEvent *event){
-    mouseMoveEvent(event);
-}
-
-void KisDelegatedSelectMagneticWrapper::endPrimaryAction(KoPointerEvent *event) {
-    mouseReleaseEvent(event);
-}
-
 bool KisDelegatedSelectMagneticWrapper::hasUserInteractionRunning() const
 {
     /**
@@ -135,11 +123,7 @@ void __KisToolSelectMagneticLocalTool::paintPath(KoPathShape &pathShape, QPainte
     qreal zoomX, zoomY;
     kisCanvas->viewConverter()->zoom(&zoomX, &zoomY);
     Q_ASSERT(qFuzzyCompare(zoomX, zoomY));
-
-    qreal width = 25*2;
-    width *= zoomX/(kisCanvas->image()->xRes());
-
-    paintOutline(&painter, m_selectionTool->pixelToView(matrix.map(pathShape.outline())), width);
+    m_selectionTool->paintToolOutline(&painter, m_selectionTool->pixelToView(matrix.map(pathShape.outline())));
 }
 
 void __KisToolSelectMagneticLocalTool::addPathShape(KoPathShape* pathShape)
@@ -184,16 +168,6 @@ void __KisToolSelectMagneticLocalTool::addPathShape(KoPathShape* pathShape)
     } else {
         helper.addSelectionShape(pathShape, m_selectionTool->selectionAction());
     }
-}
-
-void __KisToolSelectMagneticLocalTool::paintOutline(QPainter *painter, const QPainterPath &path, qreal width)
-{
-    painter->save();
-    painter->setOpacity(.3);
-    painter->setPen(QPen(QColor(128, 128, 128), width));
-    painter->drawPath(path);
-    m_selectionTool->updateCanvasViewRect(path.controlPointRect().adjusted(-width, -width, width, width));
-    painter->restore();
 }
 
 void KisToolSelectMagnetic::resetCursorStyle()

@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-class TestKoColorSpaceRegistry : public QObject
+class TestColorSpaceRegistry : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:

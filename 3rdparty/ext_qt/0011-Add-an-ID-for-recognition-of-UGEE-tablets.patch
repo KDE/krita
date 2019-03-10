@@ -1,0 +1,27 @@
+From 421860a79b6cab0ca67884314aadd9a2e2ece55f Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sun, 10 Mar 2019 14:51:28 +0300
+Subject: [PATCH] Add an ID for recognition of UGEE tablets
+
+---
+ src/plugins/platforms/xcb/qxcbconnection_xi2.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/plugins/platforms/xcb/qxcbconnection_xi2.cpp b/src/plugins/platforms/xcb/qxcbconnection_xi2.cpp
+index 8b79f2d..b8a83ba 100644
+--- a/src/plugins/platforms/xcb/qxcbconnection_xi2.cpp
++++ b/src/plugins/platforms/xcb/qxcbconnection_xi2.cpp
+@@ -240,6 +240,10 @@ void QXcbConnection::xi2SetupDevice(void *info, bool removeExisting)
+     } else if (name.contains("uc-logic") && isTablet) {
+         tabletData.pointerType = QTabletEvent::Pen;
+         dbgType = QLatin1String("pen");
++    } else if (name.contains("ugee")) {
++        isTablet = true;
++        tabletData.pointerType = QTabletEvent::Pen;
++        dbgType = QLatin1String("pen");
+     } else {
+         isTablet = false;
+     }
+-- 
+2.7.4
+

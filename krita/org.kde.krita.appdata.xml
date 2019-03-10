@@ -18,6 +18,7 @@
   <developer_name xml:lang="id">Asas Krita</developer_name>
   <developer_name xml:lang="it">Fondazione Krita</developer_name>
   <developer_name xml:lang="nl">Krita Foundation</developer_name>
+  <developer_name xml:lang="nn">Krita Foundation</developer_name>
   <developer_name xml:lang="pl">Fundacja Krity</developer_name>
   <developer_name xml:lang="pt">Fundação do Krita</developer_name>
   <developer_name xml:lang="pt-BR">Krita Foundation</developer_name>
@@ -41,6 +42,7 @@
   <name xml:lang="id">Krita</name>
   <name xml:lang="it">Krita</name>
   <name xml:lang="nl">Krita</name>
+  <name xml:lang="nn">Krita</name>
   <name xml:lang="pl">Krita</name>
   <name xml:lang="pt">Krita</name>
   <name xml:lang="pt-BR">Krita</name>
@@ -71,6 +73,7 @@
   <summary xml:lang="id">Pelukisan Digital, Kebebasan Berkreatif</summary>
   <summary xml:lang="it">Pittura digitale, libertà creativa</summary>
   <summary xml:lang="nl">Digital Painting, Creative Freedom</summary>
+  <summary xml:lang="nn">Digital teikning – kreativ fridom</summary>
   <summary xml:lang="pl">Cyfrowe malowanie, Wolność Twórcza</summary>
   <summary xml:lang="pt">Pintura Digital, Liberdade Criativa</summary>
   <summary xml:lang="pt-BR">Pintura digital, liberdade criativa</summary>
@@ -101,6 +104,7 @@
     <p xml:lang="it">Krita è uno studio d'arte digitale completo.</p>
     <p xml:lang="ja">Krita は、フル機能を備えたデジタルなアートスタジオです。</p>
     <p xml:lang="nl">Krita is de digitale kunststudio vol mogelijkheden.</p>
+    <p xml:lang="nn">Krita er ei funksjonsrik digital teiknestove.</p>
     <p xml:lang="pl">Krita jest pełnowymiarowym, cyfrowym studiem artystycznym</p>
     <p xml:lang="pt">O Krita é o estúdio de arte digital completo.</p>
     <p xml:lang="pt-BR">O Krita é o estúdio de arte digital completo.</p>
@@ -127,6 +131,7 @@
     <p xml:lang="id">Ini adalah sempurna untuk mensketsa dan melukis, dan menghadirkan sebuah solusi untuk menciptakan file-file pelukisan digital dari goresan si pelukis ulung.</p>
     <p xml:lang="it">Perfetto per fare schizzi e dipingere, prevede una soluzione completa che consente agli artisti di creare file di dipinti digitali partendo da zero.</p>
     <p xml:lang="nl">Het is perfect voor schetsen en schilderen en zet een end–to–end oplossing voor het maken van digitale bestanden voor schilderingen vanuit het niets door meesters.</p>
+    <p xml:lang="nn">Passar perfekt for både teikning og måling, og dekkjer alle ledd i prosessen med å laga digitale målerifiler frå grunnen av.</p>
     <p xml:lang="pl">Nadaje się perfekcyjnie do szkicowania i malowania i dostarcza zupełnego rozwiązania dla tworzenia plików malowideł cyfrowych od zalążka.</p>
     <p xml:lang="pt">É perfeito para desenhos e pinturas, oferecendo uma solução final para criar ficheiros de pintura digital do zero por mestres.</p>
     <p xml:lang="pt-BR">É perfeito para desenhos e pinturas, oferecendo uma solução final para criar arquivos de desenho digital feitos a partir do zero por mestres.</p>
@@ -157,6 +162,7 @@
     <p xml:lang="it">Krita rappresenta una scelta ottimale per  la creazione di arte concettuale, fumetti e texture per il rendering e il matte painting. Krita supporta molti spazi colori come RGB e CMYK a 8 e 16 bit per canali interi e 16 e 32 bit per canali a virgola mobile.</p>
     <p xml:lang="ja">コンセプトアート、コミック、3DCG 用テクスチャ、マットペイントを制作する方にとって、Krita は最適な選択です。Krita は、8/16 ビット整数/チャンネル、および 16/32 ビット浮動小数点/チャンネルの RGB や CMYK をはじめ、さまざまな色空間をサポートしています。</p>
     <p xml:lang="nl">Krita is een goede keuze voor het maken van kunstconcepten, strips, textuur voor weergeven en matte schilderijen. Krita ondersteunt vele kleurruimten zoals RGB en CMYK in 8 en 16 bits kanalen met gehele getallen, evenals 16 en 32 bits kanalen met drijvende komma.</p>
+    <p xml:lang="nn">Krita er det ideelle valet dersom du vil laga konseptskisser, teikneseriar, teksturar for 3D-rendering eller «matte paintings». Programmet støttar fleire fargerom, som RGB og CMYK med 8- og 16-bits heiltals- eller flyttalskanalar.</p>
     <p xml:lang="pl">Krita jest świetnym wyborem przy tworzeniu koncepcyjnej sztuki, komiksów, tekstur do wyświetlania i kaszet. Krita obsługuje wiele przestrzeni barw takich jak RGB oraz CMYK dla kanałów 8 oraz 16 bitowych wyrażonych w l. całkowitych, a także  16 oraz 32 bitowych wyrażonych w l. zmiennoprzecinkowych.</p>
     <p xml:lang="pt">O Krita é uma óptima escolha para criar arte conceptual, banda desenhada, texturas para desenho e pinturas. O Krita suporta diversos espaços de cores como o RGB e o CMYK com canais de cores inteiros a 8 e 16 bits, assim como canais de vírgula flutuante a 16 e a 32 bits.</p>
     <p xml:lang="pt-BR">O Krita é uma ótima escolha para criação de arte conceitual, histórias em quadrinhos, texturas para desenhos e pinturas. O Krita tem suporte a diversos espaços de cores como RGB e CMYK com canais de cores inteiros de 8 e 16 bits, assim como canais de ponto flutuante de 16 e 32 bits.</p>
@@ -184,6 +190,7 @@
     <p xml:lang="it">Divertiti a dipingere con gli avanzati sistemi di pennelli, i sorprendenti filtri e molte altre utili caratteristiche che fanno di Krita un software enormemente produttivo.</p>
     <p xml:lang="ja">Krita のソフトウェアとしての生産性を高めている先進的なブラシエンジンや素晴らしいフィルタのほか、便利な機能の数々をお楽しみください。</p>
     <p xml:lang="nl">Veel plezier met schilderen met the geavanceerde penseel-engines, filters vol verbazing en vele handige mogelijkheden die maken dat Krita enorm productief is.</p>
+    <p xml:lang="nn">Leik deg med avanserte penselmotorar og fantastiske biletfilter – og mange andre nyttige funksjonar som gjer deg produktiv med Krita.</p>
     <p xml:lang="pl">Baw się przy malowaniu przy użyciu zaawansowanych silników pędzli, zadziwiających filtrów i wielu innych przydatnych cech, które czynią z Krity bardzo produktywną.</p>
     <p xml:lang="pt">Divirta-se a pintar com os motores de pincéis avançados, os filtros espantosos e muitas outras funcionalidades úteis que tornam o Krita altamente produtivo.</p>
     <p xml:lang="pt-BR">Divirta-se pintando com os mecanismos de pincéis avançados, filtros maravilhosos e muitas outras funcionalidades úteis que tornam o Krita altamente produtivo.</p>

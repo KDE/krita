@@ -888,15 +888,58 @@ QPainterPath KisPopupPalette::createPathFromPresetIndex(int index)
     qreal startingAngle = -(index * angleSlice) + 90;
 
     // the radius will get smaller as the amount of presets shown increases. 10 slots == 41
-    qreal presetRadius = m_colorHistoryOuterRadius * qSin(qDegreesToRadians(angleSlice/2)) / (1-qSin(qDegreesToRadians(angleSlice/2)));
+    qreal radians = qDegreesToRadians((360.0/10)/2);
+    qreal maxRadius = (m_colorHistoryOuterRadius * qSin(radians) / (1-qSin(radians)))-2;
 
+    radians = qDegreesToRadians(angleSlice/2);
+    qreal presetRadius = m_colorHistoryOuterRadius * qSin(radians) / (1-qSin(radians));
+    //If we assume that circles will mesh like a hexagonal grid, then 3.5r is the size of two hexagons interlocking.
 
+    qreal length = m_colorHistoryOuterRadius + presetRadius;
+    // can we can fit in a second row? We don't want the preset icons to get too tiny.
+    if (maxRadius > presetRadius) {
+        //redo all calculations assuming a second row.
+        if (numSlots() % 2) {
+            angleSlice = 360.0/(numSlots()+1);
+            startingAngle = -(index * angleSlice) + 90;
+        }
+        if (numSlots() != m_cachedNumSlots){
+            qreal tempRadius = presetRadius;
+            qreal distance = 0;
+            do{
+                tempRadius+=0.1;
+
+                // Calculate the XY of two adjectant circles using this tempRadius.
+                qreal length1 = m_colorHistoryOuterRadius + tempRadius;
+                qreal length2 = m_colorHistoryOuterRadius + ((maxRadius*2)-tempRadius);
+                qreal pathX1 = length1 * qCos(qDegreesToRadians(startingAngle)) - tempRadius;
+                qreal pathY1 = -(length1) * qSin(qDegreesToRadians(startingAngle)) - tempRadius;
+                qreal startingAngle2 = -(index+1 * angleSlice) + 90;
+                qreal pathX2 = length2 * qCos(qDegreesToRadians(startingAngle2)) - tempRadius;
+                qreal pathY2 = -(length2) * qSin(qDegreesToRadians(startingAngle2)) - tempRadius;
+
+                // Use Pythagorean Theorem to calculate the distance between these two values.
+                qreal m1 = pathX2-pathX1;
+                qreal m2 = pathY2-pathY1;
+
+                distance = sqrt((m1*m1)+(m2*m2));
+            }
+            //As long at there's more distance than the radius of the two presets, continue increasing the radius.
+            while((tempRadius+1)*2 < distance);
+            m_cachedRadius = tempRadius;
+        }
+        m_cachedNumSlots = numSlots();
+        presetRadius = m_cachedRadius;
+        length = m_colorHistoryOuterRadius + presetRadius;
+        if (index % 2) {
+            length = m_colorHistoryOuterRadius + ((maxRadius*2)-presetRadius);
+        }
+    }
     QPainterPath path;
-    float pathX = (m_colorHistoryOuterRadius + presetRadius) * qCos(qDegreesToRadians(startingAngle)) - presetRadius;
-    float pathY = -(m_colorHistoryOuterRadius + presetRadius) * qSin(qDegreesToRadians(startingAngle)) - presetRadius;
-    float pathDiameter = 2 * presetRadius; // distance is used to calculate the X/Y in addition to the preset circle size
+    qreal pathX = length * qCos(qDegreesToRadians(startingAngle)) - presetRadius;
+    qreal pathY = -(length) * qSin(qDegreesToRadians(startingAngle)) - presetRadius;
+    qreal pathDiameter = 2 * presetRadius; // distance is used to calculate the X/Y in addition to the preset circle size
     path.addEllipse(pathX, pathY, pathDiameter, pathDiameter);
-
     return path;
 }
 

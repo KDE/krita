@@ -201,6 +201,38 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     return eventFilterImpl(event);
 }
 
+// Qt's events do not have copy-ctors yes, so we should emulate them
+// See https://bugreports.qt.io/browse/QTBUG-72488
+
+template <class Event> void copyEventHack(Event *src, QScopedPointer<QEvent> &dst);
+
+template<> void copyEventHack(QMouseEvent *src, QScopedPointer<QEvent> &dst) {
+    QMouseEvent *tmp = new QMouseEvent(src->type(),
+                                       src->localPos(), src->windowPos(), src->screenPos(),
+                                       src->button(), src->buttons(), src->modifiers(),
+                                       src->source());
+    tmp->setTimestamp(src->timestamp());
+    dst.reset(tmp);
+}
+
+template<> void copyEventHack(QTabletEvent *src, QScopedPointer<QEvent> &dst) {
+    QTabletEvent *tmp = new QTabletEvent(src->type(),
+                                         src->posF(), src->globalPosF(),
+                                         src->device(), src->pointerType(),
+                                         src->pressure(),
+                                         src->xTilt(), src->yTilt(),
+                                         src->tangentialPressure(),
+                                         src->rotation(),
+                                         src->z(),
+                                         src->modifiers(),
+                                         src->uniqueId(),
+                                         src->button(), src->buttons());
+    tmp->setTimestamp(src->timestamp());
+    dst.reset(tmp);
+}
+
+
+
 template <class Event>
 bool KisInputManager::compressMoveEventCommon(Event *event)
 {
@@ -217,14 +249,12 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
     /**
      * Compress the events if the tool doesn't need high resolution input
      */
-// See https://bugreports.qt.io/browse/QTBUG-72488    
-#if QT_VERSION < QT_VERSION_CHECK(5, 11, 3)
     if ((event->type() == QEvent::MouseMove ||
          event->type() == QEvent::TabletMove) &&
             (!d->matcher.supportsHiResInputEvents() ||
              d->testingCompressBrushEvents)) {
 
-        d->compressedMoveEvent.reset(new Event(*event));
+        copyEventHack(event, d->compressedMoveEvent);
         d->moveEventCompressor.start();
 
         /**
@@ -239,12 +269,9 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
 
         retval = true;
     } else {
-#endif
         slotCompressedMoveEvent();
         retval = d->handleCompressedTabletEvent(event);
-#if QT_VERSION < QT_VERSION_CHECK(5, 11, 3)
     }
-#endif
 
     return retval;
 }

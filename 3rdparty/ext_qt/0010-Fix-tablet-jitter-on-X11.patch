@@ -1,0 +1,59 @@
+From 999992ae79d1bc17bc4d7cbd49a8cd94cfce4e22 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sun, 10 Mar 2019 14:48:58 +0300
+Subject: [PATCH] Fix tablet jitter on X11
+
+We should get the correct stylus position from the valuators,
+not from the X11-provided global position. Global position is rounded
+to the nearest FP16 values, which is not enough for smooth painting.
+---
+ src/plugins/platforms/xcb/qxcbconnection_xi2.cpp | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/src/plugins/platforms/xcb/qxcbconnection_xi2.cpp b/src/plugins/platforms/xcb/qxcbconnection_xi2.cpp
+index 04ddd3c..8b79f2d 100644
+--- a/src/plugins/platforms/xcb/qxcbconnection_xi2.cpp
++++ b/src/plugins/platforms/xcb/qxcbconnection_xi2.cpp
+@@ -1208,6 +1208,11 @@ bool QXcbConnection::xi2HandleTabletEvent(const void *event, TabletData *tabletD
+     return handled;
+ }
+ 
++inline qreal scaleOneValuator(qreal normValue, qreal screenMin, qreal screenSize)
++{
++    return screenMin + normValue * screenSize;
++}
++
+ void QXcbConnection::xi2ReportTabletEvent(const void *event, TabletData *tabletData)
+ {
+     auto *ev = reinterpret_cast<const qt_xcb_input_device_event_t *>(event);
+@@ -1221,6 +1226,8 @@ void QXcbConnection::xi2ReportTabletEvent(const void *event, TabletData *tabletD
+     double pressure = 0, rotation = 0, tangentialPressure = 0;
+     int xTilt = 0, yTilt = 0;
+ 
++    const QRect screenArea = window->screen()->virtualGeometry();
++
+     for (QHash<int, TabletData::ValuatorClassInfo>::iterator it = tabletData->valuatorInfo.begin(),
+             ite = tabletData->valuatorInfo.end(); it != ite; ++it) {
+         int valuator = it.key();
+@@ -1228,6 +1235,18 @@ void QXcbConnection::xi2ReportTabletEvent(const void *event, TabletData *tabletD
+         xi2GetValuatorValueIfSet(event, classInfo.number, &classInfo.curVal);
+         double normalizedValue = (classInfo.curVal - classInfo.minVal) / (classInfo.maxVal - classInfo.minVal);
+         switch (valuator) {
++        case QXcbAtom::AbsX: {
++            const qreal value = scaleOneValuator(normalizedValue, screenArea.x(), screenArea.width());
++            global.rx() = value;
++            local.rx() = value - window->geometry().x();
++            break;
++        }
++        case QXcbAtom::AbsY: {
++            qreal value = scaleOneValuator(normalizedValue, screenArea.y(), screenArea.height());
++            global.ry() = value;
++            local.ry() = value - window->geometry().y();
++            break;
++        }
+         case QXcbAtom::AbsPressure:
+             pressure = normalizedValue;
+             break;
+-- 
+2.7.4
+

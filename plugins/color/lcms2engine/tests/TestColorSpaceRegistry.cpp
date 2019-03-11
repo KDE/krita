@@ -1,5 +1,5 @@
 
-#include "TestKoColorSpaceRegistry.h"
+#include "TestColorSpaceRegistry.h"
 
 #include <QTest>
 
@@ -11,13 +11,13 @@
 
 #include "sdk/tests/kistest.h"
 
-void TestKoColorSpaceRegistry::testConstruction()
+void TestColorSpaceRegistry::testConstruction()
 {
     KoColorSpaceRegistry *instance = KoColorSpaceRegistry::instance();
     Q_ASSERT(instance);
 }
 
-void TestKoColorSpaceRegistry::testRgbU8()
+void TestColorSpaceRegistry::testRgbU8()
 {
     const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID,
                                                                                 Integer8BitsColorDepthID);
@@ -39,7 +39,7 @@ void TestKoColorSpaceRegistry::testRgbU8()
 
 }
 
-void TestKoColorSpaceRegistry::testRgbU16()
+void TestColorSpaceRegistry::testRgbU16()
 {
     const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID,
                                                                                 Integer16BitsColorDepthID);
@@ -61,7 +61,7 @@ void TestKoColorSpaceRegistry::testRgbU16()
 
 }
 
-void TestKoColorSpaceRegistry::testLab()
+void TestColorSpaceRegistry::testLab()
 {
     const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(LABAColorModelID,
                                                                                 Integer16BitsColorDepthID);
@@ -88,4 +88,4 @@ void TestKoColorSpaceRegistry::testLab()
 
 }
 
-KISTEST_MAIN(TestKoColorSpaceRegistry)
+KISTEST_MAIN(TestColorSpaceRegistry)

@@ -346,6 +346,7 @@ void KisPopupPalette::slotUpdateIcons()
 {
     zoomToOneHundredPercentButton->setIcon(m_actionCollection->action("zoom_to_100pct")->icon());
     m_brushHud->updateIcons();
+    m_settingsButton->setIcon(KisIconUtils::loadIcon("tag"));
     m_brushHudButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-left"), KisIconUtils::loadIcon("arrow-right"));
 }
 

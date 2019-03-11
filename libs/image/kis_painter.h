@@ -674,6 +674,18 @@ public:
      */
     const QVector<QRect> calculateAllMirroredRects(const QRect &rc);
 
+    /**
+     * Calculate the list of the mirrored points according to the current
+     * mirroring configuration.
+     */
+    const QVector<QPointF> calculateAllMirroredPoints(const QPointF &pos);
+
+    /**
+     * Calculate the list of the mirrored point pairs according to the current
+     * mirroring configuration.
+     */
+    const QVector<QPair<QPointF, QPointF>> calculateAllMirroredPoints(const QPair<QPointF, QPointF> &pair);
+
     /// Set the current pattern
     void setPattern(const KoPattern * pattern);
 

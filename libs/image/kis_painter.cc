@@ -2956,30 +2956,61 @@ void KisPainter::mirrorDab(Qt::Orientation direction, KisRenderedDab *dab) const
     KritaUtils::mirrorDab(direction, effectiveAxesCenter, dab);
 }
 
-const QVector<QRect> KisPainter::calculateAllMirroredRects(const QRect &rc)
+namespace {
+
+inline void mirrorOneObject(Qt::Orientation dir, const QPoint &center, QRect *rc) {
+    KritaUtils::mirrorRect(dir, center, rc);
+}
+
+inline void mirrorOneObject(Qt::Orientation dir, const QPoint &center, QPointF *pt) {
+    KritaUtils::mirrorPoint(dir, center, pt);
+}
+
+inline void mirrorOneObject(Qt::Orientation dir, const QPoint &center, QPair<QPointF, QPointF> *pair) {
+    KritaUtils::mirrorPoint(dir, center, &pair->first);
+    KritaUtils::mirrorPoint(dir, center, &pair->second);
+}
+}
+
+template<class T> QVector<T> KisPainter::Private::calculateMirroredObjects(const T &object)
 {
-    QVector<QRect> rects;
+    QVector<T> result;
 
-    KisLodTransform t(d->device);
-    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
+    KisLodTransform t(this->device);
+    const QPoint effectiveAxesCenter = t.map(this->axesCenter).toPoint();
 
-    QRect baseRect = rc;
-    rects << baseRect;
+    T baseObject = object;
+    result << baseObject;
 
-    if (d->mirrorHorizontally && d->mirrorVertically){
-        KritaUtils::mirrorRect(Qt::Horizontal, effectiveAxesCenter, &baseRect);
-        rects << baseRect;
-        KritaUtils::mirrorRect(Qt::Vertical, effectiveAxesCenter, &baseRect);
-        rects << baseRect;
-        KritaUtils::mirrorRect(Qt::Horizontal, effectiveAxesCenter, &baseRect);
-        rects << baseRect;
-    } else if (d->mirrorHorizontally) {
-        KritaUtils::mirrorRect(Qt::Horizontal, effectiveAxesCenter, &baseRect);
-        rects << baseRect;
-    } else if (d->mirrorVertically) {
-        KritaUtils::mirrorRect(Qt::Vertical, effectiveAxesCenter, &baseRect);
-        rects << baseRect;
+    if (this->mirrorHorizontally && this->mirrorVertically){
+        mirrorOneObject(Qt::Horizontal, effectiveAxesCenter, &baseObject);
+        result << baseObject;
+        mirrorOneObject(Qt::Vertical, effectiveAxesCenter, &baseObject);
+        result << baseObject;
+        mirrorOneObject(Qt::Horizontal, effectiveAxesCenter, &baseObject);
+        result << baseObject;
+    } else if (this->mirrorHorizontally) {
+        mirrorOneObject(Qt::Horizontal, effectiveAxesCenter, &baseObject);
+        result << baseObject;
+    } else if (this->mirrorVertically) {
+        mirrorOneObject(Qt::Vertical, effectiveAxesCenter, &baseObject);
+        result << baseObject;
     }
 
-    return rects;
+    return result;
+}
+
+const QVector<QRect> KisPainter::calculateAllMirroredRects(const QRect &rc)
+{
+    return d->calculateMirroredObjects(rc);
+}
+
+const QVector<QPointF> KisPainter::calculateAllMirroredPoints(const QPointF &pos)
+{
+    return d->calculateMirroredObjects(pos);
+}
+
+const QVector<QPair<QPointF, QPointF>> KisPainter::calculateAllMirroredPoints(const QPair<QPointF, QPointF> &pair)
+{
+    return d->calculateMirroredObjects(pair);
 }

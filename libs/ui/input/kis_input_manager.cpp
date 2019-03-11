@@ -496,6 +496,13 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         //Reset signal compressor to prevent processing events before press late
         d->resetCompressor();
         d->eatOneMousePress();
+
+#if defined Q_OS_LINUX && !defined QT_HAS_ENTER_LEAVE_PATCH
+        // remove this hack when this patch is integrated:
+        // https://codereview.qt-project.org/#/c/255384/
+        event->setAccepted(false);
+#endif
+
         break;
     }
     case QEvent::TabletMove: {
@@ -517,6 +524,12 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
          */
         d->blockMouseEvents();
 
+#if defined Q_OS_LINUX && !defined QT_HAS_ENTER_LEAVE_PATCH
+        // remove this hack when this patch is integrated:
+        // https://codereview.qt-project.org/#/c/255384/
+        event->setAccepted(false);
+#endif
+
         break;
     }
     case QEvent::TabletRelease: {
@@ -529,6 +542,13 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         retval = d->matcher.buttonReleased(tabletEvent->button(), tabletEvent);
         retval = true;
         event->setAccepted(true);
+
+#if defined Q_OS_LINUX && !defined QT_HAS_ENTER_LEAVE_PATCH
+        // remove this hack when this patch is integrated:
+        // https://codereview.qt-project.org/#/c/255384/
+        event->setAccepted(false);
+#endif
+
         break;
     }
 

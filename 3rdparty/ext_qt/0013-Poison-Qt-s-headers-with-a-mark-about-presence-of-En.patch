@@ -1,0 +1,28 @@
+From 6851994441cc48cf48853f009dd620e9cebd551a Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 11 Mar 2019 16:17:17 +0300
+Subject: [PATCH] Poison Qt's headers with a mark about presence of Enter/Leave
+ patch
+
+---
+ src/gui/kernel/qevent.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/gui/kernel/qevent.h b/src/gui/kernel/qevent.h
+index 2b1c6a6..69cafaa 100644
+--- a/src/gui/kernel/qevent.h
++++ b/src/gui/kernel/qevent.h
+@@ -242,6 +242,10 @@ protected:
+ };
+ #endif
+ 
++// a temporary mark to know if the patch has landed to Qt or not
++// https://codereview.qt-project.org/#/c/255384/
++#define QT_HAS_ENTER_LEAVE_PATCH
++
+ #if QT_CONFIG(tabletevent)
+ class Q_GUI_EXPORT QTabletEvent : public QInputEvent
+ {
+-- 
+2.7.4
+

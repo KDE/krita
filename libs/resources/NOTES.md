@@ -24,7 +24,7 @@ TODO
  * abr storage class
  * adding/updating/removing resources from the ui
  * adding/removing tags from the ui
- * database migration and versioning
+ * database migration and versioning (loop over version, find update_from_version, execute and so on until version is up to date)
  * fix loading the actual preset in the preset delegate
  * fetch gradients from resource server by md5 or name when handling layer styles: fix how layer styles store gradients
 

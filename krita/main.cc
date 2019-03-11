@@ -63,12 +63,6 @@
 #include <kis_tablet_support_win.h>
 #include <kis_tablet_support_win8.h>
 #include <QLibrary>
-
-#elif defined HAVE_X11
-#include "config_use_qt_xcb.h"
-#ifndef USE_QT_XCB
-#include <kis_xi2_event_filter.h>
-#endif
 #endif
 
 #if defined HAVE_KCRASH
@@ -372,14 +366,7 @@ extern "C" int main(int argc, char **argv)
         app.setAttribute(Qt::AA_DontShowIconsInMenus);
     }
 
-#if defined HAVE_X11
-#ifndef USE_QT_XCB
-    app.installNativeEventFilter(KisXi2EventFilter::instance());
-#endif
-#endif
-
     app.installEventFilter(KisQtWidgetsTweaker::instance());
-
 
     if (!args.noSplash()) {
         // then create the pixmap from an xpm: we cannot get the

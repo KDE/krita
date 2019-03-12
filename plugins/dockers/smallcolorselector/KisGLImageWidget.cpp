@@ -23,6 +23,7 @@
 #include <QResizeEvent>
 #include "kis_debug.h"
 #include <config-hdr.h>
+#include <opengl/kis_opengl.h>
 
 #include "KisGLImageF16.h"
 
@@ -91,7 +92,7 @@ void KisGLImageWidget::initializeGL()
         vertSource.prepend(versionDefinition);
         fragSource.prepend(versionDefinition);
     } else {
-        const char *versionDefinition = "#version 330 core\n";
+        const char *versionDefinition = KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n";
         vertSource.prepend(versionDefinition);
         fragSource.prepend(versionDefinition);
     }

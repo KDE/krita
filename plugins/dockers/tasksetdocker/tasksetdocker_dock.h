@@ -53,7 +53,7 @@ private:
     QPointer<KisCanvas2> m_canvas;
     TasksetModel *m_model;
     bool m_blocked;
-    KoResourceServer<TasksetResource>* m_rserver;
+    KoResourceServer<TasksetResource> *m_rserver {0};
 };
 
 

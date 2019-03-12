@@ -96,8 +96,9 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
 
     chooserButton->setIcon(KisIconUtils::loadIcon("edit-copy"));
 
+    m_rserver = new KoResourceServer<TasksetResource>(ResourceType::TaskSets);
     KisResourceLoaderRegistry::instance()->add(new KisResourceLoader<TasksetResource>(ResourceType::TaskSets, ResourceType::TaskSets, i18n("Task sets"), QStringList() << "application/x-krita-taskset"));
-    KisResourceItemChooser* itemChooser = new KisResourceItemChooser(ResourceType::TaskSets, false, this);
+    KisResourceItemChooser *itemChooser = new KisResourceItemChooser(ResourceType::TaskSets, false, this);
     itemChooser->setItemDelegate(new KisTasksetResourceDelegate(this));
     itemChooser->setFixedSize(500, 250);
     itemChooser->setRowHeight(30);

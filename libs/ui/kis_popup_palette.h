@@ -126,7 +126,7 @@ private:
     KisBrushHud *m_brushHud {0};
     float m_popupPaletteSize {385.0};
     float m_colorHistoryInnerRadius {72.0};
-    float m_colorHistoryOuterRadius {92.0};
+    qreal m_colorHistoryOuterRadius {92.0};
 
     KisRoundHudButton *m_settingsButton {0};
     KisRoundHudButton *m_brushHudButton {0};
@@ -145,6 +145,9 @@ private:
     int zoomSliderMinValue {10};
     int zoomSliderMaxValue {200};
     KisAcyclicSignalConnector *m_acyclicConnector = 0;
+
+    int m_cachedNumSlots {0};
+    qreal m_cachedRadius {0.0};
 
     // updates the transparency and effects of the whole widget
     QGraphicsOpacityEffect *opacityChange {0};

@@ -1185,11 +1185,12 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
         setRecovered(true);
     }
     else {
-        if (!(flags & DontAddToRecent)) {
-            KisPart::instance()->addRecentURLToAllMainWindows(_url);
-        }
-
         if (ret) {
+
+            if ((flags & DontAddToRecent)) {
+                KisPart::instance()->addRecentURLToAllMainWindows(_url);
+            }
+
             // Detect readonly local-files; remote files are assumed to be writable
             QFileInfo fi(url.toLocalFile());
             setReadWrite(fi.isWritable());
@@ -1271,8 +1272,9 @@ bool KisDocument::openFile()
     dbgUI << localFilePath() << "type:" << typeName;
 
     KisMainWindow *window = KisPart::instance()->currentMainwindow();
+    KoUpdaterPtr updater;
     if (window && window->viewManager()) {
-        KoUpdaterPtr updater = window->viewManager()->createUnthreadedUpdater(i18n("Opening document"));
+        updater = window->viewManager()->createUnthreadedUpdater(i18n("Opening document"));
         d->importExportManager->setUpdater(updater);
     }
 
@@ -1281,6 +1283,9 @@ bool KisDocument::openFile()
     status = d->importExportManager->importDocument(localFilePath(), typeName);
 
     if (status != KisImportExportFilter::OK) {
+        if (window && window->viewManager()) {
+            updater->cancel();
+        }
         QString msg = KisImportExportFilter::conversionStatusString(status);
         if (!msg.isEmpty()) {
             DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
@@ -1668,8 +1673,9 @@ void KisDocument::setLocalFilePath( const QString &localFilePath )
 
 bool KisDocument::openUrlInternal(const QUrl &url)
 {
-    if ( !url.isValid() )
+    if ( !url.isValid() ) {
         return false;
+    }
 
     if (d->m_bAutoDetectedMime) {
         d->mimeType = QByteArray();
@@ -1678,8 +1684,9 @@ bool KisDocument::openUrlInternal(const QUrl &url)
 
     QByteArray mimetype = d->mimeType;
 
-    if ( !closeUrl() )
+    if ( !closeUrl() ) {
         return false;
+    }
 
     d->mimeType = mimetype;
     setUrl(url);

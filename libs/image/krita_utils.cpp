@@ -476,6 +476,15 @@ namespace KritaUtils
         }
     }
 
+    void mirrorPoint(Qt::Orientation dir, const QPoint &center, QPointF *pt)
+    {
+        if (dir == Qt::Horizontal) {
+            pt->rx() = -(pt->x() - qreal(center.x())) + center.x();
+        } else /* if (dir == Qt::Vertical) */ {
+            pt->ry() = -(pt->y() - qreal(center.y())) + center.y();
+        }
+    }
+
     qreal colorDifference(const QColor &c1, const QColor &c2)
     {
         const qreal dr = c1.redF() - c2.redF();

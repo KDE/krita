@@ -307,16 +307,6 @@ find_package(Qt5 ${MIN_QT_VERSION}
         Sql
 )
 
-if (UNIX AND NOT APPLE)
-    if (${Qt5_VERSION} VERSION_GREATER "5.11")
-        set (USE_QT_XCB ON)
-    else()
-        option(USE_QT_XCB "Do not use Krita's forked XCB connection and tablet support on X11, but leave everything to Qt." OFF)
-        add_feature_info("Use Qt's XCB and Tablet support on X11" USE_QT_XCB "Do not use Krita's forked XCB connection and tablet support on X11, but leave everything to Qt.")
-    endif()
-    configure_file(config_use_qt_xcb.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_use_qt_xcb.h)
-endif()
-
 include (MacroAddFileDependencies)
 include (MacroBoolTo01)
 include (MacroEnsureOutOfSourceBuild)

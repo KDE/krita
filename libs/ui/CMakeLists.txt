@@ -428,20 +428,6 @@ if (UNIX)
         ${kritaui_LIB_SRCS}
         qtlockedfile/qtlockedfile_unix.cpp
         )
-    if(NOT USE_QT_XCB)
-    set(kritaui_LIB_SRCS
-        ${kritaui_LIB_SRCS}
-        input/wintab/kis_tablet_support.cpp
-    )
-    endif()
-    if(NOT APPLE AND NOT USE_QT_XCB)
-        set(kritaui_LIB_SRCS
-            ${kritaui_LIB_SRCS}
-            input/wintab/qxcbconnection_xi2.cpp
-            input/wintab/qxcbconnection.cpp
-            input/wintab/kis_xi2_event_filter.cpp
-            )
-    endif()
 endif()
 
 if(APPLE)

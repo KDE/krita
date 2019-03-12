@@ -67,7 +67,6 @@ KoQuaZipStore::KoQuaZipStore(QIODevice *dev, KoStore::Mode _mode, const QByteArr
     : KoStore(_mode, writeMimetype)
     , dd(new Private())
 {
-    Q_D(KoStore);
     debugStore << "KoQuaZipStore" << dev;
     dd->archive = new QuaZip(dev);
     init(appIdentification);

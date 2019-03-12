@@ -90,10 +90,20 @@ KisSpacingInformation KisRoundMarkerOp::paintAt(const KisPaintInformation& info)
     KisMarkerPainter gc(painter()->device(), painter()->paintColor());
 
     if (m_firstRun) {
-        gc.fillFullCircle(pos, radius);
+        const QVector<QPointF> points =
+            painter()->calculateAllMirroredPoints(pos);
+
+        Q_FOREACH(const QPointF &pt, points) {
+            gc.fillFullCircle(pt, radius);
+        }
     } else {
-        gc.fillCirclesDiff(m_lastPaintPos, m_lastRadius,
-                           pos, radius);
+        const QVector<QPair<QPointF, QPointF>> pairs =
+            painter()->calculateAllMirroredPoints(qMakePair(m_lastPaintPos, pos));
+
+        Q_FOREACH(const auto &pair, pairs) {
+            gc.fillCirclesDiff(pair.first, m_lastRadius,
+                               pair.second, radius);
+        }
     }
 
     m_firstRun = false;
@@ -103,7 +113,11 @@ KisSpacingInformation KisRoundMarkerOp::paintAt(const KisPaintInformation& info)
     QRectF dirtyRect(pos.x() - radius, pos.y() - radius,
                      2 * radius, 2 * radius);
     dirtyRect = kisGrowRect(dirtyRect, 1);
-    painter()->addDirtyRect(dirtyRect.toAlignedRect());
+
+    const QVector<QRect> allDirtyRects =
+        painter()->calculateAllMirroredRects(dirtyRect.toAlignedRect());
+
+    painter()->addDirtyRects(allDirtyRects);
 
     // QPointF scatteredPos =
     //     m_scatterOption.apply(info,

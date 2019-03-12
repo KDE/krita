@@ -1003,6 +1003,40 @@ void KisImageTest::testFlattenImage()
 
     {
         KisLayerUtils::flattenImage(p.image, 0);
+        p.image->waitForDone();
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+
+        p.undoStore->undo();
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+    }
+
+    {
+        KisLayerUtils::flattenImage(p.image, p.layer5); // flatten with active layer just under the root (not inside any group)
+        p.image->waitForDone();
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+
+        p.undoStore->undo();
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+    }
+
+    {
+        KisLayerUtils::flattenImage(p.image, p.layer2); // flatten with active layer just under the root (not inside any group), but with a mask
+        p.image->waitForDone();
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+
+        p.undoStore->undo();
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+    }
+
+    {
+        KisLayerUtils::flattenImage(p.image, p.layer3); // flatten with active layer inside of a group
+        p.image->waitForDone();
         QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
 
         p.undoStore->undo();

@@ -43,6 +43,7 @@ struct Q_DECL_HIDDEN KisApplicationArguments::Private
     int dpiY {72};
     bool doTemplate {false};
     bool exportAs {false};
+    bool exportSequence {false};
     QString exportFileName;
     QString workspace;
     QString windowLayout;
@@ -98,6 +99,7 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("fullscreen"), i18n("Start Krita in full-screen mode")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("dpi"), i18n("Override display DPI"), QLatin1String("dpiX,dpiY")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export"), i18n("Export to the given filename and exit")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-sequence"), i18n("Export animation to the given filename and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-filename"), i18n("Filename for export"), QLatin1String("filename")));
     parser.addPositionalArgument(QLatin1String("[file(s)]"), i18n("File(s) or URL(s) to open"));
     parser.process(app);
@@ -140,6 +142,7 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     d->session = parser.value("load-session");
     d->doTemplate = parser.isSet("template");
     d->exportAs = parser.isSet("export");
+    d->exportSequence = parser.isSet("export-sequence");
     d->canvasOnly = parser.isSet("canvasonly");
     d->noSplash = parser.isSet("nosplash");
     d->fullScreen = parser.isSet("fullscreen");
@@ -280,6 +283,11 @@ bool KisApplicationArguments::doTemplate() const
 bool KisApplicationArguments::exportAs() const
 {
     return d->exportAs;
+}
+
+bool KisApplicationArguments::exportSequence() const
+{
+    return d->exportSequence;
 }
 
 QString KisApplicationArguments::exportFileName() const

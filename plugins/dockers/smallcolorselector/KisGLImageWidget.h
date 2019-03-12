@@ -37,6 +37,8 @@ public:
     KisGLImageWidget(QSurfaceFormat::ColorSpace colorSpace,
                      QWidget *parent = nullptr);
 
+    ~KisGLImageWidget();
+
     void initializeGL();
     void paintGL();
 

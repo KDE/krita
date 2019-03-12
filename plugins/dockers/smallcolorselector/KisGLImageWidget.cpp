@@ -68,6 +68,12 @@ KisGLImageWidget::KisGLImageWidget(QSurfaceFormat::ColorSpace colorSpace,
     setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
 }
 
+KisGLImageWidget::~KisGLImageWidget()
+{
+    // force releasing the reourses on destruction
+    slotOpenGLContextDestroyed();
+}
+
 void KisGLImageWidget::initializeGL()
 {
     initializeOpenGLFunctions();

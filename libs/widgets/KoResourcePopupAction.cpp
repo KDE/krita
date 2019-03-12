@@ -128,7 +128,8 @@ KoResourceSP KoResourcePopupAction::currentResource() const
     QModelIndex index = d->resourceList->currentIndex();
     if (!index.isValid()) return 0;
 
-    return QSharedPointer<KoResource>(static_cast<KoResource*>(index.internalPointer()));
+    KoResourceSP resource = d->model->resourceForIndex(index);
+    return resource;
 }
 
 void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)

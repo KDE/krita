@@ -66,7 +66,7 @@ void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionVie
     if (! index.isValid())
         return;
 
-    TasksetResource* taskset = static_cast<TasksetResource*>(index.internalPointer());
+    QString name = index.data(Qt::UserRole + KisResourceModel::Name).toString();
 
     if (option.state & QStyle::State_Selected) {
         painter->setPen(QPen(option.palette.highlight(), 2.0));
@@ -77,8 +77,7 @@ void KisTasksetResourceDelegate::paint(QPainter * painter, const QStyleOptionVie
         painter->setBrush(option.palette.text());
     }
 
-    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, taskset->name());
-
+    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, name);
 }
 
 TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canvas(0), m_blocked(false)

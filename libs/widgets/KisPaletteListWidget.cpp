@@ -30,6 +30,8 @@
 #include <kis_icon.h>
 #include <KoFileDialog.h>
 
+#include <KisResourceModel.h>
+
 #include <ui_WdgPaletteListWidget.h>
 #include "KisPaletteListWidget.h"
 #include "KisPaletteListWidget_p.h"
@@ -151,36 +153,35 @@ KisPaletteListWidgetPrivate::Delegate::Delegate(QObject *parent)
 KisPaletteListWidgetPrivate::Delegate::~Delegate()
 {  }
 
-void KisPaletteListWidgetPrivate::Delegate::paint(QPainter * painter,
-                                                  const QStyleOptionViewItem & option,
-                                                  const QModelIndex & index) const
+void KisPaletteListWidgetPrivate::Delegate::paint(QPainter *painter,
+                                                  const QStyleOptionViewItem &option,
+                                                  const QModelIndex &index) const
 {
     painter->save();
     if (!index.isValid())
         return;
 
-    KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
-    KoColorSetSP colorSet = resource.staticCast<KoColorSet>();
+    QImage preview = index.data(Qt::DecorationRole).value<QImage>();
+    QString name = index.data(Qt::UserRole + KisResourceModel::Name).toString();
 
     QRect previewRect(option.rect.x() + 2,
                       option.rect.y() + 2,
                       option.rect.height() - 4,
                       option.rect.height() - 4);
 
-    painter->drawImage(previewRect, colorSet->image());
+    painter->drawImage(previewRect, preview);
 
     if (option.state & QStyle::State_Selected) {
         painter->fillRect(option.rect, option.palette.highlight());
-        painter->drawImage(previewRect, colorSet->image());
+        painter->drawImage(previewRect, preview);
         painter->setPen(option.palette.highlightedText().color());
     } else {
         painter->setBrush(option.palette.text().color());
     }
-    QString drawnText = colorSet->name()
-            + (colorSet->isEditable() ? "" : i18n(" [READONLY]"));
+
     painter->drawText(option.rect.x() + previewRect.width() + 10,
                       option.rect.y() + painter->fontMetrics().ascent() + 5,
-                      drawnText);
+                      name);
 
     painter->restore();
 }

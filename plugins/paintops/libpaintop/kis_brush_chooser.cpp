@@ -40,6 +40,7 @@
 
 #include <KisResourceItemView.h>
 #include <KisResourceItemChooser.h>
+#include <KisResourceModel.h>
 
 #include <kis_icon.h>
 #include "KisBrushServerProvider.h"
@@ -76,11 +77,9 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
 {
     if (! index.isValid())
         return;
-
-    KisBrushSP brush = KisBrushSP(static_cast<KisBrush*>(index.internalPointer()));
+    QImage thumbnail = index.data(Qt::DecorationRole).value<QImage>();
 
     QRect itemRect = option.rect;
-    QImage thumbnail = brush->image();
 
     if (thumbnail.height() > itemRect.height() || thumbnail.width() > itemRect.width()) {
         thumbnail = thumbnail.scaled(itemRect.size() , Qt::KeepAspectRatio, Qt::SmoothTransformation);

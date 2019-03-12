@@ -119,9 +119,11 @@ void KoResourceSelector::mousePressEvent( QMouseEvent * event )
         if( ! index.isValid() )
             return;
 
-        KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
-        if( resource )
-            emit resourceApplied( resource );
+        KoResourceSP resource = d->model->resourceForIndex(index);
+
+        if (resource) {
+            emit resourceApplied(resource);
+        }
     }
 }
 

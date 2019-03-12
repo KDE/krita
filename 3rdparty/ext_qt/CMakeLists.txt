@@ -13,7 +13,7 @@ if (WIN32)
         #
         -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg
         #
-        -opensource -confirm-license
+        -opensource -confirm-license -openssl-linked
         #
         -release -platform win32-g++ -prefix ${EXTPREFIX_qt}
         QMAKE_LFLAGS_APP+=${SECURITY_EXE_LINKER_FLAGS}
@@ -41,6 +41,8 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Fix-debug-on-openGL-ES.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-cumulative-patch-for-hdr.patch
 
+      CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
+
       INSTALL_DIR ${EXTPREFIX_qt}
       CONFIGURE_COMMAND <SOURCE_DIR>/configure.bat ${_QT_conf}
 
@@ -65,7 +67,9 @@ elseif (NOT APPLE)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0012-Synthesize-Enter-LeaveEvent-when-QTabletEvent-is-acc.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0013-Poison-Qt-s-headers-with-a-mark-about-presence-of-En.patch
 
-      CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -verbose -nomake examples -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtgraphicaleffects -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtandroidextras -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth  -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -skip qtmultimedia
+      CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
+
+      CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -openssl-linked -verbose -nomake examples -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtgraphicaleffects -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtandroidextras -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth  -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -skip qtmultimedia
       INSTALL_DIR ${EXTPREFIX_qt}
 
       BUILD_COMMAND $(MAKE)
@@ -210,10 +214,12 @@ else( APPLE )
        URL https://download.qt.io/archive/qt/5.12/5.12.1/single/qt-everywhere-src-5.12.1.tar.xz
        URL_HASH MD5=6a37466c8c40e87d4a19c3f286ec2542
 
+        CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
+
         INSTALL_DIR ${EXTPREFIX_qt}
         CONFIGURE_COMMAND <SOURCE_DIR>/configure
         -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdoc -skip qtgraphicaleffects -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland
-            -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -no-sql-sqlite -skip qtcharts -skip qtdatavis3d  -skip qtgamepad -skip qtnetworkauth -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -nomake examples -nomake tools -no-compile-examples -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -no-icu -no-mtdev -system-zlib -qt-pcre -opensource -confirm-license  -prefix ${EXTPREFIX_qt}
+            -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -no-sql-sqlite -skip qtcharts -skip qtdatavis3d  -skip qtgamepad -skip qtnetworkauth -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -nomake examples -nomake tools -no-compile-examples -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -no-icu -no-mtdev -system-zlib -qt-pcre -opensource -confirm-license  -openssl-linked -prefix ${EXTPREFIX_qt}
         BUILD_COMMAND ${PARALLEL_MAKE}
         INSTALL_COMMAND make install
         UPDATE_COMMAND ""

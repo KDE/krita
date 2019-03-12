@@ -32,8 +32,31 @@ class QVariant;
  * uploaded to the KoResourceManager during the loading phase.
  * The manager will use it to convert values to/from the source
  * resource.
+ *
+ *  "Derived" resources are the resources that do not exist temselves.
+ *  Instead they are contained in some other resources and are updated
+ *  synchronously with the parent resources as well.
+ *
+ *  E.g. we store opacity and composite op and opacity in the current
+ *  paintop preset, which is also a resource. So composite op and opacity
+ *  are "derived" resources.
+ *
+ *  The main goal of this class is to make our resources comply with
+ *  a general Model-View-Controller architecture:
+ *
+ *  Model: KisPaintOpPreset. It stores opacity, composite op, eraser mode
+ *         and other "global" properties.
+ *
+ *  Controller: KoCanvasResourceManager. It controls access to the resources
+ *              and emits notification signals when they are changed.
+ *
+ *  View: KisPaintOpBox and other classes that show the resources on screen
+ *
+ *  Please take into account that according to the MVC design all the access
+ *  to the model resources should be performed through the controller.
+ *
  */
-class KRITAFLAKE_EXPORT KoDerivedResourceConverter
+ class KRITAFLAKE_EXPORT KoDerivedResourceConverter
 {
 public:
     /**

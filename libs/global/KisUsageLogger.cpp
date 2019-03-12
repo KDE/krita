@@ -26,7 +26,7 @@
 #include <QDesktopWidget>
 #include <QClipboard>
 #include <QThread>
-
+#include <QApplication>
 #include <klocalizedstring.h>
 #include <KritaVersionWrapper.h>
 
@@ -47,7 +47,6 @@ KisUsageLogger::KisUsageLogger()
 
     rotateLog();
     d->logFile.open(QFile::Append);
-    writeHeader();
 }
 
 KisUsageLogger::~KisUsageLogger()
@@ -93,9 +92,12 @@ void KisUsageLogger::write(const QString &message)
 
 void KisUsageLogger::writeHeader()
 {
-    Q_ASSERT(d->logFile.isOpen());
+    Q_ASSERT(s_instance->d->logFile.isOpen());
 
-    QString sessionHeader = QString("SESSION: %1\n\n").arg(QDateTime::currentDateTime().toString(Qt::RFC2822Date));
+    QString sessionHeader = QString("SESSION: %1. Executing %2\n\n")
+            .arg(QDateTime::currentDateTime().toString(Qt::RFC2822Date))
+            .arg(qApp->arguments().join(' '));
+
     QString disclaimer = i18n("WARNING: This file contains information about your system and the\n"
                               "images you have been working with.\n"
                               "\n"
@@ -113,7 +115,9 @@ void KisUsageLogger::writeHeader()
 
     // Krita version info
     systemInfo.append("Krita\n");
-    systemInfo.append("\n  Version: ").append(KritaVersionWrapper::versionString(true));
+    systemInfo.append("\n Version: ").append(KritaVersionWrapper::versionString(true));
+    systemInfo.append("\n Languages: ").append(KLocalizedString::languages().join(", "));
+    systemInfo.append("\n Hidpi: ").append(QCoreApplication::testAttribute(Qt::AA_EnableHighDpiScaling) ? "true" : "false");
     systemInfo.append("\n\n");
 
     systemInfo.append("Qt\n");
@@ -133,10 +137,10 @@ void KisUsageLogger::writeHeader()
     systemInfo.append("\n  Product Version: ").append(QSysInfo::productVersion());
     systemInfo.append("\n\n");
 
-    d->logFile.write(s_sectionHeader.toUtf8());
-    d->logFile.write(sessionHeader.toUtf8());
-    d->logFile.write(disclaimer.toUtf8());
-    d->logFile.write(systemInfo.toUtf8());
+    s_instance->d->logFile.write(s_sectionHeader.toUtf8());
+    s_instance->d->logFile.write(sessionHeader.toUtf8());
+    s_instance->d->logFile.write(disclaimer.toUtf8());
+    s_instance->d->logFile.write(systemInfo.toUtf8());
 
 
 }

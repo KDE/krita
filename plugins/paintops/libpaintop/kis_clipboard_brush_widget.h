@@ -70,7 +70,6 @@ Q_SIGNALS:
 private:
     KisClipboard* m_clipboard;
     KisPaintDeviceSP pd;
-    KisImageWSP m_image;
     KisBrushSP m_brush;
     QSharedPointer<KoAbstractResourceServerAdapter> m_rServerAdapter;
 };

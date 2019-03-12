@@ -48,7 +48,6 @@ private:
 
 private:
     bool                      m_firstRun;
-    KisImageSP                m_image;
     KisPaintDeviceSP          m_tempDev;
     KisPressureSizeOption     m_sizeOption;
     KisPressureSpacingOption  m_spacingOption;

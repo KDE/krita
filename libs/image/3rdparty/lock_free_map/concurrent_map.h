@@ -38,6 +38,7 @@ public:
     {
         typename Details::Table* table = m_root.loadNonatomic();
         table->destroy();
+        m_gc.flush();
     }
 
     QSBR &getGC()

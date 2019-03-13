@@ -804,14 +804,141 @@ void KisTiledDataManagerTest::stressTest()
     KisTiledDataManager dm(1, &defaultPixel);
     QReadWriteLock lock;
 
-    QThreadPool pool;
-    pool.setMaxThreadCount(NUM_TYPES);
+#ifdef LIMIT_LONG_TESTS
+    const int numThreads = 8;
+    const int numWorkers = 8;
+#else
+    const int numThreads = 16;
+    const int numWorkers = 48;
+#endif
 
-    QRect accessRect(0,0,100,100);
-    for(qint32 i = 0; i < NUM_TYPES; i++) {
+    QThreadPool pool;
+    pool.setMaxThreadCount(numThreads);
+
+    QRect accessRect(0,0,512,512);
+    for(qint32 i = 0; i < numWorkers; i++) {
         KisStressJob *job = new KisStressJob(dm, accessRect, lock);
         pool.start(job);
-        accessRect.translate(100, 0);
+        accessRect.translate(512, 0);
+    }
+    pool.waitForDone();
+}
+
+template <typename Func>
+void applyToRect(const QRect &rc, Func func) {
+    for (int y = rc.y(); y < rc.y() + rc.height(); y += KisTileData::HEIGHT) {
+        for (int x = rc.x(); x < rc.x() + rc.width(); x += KisTileData::WIDTH) {
+            const int col = x / KisTileData::WIDTH;
+            const int row = y / KisTileData::HEIGHT;
+
+            func(col, row);
+        }
+    }
+}
+
+
+class LazyCopyingStressJob : public QRunnable
+{
+public:
+    LazyCopyingStressJob(KisTiledDataManager &dataManager,
+                         const QRect &rect,
+                         QReadWriteLock &dmExclusiveLock,
+                         QReadWriteLock &tileExclusiveLock,
+                         int numCycles,
+                         bool isWriter)
+        : m_accessRect(rect),
+          dm(dataManager),
+          m_dmExclusiveLock(dmExclusiveLock),
+          m_tileExclusiveLock(tileExclusiveLock),
+          m_numCycles(numCycles),
+          m_isWriter(isWriter)
+    {
+    }
+
+    void run() override {
+        for(qint32 i = 0; i < m_numCycles; i++) {
+
+            //const int epoch = i % 100;
+            int t;
+
+            if (m_isWriter && 0) {
+
+            } else {
+                const bool shouldClear = i % 5 <= 1; // 40% of requests are clears
+                const bool shouldWrite = i % 5 <= 3; // other 40% of requests are writes
+
+                run_concurrent(m_dmExclusiveLock, t) {
+                    if (shouldClear) {
+                        QWriteLocker locker(&m_tileExclusiveLock);
+                        dm.clear(m_accessRect, 4);
+                    } else {
+                        auto readFunc = [this] (int col, int row) {
+                            KisTileSP tile = dm.getTile(col, row, false);
+                            tile->lockForRead();
+                            tile->unlock();
+                        };
+
+                        auto writeFunc = [this] (int col, int row) {
+                            KisTileSP tile = dm.getTile(col, row, true);
+                            tile->lockForWrite();
+                            tile->unlock();
+                        };
+
+                        auto readOldFunc = [this] (int col, int row) {
+                            KisTileSP tile = dm.getOldTile(col, row);
+                            tile->lockForRead();
+                            tile->unlock();
+                        };
+
+                        applyToRect(m_accessRect, readFunc);
+                        if (shouldWrite) {
+                            QReadLocker locker(&m_tileExclusiveLock);
+                            applyToRect(m_accessRect, writeFunc);
+                        }
+                        applyToRect(m_accessRect, readOldFunc);
+                    }
+                }
+            }
+        }
+    }
+
+private:
+    KisMementoSP m_memento;
+    QRect m_accessRect;
+    KisTiledDataManager &dm;
+    QReadWriteLock &m_dmExclusiveLock;
+    QReadWriteLock &m_tileExclusiveLock;
+    const int m_numCycles;
+    const bool m_isWriter;
+};
+
+void KisTiledDataManagerTest::stressTestLazyCopying()
+{
+    quint8 defaultPixel = 0;
+    KisTiledDataManager dm(1, &defaultPixel);
+    QReadWriteLock dmLock;
+    QReadWriteLock tileLock;
+
+#ifdef LIMIT_LONG_TESTS
+    const int numCycles = 10000;
+    const int numThreads = 8;
+    const int numWorkers = 8;
+#else
+    const int numThreads = 16;
+    const int numWorkers = 32;
+    const int numCycles = 100000;
+#endif
+
+    QThreadPool pool;
+    pool.setMaxThreadCount(numThreads);
+
+    const QRect accessRect(0,0,512,256);
+    for(qint32 i = 0; i < numWorkers; i++) {
+        const bool isWriter = i == 0;
+        LazyCopyingStressJob *job = new LazyCopyingStressJob(dm, accessRect,
+                                                             dmLock, tileLock,
+                                                             numCycles, isWriter);
+        pool.start(job);
     }
     pool.waitForDone();
 }

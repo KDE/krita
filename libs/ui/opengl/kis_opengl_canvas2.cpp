@@ -46,7 +46,7 @@
 #include "KisOpenGLModeProber.h"
 #include <KoColorModelStandardIds.h>
 
-#ifndef Q_OS_MACOS
+#if !defined(Q_OS_MACOS) && !defined(Q_OS_ANDROID)
 #include <QOpenGLFunctions_2_1>
 #endif
 
@@ -104,7 +104,7 @@ public:
     QVector3D vertices[6];
     QVector2D texCoords[6];
 
-#ifndef Q_OS_MACOS
+#if !defined(Q_OS_MACOS) && !defined(Q_OS_ANDROID)
     QOpenGLFunctions_2_1 *glFn201;
 #endif
 
@@ -271,7 +271,7 @@ void KisOpenGLCanvas2::initializeGL()
 {
     KisOpenGL::initializeContext(context());
     initializeOpenGLFunctions();
-#ifndef Q_OS_MACOS
+#if !defined(Q_OS_MACOS) && !defined(Q_OS_ANDROID)
     if (!KisOpenGL::hasOpenGLES()) {
         d->glFn201 = context()->versionFunctions<QOpenGLFunctions_2_1>();
         if (!d->glFn201) {
@@ -443,6 +443,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     d->solidColorShader->setUniformValue(d->solidColorShader->location(Uniform::ModelViewProjection), modelMatrix);
 
     if (!KisOpenGL::hasOpenGLES()) {
+#ifndef Q_OS_ANDROID
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
         glEnable(GL_COLOR_LOGIC_OP);
@@ -452,6 +453,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         }
 #else
         glLogicOp(GL_XOR);
+#endif
 #endif
     } else {
         glEnable(GL_BLEND);
@@ -485,8 +487,10 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
             d->lineBuffer.allocate(vertices.constData(), 3 * vertices.size() * sizeof(float));
         }
         else {
+#ifndef Q_OS_ANDROID
             d->solidColorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
             d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
+#endif
         }
 
         glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
@@ -498,7 +502,9 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     }
 
     if (!KisOpenGL::hasOpenGLES()) {
+#ifndef Q_OS_ANDROID
         glDisable(GL_COLOR_LOGIC_OP);
+#endif
     } else {
         glDisable(GL_BLEND);
     }

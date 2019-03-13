@@ -250,6 +250,38 @@ endif(MINGW)
 #########################
 ########################
 
+
+# FIXME: Apparently there is no better way to do this in android toolchain
+if(ANDROID)
+    set (Qt5_DIR $ENV{QT_ANDROID}/lib/cmake/Qt5/)
+    set (Qt5Core_DIR $ENV{QT_ANDROID}/lib/cmake/Qt5Core/)
+    set (Qt5Gui_DIR $ENV{QT_ANDROID}/lib/cmake/Qt5Gui/)
+    set (Qt5Widgets_DIR $ENV{QT_ANDROID}/lib/cmake/Qt5Widgets/)
+    set (Qt5Xml_DIR $ENV{QT_ANDROID}/lib/cmake/Qt5Xml/)
+    set (Qt5Network_DIR $ENV{QT_ANDROID}/lib/cmake/Qt5Network/)
+    set (Qt5PrintSupport_DIR $ENV{QT_ANDROID}/lib/cmake/Qt5PrintSupport/)
+    set (Qt5Svg_DIR $ENV{QT_ANDROID}/lib/cmake/Qt5Svg/)
+    set (Qt5Test_DIR $ENV{QT_ANDROID}/lib/cmake/Qt5Test/)
+    set (Qt5Concurrent_DIR $ENV{QT_ANDROID}/lib/cmake/Qt5Concurrent/)
+    set (Qt5Multimedia_DIR $ENV{QT_ANDROID}/lib/cmake/Qt5Multimedia/)
+    set (Qt5Qml_DIR $ENV{QT_ANDROID}/lib/cmake/Qt5Qml/)
+    set (Qt5Quick_DIR $ENV{QT_ANDROID}/lib/cmake/Qt5Quick/)
+    set (Qt5QuickWidgets_DIR $ENV{QT_ANDROID}/lib/cmake/Qt5QuickWidgets/)
+
+    set(ECM_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kf5/kde/install/share/ECM/cmake)
+    set(KF5Config_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kf5/kde/install/lib/cmake/KF5Config/)
+    set(KF5Config_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kf5/kde/install/lib/cmake/KF5Config/)
+    set(KF5I18n_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kf5/kde/install/lib/cmake/KF5I18n/)
+    set(KF5WidgetsAddons_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kf5/kde/install/lib/cmake/KF5WidgetsAddons)
+    set(KF5Completion_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kf5/kde/install/lib/cmake/KF5Completion)
+    set(KF5GuiAddons_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kf5/kde/install/lib/cmake/KF5GuiAddons)
+    set(KF5ItemViews_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kf5/kde/install/lib/cmake/KF5ItemViews)
+    set(KF5WindowSystem_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kf5/kde/install/lib/cmake/KF5WindowSystem)
+    set(KF5ItemModels_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kf5/kde/install/lib/cmake/KF5ItemModels)
+    set(KF5CoreAddons_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kf5/kde/install/lib/cmake/KF5CoreAddons)
+endif()
+
+
 find_package(ECM 5.22 REQUIRED NOMODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(ECMOptionalAddSubdirectory)
@@ -398,7 +430,7 @@ set_package_properties(Qt5QuickWidgets PROPERTIES
         PURPOSE "Optionally used for the touch gui for Krita")
 endif()
 
-if (NOT WIN32 AND NOT APPLE)
+if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
 
     find_package(Qt5 ${MIN_QT_VERSION} REQUIRED X11Extras)
 
@@ -528,6 +560,19 @@ set(KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/kritaplugins)
 ## Required dependencies  ##
 ############################
 ###########################
+
+if (ANDROID)
+    set (PNG_LIBRARY                ${CMAKE_CURRENT_SOURCE_DIR}/i/lib/libpng16.so)
+    set (PNG_PNG_INCLUDE_DIR        ${CMAKE_CURRENT_SOURCE_DIR}/i/include/libpng16)
+    set (LibExiv2_LIBRARIES         ${CMAKE_CURRENT_SOURCE_DIR}/i/lib/libexiv2.so)
+    set (LibExiv2_INCLUDE_DIRS      ${CMAKE_CURRENT_SOURCE_DIR}/i/include/)
+    set (LCMS2_INCLUDE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/i/include)
+    set (LCMS2_LIBRARIES            ${CMAKE_CURRENT_SOURCE_DIR}/i/lib/liblcms2.so)
+    set (QUAZIP_INCLUDE_DIR         ${CMAKE_CURRENT_SOURCE_DIR}/i/include/quazip5)
+    set (QUAZIP_LIBRARIES           ${CMAKE_CURRENT_SOURCE_DIR}/i/lib/libquazip5.so)
+    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/i/armeabi-v7a/include/boost-1_69)
+    set (Boost_LIBRARY_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/i/armeabi-v7a/lib)
+endif()
 
 find_package(PNG REQUIRED)
 
@@ -765,7 +810,7 @@ set_package_properties(Poppler PROPERTIES
 
 ##
 ## Test for quazip
-## 
+##
 find_package(QuaZip 0.6)
 set_package_properties(QuaZip PROPERTIES
     DESCRIPTION "A library for reading and writing zip files"
@@ -830,3 +875,4 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/p
   find_package(KF5I18n CONFIG REQUIRED)
   ki18n_install(po)
 endif()
+

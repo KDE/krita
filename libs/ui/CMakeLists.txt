@@ -7,6 +7,10 @@ include_directories(SYSTEM
     ${OCIO_INCLUDE_DIR}
 )
 
+if (ANDROID)
+    add_definitions(-DQT_OPENGL_ES_3)
+endif()
+
 add_subdirectory( tests )
 
 if (APPLE)
@@ -336,7 +340,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_mirror_axis.cpp
 
     kis_abstract_perspective_grid.cpp
-    
+
     KisApplication.cpp
     KisAutoSaveRecoveryDialog.cpp
     KisDetailsPane.cpp
@@ -561,11 +565,16 @@ target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::Ite
                       kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} LibExiv2::LibExiv2
 )
 
+if (ANDROID)
+    target_link_libraries(kritaui GLESv3)
+    target_link_libraries(kritaui Qt5::Gui)
+endif()
+
 if (HAVE_QT_MULTIMEDIA)
     target_link_libraries(kritaui Qt5::Multimedia)
 endif()
 
-if (NOT WIN32 AND NOT APPLE)
+if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
   target_link_libraries(kritaui ${X11_X11_LIB}
                                 ${X11_Xinput_LIB})
 endif()
@@ -579,7 +588,7 @@ endif ()
 target_link_libraries(kritaui ${OPENEXR_LIBRARIES})
 
 # Add VSync disable workaround
-if(NOT WIN32 AND NOT APPLE)
+if(NOT WIN32 AND NOT APPLE AND NOT ANDROID)
     target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
 endif()
 

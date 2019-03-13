@@ -7,6 +7,10 @@ include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
 )
 
+if (ANDROID)
+    add_definitions(-DQT_OPENGL_ES_3)
+endif()
+
 add_subdirectory(plugins)
 
 set(kritaqml_SRCS

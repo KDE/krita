@@ -21,6 +21,10 @@
 
 #include "KoConfig.h"
 
+#ifdef Q_OS_ANDROID
+#define GL_MULTISAMPLE 0x809D
+#endif
+
 #include <QPainter>
 #include <QToolButton>
 #include <QApplication>

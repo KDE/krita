@@ -18,7 +18,13 @@
 
 #include "opengl/kis_opengl_image_textures.h"
 
+#ifdef Q_OS_ANDROID
+#include <qopengl.h>
+#endif
+
+#ifndef Q_OS_ANDROID
 #include <QOpenGLFunctions>
+#endif
 #include <QOpenGLContext>
 
 #include <QMessageBox>
@@ -458,12 +464,16 @@ void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesI
         texturesInfo.internalFormat = GL_RGBA16F;
         dbgUI << "Using half (GLES or GL3)";
     } else if (ctx->hasExtension("GL_ARB_texture_float")) {
+#ifndef Q_OS_ANDROID
         texturesInfo.internalFormat = GL_RGBA16F_ARB;
         dbgUI << "Using ARB half";
+#endif
     }
     else if (ctx->hasExtension("GL_ATI_texture_float")) {
+#ifndef Q_OS_ANDROID
         texturesInfo.internalFormat = GL_RGBA_FLOAT16_ATI;
         dbgUI << "Using ATI half";
+#endif
     }
 
     bool haveBuiltInOpenExr = false;
@@ -476,13 +486,17 @@ void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesI
         destinationColorDepthId = Float16BitsColorDepthID;
         dbgUI << "Pixel type half (GLES or GL3)";
     } else if (haveBuiltInOpenExr && ctx->hasExtension("GL_ARB_half_float_pixel")) {
+#ifndef Q_OS_ANDROID
         texturesInfo.type = GL_HALF_FLOAT_ARB;
         destinationColorDepthId = Float16BitsColorDepthID;
         dbgUI << "Pixel type half";
+#endif
     } else {
+#ifndef Q_OS_ANDROID
         texturesInfo.type = GL_FLOAT;
         destinationColorDepthId = Float32BitsColorDepthID;
         dbgUI << "Pixel type float";
+#endif
     }
     texturesInfo.format = GL_RGBA;
 }
@@ -494,9 +508,11 @@ void KisOpenGLImageTextures::updateTextureFormat()
     if (!(m_image && ctx)) return;
 
     if (!KisOpenGL::hasOpenGLES()) {
+#ifndef Q_OS_ANDROID
         m_texturesInfo.internalFormat = GL_RGBA8;
         m_texturesInfo.type = GL_UNSIGNED_BYTE;
         m_texturesInfo.format = GL_BGRA;
+#endif
     } else {
         m_texturesInfo.internalFormat = GL_BGRA8_EXT;
         m_texturesInfo.type = GL_UNSIGNED_BYTE;
@@ -528,11 +544,15 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 m_texturesInfo.internalFormat = GL_RGBA32F;
                 dbgUI << "Using float (GLES or GL3)";
             } else if (ctx->hasExtension("GL_ARB_texture_float")) {
+#ifndef Q_OS_ANDROID
                 m_texturesInfo.internalFormat = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";
+#endif
             } else if (ctx->hasExtension("GL_ATI_texture_float")) {
+#ifndef Q_OS_ANDROID
                 m_texturesInfo.internalFormat = GL_RGBA_FLOAT32_ATI;
                 dbgUI << "Using ATI float";
+#endif
             }
 
             m_texturesInfo.type = GL_FLOAT;
@@ -540,6 +560,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
             destinationColorDepthId = Float32BitsColorDepthID;
         }
         else if (colorDepthId == Integer16BitsColorDepthID) {
+#ifndef Q_OS_ANDROID
             if (!KisOpenGL::hasOpenGLES()) {
                 m_texturesInfo.internalFormat = GL_RGBA16;
                 m_texturesInfo.type = GL_UNSIGNED_SHORT;
@@ -547,17 +568,20 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 destinationColorDepthId = Integer16BitsColorDepthID;
                 dbgUI << "Using 16 bits rgba";
             }
+#endif
             // TODO: for ANGLE, see if we can convert to 16f to support 10-bit display
         }
     }
     else {
         // We will convert the colorspace to 16 bits rgba, instead of 8 bits
         if (colorDepthId == Integer16BitsColorDepthID && !KisOpenGL::hasOpenGLES()) {
+#ifndef Q_OS_ANDROID
             m_texturesInfo.internalFormat = GL_RGBA16;
             m_texturesInfo.type = GL_UNSIGNED_SHORT;
             m_texturesInfo.format = GL_BGRA;
             destinationColorDepthId = Integer16BitsColorDepthID;
             dbgUI << "Using conversion to 16 bits rgba";
+#endif
         } else if (colorDepthId == Float16BitsColorDepthID && KisOpenGL::hasOpenGLES()) {
             // TODO: try removing opengl es limit
             initializeRGBA16FTextures(ctx, m_texturesInfo, destinationColorDepthId);

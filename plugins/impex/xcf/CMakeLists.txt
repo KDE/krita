@@ -19,6 +19,10 @@ if (CMAKE_COMPILER_IS_GNUCC)
     add_compile_options("-Wno-sign-compare")
 endif()
 
+if (ANDROID)
+    add_compile_options("-std=gnu89")
+endif()
+
 set(kritaxcfimport_SOURCES
     kis_xcf_import.cpp
     ${XCFTOOLS_SOURCE_DIR}/xcf-general.c
@@ -29,7 +33,7 @@ set(kritaxcfimport_SOURCES
     ${XCFTOOLS_SOURCE_DIR}/table.c
     ${XCFTOOLS_SOURCE_DIR}/enums.c
     ${XCFTOOLS_SOURCE_DIR}/flatspec.c
-    ${XCFTOOLS_SOURCE_DIR}/flatten.c  
+    ${XCFTOOLS_SOURCE_DIR}/flatten.c
     )
 
 

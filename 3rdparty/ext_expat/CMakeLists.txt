@@ -14,6 +14,20 @@ ExternalProject_Add( ext_expat
 	DEPENDS ext_patch
 )
 
+elseif (ANDROID)
+ExternalProject_Add( ext_expat
+	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+	URL http://files.kde.org/krita/build/dependencies/expat-2.1.0.tar.gz
+	URL_MD5 dd7dab7a5fea97d2a6a43f511449b7cd
+
+	INSTALL_DIR ${PREFIX_ext_expat}
+	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_expat} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE} -DANDROID_PLATFORM=${ANDROID_PLATFORM}
+	BUILD_COMMAND make
+	INSTALL_COMMAND make install
+
+	UPDATE_COMMAND ""
+)
+
 else()
 
 ExternalProject_Add( ext_expat
@@ -22,9 +36,9 @@ ExternalProject_Add( ext_expat
 	URL_MD5 dd7dab7a5fea97d2a6a43f511449b7cd
 
 	INSTALL_DIR ${PREFIX_ext_expat}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_expat}  ${GLOBAL_AUTOMAKE_PROFILE}
-    BUILD_COMMAND make
-    INSTALL_COMMAND make install
+	CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_expat}  ${GLOBAL_AUTOMAKE_PROFILE}
+	BUILD_COMMAND make
+	INSTALL_COMMAND make install
 
 	UPDATE_COMMAND ""
 

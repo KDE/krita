@@ -8,6 +8,10 @@ include_directories(
     ${CMAKE_BINARY_DIR}/libs/flake
 )
 
+if (ANDROID)
+    add_definitions(-DQT_OPENGL_ES_3)
+endif()
+
 add_subdirectory(styles)
 add_subdirectory(tests)
 

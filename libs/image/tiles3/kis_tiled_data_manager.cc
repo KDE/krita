@@ -294,8 +294,9 @@ void KisTiledDataManager::purge(const QRect& area)
         tileData->unblockSwapping();
     }
     Q_FOREACH (KisTileSP tile, tilesToDelete) {
-        m_extentManager.notifyTileRemoved(tile->col(), tile->row());
-        m_hashTable->deleteTile(tile);
+        if (m_hashTable->deleteTile(tile)) {
+            m_extentManager.notifyTileRemoved(tile->col(), tile->row());
+        }
     }
 }
 

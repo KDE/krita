@@ -41,19 +41,19 @@ sed -i -- 's/make-options -j8/make-options -j4 VERBOSE=1/g' kdesrc-conf-android/
 
 if [ -e $qt_android_libs ]
 then
-    sed -E -i "s|-DCMAKE_PREFIX_PATH=.*?\\ |-DCMAKE_PREFIX_PATH=$QT_ANDROID- -DCMAKE_ANDROID_NDK=$CMAKE_ANDROID_NDK -DECM_ADDITIONAL_FIND_ROOT_PATH=$QT_ANDROID\;$CURDIR/kf5/kde/install -DANDROID_STL=c++_static -DCMAKE_TOOLCHAIN_FILE=$CURDIR/kf5/kde/install/share/ECM/toolchain/Android.cmake -DKCONFIG_USE_DBUS=OFF|g" kdesrc-conf-android/kdesrc-buildrc
+    sed -E -i "s|-DCMAKE_PREFIX_PATH=.*?\\ |-DCMAKE_PREFIX_PATH=$QT_ANDROID- -DCMAKE_ANDROID_NDK=$CMAKE_ANDROID_NDK -DECM_ADDITIONAL_FIND_ROOT_PATH=$QT_ANDROID\;$CURDIR/kf5/kde/install -DANDROID_STL=c++_static -DCMAKE_TOOLCHAIN_FILE=$CURDIR/kf5/kde/install/share/ECM/toolchain/Android.cmake -DKCONFIG_USE_DBUS=OFF |g" kdesrc-conf-android/kdesrc-buildrc
 else
     echo "Qt Android libraries path doesn't exist. Exiting."
     exit
 fi
 
 
-sed -E -i "s|use-modules.+|use-modules kconfig ki18n|g" kdesrc-conf-android/kdesrc-buildrc
+sed -E -i "s|use-modules.+|use-modules kconfig ki18n |g" kdesrc-conf-android/kdesrc-buildrc
 rm -rf ${kf5_android_path}/kde/build/${android_architecture}/* # clean build folders
 
 
 # Needs to be patched, ignore the errors
-./kdesrc-build libintl-lite ki18n kcoreaddons kcompletion
+./kdesrc-build libintl-lite ki18n kcoreaddons kcompletion kitemmodels
 
 
 # patches

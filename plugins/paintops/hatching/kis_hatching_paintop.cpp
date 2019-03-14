@@ -47,7 +47,6 @@
 
 KisHatchingPaintOp::KisHatchingPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
-    , m_image(image)
 {
     Q_UNUSED(node);
 

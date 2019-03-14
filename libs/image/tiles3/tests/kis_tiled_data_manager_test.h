@@ -60,6 +60,8 @@ private Q_SLOTS:
     void benchmarkCOWWithPooler();
 
     void stressTest();
+
+    void stressTestLazyCopying();
 };
 
 #endif /* KIS_TILED_DATA_MANAGER_TEST_H */

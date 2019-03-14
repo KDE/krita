@@ -67,7 +67,6 @@ Q_SIGNALS:
 private:
     KisClipboard* m_clipboard;
     KisPaintDeviceSP pd;
-    KisImageWSP m_image;
     KisBrushSP m_brush;
     KoResourceServer<KisBrush> *m_rServer;
 };

@@ -111,6 +111,8 @@
 #include "widgets/KisScreenColorPicker.h"
 #include "KisDlgInternalColorSelector.h"
 
+#include <dialogs/KisAsyncAnimationFramesSaveDialog.h>
+#include <kis_image_animation_interface.h>
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -418,12 +420,13 @@ bool KisApplication::start(const KisApplicationArguments &args)
     const bool doNewImage = args.doNewImage();
     const bool doTemplate = args.doTemplate();
     const bool exportAs = args.exportAs();
+    const bool exportSequence = args.exportSequence();
     const QString exportFileName = args.exportFileName();
 
-    d->batchRun = (exportAs || !exportFileName.isEmpty());
-    const bool needsMainWindow = !exportAs;
+    d->batchRun = (exportAs || exportSequence || !exportFileName.isEmpty());
+    const bool needsMainWindow = (!exportAs && !exportSequence);
     // only show the mainWindow when no command-line mode option is passed
-    bool showmainWindow = !exportAs; // would be !batchRun;
+    bool showmainWindow = (!exportAs && !exportSequence); // would be !batchRun;
 
     const bool showSplashScreen = !d->batchRun && qEnvironmentVariableIsEmpty("NOSPLASH");
     if (showSplashScreen && d->splashScreen) {
@@ -573,6 +576,34 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     doc->setFileBatchMode(true);
                     if (!doc->exportDocumentSync(QUrl::fromLocalFile(exportFileName), outputMimetype.toLatin1())) {
                         dbgKrita << "Could not export " << fileName << "to" << exportFileName << ":" << doc->errorMessage();
+                    }
+                    QTimer::singleShot(0, this, SLOT(quit()));
+                }
+                else if (exportSequence) {
+                    KisDocument *doc = kisPart->createDocument();
+                    doc->setFileBatchMode(d->batchRun);
+                    doc->openUrl(QUrl::fromLocalFile(fileName));
+                    qApp->processEvents(); // For vector layers to be updated
+                    
+                    if (!doc->image()->animationInterface()->hasAnimation()) {
+                        errKrita << "This file has no animation." << endl;
+                        QTimer::singleShot(0, this, SLOT(quit()));
+                        return 1;
+                    }
+
+                    doc->setFileBatchMode(true);
+                    int sequenceStart = 0;
+
+                    KisAsyncAnimationFramesSaveDialog exporter(doc->image(),
+                                               doc->image()->animationInterface()->fullClipRange(),
+                                               exportFileName,
+                                               sequenceStart,
+                                               0);
+                    exporter.setBatchMode(d->batchRun);
+                    KisAsyncAnimationFramesSaveDialog::Result result =
+                        exporter.regenerateRange(0);
+                    if (result == KisAsyncAnimationFramesSaveDialog::RenderFailed) {
+                        errKrita << i18n("Failed to render animation frames!") << endl;
                     }
                     QTimer::singleShot(0, this, SLOT(quit()));
                 }

@@ -217,6 +217,8 @@ void KisResourcesSnapshot::setupMaskingBrushPainter(KisPainter *painter)
 
     painter->setMirrorInformation(m_d->axesCenter, m_d->mirrorMaskHorizontal, m_d->mirrorMaskVertical);
 
+    painter->setStrokeStyle(m_d->strokeStyle);
+
     /**
      * The paintOp should be initialized the last, because it may
      * ask the painter for some options while initialization

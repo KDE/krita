@@ -22,6 +22,7 @@
 #include <QReadWriteLock>
 
 #include <QMutex>
+#include <QAtomicPointer>
 
 #include <QRect>
 #include <QStack>
@@ -64,7 +65,20 @@ public:
      * this tile and leave it. No result will be saved. Used for
      * threading purposes
      */
-    void notifyDead();
+    void notifyDetachedFromDataManager();
+
+    /**
+     * Sometimes the tile gets replaced with another tile. In this case
+     * we shouldn't notify memento manager that the tile has died. Just
+     * forget the link to the manager and bury it in peace.
+     */
+    void notifyDeadWithoutDetaching();
+
+    /**
+     * Called by the hash table to notify that the tile has been attached
+     * to the data manager.
+     */
+    void notifyAttachedToDataManager(KisMementoManager *mm);
 
 public:
 
@@ -140,12 +154,7 @@ private:
      */
     KisTileSP m_nextTile;
 
-#ifdef DEAD_TILES_SANITY_CHECK
     QAtomicPointer<KisMementoManager> m_mementoManager;
-#else
-    KisMementoManager *m_mementoManager;
-#endif
-
 
     /**
      * This is a special mutex for guarding copy-on-write

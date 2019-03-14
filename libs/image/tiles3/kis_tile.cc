@@ -39,10 +39,10 @@ void KisTile::init(qint32 col, qint32 row,
     m_tileData = defaultTileData;
     m_tileData->acquire();
 
-    m_mementoManager = mm;
-
-    if (m_mementoManager)
-        m_mementoManager->registerTileChange(this);
+    if (mm) {
+        mm->registerTileChange(this);
+    }
+    m_mementoManager.storeRelease(mm);
 }
 
 KisTile::KisTile(qint32 col, qint32 row,
@@ -75,7 +75,7 @@ KisTile::~KisTile()
 
 #ifdef DEAD_TILES_SANITY_CHECK
     /**
-     * We should have been disconnected from the memento manager in notifyDead().
+     * We should have been disconnected from the memento manager in notifyDetachedFromDataManager().
      * otherwise, there is a bug
      */
     Q_ASSERT(!m_mementoManager);
@@ -84,12 +84,32 @@ KisTile::~KisTile()
     m_tileData->release();
 }
 
-void KisTile::notifyDead()
+void KisTile::notifyDetachedFromDataManager()
 {
-    if (m_mementoManager) {
+    if (m_mementoManager.loadAcquire()) {
         KisMementoManager *manager = m_mementoManager;
-        m_mementoManager = 0;
+        m_mementoManager.storeRelease(0);
         manager->registerTileDeleted(this);
+    }
+}
+
+void KisTile::notifyDeadWithoutDetaching()
+{
+    m_mementoManager.storeRelease(0);
+}
+
+void KisTile::notifyAttachedToDataManager(KisMementoManager *mm)
+{
+    if (!m_mementoManager.loadAcquire()) {
+        QMutexLocker locker(&m_COWMutex);
+
+        if (!m_mementoManager.loadAcquire()) {
+
+            if (mm) {
+                mm->registerTileChange(this);
+            }
+            m_mementoManager.storeRelease(mm);
+        }
     }
 }
 
@@ -193,8 +213,10 @@ void KisTile::lockForWrite()
 
             DEBUG_COWING(tileData);
 
-            if (m_mementoManager)
-                m_mementoManager->registerTileChange(this);
+            KisMementoManager *mm = m_mementoManager.load();
+            if (mm) {
+                mm->registerTileChange(this);
+            }
         }
         m_COWMutex.unlock();
     }

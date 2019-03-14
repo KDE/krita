@@ -14,6 +14,7 @@
 #include <QVector>
 #include <QMutex>
 #include <QMutexLocker>
+#include <tiles3/kis_lockless_stack.h>
 
 #define CALL_MEMBER(obj, pmf) ((obj).*(pmf))
 
@@ -28,7 +29,7 @@ private:
 
         Action(void (*f)(void*), void* p, quint64 paramSize) : func(f)
         {
-            Q_ASSERT(paramSize <= sizeof(param)); // Verify size limit.
+            KIS_ASSERT(paramSize <= sizeof(param)); // Verify size limit.
             memcpy(&param, p, paramSize);
         }
 
@@ -38,10 +39,19 @@ private:
         }
     };
 
-    QMutex m_mutex;
-    QVector<Action> m_pendingActions;
-    QVector<Action> m_deferedActions;
+    QAtomicInt m_rawPointerUsers;
+    QAtomicInt m_poolSize;
+    KisLocklessStack<Action> m_pendingActions;
+    KisLocklessStack<Action> m_migrationReclaimActions;
     std::atomic_flag m_isProcessing = ATOMIC_FLAG_INIT;
+
+    void releasePoolSafely(KisLocklessStack<Action> *pool) {
+        Action action;
+
+        while (pool->pop(action)) {
+            action();
+        }
+    }
 
 public:
 
@@ -59,50 +69,62 @@ public:
             }
         };
 
+
         Closure closure = {pmf, target};
-        while (m_isProcessing.test_and_set(std::memory_order_acquire)) {
-        }
 
         if (migration) {
-            m_deferedActions.append(Action(Closure::thunk, &closure, sizeof(closure)));
+            m_migrationReclaimActions.push(Action(Closure::thunk, &closure, sizeof(closure)));
         } else {
-            m_pendingActions.append(Action(Closure::thunk, &closure, sizeof(closure)));
+            m_pendingActions.push(Action(Closure::thunk, &closure, sizeof(closure)));
         }
 
-        m_isProcessing.clear(std::memory_order_release);
+        m_poolSize.ref();
     }
 
     void update(bool migration)
     {
-        if (!m_isProcessing.test_and_set(std::memory_order_acquire)) {
-            QVector<Action> actions;
-            actions.swap(m_pendingActions);
+        if (m_rawPointerUsers.testAndSetAcquire(0, 1)) {
+            releasePoolSafely(&m_pendingActions);
+            m_poolSize.store(0);
 
             if (!migration) {
-                m_pendingActions.swap(m_deferedActions);
+                releasePoolSafely(&m_migrationReclaimActions);
             }
 
-            m_isProcessing.clear(std::memory_order_release);
+            m_rawPointerUsers.deref();
 
-            for (auto &action : actions) {
-                action();
-            }
+        } else if (m_poolSize > 4098) {
+            // TODO: make pool size limit configurable!
+
+            while (!m_rawPointerUsers.testAndSetAcquire(0, 1));
+
+            releasePoolSafely(&m_pendingActions);
+            m_poolSize.store(0);
+
+            m_rawPointerUsers.deref();
         }
     }
 
     void flush()
     {
-        if (!m_isProcessing.test_and_set(std::memory_order_acquire)) {
-            for (auto &action : m_pendingActions) {
-                action();
-            }
+        while (!m_rawPointerUsers.testAndSetAcquire(0, 1));
 
-            for (auto &action : m_deferedActions) {
-                action();
-            }
+        releasePoolSafely(&m_pendingActions);
+        m_poolSize.store(0);
 
-            m_isProcessing.clear(std::memory_order_release);
-        }
+        releasePoolSafely(&m_migrationReclaimActions);
+
+        m_rawPointerUsers.deref();
+    }
+
+    void lockRawPointerAccess()
+    {
+        m_rawPointerUsers.ref();
+    }
+
+    void unlockRawPointerAccess()
+    {
+        m_rawPointerUsers.deref();
     }
 };
 

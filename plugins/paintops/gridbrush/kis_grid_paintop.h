@@ -67,7 +67,6 @@ private:
 
 private:
     KisGridPaintOpSettingsSP m_settings;
-    KisImageWSP         m_image;
     KisPaintDeviceSP    m_dab;
     KisPainter*         m_painter;
     qreal              m_xSpacing;

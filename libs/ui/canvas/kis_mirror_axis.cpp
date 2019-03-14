@@ -21,7 +21,7 @@
 
 #include "KoConfig.h"
 
-#ifdef Q_OS_ANDROID
+#ifdef HAS_ONLY_OPENGL_ES
 #define GL_MULTISAMPLE 0x809D
 #endif
 

@@ -46,7 +46,7 @@
 #include "KisOpenGLModeProber.h"
 #include <KoColorModelStandardIds.h>
 
-#if !defined(Q_OS_OSX) && !defined(Q_OS_ANDROID)
+#if !defined(Q_OS_OSX) && !defined(HAS_ONLY_OPENGL_ES)
 #include <QOpenGLFunctions_2_1>
 #endif
 
@@ -104,7 +104,7 @@ public:
     QVector3D vertices[6];
     QVector2D texCoords[6];
 
-#if !defined(Q_OS_OSX) && !defined(Q_OS_ANDROID)
+#if !defined(Q_OS_OSX) && !defined(HAS_ONLY_OPENGL_ES)
     QOpenGLFunctions_2_1 *glFn201;
 #endif
 
@@ -250,7 +250,7 @@ void KisOpenGLCanvas2::initializeGL()
 {
     KisOpenGL::initializeContext(context());
     initializeOpenGLFunctions();
-#if !defined(Q_OS_OSX) && !defined(Q_OS_ANDROID)
+#if !defined(Q_OS_OSX) && !defined(HAS_ONLY_OPENGL_ES)
     if (!KisOpenGL::hasOpenGLES()) {
         d->glFn201 = context()->versionFunctions<QOpenGLFunctions_2_1>();
         if (!d->glFn201) {
@@ -416,7 +416,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     d->solidColorShader->setUniformValue(d->solidColorShader->location(Uniform::ModelViewProjection), modelMatrix);
 
     if (!KisOpenGL::hasOpenGLES()) {
-#ifndef Q_OS_ANDROID
+#ifndef HAS_ONLY_OPENGL_ES
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
         glEnable(GL_COLOR_LOGIC_OP);
@@ -426,8 +426,12 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         }
 #else
         glLogicOp(GL_XOR);
-#endif
-#endif
+#endif  // Q_OS_OSX
+
+#else   // HAS_ONLY_OPENGL_ES
+        KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",
+                "Unexpected KisOpenGL::hasOpenGLES returned false");
+#endif // HAS_ONLY_OPENGL_ES
     } else {
         glEnable(GL_BLEND);
         glBlendFuncSeparate(GL_ONE_MINUS_DST_COLOR, GL_ZERO, GL_ONE, GL_ONE);
@@ -460,10 +464,8 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
             d->lineBuffer.allocate(vertices.constData(), 3 * vertices.size() * sizeof(float));
         }
         else {
-#ifndef Q_OS_ANDROID
             d->solidColorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
             d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
-#endif
         }
 
         glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
@@ -475,8 +477,11 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     }
 
     if (!KisOpenGL::hasOpenGLES()) {
-#ifndef Q_OS_ANDROID
+#ifndef HAS_ONLY_OPENGL_ES
         glDisable(GL_COLOR_LOGIC_OP);
+#else
+        KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",
+                "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
     } else {
         glDisable(GL_BLEND);

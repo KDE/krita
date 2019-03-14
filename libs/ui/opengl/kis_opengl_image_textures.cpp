@@ -18,11 +18,11 @@
 
 #include "opengl/kis_opengl_image_textures.h"
 
-#ifdef Q_OS_ANDROID
+#ifdef HAS_ONLY_OPENGL_ES
 #include <qopengl.h>
 #endif
 
-#ifndef Q_OS_ANDROID
+#ifndef HAS_ONLY_OPENGL_ES
 #include <QOpenGLFunctions>
 #endif
 #include <QOpenGLContext>
@@ -464,15 +464,17 @@ void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesI
         texturesInfo.internalFormat = GL_RGBA16F;
         dbgUI << "Using half (GLES or GL3)";
     } else if (ctx->hasExtension("GL_ARB_texture_float")) {
-#ifndef Q_OS_ANDROID
+#ifndef HAS_ONLY_OPENGL_ES
         texturesInfo.internalFormat = GL_RGBA16F_ARB;
         dbgUI << "Using ARB half";
-#endif
     }
     else if (ctx->hasExtension("GL_ATI_texture_float")) {
-#ifndef Q_OS_ANDROID
         texturesInfo.internalFormat = GL_RGBA_FLOAT16_ATI;
         dbgUI << "Using ATI half";
+#else
+        KIS_ASSERT_X(false, "initializeRGBA16FTextures",
+                "Unexpected KisOpenGL::hasOpenGLES and \
+                 KisOpenGL::hasOpenGL3 returned false");
 #endif
     }
 
@@ -486,16 +488,18 @@ void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesI
         destinationColorDepthId = Float16BitsColorDepthID;
         dbgUI << "Pixel type half (GLES or GL3)";
     } else if (haveBuiltInOpenExr && ctx->hasExtension("GL_ARB_half_float_pixel")) {
-#ifndef Q_OS_ANDROID
+#ifndef HAS_ONLY_OPENGL_ES
         texturesInfo.type = GL_HALF_FLOAT_ARB;
         destinationColorDepthId = Float16BitsColorDepthID;
         dbgUI << "Pixel type half";
-#endif
     } else {
-#ifndef Q_OS_ANDROID
         texturesInfo.type = GL_FLOAT;
         destinationColorDepthId = Float32BitsColorDepthID;
         dbgUI << "Pixel type float";
+#else
+        KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",
+                "Unexpected KisOpenGL::hasOpenGLES and \
+                 KisOpenGL::hasOpenGL3 returned false");
 #endif
     }
     texturesInfo.format = GL_RGBA;
@@ -508,10 +512,13 @@ void KisOpenGLImageTextures::updateTextureFormat()
     if (!(m_image && ctx)) return;
 
     if (!KisOpenGL::hasOpenGLES()) {
-#ifndef Q_OS_ANDROID
+#ifndef HAS_ONLY_OPENGL_ES
         m_texturesInfo.internalFormat = GL_RGBA8;
         m_texturesInfo.type = GL_UNSIGNED_BYTE;
         m_texturesInfo.format = GL_BGRA;
+#else
+        KIS_ASSERT_X(false, "KisOpenGLImageTextures::updateTextureFormat",
+                "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
     } else {
         m_texturesInfo.internalFormat = GL_BGRA8_EXT;
@@ -544,14 +551,16 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 m_texturesInfo.internalFormat = GL_RGBA32F;
                 dbgUI << "Using float (GLES or GL3)";
             } else if (ctx->hasExtension("GL_ARB_texture_float")) {
-#ifndef Q_OS_ANDROID
+#ifndef HAS_ONLY_OPENGL_ES
                 m_texturesInfo.internalFormat = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";
-#endif
             } else if (ctx->hasExtension("GL_ATI_texture_float")) {
-#ifndef Q_OS_ANDROID
                 m_texturesInfo.internalFormat = GL_RGBA_FLOAT32_ATI;
                 dbgUI << "Using ATI float";
+#else
+        KIS_ASSERT_X(false, "KisOpenGLCanvas2::updateTextureFormat",
+                "Unexpected KisOpenGL::hasOpenGLES and \
+                 KisOpenGL::hasOpenGL3 returned false");
 #endif
             }
 
@@ -560,7 +569,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
             destinationColorDepthId = Float32BitsColorDepthID;
         }
         else if (colorDepthId == Integer16BitsColorDepthID) {
-#ifndef Q_OS_ANDROID
+#ifndef HAS_ONLY_OPENGL_ES
             if (!KisOpenGL::hasOpenGLES()) {
                 m_texturesInfo.internalFormat = GL_RGBA16;
                 m_texturesInfo.type = GL_UNSIGNED_SHORT;
@@ -575,12 +584,15 @@ void KisOpenGLImageTextures::updateTextureFormat()
     else {
         // We will convert the colorspace to 16 bits rgba, instead of 8 bits
         if (colorDepthId == Integer16BitsColorDepthID && !KisOpenGL::hasOpenGLES()) {
-#ifndef Q_OS_ANDROID
+#ifndef HAS_ONLY_OPENGL_ES
             m_texturesInfo.internalFormat = GL_RGBA16;
             m_texturesInfo.type = GL_UNSIGNED_SHORT;
             m_texturesInfo.format = GL_BGRA;
             destinationColorDepthId = Integer16BitsColorDepthID;
             dbgUI << "Using conversion to 16 bits rgba";
+#else
+            KIS_ASSERT_X(false, "KisOpenGLCanvas2::updateTextureFormat",
+                    "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
         } else if (colorDepthId == Float16BitsColorDepthID && KisOpenGL::hasOpenGLES()) {
             // TODO: try removing opengl es limit

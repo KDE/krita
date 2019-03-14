@@ -9,6 +9,7 @@ include_directories(SYSTEM
 
 if (ANDROID)
     add_definitions(-DQT_OPENGL_ES_3)
+    add_definitions(-DHAS_ONLY_OPENGL_ES)
 endif()
 
 add_subdirectory( tests )

@@ -261,21 +261,21 @@ void HeifExport::initializeCapabilities()
 void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
     chkLossless->setChecked(cfg->getBool("lossless", true));
-    sliderQuality->setValue(cfg->getInt("quality", 50));
+    sliderQuality->setValue(qreal(cfg->getInt("quality", 50)));
 }
 
 KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const
 {
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->setProperty("lossless", chkLossless->isChecked());
-    cfg->setProperty("quality", sliderQuality->value());
+    cfg->setProperty("quality", int(sliderQuality->value()));
     return cfg;
 }
 
 void KisWdgOptionsHeif::toggleQualitySlider(bool toggle)
 {
     // Disable the quality slider if lossless is true
-    sliderQuality->setEnabled(!toggle);
+    lossySettings->setEnabled(!toggle);
 }
 
 #include <HeifExport.moc>

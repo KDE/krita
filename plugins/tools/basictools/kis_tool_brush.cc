@@ -128,8 +128,6 @@ void KisToolBrush::slotSetSmoothingType(int index)
         m_cmbSmoothingType->setCurrentIndex(index);
     }
 
-    if (smoothingOptions()->smoothingType() == index) return;
-
     switch (index) {
     case 0:
         KisUsageLogger::log("Disabled smoothing.");
@@ -463,6 +461,7 @@ QWidget * KisToolBrush::createOptionWidget()
 
 
     KisConfig cfg(true);
+
     slotSetSmoothingType(cfg.lineSmoothingType());
 
     return optionsWidget;

@@ -58,8 +58,6 @@
 #include <KisUsageLogger.h>
 #include <kis_image_config.h>
 
-#include
-
 #if defined Q_OS_WIN
 #include "config_use_qt_tablet_windows.h"
 #include <windows.h>

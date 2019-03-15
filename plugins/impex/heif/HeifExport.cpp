@@ -128,7 +128,6 @@ KisImportExportFilter::ConversionStatus HeifExport::convert(KisDocument *documen
 
     int quality = configuration->getInt("quality", 50);
     bool lossless = configuration->getBool("lossless", false);
-
     bool has_alpha = configuration->getBool(KisImportExportFilter::ImageContainsTransparencyTag, false);
 
 
@@ -262,6 +261,7 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
     chkLossless->setChecked(cfg->getBool("lossless", true));
     sliderQuality->setValue(qreal(cfg->getInt("quality", 50)));
+    m_hasAlpha = cfg->getBool(KisImportExportFilter::ImageContainsTransparencyTag, false);
 }
 
 KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const
@@ -269,6 +269,7 @@ KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->setProperty("lossless", chkLossless->isChecked());
     cfg->setProperty("quality", int(sliderQuality->value()));
+    cfg->setProperty(KisImportExportFilter::ImageContainsTransparencyTag, m_hasAlpha);
     return cfg;
 }
 

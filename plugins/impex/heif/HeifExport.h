@@ -45,6 +45,9 @@ public:
 private Q_SLOTS:
 
     void toggleQualitySlider(bool toggle);
+private:
+
+    bool m_hasAlpha {false};
 
 };
 

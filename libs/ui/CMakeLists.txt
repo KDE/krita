@@ -397,13 +397,13 @@ if(WIN32)
         ${kritaui_LIB_SRCS}
         qtlockedfile/qtlockedfile_win.cpp
     )
-    if (USE_QT_TABLET_WINDOWS)
-    set(kritaui_LIB_SRCS
-        ${kritaui_LIB_SRCS}
-        input/wintab/kis_tablet_support_win.cpp
-        input/wintab/kis_screen_size_choice_dialog.cpp
-        input/wintab/kis_tablet_support_win8.cpp
-        )
+    if (NOT USE_QT_TABLET_WINDOWS)
+        set(kritaui_LIB_SRCS
+            ${kritaui_LIB_SRCS}
+            input/wintab/kis_tablet_support_win.cpp
+            input/wintab/kis_screen_size_choice_dialog.cpp
+            input/wintab/kis_tablet_support_win8.cpp
+            )
     endif()
 endif()
 
@@ -527,7 +527,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
 )
 
-if(WIN32 AND USE_QT_TABLET_WINDOWS)
+if(WIN32 AND NOT USE_QT_TABLET_WINDOWS)
     ki18n_wrap_ui(kritaui_LIB_SRCS
         input/wintab/kis_screen_size_choice_dialog.ui
     )

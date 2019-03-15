@@ -407,6 +407,13 @@ void KoStore::setCompressionEnabled(bool /*e*/)
 {
 }
 
+void KoStore::setSubstitution(const QString &name, const QString &substitution)
+{
+    Q_D(KoStore);
+    d->substituteThis = name;
+    d->substituteWith = substitution;
+}
+
 bool KoStore::isEncrypted()
 {
     return false;

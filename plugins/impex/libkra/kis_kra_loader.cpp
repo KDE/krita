@@ -217,7 +217,6 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             return KisImageSP(0);
         }
 
-
         if ((attr = element.attribute(WIDTH)).isNull()) {
             m_d->errorMessages << i18n("Image does not specify a width.");
             return KisImageSP(0);
@@ -541,6 +540,11 @@ QStringList KisKraLoader::errorMessages() const
 QStringList KisKraLoader::warningMessages() const
 {
     return m_d->warningMessages;
+}
+
+QString KisKraLoader::imageName() const
+{
+    return m_d->imageName;
 }
 
 

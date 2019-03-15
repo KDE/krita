@@ -336,6 +336,18 @@ bool KraConverter::completeLoading(KoStore* store)
 
     m_image->blockUpdates();
 
+    QString layerPathName = m_kraLoader->imageName();
+    if (!m_store->hasFile(layerPathName)) {
+        // We might be hitting an encoding problem. Get the only folder in the toplevel
+        Q_FOREACH (const QString &entry, m_store->directoryList()) {
+            if (entry.contains("layer")) {
+                layerPathName = entry.split('/').first();
+                m_store->setSubstitution(m_kraLoader->imageName(), layerPathName);
+                break;
+            }
+        }
+    }
+
     m_kraLoader->loadBinaryData(store, m_image, m_doc->localFilePath(), true);
     m_kraLoader->loadPalettes(store, m_doc);
 

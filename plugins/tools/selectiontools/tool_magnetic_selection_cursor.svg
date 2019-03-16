@@ -28,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.919596"
-     inkscape:cx="-4.6145117"
-     inkscape:cy="19.142403"
+     inkscape:zoom="11.2"
+     inkscape:cx="23.518439"
+     inkscape:cy="14.612518"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -58,22 +58,22 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-288.53332)">
+    <circle
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:0.3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path823"
+       cx="4.2333331"
+       cy="292.76666"
+       r="4.0012364" />
+    <circle
+       cy="292.76666"
+       cx="4.2333331"
+       id="circle825"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.30186912;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       r="3.6643672" />
     <path
-       style="fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.19999641;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 0.17918652,288.77211 -0.0392161,4.98021 1.17646888,-1.80385 2.4705854,0.27451 z"
-       id="path924"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 3.9105678,290.18408 v 2.2598 H 1.6507552 v 0.64555 h 2.2598126 v 2.2598 h 0.6455311 v -2.2598 h 2.2598126 v -0.64555 H 4.5560989 v -2.2598 z"
+       id="rect827"
        inkscape:connector-curvature="0" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:7.38660908px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.2;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;"
-       x="-297.12744"
-       y="-3.0445065"
-       id="text928"
-       transform="matrix(0,-1,-1,0,0,0)"><tspan
-         sodipodi:role="line"
-         id="tspan926"
-         x="-297.12744"
-         y="-3.0445065"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;fill:#000000;stroke:#ffffff;stroke-width:0.2;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1">U</tspan></text>
   </g>
 </svg>

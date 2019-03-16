@@ -26,6 +26,8 @@
 #include "kis_experiment_paintop_settings.h"
 #include "kis_experimentop_option.h"
 
+#include <kis_painter.h>
+
 class QPointF;
 class KisPainter;
 
@@ -85,6 +87,8 @@ private:
     bool m_useMirroring;
     KisPainter *m_originalPainter;
     KisPaintDeviceSP m_originalDevice;
+
+    KisPainter::FillStyle m_fillStyle;
 };
 
 #endif // KIS_EXPERIMENT_PAINTOP_H_

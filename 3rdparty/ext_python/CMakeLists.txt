@@ -8,7 +8,7 @@ if (UNIX)
         
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/pyport_osx.diff
 
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure MACOSX_DEPLOYMENT_TARGET=10.11 -prefix=${PREFIX_ext_python}  ${GLOBAL_AUTOMAKE_PROFILE} --enable-shared
+        CONFIGURE_COMMAND <SOURCE_DIR>/configure MACOSX_DEPLOYMENT_TARGET=10.11 -prefix=${PREFIX_ext_python} --with-cxx-main=/usr/bin/g++ --without-ensurepip --without-gcc --enable-shared
         BUILD_COMMAND make
         INSTALL_COMMAND make install
                         COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_python}/bin/python3 ${PREFIX_ext_python}/bin/python

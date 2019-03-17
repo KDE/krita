@@ -254,6 +254,8 @@ krita_deploy () {
     mkdir -p ${KRITA_DMG}/krita.app/Contents/PlugIns
     mkdir -p ${KRITA_DMG}/krita.app/Contents/Frameworks
 
+    mkdir -p ${KRITA_DMG}/krita.app/Contents/Frameworks
+
     echo "Copying share..."
     # Deletes old copies of translation and qml to be recreated
     cd ${KIS_INSTALL_DIR}/share/
@@ -306,9 +308,12 @@ krita_deploy () {
     # rsync -prul {KIS_INSTALL_DIR}/lib/libkrita* Frameworks/
 
     # activate for python enabled Krita
-    # echo "Copying python..."
-    # cp -r ${KIS_INSTALL_DIR}/lib/python3.5 Frameworks/
-    # cp -r ${KIS_INSTALL_DIR}/lib/krita-python-libs Frameworks/
+    echo "Copying python..."
+    # folders with period in name are treated as Frameworks for codesign
+    # there cant be empty files
+    rsync -prul ${KIS_INSTALL_DIR}/lib/python3.5/ ${KRITA_DMG}/krita.app/Contents/Frameworks/python
+    ln -s python ${KRITA_DMG}/krita.app/Contents/Frameworks/python3.5
+    rsync -prul ${KIS_INSTALL_DIR}/lib/krita-python-libs ${KRITA_DMG}/krita.app/Contents/Frameworks/
 
     # XXX: fix rpath for krita.so
     # echo "Copying sip..."
@@ -340,6 +345,12 @@ krita_deploy () {
     printf "Searching for missing libraries\n"
     krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -name "*.dylib" -or -name "*.so" -or -perm u+x)
     echo "Done!"
+
+    # fix python
+    # precompile all pyc so the dont alter signature
+    cd ${KRITA_DMG}/krita.app
+    ${KIS_INSTALL_DIR}/bin/python -m compileall .
+
 }
 
 # helper to define function only once

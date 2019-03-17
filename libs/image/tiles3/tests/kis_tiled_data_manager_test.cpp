@@ -609,7 +609,7 @@ void KisTiledDataManagerTest::benchmarkCOWImpl()
         for (int j = 0; j < 64; j++) {
             KisTileSP tile = dm.getTile(j, i, true);
             tile->lockForWrite();
-            tile->unlock();
+            tile->unlockForWrite();
         }
     }
 
@@ -625,7 +625,7 @@ void KisTiledDataManagerTest::benchmarkCOWImpl()
             for (int j = 0; j < 64; j++) {
                 KisTileSP tile = dm.getTile(j, i, true);
                 tile->lockForWrite();
-                tile->unlock();
+                tile->unlockForWrite();
             }
         }
 
@@ -712,16 +712,16 @@ public:
                     tile = dm.getTile(m_accessRect.x() / TILE_DIMENSION,
                                       m_accessRect.y() / TILE_DIMENSION, false);
                     tile->lockForRead();
-                    tile->unlock();
+                    tile->unlockForRead();
                     tile = dm.getTile(m_accessRect.x() / TILE_DIMENSION,
                                       m_accessRect.y() / TILE_DIMENSION, true);
                     tile->lockForWrite();
-                    tile->unlock();
+                    tile->unlockForWrite();
 
                     tile = dm.getOldTile(m_accessRect.x() / TILE_DIMENSION,
                                          m_accessRect.y() / TILE_DIMENSION);
                     tile->lockForRead();
-                    tile->unlock();
+                    tile->unlockForRead();
                 }
                 break;
             case 3:
@@ -875,19 +875,19 @@ public:
                         auto readFunc = [this] (int col, int row) {
                             KisTileSP tile = dm.getTile(col, row, false);
                             tile->lockForRead();
-                            tile->unlock();
+                            tile->unlockForRead();
                         };
 
                         auto writeFunc = [this] (int col, int row) {
                             KisTileSP tile = dm.getTile(col, row, true);
                             tile->lockForWrite();
-                            tile->unlock();
+                            tile->unlockForWrite();
                         };
 
                         auto readOldFunc = [this] (int col, int row) {
                             KisTileSP tile = dm.getOldTile(col, row);
                             tile->lockForRead();
-                            tile->unlock();
+                            tile->unlockForRead();
                         };
 
                         applyToRect(m_accessRect, readFunc);

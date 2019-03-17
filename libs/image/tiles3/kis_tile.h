@@ -33,6 +33,8 @@
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
 
+//#define DEAD_TILES_SANITY_CHECK
+
 class KisTile;
 typedef KisSharedPtr<KisTile> KisTileSP;
 
@@ -87,7 +89,9 @@ public:
 
     void lockForRead() const;
     void lockForWrite();
-    void unlock() const;
+    void unlockForWrite();
+    void unlockForRead() const;
+
 
     /* this allows us work directly on tile's data */
     inline quint8 *data() const {
@@ -169,6 +173,20 @@ private:
      * before it has been loaded from to the memory.
      */
     mutable QMutex m_swapBarrierLock;
+
+
+#ifdef DEAD_TILES_SANITY_CHECK
+    QAtomicInt m_sanityHasBeenDetached;
+    QAtomicInt m_sanityIsDead;
+    QAtomicInt m_sanityMMHasBeenInitializedManually;
+    QAtomicInt m_sanityNumCOWHappened;
+    QAtomicInt m_sanityLockedForWrite;
+    mutable QAtomicInt m_sanityLockedForRead;
+
+    void sanityCheckIsNotDestroyedYet();
+    void sanityCheckIsNotLockedForWrite();
+#endif
+
 };
 
 #endif // KIS_TILE_H_

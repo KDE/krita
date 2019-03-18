@@ -747,6 +747,7 @@ echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
     -DFOUNDATION_BUILD=ON ^
     -DHAVE_HDR=ON ^
+    -DUSE_QT_TABLET_WINDOWS=ON ^
     -Wno-dev ^
     -G "MinGW Makefiles" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
@@ -761,6 +762,7 @@ echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DBUILD_TESTING=OFF ^
     -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
     -DFOUNDATION_BUILD=ON ^
+    -DUSE_QT_TABLET_WINDOWS=ON ^
     -DHAVE_HDR=ON ^
     -Wno-dev ^
     -G "MinGW Makefiles" ^

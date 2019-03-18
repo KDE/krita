@@ -259,6 +259,9 @@ public:
      */
     virtual void setCompressionEnabled(bool e);
 
+    /// When reading, in the paths in the store where name occurs, substitution is used.
+    void setSubstitution(const QString &name, const QString &substitution);
+
 protected:
     KoStore(Mode mode, bool writeMimetype = true);
 

@@ -69,7 +69,7 @@ public:
                     KisTileSP voidTile = m_srcDM.getTile(i, 0, true);
                     voidTile->lockForWrite();
                     QTest::qSleep(1);
-                    voidTile->unlock();
+                    voidTile->unlockForWrite();
                 }
 
                 QRect cloneRect(0, 0, m_numTiles * 64, 64);
@@ -88,7 +88,7 @@ public:
                     char temp = *voidTile->data();
                     Q_UNUSED(temp);
                     QTest::qSleep(1);
-                    voidTile->unlock();
+                    voidTile->unlockForRead();
                 }
 
                 if(j % 50 == 0) dbgKrita << "Consumer_src:" << j << "of" << m_numCycles;
@@ -104,7 +104,7 @@ public:
                     char temp = *voidTile->data();
                     Q_UNUSED(temp);
                     QTest::qSleep(1);
-                    voidTile->unlock();
+                    voidTile->unlockForRead();
                 }
 
                 if(j % 50 == 0) dbgKrita << "Consumer_dst:" << j << "of" << m_numCycles;
@@ -196,8 +196,8 @@ void KisLowMemoryTests::hangingTilesTest()
 
     QCOMPARE((int)weirdTileData->m_usersCount, 2);
 
-    srcTile->unlock();
-    srcTile->unlock();
+    srcTile->unlockForWrite();
+    srcTile->unlockForRead();
     srcTile = 0;
 
     srcDM.clear();
@@ -213,8 +213,8 @@ void KisLowMemoryTests::hangingTilesTest()
 
     QCOMPARE((int)weirdTileData->m_usersCount, 1);
 
-    dstTile->unlock();
-    dstTile->unlock();
+    dstTile->unlockForWrite();
+    dstTile->unlockForRead();
     dstTile = 0;
 }
 

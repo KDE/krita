@@ -1803,24 +1803,29 @@ void KisPaintDevice::clearSelection(KisSelectionSP selection)
 
     if (r.isValid()) {
 
-        KisHLineIteratorSP devIt = createHLineIteratorNG(r.x(), r.y(), r.width());
-        KisHLineConstIteratorSP selectionIt = selection->projection()->createHLineConstIteratorNG(r.x(), r.y(), r.width());
+        {
+            KisHLineIteratorSP devIt = createHLineIteratorNG(r.x(), r.y(), r.width());
+            KisHLineConstIteratorSP selectionIt = selection->projection()->createHLineConstIteratorNG(r.x(), r.y(), r.width());
 
-        const KoColor defaultPixel = this->defaultPixel();
-        bool transparentDefault = (defaultPixel.opacityU8() == OPACITY_TRANSPARENT_U8);
-        for (qint32 y = 0; y < r.height(); y++) {
+            const KoColor defaultPixel = this->defaultPixel();
+            bool transparentDefault = (defaultPixel.opacityU8() == OPACITY_TRANSPARENT_U8);
+            for (qint32 y = 0; y < r.height(); y++) {
 
-            do {
-                // XXX: Optimize by using stretches
-                colorSpace->applyInverseAlphaU8Mask(devIt->rawData(), selectionIt->rawDataConst(), 1);
-                if (transparentDefault && colorSpace->opacityU8(devIt->rawData()) == OPACITY_TRANSPARENT_U8) {
-                    memcpy(devIt->rawData(), defaultPixel.data(), colorSpace->pixelSize());
-                }
-            } while (devIt->nextPixel() && selectionIt->nextPixel());
-            devIt->nextRow();
-            selectionIt->nextRow();
+                do {
+                    // XXX: Optimize by using stretches
+                    colorSpace->applyInverseAlphaU8Mask(devIt->rawData(), selectionIt->rawDataConst(), 1);
+                    if (transparentDefault && colorSpace->opacityU8(devIt->rawData()) == OPACITY_TRANSPARENT_U8) {
+                        memcpy(devIt->rawData(), defaultPixel.data(), colorSpace->pixelSize());
+                    }
+                } while (devIt->nextPixel() && selectionIt->nextPixel());
+                devIt->nextRow();
+                selectionIt->nextRow();
+            }
         }
+
+        // purge() must be executed **after** all iterators have been destroyed!
         m_d->dataManager()->purge(r.translated(-m_d->x(), -m_d->y()));
+
         setDirty(r);
     }
 }

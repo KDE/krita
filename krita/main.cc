@@ -59,9 +59,12 @@
 #include <kis_image_config.h>
 
 #if defined Q_OS_WIN
+#include "config_use_qt_tablet_windows.h"
 #include <windows.h>
+#ifndef USE_QT_TABLET_WINDOWS
 #include <kis_tablet_support_win.h>
 #include <kis_tablet_support_win8.h>
+#endif
 #include <QLibrary>
 #endif
 
@@ -411,7 +414,7 @@ extern "C" int main(int argc, char **argv)
         }
     }
 #endif
-
+#ifndef USE_QT_TABLET_WINDOWS
     {
         if (cfg.useWin8PointerInput() && !KisTabletSupportWin8::isAvailable()) {
             cfg.setUseWin8PointerInput(false);
@@ -450,6 +453,7 @@ extern "C" int main(int argc, char **argv)
             }
         }
     }
+#endif
 #endif
 
     if (!app.start(args)) {

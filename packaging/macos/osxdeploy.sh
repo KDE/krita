@@ -99,6 +99,7 @@ if [[ ${DMG_validBG} -eq 0 ]]; then
     exit
 fi
 
+# Helper functions
 countArgs () {
     echo "${#}"
 }
@@ -108,27 +109,43 @@ stringContains () {
 
 }
 
+add_lib_to_list() {
+    local llist=${2}
+    if test -z "$(grep ${1##*/} <<< ${llist})" ; then
+        local llist="${llist} ${1##*/} "
+    fi
+    echo ${llist}
+}
+
+# Find all @rpath and Absolute to buildroot path libs
+# Add to libs_used
+# converts absolute buildroot path to @rpath
 find_needed_libs () {
-    local libs_used=""
-    for soFile in $(find ${KRITA_DMG}/krita.app/Contents/PlugIns -name "*.so" -or -name "*.dylib"); do
-        soFy=$(otool -L ${soFile} | cut -d " " -f 1)
-        echo "collecting libs from ${soFile}…" >&2
-        for lib in ${soFy}; do
+    echo "Analizing libraries with oTool..." >&2
+    local libs_used="" # input lib_lists founded
+    for libFile in $(find ${KRITA_DMG}/krita.app/Contents -name "*.so" -or -name "*.dylib"); do
+        oToolResult=$(otool -L ${libFile} | awk '{print $1}')
+        resultArray=(${oToolResult}) # convert to array
+        echo "${libFile##*Contents/}" >&2
+        for lib in ${resultArray[@]:1}; do
             if test "${lib:0:1}" = "@"; then
-                if test -z "$(grep ${lib##*/} <<< ${libs_used})" ; then
-                    local libs_used="${libs_used} ${lib##*/} "
-                fi
+                local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
+            fi
+            if test "${lib:0:${#BUILDROOT}}" = "${BUILDROOT}"; then
+                install_name_tool -id ${lib##*/} "${libFile}"
+                install_name_tool -change ${lib} "@rpath/${lib##*/}" "${libFile}"
+                local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
             fi
         done
     done
-    echo ${libs_used}
+    echo ${libs_used} # return updated list
 }
 
 find_missing_libs (){
     echo "Searching for missing libs on deployment folders…" >&2
     local libs_missing=""
     for lib in ${@}; do
-        if test -z "$(find ${BUILDROOT}/kritadmg/krita.app/Contents/ -name ${lib})"; then
+        if test -z "$(find ${KRITA_DMG}/krita.app/Contents/ -name ${lib})"; then
             echo "Adding ${lib} to missing libraries." >&2
             libs_missing="${libs_missing} ${lib}"
         fi
@@ -160,8 +177,9 @@ copy_missing_libs () {
 }
 
 krita_findmissinglibs() {
-    echo "Adding missin glibraries for plugins"
+    echo "Starting search for missing libraries"
     neededLibs=$(find_needed_libs)
+    echo "\nDone!"
     missingLibs=$(find_missing_libs ${neededLibs})
 
     if test $(countArgs ${missingLibs}) -gt 0; then
@@ -190,7 +208,8 @@ krita_deploy () {
     echo "Copying share..."
     # Deletes old copies of translation and qml to be recreated
     cd ${KIS_INSTALL_DIR}/share/
-    rsync -priul --delete --delete-excluded ./ \
+    rsync -priul --delete ./ \
+            --exclude krita_SRCS.icns \
             --exclude aclocal \
             --exclude doc \
             --exclude ECM \
@@ -342,7 +361,7 @@ createDMG () {
 }
 
 # Run deploy command, instalation is assumed to exist in BUILDROOT/i
-# krita_deploy
+krita_deploy
 
 # Create DMG from files insiede ${KRITA_DMG} folder
 createDMG

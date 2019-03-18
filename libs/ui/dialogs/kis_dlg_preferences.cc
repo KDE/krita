@@ -100,7 +100,10 @@
 #include "input/wintab/drawpile_tablettester/tablettester.h"
 
 #ifdef Q_OS_WIN
-#  include <kis_tablet_support_win8.h>
+#include "config_use_qt_tablet_windows.h"
+#   ifndef USE_QT_TABLET_WINDOWS
+#       include <kis_tablet_support_win8.h>
+#   endif
 #endif
 
 struct BackupSuffixValidator : public QValidator {
@@ -727,6 +730,7 @@ void TabletSettingsTab::setDefault()
     m_page->pressureCurve->setCurve(curve);
 
 #ifdef Q_OS_WIN
+#ifndef USE_QT_TABLET_WINDOWS
     if (KisTabletSupportWin8::isAvailable()) {
         KisConfig cfg(true);
         m_page->radioWintab->setChecked(!cfg.useWin8PointerInput(true));
@@ -735,6 +739,9 @@ void TabletSettingsTab::setDefault()
         m_page->radioWintab->setChecked(true);
         m_page->radioWin8PointerInput->setChecked(false);
     }
+#else
+        m_page->grpTabletApi->setVisible(false);
+#endif
 #endif
 }
 
@@ -755,6 +762,7 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
     m_page->pressureCurve->setCurve(curve);
 
 #ifdef Q_OS_WIN
+#ifndef USE_QT_TABLET_WINDOWS
     if (KisTabletSupportWin8::isAvailable()) {
         m_page->radioWintab->setChecked(!cfg.useWin8PointerInput());
         m_page->radioWin8PointerInput->setChecked(cfg.useWin8PointerInput());
@@ -763,6 +771,9 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
         m_page->radioWin8PointerInput->setChecked(false);
         m_page->grpTabletApi->setVisible(false);
     }
+#else
+        m_page->grpTabletApi->setVisible(false);
+#endif
 #else
     m_page->grpTabletApi->setVisible(false);
 #endif
@@ -1582,9 +1593,11 @@ bool KisDlgPreferences::editPreferences()
         // Tablet settings
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
 #ifdef Q_OS_WIN
+#ifndef USE_QT_TABLET_WINDOWS
         if (KisTabletSupportWin8::isAvailable()) {
             cfg.setUseWin8PointerInput(dialog->m_tabletSettings->m_page->radioWin8PointerInput->isChecked());
         }
+#endif
 #endif
 
         dialog->m_performanceSettings->save();

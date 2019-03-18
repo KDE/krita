@@ -81,12 +81,12 @@ if test ${OSTYPE} == "darwin*"; then
 fi
 
 check_dir_path () {
-    echo "Checking if ${1} exists and is dir… \r"
+    printf "%s" "Checking if ${1} exists and is dir... "
     if test -d ${1}; then
         echo "OK"
         return 0
     elif test -e ${1}; then
-        echo "ERROR: file ${1} exists but is not a directory!"
+        echo "\n\tERROR: file ${1} exists but is not a directory!"
         return 1
     else
         echo "Creating ${1}"
@@ -175,6 +175,8 @@ build_3rdparty () {
         ext_sip \
         ext_pyqt
 
+    # we need to move the contents of sip/PyQt5 to python-3.x/PyQt5/
+
     # on osx qmake is not correctly set to qmake-qt5 for some reason
     ln -s -f ${KIS_INSTALL_DIR}/bin/qmake ${KIS_INSTALL_DIR}/bin/qmake-qt5
 
@@ -243,7 +245,7 @@ rebuild_3rdparty () {
         done
     }
 
-    if ! test -n ${1}; then
+    if ! test -z ${1}; then
         build_install_ext ${1}
         exit
     fi

@@ -40,7 +40,6 @@ private:
     };
 
     QAtomicInt m_rawPointerUsers;
-    QAtomicInt m_poolSize;
     KisLocklessStack<Action> m_pendingActions;
     KisLocklessStack<Action> m_migrationReclaimActions;
     std::atomic_flag m_isProcessing = ATOMIC_FLAG_INIT;
@@ -69,7 +68,6 @@ public:
             }
         };
 
-
         Closure closure = {pmf, target};
 
         if (migration) {
@@ -77,29 +75,25 @@ public:
         } else {
             m_pendingActions.push(Action(Closure::thunk, &closure, sizeof(closure)));
         }
-
-        m_poolSize.ref();
     }
 
-    void update(bool migration)
+    void update(bool migrationInProgress)
     {
         if (m_rawPointerUsers.testAndSetAcquire(0, 1)) {
             releasePoolSafely(&m_pendingActions);
-            m_poolSize.store(0);
 
-            if (!migration) {
+            if (!migrationInProgress) {
                 releasePoolSafely(&m_migrationReclaimActions);
             }
 
             m_rawPointerUsers.deref();
 
-        } else if (m_poolSize > 4098) {
+        } else if (m_pendingActions.size() > 4098) {
             // TODO: make pool size limit configurable!
 
             while (!m_rawPointerUsers.testAndSetAcquire(0, 1));
 
             releasePoolSafely(&m_pendingActions);
-            m_poolSize.store(0);
 
             m_rawPointerUsers.deref();
         }
@@ -110,8 +104,6 @@ public:
         while (!m_rawPointerUsers.testAndSetAcquire(0, 1));
 
         releasePoolSafely(&m_pendingActions);
-        m_poolSize.store(0);
-
         releasePoolSafely(&m_migrationReclaimActions);
 
         m_rawPointerUsers.deref();

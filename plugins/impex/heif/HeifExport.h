@@ -36,6 +36,7 @@ public:
     {
         setupUi(this);
         connect(chkLossless, SIGNAL(toggled(bool)), SLOT(toggleQualitySlider(bool)));
+        sliderQuality->setRange(0, 100, 0);
     }
 
     void setConfiguration(const KisPropertiesConfigurationSP  cfg) override;
@@ -44,6 +45,9 @@ public:
 private Q_SLOTS:
 
     void toggleQualitySlider(bool toggle);
+private:
+
+    bool m_hasAlpha {false};
 
 };
 

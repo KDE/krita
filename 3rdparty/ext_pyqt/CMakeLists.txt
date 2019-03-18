@@ -1,6 +1,6 @@
 SET(PREFIX_ext_pyqt "${EXTPREFIX}" )
 if (UNIX)
-    SET(PYTHON_EXECUTABLE_PATH ${PREFIX_ext_sip}/bin/python3)
+    SET(PYTHON_EXECUTABLE_PATH ${PREFIX_ext_pyqt}/bin/python3)
     if(NOT EXISTS ${PYTHON_EXECUTABLE_PATH})
       message("WARNING: using system python3!")
       SET(PYTHON_EXECUTABLE_PATH python3)

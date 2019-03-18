@@ -849,10 +849,10 @@ inline T cfModuloShiftContinuous(T src, T dst) {
     qreal fdst = scale<qreal>(dst);
     
     if (fsrc == 1.0 && fdst == 0.0) {
-    return scale<T>(0.0);
+    return scale<T>(1.0);
     }  
     
-    return scale<T>((int(ceil(fdst+fsrc)) % 2 != 0) || (fdst == zeroValue<T>()) ? inv(cfModuloShift(fsrc,fdst)) : cfModuloShift(fsrc,fdst)); 
+    return scale<T>((int(ceil(fdst+fsrc)) % 2 != 0) || (fdst == zeroValue<T>()) ? cfModuloShift(fsrc,fdst) : inv(cfModuloShift(fsrc,fdst))); 
 }
 
 template<class T>

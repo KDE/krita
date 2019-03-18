@@ -59,6 +59,7 @@
 #include "kis_layer_properties_icons.h"
 #include "kis_layer_utils.h"
 #include "kis_projection_leaf.h"
+#include "KisRecycleProjectionsJob.h"
 
 
 class KisSafeProjection {
@@ -66,13 +67,16 @@ public:
     KisPaintDeviceSP getDeviceLazy(KisPaintDeviceSP prototype) {
         QMutexLocker locker(&m_lock);
 
-        if (!m_reusablePaintDevice) {
-            m_reusablePaintDevice = new KisPaintDevice(*prototype);
-        }
         if(!m_projection ||
            *m_projection->colorSpace() != *prototype->colorSpace()) {
-            m_projection = m_reusablePaintDevice;
-            m_projection->makeCloneFromRough(prototype, prototype->extent());
+
+            if (!m_cleanProjections.isEmpty()) {
+                m_projection = m_cleanProjections.takeLast();
+                m_projection->makeCloneFromRough(prototype, prototype->extent());
+            } else {
+                m_projection = new KisPaintDevice(*prototype);
+            }
+
             m_projection->setProjectionDevice(true);
         }
 
@@ -80,31 +84,46 @@ public:
     }
 
     void tryCopyFrom(const KisSafeProjection &rhs) {
-        QMutexLocker locker(&m_lock);
-
+        QMutexLocker rhsLocker(&rhs.m_lock);
         if (!rhs.m_projection) return;
 
-        if (!m_reusablePaintDevice) {
-            m_reusablePaintDevice = new KisPaintDevice(*rhs.m_projection);
-            m_projection = m_reusablePaintDevice;
-        } else {
-            m_projection = m_reusablePaintDevice;
-            m_projection->makeCloneFromRough(rhs.m_projection, rhs.m_projection->extent());
-        }
+        getDeviceLazy(rhs.m_projection);
     }
 
-    void freeDevice() {
+    bool releaseDevice() {
         QMutexLocker locker(&m_lock);
-        m_projection = 0;
-        if(m_reusablePaintDevice) {
-            m_reusablePaintDevice->clear();
+
+        bool result = false;
+
+        if (m_projection) {
+            m_dirtyProjections.append(m_projection);
+            m_projection = 0;
+            result = true;
         }
+
+        return result;
+    }
+
+    void recycleProjections() {
+        QMutexLocker locker(&m_lock);
+
+        Q_FOREACH (KisPaintDeviceSP dev, m_dirtyProjections) {
+            dev->clear();
+            m_cleanProjections.append(dev);
+        }
+        m_dirtyProjections.clear();
+    }
+
+    void discardCaches() {
+        QMutexLocker locker(&m_lock);
+        m_dirtyProjections.clear();
     }
 
 private:
-    QMutex m_lock;
+    mutable QMutex m_lock;
     KisPaintDeviceSP m_projection;
-    KisPaintDeviceSP m_reusablePaintDevice;
+    QVector<KisPaintDeviceSP> m_dirtyProjections;
+    QVector<KisPaintDeviceSP> m_cleanProjections;
 };
 
 class KisCloneLayersList {
@@ -243,6 +262,7 @@ KisLayer::KisLayer(KisImageWSP image, const QString &name, quint8 opacity)
     m_d->image = image;
     m_d->metaDataStore = new KisMetaData::Store();
     m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
+    connect(this, SIGNAL(internalInitiateProjectionsCleanup()), this, SLOT(slotInitiateProjectionsCleanup()));
 }
 
 KisLayer::KisLayer(const KisLayer& rhs)
@@ -270,6 +290,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
             }
         }
     }
+    connect(this, SIGNAL(internalInitiateProjectionsCleanup()), this, SLOT(slotInitiateProjectionsCleanup()));
 }
 
 KisLayer::~KisLayer()
@@ -619,6 +640,28 @@ QList<KisEffectMaskSP> KisLayer::searchEffectMasks(KisNodeSP lastNode) const
     return masks;
 }
 
+void KisLayer::recycleProjectionsInSafety()
+{
+    m_d->safeProjection.recycleProjections();
+}
+
+void KisLayer::slotInitiateProjectionsCleanup()
+{
+    /**
+     * After the projection has been used, we should clean it. But we cannot
+     * clean it until all the workers accessing it have completed their job.
+     *
+     * Therefore we just schedule an exclusive job that will execute the
+     * recycling action in an exclusive context, when no jobs are running.
+     */
+
+    if (m_d->image) {
+        m_d->image->addSpontaneousJob(new KisRecycleProjectionsJob(this));
+    } else {
+        m_d->safeProjection.discardCaches();
+    }
+}
+
 bool KisLayer::hasEffectMasks() const
 {
     return  !m_d->masksCache.effectMasks().isEmpty();
@@ -795,7 +838,9 @@ QRect KisLayer::updateProjection(const QRect& rect, KisNodeSP filthyNode)
             !originalDevice) return QRect();
 
     if (!needProjection() && !hasEffectMasks()) {
-        m_d->safeProjection.freeDevice();
+        if (m_d->safeProjection.releaseDevice()) {
+            emit internalInitiateProjectionsCleanup();
+        }
     } else {
 
         if (!updatedRect.isEmpty()) {

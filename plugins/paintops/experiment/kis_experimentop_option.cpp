@@ -67,6 +67,10 @@ KisExperimentOpOption::KisExperimentOpOption()
 
     connect(m_options->windingFillCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->hardEdgeCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+
+    connect(m_options->patternButton, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_options->solidColorButton, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+
     setConfigurationPage(m_options);
 }
 
@@ -88,6 +92,12 @@ void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfigurationSP sett
     op.windingFill = m_options->windingFillCHBox->isChecked();
     op.hardEdge = m_options->hardEdgeCHBox->isChecked();
 
+    if (m_options->patternButton->isChecked()) {
+        op.fillType = ExperimentFillType::Pattern;
+    } else {
+        op.fillType = ExperimentFillType::SolidColor;
+    }
+
     op.writeOptionSetting(setting);
 }
 
@@ -105,6 +115,13 @@ void KisExperimentOpOption::readOptionSetting(const KisPropertiesConfigurationSP
     m_options->speedCHBox->setChecked(op.isSpeedEnabled);
     m_options->smoothCHBox->setChecked(op.isSmoothingEnabled);
     m_options->displaceCHBox->setChecked(op.isDisplacementEnabled);
+
+
+    if (op.fillType == ExperimentFillType::Pattern) {
+        m_options->patternButton->setChecked(true);
+    } else {
+        m_options->solidColorButton->setChecked(true);
+    }
 }
 
 inline void enableCheckBox(QCheckBox *checkBox, qreal sliderValue)

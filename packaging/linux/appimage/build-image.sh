@@ -72,7 +72,7 @@ done
 patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so
 patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/sketch/libkritasketchplugin.so
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so
-echo "0"
+echo `find $APPDIR -name sip.so`
 #patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/sip/sip.so
 
 echo "1"

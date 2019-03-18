@@ -42,7 +42,7 @@ public:
 
 public:
     KisClickableGLImageWidget(QWidget *parent = nullptr);
-    KisClickableGLImageWidget(QSurfaceFormat::ColorSpace colorSpace,
+    KisClickableGLImageWidget(KisSurfaceColorSpace colorSpace,
                               QWidget *parent = nullptr);
     ~KisClickableGLImageWidget();
 

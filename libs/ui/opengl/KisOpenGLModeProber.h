@@ -24,6 +24,7 @@
 #include "kritaui_export.h"
 #include "kis_config.h"
 #include <QSurfaceFormat>
+#include "KisSurfaceColorSpace.h"
 #include <boost/optional.hpp>
 
 class KoColorProfile;
@@ -47,8 +48,8 @@ public:
     boost::optional<Result> probeFormat(const QSurfaceFormat &format,
                                         bool adjustGlobalState = true);
 
-    static bool fuzzyCompareColorSpaces(const QSurfaceFormat::ColorSpace &lhs,
-                                        const QSurfaceFormat::ColorSpace &rhs);
+    static bool fuzzyCompareColorSpaces(const KisSurfaceColorSpace &lhs,
+                                        const KisSurfaceColorSpace &rhs);
 
 public:
     static void initSurfaceFormatFromConfig(KisConfig::RootSurfaceFormat config,

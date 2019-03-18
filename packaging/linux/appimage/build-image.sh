@@ -69,11 +69,19 @@ done
 patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so
 patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/sketch/libkritasketchplugin.so
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so
+echo "0"
 #patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/sip/sip.so
+
+echo "1"
 
 # Step 5: Find out what version of Krita we built and give the Appimage a proper name
 cd $BUILD_PREFIX/krita-build
+
+echo "2"
+
 KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h | cut -d '"' -f 2)
+
+echo "3"
 
 # Also find out the revision of Git we built
 # Then use that to generate a combined name we'll distribute
@@ -85,8 +93,12 @@ else
 	VERSION=$KRITA_VERSION
 fi
 
+echo "4"
+
 # Return to our build root
 cd $BUILD_PREFIX
+
+echo "5"
 
 # Step 4: Build the image!!!
 linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
@@ -97,6 +109,12 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -extra-plugins=$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so,$APPDIR/usr/lib//qml/org/krita/sketch/libkritasketchplugin.so,$APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so  \
   -appimage 
 
+echo "6"  
+  
 # Generate a new name for the Appimage file and rename it accordingly
 APPIMAGE=krita-"$VERSION"-x86_64.appimage
+echo "7"
+
 mv Krita*x86_64.AppImage $APPIMAGE
+
+echo "8"

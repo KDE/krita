@@ -1,7 +1,10 @@
 #!/bin/bash
 
+echo "Starting build-image.sh"
+
+
 # Halt on errors and be verbose about what we are doing
-set -e
+#set -e
 set -x
 
 # Read in our parameters

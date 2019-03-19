@@ -165,6 +165,22 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
         return true;
     }
 
+    /**
+     * FIXME: The move tool is not completely asynchronous, it
+     * needs the content of the layer and/or selection to calculate
+     * the bounding rectange. Technically, we can move its calculation
+     * into the stroke itself and pass it back to the tool via a signal.
+     *
+     * But currently, we will just disable starting a new stroke
+     * asynchronously.
+     */
+    if (image->tryBarrierLock()) {
+        image->unlock();
+    } else {
+        return false;
+    }
+
+
     initHandles(nodes);
 
     KisStrokeStrategy *strategy;

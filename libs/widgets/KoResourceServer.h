@@ -120,38 +120,9 @@ public:
      * @param filename file name of the resource file to be imported
      * @param fileCreation decides whether to create the file in the saveLocation() directory
      */
-    bool importResourceFile(const QString & filename, bool fileCreation=true) {
-
-//        QFileInfo fi(filename);
-//        if (!fi.exists())
-//            return false;
-//        if ( fi.size() == 0)
-//            return false;
-
-//        QSharedPointer<T> resource = createResource( filename );
-//        resource->load();
-//        if (!resource->valid()) {
-//            warnWidgets << "Import failed! Resource is not valid";
-
-//            return false;
-
-//        }
-
-//        if (fileCreation) {
-//            Q_ASSERT(!resource->defaultFileExtension().isEmpty());
-//            Q_ASSERT(!saveLocation().isEmpty());
-
-//            QString newFilename = saveLocation() + fi.baseName() + resource->defaultFileExtension();
-//            QFileInfo fileInfo(newFilename);
-
-//            int i = 1;
-//            while (fileInfo.exists()) {
-//                fileInfo.setFile(saveLocation() + fi.baseName() + QString("%1").arg(i) + resource->defaultFileExtension());
-//                i++;
-//            }
-//            resource->setFilename(fileInfo.filePath());
-//        }
-        return true;
+    bool importResourceFile(const QString &filename)
+    {
+        return m_resourceModel->importResourceFile(filename);
     }
 
     /// Removes the resource file from the resource server
@@ -173,17 +144,10 @@ public:
      * @param observer the observer to be added
      * @param notifyLoadedResources determines if the observer should be notified about the already loaded resources
      */
-    void addObserver(ObserverType* observer, bool notifyLoadedResources = true)
+    void addObserver(ObserverType* observer)
     {
         if (observer && !m_observers.contains(observer)) {
             m_observers.append(observer);
-
-            if(notifyLoadedResources) {
-//                Q_FOREACH (QSharedPointer<T> resource, ByFilename) {
-//                    observer->resourceAdded(resource);
-
-//                }
-            }
         }
     }
 
@@ -193,15 +157,16 @@ public:
      */
     void removeObserver(ObserverType* observer)
     {
-        int index = m_observers.indexOf( observer );
-        if( index < 0 )
+        int index = m_observers.indexOf(observer);
+        if (index < 0) {
             return;
-
+        }
         m_observers.removeAt( index );
     }
 
-    QSharedPointer<T> resourceByFilename(const QString& /*filename*/) const
+    QSharedPointer<T> resourceByFilename(const QString& filename) const
     {
+        qDebug() << "resourceByFilename" << filename;
 //        if (m_resourcesByFilename.contains(filename)) {
 //            return m_resourcesByFilename[filename];
 //        }
@@ -209,15 +174,18 @@ public:
     }
 
 
-    QSharedPointer<T> resourceByName( const QString& /*name */) const
+    QSharedPointer<T> resourceByName(const QString& name) const
     {
+        qDebug() << "resourceByName" << name;
 //        if (m_resourcesByName.contains(name)) {
 //            return m_resourcesByName[name];
 //        }
         return 0;
     }
 
-    QSharedPointer<T> resourceByMD5(const QByteArray& /*md5*/) const {
+    QSharedPointer<T> resourceByMD5(const QByteArray& md5) const
+    {
+        qDebug() << "resourceByMD5" << md5;
 //        return m_resourcesByMd5.value(md5);
         return 0;
     }

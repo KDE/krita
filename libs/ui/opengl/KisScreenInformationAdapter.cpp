@@ -103,7 +103,7 @@ void KisScreenInformationAdapter::Private::initialize(QOpenGLContext *newContext
 
     try {
 
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN && QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 
         if (!context->isOpenGLES()) {
             throw EGLException("the context is not OpenGL ES");
@@ -210,7 +210,7 @@ KisScreenInformationAdapter::ScreenInfo KisScreenInformationAdapter::infoForScre
 {
     ScreenInfo info;
 
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN && QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 
     QPlatformNativeInterface *nativeInterface = qGuiApp->platformNativeInterface();
     HMONITOR monitor = reinterpret_cast<HMONITOR>(nativeInterface->nativeResourceForScreen("handle", screen));

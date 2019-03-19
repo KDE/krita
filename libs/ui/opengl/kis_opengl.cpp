@@ -447,8 +447,10 @@ public:
     bool operator()(const QSurfaceFormat &lhs, const QSurfaceFormat &rhs) const {
         KIS_SAFE_ASSERT_RECOVER_NOOP(m_preferredColorSpace != KisSurfaceColorSpace::DefaultColorSpace);
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         ORDER_BY(isPreferredColorSpace(lhs.colorSpace()),
                  isPreferredColorSpace(rhs.colorSpace()));
+#endif
 
 
         if (doPreferHDR()) {

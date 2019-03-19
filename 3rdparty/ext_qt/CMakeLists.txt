@@ -207,7 +207,7 @@ else( APPLE )
         BUILD_IN_SOURCE     ON
 
        URL https://download.qt.io/archive/qt/5.12/5.12.2/single/qt-everywhere-src-5.12.2.tar.xz
-       URL_MD5=99c2eb46e533371798b4ca2d1458e065
+       URL_MD5 99c2eb46e533371798b4ca2d1458e065
 
         CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
 

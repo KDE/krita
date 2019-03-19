@@ -173,7 +173,8 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
         dynamic_cast<KisPaintLayer*>(node.data()) : 0;
 
     if (paintLayer && selection &&
-        !selection->isTotallyUnselected(image->bounds())) {
+        (!selection->selectedRect().isEmpty() &&
+         !selection->selectedExactRect().isEmpty())) {
 
         strategy =
             new MoveSelectionStrokeStrategy(paintLayer,

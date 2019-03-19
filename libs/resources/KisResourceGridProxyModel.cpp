@@ -246,7 +246,6 @@ void KisResourceGridProxyModel::setSourceModel(QAbstractItemModel* newSourceMode
 
 QModelIndex KisResourceGridProxyModel::mapToSource(const QModelIndex& proxyIndex) const
 {
-    qDebug() << "KisResourceGridProxyModel::mapSelectionToSource()";
     if (!sourceModel()) return QModelIndex();
     return sourceModel()->index(sourceRow(proxyIndex.row(), proxyIndex.column()), KisResourceModel::Image);
 }

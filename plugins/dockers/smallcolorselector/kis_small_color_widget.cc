@@ -125,7 +125,7 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
 
     }
 
-    const QSurfaceFormat::ColorSpace colorSpace = QSurfaceFormat::DefaultColorSpace;
+    const KisSurfaceColorSpace colorSpace = KisSurfaceColorSpace::DefaultColorSpace;
 
     d->hueWidget = new KisClickableGLImageWidget(colorSpace, this);
     d->hueWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);

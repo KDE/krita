@@ -1014,15 +1014,15 @@ void PerformanceTab::slotFrameClonesLimitChanged(int value)
 #include <QOpenGLContext>
 #include <QScreen>
 
-QString colorSpaceString(QSurfaceFormat::ColorSpace cs, int depth)
+QString colorSpaceString(KisSurfaceColorSpace cs, int depth)
 {
     const QString csString =
 #ifdef HAVE_HDR
-        cs == QSurfaceFormat::bt2020PQColorSpace ? "Rec. 2020 PQ" :
-        cs == QSurfaceFormat::scRGBColorSpace ? "Rec. 709 Linear" :
+        cs == KisSurfaceColorSpace::bt2020PQColorSpace ? "Rec. 2020 PQ" :
+        cs == KisSurfaceColorSpace::scRGBColorSpace ? "Rec. 709 Linear" :
 #endif
-        cs == QSurfaceFormat::sRGBColorSpace ? "sRGB" :
-        cs == QSurfaceFormat::DefaultColorSpace ? "sRGB" :
+        cs == KisSurfaceColorSpace::sRGBColorSpace ? "sRGB" :
+        cs == KisSurfaceColorSpace::DefaultColorSpace ? "sRGB" :
         "Unknown Color Space";
 
     return QString("%1 (%2 bit)").arg(csString).arg(depth);
@@ -1106,10 +1106,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     lblCurrentDisplayFormat->setText("");
     lblCurrentRootSurfaceFormat->setText("");
     lblHDRWarning->setText("");
-    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::sRGBColorSpace, 8));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::sRGBColorSpace, 8));
 #ifdef HAVE_HDR
-    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::bt2020PQColorSpace, 10));
-    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::scRGBColorSpace, 16));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::bt2020PQColorSpace, 10));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::scRGBColorSpace, 16));
 #endif
     cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(KisConfig::BT709_G22));
     slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
@@ -1151,9 +1151,13 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         }
 
         const QSurfaceFormat currentFormat = KisOpenGLModeProber::instance()->surfaceformatInUse();
-        lblCurrentRootSurfaceFormat->setText(colorSpaceString(currentFormat.colorSpace(), currentFormat.redBufferSize()));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+        KisSurfaceColorSpace colorSpace = currentFormat.colorSpace();
+#else
+        KisSurfaceColorSpace colorSpace = KisSurfaceColorSpace::DefaultColorSpace;
+#endif
+        lblCurrentRootSurfaceFormat->setText(colorSpaceString(colorSpace, currentFormat.redBufferSize()));
         cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(cfg.rootSurfaceFormat()));
-
         connect(cmbPreferedRootSurfaceFormat, SIGNAL(currentIndexChanged(int)), SLOT(slotPreferredSurfaceFormatChanged(int)));
         slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
     }
@@ -1287,7 +1291,7 @@ void DisplaySettingsTab::slotPreferredSurfaceFormatChanged(int index)
             KisScreenInformationAdapter::ScreenInfo info = adapter.infoForScreen(screen);
             if (info.isValid()) {
                 if (cmbPreferedRootSurfaceFormat->currentIndex() != formatToIndex(KisConfig::BT709_G22) &&
-                    info.colorSpace == QSurfaceFormat::sRGBColorSpace) {
+                    info.colorSpace == KisSurfaceColorSpace::sRGBColorSpace) {
                     lblHDRWarning->setText(i18n("WARNING: current display doesn't support HDR rendering"));
                 } else {
                     lblHDRWarning->setText("");

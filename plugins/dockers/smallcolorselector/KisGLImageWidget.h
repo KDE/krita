@@ -27,6 +27,7 @@
 #include <QOpenGLBuffer>
 #include <QTransform>
 #include <KisGLImageF16.h>
+#include <opengl/KisSurfaceColorSpace.h>
 
 
 class KisGLImageWidget : public QOpenGLWidget, protected QOpenGLFunctions
@@ -34,7 +35,7 @@ class KisGLImageWidget : public QOpenGLWidget, protected QOpenGLFunctions
     Q_OBJECT
 public:
     KisGLImageWidget(QWidget *parent = nullptr);
-    KisGLImageWidget(QSurfaceFormat::ColorSpace colorSpace,
+    KisGLImageWidget(KisSurfaceColorSpace colorSpace,
                      QWidget *parent = nullptr);
 
     ~KisGLImageWidget();

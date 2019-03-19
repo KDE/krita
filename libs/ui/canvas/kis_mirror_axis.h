@@ -20,6 +20,8 @@
 #ifndef KISMIRRORAXIS_H
 #define KISMIRRORAXIS_H
 
+#include <QScopedPointer>
+
 #include "kis_canvas_decoration.h"
 
 class KisView;
@@ -53,7 +55,7 @@ protected:
 
 private:
     class Private;
-    Private * const d;
+    const QScopedPointer<Private> d;
 
 private Q_SLOTS:
     void mirrorModeChanged();

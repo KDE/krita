@@ -70,7 +70,8 @@ export MACOSX_DEPLOYMENT_TARGET=10.11
 export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.11
 
 print_usage () {
-    echo "USAGE: osxdeploy.sh <background-image> [pkg]"
+    echo "USAGE: osxdeploy.sh [-s=<identity>] <background-image>"
+    echo "\t -s Code sign identity for codesign"
     echo "\t osxdeploy needs an input image to add to the dmg background
     \t image recomended size is at least 950x500\n"
 }
@@ -81,22 +82,39 @@ if test ${#} -eq 0; then
     exit 1
 fi
 
-if [[ -f ${1} ]]; then
-    DMG_validBG=0
-    echo "attempting to check background is valid jpg or png..."
-    BG_FORMAT=$(sips --getProperty format ${1} | awk '{printf $2}')
-    
-    if [[ "png" = ${BG_FORMAT} || "jpeg" = ${BG_FORMAT} ]];then
-        echo "valid image file"
-        DMG_background=${1}
-        DMG_validBG=1
+for arg in "${@}"; do
+    if [[ -f ${arg} ]]; then
+        DMG_validBG=0
+        echo "attempting to check background is valid jpg or png..."
+        BG_FORMAT=$(sips --getProperty format ${arg} | awk '{printf $2}')
+
+        if [[ "png" = ${BG_FORMAT} || "jpeg" = ${BG_FORMAT} ]];then
+            echo "valid image file"
+            DMG_background=${arg}
+            DMG_validBG=1
+        fi
     fi
-fi
+    # If string starts with -sign
+    if [[ ${arg} = -s=* ]]; then
+        CODE_SIGNATURE="${arg#*=}"
+    fi
+
+    if [[ ${arg} = "-h" || ${arg} = "--help" ]]; then
+        print_usage
+        exit
+    fi
+done
 
 if [[ ${DMG_validBG} -eq 0 ]]; then
     echo "No jpg or png valid file detected!!"
     echo "exiting"
     exit
+fi
+
+if [[ -z "${CODE_SIGNATURE}" ]]; then
+    echo "WARNING: No signature provided, Code will not be signed"
+else
+    printf 'Code will be signed with "%s"\n' "${CODE_SIGNATURE}"
 fi
 
 # Helper functions
@@ -170,7 +188,10 @@ copy_missing_libs () {
             echo "${lib} might be a missing framework"
             if [ "$(stringContains "${result}" "framework")" ]; then
                 echo "copying framework ${BUILDROOT}/i/lib/${lib}.framework to dmg"
-                cp -pvr ${BUILDROOT}/i/lib/${lib}.framework ${KRITA_DMG}/krita.app/Contents/Frameworks/
+                # TODO rsync only included ${lib} Resources Versions
+                rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/${lib} ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
+                rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/Resources ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
+                rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/Versions ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
             fi
         fi
     done
@@ -199,16 +220,22 @@ krita_deploy () {
 
     cd ${BUILDROOT}
     # Update files in krita.app
+    echo "Deleting previous kritadmg run..."
     rm -rf ./krita.dmg ${KRITA_DMG}
     # Copy new builtFiles
+    echo "Preparing ${KRITA_DMG} for deployment..."
+
     echo "Copying krita.app..."
     rsync -riul ${KRITA_DMG_TEMPLATE}/ ${KRITA_DMG}
-    rsync -priul ${KIS_INSTALL_DIR}/bin/krita.app ${KRITA_DMG}
+    rsync -prul ${KIS_INSTALL_DIR}/bin/krita.app ${KRITA_DMG}
+
+    mkdir -p ${KRITA_DMG}/krita.app/Contents/PlugIns
+    mkdir -p ${KRITA_DMG}/krita.app/Contents/Frameworks
 
     echo "Copying share..."
     # Deletes old copies of translation and qml to be recreated
     cd ${KIS_INSTALL_DIR}/share/
-    rsync -priul --delete ./ \
+    rsync -prul --delete ./ \
             --exclude krita_SRCS.icns \
             --exclude aclocal \
             --exclude doc \
@@ -231,29 +258,28 @@ krita_deploy () {
     cd ${BUILDROOT}
 
     echo "Copying translations..."
-    rsync -priul ${KIS_INSTALL_DIR}/translations/ \
+    rsync -prul ${KIS_INSTALL_DIR}/translations/ \
             ${KRITA_DMG}/krita.app/Contents/Resources/translations
 
     echo "Copying kritaquicklook..."
     mkdir -p ${KRITA_DMG}/krita.app/Contents/Library/QuickLook
-    rsync -priul ${KIS_INSTALL_DIR}/plugins/kritaquicklook.qlgenerator ${KRITA_DMG}/krita.app/Contents/Library/QuickLook
+    rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaquicklook.qlgenerator ${KRITA_DMG}/krita.app/Contents/Library/QuickLook
 
     cd ${KRITA_DMG}/krita.app/Contents
     ln -shF Resources share
 
     echo "Copying qml..."
-    rsync -priul ${KIS_INSTALL_DIR}/qml Resources/qml
+    rsync -prul ${KIS_INSTALL_DIR}/qml Resources/qml
 
     echo "Copying plugins..."
-    mkdir -p ${KRITA_DMG}/krita.app/Contents/PlugIns
     # exclude kritaquicklook.qlgenerator/
     cd ${KIS_INSTALL_DIR}/plugins/
-    rsync -priul --delete --delete-excluded ./ \
+    rsync -prul --delete --delete-excluded ./ \
         --exclude kritaquicklook.qlgenerator \
         ${KRITA_DMG}/krita.app/Contents/PlugIns
 
     cd ${BUILDROOT}
-    rsync -priul ${KIS_INSTALL_DIR}/lib/kritaplugins/ ${KRITA_DMG}/krita.app/Contents/PlugIns
+    rsync -prul ${KIS_INSTALL_DIR}/lib/kritaplugins/ ${KRITA_DMG}/krita.app/Contents/PlugIns
     
     # rsync -prul /Volumes/Osiris/programs/krita-master/i/lib/libkrita* Frameworks/
 
@@ -272,7 +298,6 @@ krita_deploy () {
     #   make sub-macdeployqt-all
     #   make sub-macdeployqt-install_subtargets
     #   make install
-    echo "Preparing ${KRITA_DMG} for deployment..."
     echo "Running macdeployqt..."
     cd ${KIS_INSTALL_DIR}/bin
     ./macdeployqt ${KRITA_DMG}/krita.app \
@@ -291,6 +316,42 @@ krita_deploy () {
 
     # repair krita for plugins
     krita_findmissinglibs
+}
+
+# Code sign must be done as recommended by apple "sign code inside out in individual stages"
+signBundle() {
+    # helper to define function only once
+    batch_codesign() {
+        xargs -P4 -I FILE codesign -f -s "${CODE_SIGNATURE}" FILE
+    }
+    cd ${KRITA_DMG}
+
+    # sign Frameworks and libs
+    cd ${KRITA_DMG}/krita.app/Contents/Frameworks
+    # remove debug version as both versions cant be signed.
+    rm ${KRITA_DMG}/krita.app/Contents/Frameworks/QtScript.framework/Versions/Current/QtScript_debug
+    find . -type d -name "*.framework" | xargs printf "%s/Versions/Current\n" | batch_codesign
+    find . -type f -name "*.dylib" -or -name "*.so" | batch_codesign
+
+    # Sign all other files in Framework (needed)
+    # there are many files in pyton do we need to sign them? TODO
+    # find krita-python-libs -type f | batch_codesign
+    # find python -type f | batch_codesign
+
+    # Sing only libraries and plugins
+    cd ${KRITA_DMG}/krita.app/Contents/PlugIns
+    find . -type f -name "*.dylib" -or -name "*.so" | batch_codesign
+
+    cd ${KRITA_DMG}/krita.app/Contents/Library/QuickLook
+    printf "kritaquicklook.qlgenerator" | batch_codesign
+
+    cd ${KRITA_DMG}/krita.app/Contents/Resources
+    find . -type f -name "*.dylib" -or -name "*.so" | batch_codesign
+
+
+    #Finally sign krita and krita.app
+    printf "${KRITA_DMG}/krita.app/Contents/MacOS/krita" | batch_codesign
+    printf "${KRITA_DMG}/krita.app" | batch_codesign
 }
 
 createDMG () {
@@ -363,5 +424,9 @@ createDMG () {
 # Run deploy command, instalation is assumed to exist in BUILDROOT/i
 krita_deploy
 
+# Code sign krita.app
+if [[ -n "${CODE_SIGNATURE}" ]]; then
+    signBundle
+fi
 # Create DMG from files insiede ${KRITA_DMG} folder
 createDMG

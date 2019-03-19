@@ -28,7 +28,7 @@ KisClickableGLImageWidget::KisClickableGLImageWidget(QWidget *parent)
 {
 }
 
-KisClickableGLImageWidget::KisClickableGLImageWidget(QSurfaceFormat::ColorSpace colorSpace, QWidget *parent)
+KisClickableGLImageWidget::KisClickableGLImageWidget(KisSurfaceColorSpace colorSpace, QWidget *parent)
     : KisGLImageWidget(colorSpace, parent)
 {
 }

@@ -16,6 +16,7 @@ PLAN
  * Implement KoResourceServer as a shim for KoResourceModel
  * Make KisFavoriteManager a model-view class for presets and tags
  * Remove all hints that bundles are resources.
+ * implement metadata mechanism for resources --> the KisResourceModel class has many unimplemented methods atm
  * Implement in-memory resources, that are deleted from the db when Krita starts (add to locator cache, set id on resource, add to database, update model)
 
 TODO

@@ -26,12 +26,69 @@
 
 #include <KoResource.h>
 
+class KisAbstractResourceModel {
+
+public:
+
+    virtual ~KisAbstractResourceModel(){}
+
+    /**
+     * @brief resourceForIndex
+     * @param index
+     * @return
+     */
+    virtual KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const = 0;
+
+    /**
+     * @brief indexFromResource
+     * @param resource
+     * @return
+     */
+    virtual QModelIndex indexFromResource(KoResourceSP resource) const = 0;
+
+    /**
+     * @brief removeResource
+     * @param index
+     * @return
+     */
+    virtual bool removeResource(const QModelIndex &index) = 0;
+
+    /**
+     * @brief importResourceFile
+     * @param filename
+     * @return
+     */
+    virtual bool importResourceFile(const QString &filename) = 0;
+
+    /**
+     * @brief addResource adds the given resource to the database.
+     * @param resource the resource.
+     * @param save if true, save the resource to the default storage, if false, the resource will not exist the next time Krita is started.
+     * @return
+     */
+    virtual bool addResource(KoResourceSP resource, bool save = true) = 0;
+
+    /**
+     * @brief updateResource
+     * @param resource
+     * @return
+     */
+    virtual bool updateResource(KoResourceSP resource) = 0;
+
+    /**
+     * @brief removeResource
+     * @param resource
+     * @return
+     */
+    virtual bool removeResource(KoResourceSP resource) = 0;
+};
+
 /**
  * @brief The KisResourceModel class provides access to the cache database
  * for a particular resource type. Instances should be retrieved using
  * KisResourceModelProvider.
  */
-class KRITARESOURCES_EXPORT KisResourceModel : public QAbstractTableModel
+class KRITARESOURCES_EXPORT KisResourceModel : public QAbstractTableModel, public KisAbstractResourceModel
 {
     Q_OBJECT
 public:
@@ -76,22 +133,13 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
 // Resources API
-    KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const;
-    QModelIndex indexFromResource(KoResourceSP resource) const;
-
-    bool removeResource(const QModelIndex &index);
-
-    bool importResourceFile(const QString &filename);
-
-    /**
-     * @brief addResource adds the given resource to the database.
-     * @param resource the resource.
-     * @param save if true, save the resource to the default storage, if false, the resource will not exist the next time Krita is started.
-     * @return
-     */
-    bool addResource(KoResourceSP resource, bool save = true);
-    bool updateResource(KoResourceSP resource);
-    bool removeResource(KoResourceSP resource);
+    KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
+    QModelIndex indexFromResource(KoResourceSP resource) const override;
+    bool removeResource(const QModelIndex &index) override;
+    bool importResourceFile(const QString &filename) override;
+    bool addResource(KoResourceSP resource, bool save = true) override;
+    bool updateResource(KoResourceSP resource) override;
+    bool removeResource(KoResourceSP resource) override;
 
 Q_SIGNALS:
 

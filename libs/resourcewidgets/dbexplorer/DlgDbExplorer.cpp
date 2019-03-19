@@ -28,7 +28,7 @@
 
 #include <TableModel.h>
 #include <KisResourceModel.h>
-#include <KisResourceProxyModel.h>
+#include <KisResourceGridProxyModel.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisResourceTypeModel.h>
@@ -158,7 +158,7 @@ void DlgDbExplorer::slotRvResourceTypeSelected(int index)
     KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(this);
     tagFilterModel->setSourceModel(resourceModel);
 
-    KisResourceProxyModel *resourceProxyModel = new KisResourceProxyModel(this);
+    KisResourceGridProxyModel *resourceProxyModel = new KisResourceGridProxyModel(this);
     resourceProxyModel->setSourceModel(tagFilterModel);
     resourceProxyModel->setRowStride(10);
 

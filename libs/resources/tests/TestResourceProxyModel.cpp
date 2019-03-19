@@ -34,7 +34,7 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
-#include <KisResourceProxyModel.h>
+#include <KisResourceGridProxyModel.h>
 
 #include <DummyResource.h>
 #include <ResourceTestHelper.h>
@@ -92,7 +92,7 @@ void TestResourceProxyModel::testRowCount()
     QVERIFY(rowCount == 1);
 
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
-    KisResourceProxyModel proxyModel;
+    KisResourceGridProxyModel proxyModel;
     proxyModel.setSourceModel(resourceModel);
     QCOMPARE(proxyModel.rowCount(), rowCount);
 }
@@ -100,7 +100,7 @@ void TestResourceProxyModel::testRowCount()
 void TestResourceProxyModel::testData()
 {
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
-    KisResourceProxyModel proxyModel;
+    KisResourceGridProxyModel proxyModel;
     proxyModel.setSourceModel(resourceModel);
 
     for (int i = 0; i < proxyModel.rowCount(); ++i)  {
@@ -113,7 +113,7 @@ void TestResourceProxyModel::testData()
 void TestResourceProxyModel::testResource()
 {
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
-    KisResourceProxyModel proxyModel;
+    KisResourceGridProxyModel proxyModel;
     proxyModel.setSourceModel(resourceModel);
 
     KoResourceSP resource = resourceModel->resourceForIndex(proxyModel.mapToSource(proxyModel.index(0, 0)));

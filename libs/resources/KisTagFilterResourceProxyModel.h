@@ -22,15 +22,27 @@
 
 #include <QSortFilterProxyModel>
 #include <QObject>
+#include <KoResource.h>
+#include <KisResourceModel.h>
 
 #include "kritaresources_export.h"
 
-class KRITARESOURCES_EXPORT KisTagFilterResourceProxyModel : public QSortFilterProxyModel
+class KRITARESOURCES_EXPORT KisTagFilterResourceProxyModel : public QSortFilterProxyModel, public KisAbstractResourceModel
 {
     Q_OBJECT
 public:
     KisTagFilterResourceProxyModel(QObject *parent = 0);
     ~KisTagFilterResourceProxyModel() override;
+
+    // KisAbstractResourceModel interface
+public:
+    KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
+    QModelIndex indexFromResource(KoResourceSP resource) const override;
+    bool removeResource(const QModelIndex &index) override;
+    bool importResourceFile(const QString &filename) override;
+    bool addResource(KoResourceSP resource, bool save = true) override;
+    bool updateResource(KoResourceSP resource) override;
+    bool removeResource(KoResourceSP resource) override;
 
 protected:
 
@@ -40,7 +52,6 @@ protected:
      */
     void setTag(const QString& tag);
 
-    QVariant data(const QModelIndex &index, int role) const override;
     bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;

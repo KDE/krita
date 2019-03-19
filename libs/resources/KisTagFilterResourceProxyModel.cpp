@@ -37,14 +37,72 @@ KisTagFilterResourceProxyModel::~KisTagFilterResourceProxyModel()
     delete d;
 }
 
+KoResourceSP KisTagFilterResourceProxyModel::resourceForIndex(QModelIndex index) const
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return source->resourceForIndex(mapToSource(index));
+    }
+    return 0;
+}
+
+QModelIndex KisTagFilterResourceProxyModel::indexFromResource(KoResourceSP resource) const
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return mapFromSource(source->indexFromResource(resource));
+    }
+    return QModelIndex();
+}
+
+bool KisTagFilterResourceProxyModel::removeResource(const QModelIndex &index)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return source->removeResource(mapToSource(index));
+    }
+    return false;
+}
+
+bool KisTagFilterResourceProxyModel::importResourceFile(const QString &filename)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return source->importResourceFile(filename);
+    }
+    return false;
+}
+
+bool KisTagFilterResourceProxyModel::addResource(KoResourceSP resource, bool save)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return source->addResource(resource, save);
+    }
+    return false;
+}
+
+bool KisTagFilterResourceProxyModel::updateResource(KoResourceSP resource)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return source->updateResource(resource);
+    }
+    return false;
+}
+
+bool KisTagFilterResourceProxyModel::removeResource(KoResourceSP resource)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return source->removeResource(resource);
+    }
+    return false;
+}
+
 void KisTagFilterResourceProxyModel::setTag(const QString& tag)
 {
     d->tags = tag.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
-}
-
-QVariant KisTagFilterResourceProxyModel::data(const QModelIndex &index, int role) const
-{
-    return sourceModel()->data(mapToSource(index), role);
 }
 
 bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const

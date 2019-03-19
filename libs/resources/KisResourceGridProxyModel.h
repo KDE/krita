@@ -16,30 +16,44 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KISRESOURCEPROXYMODEL_H
-#define KISRESOURCEPROXYMODEL_H
+#ifndef KISRESOURCEGRIDPROXYMODEL_H
+#define KISRESOURCEGRIDPROXYMODEL_H
 
 #include <QAbstractProxyModel>
 #include <QObject>
 #include <QScopedPointer>
+
+#include <KoResource.h>
+#include <KisResourceModel.h>
 
 #include "kritaresources_export.h"
 
 class KisResourceModel;
 
 /**
- * @brief The KisResourceProxyModel class can be used in the grid
+ * @brief The KisResourceGridProxyModel class can be used in the grid
  * based resource widgets.
  */
-class KRITARESOURCES_EXPORT KisResourceProxyModel : public QAbstractProxyModel
+class KRITARESOURCES_EXPORT KisResourceGridProxyModel : public QAbstractProxyModel, public KisAbstractResourceModel
 {
     Q_OBJECT
 public:
-    KisResourceProxyModel(QObject *parent = 0);
-    ~KisResourceProxyModel() override;
+    KisResourceGridProxyModel(QObject *parent = 0);
+    ~KisResourceGridProxyModel() override;
 
     /// Set the number of items in a row
     void setRowStride(int rowStride);
+
+    // KisAbstractResourceModel interface
+public:
+    KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
+    QModelIndex indexFromResource(KoResourceSP resource) const override;
+    bool removeResource(const QModelIndex &index) override;
+    bool importResourceFile(const QString &filename) override;
+    bool addResource(KoResourceSP resource, bool save = true) override;
+    bool updateResource(KoResourceSP resource) override;
+    bool removeResource(KoResourceSP resource) override;
+
 
     // QAbstractItemModel interface
 public:

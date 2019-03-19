@@ -155,7 +155,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     painter->restore();
 }
 
-class KisPresetChooser::PaintOpFilterModel : public QSortFilterProxyModel
+class KisPresetChooser::PaintOpFilterModel : public QSortFilterProxyModel, public KisAbstractResourceModel
 {
     Q_OBJECT
 public:
@@ -164,7 +164,6 @@ public:
         : QSortFilterProxyModel(parent)
     {
     }
-
 
     ~PaintOpFilterModel() override
     {
@@ -179,6 +178,71 @@ public:
     {
         return m_id;
     }
+    // KisAbstractResourceModel interface
+public:
+    KoResourceSP resourceForIndex(QModelIndex index) const
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->resourceForIndex(mapToSource(index));
+        }
+        return 0;
+    }
+
+    QModelIndex indexFromResource(KoResourceSP resource) const
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return mapFromSource(source->indexFromResource(resource));
+        }
+        return QModelIndex();
+    }
+
+    bool removeResource(const QModelIndex &index)
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->removeResource(mapToSource(index));
+        }
+        return false;
+    }
+
+    bool importResourceFile(const QString &filename)
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->importResourceFile(filename);
+        }
+        return false;
+    }
+
+    bool addResource(KoResourceSP resource, bool save)
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->addResource(resource, save);
+        }
+        return false;
+    }
+
+    bool updateResource(KoResourceSP resource)
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->updateResource(resource);
+        }
+        return false;
+    }
+
+    bool removeResource(KoResourceSP resource)
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->removeResource(resource);
+        }
+        return false;
+    }
+
 
     // QSortFilterProxyModel interface
 protected:

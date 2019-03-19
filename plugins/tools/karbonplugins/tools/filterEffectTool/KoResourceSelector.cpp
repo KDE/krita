@@ -20,7 +20,7 @@
 #include "KoResourceSelector.h"
 
 #include <KisResourceModel.h>
-#include <KisResourceProxyModel.h>
+#include <KisResourceGridProxyModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisResourceItemView.h>
 #include <KisResourceItemDelegate.h>
@@ -39,7 +39,7 @@ public:
     Private() : displayMode(ImageMode) {}
     DisplayMode displayMode;
     KisResourceModel *model;
-    KisResourceProxyModel *proxyModel;
+    KisResourceGridProxyModel *proxyModel;
 
     void updateIndex( KoResourceSelector * me )
     {
@@ -67,7 +67,7 @@ KoResourceSelector::KoResourceSelector(QWidget * parent )
 {
     setView(new KisResourceItemView(this));
     d->model = KisResourceModelProvider::resourceModel(ResourceType::FilterEffects);
-    d->proxyModel = new KisResourceProxyModel(this);
+    d->proxyModel = new KisResourceGridProxyModel(this);
     d->proxyModel->setSourceModel(d->model);
     setModel(d->proxyModel);
     setItemDelegate(new KisResourceItemDelegate(this));

@@ -44,6 +44,23 @@ KisMarkerPainter::~KisMarkerPainter()
 {
 }
 
+
+
+bool KisMarkerPainter::isNumberInValidRange(qint32 number)
+{
+    if (number < -ValidNumberRangeValue || number > ValidNumberRangeValue)
+        return false;
+    return true;
+}
+
+bool KisMarkerPainter::isRectInValidRange(const QRect &rect)
+{
+    return isNumberInValidRange(rect.x())
+            && isNumberInValidRange(rect.y())
+            && isNumberInValidRange(rect.width())
+            && isNumberInValidRange(rect.height());
+}
+
 void KisMarkerPainter::fillHalfBrushDiff(const QPointF &p1, const QPointF &p2, const QPointF &p3,
                                          const QPointF &center, qreal radius)
 {
@@ -63,7 +80,12 @@ void KisMarkerPainter::fillHalfBrushDiff(const QPointF &p1, const QPointF &p2, c
     boundRect = KisAlgebra2D::cutOffRect(boundRect, plane1);
     boundRect = KisAlgebra2D::cutOffRect(boundRect, plane2);
 
-    KisSequentialIterator it(m_d->device, boundRect.toAlignedRect());
+    QRect alignedRect = boundRect.toAlignedRect();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(isRectInValidRange(alignedRect));
+
+    KisSequentialIterator it(m_d->device, alignedRect);
+
     while (it.nextPixel()) {
         QPoint pt(it.x(), it.y());
 
@@ -104,7 +126,11 @@ void KisMarkerPainter::fillFullCircle(const QPointF &center, qreal radius)
 
     KisAlgebra2D::OuterCircle outer(center, radius);
 
-    KisSequentialIterator it(m_d->device, boundRect.toAlignedRect());
+    QRect alignedRect = boundRect.toAlignedRect();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(isRectInValidRange(alignedRect));
+
+    KisSequentialIterator it(m_d->device, alignedRect);
     while (it.nextPixel()) {
         QPoint pt(it.x(), it.y());
 

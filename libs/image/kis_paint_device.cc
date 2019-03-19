@@ -1799,7 +1799,7 @@ KisRandomSubAccessorSP KisPaintDevice::createRandomSubAccessor() const
 void KisPaintDevice::clearSelection(KisSelectionSP selection)
 {
     const KoColorSpace *colorSpace = m_d->colorSpace();
-    QRect r = selection->selectedExactRect() & m_d->defaultBounds->bounds();
+    const QRect r = selection->selectedExactRect();
 
     if (r.isValid()) {
 

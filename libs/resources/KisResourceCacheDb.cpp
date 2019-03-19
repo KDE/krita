@@ -665,45 +665,48 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
     {
         QSqlQuery q;
         if (!q.prepare("DELETE FROM resources\n"
-                       "WHERE resource_id IN (SELECT versioned_resources.resource_id\n"
-                       "                      WHERE  versioned_resources.storage_id = (SELECT storages.storage_id\n"
-                       "                                                              WHERE storages.location = :location)\n"
-                       "                     );")) {
-            qWarning() << "Could not prepare delete resources query";
+                       "WHERE       id IN (SELECT versioned_resources.resource_id\n"
+                       "                   FROM   versioned_resources\n"
+                       "                   WHERE  versioned_resources.storage_id = (SELECT storages.id\n"
+                       "                                                            FROM   storages\n"
+                       "                                                            WHERE storages.location = :location)\n"
+                       "                   );")) {
+            qWarning() << "Could not prepare delete resources query in deleteStorage" << q.lastError();
             return false;
         }
         q.bindValue(":location", makeRelative(storage->location()));
         if (!q.exec()) {
-            qWarning() << "Could not execute delete resources query";
+            qWarning() << "Could not execute delete resources query in deleteStorage" << q.lastError();
             return false;
         }
     }
 
     {
         QSqlQuery q;
-        if (!q.prepare("DELETE FROM versioned_resources"
-                       "WHERE storage_id = (SELECT storages.storage_id\n"
-                       "                    WHERE storages.location = :location);")) {
-            qWarning() << "Could not prepare delete versioned_resources query";
+        if (!q.prepare("DELETE FROM versioned_resources\n"
+                       "WHERE storage_id = (SELECT storages.id\n"
+                       "                    FROM   storages\n"
+                       "                    WHERE  storages.location = :location);")) {
+            qWarning() << "Could not prepare delete versioned_resources query" << q.lastError();
             return false;
         }
         q.bindValue(":location", makeRelative(storage->location()));
         if (!q.exec()) {
-            qWarning() << "Could not execute delete versioned_resources query";
+            qWarning() << "Could not execute delete versioned_resources query" << q.lastError();
             return false;
         }
     }
 
     {
         QSqlQuery q;
-        if (!q.prepare("DELETE FROM storages"
-                       "WHERE location = :location);")) {
-            qWarning() << "Could not prepare delete storages query";
+        if (!q.prepare("DELETE FROM storages\n"
+                       "WHERE location = :location;")) {
+            qWarning() << "Could not prepare delete storages query" << q.lastError();
             return false;
         }
         q.bindValue(":location", makeRelative(storage->location()));
         if (!q.exec()) {
-            qWarning() << "Could not execute delete storages query";
+            qWarning() << "Could not execute delete storages query" << q.lastError();
             return false;
         }
     }

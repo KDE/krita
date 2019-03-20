@@ -123,7 +123,7 @@ private:
 
     friend class KisResourceModel;
     void setResourceId(int id);
-
+    void setStorageLocation(const QString &location);
 
 protected:
 

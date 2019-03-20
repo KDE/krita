@@ -37,6 +37,7 @@ struct Q_DECL_HIDDEN KoResource::Private {
     QImage image;
     bool permanent;
     int resourceId {-1};
+    QString storageLocation;
     bool dirty;
     QMap<QString, QVariant> metadata;
 };
@@ -195,5 +196,10 @@ QMap<QString, QVariant> KoResource::metadata() const
 void KoResource::setResourceId(int id)
 {
     d->resourceId = id;
+}
+
+void KoResource::setStorageLocation(const QString &location)
+{
+    d->storageLocation = location;
 }
 

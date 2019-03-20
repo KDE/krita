@@ -156,7 +156,7 @@ KisPaintOpSettingsSP KisPaintOpPreset::settings() const
 
 bool KisPaintOpPreset::load()
 {
-    dbgImage << "Load preset " << filename();
+    qDebug() << "Load preset " << filename();
     setValid(false);
 
     if (filename().isEmpty()) {

@@ -563,25 +563,31 @@ void KisPaintopBox::resourceSelected(KoResourceSP resource)
 
     m_presetsPopup->setCreatingBrushFromScratch(false); // show normal UI elements when we are not creating
 
-    KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
-    if (preset && preset != m_resourceProvider->currentPreset()) {
-        if (!preset->settings()->isLoadable())
-            return;
+//    qDebug() << ">>>>>>>>>>>>>>>" << resource
+//             << (resource ? resource->name() : "")
+//             << (resource ? QString("%1").arg(resource->valid()) : "")
+//             << (resource ? QString("%1").arg(resource->filename()) : "");
 
-        if (!m_dirtyPresetsEnabled) {
-            KisSignalsBlocker blocker(m_optionWidget);
-            if (!preset->load()) {
-                warnKrita << "failed to load the preset.";
-            }
-        }
-        //qDebug() << "resourceSelected" << resource->name();
+    KisPaintOpPresetSP preset = resource.dynamicCast<KisPaintOpPreset>();
+
+    if (preset && preset->valid() && preset != m_resourceProvider->currentPreset()) {
+        qWarning() << "Preset reloading if presets are dirty is broken";
+//        if (!preset->settings()->isLoadable()) {
+//            return;
+//        }
+//        if (!m_dirtyPresetsEnabled) {
+//            KisSignalsBlocker blocker(m_optionWidget);
+//            Q_UNUSED(blocker)
+//            if (!preset->load()) {
+//                qWarning() << "failed to load the preset.";
+//            }
+//        }
+        dbgResources << "resourceSelected: preset" << preset << (preset ? QString("%1").arg(preset->valid()) : "");
         setCurrentPaintop(preset);
 
         m_presetsPopup->setPresetImage(preset->image());
         m_presetsPopup->resourceSelected(resource);
     }
-
-
 }
 
 void KisPaintopBox::setCurrentPaintop(const KoID& paintop)

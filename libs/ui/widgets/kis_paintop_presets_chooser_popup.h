@@ -38,17 +38,17 @@ public:
     void showButtons(bool show);
     void updateViewSettings();
 public Q_SLOTS:
-    void canvasResourceChanged(KisPaintOpPresetSP  preset  );
+    void canvasResourceChanged(KisPaintOpPresetSP  preset);
     void slotThemeChanged();
 
 Q_SIGNALS:
-    void resourceSelected( KoResourceSP resource);
-    void resourceClicked( KoResourceSP resource);
+    void resourceSelected(KoResourceSP resource);
+    void resourceClicked(KoResourceSP resource);
     
 private Q_SLOTS:
     void slotThumbnailMode();
     void slotDetailMode();
-    void paintEvent(QPaintEvent* ) override;
+    void paintEvent(QPaintEvent *) override;
    
 private:
 

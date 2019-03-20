@@ -1,2 +1,3 @@
- # let's make a module
-from .tenscripts import *
+from .tenscripts import TenScriptsExtension
+
+Scripter.addExtension(TenScriptsExtension(Application))

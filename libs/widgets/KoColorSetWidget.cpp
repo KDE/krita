@@ -124,12 +124,9 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     setLayout(d->mainLayout);
 
-    connect(d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)),
-            SLOT(slotPaletteChoosen(KoColorSet*)));
-    connect(d->paletteView, SIGNAL(sigColorSelected(KoColor)),
-            SLOT(slotColorSelectedByPalette(KoColor)));
-    connect(d->colorNameCmb, SIGNAL(sigColorSelected(KoColor)),
-            SLOT(slotNameListSelection(KoColor)));
+    connect(d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSetSP)), SLOT(slotPaletteChoosen(KoColorSetSP)));
+    connect(d->paletteView, SIGNAL(sigColorSelected(KoColor)), SLOT(slotColorSelectedByPalette(KoColor)));
+    connect(d->colorNameCmb, SIGNAL(sigColorSelected(KoColor)), SLOT(slotNameListSelection(KoColor)));
 
     d->rServer = KoResourceServerProvider::instance()->paletteServer();
     KoColorSetSP defaultColorSet = d->rServer->resourceByName("Default");

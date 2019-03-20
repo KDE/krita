@@ -28,4 +28,4 @@ TODO
  * database migration and versioning (loop over version, find update_from_version, execute and so on until version is up to date)
  * fix loading the actual preset in the preset delegate
  * fetch gradients from resource server by md5 or name when handling layer styles: fix how layer styles store gradients
-
+ * fix reloading the preset if dirty presets is switched off (KisPaintopBox::resourceSelected). The problem is that the preset itself no longer knows where it comes from or how it should be loaded

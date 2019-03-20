@@ -80,6 +80,13 @@ public:
     void update(bool migrationInProgress)
     {
         if (m_rawPointerUsers.testAndSetAcquire(0, 1)) {
+
+            /// TODO: theoretically, there is a race condition:
+            /// if the user's code enters critical section and
+            /// releases an object *after* we started purging
+            /// garbage. In such a case we can free still used
+            /// tile. I didn't check this hypothesis yet though.
+
             releasePoolSafely(&m_pendingActions);
 
             if (!migrationInProgress) {

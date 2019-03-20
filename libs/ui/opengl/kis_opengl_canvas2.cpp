@@ -170,9 +170,11 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     setAttribute(Qt::WA_InputMethodEnabled, false);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     if (KisOpenGLModeProber::instance()->useHDRMode()) {
         setTextureFormat(GL_RGBA16F);
     }
+#endif
 
     setDisplayFilterImpl(colorConverter->displayFilter(), true);
 

@@ -35,7 +35,9 @@ if (WIN32)
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
       URL https://download.qt.io/archive/qt/5.12/5.12.2/single/qt-everywhere-src-5.12.2.tar.xz
       URL_MD5 99c2eb46e533371798b4ca2d1458e065
-      PATCH_COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-disable-wintab.patch
+      
+      PATCH_COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-disable-wintab.patch 
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-winink.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Don-t-request-the-MIME-image-every-time-Windows-asks.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Hack-always-return-we-support-DIBV5.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Fix-debug-on-openGL-ES.patch
@@ -207,7 +209,7 @@ else( APPLE )
         BUILD_IN_SOURCE     ON
 
        URL https://download.qt.io/archive/qt/5.12/5.12.2/single/qt-everywhere-src-5.12.2.tar.xz
-       URL_MD5=99c2eb46e533371798b4ca2d1458e065
+       URL_MD5 99c2eb46e533371798b4ca2d1458e065
 
         CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
 

@@ -1121,7 +1121,11 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     }
 
     if (context) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         QScreen *screen = QGuiApplication::screenAt(rect().center());
+#else
+        QScreen *screen = 0;
+#endif
         KisScreenInformationAdapter adapter(context);
         if (screen && adapter.isValid()) {
             KisScreenInformationAdapter::ScreenInfo info = adapter.infoForScreen(screen);
@@ -1285,7 +1289,11 @@ void DisplaySettingsTab::slotPreferredSurfaceFormatChanged(int index)
 
     QOpenGLContext *context = QOpenGLContext::currentContext();
     if (context) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         QScreen *screen = QGuiApplication::screenAt(rect().center());
+#else
+        QScreen *screen = 0;
+#endif
         KisScreenInformationAdapter adapter(context);
         if (adapter.isValid()) {
             KisScreenInformationAdapter::ScreenInfo info = adapter.infoForScreen(screen);

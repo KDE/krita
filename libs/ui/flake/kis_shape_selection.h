@@ -106,7 +106,7 @@ private:
 
 private:
 
-    void renderSelection(KisPaintDeviceSP projection, const QRect& r);
+    void renderSelection(KisPaintDeviceSP projection, const QRect& requestedRect);
 
     KisImageWSP m_image;
     QPainterPath m_outline;

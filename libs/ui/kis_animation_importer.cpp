@@ -76,7 +76,7 @@ KisImportExportFilter::ConversionStatus KisAnimationImporter::import(QStringList
     int filesProcessed = 0;
 
     if (m_d->updater) {
-        m_d->updater->setRange(0, files.size() - 1);
+        m_d->updater->setRange(0, files.size());
     }
 
     KisRasterKeyframeChannel *contentChannel = 0;
@@ -100,7 +100,7 @@ KisImportExportFilter::ConversionStatus KisAnimationImporter::import(QStringList
             if (m_d->updater->interrupted()) {
                 m_d->stop = true;
             } else {
-                m_d->updater->setValue(filesProcessed);
+                m_d->updater->setValue(filesProcessed + 1);
 
                 // the updater doesn't call that automatically,
                 // it is "threaded" by default

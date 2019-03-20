@@ -2306,7 +2306,9 @@ private:
     bool m_clear;
 };
 
+#ifdef Q_OS_LINUX
 #include <malloc.h>
+#endif
 
 void KisPaintDeviceTest::stressTestMemoryFragmentation()
 {
@@ -2346,13 +2348,16 @@ void KisPaintDeviceTest::stressTestMemoryFragmentation()
         pool.waitForDone();
         // undoStack.push(t.endAndTake());
 
-        struct mallinfo info = mallinfo();
         qDebug() << "Iteration:" << i;
+
+#ifdef Q_OS_LINUX
+        struct mallinfo info = mallinfo();
         qDebug() << "Allocated on heap:" << (info.arena >> 20) << "MiB";
         qDebug() << "Mmaped regions:" << info.hblks << (info.hblkhd >> 20) << "MiB";
         qDebug() << "Free fastbin chunks:" << info.smblks << (info.fsmblks >> 10)  << "KiB";
         qDebug() << "Allocated in ordinary blocks" << (info.uordblks >> 20) << "MiB";
         qDebug() << "Free in ordinary blockes" << info.ordblks << (info.fordblks >> 20) << "MiB";
+#endif
         qDebug() << "========================================";
     }
 

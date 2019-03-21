@@ -126,7 +126,6 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
         : KisShapeLayerCanvasBase(parent, image)
         , m_projection(0)
         , m_parentLayer(parent)
-        , m_canvasUpdateCompressor(new KisSignalCompressor(500, KisSignalCompressor::FIRST_INACTIVE, this))
         , m_asyncUpdateSignalCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
 {
     /**
@@ -136,10 +135,24 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
     m_shapeManager->addShape(parent, KoShapeManager::AddWithoutRepaint);
     m_shapeManager->selection()->setActiveLayer(parent);
 
+    connect(&m_asyncUpdateSignalCompressor, SIGNAL(timeout()), SLOT(slotStartAsyncRepaint()));
+
+    
+    if (image->width() * image->height() < 2480 * 3508) { // A4 300 DPI
+        m_canvasUpdateCompressor = new KisSignalCompressor(10, KisSignalCompressor::FIRST_INACTIVE, this);
+    }
+    else if (image->width() * image->height() < 4961 * 7061) { // A4 600 DPI
+        m_canvasUpdateCompressor = new KisSignalCompressor(100, KisSignalCompressor::FIRST_INACTIVE, this);
+    }
+    else { // Really big
+         m_canvasUpdateCompressor = new KisSignalCompressor(500, KisSignalCompressor::FIRST_INACTIVE, this);
+    }
+    
+    qDebug() << m_canvasUpdateCompressor->
+    
     connect(this, SIGNAL(forwardRepaint()), m_canvasUpdateCompressor, SLOT(start()));
     connect(m_canvasUpdateCompressor, SIGNAL(timeout()), this, SLOT(repaint()));
 
-    connect(&m_asyncUpdateSignalCompressor, SIGNAL(timeout()), SLOT(slotStartAsyncRepaint()));
 
     setImage(image);
 }

@@ -113,8 +113,8 @@ Q_SIGNALS:
 
 private:
     KisPaintDeviceSP m_projection;
-    KisShapeLayer *m_parentLayer;
-    KisSignalCompressor *m_canvasUpdateCompressor;
+    KisShapeLayer *m_parentLayer {0};
+    KisSignalCompressor *m_canvasUpdateCompressor {0};
 
     KisThreadSafeSignalCompressor m_asyncUpdateSignalCompressor;
     volatile bool m_hasUpdateInCompressor = false;

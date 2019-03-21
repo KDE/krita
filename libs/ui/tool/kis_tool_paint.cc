@@ -597,24 +597,6 @@ void KisToolPaint::slotPopupQuickHelp()
     QWhatsThis::showText(QCursor::pos(), quickHelp());
 }
 
-KisToolPaint::NodePaintAbility KisToolPaint::nodePaintAbility()
-{
-    KisNodeSP node = currentNode();
-    if (!node) {
-        return NONE;
-    }
-    if (node->inherits("KisShapeLayer")) {
-        return VECTOR;
-    }
-    if (node->inherits("KisCloneLayer")) {
-        return CLONE;
-    }
-    if (node->paintDevice()) {
-        return PAINT;
-    }
-    return NONE;
-}
-
 void KisToolPaint::activatePrimaryAction()
 {
     pickColorWasOverridden();

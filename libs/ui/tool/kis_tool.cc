@@ -524,6 +524,25 @@ void KisTool::deleteSelection()
     }
 }
 
+KisTool::NodePaintAbility KisTool::nodePaintAbility()
+{
+    KisNodeSP node = currentNode();
+    if (!node) {
+        return NodePaintAbility::UNPAINTABLE;
+    }
+    if (node->inherits("KisShapeLayer")) {
+        return NodePaintAbility::VECTOR;
+    }
+    if (node->inherits("KisCloneLayer")) {
+        return NodePaintAbility::CLONE;
+    }
+    if (node->paintDevice()) {
+        return NodePaintAbility::PAINT;
+    }
+
+    return NodePaintAbility::UNPAINTABLE;
+}
+
 QWidget* KisTool::createOptionWidget()
 {
     d->optionWidget = new QLabel(i18n("No options"));

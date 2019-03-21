@@ -79,7 +79,7 @@ void KisToolPolylineBase::beginPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
 
-    if ((m_type == PAINT && (!nodeEditable() || nodePaintAbility() == NONE)) ||
+    if ((m_type == PAINT && (!nodeEditable() || nodePaintAbility() == UNPAINTABLE)) ||
         (m_type == SELECT && !selectionEditable())) {
 
         event->ignore();

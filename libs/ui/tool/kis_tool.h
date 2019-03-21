@@ -161,6 +161,14 @@ public:
         NONE = 10000
     };
 
+    enum NodePaintAbility {
+        VECTOR,
+        CLONE,
+        PAINT,
+        UNPAINTABLE
+    };
+    Q_ENUMS(NodePaintAbility)
+
     static AlternateAction actionToAlternateAction(ToolAction action);
 
     virtual void activateAlternateAction(AlternateAction action);
@@ -179,6 +187,8 @@ public:
     void mouseMoveEvent(KoPointerEvent *event) override;
 
     bool isActive() const;
+
+    KisTool::NodePaintAbility nodePaintAbility();
 
 public Q_SLOTS:
     void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;

@@ -859,6 +859,18 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
      * stroke and pass it to the tool somehow. But currently, we will
      * just disable starting a new stroke asynchronously
      */
+
+    if(nodePaintAbility() == NodePaintAbility::UNPAINTABLE) {
+            KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+            kisCanvas->viewManager()->
+                showFloatingMessage(
+                    i18nc("floating message in transformation tool",
+                          "Unable to transform the layer"),
+                    QIcon(), 4000, KisFloatingMessage::High);
+
+            return;
+    }
+
     if (image()->tryBarrierLock()) {
         image()->unlock();
     } else {

@@ -173,6 +173,11 @@ int KoResource::resourceId() const
     return d->resourceId;
 }
 
+QString KoResource::storageLocation() const
+{
+    return d->storageLocation;
+}
+
 void KoResource::setDirty(bool value)
 {
     d->dirty = value;

@@ -107,6 +107,9 @@ public:
     /// @return the unique id of the resource in the resource database
     int resourceId() const;
 
+    /// @return the name of the storage location of the resource
+    QString storageLocation() const;
+
     /// Mark the preset as modified but not saved
     void setDirty(bool value);
 

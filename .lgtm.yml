@@ -1,0 +1,68 @@
+#
+# .lgtml.yml configuration file for C++ analysis of Krita on https://lgtm.com/projects/g/KDE/krita/
+#
+path_classifiers:
+    test:
+        - tests
+extraction:
+    cpp:
+        prepare:
+            packages:
+                - gettext
+                - build-essential
+                - cmake
+                - libboost-dev
+                - libboost-system-dev
+                - libeigen3-dev
+                - libexiv2-dev
+                - libfftw3-dev
+                - libfontconfig1-dev
+                - libfreetype6-dev
+                - libgl1-mesa-dev
+                - libglew-dev
+                - libglib2.0-dev
+                - libglu1-mesa-dev
+                - libgsf-1-dev
+                - libgsl-dev
+                - libjpeg-dev
+                - liblcms2-dev
+                - libopenexr-dev
+                - libpng-dev
+                - libpoppler-qt5-dev
+                - libtiff5-dev
+                - libvc-dev
+                - libopencolorio-dev
+                - libx11-dev
+                - libxml2-dev
+                - libxslt1-dev
+                - libxi-dev
+                - pkg-config
+                - vc-dev
+                - zlib1g-dev
+                - libkf5kdcraw-dev
+                - shared-mime-info
+                - libopenimageio-dev
+                - extra-cmake-modules
+                - libkf5archive-dev
+                - libkf5coreaddons-dev
+                - libkf5guiaddons-dev
+                - libkf5itemmodels-dev
+                - libkf5itemviews-dev
+                - libkf5widgetsaddons-dev
+                - libkf5i18n-dev
+                - libkf5windowsystem-dev
+                - libkf5completion-dev
+                - libkf5iconthemes-dev
+                - libkf5kiocore5
+                - libqt5svg5-dev
+                - libqt5x11extras5-dev
+                - libqt5opengl5-dev                
+        configure:
+            command:
+                - mkdir build
+                - cd build
+                - cmake ..
+        index:
+            build_command:
+                - cd build
+                - make

@@ -141,6 +141,28 @@ public:
         m_deleteBlockers.deref();
     }
 
+    void mergeFrom(KisLocklessStack<T> &other) {
+        Node *otherTop = other.m_top.fetchAndStoreOrdered(0);
+        if (!otherTop) return;
+
+        int removedChunkSize = 1;
+        Node *last = otherTop;
+        while(last->next) {
+            removedChunkSize++;
+            last = last->next;
+        }
+        other.m_numNodes.fetchAndAddOrdered(-removedChunkSize);
+
+        Node *top;
+
+        do {
+            top = m_top;
+            last->next = top;
+        } while (!m_top.testAndSetOrdered(top, otherTop));
+
+        m_numNodes.fetchAndAddOrdered(removedChunkSize);
+    }
+
     /**
      * This is impossible to measure the size of the stack
      * in highly concurrent environment. So we return approximate

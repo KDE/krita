@@ -44,11 +44,28 @@ private:
     KisLocklessStack<Action> m_migrationReclaimActions;
     std::atomic_flag m_isProcessing = ATOMIC_FLAG_INIT;
 
-    void releasePoolSafely(KisLocklessStack<Action> *pool) {
-        Action action;
+    void releasePoolSafely(KisLocklessStack<Action> *pool, bool force = false) {
+        KisLocklessStack<Action> tmp;
+        tmp.mergeFrom(*pool);
+        if (tmp.isEmpty()) return;
 
-        while (pool->pop(action)) {
-            action();
+        if (force || tmp.size() > 4096) {
+            while (m_rawPointerUsers.loadAcquire());
+
+            Action action;
+            while (tmp.pop(action)) {
+                action();
+            }
+        } else {
+            if (!m_rawPointerUsers.loadAcquire()) {
+                Action action;
+                while (tmp.pop(action)) {
+                    action();
+                }
+            } else {
+                // push elements back to the source
+                pool->mergeFrom(tmp);
+            }
         }
     }
 
@@ -79,41 +96,17 @@ public:
 
     void update(bool migrationInProgress)
     {
-        if (m_rawPointerUsers.testAndSetAcquire(0, 1)) {
+        releasePoolSafely(&m_pendingActions);
 
-            /// TODO: theoretically, there is a race condition:
-            /// if the user's code enters critical section and
-            /// releases an object *after* we started purging
-            /// garbage. In such a case we can free still used
-            /// tile. I didn't check this hypothesis yet though.
-
-            releasePoolSafely(&m_pendingActions);
-
-            if (!migrationInProgress) {
-                releasePoolSafely(&m_migrationReclaimActions);
-            }
-
-            m_rawPointerUsers.deref();
-
-        } else if (m_pendingActions.size() > 4098) {
-            // TODO: make pool size limit configurable!
-
-            while (!m_rawPointerUsers.testAndSetAcquire(0, 1));
-
-            releasePoolSafely(&m_pendingActions);
-
-            m_rawPointerUsers.deref();
+        if (!migrationInProgress) {
+            releasePoolSafely(&m_migrationReclaimActions);
         }
     }
 
     void flush()
     {
-        while (!m_rawPointerUsers.testAndSetAcquire(0, 1));
-
-        releasePoolSafely(&m_pendingActions);
-        releasePoolSafely(&m_migrationReclaimActions);
-
-        m_rawPointerUsers.deref();
+        releasePoolSafely(&m_pendingActions, true);
+        releasePoolSafely(&m_migrationReclaimActions, true);
     }
 
     void lockRawPointerAccess()

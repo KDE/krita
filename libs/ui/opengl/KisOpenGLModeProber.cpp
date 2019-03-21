@@ -239,6 +239,7 @@ bool KisOpenGLModeProber::isFormatHDR(const QSurfaceFormat &format)
 
     return isBt2020PQ || isBt709G10;
 #else
+    Q_UNUSED(format);
     return false;
 #endif
 }

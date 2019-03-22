@@ -70,6 +70,12 @@ export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 export MACOSX_DEPLOYMENT_TARGET=10.11
 export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.11
 
+# Attempt to find python_version
+local_PY_MAYOR_VERSION=$(python -c "import sys; print(sys.version_info[0])")
+local_PY_MINOR_VERSION=$(python -c "import sys; print(sys.version_info[1])")
+PY_VERSION="${local_PY_MAYOR_VERSION}.${local_PY_MINOR_VERSION}"
+echo "Detected Python ${PY_VERSION}"
+
 print_usage () {
     echo "USAGE: osxdeploy.sh [-s=<identity>] <background-image>"
     echo "\t -s Code sign identity for codesign"
@@ -236,6 +242,43 @@ krita_findmissinglibs() {
     fi
 }
 
+strip_python_dmginstall() {
+    # reduce size of framework python
+    # Removes tests, installers, pyenv, distutils
+    echo "Removing unnecesary files from Python.Framework to be packaged..."
+    PythonFrameworkBase="${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework"
+
+    cd ${PythonFrameworkBase}
+    find . -name "test*" -type d | xargs rm -rf
+    find "${PythonFrameworkBase}/Versions/${PY_VERSION}/bin" -not -name "python*" | xargs rm -f
+    cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/lib/python${PY_VERSION}"
+    rm -rf distutils tkinter ensurepip venv lib2to3 idlelib
+}
+
+fix_python_framework() {
+    # Fix python.framework rpath and slims down installation
+    # fix library LD_RPATH excutable_path and loader_path.
+    # It is intended to be used for Libraries inside Frameworks.
+    fix_framework_library() {
+        xargs -P4 -I FILE sh -c "
+            install_name_tool -rpath ${KIS_INSTALL_DIR}/lib @loader_path/Frameworks \"${libFile}\" 2> /dev/null
+            install_name_tool -add_rpath @loader_path/../../../ \"${libFile}\" 2> /dev/null
+        "
+    }
+    # Start fixing all executables
+    PythonFrameworkBase="${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework"
+    install_name_tool -change @loader_path/../../../../libintl.9.dylib @loader_path/../../../libintl.9.dylib "${PythonFrameworkBase}/Python"
+    install_name_tool -add_rpath @executable_path/../../../../../../../ "${PythonFrameworkBase}/Versions/Current/Resources/Python.app/Contents/MacOS/Python"
+    install_name_tool -add_rpath @executable_path/../../../../ "${PythonFrameworkBase}/Versions/Current/bin/python${PY_VERSION}"
+    install_name_tool -add_rpath @executable_path/../../../../ "${PythonFrameworkBase}/Versions/Current/bin/python${PY_VERSION}m"
+
+    # Fix rpaths from Python.Framework
+    # install_name_tool change @loader_path/../../../libz.1.dylib
+
+    # Fix main library
+    printf ${PythonFrameworkBase}/Python | fix_framework_library
+    # find ${PythonFrameworkBase} -name "*.so" -not -type l | fix_framework_library
+}
 
 krita_deploy () {
     # fix_boost_rpath
@@ -252,8 +295,6 @@ krita_deploy () {
     rsync -prul ${KIS_INSTALL_DIR}/bin/krita.app ${KRITA_DMG}
 
     mkdir -p ${KRITA_DMG}/krita.app/Contents/PlugIns
-    mkdir -p ${KRITA_DMG}/krita.app/Contents/Frameworks
-
     mkdir -p ${KRITA_DMG}/krita.app/Contents/Frameworks
 
     echo "Copying share..."
@@ -307,18 +348,6 @@ krita_deploy () {
     
     # rsync -prul {KIS_INSTALL_DIR}/lib/libkrita* Frameworks/
 
-    # activate for python enabled Krita
-    echo "Copying python..."
-    # folders with period in name are treated as Frameworks for codesign
-    # there cant be empty files
-    rsync -prul ${KIS_INSTALL_DIR}/lib/python3.5/ ${KRITA_DMG}/krita.app/Contents/Frameworks/python
-    ln -s python ${KRITA_DMG}/krita.app/Contents/Frameworks/python3.5
-    rsync -prul ${KIS_INSTALL_DIR}/lib/krita-python-libs ${KRITA_DMG}/krita.app/Contents/Frameworks/
-
-    # XXX: fix rpath for krita.so
-    # echo "Copying sip..."
-    # rsync -Prvul ${KIS_INSTALL_DIR}/sip Frameworks/
-
     # To avoid errors macdeployqt must be run from bin location
     # ext_qt will not build macdeployqt by default so it must be build manually
     #   cd ${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src
@@ -338,6 +367,25 @@ krita_deploy () {
 
     cd ${BUILDROOT}
     echo "macdeployqt done!"
+
+    echo "Copying python..."
+    # Copy this framework last!
+    # It is best that macdeployqt does not modify Python.framework
+    # folders with period in name are treated as Frameworks for codesign
+    rsync -prul ${KIS_INSTALL_DIR}/lib/Python.framework ${KRITA_DMG}/krita.app/Contents/Frameworks/
+    rsync -prul ${KIS_INSTALL_DIR}/lib/krita-python-libs ${KRITA_DMG}/krita.app/Contents/Frameworks/
+    # change perms on Python to allow header change
+    chmod +w ${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework/Python
+    
+    fix_python_framework
+    strip_python_dmginstall
+
+    # fix python pyc
+    # precompile all pyc so the dont alter signature
+    echo "Precompiling all python files..."
+    cd ${KRITA_DMG}/krita.app
+    ${KIS_INSTALL_DIR}/bin/python -m compileall . &> /dev/null
+
     install_name_tool -delete_rpath @loader_path/../../../../lib ${KRITA_DMG}/krita.app/Contents/MacOS/krita
     rm -rf ${KRITA_DMG}/krita.app/Contents/PlugIns/kf5/org.kde.kwindowsystem.platforms
 
@@ -345,11 +393,6 @@ krita_deploy () {
     printf "Searching for missing libraries\n"
     krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -name "*.dylib" -or -name "*.so" -or -perm u+x)
     echo "Done!"
-
-    # fix python
-    # precompile all pyc so the dont alter signature
-    cd ${KRITA_DMG}/krita.app
-    ${KIS_INSTALL_DIR}/bin/python -m compileall .
 
 }
 
@@ -365,12 +408,12 @@ signBundle() {
     cd ${KRITA_DMG}/krita.app/Contents/Frameworks
     # remove debug version as both versions cant be signed.
     rm ${KRITA_DMG}/krita.app/Contents/Frameworks/QtScript.framework/Versions/Current/QtScript_debug
-    find . -type d -name "*.framework" | xargs printf "%s/Versions/Current\n" | batch_codesign
     find . -type f -name "*.dylib" -or -name "*.so" | batch_codesign
+    find . -type d -name "*.framework" | xargs printf "%s/Versions/Current\n" | batch_codesign
 
     # Sign all other files in Framework (needed)
-    # there are many files in pyton do we need to sign them? TODO
-    # find krita-python-libs -type f | batch_codesign
+    # there are many files in python do we need to sign them all?
+    find krita-python-libs -type f | batch_codesign
     # find python -type f | batch_codesign
 
     # Sing only libraries and plugins
@@ -392,7 +435,7 @@ signBundle() {
 createDMG () {
     printf "Creating of dmg with contents of %s...\n" "${KRITA_DMG}"
     cd ${BUILDROOT}
-    DMG_size=500
+    DMG_size=700
 
     ## Build dmg from folder
 

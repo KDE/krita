@@ -65,6 +65,7 @@ export CPLUS_INCLUDE_PATH=${KIS_INSTALL_DIR}/include:/usr/include:${CPLUS_INCLUD
 export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:/usr/lib:${LIBRARY_PATH}
 # export CPPFLAGS=-I${KIS_INSTALL_DIR}/include
 # export LDFLAGS=-L${KIS_INSTALL_DIR}/lib
+export FRAMEWORK_PATH=${KIS_INSTALL_DIR}/lib/
 
 # export PYTHONHOME=${KIS_INSTALL_DIR}
 # export PYTHONPATH=${KIS_INSTALL_DIR}/sip:${KIS_INSTALL_DIR}/lib/python3.5/site-packages:${KIS_INSTALL_DIR}/lib/python3.5
@@ -324,6 +325,7 @@ set_krita_dirs() {
 # build_krita
 # run cmake krita
 build_krita () {
+    export DYLD_FRAMEWORK_PATH=${FRAMEWORK_PATH}
     set_krita_dirs ${1}
     echo ${KIS_BUILD_DIR}
     echo ${KIS_INSTALL_DIR}
@@ -337,9 +339,10 @@ build_krita () {
         -DBUILD_TESTING=OFF \
         -DHIDE_SAFE_ASSERTS=ON \
         -DKDE_INSTALL_BUNDLEDIR=${KIS_INSTALL_DIR}/bin \
-        -DPYQT_SIP_DIR_OVERRIDE=$KIS_INSTALL_DIR/share/sip/ \
+        -DPYQT_SIP_DIR_OVERRIDE=${KIS_INSTALL_DIR}/share/sip/ \
         -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.11
+        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.11 \
+        -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers
 
     # copiling phase
     make -j${MAKE_THREADS}
@@ -364,6 +367,8 @@ install_krita () {
     fi
 }
 
+# Runs all fixes for path and packages.
+# Historically only fixed boost @rpath
 fix_boost_rpath () {
     set_krita_dirs ${1}
     # install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib $BUILDROOT/$KRITA_INSTALL/bin/krita.app/Contents/MacOS/gmic_krita_qt
@@ -380,6 +385,26 @@ fix_boost_rpath () {
             install_name_tool -change libboost_system.dylib @rpath/libboost_system.dylib $FILE
         fi
     done
+
+    # site-packages is not added to path in Framework
+    # we create sitecustomize.py to add it on FrameworkPython start
+#     local py_mayor_version=$(python -c "import sys; print(sys.version_info[0])")
+#     if [[ ${py_mayor_version} -eq 3 ]]; then
+#         echo "Adding sitecustomize.py to Python.framework"
+#         local py_minor_version=$(python -c "import sys; print(sys.version_info[1])")
+#         local py_version="${py_mayor_version}.${py_minor_version}"
+#         local PythonLibDir="${KIS_INSTALL_DIR}/lib/Python.framework/Versions/Current/lib/python${py_version}/"
+#         printf "%s\n" \
+# "import os
+# import site
+
+# framework_path = os.path.dirname(os.path.abspath(__file__))
+# site.addsitedir(os.path.join(framework_path,'site-packages'))
+# site.addsitedir(os.path.join(framework_path,'site-packages', 'PyQt5'))
+# " \
+#     > ${PythonLibDir}/sitecustomize.py
+#     fi
+
 }
 
 print_usage () {

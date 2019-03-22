@@ -233,7 +233,8 @@ else( APPLE )
       endif()
 
 
-      ExternalProject_Add(ext_qt
+      ExternalProject_Add(
+        ext_qt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
         LOG_DOWNLOAD        ON

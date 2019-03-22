@@ -548,6 +548,11 @@ KisKeyframeBaseSP KisKeyframeChannel::previousItem(const KisKeyframeBase &item) 
     return repeat;
 }
 
+KisRangedKeyframeIterator KisKeyframeChannel::itemsWithin(KisTimeSpan range) const
+{
+    return KisRangedKeyframeIterator(this, range);
+}
+
 KisVisibleKeyframeIterator KisKeyframeChannel::visibleKeyframesFrom(int time) const
 {
     return KisVisibleKeyframeIterator(visibleKeyframeAt(time));
@@ -981,6 +986,96 @@ void KisKeyframeChannel::setScalarValue(KisKeyframeSP keyframe, qreal value, KUn
     Q_UNUSED(keyframe);
     Q_UNUSED(value);
     Q_UNUSED(parentCommand);
+}
+
+KisKeyframeBaseSP firstKeyframeInRange(const KisKeyframeChannel *channel, KisTimeSpan range)
+{
+    KisKeyframeBaseSP active = channel->activeItemAt(range.start());
+
+    if (active) {
+        if (range.contains(active->time())) return active;
+        if (active->time() < range.start()) {
+            const KisKeyframeBaseSP next = channel->nextItem(*active);
+            if (next && range.contains(next->time())) return next;
+        }
+    }
+
+    return KisKeyframeBaseSP();
+}
+
+KisRangedKeyframeIterator::KisRangedKeyframeIterator()
+{}
+
+KisRangedKeyframeIterator::KisRangedKeyframeIterator(const KisKeyframeChannel *channel, KisKeyframeBaseSP keyframe, KisTimeSpan range)
+    : m_channel(channel)
+    , m_keyframe(keyframe)
+    , m_range(range)
+{}
+
+KisRangedKeyframeIterator::KisRangedKeyframeIterator(const KisKeyframeChannel *channel, KisTimeSpan range)
+    : KisRangedKeyframeIterator(channel, firstKeyframeInRange(channel, range), range) {}
+
+KisRangedKeyframeIterator& KisRangedKeyframeIterator::operator++()
+{
+    if (!m_keyframe) return *this;
+
+    m_keyframe = m_channel->nextItem(*m_keyframe);
+    if (!m_keyframe || !m_range.contains(m_keyframe->time())) {
+        m_keyframe = nullptr;
+    }
+
+    return *this;
+}
+
+KisRangedKeyframeIterator& KisRangedKeyframeIterator::operator--()
+{
+    if (!m_keyframe) {
+        // One-past-end state: return to last keyframe in range
+        const KisKeyframeBaseSP last = m_channel->activeItemAt(m_range.end());
+        if (m_range.contains(last->time())) m_keyframe = last;
+    } else {
+        const KisKeyframeBaseSP previousKeyframe = m_channel->previousItem(*m_keyframe);
+        if (previousKeyframe && m_range.contains(previousKeyframe->time())) {
+            m_keyframe = previousKeyframe;
+        }
+    }
+
+    return *this;
+}
+
+KisKeyframeBaseSP KisRangedKeyframeIterator::operator*() const
+{
+    return m_keyframe;
+}
+
+KisKeyframeBaseSP KisRangedKeyframeIterator::operator->() const
+{
+    return m_keyframe;
+}
+
+KisRangedKeyframeIterator KisRangedKeyframeIterator::begin() const
+{
+    return KisRangedKeyframeIterator(m_channel, m_range);
+}
+
+KisRangedKeyframeIterator KisRangedKeyframeIterator::end() const
+{
+    return KisRangedKeyframeIterator(m_channel, nullptr, m_range);
+}
+
+bool KisRangedKeyframeIterator::isValid() const
+{
+    return m_keyframe != nullptr;
+}
+
+bool KisRangedKeyframeIterator::operator==(const KisRangedKeyframeIterator &rhs) const
+{
+    return m_keyframe == rhs.m_keyframe && m_range == rhs.m_range;
+}
+
+bool KisRangedKeyframeIterator::operator!=(const KisRangedKeyframeIterator &rhs) const
+{
+    return !(rhs == *this);
 }
 
 KisVisibleKeyframeIterator::KisVisibleKeyframeIterator() = default;

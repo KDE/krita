@@ -28,11 +28,13 @@
 #include "kritaimage_export.h"
 #include "kis_keyframe.h"
 #include "kis_default_bounds.h"
+#include "kis_time_range.h"
 
 class KisFrameSet;
 class KisTimeSpan;
 class KisAnimationCycle;
 class KisRepeatFrame;
+class KisRangedKeyframeIterator;
 class KisVisibleKeyframeIterator;
 class KisDefineCycleCommand;
 
@@ -98,6 +100,7 @@ public:
     KisKeyframeBaseSP activeItemAt(int time) const;
     KisKeyframeBaseSP nextItem(const KisKeyframeBase &item) const;
     KisKeyframeBaseSP previousItem(const KisKeyframeBase &item) const;
+    KisRangedKeyframeIterator itemsWithin(KisTimeSpan range) const;
 
     KisVisibleKeyframeIterator visibleKeyframesFrom(int time) const;
 
@@ -207,12 +210,42 @@ private:
     friend class KisSwapFramesCommand;
     friend class KisDefineCycleCommand;
 
+    friend class KisRangedKeyframeIterator;
+
 private:
     KisKeyframeSP insertKeyframe(int time, const KisKeyframeBaseSP copySrc, KUndo2Command *parentCommand);
     QSharedPointer<KisAnimationCycle> loadCycle(const QDomElement &cycleElement);
 
     struct Private;
     QScopedPointer<Private> m_d;
+};
+
+class KisRangedKeyframeIterator
+{
+public:
+    KisRangedKeyframeIterator();
+    KisRangedKeyframeIterator(const KisKeyframeChannel *channel, KisTimeSpan range);
+
+    KisRangedKeyframeIterator& operator--();
+    KisRangedKeyframeIterator& operator++();
+
+    KisKeyframeBaseSP operator->() const;
+    KisKeyframeBaseSP operator*() const;
+
+    bool operator==(const KisRangedKeyframeIterator &rhs) const;
+    bool operator!=(const KisRangedKeyframeIterator &rhs) const;
+
+    KisRangedKeyframeIterator begin() const;
+    KisRangedKeyframeIterator end() const;
+
+    bool isValid() const;
+
+private:
+    KisRangedKeyframeIterator(const KisKeyframeChannel *channel, KisKeyframeBaseSP keyframe, KisTimeSpan range);
+
+    const KisKeyframeChannel *m_channel{nullptr};
+    KisKeyframeBaseSP m_keyframe;
+    KisTimeSpan m_range;
 };
 
 class KisVisibleKeyframeIterator

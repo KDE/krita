@@ -20,6 +20,7 @@
 #define KIS_ANIMATION_CYCLE_H
 
 #include "kis_keyframe.h"
+#include "kis_time_range.h"
 
 class KisTimeSpan;
 class KisFrameSet;
@@ -28,12 +29,12 @@ class KisRepeatFrame;
 class KRITAIMAGE_EXPORT KisAnimationCycle : public KisKeyframeBase {
 
 public:
-    KisAnimationCycle(KisKeyframeChannel *channel, KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe);
+    KisAnimationCycle(KisKeyframeChannel *channel, KisTimeSpan sourceRange);
+    KisAnimationCycle(const KisAnimationCycle &cycle, KisTimeSpan newRange);
 
-    KisAnimationCycle(const KisAnimationCycle &cycle, KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe);
-
-    KisKeyframeSP firstSourceKeyframe() const;
-    KisKeyframeSP lastSourceKeyframe() const;
+    /**
+     * The full source range repeated by the cycle.
+     */
     KisTimeSpan originalRange() const;
     int duration() const;
 
@@ -49,7 +50,7 @@ public:
 private:
     friend class KisKeyframeChannel;
 
-    KisKeyframeSP m_firstSourceKeyframe, m_lastSourceKeyframe;
+    KisTimeSpan m_range;
     QVector<QWeakPointer<KisRepeatFrame>> m_repeats;
 };
 

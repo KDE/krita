@@ -546,7 +546,7 @@ void KisKeyframingTest::testCycles()
     KisKeyframeSP frame16 = channel->addKeyframe(16);
     channel->addKeyframe(20);
 
-    auto cmd = channel->createCycle(frame10, frame16);
+    auto cmd = channel->createCycle({10, 19});
     cmd->redo();
 
     // Cycled range can be queried from by any frame within it

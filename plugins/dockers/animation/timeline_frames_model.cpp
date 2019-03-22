@@ -993,16 +993,7 @@ bool TimelineFramesModel::defineCycles(int timeFrom, int timeTo, QSet<int> rows)
         if (dummy) {
             KisKeyframeChannel *contentChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
             if (contentChannel) {
-                KisKeyframeSP firstKeyframe = contentChannel->activeKeyframeAt(timeFrom);
-                KisKeyframeSP lastKeyframe = contentChannel->activeKeyframeAt(timeTo);
-
-                if (!firstKeyframe.isNull() && !lastKeyframe.isNull()) {
-                    KisDefineCycleCommand *createCycle = contentChannel->createCycle(firstKeyframe, lastKeyframe, parentCommand);
-
-                    if (contentChannel->itemAt(timeTo + 1).isNull()) {
-                        contentChannel->addRepeat(createCycle->cycle(), timeTo + 1, parentCommand);
-                    }
-                }
+                contentChannel->createCycle({timeFrom, timeTo}, parentCommand);
             }
         }
     }
@@ -1039,7 +1030,7 @@ bool TimelineFramesModel::deleteCycles(int timeFrom, int timeTo, QSet<int> rows)
     KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Delete animation cycle", "Delete animation cycles", cycles.size()));
 
     Q_FOREACH(QSharedPointer<KisAnimationCycle> cycle, cycles) {
-        KisKeyframeChannel *channel = cycle->firstSourceKeyframe()->channel();
+        KisKeyframeChannel *channel = cycle->channel();
         channel->deleteCycle(cycle, parentCommand);
     }
 

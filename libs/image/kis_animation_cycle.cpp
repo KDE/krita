@@ -21,41 +21,19 @@
 #include "kis_time_range.h"
 #include "kis_keyframe_channel.h"
 
-KisAnimationCycle::KisAnimationCycle(KisKeyframeChannel *channel, KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe)
-        : KisKeyframeBase(channel, firstKeyframe->time())
-        , m_firstSourceKeyframe(firstKeyframe)
-        , m_lastSourceKeyframe(lastKeyframe)
+KisAnimationCycle::KisAnimationCycle(KisKeyframeChannel *channel, KisTimeSpan sourceRange)
+    : KisKeyframeBase(channel, sourceRange.start())
+    , m_range(sourceRange)
 {}
 
-KisAnimationCycle::KisAnimationCycle(const KisAnimationCycle &cycle, KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe)
-    : KisKeyframeBase(cycle.channel(), firstKeyframe->time())
-    , m_firstSourceKeyframe(firstKeyframe)
-    , m_lastSourceKeyframe(lastKeyframe)
-    , m_repeats(cycle.m_repeats)
+KisAnimationCycle::KisAnimationCycle(const KisAnimationCycle &cycle, KisTimeSpan newRange)
+    : KisKeyframeBase(cycle.channel(), newRange.start())
+    , m_range(newRange)
 {}
-
-KisKeyframeSP KisAnimationCycle::firstSourceKeyframe() const
-{
-    return m_firstSourceKeyframe;
-}
-
-KisKeyframeSP KisAnimationCycle::lastSourceKeyframe() const
-{
-    return m_lastSourceKeyframe;
-}
 
 KisTimeSpan KisAnimationCycle::originalRange() const
 {
-    const KisKeyframeBaseSP firstAfterCycle = m_lastSourceKeyframe->channel()->nextItem(*m_lastSourceKeyframe);
-
-    KisTimeSpan range;
-    if (firstAfterCycle.isNull()) {
-        // TODO: semantics of repeat definition without a terminating keyframe?
-        range = KisTimeSpan(m_firstSourceKeyframe->time(), m_lastSourceKeyframe->time());
-    } else {
-        range = KisTimeSpan(m_firstSourceKeyframe->time(), firstAfterCycle->time() - 1);
-    }
-    return range;
+    return m_range;
 }
 
 int KisAnimationCycle::duration() const
@@ -136,11 +114,9 @@ QRect KisAnimationCycle::affectedRect() const
 {
     QRect rect;
 
-    KisKeyframeSP keyframe = m_firstSourceKeyframe;
-    do {
+    for (auto keyframe : channel()->itemsWithin(m_range)) {
         rect |= keyframe->affectedRect();
-        keyframe = channel()->nextKeyframe(keyframe);
-    } while (keyframe && keyframe != m_lastSourceKeyframe);
+    }
 
     return rect;
 }
@@ -162,22 +138,14 @@ QSharedPointer<KisAnimationCycle> KisRepeatFrame::cycle() const
 
 QRect KisRepeatFrame::affectedRect() const
 {
-    KisKeyframeSP keyframe = m_cycle->firstSourceKeyframe();
-
-    QRect rect;
-    while (!keyframe.isNull() && keyframe->time() <= m_cycle->lastSourceKeyframe()->time()) {
-        rect |= keyframe->affectedRect();
-        keyframe = channel()->nextKeyframe(keyframe);
-    }
-
-    return rect;
+    return m_cycle->affectedRect();
 }
 
 int KisRepeatFrame::getOriginalTimeFor(int time) const
 {
     KisTimeSpan originalRange = m_cycle->originalRange();
     int timeWithinCycle = (time - this->time()) % originalRange.duration();
-    return m_cycle->firstSourceKeyframe()->time() + timeWithinCycle;
+    return originalRange.start() + timeWithinCycle;
 }
 
 KisKeyframeSP KisRepeatFrame::getOriginalKeyframeFor(int time) const

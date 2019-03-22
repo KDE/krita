@@ -78,7 +78,7 @@ public:
     virtual KisKeyframeSP linkKeyframe(const KisKeyframeBaseSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
     KisKeyframeSP copyExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
 
-    KisDefineCycleCommand * createCycle(KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe, KUndo2Command *parentCommand = 0);
+    KisDefineCycleCommand * createCycle(KisTimeSpan range, KUndo2Command *parentCommand = 0);
     KUndo2Command * deleteCycle(QSharedPointer<KisAnimationCycle> cycle, KUndo2Command *parentCommand = 0);
     QSharedPointer<KisRepeatFrame> addRepeat(QSharedPointer<KisAnimationCycle> cycle, int time, KUndo2Command *parentCommand);
 

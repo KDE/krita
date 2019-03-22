@@ -133,60 +133,61 @@ CycleSP cycleAfterMove(const CycleSP &cycle, const KeyframeMapping &movedKeyfram
 {
     const KisKeyframeChannel *channel = cycle->channel();
 
-    KisTimeSpan newRange;
     int firstDestination = -1, lastDestination = -1;
+    KisKeyframeSP oldLastKeyframe;
     KisKeyframeSP newFirstKeyframe, newLastKeyframe;
 
-    KisKeyframeSP key = cycle->firstSourceKeyframe();
-    while (!key.isNull() && key->time() <= cycle->lastSourceKeyframe()->time()) {
-        const int destination = movedKeyframes.destinations.value(key, -1);
-        const int newTime = (destination >=0) ? destination : key->time();
+    const KisTimeSpan &oldRange = cycle->originalRange();
+    for (KisKeyframeBaseSP key : channel->itemsWithin(oldRange)) {
+        KisKeyframeSP keyframe = key.dynamicCast<KisKeyframe>();
+        KIS_SAFE_ASSERT_RECOVER(keyframe) { continue; }
 
-        const KisKeyframeBaseSP overwritingKey = (destination >= 0)
-            ? nullptr
-            : movedKeyframes.sources.value(key->time(), nullptr);
+        const int newTime = movedKeyframes.destination(keyframe);
 
-        if (!overwritingKey) {
+        if (newTime >= 0) {
             if (!newFirstKeyframe || newTime < firstDestination) {
                 firstDestination = newTime;
-                newFirstKeyframe = key;
+                newFirstKeyframe = keyframe;
             }
 
             if (!newLastKeyframe || newTime > lastDestination) {
                 lastDestination = newTime;
-                newLastKeyframe = key;
+                newLastKeyframe = keyframe;
             }
         }
 
-        key = channel->nextKeyframe(key->time());
+        oldLastKeyframe = keyframe;
     }
 
     if (!newLastKeyframe) return CycleSP();
 
-    if (newFirstKeyframe == cycle->firstSourceKeyframe() && newLastKeyframe == cycle->lastSourceKeyframe()) {
+    const int newEnd = lastDestination; // FIXME
+
+    const KisTimeSpan &newRange = KisTimeSpan(firstDestination, newEnd);
+    if (newRange == oldRange) {
         return cycle;
     }
 
-    return toQShared(new KisAnimationCycle(*cycle, newFirstKeyframe, newLastKeyframe));
+    return toQShared(new KisAnimationCycle(*cycle, newRange));
 }
 
 QVector<CycleSP> resolveCycleOverlaps(QVector<CycleSP> &cycles, const KeyframeMapping &movedKeyframes)
 {
-    std::sort(cycles.begin(), cycles.end(), [&movedKeyframes](const CycleSP &lhs, const CycleSP &rhs) {
-        const int lhsTime = movedKeyframes.destination(lhs->firstSourceKeyframe());
-        const int rhsTime = movedKeyframes.destination(rhs->firstSourceKeyframe());
-        return lhsTime < rhsTime;
+    if (cycles.isEmpty()) return cycles;
+
+    std::sort(cycles.begin(), cycles.end(), [](const CycleSP &lhs, const CycleSP &rhs) {
+        return lhs->originalRange().start() < rhs->originalRange().start();
     });
 
     CycleSP lhs = cycles[0];
     for (int i = 1; i < cycles.size(); i++) {
         const CycleSP &rhs = cycles[i];
 
-        const int lhsEnd = movedKeyframes.destination(lhs->lastSourceKeyframe());
-        const int rhsStart = movedKeyframes.destination(rhs->firstSourceKeyframe());
+        const int lhsEnd = lhs->originalRange().end();
+        const int rhsStart = rhs->originalRange().start();
 
         if (rhsStart < lhsEnd) {
-            const int rhsEnd = movedKeyframes.destination(rhs->lastSourceKeyframe());
+            const int rhsEnd = rhs->originalRange().end();
 
             if (rhsEnd < lhsEnd) {
                 // Rhs cycle is entirely inside lhs one: drop it
@@ -195,8 +196,8 @@ QVector<CycleSP> resolveCycleOverlaps(QVector<CycleSP> &cycles, const KeyframeMa
             } else {
                 // TODO: logic for picking the cycle to truncate?
 
-                KisKeyframeSP truncatedStart = movedKeyframes.firstTrueKeyframeAfter(lhsEnd);
-                cycles[i] = toQShared(new KisAnimationCycle(*rhs, truncatedStart, rhs->lastSourceKeyframe()));
+                const int truncatedStart = movedKeyframes.firstTrueKeyframeAfter(lhsEnd)->time();
+                cycles[i] = toQShared(new KisAnimationCycle(*rhs, {truncatedStart, rhsEnd}));
             }
         }
 
@@ -225,8 +226,8 @@ bool validateRepeats(const QVector<CycleSP > &cycles, const KeyframeMapping &mov
     Q_FOREACH(const CycleSP &cycle, cycles) {
         if (!cycle) continue;
 
-        const int cycleStart = movedKeyframes.destination(cycle->firstSourceKeyframe());
-        const int cycleEnd = movedKeyframes.destination(cycle->lastSourceKeyframe());
+        const int cycleStart = cycle->originalRange().start();
+        const int cycleEnd = cycle->originalRange().end();
 
         // If any repeat frame would land within the cycle, refuse the operation.
 

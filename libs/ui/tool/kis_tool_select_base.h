@@ -90,7 +90,7 @@ public:
         KisSelectionModifierMapper::instance();
     }
 
-    KisToolSelectBase(KoCanvasBase* canvas, QCursor cursor, QString toolName, KisTool *delegateTool)
+    KisToolSelectBase(KoCanvasBase* canvas, QCursor cursor, QString toolName, KoToolBase *delegateTool)
         : BaseClass(canvas, cursor, delegateTool)
         , m_widgetHelper(toolName)
         , m_selectionActionAlternate(SELECTION_DEFAULT)

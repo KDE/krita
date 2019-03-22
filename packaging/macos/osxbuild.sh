@@ -80,6 +80,12 @@ if test ${OSTYPE} == "darwin*"; then
     ((MAKE_THREADS = $(sysctl -n hw.ncpu) - 1))
 fi
 
+errorlog () {
+    if [ $1 -ne 0  ]; then
+        printf "%s\n" "$2" >> "${BUILDROOT}/builddeps_error.log"
+        exit
+    fi
+}
 check_dir_path () {
     printf "%s" "Checking if ${1} exists and is dir... "
     if test -d ${1}; then
@@ -120,6 +126,7 @@ build_3rdparty () {
         for package in ${@:1:${#@}}; do
             echo "Building ${package}"
             cmake --build . --config RelWithDebInfo --target ${package}
+            errorlog $? "failed build ${package}"
         done
     }
     
@@ -134,8 +141,8 @@ build_3rdparty () {
     cmake_3rdparty \
         ext_gettext \
         ext_openssl \
-        ext_qt \
         ext_zlib \
+        ext_qt \
         ext_boost \
         ext_eigen3 \
         ext_exiv2 \
@@ -396,6 +403,9 @@ elif test ${1} = "buildinstall"; then
     build_krita ${2}
     install_krita ${2}
     fix_boost_rpath ${2}
+
+elif test ${1} = "test"; then
+    ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
 
 else
     echo "Option ${1} not supported"

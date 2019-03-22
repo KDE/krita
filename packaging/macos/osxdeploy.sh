@@ -46,9 +46,6 @@
 #     unmount
 #     Compress resulting dmg into krita_nightly-<gitsha>.dmg
 #     deletes temporary files.
-    
-
-DMG_title="krita" #if changed krita.temp.dmg must be deleted manually
 
 if test -z ${BUILDROOT}; then
     echo "ERROR: BUILDROOT env not set!"
@@ -56,6 +53,8 @@ if test -z ${BUILDROOT}; then
     echo "exiting..."
     exit
 fi
+
+DMG_title="krita" #if changed krita.temp.dmg must be deleted manually
 
 # There is some duplication between build and deploy scripts
 # a config env file could would be a nice idea.
@@ -76,6 +75,18 @@ print_usage () {
     \t image recomended size is at least 950x500\n"
 }
 
+# Attempt to detach previous mouted DMG
+if [[ -d "/Volumes/${DMG_title}" ]]; then
+    echo "WARNING: Another Krita DMG is mounted!"
+    echo "Attempting eject…"
+    hdiutil detach "/Volumes/${DMG_title}"
+    if [ $? -ne 0  ]; then
+        exit
+    fi
+    echo "Success!"
+fi
+
+# Parse input args
 if test ${#} -eq 0; then
     echo "ERROR: no option given"
     print_usage
@@ -141,17 +152,23 @@ add_lib_to_list() {
 find_needed_libs () {
     echo "Analizing libraries with oTool..." >&2
     local libs_used="" # input lib_lists founded
-    for libFile in $(find ${KRITA_DMG}/krita.app/Contents -name "*.so" -or -name "*.dylib"); do
+
+    for libFile in $(find ${KRITA_DMG}/krita.app/Contents -type f -perm -u+x -not -name "*.pyc"); do
+        if test -z "$(file ${libFile} | grep 'Mach-O')" ; then
+            echo "skipping ${libFile}" >&2
+            continue
+        fi
         oToolResult=$(otool -L ${libFile} | awk '{print $1}')
         resultArray=(${oToolResult}) # convert to array
-        echo "${libFile##*Contents/}" >&2
+
         for lib in ${resultArray[@]:1}; do
             if test "${lib:0:1}" = "@"; then
                 local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
             fi
             if test "${lib:0:${#BUILDROOT}}" = "${BUILDROOT}"; then
+                printf "Fixing: %s\n" "${libFile}" >&2
                 install_name_tool -id ${lib##*/} "${libFile}"
-                install_name_tool -change ${lib} "@rpath/${lib##*/}" "${libFile}"
+                install_name_tool -change ${lib} "@rpath/${lib##*${BUILDROOT}/i/lib/}" "${libFile}"
                 local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
             fi
         done
@@ -188,7 +205,7 @@ copy_missing_libs () {
             echo "${lib} might be a missing framework"
             if [ "$(stringContains "${result}" "framework")" ]; then
                 echo "copying framework ${BUILDROOT}/i/lib/${lib}.framework to dmg"
-                # TODO rsync only included ${lib} Resources Versions
+                # rsync only included ${lib} Resources Versions
                 rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/${lib} ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
                 rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/Resources ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
                 rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/Versions ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
@@ -348,7 +365,6 @@ signBundle() {
     cd ${KRITA_DMG}/krita.app/Contents/Resources
     find . -type f -name "*.dylib" -or -name "*.so" | batch_codesign
 
-
     #Finally sign krita and krita.app
     printf "${KRITA_DMG}/krita.app/Contents/MacOS/krita" | batch_codesign
     printf "${KRITA_DMG}/krita.app" | batch_codesign
@@ -365,10 +381,10 @@ createDMG () {
     # usage of -fsargs minimze gaps at front of filesystem (reduce size)
     hdiutil create -srcfolder "${KRITA_DMG}" -volname "${DMG_title}" -fs HFS+ \
         -fsargs "-c c=64,a=16,e=16" -format UDRW -size ${DMG_size}m krita.temp.dmg
+
     # Next line is only useful if we have a dmg as a template!
     # previous hdiutil must be uncommented
     # cp krita-template.dmg krita.dmg
-
     device=$(hdiutil attach -readwrite -noverify -noautoopen "krita.temp.dmg" | egrep '^/dev/' | sed 1q | awk '{print $1}')
 
     # rsync -priul --delete ${KRITA_DMG}/krita.app "/Volumes/${DMG_title}"
@@ -421,10 +437,13 @@ createDMG () {
     echo "dmg done!"
 }
 
+#######################
+# Program starts!!
+########################
 # Run deploy command, instalation is assumed to exist in BUILDROOT/i
 krita_deploy
 
-# Code sign krita.app
+# Code sign krita.app if signature given
 if [[ -n "${CODE_SIGNATURE}" ]]; then
     signBundle
 fi

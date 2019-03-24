@@ -103,7 +103,7 @@ for arg in "${@}"; do
 
         if [[ "png" = ${BG_FORMAT} || "jpeg" = ${BG_FORMAT} ]];then
             echo "valid image file"
-            DMG_background=${arg}
+            DMG_background=$(cd "$(dirname "${arg}")"; pwd -P)/$(basename "${arg}")
             DMG_validBG=1
         fi
     fi
@@ -374,7 +374,7 @@ signBundle() {
 }
 
 createDMG () {
-    echo "Starting creation of dmg..."
+    printf "Creating of dmg with contents of %s...\n" "${KRITA_DMG}"
     cd ${BUILDROOT}
     DMG_size=500
 
@@ -396,31 +396,30 @@ createDMG () {
     if [[ ! -d "/Volumes/${DMG_title}/.background" ]]; then
         mkdir "/Volumes/${DMG_title}/.background"
     fi
-    cp ${BUILDROOT}/${DMG_background} "/Volumes/${DMG_title}/.background/"
+    cp ${DMG_background} "/Volumes/${DMG_title}/.background/"
 
     ## Apple script to set style
-    echo '
-        tell application "Finder"
-            tell disk "'${DMG_title}'"
-                open
-                set current view of container window to icon view
-                set toolbar visible of container window to false
-                set statusbar visible of container window to false
-                set the bounds of container window to {186, 156, 956, 592}
-                set theViewOptions to the icon view options of container window
-                set arrangement of theViewOptions to not arranged
-                set icon size of theViewOptions to 80
-                set background picture of theViewOptions to file ".background:'${DMG_background}'"
-                set position of item "'krita.app'" of container window to {279, 272}
-                set position of item "Applications" of container window to {597, 272}
-                set position of item "Terms of Use" of container window to {597, 110}
-                update without registering applications
-                delay 1
-                close
-            end tell
-        end tell
-        ' | osascript
-
+    printf '
+tell application "Finder"
+    tell disk "%s"
+        open
+        set current view of container window to icon view
+        set toolbar visible of container window to false
+        set statusbar visible of container window to false
+        set the bounds of container window to {291, 95, 1097, 558}
+        set theViewOptions to the icon view options of container window
+        set arrangement of theViewOptions to not arranged
+        set icon size of theViewOptions to 80
+        set background picture of theViewOptions to file ".background:%s"
+        set position of item "krita.app" of container window to {172, 70}
+        set position of item "Applications" of container window to {167, 189}
+        set position of item "Terms of Use" of container window to {166, 314}
+        update without registering applications
+        delay 1
+        close
+    end tell
+end tell
+        ' "${DMG_title}" "${DMG_background##*/}" | osascript
     
     chmod -Rf go-w "/Volumes/${DMG_title}"
 

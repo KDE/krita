@@ -63,6 +63,8 @@ KIS_BUILD_DIR=${BUILDROOT}/kisbuild # only used for getting git sha number
 KRITA_DMG=${BUILDROOT}/kritadmg
 KRITA_DMG_TEMPLATE=${BUILDROOT}/kritadmg-template
 
+export PATH=${KIS_INSTALL_DIR}/bin:$PATH
+
 # flags for OSX environment
 # We only support from 10.11 up
 export MACOSX_DEPLOYMENT_TARGET=10.11
@@ -335,12 +337,12 @@ krita_deploy () {
     krita_findmissinglibs
 }
 
+# helper to define function only once
+batch_codesign() {
+    xargs -P4 -I FILE codesign -f -s "${CODE_SIGNATURE}" FILE
+}
 # Code sign must be done as recommended by apple "sign code inside out in individual stages"
 signBundle() {
-    # helper to define function only once
-    batch_codesign() {
-        xargs -P4 -I FILE codesign -f -s "${CODE_SIGNATURE}" FILE
-    }
     cd ${KRITA_DMG}
 
     # sign Frameworks and libs
@@ -357,13 +359,14 @@ signBundle() {
 
     # Sing only libraries and plugins
     cd ${KRITA_DMG}/krita.app/Contents/PlugIns
-    find . -type f -name "*.dylib" -or -name "*.so" | batch_codesign
+    find . -type f | batch_codesign
 
     cd ${KRITA_DMG}/krita.app/Contents/Library/QuickLook
     printf "kritaquicklook.qlgenerator" | batch_codesign
 
+    # It is recommended to sign every Resource file
     cd ${KRITA_DMG}/krita.app/Contents/Resources
-    find . -type f -name "*.dylib" -or -name "*.so" | batch_codesign
+    find . -type f | batch_codesign
 
     #Finally sign krita and krita.app
     printf "${KRITA_DMG}/krita.app/Contents/MacOS/krita" | batch_codesign

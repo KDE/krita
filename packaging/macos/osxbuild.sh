@@ -73,6 +73,7 @@ export PYTHONHOME=${KIS_INSTALL_DIR}
 export KDE_COLOR_DEBUG=1
 export QTEST_COLORED=1
 
+DEPBUILD_LOG="${BUILDROOT}/builddeps_.log"
 
 # configure max core for make compile
 ((MAKE_THREADS=1))
@@ -80,12 +81,18 @@ if test ${OSTYPE} == "darwin*"; then
     ((MAKE_THREADS = $(sysctl -n hw.ncpu) - 1))
 fi
 
-errorlog () {
-    if [ $1 -ne 0  ]; then
-        printf "%s\n" "$2" >> "${BUILDROOT}/builddeps_error.log"
-        exit
+# Prints log to file
+# $2 error message
+# $3 success message
+build_errorlog () {
+    if [[ "${1}" -ne 0  ]]; then
+        printf "ERROR: %s\n" "$2" >> ${DEPBUILD_LOG}
+    else
+        printf "OK: %s\n" "$3" >> ${DEPBUILD_LOG}
     fi
+    echo ${1}
 }
+
 check_dir_path () {
     printf "%s" "Checking if ${1} exists and is dir... "
     if test -d ${1}; then
@@ -101,6 +108,41 @@ check_dir_path () {
     return 0
 }
 # builds dependencies for the first time
+osxbuild_count=0
+cmake_3rdparty () {
+    cd ${KIS_TBUILD_DIR}
+    for package in ${@:1:${#@}}; do
+        printf "STATUS: %s\n" "Building ${package}"
+        cmake --build . --config RelWithDebInfo --target ${package} 2>> "${BUILDROOT}/builddeps_.log"
+        local build_error=$(build_errorlog ${?} "Failed build ${package}" "Build Success! ${package}")
+
+        # run package fixes
+        if [[ ${osxbuild_count} -eq 0 ]]; then
+            build_3rdparty_fixes ${package}
+        fi
+    done
+    # global
+    osxbuild_count=0
+}
+
+build_3rdparty_fixes(){
+    osxbuild_count=$((${osxbuild_count} + 1))
+    pkg=${1}
+    if [[ "${pkg}" = "ext_qt" ]]; then
+        ln -sf qmake "${KIS_INSTALL_DIR}/bin/qmake-qt5"
+
+    elif [[ "${pkg}" = "ext_openexr" ]]; then
+        # open exr will fail the first time is called
+        # rpath needs to be fixed an build rerun
+        echo "Fixing rpath on openexr file: b44ExpLogTable"
+        echo "Fixing rpath on openexr file: dwaLookups"
+        install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./b44ExpLogTable
+        install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./dwaLookups
+        # we must rerun build!
+        cmake_3rdparty ext_openexr
+    fi
+}
+
 build_3rdparty () {
     echo "building in ${KIS_TBUILD_DIR}"
 
@@ -122,17 +164,8 @@ build_3rdparty () {
     # make preinstall
     echo "finished make step"
     
-    cmake_3rdparty () {
-        for package in ${@:1:${#@}}; do
-            echo "Building ${package}"
-            cmake --build . --config RelWithDebInfo --target ${package}
-            errorlog $? "failed build ${package}"
-        done
-    }
-    
     if ! test -z ${1}; then
-        echo "Starting build of ${1} $(test -n ${1})"
-        cmake_3rdparty ${1}
+        cmake_3rdparty ${@}
         exit
     fi
 
@@ -141,8 +174,8 @@ build_3rdparty () {
     cmake_3rdparty \
         ext_gettext \
         ext_openssl \
-        ext_zlib \
         ext_qt \
+        ext_zlib \
         ext_boost \
         ext_eigen3 \
         ext_exiv2 \
@@ -150,22 +183,8 @@ build_3rdparty () {
         ext_ilmbase \
         ext_jpeg \
         ext_lcms2 \
-        ext_ocio
-        
-    # open exr will fail the first time is called
-    # rpath needs to be fixed an build rerun
-    if cmake_3rdparty ext_openexr; then
-        echo "open_exr built success!"
-    else
-        if install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./b44ExpLogTable; then
-        echo "Added rpath for b44ExpLogTable"
-        fi
-        if install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./dwaLookups; then
-            echo "Added rpath for dwaLookups"
-        fi
-        echo "Rerunning ext_openexr build"
-        cmake_3rdparty ext_openexr
-    fi
+        ext_ocio \
+        ext_openexr
 
     cmake_3rdparty \
         ext_png \
@@ -175,6 +194,18 @@ build_3rdparty () {
         ext_libraw \
         ext_giflib
 
+    # Stop if qmake link was not created
+    # this meant qt build fail and further builds will
+    # also fail.
+    test -L "${KIS_INSTALL_DIR}/bin/qmake-qt5"
+    if [[ $(build_errorlog ${?} "qmake link missing!" "qmake link present, continuing...") -ne 0 ]];then
+        printf "
+    link: ${KIS_INSTALL_DIR}/bin/qmake-qt5 missing!
+    It probably means ext_qt failed!!
+    check, fix and rerun!\n"
+        exit
+    fi
+
     # for python
     # for sip PYQT_SIP_DIR_OVERRIDE=/usr/local/share/sip/qt5
     cmake_3rdparty \
@@ -182,15 +213,9 @@ build_3rdparty () {
         ext_sip \
         ext_pyqt
 
-    # we need to move the contents of sip/PyQt5 to python-3.x/PyQt5/
-
-    # on osx qmake is not correctly set to qmake-qt5 for some reason
-    ln -s -f ${KIS_INSTALL_DIR}/bin/qmake ${KIS_INSTALL_DIR}/bin/qmake-qt5
-
     cmake_3rdparty \
         ext_frameworks \
         ext_extra_cmake_modules \
-        ext_karchive \
         ext_kconfig \
         ext_kwidgetsaddons \
         ext_kcompletion \
@@ -212,88 +237,63 @@ rebuild_3rdparty () {
     build_install_ext() {
         for pkg in ${@:1:${#@}}; do
             {
-                cd ${KIS_TBUILD_DIR}/${pkg}/${pkg}-prefix/src/${pkg}-build
+                cd ${KIS_TBUILD_DIR}/${pkg}/${pkg}-prefix/src/${pkg}-stamp
             } || {
-                cd ${KIS_TBUILD_DIR}/${pkg}/${pkg}-prefix/src/${pkg}
+                cd ${KIS_TBUILD_DIR}/ext_frameworks/${pkg}-prefix/src/${pkg}-stamp
             }
             echo "Installing ${pkg} files..."
-            if test ${pkg} = "ext_boost"; then
-                echo "Copying boost files..."
-                cp bin.v2/libs/system/build/darwin-4.2.1/release/threading-multi/libboost_system.dylib ${KIS_INSTALL_DIR}/lib/
-                cp bin.v2/libs/system/build/darwin-4.2.1/release/link-static/threading-multi/libboost_system.a ${KIS_INSTALL_DIR}/lib/
-                # copy boost into i/include :: 
-                cp -r boost ${KIS_INSTALL_DIR}/include
-            else
-                make -j${MAKE_THREADS}
-                make install
-            fi
+            rm ${pkg}-configure ${pkg}-build ${pkg}-install
+
+            cmake_3rdparty ${pkg} 1> /dev/null
+
             cd ${KIS_TBUILD_DIR}
         done
     }
-
-    build_install_frameworks() {
-        for pkg in \
-                ext_extra_cmake_modules \
-                ext_karchive \
-                ext_kconfig \
-                ext_kwidgetsaddons \
-                ext_kcompletion \
-                ext_kcoreaddons \
-                ext_kguiaddons \
-                ext_ki18n \
-                ext_kitemmodels \
-                ext_kitemviews \
-                ext_kimageformats \
-                ext_kwindowsystem \
-                ; do
-            cd ${KIS_TBUILD_DIR}/ext_frameworks/${pkg}-prefix/src/${pkg}-build
-            echo "Installing ${pkg} files..."
-            make install ${pkg}
-        done
-    }
-
+    # Do not process complete list only pkgs given.
     if ! test -z ${1}; then
-        build_install_ext ${1}
+        build_install_ext ${@}
         exit
     fi
 
     build_install_ext \
         ext_gettext \
         ext_openssl \
+        ext_zlib \
+        ext_qt \
+        ext_boost \
+        ext_eigen3 \
+        ext_exiv2 \
+        ext_fftw3 \
+        ext_ilmbase \
+        ext_jpeg \
+        ext_lcms2 \
+        ext_ocio \
+        ext_openexr \
+        ext_png \
+        ext_tiff \
+        ext_gsl \
+        ext_vc \
+        ext_libraw \
+        ext_giflib \
+        ext_python \
+        ext_sip \
+        ext_pyqt \
 
-    # qt builds inside qt_ext, make install must be run inside.
-    build_install_ext   ext_qt
-    build_install_ext   ext_zlib
-
-    # ext_boost
-    build_install_ext   ext_boost
-
+    # Build kde_frameworks
     build_install_ext \
-                        ext_eigen3 \
-                        ext_exiv2 \
-                        ext_fftw3 \
-                        ext_ilmbase \
-                        ext_jpeg \
-                        ext_lcms2 \
-                        ext_ocio \
-                        ext_openexr \
-                        ext_png \
-                        ext_tiff \
-                        ext_gsl \
-                        ext_vc \
-                        ext_libraw \
-                        ext_giflib
-
-    # for python
-    build_install_ext   ext_python
-    build_install_ext   ext_sip
-    build_install_ext   ext_pyqt
-
-    # force creation of symlink, useful if install dir was wiped out.
-    ln -s -f ${KIS_INSTALL_DIR}/bin/qmake ${KIS_INSTALL_DIR}/bin/qmake-qt5
-
-    build_install_frameworks
-    
+        ext_extra_cmake_modules \
+        ext_karchive \
+        ext_kconfig \
+        ext_kwidgetsaddons \
+        ext_kcompletion \
+        ext_kcoreaddons \
+        ext_kguiaddons \
+        ext_ki18n \
+        ext_kitemmodels \
+        ext_kitemviews \
+        ext_kimageformats \
+        ext_kwindowsystem \
+        ext_quazip
 }
 
 #not tested
@@ -385,10 +385,10 @@ if test ${#} -eq 0; then
 fi
 
 if test ${1} = "builddeps"; then
-    build_3rdparty ${2}
+    build_3rdparty "${@:2}"
 
 elif test ${1} = "rebuilddeps"; then
-    rebuild_3rdparty ${2}
+    rebuild_3rdparty "${@:2}"
 
 elif test ${1} = "fixboost"; then
     fix_boost_rpath
@@ -398,6 +398,7 @@ elif test ${1} = "build"; then
 
 elif test ${1} = "install"; then
     install_krita ${2}
+    fix_boost_rpath ${2}
 
 elif test ${1} = "buildinstall"; then
     build_krita ${2}

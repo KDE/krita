@@ -8,8 +8,8 @@ if (UNIX)
 
   ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://www.riverbankcomputing.com/static/Downloads/sip/sip-4.19.15.zip
-        URL_MD5 4a1a4760cfabef15d68f45a6920974c2
+        URL https://www.riverbankcomputing.com/static/Downloads/sip/4.19.15/sip-4.19.15.zip
+        URL_MD5 301c9deccffaface52ad425fbdf447ae
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/sip -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.5
         BUILD_COMMAND make

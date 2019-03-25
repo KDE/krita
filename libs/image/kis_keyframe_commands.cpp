@@ -8,6 +8,7 @@
 
 using CycleSP = QSharedPointer<KisAnimationCycle>;
 using KeyframeMove = KisKeyframeCommands::KeyframeMove;
+using ValidationResult = KisKeyframeCommands::ValidationResult;
 
 KisKeyframeCommands::KeyframeMove::KeyframeMove(KisKeyframeBaseSP keyframe, int newTime)
     : keyframe(keyframe)
@@ -112,10 +113,10 @@ struct KeyframeMapping
     }
 };
 
-bool areValidMoveSources(const KisKeyframeChannel *channel, QVector<KeyframeMove> moves)
+ValidationResult::Status validateMoveSources(const KisKeyframeChannel *channel, QVector<KeyframeMove> moves)
 {
     Q_FOREACH(const KeyframeMove &move, moves) {
-        if (move.keyframe->channel() != channel) return false;
+        if (move.keyframe->channel() != channel) return ValidationResult::KeyframesFromDifferentChannels;
     }
 
     std::sort(moves.begin(), moves.end(),
@@ -123,10 +124,10 @@ bool areValidMoveSources(const KisKeyframeChannel *channel, QVector<KeyframeMove
     );
 
     for (int i = 1; i < moves.size(); i++) {
-        if (moves[i - 1].keyframe == moves[i].keyframe) return false;
+        if (moves[i - 1].keyframe == moves[i].keyframe) return ValidationResult::MultipleDestinations;
     }
 
-    return true;
+    return ValidationResult::Valid;
 }
 
 CycleSP cycleAfterMove(const CycleSP &cycle, const KeyframeMapping &movedKeyframes)
@@ -284,24 +285,25 @@ void deleteOverwrittenKeys(KeyframeMapping moves, KUndo2Command *parentCommand)
     }
 }
 
-KUndo2CommandSP KisKeyframeCommands::tryMoveKeyframes(KisKeyframeChannel *channel, QVector<KeyframeMove> moves, KUndo2Command *parentCommand)
+ValidationResult KisKeyframeCommands::tryMoveKeyframes(KisKeyframeChannel *channel, QVector<KeyframeMove> moves, KUndo2Command *parentCommand)
 {
     KUndo2Command *command = new KUndo2Command(parentCommand);
 
-    if (!areValidMoveSources(channel, moves)) return nullptr;
+    const ValidationResult::Status moveValidation = validateMoveSources(channel, moves);
+    if (moveValidation != ValidationResult::Valid) return moveValidation;
 
     const KeyframeMapping movedKeyframes(channel, moves);
-    if (movedKeyframes.isEmpty()) return nullptr;
+    if (movedKeyframes.isEmpty()) return ValidationResult(command);
 
     const QVector<CycleSP> cycles = cyclesAfterMoves(movedKeyframes);
 
-    if (!validateRepeats(cycles, movedKeyframes)) return nullptr;
+    if (!validateRepeats(cycles, movedKeyframes)) return ValidationResult::RepeatKeyframeWithinCycleDefinition;
 
     deleteOverwrittenKeys(movedKeyframes, command);
     new KisMoveKeyframesCommand(moves, command);
     updateCycles(channel, cycles, command);
 
-    return toQShared(command);
+    return ValidationResult(command);
 }
 
 KisReplaceKeyframeCommand::KisReplaceKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeBaseSP keyframe, KUndo2Command *parentCommand)

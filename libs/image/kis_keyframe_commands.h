@@ -23,6 +23,49 @@
 
 namespace KisKeyframeCommands
 {
+    struct ValidationResult {
+        enum Status {
+            Valid,
+            RepeatKeyframeWithinCycleDefinition,
+            KeyframesFromDifferentChannels,
+            MultipleDestinations
+        };
+
+        ValidationResult(Status error) // NOLINT(google-explicit-constructor)
+            : status(error)
+            , command(nullptr)
+        {}
+
+        explicit ValidationResult(KUndo2Command *command)
+            : status(Valid)
+            , command(command)
+        {
+            KIS_SAFE_ASSERT_RECOVER_NOOP(command);
+        }
+
+        bool isValid() const {
+            return status == Valid;
+        }
+
+        bool operator==(const ValidationResult &rhs) const
+        {
+            return status == rhs.status && command == rhs.command;
+        }
+
+        bool operator!=(const ValidationResult &rhs) const
+        {
+            return !(rhs == *this);
+        }
+
+        bool operator==(const Status &rhs) const
+        {
+            return status == rhs;
+        }
+
+        Status status;
+        KUndo2Command *command;
+    };
+
     struct KRITAIMAGE_EXPORT KeyframeMove
     {
         KisKeyframeBaseSP keyframe;
@@ -35,7 +78,7 @@ namespace KisKeyframeCommands
     /**
      * Returns either a new command for operations needed to move the keyframes or null if the operation is invalid against the current state of the channel
      */
-    KRITAIMAGE_EXPORT KUndo2CommandSP tryMoveKeyframes(KisKeyframeChannel *channel, QVector<KeyframeMove> moves, KUndo2Command *parentCommand);
+    KRITAIMAGE_EXPORT ValidationResult tryMoveKeyframes(KisKeyframeChannel *channel, QVector<KeyframeMove> moves, KUndo2Command *parentCommand);
 }
 
 class KRITAIMAGE_EXPORT KisReplaceKeyframeCommand : public KUndo2Command

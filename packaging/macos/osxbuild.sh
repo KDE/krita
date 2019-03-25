@@ -169,6 +169,7 @@ build_3rdparty () {
     # build 3rdparty tools
     # The order must not be changed!
     cmake_3rdparty \
+        ext_pkgconfig \
         ext_gettext \
         ext_openssl \
         ext_qt \
@@ -209,6 +210,8 @@ build_3rdparty () {
         ext_sip \
         ext_pyqt
 
+    cmake_3rdparty ext_libheif
+
     cmake_3rdparty \
         ext_extra_cmake_modules \
         ext_kconfig \
@@ -235,6 +238,8 @@ rebuild_3rdparty () {
                 cd ${KIS_TBUILD_DIR}/${pkg}/${pkg}-prefix/src/${pkg}-stamp
             } || {
                 cd ${KIS_TBUILD_DIR}/ext_frameworks/${pkg}-prefix/src/${pkg}-stamp
+            } || {
+                cd ${KIS_TBUILD_DIR}/ext_heif/${pkg}-prefix/src/${pkg}-stamp
             }
             echo "Installing ${pkg} files..."
             rm ${pkg}-configure ${pkg}-build ${pkg}-install
@@ -251,6 +256,7 @@ rebuild_3rdparty () {
     fi
 
     build_install_ext \
+        ext_pkgconfig \
         ext_gettext \
         ext_openssl \
         ext_qt \
@@ -273,6 +279,8 @@ rebuild_3rdparty () {
         ext_python \
         ext_sip \
         ext_pyqt \
+
+    build_install_ext ext_libheif
 
     # Build kde_frameworks
     build_install_ext \

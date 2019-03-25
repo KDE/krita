@@ -212,5 +212,10 @@ if (NOT APPLE)
 	add_subdirectory( ext_gmic )
 endif ()
 
+if(UNIX)
+    add_subdirectory( ext_pkgconfig )
+    add_subdirectory( ext_heif )
+endif()
+
 add_subdirectory(ext_giflib)
 add_subdirectory(ext_quazip)

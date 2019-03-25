@@ -152,14 +152,15 @@ add_lib_to_list() {
 # Add to libs_used
 # converts absolute buildroot path to @rpath
 find_needed_libs () {
-    echo "Analizing libraries with oTool..." >&2
+    # echo "Analizing libraries with oTool..." >&2
     local libs_used="" # input lib_lists founded
 
-    for libFile in $(find ${KRITA_DMG}/krita.app/Contents -type f -perm -u+x -not -name "*.pyc"); do
+    for libFile in ${@}; do
         if test -z "$(file ${libFile} | grep 'Mach-O')" ; then
-            echo "skipping ${libFile}" >&2
+            # echo "skipping ${libFile}" >&2
             continue
         fi
+
         oToolResult=$(otool -L ${libFile} | awk '{print $1}')
         resultArray=(${oToolResult}) # convert to array
 
@@ -167,11 +168,14 @@ find_needed_libs () {
             if test "${lib:0:1}" = "@"; then
                 local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
             fi
-            if test "${lib:0:${#BUILDROOT}}" = "${BUILDROOT}"; then
-                printf "Fixing: %s\n" "${libFile}" >&2
-                install_name_tool -id ${lib##*/} "${libFile}"
-                install_name_tool -change ${lib} "@rpath/${lib##*${BUILDROOT}/i/lib/}" "${libFile}"
-                local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
+            if [[ "${lib:0:${#BUILDROOT}}" = "${BUILDROOT}" ]]; then
+                printf "Fixing %s: %s\n" "${libFile#${KRITA_DMG}/}" "${lib##*/}" >&2
+                if [[ "${lib##*/}" = "${libFile##*/}" ]]; then
+                    install_name_tool -id ${lib##*/} "${libFile}"
+                else
+                    install_name_tool -change ${lib} "@rpath/${lib##*${BUILDROOT}/i/lib/}" "${libFile}"
+                    local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
+                fi
             fi
         done
     done
@@ -179,11 +183,11 @@ find_needed_libs () {
 }
 
 find_missing_libs (){
-    echo "Searching for missing libs on deployment folders…" >&2
+    # echo "Searching for missing libs on deployment folders…" >&2
     local libs_missing=""
     for lib in ${@}; do
         if test -z "$(find ${KRITA_DMG}/krita.app/Contents/ -name ${lib})"; then
-            echo "Adding ${lib} to missing libraries." >&2
+            # echo "Adding ${lib} to missing libraries." >&2
             libs_missing="${libs_missing} ${lib}"
         fi
     done
@@ -195,13 +199,12 @@ copy_missing_libs () {
         result=$(find "${BUILDROOT}/i" -name "${lib}")
 
         if test $(countArgs ${result}) -eq 1; then
-            echo ${result}
             if [ "$(stringContains "${result}" "plugin")" ]; then
-                echo "copying ${lib} to plugins dir"
                 cp -pv ${result} ${KRITA_DMG}/krita.app/Contents/PlugIns/
+                krita_findmissinglibs "${KRITA_DMG}/krita.app/Contents/PlugIns/${result##*/}"
             else
-                echo "copying ${lib} to Frameworks dir"
                 cp -pv ${result} ${KRITA_DMG}/krita.app/Contents/Frameworks/
+                krita_findmissinglibs "${KRITA_DMG}/krita.app/Contents/Frameworks/${result##*/}"
             fi
         else
             echo "${lib} might be a missing framework"
@@ -211,26 +214,20 @@ copy_missing_libs () {
                 rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/${lib} ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
                 rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/Resources ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
                 rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/Versions ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
+                krita_findmissinglibs "$(find "${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/" -perm u+x)"
             fi
         fi
     done
 }
 
 krita_findmissinglibs() {
-    echo "Starting search for missing libraries"
-    neededLibs=$(find_needed_libs)
-    echo "\nDone!"
+    neededLibs=$(find_needed_libs "${@}")
     missingLibs=$(find_missing_libs ${neededLibs})
 
     if test $(countArgs ${missingLibs}) -gt 0; then
-        echo "Found missing libs!"
-        echo "${missingLibs}\n"
+        printf "Found missing libs: %s\n" "${missingLibs}"
         copy_missing_libs ${missingLibs}
-    else
-        echo "No missing libraries found."
     fi
-
-    echo "Done!"
 }
 
 
@@ -300,7 +297,7 @@ krita_deploy () {
     cd ${BUILDROOT}
     rsync -prul ${KIS_INSTALL_DIR}/lib/kritaplugins/ ${KRITA_DMG}/krita.app/Contents/PlugIns
     
-    # rsync -prul /Volumes/Osiris/programs/krita-master/i/lib/libkrita* Frameworks/
+    # rsync -prul {KIS_INSTALL_DIR}/lib/libkrita* Frameworks/
 
     # activate for python enabled Krita
     # echo "Copying python..."
@@ -334,7 +331,9 @@ krita_deploy () {
     rm -rf ${KRITA_DMG}/krita.app/Contents/PlugIns/kf5/org.kde.kwindowsystem.platforms
 
     # repair krita for plugins
-    krita_findmissinglibs
+    printf "Searching for missing libraries\n"
+    krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -name "*.dylib" -or -name "*.so" -or -perm u+x)
+    echo "Done!"
 }
 
 # helper to define function only once

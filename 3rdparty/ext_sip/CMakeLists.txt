@@ -11,7 +11,7 @@ if (UNIX)
         URL https://www.riverbankcomputing.com/static/Downloads/sip/4.19.15/sip-4.19.15.tar.gz
         URL_MD5 236578d2199da630ae1251671b9a7bfe
 
-        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/sip -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.5
+        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/sip -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.5 --sip-module PyQt5.sip
         BUILD_COMMAND make
         INSTALL_COMMAND make install
 
@@ -27,6 +27,7 @@ elseif (MINGW)
         -e ${PREFIX_ext_sip}/include
         --sipdir ${PREFIX_ext_sip}/share/sip
         --target-py-version 3.6
+        --sip-module PyQt5.sip
     )
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

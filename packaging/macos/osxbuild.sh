@@ -60,13 +60,13 @@ if test -z $(which cmake); then
 fi
 
 export PATH=${KIS_INSTALL_DIR}/bin:$PATH
-export C_INCLUDE_PATH=${KIS_INSTALL_DIR}/include:${C_INCLUDE_PATH}
-export CPLUS_INCLUDE_PATH=${KIS_INSTALL_DIR}/include:${CPLUS_INCLUDE_PATH}
-export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:${LIBRARY_PATH}
+export C_INCLUDE_PATH=${KIS_INSTALL_DIR}/include:/usr/include:${C_INCLUDE_PATH}
+export CPLUS_INCLUDE_PATH=${KIS_INSTALL_DIR}/include:/usr/include:${CPLUS_INCLUDE_PATH}
+export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:/usr/lib:${LIBRARY_PATH}
 # export CPPFLAGS=-I${KIS_INSTALL_DIR}/include
 # export LDFLAGS=-L${KIS_INSTALL_DIR}/lib
 
-export PYTHONHOME=${KIS_INSTALL_DIR}
+# export PYTHONHOME=${KIS_INSTALL_DIR}
 # export PYTHONPATH=${KIS_INSTALL_DIR}/sip:${KIS_INSTALL_DIR}/lib/python3.5/site-packages:${KIS_INSTALL_DIR}/lib/python3.5
 
 # This will make the debug output prettier
@@ -108,27 +108,24 @@ check_dir_path () {
     return 0
 }
 # builds dependencies for the first time
-osxbuild_count=0
 cmake_3rdparty () {
     cd ${KIS_TBUILD_DIR}
     for package in ${@:1:${#@}}; do
-        printf "STATUS: %s\n" "Building ${package}"
-        cmake --build . --config RelWithDebInfo --target ${package} 2>> "${BUILDROOT}/builddeps_.log"
+        printf "STATUS: %s\n" "Building ${package}" >> ${DEPBUILD_LOG}
+        cmake --build . --config RelWithDebInfo --target ${package}  2>> ${DEPBUILD_LOG}
         local build_error=$(build_errorlog ${?} "Failed build ${package}" "Build Success! ${package}")
 
         # run package fixes
-        if [[ ${osxbuild_count} -eq 0 ]]; then
+        if [[ ${2} != "1" ]]; then
             build_3rdparty_fixes ${package}
         fi
     done
-    # global
-    osxbuild_count=0
 }
 
 build_3rdparty_fixes(){
     osxbuild_count=$((${osxbuild_count} + 1))
     pkg=${1}
-    if [[ "${pkg}" = "ext_qt" ]]; then
+    if [[ "${pkg}" = "ext_qt" && -e "${KIS_INSTALL_DIR}/bin/qmake" ]]; then
         ln -sf qmake "${KIS_INSTALL_DIR}/bin/qmake-qt5"
 
     elif [[ "${pkg}" = "ext_openexr" ]]; then
@@ -139,7 +136,7 @@ build_3rdparty_fixes(){
         install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./b44ExpLogTable
         install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./dwaLookups
         # we must rerun build!
-        cmake_3rdparty ext_openexr
+        cmake_3rdparty ext_openexr "1"
     fi
 }
 
@@ -207,14 +204,12 @@ build_3rdparty () {
     fi
 
     # for python
-    # for sip PYQT_SIP_DIR_OVERRIDE=/usr/local/share/sip/qt5
     cmake_3rdparty \
         ext_python \
         ext_sip \
         ext_pyqt
 
     cmake_3rdparty \
-        ext_frameworks \
         ext_extra_cmake_modules \
         ext_kconfig \
         ext_kwidgetsaddons \
@@ -258,8 +253,8 @@ rebuild_3rdparty () {
     build_install_ext \
         ext_gettext \
         ext_openssl \
-        ext_zlib \
         ext_qt \
+        ext_zlib \
         ext_boost \
         ext_eigen3 \
         ext_exiv2 \
@@ -282,7 +277,6 @@ rebuild_3rdparty () {
     # Build kde_frameworks
     build_install_ext \
         ext_extra_cmake_modules \
-        ext_karchive \
         ext_kconfig \
         ext_kwidgetsaddons \
         ext_kcompletion \

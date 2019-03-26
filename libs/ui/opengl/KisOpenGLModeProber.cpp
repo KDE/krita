@@ -191,13 +191,13 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
         format->setRedBufferSize(10);
         format->setGreenBufferSize(10);
         format->setBlueBufferSize(10);
-        format->setAlphaBufferSize(0);
+        format->setAlphaBufferSize(2);
         format->setColorSpace(KisSurfaceColorSpace::bt2020PQColorSpace);
     } else if (config == KisConfig::BT709_G10) {
         format->setRedBufferSize(16);
         format->setGreenBufferSize(16);
         format->setBlueBufferSize(16);
-        format->setAlphaBufferSize(0);
+        format->setAlphaBufferSize(16);
         format->setColorSpace(KisSurfaceColorSpace::scRGBColorSpace);
     } else
 #else
@@ -212,7 +212,7 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
         format->setRedBufferSize(8);
         format->setGreenBufferSize(8);
         format->setBlueBufferSize(8);
-        format->setAlphaBufferSize(0);
+        format->setAlphaBufferSize(8);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         // TODO: check if we can use real sRGB space here

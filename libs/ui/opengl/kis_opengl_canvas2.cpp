@@ -171,8 +171,12 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    // we should make sure the texture doesn't have alpha channel,
+    // otherwise blending will not work correctly.
     if (KisOpenGLModeProber::instance()->useHDRMode()) {
         setTextureFormat(GL_RGBA16F);
+    } else {
+        setTextureFormat(GL_RGB8);
     }
 #endif
 

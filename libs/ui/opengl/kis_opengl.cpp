@@ -514,6 +514,14 @@ public:
         m_openGLESBlacklisted = openGLESBlacklisted;
     }
 
+    bool isOpenGLBlacklisted() const {
+        return m_openGLBlacklisted;
+    }
+
+    bool isOpenGLESBlacklisted() const {
+        return m_openGLESBlacklisted;
+    }
+
     KisSurfaceColorSpace preferredColorSpace() const {
         return m_preferredColorSpace;
     }
@@ -663,6 +671,20 @@ QSurfaceFormat KisOpenGL::selectSurfaceFormat(KisOpenGL::OpenGLRenderer preferre
             supportedRenderers |= RendererDesktopGL;
         }
     }
+
+    if (preferredByQt == RendererDesktopGL &&
+        supportedRenderers & RendererDesktopGL &&
+        compareOp.isOpenGLBlacklisted()) {
+
+        preferredByQt = RendererOpenGLES;
+
+    } else if (preferredByQt == RendererOpenGLES &&
+               supportedRenderers & RendererOpenGLES &&
+               compareOp.isOpenGLESBlacklisted()) {
+
+        preferredByQt = RendererDesktopGL;
+    }
+
 
     std::stable_sort(preferredFormats.begin(), preferredFormats.end(), compareOp);
 

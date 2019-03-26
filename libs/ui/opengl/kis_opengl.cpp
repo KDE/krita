@@ -394,7 +394,7 @@ bool isOpenGLRendererBlacklisted(const QString &rendererString,
             "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used by default. "
             "You may manually switch to OpenGL but it is not guaranteed to work properly."
         );
-        QRegularExpression regex("\\b\\d{2}\\.\\d{2}\\.\\d{2}\\.(\\d{4})\\b");
+        QRegularExpression regex("\\b\\d{1,2}\\.\\d{2}\\.\\d{1,3}\\.(\\d{4})\\b");
         QRegularExpressionMatch match = regex.match(driverVersionString);
         if (match.hasMatch()) {
             int driverBuild = match.captured(1).toInt();
@@ -420,6 +420,12 @@ bool isOpenGLRendererBlacklisted(const QString &rendererString,
                 isBlacklisted = true;
                 *warningMessage << grossIntelWarning;
             }
+        } else {
+            // In case Intel changed the driver version format to something that
+            // we don't understand, we still select ANGLE.
+            qDebug() << "Detected Intel driver with unknown version format, making ANGLE the preferred renderer";
+            isBlacklisted = true;
+            *warningMessage << grossIntelWarning;
         }
     }
 

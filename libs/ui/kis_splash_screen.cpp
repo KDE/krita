@@ -24,6 +24,8 @@
 #include <QCheckBox>
 #include <kis_debug.h>
 #include <QFile>
+#include <QScreen>
+#include <QWindow>
 
 #include <KisPart.h>
 #include <KisApplication.h>
@@ -49,9 +51,9 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
     QImage img = pixmap.toImage();
-    if (devicePixelRatio() > 1) {
+    if (devicePixelRatioF() > 1.01) {
         img = pixmap_x2.toImage();
-        img.setDevicePixelRatio(devicePixelRatioF());
+        img.setDevicePixelRatio(2);
     }
 
     QFont font = this->font();
@@ -246,7 +248,17 @@ void KisSplashScreen::show()
 {
     QRect r(QPoint(), sizeHint());
     resize(r.size());
-    move(QApplication::desktop()->availableGeometry().center() - r.center());
+    if (!this->parentWidget()) {
+        this->winId(); // Force creation of native window
+        if (this->windowHandle()) {
+            // At least on Windows, the window may be created on a non-primary
+            // screen with a different scale factor. If we don't explicitly
+            // move it to the primary screen, the position will be scaled with
+            // the wrong factor and the splash will be offset.
+            this->windowHandle()->setScreen(QApplication::primaryScreen());
+        }
+    }
+    move(QApplication::primaryScreen()->availableGeometry().center() - r.center());
     if (isVisible()) {
         repaint();
     }

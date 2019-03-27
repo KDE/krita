@@ -37,7 +37,7 @@ struct Q_DECL_HIDDEN KisProjectionLeaf::Private
 {
     Private(KisNode *_node) : node(_node) {}
 
-    KisNode* node;
+    KisNodeWSP node;
     bool isTemporaryHidden = false;
 
     static bool checkPassThrough(const KisNode *node) {
@@ -93,7 +93,7 @@ struct Q_DECL_HIDDEN KisProjectionLeaf::Private
     }
 
     void temporarySetPassThrough(bool value) {
-        KisGroupLayer *group = qobject_cast<KisGroupLayer*>(node);
+        KisGroupLayer *group = qobject_cast<KisGroupLayer*>(node.data());
         if (!group) return;
 
         group->setPassThroughMode(value);
@@ -262,22 +262,22 @@ bool KisProjectionLeaf::isRoot() const
 
 bool KisProjectionLeaf::isLayer() const
 {
-    return (bool)qobject_cast<const KisLayer*>(m_d->node);
+    return (bool)qobject_cast<const KisLayer*>(m_d->node.data());
 }
 
 bool KisProjectionLeaf::isMask() const
 {
-    return (bool)qobject_cast<const KisMask*>(m_d->node);
+    return (bool)qobject_cast<const KisMask*>(m_d->node.data());
 }
 
 bool KisProjectionLeaf::canHaveChildLayers() const
 {
-    return (bool)qobject_cast<const KisGroupLayer*>(m_d->node);
+    return (bool)qobject_cast<const KisGroupLayer*>(m_d->node.data());
 }
 
 bool KisProjectionLeaf::dependsOnLowerNodes() const
 {
-    return (bool)qobject_cast<const KisAdjustmentLayer*>(m_d->node);
+    return (bool)qobject_cast<const KisAdjustmentLayer*>(m_d->node.data());
 }
 
 bool KisProjectionLeaf::visible() const
@@ -316,7 +316,7 @@ QBitArray KisProjectionLeaf::channelFlags() const
 {
     QBitArray channelFlags;
 
-    KisLayer *layer = qobject_cast<KisLayer*>(m_d->node);
+    KisLayer *layer = qobject_cast<KisLayer*>(m_d->node.data());
     if (!layer) return channelFlags;
 
     channelFlags = layer->channelFlags();
@@ -344,7 +344,7 @@ bool KisProjectionLeaf::isStillInGraph() const
 
 bool KisProjectionLeaf::isDroppedMask() const
 {
-    return qobject_cast<KisMask*>(m_d->node) &&
+    return qobject_cast<KisMask*>(m_d->node.data()) &&
             m_d->checkParentPassThrough();
 }
 

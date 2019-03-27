@@ -85,7 +85,7 @@ public:
      * Finds the time of the next keyframe if any.
      * Returns -1 if the cycle continues indefinitely.
      */
-    int end() const;
+    int lastFrame() const;
 
 private:
     QSharedPointer<KisAnimationCycle> m_cycle;

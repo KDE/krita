@@ -70,34 +70,32 @@ KisFrameSet KisAnimationCycle::instancesWithin(KisKeyframeSP original, KisTimeSp
 
     QVector<KisTimeSpan> spans;
     Q_FOREACH(const QWeakPointer<KisRepeatFrame> repeatFrame, m_repeats) {
-            auto repeat = repeatFrame.toStrongRef();
-            if (!repeat) continue;
+        const QSharedPointer<KisRepeatFrame> repeat = repeatFrame.toStrongRef();
+        if (!repeat) continue;
 
-            const int endTime = repeat->end();
+        const int lastOfRepeat = repeat->lastFrame();
 
-            if (range.isEmpty()) {
-                if (endTime != -1) {
-                    range = KisTimeSpan(0, endTime - 1);
-                } else {
-                    infiniteFrom = repeat->firstInstanceOf(originalTime);
-                    continue;
-                }
-            }
+        if (range.isEmpty() && lastOfRepeat == -1) {
+            infiniteFrom = repeat->firstInstanceOf(originalTime);
+        } else {
+            const int end = (lastOfRepeat != -1) ? lastOfRepeat : range.end();
+            const KisTimeSpan repeatRange{repeat->time(), end};
+            const KisTimeSpan relevantRange = range.isEmpty() ? repeatRange : (range & repeatRange);
 
-            KisTimeSpan repeatRange = (endTime != -1) ? range & KisTimeSpan(repeat->time(), endTime) : range.truncateRight(repeat->time());
             int firstInstance = repeat->firstInstanceOf(originalTime);
             if (firstInstance == -1) continue;
 
-            if (firstInstance < repeatRange.start()) {
+            if (firstInstance < relevantRange.start()) {
                 firstInstance += interval * ((range.start() - firstInstance) / interval);
             }
 
-            for (int repeatTime = firstInstance; repeatTime <= repeatRange.end(); repeatTime += interval) {
-                bool endsWithinRange = frameDuration != -1 && repeatTime + frameDuration - 1 <= repeatRange.end();
-                const int repeatEndTime = endsWithinRange ? (repeatTime + frameDuration - 1) : repeatRange.end();
+            for (int repeatTime = firstInstance; repeatTime <= relevantRange.end(); repeatTime += interval) {
+                const bool endsWithinRange = frameDuration != -1 && repeatTime + frameDuration - 1 <= relevantRange.end();
+                const int repeatEndTime = endsWithinRange ? (repeatTime + frameDuration - 1) : relevantRange.end();
                 spans.append(KisTimeSpan(repeatTime, repeatEndTime));
             }
         }
+    }
 
     frames |= KisFrameSet(spans);
 
@@ -190,11 +188,11 @@ int KisRepeatFrame::nextVisibleFrame(int time) const
     const int durationOfOriginalKeyframe = originalEnd + 1 - originalStart;
     const int nextFrameTime = time + durationOfOriginalKeyframe;
 
-    const int endTime = end();
+    const int endTime = lastFrame();
     return (endTime == -1 || nextFrameTime < endTime) ? nextFrameTime : -1;
 }
 
-int KisRepeatFrame::end() const
+int KisRepeatFrame::lastFrame() const
 {
     const KisKeyframeBaseSP next = channel()->nextItem(*this);
     return next ? next->time() - 1 : -1;

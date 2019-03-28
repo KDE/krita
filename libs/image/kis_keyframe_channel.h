@@ -204,8 +204,6 @@ private:
     void addCycle(QSharedPointer<KisAnimationCycle> cycle);
     void removeCycle(QSharedPointer<KisAnimationCycle> cycle);
 
-    friend class KisMoveKeyframesCommand;
-    friend class KisMoveFrameCommand;
     friend class KisReplaceKeyframeCommand;
     friend class KisSwapFramesCommand;
     friend class KisDefineCycleCommand;

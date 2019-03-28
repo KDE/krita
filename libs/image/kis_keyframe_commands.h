@@ -81,25 +81,17 @@ namespace KisKeyframeCommands
     KRITAIMAGE_EXPORT ValidationResult tryMoveKeyframes(KisKeyframeChannel *channel, QVector<KeyframeMove> moves, KUndo2Command *parentCommand);
 }
 
+/**
+ * Places the keyframe on its channel at the specified time.
+ * If the time is negative, the keyframe is removed from the channel.
+ * Otherwise, the keyframe is moved within or inserted onto the channel.
+ * Any overwritten keyframe will be restored on undo().
+ */
 class KRITAIMAGE_EXPORT KisReplaceKeyframeCommand : public KUndo2Command
 {
 public:
-    KisReplaceKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeBaseSP keyframe, KUndo2Command *parentCommand);
-
-    void redo() override;
-    void undo() override;
-
-private:
-    KisKeyframeChannel *m_channel;
-    int m_time;
-    KisKeyframeBaseSP m_keyframe;
-    KisKeyframeBaseSP m_existingKeyframe;
-};
-
-class KRITAIMAGE_EXPORT KisMoveFrameCommand : public KUndo2Command
-{
-public:
-    KisMoveFrameCommand(KisKeyframeChannel *channel, KisKeyframeBaseSP keyframe, int oldTime, int newTime, KUndo2Command *parentCommand);
+    KisReplaceKeyframeCommand(KisKeyframeBaseSP keyframe, int newTime, KUndo2Command *parentCommand);
+    KRITAIMAGE_DEPRECATED KisReplaceKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeBaseSP keyframe, KUndo2Command *parentCommand);
 
     void redo() override;
     void undo() override;
@@ -107,8 +99,11 @@ public:
 private:
     KisKeyframeChannel *m_channel;
     KisKeyframeBaseSP m_keyframe;
+    KisKeyframeBaseSP m_overwrittenKeyframe;
     int m_oldTime;
     int m_newTime;
+
+    void moveKeyframeTo(int dstTime);
 };
 
 class KRITAIMAGE_EXPORT KisSwapFramesCommand : public KUndo2Command
@@ -128,7 +123,7 @@ private:
 class KRITAIMAGE_EXPORT KisDefineCycleCommand : public KUndo2Command
 {
 public:
-    KisDefineCycleCommand(QSharedPointer<KisAnimationCycle> oldCycle, QSharedPointer<KisAnimationCycle> newCycle, KUndo2Command *parentCommand);
+    KisDefineCycleCommand(QSharedPointer<KisAnimationCycle> oldCycle, QSharedPointer<KisAnimationCycle> newCycle, KUndo2Command *parentCommand = nullptr);
 
     QSharedPointer<KisAnimationCycle> cycle() const;
 

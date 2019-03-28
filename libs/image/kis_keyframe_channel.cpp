@@ -281,7 +281,7 @@ bool KisKeyframeChannel::moveKeyframe(KisKeyframeBaseSP keyframe, int newTime, K
 
     const int srcTime = keyframe->time();
 
-    KUndo2Command *cmd = new KisMoveFrameCommand(this, keyframe, srcTime, newTime, parentCommand);
+    KUndo2Command *cmd = new KisReplaceKeyframeCommand(keyframe, newTime, parentCommand);
     cmd->redo();
 
     if (srcTime == 0) {

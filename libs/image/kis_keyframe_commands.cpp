@@ -16,32 +16,6 @@ KisKeyframeCommands::KeyframeMove::KeyframeMove(KisKeyframeBaseSP keyframe, int 
     , newTime(newTime)
 {}
 
-class KisMoveKeyframesCommand : public KUndo2Command
-{
-public:
-    KisMoveKeyframesCommand(QVector<KeyframeMove> moves, KUndo2Command *parentCommand)
-        : KUndo2Command(parentCommand)
-        , m_moves(moves)
-    {}
-
-    void redo() override
-    {
-        Q_FOREACH(const KeyframeMove &move, m_moves) {
-            move.keyframe->channel()->moveKeyframeImpl(move.keyframe, move.newTime);
-        }
-    }
-
-    void undo() override
-    {
-        Q_FOREACH(const KeyframeMove &move, m_moves) {
-            move.keyframe->channel()->moveKeyframeImpl(move.keyframe, move.oldTime);
-        }
-    }
-
-private:
-    QVector<KisKeyframeCommands::KeyframeMove> m_moves;
-};
-
 struct KeyframeMapping
 {
     KisKeyframeChannel *channel;
@@ -300,44 +274,70 @@ ValidationResult KisKeyframeCommands::tryMoveKeyframes(KisKeyframeChannel *chann
     if (!validateRepeats(cycles, movedKeyframes)) return ValidationResult::RepeatKeyframeWithinCycleDefinition;
 
     deleteOverwrittenKeys(movedKeyframes, command);
-    new KisMoveKeyframesCommand(moves, command);
+
+    Q_FOREACH(const KeyframeMove &move, moves) {
+        new KisReplaceKeyframeCommand(move.keyframe, move.newTime, command);
+    }
+
     updateCycles(channel, cycles, command);
 
     return ValidationResult(command);
 }
 
-KisReplaceKeyframeCommand::KisReplaceKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeBaseSP keyframe, KUndo2Command *parentCommand)
+KisReplaceKeyframeCommand::KisReplaceKeyframeCommand(KisKeyframeBaseSP keyframe, int newTime, KUndo2Command *parentCommand)
     : KUndo2Command(parentCommand),
-      m_channel(channel),
-      m_time(time),
+      m_channel(keyframe->channel()),
       m_keyframe(keyframe),
-      m_existingKeyframe(0)
-{
-}
-
-void KisReplaceKeyframeCommand::redo() {
-    m_existingKeyframe = m_channel->replaceKeyframeAt(m_time, m_keyframe);
-}
-
-void KisReplaceKeyframeCommand::undo() {
-    m_channel->replaceKeyframeAt(m_time, m_existingKeyframe);
-}
-
-KisMoveFrameCommand::KisMoveFrameCommand(KisKeyframeChannel *channel, KisKeyframeBaseSP keyframe, int oldTime, int newTime, KUndo2Command *parentCommand)
-    : KUndo2Command(parentCommand),
-      m_channel(channel),
-      m_keyframe(keyframe),
-      m_oldTime(oldTime),
       m_newTime(newTime)
 {
 }
 
-void KisMoveFrameCommand::redo() {
-    m_channel->moveKeyframeImpl(m_keyframe, m_newTime);
+KisReplaceKeyframeCommand::KisReplaceKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeBaseSP keyframe,
+                                                     KUndo2Command *parentCommand)
+    : KisReplaceKeyframeCommand(keyframe, time, parentCommand)
+{}
+
+void KisReplaceKeyframeCommand::redo() {
+    if (m_newTime >= 0) {
+        m_overwrittenKeyframe = m_channel->itemAt(m_newTime);
+
+        if (m_overwrittenKeyframe) {
+            m_channel->removeKeyframeLogical(m_overwrittenKeyframe);
+        }
+    }
+
+    const bool currentlyOnChannel = m_channel->itemAt(m_keyframe->time()) == m_keyframe;
+    m_oldTime = currentlyOnChannel ? m_keyframe->time() : -1;
+
+    moveKeyframeTo(m_newTime);
 }
 
-void KisMoveFrameCommand::undo() {
-    m_channel->moveKeyframeImpl(m_keyframe, m_oldTime);
+void KisReplaceKeyframeCommand::undo() {
+    moveKeyframeTo(m_oldTime);
+
+    if (m_overwrittenKeyframe) {
+        m_overwrittenKeyframe->setTime(m_newTime);
+        m_channel->insertKeyframeLogical(m_overwrittenKeyframe);
+        m_overwrittenKeyframe = nullptr;
+    }
+}
+
+void KisReplaceKeyframeCommand::moveKeyframeTo(int dstTime)
+{
+    const bool currentlyOnChannel = m_channel->itemAt(m_keyframe->time()) == m_keyframe;
+
+    if (dstTime < 0) {
+        if (currentlyOnChannel) {
+            m_channel->removeKeyframeLogical(m_keyframe);
+        }
+    } else {
+        if (currentlyOnChannel) {
+            m_channel->moveKeyframeImpl(m_keyframe, dstTime);
+        } else {
+            m_keyframe->setTime(dstTime);
+            m_channel->insertKeyframeLogical(m_keyframe);
+        }
+    }
 }
 
 KisSwapFramesCommand::KisSwapFramesCommand(KisKeyframeChannel *channel, KisKeyframeBaseSP lhsFrame, KisKeyframeBaseSP rhsFrame, KUndo2Command *parentCommand)

@@ -7,13 +7,14 @@
 : ${ANDROID_SDK_ROOT?"Android SDK path must be set"}
 : ${ANDROID_API_LEVEL?"Android API level"}
 : ${KRITA_ROOT?"Project root path must be set"}
+: ${BUILD_ROOT? "Build root must be set"}
 
 export ANDROID_ARCHITECTURE=arm
 export ANDROID_ABI=armeabi-v7a
 export ANDROID_TOOLCHAIN=arm-linux-androideabi
 export ANDROID_NATIVE_API_LEVEL=android-$ANDROID_API_LEVEL
 
-cd $KRITA_ROOT
+cd $BUILD_ROOT
 
 CURDIR="$(pwd)"/
 

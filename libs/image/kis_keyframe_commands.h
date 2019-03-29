@@ -69,16 +69,31 @@ namespace KisKeyframeCommands
     struct KRITAIMAGE_EXPORT KeyframeMove
     {
         KisKeyframeBaseSP keyframe;
-        int oldTime, newTime;
+        int newTime{-1};
 
         KeyframeMove() = default;
         KeyframeMove(KisKeyframeBaseSP keyframe, int newTime);
+
+        static KeyframeMove fromAddedKeyframe(KisKeyframeBaseSP keyframe);
+        static KeyframeMove fromAddedKeyframe(KisKeyframeBaseSP keyframe, int newTime);
+        static KeyframeMove fromDeletedKeyframe(KisKeyframeBaseSP keyframe);
+
     };
+
+    /**
+     * Returns either a new command for operations needed to add the keyframes or null if the operation is invalid against the current state of the channel
+     */
+    KRITAIMAGE_EXPORT ValidationResult tryAddKeyframes(KisKeyframeChannel *channel, const QVector<KisKeyframeBaseSP> &keyframes, KUndo2Command *parentCommand = nullptr);
+
+    /**
+     * Returns either a new command for operations needed to remove the keyframes or null if the operation is invalid against the current state of the channel
+     */
+    KRITAIMAGE_EXPORT ValidationResult tryRemoveKeyframes(KisKeyframeChannel *channel, const QVector<KisKeyframeBaseSP> &keyframes, KUndo2Command *parentCommand = nullptr);
 
     /**
      * Returns either a new command for operations needed to move the keyframes or null if the operation is invalid against the current state of the channel
      */
-    KRITAIMAGE_EXPORT ValidationResult tryMoveKeyframes(KisKeyframeChannel *channel, QVector<KeyframeMove> moves, KUndo2Command *parentCommand);
+    KRITAIMAGE_EXPORT ValidationResult tryMoveKeyframes(KisKeyframeChannel *channel, const QVector<KeyframeMove> &moves, KUndo2Command *parentCommand = nullptr);
 }
 
 /**

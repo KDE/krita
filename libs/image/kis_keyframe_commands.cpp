@@ -1,6 +1,7 @@
 
 #include "kis_keyframe_commands.h"
 
+#include <algorithm>
 #include <kis_pointer_utils.h>
 #include <KisCollectionUtils.h>
 #include "kis_time_range.h"
@@ -12,9 +13,23 @@ using ValidationResult = KisKeyframeCommands::ValidationResult;
 
 KisKeyframeCommands::KeyframeMove::KeyframeMove(KisKeyframeBaseSP keyframe, int newTime)
     : keyframe(keyframe)
-    , oldTime(keyframe->time())
     , newTime(newTime)
 {}
+
+KeyframeMove KisKeyframeCommands::KeyframeMove::fromAddedKeyframe(KisKeyframeBaseSP keyframe)
+{
+    return fromAddedKeyframe(keyframe, keyframe->time());
+}
+
+KeyframeMove KisKeyframeCommands::KeyframeMove::fromAddedKeyframe(KisKeyframeBaseSP keyframe, int newTime)
+{
+    return KeyframeMove(keyframe, newTime);
+}
+
+KeyframeMove KisKeyframeCommands::KeyframeMove::fromDeletedKeyframe(KisKeyframeBaseSP keyframe)
+{
+    return KeyframeMove(keyframe, -1);
+}
 
 struct KeyframeMapping
 {
@@ -134,7 +149,7 @@ ValidationResult::Status validateMoveSources(const KisKeyframeChannel *channel, 
     }
 
     std::sort(moves.begin(), moves.end(),
-        [](const KeyframeMove &lhs, const KeyframeMove &rhs){ return lhs.oldTime < rhs.oldTime; }
+        [](const KeyframeMove &lhs, const KeyframeMove &rhs){ return lhs.keyframe->time() < rhs.keyframe->time(); }
     );
 
     for (int i = 1; i < moves.size(); i++) {
@@ -144,7 +159,7 @@ ValidationResult::Status validateMoveSources(const KisKeyframeChannel *channel, 
     return ValidationResult::Valid;
 }
 
-CycleSP cycleAfterMove(const CycleSP &cycle, const KeyframeMapping &movedKeyframes)
+CycleSP cycleAfterChanges(const CycleSP &cycle, const KeyframeMapping &movedKeyframes)
 {
     const KisKeyframeChannel *channel = cycle->channel();
 
@@ -227,7 +242,7 @@ QVector<CycleSP> cyclesAfterMoves(const KeyframeMapping &movedKeyframes)
 
     QVector<CycleSP> cycles;
     Q_FOREACH(const CycleSP cycle, channel->cycles()) {
-        const CycleSP newCycle = cycleAfterMove(cycle, movedKeyframes);
+        const CycleSP newCycle = cycleAfterChanges(cycle, movedKeyframes);
         if (newCycle) {
             cycles << newCycle;
         }
@@ -294,34 +309,65 @@ void deleteOverwrittenKeys(KeyframeMapping moves, KUndo2Command *parentCommand)
         }
     }
 
-    Q_FOREACH(KisKeyframeBaseSP keyframe, deletedKeys) {
-        new KisReplaceKeyframeCommand(keyframe->channel(), keyframe->time(), KisKeyframeBaseSP(), parentCommand);
-    }
-}
-
-ValidationResult KisKeyframeCommands::tryMoveKeyframes(KisKeyframeChannel *channel, QVector<KeyframeMove> moves, KUndo2Command *parentCommand)
-{
     KUndo2Command *command = new KUndo2Command(parentCommand);
 
-    const ValidationResult::Status moveValidation = validateMoveSources(channel, moves);
-    if (moveValidation != ValidationResult::Valid) return moveValidation;
+    if (!validateRepeats(cycles, mapping)) return ValidationResult::RepeatKeyframeWithinCycleDefinition;
 
-    const KeyframeMapping movedKeyframes(channel, moves);
-    if (movedKeyframes.isEmpty()) return ValidationResult(command);
-
-    const QVector<CycleSP> cycles = cyclesAfterMoves(movedKeyframes);
-
-    if (!validateRepeats(cycles, movedKeyframes)) return ValidationResult::RepeatKeyframeWithinCycleDefinition;
-
-    deleteOverwrittenKeys(movedKeyframes, command);
-
-    Q_FOREACH(const KeyframeMove &move, moves) {
+    Q_FOREACH(const KeyframeMove &move, operations) {
         new KisReplaceKeyframeCommand(move.keyframe, move.newTime, command);
     }
 
     updateCycles(channel, cycles, command);
 
     return ValidationResult(command);
+}
+
+KisKeyframeCommands::ValidationResult KisKeyframeCommands::tryAddKeyframes(KisKeyframeChannel *channel, const QVector<KisKeyframeBaseSP> &keyframes, KUndo2Command *parentCommand)
+{
+    QVector<KeyframeMove> operations(keyframes.size());
+    KeyframeMove (*fromAddedKeyframe)(KisKeyframeBaseSP) = KeyframeMove::fromAddedKeyframe; // Force correct overload resolution with explicit type
+    std::transform(keyframes.cbegin(), keyframes.cend(), operations.begin(), fromAddedKeyframe);
+
+    return tryCreateCommands(channel, operations, parentCommand);
+}
+
+KisKeyframeCommands::ValidationResult KisKeyframeCommands::tryRemoveKeyframes(KisKeyframeChannel *channel, const QVector<KisKeyframeBaseSP> &keyframes, KUndo2Command *parentCommand)
+{
+    QVector<KeyframeMove> operations;
+    std::transform(keyframes.cbegin(), keyframes.cend(), operations.begin(), KeyframeMove::fromDeletedKeyframe);
+
+    return tryCreateCommands(channel, operations, parentCommand);
+}
+
+KisKeyframeCommands::ValidationResult KisKeyframeCommands::tryMoveKeyframes(KisKeyframeChannel *channel, const QVector<KeyframeMove> &moves, KUndo2Command *parentCommand)
+{
+    const ValidationResult::Status moveValidation = validateMoveSources(channel, moves);
+    if (moveValidation != ValidationResult::Valid) return moveValidation;
+    return tryCreateCommands(channel, moves, parentCommand);
+}
+
+KisKeyframeCommands::ValidationResult KisKeyframeCommands::tryAddKeyframes(KisKeyframeChannel *channel, const QVector<KisKeyframeBaseSP> &keyframes, KUndo2Command *parentCommand)
+{
+    QVector<KeyframeMove> operations(keyframes.size());
+    KeyframeMove (*fromAddedKeyframe)(KisKeyframeBaseSP) = KeyframeMove::fromAddedKeyframe; // Force correct overload resolution with explicit type
+    std::transform(keyframes.cbegin(), keyframes.cend(), operations.begin(), fromAddedKeyframe);
+
+    return tryCreateCommands(channel, operations, parentCommand);
+}
+
+KisKeyframeCommands::ValidationResult KisKeyframeCommands::tryRemoveKeyframes(KisKeyframeChannel *channel, const QVector<KisKeyframeBaseSP> &keyframes, KUndo2Command *parentCommand)
+{
+    QVector<KeyframeMove> operations(keyframes.size());
+    std::transform(keyframes.cbegin(), keyframes.cend(), operations.begin(), KeyframeMove::fromDeletedKeyframe);
+
+    return tryCreateCommands(channel, operations, parentCommand);
+}
+
+KisKeyframeCommands::ValidationResult KisKeyframeCommands::tryMoveKeyframes(KisKeyframeChannel *channel, const QVector<KeyframeMove> &moves, KUndo2Command *parentCommand)
+{
+    const ValidationResult::Status moveValidation = validateMoveSources(channel, moves);
+    if (moveValidation != ValidationResult::Valid) return moveValidation;
+    return tryCreateCommands(channel, moves, parentCommand);
 }
 
 KisReplaceKeyframeCommand::KisReplaceKeyframeCommand(KisKeyframeBaseSP keyframe, int newTime, KUndo2Command *parentCommand)

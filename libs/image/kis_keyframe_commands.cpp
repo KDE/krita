@@ -19,21 +19,31 @@ KisKeyframeCommands::KeyframeMove::KeyframeMove(KisKeyframeBaseSP keyframe, int 
 struct KeyframeMapping
 {
     KisKeyframeChannel *channel;
+
+    /**
+     * Map of destination times for changed keyframes.
+     * Added or moved keyframes map to their new, and deleted keyframes to -1.
+     */
     QMap<KisKeyframeBaseSP, int> destinations;
+
+    /**
+     * Maps times to the keyframes which is moved or added to it.
+     */
     QMap<int, KisKeyframeBaseSP> sources;
 
     KeyframeMapping(KisKeyframeChannel *channel, const QVector<KeyframeMove> &moves)
         : channel(channel)
     {
-        const int count = moves.count();
-
-        for (int i = 0; i < count; i++) {
-            const int time = moves[i].newTime;
-            const KisKeyframeBaseSP key = moves[i].keyframe;
+        Q_FOREACH(const KeyframeMove& move, moves) {
+            const KisKeyframeBaseSP key = move.keyframe;
+            const int newTime = move.newTime;
 
             if (key->channel() == channel) {
-                destinations[key] = time;
-                sources[time] = key;
+                destinations[key] = newTime;
+
+                if (newTime != -1) {
+                    sources[newTime] = key;
+                }
             }
         }
     }
@@ -43,47 +53,77 @@ struct KeyframeMapping
         return destinations.isEmpty();
     }
 
+    bool isAffected(const KisKeyframeBaseSP &keyframe) const {
+        return destinations.contains(keyframe);
+    }
+
     int destination(const KisKeyframeSP &keyframe) const
     {
         const int oldTime = keyframe->time();
-        const int newTime = destinations.value(keyframe, -1);
+        const bool overwritten = sources.contains(oldTime);
 
-        if (newTime == -1 && !sources.value(oldTime, KisKeyframeBaseSP())) {
-            return oldTime;
+        return (!isAffected(keyframe) && !overwritten) ? oldTime : destinations.value(keyframe, -1);
+    }
+
+    std::tuple<int, KisKeyframeBaseSP> firstAfter(int time) const
+    {
+        const auto sourceIt = KisCollectionUtils::firstAfter(sources, time);
+        const int firstChangeTime = (sourceIt != sources.cend()) ? sourceIt.key() : INT_MAX;
+
+        const KisRangedKeyframeIterator keys = channel->itemsWithin(KisTimeSpan(time + 1, firstChangeTime));
+        for (KisKeyframeBaseSP keyframe : keys) {
+            if (!isAffected(keyframe)) {
+                return std::make_tuple(keyframe->time(), keyframe);
+            }
         }
 
-        return newTime;
+        const KisKeyframeBaseSP changedKeyframe = (sourceIt != sources.cend()) ? sourceIt.value() : nullptr;
+        const int changedTime = changedKeyframe ? firstChangeTime : -1;
+        return std::make_tuple(changedTime, changedKeyframe);
+    }
+
+    std::tuple<int, KisKeyframeBaseSP> lastBefore(int time) const
+    {
+        const auto sourceIt = KisCollectionUtils::lastBefore(sources, time);
+        const int firstChangeTime = (sourceIt != sources.cend()) ? sourceIt.key() : -1;
+
+        const KisRangedKeyframeIterator keys = channel->itemsWithin(KisTimeSpan(firstChangeTime, time - 1));
+        KisRangedKeyframeIterator it = --keys.end();
+        for (; it.isValid(); --it) {
+            const KisKeyframeBaseSP &keyframe = *it;
+            if (!isAffected(keyframe)) {
+                return std::make_tuple(keyframe->time(), keyframe);
+            }
+        }
+
+        const KisKeyframeBaseSP changedKeyframe = (sourceIt != sources.cend()) ? sourceIt.value() : nullptr;
+        return std::make_tuple(firstChangeTime, changedKeyframe);
     }
 
     KisKeyframeSP firstTrueKeyframeAfter(int destinationTime) const
     {
-        KisKeyframeSP unmovedKeyframe;
-        {
-            int time = destinationTime;
-            KisKeyframeSP key;
-            do {
-                key = channel->nextKeyframe(time);
-                time = key ? key->time() : -1;
-            } while(destinations.contains(key));
-            unmovedKeyframe = key;
-        }
+        return nearestTrueKeyframe(destinationTime, true);
+    }
 
-        KisKeyframeSP movedKeyframe;
-        int movedTime;
-        {
-            auto sourceIt = KisCollectionUtils::firstAfter(sources, destinationTime);
-            // Skip non-keyframes (e.g. repeat frames)
-            while (sourceIt != sources.cend() && !sourceIt.value().dynamicCast<KisKeyframe>()) {
-                sourceIt++;
+    KisKeyframeSP lastTrueKeyframeBefore(int destinationTime) const
+    {
+        return nearestTrueKeyframe(destinationTime, false);
+    }
+
+    KisKeyframeSP nearestTrueKeyframe(int destinationTime, bool forward) const
+    {
+        int time = destinationTime;
+        KisKeyframeBaseSP keyframe;
+        do {
+            std::tie(time, keyframe) = forward ? firstAfter(time) : lastBefore(time);
+
+            KisKeyframeSP keyframeProper = keyframe.dynamicCast<KisKeyframe>();
+            if (keyframeProper) {
+                return keyframeProper;
             }
-            movedTime = (sourceIt != sources.cend()) ? sourceIt.key() : -1;
-        }
+        } while(keyframe);
 
-        if (movedKeyframe && unmovedKeyframe) {
-            return (movedTime < unmovedKeyframe->time()) ? movedKeyframe : unmovedKeyframe;
-        } else {
-            return movedKeyframe ? movedKeyframe : unmovedKeyframe;
-        }
+        return nullptr;
     }
 };
 
@@ -247,7 +287,7 @@ void deleteOverwrittenKeys(KeyframeMapping moves, KUndo2Command *parentCommand)
         const KisKeyframeBaseSP &originalKey = keyframe->channel()->itemAt(newTime);
 
         if (originalKey) {
-            const bool isOverwritten = !moves.destinations.contains(originalKey);
+            const bool isOverwritten = !moves.isAffected(originalKey);
             if (isOverwritten) {
                 deletedKeys.append(originalKey);
             }

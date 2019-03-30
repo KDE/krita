@@ -178,13 +178,6 @@ OSX Note: In order to build fontconfig on macOS, you need to have pkg-config ins
 You probably need homebrew for that... See http://macappstore.org/pkg-config/ .
 archives from: files.kde.org/krita/build/dependencies:
 
-On Windows, download the approporiate zip file and put in in your i folder
-
-   http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-32.zip
-   http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-64.zip
-
-- Take care, these zips contain a libstdc++-6.dll that you don't want in your path when building.
-
 On Windows and OSX
     cmake --build . --config RelWithDebInfo --target ext_kwindowsystem
 

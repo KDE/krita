@@ -1,18 +1,32 @@
 SET(PREFIX_ext_gettext "${EXTPREFIX}" )
 if (MINGW)
-ExternalProject_Add(
-    ext_gettext
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://files.kde.org/krita/build/dependencies/gettext-0.18.tar.gz
-    URL_MD5 d52a3e061032a1ed13856d42fc86f0fd
+    if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+        ExternalProject_Add(ext_gettext
+        
+            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+            URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-64.zip
+            URL_MD5 4c6b70667a83e6828749b93c283a4832
 
-    PATCH_COMMAND ${PATCH_COMMAND} --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gettext-0.18-20130319.diff
-    INSTALL_DIR ${PREFIX_ext_gettext}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_gettext} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying gettext 64-bit dependencies
+            CONFIGURE_COMMAND ""
+            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR> ${PREFIX_ext_gettext}
+                    
+            UPDATE_COMMAND ""
+        )
+    else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+            ExternalProject_Add(ext_gettext
+        
+            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+            URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-32.zip
+            URL_MD5 42f0db42b37a89ef2ebb64186fe1ee32
 
-    UPDATE_COMMAND ""
-    DEPENDS ext_patch ext_iconv
-)
+            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying gettext 64-bit dependencies
+            CONFIGURE_COMMAND ""
+            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR> ${PREFIX_ext_gettext}
+
+            UPDATE_COMMAND ""
+    )
+    endif()
 else (MINGW)
 ExternalProject_Add( ext_gettext
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

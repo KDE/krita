@@ -60,8 +60,12 @@ if (MINGW)
 		else (DEFINED ENV{WindowsSdkDir})
 			message(FATAL_ERROR "Environment variable 'WindowsSdkDir' not set! Please set it to path of Windows 10 SDK or disable QT_ENABLE_DYNAMIC_OPENGL")
 		endif ()
-	endif ()
+    endif ()
 endif (MINGW)
+
+if (WIN32)
+    option(USE_QT_TABLET_WINDOWS "Do not use Krita's forked Wintab and Windows Ink support on Windows, but leave everything to Qt." ON)
+endif ()
 
 set(SECURITY_EXE_LINKER_FLAGS "")
 set(SECURITY_SHARED_LINKER_FLAGS "")

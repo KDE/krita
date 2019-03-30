@@ -735,12 +735,21 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
     QPointF point = event->localPos();
     event->accept();
 
+
+#ifdef Q_OS_WIN
+    const int tableMouseEventsFlowDelay = 500;
+#else
+    const int tableMouseEventsFlowDelay = 100;
+#endif
+
     /**
      * Tablet support code generates a spurious right-click right after opening
      * the window, so we should ignore it. Next right-click will be used for
      * closing the popup palette
      */
-    if (!m_hadMousePressSinceOpening && m_timeSinceOpening.elapsed() > 100) {
+    if (!m_hadMousePressSinceOpening &&
+        m_timeSinceOpening.elapsed() > tableMouseEventsFlowDelay) {
+
         m_hadMousePressSinceOpening = true;
     }
 

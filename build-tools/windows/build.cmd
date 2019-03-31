@@ -706,9 +706,9 @@ if errorlevel 1 (
 )
 echo.
 
-set EXT_TARGETS=patch png2ico zlib lzma qt boost eigen3 exiv2 fftw3 ilmbase
+set EXT_TARGETS=patch png2ico zlib lzma ext_gettext_lib qt boost eigen3 exiv2 fftw3 ilmbase
 set EXT_TARGETS=%EXT_TARGETS% jpeg lcms2 ocio openexr png tiff gsl vc libraw
-set EXT_TARGETS=%EXT_TARGETS% giflib freetype poppler kwindowsystem drmingw gmic
+set EXT_TARGETS=%EXT_TARGETS% giflib freetype poppler ext_gettext kwindowsystem drmingw gmic
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
 set EXT_TARGETS=%EXT_TARGETS% quazip
 

@@ -4,7 +4,7 @@ if (MINGW)
         ExternalProject_Add(ext_gettext
         
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-64.zip
+            URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-static-64.zip
             URL_MD5 4c6b70667a83e6828749b93c283a4832
 
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying gettext 64-bit dependencies
@@ -17,7 +17,7 @@ if (MINGW)
             ExternalProject_Add(ext_gettext
         
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-32.zip
+            URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-static-32.zip
             URL_MD5 42f0db42b37a89ef2ebb64186fe1ee32
 
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying gettext 64-bit dependencies
@@ -27,6 +27,17 @@ if (MINGW)
             UPDATE_COMMAND ""
     )
     endif()
+    ExternalProject_Add (
+        ext_gettext_lib
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL http://files.kde.org/krita/build/dependencies/gettext-0.18.tar.gz
+        URL_MD5 d52a3e061032a1ed13856d42fc86f0fd
+        PATCH_COMMAND ${PATCH_COMMAND} --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gettext-0.18-20130319.diff
+        INSTALL_DIR ${PREFIX_ext_gettext}
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_gettext} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+        UPDATE_COMMAND ""
+        DEPENDS ext_patch ext_iconv
+)
 else (MINGW)
 ExternalProject_Add( ext_gettext
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

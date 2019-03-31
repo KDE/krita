@@ -230,7 +230,10 @@ else( APPLE )
         INSTALL_DIR ${EXTPREFIX_qt}
         CONFIGURE_COMMAND <SOURCE_DIR>/configure
         -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtdoc -skip qtgraphicaleffects -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland
-            -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtxmlpatterns -no-sql-sqlite -skip qtcharts -skip qtdatavis3d  -skip qtgamepad -skip qtnetworkauth -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -nomake examples -nomake tools -no-compile-examples -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -no-icu -no-mtdev -system-zlib -qt-pcre -opensource -confirm-license  -openssl-linked -prefix ${EXTPREFIX_qt}
+            -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtwebengine -skip qtxmlpatterns -no-sql-sqlite -skip qtcharts -skip qtdatavis3d  -skip qtgamepad -skip qtnetworkauth
+            -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -nomake examples -nomake tools -no-compile-examples
+            -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -no-icu -no-mtdev -system-zlib -qt-pcre
+            -opensource -confirm-license  -openssl-linked -prefix ${EXTPREFIX_qt}
         BUILD_COMMAND ${PARALLEL_MAKE}
         INSTALL_COMMAND make install
         UPDATE_COMMAND ""

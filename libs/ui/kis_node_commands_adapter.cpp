@@ -26,6 +26,7 @@
 #include "commands/kis_image_layer_remove_command.h"
 #include "commands/kis_node_commands.h"
 #include "KisViewManager.h"
+#include "kis_processing_applicator.h"
 
 KisNodeCommandsAdapter::KisNodeCommandsAdapter(KisViewManager * view)
         : QObject(view)
@@ -88,18 +89,24 @@ void KisNodeCommandsAdapter::removeNode(KisNodeSP node)
 
 void KisNodeCommandsAdapter::setOpacity(KisNodeSP node, qint32 opacity)
 {
-    Q_ASSERT(m_view->image()->undoAdapter());
-    m_view->image()->undoAdapter()->addCommand(
-        new KisNodeOpacityCommand(node, node->opacity(), opacity));
+    KUndo2Command *cmd = new KisNodeOpacityCommand(node, node->opacity(), opacity);
+    KisProcessingApplicator applicator(m_view->image(), 0, KisProcessingApplicator::NONE,
+                                       KisImageSignalVector() << ModifiedSignal,
+                                       cmd->text());
+    applicator.applyCommand(cmd);
+    applicator.end();
 }
 
 void KisNodeCommandsAdapter::setCompositeOp(KisNodeSP node,
                                             const KoCompositeOp* compositeOp)
 {
-    Q_ASSERT(m_view->image()->undoAdapter());
-    m_view->image()->undoAdapter()->addCommand(
-      new KisNodeCompositeOpCommand(node, node->compositeOpId(),
-                                    compositeOp->id()));
+    KUndo2Command *cmd = new KisNodeCompositeOpCommand(node, node->compositeOpId(),
+                                                       compositeOp->id());
+    KisProcessingApplicator applicator(m_view->image(), 0, KisProcessingApplicator::NONE,
+                                       KisImageSignalVector() << ModifiedSignal,
+                                       cmd->text());
+    applicator.applyCommand(cmd);
+    applicator.end();
 }
 
 void KisNodeCommandsAdapter::undoLastCommand()

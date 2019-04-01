@@ -759,18 +759,12 @@ qint32 KisNodeManager::convertOpacityToInt(qreal opacity)
     return qMin(255, int(opacity * 2.55 + 0.5));
 }
 
-void KisNodeManager::setNodeOpacity(KisNodeSP node, qint32 opacity,
-                                    bool finalChange)
+void KisNodeManager::setNodeOpacity(KisNodeSP node, qint32 opacity)
 {
     if (!node) return;
     if (node->opacity() == opacity) return;
 
-    if (!finalChange) {
-        node->setOpacity(opacity);
-        node->setDirty();
-    } else {
-        m_d->commandsAdapter.setOpacity(node, opacity);
-    }
+    m_d->commandsAdapter.setOpacity(node, opacity);
 }
 
 void KisNodeManager::setNodeCompositeOp(KisNodeSP node,
@@ -852,11 +846,11 @@ bool KisNodeManager::trySetNodeProperties(KisNodeSP node, KisImageSP image, KisB
     return true;
 }
 
-void KisNodeManager::nodeOpacityChanged(qreal opacity, bool finalChange)
+void KisNodeManager::nodeOpacityChanged(qreal opacity)
 {
     KisNodeSP node = activeNode();
 
-    setNodeOpacity(node, convertOpacityToInt(opacity), finalChange);
+    setNodeOpacity(node, convertOpacityToInt(opacity));
 }
 
 void KisNodeManager::nodeCompositeOpChanged(const KoCompositeOp* op)

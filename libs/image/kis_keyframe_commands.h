@@ -28,10 +28,12 @@ namespace KisKeyframeCommands
             Valid,
             RepeatKeyframeWithinCycleDefinition,
             KeyframesFromDifferentChannels,
-            MultipleDestinations
+            MultipleDestinations,
+            InvalidCycle,
+            OverlappingCycles
         };
 
-        ValidationResult(Status error) // NOLINT(google-explicit-constructor)
+        ValidationResult(Status error) // NOLINT(google-explicit-constructor, hicpp-explicit-conversions)
             : status(error)
             , command(nullptr)
         {}
@@ -94,6 +96,13 @@ namespace KisKeyframeCommands
      * Returns either a new command for operations needed to move the keyframes or null if the operation is invalid against the current state of the channel
      */
     KRITAIMAGE_EXPORT ValidationResult tryMoveKeyframes(KisKeyframeChannel *channel, const QVector<KeyframeMove> &moves, KUndo2Command *parentCommand = nullptr);
+
+    /**
+     * Returns either a new command for operations needed to define the cycle or null if the operation is invalid against the current state of the channel
+     */
+    KRITAIMAGE_EXPORT ValidationResult tryDefineCycle(KisKeyframeChannel *channel, KisTimeSpan range, KUndo2Command *parentCommand = nullptr);
+
+    KRITAIMAGE_EXPORT KUndo2Command * removeCycle(QSharedPointer<KisAnimationCycle> cycle, KUndo2Command *parentCommand = nullptr);
 }
 
 /**

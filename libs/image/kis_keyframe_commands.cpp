@@ -164,15 +164,15 @@ CycleSP cycleAfterChanges(const CycleSP &cycle, const KeyframeMapping &movedKeyf
     const KisKeyframeChannel *channel = cycle->channel();
 
     int firstDestination = -1, lastDestination = -1;
-    KisKeyframeSP oldLastKeyframe;
     KisKeyframeSP newFirstKeyframe, newLastKeyframe;
+    KisKeyframeSP oldLastKeyframe;
 
     const KisTimeSpan &oldRange = cycle->originalRange();
     for (KisKeyframeBaseSP key : channel->itemsWithin(oldRange)) {
         KisKeyframeSP keyframe = key.dynamicCast<KisKeyframe>();
         KIS_SAFE_ASSERT_RECOVER(keyframe) { continue; }
 
-        const int newTime = movedKeyframes.destination(keyframe);
+        const int newTime = mapping.destination(keyframe);
 
         if (newTime >= 0) {
             if (!newFirstKeyframe || newTime < firstDestination) {
@@ -191,17 +191,34 @@ CycleSP cycleAfterChanges(const CycleSP &cycle, const KeyframeMapping &movedKeyf
 
     if (!newLastKeyframe) return CycleSP();
 
-    const int newEnd = lastDestination; // FIXME
+    const int trailingHold = oldRange.end() - oldLastKeyframe->time();
+
+    const KisKeyframeBaseSP nextOldKeyframe = channel->nextItem(*oldLastKeyframe);
+    const bool rangeEndedJustBeforeKeyframe = nextOldKeyframe && nextOldKeyframe->time() == oldRange.end() + 1;
+
+    int timeOfNextKeyframe;
+    std::tie(timeOfNextKeyframe, std::ignore) = mapping.firstAfter(lastDestination);
+
+    int newEnd;
+    if (timeOfNextKeyframe < 0) {
+        newEnd = lastDestination + trailingHold;
+    } else if (rangeEndedJustBeforeKeyframe) {
+        newEnd = timeOfNextKeyframe - 1;
+    } else {
+        newEnd = qMin(lastDestination + trailingHold, timeOfNextKeyframe - 1);
+    }
 
     const KisTimeSpan &newRange = KisTimeSpan(firstDestination, newEnd);
     if (newRange == oldRange) {
         return cycle;
     }
 
-    return toQShared(new KisAnimationCycle(*cycle, newRange));
+    KisAnimationCycle *newCycle = new KisAnimationCycle(*cycle, newRange);
+    newCycle->setTime(firstDestination);
+    return toQShared(newCycle);
 }
 
-QVector<CycleSP> resolveCycleOverlaps(QVector<CycleSP> &cycles, const KeyframeMapping &movedKeyframes)
+QVector<CycleSP> resolveCycleOverlaps(QVector<CycleSP> &cycles)
 {
     if (cycles.isEmpty()) return cycles;
 
@@ -225,9 +242,7 @@ QVector<CycleSP> resolveCycleOverlaps(QVector<CycleSP> &cycles, const KeyframeMa
                 continue;
             } else {
                 // TODO: logic for picking the cycle to truncate?
-
-                const int truncatedStart = movedKeyframes.firstTrueKeyframeAfter(lhsEnd)->time();
-                cycles[i] = toQShared(new KisAnimationCycle(*rhs, {truncatedStart, rhsEnd}));
+                cycles[i] = toQShared(new KisAnimationCycle(*rhs, {lhsEnd + 1, rhsEnd}));
             }
         }
 
@@ -248,7 +263,7 @@ QVector<CycleSP> cyclesAfterMoves(const KeyframeMapping &movedKeyframes)
         }
     }
 
-    return resolveCycleOverlaps(cycles, movedKeyframes);
+    return resolveCycleOverlaps(cycles);
 }
 
 bool validateRepeats(const QVector<CycleSP > &cycles, const KeyframeMapping &movedKeyframes)
@@ -261,12 +276,13 @@ bool validateRepeats(const QVector<CycleSP > &cycles, const KeyframeMapping &mov
 
         // If any repeat frame would land within the cycle, refuse the operation.
 
-        auto keyIt = KisCollectionUtils::firstAfter(movedKeyframes.sources, cycleStart);
-        while (keyIt != movedKeyframes.sources.cend() && keyIt.key() < cycleEnd) {
-            const QSharedPointer<KisRepeatFrame> repeat = keyIt.value().dynamicCast<KisRepeatFrame>();
-            if (repeat) return false;
+        int time = cycleStart;
+        while (time <= cycleEnd) {
+            KisKeyframeBaseSP key;
+            std::tie(time, key) = movedKeyframes.firstAfter(time);
 
-            keyIt++;
+            const QSharedPointer<KisRepeatFrame> repeat = key.dynamicCast<KisRepeatFrame>();
+            if (repeat) return false;
         }
     }
     return true;
@@ -285,7 +301,7 @@ void updateCycles(const KisKeyframeChannel *channel, QVector<CycleSP> cyclesAfte
 
     // Add new cycle definitions
     Q_FOREACH(const CycleSP &cycle, cyclesAfter) {
-        if (!cyclesBefore.contains(cycle)) {
+        if (cycle && !cyclesBefore.contains(cycle)) {
             new KisDefineCycleCommand(nullptr, cycle, parentCommand);
         }
     }
@@ -328,22 +344,30 @@ KisKeyframeCommands::ValidationResult KisKeyframeCommands::tryAddKeyframes(KisKe
     KeyframeMove (*fromAddedKeyframe)(KisKeyframeBaseSP) = KeyframeMove::fromAddedKeyframe; // Force correct overload resolution with explicit type
     std::transform(keyframes.cbegin(), keyframes.cend(), operations.begin(), fromAddedKeyframe);
 
-    return tryCreateCommands(channel, operations, parentCommand);
+KisKeyframeCommands::ValidationResult KisKeyframeCommands::tryDefineCycle(KisKeyframeChannel *channel, KisTimeSpan range, KUndo2Command *parentCommand)
+{
+    if (range.isEmpty() || range.start() < 0) return ValidationResult::InvalidCycle;
+    Q_FOREACH(const CycleSP &cycle, channel->cycles()) {
+        // Cycles must not overlap
+        if (range.overlaps(cycle->originalRange())) {
+            return ValidationResult::OverlappingCycles;
+        }
+
+        Q_FOREACH(QWeakPointer<KisRepeatFrame> repeatWP, cycle->repeats()) {
+            auto repeat = repeatWP.toStrongRef();
+            if (repeat && range.contains(repeat->time())) {
+                return ValidationResult::RepeatKeyframeWithinCycleDefinition;
+            }
+        }
+    }
+
+    QSharedPointer<KisAnimationCycle> cycle = toQShared(new KisAnimationCycle(channel, range));
+    return ValidationResult(new KisDefineCycleCommand(nullptr, cycle, parentCommand));
 }
 
-KisKeyframeCommands::ValidationResult KisKeyframeCommands::tryRemoveKeyframes(KisKeyframeChannel *channel, const QVector<KisKeyframeBaseSP> &keyframes, KUndo2Command *parentCommand)
+KUndo2Command * KisKeyframeCommands::removeCycle(QSharedPointer<KisAnimationCycle> cycle, KUndo2Command *parentCommand)
 {
-    QVector<KeyframeMove> operations;
-    std::transform(keyframes.cbegin(), keyframes.cend(), operations.begin(), KeyframeMove::fromDeletedKeyframe);
-
-    return tryCreateCommands(channel, operations, parentCommand);
-}
-
-KisKeyframeCommands::ValidationResult KisKeyframeCommands::tryMoveKeyframes(KisKeyframeChannel *channel, const QVector<KeyframeMove> &moves, KUndo2Command *parentCommand)
-{
-    const ValidationResult::Status moveValidation = validateMoveSources(channel, moves);
-    if (moveValidation != ValidationResult::Valid) return moveValidation;
-    return tryCreateCommands(channel, moves, parentCommand);
+    return new KisDefineCycleCommand(cycle, nullptr, parentCommand);
 }
 
 KisKeyframeCommands::ValidationResult KisKeyframeCommands::tryAddKeyframes(KisKeyframeChannel *channel, const QVector<KisKeyframeBaseSP> &keyframes, KUndo2Command *parentCommand)

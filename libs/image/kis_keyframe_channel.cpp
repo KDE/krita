@@ -125,14 +125,6 @@ struct KisKeyframeChannel::Private
         remove(keyframe);
         keyframe->setTime(newTime);
         add(keyframe);
-
-        if (cycle) {
-            KIS_SAFE_ASSERT_RECOVER_NOOP(newTime < cycle->originalRange().end()); // TODO: make sure this is the case
-
-            cycles.remove(cycle->time());
-            cycle->setTime(newTime);
-            cycles.insert(newTime, cycle);
-        }
     }
 
     void addCycle(QSharedPointer<KisAnimationCycle> cycle) {
@@ -145,7 +137,6 @@ struct KisKeyframeChannel::Private
     }
 
     void removeCycle(QSharedPointer<KisAnimationCycle> cycle) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(cycle->repeats().isEmpty());
         cycles.remove(cycle->time());
     }
 };
@@ -339,6 +330,7 @@ void KisKeyframeChannel::moveKeyframeImpl(KisKeyframeBaseSP keyframe, int newTim
 {
     KIS_ASSERT_RECOVER_RETURN(keyframe);
     KIS_ASSERT_RECOVER_RETURN(!itemAt(newTime));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(itemAt(keyframe->time()) == keyframe);
 
     KisFrameSet rangeSrc = affectedFrames(keyframe->time());
     QRect rectSrc = keyframe->affectedRect();
@@ -856,7 +848,9 @@ KisKeyframeSP KisKeyframeChannel::copyExternalKeyframe(KisKeyframeChannel *srcCh
     KisKeyframeSP newKeyframe = createKeyframe(dstTime, KisKeyframeSP(), parentCommand);
     uploadExternalKeyframe(srcChannel, srcTime, newKeyframe);
 
-    KUndo2Command *cmd = new KisReplaceKeyframeCommand(this, newKeyframe->time(), newKeyframe, parentCommand);
+    KUndo2Command *cmd = KisKeyframeCommands::tryAddKeyframes(this, {newKeyframe}, parentCommand).command;
+    if (!cmd) return KisKeyframeSP();
+
     cmd->redo();
 
     return newKeyframe;

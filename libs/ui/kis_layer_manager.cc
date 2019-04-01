@@ -101,6 +101,7 @@
 #include "kis_selection_mask.h"
 #include "kis_layer_utils.h"
 #include "lazybrush/kis_colorize_mask.h"
+#include "kis_processing_applicator.h"
 
 #include "KisSaveGroupVisitor.h"
 
@@ -564,7 +565,7 @@ void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, 
     }
 }
 
-void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisNodeSP layer, bool updateImage)
+void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisNodeSP layer, bool updateImage, KisProcessingApplicator *applicator)
 {
     KisNodeSP parent;
     KisNodeSP above;
@@ -574,14 +575,14 @@ void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisNodeSP layer, bool
     const bool parentForceUpdate = group && !group->projectionIsValid();
     updateImage |= parentForceUpdate;
 
-    m_commandsAdapter->addNode(layer, parent, above, updateImage, updateImage);
+    m_commandsAdapter->addNodeAsync(layer, parent, above, updateImage, updateImage, applicator);
 }
 
 KisLayerSP KisLayerManager::addPaintLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
     KisLayerSP layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
-    addLayerCommon(activeNode, layer, false);
+    addLayerCommon(activeNode, layer, false, 0);
 
     return layer;
 }
@@ -590,7 +591,7 @@ KisNodeSP KisLayerManager::addGroupLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
     KisGroupLayerSP group = new KisGroupLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
-    addLayerCommon(activeNode, group, false);
+    addLayerCommon(activeNode, group, false, 0);
     return group;
 }
 
@@ -598,7 +599,7 @@ KisNodeSP KisLayerManager::addCloneLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
     KisNodeSP node = new KisCloneLayer(activeLayer(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
-    addLayerCommon(activeNode, node);
+    addLayerCommon(activeNode, node, true, 0);
     return node;
 }
 
@@ -610,7 +611,7 @@ KisNodeSP KisLayerManager::addShapeLayer(KisNodeSP activeNode)
     KisImageWSP image = m_view->image();
     KisShapeLayerSP layer = new KisShapeLayer(m_view->document()->shapeController(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
 
-    addLayerCommon(activeNode, layer, false);
+    addLayerCommon(activeNode, layer, false, 0);
 
     return layer;
 }
@@ -620,8 +621,13 @@ KisNodeSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
     KisImageWSP image = m_view->image();
 
     KisSelectionSP selection = m_view->selection();
-    KisAdjustmentLayerSP adjl = addAdjustmentLayer(activeNode, QString(), 0, selection);
-    image->refreshGraph();
+
+    KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE,
+                                       KisImageSignalVector() << ModifiedSignal,
+                                       kundo2_i18n("Add Layer"));
+
+
+    KisAdjustmentLayerSP adjl = addAdjustmentLayer(activeNode, QString(), 0, selection, &applicator);
 
     KisPaintDeviceSP previewDevice = new KisPaintDevice(*adjl->original());
 
@@ -634,20 +640,23 @@ KisNodeSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
 
     if (dlg.exec() != QDialog::Accepted || adjl->filter().isNull()) {
         // XXX: add messagebox warning if there's no filter set!
-        m_commandsAdapter->undoLastCommand();
+        applicator.cancel();
     } else {
         adjl->setName(dlg.layerName());
+        applicator.end();
     }
 
     return adjl;
 }
 
 KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode, const QString & name,
-                                                         KisFilterConfigurationSP  filter, KisSelectionSP selection)
+                                                         KisFilterConfigurationSP  filter,
+                                                         KisSelectionSP selection,
+                                                         KisProcessingApplicator *applicator)
 {
     KisImageWSP image = m_view->image();
     KisAdjustmentLayerSP layer = new KisAdjustmentLayer(image, name, filter, selection);
-    addLayerCommon(activeNode, layer);
+    addLayerCommon(activeNode, layer, true, applicator);
 
     return layer;
 }
@@ -671,7 +680,7 @@ KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
 
         KisNodeSP node = new KisGeneratorLayer(image, name, generator, selection);
 
-        addLayerCommon(activeNode, node );
+        addLayerCommon(activeNode, node, true, 0);
 
         return node;
     }
@@ -914,7 +923,7 @@ KisNodeSP KisLayerManager::addFileLayer(KisNodeSP activeNode)
 
         KisFileLayer::ScalingMethod scalingMethod = dlg.scaleToImageResolution();
         KisNodeSP node = new KisFileLayer(image, basePath, fileName, scalingMethod, name, OPACITY_OPAQUE_U8);
-        addLayerCommon(activeNode, node);
+        addLayerCommon(activeNode, node, true, 0);
         return node;
     }
     return 0;

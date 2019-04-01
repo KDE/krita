@@ -39,6 +39,32 @@ KisNodeCommandsAdapter::~KisNodeCommandsAdapter()
 {
 }
 
+void KisNodeCommandsAdapter::applyOneCommandAsync(KUndo2Command *cmd, KisProcessingApplicator *applicator)
+{
+    if (applicator) {
+        applicator->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+    } else {
+        QScopedPointer<KisProcessingApplicator> localApplicator(
+            new KisProcessingApplicator(m_view->image(), 0, KisProcessingApplicator::NONE,
+                                        KisImageSignalVector() << ModifiedSignal,
+                                        cmd->text());
+        localApplicator->applyCommand(cmd);
+        localApplicator->end();
+    }
+}
+
+void KisNodeCommandsAdapter::addNodeAsync(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis, bool doRedoUpdates, bool doUndoUpdates, KisProcessingApplicator *applicator)
+{
+    KUndo2Command *cmd = new KisImageLayerAddCommand(m_view->image(), node, parent, aboveThis, doRedoUpdates, doUndoUpdates);
+    applyOneCommandAsync(cmd, applicator);
+}
+
+void KisNodeCommandsAdapter::addNodeAsync(KisNodeSP node, KisNodeSP parent, quint32 index, bool doRedoUpdates, bool doUndoUpdates, KisProcessingApplicator *applicator)
+{
+    KUndo2Command *cmd = new KisImageLayerAddCommand(m_view->image(), node, parent, index, doRedoUpdates, doUndoUpdates);
+    applyOneCommandAsync(cmd, applicator);
+}
+
 void KisNodeCommandsAdapter::beginMacro(const KUndo2MagicString& macroName)
 {
     Q_ASSERT(m_view->image()->undoAdapter());
@@ -90,11 +116,7 @@ void KisNodeCommandsAdapter::removeNode(KisNodeSP node)
 void KisNodeCommandsAdapter::setOpacity(KisNodeSP node, qint32 opacity)
 {
     KUndo2Command *cmd = new KisNodeOpacityCommand(node, node->opacity(), opacity);
-    KisProcessingApplicator applicator(m_view->image(), 0, KisProcessingApplicator::NONE,
-                                       KisImageSignalVector() << ModifiedSignal,
-                                       cmd->text());
-    applicator.applyCommand(cmd);
-    applicator.end();
+    applyOneCommandAsync(cmd);
 }
 
 void KisNodeCommandsAdapter::setCompositeOp(KisNodeSP node,
@@ -102,11 +124,7 @@ void KisNodeCommandsAdapter::setCompositeOp(KisNodeSP node,
 {
     KUndo2Command *cmd = new KisNodeCompositeOpCommand(node, node->compositeOpId(),
                                                        compositeOp->id());
-    KisProcessingApplicator applicator(m_view->image(), 0, KisProcessingApplicator::NONE,
-                                       KisImageSignalVector() << ModifiedSignal,
-                                       cmd->text());
-    applicator.applyCommand(cmd);
-    applicator.end();
+    applyOneCommandAsync(cmd);
 }
 
 void KisNodeCommandsAdapter::undoLastCommand()

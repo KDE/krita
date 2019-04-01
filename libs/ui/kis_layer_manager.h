@@ -31,6 +31,7 @@ class KisViewManager;
 class KisNodeCommandsAdapter;
 class KisAction;
 class KisActionManager;
+class KisProcessingApplicator;
 
 /**
  * KisLayerManager takes care of the gui around working with layers:
@@ -101,7 +102,7 @@ private Q_SLOTS:
     KisNodeSP addShapeLayer(KisNodeSP activeNode);
 
     KisNodeSP addAdjustmentLayer(KisNodeSP activeNode);
-    KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP activeNode, const QString & name, KisFilterConfigurationSP  filter, KisSelectionSP selection);
+    KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP activeNode, const QString & name, KisFilterConfigurationSP  filter, KisSelectionSP selection, KisProcessingApplicator *applicator);
 
     KisNodeSP addGeneratorLayer(KisNodeSP activeNode);
 
@@ -111,7 +112,7 @@ private Q_SLOTS:
 
 private:
     void adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above);
-    void addLayerCommon(KisNodeSP activeNode, KisNodeSP layer, bool updateImage = true);
+    void addLayerCommon(KisNodeSP activeNode, KisNodeSP layer, bool updateImage = true, KisProcessingApplicator *applicator = 0);
 
 private:
 

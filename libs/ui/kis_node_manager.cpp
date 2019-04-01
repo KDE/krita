@@ -577,16 +577,16 @@ void KisNodeManager::slotShowHideTimeline(bool value)
 
 KisLayerSP KisNodeManager::createPaintLayer()
 {
-    KisNodeSP activeNode = this->activeNode();
-    if (!activeNode) {
-        activeNode = m_d->view->image()->root();
-    }
-
-    return m_d->layerManager.addPaintLayer(activeNode);
+    KisNodeSP node = createNode("KisPaintLayer");
+    return dynamic_cast<KisLayer*>(node.data());
 }
 
 void KisNodeManager::convertNode(const QString &nodeType)
 {
+    if (!m_d->view->blockUntilOperationsFinished(m_d->view->image())) {
+        return;
+    }
+
     KisNodeSP activeNode = this->activeNode();
     if (!activeNode) return;
 

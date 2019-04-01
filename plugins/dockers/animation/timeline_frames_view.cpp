@@ -1433,8 +1433,8 @@ void TimelineFramesView::insertOrRemoveHoldFrames(int count, bool entireColumn)
                 KisKeyframeChannel *channel = layerNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
                 if (!channel) continue;
 
-                if (keyframesInLayerNode <  channel->allKeyframeIds().count()) {
-                   keyframesInLayerNode =  channel->allKeyframeIds().count();
+                if (keyframesInLayerNode < channel->allKeyframeIds().count()) {
+                   keyframesInLayerNode = channel->allKeyframeIds().count();
                 }
             }
             m_d->model->setLastVisibleFrame(m_d->model->columnCount() + count*keyframesInLayerNode);

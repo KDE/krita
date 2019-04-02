@@ -100,7 +100,6 @@ struct KisNodeManager::Private {
         , nodeSelectionAdapter(new KisNodeSelectionAdapter(q))
         , nodeInsertionAdapter(new KisNodeInsertionAdapter(q))
         , nodeDisplayModeAdapter(new KisNodeDisplayModeAdapter())
-        , lastRequestedIsolatedModeStatus(false)
     {
     }
 
@@ -125,8 +124,6 @@ struct KisNodeManager::Private {
 
     QSignalMapper nodeCreationSignalMapper;
     QSignalMapper nodeConversionSignalMapper;
-
-    bool lastRequestedIsolatedModeStatus;
 
     void saveDeviceAsImage(KisPaintDeviceSP device,
                            const QString &defaultName,
@@ -501,8 +498,6 @@ void KisNodeManager::toggleIsolateMode(bool checked)
     } else {
         image->stopIsolatedMode();
     }
-
-    m_d->lastRequestedIsolatedModeStatus = checked;
 }
 
 void KisNodeManager::slotUpdateIsolateModeAction()
@@ -514,13 +509,12 @@ void KisNodeManager::slotUpdateIsolateModeAction()
     KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
 
     action->setChecked(isolatedRootNode && isolatedRootNode == activeNode);
-    m_d->lastRequestedIsolatedModeStatus = bool(isolatedRootNode);
 }
 
 void KisNodeManager::slotTryRestartIsolatedMode()
 {
     KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
-    if (!isolatedRootNode && !m_d->lastRequestedIsolatedModeStatus) return;
+    if (!isolatedRootNode) return;
 
     this->toggleIsolateMode(true);
 }

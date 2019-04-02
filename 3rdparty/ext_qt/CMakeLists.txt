@@ -11,7 +11,9 @@ if (WIN32)
         -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus
         -skip qtspeech -skip qtvirtualkeyboard
         #
-        -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg
+        -system-zlib -qt-pcre	-system-libpng -system-libjpeg
+        -I ${EXTPREFIX_qt}/include
+        -L ${EXTPREFIX_qt}/lib
         #
         -opensource -confirm-license
         #
@@ -66,7 +68,7 @@ if (WIN32)
       # Use a short name to reduce the chance of exceeding path length limit
       SOURCE_DIR s
       BINARY_DIR b
-      DEPENDS ext_patch
+      DEPENDS ext_patch ext_zlib ext_png ext_jpeg
   )
 elseif (NOT APPLE)
   ExternalProject_Add(

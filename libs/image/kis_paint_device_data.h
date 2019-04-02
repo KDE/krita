@@ -61,11 +61,11 @@ public:
         {
         }
 
-    KisPaintDeviceData(const KisPaintDeviceData *rhs, bool cloneContent)
+    KisPaintDeviceData(KisPaintDevice *paintDevice, const KisPaintDeviceData *rhs, bool cloneContent)
         : m_dataManager(cloneContent ?
                         new KisDataManager(*rhs->m_dataManager) :
                         new KisDataManager(rhs->m_dataManager->pixelSize(), rhs->m_dataManager->defaultPixel())),
-          m_cache(rhs->m_cache),
+          m_cache(paintDevice),
           m_x(rhs->m_x),
           m_y(rhs->m_y),
           m_colorSpace(rhs->m_colorSpace),

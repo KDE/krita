@@ -5,13 +5,15 @@ if (WIN32)
         -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland
         -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview
         -skip qtxmlpatterns -no-sql-sqlite -nomake examples -nomake tools
-        -no-compile-examples -no-dbus -no-iconv -no-qml-debug -no-ssl
+        -no-compile-examples -no-dbus -no-iconv -no-qml-debug
         -no-libproxy -no-system-proxies -no-icu -no-mtdev
         -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtnetworkauth
         -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus
         -skip qtspeech -skip qtvirtualkeyboard
         #
-        -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg
+        -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -openssl-linked
+        -I ${EXTPREFIX_qt}/include
+        -L ${EXTPREFIX_qt}/lib
         #
         -opensource -confirm-license
         #
@@ -66,7 +68,7 @@ if (WIN32)
       # Use a short name to reduce the chance of exceeding path length limit
       SOURCE_DIR s
       BINARY_DIR b
-      DEPENDS ext_patch
+      DEPENDS ext_patch ext_openssl
   )
 elseif (NOT APPLE)
   ExternalProject_Add(

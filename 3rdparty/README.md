@@ -118,6 +118,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
     On OSX and Windows:
     ```
     cmake --build . --config RelWithDebInfo --target ext_gettext
+    cmake --build . --config RelWithDebInfo --target ext_openssl
     ```
 
     On all operating systems:

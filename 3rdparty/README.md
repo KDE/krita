@@ -2,10 +2,10 @@
 
 If you need to build Krita's dependencies for the following reasons:
 
-* you develop on Windows and aren't using Craft
-* you develop on OSX and aren't using Homebrew, or are on OSX and want to make distributable app bundles
-* you want to build a generic, distro-agnostic version of Krita for Linux
-* you develop on Linux, but some dependencies aren't available for your distribution
+* you develop on Windows and aren't using krita\build-tools\windows\build.cmd or KDE's craft
+* you develop on OSX and aren't using the scripts in krita\packaging\osx or Homebrew
+* you want to build a generic, distro-agnostic version of Krita for Linux and aren't using the scripts in packaging\linux\appimage
+* you develop on Linux, but some dependencies aren't available for your distribution and aren't using the scripts in packaging\linux\appimage
 
 and you know what you're doing, you can use the following guide to build
 the dependencies that Krita needs.
@@ -22,7 +22,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
 
 1. git: https://git-scm.com/downloads. Make sure git is in your path
 2. CMake 3.3.2 or later: https://cmake.org/download/. Make sure cmake is in your path.
-    * CMake 3.9 does not build Krita properly at the moment, please use 3.8 instead.
+    * CMake 3.9 does not build Krita properly at the moment, please use 3.8 or 3.10 instead.
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
@@ -44,7 +44,7 @@ Make sure that your Python will have the correct architecture for the version yo
 
 == Prepare your directory layout ==
 
-1. Make a toplevel build directory, say $HOME/dev or c:\dev. We'll refer to this directory as BUILDROOT. You can use a variable for this, on WINDOWS %BUILDROOT%, on OSX and Linux $BUILDROOT. You will have to replace BUILDROOT with $BUILDROOT or %BUILDROOT whenever you copy and paste a command, depending on your operating system.
+1. Make a toplevel build directory, say $HOME/dev or c:\dev. We'll refer to this directory as BUILDROOT. You can use a variable for this, on WINDOWS %BUILDROOT%, on OSX and Linux $BUILDROOT. You will have to replace a bare BUILDROOT with $BUILDROOT or %BUILDROOT% whenever you copy and paste a command, depending on your operating system.
 
 2. Checkout krita in BUILDROOT
     cd BUILDROOT
@@ -85,7 +85,6 @@ Make sure that your Python will have the correct architecture for the version yo
 Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:\dev\d.
 
     set PATH=%BUILDROOT%\i\bin\;%BUILDROOT%\i\lib;%PATH%
-    set PATH=BUILDROOT\i\bin\;BUILDROOT\i\lib;%PATH%
     cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i  -G "MinGW Makefiles"
 
 - If you want to build Qt and some other dependencies with parallel jobs, add
@@ -98,17 +97,15 @@ Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:
 
 3. build the packages:
 
-With a judicious application of DEPENDS statements, it's possible to build it all in one go, but in my experience that fails always, so it's better to build the dependencies independently.
-
 On Windows:
 
     cmake --build . --config RelWithDebInfo --target ext_patch
     cmake --build . --config RelWithDebInfo --target ext_png2ico
-    cmake --build . --config RelWithDebInfo --target ext_gettext_lib
+    cmake --build . --config RelWithDebInfo --target ext_gettext
     
 On OSX and Windows:
 
-    cmake --build . --config RelWithDebInfo --target ext_gettext
+    cmake --build . --config RelWithDebInfo --target ext_gettext_lib
 
 On all operating systems:
 

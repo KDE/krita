@@ -1,7 +1,7 @@
 SET(PREFIX_ext_gettext "${EXTPREFIX}" )
 if (MINGW)
     if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-        ExternalProject_Add(ext_gettext
+        ExternalProject_Add(ext_gettext_bin
         
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
             URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.15-static-64.zip
@@ -14,7 +14,7 @@ if (MINGW)
             UPDATE_COMMAND ""
         )
     else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-            ExternalProject_Add(ext_gettext
+            ExternalProject_Add(ext_gettext_bin
         
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
             URL http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.15-static-32.zip
@@ -37,7 +37,9 @@ if (MINGW)
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_gettext} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
         UPDATE_COMMAND ""
         DEPENDS ext_patch ext_iconv
-)
+    )
+    add_custom_target(ext_gettext)
+    add_dependencies(ext_gettext ext_gettext_bin ext_gettext_lib)
 else (MINGW)
 ExternalProject_Add( ext_gettext
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

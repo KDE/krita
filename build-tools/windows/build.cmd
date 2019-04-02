@@ -699,6 +699,7 @@ echo Running CMake for deps...
     -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_DOWNLOAD_CMAKE% ^
     -DINSTALL_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
     -G "MinGW Makefiles" ^
+    -DUSE_QT_TABLET_WINDOWS=ON ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
 if errorlevel 1 (
     echo ERROR: CMake configure failed! 1>&2
@@ -747,7 +748,7 @@ echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
     -DFOUNDATION_BUILD=ON ^
     -DHAVE_HDR=ON ^
-    -DUSE_QT_TABLET_WINDOWS=OFF ^
+    -DUSE_QT_TABLET_WINDOWS=ON ^
     -Wno-dev ^
     -G "MinGW Makefiles" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
@@ -762,7 +763,7 @@ echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DBUILD_TESTING=OFF ^
     -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
     -DFOUNDATION_BUILD=ON ^
-    -DUSE_QT_TABLET_WINDOWS=OFF ^
+    -DUSE_QT_TABLET_WINDOWS=ON ^
     -DHAVE_HDR=ON ^
     -Wno-dev ^
     -G "MinGW Makefiles" ^

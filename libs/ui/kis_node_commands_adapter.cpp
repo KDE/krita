@@ -47,7 +47,7 @@ void KisNodeCommandsAdapter::applyOneCommandAsync(KUndo2Command *cmd, KisProcess
         QScopedPointer<KisProcessingApplicator> localApplicator(
             new KisProcessingApplicator(m_view->image(), 0, KisProcessingApplicator::NONE,
                                         KisImageSignalVector() << ModifiedSignal,
-                                        cmd->text());
+                                        cmd->text()));
         localApplicator->applyCommand(cmd);
         localApplicator->end();
     }

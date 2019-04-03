@@ -311,7 +311,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     d->windowStateConfig = KSharedConfig::openConfig()->group("MainWindow");
 
-    setAcceptDrops(true);
     setStandardToolBarMenuEnabled(true);
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
     setDockNestingEnabled(true);
@@ -1326,39 +1325,7 @@ void KisMainWindow::setActiveView(KisView* view)
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
 }
 
-void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)
-{
-    d->welcomePage->showDropAreaIndicator(true);
-
-
-    if (event->mimeData()->hasUrls() ||
-        event->mimeData()->hasFormat("application/x-krita-node") ||
-        event->mimeData()->hasFormat("application/x-qt-image")) {
-
-        event->accept();
-    }
-}
-
-void KisMainWindow::dropEvent(QDropEvent *event)
-{
-    d->welcomePage->showDropAreaIndicator(false);
-
-    if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
-        Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
-            if (url.toLocalFile().endsWith(".bundle")) {
-                bool r = installBundle(url.toLocalFile());
-                if (!r) {
-                    qWarning() << "Could not install bundle" << url.toLocalFile();
-                }
-            }
-            else {
-                openDocument(url, None);
-            }
-        }
-    }
-}
-
-void KisMainWindow::dragMoveEvent(QDragMoveEvent * event)
+void KisMainWindow::dragMove(QDragMoveEvent * event)
 {
     QTabBar *tabBar = d->findTabBarHACK();
 
@@ -1380,10 +1347,8 @@ void KisMainWindow::dragMoveEvent(QDragMoveEvent * event)
     }
 }
 
-void KisMainWindow::dragLeaveEvent(QDragLeaveEvent * /*event*/)
+void KisMainWindow::dragLeave()
 {
-        d->welcomePage->showDropAreaIndicator(false);
-
     if (d->tabSwitchCompressor->isActive()) {
         d->tabSwitchCompressor->stop();
     }

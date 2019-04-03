@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QDesktopServices>
 #include <QFileInfo>
+#include <QMimeData>
 
 #include "kis_action_manager.h"
 #include "kactioncollection.h"
@@ -90,6 +91,8 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     KisConfig cfg(true);
     bool m_getNews = cfg.readEntry<bool>("FetchNews", false);
     chkShowNews->setChecked(m_getNews);
+
+    setAcceptDrops(true);
 
 }
 
@@ -251,6 +254,58 @@ void KisWelcomePageWidget::populateRecentDocuments()
     recentDocumentsListView->setModel(&m_recentFilesModel);
 }
 
+void KisWelcomePageWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+    //qDebug() << "dragEnterEvent formats" << event->mimeData()->formats() << "urls" << event->mimeData()->urls() << "has images" << event->mimeData()->hasImage();
+    showDropAreaIndicator(true);
+    if (event->mimeData()->hasUrls() ||
+        event->mimeData()->hasFormat("application/x-krita-node") ||
+        event->mimeData()->hasFormat("application/x-qt-image")) {
+
+        event->accept();
+    }
+}
+
+void KisWelcomePageWidget::dropEvent(QDropEvent *event)
+{
+    //qDebug() << "KisWelcomePageWidget::dropEvent() formats" << event->mimeData()->formats() << "urls" << event->mimeData()->urls() << "has images" << event->mimeData()->hasImage();
+
+    showDropAreaIndicator(false);
+
+    if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
+        Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
+            if (url.toLocalFile().endsWith(".bundle")) {
+                bool r = m_mainWindow->installBundle(url.toLocalFile());
+                if (!r) {
+                    qWarning() << "Could not install bundle" << url.toLocalFile();
+                }
+            }
+            else {
+                m_mainWindow->openDocument(url, KisMainWindow::None);
+            }
+        }
+    }
+}
+
+void KisWelcomePageWidget::dragMoveEvent(QDragMoveEvent *event)
+{
+    //qDebug() << "dragMoveEvent";
+    m_mainWindow->dragMoveEvent(event);
+    if (event->mimeData()->hasUrls() ||
+        event->mimeData()->hasFormat("application/x-krita-node") ||
+        event->mimeData()->hasFormat("application/x-qt-image")) {
+
+        event->accept();
+    }
+
+}
+
+void KisWelcomePageWidget::dragLeaveEvent(QDragLeaveEvent */*event*/)
+{
+    //qDebug() << "dragLeaveEvent";
+    showDropAreaIndicator(false);
+    m_mainWindow->dragLeave();
+}
 
 void KisWelcomePageWidget::recentDocumentClicked(QModelIndex index)
 {

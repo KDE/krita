@@ -382,7 +382,11 @@ bool isOpenGLRendererBlacklisted(const QString &rendererString,
                                  QVector<KLocalizedString> *warningMessage)
 {
     bool isBlacklisted = false;
-
+#ifndef Q_OS_WIN
+    Q_UNUSED(rendererString);
+    Q_UNUSED(driverVersionString);
+    Q_UNUSED(warningMessage);
+#else
     // Special blacklisting of OpenGL/ANGLE is tracked on:
     // https://phabricator.kde.org/T7411
 
@@ -428,7 +432,7 @@ bool isOpenGLRendererBlacklisted(const QString &rendererString,
             *warningMessage << grossIntelWarning;
         }
     }
-
+#endif
     return isBlacklisted;
 }
 

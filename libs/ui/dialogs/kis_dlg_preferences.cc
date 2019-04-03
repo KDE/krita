@@ -706,9 +706,15 @@ void TabletSettingsTab::setDefault()
     curve.fromString(DEFAULT_CURVE_STRING);
     m_page->pressureCurve->setCurve(curve);
 
-#ifdef Q_OS_WIN
-#ifndef USE_QT_TABLET_WINDOWS
-    if (KisTabletSupportWin8::isAvailable()) {
+#if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
+
+#ifdef USE_QT_TABLET_WINDOWS
+    // ask Qt if WinInk is actually available
+    const bool isWinInkAvailable = true;
+#else
+    const bool isWinInkAvailable = KisTabletSupportWin8::isAvailable();
+#endif
+    if (isWinInkAvailable) {
         KisConfig cfg(true);
         m_page->radioWintab->setChecked(!cfg.useWin8PointerInput(true));
         m_page->radioWin8PointerInput->setChecked(cfg.useWin8PointerInput(true));
@@ -718,7 +724,6 @@ void TabletSettingsTab::setDefault()
     }
 #else
         m_page->grpTabletApi->setVisible(false);
-#endif
 #endif
 }
 
@@ -738,9 +743,14 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
     m_page->pressureCurve->setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
     m_page->pressureCurve->setCurve(curve);
 
-#ifdef Q_OS_WIN
-#ifndef USE_QT_TABLET_WINDOWS
-    if (KisTabletSupportWin8::isAvailable()) {
+#if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
+#ifdef USE_QT_TABLET_WINDOWS
+    // ask Qt if WinInk is actually available
+    const bool isWinInkAvailable = true;
+#else
+    const bool isWinInkAvailable = KisTabletSupportWin8::isAvailable();
+#endif
+    if (isWinInkAvailable) {
         m_page->radioWintab->setChecked(!cfg.useWin8PointerInput());
         m_page->radioWin8PointerInput->setChecked(cfg.useWin8PointerInput());
     } else {
@@ -748,9 +758,6 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
         m_page->radioWin8PointerInput->setChecked(false);
         m_page->grpTabletApi->setVisible(false);
     }
-#else
-        m_page->grpTabletApi->setVisible(false);
-#endif
 #else
     m_page->grpTabletApi->setVisible(false);
 #endif
@@ -1578,12 +1585,16 @@ bool KisDlgPreferences::editPreferences()
 
         // Tablet settings
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
-#ifdef Q_OS_WIN
-#ifndef USE_QT_TABLET_WINDOWS
-        if (KisTabletSupportWin8::isAvailable()) {
+#if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
+#ifdef USE_QT_TABLET_WINDOWS
+        // ask Qt if WinInk is actually available
+        const bool isWinInkAvailable = true;
+#else
+        const bool isWinInkAvailable = KisTabletSupportWin8::isAvailable();
+#endif
+        if (isWinInkAvailable) {
             cfg.setUseWin8PointerInput(dialog->m_tabletSettings->m_page->radioWin8PointerInput->isChecked());
         }
-#endif
 #endif
 
         dialog->m_performanceSettings->save();

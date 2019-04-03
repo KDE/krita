@@ -64,7 +64,11 @@ set(krita_QRCS
 
 qt5_add_resources(krita_SRCS ${krita_QRCS})
 
-add_executable(krita ${krita_SRCS})
+if (ANDROID)
+    add_library(krita SHARED ${krita_SRCS})
+else()
+    add_executable(krita ${krita_SRCS})
+endif()
 target_link_libraries(krita 
     PRIVATE
                       kritaui 

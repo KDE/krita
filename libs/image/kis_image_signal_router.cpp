@@ -26,6 +26,10 @@
 #define CONNECT_TO_IMAGE(signal)                                        \
     connect(this, SIGNAL(signal), m_image, SIGNAL(signal), Qt::DirectConnection)
 
+#define CONNECT_TO_IMAGE_QUEUED(signal)                                 \
+    connect(this, SIGNAL(signal), m_image, SIGNAL(signal), Qt::QueuedConnection)
+
+
 struct ImageSignalsStaticRegistrar {
     ImageSignalsStaticRegistrar() {
         qRegisterMetaType<KisImageSignalType>("KisImageSignalType");
@@ -43,8 +47,6 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
 
     CONNECT_TO_IMAGE(sigImageModified());
     CONNECT_TO_IMAGE(sigSizeChanged(const QPointF&, const QPointF&));
-    CONNECT_TO_IMAGE(sigProfileChanged(const KoColorProfile*));
-    CONNECT_TO_IMAGE(sigColorSpaceChanged(const KoColorSpace*));
     CONNECT_TO_IMAGE(sigResolutionChanged(double, double));
     CONNECT_TO_IMAGE(sigRequestNodeReselection(KisNodeSP, const KisNodeList&));
 
@@ -52,6 +54,17 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
     CONNECT_TO_IMAGE(sigNodeAddedAsync(KisNodeSP));
     CONNECT_TO_IMAGE(sigRemoveNodeAsync(KisNodeSP));
     CONNECT_TO_IMAGE(sigLayersChangedAsync());
+
+    /**
+     * Color space and profile conversion functions run without storkes,
+     * therefore they are executed in GUI hread under the global lock held.
+     *
+     * To ensure that the receiver of the signal will not deadlock by
+     * barrier-locking the image, we should make these signals queued.
+     */
+
+    CONNECT_TO_IMAGE_QUEUED(sigProfileChanged(const KoColorProfile*));
+    CONNECT_TO_IMAGE_QUEUED(sigColorSpaceChanged(const KoColorSpace*));
 }
 
 KisImageSignalRouter::~KisImageSignalRouter()

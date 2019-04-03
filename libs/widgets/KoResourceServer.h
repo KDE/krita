@@ -115,8 +115,7 @@ protected:
  * can be observed with a KoResourceServerObserver
  *
  * The \p Policy template parameter defines the way how the lifetime
-
- * of a resource is handled.  There are to predefined policies:
+ * of a resource is handled.  There are two predefined policies:
 
  *
  *   o PointerStoragePolicy --- usual pointers with ownership over

@@ -51,6 +51,10 @@ KoJsonTrader::KoJsonTrader()
         d.cd("../../../");
         searchDirs << d;
 #endif
+
+#ifdef Q_OS_ANDROID
+        appDir.cdUp();
+#endif
         searchDirs << appDir;
         // help plugin trader find installed plugins when run from uninstalled tests
 #ifdef CMAKE_INSTALL_PREFIX
@@ -75,6 +79,11 @@ KoJsonTrader::KoJsonTrader()
 #endif
                     QDir libDir(info.absoluteFilePath());
 
+#ifdef Q_OS_ANDROID
+                    libDir.cd("arm");
+                    m_pluginPath = libDir.absolutePath();
+                    break;
+#else
                     // on many systems this will be the actual lib dir (and krita subdir contains plugins)
                     if (libDir.cd("kritaplugins")) {
                         m_pluginPath = libDir.absolutePath();
@@ -95,6 +104,7 @@ KoJsonTrader::KoJsonTrader()
                     if (!m_pluginPath.isEmpty()) {
                         break;
                     }
+#endif
                 }
             }
 
@@ -121,7 +131,12 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
     QDirIterator dirIter(m_pluginPath, QDirIterator::Subdirectories);
     while (dirIter.hasNext()) {
         dirIter.next();
+#ifdef Q_OS_ANDROID
+        // files starting with lib_krita are plugins, it is needed because of the loading rules in NDK
+        if (dirIter.fileInfo().isFile() && dirIter.fileName().startsWith("lib_krita")) {
+#else
         if (dirIter.fileInfo().isFile() && dirIter.fileName().startsWith("krita") && !dirIter.fileName().endsWith(".debug")) {
+#endif
             debugPlugin << dirIter.fileName();
             QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
             QJsonObject json = loader->metaData().value("MetaData").toObject();

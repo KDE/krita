@@ -72,7 +72,6 @@
 #endif
 #include <QLibrary>
 #endif
-
 #if defined HAVE_KCRASH
 #include <kcrash.h>
 #elif defined USE_DRMINGW
@@ -135,9 +134,11 @@ void resetRotation()
 } // namespace
 #endif
 
+#ifdef Q_OS_ANDROID
+__attribute__ ((visibility ("default")))
+#endif
 extern "C" int main(int argc, char **argv)
 {
-
     // The global initialization of the random generator
     qsrand(time(0));
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();

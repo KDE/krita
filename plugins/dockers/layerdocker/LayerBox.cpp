@@ -519,7 +519,9 @@ void LayerBox::updateUI()
 
             m_wdgLayerBox->doubleOpacity->setEnabled(true);
 
-            slotSetOpacity(activeNode->opacity() * 100.0 / 255);
+            if (!m_wdgLayerBox->doubleOpacity->isDragging()) {
+                slotSetOpacity(activeNode->opacity() * 100.0 / 255);
+            }
 
             const KoCompositeOp* compositeOp = activeNode->compositeOp();
             if (compositeOp) {
@@ -736,7 +738,7 @@ void LayerBox::slotOpacityChanged()
 {
     if (!m_canvas) return;
     m_blockOpacityUpdate = true;
-    m_nodeManager->nodeOpacityChanged(m_newOpacity, true);
+    m_nodeManager->nodeOpacityChanged(m_newOpacity);
     m_blockOpacityUpdate = false;
 }
 

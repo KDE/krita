@@ -124,6 +124,12 @@ KisOpenGLModeProber::probeFormat(const QSurfaceFormat &format, bool adjustGlobal
     QScopedPointer<SurfaceFormatSetter> formatSetter;
     QScopedPointer<QApplication> application;
 
+    int argc = 1;
+    QByteArray probeAppName("krita");
+    char *argv = probeAppName.data();
+
+
+
     if (adjustGlobalState) {
         sharedContextSetter.reset(new AppAttributeSetter(Qt::AA_ShareOpenGLContexts, false));
 
@@ -133,10 +139,6 @@ KisOpenGLModeProber::probeFormat(const QSurfaceFormat &format, bool adjustGlobal
         }
 
         formatSetter.reset(new SurfaceFormatSetter(format));
-
-        int argc = 1;
-        QByteArray data("krita");
-        char *argv = data.data();
         application.reset(new QApplication(argc, &argv));
     }
 
@@ -239,6 +241,7 @@ bool KisOpenGLModeProber::isFormatHDR(const QSurfaceFormat &format)
 
     return isBt2020PQ || isBt709G10;
 #else
+    Q_UNUSED(format);
     return false;
 #endif
 }

@@ -60,6 +60,7 @@
 #include <QProxyStyle>
 #include <QScreen>
 #include <QAction>
+#include <QWindow>
 
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -535,6 +536,9 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         menuBar()->setVisible(true);
     }
 
+    this->winId(); // Ensures the native window has been created.
+    QWindow *window = this->windowHandle();
+    connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
 
 }
 
@@ -2633,42 +2637,12 @@ void KisMainWindow::showManual()
     QDesktopServices::openUrl(QUrl("https://docs.krita.org"));
 }
 
-void KisMainWindow::moveEvent(QMoveEvent *e)
+void KisMainWindow::windowScreenChanged(QScreen *screen)
 {
-    /**
-     * For checking if the display number has changed or not we should always use
-     * positional overload, not using QWidget overload. Otherwise we might get
-     * inconsistency, because screenNumber(widget) can return -1, but screenNumber(pos)
-     * will always return the nearest screen.
-     */
-
-    const int oldScreen = qApp->desktop()->screenNumber(e->oldPos());
-    const int newScreen = qApp->desktop()->screenNumber(e->pos());
-
-    if (oldScreen != newScreen) {
-        emit screenChanged();
-    }
-
-    if (d->screenConnectionsStore.isEmpty() || oldScreen != newScreen) {
-
-        d->screenConnectionsStore.clear();
-
-        QScreen *newScreenObject = 0;
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-        newScreenObject = qApp->screenAt(e->pos());
-#else
-        // TODO: i'm not sure if this pointer already has a correct value
-        // by the moment we get the event. It might not work on older
-        // versions of Qt
-        newScreenObject = qApp->primaryScreen();
-#endif
-
-        if (newScreenObject) {
-            d->screenConnectionsStore.addConnection(newScreenObject, SIGNAL(physicalDotsPerInchChanged(qreal)),
-                                                    this, SIGNAL(screenChanged()));
-        }
-    }
+    emit screenChanged();
+    d->screenConnectionsStore.clear();
+    d->screenConnectionsStore.addConnection(screen, SIGNAL(physicalDotsPerInchChanged(qreal)),
+                                            this, SIGNAL(screenChanged()));
 }
 
 

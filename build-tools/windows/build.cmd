@@ -692,6 +692,16 @@ if errorlevel 1 (
 )
 
 echo Running CMake for deps...
+echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
+    -DSUBMAKE_JOBS=%PARALLEL_JOBS% ^
+    -DQT_ENABLE_DEBUG_INFO=%QT_ENABLE_DEBUG_INFO% ^
+    -DQT_ENABLE_DYNAMIC_OPENGL=%QT_ENABLE_DYNAMIC_OPENGL% ^
+    -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_DOWNLOAD_CMAKE% ^
+    -DINSTALL_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
+    -G "MinGW Makefiles" ^
+    -DUSE_QT_TABLET_WINDOWS=ON ^
+    -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
+    
 "%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
     -DSUBMAKE_JOBS=%PARALLEL_JOBS% ^
     -DQT_ENABLE_DEBUG_INFO=%QT_ENABLE_DEBUG_INFO% ^
@@ -699,6 +709,7 @@ echo Running CMake for deps...
     -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_DOWNLOAD_CMAKE% ^
     -DINSTALL_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
     -G "MinGW Makefiles" ^
+    -DUSE_QT_TABLET_WINDOWS=ON ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
 if errorlevel 1 (
     echo ERROR: CMake configure failed! 1>&2
@@ -706,8 +717,8 @@ if errorlevel 1 (
 )
 echo.
 
-set EXT_TARGETS=patch png2ico zlib lzma gettext qt boost eigen3 exiv2 fftw3 ilmbase
-set EXT_TARGETS=%EXT_TARGETS% jpeg lcms2 ocio openexr png tiff gsl vc libraw
+set EXT_TARGETS=patch png2ico zlib lzma gettext openssl qt boost eigen3 exiv2 fftw3
+set EXT_TARGETS=%EXT_TARGETS% ilmbase jpeg lcms2 ocio openexr png tiff gsl vc libraw
 set EXT_TARGETS=%EXT_TARGETS% giflib freetype poppler kwindowsystem drmingw gmic
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
 set EXT_TARGETS=%EXT_TARGETS% quazip
@@ -747,7 +758,7 @@ echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
     -DFOUNDATION_BUILD=ON ^
     -DHAVE_HDR=ON ^
-    -DUSE_QT_TABLET_WINDOWS=OFF ^
+    -DUSE_QT_TABLET_WINDOWS=ON ^
     -Wno-dev ^
     -G "MinGW Makefiles" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
@@ -762,7 +773,7 @@ echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DBUILD_TESTING=OFF ^
     -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
     -DFOUNDATION_BUILD=ON ^
-    -DUSE_QT_TABLET_WINDOWS=OFF ^
+    -DUSE_QT_TABLET_WINDOWS=ON ^
     -DHAVE_HDR=ON ^
     -Wno-dev ^
     -G "MinGW Makefiles" ^

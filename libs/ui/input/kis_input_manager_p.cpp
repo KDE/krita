@@ -333,6 +333,28 @@ KisInputManager::Private::ProximityNotifier::ProximityNotifier(KisInputManager::
 
 bool KisInputManager::Private::ProximityNotifier::eventFilter(QObject* object, QEvent* event )
 {
+    /**
+     * All Qt builds in range 5.7.0...5.11.X on X11 had a problem that made all
+     * the tablet events be accepted by default. It meant that no mouse
+     * events were synthesized, and, therefore, no Enter/Leave were generated.
+     *
+     * The fix for this bug has been added only in Qt 5.12.0:
+     * https://codereview.qt-project.org/#/c/239918/
+     *
+     * To avoid this problem we should explicitly ignore all the tablet events.
+     */
+#if defined Q_OS_LINUX && \
+    QT_VERSION >= QT_VERSION_CHECK(5, 7, 0) && \
+    QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+
+    if (event->type() == QEvent::TabletMove ||
+        event->type() == QEvent::TabletPress ||
+        event->type() == QEvent::TabletRelease) {
+
+        event->ignore();
+    }
+#endif
+
     switch (event->type()) {
     case QEvent::TabletEnterProximity:
         d->debugEvent<QEvent, false>(event);

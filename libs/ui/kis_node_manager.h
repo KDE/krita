@@ -96,7 +96,7 @@ public:
     /**
      * Sets opacity for the node in a universal way (masks/layers)
      */
-    void setNodeOpacity(KisNodeSP node, qint32 opacity, bool finalChange);
+    void setNodeOpacity(KisNodeSP node, qint32 opacity);
 
     /**
      * Sets compositeOp for the node in a universal way (masks/layers)
@@ -177,7 +177,7 @@ public Q_SLOTS:
     void convertNode(const QString &nodeType);
     void nodesUpdated();
     void nodeProperties(KisNodeSP node);
-    void nodeOpacityChanged(qreal opacity, bool finalChange);
+    void nodeOpacityChanged(qreal opacity);
     void nodeCompositeOpChanged(const KoCompositeOp* op);
     void duplicateActiveNode();
     void removeNode();

@@ -350,12 +350,13 @@ int quadraticEquation(qreal a, qreal b, qreal c, qreal *x1, qreal *x2)
     int numSolutions = 0;
 
     const qreal D = pow2(b) - 4 * a * c;
+    const qreal eps = 1e-14;
 
-    if (D < 0) {
-        return 0;
-    } else if (qFuzzyCompare(D, 0)) {
+    if (qAbs(D) <= eps) {
         *x1 = -b / (2 * a);
         numSolutions = 1;
+    } else if (D < 0) {
+        return 0;
     } else {
         const qreal sqrt_D = std::sqrt(D);
 

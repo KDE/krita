@@ -47,6 +47,7 @@
 #include "kis_signal_compressor.h"
 #include "kis_time_range.h"
 #include "kis_color_label_selector_widget.h"
+#include "kis_keyframe_channel.h"
 #include "kis_slider_spin_box.h"
 #include <KisImportExportManager.h>
 #include <kis_signals_blocker.h>
@@ -1419,7 +1420,32 @@ void TimelineFramesView::insertOrRemoveHoldFrames(int count, bool entireColumn)
     }
 
     if (!indexes.isEmpty()) {
+
+        // add extra columns to the end of the timeline if we are adding hold frames
+        // they will be truncated if we don't do this
+        if (count > 0) {
+            // Scan all the layers and find out what layer has the most keyframes
+            // only keep a reference of layer that has the most keyframes
+            int keyframesInLayerNode = 0;
+            Q_FOREACH (const QModelIndex &index, indexes) {
+                KisNodeSP layerNode = m_d->model->nodeAt(index);
+
+                KisKeyframeChannel *channel = layerNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
+                if (!channel) continue;
+
+                if (keyframesInLayerNode < channel->allKeyframeIds().count()) {
+                   keyframesInLayerNode = channel->allKeyframeIds().count();
+                }
+            }
+            m_d->model->setLastVisibleFrame(m_d->model->columnCount() + count*keyframesInLayerNode);
+        }
+
+
         m_d->model->insertHoldFrames(indexes, count);
+
+        // bulk adding frames can add too many
+        // trim timeline to clean up extra frames that might have been added
+        slotUpdateInfiniteFramesCount();
     }
 }
 

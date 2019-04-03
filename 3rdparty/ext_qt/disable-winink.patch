@@ -1,0 +1,18 @@
+diff --git a/src/plugins/platforms/windows/qwindowscontext.cpp b/src/plugins/platforms/windows/qwindowscontext.cpp
+index 41655dbd..f398cefb 100644
+--- a/src/plugins/platforms/windows/qwindowscontext.cpp
++++ b/src/plugins/platforms/windows/qwindowscontext.cpp
+@@ -219,9 +219,10 @@ void QWindowsUser32DLL::init()
+ 
+ bool QWindowsUser32DLL::supportsPointerApi()
+ {
+-    return enableMouseInPointer && getPointerType && getPointerInfo && getPointerDeviceRects
+-            && getPointerTouchInfo && getPointerFrameTouchInfo && getPointerFrameTouchInfoHistory
+-            && getPointerPenInfo && getPointerPenInfoHistory && skipPointerFrameMessages;
++    return false;
++//    return enableMouseInPointer && getPointerType && getPointerInfo && getPointerDeviceRects
++//            && getPointerTouchInfo && getPointerFrameTouchInfo && getPointerFrameTouchInfoHistory
++//            && getPointerPenInfo && getPointerPenInfoHistory && skipPointerFrameMessages;
+ }
+ 
+ void QWindowsShcoreDLL::init()

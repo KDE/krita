@@ -420,6 +420,7 @@ private Q_SLOTS:
     void showManual();
     void switchTab(int index);
 
+    void windowScreenChanged(QScreen *screen);
 
 protected:
 
@@ -431,8 +432,6 @@ protected:
     void dropEvent(QDropEvent * event) override;
     void dragMoveEvent(QDragMoveEvent * event) override;
     void dragLeaveEvent(QDragLeaveEvent * event) override;
-
-    void moveEvent(QMoveEvent *e) override;
 
 
 private:

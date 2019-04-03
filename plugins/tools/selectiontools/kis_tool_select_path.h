@@ -33,7 +33,7 @@ class KisToolSelectPath;
 
 class __KisToolSelectPathLocalTool : public KoCreatePathTool {
 public:
-    __KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool);
+    __KisToolSelectPathLocalTool(KoCanvasBase *canvas, KisToolSelectPath *parentTool);
     void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter) override;
     void addPathShape(KoPathShape* pathShape) override;
 
@@ -53,9 +53,10 @@ DeselectShapesActivationPolicy> DelegatedSelectPathTool;
 struct KisDelegatedSelectPathWrapper : public DelegatedSelectPathTool {
     KisDelegatedSelectPathWrapper(KoCanvasBase *canvas,
                                   const QCursor &cursor,
-                                  KisTool* delegateTool)
-        : DelegatedSelectPathTool(canvas, cursor, (__KisToolSelectPathLocalTool*) delegateTool)
+                                  KoToolBase *delegateTool)
+        : DelegatedSelectPathTool(canvas, cursor, dynamic_cast<__KisToolSelectPathLocalTool*>(delegateTool))
     {
+        Q_ASSERT(dynamic_cast<__KisToolSelectPathLocalTool*>(delegateTool));
     }
 
     // If an event is explicitly forwarded only as an action (e.g. shift-click is captured by "change size")

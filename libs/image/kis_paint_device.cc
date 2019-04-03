@@ -161,13 +161,13 @@ public:
             if (m_data) {
                 m_data->prepareClone(rhs->currentNonLodData(), true);
             } else {
-                m_data = toQShared(new KisPaintDeviceData(rhs->currentNonLodData(), true));
+                m_data = toQShared(new KisPaintDeviceData(q, rhs->currentNonLodData(), true));
             }
         } else {
             if (m_data && !rhs->m_data) {
                 m_data.clear();
             } else if (!m_data && rhs->m_data) {
-                m_data = toQShared(new KisPaintDeviceData(rhs->m_data.data(), true));
+                m_data = toQShared(new KisPaintDeviceData(q, rhs->m_data.data(), true));
             } else if (m_data && rhs->m_data) {
                 m_data->prepareClone(rhs->m_data.data(), true);
             }
@@ -177,7 +177,7 @@ public:
                 FramesHash::const_iterator end = rhs->m_frames.constEnd();
 
                 for (; it != end; ++it) {
-                    DataSP data = toQShared(new KisPaintDeviceData(it.value().data(), true));
+                    DataSP data = toQShared(new KisPaintDeviceData(q, it.value().data(), true));
                     m_frames.insert(it.key(), data);
                 }
             }
@@ -185,7 +185,7 @@ public:
         }
 
         if (rhs->m_lodData) {
-            m_lodData.reset(new KisPaintDeviceData(rhs->m_lodData.data(), true));
+            m_lodData.reset(new KisPaintDeviceData(q, rhs->m_lodData.data(), true));
         }
     }
 
@@ -292,17 +292,17 @@ public:
              * new frame and clear m_data to make the "background" for
              * the areas where there is no frame at all.
              */
-            data = toQShared(new Data(m_data.data(), true));
+            data = toQShared(new Data(q, m_data.data(), true));
             m_data->dataManager()->clear();
             m_data->cache()->invalidate();
             initialFrame = true;
 
         } else if (copy) {
             DataSP srcData = m_frames[copySrc];
-            data = toQShared(new Data(srcData.data(), true));
+            data = toQShared(new Data(q, srcData.data(), true));
         } else {
             DataSP srcData = m_frames.begin().value();
-            data = toQShared(new Data(srcData.data(), false));
+            data = toQShared(new Data(q, srcData.data(), false));
         }
 
         if (!initialFrame && !copy) {
@@ -487,7 +487,7 @@ private:
             if (!m_externalFrameData) {
                 QMutexLocker l(&m_dataSwitchLock);
                 if (!m_externalFrameData) {
-                    m_externalFrameData.reset(new Data(m_data.data(), false));
+                    m_externalFrameData.reset(new Data(q, m_data.data(), false));
                 }
             }
             data = m_externalFrameData.data();
@@ -503,7 +503,7 @@ private:
 
             QMutexLocker l(&m_dataSwitchLock);
             if (!m_lodData) {
-                m_lodData.reset(new Data(srcData, false));
+                m_lodData.reset(new Data(q, srcData, false));
             }
         }
     }
@@ -660,7 +660,7 @@ KisPaintDevice::LodDataStruct* KisPaintDevice::Private::createLodDataStruct(int 
 
     Data *srcData = currentNonLodData();
 
-    Data *lodData = new Data(srcData, false);
+    Data *lodData = new Data(q, srcData, false);
     LodDataStruct *lodStruct = new LodDataStructImpl(lodData);
 
     int expectedX = KisLodTransform::coordToLodCoord(srcData->x(), newLod);
@@ -871,7 +871,7 @@ void KisPaintDevice::Private::uploadFrameData(DataSP srcData, DataSP dstData)
 
         KUndo2Command tempCommand;
 
-        srcData = toQShared(new Data(srcData.data(), true));
+        srcData = toQShared(new Data(q, srcData.data(), true));
         srcData->convertDataColorSpace(dstData->colorSpace(),
                                        KoColorConversionTransformation::internalRenderingIntent(),
                                        KoColorConversionTransformation::internalConversionFlags(),

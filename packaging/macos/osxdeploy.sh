@@ -46,9 +46,6 @@
 #     unmount
 #     Compress resulting dmg into krita_nightly-<gitsha>.dmg
 #     deletes temporary files.
-    
-
-DMG_title="krita" #if changed krita.temp.dmg must be deleted manually
 
 if test -z ${BUILDROOT}; then
     echo "ERROR: BUILDROOT env not set!"
@@ -57,12 +54,16 @@ if test -z ${BUILDROOT}; then
     exit
 fi
 
+DMG_title="krita" #if changed krita.temp.dmg must be deleted manually
+
 # There is some duplication between build and deploy scripts
 # a config env file could would be a nice idea.
 KIS_INSTALL_DIR=${BUILDROOT}/i
 KIS_BUILD_DIR=${BUILDROOT}/kisbuild # only used for getting git sha number
 KRITA_DMG=${BUILDROOT}/kritadmg
 KRITA_DMG_TEMPLATE=${BUILDROOT}/kritadmg-template
+
+export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 
 # flags for OSX environment
 # We only support from 10.11 up
@@ -76,6 +77,18 @@ print_usage () {
     \t image recomended size is at least 950x500\n"
 }
 
+# Attempt to detach previous mouted DMG
+if [[ -d "/Volumes/${DMG_title}" ]]; then
+    echo "WARNING: Another Krita DMG is mounted!"
+    echo "Attempting eject…"
+    hdiutil detach "/Volumes/${DMG_title}"
+    if [ $? -ne 0  ]; then
+        exit
+    fi
+    echo "Success!"
+fi
+
+# Parse input args
 if test ${#} -eq 0; then
     echo "ERROR: no option given"
     print_usage
@@ -90,7 +103,7 @@ for arg in "${@}"; do
 
         if [[ "png" = ${BG_FORMAT} || "jpeg" = ${BG_FORMAT} ]];then
             echo "valid image file"
-            DMG_background=${arg}
+            DMG_background=$(cd "$(dirname "${arg}")"; pwd -P)/$(basename "${arg}")
             DMG_validBG=1
         fi
     fi
@@ -139,20 +152,30 @@ add_lib_to_list() {
 # Add to libs_used
 # converts absolute buildroot path to @rpath
 find_needed_libs () {
-    echo "Analizing libraries with oTool..." >&2
+    # echo "Analizing libraries with oTool..." >&2
     local libs_used="" # input lib_lists founded
-    for libFile in $(find ${KRITA_DMG}/krita.app/Contents -name "*.so" -or -name "*.dylib"); do
+
+    for libFile in ${@}; do
+        if test -z "$(file ${libFile} | grep 'Mach-O')" ; then
+            # echo "skipping ${libFile}" >&2
+            continue
+        fi
+
         oToolResult=$(otool -L ${libFile} | awk '{print $1}')
         resultArray=(${oToolResult}) # convert to array
-        echo "${libFile##*Contents/}" >&2
+
         for lib in ${resultArray[@]:1}; do
             if test "${lib:0:1}" = "@"; then
                 local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
             fi
-            if test "${lib:0:${#BUILDROOT}}" = "${BUILDROOT}"; then
-                install_name_tool -id ${lib##*/} "${libFile}"
-                install_name_tool -change ${lib} "@rpath/${lib##*/}" "${libFile}"
-                local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
+            if [[ "${lib:0:${#BUILDROOT}}" = "${BUILDROOT}" ]]; then
+                printf "Fixing %s: %s\n" "${libFile#${KRITA_DMG}/}" "${lib##*/}" >&2
+                if [[ "${lib##*/}" = "${libFile##*/}" ]]; then
+                    install_name_tool -id ${lib##*/} "${libFile}"
+                else
+                    install_name_tool -change ${lib} "@rpath/${lib##*${BUILDROOT}/i/lib/}" "${libFile}"
+                    local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
+                fi
             fi
         done
     done
@@ -160,11 +183,11 @@ find_needed_libs () {
 }
 
 find_missing_libs (){
-    echo "Searching for missing libs on deployment folders…" >&2
+    # echo "Searching for missing libs on deployment folders…" >&2
     local libs_missing=""
     for lib in ${@}; do
         if test -z "$(find ${KRITA_DMG}/krita.app/Contents/ -name ${lib})"; then
-            echo "Adding ${lib} to missing libraries." >&2
+            # echo "Adding ${lib} to missing libraries." >&2
             libs_missing="${libs_missing} ${lib}"
         fi
     done
@@ -176,42 +199,35 @@ copy_missing_libs () {
         result=$(find "${BUILDROOT}/i" -name "${lib}")
 
         if test $(countArgs ${result}) -eq 1; then
-            echo ${result}
             if [ "$(stringContains "${result}" "plugin")" ]; then
-                echo "copying ${lib} to plugins dir"
                 cp -pv ${result} ${KRITA_DMG}/krita.app/Contents/PlugIns/
+                krita_findmissinglibs "${KRITA_DMG}/krita.app/Contents/PlugIns/${result##*/}"
             else
-                echo "copying ${lib} to Frameworks dir"
                 cp -pv ${result} ${KRITA_DMG}/krita.app/Contents/Frameworks/
+                krita_findmissinglibs "${KRITA_DMG}/krita.app/Contents/Frameworks/${result##*/}"
             fi
         else
             echo "${lib} might be a missing framework"
             if [ "$(stringContains "${result}" "framework")" ]; then
                 echo "copying framework ${BUILDROOT}/i/lib/${lib}.framework to dmg"
-                # TODO rsync only included ${lib} Resources Versions
+                # rsync only included ${lib} Resources Versions
                 rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/${lib} ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
                 rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/Resources ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
                 rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/Versions ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
+                krita_findmissinglibs "$(find "${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/" -perm u+x)"
             fi
         fi
     done
 }
 
 krita_findmissinglibs() {
-    echo "Starting search for missing libraries"
-    neededLibs=$(find_needed_libs)
-    echo "\nDone!"
+    neededLibs=$(find_needed_libs "${@}")
     missingLibs=$(find_missing_libs ${neededLibs})
 
     if test $(countArgs ${missingLibs}) -gt 0; then
-        echo "Found missing libs!"
-        echo "${missingLibs}\n"
+        printf "Found missing libs: %s\n" "${missingLibs}"
         copy_missing_libs ${missingLibs}
-    else
-        echo "No missing libraries found."
     fi
-
-    echo "Done!"
 }
 
 
@@ -281,7 +297,7 @@ krita_deploy () {
     cd ${BUILDROOT}
     rsync -prul ${KIS_INSTALL_DIR}/lib/kritaplugins/ ${KRITA_DMG}/krita.app/Contents/PlugIns
     
-    # rsync -prul /Volumes/Osiris/programs/krita-master/i/lib/libkrita* Frameworks/
+    # rsync -prul {KIS_INSTALL_DIR}/lib/libkrita* Frameworks/
 
     # activate for python enabled Krita
     # echo "Copying python..."
@@ -315,15 +331,17 @@ krita_deploy () {
     rm -rf ${KRITA_DMG}/krita.app/Contents/PlugIns/kf5/org.kde.kwindowsystem.platforms
 
     # repair krita for plugins
-    krita_findmissinglibs
+    printf "Searching for missing libraries\n"
+    krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -name "*.dylib" -or -name "*.so" -or -perm u+x)
+    echo "Done!"
 }
 
+# helper to define function only once
+batch_codesign() {
+    xargs -P4 -I FILE codesign -f -s "${CODE_SIGNATURE}" FILE
+}
 # Code sign must be done as recommended by apple "sign code inside out in individual stages"
 signBundle() {
-    # helper to define function only once
-    batch_codesign() {
-        xargs -P4 -I FILE codesign -f -s "${CODE_SIGNATURE}" FILE
-    }
     cd ${KRITA_DMG}
 
     # sign Frameworks and libs
@@ -340,14 +358,14 @@ signBundle() {
 
     # Sing only libraries and plugins
     cd ${KRITA_DMG}/krita.app/Contents/PlugIns
-    find . -type f -name "*.dylib" -or -name "*.so" | batch_codesign
+    find . -type f | batch_codesign
 
     cd ${KRITA_DMG}/krita.app/Contents/Library/QuickLook
     printf "kritaquicklook.qlgenerator" | batch_codesign
 
+    # It is recommended to sign every Resource file
     cd ${KRITA_DMG}/krita.app/Contents/Resources
-    find . -type f -name "*.dylib" -or -name "*.so" | batch_codesign
-
+    find . -type f | batch_codesign
 
     #Finally sign krita and krita.app
     printf "${KRITA_DMG}/krita.app/Contents/MacOS/krita" | batch_codesign
@@ -355,7 +373,7 @@ signBundle() {
 }
 
 createDMG () {
-    echo "Starting creation of dmg..."
+    printf "Creating of dmg with contents of %s...\n" "${KRITA_DMG}"
     cd ${BUILDROOT}
     DMG_size=500
 
@@ -365,10 +383,10 @@ createDMG () {
     # usage of -fsargs minimze gaps at front of filesystem (reduce size)
     hdiutil create -srcfolder "${KRITA_DMG}" -volname "${DMG_title}" -fs HFS+ \
         -fsargs "-c c=64,a=16,e=16" -format UDRW -size ${DMG_size}m krita.temp.dmg
+
     # Next line is only useful if we have a dmg as a template!
     # previous hdiutil must be uncommented
     # cp krita-template.dmg krita.dmg
-
     device=$(hdiutil attach -readwrite -noverify -noautoopen "krita.temp.dmg" | egrep '^/dev/' | sed 1q | awk '{print $1}')
 
     # rsync -priul --delete ${KRITA_DMG}/krita.app "/Volumes/${DMG_title}"
@@ -377,31 +395,30 @@ createDMG () {
     if [[ ! -d "/Volumes/${DMG_title}/.background" ]]; then
         mkdir "/Volumes/${DMG_title}/.background"
     fi
-    cp ${BUILDROOT}/${DMG_background} "/Volumes/${DMG_title}/.background/"
+    cp ${DMG_background} "/Volumes/${DMG_title}/.background/"
 
     ## Apple script to set style
-    echo '
-        tell application "Finder"
-            tell disk "'${DMG_title}'"
-                open
-                set current view of container window to icon view
-                set toolbar visible of container window to false
-                set statusbar visible of container window to false
-                set the bounds of container window to {186, 156, 956, 592}
-                set theViewOptions to the icon view options of container window
-                set arrangement of theViewOptions to not arranged
-                set icon size of theViewOptions to 80
-                set background picture of theViewOptions to file ".background:'${DMG_background}'"
-                set position of item "'krita.app'" of container window to {279, 272}
-                set position of item "Applications" of container window to {597, 272}
-                set position of item "Terms of Use" of container window to {597, 110}
-                update without registering applications
-                delay 1
-                close
-            end tell
-        end tell
-        ' | osascript
-
+    printf '
+tell application "Finder"
+    tell disk "%s"
+        open
+        set current view of container window to icon view
+        set toolbar visible of container window to false
+        set statusbar visible of container window to false
+        set the bounds of container window to {291, 95, 1097, 558}
+        set theViewOptions to the icon view options of container window
+        set arrangement of theViewOptions to not arranged
+        set icon size of theViewOptions to 80
+        set background picture of theViewOptions to file ".background:%s"
+        set position of item "krita.app" of container window to {172, 70}
+        set position of item "Applications" of container window to {167, 189}
+        set position of item "Terms of Use" of container window to {166, 314}
+        update without registering applications
+        delay 1
+        close
+    end tell
+end tell
+        ' "${DMG_title}" "${DMG_background##*/}" | osascript
     
     chmod -Rf go-w "/Volumes/${DMG_title}"
 
@@ -421,10 +438,13 @@ createDMG () {
     echo "dmg done!"
 }
 
+#######################
+# Program starts!!
+########################
 # Run deploy command, instalation is assumed to exist in BUILDROOT/i
 krita_deploy
 
-# Code sign krita.app
+# Code sign krita.app if signature given
 if [[ -n "${CODE_SIGNATURE}" ]]; then
     signBundle
 fi

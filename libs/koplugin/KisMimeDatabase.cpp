@@ -276,6 +276,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.description = i18nc("description of a file type", "Krita Gamut Mask");
         mimeType.suffixes = QStringList() << "kgm";
         s_mimeDatabase << mimeType;
+        
+        mimeType.mimeType = "application/x-krita-shortcuts";
+        mimeType.description = i18nc("description of a file type", "Krita Shortcut Scheme");
+        mimeType.suffixes = QStringList() << "shortcuts";
+        s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "image/x-krita-raw";
         mimeType.description = i18nc("description of a file type", "Camera Raw Files");

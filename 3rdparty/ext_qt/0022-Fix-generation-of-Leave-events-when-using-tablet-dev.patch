@@ -1,0 +1,40 @@
+From 0749bda24a02db33812978e167ffac356f74526b Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sat, 30 Mar 2019 23:14:07 +0300
+Subject: [PATCH 22/22] Fix generation of Leave events when using tablet
+ devices
+
+When both mouse and tablet events are handled by QWindowsPointerHandler,
+m_currentWindow variable is shared among the two event streams, therefore
+each stream should ensure it does euqivalent operations, when changing it.
+
+Here we should subscribe to the Leave events, when we emit Enter event
+from the inside of the tablet events flow. Without whis subscription,
+the cursor may stuck into "resize" state when crossing the window's
+frame multiple times.
+
+Change-Id: I88df4a42ae86243e10ecd4a4cedf87639c96d169
+---
+ src/plugins/platforms/windows/qwindowspointerhandler.cpp | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/plugins/platforms/windows/qwindowspointerhandler.cpp b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
+index f37bec935c..190fb208d9 100644
+--- a/src/plugins/platforms/windows/qwindowspointerhandler.cpp
++++ b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
+@@ -597,7 +597,12 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
+         if (m_needsEnterOnPointerUpdate) {
+             m_needsEnterOnPointerUpdate = false;
+             if (window != m_currentWindow) {
++
++                // make sure we subscribe to leave events for this window
++                trackLeave(hwnd);
++
+                 QWindowSystemInterface::handleEnterEvent(window, localPos, globalPos);
++
+                 m_currentWindow = window;
+                 if (QWindowsWindow *wumPlatformWindow = QWindowsWindow::windowsWindowOf(target))
+                     wumPlatformWindow->applyCursor();
+-- 
+2.20.1.windows.1
+

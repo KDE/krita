@@ -216,8 +216,15 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         KisMergeWalker::JobItem item = leafStack.pop();
         KisProjectionLeafSP currentLeaf = item.m_leaf;
 
+        /**
+         * In some unidentified cases teh nodes might be removed
+         * while the updates are still running. We have no proof
+         * of it yet, so just add a safety assert here.
+         */
+        KIS_SAFE_ASSERT_RECOVER_RETURN(currentLeaf);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(currentLeaf->node());
+
         // All the masks should be filtered by the walkers
-        Q_ASSERT(currentLeaf);
         KIS_SAFE_ASSERT_RECOVER_RETURN(currentLeaf->isLayer());
 
         QRect applyRect = item.m_applyRect;

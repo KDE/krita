@@ -139,6 +139,13 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
             SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
              this, SLOT(changePage(QListWidgetItem*,QListWidgetItem*)));
 
+    // improve the checkbox visibility by altering the style sheet list a bit
+    // the dark themes make them hard to see
+    QPalette newPalette = palette();
+    newPalette.setColor(QPalette::Active, QPalette::Background, palette().text().color().darker(240) );
+    wdgLayerStyles.lstStyleSelector->setPalette(newPalette);
+
+
     notifyPredefinedStyleSelected(layerStyle);
 
     connect(m_dropShadow, SIGNAL(globalAngleChanged(int)), SLOT(syncGlobalAngle(int)));

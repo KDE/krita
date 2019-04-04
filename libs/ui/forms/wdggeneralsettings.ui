@@ -707,6 +707,13 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="chkSaveSessionOnQuit">
+         <property name="text">
+          <string>Save session when Krita closes</string>
+         </property>
+        </widget>
+       </item>
        <item row="3" column="1">
         <widget class="QCheckBox" name="m_chkConvertOnImport">
          <property name="text">
@@ -721,6 +728,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Only applies to new or newly opened images.</string>
          </property>
          <property name="text">
           <string>Undo stack size:</string>
@@ -743,6 +753,9 @@
            <width>75</width>
            <height>0</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Only applies to new or newly opened images.</string>
          </property>
          <property name="minimum">
           <number>0</number>
@@ -878,13 +891,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="2" column="1">
-        <widget class="QCheckBox" name="chkSaveSessionOnQuit">
-         <property name="text">
-          <string>Save session when Krita closes</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>

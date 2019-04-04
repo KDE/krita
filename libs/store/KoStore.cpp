@@ -395,6 +395,11 @@ bool KoStore::hasFile(const QString& fileName) const
     return fileExists(d->toExternalNaming(fileName));
 }
 
+bool KoStore::hasDirectory(const QString &directoryName)
+{
+    return enterAbsoluteDirectory(directoryName);
+}
+
 bool KoStore::finalize()
 {
     Q_D(KoStore);

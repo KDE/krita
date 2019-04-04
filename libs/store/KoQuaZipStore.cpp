@@ -121,7 +121,6 @@ qint64 KoQuaZipStore::write(const char *_data, qint64 _len)
 
 QStringList KoQuaZipStore::directoryList() const
 {
-    debugStore << dd->archive->getFileNameList();
     return dd->archive->getFileNameList();
 }
 
@@ -261,13 +260,11 @@ bool KoQuaZipStore::closeRead()
 
 bool KoQuaZipStore::enterRelativeDirectory(const QString &path)
 {
-    debugStore << "enterRelativeDirectory()" << path;
     return true;
 }
 
 bool KoQuaZipStore::enterAbsoluteDirectory(const QString &path)
 {
-
     QString fixedPath = path;
     fixedPath.replace("//", "/");
 
@@ -276,6 +273,7 @@ bool KoQuaZipStore::enterAbsoluteDirectory(const QString &path)
     }
 
     QuaZipDir currentDir (dd->archive, fixedPath);
+
     return currentDir.exists();
 }
 
@@ -289,7 +287,6 @@ bool KoQuaZipStore::fileExists(const QString &absPath) const
     if (!d->substituteThis.isEmpty()) {
         fixedPath = fixedPath.replace(d->substituteThis, d->substituteWith);
     }
-
 
     return dd->archive->getFileNameList().contains(fixedPath);
 }

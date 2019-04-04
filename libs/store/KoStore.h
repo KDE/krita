@@ -166,7 +166,7 @@ public:
      * opening a stream.
      * Note: Operates on internal names
      */
-    bool enterDirectory(const QString &directory);
+    virtual bool enterDirectory(const QString &directory);
 
     /**
      * Leaves a directory. Equivalent to "cd .."
@@ -198,6 +198,11 @@ public:
      * i.e. if open(fileName) will work.
      */
     bool hasFile(const QString &fileName) const;
+
+    /**
+     *@return true if the given directory exists in the archive
+     */
+    bool hasDirectory(const QString &directoryName);
 
     /**
      * Extracts a file out of the store to a buffer
@@ -303,6 +308,7 @@ protected:
      * The directory might not exist yet in Write mode.
      */
     virtual bool enterRelativeDirectory(const QString &dirName) = 0;
+
     /**
      * Enter a directory where we've been before.
      * It is guaranteed to always exist.

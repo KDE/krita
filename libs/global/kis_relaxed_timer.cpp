@@ -17,6 +17,7 @@
  */
 
 #include "kis_relaxed_timer.h"
+#include "kis_assert.h"
 
 KisRelaxedTimer::KisRelaxedTimer(QObject *parent)
     : QObject(parent)
@@ -30,7 +31,10 @@ KisRelaxedTimer::KisRelaxedTimer(QObject *parent)
 
 void KisRelaxedTimer::setInterval(int interval)
 {
-    Q_ASSERT(!isActive());
+    KIS_SAFE_ASSERT_RECOVER(!isActive()) {
+        this->stop();
+    }
+
     m_interval = interval;
 }
 

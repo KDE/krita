@@ -446,6 +446,18 @@ if(MINGW)
     string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
 endif(MINGW)
 
+if(MINGW)
+    # Hack CMake's variables to tell AR to create thin archives to reduce unnecessary writes.
+    # Source of definition: https://github.com/Kitware/CMake/blob/v3.14.1/Modules/Platform/Windows-GNU.cmake#L128
+    # Thin archives: https://sourceware.org/binutils/docs/binutils/ar.html#index-thin-archives
+    macro(mingw_use_thin_archive lang)
+        foreach(rule CREATE_SHARED_MODULE CREATE_SHARED_LIBRARY LINK_EXECUTABLE)
+            string(REGEX REPLACE "(<CMAKE_AR> [^ T]+) " "\\1T " CMAKE_${lang}_${rule} "${CMAKE_${lang}_${rule}}")
+        endforeach()
+    endmacro()
+    mingw_use_thin_archive(CXX)
+endif(MINGW)
+
 # enable exceptions globally
 kde_enable_exceptions()
 

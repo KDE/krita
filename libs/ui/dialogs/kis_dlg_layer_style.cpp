@@ -603,6 +603,7 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
 
     ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(i18n(" px"));
+    ui.intSize->setExponentRatio(2.0);
 
     ui.intSoften->setRange(0, 18);
     ui.intSoften->setSuffix(i18n(" px"));
@@ -821,6 +822,7 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
 
     ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(i18n(" px"));
+    ui.intSize->setExponentRatio(2.0);
 
     ui.intNoise->setRange(0, 100);
     ui.intNoise->setSuffix(i18n(" %"));
@@ -1024,6 +1026,7 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
 
     ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(i18n(" px"));
+    ui.intSize->setExponentRatio(2.0);
 
     ui.intRange->setRange(1, 100);
     ui.intRange->setSuffix(i18n(" %"));
@@ -1192,6 +1195,7 @@ Satin::Satin(QWidget *parent)
 
     ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(i18n(" px"));
+    ui.intSize->setExponentRatio(2.0);
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.bnColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
@@ -1257,6 +1261,7 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
 
     ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(i18n(" px"));
+    ui.intSize->setExponentRatio(2.0);
 
     ui.intOpacity->setRange(0, 100);
     ui.intOpacity->setSuffix(i18n(" %"));

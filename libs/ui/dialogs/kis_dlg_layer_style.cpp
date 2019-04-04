@@ -142,7 +142,7 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     // improve the checkbox visibility by altering the style sheet list a bit
     // the dark themes make them hard to see
     QPalette newPalette = palette();
-    newPalette.setColor(QPalette::Active, QPalette::Background, palette().text().color().darker(240) );
+    newPalette.setColor(QPalette::Active, QPalette::Background, palette().text().color() );
     wdgLayerStyles.lstStyleSelector->setPalette(newPalette);
 
 

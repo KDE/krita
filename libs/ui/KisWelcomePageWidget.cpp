@@ -41,7 +41,6 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
-
     recentDocumentsListView->setDragEnabled(false);
     recentDocumentsListView->viewport()->setAutoFillBackground(false);
     recentDocumentsListView->setSpacing(2);
@@ -109,7 +108,6 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         if ( mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() != "") {
             newFileLinkShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() + QString(")"));
         }
-
         if (mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString()  != "") {
             openFileShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString() + QString(")"));
         }
@@ -212,17 +210,25 @@ void KisWelcomePageWidget::populateRecentDocuments()
         else {
             if (QFileInfo(recentFileUrlPath).exists()) {
                 if (recentFileUrlPath.toLower().endsWith("ora") || recentFileUrlPath.toLower().endsWith("kra")) {
+
                     QScopedPointer<KoStore> store(KoStore::createStore(recentFileUrlPath, KoStore::Read));
                     if (store) {
-                        if (store->open(QString("Thumbnails/thumbnail.png"))
-                                || store->open(QString("preview.png"))) {
+                        QString thumbnailpath;
+                        if (store->hasFile(QString("Thumbnails/thumbnail.png"))){
+                            thumbnailpath = QString("Thumbnails/thumbnail.png");
+                        } else if (store->hasFile(QString("preview.png"))) {
+                            thumbnailpath = QString("preview.png");
+                        }
+                        if (!thumbnailpath.isEmpty()) {
+                            if (store->open(thumbnailpath)) {
 
-                            QByteArray bytes = store->read(store->size());
-                            store->close();
-                            QImage img;
-                            img.loadFromData(bytes);
-                            img.setDevicePixelRatio(devicePixelRatioF());
-                            recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
+                                QByteArray bytes = store->read(store->size());
+                                store->close();
+                                QImage img;
+                                img.loadFromData(bytes);
+                                img.setDevicePixelRatio(devicePixelRatioF());
+                                recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
+                            }
                         }
                     }
                 }

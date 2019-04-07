@@ -60,7 +60,7 @@ void KisMirrorManager::setView(QPointer<KisView> imageView)
 {
     if (m_imageView) {
         m_mirrorCanvas->disconnect();
-        m_imageView->document()->disconnect();
+        m_imageView->document()->disconnect(this);
 
         KisMirrorAxisSP canvasDecoration = this->decoration();
         if (canvasDecoration) {

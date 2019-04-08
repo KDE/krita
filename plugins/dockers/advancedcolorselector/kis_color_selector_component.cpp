@@ -136,7 +136,7 @@ bool KisColorSelectorComponent::containsPointInComponentCoords(int x, int y) con
         return false;
 }
 
-bool KisColorSelectorComponent::allowsColorSelectionAtPoint(const QPoint &pt) const
+bool KisColorSelectorComponent::allowsColorSelectionAtPoint(const QPoint & /*pt*/) const
 {
     return true;
 }

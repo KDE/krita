@@ -564,7 +564,7 @@ KisPaintDeviceSP prepareUniformPaintDevice(int pixelsNumber, bool horizontal)
     return dev;
 }
 
-void prepareUniformPixels(quint8 r[], quint8 a[], int pixelsNumber, bool horizontal)
+void prepareUniformPixels(quint8 r[], quint8 a[], int pixelsNumber, bool /*horizontal*/)
 {
     for (int i = 0; i < pixelsNumber; i++) {
 

@@ -59,6 +59,8 @@ KisGLImageWidget::KisGLImageWidget(KisSurfaceColorSpace colorSpace,
     : QOpenGLWidget(parent),
       m_texture(QOpenGLTexture::Target2D)
 {
+    Q_UNUSED(colorSpace)
+
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     setTextureFormat(GL_RGBA16F);
 #endif
@@ -183,9 +185,9 @@ void KisGLImageWidget::updateVerticesBuffer(const QRect &rect)
 
 void KisGLImageWidget::paintGL()
 {
-    const QColor bgColor = palette().background().color();
     // TODO: fix conversion to the destination surface space
-    //glClearColor(bgColor.redF(), bgColor.greenF(), bgColor.blueF(), 1.0f);
+    // Fill with bright color as as default for debugging purposes
+    // glClearColor(bgColor.redF(), bgColor.greenF(), bgColor.blueF(), 1.0f);
     glClearColor(0.3, 0.2, 0.8, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 

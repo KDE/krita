@@ -100,6 +100,7 @@ struct KisNodeManager::Private {
         , nodeSelectionAdapter(new KisNodeSelectionAdapter(q))
         , nodeInsertionAdapter(new KisNodeInsertionAdapter(q))
         , nodeDisplayModeAdapter(new KisNodeDisplayModeAdapter())
+        , lastRequestedIsolatedModeStatus(false)
     {
     }
 
@@ -124,6 +125,8 @@ struct KisNodeManager::Private {
 
     QSignalMapper nodeCreationSignalMapper;
     QSignalMapper nodeConversionSignalMapper;
+
+    bool lastRequestedIsolatedModeStatus;
 
     void saveDeviceAsImage(KisPaintDeviceSP device,
                            const QString &defaultName,
@@ -221,7 +224,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
         KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->imageView->document()->shapeController());
         Q_ASSERT(shapeController);
         connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
-        connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()),this, SLOT(slotUpdateIsolateModeAction()));
+        connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()),this, SLOT(slotUpdateIsolateModeActionImageStatusChange()));
         connect(m_d->imageView->image(), SIGNAL(sigRequestNodeReselection(KisNodeSP,KisNodeList)),this, SLOT(slotImageRequestNodeReselection(KisNodeSP,KisNodeList)));
         m_d->imageView->resourceProvider()->slotNodeActivated(m_d->imageView->currentNode());
     }
@@ -498,6 +501,20 @@ void KisNodeManager::toggleIsolateMode(bool checked)
     } else {
         image->stopIsolatedMode();
     }
+
+    m_d->lastRequestedIsolatedModeStatus = checked;
+}
+
+void KisNodeManager::slotUpdateIsolateModeActionImageStatusChange()
+{
+    slotUpdateIsolateModeAction();
+
+    KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
+    if (this->activeNode() &&
+        bool(isolatedRootNode) != m_d->lastRequestedIsolatedModeStatus) {
+
+        slotTryRestartIsolatedMode();
+    }
 }
 
 void KisNodeManager::slotUpdateIsolateModeAction()
@@ -514,7 +531,7 @@ void KisNodeManager::slotUpdateIsolateModeAction()
 void KisNodeManager::slotTryRestartIsolatedMode()
 {
     KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
-    if (!isolatedRootNode) return;
+    if (!isolatedRootNode && !m_d->lastRequestedIsolatedModeStatus) return;
 
     this->toggleIsolateMode(true);
 }

@@ -63,7 +63,7 @@ void KisStopGradientSliderWidget::updateHandleSize()
 int KisStopGradientSliderWidget::handleClickTolerance() const
 {
     // the size of the default text!
-    return m_handleSize.height();
+    return m_handleSize.width();
 }
 
 void KisStopGradientSliderWidget::setGradientResource(KoStopGradientSP gradient)

@@ -36,7 +36,7 @@ KisCategorizedListView::KisCategorizedListView(QWidget* parent):
     // Because this widget has a darker background, the checkbox borders get hidden with default palette
     // This palette update makes the checkboxes easier to see by starting with the text color
     QPalette newPall = palette();
-    newPall.setColor(QPalette::Active, QPalette::Background, palette().text().color().darker(240) );
+    newPall.setColor(QPalette::Active, QPalette::Background, palette().text().color() );
     setPalette(newPall);
 
     {

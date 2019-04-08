@@ -216,7 +216,7 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
         KisFilterWeightsApplicator::LinePos dstPos;
         KisFilterWeightsApplicator::LinePos srcPos(srcStart, srcLen);
 
-        dstPos = applicator.processLine<T>(srcPos, i, &buf, filterStrategy->support());
+        dstPos = applicator.processLine<T>(srcPos, i, &buf, filterStrategy->support(buf.weightsPositionScale().toFloat()));
         dstBounds.unite(dstPos);
 
         progressHelper.step();

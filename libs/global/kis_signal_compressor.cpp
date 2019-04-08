@@ -66,7 +66,17 @@ KisSignalCompressor::KisSignalCompressor(int delay, Mode mode, QObject *parent)
 
 void KisSignalCompressor::setDelay(int delay)
 {
+    const bool wasActive = m_timer->isActive();
+
+    if (wasActive) {
+        m_timer->stop();
+    }
+
     m_timer->setInterval(delay);
+
+    if (wasActive) {
+        m_timer->start();
+    }
 }
 
 void KisSignalCompressor::start()

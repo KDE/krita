@@ -1034,22 +1034,27 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs, KritaUtils::DeviceCopy
     , m_d(new Private(this))
 {
     if (this != &rhs) {
-        // temporary def. bounds object for the initialization phase only
-        m_d->defaultBounds = m_d->transitionalDefaultBounds;
-
-        // copy data objects with or without frames
-        m_d->cloneAllDataObjects(rhs.m_d, copyMode == KritaUtils::CopyAllFrames);
-
-        if (copyMode == KritaUtils::CopyAllFrames && rhs.m_d->framesInterface) {
-            KIS_ASSERT_RECOVER_RETURN(rhs.m_d->framesInterface);
-            KIS_ASSERT_RECOVER_RETURN(rhs.m_d->contentChannel);
-            m_d->framesInterface.reset(new KisPaintDeviceFramesInterface(this));
-            m_d->contentChannel.reset(new KisRasterKeyframeChannel(*rhs.m_d->contentChannel.data(), newParentNode, this));
-        }
-
-        setDefaultBounds(rhs.m_d->defaultBounds);
-        setParentNode(newParentNode);
+        makeFullCopyFrom(rhs, copyMode, newParentNode);
     }
+}
+
+void KisPaintDevice::makeFullCopyFrom(const KisPaintDevice &rhs, KritaUtils::DeviceCopyMode copyMode, KisNode *newParentNode)
+{
+    // temporary def. bounds object for the initialization phase only
+    m_d->defaultBounds = m_d->transitionalDefaultBounds;
+
+    // copy data objects with or without frames
+    m_d->cloneAllDataObjects(rhs.m_d, copyMode == KritaUtils::CopyAllFrames);
+
+    if (copyMode == KritaUtils::CopyAllFrames && rhs.m_d->framesInterface) {
+        KIS_ASSERT_RECOVER_RETURN(rhs.m_d->framesInterface);
+        KIS_ASSERT_RECOVER_RETURN(rhs.m_d->contentChannel);
+        m_d->framesInterface.reset(new KisPaintDeviceFramesInterface(this));
+        m_d->contentChannel.reset(new KisRasterKeyframeChannel(*rhs.m_d->contentChannel.data(), newParentNode, this));
+    }
+
+    setDefaultBounds(rhs.m_d->defaultBounds);
+    setParentNode(newParentNode);
 }
 
 KisPaintDevice::~KisPaintDevice()

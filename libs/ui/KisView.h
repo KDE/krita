@@ -55,6 +55,7 @@ class KConfigGroup;
 
 // Qt classes
 class QDragEnterEvent;
+class QDragMoveEvent;
 class QDropEvent;
 class QPrintDialog;
 class QCloseEvent;
@@ -271,8 +272,9 @@ Q_SIGNALS:
 protected:
 
     // QWidget overrides
-    void dragEnterEvent(QDragEnterEvent * event) override;
-    void dropEvent(QDropEvent * event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
 
     /**

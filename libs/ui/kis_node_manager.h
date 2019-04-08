@@ -169,6 +169,7 @@ public Q_SLOTS:
 
     void toggleIsolateActiveNode();
     void toggleIsolateMode(bool checked);
+    void slotUpdateIsolateModeActionImageStatusChange();
     void slotUpdateIsolateModeAction();
     void slotTryRestartIsolatedMode();
 

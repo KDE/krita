@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QDesktopServices>
 #include <QFileInfo>
+#include <QMimeData>
 
 #include "kis_action_manager.h"
 #include "kactioncollection.h"
@@ -40,7 +41,6 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
-
     recentDocumentsListView->setDragEnabled(false);
     recentDocumentsListView->viewport()->setAutoFillBackground(false);
     recentDocumentsListView->setSpacing(2);
@@ -91,6 +91,8 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     bool m_getNews = cfg.readEntry<bool>("FetchNews", false);
     chkShowNews->setChecked(m_getNews);
 
+    setAcceptDrops(true);
+
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()
@@ -106,7 +108,6 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         if ( mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() != "") {
             newFileLinkShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() + QString(")"));
         }
-
         if (mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString()  != "") {
             openFileShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString() + QString(")"));
         }
@@ -209,17 +210,25 @@ void KisWelcomePageWidget::populateRecentDocuments()
         else {
             if (QFileInfo(recentFileUrlPath).exists()) {
                 if (recentFileUrlPath.toLower().endsWith("ora") || recentFileUrlPath.toLower().endsWith("kra")) {
+
                     QScopedPointer<KoStore> store(KoStore::createStore(recentFileUrlPath, KoStore::Read));
                     if (store) {
-                        if (store->open(QString("Thumbnails/thumbnail.png"))
-                                || store->open(QString("preview.png"))) {
+                        QString thumbnailpath;
+                        if (store->hasFile(QString("Thumbnails/thumbnail.png"))){
+                            thumbnailpath = QString("Thumbnails/thumbnail.png");
+                        } else if (store->hasFile(QString("preview.png"))) {
+                            thumbnailpath = QString("preview.png");
+                        }
+                        if (!thumbnailpath.isEmpty()) {
+                            if (store->open(thumbnailpath)) {
 
-                            QByteArray bytes = store->read(store->size());
-                            store->close();
-                            QImage img;
-                            img.loadFromData(bytes);
-                            img.setDevicePixelRatio(devicePixelRatioF());
-                            recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
+                                QByteArray bytes = store->read(store->size());
+                                store->close();
+                                QImage img;
+                                img.loadFromData(bytes);
+                                img.setDevicePixelRatio(devicePixelRatioF());
+                                recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
+                            }
                         }
                     }
                 }
@@ -251,6 +260,58 @@ void KisWelcomePageWidget::populateRecentDocuments()
     recentDocumentsListView->setModel(&m_recentFilesModel);
 }
 
+void KisWelcomePageWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+    //qDebug() << "dragEnterEvent formats" << event->mimeData()->formats() << "urls" << event->mimeData()->urls() << "has images" << event->mimeData()->hasImage();
+    showDropAreaIndicator(true);
+    if (event->mimeData()->hasUrls() ||
+        event->mimeData()->hasFormat("application/x-krita-node") ||
+        event->mimeData()->hasFormat("application/x-qt-image")) {
+
+        event->accept();
+    }
+}
+
+void KisWelcomePageWidget::dropEvent(QDropEvent *event)
+{
+    //qDebug() << "KisWelcomePageWidget::dropEvent() formats" << event->mimeData()->formats() << "urls" << event->mimeData()->urls() << "has images" << event->mimeData()->hasImage();
+
+    showDropAreaIndicator(false);
+
+    if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
+        Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
+            if (url.toLocalFile().endsWith(".bundle")) {
+                bool r = m_mainWindow->installBundle(url.toLocalFile());
+                if (!r) {
+                    qWarning() << "Could not install bundle" << url.toLocalFile();
+                }
+            }
+            else {
+                m_mainWindow->openDocument(url, KisMainWindow::None);
+            }
+        }
+    }
+}
+
+void KisWelcomePageWidget::dragMoveEvent(QDragMoveEvent *event)
+{
+    //qDebug() << "dragMoveEvent";
+    m_mainWindow->dragMoveEvent(event);
+    if (event->mimeData()->hasUrls() ||
+        event->mimeData()->hasFormat("application/x-krita-node") ||
+        event->mimeData()->hasFormat("application/x-qt-image")) {
+
+        event->accept();
+    }
+
+}
+
+void KisWelcomePageWidget::dragLeaveEvent(QDragLeaveEvent */*event*/)
+{
+    //qDebug() << "dragLeaveEvent";
+    showDropAreaIndicator(false);
+    m_mainWindow->dragLeave();
+}
 
 void KisWelcomePageWidget::recentDocumentClicked(QModelIndex index)
 {

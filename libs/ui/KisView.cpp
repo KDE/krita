@@ -458,6 +458,7 @@ KisCoordinatesConverter *KisView::viewConverter() const
 
 void KisView::dragEnterEvent(QDragEnterEvent *event)
 {
+    //qDebug() << "KisView::dragEnterEvent formats" << event->mimeData()->formats() << "urls" << event->mimeData()->urls() << "has images" << event->mimeData()->hasImage();
     if (event->mimeData()->hasImage()
             || event->mimeData()->hasUrls()
             || event->mimeData()->hasFormat("application/x-krita-node")) {
@@ -489,6 +490,9 @@ void KisView::dropEvent(QDropEvent *event)
         pasteCenter = imageBounds.center();
         forceRecenter = false;
     }
+
+    //qDebug() << "KisView::dropEvent() formats" << event->mimeData()->formats() << "urls" << event->mimeData()->urls() << "has images" << event->mimeData()->hasImage();
+
     if (event->mimeData()->hasFormat("application/x-krita-node") ||
             event->mimeData()->hasImage())
     {
@@ -607,6 +611,17 @@ void KisView::dropEvent(QDropEvent *event)
                 }
             }
         }
+    }
+}
+
+void KisView::dragMoveEvent(QDragMoveEvent *event)
+{
+    //qDebug() << "KisView::dragMoveEvent";
+    if (event->mimeData()->hasUrls() ||
+        event->mimeData()->hasFormat("application/x-krita-node") ||
+        event->mimeData()->hasFormat("application/x-qt-image")) {
+
+        event->accept();
     }
 
 }

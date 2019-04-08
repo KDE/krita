@@ -305,6 +305,11 @@ extern "C" int main(int argc, char **argv)
         }
     }
 
+#if defined Q_OS_WIN && defined USE_QT_TABLET_WINDOWS && defined QT_HAS_WINTAB_SWITCH
+    const bool forceWinTab = !KisConfig::useWin8PointerInputNoApp(&kritarc);
+    QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI, forceWinTab);
+#endif
+
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
 
@@ -453,6 +458,15 @@ extern "C" int main(int argc, char **argv)
             }
         }
     }
+#elif defined QT_HAS_WINTAB_SWITCH
+
+    // Check if WinTab/WinInk has actually activated
+    const bool useWinTabAPI = app.testAttribute(Qt::AA_MSWindowsUseWinTabAPI);
+
+    if (useWinTabAPI != !cfg.useWin8PointerInput()) {
+        cfg.setUseWin8PointerInput(useWinTabAPI);
+    }
+
 #endif
 #endif
 

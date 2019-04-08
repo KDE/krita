@@ -182,10 +182,6 @@ add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a bi
 option(KRITA_ENABLE_BROKEN_TESTS "Enable tests that are marked as broken" OFF)
 add_feature_info("Enable Broken Tests" KRITA_ENABLE_BROKEN_TESTS "Runs broken test when \"make test\" is invoked (use -DKRITA_ENABLE_BROKEN_TESTS=ON to enable).")
 
-option(HAVE_HDR "Enable HDR surface format selection. Available only on certain patched versions of Qt" OFF)
-configure_file(config-hdr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hdr.h)
-add_feature_info("Enable HDR" HAVE_HDR "Enable selection of HDR surface fort Krita window. Needs a particular patched version of Qt")
-
 option(LIMIT_LONG_TESTS "Run long running unittests in a limited quick mode" ON)
 configure_file(config-limit-long-tests.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-limit-long-tests.h)
 add_feature_info("Limit long tests" LIMIT_LONG_TESTS "Run long running unittests in a limited quick mode")
@@ -308,10 +304,45 @@ find_package(Qt5 ${MIN_QT_VERSION}
 )
 
 if (WIN32)
+    set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS})
+    set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES})
+
+    CHECK_CXX_SOURCE_COMPILES("
+#include <QCoreApplication>
+int main(int argc, char *argv[]) {
+QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI);
+}
+"
+    QT_HAS_WINTAB_SWITCH
+    )
+
+    unset(CMAKE_REQUIRED_INCLUDES)
+    unset(CMAKE_REQUIRED_LIBRARIES)
+
     option(USE_QT_TABLET_WINDOWS "Do not use Krita's forked Wintab and Windows Ink support on Windows, but leave everything to Qt." ON)
 	add_feature_info("Use Qt's Windows Tablet Support" USE_QT_TABLET_WINDOWS "Do not use Krita's forked Wintab and Windows Ink support on Windows, but leave everything to Qt.")
     configure_file(config_use_qt_tablet_windows.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_use_qt_tablet_windows.h)
 endif ()     
+
+
+set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
+set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES})
+
+CHECK_CXX_SOURCE_COMPILES("
+#include <QSurfaceFormat>
+int main(int argc, char *argv[]) {
+QSurfaceFormat fmt;
+fmt.setColorSpace(QSurfaceFormat::scRGBColorSpace);
+fmt.setColorSpace(QSurfaceFormat::bt2020PQColorSpace);
+}
+"
+HAVE_HDR
+)
+configure_file(config-hdr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hdr.h)
+
+unset(CMAKE_REQUIRED_INCLUDES)
+unset(CMAKE_REQUIRED_LIBRARIES)
+
 
 include (MacroAddFileDependencies)
 include (MacroBoolTo01)
@@ -430,6 +461,18 @@ endif()
 if(MINGW)
     string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
     string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+endif(MINGW)
+
+if(MINGW)
+    # Hack CMake's variables to tell AR to create thin archives to reduce unnecessary writes.
+    # Source of definition: https://github.com/Kitware/CMake/blob/v3.14.1/Modules/Platform/Windows-GNU.cmake#L128
+    # Thin archives: https://sourceware.org/binutils/docs/binutils/ar.html#index-thin-archives
+    macro(mingw_use_thin_archive lang)
+        foreach(rule CREATE_SHARED_MODULE CREATE_SHARED_LIBRARY LINK_EXECUTABLE)
+            string(REGEX REPLACE "(<CMAKE_AR> [^ T]+) " "\\1T " CMAKE_${lang}_${rule} "${CMAKE_${lang}_${rule}}")
+        endforeach()
+    endmacro()
+    mingw_use_thin_archive(CXX)
 endif(MINGW)
 
 # enable exceptions globally

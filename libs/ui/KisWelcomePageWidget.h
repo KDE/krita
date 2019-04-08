@@ -50,6 +50,14 @@ public Q_SLOTS:
     /// have a preview, an icon is used that needs to be updated
     void populateRecentDocuments();
 
+protected:
+
+    // QWidget overrides
+    void dragEnterEvent(QDragEnterEvent * event) override;
+    void dropEvent(QDropEvent * event) override;
+    void dragMoveEvent(QDragMoveEvent * event) override;
+    void dragLeaveEvent(QDragLeaveEvent * event) override;
+
 
 private:
     KisMainWindow *m_mainWindow;

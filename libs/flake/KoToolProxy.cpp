@@ -51,15 +51,9 @@
 
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
-    : activeTool(0),
-      tabletPressed(false),
-      hasSelection(false),
-      controller(0),
-      parent(p)
+    : parent(p)
 {
     scrollTimer.setInterval(100);
-    mouseLeaveWorkaround = false;
-    multiClickCount = 0;
 }
 
 void KoToolProxyPrivate::timeout() // Auto scroll the canvas

@@ -108,6 +108,8 @@ public:
     KisPaintDevice(const KisPaintDevice& rhs, KritaUtils::DeviceCopyMode copyMode = KritaUtils::CopySnapshot, KisNode *newParentNode = 0);
     ~KisPaintDevice() override;
 
+    void makeFullCopyFrom(const KisPaintDevice& rhs, KritaUtils::DeviceCopyMode copyMode = KritaUtils::CopySnapshot, KisNode *newParentNode = 0);
+
 protected:
     /**
      * A special constructor for usage in KisPixelSelection. It allows

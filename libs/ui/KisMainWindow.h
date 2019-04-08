@@ -143,7 +143,6 @@ public:
      */
     void showWelcomeScreen(bool show);
 
-
     /**
      * Saves the document, asking for a filename if necessary.
      *
@@ -428,11 +427,12 @@ protected:
     void resizeEvent(QResizeEvent * e) override;
 
     // QWidget overrides
-    void dragEnterEvent(QDragEnterEvent * event) override;
-    void dropEvent(QDropEvent * event) override;
-    void dragMoveEvent(QDragMoveEvent * event) override;
-    void dragLeaveEvent(QDragLeaveEvent * event) override;
 
+private:
+
+    friend class KisWelcomePageWidget;
+    void dragMove(QDragMoveEvent *event);
+    void dragLeave();
 
 private:
 

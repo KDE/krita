@@ -85,6 +85,7 @@ void HistogramDockerWidget::paintEvent(QPaintEvent *event)
 
         QLabel::paintEvent(event);
         QPainter painter(this);
+        painter.fillRect(0, 0, this->width(), this->height(), this->palette().dark().color());
         painter.setPen(this->palette().light().color());
 
         const int NGRID = 4;

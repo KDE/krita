@@ -735,17 +735,19 @@ namespace KisLayerUtils {
             //   and here:     root . . . . X ! ! . . ! ! ! ! . . . . putAfter
             //   you can see which node is "the perfect ancestor"
             //   (marked X; called "parent" in the function arguments).
+            //   and here:     root . . . . . O ! . . ! ! ! ! . . . . putAfter
+            //   you can see which node is "the topmost deleted ancestor" (marked 'O')
 
             KisNodeSP node = putAfter->parent();
             bool foundDeletedAncestor = false;
-            KisNodeSP lastPerfectAncestor = nullptr;
+            KisNodeSP topmostAncestorToDelete = nullptr;
 
             while (node) {
 
                 if (nodesToDelete.contains(node)
                         && !nodesToDelete.contains(node->parent())) {
                     foundDeletedAncestor = true;
-                    lastPerfectAncestor = node->parent();
+                    topmostAncestorToDelete = node;
                     // Here node is to be deleted and its parent is not,
                     // so its parent is the one of the first not deleted (="perfect") ancestors.
                     // We need the one that is closest to the top (root)
@@ -755,7 +757,8 @@ namespace KisLayerUtils {
             }
 
             if (foundDeletedAncestor) {
-                parent = lastPerfectAncestor;
+                parent = topmostAncestorToDelete->parent();
+                putAfter = topmostAncestorToDelete;
             }
             else {
                 parent = putAfter->parent(); // putAfter (and none of its ancestors) is to be deleted, so its parent is the first not deleted ancestor
@@ -784,20 +787,12 @@ namespace KisLayerUtils {
 
             }
             else {
-                if (parent == m_putAfter->parent()) {
-                    addCommand(new KisImageLayerAddCommand(m_info->image,
-                                                           m_info->dstNode,
-                                                           parent,
-                                                           m_putAfter,
-                                                           true, false));
-                }
-                else {
-                    addCommand(new KisImageLayerAddCommand(m_info->image,
-                                                           m_info->dstNode,
-                                                           parent,
-                                                           parent->lastChild(),
-                                                           true, false));
-                }
+                addCommand(new KisImageLayerAddCommand(m_info->image,
+                                                       m_info->dstNode,
+                                                       parent,
+                                                       m_putAfter,
+                                                       true, false));
+
 
                 /**
                  * We can merge selection masks, in this case dstLayer is not defined!

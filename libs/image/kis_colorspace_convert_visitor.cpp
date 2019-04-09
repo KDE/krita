@@ -114,26 +114,21 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
         return false;
     }
 
+    KUndo2Command *parentConversionCommand = new KUndo2Command();
+
     if (layer->original()) {
-        KUndo2Command* cmd = layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
-        if (cmd) {
-            image->undoAdapter()->addCommand(cmd);
-        }
+        layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand);
     }
 
     if (layer->paintDevice()) {
-        KUndo2Command* cmd = layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
-        if (cmd) {
-            image->undoAdapter()->addCommand(cmd);
-        }
+        layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand);
     }
 
     if (layer->projection()) {
-        KUndo2Command* cmd = layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags);
-        if (cmd) {
-            image->undoAdapter()->addCommand(cmd);
-        }
+        layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand);
     }
+
+    image->undoAdapter()->addCommand(parentConversionCommand);
 
     KisPaintLayer *paintLayer = 0;
     if ((paintLayer = dynamic_cast<KisPaintLayer*>(layer))) {

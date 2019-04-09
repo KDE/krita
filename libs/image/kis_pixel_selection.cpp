@@ -92,7 +92,7 @@ KisPixelSelection::KisPixelSelection(const KisPaintDeviceSP copySource, KritaUti
     , m_d(new Private)
 {
     KisPaintDeviceSP tmpDevice = new KisPaintDevice(*copySource, copyMode, 0);
-    delete tmpDevice->convertTo(this->colorSpace());
+    tmpDevice->convertTo(this->colorSpace());
 
     this->makeFullCopyFrom(*tmpDevice, copyMode, 0);
 

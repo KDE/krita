@@ -74,8 +74,7 @@ bool KisSpriterExport::savePaintDevice(KisPaintDeviceSP dev, const QString &file
 
     if (!KisPNGConverter::isColorSpaceSupported(dev->colorSpace())) {
         dev = new KisPaintDevice(*dev.data());
-        KUndo2Command *cmd = dev->convertTo(KoColorSpaceRegistry::instance()->rgb8());
-        delete cmd;
+        dev->convertTo(KoColorSpaceRegistry::instance()->rgb8());
     }
 
     KisPNGOptions options;

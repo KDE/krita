@@ -85,7 +85,7 @@ void generateDab(const DabGenerationInfo &di, DabRenderingResources *resources, 
 
         QRect maskRect(QPoint(), di.dstDabRect.size());
         resources->colorSource->colorize(resources->colorSourceDevice, maskRect, di.info.pos().toPoint());
-        delete resources->colorSourceDevice->convertTo(cs);
+        resources->colorSourceDevice->convertTo(cs);
 
         resources->brush->mask(*dab, resources->colorSourceDevice,
                                di.shape,

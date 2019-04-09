@@ -108,7 +108,7 @@ public:
     KisPaintDeviceStrategy* currentStrategy();
 
     void init(const KoColorSpace *cs, const quint8 *defaultPixel);
-    KUndo2Command* convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
+    void convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand);
     bool assignProfile(const KoColorProfile * profile);
 
     inline const KoColorSpace* colorSpace() const
@@ -895,14 +895,15 @@ void KisPaintDevice::Private::tesingFetchLodDevice(KisPaintDeviceSP targetDevice
     transferFromData(data, targetDevice);
 }
 
-KUndo2Command* KisPaintDevice::Private::convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+void KisPaintDevice::Private::convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand)
 {
 
     class DeviceChangeColorSpaceCommand : public KUndo2Command
     {
     public:
-        DeviceChangeColorSpaceCommand(KisPaintDeviceSP device)
-            : m_firstRun(true),
+        DeviceChangeColorSpaceCommand(KisPaintDeviceSP device, KUndo2Command *parent = 0)
+            : KUndo2Command(parent),
+              m_firstRun(true),
               m_device(device)
         {
         }
@@ -937,25 +938,19 @@ KUndo2Command* KisPaintDevice::Private::convertColorSpace(const KoColorSpace * d
     };
 
 
-    KUndo2Command *parentCommand = new DeviceChangeColorSpaceCommand(q);
-
     QList<Data*> dataObjects = allDataObjects();
+    if (dataObjects.isEmpty()) return;
+
+    KUndo2Command *mainCommand =
+        parentCommand ? new DeviceChangeColorSpaceCommand(q, parentCommand) : 0;
 
     Q_FOREACH (Data *data, dataObjects) {
         if (!data) continue;
 
-        data->convertDataColorSpace(dstColorSpace, renderingIntent, conversionFlags, parentCommand);
+        data->convertDataColorSpace(dstColorSpace, renderingIntent, conversionFlags, mainCommand);
     }
 
-    if (!parentCommand->childCount()) {
-        delete parentCommand;
-        parentCommand = 0;
-    } else {
-        q->emitColorSpaceChanged();
-    }
-
-    return parentCommand;
-
+    q->emitColorSpaceChanged();
 }
 
 bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile)
@@ -1516,10 +1511,9 @@ void KisPaintDevice::emitProfileChanged()
     emit profileChanged(m_d->colorSpace()->profile());
 }
 
-KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand)
 {
-    KUndo2Command *command = m_d->convertColorSpace(dstColorSpace, renderingIntent, conversionFlags);
-    return command;
+    m_d->convertColorSpace(dstColorSpace, renderingIntent, conversionFlags, parentCommand);
 }
 
 bool KisPaintDevice::setProfile(const KoColorProfile * profile)

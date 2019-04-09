@@ -779,6 +779,23 @@ void KisView::slotScreenChanged()
     d->zoomManager.updateScreenResolution(this);
 }
 
+void KisView::slotThemeChanged(QPalette pal)
+{
+    this->setPalette(pal);
+    for (int i=0; i<this->children().size();i++) {
+        QWidget *w = qobject_cast<QWidget*> ( this->children().at(i));
+        if (w) {
+            w->setPalette(pal);
+        }
+    }
+    if (canvasBase()) {
+        canvasBase()->canvasWidget()->setPalette(pal);
+    }
+    if (canvasController()) {
+        canvasController()->setPalette(pal);
+    }
+}
+
 void KisView::resetImageSizeAndScroll(bool changeCentering,
                                       const QPointF &oldImageStillPoint,
                                       const QPointF &newImageStillPoint)

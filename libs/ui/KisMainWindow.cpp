@@ -702,6 +702,19 @@ void KisMainWindow::slotThemeChanged()
     Q_FOREACH (QAction *action, actionCollection()->actions()) {
         KisIconUtils::updateIcon(action);
     }
+    if (d->mdiArea) {
+        d->mdiArea->setPalette(qApp->palette());
+        for (int i=0; i<d->mdiArea->subWindowList().size(); i++) {
+            QMdiSubWindow *window = d->mdiArea->subWindowList().at(i);
+            if (window) {
+                window->setPalette(qApp->palette());
+                KisView *view = qobject_cast<KisView*>(window->widget());
+                if (view) {
+                    view->slotThemeChanged(qApp->palette());
+                }
+            }
+        }
+    }
 
     emit themeChanged();
 }

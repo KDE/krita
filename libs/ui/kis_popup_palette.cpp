@@ -55,29 +55,41 @@ public:
     void tabletEvent(QTabletEvent* event) override {
         event->accept();
         QMouseEvent* mouseEvent = 0;
-        switch (event->type()) {
-        case QEvent::TabletPress:
-            mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
-                                         Qt::LeftButton, Qt::LeftButton, event->modifiers());
-            m_dragging = true;
-            mousePressEvent(mouseEvent);
-            break;
-        case QEvent::TabletMove:
-            mouseEvent = new QMouseEvent(QEvent::MouseMove, event->pos(),
-                                         (m_dragging) ? Qt::LeftButton : Qt::NoButton,
-                                         (m_dragging) ? Qt::LeftButton : Qt::NoButton, event->modifiers());
-            mouseMoveEvent(mouseEvent);
-            break;
-        case QEvent::TabletRelease:
-            mouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, event->pos(),
-                                         Qt::LeftButton,
-                                         Qt::LeftButton,
-                                         event->modifiers());
-            m_dragging = false;
-            mouseReleaseEvent(mouseEvent);
-            break;
-        default: break;
+
+        // this will tell the pop-up palette widget to close
+        if(event->button() == Qt::RightButton) {
+            emit requestCloseContainer();
         }
+
+        // ignore any tablet events that are done with the right click
+        // Tablet move events don't return a "button", so catch that too
+        if(event->button() == Qt::LeftButton || event->type() == QEvent::TabletMove)
+        {
+            switch (event->type()) {
+                case QEvent::TabletPress:
+                    mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
+                                                 Qt::LeftButton, Qt::LeftButton, event->modifiers());
+                    m_dragging = true;
+                    mousePressEvent(mouseEvent);
+                    break;
+                case QEvent::TabletMove:
+                    mouseEvent = new QMouseEvent(QEvent::MouseMove, event->pos(),
+                                                 (m_dragging) ? Qt::LeftButton : Qt::NoButton,
+                                                 (m_dragging) ? Qt::LeftButton : Qt::NoButton, event->modifiers());
+                    mouseMoveEvent(mouseEvent);
+                    break;
+                case QEvent::TabletRelease:
+                    mouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, event->pos(),
+                                                 Qt::LeftButton,
+                                                 Qt::LeftButton,
+                                                 event->modifiers());
+                    m_dragging = false;
+                    mouseReleaseEvent(mouseEvent);
+                    break;
+                default: break;
+            }
+        }
+
         delete mouseEvent;
     }
 
@@ -127,6 +139,8 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
             m_colorChangeCompressor.data(), SLOT(start()));
     connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
             SLOT(slotEmitColorChanged()));
+
+    connect(m_triangleColorSelector, SIGNAL(requestCloseContainer()), this, SLOT(slotHide()));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_triangleColorSelector, SLOT(configurationChanged()));
 

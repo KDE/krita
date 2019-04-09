@@ -79,6 +79,7 @@ public Q_SLOTS:
     void startUpdateCanvasProjection();
     void generateThumbnail();
     void updateThumbnail(QImage pixmap);
+    void slotThemeChanged();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

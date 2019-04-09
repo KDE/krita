@@ -244,7 +244,7 @@ rebuild_3rdparty () {
             echo "Installing ${pkg} files..."
             rm ${pkg}-configure ${pkg}-build ${pkg}-install
 
-            cmake_3rdparty ${pkg} 1> /dev/null
+            cmake_3rdparty ${pkg} >> ${BUILDROOT}/rebuilddeps_.log
 
             cd ${KIS_TBUILD_DIR}
         done
@@ -257,18 +257,22 @@ rebuild_3rdparty () {
 
     build_install_ext \
         ext_pkgconfig \
+        ext_iconv \
         ext_gettext \
         ext_openssl \
         ext_qt \
         ext_zlib \
         ext_boost \
         ext_eigen3 \
+        ext_expat \
         ext_exiv2 \
         ext_fftw3 \
         ext_ilmbase \
         ext_jpeg \
+        ext_patch \
         ext_lcms2 \
         ext_ocio \
+        ext_ilmbase \
         ext_openexr \
         ext_png \
         ext_tiff \
@@ -280,7 +284,12 @@ rebuild_3rdparty () {
         ext_sip \
         ext_pyqt \
 
-    build_install_ext ext_libheif
+    build_install_ext \
+        ext_yasm \
+        ext_nasm \
+        ext_libx265 \
+        ext_libde265 \
+        ext_libheif \
 
     # Build kde_frameworks
     build_install_ext \

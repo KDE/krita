@@ -92,7 +92,7 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     QPalette pal = d->edit->palette();
     pal.setColor(QPalette::Base, Qt::transparent);
     d->edit->setPalette(pal);
-
+    d->edit->setContextMenuPolicy(Qt::PreventContextMenu);
     connect(d->edit, SIGNAL(editingFinished()), this, SLOT(editLostFocus()));
 
     d->validator = new QDoubleValidator(d->edit);
@@ -397,7 +397,6 @@ void KisAbstractSliderSpinBox::mousePressEvent(QMouseEvent* e)
         showEdit();
     }
 
-
     update();
 }
 
@@ -422,7 +421,6 @@ void KisAbstractSliderSpinBox::mouseReleaseEvent(QMouseEvent* e)
     } else { // Confirm the last known value, since we might be ignoring move events
         setInternalValue(d->value);
     }
-
     d->upButtonDown = false;
     d->downButtonDown = false;
     update();

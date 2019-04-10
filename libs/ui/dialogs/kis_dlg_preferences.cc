@@ -875,6 +875,11 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     connect(chkCachedFramesSizeLimit, SIGNAL(toggled(bool)), intCachedFramesSizeLimit, SLOT(setEnabled(bool)));
     connect(chkUseRegionOfInterest, SIGNAL(toggled(bool)), intRegionOfInterestMargin, SLOT(setEnabled(bool)));
 
+#ifndef Q_OS_WIN
+    // AVX workaround is needed on Windows+GCC only
+    chkDisableAVXOptimizations->setVisible(false);
+#endif
+
     load(false);
 }
 
@@ -910,6 +915,9 @@ void PerformanceTab::load(bool requestDefault)
         chkOpenGLFramerateLogging->setChecked(cfg2.enableOpenGLFramerateLogging(requestDefault));
         chkBrushSpeedLogging->setChecked(cfg2.enableBrushSpeedLogging(requestDefault));
         chkDisableVectorOptimizations->setChecked(cfg2.enableAmdVectorizationWorkaround(requestDefault));
+#ifdef Q_OS_WIN
+        chkDisableAVXOptimizations->setChecked(cfg2.disableAVXOptimizations(requestDefault));
+#endif
         chkBackgroundCacheGeneration->setChecked(cfg2.calculateAnimationCacheInBackground(requestDefault));
     }
 
@@ -952,6 +960,9 @@ void PerformanceTab::save()
         cfg2.setEnableOpenGLFramerateLogging(chkOpenGLFramerateLogging->isChecked());
         cfg2.setEnableBrushSpeedLogging(chkBrushSpeedLogging->isChecked());
         cfg2.setEnableAmdVectorizationWorkaround(chkDisableVectorOptimizations->isChecked());
+#ifdef Q_OS_WIN
+        cfg2.setDisableAVXOptimizations(chkDisableAVXOptimizations->isChecked());
+#endif
         cfg2.setCalculateAnimationCacheInBackground(chkBackgroundCacheGeneration->isChecked());
     }
 

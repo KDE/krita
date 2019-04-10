@@ -537,6 +537,9 @@ public:
     void setEnableAmdVectorizationWorkaround(bool value);
     bool enableAmdVectorizationWorkaround(bool defaultValue = false) const;
 
+    void setDisableAVXOptimizations(bool value);
+    bool disableAVXOptimizations(bool defaultValue = false) const;
+
     bool animationDropFrames(bool defaultValue = false) const;
     void setAnimationDropFrames(bool value);
 

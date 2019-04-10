@@ -1886,6 +1886,16 @@ bool KisConfig::enableAmdVectorizationWorkaround(bool defaultValue) const
     return (defaultValue ? false : m_cfg.readEntry("amdDisableVectorWorkaround", false));
 }
 
+void KisConfig::setDisableAVXOptimizations(bool value)
+{
+    m_cfg.writeEntry("disableAVXOptimizations", value);
+}
+
+bool KisConfig::disableAVXOptimizations(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("disableAVXOptimizations", false));
+}
+
 void KisConfig::setAnimationDropFrames(bool value)
 {
     bool oldValue = animationDropFrames();

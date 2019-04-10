@@ -692,16 +692,8 @@ if errorlevel 1 (
 )
 
 echo Running CMake for deps...
-echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
-    -DSUBMAKE_JOBS=%PARALLEL_JOBS% ^
-    -DQT_ENABLE_DEBUG_INFO=%QT_ENABLE_DEBUG_INFO% ^
-    -DQT_ENABLE_DYNAMIC_OPENGL=%QT_ENABLE_DYNAMIC_OPENGL% ^
-    -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_DOWNLOAD_CMAKE% ^
-    -DINSTALL_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
-    -G "MinGW Makefiles" ^
-    -DUSE_QT_TABLET_WINDOWS=ON ^
-    -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
-    
+
+@echo on
 "%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
     -DSUBMAKE_JOBS=%PARALLEL_JOBS% ^
     -DQT_ENABLE_DEBUG_INFO=%QT_ENABLE_DEBUG_INFO% ^
@@ -711,10 +703,11 @@ echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
     -G "MinGW Makefiles" ^
     -DUSE_QT_TABLET_WINDOWS=ON ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
-if errorlevel 1 (
-    echo ERROR: CMake configure failed! 1>&2
-    exit /b 104
+@if errorlevel 1 (
+    @echo ERROR: CMake configure failed! 1>&2
+    @exit /b 104
 )
+@echo off
 echo.
 
 set EXT_TARGETS=patch png2ico zlib lzma gettext openssl qt boost eigen3 exiv2 fftw3
@@ -747,21 +740,8 @@ if errorlevel 1 (
 )
 
 echo Running CMake for Krita...
-echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
-    -DBoost_DEBUG=OFF ^
-    -DBOOST_INCLUDEDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/include ^
-    -DBOOST_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
-    -DBOOST_LIBRARYDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/lib ^
-    -DCMAKE_PREFIX_PATH=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
-    -DCMAKE_INSTALL_PREFIX=%BUILDDIR_KRITA_INSTALL_CMAKE% ^
-    -DBUILD_TESTING=OFF ^
-    -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
-    -DFOUNDATION_BUILD=ON ^
-    -DUSE_QT_TABLET_WINDOWS=ON ^
-    -Wno-dev ^
-    -G "MinGW Makefiles" ^
-    -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
 
+@echo on
 "%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DBoost_DEBUG=OFF ^
     -DBOOST_INCLUDEDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/include ^
@@ -776,10 +756,11 @@ echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -Wno-dev ^
     -G "MinGW Makefiles" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
-if errorlevel 1 (
-    echo ERROR: CMake configure failed! 1>&2
-    exit /b 104
+@if errorlevel 1 (
+    @echo ERROR: CMake configure failed! 1>&2
+    @exit /b 104
 )
+@echo off
 echo.
 
 echo Building Krita...

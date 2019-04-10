@@ -36,16 +36,16 @@ KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget():
 {
     setObjectName("KisPressureSharpnessOptionWidget");
 
-    QLabel* thresholdLbl = new QLabel(i18n("Threshold:"));
-
-    m_threshold = new KisSliderSpinBox();
-    m_threshold->setRange(1, 100);
-    m_threshold->setValue(40);
-    m_threshold->setSingleStep(1);
+    QLabel* thresholdLbl = new QLabel(i18n("Soften edge:"));
+    m_softenedge = new KisSliderSpinBox();
+    m_softenedge->setRange(0, 100);
+    m_softenedge->setValue(0); // Sets old behaviour
+    m_softenedge->setSingleStep(1);
 
     QHBoxLayout* hl = new QHBoxLayout;
+    hl->setMargin(9);
     hl->addWidget(thresholdLbl);
-    hl->addWidget(m_threshold, 1);
+    hl->addWidget(m_softenedge, 1);
 
     QVBoxLayout* vl = new QVBoxLayout;
     vl->setMargin(0);
@@ -55,14 +55,21 @@ KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget():
     QWidget* w = new QWidget;
     w->setLayout(vl);
 
-    KisCurveOptionWidget::setConfigurationPage(w);
+    connect(m_softenedge, SIGNAL(valueChanged(int)), SLOT(setThreshold(int)));
 
-    connect(m_threshold, SIGNAL(valueChanged(int)), this, SLOT(setThreshold(int)));
-    setThreshold(m_threshold->value());
+    setConfigurationPage(w);
+
+    setThreshold(m_softenedge->value());
+}
+
+void KisPressureSharpnessOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
+{
+    KisCurveOptionWidget::readOptionSetting(setting);
+    m_softenedge->setValue(static_cast<KisPressureSharpnessOption*>(curveOption())->threshold());
 }
 
 void KisPressureSharpnessOptionWidget::setThreshold(int threshold)
 {
-    static_cast<KisPressureSharpnessOption*>(KisCurveOptionWidget::curveOption())->setThreshold(threshold);
+    static_cast<KisPressureSharpnessOption*>(curveOption())->setThreshold(threshold);
     emitSettingChanged();
 }

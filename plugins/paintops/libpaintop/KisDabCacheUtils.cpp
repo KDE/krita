@@ -106,7 +106,7 @@ void postProcessDab(KisFixedPaintDeviceSP dab,
                     DabRenderingResources *resources)
 {
     if (resources->sharpnessOption) {
-        resources->sharpnessOption->applyThreshold(dab);
+        resources->sharpnessOption->applyThreshold(dab, info);
     }
 
     if (resources->textureOption) {

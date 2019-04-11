@@ -36,4 +36,5 @@ cmake --build . --config RelWithDebInfo --target ext_lcms2
 # this one SHOULD be built before exiv
 cmake --build . --config RelWithDebInfo --target ext_expat
 cmake --build . --config RelWithDebInfo --target ext_exiv2
+cmake --build . --config RelWithDebInfo --target ext_gsl
 

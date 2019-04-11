@@ -529,7 +529,16 @@ if(WIN32)
 endif()
 
 # set custom krita plugin installdir
-set(KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/kritaplugins)
+if (ANDROID)
+    if (NOT ANDROID_ABI)
+        set (ANDROID_ABI armeabi-v7a)
+    endif()
+    set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/${ANDROID_ABI})
+    set (DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/assets)
+else()
+    set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/kritaplugins)
+endif()
+
 
  ###########################
 ############################
@@ -546,8 +555,12 @@ if (ANDROID)
     set (LCMS2_LIBRARIES            ${CMAKE_CURRENT_BINARY_DIR}/i/lib/liblcms2.so)
     set (QUAZIP_INCLUDE_DIR         ${CMAKE_CURRENT_BINARY_DIR}/i/include/quazip5)
     set (QUAZIP_LIBRARIES           ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libquazip5.so)
-    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/armeabi-v7a/include/boost-1_69)
-    set (Boost_LIBRARY_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/armeabi-v7a/lib)
+    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_69)
+    set (Boost_LIBRARY_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/lib)
+    set (GSL_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libgsl.so)
+    set (GSL_CBLAS_LIBRARIES        ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libgslcblas.so)
+    set (GSL_INCLUDE_DIR            ${CMAKE_CURRENT_BINARY_DIR}/i/include/)
+    set (GSL_CONFIG                 ${CMAKE_CURRENT_BINARY_DIR}/i/bin/gsl-config)
 endif()
 
 find_package(PNG REQUIRED)

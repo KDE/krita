@@ -541,7 +541,7 @@ void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
 
 void KisStrokeBenchmark::benchmarkRectangle(QString presetFileName)
 {
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
+    KisPaintOpPresetSP preset(new KisPaintOpPreset(m_dataPath + presetFileName));
     bool loadedOk = preset->load();
     if (!loadedOk){
         dbgKrita << "The preset was not loaded correctly. Done.";

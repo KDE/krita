@@ -112,9 +112,12 @@ Q_SIGNALS:
     void forwardRepaint();
 
 private:
+    void updateUpdateCompressorDelay();
+
+private:
     KisPaintDeviceSP m_projection;
-    KisShapeLayer *m_parentLayer;
-    KisSignalCompressor *m_canvasUpdateCompressor;
+    KisShapeLayer *m_parentLayer {0};
+    KisSignalCompressor m_canvasUpdateCompressor;
 
     KisThreadSafeSignalCompressor m_asyncUpdateSignalCompressor;
     volatile bool m_hasUpdateInCompressor = false;

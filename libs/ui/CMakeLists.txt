@@ -400,11 +400,16 @@ set(kritaui_LIB_SRCS
 if(WIN32)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
-        input/wintab/kis_tablet_support_win.cpp
-        input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
-        input/wintab/kis_tablet_support_win8.cpp
-        )
+    )
+    if (NOT USE_QT_TABLET_WINDOWS)
+        set(kritaui_LIB_SRCS
+            ${kritaui_LIB_SRCS}
+            input/wintab/kis_tablet_support_win.cpp
+            input/wintab/kis_screen_size_choice_dialog.cpp
+            input/wintab/kis_tablet_support_win8.cpp
+            )
+    endif()
 endif()
 
     set(kritaui_LIB_SRCS
@@ -526,6 +531,12 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     input/wintab/drawpile_tablettester/tablettest.ui
 
 )
+
+if(WIN32 AND NOT USE_QT_TABLET_WINDOWS)
+    ki18n_wrap_ui(kritaui_LIB_SRCS
+        input/wintab/kis_screen_size_choice_dialog.ui
+    )
+endif()    
 
 
 add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )

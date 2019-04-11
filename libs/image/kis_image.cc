@@ -364,17 +364,14 @@ void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 
     SANITY_CHECK_LOCKED("nodeHasBeenAdded");
     m_d->signalRouter.emitNodeHasBeenAdded(parent, index);
-
-    KisNodeSP newNode = parent->at(index);
-    if (!dynamic_cast<KisSelectionMask*>(newNode.data())) {
-        emit sigInternalStopIsolatedModeRequested();
-    }
 }
 
 void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 {
     KisNodeSP deletedNode = parent->at(index);
-    if (!dynamic_cast<KisSelectionMask*>(deletedNode.data())) {
+    if (!dynamic_cast<KisSelectionMask*>(deletedNode.data()) &&
+        deletedNode == m_d->isolatedRootNode) {
+
         emit sigInternalStopIsolatedModeRequested();
     }
 
@@ -1306,10 +1303,8 @@ void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
     m_d->rootLayer->setGraphListener(this);
     m_d->rootLayer->setImage(this);
 
-    KisPaintDeviceSP newOriginal = m_d->rootLayer->original();
-    newOriginal->setDefaultPixel(defaultProjectionColor);
-
     setRoot(m_d->rootLayer.data());
+    this->setDefaultProjectionColor(defaultProjectionColor);
 }
 
 void KisImage::addAnnotation(KisAnnotationSP annotation)

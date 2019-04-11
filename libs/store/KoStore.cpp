@@ -395,6 +395,11 @@ bool KoStore::hasFile(const QString& fileName) const
     return fileExists(d->toExternalNaming(fileName));
 }
 
+bool KoStore::hasDirectory(const QString &directoryName)
+{
+    return enterAbsoluteDirectory(directoryName);
+}
+
 bool KoStore::finalize()
 {
     Q_D(KoStore);
@@ -405,6 +410,13 @@ bool KoStore::finalize()
 
 void KoStore::setCompressionEnabled(bool /*e*/)
 {
+}
+
+void KoStore::setSubstitution(const QString &name, const QString &substitution)
+{
+    Q_D(KoStore);
+    d->substituteThis = name;
+    d->substituteWith = substitution;
 }
 
 bool KoStore::isEncrypted()

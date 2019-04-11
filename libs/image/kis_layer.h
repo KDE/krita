@@ -392,6 +392,15 @@ private:
     friend class KisTransformMask;
     friend class KisLayerTest;
 
+    friend class KisRecycleProjectionsJob;
+    void recycleProjectionsInSafety();
+
+private Q_SLOTS:
+    void slotInitiateProjectionsCleanup();
+
+Q_SIGNALS:
+    void internalInitiateProjectionsCleanup();
+
 private:
     QRect layerExtentImpl(bool exactBounds) const;
 

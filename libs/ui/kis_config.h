@@ -305,7 +305,10 @@ public:
     void setPressureTabletCurve(const QString& curveString) const;
 
     bool useWin8PointerInput(bool defaultValue = false) const;
-    void setUseWin8PointerInput(bool value) const;
+    void setUseWin8PointerInput(bool value);
+
+    static bool useWin8PointerInputNoApp(QSettings *settings, bool defaultValue = false);
+    static void setUseWin8PointerInputNoApp(QSettings *settings, bool value);
 
     qreal vastScrolling(bool defaultValue = false) const;
     void setVastScrolling(const qreal factor) const;
@@ -533,6 +536,9 @@ public:
 
     void setEnableAmdVectorizationWorkaround(bool value);
     bool enableAmdVectorizationWorkaround(bool defaultValue = false) const;
+
+    void setDisableAVXOptimizations(bool value);
+    bool disableAVXOptimizations(bool defaultValue = false) const;
 
     bool animationDropFrames(bool defaultValue = false) const;
     void setAnimationDropFrames(bool value);

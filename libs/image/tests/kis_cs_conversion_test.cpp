@@ -72,7 +72,7 @@ void KisCsConversionTest::testColorSpaceConversion()
             dev->convertFromQImage(image, 0);
             dev->moveTo(10, 10);   // Unalign with tile boundaries
             dev->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(dev->exactBounds()));
-            delete dev->convertTo(dstCs);
+            dev->convertTo(dstCs);
 
             if (dev->exactBounds() != QRect(10, 10, image.width(), image.height())) {
                 logFailure("bounds", srcCs, dstCs);

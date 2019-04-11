@@ -142,7 +142,6 @@ public:
      */
     void showWelcomeScreen(bool show);
 
-
     /**
      * Saves the document, asking for a filename if necessary.
      *
@@ -419,6 +418,7 @@ private Q_SLOTS:
     void showManual();
     void switchTab(int index);
 
+    void windowScreenChanged(QScreen *screen);
 
 protected:
 
@@ -426,13 +426,12 @@ protected:
     void resizeEvent(QResizeEvent * e) override;
 
     // QWidget overrides
-    void dragEnterEvent(QDragEnterEvent * event) override;
-    void dropEvent(QDropEvent * event) override;
-    void dragMoveEvent(QDragMoveEvent * event) override;
-    void dragLeaveEvent(QDragLeaveEvent * event) override;
 
-    void moveEvent(QMoveEvent *e) override;
+private:
 
+    friend class KisWelcomePageWidget;
+    void dragMove(QDragMoveEvent *event);
+    void dragLeave();
 
 private:
 

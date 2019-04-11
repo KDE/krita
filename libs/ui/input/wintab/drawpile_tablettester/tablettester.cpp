@@ -21,8 +21,8 @@
 #include "tablettest.h"
 #include "ui_tablettest.h"
 
-TabletTestDialog::TabletTestDialog( QWidget *parent) :
-    KoDialog(parent, Qt::Window)
+TabletTestDialog::TabletTestDialog(QWidget *parent)
+    : KoDialog(parent, Qt::Dialog)
 {
     setCaption(i18n("Tablet Tester"));
     QWidget *page = new QWidget(this);

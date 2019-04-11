@@ -180,7 +180,7 @@ public:
     LayerBoxFactory() { }
 
     QString id() const override {
-        return QString("LayerBox");
+        return QString("KisLayerBox");
     }
 
     QDockWidget* createDockWidget() override {

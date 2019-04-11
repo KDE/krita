@@ -33,19 +33,9 @@
 #include <KisMirrorAxisConfig.h>
 #include <KisDocument.h>
 #include <kis_signals_blocker.h>
-
-class KisMirrorManager::Private
-{
-public:
-    Private()
-        : mirrorAxisDecoration(nullptr)
-    {}
-
-    KisMirrorAxis* mirrorAxisDecoration;
-};
+#include <kis_types.h>
 
 KisMirrorManager::KisMirrorManager(KisViewManager* view) : QObject(view)
-    , d(new Private())
     , m_imageView(0)
 {
 }
@@ -70,10 +60,12 @@ void KisMirrorManager::setView(QPointer<KisView> imageView)
 {
     if (m_imageView) {
         m_mirrorCanvas->disconnect();
-        m_imageView->document()->disconnect();
+        m_imageView->document()->disconnect(this);
 
-        d->mirrorAxisDecoration->disconnect();
-        d->mirrorAxisDecoration = nullptr;
+        KisMirrorAxisSP canvasDecoration = this->decoration();
+        if (canvasDecoration) {
+            canvasDecoration->disconnect();
+        }
     }
 
     m_imageView = imageView;
@@ -82,16 +74,15 @@ void KisMirrorManager::setView(QPointer<KisView> imageView)
         connect(m_mirrorCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(m_imageView->canvasController()), SLOT(mirrorCanvas(bool)));
         connect(m_imageView->document(), SIGNAL(sigMirrorAxisConfigChanged()), this, SLOT(slotDocumentConfigChanged()), Qt::UniqueConnection);
 
-        KisMirrorAxis* decoration;
-        if (m_imageView->canvasBase() && m_imageView->canvasBase()->decoration("mirror_axis")) {
-            decoration = dynamic_cast<KisMirrorAxis*>(m_imageView->canvasBase()->decoration("mirror_axis").data());
-        } else {
-            decoration = new KisMirrorAxis(m_imageView->viewManager()->canvasResourceProvider(), m_imageView);
+        KisMirrorAxisSP canvasDecoration = this->decoration();
+        if (!canvasDecoration) {
+            KisMirrorAxis* decoration = new KisMirrorAxis(m_imageView->viewManager()->canvasResourceProvider(), m_imageView);
             connect(decoration, SIGNAL(sigConfigChanged()), this, SLOT(slotMirrorAxisConfigChanged()), Qt::UniqueConnection);
             m_imageView->canvasBase()->addDecoration(decoration);
+        } else {
+            connect(canvasDecoration.data(), SIGNAL(sigConfigChanged()), this, SLOT(slotMirrorAxisConfigChanged()), Qt::UniqueConnection);
         }
 
-        d->mirrorAxisDecoration = decoration;
         setDecorationConfig();
     }
 
@@ -119,7 +110,20 @@ void KisMirrorManager::slotMirrorAxisConfigChanged()
 {
     if (m_imageView && m_imageView->document()) {
         KisSignalsBlocker blocker(m_imageView->document());
-        m_imageView->document()->setMirrorAxisConfig(d->mirrorAxisDecoration->mirrorAxisConfig());
+
+        KisMirrorAxisSP canvasDecoration = this->decoration();
+        if (canvasDecoration) {
+            m_imageView->document()->setMirrorAxisConfig(canvasDecoration->mirrorAxisConfig());
+        }
+    }
+}
+
+KisMirrorAxisSP KisMirrorManager::decoration() const
+{
+    if (m_imageView) {
+        return qobject_cast<KisMirrorAxis*>(m_imageView->canvasBase()->decoration("mirror_axis").data());
+    } else {
+        return 0;
     }
 }
 
@@ -127,6 +131,10 @@ void KisMirrorManager::setDecorationConfig()
 {
     if (m_imageView && m_imageView->document()) {
         KisMirrorAxisConfig config = m_imageView->document()->mirrorAxisConfig();
-        d->mirrorAxisDecoration->setMirrorAxisConfig(config);
+
+        KisMirrorAxisSP canvasDecoration = this->decoration();
+        if (canvasDecoration) {
+            canvasDecoration->setMirrorAxisConfig(config);
+        }
     }
 }

@@ -14,6 +14,7 @@
 #include <QVector>
 #include <QMutex>
 #include <QMutexLocker>
+#include <tiles3/kis_lockless_stack.h>
 
 #define CALL_MEMBER(obj, pmf) ((obj).*(pmf))
 
@@ -28,7 +29,7 @@ private:
 
         Action(void (*f)(void*), void* p, quint64 paramSize) : func(f)
         {
-            Q_ASSERT(paramSize <= sizeof(param)); // Verify size limit.
+            KIS_ASSERT(paramSize <= sizeof(param)); // Verify size limit.
             memcpy(&param, p, paramSize);
         }
 
@@ -38,10 +39,35 @@ private:
         }
     };
 
-    QMutex m_mutex;
-    QVector<Action> m_pendingActions;
-    QVector<Action> m_deferedActions;
+    QAtomicInt m_rawPointerUsers;
+    KisLocklessStack<Action> m_pendingActions;
+    KisLocklessStack<Action> m_migrationReclaimActions;
     std::atomic_flag m_isProcessing = ATOMIC_FLAG_INIT;
+
+    void releasePoolSafely(KisLocklessStack<Action> *pool, bool force = false) {
+        KisLocklessStack<Action> tmp;
+        tmp.mergeFrom(*pool);
+        if (tmp.isEmpty()) return;
+
+        if (force || tmp.size() > 4096) {
+            while (m_rawPointerUsers.loadAcquire());
+
+            Action action;
+            while (tmp.pop(action)) {
+                action();
+            }
+        } else {
+            if (!m_rawPointerUsers.loadAcquire()) {
+                Action action;
+                while (tmp.pop(action)) {
+                    action();
+                }
+            } else {
+                // push elements back to the source
+                pool->mergeFrom(tmp);
+            }
+        }
+    }
 
 public:
 
@@ -60,49 +86,37 @@ public:
         };
 
         Closure closure = {pmf, target};
-        while (m_isProcessing.test_and_set(std::memory_order_acquire)) {
-        }
 
         if (migration) {
-            m_deferedActions.append(Action(Closure::thunk, &closure, sizeof(closure)));
+            m_migrationReclaimActions.push(Action(Closure::thunk, &closure, sizeof(closure)));
         } else {
-            m_pendingActions.append(Action(Closure::thunk, &closure, sizeof(closure)));
+            m_pendingActions.push(Action(Closure::thunk, &closure, sizeof(closure)));
         }
-
-        m_isProcessing.clear(std::memory_order_release);
     }
 
-    void update(bool migration)
+    void update(bool migrationInProgress)
     {
-        if (!m_isProcessing.test_and_set(std::memory_order_acquire)) {
-            QVector<Action> actions;
-            actions.swap(m_pendingActions);
+        releasePoolSafely(&m_pendingActions);
 
-            if (!migration) {
-                m_pendingActions.swap(m_deferedActions);
-            }
-
-            m_isProcessing.clear(std::memory_order_release);
-
-            for (auto &action : actions) {
-                action();
-            }
+        if (!migrationInProgress) {
+            releasePoolSafely(&m_migrationReclaimActions);
         }
     }
 
     void flush()
     {
-        if (!m_isProcessing.test_and_set(std::memory_order_acquire)) {
-            for (auto &action : m_pendingActions) {
-                action();
-            }
+        releasePoolSafely(&m_pendingActions, true);
+        releasePoolSafely(&m_migrationReclaimActions, true);
+    }
 
-            for (auto &action : m_deferedActions) {
-                action();
-            }
+    void lockRawPointerAccess()
+    {
+        m_rawPointerUsers.ref();
+    }
 
-            m_isProcessing.clear(std::memory_order_release);
-        }
+    void unlockRawPointerAccess()
+    {
+        m_rawPointerUsers.deref();
     }
 };
 

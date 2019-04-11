@@ -170,9 +170,26 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     setAttribute(Qt::WA_InputMethodEnabled, false);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    // we should make sure the texture doesn't have alpha channel,
+    // otherwise blending will not work correctly.
     if (KisOpenGLModeProber::instance()->useHDRMode()) {
         setTextureFormat(GL_RGBA16F);
+    } else {
+        /**
+         * When in pure OpenGL mode, the canvas surface will have alpha
+         * channel. Therefore, if our canvas blending algorithm produces
+         * semi-transparent pixels (and it does), then Krita window itself
+         * will become transparent. Which is not good.
+         *
+         * In Angle mode, GL_RGB8 is not available (and the transparence effect
+         * doesn't exist at all).
+         */
+        if (!KisOpenGL::hasOpenGLES()) {
+            setTextureFormat(GL_RGB8);
+        }
     }
+#endif
 
     setDisplayFilterImpl(colorConverter->displayFilter(), true);
 

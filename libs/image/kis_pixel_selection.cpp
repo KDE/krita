@@ -40,6 +40,7 @@
 #include "kis_outline_generator.h"
 #include <kis_iterator_ng.h>
 #include "kis_lod_transform.h"
+#include "kundo2command.h"
 
 
 struct Q_DECL_HIDDEN KisPixelSelection::Private {
@@ -87,11 +88,13 @@ KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs, KritaUtils::D
 }
 
 KisPixelSelection::KisPixelSelection(const KisPaintDeviceSP copySource, KritaUtils::DeviceCopyMode copyMode, KisSelectionWSP parentSelection)
-    : KisPaintDevice(*copySource.data(), copyMode)
+    : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), copySource->defaultBounds())
     , m_d(new Private)
 {
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
-    convertTo(cs);
+    KisPaintDeviceSP tmpDevice = new KisPaintDevice(*copySource, copyMode, 0);
+    tmpDevice->convertTo(this->colorSpace());
+
+    this->makeFullCopyFrom(*tmpDevice, copyMode, 0);
 
     m_d->parentSelection = parentSelection;
     m_d->outlineCacheValid = true;

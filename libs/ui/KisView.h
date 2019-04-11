@@ -55,6 +55,7 @@ class KConfigGroup;
 
 // Qt classes
 class QDragEnterEvent;
+class QDragMoveEvent;
 class QDropEvent;
 class QPrintDialog;
 class QCloseEvent;
@@ -251,6 +252,8 @@ public Q_SLOTS:
 
     void slotScreenChanged();
 
+    void slotThemeChanged(QPalette pal);
+
 private Q_SLOTS:
     void slotImageNodeAdded(KisNodeSP node);
     void slotContinueAddNode(KisNodeSP newActiveNode);
@@ -271,8 +274,9 @@ Q_SIGNALS:
 protected:
 
     // QWidget overrides
-    void dragEnterEvent(QDragEnterEvent * event) override;
-    void dropEvent(QDropEvent * event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
 
     /**

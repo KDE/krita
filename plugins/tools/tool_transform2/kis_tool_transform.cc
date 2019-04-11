@@ -841,15 +841,6 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
 {
     Q_ASSERT(!m_strokeData.strokeId());
 
-    KisResourcesSnapshotSP resources =
-            new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
-
-    KisNodeSP currentNode = resources->currentNode();
-
-    if (!currentNode || !currentNode->isEditable()) {
-        return;
-    }
-
     /**
      * FIXME: The transform tool is not completely asynchronous, it
      * needs the content of the layer for creation of the stroke
@@ -859,11 +850,44 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
      * stroke and pass it to the tool somehow. But currently, we will
      * just disable starting a new stroke asynchronously
      */
+
     if (image()->tryBarrierLock()) {
         image()->unlock();
     } else {
         return;
     }
+
+
+    // set up and null checks before we do anything
+    KisResourcesSnapshotSP resources =
+            new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
+    KisNodeSP currentNode = resources->currentNode();
+    if (!currentNode || !currentNode->isEditable()) return;
+
+
+    // some layer types cannot be transformed. Give a message and return if a user tries it
+    if (currentNode->inherits("KisColorizeMask") ||
+        currentNode->inherits("KisFileLayer") ||
+        currentNode->inherits("KisCloneLayer")) {
+
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in transformation tool",
+                      "Layer type cannot use the transform tool"),
+                 koIcon("object-locked"), 4000, KisFloatingMessage::High);
+
+        // force-reset transform mode to default
+        initTransformMode(mode);
+
+        return;
+    }
+
+    // this goes after the floating message check since the fetchNodesList()
+    // says a file layer is "empty" and messes up the floating message check above
+    QList<KisNodeSP> nodesList = fetchNodesList(mode, currentNode, m_workRecursively);
+    if (nodesList.isEmpty()) return;
+
 
     /**
      * We must ensure that the currently selected subtree
@@ -881,22 +905,6 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
     if (m_optionsWidget) {
         m_workRecursively = m_optionsWidget->workRecursively() ||
             !currentNode->paintDevice();
-    }
-
-    QList<KisNodeSP> nodesList = fetchNodesList(mode, currentNode, m_workRecursively);
-
-    if (nodesList.isEmpty()) {
-        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        kisCanvas->viewManager()->
-            showFloatingMessage(
-                i18nc("floating message in transformation tool",
-                      "Selected layer cannot be transformed with active transformation mode "),
-                 koIcon("object-locked"), 4000, KisFloatingMessage::High);
-
-        // force-reset transform mode to default
-        initTransformMode(mode);
-
-        return;
     }
 
     KisSelectionSP selection = resources->activeSelection();

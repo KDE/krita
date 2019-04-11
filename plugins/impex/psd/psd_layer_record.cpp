@@ -325,6 +325,8 @@ bool PSDLayerRecord::read(QIODevice* io)
                 << io->bytesAvailable()
                 << "pos" << io->pos();
 
+                
+        // See https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_22582
         quint32 layerMaskLength = 1; // invalid...
         if (!psdread(io, &layerMaskLength) ||
                 io->bytesAvailable() < layerMaskLength ||
@@ -355,7 +357,7 @@ bool PSDLayerRecord::read(QIODevice* io)
             }
         }
 
-
+        // If it's 36, that is, bit four of the flags is set, we also need to read the 'real' flags, background and rectangle
         if (layerMaskLength == 36 ) {
             if (!psdread(io, &flags) ||
                     !psdread(io, &layerMask.defaultColor) ||
@@ -583,10 +585,10 @@ KisPaintDeviceSP PSDLayerRecord::convertMaskDeviceIfNeeded(KisPaintDeviceSP dev)
 
     if (m_header.channelDepth == 16) {
         result = new KisPaintDevice(*dev);
-        delete result->convertTo(KoColorSpaceRegistry::instance()->alpha16());
+        result->convertTo(KoColorSpaceRegistry::instance()->alpha16());
     } else if (m_header.channelDepth == 32) {
         result = new KisPaintDevice(*dev);
-        delete result->convertTo(KoColorSpaceRegistry::instance()->alpha32f());
+        result->convertTo(KoColorSpaceRegistry::instance()->alpha32f());
     }
     return result;
 }

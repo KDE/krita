@@ -88,7 +88,10 @@
 #include "input/wintab/drawpile_tablettester/tablettester.h"
 
 #ifdef Q_OS_WIN
-#  include <kis_tablet_support_win8.h>
+#include "config_use_qt_tablet_windows.h"
+#   ifndef USE_QT_TABLET_WINDOWS
+#       include <kis_tablet_support_win8.h>
+#   endif
 #endif
 
 struct BackupSuffixValidator : public QValidator {
@@ -703,8 +706,15 @@ void TabletSettingsTab::setDefault()
     curve.fromString(DEFAULT_CURVE_STRING);
     m_page->pressureCurve->setCurve(curve);
 
-#ifdef Q_OS_WIN
-    if (KisTabletSupportWin8::isAvailable()) {
+#if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
+
+#ifdef USE_QT_TABLET_WINDOWS
+    // ask Qt if WinInk is actually available
+    const bool isWinInkAvailable = true;
+#else
+    const bool isWinInkAvailable = KisTabletSupportWin8::isAvailable();
+#endif
+    if (isWinInkAvailable) {
         KisConfig cfg(true);
         m_page->radioWintab->setChecked(!cfg.useWin8PointerInput(true));
         m_page->radioWin8PointerInput->setChecked(cfg.useWin8PointerInput(true));
@@ -712,6 +722,8 @@ void TabletSettingsTab::setDefault()
         m_page->radioWintab->setChecked(true);
         m_page->radioWin8PointerInput->setChecked(false);
     }
+#else
+        m_page->grpTabletApi->setVisible(false);
 #endif
 }
 
@@ -731,8 +743,14 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
     m_page->pressureCurve->setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
     m_page->pressureCurve->setCurve(curve);
 
-#ifdef Q_OS_WIN
-    if (KisTabletSupportWin8::isAvailable()) {
+#if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
+#ifdef USE_QT_TABLET_WINDOWS
+    // ask Qt if WinInk is actually available
+    const bool isWinInkAvailable = true;
+#else
+    const bool isWinInkAvailable = KisTabletSupportWin8::isAvailable();
+#endif
+    if (isWinInkAvailable) {
         m_page->radioWintab->setChecked(!cfg.useWin8PointerInput());
         m_page->radioWin8PointerInput->setChecked(cfg.useWin8PointerInput());
     } else {
@@ -857,6 +875,11 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     connect(chkCachedFramesSizeLimit, SIGNAL(toggled(bool)), intCachedFramesSizeLimit, SLOT(setEnabled(bool)));
     connect(chkUseRegionOfInterest, SIGNAL(toggled(bool)), intRegionOfInterestMargin, SLOT(setEnabled(bool)));
 
+#ifndef Q_OS_WIN
+    // AVX workaround is needed on Windows+GCC only
+    chkDisableAVXOptimizations->setVisible(false);
+#endif
+
     load(false);
 }
 
@@ -892,6 +915,9 @@ void PerformanceTab::load(bool requestDefault)
         chkOpenGLFramerateLogging->setChecked(cfg2.enableOpenGLFramerateLogging(requestDefault));
         chkBrushSpeedLogging->setChecked(cfg2.enableBrushSpeedLogging(requestDefault));
         chkDisableVectorOptimizations->setChecked(cfg2.enableAmdVectorizationWorkaround(requestDefault));
+#ifdef Q_OS_WIN
+        chkDisableAVXOptimizations->setChecked(cfg2.disableAVXOptimizations(requestDefault));
+#endif
         chkBackgroundCacheGeneration->setChecked(cfg2.calculateAnimationCacheInBackground(requestDefault));
     }
 
@@ -934,6 +960,9 @@ void PerformanceTab::save()
         cfg2.setEnableOpenGLFramerateLogging(chkOpenGLFramerateLogging->isChecked());
         cfg2.setEnableBrushSpeedLogging(chkBrushSpeedLogging->isChecked());
         cfg2.setEnableAmdVectorizationWorkaround(chkDisableVectorOptimizations->isChecked());
+#ifdef Q_OS_WIN
+        cfg2.setDisableAVXOptimizations(chkDisableAVXOptimizations->isChecked());
+#endif
         cfg2.setCalculateAnimationCacheInBackground(chkBackgroundCacheGeneration->isChecked());
     }
 
@@ -980,15 +1009,15 @@ void PerformanceTab::slotFrameClonesLimitChanged(int value)
 #include <QOpenGLContext>
 #include <QScreen>
 
-QString colorSpaceString(QSurfaceFormat::ColorSpace cs, int depth)
+QString colorSpaceString(KisSurfaceColorSpace cs, int depth)
 {
     const QString csString =
 #ifdef HAVE_HDR
-        cs == QSurfaceFormat::bt2020PQColorSpace ? "Rec. 2020 PQ" :
-        cs == QSurfaceFormat::scRGBColorSpace ? "Rec. 709 Linear" :
+        cs == KisSurfaceColorSpace::bt2020PQColorSpace ? "Rec. 2020 PQ" :
+        cs == KisSurfaceColorSpace::scRGBColorSpace ? "Rec. 709 Linear" :
 #endif
-        cs == QSurfaceFormat::sRGBColorSpace ? "sRGB" :
-        cs == QSurfaceFormat::DefaultColorSpace ? "sRGB" :
+        cs == KisSurfaceColorSpace::sRGBColorSpace ? "sRGB" :
+        cs == KisSurfaceColorSpace::DefaultColorSpace ? "sRGB" :
         "Unknown Color Space";
 
     return QString("%1 (%2 bit)").arg(csString).arg(depth);
@@ -1072,10 +1101,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     lblCurrentDisplayFormat->setText("");
     lblCurrentRootSurfaceFormat->setText("");
     lblHDRWarning->setText("");
-    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::sRGBColorSpace, 8));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::sRGBColorSpace, 8));
 #ifdef HAVE_HDR
-    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::bt2020PQColorSpace, 10));
-    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::scRGBColorSpace, 16));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::bt2020PQColorSpace, 10));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::scRGBColorSpace, 16));
 #endif
     cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(KisConfig::BT709_G22));
     slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
@@ -1087,7 +1116,11 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     }
 
     if (context) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         QScreen *screen = QGuiApplication::screenAt(rect().center());
+#else
+        QScreen *screen = 0;
+#endif
         KisScreenInformationAdapter adapter(context);
         if (screen && adapter.isValid()) {
             KisScreenInformationAdapter::ScreenInfo info = adapter.infoForScreen(screen);
@@ -1117,9 +1150,13 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         }
 
         const QSurfaceFormat currentFormat = KisOpenGLModeProber::instance()->surfaceformatInUse();
-        lblCurrentRootSurfaceFormat->setText(colorSpaceString(currentFormat.colorSpace(), currentFormat.redBufferSize()));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+        KisSurfaceColorSpace colorSpace = currentFormat.colorSpace();
+#else
+        KisSurfaceColorSpace colorSpace = KisSurfaceColorSpace::DefaultColorSpace;
+#endif
+        lblCurrentRootSurfaceFormat->setText(colorSpaceString(colorSpace, currentFormat.redBufferSize()));
         cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(cfg.rootSurfaceFormat()));
-
         connect(cmbPreferedRootSurfaceFormat, SIGNAL(currentIndexChanged(int)), SLOT(slotPreferredSurfaceFormatChanged(int)));
         slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
     }
@@ -1247,13 +1284,17 @@ void DisplaySettingsTab::slotPreferredSurfaceFormatChanged(int index)
 
     QOpenGLContext *context = QOpenGLContext::currentContext();
     if (context) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         QScreen *screen = QGuiApplication::screenAt(rect().center());
+#else
+        QScreen *screen = 0;
+#endif
         KisScreenInformationAdapter adapter(context);
         if (adapter.isValid()) {
             KisScreenInformationAdapter::ScreenInfo info = adapter.infoForScreen(screen);
             if (info.isValid()) {
                 if (cmbPreferedRootSurfaceFormat->currentIndex() != formatToIndex(KisConfig::BT709_G22) &&
-                    info.colorSpace == QSurfaceFormat::sRGBColorSpace) {
+                    info.colorSpace == KisSurfaceColorSpace::sRGBColorSpace) {
                     lblHDRWarning->setText(i18n("WARNING: current display doesn't support HDR rendering"));
                 } else {
                     lblHDRWarning->setText("");
@@ -1555,8 +1596,14 @@ bool KisDlgPreferences::editPreferences()
 
         // Tablet settings
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
-#ifdef Q_OS_WIN
-        if (KisTabletSupportWin8::isAvailable()) {
+#if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
+#ifdef USE_QT_TABLET_WINDOWS
+        // ask Qt if WinInk is actually available
+        const bool isWinInkAvailable = true;
+#else
+        const bool isWinInkAvailable = KisTabletSupportWin8::isAvailable();
+#endif
+        if (isWinInkAvailable) {
             cfg.setUseWin8PointerInput(dialog->m_tabletSettings->m_page->radioWin8PointerInput->isChecked());
         }
 #endif

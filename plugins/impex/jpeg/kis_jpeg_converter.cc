@@ -470,16 +470,14 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(QIODevice *io, KisPaintLayerS
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
 
     if (color_type == JCS_UNKNOWN) {
-        KUndo2Command *tmp = layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-        delete tmp;
+        layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
         cs = KoColorSpaceRegistry::instance()->rgb8();
         color_type = JCS_RGB;
     }
 
     if (options.forceSRGB) {
         const KoColorSpace* dst = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), layer->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
-        KUndo2Command *tmp = layer->paintDevice()->convertTo(dst);
-        delete tmp;
+        layer->paintDevice()->convertTo(dst);
         cs = dst;
         color_type = JCS_RGB;
     }

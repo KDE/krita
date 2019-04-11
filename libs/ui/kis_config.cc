@@ -51,6 +51,10 @@
 #include <kis_color_manager.h>
 #include <KisOcioConfiguration.h>
 
+#ifdef Q_OS_WIN
+#include "config_use_qt_tablet_windows.h"
+#endif
+
 KisConfig::KisConfig(bool readOnly)
     : m_cfg( KSharedConfig::openConfig()->group(""))
     , m_readOnly(readOnly)
@@ -1118,24 +1122,51 @@ void KisConfig::setPressureTabletCurve(const QString& curveString) const
 bool KisConfig::useWin8PointerInput(bool defaultValue) const
 {
 #ifdef Q_OS_WIN
+#ifdef USE_QT_TABLET_WINDOWS
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+
+    return useWin8PointerInputNoApp(&kritarc, defaultValue);
+#else
     return (defaultValue ? false : m_cfg.readEntry("useWin8PointerInput", false));
+#endif
 #else
     Q_UNUSED(defaultValue);
     return false;
 #endif
 }
 
-void KisConfig::setUseWin8PointerInput(bool value) const
+void KisConfig::setUseWin8PointerInput(bool value)
 {
 #ifdef Q_OS_WIN
+
     // Special handling: Only set value if changed
     // I don't want it to be set if the user hasn't touched it
     if (useWin8PointerInput() != value) {
+
+#ifdef USE_QT_TABLET_WINDOWS
+        const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+        QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+        setUseWin8PointerInputNoApp(&kritarc, value);
+#else
         m_cfg.writeEntry("useWin8PointerInput", value);
+#endif
+
     }
+
 #else
     Q_UNUSED(value)
 #endif
+}
+
+bool KisConfig::useWin8PointerInputNoApp(QSettings *settings, bool defaultValue)
+{
+    return defaultValue ? false : settings->value("useWin8PointerInput", false).toBool();
+}
+
+void KisConfig::setUseWin8PointerInputNoApp(QSettings *settings, bool value)
+{
+    settings->setValue("useWin8PointerInput", value);
 }
 
 qreal KisConfig::vastScrolling(bool defaultValue) const
@@ -1853,6 +1884,16 @@ void KisConfig::setEnableAmdVectorizationWorkaround(bool value)
 bool KisConfig::enableAmdVectorizationWorkaround(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("amdDisableVectorWorkaround", false));
+}
+
+void KisConfig::setDisableAVXOptimizations(bool value)
+{
+    m_cfg.writeEntry("disableAVXOptimizations", value);
+}
+
+bool KisConfig::disableAVXOptimizations(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("disableAVXOptimizations", false));
 }
 
 void KisConfig::setAnimationDropFrames(bool value)

@@ -60,6 +60,7 @@
 #include <QProxyStyle>
 #include <QScreen>
 #include <QAction>
+#include <QWindow>
 
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -310,7 +311,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     d->windowStateConfig = KSharedConfig::openConfig()->group("MainWindow");
 
-    setAcceptDrops(true);
     setStandardToolBarMenuEnabled(true);
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
     setDockNestingEnabled(true);
@@ -536,6 +536,9 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         menuBar()->setVisible(true);
     }
 
+    this->winId(); // Ensures the native window has been created.
+    QWindow *window = this->windowHandle();
+    connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
 
 }
 
@@ -698,6 +701,19 @@ void KisMainWindow::slotThemeChanged()
     // reload action icons!
     Q_FOREACH (QAction *action, actionCollection()->actions()) {
         KisIconUtils::updateIcon(action);
+    }
+    if (d->mdiArea) {
+        d->mdiArea->setPalette(qApp->palette());
+        for (int i=0; i<d->mdiArea->subWindowList().size(); i++) {
+            QMdiSubWindow *window = d->mdiArea->subWindowList().at(i);
+            if (window) {
+                window->setPalette(qApp->palette());
+                KisView *view = qobject_cast<KisView*>(window->widget());
+                if (view) {
+                    view->slotThemeChanged(qApp->palette());
+                }
+            }
+        }
     }
 
     emit themeChanged();
@@ -1322,39 +1338,7 @@ void KisMainWindow::setActiveView(KisView* view)
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
 }
 
-void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)
-{
-    d->welcomePage->showDropAreaIndicator(true);
-
-
-    if (event->mimeData()->hasUrls() ||
-        event->mimeData()->hasFormat("application/x-krita-node") ||
-        event->mimeData()->hasFormat("application/x-qt-image")) {
-
-        event->accept();
-    }
-}
-
-void KisMainWindow::dropEvent(QDropEvent *event)
-{
-    d->welcomePage->showDropAreaIndicator(false);
-
-    if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
-        Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
-            if (url.toLocalFile().endsWith(".bundle")) {
-                bool r = installBundle(url.toLocalFile());
-                if (!r) {
-                    qWarning() << "Could not install bundle" << url.toLocalFile();
-                }
-            }
-            else {
-                openDocument(url, None);
-            }
-        }
-    }
-}
-
-void KisMainWindow::dragMoveEvent(QDragMoveEvent * event)
+void KisMainWindow::dragMove(QDragMoveEvent * event)
 {
     QTabBar *tabBar = d->findTabBarHACK();
 
@@ -1376,10 +1360,8 @@ void KisMainWindow::dragMoveEvent(QDragMoveEvent * event)
     }
 }
 
-void KisMainWindow::dragLeaveEvent(QDragLeaveEvent * /*event*/)
+void KisMainWindow::dragLeave()
 {
-        d->welcomePage->showDropAreaIndicator(false);
-
     if (d->tabSwitchCompressor->isActive()) {
         d->tabSwitchCompressor->stop();
     }
@@ -2147,9 +2129,12 @@ void KisMainWindow::updateWindowMenu()
     QMenu *docMenu = d->documentMenu->menu();
     docMenu->clear();
 
+    QFontMetrics fontMetrics = docMenu->fontMetrics();
+    int fileStringWidth = int(QApplication::desktop()->screenGeometry(this).width() * .40f);
+
     Q_FOREACH (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
-            QString title = doc->url().toDisplayString();
+            QString title = fontMetrics.elidedText(doc->url().toDisplayString(QUrl::PreferLocalFile), Qt::ElideMiddle, fileStringWidth);
             if (title.isEmpty() && doc->image()) {
                 title = doc->image()->objectName();
             }
@@ -2247,10 +2232,10 @@ void KisMainWindow::updateWindowMenu()
         if (child && child->document()) {
             QString text;
             if (i < 9) {
-                text = i18n("&%1 %2", i + 1, child->document()->url().toDisplayString());
+                text = i18n("&%1 %2", i + 1, fontMetrics.elidedText(child->document()->url().toDisplayString(QUrl::PreferLocalFile), Qt::ElideMiddle, fileStringWidth));
             }
             else {
-                text = i18n("%1 %2", i + 1, child->document()->url().toDisplayString());
+                text = i18n("%1 %2", i + 1, fontMetrics.elidedText(child->document()->url().toDisplayString(QUrl::PreferLocalFile), Qt::ElideMiddle, fileStringWidth));
             }
 
             QAction *action  = menu->addAction(text);
@@ -2638,42 +2623,12 @@ void KisMainWindow::showManual()
     QDesktopServices::openUrl(QUrl("https://docs.krita.org"));
 }
 
-void KisMainWindow::moveEvent(QMoveEvent *e)
+void KisMainWindow::windowScreenChanged(QScreen *screen)
 {
-    /**
-     * For checking if the display number has changed or not we should always use
-     * positional overload, not using QWidget overload. Otherwise we might get
-     * inconsistency, because screenNumber(widget) can return -1, but screenNumber(pos)
-     * will always return the nearest screen.
-     */
-
-    const int oldScreen = qApp->desktop()->screenNumber(e->oldPos());
-    const int newScreen = qApp->desktop()->screenNumber(e->pos());
-
-    if (oldScreen != newScreen) {
-        emit screenChanged();
-    }
-
-    if (d->screenConnectionsStore.isEmpty() || oldScreen != newScreen) {
-
-        d->screenConnectionsStore.clear();
-
-        QScreen *newScreenObject = 0;
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-        newScreenObject = qApp->screenAt(e->pos());
-#else
-        // TODO: i'm not sure if this pointer already has a correct value
-        // by the moment we get the event. It might not work on older
-        // versions of Qt
-        newScreenObject = qApp->primaryScreen();
-#endif
-
-        if (newScreenObject) {
-            d->screenConnectionsStore.addConnection(newScreenObject, SIGNAL(physicalDotsPerInchChanged(qreal)),
-                                                    this, SIGNAL(screenChanged()));
-        }
-    }
+    emit screenChanged();
+    d->screenConnectionsStore.clear();
+    d->screenConnectionsStore.addConnection(screen, SIGNAL(physicalDotsPerInchChanged(qreal)),
+                                            this, SIGNAL(screenChanged()));
 }
 
 

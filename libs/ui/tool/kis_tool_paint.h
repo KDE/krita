@@ -110,16 +110,6 @@ protected:
         return QString();
     }
 
-    enum NodePaintAbility {
-        NONE,
-        PAINT,
-        VECTOR,
-        CLONE
-    };
-
-    /// Checks if and how the tool can paint on the current node
-    NodePaintAbility nodePaintAbility();
-
     const KoCompositeOp* compositeOp();
 
 public Q_SLOTS:

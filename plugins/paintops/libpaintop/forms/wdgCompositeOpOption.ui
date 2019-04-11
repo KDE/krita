@@ -77,6 +77,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>Turn the preset into an Eraser preset (overrides the blending mode)</string>
+       </property>
        <property name="text">
         <string>Eraser</string>
        </property>

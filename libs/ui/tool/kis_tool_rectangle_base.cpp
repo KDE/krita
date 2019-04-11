@@ -109,7 +109,7 @@ bool KisToolRectangleBase::listeningToModifiers()
 
 void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
 {
-    if ((m_type == PAINT && (!nodeEditable() || nodePaintAbility() == NONE)) ||
+    if ((m_type == PAINT && (!nodeEditable() || nodePaintAbility() == UNPAINTABLE)) ||
         (m_type == SELECT && !selectionEditable())) {
 
         event->ignore();

@@ -1,16 +1,19 @@
-'''
-This script is licensed CC 0 1.0, so that you can learn from it.
+# This script is licensed CC 0 1.0, so that you can learn from it.
 
------- CC 0 1.0 ---------------
+# ------ CC 0 1.0 ---------------
 
-The person who associated a work with this deed has dedicated the work to the public domain by waiving all of his or her rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law.
+# The person who associated a work with this deed has dedicated the
+# work to the public domain by waiving all of his or her rights to the
+# work worldwide under copyright law, including all related and
+# neighboring rights, to the extent allowed by law.
 
-You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.
+# You can copy, modify, distribute and perform the work, even for
+# commercial purposes, all without asking permission.
 
-https://creativecommons.org/publicdomain/zero/1.0/legalcode
-'''
+# https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
+from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QPushButton,
                              QLineEdit, QScrollArea, QGridLayout, QFileDialog,
                              QLabel, QDialogButtonBox)
 from . import tenscriptsdialog
@@ -21,7 +24,8 @@ class UITenScripts(object):
 
     def __init__(self):
         self.kritaInstance = krita.Krita.instance()
-        self.mainDialog = tenscriptsdialog.TenScriptsDialog(self, self.kritaInstance.activeWindow().qwindow())
+        self.mainDialog = tenscriptsdialog.TenScriptsDialog(
+            self, self.kritaInstance.activeWindow().qwindow())
 
         self.buttonBox = QDialogButtonBox(self.mainDialog)
         self.layout = QVBoxLayout(self.mainDialog)
@@ -34,7 +38,8 @@ class UITenScripts(object):
         self.buttonBox.rejected.connect(self.mainDialog.reject)
 
         self.buttonBox.setOrientation(Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        self.buttonBox.setStandardButtons(
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         self.scrollArea.setWidgetResizable(True)
 
     def initialize(self, tenscripts):
@@ -55,7 +60,6 @@ class UITenScripts(object):
 
     def addNewRow(self, key):
         rowPosition = self.scriptsLayout.rowCount()
-        rowLayout = QHBoxLayout()
         label = QLabel()
         directoryTextField = QLineEdit()
         directoryDialogButton = QPushButton(i18n("..."))
@@ -66,9 +70,12 @@ class UITenScripts(object):
         directoryDialogButton.setToolTip(i18n("Select the script"))
         directoryDialogButton.clicked.connect(self._selectScript)
 
-        self.scriptsLayout.addWidget(label, rowPosition, 0, Qt.AlignLeft|Qt.AlignTop)
-        self.scriptsLayout.addWidget(directoryTextField, rowPosition, 1, Qt.AlignLeft|Qt.AlignTop)
-        self.scriptsLayout.addWidget(directoryDialogButton, rowPosition, 2, Qt.AlignLeft|Qt.AlignTop)
+        self.scriptsLayout.addWidget(
+            label, rowPosition, 0, Qt.AlignLeft | Qt.AlignTop)
+        self.scriptsLayout.addWidget(
+            directoryTextField, rowPosition, 1, Qt.AlignLeft | Qt.AlignTop)
+        self.scriptsLayout.addWidget(
+            directoryDialogButton, rowPosition, 2, Qt.AlignLeft | Qt.AlignTop)
 
     def saved_scripts(self):
         _saved_scripts = []
@@ -89,7 +96,8 @@ class UITenScripts(object):
         if dialog.exec_():
             selectedFile = dialog.selectedFiles()[0]
             obj = self.mainDialog.sender()
-            textField = self.scriptsLayout.itemAt(self.scriptsLayout.indexOf(obj)-1).widget()
+            textField = self.scriptsLayout.itemAt(
+                self.scriptsLayout.indexOf(obj)-1).widget()
             textField.setText(selectedFile)
 
     def _loadGridLayout(self):

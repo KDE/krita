@@ -76,7 +76,7 @@ parts:
         - libqt5svg5-dev
         - libqt5x11extras5-dev
         - libqt5opengl5-dev
-
+        - libquazip5-dev
   runtime:
     plugin: nil
     stage-packages:
@@ -125,6 +125,7 @@ parts:
         - libqt5xml5
         - locales
         - libc-bin
+        - libquazip5
     prime:
     - "-usr/share/wallpapers/*"
     - "-usr/share/fonts/*"

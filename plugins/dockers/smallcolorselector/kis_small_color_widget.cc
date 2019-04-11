@@ -125,7 +125,7 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
 
     }
 
-    const QSurfaceFormat::ColorSpace colorSpace = QSurfaceFormat::DefaultColorSpace;
+    const KisSurfaceColorSpace colorSpace = KisSurfaceColorSpace::DefaultColorSpace;
 
     d->hueWidget = new KisClickableGLImageWidget(colorSpace, this);
     d->hueWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -264,8 +264,8 @@ void KisSmallColorWidget::slotUpdatePalettes()
 
 namespace {
 struct FillHPolicy {
-    static inline void getRGB(qreal hue, float xPortionCoeff, float yPortionCoeff,
-                              int x, int y, float *r, float *g, float *b) {
+    static inline void getRGB(qreal /*hue*/, float xPortionCoeff, float /*yPortionCoeff*/,
+                              int x, int /*y*/, float *r, float *g, float *b) {
 
         HSVToRGB(xPortionCoeff * x * 360.0f, 1.0, 1.0, r, g, b);
     }

@@ -126,7 +126,7 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
         : KisShapeLayerCanvasBase(parent, image)
         , m_projection(0)
         , m_parentLayer(parent)
-        , m_canvasUpdateCompressor(new KisSignalCompressor(500, KisSignalCompressor::FIRST_INACTIVE, this))
+        , m_canvasUpdateCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
         , m_asyncUpdateSignalCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
 {
     /**
@@ -136,10 +136,9 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
     m_shapeManager->addShape(parent, KoShapeManager::AddWithoutRepaint);
     m_shapeManager->selection()->setActiveLayer(parent);
 
-    connect(this, SIGNAL(forwardRepaint()), m_canvasUpdateCompressor, SLOT(start()));
-    connect(m_canvasUpdateCompressor, SIGNAL(timeout()), this, SLOT(repaint()));
-
     connect(&m_asyncUpdateSignalCompressor, SIGNAL(timeout()), SLOT(slotStartAsyncRepaint()));
+    connect(this, SIGNAL(forwardRepaint()), &m_canvasUpdateCompressor, SLOT(start()));
+    connect(&m_canvasUpdateCompressor, SIGNAL(timeout()), this, SLOT(repaint()));
 
     setImage(image);
 }
@@ -162,6 +161,8 @@ void KisShapeLayerCanvas::setImage(KisImageWSP image)
         connect(m_image, SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
         m_cachedImageRect = m_image->bounds();
     }
+
+    updateUpdateCompressorDelay();
 }
 
 
@@ -271,6 +272,7 @@ void KisShapeLayerCanvas::slotImageSizeChanged()
     updateCanvas(dirtyRects);
 
     m_cachedImageRect = m_image->bounds();
+    updateUpdateCompressorDelay();
 }
 
 void KisShapeLayerCanvas::repaint()
@@ -350,4 +352,15 @@ void KisShapeLayerCanvas::rerenderAfterBeingInvisible()
 
     m_hasChangedWhileBeingInvisible = false;
     resetCache();
+}
+
+void KisShapeLayerCanvas::updateUpdateCompressorDelay()
+{
+    if (m_cachedImageRect.width() * m_cachedImageRect.height() < 2480 * 3508) { // A4 300 DPI
+        m_canvasUpdateCompressor.setDelay(25);
+    } else if (m_cachedImageRect.width() * m_cachedImageRect.height() < 4961 * 7061) { // A4 600 DPI
+        m_canvasUpdateCompressor.setDelay(100);
+    } else { // Really big
+        m_canvasUpdateCompressor.setDelay(500);
+    }
 }

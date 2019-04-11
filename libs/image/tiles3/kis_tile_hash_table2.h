@@ -30,7 +30,7 @@
 /**
  * This is a  template for a hash table that stores  tiles (or some other
  * objects  resembling tiles).   Actually, this  object should  only have
- * col()/row() methods and be able to answer notifyDead() requests to
+ * col()/row() methods and be able to answer notifyDetachedFromDataManager() requests to
  * be   stored   here.    It   is   used   in   KisTiledDataManager   and
  * KisMementoManager.
  *
@@ -119,9 +119,7 @@ private:
 
         void destroy()
         {
-            d->notifyDead();
             TileTypeSP::deref(reinterpret_cast<TileTypeSP*>(this), d);
-            this->MemoryReclaimer::~MemoryReclaimer();
             delete this;
         }
 
@@ -150,35 +148,47 @@ private:
 
         {
             QReadLocker locker(&m_iteratorLock);
+            m_map.getGC().lockRawPointerAccess();
             tile = m_map.assign(idx, item.data());
         }
 
         if (tile) {
+            tile->notifyDeadWithoutDetaching();
             m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(tile));
         } else {
             m_numTiles.fetchAndAddRelaxed(1);
         }
+
+        m_map.getGC().unlockRawPointerAccess();
 
         m_map.getGC().update(m_map.migrationInProcess());
     }
 
     inline bool erase(quint32 idx)
     {
+        m_map.getGC().lockRawPointerAccess();
+
         bool wasDeleted = false;
         TileType *tile = m_map.erase(idx);
 
         if (tile) {
+            tile->notifyDetachedFromDataManager();
+
             wasDeleted = true;
             m_numTiles.fetchAndSubRelaxed(1);
             m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(tile));
         }
+
+        m_map.getGC().unlockRawPointerAccess();
 
         m_map.getGC().update(m_map.migrationInProcess());
         return wasDeleted;
     }
 
 private:
-    mutable ConcurrentMap<quint32, TileType*> m_map;
+    typedef ConcurrentMap<quint32, TileType*> LockFreeTileMap;
+    typedef typename LockFreeTileMap::Mutator LockFreeTileMapMutator;
+    mutable LockFreeTileMap m_map;
 
     /**
      * We still need something to guard changes in m_defaultTileData,
@@ -186,7 +196,6 @@ private:
      */
     QReadWriteLock m_defaultPixelDataLock;
     mutable QReadWriteLock m_iteratorLock;
-    std::atomic_flag m_lazyLock = ATOMIC_FLAG_INIT;
 
     QAtomicInt m_numTiles;
     KisTileData *m_defaultTileData;
@@ -287,7 +296,11 @@ template <class T>
 typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getExistingTile(qint32 col, qint32 row)
 {
     quint32 idx = calculateHash(col, row);
+
+    m_map.getGC().lockRawPointerAccess();
     TileTypeSP tile = m_map.get(idx);
+    m_map.getGC().unlockRawPointerAccess();
+
     m_map.getGC().update(m_map.migrationInProcess());
     return tile;
 }
@@ -297,35 +310,60 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
 {
     newTile = false;
     quint32 idx = calculateHash(col, row);
-    TileTypeSP tile = m_map.get(idx);
 
-    if (!tile) {
-        while (m_lazyLock.test_and_set(std::memory_order_acquire));
+    // we are going to assign a raw-pointer tile from the table
+    // to a shared pointer...
+    m_map.getGC().lockRawPointerAccess();
 
-        while (!(tile = m_map.get(idx))) {
+    TileTypeSP tile;
+
+    while (!(tile = m_map.get(idx))) {
+        LockFreeTileMapMutator mutator = m_map.insertOrFind(idx);
+        if (!mutator.getValue()) {
+            // we shouldn't try to aquire **any** lock with
+            // raw-pointer lock held
+            m_map.getGC().unlockRawPointerAccess();
+
             {
                 QReadLocker locker(&m_defaultPixelDataLock);
-                tile = new TileType(col, row, m_defaultTileData, m_mementoManager);
+                tile = new TileType(col, row, m_defaultTileData, 0);
             }
 
             TileTypeSP::ref(&tile, tile.data());
             TileType *item = 0;
 
-            {
-                QReadLocker locker(&m_iteratorLock);
-                item = m_map.assign(idx, tile.data());
-            }
+            // iterator lock should be taken **before**
+            // the pointers are locked
+            m_iteratorLock.lockForRead();
+
+            // and now lock raw-pointers again
+            m_map.getGC().lockRawPointerAccess();
+
+            item = mutator.exchangeValue(tile.data());
+            m_iteratorLock.unlock();
 
             if (item) {
+                // we've got our tile back, it didn't manage to
+                // get into the table. Now release the allocated
+                // tile and push TO/GA switch.
+                tile = 0;
+
+                item->notifyDeadWithoutDetaching();
                 m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(item));
+
+                continue;
+
             } else {
                 newTile = true;
                 m_numTiles.fetchAndAddRelaxed(1);
-            }
-        }
 
-        m_lazyLock.clear(std::memory_order_release);
+                tile->notifyAttachedToDataManager(m_mementoManager);
+            }
+        } else {
+            tile = mutator.getValue();
+        }
     }
+    m_map.getGC().unlockRawPointerAccess();
 
     m_map.getGC().update(m_map.migrationInProcess());
     return tile;
@@ -335,7 +373,11 @@ template <class T>
 typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getReadOnlyTileLazy(qint32 col, qint32 row, bool &existingTile)
 {
     quint32 idx = calculateHash(col, row);
+
+    m_map.getGC().lockRawPointerAccess();
     TileTypeSP tile = m_map.get(idx);
+    m_map.getGC().unlockRawPointerAccess();
+
     existingTile = tile;
 
     if (!existingTile) {
@@ -370,22 +412,29 @@ bool KisTileHashTableTraits2<T>::deleteTile(qint32 col, qint32 row)
 template<class T>
 void KisTileHashTableTraits2<T>::clear()
 {
-    QWriteLocker locker(&m_iteratorLock);
+    {
+        QWriteLocker locker(&m_iteratorLock);
 
-    typename ConcurrentMap<quint32, TileType*>::Iterator iter(m_map);
-    TileType *tile = 0;
+        typename ConcurrentMap<quint32, TileType*>::Iterator iter(m_map);
+        TileType *tile = 0;
 
-    while (iter.isValid()) {
-        tile = m_map.erase(iter.getKey());
+        while (iter.isValid()) {
+            m_map.getGC().lockRawPointerAccess();
+            tile = m_map.erase(iter.getKey());
 
-        if (tile) {
-            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(tile));
+            if (tile) {
+                tile->notifyDetachedFromDataManager();
+                m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(tile));
+            }
+            m_map.getGC().unlockRawPointerAccess();
+
+            iter.next();
         }
 
-        iter.next();
+        m_numTiles.store(0);
     }
 
-    m_numTiles.store(0);
+    // garbage collection must **not** be run with locks held
     m_map.getGC().update(false);
 }
 

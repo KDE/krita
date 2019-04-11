@@ -80,7 +80,7 @@ OverviewWidget::OverviewWidget(QWidget * parent)
 {
     setMouseTracking(true);
     KisConfig cfg(true);
-    m_outlineColor = qApp->palette().color(QPalette::Highlight);
+    slotThemeChanged();
 }
 
 OverviewWidget::~OverviewWidget()
@@ -104,6 +104,7 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
         connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),SLOT(startUpdateCanvasProjection()));
 
         connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
+        connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()));
         generateThumbnail();
     }
 }
@@ -262,6 +263,11 @@ void OverviewWidget::updateThumbnail(QImage pixmap)
     m_pixmap = QPixmap::fromImage(pixmap);
     m_oldPixmap = m_pixmap.copy();
     update();
+}
+
+void OverviewWidget::slotThemeChanged()
+{
+    m_outlineColor = qApp->palette().color(QPalette::Highlight);
 }
 
 

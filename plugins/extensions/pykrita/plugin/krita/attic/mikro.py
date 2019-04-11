@@ -26,6 +26,9 @@ This code uses a lot of metaprogramming magic. To fully understand it,
 you have to know about metaclasses in Python
 """
 
+# NOTE: This has not been tested with private sip module for PyQt5, as required
+#       by newer PyQt5. In particular, `import sip` may or may not work.
+
 import sys
 import sip
 from PyQt5.QtCore import QVariant, QMetaObject, Q_RETURN_ARG, Q_ARG, QObject, Qt, QMetaMethod, pyqtSignal

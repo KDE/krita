@@ -330,6 +330,11 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
                <property name="wrapping">
                 <bool>false</bool>
                </property>
@@ -545,15 +550,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisCurveWidget</class>
-   <extends></extends>
-   <header>widgets/kis_curve_widget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisCurveWidget</class>
+   <extends></extends>
+   <header>widgets/kis_curve_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

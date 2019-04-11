@@ -313,5 +313,12 @@ void KisCurveOptionWidget::updateThemedIcons()
     m_curveOptionWidget->reverseSCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-s-reverse"));
     m_curveOptionWidget->uCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-u"));
     m_curveOptionWidget->revUCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-arch"));
+
+    // this helps make the checkboxes show themselves on the dark color themes
+    QPalette pal = m_curveOptionWidget->sensorSelector->palette();
+    QPalette newPalette = pal;
+    newPalette.setColor(QPalette::Active, QPalette::Background, pal.text().color() );
+    m_curveOptionWidget->sensorSelector->setPalette(newPalette);
+
 }
 

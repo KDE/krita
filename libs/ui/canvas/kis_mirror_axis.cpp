@@ -116,7 +116,6 @@ KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisVi
 
 KisMirrorAxis::~KisMirrorAxis()
 {
-    delete d;
 }
 
 float KisMirrorAxis::handleSize() const
@@ -128,7 +127,7 @@ void KisMirrorAxis::setHandleSize(float newSize)
 {
     if(d->config.handleSize() != newSize) {
         d->config.setHandleSize(newSize);
-        d->horizontalIcon = KisIconUtils::loadIcon("symmetry-horyzontal").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
+        d->horizontalIcon = KisIconUtils::loadIcon("symmetry-horizontal").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
         d->verticalIcon = KisIconUtils::loadIcon("symmetry-vertical").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
         d->horizontalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
         d->verticalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);

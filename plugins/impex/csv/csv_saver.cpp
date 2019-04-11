@@ -425,8 +425,7 @@ KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* ex
 
     if (!KisPNGConverter::isColorSpaceSupported(cs)) {
         device = new KisPaintDevice(*device.data());
-        KUndo2Command *cmd= device->convertTo(KoColorSpaceRegistry::instance()->rgb8());
-        delete cmd;
+        device->convertTo(KoColorSpaceRegistry::instance()->rgb8());
     }
     KisPNGOptions options;
 

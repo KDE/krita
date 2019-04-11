@@ -138,7 +138,7 @@ void KisTileDataStoreTest::testLeaks()
 
     KisTileSP tile = dm->getTile(0, 0, true);
     tile->lockForWrite();
-    tile->unlock();
+    tile->unlockForWrite();
 
     tile = 0;
 
@@ -173,7 +173,7 @@ void KisTileDataStoreTest::testSwapping()
         memset(td->data(), COLUMN2COLOR(col), TILESIZE);
         QVERIFY(memoryIsFilled(COLUMN2COLOR(col), td->data(), TILESIZE));
 
-        tile->unlock();
+        tile->unlockForWrite();
     }
 
     //KisTileDataStore::instance()->debugSwapAll();
@@ -184,7 +184,7 @@ void KisTileDataStoreTest::testSwapping()
 
         KisTileData *td = tile->tileData();
         QVERIFY(memoryIsFilled(COLUMN2COLOR(col), td->data(), TILESIZE));
-        tile->unlock();
+        tile->unlockForWrite();
     }
 }
 

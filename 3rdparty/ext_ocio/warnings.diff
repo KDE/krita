@@ -11,3 +11,16 @@ index b05c7e4..8577e54 100644
      # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
  endif(CMAKE_COMPILER_IS_GNUCXX)
  
+diff --git a/src/core/CMakeLists.txt b/src/core/CMakeLists.txt
+index 1eb691b..cff9bd8 100644
+--- a/src/core/CMakeLists.txt
++++ b/src/core/CMakeLists.txt
+@@ -23,8 +23,6 @@ if(WIN32)
+     if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+         set(EXTERNAL_COMPILE_FLAGS "${EXTERNAL_COMPILE_FLAGS} /WX")
+     endif()
+-else()
+-    set(EXTERNAL_COMPILE_FLAGS "${EXTERNAL_COMPILE_FLAGS} -Werror")
+ endif()
+ 
+ # SHARED

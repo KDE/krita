@@ -306,6 +306,9 @@ extern "C" int main(int argc, char **argv)
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+
+    KisUsageLogger::writeHeader();
+
     if (!language.isEmpty()) {
         if (rightToLeft) {
             app.setLayoutDirection(Qt::RightToLeft);

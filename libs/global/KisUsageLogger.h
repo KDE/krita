@@ -43,9 +43,11 @@ public:
     /// Writes without date/time
     static void write(const QString &message);
 
+
+    static void writeHeader();
+
 private:
 
-    void writeHeader();
     void rotateLog();
 
     Q_DISABLE_COPY(KisUsageLogger)

@@ -1099,6 +1099,8 @@ void KisPainter::paintPolyline(const vQPointF &points,
         fillPolygon(points, d->fillStyle);
     }
 
+    if (d->strokeStyle == StrokeStyleNone) return;
+
     if (index >= points.count())
         return;
 
@@ -1110,11 +1112,12 @@ void KisPainter::paintPolyline(const vQPointF &points,
 
     if (numPoints > 1) {
         KisDistanceInformation saveDist(points[0],
-                                        KisAlgebra2D::directionBetweenPoints(points[0], points[1], 0.0));
+                KisAlgebra2D::directionBetweenPoints(points[0], points[1], 0.0));
         for (int i = index; i < index + numPoints - 1; i++) {
             paintLine(points [i], points [i + 1], &saveDist);
         }
     }
+
 }
 
 static void getBezierCurvePoints(const KisVector2D &pos1,

@@ -46,6 +46,7 @@ public:
     int dpiY() const;
     bool doTemplate() const;
     bool exportAs() const;
+    bool exportSequence() const;
     QString exportFileName() const;
     QString workspace() const;
     QString windowLayout() const;

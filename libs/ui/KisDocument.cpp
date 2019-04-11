@@ -1187,7 +1187,7 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
     else {
         if (ret) {
 
-            if ((flags & DontAddToRecent)) {
+            if (!(flags & DontAddToRecent)) {
                 KisPart::instance()->addRecentURLToAllMainWindows(_url);
             }
 

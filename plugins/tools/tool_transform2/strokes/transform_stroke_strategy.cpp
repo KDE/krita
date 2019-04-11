@@ -142,6 +142,13 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                                       "transformed_image");
 
                 KisGroupLayerSP clonedGroup = dynamic_cast<KisGroupLayer*>(group->clone().data());
+
+                // In case the group is pass-through, it needs to be disabled for the preview,
+                //   otherwise it will crash (no parent for a preview leaf).
+                // Also it needs to be done before setting the root layer for clonedImage.
+                // Result: preview for pass-through group is the same as for standard group
+                //   (i.e. filter layers in the group won't affect the layer stack for a moment).
+                clonedGroup->setPassThroughMode(false);
                 clonedImage->setRootLayer(clonedGroup);
 
                 QQueue<KisNodeSP> linearizedSrcNodes;

@@ -51,7 +51,6 @@
 KisGridPaintOp::KisGridPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
     , m_settings(static_cast<KisGridPaintOpSettings*>(const_cast<KisPaintOpSettings*>(settings.data())))
-    , m_image(image)
     , m_node(node)
 {
     m_properties.readOptionSetting(settings);

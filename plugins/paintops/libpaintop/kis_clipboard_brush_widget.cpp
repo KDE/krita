@@ -36,7 +36,7 @@
 #include "kis_gbr_brush.h"
 #include "KisBrushServerProvider.h"
 
-KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString &caption, KisImageWSP image)
+KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString &caption, KisImageWSP /*image*/)
     : KisWdgClipboardBrush(parent)
 {
     setWindowTitle(caption);

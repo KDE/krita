@@ -96,7 +96,7 @@ protected:
     /// a subclass can implement this method to note that the point, although it is in
     /// containsPointInComponentCoords area, still cannot be selected as a color (e.g.
     /// it is masked out). Default implementation always returns true.
-    virtual bool allowsColorSelectionAtPoint(const QPoint &pt) const;
+    virtual bool allowsColorSelectionAtPoint(const QPoint &) const;
 
     // Workaround for Bug 287001
     void setLastMousePosition(int x, int y);

@@ -32,16 +32,8 @@
 Q_GLOBAL_STATIC(TimelineColorScheme, s_instance)
 
 
-struct TimelineColorScheme::Private
-{
-    QColor baseColor;
-};
-
-
 TimelineColorScheme::TimelineColorScheme()
-    : m_d(new Private)
 {
-    m_d->baseColor = QColor(137, 192, 221);
 }
 
 TimelineColorScheme::~TimelineColorScheme()
@@ -89,7 +81,7 @@ QBrush TimelineColorScheme::headerActive() const
 
 QColor TimelineColorScheme::onionSkinsSliderEnabledColor() const
 {
-    return m_d->baseColor;
+    return qApp->palette().color(QPalette::Highlight);
 }
 
 QColor TimelineColorScheme::onionSkinsSliderDisabledColor() const
@@ -101,7 +93,7 @@ QColor TimelineColorScheme::onionSkinsButtonColor() const
 {
     QColor bgColor = qApp->palette().color(QPalette::Base);
     const int lighterCoeff = bgColor.value() > 128 ? 120 : 80;
-    return m_d->baseColor.lighter(lighterCoeff);
+    return qApp->palette().color(QPalette::Highlight).lighter(lighterCoeff);
 }
 
 QFont TimelineColorScheme::getOnionSkinsFont(const QString &maxString, const QSize &availableSize) const

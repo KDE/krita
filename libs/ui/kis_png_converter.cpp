@@ -861,8 +861,7 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &im
 
         if (dev->colorSpace()->id() != "RGBA") {
             dev = new KisPaintDevice(*dev.data());
-            KUndo2Command *cmd = dev->convertTo(KoColorSpaceRegistry::instance()->rgb8());
-            delete cmd;
+            dev->convertTo(KoColorSpaceRegistry::instance()->rgb8());
         }
 
         bool success = pngconv.buildFile(&io, imageRect, xRes, yRes, dev, annotIt, annotIt, options, metaDataStore);
@@ -936,7 +935,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
         KisPaintDeviceSP tmp = new KisPaintDevice(device->colorSpace());
         tmp->makeCloneFromRough(device, imageRect);
-        delete tmp->convertTo(dstCS);
+        tmp->convertTo(dstCS);
 
         device = tmp;
 
@@ -954,8 +953,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     if (options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
         device = new KisPaintDevice(*device);
-        KUndo2Command *cmd = device->convertTo(cs);
-        delete cmd;
+        device->convertTo(cs);
     }
 
     // Initialize structures

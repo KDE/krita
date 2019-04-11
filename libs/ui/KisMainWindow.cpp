@@ -701,6 +701,19 @@ void KisMainWindow::slotThemeChanged()
     Q_FOREACH (QAction *action, actionCollection()->actions()) {
         KisIconUtils::updateIcon(action);
     }
+    if (d->mdiArea) {
+        d->mdiArea->setPalette(qApp->palette());
+        for (int i=0; i<d->mdiArea->subWindowList().size(); i++) {
+            QMdiSubWindow *window = d->mdiArea->subWindowList().at(i);
+            if (window) {
+                window->setPalette(qApp->palette());
+                KisView *view = qobject_cast<KisView*>(window->widget());
+                if (view) {
+                    view->slotThemeChanged(qApp->palette());
+                }
+            }
+        }
+    }
 
     emit themeChanged();
 }
@@ -2115,9 +2128,12 @@ void KisMainWindow::updateWindowMenu()
     QMenu *docMenu = d->documentMenu->menu();
     docMenu->clear();
 
+    QFontMetrics fontMetrics = docMenu->fontMetrics();
+    int fileStringWidth = int(QApplication::desktop()->screenGeometry(this).width() * .40f);
+
     Q_FOREACH (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
-            QString title = doc->url().toDisplayString();
+            QString title = fontMetrics.elidedText(doc->url().toDisplayString(QUrl::PreferLocalFile), Qt::ElideMiddle, fileStringWidth);
             if (title.isEmpty() && doc->image()) {
                 title = doc->image()->objectName();
             }
@@ -2211,10 +2227,10 @@ void KisMainWindow::updateWindowMenu()
         if (child && child->document()) {
             QString text;
             if (i < 9) {
-                text = i18n("&%1 %2", i + 1, child->document()->url().toDisplayString());
+                text = i18n("&%1 %2", i + 1, fontMetrics.elidedText(child->document()->url().toDisplayString(QUrl::PreferLocalFile), Qt::ElideMiddle, fileStringWidth));
             }
             else {
-                text = i18n("%1 %2", i + 1, child->document()->url().toDisplayString());
+                text = i18n("%1 %2", i + 1, fontMetrics.elidedText(child->document()->url().toDisplayString(QUrl::PreferLocalFile), Qt::ElideMiddle, fileStringWidth));
             }
 
             QAction *action  = menu->addAction(text);

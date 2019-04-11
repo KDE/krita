@@ -188,6 +188,9 @@ public:
                                         m_colorSpace, dstColorSpace,
                                         parentCommand);
         cmd->forcedRedo();
+        if (!parentCommand) {
+            delete cmd;
+        }
     }
 
     void prepareClone(const KisPaintDeviceData *srcData, bool copyContent = false) {

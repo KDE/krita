@@ -191,12 +191,14 @@ namespace KisCommandUtils
     }
 
     void CompositeCommand::redo() {
+        KUndo2Command::redo();
         Q_FOREACH (KUndo2Command *cmd, m_commands) {
             cmd->redo();
         }
     }
 
     void CompositeCommand::undo() {
+        KUndo2Command::undo();
         Q_FOREACH (KUndo2Command *cmd, m_commands) {
             cmd->undo();
         }

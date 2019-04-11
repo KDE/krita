@@ -43,7 +43,7 @@
 
 
 
-KisRoundMarkerOp::KisRoundMarkerOp(KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
+KisRoundMarkerOp::KisRoundMarkerOp(KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP /*image*/)
     : KisPaintOp(painter)
     , m_firstRun(true)
     , m_lastRadius(1.0)

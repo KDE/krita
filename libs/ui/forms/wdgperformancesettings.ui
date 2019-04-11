@@ -353,9 +353,16 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="chkDisableAVXOptimizations">
+         <property name="text">
+          <string>Disable AVX vector optimizations</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCheckBox" name="chkDisableVectorOptimizations">
          <property name="text">
-          <string>Disable vector optimizations (for AMD CPUs)</string>
+          <string>Disable all vector optimizations (for AMD CPUs)</string>
          </property>
         </widget>
        </item>

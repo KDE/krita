@@ -107,6 +107,9 @@ echo --jobs ^<count^>                  Set parallel jobs count when building
 echo                                 Defaults to no. of logical cores
 echo --skip-deps                     Skips (re)building of deps
 echo --skip-krita                    Skips (re)building of Krita
+echo --cmd                           Launch a cmd prompt instead of building.
+echo                                 The environment is set up like the build
+echo                                 environment with some helper command macros.
 echo.
 echo Path options:
 echo --src-dir ^<dir_path^>            Specify Krita source dir
@@ -149,6 +152,7 @@ set ARG_DEPS_BUILD_DIR=
 set ARG_DEPS_INSTALL_DIR=
 set ARG_KRITA_BUILD_DIR=
 set ARG_KRITA_INSTALL_DIR=
+set ARG_CMD=
 :args_parsing_loop
 set CURRENT_MATCHED=
 if not "%1" == "" (
@@ -267,6 +271,10 @@ if not "%1" == "" (
         )
         call :get_dir_path ARG_KRITA_INSTALL_DIR "%~f2\"
         shift /2
+        set CURRENT_MATCHED=1
+    )
+    if "%1" == "--cmd" (
+        set ARG_CMD=1
         set CURRENT_MATCHED=1
     )
     if "%1" == "--help" (
@@ -683,6 +691,57 @@ if not "%GETTEXT_SEARCH_PATH%" == "" (
     set PATH=!PATH!;!GETTEXT_SEARCH_PATH!
 )
 
+:: Prepare the CMake command lines
+set CMDLINE_CMAKE_DEPS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
+    -DSUBMAKE_JOBS=%PARALLEL_JOBS% ^
+    -DQT_ENABLE_DEBUG_INFO=%QT_ENABLE_DEBUG_INFO% ^
+    -DQT_ENABLE_DYNAMIC_OPENGL=%QT_ENABLE_DYNAMIC_OPENGL% ^
+    -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_DOWNLOAD_CMAKE% ^
+    -DINSTALL_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
+    -G "MinGW Makefiles" ^
+    -DUSE_QT_TABLET_WINDOWS=ON ^
+    -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
+set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
+    -DBoost_DEBUG=OFF ^
+    -DBOOST_INCLUDEDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/include ^
+    -DBOOST_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
+    -DBOOST_LIBRARYDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/lib ^
+    -DCMAKE_PREFIX_PATH=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
+    -DCMAKE_INSTALL_PREFIX=%BUILDDIR_KRITA_INSTALL_CMAKE% ^
+    -DBUILD_TESTING=OFF ^
+    -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
+    -DFOUNDATION_BUILD=ON ^
+    -DUSE_QT_TABLET_WINDOWS=ON ^
+    -Wno-dev ^
+    -G "MinGW Makefiles" ^
+    -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
+
+:: Launch CMD prompt if requested
+if "%ARG_CMD%" == "1" (
+    doskey cmake-deps=cmd /c "pushd %DEPS_BUILD_DIR% && %CMDLINE_CMAKE_DEPS%"
+    doskey cmake-krita=cmd /c "pushd %KRITA_BUILD_DIR% && %CMDLINE_CMAKE_KRITA%"
+    doskey make-deps=cmd /c "pushd %DEPS_BUILD_DIR% && "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target $*"
+    doskey make-krita=cmd /c "pushd %KRITA_BUILD_DIR% && "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target install -- -j%PARALLEL_JOBS%"
+    echo.
+    title Krita build - %KRITA_SRC_DIR% ^(deps: %DEPS_BUILD_DIR%, krita: %KRITA_BUILD_DIR%^)
+    echo You're now in the build environment.
+    echo The following macros are available:
+    echo   cmake-deps
+    echo     -- Run CMake for the deps.
+    echo   make-deps ^<deps target^>
+    echo     -- Run build for the specified deps target. The target name should
+    echo        include the `ext_` prefix, e.g. `ext_qt`.
+    echo   cmake-krita
+    echo     -- Run CMake for Krita.
+    echo   make-krita
+    echo     -- Run build for Krita's `install` target.
+    echo.
+    echo For more info, type `doskey /macros` to view the macro commands.
+    cmd /k
+    exit
+)
+
+
 if "%ARG_SKIP_DEPS%" == "1" goto skip_build_deps
 
 pushd %DEPS_BUILD_DIR%
@@ -692,29 +751,14 @@ if errorlevel 1 (
 )
 
 echo Running CMake for deps...
-echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
-    -DSUBMAKE_JOBS=%PARALLEL_JOBS% ^
-    -DQT_ENABLE_DEBUG_INFO=%QT_ENABLE_DEBUG_INFO% ^
-    -DQT_ENABLE_DYNAMIC_OPENGL=%QT_ENABLE_DYNAMIC_OPENGL% ^
-    -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_DOWNLOAD_CMAKE% ^
-    -DINSTALL_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
-    -G "MinGW Makefiles" ^
-    -DUSE_QT_TABLET_WINDOWS=ON ^
-    -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
-    
-"%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
-    -DSUBMAKE_JOBS=%PARALLEL_JOBS% ^
-    -DQT_ENABLE_DEBUG_INFO=%QT_ENABLE_DEBUG_INFO% ^
-    -DQT_ENABLE_DYNAMIC_OPENGL=%QT_ENABLE_DYNAMIC_OPENGL% ^
-    -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_DOWNLOAD_CMAKE% ^
-    -DINSTALL_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
-    -G "MinGW Makefiles" ^
-    -DUSE_QT_TABLET_WINDOWS=ON ^
-    -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
-if errorlevel 1 (
-    echo ERROR: CMake configure failed! 1>&2
-    exit /b 104
+
+@echo on
+%CMDLINE_CMAKE_DEPS%
+@if errorlevel 1 (
+    @echo ERROR: CMake configure failed! 1>&2
+    @exit /b 104
 )
+@echo off
 echo.
 
 set EXT_TARGETS=patch png2ico zlib lzma gettext openssl qt boost eigen3 exiv2 fftw3
@@ -747,39 +791,14 @@ if errorlevel 1 (
 )
 
 echo Running CMake for Krita...
-echo "%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
-    -DBoost_DEBUG=OFF ^
-    -DBOOST_INCLUDEDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/include ^
-    -DBOOST_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
-    -DBOOST_LIBRARYDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/lib ^
-    -DCMAKE_PREFIX_PATH=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
-    -DCMAKE_INSTALL_PREFIX=%BUILDDIR_KRITA_INSTALL_CMAKE% ^
-    -DBUILD_TESTING=OFF ^
-    -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
-    -DFOUNDATION_BUILD=ON ^
-    -DUSE_QT_TABLET_WINDOWS=ON ^
-    -Wno-dev ^
-    -G "MinGW Makefiles" ^
-    -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
 
-"%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
-    -DBoost_DEBUG=OFF ^
-    -DBOOST_INCLUDEDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/include ^
-    -DBOOST_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
-    -DBOOST_LIBRARYDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/lib ^
-    -DCMAKE_PREFIX_PATH=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
-    -DCMAKE_INSTALL_PREFIX=%BUILDDIR_KRITA_INSTALL_CMAKE% ^
-    -DBUILD_TESTING=OFF ^
-    -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
-    -DFOUNDATION_BUILD=ON ^
-    -DUSE_QT_TABLET_WINDOWS=ON ^
-    -Wno-dev ^
-    -G "MinGW Makefiles" ^
-    -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
-if errorlevel 1 (
-    echo ERROR: CMake configure failed! 1>&2
-    exit /b 104
+@echo on
+%CMDLINE_CMAKE_KRITA%
+@if errorlevel 1 (
+    @echo ERROR: CMake configure failed! 1>&2
+    @exit /b 104
 )
+@echo off
 echo.
 
 echo Building Krita...

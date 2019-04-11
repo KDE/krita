@@ -127,8 +127,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(KisDocument 
 
     if (pd->colorSpace()->colorModelId() != target_co_model || pd->colorSpace()->colorDepthId() != target_co_depth) {
         pd = new KisPaintDevice(*pd.data());
-        KUndo2Command *cmd = pd->convertTo(KoColorSpaceRegistry::instance()->colorSpace(target_co_model.id(), target_co_depth.id()));
-        delete cmd;
+        pd->convertTo(KoColorSpaceRegistry::instance()->colorSpace(target_co_model.id(), target_co_depth.id()));
     }
 
     if (target_co_depth == Float32BitsColorDepthID) {

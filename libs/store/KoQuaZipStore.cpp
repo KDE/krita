@@ -258,7 +258,7 @@ bool KoQuaZipStore::closeRead()
     return true;
 }
 
-bool KoQuaZipStore::enterRelativeDirectory(const QString &path)
+bool KoQuaZipStore::enterRelativeDirectory(const QString & /*path*/)
 {
     return true;
 }

@@ -252,6 +252,8 @@ public Q_SLOTS:
 
     void slotScreenChanged();
 
+    void slotThemeChanged(QPalette pal);
+
 private Q_SLOTS:
     void slotImageNodeAdded(KisNodeSP node);
     void slotContinueAddNode(KisNodeSP newActiveNode);

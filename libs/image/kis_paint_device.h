@@ -482,12 +482,11 @@ public:
 
     /**
      * Converts the paint device to a different colorspace
-     *
-     * @return a command that can be used to undo the conversion.
      */
-    KUndo2Command* convertTo(const KoColorSpace * dstColorSpace,
-                             KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
-                             KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
+    void convertTo(const KoColorSpace * dstColorSpace,
+                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags(),
+                   KUndo2Command *parentCommand = 0);
 
     /**
      * Changes the profile of the colorspace of this paint device to the given

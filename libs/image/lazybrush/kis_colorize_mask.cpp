@@ -276,8 +276,8 @@ KUndo2Command* KisColorizeMask::setColorSpace(const KoColorSpace * dstColorSpace
 
     CompositeCommand *composite = new CompositeCommand();
 
-    composite->addCommand(m_d->fakePaintDevice->convertTo(dstColorSpace, renderingIntent, conversionFlags));
-    composite->addCommand(m_d->coloringProjection->convertTo(dstColorSpace, renderingIntent, conversionFlags));
+    m_d->fakePaintDevice->convertTo(dstColorSpace, renderingIntent, conversionFlags, composite);
+    m_d->coloringProjection->convertTo(dstColorSpace, renderingIntent, conversionFlags, composite);
 
     KUndo2Command *strokesConversionCommand =
         new SetKeyStrokesColorSpaceCommand(

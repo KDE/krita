@@ -46,8 +46,11 @@ ExternalProject_Add(
     URL http://ftp.videolan.org/pub/videolan/x265/x265_3.0.tar.gz
     URL_MD5 8ff1780246bb7ac8506239f6129c04ec
 
+    INSTALL_DIR ${EXTPREFIX_heif}
     SOURCE_SUBDIR source/
+    
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif}
+    
     BUILD_COMMAND make
     INSTALL_COMMAND make install
 

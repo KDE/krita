@@ -103,11 +103,15 @@ void KisCurveWidget::setupInOutControls(QSpinBox *in, QSpinBox *out, int inMin, 
     d->m_outMin = outMin;
     d->m_outMax = outMax;
 
-    d->m_intIn->setRange(d->m_inMin, d->m_inMax);
+    int realInMin = qMin(inMin, inMax); // tilt elevation has range (90, 0), which QSpinBox can't handle
+    int realInMax = qMax(inMin, inMax);
+
+    d->m_intIn->setRange(realInMin, realInMax);
     d->m_intOut->setRange(d->m_outMin, d->m_outMax);
 
     connect(d->m_intIn, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)), Qt::UniqueConnection);
     connect(d->m_intOut, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)), Qt::UniqueConnection);
+
     d->syncIOControls();
 
 }
@@ -132,24 +136,31 @@ void KisCurveWidget::inOutChanged(int)
     pt.setX(d->io2sp(d->m_intIn->value(), d->m_inMin, d->m_inMax));
     pt.setY(d->io2sp(d->m_intOut->value(), d->m_outMin, d->m_outMax));
 
+    bool newPoint = false;
     if (d->jumpOverExistingPoints(pt, d->m_grab_point_index)) {
+        newPoint = true;
+
         d->m_curve.setPoint(d->m_grab_point_index, pt);
         d->m_grab_point_index = d->m_curve.points().indexOf(pt);
         emit pointSelectedChanged();
-    } else
+    } else {
         pt = d->m_curve.points()[d->m_grab_point_index];
+    }
 
+    if (!newPoint) {
+        // if there is a new Point, no point in rewriting values in spinboxes
 
-    d->m_intIn->blockSignals(true);
-    d->m_intOut->blockSignals(true);
+        d->m_intIn->blockSignals(true);
+        d->m_intOut->blockSignals(true);
 
-    d->m_intIn->setValue(d->sp2io(pt.x(), d->m_inMin, d->m_inMax));
-    d->m_intOut->setValue(d->sp2io(pt.y(), d->m_outMin, d->m_outMax));
+        d->m_intIn->setValue(d->sp2io(pt.x(), d->m_inMin, d->m_inMax));
+        d->m_intOut->setValue(d->sp2io(pt.y(), d->m_outMin, d->m_outMax));
 
-    d->m_intIn->blockSignals(false);
-    d->m_intOut->blockSignals(false);
+        d->m_intIn->blockSignals(false);
+        d->m_intOut->blockSignals(false);
+    }
 
-    d->setCurveModified();
+    d->setCurveModified(false);
 }
 
 

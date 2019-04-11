@@ -773,10 +773,8 @@ namespace KisLayerUtils {
             findPerfectParent(nodesToDelete, m_putAfter, parent);
 
             if (!parent) {
-                KisGroupLayerSP oldRoot = m_info->image->rootLayer();
-                KisGroupLayerSP newRoot(new KisGroupLayer(m_info->image, "root", OPACITY_OPAQUE_U8));
-                newRoot->setDefaultProjectionColor(oldRoot->defaultProjectionColor());
-
+                KisNodeSP oldRoot = m_info->image->root();
+                KisNodeSP newRoot(new KisGroupLayer(m_info->image, "root", OPACITY_OPAQUE_U8));
 
                 addCommand(new KisImageLayerAddCommand(m_info->image,
                                                        m_info->dstNode,

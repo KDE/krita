@@ -1,0 +1,70 @@
+From 73d1e5fac0d9f78a6ba23db2ac648ec52273a2dc Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sat, 13 Apr 2019 23:24:01 +0300
+Subject: [PATCH] Implement a custom variable for overriding Wintab's desktop
+ area
+
+If you think that Qt recognizes desktop area incorrectly, you can try
+to override this choice by setting environment variable
+QT_WINTAB_DESKTOP_RECT and running the application in this environment.
+The value of the variable is a semicolon-separated list of integers:
+
+QT_WINTAB_DESKTOP_RECT=x;y;width;height
+---
+ .../windows/qwindowstabletsupport.cpp         | 32 ++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+index 18ec05e4..43c6130f 100644
+--- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
++++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+@@ -53,6 +53,7 @@
+ #include <QtCore/qdebug.h>
+ #include <QtCore/qvarlengtharray.h>
+ #include <QtCore/qmath.h>
++#include <QtCore/qregularexpression.h>
+ 
+ #include <private/qguiapplication_p.h>
+ #include <QtCore/private/qsystemlibrary_p.h>
+@@ -534,8 +535,37 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
+     //    in which case we snap the position to the mouse position.
+     // It seems there is no way to find out the mode programmatically, the LOGCONTEXT orgX/Y/Ext
+     // area is always the virtual desktop.
++
++    static bool customGeometryIsInitialized = false;
++    static QRect customGeometry;
++
++    if (!customGeometryIsInitialized) {
++        const QString geometry = qEnvironmentVariable("QT_WINTAB_DESKTOP_RECT");
++        if (!geometry.isEmpty()) {
++            QString tmp = QString::fromLatin1("(\\d+);(\\d+);(\\d+);(\\d+)");
++
++            QRegularExpression rex(tmp);
++            QRegularExpressionMatch match = rex.match(geometry);
++
++            if (match.hasMatch()) {
++                customGeometry.setRect(match.captured(1).toInt(),
++                                       match.captured(2).toInt(),
++                                       match.captured(3).toInt(),
++                                       match.captured(4).toInt());
++
++                qInfo() << "INFO: apply QT_WINTAB_DESKTOP_RECT:" << customGeometry;
++            } else {
++                qWarning() << "WARNING: failed to parse QT_WINTAB_DESKTOP_RECT:" << geometry;
++            }
++        }
++
++        customGeometryIsInitialized = true;
++    }
++
+     const QRect virtualDesktopArea =
+-        QWindowsScreen::virtualGeometry(QGuiApplication::primaryScreen()->handle());
++        !customGeometry.isValid() ?
++        QWindowsScreen::virtualGeometry(QGuiApplication::primaryScreen()->handle()) :
++        customGeometry;
+ 
+     if (QWindowsContext::verbose > 1)  {
+         qCDebug(lcQpaTablet) << __FUNCTION__ << "processing" << packetCount
+-- 
+2.20.1.windows.1
+

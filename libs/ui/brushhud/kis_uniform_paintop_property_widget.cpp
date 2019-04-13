@@ -62,6 +62,16 @@ KisUniformPaintOpPropertySP KisUniformPaintOpPropertyWidget::property() const
     return m_d->property;
 }
 
+void KisUniformPaintOpPropertyWidget::slotThemeChanged(QPalette pal)
+{
+    for(int i=0; i<this->children().size(); i++) {
+        QWidget *w = qobject_cast<QWidget*>(this->children().at(i));
+        if (w) {
+            w->setPalette(pal);
+        }
+    }
+}
+
 /****************************************************************/
 /*      KisUniformPaintOpPropertyIntSlider                      */
 /****************************************************************/

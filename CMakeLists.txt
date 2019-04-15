@@ -265,17 +265,18 @@ if(ANDROID)
     set (Qt5Quick_DIR          $ENV{QT_ANDROID}/lib/cmake/Qt5Quick/)
     set (Qt5QuickWidgets_DIR   $ENV{QT_ANDROID}/lib/cmake/Qt5QuickWidgets/)
 
+    set (KF5_LIBRARIES         ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib)
     set(ECM_DIR                ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/share/ECM/cmake)
-    set(KF5Config_DIR          ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib/cmake/KF5Config/)
-    set(KF5Config_DIR          ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib/cmake/KF5Config/)
-    set(KF5I18n_DIR            ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib/cmake/KF5I18n/)
-    set(KF5WidgetsAddons_DIR   ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib/cmake/KF5WidgetsAddons)
-    set(KF5Completion_DIR      ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib/cmake/KF5Completion)
-    set(KF5GuiAddons_DIR       ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib/cmake/KF5GuiAddons)
-    set(KF5ItemViews_DIR       ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib/cmake/KF5ItemViews)
-    set(KF5WindowSystem_DIR    ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib/cmake/KF5WindowSystem)
-    set(KF5ItemModels_DIR      ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib/cmake/KF5ItemModels)
-    set(KF5CoreAddons_DIR      ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib/cmake/KF5CoreAddons)
+    set(KF5Config_DIR          ${KF5_LIBRARIES}/cmake/KF5Config/)
+    set(KF5Config_DIR          ${KF5_LIBRARIES}/cmake/KF5Config/)
+    set(KF5I18n_DIR            ${KF5_LIBRARIES}/cmake/KF5I18n/)
+    set(KF5WidgetsAddons_DIR   ${KF5_LIBRARIES}/cmake/KF5WidgetsAddons)
+    set(KF5Completion_DIR      ${KF5_LIBRARIES}/cmake/KF5Completion)
+    set(KF5GuiAddons_DIR       ${KF5_LIBRARIES}/cmake/KF5GuiAddons)
+    set(KF5ItemViews_DIR       ${KF5_LIBRARIES}/cmake/KF5ItemViews)
+    set(KF5WindowSystem_DIR    ${KF5_LIBRARIES}/cmake/KF5WindowSystem)
+    set(KF5ItemModels_DIR      ${KF5_LIBRARIES}/cmake/KF5ItemModels)
+    set(KF5CoreAddons_DIR      ${KF5_LIBRARIES}/cmake/KF5CoreAddons)
 endif()
 
 
@@ -530,11 +531,15 @@ endif()
 
 # set custom krita plugin installdir
 if (ANDROID)
+    # use default ABI
     if (NOT ANDROID_ABI)
         set (ANDROID_ABI armeabi-v7a)
     endif()
-    set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/${ANDROID_ABI})
-    set (DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/assets)
+
+    set (ANDROID_SDK_ROOT $ENV{ANDROID_SDK_ROOT})
+
+    set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR})
+    # set (DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/assets)
 else()
     set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/kritaplugins)
 endif()
@@ -561,6 +566,25 @@ if (ANDROID)
     set (GSL_CBLAS_LIBRARIES        ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libgslcblas.so)
     set (GSL_INCLUDE_DIR            ${CMAKE_CURRENT_BINARY_DIR}/i/include/)
     set (GSL_CONFIG                 ${CMAKE_CURRENT_BINARY_DIR}/i/bin/gsl-config)
+    set (EXPAT_LIBRARY              ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libexpat.so)
+
+    # libraries to be used when bundling android apk
+    # FIXME: better way to do this?
+    list (APPEND ANDROID_EXTRA_LIBS ${PNG_LIBRARY}
+                                    ${LibExiv2_LIBRARIES}
+                                    ${QUAZIP_LIBRARIES}
+                                    ${LCMS2_LIBRARIES}
+                                    ${EXPAT_LIBRARY}
+                                    ${KF5_LIBRARIES}/libKF5Completion.so
+                                    ${KF5_LIBRARIES}/libKF5WindowSystem.so
+                                    ${KF5_LIBRARIES}/libKF5WidgetsAddons.so
+                                    ${KF5_LIBRARIES}/libKF5ItemViews.so
+                                    ${KF5_LIBRARIES}/libKF5ItemModels.so
+                                    ${KF5_LIBRARIES}/libKF5GuiAddons.so
+                                    ${KF5_LIBRARIES}/libKF5I18n.so
+                                    ${KF5_LIBRARIES}/libKF5CoreAddons.so
+                                    ${KF5_LIBRARIES}/libKF5ConfigGui.so
+                                    ${KF5_LIBRARIES}/libKF5ConfigCore.so)
 endif()
 
 find_package(PNG REQUIRED)
@@ -583,6 +607,9 @@ set_package_properties(GSL PROPERTIES
     PURPOSE "Required by Krita's Transform tool.")
 macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
+if (GSL_FOUND)
+    list (APPEND ANDROID_EXTRA_LIBS ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+endif()
 
  ###########################
 ############################
@@ -869,5 +896,29 @@ feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po )
   find_package(KF5I18n CONFIG REQUIRED)
   ki18n_install(po)
+endif()
+
+
+if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
+    set (_CMAKE_ANDROID_DIR "${ECM_DIR}/../toolchain")
+    list(LENGTH QTANDROID_EXPORTED_TARGET targetsCount)
+    include(${_CMAKE_ANDROID_DIR}/ECMAndroidDeployQt.cmake)
+
+    math(EXPR last "${targetsCount}-1")
+    foreach(idx RANGE 0 ${last})
+        list(GET QTANDROID_EXPORTED_TARGET ${idx} exportedTarget)
+        list(GET ANDROID_APK_DIR ${idx} APK_DIR)
+        if(APK_DIR AND NOT EXISTS "${ANDROID_APK_DIR}/AndroidManifest.xml" AND IS_ABSOLUTE ANDROID_APK_DIR)
+            message(FATAL_ERROR "Cannot find ${APK_DIR}/AndroidManifest.xml according to ANDROID_APK_DIR. ${ANDROID_APK_DIR} ${exportedTarget}")
+        elseif(NOT APK_DIR)
+            get_filename_component(_qt5Core_install_prefix "${Qt5Core_DIR}/../../../" ABSOLUTE)
+            set(APK_DIR "${_qt5Core_install_prefix}/src/android/templates/")
+        endif()
+
+        ecm_androiddeployqt("${exportedTarget}" "${ECM_ADDITIONAL_FIND_ROOT_PATH}")
+        set_target_properties(create-apk-${exportedTarget} PROPERTIES ANDROID_APK_DIR "${APK_DIR}")
+    endforeach()
+else()
+    message(STATUS "You can export a target by specifying -DQTANDROID_EXPORTED_TARGET=<targetname> and -DANDROID_APK_DIR=<paths>")
 endif()
 

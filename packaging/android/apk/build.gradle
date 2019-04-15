@@ -1,0 +1,103 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.0'
+    }
+}
+
+repositories {
+    google()
+    jcenter()
+}
+
+apply plugin: 'com.android.application'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+}
+
+task ("configure") {
+    doLast {
+        def abi = System.getenv('ANDROID_ABI')
+        if (abi == null) {
+            abi = 'armeabi-v7a'
+            logger.error('ANDROID_ABI not specified using the default one instead: armeabi-7a')
+        }
+
+        def installPrefix = System.getenv('INSTALL_PREFIX')
+        if (installPrefix == null) {
+            throw new GradleException('Please set INSTALL_PREFIX to the location where binaries are installed')
+        }
+
+        def libs = new File(installPrefix, 'lib')
+        if (!libs.exists()) {
+            throw new GradleException('Please run `make install` first')
+        }
+    }
+}
+
+// copy libs(plugins) which start with krita*.so and rename
+// them to start with `lib_`
+task copyLibs(type: Copy, dependsOn: configure) {
+    from "${System.getenv('INSTALL_PREFIX')}/lib"
+    into 'libs/armeabi-v7a'
+    rename ('^krita(.*).so$', 'lib_krita$1.so')
+}
+
+task copyAssets(type: Copy) {
+    from "${System.getenv('INSTALL_PREFIX')}/share/"
+    into 'assets'
+}
+
+copyLibs.dependsOn configure
+
+android {
+    /*******************************************************
+     * The following variables:
+     * - androidBuildToolsVersion,
+     * - androidCompileSdkVersion
+     * - qt5AndroidDir - holds the path to qt android files
+     *                   needed to build any Qt application
+     *                   on Android.
+     *
+     * are defined in gradle.properties file. This file is
+     * updated by QtCreator and androiddeployqt tools.
+     * Changing them manually might break the compilation!
+     *******************************************************/
+
+    compileSdkVersion androidCompileSdkVersion.toInteger()
+
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = [qt5AndroidDir + '/src', 'src', 'java']
+            aidl.srcDirs = [qt5AndroidDir + '/src', 'src', 'aidl']
+            res.srcDirs = [qt5AndroidDir + '/res', 'res']
+            resources.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs', 'lib']
+       }
+    }
+
+    // This is needed because, gradle by default ignores hidden assets.
+    aaptOptions {
+        ignoreAssetsPattern "!.foajasoie"
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+	defaultConfig {
+        targetSdkVersion 26
+        minSdkVersion 21
+    }
+
+    preBuild.dependsOn(copyLibs)
+    preBuild.dependsOn(copyAssets)
+}

@@ -59,9 +59,15 @@ class ComicsProjectSetupWizard():
         self.setupDictionary = {}
 
         # ask for a project directory.
-        self.projectDirectory = QFileDialog.getExistingDirectory(caption=i18n("Where should the comic project go?"), options=QFileDialog.ShowDirsOnly)
-        if os.path.exists(self.projectDirectory) is False:
-            return
+        self.projectDirectory = None
+        
+        while self.projectDirectory == None:
+            self.projectDirectory = QFileDialog.getExistingDirectory(caption=i18n("Where should the comic project go?"), options=QFileDialog.ShowDirsOnly)
+            if os.path.exists(self.projectDirectory) is False:
+                return
+            if os.access(self.projectDirectory, os.W_OK) is False:
+                QMessageBox.warning(None, i18n("Folder cannot be used"), i18n("Krita doesn't have write access to this folder, so files cannot be made. Please choose a different folder."), QMessageBox.Ok)
+                self.projectDirectory = None
         self.pagesDirectory = os.path.relpath(self.projectDirectory, self.projectDirectory)
         self.exportDirectory = os.path.relpath(self.projectDirectory, self.projectDirectory)
 
@@ -151,6 +157,7 @@ class ComicsProjectSetupWizard():
             self.templateLocation = self.lnTemplateLocation.text()
             self.translationLocation = self.lnTranslationLocation.text()
             projectPath = Path(self.projectDirectory)
+            
             # Only make a project directory if the checkbox for that has been checked.
             if self.chkMakeProjectDirectory.isChecked():
                 projectPath = projectPath / self.lnProjectName.text()

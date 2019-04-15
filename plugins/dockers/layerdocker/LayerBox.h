@@ -101,7 +101,9 @@ private Q_SLOTS:
     // from the layerbox to the node manager
     void slotRmClicked();
     void slotRaiseClicked();
+    void slotRaiseTopClicked();
     void slotLowerClicked();
+    void slotLowerBottomClicked();
     void slotPropertiesClicked();
 
     void slotCompositeOpChanged(int index);

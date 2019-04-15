@@ -190,6 +190,31 @@
       </widget>
      </item>
      <item>
+      <widget class="QToolButton" name="bnLowerBottom">
+       <property name="minimumSize">
+        <size>
+         <width>28</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Move layer or mask to bottom</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QToolButton" name="bnLower">
        <property name="minimumSize">
         <size>
@@ -224,6 +249,31 @@
        </property>
        <property name="toolTip">
         <string>Move layer or mask up</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="bnRaiseTop">
+       <property name="minimumSize">
+        <size>
+         <width>28</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Move layer or mask to top</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -339,8 +389,10 @@
  <tabstops>
   <tabstop>cmbComposite</tabstop>
   <tabstop>bnDuplicate</tabstop>
+  <tabstop>bnLowerBottom</tabstop>
   <tabstop>bnLower</tabstop>
   <tabstop>bnRaise</tabstop>
+  <tabstop>bnRaiseTop</tabstop>
   <tabstop>bnProperties</tabstop>
   <tabstop>bnDelete</tabstop>
  </tabstops>

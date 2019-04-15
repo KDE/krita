@@ -907,11 +907,33 @@ void KisNodeManager::raiseNode()
     juggler->raiseNode(selectedNodes());
 }
 
+void KisNodeManager::raiseTopNode()
+{
+    KisNodeList nodes = selectedNodes();
+    KisNodeSP parent = activeNode()->parent();
+    KisNodeSP above = parent->lastChild();
+
+    KUndo2MagicString actionName = kundo2_i18n("Raise to Top");
+    KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+    juggler->moveNode(nodes, parent, above);
+}
+
 void KisNodeManager::lowerNode()
 {
     KUndo2MagicString actionName = kundo2_i18n("Lower Nodes");
     KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
     juggler->lowerNode(selectedNodes());
+}
+
+void KisNodeManager::lowerBottomNode()
+{
+    KisNodeList nodes = selectedNodes();
+    KisNodeSP parent = activeNode()->parent();
+    KisNodeSP above = 0;
+
+    KUndo2MagicString actionName = kundo2_i18n("Lower to Bottom");
+    KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+    juggler->moveNode(nodes, parent, above);
 }
 
 void KisNodeManager::removeSingleNode(KisNodeSP node)

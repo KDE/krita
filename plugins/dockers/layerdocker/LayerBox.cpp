@@ -181,13 +181,12 @@ LayerBox::LayerBox()
     slotUpdateIcons();
 
     m_wdgLayerBox->bnDelete->setIconSize(QSize(22, 22));
+    m_wdgLayerBox->bnRaiseTop->setIconSize(QSize(22, 22));
     m_wdgLayerBox->bnRaise->setIconSize(QSize(22, 22));
+    m_wdgLayerBox->bnLowerBottom->setIconSize(QSize(22, 22));
     m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));
     m_wdgLayerBox->bnProperties->setIconSize(QSize(22, 22));
     m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
-
-    m_wdgLayerBox->bnLower->setEnabled(false);
-    m_wdgLayerBox->bnRaise->setEnabled(false);
 
     if (cfg.sliderLabels()) {
         m_wdgLayerBox->opacityLabel->hide();
@@ -358,10 +357,20 @@ void LayerBox::setViewManager(KisViewManager* kisview)
     new SyncButtonAndAction(m_removeAction, m_wdgLayerBox->bnDelete, this);
     connect(m_removeAction, SIGNAL(triggered()), this, SLOT(slotRmClicked()));
 
+    action = actionManager->createAction("move_layer_up_top");
+    Q_ASSERT(action);
+    new SyncButtonAndAction(action, m_wdgLayerBox->bnRaiseTop, this);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotRaiseTopClicked()));
+
     action = actionManager->createAction("move_layer_up");
     Q_ASSERT(action);
     new SyncButtonAndAction(action, m_wdgLayerBox->bnRaise, this);
     connect(action, SIGNAL(triggered()), this, SLOT(slotRaiseClicked()));
+
+    action = actionManager->createAction("move_layer_down_bottom");
+    Q_ASSERT(action);
+    new SyncButtonAndAction(action, m_wdgLayerBox->bnLowerBottom, this);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotLowerBottomClicked()));
 
     action = actionManager->createAction("move_layer_down");
     Q_ASSERT(action);
@@ -502,11 +511,6 @@ void LayerBox::updateUI()
             }
         }
     }
-
-    m_wdgLayerBox->bnRaise->setEnabled(activeNode && activeNode->isEditable(false) && (activeNode->nextSibling()
-                                                                                       || (activeNode->parent() && activeNode->parent() != m_image->root())));
-    m_wdgLayerBox->bnLower->setEnabled(activeNode && activeNode->isEditable(false) && (activeNode->prevSibling()
-                                                                                       || (activeNode->parent() && activeNode->parent() != m_image->root())));
 
     m_wdgLayerBox->doubleOpacity->setEnabled(activeNode && activeNode->isEditable(false));
 
@@ -711,10 +715,22 @@ void LayerBox::slotRaiseClicked()
     m_nodeManager->raiseNode();
 }
 
+void LayerBox::slotRaiseTopClicked()
+{
+    if (!m_canvas) return;
+    m_nodeManager->raiseTopNode();
+}
+
 void LayerBox::slotLowerClicked()
 {
     if (!m_canvas) return;
     m_nodeManager->lowerNode();
+}
+
+void LayerBox::slotLowerBottomClicked()
+{
+    if (!m_canvas) return;
+    m_nodeManager->lowerBottomNode();
 }
 
 void LayerBox::slotPropertiesClicked()
@@ -1056,9 +1072,11 @@ void LayerBox::slotImageTimeChanged(int time)
 
 void LayerBox::slotUpdateIcons() {
     m_wdgLayerBox->bnAdd->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_wdgLayerBox->bnRaiseTop->setIcon(KisIconUtils::loadIcon("arrowuptop"));
     m_wdgLayerBox->bnRaise->setIcon(KisIconUtils::loadIcon("arrowupblr"));
     m_wdgLayerBox->bnDelete->setIcon(KisIconUtils::loadIcon("deletelayer"));
     m_wdgLayerBox->bnLower->setIcon(KisIconUtils::loadIcon("arrowdown"));
+    m_wdgLayerBox->bnLowerBottom->setIcon(KisIconUtils::loadIcon("arrowdownbottom"));
     m_wdgLayerBox->bnProperties->setIcon(KisIconUtils::loadIcon("properties"));
     m_wdgLayerBox->bnDuplicate->setIcon(KisIconUtils::loadIcon("duplicatelayer"));
 

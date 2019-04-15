@@ -201,9 +201,19 @@ public Q_SLOTS:
     void raiseNode();
 
     /**
+     * move the active node to top of parent in the nodestack.
+     */
+    void raiseTopNode();
+
+    /**
      * move the active node down the nodestack
      */
     void lowerNode();
+
+    /**
+     * move the active node down to bottom of the parent in the nodestack
+     */
+    void lowerBottomNode();
 
     void saveNodeAsImage();
     void saveVectorLayerAsImage();

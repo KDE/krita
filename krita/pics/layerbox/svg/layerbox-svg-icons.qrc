@@ -4,7 +4,9 @@
     <file>dark_addlayer.svg</file>
     <file>dark_addtofolder.svg</file>
     <file>dark_arrowdown.svg</file>
+    <file>dark_arrowdownbottom.svg</file>
     <file>dark_arrowupblr.svg</file>
+    <file>dark_arrowuptop.svg</file>
     <file>dark_deletelayer.svg</file>
     <file>dark_duplicatelayer.svg</file>
     <file>dark_properties.svg</file>
@@ -12,7 +14,9 @@
     <file>light_addlayer.svg</file>
     <file>light_addtofolder.svg</file>
     <file>light_arrowdown.svg</file>
+    <file>light_arrowdownbottom.svg</file>
     <file>light_arrowupblr.svg</file>
+    <file>light_arrowuptop.svg</file>
     <file>light_deletelayer.svg</file>
     <file>light_duplicatelayer.svg</file>
     <file>light_properties.svg</file>

@@ -3556,6 +3556,16 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="move_layer_up_top">
+      <icon>arrowupblr</icon>
+      <text>Move Layer or Mask Up to Top</text>
+      <whatsThis></whatsThis>
+      <toolTip>Move Layer or Mask Up to Top</toolTip>
+      <iconText></iconText>
+      <shortcut>Ctrl+Shift+PgUp</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="move_layer_up">
       <icon>arrowupblr</icon>
       <text>Move Layer or Mask Up</text>
@@ -3563,6 +3573,16 @@
       <toolTip>Move Layer or Mask Up</toolTip>
       <iconText></iconText>
       <shortcut>Ctrl+PgUp</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="move_layer_down_bottom">
+      <icon>arrowdown</icon>
+      <text>Move Layer or Mask Down to Bottom</text>
+      <whatsThis></whatsThis>
+      <toolTip>Move Layer or Mask Down to Bottom</toolTip>
+      <iconText></iconText>
+      <shortcut>Ctrl+Shift+PgDown</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

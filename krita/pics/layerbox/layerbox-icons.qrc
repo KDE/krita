@@ -4,7 +4,9 @@
     <file>dark_addlayer.png</file>
     <file>dark_addtofolder.png</file>
     <file>dark_arrowdown.png</file>
+    <file>dark_arrowdownbottom.png</file>
     <file>dark_arrowupblr.png</file>
+    <file>dark_arrowuptop.png</file>
     <file>dark_deletelayer.png</file>
     <file>dark_duplicatelayer.png</file>
     <file>dark_properties.png</file>
@@ -12,7 +14,9 @@
     <file>light_addlayer.png</file>
     <file>light_addtofolder.png</file>
     <file>light_arrowdown.png</file>
+    <file>light_arrowdownbottom.png</file>
     <file>light_arrowupblr.png</file>
+    <file>light_arrowuptop.png</file>
     <file>light_deletelayer.png</file>
     <file>light_duplicatelayer.png</file>
     <file>light_properties.png</file>

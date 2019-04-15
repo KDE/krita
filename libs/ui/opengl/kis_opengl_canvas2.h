@@ -119,6 +119,8 @@ private:
     void drawImage();
     void drawCheckers();
     void drawGrid();
+    QSize viewportDevicePixelSize() const;
+    QSizeF widgetSizeAlignedToDevicePixel() const;
 
 private:
 

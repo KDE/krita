@@ -46,6 +46,8 @@ public:
     static QRect calcNativeScreenRect();
     static Mode getTabletMode(QRect *customRect);
 
+    static void applyConfiguration(Mode mode, const QRect &customRect);
+
 private:
     Ui::KisDlgCustomTabletResolution *ui;
 };

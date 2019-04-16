@@ -27,6 +27,15 @@
 #include <QStandardPaths>
 #include <qpa/qplatformscreen.h>
 
+namespace {
+QString rectToString(const QRect &rc) {
+    return QString("%1, %2 %3 x %4")
+            .arg(rc.x())
+            .arg(rc.y())
+            .arg(rc.width())
+            .arg(rc.height());
+}
+}
 
 KisDlgCustomTabletResolution::KisDlgCustomTabletResolution(QWidget *parent) :
     QDialog(parent),
@@ -48,14 +57,13 @@ KisDlgCustomTabletResolution::KisDlgCustomTabletResolution(QWidget *parent) :
 
     const QRect virtualScreenRect = calcNativeScreenRect();
 
-    const QString rectToString =
-        QString("%1, %2 %3 x %4")
-            .arg(virtualScreenRect.x())
-            .arg(virtualScreenRect.y())
-            .arg(virtualScreenRect.width())
-            .arg(virtualScreenRect.height());
+    ui->radioMapToEntireScreen->setText(i18nc("@option:radio", "Map to entire virtual screen (%1)", rectToString(virtualScreenRect)));
 
-    ui->radioMapToEntireScreen->setText(i18nc("@option:radio", "Map to entire virtual screen (%1)", rectToString));
+    QRect nativeScreenRect;
+    QPlatformScreen *screen = qGuiApp->primaryScreen()->handle();
+    Q_FOREACH (QPlatformScreen *scr, screen->virtualSiblings()) {
+        nativeScreenRect |= scr->geometry();
+    }
 
     QRect customScreenRect = virtualScreenRect;
     Mode mode = getTabletMode(&customScreenRect);
@@ -90,6 +98,13 @@ void KisDlgCustomTabletResolution::accept()
         cfg.setValue("wintabCustomResolutionY", ui->intYOffset->value());
         cfg.setValue("wintabCustomResolutionWidth", ui->intWidth->value());
         cfg.setValue("wintabCustomResolutionHeight", ui->intHeight->value());
+    }
+
+    // apply the mode right now
+    {
+        QRect customTabletRect;
+        const Mode tabletMode = getTabletMode(&customTabletRect);
+        applyConfiguration(tabletMode, customTabletRect);
     }
 
     QDialog::accept();
@@ -134,4 +149,23 @@ KisDlgCustomTabletResolution::Mode KisDlgCustomTabletResolution::getTabletMode(Q
     }
 
     return modeValue;
+}
+
+void KisDlgCustomTabletResolution::applyConfiguration(KisDlgCustomTabletResolution::Mode tabletMode, const QRect &customTabletRect)
+{
+    if (tabletMode == KisDlgCustomTabletResolution::USE_CUSTOM) {
+        qputenv("QT_WINTAB_DESKTOP_RECT",
+                QString("%1;%2;%3;%4")
+                .arg(customTabletRect.x())
+                .arg(customTabletRect.y())
+                .arg(customTabletRect.width())
+                .arg(customTabletRect.height()).toLatin1());
+        qunsetenv("QT_IGNORE_WINTAB_MAPPING");
+    } else if (tabletMode == KisDlgCustomTabletResolution::USE_VIRTUAL_SCREEN) {
+        qputenv("QT_IGNORE_WINTAB_MAPPING", "1");
+        qunsetenv("QT_WINTAB_DESKTOP_RECT");
+    } else {
+        qunsetenv("QT_WINTAB_DESKTOP_RECT");
+        qunsetenv("QT_IGNORE_WINTAB_MAPPING");
+    }
 }

@@ -317,19 +317,8 @@ extern "C" int main(int argc, char **argv)
         QRect customTabletRect;
         KisDlgCustomTabletResolution::Mode tabletMode =
             KisDlgCustomTabletResolution::getTabletMode(&customTabletRect);
-
-        if (tabletMode == KisDlgCustomTabletResolution::USE_CUSTOM) {
-            qputenv("QT_WINTAB_DESKTOP_RECT",
-                    QString("%1;%2;%3;%4")
-                    .arg(customTabletRect.x())
-                    .arg(customTabletRect.y())
-                    .arg(customTabletRect.width())
-                    .arg(customTabletRect.height()).toLatin1());
-        } else if (tabletMode == KisDlgCustomTabletResolution::USE_VIRTUAL_SCREEN) {
-            qputenv("QT_IGNORE_WINTAB_MAPPING", "1");
-        }
+        KisDlgCustomTabletResolution::applyConfiguration(tabletMode, customTabletRect);
     }
-
 #endif
 
     // first create the application so we can create a pixmap

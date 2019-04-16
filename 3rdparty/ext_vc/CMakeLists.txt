@@ -21,6 +21,7 @@ elseif (WIN32)
         URL_HASH SHA1=3d3ddd29eca7c2b541fd8d0f00923e57f58d5ef0
 
         PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Workaround-AVX-argument-failures.patch
+              COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/relocatable-vc-1.3-install.patch
 
         INSTALL_DIR ${PREFIX_ext_vc}
 

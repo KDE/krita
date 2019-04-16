@@ -213,7 +213,7 @@ void KisColorSpaceSelector::installProfile()
 void KisColorSpaceSelector::slotOpenAdvancedSelector()
 {
     if (!m_advancedSelector) {
-        m_advancedSelector = new KisAdvancedColorSpaceSelector(this, "Select a Colorspace");
+        m_advancedSelector = new KisAdvancedColorSpaceSelector(this, i18n("Select a Colorspace"));
         m_advancedSelector->setModal(true);
         if (currentColorSpace()) {
             m_advancedSelector->setCurrentColorSpace(currentColorSpace());

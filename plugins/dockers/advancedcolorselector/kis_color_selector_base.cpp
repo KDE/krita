@@ -219,7 +219,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
     event->accept();
 
 
-//this boolean here is to check if the colour selector is updating the resource, so it won't update itself when the resource is updated//
+//this boolean here is to check if the color selector is updating the resource, so it won't update itself when the resource is updated//
    if (m_colorUpdateSelf==false)
    {m_colorUpdateSelf=true;}
 
@@ -540,7 +540,7 @@ KisDisplayColorConverter* KisColorSelectorBase::converter() const
 void KisColorSelectorBase::tryHideAllPopups()
 {
     if (m_colorPreviewPopup->isVisible()) {
-        m_colorUpdateSelf=false; //this is for allowing advanced selector to listen to outside colour-change events.
+        m_colorUpdateSelf=false; //this is for allowing advanced selector to listen to outside color-change events.
         m_colorPreviewPopup->hide();
     }
 

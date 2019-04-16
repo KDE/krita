@@ -96,7 +96,7 @@ private:
 protected Q_SLOTS:
     void hidePopup();
 
-    /// if you overwrite this, keep in mind, that you should set the colour only, if m_colorUpdateAllowed is true
+    /// if you overwrite this, keep in mind, that you should set the color only, if m_colorUpdateAllowed is true
     virtual void canvasResourceChanged(int key, const QVariant& v);
 
     void updateLastUsedColorPreview(const KoColor &color);

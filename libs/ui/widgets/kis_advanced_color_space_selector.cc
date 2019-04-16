@@ -392,7 +392,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                     "<b><a href=\"https://en.wikipedia.org/wiki/Grayscale\">Grayscale</a></b> only allows for "
                                                                     "gray values and transparent values. Grayscale images use half "
                                                                     "the memory and disk space compared to an RGB image of the same bit-depth.<br/>"
-                                                                    "Grayscale is useful for inking and greyscale images. In "
+                                                                    "Grayscale is useful for inking and grayscale images. In "
                                                                     "Krita, you can mix Grayscale and RGB layers in the same image.")+"</p>");
     } else if (currentModelStr == "LABA") {
         d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("If the selected model is LAB",

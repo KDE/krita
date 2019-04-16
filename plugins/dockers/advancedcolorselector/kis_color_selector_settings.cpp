@@ -316,10 +316,10 @@ void KisColorSelectorSettings::changedACSColorSelectorType(int index)
     ui->lumaCoefficientGroupbox->setVisible(false);
 
     if (index == 0)     {  // HSV
-        ui->ACSTypeDescriptionLabel->setText(i18n("Values goes from black to white, or black to the most saturated colour. Saturation, in turn, goes from the most saturated colour to white, grey or black."));
+        ui->ACSTypeDescriptionLabel->setText(i18n("Values goes from black to white, or black to the most saturated color. Saturation, in turn, goes from the most saturated color to white, gray or black."));
     }
     else if (index == 1)     {  // HSL
-        ui->ACSTypeDescriptionLabel->setText(i18n("Lightness goes from black to white, with middle grey being equal to the most saturated colour."));
+        ui->ACSTypeDescriptionLabel->setText(i18n("Lightness goes from black to white, with middle gray being equal to the most saturated color."));
     }
     else if (index == 2)     {  // HSI
         ui->ACSTypeDescriptionLabel->setText(i18n("Intensity maps to the sum of rgb components"));

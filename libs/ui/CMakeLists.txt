@@ -404,6 +404,12 @@ if(WIN32)
             input/wintab/kis_screen_size_choice_dialog.cpp
             input/wintab/kis_tablet_support_win8.cpp
             )
+    else()
+        include_directories(SYSTEM ${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+        set(kritaui_LIB_SRCS
+            ${kritaui_LIB_SRCS}
+            dialogs/KisDlgCustomTabletResolution.cpp
+            )
     endif()
 endif()
 
@@ -527,11 +533,17 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
 )
 
-if(WIN32 AND NOT USE_QT_TABLET_WINDOWS)
-    ki18n_wrap_ui(kritaui_LIB_SRCS
-        input/wintab/kis_screen_size_choice_dialog.ui
-    )
-endif()    
+if(WIN32)
+    if(USE_QT_TABLET_WINDOWS)
+        ki18n_wrap_ui(kritaui_LIB_SRCS
+            dialogs/KisDlgCustomTabletResolution.ui
+        )
+    else()
+        ki18n_wrap_ui(kritaui_LIB_SRCS
+            input/wintab/kis_screen_size_choice_dialog.ui
+        )
+    endif()
+endif()
 
 
 add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )

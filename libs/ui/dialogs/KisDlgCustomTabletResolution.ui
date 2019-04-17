@@ -17,7 +17,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Select area your tablet is mappet to:</string>
+      <string>Select area your tablet is mapped to:</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>

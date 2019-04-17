@@ -69,6 +69,12 @@ static bool isMouseEventType(QEvent::Type t)
             t == QEvent::MouseButtonDblClick);
 }
 
+KisInputManager::Private::EventEater::EventEater()
+{
+    KisConfig cfg(true);
+    activateSecondaryButtonsWorkaround = cfg.readEntry("rightMiddleTabletButtonWorkaround", false);
+}
+
 bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* event )
 {
     Q_UNUSED(target)
@@ -81,6 +87,14 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         }
     };
 
+    auto debugTabletEvent = [&](int i) {
+        if (KisTabletDebugger::instance()->debugEnabled()) {
+            QString pre = QString("[BLOCKED %1:]").arg(i);
+            QTabletEvent *ev = static_cast<QTabletEvent*>(event);
+            dbgTablet << KisTabletDebugger::instance()->eventToString(*ev, pre);
+        }
+    };
+
     if (peckish && event->type() == QEvent::MouseButtonPress
         // Drop one mouse press following tabletPress or touchBegin
         && (static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton)) {
@@ -88,7 +102,28 @@ bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* 
         debugEvent(1);
         return true;
     }
-    else if (isMouseEventType(event->type()) &&
+
+    if (activateSecondaryButtonsWorkaround) {
+        if (event->type() == QEvent::TabletPress ||
+                event->type() == QEvent::TabletRelease) {
+
+            QTabletEvent *te = static_cast<QTabletEvent*>(event);
+            if (te->button() != Qt::LeftButton) {
+                debugTabletEvent(3);
+                return true;
+            }
+        } else if (event->type() == QEvent::MouseButtonPress ||
+                   event->type() == QEvent::MouseButtonRelease ||
+                   event->type() == QEvent::MouseButtonDblClick) {
+
+            QMouseEvent *me = static_cast<QMouseEvent*>(event);
+            if (me->button() != Qt::LeftButton) {
+                return false;
+            }
+        }
+    }
+
+    if (isMouseEventType(event->type()) &&
                (hungry
             // On Mac, we need mouse events when the tablet is in proximity, but not pressed down
             // since tablet move events are not generated until after tablet press.
@@ -134,11 +169,6 @@ bool KisInputManager::Private::ignoringQtCursorEvents()
 void KisInputManager::Private::setMaskSyntheticEvents(bool value)
 {
     eventEater.eatSyntheticEvents = value;
-}
-
-void KisInputManager::Private::setTabletActive(bool value)
-{
-    tabletActive = value;
 }
 
 KisInputManager::Private::Private(KisInputManager *qq)

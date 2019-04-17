@@ -288,9 +288,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
         d->debugEvent<QMouseEvent, true>(event);
-        //Block mouse press events on Genius tablets
-        if (d->tabletActive) break;
-        if (d->ignoringQtCursorEvents()) break;
         if (d->touchHasBlockedPressEvents) break;
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -309,7 +306,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::MouseButtonRelease: {
         d->debugEvent<QMouseEvent, true>(event);
-        if (d->ignoringQtCursorEvents()) break;
         if (d->touchHasBlockedPressEvents) break;
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -352,7 +348,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::MouseMove: {
         d->debugEvent<QMouseEvent, true>(event);
-        if (d->ignoringQtCursorEvents()) break;
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = compressMoveEventCommon(mouseEvent);

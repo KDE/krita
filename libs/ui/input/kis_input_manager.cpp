@@ -276,11 +276,30 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
     return retval;
 }
 
+bool shouldResetWheelDelta(QEvent * event)
+{
+    return
+        event->type() == QEvent::FocusIn ||
+        event->type() == QEvent::FocusOut ||
+        event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::MouseButtonRelease ||
+        event->type() == QEvent::MouseButtonDblClick ||
+        event->type() == QEvent::TabletPress ||
+        event->type() == QEvent::TabletRelease ||
+        event->type() == QEvent::Enter ||
+        event->type() == QEvent::Leave ||
+        event->type() == QEvent::TouchBegin ||
+        event->type() == QEvent::TouchEnd ||
+        event->type() == QEvent::TouchCancel ||
+        event->type() == QEvent::NativeGesture;
+
+}
+
 bool KisInputManager::eventFilterImpl(QEvent * event)
 {
     bool retval = false;
 
-    if (event->type() != QEvent::Wheel) {
+    if (shouldResetWheelDelta(event)) {
         d->accumulatedScrollDelta = 0;
     }
 

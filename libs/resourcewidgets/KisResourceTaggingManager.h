@@ -60,7 +60,6 @@ public:
     bool allowTagModification();
     KisTagFilterWidget *tagFilterWidget();
     KisTagChooserWidget *tagChooserWidget();
-    class QLineEdit* searchField();
 
 Q_SIGNALS:
 

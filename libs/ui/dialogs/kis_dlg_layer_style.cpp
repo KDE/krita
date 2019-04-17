@@ -101,6 +101,8 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     wdgLayerStyles.stylesStack->addWidget(m_innerGlow);
     connect(m_innerGlow, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
+    // Contour and Texture are sub-styles of Bevel and Emboss
+    // They are only applied to canvas when Bevel and Emboss is active.
     m_contour = new Contour(this);
     m_texture = new Texture(this);
     m_bevelAndEmboss = new BevelAndEmboss(m_contour, m_texture, this);
@@ -109,6 +111,8 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     wdgLayerStyles.stylesStack->addWidget(m_contour);
     wdgLayerStyles.stylesStack->addWidget(m_texture);
 
+    // slotBevelAndEmbossChanged(QListWidgetItem*) enables/disables Contour and Texture on "Bevel and Emboss" toggle.
+    connect(wdgLayerStyles.lstStyleSelector, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(slotBevelAndEmbossChanged(QListWidgetItem*)));
     connect(m_bevelAndEmboss, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
     m_satin = new Satin(this);
@@ -196,6 +200,32 @@ void KisDlgLayerStyle::notifyPredefinedStyleSelected(KisPSDLayerStyleSP style)
     m_configChangedCompressor->start();
 }
 
+void KisDlgLayerStyle::slotBevelAndEmbossChanged(QListWidgetItem*) {
+    QListWidgetItem *item;
+
+    if (wdgLayerStyles.lstStyleSelector->item(6)->checkState() == Qt::Checked) {
+        // Enable "Contour" (list item 7)
+        item = wdgLayerStyles.lstStyleSelector->item(7);
+        Qt::ItemFlags currentFlags7 = item->flags();
+        item->setFlags(currentFlags7 | Qt::ItemIsEnabled);
+
+        // Enable "Texture" (list item 8)
+        item = wdgLayerStyles.lstStyleSelector->item(8);
+        Qt::ItemFlags currentFlags8 = item->flags();
+        item->setFlags(currentFlags8 | Qt::ItemIsEnabled);
+    }
+    else {
+        // Disable "Contour"
+        item = wdgLayerStyles.lstStyleSelector->item(7);
+        Qt::ItemFlags currentFlags7 = item->flags();
+        item->setFlags(currentFlags7 & (~Qt::ItemIsEnabled));
+
+        // Disable "Texture"
+        item = wdgLayerStyles.lstStyleSelector->item(8);
+        Qt::ItemFlags currentFlags8 = item->flags();
+        item->setFlags(currentFlags8 & (~Qt::ItemIsEnabled));
+    }
+}
 
 void KisDlgLayerStyle::slotNotifyOnAccept()
 {

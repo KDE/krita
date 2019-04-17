@@ -127,10 +127,6 @@ void KisTagFilterWidget::clear()
     d->tagSearchSaveButton->setEnabled(false);
 }
 
-QLineEdit *KisTagFilterWidget::searchField()
-{
-    return d->tagSearchLineEdit;
-}
 
 void KisTagFilterWidget::onTextChanged(const QString& lineEditText)
 {

@@ -31,6 +31,7 @@ class KisUniformPaintOpPropertyWidget : public QWidget
 public:
     KisUniformPaintOpPropertyWidget(KisUniformPaintOpPropertySP property, QWidget *parent);
     ~KisUniformPaintOpPropertyWidget() override;
+    void slotThemeChanged(QPalette pal);
 
 protected:
     KisUniformPaintOpPropertySP property() const;

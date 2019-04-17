@@ -23,7 +23,7 @@ Template dialog
 import os
 import shutil
 #from PyQt5.QtGui import *
-from PyQt5.QtWidgets import QDialog, QComboBox, QDialogButtonBox, QVBoxLayout, QFormLayout, QGridLayout, QWidget, QPushButton, QHBoxLayout, QLabel, QSpinBox, QDoubleSpinBox, QLineEdit, QTabWidget, QColorDialog
+from PyQt5.QtWidgets import QDialog, QComboBox, QDialogButtonBox, QVBoxLayout, QFormLayout, QGridLayout, QWidget, QPushButton, QHBoxLayout, QLabel, QSpinBox, QDoubleSpinBox, QLineEdit, QTabWidget, QColorDialog, QProgressDialog
 from PyQt5.QtCore import QLocale, Qt, QByteArray, QRectF
 from PyQt5.QtGui import QImage, QPainter, QPixmap
 from krita import *
@@ -317,16 +317,27 @@ class comics_template_create(QDialog):
         else:
             backgroundNode = template.createNode(backgroundName, "paintlayer")
             template.rootNode().addChildNode(backgroundNode, None)
-        red   = int(self.currentColor.redF()*255)
-        green = int(self.currentColor.greenF()*255)
-        blue  = int(self.currentColor.blueF()*255)
-        alpha = int(self.currentColor.alphaF()*255)
+        
         pixelByteArray = QByteArray()
-        for byteNumber in range(template.width()*template.height()):
-            pixelByteArray.append( blue.to_bytes(1, byteorder='little'))
-            pixelByteArray.append(green.to_bytes(1, byteorder='little'))
-            pixelByteArray.append(  red.to_bytes(1, byteorder='little'))
-            pixelByteArray.append(alpha.to_bytes(1, byteorder='little'))
+        if self.currentColor == Qt.white:
+            pixelByteArray = backgroundNode.pixelData(0, 0, template.width(), template.height())
+            pixelByteArray.fill(int(255).to_bytes(1, byteorder='little'))
+        else:
+            red   = int(self.currentColor.redF()*255).to_bytes(1, byteorder='little')
+            green = int(self.currentColor.greenF()*255).to_bytes(1, byteorder='little')
+            blue  = int(self.currentColor.blueF()*255).to_bytes(1, byteorder='little')
+            alpha = int(self.currentColor.alphaF()*255).to_bytes(1, byteorder='little')
+        
+            progress = QProgressDialog(i18n("Creating template"), str(), 0, template.width()*template.height())
+            progress.setCancelButton(None)
+            progress.show()
+            qApp.processEvents()
+            for byteNumber in range(template.width()*template.height()):
+                pixelByteArray.append( blue)
+                pixelByteArray.append(green)
+                pixelByteArray.append(  red)
+                pixelByteArray.append(alpha)
+                progress.setValue(byteNumber)
         backgroundNode.setPixelData(pixelByteArray, 0, 0, template.width(), template.height())
         backgroundNode.setOpacity(255)
         backgroundNode.setLocked(True)

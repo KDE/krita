@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>473</width>
-    <height>335</height>
+    <width>1607</width>
+    <height>924</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
@@ -82,6 +82,9 @@
         <property name="checkState">
          <enum>Unchecked</enum>
         </property>
+        <property name="flags">
+         <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable</set>
+        </property>
        </item>
        <item>
         <property name="text">
@@ -89,6 +92,9 @@
         </property>
         <property name="checkState">
          <enum>Unchecked</enum>
+        </property>
+        <property name="flags">
+         <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable</set>
         </property>
        </item>
        <item>

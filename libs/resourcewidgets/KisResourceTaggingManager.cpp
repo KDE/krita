@@ -373,11 +373,6 @@ KisTagChooserWidget *KisResourceTaggingManager::tagChooserWidget()
     return d->tagChooser;
 }
 
-QLineEdit *KisResourceTaggingManager::searchField()
-{
-    return d->tagFilter->searchField();
-}
-
 KisTagFilterWidget *KisResourceTaggingManager::tagFilterWidget()
 {
     return d->tagFilter;

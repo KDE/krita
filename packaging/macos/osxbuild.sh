@@ -190,7 +190,10 @@ build_3rdparty () {
         ext_gsl \
         ext_vc \
         ext_libraw \
-        ext_giflib
+        ext_giflib \
+        ext_fontconfig \
+        ext_freetype \
+        ext_poppler
 
     # Stop if qmake link was not created
     # this meant qt build fail and further builds will
@@ -280,6 +283,9 @@ rebuild_3rdparty () {
         ext_vc \
         ext_libraw \
         ext_giflib \
+        ext_fontconfig \
+        ext_freetype \
+        ext_poppler \
         ext_python \
         ext_sip \
         ext_pyqt \

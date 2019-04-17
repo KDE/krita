@@ -78,10 +78,10 @@ Q_SIGNALS:
     void paramChanged(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness, qreal hsiSaturation, qreal intensity, qreal hsySaturation, qreal luma);
 protected:
     const KoColorSpace* colorSpace() const;
-    /// returns true, if ether the colour space, the size or the parameters have changed since the last paint event
+    /// returns true, if ether the color space, the size or the parameters have changed since the last paint event
     bool isDirty() const;
 
-    /// this method must be overloaded to return the colour at position x/y and draw a marker on that position
+    /// this method must be overloaded to return the color at position x/y and draw a marker on that position
     virtual KoColor selectColor(int x, int y) = 0;
 
     /// paint component using given painter

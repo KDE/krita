@@ -394,6 +394,11 @@ set(kritaui_LIB_SRCS
 )
 
 if(WIN32)
+    # Private headers are needed for:
+    #    * KisDlgCustomTabletResolution
+    #    * KisScreenInformationAdapter
+    include_directories(SYSTEM ${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
         qtlockedfile/qtlockedfile_win.cpp
@@ -406,7 +411,6 @@ if(WIN32)
             input/wintab/kis_tablet_support_win8.cpp
             )
     else()
-        include_directories(SYSTEM ${Qt5Gui_PRIVATE_INCLUDE_DIRS})
         set(kritaui_LIB_SRCS
             ${kritaui_LIB_SRCS}
             dialogs/KisDlgCustomTabletResolution.cpp

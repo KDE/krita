@@ -40,7 +40,7 @@
 #include <kis_dom_utils.h>
 
 KisDuplicateOpSettings::KisDuplicateOpSettings()
-    : m_isOffsetNotUptodate(false)
+    : m_isOffsetNotUptodate(false), m_duringPaintingStroke(false)
 {
 }
 
@@ -81,15 +81,25 @@ bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt
         ignoreEvent = false;
     }
     else {
-        if (m_isOffsetNotUptodate) {
+        bool resetOrigin = getBool(DUPLICATE_RESET_SOURCE_POINT);
+        if (m_isOffsetNotUptodate || resetOrigin) {
             m_offset = info.pos() - m_position;
             m_isOffsetNotUptodate = false;
         }
+        m_duringPaintingStroke = true;
         ignoreEvent = true;
     }
 
     return ignoreEvent;
 }
+
+bool KisDuplicateOpSettings::mouseReleaseEvent()
+{
+    m_duringPaintingStroke = false;
+    bool ignoreEvent = true;
+    return ignoreEvent;
+}
+
 
 KisNodeWSP KisDuplicateOpSettings::sourceNode() const
 {
@@ -129,6 +139,7 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
     s->m_isOffsetNotUptodate = m_isOffsetNotUptodate;
     s->m_position = m_position;
     s->m_sourceNode = m_sourceNode;
+    s->m_duringPaintingStroke = m_duringPaintingStroke;
 
     return setting;
 }
@@ -149,7 +160,11 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
 
     QPainterPath copy(path);
     QRectF rect2 = copy.boundingRect();
-    if (m_isOffsetNotUptodate || !getBool(DUPLICATE_MOVE_SOURCE_POINT)) {
+    bool shouldStayInOrigin = m_isOffsetNotUptodate // the clone brush right now waits for first stroke with a new origin, so stays at origin point
+            || !getBool(DUPLICATE_MOVE_SOURCE_POINT) // the brush always use the same source point, so stays at origin point
+            || (!m_duringPaintingStroke && getBool(DUPLICATE_RESET_SOURCE_POINT)); // during the stroke, with reset Origin selected, outline should stay at origin point
+
+    if (shouldStayInOrigin) {
         copy.translate(m_position - info.pos());
     }
     else {

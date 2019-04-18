@@ -373,10 +373,6 @@ void KisShortcutMatcher::reinitialize()
 
 void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &keys)
 {
-    QVector<Qt::Key> pressedKeys;
-    QVector<Qt::Key> releasedKeys;
-    splitStates(m_d->keys, keys, &pressedKeys, &releasedKeys);
-
     Q_FOREACH (Qt::Key key, m_d->keys) {
         if (!keys.contains(key)) {
             keyReleased(key);

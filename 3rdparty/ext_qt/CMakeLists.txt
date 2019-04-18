@@ -60,6 +60,7 @@ if (WIN32)
     set(ext_qt_PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/set-has-border-in-full-screen-default.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/remove-fullscreen-border-hack.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qttools -i ${CMAKE_CURRENT_SOURCE_DIR}/windeployqt-force-allow-debug-info.patch
     )
 
   ExternalProject_Add(

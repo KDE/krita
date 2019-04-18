@@ -42,7 +42,6 @@ private:
     QAtomicInt m_rawPointerUsers;
     KisLocklessStack<Action> m_pendingActions;
     KisLocklessStack<Action> m_migrationReclaimActions;
-    std::atomic_flag m_isProcessing = ATOMIC_FLAG_INIT;
 
     void releasePoolSafely(KisLocklessStack<Action> *pool, bool force = false) {
         KisLocklessStack<Action> tmp;

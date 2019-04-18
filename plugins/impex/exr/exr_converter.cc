@@ -557,7 +557,7 @@ bool EXRConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
     return result;
 }
 
-KisImageBuilder_Result EXRConverter::decode(const QString &filename)
+KisImportExportErrorCode EXRConverter::decode(const QString &filename)
 {
     Imf::InputFile file(QFile::encodeName(filename));
 
@@ -777,7 +777,7 @@ KisImageBuilder_Result EXRConverter::decode(const QString &filename)
     dbgFile << "Image type = " << imageType;
     const KoColorSpace* colorSpace = kisTypeToColorSpace(RGBAColorModelID.id(), imageType);
 
-    if (!colorSpace) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    if (!colorSpace) return ImportExportCodes::FormatColorSpaceUnsupported;
     dbgFile << "Colorspace: " << colorSpace->name();
 
     // Set the colorspace on all groups
@@ -794,7 +794,7 @@ KisImageBuilder_Result EXRConverter::decode(const QString &filename)
     d->image = new KisImage(d->doc->createUndoStore(), displayWidth, displayHeight, colorSpace, "");
 
     if (!d->image) {
-        return KisImageBuilder_RESULT_FAILURE;
+        return ImportExportCodes::Failure;
     }
 
     /**
@@ -822,7 +822,7 @@ KisImageBuilder_Result EXRConverter::decode(const QString &filename)
             layer->setCompositeOpId(COMPOSITE_OVER);
 
             if (!layer) {
-                return KisImageBuilder_RESULT_FAILURE;
+                return ImportExportCodes::Failure;
             }
 
             switch (info.channelMap.size()) {
@@ -901,10 +901,10 @@ KisImageBuilder_Result EXRConverter::decode(const QString &filename)
         KisExrLayersSorter sorter(extraLayersInfo, d->image);
     }
 
-    return KisImageBuilder_RESULT_OK;
+    return ImportExportCodes::OK;
 }
 
-KisImageBuilder_Result EXRConverter::buildImage(const QString &filename)
+KisImportExportErrorCode EXRConverter::buildImage(const QString &filename)
 {
     return decode(filename);
 
@@ -1070,14 +1070,13 @@ KisPaintDeviceSP wrapLayerDevice(KisPaintDeviceSP device)
     return device;
 }
 
-KisImageBuilder_Result EXRConverter::buildFile(const QString &filename, KisPaintLayerSP layer)
+KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisPaintLayerSP layer)
 {
-    if (!layer)
-        return KisImageBuilder_RESULT_INVALID_ARG;
+    KIS_ASSERT_RECOVER_RETURN_VALUE(layer, ImportExportCodes::InternalError);
 
     KisImageSP image = layer->image();
-    if (!image)
-        return KisImageBuilder_RESULT_EMPTY;
+    KIS_ASSERT_RECOVER_RETURN_VALUE(image, ImportExportCodes::InternalError);
+
 
     // Make the header
     qint32 height = image->height();
@@ -1115,7 +1114,7 @@ KisImageBuilder_Result EXRConverter::buildFile(const QString &filename, KisPaint
 
     encodeData(file, informationObjects, width, height);
 
-    return KisImageBuilder_RESULT_OK;
+    return ImportExportCodes::OK;
 }
 
 QString remap(const QMap<QString, QString>& current2original, const QString& current)
@@ -1312,15 +1311,12 @@ QString EXRConverter::Private::fetchExtraLayersInfo(QList<ExrPaintLayerSaveInfo>
     return doc.toString();
 }
 
-KisImageBuilder_Result EXRConverter::buildFile(const QString &filename, KisGroupLayerSP layer, bool flatten)
+KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisGroupLayerSP layer, bool flatten)
 {
-    if (!layer)
-        return KisImageBuilder_RESULT_INVALID_ARG;
+    KIS_ASSERT_RECOVER_RETURN_VALUE(layer, ImportExportCodes::InternalError);
 
     KisImageSP image = layer->image();
-    if (!image)
-        return KisImageBuilder_RESULT_EMPTY;
-
+    KIS_ASSERT_RECOVER_RETURN_VALUE(image, ImportExportCodes::InternalError);
 
     qint32 height = image->height();
     qint32 width = image->width();
@@ -1337,7 +1333,7 @@ KisImageBuilder_Result EXRConverter::buildFile(const QString &filename, KisGroup
         d->recBuildPaintLayerSaveInfo(informationObjects, "", layer);
 
         if(informationObjects.isEmpty()) {
-            return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+            return ImportExportCodes::FormatColorSpaceUnsupported;
         }
 
         d->makeLayerNamesUnique(informationObjects);
@@ -1361,7 +1357,7 @@ KisImageBuilder_Result EXRConverter::buildFile(const QString &filename, KisGroup
         Imf::OutputFile file(QFile::encodeName(filename), header);
 
         encodeData(file, informationObjects, width, height);
-        return KisImageBuilder_RESULT_OK;
+        return ImportExportCodes::OK;
     }
 }
 

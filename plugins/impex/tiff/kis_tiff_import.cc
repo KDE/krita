@@ -40,32 +40,10 @@ KisTIFFImport::~KisTIFFImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisTIFFImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisTIFFImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KisTIFFConverter tiffConverter(document);
-
-    switch (tiffConverter.buildImage(filename())) {
-    case KisImageBuilder_RESULT_UNSUPPORTED:
-        return KisImportExportFilter::NotImplemented;
-    case KisImageBuilder_RESULT_INVALID_ARG:
-        return KisImportExportFilter::BadMimeType;
-    case KisImageBuilder_RESULT_NO_URI:
-    case KisImageBuilder_RESULT_NOT_LOCAL:
-        return KisImportExportFilter::FileNotFound;
-    case KisImageBuilder_RESULT_BAD_FETCH:
-    case KisImageBuilder_RESULT_EMPTY:
-        return KisImportExportFilter::ParsingError;
-    case KisImageBuilder_RESULT_FAILURE:
-        return KisImportExportFilter::InternalError;
-    case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
-        return KisImportExportFilter::WrongFormat;
-    case KisImageBuilder_RESULT_OK:
-        document -> setCurrentImage(tiffConverter.image());
-        return KisImportExportFilter::OK;
-    default:
-        break;
-    }
-    return KisImportExportFilter::InternalError;
+    return tiffConverter.buildImage(filename());
 }
 
 #include <kis_tiff_import.moc>

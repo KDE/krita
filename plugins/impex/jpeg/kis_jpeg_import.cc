@@ -40,39 +40,11 @@ KisJPEGImport::~KisJPEGImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisJPEGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisJPEGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
 
     KisJPEGConverter ib(document, batchMode());
-
-    switch (ib.buildImage(io)) {
-    case KisImageBuilder_RESULT_UNSUPPORTED:
-    case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
-        return KisImportExportFilter::NotImplemented;
-        break;
-    case KisImageBuilder_RESULT_INVALID_ARG:
-        return KisImportExportFilter::BadMimeType;
-        break;
-    case KisImageBuilder_RESULT_NO_URI:
-    case KisImageBuilder_RESULT_NOT_LOCAL:
-        return KisImportExportFilter::FileNotFound;
-        break;
-    case KisImageBuilder_RESULT_BAD_FETCH:
-    case KisImageBuilder_RESULT_EMPTY:
-        return KisImportExportFilter::ParsingError;
-        break;
-    case KisImageBuilder_RESULT_FAILURE:
-        return KisImportExportFilter::InternalError;
-        break;
-    case KisImageBuilder_RESULT_OK:
-        document->setCurrentImage(ib.image());
-        return KisImportExportFilter::OK;
-    default:
-        break;
-
-    }
-
-    return KisImportExportFilter::InternalError;
+    return ib.buildImage(io);
 
 }
 

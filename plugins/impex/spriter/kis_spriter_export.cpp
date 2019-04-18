@@ -84,9 +84,9 @@ bool KisSpriterExport::savePaintDevice(KisPaintDeviceSP dev, const QString &file
     vKisAnnotationSP_it endIt = m_image->endAnnotations();
 
     KisPNGConverter converter(0);
-    KisImageBuilder_Result res = converter.buildFile(fileName, rc, m_image->xRes(), m_image->yRes(), dev, beginIt, endIt, options, 0);
+    KisImportExportErrorCode res = converter.buildFile(fileName, rc, m_image->xRes(), m_image->yRes(), dev, beginIt, endIt, options, 0);
 
-    return (res == KisImageBuilder_RESULT_OK);
+    return res.isOk();
 }
 
 void KisSpriterExport::parseFolder(KisGroupLayerSP parentGroup, const QString &folderName, const QString &basePath, int *folderId)
@@ -142,7 +142,8 @@ void KisSpriterExport::parseFolder(KisGroupLayerSP parentGroup, const QString &f
             file.y = ymin;
             //qDebug() << "Created file" << file.id << file.name << file.pathName << file.baseName << file.width << file.height << file.layerName;
 
-            savePaintDevice(child->projection(), basePath + file.name);
+            bool result = savePaintDevice(child->projection(), basePath + file.name);
+            Q_UNUSED(result);
             folder.files.append(file);
         }
 
@@ -468,14 +469,14 @@ Bone *findBoneByName(Bone *startBone, const QString &name)
     return 0;
 }
 
-KisImportExportFilter::ConversionStatus KisSpriterExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisSpriterExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     QFileInfo fi(filename());
 
     m_image = document->savingImage();
 
     if (m_image->rootLayer()->childCount() == 0) {
-        return KisImportExportFilter::UsageError;
+        return ImportExportCodes::Failure;
     }
 
     KisGroupLayerSP root = m_image->rootLayer();
@@ -600,7 +601,7 @@ KisImportExportFilter::ConversionStatus KisSpriterExport::convert(KisDocument *d
 
     delete m_rootBone;
 
-    return KisImportExportFilter::OK;
+    return ImportExportCodes::OK;
 }
 
 void KisSpriterExport::initializeCapabilities()

@@ -77,7 +77,7 @@ private:
 
 
 
-KisImportExportFilter::ConversionStatus HeifImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     // Wrap input stream into heif Reader object
     Reader_QIODevice reader(io);
@@ -179,7 +179,7 @@ KisImportExportFilter::ConversionStatus HeifImport::convert(KisDocument *documen
 
 
         document->setCurrentImage(image);
-        return KisImportExportFilter::OK;
+        return ImportExportCodes::OK;
     }
     catch (heif::Error err) {
         return setHeifError(document, err);

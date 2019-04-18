@@ -141,7 +141,7 @@ KisJPEGConverter::~KisJPEGConverter()
 {
 }
 
-KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
+KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
 {
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
@@ -172,7 +172,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
         if (modelId.isEmpty()) {
             dbgFile << "unsupported colorspace :" << cinfo.out_color_space;
             jpeg_destroy_decompress(&cinfo);
-            return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+            return ImportExportCodes::FormatColorSpaceUnsupported;
         }
         uchar* profile_data;
         uint profile_len;
@@ -213,7 +213,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
         if (cs == 0) {
             dbgFile << "unknown colorspace";
             jpeg_destroy_decompress(&cinfo);
-            return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+            return ImportExportCodes::FormatColorSpaceUnsupported;
         }
         // TODO fixit
         // Create the cmsTransform if needed
@@ -296,7 +296,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
                 } while (it->nextPixel());
                 break;
             default:
-                return KisImageBuilder_RESULT_UNSUPPORTED;
+                return ImportExportCodes::FormatFeaturesUnsupported;
             }
         }
 
@@ -435,17 +435,17 @@ KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
         jpeg_finish_decompress(&cinfo);
         jpeg_destroy_decompress(&cinfo);
         delete [] row_pointer;
-        return KisImageBuilder_RESULT_OK;
+        return ImportExportCodes::OK;
     }
     catch( std::runtime_error &e) {
         jpeg_destroy_decompress(&cinfo);
-        return KisImageBuilder_RESULT_FAILURE;
+        return ImportExportCodes::Failure;
     }
 }
 
 
 
-KisImageBuilder_Result KisJPEGConverter::buildImage(QIODevice *io)
+KisImportExportErrorCode KisJPEGConverter::buildImage(QIODevice *io)
 {
     return decode(io);
 }
@@ -457,14 +457,12 @@ KisImageSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(QIODevice *io, KisPaintLayerSP layer, KisJPEGOptions options, KisMetaData::Store* metaData)
+KisImportExportErrorCode KisJPEGConverter::buildFile(QIODevice *io, KisPaintLayerSP layer, KisJPEGOptions options, KisMetaData::Store* metaData)
 {
-    if (!layer)
-        return KisImageBuilder_RESULT_INVALID_ARG;
+    KIS_ASSERT_RECOVER_RETURN_VALUE(layer, ImportExportCodes::InternalError);
 
     KisImageSP image = KisImageSP(layer->image());
-    if (!image)
-        return KisImageBuilder_RESULT_EMPTY;
+    KIS_ASSERT_RECOVER_RETURN_VALUE(layer, ImportExportCodes::InternalError);
 
     const KoColorSpace * cs = layer->colorSpace();
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
@@ -705,7 +703,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(QIODevice *io, KisPaintLayerS
         default:
             delete [] row_pointer;
             jpeg_destroy_compress(&cinfo);
-            return KisImageBuilder_RESULT_UNSUPPORTED;
+            return ImportExportCodes::FormatFeaturesUnsupported;
         }
         jpeg_write_scanlines(&cinfo, &row_pointer, 1);
     }
@@ -718,7 +716,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(QIODevice *io, KisPaintLayerS
     // Free memory
     jpeg_destroy_compress(&cinfo);
 
-    return KisImageBuilder_RESULT_OK;
+    return ImportExportCodes::OK;
 }
 
 

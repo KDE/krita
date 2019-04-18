@@ -21,6 +21,7 @@
 #include <kis_cubic_curve.h>
 #include <QApplication>
 #include <QPalette>
+#include <KisSpinBoxSplineUnitConverter.h>
 
 enum enumState {
     ST_NORMAL,
@@ -34,6 +35,7 @@ class Q_DECL_HIDDEN KisCurveWidget::Private
 {
 
     KisCurveWidget *m_curveWidget;
+    KisSpinBoxSplineUnitConverter unitConverter;
 
 
 public:
@@ -88,7 +90,7 @@ public:
     /**
      * Common update routines
      */
-    void setCurveModified();
+    void setCurveModified(bool rewriteSpinBoxesValues);
     void setCurveRepaint();
 
 
@@ -96,6 +98,7 @@ public:
      * Convert working range of
      * In/Out controls to normalized
      * range of spline (and reverse)
+     * See notes on KisSpinBoxSplineUnitConverter
      */
     double io2sp(int x, int min, int max);
     int sp2io(double x, int min, int max);
@@ -139,14 +142,12 @@ KisCurveWidget::Private::Private(KisCurveWidget *parent)
 
 double KisCurveWidget::Private::io2sp(int x, int min, int max)
 {
-    int rangeLen = max - min;
-    return double(x - min) / rangeLen;
+    return unitConverter.io2sp(x, min, max);
 }
 
 int KisCurveWidget::Private::sp2io(double x, int min, int max)
 {
-    int rangeLen = max - min;
-    return int(x*rangeLen + 0.5) + min;
+    return unitConverter.sp2io(x, min, max);
 }
 
 
@@ -155,9 +156,10 @@ bool KisCurveWidget::Private::jumpOverExistingPoints(QPointF &pt, int skipIndex)
     Q_FOREACH (const QPointF &it, m_curve.points()) {
         if (m_curve.points().indexOf(it) == skipIndex)
             continue;
-        if (fabs(it.x() - pt.x()) < POINT_AREA)
+        if (fabs(it.x() - pt.x()) < POINT_AREA) {
             pt.rx() = pt.x() >= it.x() ?
                       it.x() + POINT_AREA : it.x() - POINT_AREA;
+        }
     }
     return (pt.x() >= 0 && pt.x() <= 1.);
 }
@@ -243,9 +245,12 @@ void KisCurveWidget::Private::syncIOControls()
     }
 }
 
-void KisCurveWidget::Private::setCurveModified()
+void KisCurveWidget::Private::setCurveModified(bool rewriteSpinBoxesValues = true)
 {
-    syncIOControls();
+
+    if (rewriteSpinBoxesValues) {
+        syncIOControls();
+    }
     m_splineDirty = true;
     m_curveWidget->update();
     m_curveWidget->emit modified();

@@ -94,7 +94,7 @@ intent.</string>
       <item row="3" column="0">
        <widget class="QRadioButton" name="radioAbsoluteColorimetric">
         <property name="toolTip">
-         <string>Best for spot colours</string>
+         <string>Best for spot colors</string>
         </property>
         <property name="whatsThis">
          <string>Within the destination device gamut; hue,

@@ -197,6 +197,7 @@ public:
 
 private Q_SLOTS:
     void slotTabletTest();
+    void slotResolutionSettings();
 
 public:
     void setDefault();

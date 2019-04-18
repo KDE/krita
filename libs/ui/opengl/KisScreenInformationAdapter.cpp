@@ -26,19 +26,10 @@
 
 #include <config-hdr.h>
 
-#ifdef Q_OS_WIN
-#if (QT_VERSION == QT_VERSION_CHECK(5, 11, 2))
-#include <QtGui/5.11.2/QtGui/qpa/qplatformnativeinterface.h>
-#elif (QT_VERSION == QT_VERSION_CHECK(5, 12, 0))
-#include <QtGui/5.12.0/QtGui/qpa/qplatformnativeinterface.h>
-#elif (QT_VERSION == QT_VERSION_CHECK(5, 12, 1))
-#include <QtGui/5.12.1/QtGui/qpa/qplatformnativeinterface.h>
-#elif (QT_VERSION == QT_VERSION_CHECK(5, 12, 2))
-#include <QtGui/5.12.2/QtGui/qpa/qplatformnativeinterface.h>
-#elif (QT_VERSION == QT_VERSION_CHECK(5, 13, 0))
-#include <QtGui/5.13.0/QtGui/qpa/qplatformnativeinterface.h>
-#endif
 
+
+#ifdef Q_OS_WIN
+#include <qpa/qplatformnativeinterface.h>
 #include <d3d11.h>
 #include <wrl/client.h>
 #include <dxgi1_6.h>

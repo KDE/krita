@@ -346,6 +346,9 @@ class comics_project_manager_docker(DockWidget):
     def slot_open_config(self):
         self.path_to_config = QFileDialog.getOpenFileName(caption=i18n("Please select the JSON comic config file."), filter=str(i18n("JSON files") + "(*.json)"))[0]
         if os.path.exists(self.path_to_config) is True:
+            if os.access(self.path_to_config, os.W_OK) is False:
+                QMessageBox.warning(None, i18n("Config cannot be used"), i18n("Krita doesn't have write access to this folder, so new files cannot be made. Please configure the folder access or move the project to a folder that can be written to."), QMessageBox.Ok)
+                return
             configFile = open(self.path_to_config, "r", newline="", encoding="utf-16")
             self.setupDictionary = json.load(configFile)
             self.projecturl = os.path.dirname(str(self.path_to_config))
@@ -812,6 +815,13 @@ class comics_project_manager_docker(DockWidget):
     def slot_new_project(self):
         setup = comics_project_setup_wizard.ComicsProjectSetupWizard()
         setup.showDialog()
+        self.path_to_config = os.path.join(setup.projectDirectory, "comicConfig.json")
+        if os.path.exists(self.path_to_config) is True:
+            configFile = open(self.path_to_config, "r", newline="", encoding="utf-16")
+            self.setupDictionary = json.load(configFile)
+            self.projecturl = os.path.dirname(str(self.path_to_config))
+            configFile.close()
+            self.load_config()
     """
     This is triggered by any document save.
     It checks if the given url in in the pages list, and if so,

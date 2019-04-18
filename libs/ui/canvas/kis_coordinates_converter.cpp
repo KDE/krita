@@ -150,7 +150,7 @@ KisCoordinatesConverter::~KisCoordinatesConverter()
     delete m_d;
 }
 
-void KisCoordinatesConverter::setCanvasWidgetSize(QSize size)
+void KisCoordinatesConverter::setCanvasWidgetSize(QSizeF size)
 {
     m_d->canvasWidgetSize = size;
     recalculateTransformations();
@@ -167,13 +167,18 @@ void KisCoordinatesConverter::setImage(KisImageWSP image)
     recalculateTransformations();
 }
 
-void KisCoordinatesConverter::setDocumentOffset(const QPoint& offset)
+void KisCoordinatesConverter::setDocumentOffset(const QPointF& offset)
 {
     QPointF diff = m_d->documentOffset - offset;
 
     m_d->documentOffset = offset;
     m_d->flakeToWidget *= QTransform::fromTranslate(diff.x(), diff.y());
     recalculateTransformations();
+}
+
+qreal KisCoordinatesConverter::devicePixelRatio() const
+{
+    return m_d->devicePixelRatio;
 }
 
 QPoint KisCoordinatesConverter::documentOffset() const

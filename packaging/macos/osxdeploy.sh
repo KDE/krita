@@ -105,6 +105,13 @@ for arg in "${@}"; do
             echo "valid image file"
             DMG_background=$(cd "$(dirname "${arg}")"; pwd -P)/$(basename "${arg}")
             DMG_validBG=1
+            # check imageDPI
+            BG_DPI=$(sips --getProperty dpiWidth ${DMG_background} | grep dpi | awk '{print $2}')
+            if [[ $(echo "${BG_DPI} > 150" | bc -l) -eq 1 ]]; then
+            printf "WARNING: image dpi has an effect on apparent size!
+    Check dpi is adequate for screen display if image appears very small
+    Current dpi is: %s\n" ${BG_DPI}
+            fi
         fi
     fi
     # If string starts with -sign
@@ -137,7 +144,6 @@ countArgs () {
 
 stringContains () {
     echo "$(grep "${2}" <<< "${1}")"
-
 }
 
 add_lib_to_list() {
@@ -145,7 +151,7 @@ add_lib_to_list() {
     if test -z "$(grep ${1##*/} <<< ${llist})" ; then
         local llist="${llist} ${1##*/} "
     fi
-    echo ${llist}
+    echo "${llist}"
 }
 
 # Find all @rpath and Absolute to buildroot path libs
@@ -166,7 +172,7 @@ find_needed_libs () {
 
         for lib in ${resultArray[@]:1}; do
             if test "${lib:0:1}" = "@"; then
-                local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
+                local libs_used=$(add_lib_to_list "${lib}" "${libs_used}")
             fi
             if [[ "${lib:0:${#BUILDROOT}}" = "${BUILDROOT}" ]]; then
                 printf "Fixing %s: %s\n" "${libFile#${KRITA_DMG}/}" "${lib##*/}" >&2
@@ -174,12 +180,12 @@ find_needed_libs () {
                     install_name_tool -id ${lib##*/} "${libFile}"
                 else
                     install_name_tool -change ${lib} "@rpath/${lib##*${BUILDROOT}/i/lib/}" "${libFile}"
-                    local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
+                    local libs_used=$(add_lib_to_list "${lib}" "${libs_used}")
                 fi
             fi
         done
     done
-    echo ${libs_used} # return updated list
+    echo "${libs_used}" # return updated list
 }
 
 find_missing_libs (){
@@ -191,12 +197,12 @@ find_missing_libs (){
             libs_missing="${libs_missing} ${lib}"
         fi
     done
-    echo ${libs_missing}
+    echo "${libs_missing}"
 }
 
 copy_missing_libs () {
     for lib in ${@}; do
-        result=$(find "${BUILDROOT}/i" -name "${lib}")
+        result=$(find -L "${BUILDROOT}/i" -name "${lib}")
 
         if test $(countArgs ${result}) -eq 1; then
             if [ "$(stringContains "${result}" "plugin")" ]; then

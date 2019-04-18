@@ -64,6 +64,12 @@
 #ifndef USE_QT_TABLET_WINDOWS
 #include <kis_tablet_support_win.h>
 #include <kis_tablet_support_win8.h>
+#else
+#include <dialogs/KisDlgCustomTabletResolution.h>
+#endif
+#include "config-set-has-border-in-full-screen-default.h"
+#ifdef HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
+#include <QtPlatformHeaders/QWindowsWindowFunctions>
 #endif
 #include <QLibrary>
 #endif
@@ -310,10 +316,25 @@ extern "C" int main(int argc, char **argv)
 #if defined Q_OS_WIN && defined USE_QT_TABLET_WINDOWS && defined QT_HAS_WINTAB_SWITCH
     const bool forceWinTab = !KisConfig::useWin8PointerInputNoApp(&kritarc);
     QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI, forceWinTab);
+
+    if (qEnvironmentVariableIsEmpty("QT_WINTAB_DESKTOP_RECT") &&
+        qEnvironmentVariableIsEmpty("QT_IGNORE_WINTAB_MAPPING")) {
+
+        QRect customTabletRect;
+        KisDlgCustomTabletResolution::Mode tabletMode =
+            KisDlgCustomTabletResolution::getTabletMode(&customTabletRect);
+        KisDlgCustomTabletResolution::applyConfiguration(tabletMode, customTabletRect);
+    }
 #endif
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+
+#ifdef HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
+    if (QCoreApplication::testAttribute(Qt::AA_UseDesktopOpenGL)) {
+        QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
+    }
+#endif
 
     KisUsageLogger::writeHeader();
 

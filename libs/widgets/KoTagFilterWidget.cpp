@@ -127,11 +127,6 @@ void KoTagFilterWidget::clear()
     d->tagSearchSaveButton->setEnabled(false);
 }
 
-QLineEdit *KoTagFilterWidget::searchField()
-{
-    return d->tagSearchLineEdit;
-}
-
 void KoTagFilterWidget::onTextChanged(const QString& lineEditText)
 {
     d->tagSearchSaveButton->setEnabled(!lineEditText.isEmpty());

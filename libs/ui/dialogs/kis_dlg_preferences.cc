@@ -758,6 +758,15 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
         m_page->radioWin8PointerInput->setChecked(false);
         m_page->grpTabletApi->setVisible(false);
     }
+
+#ifdef USE_QT_TABLET_WINDOWS
+    connect(m_page->btnResolutionSettings, SIGNAL(clicked()), SLOT(slotResolutionSettings()));
+    connect(m_page->radioWintab, SIGNAL(toggled(bool)), m_page->btnResolutionSettings, SLOT(setEnabled(bool)));
+    m_page->btnResolutionSettings->setEnabled(m_page->radioWintab->isChecked());
+#else
+    m_page->btnResolutionSettings->setVisible(false);
+#endif
+
 #else
     m_page->grpTabletApi->setVisible(false);
 #endif
@@ -768,6 +777,18 @@ void TabletSettingsTab::slotTabletTest()
 {
     TabletTestDialog tabletTestDialog(this);
     tabletTestDialog.exec();
+}
+
+#if defined Q_OS_WIN && defined USE_QT_TABLET_WINDOWS
+#include "KisDlgCustomTabletResolution.h"
+#endif
+
+void TabletSettingsTab::slotResolutionSettings()
+{
+#if defined Q_OS_WIN && defined USE_QT_TABLET_WINDOWS
+    KisDlgCustomTabletResolution dlg(this);
+    dlg.exec();
+#endif
 }
 
 

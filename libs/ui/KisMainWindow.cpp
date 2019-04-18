@@ -148,10 +148,6 @@
 #include <kritaversion.h>
 #include <mutex>
 
-#ifdef Q_OS_WIN
-  #include <QtPlatformHeaders/QWindowsWindowFunctions>
-#endif
-
 class ToolDockerFactory : public KoDockFactoryBase
 {
 public:
@@ -507,11 +503,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     d->viewManager->updateGUI();
     d->viewManager->updateIcons();
-
-#ifdef Q_OS_WIN
-    auto w = qApp->activeWindow();
-    if (w) QWindowsWindowFunctions::setHasBorderInFullScreen(w->windowHandle(), true);
-#endif
 
     QTimer::singleShot(1000, this, SLOT(checkSanity()));
 

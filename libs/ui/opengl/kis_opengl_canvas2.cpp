@@ -382,9 +382,11 @@ void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
     cfg.setCanvasState("OPENGL_FAILED");
 }
 
-void KisOpenGLCanvas2::resizeGL(int width, int height)
+void KisOpenGLCanvas2::resizeGL(int /*width*/, int /*height*/)
 {
-    coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
+    // The given size is the widget size but here we actually want to give
+    // KisCoordinatesConverter the viewport size aligned to device pixels.
+    coordinatesConverter()->setCanvasWidgetSize(widgetSizeAlignedToDevicePixel());
     paintGL();
 }
 
@@ -421,10 +423,14 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         return;
     }
 
+    QSizeF widgetSize = widgetSizeAlignedToDevicePixel();
+
     // setup the mvp transformation
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
-    projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+    // FIXME: It may be better to have the projection in device pixel, but
+    //       this requires introducing a new coordinate system.
+    projectionMatrix.ortho(0, widgetSize.width(), widgetSize.height(), 0, NEAR_VAL, FAR_VAL);
 
     // Set view/projection matrices
     QMatrix4x4 modelMatrix(coordinatesConverter()->flakeToWidgetTransform());
@@ -532,9 +538,10 @@ void KisOpenGLCanvas2::drawCheckers()
     QRectF textureRect;
     QRectF modelRect;
 
+    QSizeF widgetSize = widgetSizeAlignedToDevicePixel();
     QRectF viewportRect = !d->wrapAroundMode ?
                 converter->imageRectInViewportPixels() :
-                converter->widgetToViewport(this->rect());
+                converter->widgetToViewport(QRectF(0, 0, widgetSize.width(), widgetSize.height()));
 
     if (!canvas()->renderingLimit().isEmpty()) {
         const QRect vrect = converter->imageToViewport(canvas()->renderingLimit()).toAlignedRect();
@@ -554,7 +561,9 @@ void KisOpenGLCanvas2::drawCheckers()
 
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
-    projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+    // FIXME: It may be better to have the projection in device pixel, but
+    //       this requires introducing a new coordinate system.
+    projectionMatrix.ortho(0, widgetSize.width(), widgetSize.height(), 0, NEAR_VAL, FAR_VAL);
 
     // Set view/projection matrices
     QMatrix4x4 modelMatrix(modelTransform);
@@ -602,9 +611,13 @@ void KisOpenGLCanvas2::drawGrid()
         return;
     }
 
+    QSizeF widgetSize = widgetSizeAlignedToDevicePixel();
+
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
-    projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+    // FIXME: It may be better to have the projection in device pixel, but
+    //       this requires introducing a new coordinate system.
+    projectionMatrix.ortho(0, widgetSize.width(), widgetSize.height(), 0, NEAR_VAL, FAR_VAL);
 
     // Set view/projection matrices
     QMatrix4x4 modelMatrix(coordinatesConverter()->imageToWidgetTransform());
@@ -624,7 +637,7 @@ void KisOpenGLCanvas2::drawGrid()
         d->lineBuffer.bind();
     }
 
-    QRectF widgetRect(0,0, width(), height());
+    QRectF widgetRect(0,0, widgetSize.width(), widgetSize.height());
     QRectF widgetRectInImagePixels = coordinatesConverter()->documentToImage(coordinatesConverter()->widgetToDocument(widgetRect));
     QRect wr = widgetRectInImagePixels.toAlignedRect();
 
@@ -677,9 +690,13 @@ void KisOpenGLCanvas2::drawImage()
 
     d->displayShader->bind();
 
+    QSizeF widgetSize = widgetSizeAlignedToDevicePixel();
+
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
-    projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+    // FIXME: It may be better to have the projection in device pixel, but
+    //       this requires introducing a new coordinate system.
+    projectionMatrix.ortho(0, widgetSize.width(), widgetSize.height(), 0, NEAR_VAL, FAR_VAL);
 
     // Set view/projection matrices
     QMatrix4x4 modelMatrix(converter->imageToWidgetTransform());
@@ -691,7 +708,7 @@ void KisOpenGLCanvas2::drawImage()
     textureMatrix.setToIdentity();
     d->displayShader->setUniformValue(d->displayShader->location(Uniform::TextureMatrix), textureMatrix);
 
-    QRectF widgetRect(0,0, width(), height());
+    QRectF widgetRect(0,0, widgetSize.width(), widgetSize.height());
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
 
     const QRect renderingLimit = canvas()->renderingLimit();
@@ -847,6 +864,23 @@ void KisOpenGLCanvas2::drawImage()
     d->displayShader->release();
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glDisable(GL_BLEND);
+}
+
+QSize KisOpenGLCanvas2::viewportDevicePixelSize() const
+{
+    // This is how QOpenGLCanvas sets the FBO and the viewport size. If
+    // devicePixelRatioF() is non-integral, the result is truncated.
+    int viewportWidth = static_cast<int>(width() * devicePixelRatioF());
+    int viewportHeight = static_cast<int>(height() * devicePixelRatioF());
+    return QSize(viewportWidth, viewportHeight);
+}
+
+QSizeF KisOpenGLCanvas2::widgetSizeAlignedToDevicePixel() const
+{
+    QSize viewportSize = viewportDevicePixelSize();
+    qreal scaledWidth = viewportSize.width() / devicePixelRatioF();
+    qreal scaledHeight = viewportSize.height() / devicePixelRatioF();
+    return QSizeF(scaledWidth, scaledHeight);
 }
 
 void KisOpenGLCanvas2::slotConfigChanged()

@@ -357,6 +357,14 @@ void KisPopupPalette::adjustLayout(const QPoint &p)
 
 void KisPopupPalette::slotUpdateIcons()
 {
+    this->setPalette(qApp->palette());
+
+    for(int i=0; i<this->children().size(); i++) {
+        QWidget *w = qobject_cast<QWidget*>(this->children().at(i));
+        if (w) {
+            w->setPalette(qApp->palette());
+        }
+    }
     zoomToOneHundredPercentButton->setIcon(m_actionCollection->action("zoom_to_100pct")->icon());
     m_brushHud->updateIcons();
     m_settingsButton->setIcon(KisIconUtils::loadIcon("tag"));

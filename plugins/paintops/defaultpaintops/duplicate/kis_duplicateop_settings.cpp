@@ -128,6 +128,7 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
     s->m_offset = m_offset;
     s->m_isOffsetNotUptodate = m_isOffsetNotUptodate;
     s->m_position = m_position;
+    s->m_sourceNode = m_sourceNode;
 
     return setting;
 }

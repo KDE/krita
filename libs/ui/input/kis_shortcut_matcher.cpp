@@ -371,6 +371,28 @@ void KisShortcutMatcher::reinitialize()
     }
 }
 
+void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &keys)
+{
+    Q_FOREACH (Qt::Key key, m_d->keys) {
+        if (!keys.contains(key)) {
+            keyReleased(key);
+        }
+    }
+
+    Q_FOREACH (Qt::Key key, keys) {
+        if (!m_d->keys.contains(key)) {
+            keyPressed(key);
+        }
+    }
+
+    if (!m_d->runningShortcut) {
+        prepareReadyShortcuts();
+        tryActivateReadyShortcut();
+    }
+
+    DEBUG_ACTION("recoverySyncModifiers");
+}
+
 void KisShortcutMatcher::lostFocusEvent(const QPointF &localPos)
 {
     if (m_d->runningShortcut) {

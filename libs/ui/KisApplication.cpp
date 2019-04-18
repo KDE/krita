@@ -26,7 +26,7 @@
 #include <tchar.h>
 #endif
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
 #include "osx.h"
 #endif
 
@@ -138,7 +138,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     : QtSingleApplication(key, argc, argv)
     , d(new Private)
 {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     setMouseCoalescingEnabled(false);
 #endif
 

@@ -21,7 +21,7 @@
 #define KIS_OPENGL_CANVAS_2_H
 
 #include <QOpenGLWidget>
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
 #include <QOpenGLFunctions>
 #else
 #include <QOpenGLFunctions_3_2_Core>
@@ -38,7 +38,7 @@ class QOpenGLShaderProgram;
 class QPainterPath;
 
 #ifndef Q_MOC_RUN
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
 #define GLFunctions QOpenGLFunctions
 #else
 #define GLFunctions QOpenGLFunctions_3_2_Core

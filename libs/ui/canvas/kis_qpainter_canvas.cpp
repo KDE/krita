@@ -79,7 +79,7 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter
     setAttribute(Qt::WA_InputMethodEnabled, false);
     setAttribute(Qt::WA_StaticContents);
     setAttribute(Qt::WA_OpaquePaintEvent);
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     setAttribute(Qt::WA_AcceptTouchEvents, false);
 #else
     setAttribute(Qt::WA_AcceptTouchEvents, true);

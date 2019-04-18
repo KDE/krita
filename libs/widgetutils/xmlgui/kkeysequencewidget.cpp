@@ -572,7 +572,7 @@ void KKeySequenceWidgetPrivate::updateShortcutDisplay()
             if (modifierKeys & Qt::META) {
                 s += KKeyServer::modToStringUser(Qt::META) + QLatin1Char('+');
             }
-#if defined(Q_OS_OSX)
+#if defined(Q_OS_MACOS)
             if (modifierKeys & Qt::ALT) {
                 s += KKeyServer::modToStringUser(Qt::ALT) + QLatin1Char('+');
             }

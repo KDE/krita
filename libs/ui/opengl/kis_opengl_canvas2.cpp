@@ -46,7 +46,7 @@
 #include "KisOpenGLModeProber.h"
 #include <KoColorModelStandardIds.h>
 
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
 #include <QOpenGLFunctions_2_1>
 #endif
 
@@ -104,7 +104,7 @@ public:
     QVector3D vertices[6];
     QVector2D texCoords[6];
 
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
     QOpenGLFunctions_2_1 *glFn201;
 #endif
 
@@ -162,7 +162,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
 
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground, true);
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     setAttribute(Qt::WA_AcceptTouchEvents, false);
 #else
     setAttribute(Qt::WA_AcceptTouchEvents, true);
@@ -267,7 +267,7 @@ void KisOpenGLCanvas2::initializeGL()
 {
     KisOpenGL::initializeContext(context());
     initializeOpenGLFunctions();
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
     if (!KisOpenGL::hasOpenGLES()) {
         d->glFn201 = context()->versionFunctions<QOpenGLFunctions_2_1>();
         if (!d->glFn201) {
@@ -442,7 +442,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
         glEnable(GL_COLOR_LOGIC_OP);
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
         if (d->glFn201) {
             d->glFn201->glLogicOp(GL_XOR);
         }
@@ -997,7 +997,7 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
 
 QVector<QRect> KisOpenGLCanvas2::updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects)
 {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     /**
      * On OSX openGL defferent (shared) contexts have different execution queues.
      * It means that the textures uploading and their painting can be easily reordered.
@@ -1013,7 +1013,7 @@ QVector<QRect> KisOpenGLCanvas2::updateCanvasProjection(const QVector<KisUpdateI
 
     QVector<QRect> result = KisCanvasWidgetBase::updateCanvasProjection(infoObjects);
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     if (oldContext) {
         oldContext->makeCurrent(oldSurface);
     } else {

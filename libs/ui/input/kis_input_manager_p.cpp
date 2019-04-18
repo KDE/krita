@@ -395,7 +395,7 @@ bool KisInputManager::Private::ProximityNotifier::eventFilter(QObject* object, Q
         // Qt sends fake mouse events instead of hover events, so not very useful.
         // Don't block mouse events on tablet since tablet move events are not generated until
         // after tablet press.
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
         d->blockMouseEvents();
 #else
         // Notify input manager that tablet proximity is entered for Genius tablets.
@@ -405,7 +405,7 @@ bool KisInputManager::Private::ProximityNotifier::eventFilter(QObject* object, Q
     case QEvent::TabletLeaveProximity:
         d->debugEvent<QEvent, false>(event);
         d->allowMouseEvents();
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         d->setTabletActive(false);
 #endif
         break;
@@ -522,7 +522,7 @@ bool KisInputManager::Private::addNativeGestureShortcut(KisAbstractInputAction* 
     // Qt5 only implements QNativeGestureEvent for macOS
     Qt::NativeGestureType type;
     switch (gesture) {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         case KisShortcutConfiguration::PinchGesture:
             type = Qt::ZoomNativeGesture;
             break;

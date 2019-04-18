@@ -35,7 +35,7 @@
 #include "kis_global.h"
 #include <cmath>
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
 #include <errno.h>
 #endif
 
@@ -46,7 +46,7 @@ KisImageConfig::KisImageConfig(bool readOnly)
     if (!readOnly) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
     }
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     // clear /var/folders/ swap path set by old broken Krita swap implementation in order to use new default swap dir.
     QString swap = m_config.readEntry("swaplocation", "");
     if (swap.startsWith("/var/folders/")) {
@@ -231,7 +231,7 @@ void KisImageConfig::setMemoryPoolLimitPercent(qreal value)
 
 QString KisImageConfig::safelyGetWritableTempLocation(const QString &suffix, const QString &configKey, bool requestDefault) const
 {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     // On OSX, QDir::tempPath() gives us a folder we cannot reply upon (usually
     // something like /var/folders/.../...) and that will have vanished when we
     // try to create the tmp file in KisMemoryWindow::KisMemoryWindow using
@@ -359,7 +359,7 @@ void KisImageConfig::setLazyFrameCreationEnabled(bool value)
 #include <sys/sysctl.h>
 #elif defined Q_OS_WIN
 #include <windows.h>
-#elif defined Q_OS_OSX
+#elif defined Q_OS_MACOS
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #endif
@@ -403,7 +403,7 @@ int KisImageConfig::totalRAM()
 #   if defined ENV32BIT
     totalMemory = qMin(totalMemory, 2000);
 #   endif
-#elif defined Q_OS_OSX
+#elif defined Q_OS_MACOS
     int mib[2] = { CTL_HW, HW_MEMSIZE };
     u_int namelen = sizeof(mib) / sizeof(mib[0]);
     uint64_t size;

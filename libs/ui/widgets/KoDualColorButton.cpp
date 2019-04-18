@@ -98,7 +98,7 @@ void KoDualColorButton::Private::init(KoDualColorButton *q)
         q->setMinimumSize( q->sizeHint() );
 
     q->setAcceptDrops( true );
-    QString caption = i18n("Select a color");
+    QString caption = i18n("Select a Color");
     KisDlgInternalColorSelector::Config config = KisDlgInternalColorSelector::Config();
     config.modal = false;
     colorSelectorDialog = new KisDlgInternalColorSelector(q, foregroundColor, config, caption, displayRenderer);

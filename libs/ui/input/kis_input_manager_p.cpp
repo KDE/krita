@@ -73,7 +73,7 @@ static bool isMouseEventType(QEvent::Type t)
 KisInputManager::Private::EventEater::EventEater()
 {
     KisConfig cfg(true);
-    activateSecondaryButtonsWorkaround = cfg.readEntry("rightMiddleTabletButtonWorkaround", false);
+    activateSecondaryButtonsWorkaround = cfg.useRightMiddleTabletButtonWorkaround();
 }
 
 bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* event )

@@ -706,6 +706,9 @@ void TabletSettingsTab::setDefault()
     curve.fromString(DEFAULT_CURVE_STRING);
     m_page->pressureCurve->setCurve(curve);
 
+    m_page->chkUseRightMiddleClickWorkaround->setChecked(
+        KisConfig(true).useRightMiddleTabletButtonWorkaround(true));
+
 #if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
 
 #ifdef USE_QT_TABLET_WINDOWS
@@ -742,6 +745,9 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
 
     m_page->pressureCurve->setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
     m_page->pressureCurve->setCurve(curve);
+
+    m_page->chkUseRightMiddleClickWorkaround->setChecked(
+         cfg.useRightMiddleTabletButtonWorkaround());
 
 #if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
 #ifdef USE_QT_TABLET_WINDOWS
@@ -1617,6 +1623,9 @@ bool KisDlgPreferences::editPreferences()
 
         // Tablet settings
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
+        cfg.setUseRightMiddleTabletButtonWorkaround(
+            dialog->m_tabletSettings->m_page->chkUseRightMiddleClickWorkaround->isChecked());
+
 #if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
 #ifdef USE_QT_TABLET_WINDOWS
         // ask Qt if WinInk is actually available

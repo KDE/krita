@@ -31,6 +31,7 @@
 #include "kis_touch_shortcut.h"
 #include "kis_native_gesture_shortcut.h"
 #include "kis_input_profile_manager.h"
+#include "kis_extended_modifiers_mapper.h"
 
 /**
  * This hungry class EventEater encapsulates event masking logic.
@@ -337,7 +338,6 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
             break;
         case QEvent::MouseMove:
         case QEvent::TabletMove: {
-
             QWidget *widget = static_cast<QWidget*>(object);
 
             if (!widget->hasFocus()) {
@@ -620,6 +620,29 @@ void KisInputManager::Private::resetCompressor() {
 bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
 {
     bool retval = false;
+
+    /**
+     * When Krita (as an application) has no input focus, we cannot
+     * handle key events. But at the same time, when the user hovers
+     * Krita canvas, we should still show him the correct cursor.
+     *
+     * So here we just add a simple workaround to resync shortcut
+     * matcher's state at least against the basic modifiers, like
+     * Shift, Control and Alt.
+     */
+    QWidget *recievingWidget = dynamic_cast<QWidget*>(eventsReceiver);
+    if (recievingWidget && !recievingWidget->hasFocus()) {
+        QVector<Qt::Key> guessedKeys;
+
+        KisExtendedModifiersMapper mapper;
+        Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
+        Q_FOREACH (Qt::Key key, mapper.queryExtendedModifiers()) {
+            QKeyEvent kevent(QEvent::ShortcutOverride, key, modifiers);
+            guessedKeys << KisExtendedModifiersMapper::workaroundShiftAltMetaHell(&kevent);
+        }
+
+        matcher.recoveryModifiersWithoutFocus(guessedKeys);
+    }
 
     if (!matcher.pointerMoved(event) && toolProxy) {
         toolProxy->forwardHoverEvent(event);

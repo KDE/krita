@@ -34,8 +34,8 @@ public:
     OraConverter(KisDocument *doc);
     ~OraConverter() override;
 public:
-    KisImageBuilder_Result buildImage(QIODevice *io);
-    KisImageBuilder_Result buildFile(QIODevice *io, KisImageSP image, vKisNodeSP activeNodes);
+    ImportExport::ErrorCode buildImage(QIODevice *io);
+    ImportExport::ErrorCode buildFile(QIODevice *io, KisImageSP image, vKisNodeSP activeNodes);
     /**
      * Retrieve the constructed image
      */

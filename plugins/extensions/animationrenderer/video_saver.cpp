@@ -103,7 +103,7 @@ public:
         : m_cancelled(false),
           m_ffmpegPath(ffmpegPath) {}
 public:
-    KisImageBuilder_Result runFFMpeg(const QStringList &specialArgs,
+    ImportExport::ErrorCode runFFMpeg(const QStringList &specialArgs,
                                      const QString &actionName,
                                      const QString &logPath,
                                      int totalFrames)
@@ -137,7 +137,7 @@ public:
     }
 
 private:
-    KisImageBuilder_Result waitForFFMpegProcess(const QString &message,
+    ImportExport::ErrorCode waitForFFMpegProcess(const QString &message,
                                                 QFile &progressFile,
                                                 QProcess &ffmpegProcess,
                                                 int totalFrames)
@@ -165,16 +165,16 @@ private:
             ffmpegProcess.waitForFinished(5000);
         }
 
-        KisImageBuilder_Result retval = KisImageBuilder_RESULT_OK;
+        ImportExport::ErrorCode retval = ImportExport::ErrorCodeID::OK;
 
         if (ffmpegProcess.state() != QProcess::NotRunning) {
             // sorry...
             ffmpegProcess.kill();
-            retval = KisImageBuilder_RESULT_FAILURE;
+            retval = ImportExport::ErrorCodeID::Failure;
         } else if (m_cancelled) {
-            retval = KisImageBuilder_RESULT_CANCEL;
+            retval = ImportExport::ErrorCodeID::Cancelled;
         } else if (ffmpegProcess.exitCode()) {
-            retval = KisImageBuilder_RESULT_FAILURE;
+            retval = ImportExport::ErrorCodeID::Failure;
         }
 
         return retval;
@@ -203,14 +203,14 @@ KisImageSP VideoSaver::image()
     return m_image;
 }
 
-KisImageBuilder_Result VideoSaver::encode(const QString &savedFilesMask, const KisAnimationRenderingOptions &options)
+ImportExport::ErrorCode VideoSaver::encode(const QString &savedFilesMask, const KisAnimationRenderingOptions &options)
 {
     if (!QFileInfo(options.ffmpegPath).exists()) {
         m_doc->setErrorMessage(i18n("ffmpeg could not be found at %1", options.ffmpegPath));
-        return KisImageBuilder_RESULT_FAILURE;
+        return ImportExport::ErrorCodeID::Failure;
     }
 
-    KisImageBuilder_Result result = KisImageBuilder_RESULT_OK;
+    ImportExport::ErrorCode resultOuter = ImportExport::ErrorCodeID::OK;
 
     KisImageAnimationInterface *animation = m_image->animationInterface();
 
@@ -245,12 +245,12 @@ KisImageBuilder_Result VideoSaver::encode(const QString &savedFilesMask, const K
                  << "-vf" << "palettegen"
                  << "-y" << palettePath;
 
-            KisImageBuilder_Result result =
+            ImportExport::ErrorCode result =
                 runner->runFFMpeg(args, i18n("Fetching palette..."),
                                     videoDir.filePath("log_generate_palette_gif.log"),
                                     clipRange.duration());
 
-            if (result != KisImageBuilder_RESULT_OK) {
+            if (!result.isOk()) {
                 return result;
             }
         }
@@ -272,12 +272,12 @@ KisImageBuilder_Result VideoSaver::encode(const QString &savedFilesMask, const K
 
             dbgFile << "savedFilesMask" << savedFilesMask << "start" << QString::number(clipRange.start()) << "duration" << clipRange.duration();
 
-            KisImageBuilder_Result result =
+            ImportExport::ErrorCode result =
                 runner->runFFMpeg(args, i18n("Encoding frames..."),
                                     videoDir.filePath("log_encode_gif.log"),
                                     clipRange.duration());
 
-            if (result != KisImageBuilder_RESULT_OK) {
+            if (!result.isOk()) {
                 return result;
             }
         }
@@ -313,30 +313,19 @@ KisImageBuilder_Result VideoSaver::encode(const QString &savedFilesMask, const K
              << "-y" << resultFile;
 
 
-        result = runner->runFFMpeg(args, i18n("Encoding frames..."),
+        resultOuter = runner->runFFMpeg(args, i18n("Encoding frames..."),
                                      videoDir.filePath("log_encode.log"),
                                      clipRange.duration());
     }
 
-    return result;
+    return resultOuter;
 }
 
-KisImportExportFilter::ConversionStatus VideoSaver::convert(KisDocument *document, const QString &savedFilesMask, const KisAnimationRenderingOptions &options, bool batchMode)
+ImportExport::ErrorCode VideoSaver::convert(KisDocument *document, const QString &savedFilesMask, const KisAnimationRenderingOptions &options, bool batchMode)
 {
     VideoSaver videoSaver(document, batchMode);
-    KisImageBuilder_Result res = videoSaver.encode(savedFilesMask, options);
-
-    if (res == KisImageBuilder_RESULT_OK) {
-        return KisImportExportFilter::OK;
-
-    } else if (res == KisImageBuilder_RESULT_CANCEL) {
-        return KisImportExportFilter::ProgressCancelled;
-
-    }else {
-        document->setErrorMessage(i18n("FFMpeg failed to convert the image sequence. Check the logfile in your output directory for more information."));
-    }
-
-    return KisImportExportFilter::InternalError;
+    ImportExport::ErrorCode res = videoSaver.encode(savedFilesMask, options);
+    return res;
 }
 
 #include "video_saver.moc"

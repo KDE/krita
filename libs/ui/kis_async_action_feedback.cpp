@@ -59,7 +59,7 @@ T runActionImpl(std::function<T()> func)
     return watcher.result();
 }
 
-KisImportExportFilter::ConversionStatus KisAsyncActionFeedback::runAction(std::function<KisImportExportFilter::ConversionStatus()> func)
+ImportExport::ErrorCode KisAsyncActionFeedback::runAction(std::function<ImportExport::ErrorCode()> func)
 {
     return runActionImpl(func);
 }

@@ -1814,11 +1814,10 @@ void KisMainWindow::importAnimation()
         KoUpdaterPtr updater =
                 !document->fileBatchMode() ? viewManager()->createUnthreadedUpdater(i18n("Import frames")) : 0;
         KisAnimationImporter importer(document->image(), updater);
-        KisImportExportFilter::ConversionStatus status = importer.import(files, firstFrame, step);
+        ImportExport::ErrorCode status = importer.import(files, firstFrame, step);
 
-        if (status != KisImportExportFilter::OK && status != KisImportExportFilter::InternalError) {
-            QString msg = KisImportExportFilter::conversionStatusString(status);
-
+        if (!status.isOk() && !status.isInternalError()) {
+            QString msg = status.errorMessage();
             if (!msg.isEmpty())
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not finish import animation:\n%1", msg));
         }

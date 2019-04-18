@@ -57,7 +57,7 @@ CSVLoader::~CSVLoader()
 {
 }
 
-KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
+ImportExport::ErrorCode CSVLoader::decode(QIODevice *io, const QString &filename)
 {
     QString     field;
     int         idx;
@@ -91,7 +91,7 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
     //according to the QT docs, the slash is a universal directory separator
     path.append(".frames/");
 
-    KisImageBuilder_Result retval = KisImageBuilder_RESULT_OK;
+    ImportExport::ErrorCode retval = ImportExport::ErrorCodeID::OK;
 
     dbgFile << "pos:" << io->pos();
 
@@ -131,13 +131,13 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
         qApp->processEvents();
 
         if (m_stop) {
-            retval = KisImageBuilder_RESULT_CANCEL;
+            retval = ImportExport::ErrorCodeID::Cancelled;
             break;
         }
 
         if ((idx = readLine.nextLine(io)) <= 0) {
             if ((idx < 0) ||(step < 5))
-                retval = KisImageBuilder_RESULT_FAILURE;
+                retval = ImportExport::ErrorCodeID::Failure;
 
             break;
         }
@@ -206,7 +206,7 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
             }
 
             if ((width < 1) || (height < 1)) {
-               retval = KisImageBuilder_RESULT_FAILURE;
+               retval = ImportExport::ErrorCodeID::Failure;
                break;
             }
 
@@ -288,11 +288,11 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
             frame++;
             break;
         }
-    } while (retval == KisImageBuilder_RESULT_OK);
+    } while (retval.isOk());
 
     //finish the layers
 
-    if (retval == KisImageBuilder_RESULT_OK) {
+    if (retval.isOk()) {
         if (m_image) {
             KisImageAnimationInterface *animation = m_image->animationInterface();
 
@@ -310,7 +310,7 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
             if ((layer->frame > 0) || !layer->last.isEmpty()) {
                 retval = setLayer(layer, importDoc.data(), path);
 
-                if (retval != KisImageBuilder_RESULT_OK)
+                if (!retval.isOk())
                     break;
             }
         }
@@ -408,7 +408,7 @@ QString CSVLoader::validPath(const QString &path,const QString &base)
     return QString(); //NULL string
 }
 
-KisImageBuilder_Result CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *importDoc, const QString &path)
+ImportExport::ErrorCode CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *importDoc, const QString &path)
 {
     bool result = true;
 
@@ -452,10 +452,10 @@ KisImageBuilder_Result CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *i
         //blank
         layer->channel->addKeyframe(layer->frame);
     }
-    return (result) ? KisImageBuilder_RESULT_OK : KisImageBuilder_RESULT_FAILURE;
+    return (result) ? ImportExport::ErrorCodeID::OK : ImportExport::ErrorCodeID::Failure;
 }
 
-KisImageBuilder_Result CSVLoader::createNewImage(int width, int height, float ratio, const QString &name)
+ImportExport::ErrorCode CSVLoader::createNewImage(int width, int height, float ratio, const QString &name)
 {
     //the CSV is RGBA 8bits, sRGB
 
@@ -465,15 +465,15 @@ KisImageBuilder_Result CSVLoader::createNewImage(int width, int height, float ra
 
         if (cs) m_image = new KisImage(m_doc->createUndoStore(), width, height, cs, name);
 
-        if (!m_image) return KisImageBuilder_RESULT_FAILURE;
+        if (!m_image) return ImportExport::ErrorCodeID::Failure;
 
         m_image->setResolution(ratio, 1.0);
         m_image->lock();
     }
-    return KisImageBuilder_RESULT_OK;
+    return ImportExport::ErrorCodeID::OK;
 }
 
-KisImageBuilder_Result CSVLoader::buildAnimation(QIODevice *io, const QString &filename)
+ImportExport::ErrorCode CSVLoader::buildAnimation(QIODevice *io, const QString &filename)
 {
     return decode(io, filename);
 }

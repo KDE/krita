@@ -31,7 +31,7 @@ public:
     exrImport(QObject *parent, const QVariantList &);
     ~exrImport() override;
     bool supportsIO() const override { return false; }
-    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    ImportExport::ErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

@@ -31,7 +31,7 @@ public:
     KisPDFImport(QObject *parent, const QVariantList &);
     virtual ~KisPDFImport();
 public:
-    virtual KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    virtual ImportExport::ErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
 };
 
 #endif

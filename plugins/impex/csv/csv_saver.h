@@ -26,7 +26,7 @@
 #include "kis_raster_keyframe_channel.h"
 #include "kis_png_converter.h"
 
-/* The KisImageBuilder_Result definitions come from kis_png_converter.h here */
+/* The ImportExport::ErrorCode definitions come from kis_png_converter.h here */
 
 #include "csv_layer_record.h"
 class KisDocument;
@@ -39,12 +39,12 @@ public:
     CSVSaver(KisDocument* doc, bool batchMode);
     ~CSVSaver() override;
 
-    KisImageBuilder_Result buildAnimation(QIODevice *io);
+    ImportExport::ErrorCode buildAnimation(QIODevice *io);
     KisImageSP image();
 
 private:
-    KisImageBuilder_Result encode(QIODevice *io);
-    KisImageBuilder_Result getLayer(CSVLayerRecord* , KisDocument* , KisKeyframeSP, const QString &, int, int);
+    ImportExport::ErrorCode encode(QIODevice *io);
+    ImportExport::ErrorCode getLayer(CSVLayerRecord* , KisDocument* , KisKeyframeSP, const QString &, int, int);
     void createTempImage(KisDocument* );
     QString convertToBlending(const QString &);
 

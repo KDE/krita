@@ -82,10 +82,10 @@ void roudTripHdrImage(const KoColorSpace *savingColorSpace)
         KisImportExportManager manager(doc.data());
         doc->setFileBatchMode(true);
 
-        KisImportExportFilter::ConversionStatus loadingStatus =
+        ImportExport::ErrorCode loadingStatus =
             manager.importDocument("test.png", QString());
 
-        QCOMPARE(loadingStatus, KisImportExportFilter::OK);
+        QVERIFY(loadingStatus.isOk());
 
         KisImageSP image = doc->image();
         image->initialRefreshGraph();

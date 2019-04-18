@@ -50,21 +50,10 @@ psdExport::~psdExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus psdExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+ImportExport::ErrorCode psdExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     PSDSaver psdSaver(document);
-    KisImageBuilder_Result res;
-
-    if ((res = psdSaver.buildFile(io)) == KisImageBuilder_RESULT_OK) {
-        dbgFile <<"success !";
-        return KisImportExportFilter::OK;
-    }
-    else if (res == KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE) {
-        document->setErrorMessage(i18n("Could not convert this colorspace to something Krita can save."));
-        return KisImportExportFilter::WrongFormat;
-    }
-    dbgFile <<" Result =" << res;
-    return KisImportExportFilter::InternalError;
+    return psdSaver.buildFile(io);
 }
 
 void psdExport::initializeCapabilities()

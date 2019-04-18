@@ -28,7 +28,7 @@
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_annotation.h"
-#include <KisImageBuilderResult.h>
+#include <KisImportExportErrorCodes.h>
 class KisDocument;
 
 struct KisTIFFOptions {
@@ -52,16 +52,16 @@ public:
     KisTIFFConverter(KisDocument *doc);
     ~KisTIFFConverter() override;
 public:
-    KisImageBuilder_Result buildImage(const QString &filename);
-    KisImageBuilder_Result buildFile(const QString &filename, KisImageSP layer, KisTIFFOptions);
+    ImportExport::ErrorCode buildImage(const QString &filename);
+    ImportExport::ErrorCode buildFile(const QString &filename, KisImageSP layer, KisTIFFOptions);
     /** Retrieve the constructed image
     */
     KisImageSP image();
 public Q_SLOTS:
     virtual void cancel();
 private:
-    KisImageBuilder_Result decode(const QString &filename);
-    KisImageBuilder_Result readTIFFDirectory(TIFF* image);
+    ImportExport::ErrorCode decode(const QString &filename);
+    ImportExport::ErrorCode readTIFFDirectory(TIFF* image);
 private:
     KisImageSP m_image;
     KisDocument *m_doc;

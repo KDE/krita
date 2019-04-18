@@ -34,7 +34,7 @@ public:
     KisXCFImport(QObject *parent, const QVariantList &);
     ~KisXCFImport() override;
 public:
-    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    ImportExport::ErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

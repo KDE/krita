@@ -51,7 +51,7 @@ KisGIFImport::~KisGIFImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisGIFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+ImportExport::ErrorCode KisGIFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(configuration);
 
@@ -62,10 +62,12 @@ KisImportExportFilter::ConversionStatus KisGIFImport::convert(KisDocument *docum
 
     if (handler.canRead()) {
         result = handler.read(&img);
+    } else {
+        return ImportExport::ErrorCodeID::NoAccessToRead;
     }
 
     if (result == false) {
-        return KisImportExportFilter::CreationError;
+        return ImportExport::ErrorCodeID::ErrorWhileReading;
     }
 
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -76,7 +78,7 @@ KisImportExportFilter::ConversionStatus KisGIFImport::convert(KisDocument *docum
     image->addNode(layer.data(), image->rootLayer().data());
 
     document->setCurrentImage(image);
-    return KisImportExportFilter::OK;
+    return ImportExport::ErrorCodeID::OK;
 
 }
 

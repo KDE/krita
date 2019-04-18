@@ -293,7 +293,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         QBuffer buf(&ba);
         KisImportExportFilter *filter = tempDoc->importExportManager()->filterForMimeType(tempDoc->nativeFormatMimeType(), KisImportExportManager::Import);
         filter->setBatchMode(true);
-        bool result = (filter->convert(tempDoc, &buf) == KisImportExportFilter::OK);
+        bool result = (filter->convert(tempDoc, &buf).isOk());
 
         if (result) {
             KisImageWSP tempImage = tempDoc->image();

@@ -155,11 +155,13 @@ private:
 
 
 
-KisImportExportFilter::ConversionStatus KisPPMImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+ImportExport::ErrorCode KisPPMImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     QByteArray array = io->read(2);
 
-    if (array.size() < 2) return KisImportExportFilter::CreationError;
+    if (array.size() < 2) {
+        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+    }
 
     // Read the type of the ppm file
     enum { Puk, P1, P2, P3, P4, P5, P6 } fileType = Puk; // Puk => unknown
@@ -192,7 +194,9 @@ KisImportExportFilter::ConversionStatus KisPPMImport::convert(KisDocument *docum
 
     Q_ASSERT(channels != -1);
     char c; io->getChar(&c);
-    if (!isspace(c)) return KisImportExportFilter::CreationError; // Invalid file, it should have a separator now
+    if (!isspace(c)) {
+        return ImportExport::ErrorCodeID::FileFormatIncorrect;; // Invalid file, it should have a separator now
+    }
 
     while (io->peek(1) == "#") {
         io->readLine();
@@ -240,7 +244,7 @@ KisImportExportFilter::ConversionStatus KisPPMImport::convert(KisDocument *docum
         }
     } else {
         dbgFile << "Unknown colorspace";
-        return KisImportExportFilter::CreationError;
+        return ImportExport::ErrorCodeID::FormatColorSpaceUnsupported;
     }
 
     if (colorSpaceId == RGBAColorModelID.id()) {
@@ -264,7 +268,9 @@ KisImportExportFilter::ConversionStatus KisPPMImport::convert(KisDocument *docum
     for (int v = 0; v < height; ++v) {
         KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, v, width);
         ppmFlow->nextRow();
-        if (!ppmFlow->valid()) return KisImportExportFilter::CreationError;
+        if (!ppmFlow->valid()) {
+            return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        }
         if (maxval <= 255) {
             if (channels == 3) {
                 do {
@@ -308,7 +314,7 @@ KisImportExportFilter::ConversionStatus KisPPMImport::convert(KisDocument *docum
     image->addNode(layer.data(), image->rootLayer().data());
 
     document->setCurrentImage(image);
-    return KisImportExportFilter::OK;
+    return ImportExport::ErrorCodeID::OK;
 }
 
 #include "kis_ppm_import.moc"

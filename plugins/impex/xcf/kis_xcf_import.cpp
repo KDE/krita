@@ -153,7 +153,7 @@ KisXCFImport::~KisXCFImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+ImportExport::ErrorCode KisXCFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     dbgFile << "Start decoding file";
     QByteArray data = io->readAll();
@@ -166,7 +166,7 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *docum
 
     if (XCF.version < 0 || XCF.version > 3) {
         document->setErrorMessage(i18n("This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 or newer."));
-        return KisImportExportFilter::UnsupportedVersion;
+        return ImportExport::ErrorCodeID::FormatFeaturesUnsupported;
     }
 
     initColormap();
@@ -310,7 +310,7 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *docum
     }
 
     document->setCurrentImage(image);
-    return KisImportExportFilter::OK;
+    return ImportExport::ErrorCodeID::OK;
 
 }
 

@@ -36,6 +36,7 @@
 #include <KisMimeDatabase.h>
 #include <kis_time_range.h>
 #include <KisImportExportManager.h>
+#include <KisImportExportErrorCodes.h>
 
 #include "DlgAnimationRenderer.h"
 #include <dialogs/KisAsyncAnimationFramesSaveDialog.h>
@@ -173,12 +174,11 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
             KIS_SAFE_ASSERT_RECOVER_NOOP(dir.exists());
         }
 
-        KisImportExportFilter::ConversionStatus res;
+        ImportExport::ErrorCode res;
         QFile fi(resultFile);
         if (!fi.open(QIODevice::WriteOnly)) {
             qWarning() << "Could not open" << fi.fileName() << "for writing!";
-            doc->setErrorMessage(i18n("Could not open %1 for writing!", fi.fileName()));
-            res = KisImportExportFilter::CreationError;
+            res = ImportExport::ErrorCodeCannotWrite(fi.error());
         } else {
             fi.close();
         }
@@ -186,8 +186,8 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
         QScopedPointer<VideoSaver> encoder(new VideoSaver(doc, batchMode));
         res = encoder->convert(doc, savedFilesMask, encoderOptions, batchMode);
 
-        if (res != KisImportExportFilter::OK) {
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
+        if (!res.isOk()) {
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", res.errorMessage()));
         }
 
         if (encoderOptions.shouldDeleteSequence) {

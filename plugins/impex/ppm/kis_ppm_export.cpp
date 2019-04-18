@@ -134,7 +134,7 @@ private:
     quint8 m_current;
 };
 
-KisImportExportFilter::ConversionStatus KisPPMExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+ImportExport::ErrorCode KisPPMExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     bool rgb = (mimeType() == "image/x-portable-pixmap");
     bool binary = (configuration->getInt("type") == 0);
@@ -158,27 +158,60 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(KisDocument *docum
     bool is16bit = pd->colorSpace()->id() == "RGBA16" || pd->colorSpace()->id() == "GRAYAU16";
 
     // Write the magic
+    QString toWrite = "";
+    int written = 0;
     if (rgb) {
-        if (binary) io->write("P6");
-        else io->write("P3");
+        if (binary) {
+            toWrite = "P6";
+        }
+        else {
+            toWrite = "P3";
+        }
     } else if (bitmap) {
-        if (binary) io->write("P4");
-        else io->write("P1");
+        if (binary) {
+            toWrite = "P4";
+        }
+        else {
+            toWrite = "P1";
+        }
     } else {
-        if (binary) io->write("P5");
-        else io->write("P2");
+        if (binary) {
+            toWrite = "P5";
+        }
+        else {
+            toWrite = "P2";
+        }
     }
-    io->write("\n");
+    written = io->write(toWrite.toUtf8());
+    if (written != toWrite.toUtf8().length()) {
+        return ImportExport::ErrorCodeID::ErrorWhileWriting;
+    }
+
+    written = io->write("\n");
 
     // Write the header
-    io->write(QByteArray::number(image->width()));
-    io->write(" ");
-    io->write(QByteArray::number(image->height()));
+    QByteArray width = QByteArray::number(image->width());
+    QByteArray height = QByteArray::number(image->height());
+
+    written += io->write(width);
+    written += io->write(" ");
+    written += io->write(height);
+    if (written != QString(" ").length() + QString("\n").length() + width.length() + height.length()) {
+        return ImportExport::ErrorCodeID::ErrorWhileWriting;
+    }
     if (!bitmap) {
-        if (is16bit) io->write(" 65535\n");
-        else io->write(" 255\n");
+        if (is16bit) {
+            toWrite = " 65535\n";
+        }
+        else {
+            toWrite = " 255\n";
+        }
     } else {
-        io->write("\n");
+        toWrite = "\n";
+    }
+    written = io->write(toWrite.toUtf8());
+    if (written != toWrite.toUtf8().length()) {
+        return ImportExport::ErrorCodeID::ErrorWhileWriting;
     }
 
     // Write the data
@@ -231,7 +264,7 @@ KisImportExportFilter::ConversionStatus KisPPMExport::convert(KisDocument *docum
         flow->flush();
     }
     delete flow;
-    return KisImportExportFilter::OK;
+    return ImportExport::ErrorCodeID::OK;
 }
 
 KisPropertiesConfigurationSP KisPPMExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const

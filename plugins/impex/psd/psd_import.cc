@@ -35,37 +35,10 @@ psdImport::~psdImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus psdImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+ImportExport::ErrorCode psdImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-
-
     PSDLoader ib(document);
-
-    KisImageBuilder_Result result = ib.buildImage(io);
-
-    switch (result) {
-    case KisImageBuilder_RESULT_UNSUPPORTED:
-        return KisImportExportFilter::NotImplemented;
-    case KisImageBuilder_RESULT_INVALID_ARG:
-        return KisImportExportFilter::BadMimeType;
-    case KisImageBuilder_RESULT_NO_URI:
-    case KisImageBuilder_RESULT_NOT_EXIST:
-    case KisImageBuilder_RESULT_NOT_LOCAL:
-        qDebug() << "ib returned KisImageBuilder_RESULT_NOT_LOCAL";
-        return KisImportExportFilter::FileNotFound;
-    case KisImageBuilder_RESULT_BAD_FETCH:
-    case KisImageBuilder_RESULT_EMPTY:
-        return KisImportExportFilter::ParsingError;
-    case KisImageBuilder_RESULT_FAILURE:
-        return KisImportExportFilter::InternalError;
-    case KisImageBuilder_RESULT_OK:
-        document -> setCurrentImage( ib.image());
-        return KisImportExportFilter::OK;
-    default:
-        return KisImportExportFilter::StorageCreationError;
-        //dbgFile << "Result was: " << result;
-    }
-    return KisImportExportFilter::InternalError;
+    return ib.buildImage(io);
 }
 
 #include <psd_import.moc>

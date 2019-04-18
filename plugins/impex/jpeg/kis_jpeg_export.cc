@@ -68,7 +68,7 @@ KisJPEGExport::~KisJPEGExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+ImportExport::ErrorCode KisJPEGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     KisImageSP image = document->savingImage();
     Q_CHECK_PTR(image);
@@ -168,13 +168,8 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
         }
     }
 
-    KisImageBuilder_Result res = kpc.buildFile(io, l, options, metaDataStore.data());
-
-    if (res == KisImageBuilder_RESULT_OK) {
-        return KisImportExportFilter::OK;
-    }
-    dbgFile << " Result =" << res;
-    return KisImportExportFilter::InternalError;
+    ImportExport::ErrorCode res = kpc.buildFile(io, l, options, metaDataStore.data());
+    return res;
 }
 
 KisPropertiesConfigurationSP KisJPEGExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const

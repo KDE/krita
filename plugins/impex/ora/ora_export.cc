@@ -71,20 +71,14 @@ bool hasShapeLayerChild(KisNodeSP node)
     return false;
 }
 
-KisImportExportFilter::ConversionStatus OraExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+ImportExport::ErrorCode OraExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KisImageSP image = document->savingImage();
     Q_CHECK_PTR(image);
     OraConverter oraConverter(document);
 
-    KisImageBuilder_Result res;
-
-    if ((res = oraConverter.buildFile(io, image, {document->preActivatedNode()})) == KisImageBuilder_RESULT_OK) {
-        dbgFile << "success !";
-        return KisImportExportFilter::OK;
-    }
-    dbgFile << " Result =" << res;
-    return KisImportExportFilter::InternalError;
+    ImportExport::ErrorCode res = oraConverter.buildFile(io, image, {document->preActivatedNode()});
+    return res;
 }
 
 void OraExport::initializeCapabilities()

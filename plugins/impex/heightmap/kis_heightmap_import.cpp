@@ -74,13 +74,13 @@ KisHeightMapImport::~KisHeightMapImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration)
+ImportExport::ErrorCode KisHeightMapImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(configuration);
     KoID depthId = KisHeightmapUtils::mimeTypeToKoID(mimeType());
     if (depthId.id().isNull()) {
         document->setErrorMessage(i18n("Unknown file type"));
-        return KisImportExportFilter::WrongFormat;
+        return ImportExport::ErrorCodeID::FileFormatIncorrect;
     }
 
     int w = 0;
@@ -133,11 +133,12 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument 
             wdg->typeLabel->setText("Float");
         }
         else {
-            return KisImportExportFilter::InternalError;
+            KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExport::ErrorCodeID::InternalError);
+            return ImportExport::ErrorCodeID::InternalError;
         }
 
         if (kdb->exec() == QDialog::Rejected) {
-            return KisImportExportFilter::UserCancelled;
+            return ImportExport::ErrorCodeID::Cancelled;
         }
 
         cfg->setProperty("endianness", wdg->radioBig->isChecked() ? 0 : 1);
@@ -187,12 +188,13 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument 
         fillData<quint8>(layer->paintDevice(), w, h, s);
     }
     else {
-        return KisImportExportFilter::InternalError;
+        KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExport::ErrorCodeID::InternalError);
+        return ImportExport::ErrorCodeID::InternalError;
     }
 
     image->addNode(layer.data(), image->rootLayer().data());
     document->setCurrentImage(image);
-    return KisImportExportFilter::OK;
+    return ImportExport::ErrorCodeID::OK;
 }
 
 #include "kis_heightmap_import.moc"

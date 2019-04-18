@@ -25,7 +25,7 @@
 #include <QFileInfo>
 
 #include "kis_types.h"
-#include <KisImageBuilderResult.h>
+#include <KisImportExportErrorCodes.h>
 
 class QMLConverter : public QObject
 {
@@ -34,7 +34,7 @@ public:
     QMLConverter();
     ~QMLConverter() override;
 public:
-    KisImageBuilder_Result buildFile(const QString &filename, const QString &realFilename, QIODevice *io, KisImageSP image);
+    ImportExport::ErrorCode buildFile(const QString &filename, const QString &realFilename, QIODevice *io, KisImageSP image);
 
 private:
     void writeString(QTextStream& out, int spacing, const QString& setting, const QString& value);

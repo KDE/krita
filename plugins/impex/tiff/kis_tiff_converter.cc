@@ -228,41 +228,42 @@ KisTIFFConverter::~KisTIFFConverter()
 {
 }
 
-KisImageBuilder_Result KisTIFFConverter::decode(const QString &filename)
+ImportExport::ErrorCode KisTIFFConverter::decode(const QString &filename)
 {
     dbgFile << "Start decoding TIFF File";
     // Opent the TIFF file
     TIFF *image = 0;
+
     if ((image = TIFFOpen(QFile::encodeName(filename), "r")) == 0) {
         dbgFile << "Could not open the file, either it does not exist, either it is not a TIFF :" << filename;
-        return (KisImageBuilder_RESULT_BAD_FETCH);
+        return (ImportExport::ErrorCodeID::FileFormatIncorrect);
     }
     do {
         dbgFile << "Read new sub-image";
-        KisImageBuilder_Result result = readTIFFDirectory(image);
-        if (result != KisImageBuilder_RESULT_OK) {
+        ImportExport::ErrorCode result = readTIFFDirectory(image);
+        if (!result.isOk()) {
             return result;
         }
     } while (TIFFReadDirectory(image));
     // Freeing memory
     TIFFClose(image);
-    return KisImageBuilder_RESULT_OK;
+    return ImportExport::ErrorCodeID::OK;
 }
 
-KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
+ImportExport::ErrorCode KisTIFFConverter::readTIFFDirectory(TIFF* image)
 {
     // Read information about the tiff
     uint32 width, height;
     if (TIFFGetField(image, TIFFTAG_IMAGEWIDTH, &width) == 0) {
         dbgFile << "Image does not define its width";
         TIFFClose(image);
-        return KisImageBuilder_RESULT_INVALID_ARG;
+        return ImportExport::ErrorCodeID::FileFormatIncorrect;
     }
 
     if (TIFFGetField(image, TIFFTAG_IMAGELENGTH, &height) == 0) {
         dbgFile << "Image does not define its height";
         TIFFClose(image);
-        return KisImageBuilder_RESULT_INVALID_ARG;
+        return ImportExport::ErrorCodeID::FileFormatIncorrect;
     }
 
     float xres;
@@ -316,7 +317,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     if (colorSpaceIdTag.first.isEmpty()) {
         dbgFile << "Image has an unsupported colorspace :" << color_type << " for this depth :" << depth;
         TIFFClose(image);
-        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+        return ImportExport::ErrorCodeID::FormatColorSpaceUnsupported;
     }
     dbgFile << "Colorspace is :" << colorSpaceIdTag.first << colorSpaceIdTag.second << " with a depth of" << depth << " and with a nb of channels of" << nbchannels;
 
@@ -366,7 +367,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     if (cs == 0) {
         dbgFile << "Colorspace" << colorSpaceIdTag.first << colorSpaceIdTag.second << " is not available, please check your installation.";
         TIFFClose(image);
-        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+        return ImportExport::ErrorCodeID::FormatColorSpaceUnsupported;
     }
 
     // Create the cmsTransform if needed
@@ -422,7 +423,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     if (TIFFGetField(image, TIFFTAG_PLANARCONFIG, &planarconfig) == 0) {
         dbgFile << "Plannar configuration is not define";
         TIFFClose(image);
-        return KisImageBuilder_RESULT_INVALID_ARG;
+        return ImportExport::ErrorCodeID::FileFormatIncorrect;
     }
     // Creating the KisImageSP
     if (! m_image) {
@@ -505,7 +506,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
             dbgFile << "Indexed image does not define a palette";
             TIFFClose(image);
             delete [] lineSizeCoeffs;
-            return KisImageBuilder_RESULT_INVALID_ARG;
+            return ImportExport::ErrorCodeID::FileFormatIncorrect;
         }
 
         tiffReader = new KisTIFFReaderFromPalette(layer->paintDevice(), red, green, blue, poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor);
@@ -554,7 +555,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         delete[] lineSizeCoeffs;
         TIFFClose(image);
         dbgFile << "Image has an invalid/unsupported color type: " << color_type;
-        return KisImageBuilder_RESULT_INVALID_ARG;
+        return ImportExport::ErrorCodeID::FileFormatIncorrect;
     }
 
     if (TIFFIsTiled(image)) {
@@ -676,10 +677,10 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     }
 
     m_image->addNode(KisNodeSP(layer), m_image->rootLayer().data());
-    return KisImageBuilder_RESULT_OK;
+    return ImportExport::ErrorCodeID::OK;
 }
 
-KisImageBuilder_Result KisTIFFConverter::buildImage(const QString &filename)
+ImportExport::ErrorCode KisTIFFConverter::buildImage(const QString &filename)
 {
     return decode(filename);
 }
@@ -691,18 +692,17 @@ KisImageSP KisTIFFConverter::image()
 }
 
 
-KisImageBuilder_Result KisTIFFConverter::buildFile(const QString &filename, KisImageSP kisimage, KisTIFFOptions options)
+ImportExport::ErrorCode KisTIFFConverter::buildFile(const QString &filename, KisImageSP kisimage, KisTIFFOptions options)
 {
     dbgFile << "Start writing TIFF File";
-    if (!kisimage)
-        return KisImageBuilder_RESULT_EMPTY;
+    KIS_ASSERT_RECOVER_RETURN_VALUE(kisimage, ImportExport::ErrorCodeID::InternalError);
 
     // Open file for writing
     TIFF *image;
     if ((image = TIFFOpen(QFile::encodeName(filename), "w")) == 0) {
         dbgFile << "Could not open the file for writing" << filename;
         TIFFClose(image);
-        return (KisImageBuilder_RESULT_FAILURE);
+        return ImportExport::ErrorCodeID::NoAccessToWrite;
     }
 
     // Set the document information
@@ -725,19 +725,19 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const QString &filename, KisI
     TIFFSetField(image, TIFFTAG_YRESOLUTION, INCH_TO_POINT(kisimage->yRes()));
 
     KisGroupLayer* root = dynamic_cast<KisGroupLayer*>(kisimage->rootLayer().data());
-    if (root == 0) {
+    KIS_ASSERT_RECOVER(root) {
         TIFFClose(image);
-        return KisImageBuilder_RESULT_FAILURE;
+        return ImportExport::ErrorCodeID::InternalError;
     }
 
     KisTIFFWriterVisitor* visitor = new KisTIFFWriterVisitor(image, &options);
-    if (!visitor->visit(root)) {
+    KIS_ASSERT_RECOVER(visitor->visit(root)) {
         TIFFClose(image);
-        return KisImageBuilder_RESULT_FAILURE;
+        return ImportExport::ErrorCodeID::InternalError;
     }
 
     TIFFClose(image);
-    return KisImageBuilder_RESULT_OK;
+    return ImportExport::ErrorCodeID::OK;
 }
 
 

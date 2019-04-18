@@ -53,7 +53,7 @@ KisTIFFExport::~KisTIFFExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
+ImportExport::ErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
     // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
@@ -99,14 +99,8 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *docu
     }
 
     KisTIFFConverter tiffConverter(document);
-    KisImageBuilder_Result res;
-    if ((res = tiffConverter.buildFile(filename(), image, options)) == KisImageBuilder_RESULT_OK) {
-        dbgFile << "success !";
-        return KisImportExportFilter::OK;
-    }
-
-    dbgFile << " Result =" << res;
-    return KisImportExportFilter::InternalError;
+    ImportExport::ErrorCode res = tiffConverter.buildFile(filename(), image, options);
+    return res;
 }
 
 KisPropertiesConfigurationSP KisTIFFExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const

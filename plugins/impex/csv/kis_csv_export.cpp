@@ -48,22 +48,12 @@ KisCSVExport::~KisCSVExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisCSVExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+ImportExport::ErrorCode KisCSVExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     CSVSaver kpc(document, batchMode());
 
-    KisImageBuilder_Result res;
-
-    if ((res = kpc.buildAnimation(io)) == KisImageBuilder_RESULT_OK) {
-        dbgFile <<"success!";
-        return KisImportExportFilter::OK;
-    }
-    dbgFile <<" Result =" << res;
-
-    if (res == KisImageBuilder_RESULT_CANCEL)
-        return KisImportExportFilter::ProgressCancelled;
-
-    return KisImportExportFilter::InternalError;
+    ImportExport::ErrorCode res = kpc.buildAnimation(io);
+    return res;
 }
 
 void KisCSVExport::initializeCapabilities()

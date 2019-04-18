@@ -57,6 +57,10 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0027-Switch-stylus-pointer-type-when-the-tablet-is-in-the.patch
             )
     endif()
+    set(ext_qt_PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/set-has-border-in-full-screen-default.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/remove-fullscreen-border-hack.patch
+    )
 
   ExternalProject_Add(
       ext_qt

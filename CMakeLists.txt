@@ -339,6 +339,18 @@ HAVE_HDR
 )
 configure_file(config-hdr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hdr.h)
 
+if (WIN32)
+    CHECK_CXX_SOURCE_COMPILES("
+#include <QtPlatformHeaders/QWindowsWindowFunctions>
+int main(int argc, char *argv[]) {
+QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
+}
+"
+    HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
+    )
+    configure_file(config-set-has-border-in-full-screen-default.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-set-has-border-in-full-screen-default.h)
+endif (WIN32)
+
 unset(CMAKE_REQUIRED_INCLUDES)
 unset(CMAKE_REQUIRED_LIBRARIES)
 

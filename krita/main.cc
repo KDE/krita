@@ -67,6 +67,10 @@
 #else
 #include <dialogs/KisDlgCustomTabletResolution.h>
 #endif
+#include "config-set-has-border-in-full-screen-default.h"
+#ifdef HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
+#include <QtPlatformHeaders/QWindowsWindowFunctions>
+#endif
 #include <QLibrary>
 #endif
 
@@ -323,6 +327,12 @@ extern "C" int main(int argc, char **argv)
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+
+#ifdef HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
+    if (QCoreApplication::testAttribute(Qt::AA_UseDesktopOpenGL)) {
+        QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
+    }
+#endif
 
     KisUsageLogger::writeHeader();
 

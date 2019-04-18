@@ -1,0 +1,38 @@
+From e9b40ddf98af52f1c1866c766c9add6245e66a92 Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvin@alvinhc.com>
+Date: Thu, 18 Apr 2019 18:59:58 +0800
+Subject: [PATCH] Hack to hide 1px border with OpenGL fullscreen hack
+
+Unfortunately can't hide all four sides because the bug returns. Now we
+leave the bottom border visible, which is probably the most we can do.
+
+Ref: https://bugreports.qt.io/browse/QTBUG-41309
+---
+ src/plugins/platforms/windows/qwindowswindow.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
+index 9705eb7293..08c743aaae 100644
+--- a/src/plugins/platforms/windows/qwindowswindow.cpp
++++ b/src/plugins/platforms/windows/qwindowswindow.cpp
+@@ -1995,7 +1995,7 @@ bool QWindowsWindow::isFullScreen_sys() const
+         return false;
+     QRect geometry = geometry_sys();
+     if (testFlag(HasBorderInFullScreen))
+-        geometry += QMargins(1, 1, 1, 1);
++        geometry += QMargins(0, 0, 0, 1);
+     QPlatformScreen *screen = screenForGeometry(geometry);
+     return screen && geometry == screen->geometry();
+ }
+@@ -2066,7 +2066,7 @@ void QWindowsWindow::setWindowState_sys(Qt::WindowStates newState)
+                 const UINT swpf = SWP_FRAMECHANGED | SWP_NOACTIVATE;
+                 const bool wasSync = testFlag(SynchronousGeometryChangeEvent);
+                 setFlag(SynchronousGeometryChangeEvent);
+-                SetWindowPos(m_data.hwnd, HWND_TOP, r.left(), r.top(), r.width(), r.height(), swpf);
++                SetWindowPos(m_data.hwnd, HWND_TOP, r.left() - 1, r.top() - 1, r.width() + 2, r.height() + 1, swpf);
+                 if (!wasSync)
+                     clearFlag(SynchronousGeometryChangeEvent);
+                 clearFlag(MaximizeToFullScreen);
+-- 
+2.18.0.windows.1
+

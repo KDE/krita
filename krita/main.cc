@@ -192,6 +192,11 @@ extern "C" int main(int argc, char **argv)
         if (!qgetenv("KRITA_HIDPI").isEmpty()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+        if (kritarc.value("EnableHiDPIFractionalScaling", true).toBool()) {
+            QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+        }
+#endif
 
         if (!qgetenv("KRITA_OPENGL_DEBUG").isEmpty()) {
             enableOpenGLDebug = true;

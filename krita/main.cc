@@ -171,9 +171,9 @@ extern "C" int main(int argc, char **argv)
     //   RoundPreferFloor: Round up for .75 and above.
     //   PassThrough:      Don't round.
     //
-    // The default is set to Round to obtain the same behaviour as in the past,
+    // The default is set to RoundPreferFloor for better behaviour than before,
     // but can be overridden by the above environment variable.
-    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::Round);
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
 #endif
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);

@@ -67,6 +67,7 @@
 #else
 #include <dialogs/KisDlgCustomTabletResolution.h>
 #endif
+#include "config-high-dpi-scale-factor-rounding-policy.h"
 #include "config-set-has-border-in-full-screen-default.h"
 #ifdef HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
 #include <QtPlatformHeaders/QWindowsWindowFunctions>
@@ -155,6 +156,24 @@ extern "C" int main(int argc, char **argv)
 
 #if QT_VERSION >= 0x050900
     QCoreApplication::setAttribute(Qt::AA_DisableShaderDiskCache, true);
+#endif
+
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+    // This rounding policy depends on a series of patches to Qt related to
+    // https://bugreports.qt.io/browse/QTBUG-53022. These patches are applied
+    // in ext_qt for WIndows (patches 0031-0036).
+    //
+    // The rounding policy can be set externally by setting the environment
+    // variable `QT_SCALE_FACTOR_ROUNDING_POLICY` to one of the following:
+    //   Round:            Round up for .5 and above.
+    //   Ceil:             Always round up.
+    //   Floor:            Always round down.
+    //   RoundPreferFloor: Round up for .75 and above.
+    //   PassThrough:      Don't round.
+    //
+    // The default is set to Round to obtain the same behaviour as in the past,
+    // but can be overridden by the above environment variable.
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::Round);
 #endif
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);

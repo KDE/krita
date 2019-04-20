@@ -73,8 +73,8 @@ void KisImageLayerRemoveCommandImpl::undo()
     if (!image) {
         return;
     }
+    m_d->restoreClones(); // so that we can get prevAbove back, if it is our clone
     image->addNode(m_d->node, m_d->prevParent, m_d->prevAbove);
-    m_d->restoreClones();
 }
 
 void KisImageLayerRemoveCommandImpl::Private::restoreClones()

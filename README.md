@@ -1,4 +1,4 @@
-![Picture](https://krita.org/wp-content/uploads/2016/04/krita_logo_200-ef21fd67a8add4f0.png)
+![Picture](https://krita.org/wp-content/uploads/2019/04/krita-logo-2019.png)
 
 Krita is a free and open source digital painting application. It is for artists who want to create professional work from start to end. Krita is used by comic book artists, illustrators, concept artists, matte and texture painters and in the digital VFX industry.
 

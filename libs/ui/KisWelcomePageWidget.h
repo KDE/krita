@@ -50,6 +50,10 @@ public Q_SLOTS:
     /// have a preview, an icon is used that needs to be updated
     void populateRecentDocuments();
 
+    /// if we are not showing the news on the welcome, hide the entire 3rd column
+    /// since it takes up the entire 3rd column
+    void slotShowNewsUI();
+
 protected:
 
     // QWidget overrides

@@ -85,11 +85,13 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
 
     connect(chkShowNews, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
+    connect(chkShowNews, SIGNAL(toggled(bool)), this, SLOT(slotShowNewsUI()));
 
     // configure the News area
     KisConfig cfg(true);
     bool m_getNews = cfg.readEntry<bool>("FetchNews", false);
     chkShowNews->setChecked(m_getNews);
+    slotShowNewsUI();
 
     setAcceptDrops(true);
 
@@ -136,6 +138,12 @@ void KisWelcomePageWidget::showDropAreaIndicator(bool show)
         QString dropFrameStyle = QString("QFrame#dropAreaIndicator { border: 2px dotted ").append(blendedColor.name()).append(" }") ;
         dropFrameBorder->setStyleSheet(dropFrameStyle);
     }
+}
+
+void KisWelcomePageWidget::slotShowNewsUI()
+{
+    newTitleLabel->setVisible(chkShowNews->isChecked());
+    newsWidget->setVisible(chkShowNews->isChecked());
 }
 
 void KisWelcomePageWidget::slotUpdateThemeColors()

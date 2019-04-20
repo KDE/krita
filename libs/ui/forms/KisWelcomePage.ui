@@ -68,6 +68,25 @@
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="chkShowNews">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Show news about Krita: this needs internet to retrieve information from the krita.org website</string>
+          </property>
+          <property name="text">
+           <string>Enable News</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <property name="spacing">
            <number>0</number>
@@ -706,7 +725,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_12">
           <item>
-           <widget class="QLabel" name="helpTitleLabel_2">
+           <widget class="QLabel" name="newTitleLabel">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -723,25 +742,6 @@
             </property>
             <property name="margin">
              <number>0</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="chkShowNews">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip">
-             <string>Show news about Krita: this needs internet to retrieve information from the krita.org website</string>
-            </property>
-            <property name="text">
-             <string>Enabled</string>
             </property>
            </widget>
           </item>

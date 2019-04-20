@@ -73,7 +73,7 @@ static bool isMouseEventType(QEvent::Type t)
 KisInputManager::Private::EventEater::EventEater()
 {
     KisConfig cfg(true);
-    activateSecondaryButtonsWorkaround = cfg.readEntry("rightMiddleTabletButtonWorkaround", false);
+    activateSecondaryButtonsWorkaround = cfg.useRightMiddleTabletButtonWorkaround();
 }
 
 bool KisInputManager::Private::EventEater::eventFilter(QObject* target, QEvent* event )
@@ -299,7 +299,12 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
             setupFocusThreshold(object);
             focusSwitchThreshold.setEnabled(false);
 
-            QEvent event(QEvent::Enter);
+            const QPoint globalPos = QCursor::pos();
+            const QPoint localPos = d->canvas->canvasWidget()->mapFromGlobal(globalPos);
+            QWidget *canvasWindow = d->canvas->canvasWidget()->window();
+            const QPoint windowsPos = canvasWindow ? canvasWindow->mapFromGlobal(globalPos) : localPos;
+
+            QEnterEvent event(localPos, windowsPos, globalPos);
             d->q->eventFilter(object, &event);
             break;
         }
@@ -395,19 +400,13 @@ bool KisInputManager::Private::ProximityNotifier::eventFilter(QObject* object, Q
         // Qt sends fake mouse events instead of hover events, so not very useful.
         // Don't block mouse events on tablet since tablet move events are not generated until
         // after tablet press.
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
         d->blockMouseEvents();
-#else
-        // Notify input manager that tablet proximity is entered for Genius tablets.
-        d->setTabletActive(true);
 #endif
         break;
     case QEvent::TabletLeaveProximity:
         d->debugEvent<QEvent, false>(event);
         d->allowMouseEvents();
-#ifdef Q_OS_OSX
-        d->setTabletActive(false);
-#endif
         break;
     default:
         break;
@@ -522,7 +521,7 @@ bool KisInputManager::Private::addNativeGestureShortcut(KisAbstractInputAction* 
     // Qt5 only implements QNativeGestureEvent for macOS
     Qt::NativeGestureType type;
     switch (gesture) {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         case KisShortcutConfiguration::PinchGesture:
             type = Qt::ZoomNativeGesture;
             break;

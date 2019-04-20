@@ -110,7 +110,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
 
     setAcceptDrops(true);
     //setStandardToolBarMenuEnabled(true);
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     setUnifiedTitleAndToolBarOnMac(true);
 #endif
     setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);

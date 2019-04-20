@@ -163,7 +163,7 @@ void KoFileDialog::createFileDialog()
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
     d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, true);
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     QList<QUrl> urls = d->fileDialog->sidebarUrls();
     QUrl volumes = QUrl::fromLocalFile("/Volumes");
     if (!urls.contains(volumes)) {

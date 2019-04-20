@@ -1169,6 +1169,16 @@ void KisConfig::setUseWin8PointerInputNoApp(QSettings *settings, bool value)
     settings->setValue("useWin8PointerInput", value);
 }
 
+bool KisConfig::useRightMiddleTabletButtonWorkaround(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("useRightMiddleTabletButtonWorkaround", false));
+}
+
+void KisConfig::setUseRightMiddleTabletButtonWorkaround(bool value)
+{
+    m_cfg.writeEntry("useRightMiddleTabletButtonWorkaround", value);
+}
+
 qreal KisConfig::vastScrolling(bool defaultValue) const
 {
     return (defaultValue ? 0.9 : m_cfg.readEntry("vastScrolling", 0.9));

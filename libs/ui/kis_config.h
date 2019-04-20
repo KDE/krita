@@ -310,6 +310,9 @@ public:
     static bool useWin8PointerInputNoApp(QSettings *settings, bool defaultValue = false);
     static void setUseWin8PointerInputNoApp(QSettings *settings, bool value);
 
+    bool useRightMiddleTabletButtonWorkaround(bool defaultValue = false) const;
+    void setUseRightMiddleTabletButtonWorkaround(bool value);
+
     qreal vastScrolling(bool defaultValue = false) const;
     void setVastScrolling(const qreal factor) const;
 

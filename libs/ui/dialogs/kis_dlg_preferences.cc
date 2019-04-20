@@ -92,6 +92,7 @@
 #   ifndef USE_QT_TABLET_WINDOWS
 #       include <kis_tablet_support_win8.h>
 #   endif
+#include "config-high-dpi-scale-factor-rounding-policy.h"
 #endif
 
 struct BackupSuffixValidator : public QValidator {
@@ -172,6 +173,11 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
     m_chkHiDPI->setChecked(kritarc.value("EnableHiDPI", true).toBool());
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+    m_chkHiDPIFractionalScaling->setChecked(kritarc.value("EnableHiDPIFractionalScaling", true).toBool());
+#else
+    m_chkHiDPIFractionalScaling->setVisible(false);
+#endif
     chkUsageLogging->setChecked(kritarc.value("LogUsage", true).toBool());
     m_chkSingleApplication->setChecked(kritarc.value("EnableSingleApplication", true).toBool());
 
@@ -287,6 +293,9 @@ void GeneralTab::setDefault()
     m_chkSingleApplication->setChecked(true);
 
     m_chkHiDPI->setChecked(true);
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+    m_chkHiDPIFractionalScaling->setChecked(true);
+#endif
     chkUsageLogging->setChecked(true);
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
     cmbFlowMode->setCurrentIndex(0);
@@ -706,6 +715,9 @@ void TabletSettingsTab::setDefault()
     curve.fromString(DEFAULT_CURVE_STRING);
     m_page->pressureCurve->setCurve(curve);
 
+    m_page->chkUseRightMiddleClickWorkaround->setChecked(
+        KisConfig(true).useRightMiddleTabletButtonWorkaround(true));
+
 #if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
 
 #ifdef USE_QT_TABLET_WINDOWS
@@ -742,6 +754,9 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
 
     m_page->pressureCurve->setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
     m_page->pressureCurve->setCurve(curve);
+
+    m_page->chkUseRightMiddleClickWorkaround->setChecked(
+         cfg.useRightMiddleTabletButtonWorkaround());
 
 #if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
 #ifdef USE_QT_TABLET_WINDOWS
@@ -1568,6 +1583,9 @@ bool KisDlgPreferences::editPreferences()
         const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
         QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
         kritarc.setValue("EnableHiDPI", dialog->m_general->m_chkHiDPI->isChecked());
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+        kritarc.setValue("EnableHiDPIFractionalScaling", dialog->m_general->m_chkHiDPIFractionalScaling->isChecked());
+#endif
         kritarc.setValue("EnableSingleApplication", dialog->m_general->m_chkSingleApplication->isChecked());
         kritarc.setValue("LogUsage", dialog->m_general->chkUsageLogging->isChecked());
 
@@ -1617,6 +1635,9 @@ bool KisDlgPreferences::editPreferences()
 
         // Tablet settings
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
+        cfg.setUseRightMiddleTabletButtonWorkaround(
+            dialog->m_tabletSettings->m_page->chkUseRightMiddleClickWorkaround->isChecked());
+
 #if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
 #ifdef USE_QT_TABLET_WINDOWS
         // ask Qt if WinInk is actually available

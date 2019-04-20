@@ -45,7 +45,7 @@ KoJsonTrader::KoJsonTrader()
 
         QDir appDir(qApp->applicationDirPath());
         appDir.cdUp();
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         // Help Krita run without deployment
         QDir d(appDir);
         d.cd("../../../");
@@ -62,13 +62,13 @@ KoJsonTrader::KoJsonTrader()
 #endif
         Q_FOREACH (const QDir& dir, searchDirs) {
             const QStringList nameFilters = {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
                 "*PlugIns*",
 #endif
                 "lib*",
             };
             Q_FOREACH (const QFileInfo &info, dir.entryInfoList(nameFilters, QDir::Dirs | QDir::NoDotAndDotDot)) {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
                 if (info.fileName().contains("PlugIns")) {
                     m_pluginPath = info.absoluteFilePath();
                     break;

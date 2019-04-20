@@ -313,10 +313,10 @@ void TouchDockerDock::showFileOpenDialog()
 
 void TouchDockerDock::showFileSaveAsDialog()
 {
-    if (!d->openDialog) {
-        d->openDialog = createDialog("qrc:/saveasdialog.qml");
+    if (!d->saveAsDialog) {
+        d->saveAsDialog = createDialog("qrc:/saveasdialog.qml");
     }
-    d->openDialog->exec();
+    d->saveAsDialog->exec();
 }
 
 void TouchDockerDock::changeEvent(QEvent *event)

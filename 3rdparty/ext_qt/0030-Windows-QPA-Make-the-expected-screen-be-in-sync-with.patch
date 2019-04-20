@@ -1,0 +1,59 @@
+From e553433c3dfa2664140a2ccf4b479821fc382e83 Mon Sep 17 00:00:00 2001
+From: Andy Shaw <andy.shaw@qt.io>
+Date: Fri, 21 Dec 2018 15:53:57 +0100
+Subject: [PATCH 30/36] Windows QPA: Make the expected screen be in sync with
+ the geometry changes
+
+When the window moves to a new screen then we should ensure the screen
+is updated at that point with the new size so it can account for any
+scaling changes.
+
+This reverts f1ec81b543fe1d5090acff298e24faf10a7bac63.
+
+Change-Id: I2be3aab677c4677841a07beaaf373f498483b320
+Fixes: QTBUG-72504
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+---
+ src/plugins/platforms/windows/qwindowswindow.cpp | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
+index 910d8dd209..865874846e 100644
+--- a/src/plugins/platforms/windows/qwindowswindow.cpp
++++ b/src/plugins/platforms/windows/qwindowswindow.cpp
+@@ -1756,15 +1756,12 @@ void QWindowsWindow::checkForScreenChanged()
+ 
+     QPlatformScreen *currentScreen = screen();
+     const auto &screenManager = QWindowsContext::instance()->screenManager();
+-    // QTBUG-62971: When dragging a window by its border, detect by mouse position
+-    // to prevent it from oscillating between screens when it resizes
+-    const QWindowsScreen *newScreen = testFlag(ResizeMoveActive)
+-        ? screenManager.screenAtDp(QWindowsCursor::mousePosition())
+-        : screenManager.screenForHwnd(m_data.hwnd);
++    const QWindowsScreen *newScreen = screenManager.screenForHwnd(m_data.hwnd);
+     if (newScreen != nullptr && newScreen != currentScreen) {
+         qCDebug(lcQpaWindows).noquote().nospace() << __FUNCTION__
+             << ' ' << window() << " \"" << currentScreen->name()
+             << "\"->\"" << newScreen->name() << '"';
++        setFlag(SynchronousGeometryChangeEvent);
+         QWindowSystemInterface::handleWindowScreenChanged(window(), newScreen->screen());
+     }
+ }
+@@ -1783,11 +1780,14 @@ void QWindowsWindow::handleGeometryChange()
+         fireExpose(QRect(QPoint(0, 0), m_data.geometry.size()), true);
+     }
+ 
++    const bool wasSync = testFlag(SynchronousGeometryChangeEvent);
+     checkForScreenChanged();
+ 
+     if (testFlag(SynchronousGeometryChangeEvent))
+         QWindowSystemInterface::flushWindowSystemEvents(QEventLoop::ExcludeUserInputEvents);
+ 
++    if (!wasSync)
++        clearFlag(SynchronousGeometryChangeEvent);
+     qCDebug(lcQpaEvents) << __FUNCTION__ << this << window() << m_data.geometry;
+ }
+ 
+-- 
+2.18.0.windows.1
+

@@ -377,7 +377,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->debugEvent<QWheelEvent, false>(event);
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         // Some QT wheel events are actually touch pad pan events. From the QT docs:
         // "Wheel events are generated for both mouse wheels and trackpad scroll gestures."
 
@@ -398,7 +398,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
          * Ignore delta 0 events on OSX, since they are triggered by tablet
          * proximity when using Wacom devices.
          */
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         if(wheelEvent->delta() == 0) {
             retval = true;
             break;
@@ -595,7 +595,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             d->touchHasBlockedPressEvents = KisConfig(true).disableTouchOnCanvas();
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.touchUpdateEvent(tevent);
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         }
 #endif
         event->accept();

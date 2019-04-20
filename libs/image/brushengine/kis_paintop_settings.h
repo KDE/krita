@@ -86,11 +86,18 @@ public:
     /**
      * This function is called by a tool when the mouse is pressed. It's useful if
      * the paintop needs mouse interaction for instance in the case of the clone op.
-     * If the tool is supposed to ignore the event, the paint op should return false
-     * and if the tool is supposed to use the event, return true.
+     * If the tool is supposed to ignore the event, the paint op should return true
+     * and if the tool is supposed to use the event, return false.
+     * See kis_tool_freehand:tryPickByPaintOp()
      */
     virtual bool mousePressEvent(const KisPaintInformation &paintInformation, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode);
-
+    /**
+     * This function is called by a tool when the mouse is released. It's useful if
+     * the paintop needs mouse interaction for instance in the case of the clone op.
+     * If the tool is supposed to ignore the event, the paint op should return true
+     * and if the tool is supposed to use the event, return false.
+     */
+    virtual bool mouseReleaseEvent();
     /**
      * Clone the current settings object. Override this if your settings instance doesn't
      * store everything as properties.

@@ -339,6 +339,18 @@ HAVE_HDR
 )
 configure_file(config-hdr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hdr.h)
 
+CHECK_CXX_SOURCE_COMPILES("
+#include <QGuiApplication>
+int main(int argc, char *argv[]) {
+QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::Round);
+QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
+QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+}
+"
+HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+)
+configure_file(config-high-dpi-scale-factor-rounding-policy.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-high-dpi-scale-factor-rounding-policy.h)
+
 if (WIN32)
     CHECK_CXX_SOURCE_COMPILES("
 #include <QtPlatformHeaders/QWindowsWindowFunctions>

@@ -92,6 +92,7 @@
 #   ifndef USE_QT_TABLET_WINDOWS
 #       include <kis_tablet_support_win8.h>
 #   endif
+#include "config-high-dpi-scale-factor-rounding-policy.h"
 #endif
 
 struct BackupSuffixValidator : public QValidator {
@@ -172,6 +173,11 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
     m_chkHiDPI->setChecked(kritarc.value("EnableHiDPI", true).toBool());
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+    m_chkHiDPIFractionalScaling->setChecked(kritarc.value("EnableHiDPIFractionalScaling", true).toBool());
+#else
+    m_chkHiDPIFractionalScaling->setVisible(false);
+#endif
     chkUsageLogging->setChecked(kritarc.value("LogUsage", true).toBool());
     m_chkSingleApplication->setChecked(kritarc.value("EnableSingleApplication", true).toBool());
 
@@ -287,6 +293,9 @@ void GeneralTab::setDefault()
     m_chkSingleApplication->setChecked(true);
 
     m_chkHiDPI->setChecked(true);
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+    m_chkHiDPIFractionalScaling->setChecked(true);
+#endif
     chkUsageLogging->setChecked(true);
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
     cmbFlowMode->setCurrentIndex(0);
@@ -1574,6 +1583,9 @@ bool KisDlgPreferences::editPreferences()
         const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
         QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
         kritarc.setValue("EnableHiDPI", dialog->m_general->m_chkHiDPI->isChecked());
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+        kritarc.setValue("EnableHiDPIFractionalScaling", dialog->m_general->m_chkHiDPIFractionalScaling->isChecked());
+#endif
         kritarc.setValue("EnableSingleApplication", dialog->m_general->m_chkSingleApplication->isChecked());
         kritarc.setValue("LogUsage", dialog->m_general->chkUsageLogging->isChecked());
 

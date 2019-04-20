@@ -853,6 +853,7 @@ void KisConfig::loadSnapConfig(KisSnapConfig *config, bool defaultValue) const
     config->setBoundingBox(m_cfg.readEntry("globalSnapBoundingBox", defaultConfig.boundingBox()));
     config->setImageBounds(m_cfg.readEntry("globalSnapImageBounds", defaultConfig.imageBounds()));
     config->setImageCenter(m_cfg.readEntry("globalSnapImageCenter", defaultConfig.imageCenter()));
+    config->setToPixel(m_cfg.readEntry("globalSnapToPixel", defaultConfig.toPixel()));
 }
 
 void KisConfig::saveSnapConfig(const KisSnapConfig &config)
@@ -864,6 +865,7 @@ void KisConfig::saveSnapConfig(const KisSnapConfig &config)
     m_cfg.writeEntry("globalSnapBoundingBox", config.boundingBox());
     m_cfg.writeEntry("globalSnapImageBounds", config.imageBounds());
     m_cfg.writeEntry("globalSnapImageCenter", config.imageCenter());
+    m_cfg.writeEntry("globalSnapToPixel", config.toPixel());
 }
 
 qint32 KisConfig::checkSize(bool defaultValue) const

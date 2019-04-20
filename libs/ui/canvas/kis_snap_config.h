@@ -75,6 +75,13 @@ public:
         m_imageCenter = value;
     }
 
+    bool toPixel() const {
+        return m_toPixel;
+    }
+    void setToPixel(bool value) {
+        m_toPixel = value;
+    }
+
     void saveStaticData() const;
     void loadStaticData();
 
@@ -86,6 +93,7 @@ private:
     bool m_boundingBox;
     bool m_imageBounds;
     bool m_imageCenter;
+    bool m_toPixel;
 };
 
 #endif /* __KIS_SNAP_CONFIG_H */

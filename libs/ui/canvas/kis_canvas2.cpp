@@ -97,6 +97,8 @@
 #include "kis_algebra_2d.h"
 #include "kis_image_signal_router.h"
 
+#include "KisSnapPixelStrategy.h"
+
 
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
@@ -207,6 +209,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
 
     m_d->frameRenderStartCompressor.setDelay(1000 / config.fpsLimit());
     m_d->frameRenderStartCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
+    snapGuide()->overrideSnapStrategy(KoSnapGuide::PixelSnapping, new KisSnapPixelStrategy());
 }
 
 void KisCanvas2::setup()

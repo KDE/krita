@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2019 Kuntal Majumder <hellozee@disroot.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,38 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_snap_config.h"
+#ifndef __KIS_SNAP_PIXEL_STRATEGY_H
+#define __KIS_SNAP_PIXEL_STRATEGY_H
 
-#include "kis_config.h"
+#include <QScopedPointer>
 
-KisSnapConfig::KisSnapConfig(bool loadValues)
-    : m_orthogonal(false),
-      m_node(false),
-      m_extension(false),
-      m_intersection(false),
-      m_boundingBox(false),
-      m_imageBounds(true),
-      m_imageCenter(true),
-      m_toPixel(false)
+#include "KoSnapStrategy.h"
+
+
+class KisSnapPixelStrategy : public KoSnapStrategy
 {
-    if (loadValues) {
-        loadStaticData();
-    }
-}
+public:
+    KisSnapPixelStrategy(KoSnapGuide::Strategy type = KoSnapGuide::PixelSnapping);
+    ~KisSnapPixelStrategy() override;
 
+    bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance) override;
+    QPainterPath decoration(const KoViewConverter &converter) const override;
+};
 
-KisSnapConfig::~KisSnapConfig()
-{
-}
-
-void KisSnapConfig::saveStaticData() const
-{
-    KisConfig cfg(false);
-    cfg.saveSnapConfig(*this);
-}
-
-void KisSnapConfig::loadStaticData()
-{
-    KisConfig cfg(true);
-    cfg.loadSnapConfig(this);
-}
+#endif /* __KIS_SNAP_PIXEL_STRATEGY_H */

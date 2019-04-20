@@ -299,7 +299,12 @@ bool KisInputManager::Private::CanvasSwitcher::eventFilter(QObject* object, QEve
             setupFocusThreshold(object);
             focusSwitchThreshold.setEnabled(false);
 
-            QEvent event(QEvent::Enter);
+            const QPoint globalPos = QCursor::pos();
+            const QPoint localPos = d->canvas->canvasWidget()->mapFromGlobal(globalPos);
+            QWidget *canvasWindow = d->canvas->canvasWidget()->window();
+            const QPoint windowsPos = canvasWindow ? canvasWindow->mapFromGlobal(globalPos) : localPos;
+
+            QEnterEvent event(localPos, windowsPos, globalPos);
             d->q->eventFilter(object, &event);
             break;
         }

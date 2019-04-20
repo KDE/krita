@@ -1,5 +1,4 @@
-![Picture](https://krita.org/wp-content/uploads/2016/04/krita_logo_200-ef21fd67a8add4f0.png)
-
+![Picture](https://krita.org/wp-content/uploads/2019/04/krita-logo-2019.png)
 
 | Jenkins CI Name | Master | Stable |
 | --------------- | ------ | ------ |

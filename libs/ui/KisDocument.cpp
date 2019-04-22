@@ -820,6 +820,10 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
         }
     }
 
+    KIS_SAFE_ASSERT_RECOVER(clonedDocument->image()->isIdle()) {
+        waitForImage(clonedDocument->image());
+    }
+
     KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveDocument, false);
     KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveJob.isValid(), false);
     d->backgroundSaveDocument.reset(clonedDocument.take());

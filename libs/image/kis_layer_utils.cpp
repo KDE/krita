@@ -1514,6 +1514,17 @@ namespace KisLayerUtils {
         });
     }
 
+    bool hasDelayedNodeWithUpdates(KisNodeSP root)
+    {
+        return recursiveFindNode(root,
+            [] (KisNodeSP node) {
+                KisDelayedUpdateNodeInterface *delayedUpdate =
+                    dynamic_cast<KisDelayedUpdateNodeInterface*>(node.data());
+
+                return delayedUpdate ? delayedUpdate->hasPendingTimedUpdates() : false;
+            });
+    }
+
     KisImageSP findImageByHierarchy(KisNodeSP node)
     {
         while (node) {

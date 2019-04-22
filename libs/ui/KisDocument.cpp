@@ -803,6 +803,23 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
         return false;
     }
 
+    auto waitForImage = [] (KisImageSP image) {
+        KisMainWindow *window = KisPart::instance()->currentMainwindow();
+        if (window) {
+            if (window->viewManager()) {
+                window->viewManager()->blockUntilOperationsFinishedForced(image);
+            }
+        }
+    };
+
+    {
+        KisNodeSP newRoot = clonedDocument->image()->root();
+        KIS_SAFE_ASSERT_RECOVER(!KisLayerUtils::hasDelayedNodeWithUpdates(newRoot)) {
+            KisLayerUtils::forceAllDelayedNodesUpdate(newRoot);
+            waitForImage(clonedDocument->image());
+        }
+    }
+
     KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveDocument, false);
     KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveJob.isValid(), false);
     d->backgroundSaveDocument.reset(clonedDocument.take());

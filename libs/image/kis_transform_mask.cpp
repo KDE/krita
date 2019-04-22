@@ -425,12 +425,17 @@ void KisTransformMask::setY(qint32 y)
 
 void KisTransformMask::forceUpdateTimedNode()
 {
-    if (m_d->updateSignalCompressor.isActive()) {
+    if (hasPendingTimedUpdates()) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->staticCacheValid);
 
         m_d->updateSignalCompressor.stop();
         slotDelayedStaticUpdate();
     }
+}
+
+bool KisTransformMask::hasPendingTimedUpdates() const
+{
+    return m_d->updateSignalCompressor.isActive();
 }
 
 void KisTransformMask::threadSafeForceStaticImageUpdate()

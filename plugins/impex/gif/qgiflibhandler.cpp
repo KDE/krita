@@ -302,8 +302,13 @@ bool QGIFLibHandler::write ( const QImage & image )
         qWarning("EGifPutImageDesc returned error %d", gif->Error);
 
     int lc = toWrite.height();
-    int llen = toWrite.bytesPerLine();
+
+    // NOTE: we suppose that the pixel size is exactly 1 byte, right now we
+    //       cannot save anything else
+    int llen = toWrite.width();
+
     //	qDebug("will write %d lines, %d bytes each", lc, llen);
+
     for (int l = 0; l < lc; ++l)
     {
         uchar* line = toWrite.scanLine(l);

@@ -313,7 +313,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
 
             lastCommand = command;
 
-            if (*ptr == '+' || *ptr == '-' || (*ptr >= '0' && *ptr <= '9')) {
+            if (*ptr == '+' || *ptr == '-' || *ptr == '.' || (*ptr >= '0' && *ptr <= '9')) {
                 // there are still coords in this command
                 if (command == 'M')
                     command = 'L';

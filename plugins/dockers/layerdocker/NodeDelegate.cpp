@@ -36,6 +36,7 @@
 #include <QPointer>
 #include <QStyle>
 #include <QStyleOptionViewItem>
+#include <QBitmap>
 
 #include <klocalizedstring.h>
 #include "kis_node_view_color_scheme.h"
@@ -494,14 +495,14 @@ void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, Opt
     QModelIndex root(view->rootIndex());
 
     if ((modifier & Qt::ShiftModifier) == Qt::ShiftModifier && clickedProperty->canHaveStasis) {
-        if(stasisIsDirty(root, clickedProperty)){ // clean inStasis if mixed!
-            resetPropertyStateRecursive(root, clickedProperty);
-        }
+//        if(stasisIsDirty(root, clickedProperty)){ // clean inStasis if mixed!
+//            resetPropertyStateRecursive(root, clickedProperty);
+//        }
         KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
         OptionalProperty prop = findProperty(props, clickedProperty);
 
         bool mode = true;
-        bool record = prop->isInStasis;
+        bool record = !prop->isInStasis;
         QList<QModelIndex> items;
 
         if(modifier == (Qt::ControlModifier | Qt::ShiftModifier)) {
@@ -517,6 +518,7 @@ void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, Opt
     } else {
         resetPropertyStateRecursive(root, clickedProperty);
         clickedProperty->state = !clickedProperty->state.toBool();
+        clickedProperty->isInStasis = false;
         view->model()->setData(index, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
     }
 }
@@ -535,7 +537,7 @@ void NodeDelegate::Private::togglePropertyRecursive(const QModelIndex &root, con
         if (!prop) continue;
         if (record){ // record
             prop->stateInStasis = prop->state.toBool();
-            prop->isInStasis = false;
+            prop->isInStasis = true;
             if(mode) { //include mode
                 prop->state = (items.contains(idx))? QVariant(true) : QVariant(false);
             } else { // exclude
@@ -544,7 +546,7 @@ void NodeDelegate::Private::togglePropertyRecursive(const QModelIndex &root, con
             }
         } else { // recover
             prop->state = QVariant(prop->stateInStasis);
-            prop->isInStasis = true;
+            prop->isInStasis = false;
         }
         view->model()->setData(idx, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
 
@@ -593,8 +595,7 @@ void NodeDelegate::Private::resetPropertyStateRecursive(const QModelIndex &root,
         OptionalProperty prop = findProperty(props, clickedProperty);
 
         if (!prop) continue;
-        prop->stateInStasis = prop->state.toBool();
-        prop->isInStasis = true;
+        prop->isInStasis = false;
         view->model()->setData(idx, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
 
         resetPropertyStateRecursive(idx,clickedProperty);
@@ -753,8 +754,20 @@ void NodeDelegate::drawVisibilityIconHijack(QPainter *p, const QStyleOptionViewI
         p->setOpacity(0.35);
     }
 
-    p->drawPixmap(fitRect.x(), fitRect.center().y() - scm.visibilitySize() / 2,
-                  icon.pixmap(scm.visibilitySize(),  QIcon::Normal));
+    QPixmap pixmapIcon(icon.pixmap(scm.visibilitySize(), QIcon::Active));
+    p->drawPixmap(fitRect.x(), fitRect.center().y() - scm.visibilitySize() / 2, pixmapIcon);
+
+    if (prop->isInStasis) {
+        QPainter::CompositionMode prevComposition = p->compositionMode();
+        p->setCompositionMode(QPainter::CompositionMode_HardLight);
+        pixmapIcon = icon.pixmap(scm.visibilitySize(), QIcon::Active);
+        QBitmap mask = pixmapIcon.mask();
+        pixmapIcon.fill((QColor(142,160,27,255)));
+        pixmapIcon.setMask(mask);
+        p->drawPixmap(fitRect.x(), fitRect.center().y() - scm.visibilitySize() / 2, pixmapIcon);
+        p->setCompositionMode(prevComposition);
+    }
+
     p->setOpacity(oldOpacity);
 
     //// For debugging purposes only

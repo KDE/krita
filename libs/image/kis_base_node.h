@@ -85,14 +85,14 @@ public:
         bool canHaveStasis;
 
         /** If the property isMutable and canHaveStasis, indicate whether it is in stasis or not */
-        bool isInStasis;
+        bool isInStasis = false;
 
         /** If the property isMutable and canHaveStasis, provide this value to store the property's
         state while in stasis */
         bool stateInStasis;
 
         bool operator==(const Property &rhs) const {
-            return rhs.name == name && rhs.state == state;
+            return rhs.name == name && rhs.state == state && rhs.isInStasis == false;
         }
 
         Property(): isMutable( false ) { }

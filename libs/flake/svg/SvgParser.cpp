@@ -1357,7 +1357,7 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
         QTransform viewTransform_unused;
         QRectF fakeBoundingRect(0.0, 0.0, 1.0, 1.0);
 
-        if (SvgUtil::parseViewBox(gc, e, fakeBoundingRect,
+        if (SvgUtil::parseViewBox(e, fakeBoundingRect,
                                   &viewRect, &viewTransform_unused)) {
 
             QSizeF estimatedSize = viewRect.size();
@@ -1433,7 +1433,7 @@ void SvgParser::applyViewBoxTransform(const KoXmlElement &element)
     QRectF viewRect = gc->currentBoundingBox;
     QTransform viewTransform;
 
-    if (SvgUtil::parseViewBox(gc, element, gc->currentBoundingBox,
+    if (SvgUtil::parseViewBox(element, gc->currentBoundingBox,
                               &viewRect, &viewTransform)) {
 
         gc->matrix = viewTransform * gc->matrix;

@@ -407,7 +407,7 @@ extern "C" int main(int argc, char **argv)
     if (singleApplication && app.isRunning()) {
         // only pass arguments to main instance if they are not for batch processing
         // any batch processing would be done in this separate instance
-        const bool batchRun = args.exportAs();
+        const bool batchRun = args.exportAs() || args.exportSequence();
 
         if (!batchRun) {
             QByteArray ba = args.serialize();

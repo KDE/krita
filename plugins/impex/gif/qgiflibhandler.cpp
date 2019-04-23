@@ -320,6 +320,7 @@ bool QGIFLibHandler::write ( const QImage & image )
     }
 
     EGifCloseFile(gif, &err);
+    free(colorValues);
 
     return true;
 }

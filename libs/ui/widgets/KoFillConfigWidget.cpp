@@ -259,6 +259,7 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
 
     d->ui->btnPatternFill->setIcon(QPixmap((const char **) buttonpattern));
     d->group->addButton(d->ui->btnPatternFill, Pattern);
+    d->ui->btnPatternFill->setVisible(false);
 
     d->colorAction = new KoColorPopupAction(d->ui->btnChooseSolidColor);
     d->colorAction->setToolTip(i18n("Change the filling color"));

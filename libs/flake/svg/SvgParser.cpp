@@ -1348,8 +1348,33 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
 
     const QString w = e.attribute("width");
     const QString h = e.attribute("height");
-    const qreal width = w.isEmpty() ? 666.0 : parseUnitX(w);
-    const qreal height = h.isEmpty() ? 555.0 : parseUnitY(h);
+
+    qreal width = w.isEmpty() ? 666.0 : parseUnitX(w);
+    qreal height = h.isEmpty() ? 555.0 : parseUnitY(h);
+
+    if (w.isEmpty() || h.isEmpty()) {
+        QRectF viewRect;
+        QTransform viewTransform_unused;
+        QRectF fakeBoundingRect(0.0, 0.0, 1.0, 1.0);
+
+        if (SvgUtil::parseViewBox(gc, e, fakeBoundingRect,
+                                  &viewRect, &viewTransform_unused)) {
+
+            QSizeF estimatedSize = viewRect.size();
+
+            if (estimatedSize.isValid()) {
+
+                if (!w.isEmpty()) {
+                    estimatedSize = QSizeF(width, width * estimatedSize.height() / estimatedSize.width());
+                } else if (!h.isEmpty()) {
+                    estimatedSize = QSizeF(height * estimatedSize.width() / estimatedSize.height(), height);
+                }
+
+                width = estimatedSize.width();
+                height = estimatedSize.height();
+            }
+        }
+    }
 
     QSizeF svgFragmentSize(QSizeF(width, height));
 

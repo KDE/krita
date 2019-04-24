@@ -481,10 +481,13 @@ public Q_SLOTS:
      * @param xRes the horizontal resolution in pixels per pt (there are 72 pts in an inch)
      * @param yRes the horizontal resolution in pixels per pt (there are 72 pts in an inch)
      * @param exportConfiguration a configuration object appropriate to the file format.
+     * @param exportRect the export bounds for saving a node as a QRect
+     * If \p exportRect is empty, then save exactBounds() of the node. If you'd like to save the image-
+     * aligned area of the node, just pass image->bounds() there.
      * See Document->exportImage for InfoObject details.
      * @return true if saving succeeded, false if it failed.
      */
-    bool save(const QString &filename, double xRes, double yRes, const InfoObject &exportConfiguration);
+    bool save(const QString &filename, double xRes, double yRes, const InfoObject &exportConfiguration, const QRect &exportRect = QRect());
 
     /**
      * @brief mergeDown merges the given node with the first visible node underneath this node in the layerstack.

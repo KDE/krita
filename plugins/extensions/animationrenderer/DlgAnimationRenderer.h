@@ -66,7 +66,7 @@ private Q_SLOTS:
      * @brief sequenceMimeTypeSelected
      * calls the dialog for the export widget.
      */
-    void sequenceMimeTypeSelected();
+    void sequenceMimeTypeOptionsClicked();
 
     void slotLockAspectRatioDimensionsWidth(int width);
     void slotLockAspectRatioDimensionsHeight(int height);
@@ -96,7 +96,6 @@ private:
     KisImageSP m_image;
     KisDocument *m_doc;
     WdgAnimationRenderer *m_page {0};
-    KisPropertiesConfigurationSP m_frameExportConfig;
 
     QString m_customFFMpegOptionsString;
     bool m_forceHDRVideo = false;

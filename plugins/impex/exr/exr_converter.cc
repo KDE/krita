@@ -125,6 +125,7 @@ void ExrPaintLayerInfo::updateImageType(ImageType channelType)
 
 struct ExrPaintLayerSaveInfo {
     QString name; ///< name of the layer with a "." at the end (ie "group1.group2.layer1.")
+    KisPaintDeviceSP layerDevice;
     KisPaintLayerSP layer;
     QList<QString> channels;
     Imf::PixelType pixelType;
@@ -966,7 +967,7 @@ template<typename _T_, int size, int alphaPos>
 void EncoderImpl<_T_, size, alphaPos>::encodeData(int line)
 {
     ExrPixel *rgba = pixels.data();
-    KisHLineIteratorSP it = info->layer->paintDevice()->createHLineIteratorNG(0, line, m_width);
+    KisHLineConstIteratorSP it = info->layerDevice->createHLineConstIteratorNG(0, line, m_width);
     do {
         const _T_* dst = reinterpret_cast < const _T_* >(it->oldRawData());
 
@@ -984,33 +985,33 @@ void EncoderImpl<_T_, size, alphaPos>::encodeData(int line)
 
 Encoder* encoder(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int width)
 {
-    dbgFile << "Create encoder for" << info.layer->name() << info.channels << info.layer->colorSpace()->channelCount();
-    switch (info.layer->colorSpace()->channelCount()) {
+    dbgFile << "Create encoder for" << info.name << info.channels << info.layerDevice->colorSpace()->channelCount();
+    switch (info.layerDevice->colorSpace()->channelCount()) {
     case 1: {
-        if (info.layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+        if (info.layerDevice->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
             Q_ASSERT(info.pixelType == Imf::HALF);
             return new EncoderImpl < half, 1, -1 > (&file, &info, width);
-        } else if (info.layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+        } else if (info.layerDevice->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
             Q_ASSERT(info.pixelType == Imf::FLOAT);
             return new EncoderImpl < float, 1, -1 > (&file, &info, width);
         }
         break;
     }
     case 2: {
-        if (info.layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+        if (info.layerDevice->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
             Q_ASSERT(info.pixelType == Imf::HALF);
             return new EncoderImpl<half, 2, 1>(&file, &info, width);
-        } else if (info.layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+        } else if (info.layerDevice->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
             Q_ASSERT(info.pixelType == Imf::FLOAT);
             return new EncoderImpl<float, 2, 1>(&file, &info, width);
         }
         break;
     }
     case 4: {
-        if (info.layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+        if (info.layerDevice->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
             Q_ASSERT(info.pixelType == Imf::HALF);
             return new EncoderImpl<half, 4, 3>(&file, &info, width);
-        } else if (info.layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+        } else if (info.layerDevice->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
             Q_ASSERT(info.pixelType == Imf::FLOAT);
             return new EncoderImpl<float, 4, 3>(&file, &info, width);
         }
@@ -1043,6 +1044,30 @@ void encodeData(Imf::OutputFile& file, const QList<ExrPaintLayerSaveInfo>& infor
     qDeleteAll(encoders);
 }
 
+KisPaintDeviceSP wrapLayerDevice(KisPaintDeviceSP device)
+{
+    const KoColorSpace *cs = device->colorSpace();
+
+    if (cs->colorDepthId() != Float16BitsColorDepthID && cs->colorDepthId() != Float32BitsColorDepthID) {
+        cs = KoColorSpaceRegistry::instance()->colorSpace(
+            cs->colorModelId() == GrayAColorModelID ?
+                GrayAColorModelID.id() : RGBAColorModelID.id(),
+            Float16BitsColorDepthID.id());
+    } else if (cs->colorModelId() != GrayColorModelID &&
+               cs->colorModelId() != RGBAColorModelID) {
+        cs = KoColorSpaceRegistry::instance()->colorSpace(
+            RGBAColorModelID.id(),
+            cs->colorDepthId().id());
+    }
+
+    if (*cs != *device->colorSpace()) {
+        device = new KisPaintDevice(*device);
+        device->convertTo(cs);
+    }
+
+    return device;
+}
+
 KisImageBuilder_Result EXRConverter::buildFile(const QString &filename, KisPaintLayerSP layer)
 {
     if (!layer)
@@ -1057,34 +1082,23 @@ KisImageBuilder_Result EXRConverter::buildFile(const QString &filename, KisPaint
     qint32 width = image->width();
     Imf::Header header(width, height);
 
-    Imf::PixelType pixelType = Imf::NUM_PIXELTYPES;
+    ExrPaintLayerSaveInfo info;
+    info.layer = layer;
+    info.layerDevice = wrapLayerDevice(layer->paintDevice());
 
-    if (layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+    Imf::PixelType pixelType = Imf::NUM_PIXELTYPES;
+    if (info.layerDevice->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
         pixelType = Imf::HALF;
     }
-    else if(layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
+    else if (info.layerDevice->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
         pixelType = Imf::FLOAT;
     }
-    else {
-        const KoColorSpace *cs = 0;
-        if (layer->colorSpace()->colorModelId() == GrayAColorModelID) {
-            cs = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Float16BitsColorDepthID.id());
-        }
-        else {
-            cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id());
-        }
-        image->convertImageColorSpace(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-        pixelType = Imf::HALF;
-    }
-
 
     header.channels().insert("R", Imf::Channel(pixelType));
     header.channels().insert("G", Imf::Channel(pixelType));
     header.channels().insert("B", Imf::Channel(pixelType));
     header.channels().insert("A", Imf::Channel(pixelType));
 
-    ExrPaintLayerSaveInfo info;
-    info.layer = layer;
     info.channels.push_back("R");
     info.channels.push_back("G");
     info.channels.push_back("B");
@@ -1180,6 +1194,7 @@ void EXRConverter::Private::recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveIn
             ExrPaintLayerSaveInfo info;
             info.name = name + paintLayer->name() + '.';
             info.layer = paintLayer;
+            info.layerDevice = wrapLayerDevice(paintLayer->paintDevice());
 
             if (info.name == QString(HDR_LAYER) + ".") {
                 info.channels.push_back("R");
@@ -1309,19 +1324,7 @@ KisImageBuilder_Result EXRConverter::buildFile(const QString &filename, KisGroup
     qint32 width = image->width();
     Imf::Header header(width, height);
 
-    if (image->colorSpace()->colorDepthId() != Float16BitsColorDepthID && image->colorSpace()->colorDepthId() != Float32BitsColorDepthID) {
-        const KoColorSpace *cs = 0;
-        if (layer->colorSpace()->colorModelId() == GrayAColorModelID) {
-            cs = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Float16BitsColorDepthID.id());
-        }
-        else {
-            cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id());
-        }
-        image->convertImageColorSpace(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-    }
-
     if (flatten) {
-        image->waitForDone(); // This is to make sure we have a full image to project.
         KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
         KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
         return buildFile(filename, l);

@@ -755,9 +755,18 @@ KisDocument* KisDocument::lockAndCloneForSaving()
 
 bool KisDocument::exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration)
 {
-    Private::StrippedSafeSavingLocker locker(&d->savingMutex, d->image);
-    if (!locker.successfullyLocked()) {
-        return false;
+    {
+
+        /**
+         * The caller guarantees that noone else uses the document (usually,
+         * it is a temporary docuent created specifically for exporting), so
+         * we don't need to copy or lock the document. Instead we should just
+         * ensure the barrier lock is synced and then released.
+         */
+        Private::StrippedSafeSavingLocker locker(&d->savingMutex, d->image);
+        if (!locker.successfullyLocked()) {
+            return false;
+        }
     }
 
     d->savingImage = d->image;

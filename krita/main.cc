@@ -102,7 +102,12 @@ void tryInitDrMingw()
     QString logFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation).replace(L'/', L'\\') + QStringLiteral("\\kritacrash.log");
     myExcHndlSetLogFileNameA(logFile.toLocal8Bit());
 }
+} // namespace
+#endif
 
+#ifdef Q_OS_WIN
+namespace
+{
 typedef enum ORIENTATION_PREFERENCE {
     ORIENTATION_PREFERENCE_NONE = 0x0,
     ORIENTATION_PREFERENCE_LANDSCAPE = 0x1,
@@ -131,6 +136,7 @@ void resetRotation()
 }
 } // namespace
 #endif
+
 extern "C" int main(int argc, char **argv)
 {
 

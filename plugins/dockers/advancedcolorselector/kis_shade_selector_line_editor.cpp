@@ -17,12 +17,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <QMouseEvent>
+
 #include "kis_shade_selector_line_editor.h"
-
 #include "kis_double_parse_spin_box.h"
+#include "kis_config.h"
 
-KisShadeSelectorLineEditor::KisShadeSelectorLineEditor(QWidget* parent)
+KisShadeSelectorLineEditor::KisShadeSelectorLineEditor(QWidget* parent, KisShadeSelectorLine* preview)
     : KisShadeSelectorLineBase(parent)
+    , m_line_preview(preview)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
 
@@ -70,6 +73,20 @@ KisShadeSelectorLineEditor::KisShadeSelectorLineEditor(QWidget* parent)
     connect(m_saturationShift, SIGNAL(valueChanged(double)), SLOT(valueChanged()));
     connect(m_valueShift, SIGNAL(valueChanged(double)), SLOT(valueChanged()));
 
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+    QString lineset = cfg.readEntry(
+                "minimalShadeSelectorLineConfig", "0|0.2|0|0|0|0|0;1|0|1|1|0|0|0;2|0|-1|1|0|0|0;").split(";").at(0);
+    fromString(lineset);
+
+    updatePreview();
+}
+
+void KisShadeSelectorLineEditor::updatePreview(){
+    m_line_preview->setParam(
+                m_hueDelta->value(), m_saturationDelta->value(), m_valueDelta->value(),
+                m_hueShift->value(), m_saturationShift->value(), m_valueShift->value()
+                );
+    this->parentWidget()->update(m_line_preview->geometry());
 }
 
 QString KisShadeSelectorLineEditor::toString() const
@@ -98,5 +115,11 @@ void KisShadeSelectorLineEditor::fromString(const QString &string)
 }
 
 void KisShadeSelectorLineEditor::valueChanged() {
+    updatePreview();
     emit requestActivateLine(this);
 }
+
+void KisShadeSelectorLineEditor::mousePressEvent(QMouseEvent* e) {
+    e->accept();
+}
+

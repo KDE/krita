@@ -78,6 +78,7 @@ void KisShadeSelectorLineComboBox::showPopup()
 void KisShadeSelectorLineComboBox::setConfiguration(const QString &stri)
 {
     m_currentLine->fromString(stri);
+    update();
 }
 
 QString KisShadeSelectorLineComboBox::configuration() const

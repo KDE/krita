@@ -120,8 +120,18 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
 
     TgaHeaderInfo info(tga);
 
-    // However alpha exists only in the 32 bit format.
-    if ((tga.pixel_size == 32) && (tga.flags & 0xf)) {
+    /**
+     * Theoretically, we should check alpha presence via the bits
+     * in flags, but there are a lot of files in the wild that
+     * have this flag unset. It contradicts TGA specification,
+     * but we cannot do anything about it.
+     */
+    const bool hasAlpha = tga.flags & 0xf;
+    if (tga.pixel_size == 32 && !hasAlpha) {
+        qWarning() << "WARNING: TGA image with 32-bit pixel size reports absence of alpha channel. It is not possible, fixing...";
+    }
+
+    if (tga.pixel_size == 32 || tga.pixel_size == 16) {
         img = QImage(tga.width, tga.height, QImage::Format_ARGB32);
     }
 

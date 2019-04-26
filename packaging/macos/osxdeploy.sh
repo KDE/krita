@@ -54,7 +54,23 @@ if test -z ${BUILDROOT}; then
     exit
 fi
 
+get_script_dir() {
+    script_source="${BASH_SOURCE[0]}"
+    # go to target until finding root.
+    while [ -L "${script_source}" ]; do
+        script_target="$(readlink ${script_source})"
+        if [[ "${script_source}" = /* ]]; then
+            script_source="$script_target"
+        else
+            script_dir="$(dirname "${script_source}")"
+            script_source="${script_dir}/${script_target}"
+        fi
+    done
+    echo "$(dirname ${script_source})"
+}
+
 DMG_title="krita" #if changed krita.temp.dmg must be deleted manually
+SCRIPT_SOURCE_DIR="$(get_script_dir)"
 
 # There is some duplication between build and deploy scripts
 # a config env file could would be a nice idea.
@@ -84,20 +100,7 @@ print_usage () {
     \t image recomended size is at least 950x500\n"
 }
 
-get_script_dir() {
-    script_source="${BASH_SOURCE[0]}"
-    # go to target until finding root.
-    while [ -L "${script_source}" ]; do
-        script_target="$(readlink ${script_source})"
-        if [[ "${script_source}" = /* ]]; then
-            script_source="$script_target"
-        else
-            script_dir="$(dirname "${script_source}")"
-            script_source="${script_dir}/${script_target}"
-        fi
-    done
-    echo "$(dirname ${script_source})"
-}
+
 
 # Attempt to detach previous mouted DMG
 if [[ -d "/Volumes/${DMG_title}" ]]; then
@@ -155,7 +158,7 @@ for arg in "${@}"; do
 done
 
 if [[ ! ${DMG_STYLE} ]]; then
-    DMG_STYLE="$(get_script_dir)/default.style"
+    DMG_STYLE="${SCRIPT_SOURCE_DIR}/default.style"
 fi
 echo "Using style from: ${DMG_STYLE}"
 
@@ -484,11 +487,16 @@ createDMG () {
     if [[ ! -d "/Volumes/${DMG_title}/.background" ]]; then
         mkdir "/Volumes/${DMG_title}/.background"
     fi
-    cp ${DMG_background} "/Volumes/${DMG_title}/.background/"
+
+    cp -v ${DMG_background} "/Volumes/${DMG_title}/.background/"
 
     ## Apple script to set style
     style="$(<"${DMG_STYLE}")"
     printf "${style}" "${DMG_title}" "${DMG_background##*/}" | osascript
+
+    #Set Icon for DMG
+    cp -v "${SCRIPT_SOURCE_DIR}/KritaIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
+    SetFile -a C "/Volumes/${DMG_title}"
     
     chmod -Rf go-w "/Volumes/${DMG_title}"
 

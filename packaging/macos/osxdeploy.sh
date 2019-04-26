@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # Krita tool to create dmg from installed source
 # Copies all files to a folder to be converted into the final dmg
@@ -77,10 +77,26 @@ PY_VERSION="${local_PY_MAYOR_VERSION}.${local_PY_MINOR_VERSION}"
 echo "Detected Python ${PY_VERSION}"
 
 print_usage () {
-    echo "USAGE: osxdeploy.sh [-s=<identity>] <background-image>"
+    echo "USAGE: osxdeploy.sh [-s=<identity>] [-style=<style.txt>] <background-image>"
     echo "\t -s Code sign identity for codesign"
+    echo "\t -style Style file defined from 'dmgstyle.sh' output"
     echo "\t osxdeploy needs an input image to add to the dmg background
     \t image recomended size is at least 950x500\n"
+}
+
+get_script_dir() {
+    script_source="${BASH_SOURCE[0]}"
+    # go to target until finding root.
+    while [ -L "${script_source}" ]; do
+        script_target="$(readlink ${script_source})"
+        if [[ "${script_source}" = /* ]]; then
+            script_source="$script_target"
+        else
+            script_dir="$(dirname "${script_source}")"
+            script_source="${script_dir}/${script_target}"
+        fi
+    done
+    echo "$(dirname ${script_source})"
 }
 
 # Attempt to detach previous mouted DMG
@@ -125,17 +141,30 @@ for arg in "${@}"; do
         CODE_SIGNATURE="${arg#*=}"
     fi
 
+    if [[ ${arg} = -style=* ]]; then
+        style_filename="${arg#*=}"
+        if [[ -f "${style_filename}" ]]; then
+            DMG_STYLE="${style_filename}"
+        fi
+    fi
+
     if [[ ${arg} = "-h" || ${arg} = "--help" ]]; then
         print_usage
         exit
     fi
 done
 
+if [[ ! ${DMG_STYLE} ]]; then
+    DMG_STYLE="$(get_script_dir)/default.style"
+fi
+echo "Using style from: ${DMG_STYLE}"
+
 if [[ ${DMG_validBG} -eq 0 ]]; then
     echo "No jpg or png valid file detected!!"
     echo "exiting"
     exit
 fi
+
 
 if [[ -z "${CODE_SIGNATURE}" ]]; then
     echo "WARNING: No signature provided, Code will not be signed"
@@ -458,27 +487,8 @@ createDMG () {
     cp ${DMG_background} "/Volumes/${DMG_title}/.background/"
 
     ## Apple script to set style
-    printf '
-tell application "Finder"
-    tell disk "%s"
-        open
-        set current view of container window to icon view
-        set toolbar visible of container window to false
-        set statusbar visible of container window to false
-        set the bounds of container window to {291, 95, 1097, 558}
-        set theViewOptions to the icon view options of container window
-        set arrangement of theViewOptions to not arranged
-        set icon size of theViewOptions to 80
-        set background picture of theViewOptions to file ".background:%s"
-        set position of item "krita.app" of container window to {172, 70}
-        set position of item "Applications" of container window to {167, 189}
-        set position of item "Terms of Use" of container window to {166, 314}
-        update without registering applications
-        delay 1
-        close
-    end tell
-end tell
-        ' "${DMG_title}" "${DMG_background##*/}" | osascript
+    style="$(<"${DMG_STYLE}")"
+    printf "${style}" "${DMG_title}" "${DMG_background##*/}" | osascript
     
     chmod -Rf go-w "/Volumes/${DMG_title}"
 

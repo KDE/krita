@@ -54,6 +54,7 @@ KisInputConfigurationPage::KisInputConfigurationPage(QWidget *parent, Qt::Window
         ui->configurationItemsArea->setSpacing(0);
         ui->configurationItemsArea->addWidget(item);
     }
+    ui->configurationItemsArea->addStretch(20); // ensures listed input are on top
 
     QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(ui->scrollArea);
     if (scroller) {

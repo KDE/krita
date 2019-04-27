@@ -21,6 +21,7 @@
 
 #include "kis_coordinates_converter.h"
 
+#include <QtMath>
 #include <QTransform>
 #include <KoViewConverter.h>
 
@@ -466,4 +467,20 @@ void KisCoordinatesConverter::imagePhysicalScale(qreal *scaleX, qreal *scaleY) c
     imageScale(scaleX, scaleY);
     *scaleX *= m_d->devicePixelRatio;
     *scaleY *= m_d->devicePixelRatio;
+}
+
+/**
+ * @brief Adjust a given pair of coordinates to the nearest device pixel
+ *        according to the value of `devicePixelRatio`.
+ * @param point a point in logical pixel space
+ * @return The point in logical pixel space but adjusted to the nearest device
+ *         pixel
+ */
+
+QPointF KisCoordinatesConverter::snapToDevicePixel(const QPointF &point) const
+{
+    QPoint devicePixel = (point * m_d->devicePixelRatio).toPoint();
+    // These adjusted coords will be in logical pixel but is aligned in device
+    // pixel space for pixel-perfect rendering.
+    return QPointF(devicePixel) / m_d->devicePixelRatio;
 }

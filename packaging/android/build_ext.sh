@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # See more: 3rdparty/README.md
 # Build external dependencies in $KRITA_ROOT/3rdparty
@@ -11,20 +11,21 @@
 : ${QT_ANDROID?"Path to QT root is required"}
 : ${BUILD_ROOT? "Build root must be set"}
 
-export ANDROID_ARCHITECTURE=arm
-export ANDROID_ABI=armeabi-v7a
-export ANDROID_TOOLCHAIN=arm-linux-androideabi
-export ANDROID_NATIVE_API_LEVEL=android-$ANDROID_API_LEVEL
+if [[ -z $ANDROID_ABI ]]; then
+    echo "ANDROID_ABI not specified, using the default one: armeabi-v7a"
+    ANDROID_ABI=armeabi-v7a
+fi
 
+ANDROID_NATIVE_API_LEVEL=android-$ANDROID_API_LEVEL
 
 cmake $KRITA_ROOT/3rdparty \
-	-DINSTALL_ROOT=$BUILD_ROOT/i \
-	-DEXTERNALS_DOWNLOAD_DIR=$BUILD_ROOT/d \
-	-DCMAKE_INSTALL_PREFIX=$BUILD_ROOT/i \
-	-DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake \
-	-DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL \
-	-DANDROID_ABI=$ANDROID_ABI \
-	-DANDROID_STL=c++_static
+    -DINSTALL_ROOT=$BUILD_ROOT/i \
+    -DEXTERNALS_DOWNLOAD_DIR=$BUILD_ROOT/d \
+    -DCMAKE_INSTALL_PREFIX=$BUILD_ROOT/i \
+    -DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake \
+    -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL \
+    -DANDROID_ABI=$ANDROID_ABI \
+    -DANDROID_STL=c++_static
 
 
 

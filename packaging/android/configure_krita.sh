@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 : ${KRITA_ROOT?"Project root path must be set"}
 : ${CMAKE_ANDROID_NDK?"Android NDK path must be set"}
@@ -9,11 +9,13 @@
 
 CURDIR="$(pwd)"/
 
-export ANDROID_ARCHITECTURE=arm
-export ANDROID_ABI=armeabi-v7a
-export ANDROID_TOOLCHAIN=arm-linux-androideabi
-export ANDROID_NATIVE_API_LEVEL=android-$ANDROID_API_LEVEL
 
+if [[ -z $ANDROID_ABI ]]; then
+    echo "ANDROID_ABI not specified, using the default one: armeabi-v7a"
+    ANDROID_ABI=armeabi-v7a
+fi
+
+ANDROID_NATIVE_API_LEVEL=android-$ANDROID_API_LEVEL
 
 : ${PY_INCLUDE_PATH?"Python include path must be set"}
 : ${PY_LIBRARY?"Python lib path must be set"}
@@ -36,5 +38,6 @@ cmake $KRITA_ROOT -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX \
      -DBoost_NO_SYSTEM_PATHS=TRUE \
      -DQTANDROID_EXPORTED_TARGET=krita \
      -DANDROID_APK_DIR=$KRITA_ROOT/packaging/android/apk \
-     -DANDROID_STL=c++_shared
+     -DANDROID_STL=c++_shared \
+     -DANDROID_ABI=$ANDROID_ABI
 

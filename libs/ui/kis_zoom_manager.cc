@@ -229,10 +229,10 @@ void KisZoomManager::updateMouseTrackingConnections()
     m_mouseTrackingConnections.clear();
 
     if (value) {
-        connect(m_canvasController->proxyObject,
+        m_mouseTrackingConnections.addConnection(m_canvasController->proxyObject,
                 SIGNAL(canvasMousePositionChanged(QPoint)),
+                this,
                 SLOT(mousePositionChanged(QPoint)));
-
     }
 }
 

@@ -20,11 +20,13 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
 }
 
+ext {
+    abi = System.getenv('ANDROID_ABI')
+}
+
 task ("configure") {
     doLast {
-        def abi = System.getenv('ANDROID_ABI')
         if (abi == null) {
-            abi = 'armeabi-v7a'
             logger.error('ANDROID_ABI not specified using the default one instead: armeabi-7a')
         }
 
@@ -42,9 +44,9 @@ task ("configure") {
 
 // copy libs(plugins) which start with krita*.so and rename
 // them to start with `lib_`
-task copyLibs(type: Copy, dependsOn: configure) {
+task copyLibs(type: Copy) {
     from "${System.getenv('INSTALL_PREFIX')}/lib"
-    into 'libs/armeabi-v7a'
+    into "libs/${abi ?: 'armeabi-v7a'}"
     rename ('^krita(.*).so$', 'lib_krita$1.so')
 }
 

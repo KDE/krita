@@ -25,7 +25,7 @@ class DebuggerWidget(QWidget):
         super(DebuggerWidget, self).__init__(parent)
 
         self.scripter = scripter
-        self.setObjectName('Debugger')
+        self.setObjectName(i18n('Debugger'))
         self.layout = QVBoxLayout()
 
         self.stopAction = stopaction.StopAction(self.scripter, self)

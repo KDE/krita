@@ -25,7 +25,7 @@ class OutPutWidget(QWidget):
         super(OutPutWidget, self).__init__(parent)
 
         self.scripter = scripter
-        self.setObjectName('OutPut')
+        self.setObjectName(i18n('Output'))
         self.layout = QVBoxLayout()
 
         self.toolbar = QToolBar()

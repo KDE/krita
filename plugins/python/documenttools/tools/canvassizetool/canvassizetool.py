@@ -21,7 +21,7 @@ class CanvasSizeTool(QWidget):
     def __init__(self, mainDialog, parent=None):
         super(CanvasSizeTool, self).__init__(parent)
 
-        self.setObjectName("Canvas Size")
+        self.setObjectName(i18n("Canvas Size"))
 
         self.layout = QFormLayout()
         self.offsetLayout = QVBoxLayout()

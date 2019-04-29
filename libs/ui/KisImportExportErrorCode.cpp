@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KisImportExportErrorCodes.h"
+#include "KisImportExportErrorCode.h"
 #include <KLocalizedString>
 #include <kis_assert.h>
 

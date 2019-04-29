@@ -360,7 +360,7 @@ set(kritaui_LIB_SRCS
     KisTemplateTree.cpp
     KisUndoActionsUpdateManager.cpp
     KisView.cpp
-    KisImportExportErrorCodes.cpp
+    KisImportExportErrorCode.cpp
 
     thememanager.cpp
 

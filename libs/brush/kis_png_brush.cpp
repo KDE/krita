@@ -106,7 +106,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
     setBrushTipImage(image);
     setValid(true);
 
-    if (brushTipImage().isGrayscale()) {
+    if (brushTipImage().allGray()) {
         setBrushType(MASK);
         setHasColor(false);
     }

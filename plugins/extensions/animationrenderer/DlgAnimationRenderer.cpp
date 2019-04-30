@@ -76,8 +76,6 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     //m_page->intEnd->setMaximum(doc->image()->animationInterface()->fullClipRange().end());
     m_page->intEnd->setValue(doc->image()->animationInterface()->playbackRange().end());
 
-
-
     m_page->intHeight->setMinimum(1);
     m_page->intHeight->setMaximum(10000);
     m_page->intHeight->setValue(doc->image()->height());
@@ -140,6 +138,8 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     connect(m_page->shouldExportOnlyImageSequence, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
     connect(m_page->shouldExportOnlyVideo, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
     connect(m_page->shouldExportAll, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
+
+    connect(m_page->intFramesPerSecond, SIGNAL(valueChanged(int)), SLOT(frameRateChanged(int)));
 
     // connect and cold init
     connect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), this, SLOT(selectRenderType(int)));
@@ -276,6 +276,10 @@ QString DlgAnimationRenderer::defaultVideoFileName(KisDocument *doc, const QStri
 void DlgAnimationRenderer::selectRenderType(int index)
 {
     const QString mimeType = m_page->cmbRenderType->itemData(index).toString();
+
+    m_page->bnRenderOptions->setEnabled(mimeType != "image/gif");
+    m_page->lblGifWarning->setVisible((mimeType == "image/gif" && m_page->intFramesPerSecond->value() > 50));
+
     QString videoFileName = defaultVideoFileName(m_doc, mimeType);
 
     if (!m_page->videoFilename->fileName().isEmpty()) {
@@ -385,6 +389,11 @@ KisAnimationRenderingOptions DlgAnimationRenderer::getEncoderOptions() const
 
     options.ffmpegPath = m_page->ffmpegLocation->fileName();
     options.frameRate = m_page->intFramesPerSecond->value();
+
+    if (options.frameRate > 50 && options.videoMimeType == "image/gif") {
+        options.frameRate = 50;
+    }
+
     options.width = roundByTwo(m_page->intWidth->value());
     options.height = roundByTwo(m_page->intHeight->value());
     options.videoFileName = m_page->videoFilename->fileName();
@@ -556,6 +565,12 @@ void DlgAnimationRenderer::slotExportTypeChanged()
      // for the resize to work as expected, try to hide elements first before displaying other ones.
      // if the widget gets bigger at any point, the resize will use that, even if elements are hidden later to make it smaller
      resize(m_page->sizeHint());
+}
+
+void DlgAnimationRenderer::frameRateChanged(int framerate)
+{
+    const QString mimeType = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
+    m_page->lblGifWarning->setVisible((mimeType == "image/gif" && framerate > 50));
 }
 
 void DlgAnimationRenderer::slotLockAspectRatioDimensionsWidth(int width)

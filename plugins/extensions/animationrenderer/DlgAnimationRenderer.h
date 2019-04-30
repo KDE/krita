@@ -73,11 +73,13 @@ private Q_SLOTS:
 
     void slotExportTypeChanged();
 
+    void frameRateChanged(int framerate);
 
 protected Q_SLOTS:
 
     void slotButtonClicked(int button) override;
     void slotDialogAccepted();
+
 
 private:
     void loadAnimationOptions(const KisAnimationRenderingOptions &options);

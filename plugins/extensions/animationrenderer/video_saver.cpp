@@ -262,7 +262,6 @@ KisImageBuilder_Result VideoSaver::encode(const QString &savedFilesMask, const K
                  << "-i" << savedFilesMask
                  << "-i" << palettePath
                  << "-lavfi" << "[0:v][1:v] paletteuse"
-                 << additionalOptionsList
                  << "-y" << resultFile;
 
             // if we are exporting out at a different image size, we apply scaling filter

@@ -106,12 +106,6 @@ if [[ -d "/Volumes/${DMG_title}" ]]; then
 fi
 
 # Parse input args
-if test ${#} -eq 0; then
-    echo "ERROR: no option given"
-    print_usage
-    exit 1
-fi
-
 for arg in "${@}"; do
     if [ "${arg}" = -bg=* -a -f "${arg#*=}" ]; then
         DMG_validBG=0
@@ -304,8 +298,50 @@ fix_python_framework() {
     # find ${PythonFrameworkBase} -name "*.so" -not -type l | fix_framework_library
 }
 
+# Checks for macdeployqt
+# If not present attempts to install
+# If it fails shows an informatve message
+# (For now, macdeployqt is fundamental to deploy)
+macdeployqt_exists() {
+    printf "Checking for macdeployqt...  "
+
+    if [[ ! -e "${KIS_INSTALL_DIR}/bin/macdeployqt" ]]; then
+        printf "Not Found!\n"
+        printf "Attempting to install macdeployqt\n"
+
+        cd ${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src
+        make sub-macdeployqt-all
+        make sub-macdeployqt-install_subtargets
+        make install
+
+        if [[ ! -e "${KIS_INSTALL_DIR}/bin/macdeployqt" ]]; then
+        printf "
+ERROR: Failed to install macdeployqt!
+
+    Compile and install from qt source directory
+    Source code to build could be located in qttools/src in qt source dir:
+
+        ${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src
+
+    From the source dir, build and install:
+
+        make sub-macdeployqt-all
+        make sub-macdeployqt-install_subtargets
+        make install
+"
+        printf "\nexiting...\n"
+        exit
+        else
+            echo "Done!"
+        fi
+    else
+        echo "Found!"
+    fi
+}
+
 krita_deploy () {
-    # fix_boost_rpath
+    # check for macdeployqt
+    macdeployqt_exists
 
     cd ${BUILDROOT}
     # Update files in krita.app

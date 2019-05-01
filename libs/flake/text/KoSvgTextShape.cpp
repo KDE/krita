@@ -609,12 +609,13 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
         shapeRect = rect.toRectF();
     }
 
+    KoShapeController *controller = documentResources->shapeController();
 
     KoSvgTextShapeMarkupConverter converter(shape);
     converter.convertFromSvg(svgText,
                              defs,
                              shapeRect,
-                             documentResources->shapeController()->pixelsPerInch());
+                             controller ? controller->pixelsPerInch() : 72);
 
     shape->setPosition(shapeRect.topLeft());
 

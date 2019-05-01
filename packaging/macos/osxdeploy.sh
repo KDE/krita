@@ -2,21 +2,11 @@
 
 # Krita tool to create dmg from installed source
 # Copies all files to a folder to be converted into the final dmg
-# Background image must be set for it to deploy correcly
 
-# osxdeploy.sh automates the creation of the release DMG. It needs an image
-#     either png or jpg as first argument as it will use the image to set
-#     the background of the DMG.
-
-# Necessary files can be downloaded from https://drive.google.com/drive/folders/15cUhCou7ya9ktjfhbzRaL7_IpntzxG4j?usp=sharing
+# osxdeploy.sh automates the creation of the release DMG.
+#       default background and style are used if none provided
 
 # A short explanation of what it does:
-
-# - Creates a copy of "krita-template" folder (this containes Terms of use
-#     and Applications) into kritadmg folder.
-# Application folder symlink can be created with applescript but Terms of use contents cannot,
-# also working like this allows to add other files to dmg if needed.
-# Place the folder in ${BUILDROOT}
 
 # - Copies krita.app contents to kritadmg folder
 # - Copies i/share to Contents/Resources excluding unnecesary files
@@ -74,6 +64,7 @@ SCRIPT_SOURCE_DIR="$(get_script_dir)"
 
 # There is some duplication between build and deploy scripts
 # a config env file could would be a nice idea.
+KIS_SRC_DIR=${BUILDROOT}/krita
 KIS_INSTALL_DIR=${BUILDROOT}/i
 KIS_BUILD_DIR=${BUILDROOT}/kisbuild # only used for getting git sha number
 KRITA_DMG=${BUILDROOT}/kritadmg
@@ -93,9 +84,10 @@ PY_VERSION="${local_PY_MAYOR_VERSION}.${local_PY_MINOR_VERSION}"
 echo "Detected Python ${PY_VERSION}"
 
 print_usage () {
-    echo "USAGE: osxdeploy.sh [-s=<identity>] [-style=<style.txt>] <background-image>"
+    echo "USAGE: osxdeploy.sh [-s=<identity>] [-style=<style.txt>] [-bg=<background-image>]"
     echo "\t -s Code sign identity for codesign"
     echo "\t -style Style file defined from 'dmgstyle.sh' output"
+    echo "\t -bg Set a background image for dmg folder"
     echo "\t osxdeploy needs an input image to add to the dmg background
     \t image recomended size is at least 950x500\n"
 }
@@ -121,14 +113,15 @@ if test ${#} -eq 0; then
 fi
 
 for arg in "${@}"; do
-    if [[ -f ${arg} ]]; then
+    if [ "${arg}" = -bg=* -a -f "${arg#*=}" ]; then
         DMG_validBG=0
+        bg_filename=${arg#*=}
         echo "attempting to check background is valid jpg or png..."
-        BG_FORMAT=$(sips --getProperty format ${arg} | awk '{printf $2}')
+        BG_FORMAT=$(sips --getProperty format ${bg_filename} | awk '{printf $2}')
 
         if [[ "png" = ${BG_FORMAT} || "jpeg" = ${BG_FORMAT} ]];then
             echo "valid image file"
-            DMG_background=$(cd "$(dirname "${arg}")"; pwd -P)/$(basename "${arg}")
+            DMG_background=$(cd "$(dirname "${bg_filename}")"; pwd -P)/$(basename "${bg_filename}")
             DMG_validBG=1
             # check imageDPI
             BG_DPI=$(sips --getProperty dpiWidth ${DMG_background} | grep dpi | awk '{print $2}')
@@ -164,10 +157,9 @@ echo "Using style from: ${DMG_STYLE}"
 
 if [[ ${DMG_validBG} -eq 0 ]]; then
     echo "No jpg or png valid file detected!!"
-    echo "exiting"
-    exit
+    echo "Using default style"
+    DMG_background="${SCRIPT_SOURCE_DIR}/krita-4.1_dmgBG.jpg"
 fi
-
 
 if [[ -z "${CODE_SIGNATURE}" ]]; then
     echo "WARNING: No signature provided, Code will not be signed"
@@ -323,7 +315,8 @@ krita_deploy () {
     echo "Preparing ${KRITA_DMG} for deployment..."
 
     echo "Copying krita.app..."
-    rsync -riul ${KRITA_DMG_TEMPLATE}/ ${KRITA_DMG}
+    mkdir "${KRITA_DMG}"
+
     rsync -prul ${KIS_INSTALL_DIR}/bin/krita.app ${KRITA_DMG}
 
     mkdir -p ${KRITA_DMG}/krita.app/Contents/PlugIns
@@ -487,8 +480,11 @@ createDMG () {
     if [[ ! -d "/Volumes/${DMG_title}/.background" ]]; then
         mkdir "/Volumes/${DMG_title}/.background"
     fi
-
     cp -v ${DMG_background} "/Volumes/${DMG_title}/.background/"
+
+    mkdir "/Volumes/${DMG_title}/Terms of Use"
+    cp -v "${KIS_SRC_DIR}/packaging/macos/Terms_of_use.rtf" "/Volumes/${DMG_title}/Terms of Use/"
+    ln -s "/Applications" "/Volumes/${DMG_title}/Applications"
 
     ## Apple script to set style
     style="$(<"${DMG_STYLE}")"

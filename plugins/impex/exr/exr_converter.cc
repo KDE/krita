@@ -197,11 +197,13 @@ ImageType imfTypeToKisType(Imf::PixelType type)
 
 const KoColorSpace* kisTypeToColorSpace(QString model, ImageType imageType)
 {
+    const QString profileName = KisConfig(false).readEntry("ExrDefaultColorProfile", KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(model));
+
     switch (imageType) {
     case IT_FLOAT16:
-        return KoColorSpaceRegistry::instance()->colorSpace(model, Float16BitsColorDepthID.id(), "");
+        return KoColorSpaceRegistry::instance()->colorSpace(model, Float16BitsColorDepthID.id(), profileName);
     case IT_FLOAT32:
-        return KoColorSpaceRegistry::instance()->colorSpace(model, Float32BitsColorDepthID.id(), "");
+        return KoColorSpaceRegistry::instance()->colorSpace(model, Float32BitsColorDepthID.id(), profileName);
     case IT_UNKNOWN:
     case IT_UNSUPPORTED:
         return 0;

@@ -68,8 +68,8 @@ bool KisConvolutionPainter::useFFTImplemenation(const KisConvolutionKernelSP ker
     result =
         m_enginePreference == FFTW ||
         (m_enginePreference == NONE &&
-         kernel->width() > THRESHOLD_SIZE ||
-         kernel->height() > THRESHOLD_SIZE);
+         (kernel->width() > THRESHOLD_SIZE ||
+          kernel->height() > THRESHOLD_SIZE));
 #else
     Q_UNUSED(kernel);
 #endif

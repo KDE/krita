@@ -52,7 +52,7 @@ Now if `adb` is in your PATH then run `make install-apk-krita`, if it is not
 in your `PATH` you can add it  or use this:
 
 ```shell
-$ANDROID_SDK_ROOT/platform-tools/adb -d -r krita_build_apk/build/outputs/apk/debug/krita_build_apk-debug.apk
+$ANDROID_SDK_ROOT/platform-tools/adb install -d -r krita_build_apk/build/outputs/apk/debug/krita_build_apk-debug.apk
 
 ```
 

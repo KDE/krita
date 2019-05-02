@@ -742,6 +742,12 @@ public:
      */
     KisPaintDeviceFramesInterface* framesInterface();
 
+    /**
+     * @brief debugPaintDevice save the current paint device to a numbered PNG image
+     * @param basename the basename for the file.
+     */
+    void debugPaintDevice(const QString &basename) const;
+
 public:
 
     /**

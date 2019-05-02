@@ -2075,6 +2075,17 @@ KisPaintDeviceFramesInterface* KisPaintDevice::framesInterface()
     return m_d->framesInterface.data();
 }
 
+void KisPaintDevice::debugPaintDevice(const QString &basename) const
+{
+    static int i = 0;
+    QString filename = QString ("%1_%2.png").arg(QString::number(i), 6, QChar('0')).arg(basename);
+
+    QImage image = convertToQImage(0);
+    image.save(filename);
+
+    i++;
+}
+
 /******************************************************************/
 /*               KisPaintDeviceFramesInterface                    */
 /******************************************************************/

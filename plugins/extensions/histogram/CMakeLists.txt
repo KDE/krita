@@ -1,6 +1,0 @@
-set(kritahistogram_SOURCES histogram.cc dlg_histogram.cc kis_histogram_widget.cc )
-ki18n_wrap_ui(kritahistogram_SOURCES wdghistogram.ui )
-add_library(kritahistogram MODULE ${kritahistogram_SOURCES})
-target_link_libraries(kritahistogram kritaui)
-install(TARGETS kritahistogram  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-install( FILES  histogram.xmlgui  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

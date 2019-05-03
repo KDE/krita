@@ -260,7 +260,7 @@ QSize KisColorButton::sizeHint() const
     QStyleOptionButton opt;
     d->initStyleOption(&opt);
     return style()->sizeFromContents(QStyle::CT_PushButton, &opt, QSize(40, 15), this).
-           expandedTo(QApplication::globalStrut());
+            expandedTo(QApplication::globalStrut());
 }
 
 QSize KisColorButton::minimumSizeHint() const
@@ -268,7 +268,7 @@ QSize KisColorButton::minimumSizeHint() const
     QStyleOptionButton opt;
     d->initStyleOption(&opt);
     return style()->sizeFromContents(QStyle::CT_PushButton, &opt, QSize(3, 3), this).
-           expandedTo(QApplication::globalStrut());
+            expandedTo(QApplication::globalStrut());
 }
 
 void KisColorButton::dragEnterEvent(QDragEnterEvent *event)
@@ -342,9 +342,9 @@ void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
     cfg.paletteBox = q->paletteViewEnabled();
 #ifndef Q_OS_MACOS
     dialog = new KisDlgInternalColorSelector(q,
-                                          q->color(),
-                                          cfg,
-                                          i18n("Choose a color"));
+                                             q->color(),
+                                             cfg,
+                                             i18n("Choose a color"));
 #else
     dialog = new QColorDialog(q);
     dialog->setOption(QColorDialog::ShowAlphaChannel, m_alphaChannel);
@@ -353,9 +353,9 @@ void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
     connect(dialog, SIGNAL(accepted()), q, SLOT(_k_colorChosen()));
     dialogPtr = dialog;
 #ifndef Q_OS_MACOS
-        dialog->setPreviousColor(q->color());
+    dialog->setPreviousColor(q->color());
 #else
-        dialog->setCurrentColor(q->color().toQColor());
+    dialog->setCurrentColor(q->color().toQColor());
 #endif
     dialog->show();
 }

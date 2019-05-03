@@ -2330,7 +2330,10 @@ void KisMainWindow::configChanged()
     d->themeManager->setCurrentTheme(group.readEntry("Theme", "Krita dark"));
     d->actionManager()->updateGUI();
 
-    QBrush brush(cfg.getMDIBackgroundColor());
+    QString s = cfg.getMDIBackgroundColor();
+    KoColor c = KoColor::fromXML(s);
+    qDebug() << ">>>>>>>>>>>." << s << c.toQColor();
+    QBrush brush(c.toQColor());
     d->mdiArea->setBackground(brush);
 
     QString backgroundImage = cfg.getMDIBackgroundImage();

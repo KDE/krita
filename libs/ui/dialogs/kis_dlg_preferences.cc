@@ -162,8 +162,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
     connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
 
-    KoColor mdiColor;
-    mdiColor.fromQColor(cfg.getMDIBackgroundColor());
+    QString xml = cfg.getMDIBackgroundColor();
+    KoColor mdiColor = KoColor::fromXML(xml);
     m_mdiColor->setColor(mdiColor);
 
     m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
@@ -283,7 +283,7 @@ void GeneralTab::setDefault()
     m_chkRubberBand->setChecked(cfg.useOpenGL(true));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets(true));
     KoColor mdiColor;
-    mdiColor.fromQColor(cfg.getMDIBackgroundColor(true));
+    mdiColor.fromXML(cfg.getMDIBackgroundColor(true));
     m_mdiColor->setColor(mdiColor);
     m_backgroundimage->setText(cfg.getMDIBackgroundImage(true));
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages(true));
@@ -1566,7 +1566,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.writeEntry<int>("maximumBrushSize", dialog->m_general->intMaxBrushSize->value());
 
         cfg.writeEntry<int>("mdi_viewmode", dialog->m_general->mdiMode());
-        cfg.setMDIBackgroundColor(dialog->m_general->m_mdiColor->color().toQColor());
+        cfg.setMDIBackgroundColor(dialog->m_general->m_mdiColor->color().toXML());
         cfg.setMDIBackgroundImage(dialog->m_general->m_backgroundimage->text());
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.writeEntry("autosavefileshidden", dialog->m_general->chkHideAutosaveFiles->isChecked());

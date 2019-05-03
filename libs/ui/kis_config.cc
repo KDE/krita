@@ -404,15 +404,18 @@ void KisConfig::setUseEraserBrushOpacity(bool value)
 }
 
 
-QColor KisConfig::getMDIBackgroundColor(bool defaultValue) const
+QString KisConfig::getMDIBackgroundColor(bool defaultValue) const
 {
     QColor col(77, 77, 77);
-    return (defaultValue ? col : m_cfg.readEntry("mdiBackgroundColor", col));
+    KoColor kol(KoColorSpaceRegistry::instance()->rgb8());
+    kol.fromQColor(col);
+    QString xml = kol.toXML();
+    return (defaultValue ? xml : m_cfg.readEntry("mdiBackgroundColorXML", xml));
 }
 
-void KisConfig::setMDIBackgroundColor(const QColor &v) const
+void KisConfig::setMDIBackgroundColor(const QString &v) const
 {
-    m_cfg.writeEntry("mdiBackgroundColor", v);
+    m_cfg.writeEntry("mdiBackgroundColorXML", v);
 }
 
 QString KisConfig::getMDIBackgroundImage(bool defaultValue) const

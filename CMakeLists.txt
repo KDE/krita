@@ -264,6 +264,7 @@ if(ANDROID)
     set (Qt5Qml_DIR            $ENV{QT_ANDROID}/lib/cmake/Qt5Qml/)
     set (Qt5Quick_DIR          $ENV{QT_ANDROID}/lib/cmake/Qt5Quick/)
     set (Qt5QuickWidgets_DIR   $ENV{QT_ANDROID}/lib/cmake/Qt5QuickWidgets/)
+    set (Qt5AndroidExtras_DIR  $ENV{QT_ANDROID}/lib/cmake/Qt5AndroidExtras/)
 
     set (KF5_LIBRARIES         ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib)
     set(ECM_DIR                ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/share/ECM/cmake)
@@ -333,6 +334,13 @@ find_package(Qt5 ${MIN_QT_VERSION}
         Test
         Concurrent
 )
+
+if (ANDROID)
+    find_package(Qt5 ${MIN_QT_VERSION}
+        REQUIRED COMPONENTS
+        AndroidExtras
+    )
+endif()
 
 if (WIN32)
     set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS})

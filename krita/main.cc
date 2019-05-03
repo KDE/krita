@@ -58,6 +58,10 @@
 #include <KisUsageLogger.h>
 #include <kis_image_config.h>
 
+#ifdef Q_OS_ANDROID
+#include <QtAndroid>
+#endif
+
 #if defined Q_OS_WIN
 #include "config_use_qt_tablet_windows.h"
 #include <windows.h>
@@ -176,6 +180,21 @@ extern "C" int main(int argc, char **argv)
     // The default is set to RoundPreferFloor for better behaviour than before,
     // but can be overridden by the above environment variable.
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
+#endif
+
+#ifdef Q_OS_ANDROID
+    const QString write_permission = "android.permission.WRITE_EXTERNAL_STORAGE";
+    const QStringList permissions = { write_permission };
+    const QtAndroid::PermissionResultMap resultHash =
+            QtAndroid::requestPermissionsSync(QStringList(permissions));
+
+    if (resultHash[write_permission] == QtAndroid::PermissionResult::Denied) {
+        // TODO: show a dialog and graciously exit
+        dbgKrita << "Permission denied by the user";
+    }
+    else {
+        dbgKrita << "Permission granted";
+    }
 #endif
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);

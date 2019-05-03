@@ -10,7 +10,12 @@ add_subdirectory( data )
 add_subdirectory( integration )
 add_subdirectory( pics/app )
 
+if (ANDROID)
+    include_directories (${Qt5AndroidExtras_INCLUDE_DIRS})
+endif()
+
 set(krita_SRCS main.cc)
+
 
 if (NOT APPLE)
     file(GLOB ICON_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakrita.png")
@@ -66,6 +71,7 @@ qt5_add_resources(krita_SRCS ${krita_QRCS})
 
 if (ANDROID)
     add_library(krita SHARED ${krita_SRCS})
+    target_link_libraries(krita PRIVATE Qt5::AndroidExtras)
 else()
     add_executable(krita ${krita_SRCS})
 endif()

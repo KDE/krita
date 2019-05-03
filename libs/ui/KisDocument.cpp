@@ -1581,7 +1581,11 @@ void KisDocument::slotUndoStackCleanChanged(bool value)
 void KisDocument::slotConfigChanged()
 {
     KisConfig cfg(true);
-    d->undoStack->setUndoLimit(cfg.undoStackLimit());
+    if (!d->undoStack->isClean() && d->undoStack->undoLimit() != cfg.undoStackLimit()) {
+        d->undoStack->clear();
+        d->undoStack->setUndoLimit(cfg.undoStackLimit());
+    }
+
     d->autoSaveDelay = cfg.autoSaveInterval();
     setNormalAutoSaveInterval();
 }

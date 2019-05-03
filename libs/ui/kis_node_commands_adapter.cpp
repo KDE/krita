@@ -24,6 +24,7 @@
 #include "commands/kis_image_layer_add_command.h"
 #include "commands/kis_image_layer_move_command.h"
 #include "commands/kis_image_layer_remove_command.h"
+#include "commands/KisNodeRenameCommand.h"
 #include "commands/kis_node_commands.h"
 #include "KisViewManager.h"
 #include "kis_processing_applicator.h"
@@ -124,6 +125,12 @@ void KisNodeCommandsAdapter::setCompositeOp(KisNodeSP node,
 {
     KUndo2Command *cmd = new KisNodeCompositeOpCommand(node, node->compositeOpId(),
                                                        compositeOp->id());
+    applyOneCommandAsync(cmd);
+}
+
+void KisNodeCommandsAdapter::setNodeName(KisNodeSP node, const QString &name)
+{
+    KUndo2Command *cmd = new KisNodeRenameCommand(node, node->name(), name);
     applyOneCommandAsync(cmd);
 }
 

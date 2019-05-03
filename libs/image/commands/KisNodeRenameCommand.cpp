@@ -1,6 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
+ *  Copyright (c) 2019 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,27 +16,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "KisNodeRenameCommand.h"
+
 #include <klocalizedstring.h>
-#include <KoCompositeOp.h>
 #include "kis_node.h"
 #include "commands/kis_node_commands.h"
 
-KisNodeCompositeOpCommand::KisNodeCompositeOpCommand(KisNodeSP node, const QString& oldCompositeOp,
-        const QString& newCompositeOp) :
-        KisNodeCommand(kundo2_i18n("Composition Mode Change"), node)
+
+KisNodeRenameCommand::KisNodeRenameCommand(KisNodeSP node, const QString &oldName, const QString &newName)
+    : KisNodeCommand(kundo2_i18n("Node Rename"), node)
 {
-    m_oldCompositeOp = oldCompositeOp;
-    m_newCompositeOp = newCompositeOp;
+    m_oldName = oldName;
+    m_newName = newName;
 }
 
-void KisNodeCompositeOpCommand::redo()
+void KisNodeRenameCommand::redo()
 {
-    m_node->setCompositeOpId(m_newCompositeOp);
-    m_node->setDirty();
+    m_node->setName(m_newName);
 }
 
-void KisNodeCompositeOpCommand::undo()
+void KisNodeRenameCommand::undo()
 {
-    m_node->setCompositeOpId(m_oldCompositeOp);
-    m_node->setDirty();
+    m_node->setName(m_oldName);
 }

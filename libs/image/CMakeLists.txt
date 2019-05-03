@@ -98,6 +98,7 @@ set(kritaimage_LIB_SRCS
    commands/kis_reselect_global_selection_command.cpp
    commands/KisReselectActiveSelectionCommand.cpp
    commands/kis_set_global_selection_command.cpp
+   commands/KisNodeRenameCommand.cpp
    commands_new/kis_saved_commands.cpp
    commands_new/kis_processing_command.cpp
    commands_new/kis_image_resize_command.cpp

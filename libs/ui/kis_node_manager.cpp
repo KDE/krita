@@ -776,6 +776,15 @@ qint32 KisNodeManager::convertOpacityToInt(qreal opacity)
     return qMin(255, int(opacity * 2.55 + 0.5));
 }
 
+void KisNodeManager::setNodeName(KisNodeSP node, const QString &name)
+{
+    if (!node) return;
+    if (node->name() == name) return;
+
+    m_d->commandsAdapter.setNodeName(node, name);
+
+}
+
 void KisNodeManager::setNodeOpacity(KisNodeSP node, qint32 opacity)
 {
     if (!node) return;

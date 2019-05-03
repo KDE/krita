@@ -2332,7 +2332,6 @@ void KisMainWindow::configChanged()
 
     QString s = cfg.getMDIBackgroundColor();
     KoColor c = KoColor::fromXML(s);
-    qDebug() << ">>>>>>>>>>>." << s << c.toQColor();
     QBrush brush(c.toQColor());
     d->mdiArea->setBackground(brush);
 

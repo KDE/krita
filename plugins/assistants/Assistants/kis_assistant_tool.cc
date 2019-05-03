@@ -52,8 +52,10 @@
 #include "VanishingPointAssistant.h"
 #include "EditAssistantsCommand.h"
 #include <kis_undo_adapter.h>
+#include "ConjugateAssistant.h"
 
 #include <math.h>
+#include <QtCore/qmath.h>
 
 KisAssistantTool::KisAssistantTool(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas)),
@@ -268,8 +270,9 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
             }
             m_snapIsRadial = false;
         } else if (m_handleDrag && assistant->handles().size()>2 && (assistant->id() == "ellipse" ||
-                                    assistant->id() == "concentric ellipse" ||
-                                    assistant->id() == "fisheye-point")){
+								     assistant->id() == "concentric ellipse" ||
+								     assistant->id() == "fisheye-point" ||
+								     assistant->id() == "conjugate")){
             m_snapIsRadial = false;
             if (m_handleDrag == assistant->handles()[0]) {
                 m_dragStart = *assistant->handles()[1];
@@ -285,6 +288,33 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
             m_dragStart = assistant->getEditorPosition();
             m_snapIsRadial = false;
         }
+
+	if (assistant->id() == "conjugate") {
+
+	  // QSharedPointer <ConjugateAssistant> assis = qSharedPointerCast<ConjugateAssistant>(assistant);
+	  // QPointF h1 = *assis->handles()[0];
+	  // QPointF h2 = *assis->handles()[1];
+	  // QPointF h3 = *assis->handles()[2];
+
+	  // QLineF horiz = QLineF(h1,h2);
+	  // QLineF norm = horiz.normalVector();
+
+	  // norm.translate(h3 - h1);
+
+	  // QPointF inter;
+	  // norm.intersect(horiz,&inter);
+
+	  // qreal h1dst = QLineF(h1,inter).length();
+	  // qreal h2dst = QLineF(h2,inter).length();
+
+	  // qreal radius = (h1dst + h2dst) / 2;
+	  // qreal spdst = qSqrt(qPow(radius,2) - qPow(radius-qMin(h1dst,h2dst),2));
+
+	  // norm.setP1(inter);
+	  // norm.setLength(spdst);
+
+	  // assis->setStationPoint(norm.p2());
+	}
     }
 
     if (m_handleDrag) {
@@ -502,6 +532,39 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
                 *assistant->sideHandles()[1] = perspectiveline.p2();
                 *assistant->sideHandles()[3] = perspectiveline2.p2();
             }
+
+        }
+        if (m_handleDrag &&
+	    assistant->id() == "conjugate" &&
+            assistant->handles().size() == 3) {
+
+	  QSharedPointer <ConjugateAssistant> assis = qSharedPointerCast<ConjugateAssistant>(assistant);
+
+	  int working_handle_id;
+	  int other_handle_id;
+
+	  if (m_handleDrag == assistant->handles()[0]) {
+	    working_handle_id = 0;
+	    other_handle_id = 1;
+	  } else {
+	    working_handle_id = 1;
+	    other_handle_id = 0;
+	  }
+
+	  QPointF working_handle = *assistant->handles()[working_handle_id];
+
+	  QLineF snap = QLineF(assis->stationPoint(), working_handle);
+	  QPointF new_other;
+	  snap.normalVector().intersect(assis->horizonLine(), &new_other);
+	  assis->handles()[other_handle_id]->setX(new_other.x());
+	  assis->handles()[other_handle_id]->setY(new_other.y());
+
+	  snap = QLineF(assis->stationPoint(),new_other);
+
+	  QPointF new_working;
+	  snap.normalVector().intersect(assis->horizonLine(), &new_working);
+	  assis->handles()[working_handle_id]->setX(new_working.x());
+	  assis->handles()[working_handle_id]->setY(new_working.y());
 
         }
     }

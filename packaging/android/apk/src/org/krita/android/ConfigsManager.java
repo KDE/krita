@@ -69,7 +69,9 @@ class ConfigsManager {
 			}
 			else {
 				for (String asset : assets) {
-					recurse(toPath(path, asset));
+					if (asset.length() > 0) {
+						recurse(toPath(path, asset));
+					}
 				}
 			}
 		} catch (IOException ex) {
@@ -98,7 +100,7 @@ class ConfigsManager {
 		}
 
 		// if last character is '/', then delete it
-		if (result.charAt(result.length() - 1) == '/') {
+		if (result.length() != 0 && result.charAt(result.length() - 1) == '/') {
 			result.deleteCharAt(result.length() - 1);
 		}
 		return result.toString();

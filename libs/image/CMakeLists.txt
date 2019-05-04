@@ -218,6 +218,7 @@ set(kritaimage_LIB_SRCS
    kis_layer_utils.cpp
    kis_mask_projection_plane.cpp
    kis_projection_leaf.cpp
+   KisSafeNodeProjectionStore.cpp
    kis_mask.cc
    kis_base_mask_generator.cpp
    kis_rect_mask_generator.cpp

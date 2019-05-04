@@ -169,9 +169,6 @@ public:
      */
     void setTemporary(bool t);
 
-    /// returns the image this layer belongs to, or null if there is no image
-    KisImageWSP image() const;
-
     /**
      * Set the image this layer belongs to.
      */
@@ -391,15 +388,6 @@ private:
     friend class KisLayerProjectionPlane;
     friend class KisTransformMask;
     friend class KisLayerTest;
-
-    friend class KisRecycleProjectionsJob;
-    void recycleProjectionsInSafety();
-
-private Q_SLOTS:
-    void slotInitiateProjectionsCleanup();
-
-Q_SIGNALS:
-    void internalInitiateProjectionsCleanup();
 
 private:
     QRect layerExtentImpl(bool exactBounds) const;

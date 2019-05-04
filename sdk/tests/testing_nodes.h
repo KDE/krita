@@ -20,10 +20,15 @@
 #define TESTING_NODES_H
 
 #include "kis_node.h"
+#include "kis_image.h"
 
 namespace TestUtil {
 
 struct DefaultNode : public KisNode {
+    DefaultNode() : KisNode(nullptr)
+    {
+    }
+
     KisPaintDeviceSP paintDevice() const override {
         return KisPaintDeviceSP();
     }

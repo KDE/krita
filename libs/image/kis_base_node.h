@@ -121,7 +121,7 @@ public:
      * Create a new, empty base node. The node is unnamed, unlocked
      * visible and unlinked.
      */
-    KisBaseNode();
+    KisBaseNode(KisImageWSP image);
 
     /**
      * Create a copy of this node.
@@ -502,6 +502,7 @@ public:
     void enableAnimation();
 
     virtual void setImage(KisImageWSP image);
+    KisImageWSP image() const;
 
 protected:
 

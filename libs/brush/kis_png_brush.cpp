@@ -103,14 +103,15 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
         return false;
     }
 
-    setBrushTipImage(image);
     setValid(true);
 
     if (brushTipImage().allGray()) {
+        setBrushTipImage(image.convertToFormat(QImage::Format_Grayscale8));
         setBrushType(MASK);
         setHasColor(false);
     }
     else {
+        setBrushTipImage(image);
         setBrushType(IMAGE);
         setHasColor(true);
     }

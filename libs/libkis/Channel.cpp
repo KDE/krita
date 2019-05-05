@@ -26,7 +26,6 @@
 #include <KoColorSpace.h>
 #include <kis_sequential_iterator.h>
 #include <kis_layer.h>
-#include <krita_utils.h>
 
 #ifdef HAVE_OPENEXR
 #include <half.h>

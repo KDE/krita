@@ -26,6 +26,7 @@
 #include <KoColorSpace.h>
 #include <kis_sequential_iterator.h>
 #include <kis_layer.h>
+#include <krita_utils.h>
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
@@ -69,11 +70,12 @@ bool Channel::visible() const
 {
     if (!d->node || !d->channel) return false;
     if (!d->node->inherits("KisLayer")) return false;
+
     for (uint i = 0; i < d->node->colorSpace()->channelCount(); ++i) {
         if (d->node->colorSpace()->channels()[i] == d->channel) {
             KisLayerSP layer = qobject_cast<KisLayer*>(d->node.data());
-            QBitArray flags = layer->channelFlags();
-            return flags.testBit(i);
+            const QBitArray& flags = layer->channelFlags();
+            return flags.isEmpty() || flags.testBit(i);
         }
     }
     return false;

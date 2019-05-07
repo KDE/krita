@@ -192,7 +192,7 @@ KisFilterConfigurationSP KisHalftoneFilter::factoryConfiguration() const
     return config;
 }
 
-KisConfigWidget *KisHalftoneFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisHalftoneFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KisHalftoneConfigWidget(parent, dev);
 }

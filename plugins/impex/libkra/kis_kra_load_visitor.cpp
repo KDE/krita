@@ -65,6 +65,8 @@
 #include "kis_dom_utils.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_paint_device_frames_interface.h"
+#include "kis_filter_registry.h"
+
 
 using namespace KRA;
 
@@ -262,7 +264,8 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         return false;
     }
 
-    loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));
+    loadFilterConfiguration(layer->filter(), getLocation(layer, DOT_FILTERCONFIG));
+    fixOldFilterConfigurations(layer->filter());
 
     result = visitAll(layer);
     return result;
@@ -335,7 +338,8 @@ bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 
     bool result = true;
     result = loadSelection(getLocation(mask), mask->selection());
-    result = loadFilterConfiguration(mask->filter().data(), getLocation(mask, DOT_FILTERCONFIG));
+    result = loadFilterConfiguration(mask->filter(), getLocation(mask, DOT_FILTERCONFIG));
+    fixOldFilterConfigurations(mask->filter());
     return result;
 }
 
@@ -589,6 +593,18 @@ bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, co
     }
     m_warningMessages << i18n("Could not filter configuration %1.", location);
     return true;
+}
+
+void KisKraLoadVisitor::fixOldFilterConfigurations(KisFilterConfigurationSP kfc)
+{
+    KisFilterSP filter = KisFilterRegistry::instance()->value(kfc->name());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(filter);
+
+    if (!filter->configurationAllowedForMask(kfc)) {
+        filter->fixLoadedFilterConfigurationForMasks(kfc);
+    }
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(filter->configurationAllowedForMask(kfc));
 }
 
 bool KisKraLoadVisitor::loadMetaData(KisNode* node)

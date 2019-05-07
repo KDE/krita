@@ -151,7 +151,7 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
         delete d->centralWidget;
 
         KisConfigWidget* widget =
-            d->currentGenerator->createConfigurationWidget(d->uiWdgGenerators.centralWidgetHolder, d->dev);
+            d->currentGenerator->createConfigurationWidget(d->uiWdgGenerators.centralWidgetHolder, d->dev, true);
 
         if (!widget) { // No widget, so display a label instead
             d->centralWidget = new QLabel(i18n("No configuration options."),

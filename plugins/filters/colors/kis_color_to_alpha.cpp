@@ -47,7 +47,7 @@ KisFilterColorToAlpha::KisFilterColorToAlpha()
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     return new KisWdgColorToAlpha(parent);
 }

@@ -29,7 +29,7 @@ class KisWdgGaussianBlur : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisWdgGaussianBlur(QWidget * parent);
+    KisWdgGaussianBlur(bool useForMasks, QWidget * parent);
     ~KisWdgGaussianBlur() override;
     inline const Ui_WdgGaussianBlur* widget() const {
         return m_widget;

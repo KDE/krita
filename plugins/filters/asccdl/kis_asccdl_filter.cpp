@@ -60,7 +60,7 @@ KoColorTransformation *KisFilterASCCDL::createTransformation(const KoColorSpace 
                                        config->getColor("power", black));
 }
 
-KisConfigWidget *KisFilterASCCDL::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisFilterASCCDL::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KisASCCDLConfigWidget(parent, dev->colorSpace());
 }

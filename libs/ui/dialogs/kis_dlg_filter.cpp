@@ -140,8 +140,11 @@ void KisDlgFilter::startApplyingFilter(KisFilterConfigurationSP config)
 
 void KisDlgFilter::updatePreview()
 {
-    if (!d->uiFilterDialog.filterSelection->configuration()) return;
+    KisFilterConfigurationSP config = d->uiFilterDialog.filterSelection->configuration();
+    if (!config) return;
 
+    bool maskCreationAllowed = !d->currentFilter || d->currentFilter->configurationAllowedForMask(config);
+    d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(maskCreationAllowed);
 
     if (d->uiFilterDialog.checkBoxPreview->isChecked()) {
         KisFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());

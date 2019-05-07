@@ -31,7 +31,7 @@ KisColorBalanceFilter::KisColorBalanceFilter()
 	setSupportsPainting(true);
 }
 
-KisConfigWidget * KisColorBalanceFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisColorBalanceFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     return new KisColorBalanceConfigWidget(parent);

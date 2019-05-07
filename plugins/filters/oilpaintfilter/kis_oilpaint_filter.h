@@ -40,7 +40,7 @@ public:
 
     KisFilterConfigurationSP factoryConfiguration() const override;
 public:
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 
 private:
     void OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect &applyRect,

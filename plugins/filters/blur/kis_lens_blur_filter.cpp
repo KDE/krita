@@ -50,7 +50,7 @@ KisLensBlurFilter::KisLensBlurFilter() : KisFilter(id(), FiltersCategoryBlurId, 
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisLensBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisLensBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     return new KisWdgLensBlur(parent);
 }

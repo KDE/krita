@@ -97,7 +97,7 @@ KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
     return config;
 }
 
-KisConfigWidget * KritaFilterGradientMap::createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KritaFilterGradientMap::createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KritaGradientMapConfigWidget(parent, dev);
 }

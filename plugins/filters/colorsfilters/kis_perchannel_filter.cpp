@@ -149,7 +149,7 @@ KisPerChannelFilter::KisPerChannelFilter() : KisMultiChannelFilter(id(), i18n("&
     setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
 }
 
-KisConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KisPerChannelConfigWidget(parent, dev);
 }

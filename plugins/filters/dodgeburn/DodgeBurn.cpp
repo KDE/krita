@@ -28,7 +28,7 @@ KisFilterDodgeBurn::KisFilterDodgeBurn(const QString& id, const QString& prefix,
     setSupportsPainting(true);
 }
 
-KisConfigWidget * KisFilterDodgeBurn::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisFilterDodgeBurn::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     return new KisDodgeBurnConfigWidget(parent, id());

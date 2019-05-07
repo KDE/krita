@@ -44,12 +44,12 @@ OraConverter::~OraConverter()
 {
 }
 
-ImportExport::ErrorCode OraConverter::buildImage(QIODevice *io)
+KisImportExportErrorCode OraConverter::buildImage(QIODevice *io)
 {
     KoStore* store = KoStore::createStore(io, KoStore::Read, "image/openraster", KoStore::Zip);
     if (!store) {
         delete store;
-        return ImportExport::ErrorCodeID::Failure;
+        return ImportExportCodes::Failure;
     }
 
     KisOpenRasterLoadContext olc(store);
@@ -59,7 +59,7 @@ ImportExport::ErrorCode OraConverter::buildImage(QIODevice *io)
     m_activeNodes = orslv.activeNodes();
     delete store;
 
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
 KisImageSP OraConverter::image()
@@ -72,14 +72,14 @@ vKisNodeSP OraConverter::activeNodes()
     return m_activeNodes;
 }
 
-ImportExport::ErrorCode OraConverter::buildFile(QIODevice *io, KisImageSP image, vKisNodeSP activeNodes)
+KisImportExportErrorCode OraConverter::buildFile(QIODevice *io, KisImageSP image, vKisNodeSP activeNodes)
 {
 
     // Open file for writing
     KoStore* store = KoStore::createStore(io, KoStore::Write, "image/openraster", KoStore::Zip);
     if (!store) {
         delete store;
-        return ImportExport::ErrorCodeID::Failure;
+        return ImportExportCodes::Failure;
     }
 
     KisOpenRasterSaveContext osc(store);
@@ -105,7 +105,7 @@ ImportExport::ErrorCode OraConverter::buildFile(QIODevice *io, KisImageSP image,
     KisPNGConverter::saveDeviceToStore("mergedimage.png", image->bounds(), image->xRes(), image->yRes(), dev, store);
 
     delete store;
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
 

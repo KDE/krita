@@ -25,7 +25,7 @@
 #include <QFileInfo>
 
 #include "kis_types.h"
-#include <KisImportExportErrorCodes.h>
+#include <KisImportExportErrorCode.h>
 
 
 // max number of pixels in one dimension of psd file
@@ -45,7 +45,7 @@ public:
 
 public:
 
-    ImportExport::ErrorCode buildFile(QIODevice *io);
+    KisImportExportErrorCode buildFile(QIODevice *io);
 
     KisImageSP image();
 

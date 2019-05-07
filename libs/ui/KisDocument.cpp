@@ -46,7 +46,7 @@
 #include <KoXmlReader.h>
 #include <KoStoreDevice.h>
 #include <KoDialog.h>
-#include <KisImportExportErrorCodes.h>
+#include <KisImportExportErrorCode.h>
 
 #include <KisUsageLogger.h>
 #include <klocalizedstring.h>
@@ -346,7 +346,7 @@ public:
     bool modifiedWhileSaving = false;
     QScopedPointer<KisDocument> backgroundSaveDocument;
     QPointer<KoUpdater> savingUpdater;
-    QFuture<ImportExport::ErrorCode> childSavingFuture;
+    QFuture<KisImportExportErrorCode> childSavingFuture;
     KritaUtils::ExportFileJob backgroundSaveJob;
 
     bool isRecovered = false;
@@ -531,8 +531,10 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
     QFileInfo filePathInfo(job.filePath);
 
     if (filePathInfo.exists() && !filePathInfo.isWritable()) {
-        slotCompleteSavingDocument(job, ImportExport::ErrorCodeID::NoAccessToWrite,
+        ENTER_FUNCTION() << "first!";
+        slotCompleteSavingDocument(job, ImportExportCodes::NoAccessToWrite,
                                    i18n("%1 cannot be written to. Please save under a different name.", job.filePath));
+        //return ImportExportCodes::NoAccessToWrite;
         return false;
     }
 
@@ -564,18 +566,26 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
         }
     }
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!job.mimeType.isEmpty(), false);
+    //KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!job.mimeType.isEmpty(), false);
+    if (job.mimeType.isEmpty()) {
+
+        KisImportExportErrorCode error = ImportExportCodes::FileFormatIncorrect;
+        slotCompleteSavingDocument(job, error, error.errorMessage());
+        return false;
+
+    }
 
     const QString actionName =
             job.flags & KritaUtils::SaveIsExporting ?
                 i18n("Exporting Document...") :
                 i18n("Saving Document...");
 
+    ENTER_FUNCTION() << "second!";
     bool started =
             initiateSavingInBackground(actionName,
-                                       this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, ImportExport::ErrorCode ,QString)),
+                                       this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, KisImportExportErrorCode ,QString)),
                                        job, exportConfiguration);
-
+    ENTER_FUNCTION() << "started? " << started;
     if (!started) {
         emit canceled(QString());
     }
@@ -659,12 +669,14 @@ QByteArray KisDocument::serializeToNativeByteArray()
     return byteArray;
 }
 
-void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, ImportExport::ErrorCode status, const QString &errorMessage)
+void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage)
 {
     if (status.isCancelled())
         return;
 
     const QString fileName = QFileInfo(job.filePath).fileName();
+
+    ENTER_FUNCTION() << "status = " << status << " Message " << status.errorMessage();
 
     if (!status.isOk()) {
         emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
@@ -773,7 +785,7 @@ bool KisDocument::exportDocumentSync(const QUrl &url, const QByteArray &mimeType
 
     const QString fileName = url.toLocalFile();
 
-    ImportExport::ErrorCode status =
+    KisImportExportErrorCode status =
             d->importExportManager->
             exportDocument(fileName, fileName, mimeType, false, exportConfiguration);
 
@@ -844,12 +856,12 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
     }
 
     connect(d->backgroundSaveDocument.data(),
-            SIGNAL(sigBackgroundSavingFinished(ImportExport::ErrorCode, QString)),
+            SIGNAL(sigBackgroundSavingFinished(KisImportExportErrorCode, QString)),
             this,
-            SLOT(slotChildCompletedSavingInBackground(ImportExport::ErrorCode, QString)));
+            SLOT(slotChildCompletedSavingInBackground(KisImportExportErrorCode, QString)));
 
 
-    connect(this, SIGNAL(sigCompleteBackgroundSaving(KritaUtils::ExportFileJob, ImportExport::ErrorCode, QString)),
+    connect(this, SIGNAL(sigCompleteBackgroundSaving(KritaUtils::ExportFileJob, KisImportExportErrorCode, QString)),
             receiverObject, receiverMethod, Qt::UniqueConnection);
 
     bool started =
@@ -874,7 +886,7 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
 }
 
 
-void KisDocument::slotChildCompletedSavingInBackground(ImportExport::ErrorCode status, const QString &errorMessage)
+void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage)
 {
     KIS_SAFE_ASSERT_RECOVER(!d->savingMutex.tryLock()) {
         d->savingMutex.unlock();
@@ -914,7 +926,7 @@ void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalCloned
 
     if (d->image->isIdle() || hadClonedDocument) {
         started = initiateSavingInBackground(i18n("Autosaving..."),
-                                             this, SLOT(slotCompleteAutoSaving(KritaUtils::ExportFileJob, ImportExport::ErrorCode, QString)),
+                                             this, SLOT(slotCompleteAutoSaving(KritaUtils::ExportFileJob, KisImportExportErrorCode, QString)),
                                              KritaUtils::ExportFileJob(autoSaveFileName, nativeFormatMimeType(), KritaUtils::SaveIsExporting | KritaUtils::SaveInAutosaveMode),
                                              0,
                                              std::move(optionalClonedDocument));
@@ -950,7 +962,7 @@ void KisDocument::slotInitiateAsyncAutosaving(KisDocument *clonedDocument)
     slotAutoSaveImpl(std::unique_ptr<KisDocument>(clonedDocument));
 }
 
-void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, ImportExport::ErrorCode status, const QString &errorMessage)
+void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage)
 {
     Q_UNUSED(job);
 
@@ -994,7 +1006,7 @@ bool KisDocument::startExportInBackground(const QString &actionName,
         }
     }
 
-    ImportExport::ErrorCode initializationStatus(ImportExport::ErrorCodeID::OK);
+    KisImportExportErrorCode initializationStatus(ImportExportCodes::OK);
     d->childSavingFuture =
             d->importExportManager->exportDocumentAsyc(location,
                                                        realLocation,
@@ -1003,7 +1015,7 @@ bool KisDocument::startExportInBackground(const QString &actionName,
                                                        showWarnings,
                                                        exportConfiguration);
 
-    if (initializationStatus.isOk()) {
+    if (!initializationStatus.isOk()) {
         if (d->savingUpdater) {
             d->savingUpdater->cancel();
         }
@@ -1012,7 +1024,7 @@ bool KisDocument::startExportInBackground(const QString &actionName,
         return false;
     }
 
-    typedef QFutureWatcher<ImportExport::ErrorCode> StatusWatcher;
+    typedef QFutureWatcher<KisImportExportErrorCode> StatusWatcher;
     StatusWatcher *watcher = new StatusWatcher();
     watcher->setFuture(d->childSavingFuture);
 
@@ -1025,16 +1037,16 @@ bool KisDocument::startExportInBackground(const QString &actionName,
 void KisDocument::finishExportInBackground()
 {
     KIS_SAFE_ASSERT_RECOVER(d->childSavingFuture.isFinished()) {
-        emit sigBackgroundSavingFinished(ImportExport::ErrorCodeID::InternalError, "");
+        emit sigBackgroundSavingFinished(ImportExportCodes::InternalError, "");
         return;
     }
 
-   ImportExport::ErrorCode status =
+   KisImportExportErrorCode status =
             d->childSavingFuture.result();
     const QString errorMessage = status.errorMessage();
 
     d->savingImage.clear();
-    d->childSavingFuture = QFuture<ImportExport::ErrorCode>();
+    d->childSavingFuture = QFuture<KisImportExportErrorCode>();
     d->lastErrorMessage.clear();
 
     if (d->savingUpdater) {
@@ -1308,7 +1320,7 @@ bool KisDocument::openFile()
         d->importExportManager->setUpdater(updater);
     }
 
-    ImportExport::ErrorCode status = d->importExportManager->importDocument(localFilePath(), typeName);
+    KisImportExportErrorCode status = d->importExportManager->importDocument(localFilePath(), typeName);
 
     if (!status.isOk()) {
         if (window && window->viewManager()) {
@@ -1967,7 +1979,7 @@ bool KisDocument::isAutosaving() const
     return d->isAutosaving;
 }
 
-QString KisDocument::exportErrorToUserMessage(ImportExport::ErrorCode status, const QString &errorMessage)
+QString KisDocument::exportErrorToUserMessage(KisImportExportErrorCode status, const QString &errorMessage)
 {
     return errorMessage.isEmpty() ? status.errorMessage() : errorMessage;
 }

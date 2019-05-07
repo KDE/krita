@@ -66,7 +66,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             KisImportExportManager manager(doc);
             doc->setFileBatchMode(true);
 
-            ImportExport::ErrorCode status = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString());
+            KisImportExportErrorCode status = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString());
             Q_UNUSED(status);
 
             if (!doc->image()) {

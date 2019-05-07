@@ -32,7 +32,7 @@ public:
     KisAsyncActionFeedback(const QString &message, QWidget *parent);
     ~KisAsyncActionFeedback();
 
-    ImportExport::ErrorCode runAction(std::function<ImportExport::ErrorCode()> func);
+    KisImportExportErrorCode runAction(std::function<KisImportExportErrorCode()> func);
     void runVoidAction(std::function<void()> func);
     void waitForMutex(QMutex *mutex);
 

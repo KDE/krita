@@ -49,12 +49,12 @@ KisQImageIOImport::~KisQImageIOImport()
 {
 }
 
-ImportExport::ErrorCode KisQImageIOImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisQImageIOImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     QFileInfo fi(filename());
     QImage img;
     if (!img.loadFromData(io->readAll(), fi.suffix().toLower().toLatin1())) {
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -65,7 +65,7 @@ ImportExport::ErrorCode KisQImageIOImport::convert(KisDocument *document, QIODev
     image->addNode(layer.data(), image->rootLayer().data());
 
     document->setCurrentImage(image);
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 
 }
 

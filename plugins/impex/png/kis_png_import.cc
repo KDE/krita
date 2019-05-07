@@ -41,10 +41,10 @@ KisPNGImport::~KisPNGImport()
 {
 }
 
-ImportExport::ErrorCode KisPNGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisPNGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KisPNGConverter ib(document, batchMode());
-    ImportExport::ErrorCode res = ib.buildImage(io);
+    KisImportExportErrorCode res = ib.buildImage(io);
     return res;
 
 }

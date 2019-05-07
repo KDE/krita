@@ -36,7 +36,7 @@
 #include <KisMimeDatabase.h>
 #include <kis_time_range.h>
 #include <KisImportExportManager.h>
-#include <KisImportExportErrorCodes.h>
+#include <KisImportExportErrorCode.h>
 
 #include "DlgAnimationRenderer.h"
 #include <dialogs/KisAsyncAnimationFramesSaveDialog.h>
@@ -174,11 +174,11 @@ void AnimaterionRenderer::renderAnimationImpl(KisDocument *doc, KisAnimationRend
             KIS_SAFE_ASSERT_RECOVER_NOOP(dir.exists());
         }
 
-        ImportExport::ErrorCode res;
+        KisImportExportErrorCode res;
         QFile fi(resultFile);
         if (!fi.open(QIODevice::WriteOnly)) {
             qWarning() << "Could not open" << fi.fileName() << "for writing!";
-            res = ImportExport::ErrorCodeCannotWrite(fi.error());
+            res = KisImportExportErrorCannotWrite(fi.error());
         } else {
             fi.close();
         }

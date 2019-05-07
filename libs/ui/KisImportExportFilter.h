@@ -41,7 +41,7 @@ class KisDocument;
 class KisConfigWidget;
 
 #include "kritaui_export.h"
-#include "KisImportExportErrorCodes.h"
+#include "KisImportExportErrorCode.h"
 
 /**
  * @brief The base class for import and export filters.
@@ -114,7 +114,7 @@ public:
      * @return The error status, see the @ref #ConversionStatus enum.
      *         KisImportExportFilter::OK means that everything is alright.
      */
-    virtual ImportExport::ErrorCode convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration = 0) = 0;
+    virtual KisImportExportErrorCode convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration = 0) = 0;
 
     /**
      * Get the text version of the status value

@@ -53,13 +53,13 @@ KraConverter::~KraConverter()
     delete m_kraLoader;
 }
 
-ImportExport::ErrorCode KraConverter::buildImage(QIODevice *io)
+KisImportExportErrorCode KraConverter::buildImage(QIODevice *io)
 {
     m_store = KoStore::createStore(io, KoStore::Read, "", KoStore::Zip);
 
     if (m_store->bad()) {
         m_doc->setErrorMessage(i18n("Not a valid Krita file"));
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     bool success;
@@ -67,7 +67,7 @@ ImportExport::ErrorCode KraConverter::buildImage(QIODevice *io)
         if (m_store->hasFile("root") || m_store->hasFile("maindoc.xml")) {   // Fallback to "old" file format (maindoc.xml)
             KoXmlDocument doc;
 
-            ImportExport::ErrorCode res = oldLoadAndParse(m_store, "root", doc);
+            KisImportExportErrorCode res = oldLoadAndParse(m_store, "root", doc);
             if (res.isOk())
                 res = loadXML(doc, m_store);
             if (!res.isOk()) {
@@ -76,7 +76,7 @@ ImportExport::ErrorCode KraConverter::buildImage(QIODevice *io)
 
         } else {
             errUI << "ERROR: No maindoc.xml" << endl;
-            return ImportExport::ErrorCodeID::FileFormatIncorrect;
+            return ImportExportCodes::FileFormatIncorrect;
         }
 
         if (m_store->hasFile("documentinfo.xml")) {
@@ -88,7 +88,7 @@ ImportExport::ErrorCode KraConverter::buildImage(QIODevice *io)
         success = completeLoading(m_store);
     }
 
-    return success ? ImportExport::ErrorCodeID::OK : ImportExport::ErrorCodeID::Failure;
+    return success ? ImportExportCodes::OK : ImportExportCodes::Failure;
 }
 
 KisImageSP KraConverter::image()
@@ -106,19 +106,19 @@ QList<KisPaintingAssistantSP> KraConverter::assistants()
     return m_assistants;
 }
 
-ImportExport::ErrorCode KraConverter::buildFile(QIODevice *io, const QString &filename)
+KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &filename)
 {
     m_store = KoStore::createStore(io, KoStore::Write, m_doc->nativeFormatMimeType(), KoStore::Zip);
 
     if (m_store->bad()) {
         m_doc->setErrorMessage(i18n("Could not create the file for saving"));
-        return ImportExport::ErrorCodeID::CannotCreateFile;
+        return ImportExportCodes::CannotCreateFile;
     }
 
 
     m_kraSaver = new KisKraSaver(m_doc, filename);
 
-    ImportExport::ErrorCode resultCode = saveRootDocuments(m_store);
+    KisImportExportErrorCode resultCode = saveRootDocuments(m_store);
 
     if (!resultCode.isOk()) {
         return resultCode;
@@ -140,28 +140,28 @@ ImportExport::ErrorCode KraConverter::buildFile(QIODevice *io, const QString &fi
     }
 
     if (!m_store->finalize()) {
-        return ImportExport::ErrorCodeID::Failure;
+        return ImportExportCodes::Failure;
     }
 
     if (!m_kraSaver->errorMessages().isEmpty()) {
         m_doc->setErrorMessage(m_kraSaver->errorMessages().join(".\n"));
-        return ImportExport::ErrorCodeID::Failure;
+        return ImportExportCodes::Failure;
     }
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
-ImportExport::ErrorCode KraConverter::saveRootDocuments(KoStore *store)
+KisImportExportErrorCode KraConverter::saveRootDocuments(KoStore *store)
 {
     dbgFile << "Saving root";
     if (store->open("root")) {
         KoStoreDevice dev(store);
         if (!saveToStream(&dev) || !store->close()) {
             dbgUI << "saveToStream failed";
-            return ImportExport::ErrorCodeID::NoAccessToWrite;
+            return ImportExportCodes::NoAccessToWrite;
         }
     } else {
         m_doc->setErrorMessage(i18n("Not able to write '%1'. Partition full?", QString("maindoc.xml")));
-        return ImportExport::ErrorCodeID::ErrorWhileWriting;
+        return ImportExportCodes::ErrorWhileWriting;
     }
 
     if (store->open("documentinfo.xml")) {
@@ -172,26 +172,26 @@ ImportExport::ErrorCode KraConverter::saveRootDocuments(KoStore *store)
         QByteArray s = doc.toByteArray(); // this is already Utf8!
         bool success = dev.write(s.data(), s.size());
         if (!success) {
-            return ImportExport::ErrorCodeID::ErrorWhileWriting;
+            return ImportExportCodes::ErrorWhileWriting;
         }
         store->close();
     } else {
-        return ImportExport::ErrorCodeID::Failure;
+        return ImportExportCodes::Failure;
     }
 
     if (store->open("preview.png")) {
         // ### TODO: missing error checking (The partition could be full!)
-        ImportExport::ErrorCode result = savePreview(store);
+        KisImportExportErrorCode result = savePreview(store);
         (void)store->close();
         if (!result.isOk()) {
             return result;
         }
     } else {
-        return ImportExport::ErrorCodeID::Failure;
+        return ImportExportCodes::Failure;
     }
 
     dbgUI << "Saving done of url:" << m_doc->url().toLocalFile();
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
 bool KraConverter::saveToStream(QIODevice *dev)
@@ -224,7 +224,7 @@ QDomDocument KraConverter::createDomDocument()
     return doc;
 }
 
-ImportExport::ErrorCode KraConverter::savePreview(KoStore *store)
+KisImportExportErrorCode KraConverter::savePreview(KoStore *store)
 {
     QPixmap pix = m_doc->generatePreview(QSize(256, 256));
     QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
@@ -237,21 +237,21 @@ ImportExport::ErrorCode KraConverter::savePreview(KoStore *store)
 
     KoStoreDevice io(store);
     if (!io.open(QIODevice::WriteOnly)) {
-        return ImportExport::ErrorCodeID::NoAccessToWrite;
+        return ImportExportCodes::NoAccessToWrite;
     }
     bool ret = preview.save(&io, "PNG");
     io.close();
-    return ret ? ImportExport::OK : ImportExport::ErrorWhileWriting;
+    return ret ? ImportExportCodes::OK : ImportExportCodes::ErrorWhileWriting;
 }
 
 
-ImportExport::ErrorCode KraConverter::oldLoadAndParse(KoStore *store, const QString &filename, KoXmlDocument &xmldoc)
+KisImportExportErrorCode KraConverter::oldLoadAndParse(KoStore *store, const QString &filename, KoXmlDocument &xmldoc)
 {
     //dbgUI <<"Trying to open" << filename;
 
     if (!store->open(filename)) {
         warnUI << "Entry " << filename << " not found!";
-        return ImportExport::ErrorCodeID::FileNotExist;
+        return ImportExportCodes::FileNotExist;
     }
     // Error variables for QDomDocument::setContent
     QString errorMsg;
@@ -262,13 +262,13 @@ ImportExport::ErrorCode KraConverter::oldLoadAndParse(KoStore *store, const QStr
         errUI << "Parsing error in " << filename << "! Aborting!" << endl
               << " In line: " << errorLine << ", column: " << errorColumn << endl
               << " Error message: " << errorMsg << endl;
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        return ImportExportCodes::FileFormatIncorrect;
     }
     dbgUI << "File" << filename << " loaded and parsed";
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
-ImportExport::ErrorCode KraConverter::loadXML(const KoXmlDocument &doc, KoStore *store)
+KisImportExportErrorCode KraConverter::loadXML(const KoXmlDocument &doc, KoStore *store)
 {
     Q_UNUSED(store);
 
@@ -277,18 +277,18 @@ ImportExport::ErrorCode KraConverter::loadXML(const KoXmlDocument &doc, KoStore 
 
     if (doc.doctype().name() != "DOC") {
        errUI << "The format is not supported or the file is corrupted";
-       return ImportExport::ErrorCodeID::FileFormatIncorrect;
+       return ImportExportCodes::FileFormatIncorrect;
     }
     root = doc.documentElement();
     int syntaxVersion = root.attribute("syntaxVersion", "3").toInt();
     if (syntaxVersion > 2) {
         errUI << "The file is too new for this version of Krita: " + syntaxVersion;
-        return ImportExport::ErrorCodeID::FormatFeaturesUnsupported;
+        return ImportExportCodes::FormatFeaturesUnsupported;
     }
 
     if (!root.hasChildNodes()) {
         errUI << "The file has no layers.";
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     m_kraLoader = new KisKraLoader(m_doc, syntaxVersion);
@@ -308,23 +308,23 @@ ImportExport::ErrorCode KraConverter::loadXML(const KoXmlDocument &doc, KoStore 
                     else {
                         errUI << m_kraLoader->errorMessages().join("\n");
                     }
-                    return ImportExport::ErrorCodeID::Failure;
+                    return ImportExportCodes::Failure;
                 }
 
                 // HACK ALERT!
                 m_doc->hackPreliminarySetImage(m_image);
 
-                return ImportExport::ErrorCodeID::OK;
+                return ImportExportCodes::OK;
             }
             else {
                 if (m_kraLoader->errorMessages().isEmpty()) {
                     m_doc->setErrorMessage(i18n("The file does not contain an image."));
                 }
-                return ImportExport::ErrorCodeID::FileFormatIncorrect;
+                return ImportExportCodes::FileFormatIncorrect;
             }
         }
     }
-    return ImportExport::ErrorCodeID::Failure;
+    return ImportExportCodes::Failure;
 }
 
 bool KraConverter::completeLoading(KoStore* store)

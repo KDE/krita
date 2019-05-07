@@ -60,9 +60,9 @@ public:
      * @param configuration the configuration
      * @return whether it is successful or had another failure.
      */
-    ImportExport::ErrorCode encode(const QString &savedFilesMask, const KisAnimationRenderingOptions &options);
+    KisImportExportErrorCode encode(const QString &savedFilesMask, const KisAnimationRenderingOptions &options);
 
-    static ImportExport::ErrorCode convert(KisDocument *document, const QString &savedFilesMask, const KisAnimationRenderingOptions &options, bool batchMode);
+    static KisImportExportErrorCode convert(KisDocument *document, const QString &savedFilesMask, const KisAnimationRenderingOptions &options, bool batchMode);
 
 private:
     KisImageSP m_image;

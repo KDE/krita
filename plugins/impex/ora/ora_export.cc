@@ -71,13 +71,13 @@ bool hasShapeLayerChild(KisNodeSP node)
     return false;
 }
 
-ImportExport::ErrorCode OraExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode OraExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KisImageSP image = document->savingImage();
     Q_CHECK_PTR(image);
     OraConverter oraConverter(document);
 
-    ImportExport::ErrorCode res = oraConverter.buildFile(io, image, {document->preActivatedNode()});
+    KisImportExportErrorCode res = oraConverter.buildFile(io, image, {document->preActivatedNode()});
     return res;
 }
 

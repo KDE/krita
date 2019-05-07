@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2019 Agata Cacko <cacko.azh@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,34 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KIS_IMPORT_EXPORT_ADDITIONAL_CHECKS_H
+#define KIS_IMPORT_EXPORT_ADDITIONAL_CHECKS_H
 
-#include "exr_import.h"
+#include <QString>
+#include <KisImportExportErrorCode.h>
 
-#include <kpluginfactory.h>
-#include <QFileInfo>
-
-#include <KisImportExportManager.h>
-
-#include <KisDocument.h>
-#include <kis_image.h>
-
-#include "exr_converter.h"
-
-K_PLUGIN_FACTORY_WITH_JSON(ImportFactory, "krita_exr_import.json", registerPlugin<exrImport>();)
-
-exrImport::exrImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
+class KRITAUI_EXPORT KisImportExportAdditionalChecks
 {
-}
 
-exrImport::~exrImport()
-{
-}
+public:
 
-KisImportExportErrorCode exrImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
-{
-    EXRConverter ib(document, !batchMode());
-    return ib.buildImage(filename());
-}
+    bool isFileWriteable(QString filepath) const;
+    bool isFileReadable(QString filepath) const;
+    bool doesFileExist(QString filepath) const;
 
-#include <exr_import.moc>
+    KisImportExportErrorCode checkWriteErrors(QString filepath) const;
+    KisImportExportErrorCode checkReadErrors(QString filepath) const;
 
+
+};
+
+
+
+
+#endif // #ifndef KIS_IMPORT_EXPORT_ADDITIONAL_CHECKS_H

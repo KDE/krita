@@ -53,7 +53,7 @@ KisTIFFExport::~KisTIFFExport()
 {
 }
 
-ImportExport::ErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
     // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
@@ -99,7 +99,7 @@ ImportExport::ErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice 
     }
 
     KisTIFFConverter tiffConverter(document);
-    ImportExport::ErrorCode res = tiffConverter.buildFile(filename(), image, options);
+    KisImportExportErrorCode res = tiffConverter.buildFile(filename(), image, options);
     return res;
 }
 

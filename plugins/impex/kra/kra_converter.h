@@ -42,8 +42,8 @@ public:
     KraConverter(KisDocument *doc);
     ~KraConverter() override;
 
-    ImportExport::ErrorCode buildImage(QIODevice *io);
-    ImportExport::ErrorCode buildFile(QIODevice *io, const QString &filename);
+    KisImportExportErrorCode buildImage(QIODevice *io);
+    KisImportExportErrorCode buildFile(QIODevice *io, const QString &filename);
     /**
      * Retrieve the constructed image
      */
@@ -57,12 +57,12 @@ public Q_SLOTS:
 
 private:
 
-    ImportExport::ErrorCode saveRootDocuments(KoStore *store);
+    KisImportExportErrorCode saveRootDocuments(KoStore *store);
     bool saveToStream(QIODevice *dev);
     QDomDocument createDomDocument();
-    ImportExport::ErrorCode savePreview(KoStore *store);
-    ImportExport::ErrorCode oldLoadAndParse(KoStore *store, const QString &filename, KoXmlDocument &xmldoc);
-    ImportExport::ErrorCode loadXML(const KoXmlDocument &doc, KoStore *store);
+    KisImportExportErrorCode savePreview(KoStore *store);
+    KisImportExportErrorCode oldLoadAndParse(KoStore *store, const QString &filename, KoXmlDocument &xmldoc);
+    KisImportExportErrorCode loadXML(const KoXmlDocument &doc, KoStore *store);
     bool completeLoading(KoStore *store);
 
     KisDocument *m_doc {0};

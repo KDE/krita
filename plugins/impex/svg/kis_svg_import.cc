@@ -42,7 +42,7 @@ KisSVGImport::~KisSVGImport()
 {
 }
 
-ImportExport::ErrorCode KisSVGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisSVGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(configuration);
 
@@ -64,7 +64,7 @@ ImportExport::ErrorCode KisSVGImport::convert(KisDocument *document, QIODevice *
                                              0, 100000, 1, &okay);
 
         if (!okay) {
-            return ImportExport::ErrorCodeID::Cancelled;
+            return ImportExportCodes::Cancelled;
         }
 
         cfg.setPreferredVectorImportResolutionPPI(resolutionPPI);
@@ -97,7 +97,7 @@ ImportExport::ErrorCode KisSVGImport::convert(KisDocument *document, QIODevice *
     }
 
     image->addNode(shapeLayer);
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
 #include <kis_svg_import.moc>

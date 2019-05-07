@@ -40,7 +40,7 @@ KisTIFFImport::~KisTIFFImport()
 {
 }
 
-ImportExport::ErrorCode KisTIFFImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisTIFFImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KisTIFFConverter tiffConverter(document);
     return tiffConverter.buildImage(filename());

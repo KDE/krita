@@ -31,7 +31,7 @@ extern "C" {
 
 #include "kis_types.h"
 #include "kis_annotation.h"
-#include <KisImportExportErrorCodes.h>
+#include <KisImportExportErrorCode.h>
 class KisDocument;
 
 namespace KisMetaData
@@ -69,15 +69,15 @@ public:
     KisJPEGConverter(KisDocument *doc, bool batchMode = false);
     ~KisJPEGConverter() override;
 public:
-    ImportExport::ErrorCode buildImage(QIODevice *io);
-    ImportExport::ErrorCode buildFile(QIODevice *io, KisPaintLayerSP layer, KisJPEGOptions options, KisMetaData::Store* metaData);
+    KisImportExportErrorCode buildImage(QIODevice *io);
+    KisImportExportErrorCode buildFile(QIODevice *io, KisPaintLayerSP layer, KisJPEGOptions options, KisMetaData::Store* metaData);
     /** Retrieve the constructed image
     */
     KisImageSP image();
 public Q_SLOTS:
     virtual void cancel();
 private:
-    ImportExport::ErrorCode decode(QIODevice *io);
+    KisImportExportErrorCode decode(QIODevice *io);
 private:
     struct Private;
     QScopedPointer<Private> m_d;

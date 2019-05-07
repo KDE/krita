@@ -59,7 +59,7 @@ T runActionImpl(std::function<T()> func)
     return watcher.result();
 }
 
-ImportExport::ErrorCode KisAsyncActionFeedback::runAction(std::function<ImportExport::ErrorCode()> func)
+KisImportExportErrorCode KisAsyncActionFeedback::runAction(std::function<KisImportExportErrorCode()> func)
 {
     return runActionImpl(func);
 }

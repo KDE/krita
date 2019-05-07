@@ -1201,6 +1201,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                         setReadWrite(true);
                     } else {
                         dbgUI << "Failed Save As!";
+
                     }
                 }
                 else { // Export
@@ -1814,7 +1815,7 @@ void KisMainWindow::importAnimation()
         KoUpdaterPtr updater =
                 !document->fileBatchMode() ? viewManager()->createUnthreadedUpdater(i18n("Import frames")) : 0;
         KisAnimationImporter importer(document->image(), updater);
-        ImportExport::ErrorCode status = importer.import(files, firstFrame, step);
+        KisImportExportErrorCode status = importer.import(files, firstFrame, step);
 
         if (!status.isOk() && !status.isInternalError()) {
             QString msg = status.errorMessage();

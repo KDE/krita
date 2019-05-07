@@ -23,7 +23,7 @@
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KisImportExportErrorCodes.h>
+#include <KisImportExportErrorCode.h>
 #include <KoColorSpaceTraits.h>
 
 #include "kis_debug.h"
@@ -68,7 +68,7 @@ inline quint16 correctIndian(quint16 v)
 #endif
 }
 
-ImportExport::ErrorCode KisRawImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisRawImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
 {
     // Show dialog
     m_dialog->setCursor(Qt::ArrowCursor);
@@ -93,22 +93,22 @@ ImportExport::ErrorCode KisRawImport::convert(KisDocument *document, QIODevice *
         int width, height, rgbmax;
         KDcraw dcraw;
         if (!dcraw.decodeRAWImage(filename(), settings, imageData, width, height, rgbmax))
-            return ImportExport::ErrorCodeID::FileFormatIncorrect;
+            return ImportExportCodes::FileFormatIncorrect;
 
         QApplication::restoreOverrideCursor();
 
         // Init the image
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb16();
         KisImageSP image = new KisImage(document->createUndoStore(), width, height, cs, filename());
-        KIS_ASSERT_RECOVER_RETURN_VALUE(!image.isNull(), ImportExport::ErrorCodeID::InternalError);
+        KIS_ASSERT_RECOVER_RETURN_VALUE(!image.isNull(), ImportExportCodes::InternalError);
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), quint8_MAX);
 
         image->addNode(layer, image->rootLayer());
-        KIS_ASSERT_RECOVER_RETURN_VALUE(!layer.isNull(), ImportExport::ErrorCodeID::InternalError);
+        KIS_ASSERT_RECOVER_RETURN_VALUE(!layer.isNull(), ImportExportCodes::InternalError);
 
         KisPaintDeviceSP device = layer->paintDevice();
-        KIS_ASSERT_RECOVER_RETURN_VALUE(!device.isNull(), ImportExport::ErrorCodeID::InternalError);
+        KIS_ASSERT_RECOVER_RETURN_VALUE(!device.isNull(), ImportExportCodes::InternalError);
 
         // Copy the data
         KisHLineIteratorSP it = device->createHLineIteratorNG(0, 0, width);
@@ -132,11 +132,11 @@ ImportExport::ErrorCode KisRawImport::convert(KisDocument *document, QIODevice *
 
         QApplication::restoreOverrideCursor();
         document->setCurrentImage(image);
-        return ImportExport::ErrorCodeID::OK;
+        return ImportExportCodes::OK;
     }
 
     QApplication::restoreOverrideCursor();
-    return ImportExport::ErrorCodeID::Cancelled;
+    return ImportExportCodes::Cancelled;
 }
 
 void KisRawImport::slotUpdatePreview()

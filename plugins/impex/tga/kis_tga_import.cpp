@@ -247,7 +247,7 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
 
 
 
-ImportExport::ErrorCode KisTGAImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisTGAImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(configuration);
     QDataStream s(io);
@@ -260,19 +260,19 @@ ImportExport::ErrorCode KisTGAImport::convert(KisDocument *document, QIODevice *
 
     // Check image file format.
     if (s.atEnd()) {
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     // Check supported file types.
     if (!isSupported(tga)) {
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     QImage img;
     bool result = loadTGA(s, tga, img);
 
     if (result == false) {
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -283,7 +283,7 @@ ImportExport::ErrorCode KisTGAImport::convert(KisDocument *document, QIODevice *
     image->addNode(layer.data(), image->rootLayer().data());
 
     document->setCurrentImage(image);
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 
 }
 

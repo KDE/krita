@@ -34,7 +34,7 @@
 #include "kis_group_layer.h"
 #include "kis_psd_layer_style.h"
 #include "kis_paint_device_debug_utils.h"
-#include <KisImportExportErrorCodes.h>
+#include <KisImportExportErrorCode.h>
 
 
 void KisPSDTest::testFiles()
@@ -51,7 +51,7 @@ void KisPSDTest::testOpening()
     KisImportExportManager manager(doc.data());
     doc->setFileBatchMode(true);
 
-    ImportExport::ErrorCode status = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString());
+    KisImportExportErrorCode status = manager.importDocument(sourceFileInfo.absoluteFilePath(), QString());
     QVERIFY(status.isOk());
 
     Q_ASSERT(doc->image());
@@ -64,7 +64,7 @@ QSharedPointer<KisDocument> openPsdDocument(const QFileInfo &fileInfo)
     KisImportExportManager manager(doc.data());
     doc->setFileBatchMode(true);
 
-    ImportExport::ErrorCode status = manager.importDocument(fileInfo.absoluteFilePath(), QString());
+    KisImportExportErrorCode status = manager.importDocument(fileInfo.absoluteFilePath(), QString());
     Q_UNUSED(status);
 
     return doc;

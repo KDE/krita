@@ -31,7 +31,7 @@ public:
     KisQImageIOExport(QObject *parent, const QVariantList &);
     ~KisQImageIOExport() override;
 public:
-    ImportExport::ErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
     void initializeCapabilities() override;
 };
 

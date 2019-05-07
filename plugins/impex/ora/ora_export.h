@@ -29,7 +29,7 @@ public:
     OraExport(QObject *parent, const QVariantList &);
     ~OraExport() override;
 public:
-    ImportExport::ErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
     void initializeCapabilities() override;
 };
 

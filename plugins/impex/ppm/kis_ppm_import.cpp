@@ -155,12 +155,12 @@ private:
 
 
 
-ImportExport::ErrorCode KisPPMImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisPPMImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     QByteArray array = io->read(2);
 
     if (array.size() < 2) {
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     // Read the type of the ppm file
@@ -195,7 +195,7 @@ ImportExport::ErrorCode KisPPMImport::convert(KisDocument *document, QIODevice *
     Q_ASSERT(channels != -1);
     char c; io->getChar(&c);
     if (!isspace(c)) {
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;; // Invalid file, it should have a separator now
+        return ImportExportCodes::FileFormatIncorrect;; // Invalid file, it should have a separator now
     }
 
     while (io->peek(1) == "#") {
@@ -244,7 +244,7 @@ ImportExport::ErrorCode KisPPMImport::convert(KisDocument *document, QIODevice *
         }
     } else {
         dbgFile << "Unknown colorspace";
-        return ImportExport::ErrorCodeID::FormatColorSpaceUnsupported;
+        return ImportExportCodes::FormatColorSpaceUnsupported;
     }
 
     if (colorSpaceId == RGBAColorModelID.id()) {
@@ -269,7 +269,7 @@ ImportExport::ErrorCode KisPPMImport::convert(KisDocument *document, QIODevice *
         KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, v, width);
         ppmFlow->nextRow();
         if (!ppmFlow->valid()) {
-            return ImportExport::ErrorCodeID::FileFormatIncorrect;
+            return ImportExportCodes::FileFormatIncorrect;
         }
         if (maxval <= 255) {
             if (channels == 3) {
@@ -314,7 +314,7 @@ ImportExport::ErrorCode KisPPMImport::convert(KisDocument *document, QIODevice *
     image->addNode(layer.data(), image->rootLayer().data());
 
     document->setCurrentImage(image);
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
 #include "kis_ppm_import.moc"

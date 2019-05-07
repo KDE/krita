@@ -68,7 +68,7 @@ KisImageSP CSVSaver::image()
     return m_image;
 }
 
-ImportExport::ErrorCode CSVSaver::encode(QIODevice *io)
+KisImportExportErrorCode CSVSaver::encode(QIODevice *io)
 {
     int idx;
     int start, end;
@@ -168,7 +168,7 @@ ImportExport::ErrorCode CSVSaver::encode(QIODevice *io)
     QScopedPointer<KisDocument> exportDoc(KisPart::instance()->createDocument());
     createTempImage(exportDoc.data());
 
-    ImportExport::ErrorCode retval= ImportExport::ErrorCodeID::OK;
+    KisImportExportErrorCode retval= ImportExportCodes::OK;
 
     if (!m_batchMode) {
         // TODO: use other systems of progress reporting (KisViewManager::createUnthreadedUpdater()
@@ -183,7 +183,7 @@ ImportExport::ErrorCode CSVSaver::encode(QIODevice *io)
         qApp->processEvents();
 
         if (m_stop) {
-            retval = ImportExport::ErrorCodeID::Cancelled;
+            retval = ImportExportCodes::Cancelled;
             break;
         }
 
@@ -191,49 +191,49 @@ ImportExport::ErrorCode CSVSaver::encode(QIODevice *io)
 
         case 0 :    //first row
             if (io->write("UTF-8, TVPaint, \"CSV 1.0\"\r\n") < 0) {
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
             }
             break;
 
         case 1 :    //scene header names
             if (io->write("Project Name, Width, Height, Frame Count, Layer Count, Frame Rate, Pixel Aspect Ratio, Field Mode\r\n") < 0) {
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
             }
             break;
 
         case 2 :    //scene header values
             ba = QString("\"%1\", ").arg(m_image->objectName()).toUtf8();
             if (io->write(ba.data()) < 0) {
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
                 break;
             }
             ba = QString("%1, %2, ").arg(m_image->width()).arg(m_image->height()).toUtf8();
             if (io->write(ba.data()) < 0) {
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
                 break;
             }
 
             ba = QString("%1, %2, ").arg(end - start + 1).arg(layers.size()).toUtf8();
             if (io->write(ba.data()) < 0) {
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
                 break;
             }
             //the framerate is an integer here
             ba = QString("%1, ").arg((double)(animation->framerate()),0,'f',6).toUtf8();
             if (io->write(ba.data()) < 0) {
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
                 break;
             }
             ba = QString("%1, Progressive\r\n").arg((double)(m_image->xRes() / m_image->yRes()),0,'f',6).toUtf8();
             if (io->write(ba.data()) < 0) {
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
                 break;
             }
             break;
 
         case 3 :    //layer header values
             if (io->write("#Layers") < 0) {          //Layers
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
                 break;
             }
 
@@ -246,7 +246,7 @@ ImportExport::ErrorCode CSVSaver::encode(QIODevice *io)
 
         case 4 :
             if (io->write("\r\n#Density") < 0) {     //Density
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
                 break;
             }
             for (idx = 0; idx < layers.size(); idx++) {
@@ -258,7 +258,7 @@ ImportExport::ErrorCode CSVSaver::encode(QIODevice *io)
 
         case 5 :
             if (io->write("\r\n#Blending") < 0) {     //Blending
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
                 break;
             }
             for (idx = 0; idx < layers.size(); idx++) {
@@ -270,7 +270,7 @@ ImportExport::ErrorCode CSVSaver::encode(QIODevice *io)
 
         case 6 :
             if (io->write("\r\n#Visible") < 0) {     //Visible
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
                 break;
             }
             for (idx = 0; idx < layers.size(); idx++) {
@@ -279,7 +279,7 @@ ImportExport::ErrorCode CSVSaver::encode(QIODevice *io)
                     break;
             }
             if (idx < layers.size()) {
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
             }
             break;
 
@@ -287,7 +287,7 @@ ImportExport::ErrorCode CSVSaver::encode(QIODevice *io)
 
             if (frame > end) {
                 if (io->write("\r\n") < 0)
-                    retval = ImportExport::ErrorCodeID::Failure;
+                    retval = ImportExportCodes::Failure;
 
                 step = 8;
                 break;
@@ -295,7 +295,7 @@ ImportExport::ErrorCode CSVSaver::encode(QIODevice *io)
 
             ba = QString("\r\n#%1").arg(frame, 5, 10, QChar('0')).toUtf8();
             if (io->write(ba.data()) < 0) {
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
                 break;
             }
 
@@ -330,7 +330,7 @@ ImportExport::ErrorCode CSVSaver::encode(QIODevice *io)
                     break;
             }
             if (idx < layers.size())
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
 
             frame++;
             step = 6; //keep step here
@@ -386,7 +386,7 @@ QString CSVSaver::convertToBlending(const QString &opid)
     return "Color";
 }
 
-ImportExport::ErrorCode CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* exportDoc, KisKeyframeSP keyframe, const QString &path, int frame, int idx)
+KisImportExportErrorCode CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* exportDoc, KisKeyframeSP keyframe, const QString &path, int frame, int idx)
 {
     //render to the temp layer
     KisImageSP image = exportDoc->savingImage();
@@ -404,7 +404,7 @@ ImportExport::ErrorCode CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* e
 
     if (bounds.isEmpty()) {
         layer->last = "";                   //empty frame
-        return ImportExport::ErrorCodeID::OK;
+        return ImportExportCodes::OK;
     }
     layer->last = QString("frame%1-%2.png").arg(idx + 1,5,10,QChar('0')).arg(frame,5,10,QChar('0'));
 
@@ -439,7 +439,7 @@ ImportExport::ErrorCode CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* e
 
     KisPNGConverter kpc(exportDoc);
 
-    ImportExport::ErrorCode result = kpc.buildFile(filename, image->bounds(),
+    KisImportExportErrorCode result = kpc.buildFile(filename, image->bounds(),
                                                   image->xRes(), image->yRes(), device,
                                                   image->beginAnnotations(), image->endAnnotations(),
                                                   options, (KisMetaData::Store* )0 );
@@ -464,9 +464,9 @@ void CSVSaver::createTempImage(KisDocument* exportDoc)
 }
 
 
-ImportExport::ErrorCode CSVSaver::buildAnimation(QIODevice *io)
+KisImportExportErrorCode CSVSaver::buildAnimation(QIODevice *io)
 {
-    KIS_ASSERT_RECOVER_RETURN_VALUE(m_image, ImportExport::ErrorCodeID::InternalError);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(m_image, ImportExportCodes::InternalError);
     return encode(io);
 }
 

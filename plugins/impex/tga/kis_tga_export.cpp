@@ -45,7 +45,7 @@ KisTGAExport::~KisTGAExport()
 {
 }
 
-ImportExport::ErrorCode KisTGAExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisTGAExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(configuration);
     QRect rc = document->savingImage()->bounds();
@@ -76,7 +76,7 @@ ImportExport::ErrorCode KisTGAExport::convert(KisDocument *document, QIODevice *
         }
     }
 
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
 void KisTGAExport::initializeCapabilities()

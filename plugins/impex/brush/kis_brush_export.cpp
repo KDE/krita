@@ -60,7 +60,7 @@ KisBrushExport::~KisBrushExport()
 {
 }
 
-ImportExport::ErrorCode KisBrushExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
 
 // XXX: Loading the parasite itself was commented out -- needs investigation
@@ -98,7 +98,7 @@ ImportExport::ErrorCode KisBrushExport::convert(KisDocument *document, QIODevice
         brush = new KisImagePipeBrush(filename());
     }
     else {
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     qApp->processEvents(); // For vector layers to be updated
@@ -160,10 +160,10 @@ ImportExport::ErrorCode KisBrushExport::convert(KisDocument *document, QIODevice
     brush->setHeight(rc.height());
 
     if (brush->saveToDevice(io)) {
-        return ImportExport::ErrorCodeID::OK;
+        return ImportExportCodes::OK;
     }
     else {
-        return ImportExport::ErrorCodeID::Failure;
+        return ImportExportCodes::Failure;
     }
 }
 

@@ -63,7 +63,7 @@ PSDLoader::~PSDLoader()
 {
 }
 
-ImportExport::ErrorCode PSDLoader::decode(QIODevice *io)
+KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
 {
     // open the file
 
@@ -72,7 +72,7 @@ ImportExport::ErrorCode PSDLoader::decode(QIODevice *io)
     PSDHeader header;
     if (!header.read(io)) {
         dbgFile << "failed reading header: " << header.error;
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     dbgFile << header;
@@ -81,7 +81,7 @@ ImportExport::ErrorCode PSDLoader::decode(QIODevice *io)
     PSDColorModeBlock colorModeBlock(header.colormode);
     if (!colorModeBlock.read(io)) {
         dbgFile << "failed reading colormode block: " << colorModeBlock.error;
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     dbgFile << "Read color mode block. pos:" << io->pos();
@@ -89,14 +89,14 @@ ImportExport::ErrorCode PSDLoader::decode(QIODevice *io)
     PSDImageResourceSection resourceSection;
     if (!resourceSection.read(io)) {
         dbgFile << "failed image reading resource section: " << resourceSection.error;
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        return ImportExportCodes::FileFormatIncorrect;
     }
     dbgFile << "Read image resource section. pos:" << io->pos();
 
     PSDLayerMaskSection layerSection(header);
     if (!layerSection.read(io)) {
         dbgFile << "failed reading layer/mask section: " << layerSection.error;
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        return ImportExportCodes::FileFormatIncorrect;
     }
     dbgFile << "Read layer/mask section. " << layerSection.nLayers << "layers. pos:" << io->pos();
 
@@ -108,7 +108,7 @@ ImportExport::ErrorCode PSDLoader::decode(QIODevice *io)
                                                                          header.channelDepth);
     if (colorSpaceId.first.isNull()) {
         dbgFile << "Unsupported colorspace" << header.colormode << header.channelDepth;
-        return ImportExport::ErrorCodeID::FormatColorSpaceUnsupported;
+        return ImportExportCodes::FormatColorSpaceUnsupported;
     }
 
     // Get the icc profile from the image resource section
@@ -127,7 +127,7 @@ ImportExport::ErrorCode PSDLoader::decode(QIODevice *io)
     // Create the colorspace
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile);
     if (!cs) {
-        return ImportExport::ErrorCodeID::FormatColorSpaceUnsupported;
+        return ImportExportCodes::FormatColorSpaceUnsupported;
     }
 
     // Creating the KisImage
@@ -179,7 +179,7 @@ ImportExport::ErrorCode PSDLoader::decode(QIODevice *io)
 
         // Only one layer, the background layer, so we're done.
         m_image->unlock();
-        return ImportExport::ErrorCodeID::OK;
+        return ImportExportCodes::OK;
     }
 
     // More than one layer, so now construct the Krita image from the info we read.
@@ -282,7 +282,7 @@ ImportExport::ErrorCode PSDLoader::decode(QIODevice *io)
 
             if (!layerRecord->readPixelData(io, layer->paintDevice())) {
                 dbgFile << "failed reading channels for layer: " << layerRecord->layerName << layerRecord->error;
-                return ImportExport::ErrorCodeID::FileFormatIncorrect;
+                return ImportExportCodes::FileFormatIncorrect;
             }
             if (!groupStack.isEmpty()) {
                 m_image->addNode(layer, groupStack.top());
@@ -358,10 +358,10 @@ ImportExport::ErrorCode PSDLoader::decode(QIODevice *io)
 
 
     m_image->unlock();
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
-ImportExport::ErrorCode PSDLoader::buildImage(QIODevice *io)
+KisImportExportErrorCode PSDLoader::buildImage(QIODevice *io)
 {
     return decode(io);
 }

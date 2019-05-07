@@ -31,7 +31,7 @@ public:
     HeifImport(QObject *parent, const QVariantList &);
     ~HeifImport() override;
     bool supportsIO() const override { return true; }
-    ImportExport::ErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

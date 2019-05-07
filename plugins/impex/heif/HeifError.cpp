@@ -20,43 +20,43 @@
 #include "HeifError.h"
 
 
-ImportExport::ErrorCode setHeifError(KisDocument* document,
+KisImportExportErrorCode setHeifError(KisDocument* document,
                                                      heif::Error error)
 {
   switch (error.get_code()) {
   case heif_error_Ok:
-        return ImportExport::ErrorCodeID::OK;
+        return ImportExportCodes::OK;
 
   case heif_error_Input_does_not_exist:
     // this should never happen because we do not read from file names
-    KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExport::ErrorCodeID::InternalError);
-    return ImportExport::ErrorCodeID::InternalError;
+    KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExportCodes::InternalError);
+    return ImportExportCodes::InternalError;
 
   case heif_error_Invalid_input:
   case heif_error_Decoder_plugin_error:
-    return ImportExport::ErrorCodeID::FileFormatIncorrect;
+    return ImportExportCodes::FileFormatIncorrect;
 
   case heif_error_Unsupported_filetype:
   case heif_error_Unsupported_feature:
-    return ImportExport::ErrorCodeID::FormatFeaturesUnsupported;
+    return ImportExportCodes::FormatFeaturesUnsupported;
 
   case heif_error_Usage_error:
   case heif_error_Encoder_plugin_error:
     // this should never happen if we use libheif in the correct way
-      KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExport::ErrorCodeID::InternalError);
-      return ImportExport::ErrorCodeID::InternalError;
+      KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExportCodes::InternalError);
+      return ImportExportCodes::InternalError;
 
   case heif_error_Memory_allocation_error:
     document->setErrorMessage(i18n("Could not allocate memory."));
-    return ImportExport::ErrorCodeID::InsufficientMemory;
+    return ImportExportCodes::InsufficientMemory;
 
   case heif_error_Encoding_error:
     document->setErrorMessage(i18n("Could not encode or write image."));
-    return ImportExport::ErrorCodeID::NoAccessToWrite;
+    return ImportExportCodes::NoAccessToWrite;
 
   default:
     // we only get here when we forgot to handle an error ID
     document->setErrorMessage(i18n("Unknown error."));
-    return ImportExport::ErrorCodeID::Failure;
+    return ImportExportCodes::Failure;
   }
 }

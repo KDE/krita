@@ -41,7 +41,7 @@ QMLExport::~QMLExport()
 {
 }
 
-ImportExport::ErrorCode QMLExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode QMLExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KisImageSP image = document->savingImage();
     Q_CHECK_PTR(image);

@@ -30,7 +30,7 @@ public:
     KisSVGImport(QObject *parent, const QVariantList &);
     ~KisSVGImport() override;
 public:
-    ImportExport::ErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration) override;
+    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration) override;
 };
 
 #endif

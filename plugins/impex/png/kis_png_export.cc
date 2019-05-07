@@ -27,7 +27,7 @@
 
 #include <KoColorSpace.h>
 #include <KisImportExportManager.h>
-#include <KisImportExportErrorCodes.h>
+#include <KisImportExportErrorCode.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceRegistry.h>
@@ -57,7 +57,7 @@ KisPNGExport::~KisPNGExport()
 {
 }
 
-ImportExport::ErrorCode KisPNGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisPNGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     KisImageSP image = document->savingImage();
 
@@ -92,7 +92,7 @@ ImportExport::ErrorCode KisPNGExport::convert(KisDocument *document, QIODevice *
 
     KisPNGConverter pngConverter(document);
 
-    ImportExport::ErrorCode res = pngConverter.buildFile(io, image->bounds(), image->xRes(), image->yRes(), image->projection(), beginIt, endIt, options, eI);
+    KisImportExportErrorCode res = pngConverter.buildFile(io, image->bounds(), image->xRes(), image->yRes(), image->projection(), beginIt, endIt, options, eI);
     delete eI;
     dbgFile << " Result =" << res;
     return res;

@@ -48,11 +48,11 @@ KisCSVExport::~KisCSVExport()
 {
 }
 
-ImportExport::ErrorCode KisCSVExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisCSVExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     CSVSaver kpc(document, batchMode());
 
-    ImportExport::ErrorCode res = kpc.buildAnimation(io);
+    KisImportExportErrorCode res = kpc.buildAnimation(io);
     return res;
 }
 

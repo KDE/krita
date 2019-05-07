@@ -53,7 +53,7 @@
 #include <kis_guides_config.h>
 #include <kis_coordinates_converter.h>
 #include <kis_time_range.h>
-#include <KisImportExportErrorCodes.h>
+#include <KisImportExportErrorCode.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -860,7 +860,7 @@ bool Document::importAnimation(const QList<QString> &files, int firstFrame, int 
     }
 
     KisAnimationImporter importer(d->document->image(), updater);
-    ImportExport::ErrorCode status = importer.import(files, firstFrame, step);
+    KisImportExportErrorCode status = importer.import(files, firstFrame, step);
 
     return status.isOk();
 }

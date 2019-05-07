@@ -31,7 +31,7 @@ public:
     KisTGAImport(QObject *parent, const QVariantList &);
     ~KisTGAImport() override;
 public:
-    ImportExport::ErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

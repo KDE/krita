@@ -66,7 +66,7 @@ KisConfigWidget *EXRExport::createConfigurationWidget(QWidget *parent, const QBy
     return new KisWdgOptionsExr(parent);
 }
 
-ImportExport::ErrorCode EXRExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode EXRExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
     Q_ASSERT(document);
     Q_ASSERT(configuration);
@@ -76,7 +76,7 @@ ImportExport::ErrorCode EXRExport::convert(KisDocument *document, QIODevice */*i
 
     EXRConverter exrConverter(document, !batchMode());
 
-    ImportExport::ErrorCode res;
+    KisImportExportErrorCode res;
 
     if (configuration && configuration->getBool("flatten")) {
         res = exrConverter.buildFile(filename(), image->rootLayer(), true);

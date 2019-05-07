@@ -102,12 +102,12 @@ KisImageSP PSDSaver::image()
     return m_image;
 }
 
-ImportExport::ErrorCode PSDSaver::buildFile(QIODevice *io)
+KisImportExportErrorCode PSDSaver::buildFile(QIODevice *io)
 {
-    KIS_ASSERT_RECOVER_RETURN_VALUE(m_image, ImportExport::ErrorCodeID::InternalError);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(m_image, ImportExportCodes::InternalError);
 
     if (m_image->width() > MAX_PSD_SIZE || m_image->height() > MAX_PSD_SIZE) {
-        return ImportExport::ErrorCodeID::Failure;
+        return ImportExportCodes::Failure;
     }
 
     const bool haveLayers = m_image->rootLayer()->childCount() > 1 ||
@@ -139,7 +139,7 @@ ImportExport::ErrorCode PSDSaver::buildFile(QIODevice *io)
 
     if (!header.write(io)) {
         dbgFile << "Failed to write header. Error:" << header.error << io->pos();
-        return ImportExport::ErrorCodeID::ErrorWhileWriting;
+        return ImportExportCodes::ErrorWhileWriting;
     }
 
     // COLORMODE BlOCK
@@ -154,7 +154,7 @@ ImportExport::ErrorCode PSDSaver::buildFile(QIODevice *io)
     dbgFile << "colormode block" << io->pos();
     if (!colorModeBlock.write(io)) {
         dbgFile << "Failed to write colormode block. Error:" << colorModeBlock.error << io->pos();
-        return ImportExport::ErrorCodeID::ErrorWhileWriting;
+        return ImportExportCodes::ErrorWhileWriting;
     }
 
     // IMAGE RESOURCES SECTION
@@ -209,7 +209,7 @@ ImportExport::ErrorCode PSDSaver::buildFile(QIODevice *io)
     dbgFile << "resource section" << io->pos();
     if (!resourceSection.write(io)) {
         dbgFile << "Failed to write resource section. Error:" << resourceSection.error << io->pos();
-        return ImportExport::ErrorCodeID::ErrorWhileWriting;
+        return ImportExportCodes::ErrorWhileWriting;
     }
 
     // LAYER AND MASK DATA
@@ -223,7 +223,7 @@ ImportExport::ErrorCode PSDSaver::buildFile(QIODevice *io)
 
         if (!layerSection.write(io, m_image->rootLayer())) {
             dbgFile << "failed to write layer section. Error:" << layerSection.error << io->pos();
-            return ImportExport::ErrorCodeID::ErrorWhileWriting;
+            return ImportExportCodes::ErrorWhileWriting;
         }
     }
     else {
@@ -237,10 +237,10 @@ ImportExport::ErrorCode PSDSaver::buildFile(QIODevice *io)
     PSDImageData imagedata(&header);
     if (!imagedata.write(io, m_image->projection(), haveLayers)) {
         dbgFile << "Failed to write image data. Error:"  << imagedata.error;
-        return ImportExport::ErrorCodeID::ErrorWhileWriting;
+        return ImportExportCodes::ErrorWhileWriting;
     }
 
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
 

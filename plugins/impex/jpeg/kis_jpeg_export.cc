@@ -68,7 +68,7 @@ KisJPEGExport::~KisJPEGExport()
 {
 }
 
-ImportExport::ErrorCode KisJPEGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisJPEGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     KisImageSP image = document->savingImage();
     Q_CHECK_PTR(image);
@@ -168,7 +168,7 @@ ImportExport::ErrorCode KisJPEGExport::convert(KisDocument *document, QIODevice 
         }
     }
 
-    ImportExport::ErrorCode res = kpc.buildFile(io, l, options, metaDataStore.data());
+    KisImportExportErrorCode res = kpc.buildFile(io, l, options, metaDataStore.data());
     return res;
 }
 

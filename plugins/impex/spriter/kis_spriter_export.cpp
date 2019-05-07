@@ -64,7 +64,7 @@ KisSpriterExport::~KisSpriterExport()
 {
 }
 
-bool KisSpriterExport::savePaintDevice(KisPaintDeviceSP dev, const QString &fileName)
+KisImportExportErrorCode KisSpriterExport::savePaintDevice(KisPaintDeviceSP dev, const QString &fileName)
 {
     QFileInfo fi(fileName);
 
@@ -84,9 +84,9 @@ bool KisSpriterExport::savePaintDevice(KisPaintDeviceSP dev, const QString &file
     vKisAnnotationSP_it endIt = m_image->endAnnotations();
 
     KisPNGConverter converter(0);
-    ImportExport::ErrorCode res = converter.buildFile(fileName, rc, m_image->xRes(), m_image->yRes(), dev, beginIt, endIt, options, 0);
+    KisImportExportErrorCode res = converter.buildFile(fileName, rc, m_image->xRes(), m_image->yRes(), dev, beginIt, endIt, options, 0);
 
-    return res.isOk();
+    return res;
 }
 
 void KisSpriterExport::parseFolder(KisGroupLayerSP parentGroup, const QString &folderName, const QString &basePath, int *folderId)
@@ -120,6 +120,8 @@ void KisSpriterExport::parseFolder(KisGroupLayerSP parentGroup, const QString &f
 
     int fileId = 0;
     child = parentGroup->lastChild();
+    KisImportExportErrorCode ret;
+
     while (child) {
         if (child->visible() && !child->inherits("KisGroupLayer") && !child->inherits("KisMask")) {
             QRectF rc = m_image->bounds().intersected(child->exactBounds());
@@ -142,9 +144,14 @@ void KisSpriterExport::parseFolder(KisGroupLayerSP parentGroup, const QString &f
             file.y = ymin;
             //qDebug() << "Created file" << file.id << file.name << file.pathName << file.baseName << file.width << file.height << file.layerName;
 
-            bool result = savePaintDevice(child->projection(), basePath + file.name);
-            Q_UNUSED(result);
-            folder.files.append(file);
+            KisImportExportErrorCode result = savePaintDevice(child->projection(), basePath + file.name);
+            if (result.isOk()) {
+                folder.files.append(file);
+            }
+            else {
+                ret = result;
+                break;
+            }
         }
 
         child = child->prevSibling();
@@ -469,14 +476,18 @@ Bone *findBoneByName(Bone *startBone, const QString &name)
     return 0;
 }
 
-ImportExport::ErrorCode KisSpriterExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisSpriterExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     QFileInfo fi(filename());
+
+    if (io->isOpen()) {
+        ENTER_FUNCTION() << "is open!!!";
+    }
 
     m_image = document->savingImage();
 
     if (m_image->rootLayer()->childCount() == 0) {
-        return ImportExport::ErrorCodeID::Failure;
+        return ImportExportCodes::Failure;
     }
 
     KisGroupLayerSP root = m_image->rootLayer();
@@ -487,7 +498,7 @@ ImportExport::ErrorCode KisSpriterExport::convert(KisDocument *document, QIODevi
     m_rootLayer= qobject_cast<KisGroupLayer*>(root->findChildByName("root").data());
     //qDebug() << "Fond rootLayer" << m_rootLayer;
 
-    parseFolder(m_image->rootLayer(), "", fi.absolutePath());
+     parseFolder(m_image->rootLayer(), "", fi.absolutePath());
 
     m_rootBone = 0;
 
@@ -601,7 +612,7 @@ ImportExport::ErrorCode KisSpriterExport::convert(KisDocument *document, QIODevi
 
     delete m_rootBone;
 
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
 void KisSpriterExport::initializeCapabilities()

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2019 Agata Cacko <cacko.azh@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,33 +17,32 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "exr_import.h"
+#include "KisImportExportAdditionalChecks.h"
 
-#include <kpluginfactory.h>
-#include <QFileInfo>
 
-#include <KisImportExportManager.h>
 
-#include <KisDocument.h>
-#include <kis_image.h>
-
-#include "exr_converter.h"
-
-K_PLUGIN_FACTORY_WITH_JSON(ImportFactory, "krita_exr_import.json", registerPlugin<exrImport>();)
-
-exrImport::exrImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
+bool KisImportExportAdditionalChecks::isFileWriteable(QString filepath) const
 {
+    QFile file(filepath);
+    bool ret = file.open(QIODevice::WriteOnly);
+    if (ret) {
+        file.close();
+    }
+    return ret;
 }
 
-exrImport::~exrImport()
+bool KisImportExportAdditionalChecks::isFileReadable(QString filepath) const
 {
+    QFile file(filepath);
+    bool ret = file.open(QIODevice::ReadOnly);
+    if (ret) {
+        file.close();
+    }
+    return ret;
 }
 
-KisImportExportErrorCode exrImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
+bool KisImportExportAdditionalChecks::doesFileExist(QString filepath) const
 {
-    EXRConverter ib(document, !batchMode());
-    return ib.buildImage(filename());
+    return QFile::exists(filepath);
 }
-
-#include <exr_import.moc>
 

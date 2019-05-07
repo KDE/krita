@@ -57,7 +57,7 @@ CSVLoader::~CSVLoader()
 {
 }
 
-ImportExport::ErrorCode CSVLoader::decode(QIODevice *io, const QString &filename)
+KisImportExportErrorCode CSVLoader::decode(QIODevice *io, const QString &filename)
 {
     QString     field;
     int         idx;
@@ -91,7 +91,7 @@ ImportExport::ErrorCode CSVLoader::decode(QIODevice *io, const QString &filename
     //according to the QT docs, the slash is a universal directory separator
     path.append(".frames/");
 
-    ImportExport::ErrorCode retval = ImportExport::ErrorCodeID::OK;
+    KisImportExportErrorCode retval = ImportExportCodes::OK;
 
     dbgFile << "pos:" << io->pos();
 
@@ -131,13 +131,13 @@ ImportExport::ErrorCode CSVLoader::decode(QIODevice *io, const QString &filename
         qApp->processEvents();
 
         if (m_stop) {
-            retval = ImportExport::ErrorCodeID::Cancelled;
+            retval = ImportExportCodes::Cancelled;
             break;
         }
 
         if ((idx = readLine.nextLine(io)) <= 0) {
             if ((idx < 0) ||(step < 5))
-                retval = ImportExport::ErrorCodeID::Failure;
+                retval = ImportExportCodes::Failure;
 
             break;
         }
@@ -206,7 +206,7 @@ ImportExport::ErrorCode CSVLoader::decode(QIODevice *io, const QString &filename
             }
 
             if ((width < 1) || (height < 1)) {
-               retval = ImportExport::ErrorCodeID::Failure;
+               retval = ImportExportCodes::Failure;
                break;
             }
 
@@ -408,7 +408,7 @@ QString CSVLoader::validPath(const QString &path,const QString &base)
     return QString(); //NULL string
 }
 
-ImportExport::ErrorCode CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *importDoc, const QString &path)
+KisImportExportErrorCode CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *importDoc, const QString &path)
 {
     bool result = true;
 
@@ -452,10 +452,10 @@ ImportExport::ErrorCode CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument *
         //blank
         layer->channel->addKeyframe(layer->frame);
     }
-    return (result) ? ImportExport::ErrorCodeID::OK : ImportExport::ErrorCodeID::Failure;
+    return (result) ? ImportExportCodes::OK : ImportExportCodes::Failure;
 }
 
-ImportExport::ErrorCode CSVLoader::createNewImage(int width, int height, float ratio, const QString &name)
+KisImportExportErrorCode CSVLoader::createNewImage(int width, int height, float ratio, const QString &name)
 {
     //the CSV is RGBA 8bits, sRGB
 
@@ -465,15 +465,15 @@ ImportExport::ErrorCode CSVLoader::createNewImage(int width, int height, float r
 
         if (cs) m_image = new KisImage(m_doc->createUndoStore(), width, height, cs, name);
 
-        if (!m_image) return ImportExport::ErrorCodeID::Failure;
+        if (!m_image) return ImportExportCodes::Failure;
 
         m_image->setResolution(ratio, 1.0);
         m_image->lock();
     }
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
-ImportExport::ErrorCode CSVLoader::buildAnimation(QIODevice *io, const QString &filename)
+KisImportExportErrorCode CSVLoader::buildAnimation(QIODevice *io, const QString &filename)
 {
     return decode(io, filename);
 }

@@ -107,9 +107,9 @@ void KisHeightMapExport::initializeCapabilities()
     }
 }
 
-ImportExport::ErrorCode KisHeightMapExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisHeightMapExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    KIS_ASSERT_RECOVER_RETURN_VALUE(mimeType() == "image/x-r16" || mimeType() == "image/x-r8" || mimeType() == "image/x-r32", ImportExport::ErrorCodeID::FileFormatIncorrect);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(mimeType() == "image/x-r16" || mimeType() == "image/x-r8" || mimeType() == "image/x-r32", ImportExportCodes::FileFormatIncorrect);
 
     KisImageSP image = document->savingImage();
     QDataStream::ByteOrder bo = configuration->getInt("endianness", 1) == 0 ? QDataStream::BigEndian : QDataStream::LittleEndian;
@@ -140,9 +140,9 @@ ImportExport::ErrorCode KisHeightMapExport::convert(KisDocument *document, QIODe
         writeData<quint8>(pd, image->bounds(), s);
     }
     else {
-        KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExport::ErrorCodeID::InternalError);
+        KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExportCodes::InternalError);
     }
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
 #include "kis_heightmap_export.moc"

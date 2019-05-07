@@ -82,13 +82,13 @@ struct KisImportExportManager::ConversionResult {
     {
     }
 
-    ConversionResult(const QFuture<ImportExport::ErrorCode> &futureStatus)
+    ConversionResult(const QFuture<KisImportExportErrorCode> &futureStatus)
         : m_isAsync(true),
           m_futureStatus(futureStatus)
     {
     }
 
-    ConversionResult(ImportExport::ErrorCode status)
+    ConversionResult(KisImportExportErrorCode status)
         : m_isAsync(false),
           m_status(status)
     {
@@ -98,7 +98,7 @@ struct KisImportExportManager::ConversionResult {
         return m_isAsync;
     }
 
-    QFuture<ImportExport::ErrorCode> futureStatus() const {
+    QFuture<KisImportExportErrorCode> futureStatus() const {
         // if the result is not async, then it means some failure happened,
         // just return a cancelled future
         KIS_SAFE_ASSERT_RECOVER_NOOP(m_isAsync || !m_status.isOk());
@@ -106,17 +106,17 @@ struct KisImportExportManager::ConversionResult {
         return m_futureStatus;
     }
 
-    ImportExport::ErrorCode status() const {
+    KisImportExportErrorCode status() const {
         return m_status;
     }
 
-    void setStatus(ImportExport::ErrorCode value) {
+    void setStatus(KisImportExportErrorCode value) {
         m_status = value;
     }
 private:
     bool m_isAsync = false;
-    QFuture<ImportExport::ErrorCode> m_futureStatus;
-    ImportExport::ErrorCode m_status = ImportExport::ErrorCodeID::InternalError;
+    QFuture<KisImportExportErrorCode> m_futureStatus;
+    KisImportExportErrorCode m_status = ImportExportCodes::InternalError;
 };
 
 
@@ -131,28 +131,28 @@ KisImportExportManager::~KisImportExportManager()
     delete d;
 }
 
-ImportExport::ErrorCode KisImportExportManager::importDocument(const QString& location, const QString& mimeType)
+KisImportExportErrorCode KisImportExportManager::importDocument(const QString& location, const QString& mimeType)
 {
     ConversionResult result = convert(Import, location, location, mimeType, false, 0, false);
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!result.isAsync(), ImportExport::ErrorCodeID::InternalError);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!result.isAsync(), ImportExportCodes::InternalError);
 
     return result.status();
 }
 
-ImportExport::ErrorCode KisImportExportManager::exportDocument(const QString& location, const QString& realLocation, const QByteArray& mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+KisImportExportErrorCode KisImportExportManager::exportDocument(const QString& location, const QString& realLocation, const QByteArray& mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
     ConversionResult result = convert(Export, location, realLocation, mimeType, showWarnings, exportConfiguration, false);
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!result.isAsync(), ImportExport::ErrorCodeID::InternalError);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!result.isAsync(), ImportExportCodes::InternalError);
 
     return result.status();
 }
 
-QFuture<ImportExport::ErrorCode> KisImportExportManager::exportDocumentAsyc(const QString &location, const QString &realLocation, const QByteArray &mimeType,
-                                                                            ImportExport::ErrorCode &status, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
+QFuture<KisImportExportErrorCode> KisImportExportManager::exportDocumentAsyc(const QString &location, const QString &realLocation, const QByteArray &mimeType,
+                                                                            KisImportExportErrorCode &status, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
 {
     ConversionResult result = convert(Export, location, realLocation, mimeType, showWarnings, exportConfiguration, true);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(result.isAsync() ||
-                                         !result.status().isOk(), QFuture<ImportExport::ErrorCode>());
+                                         !result.status().isOk(), QFuture<KisImportExportErrorCode>());
 
     status = result.status();
     return result.futureStatus();
@@ -306,7 +306,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
     }
 
     if (!filter) {
-        return ImportExport::ErrorCode(ImportExport::ErrorCodeID::FileFormatIncorrect);
+        return KisImportExportErrorCode(ImportExportCodes::FileFormatIncorrect);
     }
 
     filter->setFilename(location);
@@ -337,9 +337,9 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
 
     KIS_ASSERT_RECOVER_RETURN_VALUE(
                 direction == Import || direction == Export,
-                ImportExport::ErrorCode(ImportExport::ErrorCodeID::InternalError)); // "bad conversion graph"
+                KisImportExportErrorCode(ImportExportCodes::InternalError)); // "bad conversion graph"
 
-    ConversionResult result = ImportExport::ErrorCode(ImportExport::ErrorCodeID::OK);
+    ConversionResult result = KisImportExportErrorCode(ImportExportCodes::OK);
     if (direction == Import) {
 
         KisUsageLogger::log(QString("Importing %1 to %2. Location: %3. Real location: %4. Batchmode: %5")
@@ -378,7 +378,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
 
 
         if (!batchMode() && !askUser) {
-            return ImportExport::ErrorCode(ImportExport::ErrorCodeID::Cancelled);
+            return KisImportExportErrorCode(ImportExportCodes::Cancelled);
         }
 
         KisUsageLogger::log(QString("Converting from %1 to %2. Location: %3. Real location: %4. Batchmode: %5. Configuration: %6")
@@ -395,7 +395,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
             result = QtConcurrent::run(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));
 
             // we should explicitly report that the exporting has been initiated
-            result.setStatus(ImportExport::ErrorCodeID::OK);
+            result.setStatus(ImportExportCodes::OK);
 
         } else if (!batchMode()) {
             KisAsyncActionFeedback f(i18n("Saving document..."), 0);
@@ -581,18 +581,18 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
     return true;
 }
 
-ImportExport::ErrorCode KisImportExportManager::doImport(const QString &location, QSharedPointer<KisImportExportFilter> filter)
+KisImportExportErrorCode KisImportExportManager::doImport(const QString &location, QSharedPointer<KisImportExportFilter> filter)
 {
     QFile file(location);
     if (!file.exists()) {
-        return ImportExport::ErrorCodeID::FileNotExist;
+        return ImportExportCodes::FileNotExist;
     }
 
     if (filter->supportsIO() && !file.open(QFile::ReadOnly)) {
-        return ImportExport::ErrorCode(ImportExport::ErrorCodeCannotRead(file.error()));
+        return KisImportExportErrorCode(KisImportExportErrorCannotRead(file.error()));
     }
 
-    ImportExport::ErrorCode status = filter->convert(m_document, &file, KisPropertiesConfigurationSP());
+    KisImportExportErrorCode status = filter->convert(m_document, &file, KisPropertiesConfigurationSP());
 
     if (file.isOpen()) {
         file.close();
@@ -601,9 +601,9 @@ ImportExport::ErrorCode KisImportExportManager::doImport(const QString &location
     return status;
 }
 
-ImportExport::ErrorCode KisImportExportManager::doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, bool alsoAsKra)
+KisImportExportErrorCode KisImportExportManager::doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, bool alsoAsKra)
 {
-    ImportExport::ErrorCode status =
+    KisImportExportErrorCode status =
             doExportImpl(location, filter, exportConfiguration);
 
     if (alsoAsKra && status.isOk()) {
@@ -622,7 +622,7 @@ ImportExport::ErrorCode KisImportExportManager::doExport(const QString &location
 
             status = doExportImpl(kraLocation, filter, kraExportConfiguration);
         } else {
-            status = ImportExport::ErrorCodeID::FileFormatIncorrect;
+            status = ImportExportCodes::FileFormatIncorrect;
         }
     }
 
@@ -634,7 +634,7 @@ ImportExport::ErrorCode KisImportExportManager::doExport(const QString &location
 #define USE_QSAVEFILE
 #endif
 
-ImportExport::ErrorCode KisImportExportManager::doExportImpl(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration)
+KisImportExportErrorCode KisImportExportManager::doExportImpl(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration)
 {
 #ifdef USE_QSAVEFILE
     QSaveFile file(location);
@@ -645,14 +645,14 @@ ImportExport::ErrorCode KisImportExportManager::doExportImpl(const QString &loca
     QTemporaryFile file(fi.absolutePath() + ".XXXXXX.kra");
     if (filter->supportsIO() && !file.open()) {
 #endif
-        ImportExport::ErrorCodeCannotWrite result(file.error());
+        KisImportExportErrorCannotWrite result(file.error());
 #ifdef USE_QSAVEFILE
         file.cancelWriting();
 #endif
         return result;
     }
 
-    ImportExport::ErrorCode status = filter->convert(m_document, &file, exportConfiguration);
+    KisImportExportErrorCode status = filter->convert(m_document, &file, exportConfiguration);
 
     if (filter->supportsIO()) {
         if (!status.isOk()) {
@@ -663,7 +663,7 @@ ImportExport::ErrorCode KisImportExportManager::doExportImpl(const QString &loca
 #ifdef USE_QSAVEFILE
             if (!file.commit()) {
                 qWarning() << "Could not commit QSaveFile";
-                status = ImportExport::ErrorCodeCannotWrite(file.error());
+                status = KisImportExportErrorCannotWrite(file.error());
             }
 #else
             file.flush();
@@ -675,7 +675,7 @@ ImportExport::ErrorCode KisImportExportManager::doExportImpl(const QString &loca
             }
             if (!file.copy(location)) {
                 file.setAutoRemove(false);
-                return ImportExport::ErrorCodeCannotWrite(file.error());
+                return KisImportExportErrorCannotWrite(file.error());
             }
 #endif
         }

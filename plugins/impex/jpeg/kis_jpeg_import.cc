@@ -40,7 +40,7 @@ KisJPEGImport::~KisJPEGImport()
 {
 }
 
-ImportExport::ErrorCode KisJPEGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisJPEGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
 
     KisJPEGConverter ib(document, batchMode());

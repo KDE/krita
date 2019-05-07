@@ -74,13 +74,13 @@ KisHeightMapImport::~KisHeightMapImport()
 {
 }
 
-ImportExport::ErrorCode KisHeightMapImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisHeightMapImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(configuration);
     KoID depthId = KisHeightmapUtils::mimeTypeToKoID(mimeType());
     if (depthId.id().isNull()) {
         document->setErrorMessage(i18n("Unknown file type"));
-        return ImportExport::ErrorCodeID::FileFormatIncorrect;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     int w = 0;
@@ -133,12 +133,12 @@ ImportExport::ErrorCode KisHeightMapImport::convert(KisDocument *document, QIODe
             wdg->typeLabel->setText("Float");
         }
         else {
-            KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExport::ErrorCodeID::InternalError);
-            return ImportExport::ErrorCodeID::InternalError;
+            KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExportCodes::InternalError);
+            return ImportExportCodes::InternalError;
         }
 
         if (kdb->exec() == QDialog::Rejected) {
-            return ImportExport::ErrorCodeID::Cancelled;
+            return ImportExportCodes::Cancelled;
         }
 
         cfg->setProperty("endianness", wdg->radioBig->isChecked() ? 0 : 1);
@@ -188,13 +188,13 @@ ImportExport::ErrorCode KisHeightMapImport::convert(KisDocument *document, QIODe
         fillData<quint8>(layer->paintDevice(), w, h, s);
     }
     else {
-        KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExport::ErrorCodeID::InternalError);
-        return ImportExport::ErrorCodeID::InternalError;
+        KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExportCodes::InternalError);
+        return ImportExportCodes::InternalError;
     }
 
     image->addNode(layer.data(), image->rootLayer().data());
     document->setCurrentImage(image);
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
 #include "kis_heightmap_import.moc"

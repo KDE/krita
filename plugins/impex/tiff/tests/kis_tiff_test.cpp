@@ -99,7 +99,7 @@ void KisTiffTest::testRoundTripRGBF16()
     KisImportExportManager manager(doc1);
     doc1->setFileBatchMode(false);
 
-    ImportExport::ErrorCode status;
+    KisImportExportErrorCode status;
 
     QString s = manager.importDocument(tmpFile.fileName(),
                                        QString(),

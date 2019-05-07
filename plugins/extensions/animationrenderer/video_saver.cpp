@@ -103,7 +103,7 @@ public:
         : m_cancelled(false),
           m_ffmpegPath(ffmpegPath) {}
 public:
-    ImportExport::ErrorCode runFFMpeg(const QStringList &specialArgs,
+    KisImportExportErrorCode runFFMpeg(const QStringList &specialArgs,
                                      const QString &actionName,
                                      const QString &logPath,
                                      int totalFrames)
@@ -137,7 +137,7 @@ public:
     }
 
 private:
-    ImportExport::ErrorCode waitForFFMpegProcess(const QString &message,
+    KisImportExportErrorCode waitForFFMpegProcess(const QString &message,
                                                 QFile &progressFile,
                                                 QProcess &ffmpegProcess,
                                                 int totalFrames)
@@ -165,16 +165,16 @@ private:
             ffmpegProcess.waitForFinished(5000);
         }
 
-        ImportExport::ErrorCode retval = ImportExport::ErrorCodeID::OK;
+        KisImportExportErrorCode retval = ImportExportCodes::OK;
 
         if (ffmpegProcess.state() != QProcess::NotRunning) {
             // sorry...
             ffmpegProcess.kill();
-            retval = ImportExport::ErrorCodeID::Failure;
+            retval = ImportExportCodes::Failure;
         } else if (m_cancelled) {
-            retval = ImportExport::ErrorCodeID::Cancelled;
+            retval = ImportExportCodes::Cancelled;
         } else if (ffmpegProcess.exitCode()) {
-            retval = ImportExport::ErrorCodeID::Failure;
+            retval = ImportExportCodes::Failure;
         }
 
         return retval;
@@ -203,14 +203,14 @@ KisImageSP VideoSaver::image()
     return m_image;
 }
 
-ImportExport::ErrorCode VideoSaver::encode(const QString &savedFilesMask, const KisAnimationRenderingOptions &options)
+KisImportExportErrorCode VideoSaver::encode(const QString &savedFilesMask, const KisAnimationRenderingOptions &options)
 {
     if (!QFileInfo(options.ffmpegPath).exists()) {
         m_doc->setErrorMessage(i18n("ffmpeg could not be found at %1", options.ffmpegPath));
-        return ImportExport::ErrorCodeID::Failure;
+        return ImportExportCodes::Failure;
     }
 
-    ImportExport::ErrorCode resultOuter = ImportExport::ErrorCodeID::OK;
+    KisImportExportErrorCode resultOuter = ImportExportCodes::OK;
 
     KisImageAnimationInterface *animation = m_image->animationInterface();
 
@@ -245,7 +245,7 @@ ImportExport::ErrorCode VideoSaver::encode(const QString &savedFilesMask, const 
                  << "-vf" << "palettegen"
                  << "-y" << palettePath;
 
-            ImportExport::ErrorCode result =
+            KisImportExportErrorCode result =
                 runner->runFFMpeg(args, i18n("Fetching palette..."),
                                     videoDir.filePath("log_generate_palette_gif.log"),
                                     clipRange.duration());
@@ -272,7 +272,7 @@ ImportExport::ErrorCode VideoSaver::encode(const QString &savedFilesMask, const 
 
             dbgFile << "savedFilesMask" << savedFilesMask << "start" << QString::number(clipRange.start()) << "duration" << clipRange.duration();
 
-            ImportExport::ErrorCode result =
+            KisImportExportErrorCode result =
                 runner->runFFMpeg(args, i18n("Encoding frames..."),
                                     videoDir.filePath("log_encode_gif.log"),
                                     clipRange.duration());
@@ -321,10 +321,10 @@ ImportExport::ErrorCode VideoSaver::encode(const QString &savedFilesMask, const 
     return resultOuter;
 }
 
-ImportExport::ErrorCode VideoSaver::convert(KisDocument *document, const QString &savedFilesMask, const KisAnimationRenderingOptions &options, bool batchMode)
+KisImportExportErrorCode VideoSaver::convert(KisDocument *document, const QString &savedFilesMask, const KisAnimationRenderingOptions &options, bool batchMode)
 {
     VideoSaver videoSaver(document, batchMode);
-    ImportExport::ErrorCode res = videoSaver.encode(savedFilesMask, options);
+    KisImportExportErrorCode res = videoSaver.encode(savedFilesMask, options);
     return res;
 }
 

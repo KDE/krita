@@ -25,7 +25,7 @@
 #include <QObject>
 
 #include "kis_types.h"
-#include <KisImportExportErrorCodes.h>
+#include <KisImportExportErrorCode.h>
 
 class KisDocument;
 
@@ -36,16 +36,16 @@ public:
     EXRConverter(KisDocument *doc, bool showNotifications);
     ~EXRConverter() override;
 public:
-    ImportExport::ErrorCode buildImage(const QString &filename);
-    ImportExport::ErrorCode buildFile(const QString &filename, KisPaintLayerSP layer);
-    ImportExport::ErrorCode buildFile(const QString &filename, KisGroupLayerSP layer, bool flatten=false);
+    KisImportExportErrorCode buildImage(const QString &filename);
+    KisImportExportErrorCode buildFile(const QString &filename, KisPaintLayerSP layer);
+    KisImportExportErrorCode buildFile(const QString &filename, KisGroupLayerSP layer, bool flatten=false);
     /**
      * Retrieve the constructed image
      */
     KisImageSP image();
     QString errorMessage() const;
 private:
-    ImportExport::ErrorCode decode(const QString &filename);
+    KisImportExportErrorCode decode(const QString &filename);
 
 public Q_SLOTS:
     virtual void cancel();

@@ -33,7 +33,7 @@ QMLConverter::~QMLConverter()
 {
 }
 
-ImportExport::ErrorCode QMLConverter::buildFile(const QString &filename, const QString &realFilename, QIODevice *io, KisImageSP image)
+KisImportExportErrorCode QMLConverter::buildFile(const QString &filename, const QString &realFilename, QIODevice *io, KisImageSP image)
 {
     QTextStream out(io);
     out.setCodec("UTF-8");
@@ -53,7 +53,7 @@ ImportExport::ErrorCode QMLConverter::buildFile(const QString &filename, const Q
         bool success = dir.mkpath(imagePath);
         if (!success)
         {
-            return ImportExport::ErrorCodeID::CannotCreateFile;
+            return ImportExportCodes::CannotCreateFile;
         }
     }
 
@@ -79,7 +79,7 @@ ImportExport::ErrorCode QMLConverter::buildFile(const QString &filename, const Q
     }
     out << "}\n";
 
-    return ImportExport::ErrorCodeID::OK;
+    return ImportExportCodes::OK;
 }
 
 void QMLConverter::writeString(QTextStream&  out, int spacing, const QString& setting, const QString& value) {

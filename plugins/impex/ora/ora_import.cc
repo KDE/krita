@@ -35,7 +35,7 @@ OraImport::~OraImport()
 {
 }
 
-ImportExport::ErrorCode OraImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode OraImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     OraConverter oraConverter(document);
     return oraConverter.buildImage(io);

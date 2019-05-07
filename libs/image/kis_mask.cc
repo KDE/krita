@@ -215,7 +215,8 @@ KisSelectionSP KisMask::selection() const
 
 KisPaintDeviceSP KisMask::paintDevice() const
 {
-    return selection()->pixelSelection();
+    KisSelectionSP selection = this->selection();
+    return selection ? selection->pixelSelection() : 0;
 }
 
 KisPaintDeviceSP KisMask::original() const
@@ -225,13 +226,12 @@ KisPaintDeviceSP KisMask::original() const
 
 KisPaintDeviceSP KisMask::projection() const
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->selection, 0);
-
     KisPaintDeviceSP originalDevice = original();
     KisPaintDeviceSP result = originalDevice;
 
-    if (selection() && hasTemporaryTarget()) {
-        result = m_d->safeProjection->getDeviceLazy(m_d->selection)->pixelSelection();
+    KisSelectionSP selection = this->selection();
+    if (selection && hasTemporaryTarget()) {
+        result = m_d->safeProjection->getDeviceLazy(selection)->pixelSelection();
     }
 
     return result;

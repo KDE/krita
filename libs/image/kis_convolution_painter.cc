@@ -99,6 +99,16 @@ KisConvolutionWorker<factory>* KisConvolutionPainter::createWorker(const KisConv
 }
 
 
+bool KisConvolutionPainter::supportsFFTW()
+{
+#ifdef HAVE_FFTW3
+    return true;
+#else
+    return false;
+#endif
+}
+
+
 KisConvolutionPainter::KisConvolutionPainter()
     : KisPainter(),
       m_enginePreference(NONE)

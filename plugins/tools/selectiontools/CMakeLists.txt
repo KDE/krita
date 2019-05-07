@@ -1,3 +1,7 @@
+if (NOT WIN32 AND NOT APPLE)
+    add_subdirectory(tests)
+endif()
+
 set(kritaselectiontools_SOURCES
     selection_tools.cc
     kis_tool_select_rectangular.cc
@@ -8,11 +12,14 @@ set(kritaselectiontools_SOURCES
     kis_tool_select_path.cc
     kis_tool_select_similar.cc
     kis_selection_modifier_mapper.cc
+    KisMagneticWorker.cc
 )
 
 qt5_add_resources(kritaselectiontools_SOURCES selectiontools.qrc)
 
 add_library(kritaselectiontools MODULE ${kritaselectiontools_SOURCES})
+
+generate_export_header(kritaselectiontools BASE_NAME kritaselectiontools)
 
 target_link_libraries(kritaselectiontools kritaui kritabasicflakes)
 

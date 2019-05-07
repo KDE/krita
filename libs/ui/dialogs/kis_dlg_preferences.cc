@@ -532,6 +532,13 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         m_monitorProfileWidgets << cmb;
     }
 
+// disable if not Linux as KisColorManager is not yet implemented outside Linux
+#ifndef Q_OS_LINUX
+    m_page->chkUseSystemMonitorProfile->setChecked(false);
+    m_page->chkUseSystemMonitorProfile->setDisabled(true);
+    m_page->chkUseSystemMonitorProfile->setHidden(true);
+#endif
+
     refillMonitorProfiles(KoID("RGBA"));
 
     for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {

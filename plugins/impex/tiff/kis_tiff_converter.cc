@@ -701,7 +701,6 @@ KisImportExportErrorCode KisTIFFConverter::buildFile(const QString &filename, Ki
     TIFF *image;
     if ((image = TIFFOpen(QFile::encodeName(filename), "w")) == 0) {
         dbgFile << "Could not open the file for writing" << filename;
-        TIFFClose(image);
         return ImportExportCodes::NoAccessToWrite;
     }
 

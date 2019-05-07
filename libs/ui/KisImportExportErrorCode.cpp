@@ -67,6 +67,7 @@ QString KisImportExportComplexError::qtErrorMessage() const
     return unspecifiedError;
 }
 
+KisImportExportErrorCannotRead::KisImportExportErrorCannotRead() : KisImportExportComplexError(QFileDevice::FileError()) { }
 
 KisImportExportErrorCannotRead::KisImportExportErrorCannotRead(QFileDevice::FileError error) : KisImportExportComplexError(error) {
     KIS_ASSERT_RECOVER_NOOP(error != QFileDevice::NoError);
@@ -77,6 +78,7 @@ QString KisImportExportErrorCannotRead::errorMessage() const
     return i18n("Cannot open file for reading. Reason: %1", qtErrorMessage());
 }
 
+KisImportExportErrorCannotWrite::KisImportExportErrorCannotWrite() : KisImportExportComplexError(QFileDevice::FileError()) { }
 
 KisImportExportErrorCannotWrite::KisImportExportErrorCannotWrite(QFileDevice::FileError error) : KisImportExportComplexError(error) {
     KIS_ASSERT_RECOVER_NOOP(error != QFileDevice::NoError);
@@ -87,12 +89,12 @@ QString KisImportExportErrorCannotWrite::errorMessage() const
     return i18n("Cannot open file for writing. Reason: %1", qtErrorMessage());
 }
 
-KisImportExportErrorCode::KisImportExportErrorCode() : errorFieldUsed(None), cannotRead(QFileDevice::FileError()), cannotWrite(QFileDevice::FileError()) { }
+KisImportExportErrorCode::KisImportExportErrorCode() : errorFieldUsed(None), cannotRead(), cannotWrite() { }
 
-KisImportExportErrorCode::KisImportExportErrorCode(ImportExportCodes::ErrorCodeID id) : errorFieldUsed(CodeId), codeId(id),  cannotRead(QFileDevice::FileError()), cannotWrite(QFileDevice::FileError()) { }
+KisImportExportErrorCode::KisImportExportErrorCode(ImportExportCodes::ErrorCodeID id) : errorFieldUsed(CodeId), codeId(id),  cannotRead(), cannotWrite() { }
 
-KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotRead error) : errorFieldUsed(CannotRead), cannotRead(error), cannotWrite(QFileDevice::FileError()) { }
-KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotWrite error) : errorFieldUsed(CannotWrite), cannotRead(QFileDevice::FileError()), cannotWrite(error) { }
+KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotRead error) : errorFieldUsed(CannotRead), cannotRead(error), cannotWrite() { }
+KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotWrite error) : errorFieldUsed(CannotWrite), cannotRead(), cannotWrite(error) { }
 
 
 

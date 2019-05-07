@@ -114,7 +114,7 @@ public:
     void initializeCapabilities() override;
 private:
 
-    bool savePaintDevice(KisPaintDeviceSP dev, const QString &fileName);
+    KisImportExportErrorCode savePaintDevice(KisPaintDeviceSP dev, const QString &fileName);
     void parseFolder(KisGroupLayerSP parentGroup, const QString &folderName, const QString &basePath, int *folderId = 0);
     Bone *parseBone(const Bone *parent, KisGroupLayerSP groupLayer);
     void fixBone(Bone *bone);

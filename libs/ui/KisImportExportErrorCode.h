@@ -84,6 +84,13 @@ struct KRITAUI_EXPORT KisImportExportErrorCannotWrite : KisImportExportComplexEr
     QString errorMessage() const override;
 
     ~KisImportExportErrorCannotWrite() { }
+
+private:
+    KisImportExportErrorCannotWrite();
+
+    //friend KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotWrite code);
+    friend class KisImportExportErrorCode;
+
 };
 
 struct KRITAUI_EXPORT KisImportExportErrorCannotRead : KisImportExportComplexError
@@ -93,6 +100,13 @@ struct KRITAUI_EXPORT KisImportExportErrorCannotRead : KisImportExportComplexErr
     QString errorMessage() const override;
 
     ~KisImportExportErrorCannotRead() { }
+
+private:
+    KisImportExportErrorCannotRead();
+
+    //friend KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotRead code);
+    friend class KisImportExportErrorCode;
+
 };
 
 

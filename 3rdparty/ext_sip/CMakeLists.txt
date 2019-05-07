@@ -31,8 +31,8 @@ if (UNIX)
 
         ExternalProject_Add( ext_sip
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://www.riverbankcomputing.com/static/Downloads/sip/sip-4.19.15.zip
-            URL_MD5 4a1a4760cfabef15d68f45a6920974c2
+            URL https://www.riverbankcomputing.com/static/Downloads/sip/4.19.15/sip-4.19.15.tar.gz
+            URL_MD5 236578d2199da630ae1251671b9a7bfe
 
             CMAKE_ARGS -DPYTHON_INCLUDE_DIR=${PREFIX_ext_sip}/lib/Python.framework/Headers
             CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py --deployment-target=10.11

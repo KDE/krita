@@ -113,7 +113,7 @@ cmake_3rdparty () {
     cd ${KIS_TBUILD_DIR}
     for package in ${@:1:${#@}}; do
         printf "STATUS: %s\n" "Building ${package}" >> ${DEPBUILD_LOG}
-        cmake --build . --config RelWithDebInfo --target ${package}  2>> ${DEPBUILD_LOG}
+        cmake --build . --config RelWithDebInfo --target ${package} 2>> ${DEPBUILD_LOG}
         local build_error=$(build_errorlog ${?} "Failed build ${package}" "Build Success! ${package}")
 
         # run package fixes
@@ -138,6 +138,12 @@ build_3rdparty_fixes(){
         install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./dwaLookups
         # we must rerun build!
         cmake_3rdparty ext_openexr "1"
+
+    elif [[ "${pkg}" = "ext_fontconfig" ]]; then
+        echo "fixing rpath on fc-cache"
+        install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_fontconfig/ext_fontconfig-prefix/src/ext_fontconfig-build/fc-cache/.libs/fc-cache
+        # rerun rebuild
+        cmake_3rdparty ext_fontconfig "1"
     fi
 }
 
@@ -192,8 +198,8 @@ build_3rdparty () {
         ext_vc \
         ext_libraw \
         ext_giflib \
-        ext_fontconfig \
         ext_freetype \
+        ext_fontconfig \
         ext_poppler
 
     # Stop if qmake link was not created

@@ -648,9 +648,20 @@ print(root.childNodes())
      * Creates a filter mask object that much like a filterlayer can apply a filter non-destructively.
      * @param name the name of the layer.
      * @param filter the filter assigned.
+     * @param selection the selection to be used by the filter mask
      * @return a FilterMask
      */
-    FilterMask* createFilterMask(const QString &name, Filter &filter);
+    FilterMask* createFilterMask(const QString &name, Filter &filter, Selection &selection);
+
+    /**
+     * @brief createFilterMask
+     * Creates a filter mask object that much like a filterlayer can apply a filter non-destructively.
+     * @param name the name of the layer.
+     * @param filter the filter assigned.
+     * @param selection_source a node from which the selection should be initialized
+     * @return a FilterMask
+     */
+    FilterMask* createFilterMask(const QString &name, Filter &filter, const Node* selection_source);
 
     /**
      * @brief createSelectionMask

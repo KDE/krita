@@ -665,13 +665,41 @@ VectorLayer *Document::createVectorLayer(const QString &name)
     return new VectorLayer(d->document->shapeController(), image, name);
 }
 
-FilterMask *Document::createFilterMask(const QString &name, Filter &filter)
+FilterMask *Document::createFilterMask(const QString &name, Filter &filter, const Node *selection_source)
 {
-    if (!d->document) return 0;
-    if (!d->document->image()) return 0;
-    KisImageSP image = d->document->image();
+    if (!d->document)
+        return 0;
 
-    return new FilterMask(image, name, filter);
+    if (!d->document->image())
+        return 0;
+
+    if(!selection_source)
+        return 0;
+
+    KisLayerSP layer = qobject_cast<KisLayer*>(selection_source->node().data());
+    if(layer.isNull())
+        return 0;
+
+    KisImageSP image = d->document->image();
+    FilterMask* mask = new FilterMask(image, name, filter);
+    qobject_cast<KisMask*>(mask->node().data())->initSelection(layer);
+
+    return mask;
+}
+
+FilterMask *Document::createFilterMask(const QString &name, Filter &filter, Selection &selection)
+{
+    if (!d->document)
+        return 0;
+
+    if (!d->document->image())
+        return 0;
+
+    KisImageSP image = d->document->image();
+    FilterMask* mask = new FilterMask(image, name, filter);
+    qobject_cast<KisMask*>(mask->node().data())->setSelection(selection.selection());
+
+    return mask;
 }
 
 SelectionMask *Document::createSelectionMask(const QString &name)

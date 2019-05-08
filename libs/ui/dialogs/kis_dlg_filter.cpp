@@ -29,6 +29,7 @@
 #include <kis_filter_mask.h>
 #include <kis_node.h>
 #include <kis_layer.h>
+#include <kis_paint_layer.h>
 #include <KisViewManager.h>
 #include <kis_config.h>
 
@@ -131,8 +132,8 @@ void KisDlgFilter::startApplyingFilter(KisFilterConfigurationSP config)
 {
     if (!d->uiFilterDialog.filterSelection->configuration()) return;
 
-    if (d->node->inherits("KisLayer")) {
-        config->setChannelFlags(qobject_cast<KisLayer*>(d->node.data())->channelFlags());
+    if (d->node->inherits("KisPaintLayer")) {
+        config->setChannelFlags(qobject_cast<KisPaintLayer*>(d->node.data())->channelLockFlags());
     }
 
     d->filterManager->apply(config);

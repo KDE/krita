@@ -52,7 +52,8 @@ task copyLibs(type: Copy) {
 
 task copyAssets(type: Copy) {
     from "${System.getenv('INSTALL_PREFIX')}/share/"
-    into 'assets'
+    into 'assets/'
+    include '**'
 }
 
 copyLibs.dependsOn configure
@@ -98,6 +99,10 @@ android {
 	defaultConfig {
         targetSdkVersion 26
         minSdkVersion 21
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
 
     preBuild.dependsOn(copyLibs)

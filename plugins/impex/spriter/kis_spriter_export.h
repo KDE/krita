@@ -115,7 +115,7 @@ public:
 private:
 
     KisImportExportErrorCode savePaintDevice(KisPaintDeviceSP dev, const QString &fileName);
-    void parseFolder(KisGroupLayerSP parentGroup, const QString &folderName, const QString &basePath, int *folderId = 0);
+    KisImportExportErrorCode parseFolder(KisGroupLayerSP parentGroup, const QString &folderName, const QString &basePath, int *folderId = 0);
     Bone *parseBone(const Bone *parent, KisGroupLayerSP groupLayer);
     void fixBone(Bone *bone);
     void fillScml(QDomDocument &scml, const QString &entityName);

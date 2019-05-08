@@ -339,6 +339,7 @@ build_krita () {
     cd ${KIS_BUILD_DIR}
 
     cmake ${KIS_SRC_DIR} \
+        -DFOUNDATION_BUILD=ON \
         -DBoost_INCLUDE_DIR=${KIS_INSTALL_DIR}/include \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
         -DDEFINE_NO_DEPRECATED=1 \

@@ -903,7 +903,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(const QString &filename, con
 
 KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!device, ImportExportCodes::InternalError);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(device, ImportExportCodes::InternalError);
 
     if (!options.alpha) {
         KisPaintDeviceSP tmp = new KisPaintDevice(device->colorSpace());

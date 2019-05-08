@@ -609,6 +609,15 @@ KisImportExportErrorCode KisSpriterExport::convert(KisDocument *document, QIODev
     QDomDocument scml;
     fillScml(scml, fi.baseName());
 
+    bool openedHere = false;
+    if (!io->isOpen()) {
+        openedHere = io->open(QIODevice::WriteOnly);
+        if (!openedHere) {
+            // unsuccessful open
+            return ImportExportCodes::NoAccessToWrite;
+        }
+    }
+
     QString towrite = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     if (io->write(towrite.toUtf8()) != towrite.length()) {
         return ImportExportCodes::ErrorWhileWriting;
@@ -619,6 +628,11 @@ KisImportExportErrorCode KisSpriterExport::convert(KisDocument *document, QIODev
     }
 
     delete m_rootBone;
+
+    if (openedHere) {
+        // FIXME: casues crash...
+        //io->close();
+    }
 
     return ImportExportCodes::OK;
 }

@@ -124,7 +124,7 @@ QRect KisGaussianBlurFilter::changedRect(const QRect & rect, const KisFilterConf
 
 bool KisGaussianBlurFilter::configurationAllowedForMask(KisFilterConfigurationSP config) const
 {
-    ENTER_FUNCTION() << config->getFloat("horizRadius", 5.0) << config->getFloat("vertRadius", 5.0);
+    //ENTER_FUNCTION() << config->getFloat("horizRadius", 5.0) << config->getFloat("vertRadius", 5.0);
 
     const float maxRadiusForMask = 100.0;
 

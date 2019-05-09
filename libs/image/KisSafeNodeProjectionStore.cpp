@@ -193,6 +193,7 @@ void KisSafeNodeProjectionStoreBase::releaseDevice()
 {
     QMutexLocker locker(&m_d->lock);
     if (m_d->store->releaseDevice()) {
+        locker.unlock();
         emit internalInitiateProjectionsCleanup();
     }
 }

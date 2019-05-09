@@ -43,9 +43,9 @@ export KIS_BUILD_DIR=${BUILDROOT}/kisbuild
 export KIS_INSTALL_DIR=${BUILDROOT}/i
 
 # flags for OSX environment
-# We only support from 10.11 up
-export MACOSX_DEPLOYMENT_TARGET=10.11
-export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.11
+# Qt only supports from 10.12 up, and https://doc.qt.io/qt-5/macos.html#target-platforms warns against setting it lower
+export MACOSX_DEPLOYMENT_TARGET=10.12
+export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.12
 
 # Build time variables
 if test -z $(which cmake); then

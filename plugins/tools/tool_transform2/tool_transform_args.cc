@@ -129,7 +129,7 @@ ToolTransformArgs& ToolTransformArgs::operator=(const ToolTransformArgs& args)
 {
     clear();
 
-    m_liquifyProperties = args.m_liquifyProperties;
+    m_liquifyProperties.reset(new KisLiquifyProperties(*args.m_liquifyProperties.data()));
     init(args);
 
     return *this;

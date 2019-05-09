@@ -42,10 +42,12 @@ KisJPEGImport::~KisJPEGImport()
 
 KisImportExportErrorCode KisJPEGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-
     KisJPEGConverter ib(document, batchMode());
-    return ib.buildImage(io);
-
+    KisImportExportErrorCode result = ib.buildImage(io);
+    if (result.isOk()) {
+        document->setCurrentImage(ib.image());
+    }
+    return result;
 }
 
 #include <kis_jpeg_import.moc>

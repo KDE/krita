@@ -38,7 +38,11 @@ psdImport::~psdImport()
 KisImportExportErrorCode psdImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     PSDLoader ib(document);
-    return ib.buildImage(io);
+    KisImportExportErrorCode result = ib.buildImage(io);
+    if (result.isOk()) {
+        document->setCurrentImage(ib.image());
+    }
+    return result;
 }
 
 #include <psd_import.moc>

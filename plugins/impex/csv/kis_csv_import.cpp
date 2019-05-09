@@ -44,7 +44,11 @@ KisCSVImport::~KisCSVImport()
 KisImportExportErrorCode KisCSVImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     CSVLoader ib(document, batchMode());
-    return ib.buildAnimation(io, filename());
+    KisImportExportErrorCode result = ib.buildAnimation(io, filename());
+    if (result.isOk()) {
+        document->setCurrentImage(ib.image());
+    }
+    return result;
 }
 
 #include <kis_csv_import.moc>

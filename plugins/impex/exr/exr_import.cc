@@ -42,7 +42,11 @@ exrImport::~exrImport()
 KisImportExportErrorCode exrImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
 {
     EXRConverter ib(document, !batchMode());
-    return ib.buildImage(filename());
+    KisImportExportErrorCode result = ib.buildImage(filename());
+    if (result.isOk()) {
+        document->setCurrentImage(ib.image());
+    }
+    return result;
 }
 
 #include <exr_import.moc>

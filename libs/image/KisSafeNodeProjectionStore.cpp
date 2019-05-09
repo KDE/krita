@@ -56,18 +56,18 @@ struct StoreImplementation : public StoreImplementaionInterface
             m_projection = 0;
             hasDeletedProjection = true;
 
-            qDebug() << "release a device";
+//            qDebug() << "release a device";
         }
         return hasDeletedProjection;
     }
 
     virtual void discardCaches() {
-        qDebug() << "discard caches";
+//        qDebug() << "discard caches";
         m_dirtyProjections.clear();
     }
 
     virtual void recycleProjectionsInSafety() {
-        qDebug() << "recycle caches";
+//        qDebug() << "recycle caches";
         Q_FOREACH (DeviceSP projection, m_dirtyProjections) {
             projection->clear();
             m_cleanProjections.append(projection);

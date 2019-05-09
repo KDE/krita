@@ -121,10 +121,17 @@ bool KisGroupLayer::checkNodeRecursively(KisNodeSP node) const
 
 bool KisGroupLayer::allowAsChild(KisNodeSP node) const
 {
-    return checkNodeRecursively(node) &&
-            (parent() ||
-             (node->inherits("KisSelectionMask") && !selectionMask()) ||
-             !node->inherits("KisMask"));
+    if (!parent()) { // We are the root layer, so we need to check
+                     // whether the node that's going to be added is
+                     // a selection mask; that is only allowed if
+                     // there isn't a global selection. See
+                     // BUG:294905
+        if (node->inherits("KisSelectionMask") && !selectionMask()) {
+            return false;
+        }
+    }
+
+    return checkNodeRecursively(node);
 }
 
 const KoColorSpace * KisGroupLayer::colorSpace() const

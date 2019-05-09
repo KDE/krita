@@ -181,8 +181,8 @@ private:
     quint8 m_defaultHueSteps;
     quint8 m_defaultSaturationSteps;
     quint8 m_defaultValueScaleSteps;
-    bool m_showValueScaleNumbers;
-    bool m_showBgColor;
+    bool m_showValueScaleNumbers {false};
+    bool m_showBgColor {true};
 
     bool m_gamutMaskOn;
     KoGamutMask* m_currentGamutMask;

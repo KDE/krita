@@ -194,7 +194,7 @@ public:
     KisSignalCompressor colorChangedCompressor;
     KisAcyclicSignalConnector shapeChangedAcyclicConnector;
     KisAcyclicSignalConnector resourceManagerAcyclicConnector;
-    KoFillConfigWidget::StyleButton selectedFillIndex;
+    KoFillConfigWidget::StyleButton selectedFillIndex {KoFillConfigWidget::None};
 
     QSharedPointer<KoStopGradient> activeGradient;
     KisSignalCompressor gradientChangedCompressor;

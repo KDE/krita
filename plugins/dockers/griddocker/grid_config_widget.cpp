@@ -36,7 +36,7 @@ struct GridConfigWidget::Private
 
     KisGridConfig gridConfig;
     KisGuidesConfig guidesConfig;
-    bool guiSignalsBlocked;
+    bool guiSignalsBlocked {false};
 };
 
 GridConfigWidget::GridConfigWidget(QWidget *parent) :
@@ -64,9 +64,6 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
 
 
     connect(ui->gridTypeCombobox, SIGNAL(currentIndexChanged(int)), SLOT(slotGridTypeChanged()));
-
-
-    m_isGridEnabled = false;
 
     setGridConfig(m_d->gridConfig);
     setGuidesConfig(m_d->guidesConfig);

@@ -38,7 +38,14 @@ OraImport::~OraImport()
 KisImportExportErrorCode OraImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     OraConverter oraConverter(document);
-    return oraConverter.buildImage(io);
+    KisImportExportErrorCode result = oraConverter.buildImage(io);
+    if (result.isOk()) {
+        document->setCurrentImage(oraConverter.image());
+        if (oraConverter.activeNodes().size() > 0) {
+            document->setPreActivatedNode(oraConverter.activeNodes()[0]);
+        }
+    }
+    return result;
 }
 
 #include <ora_import.moc>

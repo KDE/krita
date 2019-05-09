@@ -43,7 +43,11 @@ KisTIFFImport::~KisTIFFImport()
 KisImportExportErrorCode KisTIFFImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KisTIFFConverter tiffConverter(document);
-    return tiffConverter.buildImage(filename());
+    KisImportExportErrorCode result = tiffConverter.buildImage(filename());
+    if (result.isOk()) {
+        document->setCurrentImage(tiffConverter.image());
+    }
+    return result;
 }
 
 #include <kis_tiff_import.moc>

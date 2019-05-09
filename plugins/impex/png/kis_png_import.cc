@@ -45,6 +45,9 @@ KisImportExportErrorCode KisPNGImport::convert(KisDocument *document, QIODevice 
 {
     KisPNGConverter ib(document, batchMode());
     KisImportExportErrorCode res = ib.buildImage(io);
+    if (res.isOk()){
+        document->setCurrentImage(ib.image());
+    }
     return res;
 
 }

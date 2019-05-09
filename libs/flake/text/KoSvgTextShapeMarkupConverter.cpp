@@ -842,8 +842,6 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
 
                 QTextLine line = cursor.block().layout()->lineAt(0);
 
-                // Hack Create new block to allow lineHeight spill to empty line
-                cursor.insertBlock();
                 if (prevBlockCursorPosition >= 0) {
                     postCorrectBlockHeight(doc, line.ascent(), prevLineAscent, prevLineDescent,
                                            prevBlockCursorPosition, currBlockAbsoluteLineOffset);

@@ -358,7 +358,6 @@ set_krita_dirs() {
 # run cmake krita
 build_krita () {
     export DYLD_FRAMEWORK_PATH=${FRAMEWORK_PATH}
-    set_krita_dirs ${1}
     echo ${KIS_BUILD_DIR}
     echo ${KIS_INSTALL_DIR}
     log_cmd check_dir_path ${KIS_BUILD_DIR}
@@ -387,10 +386,48 @@ build_krita () {
     fi
 }
 
+build_krita_tarball () {
+    filename="$(basename ${1})"
+    KIS_CUSTOM_BUILD="${BUILDROOT}/releases/${filename%.tar.gz}"
+
+    filename_dir=$(dirname "${1}")
+    cd "${filename_dir}"
+    file_abspath="$(pwd)/${1##*/}"
+
+    mkdir "${KIS_CUSTOM_BUILD}" 2> /dev/null
+    cd "${KIS_CUSTOM_BUILD}"
+
+    mkdir "src" "build" 2> /dev/null
+    tar -xzf "${file_abspath}" --strip-components=1 --directory "src"
+    if [[ $(print_if_error "Untar ${file_abspath} failed!") ]]; then
+        exit
+    fi
+
+    KIS_BUILD_DIR="${KIS_CUSTOM_BUILD}/build"
+    KIS_SRC_DIR="${BUILDROOT}/src"
+
+    build_krita
+
+    print_msg "Build done!"
+    printf "to install run
+osxbuild.sh install %s
+" "${KIS_BUILD_DIR}"
+
+}
+
 install_krita () {
-    set_krita_dirs ${1}
+    # custom install provided
+    if [[ -n "${1}" ]]; then
+        KIS_BUILD_DIR="${1}"
+    fi
+    print_msg "Install krita from ${KIS_BUILD_DIR}"
     log_cmd check_dir_path ${KIS_BUILD_DIR}
+
     cd ${KIS_BUILD_DIR}
+    if [[ $(print_if_error "could not cd to ${KIS_BUILD_DIR}") ]]; then
+        exit
+    fi
+
     make install
 
     # compile integrations
@@ -423,16 +460,18 @@ fix_boost_rpath () {
 }
 
 print_usage () {
-    echo "USAGE: osxbuild.sh <buildstep> [pkg]"
-    echo "BUILDSTEPS:\t\t"
-    echo "\n builddeps \t\t Run cmake step for 3rd party dependencies, optionally takes a [pkg] arg"
-    echo "\n rebuilddeps \t\t Rerun make and make install step for 3rd party deps, optionally takes a [pkg] arg
+    printf "USAGE: osxbuild.sh <buildstep> [pkg|file]\n"
+    printf "BUILDSTEPS:\t\t"
+    printf "\n builddeps \t\t Run cmake step for 3rd party dependencies, optionally takes a [pkg] arg"
+    printf "\n rebuilddeps \t\t Rerun make and make install step for 3rd party deps, optionally takes a [pkg] arg
     \t\t\t usefull for cleaning install directory and quickly reinstall all deps."
-    echo "\n fixboost \t\t Fixes broken boost \@rpath on OSX"
-    echo "\n build \t\t\t Builds krita"
-    echo "\n install \t\t Installs krita"
-    echo "\n buildinstall \t\t Build and Installs krita, running fixboost after installing"
-    echo ""
+    printf "\n fixboost \t\t Fixes broken boost \@rpath on OSX"
+    printf "\n build \t\t\t Builds krita"
+    printf "\n buildtarball \t\t\t Builds krita from provided [file] tarball"
+    printf "\n install \t\t Installs krita. Optionally accepts a [build dir] as argument
+    \t\t\t this will install krita from given directory"
+    printf "\n buildinstall \t\t Build and Installs krita, running fixboost after installing"
+    printf "\n"
 }
 
 if [[ ${#} -eq 0 ]]; then
@@ -452,6 +491,14 @@ elif [[ ${1} = "fixboost" ]]; then
 
 elif [[ ${1} = "build" ]]; then
     build_krita ${2}
+
+elif [[ ${1} = "buildtarball" ]]; then
+    # uncomment line to optionally change
+    # install directory providing a third argument
+    # This is not on by default as build success requires all
+    # deps installed in the given dir beforehand.
+    # KIS_INSTALL_DIR=${3}
+    build_krita_tarball ${2}
 
 elif [[ ${1} = "install" ]]; then
     install_krita ${2}

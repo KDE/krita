@@ -653,6 +653,9 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
         // by the new colorspace.
         dbgKrita << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
     }
+
+    m_currCompositeOpID = preset->settings()->paintOpCompositeOp();
+    updateCompositeOp(m_currCompositeOpID);
 }
 
 void KisPaintopBox::slotUpdateOptionsWidgetPopup()
@@ -699,6 +702,8 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID& paintOp)
 
 void KisPaintopBox::updateCompositeOp(QString compositeOpID)
 {
+    qDebug() << "updateCompositeOp();" << compositeOpID << m_optionWidget;
+
     if (!m_optionWidget) return;
     KisSignalsBlocker blocker(m_optionWidget);
 
@@ -721,6 +726,12 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID)
         else {
             m_eraseModeButton->setChecked(false);
         }
+    }
+    else if (!node) {
+        KisSignalsBlocker b1(m_cmbCompositeOp);
+        m_cmbCompositeOp->selectCompositeOp(KoID(compositeOpID));
+        m_currCompositeOpID = compositeOpID;
+
     }
 }
 
@@ -888,35 +899,6 @@ void KisPaintopBox::slotCanvasResourceChanged(int key, const QVariant &value)
 
         sender()->blockSignals(false);
     }
-}
-
-void KisPaintopBox::slotUpdatePreset()
-{
-    if (!m_resourceProvider->currentPreset()) return;
-
-    // block updates of avoid some over updating of the option widget
-    m_blockUpdate = true;
-
-    setSliderValue("size", m_resourceProvider->size());
-
-    {
-        qreal opacity = m_resourceProvider->currentPreset()->settings()->paintOpOpacity();
-        m_resourceProvider->setOpacity(opacity);
-        setSliderValue("opacity", opacity);
-        setWidgetState(ENABLE_OPACITY);
-    }
-
-    {
-        setSliderValue("flow", m_resourceProvider->currentPreset()->settings()->paintOpFlow());
-        setWidgetState(ENABLE_FLOW);
-    }
-
-    {
-        updateCompositeOp(m_resourceProvider->currentPreset()->settings()->paintOpCompositeOp());
-        setWidgetState(ENABLE_COMPOSITEOP);
-    }
-
-    m_blockUpdate = false;
 }
 
 void KisPaintopBox::slotSetupDefaultPreset()
@@ -1097,7 +1079,32 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas, int toolId)
 
         if (flags & KisTool::FLAG_USES_CUSTOM_PRESET) {
             setWidgetState(ENABLE_PRESETS);
-            slotUpdatePreset();
+            if (!m_resourceProvider->currentPreset()) return;
+
+            // block updates of avoid some over updating of the option widget
+            m_blockUpdate = true;
+
+            setSliderValue("size", m_resourceProvider->size());
+
+            {
+                qreal opacity = m_resourceProvider->currentPreset()->settings()->paintOpOpacity();
+                m_resourceProvider->setOpacity(opacity);
+                setSliderValue("opacity", opacity);
+                setWidgetState(ENABLE_OPACITY);
+            }
+
+            {
+                setSliderValue("flow", m_resourceProvider->currentPreset()->settings()->paintOpFlow());
+                setWidgetState(ENABLE_FLOW);
+            }
+
+            {
+                updateCompositeOp(m_resourceProvider->currentPreset()->settings()->paintOpCompositeOp());
+                setWidgetState(ENABLE_COMPOSITEOP);
+            }
+
+            m_blockUpdate = false;
+
             m_presetsEnabled = true;
         } else {
             setWidgetState(DISABLE_PRESETS);
@@ -1278,7 +1285,6 @@ void KisPaintopBox::slotDropLockedOption(KisPropertiesConfigurationSP p)
         }
     }
 
-    //slotUpdatePreset();
 }
 void KisPaintopBox::slotDirtyPresetToggled(bool value)
 {

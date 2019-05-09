@@ -445,7 +445,9 @@ void KisViewManager::setCurrentView(KisView *view)
                 preset = rserver->resources().first();
             }
             if (preset) {
+                qDebug() << "preset" << preset << "composite op" << preset->settings()->paintOpCompositeOp();
                 paintOpBox()->restoreResource(preset.data());
+                canvasResourceProvider()->setCurrentCompositeOp(preset->settings()->paintOpCompositeOp());
             }
         }
 

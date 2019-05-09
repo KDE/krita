@@ -1,9 +1,4 @@
-#!/usr/bin/env sh
-
-# Stop at any error
-# For debug purposes
-# set -e
-# set -x
+#!/usr/bin/env bash
 
 # osxbuild.sh automates building and installing of krita and krita dependencies
 # for OSX, the script only needs you to set BUILDROOT environment to work
@@ -31,16 +26,15 @@
 # fixboost: Search for all libraries using boost and sets a proper @rpath for boost as by
 #     default it fails to set a proper @rpath
 
-# buildinstall: Runs build, install and fixboost steps.
-
+# buildinstall: Runs build, install and fixboost steps.#
 
 if test -z $BUILDROOT; then
     echo "ERROR: BUILDROOT env not set, exiting!"
     echo "\t Must point to the root of the buildfiles as stated in 3rdparty Readme"
     exit
 fi
-
 echo "BUILDROOT set to ${BUILDROOT}"
+
 export KIS_SRC_DIR=${BUILDROOT}/krita
 export KIS_TBUILD_DIR=${BUILDROOT}/depbuild
 export KIS_TDEPINSTALL_DIR=${BUILDROOT}/depinstall
@@ -74,7 +68,10 @@ export FRAMEWORK_PATH=${KIS_INSTALL_DIR}/lib/
 export KDE_COLOR_DEBUG=1
 export QTEST_COLORED=1
 
-DEPBUILD_LOG="${BUILDROOT}/builddeps_.log"
+OUPUT_LOG="${BUILDROOT}/osxbuild.log"
+ERROR_LOG="${BUILDROOT}/osxbuild-error.log"
+printf "" > "${OUPUT_LOG}"
+printf "" > "${ERROR_LOG}"
 
 # configure max core for make compile
 ((MAKE_THREADS=1))
@@ -82,28 +79,51 @@ if test ${OSTYPE} == "darwin*"; then
     ((MAKE_THREADS = $(sysctl -n hw.ncpu) - 1))
 fi
 
-# Prints log to file
-# $2 error message
-# $3 success message
-build_errorlog () {
-    if [[ "${1}" -ne 0  ]]; then
-        printf "ERROR: %s\n" "$2" >> ${DEPBUILD_LOG}
+# Prints stderr and stdout to log files
+# >(tee) works but breaks sigint
+log_cmd () {
+    if [[ "${VERBOSE}" ]]; then
+        "$@" 1>> ${OUPUT_LOG} 2>> ${ERROR_LOG}
     else
-        printf "OK: %s\n" "$3" >> ${DEPBUILD_LOG}
+        "$@" 2>> ${ERROR_LOG} | tee -a ${OUPUT_LOG} > /dev/null
     fi
-    echo ${1}
+}
+
+# Log messages to logfile
+log () {
+    if [[ "${VERBOSE}" ]]; then
+        printf "%s\n" "${@}"  | tee -a ${OUPUT_LOG}
+    else
+        printf "%s\n" "${@}" | tee -a ${OUPUT_LOG} > /dev/null
+    fi
+}
+
+# if previous command gives error
+# print msg
+print_if_error() {
+    error_stat="${?}"
+    if [ ${error_stat} -ne 0 ]; then
+        printf "\e[31m%s %s\e[0m\n" "Error:" "${1}" 2>> ${ERROR_LOG}
+        printf "%s\r" "${error_stat}"
+    fi
+}
+
+# print status messges
+print_msg() {
+    printf "\e[32m%s\e[0m\n" "${1}"
+    printf "%s\n" "${1}" >> ${OUPUT_LOG}
 }
 
 check_dir_path () {
     printf "%s" "Checking if ${1} exists and is dir... "
     if test -d ${1}; then
-        echo "OK"
-        return 0
+        echo -e "OK"
+
     elif test -e ${1}; then
-        echo "\n\tERROR: file ${1} exists but is not a directory!"
+        echo -e "\n\tERROR: file ${1} exists but is not a directory!" >&2
         return 1
     else
-        echo "Creating ${1}"
+        echo -e "Creating ${1}"
         mkdir ${1}
     fi
     return 0
@@ -111,20 +131,28 @@ check_dir_path () {
 # builds dependencies for the first time
 cmake_3rdparty () {
     cd ${KIS_TBUILD_DIR}
-    for package in ${@:1:${#@}}; do
-        printf "STATUS: %s\n" "Building ${package}" >> ${DEPBUILD_LOG}
-        cmake --build . --config RelWithDebInfo --target ${package} 2>> ${DEPBUILD_LOG}
-        local build_error=$(build_errorlog ${?} "Failed build ${package}" "Build Success! ${package}")
 
-        # run package fixes
-        if [[ ${2} != "1" ]]; then
+    local build_pkgs=("${@}") # convert to array
+
+    if [[ ${2} = "1" ]]; then
+        local nofix="true"
+        local build_pkgs=(${build_pkgs[@]:0:1})
+    fi
+
+    for package in ${build_pkgs[@]} ; do
+        print_msg "Building ${package}"
+        log_cmd cmake --build . --config RelWithDebInfo --target ${package}
+        if [[ ! $(print_if_error "Failed build ${package}") ]]; then
+            print_msg "Build Success! ${package}"
+        fi
+        # fixes does not depend on failure
+        if [[ ! ${nofix} ]]; then
             build_3rdparty_fixes ${package}
         fi
     done
 }
 
 build_3rdparty_fixes(){
-    osxbuild_count=$((${osxbuild_count} + 1))
     pkg=${1}
     if [[ "${pkg}" = "ext_qt" && -e "${KIS_INSTALL_DIR}/bin/qmake" ]]; then
         ln -sf qmake "${KIS_INSTALL_DIR}/bin/qmake-qt5"
@@ -132,31 +160,31 @@ build_3rdparty_fixes(){
     elif [[ "${pkg}" = "ext_openexr" ]]; then
         # open exr will fail the first time is called
         # rpath needs to be fixed an build rerun
-        echo "Fixing rpath on openexr file: b44ExpLogTable"
-        echo "Fixing rpath on openexr file: dwaLookups"
-        install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./b44ExpLogTable
-        install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./dwaLookups
+        log "Fixing rpath on openexr file: b44ExpLogTable"
+        log "Fixing rpath on openexr file: dwaLookups"
+        log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./b44ExpLogTable
+        log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./dwaLookups
         # we must rerun build!
         cmake_3rdparty ext_openexr "1"
 
     elif [[ "${pkg}" = "ext_fontconfig" ]]; then
-        echo "fixing rpath on fc-cache"
-        install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_fontconfig/ext_fontconfig-prefix/src/ext_fontconfig-build/fc-cache/.libs/fc-cache
+        log "fixing rpath on fc-cache"
+        log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_TBUILD_DIR}/ext_fontconfig/ext_fontconfig-prefix/src/ext_fontconfig-build/fc-cache/.libs/fc-cache
         # rerun rebuild
         cmake_3rdparty ext_fontconfig "1"
     fi
 }
 
 build_3rdparty () {
-    echo "building in ${KIS_TBUILD_DIR}"
+    print_msg "building in ${KIS_TBUILD_DIR}"
 
-    check_dir_path ${KIS_TBUILD_DIR}
-    check_dir_path ${KIS_DOWN_DIR}
-    check_dir_path ${KIS_INSTALL_DIR}
+    log "$(check_dir_path ${KIS_TBUILD_DIR})"
+    log "$(check_dir_path ${KIS_DOWN_DIR})"
+    log "$(check_dir_path ${KIS_INSTALL_DIR})"
 
     cd ${KIS_TBUILD_DIR}
 
-    cmake ${KIS_SRC_DIR}/3rdparty/ \
+    log_cmd cmake ${KIS_SRC_DIR}/3rdparty/ \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
         -DEXTERNALS_DOWNLOAD_DIR=${KIS_DOWN_DIR} \
         -DINSTALL_ROOT=${KIS_INSTALL_DIR}
@@ -164,12 +192,10 @@ build_3rdparty () {
         # -DCPPFLAGS=-I${KIS_INSTALL_DIR}/include \
         # -DLDFLAGS=-L${KIS_INSTALL_DIR}/lib
 
-    echo "finished 3rdparty build setup"
-    # make preinstall
-    echo "finished make step"
+    print_msg "finished 3rdparty build setup"
     
-    if ! test -z ${1}; then
-        cmake_3rdparty ${@}
+    if [[ -n ${1} ]]; then
+        cmake_3rdparty "${@}"
         exit
     fi
 
@@ -205,8 +231,8 @@ build_3rdparty () {
     # Stop if qmake link was not created
     # this meant qt build fail and further builds will
     # also fail.
-    test -L "${KIS_INSTALL_DIR}/bin/qmake-qt5"
-    if [[ $(build_errorlog ${?} "qmake link missing!" "qmake link present, continuing...") -ne 0 ]];then
+    log_cmd test -L "${KIS_INSTALL_DIR}/bin/qmake-qt5"
+    if [[ $(print_if_error "qmake link missing!") ]]; then
         printf "
     link: ${KIS_INSTALL_DIR}/bin/qmake-qt5 missing!
     It probably means ext_qt failed!!
@@ -241,7 +267,7 @@ build_3rdparty () {
 # make is only on target first run
 # subsequent runs only call make install
 rebuild_3rdparty () {
-    echo "starting rebuild of 3rdparty packages"
+    print_msg "starting rebuild of 3rdparty packages"
     build_install_ext() {
         for pkg in ${@:1:${#@}}; do
             {
@@ -251,10 +277,10 @@ rebuild_3rdparty () {
             } || {
                 cd ${KIS_TBUILD_DIR}/ext_heif/${pkg}-prefix/src/${pkg}-stamp
             }
-            echo "Installing ${pkg} files..."
+            log "Installing ${pkg} files..."
             rm ${pkg}-configure ${pkg}-build ${pkg}-install
 
-            cmake_3rdparty ${pkg} >> ${BUILDROOT}/rebuilddeps_.log
+            cmake_3rdparty ${pkg}
 
             cd ${KIS_TBUILD_DIR}
         done
@@ -322,7 +348,7 @@ rebuild_3rdparty () {
 
 #not tested
 set_krita_dirs() {
-    if ! test -z ${1}; then
+    if [[ -n ${1} ]]; then
         KIS_BUILD_DIR=${BUILDROOT}/b_${1}
         KIS_INSTALL_DIR=${BUILDROOT}/i_${1}
         KIS_SRC_DIR=${BUILDROOT}/src_${1}
@@ -335,7 +361,7 @@ build_krita () {
     set_krita_dirs ${1}
     echo ${KIS_BUILD_DIR}
     echo ${KIS_INSTALL_DIR}
-    check_dir_path ${KIS_BUILD_DIR}
+    log_cmd check_dir_path ${KIS_BUILD_DIR}
     cd ${KIS_BUILD_DIR}
 
     cmake ${KIS_SRC_DIR} \
@@ -363,7 +389,7 @@ build_krita () {
 
 install_krita () {
     set_krita_dirs ${1}
-    check_dir_path ${KIS_BUILD_DIR}
+    log_cmd check_dir_path ${KIS_BUILD_DIR}
     cd ${KIS_BUILD_DIR}
     make install
 
@@ -378,40 +404,22 @@ install_krita () {
 # Historically only fixed boost @rpath
 fix_boost_rpath () {
     set_krita_dirs ${1}
+    print_msg "Fixing boost..."
     # install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib $BUILDROOT/$KRITA_INSTALL/bin/krita.app/Contents/MacOS/gmic_krita_qt
-    if $(install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita); then
-        echo "Added rpath ${KIS_INSTALL_DIR}/lib to krita bin"
-    fi
+    log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
+    # echo "Added rpath ${KIS_INSTALL_DIR}/lib to krita bin"
     # install_name_tool -add_rpath ${BUILDROOT}/deps/lib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
-    install_name_tool -change libboost_system.dylib @rpath/libboost_system.dylib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
+    log_cmd install_name_tool -change libboost_system.dylib @rpath/libboost_system.dylib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
 
     FILES=$(find -L ${KIS_INSTALL_DIR} -name '*so' -o -name '*dylib')
     for FILE in $FILES; do
-        if test -n "$(otool -L $FILE | grep boost)"; then
-            echo "Fixing… $FILE"
-            install_name_tool -change libboost_system.dylib @rpath/libboost_system.dylib $FILE
+        if [[ -n "$(otool -L $FILE | grep boost)" ]]; then
+            log "Fixing -- $FILE"
+            log_cmd install_name_tool -change libboost_system.dylib @rpath/libboost_system.dylib $FILE
         fi
     done
 
-    # site-packages is not added to path in Framework
-    # we create sitecustomize.py to add it on FrameworkPython start
-#     local py_mayor_version=$(python -c "import sys; print(sys.version_info[0])")
-#     if [[ ${py_mayor_version} -eq 3 ]]; then
-#         echo "Adding sitecustomize.py to Python.framework"
-#         local py_minor_version=$(python -c "import sys; print(sys.version_info[1])")
-#         local py_version="${py_mayor_version}.${py_minor_version}"
-#         local PythonLibDir="${KIS_INSTALL_DIR}/lib/Python.framework/Versions/Current/lib/python${py_version}/"
-#         printf "%s\n" \
-# "import os
-# import site
-
-# framework_path = os.path.dirname(os.path.abspath(__file__))
-# site.addsitedir(os.path.join(framework_path,'site-packages'))
-# site.addsitedir(os.path.join(framework_path,'site-packages', 'PyQt5'))
-# " \
-#     > ${PythonLibDir}/sitecustomize.py
-#     fi
-
+    log "Fixing boost done!"
 }
 
 print_usage () {
@@ -427,39 +435,40 @@ print_usage () {
     echo ""
 }
 
-if test ${#} -eq 0; then
+if [[ ${#} -eq 0 ]]; then
     echo "ERROR: No option given!"
     print_usage
     exit 1
 fi
 
-if test ${1} = "builddeps"; then
+if [[ ${1} = "builddeps" ]]; then
     build_3rdparty "${@:2}"
 
-elif test ${1} = "rebuilddeps"; then
+elif [[ ${1} = "rebuilddeps" ]]; then
     rebuild_3rdparty "${@:2}"
 
-elif test ${1} = "fixboost"; then
+elif [[ ${1} = "fixboost" ]]; then
     fix_boost_rpath
 
-elif test ${1} = "build"; then
+elif [[ ${1} = "build" ]]; then
     build_krita ${2}
 
-elif test ${1} = "install"; then
+elif [[ ${1} = "install" ]]; then
     install_krita ${2}
     fix_boost_rpath ${2}
 
-elif test ${1} = "buildinstall"; then
+elif [[ ${1} = "buildinstall" ]]; then
     build_krita ${2}
     install_krita ${2}
     fix_boost_rpath ${2}
 
-elif test ${1} = "test"; then
+elif [[ ${1} = "test" ]]; then
     ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
 
 else
     echo "Option ${1} not supported"
     print_usage
+    exit 1
 fi
 
 # after finishig sometimes it complains about missing matching quotes.

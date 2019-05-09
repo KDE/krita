@@ -185,6 +185,7 @@ build_3rdparty () {
     cd ${KIS_TBUILD_DIR}
 
     log_cmd cmake ${KIS_SRC_DIR}/3rdparty/ \
+        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
         -DEXTERNALS_DOWNLOAD_DIR=${KIS_DOWN_DIR} \
         -DINSTALL_ROOT=${KIS_INSTALL_DIR}
@@ -373,7 +374,7 @@ build_krita () {
         -DKDE_INSTALL_BUNDLEDIR=${KIS_INSTALL_DIR}/bin \
         -DPYQT_SIP_DIR_OVERRIDE=${KIS_INSTALL_DIR}/share/sip/ \
         -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.11 \
+        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
         -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers
 
     # copiling phase

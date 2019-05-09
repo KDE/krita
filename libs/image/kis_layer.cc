@@ -861,6 +861,23 @@ QRect KisLayer::outgoingChangeRect(const QRect &rect) const
     return rect;
 }
 
+QRect KisLayer::needRectForOriginal(const QRect &rect) const
+{
+    QRect needRect = rect;
+
+    const QList<KisEffectMaskSP> masks = effectMasks();
+
+    if (!masks.isEmpty()) {
+        QStack<QRect> applyRects;
+        bool needRectVaries;
+
+        needRect = masksNeedRect(masks, rect,
+                                 applyRects, needRectVaries);
+    }
+
+    return needRect;
+}
+
 QImage KisLayer::createThumbnail(qint32 w, qint32 h)
 {
     if (w == 0 || h == 0) {

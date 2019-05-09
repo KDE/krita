@@ -338,8 +338,29 @@ protected:
             m_resultAccessRect = m_resultNeedRect = m_childNeedRect =
                 m_lastNeedRect = m_resultChangeRect;
 
-        if(position & N_TOPMOST)
-            m_lastNeedRect = m_childNeedRect;
+        if (leaf->parent() && position & N_TOPMOST) {
+            bool parentNeedRectFound = false;
+            QRect parentNeedRect;
+
+            Q_FOREACH(const JobItem &job, m_mergeTask) {
+                if (job.m_leaf == leaf->parent()) {
+                    parentNeedRect =
+                        job.m_leaf->projectionPlane()->needRectForOriginal(job.m_applyRect);
+                    parentNeedRectFound = true;
+                }
+            }
+
+            // TODO: check if we can put this requirement
+            // KIS_SAFE_ASSERT_RECOVER_NOOP(parentNeedRectFound);
+
+            if (parentNeedRectFound) {
+                m_lastNeedRect = parentNeedRect;
+            } else {
+                // legacy way of fetching parent need rect, just
+                // takes need rect of the last visited filthy node
+                m_lastNeedRect = m_childNeedRect;
+            }
+        }
 
         if (!leaf->visible()) {
             if (!m_lastNeedRect.isEmpty()) {

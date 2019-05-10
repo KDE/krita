@@ -279,9 +279,9 @@ void VideoExportOptionsDialog::setConfiguration(const KisPropertiesConfiguration
 
     ui->cmbPresetH265->setCurrentIndex(cfg->getInt("h265PresetIndex", 5));
     ui->intCRFH265->setValue(cfg->getInt("h265ConstantRateFactor", 23));
-    ui->cmbProfileH265->setCurrentIndex(cfg->getInt("h265ProfileIndex", 0));
+    ui->cmbProfileH265->setCurrentIndex(cfg->getInt("h265ProfileIndex", 1));
     ui->cmbTuneH265->setCurrentIndex(cfg->getInt("h265TuneIndex", 1));
-    ui->chkUseHDRMetadata->setChecked(cfg->getBool("h265UseHDRMetadata", false));
+    ui->chkUseHDRMetadata->setChecked(cfg->getBool("h265UseHDRMetadata", true));
 
     ui->intBitrate->setValue(cfg->getInt("TheoraBitrate", 5000));
 
@@ -289,7 +289,7 @@ void VideoExportOptionsDialog::setConfiguration(const KisPropertiesConfiguration
     ui->chkCustomLine->setChecked(!m_d->currentCustomLine.isEmpty());
     slotCustomLineToggled(ui->chkCustomLine->isChecked());
 
-    const QString codecId = cfg->getString("CodecId", "");
+    const QString codecId = cfg->getString("CodecId", "hevc_qsv");
 
     const int index = qMax(0, findIndexById(codecId, m_d->codecs));
     ui->cmbCodec->setCurrentIndex(index);

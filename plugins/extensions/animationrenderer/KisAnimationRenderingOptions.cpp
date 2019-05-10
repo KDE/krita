@@ -120,8 +120,8 @@ void KisAnimationRenderingOptions::fromProperties(KisPropertiesConfigurationSP c
     videoMimeType = config->getPropertyLazy("video_mimetype", videoMimeType);
     frameMimeType = config->getPropertyLazy("frame_mimetype", frameMimeType);
 
-    shouldEncodeVideo = config->getPropertyLazy("encode_video", false);
-    shouldDeleteSequence = config->getPropertyLazy("delete_sequence", false);
+    shouldEncodeVideo = config->getPropertyLazy("encode_video", true);
+    shouldDeleteSequence = config->getPropertyLazy("delete_sequence", true);
 
     ffmpegPath = config->getPropertyLazy("ffmpeg_path", "");
     frameRate = config->getPropertyLazy("framerate", 25);

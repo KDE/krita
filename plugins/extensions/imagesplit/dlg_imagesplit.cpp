@@ -28,10 +28,13 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 
+#include <KisDialogStateSaver.h>
+
 DlgImagesplit::DlgImagesplit(KisViewManager* view, const QString &suffix, QStringList listMimeFilter, int defaultMimeIndex)
     : KoDialog(view->mainWindow())
 {
     m_page = new WdgImagesplit(this);
+    KisDialogStateSaver::restoreState(m_page, "DlgImagesplit");
 
     setCaption(i18n("Image Split"));
     setButtons(Apply | Close);
@@ -52,6 +55,7 @@ DlgImagesplit::DlgImagesplit(KisViewManager* view, const QString &suffix, QStrin
 
 DlgImagesplit::~DlgImagesplit()
 {
+    KisDialogStateSaver::saveState(m_page, "DlgImagesplit");
 }
 
 void DlgImagesplit::lineEditEnable()

@@ -27,6 +27,9 @@
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
+
+#include <KisDialogStateSaver.h>
+
 DlgSeparate::DlgSeparate(const QString & imageCS,
                          const QString & layerCS,
                          QWidget *  parent,
@@ -44,6 +47,7 @@ DlgSeparate::DlgSeparate(const QString & imageCS,
     Q_CHECK_PTR(m_page);
     setMainWidget(m_page);
     resize(m_page->sizeHint());
+    KisDialogStateSaver::restoreState(m_page, "DlgSeparate");
 
     m_page->lblColormodel->setText(layerCS);
     m_page->grpOutput->hide();
@@ -57,6 +61,7 @@ DlgSeparate::DlgSeparate(const QString & imageCS,
 
 DlgSeparate::~DlgSeparate()
 {
+    KisDialogStateSaver::saveState(m_page, "DlgSeparate");
     delete m_page;
 }
 enumSepAlphaOptions DlgSeparate::getAlphaOptions()

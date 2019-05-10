@@ -21,7 +21,7 @@
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <kis_config.h>
-
+#include <KisDialogStateSaver.h>
 #include "kis_document_aware_spin_box_unit_manager.h"
 
 const QString DlgOffsetImage::PARAM_PREFIX = "imageoffsetdlg";
@@ -43,7 +43,7 @@ DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize image
     m_page = new WdgOffsetImage(this);
     Q_CHECK_PTR(m_page);
     m_page->setObjectName("offset_image");
-
+    KisDialogStateSaver::restoreState(m_page, "DlgOffsetImage");
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
@@ -95,6 +95,7 @@ DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize image
 
 DlgOffsetImage::~DlgOffsetImage()
 {
+    KisDialogStateSaver::saveState(m_page, "DlgOffsetImage");
     KisConfig cfg(false);
 
     cfg.writeEntry<QString>(PARAM_XOFFSET_UNIT, _widthUnitManager->getApparentUnitSymbol());

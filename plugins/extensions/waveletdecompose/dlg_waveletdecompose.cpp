@@ -21,10 +21,11 @@
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
+#include <KisDialogStateSaver.h>
 
 DlgWaveletDecompose::DlgWaveletDecompose(QWidget *  parent,
-                                       const char * name)
-        : KoDialog(parent)
+                                         const char * name)
+    : KoDialog(parent)
 {
     setCaption(i18n("WaveletDecompose"));
     setButtons(Ok | Cancel);
@@ -33,8 +34,9 @@ DlgWaveletDecompose::DlgWaveletDecompose(QWidget *  parent,
 
     m_page = new WdgWaveletDecompose(this);
     Q_CHECK_PTR(m_page);
-     m_page->layout()->setMargin(0);
-     m_page->setObjectName("wavelet_decompose");
+    m_page->layout()->setMargin(0);
+    m_page->setObjectName("wavelet_decompose");
+    KisDialogStateSaver::restoreState(m_page, "DlgWaveletDecompose");
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());
@@ -46,6 +48,7 @@ DlgWaveletDecompose::DlgWaveletDecompose(QWidget *  parent,
 
 DlgWaveletDecompose::~DlgWaveletDecompose()
 {
+    KisDialogStateSaver::saveState(m_page, "DlgWaveletDecompose");
     delete m_page;
 }
 

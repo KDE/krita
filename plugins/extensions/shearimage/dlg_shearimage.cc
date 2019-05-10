@@ -24,6 +24,7 @@
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
+#include <KisDialogStateSaver.h>
 
 DlgShearImage::DlgShearImage(QWidget *  parent,
                              const char * name)
@@ -40,6 +41,7 @@ DlgShearImage::DlgShearImage(QWidget *  parent,
     Q_CHECK_PTR(m_page);
     m_page->layout()->setMargin(0);
     m_page->setObjectName("shear_image");
+    KisDialogStateSaver::restoreState(m_page, "DlgShearImage");
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());
@@ -51,6 +53,7 @@ DlgShearImage::DlgShearImage(QWidget *  parent,
 
 DlgShearImage::~DlgShearImage()
 {
+    KisDialogStateSaver::saveState(m_page, "DlgShearImage");
     delete m_page;
 }
 

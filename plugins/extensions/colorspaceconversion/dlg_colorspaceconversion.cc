@@ -33,6 +33,8 @@
 #include "KoColorSpace.h"
 #include "KoID.h"
 
+#include "KisDialogStateSaver.h"
+
 #include "widgets/kis_cmb_idlist.h"
 #include <KisSqueezedComboBox.h>// TODO: add a label that would display if there isn't a good color conversion path (use KoColorConversionSystem::isGoodPath), all color spaces shipped with Calligra are expected to have a good path, but better warn the user in case
 
@@ -46,6 +48,7 @@ DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
     m_page = new WdgConvertColorSpace(this);
     Q_CHECK_PTR(m_page);
     m_page->setObjectName("colorspace_conversion");
+    KisDialogStateSaver::saveState(m_page, "DlgColorSpaceConversion");
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());
@@ -67,6 +70,7 @@ DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
 
 DlgColorSpaceConversion::~DlgColorSpaceConversion()
 {
+    KisDialogStateSaver::saveState(m_page, "DlgColorSpaceConversion");
     delete m_page;
 }
 

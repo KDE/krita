@@ -30,7 +30,7 @@
 #include <kis_node.h>
 #include <kis_group_layer.h>
 #include <kis_clone_layer.h>
-
+#include <KisDialogStateSaver.h>
 
 DlgClonesArray::DlgClonesArray(KisViewManager *viewManager, QWidget *parent)
     : KoDialog(parent)
@@ -48,6 +48,7 @@ DlgClonesArray::DlgClonesArray(KisViewManager *viewManager, QWidget *parent)
     m_page = new WdgClonesArray(this);
     Q_CHECK_PTR(m_page);
     m_page->setObjectName("clones_array");
+    KisDialogStateSaver::restoreState(m_page, "DlgClonesArray");
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());
@@ -84,6 +85,7 @@ DlgClonesArray::DlgClonesArray(KisViewManager *viewManager, QWidget *parent)
 
 DlgClonesArray::~DlgClonesArray()
 {
+    KisDialogStateSaver::saveState(m_page, "DlgClonesArray");
     delete m_page;
 }
 

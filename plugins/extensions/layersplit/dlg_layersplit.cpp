@@ -34,8 +34,8 @@
 
 #include <kis_config.h>
 
-DlgLayerSplit::DlgLayerSplit()
-    : KoDialog()
+DlgLayerSplit::DlgLayerSplit(QWidget *parent)
+    : KoDialog(parent)
 {
     m_page = new WdgLayerSplit(this);
 

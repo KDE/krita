@@ -44,9 +44,9 @@ namespace KisDialogStateSaver
      * @brief restoreState restores the state of the dialog
      * @param parent the parent at the top of the QObject hierarchy that contains the child widgets
      * @param dialogName the name for the section under which we will restore the state
-     * @param defaults: contains default values for widgets. If there are widgets for which no default
-     *  has been specified, the default value created by QVariant will be used.
-     * in the variant part of the map.
+     * @param defaults: contains default values for widgets. This overrides what is stored in the config
+     * file. If there is no value in the config file, and no default specified, the value set for
+     * the widget (for instance in the ui file) will be used.
      * @return true if all the widgets could be restored, false if there was a problem
      */
     KRITAWIDGETUTILS_EXPORT void restoreState(QWidget *parent, const QString &dialogName, const QMap<QString, QVariant> &defaults = QMap<QString, QVariant>());

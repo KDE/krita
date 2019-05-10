@@ -16,12 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISINTPARSESPINBOX_H
-#define KISINTPARSESPINBOX_H
+#ifndef KISDOUBLEPARSESPINBOX_H
+#define KISDOUBLEPARSESPINBOX_H
 
-#include <QSpinBox>
+#include <QDoubleSpinBox>
 
-#include "kritawidgets_export.h"
+#include "kritawidgetutils_export.h"
 
 class QLabel;
 
@@ -30,45 +30,48 @@ class QLabel;
  *
  * Use this spinbox instead of the basic one from Qt if you want it to be able to parse arithmetic expressions.
  */
-class KRITAWIDGETS_EXPORT KisIntParseSpinBox : public QSpinBox
+class KRITAWIDGETUTILS_EXPORT KisDoubleParseSpinBox : public QDoubleSpinBox
 {
+
     Q_OBJECT
-
 public:
-    KisIntParseSpinBox(QWidget *parent = 0);
-    ~KisIntParseSpinBox() override;
+    KisDoubleParseSpinBox(QWidget* parent = 0);
+    ~KisDoubleParseSpinBox() override; //KisDoubleParseSpinBox may be used polymorphycally as a QDoubleSpinBox.
 
-    int valueFromText(const QString & text) const override;
-    QString textFromValue(int val) const override;
+    double valueFromText(const QString & text) const override;
+    QString textFromValue(double val) const override;
     QValidator::State validate ( QString & input, int & pos ) const override;
 
     void stepBy(int steps) override;
 
-    void setValue(int val); //polymorphism won't work directly, we use a signal/slot hack to do so but if signals are disabled this function will still be useful.
+    void setValue(double value); //polymorphism won't work directly, we use a signal/slot hack to do so but if signals are disabled this function will still be useful.
 
     bool isLastValid() const{ return boolLastValid; }
 
+    //! \brief this virtual function is similar to cleanText(); for KisDoubleParseSpinBox. But child class may remove additional artifacts.
+    virtual QString veryCleanText() const;
+
 Q_SIGNALS:
 
-    //! \brief signal emitted when the last parsed expression create an error.
+    //! \brief signal emitted when the last parsed expression creates an error.
     void errorWhileParsing(QString expr) const;
     //! \brief signal emitted when the last parsed expression is valid.
     void noMoreParsingError() const;
 
 public Q_SLOTS:
 
-    //! \brief useful to let the widget change it's stylesheet when an error occurred in the last expression.
+    //! \brief useful to let the widget change its stylesheet when an error occurred in the last expression.
     void setErrorStyle();
-    //! \brief useful to let the widget reset it's stylesheet when there's no more error.
+    //! \brief useful to let the widget reset its stylesheet when there's no more error.
     void clearErrorStyle();
     //! \brief say the widget to return to an error free state.
     void clearError();
 
 protected:
 
-    mutable QString* lastExprParsed;
     mutable bool boolLastValid;
-    mutable int oldVal; //store the last correctly evaluated value.
+    mutable double oldValue;
+    mutable QString lastExprParsed;
 
     QLabel* warningIcon;
 
@@ -79,4 +82,4 @@ protected:
     bool areOldMarginsSaved;
 };
 
-#endif // KISINTPARSESPINBOX_H
+#endif // KISDOUBLEPARSESPINBOX_H

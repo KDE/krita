@@ -22,7 +22,7 @@
 #include <KoUnit.h>
 
 #include "kis_double_parse_spin_box.h"
-#include "kritawidgets_export.h"
+#include "kritawidgetutils_export.h"
 
 class KisSpinBoxUnitManager;
 
@@ -31,7 +31,7 @@ class KisSpinBoxUnitManager;
  *
  * This class store the
  */
-class KRITAWIDGETS_EXPORT  KisDoubleParseUnitSpinBox : public KisDoubleParseSpinBox
+class KRITAWIDGETUTILS_EXPORT  KisDoubleParseUnitSpinBox : public KisDoubleParseSpinBox
 {
 
     Q_OBJECT

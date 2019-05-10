@@ -28,6 +28,11 @@
 #include <QSpinBox>
 #include <QDoubleSpinBox>
 
+#include "kis_int_parse_spin_box.h"
+#include "kis_double_parse_spin_box.h"
+#include "kis_double_parse_unit_spin_box.h"
+
+
 void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName)
 {
     Q_ASSERT(parent);
@@ -36,8 +41,18 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName)
     KConfigGroup group(KSharedConfig::openConfig(), dialogName);
     Q_FOREACH(QWidget *widget, parent->findChildren<QWidget*>(QString())) {
 
-        if (widget && !widget->objectName().isEmpty() ) {
-            if (qobject_cast<QCheckBox*>(widget)) {
+        if (!widget->objectName().isEmpty() ) {
+            if (qobject_cast<KisIntParseSpinBox*>(widget)) {
+                group.writeEntry(widget->objectName(), qobject_cast<KisIntParseSpinBox*>(widget)->value());
+            }
+            else if (qobject_cast<KisDoubleParseSpinBox*>(widget)) {
+                group.writeEntry(widget->objectName(), qobject_cast<KisDoubleParseSpinBox*>(widget)->value());
+            }
+            else if (qobject_cast<KisDoubleParseUnitSpinBox*>(widget)) {
+                // XXX: also save the unit
+                group.writeEntry(widget->objectName(), qobject_cast<KisDoubleParseUnitSpinBox*>(widget)->value());
+            }
+            else if (qobject_cast<QCheckBox*>(widget)) {
                 group.writeEntry(widget->objectName(), qobject_cast<const QCheckBox*>(widget)->isChecked());
             }
             else if (qobject_cast<QComboBox*>(widget)) {
@@ -55,11 +70,15 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName)
             else if (qobject_cast<QDoubleSpinBox*>(widget)) {
                 group.writeEntry(widget->objectName(), qobject_cast<QDoubleSpinBox*>(widget)->value());
             }
-            else {
-                //qWarning() << "Cannot save state for object" << widget;
-            }
 
+            else {
+                qWarning() << "Cannot save state for object" << widget;
+            }
         }
+        else {
+            qWarning() << "Dialog" << dialogName << "has a widget without an objectname:" << widget;
+        }
+
     }
 }
 
@@ -72,7 +91,7 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
 
     Q_FOREACH(QWidget *widget, parent->findChildren<QWidget*>(QString())) {
 
-        if (widget && !widget->objectName().isEmpty()) {
+        if (!widget->objectName().isEmpty()) {
 
             QString widgetName = widget->objectName();
 
@@ -81,7 +100,31 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
                 defaultValue = defaults[widgetName];
             }
 
-            if (qobject_cast<QCheckBox*>(widget)) {
+            if (qobject_cast<KisIntParseSpinBox*>(widget)) {
+                if (defaultValue.isValid()) {
+                    qobject_cast<KisIntParseSpinBox*>(widget)->setValue(defaultValue.toInt());
+                }
+                else {
+                    qobject_cast<KisIntParseSpinBox*>(widget)->setValue(group.readEntry<int>(widgetName, qobject_cast<KisIntParseSpinBox*>(widget)->value()));
+                }
+            }
+            else if (qobject_cast<KisDoubleParseSpinBox*>(widget)) {
+                if (defaultValue.isValid()) {
+                    qobject_cast<KisDoubleParseSpinBox*>(widget)->setValue(defaultValue.toInt());
+                }
+                else {
+                    qobject_cast<KisDoubleParseSpinBox*>(widget)->setValue(group.readEntry<int>(widgetName, qobject_cast<KisDoubleParseSpinBox*>(widget)->value()));
+                }
+            }
+            else if (qobject_cast<KisDoubleParseUnitSpinBox*>(widget)) {
+                if (defaultValue.isValid()) {
+                    qobject_cast<KisDoubleParseUnitSpinBox*>(widget)->setValue(defaultValue.toInt());
+                }
+                else {
+                    qobject_cast<KisDoubleParseUnitSpinBox*>(widget)->setValue(group.readEntry<int>(widgetName, qobject_cast<KisDoubleParseUnitSpinBox*>(widget)->value()));
+                }
+            }
+            else if (qobject_cast<QCheckBox*>(widget)) {
                 if (defaultValue.isValid()) {
                     qobject_cast<QCheckBox*>(widget)->setChecked(defaultValue.toBool());
                 }
@@ -133,6 +176,9 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
             else {
                 //qWarning() << "Cannot restore state for object" << widget;
             }
+        }
+        else {
+            qWarning() << "Dialog" << dialogName << "has a widget without an object name:" << widget;
         }
     }
 }

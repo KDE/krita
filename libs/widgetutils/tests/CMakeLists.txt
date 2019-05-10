@@ -12,6 +12,7 @@ ecm_add_tests(
     kis_simple_math_parser_test.cpp # FIXME this test should be in the ui directory
     TestKoProgressUpdater.cpp
     TestSqueezedComboBox.cpp
+    kis_parse_spin_boxes_test.cpp
     NAME_PREFIX "libs-widgetutils-"
     LINK_LIBRARIES kritawidgetutils kritaimage Qt5::Test
 )

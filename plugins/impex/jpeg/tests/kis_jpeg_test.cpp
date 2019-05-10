@@ -54,11 +54,21 @@ void KisJpegTest::testFiles()
     }
 }
 
-void KisJpegTest::testWriteonly()
+void KisJpegTest::testImportFromWriteonly()
 {
-    TestUtil::testWriteonly(QString(FILES_DATA_DIR), JpegMimetype);
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), JpegMimetype);
 }
 
 
+void KisJpegTest::testExportToReadonly()
+{
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), JpegMimetype);
+}
+
+
+void KisJpegTest::testImportIncorrectFormat()
+{
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), JpegMimetype);
+}
 KISTEST_MAIN(KisJpegTest)
 

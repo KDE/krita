@@ -1348,7 +1348,6 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisGro
     qint32 width = image->width();
     Imf::Header header(width, height);
 
-
     if (flatten) {
         KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
         KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);

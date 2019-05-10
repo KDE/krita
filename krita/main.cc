@@ -428,7 +428,7 @@ extern "C" int main(int argc, char **argv)
         app.setAttribute(Qt::AA_DontShowIconsInMenus);
     }
 
-    app.installEventFilter(KisQtWidgetsTweaker::instance());
+    //app.installEventFilter(KisQtWidgetsTweaker::instance());
 
     if (!args.noSplash()) {
         // then create the pixmap from an xpm: we cannot get the

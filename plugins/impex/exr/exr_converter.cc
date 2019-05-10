@@ -1354,33 +1354,25 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisGro
     qint32 width = image->width();
     Imf::Header header(width, height);
 
-    ENTER_FUNCTION() << "(1)";
-
     if (flatten) {
-        ENTER_FUNCTION() << "(2)";
         KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
         KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-        ENTER_FUNCTION() << "(3)";
         return buildFile(filename, l);
     }
     else {
-        ENTER_FUNCTION() << "(4)";
         QList<ExrPaintLayerSaveInfo> informationObjects;
         d->recBuildPaintLayerSaveInfo(informationObjects, "", layer);
 
         if(informationObjects.isEmpty()) {
             return ImportExportCodes::FormatColorSpaceUnsupported;
         }
-        ENTER_FUNCTION() << "(5)";
         d->makeLayerNamesUnique(informationObjects);
 
         QByteArray extraLayersInfo = d->fetchExtraLayersInfo(informationObjects).toUtf8();
         if (!extraLayersInfo.isNull()) {
             header.insert(EXR_KRITA_LAYERS, Imf::StringAttribute(extraLayersInfo.constData()));
         }
-        ENTER_FUNCTION() << "(6)";
         dbgFile << informationObjects.size() << " layers to save";
-        ENTER_FUNCTION() << "(7)";
         Q_FOREACH (const ExrPaintLayerSaveInfo& info, informationObjects) {
             if (info.pixelType < Imf::NUM_PIXELTYPES) {
                 Q_FOREACH (const QString& channel, info.channels) {
@@ -1389,13 +1381,11 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisGro
                 }
             }
         }
-        ENTER_FUNCTION() << "(8)";
 
         // Open file for writing
         try {
             Imf::OutputFile file(QFile::encodeName(filename), header);
             encodeData(file, informationObjects, width, height);
-            ENTER_FUNCTION() << "(9)";
             return ImportExportCodes::OK;
         } catch(std::exception &e) {
             dbgFile << "Exception while writing to exr file: " << e.what();

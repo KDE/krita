@@ -118,26 +118,53 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
 }
 
 
-void testWriteonly(const QString& _dirname, QString mimetype = "")
+void prepareFile(QFileInfo sourceFileInfo, bool removePermissionToWrite, bool removePermissionToRead)
 {
-    QString writeonlyFilename = _dirname + "writeonlyFile.txt";
 
-    QFileInfo sourceFileInfo(writeonlyFilename);
     QFileDevice::Permissions permissionsBefore;
     if (sourceFileInfo.exists()) {
         permissionsBefore = QFile::permissions(sourceFileInfo.absoluteFilePath());
         ENTER_FUNCTION() << permissionsBefore;
     } else {
-        QFile file(writeonlyFilename);
+        QFile file(sourceFileInfo.absoluteFilePath());
         file.open(QIODevice::WriteOnly);
         permissionsBefore = file.permissions();
         file.close();
     }
-    QFileDevice::Permissions permissionsNow = permissionsBefore &
-            (~QFileDevice::ReadUser & ~QFileDevice::ReadOwner
-             & ~QFileDevice::ReadGroup & ~QFileDevice::ReadOther);
+    QFileDevice::Permissions permissionsNow = permissionsBefore;
+    if (removePermissionToRead) {
+        permissionsNow = permissionsBefore &
+                (~QFileDevice::ReadUser & ~QFileDevice::ReadOwner
+                 & ~QFileDevice::ReadGroup & ~QFileDevice::ReadOther);
+    }
+    if (removePermissionToWrite) {
+        permissionsNow = permissionsBefore &
+                (~QFileDevice::WriteUser & ~QFileDevice::WriteOwner
+                 & ~QFileDevice::WriteGroup & ~QFileDevice::WriteOther);
+    }
+
     QFile::setPermissions(sourceFileInfo.absoluteFilePath(), permissionsNow);
 
+}
+
+void restorePermissionsToReadAndWrite(QFileInfo sourceFileInfo)
+{
+    QFileDevice::Permissions permissionsNow = sourceFileInfo.permissions();
+    QFileDevice::Permissions permissionsAfter = permissionsNow
+            | (QFileDevice::ReadUser | QFileDevice::ReadOwner
+            | QFileDevice::ReadGroup | QFileDevice::ReadOther)
+            | (QFileDevice::WriteUser | QFileDevice::WriteOwner
+            | QFileDevice::WriteGroup | QFileDevice::WriteOther);
+    QFile::setPermissions(sourceFileInfo.absoluteFilePath(), permissionsAfter);
+}
+
+
+void testImportFromWriteonly(const QString& _dirname, QString mimetype = "")
+{
+    QString writeonlyFilename = _dirname + "writeonlyFile.txt";
+    QFileInfo sourceFileInfo(writeonlyFilename);
+
+    prepareFile(sourceFileInfo, false, true);
 
     KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
 
@@ -158,11 +185,79 @@ void testWriteonly(const QString& _dirname, QString mimetype = "")
 
     delete doc;
 
-    QFileDevice::Permissions permissionsAfter = permissionsNow |
-            (QFileDevice::ReadUser | QFileDevice::ReadOwner
-             | QFileDevice::ReadGroup | QFileDevice::ReadOther);
-    QFile::setPermissions(sourceFileInfo.absoluteFilePath(), permissionsAfter);
+    restorePermissionsToReadAndWrite(sourceFileInfo);
+
 }
+
+
+void testExportToReadonly(const QString& _dirname, QString mimetype = "")
+{
+    QString readonlyFilename = _dirname + "readonlyFile.txt";
+
+    QFileInfo sourceFileInfo(readonlyFilename);
+    prepareFile(sourceFileInfo, true, false);
+
+    KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
+
+    KisImportExportManager manager(doc);
+    doc->setFileBatchMode(true);
+
+    {
+    MaskParent p;
+    ENTER_FUNCTION() << doc->image();
+
+    doc->setCurrentImage(p.image);
+
+    KisImportExportErrorCode status = manager.exportDocument(sourceFileInfo.absoluteFilePath(), sourceFileInfo.absoluteFilePath(), mimetype.toUtf8());
+    qDebug() << "export result = " << status;
+
+    QVERIFY(!status.isOk());
+
+
+    qApp->processEvents();
+
+    if (doc->image()) {
+        doc->image()->waitForDone();
+    }
+
+    }
+    delete doc;
+
+    restorePermissionsToReadAndWrite(sourceFileInfo);
+}
+
+
+
+void testImportIncorrectFormat(const QString& _dirname, QString mimetype = "")
+{
+    QString incorrectFormatFilename = _dirname + "incorrectFormatFile.txt";
+    QFileInfo sourceFileInfo(incorrectFormatFilename);
+
+    prepareFile(sourceFileInfo, false, false);
+
+    KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
+
+    KisImportExportManager manager(doc);
+    doc->setFileBatchMode(true);
+
+    KisImportExportErrorCode status = manager.importDocument(sourceFileInfo.absoluteFilePath(), mimetype);
+    qDebug() << "import result = " << status;
+
+    QVERIFY(!status.isOk());
+    QVERIFY(status == KisImportExportErrorCode(ImportExportCodes::FileFormatIncorrect));
+
+
+    qApp->processEvents();
+
+    if (doc->image()) {
+        doc->image()->waitForDone();
+    }
+
+    delete doc;
+
+}
+
+
 
 
 

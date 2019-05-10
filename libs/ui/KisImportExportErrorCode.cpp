@@ -78,6 +78,13 @@ QString KisImportExportErrorCannotRead::errorMessage() const
     return i18n("Cannot open file for reading. Reason: %1", qtErrorMessage());
 }
 
+bool KisImportExportErrorCannotRead::operator==(KisImportExportErrorCannotRead other)
+{
+    return other.m_error == m_error;
+}
+
+
+
 KisImportExportErrorCannotWrite::KisImportExportErrorCannotWrite() : KisImportExportComplexError(QFileDevice::FileError()) { }
 
 KisImportExportErrorCannotWrite::KisImportExportErrorCannotWrite(QFileDevice::FileError error) : KisImportExportComplexError(error) {
@@ -89,15 +96,21 @@ QString KisImportExportErrorCannotWrite::errorMessage() const
     return i18n("Cannot open file for writing. Reason: %1", qtErrorMessage());
 }
 
+bool KisImportExportErrorCannotWrite::operator==(KisImportExportErrorCannotWrite other)
+{
+    return other.m_error == m_error;
+}
+
+
+
+
+
 KisImportExportErrorCode::KisImportExportErrorCode() : errorFieldUsed(None), cannotRead(), cannotWrite() { }
 
 KisImportExportErrorCode::KisImportExportErrorCode(ImportExportCodes::ErrorCodeID id) : errorFieldUsed(CodeId), codeId(id),  cannotRead(), cannotWrite() { }
 
 KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotRead error) : errorFieldUsed(CannotRead), cannotRead(error), cannotWrite() { }
 KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotWrite error) : errorFieldUsed(CannotWrite), cannotRead(), cannotWrite(error) { }
-
-
-
 
 
 bool KisImportExportErrorCode::isOk() const
@@ -167,6 +180,21 @@ QString KisImportExportErrorCode::errorMessage() const
     return internal; // errorFieldUsed = None
 }
 
+
+
+bool KisImportExportErrorCode::operator==(KisImportExportErrorCode errorCode)
+{
+    if (errorFieldUsed != errorCode.errorFieldUsed) {
+        return false;
+    }
+    if (errorFieldUsed == CodeId) {
+        return codeId == errorCode.codeId;
+    }
+    if (errorFieldUsed == CannotRead) {
+        return cannotRead == errorCode.cannotRead;
+    }
+    return cannotWrite == errorCode.cannotWrite;
+}
 
 
 QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode)

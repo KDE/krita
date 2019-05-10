@@ -18,6 +18,19 @@
 #ifndef KOGAMUTMASK_H
 #define KOGAMUTMASK_H
 
+/*
+ * Optimize is only supported on GCC and optnone on CLANG
+ * This ensures no optimizations are used on intended functions
+ * in clang and gcc
+*/
+#ifndef KOGAMUTMASK_NO_OPTIMIZE
+#   if __has_attribute(optimize)
+#       define KOGAMUTMASK_NO_OPTIMIZE __attribute__((optimize(0)))
+#   else
+#       define KOGAMUTMASK_NO_OPTIMIZE __attribute__((optnone))
+#   endif
+#endif
+
 #include <QPainter>
 #include <QString>
 #include <QVector>
@@ -63,8 +76,7 @@ public:
     KoGamutMask(KoGamutMask *rhs);
 
     bool coordIsClear(const QPointF& coord, KoViewConverter& viewConverter, bool preview);
-
-    bool load() override __attribute__((optimize(0)));
+    bool load() override KOGAMUTMASK_NO_OPTIMIZE;
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;

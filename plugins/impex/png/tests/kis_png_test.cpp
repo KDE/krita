@@ -31,9 +31,16 @@
 #endif
 
 
+const QString PngMimetype = "image/png";
+
 void KisPngTest::testFiles()
 {
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), 1);
+}
+
+void KisPngTest::testWriteonly()
+{
+    TestUtil::testWriteonly(QString(FILES_DATA_DIR), PngMimetype);
 }
 
 void roudTripHdrImage(const KoColorSpace *savingColorSpace)

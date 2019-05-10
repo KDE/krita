@@ -37,11 +37,14 @@
 #include <QTemporaryFile>
 #include <QFileInfo>
 #include <QApplication>
+#include <QFile>
+#include <QFileDevice>
+#include <QIODevice>
 
 namespace TestUtil
 {
 
-void testFiles(const QString& _dirname, const QStringList& exclusions, const QString &resultSuffix = QString(), int fuzzy = 0, int maxNumFailingPixels = 0)
+void testFiles(const QString& _dirname, const QStringList& exclusions, const QString &resultSuffix = QString(), int fuzzy = 0, int maxNumFailingPixels = 0, bool showDebug = true)
 {
     QDir dirSources(_dirname);
     QStringList failuresFileInfo;
@@ -94,7 +97,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
 
             QPoint pt;
 
-            if (!TestUtil::compareQImages(pt, resultImage, sourceImage, fuzzy, fuzzy, maxNumFailingPixels)) {
+            if (!TestUtil::compareQImages(pt, resultImage, sourceImage, fuzzy, fuzzy, maxNumFailingPixels, showDebug)) {
                 failuresCompare << sourceFileInfo.fileName() + ": " + QString("Pixel (%1,%2) has different values").arg(pt.x()).arg(pt.y()).toLatin1();
                 sourceImage.save(sourceFileInfo.fileName() + ".png");
                 resultImage.save(resultFileInfo.fileName() + ".expected.png");
@@ -113,6 +116,55 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
 
     QFAIL("Failed testing files");
 }
+
+
+void testWriteonly(const QString& _dirname, QString mimetype = "")
+{
+    QString writeonlyFilename = _dirname + "writeonlyFile.txt";
+
+    QFileInfo sourceFileInfo(writeonlyFilename);
+    QFileDevice::Permissions permissionsBefore;
+    if (sourceFileInfo.exists()) {
+        permissionsBefore = QFile::permissions(sourceFileInfo.absoluteFilePath());
+        ENTER_FUNCTION() << permissionsBefore;
+    } else {
+        QFile file(writeonlyFilename);
+        file.open(QIODevice::WriteOnly);
+        permissionsBefore = file.permissions();
+        file.close();
+    }
+    QFileDevice::Permissions permissionsNow = permissionsBefore &
+            (~QFileDevice::ReadUser & ~QFileDevice::ReadOwner
+             & ~QFileDevice::ReadGroup & ~QFileDevice::ReadOther);
+    QFile::setPermissions(sourceFileInfo.absoluteFilePath(), permissionsNow);
+
+
+    KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
+
+    KisImportExportManager manager(doc);
+    doc->setFileBatchMode(true);
+
+    KisImportExportErrorCode status = manager.importDocument(sourceFileInfo.absoluteFilePath(), mimetype);
+    qDebug() << "import result = " << status;
+
+    QVERIFY(!status.isOk());
+
+
+    qApp->processEvents();
+
+    if (doc->image()) {
+        doc->image()->waitForDone();
+    }
+
+    delete doc;
+
+    QFileDevice::Permissions permissionsAfter = permissionsNow |
+            (QFileDevice::ReadUser | QFileDevice::ReadOwner
+             | QFileDevice::ReadGroup | QFileDevice::ReadOther);
+    QFile::setPermissions(sourceFileInfo.absoluteFilePath(), permissionsAfter);
+}
+
+
 
 }
 #endif

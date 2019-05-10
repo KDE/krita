@@ -26,6 +26,7 @@ class KisJpegTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testFiles();
+    void testWriteonly();
 };
 
 #endif

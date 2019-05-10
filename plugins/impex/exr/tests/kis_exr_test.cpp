@@ -37,6 +37,11 @@ void KisExrTest::testFiles()
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), 5);
 }
 
+void KisExrTest::testWriteonly()
+{
+    TestUtil::testWriteonly(QString(FILES_DATA_DIR));
+}
+
 void KisExrTest::testRoundTrip()
 {
     QString inputFileName(TestUtil::fetchDataFileLazy("CandleGlass.exr"));

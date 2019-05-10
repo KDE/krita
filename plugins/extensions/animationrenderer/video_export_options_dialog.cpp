@@ -35,6 +35,7 @@ struct VideoExportOptionsDialog::Private
         if (containerType == DEFAULT) {
             codecs << KoID("libx264", i18nc("h264 codec name, check simplescreenrecorder for standard translations", "H.264, MPEG-4 Part 10"));
             codecs << KoID("libx265", i18nc("h265 codec name, check simplescreenrecorder for standard translations", "H.265, MPEG-H Part 2 (HEVC)"));
+            codecs << KoID("hevc_qsv", i18nc("h265 for Intel codec name, check simplescreenrecorder for standard translations", "H.265 (Intel Quick Sync Video)"));
         } else {
             codecs << KoID("libtheora", i18nc("theora codec name, check simplescreenrecorder for standard translations", "Theora"));
         }
@@ -226,7 +227,7 @@ void VideoExportOptionsDialog::slotCodecSelected(int index)
 
     if (codec == "libx264") {
         ui->stackedWidget->setCurrentIndex(CODEC_H264);
-    } else if (codec == "libx265") {
+    } else if (codec == "libx265" || codec == "hevc_qsv") {
         ui->stackedWidget->setCurrentIndex(CODEC_H265);
     } else if (codec == "libtheora") {
         ui->stackedWidget->setCurrentIndex(CODEC_THEORA);
@@ -326,7 +327,7 @@ QStringList VideoExportOptionsDialog::generateCustomLine() const
         //const int tuneIndex = ui->cmbTune->currentIndex();
         //options << "-tune" << m_d->tunes[tuneIndex].id();
 
-    } else if (currentCodecId() == "libx265") {
+    } else if (currentCodecId() == "libx265" || currentCodecId() == "hevc_qsv") {
         const bool enableHDR =
             ui->chkUseHDRMetadata->isEnabled() &&
             ui->chkUseHDRMetadata->isChecked();
@@ -337,7 +338,12 @@ QStringList VideoExportOptionsDialog::generateCustomLine() const
                     << "-color_primaries" << "bt2020";
         }
 
-        options << "-c:v" << "libx265";
+        if (currentCodecId() == "libx265") {
+            options << "-c:v" << "libx265";
+        } else {
+            options << "-c:v" << "hevc_qsv";
+        }
+
         options << "-crf" << QString::number(ui->intCRFH265->value());
 
         const int presetIndex = ui->cmbPresetH265->currentIndex();

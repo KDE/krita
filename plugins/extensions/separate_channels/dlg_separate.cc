@@ -29,6 +29,9 @@
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
+
+#include <KisDialogStateSaver.h>
+
 DlgSeparate::DlgSeparate(const QString & imageCS,
                          const QString & layerCS,
                          QWidget *  parent,
@@ -46,6 +49,7 @@ DlgSeparate::DlgSeparate(const QString & imageCS,
     Q_CHECK_PTR(m_page);
     setMainWidget(m_page);
     resize(m_page->sizeHint());
+    KisDialogStateSaver::restoreState(m_page, "DlgSeparate");
 
     m_page->lblColormodel->setText(layerCS);
     connect(m_page->radioCurrentLayer, SIGNAL(toggled(bool)), this, SLOT(slotSetColorSpaceLabel()));
@@ -60,7 +64,11 @@ DlgSeparate::DlgSeparate(const QString & imageCS,
 
 DlgSeparate::~DlgSeparate()
 {
+<<<<<<< HEAD
     KisDialogStateSaver::saveState(m_page, "krita/separate channels");
+=======
+    KisDialogStateSaver::saveState(m_page, "DlgSeparate");
+>>>>>>> 2f57557c5c... Initial conversion of dialogs to the statesaver
     delete m_page;
 }
 enumSepAlphaOptions DlgSeparate::getAlphaOptions()

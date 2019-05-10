@@ -52,6 +52,7 @@
 #include "kis_iterator_ng.h"
 #include "kis_selection_tool_helper.h"
 #include <kis_slider_spin_box.h>
+#include <KisDialogStateSaver.h>
 
 DlgColorRange::DlgColorRange(KisViewManager *viewManager, QWidget *parent)
     : KoDialog(parent)
@@ -65,6 +66,7 @@ DlgColorRange::DlgColorRange(KisViewManager *viewManager, QWidget *parent)
     m_page = new WdgColorRange(this);
     Q_CHECK_PTR(m_page);
     m_page->setObjectName("color_range");
+    KisDialogStateSaver::restoreState(m_page, "DlgColorRange");
 
     setCaption(i18n("Color Range"));
     setMainWidget(m_page);
@@ -109,6 +111,7 @@ DlgColorRange::DlgColorRange(KisViewManager *viewManager, QWidget *parent)
 
 DlgColorRange::~DlgColorRange()
 {
+    KisDialogStateSaver::saveState(m_page, "DlgColorRange");
     delete m_page;
 }
 

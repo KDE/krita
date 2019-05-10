@@ -25,6 +25,7 @@
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <kis_icon.h>
+#include <KisDialogStateSaver.h>
 
 DlgRotateImage::DlgRotateImage(QWidget *  parent,
                                const char * name)
@@ -40,6 +41,7 @@ DlgRotateImage::DlgRotateImage(QWidget *  parent,
     m_page = new WdgRotateImage(this);
     Q_CHECK_PTR(m_page);
     m_page->setObjectName("rotate_image");
+    KisDialogStateSaver::restoreState(m_page, "DlgRotateImage");
 
     setMainWidget(m_page);
     resize(m_page->sizeHint());
@@ -58,6 +60,7 @@ DlgRotateImage::DlgRotateImage(QWidget *  parent,
 
 DlgRotateImage::~DlgRotateImage()
 {
+    KisDialogStateSaver::saveState(m_page, "DlgRotateImage");
     delete m_page;
 }
 

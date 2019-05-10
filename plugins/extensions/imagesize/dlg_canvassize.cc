@@ -31,6 +31,7 @@
 
 #include <QComboBox>
 #include <QButtonGroup>
+#include <KisDialogStateSaver.h>
 
 // used to extend KoUnit in comboboxes
 static const QString percentStr(i18n("Percent (%)"));
@@ -61,6 +62,7 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
     Q_CHECK_PTR(m_page);
     m_page->layout()->setMargin(0);
     m_page->setObjectName("canvas_size");
+    KisDialogStateSaver::restoreState(m_page, "DlgCanvasSize");
 
     _widthUnitManager = new KisDocumentAwareSpinBoxUnitManager(this);
     _heightUnitManager = new KisDocumentAwareSpinBoxUnitManager(this, KisDocumentAwareSpinBoxUnitManager::PIX_DIR_Y);
@@ -199,6 +201,8 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
 
 DlgCanvasSize::~DlgCanvasSize()
 {
+    KisDialogStateSaver::saveState(m_page, "DlgCanvasSize");
+
     KisConfig cfg(false);
     cfg.writeEntry<bool>("CanvasSize/KeepAspectRatio", m_page->aspectRatioBtn->keepAspectRatio());
     cfg.writeEntry<bool>("CanvasSize/ConstrainProportions", m_page->constrainProportionsCkb->isChecked());

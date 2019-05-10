@@ -26,7 +26,7 @@
 #include <kis_config.h>
 
 #include <klocalizedstring.h>
-
+#include <KisDialogStateSaver.h>
 #include <kis_document_aware_spin_box_unit_manager.h>
 
 #include <kis_filter_strategy.h>// XXX: I'm really real bad at arithmetic, let alone math. Here
@@ -63,6 +63,7 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
     Q_CHECK_PTR(m_page);
     m_page->layout()->setMargin(0);
     m_page->setObjectName(name);
+    KisDialogStateSaver::restoreState(m_page, "DlgLayerSize");
 
     KisConfig cfg(true);
 
@@ -123,6 +124,7 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
 
 DlgLayerSize::~DlgLayerSize()
 {
+    KisDialogStateSaver::saveState(m_page, "DlgLayerSize");
 
     KisConfig cfg(false);
 

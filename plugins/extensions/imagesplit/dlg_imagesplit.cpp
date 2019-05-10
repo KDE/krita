@@ -28,6 +28,7 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <QPainter>
+#include <KisDialogStateSaver.h>
 
 DlgImagesplit::DlgImagesplit(KisViewManager* view
                              , const QString &suffix
@@ -37,7 +38,9 @@ DlgImagesplit::DlgImagesplit(KisViewManager* view
                              , QList<qreal> vGuides, qreal thumbnailRatio)
     : KoDialog(view->mainWindow())
 {
+
     m_page = new WdgImagesplit(this);
+
     m_thumbnail = thumbnail;
     m_horizontalGuides = hGuides;
     m_verticalGuides = vGuides;
@@ -66,11 +69,14 @@ DlgImagesplit::DlgImagesplit(KisViewManager* view
     connect(m_page->chkGuidesHorizontal, SIGNAL(toggled(bool)), SLOT(updatePreview()));
     connect(m_page->chkGuidesVertical, SIGNAL(toggled(bool)), SLOT(updatePreview()));
 
+    KisDialogStateSaver::restoreState(m_page, "DlgImagesplit");
+
     updatePreview();
 }
 
 DlgImagesplit::~DlgImagesplit()
 {
+    KisDialogStateSaver::saveState(m_page, "DlgImagesplit");
 }
 
 void DlgImagesplit::lineEditEnable()

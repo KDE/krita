@@ -37,7 +37,7 @@ class DlgLayerSplit: public KoDialog
 
 public:
 
-    DlgLayerSplit();
+    DlgLayerSplit(QWidget *parent = 0);
     ~DlgLayerSplit() override;
 
     bool createBaseGroup() const;

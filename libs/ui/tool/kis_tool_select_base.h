@@ -293,11 +293,11 @@ public:
                 KisStrokeStrategy *strategy = new MoveStrokeStrategy({selectionMask}, this->image().data(), this->image().data());
                 m_moveStrokeId = this->image()->startStroke(strategy);
                 m_dragStartPos = pos;
-
+                m_didMove = true;
                 return;
             }
         }
-
+        m_didMove = false;
         keysAtStart = event->modifiers();
 
         setAlternateSelectionAction(KisSelectionModifierMapper::map(keysAtStart));
@@ -349,6 +349,10 @@ public:
         return m_moveStrokeId;
     }
 
+    bool selectionDidMove() const {
+        return m_didMove;
+    }
+
     QMenu* popupActionsMenu() {
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, 0);
@@ -367,6 +371,7 @@ private:
 
     QPointF m_dragStartPos;
     KisStrokeId m_moveStrokeId;
+    bool m_didMove = false;
 
     KisSignalAutoConnectionsStore m_modeConnections;
 };

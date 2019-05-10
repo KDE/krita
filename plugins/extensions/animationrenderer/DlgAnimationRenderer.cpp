@@ -539,8 +539,6 @@ void DlgAnimationRenderer::slotExportTypeChanged()
         m_page->imageSequenceOptionsGroup->setVisible(false);
         m_page->videoOptionsGroup->setVisible(false); //shrinks the horizontal space temporarily to help resize() work
         m_page->videoOptionsGroup->setVisible(true);
-
-        cfg.writeEntry<QString>("AnimationRenderer/export_type", "Video");
     }
 
 
@@ -550,16 +548,12 @@ void DlgAnimationRenderer::slotExportTypeChanged()
         m_page->videoOptionsGroup->setVisible(false);
         m_page->imageSequenceOptionsGroup->setVisible(false);
         m_page->imageSequenceOptionsGroup->setVisible(true);
-
-        cfg.writeEntry<QString>("AnimationRenderer/export_type", "ImageSequence");
     }
 
     // show all options
      if (m_page->shouldExportAll->isChecked() ) {
          m_page->imageSequenceOptionsGroup->setVisible(true);
          m_page->videoOptionsGroup->setVisible(true);
-
-         cfg.writeEntry<QString>("AnimationRenderer/export_type", "VideoAndImageSequence");
      }
 
 

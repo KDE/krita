@@ -844,12 +844,13 @@ void KisMainWindow::updateCaption(const QString &caption, bool modified)
 #endif
         d->mdiArea->activeSubWindow()->setWindowModified(modified);
     }
-
-//#if defined(KRITA_ALPHA) || defined (KRITA_BETA) || defined (KRITA_RC)
-//    setWindowTitle(QString("%1: %2").arg(versionString).arg(title));
-//#else
-//    setWindowTitle(title);
-//#endif
+    else {
+#if defined(KRITA_ALPHA) || defined (KRITA_BETA) || defined (KRITA_RC)
+    setWindowTitle(QString("%1: %2").arg(versionString).arg(title));
+#else
+    setWindowTitle(title);
+#endif
+    }
     setWindowModified(modified);
 
 

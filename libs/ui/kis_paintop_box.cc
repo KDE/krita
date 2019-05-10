@@ -702,8 +702,6 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID& paintOp)
 
 void KisPaintopBox::updateCompositeOp(QString compositeOpID)
 {
-    qDebug() << "updateCompositeOp();" << compositeOpID << m_optionWidget;
-
     if (!m_optionWidget) return;
     KisSignalsBlocker blocker(m_optionWidget);
 

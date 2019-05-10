@@ -24,6 +24,7 @@ set(kritawidgetutils_LIB_SRCS
     KoResourcePaths.cpp
     KisKineticScroller.cpp
     KisSqueezedComboBox.cpp
+    KisDialogStateSaver.cpp
 
     kis_num_parser.cpp
     kis_spin_box_unit_manager.cpp

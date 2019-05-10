@@ -324,6 +324,7 @@ void DlgAnimationRenderer::selectRenderOptions()
         KisConfig cfg(false);
         cfg.setExportConfiguration("VIDEO_ENCODER", encoderConfigWidget->configuration());
         m_customFFMpegOptionsString = encoderConfigWidget->customUserOptionsString();
+        m_forceHDRVideo = encoderConfigWidget->forceHDRModeForFrames();
     }
 
     dlg.setMainWidget(0);

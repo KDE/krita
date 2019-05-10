@@ -832,7 +832,7 @@ void KisMainWindow::updateCaption(const QString &caption, bool modified)
     QString versionString = KritaVersionWrapper::versionString(true);
 
     QString title = caption;
-    if (!title.contains(QStringLiteral("[*]")) && !title.isEmpty()) { // append the placeholder so that the modified mechanism works
+    if (!title.contains(QStringLiteral("[*]"))) { // append the placeholder so that the modified mechanism works
         title.append(QStringLiteral(" [*]"));
     }
 

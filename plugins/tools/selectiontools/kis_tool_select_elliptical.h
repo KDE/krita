@@ -62,7 +62,7 @@ class KisToolSelectElliptical : public KisToolSelectEllipticalTemplate
     Q_OBJECT
 public:
     KisToolSelectElliptical(KoCanvasBase* canvas);
-    void resetCursorStyle();
+    void resetCursorStyle() override;
 };
 
 class KisToolSelectEllipticalFactory : public KisSelectionToolFactoryBase

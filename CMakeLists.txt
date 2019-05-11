@@ -811,7 +811,9 @@ include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}
 
 add_subdirectory(libs)
 add_subdirectory(plugins)
-add_subdirectory(benchmarks)
+if (BUILD_TESTING)
+    add_subdirectory(benchmarks)
+endif()
 add_subdirectory(krita)
 
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )

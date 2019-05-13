@@ -314,11 +314,8 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
         } else {
             m_dragStart = m_dragEnd = event->point;
             m_dragging = true;
+            event->accept();
         }
-
-        event->accept();
-    } else {
-        event->ignore();
     }
 }
 
@@ -393,8 +390,8 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
         canvas()->addCommand(parentCommand);
 
         showEditor();
+        event->accept();
     }
-    event->accept();
 }
 
 void SvgTextTool::keyPressEvent(QKeyEvent *event)
@@ -415,5 +412,6 @@ void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         return;
     }
     showEditor();
+    event->accept();
 }
 

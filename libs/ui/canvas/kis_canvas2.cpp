@@ -31,6 +31,8 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QDesktopWidget>
+#include <QScreen>
+#include <QWindow>
 
 #include <kis_debug.h>
 
@@ -1085,7 +1087,24 @@ void KisCanvas2::slotConfigChanged()
     m_d->vastScrolling = cfg.vastScrolling();
 
     resetCanvas(cfg.useOpenGL());
-    setDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(this->canvasWidget())));
+
+    // HACK: Sometimes screenNumber(this->canvasWidget()) is not able to get the
+    //       proper screenNumber when moving the window across screens. Using
+    //       the coordinates should be able to work around this.
+    // FIXME: We should change to associate the display profiles with the screen
+    //        model and serial number instead. See https://bugs.kde.org/show_bug.cgi?id=407498
+    QScreen *canvasScreen = this->canvasWidget()->window()->windowHandle()->screen();
+    QPoint canvasScreenCenter = canvasScreen->geometry().center();
+    int canvasScreenNumber = QApplication::desktop()->screenNumber(canvasScreenCenter);
+    if (canvasScreenNumber == -1) {
+        // Fall back to the old way of getting the screenNumber
+        canvasScreenNumber = QApplication::desktop()->screenNumber(this->canvasWidget());
+    }
+    if (canvasScreenNumber != -1) {
+        setDisplayProfile(cfg.displayProfile(canvasScreenNumber));
+    } else {
+        warnUI << "Failed to get screenNumber for updating display profile.";
+    }
 
     initializeFpsDecoration();
 }

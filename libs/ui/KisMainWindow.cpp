@@ -590,6 +590,11 @@ void KisMainWindow::addView(KisView *view)
 
 void KisMainWindow::notifyChildViewDestroyed(KisView *view)
 {
+    /**
+     * If we are the last view of the window, Qt will not activate another tab
+     * before destroying tab/window. In ths case we should clear oll the dangling
+     * pointers manually by setting the current view to null
+     */
     viewManager()->inputManager()->removeTrackedCanvas(view->canvasBase());
     if (view->canvasBase() == viewManager()->canvasBase()) {
         viewManager()->setCurrentView(0);

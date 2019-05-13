@@ -54,7 +54,7 @@ public:
      */
     void scrollContentsBy(int dx, int dy) override;
 
-    QSize viewportSize() const override;
+    QSizeF viewportSize() const override;
 
     /// Reimplemented from KoCanvasController
 
@@ -134,7 +134,7 @@ public:
      */
     void setScrollBarValue(const QPoint &value) override;
 
-    void updateDocumentSize(const QSize &sz, bool recalculateCenter = true) override;
+    void updateDocumentSize(const QSizeF &sz, bool recalculateCenter = true) override;
 
     /**
      * Set mouse wheel to zoom behaviour

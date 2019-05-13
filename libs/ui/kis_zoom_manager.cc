@@ -60,9 +60,11 @@ public:
     }
 
 protected:
-    QSize documentToViewport(const QSizeF &size) override {
+    QSizeF documentToViewport(const QSizeF &size) override {
         QRectF docRect(QPointF(), size);
-        return m_converter->documentToWidget(docRect).toRect().size();
+        QSizeF viewport = m_converter->documentToWidget(docRect).size();
+        QPointF adjustedViewport = m_converter->snapToDevicePixel(QPointF(viewport.width(), viewport.height()));
+        return QSizeF(adjustedViewport.x(), adjustedViewport.y());
     }
 
 private:

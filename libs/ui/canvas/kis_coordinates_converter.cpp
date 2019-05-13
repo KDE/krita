@@ -106,8 +106,8 @@ QPointF KisCoordinatesConverter::centeringCorrection() const
 
 void KisCoordinatesConverter::correctOffsetToTransformation()
 {
-    m_d->documentOffset = -(imageRectInWidgetPixels().topLeft() -
-          centeringCorrection()).toPoint();
+    m_d->documentOffset = snapToDevicePixel(-(imageRectInWidgetPixels().topLeft() -
+          centeringCorrection()));
 }
 
 void KisCoordinatesConverter::correctTransformationToOffset()

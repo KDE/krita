@@ -137,8 +137,7 @@ KisImportExportErrorCode CSVLoader::decode(QIODevice *io, const QString &filenam
 
         if ((idx = readLine.nextLine(io)) <= 0) {
             if ((idx < 0) ||(step < 5))
-                retval = ImportExportCodes::Failure;
-
+                retval = ImportExportCodes::FileFormatIncorrect;
             break;
         }
         field = readLine.nextField(); //first field of the line

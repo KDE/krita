@@ -88,6 +88,10 @@ KisImportExportErrorCode KisHeightMapImport::convert(KisDocument *document, QIOD
 
     KIS_ASSERT(io->isOpen());
     const quint64 size = io->size();
+    if (size == 0) {
+        return ImportExportCodes::FileFormatIncorrect;
+    }
+
     QDataStream::ByteOrder bo = QDataStream::LittleEndian;
 
     if (!batchMode()) {

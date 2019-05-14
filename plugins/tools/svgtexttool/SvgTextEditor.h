@@ -135,6 +135,11 @@ Q_SIGNALS:
 
 protected:
     void wheelEvent(QWheelEvent *event) override;
+    /**
+     * Selects all if there is no selection
+     * @returns a copy of the previous cursor.
+     */
+    QTextCursor setTextSelection();
 
 private:
     void applySettings();

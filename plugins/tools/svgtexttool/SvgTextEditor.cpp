@@ -453,12 +453,14 @@ void SvgTextEditor::setTextBold(QFont::Weight weight)
 {
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
         QTextCharFormat format;
+        QTextCursor oldCursor = setTextSelection();
         if (m_textEditorWidget.richTextEdit->textCursor().charFormat().fontWeight() > QFont::Normal && weight==QFont::Bold) {
             format.setFontWeight(QFont::Normal);
         } else {
             format.setFontWeight(weight);
         }
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
+        m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
     } else {
         QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
         if (cursor.hasSelection()) {
@@ -514,8 +516,10 @@ void SvgTextEditor::setTextItalic(QFont::Style style)
 
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
         QTextCharFormat format;
+        QTextCursor origCursor = setTextSelection();
         format.setFontItalic(!m_textEditorWidget.richTextEdit->textCursor().charFormat().fontItalic());
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
+        m_textEditorWidget.richTextEdit->setTextCursor(origCursor);
     }
     else {
         if (cursor.hasSelection()) {
@@ -528,7 +532,7 @@ void SvgTextEditor::setTextItalic(QFont::Style style)
 
 void SvgTextEditor::setTextDecoration(KoSvgText::TextDecoration decor)
 {
-    QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
+    QTextCursor cursor = setTextSelection();
     QTextCharFormat currentFormat = m_textEditorWidget.richTextEdit->textCursor().charFormat();
     QTextCharFormat format;
     QString textDecoration = "inherit";
@@ -577,6 +581,7 @@ void SvgTextEditor::setTextDecoration(KoSvgText::TextDecoration decor)
             cursor.insertText(selectionModified);
         }
     }
+    m_textEditorWidget.richTextEdit->setTextCursor(cursor);
 }
 
 void SvgTextEditor::setTextUnderline()
@@ -618,6 +623,7 @@ void SvgTextEditor::setTextSuperScript()
 
 void SvgTextEditor::increaseTextSize()
 {
+    QTextCursor oldCursor = setTextSelection();
     QTextCharFormat format;
     int pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pointSize();
     if (pointSize<0) {
@@ -625,10 +631,12 @@ void SvgTextEditor::increaseTextSize()
     }
     format.setFontPointSize(pointSize+1.0);
     m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
+    m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
 }
 
 void SvgTextEditor::decreaseTextSize()
 {
+    QTextCursor oldCursor = setTextSelection();
     QTextCharFormat format;
     int pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pointSize();
     if (pointSize<1) {
@@ -636,42 +644,53 @@ void SvgTextEditor::decreaseTextSize()
     }
     format.setFontPointSize(qMax(pointSize-1.0, 1.0));
     m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
+    m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
 }
 
 void SvgTextEditor::setLineHeight(double lineHeightPercentage)
 {
+    QTextCursor oldCursor = setTextSelection();
     QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
     format.setLineHeight(lineHeightPercentage, QTextBlockFormat::ProportionalHeight);
-     m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
+    m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
+    m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
 }
 
 
 void SvgTextEditor::alignLeft()
 {
+    QTextCursor oldCursor = setTextSelection();
     QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
     format.setAlignment(Qt::AlignLeft);
     m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
+    m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
 }
 
 void SvgTextEditor::alignRight()
 {
+    QTextCursor oldCursor = setTextSelection();
     QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
     format.setAlignment(Qt::AlignRight);
     m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
+    m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
 }
 
 void SvgTextEditor::alignCenter()
 {
+    QTextCursor oldCursor = setTextSelection();
     QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
     format.setAlignment(Qt::AlignCenter);
     m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
+    m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
 }
 
 void SvgTextEditor::alignJustified()
 {
+    QTextCursor oldCursor = setTextSelection();
     QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
     format.setAlignment(Qt::AlignJustify);
     m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
+    m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
 }
 
 void SvgTextEditor::setSettings()
@@ -792,9 +811,11 @@ void SvgTextEditor::setFontColor(const KoColor &c)
 {
     QColor color = c.toQColor();
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
+        QTextCursor oldCursor = setTextSelection();
         QTextCharFormat format;
         format.setForeground(QBrush(color));
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
+        m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
     }
     else {
         QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
@@ -847,7 +868,9 @@ void SvgTextEditor::setFont(const QString &fontName)
     //This disables the style being set from the font-comboboxes too, so we need to rethink how we use that.
     format.setFontFamily(font.family());
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
+        QTextCursor oldCursor = setTextSelection();
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
+        m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
     } else {
         QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
         if (cursor.hasSelection()) {
@@ -861,9 +884,11 @@ void SvgTextEditor::setFont(const QString &fontName)
 void SvgTextEditor::setFontSize(qreal fontSize)
 {
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
+        QTextCursor oldCursor = setTextSelection();
         QTextCharFormat format;
         format.setFontPointSize(fontSize);
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
+        m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
     } else {
         QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
         if (cursor.hasSelection()) {
@@ -893,6 +918,15 @@ void SvgTextEditor::wheelEvent(QWheelEvent *event)
         m_textEditorWidget.svgTextEdit->zoomOut(numSteps);
         event->accept();
     }
+}
+
+QTextCursor SvgTextEditor::setTextSelection()
+{
+    QTextCursor orignalCursor(m_textEditorWidget.richTextEdit->textCursor());
+    if (!orignalCursor.hasSelection()){
+        m_textEditorWidget.richTextEdit->selectAll();
+    }
+    return orignalCursor;
 }
 
 void SvgTextEditor::applySettings()

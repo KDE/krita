@@ -110,7 +110,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
         // Make sure brush tips all have a white background
         QImage base(image.size(), image.format());
         if ((int)base.format() < (int)QImage::Format_RGB32) {
-            base = base.convertToFormat(QImage::Format_RGBA64);
+            base = base.convertToFormat(QImage::Format_ARGB32);
         }
         QPainter gc(&base);
         gc.fillRect(base.rect(), Qt::white);

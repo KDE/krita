@@ -61,7 +61,7 @@ public:
     void setColorSpace(KisColor::Type type);
     void setColorConverter(KisDisplayColorConverter* colorConverter);
     void setNumPieces(int num);
-    void setNumLightPieces(int num) KOGAMUTMASK_NO_OPTIMIZE;
+    void setNumLightPieces(int num);
     void setNumRings(int num);
 
     void setLight(qreal light=0.0f);

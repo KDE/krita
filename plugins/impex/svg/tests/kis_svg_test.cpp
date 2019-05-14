@@ -31,7 +31,7 @@
 #endif
 
 
-const QString SvgMimetype = "image/svg";
+const QString SvgMimetype = "image/svg+xml";
 
 
 void KisSvgTest::testFiles()

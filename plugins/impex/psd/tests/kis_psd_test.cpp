@@ -38,7 +38,7 @@
 
 
 
-const QString PSDMimetype = "application/x-photoshop";
+const QString PSDMimetype = "image/vnd.adobe.photoshop";
 
 
 void KisPSDTest::testFiles()

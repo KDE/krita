@@ -224,9 +224,8 @@ void SvgTextTool::showEditor()
     if (!shape) return;
 
     if (!m_editor) {
-        m_editor = new SvgTextEditor();
+        m_editor = new SvgTextEditor(QApplication::activeWindow());
         m_editor->setWindowModality(Qt::NonModal);
-        m_editor->setWindowFlags(Qt::WindowStaysOnTopHint);
         m_editor->setAttribute( Qt::WA_QuitOnClose, false );
 
         connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*,QString,QString,bool)), SLOT(textUpdated(KoSvgTextShape*,QString,QString,bool)));
@@ -234,7 +233,6 @@ void SvgTextTool::showEditor()
 
         m_editor->activateWindow(); // raise on creation only
     }
-
     m_editor->setShape(shape);
     m_editor->show();
 }
@@ -422,6 +420,10 @@ void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         return;
     }
     showEditor();
+    if(m_editor) {
+        m_editor->raise();
+        m_editor->activateWindow();
+    }
     event->accept();
 }
 

@@ -41,7 +41,6 @@
 #include <KisGamutMaskViewConverter.h>
 #include <kis_assert.h>
 
-
 KoGamutMaskShape::KoGamutMaskShape(KoShape* shape)
     : m_maskShape(shape)
     , m_shapePaintingContext(KoShapePaintingContext())

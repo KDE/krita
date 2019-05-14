@@ -35,6 +35,8 @@
 #endif
 
 
+const QString TiffMimetype = "image/tiff";
+
 void KisTiffTest::testFiles()
 {
     // XXX: make the exiv io backends real plugins
@@ -114,6 +116,26 @@ void KisTiffTest::testRoundTripRGBF16()
     QCOMPARE(ref0, ref1);
 #endif
 }
+
+
+void KisTiffTest::testImportFromWriteonly()
+{
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), TiffMimetype);
+}
+
+
+void KisTiffTest::testExportToReadonly()
+{
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), TiffMimetype);
+}
+
+
+void KisTiffTest::testImportIncorrectFormat()
+{
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), TiffMimetype);
+}
+
+
 
 KISTEST_MAIN(KisTiffTest)
 

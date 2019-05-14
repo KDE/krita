@@ -37,6 +37,10 @@
 #include <KisImportExportErrorCode.h>
 
 
+
+const QString PSDMimetype = "application/x-photoshop";
+
+
 void KisPSDTest::testFiles()
 {
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
@@ -346,6 +350,27 @@ void KisPSDTest::testSavingAllFormats()
         }
     }
 }
+
+
+
+void KisPSDTest::testImportFromWriteonly()
+{
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), PSDMimetype);
+}
+
+
+void KisPSDTest::testExportToReadonly()
+{
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), PSDMimetype);
+}
+
+
+void KisPSDTest::testImportIncorrectFormat()
+{
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), PSDMimetype);
+}
+
+
 
 
 KISTEST_MAIN(KisPSDTest)

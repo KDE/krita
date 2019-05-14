@@ -30,10 +30,32 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
 
+
+const QString PPMMimetype = "image/x-portable-pixmap";
+
 void KisPPMTest::testFiles()
 {
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), 1);
 }
+
+
+void KisPPMTest::testImportFromWriteonly()
+{
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), PPMMimetype);
+}
+
+
+void KisPPMTest::testExportToReadonly()
+{
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), PPMMimetype);
+}
+
+
+void KisPPMTest::testImportIncorrectFormat()
+{
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), PPMMimetype);
+}
+
 
 KISTEST_MAIN(KisPPMTest)
 

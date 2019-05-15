@@ -177,6 +177,7 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
                 m_textEditorWidget.richTextEdit->setDocument(doc);
                 KisSignalsBlocker b(m_textEditorWidget.textTab);
                 m_textEditorWidget.textTab->setCurrentIndex(Richtext);
+                doc->clearUndoRedoStacks();
                 switchTextEditorTab(false);
             } else {
                 KisSignalsBlocker b(m_textEditorWidget.textTab);
@@ -238,6 +239,7 @@ void SvgTextEditor::switchTextEditorTab(bool convertData)
                 qWarning()<<"new converter svgToDoc doesn't work!";
             }
             m_textEditorWidget.richTextEdit->setDocument(doc);
+            doc->clearUndoRedoStacks();
         }
         m_currentEditor = m_textEditorWidget.richTextEdit;
     }

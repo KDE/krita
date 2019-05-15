@@ -30,7 +30,7 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
 
-const QString XcfMimetype = "image/xcf";
+const QString XcfMimetype = "image/x-xcf";
 
 
 void KisXCFTest::testFiles()
@@ -44,11 +44,12 @@ void KisXCFTest::testImportFromWriteonly()
     TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), XcfMimetype);
 }
 
-
+/*
 void KisXCFTest::testExportToReadonly()
 {
     TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), XcfMimetype);
 }
+*/
 
 
 void KisXCFTest::testImportIncorrectFormat()

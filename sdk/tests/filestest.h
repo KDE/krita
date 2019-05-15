@@ -127,7 +127,10 @@ void prepareFile(QFileInfo sourceFileInfo, bool removePermissionToWrite, bool re
         ENTER_FUNCTION() << permissionsBefore;
     } else {
         QFile file(sourceFileInfo.absoluteFilePath());
-        file.open(QIODevice::WriteOnly);
+        bool opened = file.open(QIODevice::WriteOnly);
+        if (!opened) {
+            qDebug() << "The file cannot be opened/created: " << file.error() << file.errorString();
+        }
         permissionsBefore = file.permissions();
         file.close();
     }
@@ -176,6 +179,10 @@ void testImportFromWriteonly(const QString& _dirname, QString mimetype = "")
 
     QVERIFY(!status.isOk());
 
+    if (status == ImportExportCodes::FileFormatIncorrect) {
+        qDebug() << "Make sure you set the correct mimetype in the test case.";
+        QFAIL("Incorrect status.");
+    }
 
     qApp->processEvents();
 
@@ -212,6 +219,10 @@ void testExportToReadonly(const QString& _dirname, QString mimetype = "")
     qDebug() << "export result = " << status;
 
     QVERIFY(!status.isOk());
+    if (status == ImportExportCodes::FileFormatIncorrect) {
+        qDebug() << "Make sure you set the correct mimetype in the test case.";
+        QFAIL("Incorrect status.");
+    }
 
 
     qApp->processEvents();

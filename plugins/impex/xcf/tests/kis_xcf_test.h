@@ -28,7 +28,8 @@ private Q_SLOTS:
     void testFiles();
 
     void testImportFromWriteonly();
-    void testExportToReadonly();
+    // You can't export to xcf
+    /* void testExportToReadonly(); */
     void testImportIncorrectFormat();
 };
 

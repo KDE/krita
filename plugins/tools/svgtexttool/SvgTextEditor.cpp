@@ -319,6 +319,12 @@ void SvgTextEditor::checkFormat()
             spnLineHeight->setValue(double(blockFormat.lineHeight()));
         }
     }
+
+    {
+        QDoubleSpinBox* spnLetterSpacing = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_letter_spacing"))->defaultWidget());
+        KisSignalsBlocker b(spnLetterSpacing);
+        spnLetterSpacing->setValue(format.fontLetterSpacing());
+    }
 }
 
 void SvgTextEditor::undo()
@@ -658,6 +664,24 @@ void SvgTextEditor::setLineHeight(double lineHeightPercentage)
     m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
 }
 
+void SvgTextEditor::setLetterSpacing(double letterSpacing)
+{
+    QTextCursor cursor = setTextSelection();
+    if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
+        QTextCharFormat format;
+        format.setFontLetterSpacingType(QFont::AbsoluteSpacing);
+        format.setFontLetterSpacing(letterSpacing);
+        m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
+        m_textEditorWidget.richTextEdit->setTextCursor(cursor);
+    }
+    else {
+        if (cursor.hasSelection()) {
+            QString selectionModified = "<tspan style=\"letter-spacing:" + QString::number(letterSpacing) + "\">" + cursor.selectedText() + "</tspan>";
+            cursor.removeSelectedText();
+            cursor.insertText(selectionModified);
+        }
+    }
+}
 
 void SvgTextEditor::alignLeft()
 {
@@ -1126,6 +1150,17 @@ void SvgTextEditor::createActions()
     actionCollection()->addAction("svg_line_height", lineHeight);
     m_richTextActions << lineHeight;
     actionRegistry->propertizeAction("svg_line_height", lineHeight);
+
+    QWidgetAction *letterSpacing = new QWidgetAction(this);
+    QDoubleSpinBox *spnletterSpacing = new QDoubleSpinBox();
+    spnletterSpacing->setToolTip(i18n("Letter Spacing"));
+    spnletterSpacing->setRange(-20.0, 20.0);
+    spnletterSpacing->setSingleStep(0.5);
+    connect(spnletterSpacing, SIGNAL(valueChanged(double)), SLOT(setLetterSpacing(double)));
+    letterSpacing->setDefaultWidget(spnletterSpacing);
+    actionCollection()->addAction("svg_letter_spacing", letterSpacing);
+    m_richTextActions << letterSpacing;
+    actionRegistry->propertizeAction("svg_letter_spacing", letterSpacing);
 }
 
 void SvgTextEditor::enableRichTextActions(bool enable)

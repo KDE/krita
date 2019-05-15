@@ -111,6 +111,7 @@ private Q_SLOTS:
     void decreaseTextSize();
 
     void setLineHeight(double lineHeightPercentage);
+    void setLetterSpacing(double letterSpacing);
     void alignLeft();
     void alignRight();
     void alignCenter();

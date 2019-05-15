@@ -5,7 +5,7 @@
 : ${ANDROID_SDK_ROOT?"Android SDK path must be set"}
 : ${ANDROID_API_LEVEL?"API level required"}
 : ${QT_ANDROID?"path to qt android required"}
-: ${INSTALL_PREFIX?"INSTALL_ROOT must be set for building apk"}
+: ${INSTALL_PREFIX?"INSTALL_PREFIX must be set for building apk"}
 
 CURDIR="$(pwd)"/
 

@@ -100,6 +100,13 @@ void free_or_close_xcf(void);
 /* ****************************************************************** */
 /* utils.c */
 
+
+#define XCF_ERROR 1
+#define XCF_OK 0
+#define XCF_PTR_ERROR (-1)
+#define XCF_PTR_EMPTY 0
+
+
 extern const char *progname ;
 extern int verboseFlag ;
 
@@ -107,13 +114,13 @@ void *xcfmalloc(size_t size);
 void xcffree(void*);
 
 void FatalGeneric(int status,const char* format,...)
-     __ATTRIBUTE__((format(printf,2,3),noreturn)) ;
+     __ATTRIBUTE__((format(printf,2,3))) ;
 void FatalUnexpected(const char* format,...)
-     __ATTRIBUTE__((format(printf,1,2),noreturn)) ;
+     __ATTRIBUTE__((format(printf,1,2))) ;
 void FatalBadXCF(const char* format,...)
-     __ATTRIBUTE__((format(printf,1,2),noreturn)) ;
+     __ATTRIBUTE__((format(printf,1,2))) ;
 void FatalUnsupportedXCF(const char* format,...)
-     __ATTRIBUTE__((format(printf,1,2),noreturn)) ;
+     __ATTRIBUTE__((format(printf,1,2))) ;
 
 void gpl_blurb(void) __ATTRIBUTE__((noreturn));
      
@@ -136,11 +143,11 @@ extern uint8_t *xcf_file ;
 extern size_t xcf_length ;
 extern int use_utf8 ;
 
-void xcfCheckspace(uint32_t addr,int spaceafter, const char *format,...)
+int xcfCheckspace(uint32_t addr,int spaceafter, const char *format,...)
      __ATTRIBUTE__((format(printf,3,4)));
-uint32_t xcfOffset(uint32_t addr,int spaceafter);
+int xcfOffset(uint32_t addr,int spaceafter, uint32_t* apparent);
 
-int xcfNextprop(uint32_t *master,uint32_t *body);
+int xcfNextprop(uint32_t *master,uint32_t *body, PropType* type);
 const char* xcfString(uint32_t ptr,uint32_t *after);
 
 /* These are hardcoded in the Gimp sources: */
@@ -196,6 +203,6 @@ extern struct xcfImage {
   uint32_t colormapptr ;
 } XCF ;
 
-void getBasicXcfInfo(void);
+int getBasicXcfInfo(void);
 
 #endif /* XCFTOOLS_H */

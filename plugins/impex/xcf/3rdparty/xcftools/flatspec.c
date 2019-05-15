@@ -122,7 +122,7 @@ color_by_layers(struct FlattenSpec *spec)
   return grayish ;
 }
 
-void
+int
 complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
 {
   unsigned i ;
@@ -258,7 +258,9 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
   /* Initialize layers and print overview if we're verbose */
   for( i=spec->numLayers; i--; )
     if( spec->layers[i].isVisible ) {
-      initLayer(&spec->layers[i]) ;
+        if (initLayer(&spec->layers[i]) != XCF_OK) {
+            return XCF_ERROR;
+        }
       if( verboseFlag ) {
         fprintf(stderr,"%dx%d%+d%+d %s %s",
                 spec->layers[i].dim.width, spec->layers[i].dim.height,
@@ -282,6 +284,7 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
     if( spec->out_color_mode == COLOR_BY_CONTENTS )
       spec->out_color_mode = color_by_layers(spec) ;
   }
+  return XCF_OK;
 }
 
 void

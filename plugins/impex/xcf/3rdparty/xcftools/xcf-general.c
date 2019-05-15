@@ -29,25 +29,39 @@ uint8_t *xcf_file = 0 ;
 size_t xcf_length ;
 int use_utf8 = 0 ;
 
-uint32_t
-xcfOffset(uint32_t addr,int spaceafter)
+int
+xcfOffset(uint32_t addr,int spaceafter, uint32_t* apparent)
 {
-  uint32_t apparent ;
-  xcfCheckspace(addr,4,"(xcfOffset)");
-  apparent = xcfL(addr);
-  xcfCheckspace(apparent,spaceafter,
+  if (!apparent) {
+      return XCF_ERROR;
+  }
+  if(xcfCheckspace(addr,4,"(xcfOffset)") != XCF_OK) {
+      return XCF_ERROR;
+  }
+  *apparent = xcfL(addr);
+  if (xcfCheckspace(*apparent,spaceafter,
                 "Too large offset (%" PRIX32 ") at position %" PRIX32,
-                apparent,addr);
-  return apparent ;
+                                *apparent,addr) != XCF_OK) {
+      return XCF_ERROR;
+  }
+  return XCF_OK;
 }
 
 int
-xcfNextprop(uint32_t *master,uint32_t *body)
+xcfNextprop(uint32_t *master,uint32_t *body, PropType *typeOut)
 {
+  int response;
+
+  if (typeOut ==  0) {
+      return XCF_ERROR;
+  }
+
   uint32_t ptr, length, total, minlength ;
   PropType type ;
   ptr = *master ;
-  xcfCheckspace(ptr,8,"(property header)");
+  if ((response = xcfCheckspace(ptr,8,"(property header)")) != XCF_OK) {
+      return XCF_ERROR;
+  }
   type = xcfL(ptr);
   length = xcfL(ptr+4);
   *body = ptr+8 ;
@@ -56,10 +70,15 @@ xcfNextprop(uint32_t *master,uint32_t *body)
   case PROP_COLORMAP:
     {
       uint32_t ncolors ;
-      xcfCheckspace(ptr+8,4,"(colormap length)");
+      if ((response = xcfCheckspace(ptr+8,4,"(colormap length)")) != XCF_OK) {
+          return XCF_ERROR;
+      }
       ncolors = xcfL(ptr+8) ;
-      if( ncolors > 256 )
+      if( ncolors > 256 ) {
         FatalBadXCF("Colormap has %" PRIu32 " entries",ncolors);
+        return XCF_ERROR;
+      }
+
       /* Surprise! Some older version of the Gimp computed the wrong length
        * word, and the _reader_ always just reads three bytes per color
        * and ignores the length tag! Duplicate this so we too can read
@@ -75,15 +94,22 @@ xcfNextprop(uint32_t *master,uint32_t *body)
   case PROP_MODE:        minlength = 4; break;
   default:               minlength = 0; break;
   }
-  if( length < minlength )
+  if( length < minlength ) {
     FatalBadXCF("Short %s property at %" PRIX32 " (%" PRIu32 "<%" PRIu32 ")",
                 showPropType(type),ptr,length,minlength);
+    return XCF_ERROR;
+  }
   *master = ptr+8+length ;
   total = 8 + length + (type != PROP_END ? 8 : 0) ;
-  if( total < length ) /* Check overwrap */
+  if( total < length ) { /* Check overwrap */
     FatalBadXCF("Overlong property at %" PRIX32, ptr);
-  xcfCheckspace(ptr,total,"Overlong property at %" PRIX32,ptr) ;
-  return type ;
+    return XCF_ERROR;
+  }
+  if((response = xcfCheckspace(ptr,total,"Overlong property at %" PRIX32,ptr)) != 0) {
+      return XCF_ERROR;
+  }
+  *typeOut = type;
+  return XCF_OK;
 }
 
 const char*
@@ -93,14 +119,21 @@ xcfString(uint32_t ptr,uint32_t *after)
   unsigned i ;
   ICONV_CONST char *utf8master ;
 
-  xcfCheckspace(ptr,4,"(string length)");
+  int response;
+  if ((response = xcfCheckspace(ptr,4,"(string length)")) != XCF_OK) {
+      return XCF_PTR_EMPTY;
+  }
   length = xcfL(ptr) ;
   ptr += 4 ;
-  xcfCheckspace(ptr,length,"(string)");
+  if ((response = xcfCheckspace(ptr,length,"(string)")) != XCF_OK) {
+      return XCF_PTR_EMPTY;
+  }
   utf8master = (ICONV_CONST char*)(xcf_file+ptr) ;
   if( after ) *after = ptr + length ;
-  if( length == 0 || utf8master[length-1] != 0 )
+  if( length == 0 || utf8master[length-1] != 0 ) {
     FatalBadXCF("String at %" PRIX32 " not zero-terminated",ptr-4);
+    return XCF_PTR_EMPTY;
+  }
   length-- ;
 
   if( use_utf8 ) return utf8master ;
@@ -111,8 +144,10 @@ xcfString(uint32_t ptr,uint32_t *after)
   for( i=0 ; ; i++ ) {
     if( i == length )
       return utf8master ; /* Only ASCII after all */
-    if( utf8master[i] == 0 )
+    if( utf8master[i] == 0 ) {
       FatalBadXCF("String at %" PRIX32 " has embedded zeroes",ptr-4);
+      return XCF_PTR_EMPTY;
+    }
     if( (int8_t) utf8master[i] < 0 )
       break ;
   }
@@ -154,15 +189,18 @@ xcfString(uint32_t ptr,uint32_t *after)
           }
           break ;
         }
-        if( errno == EILSEQ || errno == EINVAL )
+        if( errno == EILSEQ || errno == EINVAL ) {
           FatalBadXCF("Bad UTF-8 encoding '%s' at %" PRIXPTR,
                       inbuf,(uintptr_t)((inbuf-utf8master)+ptr));
+          return XCF_PTR_EMPTY;
+        }
         if( errno == E2BIG ) {
           targetsize += 1+incount ;
           xcffree(buffer) ;
           continue ;
         }
         FatalUnexpected("!iconv on layer name at %"PRIX32,ptr);
+        return XCF_PTR_EMPTY:
       }
   }
 #endif
@@ -191,24 +229,33 @@ computeDimensions(struct tileDimensions *d)
 
 struct xcfImage XCF ;
 
-void
+int
 getBasicXcfInfo(void)
 {
+
   uint32_t ptr, data, layerfile ;
   PropType type ;
   int i, j ;
+  
+  int errorStatus;
+  uint32_t ptrout;
 
-  xcfCheckspace(0,14+7*4,"(very short)");
+  if ((errorStatus = xcfCheckspace(0,14+7*4,"(very short)")) != 0) {
+     return XCF_ERROR;
+  }
+
   if( strcmp((char*)xcf_file,"gimp xcf file") == 0 )
     XCF.version = 0 ;
   else if( xcf_file[13] == 0 &&
           sscanf((char*)xcf_file,"gimp xcf v%d",&XCF.version) == 1 )
     ;
-  else
+  else {
     FatalBadXCF(_("Not an XCF file at all (magic not recognized)"));
+    return XCF_ERROR;
+  }
 
   if (XCF.version < 0 || XCF.version > 3) {
-      return;
+      return XCF_ERROR;
   }
 
   XCF.compression = COMPRESS_NONE ;
@@ -218,7 +265,11 @@ getBasicXcfInfo(void)
   XCF.width    = xcfL(ptr); ptr += 4 ;
   XCF.height   = xcfL(ptr); ptr += 4 ;
   XCF.type     = xcfL(ptr); ptr += 4 ;
-  while( (type = xcfNextprop(&ptr,&data)) != PROP_END ) {
+  while( (errorStatus = xcfNextprop(&ptr,&data, &type)) != XCF_ERROR && type != PROP_END ) {
+      if (errorStatus != XCF_OK) {
+          return XCF_ERROR;
+      }
+
     switch(type) {
     case PROP_COLORMAP:
       XCF.colormapptr = data ;
@@ -233,8 +284,18 @@ getBasicXcfInfo(void)
   }
 
   layerfile = ptr ;
-  for( XCF.numLayers = 0 ; xcfOffset(ptr,8*4) ; XCF.numLayers++, ptr+=4  )
-    ;
+  XCF.numLayers = 0;
+  while (1) {
+      errorStatus = xcfOffset(ptr,8*4, &ptrout);
+      if (errorStatus != XCF_OK) {
+          return XCF_ERROR;
+      }
+      if (!ptrout) {
+          break;
+      }
+      XCF.numLayers++;
+      ptr+=4;
+  }
   XCF.layers = xcfmalloc(XCF.numLayers * sizeof(struct xcfLayer)) ;
   for( i = 0 ; i < XCF.numLayers ; i++ ) {
     struct xcfLayer *L = XCF.layers + i ;
@@ -248,13 +309,19 @@ getBasicXcfInfo(void)
     L->dim.height = xcfL(ptr); ptr+=4 ;
     L->type = xcfL(ptr); ptr+=4 ;
     L->name = xcfString(ptr,&ptr);
+    if (L->name == XCF_PTR_EMPTY) {
+        return XCF_ERROR;
+    }
     L->propptr = ptr ;
 
     L->isGroup = 0;
     L->pathLength = 0;
     L->path = NULL;
 
-    while( (type = xcfNextprop(&ptr,&data)) != PROP_END ) {
+    while( (errorStatus = xcfNextprop(&ptr,&data, &type)) != XCF_ERROR && type != PROP_END ) {
+        if (errorStatus != XCF_OK) {
+            return XCF_ERROR;
+        }
       switch(type) {
       case PROP_OPACITY:
         L->opacity = xcfL(data);
@@ -293,13 +360,22 @@ getBasicXcfInfo(void)
         break ;
       }
     }
-    xcfCheckspace(ptr,8,"(end of layer %s)",L->name);
+    if ((errorStatus = xcfCheckspace(ptr,8,"(end of layer %s)",L->name)) != XCF_OK) {
+        return XCF_ERROR;
+    }
     L->pixels.tileptrs = 0 ;
-    L->pixels.hierarchy = xcfOffset(ptr  ,4*4);
+
+    if (xcfOffset(ptr  , 4*4, &(L->pixels.hierarchy)) != XCF_OK) {
+        return XCF_ERROR;
+    }
     L->mask.tileptrs = 0 ;
-    L->mask.hierarchy   = xcfOffset(ptr+4,4*4);
+    if (xcfOffset(ptr+4, 4*4, &(L->mask.hierarchy)) != XCF_OK) {
+        return XCF_ERROR;
+    }
 
     computeDimensions(&L->dim);
+
   }
+  return XCF_OK;
 }
 

@@ -26,7 +26,6 @@ const char *progname = "$0" ;
 int verboseFlag = 0 ;
 
 
-static void  __ATTRIBUTE__((noreturn))
 vFatalGeneric(int status,const char *format,va_list args)
 {
   if( format ) {
@@ -38,7 +37,8 @@ vFatalGeneric(int status,const char *format,va_list args)
       fputc('\n',stderr);
     }
   }
-  exit(status);
+  /* don't exit here - Krita can't handle errors otherwise */
+  /* exit(status); */
 }
 
 void
@@ -65,7 +65,7 @@ FatalBadXCF(const char* format,...)
   vFatalGeneric(125,format,v) ;
 }
 
-void
+int
 xcfCheckspace(uint32_t addr,int spaceafter,const char *format,...)
 {
   if( xcf_length < spaceafter || addr > xcf_length - spaceafter ) {
@@ -73,7 +73,9 @@ xcfCheckspace(uint32_t addr,int spaceafter,const char *format,...)
     fprintf(stderr,"%s: %s\n ",progname,_("Corrupted or truncated XCF file"));
     fprintf(stderr,"(0x%" PRIXPTR " bytes): ",(uintptr_t)xcf_length);
     vFatalGeneric(125,format,v) ;
+    return XCF_ERROR;
   }
+  return XCF_OK;
 }
 
 

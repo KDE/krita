@@ -155,6 +155,8 @@ KisXCFImport::~KisXCFImport()
 
 KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
+    int errorStatus;
+
     dbgFile << "Start decoding file";
     QByteArray data = io->readAll();
     xcf_file = (uint8_t*)data.data();
@@ -162,14 +164,23 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *docum
     io->close();
 
     // Decode the data
-    getBasicXcfInfo() ;
+    if (getBasicXcfInfo() != XCF_OK) {
+        if (XCF.version > 3) {
+            return KisImportExportFilter::ConversionStatus::UnsupportedVersion;
+        }
+        return KisImportExportFilter::ConversionStatus::ParsingError;
+    }
+
+
 
     if (XCF.version < 0 || XCF.version > 3) {
         document->setErrorMessage(i18n("This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 or newer."));
         return KisImportExportFilter::UnsupportedVersion;
     }
 
-    initColormap();
+    if(initColormap() != XCF_OK) {
+        return KisImportExportFilter::ConversionStatus::ParsingError;
+    }
 
     dbgFile << XCF.version << "width = " << XCF.width << "height = " << XCF.height << "layers = " << XCF.numLayers;
 
@@ -226,7 +237,9 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *docum
         layer.depth = xcflayer.pathLength;
 
         // Copy the data in the image
-        initLayer(&xcflayer);
+        if ((errorStatus = initLayer(&xcflayer)) != XCF_OK) {
+            return KisImportExportFilter::ConversionStatus::ParsingError;
+        }
 
         int left = xcflayer.dim.c.l;
         int top = xcflayer.dim.c.t;

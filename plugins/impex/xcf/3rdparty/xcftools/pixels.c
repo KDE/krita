@@ -62,30 +62,41 @@ tileDirectoryOneLevel(struct tileDimensions *dim,uint32_t ptr)
   if( ptr == 0 )
     return 0 ;
   if( xcfL(ptr  ) != dim->c.r - dim->c.l ||
-      xcfL(ptr+4) != dim->c.b - dim->c.t )
+          xcfL(ptr+4) != dim->c.b - dim->c.t ) {
     FatalBadXCF("Drawable size mismatch at %" PRIX32, ptr);
+    return 0;
+  }
   return ptr += 8 ;
 }
 
-static void
+static int
 initTileDirectory(struct tileDimensions *dim,struct xcfTiles *tiles,
                   const char *type)
 {
   uint32_t ptr ;
   uint32_t data ;
 
+  int response;
+
   ptr = tiles->hierarchy ;
   tiles->hierarchy = 0 ;
-  if( (ptr = tileDirectoryOneLevel(dim,ptr)) == 0 ) return ;
+  if( (ptr = tileDirectoryOneLevel(dim,ptr)) == 0 ) return XCF_OK;
   if( tiles->params == &convertChannel ) {
     /* A layer mask is a channel.
      * Skip a name and a property list.
      */
-    xcfString(ptr,&ptr);
-    while( xcfNextprop(&ptr,&data) != PROP_END )
-      ;
-    ptr = xcfOffset(ptr,4*4);
-    if( (ptr = tileDirectoryOneLevel(dim,ptr)) == 0 ) return ;
+     xcfString(ptr,&ptr);
+    PropType type;
+    while( (response = xcfNextprop(&ptr,&data, &type)) != XCF_ERROR && type != PROP_END ) {
+
+    }
+    if (response != XCF_OK) {
+        return XCF_ERROR;
+    }
+    uint32_t ptrout;
+    if(xcfOffset(ptr,4*4, &ptrout) != XCF_OK) return XCF_ERROR;
+    ptr = ptrout;
+    if( (ptr = tileDirectoryOneLevel(dim,ptr)) == 0 ) return XCF_OK;
   }
   /* The XCF format has a dummy "hierarchy" level which was
    * once meant to mean something, but never happened. It contains
@@ -93,12 +104,18 @@ initTileDirectory(struct tileDimensions *dim,struct xcfTiles *tiles,
    * first level actually contains data.
    */
   data = xcfL(ptr) ;
-  if( xcfL(ptr) != tiles->params->bpp )
+  if( xcfL(ptr) != tiles->params->bpp ) {
     FatalBadXCF("%"PRIu32" bytes per pixel for %s drawable",xcfL(ptr),type);
-  ptr = xcfOffset(ptr+4,3*4) ;
-  if( (ptr = tileDirectoryOneLevel(dim,ptr)) == 0 ) return ;
+    return XCF_ERROR;
+  }
+  uint32_t ptrout;
+  if(xcfOffset(ptr+4,3*4, &ptrout) != XCF_OK) return XCF_ERROR;
+  ptr = ptrout;
+  if( (ptr = tileDirectoryOneLevel(dim,ptr)) == 0 ) return XCF_OK;
 
-  xcfCheckspace(ptr,dim->ntiles*4+4,"Tile directory at %" PRIX32,ptr);
+  if ((response = xcfCheckspace(ptr,dim->ntiles*4+4,"Tile directory at %" PRIX32,ptr)) != XCF_OK) {
+      return XCF_ERROR;
+  }
 /*  if( xcfL(ptr + dim->ntiles*4) != 0 )
     FatalBadXCF("Wrong sized tile directory at %" PRIX32,ptr);*/
 
@@ -116,13 +133,14 @@ initTileDirectory(struct tileDimensions *dim,struct xcfTiles *tiles,
         tiles->tileptrs[i] = xcfL(ptr+i*4);
     }
 #endif
+  return XCF_OK;
 }
 
-void
+int
 initLayer(struct xcfLayer *layer) {
   if( layer->dim.ntiles == 0 ||
       (layer->pixels.hierarchy == 0 && layer->mask.hierarchy == 0) )
-    return ;
+    return XCF_OK;
   switch(layer->type) {
 #define DEF(X) case GIMP_##X##_IMAGE: layer->pixels.params = &convert##X; break
     DEF(RGB);
@@ -132,26 +150,39 @@ initLayer(struct xcfLayer *layer) {
     DEF(INDEXED);
     DEF(INDEXEDA);
   default:
-    FatalUnsupportedXCF(_("Layer type %s"),_(showGimpImageType(layer->type)));
+    {
+        FatalUnsupportedXCF(_("Layer type %s"),_(showGimpImageType(layer->type)));
+        return XCF_ERROR;
+    }
+
   }
-  initTileDirectory(&layer->dim,&layer->pixels,
-                    _(showGimpImageType(layer->type)));
+  if (initTileDirectory(&layer->dim,&layer->pixels,
+                                    _(showGimpImageType(layer->type)))  != XCF_OK) {
+      return XCF_ERROR;
+  }
   layer->mask.params = &convertChannel ;
-  initTileDirectory(&layer->dim,&layer->mask,"layer mask");
+  if (initTileDirectory(&layer->dim,&layer->mask,"layer mask") != XCF_OK) {
+          return XCF_ERROR;
+   }
+  return XCF_OK;
 }
-static void copyStraightPixels(rgba *dest,unsigned npixels,
+static int copyStraightPixels(rgba *dest,unsigned npixels,
                                uint32_t ptr,convertParams *params);
-void
+int
 initColormap(void) {
   uint32_t ncolors ;
   if( XCF.colormapptr == 0 ) {
     colormapLength = 0 ;
-    return ;
+    return XCF_OK;
   }
   ncolors = xcfL(XCF.colormapptr) ;
-  if( ncolors > 256 )
+  if( ncolors > 256 ) {
     FatalUnsupportedXCF(_("Color map has more than 256 entries"));
-  copyStraightPixels(colormap,ncolors,XCF.colormapptr+4,&convertColormap);
+    return XCF_ERROR;
+  }
+  if(copyStraightPixels(colormap,ncolors,XCF.colormapptr+4,&convertColormap) != XCF_OK) {
+      return XCF_ERROR;
+  }
   colormapLength = ncolors ;
 #ifdef xDEBUG
   {
@@ -164,6 +195,7 @@ initColormap(void) {
     fprintf(stderr,"\n");
   }
 #endif
+    return XCF_OK;
 }
 
 /* ****************************************************************** */
@@ -234,7 +266,7 @@ fillTile(struct Tile *tile,rgba data)
 
 /* ****************************************************************** */
 
-static void
+static int
 copyStraightPixels(rgba *dest,unsigned npixels,
                    uint32_t ptr,convertParams *params)
 {
@@ -242,8 +274,11 @@ copyStraightPixels(rgba *dest,unsigned npixels,
   const rgba *lookup = params->lookup;
   rgba base_pixel = params->base_pixel ;
   uint8_t *bp = xcf_file + ptr ;
-  xcfCheckspace(ptr,bpp*npixels,
-                "pixel array (%u x %d bpp) at %"PRIX32,npixels,bpp,ptr);
+  int response;
+  if ((response = xcfCheckspace(ptr,bpp*npixels,
+                                "pixel array (%u x %d bpp) at %"PRIX32,npixels,bpp,ptr)) != XCF_OK) {
+      return XCF_ERROR;
+  }
   while( npixels-- ) {
     rgba pixel = base_pixel ;
     unsigned i ;
@@ -256,9 +291,10 @@ copyStraightPixels(rgba *dest,unsigned npixels,
     }
     *dest++ = pixel ;
   }
+  return XCF_OK;
 }
 
-static void
+static int
 copyRLEpixels(rgba *dest,unsigned npixels,uint32_t ptr,convertParams *params)
 {
   unsigned i,j ;
@@ -269,6 +305,7 @@ copyRLEpixels(rgba *dest,unsigned npixels,uint32_t ptr,convertParams *params)
           ptr,params->bpp,npixels,base_pixel);
 #endif
 
+  int response;
 
   /* This algorithm depends on the indexed byte always being the first one */
   if( params->shift[0] < -1 )
@@ -283,17 +320,23 @@ copyRLEpixels(rgba *dest,unsigned npixels,uint32_t ptr,convertParams *params)
     for( j = 0 ; j < npixels ; ) {
       int countspec ;
       unsigned count ;
-      xcfCheckspace(ptr,2,"RLE data stream");
+      if ((response = xcfCheckspace(ptr,2,"RLE data stream")) != XCF_OK) {
+          return XCF_ERROR;
+      }
       countspec = (int8_t) xcf_file[ptr++] ;
       count = countspec >= 0 ? countspec+1 : -countspec ;
       if( count == 128 ) {
-        xcfCheckspace(ptr,3,"RLE long count");
+          if ((response = xcfCheckspace(ptr,3,"RLE long count")) != XCF_OK) {
+              return XCF_ERROR;
+          }
         count = xcf_file[ptr++] << 8 ;
         count += xcf_file[ptr++] ;
       }
-      if( j + count > npixels )
+      if( j + count > npixels ) {
         FatalBadXCF("Overlong RLE run at %"PRIX32" (plane %u, %u left)",
                     ptr,i,npixels-j);
+        return XCF_ERROR;
+      }
       if( countspec >= 0 ) {
         rgba data = (uint32_t) xcf_file[ptr++] << shift ;
         while( count-- )
@@ -321,9 +364,10 @@ copyRLEpixels(rgba *dest,unsigned npixels,uint32_t ptr,convertParams *params)
   fprintf(stderr,"\n");
   */
 #endif
+    return XCF_OK;
 }
 
-static void
+static int
 copyTilePixels(struct Tile *dest, uint32_t ptr,convertParams *params)
 {
   if( FULLALPHA(params->base_pixel) )
@@ -332,15 +376,23 @@ copyTilePixels(struct Tile *dest, uint32_t ptr,convertParams *params)
     dest->summary = 0 ;
   switch( XCF.compression ) {
   case COMPRESS_NONE:
-    copyStraightPixels(dest->pixels,dest->count,ptr,params);
+      if (copyStraightPixels(dest->pixels,dest->count,ptr,params) != XCF_OK) {
+          return XCF_ERROR;
+      }
     break ;
   case COMPRESS_RLE:
-    copyRLEpixels(dest->pixels,dest->count,ptr,params);
+      if (copyRLEpixels(dest->pixels,dest->count,ptr,params) != XCF_OK) {
+          return XCF_ERROR;
+      }
     break ;
   default:
-    FatalUnsupportedXCF(_("%s compression"),
+    {
+        FatalUnsupportedXCF(_("%s compression"),
                         _(showXcfCompressionType(XCF.compression)));
+        return XCF_ERROR;
+    }
   }
+  return XCF_OK;
 }
 
 
@@ -350,7 +402,11 @@ getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
 {
   struct Tile *tile = newTile(want);
 
-  assert( want.l < want.r && want.t < want.b );
+  if (want.l >= want.r || want.t >= want.b ) {
+      return XCF_PTR_EMPTY;
+  }
+
+
   if( tiles->tileptrs == 0 ) {
     fillTile(tile,0);
     return tile ;
@@ -367,7 +423,9 @@ getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
     int ty = TILE_NUM(want.t - dim->c.t);
     if( want.r == TILEXn(*dim,tx+1) && want.b == TILEYn(*dim,ty+1) ) {
       /* The common case? An entire single tile from the layer */
-      copyTilePixels(tile,tiles->tileptrs[tx + ty*dim->tilesx],tiles->params);
+        if (copyTilePixels(tile,tiles->tileptrs[tx + ty*dim->tilesx],tiles->params) != XCF_OK) {
+            return XCF_PTR_EMPTY;
+        }
       return tile ;
     }
   }
@@ -423,8 +481,11 @@ getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
                   ty,l0,y,l1,lstart,lnum,
                   tx,c0,x,c1,cstart,cnum);
 #endif
-          copyTilePixels(&tmptile,
-                         tiles->tileptrs[tx+ty*dim->tilesx],tiles->params);
+          if (copyTilePixels(&tmptile,
+                             tiles->tileptrs[tx+ty*dim->tilesx],tiles->params) != XCF_OK) {
+              return XCF_PTR_EMPTY;
+          }
+
           for(i=0; i<lnum; i++)
             for(j=0; j<cnum; j++)
               pixhoriz[i*width+j]

@@ -1116,8 +1116,8 @@ void SvgTextEditor::createActions()
     actionRegistry->propertizeAction("svg_pick_color", colorPickerAction);
 
     QWidgetAction *lineHeight = new QWidgetAction(this);
-    lineHeight->setToolTip(i18n("Line height"));
     QDoubleSpinBox *spnLineHeight = new QDoubleSpinBox();
+    spnLineHeight->setToolTip(i18n("Line height"));
     spnLineHeight->setRange(0.0, 1000.0);
     spnLineHeight->setSingleStep(10.0);
     spnLineHeight->setSuffix("%");

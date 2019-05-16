@@ -57,16 +57,20 @@ static convertParams convertChannel   = { 1, {ALPHA_SHIFT}, 0, 0 };
 /* ****************************************************************** */
 
 static int
-tileDirectoryOneLevel(struct tileDimensions *dim,uint32_t ptr)
+tileDirectoryOneLevel(struct tileDimensions *dim,uint32_t ptr, int* ptrOut)
 {
-  if( ptr == 0 )
-    return 0 ;
+  if( ptr == 0 ) {
+      *ptrOut = 0;
+    return XCF_OK; /* allowed by xcf, apparently */
+  }
   if( xcfL(ptr  ) != dim->c.r - dim->c.l ||
           xcfL(ptr+4) != dim->c.b - dim->c.t ) {
     FatalBadXCF("Drawable size mismatch at %" PRIX32, ptr);
-    return 0;
+    *ptrOut = XCF_PTR_EMPTY;
+    return XCF_ERROR;
   }
-  return ptr += 8 ;
+  *ptrOut = (ptr += 8) ;
+  return XCF_OK;
 }
 
 static int
@@ -76,17 +80,23 @@ initTileDirectory(struct tileDimensions *dim,struct xcfTiles *tiles,
   uint32_t ptr ;
   uint32_t data ;
 
-  int response;
-
   ptr = tiles->hierarchy ;
   tiles->hierarchy = 0 ;
-  if( (ptr = tileDirectoryOneLevel(dim,ptr)) == 0 ) return XCF_OK;
+  int ptrOut;
+  if (tileDirectoryOneLevel(dim,ptr, &ptrOut) != XCF_OK) {
+      return XCF_ERROR;
+  }
+  if (ptrOut == XCF_PTR_EMPTY) {
+      return XCF_OK;
+  }
+  ptr = ptrOut;
   if( tiles->params == &convertChannel ) {
     /* A layer mask is a channel.
      * Skip a name and a property list.
      */
      xcfString(ptr,&ptr);
     PropType type;
+    int response;
     while( (response = xcfNextprop(&ptr,&data, &type)) != XCF_ERROR && type != PROP_END ) {
 
     }
@@ -96,7 +106,13 @@ initTileDirectory(struct tileDimensions *dim,struct xcfTiles *tiles,
     uint32_t ptrout;
     if(xcfOffset(ptr,4*4, &ptrout) != XCF_OK) return XCF_ERROR;
     ptr = ptrout;
-    if( (ptr = tileDirectoryOneLevel(dim,ptr)) == 0 ) return XCF_OK;
+    if (tileDirectoryOneLevel(dim,ptr, &ptrOut) != XCF_OK) {
+        return XCF_ERROR;
+    }
+    if (ptrOut == XCF_PTR_EMPTY) {
+        return XCF_OK;
+    }
+    ptr = ptrOut;
   }
   /* The XCF format has a dummy "hierarchy" level which was
    * once meant to mean something, but never happened. It contains
@@ -111,9 +127,15 @@ initTileDirectory(struct tileDimensions *dim,struct xcfTiles *tiles,
   uint32_t ptrout;
   if(xcfOffset(ptr+4,3*4, &ptrout) != XCF_OK) return XCF_ERROR;
   ptr = ptrout;
-  if( (ptr = tileDirectoryOneLevel(dim,ptr)) == 0 ) return XCF_OK;
+  if (tileDirectoryOneLevel(dim,ptr, &ptrOut) != XCF_OK) {
+      return XCF_ERROR;
+  }
+  if (ptrOut == XCF_PTR_EMPTY) {
+      return XCF_OK;
+  }
+  ptr = ptrOut;
 
-  if ((response = xcfCheckspace(ptr,dim->ntiles*4+4,"Tile directory at %" PRIX32,ptr)) != XCF_OK) {
+  if (xcfCheckspace(ptr,dim->ntiles*4+4,"Tile directory at %" PRIX32,ptr) != XCF_OK) {
       return XCF_ERROR;
   }
 /*  if( xcfL(ptr + dim->ntiles*4) != 0 )
@@ -322,13 +344,13 @@ copyRLEpixels(rgba *dest,unsigned npixels,uint32_t ptr,convertParams *params)
     for( j = 0 ; j < npixels ; ) {
       int countspec ;
       unsigned count ;
-      if ((response = xcfCheckspace(ptr,2,"RLE data stream")) != XCF_OK) {
+      if (xcfCheckspace(ptr,2,"RLE data stream") != XCF_OK) {
           return XCF_ERROR;
       }
       countspec = (int8_t) xcf_file[ptr++] ;
       count = countspec >= 0 ? countspec+1 : -countspec ;
       if( count == 128 ) {
-          if ((response = xcfCheckspace(ptr,3,"RLE long count")) != XCF_OK) {
+          if (xcfCheckspace(ptr,3,"RLE long count") != XCF_OK) {
               return XCF_ERROR;
           }
         count = xcf_file[ptr++] << 8 ;
@@ -533,10 +555,16 @@ getLayerTile(struct xcfLayer *layer,const struct rect *where)
   }
 
   data = getMaskOrLayerTile(&layer->dim,&layer->pixels,*where);
+  if (data == XCF_PTR_EMPTY) {
+      return XCF_PTR_EMPTY;
+  }
   if( (data->summary & TILESUMMARY_ALLNULL) != 0 )
     return data ;
   if( layer->hasMask ) {
     struct Tile *mask = getMaskOrLayerTile(&layer->dim,&layer->mask,*where);
+    if (mask == XCF_PTR_EMPTY) { /* error */
+        return XCF_PTR_EMPTY;
+    }
     applyMask(data,mask);
   }
   if( layer->opacity < 255 ) {

@@ -255,6 +255,9 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *docum
                     want.b = want.t + TILE_HEIGHT;
                     want.r = want.l + TILE_WIDTH;
                     Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.pixels, want);
+                    if (tile == XCF_PTR_EMPTY) {
+                        return KisImportExportFilter::ConversionStatus::ParsingError;
+                    }
                     KisHLineIteratorSP it = kisLayer->paintDevice()->createHLineIteratorNG(x, y, TILE_WIDTH);
                     rgba* data = tile->pixels;
                     for (int v = 0; v < TILE_HEIGHT; ++v) {
@@ -298,6 +301,9 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *docum
                     want.b = want.t + TILE_HEIGHT;
                     want.r = want.l + TILE_WIDTH;
                     Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.mask, want);
+                    if (tile == XCF_PTR_EMPTY) {
+                        return KisImportExportFilter::ConversionStatus::ParsingError;
+                    }
                     KisHLineIteratorSP it = mask->paintDevice()->createHLineIteratorNG(x, y, TILE_WIDTH);
                     rgba* data = tile->pixels;
                     for (int v = 0; v < TILE_HEIGHT; ++v) {

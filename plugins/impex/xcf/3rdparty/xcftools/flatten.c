@@ -493,6 +493,9 @@ static struct Tile *
             continue ;
 
         tile = getLayerTile(&spec->layers[nlayers],where);
+        if (tile == XCF_PTR_EMPTY) {
+            return XCF_PTR_EMPTY;
+        }
 
         if( tile->summary & TILESUMMARY_ALLNULL )
             continue ; /* Simulate a tail call */
@@ -530,6 +533,9 @@ static struct Tile *
             /* Create a dummy top for the layers below this */
             if( top->summary & TILESUMMARY_CRISP ) {
                 above = forkTile(top);
+                if(above == XCF_PTR_EMPTY) {
+                    return XCF_PTR_EMPTY;
+                }
             } else {
                 summary_t summary = TILESUMMARY_ALLNULL ;
                 above = newTile(*where);
@@ -658,7 +664,9 @@ flattenIncrementally(struct FlattenSpec *spec,lineCallback callback)
                 return XCF_ERROR;
             }
             toptile.refcount-- ; /* addBackground may change destructively */
-            addBackground(spec,tile,ncols);
+            if (addBackground(spec,tile,ncols) != XCF_OK) {
+                return XCF_ERROR;
+            }
 
             for( i = 0 ; i < tile->count ; i++ )
                 if( NULLALPHA(tile->pixels[i]) )
@@ -695,7 +703,11 @@ flattenAll(struct FlattenSpec *spec)
     if( verboseFlag )
         fprintf(stderr,_("Flattening image ..."));
     collectPointer = rows ;
-    flattenIncrementally(spec,collector);
+    if (flattenIncrementally(spec,collector) != XCF_OK) {
+        xcffree(rows);
+        collectPointer = XCF_PTR_EMPTY;
+        return XCF_PTR_EMPTY;
+    }
     if( verboseFlag )
         fprintf(stderr,"\n");
     return rows ;

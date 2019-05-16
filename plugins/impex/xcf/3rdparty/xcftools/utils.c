@@ -94,7 +94,8 @@ gpl_blurb(void)
   fprintf(stderr,PACKAGE_STRING "\n");
   fprintf(stderr,
           _("Type \"%s -h\" to get an option summary.\n"),progname);
-  exit(1) ;
+  /* don't exit here - Krita will close otherwise */
+  /* exit(1) ; */
 }
 
 /* ******************************************************* */

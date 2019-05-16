@@ -119,13 +119,12 @@ xcfString(uint32_t ptr,uint32_t *after)
   unsigned i ;
   ICONV_CONST char *utf8master ;
 
-  int response;
-  if ((response = xcfCheckspace(ptr,4,"(string length)")) != XCF_OK) {
+  if (xcfCheckspace(ptr,4,"(string length)") != XCF_OK) {
       return XCF_PTR_EMPTY;
   }
   length = xcfL(ptr) ;
   ptr += 4 ;
-  if ((response = xcfCheckspace(ptr,length,"(string)")) != XCF_OK) {
+  if (xcfCheckspace(ptr,length,"(string)") != XCF_OK) {
       return XCF_PTR_EMPTY;
   }
   utf8master = (ICONV_CONST char*)(xcf_file+ptr) ;
@@ -240,7 +239,7 @@ getBasicXcfInfo(void)
   int errorStatus;
   uint32_t ptrout;
 
-  if ((errorStatus = xcfCheckspace(0,14+7*4,"(very short)")) != 0) {
+  if (xcfCheckspace(0,14+7*4,"(very short)") != XCF_OK) {
      return XCF_ERROR;
   }
 
@@ -320,6 +319,8 @@ getBasicXcfInfo(void)
 
     while( (errorStatus = xcfNextprop(&ptr,&data, &type)) != XCF_ERROR && type != PROP_END ) {
         if (errorStatus != XCF_OK) {
+            xcffree(XCF.layers);
+            XCF.layers = XCF_PTR_EMPTY;
             return XCF_ERROR;
         }
       switch(type) {
@@ -361,15 +362,21 @@ getBasicXcfInfo(void)
       }
     }
     if ((errorStatus = xcfCheckspace(ptr,8,"(end of layer %s)",L->name)) != XCF_OK) {
+        xcffree(XCF.layers);
+        XCF.layers = XCF_PTR_EMPTY;
         return XCF_ERROR;
     }
     L->pixels.tileptrs = 0 ;
 
     if (xcfOffset(ptr  , 4*4, &(L->pixels.hierarchy)) != XCF_OK) {
+        xcffree(XCF.layers);
+        XCF.layers = XCF_PTR_EMPTY;
         return XCF_ERROR;
     }
     L->mask.tileptrs = 0 ;
     if (xcfOffset(ptr+4, 4*4, &(L->mask.hierarchy)) != XCF_OK) {
+        xcffree(XCF.layers);
+        XCF.layers = XCF_PTR_EMPTY;
         return XCF_ERROR;
     }
 

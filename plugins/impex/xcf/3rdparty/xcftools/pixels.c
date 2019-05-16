@@ -427,6 +427,7 @@ getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
   struct Tile *tile = newTile(want);
 
   if (want.l >= want.r || want.t >= want.b ) {
+      freeTile(tile);
       return XCF_PTR_EMPTY;
   }
 
@@ -448,6 +449,7 @@ getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
     if( want.r == TILEXn(*dim,tx+1) && want.b == TILEYn(*dim,ty+1) ) {
       /* The common case? An entire single tile from the layer */
         if (copyTilePixels(tile,tiles->tileptrs[tx + ty*dim->tilesx],tiles->params) != XCF_OK) {
+            freeTile(tile);
             return XCF_PTR_EMPTY;
         }
       return tile ;
@@ -507,6 +509,7 @@ getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
 #endif
           if (copyTilePixels(&tmptile,
                              tiles->tileptrs[tx+ty*dim->tilesx],tiles->params) != XCF_OK) {
+              freeTile(tile);
               return XCF_PTR_EMPTY;
           }
 

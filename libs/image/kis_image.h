@@ -676,6 +676,18 @@ public:
      */
     void setMirrorAxesCenter(const QPointF &value) const;
 
+    /**
+     * Configure the image to allow masks on the root not (as reported by
+     * root()->allowAsChild()). By default it is not allowed (because it
+     * looks weird from GUI point of view)
+     */
+    void setAllowMasksOnRootNode(bool value);
+
+    /**
+     * \see setAllowMasksOnRootNode()
+     */
+    bool allowMasksOnRootNode() const;
+
 public Q_SLOTS:
 
     /**

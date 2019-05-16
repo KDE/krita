@@ -472,6 +472,7 @@ void KisPart::openTemplate(const QUrl &url)
         mimeType.remove( QRegExp( "-template$" ) );
         document->setMimeTypeAfterLoading(mimeType);
         document->resetURL();
+        document->setReadWrite(true);
     }
     else {
         if (document->errorMessage().isEmpty()) {

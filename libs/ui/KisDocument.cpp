@@ -1127,7 +1127,7 @@ QString KisDocument::generateAutoSaveFileName(const QString & path) const
     QString dir = fi.absolutePath();
     QString filename = fi.fileName();
 
-    if (path.isEmpty() || autosavePattern1.match(filename).hasMatch() || autosavePattern2.match(filename).hasMatch()) {
+    if (path.isEmpty() || autosavePattern1.match(filename).hasMatch() || autosavePattern2.match(filename).hasMatch() || !fi.isWritable()) {
         // Never saved?
 #ifdef Q_OS_WIN
         // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)

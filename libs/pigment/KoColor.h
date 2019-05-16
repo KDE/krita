@@ -218,21 +218,21 @@ public:
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
      *
      * @param elt the element to unserialize (\<CMYK /\>, \<sRGB /\>, \<RGB /\>)
-     * @param bitDepthId the bit depth is unspecified by the spec, this allow to select
+     * @param channelDepthId the bit depth is unspecified by the spec, this allow to select
      *                   a preferred bit depth for creating the KoColor object (if that
      *                   bit depth isn't available, this function will randomly select
      *                   an other bit depth)
      * @return the unserialize color, or an empty color object if the function failed
      *         to unserialize the color
      */
-    static KoColor fromXML(const QDomElement& elt, const QString & bitDepthId);
+    static KoColor fromXML(const QDomElement& elt, const QString & channelDepthId);
 
     /**
      * Unserialize a color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
      *
      * @param elt the element to unserialize (\<CMYK /\>, \<sRGB /\>, \<RGB /\>)
-     * @param bitDepthId the bit depth is unspecified by the spec, this allow to select
+     * @param channelDepthId the bit depth is unspecified by the spec, this allow to select
      *                   a preferred bit depth for creating the KoColor object (if that
      *                   bit depth isn't available, this function will randomly select
      *                   an other bit depth)
@@ -240,7 +240,24 @@ public:
      * @return the unserialize color, or an empty color object if the function failed
      *         to unserialize the color
      */
-    static KoColor fromXML(const QDomElement& elt, const QString & bitDepthId, bool* ok);
+    static KoColor fromXML(const QDomElement& elt, const QString & channelDepthId, bool* ok);
+
+
+    /**
+     * @brief toXML creates a string with XML that represents the current color. The XML
+     * is extended with a "channeldepth" attribute so we can restore the color to the same
+     * channel depth.
+     * @return a valid XML document in a string
+     */
+    QString toXML() const;
+
+    /**
+     * @brief fromXML restores a KoColor from a string saved with toXML(). If the
+     * string does not contain the "channeldepth" attribute, 16 bit integer is assumed.
+     * @param xml a valid XML document
+     * @return a new KoColor object
+     */
+    static KoColor fromXML(const QString &xml);
 
     /**
      * @brief toQString create a user-visible string of the channel names and the channel values

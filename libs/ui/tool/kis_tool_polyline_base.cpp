@@ -31,6 +31,7 @@
 #include <KisViewManager.h>
 #include <kis_action.h>
 #include <kactioncollection.h>
+#include <kis_icon.h>
 
 #include "kis_action_registry.h"
 
@@ -78,9 +79,15 @@ bool KisToolPolylineBase::hasUserInteractionRunning() const
 void KisToolPolylineBase::beginPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
-
-    if ((m_type == PAINT && (!nodeEditable() || nodePaintAbility() == UNPAINTABLE)) ||
+    NodePaintAbility paintability = nodePaintAbility();
+    if ((m_type == PAINT && (!nodeEditable() || paintability == UNPAINTABLE || paintability  == KisToolPaint::CLONE)) ||
         (m_type == SELECT && !selectionEditable())) {
+
+        if (paintability == KisToolPaint::CLONE){
+            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+            QString message = i18n("This tool cannot paint on clone layers.  Please select a paint or vector layer or mask.");
+            kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+        }
 
         event->ignore();
         return;

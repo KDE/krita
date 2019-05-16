@@ -755,9 +755,18 @@ KisDocument* KisDocument::lockAndCloneForSaving()
 
 bool KisDocument::exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration)
 {
-    Private::StrippedSafeSavingLocker locker(&d->savingMutex, d->image);
-    if (!locker.successfullyLocked()) {
-        return false;
+    {
+
+        /**
+         * The caller guarantees that noone else uses the document (usually,
+         * it is a temporary docuent created specifically for exporting), so
+         * we don't need to copy or lock the document. Instead we should just
+         * ensure the barrier lock is synced and then released.
+         */
+        Private::StrippedSafeSavingLocker locker(&d->savingMutex, d->image);
+        if (!locker.successfullyLocked()) {
+            return false;
+        }
     }
 
     d->savingImage = d->image;
@@ -801,6 +810,27 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
     // we block saving until the current saving is finished!
     if (!clonedDocument || !d->savingMutex.tryLock()) {
         return false;
+    }
+
+    auto waitForImage = [] (KisImageSP image) {
+        KisMainWindow *window = KisPart::instance()->currentMainwindow();
+        if (window) {
+            if (window->viewManager()) {
+                window->viewManager()->blockUntilOperationsFinishedForced(image);
+            }
+        }
+    };
+
+    {
+        KisNodeSP newRoot = clonedDocument->image()->root();
+        KIS_SAFE_ASSERT_RECOVER(!KisLayerUtils::hasDelayedNodeWithUpdates(newRoot)) {
+            KisLayerUtils::forceAllDelayedNodesUpdate(newRoot);
+            waitForImage(clonedDocument->image());
+        }
+    }
+
+    KIS_SAFE_ASSERT_RECOVER(clonedDocument->image()->isIdle()) {
+        waitForImage(clonedDocument->image());
     }
 
     KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveDocument, false);
@@ -1551,7 +1581,11 @@ void KisDocument::slotUndoStackCleanChanged(bool value)
 void KisDocument::slotConfigChanged()
 {
     KisConfig cfg(true);
-    d->undoStack->setUndoLimit(cfg.undoStackLimit());
+    if (!d->undoStack->isClean() && d->undoStack->undoLimit() != cfg.undoStackLimit()) {
+        d->undoStack->clear();
+        d->undoStack->setUndoLimit(cfg.undoStackLimit());
+    }
+
     d->autoSaveDelay = cfg.autoSaveInterval();
     setNormalAutoSaveInterval();
 }

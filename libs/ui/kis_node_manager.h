@@ -94,6 +94,11 @@ public:
     const KoColorSpace* activeColorSpace();
 
     /**
+     * Sets the name for the node in a universal way (masks/layers)
+     */
+    void setNodeName(KisNodeSP node, const QString &name);
+
+    /**
      * Sets opacity for the node in a universal way (masks/layers)
      */
     void setNodeOpacity(KisNodeSP node, qint32 opacity);

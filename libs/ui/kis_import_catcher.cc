@@ -101,7 +101,7 @@ void KisImportCatcher::slotLoadingFinished()
     KisImageWSP importedImage = m_d->doc->image();
     importedImage->waitForDone();
 
-    if (importedImage && importedImage->projection()->exactBounds().isValid()) {
+    if (importedImage && importedImage->bounds().isValid()) {
         if (m_d->layerType == "KisPaintLayer") {
             KisPaintDeviceSP dev = importedImage->projection();
             adaptClipToImageColorSpace(dev, m_d->view->image());

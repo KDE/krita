@@ -460,7 +460,7 @@ private:
     /**
      * Updates the window caption based on the document info and path.
      */
-    void updateCaption(const QString & caption, bool mod);
+    void updateCaption(const QString & caption, bool modified);
     void updateReloadFileAction(KisDocument *doc);
 
     void saveWindowSettings();

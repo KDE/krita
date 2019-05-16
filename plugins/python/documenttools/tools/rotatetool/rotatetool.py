@@ -21,7 +21,7 @@ class RotateTool(QWidget):
     def __init__(self, mainDialog, parent=None):
         super(RotateTool, self).__init__(parent)
 
-        self.setObjectName("Rotate")
+        self.setObjectName(i18n("Rotate"))
 
         self.layout = QFormLayout()
 

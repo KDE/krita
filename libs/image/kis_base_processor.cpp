@@ -95,7 +95,7 @@ KisFilterConfigurationSP KisBaseProcessor::defaultConfiguration() const
     return factoryConfiguration();
 }
 
-KisConfigWidget * KisBaseProcessor::createConfigurationWidget(QWidget *, const KisPaintDeviceSP) const
+KisConfigWidget * KisBaseProcessor::createConfigurationWidget(QWidget *, const KisPaintDeviceSP, bool) const
 {
     return 0;
 }

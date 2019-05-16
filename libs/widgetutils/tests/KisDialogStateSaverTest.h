@@ -1,7 +1,5 @@
 /*
- *  dlg_histogram.h -- part of KimageShop^WKrayon^WKrita
- *
- *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2019 Boudewijn Rempt <boud@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,39 +15,19 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef DLG_HISTOGRAM
-#define DLG_HISTOGRAM
 
-#include <KoDialog.h>
+#ifndef KISDIALOGSTATESAVERTEST_H
+#define KISDIALOGSTATESAVERTEST_H
 
-#include "kis_types.h"
+#include <QTest>
+#include "ui_dialogsavertestwidget.h"
 
-class KisHistogramWidget;
-
-/**
- * This dialog shows the histogram for the (selected) portion
- * of the current layer.
- *
- * XXX: Also for complete image?
- */
-class DlgHistogram: public KoDialog
+class KisDialogStateSaverTest : public QObject
 {
     Q_OBJECT
-
-public:
-
-    DlgHistogram(QWidget * parent = 0,
-                 const char* name = 0);
-    ~DlgHistogram() override;
-
-    void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds);
-
 private Q_SLOTS:
-    void okClicked();
-
-private:
-
-    KisHistogramWidget * m_page;
+    void testSave();
+    void testRestore();
 };
 
-#endif // DLG_HISTOGRAM
+#endif // KISDIALOGSTATESAVERTEST_H

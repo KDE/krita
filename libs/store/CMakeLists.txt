@@ -11,6 +11,7 @@ set(kritastore_LIB_SRCS
     KoXmlReader.cpp
     KoXmlWriter.cpp
     KoQuaZipStore.cpp
+    KoLegacyZipStore.cpp
     StoreDebug.cpp
 )
 
@@ -22,6 +23,7 @@ target_link_libraries(kritastore
         kritaversion 
         kritaglobal 
         KF5::ConfigCore
+        KF5::Archive
         Qt5::Xml 
         Qt5::Gui 
         ${QUAZIP_LIBRARIES}

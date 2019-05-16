@@ -67,6 +67,11 @@
 #else
 #include <dialogs/KisDlgCustomTabletResolution.h>
 #endif
+#include "config-high-dpi-scale-factor-rounding-policy.h"
+#include "config-set-has-border-in-full-screen-default.h"
+#ifdef HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
+#include <QtPlatformHeaders/QWindowsWindowFunctions>
+#endif
 #include <QLibrary>
 #endif
 
@@ -97,7 +102,12 @@ void tryInitDrMingw()
     QString logFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation).replace(L'/', L'\\') + QStringLiteral("\\kritacrash.log");
     myExcHndlSetLogFileNameA(logFile.toLocal8Bit());
 }
+} // namespace
+#endif
 
+#ifdef Q_OS_WIN
+namespace
+{
 typedef enum ORIENTATION_PREFERENCE {
     ORIENTATION_PREFERENCE_NONE = 0x0,
     ORIENTATION_PREFERENCE_LANDSCAPE = 0x1,
@@ -126,6 +136,7 @@ void resetRotation()
 }
 } // namespace
 #endif
+
 extern "C" int main(int argc, char **argv)
 {
 
@@ -153,6 +164,24 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_DisableShaderDiskCache, true);
 #endif
 
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+    // This rounding policy depends on a series of patches to Qt related to
+    // https://bugreports.qt.io/browse/QTBUG-53022. These patches are applied
+    // in ext_qt for WIndows (patches 0031-0036).
+    //
+    // The rounding policy can be set externally by setting the environment
+    // variable `QT_SCALE_FACTOR_ROUNDING_POLICY` to one of the following:
+    //   Round:            Round up for .5 and above.
+    //   Ceil:             Always round up.
+    //   Floor:            Always round down.
+    //   RoundPreferFloor: Round up for .75 and above.
+    //   PassThrough:      Don't round.
+    //
+    // The default is set to RoundPreferFloor for better behaviour than before,
+    // but can be overridden by the above environment variable.
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
+#endif
+
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
 
@@ -169,6 +198,11 @@ extern "C" int main(int argc, char **argv)
         if (!qgetenv("KRITA_HIDPI").isEmpty()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+        if (kritarc.value("EnableHiDPIFractionalScaling", true).toBool()) {
+            QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+        }
+#endif
 
         if (!qgetenv("KRITA_OPENGL_DEBUG").isEmpty()) {
             enableOpenGLDebug = true;
@@ -324,6 +358,12 @@ extern "C" int main(int argc, char **argv)
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
 
+#ifdef HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
+    if (QCoreApplication::testAttribute(Qt::AA_UseDesktopOpenGL)) {
+        QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
+    }
+#endif
+
     KisUsageLogger::writeHeader();
 
     if (!language.isEmpty()) {
@@ -373,7 +413,7 @@ extern "C" int main(int argc, char **argv)
     if (singleApplication && app.isRunning()) {
         // only pass arguments to main instance if they are not for batch processing
         // any batch processing would be done in this separate instance
-        const bool batchRun = args.exportAs();
+        const bool batchRun = args.exportAs() || args.exportSequence();
 
         if (!batchRun) {
             QByteArray ba = args.serialize();

@@ -93,7 +93,6 @@
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "kis_raster_keyframe_channel.h"
-#include "KisImportExportManager.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_abstract_projection_plane.h"
 #include "commands_new/kis_set_layer_style_command.h"

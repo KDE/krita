@@ -47,7 +47,8 @@
 #include <KoColorSpaceTraits.h>
 #include <KoCompositeOpAlphaDarken.h>
 #include <KoCompositeOpOver.h>
-#include "KoOptimizedCompositeOpFactory.h"
+#include <KoOptimizedCompositeOpFactory.h>
+#include <KoAlphaDarkenParamsWrapper.h>
 
 // for posix_memalign()
 #include <stdlib.h>

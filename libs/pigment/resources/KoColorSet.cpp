@@ -55,6 +55,32 @@
 #include "KoColorSet.h"
 #include "KoColorSet_p.h"
 
+namespace {
+
+/**
+ * readAllLinesSafe() reads all the lines in the byte array
+ * using the automated UTF8 and CR/LF transformations. That
+ * might be necessary for opening GPL palettes created on Linux
+ * in Windows environment.
+ */
+QStringList readAllLinesSafe(QByteArray *data)
+{
+    QStringList lines;
+
+    QBuffer buffer(data);
+    buffer.open(QBuffer::ReadOnly);
+    QTextStream stream(&buffer);
+
+    QString line;
+    while (stream.readLineInto(&line)) {
+        lines << line;
+    }
+
+    return lines;
+}
+}
+
+
 const QString KoColorSet::GLOBAL_GROUP_NAME = QString();
 const QString KoColorSet::KPL_VERSION_ATTR = "version";
 const QString KoColorSet::KPL_GROUP_ROW_COUNT_ATTR = "rows";
@@ -739,16 +765,14 @@ bool KoColorSet::Private::saveGpl(QIODevice *dev) const
 
 bool KoColorSet::Private::loadGpl()
 {
-    QString s = QString::fromUtf8(data.data(), data.count());
-
-    if (s.isEmpty() || s.isNull() || s.length() < 50) {
+    if (data.isEmpty() || data.isNull() || data.length() < 50) {
         warnPigment << "Illegal Gimp palette file: " << colorSet->filename();
         return false;
     }
 
     quint32 index = 0;
 
-    QStringList lines = s.split('\n', QString::SkipEmptyParts);
+    QStringList lines = readAllLinesSafe(&data);
 
     if (lines.size() < 3) {
         warnPigment << "Not enough lines in palette file: " << colorSet->filename();
@@ -858,8 +882,7 @@ bool KoColorSet::Private::loadPsp()
     KisSwatch e;
     qint32 r, g, b;
 
-    QString s = QString::fromUtf8(data.data(), data.count());
-    QStringList l = s.split('\n', QString::SkipEmptyParts);
+    QStringList l = readAllLinesSafe(&data);
     if (l.size() < 4) return false;
     if (l[0] != "JASC-PAL") return false;
     if (l[1] != "0100") return false;

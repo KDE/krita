@@ -257,10 +257,10 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
             hasIndirectPainting = false;
         }
     }
-    if(m_useMergeID){
-        m_transaction = new KisTransaction(name(), targetDevice,0,timedID(this->id()));
+    if (m_useMergeID) {
+        m_transaction = new KisTransaction(name(), targetDevice, 0, timedID(this->id()));
     }
-    else{
+    else {
         m_transaction = new KisTransaction(name(), targetDevice);
     }
 

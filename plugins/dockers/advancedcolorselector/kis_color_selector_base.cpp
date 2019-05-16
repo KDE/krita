@@ -386,20 +386,15 @@ void KisColorSelectorBase::lazyCreatePopup()
         Q_ASSERT(m_popup);
         m_popup->setParent(this);
 
-        /**
-         * On Linux passing Qt::X11BypassWindowManagerHint makes
-         * the window never hide if one switches it with Alt+Tab
-         * or something like that. The window also don't get any
-         * mouse-enter/leave events. So we have to make it normal
-         * window (which is visible to the window manager and
-         * appears in the tasks bar). Therefore we don't use it
-         * anyomore.
-         */
+        // Setting Qt::BypassWindowManagerHint will prevent
+        // the WM from showing another taskbar entry,
+        // but will require that we handle window activation manually
         m_popup->setWindowFlags(Qt::FramelessWindowHint |
                                 Qt::Window |
-                                Qt::NoDropShadowWindowHint);
+                                Qt::NoDropShadowWindowHint |
+                                Qt::BypassWindowManagerHint);
         m_popup->m_parent = this;
-        m_popup->m_isPopup=true;
+        m_popup->m_isPopup = true;
     }
     m_popup->setCanvas(m_canvas);
     m_popup->updateSettings();
@@ -557,4 +552,25 @@ void KisColorSelectorBase::tryHideAllPopups()
 void KisColorSelectorBase::mouseMoveEvent(QMouseEvent *event)
 {
     event->accept();
+}
+
+
+void KisColorSelectorBase::changeEvent(QEvent *event)
+{
+    // hide the popup when another window becomes active, e.g. due to alt+tab
+    if(m_isPopup && event->type() == QEvent::ActivationChange && !isActiveWindow()) {
+        hidePopup();
+    }
+
+    QWidget::changeEvent(event);
+}
+
+void KisColorSelectorBase::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+
+    // manual activation required due to Qt::BypassWindowManagerHint
+    if(m_isPopup) {
+        activateWindow();
+    }
 }

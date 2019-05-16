@@ -48,9 +48,9 @@ KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), FiltersCatego
 }
 
 void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
-                 const QRect& applyRect,
-                 const KisFilterConfigurationSP config,
-                 KoUpdater *progressUpdater) const
+                                         const QRect& applyRect,
+                                         const KisFilterConfigurationSP config,
+                                         KoUpdater *progressUpdater) const
 {
     Q_ASSERT(!device.isNull());
 
@@ -58,18 +58,16 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
     if (config->version()==1) {
         QDomElement elt = doc.createElement("gradient");
         KoAbstractGradientSP gradientAb = KoResourceServerProvider::instance()->gradientServer()->resourceByName(config->getString("gradientName"));
-            if (!gradientAb) {
-                qWarning() << "Could not find gradient" << config->getString("gradientName");
-            }
+        if (!gradientAb) {
+            qWarning() << "Could not find gradient" << config->getString("gradientName");
+        }
         gradientAb = KoResourceServerProvider::instance()->gradientServer()->resources().first();
         KoStopGradient::fromQGradient(gradientAb->toQGradient())->toXML(doc, elt);
         doc.appendChild(elt);
     } else {
         doc.setContent(config->getString("gradientXML", ""));
     }
-   KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
-
-
+    KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
 
     KoColor outColor(Qt::white, device->colorSpace());
     KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
@@ -99,7 +97,7 @@ KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
     return config;
 }
 
-KisConfigWidget * KritaFilterGradientMap::createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KritaFilterGradientMap::createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KritaGradientMapConfigWidget(parent, dev);
 }

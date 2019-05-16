@@ -97,6 +97,8 @@
 #include "kis_algebra_2d.h"
 #include "kis_image_signal_router.h"
 
+#include "KisSnapPixelStrategy.h"
+
 
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
@@ -207,6 +209,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
 
     m_d->frameRenderStartCompressor.setDelay(1000 / config.fpsLimit());
     m_d->frameRenderStartCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
+    snapGuide()->overrideSnapStrategy(KoSnapGuide::PixelSnapping, new KisSnapPixelStrategy());
 }
 
 void KisCanvas2::setup()
@@ -1053,20 +1056,13 @@ void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
 {
     QPointF offsetBefore = m_d->coordinatesConverter->imageRectInViewportPixels().topLeft();
 
-    qreal devicePixelRatio = m_d->coordinatesConverter->devicePixelRatio();
     // The given offset is in widget logical pixels. In order to prevent fuzzy
     // canvas rendering at 100% pixel-perfect zoom level when devicePixelRatio
     // is not integral, we adjusts the offset to map to whole device pixels.
-    // We use qFloor here since the offset can be negative.
-    int deviceOffsetX = qFloor(documentOffset.x() * devicePixelRatio);
-    int deviceOffsetY = qFloor(documentOffset.y() * devicePixelRatio);
-    // These adjusted offsets will be in logical pixel but is aligned in device
-    // pixel space for pixel-perfect rendering.
-    qreal pixelPerfectOffsetX = deviceOffsetX / devicePixelRatio;
-    qreal pixelPerfectOffsetY = deviceOffsetY / devicePixelRatio;
+    //
     // FIXME: This is a temporary hack for fixing the canvas under fractional
     //        DPI scaling before a new coordinate system is introduced.
-    QPointF offsetAdjusted(pixelPerfectOffsetX, pixelPerfectOffsetY);
+    QPointF offsetAdjusted = m_d->coordinatesConverter->snapToDevicePixel(documentOffset);
 
     m_d->coordinatesConverter->setDocumentOffset(offsetAdjusted);
     QPointF offsetAfter = m_d->coordinatesConverter->imageRectInViewportPixels().topLeft();

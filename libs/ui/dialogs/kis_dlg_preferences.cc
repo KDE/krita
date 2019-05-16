@@ -104,6 +104,7 @@
 #   ifndef USE_QT_TABLET_WINDOWS
 #       include <kis_tablet_support_win8.h>
 #   endif
+#include "config-high-dpi-scale-factor-rounding-policy.h"
 #endif
 
 struct BackupSuffixValidator : public QValidator {
@@ -173,8 +174,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
     connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
 
-    KoColor mdiColor;
-    mdiColor.fromQColor(cfg.getMDIBackgroundColor());
+    QString xml = cfg.getMDIBackgroundColor();
+    KoColor mdiColor = KoColor::fromXML(xml);
     m_mdiColor->setColor(mdiColor);
 
     m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
@@ -184,6 +185,11 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
     m_chkHiDPI->setChecked(kritarc.value("EnableHiDPI", true).toBool());
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+    m_chkHiDPIFractionalScaling->setChecked(kritarc.value("EnableHiDPIFractionalScaling", true).toBool());
+#else
+    m_chkHiDPIFractionalScaling->setVisible(false);
+#endif
     chkUsageLogging->setChecked(kritarc.value("LogUsage", true).toBool());
     m_chkSingleApplication->setChecked(kritarc.value("EnableSingleApplication", true).toBool());
 
@@ -300,7 +306,7 @@ void GeneralTab::setDefault()
     m_chkRubberBand->setChecked(cfg.useOpenGL(true));
     m_favoritePresetsSpinBox->setValue(cfg.favoritePresets(true));
     KoColor mdiColor;
-    mdiColor.fromQColor(cfg.getMDIBackgroundColor(true));
+    mdiColor.fromXML(cfg.getMDIBackgroundColor(true));
     m_mdiColor->setColor(mdiColor);
     m_backgroundimage->setText(cfg.getMDIBackgroundImage(true));
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages(true));
@@ -310,6 +316,9 @@ void GeneralTab::setDefault()
     m_chkSingleApplication->setChecked(true);
 
     m_chkHiDPI->setChecked(true);
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+    m_chkHiDPIFractionalScaling->setChecked(true);
+#endif
     chkUsageLogging->setChecked(true);
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
     cmbFlowMode->setCurrentIndex(0);
@@ -546,6 +555,13 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         m_monitorProfileWidgets << cmb;
     }
 
+// disable if not Linux as KisColorManager is not yet implemented outside Linux
+#ifndef Q_OS_LINUX
+    m_page->chkUseSystemMonitorProfile->setChecked(false);
+    m_page->chkUseSystemMonitorProfile->setDisabled(true);
+    m_page->chkUseSystemMonitorProfile->setHidden(true);
+#endif
+
     refillMonitorProfiles(KoID("RGBA"));
 
     for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
@@ -729,6 +745,9 @@ void TabletSettingsTab::setDefault()
     curve.fromString(DEFAULT_CURVE_STRING);
     m_page->pressureCurve->setCurve(curve);
 
+    m_page->chkUseRightMiddleClickWorkaround->setChecked(
+        KisConfig(true).useRightMiddleTabletButtonWorkaround(true));
+
 #if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
 
 #ifdef USE_QT_TABLET_WINDOWS
@@ -765,6 +784,9 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
 
     m_page->pressureCurve->setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
     m_page->pressureCurve->setCurve(curve);
+
+    m_page->chkUseRightMiddleClickWorkaround->setChecked(
+         cfg.useRightMiddleTabletButtonWorkaround());
 
 #if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
 #ifdef USE_QT_TABLET_WINDOWS
@@ -1574,7 +1596,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.writeEntry<int>("maximumBrushSize", dialog->m_general->intMaxBrushSize->value());
 
         cfg.writeEntry<int>("mdi_viewmode", dialog->m_general->mdiMode());
-        cfg.setMDIBackgroundColor(dialog->m_general->m_mdiColor->color().toQColor());
+        cfg.setMDIBackgroundColor(dialog->m_general->m_mdiColor->color().toXML());
         cfg.setMDIBackgroundImage(dialog->m_general->m_backgroundimage->text());
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.writeEntry("autosavefileshidden", dialog->m_general->chkHideAutosaveFiles->isChecked());
@@ -1591,6 +1613,9 @@ bool KisDlgPreferences::editPreferences()
         const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
         QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
         kritarc.setValue("EnableHiDPI", dialog->m_general->m_chkHiDPI->isChecked());
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+        kritarc.setValue("EnableHiDPIFractionalScaling", dialog->m_general->m_chkHiDPIFractionalScaling->isChecked());
+#endif
         kritarc.setValue("EnableSingleApplication", dialog->m_general->m_chkSingleApplication->isChecked());
         kritarc.setValue("LogUsage", dialog->m_general->chkUsageLogging->isChecked());
 
@@ -1643,6 +1668,9 @@ bool KisDlgPreferences::editPreferences()
 
         // Tablet settings
         cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
+        cfg.setUseRightMiddleTabletButtonWorkaround(
+            dialog->m_tabletSettings->m_page->chkUseRightMiddleClickWorkaround->isChecked());
+
 #if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
 #ifdef USE_QT_TABLET_WINDOWS
         // ask Qt if WinInk is actually available

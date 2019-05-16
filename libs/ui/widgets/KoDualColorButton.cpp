@@ -98,7 +98,7 @@ void KoDualColorButton::Private::init(KoDualColorButton *q)
         q->setMinimumSize( q->sizeHint() );
 
     q->setAcceptDrops( true );
-    QString caption = i18n("Select a color");
+    QString caption = i18n("Select a Color");
     KisDlgInternalColorSelector::Config config = KisDlgInternalColorSelector::Config();
     config.modal = false;
     colorSelectorDialog = new KisDlgInternalColorSelector(q, foregroundColor, config, caption, displayRenderer);
@@ -343,7 +343,7 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     if (foregroundRect.contains( event->pos())) {
         if (d->tmpSelection == Foreground) {
             if (d->popDialog) {
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
                 d->colorSelectorDialog->setPreviousColor(d->foregroundColor);
                 //this should toggle, but I don't know how to implement that...
                 d->colorSelectorDialog->show();
@@ -367,7 +367,7 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     } else if ( backgroundRect.contains( event->pos() )) {
         if(d->tmpSelection == Background ) {
             if( d->popDialog) {
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
                 KoColor c = d->backgroundColor;
                 c = KisDlgInternalColorSelector::getModalColorDialog(c, this);
                 d->backgroundColor = c;

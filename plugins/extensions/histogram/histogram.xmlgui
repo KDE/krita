@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritahistogram" version="6" translationDomain="krita">
-<MenuBar>
-    <Menu name="Layer"><text>&amp;Layer</text>
-	<Action name="histogram" group="layer_properties_merge"/>
-    </Menu>
-</MenuBar>
-</kpartgui>

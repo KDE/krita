@@ -27,7 +27,7 @@ class FilterManagerTreeModel(QAbstractItemModel):
         super(FilterManagerTreeModel, self).__init__(parent)
 
         self.rootItem = filtermanagertreeitem.FilterManagerTreeItem(
-            ("Name", "Type", "Thumbnail"))
+            (i18n("Name"), i18n("Type"), i18n("Thumbnail")))
         self.uiFilterManager = uiFilterManager
         self._loadTreeModel(self.rootItem)
 

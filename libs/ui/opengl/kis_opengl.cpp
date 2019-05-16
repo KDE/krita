@@ -353,7 +353,7 @@ QSurfaceFormat generateSurfaceFormat(QSurfaceFormat::RenderableType renderer,
                                      bool debugContext)
 {
     QSurfaceFormat format;
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     format.setVersion(3, 2);
     format.setProfile(QSurfaceFormat::CoreProfile);
 #else

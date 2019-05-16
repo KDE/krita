@@ -76,7 +76,7 @@ public:
     /**
      * Create an empty node without a parent.
      */
-    KisNode();
+    KisNode(KisImageWSP image);
 
     /**
      * Create a copy of this node. The copy will not have a parent
@@ -195,6 +195,9 @@ public:
      * graph may have a different order the main one.
      */
     virtual KisProjectionLeafSP projectionLeaf() const;
+
+
+    void setImage(KisImageWSP image) override;
 
 protected:
 

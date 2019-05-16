@@ -70,7 +70,7 @@ KisPosterizeColorTransformation::KisPosterizeColorTransformation(int steps, cons
     m_halfStep = m_step / 2;
 }
 
-KisConfigWidget* KisFilterPosterize::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget* KisFilterPosterize::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     vKisIntegerWidgetParam param;

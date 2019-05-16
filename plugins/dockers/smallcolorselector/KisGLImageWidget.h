@@ -40,15 +40,15 @@ public:
 
     ~KisGLImageWidget();
 
-    void initializeGL();
-    void paintGL();
+    void initializeGL() override;
+    void paintGL() override;
 
     void loadImage(const KisGLImageF16 &image);
 
     void paintEvent(QPaintEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 public Q_SLOTS:
 

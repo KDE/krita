@@ -66,6 +66,7 @@ public:
     void removeNode(KisNodeSP node);
     void setOpacity(KisNodeSP node, qint32 opacity);
     void setCompositeOp(KisNodeSP node, const KoCompositeOp* compositeOp);
+    void setNodeName(KisNodeSP node, const QString &name);
 
     void undoLastCommand();
 private:

@@ -1,7 +1,5 @@
 /*
- * histogram.h -- Part of Krita
- *
- * Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2019 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,22 +16,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef HISTOGRAM_H
-#define HISTOGRAM_H
+#include "KisNodeRenameCommand.h"
 
-#include <QVariant>
+#include <klocalizedstring.h>
+#include "kis_node.h"
+#include "commands/kis_node_commands.h"
 
-#include <KisActionPlugin.h>
 
-class Histogram : public KisActionPlugin
+KisNodeRenameCommand::KisNodeRenameCommand(KisNodeSP node, const QString &oldName, const QString &newName)
+    : KisNodeCommand(kundo2_i18n("Node Rename"), node)
 {
-    Q_OBJECT
-public:
-    Histogram(QObject *parent, const QVariantList &);
-    ~Histogram() override;
+    m_oldName = oldName;
+    m_newName = newName;
+}
 
-private Q_SLOTS:
-    void slotActivated();
-};
+void KisNodeRenameCommand::redo()
+{
+    m_node->setName(m_newName);
+}
 
-#endif // HISTOGRAM_H
+void KisNodeRenameCommand::undo()
+{
+    m_node->setName(m_oldName);
+}

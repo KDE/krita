@@ -70,6 +70,9 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
 
 SvgTextTool::~SvgTextTool()
 {
+    if(m_editor) {
+        m_editor->close();
+    }
 }
 
 void SvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
@@ -221,16 +224,17 @@ void SvgTextTool::showEditor()
     if (!shape) return;
 
     if (!m_editor) {
-        m_editor = new SvgTextEditor();
-        m_editor->setWindowModality(Qt::ApplicationModal);
+        m_editor = new SvgTextEditor(QApplication::activeWindow());
+        m_editor->setWindowModality(Qt::NonModal);
+        m_editor->setAttribute( Qt::WA_QuitOnClose, false );
 
         connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*,QString,QString,bool)), SLOT(textUpdated(KoSvgTextShape*,QString,QString,bool)));
         connect(m_editor, SIGNAL(textEditorClosed()), SLOT(slotTextEditorClosed()));
-    }
 
+        m_editor->activateWindow(); // raise on creation only
+    }
     m_editor->setShape(shape);
     m_editor->show();
-    m_editor->activateWindow();
 }
 
 void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextUpdated)
@@ -314,11 +318,8 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
         } else {
             m_dragStart = m_dragEnd = event->point;
             m_dragging = true;
+            event->accept();
         }
-
-        event->accept();
-    } else {
-        event->ignore();
     }
 }
 
@@ -393,8 +394,12 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
         canvas()->addCommand(parentCommand);
 
         showEditor();
+        event->accept();
+
+    } else if (m_editor) {
+        showEditor();
+        event->accept();
     }
-    event->accept();
 }
 
 void SvgTextTool::keyPressEvent(QKeyEvent *event)
@@ -415,5 +420,10 @@ void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         return;
     }
     showEditor();
+    if(m_editor) {
+        m_editor->raise();
+        m_editor->activateWindow();
+    }
+    event->accept();
 }
 

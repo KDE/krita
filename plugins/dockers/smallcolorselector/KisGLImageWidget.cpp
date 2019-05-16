@@ -102,7 +102,11 @@ void KisGLImageWidget::initializeGL()
         vertSource.prepend(versionDefinition);
         fragSource.prepend(versionDefinition);
     } else {
+#ifdef Q_OS_MACOS
+        const char *versionDefinition = KisOpenGL::supportsLoD() ? "#version 150\n" : "#version 120\n";
+#else
         const char *versionDefinition = KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n";
+#endif
         vertSource.prepend(versionDefinition);
         fragSource.prepend(versionDefinition);
     }

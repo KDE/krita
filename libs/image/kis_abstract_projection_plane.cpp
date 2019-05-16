@@ -58,6 +58,11 @@ QRect KisDumbProjectionPlane::accessRect(const QRect &rect, KisLayer::PositionTo
     return rect;
 }
 
+QRect KisDumbProjectionPlane::needRectForOriginal(const QRect &rect) const
+{
+    return rect;
+}
+
 KisPaintDeviceList KisDumbProjectionPlane::getLodCapableDevices() const
 {
     // arghm...

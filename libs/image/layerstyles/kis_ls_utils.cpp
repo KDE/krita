@@ -387,6 +387,7 @@ namespace KisLsUtils
         if (scale != 100) {
             warnKrita << "KisLsOverlayFilter::applyOverlay(): Pattern scaling is NOT implemented!";
         }
+        KIS_SAFE_ASSERT_RECOVER_RETURN(pattern);
 
         QSize psize(pattern->width(), pattern->height());
 

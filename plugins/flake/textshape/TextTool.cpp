@@ -1653,7 +1653,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         } else if (hit(item, KStandardShortcut::ForwardWord)) {
             moveOperation = QTextCursor::WordRight;
         }
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         // Don't reject "alt" key, it may be used for typing text on Mac OS
         else if ((event->modifiers() & Qt::ControlModifier) || event->text().length() == 0) {
 #else

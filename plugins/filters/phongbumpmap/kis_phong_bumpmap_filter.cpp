@@ -229,7 +229,7 @@ QRect KisFilterPhongBumpmap::changedRect(const QRect &rect, const KisFilterConfi
     return rect;
 }
 
-KisConfigWidget *KisFilterPhongBumpmap::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisFilterPhongBumpmap::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     KisPhongBumpmapConfigWidget *w = new KisPhongBumpmapConfigWidget(dev, parent);
     return w;

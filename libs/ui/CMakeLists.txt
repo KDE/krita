@@ -43,6 +43,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_snap_config.cpp
     canvas/kis_snap_line_strategy.cpp
     canvas/KisSnapPointStrategy.cpp
+    canvas/KisSnapPixelStrategy.cpp
 	canvas/KisMirrorAxisConfig.cpp
 	dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
@@ -107,7 +108,6 @@ set(kritaui_LIB_SRCS
     kis_splash_screen.cpp
     kis_filter_manager.cc
     kis_filters_model.cc
-    kis_histogram_view.cc
     KisImageBarrierLockerWithFeedback.cpp
     kis_image_manager.cc
     kis_image_view_converter.cpp
@@ -357,6 +357,7 @@ set(kritaui_LIB_SRCS
     KisTemplateTree.cpp
     KisUndoActionsUpdateManager.cpp
     KisView.cpp
+    KisImportExportErrorCode.cpp
 
     thememanager.cpp
 
@@ -392,6 +393,11 @@ set(kritaui_LIB_SRCS
 )
 
 if(WIN32)
+    # Private headers are needed for:
+    #    * KisDlgCustomTabletResolution
+    #    * KisScreenInformationAdapter
+    include_directories(SYSTEM ${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
         qtlockedfile/qtlockedfile_win.cpp
@@ -404,7 +410,6 @@ if(WIN32)
             input/wintab/kis_tablet_support_win8.cpp
             )
     else()
-        include_directories(SYSTEM ${Qt5Gui_PRIVATE_INCLUDE_DIRS})
         set(kritaui_LIB_SRCS
             ${kritaui_LIB_SRCS}
             dialogs/KisDlgCustomTabletResolution.cpp

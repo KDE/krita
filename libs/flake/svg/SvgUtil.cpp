@@ -144,12 +144,10 @@ void SvgUtil::writeTransformAttributeLazy(const QString &name, const QTransform 
     }
 }
 
-bool SvgUtil::parseViewBox(SvgGraphicsContext *gc, const KoXmlElement &e,
+bool SvgUtil::parseViewBox(const KoXmlElement &e,
                            const QRectF &elementBounds,
                            QRectF *_viewRect, QTransform *_viewTransform)
 {
-    Q_UNUSED(gc)
-
     KIS_ASSERT(_viewRect);
     KIS_ASSERT(_viewTransform);
 

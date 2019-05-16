@@ -21,7 +21,7 @@
 #include <KisResourceItemView.h>
 #include <KisResourceItemChooser.h>
 #include <brushengine/kis_paintop_registry.h>
-
+#include "kis_config.h"
 #include <kis_icon.h>
 
 #include <QAbstractScrollArea>
@@ -32,7 +32,7 @@ KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
 {
     setupUi(this);
     smallPresetChooser->showButtons(false); //loading and saving buttons. don't need these with the brush editor
-    smallPresetChooser->setViewMode(KisPresetChooser::DETAIL); // set to details view by default to see names
+    smallPresetChooser->setViewMode((KisPresetChooser::ViewMode)KisConfig(true).presetChooserViewMode());
     smallPresetChooser->showTaggingBar(true);
     m_resourceItemView = smallPresetChooser->itemChooser()->itemView();
 

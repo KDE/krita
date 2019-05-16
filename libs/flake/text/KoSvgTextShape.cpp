@@ -344,9 +344,17 @@ struct LayoutChunkWrapper
         }
 
         if (startPos <= lastPos) {
+            // defines the number of columns to look for glyphs
             const int numChars = lastPos - startPos + 1;
+            // Tabs break the normal column flow
+            // grow to avoid missing glyphs
 
-            line.setNumColumns(numChars);
+            int charOffset = 0;
+            while (line.textLength() < numChars) {
+                line.setNumColumns(numChars + charOffset);
+                charOffset++;
+            }
+
             line.setPosition(currentTextPos - QPointF(0, line.ascent()));
             currentTextPos.rx() += line.horizontalAdvance();
 
@@ -609,12 +617,13 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
         shapeRect = rect.toRectF();
     }
 
+    KoShapeController *controller = documentResources->shapeController();
 
     KoSvgTextShapeMarkupConverter converter(shape);
     converter.convertFromSvg(svgText,
                              defs,
                              shapeRect,
-                             documentResources->shapeController()->pixelsPerInch());
+                             controller ? controller->pixelsPerInch() : 72);
 
     shape->setPosition(shapeRect.topLeft());
 

@@ -188,6 +188,8 @@ void KisToolFreehand::doStroke(KoPointerEvent *event)
 void KisToolFreehand::endStroke()
 {
     m_helper->endPaint();
+    bool paintOpIgnoredEvent = currentPaintOpPreset()->settings()->mouseReleaseEvent();
+    Q_UNUSED(paintOpIgnoredEvent);
 }
 
 bool KisToolFreehand::primaryActionSupportsHiResEvents() const
@@ -285,6 +287,8 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
                                             perspective, 0, 0),
                         event->modifiers(),
                         currentNode());
+    // DuplicateOP during the picking of new source point (origin)
+    // is the only paintop that returns "false" here
     return !paintOpIgnoredEvent;
 }
 

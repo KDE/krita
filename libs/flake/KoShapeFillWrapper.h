@@ -44,8 +44,10 @@ public:
     QColor color() const;
     const QGradient* gradient() const;
     QTransform gradientTransform() const;
+    bool hasZeroLineWidth() const;
 
     KUndo2Command* setColor(const QColor &color);
+    KUndo2Command* setLineWidth(const float &lineWidth);
 
     KUndo2Command* setGradient(const QGradient *gradient, const QTransform &transform);
     KUndo2Command* applyGradient(const QGradient *gradient);

@@ -445,6 +445,7 @@ void KisViewManager::setCurrentView(KisView *view)
             }
             if (preset) {
                 paintOpBox()->restoreResource(preset);
+                canvasResourceProvider()->setCurrentCompositeOp(preset->settings()->paintOpCompositeOp());
             }
         }
 

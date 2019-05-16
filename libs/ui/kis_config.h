@@ -310,6 +310,9 @@ public:
     static bool useWin8PointerInputNoApp(QSettings *settings, bool defaultValue = false);
     static void setUseWin8PointerInputNoApp(QSettings *settings, bool value);
 
+    bool useRightMiddleTabletButtonWorkaround(bool defaultValue = false) const;
+    void setUseRightMiddleTabletButtonWorkaround(bool value);
+
     qreal vastScrolling(bool defaultValue = false) const;
     void setVastScrolling(const qreal factor) const;
 
@@ -499,8 +502,8 @@ public:
     bool useEraserBrushOpacity(bool defaultValue = false) const;
     void setUseEraserBrushOpacity(bool value);
 
-    QColor getMDIBackgroundColor(bool defaultValue = false) const;
-    void setMDIBackgroundColor(const QColor & v) const;
+    QString getMDIBackgroundColor(bool defaultValue = false) const;
+    void setMDIBackgroundColor(const QString & v) const;
 
     QString getMDIBackgroundImage(bool defaultValue = false) const;
     void setMDIBackgroundImage(const QString & fileName) const;

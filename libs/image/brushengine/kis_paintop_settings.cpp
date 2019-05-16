@@ -124,6 +124,11 @@ bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &paintInforma
     return true; // ignore the event by default
 }
 
+bool KisPaintOpSettings::mouseReleaseEvent()
+{
+    return true; // ignore the event by default
+}
+
 void KisPaintOpSettings::setRandomOffset(const KisPaintInformation &paintInformation)
 {
     if (getBool("Texture/Pattern/Enabled")) {

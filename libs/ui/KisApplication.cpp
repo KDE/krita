@@ -26,7 +26,7 @@
 #include <tchar.h>
 #endif
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
 #include "osx.h"
 #endif
 
@@ -153,7 +153,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     : QtSingleApplication(key, argc, argv)
     , d(new Private)
 {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     setMouseCoalescingEnabled(false);
 #endif
 
@@ -170,7 +170,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
-        QStringList styles = QStringList() << "breeze" << "fusion" << "plastique";
+        QStringList styles = QStringList() /*<< "breeze"*/ << "fusion" << "plastique";
         if (!styles.contains(style()->objectName().toLower())) {
             Q_FOREACH (const QString & style, styles) {
                 if (!setStyle(style)) {

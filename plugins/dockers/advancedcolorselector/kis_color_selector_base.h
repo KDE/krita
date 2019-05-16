@@ -87,6 +87,8 @@ protected:
     void setHidingTime(int time);
     bool isPopup() const { return m_isPopup; }
     void mouseMoveEvent(QMouseEvent *event) override;
+    void changeEvent(QEvent *event) override;
+    void showEvent(QShowEvent *event) override;
     void requestUpdateColorAndPreview(const KoColor &color, Acs::ColorRole role);
 
 private:

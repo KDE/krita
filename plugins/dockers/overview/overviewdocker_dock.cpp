@@ -36,6 +36,7 @@
 #include "kis_signal_compressor.h"
 #include "kis_canvas_controller.h"
 #include "kis_icon_utils.h"
+#include "kis_signals_blocker.h"
 
 OverviewDockerDock::OverviewDockerDock( )
     : QDockWidget(i18n("Overview"))
@@ -136,6 +137,8 @@ void OverviewDockerDock::rotateCanvasView(qreal rotation)
 
 void OverviewDockerDock::updateSlider()
 {
+    KisSignalsBlocker l(m_rotateSlider);
+
     qreal rotation = m_canvas->rotationAngle();
     if (rotation > 180) {
         rotation = rotation - 360;

@@ -63,8 +63,7 @@ public:
     KoGamutMask(KoGamutMask *rhs);
 
     bool coordIsClear(const QPointF& coord, KoViewConverter& viewConverter, bool preview);
-
-    bool load() override __attribute__((optimize(0)));
+    bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;

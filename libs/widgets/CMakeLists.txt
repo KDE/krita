@@ -51,10 +51,6 @@ set(kritawidgets_LIB_SRCS
 
     kis_file_name_requester.cpp
 
-    kis_double_parse_spin_box.cpp
-    kis_double_parse_unit_spin_box.cpp
-    kis_int_parse_spin_box.cpp
-
     KisColorSelectorInterface.cpp
     KoAnchorSelectionWidget.cpp
 

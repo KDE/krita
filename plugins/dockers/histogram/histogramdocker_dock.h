@@ -27,7 +27,6 @@
 #include <kis_canvas2.h>
 
 class QVBoxLayout;
-class KisHistogramView;
 class KisIdleWatcher;
 class KoHistogramProducer;
 class HistogramDockerWidget;

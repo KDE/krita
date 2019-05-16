@@ -27,7 +27,8 @@ KisSnapConfig::KisSnapConfig(bool loadValues)
       m_intersection(false),
       m_boundingBox(false),
       m_imageBounds(true),
-      m_imageCenter(true)
+      m_imageCenter(true),
+      m_toPixel(false)
 {
     if (loadValues) {
         loadStaticData();

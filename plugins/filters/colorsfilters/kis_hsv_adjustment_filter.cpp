@@ -97,7 +97,7 @@ KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
     setSupportsPainting(true);
 }
 
-KisConfigWidget * KisHSVAdjustmentFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisHSVAdjustmentFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     return new KisHSVConfigWidget(parent);

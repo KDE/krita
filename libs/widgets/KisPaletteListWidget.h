@@ -31,7 +31,7 @@
 class KoResource;
 
 
-class KisPaletteListWidgetPrivate;
+struct KisPaletteListWidgetPrivate;
 
 class KRITAWIDGETS_EXPORT KisPaletteListWidget : public QWidget
 {

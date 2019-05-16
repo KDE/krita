@@ -276,11 +276,30 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
     return retval;
 }
 
+bool shouldResetWheelDelta(QEvent * event)
+{
+    return
+        event->type() == QEvent::FocusIn ||
+        event->type() == QEvent::FocusOut ||
+        event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::MouseButtonRelease ||
+        event->type() == QEvent::MouseButtonDblClick ||
+        event->type() == QEvent::TabletPress ||
+        event->type() == QEvent::TabletRelease ||
+        event->type() == QEvent::Enter ||
+        event->type() == QEvent::Leave ||
+        event->type() == QEvent::TouchBegin ||
+        event->type() == QEvent::TouchEnd ||
+        event->type() == QEvent::TouchCancel ||
+        event->type() == QEvent::NativeGesture;
+
+}
+
 bool KisInputManager::eventFilterImpl(QEvent * event)
 {
     bool retval = false;
 
-    if (event->type() != QEvent::Wheel) {
+    if (shouldResetWheelDelta(event)) {
         d->accumulatedScrollDelta = 0;
     }
 
@@ -288,9 +307,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
         d->debugEvent<QMouseEvent, true>(event);
-        //Block mouse press events on Genius tablets
-        if (d->tabletActive) break;
-        if (d->ignoringQtCursorEvents()) break;
         if (d->touchHasBlockedPressEvents) break;
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -309,7 +325,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::MouseButtonRelease: {
         d->debugEvent<QMouseEvent, true>(event);
-        if (d->ignoringQtCursorEvents()) break;
         if (d->touchHasBlockedPressEvents) break;
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -352,7 +367,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::MouseMove: {
         d->debugEvent<QMouseEvent, true>(event);
-        if (d->ignoringQtCursorEvents()) break;
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = compressMoveEventCommon(mouseEvent);
@@ -363,7 +377,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->debugEvent<QWheelEvent, false>(event);
         QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         // Some QT wheel events are actually touch pad pan events. From the QT docs:
         // "Wheel events are generated for both mouse wheels and trackpad scroll gestures."
 
@@ -384,7 +398,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
          * Ignore delta 0 events on OSX, since they are triggered by tablet
          * proximity when using Wacom devices.
          */
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         if(wheelEvent->delta() == 0) {
             retval = true;
             break;
@@ -581,7 +595,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             d->touchHasBlockedPressEvents = KisConfig(true).disableTouchOnCanvas();
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.touchUpdateEvent(tevent);
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         }
 #endif
         event->accept();

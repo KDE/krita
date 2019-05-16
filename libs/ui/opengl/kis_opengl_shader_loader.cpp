@@ -61,7 +61,7 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     QByteArray vertSource;
 
 // XXX Check can be removed and set to the MAC version after we move to Qt5.7
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     vertSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
     // OpenColorIO doesn't support the new GLSL version yet.
     vertSource.append("#define texture2D texture\n");
@@ -86,7 +86,7 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     QByteArray fragSource;
 
 // XXX Check can be removed and set to the MAC version after we move to Qt5.7
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     fragSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
     // OpenColorIO doesn't support the new GLSL version yet.
     fragSource.append("#define texture2D texture\n");

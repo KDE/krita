@@ -709,7 +709,9 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
     }
 
     if (cmd) {
-        KisProcessingApplicator::runSingleCommandStroke(m_d->image, cmd, KisStrokeJobData::BARRIER);
+        KisProcessingApplicator::runSingleCommandStroke(m_d->image, cmd,
+                                                        KisStrokeJobData::BARRIER,
+                                                        KisStrokeJobData::EXCLUSIVE);
     }
 
     return cmd;
@@ -836,7 +838,9 @@ bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows,
                                         newTime, parentCommand);
     }
 
-    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand,
+                                                    KisStrokeJobData::BARRIER,
+                                                    KisStrokeJobData::EXCLUSIVE);
 
     return true;
 }
@@ -934,7 +938,9 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
     }
 
 
-    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.take(), KisStrokeJobData::BARRIER);
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.take(),
+                                                    KisStrokeJobData::BARRIER,
+                                                    KisStrokeJobData::EXCLUSIVE);
     return true;
 }
 

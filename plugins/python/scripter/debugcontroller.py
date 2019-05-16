@@ -72,7 +72,7 @@ class DebugController (object):
             return 0
 
     def updateUIDebugger(self):
-        widget = self.scripter.uicontroller.findTabWidget('Debugger')
+        widget = self.scripter.uicontroller.findTabWidget(i18n('Debugger'))
         exception = self._debuggerException()
 
         if exception:

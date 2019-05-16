@@ -404,15 +404,18 @@ void KisConfig::setUseEraserBrushOpacity(bool value)
 }
 
 
-QColor KisConfig::getMDIBackgroundColor(bool defaultValue) const
+QString KisConfig::getMDIBackgroundColor(bool defaultValue) const
 {
     QColor col(77, 77, 77);
-    return (defaultValue ? col : m_cfg.readEntry("mdiBackgroundColor", col));
+    KoColor kol(KoColorSpaceRegistry::instance()->rgb8());
+    kol.fromQColor(col);
+    QString xml = kol.toXML();
+    return (defaultValue ? xml : m_cfg.readEntry("mdiBackgroundColorXML", xml));
 }
 
-void KisConfig::setMDIBackgroundColor(const QColor &v) const
+void KisConfig::setMDIBackgroundColor(const QString &v) const
 {
-    m_cfg.writeEntry("mdiBackgroundColor", v);
+    m_cfg.writeEntry("mdiBackgroundColorXML", v);
 }
 
 QString KisConfig::getMDIBackgroundImage(bool defaultValue) const
@@ -853,6 +856,7 @@ void KisConfig::loadSnapConfig(KisSnapConfig *config, bool defaultValue) const
     config->setBoundingBox(m_cfg.readEntry("globalSnapBoundingBox", defaultConfig.boundingBox()));
     config->setImageBounds(m_cfg.readEntry("globalSnapImageBounds", defaultConfig.imageBounds()));
     config->setImageCenter(m_cfg.readEntry("globalSnapImageCenter", defaultConfig.imageCenter()));
+    config->setToPixel(m_cfg.readEntry("globalSnapToPixel", defaultConfig.toPixel()));
 }
 
 void KisConfig::saveSnapConfig(const KisSnapConfig &config)
@@ -864,6 +868,7 @@ void KisConfig::saveSnapConfig(const KisSnapConfig &config)
     m_cfg.writeEntry("globalSnapBoundingBox", config.boundingBox());
     m_cfg.writeEntry("globalSnapImageBounds", config.imageBounds());
     m_cfg.writeEntry("globalSnapImageCenter", config.imageCenter());
+    m_cfg.writeEntry("globalSnapToPixel", config.toPixel());
 }
 
 qint32 KisConfig::checkSize(bool defaultValue) const
@@ -1167,6 +1172,16 @@ bool KisConfig::useWin8PointerInputNoApp(QSettings *settings, bool defaultValue)
 void KisConfig::setUseWin8PointerInputNoApp(QSettings *settings, bool value)
 {
     settings->setValue("useWin8PointerInput", value);
+}
+
+bool KisConfig::useRightMiddleTabletButtonWorkaround(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("useRightMiddleTabletButtonWorkaround", false));
+}
+
+void KisConfig::setUseRightMiddleTabletButtonWorkaround(bool value)
+{
+    m_cfg.writeEntry("useRightMiddleTabletButtonWorkaround", value);
 }
 
 qreal KisConfig::vastScrolling(bool defaultValue) const

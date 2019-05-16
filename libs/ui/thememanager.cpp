@@ -188,7 +188,7 @@ void ThemeManager::slotChangePalette()
     qApp->setProperty("KDE_COLOR_SCHEME_PATH", filename);
     qApp->setPalette(palette);
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     if (theme == "Krita bright" || theme.isEmpty()) {
         qApp->setStyle("Macintosh");
         qApp->style()->polish(qApp);

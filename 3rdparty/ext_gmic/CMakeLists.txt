@@ -6,9 +6,13 @@ ExternalProject_Add( ext_gmic_base
     URL https://gmic.eu/files/source/gmic_2.5.6.tar.gz
     URL_MD5 8deabebc29081657986ae6531e3fc1d7
 
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/cmake.diff
+          COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/no_threads.diff
+
     SOURCE_DIR gmic
 
-    CONFIGURE_COMMAND ""
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_gmic} -D -DCMAKE_BUILD_TYPE=Release ${GLOBAL_PROFILE}
+
     BUILD_COMMAND ""
     INSTALL_COMMAND ""
 

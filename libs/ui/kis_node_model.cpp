@@ -591,7 +591,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     switch (role) {
     case Qt::DisplayRole:
     case Qt::EditRole:
-        node->setName(value.toString());
+        m_d->nodeManager->setNodeName(node, value.toString());
         break;
     case KisNodeModel::PropertiesRole:
         {

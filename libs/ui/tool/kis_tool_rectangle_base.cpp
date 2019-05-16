@@ -26,6 +26,8 @@
 #include <KoCanvasController.h>
 #include <KoViewConverter.h>
 #include "kis_canvas2.h"
+#include "KisViewManager.h"
+#include <kis_icon.h>
 
 #include "kis_rectangle_constraint_widget.h"
 
@@ -109,8 +111,14 @@ bool KisToolRectangleBase::listeningToModifiers()
 
 void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
 {
-    if ((m_type == PAINT && (!nodeEditable() || nodePaintAbility() == UNPAINTABLE)) ||
-        (m_type == SELECT && !selectionEditable())) {
+    NodePaintAbility paintability = nodePaintAbility();
+    if ((m_type == PAINT && (!nodeEditable() || paintability == UNPAINTABLE || paintability  == KisToolPaint::CLONE)) || (m_type == SELECT && !selectionEditable())) {
+
+        if (paintability == KisToolPaint::CLONE){
+            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+            QString message = i18n("This tool cannot paint on clone layers.  Please select a paint or vector layer or mask.");
+            kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+        }
 
         event->ignore();
         return;

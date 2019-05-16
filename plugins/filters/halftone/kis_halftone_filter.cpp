@@ -121,7 +121,7 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     painter.setCompositeOp(device->colorSpace()->compositeOp(COMPOSITE_OVER));
     KisPaintDeviceSP dab = device->createCompositionSourceDevice();
     KisPainter dbPainter(dab);
-    KisSelectionSP alpha = new KisSelection();
+    KisSelectionSP alpha = new KisSelection(new KisSelectionEmptyBounds(0));
     alpha->pixelSelection()->copyAlphaFrom(device, applyRect);
     device->fill(applyRect, backgroundC);
     dbPainter.setAntiAliasPolygonFill(config->getBool("antiAliasing", true));
@@ -192,7 +192,7 @@ KisFilterConfigurationSP KisHalftoneFilter::factoryConfiguration() const
     return config;
 }
 
-KisConfigWidget *KisHalftoneFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisHalftoneFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KisHalftoneConfigWidget(parent, dev);
 }

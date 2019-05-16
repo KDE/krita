@@ -53,7 +53,7 @@ public:
     }
 
     KisFilterConfigurationSP factoryConfiguration() const override;
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 
     uint seedFromString(const QString &string) const;
     quint64 rotateLeft(const quint64 input, uint d) const;

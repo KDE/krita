@@ -216,9 +216,11 @@ newTile(struct rect r)
 struct Tile *
 forkTile(struct Tile* tile)
 {
-  if( ++tile->refcount <= 0 )
+  if( ++tile->refcount <= 0 ) {
     FatalUnsupportedXCF(_("Unbelievably many layers?\n"
                           "More likely to be a bug in %s"),progname);
+    return XCF_PTR_EMPTY;
+  }
   return tile ;
 }
 

@@ -36,26 +36,31 @@ init_flatspec(struct FlattenSpec *spec)
   spec->gimpish_indexed = 1 ;
 }
 
-void
+int
 add_layer_request(struct FlattenSpec *spec, const char *layer)
 {
   spec->layers = realloc(spec->layers,
                          sizeof(struct xcfLayer) * (1+spec->numLayers));
-  if( spec->layers == NULL )
+  if( spec->layers == NULL ) {
     FatalUnexpected(_("Out of memory"));
+    return XCF_ERROR;
+  }
   spec->layers[spec->numLayers].name = layer ;
   spec->layers[spec->numLayers].mode = (GimpLayerModeEffects)-1 ;
   spec->layers[spec->numLayers].opacity = 9999 ;
   spec->layers[spec->numLayers].hasMask = -1 ;
   spec->numLayers++ ;
+  return XCF_OK;
 }
 
 struct xcfLayer *
 lastlayerspec(struct FlattenSpec *spec,const char *option)
 {
-  if( spec->numLayers == 0 )
+  if( spec->numLayers == 0 ) {
     FatalGeneric(20,_("The %s option must follow a layer name on the "
                       "command line"),option);
+    return XCF_PTR_EMPTY;
+  }
   return spec->layers + (spec->numLayers-1) ;
 }
 
@@ -140,9 +145,11 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
       unsigned j ;
 
       for( j=0; ; j++ ) {
-        if( j == XCF.numLayers )
+        if( j == XCF.numLayers ) {
           FatalGeneric(22,_("The image has no layer called '%s'"),
                        spec->layers[i].name);
+          return XCF_ERROR;
+        }
         if( strcmp(spec->layers[i].name,XCF.layers[j].name) == 0 )
           break ;
       }
@@ -153,9 +160,11 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
       hasMask = spec->layers[i].hasMask == -1 ?
         XCF.layers[j].hasMask : spec->layers[i].hasMask ;
       if( hasMask && !XCF.layers[j].hasMask &&
-          XCF.layers[j].mask.hierarchy == 0 )
+              XCF.layers[j].mask.hierarchy == 0 ) {
         FatalGeneric(22,_("Layer '%s' has no layer mask to enable"),
                      spec->layers[i].name);
+        return XCF_ERROR;
+      }
       spec->layers[i] = XCF.layers[j] ;
       spec->layers[i].mode = mode ;
       spec->layers[i].opacity = opacity ;
@@ -287,7 +296,7 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
   return XCF_OK;
 }
 
-void
+int
 analyse_colormode(struct FlattenSpec *spec,rgba **allPixels,
                   guesser guess_callback)
 {
@@ -356,14 +365,18 @@ analyse_colormode(struct FlattenSpec *spec,rgba **allPixels,
   case COLOR_RGB: /* Everything is fine. */
     break ;
   case COLOR_GRAY:
-    if( (status & 1) == 0 )
+    if( (status & 1) == 0 ) {
       FatalGeneric(103,
                    _("Grayscale output selected, but colored pixel(s) found"));
+      return XCF_ERROR;
+    }
     break ;
   case COLOR_MONO:
-    if( (status & 2) == 0 )
+    if( (status & 2) == 0 ) {
       FatalGeneric(103,_("Monochrome output selected, but not all pixels "
                          "are black or white"));
+      return XCF_ERROR;
+    }
     break ;
   case COLOR_BY_FILENAME: /* Should not happen ... */
   case COLOR_BY_CONTENTS:
@@ -380,4 +393,5 @@ analyse_colormode(struct FlattenSpec *spec,rgba **allPixels,
     spec->default_pixel = NEWALPHA(colormap[0],255);
   else if( (status & 12) == 4 )
     spec->partial_transparency_mode = PARTIAL_TRANSPARENCY_IMPOSSIBLE ;
+  return XCF_OK;
 }

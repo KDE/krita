@@ -125,7 +125,7 @@ void FatalUnsupportedXCF(const char* format,...)
 void gpl_blurb(void) __ATTRIBUTE__((noreturn));
      
 FILE* openout(const char*);
-void closeout(FILE *,const char*);
+int closeout(FILE *,const char*);
 
 struct rect {
   int t, b, l, r ;

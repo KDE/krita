@@ -382,8 +382,11 @@ merge_exotic(struct Tile *bot, const struct Tile *top,
             HEXTANT(GREEN,BLUE,RED);
             HEXTANT(GREEN,RED,BLUE);
 #undef HEXTANT
-            default:
-                FatalUnexpected("Hue hextant is %d", hsvBot.hue);
+            default: {
+
+                    FatalUnexpected("Hue hextant is %d", hsvBot.hue);
+                    return XCF_ERROR;
+                }
             }
             break ;
         }
@@ -565,18 +568,20 @@ static struct Tile *
     return top ;
 }
 
-static void
+static int
 addBackground(struct FlattenSpec *spec, struct Tile *tile, unsigned ncols)
 {
     unsigned i ;
 
     if( tileSummary(tile) & TILESUMMARY_ALLFULL )
-        return ;
+        return XCF_OK;
 
     switch( spec->partial_transparency_mode ) {
     case FORBID_PARTIAL_TRANSPARENCY:
-        if( !(tileSummary(tile) & TILESUMMARY_CRISP) )
+        if( !(tileSummary(tile) & TILESUMMARY_CRISP) ) {
             FatalGeneric(102,_("Flattened image has partially transparent pixels"));
+            return XCF_ERROR;
+        }
         break ;
     case DISSOLVE_PARTIAL_TRANSPARENCY:
         dissolveTile(tile);
@@ -599,9 +604,9 @@ addBackground(struct FlattenSpec *spec, struct Tile *tile, unsigned ncols)
             }
         tile->summary = TILESUMMARY_UPTODATE +
                 TILESUMMARY_ALLFULL + TILESUMMARY_CRISP ;
-        return ;
+        return XCF_OK;
     }
-    if( !FULLALPHA(spec->default_pixel) )  return ;
+    if( !FULLALPHA(spec->default_pixel) )  return XCF_OK;
     if( tileSummary(tile) & TILESUMMARY_ALLNULL ) {
         fillTile(tile,spec->default_pixel);
     } else {
@@ -617,6 +622,7 @@ addBackground(struct FlattenSpec *spec, struct Tile *tile, unsigned ncols)
         tile->summary = TILESUMMARY_UPTODATE +
                 TILESUMMARY_ALLFULL + TILESUMMARY_CRISP ;
     }
+    return XCF_OK;
 }
 
 int

@@ -34,6 +34,8 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoMixColorsOp.h"
 
+#include "kis_dom_utils.h"
+
 #include <math.h>
 #include <KoColorModelStandardIds.h>
 
@@ -535,12 +537,12 @@ QString KoStopGradient::defaultFileExtension() const
 void KoStopGradient::toXML(QDomDocument &doc, QDomElement &gradientElt) const
 {
     gradientElt.setAttribute("type", "stop");
-    for (int s = 0; s<m_stops.size(); s++) {
+    for (int s = 0; s < m_stops.size(); s++) {
         KoGradientStop stop = m_stops.at(s);
         QDomElement stopElt = doc.createElement("stop");
-        stopElt.setAttribute("offset", stop.first);
+        stopElt.setAttribute("offset", KisDomUtils::toString(stop.first));
         stopElt.setAttribute("bitdepth", stop.second.colorSpace()->colorDepthId().id());
-        stopElt.setAttribute("alpha", stop.second.opacityF());
+        stopElt.setAttribute("alpha", KisDomUtils::toString(stop.second.opacityF()));
         stop.second.toXML(doc, stopElt);
         gradientElt.appendChild(stopElt);
     }
@@ -552,10 +554,10 @@ KoStopGradient KoStopGradient::fromXML(const QDomElement &elt)
     QList<KoGradientStop> stops;
     QDomElement stopElt = elt.firstChildElement("stop");
     while (!stopElt.isNull()) {
-        qreal offset = stopElt.attribute("offset", "0").toDouble();
+        qreal offset = KisDomUtils::toDouble(stopElt.attribute("offset", "0.0"));
         QString bitDepth = stopElt.attribute("bitdepth", Integer8BitsColorDepthID.id());
         KoColor color = KoColor::fromXML(stopElt.firstChildElement(), bitDepth);
-        color.setOpacity(stopElt.attribute("alpha", "1.0").toDouble());
+        color.setOpacity(KisDomUtils::toDouble(stopElt.attribute("alpha", "1.0")));
         stops.append(KoGradientStop(offset, color));
         stopElt = stopElt.nextSiblingElement("stop");
     }

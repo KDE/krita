@@ -84,10 +84,13 @@ public:
             return true;
         }
 
-        KisPaintDeviceSP originalDevice = layer->original();
-        originalDevice->clear(m_updateRect);
+        const QRect originalUpdateRect =
+            layer->projectionPlane()->needRectForOriginal(m_updateRect);
 
-        const QRect applyRect = m_updateRect & m_projection->extent();
+        KisPaintDeviceSP originalDevice = layer->original();
+        originalDevice->clear(originalUpdateRect);
+
+        const QRect applyRect = originalUpdateRect & m_projection->extent();
 
         // If the intersection of the updaterect and the projection extent is
         //      null, we are finish here.

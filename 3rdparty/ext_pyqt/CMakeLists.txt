@@ -5,12 +5,20 @@ if (UNIX)
       message("WARNING: using system python3!")
       SET(PYTHON_EXECUTABLE_PATH python3)
     endif()
+
+    list(APPEND _PYQT_conf
+        --confirm-license
+        --qmake ${PREFIX_ext_pyqt}/bin/qmake
+        --sip ${PREFIX_ext_pyqt}/bin/sip
+        --sip-incdir ${PREFIX_ext_pyqt}/include
+        --sipdir ${PREFIX_ext_pyqt}/share/sip
+    )
     ExternalProject_Add( ext_pyqt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.12.1/PyQt5_gpl-5.12.1.tar.gz
         URL_MD5 67508b652098d2e05c4c2b5baeb170cc
         
-        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py --confirm-license --qmake ${PREFIX_ext_pyqt}/bin/qmake --sip ${PREFIX_ext_pyqt}/bin/sip --sip-incdir ${PREFIX_ext_pyqt}/include --sipdir ${PREFIX_ext_pyqt}/share/sip
+        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py ${_PYQT_conf}
         BUILD_COMMAND make
         INSTALL_COMMAND make install
         

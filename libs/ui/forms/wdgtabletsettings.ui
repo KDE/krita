@@ -212,7 +212,7 @@
       <item>
        <widget class="QRadioButton" name="radioWin8PointerInput">
         <property name="text">
-         <string>Windows 8+ Pointer Input (depends on Windows Ink) (EXPERIMENTAL)</string>
+         <string>Windows 8+ Pointer Input (Windows Ink)</string>
         </property>
        </widget>
       </item>

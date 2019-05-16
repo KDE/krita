@@ -539,13 +539,13 @@ Node* Node::duplicate()
     return new Node(d->image, d->node->clone());
 }
 
-bool Node::save(const QString &filename, double xRes, double yRes, const InfoObject &exportConfiguration)
+bool Node::save(const QString &filename, double xRes, double yRes, const InfoObject &exportConfiguration, const QRect &exportRect)
 {
     if (!d->node) return false;
     if (filename.isEmpty()) return false;
 
     KisPaintDeviceSP projection = d->node->projection();
-    QRect bounds = d->node->exactBounds();
+    QRect bounds = (exportRect.isEmpty())? d->node->exactBounds() : exportRect;
 
     QString mimeType = KisMimeDatabase::mimeTypeForFile(filename, false);
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());

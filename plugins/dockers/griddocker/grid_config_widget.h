@@ -75,9 +75,9 @@ private:
 
     struct Private;
     const QScopedPointer<Private> m_d;
-    bool m_isGridEnabled;
+    bool m_isGridEnabled {false};
 
-    bool m_isIsometricGridEnabled = true;
+    bool m_isIsometricGridEnabled {true};
 };
 
 #endif // GRID_CONFIG_WIDGET_H

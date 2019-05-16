@@ -45,7 +45,7 @@ QTextDocument *NodeToolTip::createDocument(const QModelIndex &index)
     QString name = index.data(Qt::DisplayRole).toString();
     KisBaseNode::PropertyList properties = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
     QString rows;
-    const QString row = QString("<tr><td align=\"right\">%1:</td><td align=\"left\">%2</td></tr>");
+    const QString row = QString("<tr><td align=\"right\"><nobr>%1:</nobr></td><td align=\"left\">%2</td></tr>");
     QString value;
     for(int i = 0, n = properties.count(); i < n; ++i) {
         if (properties[i].isMutable)

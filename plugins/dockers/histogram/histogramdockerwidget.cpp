@@ -79,7 +79,7 @@ void HistogramDockerWidget::receiveNewHistogram(HistVector *histogramData)
 
 void HistogramDockerWidget::paintEvent(QPaintEvent *event)
 {
-    if (!m_histogramData.empty()) {
+    if (m_paintDevice && !m_histogramData.empty()) {
         int nBins = m_histogramData.at(0).size();
         const KoColorSpace* cs = m_paintDevice->colorSpace();
 

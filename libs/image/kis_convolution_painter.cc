@@ -68,8 +68,8 @@ bool KisConvolutionPainter::useFFTImplemenation(const KisConvolutionKernelSP ker
     result =
         m_enginePreference == FFTW ||
         (m_enginePreference == NONE &&
-         kernel->width() > THRESHOLD_SIZE &&
-         kernel->height() > THRESHOLD_SIZE);
+         (kernel->width() > THRESHOLD_SIZE ||
+          kernel->height() > THRESHOLD_SIZE));
 #else
     Q_UNUSED(kernel);
 #endif
@@ -96,6 +96,16 @@ KisConvolutionWorker<factory>* KisConvolutionPainter::createWorker(const KisConv
 #endif
 
     return worker;
+}
+
+
+bool KisConvolutionPainter::supportsFFTW()
+{
+#ifdef HAVE_FFTW3
+    return true;
+#else
+    return false;
+#endif
 }
 
 

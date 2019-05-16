@@ -111,6 +111,16 @@ KoUnit KisShapeLayerCanvasBase::unit() const
     return KoUnit(KoUnit::Point);
 }
 
+void KisShapeLayerCanvasBase::setUpdatesBlocked(bool value)
+{
+    m_updatesBlocked = value;
+}
+
+bool KisShapeLayerCanvasBase::updatesBlocked() const
+{
+    return m_updatesBlocked;
+}
+
 void KisShapeLayerCanvasBase::prepareForDestroying()
 {
     m_isDestroying = true;
@@ -138,7 +148,7 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
 
     connect(&m_asyncUpdateSignalCompressor, SIGNAL(timeout()), SLOT(slotStartAsyncRepaint()));
     connect(this, SIGNAL(forwardRepaint()), &m_canvasUpdateCompressor, SLOT(start()));
-    connect(&m_canvasUpdateCompressor, SIGNAL(timeout()), this, SLOT(repaint()));
+    connect(&m_canvasUpdateCompressor, SIGNAL(timeout()), this, SLOT(slotStartDirectSyncRepaint()));
 
     setImage(image);
 }
@@ -207,7 +217,7 @@ private:
 
 void KisShapeLayerCanvas::updateCanvas(const QVector<QRectF> &region)
 {
-    if (!m_parentLayer->image() || m_isDestroying) {
+    if (!m_parentLayer->image() || m_isDestroying || m_updatesBlocked) {
         return;
     }
 
@@ -240,6 +250,7 @@ void KisShapeLayerCanvas::updateCanvas(const QVector<QRectF> &region)
 
     if (qApp->thread() == QThread::currentThread()) {
         emit forwardRepaint();
+        m_hasDirectSyncRepaintInitiated = true;
     } else {
         m_asyncUpdateSignalCompressor.start();
         m_hasUpdateInCompressor = true;
@@ -256,6 +267,12 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
 {
     m_hasUpdateInCompressor = false;
     m_image->addSpontaneousJob(new KisRepaintShapeLayerLayerJob(m_parentLayer, this));
+}
+
+void KisShapeLayerCanvas::slotStartDirectSyncRepaint()
+{
+    m_hasDirectSyncRepaintInitiated = false;
+    repaint();
 }
 
 void KisShapeLayerCanvas::slotImageSizeChanged()
@@ -330,10 +347,15 @@ void KisShapeLayerCanvas::forceRepaint()
      * The only real solution to this is to port vector tools to strokes framework.
      */
 
-    if (m_hasUpdateInCompressor) {
+    if (hasPendingUpdates()) {
         m_asyncUpdateSignalCompressor.stop();
         slotStartAsyncRepaint();
     }
+}
+
+bool KisShapeLayerCanvas::hasPendingUpdates() const
+{
+    return m_hasUpdateInCompressor || m_hasDirectSyncRepaintInitiated;
 }
 
 void KisShapeLayerCanvas::resetCache()

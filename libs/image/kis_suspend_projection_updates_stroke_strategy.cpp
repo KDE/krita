@@ -323,10 +323,25 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 
             image->signalRouter()->emitNotifyBatchUpdateEnded();
             m_strategy->m_d->sanityResumingFinished = true;
+            m_strategy->m_d->accumulatedDirtyRects.clear();
+            KIS_SAFE_ASSERT_RECOVER_NOOP(m_strategy->m_d->usedFilters.isEmpty());
         }
 
         void undo() override {
-            KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "why the heck we are undoing the last job of the stroke?!");
+            /**
+             * Even though this comand is the last command of the stroke is can
+             * still be undone by suspendStrokeCallback(). It happens when a LodN
+             * stroke is started right after the last job of resume strategy was
+             * being executed. In such a case new stroke is placed right in front
+             * of our resume strategy and all the resuming work is undone (mimicing
+             * a normal suspend strategy).
+             *
+             * The only thing we should control here is whether the state of the
+             * stroke is reset to default. Otherwise we'll do all the updates twice.
+             */
+
+            KIS_SAFE_ASSERT_RECOVER_NOOP(m_strategy->m_d->usedFilters.isEmpty());
+            KIS_SAFE_ASSERT_RECOVER_NOOP(m_strategy->m_d->accumulatedDirtyRects.isEmpty());
 
             m_strategy->m_d->sanityResumingFinished = false;
 
@@ -472,6 +487,7 @@ void KisSuspendProjectionUpdatesStrokeStrategy::Private::tryIssueRecordedDirtyRe
     Q_FOREACH (QSharedPointer<Private::SuspendLod0Updates> filter, usedFilters) {
         filter->notifyUpdates(image.data());
     }
+    usedFilters.clear();
 }
 
 void KisSuspendProjectionUpdatesStrokeStrategy::cancelStrokeCallback()
@@ -506,7 +522,17 @@ void KisSuspendProjectionUpdatesStrokeStrategy::cancelStrokeCallback()
 
 void KisSuspendProjectionUpdatesStrokeStrategy::suspendStrokeCallback()
 {
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->suspend || !m_d->sanityResumingFinished);
+    /**
+     * The resume stroke can be suspended even when all its jobs are completed.
+     * In such a case, we should just ensure that all the internal state is reset
+     * to default.
+     */
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->suspend ||
+                                 !m_d->sanityResumingFinished ||
+                                 (m_d->sanityResumingFinished &&
+                                  m_d->usedFilters.isEmpty() &&
+                                  m_d->accumulatedDirtyRects.isEmpty()));
 
     for (auto it = m_d->executedCommands.rbegin(); it != m_d->executedCommands.rend(); ++it) {
         (*it)->undo();

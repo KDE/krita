@@ -502,8 +502,8 @@ public:
     bool useEraserBrushOpacity(bool defaultValue = false) const;
     void setUseEraserBrushOpacity(bool value);
 
-    QColor getMDIBackgroundColor(bool defaultValue = false) const;
-    void setMDIBackgroundColor(const QColor & v) const;
+    QString getMDIBackgroundColor(bool defaultValue = false) const;
+    void setMDIBackgroundColor(const QString & v) const;
 
     QString getMDIBackgroundImage(bool defaultValue = false) const;
     void setMDIBackgroundImage(const QString & fileName) const;

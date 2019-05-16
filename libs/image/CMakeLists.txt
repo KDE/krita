@@ -102,6 +102,7 @@ set(kritaimage_LIB_SRCS
    commands/kis_reselect_global_selection_command.cpp
    commands/KisReselectActiveSelectionCommand.cpp
    commands/kis_set_global_selection_command.cpp
+   commands/KisNodeRenameCommand.cpp
    commands_new/kis_saved_commands.cpp
    commands_new/kis_processing_command.cpp
    commands_new/kis_image_resize_command.cpp
@@ -221,6 +222,7 @@ set(kritaimage_LIB_SRCS
    kis_layer_utils.cpp
    kis_mask_projection_plane.cpp
    kis_projection_leaf.cpp
+   KisSafeNodeProjectionStore.cpp
    kis_mask.cc
    kis_base_mask_generator.cpp
    kis_rect_mask_generator.cpp

@@ -45,7 +45,7 @@ public:
     KisFilterIndexColors();
 public:
     KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
-    KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
     static inline KoID id() {
         return KoID("indexcolors", i18n("Index Colors"));
     }

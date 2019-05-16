@@ -19,6 +19,7 @@
 #include "kis_base_node.h"
 #include <klocalizedstring.h>
 
+#include <kis_image.h>
 #include <kis_icon.h>
 #include <KoProperties.h>
 #include <KoColorSpace.h>
@@ -42,14 +43,16 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     bool supportsLodMoves;
     bool animated;
     bool useInTimeline;
+    KisImageWSP image;
 
-    Private()
+    Private(KisImageWSP image)
         : id(QUuid::createUuid())
         , systemLocked(false)
         , collapsed(false)
         , supportsLodMoves(false)
         , animated(false)
         , useInTimeline(false)
+        , image(image)
     {
     }
 
@@ -60,7 +63,8 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
           collapsed(rhs.collapsed),
           supportsLodMoves(rhs.supportsLodMoves),
           animated(rhs.animated),
-          useInTimeline(rhs.useInTimeline)
+          useInTimeline(rhs.useInTimeline),
+          image(rhs.image)
     {
         QMapIterator<QString, QVariant> iter = rhs.properties.propertyIterator();
         while (iter.hasNext()) {
@@ -70,8 +74,8 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     }
 };
 
-KisBaseNode::KisBaseNode()
-    : m_d(new Private())
+KisBaseNode::KisBaseNode(KisImageWSP image)
+    : m_d(new Private(image))
 {
     /**
      * Be cautious! These two calls are vital to warm-up KoProperties.
@@ -339,7 +343,12 @@ bool KisBaseNode::supportsLodMoves() const
 
 void KisBaseNode::setImage(KisImageWSP image)
 {
-    Q_UNUSED(image);
+    m_d->image = image;
+}
+
+KisImageWSP KisBaseNode::image() const
+{
+    return m_d->image;
 }
 
 void KisBaseNode::setSupportsLodMoves(bool value)

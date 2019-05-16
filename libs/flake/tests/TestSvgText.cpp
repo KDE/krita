@@ -637,6 +637,42 @@ void TestSvgText::testTextSpacing()
 
 }
 
+void TestSvgText::testTextTabSpacing()
+{
+    const QString data =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"test\">"
+
+            "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"120\""
+            "        fill=\"none\" stroke=\"red\"/>"
+
+            "    <text id=\"testRect\" x=\"5\" y=\"24\" "
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
+
+            "        <tspan x=\"10\" dy=\"1.0em\">  Lorem</tspan>"
+            "        <tspan x=\"10\" dy=\"2.0em\">	ipsum</tspan>"
+            "        <tspan x=\"10\" dy=\"2.0em\">dolor  sit	amet,</tspan>"
+            "        <tspan x=\"10\" dy=\"2.0em\">		consectetur adipiscing elit.</tspan>"
+
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.setFuzzyThreshold(5);
+    t.test_standard("text_tab_spacing", QSize(400, 170), 72.0);
+
+    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
+    QVERIFY(baseShape);
+
+    // root shape is not just a chunk!
+    QVERIFY(dynamic_cast<KoSvgTextShape*>(baseShape));
+}
+
 void TestSvgText::testTextDecorations()
 {
     const QString data =

@@ -76,6 +76,8 @@ private:
     void showFileSaveAsDialog();
     void changeEvent(QEvent* event) override;
 
+    void tabletEvent(QTabletEvent *event) override;
+
     KoDialog *createDialog(const QString qml);
 
     QPointer<KisCanvas2> m_canvas;

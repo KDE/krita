@@ -35,7 +35,7 @@
 KoJsonTrader::KoJsonTrader()
 {
     // Allow a command line variable KRITA_PLUGIN_PATH to override the automatic search
-    auto requestedPath = QProcessEnvironment::systemEnvironment().value("KRITA_PLUGIN_PATH");
+    QString requestedPath = QProcessEnvironment::systemEnvironment().value("KRITA_PLUGIN_PATH");
     if (!requestedPath.isEmpty()) {
         m_pluginPath = requestedPath;
     }

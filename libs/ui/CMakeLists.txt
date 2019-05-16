@@ -48,6 +48,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_snap_config.cpp
     canvas/kis_snap_line_strategy.cpp
     canvas/KisSnapPointStrategy.cpp
+    canvas/KisSnapPixelStrategy.cpp
 	canvas/KisMirrorAxisConfig.cpp
 	dialogs/kis_about_application.cpp
     dialogs/kis_dlg_adj_layer_props.cc
@@ -113,7 +114,6 @@ set(kritaui_LIB_SRCS
     kis_splash_screen.cpp
     kis_filter_manager.cc
     kis_filters_model.cc
-    kis_histogram_view.cc
     KisImageBarrierLockerWithFeedback.cpp
     kis_image_manager.cc
     kis_image_view_converter.cpp
@@ -364,6 +364,7 @@ set(kritaui_LIB_SRCS
     KisTemplateTree.cpp
     KisUndoActionsUpdateManager.cpp
     KisView.cpp
+    KisImportExportErrorCode.cpp
 
     thememanager.cpp
 

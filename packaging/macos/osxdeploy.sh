@@ -1,22 +1,12 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # Krita tool to create dmg from installed source
 # Copies all files to a folder to be converted into the final dmg
-# Background image must be set for it to deploy correcly
 
-# osxdeploy.sh automates the creation of the release DMG. It needs an image
-#     either png or jpg as first argument as it will use the image to set
-#     the background of the DMG.
-
-# Necessary files can be downloaded from https://drive.google.com/drive/folders/15cUhCou7ya9ktjfhbzRaL7_IpntzxG4j?usp=sharing
+# osxdeploy.sh automates the creation of the release DMG.
+#       default background and style are used if none provided
 
 # A short explanation of what it does:
-
-# - Creates a copy of "krita-template" folder (this containes Terms of use
-#     and Applications) into kritadmg folder.
-# Application folder symlink can be created with applescript but Terms of use contents cannot,
-# also working like this allows to add other files to dmg if needed.
-# Place the folder in ${BUILDROOT}
 
 # - Copies krita.app contents to kritadmg folder
 # - Copies i/share to Contents/Resources excluding unnecesary files
@@ -54,10 +44,27 @@ if test -z ${BUILDROOT}; then
     exit
 fi
 
+get_script_dir() {
+    script_source="${BASH_SOURCE[0]}"
+    # go to target until finding root.
+    while [ -L "${script_source}" ]; do
+        script_target="$(readlink ${script_source})"
+        if [[ "${script_source}" = /* ]]; then
+            script_source="$script_target"
+        else
+            script_dir="$(dirname "${script_source}")"
+            script_source="${script_dir}/${script_target}"
+        fi
+    done
+    echo "$(dirname ${script_source})"
+}
+
 DMG_title="krita" #if changed krita.temp.dmg must be deleted manually
+SCRIPT_SOURCE_DIR="$(get_script_dir)"
 
 # There is some duplication between build and deploy scripts
 # a config env file could would be a nice idea.
+KIS_SRC_DIR=${BUILDROOT}/krita
 KIS_INSTALL_DIR=${BUILDROOT}/i
 KIS_BUILD_DIR=${BUILDROOT}/kisbuild # only used for getting git sha number
 KRITA_DMG=${BUILDROOT}/kritadmg
@@ -70,12 +77,22 @@ export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 export MACOSX_DEPLOYMENT_TARGET=10.11
 export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.11
 
+# Attempt to find python_version
+local_PY_MAYOR_VERSION=$(python -c "import sys; print(sys.version_info[0])")
+local_PY_MINOR_VERSION=$(python -c "import sys; print(sys.version_info[1])")
+PY_VERSION="${local_PY_MAYOR_VERSION}.${local_PY_MINOR_VERSION}"
+echo "Detected Python ${PY_VERSION}"
+
 print_usage () {
-    echo "USAGE: osxdeploy.sh [-s=<identity>] <background-image>"
+    echo "USAGE: osxdeploy.sh [-s=<identity>] [-style=<style.txt>] [-bg=<background-image>]"
     echo "\t -s Code sign identity for codesign"
+    echo "\t -style Style file defined from 'dmgstyle.sh' output"
+    echo "\t -bg Set a background image for dmg folder"
     echo "\t osxdeploy needs an input image to add to the dmg background
     \t image recomended size is at least 950x500\n"
 }
+
+
 
 # Attempt to detach previous mouted DMG
 if [[ -d "/Volumes/${DMG_title}" ]]; then
@@ -89,21 +106,16 @@ if [[ -d "/Volumes/${DMG_title}" ]]; then
 fi
 
 # Parse input args
-if test ${#} -eq 0; then
-    echo "ERROR: no option given"
-    print_usage
-    exit 1
-fi
-
 for arg in "${@}"; do
-    if [[ -f ${arg} ]]; then
+    if [ "${arg}" = -bg=* -a -f "${arg#*=}" ]; then
         DMG_validBG=0
+        bg_filename=${arg#*=}
         echo "attempting to check background is valid jpg or png..."
-        BG_FORMAT=$(sips --getProperty format ${arg} | awk '{printf $2}')
+        BG_FORMAT=$(sips --getProperty format ${bg_filename} | awk '{printf $2}')
 
         if [[ "png" = ${BG_FORMAT} || "jpeg" = ${BG_FORMAT} ]];then
             echo "valid image file"
-            DMG_background=$(cd "$(dirname "${arg}")"; pwd -P)/$(basename "${arg}")
+            DMG_background=$(cd "$(dirname "${bg_filename}")"; pwd -P)/$(basename "${bg_filename}")
             DMG_validBG=1
             # check imageDPI
             BG_DPI=$(sips --getProperty dpiWidth ${DMG_background} | grep dpi | awk '{print $2}')
@@ -119,16 +131,28 @@ for arg in "${@}"; do
         CODE_SIGNATURE="${arg#*=}"
     fi
 
+    if [[ ${arg} = -style=* ]]; then
+        style_filename="${arg#*=}"
+        if [[ -f "${style_filename}" ]]; then
+            DMG_STYLE="${style_filename}"
+        fi
+    fi
+
     if [[ ${arg} = "-h" || ${arg} = "--help" ]]; then
         print_usage
         exit
     fi
 done
 
+if [[ ! ${DMG_STYLE} ]]; then
+    DMG_STYLE="${SCRIPT_SOURCE_DIR}/default.style"
+fi
+echo "Using style from: ${DMG_STYLE}"
+
 if [[ ${DMG_validBG} -eq 0 ]]; then
     echo "No jpg or png valid file detected!!"
-    echo "exiting"
-    exit
+    echo "Using default style"
+    DMG_background="${SCRIPT_SOURCE_DIR}/krita-4.1_dmgBG.jpg"
 fi
 
 if [[ -z "${CODE_SIGNATURE}" ]]; then
@@ -236,9 +260,88 @@ krita_findmissinglibs() {
     fi
 }
 
+strip_python_dmginstall() {
+    # reduce size of framework python
+    # Removes tests, installers, pyenv, distutils
+    echo "Removing unnecesary files from Python.Framework to be packaged..."
+    PythonFrameworkBase="${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework"
+
+    cd ${PythonFrameworkBase}
+    find . -name "test*" -type d | xargs rm -rf
+    find "${PythonFrameworkBase}/Versions/${PY_VERSION}/bin" -not -name "python*" | xargs rm -f
+    cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/lib/python${PY_VERSION}"
+    rm -rf distutils tkinter ensurepip venv lib2to3 idlelib
+}
+
+fix_python_framework() {
+    # Fix python.framework rpath and slims down installation
+    # fix library LD_RPATH excutable_path and loader_path.
+    # It is intended to be used for Libraries inside Frameworks.
+    fix_framework_library() {
+        xargs -P4 -I FILE sh -c "
+            install_name_tool -rpath ${KIS_INSTALL_DIR}/lib @loader_path/Frameworks \"${libFile}\" 2> /dev/null
+            install_name_tool -add_rpath @loader_path/../../../ \"${libFile}\" 2> /dev/null
+        "
+    }
+    # Start fixing all executables
+    PythonFrameworkBase="${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework"
+    install_name_tool -change @loader_path/../../../../libintl.9.dylib @loader_path/../../../libintl.9.dylib "${PythonFrameworkBase}/Python"
+    install_name_tool -add_rpath @executable_path/../../../../../../../ "${PythonFrameworkBase}/Versions/Current/Resources/Python.app/Contents/MacOS/Python"
+    install_name_tool -add_rpath @executable_path/../../../../ "${PythonFrameworkBase}/Versions/Current/bin/python${PY_VERSION}"
+    install_name_tool -add_rpath @executable_path/../../../../ "${PythonFrameworkBase}/Versions/Current/bin/python${PY_VERSION}m"
+
+    # Fix rpaths from Python.Framework
+    # install_name_tool change @loader_path/../../../libz.1.dylib
+
+    # Fix main library
+    printf ${PythonFrameworkBase}/Python | fix_framework_library
+    # find ${PythonFrameworkBase} -name "*.so" -not -type l | fix_framework_library
+}
+
+# Checks for macdeployqt
+# If not present attempts to install
+# If it fails shows an informatve message
+# (For now, macdeployqt is fundamental to deploy)
+macdeployqt_exists() {
+    printf "Checking for macdeployqt...  "
+
+    if [[ ! -e "${KIS_INSTALL_DIR}/bin/macdeployqt" ]]; then
+        printf "Not Found!\n"
+        printf "Attempting to install macdeployqt\n"
+
+        cd ${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src
+        make sub-macdeployqt-all
+        make sub-macdeployqt-install_subtargets
+        make install
+
+        if [[ ! -e "${KIS_INSTALL_DIR}/bin/macdeployqt" ]]; then
+        printf "
+ERROR: Failed to install macdeployqt!
+
+    Compile and install from qt source directory
+    Source code to build could be located in qttools/src in qt source dir:
+
+        ${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src
+
+    From the source dir, build and install:
+
+        make sub-macdeployqt-all
+        make sub-macdeployqt-install_subtargets
+        make install
+"
+        printf "\nexiting...\n"
+        exit
+        else
+            echo "Done!"
+        fi
+    else
+        echo "Found!"
+    fi
+}
 
 krita_deploy () {
-    # fix_boost_rpath
+    # check for macdeployqt
+    macdeployqt_exists
 
     cd ${BUILDROOT}
     # Update files in krita.app
@@ -248,7 +351,8 @@ krita_deploy () {
     echo "Preparing ${KRITA_DMG} for deployment..."
 
     echo "Copying krita.app..."
-    rsync -riul ${KRITA_DMG_TEMPLATE}/ ${KRITA_DMG}
+    mkdir "${KRITA_DMG}"
+
     rsync -prul ${KIS_INSTALL_DIR}/bin/krita.app ${KRITA_DMG}
 
     mkdir -p ${KRITA_DMG}/krita.app/Contents/PlugIns
@@ -305,15 +409,6 @@ krita_deploy () {
     
     # rsync -prul {KIS_INSTALL_DIR}/lib/libkrita* Frameworks/
 
-    # activate for python enabled Krita
-    # echo "Copying python..."
-    # cp -r ${KIS_INSTALL_DIR}/lib/python3.5 Frameworks/
-    # cp -r ${KIS_INSTALL_DIR}/lib/krita-python-libs Frameworks/
-
-    # XXX: fix rpath for krita.so
-    # echo "Copying sip..."
-    # rsync -Prvul ${KIS_INSTALL_DIR}/sip Frameworks/
-
     # To avoid errors macdeployqt must be run from bin location
     # ext_qt will not build macdeployqt by default so it must be build manually
     #   cd ${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src
@@ -333,6 +428,25 @@ krita_deploy () {
 
     cd ${BUILDROOT}
     echo "macdeployqt done!"
+
+    echo "Copying python..."
+    # Copy this framework last!
+    # It is best that macdeployqt does not modify Python.framework
+    # folders with period in name are treated as Frameworks for codesign
+    rsync -prul ${KIS_INSTALL_DIR}/lib/Python.framework ${KRITA_DMG}/krita.app/Contents/Frameworks/
+    rsync -prul ${KIS_INSTALL_DIR}/lib/krita-python-libs ${KRITA_DMG}/krita.app/Contents/Frameworks/
+    # change perms on Python to allow header change
+    chmod +w ${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework/Python
+    
+    fix_python_framework
+    strip_python_dmginstall
+
+    # fix python pyc
+    # precompile all pyc so the dont alter signature
+    echo "Precompiling all python files..."
+    cd ${KRITA_DMG}/krita.app
+    ${KIS_INSTALL_DIR}/bin/python -m compileall . &> /dev/null
+
     install_name_tool -delete_rpath @loader_path/../../../../lib ${KRITA_DMG}/krita.app/Contents/MacOS/krita
     rm -rf ${KRITA_DMG}/krita.app/Contents/PlugIns/kf5/org.kde.kwindowsystem.platforms
 
@@ -340,6 +454,7 @@ krita_deploy () {
     printf "Searching for missing libraries\n"
     krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -name "*.dylib" -or -name "*.so" -or -perm u+x)
     echo "Done!"
+
 }
 
 # helper to define function only once
@@ -354,12 +469,12 @@ signBundle() {
     cd ${KRITA_DMG}/krita.app/Contents/Frameworks
     # remove debug version as both versions cant be signed.
     rm ${KRITA_DMG}/krita.app/Contents/Frameworks/QtScript.framework/Versions/Current/QtScript_debug
-    find . -type d -name "*.framework" | xargs printf "%s/Versions/Current\n" | batch_codesign
     find . -type f -name "*.dylib" -or -name "*.so" | batch_codesign
+    find . -type d -name "*.framework" | xargs printf "%s/Versions/Current\n" | batch_codesign
 
     # Sign all other files in Framework (needed)
-    # there are many files in pyton do we need to sign them? TODO
-    # find krita-python-libs -type f | batch_codesign
+    # there are many files in python do we need to sign them all?
+    find krita-python-libs -type f | batch_codesign
     # find python -type f | batch_codesign
 
     # Sing only libraries and plugins
@@ -381,7 +496,7 @@ signBundle() {
 createDMG () {
     printf "Creating of dmg with contents of %s...\n" "${KRITA_DMG}"
     cd ${BUILDROOT}
-    DMG_size=500
+    DMG_size=700
 
     ## Build dmg from folder
 
@@ -401,30 +516,19 @@ createDMG () {
     if [[ ! -d "/Volumes/${DMG_title}/.background" ]]; then
         mkdir "/Volumes/${DMG_title}/.background"
     fi
-    cp ${DMG_background} "/Volumes/${DMG_title}/.background/"
+    cp -v ${DMG_background} "/Volumes/${DMG_title}/.background/"
+
+    mkdir "/Volumes/${DMG_title}/Terms of Use"
+    cp -v "${KIS_SRC_DIR}/packaging/macos/Terms_of_use.rtf" "/Volumes/${DMG_title}/Terms of Use/"
+    ln -s "/Applications" "/Volumes/${DMG_title}/Applications"
 
     ## Apple script to set style
-    printf '
-tell application "Finder"
-    tell disk "%s"
-        open
-        set current view of container window to icon view
-        set toolbar visible of container window to false
-        set statusbar visible of container window to false
-        set the bounds of container window to {291, 95, 1097, 558}
-        set theViewOptions to the icon view options of container window
-        set arrangement of theViewOptions to not arranged
-        set icon size of theViewOptions to 80
-        set background picture of theViewOptions to file ".background:%s"
-        set position of item "krita.app" of container window to {172, 70}
-        set position of item "Applications" of container window to {167, 189}
-        set position of item "Terms of Use" of container window to {166, 314}
-        update without registering applications
-        delay 1
-        close
-    end tell
-end tell
-        ' "${DMG_title}" "${DMG_background##*/}" | osascript
+    style="$(<"${DMG_STYLE}")"
+    printf "${style}" "${DMG_title}" "${DMG_background##*/}" | osascript
+
+    #Set Icon for DMG
+    cp -v "${SCRIPT_SOURCE_DIR}/KritaIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
+    SetFile -a C "/Volumes/${DMG_title}"
     
     chmod -Rf go-w "/Volumes/${DMG_title}"
 

@@ -717,7 +717,6 @@ void KisView::closeEvent(QCloseEvent *event)
     }
 
     if (queryClose()) {
-        d->viewManager->statusBar()->setView(0);
         event->accept();
         return;
     }

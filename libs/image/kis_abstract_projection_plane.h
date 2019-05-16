@@ -80,6 +80,12 @@ public:
     virtual QRect accessRect(const QRect &rect, KisLayer::PositionToFilthy pos = KisLayer::N_FILTHY) const = 0;
 
     /**
+     * Works like KisLayer::needRectForOriginal(), but includes needed
+     * rects of layer styles
+     */
+    virtual QRect needRectForOriginal(const QRect &rect) const = 0;
+
+    /**
      * Returns a list of devices which should synchronize the lod cache on update
      */
     virtual KisPaintDeviceList getLodCapableDevices() const = 0;
@@ -98,6 +104,8 @@ public:
     QRect needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
     QRect changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
     QRect accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
+    QRect needRectForOriginal(const QRect &rect) const override;
+
 
     KisPaintDeviceList getLodCapableDevices() const override;
 };

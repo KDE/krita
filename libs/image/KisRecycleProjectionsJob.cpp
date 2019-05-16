@@ -16,12 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "KisRecycleProjectionsJob.h"
+#include "KisSafeNodeProjectionStore.h"
+#include "kis_paint_device.h"
 
-#include "kis_layer.h"
-
-
-KisRecycleProjectionsJob::KisRecycleProjectionsJob(KisLayerWSP layer)
-    : m_layer(layer)
+KisRecycleProjectionsJob::KisRecycleProjectionsJob(KisSafeNodeProjectionStoreBaseWSP projectionStore)
+    : m_projectionStore(projectionStore)
 {
     setExclusive(true);
 }
@@ -32,14 +31,14 @@ bool KisRecycleProjectionsJob::overrides(const KisSpontaneousJob *_otherJob)
         dynamic_cast<const KisRecycleProjectionsJob*>(_otherJob);
 
     return otherJob &&
-        otherJob->m_layer == m_layer;
+        otherJob->m_projectionStore == m_projectionStore;
 }
 
 void KisRecycleProjectionsJob::run()
 {
-    KisLayerSP layer = m_layer;
-    if (layer) {
-        layer->recycleProjectionsInSafety();
+    KisSafeNodeProjectionStoreBaseSP store = m_projectionStore;
+    if (store) {
+        store->recycleProjectionsInSafety();
     }
 }
 

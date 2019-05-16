@@ -187,9 +187,10 @@ void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImag
 
     QScopedPointer<KUndo2Command> cmd(new KisNodePropertyListCommand(node, proplist));
 
+    image->setModified();
+
     if (undo.contains(true)) {
         image->undoAdapter()->addCommand(cmd.take());
-        image->setModified();
     }
     else {
         /**

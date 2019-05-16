@@ -22,7 +22,8 @@
 #include "kis_spontaneous_job.h"
 
 class QMutex;
-
+class KisSafeNodeProjectionStoreBase;
+typedef KisWeakSharedPtr<KisSafeNodeProjectionStoreBase> KisSafeNodeProjectionStoreBaseWSP;
 
 /**
  * This is a simple job for initiating recycling of KisLayer's
@@ -34,14 +35,14 @@ class QMutex;
 class KRITAIMAGE_EXPORT KisRecycleProjectionsJob : public KisSpontaneousJob
 {
 public:
-    KisRecycleProjectionsJob(KisLayerWSP layer);
+    KisRecycleProjectionsJob(KisSafeNodeProjectionStoreBaseWSP projectionStore);
 
     bool overrides(const KisSpontaneousJob *otherJob) override;
     void run() override;
     int levelOfDetail() const override;
 
 private:
-    KisLayerWSP m_layer;
+    KisSafeNodeProjectionStoreBaseWSP m_projectionStore;
 };
 
 #endif // KISRECYCLEPROJECTIONSJOB_H

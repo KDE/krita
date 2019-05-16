@@ -115,6 +115,11 @@ public:
         m_layer->signalUpdate(m_layer->boundingImageRect());
     }
 
+    bool hasPendingUpdates() const override
+    {
+        return false;
+    }
+
     void rerenderAfterBeingInvisible() override {}
     void resetCache() override {}
     void setImage(KisImageWSP /*image*/) override {}

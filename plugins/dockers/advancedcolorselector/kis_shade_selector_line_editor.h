@@ -34,10 +34,15 @@ class KisDoubleParseSpinBox;
 class KisShadeSelectorLineEditor : public KisShadeSelectorLineBase {
     Q_OBJECT
 public:
-    KisShadeSelectorLineEditor(QWidget* parent);
+    KisShadeSelectorLineEditor(QWidget* parent, KisShadeSelectorLine *preview);
 
     QString toString() const override;
     void fromString(const QString &string) override;
+
+    void mousePressEvent(QMouseEvent* e) override;
+
+private:
+    void updatePreview();
 
 private Q_SLOTS:
     void valueChanged();
@@ -46,6 +51,8 @@ Q_SIGNALS:
     void requestActivateLine(QWidget *widget);
 
 private:
+    KisShadeSelectorLine* m_line_preview;
+
     KisDoubleParseSpinBox* m_hueDelta;
     KisDoubleParseSpinBox* m_saturationDelta;
     KisDoubleParseSpinBox* m_valueDelta;

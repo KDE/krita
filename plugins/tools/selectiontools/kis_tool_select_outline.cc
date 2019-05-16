@@ -160,13 +160,16 @@ void KisToolSelectOutline::finishSelectionAction()
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
     kisCanvas->updateCanvas();
 
-    QRectF boundingViewRect =
-        pixelToView(KisAlgebra2D::accumulateBounds(m_points));
+    const QRectF boundingRect = KisAlgebra2D::accumulateBounds(m_points);
+    const QRectF boundingViewRect = pixelToView(boundingRect);
 
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select by Outline"));
 
-    if (m_points.count() > 2 &&
-        !helper.tryDeselectCurrentSelection(boundingViewRect, selectionAction())) {
+    if (helper.tryDeselectCurrentSelection(boundingViewRect, selectionAction())) {
+        return;
+    }
+
+    if (m_points.count() > 2) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
         const SelectionMode mode =

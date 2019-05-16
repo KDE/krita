@@ -38,6 +38,7 @@ private Q_SLOTS:
     void testHindiText();
     void testTextBaselineShift();
     void testTextSpacing();
+    void testTextTabSpacing();
     void testTextDecorations();
     void testRightToLeft();
 

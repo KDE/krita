@@ -229,10 +229,10 @@ void KisZoomManager::updateMouseTrackingConnections()
     m_mouseTrackingConnections.clear();
 
     if (value) {
-        connect(m_canvasController->proxyObject,
+        m_mouseTrackingConnections.addConnection(m_canvasController->proxyObject,
                 SIGNAL(canvasMousePositionChanged(QPoint)),
+                this,
                 SLOT(mousePositionChanged(QPoint)));
-
     }
 }
 
@@ -360,7 +360,10 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
 {
     KisImageWSP image = m_view->image();
 
-    const KoZoomMode::Mode newMode = KoZoomMode::ZOOM_CONSTANT;
+    // changeAspectMode is called with the same aspectMode when the window is
+    // moved across screens. Preserve the old zoomMode if this is the case.
+    const KoZoomMode::Mode newMode =
+            aspectMode == m_aspectMode ? m_zoomHandler->zoomMode() : KoZoomMode::ZOOM_CONSTANT;
     const qreal newZoom = m_zoomHandler->zoom();
 
     const qreal resolutionX =

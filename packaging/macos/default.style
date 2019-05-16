@@ -1,0 +1,19 @@
+tell application "Finder"
+    tell disk "%s"
+        open
+        set current view of container window to icon view
+        set toolbar visible of container window to false
+        set statusbar visible of container window to false
+        set the bounds of container window to {300, 51, 1070, 487}
+        set theViewOptions to the icon view options of container window
+        set arrangement of theViewOptions to not arranged
+        set icon size of theViewOptions to 80
+        set background picture of theViewOptions to file ".background:%s"
+        set position of item "krita.app" of container window to {281, 287}
+        set position of item "Applications" of container window to {596, 285}
+        set position of item "Terms of Use" of container window to {598, 132}
+        update without registering applications
+        delay 1
+        close
+    end tell
+end tell

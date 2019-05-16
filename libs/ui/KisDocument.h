@@ -151,6 +151,11 @@ public:
      */
     bool exportDocument(const QUrl &url, const QByteArray &mimeType, bool showWarnings = false, KisPropertiesConfigurationSP exportConfiguration = 0);
 
+    /**
+     * Exports he document is a synchronous way. The caller must ensure that the
+     * image is not accessed by any other actors, because the exporting happens
+     * without holding the image lock.
+     */
     bool exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration = 0);
 
 private:

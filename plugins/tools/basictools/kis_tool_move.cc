@@ -271,6 +271,8 @@ void KisToolMove::commitChanges()
 void KisToolMove::moveDiscrete(MoveDirection direction, bool big)
 {
     if (mode() == KisTool::PAINT_MODE) return;  // Don't interact with dragging
+    if (!currentNode()) return;
+    if (!image()) return;
     if (!currentNode()->isEditable()) return; // Don't move invisible nodes
 
     if (startStrokeImpl(MoveSelectedLayer, 0)) {

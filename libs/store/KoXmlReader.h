@@ -78,7 +78,7 @@ namespace KoXml
  * Note: do *NOT* use getElementsByTagNameNS, it's recursive!
  */
 KRITASTORE_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
-                                        const QString& nsURI, const QString& localName);
+                                           const QString& nsURI, const QString& localName);
 
 /**
  * A namespace-aware version of QDomNode::namedItem().
@@ -92,8 +92,8 @@ KRITASTORE_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
  * the office-text-content-prelude condition as @a KoXmlNamedItemType .
  */
 KRITASTORE_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
-                                      const QString& nsURI, const QString& localName,
-                                      KoXmlNamedItemType type);
+                                           const QString& nsURI, const QString& localName,
+                                           KoXmlNamedItemType type);
 
 /**
  * Explicitly load child nodes of specified node, up to given depth.
@@ -155,8 +155,8 @@ KRITASTORE_EXPORT QDomDocument asQDomDocument(const KoXmlDocument& document);
  * Note: it is assumed that the XML uses UTF-8 encoding.
  */
 KRITASTORE_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
-                                bool namespaceProcessing, QString* errorMsg = 0,
-                                int* errorLine = 0, int* errorColumn = 0);
+                                   bool namespaceProcessing, QString* errorMsg = 0,
+                                   int* errorLine = 0, int* errorColumn = 0);
 }
 
 /**
@@ -177,7 +177,7 @@ KRITASTORE_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
  */
 #define forEachElement( elem, parent ) \
     for ( KoXmlNode _node = parent.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
-        if ( ( elem = _node.toElement() ).isNull() ) {} else
+    if ( ( elem = _node.toElement() ).isNull() ) {} else
 
 
 #endif // KO_XMLREADER_H

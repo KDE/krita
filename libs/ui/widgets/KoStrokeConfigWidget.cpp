@@ -170,7 +170,6 @@ public:
         active(true),
         allowLocalUnitManagement(true),
         fillConfigWidget(0),
-        noSelectionTrackingMode(false),
         selectionChangedCompressor(200, KisSignalCompressor::FIRST_ACTIVE)
     {
     }
@@ -191,7 +190,7 @@ public:
     bool allowLocalUnitManagement;
 
     KoFillConfigWidget *fillConfigWidget;
-    bool noSelectionTrackingMode;
+    bool noSelectionTrackingMode {false};
 
     KisAcyclicSignalConnector shapeChangedAcyclicConnector;
     KisAcyclicSignalConnector resourceManagerAcyclicConnector;
@@ -744,7 +743,7 @@ void KoStrokeConfigWidget::selectionChanged()
         }
     }
 
-    const bool lineOptionsVisible =  d->fillConfigWidget->selectedFillIndex() != 0;
+    const bool lineOptionsVisible = (d->fillConfigWidget->selectedFillIndex() != 0);
 
     // This switch statement is to help the tab widget "pages" to be closer to the correct size
     // if we don't do this the internal widgets get rendered, then the tab page has to get resized to

@@ -23,6 +23,7 @@
 #include <QImageReader>
 #include <QByteArray>
 #include <QBuffer>
+#include <QPainter>
 
 #include <kis_dom_utils.h>
 
@@ -103,14 +104,25 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
         return false;
     }
 
-    setBrushTipImage(image);
     setValid(true);
 
-    if (brushTipImage().isGrayscale()) {
+    if (image.allGray()) {
+        // Make sure brush tips all have a white background
+        QImage base(image.size(), image.format());
+        if ((int)base.format() < (int)QImage::Format_RGB32) {
+            base = base.convertToFormat(QImage::Format_ARGB32);
+        }
+        QPainter gc(&base);
+        gc.fillRect(base.rect(), Qt::white);
+        gc.drawImage(0, 0, image);
+        gc.end();
+        QImage converted = base.convertToFormat(QImage::Format_Grayscale8);
+        setBrushTipImage(converted);
         setBrushType(MASK);
         setHasColor(false);
     }
     else {
+        setBrushTipImage(image);
         setBrushType(IMAGE);
         setHasColor(true);
     }

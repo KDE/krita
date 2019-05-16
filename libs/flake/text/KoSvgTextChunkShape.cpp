@@ -950,7 +950,8 @@ KoSvgText::KoSvgCharChunkFormat KoSvgTextChunkShapePrivate::fetchCharFormat() co
 
     if (q->background()) {
         KoColorBackground *colorBackground = dynamic_cast<KoColorBackground*>(q->background().data());
-        KIS_SAFE_ASSERT_RECOVER (colorBackground) {
+        if (!colorBackground) {
+            qWarning() << "TODO: support gradient and pattern backgrounds for text";
             textBrush = Qt::red;
         }
 

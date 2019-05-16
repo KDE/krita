@@ -102,7 +102,7 @@ class UIController(object):
         self.editor.undoAvailable.connect(self.setStatusModified)
 
     def loadMenus(self):
-        self.addMenu('File', 'File')
+        self.addMenu(i18n('File'), i18n('File'))
 
     def addMenu(self, menuName, parentName):
         parent = self.menu_bar.findChild(QObject, parentName)

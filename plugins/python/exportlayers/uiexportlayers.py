@@ -13,7 +13,7 @@
 # https://creativecommons.org/publicdomain/zero/1.0/legalcode
 
 from . import exportlayersdialog
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import (Qt, QRect)
 from PyQt5.QtWidgets import (QFormLayout, QListWidget, QHBoxLayout,
                              QDialogButtonBox, QVBoxLayout, QFrame,
                              QPushButton, QAbstractScrollArea, QLineEdit,
@@ -29,10 +29,11 @@ class UIExportLayers(object):
         self.mainDialog = exportlayersdialog.ExportLayersDialog()
         self.mainLayout = QVBoxLayout(self.mainDialog)
         self.formLayout = QFormLayout()
+        self.resSpinBoxLayout = QFormLayout()
         self.documentLayout = QVBoxLayout()
         self.directorySelectorLayout = QHBoxLayout()
         self.optionsLayout = QVBoxLayout()
-        self.resolutionLayout = QHBoxLayout()
+        self.rectSizeLayout = QHBoxLayout()
 
         self.refreshButton = QPushButton(i18n("Refresh"))
         self.widgetDocuments = QListWidget()
@@ -43,9 +44,13 @@ class UIExportLayers(object):
         self.batchmodeCheckBox = QCheckBox(i18n("Export in batchmode"))
         self.ignoreInvisibleLayersCheckBox = QCheckBox(
             i18n("Ignore invisible layers"))
-        self.xResSpinBox = QSpinBox()
-        self.yResSpinBox = QSpinBox()
+        self.cropToImageBounds = QCheckBox(
+                i18n("Adjust export size to layer content"))
+
+        self.rectWidthSpinBox = QSpinBox()
+        self.rectHeightSpinBox = QSpinBox()
         self.formatsComboBox = QComboBox()
+        self.resSpinBox = QSpinBox()
 
         self.buttonBox = QDialogButtonBox(
             QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
@@ -60,6 +65,7 @@ class UIExportLayers(object):
         self.refreshButton.clicked.connect(self.refreshButtonClicked)
         self.buttonBox.accepted.connect(self.confirmButton)
         self.buttonBox.rejected.connect(self.mainDialog.close)
+        self.cropToImageBounds.stateChanged.connect(self._toggleCropSize)
 
         self.mainDialog.setWindowModality(Qt.NonModal)
         self.widgetDocuments.setSizeAdjustPolicy(
@@ -68,8 +74,9 @@ class UIExportLayers(object):
     def initialize(self):
         self.loadDocuments()
 
-        self.xResSpinBox.setRange(1, 10000)
-        self.yResSpinBox.setRange(1, 10000)
+        self.rectWidthSpinBox.setRange(1, 10000)
+        self.rectHeightSpinBox.setRange(1, 10000)
+        self.resSpinBox.setRange(20, 1200)
 
         self.formatsComboBox.addItem(i18n("JPEG"))
         self.formatsComboBox.addItem(i18n("PNG"))
@@ -83,15 +90,19 @@ class UIExportLayers(object):
         self.optionsLayout.addWidget(self.exportFilterLayersCheckBox)
         self.optionsLayout.addWidget(self.batchmodeCheckBox)
         self.optionsLayout.addWidget(self.ignoreInvisibleLayersCheckBox)
+        self.optionsLayout.addWidget(self.cropToImageBounds)
 
-        self.resolutionLayout.addWidget(self.xResSpinBox)
-        self.resolutionLayout.addWidget(self.yResSpinBox)
+        self.resSpinBoxLayout.addRow(i18n("dpi:"), self.resSpinBox)
+
+        self.rectSizeLayout.addWidget(self.rectWidthSpinBox)
+        self.rectSizeLayout.addWidget(self.rectHeightSpinBox)
+        self.rectSizeLayout.addLayout(self.resSpinBoxLayout)
 
         self.formLayout.addRow(i18n("Documents:"), self.documentLayout)
         self.formLayout.addRow(
             i18n("Initial directory:"), self.directorySelectorLayout)
         self.formLayout.addRow(i18n("Export options:"), self.optionsLayout)
-        self.formLayout.addRow(i18n("Resolution:"), self.resolutionLayout)
+        self.formLayout.addRow(i18n("Export size:"), self.rectSizeLayout)
         self.formLayout.addRow(
             i18n("Images extensions:"), self.formatsComboBox)
 
@@ -188,11 +199,16 @@ class UIExportLayers(object):
                 elif '[png]' in nodeName:
                     _fileFormat = 'png'
 
+                if self.cropToImageBounds.isChecked():
+                    bounds = QRect()
+                else:
+                    bounds = QRect(0, 0, self.rectWidthSpinBox.value(), self.rectHeightSpinBox.value())
+
                 layerFileName = '{0}{1}/{2}.{3}'.format(
                     self.directoryTextField.text(),
                     parentDir, node.name(), _fileFormat)
-                node.save(layerFileName, self.xResSpinBox.value(),
-                          self.yResSpinBox.value(), krita.InfoObject())
+                node.save(layerFileName, self.resSpinBox.value() / 72.,
+                          self.resSpinBox.value() / 72., krita.InfoObject(), bounds)
 
             if node.childNodes():
                 self._exportLayers(node, fileFormat, newDir)
@@ -207,5 +223,11 @@ class UIExportLayers(object):
 
     def _setResolution(self, index):
         document = self.documentsList[index]
-        self.xResSpinBox.setValue(document.width())
-        self.yResSpinBox.setValue(document.height())
+        self.rectWidthSpinBox.setValue(document.width())
+        self.rectHeightSpinBox.setValue(document.height())
+        self.resSpinBox.setValue(document.resolution())
+
+    def _toggleCropSize(self):
+        cropToLayer = self.cropToImageBounds.isChecked()
+        self.rectWidthSpinBox.setDisabled(cropToLayer)
+        self.rectHeightSpinBox.setDisabled(cropToLayer)

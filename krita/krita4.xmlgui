@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="420"
+version="421"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -114,6 +114,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
         <text>&amp;Snap To</text>
         <Action name="view_snap_to_guides"/>
             <Action name="view_snap_to_grid"/>
+            <Action name="view_snap_to_pixel"/>
           <Action name="view_snap_orthogonal" />
             <Action name="view_snap_node" />
             <Action name="view_snap_extension" />

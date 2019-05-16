@@ -42,6 +42,7 @@ public:
     QRect needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
     QRect changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
     QRect accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
+    QRect needRectForOriginal(const QRect &rect) const override;
 
     KisPaintDeviceList getLodCapableDevices() const override;
 
@@ -54,6 +55,8 @@ private:
     KisLayerStyleProjectionPlane(KisLayer *sourceLayer, KisPSDLayerStyleSP style);
 
     void init(KisLayer *sourceLayer, KisPSDLayerStyleSP layerStyle);
+
+    QRect stylesNeedRect(const QRect &rect) const;
 
 private:
     struct Private;

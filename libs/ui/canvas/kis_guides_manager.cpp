@@ -211,6 +211,7 @@ void KisGuidesManager::syncActionsStatus()
     m_d->syncAction("view_snap_bounding_box", m_d->snapConfig.boundingBox());
     m_d->syncAction("view_snap_image_bounds", m_d->snapConfig.imageBounds());
     m_d->syncAction("view_snap_image_center", m_d->snapConfig.imageCenter());
+    m_d->syncAction("view_snap_to_pixel",m_d->snapConfig.toPixel());
 }
 
 void KisGuidesManager::Private::updateSnappingStatus(const KisGuidesConfig &value)
@@ -236,6 +237,7 @@ void KisGuidesManager::Private::updateSnappingStatus(const KisGuidesConfig &valu
     snapGuide->enableSnapStrategy(KoSnapGuide::BoundingBoxSnapping, snapConfig.boundingBox());
     snapGuide->enableSnapStrategy(KoSnapGuide::DocumentBoundsSnapping, snapConfig.imageBounds());
     snapGuide->enableSnapStrategy(KoSnapGuide::DocumentCenterSnapping, snapConfig.imageCenter());
+    snapGuide->enableSnapStrategy(KoSnapGuide::PixelSnapping, snapConfig.toPixel());
 
     snapConfig.saveStaticData();
 }
@@ -331,6 +333,9 @@ void KisGuidesManager::setup(KisActionManager *actionManager)
 
     action = actionManager->createAction("view_snap_image_center");
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setSnapImageCenter(bool)));
+
+    action = actionManager->createAction("view_snap_to_pixel");
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setSnapToPixel(bool)));
 
     m_d->updateSnappingStatus(m_d->guidesConfig);
     syncActionsStatus();
@@ -746,6 +751,7 @@ void KisGuidesManager::slotShowSnapOptions()
     menu.addSection(i18n("Snap to:"));
     menu.addAction(m_d->createShortenedAction(i18n("Grid"), "view_snap_to_grid", &menu));
     menu.addAction(m_d->createShortenedAction(i18n("Guides"), "view_snap_to_guides", &menu));
+    menu.addAction(m_d->createShortenedAction(i18n("Pixel"), "view_snap_to_pixel", &menu));
     menu.addAction(m_d->createShortenedAction(i18n("Orthogonal"), "view_snap_orthogonal", &menu));
 
     menu.addAction(m_d->createShortenedAction(i18n("Node"), "view_snap_node", &menu));
@@ -798,5 +804,11 @@ void KisGuidesManager::setSnapImageBounds(bool value)
 void KisGuidesManager::setSnapImageCenter(bool value)
 {
     m_d->snapConfig.setImageCenter(value);
+    m_d->updateSnappingStatus(m_d->guidesConfig);
+}
+
+void KisGuidesManager::setSnapToPixel(bool value)
+{
+    m_d->snapConfig.setToPixel(value);
     m_d->updateSnappingStatus(m_d->guidesConfig);
 }

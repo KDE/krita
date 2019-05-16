@@ -866,6 +866,17 @@
       <statusTip></statusTip>
     </Action>
 
+    <Action name="view_snap_to_pixel">
+      <icon></icon>
+      <text>Snap Pixel</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Pixel</toolTip>
+      <iconText>Snap Pixel</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="view_snap_intersection">
       <icon></icon>
       <text>Snap Intersection</text>

@@ -1,4 +1,4 @@
-# This script is licensed CC 0 1.0, so that you can learn from it.
+/# This script is licensed CC 0 1.0, so that you can learn from it.
 
 # ------ CC 0 1.0 ---------------
 
@@ -21,7 +21,7 @@ class ScaleTool(QWidget):
     def __init__(self, mainDialog, parent=None):
         super(ScaleTool, self).__init__(parent)
 
-        self.setObjectName("Scale")
+        self.setObjectName(i18n("Scale"))
 
         self.layout = QFormLayout()
         self.resolutionLayout = QVBoxLayout()

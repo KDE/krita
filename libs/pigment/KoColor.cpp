@@ -304,13 +304,13 @@ qreal KoColor::opacityF() const
     return m_colorSpace->opacityF(m_data);
 }
 
-KoColor KoColor::fromXML(const QDomElement& elt, const QString& bitDepthId)
+KoColor KoColor::fromXML(const QDomElement& elt, const QString& channelDepthId)
 {
     bool ok;
-    return fromXML(elt, bitDepthId, &ok);
+    return fromXML(elt, channelDepthId, &ok);
 }
 
-KoColor KoColor::fromXML(const QDomElement& elt, const QString& bitDepthId, bool* ok)
+KoColor KoColor::fromXML(const QDomElement& elt, const QString& channelDepthId, bool* ok)
 {
     *ok = true;
     QString modelId;
@@ -336,7 +336,7 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString& bitDepthId, bool
             profileName.clear();
         }
     }
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, bitDepthId, profileName);
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, channelDepthId, profileName);
     if (cs == 0) {
         QList<KoID> list =  KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces);
         if (!list.empty()) {
@@ -352,6 +352,29 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString& bitDepthId, bool
         *ok = false;
         return KoColor();
     }
+}
+
+QString KoColor::toXML() const
+{
+    QDomDocument cdataDoc = QDomDocument("color");
+    QDomElement cdataRoot = cdataDoc.createElement("color");
+    cdataDoc.appendChild(cdataRoot);
+    cdataRoot.setAttribute("channeldepth", colorSpace()->colorDepthId().id());
+    toXML(cdataDoc, cdataRoot);
+    return cdataDoc.toString();
+}
+
+KoColor KoColor::fromXML(const QString &xml)
+{
+    KoColor c;
+    QDomDocument doc;
+    if (doc.setContent(xml)) {
+        QDomElement e = doc.documentElement().firstChild().toElement();
+        QString channelDepthID = e.attribute("channeldepth", Integer16BitsColorDepthID.id());
+        bool ok;
+        c = KoColor::fromXML(e, channelDepthID, &ok);
+    }
+    return c;
 }
 
 QString KoColor::toQString(const KoColor &color)

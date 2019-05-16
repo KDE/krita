@@ -56,7 +56,7 @@ KisLevelFilter::~KisLevelFilter()
 {
 }
 
-KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KisLevelConfigWidget(parent, dev);
 }
@@ -141,10 +141,10 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
 
     KoHistogramProducer *producer = new KoGenericLabHistogramProducer();
     m_histogram.reset( new KisHistogram(dev, dev->exactBounds(), producer, LINEAR) );
-    m_histlog = false;
-    m_page.histview->resize(288,100);
+    m_isLogarithmic = false;
+    //m_page.histview->resize(288,100);
     m_inverted = false;
-    slotDrawHistogram();
+    slotDrawHistogram(m_page.chkLogarithmic->isChecked());
 
 }
 
@@ -152,23 +152,23 @@ KisLevelConfigWidget::~KisLevelConfigWidget()
 {
 }
 
-void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
+void KisLevelConfigWidget::slotDrawHistogram(bool isLogarithmic)
 {
     int wHeight = m_page.histview->height();
     int wHeightMinusOne = wHeight - 1;
     int wWidth = m_page.histview->width();
 
-    if (m_histlog != logarithmic) {
+    if (m_isLogarithmic != isLogarithmic) {
         // Update the m_histogram
-        if (logarithmic)
+        if (isLogarithmic)
             m_histogram->setHistogramType(LOGARITHMIC);
         else
             m_histogram->setHistogramType(LINEAR);
-        m_histlog = logarithmic;
+        m_isLogarithmic = isLogarithmic;
     }
 
     QPalette appPalette = QApplication::palette();
-    QPixmap pix(wWidth-100, wHeight);
+    QPixmap pix(wWidth, wHeight);
 
     pix.fill(QColor(appPalette.color(QPalette::Base)));
     QPainter p(&pix);

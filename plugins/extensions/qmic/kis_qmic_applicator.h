@@ -27,6 +27,7 @@
 
 #include "gmic.h"
 #include "kis_qmic_data.h"
+#include <QScopedPointer>
 
 class KisProcessingApplicator;
 
@@ -49,12 +50,11 @@ Q_SIGNALS:
     void gmicFinished(bool successfully, int milliseconds = -1, const QString &msg = QString());
 
 private:
-    KisProcessingApplicator *m_applicator;
+    QScopedPointer<KisProcessingApplicator> m_applicator;
     KisImageWSP m_image;
     KisNodeSP m_node;
     KUndo2MagicString m_actionName;
     KisNodeListSP m_kritaNodes;
-    bool m_applicatorStrokeEnded;
     QVector<gmic_image<float> *> m_images;
     KisQmicDataSP m_gmicData;
 };

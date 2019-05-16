@@ -100,6 +100,17 @@ KisGaussianKernel::createVerticalKernel(qreal radius)
     return KisConvolutionKernel::fromMatrix(matrix, 0, matrix.sum());
 }
 
+KisConvolutionKernelSP
+KisGaussianKernel::createUniform2DKernel(qreal xRadius, qreal yRadius)
+{
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> h = createHorizontalMatrix(xRadius);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> v = createVerticalMatrix(yRadius);
+
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> uni = v * h;
+    return KisConvolutionKernel::fromMatrix(uni, 0, uni.sum());
+}
+
+
 void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
                                       const QRect& rect,
                                       qreal xRadius, qreal yRadius,
@@ -109,7 +120,22 @@ void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
 {
     QPoint srcTopLeft = rect.topLeft();
 
-    if (xRadius > 0.0 && yRadius > 0.0) {
+
+    if (KisConvolutionPainter::supportsFFTW()) {
+        KisConvolutionPainter painter(device, KisConvolutionPainter::FFTW);
+        painter.setChannelFlags(channelFlags);
+        painter.setProgress(progressUpdater);
+
+        KisConvolutionKernelSP kernel2D = KisGaussianKernel::createUniform2DKernel(xRadius, yRadius);
+
+        QScopedPointer<KisTransaction> transaction;
+        if (createTransaction && painter.needsTransaction(kernel2D)) {
+            transaction.reset(new KisTransaction(device));
+        }
+
+        painter.applyMatrix(kernel2D, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+
+    } else if (xRadius > 0.0 && yRadius > 0.0) {
         KisPaintDeviceSP interm = new KisPaintDevice(device->colorSpace());
 
         KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(xRadius);

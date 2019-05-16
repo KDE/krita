@@ -303,7 +303,6 @@ private:
 
         // add terminator to string
         QString expr = m_token + QChar();
-        QChar ch;
         int i = 0;
         state = Start;
 
@@ -526,7 +525,6 @@ public:
     {
         // add terminator to string
         QString expr = selector + QChar();
-        QChar lastCh;
         enum {
             Finish,
             Bad,

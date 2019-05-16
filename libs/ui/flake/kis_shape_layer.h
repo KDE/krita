@@ -146,6 +146,11 @@ public:
      */
     void forceUpdateTimedNode() override;
 
+    /**
+     * \return true if there are any pending updates in the delayed queue
+     */
+    bool hasPendingTimedUpdates() const override;
+
 protected:
     using KoShape::isVisible;
 

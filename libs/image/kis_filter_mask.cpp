@@ -59,9 +59,6 @@ QIcon KisFilterMask::icon() const
 
 void KisFilterMask::setFilter(KisFilterConfigurationSP  filterConfig)
 {
-    if (parent() && parent()->inherits("KisLayer")) {
-        filterConfig->setChannelFlags(qobject_cast<KisLayer*>(parent().data())->channelFlags());
-    }
     KisNodeFilterInterface::setFilter(filterConfig);
 }
 

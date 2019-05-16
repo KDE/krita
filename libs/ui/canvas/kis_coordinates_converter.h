@@ -151,6 +151,8 @@ public:
     void imageScale(qreal *scaleX, qreal *scaleY) const;
     void imagePhysicalScale(qreal *scaleX, qreal *scaleY) const;
 
+    QPointF snapToDevicePixel(const QPointF &point) const;
+
 private:
     friend class KisZoomAndPanTest;
 

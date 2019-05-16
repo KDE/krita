@@ -75,6 +75,7 @@ public:
     void setY(qint32 y) override;
 
     void forceUpdateTimedNode() override;
+    bool hasPendingTimedUpdates() const override;
 
     void threadSafeForceStaticImageUpdate();
 

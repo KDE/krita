@@ -86,6 +86,10 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
         return;
     }
 
+    if (KisToolSelect::selectionDidMove()) {
+        return;
+    }
+
     QApplication::setOverrideCursor(KisCursor::waitCursor());
 
 

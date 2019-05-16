@@ -101,6 +101,8 @@ public:
 
     QString substituteThis;
     QString substituteWith;
+
+    QUrl url;
 };
 
 #endif

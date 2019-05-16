@@ -1214,6 +1214,21 @@ void KisPaintopBox::slotReloadPreset()
     if (preset) {
         preset->load();
     }
+
+    if (m_resourceProvider->currentPreset() != preset) {
+        m_resourceProvider->setPaintOpPreset(preset);
+    } else {
+        /**
+         * HACK ALERT: here we emit a private signal from the resource manager to
+         * ensure that all the subscribers of resource-changed signal got the
+         * notification. That is especially important for
+         * KisPaintopTransformationConnector. See bug 392622.
+         */
+
+        emit m_resourceProvider->resourceManager()->canvasResourceChanged(
+            KisCanvasResourceProvider::CurrentPaintOpPreset,
+            QVariant::fromValue(preset));
+    }
 }
 void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is changed and not when preset is changed
 {

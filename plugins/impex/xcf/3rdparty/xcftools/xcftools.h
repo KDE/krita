@@ -103,7 +103,6 @@ void free_or_close_xcf(void);
 
 #define XCF_ERROR 1
 #define XCF_OK 0
-#define XCF_PTR_ERROR (-1)
 #define XCF_PTR_EMPTY 0
 
 
@@ -122,7 +121,7 @@ void FatalBadXCF(const char* format,...)
 void FatalUnsupportedXCF(const char* format,...)
      __ATTRIBUTE__((format(printf,1,2))) ;
 
-void gpl_blurb(void) __ATTRIBUTE__((noreturn));
+void gpl_blurb(void);
      
 FILE* openout(const char*);
 int closeout(FILE *,const char*);

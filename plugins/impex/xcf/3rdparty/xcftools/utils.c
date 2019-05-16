@@ -26,6 +26,7 @@ const char *progname = "$0" ;
 int verboseFlag = 0 ;
 
 
+void
 vFatalGeneric(int status,const char *format,va_list args)
 {
   if( format ) {

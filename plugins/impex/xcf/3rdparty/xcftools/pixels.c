@@ -329,8 +329,6 @@ copyRLEpixels(rgba *dest,unsigned npixels,uint32_t ptr,convertParams *params)
           ptr,params->bpp,npixels,base_pixel);
 #endif
 
-  int response;
-
   /* This algorithm depends on the indexed byte always being the first one */
   if( params->shift[0] < -1 )
     base_pixel = 0 ;

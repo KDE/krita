@@ -56,6 +56,7 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0026-Fetch-mapped-screen-size-from-the-Wintab-driver.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0027-Switch-stylus-pointer-type-when-the-tablet-is-in-the.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0028-Fix-updating-tablet-pressure-resolution-on-every-pro.patch 
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0050-Fix-using-tablet-on-QML-widgets.patch
             )
     endif()
     set(ext_qt_PATCH_COMMAND ${ext_qt_PATCH_COMMAND}

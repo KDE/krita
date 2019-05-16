@@ -183,6 +183,8 @@ public Q_SLOTS:
     void convertNode(const QString &nodeType);
     void nodesUpdated();
     void nodeProperties(KisNodeSP node);
+    /// pop up a window for changing the source of the selected Clone Layers
+    void changeCloneSource();
     void nodeOpacityChanged(qreal opacity);
     void nodeCompositeOpChanged(const KoCompositeOp* op);
     void duplicateActiveNode();

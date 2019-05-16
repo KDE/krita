@@ -766,6 +766,11 @@ void KisNodeManager::nodeProperties(KisNodeSP node)
     }
 }
 
+void KisNodeManager::changeCloneSource()
+{
+    m_d->layerManager.changeCloneSource();
+}
+
 qint32 KisNodeManager::convertOpacityToInt(qreal opacity)
 {
     /**

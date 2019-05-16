@@ -976,10 +976,12 @@ void NodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &opti
         const QRect iconsRectR    = iconsRect(option, index);
         const int height = 5;
         const QRect rc = QRect(
-            ((option.direction == Qt::RightToLeft) ? iconsRectR.bottomRight()
-                                                   : thumbnailRect.bottomRight()) - QPoint(0, height),
-            ((option.direction == Qt::RightToLeft) ? thumbnailRect.bottomLeft()
-                                                   : iconsRectR.bottomLeft()));
+            ((option.direction == Qt::RightToLeft) ?
+              iconsRectR.bottomRight() :
+              thumbnailRect.bottomRight()) - QPoint(0, height),
+            ((option.direction == Qt::RightToLeft) ?
+              thumbnailRect.bottomLeft() :
+              iconsRectR.bottomLeft()));
 
         p->save();
         {
@@ -987,6 +989,7 @@ void NodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &opti
             QStyle* style = QApplication::style();
             QStyleOptionProgressBar opt;
 
+            opt.rect = rc;
             opt.minimum = 0;
             opt.maximum = 100;
             opt.progress = value.toInt();

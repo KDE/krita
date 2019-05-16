@@ -106,7 +106,6 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
         errorStore << "Can't create a Directory store for a memory buffer!" << endl;
         return 0;
     case Zip:
-        qDebug() << KSharedConfig::openConfig()->group("").readEntry<bool>("UseZip64", false);
         if (appIdentification == "application/x-krita" && KSharedConfig::openConfig()->group("").readEntry<bool>("UseZip64", false)) {
             return new KoQuaZipStore(device, mode, appIdentification, writeMimetype);
         }

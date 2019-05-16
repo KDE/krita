@@ -64,5 +64,6 @@ rm -rf kde/build/* # clean build folders
      frameworks-android          \
      kwidgetsaddons kcompletion  \
      kguiaddons kitemmodels      \
-     kitemviews kwindowsystem
+     kitemviews kwindowsystem    \
+     karchive
 

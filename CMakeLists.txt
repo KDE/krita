@@ -277,6 +277,7 @@ if(ANDROID)
     set(KF5WindowSystem_DIR    ${KF5_LIBRARIES}/cmake/KF5WindowSystem)
     set(KF5ItemModels_DIR      ${KF5_LIBRARIES}/cmake/KF5ItemModels)
     set(KF5CoreAddons_DIR      ${KF5_LIBRARIES}/cmake/KF5CoreAddons)
+    set(KF5Archive_DIR         ${KF5_LIBRARIES}/cmake/KF5Archive)
 endif()
 
 
@@ -616,7 +617,8 @@ if (ANDROID)
                                     ${KF5_LIBRARIES}/libKF5I18n.so
                                     ${KF5_LIBRARIES}/libKF5CoreAddons.so
                                     ${KF5_LIBRARIES}/libKF5ConfigGui.so
-                                    ${KF5_LIBRARIES}/libKF5ConfigCore.so)
+                                    ${KF5_LIBRARIES}/libKF5ConfigCore.so
+                                    ${KF5_LIBRARIES}/libKF5Archive.so)
 endif()
 
 find_package(PNG REQUIRED)

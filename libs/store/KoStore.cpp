@@ -22,6 +22,7 @@
 #include "KoStore.h"
 #include "KoStore_p.h"
 
+#include "KoLegacyZipStore.h"
 #include "KoQuaZipStore.h"
 #include "KoDirectoryStore.h"
 
@@ -31,6 +32,11 @@
 
 #include <QUrl>
 #include <StoreDebug.h>
+
+#include <KConfig>
+#include <KSharedConfig>
+#include <KConfigGroup>
+
 
 #define DefaultFormat KoStore::Zip
 
@@ -64,7 +70,17 @@ KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArr
     }
     switch (backend) {
     case Zip:
-        return new KoQuaZipStore(fileName, mode, appIdentification, writeMimetype);
+        if (appIdentification == "application/x-krita" && KSharedConfig::openConfig()->group("").readEntry<bool>("UseZip64", false)) {
+            return new KoQuaZipStore(fileName, mode, appIdentification, writeMimetype);
+        }
+        else {
+            KoStore *store = new KoLegacyZipStore(fileName, mode, appIdentification, writeMimetype);
+            if (store->bad()) {
+                return new KoQuaZipStore(fileName, mode, appIdentification, writeMimetype);
+            }
+            return store;
+        }
+
     case Directory:
         return new KoDirectoryStore(fileName /* should be a dir name.... */, mode, writeMimetype);
     default:
@@ -90,7 +106,17 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
         errorStore << "Can't create a Directory store for a memory buffer!" << endl;
         return 0;
     case Zip:
-        return new KoQuaZipStore(device, mode, appIdentification, writeMimetype);
+        qDebug() << KSharedConfig::openConfig()->group("").readEntry<bool>("UseZip64", false);
+        if (appIdentification == "application/x-krita" && KSharedConfig::openConfig()->group("").readEntry<bool>("UseZip64", false)) {
+            return new KoQuaZipStore(device, mode, appIdentification, writeMimetype);
+        }
+        else {
+            KoStore *store = new KoLegacyZipStore(device, mode, appIdentification, writeMimetype);
+            if (store->bad()) {
+                return new KoQuaZipStore(device, mode, appIdentification, writeMimetype);
+            }
+            return store;
+        }
     default:
         warnStore << "Unsupported backend requested for KoStore : " << backend;
         return 0;

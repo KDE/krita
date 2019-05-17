@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>279</width>
+    <width>288</width>
     <height>352</height>
    </rect>
   </property>
@@ -100,6 +100,29 @@
          <width>18</width>
          <height>18</height>
         </size>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bnPasteReferenceImage">
+       <property name="toolTip">
+        <string>Paste Reference Image From System Clipboard</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="clipboard">
+         <normaloff>.</normaloff>.</iconset>
+       </property>
+       <property name="checkable">
+        <bool>false</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
        </property>
        <property name="flat">
         <bool>true</bool>

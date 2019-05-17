@@ -1,0 +1,11 @@
+--- a/src/plugins/platforms/android/qandroidplatformopenglwindow.cpp
++++ b/src/plugins/platforms/android/qandroidplatformopenglwindow.cpp
+@@ -176,6 +176,8 @@
+ void QAndroidPlatformOpenGLWindow::createEgl(EGLConfig config)
+ {
+     clearEgl();
++    if (config == nullptr)
++        return;
+     QJNIEnvironmentPrivate env;
+     m_nativeWindow = ANativeWindow_fromSurface(env, m_androidSurfaceObject.object());
+     m_androidSurfaceObject = QJNIObjectPrivate();

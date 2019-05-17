@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # See more: 3rdparty/README.md
 # Build external dependencies in $KRITA_ROOT/3rdparty
@@ -26,7 +26,6 @@ cmake $KRITA_ROOT/3rdparty \
     -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL \
     -DANDROID_ABI=$ANDROID_ABI \
     -DANDROID_STL=c++_static
-
 
 
 # You can comment these and build them individually

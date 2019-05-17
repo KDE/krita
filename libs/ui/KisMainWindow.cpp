@@ -683,6 +683,7 @@ void KisMainWindow::slotPreferences()
             }
 
         }
+        updateWindowMenu();
 
         d->viewManager->showHideScrollbars();
     }

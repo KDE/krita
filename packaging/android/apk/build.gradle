@@ -22,6 +22,7 @@ dependencies {
 
 ext {
     abi = System.getenv('ANDROID_ABI')
+    installPrefix = System.getenv('INSTALL_PREFIX')
 }
 
 task ("configure") {
@@ -30,7 +31,6 @@ task ("configure") {
             logger.error('ANDROID_ABI not specified using the default one instead: armeabi-7a')
         }
 
-        def installPrefix = System.getenv('INSTALL_PREFIX')
         if (installPrefix == null) {
             throw new GradleException('Please set INSTALL_PREFIX to the location where binaries are installed')
         }
@@ -45,13 +45,13 @@ task ("configure") {
 // copy libs(plugins) which start with krita*.so and rename
 // them to start with `lib_`
 task copyLibs(type: Copy) {
-    from "${System.getenv('INSTALL_PREFIX')}/lib"
+    from "$installPrefix/lib"
     into "libs/${abi ?: 'armeabi-v7a'}"
     rename ('^krita(.*).so$', 'lib_krita$1.so')
 }
 
 task copyAssets(type: Copy) {
-    from "${System.getenv('INSTALL_PREFIX')}/share/"
+    from "$installPrefix/share/"
     into 'assets/'
     include '**'
 }

@@ -4,11 +4,14 @@
 : ${CMAKE_ANDROID_NDK?"Android NDK path must be set"}
 : ${BUILD_ROOT? "Build root must be set"}
 : ${ANDROID_SDK_ROOT? "Android SDK path must be set"}
+: ${ANDROID_API_LEVEL?"Android API level is required"}
 
 if [[ -z $ANDROID_ABI ]]; then
     echo "ANDROID_ABI not specified, using the default one: armeabi-v7a"
     ANDROID_ABI=armeabi-v7a
 fi
+
+ANDROID_NATIVE_API_LEVEL=android-$ANDROID_API_LEVEL
 
 cmake $KRITA_ROOT/3rdparty \
     -DINSTALL_ROOT=$BUILD_ROOT/i \
@@ -16,6 +19,7 @@ cmake $KRITA_ROOT/3rdparty \
     -DCMAKE_INSTALL_PREFIX=$BUILD_ROOT/i \
     -DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake \
     -DANDROID_ABI=$ANDROID_ABI \
+    -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL \
     -DANDROID_STL=c++_static \
     -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT
 

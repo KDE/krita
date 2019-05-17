@@ -101,10 +101,6 @@ android {
         minSdkVersion 21
     }
 
-    dexOptions {
-        javaMaxHeapSize "4g"
-    }
-
     preBuild.dependsOn(copyLibs)
     preBuild.dependsOn(copyAssets)
 }

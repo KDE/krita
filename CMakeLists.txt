@@ -278,7 +278,6 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         ItemModels
         ItemViews
         WindowSystem
-        Archive
 )
 
 # KConfig deprecated authorizeKAction. In order to be warning free,

@@ -129,14 +129,6 @@ bool KisGroupLayer::allowAsChild(KisNodeSP node) const
         if (node->inherits("KisSelectionMask") && selectionMask()) {
             return false;
         }
-
-        KisImageSP image = this->image();
-
-        if (!image || !image->allowMasksOnRootNode()) {
-            if (node->inherits("KisMask")) {
-                return false;
-            }
-        }
     }
 
     return checkNodeRecursively(node);

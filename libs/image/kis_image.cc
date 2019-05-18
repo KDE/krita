@@ -234,7 +234,6 @@ public:
     bool blockLevelOfDetail = false;
 
     QPointF axesCenter;
-    bool allowMasksOnRootNode = false;
 
     bool tryCancelCurrentStrokeAsync();
 
@@ -293,7 +292,6 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
     m_d->xres = rhs.m_d->xres;
     m_d->yres = rhs.m_d->yres;
 
-    m_d->allowMasksOnRootNode = rhs.m_d->allowMasksOnRootNode;
 
     if (rhs.m_d->proofingConfig) {
         m_d->proofingConfig = toQShared(new KisProofingConfiguration(*rhs.m_d->proofingConfig));
@@ -1900,14 +1898,4 @@ QPointF KisImage::mirrorAxesCenter() const
 void KisImage::setMirrorAxesCenter(const QPointF &value) const
 {
     m_d->axesCenter = value;
-}
-
-void KisImage::setAllowMasksOnRootNode(bool value)
-{
-    m_d->allowMasksOnRootNode = value;
-}
-
-bool KisImage::allowMasksOnRootNode() const
-{
-    return m_d->allowMasksOnRootNode;
 }

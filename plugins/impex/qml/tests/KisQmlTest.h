@@ -16,42 +16,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KisBrushTest.h"
+#ifndef _KIS_QML_TEST_H_
+#define _KIS_QML_TEST_H_
 
+#include <QtTest>
 
-#include <QTest>
-#include <QCoreApplication>
-
-#include "filestest.h"
-
-#ifndef FILES_DATA_DIR
-#error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
-#endif
-
-
-const QString BrushMimetype = "image/x-gimp-brush";
-
-
-
-void KisBrushTest::testImportFromWriteonly()
+class KisQmlTest : public QObject
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), BrushMimetype);
-}
+    Q_OBJECT
+private Q_SLOTS:
 
+    void testExportToReadonly();
+};
 
-void KisBrushTest::testExportToReadonly()
-{
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), BrushMimetype);
-}
-
-
-void KisBrushTest::testImportIncorrectFormat()
-{
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), BrushMimetype);
-}
-
-
-
-KISTEST_MAIN(KisBrushTest)
-
+#endif // _KIS_QML_TEST_H_
 

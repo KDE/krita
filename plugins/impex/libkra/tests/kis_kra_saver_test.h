@@ -46,6 +46,8 @@ private Q_SLOTS:
     void testRoundTripShapeLayer();
     void testRoundTripShapeSelection();
 
+    void testExportToReadonly();
+
 };
 
 #endif

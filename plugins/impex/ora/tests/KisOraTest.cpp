@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KisBrushTest.h"
+#include "KisOraTest.h"
 
 
 #include <QTest>
@@ -29,29 +29,29 @@
 #endif
 
 
-const QString BrushMimetype = "image/x-gimp-brush";
+const QString OraMimetype = "image/openraster";
 
 
 
-void KisBrushTest::testImportFromWriteonly()
+void KisOraTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), OraMimetype);
 }
 
 
-void KisBrushTest::testExportToReadonly()
+void KisOraTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), OraMimetype);
 }
 
 
-void KisBrushTest::testImportIncorrectFormat()
+void KisOraTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), OraMimetype);
 }
 
 
 
-KISTEST_MAIN(KisBrushTest)
+KISTEST_MAIN(KisOraTest)
 
 

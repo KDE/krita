@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KisBrushTest.h"
+#include "KisQmlTest.h"
 
 
 #include <QTest>
@@ -29,29 +29,15 @@
 #endif
 
 
-const QString BrushMimetype = "image/x-gimp-brush";
+const QString QmlMimetype = "text/x-qml";
 
 
-
-void KisBrushTest::testImportFromWriteonly()
+void KisQmlTest::testExportToReadonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), QmlMimetype);
 }
 
 
-void KisBrushTest::testExportToReadonly()
-{
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), BrushMimetype);
-}
-
-
-void KisBrushTest::testImportIncorrectFormat()
-{
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), BrushMimetype);
-}
-
-
-
-KISTEST_MAIN(KisBrushTest)
+KISTEST_MAIN(KisQmlTest)
 
 

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KisBrushTest.h"
+#include "KisGifTest.h"
 
 
 #include <QTest>
@@ -29,29 +29,29 @@
 #endif
 
 
-const QString BrushMimetype = "image/x-gimp-brush";
+const QString GifMimetype = "image/gif";
 
 
 
-void KisBrushTest::testImportFromWriteonly()
+void KisGifTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), GifMimetype);
 }
 
 
-void KisBrushTest::testExportToReadonly()
+void KisGifTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), GifMimetype);
 }
 
 
-void KisBrushTest::testImportIncorrectFormat()
+void KisGifTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), GifMimetype);
 }
 
 
 
-KISTEST_MAIN(KisBrushTest)
+KISTEST_MAIN(KisGifTest)
 
 

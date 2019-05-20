@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KisBrushTest.h"
+#include "KisHeifTest.h"
 
 
 #include <QTest>
@@ -29,29 +29,29 @@
 #endif
 
 
-const QString BrushMimetype = "image/x-gimp-brush";
+const QString HeifMimetype = "image/heic";
 
 
 
-void KisBrushTest::testImportFromWriteonly()
+void KisHeifTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), HeifMimetype);
 }
 
 
-void KisBrushTest::testExportToReadonly()
+void KisHeifTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), HeifMimetype);
 }
 
 
-void KisBrushTest::testImportIncorrectFormat()
+void KisHeifTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), HeifMimetype);
 }
 
 
 
-KISTEST_MAIN(KisBrushTest)
+KISTEST_MAIN(KisHeifTest)
 
 

@@ -1,3 +1,5 @@
+add_subdirectory(tests)
+
 set(kritaqmlexport_SOURCES
     qml_converter.cc
     qml_export.cc

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KisBrushTest.h"
+#include "KisTgaTest.h"
 
 
 #include <QTest>
@@ -29,29 +29,29 @@
 #endif
 
 
-const QString BrushMimetype = "image/x-gimp-brush";
+const QString TgaMimetype = "image/x-gimp-brush";
 
 
 
-void KisBrushTest::testImportFromWriteonly()
+void KisTgaTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), TgaMimetype);
 }
 
 
-void KisBrushTest::testExportToReadonly()
+void KisTgaTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), TgaMimetype);
 }
 
 
-void KisBrushTest::testImportIncorrectFormat()
+void KisTgaTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), TgaMimetype);
 }
 
 
 
-KISTEST_MAIN(KisBrushTest)
+KISTEST_MAIN(KisTgaTest)
 
 

@@ -127,7 +127,7 @@ void prepareFile(QFileInfo sourceFileInfo, bool removePermissionToWrite, bool re
         ENTER_FUNCTION() << permissionsBefore;
     } else {
         QFile file(sourceFileInfo.absoluteFilePath());
-        bool opened = file.open(QIODevice::WriteOnly);
+        bool opened = file.open(QIODevice::ReadWrite);
         if (!opened) {
             qDebug() << "The file cannot be opened/created: " << file.error() << file.errorString();
         }

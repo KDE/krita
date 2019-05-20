@@ -654,6 +654,8 @@ endif()
 if (ANDROID)
     set (TIFF_LIBRARY           ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libtiff.so)
     set (TIFF_INCLUDE_DIR       ${CMAKE_CURRENT_BINARY_DIR}/i/include})
+    set (FFTW3_LIBRARY          ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libfftw3.so)
+    set (FFTW3_INCLUDE_DIR      ${CMAKE_CURRENT_BINARY_DIR}/i/)
 endif()
 
 
@@ -725,6 +727,9 @@ set_package_properties(FFTW3 PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita for fast convolution operators and some G'Mic features")
 macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+if (FFTW3_FOUND)
+    list (APPEND ANDROID_EXTRA_LIBS ${FFTW3_LIBRARY})
+endif()
 
 find_package(OCIO)
 set_package_properties(OCIO PROPERTIES

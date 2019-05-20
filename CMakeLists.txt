@@ -651,6 +651,11 @@ endif()
 ############################
 ###########################
 
+if (ANDROID)
+    set (TIFF_LIBRARY           ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libtiff.so)
+    set (TIFF_INCLUDE_DIR       ${CMAKE_CURRENT_BINARY_DIR}/i/include})
+endif()
+
 
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES
@@ -680,6 +685,9 @@ set_package_properties(TIFF PROPERTIES
     URL "http://www.remotesensing.org/libtiff"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita TIFF filter")
+if (TIFF_FOUND)
+    list (APPEND ANDROID_EXTRA_LIBS ${TIFF_LIBRARY})
+endif()
 
 find_package(JPEG)
 set_package_properties(JPEG PROPERTIES

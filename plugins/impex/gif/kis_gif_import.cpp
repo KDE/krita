@@ -37,6 +37,7 @@
 #include <kis_node.h>
 #include <kis_group_layer.h>
 #include <KisDocument.h>
+#include <KisImportExportAdditionalChecks.h>
 
 #include "qgiflibhandler.h"
 
@@ -58,16 +59,23 @@ KisImportExportErrorCode KisGIFImport::convert(KisDocument *document, QIODevice 
     QImage img;
     bool result = false;
     QGIFLibHandler handler;
+
+
     handler.setDevice(io);
+
+    if (!io->isReadable()) {
+        return ImportExportCodes::NoAccessToRead;
+    }
 
     if (handler.canRead()) {
         result = handler.read(&img);
     } else {
-        return ImportExportCodes::NoAccessToRead;
+        // handler.canRead() checks for the flag in the file; if it can't read it, maybe the format is incorrect
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     if (result == false) {
-        return ImportExportCodes::ErrorWhileReading;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();

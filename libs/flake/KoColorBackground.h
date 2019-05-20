@@ -61,8 +61,8 @@ public:
 protected:
     KoColorBackground(KoShapeBackgroundPrivate &dd);
 private:
-    Q_DECLARE_PRIVATE(KoColorBackground)
-    Q_DISABLE_COPY(KoColorBackground)
+    // Q_DECLARE_PRIVATE(KoColorBackground)
+    // Q_DISABLE_COPY(KoColorBackground)
 };
 
 #endif // KOCOLORBACKGROUND_H

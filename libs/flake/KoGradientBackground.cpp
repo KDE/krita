@@ -46,7 +46,7 @@ public:
 KoGradientBackground::KoGradientBackground(QGradient * gradient, const QTransform &matrix)
     : KoShapeBackground(*(new KoGradientBackgroundPrivate()))
 {
-    Q_D(KoGradientBackground);
+    SHARED_D(KoGradientBackground);
     d->gradient = gradient;
     d->matrix = matrix;
     Q_ASSERT(d->gradient);
@@ -55,7 +55,7 @@ KoGradientBackground::KoGradientBackground(QGradient * gradient, const QTransfor
 KoGradientBackground::KoGradientBackground(const QGradient & gradient, const QTransform &matrix)
     : KoShapeBackground(*(new KoGradientBackgroundPrivate()))
 {
-    Q_D(KoGradientBackground);
+    SHARED_D(KoGradientBackground);
     d->gradient = KoFlake::cloneGradient(&gradient);
     d->matrix = matrix;
     Q_ASSERT(d->gradient);
@@ -63,13 +63,13 @@ KoGradientBackground::KoGradientBackground(const QGradient & gradient, const QTr
 
 KoGradientBackground::~KoGradientBackground()
 {
-    Q_D(KoGradientBackground);
+    SHARED_D(KoGradientBackground);
     delete d->gradient;
 }
 
 bool KoGradientBackground::compareTo(const KoShapeBackground *other) const
 {
-    Q_D(const KoGradientBackground);
+    CONST_SHARED_D(KoGradientBackground);
     const KoGradientBackground *otherGradient = dynamic_cast<const KoGradientBackground*>(other);
 
     return otherGradient &&
@@ -79,19 +79,19 @@ bool KoGradientBackground::compareTo(const KoShapeBackground *other) const
 
 void KoGradientBackground::setTransform(const QTransform &matrix)
 {
-    Q_D(KoGradientBackground);
+    SHARED_D(KoGradientBackground);
     d->matrix = matrix;
 }
 
 QTransform KoGradientBackground::transform() const
 {
-    Q_D(const KoGradientBackground);
+    CONST_SHARED_D(KoGradientBackground);
     return d->matrix;
 }
 
 void KoGradientBackground::setGradient(const QGradient &gradient)
 {
-    Q_D(KoGradientBackground);
+    SHARED_D(KoGradientBackground);
     delete d->gradient;
 
     d->gradient = KoFlake::cloneGradient(&gradient);
@@ -100,13 +100,13 @@ void KoGradientBackground::setGradient(const QGradient &gradient)
 
 const QGradient * KoGradientBackground::gradient() const
 {
-    Q_D(const KoGradientBackground);
+    CONST_SHARED_D(KoGradientBackground);
     return d->gradient;
 }
 
 void KoGradientBackground::paint(QPainter &painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
 {
-    Q_D(const KoGradientBackground);
+    CONST_SHARED_D(KoGradientBackground);
     if (!d->gradient) return;
 
     if (d->gradient->coordinateMode() == QGradient::ObjectBoundingMode) {
@@ -147,7 +147,7 @@ void KoGradientBackground::paint(QPainter &painter, const KoViewConverter &/*con
 
 void KoGradientBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
-    Q_D(KoGradientBackground);
+    SHARED_D(KoGradientBackground);
     if (!d->gradient) return;
     QBrush brush(*d->gradient);
     brush.setTransform(d->matrix);
@@ -156,7 +156,7 @@ void KoGradientBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &co
 
 bool KoGradientBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize)
 {
-    Q_D(KoGradientBackground);
+    SHARED_D(KoGradientBackground);
     KoStyleStack &styleStack = context.styleStack();
     if (! styleStack.hasProperty(KoXmlNS::draw, "fill"))
         return false;

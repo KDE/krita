@@ -84,7 +84,7 @@ bool KoOdfGradientBackground::compareTo(const KoShapeBackground *other) const
 
 bool KoOdfGradientBackground::loadOdf(const KoXmlElement& e)
 {
-    Q_D(KoOdfGradientBackground);
+    SHARED_D(KoOdfGradientBackground);
     d->style = e.attributeNS(KoXmlNS::draw, "style", QString());
     //TODO: support ellipsoid here too
     if ((d->style != "rectangular") && (d->style != "square")) {
@@ -109,7 +109,7 @@ bool KoOdfGradientBackground::loadOdf(const KoXmlElement& e)
 
 void KoOdfGradientBackground::saveOdf(KoGenStyle& styleFill, KoGenStyles& mainStyles) const
 {
-    Q_D(const KoOdfGradientBackground);
+    CONST_SHARED_D(KoOdfGradientBackground);
 
     KoGenStyle::Type type = styleFill.type();
     KoGenStyle::PropertyType propertyType = (type == KoGenStyle::GraphicStyle || type == KoGenStyle::GraphicAutoStyle ||
@@ -139,7 +139,7 @@ void KoOdfGradientBackground::saveOdf(KoGenStyle& styleFill, KoGenStyles& mainSt
 
 void KoOdfGradientBackground::paint(QPainter& painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath& fillPath) const
 {
-    Q_D(const KoOdfGradientBackground);
+    CONST_SHARED_D(KoOdfGradientBackground);
 
     QImage buffer;
 
@@ -169,7 +169,7 @@ void KoOdfGradientBackground::fillStyle(KoGenStyle& style, KoShapeSavingContext&
 bool KoOdfGradientBackground::loadStyle(KoOdfLoadingContext& context, const QSizeF& shapeSize)
 {
     Q_UNUSED(shapeSize);
-    Q_D(KoOdfGradientBackground);
+    SHARED_D(KoOdfGradientBackground);
 
     KoStyleStack &styleStack = context.styleStack();
     if (!styleStack.hasProperty(KoXmlNS::draw, "fill")) {
@@ -197,7 +197,7 @@ bool KoOdfGradientBackground::loadStyle(KoOdfLoadingContext& context, const QSiz
 
 void KoOdfGradientBackground::renderSquareGradient(QImage& buffer) const
 {
-    Q_D(const KoOdfGradientBackground);
+    CONST_SHARED_D(KoOdfGradientBackground);
     buffer.fill(d->startColor.rgba());
 
     QPainter painter(&buffer);
@@ -261,7 +261,7 @@ void KoOdfGradientBackground::renderSquareGradient(QImage& buffer) const
 
 void KoOdfGradientBackground::renderRectangleGradient(QImage& buffer) const
 {
-    Q_D(const KoOdfGradientBackground);
+    CONST_SHARED_D(KoOdfGradientBackground);
     buffer.fill(d->startColor.rgba());
 
     QPainter painter(&buffer);
@@ -377,7 +377,7 @@ void KoOdfGradientBackground::renderRectangleGradient(QImage& buffer) const
 
 void KoOdfGradientBackground::debug() const
 {
-    Q_D(const KoOdfGradientBackground);
+    CONST_SHARED_D(KoOdfGradientBackground);
     debugFlake << "cx,cy: "<< d->cx << d->cy;
     debugFlake << "style" << d->style;
     debugFlake << "colors" << d->startColor << d->endColor;

@@ -23,6 +23,7 @@
 #include "kritaflake_export.h"
 
 #include <QtGlobal>
+#include <QSharedDataPointer>
 
 class QSizeF;
 class QPainter;
@@ -33,6 +34,9 @@ class KoOdfLoadingContext;
 class KoShapeBackgroundPrivate;
 class KoShapePaintingContext;
 class KoViewConverter;
+
+#define CONST_SHARED_D(Class) const Class##Private *d = dynamic_cast<const Class##Private *>(d_ptr.constData())
+#define SHARED_D(Class) Class##Private *d = dynamic_cast<Class##Private *>(d_ptr.data())
 
 /**
  * This is the base class for shape backgrounds.
@@ -63,11 +67,13 @@ public:
     /// load background from odf styles
     virtual bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) = 0;
 
+    virtual explicit operator bool() const { return true; }
+
 protected:
     KoShapeBackground(KoShapeBackgroundPrivate &);
-    KoShapeBackgroundPrivate *d_ptr;
+    QSharedDataPointer<KoShapeBackgroundPrivate> d_ptr;
 private:
-    Q_DECLARE_PRIVATE(KoShapeBackground)
+    // Q_DECLARE_PRIVATE(KoShapeBackground)
 
 
 };

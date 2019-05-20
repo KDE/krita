@@ -41,7 +41,7 @@ KoColorBackground::KoColorBackground(KoShapeBackgroundPrivate &dd)
 KoColorBackground::KoColorBackground(const QColor &color, Qt::BrushStyle style)
 : KoShapeBackground(*(new KoColorBackgroundPrivate()))
 {
-    Q_D(KoColorBackground);
+    SHARED_D(KoColorBackground);
     if (style < Qt::SolidPattern || style >= Qt::LinearGradientPattern)
         style = Qt::SolidPattern;
     d->style = style;
@@ -54,7 +54,7 @@ KoColorBackground::~KoColorBackground()
 
 bool KoColorBackground::compareTo(const KoShapeBackground *other) const
 {
-    Q_D(const KoColorBackground);
+    CONST_SHARED_D(KoColorBackground);
 
     const KoColorBackground *bg = dynamic_cast<const KoColorBackground*>(other);
     return bg && bg->color() == d->color;
@@ -62,25 +62,25 @@ bool KoColorBackground::compareTo(const KoShapeBackground *other) const
 
 QColor KoColorBackground::color() const
 {
-    Q_D(const KoColorBackground);
+    CONST_SHARED_D(KoColorBackground);
     return d->color;
 }
 
 void KoColorBackground::setColor(const QColor &color)
 {
-    Q_D(KoColorBackground);
+    SHARED_D(KoColorBackground);
     d->color = color;
 }
 
 Qt::BrushStyle KoColorBackground::style() const
 {
-    Q_D(const KoColorBackground);
+    CONST_SHARED_D(KoColorBackground);
     return d->style;
 }
 
 QBrush KoColorBackground::brush() const
 {
-    Q_D(const KoColorBackground);
+    CONST_SHARED_D(KoColorBackground);
     return QBrush(d->color, d->style);
 }
 
@@ -92,13 +92,13 @@ void KoColorBackground::paint(QPainter &painter, const KoViewConverter &/*conver
 
 void KoColorBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
-    Q_D(KoColorBackground);
+    SHARED_D(KoColorBackground);
     KoOdfGraphicStyles::saveOdfFillStyle(style, context.mainStyles(), QBrush(d->color, d->style));
 }
 
 bool KoColorBackground::loadStyle(KoOdfLoadingContext & context, const QSizeF &)
 {
-    Q_D(KoColorBackground);
+    SHARED_D(KoColorBackground);
     KoStyleStack &styleStack = context.styleStack();
     if (! styleStack.hasProperty(KoXmlNS::draw, "fill"))
         return false;

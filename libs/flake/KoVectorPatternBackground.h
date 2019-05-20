@@ -61,7 +61,7 @@ public:
     bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) override;
 
 private:
-    Q_DECLARE_PRIVATE(KoVectorPatternBackground)
+    // Q_DECLARE_PRIVATE(KoVectorPatternBackground)
     Q_DISABLE_COPY(KoVectorPatternBackground)
 };
 

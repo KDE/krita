@@ -20,7 +20,9 @@
 #ifndef KoShapeBackgroundPrivate_H
 #define KoShapeBackgroundPrivate_H
 
-class KoShapeBackgroundPrivate
+#include <QSharedData>
+
+class KoShapeBackgroundPrivate : public QSharedData
 {
 public:
     KoShapeBackgroundPrivate();

@@ -60,7 +60,7 @@ public:
     constexpr static KisSharedDescendent &of(U x) { return *(new KisSharedDescendent<T>(std::move(x))); }
 
     template<typename U>
-    constexpr static KisSharedDescendent *pointerOf(U x) { return *(new KisSharedDescendent<T>(std::move(x))); }
+    constexpr static KisSharedDescendent *pointerOf(U x) { return new KisSharedDescendent<T>(std::move(x)); }
 };
 
 

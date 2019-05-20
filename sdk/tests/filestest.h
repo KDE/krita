@@ -177,11 +177,13 @@ void testImportFromWriteonly(const QString& _dirname, QString mimetype = "")
     KisImportExportErrorCode status = manager.importDocument(sourceFileInfo.absoluteFilePath(), mimetype);
     qDebug() << "import result = " << status;
 
-    QVERIFY(!status.isOk());
+    QString failMessage = "";
+    bool fail = false;
 
     if (status == ImportExportCodes::FileFormatIncorrect) {
         qDebug() << "Make sure you set the correct mimetype in the test case.";
-        QFAIL("Incorrect status.");
+        failMessage = "Incorrect status.";
+        fail = true;
     }
 
     qApp->processEvents();
@@ -193,6 +195,11 @@ void testImportFromWriteonly(const QString& _dirname, QString mimetype = "")
     delete doc;
 
     restorePermissionsToReadAndWrite(sourceFileInfo);
+
+    QVERIFY(!status.isOk());
+    if (fail) {
+        QFAIL(failMessage.toUtf8());
+    }
 
 }
 
@@ -209,19 +216,23 @@ void testExportToReadonly(const QString& _dirname, QString mimetype = "")
     KisImportExportManager manager(doc);
     doc->setFileBatchMode(true);
 
+    KisImportExportErrorCode status = ImportExportCodes::OK;
+    QString failMessage = "";
+    bool fail = false;
+
     {
     MaskParent p;
     ENTER_FUNCTION() << doc->image();
 
     doc->setCurrentImage(p.image);
 
-    KisImportExportErrorCode status = manager.exportDocument(sourceFileInfo.absoluteFilePath(), sourceFileInfo.absoluteFilePath(), mimetype.toUtf8());
+    status = manager.exportDocument(sourceFileInfo.absoluteFilePath(), sourceFileInfo.absoluteFilePath(), mimetype.toUtf8());
     qDebug() << "export result = " << status;
 
-    QVERIFY(!status.isOk());
     if (status == ImportExportCodes::FileFormatIncorrect) {
         qDebug() << "Make sure you set the correct mimetype in the test case.";
-        QFAIL("Incorrect status.");
+        failMessage = "Incorrect status.";
+        fail = true;
     }
 
 
@@ -235,6 +246,11 @@ void testExportToReadonly(const QString& _dirname, QString mimetype = "")
     delete doc;
 
     restorePermissionsToReadAndWrite(sourceFileInfo);
+
+    QVERIFY(!status.isOk());
+    if (fail) {
+        QFAIL(failMessage.toUtf8());
+    }
 }
 
 
@@ -254,9 +270,6 @@ void testImportIncorrectFormat(const QString& _dirname, QString mimetype = "")
     KisImportExportErrorCode status = manager.importDocument(sourceFileInfo.absoluteFilePath(), mimetype);
     qDebug() << "import result = " << status;
 
-    QVERIFY(!status.isOk());
-    QVERIFY(status == KisImportExportErrorCode(ImportExportCodes::FileFormatIncorrect));
-
 
     qApp->processEvents();
 
@@ -265,6 +278,9 @@ void testImportIncorrectFormat(const QString& _dirname, QString mimetype = "")
     }
 
     delete doc;
+
+    QVERIFY(!status.isOk());
+    QVERIFY(status == KisImportExportErrorCode(ImportExportCodes::FileFormatIncorrect));
 
 }
 

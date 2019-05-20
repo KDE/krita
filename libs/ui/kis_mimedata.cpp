@@ -101,6 +101,7 @@ KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
     }
 
     KisImageSP image = new KisImage(0, rc.width(), rc.height(), nodes.first()->colorSpace(), nodes.first()->name());
+    image->setAllowMasksOnRootNode(true);
 
     {
         KisImageBarrierLockerWithFeedbackAllowNull locker(srcImage);

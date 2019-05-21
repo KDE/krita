@@ -788,7 +788,7 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 {
     TabletToolMap::iterator toolData = m_tabletToolMap.find(inputDevice);
 
-    KisUsageLogger::log(QString("Changing input device to %1, %2").arg(inputDevice.device().arg(inputDevice.uniqueTabletId())));
+    KisUsageLogger::log(QString("Changing input device to %1, %2").arg(inputDevice.device()).arg(inputDevice.uniqueTabletId()));
 
     //qDebug() << "slotInputDeviceChanged()" << inputDevice.device() << inputDevice.uniqueTabletId();
 

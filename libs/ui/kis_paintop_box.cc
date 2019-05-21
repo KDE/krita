@@ -82,6 +82,8 @@
 #include "kis_action_manager.h"
 #include "kis_highlighted_button.h"
 
+#include <KisUsageLogger.h>
+
 typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
 
@@ -785,6 +787,8 @@ void KisPaintopBox::slotSetPaintop(const QString& paintOpId)
 void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 {
     TabletToolMap::iterator toolData = m_tabletToolMap.find(inputDevice);
+
+    KisUsageLogger::log(QString("Changing input device to %1, %2").arg(inputDevice.device().arg(inputDevice.uniqueTabletId())));
 
     //qDebug() << "slotInputDeviceChanged()" << inputDevice.device() << inputDevice.uniqueTabletId();
 

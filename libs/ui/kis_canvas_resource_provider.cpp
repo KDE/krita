@@ -43,6 +43,8 @@
 #include "KisViewManager.h"
 #include "canvas/kis_canvas2.h"
 
+#include <KisUsageLogger.h>
+
 KisCanvasResourceProvider::KisCanvasResourceProvider(KisViewManager * view)
     : m_view(view)
 {
@@ -176,6 +178,8 @@ void KisCanvasResourceProvider::setPaintOpPreset(const KisPaintOpPresetSP preset
     Q_ASSERT(preset->settings());
     if (!preset) return;
 
+    KisUsageLogger::log("setPaintOpPreset:" + preset->filename());
+
     dbgUI << "setPaintOpPreset" << preset->paintOp();
 
     QVariant v;
@@ -195,6 +199,8 @@ void KisCanvasResourceProvider::setPreviousPaintOpPreset(const KisPaintOpPresetS
     Q_ASSERT(!preset->paintOp().id().isEmpty());
     Q_ASSERT(preset->settings());
     if (!preset) return;
+
+    KisUsageLogger::log("setPreviousPaintOpPreset:" + preset->filename());
 
     dbgUI << "setPreviousPaintOpPreset" << preset->paintOp();
 

@@ -658,6 +658,8 @@ if (ANDROID)
     set (FFTW3_INCLUDE_DIR      ${CMAKE_CURRENT_BINARY_DIR}/i/)
     set (GIF_LIBRARY            ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libgiflib.so)
     set (GIF_INCLUDE_DIR        ${CMAKE_CURRENT_BINARY_DIR}/i/include)
+    set (JPEG_LIBRARY           ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libjpeg.so)
+    set (JPEG_INCLUDE_DIR       ${CMAKE_CURRENT_BINARY_DIR}/i/include)
 endif()
 
 
@@ -699,6 +701,9 @@ set_package_properties(JPEG PROPERTIES
     URL "http://www.libjpeg-turbo.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita JPEG filter")
+if (JPEG_FOUND)
+    list (APPEND ANDROID_EXTRA_LIBS ${JPEG_LIBRARY})
+endif()
 
 find_package(GIF)
 set_package_properties(GIF PROPERTIES

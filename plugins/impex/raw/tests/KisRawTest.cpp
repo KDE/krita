@@ -39,12 +39,6 @@ void KisRawTest::testImportFromWriteonly()
 }
 
 
-void KisRawTest::testExportToReadonly()
-{
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), RawMimetype);
-}
-
-
 void KisRawTest::testImportIncorrectFormat()
 {
     TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), RawMimetype);

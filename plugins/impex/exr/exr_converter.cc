@@ -908,13 +908,14 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
 
     } catch (std::exception &e) {
         dbgFile << "Error while reading from the exr file: " << e.what();
+
         KisImportExportAdditionalChecks checks;
         if (!checks.doesFileExist(filename)) {
             return ImportExportCodes::FileNotExist;
         } else if(!checks.isFileReadable(filename)) {
             return ImportExportCodes::NoAccessToRead;
         } else {
-            return ImportExportCodes::Failure;
+            return ImportExportCodes::ErrorWhileReading;
         }
     }
 
@@ -1387,7 +1388,7 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisGro
             if (!checks.isFileWriteable(QFile::encodeName(filename))) {
                 return ImportExportCodes::NoAccessToWrite;
             }
-            return ImportExportCodes::Failure;
+            return ImportExportCodes::ErrorWhileWriting;
         }
 
     }

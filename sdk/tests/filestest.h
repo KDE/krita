@@ -286,7 +286,8 @@ void testImportIncorrectFormat(const QString& _dirname, QString mimetype = "")
     delete doc;
 
     QVERIFY(!status.isOk());
-    QVERIFY(status == KisImportExportErrorCode(ImportExportCodes::FileFormatIncorrect));
+    QVERIFY(status == KisImportExportErrorCode(ImportExportCodes::FileFormatIncorrect)
+            || status == KisImportExportErrorCode(ImportExportCodes::ErrorWhileReading)); // in case the filter doesn't know if it can't read or just parse
 
 }
 

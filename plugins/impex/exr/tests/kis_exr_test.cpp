@@ -45,7 +45,7 @@ void KisExrTest::testImportFromWriteonly()
 
 void KisExrTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), ExrMimetype);
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), ExrMimetype, true);
 }
 
 void KisExrTest::testImportIncorrectFormat()

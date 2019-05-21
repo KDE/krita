@@ -27,7 +27,6 @@ class KisRawTest : public QObject
 private Q_SLOTS:
 
     void testImportFromWriteonly();
-    void testExportToReadonly();
     void testImportIncorrectFormat();
 };
 

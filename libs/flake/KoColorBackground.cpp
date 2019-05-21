@@ -20,6 +20,7 @@
 #include "KoColorBackground.h"
 #include "KoColorBackground_p.h"
 #include "KoShapeSavingContext.h"
+#include "KisSharedDescendent.h"
 #include <KoOdfGraphicStyles.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
@@ -29,17 +30,17 @@
 #include <QPainter>
 
 KoColorBackground::KoColorBackground()
-: KoShapeBackground(*(new KoColorBackgroundPrivate()))
+    : KoShapeBackground(KisSharedDescendent<KoShapeBackgroundPrivate>::of(KoColorBackgroundPrivate()))
 {
 }
 
-KoColorBackground::KoColorBackground(KoShapeBackgroundPrivate &dd)
-: KoShapeBackground(dd)
+KoColorBackground::KoColorBackground(KisSharedDescendent<KoShapeBackgroundPrivate> &dd)
+    : KoShapeBackground(dd)
 {
 }
 
 KoColorBackground::KoColorBackground(const QColor &color, Qt::BrushStyle style)
-: KoShapeBackground(*(new KoColorBackgroundPrivate()))
+    : KoShapeBackground(KisSharedDescendent<KoShapeBackgroundPrivate>::of(KoColorBackgroundPrivate()))
 {
     SHARED_D(KoColorBackground);
     if (style < Qt::SolidPattern || style >= Qt::LinearGradientPattern)

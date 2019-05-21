@@ -25,6 +25,8 @@
 #include <QtGlobal>
 #include <QSharedDataPointer>
 
+#include <KisSharedDescendent.h>
+
 class QSizeF;
 class QPainter;
 class QPainterPath;
@@ -34,9 +36,6 @@ class KoOdfLoadingContext;
 class KoShapeBackgroundPrivate;
 class KoShapePaintingContext;
 class KoViewConverter;
-
-#define CONST_SHARED_D(Class) const Class##Private *d = dynamic_cast<const Class##Private *>(d_ptr.constData())
-#define SHARED_D(Class) Class##Private *d = dynamic_cast<Class##Private *>(d_ptr.data())
 
 /**
  * This is the base class for shape backgrounds.
@@ -70,12 +69,10 @@ public:
     virtual explicit operator bool() const { return true; }
 
 protected:
-    KoShapeBackground(KoShapeBackgroundPrivate &);
-    QSharedDataPointer<KoShapeBackgroundPrivate> d_ptr;
+    KoShapeBackground(KisSharedDescendent<KoShapeBackgroundPrivate> &);
+    QSharedDataPointer<KisSharedDescendent<KoShapeBackgroundPrivate> > d_ptr;
 private:
-    // Q_DECLARE_PRIVATE(KoShapeBackground)
-
-
+    SHARED_DECLARE_PRIVATE(KoShapeBackground)
 };
 
 #endif // KOSHAPEBACKGROUND_H

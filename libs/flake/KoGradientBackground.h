@@ -70,10 +70,8 @@ public:
     void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;
     /// reimplemented from KoShapeBackground
     bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) override;
-
 private:
-    // Q_DECLARE_PRIVATE(KoGradientBackground)
-    // Q_DISABLE_COPY(KoGradientBackground)
+    SHARED_DECLARE_PRIVATE(KoGradientBackground)
 };
 
 #endif // KOGRADIENTBACKGROUND_H

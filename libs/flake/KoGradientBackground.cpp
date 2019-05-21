@@ -44,7 +44,7 @@ public:
 };
 
 KoGradientBackground::KoGradientBackground(QGradient * gradient, const QTransform &matrix)
-    : KoShapeBackground(*(new KoGradientBackgroundPrivate()))
+    : KoShapeBackground(KisSharedDescendent<KoShapeBackgroundPrivate>::of(KoGradientBackgroundPrivate()))
 {
     SHARED_D(KoGradientBackground);
     d->gradient = gradient;
@@ -53,7 +53,7 @@ KoGradientBackground::KoGradientBackground(QGradient * gradient, const QTransfor
 }
 
 KoGradientBackground::KoGradientBackground(const QGradient & gradient, const QTransform &matrix)
-    : KoShapeBackground(*(new KoGradientBackgroundPrivate()))
+    : KoShapeBackground(KisSharedDescendent<KoShapeBackgroundPrivate>::of(KoGradientBackgroundPrivate()))
 {
     SHARED_D(KoGradientBackground);
     d->gradient = KoFlake::cloneGradient(&gradient);

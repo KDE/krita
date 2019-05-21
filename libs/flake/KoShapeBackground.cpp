@@ -29,21 +29,20 @@ KoShapeBackgroundPrivate::~KoShapeBackgroundPrivate()
 {
 }
 
-KoShapeBackground::KoShapeBackground(KoShapeBackgroundPrivate &dd)
-    :d_ptr(&dd)
+KoShapeBackground::KoShapeBackground(KisSharedDescendent<KoShapeBackgroundPrivate> &dd)
+    : d_ptr(&dd)
 {
 }
 
 
 
 KoShapeBackground::KoShapeBackground()
-    : d_ptr(new KoShapeBackgroundPrivate())
+    : d_ptr(KisSharedDescendent<KoShapeBackgroundPrivate>::pointerOf(KoShapeBackgroundPrivate()))
 {
 }
 
 KoShapeBackground::~KoShapeBackground()
 {
-    delete d_ptr;
 }
 
 bool KoShapeBackground::hasTransparency() const

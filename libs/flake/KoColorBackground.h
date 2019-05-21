@@ -59,10 +59,9 @@ public:
     // reimplemented from KoShapeBackground
     bool loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize) override;
 protected:
-    KoColorBackground(KoShapeBackgroundPrivate &dd);
+    KoColorBackground(KisSharedDescendent<KoShapeBackgroundPrivate> &dd);
 private:
-    // Q_DECLARE_PRIVATE(KoColorBackground)
-    // Q_DISABLE_COPY(KoColorBackground)
+    SHARED_DECLARE_PRIVATE(KoColorBackground)
 };
 
 #endif // KOCOLORBACKGROUND_H

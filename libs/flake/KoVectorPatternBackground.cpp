@@ -48,7 +48,7 @@ public:
 };
 
 KoVectorPatternBackground::KoVectorPatternBackground()
-    : KoShapeBackground(*(new KoVectorPatternBackgroundPrivate()))
+    : KoShapeBackground(KisSharedDescendent<KoShapeBackgroundPrivate>::of(KoVectorPatternBackgroundPrivate()))
 {
 }
 

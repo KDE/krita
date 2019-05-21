@@ -46,8 +46,12 @@
  * Replace all `Q_D()` macros that get const d-pointers with `CONST_SHARED_D(YourClass)`.
  */
 
-#define CONST_SHARED_D(Class) const Class##Private *const d = reinterpret_cast<const Class##Private *>(d_ptr.constData()->constData())
-#define SHARED_D(Class) Class##Private *const d = reinterpret_cast<Class##Private *>(d_ptr.data()->data())
+#define SHARED_DECLARE_PRIVATE(Class) \
+    inline const Class##Private *d_func() const { return reinterpret_cast<const Class##Private *>(d_ptr.constData()->constData()); } \
+    inline Class##Private *d_func() { return reinterpret_cast<Class##Private *>(d_ptr.data()->data()); } \
+    inline const Class##Private *const_d_func() const { return d_func(); }
+#define CONST_SHARED_D(Class) const Class##Private *const d = const_d_func()
+#define SHARED_D(Class) Class##Private *const d = d_func()
 
 template<typename T>
 class KisSharedDescendent : public KisDescendent<T>, public QSharedData

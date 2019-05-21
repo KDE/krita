@@ -51,8 +51,8 @@ public:
 private:
     QString saveHatchStyle(KoShapeSavingContext &context) const;
 
-    Q_DECLARE_PRIVATE(KoHatchBackground)
-    Q_DISABLE_COPY(KoHatchBackground)
+private:
+    SHARED_DECLARE_PRIVATE(KoHatchBackground)
 };
 
 #endif /* KOHATCHBACKGROUND_H */

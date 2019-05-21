@@ -54,13 +54,13 @@ public:
 };
 
 KoHatchBackground::KoHatchBackground()
-    : KoColorBackground(*(new KoHatchBackgroundPrivate()))
+    : KoColorBackground(KisSharedDescendent<KoShapeBackgroundPrivate>::of(KoHatchBackgroundPrivate()))
 {
 }
 
 void KoHatchBackground::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const
 {
-    Q_D(const KoHatchBackground);
+    CONST_SHARED_D(KoHatchBackground);
     if (d->color.isValid()) {
         // paint background color if set by using the color background
         KoColorBackground::paint(painter, converter, context, fillPath);
@@ -127,7 +127,7 @@ void KoHatchBackground::paint(QPainter &painter, const KoViewConverter &converte
 
 void KoHatchBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
-    Q_D(KoHatchBackground);
+    SHARED_D(KoHatchBackground);
 
     KoGenStyle::Type type = style.type();
     KoGenStyle::PropertyType propertyType = (type == KoGenStyle::GraphicStyle || type == KoGenStyle::GraphicAutoStyle ||
@@ -145,7 +145,7 @@ void KoHatchBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &conte
 
 QString KoHatchBackground::saveHatchStyle(KoShapeSavingContext &context) const
 {
-    Q_D(const KoHatchBackground);
+    CONST_SHARED_D(KoHatchBackground);
     KoGenStyle hatchStyle(KoGenStyle::HatchStyle /*no family name*/);
     hatchStyle.addAttribute("draw:display-name", d->name);
     hatchStyle.addAttribute("draw:color", d->lineColor.name());
@@ -172,7 +172,7 @@ QString KoHatchBackground::saveHatchStyle(KoShapeSavingContext &context) const
 bool KoHatchBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize)
 {
     // <draw:hatch draw:name="hatchStyle3" draw:color="#000000" draw:display-name="#000000 Vertical" draw:distance="0.102cm" draw:rotation="900" draw:style="single"/>
-    Q_D(KoHatchBackground);
+    SHARED_D(KoHatchBackground);
     Q_UNUSED(shapeSize);
 
     KoStyleStack &styleStack = context.styleStack();

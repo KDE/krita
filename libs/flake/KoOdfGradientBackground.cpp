@@ -65,7 +65,7 @@ public:
 
 
 KoOdfGradientBackground::KoOdfGradientBackground()
-    : KoShapeBackground(*(new KoOdfGradientBackgroundPrivate()))
+    : KoShapeBackground(KisSharedDescendent<KoShapeBackgroundPrivate>::of(KoOdfGradientBackgroundPrivate()))
 {
 
 }

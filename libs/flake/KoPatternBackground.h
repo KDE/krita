@@ -121,8 +121,7 @@ public:
     /// Returns the bounding rect of the pattern image based on the given fill size
     QRectF patternRectFromFillSize(const QSizeF &size);
 private:
-    // Q_DECLARE_PRIVATE(KoPatternBackground)
-    Q_DISABLE_COPY(KoPatternBackground)
+    SHARED_DECLARE_PRIVATE(KoPatternBackground)
 };
 
 #endif // KOPATTERNBACKGROUND_H

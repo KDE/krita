@@ -59,10 +59,8 @@ public:
     bool hasTransparency() const override;
     void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;
     bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) override;
-
 private:
-    // Q_DECLARE_PRIVATE(KoVectorPatternBackground)
-    Q_DISABLE_COPY(KoVectorPatternBackground)
+    SHARED_DECLARE_PRIVATE(KoVectorPatternBackground)
 };
 
 #endif // KOVECTORPATTERNBACKGROUND_H

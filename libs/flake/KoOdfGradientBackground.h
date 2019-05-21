@@ -57,10 +57,8 @@ private:
 
 private:
     void debug() const;
-
 private:
-    // Q_DECLARE_PRIVATE(KoOdfGradientBackground)
-    Q_DISABLE_COPY(KoOdfGradientBackground)
+    SHARED_DECLARE_PRIVATE(KoOdfGradientBackground)
 };
 
 #endif

@@ -133,7 +133,7 @@ public:
 
 
 KoPatternBackground::KoPatternBackground(KoImageCollection *imageCollection)
-        : KoShapeBackground(*(new KoPatternBackgroundPrivate()))
+    : KoShapeBackground(KisSharedDescendent<KoShapeBackgroundPrivate>::of(KoPatternBackgroundPrivate()))
 {
     SHARED_D(KoPatternBackground);
     d->imageCollection = imageCollection;

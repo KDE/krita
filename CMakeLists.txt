@@ -656,6 +656,8 @@ if (ANDROID)
     set (TIFF_INCLUDE_DIR       ${CMAKE_CURRENT_BINARY_DIR}/i/include})
     set (FFTW3_LIBRARY          ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libfftw3.so)
     set (FFTW3_INCLUDE_DIR      ${CMAKE_CURRENT_BINARY_DIR}/i/)
+    set (GIF_LIBRARY            ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libgiflib.so)
+    set (GIF_INCLUDE_DIR        ${CMAKE_CURRENT_BINARY_DIR}/i/include)
 endif()
 
 
@@ -704,6 +706,9 @@ set_package_properties(GIF PROPERTIES
     URL "http://giflib.sourceforge.net/"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita GIF filter")
+if (GIF_FOUND)
+    list (APPEND ANDROID_EXTRA_LIBS ${GIF_LIBRARY})
+endif()
 
 find_package(HEIF "1.3.0")
 set_package_properties(HEIF PROPERTIES

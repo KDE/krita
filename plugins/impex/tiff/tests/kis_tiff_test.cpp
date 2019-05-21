@@ -126,7 +126,7 @@ void KisTiffTest::testImportFromWriteonly()
 
 void KisTiffTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), TiffMimetype);
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), TiffMimetype, true);
 }
 
 

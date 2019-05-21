@@ -46,6 +46,8 @@
 #include "kis_buffer_stream.h"
 #include "kis_tiff_writer_visitor.h"
 
+#include <KisImportExportAdditionalChecks.h>
+
 #if TIFFLIB_VERSION < 20111221
 typedef size_t tmsize_t;
 #endif
@@ -233,6 +235,13 @@ KisImportExportErrorCode KisTIFFConverter::decode(const QString &filename)
     dbgFile << "Start decoding TIFF File";
     // Opent the TIFF file
     TIFF *image = 0;
+
+    if (!KisImportExportAdditionalChecks().doesFileExist(filename)) {
+        return ImportExportCodes::FileNotExist;
+    }
+    if (!KisImportExportAdditionalChecks().isFileReadable(filename)) {
+        return ImportExportCodes::NoAccessToRead;
+    }
 
     if ((image = TIFFOpen(QFile::encodeName(filename), "r")) == 0) {
         dbgFile << "Could not open the file, either it does not exist, either it is not a TIFF :" << filename;
@@ -708,20 +717,35 @@ KisImportExportErrorCode KisTIFFConverter::buildFile(const QString &filename, Ki
     KoDocumentInfo * info = m_doc->documentInfo();
     QString title = info->aboutInfo("title");
     if (!title.isEmpty()) {
-        TIFFSetField(image, TIFFTAG_DOCUMENTNAME, title.toLatin1().constData());
+        if (!TIFFSetField(image, TIFFTAG_DOCUMENTNAME, title.toLatin1().constData())) {
+            TIFFClose(image);
+            return ImportExportCodes::ErrorWhileWriting;
+        }
     }
     QString abstract = info->aboutInfo("description");
     if (!abstract.isEmpty()) {
-        TIFFSetField(image, TIFFTAG_IMAGEDESCRIPTION, abstract.toLatin1().constData());
+        if (!TIFFSetField(image, TIFFTAG_IMAGEDESCRIPTION, abstract.toLatin1().constData())) {
+            TIFFClose(image);
+            return ImportExportCodes::ErrorWhileWriting;
+        }
     }
     QString author = info->authorInfo("creator");
     if (!author.isEmpty()) {
-        TIFFSetField(image, TIFFTAG_ARTIST, author.toLatin1().constData());
+        if(!TIFFSetField(image, TIFFTAG_ARTIST, author.toLatin1().constData())) {
+            TIFFClose(image);
+            return ImportExportCodes::ErrorWhileWriting;
+        }
     }
 
     dbgFile << "xres: " << INCH_TO_POINT(kisimage->xRes()) << " yres: " << INCH_TO_POINT(kisimage->yRes());
-    TIFFSetField(image, TIFFTAG_XRESOLUTION, INCH_TO_POINT(kisimage->xRes())); // It is the "invert" macro because we convert from pointer-per-inchs to points
-    TIFFSetField(image, TIFFTAG_YRESOLUTION, INCH_TO_POINT(kisimage->yRes()));
+    if (!TIFFSetField(image, TIFFTAG_XRESOLUTION, INCH_TO_POINT(kisimage->xRes()))) { // It is the "invert" macro because we convert from pointer-per-inchs to points
+        TIFFClose(image);
+        return ImportExportCodes::ErrorWhileWriting;
+    }
+    if (!TIFFSetField(image, TIFFTAG_YRESOLUTION, INCH_TO_POINT(kisimage->yRes()))) {
+        TIFFClose(image);
+        return ImportExportCodes::ErrorWhileWriting;
+    }
 
     KisGroupLayer* root = dynamic_cast<KisGroupLayer*>(kisimage->rootLayer().data());
     KIS_ASSERT_RECOVER(root) {

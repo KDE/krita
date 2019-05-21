@@ -204,7 +204,7 @@ void testImportFromWriteonly(const QString& _dirname, QString mimetype = "")
 }
 
 
-void testExportToReadonly(const QString& _dirname, QString mimetype = "")
+void testExportToReadonly(const QString& _dirname, QString mimetype = "", bool useDocumentExport=false)
 {
     QString readonlyFilename = _dirname + "readonlyFile.txt";
 
@@ -226,10 +226,16 @@ void testExportToReadonly(const QString& _dirname, QString mimetype = "")
 
     doc->setCurrentImage(p.image);
 
-    status = manager.exportDocument(sourceFileInfo.absoluteFilePath(), sourceFileInfo.absoluteFilePath(), mimetype.toUtf8());
+    if (useDocumentExport) {
+        bool result = doc->exportDocumentSync(QUrl(sourceFileInfo.absoluteFilePath()), mimetype.toUtf8());
+        status = result ? ImportExportCodes::OK : ImportExportCodes::Failure;
+    } else {
+        status = manager.exportDocument(sourceFileInfo.absoluteFilePath(), sourceFileInfo.absoluteFilePath(), mimetype.toUtf8());
+    }
+
     qDebug() << "export result = " << status;
 
-    if (status == ImportExportCodes::FileFormatIncorrect) {
+    if (!useDocumentExport && status == ImportExportCodes::FileFormatIncorrect) {
         qDebug() << "Make sure you set the correct mimetype in the test case.";
         failMessage = "Incorrect status.";
         fail = true;

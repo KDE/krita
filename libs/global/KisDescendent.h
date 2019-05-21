@@ -72,7 +72,7 @@ public:
      */
     KisDescendent(KisDescendent &&that) : m_d(std::move(that.m_d)) {}
 
-    KisDescendent & operator=(const KisDescendent &that) { Descendent t(that); *this = std::move(t); return *this; }
+    KisDescendent & operator=(const KisDescendent &that) { KisDescendent t(that); *this = std::move(t); return *this; }
     KisDescendent & operator=(KisDescendent &&that) { m_d = std::move(that.m_d); return *this; }
 
     /**

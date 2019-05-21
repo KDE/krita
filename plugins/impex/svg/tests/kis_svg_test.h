@@ -28,7 +28,6 @@ private Q_SLOTS:
     void testFiles();
 
     void testImportFromWriteonly();
-    void testExportToReadonly();
     void testImportIncorrectFormat();
 };
 

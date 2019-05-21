@@ -47,11 +47,6 @@ void KisSvgTest::testImportFromWriteonly()
 }
 
 
-void KisSvgTest::testExportToReadonly()
-{
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), SvgMimetype);
-}
-
 
 void KisSvgTest::testImportIncorrectFormat()
 {

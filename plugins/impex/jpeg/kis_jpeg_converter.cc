@@ -439,7 +439,7 @@ KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
     }
     catch( std::runtime_error &e) {
         jpeg_destroy_decompress(&cinfo);
-        return ImportExportCodes::Failure;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 }
 

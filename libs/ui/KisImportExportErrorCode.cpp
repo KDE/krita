@@ -132,6 +132,7 @@ bool KisImportExportErrorCode::isInternalError() const
 QString KisImportExportErrorCode::errorMessage() const
 {
     QString internal = i18n("Unexpected error. Please contact developers.");
+    QString unknown = i18n("Unknown error.");
     if (errorFieldUsed == CannotRead) {
         return cannotRead.errorMessage();
     } else if (errorFieldUsed == CannotWrite) {
@@ -149,6 +150,8 @@ QString KisImportExportErrorCode::errorMessage() const
                 return i18n("The file format contains unsupported features.");
             case ImportExportCodes::FormatColorSpaceUnsupported:
                 return i18n("The file format contains unsupported color space.");
+            case ImportExportCodes::ErrorWhileReading:
+                return unknown;
 
             // Writing
             case ImportExportCodes::CannotCreateFile:
@@ -157,6 +160,8 @@ QString KisImportExportErrorCode::errorMessage() const
                 return i18n("Permission denied: Krita is not allowed to write to the file.");
             case ImportExportCodes::InsufficientMemory:
                 return i18n("There is not enough memory left to save the file.");
+            case ImportExportCodes::ErrorWhileWriting:
+                return unknown;
 
 
             // Both
@@ -165,7 +170,7 @@ QString KisImportExportErrorCode::errorMessage() const
 
             // Other
             case ImportExportCodes::Failure:
-                return i18n("Unknown error.");
+                return unknown;
             case ImportExportCodes::InternalError:
                 return internal;
 
@@ -207,7 +212,7 @@ QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode)
             d << "Cannot read: " << errorCode.cannotRead.m_error;
         break;
     case KisImportExportErrorCode::CannotWrite:
-        d << "Cannot read: " << errorCode.cannotRead.m_error;
+        d << "Cannot write: " << errorCode.cannotRead.m_error;
         break;
     case KisImportExportErrorCode::CodeId:
         d << "Error code = " << errorCode.codeId;

@@ -331,8 +331,8 @@ void HairyBrush::paintParticle(QPointF pos, const KoColor& color, qreal weight)
 
     int ipx = int (pos.x());
     int ipy = int (pos.y());
-    qreal fx = pos.x() - ipx;
-    qreal fy = pos.y() - ipy;
+    qreal fx = qAbs(pos.x() - ipx);
+    qreal fy = qAbs(pos.y() - ipy);
 
     quint8 btl = qRound((1.0 - fx) * (1.0 - fy) * opacity);
     quint8 btr = qRound((fx)  * (1.0 - fy) * opacity);
@@ -370,8 +370,8 @@ void HairyBrush::paintParticle(QPointF pos, const KoColor& color)
 
     int ipx = int (pos.x());
     int ipy = int (pos.y());
-    qreal fx = pos.x() - ipx;
-    qreal fy = pos.y() - ipy;
+    qreal fx = qAbs(pos.x() - ipx);
+    qreal fy = qAbs(pos.y() - ipy);
 
     quint8 btl = qRound((1.0 - fx) * (1.0 - fy) * opacity);
     quint8 btr = qRound((fx)  * (1.0 - fy) * opacity);

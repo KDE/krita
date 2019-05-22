@@ -25,6 +25,7 @@
 
 #include <QSize>
 #include <QMetaType>
+#include <QSharedDataPointer>
 
 #include <KoShapeUserData.h>
 
@@ -112,7 +113,7 @@ public:
     bool isValid() const;
 
     /// \internal
-    KoImageDataPrivate *priv() { return d; }
+    KoImageDataPrivate *priv();
 
 private:
     friend class KoImageCollection;
@@ -132,8 +133,7 @@ private:
 
 
 private:
-    KoImageDataPrivate *d;
-    Q_PRIVATE_SLOT(d, void cleanupImageCache())
+    QSharedDataPointer<KoImageDataPrivate> d;
 };
 
 Q_DECLARE_METATYPE(KoImageData*)

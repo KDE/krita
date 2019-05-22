@@ -21,13 +21,15 @@
 #include <QRectF>
 #include <QTransform>
 #include <QPainter>
+#include <QSharedData>
 #include <KoShape.h>
 #include "kis_algebra_2d.h"
 
 #include <KoViewConverter.h>
 #include <KoShapePainter.h>
 
-struct Q_DECL_HIDDEN KoClipMask::Private {
+struct Q_DECL_HIDDEN KoClipMask::Private : public QSharedData
+{
     Private() {}
     Private(const Private &rhs)
         : coordinates(rhs.coordinates),
@@ -35,6 +37,7 @@ struct Q_DECL_HIDDEN KoClipMask::Private {
           maskRect(rhs.maskRect),
           extraShapeTransform(rhs.extraShapeTransform)
     {
+        // XXX: Use KisDescendent<KoShape> instead of this
         Q_FOREACH (KoShape *shape, rhs.shapes) {
             KoShape *clonedShape = shape->cloneShape();
             KIS_ASSERT_RECOVER(clonedShape) { continue; }
@@ -65,11 +68,6 @@ KoClipMask::KoClipMask()
 }
 
 KoClipMask::~KoClipMask()
-{
-}
-
-KoClipMask::KoClipMask(const KoClipMask &rhs)
-    : m_d(new Private(*rhs.m_d))
 {
 }
 

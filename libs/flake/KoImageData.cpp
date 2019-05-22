@@ -41,28 +41,22 @@
 #define MAX_MEMORY_IMAGESIZE 90000
 
 KoImageData::KoImageData()
-    : d(0)
 {
 }
 
 KoImageData::KoImageData(const KoImageData &imageData)
     : KoShapeUserData(),
-    d(imageData.d)
+      d(imageData.d)
 {
-    if (d)
-        d->refCount.ref();
 }
 
 KoImageData::KoImageData(KoImageDataPrivate *priv)
     : d(priv)
 {
-    d->refCount.ref();
 }
 
 KoImageData::~KoImageData()
 {
-    if (d && !d->refCount.deref())
-        delete d;
 }
 
 QPixmap KoImageData::pixmap(const QSize &size)
@@ -104,10 +98,10 @@ QPixmap KoImageData::pixmap(const QSize &size)
         }
 
         if (d->dataStoreState == KoImageDataPrivate::StateImageLoaded) {
-            if (d->cleanCacheTimer.isActive())
-                d->cleanCacheTimer.stop();
+            if (d->cleanCacheTimer->isActive())
+                d->cleanCacheTimer->stop();
             // schedule an auto-unload of the big QImage in a second.
-            d->cleanCacheTimer.start();
+            d->cleanCacheTimer->start();
         }
     }
     return d->pixmap;
@@ -138,6 +132,7 @@ QSizeF KoImageData::imageSize()
     return d->imageSize;
 }
 
+// XXX: why const here?
 QImage KoImageData::image() const
 {
     if (d->dataStoreState == KoImageDataPrivate::StateNotLoaded) {
@@ -183,8 +178,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
         delete other;
     } else {
         if (d == 0) {
-            d = new KoImageDataPrivate(this);
-            d->refCount.ref();
+            d = new KoImageDataPrivate();
         }
         delete d->temporaryFile;
         d->temporaryFile = 0;
@@ -235,8 +229,7 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
         delete other;
     } else {
         if (d == 0) {
-            d = new KoImageDataPrivate(this);
-            d->refCount.ref();
+            d = new KoImageDataPrivate();
         } else {
             d->clear();
         }
@@ -290,8 +283,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
     }
     else {
         if (d == 0) {
-            d = new KoImageDataPrivate(this);
-            d->refCount.ref();
+            d = new KoImageDataPrivate();
         }
 
         d->suffix = "png"; // good default for non-lossy storage.
@@ -335,6 +327,11 @@ bool KoImageData::isValid() const
         && d->errorCode == Success;
 }
 
+KoImageDataPrivate *KoImageData::priv()
+{
+    return d.data();
+}
+
 bool KoImageData::operator==(const KoImageData &other) const
 {
     return other.d == d;
@@ -342,10 +339,6 @@ bool KoImageData::operator==(const KoImageData &other) const
 
 KoImageData &KoImageData::operator=(const KoImageData &other)
 {
-    if (other.d)
-        other.d->refCount.ref();
-    if (d && !d->refCount.deref())
-        delete d;
     d = other.d;
     return *this;
 }

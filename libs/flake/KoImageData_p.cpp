@@ -31,17 +31,16 @@
 #include <FlakeDebug.h>
 #include <QBuffer>
 
-KoImageDataPrivate::KoImageDataPrivate(KoImageData *q)
+KoImageDataPrivate::KoImageDataPrivate()
     : collection(0),
     errorCode(KoImageData::Success),
     key(0),
-    refCount(0),
     dataStoreState(StateEmpty),
     temporaryFile(0)
 {
-    cleanCacheTimer.setSingleShot(true);
-    cleanCacheTimer.setInterval(1000);
-    QObject::connect(&cleanCacheTimer, SIGNAL(timeout()), q, SLOT(cleanupImageCache()));
+    cleanCacheTimer->setSingleShot(true);
+    cleanCacheTimer->setInterval(1000);
+    QObject::connect(cleanCacheTimer.data(), &QTimer::timeout, [&]() { cleanupImageCache(); });
 }
 
 KoImageDataPrivate::~KoImageDataPrivate()

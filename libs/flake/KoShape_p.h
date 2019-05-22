@@ -86,6 +86,7 @@ public:
     QList<KoShape::ShapeChangeListener*> listeners;
     KoShapeShadow * shadow; ///< the current shape shadow
     KoBorder *border; ///< the current shape border
+    // XXX: change this to instance instead of pointer
     QScopedPointer<KoClipPath> clipPath; ///< the current clip path
     QScopedPointer<KoClipMask> clipMask; ///< the current clip mask
     QMap<QString, QString> additionalAttributes;

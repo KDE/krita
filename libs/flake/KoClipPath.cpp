@@ -26,6 +26,7 @@
 #include <QPainterPath>
 #include <QPainter>
 #include <QVarLengthArray>
+#include <QSharedData>
 
 #include <kis_algebra_2d.h>
 
@@ -44,7 +45,7 @@ QTransform scaleFromPercent(const QSizeF &size)
     return QTransform().scale(w/1.0, h/1.0);
 }
 
-class Q_DECL_HIDDEN KoClipPath::Private
+class Q_DECL_HIDDEN KoClipPath::Private : public QSharedData
 {
 public:
     Private()
@@ -119,11 +120,6 @@ KoClipPath::KoClipPath(QList<KoShape*> clipShapes, KoFlake::CoordinateSystem coo
     d->shapes = clipShapes;
     d->coordinates = coordinates;
     d->compileClipPath();
-}
-
-KoClipPath::KoClipPath(const KoClipPath &rhs)
-    : d(new Private(*rhs.d))
-{
 }
 
 KoClipPath::~KoClipPath()

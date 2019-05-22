@@ -29,16 +29,19 @@
 #include <QPixmap>
 #include <QTimer>
 #include <QDir>
+#include <QSharedData>
+
+#include <KisNewOnCopy.h>
 
 #include "KoImageData.h"
 
 class KoImageCollection;
 class QTemporaryFile;
 
-class KoImageDataPrivate
+class KoImageDataPrivate : public QSharedData
 {
 public:
-    explicit KoImageDataPrivate(KoImageData *q);
+    KoImageDataPrivate();
     virtual ~KoImageDataPrivate();
 
     /**
@@ -70,18 +73,17 @@ public:
     };
 
     KoImageCollection *collection;
-    KoImageData::ErrorCode errorCode;
+    mutable KoImageData::ErrorCode errorCode;
     QSizeF imageSize;
     qint64 key;
     QString suffix; // the suffix of the picture e.g. png  TODO use a QByteArray ?
-    QTimer cleanCacheTimer;
-
-    QAtomicInt refCount;
+    KisNewOnCopy<QTimer> cleanCacheTimer;
 
     // Image data store.
-    DataStoreState dataStoreState;
+    mutable DataStoreState dataStoreState;
     QUrl imageLocation;
-    QImage image;
+    // XXX this should not be needed
+    mutable QImage image;
     /// screen optimized cached version.
     QPixmap pixmap;
 

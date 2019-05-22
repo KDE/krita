@@ -24,6 +24,7 @@
 
 #include <QScopedPointer>
 #include <QList>
+#include <QSharedDataPointer>
 #include <qnamespace.h>
 #include <KoFlakeCoordinateSystem.h>
 
@@ -83,11 +84,8 @@ public:
     static void applyClipping(KoShape *clippedShape, QPainter &painter, const KoViewConverter &converter);
 
 private:
-    KoClipPath(const KoClipPath &rhs);
-
-private:
     class Private;
-    const QScopedPointer<Private> d;
+    QSharedDataPointer<Private> d;
 };
 
 #endif // KOCLIPPATH_H

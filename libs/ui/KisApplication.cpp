@@ -539,15 +539,28 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
                     KisDocument *doc = kisPart->createDocument();
                     doc->setFileBatchMode(d->batchRun);
-                    doc->openUrl(QUrl::fromLocalFile(fileName));
+                    bool result = doc->openUrl(QUrl::fromLocalFile(fileName));
+
+                    if (!result) {
+                        errKrita << "Could not load " << fileName << ":" << doc->errorMessage();
+                        QTimer::singleShot(0, this, SLOT(quit()));
+                        return 1;
+                    }
+
+                    if (exportFileName.isEmpty()) {
+                        errKrita << "Export destination is not specified for" << fileName << "Please specify export destination with --export-filename option";
+                        QTimer::singleShot(0, this, SLOT(quit()));
+                        return 1;
+                    }
 
                     qApp->processEvents(); // For vector layers to be updated
 
                     doc->setFileBatchMode(true);
                     if (!doc->exportDocumentSync(QUrl::fromLocalFile(exportFileName), outputMimetype.toLatin1())) {
-                        dbgKrita << "Could not export " << fileName << "to" << exportFileName << ":" << doc->errorMessage();
+                        errKrita << "Could not export " << fileName << "to" << exportFileName << ":" << doc->errorMessage();
                     }
                     QTimer::singleShot(0, this, SLOT(quit()));
+                    return 0;
                 }
                 else if (exportSequence) {
                     KisDocument *doc = kisPart->createDocument();
@@ -576,6 +589,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                         errKrita << i18n("Failed to render animation frames!") << endl;
                     }
                     QTimer::singleShot(0, this, SLOT(quit()));
+                    return 0;
                 }
                 else if (d->mainWindow) {
                     if (fileName.endsWith(".bundle")) {

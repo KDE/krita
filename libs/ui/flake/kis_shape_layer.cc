@@ -184,7 +184,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* c
         addShape(clonedShape);
     }
 
-    m_d->canvas->setUpdatesBlocked(true);
+    m_d->canvas->setUpdatesBlocked(false);
 }
 
 KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_addShapes)

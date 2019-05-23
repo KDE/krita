@@ -33,6 +33,14 @@ SvgGraphicsContext::SvgGraphicsContext()
     stroke->setJoinStyle(Qt::MiterJoin);
 }
 
+SvgGraphicsContext::SvgGraphicsContext(const SvgGraphicsContext &gc)
+    : stroke(toQShared(new KoShapeStroke(*(gc.stroke.data()))))
+{
+    KoShapeStrokeSP newStroke = stroke;
+    *this = gc;
+    this->stroke = newStroke;
+}
+
 void SvgGraphicsContext::workaroundClearInheritedFillProperties()
 {
     /**

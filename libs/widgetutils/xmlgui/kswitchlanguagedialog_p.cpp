@@ -85,18 +85,6 @@ static void initializeLanguages()
             qputenv("LANGUAGE", languageCode + ":" + languages);
         }
     }
-
-
-    // See https://bugs.kde.org/show_bug.cgi?id=390623
-    // Ideally setting the LANGUAGE would change the default QLocale too
-    // but unfortunately this is too late since the QCoreApplication constructor
-    // already created a QLocale at this stage so we need to set the reset it
-    // by triggering the creation and destruction of a QSystemLocale
-    // this is highly dependant on Qt internals, so may break, but oh well
-    QSystemLocale *dummy = new QSystemLocale();
-    delete dummy;
-
-
     //qDebug() << ">>>>>>>>>>>>>> LANGUAGE" << qgetenv("LANGUAGE");
     //qDebug() << ">>>>>>>>>>>>>> DATADIRS" << qgetenv("XDG_DATA_DIRS");
 }

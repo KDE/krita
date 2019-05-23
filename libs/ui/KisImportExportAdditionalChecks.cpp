@@ -18,30 +18,22 @@
  */
 
 #include "KisImportExportAdditionalChecks.h"
+#include <QFileInfo>
 
 
-
-bool KisImportExportAdditionalChecks::isFileWriteable(QString filepath) const
+bool KisImportExportAdditionalChecks::isFileWritable(QString filepath)
 {
-    QFile file(filepath);
-    bool ret = file.open(QIODevice::WriteOnly);
-    if (ret) {
-        file.close();
-    }
-    return ret;
+    QFileInfo finfo(filepath);
+    return finfo.isWritable();
 }
 
-bool KisImportExportAdditionalChecks::isFileReadable(QString filepath) const
+bool KisImportExportAdditionalChecks::isFileReadable(QString filepath)
 {
-    QFile file(filepath);
-    bool ret = file.open(QIODevice::ReadOnly);
-    if (ret) {
-        file.close();
-    }
-    return ret;
+    QFileInfo finfo(filepath);
+    return finfo.isReadable();
 }
 
-bool KisImportExportAdditionalChecks::doesFileExist(QString filepath) const
+bool KisImportExportAdditionalChecks::doesFileExist(QString filepath)
 {
     return QFile::exists(filepath);
 }

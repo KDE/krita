@@ -27,14 +27,9 @@ class KRITAUI_EXPORT KisImportExportAdditionalChecks
 
 public:
 
-    bool isFileWriteable(QString filepath) const;
-    bool isFileReadable(QString filepath) const;
-    bool doesFileExist(QString filepath) const;
-
-    KisImportExportErrorCode checkWriteErrors(QString filepath) const;
-    KisImportExportErrorCode checkReadErrors(QString filepath) const;
-
-
+    static bool isFileWritable(QString filepath);
+    static bool isFileReadable(QString filepath);
+    static bool doesFileExist(QString filepath);
 };
 
 

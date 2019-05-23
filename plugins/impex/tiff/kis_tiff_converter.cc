@@ -236,10 +236,10 @@ KisImportExportErrorCode KisTIFFConverter::decode(const QString &filename)
     // Opent the TIFF file
     TIFF *image = 0;
 
-    if (!KisImportExportAdditionalChecks().doesFileExist(filename)) {
+    if (!KisImportExportAdditionalChecks::doesFileExist(filename)) {
         return ImportExportCodes::FileNotExist;
     }
-    if (!KisImportExportAdditionalChecks().isFileReadable(filename)) {
+    if (!KisImportExportAdditionalChecks::isFileReadable(filename)) {
         return ImportExportCodes::NoAccessToRead;
     }
 

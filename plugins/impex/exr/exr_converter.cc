@@ -909,10 +909,9 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
     } catch (std::exception &e) {
         dbgFile << "Error while reading from the exr file: " << e.what();
 
-        KisImportExportAdditionalChecks checks;
-        if (!checks.doesFileExist(filename)) {
+        if (!KisImportExportAdditionalChecks::doesFileExist(filename)) {
             return ImportExportCodes::FileNotExist;
-        } else if(!checks.isFileReadable(filename)) {
+        } else if(!KisImportExportAdditionalChecks::isFileReadable(filename)) {
             return ImportExportCodes::NoAccessToRead;
         } else {
             return ImportExportCodes::ErrorWhileReading;
@@ -1135,8 +1134,7 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisPai
 
     } catch(std::exception &e) {
         dbgFile << "Exception while writing to exr file: " << e.what();
-        KisImportExportAdditionalChecks checks;
-        if (!checks.isFileWriteable(QFile::encodeName(filename))) {
+        if (!KisImportExportAdditionalChecks::isFileWritable(QFile::encodeName(filename))) {
             return ImportExportCodes::NoAccessToWrite;
         }
         return ImportExportCodes::Failure;
@@ -1384,8 +1382,7 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisGro
             return ImportExportCodes::OK;
         } catch(std::exception &e) {
             dbgFile << "Exception while writing to exr file: " << e.what();
-            KisImportExportAdditionalChecks checks;
-            if (!checks.isFileWriteable(QFile::encodeName(filename))) {
+            if (!KisImportExportAdditionalChecks::isFileWritable(QFile::encodeName(filename))) {
                 return ImportExportCodes::NoAccessToWrite;
             }
             return ImportExportCodes::ErrorWhileWriting;

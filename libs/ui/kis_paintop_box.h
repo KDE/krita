@@ -231,13 +231,13 @@ private:
         }
 
         bool operator == (const TabletToolID& id) const {
-            return pointer == id.pointer && uniqueID == id.uniqueID;
+            return pointer == id.pointer; // && uniqueID == id.uniqueID;
         }
 
         bool operator < (const TabletToolID& id) const {
-            if (uniqueID == id.uniqueID)
+            //if (uniqueID == id.uniqueID)
                 return pointer < id.pointer;
-            return uniqueID < id.uniqueID;
+            //return uniqueID < id.uniqueID;
         }
 
         QTabletEvent::PointerType  pointer;

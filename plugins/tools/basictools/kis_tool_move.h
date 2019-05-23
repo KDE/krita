@@ -32,6 +32,7 @@
 #include <QRadioButton>
 #include "KisToolChangesTracker.h"
 #include "kis_signal_compressor.h"
+#include "kis_signal_auto_connection.h"
 
 #include "kis_canvas2.h"
 
@@ -140,6 +141,15 @@ private Q_SLOTS:
     void endStroke();
     void slotTrackerChangedConfig(KisToolChangesTrackerDataSP state);
 
+    void slotMoveDiscreteLeft();
+    void slotMoveDiscreteRight();
+    void slotMoveDiscreteUp();
+    void slotMoveDiscreteDown();
+    void slotMoveDiscreteLeftMore();
+    void slotMoveDiscreteRightMore();
+    void slotMoveDiscreteUpMore();
+    void slotMoveDiscreteDownMore();
+
 private:
 
     MoveToolOptionsWidget* m_optionsWidget {0};
@@ -161,6 +171,7 @@ private:
 
     QPoint m_lastCursorPos;
     KisSignalCompressor m_updateCursorCompressor;
+    KisSignalAutoConnectionsStore m_actionConnections;
 };
 
 

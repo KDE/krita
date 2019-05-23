@@ -247,40 +247,6 @@ endif(MINGW)
 #########################
 ########################
 
-
-# FIXME: Apparently there is no better way to do this in android toolchain
-if(ANDROID)
-    set (Qt5_DIR               $ENV{QT_ANDROID}/lib/cmake/Qt5/)
-    set (Qt5Core_DIR           $ENV{QT_ANDROID}/lib/cmake/Qt5Core/)
-    set (Qt5Gui_DIR            $ENV{QT_ANDROID}/lib/cmake/Qt5Gui/)
-    set (Qt5Widgets_DIR        $ENV{QT_ANDROID}/lib/cmake/Qt5Widgets/)
-    set (Qt5Xml_DIR            $ENV{QT_ANDROID}/lib/cmake/Qt5Xml/)
-    set (Qt5Network_DIR        $ENV{QT_ANDROID}/lib/cmake/Qt5Network/)
-    set (Qt5PrintSupport_DIR   $ENV{QT_ANDROID}/lib/cmake/Qt5PrintSupport/)
-    set (Qt5Svg_DIR            $ENV{QT_ANDROID}/lib/cmake/Qt5Svg/)
-    set (Qt5Test_DIR           $ENV{QT_ANDROID}/lib/cmake/Qt5Test/)
-    set (Qt5Concurrent_DIR     $ENV{QT_ANDROID}/lib/cmake/Qt5Concurrent/)
-    set (Qt5Multimedia_DIR     $ENV{QT_ANDROID}/lib/cmake/Qt5Multimedia/)
-    set (Qt5Qml_DIR            $ENV{QT_ANDROID}/lib/cmake/Qt5Qml/)
-    set (Qt5Quick_DIR          $ENV{QT_ANDROID}/lib/cmake/Qt5Quick/)
-    set (Qt5QuickWidgets_DIR   $ENV{QT_ANDROID}/lib/cmake/Qt5QuickWidgets/)
-    set (Qt5AndroidExtras_DIR  $ENV{QT_ANDROID}/lib/cmake/Qt5AndroidExtras/)
-
-    set (KF5_LIBRARIES         ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib)
-    set(ECM_DIR                ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/share/ECM/cmake)
-    set(KF5Config_DIR          ${KF5_LIBRARIES}/cmake/KF5Config/)
-    set(KF5I18n_DIR            ${KF5_LIBRARIES}/cmake/KF5I18n/)
-    set(KF5WidgetsAddons_DIR   ${KF5_LIBRARIES}/cmake/KF5WidgetsAddons)
-    set(KF5Completion_DIR      ${KF5_LIBRARIES}/cmake/KF5Completion)
-    set(KF5GuiAddons_DIR       ${KF5_LIBRARIES}/cmake/KF5GuiAddons)
-    set(KF5ItemViews_DIR       ${KF5_LIBRARIES}/cmake/KF5ItemViews)
-    set(KF5WindowSystem_DIR    ${KF5_LIBRARIES}/cmake/KF5WindowSystem)
-    set(KF5ItemModels_DIR      ${KF5_LIBRARIES}/cmake/KF5ItemModels)
-    set(KF5CoreAddons_DIR      ${KF5_LIBRARIES}/cmake/KF5CoreAddons)
-    set(KF5Archive_DIR         ${KF5_LIBRARIES}/cmake/KF5Archive)
-endif()
-
-
 find_package(ECM 5.22 REQUIRED NOMODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(ECMOptionalAddSubdirectory)
@@ -568,9 +534,7 @@ if (ANDROID)
     if (NOT ANDROID_ABI)
         set (ANDROID_ABI armeabi-v7a)
     endif()
-
     set (ANDROID_SDK_ROOT $ENV{ANDROID_SDK_ROOT})
-
     set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR})
     # set (DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/assets)
 else()
@@ -584,44 +548,15 @@ endif()
 ############################
 ###########################
 
+# FIXME: Still hardcoded
 if (ANDROID)
-    set (PNG_LIBRARY                ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libpng16.so)
-    set (PNG_PNG_INCLUDE_DIR        ${CMAKE_CURRENT_BINARY_DIR}/i/include/libpng16)
-    set (LibExiv2_LIBRARIES         ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libexiv2.so)
-    set (LibExiv2_INCLUDE_DIRS      ${CMAKE_CURRENT_BINARY_DIR}/i/include/)
-    set (LCMS2_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/include)
-    set (LCMS2_LIBRARIES            ${CMAKE_CURRENT_BINARY_DIR}/i/lib/liblcms2.so)
-    set (QUAZIP_INCLUDE_DIR         ${CMAKE_CURRENT_BINARY_DIR}/i/include/quazip5)
-    set (QUAZIP_LIBRARIES           ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libquazip5.so)
     set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_69)
     set (Boost_LIBRARY_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/lib)
-    set (GSL_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libgsl.so)
-    set (GSL_CBLAS_LIBRARIES        ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libgslcblas.so)
-    set (GSL_INCLUDE_DIR            ${CMAKE_CURRENT_BINARY_DIR}/i/include/)
-    set (GSL_CONFIG                 ${CMAKE_CURRENT_BINARY_DIR}/i/bin/gsl-config)
-    set (EXPAT_LIBRARY              ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libexpat.so)
-
-    # libraries to be used when bundling android apk
-    # FIXME: better way to do this?
-    list (APPEND ANDROID_EXTRA_LIBS ${PNG_LIBRARY}
-                                    ${LibExiv2_LIBRARIES}
-                                    ${QUAZIP_LIBRARIES}
-                                    ${LCMS2_LIBRARIES}
-                                    ${EXPAT_LIBRARY}
-                                    ${KF5_LIBRARIES}/libKF5Completion.so
-                                    ${KF5_LIBRARIES}/libKF5WindowSystem.so
-                                    ${KF5_LIBRARIES}/libKF5WidgetsAddons.so
-                                    ${KF5_LIBRARIES}/libKF5ItemViews.so
-                                    ${KF5_LIBRARIES}/libKF5ItemModels.so
-                                    ${KF5_LIBRARIES}/libKF5GuiAddons.so
-                                    ${KF5_LIBRARIES}/libKF5I18n.so
-                                    ${KF5_LIBRARIES}/libKF5CoreAddons.so
-                                    ${KF5_LIBRARIES}/libKF5ConfigGui.so
-                                    ${KF5_LIBRARIES}/libKF5ConfigCore.so
-                                    ${KF5_LIBRARIES}/libKF5Archive.so)
+    set (KF5_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib)
 endif()
 
 find_package(PNG REQUIRED)
+list (APPEND ANDROID_EXTRA_LIBS ${PNG_LIBRARY})
 
 if (APPLE)
     # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
@@ -650,18 +585,6 @@ endif()
 ## Optional dependencies  ##
 ############################
 ###########################
-
-if (ANDROID)
-    set (TIFF_LIBRARY           ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libtiff.so)
-    set (TIFF_INCLUDE_DIR       ${CMAKE_CURRENT_BINARY_DIR}/i/include})
-    set (FFTW3_LIBRARY          ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libfftw3.so)
-    set (FFTW3_INCLUDE_DIR      ${CMAKE_CURRENT_BINARY_DIR}/i/)
-    set (GIF_LIBRARY            ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libgiflib.so)
-    set (GIF_INCLUDE_DIR        ${CMAKE_CURRENT_BINARY_DIR}/i/include)
-    set (JPEG_LIBRARY           ${CMAKE_CURRENT_BINARY_DIR}/i/lib/libjpeg.so)
-    set (JPEG_INCLUDE_DIR       ${CMAKE_CURRENT_BINARY_DIR}/i/include)
-endif()
-
 
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES
@@ -796,6 +719,7 @@ set_package_properties(Eigen3 PROPERTIES
 ## Test for exiv2
 ##
 find_package(LibExiv2 0.16 REQUIRED)
+list (APPEND ANDROID_EXTRA_LIBS ${LibExiv2_LIBRARIES})
 
 ##
 ## Test for lcms
@@ -813,6 +737,7 @@ if(LCMS2_FOUND)
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
 endif()
+list (APPEND ANDROID_EXTRA_LIBS ${LCMS2_LIBRARIES})
 
 ##
 ## Test for Vc
@@ -900,6 +825,20 @@ set_package_properties(QuaZip PROPERTIES
     PURPOSE "Needed for reading and writing KRA and ORA files"
 )
 
+# FIXME: better way to do this?
+list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
+                                ${EXPAT_LIBRARY}
+                                ${KF5_LIBRARIES}/libKF5Completion.so
+                                ${KF5_LIBRARIES}/libKF5WindowSystem.so
+                                ${KF5_LIBRARIES}/libKF5WidgetsAddons.so
+                                ${KF5_LIBRARIES}/libKF5ItemViews.so
+                                ${KF5_LIBRARIES}/libKF5ItemModels.so
+                                ${KF5_LIBRARIES}/libKF5GuiAddons.so
+                                ${KF5_LIBRARIES}/libKF5I18n.so
+                                ${KF5_LIBRARIES}/libKF5CoreAddons.so
+                                ${KF5_LIBRARIES}/libKF5ConfigGui.so
+                                ${KF5_LIBRARIES}/libKF5ConfigCore.so
+                                ${KF5_LIBRARIES}/libKF5Archive.so)
 
 
 ##

@@ -68,8 +68,8 @@ export FRAMEWORK_PATH=${KIS_INSTALL_DIR}/lib/
 export KDE_COLOR_DEBUG=1
 export QTEST_COLORED=1
 
-OUPUT_LOG="${BUILDROOT}/osxbuild.log"
-ERROR_LOG="${BUILDROOT}/osxbuild-error.log"
+export OUPUT_LOG="${BUILDROOT}/osxbuild.log"
+export ERROR_LOG="${BUILDROOT}/osxbuild-error.log"
 printf "" > "${OUPUT_LOG}"
 printf "" > "${ERROR_LOG}"
 
@@ -369,7 +369,7 @@ build_krita () {
         -DBoost_INCLUDE_DIR=${KIS_INSTALL_DIR}/include \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
         -DDEFINE_NO_DEPRECATED=1 \
-        -DBUILD_TESTING=OFF \
+        -DBUILD_TESTING=ON \
         -DHIDE_SAFE_ASSERTS=ON \
         -DKDE_INSTALL_BUNDLEDIR=${KIS_INSTALL_DIR}/bin \
         -DPYQT_SIP_DIR_OVERRIDE=${KIS_INSTALL_DIR}/share/sip/ \
@@ -441,6 +441,24 @@ install_krita () {
 # Runs all fixes for path and packages.
 # Historically only fixed boost @rpath
 fix_boost_rpath () {
+    # helpers to define function only once
+    fixboost_find () {
+        for FILE in "${@}"; do
+            if [[ -n "$(otool -L $FILE | grep boost)" ]]; then
+                log "Fixing -- $FILE"
+                log_cmd install_name_tool -change libboost_system.dylib @rpath/libboost_system.dylib $FILE
+            fi
+        done
+    }
+
+    batch_fixboost() {
+        xargs -P4 -I FILE bash -c 'fixboost_find "FILE"'
+    }
+
+    export -f fixboost_find
+    export -f log
+    export -f log_cmd
+
     print_msg "Fixing boost in... ${KIS_INSTALL_DIR}"
     # install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib $BUILDROOT/$KRITA_INSTALL/bin/krita.app/Contents/MacOS/gmic_krita_qt
     log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
@@ -448,13 +466,7 @@ fix_boost_rpath () {
     # install_name_tool -add_rpath ${BUILDROOT}/deps/lib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
     log_cmd install_name_tool -change libboost_system.dylib @rpath/libboost_system.dylib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
 
-    FILES=$(find -L ${KIS_INSTALL_DIR} -name '*so' -o -name '*dylib')
-    for FILE in $FILES; do
-        if [[ -n "$(otool -L $FILE | grep boost)" ]]; then
-            log "Fixing -- $FILE"
-            log_cmd install_name_tool -change libboost_system.dylib @rpath/libboost_system.dylib $FILE
-        fi
-    done
+    find -L "${KIS_INSTALL_DIR}" -name '*so' -o -name '*dylib' | batch_fixboost
 
     log "Fixing boost done!"
 }

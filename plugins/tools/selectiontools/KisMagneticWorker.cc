@@ -18,6 +18,7 @@
 #include "KisMagneticWorker.h"
 
 #include "kis_gaussian_kernel.h"
+#include <kis_painter.h>
 
 #include <QtCore>
 

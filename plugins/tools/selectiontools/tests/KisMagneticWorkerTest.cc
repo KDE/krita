@@ -23,6 +23,8 @@
 #include <testutil.h>
 #include <kis_paint_device_debug_utils.h>
 
+#include <QDebug>
+
 inline KisPaintDeviceSP loadTestImage(const QString &name, bool convertToAlpha)
 {
     QImage image(TestUtil::fetchDataFileLazy(name));
@@ -40,10 +42,11 @@ void KisMagneticWorkerTest::testWorker()
 {
     KisPaintDeviceSP dev = loadTestImage("test_main.png", false);
     const QRect rect = dev->exactBounds();
+    KisPaintDeviceSP grayscaleDev = KisPainter::convertToAlphaAsGray(dev);
     KisMagneticWorker worker;
-    worker.run(dev, rect);
+    worker.run(grayscaleDev, rect);
 
-    KIS_DUMP_DEVICE_2(dev, rect, "main", "dd");
+    KIS_DUMP_DEVICE_2(grayscaleDev, rect, "main", "dd");
 }
 
 QTEST_MAIN(KisMagneticWorkerTest)

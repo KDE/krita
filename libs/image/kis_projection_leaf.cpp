@@ -262,12 +262,14 @@ bool KisProjectionLeaf::isRoot() const
 
 bool KisProjectionLeaf::isLayer() const
 {
-    return (bool)qobject_cast<const KisLayer*>(m_d->node.data());
+    return (bool)qobject_cast<const KisLayer*>(m_d->node.data()) &&
+        !m_d->node->isFakeNode();
 }
 
 bool KisProjectionLeaf::isMask() const
 {
-    return (bool)qobject_cast<const KisMask*>(m_d->node.data());
+    return (bool)qobject_cast<const KisMask*>(m_d->node.data()) &&
+        !m_d->node->isFakeNode();
 }
 
 bool KisProjectionLeaf::canHaveChildLayers() const

@@ -152,7 +152,7 @@ echo "Using style from: ${DMG_STYLE}"
 if [[ ${DMG_validBG} -eq 0 ]]; then
     echo "No jpg or png valid file detected!!"
     echo "Using default style"
-    DMG_background="${SCRIPT_SOURCE_DIR}/krita-4.1_dmgBG.jpg"
+    DMG_background="${SCRIPT_SOURCE_DIR}/krita_dmgBG.jpg"
 fi
 
 if [[ -z "${CODE_SIGNATURE}" ]]; then

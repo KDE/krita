@@ -1,8 +1,8 @@
-From 9a2a150476d51d786e011e1ddde4bb77c7b9d146 Mon Sep 17 00:00:00 2001
+From 5a518a022d840571e6fb6cb1448fc801a2678aba Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Wed, 15 May 2019 19:54:52 +0300
-Subject: [PATCH 2/2] Add workaround for handling table press correctly in
- WinInk mode
+Subject: [PATCH] Add workaround for handling table press correctly in WinInk
+ mode
 
 Original problem: widgets do not get synthesized mouse-down and
 mouse-press events until the stylus is released
@@ -26,24 +26,19 @@ by using the following rules:
 3) All accepted tablet press- and release-events are reported as "accepted",
    **but** we artificially synthesize mouse events for them.
 
-TODO: there are still two problems:
+TODO: there are still one problem:
 
 1) Perhaps this synthesizeMouseEvent() is not needed at all. But we should
    first check if Qt relies on these synthesized messages anywhere in the
    code or not.
-
-2) If we still keep synthesizeMouseEvent(), then it should fetch actual
-   tablet buttons from QGuiApplicationPrivate::tabletDevicePoint(). Right
-   now it always synthesizes left-click, whatever the button was pressed/
-   released.
 
 See bug: https://bugs.kde.org/show_bug.cgi?id=406668
 ---
  src/gui/kernel/qguiapplication.cpp            |  1 +
  src/gui/kernel/qwindowsysteminterface.cpp     | 20 ++---
  src/gui/kernel/qwindowsysteminterface.h       |  8 +-
- .../windows/qwindowspointerhandler.cpp        | 75 ++++++++++++++++++-
- 4 files changed, 86 insertions(+), 18 deletions(-)
+ .../windows/qwindowspointerhandler.cpp        | 88 ++++++++++++++++++-
+ 4 files changed, 99 insertions(+), 18 deletions(-)
 
 diff --git a/src/gui/kernel/qguiapplication.cpp b/src/gui/kernel/qguiapplication.cpp
 index 3541c1ae..681cbd85 100644
@@ -146,7 +141,7 @@ index 1dde9130..0ad89547 100644
                                                  qreal tangentialPressure, qreal rotation, int z, qint64 uid,
                                                  Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 diff --git a/src/plugins/platforms/windows/qwindowspointerhandler.cpp b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
-index 07f4d41e..58a5d19f 100644
+index 07f4d41e..e8c98948 100644
 --- a/src/plugins/platforms/windows/qwindowspointerhandler.cpp
 +++ b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
 @@ -518,6 +518,58 @@ bool QWindowsPointerHandler::translateTouchEvent(QWindow *window, HWND hwnd,
@@ -208,7 +203,7 @@ index 07f4d41e..58a5d19f 100644
  bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWindows::WindowsEventType et,
                                                 MSG msg, PVOID vPenInfo)
  {
-@@ -610,10 +662,25 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
+@@ -610,10 +662,38 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
          }
          const Qt::KeyboardModifiers keyModifiers = QWindowsKeyMapper::queryKeyboardModifiers();
  
@@ -216,21 +211,34 @@ index 07f4d41e..58a5d19f 100644
 -                                                  pressure, xTilt, yTilt, tangentialPressure, rotation, z,
 -                                                  sourceDevice, keyModifiers);
 -        return false;  // Allow mouse messages to be generated.
++        const Qt::MouseButtons oldButtons = QGuiApplicationPrivate::tabletDevicePoint(sourceDevice).state;
++
 +        const bool accepted =
 +            QWindowSystemInterface::handleTabletEvent(target, localPos, hiResGlobalPos, device, type, mouseButtons,
 +                                                      pressure, xTilt, yTilt, tangentialPressure, rotation, z,
 +                                                      sourceDevice, keyModifiers);
 +
-+        /**
-+         * TODO: right now we can fake-synthesize only left button clicks. For
-+         *       synthesizing right button clicks we should fetch tablet state
-+         *       from QGuiApplicationPrivate::tabletDevicePoint()
-+         */
-+        if (accepted && (msg.message == WM_POINTERDOWN || msg.message == WM_POINTERUP)) {
-+            QEvent::Type type = (msg.message == WM_POINTERDOWN) ? QEvent::TabletPress : QEvent::TabletRelease;
-+            Qt::MouseButton button = Qt::LeftButton;
++        const Qt::MouseButtons changedButtons =
++            oldButtons ^ QGuiApplicationPrivate::tabletDevicePoint(sourceDevice).state;
 +
-+            synthesizeMouseEvent(type, button, *penInfo);
++        Qt::MouseButton pressedButton = Qt::NoButton;
++
++        const QVector<Qt::MouseButton> supportedButtons =
++            {Qt::LeftButton, Qt::RightButton, Qt::MiddleButton};
++
++        for (Qt::MouseButton button : supportedButtons) {
++            if (changedButtons & button) {
++                pressedButton = button;
++                break;
++            }
++        }
++
++        if (accepted && pressedButton != Qt::NoButton &&
++            (msg.message == WM_POINTERDOWN || msg.message == WM_POINTERUP)) {
++
++            QEvent::Type type = (msg.message == WM_POINTERDOWN) ? QEvent::TabletPress : QEvent::TabletRelease;
++
++            synthesizeMouseEvent(type, pressedButton, *penInfo);
 +            return true;
 +        } else {
 +            return false; // Allow mouse messages to be generated by OS

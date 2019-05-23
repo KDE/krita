@@ -362,6 +362,7 @@ set(kritaui_LIB_SRCS
     KisUndoActionsUpdateManager.cpp
     KisView.cpp
     KisImportExportErrorCode.cpp
+    KisImportExportAdditionalChecks.cpp
 
     thememanager.cpp
 
@@ -393,7 +394,7 @@ set(kritaui_LIB_SRCS
     KisReferenceImage.cpp
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
-
+    KisMouseClickEater.cpp
 )
 
 if(WIN32)

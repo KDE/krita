@@ -31,9 +31,16 @@
 #endif
 
 
+const QString PngMimetype = "image/png";
+
 void KisPngTest::testFiles()
 {
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), 1);
+}
+
+void KisPngTest::testWriteonly()
+{
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), PngMimetype);
 }
 
 void roudTripHdrImage(const KoColorSpace *savingColorSpace)
@@ -82,10 +89,10 @@ void roudTripHdrImage(const KoColorSpace *savingColorSpace)
         KisImportExportManager manager(doc.data());
         doc->setFileBatchMode(true);
 
-        KisImportExportFilter::ConversionStatus loadingStatus =
+        KisImportExportErrorCode loadingStatus =
             manager.importDocument("test.png", QString());
 
-        QCOMPARE(loadingStatus, KisImportExportFilter::OK);
+        QVERIFY(loadingStatus.isOk());
 
         KisImageSP image = doc->image();
         image->initialRefreshGraph();

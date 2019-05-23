@@ -153,8 +153,10 @@ KisXCFImport::~KisXCFImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisXCFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
+    int errorStatus;
+
     dbgFile << "Start decoding file";
     QByteArray data = io->readAll();
     xcf_file = (uint8_t*)data.data();
@@ -162,14 +164,17 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *docum
     io->close();
 
     // Decode the data
-    getBasicXcfInfo() ;
-
-    if (XCF.version < 0 || XCF.version > 3) {
-        document->setErrorMessage(i18n("This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 or newer."));
-        return KisImportExportFilter::UnsupportedVersion;
+    if (getBasicXcfInfo() != XCF_OK) {
+        if (XCF.version < 0 || XCF.version > 3) {
+            document->setErrorMessage(i18n("This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 or newer."));
+            return ImportExportCodes::FormatFeaturesUnsupported;
+        }
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
-    initColormap();
+    if(initColormap() != XCF_OK) {
+        return ImportExportCodes::FileFormatIncorrect;
+    }
 
     dbgFile << XCF.version << "width = " << XCF.width << "height = " << XCF.height << "layers = " << XCF.numLayers;
 
@@ -226,7 +231,9 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *docum
         layer.depth = xcflayer.pathLength;
 
         // Copy the data in the image
-        initLayer(&xcflayer);
+        if ((errorStatus = initLayer(&xcflayer)) != XCF_OK) {
+            return ImportExportCodes::FileFormatIncorrect;
+        }
 
         int left = xcflayer.dim.c.l;
         int top = xcflayer.dim.c.t;
@@ -242,6 +249,9 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *docum
                     want.b = want.t + TILE_HEIGHT;
                     want.r = want.l + TILE_WIDTH;
                     Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.pixels, want);
+                    if (tile == XCF_PTR_EMPTY) {
+                        return ImportExportCodes::FileFormatIncorrect;
+                    }
                     KisHLineIteratorSP it = kisLayer->paintDevice()->createHLineIteratorNG(x, y, TILE_WIDTH);
                     rgba* data = tile->pixels;
                     for (int v = 0; v < TILE_HEIGHT; ++v) {
@@ -285,6 +295,9 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *docum
                     want.b = want.t + TILE_HEIGHT;
                     want.r = want.l + TILE_WIDTH;
                     Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.mask, want);
+                    if (tile == XCF_PTR_EMPTY) {
+                        return ImportExportCodes::FileFormatIncorrect;
+                    }
                     KisHLineIteratorSP it = mask->paintDevice()->createHLineIteratorNG(x, y, TILE_WIDTH);
                     rgba* data = tile->pixels;
                     for (int v = 0; v < TILE_HEIGHT; ++v) {
@@ -310,7 +323,7 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *docum
     }
 
     document->setCurrentImage(image);
-    return KisImportExportFilter::OK;
+    return ImportExportCodes::OK;
 
 }
 

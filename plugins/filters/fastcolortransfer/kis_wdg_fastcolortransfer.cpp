@@ -73,8 +73,8 @@ KisPropertiesConfigurationSP KisWdgFastColorTransfer::configuration() const
     KisDocument *d = KisPart::instance()->createDocument();
 
     KisImportExportManager manager(d);
-    KisImportExportFilter::ConversionStatus status = manager.importDocument(fileName, QString());
-    dbgPlugins << "import returned status" << status;
+    KisImportExportErrorCode status = manager.importDocument(fileName, QString());
+    dbgPlugins << "import returned status" << status.errorMessage();
     KisImageWSP importedImage = d->image();
 
     if (importedImage) {

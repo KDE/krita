@@ -43,16 +43,16 @@ KisQImageIOExport::~KisQImageIOExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisQImageIOExport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisQImageIOExport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP /*configuration*/)
 {
     QRect rc = document->savingImage()->bounds();
     QImage image = document->savingImage()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-    bool r = image.save(io, QFileInfo(filename()).suffix().toLatin1());
-    if (r) {
-        return KisImportExportFilter::OK;
+    bool result = image.save(io, QFileInfo(filename()).suffix().toLatin1());
+    if (result) {
+        return ImportExportCodes::OK;
     }
     else {
-        return KisImportExportFilter::InvalidFormat;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 }
 

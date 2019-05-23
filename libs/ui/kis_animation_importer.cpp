@@ -60,7 +60,7 @@ KisAnimationImporter::KisAnimationImporter(KisDocument* document)
 KisAnimationImporter::~KisAnimationImporter()
 {}
 
-KisImportExportFilter::ConversionStatus KisAnimationImporter::import(QStringList files, int firstFrame, int step)
+KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int firstFrame, int step)
 {
     Q_ASSERT(step > 0);
 
@@ -71,7 +71,7 @@ KisImportExportFilter::ConversionStatus KisAnimationImporter::import(QStringList
     QScopedPointer<KisDocument> importDoc(KisPart::instance()->createDocument());
     importDoc->setFileBatchMode(true);
 
-    KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
+    KisImportExportErrorCode status = ImportExportCodes::OK;
     int frame = firstFrame;
     int filesProcessed = 0;
 
@@ -83,7 +83,7 @@ KisImportExportFilter::ConversionStatus KisAnimationImporter::import(QStringList
     Q_FOREACH(QString file, files) {
         bool successfullyLoaded = importDoc->openUrl(QUrl::fromLocalFile(file), KisDocument::DontAddToRecent);
         if (!successfullyLoaded) {
-            status = KisImportExportFilter::InternalError;
+            status = ImportExportCodes::InternalError;
             break;
         }
 
@@ -109,7 +109,7 @@ KisImportExportFilter::ConversionStatus KisAnimationImporter::import(QStringList
         }
 
         if (m_d->stop) {
-            status = KisImportExportFilter::ProgressCancelled;
+            status = ImportExportCodes::Cancelled;
             break;
         }
 

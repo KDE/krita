@@ -1,3 +1,5 @@
+add_subdirectory(tests)
+
 set(libkritaconverter_LIB_SRCS
     ora_converter.cpp
     kis_open_raster_load_context.cpp

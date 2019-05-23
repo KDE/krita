@@ -71,6 +71,8 @@ struct KRITAUI_EXPORT KisImportExportComplexError
     KisImportExportComplexError(QFileDevice::FileError error);
 
     friend QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode);
+
+
 protected:
     QString qtErrorMessage() const;
     QFileDevice::FileError m_error;
@@ -84,6 +86,15 @@ struct KRITAUI_EXPORT KisImportExportErrorCannotWrite : KisImportExportComplexEr
     QString errorMessage() const override;
 
     ~KisImportExportErrorCannotWrite() { }
+
+    bool operator==(KisImportExportErrorCannotWrite other);
+
+private:
+    KisImportExportErrorCannotWrite();
+
+    //friend KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotWrite code);
+    friend class KisImportExportErrorCode;
+
 };
 
 struct KRITAUI_EXPORT KisImportExportErrorCannotRead : KisImportExportComplexError
@@ -93,6 +104,15 @@ struct KRITAUI_EXPORT KisImportExportErrorCannotRead : KisImportExportComplexErr
     QString errorMessage() const override;
 
     ~KisImportExportErrorCannotRead() { }
+
+    bool operator==(KisImportExportErrorCannotRead other);
+
+private:
+    KisImportExportErrorCannotRead();
+
+    //friend KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotRead code);
+    friend class KisImportExportErrorCode;
+
 };
 
 
@@ -113,6 +133,8 @@ public:
     bool isInternalError() const;
 
     friend QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode);
+
+    bool operator==(KisImportExportErrorCode errorCode);
 
 private:
     enum ErrorFieldUsed

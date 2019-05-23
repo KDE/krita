@@ -32,7 +32,7 @@ public:
     KisTIFFExport(QObject *parent, const QVariantList &);
     ~KisTIFFExport() override;
     bool supportsIO() const override { return false; }
-    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
     KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const override;
     KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const override;
     void initializeCapabilities() override;

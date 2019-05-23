@@ -212,6 +212,11 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
         const QVector<QPointF> bristlePath = m_trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
         bristlePathSize = m_trajectory.size();
 
+        // avoid overlapping bristle caps with antialias on
+        if (m_properties->antialias) {
+            bristlePathSize -= 1;
+        }
+
         memcpy(bristleColor.data(), bristle->color().data() , m_pixelSize);
         for (int i = 0; i < bristlePathSize ; i++) {
 

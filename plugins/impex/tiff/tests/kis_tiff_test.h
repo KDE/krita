@@ -27,6 +27,10 @@ class KisTiffTest : public QObject
 private Q_SLOTS:
     void testFiles();
     void testRoundTripRGBF16();
+
+    void testImportFromWriteonly();
+    void testExportToReadonly();
+    void testImportIncorrectFormat();
 };
 
 #endif

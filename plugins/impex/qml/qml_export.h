@@ -29,7 +29,7 @@ public:
     QMLExport(QObject *parent, const QVariantList &);
     ~QMLExport() override;
 public:
-    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
     void initializeCapabilities() override;
 };
 

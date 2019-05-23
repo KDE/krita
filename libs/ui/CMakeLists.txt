@@ -362,6 +362,7 @@ set(kritaui_LIB_SRCS
     KisUndoActionsUpdateManager.cpp
     KisView.cpp
     KisImportExportErrorCode.cpp
+    KisImportExportAdditionalChecks.cpp
 
     thememanager.cpp
 

@@ -1,3 +1,5 @@
+add_subdirectory(tests)
+
 if(OPENEXR_FOUND)
 	include_directories(${OPENEXR_INCLUDE_DIR})
 endif()

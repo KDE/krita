@@ -67,6 +67,7 @@ QString KisImportExportComplexError::qtErrorMessage() const
     return unspecifiedError;
 }
 
+KisImportExportErrorCannotRead::KisImportExportErrorCannotRead() : KisImportExportComplexError(QFileDevice::FileError()) { }
 
 KisImportExportErrorCannotRead::KisImportExportErrorCannotRead(QFileDevice::FileError error) : KisImportExportComplexError(error) {
     KIS_ASSERT_RECOVER_NOOP(error != QFileDevice::NoError);
@@ -77,6 +78,14 @@ QString KisImportExportErrorCannotRead::errorMessage() const
     return i18n("Cannot open file for reading. Reason: %1", qtErrorMessage());
 }
 
+bool KisImportExportErrorCannotRead::operator==(KisImportExportErrorCannotRead other)
+{
+    return other.m_error == m_error;
+}
+
+
+
+KisImportExportErrorCannotWrite::KisImportExportErrorCannotWrite() : KisImportExportComplexError(QFileDevice::FileError()) { }
 
 KisImportExportErrorCannotWrite::KisImportExportErrorCannotWrite(QFileDevice::FileError error) : KisImportExportComplexError(error) {
     KIS_ASSERT_RECOVER_NOOP(error != QFileDevice::NoError);
@@ -87,15 +96,21 @@ QString KisImportExportErrorCannotWrite::errorMessage() const
     return i18n("Cannot open file for writing. Reason: %1", qtErrorMessage());
 }
 
-KisImportExportErrorCode::KisImportExportErrorCode() : errorFieldUsed(None), cannotRead(QFileDevice::FileError()), cannotWrite(QFileDevice::FileError()) { }
-
-KisImportExportErrorCode::KisImportExportErrorCode(ImportExportCodes::ErrorCodeID id) : errorFieldUsed(CodeId), codeId(id),  cannotRead(QFileDevice::FileError()), cannotWrite(QFileDevice::FileError()) { }
-
-KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotRead error) : errorFieldUsed(CannotRead), cannotRead(error), cannotWrite(QFileDevice::FileError()) { }
-KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotWrite error) : errorFieldUsed(CannotWrite), cannotRead(QFileDevice::FileError()), cannotWrite(error) { }
+bool KisImportExportErrorCannotWrite::operator==(KisImportExportErrorCannotWrite other)
+{
+    return other.m_error == m_error;
+}
 
 
 
+
+
+KisImportExportErrorCode::KisImportExportErrorCode() : errorFieldUsed(None), cannotRead(), cannotWrite() { }
+
+KisImportExportErrorCode::KisImportExportErrorCode(ImportExportCodes::ErrorCodeID id) : errorFieldUsed(CodeId), codeId(id),  cannotRead(), cannotWrite() { }
+
+KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotRead error) : errorFieldUsed(CannotRead), cannotRead(error), cannotWrite() { }
+KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotWrite error) : errorFieldUsed(CannotWrite), cannotRead(), cannotWrite(error) { }
 
 
 bool KisImportExportErrorCode::isOk() const
@@ -117,6 +132,7 @@ bool KisImportExportErrorCode::isInternalError() const
 QString KisImportExportErrorCode::errorMessage() const
 {
     QString internal = i18n("Unexpected error. Please contact developers.");
+    QString unknown = i18n("Unknown error.");
     if (errorFieldUsed == CannotRead) {
         return cannotRead.errorMessage();
     } else if (errorFieldUsed == CannotWrite) {
@@ -134,6 +150,8 @@ QString KisImportExportErrorCode::errorMessage() const
                 return i18n("The file format contains unsupported features.");
             case ImportExportCodes::FormatColorSpaceUnsupported:
                 return i18n("The file format contains unsupported color space.");
+            case ImportExportCodes::ErrorWhileReading:
+                return unknown;
 
             // Writing
             case ImportExportCodes::CannotCreateFile:
@@ -142,6 +160,8 @@ QString KisImportExportErrorCode::errorMessage() const
                 return i18n("Permission denied: Krita is not allowed to write to the file.");
             case ImportExportCodes::InsufficientMemory:
                 return i18n("There is not enough memory left to save the file.");
+            case ImportExportCodes::ErrorWhileWriting:
+                return unknown;
 
 
             // Both
@@ -150,7 +170,7 @@ QString KisImportExportErrorCode::errorMessage() const
 
             // Other
             case ImportExportCodes::Failure:
-                return i18n("Unknown error.");
+                return unknown;
             case ImportExportCodes::InternalError:
                 return internal;
 
@@ -167,6 +187,21 @@ QString KisImportExportErrorCode::errorMessage() const
 
 
 
+bool KisImportExportErrorCode::operator==(KisImportExportErrorCode errorCode)
+{
+    if (errorFieldUsed != errorCode.errorFieldUsed) {
+        return false;
+    }
+    if (errorFieldUsed == CodeId) {
+        return codeId == errorCode.codeId;
+    }
+    if (errorFieldUsed == CannotRead) {
+        return cannotRead == errorCode.cannotRead;
+    }
+    return cannotWrite == errorCode.cannotWrite;
+}
+
+
 QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode)
 {
     switch(errorCode.errorFieldUsed) {
@@ -177,7 +212,7 @@ QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode)
             d << "Cannot read: " << errorCode.cannotRead.m_error;
         break;
     case KisImportExportErrorCode::CannotWrite:
-        d << "Cannot read: " << errorCode.cannotRead.m_error;
+        d << "Cannot write: " << errorCode.cannotRead.m_error;
         break;
     case KisImportExportErrorCode::CodeId:
         d << "Error code = " << errorCode.codeId;

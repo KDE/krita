@@ -77,7 +77,7 @@ public:
      * If the QString which is returned isEmpty() and the status is OK,
      * then we imported the file directly into the document.
      */
-    KisImportExportFilter::ConversionStatus importDocument(const QString &location, const QString &mimeType);
+    KisImportExportErrorCode importDocument(const QString &location, const QString &mimeType);
 
     /**
      * @brief Exports the given file/document to the specified URL/mimetype.
@@ -86,9 +86,9 @@ public:
      * and when the method returns @p mimeType contains this mimetype.
      * Oh, well, export is a C++ keyword ;)
      */
-    KisImportExportFilter::ConversionStatus exportDocument(const QString &location, const QString& realLocation, const QByteArray &mimeType, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0);
+    KisImportExportErrorCode exportDocument(const QString &location, const QString& realLocation, const QByteArray &mimeType, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0);
 
-    QFuture<KisImportExportFilter::ConversionStatus> exportDocumentAsyc(const QString &location, const QString& realLocation, const QByteArray &mimeType, KisImportExportFilter::ConversionStatus &status, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0);
+    QFuture<KisImportExportErrorCode> exportDocumentAsyc(const QString &location, const QString& realLocation, const QByteArray &mimeType, KisImportExportErrorCode &status, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0);
 
     ///@name Static API
     //@{
@@ -136,10 +136,10 @@ private:
     void fillStaticExportConfigurationProperties(KisPropertiesConfigurationSP exportConfiguration);
     bool askUserAboutExportConfiguration(QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, const QByteArray &from, const QByteArray &to, bool batchMode, const bool showWarnings, bool *alsoAsKra);
 
-    KisImportExportFilter::ConversionStatus doImport(const QString &location, QSharedPointer<KisImportExportFilter> filter);
+    KisImportExportErrorCode doImport(const QString &location, QSharedPointer<KisImportExportFilter> filter);
 
-    KisImportExportFilter::ConversionStatus doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, bool alsoAsKra);
-    KisImportExportFilter::ConversionStatus doExportImpl(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration);
+    KisImportExportErrorCode doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, bool alsoAsKra);
+    KisImportExportErrorCode doExportImpl(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration);
 
     // Private API
     KisImportExportManager(const KisImportExportManager& rhs);

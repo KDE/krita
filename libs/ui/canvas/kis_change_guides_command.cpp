@@ -22,10 +22,20 @@
 #include "KisDocument.h"
 #include <kis_image.h>
 
+#include <QList>
+#include <QListIterator>
 
 struct KisChangeGuidesCommand::Private
 {
     Private(KisDocument *_doc) : doc(_doc) {}
+
+    bool sameOrOnlyMovedOneGuideBetween(const KisGuidesConfig &first, const KisGuidesConfig &second);
+    enum Status {
+        NO_DIFF = 0,
+        ONE_DIFF = 1, /// only one difference including adding or removing
+        OTHER_DIFF = 4
+    };
+    Status diff(const QList<qreal> &first, const QList<qreal> &second);
 
     KisDocument *doc;
 
@@ -33,6 +43,47 @@ struct KisChangeGuidesCommand::Private
     KisGuidesConfig newGuides;
 };
 
+bool KisChangeGuidesCommand::Private::sameOrOnlyMovedOneGuideBetween(const KisGuidesConfig &first, const KisGuidesConfig &second)
+{
+    return diff(first.horizontalGuideLines(), second.horizontalGuideLines()) +
+        diff(first.verticalGuideLines(), second.verticalGuideLines()) <= 1;
+}
+
+KisChangeGuidesCommand::Private::Status KisChangeGuidesCommand::Private::diff(const QList<qreal> &first, const QList<qreal> &second)
+{
+    if (first.size() == second.size()) {
+        int diffCount = 0;
+        for (int i = 0; i < first.size(); ++i) {
+            if (first[i] != second[i]) {
+                ++diffCount;
+                if (diffCount > 1) {
+                    return OTHER_DIFF;
+                }
+            }
+        }
+        return diffCount == 0 ? NO_DIFF : ONE_DIFF;
+    } else if (first.size() - second.size() == -1) { // added a guide
+        QList<qreal> beforeRemoval = second;
+        beforeRemoval.takeLast();
+        return first == beforeRemoval ? ONE_DIFF : OTHER_DIFF;
+    } else if (first.size() - second.size() == 1) { // removed a guide
+        bool skippedItem = false;
+        for (QListIterator<qreal> i(first), j(second); i.hasNext() && j.hasNext(); ) {
+            qreal curFirst = i.next();
+            qreal curSecond = j.next();
+            if (!skippedItem && curFirst != curSecond) {
+                curFirst = i.next(); // try to go to the next item and see if it matches
+            }
+            if (curFirst != curSecond) {
+                return OTHER_DIFF;
+            }
+        }
+        // here we conclude only one guide is removed
+        return ONE_DIFF;
+    } else {
+        return OTHER_DIFF;
+    }
+}
 
 KisChangeGuidesCommand::KisChangeGuidesCommand(KisDocument *doc, const KisGuidesConfig &newGuides)
     : KUndo2Command(kundo2_i18n("Edit Guides")),
@@ -69,8 +120,15 @@ bool KisChangeGuidesCommand::mergeWith(const KUndo2Command *command)
         dynamic_cast<const KisChangeGuidesCommand*>(command);
 
     if (rhs) {
-        m_d->newGuides = rhs->m_d->newGuides;
-        result = true;
+        // we want to only merge consecutive movements, or creation then movement, or movement then deletion
+        // there should not be any changes not on the stack (see kis_guides_manager.cpp)
+        // nor any addition/removal of guides
+        // nor the movement of other guides
+        if (m_d->newGuides == rhs->m_d->oldGuides &&
+            m_d->sameOrOnlyMovedOneGuideBetween(m_d->oldGuides, rhs->m_d->newGuides)) {
+            m_d->newGuides = rhs->m_d->newGuides;
+            result = true;
+        }
     }
 
     return result;

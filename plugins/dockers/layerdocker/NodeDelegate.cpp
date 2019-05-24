@@ -810,6 +810,7 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
             if (hasCorrectModifier) {
                 model->setData(index, QVariant(int(action)), KisNodeModel::SelectOpaqueRole);
             }
+            d->view->setCurrentIndex(index);
             return true; //If not here then the item is !expanded when reaching return false;
         }
 

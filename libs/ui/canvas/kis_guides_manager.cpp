@@ -83,6 +83,7 @@ struct KisGuidesManager::Private
     Qt::MouseButton getButtonFromEvent(QEvent *event);
     QAction* createShortenedAction(const QString &text, const QString &parentId, QObject *parent);
     void syncAction(const QString &actionName, bool value);
+    bool needsUndoCommand();
 
     GuideHandle currentGuide;
 
@@ -131,8 +132,10 @@ void KisGuidesManager::slotUploadConfigToDocument()
         KisSignalsBlocker b(doc);
 
         if (m_d->shouldSetModified) {
-            KUndo2Command *cmd = new KisChangeGuidesCommand(doc, value);
-            doc->addCommand(cmd);
+            if (m_d->needsUndoCommand()) {
+                KUndo2Command *cmd = new KisChangeGuidesCommand(doc, value);
+                doc->addCommand(cmd);
+            }
         } else {
             doc->setGuidesConfig(value);
         }
@@ -194,6 +197,17 @@ void KisGuidesManager::Private::syncAction(const QString &actionName, bool value
     KIS_ASSERT_RECOVER_RETURN(action);
     KisSignalsBlocker b(action);
     action->setChecked(value);
+}
+
+bool KisGuidesManager::Private::needsUndoCommand()
+{
+    const KisGuidesConfig &value = guidesConfig;
+
+    KisDocument *doc = view ? view->document() : 0;
+    if (!doc) {
+        return false;
+    }
+    return !(doc->guidesConfig().hasSamePositionAs(value));
 }
 
 void KisGuidesManager::syncActionsStatus()

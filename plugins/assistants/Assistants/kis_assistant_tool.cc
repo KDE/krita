@@ -48,6 +48,8 @@
 #include <kis_painting_assistants_decoration.h>
 #include "kis_global.h"
 #include "VanishingPointAssistant.h"
+#include "AddRemoveAssistantCommand.h"
+#include <kis_undo_adapter.h>
 
 #include <math.h>
 
@@ -531,27 +533,22 @@ void KisAssistantTool::endPrimaryAction(KoPointerEvent *event)
 
 void KisAssistantTool::addAssistant()
 {
-    m_canvas->paintingAssistantsDecoration()->addAssistant(m_newAssistant);
+    KUndo2Command *addAssistantCmd = new AddRemoveAssistantCommand(AddRemoveAssistantCommand::ADD, m_canvas, m_newAssistant);
+    m_canvas->viewManager()->undoAdapter()->addCommand(addAssistantCmd);
+
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
     m_canvas->paintingAssistantsDecoration()->setSelectedAssistant(m_newAssistant);
     updateToolOptionsUI(); // vanishing point assistant will get an extra option
 
-    KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(m_newAssistant.data());
-    if (grid) {
-        m_canvas->viewManager()->canvasResourceProvider()->addPerspectiveGrid(grid);
-    }
     m_newAssistant.clear();
 }
 
 void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
 {
-    KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
-    if (grid) {
-        m_canvas->viewManager()->canvasResourceProvider()->removePerspectiveGrid(grid);
-    }
-    m_canvas->paintingAssistantsDecoration()->removeAssistant(assistant);
-    m_handles = m_canvas->paintingAssistantsDecoration()->handles();
+    KUndo2Command *removeAssistantCmd = new AddRemoveAssistantCommand(AddRemoveAssistantCommand::REMOVE, m_canvas, assistant);
+    m_canvas->viewManager()->undoAdapter()->addCommand(removeAssistantCmd);
 
+    m_handles = m_canvas->paintingAssistantsDecoration()->handles();
     m_canvas->paintingAssistantsDecoration()->deselectAssistant();
     updateToolOptionsUI();
 }

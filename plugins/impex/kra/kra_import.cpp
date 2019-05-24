@@ -40,7 +40,17 @@ KraImport::~KraImport()
 KisImportExportErrorCode KraImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KraConverter kraConverter(document);
-    return kraConverter.buildImage(io);
+    KisImportExportErrorCode result = kraConverter.buildImage(io);
+    if (result.isOk()) {
+        document->setCurrentImage(kraConverter.image());
+        if (kraConverter.activeNodes().size() > 0) {
+            document->setPreActivatedNode(kraConverter.activeNodes()[0]);
+        }
+        if (kraConverter.assistants().size() > 0) {
+            document->setAssistants(kraConverter.assistants());
+        }
+    }
+    return result;
 }
 
 #include <kra_import.moc>

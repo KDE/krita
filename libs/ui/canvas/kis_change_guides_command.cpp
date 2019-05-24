@@ -27,17 +27,20 @@
 
 struct KisChangeGuidesCommand::Private
 {
-    Private(KisDocument *_doc) : doc(_doc) {}
+    Private(KisDocument *_doc, KisChangeGuidesCommand *q) : doc(_doc), q(q) {}
 
     bool sameOrOnlyMovedOneGuideBetween(const KisGuidesConfig &first, const KisGuidesConfig &second);
     enum Status {
         NO_DIFF = 0,
-        ONE_DIFF = 1, /// only one difference including adding or removing
-        OTHER_DIFF = 4
+        ONE_DIFF = 1,
+        ADDITION = 4,
+        REMOVAL = 16,
+        OTHER_DIFF = 1024
     };
     Status diff(const QList<qreal> &first, const QList<qreal> &second);
 
     KisDocument *doc;
+    KisChangeGuidesCommand *q;
 
     KisGuidesConfig oldGuides;
     KisGuidesConfig newGuides;
@@ -45,8 +48,20 @@ struct KisChangeGuidesCommand::Private
 
 bool KisChangeGuidesCommand::Private::sameOrOnlyMovedOneGuideBetween(const KisGuidesConfig &first, const KisGuidesConfig &second)
 {
-    return diff(first.horizontalGuideLines(), second.horizontalGuideLines()) +
-        diff(first.verticalGuideLines(), second.verticalGuideLines()) <= 1;
+    int ret = diff(first.horizontalGuideLines(), second.horizontalGuideLines()) +
+        diff(first.verticalGuideLines(), second.verticalGuideLines());
+
+    if (ret == ADDITION) {
+        q->setText(kundo2_i18n("Add Guide"));
+    } else if (ret == REMOVAL) {
+        q->setText(kundo2_i18n("Remove Guide"));
+    } else if (ret == NO_DIFF || ret == ONE_DIFF) { // meaning we will still merge it
+        // XXX: how to deal with NO_DIFF (the command "should" be removed -- how?)
+        q->setText(kundo2_i18n("Edit Guides"));
+    } else {
+        return false;
+    }
+    return true;
 }
 
 KisChangeGuidesCommand::Private::Status KisChangeGuidesCommand::Private::diff(const QList<qreal> &first, const QList<qreal> &second)
@@ -65,7 +80,7 @@ KisChangeGuidesCommand::Private::Status KisChangeGuidesCommand::Private::diff(co
     } else if (first.size() - second.size() == -1) { // added a guide
         QList<qreal> beforeRemoval = second;
         beforeRemoval.takeLast();
-        return first == beforeRemoval ? ONE_DIFF : OTHER_DIFF;
+        return first == beforeRemoval ? ADDITION : OTHER_DIFF;
     } else if (first.size() - second.size() == 1) { // removed a guide
         bool skippedItem = false;
         for (QListIterator<qreal> i(first), j(second); i.hasNext() && j.hasNext(); ) {
@@ -79,7 +94,7 @@ KisChangeGuidesCommand::Private::Status KisChangeGuidesCommand::Private::diff(co
             }
         }
         // here we conclude only one guide is removed
-        return ONE_DIFF;
+        return REMOVAL;
     } else {
         return OTHER_DIFF;
     }
@@ -87,10 +102,12 @@ KisChangeGuidesCommand::Private::Status KisChangeGuidesCommand::Private::diff(co
 
 KisChangeGuidesCommand::KisChangeGuidesCommand(KisDocument *doc, const KisGuidesConfig &newGuides)
     : KUndo2Command(kundo2_i18n("Edit Guides")),
-      m_d(new Private(doc))
+      m_d(new Private(doc, this))
 {
     m_d->oldGuides = doc->guidesConfig();
     m_d->newGuides = newGuides;
+    // update the undo command text
+    m_d->sameOrOnlyMovedOneGuideBetween(m_d->oldGuides, m_d->newGuides);
 }
 
 KisChangeGuidesCommand::~KisChangeGuidesCommand()

@@ -36,7 +36,7 @@ public:
     }
 
     int margin;
-    QSize documentSize;
+    QSizeF documentSize;
     QPoint documentOffset;
     qreal preferredCenterFractionX;
     qreal preferredCenterFractionY;
@@ -72,12 +72,12 @@ KoCanvasBase* KoCanvasController::canvas() const
     return 0;
 }
 
-void KoCanvasController::setDocumentSize(const QSize &sz)
+void KoCanvasController::setDocumentSize(const QSizeF &sz)
 {
     d->documentSize = sz;
 }
 
-QSize KoCanvasController::documentSize() const
+QSizeF KoCanvasController::documentSize() const
 {
     return d->documentSize;
 }

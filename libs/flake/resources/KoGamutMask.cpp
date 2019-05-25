@@ -27,6 +27,7 @@
 #include <QDomElement>
 #include <QByteArray>
 #include <QBuffer>
+#include <QScopedPointer>
 
 #include <FlakeDebug.h>
 
@@ -242,7 +243,7 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev)
     QBuffer buf(&d->data);
     buf.open(QBuffer::ReadOnly);
 
-    KoStore* store(KoStore::createStore(&buf, KoStore::Read, "application/x-krita-gamutmask", KoStore::Zip));
+    QScopedPointer<KoStore> store(KoStore::createStore(&buf, KoStore::Read, "application/x-krita-gamutmask", KoStore::Zip));
     if (!store || store->bad()) return false;
 
     bool storeOpened = store->open("gamutmask.svg");
@@ -286,7 +287,7 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev)
     setMaskShapes(shapes);
 
     if (store->open("preview.png")) {
-        KoStoreDevice previewDev(store);
+        KoStoreDevice previewDev(store.data());
         previewDev.open(QIODevice::ReadOnly);
 
         QImage preview = QImage();

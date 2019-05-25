@@ -663,7 +663,8 @@ namespace KisLayerUtils {
         KisNodeSP node = image->root()->firstChild();
         while (node) {
             if (!nodesToRemove.contains(node) &&
-                qobject_cast<KisLayer*>(node.data())) {
+                qobject_cast<KisLayer*>(node.data()) &&
+                !node->isFakeNode()) {
 
                 lastLayer = false;
                 break;

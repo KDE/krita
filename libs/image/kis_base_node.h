@@ -504,6 +504,13 @@ public:
     virtual void setImage(KisImageWSP image);
     KisImageWSP image() const;
 
+
+    /**
+     * Fake node is not present in the layer stack and is not used
+     * for normal projection rendering algorithms.
+     */
+    virtual bool isFakeNode() const;
+
 protected:
 
     void setSupportsLodMoves(bool value);

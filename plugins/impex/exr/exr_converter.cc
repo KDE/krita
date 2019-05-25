@@ -1110,7 +1110,6 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisPai
     else if (info.layerDevice->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
         pixelType = Imf::FLOAT;
     }
-    ENTER_FUNCTION() << "(4)";
     header.channels().insert("R", Imf::Channel(pixelType));
     header.channels().insert("G", Imf::Channel(pixelType));
     header.channels().insert("B", Imf::Channel(pixelType));
@@ -1121,7 +1120,6 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisPai
     info.channels.push_back("B");
     info.channels.push_back("A");
     info.pixelType = pixelType;
-    ENTER_FUNCTION() << "(5)";
 
     // Open file for writing
     try {

@@ -230,7 +230,7 @@ KisLayer* KisGroupLayer::onlyMeaningfulChild() const
 
     while (child) {
         KisLayer *layer = qobject_cast<KisLayer*>(child);
-        if (layer) {
+        if (layer && !layer->isFakeNode()) {
             if (onlyLayer) return 0;
             onlyLayer = layer;
         }

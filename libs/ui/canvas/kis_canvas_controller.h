@@ -39,7 +39,7 @@ public:
     void keyPressEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
-    void updateDocumentSize(const QSize &sz, bool recalculateCenter) override;
+    void updateDocumentSize(const QSizeF &sz, bool recalculateCenter) override;
     void activate() override;
 
     QPointF currentCursorPosition() const override;

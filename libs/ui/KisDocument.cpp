@@ -579,12 +579,10 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
                 i18n("Exporting Document...") :
                 i18n("Saving Document...");
 
-    ENTER_FUNCTION() << "second!";
     bool started =
             initiateSavingInBackground(actionName,
                                        this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, KisImportExportErrorCode ,QString)),
                                        job, exportConfiguration);
-    ENTER_FUNCTION() << "started? " << started;
     if (!started) {
         emit canceled(QString());
     }
@@ -674,8 +672,6 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
         return;
 
     const QString fileName = QFileInfo(job.filePath).fileName();
-
-    ENTER_FUNCTION() << "status = " << status << " Message " << status.errorMessage();
 
     if (!status.isOk()) {
         emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",

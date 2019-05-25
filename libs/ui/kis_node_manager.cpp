@@ -845,7 +845,7 @@ KisNodeDisplayModeAdapter *KisNodeManager::nodeDisplayModeAdapter() const
 
 bool KisNodeManager::isNodeHidden(KisNodeSP node, bool isGlobalSelectionHidden)
 {
-    if (dynamic_cast<KisReferenceImagesLayer *>(node.data())) {
+    if (node && node->isFakeNode()) {
         return true;
     }
 

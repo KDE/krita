@@ -132,7 +132,6 @@ bool KisImportExportErrorCode::isInternalError() const
 QString KisImportExportErrorCode::errorMessage() const
 {
     QString internal = i18n("Unexpected error. Please contact developers.");
-    QString unknown = i18n("Unknown error.");
     if (errorFieldUsed == CannotRead) {
         return cannotRead.errorMessage();
     } else if (errorFieldUsed == CannotWrite) {
@@ -151,7 +150,7 @@ QString KisImportExportErrorCode::errorMessage() const
             case ImportExportCodes::FormatColorSpaceUnsupported:
                 return i18n("The file format contains unsupported color space.");
             case ImportExportCodes::ErrorWhileReading:
-                return unknown;
+                return i18n("Error occurred while reading from the file.");
 
             // Writing
             case ImportExportCodes::CannotCreateFile:
@@ -159,9 +158,9 @@ QString KisImportExportErrorCode::errorMessage() const
             case ImportExportCodes::NoAccessToWrite:
                 return i18n("Permission denied: Krita is not allowed to write to the file.");
             case ImportExportCodes::InsufficientMemory:
-                return i18n("There is not enough memory left to save the file.");
+                return i18n("There is not enough disk space left to save the file.");
             case ImportExportCodes::ErrorWhileWriting:
-                return unknown;
+                return i18n("Error occurred while writing to the file.");
 
 
             // Both
@@ -170,7 +169,7 @@ QString KisImportExportErrorCode::errorMessage() const
 
             // Other
             case ImportExportCodes::Failure:
-                return unknown;
+                return i18n("Unknown error.");
             case ImportExportCodes::InternalError:
                 return internal;
 

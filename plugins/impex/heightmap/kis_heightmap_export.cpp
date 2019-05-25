@@ -141,6 +141,7 @@ KisImportExportErrorCode KisHeightMapExport::convert(KisDocument *document, QIOD
     }
     else {
         KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExportCodes::InternalError);
+        return ImportExportCodes::InternalError;
     }
     return ImportExportCodes::OK;
 }

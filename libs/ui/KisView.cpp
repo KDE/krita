@@ -815,7 +815,7 @@ void KisView::resetImageSizeAndScroll(bool changeCentering,
                 converter->imageToWidget(oldImageStillPoint) +
                 converter->documentOffset();
     } else {
-        QSize oldDocumentSize = d->canvasController.documentSize();
+        QSizeF oldDocumentSize = d->canvasController.documentSize();
         oldStillPoint = QPointF(0.5 * oldDocumentSize.width(), 0.5 * oldDocumentSize.height());
     }
 
@@ -841,7 +841,7 @@ void KisView::resetImageSizeAndScroll(bool changeCentering,
                 converter->imageToWidget(newImageStillPoint) +
                 converter->documentOffset();
     } else {
-        QSize newDocumentSize = d->canvasController.documentSize();
+        QSizeF newDocumentSize = d->canvasController.documentSize();
         newStillPoint = QPointF(0.5 * newDocumentSize.width(), 0.5 * newDocumentSize.height());
     }
 

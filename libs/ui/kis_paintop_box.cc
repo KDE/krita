@@ -266,7 +266,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         slFlow->setFixedHeight(iconsize);
         slFlow->setBlockUpdateSignalOnDrag(true);
 
-        slSize->setRange(0, cfg.readEntry("maximumBrushSize", 1000), 2);
+        slSize->setRange(0.01, cfg.readEntry("maximumBrushSize", 1000), 2);
         slSize->setValue(100);
 
         slSize->setSingleStep(1);

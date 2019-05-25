@@ -75,8 +75,8 @@ void KoCanvasControllerWidget::Private::resetScrollBars()
     // The scrollbar value always points at the top-left corner of the
     // bit of image we paint.
 
-    int docH = q->documentSize().height() + q->margin();
-    int docW = q->documentSize().width() + q->margin();
+    int docH = (int)q->documentSize().height() + q->margin();
+    int docW = (int)q->documentSize().width() + q->margin();
     int drawH = viewportWidget->height();
     int drawW = viewportWidget->width();
 
@@ -222,9 +222,13 @@ void KoCanvasControllerWidget::scrollContentsBy(int dx, int dy)
     d->setDocumentOffset();
 }
 
-QSize KoCanvasControllerWidget::viewportSize() const
+QSizeF KoCanvasControllerWidget::viewportSize() const
 {
-    return viewport()->size();
+    // Calculate viewport size aligned to device pixels to match KisOpenGLCanvas2.
+    qreal dpr = viewport()->devicePixelRatioF();
+    int viewportWidth = static_cast<int>(viewport()->width() * dpr);
+    int viewportHeight = static_cast<int>(viewport()->height() * dpr);
+    return QSizeF(viewportWidth / dpr, viewportHeight / dpr);
 }
 
 void KoCanvasControllerWidget::resizeEvent(QResizeEvent *resizeEvent)
@@ -442,7 +446,7 @@ void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
     zoomBy(viewRect.center(), scale);
 }
 
-void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalculateCenter)
+void KoCanvasControllerWidget::updateDocumentSize(const QSizeF &sz, bool recalculateCenter)
 {
     // Don't update if the document-size didn't changed to prevent infinite loops and unneeded updates.
     if (KoCanvasController::documentSize() == sz)

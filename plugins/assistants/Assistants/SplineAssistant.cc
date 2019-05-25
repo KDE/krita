@@ -38,6 +38,17 @@ SplineAssistant::SplineAssistant()
 {
 }
 
+SplineAssistant::SplineAssistant(const SplineAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : KisPaintingAssistant(rhs, handleMap)
+    , m_canvas(rhs.m_canvas)
+{
+}
+
+KisPaintingAssistantSP SplineAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+{
+    return KisPaintingAssistantSP(new SplineAssistant(*this, handleMap));
+}
+
 // parametric form of a cubic spline (B(t) = (1-t)^3 P0 + 3 (1-t)^2 t P1 + 3 (1-t) t^2 P2 + t^3 P3)
 inline QPointF B(qreal t, const QPointF& P0, const QPointF& P1, const QPointF& P2, const QPointF& P3)
 {

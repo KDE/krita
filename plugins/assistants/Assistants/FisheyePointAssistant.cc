@@ -39,6 +39,18 @@ FisheyePointAssistant::FisheyePointAssistant()
 {
 }
 
+FisheyePointAssistant::FisheyePointAssistant(const FisheyePointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandlebSP> &handleMap)
+    : KisPaintingAssistant(rhs, handleMap)
+    , e(rhs.e)
+    , extraE(rhs.extraE)
+{
+}
+
+KisPaintingAssistantSP FisheyePointAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+{
+    return KisPaintingAssistantSP(new FisheyePointAssistant(*this, handleMap));
+}
+
 QPointF FisheyePointAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
     const static QPointF nullPoint(std::numeric_limits<qreal>::quiet_NaN(), std::numeric_limits<qreal>::quiet_NaN());

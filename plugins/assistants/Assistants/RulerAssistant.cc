@@ -35,6 +35,16 @@ RulerAssistant::RulerAssistant()
 {
 }
 
+KisPaintingAssistantSP RulerAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+{
+    return KisPaintingAssistantSP(new RulerAssistant(*this, handleMap));
+}
+
+RulerAssistant::RulerAssistant(const RulerAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : KisPaintingAssistant(rhs, handleMap)
+{
+}
+
 QPointF RulerAssistant::project(const QPointF& pt) const
 {
     Q_ASSERT(isAssistantComplete());

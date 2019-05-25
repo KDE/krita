@@ -19,6 +19,8 @@
 #ifndef _RULER_ASSISTANT_H_
 #define _RULER_ASSISTANT_H_
 
+#include <QMap>
+
 #include "kis_painting_assistant.h"
 
 class Ruler;
@@ -27,6 +29,7 @@ class RulerAssistant : public KisPaintingAssistant
 {
 public:
     RulerAssistant();
+    KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
     QPointF buttonPosition() const override;
     int numHandles() const override { return 2; }
@@ -37,6 +40,7 @@ protected:
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
     QPointF project(const QPointF& pt) const;
+    explicit RulerAssistant(const RulerAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 };
 
 class RulerAssistantFactory : public KisPaintingAssistantFactory

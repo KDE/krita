@@ -38,6 +38,16 @@ InfiniteRulerAssistant::InfiniteRulerAssistant()
 {
 }
 
+InfiniteRulerAssistant::InfiniteRulerAssistant(const InfiniteRulerAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : KisPaintingAssistant(rhs, handleMap)
+{
+}
+
+KisPaintingAssistantSP InfiniteRulerAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+{
+    return KisPaintingAssistantSP(new InfiniteRulerAssistant(*this, handleMap));
+}
+
 QPointF InfiniteRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
     Q_ASSERT(isAssistantComplete());

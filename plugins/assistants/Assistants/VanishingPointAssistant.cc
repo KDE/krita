@@ -38,6 +38,18 @@ VanishingPointAssistant::VanishingPointAssistant()
 {
 }
 
+VanishingPointAssistant::VanishingPointAssistant(const VanishingPointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandlebSP> &handleMap)
+    : KisPaintingAssistant(rhs, handleMap)
+    , m_canvas(rhs.m_canvas)
+    , m_referenceLineDensity(rhs.referenceLineDensity)
+{
+}
+
+KisPaintingAssistantSP VanishingPointAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+{
+    return KisPaintingAssistantSP(new VanishingPointAssistant(*this, handleMap));
+}
+
 QPointF VanishingPointAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
     //Q_ASSERT(handles().size() == 1 || handles().size() == 5);

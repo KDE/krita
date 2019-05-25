@@ -27,9 +27,11 @@
 #include <QObject>
 #include <QColor>
 #include <QXmlStreamWriter>
+#include <QMap>
 
 #include <kritaui_export.h>
 #include <kis_shared.h>
+#include <kis_types.h>
 
 class QPainter;
 class QRect;
@@ -74,12 +76,12 @@ public:
     void uncache();
     KisPaintingAssistantHandle& operator=(const QPointF&);
     void setType(char type);
-    char handleType();
+    char handleType() const;
 
 private:
     void registerAssistant(KisPaintingAssistant*);
     void unregisterAssistant(KisPaintingAssistant*);
-    bool containsAssistant(KisPaintingAssistant*);
+    bool containsAssistant(KisPaintingAssistant*) const;
 
 private:
     struct Private;
@@ -95,6 +97,7 @@ class KRITAUI_EXPORT KisPaintingAssistant
 public:
     KisPaintingAssistant(const QString& id, const QString& name);
     virtual ~KisPaintingAssistant();
+    virtual KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
     const QString& id() const;
     const QString& name() const;
     bool isSnappingActive() const;
@@ -189,6 +192,8 @@ public:
     static double norm2(const QPointF& p);
 
 protected:
+    explicit KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantSP> &handleMap);
+
     virtual QRect boundingRect() const;
 
     /// performance layer where the graphics can be drawn from a cache instead of generated every render update

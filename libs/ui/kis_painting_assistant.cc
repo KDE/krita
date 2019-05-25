@@ -70,7 +70,7 @@ void KisPaintingAssistantHandle::setType(char type)
     d->handle_type = type;
 }
 
-char KisPaintingAssistantHandle::handleType()
+char KisPaintingAssistantHandle::handleType() const
 {
     return d->handle_type;
 }
@@ -93,7 +93,7 @@ void KisPaintingAssistantHandle::unregisterAssistant(KisPaintingAssistant* assis
     Q_ASSERT(!d->assistants.contains(assistant));
 }
 
-bool KisPaintingAssistantHandle::containsAssistant(KisPaintingAssistant* assistant)
+bool KisPaintingAssistantHandle::containsAssistant(KisPaintingAssistant* assistant) const
 {
     return d->assistants.contains(assistant);
 }
@@ -120,6 +120,8 @@ void KisPaintingAssistantHandle::uncache()
 }
 
 struct KisPaintingAssistant::Private {
+    explicit Private(const Private &rhs);
+    KisPaintingAssistantHandleSP reuseOrCreateHandle(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap, KisPaintingAssistantHandleSP origHandle, KisPaintingAssistant *q);
     QString id;
     QString name;
     bool isSnappingActive;
@@ -145,6 +147,34 @@ struct KisPaintingAssistant::Private {
     bool useCustomColor = false;
     QColor assistantCustomColor = KisConfig(true).defaultAssistantsColor();
 };
+
+KisPaintingAssistant::Private::Private(const Private &rhs)
+    : id(rhs.id)
+    , name(rhs.name)
+    , isSnappingActive(rhs.isSnappingActive)
+    , outlineVisible(rhs.outlineVisible)
+      // handles are shared, need to use map
+    , cached(rhs.cached)
+    , cachedRect(rhs.cachedRect)
+    , m_canvas(rhs.m_canvas)
+    , cachedTransform(rhs.cachedTransform)
+    , assistantGlobalColorCache(rhs.assistantGlobalColorCache)
+    , useCustomColor(rhs.useCustomColor)
+    , assistantCustomColor(rhs.assistantCustomColor)
+{
+}
+
+KisPaintingAssistantHandleSP KisPaintingAssistant::Private::reuseOrCreateHandle(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap, KisPaintingAssistantHandleSP origHandle, KisPaintingAssistant *q)
+{
+    KisPaintingAssistantHandleSP mappedHandle = handleMap.value();
+    if (!mappedHandle) {
+        mappedHandle = KisPaintingAssistantHandleSP(new KisPaintingAssistantHandle(origHandle));
+        mappedHandle->setType(origHandle->handleType());
+        handleMap.insert(origHandle, mappedHandle);
+    }
+    mappedHandle.registerAssistant(q);
+    return mappedHandle;
+}
 
 bool KisPaintingAssistant::useCustomColor()
 {
@@ -182,6 +212,32 @@ KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& nam
     d->name = name;
     d->isSnappingActive = true;
     d->outlineVisible = true;
+}
+
+KisPaintingAssistant::KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap<KisPaintingAssistantHandleMap, KisPaintingAssistantHandleSP> &handleMap)
+    : d(new Private(rhs.d))
+{
+    Q_FOREACH (const KisPaintingAssistantHandleSP origHandle, rhs.d->handles) {
+        d->handles << d->reuseOrCreateHandle(handleMap, origHandle, this);
+    }
+    Q_FOREACH (const KisPaintingAssistantHandleSP origHandle, rhs.d->sideHandles) {
+        d->sideHandles << d->reuseOrCreateHandle(handleMap, origHandle, this);
+    }
+#define _REUSE_H(name) d->name = d->reuseOrCreateHandle(handleMap, rhs.d->name, this)
+    _REUSE_H(topLeft);
+    _REUSE_H(bottomLeft);
+    _REUSE_H(topRight);
+    _REUSE_H(bottomRight);
+    _REUSE_H(topMiddle);
+    _REUSE_H(bottomMiddle);
+    _REUSE_H(rightMiddle);
+    _REUSE_H(leftMiddle);
+#undef _REUSE_H
+}
+
+KisPaintingAssistantSP KisPaintingAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+{
+    return KisPaintingAssistantSP(new KisPaintingAssistant(*this, handleMap));
 }
 
 bool KisPaintingAssistant::isSnappingActive() const

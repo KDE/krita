@@ -38,10 +38,10 @@ VanishingPointAssistant::VanishingPointAssistant()
 {
 }
 
-VanishingPointAssistant::VanishingPointAssistant(const VanishingPointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandlebSP> &handleMap)
+VanishingPointAssistant::VanishingPointAssistant(const VanishingPointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
     : KisPaintingAssistant(rhs, handleMap)
     , m_canvas(rhs.m_canvas)
-    , m_referenceLineDensity(rhs.referenceLineDensity)
+    , m_referenceLineDensity(rhs.m_referenceLineDensity)
 {
 }
 

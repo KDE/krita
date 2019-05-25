@@ -35,7 +35,7 @@ EllipseAssistant::EllipseAssistant()
 {
 }
 
-EllipseAssistant::EllipseAssistant(const EllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandlebSP> &handleMap)
+EllipseAssistant::EllipseAssistant(const EllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
     : KisPaintingAssistant(rhs, handleMap)
     , e(rhs.e)
 {

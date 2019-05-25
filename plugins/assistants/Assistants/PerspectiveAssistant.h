@@ -53,7 +53,7 @@ private:
     bool quad(QPolygonF& out) const;
     // finds the transform from perspective coordinates (a unit square) to the document
     bool getTransform(QPolygonF& polyOut, QTransform& transformOut) const;
-    explicit PerspectiveAssistant(const PerspectiveAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandlebSP> &handleMap);
+    explicit PerspectiveAssistant(const PerspectiveAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 
     // which direction to snap to (in transformed coordinates)
     QLineF m_snapLine;

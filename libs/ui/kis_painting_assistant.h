@@ -97,7 +97,7 @@ class KRITAUI_EXPORT KisPaintingAssistant
 public:
     KisPaintingAssistant(const QString& id, const QString& name);
     virtual ~KisPaintingAssistant();
-    virtual KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
+    virtual KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const = 0;
     const QString& id() const;
     const QString& name() const;
     bool isSnappingActive() const;
@@ -192,7 +192,7 @@ public:
     static double norm2(const QPointF& p);
 
 protected:
-    explicit KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantSP> &handleMap);
+    explicit KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 
     virtual QRect boundingRect() const;
 

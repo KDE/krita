@@ -43,7 +43,7 @@ KisPaintingAssistantSP ParallelRulerAssistant::clone(QMap<KisPaintingAssistantHa
     return KisPaintingAssistantSP(new ParallelRulerAssistant(*this, handleMap));
 }
 
-ParallelRulerAssistant::ParallelRulerAssistant(const ParallelRulerAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandlebSP> &handleMap)
+ParallelRulerAssistant::ParallelRulerAssistant(const ParallelRulerAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
     : KisPaintingAssistant(rhs, handleMap)
 {
 }

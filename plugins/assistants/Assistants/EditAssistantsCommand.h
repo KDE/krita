@@ -16,38 +16,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef ADD_REMOVE_ASSISTANT_COMMAND_H_
-#define ADD_REMOVE_ASSISTANT_COMMAND_H_
+#include <QPointer>
 
 #include <kundo2command.h>
 #include <kis_painting_assistant.h>
-#include <kis_types.h>
-
-#include <QPointer>
 
 class KisCanvas2;
 
-class AddRemoveAssistantCommand : public KUndo2Command
+class EditAssistantsCommand : public KUndo2Command
 {
+    using AssistantSPList = QList<KisPaintingAssistantSP>;
 public:
     enum Type {
-        ADD,
-        REMOVE
+        ADD = -1,
+        REMOVE = 1,
+        EDIT = 0
     };
-
-    AddRemoveAssistantCommand(Type type, QPointer<KisCanvas2> canvas, KisPaintingAssistantSP assistant, KUndo2Command *parent = 0);
-    ~AddRemoveAssistantCommand() override;
+    EditAssistantsCommand(QPointer<KisCanvas2> canvas, AssistantSPList origAssistants, AssistantSPList newAssistants, KUndo2Command *parent = 0);
+    EditAssistantsCommand(QPointer<KisCanvas2> canvas, AssistantSPList origAssistants, AssistantSPList newAssistants, Type type, int index, KUndo2Command *parent = 0);
 
     void undo() override;
     void redo() override;
 
 private:
-    void addAssistant();
-    void removeAssistant();
-
-    Type m_type;
+    void replaceWith(AssistantSPList assistants, Type type = EDIT);
     QPointer<KisCanvas2> m_canvas;
-    KisPaintingAssistantSP m_assistant;
+    AssistantSPList m_origAssistants, m_newAssistants;
+    int m_index;
+    bool m_firstRedo;
+    Type m_type;
 };
-
-#endif

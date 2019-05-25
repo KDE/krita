@@ -56,6 +56,7 @@ KisPaintingAssistantHandle::KisPaintingAssistantHandle(const KisPaintingAssistan
     , KisShared()
     , d(new Private)
 {
+    dbgUI << "KisPaintingAssistantHandle ctor";
 }
 
 KisPaintingAssistantHandle& KisPaintingAssistantHandle::operator=(const QPointF &  pt)
@@ -120,6 +121,7 @@ void KisPaintingAssistantHandle::uncache()
 }
 
 struct KisPaintingAssistant::Private {
+    Private() = default;
     explicit Private(const Private &rhs);
     KisPaintingAssistantHandleSP reuseOrCreateHandle(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap, KisPaintingAssistantHandleSP origHandle, KisPaintingAssistant *q);
     QString id;
@@ -166,13 +168,22 @@ KisPaintingAssistant::Private::Private(const Private &rhs)
 
 KisPaintingAssistantHandleSP KisPaintingAssistant::Private::reuseOrCreateHandle(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap, KisPaintingAssistantHandleSP origHandle, KisPaintingAssistant *q)
 {
-    KisPaintingAssistantHandleSP mappedHandle = handleMap.value();
+    KisPaintingAssistantHandleSP mappedHandle = handleMap.value(origHandle);
     if (!mappedHandle) {
-        mappedHandle = KisPaintingAssistantHandleSP(new KisPaintingAssistantHandle(origHandle));
-        mappedHandle->setType(origHandle->handleType());
-        handleMap.insert(origHandle, mappedHandle);
+        if (origHandle) {
+            dbgUI << "handle not found in the map, creating a new one...";
+            mappedHandle = KisPaintingAssistantHandleSP(new KisPaintingAssistantHandle(*origHandle));
+            dbgUI << "done";
+            mappedHandle->setType(origHandle->handleType());
+            handleMap.insert(origHandle, mappedHandle);
+        } else {
+            dbgUI << "orig handle is null, not doing anything";
+            mappedHandle = KisPaintingAssistantHandleSP();
+        }
     }
-    mappedHandle.registerAssistant(q);
+    if (mappedHandle) {
+        mappedHandle->registerAssistant(q);
+    }
     return mappedHandle;
 }
 
@@ -214,9 +225,10 @@ KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& nam
     d->outlineVisible = true;
 }
 
-KisPaintingAssistant::KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap<KisPaintingAssistantHandleMap, KisPaintingAssistantHandleSP> &handleMap)
-    : d(new Private(rhs.d))
+KisPaintingAssistant::KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : d(new Private(*(rhs.d)))
 {
+    dbgUI << "creating handles...";
     Q_FOREACH (const KisPaintingAssistantHandleSP origHandle, rhs.d->handles) {
         d->handles << d->reuseOrCreateHandle(handleMap, origHandle, this);
     }
@@ -233,11 +245,7 @@ KisPaintingAssistant::KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap
     _REUSE_H(rightMiddle);
     _REUSE_H(leftMiddle);
 #undef _REUSE_H
-}
-
-KisPaintingAssistantSP KisPaintingAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
-{
-    return KisPaintingAssistantSP(new KisPaintingAssistant(*this, handleMap));
+    dbgUI << "done";
 }
 
 bool KisPaintingAssistant::isSnappingActive() const

@@ -29,7 +29,7 @@ class ConcentricEllipseAssistant : public KisPaintingAssistant
 {
 public:
     ConcentricEllipseAssistant();
-    KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) override;
+    KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
     QPointF buttonPosition() const override;
     int numHandles() const override { return 3; }

@@ -39,7 +39,7 @@ PerspectiveAssistant::PerspectiveAssistant(QObject *parent)
 {
 }
 
-PerspectiveAssistant::PerspectiveAssistant(const PerspectiveAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandlebSP> &handleMap)
+PerspectiveAssistant::PerspectiveAssistant(const PerspectiveAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
     : KisAbstractPerspectiveGrid(rhs.parent())
     , KisPaintingAssistant(rhs, handleMap)
     , m_snapLine(rhs.m_snapLine)

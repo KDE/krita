@@ -39,7 +39,7 @@ FisheyePointAssistant::FisheyePointAssistant()
 {
 }
 
-FisheyePointAssistant::FisheyePointAssistant(const FisheyePointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandlebSP> &handleMap)
+FisheyePointAssistant::FisheyePointAssistant(const FisheyePointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
     : KisPaintingAssistant(rhs, handleMap)
     , e(rhs.e)
     , extraE(rhs.extraE)

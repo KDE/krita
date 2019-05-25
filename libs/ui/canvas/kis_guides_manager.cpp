@@ -131,11 +131,9 @@ void KisGuidesManager::slotUploadConfigToDocument()
     if (doc) {
         KisSignalsBlocker b(doc);
 
-        if (m_d->shouldSetModified) {
-            if (m_d->needsUndoCommand()) {
-                KUndo2Command *cmd = new KisChangeGuidesCommand(doc, value);
-                doc->addCommand(cmd);
-            }
+        if (m_d->shouldSetModified && m_d->needsUndoCommand()) {
+            KUndo2Command *cmd = new KisChangeGuidesCommand(doc, value);
+            doc->addCommand(cmd);
         } else {
             doc->setGuidesConfig(value);
         }

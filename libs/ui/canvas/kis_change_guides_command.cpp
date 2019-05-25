@@ -39,6 +39,8 @@ struct KisChangeGuidesCommand::Private
     };
     Status diff(const QList<qreal> &first, const QList<qreal> &second);
 
+    void switchTo(const KisGuidesConfig &config);
+
     KisDocument *doc;
     KisChangeGuidesCommand *q;
 
@@ -100,6 +102,14 @@ KisChangeGuidesCommand::Private::Status KisChangeGuidesCommand::Private::diff(co
     }
 }
 
+void KisChangeGuidesCommand::Private::switchTo(const KisGuidesConfig &config)
+{
+    KisGuidesConfig curConfig = doc->guidesConfig();
+    curConfig.setHorizontalGuideLines(config.horizontalGuideLines());
+    curConfig.setVerticalGuideLines(config.verticalGuideLines());
+    doc->setGuidesConfig(curConfig);
+}
+
 KisChangeGuidesCommand::KisChangeGuidesCommand(KisDocument *doc, const KisGuidesConfig &newGuides)
     : KUndo2Command(kundo2_i18n("Edit Guides")),
       m_d(new Private(doc, this))
@@ -116,12 +126,12 @@ KisChangeGuidesCommand::~KisChangeGuidesCommand()
 
 void KisChangeGuidesCommand::undo()
 {
-    m_d->doc->setGuidesConfig(m_d->oldGuides);
+    m_d->switchTo(m_d->oldGuides);
 }
 
 void KisChangeGuidesCommand::redo()
 {
-    m_d->doc->setGuidesConfig(m_d->newGuides);
+    m_d->switchTo(m_d->newGuides);
 }
 
 int KisChangeGuidesCommand::id() const

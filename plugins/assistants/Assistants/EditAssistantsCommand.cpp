@@ -61,26 +61,6 @@ void EditAssistantsCommand::replaceWith(AssistantSPList assistants, Type type)
         KIS_ASSERT_RECOVER_RETURN(curAssistants.size() == assistants.size() + 1);
     }
 
-
-    // when undo/redoing,
-    // keep locations, don't touch the current display configuration
-    int i = 0;
-    for (QListIterator<KisPaintingAssistantSP> cur(curAssistants), dest(assistants); cur.hasNext() && dest.hasNext(); ++i) {
-        KisPaintingAssistantSP current = cur.next(), target = dest.next();
-        if (i == m_index) {
-            if (type == ADD) { // we will add an assistant to the canvas now
-                target = dest.next(); // pass this one as it is not in `cur'
-            } else {
-                current = cur.next();
-            }
-        }
-        KIS_ASSERT_RECOVER_RETURN(current->id() == target->id());
-        target->setAssistantCustomColor(current->assistantCustomColor());
-        target->setUseCustomColor(current->useCustomColor());
-        target->setSnappingActive(current->isSnappingActive());
-        target->uncache();
-    }
-
     Q_FOREACH (KisPaintingAssistantSP assistant, curAssistants) {
         KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
         if (grid) {
@@ -91,6 +71,7 @@ void EditAssistantsCommand::replaceWith(AssistantSPList assistants, Type type)
     m_canvas->imageView()->document()->setAssistants(assistants);
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
+        assistant->uncache();
         KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
         if (grid) {
             m_canvas->viewManager()->canvasResourceProvider()->addPerspectiveGrid(grid);

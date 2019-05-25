@@ -27,6 +27,7 @@ class SplineAssistant : public KisPaintingAssistant
 {
 public:
     SplineAssistant();
+    KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
     QPointF buttonPosition() const override;
     int numHandles() const override { return 4; }
@@ -37,6 +38,7 @@ protected:
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
     QPointF project(const QPointF& pt) const;
+    explicit SplineAssistant(const SplineAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 
     /// used for getting the decoration so the bezier handles aren't drawn while editing
     KisCanvas2* m_canvas;

@@ -45,6 +45,7 @@ class VanishingPointAssistant : public KisPaintingAssistant
 {
 public:
     VanishingPointAssistant();
+    KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
     //virtual void endStroke();
     QPointF buttonPosition() const override;
@@ -63,6 +64,7 @@ protected:
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
+    explicit VanishingPointAssistant(const VanishingPointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandlebSP> &handleMap);
     KisCanvas2 *m_canvas;
 
     float m_referenceLineDensity = 15.0;

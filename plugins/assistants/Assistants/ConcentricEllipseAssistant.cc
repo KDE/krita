@@ -35,6 +35,18 @@ ConcentricEllipseAssistant::ConcentricEllipseAssistant()
 {
 }
 
+KisPaintingAssistantSP ConcentricEllipseAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+{
+    return KisPaintingAssistantSP(new ConcentricEllipseAssistant(*this, handleMap));
+}
+
+ConcentricEllipseAssistant::ConcentricEllipseAssistant(const ConcentricEllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : KisPaintingAssistant(rhs, handleMap)
+    , m_ellipse(rhs.m_ellipse)
+    , m_extraEllipse(rhs.m_extraEllipse)
+{
+}
+
 QPointF ConcentricEllipseAssistant::project(const QPointF& pt, const QPointF& strokeBegin) const
 {
     Q_ASSERT(isAssistantComplete());

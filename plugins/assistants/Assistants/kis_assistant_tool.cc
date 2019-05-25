@@ -531,6 +531,16 @@ void KisAssistantTool::endPrimaryAction(KoPointerEvent *event)
     m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
 }
 
+QList<KisPaintingAssistantSP> cloneAssistantList(const QList<KisPaintingAssistantSP> &list) const
+{
+    QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> handleMap;
+    QList<KisPaintingAssistantSP> clonedList;
+    for (auto i = list.begin(); i != list.end(); ++i) {
+        clonedList << i->clone(handleMap);
+    }
+    return clonedList;
+}
+
 void KisAssistantTool::addAssistant()
 {
     KUndo2Command *addAssistantCmd = new AddRemoveAssistantCommand(AddRemoveAssistantCommand::ADD, m_canvas, m_newAssistant);

@@ -843,20 +843,15 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
     return false;
 }
 
-QWidget *NodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
+QWidget *NodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex &index) const
 {
-    d->edit = new QLineEdit(parent);
+    // #400357 do not override QAbstractItemDelegate::setEditorData to update editor's text
+    // because replacing the text while user type is confusing
+    const QString &text = index.data(Qt::DisplayRole).toString();
+    d->edit = new QLineEdit(text, parent);
     d->edit->setFocusPolicy(Qt::StrongFocus);
     d->edit->installEventFilter(const_cast<NodeDelegate*>(this)); //hack?
     return d->edit;
-}
-
-void NodeDelegate::setEditorData(QWidget *widget, const QModelIndex &index) const
-{
-    QLineEdit *edit = qobject_cast<QLineEdit*>(widget);
-    Q_ASSERT(edit);
-
-    edit->setText(index.data(Qt::DisplayRole).toString());
 }
 
 void NodeDelegate::setModelData(QWidget *widget, QAbstractItemModel *model, const QModelIndex &index) const

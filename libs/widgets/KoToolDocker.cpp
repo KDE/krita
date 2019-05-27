@@ -109,6 +109,7 @@ public:
                     cnt++;
                 }
                 break;
+            case Qt::NoDockWidgetArea:
             case Qt::LeftDockWidgetArea:
             case Qt::RightDockWidgetArea: {
                 housekeeperLayout->setHorizontalSpacing(0);

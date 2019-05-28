@@ -108,21 +108,20 @@
      </item>
      <item>
       <widget class="QPushButton" name="bnPasteReferenceImage">
-       <property name="toolTip">
-        <string>Paste Reference Image From System Clipboard</string>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
        <property name="text">
         <string/>
        </property>
-       <property name="icon">
-        <iconset theme="clipboard">
-         <normaloff>.</normaloff>.</iconset>
-       </property>
-       <property name="checkable">
-        <bool>false</bool>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
+       <property name="iconSize">
+        <size>
+         <width>18</width>
+         <height>18</height>
+        </size>
        </property>
        <property name="flat">
         <bool>true</bool>

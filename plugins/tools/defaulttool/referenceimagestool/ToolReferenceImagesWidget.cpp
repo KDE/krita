@@ -82,7 +82,9 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->bnSave->setToolTip(i18n("Export Reference Images Set"));
     d->ui->bnSave->setIcon(KisIconUtils::loadIcon("document-save"));
 
-    d->ui->bnPasteReferenceImage->setEnabled(!QApplication::clipboard()->image().isNull());
+    slotCheckClipboardContents();
+    d->ui->bnPasteReferenceImage->setToolTip(i18n("Paste Reference Image From System Clipboard"));
+    d->ui->bnPasteReferenceImage->setIcon(KisIconUtils::loadIcon("edit-paste"));
 
 
     connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), tool, SLOT(addReferenceImage()));

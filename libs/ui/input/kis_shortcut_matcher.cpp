@@ -331,11 +331,6 @@ bool KisShortcutMatcher::nativeGestureBeginEvent(QNativeGestureEvent *event)
 bool KisShortcutMatcher::nativeGestureEvent(QNativeGestureEvent *event)
 {
     bool retval = false;
-
-    if ( m_d->nativeGestureShortcut && !m_d->nativeGestureShortcut->match( event ) ) {
-        retval = tryEndNativeGestureShortcut( event );
-    }
-
     if ( !m_d->nativeGestureShortcut ) {
         retval = tryRunNativeGestureShortcut( event );
     }
@@ -349,7 +344,9 @@ bool KisShortcutMatcher::nativeGestureEvent(QNativeGestureEvent *event)
 
 bool KisShortcutMatcher::nativeGestureEndEvent(QNativeGestureEvent *event)
 {
-    Q_UNUSED(event)
+    if ( m_d->nativeGestureShortcut && !m_d->nativeGestureShortcut->match( event ) ) {
+        tryEndNativeGestureShortcut( event );
+    }
     m_d->usingNativeGesture = false;
     return true;
 }

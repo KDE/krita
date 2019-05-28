@@ -38,7 +38,6 @@ public:
     void redo() override;
 
     int id() const override;
-    bool mergeWith(const KUndo2Command *command) override;
 
 private:
     struct Private;

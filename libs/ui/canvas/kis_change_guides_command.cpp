@@ -27,7 +27,7 @@
 
 struct KisChangeGuidesCommand::Private
 {
-    Private(KisDocument *_doc, KisChangeGuidesCommand *q) : doc(_doc), q(q) {}
+    Private(KisDocument *_doc, KisChangeGuidesCommand *q) : doc(_doc), q(q), firstRedo(true) {}
 
     bool sameOrOnlyMovedOneGuideBetween(const KisGuidesConfig &first, const KisGuidesConfig &second);
     enum Status {
@@ -46,6 +46,8 @@ struct KisChangeGuidesCommand::Private
 
     KisGuidesConfig oldGuides;
     KisGuidesConfig newGuides;
+
+    bool firstRedo;
 };
 
 bool KisChangeGuidesCommand::Private::sameOrOnlyMovedOneGuideBetween(const KisGuidesConfig &first, const KisGuidesConfig &second)
@@ -131,6 +133,10 @@ void KisChangeGuidesCommand::undo()
 
 void KisChangeGuidesCommand::redo()
 {
+    if (m_d->firstRedo) {
+        m_d->firstRedo = false;
+        return;
+    }
     m_d->switchTo(m_d->newGuides);
 }
 
@@ -139,24 +145,3 @@ int KisChangeGuidesCommand::id() const
     return 1863;
 }
 
-bool KisChangeGuidesCommand::mergeWith(const KUndo2Command *command)
-{
-    bool result = false;
-
-    const KisChangeGuidesCommand *rhs =
-        dynamic_cast<const KisChangeGuidesCommand*>(command);
-
-    if (rhs) {
-        // we want to only merge consecutive movements, or creation then movement, or movement then deletion
-        // there should not be any changes not on the stack (see kis_guides_manager.cpp)
-        // nor any addition/removal of guides
-        // nor the movement of other guides
-        if (m_d->newGuides == rhs->m_d->oldGuides &&
-            m_d->sameOrOnlyMovedOneGuideBetween(m_d->oldGuides, rhs->m_d->newGuides)) {
-            m_d->newGuides = rhs->m_d->newGuides;
-            result = true;
-        }
-    }
-
-    return result;
-}

@@ -49,13 +49,13 @@ struct KisGuidesManager::Private
           currentGuide(invalidGuide),
           cursorSwitched(false),
           dragStartGuidePos(0),
-          updateDocumentCompressor(40, KisSignalCompressor::FIRST_ACTIVE),
           shouldSetModified(false) {}
 
     KisGuidesManager *q;
 
     KisGuidesDecoration *decoration;
     KisGuidesConfig guidesConfig;
+    KisGuidesConfig oldGuidesConfig;
     KisSnapConfig snapConfig;
     QPointer<KisView> view;
 
@@ -96,7 +96,6 @@ struct KisGuidesManager::Private
 
     KisSignalAutoConnectionsStore viewConnections;
 
-    KisSignalCompressor updateDocumentCompressor;
     bool shouldSetModified;
 };
 
@@ -104,7 +103,6 @@ KisGuidesManager::KisGuidesManager(QObject *parent)
     : QObject(parent),
       m_d(new Private(this))
 {
-    connect(&m_d->updateDocumentCompressor, SIGNAL(timeout()), SLOT(slotUploadConfigToDocument()));
 }
 
 KisGuidesManager::~KisGuidesManager()
@@ -114,7 +112,8 @@ KisGuidesManager::~KisGuidesManager()
 void KisGuidesManager::setGuidesConfig(const KisGuidesConfig &config)
 {
     if (config == m_d->guidesConfig) return;
-    setGuidesConfigImpl(config, true);
+    setGuidesConfigImpl(config, !config.hasSamePositionAs(m_d->guidesConfig));
+    slotUploadConfigToDocument();
 }
 
 void KisGuidesManager::slotDocumentRequestedConfig(const KisGuidesConfig &config)
@@ -134,9 +133,10 @@ void KisGuidesManager::slotUploadConfigToDocument()
         if (m_d->shouldSetModified && m_d->needsUndoCommand()) {
             KUndo2Command *cmd = new KisChangeGuidesCommand(doc, value);
             doc->addCommand(cmd);
-        } else {
-            doc->setGuidesConfig(value);
         }
+        // we've made KisChangeGuidesCommand post-exec, so in all situations
+        // we will replace the whole config
+        doc->setGuidesConfig(value);
 
         value.saveStaticData();
     }
@@ -154,7 +154,6 @@ void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value, bool em
     }
 
     m_d->shouldSetModified |= emitModified;
-    m_d->updateDocumentCompressor.start();
 
     const bool shouldFilterEvent =
         value.showGuides() && !value.lockGuides() && value.hasGuides();
@@ -263,6 +262,7 @@ void KisGuidesManager::setShowGuides(bool value)
 {
     m_d->guidesConfig.setShowGuides(value);
     setGuidesConfigImpl(m_d->guidesConfig);
+    slotUploadConfigToDocument();
 }
 
 bool KisGuidesManager::lockGuides() const
@@ -274,6 +274,7 @@ void KisGuidesManager::setLockGuides(bool value)
 {
     m_d->guidesConfig.setLockGuides(value);
     setGuidesConfigImpl(m_d->guidesConfig);
+    slotUploadConfigToDocument();
 }
 
 bool KisGuidesManager::snapToGuides() const
@@ -285,6 +286,7 @@ void KisGuidesManager::setSnapToGuides(bool value)
 {
     m_d->guidesConfig.setSnapToGuides(value);
     setGuidesConfigImpl(m_d->guidesConfig);
+    slotUploadConfigToDocument();
 }
 
 bool KisGuidesManager::rulersMultiple2() const
@@ -296,6 +298,7 @@ void KisGuidesManager::setRulersMultiple2(bool value)
 {
     m_d->guidesConfig.setRulersMultiple2(value);
     setGuidesConfigImpl(m_d->guidesConfig);
+    slotUploadConfigToDocument();
 }
 
 KoUnit::Type KisGuidesManager::unitType() const
@@ -307,6 +310,7 @@ void KisGuidesManager::setUnitType(const KoUnit::Type type)
 {
     m_d->guidesConfig.setUnitType(type);
     setGuidesConfigImpl(m_d->guidesConfig, false);
+    slotUploadConfigToDocument();
 }
 
 void KisGuidesManager::setup(KisActionManager *actionManager)
@@ -360,10 +364,7 @@ void KisGuidesManager::setView(QPointer<KisView> view)
         snapGuide->overrideSnapStrategy(KoSnapGuide::GuideLineSnapping, 0);
         snapGuide->enableSnapStrategy(KoSnapGuide::GuideLineSnapping, false);
 
-        if (m_d->updateDocumentCompressor.isActive()) {
-            m_d->updateDocumentCompressor.stop();
-            slotUploadConfigToDocument();
-        }
+        slotUploadConfigToDocument();
 
         m_d->decoration = 0;
         m_d->viewConnections.clear();
@@ -503,6 +504,7 @@ void KisGuidesManager::Private::initDragStart(const GuideHandle &guide,
                                               qreal guideValue,
                                               bool snapToStart)
 {
+    oldGuidesConfig = guidesConfig;
     currentGuide = guide;
     dragStartDoc = dragStart;
     dragStartGuidePos = guideValue;
@@ -581,6 +583,8 @@ bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
 
         updateSnappingStatus(guidesConfig);
     }
+
+    q->slotUploadConfigToDocument();
 
     return updateCursor(docPos) | result;
 }

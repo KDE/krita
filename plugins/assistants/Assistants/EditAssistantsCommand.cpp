@@ -68,7 +68,7 @@ void EditAssistantsCommand::replaceWith(AssistantSPList assistants, Type type)
         }
     }
 
-    m_canvas->imageView()->document()->setAssistants(assistants);
+    m_canvas->paintingAssistantsDecoration()->setAssistants(assistants);
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
         assistant->uncache();

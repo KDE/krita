@@ -516,7 +516,6 @@ KisPaintopBox::~KisPaintopBox()
     QMapIterator<TabletToolID, TabletToolData> iter(m_tabletToolMap);
     while (iter.hasNext()) {
         iter.next();
-        qDebug() << "Writing last used preset for" << iter.key().pointer << iter.value().preset->name();
         if ((iter.key().pointer) == QTabletEvent::Eraser) {
             cfg.writeEntry(QString("LastEraser") , iter.value().preset->name());
         }

@@ -1,0 +1,9 @@
+{
+    "Id": "Krita Snapshot Docker plugin",
+    "Type": "Service",
+    "X-KDE-Library": "kritasnapshotdocker",
+    "X-KDE-ServiceTypes": [
+        "Krita/Dock"
+    ],
+    "X-Krita-Version": "28"
+}

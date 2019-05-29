@@ -78,23 +78,23 @@ void KisPrecisionOption::setAutoPrecision(double brushSize)
 {
     double deltaValue = this->deltaValue();
     double sizeToStartFrom = this ->sizeToStartFrom();
-    if (brushSize <= sizeToStartFrom + deltaValue)
+    if (brushSize < sizeToStartFrom + deltaValue)
     {
         this->setPrecisionLevel(5);
     }
-    else if (brushSize > sizeToStartFrom + deltaValue && brushSize <= sizeToStartFrom + deltaValue*3)
+    else if (brushSize >= sizeToStartFrom + deltaValue && brushSize < sizeToStartFrom + deltaValue*2)
     {
         this->setPrecisionLevel(4);
     }
-    else if (brushSize > sizeToStartFrom + deltaValue*2 && brushSize <= sizeToStartFrom + deltaValue*4)
+    else if (brushSize >= sizeToStartFrom + deltaValue*2 && brushSize < sizeToStartFrom + deltaValue*3)
     {
         this->setPrecisionLevel(3);
     }
-    else if (brushSize > sizeToStartFrom + deltaValue*3 && brushSize <= sizeToStartFrom + deltaValue*5)
+    else if (brushSize >= sizeToStartFrom + deltaValue*3 && brushSize < sizeToStartFrom + deltaValue*4)
     {
         this->setPrecisionLevel(2);
     }
-    else if (brushSize > sizeToStartFrom + deltaValue*4)
+    else if (brushSize >= sizeToStartFrom + deltaValue*4)
     {
         this->setPrecisionLevel(1);
     }

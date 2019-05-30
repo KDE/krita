@@ -545,6 +545,10 @@ createDMG () {
     echo "moved krita-out.dmg to krita-nightly_${GIT_SHA}.dmg"
     rm krita.temp.dmg
 
+    if [[ -n "${CODE_SIGNATURE}" ]]; then
+        printf "krita-nightly_${GIT_SHA}.dmg" | batch_codesign
+    fi
+
     echo "dmg done!"
 }
 

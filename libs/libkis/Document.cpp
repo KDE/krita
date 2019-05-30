@@ -793,12 +793,12 @@ QList<qreal> Document::verticalGuides() const
 
 bool Document::guidesVisible() const
 {
-    return d->document->guidesConfig().lockGuides();
+    return d->document->guidesConfig().showGuides();
 }
 
 bool Document::guidesLocked() const
 {
-    return d->document->guidesConfig().showGuides();
+    return d->document->guidesConfig().lockGuides();
 }
 
 Document *Document::clone() const

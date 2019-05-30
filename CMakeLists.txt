@@ -719,7 +719,12 @@ set_package_properties(Eigen3 PROPERTIES
 ## Test for exiv2
 ##
 find_package(LibExiv2 0.16 REQUIRED)
-list (APPEND ANDROID_EXTRA_LIBS ${LibExiv2_LIBRARIES})
+if (ANDROID)
+    list (APPEND ANDROID_EXTRA_LIBS ${LibExiv2_LIBRARIES})
+    # because libexiv2 depends on libexpat and it is installed in the same folder
+    get_filename_component (_base_dir ${LibExiv2_LIBRARIES} DIRECTORY)
+    list (APPEND ANDROID_EXTRA_LIBS ${_base_dir}/libexpat.so)
+endif()
 
 ##
 ## Test for lcms

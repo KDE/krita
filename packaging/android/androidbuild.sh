@@ -58,19 +58,28 @@ configure_ext() {
     cd $BUILD_ROOT
 }
 
+PROC_COUNT=`grep processor /proc/cpuinfo | wc -l`
+
 build_qt() {
-    if [[ ! -z $QT_ANDROID ]]; then
+    if [[ ! -z $QT_ANDROID && -e $QT_ANDROID/lib/libQt5AndroidExtras.so ]]; then
         echo "Qt path provided; Skipping Qt build"
         return 0
     fi
     cd $DEPS_BUILD
+    configure_ext
     cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_qt
-    export QT_ANDROID=$BUILD_ROOT/i
     cd $BUILD_ROOT
 }
 
 build_ext() {
+    if [[ ! -d $QT_ANDROID ]]; then
+        echoerr "qt libs not found"
+        echo "Please run -p=qt prior to this"
+        exit
+    fi
+
     cd $DEPS_BUILD
+    configure_ext
     # Please do not change the order
     cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_png
     cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_zlib
@@ -107,6 +116,12 @@ build_boost() {
 }
 
 build_kf5() { 
+    if [[ ! -d $QT_ANDROID ]]; then
+        echoerr "qt libs not found"
+        echo "Please run -p=qt prior to this"
+        exit
+    fi
+
     cd $BUILD_ROOT
 
     if [[ $ANDROID_ABI == "armeabi-v7a" ]]; then
@@ -276,6 +291,9 @@ check_exists KRITA_ROOT
 
 export ANDROID_NATIVE_API_LEVEL=android-$ANDROID_API_LEVEL
 export INSTALL_PREFIX=$BUILD_ROOT/krita-android-build
+if [[ -z $QT_ANDROID ]]; then
+    export QT_ANDROID=$BUILD_ROOT/i
+fi
 
 # setting default expected paths
 : ${PYTHON_INCLUDE_PATH:="/usr/include/python3.6/"}
@@ -292,7 +310,6 @@ setup_directories
 
 case $PACKAGE in
     all)
-        configure_ext
         build_qt
         build_kf5
         build_ext

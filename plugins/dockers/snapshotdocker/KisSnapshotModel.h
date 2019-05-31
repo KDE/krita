@@ -33,7 +33,14 @@ public:
 
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
     void setCanvas(QPointer<KisCanvas2> canvas);
+
+public Q_SLOTS:
+    bool slotCreateSnapshot();
+    bool slotRemoveActivatedSnapshot();
+    bool slotSwitchToActivatedSnapshot(const QModelIndex &index);
+
 private:
     struct Private;
     QScopedPointer<Private> m_d;

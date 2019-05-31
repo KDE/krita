@@ -32,8 +32,9 @@
 struct SnapshotDocker::Private
 {
     Private();
+    ~Private();
 
-    QPointer<KisSnapshotModel> model;
+    QScopedPointer<KisSnapshotModel> model;
     QPointer<QListView> view;
     QPointer<KisCanvas2> canvas;
     QPointer<QToolButton> bnAdd;
@@ -49,18 +50,26 @@ SnapshotDocker::Private::Private()
 {
 }
 
+SnapshotDocker::Private::~Private()
+{
+}
+
 SnapshotDocker::SnapshotDocker()
     : QDockWidget()
     , m_d(new Private)
 {
     QWidget *widget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(widget);
+    connect(m_d->view, &QListView::activated, m_d->model.data(), &KisSnapshotModel::slotSwitchToActivatedSnapshot);
+    m_d->view->setModel(m_d->model.data());
     mainLayout->addWidget(m_d->view);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout(widget);
     m_d->bnAdd->setIcon(KisIconUtils::loadIcon("addlayer"));
+    connect(m_d->bnAdd, &QToolButton::clicked, m_d->model.data(), &KisSnapshotModel::slotCreateSnapshot);
     buttonsLayout->addWidget(m_d->bnAdd);
     m_d->bnRemove->setIcon(KisIconUtils::loadIcon("deletelayer"));
+    connect(m_d->bnRemove, &QToolButton::clicked, m_d->model.data(), &KisSnapshotModel::slotRemoveActivatedSnapshot);
     buttonsLayout->addWidget(m_d->bnRemove);
     mainLayout->addLayout(buttonsLayout);
 
@@ -81,6 +90,7 @@ void SnapshotDocker::setCanvas(KoCanvasBase *canvas)
         }
     }
     m_d->canvas = c;
+    m_d->model->setCanvas(c);
 }
 
 void SnapshotDocker::unsetCanvas()

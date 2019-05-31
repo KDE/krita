@@ -640,14 +640,15 @@ private Q_SLOTS:
 
     void slotConfigChanged();
 
-
-private:
+public:
     /**
      * @brief try to clone the image. This method handles all the locking for you. If locking
      *        has failed, no cloning happens
      * @return cloned document on success, null otherwise
      */
     KisDocument *lockAndCloneForSaving();
+
+private:
 
     QString exportErrorToUserMessage(KisImportExportErrorCode status, const QString &errorMessage);
 

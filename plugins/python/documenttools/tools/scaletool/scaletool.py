@@ -1,4 +1,4 @@
-/# This script is licensed CC 0 1.0, so that you can learn from it.
+# This script is licensed CC 0 1.0, so that you can learn from it.
 
 # ------ CC 0 1.0 ---------------
 

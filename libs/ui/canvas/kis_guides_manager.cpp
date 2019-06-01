@@ -84,6 +84,7 @@ struct KisGuidesManager::Private
     QAction* createShortenedAction(const QString &text, const QString &parentId, QObject *parent);
     void syncAction(const QString &actionName, bool value);
     bool needsUndoCommand();
+    void createUndoCommandIfNeeded();
 
     GuideHandle currentGuide;
 
@@ -130,10 +131,6 @@ void KisGuidesManager::slotUploadConfigToDocument()
     if (doc) {
         KisSignalsBlocker b(doc);
 
-        if (m_d->shouldSetModified && m_d->needsUndoCommand()) {
-            KUndo2Command *cmd = new KisChangeGuidesCommand(doc, value);
-            doc->addCommand(cmd);
-        }
         // we've made KisChangeGuidesCommand post-exec, so in all situations
         // we will replace the whole config
         doc->setGuidesConfig(value);
@@ -198,13 +195,16 @@ void KisGuidesManager::Private::syncAction(const QString &actionName, bool value
 
 bool KisGuidesManager::Private::needsUndoCommand()
 {
-    const KisGuidesConfig &value = guidesConfig;
+    return !(oldGuidesConfig.hasSamePositionAs(guidesConfig));
+}
 
+void KisGuidesManager::Private::createUndoCommandIfNeeded()
+{
     KisDocument *doc = view ? view->document() : 0;
-    if (!doc) {
-        return false;
+    if (doc && needsUndoCommand()) {
+        KUndo2Command *cmd = new KisChangeGuidesCommand(doc, oldGuidesConfig, guidesConfig);
+        doc->addCommand(cmd);
     }
-    return !(doc->guidesConfig().hasSamePositionAs(value));
 }
 
 void KisGuidesManager::syncActionsStatus()
@@ -504,7 +504,6 @@ void KisGuidesManager::Private::initDragStart(const GuideHandle &guide,
                                               qreal guideValue,
                                               bool snapToStart)
 {
-    oldGuidesConfig = guidesConfig;
     currentGuide = guide;
     dragStartDoc = dragStart;
     dragStartGuidePos = guideValue;
@@ -585,6 +584,7 @@ bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
     }
 
     q->slotUploadConfigToDocument();
+    createUndoCommandIfNeeded();
 
     return updateCursor(docPos) | result;
 }
@@ -673,6 +673,7 @@ bool KisGuidesManager::eventFilter(QObject *obj, QEvent *event)
         const bool guideValid = m_d->isGuideValid(guide);
 
         if (guideValid) {
+            m_d->oldGuidesConfig = m_d->guidesConfig;
             m_d->initDragStart(guide, docPos, m_d->guideValue(guide), true);
         }
 
@@ -710,6 +711,8 @@ void KisGuidesManager::slotGuideCreationInProgress(Qt::Orientation orientation, 
         m_d->mouseMoveHandler(docPos, modifiers);
     } else {
         m_d->guidesConfig.setShowGuides(true);
+
+        m_d->oldGuidesConfig = m_d->guidesConfig;
 
         if (orientation == Qt::Horizontal) {
             QList<qreal> guides = m_d->guidesConfig.horizontalGuideLines();

@@ -30,8 +30,7 @@ class KisGuidesConfig;
 class KisChangeGuidesCommand : public KUndo2Command
 {
 public:
-    KisChangeGuidesCommand(KisDocument *doc, const KisGuidesConfig &newGuides);
-    KisChangeGuidesCommand(KisDocument *document);
+    KisChangeGuidesCommand(KisDocument *doc, const KisGuidesConfig &oldGuides, const KisGuidesConfig &newGuides);
     ~KisChangeGuidesCommand() override;
 
     void undo() override;

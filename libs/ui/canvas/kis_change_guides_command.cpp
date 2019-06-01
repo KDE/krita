@@ -112,11 +112,11 @@ void KisChangeGuidesCommand::Private::switchTo(const KisGuidesConfig &config)
     doc->setGuidesConfig(curConfig);
 }
 
-KisChangeGuidesCommand::KisChangeGuidesCommand(KisDocument *doc, const KisGuidesConfig &newGuides)
+KisChangeGuidesCommand::KisChangeGuidesCommand(KisDocument *doc, const KisGuidesConfig &oldGuides, const KisGuidesConfig &newGuides)
     : KUndo2Command(kundo2_i18n("Edit Guides")),
       m_d(new Private(doc, this))
 {
-    m_d->oldGuides = doc->guidesConfig();
+    m_d->oldGuides = oldGuides;
     m_d->newGuides = newGuides;
     // update the undo command text
     m_d->sameOrOnlyMovedOneGuideBetween(m_d->oldGuides, m_d->newGuides);

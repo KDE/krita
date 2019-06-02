@@ -23,9 +23,9 @@
 #include <boost/graph/astar_search.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/unordered_map.hpp>
-#include <libs/image/lazybrush/kis_lazy_fill_graph.h>
+#include "KisMagneticGraph.h"
 
-typedef KisLazyFillGraph::VertexDescriptor VertexDescriptor;
+typedef KisMagneticGraph::VertexDescriptor VertexDescriptor;
 
 struct VertexHash : std::unary_function<VertexDescriptor, std::size_t> {
   std::size_t operator()(VertexDescriptor const& u) const {

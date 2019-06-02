@@ -56,20 +56,28 @@ class AstarHeuristic : public boost::astar_heuristic<KisLazyFillGraph, double> {
 
         double operator()(VertexDescriptor v){
             auto prev = m_pmap[v];
-            auto di = (m_goal.y - prev.y) * v.x + (m_goal.x - prev.x) * v.y;
+            double di = (m_goal.y - prev.y) * v.x + (m_goal.x - prev.x) * v.y;
             di = std::abs(di + prev.x * m_goal.y + prev.y * m_goal.x);
             auto dist = [](VertexDescriptor p1, VertexDescriptor p2){
                 return std::sqrt(std::pow(p1.y-p2.y, 2) + std::pow(p1.x-p2.x, 2));
             };
-            auto dz = dist(prev, m_goal);
+            double dz = dist(prev, m_goal);
             di = di/dz;
-            auto dm = dist(v, m_goal);
+            double dm = dist(v, m_goal);
             return coeff_a * di + coeff_b * (dm - dz);
         }
 };
+
+KisMagneticWorker::KisMagneticWorker(KisPaintDeviceSP dev, const QRect &rect):
+    m_dev(dev), m_rect(rect)
+{ }
 
 void KisMagneticWorker::run(KisPaintDeviceSP dev, const QRect &rect)
 {
     KisGaussianKernel::applyLoG(dev, rect, 2, -1.0, QBitArray(), 0);
 }
 
+void KisMagneticWorker::computeEdge(QPoint start, QPoint end)
+{
+    KisGaussianKernel::applyLoG(m_dev, m_rect, 2, -1.0, QBitArray(), 0);
+}

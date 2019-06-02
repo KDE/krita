@@ -342,6 +342,8 @@ public:
         m_mainArea = mainRect;
         m_aLabelArea = aLabelRegion.boundingRect();
         m_bLabelArea = bLabelRegion.boundingRect();
+
+        //QRegion::rects() is deprecated, https://doc.qt.io/qt-5/qregion-obsolete.html#rects
         m_aLabelRects = aLabelRegion.rects();
         m_bLabelRects = bLabelRegion.rects();
 

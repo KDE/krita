@@ -39,7 +39,7 @@ struct VertexHash : std::unary_function<VertexDescriptor, std::size_t> {
 typedef boost::unordered_map<VertexDescriptor, VertexDescriptor, VertexHash> PredMap;
 typedef boost::associative_property_map<PredMap> APredMap;
 
-class AstarHeuristic : public boost::astar_heuristic<KisLazyFillGraph, double> {
+class AstarHeuristic : public boost::astar_heuristic<KisMagneticGraph, double> {
     private:
         APredMap m_pmap;
         VertexDescriptor m_goal;
@@ -68,6 +68,10 @@ class AstarHeuristic : public boost::astar_heuristic<KisLazyFillGraph, double> {
         }
 };
 
+KisMagneticWorker::KisMagneticWorker():
+    m_dev(0), m_rect(QRect())
+{ }
+
 KisMagneticWorker::KisMagneticWorker(KisPaintDeviceSP dev, const QRect &rect):
     m_dev(dev), m_rect(rect)
 { }
@@ -79,5 +83,7 @@ void KisMagneticWorker::run(KisPaintDeviceSP dev, const QRect &rect)
 
 void KisMagneticWorker::computeEdge(QPoint start, QPoint end)
 {
+    Q_UNUSED(start)
+    Q_UNUSED(end)
     KisGaussianKernel::applyLoG(m_dev, m_rect, 2, -1.0, QBitArray(), 0);
 }

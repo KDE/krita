@@ -23,6 +23,7 @@
 
 class KRITASELECTIONTOOLS_EXPORT KisMagneticWorker{
     public:
+        KisMagneticWorker();
         KisMagneticWorker(KisPaintDeviceSP dev, const QRect &rect);
         void run(KisPaintDeviceSP dev, const QRect& rect);
         void computeEdge(QPoint start, QPoint end);

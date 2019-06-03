@@ -39,6 +39,23 @@ PerspectiveAssistant::PerspectiveAssistant(QObject *parent)
 {
 }
 
+PerspectiveAssistant::PerspectiveAssistant(const PerspectiveAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : KisAbstractPerspectiveGrid(rhs.parent())
+    , KisPaintingAssistant(rhs, handleMap)
+    , m_snapLine(rhs.m_snapLine)
+    , m_cachedTransform(rhs.m_cachedTransform)
+    , m_cachedPolygon(rhs.m_cachedPolygon)
+    , m_cacheValid(rhs.m_cacheValid)
+{
+    for (int i = 0; i < 4; ++i) {
+        m_cachedPoints[i] = rhs.m_cachedPoints[i];
+    }
+}
+
+KisPaintingAssistantSP PerspectiveAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+{
+    return KisPaintingAssistantSP(new PerspectiveAssistant(*this, handleMap));
+}
 // squared distance from a point to a line
 inline qreal distsqr(const QPointF& pt, const QLineF& line)
 {

@@ -76,7 +76,7 @@ public:
     KisToolSelectPath(KoCanvasBase * canvas);
     void mousePressEvent(KoPointerEvent* event) override;
     bool eventFilter(QObject *obj, QEvent *event) override;
-    void resetCursorStyle();
+    void resetCursorStyle() override;
 
 protected:
     void requestStrokeCancellation() override;

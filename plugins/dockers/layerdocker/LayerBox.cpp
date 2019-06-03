@@ -284,6 +284,7 @@ LayerBox::LayerBox()
 
     connect(thumbnailSizeSlider, SIGNAL(sliderMoved(int)), &m_thumbnailSizeCompressor, SLOT(start()));
     connect(&m_thumbnailSizeCompressor, SIGNAL(timeout()), SLOT(slotUpdateThumbnailIconSize()));
+
 }
 
 LayerBox::~LayerBox()
@@ -367,6 +368,11 @@ void LayerBox::setViewManager(KisViewManager* kisview)
     Q_ASSERT(action);
     new SyncButtonAndAction(action, m_wdgLayerBox->bnLower, this);
     connect(action, SIGNAL(triggered()), this, SLOT(slotLowerClicked()));
+
+    m_changeCloneSourceAction = actionManager->createAction("set-copy-from");
+    Q_ASSERT(m_changeCloneSourceAction);
+    connect(m_changeCloneSourceAction, &KisAction::triggered,
+            this, &LayerBox::slotChangeCloneSourceClicked);
 }
 
 void LayerBox::setCanvas(KoCanvasBase *canvas)
@@ -609,6 +615,13 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
                 addActionToMenu(&menu, "layer_style");
             }
 
+            Q_FOREACH(KisNodeSP node, nodes) {
+                if (node && node->inherits("KisCloneLayer")) {
+                    menu.addAction(m_changeCloneSourceAction);
+                    break;
+                }
+            }
+
             {
                 KisSignalsBlocker b(m_colorSelector);
                 m_colorSelector->setCurrentIndex(singleLayer ? activeNode->colorLabelIndex() : -1);
@@ -678,6 +691,7 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
                 }
 
                 addActionToMenu(&menu, "selectopaque");
+
             }
         }
         menu.exec(pos);
@@ -723,6 +737,12 @@ void LayerBox::slotPropertiesClicked()
     if (KisNodeSP active = m_nodeManager->activeNode()) {
         m_nodeManager->nodeProperties(active);
     }
+}
+
+void LayerBox::slotChangeCloneSourceClicked()
+{
+    if (!m_canvas) return;
+    m_nodeManager->changeCloneSource();
 }
 
 void LayerBox::slotCompositeOpChanged(int index)

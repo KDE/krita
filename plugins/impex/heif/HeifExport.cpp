@@ -115,7 +115,7 @@ private:
 };
 
 
-KisImportExportFilter::ConversionStatus HeifExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     KisImageSP image = document->savingImage();
     const KoColorSpace *cs = image->colorSpace();
@@ -239,7 +239,7 @@ KisImportExportFilter::ConversionStatus HeifExport::convert(KisDocument *documen
         return setHeifError(document, err);
     }
 
-    return KisImportExportFilter::OK;
+    return ImportExportCodes::OK;
 }
 
 void HeifExport::initializeCapabilities()

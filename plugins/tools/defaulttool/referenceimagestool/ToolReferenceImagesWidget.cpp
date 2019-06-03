@@ -27,6 +27,10 @@
 #include <kis_signals_blocker.h>
 #include <KisReferenceImage.h>
 
+#include <QClipboard>
+#include <QApplication>
+#include <QStandardItemModel>
+
 #include "ToolReferenceImages.h"
 
 struct ToolReferenceImagesWidget::Private {
@@ -78,10 +82,15 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->bnSave->setToolTip(i18n("Export Reference Images Set"));
     d->ui->bnSave->setIcon(KisIconUtils::loadIcon("document-save"));
 
-
+    slotCheckClipboardContents();
+    d->ui->bnPasteReferenceImage->setToolTip(i18n("Paste Reference Image From System Clipboard"));
+    d->ui->bnPasteReferenceImage->setIcon(KisIconUtils::loadIcon("edit-paste"));
 
 
     connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), tool, SLOT(addReferenceImage()));
+    connect(d->ui->bnPasteReferenceImage, SIGNAL(clicked()), tool, SLOT(pasteReferenceImage()));
+    connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(slotCheckClipboardContents()));
+
     connect(d->ui->bnDelete, SIGNAL(clicked()), tool, SLOT(removeAllReferenceImages()));
     connect(d->ui->bnSave, SIGNAL(clicked()), tool, SLOT(saveReferenceImages()));
     connect(d->ui->bnLoad, SIGNAL(clicked()), tool, SLOT(loadReferenceImages()));
@@ -147,6 +156,10 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
     updateVisibility(anySelected);
 }
 
+void ToolReferenceImagesWidget::slotCheckClipboardContents() {
+    d->ui->bnPasteReferenceImage->setEnabled(!QApplication::clipboard()->image().isNull());
+}
+
 void ToolReferenceImagesWidget::slotKeepAspectChanged()
 {
     KoSelection *selection = d->tool->koSelection();
@@ -193,7 +206,12 @@ void ToolReferenceImagesWidget::slotSaveLocationChanged(int index)
         if (index == 0) { // embed to KRA
             reference->setEmbed(true);
         } else { // link to file
-            reference->setEmbed(false);
+            if (reference->hasLocalFile()) {
+                reference->setEmbed(false);
+            } else {
+                //In the case no local file is found, switch back to embed file data.
+                d->ui->referenceImageLocationCombobox->setCurrentIndex(0);
+            }
         }
     }
 }
@@ -210,4 +228,25 @@ void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
     // show a label indicating that a selection is required to show options
     d->ui->referenceImageOptionsLabel->setVisible(!hasSelection);
 
+    if (hasSelection) {
+        KoSelection* selection = d->tool->koSelection();
+        QList<KoShape*> shapes = selection->selectedEditableShapes();
+        bool usesLocalFile = true;
+
+        Q_FOREACH(KoShape *shape, shapes) {
+            KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
+
+            if (reference) {
+                usesLocalFile &= reference->hasLocalFile();
+            }
+        }
+
+        QStandardItemModel* model = dynamic_cast<QStandardItemModel*>(d->ui->referenceImageLocationCombobox->model());
+
+        if (model) {
+            QStandardItem* item = model->item(1);
+            item->setFlags(usesLocalFile ? item->flags() | Qt::ItemIsEnabled :
+                                           item->flags() & ~Qt::ItemIsEnabled);
+        }
+    }
 }

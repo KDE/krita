@@ -64,6 +64,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_delayed_save_dialog.cpp
     dialogs/KisSessionManagerDialog.cpp
     dialogs/KisNewWindowLayoutDialog.cpp
+    dialogs/KisDlgChangeCloneSource.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -155,6 +156,7 @@ set(kritaui_LIB_SRCS
     kis_multinode_property.cpp
     kis_stopgradient_editor.cpp
     KisWelcomePageWidget.cpp
+    KisChangeCloneLayersCommand.cpp
 
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
@@ -360,6 +362,7 @@ set(kritaui_LIB_SRCS
     KisUndoActionsUpdateManager.cpp
     KisView.cpp
     KisImportExportErrorCode.cpp
+    KisImportExportAdditionalChecks.cpp
 
     thememanager.cpp
 
@@ -391,7 +394,7 @@ set(kritaui_LIB_SRCS
     KisReferenceImage.cpp
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
-
+    KisMouseClickEater.cpp
 )
 
 if(WIN32)
@@ -508,6 +511,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/WdgDlgPaletteEditor.ui
     forms/KisNewsPage.ui
     forms/wdgGamutMaskToolbar.ui
+    forms/wdgchangeclonesource.ui
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui

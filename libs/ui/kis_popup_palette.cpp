@@ -40,14 +40,15 @@
 #include "kis_signals_blocker.h"
 #include "kis_canvas_controller.h"
 #include "kis_acyclic_signal_connector.h"
-
+#include "KisMouseClickEater.h"
 
 class PopupColorTriangle : public KoTriangleColorSelector
 {
 public:
     PopupColorTriangle(const KoColorDisplayRendererInterface *displayRenderer, QWidget* parent)
         : KoTriangleColorSelector(displayRenderer, parent)
-        , m_dragging(false) {
+        , m_dragging(false)
+    {
     }
 
     ~PopupColorTriangle() override {}
@@ -108,6 +109,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     , m_colorChangeCompressor(new KisSignalCompressor(50, KisSignalCompressor::POSTPONE))
     , m_actionCollection(viewManager->actionCollection())
     , m_acyclicConnector(new KisAcyclicSignalConnector(this))
+    , m_clicksEater(new KisMouseClickEater(Qt::RightButton, 1, this))
 {
     // some UI controls are defined and created based off these variables
 
@@ -129,6 +131,15 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
         fgcolor = provider->fgColor();
     }
     m_triangleColorSelector->slotSetColor(fgcolor);
+
+
+    /**
+     * Tablet support code generates a spurious right-click right after opening
+     * the window, so we should ignore it. Next right-click will be used for
+     * closing the popup palette
+     */
+    this->installEventFilter(m_clicksEater);
+    m_triangleColorSelector->installEventFilter(m_clicksEater);
 
     QRegion maskedRegion(0, 0, m_triangleColorSelector->width(), m_triangleColorSelector->height(), QRegion::Ellipse );
     m_triangleColorSelector->setMask(maskedRegion);
@@ -397,10 +408,6 @@ void KisPopupPalette::showPopupPalette(const QPoint &p)
 void KisPopupPalette::showPopupPalette(bool show)
 {
     if (show) {
-        m_hadMousePressSinceOpening = false;
-        m_timeSinceOpening.start();
-
-
         // don't set the zoom slider if we are outside of the zoom slider bounds. It will change the zoom level to within
         // the bounds and cause the canvas to jump between the slider's min and max
         if (m_coordinatesConverter->zoomInPercent() > zoomSliderMinValue &&
@@ -757,24 +764,6 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
     QPointF point = event->localPos();
     event->accept();
 
-
-#ifdef Q_OS_WIN
-    const int tableMouseEventsFlowDelay = 500;
-#else
-    const int tableMouseEventsFlowDelay = 100;
-#endif
-
-    /**
-     * Tablet support code generates a spurious right-click right after opening
-     * the window, so we should ignore it. Next right-click will be used for
-     * closing the popup palette
-     */
-    if (!m_hadMousePressSinceOpening &&
-        m_timeSinceOpening.elapsed() > tableMouseEventsFlowDelay) {
-
-        m_hadMousePressSinceOpening = true;
-    }
-
     if (event->button() == Qt::LeftButton) {
 
         //in favorite brushes area
@@ -843,14 +832,18 @@ void KisPopupPalette::tabletEvent(QTabletEvent *event) {
     event->ignore();
 }
 
+void KisPopupPalette::showEvent(QShowEvent *event)
+{
+    m_clicksEater->reset();
+    QWidget::showEvent(event);
+}
+
 void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
 {
     QPointF point = event->localPos();
     event->accept();
 
-    // see a comment in KisPopupPalette::mousePressEvent
-    if (m_hadMousePressSinceOpening &&
-        event->buttons() == Qt::NoButton &&
+    if (event->buttons() == Qt::NoButton &&
         event->button() == Qt::RightButton) {
 
         showPopupPalette(false);

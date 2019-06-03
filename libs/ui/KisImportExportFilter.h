@@ -21,6 +21,8 @@ Boston, MA 02110-1301, USA.
 #ifndef KIS_IMPORT_EXPORT_FILTER_H
 #define KIS_IMPORT_EXPORT_FILTER_H
 
+#include "KisImageBuilderResult.h"
+
 #include <QObject>
 #include <QIODevice>
 #include <QMap>
@@ -39,7 +41,7 @@ class KisDocument;
 class KisConfigWidget;
 
 #include "kritaui_export.h"
-
+#include "KisImportExportErrorCode.h"
 
 /**
  * @brief The base class for import and export filters.
@@ -112,7 +114,7 @@ public:
      * @return The error status, see the @ref #ConversionStatus enum.
      *         KisImportExportFilter::OK means that everything is alright.
      */
-    virtual ConversionStatus convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration = 0) = 0;
+    virtual KisImportExportErrorCode convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration = 0) = 0;
 
     /**
      * Get the text version of the status value

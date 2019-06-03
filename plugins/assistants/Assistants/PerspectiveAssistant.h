@@ -32,6 +32,7 @@ class PerspectiveAssistant : public KisAbstractPerspectiveGrid, public KisPainti
     Q_OBJECT
 public:
     PerspectiveAssistant(QObject * parent = 0);
+    KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
     void endStroke() override;
     QPointF buttonPosition() const override;
@@ -52,6 +53,7 @@ private:
     bool quad(QPolygonF& out) const;
     // finds the transform from perspective coordinates (a unit square) to the document
     bool getTransform(QPolygonF& polyOut, QTransform& transformOut) const;
+    explicit PerspectiveAssistant(const PerspectiveAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 
     // which direction to snap to (in transformed coordinates)
     QLineF m_snapLine;

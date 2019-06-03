@@ -41,4 +41,6 @@ enum KisImageBuilder_Result {
     KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE = 600
 };
 
+
+
 #endif

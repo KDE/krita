@@ -155,10 +155,15 @@ KisSelectionSP KisSelectionBasedLayer::fetchComposedInternalSelection(const QRec
 
     if (hasTemporaryTarget()) {
         /**
-         * Cloning a selection with COW
-         * FIXME: check whether it's faster than usual bitBlt'ing
+         * WARNING: we don't try to clone the selection entirely, because
+         *          it might be unsafe for shape selections.
+         *
+         * TODO: make cloning of vector selections safe! See a comment in
+         *       KisShapeSelection::clone().
          */
-        tempSelection = new KisSelection(*tempSelection);
+        tempSelection = new KisSelection();
+
+        KisPainter::copyAreaOptimized(rect.topLeft(), m_d->selection->pixelSelection(), tempSelection->pixelSelection(), rect);
 
         KisPainter gc2(tempSelection->pixelSelection());
         setupTemporaryPainter(&gc2);

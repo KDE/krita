@@ -109,6 +109,10 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         return;
     }
 
+    if (KisToolSelect::selectionDidMove()) {
+        return;
+    }
+
     QPointF pos = convertToPixelCoord(event);
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());

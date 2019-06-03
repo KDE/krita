@@ -65,6 +65,7 @@ public Q_SLOTS:
     void deactivate() override;
 
     void addReferenceImage();
+    void pasteReferenceImage();
     void removeAllReferenceImages();
     void saveReferenceImages();
     void loadReferenceImages();

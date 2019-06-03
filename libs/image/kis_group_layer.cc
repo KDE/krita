@@ -121,13 +121,25 @@ bool KisGroupLayer::checkNodeRecursively(KisNodeSP node) const
 
 bool KisGroupLayer::allowAsChild(KisNodeSP node) const
 {
-    if (!parent()) { // We are the root layer, so we need to check
+    if (!checkNodeRecursively(node)) return false;
+
+    if (!parent()) {
+        // We are the root layer, so we need to check
         // whether the node that's going to be added is
         // a selection mask; that is only allowed if
         // there isn't a global selection. See
         // BUG:294905
-        if (node->inherits("KisSelectionMask") && selectionMask()) {
-            return false;
+
+        if (node->inherits("KisSelectionMask")) {
+            return !selectionMask();
+        }
+
+        KisImageSP image = this->image();
+
+        if (!image || !image->allowMasksOnRootNode()) {
+            if (node->inherits("KisMask")) {
+                return false;
+            }
         }
     }
 
@@ -218,7 +230,7 @@ KisLayer* KisGroupLayer::onlyMeaningfulChild() const
 
     while (child) {
         KisLayer *layer = qobject_cast<KisLayer*>(child);
-        if (layer) {
+        if (layer && !layer->isFakeNode()) {
             if (onlyLayer) return 0;
             onlyLayer = layer;
         }

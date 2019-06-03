@@ -109,7 +109,6 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
                                    float centerX, float centerY)
 {
     const bool useSmoothing = d->copyOfAntialiasEdges;
-    const bool noFading = d->noFading;
 
     float y_ = y - centerY;
     float sinay_ = sina * y_;
@@ -146,31 +145,26 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
         Vc::float_m outsideMask = n > vOne;
 
         if (!outsideMask.isFull()) {
-
-            if (noFading) {
-                Vc::float_v vFade(Vc::Zero);
-                vFade(outsideMask) = vOne;
-                vFade.store(bufferPointer, Vc::Aligned);
-            } else {
-                if (useSmoothing) {
-                    xr = Vc::abs(xr) + vOne;
-                    yr = Vc::abs(yr) + vOne;
-                }
-
-                Vc::float_v vNormFade = pow2(xr * vTransformedFadeX) + pow2(yr * vTransformedFadeY);
-
-                //255 * n * (normeFade - 1) / (normeFade - n)
-                Vc::float_v vFade = n * (vNormFade - vOne) / (vNormFade - n);
-
-                // Mask in the inner circle of the mask
-                Vc::float_m mask = vNormFade < vOne;
-                vFade.setZero(mask);
-
-                // Mask out the outer circle of the mask
-                vFade(outsideMask) = vOne;
-
-                vFade.store(bufferPointer, Vc::Aligned);
+            if (useSmoothing) {
+                xr = Vc::abs(xr) + vOne;
+                yr = Vc::abs(yr) + vOne;
             }
+            Vc::float_v vNormFade = pow2(xr * vTransformedFadeX) + pow2(yr * vTransformedFadeY);
+            Vc::float_m vNormLowMask = vNormFade < vOne;
+            vNormFade.setZero(vNormLowMask);
+
+            //255 * n * (normeFade - 1) / (normeFade - n)
+            Vc::float_v vFade = n * (vNormFade - vOne) / (vNormFade - n);
+
+            // Mask in the inner circle of the mask
+            Vc::float_m mask = vNormFade < vOne;
+            vFade.setZero(mask);
+
+            // Mask out the outer circle of the mask
+            vFade(outsideMask) = vOne;
+
+            vFade.store(bufferPointer, Vc::Aligned);
+
         } else {
             // Mask out everything outside the circle
             vOne.store(bufferPointer, Vc::Aligned);

@@ -33,7 +33,7 @@ QMLConverter::~QMLConverter()
 {
 }
 
-KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, const QString &realFilename, QIODevice *io, KisImageSP image)
+KisImportExportErrorCode QMLConverter::buildFile(const QString &filename, const QString &realFilename, QIODevice *io, KisImageSP image)
 {
     QTextStream out(io);
     out.setCodec("UTF-8");
@@ -50,8 +50,13 @@ KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, const QS
     QString imagePath = infoRealFile.absolutePath() + '/' + imageDir;
     if (node) {
         QDir dir;
-        dir.mkpath(imagePath);
+        bool success = dir.mkpath(imagePath);
+        if (!success)
+        {
+            return ImportExportCodes::CannotCreateFile;
+        }
     }
+
     dbgFile << "Saving images to " << imagePath;
     while(node) {
         KisPaintDeviceSP projection = node->projection();
@@ -74,7 +79,7 @@ KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, const QS
     }
     out << "}\n";
 
-    return KisImageBuilder_RESULT_OK;
+    return ImportExportCodes::OK;
 }
 
 void QMLConverter::writeString(QTextStream&  out, int spacing, const QString& setting, const QString& value) {

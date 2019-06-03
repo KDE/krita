@@ -939,7 +939,11 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
             // that are locked and will not be transformed
             if (node->inherits("KisGroupLayer")) continue;
 
-            srcRect |= node->exactBounds();
+            if (const KisTransformMask *mask = dynamic_cast<const KisTransformMask*>(node.data())) {
+                srcRect |= mask->sourceDataBounds();
+            } else {
+                srcRect |= node->exactBounds();
+            }
         }
     }
 

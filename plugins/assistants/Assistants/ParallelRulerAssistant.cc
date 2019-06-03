@@ -38,6 +38,16 @@ ParallelRulerAssistant::ParallelRulerAssistant()
 {
 }
 
+KisPaintingAssistantSP ParallelRulerAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+{
+    return KisPaintingAssistantSP(new ParallelRulerAssistant(*this, handleMap));
+}
+
+ParallelRulerAssistant::ParallelRulerAssistant(const ParallelRulerAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : KisPaintingAssistant(rhs, handleMap)
+{
+}
+
 QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
     Q_ASSERT(isAssistantComplete());

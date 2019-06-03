@@ -46,7 +46,6 @@ struct Q_DECL_HIDDEN KisCircleMaskGenerator::Private {
     double xfadecoef, yfadecoef;
     double transformedFadeX, transformedFadeY;
     bool copyOfAntialiasEdges;
-    bool noFading;
 
     QScopedPointer<KisBrushMaskApplicatorBase> applicator;
 };

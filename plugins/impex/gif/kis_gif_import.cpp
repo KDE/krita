@@ -37,6 +37,7 @@
 #include <kis_node.h>
 #include <kis_group_layer.h>
 #include <KisDocument.h>
+#include <KisImportExportAdditionalChecks.h>
 
 #include "qgiflibhandler.h"
 
@@ -51,21 +52,30 @@ KisGIFImport::~KisGIFImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisGIFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisGIFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(configuration);
 
     QImage img;
     bool result = false;
     QGIFLibHandler handler;
+
+
     handler.setDevice(io);
+
+    if (!io->isReadable()) {
+        return ImportExportCodes::NoAccessToRead;
+    }
 
     if (handler.canRead()) {
         result = handler.read(&img);
+    } else {
+        // handler.canRead() checks for the flag in the file; if it can't read it, maybe the format is incorrect
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     if (result == false) {
-        return KisImportExportFilter::CreationError;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -76,7 +86,7 @@ KisImportExportFilter::ConversionStatus KisGIFImport::convert(KisDocument *docum
     image->addNode(layer.data(), image->rootLayer().data());
 
     document->setCurrentImage(image);
-    return KisImportExportFilter::OK;
+    return ImportExportCodes::OK;
 
 }
 

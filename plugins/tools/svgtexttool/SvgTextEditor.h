@@ -111,6 +111,7 @@ private Q_SLOTS:
     void decreaseTextSize();
 
     void setLineHeight(double lineHeightPercentage);
+    void setLetterSpacing(double letterSpacing);
     void alignLeft();
     void alignRight();
     void alignCenter();
@@ -135,6 +136,11 @@ Q_SIGNALS:
 
 protected:
     void wheelEvent(QWheelEvent *event) override;
+    /**
+     * Selects all if there is no selection
+     * @returns a copy of the previous cursor.
+     */
+    QTextCursor setTextSelection();
 
 private:
     void applySettings();

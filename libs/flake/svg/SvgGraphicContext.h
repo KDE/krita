@@ -38,6 +38,8 @@ public:
     };
 
     SvgGraphicsContext();
+    SvgGraphicsContext(const SvgGraphicsContext &gc);
+
     void workaroundClearInheritedFillProperties();
 
     StyleType     fillType  {Solid};  ///< the current fill type

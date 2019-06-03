@@ -25,7 +25,7 @@
 
 #include "kis_image.h"
 #include "kritaui_export.h"
-#include <KisImageBuilderResult.h>
+#include <KisImportExportErrorCode.h>
 class KisDocument;
 
 #include "csv_layer_record.h"
@@ -38,14 +38,14 @@ public:
     CSVLoader(KisDocument* doc, bool batchMode);
     ~CSVLoader() override;
 
-    KisImageBuilder_Result buildAnimation(QIODevice *io, const QString &filename);
+    KisImportExportErrorCode buildAnimation(QIODevice *io, const QString &filename);
 
     KisImageSP image();
 
 private:
-    KisImageBuilder_Result decode(QIODevice *io, const QString &filename);
-    KisImageBuilder_Result setLayer(CSVLayerRecord* , KisDocument* ,const QString &);
-    KisImageBuilder_Result createNewImage(int, int, float, const QString &);
+    KisImportExportErrorCode decode(QIODevice *io, const QString &filename);
+    KisImportExportErrorCode setLayer(CSVLayerRecord* , KisDocument* ,const QString &);
+    KisImportExportErrorCode createNewImage(int, int, float, const QString &);
     QString convertBlending(const QString &);
     QString validPath(const QString &, const QString &);
 

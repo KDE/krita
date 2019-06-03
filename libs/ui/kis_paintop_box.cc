@@ -264,7 +264,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         slFlow->setFixedHeight(iconsize);
         slFlow->setBlockUpdateSignalOnDrag(true);
 
-        slSize->setRange(0, cfg.readEntry("maximumBrushSize", 1000), 2);
+        slSize->setRange(0.01, cfg.readEntry("maximumBrushSize", 1000), 2);
         slSize->setValue(100);
 
         slSize->setSingleStep(1);
@@ -516,12 +516,11 @@ KisPaintopBox::~KisPaintopBox()
     QMapIterator<TabletToolID, TabletToolData> iter(m_tabletToolMap);
     while (iter.hasNext()) {
         iter.next();
-        //qDebug() << "Writing last used preset for" << iter.key().pointer << iter.key().uniqueID << iter.value().preset->name();
         if ((iter.key().pointer) == QTabletEvent::Eraser) {
-            cfg.writeEntry(QString("LastEraser_%1").arg(iter.key().uniqueID) , iter.value().preset->name());
+            cfg.writeEntry(QString("LastEraser") , iter.value().preset->name());
         }
         else {
-            cfg.writeEntry(QString("LastPreset_%1").arg(iter.key().uniqueID) , iter.value().preset->name());
+            cfg.writeEntry(QString("LastPreset"), iter.value().preset->name());
         }
     }
     // Do not delete the widget, since it is global to the application, not owned by the view
@@ -1213,6 +1212,21 @@ void KisPaintopBox::slotReloadPreset()
     KisPaintOpPresetSP preset = rserver->resourceByName(m_resourceProvider->currentPreset()->name());
     if (preset) {
         preset->load();
+    }
+
+    if (m_resourceProvider->currentPreset() != preset) {
+        m_resourceProvider->setPaintOpPreset(preset);
+    } else {
+        /**
+         * HACK ALERT: here we emit a private signal from the resource manager to
+         * ensure that all the subscribers of resource-changed signal got the
+         * notification. That is especially important for
+         * KisPaintopTransformationConnector. See bug 392622.
+         */
+
+        emit m_resourceProvider->resourceManager()->canvasResourceChanged(
+            KisCanvasResourceProvider::CurrentPaintOpPreset,
+            QVariant::fromValue(preset));
     }
 }
 void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is changed and not when preset is changed

@@ -33,6 +33,7 @@ class FisheyePointAssistant : public KisPaintingAssistant
 {
 public:
     FisheyePointAssistant();
+    KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
     //virtual void endStroke();
     QPointF buttonPosition() const override;
@@ -46,6 +47,7 @@ protected:
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
+    explicit FisheyePointAssistant(const FisheyePointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
     mutable Ellipse e;
     mutable Ellipse extraE;
 };

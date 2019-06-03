@@ -26,6 +26,9 @@ class KisSvgTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testFiles();
+
+    void testImportFromWriteonly();
+    void testImportIncorrectFormat();
 };
 
 #endif

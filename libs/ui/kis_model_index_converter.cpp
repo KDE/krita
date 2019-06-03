@@ -42,12 +42,9 @@ inline bool KisModelIndexConverter::checkDummyType(KisNodeDummy *dummy)
 
 inline bool KisModelIndexConverter::checkDummyMetaObjectType(const QString &type)
 {
-    // TODO: refactor too?
-    if (m_showGlobalSelection) return true;
-
-    QString selectionMaskType = KisSelectionMask::staticMetaObject.className();
-    QString referencesLayerType = KisReferenceImagesLayer::staticMetaObject.className();
-    return type != selectionMaskType && type != referencesLayerType;
+    const QString selectionMaskType = KisSelectionMask::staticMetaObject.className();
+    const QString referencesLayerType = KisReferenceImagesLayer::staticMetaObject.className();
+    return (type != selectionMaskType || m_showGlobalSelection) && type != referencesLayerType;
 }
 
 KisNodeDummy* KisModelIndexConverter::dummyFromRow(int row, QModelIndex parent)

@@ -53,6 +53,7 @@
 #include <kis_guides_config.h>
 #include <kis_coordinates_converter.h>
 #include <kis_time_range.h>
+#include <KisImportExportErrorCode.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -793,12 +794,12 @@ QList<qreal> Document::verticalGuides() const
 
 bool Document::guidesVisible() const
 {
-    return d->document->guidesConfig().lockGuides();
+    return d->document->guidesConfig().showGuides();
 }
 
 bool Document::guidesLocked() const
 {
-    return d->document->guidesConfig().showGuides();
+    return d->document->guidesConfig().lockGuides();
 }
 
 Document *Document::clone() const
@@ -887,9 +888,9 @@ bool Document::importAnimation(const QList<QString> &files, int firstFrame, int 
     }
 
     KisAnimationImporter importer(d->document->image(), updater);
-    KisImportExportFilter::ConversionStatus status = importer.import(files, firstFrame, step);
+    KisImportExportErrorCode status = importer.import(files, firstFrame, step);
 
-    return (status == KisImportExportFilter::OK);
+    return status.isOk();
 }
 
 int Document::framesPerSecond()

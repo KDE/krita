@@ -68,8 +68,8 @@ export FRAMEWORK_PATH=${KIS_INSTALL_DIR}/lib/
 export KDE_COLOR_DEBUG=1
 export QTEST_COLORED=1
 
-OUPUT_LOG="${BUILDROOT}/osxbuild.log"
-ERROR_LOG="${BUILDROOT}/osxbuild-error.log"
+export OUPUT_LOG="${BUILDROOT}/osxbuild.log"
+export ERROR_LOG="${BUILDROOT}/osxbuild-error.log"
 printf "" > "${OUPUT_LOG}"
 printf "" > "${ERROR_LOG}"
 
@@ -390,6 +390,7 @@ build_krita () {
 build_krita_tarball () {
     filename="$(basename ${1})"
     KIS_CUSTOM_BUILD="${BUILDROOT}/releases/${filename%.tar.gz}"
+    print_msg "Tarball BUILDROOT is ${KIS_CUSTOM_BUILD}"
 
     filename_dir=$(dirname "${1}")
     cd "${filename_dir}"
@@ -405,14 +406,13 @@ build_krita_tarball () {
     fi
 
     KIS_BUILD_DIR="${KIS_CUSTOM_BUILD}/build"
-    KIS_SRC_DIR="${BUILDROOT}/src"
+    KIS_SRC_DIR="${KIS_CUSTOM_BUILD}/src"
 
     build_krita
 
     print_msg "Build done!"
-    printf "to install run
-osxbuild.sh install %s
-" "${KIS_BUILD_DIR}"
+    print_msg "to install run
+osxbuild.sh install ${KIS_BUILD_DIR}"
 
 }
 
@@ -441,21 +441,32 @@ install_krita () {
 # Runs all fixes for path and packages.
 # Historically only fixed boost @rpath
 fix_boost_rpath () {
-    set_krita_dirs ${1}
-    print_msg "Fixing boost..."
+    # helpers to define function only once
+    fixboost_find () {
+        for FILE in "${@}"; do
+            if [[ -n "$(otool -L $FILE | grep boost)" ]]; then
+                log "Fixing -- $FILE"
+                log_cmd install_name_tool -change libboost_system.dylib @rpath/libboost_system.dylib $FILE
+            fi
+        done
+    }
+
+    batch_fixboost() {
+        xargs -P4 -I FILE bash -c 'fixboost_find "FILE"'
+    }
+
+    export -f fixboost_find
+    export -f log
+    export -f log_cmd
+
+    print_msg "Fixing boost in... ${KIS_INSTALL_DIR}"
     # install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib $BUILDROOT/$KRITA_INSTALL/bin/krita.app/Contents/MacOS/gmic_krita_qt
     log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
     # echo "Added rpath ${KIS_INSTALL_DIR}/lib to krita bin"
     # install_name_tool -add_rpath ${BUILDROOT}/deps/lib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
     log_cmd install_name_tool -change libboost_system.dylib @rpath/libboost_system.dylib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
 
-    FILES=$(find -L ${KIS_INSTALL_DIR} -name '*so' -o -name '*dylib')
-    for FILE in $FILES; do
-        if [[ -n "$(otool -L $FILE | grep boost)" ]]; then
-            log "Fixing -- $FILE"
-            log_cmd install_name_tool -change libboost_system.dylib @rpath/libboost_system.dylib $FILE
-        fi
-    done
+    find -L "${KIS_INSTALL_DIR}" -name '*so' -o -name '*dylib' | batch_fixboost
 
     log "Fixing boost done!"
 }
@@ -488,6 +499,9 @@ elif [[ ${1} = "rebuilddeps" ]]; then
     rebuild_3rdparty "${@:2}"
 
 elif [[ ${1} = "fixboost" ]]; then
+    if [[ -d ${1} ]]; then
+        KIS_BUILD_DIR="${1}"
+    fi
     fix_boost_rpath
 
 elif [[ ${1} = "build" ]]; then
@@ -503,7 +517,7 @@ elif [[ ${1} = "buildtarball" ]]; then
 
 elif [[ ${1} = "install" ]]; then
     install_krita ${2}
-    fix_boost_rpath ${2}
+    fix_boost_rpath
 
 elif [[ ${1} = "buildinstall" ]]; then
     build_krita ${2}

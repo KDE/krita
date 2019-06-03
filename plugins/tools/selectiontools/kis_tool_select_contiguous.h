@@ -47,7 +47,7 @@ public:
 
     void beginPrimaryAction(KoPointerEvent *event) override;
 
-    void resetCursorStyle();
+    void resetCursorStyle() override;
 
 protected:
 

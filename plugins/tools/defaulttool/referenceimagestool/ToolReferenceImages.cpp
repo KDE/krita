@@ -109,6 +109,20 @@ void ToolReferenceImages::addReferenceImage()
     }
 }
 
+void ToolReferenceImages::pasteReferenceImage()
+{
+    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas)
+
+    KisReferenceImage* reference = KisReferenceImage::fromClipboard(*kisCanvas->coordinatesConverter(), canvas()->canvasWidget());
+    if(reference) {
+        KisDocument *doc = document();
+        doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
+    }
+}
+
+
+
 void ToolReferenceImages::removeAllReferenceImages()
 {
     auto layer = m_layer.toStrongRef();

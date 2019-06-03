@@ -22,6 +22,8 @@
 #include <QImage>
 #include <QMessageBox>
 #include <QPainter>
+#include <QApplication>
+#include <QClipboard>
 
 #include <kundo2command.h>
 #include <KoStore.h>
@@ -52,6 +54,11 @@ struct KisReferenceImage::Private {
     bool loadFromFile() {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!externalFilename.isEmpty(), false);
         return image.load(externalFilename);
+    }
+
+    bool loadFromClipboard() {
+        image = QApplication::clipboard()->image();
+        return !image.isNull();
     }
 
     void updateCache() {
@@ -136,6 +143,28 @@ KisReferenceImage * KisReferenceImage::fromFile(const QString &filename, const K
 
         if (parent) {
             QMessageBox::critical(parent, i18nc("@title:window", "Krita"), i18n("Could not load %1.", filename));
+        }
+
+        return nullptr;
+    }
+
+    return reference;
+}
+
+KisReferenceImage* KisReferenceImage::fromClipboard(const KisCoordinatesConverter &converter, QWidget *parent)
+{
+    KisReferenceImage *reference = new KisReferenceImage();
+    bool ok = reference->d->loadFromClipboard();
+
+    if(ok){
+        QRect r = QRect(QPoint(), reference->d->image.size());
+        QSizeF size = converter.imageToDocument(r).size();
+        reference->setSize(size);
+    } else {
+        delete reference;
+
+        if(parent){
+            QMessageBox::critical(parent, i18nc("@title:window", "Krita"), i18n("Could not load image from clipboard."));
         }
 
         return nullptr;

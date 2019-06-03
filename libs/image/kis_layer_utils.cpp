@@ -1218,6 +1218,19 @@ namespace KisLayerUtils {
         return visibleNodes;
     }
 
+    void filterUnlockedNodes(KisNodeList &nodes)
+    {
+        KisNodeList::iterator it = nodes.begin();
+
+        while (it != nodes.end()) {
+            if ((*it)->userLocked()) {
+                it = nodes.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    }
+
     void changeImageDefaultProjectionColor(KisImageSP image, const KoColor &color)
     {
         KisImageSignalVector emitSignals;

@@ -200,6 +200,7 @@ KisLayer::KisLayer(KisImageWSP image, const QString &name, quint8 opacity)
     m_d->metaDataStore = new KisMetaData::Store();
     m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
     m_d->safeProjection = new KisSafeNodeProjectionStore();
+    m_d->safeProjection->setImage(image);
 }
 
 KisLayer::KisLayer(const KisLayer& rhs)
@@ -213,6 +214,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
         setName(rhs.name());
         m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
         m_d->safeProjection = new KisSafeNodeProjectionStore(*rhs.m_d->safeProjection);
+        m_d->safeProjection->setImage(image());
 
         if (rhs.m_d->layerStyle) {
             m_d->layerStyle = rhs.m_d->layerStyle->clone();

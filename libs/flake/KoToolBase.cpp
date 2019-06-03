@@ -33,6 +33,7 @@
 #include "KoShapeControllerBase.h"
 #include "KoToolSelection.h"
 #include "KoCanvasController.h"
+#include "KisDialogStateSaver.h"
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
@@ -57,6 +58,9 @@ KoToolBase::KoToolBase(KoToolBasePrivate &dd)
 
 KoToolBase::~KoToolBase()
 {
+    Q_FOREACH(QWidget *widget, d_ptr->optionWidgets) {
+        KisDialogStateSaver::saveState(widget, toolId());
+    }
     qDeleteAll(d_ptr->optionWidgets);
     delete d_ptr;
 }
@@ -178,6 +182,9 @@ QList<QPointer<QWidget> > KoToolBase::optionWidgets()
     Q_D(KoToolBase);
     if (!d->optionWidgetsCreated) {
         d->optionWidgets = createOptionWidgets();
+        Q_FOREACH(QWidget *widget, d->optionWidgets) {
+            KisDialogStateSaver::restoreState(widget, toolId());
+        }
         d->optionWidgetsCreated = true;
     }
     return d->optionWidgets;

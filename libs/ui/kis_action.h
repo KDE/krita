@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2013 Sven Langkamp <sven.langkamp@gmail.com>
  *
@@ -39,8 +40,7 @@ class KisActionManager;
  *  of these instantiations happen inside the constructor for KisMainWindow as
  *  well as the various functions called in KisViewManager::setupManagers().
  *
- **/
-
+ */
 class KRITAUI_EXPORT KisAction : public QWidgetAction
 {
     Q_OBJECT

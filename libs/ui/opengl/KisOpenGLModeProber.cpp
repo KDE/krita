@@ -212,7 +212,11 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
         format->setRedBufferSize(8);
         format->setGreenBufferSize(8);
         format->setBlueBufferSize(8);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         format->setAlphaBufferSize(8);
+#else
+        format->setAlphaBufferSize(0);
+#endif
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         // TODO: check if we can use real sRGB space here

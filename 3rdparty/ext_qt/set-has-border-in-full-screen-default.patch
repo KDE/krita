@@ -1,7 +1,7 @@
-diff --git a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
+diff --git a/qtbase/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h b/qtbase/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
 index e51c2fde6..032dcafa6 100644
---- a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
-+++ b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
+--- a/qtbase/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
++++ b/qtbase/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
 @@ -81,6 +81,15 @@ public:
              func(window, border);
      }
@@ -18,10 +18,10 @@ index e51c2fde6..032dcafa6 100644
      typedef void (*SetWindowActivationBehaviorType)(WindowActivationBehavior);
      static const QByteArray setWindowActivationBehaviorIdentifier() { return QByteArrayLiteral("WindowsSetWindowActivationBehavior"); }
  
-diff --git a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
+diff --git a/qtbase/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc b/qtbase/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
 index a52bbe061..0c52cde75 100644
---- a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
-+++ b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
+--- a/qtbase/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
++++ b/qtbase/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
 @@ -93,7 +93,40 @@
      is true then it will enable the WS_BORDER flag in full screen mode to enable other top level windows
      inside the application to appear on top when required.
@@ -63,11 +63,11 @@ index a52bbe061..0c52cde75 100644
  */
  
  /*!
-diff --git a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp b/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
-index ed945ec4b..9003e94c5 100644
---- a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
-+++ b/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
-@@ -277,6 +277,8 @@ QFunctionPointer QWindowsNativeInterface::platformFunction(const QByteArray &fun
+diff --git a/qtbase/src/plugins/platforms/windows/qwindowsnativeinterface.cpp b/qtbase/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
+index 1c5be4415..42193baf4 100644
+--- a/qtbase/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
++++ b/qtbase/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
+@@ -293,6 +293,8 @@ QFunctionPointer QWindowsNativeInterface::platformFunction(const QByteArray &fun
          return QFunctionPointer(QWindowsWindow::setTouchWindowTouchTypeStatic);
      if (function == QWindowsWindowFunctions::setHasBorderInFullScreenIdentifier())
          return QFunctionPointer(QWindowsWindow::setHasBorderInFullScreenStatic);
@@ -76,10 +76,10 @@ index ed945ec4b..9003e94c5 100644
      if (function == QWindowsWindowFunctions::setWindowActivationBehaviorIdentifier())
          return QFunctionPointer(QWindowsNativeInterface::setWindowActivationBehavior);
      if (function == QWindowsWindowFunctions::isTabletModeIdentifier())
-diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
-index 0376e363f..338e594c7 100644
---- a/src/plugins/platforms/windows/qwindowswindow.cpp
-+++ b/src/plugins/platforms/windows/qwindowswindow.cpp
+diff --git a/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp b/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
+index 76a443a89..967d479a0 100644
+--- a/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
++++ b/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
 @@ -1183,6 +1183,7 @@ QWindowCreationContext::QWindowCreationContext(const QWindow *w,
  
  const char *QWindowsWindow::embeddedNativeParentHandleProperty = "_q_embedded_native_parent_handle";
@@ -97,7 +97,7 @@ index 0376e363f..338e594c7 100644
          setFlag(HasBorderInFullScreen);
      clearFlag(WithinCreate);
  }
-@@ -2819,6 +2820,11 @@ void QWindowsWindow::setHasBorderInFullScreenStatic(QWindow *window, bool border
+@@ -2823,6 +2824,11 @@ void QWindowsWindow::setHasBorderInFullScreenStatic(QWindow *window, bool border
          window->setProperty(hasBorderInFullScreenProperty, QVariant(border));
  }
  
@@ -109,10 +109,10 @@ index 0376e363f..338e594c7 100644
  void QWindowsWindow::setHasBorderInFullScreen(bool border)
  {
      if (testFlag(HasBorderInFullScreen) == border)
-diff --git a/src/plugins/platforms/windows/qwindowswindow.h b/src/plugins/platforms/windows/qwindowswindow.h
+diff --git a/qtbase/src/plugins/platforms/windows/qwindowswindow.h b/qtbase/src/plugins/platforms/windows/qwindowswindow.h
 index 2675990cf..0d8096ddf 100644
---- a/src/plugins/platforms/windows/qwindowswindow.h
-+++ b/src/plugins/platforms/windows/qwindowswindow.h
+--- a/qtbase/src/plugins/platforms/windows/qwindowswindow.h
++++ b/qtbase/src/plugins/platforms/windows/qwindowswindow.h
 @@ -342,6 +342,7 @@ public:
      static void setTouchWindowTouchTypeStatic(QWindow *window, QWindowsWindowFunctions::TouchWindowTouchTypes touchTypes);
      void registerTouchWindow(QWindowsWindowFunctions::TouchWindowTouchTypes touchTypes = QWindowsWindowFunctions::NormalTouch);

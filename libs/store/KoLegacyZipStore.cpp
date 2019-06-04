@@ -30,11 +30,11 @@
 
 #include <QUrl>
 
-class SaveZip : public KZip {
+class SafeZip : public KZip {
 public:
-    SaveZip(const QString &filename) : KZip(filename) {}
-    SaveZip(QIODevice *dev) : KZip(dev) {}
-    ~SaveZip() override {}
+    SafeZip(const QString &filename) : KZip(filename) {}
+    SafeZip(QIODevice *dev) : KZip(dev) {}
+    ~SafeZip() override {}
     void resetDevice() {
         closeArchive();
         setDevice(0);
@@ -52,7 +52,7 @@ KoLegacyZipStore::KoLegacyZipStore(const QString & _filename, Mode mode, const Q
 
     d->localFileName = _filename;
 
-    m_pZip = new SaveZip(_filename);
+    m_pZip = new SafeZip(_filename);
 
     init(appIdentification);   // open the zip file and init some vars
 }
@@ -65,7 +65,7 @@ KoLegacyZipStore::KoLegacyZipStore(QIODevice *dev, Mode mode, const QByteArray &
 //               << " mode = " << int(mode)
 //               << " mimetype = " << appIdentification;
 
-    m_pZip = new SaveZip(dev);
+    m_pZip = new SafeZip(dev);
     init(appIdentification);
 }
 
@@ -91,7 +91,7 @@ KoLegacyZipStore::KoLegacyZipStore(QWidget* window, const QUrl &_url, const QStr
         f.close();
     }
 
-    m_pZip = new SaveZip(d->localFileName);
+    m_pZip = new SafeZip(d->localFileName);
     init(appIdentification);   // open the zip file and init some vars
 }
 

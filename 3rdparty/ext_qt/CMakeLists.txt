@@ -47,7 +47,6 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-cumulative-patch-for-hdr.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-Fix-swizzling-when-rendering-QPainter-on-QOpenGLWidg.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0020-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0021-Fix-QTabletEvent-uniqueId-when-Qt-uses-WinInk.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0022-Fix-generation-of-Leave-events-when-using-tablet-dev.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0023-Implement-a-switch-for-tablet-API-on-Windows.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0024-Fetch-stylus-button-remapping-from-WinTab-driver.patch

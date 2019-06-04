@@ -1,7 +1,7 @@
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 index fa209f09c..d31998825 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+--- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
++++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -497,6 +497,11 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
              m_state = PenDown;
              m_mode = (mouseLocation - globalPosF).manhattanLength() > m_absoluteRange

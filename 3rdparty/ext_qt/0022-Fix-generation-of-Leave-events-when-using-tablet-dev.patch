@@ -1,7 +1,7 @@
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowspointerhandler.cpp b/qtbase/src/plugins/platforms/windows/qwindowspointerhandler.cpp
+diff --git a/src/plugins/platforms/windows/qwindowspointerhandler.cpp b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
 index 9a8b5d512..a83289de7 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowspointerhandler.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowspointerhandler.cpp
+--- a/src/plugins/platforms/windows/qwindowspointerhandler.cpp
++++ b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
 @@ -614,7 +614,12 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
          if (m_needsEnterOnPointerUpdate) {
              m_needsEnterOnPointerUpdate = false;

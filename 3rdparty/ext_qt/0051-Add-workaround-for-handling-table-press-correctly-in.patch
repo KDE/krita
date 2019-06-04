@@ -1,7 +1,7 @@
-diff --git a/qtbase/src/gui/kernel/qguiapplication.cpp b/qtbase/src/gui/kernel/qguiapplication.cpp
+diff --git a/src/gui/kernel/qguiapplication.cpp b/src/gui/kernel/qguiapplication.cpp
 index fd01f8bb7..4d61d9fd8 100644
---- a/qtbase/src/gui/kernel/qguiapplication.cpp
-+++ b/qtbase/src/gui/kernel/qguiapplication.cpp
+--- a/src/gui/kernel/qguiapplication.cpp
++++ b/src/gui/kernel/qguiapplication.cpp
 @@ -2532,6 +2532,7 @@ void QGuiApplicationPrivate::processTabletEvent(QWindowSystemInterfacePrivate::T
      tabletEvent.setTimestamp(e->timestamp);
      QGuiApplication::sendSpontaneousEvent(window, &tabletEvent);
@@ -10,10 +10,10 @@ index fd01f8bb7..4d61d9fd8 100644
      if (!tabletEvent.isAccepted()
          && !QWindowSystemInterfacePrivate::TabletEvent::platformSynthesizesMouse
          && qApp->testAttribute(Qt::AA_SynthesizeMouseForUnhandledTabletEvents)) {
-diff --git a/qtbase/src/gui/kernel/qwindowsysteminterface.cpp b/qtbase/src/gui/kernel/qwindowsysteminterface.cpp
+diff --git a/src/gui/kernel/qwindowsysteminterface.cpp b/src/gui/kernel/qwindowsysteminterface.cpp
 index b0f286912..b3b6167c9 100644
---- a/qtbase/src/gui/kernel/qwindowsysteminterface.cpp
-+++ b/qtbase/src/gui/kernel/qwindowsysteminterface.cpp
+--- a/src/gui/kernel/qwindowsysteminterface.cpp
++++ b/src/gui/kernel/qwindowsysteminterface.cpp
 @@ -949,7 +949,7 @@ void QWindowSystemInterfacePrivate::TabletEvent::setPlatformSynthesizesMouse(boo
      platformSynthesizesMouse = v;
  }
@@ -69,10 +69,10 @@ index b0f286912..b3b6167c9 100644
  }
  #endif // QT_DEPRECATED_SINCE(5, 10)
  
-diff --git a/qtbase/src/gui/kernel/qwindowsysteminterface.h b/qtbase/src/gui/kernel/qwindowsysteminterface.h
+diff --git a/src/gui/kernel/qwindowsysteminterface.h b/src/gui/kernel/qwindowsysteminterface.h
 index bf98c33a1..fdc5a2fb5 100644
---- a/qtbase/src/gui/kernel/qwindowsysteminterface.h
-+++ b/qtbase/src/gui/kernel/qwindowsysteminterface.h
+--- a/src/gui/kernel/qwindowsysteminterface.h
++++ b/src/gui/kernel/qwindowsysteminterface.h
 @@ -247,20 +247,20 @@ public:
      static void handleFileOpenEvent(const QString& fileName);
      static void handleFileOpenEvent(const QUrl &url);
@@ -98,10 +98,10 @@ index bf98c33a1..fdc5a2fb5 100644
                                                  int device, int pointerType, qreal pressure, int xTilt, int yTilt,
                                                  qreal tangentialPressure, qreal rotation, int z, qint64 uid,
                                                  Qt::KeyboardModifiers modifiers = Qt::NoModifier);
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowspointerhandler.cpp b/qtbase/src/plugins/platforms/windows/qwindowspointerhandler.cpp
+diff --git a/src/plugins/platforms/windows/qwindowspointerhandler.cpp b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
 index 9a8b5d512..93498d58b 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowspointerhandler.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowspointerhandler.cpp
+--- a/src/plugins/platforms/windows/qwindowspointerhandler.cpp
++++ b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
 @@ -535,6 +535,58 @@ bool QWindowsPointerHandler::translateTouchEvent(QWindow *window, HWND hwnd,
      return false; // Allow mouse messages to be generated.
  }

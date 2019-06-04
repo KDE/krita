@@ -1,7 +1,7 @@
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 index fa209f09c..462be8b3f 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+--- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
++++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -434,6 +434,14 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
      if (m_currentDevice < 0) {
          m_currentDevice = m_devices.size();

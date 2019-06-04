@@ -1,7 +1,7 @@
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 index fa209f09c..d959da90b 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+--- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
++++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -454,7 +454,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
          return false;
  

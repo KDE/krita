@@ -1,7 +1,7 @@
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowspointerhandler.cpp b/qtbase/src/plugins/platforms/windows/qwindowspointerhandler.cpp
+diff --git a/src/plugins/platforms/windows/qwindowspointerhandler.cpp b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
 index 9a8b5d512..4a8322337 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowspointerhandler.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowspointerhandler.cpp
+--- a/src/plugins/platforms/windows/qwindowspointerhandler.cpp
++++ b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
 @@ -639,14 +639,16 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
  #endif
  }
@@ -30,10 +30,10 @@ index 9a8b5d512..4a8322337 100644
          if (QWindowsIntegration::instance()->options() & QWindowsIntegration::DontPassOsMouseEventsSynthesizedFromTouch)
              return false;
          source = Qt::MouseEventSynthesizedBySystem;
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 index fa209f09c..462be8b3f 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+--- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
++++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -434,6 +434,14 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
      if (m_currentDevice < 0) {
          m_currentDevice = m_devices.size();

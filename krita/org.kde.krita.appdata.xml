@@ -266,6 +266,6 @@
     <id>org.kde.krita.desktop</id>
   </provides>
   <releases>
-    <release date="2019-05-29" version="4.2.0.0"/>
+    <release date="2019-06-04" version="4.2.1.0"/>
   </releases>
 </component>

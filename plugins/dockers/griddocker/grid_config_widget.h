@@ -42,8 +42,6 @@ public:
     void setGuidesConfig(const KisGuidesConfig &value);
     KisGuidesConfig guidesConfig() const;
 
-    void setGridDivision(int w, int h);
-
     bool showRulers() const;
 
     void enableIsometricGrid(bool value);

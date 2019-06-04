@@ -305,7 +305,7 @@ void KisLayerManager::layerProperties()
         dlg->resize(dlg->minimumSizeHint());
 
         Qt::WindowFlags flags = dlg->windowFlags();
-        dlg->setWindowFlags(flags | Qt::WindowStaysOnTopHint | Qt::Dialog);
+        dlg->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
         dlg->show();
 
     }
@@ -347,7 +347,7 @@ void KisLayerManager::layerProperties()
         dialog->resize(dialog->minimumSizeHint());
         dialog->setAttribute(Qt::WA_DeleteOnClose);
         Qt::WindowFlags flags = dialog->windowFlags();
-        dialog->setWindowFlags(flags | Qt::WindowStaysOnTopHint | Qt::Dialog);
+        dialog->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
         dialog->show();
 
     }
@@ -378,7 +378,7 @@ void KisLayerManager::changeCloneSource()
     dialog->resize(dialog->minimumSizeHint());
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     Qt::WindowFlags flags = dialog->windowFlags();
-    dialog->setWindowFlags(flags | Qt::WindowStaysOnTopHint | Qt::Dialog);
+    dialog->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
     dialog->show();
 }
 

@@ -1,37 +1,7 @@
-From 087561675d1c1922265c3c52faeac61ab1bc2ecf Mon Sep 17 00:00:00 2001
-From: Dmitry Kazakov <dimula73@gmail.com>
-Date: Sat, 13 Apr 2019 23:24:01 +0300
-Subject: [PATCH] Fetch mapped screen size from the Wintab driver
-
-Some devices, like Microsoft Surface Pro 5, don't map tablet's
-input range to the entire virtual screen area, but map it to
-the primary display that has actual built-in tablet sensor.
-
-In such cases we should fetch actualy mapped aread from Wintab's
-lcSys{Org,Ext}{X,Y} fields and use it for cursor mapping.
-
-If one wants to fall back to the old screen size detection method,
-then an environment variable can be set:
-
-QT_IGNORE_WINTAB_MAPPING=1
-
-When the variable is set, the scaling is done via virtual desktop
-area only.
-
-If the tablet driver is broken (e.g. Microsoft SP5, when primary
-display is set to an external monitor) the user might want to override
-mapping completely. Then the following variable can be used:
-
-QT_WINTAB_DESKTOP_RECT=x;y;width;height
----
- .../windows/qwindowstabletsupport.cpp         | 89 ++++++++++++++++++-
- .../platforms/windows/qwindowstabletsupport.h | 13 ++-
- 2 files changed, 99 insertions(+), 3 deletions(-)
-
-diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-index 18ec05e4..6a1bf02b 100644
---- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-+++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+diff --git a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+index fa209f09c..318e8372c 100644
+--- a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
++++ b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -53,6 +53,7 @@
  #include <QtCore/qdebug.h>
  #include <QtCore/qvarlengtharray.h>
@@ -145,7 +115,7 @@ index 18ec05e4..6a1bf02b 100644
      const UINT currentCursor = proximityBuffer[0].pkCursor;
      UINT physicalCursorId;
      QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + currentCursor, CSR_PHYSID, &physicalCursorId);
-@@ -534,8 +619,8 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
+@@ -470,8 +555,8 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
      //    in which case we snap the position to the mouse position.
      // It seems there is no way to find out the mode programmatically, the LOGCONTEXT orgX/Y/Ext
      // area is always the virtual desktop.
@@ -156,21 +126,22 @@ index 18ec05e4..6a1bf02b 100644
  
      if (QWindowsContext::verbose > 1)  {
          qCDebug(lcQpaTablet) << __FUNCTION__ << "processing" << packetCount
-diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.h b/src/plugins/platforms/windows/qwindowstabletsupport.h
-index 5b1ddb52..e8b0c01b 100644
---- a/src/plugins/platforms/windows/qwindowstabletsupport.h
-+++ b/src/plugins/platforms/windows/qwindowstabletsupport.h
-@@ -45,7 +45,9 @@
+diff --git a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.h b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.h
+index d91701d6a..572af8cad 100644
+--- a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.h
++++ b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.h
+@@ -45,6 +45,10 @@
  
  #include <QtCore/qvector.h>
  #include <QtCore/qpoint.h>
 +#include <QtCore/qrect.h>
- #include <QtCore/qmap.h>
++#include <QtCore/qmap.h>
 +#include <QtCore/qobject.h>
++
  
  #include <wintab.h>
  
-@@ -56,6 +58,7 @@ QT_BEGIN_NAMESPACE
+@@ -55,6 +59,7 @@ QT_BEGIN_NAMESPACE
  class QDebug;
  class QWindow;
  class QRect;
@@ -178,7 +149,7 @@ index 5b1ddb52..e8b0c01b 100644
  
  struct QWindowsWinTab32DLL
  {
-@@ -108,7 +111,7 @@ struct QWindowsTabletDeviceData
+@@ -106,7 +111,7 @@ struct QWindowsTabletDeviceData
  QDebug operator<<(QDebug d, const QWindowsTabletDeviceData &t);
  #endif
  
@@ -187,7 +158,7 @@ index 5b1ddb52..e8b0c01b 100644
  {
      Q_DISABLE_COPY(QWindowsTabletSupport)
  
-@@ -141,9 +144,14 @@ public:
+@@ -139,9 +144,14 @@ public:
      int absoluteRange() const { return m_absoluteRange; }
      void setAbsoluteRange(int a) { m_absoluteRange = a; }
  
@@ -202,7 +173,7 @@ index 5b1ddb52..e8b0c01b 100644
  
      static QWindowsWinTab32DLL m_winTab32DLL;
      const HWND m_window;
-@@ -154,6 +162,9 @@ private:
+@@ -152,6 +162,9 @@ private:
      int m_currentDevice = -1;
      Mode m_mode = PenMode;
      State m_state = PenUp;
@@ -212,6 +183,3 @@ index 5b1ddb52..e8b0c01b 100644
  };
  
  QT_END_NAMESPACE
--- 
-2.20.1.windows.1
-

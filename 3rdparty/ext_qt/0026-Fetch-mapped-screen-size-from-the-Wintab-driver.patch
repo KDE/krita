@@ -1,7 +1,7 @@
-diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-index fa209f09c..318e8372c 100644
---- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-+++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+diff --git a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+index 3e35b1464..11e6769c8 100644
+--- a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
++++ b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -53,6 +53,7 @@
  #include <QtCore/qdebug.h>
  #include <QtCore/qvarlengtharray.h>
@@ -115,7 +115,7 @@ index fa209f09c..318e8372c 100644
      const UINT currentCursor = proximityBuffer[0].pkCursor;
      UINT physicalCursorId;
      QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + currentCursor, CSR_PHYSID, &physicalCursorId);
-@@ -470,8 +555,8 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
+@@ -535,8 +620,8 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
      //    in which case we snap the position to the mouse position.
      // It seems there is no way to find out the mode programmatically, the LOGCONTEXT orgX/Y/Ext
      // area is always the virtual desktop.
@@ -126,30 +126,30 @@ index fa209f09c..318e8372c 100644
  
      if (QWindowsContext::verbose > 1)  {
          qCDebug(lcQpaTablet) << __FUNCTION__ << "processing" << packetCount
-diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.h b/src/plugins/platforms/windows/qwindowstabletsupport.h
-index d91701d6a..572af8cad 100644
---- a/src/plugins/platforms/windows/qwindowstabletsupport.h
-+++ b/src/plugins/platforms/windows/qwindowstabletsupport.h
-@@ -45,6 +45,10 @@
+diff --git a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.h b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.h
+index 5b1ddb529..59c996cd3 100644
+--- a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.h
++++ b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.h
+@@ -45,7 +45,9 @@
  
  #include <QtCore/qvector.h>
  #include <QtCore/qpoint.h>
 +#include <QtCore/qrect.h>
-+#include <QtCore/qmap.h>
+ #include <QtCore/qmap.h>
 +#include <QtCore/qobject.h>
-+
  
  #include <wintab.h>
  
-@@ -55,6 +59,7 @@ QT_BEGIN_NAMESPACE
+@@ -55,7 +57,7 @@ QT_BEGIN_NAMESPACE
+ 
  class QDebug;
  class QWindow;
- class QRect;
+-class QRect;
 +class QScreen;
  
  struct QWindowsWinTab32DLL
  {
-@@ -106,7 +111,7 @@ struct QWindowsTabletDeviceData
+@@ -108,7 +110,7 @@ struct QWindowsTabletDeviceData
  QDebug operator<<(QDebug d, const QWindowsTabletDeviceData &t);
  #endif
  
@@ -158,7 +158,7 @@ index d91701d6a..572af8cad 100644
  {
      Q_DISABLE_COPY(QWindowsTabletSupport)
  
-@@ -139,9 +144,14 @@ public:
+@@ -141,9 +143,14 @@ public:
      int absoluteRange() const { return m_absoluteRange; }
      void setAbsoluteRange(int a) { m_absoluteRange = a; }
  
@@ -173,7 +173,7 @@ index d91701d6a..572af8cad 100644
  
      static QWindowsWinTab32DLL m_winTab32DLL;
      const HWND m_window;
-@@ -152,6 +162,9 @@ private:
+@@ -154,6 +161,9 @@ private:
      int m_currentDevice = -1;
      Mode m_mode = PenMode;
      State m_state = PenUp;

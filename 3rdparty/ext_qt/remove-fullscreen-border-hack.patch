@@ -1,21 +1,8 @@
-From c09f43f4c97ab9154d35d9388943b5f58125e457 Mon Sep 17 00:00:00 2001
-From: Alvin Wong <alvin@alvinhc.com>
-Date: Thu, 18 Apr 2019 18:59:58 +0800
-Subject: [PATCH] Hack to hide 1px border with OpenGL fullscreen hack
-
-Unfortunately can't hide all four sides because the bug returns. Now we
-leave the bottom border visible, which is probably the most we can do.
-
-Ref: https://bugreports.qt.io/browse/QTBUG-41309
----
- src/plugins/platforms/windows/qwindowswindow.cpp | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
-index 9705eb7293..a25b11d305 100644
---- a/src/plugins/platforms/windows/qwindowswindow.cpp
-+++ b/src/plugins/platforms/windows/qwindowswindow.cpp
-@@ -1558,7 +1558,7 @@ void QWindowsWindow::show_sys() const
+diff --git a/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp b/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
+index 0376e363f..6472c04e3 100644
+--- a/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
++++ b/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
+@@ -1560,7 +1560,7 @@ void QWindowsWindow::show_sys() const
                  restoreMaximize = true;
          } else {
              updateTransientParent();
@@ -24,7 +11,7 @@ index 9705eb7293..a25b11d305 100644
                  sm = SW_SHOWMAXIMIZED;
                  // Windows will not behave correctly when we try to maximize a window which does not
                  // have minimize nor maximize buttons in the window frame. Windows would then ignore
-@@ -1995,7 +1995,7 @@ bool QWindowsWindow::isFullScreen_sys() const
+@@ -1997,7 +1997,7 @@ bool QWindowsWindow::isFullScreen_sys() const
          return false;
      QRect geometry = geometry_sys();
      if (testFlag(HasBorderInFullScreen))
@@ -33,7 +20,7 @@ index 9705eb7293..a25b11d305 100644
      QPlatformScreen *screen = screenForGeometry(geometry);
      return screen && geometry == screen->geometry();
  }
-@@ -2066,7 +2066,11 @@ void QWindowsWindow::setWindowState_sys(Qt::WindowStates newState)
+@@ -2068,7 +2068,11 @@ void QWindowsWindow::setWindowState_sys(Qt::WindowStates newState)
                  const UINT swpf = SWP_FRAMECHANGED | SWP_NOACTIVATE;
                  const bool wasSync = testFlag(SynchronousGeometryChangeEvent);
                  setFlag(SynchronousGeometryChangeEvent);
@@ -46,6 +33,3 @@ index 9705eb7293..a25b11d305 100644
                  if (!wasSync)
                      clearFlag(SynchronousGeometryChangeEvent);
                  clearFlag(MaximizeToFullScreen);
--- 
-2.18.0.windows.1
-

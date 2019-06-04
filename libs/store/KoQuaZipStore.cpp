@@ -207,10 +207,6 @@ bool KoQuaZipStore::openRead(const QString &name)
     QString fixedPath = name;
     fixedPath.replace("//", "/");
 
-    if (!d->substituteThis.isEmpty()) {
-        fixedPath = fixedPath.replace(d->substituteThis, d->substituteWith);
-    }
-
     delete d->stream;
     d->stream = 0;
     delete dd->currentFile;
@@ -220,6 +216,9 @@ bool KoQuaZipStore::openRead(const QString &name)
         fixedPath = currentPath() + '/' + fixedPath;
     }
 
+    if (!d->substituteThis.isEmpty()) {
+        fixedPath = fixedPath.replace(d->substituteThis, d->substituteWith);
+    }
 
     if (!dd->archive->setCurrentFile(fixedPath)) {
         qWarning() << "\t\tCould not set current file" << dd->archive->getZipError() << fixedPath;

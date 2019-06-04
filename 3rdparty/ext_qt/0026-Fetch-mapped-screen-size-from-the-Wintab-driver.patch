@@ -1,7 +1,7 @@
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 index 3e35b1464..11e6769c8 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+--- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
++++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -53,6 +53,7 @@
  #include <QtCore/qdebug.h>
  #include <QtCore/qvarlengtharray.h>
@@ -126,10 +126,10 @@ index 3e35b1464..11e6769c8 100644
  
      if (QWindowsContext::verbose > 1)  {
          qCDebug(lcQpaTablet) << __FUNCTION__ << "processing" << packetCount
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.h b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.h
+diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.h b/src/plugins/platforms/windows/qwindowstabletsupport.h
 index 5b1ddb529..59c996cd3 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.h
-+++ b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.h
+--- a/src/plugins/platforms/windows/qwindowstabletsupport.h
++++ b/src/plugins/platforms/windows/qwindowstabletsupport.h
 @@ -45,7 +45,9 @@
  
  #include <QtCore/qvector.h>

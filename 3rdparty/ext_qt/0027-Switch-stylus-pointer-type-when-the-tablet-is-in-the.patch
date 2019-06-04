@@ -1,7 +1,7 @@
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 index 11e6769c8..b04312769 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+--- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
++++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -604,7 +604,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
          return false;
  
@@ -39,10 +39,10 @@ index 11e6769c8..b04312769 100644
          const int z = currentDevice == QTabletEvent::FourDMouse ? int(packet.pkZ) : 0;
  
          QPointF globalPosF =
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp.orig b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp.orig
+diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp.orig b/src/plugins/platforms/windows/qwindowstabletsupport.cpp.orig
 index 316551014..11e6769c8 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp.orig
-+++ b/qtbase/src/plugins/platforms/windows/qwindowstabletsupport.cpp.orig
+--- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp.orig
++++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp.orig
 @@ -53,6 +53,7 @@
  #include <QtCore/qdebug.h>
  #include <QtCore/qvarlengtharray.h>

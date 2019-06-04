@@ -1,7 +1,7 @@
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp b/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
+diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
 index 967d479a0..c888847ed 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
+--- a/src/plugins/platforms/windows/qwindowswindow.cpp
++++ b/src/plugins/platforms/windows/qwindowswindow.cpp
 @@ -1561,7 +1561,7 @@ void QWindowsWindow::show_sys() const
                  restoreMaximize = true;
          } else {

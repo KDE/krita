@@ -1,4 +1,4 @@
-diff --git a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h b/qtbase/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
+diff --git a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
 index e51c2fde6..032dcafa6 100644
 --- a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
 +++ b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
@@ -18,7 +18,7 @@ index e51c2fde6..032dcafa6 100644
      typedef void (*SetWindowActivationBehaviorType)(WindowActivationBehavior);
      static const QByteArray setWindowActivationBehaviorIdentifier() { return QByteArrayLiteral("WindowsSetWindowActivationBehavior"); }
  
-diff --git a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc b/qtbase/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
+diff --git a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
 index a52bbe061..0c52cde75 100644
 --- a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
 +++ b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
@@ -63,7 +63,7 @@ index a52bbe061..0c52cde75 100644
  */
  
  /*!
-diff --git a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp b/qtbase/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
+diff --git a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp b/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
 index ed945ec4b..9003e94c5 100644
 --- a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
 +++ b/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
@@ -76,7 +76,7 @@ index ed945ec4b..9003e94c5 100644
      if (function == QWindowsWindowFunctions::setWindowActivationBehaviorIdentifier())
          return QFunctionPointer(QWindowsNativeInterface::setWindowActivationBehavior);
      if (function == QWindowsWindowFunctions::isTabletModeIdentifier())
-diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
+diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
 index 0376e363f..338e594c7 100644
 --- a/src/plugins/platforms/windows/qwindowswindow.cpp
 +++ b/src/plugins/platforms/windows/qwindowswindow.cpp
@@ -109,7 +109,7 @@ index 0376e363f..338e594c7 100644
  void QWindowsWindow::setHasBorderInFullScreen(bool border)
  {
      if (testFlag(HasBorderInFullScreen) == border)
-diff --git a/src/plugins/platforms/windows/qwindowswindow.h b/qtbase/src/plugins/platforms/windows/qwindowswindow.h
+diff --git a/src/plugins/platforms/windows/qwindowswindow.h b/src/plugins/platforms/windows/qwindowswindow.h
 index 2675990cf..0d8096ddf 100644
 --- a/src/plugins/platforms/windows/qwindowswindow.h
 +++ b/src/plugins/platforms/windows/qwindowswindow.h

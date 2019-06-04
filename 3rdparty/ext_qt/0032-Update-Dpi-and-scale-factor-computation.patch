@@ -1,7 +1,7 @@
-diff --git a/qtbase/src/gui/kernel/qhighdpiscaling.cpp b/qtbase/src/gui/kernel/qhighdpiscaling.cpp
+diff --git a/src/gui/kernel/qhighdpiscaling.cpp b/src/gui/kernel/qhighdpiscaling.cpp
 index 22e46e085..cdf6c8669 100644
---- a/qtbase/src/gui/kernel/qhighdpiscaling.cpp
-+++ b/qtbase/src/gui/kernel/qhighdpiscaling.cpp
+--- a/src/gui/kernel/qhighdpiscaling.cpp
++++ b/src/gui/kernel/qhighdpiscaling.cpp
 @@ -44,6 +44,9 @@
  #include "private/qscreen_p.h"
  
@@ -257,10 +257,10 @@ index 22e46e085..cdf6c8669 100644
          if (m_screenFactorSet) {
              QVariant screenFactor = screen->screen()->property(scaleFactorProperty);
              if (screenFactor.isValid())
-diff --git a/qtbase/src/gui/kernel/qhighdpiscaling_p.h b/qtbase/src/gui/kernel/qhighdpiscaling_p.h
+diff --git a/src/gui/kernel/qhighdpiscaling_p.h b/src/gui/kernel/qhighdpiscaling_p.h
 index 83fc9452c..c664693a0 100644
---- a/qtbase/src/gui/kernel/qhighdpiscaling_p.h
-+++ b/qtbase/src/gui/kernel/qhighdpiscaling_p.h
+--- a/src/gui/kernel/qhighdpiscaling_p.h
++++ b/src/gui/kernel/qhighdpiscaling_p.h
 @@ -71,7 +71,33 @@ typedef QPair<qreal, qreal> QDpi;
  
  #ifndef QT_NO_HIGHDPISCALING
@@ -305,10 +305,10 @@ index 83fc9452c..c664693a0 100644
      static qreal screenSubfactor(const QPlatformScreen *screen);
  
      static qreal m_factor;
-diff --git a/qtbase/src/gui/kernel/qplatformscreen.cpp b/qtbase/src/gui/kernel/qplatformscreen.cpp
+diff --git a/src/gui/kernel/qplatformscreen.cpp b/src/gui/kernel/qplatformscreen.cpp
 index 21ae75ba8..ff76528a0 100644
---- a/qtbase/src/gui/kernel/qplatformscreen.cpp
-+++ b/qtbase/src/gui/kernel/qplatformscreen.cpp
+--- a/src/gui/kernel/qplatformscreen.cpp
++++ b/src/gui/kernel/qplatformscreen.cpp
 @@ -197,6 +197,20 @@ QDpi QPlatformScreen::logicalDpi() const
                  25.4 * s.height() / ps.height());
  }
@@ -330,10 +330,10 @@ index 21ae75ba8..ff76528a0 100644
  /*!
      Reimplement this function in subclass to return the device pixel ratio
      for the screen. This is the ratio between physical pixels and the
-diff --git a/qtbase/src/gui/kernel/qplatformscreen.h b/qtbase/src/gui/kernel/qplatformscreen.h
+diff --git a/src/gui/kernel/qplatformscreen.h b/src/gui/kernel/qplatformscreen.h
 index e9d64c8a2..63b5d5a4a 100644
---- a/qtbase/src/gui/kernel/qplatformscreen.h
-+++ b/qtbase/src/gui/kernel/qplatformscreen.h
+--- a/src/gui/kernel/qplatformscreen.h
++++ b/src/gui/kernel/qplatformscreen.h
 @@ -113,6 +113,7 @@ public:
  
      virtual QSizeF physicalSize() const;
@@ -342,10 +342,10 @@ index e9d64c8a2..63b5d5a4a 100644
      virtual qreal devicePixelRatio() const;
      virtual qreal pixelDensity()  const;
  
-diff --git a/qtbase/src/plugins/platforms/android/qandroidplatformscreen.cpp b/qtbase/src/plugins/platforms/android/qandroidplatformscreen.cpp
+diff --git a/src/plugins/platforms/android/qandroidplatformscreen.cpp b/src/plugins/platforms/android/qandroidplatformscreen.cpp
 index 7dc8bb808..80757c213 100644
---- a/qtbase/src/plugins/platforms/android/qandroidplatformscreen.cpp
-+++ b/qtbase/src/plugins/platforms/android/qandroidplatformscreen.cpp
+--- a/src/plugins/platforms/android/qandroidplatformscreen.cpp
++++ b/src/plugins/platforms/android/qandroidplatformscreen.cpp
 @@ -401,15 +401,17 @@ void QAndroidPlatformScreen::doRedraw()
          m_dirtyRect = QRect();
  }
@@ -367,10 +367,10 @@ index 7dc8bb808..80757c213 100644
  }
  
  Qt::ScreenOrientation QAndroidPlatformScreen::orientation() const
-diff --git a/qtbase/src/plugins/platforms/android/qandroidplatformscreen.h b/qtbase/src/plugins/platforms/android/qandroidplatformscreen.h
+diff --git a/src/plugins/platforms/android/qandroidplatformscreen.h b/src/plugins/platforms/android/qandroidplatformscreen.h
 index f15aeae3f..5dc158e35 100644
---- a/qtbase/src/plugins/platforms/android/qandroidplatformscreen.h
-+++ b/qtbase/src/plugins/platforms/android/qandroidplatformscreen.h
+--- a/src/plugins/platforms/android/qandroidplatformscreen.h
++++ b/src/plugins/platforms/android/qandroidplatformscreen.h
 @@ -103,7 +103,7 @@ protected:
  
  private:
@@ -380,10 +380,10 @@ index f15aeae3f..5dc158e35 100644
      Qt::ScreenOrientation orientation() const override;
      Qt::ScreenOrientation nativeOrientation() const override;
      void surfaceChanged(JNIEnv *env, jobject surface, int w, int h) override;
-diff --git a/qtbase/src/plugins/platforms/cocoa/qcocoascreen.h b/qtbase/src/plugins/platforms/cocoa/qcocoascreen.h
+diff --git a/src/plugins/platforms/cocoa/qcocoascreen.h b/src/plugins/platforms/cocoa/qcocoascreen.h
 index 9ded98df3..a73b97c77 100644
---- a/qtbase/src/plugins/platforms/cocoa/qcocoascreen.h
-+++ b/qtbase/src/plugins/platforms/cocoa/qcocoascreen.h
+--- a/src/plugins/platforms/cocoa/qcocoascreen.h
++++ b/src/plugins/platforms/cocoa/qcocoascreen.h
 @@ -64,6 +64,7 @@ public:
      qreal devicePixelRatio() const override;
      QSizeF physicalSize() const override { return m_physicalSize; }
@@ -392,10 +392,10 @@ index 9ded98df3..a73b97c77 100644
      qreal refreshRate() const override { return m_refreshRate; }
      QString name() const override { return m_name; }
      QPlatformCursor *cursor() const override { return m_cursor; }
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowsscreen.cpp b/qtbase/src/plugins/platforms/windows/qwindowsscreen.cpp
+diff --git a/src/plugins/platforms/windows/qwindowsscreen.cpp b/src/plugins/platforms/windows/qwindowsscreen.cpp
 index 0520f8893..9b7b4630f 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowsscreen.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowsscreen.cpp
+--- a/src/plugins/platforms/windows/qwindowsscreen.cpp
++++ b/src/plugins/platforms/windows/qwindowsscreen.cpp
 @@ -254,15 +254,6 @@ QWindow *QWindowsScreen::windowAt(const QPoint &screenPoint, unsigned flags)
      return result;
  }
@@ -412,10 +412,10 @@ index 0520f8893..9b7b4630f 100644
  /*!
      \brief Determine siblings in a virtual desktop system.
  
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowsscreen.h b/qtbase/src/plugins/platforms/windows/qwindowsscreen.h
+diff --git a/src/plugins/platforms/windows/qwindowsscreen.h b/src/plugins/platforms/windows/qwindowsscreen.h
 index 824bcb1ad..cd765f181 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowsscreen.h
-+++ b/qtbase/src/plugins/platforms/windows/qwindowsscreen.h
+--- a/src/plugins/platforms/windows/qwindowsscreen.h
++++ b/src/plugins/platforms/windows/qwindowsscreen.h
 @@ -87,7 +87,7 @@ public:
      QImage::Format format() const override { return m_data.format; }
      QSizeF physicalSize() const override { return m_data.physicalSizeMM; }
@@ -425,10 +425,10 @@ index 824bcb1ad..cd765f181 100644
      qreal devicePixelRatio() const override { return 1.0; }
      qreal refreshRate() const override { return m_data.refreshRateHz; }
      QString name() const override { return m_data.name; }
-diff --git a/qtbase/src/plugins/platforms/xcb/qxcbscreen.cpp b/qtbase/src/plugins/platforms/xcb/qxcbscreen.cpp
+diff --git a/src/plugins/platforms/xcb/qxcbscreen.cpp b/src/plugins/platforms/xcb/qxcbscreen.cpp
 index 57dbdc9be..9af0794d2 100644
---- a/qtbase/src/plugins/platforms/xcb/qxcbscreen.cpp
-+++ b/qtbase/src/plugins/platforms/xcb/qxcbscreen.cpp
+--- a/src/plugins/platforms/xcb/qxcbscreen.cpp
++++ b/src/plugins/platforms/xcb/qxcbscreen.cpp
 @@ -671,11 +671,6 @@ QDpi QXcbScreen::logicalDpi() const
      return m_virtualDesktop->dpi();
  }
@@ -454,10 +454,10 @@ index 57dbdc9be..9af0794d2 100644
      m_geometry = geometry;
      m_availableGeometry = geometry & m_virtualDesktop->workArea();
      QWindowSystemInterface::handleScreenGeometryChange(QPlatformScreen::screen(), m_geometry, m_availableGeometry);
-diff --git a/qtbase/src/plugins/platforms/xcb/qxcbscreen.h b/qtbase/src/plugins/platforms/xcb/qxcbscreen.h
+diff --git a/src/plugins/platforms/xcb/qxcbscreen.h b/src/plugins/platforms/xcb/qxcbscreen.h
 index be6c45e41..3f619d71c 100644
---- a/qtbase/src/plugins/platforms/xcb/qxcbscreen.h
-+++ b/qtbase/src/plugins/platforms/xcb/qxcbscreen.h
+--- a/src/plugins/platforms/xcb/qxcbscreen.h
++++ b/src/plugins/platforms/xcb/qxcbscreen.h
 @@ -161,7 +161,7 @@ public:
      QImage::Format format() const override;
      QSizeF physicalSize() const override { return m_sizeMillimeters; }
@@ -475,10 +475,10 @@ index be6c45e41..3f619d71c 100644
      QEdidParser m_edid;
  };
  
-diff --git a/qtbase/tests/manual/highdpi/highdpi.pro b/qtbase/tests/manual/highdpi/highdpi.pro
+diff --git a/tests/manual/highdpi/highdpi.pro b/tests/manual/highdpi/highdpi.pro
 index 9db083cd8..2de8ed3bb 100644
---- a/qtbase/tests/manual/highdpi/highdpi.pro
-+++ b/qtbase/tests/manual/highdpi/highdpi.pro
+--- a/tests/manual/highdpi/highdpi.pro
++++ b/tests/manual/highdpi/highdpi.pro
 @@ -15,3 +15,4 @@ HEADERS += \
  RESOURCES += \
      highdpi.qrc

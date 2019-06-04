@@ -1,7 +1,7 @@
-diff --git a/qtbase/src/widgets/kernel/qwidgetwindow.cpp b/qtbase/src/widgets/kernel/qwidgetwindow.cpp
+diff --git a/src/widgets/kernel/qwidgetwindow.cpp b/src/widgets/kernel/qwidgetwindow.cpp
 index fbc71cd0e..729a7f701 100644
---- a/qtbase/src/widgets/kernel/qwidgetwindow.cpp
-+++ b/qtbase/src/widgets/kernel/qwidgetwindow.cpp
+--- a/src/widgets/kernel/qwidgetwindow.cpp
++++ b/src/widgets/kernel/qwidgetwindow.cpp
 @@ -1051,6 +1051,18 @@ void QWidgetWindow::handleTabletEvent(QTabletEvent *event)
          event->setAccepted(ev.isAccepted());
      }

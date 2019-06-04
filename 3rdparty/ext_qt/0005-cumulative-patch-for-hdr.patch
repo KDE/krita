@@ -1,7 +1,7 @@
-diff --git a/qtbase/src/3rdparty/angle/src/common/platform.h b/qtbase/src/3rdparty/angle/src/common/platform.h
+diff --git a/src/3rdparty/angle/src/common/platform.h b/src/3rdparty/angle/src/common/platform.h
 index fb251da57..2e1799455 100644
---- a/qtbase/src/3rdparty/angle/src/common/platform.h
-+++ b/qtbase/src/3rdparty/angle/src/common/platform.h
+--- a/src/3rdparty/angle/src/common/platform.h
++++ b/src/3rdparty/angle/src/common/platform.h
 @@ -59,12 +59,14 @@
  #   endif
  
@@ -23,10 +23,10 @@ index fb251da57..2e1799455 100644
  #   endif
  
  #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
-diff --git a/qtbase/src/3rdparty/angle/src/libANGLE/Caps.cpp b/qtbase/src/3rdparty/angle/src/libANGLE/Caps.cpp
+diff --git a/src/3rdparty/angle/src/libANGLE/Caps.cpp b/src/3rdparty/angle/src/libANGLE/Caps.cpp
 index 44da2bbe2..208845745 100644
---- a/qtbase/src/3rdparty/angle/src/libANGLE/Caps.cpp
-+++ b/qtbase/src/3rdparty/angle/src/libANGLE/Caps.cpp
+--- a/src/3rdparty/angle/src/libANGLE/Caps.cpp
++++ b/src/3rdparty/angle/src/libANGLE/Caps.cpp
 @@ -1101,7 +1101,10 @@ DisplayExtensions::DisplayExtensions()
        displayTextureShareGroup(false),
        createContextClientArrays(false),
@@ -49,10 +49,10 @@ index 44da2bbe2..208845745 100644
      // TODO(jmadill): Enable this when complete.
      //InsertExtensionString("KHR_create_context_no_error",                       createContextNoError,               &extensionStrings);
      // clang-format on
-diff --git a/qtbase/src/3rdparty/angle/src/libANGLE/Caps.h b/qtbase/src/3rdparty/angle/src/libANGLE/Caps.h
+diff --git a/src/3rdparty/angle/src/libANGLE/Caps.h b/src/3rdparty/angle/src/libANGLE/Caps.h
 index 64bdf9711..8157af580 100644
---- a/qtbase/src/3rdparty/angle/src/libANGLE/Caps.h
-+++ b/qtbase/src/3rdparty/angle/src/libANGLE/Caps.h
+--- a/src/3rdparty/angle/src/libANGLE/Caps.h
++++ b/src/3rdparty/angle/src/libANGLE/Caps.h
 @@ -692,6 +692,15 @@ struct DisplayExtensions
  
      // EGL_ANGLE_robust_resource_initialization
@@ -69,10 +69,10 @@ index 64bdf9711..8157af580 100644
  };
  
  struct DeviceExtensions
-diff --git a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
 index dcc98f2ec..b8ee63562 100644
---- a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
-+++ b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
 @@ -130,7 +130,8 @@ class RendererD3D : public BufferFactoryD3D, public MultisampleTextureInitialize
                                            GLenum backBufferFormat,
                                            GLenum depthBufferFormat,
@@ -83,10 +83,10 @@ index dcc98f2ec..b8ee63562 100644
      virtual egl::Error getD3DTextureInfo(const egl::Config *configuration,
                                           IUnknown *d3dTexture,
                                           EGLint *width,
-diff --git a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
 index 7657aef79..efd4dd1a2 100644
---- a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
-+++ b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
 @@ -22,6 +22,27 @@
  namespace rx
  {
@@ -134,10 +134,10 @@ index 7657aef79..efd4dd1a2 100644
      if (!mSwapChain)
      {
          return egl::EglBadAlloc();
-diff --git a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
 index 01d257324..ccb793d42 100644
---- a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
-+++ b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
 @@ -90,6 +90,7 @@ class SurfaceD3D : public SurfaceImpl
  
      bool mFixedSize;
@@ -146,10 +146,10 @@ index 01d257324..ccb793d42 100644
  
      GLenum mRenderTargetFormat;
      GLenum mDepthStencilFormat;
-diff --git a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
 index b0ef9abdd..f0e497b52 100644
---- a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
-+++ b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
 @@ -465,6 +465,7 @@ Renderer11::Renderer11(egl::Display *display)
      mRenderer11DeviceCaps.supportsConstantBufferOffsets = false;
      mRenderer11DeviceCaps.supportsVpRtIndexWriteFromVertexShader = false;
@@ -203,10 +203,10 @@ index b0ef9abdd..f0e497b52 100644
  }
  
  void *Renderer11::getD3DDevice()
-diff --git a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
 index a8c24e681..3516bf779 100644
---- a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
-+++ b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
 @@ -49,6 +49,7 @@ struct Renderer11DeviceCaps
  
      D3D_FEATURE_LEVEL featureLevel;
@@ -225,10 +225,10 @@ index a8c24e681..3516bf779 100644
      egl::Error getD3DTextureInfo(const egl::Config *configuration,
                                   IUnknown *d3dTexture,
                                   EGLint *width,
-diff --git a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
 index dcfd06484..fc967b90d 100644
---- a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
-+++ b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
 @@ -18,6 +18,11 @@
  #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
  #include "third_party/trace_event/trace_event.h"
@@ -350,10 +350,10 @@ index dcfd06484..fc967b90d 100644
          const auto &format =
              d3d11::Format::Get(mOffscreenRenderTargetFormat, mRenderer->getRenderer11DeviceCaps());
          mBackBufferTexture.set(backbufferTex, format);
-diff --git a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
 index eca068210..2a4b9ba27 100644
---- a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
-+++ b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
 @@ -28,7 +28,8 @@ class SwapChain11 final : public SwapChainD3D
                  GLenum backBufferFormat,
                  GLenum depthBufferFormat,
@@ -372,10 +372,10 @@ index eca068210..2a4b9ba27 100644
      bool mAppCreatedShareHandle;
      unsigned int mSwapInterval;
      bool mPassThroughResourcesInit;
-diff --git a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
 index 5394e3d3e..af52c41d0 100644
---- a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
-+++ b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
 @@ -146,6 +146,9 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
  
      // Use IDXGIFactory2::CreateSwapChainForHwnd if DXGI 1.2 is available to create a
@@ -424,10 +424,10 @@ index 5394e3d3e..af52c41d0 100644
      swapChainDesc.SwapEffect         = DXGI_SWAP_EFFECT_DISCARD;
  
      HRESULT result = factory->CreateSwapChain(device, &swapChainDesc, swapChain);
-diff --git a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
 index 75c629886..58596169a 100644
---- a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
-+++ b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
 @@ -718,8 +718,10 @@ SwapChainD3D *Renderer9::createSwapChain(NativeWindowD3D *nativeWindow,
                                           GLenum backBufferFormat,
                                           GLenum depthBufferFormat,
@@ -440,10 +440,10 @@ index 75c629886..58596169a 100644
      return new SwapChain9(this, GetAs<NativeWindow9>(nativeWindow), shareHandle, d3dTexture,
                            backBufferFormat, depthBufferFormat, orientation);
  }
-diff --git a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
 index 9ddee45f0..ce4bb201e 100644
---- a/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
-+++ b/qtbase/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
 @@ -92,7 +92,8 @@ class Renderer9 : public RendererD3D
                                    GLenum backBufferFormat,
                                    GLenum depthBufferFormat,
@@ -454,10 +454,10 @@ index 9ddee45f0..ce4bb201e 100644
      egl::Error getD3DTextureInfo(const egl::Config *configuration,
                                   IUnknown *d3dTexture,
                                   EGLint *width,
-diff --git a/qtbase/src/3rdparty/angle/src/libANGLE/validationEGL.cpp b/qtbase/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
+diff --git a/src/3rdparty/angle/src/libANGLE/validationEGL.cpp b/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
 index 13a3a9e28..858d7ee92 100644
---- a/qtbase/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
-+++ b/qtbase/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
+--- a/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
++++ b/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
 @@ -885,6 +885,32 @@ Error ValidateCreateWindowSurface(Display *display, Config *config, EGLNativeWin
                                                "either EGL_TRUE or EGL_FALSE.";
                }
@@ -525,10 +525,10 @@ index 13a3a9e28..858d7ee92 100644
            default:
                return EglBadAttribute();
          }
-diff --git a/qtbase/src/gui/kernel/qsurfaceformat.cpp b/qtbase/src/gui/kernel/qsurfaceformat.cpp
+diff --git a/src/gui/kernel/qsurfaceformat.cpp b/src/gui/kernel/qsurfaceformat.cpp
 index 1a814ec21..fc8b9c4f4 100644
---- a/qtbase/src/gui/kernel/qsurfaceformat.cpp
-+++ b/qtbase/src/gui/kernel/qsurfaceformat.cpp
+--- a/src/gui/kernel/qsurfaceformat.cpp
++++ b/src/gui/kernel/qsurfaceformat.cpp
 @@ -221,6 +221,17 @@ public:
      set, the window will be created with an sRGB-capable default
      framebuffer. Note that some platforms may return windows with a sRGB-capable
@@ -547,10 +547,10 @@ index 1a814ec21..fc8b9c4f4 100644
   */
  
  /*!
-diff --git a/qtbase/src/gui/kernel/qsurfaceformat.h b/qtbase/src/gui/kernel/qsurfaceformat.h
+diff --git a/src/gui/kernel/qsurfaceformat.h b/src/gui/kernel/qsurfaceformat.h
 index ed63eb8bb..9ba6a29b7 100644
---- a/qtbase/src/gui/kernel/qsurfaceformat.h
-+++ b/qtbase/src/gui/kernel/qsurfaceformat.h
+--- a/src/gui/kernel/qsurfaceformat.h
++++ b/src/gui/kernel/qsurfaceformat.h
 @@ -87,7 +87,9 @@ public:
  
      enum ColorSpace {
@@ -562,10 +562,10 @@ index ed63eb8bb..9ba6a29b7 100644
      };
      Q_ENUM(ColorSpace)
  
-diff --git a/qtbase/src/gui/opengl/qopenglframebufferobject.cpp b/qtbase/src/gui/opengl/qopenglframebufferobject.cpp
+diff --git a/src/gui/opengl/qopenglframebufferobject.cpp b/src/gui/opengl/qopenglframebufferobject.cpp
 index cae3d516c..ccdccb637 100644
---- a/qtbase/src/gui/opengl/qopenglframebufferobject.cpp
-+++ b/qtbase/src/gui/opengl/qopenglframebufferobject.cpp
+--- a/src/gui/opengl/qopenglframebufferobject.cpp
++++ b/src/gui/opengl/qopenglframebufferobject.cpp
 @@ -545,10 +545,13 @@ void QOpenGLFramebufferObjectPrivate::initTexture(int idx)
      ColorAttachment &color(colorAttachments[idx]);
  
@@ -582,10 +582,10 @@ index cae3d516c..ccdccb637 100644
  
      funcs.glTexImage2D(target, 0, color.internalFormat, color.size.width(), color.size.height(), 0,
                         GL_RGBA, pixelType, NULL);
-diff --git a/qtbase/src/gui/opengl/qopengltextureblitter.cpp b/qtbase/src/gui/opengl/qopengltextureblitter.cpp
+diff --git a/src/gui/opengl/qopengltextureblitter.cpp b/src/gui/opengl/qopengltextureblitter.cpp
 index b65df9dc8..5f6dbff29 100644
---- a/qtbase/src/gui/opengl/qopengltextureblitter.cpp
-+++ b/qtbase/src/gui/opengl/qopengltextureblitter.cpp
+--- a/src/gui/opengl/qopengltextureblitter.cpp
++++ b/src/gui/opengl/qopengltextureblitter.cpp
 @@ -131,14 +131,85 @@ static const char vertex_shader[] =
      "}";
  
@@ -922,10 +922,10 @@ index b65df9dc8..5f6dbff29 100644
      if (d->vao->isCreated())
          d->vao->release();
  }
-diff --git a/qtbase/src/gui/opengl/qopengltextureblitter.h b/qtbase/src/gui/opengl/qopengltextureblitter.h
+diff --git a/src/gui/opengl/qopengltextureblitter.h b/src/gui/opengl/qopengltextureblitter.h
 index 2f7c6b1a0..3c87e4e2b 100644
---- a/qtbase/src/gui/opengl/qopengltextureblitter.h
-+++ b/qtbase/src/gui/opengl/qopengltextureblitter.h
+--- a/src/gui/opengl/qopengltextureblitter.h
++++ b/src/gui/opengl/qopengltextureblitter.h
 @@ -48,6 +48,9 @@
  #include <QtGui/QMatrix3x3>
  #include <QtGui/QMatrix4x4>
@@ -952,10 +952,10 @@ index 2f7c6b1a0..3c87e4e2b 100644
      void release();
  
      void setRedBlueSwizzle(bool swizzle);
-diff --git a/qtbase/src/gui/painting/qplatformbackingstore.cpp b/qtbase/src/gui/painting/qplatformbackingstore.cpp
+diff --git a/src/gui/painting/qplatformbackingstore.cpp b/src/gui/painting/qplatformbackingstore.cpp
 index c71d82546..8dd96a66b 100644
---- a/qtbase/src/gui/painting/qplatformbackingstore.cpp
-+++ b/qtbase/src/gui/painting/qplatformbackingstore.cpp
+--- a/src/gui/painting/qplatformbackingstore.cpp
++++ b/src/gui/painting/qplatformbackingstore.cpp
 @@ -132,6 +132,7 @@ struct QBackingstoreTextureInfo
      QRect rect;
      QRect clipRect;
@@ -1014,10 +1014,10 @@ index c71d82546..8dd96a66b 100644
          if (d_ptr->needsSwizzle)
              d_ptr->blitter->setRedBlueSwizzle(true);
          // The backingstore is for the entire tlw.
-diff --git a/qtbase/src/gui/painting/qplatformbackingstore.h b/qtbase/src/gui/painting/qplatformbackingstore.h
+diff --git a/src/gui/painting/qplatformbackingstore.h b/src/gui/painting/qplatformbackingstore.h
 index de5ba964d..f8887bd4c 100644
---- a/qtbase/src/gui/painting/qplatformbackingstore.h
-+++ b/qtbase/src/gui/painting/qplatformbackingstore.h
+--- a/src/gui/painting/qplatformbackingstore.h
++++ b/src/gui/painting/qplatformbackingstore.h
 @@ -95,11 +95,13 @@ public:
      QRect clipRect(int index) const;
      void *source(int index);
@@ -1033,10 +1033,10 @@ index de5ba964d..f8887bd4c 100644
      void clear();
  
   Q_SIGNALS:
-diff --git a/qtbase/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp b/qtbase/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp
+diff --git a/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp b/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp
 index 40400e2a1..5d44e6245 100644
---- a/qtbase/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp
-+++ b/qtbase/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp
+--- a/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp
++++ b/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp
 @@ -230,7 +230,7 @@ void QOpenGLCompositorBackingStore::composeAndFlush(QWindow *window, const QRegi
      m_textures->clear();
      for (int i = 0; i < textures->count(); ++i)
@@ -1046,10 +1046,10 @@ index 40400e2a1..5d44e6245 100644
  
      updateTexture();
      m_textures->appendTexture(nullptr, m_bsTexture, window->geometry());
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowseglcontext.cpp b/qtbase/src/plugins/platforms/windows/qwindowseglcontext.cpp
+diff --git a/src/plugins/platforms/windows/qwindowseglcontext.cpp b/src/plugins/platforms/windows/qwindowseglcontext.cpp
 index 063e81150..4cd745eac 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowseglcontext.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowseglcontext.cpp
+--- a/src/plugins/platforms/windows/qwindowseglcontext.cpp
++++ b/src/plugins/platforms/windows/qwindowseglcontext.cpp
 @@ -151,8 +151,9 @@ bool QWindowsLibEGL::init()
      eglGetCurrentDisplay = RESOLVE((EGLDisplay (EGLAPIENTRY *)(void)), eglGetCurrentDisplay);
      eglSwapBuffers = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay , EGLSurface)), eglSwapBuffers);
@@ -1154,10 +1154,10 @@ index 063e81150..4cd745eac 100644
          }
          return false;
      }
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowseglcontext.h b/qtbase/src/plugins/platforms/windows/qwindowseglcontext.h
+diff --git a/src/plugins/platforms/windows/qwindowseglcontext.h b/src/plugins/platforms/windows/qwindowseglcontext.h
 index 8a1e1ddae..9f7742e6f 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowseglcontext.h
-+++ b/qtbase/src/plugins/platforms/windows/qwindowseglcontext.h
+--- a/src/plugins/platforms/windows/qwindowseglcontext.h
++++ b/src/plugins/platforms/windows/qwindowseglcontext.h
 @@ -80,6 +80,7 @@ struct QWindowsLibEGL
      QFunctionPointer (EGLAPIENTRY *eglGetProcAddress)(const char *procname);
  
@@ -1185,10 +1185,10 @@ index 8a1e1ddae..9f7742e6f 100644
  };
  
  class QWindowsEGLContext : public QWindowsOpenGLContext
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowsnativeinterface.cpp b/qtbase/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
+diff --git a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp b/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
 index ed945ec4b..1c5be4415 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
+--- a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
++++ b/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
 @@ -40,6 +40,7 @@
  #include "qwindowsnativeinterface.h"
  #include "qwindowsclipboard.h"
@@ -1219,10 +1219,10 @@ index ed945ec4b..1c5be4415 100644
  #ifndef QT_NO_CURSOR
  void *QWindowsNativeInterface::nativeResourceForCursor(const QByteArray &resource, const QCursor &cursor)
  {
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowsnativeinterface.h b/qtbase/src/plugins/platforms/windows/qwindowsnativeinterface.h
+diff --git a/src/plugins/platforms/windows/qwindowsnativeinterface.h b/src/plugins/platforms/windows/qwindowsnativeinterface.h
 index e6f8aae8f..ce395dc5a 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowsnativeinterface.h
-+++ b/qtbase/src/plugins/platforms/windows/qwindowsnativeinterface.h
+--- a/src/plugins/platforms/windows/qwindowsnativeinterface.h
++++ b/src/plugins/platforms/windows/qwindowsnativeinterface.h
 @@ -74,6 +74,7 @@ public:
      void *nativeResourceForContext(const QByteArray &resource, QOpenGLContext *context) override;
  #endif
@@ -1231,10 +1231,10 @@ index e6f8aae8f..ce395dc5a 100644
  #ifndef QT_NO_CURSOR
      void *nativeResourceForCursor(const QByteArray &resource, const QCursor &cursor) override;
  #endif
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowsopenglcontext.h b/qtbase/src/plugins/platforms/windows/qwindowsopenglcontext.h
+diff --git a/src/plugins/platforms/windows/qwindowsopenglcontext.h b/src/plugins/platforms/windows/qwindowsopenglcontext.h
 index cc6d93d35..61c0e2876 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowsopenglcontext.h
-+++ b/qtbase/src/plugins/platforms/windows/qwindowsopenglcontext.h
+--- a/src/plugins/platforms/windows/qwindowsopenglcontext.h
++++ b/src/plugins/platforms/windows/qwindowsopenglcontext.h
 @@ -63,7 +63,7 @@ public:
  
      // If the windowing system interface needs explicitly created window surfaces (like EGL),
@@ -1244,10 +1244,10 @@ index cc6d93d35..61c0e2876 100644
      virtual void destroyWindowSurface(void * /*nativeSurface*/) { }
  
  protected:
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowsscreen.cpp b/qtbase/src/plugins/platforms/windows/qwindowsscreen.cpp
+diff --git a/src/plugins/platforms/windows/qwindowsscreen.cpp b/src/plugins/platforms/windows/qwindowsscreen.cpp
 index 0520f8893..b70b0bbe3 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowsscreen.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowsscreen.cpp
+--- a/src/plugins/platforms/windows/qwindowsscreen.cpp
++++ b/src/plugins/platforms/windows/qwindowsscreen.cpp
 @@ -321,6 +321,11 @@ void QWindowsScreen::handleChanges(const QWindowsScreenData &newData)
      }
  }
@@ -1260,10 +1260,10 @@ index 0520f8893..b70b0bbe3 100644
  QRect QWindowsScreen::virtualGeometry(const QPlatformScreen *screen) // cf QScreen::virtualGeometry()
  {
      QRect result;
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowsscreen.h b/qtbase/src/plugins/platforms/windows/qwindowsscreen.h
+diff --git a/src/plugins/platforms/windows/qwindowsscreen.h b/src/plugins/platforms/windows/qwindowsscreen.h
 index 824bcb1ad..33c9effa2 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowsscreen.h
-+++ b/qtbase/src/plugins/platforms/windows/qwindowsscreen.h
+--- a/src/plugins/platforms/windows/qwindowsscreen.h
++++ b/src/plugins/platforms/windows/qwindowsscreen.h
 @@ -104,6 +104,8 @@ public:
  
      inline void handleChanges(const QWindowsScreenData &newData);
@@ -1273,10 +1273,10 @@ index 824bcb1ad..33c9effa2 100644
  #ifndef QT_NO_CURSOR
      QPlatformCursor *cursor() const override { return m_cursor.data(); }
      const CursorPtr &cursorPtr() const { return m_cursor; }
-diff --git a/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp b/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
+diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
 index 0376e363f..76a443a89 100644
---- a/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
-+++ b/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
+--- a/src/plugins/platforms/windows/qwindowswindow.cpp
++++ b/src/plugins/platforms/windows/qwindowswindow.cpp
 @@ -2741,9 +2741,13 @@ void *QWindowsWindow::surface(void *nativeConfig, int *err)
      return 0;
  #endif
@@ -1293,10 +1293,10 @@ index 0376e363f..76a443a89 100644
      }
  
      return m_surface;
-diff --git a/qtbase/src/widgets/kernel/qopenglwidget.cpp b/qtbase/src/widgets/kernel/qopenglwidget.cpp
+diff --git a/src/widgets/kernel/qopenglwidget.cpp b/src/widgets/kernel/qopenglwidget.cpp
 index 89f860150..0abf707e0 100644
---- a/qtbase/src/widgets/kernel/qopenglwidget.cpp
-+++ b/qtbase/src/widgets/kernel/qopenglwidget.cpp
+--- a/src/widgets/kernel/qopenglwidget.cpp
++++ b/src/widgets/kernel/qopenglwidget.cpp
 @@ -568,7 +568,8 @@ public:
            updateBehavior(QOpenGLWidget::NoPartialUpdate),
            requestedSamples(0),
@@ -1377,10 +1377,10 @@ index 89f860150..0abf707e0 100644
  /*!
      \return the active internal texture format if the widget has already
      initialized, the requested format if one was set but the widget has not yet
-diff --git a/qtbase/src/widgets/kernel/qopenglwidget.h b/qtbase/src/widgets/kernel/qopenglwidget.h
+diff --git a/src/widgets/kernel/qopenglwidget.h b/src/widgets/kernel/qopenglwidget.h
 index 9eb4a9ba5..eff2d9796 100644
---- a/qtbase/src/widgets/kernel/qopenglwidget.h
-+++ b/qtbase/src/widgets/kernel/qopenglwidget.h
+--- a/src/widgets/kernel/qopenglwidget.h
++++ b/src/widgets/kernel/qopenglwidget.h
 @@ -75,6 +75,9 @@ public:
      GLenum textureFormat() const;
      void setTextureFormat(GLenum texFormat);
@@ -1391,10 +1391,10 @@ index 9eb4a9ba5..eff2d9796 100644
      bool isValid() const;
  
      void makeCurrent();
-diff --git a/qtbase/src/widgets/kernel/qwidget_p.h b/qtbase/src/widgets/kernel/qwidget_p.h
+diff --git a/src/widgets/kernel/qwidget_p.h b/src/widgets/kernel/qwidget_p.h
 index 7e4ea2cc0..1ff5af426 100644
---- a/qtbase/src/widgets/kernel/qwidget_p.h
-+++ b/qtbase/src/widgets/kernel/qwidget_p.h
+--- a/src/widgets/kernel/qwidget_p.h
++++ b/src/widgets/kernel/qwidget_p.h
 @@ -655,6 +655,7 @@ public:
              ? QPlatformTextureList::StacksOnTop
              : QPlatformTextureList::Flags(0);
@@ -1403,10 +1403,10 @@ index 7e4ea2cc0..1ff5af426 100644
      virtual QImage grabFramebuffer() { return QImage(); }
      virtual void beginBackingStorePainting() { }
      virtual void endBackingStorePainting() { }
-diff --git a/qtbase/src/widgets/kernel/qwidgetbackingstore.cpp b/qtbase/src/widgets/kernel/qwidgetbackingstore.cpp
+diff --git a/src/widgets/kernel/qwidgetbackingstore.cpp b/src/widgets/kernel/qwidgetbackingstore.cpp
 index a32eb2a03..db6033803 100644
---- a/qtbase/src/widgets/kernel/qwidgetbackingstore.cpp
-+++ b/qtbase/src/widgets/kernel/qwidgetbackingstore.cpp
+--- a/src/widgets/kernel/qwidgetbackingstore.cpp
++++ b/src/widgets/kernel/qwidgetbackingstore.cpp
 @@ -1007,7 +1007,7 @@ static void findTextureWidgetsRecursively(QWidget *tlw, QWidget *widget, QPlatfo
      if (wd->renderToTexture) {
          QPlatformTextureList::Flags flags = wd->textureListFlags();
@@ -1416,10 +1416,10 @@ index a32eb2a03..db6033803 100644
      }
  
      for (int i = 0; i < wd->children.size(); ++i) {
-diff --git a/qtbase/src/widgets/widgets/qdockwidget.cpp b/qtbase/src/widgets/widgets/qdockwidget.cpp
+diff --git a/src/widgets/widgets/qdockwidget.cpp b/src/widgets/widgets/qdockwidget.cpp
 index 6c871aae2..19fc2d167 100644
---- a/qtbase/src/widgets/widgets/qdockwidget.cpp
-+++ b/qtbase/src/widgets/widgets/qdockwidget.cpp
+--- a/src/widgets/widgets/qdockwidget.cpp
++++ b/src/widgets/widgets/qdockwidget.cpp
 @@ -1171,6 +1171,8 @@ void QDockWidgetPrivate::setWindowState(bool floating, bool unplug, const QRect
              QMainWindowLayout *mwlayout = qt_mainwindow_layout_from_dock(q);
              if (mwlayout)
@@ -1429,10 +1429,10 @@ index 6c871aae2..19fc2d167 100644
          }
      }
  
-diff --git a/qtbase/tests/manual/manual.pro b/qtbase/tests/manual/manual.pro
+diff --git a/tests/manual/manual.pro b/tests/manual/manual.pro
 index ab00a5ef6..b202ed043 100644
---- a/qtbase/tests/manual/manual.pro
-+++ b/qtbase/tests/manual/manual.pro
+--- a/tests/manual/manual.pro
++++ b/tests/manual/manual.pro
 @@ -59,7 +59,7 @@ qtabbar
  
  qtConfig(opengl) {

@@ -1,8 +1,8 @@
-diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
-index 0376e363f..6472c04e3 100644
---- a/src/plugins/platforms/windows/qwindowswindow.cpp
-+++ b/src/plugins/platforms/windows/qwindowswindow.cpp
-@@ -1560,7 +1560,7 @@ void QWindowsWindow::show_sys() const
+diff --git a/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp b/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
+index 967d479a0..c888847ed 100644
+--- a/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
++++ b/qtbase/src/plugins/platforms/windows/qwindowswindow.cpp
+@@ -1561,7 +1561,7 @@ void QWindowsWindow::show_sys() const
                  restoreMaximize = true;
          } else {
              updateTransientParent();
@@ -11,7 +11,7 @@ index 0376e363f..6472c04e3 100644
                  sm = SW_SHOWMAXIMIZED;
                  // Windows will not behave correctly when we try to maximize a window which does not
                  // have minimize nor maximize buttons in the window frame. Windows would then ignore
-@@ -1997,7 +1997,7 @@ bool QWindowsWindow::isFullScreen_sys() const
+@@ -1998,7 +1998,7 @@ bool QWindowsWindow::isFullScreen_sys() const
          return false;
      QRect geometry = geometry_sys();
      if (testFlag(HasBorderInFullScreen))
@@ -20,7 +20,7 @@ index 0376e363f..6472c04e3 100644
      QPlatformScreen *screen = screenForGeometry(geometry);
      return screen && geometry == screen->geometry();
  }
-@@ -2068,7 +2068,11 @@ void QWindowsWindow::setWindowState_sys(Qt::WindowStates newState)
+@@ -2069,7 +2069,11 @@ void QWindowsWindow::setWindowState_sys(Qt::WindowStates newState)
                  const UINT swpf = SWP_FRAMECHANGED | SWP_NOACTIVATE;
                  const bool wasSync = testFlag(SynchronousGeometryChangeEvent);
                  setFlag(SynchronousGeometryChangeEvent);

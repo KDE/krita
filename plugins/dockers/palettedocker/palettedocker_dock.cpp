@@ -151,8 +151,6 @@ void PaletteDockerDock::setViewManager(KisViewManager* kisview)
             SLOT(loadFromWorkspace(KisWorkspaceResourceSP)));
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),
             this, SLOT(slotFGColorResourceChanged(KoColor)));
-    connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),
-            m_ui->paletteView, SLOT(trySelectClosestColor(KoColor)));
     kisview->nodeManager()->disconnect(m_model);
 }
 

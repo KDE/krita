@@ -70,12 +70,10 @@ KisImportExportErrorCode KisBrushImport::convert(KisDocument *document, QIODevic
     }
 
     if (!brush->loadFromDevice(io)) {
-        delete brush;
         return ImportExportCodes::FileFormatIncorrect;
     }
 
     if (!brush->valid()) {
-        delete brush;
         return ImportExportCodes::FileFormatIncorrect;;
     }
 
@@ -116,7 +114,6 @@ KisImportExportErrorCode KisBrushImport::convert(KisDocument *document, QIODevic
     }
 
     document->setCurrentImage(image);
-    delete brush;
     return ImportExportCodes::OK;
 
 }

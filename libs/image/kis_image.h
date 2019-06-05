@@ -122,6 +122,8 @@ public:
      */
     KisImage *clone(bool exactCopy = false);
 
+    void copyFromImage(const KisImage &rhs);
+
     /**
      * Render the projection onto a QImage.
      */

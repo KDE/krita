@@ -648,6 +648,8 @@ public:
      */
     KisDocument *lockAndCloneForSaving();
 
+    void copyFromDocument(const KisDocument &rhs);
+
 private:
 
     QString exportErrorToUserMessage(KisImportExportErrorCode status, const QString &errorMessage);

@@ -367,8 +367,39 @@ public:
         }
     }
 
+    void copyFrom(const Private &rhs, KisDocument *q);
+
     class StrippedSafeSavingLocker;
 };
+
+void KisDocument::Private::copyFrom(const Private &rhs, KisDocument *q)
+{
+    delete docInfo;
+    docInfo = (new KoDocumentInfo(*rhs.docInfo, q));
+    unit = rhs.unit;
+//        , importExportManager(new KisImportExportManager(q))
+    mimeType = rhs.mimeType;
+    outputMimeType = rhs.outputMimeType;
+    // TODO: undo stacks may store pointers to the document and/or image
+    // we *have* to destroy the original one
+    //delete undoStack;
+    //undoStack = new UndoStack(q);
+    q->setGuidesConfig(rhs.guidesConfig);
+    q->setMirrorAxisConfig(rhs.mirrorAxisConfig);
+    m_bAutoDetectedMime = rhs.m_bAutoDetectedMime;
+    m_url = rhs.m_url;
+    m_file = rhs.m_file;
+    q->setModified(rhs.modified);
+    readwrite = rhs.readwrite;
+    firstMod = rhs.firstMod;
+    lastMod = rhs.lastMod;
+    // TODO clone assistants
+    assistants = (rhs.assistants); // WARNING: assistants should not store pointers to the document!
+    globalAssistantsColor = rhs.globalAssistantsColor;
+    paletteList = rhs.paletteList;
+    gridConfig = rhs.gridConfig;
+    batchMode = rhs.batchMode;
+}
 
 class KisDocument::Private::StrippedSafeSavingLocker {
 public:
@@ -458,7 +489,7 @@ KisDocument::KisDocument(const KisDocument &rhs)
         // since we clone uuid's, we can use them for lacating new
         // nodes. Otherwise we would need to use findSymmetricClone()
         d->preActivatedNode =
-                KisLayerUtils::findNodeByUuid(d->image->root(), rhs.d->preActivatedNode->uuid());
+            KisLayerUtils::findNodeByUuid(d->image->root(), rhs.d->preActivatedNode->uuid());
     }
 }
 
@@ -578,14 +609,14 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
     }
 
     const QString actionName =
-            job.flags & KritaUtils::SaveIsExporting ?
-                i18n("Exporting Document...") :
-                i18n("Saving Document...");
+        job.flags & KritaUtils::SaveIsExporting ?
+        i18n("Exporting Document...") :
+        i18n("Saving Document...");
 
     bool started =
-            initiateSavingInBackground(actionName,
-                                       this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, KisImportExportErrorCode ,QString)),
-                                       job, exportConfiguration);
+        initiateSavingInBackground(actionName,
+                                   this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, KisImportExportErrorCode ,QString)),
+                                   job, exportConfiguration);
     if (!started) {
         emit canceled(QString());
     }
@@ -761,6 +792,39 @@ KisDocument* KisDocument::lockAndCloneForSaving()
     }
 
     return new KisDocument(*this);
+}
+
+void KisDocument::copyFromDocument(const KisDocument &rhs)
+{
+    d->copyFrom(*(rhs.d), this);
+    connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(slotUndoStackCleanChanged(bool)));
+    setObjectName(rhs.objectName());
+
+    slotConfigChanged();
+
+    if (rhs.d->image) {
+        d->image->barrierLock(/* readOnly = */ false);
+        rhs.d->image->barrierLock(/* readOnly = */ true);
+        d->image->copyFromImage(*(rhs.d->image));
+        d->image->unlock();
+        rhs.d->image->unlock();
+        setCurrentImage(d->image, /* forceInitialUpdate = */ true);
+    }
+
+    if (rhs.d->preActivatedNode) {
+        QQueue<KisNodeSP> linearizedNodes;
+        KisLayerUtils::recursiveApplyNodes(rhs.d->image->root(),
+                                           [&linearizedNodes](KisNodeSP node) {
+                                               linearizedNodes.enqueue(node);
+                                           });
+        KisLayerUtils::recursiveApplyNodes(d->image->root(),
+                                           [&linearizedNodes, &rhs, this](KisNodeSP node) {
+                                               KisNodeSP refNode = linearizedNodes.dequeue();
+                                               if (rhs.d->preActivatedNode.data() == refNode.data()) {
+                                                   d->preActivatedNode = node;
+                                               }
+                                           });
+    }
 }
 
 bool KisDocument::exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration)

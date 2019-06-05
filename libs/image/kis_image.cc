@@ -274,6 +274,80 @@ KisImage *KisImage::clone(bool exactCopy)
     return new KisImage(*this, 0, exactCopy);
 }
 
+void KisImage::copyFromImage(const KisImage &rhs)
+{
+    m_d->width = rhs.width();
+    m_d->height = rhs.height();
+    if (m_d->colorSpace != rhs.colorSpace()) {
+        m_d->colorSpace = rhs.colorSpace();
+        emit sigColorSpaceChanged(m_d->colorSpace);
+    }
+
+    // from KisImage::KisImage(const KisImage &, KisUndoStore *, bool)
+    setObjectName(rhs.objectName());
+
+    if (m_d->xres != rhs.m_d->xres || m_d->yres != rhs.m_d->yres) {
+        m_d->xres = rhs.m_d->xres;
+        m_d->yres = rhs.m_d->yres;
+        emit sigResolutionChanged(m_d->xres, m_d->yres);
+    }
+
+    m_d->allowMasksOnRootNode = rhs.m_d->allowMasksOnRootNode;
+
+    KisNodeSP newRoot = rhs.root()->clone();
+    newRoot->setGraphListener(this);
+    newRoot->setImage(this);
+    m_d->rootLayer = dynamic_cast<KisGroupLayer*>(newRoot.data());
+    setRoot(newRoot);
+    if (rhs.m_d->isolatedRootNode) {
+        QQueue<KisNodeSP> linearizedNodes;
+        KisLayerUtils::recursiveApplyNodes(rhs.root(),
+                                           [&linearizedNodes](KisNodeSP node) {
+                                               linearizedNodes.enqueue(node);
+                                           });
+        KisLayerUtils::recursiveApplyNodes(newRoot,
+                                           [&linearizedNodes, &rhs, this](KisNodeSP node) {
+                                               KisNodeSP refNode = linearizedNodes.dequeue();
+                                               if (rhs.m_d->isolatedRootNode == refNode) {
+                                                   m_d->isolatedRootNode = node;
+                                               }
+                                           });
+    }
+
+    KisLayerUtils::recursiveApplyNodes(newRoot,
+                                       [](KisNodeSP node) {
+                                           dbgImage << "Node: " << (void *)node.data();
+                                       });
+
+    Q_FOREACH (KisLayerCompositionSP comp, rhs.m_d->compositions) {
+        m_d->compositions << toQShared(new KisLayerComposition(*comp, this));
+    }
+
+    emit sigLayersChangedAsync();
+
+    m_d->nserver = rhs.m_d->nserver;
+
+    vKisAnnotationSP newAnnotations;
+    Q_FOREACH (KisAnnotationSP annotation, rhs.m_d->annotations) {
+        newAnnotations << annotation->clone();
+    }
+    m_d->annotations = newAnnotations;
+
+    KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->projectionUpdatesFilter);
+    KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableUIUpdateSignals);
+    KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableDirtyRequests);
+
+    m_d->blockLevelOfDetail = rhs.m_d->blockLevelOfDetail;
+
+    /**
+     * The overlay device is not inherited when cloning the image!
+     */
+    if (rhs.m_d->overlaySelectionMask) {
+        const QRect dirtyRect = rhs.m_d->overlaySelectionMask->extent();
+        m_d->rootLayer->setDirty(dirtyRect);
+    }
+}
+
 KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
     : KisNodeFacade(),
       KisNodeGraphListener(),

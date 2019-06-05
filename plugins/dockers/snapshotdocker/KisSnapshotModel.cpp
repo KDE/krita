@@ -26,6 +26,7 @@
 
 #include <KisDocument.h>
 #include <KisView.h>
+#include <KisViewManager.h>
 
 struct KisSnapshotModel::Private
 {
@@ -39,7 +40,7 @@ struct KisSnapshotModel::Private
 
     DocPList curDocList;
 
-    QList<DocPList> documentGroups;
+    QMap<QPointer<KisDocument>, DocPList> documentGroups;
     QPointer<KisCanvas2> curCanvas;
 };
 
@@ -63,7 +64,10 @@ bool KisSnapshotModel::Private::switchToDocument(QPointer<KisDocument> doc)
 {
     if (curCanvas && curCanvas->imageView()) {
         KisView *view = curCanvas->imageView();
-        view->setDocument(doc);
+        KisDocument *curDoc = curDocument();
+        if (curDoc && doc) {
+            curDoc->copyFromDocument(*doc);
+        }
         // FIXME: more things need to be done
         return true;
     }
@@ -116,17 +120,8 @@ void KisSnapshotModel::setCanvas(QPointer<KisCanvas2> canvas)
     }
 
     if (m_d->curCanvas) {
-        // if any one doc in the group is no longer valid (is closed)
-        // destroy all other snapshots
-        bool docValid = true;
-        Q_FOREACH (auto const &i, m_d->curDocList) {
-            if (! i.second) {
-                docValid = false;
-                break;
-            }
-        }
-        if (docValid) {
-            m_d->documentGroups << m_d->curDocList;
+        if (m_d->curDocument()) {
+            m_d->documentGroups.insert(m_d->curDocument(), m_d->curDocList);
         } else {
             Q_FOREACH (auto const &i, m_d->curDocList) {
                 delete i.second.data();
@@ -142,19 +137,14 @@ void KisSnapshotModel::setCanvas(QPointer<KisCanvas2> canvas)
 
     QPointer<KisDocument> curDoc = m_d->curDocument();
     if (curDoc) {
-        for (int i = 0; i < m_d->documentGroups.size(); ++i) {
-            const Private::DocPList &docList = m_d->documentGroups[i];
-            Q_FOREACH (auto const &j, docList) {
-                if (j.second == curDoc) {
-                    m_d->curDocList = m_d->documentGroups.takeAt(i);
-                    return;
-                }
-            }
+        QMap<QPointer<KisDocument>, Private::DocPList>::const_iterator i = m_d->documentGroups.constFind(curDoc);
+        if (i != m_d->documentGroups.constEnd()) {
+            Private::DocPList docList = i.value();
+            beginInsertRows(QModelIndex(), docList.size(), docList.size());
+            m_d->curDocList = docList;
+            endInsertRows();
         }
         // we have not found any existing group containing the current document
-        beginInsertRows(QModelIndex(), m_d->curDocList.size(), m_d->curDocList.size());
-        m_d->curDocList << qMakePair(i18n("Original Document"), curDoc); /// XXX: a better title for it?
-        endInsertRows();
     }
 
 }

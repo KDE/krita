@@ -49,7 +49,7 @@ class KCheckAcceleratorsInitializer : public QObject
 {
     Q_OBJECT
 public:
-    explicit KCheckAcceleratorsInitializer(QObject *parent = Q_NULLPTR)
+    explicit KCheckAcceleratorsInitializer(QObject *parent = 0)
         : QObject(parent)
     {
     }

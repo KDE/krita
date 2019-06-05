@@ -201,7 +201,9 @@ void KisPaletteView::selectClosestColor(const KoColor &color)
 
     selectionModel()->clearSelection();
     QModelIndex index = m_d->model->indexForClosest(color);
+    blockSignals(true);
     selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+    blockSignals(false;)
 }
 
 void KisPaletteView::slotFGColorChanged(const KoColor &color)
@@ -231,7 +233,7 @@ void KisPaletteView::slotSelectColor(const KoColor &color)
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 {
     if (m_d->model) {
-        disconnect(m_d->model, Q_NULLPTR, this, Q_NULLPTR);
+        disconnect(m_d->model, 0, this, 0);
     }
     m_d->model = model;
     setModel(model);

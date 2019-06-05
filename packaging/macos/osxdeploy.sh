@@ -244,7 +244,7 @@ copy_missing_libs () {
                 rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/${lib} ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
                 rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/Resources ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
                 rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/Versions ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
-                krita_findmissinglibs "$(find "${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/" -perm u+x)"
+                krita_findmissinglibs "$(find "${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/" -type f -perm 755)"
             fi
         fi
     done
@@ -275,27 +275,23 @@ strip_python_dmginstall() {
 
 fix_python_framework() {
     # Fix python.framework rpath and slims down installation
-    # fix library LD_RPATH excutable_path and loader_path.
-    # It is intended to be used for Libraries inside Frameworks.
-    fix_framework_library() {
-        xargs -P4 -I FILE sh -c "
-            install_name_tool -rpath ${KIS_INSTALL_DIR}/lib @loader_path/Frameworks \"${libFile}\" 2> /dev/null
-            install_name_tool -add_rpath @loader_path/../../../ \"${libFile}\" 2> /dev/null
-        "
-    }
-    # Start fixing all executables
     PythonFrameworkBase="${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework"
-    install_name_tool -change @loader_path/../../../../libintl.9.dylib @loader_path/../../../libintl.9.dylib "${PythonFrameworkBase}/Python"
+
+    # Fix main library
+    pythonLib="${PythonFrameworkBase}/Python"
+    install_name_tool -id "${pythonLib##*/}" "${pythonLib}"
+    install_name_tool -rpath "${KIS_INSTALL_DIR}/lib" @loader_path/Frameworks
+    install_name_tool -add_rpath @loader_path/../../../ "${pythonLib}" 2> /dev/null
+    install_name_tool -change @loader_path/../../../../libintl.9.dylib @loader_path/../../../libintl.9.dylib "${pythonLib}"
+
+    # Fix all executables
     install_name_tool -add_rpath @executable_path/../../../../../../../ "${PythonFrameworkBase}/Versions/Current/Resources/Python.app/Contents/MacOS/Python"
+    install_name_tool -change "${KIS_INSTALL_DIR}/lib/Python.framework/Versions/${PY_VERSION}/Python" @executable_path/../../../../../../Python "${PythonFrameworkBase}/Versions/Current/Resources/Python.app/Contents/MacOS/Python"
     install_name_tool -add_rpath @executable_path/../../../../ "${PythonFrameworkBase}/Versions/Current/bin/python${PY_VERSION}"
     install_name_tool -add_rpath @executable_path/../../../../ "${PythonFrameworkBase}/Versions/Current/bin/python${PY_VERSION}m"
 
     # Fix rpaths from Python.Framework
-    # install_name_tool change @loader_path/../../../libz.1.dylib
-
-    # Fix main library
-    printf ${PythonFrameworkBase}/Python | fix_framework_library
-    # find ${PythonFrameworkBase} -name "*.so" -not -type l | fix_framework_library
+    find ${PythonFrameworkBase} -type f -perm 755 | xargs -P4 -I FILE install_name_tool -delete_rpath "${BUILDROOT}/i/lib" FILE 2> /dev/null
 }
 
 # Checks for macdeployqt
@@ -452,7 +448,7 @@ krita_deploy () {
 
     # repair krita for plugins
     printf "Searching for missing libraries\n"
-    krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -name "*.dylib" -or -name "*.so" -or -perm u+x)
+    krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
     echo "Done!"
 
 }
@@ -469,7 +465,7 @@ signBundle() {
     cd ${KRITA_DMG}/krita.app/Contents/Frameworks
     # remove debug version as both versions cant be signed.
     rm ${KRITA_DMG}/krita.app/Contents/Frameworks/QtScript.framework/Versions/Current/QtScript_debug
-    find . -type f -name "*.dylib" -or -name "*.so" | batch_codesign
+    find . -type f -perm 755 -or -name "*.dylib" -or -name "*.so" | batch_codesign
     find . -type d -name "*.framework" | xargs printf "%s/Versions/Current\n" | batch_codesign
 
     # Sign all other files in Framework (needed)

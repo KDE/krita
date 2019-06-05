@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
   <id>org.kde.krita</id>
-  <launchable type="desktop-id">org.kde.krita</launchable>
+  <launchable type="desktop-id">org.kde.krita.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-only</project_license>
   <developer_name>Krita Foundation</developer_name>

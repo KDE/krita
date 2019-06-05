@@ -2,6 +2,7 @@ set(kritasnapshotdocker_SOURCES
   KisSnapshotModel.cpp
   SnapshotDocker.cpp
   SnapshotPlugin.cpp
+  KisSnapshotView.cpp
   )
 
 add_library(kritasnapshotdocker MODULE ${kritasnapshotdocker_SOURCES})

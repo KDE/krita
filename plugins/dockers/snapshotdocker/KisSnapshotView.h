@@ -16,34 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_SNAPSHOT_MODEL_H_
-#define KIS_SNAPSHOT_MODEL_H_
+#ifndef KIS_SNAPSHOT_VIEW_H_
+#define KIS_SNAPSHOT_VIEW_H_
 
-#include <QAbstractListModel>
-#include <QScopedPointer>
-#include <QPointer>
+#include <QListView>
 
-#include <kis_canvas2.h>
-
-class KisSnapshotModel : public QAbstractListModel
+class KisSnapshotView : public QListView
 {
 public:
-    KisSnapshotModel();
-    ~KisSnapshotModel() override;
+    KisSnapshotView();
+    ~KisSnapshotView() override;
 
-    int rowCount(const QModelIndex &parent) const override;
-    QVariant data(const QModelIndex &index, int role) const override;
-    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
-    void setCanvas(QPointer<KisCanvas2> canvas);
+    void setModel(QAbstractItemModel *model) override;
 
 public Q_SLOTS:
-    bool slotCreateSnapshot();
-    bool slotRemoveSnapshot(const QModelIndex &index);
-    bool slotSwitchToSnapshot(const QModelIndex &index);
-
+    void slotSwitchToSelectedSnapshot();
+    void slotRemoveSelectedSnapshot();
 private:
     struct Private;
     QScopedPointer<Private> m_d;
 };
 
-#endif // KIS_SNAPSHOT_MODEL_H_
+#endif

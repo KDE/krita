@@ -110,6 +110,18 @@ QVariant KisSnapshotModel::data(const QModelIndex &index, int role) const
 
 bool KisSnapshotModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    if (!index.isValid() || index.row() >= rowCount(QModelIndex())) {
+        return false;
+    }
+    int i = index.row();
+    switch (role) {
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+        m_d->curDocList[i].first = value.toString();
+        emit dataChanged(index, index);
+        return true;
+        break;
+    }
     return false;
 }
 
@@ -161,12 +173,20 @@ bool KisSnapshotModel::slotCreateSnapshot()
     return false;
 }
 
-bool KisSnapshotModel::slotRemoveActivatedSnapshot()
+bool KisSnapshotModel::slotRemoveSnapshot(const QModelIndex &index)
 {
-    return false;
+    if (!index.isValid() || index.row() >= m_d->curDocList.size()) {
+        return false;
+    }
+    int i = index.row();
+    beginRemoveRows(QModelIndex(), i, i);
+    QPair<QString, QPointer<KisDocument> > pair = m_d->curDocList.takeAt(i);
+    endRemoveRows();
+    delete pair.second.data();
+    return true;
 }
 
-bool KisSnapshotModel::slotSwitchToActivatedSnapshot(const QModelIndex &index)
+bool KisSnapshotModel::slotSwitchToSnapshot(const QModelIndex &index)
 {
     if (!index.isValid() || index.row() >= m_d->curDocList.size()) {
         return false;

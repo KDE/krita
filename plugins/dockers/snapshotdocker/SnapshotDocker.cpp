@@ -25,6 +25,7 @@
 #include <QHBoxLayout>
 
 #include "KisSnapshotModel.h"
+#include "KisSnapshotView.h"
 
 #include <kis_canvas2.h>
 #include <kis_icon_utils.h>
@@ -35,17 +36,19 @@ struct SnapshotDocker::Private
     ~Private();
 
     QScopedPointer<KisSnapshotModel> model;
-    QPointer<QListView> view;
+    QPointer<KisSnapshotView> view;
     QPointer<KisCanvas2> canvas;
     QPointer<QToolButton> bnAdd;
+    QPointer<QToolButton> bnSwitchTo;
     QPointer<QToolButton> bnRemove;
 };
 
 SnapshotDocker::Private::Private()
     : model(new KisSnapshotModel)
-    , view(new QListView)
+    , view(new KisSnapshotView)
     , canvas(0)
     , bnAdd(new QToolButton)
+    , bnSwitchTo(new QToolButton)
     , bnRemove(new QToolButton)
 {
 }
@@ -60,7 +63,8 @@ SnapshotDocker::SnapshotDocker()
 {
     QWidget *widget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(widget);
-    connect(m_d->view, &QListView::activated, m_d->model.data(), &KisSnapshotModel::slotSwitchToActivatedSnapshot);
+    //connect(m_d->view, &QListView::activated, m_d->model.data(), &KisSnapshotModel::slotSwitchToActivatedSnapshot);
+    connect(m_d->view, &KisSnapshotView::doubleClicked, m_d->view, QOverload<const QModelIndex &>::of(&KisSnapshotView::edit));
     m_d->view->setModel(m_d->model.data());
     mainLayout->addWidget(m_d->view);
 
@@ -68,8 +72,11 @@ SnapshotDocker::SnapshotDocker()
     m_d->bnAdd->setIcon(KisIconUtils::loadIcon("addlayer"));
     connect(m_d->bnAdd, &QToolButton::clicked, m_d->model.data(), &KisSnapshotModel::slotCreateSnapshot);
     buttonsLayout->addWidget(m_d->bnAdd);
+    m_d->bnSwitchTo->setIcon(KisIconUtils::loadIcon("draw-freehand")); /// XXX: which icon to use?
+    connect(m_d->bnSwitchTo, &QToolButton::clicked, m_d->view, &KisSnapshotView::slotSwitchToSelectedSnapshot);
+    buttonsLayout->addWidget(m_d->bnSwitchTo);
     m_d->bnRemove->setIcon(KisIconUtils::loadIcon("deletelayer"));
-    connect(m_d->bnRemove, &QToolButton::clicked, m_d->model.data(), &KisSnapshotModel::slotRemoveActivatedSnapshot);
+    connect(m_d->bnRemove, &QToolButton::clicked, m_d->view, &KisSnapshotView::slotRemoveSelectedSnapshot);
     buttonsLayout->addWidget(m_d->bnRemove);
     mainLayout->addLayout(buttonsLayout);
 

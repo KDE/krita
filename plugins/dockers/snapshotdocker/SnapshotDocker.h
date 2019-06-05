@@ -34,12 +34,10 @@ class SnapshotDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     SnapshotDocker();
     ~SnapshotDocker() override;
-    
+
     QString observerName() override { return "SnapshotDocker"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
-
-private Q_SLOTS:
 
 private:
     struct Private;

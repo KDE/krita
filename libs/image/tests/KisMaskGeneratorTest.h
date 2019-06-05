@@ -21,7 +21,7 @@
 
 #include <QtTest>
 
-class KisMaskGeneratorBenchmark : public QObject
+class KisMaskGeneratorTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:

@@ -985,6 +985,10 @@ void SvgTextEditor::applySettings()
 
     QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().background().color());
     palette.setBrush(QPalette::Active, QPalette::Background, QBrush(background));
+    m_textEditorWidget.richTextEdit->setStyleSheet(QString("background-color:%1").arg(background.name()));
+    m_textEditorWidget.svgStylesEdit->setStyleSheet(QString("background-color:%1").arg(background.name()));
+    m_textEditorWidget.svgTextEdit->setStyleSheet(QString("background-color:%1").arg(background.name()));
+
     QColor foreground = cfg.readEntry("colorEditorForeground", qApp->palette().text().color());
     palette.setBrush(QPalette::Active, QPalette::Text, QBrush(foreground));
 
@@ -995,6 +999,8 @@ void SvgTextEditor::applySettings()
         writingSystems.append((QFontDatabase::WritingSystem)QString(selectedWritingSystems.at(i)).toInt());
     }
     qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget())->refillComboBox(writingSystems);
+
+
 
     m_page->setUpdatesEnabled(true);
 }

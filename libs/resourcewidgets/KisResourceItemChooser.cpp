@@ -535,7 +535,7 @@ void KisResourceItemChooser::baseLengthChanged(int length)
         while (cols <= maxColumns) {
             int size = width / cols;
             int rows = ceil(resourceCount / (double)cols);
-            if (rows * size < (d->view->height() - 5)) {
+            if (rows * size < (d->view->height())) {
                 break;
             }
             cols++;

@@ -53,20 +53,15 @@ KraExport::~KraExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KraExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KraExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KisImageSP image = document->savingImage();
-    KIS_ASSERT_RECOVER_RETURN_VALUE(image, CreationError);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(image, ImportExportCodes::InternalError);
 
     KraConverter kraConverter(document);
-    KisImageBuilder_Result res = kraConverter.buildFile(io, filename());
-
-    if (res == KisImageBuilder_RESULT_OK) {
-        dbgFile << "KraExport::convert success !";
-        return KisImportExportFilter::OK;
-    }
+    KisImportExportErrorCode res = kraConverter.buildFile(io, filename());
     dbgFile << "KraExport::convert result =" << res;
-    return KisImportExportFilter::InternalError;
+    return res;
 }
 
 void KraExport::initializeCapabilities()

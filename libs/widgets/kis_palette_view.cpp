@@ -89,6 +89,8 @@ KisPaletteView::KisPaletteView(QWidget *parent)
         connect(scroller, SIGNAL(stateChanged(QScroller::State)),
                 this, SLOT(slotScrollerStateChanged(QScroller::State)));
     }
+
+    connect(this, SIGNAL(clicked(QModelIndex)), SLOT(slotCurrentSelectionChanged(QModelIndex)));
 }
 
 KisPaletteView::~KisPaletteView()
@@ -229,7 +231,7 @@ void KisPaletteView::slotSelectColor(const KoColor &color)
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 {
     if (m_d->model) {
-        disconnect(m_d->model, Q_NULLPTR, this, Q_NULLPTR);
+        disconnect(m_d->model, 0, this, 0);
     }
     m_d->model = model;
     setModel(model);
@@ -237,7 +239,6 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 
     connect(model, SIGNAL(sigPaletteModified()), SLOT(slotAdditionalGuiUpdate()));
     connect(model, SIGNAL(sigPaletteChanged()), SLOT(slotAdditionalGuiUpdate()));
-    connect(selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(slotCurrentSelectionChanged(QModelIndex)));
 }
 
 KisPaletteModel* KisPaletteView::paletteModel() const

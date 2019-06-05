@@ -30,7 +30,7 @@
 
 KisPaletteComboBox::KisPaletteComboBox(QWidget *parent)
     : KisSqueezedComboBox(parent)
-    , m_model(Q_NULLPTR)
+    , m_model(0)
 {
     setEditable(true);
     setInsertPolicy(NoInsert);

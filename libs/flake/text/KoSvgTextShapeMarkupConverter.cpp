@@ -276,7 +276,7 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
 
             if (attributes.hasAttribute("style")) {
                 QString filteredStyles;
-                QStringList svgStyles = QString("font-family font-size font-weight font-variant word-spacing text-decoration font-style font-size-adjust font-stretch direction").split(" ");
+                QStringList svgStyles = QString("font-family font-size font-weight font-variant word-spacing text-decoration font-style font-size-adjust font-stretch direction letter-spacing").split(" ");
                 QStringList styles = attributes.value("style").toString().split(";");
                 for(int i=0; i<styles.size(); i++) {
                     QStringList style = QString(styles.at(i)).split(":");
@@ -1244,6 +1244,8 @@ QTextFormat KoSvgTextShapeMarkupConverter::formatDifference(QTextFormat test, QT
         if (it.value() == test.property(it.key())) {
             // Some props must not be removed as default state gets in the way.
             if (it.key() == 0x2023) { // TextUnderlineStyle
+                continue;
+            } else if (it.key() == 0x2033) { // FontLetterSpacingType
                 continue;
             }
             diff.clearProperty(it.key());

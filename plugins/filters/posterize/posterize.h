@@ -50,12 +50,15 @@ class KisPosterizeColorTransformation : public KoColorTransformation
 {
 public:
     KisPosterizeColorTransformation(int steps, const KoColorSpace* cs);
+    ~KisPosterizeColorTransformation() override;
     void transform(const quint8* src, quint8* dst, qint32 nPixels) const override;
 private:
     const KoColorSpace* m_colorSpace;
     quint32 m_psize;
     quint16 m_step;
     quint16 m_halfStep;
+    KoColorConversionTransformation* m_fromConversion;
+    KoColorConversionTransformation* m_toConversion;
 };
 
 #endif

@@ -35,6 +35,17 @@ EllipseAssistant::EllipseAssistant()
 {
 }
 
+EllipseAssistant::EllipseAssistant(const EllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : KisPaintingAssistant(rhs, handleMap)
+    , e(rhs.e)
+{
+}
+
+KisPaintingAssistantSP EllipseAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+{
+    return KisPaintingAssistantSP(new EllipseAssistant(*this, handleMap));
+}
+
 QPointF EllipseAssistant::project(const QPointF& pt) const
 {
     Q_ASSERT(isAssistantComplete());

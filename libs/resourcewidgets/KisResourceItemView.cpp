@@ -28,6 +28,8 @@
 
 #include <KisKineticScroller.h>
 
+#include <QtMath>
+
 KisResourceItemView::KisResourceItemView(QWidget *parent)
     : QTableView(parent)
 {
@@ -130,11 +132,12 @@ void KisResourceItemView::updateView()
     int rowHeight, columnWidth;
 
     if (m_viewMode == FIXED_COLUMNS) {
-        columnWidth = viewport()->size().width() / columnCount;
+        columnWidth = qFloor(viewport()->size().width() / static_cast<double>(columnCount));
 
         for (int i = 0; i < columnCount; ++i) {
             setColumnWidth(i, columnWidth);
         }
+        // keep aspect ratio always square.
         if (columnCount > 1) {
             for (int i = 0; i < rowCount; ++i) {
                 setRowHeight(i, columnWidth);
@@ -142,7 +145,7 @@ void KisResourceItemView::updateView()
         }
     } else if (m_viewMode == FIXED_ROWS) {
         if (rowCount == 0) return;  // Don't divide by zero
-        rowHeight = viewport()->size().height() / rowCount;
+        rowHeight = qFloor(viewport()->size().height() / static_cast<double>(rowCount));
 
         for (int i = 0; i < rowCount; ++i) {
             setRowHeight(i, rowHeight);

@@ -32,6 +32,11 @@ private Q_SLOTS:
     void testObligeSingleChildNonTranspPixel();
 
     void testLoadAnimated();
+
+    void testImportFromWriteonly();
+    void testImportIncorrectFormat();
+
+
 };
 
 #endif

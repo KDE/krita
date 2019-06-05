@@ -25,7 +25,13 @@
 #include <QFileInfo>
 
 #include "kis_types.h"
-#include <KisImageBuilderResult.h>
+#include <KisImportExportErrorCode.h>
+
+
+// max number of pixels in one dimension of psd file
+extern const int MAX_PSD_SIZE;
+
+
 class KisDocument;
 
 class PSDSaver : public QObject {
@@ -39,7 +45,7 @@ public:
 
 public:
 
-    KisImageBuilder_Result buildFile(QIODevice *io);
+    KisImportExportErrorCode buildFile(QIODevice *io);
 
     KisImageSP image();
 
@@ -48,7 +54,6 @@ public Q_SLOTS:
     virtual void cancel();
 
 private:
-
     KisImageSP m_image;
     KisDocument *m_doc;
     bool m_stop;

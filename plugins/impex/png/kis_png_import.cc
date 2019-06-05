@@ -41,37 +41,14 @@ KisPNGImport::~KisPNGImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisPNGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisPNGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KisPNGConverter ib(document, batchMode());
-
-    switch (ib.buildImage(io)) {
-    case KisImageBuilder_RESULT_UNSUPPORTED:
-        return KisImportExportFilter::NotImplemented;
-        break;
-    case KisImageBuilder_RESULT_INVALID_ARG:
-        return KisImportExportFilter::BadMimeType;
-        break;
-    case KisImageBuilder_RESULT_NO_URI:
-    case KisImageBuilder_RESULT_NOT_EXIST:
-    case KisImageBuilder_RESULT_NOT_LOCAL:
-        return KisImportExportFilter::FileNotFound;
-        break;
-    case KisImageBuilder_RESULT_BAD_FETCH:
-    case KisImageBuilder_RESULT_EMPTY:
-        return KisImportExportFilter::ParsingError;
-        break;
-    case KisImageBuilder_RESULT_FAILURE:
-        return KisImportExportFilter::InternalError;
-        break;
-    case KisImageBuilder_RESULT_OK:
-        document -> setCurrentImage(ib.image());
-        return KisImportExportFilter::OK;
-        break;
-    default:
-        break;
+    KisImportExportErrorCode res = ib.buildImage(io);
+    if (res.isOk()){
+        document->setCurrentImage(ib.image());
     }
-    return KisImportExportFilter::InternalError;
+    return res;
 
 }
 

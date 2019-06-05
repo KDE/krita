@@ -31,7 +31,7 @@ public:
     KraExport(QObject *parent, const QVariantList &);
     ~KraExport() override;
 public:
-    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
     void initializeCapabilities() override;
 
 };

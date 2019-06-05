@@ -52,6 +52,8 @@ public:
         return new KisReferenceImagesLayer(*this);
     }
 
+    bool isFakeNode() const override;
+
 Q_SIGNALS:
     /**
      * The content of the layer has changed, and the canvas decoration

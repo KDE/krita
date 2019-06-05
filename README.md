@@ -24,7 +24,7 @@ If you're building on Linux, please follow David Revoy's Cat Guide: http://www.d
 
 Other developer guides, notes and wiki:
 
-https://community.kde.org/Krita
+https://docs.krita.org/en/untranslatable_pages.html
 
 Apidox:
 

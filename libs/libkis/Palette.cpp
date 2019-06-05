@@ -115,7 +115,7 @@ void Palette::removeEntry(int index, const QString &/*groupName*/)
     int col = index % columnCount();
     int tmp = index;
     int row = (index - col) / columnCount();
-    KisSwatchGroup *groupFoundIn = Q_NULLPTR;
+    KisSwatchGroup *groupFoundIn = 0;
     Q_FOREACH(const QString &name, groupNames()) {
         KisSwatchGroup *g = d->palette->getGroup(name);
         tmp -= g->rowCount() * columnCount();

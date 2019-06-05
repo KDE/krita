@@ -430,7 +430,7 @@ int KoColorSet::rowCount() const
 KisSwatchGroup *KoColorSet::getGroup(const QString &name)
 {
     if (!d->groups.contains(name)) {
-        return Q_NULLPTR;
+        return 0;
     }
     return &(d->groups[name]);
 }

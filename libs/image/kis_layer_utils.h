@@ -41,6 +41,7 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT KisNodeList sortMergableNodes(KisNodeSP root, KisNodeList nodes);
     KRITAIMAGE_EXPORT void filterMergableNodes(KisNodeList &nodes, bool allowMasks = false);
     KRITAIMAGE_EXPORT bool checkIsChildOf(KisNodeSP node, const KisNodeList &parents);
+    KRITAIMAGE_EXPORT void filterUnlockedNodes(KisNodeList &nodes);
 
     /**
      * Returns true if:

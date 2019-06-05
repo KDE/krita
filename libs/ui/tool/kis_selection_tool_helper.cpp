@@ -99,8 +99,11 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
 
         KUndo2Command* paint() override {
 
-            KisPixelSelectionSP pixelSelection = m_view->selection()->pixelSelection();
-            KIS_ASSERT_RECOVER(pixelSelection) { return 0; }
+            KisSelectionSP selection = m_view->selection();
+            KIS_SAFE_ASSERT_RECOVER(selection) { return 0; }
+
+            KisPixelSelectionSP pixelSelection = selection->pixelSelection();
+            KIS_SAFE_ASSERT_RECOVER(pixelSelection) { return 0; }
 
             bool hasSelection = !pixelSelection->isEmpty();
 

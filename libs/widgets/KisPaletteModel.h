@@ -43,7 +43,7 @@ class KRITAWIDGETS_EXPORT KisPaletteModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit KisPaletteModel(QObject* parent = Q_NULLPTR);
+    explicit KisPaletteModel(QObject* parent = 0);
     ~KisPaletteModel() override;
 
     enum AdditionalRoles {

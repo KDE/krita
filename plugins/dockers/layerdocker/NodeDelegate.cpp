@@ -810,7 +810,8 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
             if (hasCorrectModifier) {
                 model->setData(index, QVariant(int(action)), KisNodeModel::SelectOpaqueRole);
             }
-            return true; //If not here then the item is !expanded when reaching return false;
+            d->view->setCurrentIndex(index);
+            return hasCorrectModifier; //If not here then the item is !expanded when reaching return false;
         }
 
         if (mouseEvent->button() == Qt::LeftButton &&
@@ -834,20 +835,15 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
     return false;
 }
 
-QWidget *NodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
+QWidget *NodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex &index) const
 {
-    d->edit = new QLineEdit(parent);
+    // #400357 do not override QAbstractItemDelegate::setEditorData to update editor's text
+    // because replacing the text while user type is confusing
+    const QString &text = index.data(Qt::DisplayRole).toString();
+    d->edit = new QLineEdit(text, parent);
     d->edit->setFocusPolicy(Qt::StrongFocus);
     d->edit->installEventFilter(const_cast<NodeDelegate*>(this)); //hack?
     return d->edit;
-}
-
-void NodeDelegate::setEditorData(QWidget *widget, const QModelIndex &index) const
-{
-    QLineEdit *edit = qobject_cast<QLineEdit*>(widget);
-    Q_ASSERT(edit);
-
-    edit->setText(index.data(Qt::DisplayRole).toString());
 }
 
 void NodeDelegate::setModelData(QWidget *widget, QAbstractItemModel *model, const QModelIndex &index) const
@@ -976,10 +972,12 @@ void NodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &opti
         const QRect iconsRectR    = iconsRect(option, index);
         const int height = 5;
         const QRect rc = QRect(
-            ((option.direction == Qt::RightToLeft) ? iconsRectR.bottomRight()
-                                                   : thumbnailRect.bottomRight()) - QPoint(0, height),
-            ((option.direction == Qt::RightToLeft) ? thumbnailRect.bottomLeft()
-                                                   : iconsRectR.bottomLeft()));
+            ((option.direction == Qt::RightToLeft) ?
+              iconsRectR.bottomRight() :
+              thumbnailRect.bottomRight()) - QPoint(0, height),
+            ((option.direction == Qt::RightToLeft) ?
+              thumbnailRect.bottomLeft() :
+              iconsRectR.bottomLeft()));
 
         p->save();
         {
@@ -987,6 +985,7 @@ void NodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &opti
             QStyle* style = QApplication::style();
             QStyleOptionProgressBar opt;
 
+            opt.rect = rc;
             opt.minimum = 0;
             opt.maximum = 100;
             opt.progress = value.toInt();

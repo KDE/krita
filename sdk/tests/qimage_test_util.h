@@ -80,7 +80,7 @@ inline bool compareChannels(int ch1, int ch2, int fuzzy)
     return qAbs(ch1 - ch2) <= fuzzy;
 }
 
-inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0, int maxNumFailingPixels = 0)
+inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0, int maxNumFailingPixels = 0, bool showDebug = true)
 {
     //     QTime t;
     //     t.start();
@@ -120,13 +120,14 @@ inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & im
                     pt.setY(y);
                     numFailingPixels++;
 
-                    qDebug() << " Different at" << pt
-                             << "source" << qRed(a) << qGreen(a) << qBlue(a) << qAlpha(a)
-                             << "dest" << qRed(b) << qGreen(b) << qBlue(b) << qAlpha(b)
-                             << "fuzzy" << fuzzy
-                             << "fuzzyAlpha" << fuzzyAlpha
-                             << "(" << numFailingPixels << "of" << maxNumFailingPixels << "allowed )";
-
+                    if (showDebug) {
+                        qDebug() << " Different at" << pt
+                                 << "source" << qRed(a) << qGreen(a) << qBlue(a) << qAlpha(a)
+                                 << "dest" << qRed(b) << qGreen(b) << qBlue(b) << qAlpha(b)
+                                 << "fuzzy" << fuzzy
+                                 << "fuzzyAlpha" << fuzzyAlpha
+                                 << "(" << numFailingPixels << "of" << maxNumFailingPixels << "allowed )";
+                    }
 
                     if (numFailingPixels > maxNumFailingPixels) {
                         return false;

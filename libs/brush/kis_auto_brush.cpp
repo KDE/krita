@@ -272,8 +272,8 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     double centerX = hotSpot.x() - 0.5 + subPixelX;
     double centerY = hotSpot.y() - 0.5 + subPixelY;
 
+    d->shape->setSoftness(softnessFactor); // softness must be set first
     d->shape->setScale(shape.scaleX(), shape.scaleY());
-    d->shape->setSoftness(softnessFactor);
 
     if (coloringInformation) {
         if (color && pixelSize == 4) {

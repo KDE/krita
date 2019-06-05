@@ -456,9 +456,9 @@ Q_SIGNALS:
 
     void sigGuidesConfigChanged(const KisGuidesConfig &config);
 
-    void sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    void sigBackgroundSavingFinished(KisImportExportErrorCode status, const QString &errorMessage);
 
-    void sigCompleteBackgroundSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    void sigCompleteBackgroundSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);
 
     void sigReferenceImagesChanged();
 
@@ -466,10 +466,10 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void finishExportInBackground();
-    void slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
-    void slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    void slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage);
+    void slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);
 
-    void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);
 
     void slotInitiateAsyncAutosaving(KisDocument *clonedDocument);
 
@@ -650,7 +650,7 @@ private:
      */
     KisDocument *lockAndCloneForSaving();
 
-    QString exportErrorToUserMessage(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    QString exportErrorToUserMessage(KisImportExportErrorCode status, const QString &errorMessage);
 
     QString prettyPathOrUrl() const;
 

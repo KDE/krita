@@ -72,9 +72,10 @@ public:
     KisSignalCompressor(int delay, Mode mode, QObject *parent = 0);
     bool isActive() const;
     void setMode(Mode mode);
-    void setDelay(int delay);
+
 
 public Q_SLOTS:
+    void setDelay(int delay);
     void start();
     void stop();
 

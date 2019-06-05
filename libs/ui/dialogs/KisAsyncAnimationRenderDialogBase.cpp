@@ -323,7 +323,7 @@ void KisAsyncAnimationRenderDialogBase::updateProgressLabel()
     const QString estimatedTimeString = estimatedTime.toString(timeFormat);
 
     const QString memoryLimitMessage(
-        i18n("\n\nMemory limit is reached!\nThe number of clones is limited to %1\n\n",
+        i18n("\n\nThe memory limit has been reached.\nThe number of frames saved simultaneously is limited to %1\n\n",
              m_d->asyncRenderers.size()));
 
 

@@ -3576,5 +3576,17 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="set-copy-from">
+      <icon></icon>
+      <text>Set Copy F&amp;rom...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Set the source for the selected clone layer(s).</toolTip>
+      <iconText>Set Copy From</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 </ActionCollection>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
   <id>org.kde.krita</id>
-  <launchable type="desktop-id">org.kde.krita.desktop</launchable>
+  <launchable type="desktop-id">org.kde.krita</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-only</project_license>
   <developer_name>Krita Foundation</developer_name>
@@ -272,6 +272,6 @@
     <id>org.kde.krita.desktop</id>
   </provides>
   <releases>
-    <release date="2019-06-04" version="4.2.0.0 (BETA)"/>
+    <release date="2019-05-29" version="4.3.0.0"/>
   </releases>
 </component>

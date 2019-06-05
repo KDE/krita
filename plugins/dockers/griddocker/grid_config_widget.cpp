@@ -150,7 +150,9 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
     ui->spacingAspectButton->setKeepAspectRatio(m_d->gridConfig.spacingAspectLocked());
     ui->chkShowGrid->setChecked(m_d->gridConfig.showGrid());
     ui->intHSpacing->setValue(m_d->gridConfig.spacing().x());
+    ui->intHSpacing->setMaximum(std::numeric_limits<int>::max());
     ui->intVSpacing->setValue(m_d->gridConfig.spacing().y());
+    ui->intVSpacing->setMaximum(std::numeric_limits<int>::max());
     ui->intXOffset->setValue(m_d->gridConfig.offset().x());
     ui->intYOffset->setValue(m_d->gridConfig.offset().y());
     ui->intSubdivision->setValue(m_d->gridConfig.subdivision());
@@ -197,12 +199,6 @@ KisGridConfig GridConfigWidget::gridConfig() const
 KisGuidesConfig GridConfigWidget::guidesConfig() const
 {
     return m_d->guidesConfig;
-}
-
-void GridConfigWidget::setGridDivision(int w, int h)
-{
-    ui->intHSpacing->setMaximum(w);
-    ui->intVSpacing->setMaximum(h);
 }
 
 KisGridConfig GridConfigWidget::fetchGuiGridConfig() const

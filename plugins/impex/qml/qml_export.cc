@@ -41,19 +41,13 @@ QMLExport::~QMLExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus QMLExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode QMLExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KisImageSP image = document->savingImage();
     Q_CHECK_PTR(image);
 
     QMLConverter converter;
-    KisImageBuilder_Result result = converter.buildFile(filename(), realFilename(), io, image);
-    if (result == KisImageBuilder_RESULT_OK) {
-        dbgFile << "success !";
-        return KisImportExportFilter::OK;
-    }
-    dbgFile << " Result =" << result;
-    return KisImportExportFilter::InternalError;
+    return converter.buildFile(filename(), realFilename(), io, image);
 }
 
 void QMLExport::initializeCapabilities()

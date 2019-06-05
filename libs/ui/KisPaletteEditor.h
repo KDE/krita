@@ -46,7 +46,7 @@ public:
     struct PaletteInfo;
 
 public:
-    explicit KisPaletteEditor(QObject *parent = Q_NULLPTR);
+    explicit KisPaletteEditor(QObject *parent = 0);
     ~KisPaletteEditor();
 
     void setPaletteModel(KisPaletteModel *model);

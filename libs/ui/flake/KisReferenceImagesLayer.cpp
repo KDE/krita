@@ -183,6 +183,11 @@ void KisReferenceImagesLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapt
     visitor.visit(this, undoAdapter);
 }
 
+bool KisReferenceImagesLayer::isFakeNode() const
+{
+    return true;
+}
+
 void KisReferenceImagesLayer::signalUpdate(const QRectF &rect)
 {
     emit sigUpdateCanvas(rect);

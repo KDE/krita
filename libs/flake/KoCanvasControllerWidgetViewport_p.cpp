@@ -78,7 +78,7 @@ void Viewport::setCanvas(QWidget *canvas)
     resetLayout();
 }
 
-void Viewport::setDocumentSize(const QSize &size)
+void Viewport::setDocumentSize(const QSizeF &size)
 {
     m_documentSize = size;
     resetLayout();

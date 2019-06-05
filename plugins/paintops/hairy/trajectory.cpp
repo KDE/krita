@@ -59,19 +59,18 @@ const QVector<QPointF> &Trajectory::getLinearTrajectory(const QPointF &start, co
     reset();
 
     // Width and height of the line
-    float xd = (end.x() - start.x());
-    float yd = (end.y() - start.y());
+    qreal xd = (end.x() - start.x());
+    qreal yd = (end.y() - start.y());
 
     int x = (int)start.x();
     int y = (int)start.y();
-    float fx = start.x();
-    float fy = start.y();
-    float m = yd / xd;
+    qreal fx = start.x();
+    qreal fy = start.y();
+    qreal m = yd / xd;
 
     int y2 = (int)end.y();
     int x2 = (int)end.x();
 
-    //m_path.append(start);
     addPoint(start);
 
     if (fabs(m) > 1) {
@@ -86,9 +85,10 @@ const QVector<QPointF> &Trajectory::getLinearTrajectory(const QPointF &start, co
         }
         while (y != y2) {
             fx = fx + m;
-            y = y + incr;
-            x = (int)(fx + 0.5f);
-            addPoint(QPointF(fx, y));
+            fy = fy + incr;
+            y += incr;
+//            x = (int)(fx + 0.5f);
+            addPoint(QPointF(fx, fy));
         }
     } else {
         // x - directional axis
@@ -101,9 +101,10 @@ const QVector<QPointF> &Trajectory::getLinearTrajectory(const QPointF &start, co
         }
         while (x != x2) {
             fy = fy + m;
-            x = x + incr;
-            y = (int)(fy + 0.5f);
-            addPoint(QPointF(x, fy));
+            fx = fx + incr;
+            x += incr;
+//            y = (int)(fy + 0.5f);
+            addPoint(QPointF(fx, fy));
         }
     }
 

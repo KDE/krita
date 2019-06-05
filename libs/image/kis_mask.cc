@@ -79,6 +79,7 @@ KisMask::KisMask(const QString & name)
 {
     setName(name);
     m_d->safeProjection = new KisSafeSelectionNodeProjectionStore();
+    m_d->safeProjection->setImage(image());
 }
 
 KisMask::KisMask(const KisMask& rhs)

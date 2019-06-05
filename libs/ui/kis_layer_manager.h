@@ -110,6 +110,8 @@ private Q_SLOTS:
 
     void layerStyle();
 
+    void changeCloneSource();
+
 private:
     void adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above);
     void addLayerCommon(KisNodeSP activeNode, KisNodeSP layer, bool updateImage = true, KisProcessingApplicator *applicator = 0);

@@ -75,6 +75,11 @@ public:
 
     QWidget *createOptionWidget() override;
 
+    /// clones the list of assistants
+    /// the originally shared handles will still be shared
+    /// the cloned assistants do not share any handle with the original assistants
+    QList<KisPaintingAssistantSP> cloneAssistantList(const QList<KisPaintingAssistantSP> &list) const;
+
 private:
     // adds and removes assistant.
     // this is event is forwarded to the kis_painting_decoration class
@@ -146,6 +151,7 @@ private:
     PerspectiveAssistantEditionMode m_internalMode;
     KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
     int m_assistantHelperYOffset; // used by the assistant editor icons for placement on the canvas.
+    QList<KisPaintingAssistantSP> m_origAssistantList;
 };
 
 

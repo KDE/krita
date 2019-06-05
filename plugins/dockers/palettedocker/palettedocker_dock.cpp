@@ -67,10 +67,10 @@ PaletteDockerDock::PaletteDockerDock( )
     , m_ui(new Ui_WdgPaletteDock())
     , m_model(new KisPaletteModel(this))
     , m_paletteChooser(new KisPaletteListWidget(this))
-    , m_view(Q_NULLPTR)
-    , m_resourceProvider(Q_NULLPTR)
+    , m_view(0)
+    , m_resourceProvider(0)
     , m_rServer(KoResourceServerProvider::instance()->paletteServer())
-    , m_activeDocument(Q_NULLPTR)
+    , m_activeDocument(0)
     , m_paletteEditor(new KisPaletteEditor)
     , m_actAdd(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Add a color")))
     , m_actRemove(new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete color")))
@@ -152,7 +152,6 @@ void PaletteDockerDock::setViewManager(KisViewManager* kisview)
             SLOT(loadFromWorkspace(KisWorkspaceResource*)));
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),
             this, SLOT(slotFGColorResourceChanged(KoColor)));
-
     kisview->nodeManager()->disconnect(m_model);
 }
 
@@ -196,7 +195,7 @@ void PaletteDockerDock::slotExportPalette(KoColorSet *palette)
 
 void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
 {
-    setEnabled(canvas != Q_NULLPTR);
+    setEnabled(canvas != 0);
     if (canvas) {
         KisCanvas2 *cv = qobject_cast<KisCanvas2*>(canvas);
         m_ui->paletteView->setDisplayRenderer(cv->displayColorConverter()->displayRendererInterface());
@@ -220,15 +219,15 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
     }
 
     if (!m_currentColorSet) {
-        slotSetColorSet(Q_NULLPTR);
+        slotSetColorSet(0);
     }
 }
 
 void PaletteDockerDock::unsetCanvas()
 {
     setEnabled(false);
-    m_ui->paletteView->setDisplayRenderer(Q_NULLPTR);
-    m_paletteEditor->setView(Q_NULLPTR);
+    m_ui->paletteView->setDisplayRenderer(0);
+    m_paletteEditor->setView(0);
 
     for (KoResource *r : m_rServer->resources()) {
         KoColorSet *c = static_cast<KoColorSet*>(r);
@@ -237,7 +236,7 @@ void PaletteDockerDock::unsetCanvas()
         }
     }
     if (!m_currentColorSet) {
-        slotSetColorSet(Q_NULLPTR);
+        slotSetColorSet(0);
     }
 }
 

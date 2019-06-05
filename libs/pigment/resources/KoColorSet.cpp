@@ -116,7 +116,7 @@ KoColorSet::KoColorSet(const QString& filename)
 
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
-    : QObject(Q_NULLPTR)
+    : QObject(0)
     , KoResource(rhs)
     , d(new Private(this))
 {
@@ -431,7 +431,7 @@ int KoColorSet::rowCount() const
 KisSwatchGroup *KoColorSet::getGroup(const QString &name)
 {
     if (!d->groups.contains(name)) {
-        return Q_NULLPTR;
+        return 0;
     }
     return &(d->groups[name]);
 }

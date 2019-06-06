@@ -20,9 +20,11 @@
 
 #include <boost/operators.hpp>
 #include <boost/graph/graph_traits.hpp>
+#include <kis_paint_device.h>
 
 #include <QDebug>
 #include <QRect>
+#include <QColor>
 
 struct VertexDescriptor : public boost::equality_comparable<VertexDescriptor>{
 
@@ -53,10 +55,14 @@ struct neighbour_iterator;
 
 struct KisMagneticGraph{
 
+    typedef KisMagneticGraph type;
+
     KisMagneticGraph() { }
-    KisMagneticGraph(long _outDegree, QRect graphRect):
-        outDegree(_outDegree), topLeft(graphRect.topLeft()), bottomRight(graphRect.bottomRight())
-    { }
+    KisMagneticGraph(KisPaintDeviceSP dev, QRect graphRect):
+        topLeft(graphRect.topLeft()), bottomRight(graphRect.bottomRight()), m_dev(dev)
+    {
+        outDegree = (bottomRight.y() - topLeft.y()) * (bottomRight.x() - topLeft.x()) - 1;
+    }
 
     typedef VertexDescriptor                                vertex_descriptor;
     typedef std::pair<vertex_descriptor, vertex_descriptor> edge_descriptor;
@@ -68,6 +74,17 @@ struct KisMagneticGraph{
 
     degree_size_type outDegree;
     QPoint topLeft, bottomRight;
+
+    double getIntensity(QPoint pt){
+        QColor *col;
+        m_dev->pixel(pt.x(),pt.y(), col);
+        double intensity = col->blackF();
+        delete col;
+        return intensity;
+    }
+
+private:
+    KisPaintDeviceSP m_dev;
 };
 
 struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
@@ -86,7 +103,7 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
 
     std::pair<VertexDescriptor, VertexDescriptor>
     operator*() const {
-        std::pair const result = std::make_pair(currentPoint,nextPoint);
+        std::pair<VertexDescriptor, VertexDescriptor> const result = std::make_pair(currentPoint,nextPoint);
         return result;
     }
 
@@ -101,7 +118,7 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
     }
 
     bool operator==(neighbour_iterator const& that) const {
-        return point == that.point;
+        return currentPoint == that.currentPoint && nextPoint == that.nextPoint;
     }
 
     bool equal(neighbour_iterator const& that) const {
@@ -120,14 +137,13 @@ private:
 namespace boost{
 template<>
 struct graph_traits<KisMagneticGraph> {
-    typedef KisMagneticGraph type;
-    typedef typename type::vertex_descriptor      vertex_descriptor;
-    typedef typename type::edge_descriptor        edge_descriptor;
-    typedef typename type::out_edge_iterator      out_edge_iterator;
-    typedef typename type::directed_category      directed_category;
-    typedef typename type::edge_parallel_category edge_parallel_category;
-    typedef typename type::traversal_category     traversal_category;
-    typedef typename type::degree_size_type       degree_size_type;
+    typedef typename KisMagneticGraph::vertex_descriptor      vertex_descriptor;
+    typedef typename KisMagneticGraph::edge_descriptor        edge_descriptor;
+    typedef typename KisMagneticGraph::out_edge_iterator      out_edge_iterator;
+    typedef typename KisMagneticGraph::directed_category      directed_category;
+    typedef typename KisMagneticGraph::edge_parallel_category edge_parallel_category;
+    typedef typename KisMagneticGraph::traversal_category     traversal_category;
+    typedef typename KisMagneticGraph::degree_size_type       degree_size_type;
 
     typedef void in_edge_iterator;
     typedef void vertex_iterator;
@@ -153,8 +169,8 @@ target(typename KisMagneticGraph::edge_descriptor e, KisMagneticGraph g) {
 std::pair<KisMagneticGraph::out_edge_iterator, KisMagneticGraph::out_edge_iterator>
 out_edges(typename KisMagneticGraph::vertex_descriptor v, KisMagneticGraph g) {
     return std::make_pair(
-                KisMagneticGraph::out_edge_iterator(v),
-                KisMagneticGraph::out_edge_iterator(v)
+                KisMagneticGraph::out_edge_iterator(v, g),
+                KisMagneticGraph::out_edge_iterator(v, g)
                 );
 }
 

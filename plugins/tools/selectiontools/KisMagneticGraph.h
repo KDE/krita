@@ -18,192 +18,153 @@
 #ifndef KISMAGNETICGRAPH_H
 #define KISMAGNETICGRAPH_H
 
-#include <boost/limits.hpp>
 #include <boost/operators.hpp>
 #include <boost/graph/graph_traits.hpp>
-#include <boost/graph/properties.hpp>
-#include <boost/iterator/counting_iterator.hpp>
-#include <boost/iterator/transform_iterator.hpp>
 
 #include <QDebug>
+#include <QRect>
 
+struct VertexDescriptor : public boost::equality_comparable<VertexDescriptor>{
 
-// vertex_at
-template <typename Graph>
-struct magnetic_graph_vertex_at {
+    long x,y;
 
-    typedef typename boost::graph_traits<Graph>::vertex_descriptor result_type;
+    VertexDescriptor(long _x, long _y):
+        x(_x), y(_y)
+    { }
 
-    magnetic_graph_vertex_at() : m_graph(0) {}
+    VertexDescriptor(QPoint pt):
+        x(pt.x()), y(pt.y())
+    { }
 
-    magnetic_graph_vertex_at(const Graph* graph) :
-        m_graph(graph) { }
+    VertexDescriptor():
+        x(0), y(0)
+    { }
 
-    result_type
-    operator() (typename boost::graph_traits<Graph>::vertices_size_type vertex_index) const {
-        return (vertex(vertex_index, *m_graph));
+    bool operator ==(const VertexDescriptor &rhs) const {
+        return rhs.x == x && rhs.y == y;
     }
 
-private:
-    const Graph* m_graph;
-};
-
-// out_edge_at
-template <typename Graph>
-struct magnetic_graph_out_edge_at {
-
-private:
-    typedef typename boost::graph_traits<Graph>::vertex_descriptor vertex_descriptor;
-
-public:
-    typedef typename boost::graph_traits<Graph>::edge_descriptor result_type;
-
-    magnetic_graph_out_edge_at() :
-        m_vertex(), m_graph(0)
-    { }
-
-    magnetic_graph_out_edge_at(vertex_descriptor source_vertex, const Graph* graph) :
-        m_vertex(source_vertex), m_graph(graph)
-    { }
-
-    result_type
-    operator() (typename boost::graph_traits<Graph>::degree_size_type out_edge_index) const {
-        return (out_edge_at(m_vertex, out_edge_index, *m_graph));
+    bool operator ==(const QPoint &rhs) const {
+        return rhs.x() == x && rhs.y() == y;
     }
-
-private:
-    vertex_descriptor m_vertex;
-    const Graph* m_graph;
 };
 
-// in_edge_at
-template <typename Graph>
-struct magnetic_graph_in_edge_at {
+struct neighbour_iterator;
 
-private:
-    typedef typename boost::graph_traits<Graph>::vertex_descriptor vertex_descriptor;
-
-public:
-    typedef typename boost::graph_traits<Graph>::edge_descriptor result_type;
-
-    magnetic_graph_in_edge_at() :
-        m_vertex(), m_graph(0)
-    { }
-
-    magnetic_graph_in_edge_at(vertex_descriptor target_vertex, const Graph* graph) :
-        m_vertex(target_vertex), m_graph(graph)
-    { }
-
-    result_type
-    operator() (typename boost::graph_traits<Graph>::degree_size_type in_edge_index) const {
-        return (in_edge_at(m_vertex, in_edge_index, *m_graph));
-    }
-
-private:
-    vertex_descriptor m_vertex;
-    const Graph* m_graph;
-};
-
-// edge_at
-template <typename Graph>
-struct magnetic_graph_edge_at {
-
-    typedef typename boost::graph_traits<Graph>::edge_descriptor result_type;
-
-    magnetic_graph_edge_at () :
-        m_graph(0)
-    { }
-
-    magnetic_graph_edge_at (const Graph* graph) :
-        m_graph(graph)
-    { }
-
-    result_type operator()
-    (typename boost::graph_traits<Graph>::edges_size_type edge_index) const {
-        return (edge_at(edge_index, *m_graph));
-    }
-
-private:
-    const Graph* m_graph;
-};
-
-// adjacent_vertex_at
-template <typename Graph>
-struct magnetic_graph_adjacent_vertex_at {
-
-public:
-    typedef typename boost::graph_traits<Graph>::vertex_descriptor result_type;
-
-    magnetic_graph_adjacent_vertex_at
-    (result_type source_vertex, const Graph* graph) :
-        m_vertex(source_vertex), m_graph(graph)
-    { }
-
-    result_type operator()
-    (typename boost::graph_traits<Graph>::degree_size_type adjacent_index) const {
-        return (target(out_edge_at(m_vertex, adjacent_index, *m_graph), *m_graph));
-    }
-
-private:
-    result_type m_vertex;
-    const Graph* m_graph;
-};
-
-
-class KisMagneticGraph{
-public:
-    typedef KisMagneticGraph type;
-
-
-    typedef long VertexIndex;
-    typedef long EdgeIndex;
-
-    typedef VertexIndex vertices_size_type;
-    typedef EdgeIndex edges_size_type;
-    typedef EdgeIndex degree_size_type;
-
-    struct VertexDescriptor : public boost::equality_comparable<VertexDescriptor>{
-        vertices_size_type x,y;
-
-        VertexDescriptor(vertices_size_type _x, vertices_size_type _y):
-            x(_x),y(_y)
-        { }
-
-        VertexDescriptor():
-            x(0),y(0)
-        { }
-
-        bool operator ==(const VertexDescriptor &rhs) const {
-            return rhs.x == x && rhs.y == y;
-        }
-    };
-
-    typedef VertexDescriptor vertex_descriptor;
-    typedef std::pair<vertex_descriptor, vertex_descriptor> edge_descriptor;
-
-    friend QDebug operator<<(QDebug dbg, const KisMagneticGraph::edge_descriptor &e);
-    friend QDebug operator<<(QDebug dbg, const KisMagneticGraph::vertex_descriptor &v);
-
-    typedef boost::directed_tag directed_category;
-    typedef boost::disallow_parallel_edge_tag edge_parallel_category;
-    struct traversal_category : virtual public boost::incidence_graph_tag,
-                                virtual public boost::vertex_list_graph_tag
-    { };
+struct KisMagneticGraph{
 
     KisMagneticGraph() { }
+    KisMagneticGraph(long _outDegree, QRect graphRect):
+        outDegree(_outDegree), topLeft(graphRect.topLeft()), bottomRight(graphRect.bottomRight())
+    { }
+
+    typedef VertexDescriptor                                vertex_descriptor;
+    typedef std::pair<vertex_descriptor, vertex_descriptor> edge_descriptor;
+    typedef boost::undirected_tag                           directed_category;
+    typedef boost::disallow_parallel_edge_tag               edge_parallel_category;
+    typedef boost::incidence_graph_tag                      traversal_category;
+    typedef neighbour_iterator                              out_edge_iterator;
+    typedef long                                            degree_size_type;
+
+    degree_size_type outDegree;
+    QPoint topLeft, bottomRight;
 };
 
-QDebug operator<<(QDebug dbg, const KisMagneticGraph::vertex_descriptor &v) {
+struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
+                               std::pair<VertexDescriptor, VertexDescriptor>,
+                                                boost::forward_traversal_tag,
+                               std::pair<VertexDescriptor, VertexDescriptor>>
+{
+    neighbour_iterator(VertexDescriptor v, KisMagneticGraph g):
+        currentPoint(v), graph(g)
+    {
+        nextPoint = VertexDescriptor(g.topLeft.x(), g.topLeft.y());
+        if(nextPoint == currentPoint){
+            operator++();
+        }
+    }
 
-    dbg.nospace() << "(" << v.x << ", " << v.y << ")";
-    return dbg.space();
+    std::pair<VertexDescriptor, VertexDescriptor>
+    operator*() const {
+        std::pair const result = std::make_pair(currentPoint,nextPoint);
+        return result;
+    }
+
+    void operator++() {
+        if(nextPoint == graph.bottomRight)
+            return; // we are done, no more points
+
+        if(nextPoint.x == graph.bottomRight.x()) // end of a row move to next column
+            nextPoint = VertexDescriptor(graph.topLeft.x(), nextPoint.y++);
+        else
+            nextPoint.x++;
+    }
+
+    bool operator==(neighbour_iterator const& that) const {
+        return point == that.point;
+    }
+
+    bool equal(neighbour_iterator const& that) const {
+        return operator==(that);
+    }
+
+    void increment() {
+        operator++();
+    }
+
+private:
+    KisMagneticGraph graph;
+    VertexDescriptor currentPoint, nextPoint;
+};
+
+namespace boost{
+template<>
+struct graph_traits<KisMagneticGraph> {
+    typedef KisMagneticGraph type;
+    typedef typename type::vertex_descriptor      vertex_descriptor;
+    typedef typename type::edge_descriptor        edge_descriptor;
+    typedef typename type::out_edge_iterator      out_edge_iterator;
+    typedef typename type::directed_category      directed_category;
+    typedef typename type::edge_parallel_category edge_parallel_category;
+    typedef typename type::traversal_category     traversal_category;
+    typedef typename type::degree_size_type       degree_size_type;
+
+    typedef void in_edge_iterator;
+    typedef void vertex_iterator;
+    typedef void vertices_size_type;
+    typedef void edge_iterator;
+    typedef void edges_size_type;
+};
 }
 
-QDebug operator<<(QDebug dbg, const KisMagneticGraph::edge_descriptor &e) {
-    KisMagneticGraph::vertex_descriptor src = e.first;
-    KisMagneticGraph::vertex_descriptor dst = e.second;
+// Requirements for an Incidence Graph,
+// https://www.boost.org/doc/libs/1_70_0/libs/graph/doc/IncidenceGraph.html
 
-    dbg.nospace() << "(" << src << " -> " << dst << ")";
+typename KisMagneticGraph::vertex_descriptor
+source(typename KisMagneticGraph::edge_descriptor e, KisMagneticGraph g) {
+    return e.first;
+}
+
+typename KisMagneticGraph::vertex_descriptor
+target(typename KisMagneticGraph::edge_descriptor e, KisMagneticGraph g) {
+    return e.second;
+}
+
+std::pair<KisMagneticGraph::out_edge_iterator, KisMagneticGraph::out_edge_iterator>
+out_edges(typename KisMagneticGraph::vertex_descriptor v, KisMagneticGraph g) {
+    return std::make_pair(
+                KisMagneticGraph::out_edge_iterator(v),
+                KisMagneticGraph::out_edge_iterator(v)
+                );
+}
+
+typename KisMagneticGraph::degree_size_type
+out_degree(typename KisMagneticGraph::vertex_descriptor v, KisMagneticGraph g) {
+    return g.outDegree;
+}
+
+QDebug operator<<(QDebug dbg, const KisMagneticGraph::vertex_descriptor &v) {
+    dbg.nospace() << "(" << v.x << ", " << v.y << ")";
     return dbg.space();
 }
 

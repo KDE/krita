@@ -25,8 +25,6 @@
 #include <boost/unordered_map.hpp>
 #include "KisMagneticGraph.h"
 
-typedef KisMagneticGraph::VertexDescriptor VertexDescriptor;
-
 struct VertexHash : std::unary_function<VertexDescriptor, std::size_t> {
   std::size_t operator()(VertexDescriptor const& u) const {
     std::size_t seed = 0;

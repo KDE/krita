@@ -27,7 +27,7 @@
 #include "KisViewManager.h"
 #include "kactioncollection.h"
 #include "kis_tool_button.h"
-#include "kis_highlighted_button.h"
+#include "KisHighlightedToolButton.h"
 #include <KisColorSelectorInterface.h>
 
 class KisFavoriteResourceManager;

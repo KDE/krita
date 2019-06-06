@@ -64,13 +64,9 @@ private:
 private:
     void setFastConfig(int size);
 
-    KisAction *m_toggleGrid;
-    KisAction* m_toggleSnapToGrid;
-
-    QPointer<KisView> m_imageView;
-    KisGridDecoration* m_gridDecoration;
-
-    bool m_blockModifiedSignal;
+private:
+    struct Private;
+    QScopedPointer<Private> m_d;
 };
 
 #endif

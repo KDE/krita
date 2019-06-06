@@ -463,6 +463,8 @@ Q_SIGNALS:
 
     void sigMirrorAxisConfigChanged();
 
+    void sigGridConfigChanged(const KisGridConfig &config);
+
 private Q_SLOTS:
     void finishExportInBackground();
     void slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage);

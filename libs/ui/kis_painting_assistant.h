@@ -203,6 +203,11 @@ protected:
     QList<KisPaintingAssistantHandleSP> m_handles;
 
     QPointF pixelToView(const QPoint pixelCoords) const;
+public:
+    /// clones the list of assistants
+    /// the originally shared handles will still be shared
+    /// the cloned assistants do not share any handle with the original assistants
+    static QList<KisPaintingAssistantSP> cloneAssistantList(const QList<KisPaintingAssistantSP> &list);
 
 private:
     struct Private;

@@ -271,14 +271,13 @@ public:
         , nserver(new KisNameServer(*rhs.nserver))
         , preActivatedNode(0) // the node is from another hierarchy!
         , imageIdleWatcher(2000 /*ms*/)
-        , assistants(rhs.assistants) // WARNING: assistants should not store pointers to the document!
+        , assistants(KisPaintingAssistant::cloneAssistantList(rhs.assistants)) // WARNING: assistants should not store pointers to the document!
         , globalAssistantsColor(rhs.globalAssistantsColor)
         , paletteList(rhs.paletteList)
         , gridConfig(rhs.gridConfig)
         , savingLock(&savingMutex)
         , batchMode(rhs.batchMode)
     {
-        // TODO: clone assistants
     }
 
     ~Private() {
@@ -377,7 +376,6 @@ void KisDocument::Private::copyFrom(const Private &rhs, KisDocument *q)
     delete docInfo;
     docInfo = (new KoDocumentInfo(*rhs.docInfo, q));
     unit = rhs.unit;
-//        , importExportManager(new KisImportExportManager(q))
     mimeType = rhs.mimeType;
     outputMimeType = rhs.outputMimeType;
     // TODO: undo stacks may store pointers to the document and/or image
@@ -393,11 +391,11 @@ void KisDocument::Private::copyFrom(const Private &rhs, KisDocument *q)
     readwrite = rhs.readwrite;
     firstMod = rhs.firstMod;
     lastMod = rhs.lastMod;
-    // TODO clone assistants
-    assistants = (rhs.assistants); // WARNING: assistants should not store pointers to the document!
+    // XXX: the display properties will be shared between different snapshots
+    assistants = KisPaintingAssistant::cloneAssistantList(rhs.assistants);
     globalAssistantsColor = rhs.globalAssistantsColor;
     paletteList = rhs.paletteList;
-    gridConfig = rhs.gridConfig;
+    q->setGridConfig(rhs.gridConfig);
     batchMode = rhs.batchMode;
 }
 
@@ -1677,7 +1675,10 @@ KisGridConfig KisDocument::gridConfig() const
 
 void KisDocument::setGridConfig(const KisGridConfig &config)
 {
-    d->gridConfig = config;
+    if (d->gridConfig != config) {
+        d->gridConfig = config;
+        emit sigGridConfigChanged(config);
+    }
 }
 
 QList<KoColorSet *> &KisDocument::paletteList()

@@ -25,6 +25,8 @@
 #include <KoColorSpaceRegistry.h>
 #include "kis_paint_device.h"
 
+#include <sstream>
+
 //#define DEBUG_ENABLED
 #include "kis_filter_weights_applicator.h"
 
@@ -164,8 +166,9 @@ void KisFilterWeightsApplicatorTest::testSpan_Scale_0_5_Shift_0_125_Mirrored()
     testSpan(-0.5, 0.125, -2, 1, 0.125, 0.5);
 }
 
-void printPixels(KisPaintDeviceSP dev, int x0, int len, bool horizontal)
+void printPixels(KisPaintDeviceSP dev, int x0, int len, bool horizontal, bool dense = false)
 {
+    std::stringstream ss;
     for (int i = x0; i < x0 + len; i++) {
         QColor c;
 
@@ -173,12 +176,21 @@ void printPixels(KisPaintDeviceSP dev, int x0, int len, bool horizontal)
         int y = horizontal ? 0 : i;
 
         dev->pixel(x, y, &c);
-        dbgKrita << "px" << x << y << "|" << c.red() << c.green() << c.blue() << c.alpha();
+        if (dense){
+            ss << c.red() << " , " << c.alpha() << " | ";
+        } else {
+            dbgKrita << "px" << x << y << "|" << c.red() << c.green() << c.blue() << c.alpha();
+        }
+    }
+
+    if (dense) {
+        qDebug() << ss.str().c_str();
     }
 }
 
 void checkRA(KisPaintDeviceSP dev, int x0, int len, quint8 r[], quint8 a[], bool horizontal)
 {
+    bool failed = false;
     for (int i = 0; i < len; i++) {
         QColor c;
 
@@ -193,8 +205,12 @@ void checkRA(KisPaintDeviceSP dev, int x0, int len, quint8 r[], quint8 a[], bool
             dbgKrita << "Failed to compare RA channels:" << ppVar(x0 + i);
             dbgKrita << "Red:" << c.red() << "Expected:" << r[i];
             dbgKrita << "Alpha:" << c.alpha() << "Expected:" << a[i];
-            QFAIL("failed");
+            failed = true;
         }
+    }
+
+    if (failed) {
+        QFAIL("failed");
     }
 }
 
@@ -258,7 +274,7 @@ void testLineImpl(qreal scale, qreal dx, quint8 expR[], quint8 expA[], int x0, i
         QVERIFY(rc.top() + rc.height() <= dstPos.end());
     }
 
-    //printPixels(dev, x0, len, horizontal);
+    //printPixels(dev, x0, len, horizontal, true);
     checkRA(dev, x0, len, expR, expA, horizontal);
 }
 
@@ -533,6 +549,20 @@ void KisFilterWeightsApplicatorTest::testProcessLine_NearestNeighbourFilter_075x
     testLine(scale, dx, r, a, -1, 7, false, filter);
 }
 
+void KisFilterWeightsApplicatorTest::testProcessLine_NearestNeighbourFilter_051x()
+{
+
+    qreal scale = 0.51;
+    qreal dx = 0;
+
+    quint8 r[] = {  0, 10, 30, 0, 0,  0,  0};
+    quint8 a[] = {  0,255,255, 0, 0,  0,  0};
+
+    KisFilterStrategy* filter = new KisBoxFilterStrategy();
+    testLine(scale, dx, r, a, -1, 7, false, filter);
+}
+
+
 
 void KisFilterWeightsApplicatorTest::testProcessLine_NearestNeighbourFilter_15x()
 {
@@ -546,6 +576,97 @@ void KisFilterWeightsApplicatorTest::testProcessLine_NearestNeighbourFilter_15x(
     KisFilterStrategy* filter = new KisBoxFilterStrategy();
     testLine(scale, dx, r, a, -1, 7, false, filter);
 }
+
+
+void preparePixelData(quint8* r, quint8* a, int i)
+{
+    for (int j = 0; j < 7; j ++) {
+        r[j] = 0;
+        a[j] = 0;
+    }
+
+    if (i < 13) {
+        // nothing to do
+    } else if (i < 17) {
+        r[1] = 40;
+        a[1] = 255;
+    } else if (i < 25) {
+        r[1] = 30;
+        a[1] = 255;
+    } else if (i < 38) {
+        r[1] = 20;
+        a[1] = 255;
+    } else if (i < 50) {
+        r[1] = 20;
+        r[2] = 40;
+        a[1] = 255;
+        a[2] = 255;
+    } else if (i < 63) {
+        r[1] = 10;
+        r[2] = 30;
+        a[1] = 255;
+        a[2] = 255;
+    } else if (i < 75) {
+        r[1] = 10;
+        r[2] = 30;
+        r[3] = 40;
+
+        a[1] = 255;
+        a[2] = 255;
+        a[3] = 255;
+
+    } else if (i < 84) {
+        r[1] = 10;
+        r[2] = 20;
+        r[3] = 40;
+
+        a[1] = 255;
+        a[2] = 255;
+        a[3] = 255;
+
+    } else if (i < 88) {
+        r[1] = 10;
+        r[2] = 20;
+        r[3] = 30;
+
+        a[1] = 255;
+        a[2] = 255;
+        a[3] = 255;
+    } else {
+
+        r[1] = 10;
+        r[2] = 20;
+        r[3] = 30;
+        r[4] = 40;
+
+        a[1] = 255;
+        a[2] = 255;
+        a[3] = 255;
+        a[4] = 255;
+    }
+
+}
+
+
+void KisFilterWeightsApplicatorTest::testProcessLine_NearestNeighbourFilter_all()
+{
+
+    KisFilterStrategy* filter = new KisBoxFilterStrategy();
+
+    for (int i = 1; i < 100; i++) {
+
+        qreal scale = i/100.0;
+        qreal dx = 0;
+
+        quint8 r[7];
+        quint8 a[7];
+
+        preparePixelData(r, a, i);
+        testLine(scale, dx, r, a, -1, 7, false, filter);
+
+    }
+}
+
 
 
 

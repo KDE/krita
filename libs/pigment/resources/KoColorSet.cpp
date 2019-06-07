@@ -976,10 +976,10 @@ bool KoColorSet::Private::loadKpl()
 
         desiredColumnCount = e.attribute(KPL_PALETTE_COLUMN_COUNT_ATTR).toInt();
         if (desiredColumnCount > 4096) {
-            warnPigment << "Refusing to load KPL file with unreasonable number of columns (" << columns << "): " << colorSet->filename();
+            warnPigment << "Refusing to load KPL file with unreasonable number of columns (" << desiredColumnCount << "): " << colorSet->filename();
             return false;
         }
-        colorSet->setColumnCount();
+        colorSet->setColumnCount(desiredColumnCount);
 
         loadKplGroup(doc, e, colorSet->getGlobalGroup());
 

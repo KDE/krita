@@ -596,7 +596,7 @@ KoShape *KoSvgTextShapeFactory::createDefaultShape(KoDocumentResourceManager *do
     converter.convertFromSvg("<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</text>",
                              "<defs/>",
                              QRectF(0, 0, 200, 60),
-                             documentResources->shapeController()->pixelsPerInch());
+                             documentResources->documentResolution());
 
     debugFlake << converter.errors() << converter.warnings();
 
@@ -617,13 +617,11 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
         shapeRect = rect.toRectF();
     }
 
-    KoShapeController *controller = documentResources->shapeController();
-
     KoSvgTextShapeMarkupConverter converter(shape);
     converter.convertFromSvg(svgText,
                              defs,
                              shapeRect,
-                             controller ? controller->pixelsPerInch() : 72);
+                             documentResources->documentResolution());
 
     shape->setPosition(shapeRect.topLeft());
 

@@ -128,9 +128,6 @@ KoShapeController::KoShapeController(KoCanvasBase *canvas, KoShapeControllerBase
 {
     d->canvas = canvas;
     d->shapeController = shapeController;
-    if (shapeController) {
-        shapeController->resourceManager()->setShapeController(this);
-    }
 }
 
 KoShapeController::~KoShapeController()

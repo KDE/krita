@@ -799,6 +799,10 @@ bool KoColorSet::Private::loadGpl()
     if (lines[index].toLower().contains("columns")) {
         columnsText = lines[index].split(":")[1].trimmed();
         columns = columnsText.toInt();
+        if (columns > 4096) {
+            warnPigment << "Refusing to load GIMP Palette file with unreasonable number of columns (" << columns << "): " << colorSet->filename();
+            return false;
+        }
         global().setColumnCount(columns);
         index = 3;
     }
@@ -811,7 +815,7 @@ bool KoColorSet::Private::loadGpl()
             QStringList a = lines[i].replace('\t', ' ').split(' ', QString::SkipEmptyParts);
 
             if (a.count() < 3) {
-                break;
+                continue;
             }
 
             r = qBound(0, a[0].toInt(), 255);
@@ -961,13 +965,21 @@ bool KoColorSet::Private::loadKpl()
         QByteArray ba = store->read(store->size());
         store->close();
 
+        int desiredColumnCount;
+
         QDomDocument doc;
         doc.setContent(ba);
         QDomElement e = doc.documentElement();
         colorSet->setName(e.attribute(KPL_PALETTE_NAME_ATTR));
-        colorSet->setColumnCount(e.attribute(KPL_PALETTE_COLUMN_COUNT_ATTR).toInt());
         colorSet->setIsEditable(e.attribute(KPL_PALETTE_READONLY_ATTR) != "true");
         comment = e.attribute(KPL_PALETTE_COMMENT_ATTR);
+
+        desiredColumnCount = e.attribute(KPL_PALETTE_COLUMN_COUNT_ATTR).toInt();
+        if (desiredColumnCount > 4096) {
+            warnPigment << "Refusing to load KPL file with unreasonable number of columns (" << columns << "): " << colorSet->filename();
+            return false;
+        }
+        colorSet->setColumnCount();
 
         loadKplGroup(doc, e, colorSet->getGlobalGroup());
 

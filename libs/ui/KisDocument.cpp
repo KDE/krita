@@ -489,6 +489,9 @@ KisDocument::KisDocument(const KisDocument &rhs)
         d->preActivatedNode =
             KisLayerUtils::findNodeByUuid(d->image->root(), rhs.d->preActivatedNode->uuid());
     }
+    KisNodeSP foundNode = KisLayerUtils::recursiveFindNode(image()->rootLayer(), [](KisNodeSP node) -> bool { return dynamic_cast<KisReferenceImagesLayer *>(node.data()); });
+    KisReferenceImagesLayer *refLayer = dynamic_cast<KisReferenceImagesLayer *>(foundNode.data());
+    setReferenceImagesLayer(refLayer, /* updateImage = */ false);
 }
 
 KisDocument::~KisDocument()
@@ -823,6 +826,9 @@ void KisDocument::copyFromDocument(const KisDocument &rhs)
                                                }
                                            });
     }
+    KisNodeSP foundNode = KisLayerUtils::recursiveFindNode(image()->rootLayer(), [](KisNodeSP node) -> bool { return dynamic_cast<KisReferenceImagesLayer *>(node.data()); });
+    KisReferenceImagesLayer *refLayer = dynamic_cast<KisReferenceImagesLayer *>(foundNode.data());
+    setReferenceImagesLayer(refLayer, /* updateImage = */ false);
 }
 
 bool KisDocument::exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration)
@@ -1957,6 +1963,10 @@ KisSharedPtr<KisReferenceImagesLayer> KisDocument::referenceImagesLayer() const
 
 void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateImage)
 {
+    if (d->referenceImagesLayer == layer) {
+        return;
+    }
+
     if (d->referenceImagesLayer) {
         d->referenceImagesLayer->disconnect(this);
     }
@@ -1975,6 +1985,7 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
         connect(d->referenceImagesLayer, SIGNAL(sigUpdateCanvas(QRectF)),
                 this, SIGNAL(sigReferenceImagesChanged()));
     }
+    emit sigReferenceImagesLayerChanged(layer);
 }
 
 void KisDocument::setPreActivatedNode(KisNodeSP activatedNode)

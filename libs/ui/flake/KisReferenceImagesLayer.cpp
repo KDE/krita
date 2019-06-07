@@ -122,7 +122,10 @@ public:
 
     void rerenderAfterBeingInvisible() override {}
     void resetCache() override {}
-    void setImage(KisImageWSP /*image*/) override {}
+    void setImage(KisImageWSP image) override
+    {
+        m_viewConverter->setImage(image);
+    }
 
 private:
     KisReferenceImagesLayer *m_layer;

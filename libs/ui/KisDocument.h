@@ -465,6 +465,8 @@ Q_SIGNALS:
 
     void sigGridConfigChanged(const KisGridConfig &config);
 
+    void sigReferenceImagesLayerChanged(KisSharedPtr<KisReferenceImagesLayer> layer);
+
 private Q_SLOTS:
     void finishExportInBackground();
     void slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage);

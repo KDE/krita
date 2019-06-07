@@ -2,7 +2,7 @@
 Categories=Qt;KDE;Office;Graphics;
 Exec=krita %F
 GenericName=Application for Drawing and Handling of Images
-GenericName[ar]=تطبيق لرسم الصور والتعامل معها
+GenericName[ar]=تطبيق لرسم الصّور والتّعامل معها
 GenericName[bg]=Приложение за рисуване и обработка на изображения
 GenericName[bs]=Aplikacija za crtanje i upravljanje slikom
 GenericName[ca]=Aplicació per a dibuix i modificació d'imatges

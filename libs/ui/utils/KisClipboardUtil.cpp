@@ -39,10 +39,7 @@ QImage getImageFromClipboard()
 
     QClipboard *clipboard = QApplication::clipboard();
 
-    QImage image = clipboard->image();
-    if (!image.isNull()) {
-        return image;
-    }
+    QImage image;
 
     const QSet<QString> &clipboardFormats = clipboard->mimeData()->formats().toSet();
 
@@ -61,6 +58,10 @@ QImage getImageFromClipboard()
         if (image.loadFromData(imageData, supportedFormat.second.toLatin1())) {
             break;
         }
+    }
+
+    if (image.isNull()) {
+        image = clipboard->image();
     }
 
     return image;

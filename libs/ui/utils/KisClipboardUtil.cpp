@@ -28,9 +28,15 @@
 
 namespace KisClipboardUtil {
 
+struct ClipboardImageFormat
+{
+    QSet<QString> mimeTypes;
+    QString format;
+};
+
 QImage getImageFromClipboard()
 {
-    static const QList<QPair<QSet<QString>, QString>> supportedFormats = {
+    static const QList<ClipboardImageFormat> supportedFormats = {
             {{"image/png"}, "PNG"},
             {{"image/tiff"}, "TIFF"},
             {{"image/bmp", "image/x-bmp", "image/x-MS-bmp", "image/x-win-bitmap"}, "BMP"},
@@ -41,21 +47,21 @@ QImage getImageFromClipboard()
 
     QImage image;
 
-    const QSet<QString> &clipboardFormats = clipboard->mimeData()->formats().toSet();
+    const QSet<QString> &clipboardMimeTypes = clipboard->mimeData()->formats().toSet();
 
-    Q_FOREACH (const auto &supportedFormat, supportedFormats) {
-        const auto& intersection = supportedFormat.first & clipboardFormats;
+    Q_FOREACH (const ClipboardImageFormat &item, supportedFormats) {
+        const QSet<QString> &intersection = item.mimeTypes & clipboardMimeTypes;
         if (intersection.isEmpty()) {
             continue;
         }
-        const QString& format = *intersection.constBegin();
 
+        const QString &format = *intersection.constBegin();
         const QByteArray &imageData = clipboard->mimeData()->data(format);
         if (imageData.isEmpty()) {
             continue;
         }
 
-        if (image.loadFromData(imageData, supportedFormat.second.toLatin1())) {
+        if (image.loadFromData(imageData, item.format.toLatin1())) {
             break;
         }
     }

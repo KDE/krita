@@ -745,7 +745,8 @@ int KisAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) 
     }
 
     //Final value
-    qreal realvalue = ((dValues * pow(percent, d->exponentRatio)) + minDbl);
+    qreal exp_percent = pow(percent, d->exponentRatio);
+    qreal realvalue = ((dValues * (percent * exp_percent >= 0 ? exp_percent : -exp_percent)) + minDbl);
     //If key CTRL is pressed, round to the closest step.
     if( modifiers & Qt::ControlModifier ) {
         qreal fstep = d->fastSliderStep;

@@ -141,6 +141,9 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_pasteAt = actionManager->createAction("paste_at");
     connect(m_pasteAt, SIGNAL(triggered()), this, SLOT(pasteAt()));
 
+    m_pasteAsReference = actionManager->createAction("paste_as_reference");
+    connect(m_pasteAsReference, SIGNAL(triggered()), this, SLOT(pasteAsReference()));
+
     m_copyMerged = actionManager->createAction("copy_merged");
     connect(m_copyMerged, SIGNAL(triggered()), this, SLOT(copyMerged()));
 
@@ -327,6 +330,7 @@ void KisSelectionManager::updateGUI()
     m_pasteAt->setEnabled(havePixelsInClipboard || haveShapesInClipboard);
     // FIXME: how about pasting shapes?
     m_pasteNew->setEnabled(havePixelsInClipboard);
+    m_pasteAsReference->setEnabled(haveDevice);
 
     m_selectAll->setEnabled(true);
     m_deselect->setEnabled(canDeselect);
@@ -392,6 +396,12 @@ void KisSelectionManager::pasteAt()
 {
     KisPasteActionFactory factory;
     factory.run(true, m_view);
+}
+
+void KisSelectionManager::pasteAsReference()
+{
+    KisPasteReferenceActionFactory factory;
+    factory.run(m_view);
 }
 
 void KisSelectionManager::pasteNew()

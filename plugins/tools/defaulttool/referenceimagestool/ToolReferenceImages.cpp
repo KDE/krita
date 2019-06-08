@@ -114,7 +114,7 @@ void ToolReferenceImages::pasteReferenceImage()
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas)
 
-    KisReferenceImage* reference = KisReferenceImage::fromClipboard(*kisCanvas->coordinatesConverter(), canvas()->canvasWidget());
+    KisReferenceImage* reference = KisReferenceImage::fromClipboard(*kisCanvas->coordinatesConverter());
     if(reference) {
         KisDocument *doc = document();
         doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));

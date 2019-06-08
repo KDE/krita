@@ -276,8 +276,11 @@ KisImage *KisImage::clone(bool exactCopy)
 
 void KisImage::copyFromImage(const KisImage &rhs)
 {
-    m_d->width = rhs.width();
-    m_d->height = rhs.height();
+    if (m_d->width != rhs.width() || m_d->height != rhs.height()) {
+        m_d->width = rhs.width();
+        m_d->height = rhs.height();
+        emit sigSizeChanged(QPointF(), QPointF());
+    }
     if (m_d->colorSpace != rhs.colorSpace()) {
         m_d->colorSpace = rhs.colorSpace();
         emit sigColorSpaceChanged(m_d->colorSpace);

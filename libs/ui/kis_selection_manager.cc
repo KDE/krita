@@ -85,7 +85,7 @@
 #include "dialogs/kis_dlg_stroke_selection_properties.h"
 
 #include "actions/kis_selection_action_factories.h"
-#include "actions/KisPasteActionFactory.h"
+#include "actions/KisPasteActionFactories.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "operations/kis_operation_configuration.h"

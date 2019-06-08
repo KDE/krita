@@ -26,7 +26,6 @@
 #include <KisMainWindow.h>
 #include <KisDocument.h>
 #include <KisPart.h>
-#include <KisReferenceImagesLayer.h>
 #include <KoPathShape.h>
 #include <KoShapeController.h>
 #include <KoShapeRegistry.h>
@@ -389,51 +388,6 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
 
     KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Copy Merged"));
     endAction(ap, KisOperationConfiguration(id()).toXML());
-}
-
-void KisPasteReferenceActionFactory::run(KisViewManager *viewManager)
-{
-    KisCanvas2 *canvasBase = viewManager->canvasBase();
-    if (!canvasBase) return;
-
-    KisReferenceImage* reference = KisReferenceImage::fromClipboard(*canvasBase->coordinatesConverter());
-    if (!reference) return;
-
-    KisDocument *doc = viewManager->document();
-    doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
-
-    KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
-}
-
-void KisPasteNewActionFactory::run(KisViewManager *viewManager)
-{
-    Q_UNUSED(viewManager);
-
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
-    if (!clip) return;
-
-    QRect rect = clip->exactBounds();
-    if (rect.isEmpty()) return;
-
-    KisDocument *doc = KisPart::instance()->createDocument();
-    doc->documentInfo()->setAboutInfo("title", i18n("Untitled"));
-    KisImageSP image = new KisImage(doc->createUndoStore(),
-                                    rect.width(),
-                                    rect.height(),
-                                    clip->colorSpace(),
-                                    i18n("Pasted"));
-    KisPaintLayerSP layer =
-        new KisPaintLayer(image.data(), image->nextLayerName() + " " + i18n("(pasted)"),
-                          OPACITY_OPAQUE_U8, clip->colorSpace());
-
-    KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), rect);
-
-    image->addNode(layer.data(), image->rootLayer());
-    doc->setCurrentImage(image);
-    KisPart::instance()->addDocument(doc);
-
-    KisMainWindow *win = viewManager->mainWindow();
-    win->addViewAndNotifyLoadingCompleted(doc);
 }
 
 void KisInvertSelectionOperation::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)

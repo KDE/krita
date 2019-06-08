@@ -21,7 +21,7 @@
 
 #include <QGlobalStatic>
 #include "actions/kis_selection_action_factories.h"
-#include "actions/KisPasteActionFactory.h"
+#include "actions/KisPasteActionFactories.h"
 
 Q_GLOBAL_STATIC(KisOperationRegistry, s_instance)
 

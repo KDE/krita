@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISPASTEACTIONFACTORY_H
-#define KISPASTEACTIONFACTORY_H
+#ifndef __KIS_NOPARAMETERACTIONFACTORY_H
+#define __KIS_NOPARAMETERACTIONFACTORY_H
 
 #include "operations/kis_operation.h"
-#include "operations/kis_operation_configuration.h"
 
-struct KRITAUI_EXPORT KisPasteActionFactory : public KisOperation {
-    KisPasteActionFactory() : KisOperation("paste-ui-action") {}
-
+class KRITAUI_EXPORT KisNoParameterActionFactory : public KisOperation
+{
+public:
+    KisNoParameterActionFactory(const QString &id) : KisOperation(id) {}
     void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override {
-        run(config.getBool("paste-at-cursor-position", false), view);
+        Q_UNUSED(config);
+        run(view);
     }
-
-    void run(bool pasteAtCursorPosition, KisViewManager *view);
+    virtual void run(KisViewManager *view) = 0;
 };
 
-#endif // KISPASTEACTIONFACTORY_H
+#endif //__KIS_NOPARAMETERACTIONFACTORY_H

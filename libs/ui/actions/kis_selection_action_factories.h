@@ -19,21 +19,12 @@
 #ifndef __KIS_SELECTION_ACTION_FACTORIES_H
 #define __KIS_SELECTION_ACTION_FACTORIES_H
 
+#include "KisNoParameterActionFactory.h"
 #include "operations/kis_operation.h"
 #include "operations/kis_operation_configuration.h"
 #include "operations/kis_filter_selection_operation.h"
 #include "dialogs/kis_dlg_stroke_selection_properties.h"
 
-class KRITAUI_EXPORT KisNoParameterActionFactory : public KisOperation
-{
-public:
-    KisNoParameterActionFactory(const QString &id) : KisOperation(id) {}
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override {
-        Q_UNUSED(config);
-        run(view);
-    }
-    virtual void run(KisViewManager *view) = 0;
-};
 
 struct KRITAUI_EXPORT KisSelectAllActionFactory : public KisNoParameterActionFactory {
     KisSelectAllActionFactory() : KisNoParameterActionFactory("select-all-ui-action") {}
@@ -86,16 +77,6 @@ struct KRITAUI_EXPORT KisCutCopyActionFactory : public KisOperation {
 
 struct KRITAUI_EXPORT KisCopyMergedActionFactory : public KisNoParameterActionFactory {
     KisCopyMergedActionFactory() : KisNoParameterActionFactory("copy-merged-ui-action") {}
-    void run(KisViewManager *view) override;
-};
-
-struct KRITAUI_EXPORT KisPasteReferenceActionFactory : public KisNoParameterActionFactory {
-    KisPasteReferenceActionFactory() : KisNoParameterActionFactory("paste-reference-ui-action") {}
-    void run(KisViewManager *view) override;
-};
-
-struct KRITAUI_EXPORT KisPasteNewActionFactory : public KisNoParameterActionFactory {
-    KisPasteNewActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
     void run(KisViewManager *view) override;
 };
 

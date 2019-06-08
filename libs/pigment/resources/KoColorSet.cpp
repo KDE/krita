@@ -1642,8 +1642,11 @@ void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElemen
         }
     }
 
-    if (parentEle.attribute(KPL_GROUP_ROW_COUNT_ATTR).isNull() && group->colorCount() > 0 && group->columnCount() > 0 && (group->colorCount() / (group->columnCount() +1)) < 20) {
-        group->setRowCount(group->colorCount() / group->columnCount() + 1);
+    if (parentEle.attribute(KPL_GROUP_ROW_COUNT_ATTR).isNull()
+            && group->colorCount() > 0
+            && group->columnCount() > 0
+            && (group->colorCount() / (group->columnCount()) + 1) < 20) {
+        group->setRowCount((group->colorCount() / group->columnCount()) + 1);
     }
 
 }

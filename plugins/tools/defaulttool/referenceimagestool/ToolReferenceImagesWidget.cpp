@@ -82,14 +82,12 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->bnSave->setToolTip(i18n("Export Reference Images Set"));
     d->ui->bnSave->setIcon(KisIconUtils::loadIcon("document-save"));
 
-    slotCheckClipboardContents();
     d->ui->bnPasteReferenceImage->setToolTip(i18n("Paste Reference Image From System Clipboard"));
     d->ui->bnPasteReferenceImage->setIcon(KisIconUtils::loadIcon("edit-paste"));
 
 
     connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), tool, SLOT(addReferenceImage()));
     connect(d->ui->bnPasteReferenceImage, SIGNAL(clicked()), tool, SLOT(pasteReferenceImage()));
-    connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(slotCheckClipboardContents()));
 
     connect(d->ui->bnDelete, SIGNAL(clicked()), tool, SLOT(removeAllReferenceImages()));
     connect(d->ui->bnSave, SIGNAL(clicked()), tool, SLOT(saveReferenceImages()));
@@ -154,10 +152,6 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
 
 
     updateVisibility(anySelected);
-}
-
-void ToolReferenceImagesWidget::slotCheckClipboardContents() {
-    d->ui->bnPasteReferenceImage->setEnabled(!QApplication::clipboard()->image().isNull());
 }
 
 void ToolReferenceImagesWidget::slotKeepAspectChanged()

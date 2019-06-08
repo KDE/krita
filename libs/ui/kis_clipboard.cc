@@ -46,6 +46,7 @@
 #include <kis_node.h>
 #include <kis_image.h>
 #include <kis_time_range.h>
+#include <utils/KisClipboardUtil.h>
 
 // local
 #include "kis_config.h"
@@ -276,71 +277,7 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
 
     if (!clip) {
 
-        QStringList formats = cb->mimeData()->formats();
-
-        QMap<int, QImage> qimages;
-
-        Q_FOREACH(const QString format, formats) {
-//            qDebug() << "Format" << format;
-            QImage image;
-            if (format.startsWith("image")) {
-                int priority = -1;
-
-                QByteArray ba = cb->mimeData()->data(format);
-
-//                qDebug() << "data" << ba.size() << "mime" << KisMimeDatabase::mimeTypeForData(ba);
-
-                if (ba.isEmpty()) {
-                    continue;
-                }
-
-                QString qimageioFormat;
-
-                if (format == "image/png") {
-                    qimageioFormat = "PNG";
-                    priority = 0;
-                }
-                else if (format == "image/tiff") {
-                    qimageioFormat = "TIFF";
-                    priority = 1;
-                }
-                else if (format == "image/bmp"
-                         || format == "image/x-bmp"
-                         || format == "image/x-MS-bmp"
-                         || format == "image/x-win-bitmap") {
-
-                    qimageioFormat = "BMP";
-                    priority = 2;
-                }
-                else if (format == "image/jpeg") {
-                    qimageioFormat = "JPG";
-                    priority = 3;
-                }
-
-                if (!qimageioFormat.isEmpty()) {
-                    image.loadFromData(ba, qimageioFormat.toLatin1());
-                }
-
-                if (!image.isNull()) {
-//                    qDebug() << "Loaded image succesfully" << image.format() << image.hasAlphaChannel();
-                    qimages[priority] = image;
-                }
-//                else {
-//                    qDebug() << "Could not load image of type" << format;
-//                }
-            }
-        }
-
-        QImage qimage = cb->image();
-
-        for(int i = 0; i < 4; i++) {
-            if (qimages.contains(i)) {
-                qimage = qimages[i];
-                break;
-            }
-        }
-
-//        qDebug() << "Final QImage" << qimage.format() << qimage.hasAlphaChannel();
+        QImage qimage = KisClipboardUtil::getImageFromClipboard();
 
         if (qimage.isNull()) {
             return KisPaintDeviceSP(0);

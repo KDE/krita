@@ -45,7 +45,6 @@ private Q_SLOTS:
     void slotSaturationSliderChanged(qreal);
     void slotKeepAspectChanged();
     void slotSaveLocationChanged(int index);
-    void slotCheckClipboardContents();
 
 private:
     struct Private;

@@ -89,6 +89,11 @@ struct KRITAUI_EXPORT KisCopyMergedActionFactory : public KisNoParameterActionFa
     void run(KisViewManager *view) override;
 };
 
+struct KRITAUI_EXPORT KisPasteReferenceActionFactory : public KisNoParameterActionFactory {
+    KisPasteReferenceActionFactory() : KisNoParameterActionFactory("paste-reference-ui-action") {}
+    void run(KisViewManager *view) override;
+};
+
 struct KRITAUI_EXPORT KisPasteNewActionFactory : public KisNoParameterActionFactory {
     KisPasteNewActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
     void run(KisViewManager *view) override;

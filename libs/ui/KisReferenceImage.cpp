@@ -35,6 +35,7 @@
 #include <SvgUtil.h>
 #include <libs/flake/svg/parsers/SvgTransformParser.h>
 #include <libs/brush/kis_qimage_pyramid.h>
+#include <utils/KisClipboardUtil.h>
 
 struct KisReferenceImage::Private {
     // Filename within .kra (for embedding)
@@ -57,7 +58,7 @@ struct KisReferenceImage::Private {
     }
 
     bool loadFromClipboard() {
-        image = QApplication::clipboard()->image();
+        image = KisClipboardUtil::getImageFromClipboard();
         return !image.isNull();
     }
 
@@ -151,23 +152,18 @@ KisReferenceImage * KisReferenceImage::fromFile(const QString &filename, const K
     return reference;
 }
 
-KisReferenceImage* KisReferenceImage::fromClipboard(const KisCoordinatesConverter &converter, QWidget *parent)
+KisReferenceImage *KisReferenceImage::fromClipboard(const KisCoordinatesConverter &converter)
 {
     KisReferenceImage *reference = new KisReferenceImage();
     bool ok = reference->d->loadFromClipboard();
 
-    if(ok){
+    if (ok) {
         QRect r = QRect(QPoint(), reference->d->image.size());
         QSizeF size = converter.imageToDocument(r).size();
         reference->setSize(size);
     } else {
         delete reference;
-
-        if(parent){
-            QMessageBox::critical(parent, i18nc("@title:window", "Krita"), i18n("Could not load image from clipboard."));
-        }
-
-        return nullptr;
+        reference = nullptr;
     }
 
     return reference;

@@ -27,6 +27,7 @@
 #include <KisDocument.h>
 #include <KisView.h>
 #include <KisViewManager.h>
+#include <kis_node_manager.h>
 
 struct KisSnapshotModel::Private
 {
@@ -67,6 +68,7 @@ bool KisSnapshotModel::Private::switchToDocument(QPointer<KisDocument> doc)
         KisDocument *curDoc = curDocument();
         if (curDoc && doc) {
             curDoc->copyFromDocument(*doc);
+            view->viewManager()->nodeManager()->slotNonUiActivatedNode(curDoc->preActivatedNode());
         }
         // FIXME: more things need to be done
         return true;

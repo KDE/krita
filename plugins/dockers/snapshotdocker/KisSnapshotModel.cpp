@@ -163,7 +163,7 @@ void KisSnapshotModel::setCanvas(QPointer<KisCanvas2> canvas)
 
 bool KisSnapshotModel::slotCreateSnapshot()
 {
-    QPointer<KisDocument> clonedDoc(m_d->curDocument()->lockAndCloneForSaving());
+    QPointer<KisDocument> clonedDoc(m_d->curDocument()->lockAndCreateSnapshot());
     if (clonedDoc) {
         beginInsertRows(QModelIndex(), m_d->curDocList.size(), m_d->curDocList.size());
         m_d->curDocList << qMakePair(i18n("Snapshot"), clonedDoc);

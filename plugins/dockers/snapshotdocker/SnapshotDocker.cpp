@@ -63,8 +63,6 @@ SnapshotDocker::SnapshotDocker()
 {
     QWidget *widget = new QWidget(this);
     QVBoxLayout *mainLayout = new QVBoxLayout(widget);
-    //connect(m_d->view, &QListView::activated, m_d->model.data(), &KisSnapshotModel::slotSwitchToActivatedSnapshot);
-    connect(m_d->view, &KisSnapshotView::doubleClicked, m_d->view, QOverload<const QModelIndex &>::of(&KisSnapshotView::edit));
     m_d->view->setModel(m_d->model.data());
     mainLayout->addWidget(m_d->view);
 

@@ -83,6 +83,7 @@ private Q_SLOTS:
     void loadFromWorkspace(KisWorkspaceResource* workspace);
 
     void slotFGColorResourceChanged(const KoColor& color);
+    void slotUpdatePaletteList(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList);
 
 private:
     void setEntryByForeground(const QModelIndex &index);

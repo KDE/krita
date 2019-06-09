@@ -338,6 +338,7 @@ public:
     KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
 
     QList<KoColorSet*> paletteList;
+    bool ownsPaletteList = false;
 
     KisGridConfig gridConfig;
 
@@ -394,7 +395,13 @@ void KisDocument::Private::copyFrom(const Private &rhs, KisDocument *q)
     // XXX: the display properties will be shared between different snapshots
     assistants = KisPaintingAssistant::cloneAssistantList(rhs.assistants);
     globalAssistantsColor = rhs.globalAssistantsColor;
-    paletteList = rhs.paletteList;
+
+    QList<KoColorSet *> newPaletteList;
+    Q_FOREACH (KoColorSet *palette, rhs.paletteList) {
+        newPaletteList << new KoColorSet(*palette);
+    }
+    q->setPaletteList(newPaletteList, /* emitSignal = */ true);
+
     q->setGridConfig(rhs.gridConfig);
     batchMode = rhs.batchMode;
 }
@@ -545,6 +552,10 @@ KisDocument::~KisDocument()
 
         // check if the image has actually been deleted
         KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
+    }
+
+    if (d->ownsPaletteList) {
+        qDeleteAll(d->paletteList);
     }
 
     delete d;
@@ -793,6 +804,19 @@ KisDocument* KisDocument::lockAndCloneForSaving()
     }
 
     return new KisDocument(*this);
+}
+
+KisDocument *KisDocument::lockAndCreateSnapshot()
+{
+    KisDocument *doc = lockAndCloneForSaving();
+    if (doc) {
+        // clone palette list
+        for (KoColorSet *&cs : doc->d->paletteList) {
+            cs = new KoColorSet(*cs);
+        }
+        doc->d->ownsPaletteList = true;
+    }
+    return doc;
 }
 
 void KisDocument::copyFromDocument(const KisDocument &rhs)
@@ -1692,9 +1716,15 @@ QList<KoColorSet *> &KisDocument::paletteList()
     return d->paletteList;
 }
 
-void KisDocument::setPaletteList(const QList<KoColorSet *> &paletteList)
+void KisDocument::setPaletteList(const QList<KoColorSet *> &paletteList, bool emitSignal)
 {
-    d->paletteList = paletteList;
+    if (d->paletteList != paletteList) {
+        QList<KoColorSet *> oldPaletteList = d->paletteList;
+        d->paletteList = paletteList;
+        if (emitSignal) {
+            emit sigPaletteListChanged(oldPaletteList, paletteList);
+        }
+    }
 }
 
 const KisGuidesConfig& KisDocument::guidesConfig() const

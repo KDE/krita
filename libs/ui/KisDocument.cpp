@@ -822,7 +822,8 @@ KisDocument *KisDocument::lockAndCreateSnapshot()
 void KisDocument::copyFromDocument(const KisDocument &rhs)
 {
     d->copyFrom(*(rhs.d), this);
-    connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(slotUndoStackCleanChanged(bool)));
+
+    d->undoStack->clear();
     setObjectName(rhs.objectName());
 
     slotConfigChanged();
@@ -853,6 +854,8 @@ void KisDocument::copyFromDocument(const KisDocument &rhs)
     KisNodeSP foundNode = KisLayerUtils::recursiveFindNode(image()->rootLayer(), [](KisNodeSP node) -> bool { return dynamic_cast<KisReferenceImagesLayer *>(node.data()); });
     KisReferenceImagesLayer *refLayer = dynamic_cast<KisReferenceImagesLayer *>(foundNode.data());
     setReferenceImagesLayer(refLayer, /* updateImage = */ false);
+
+    setModified(true);
 }
 
 bool KisDocument::exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration)

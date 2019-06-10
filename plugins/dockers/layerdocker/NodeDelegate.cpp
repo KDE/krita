@@ -52,7 +52,7 @@ typedef KisBaseNode::Property* OptionalProperty;
 class NodeDelegate::Private
 {
 public:
-    Private() : view(0), edit(0) { }
+    Private() : view(0), edit(0), viewInStasis(false) { }
 
     NodeView *view;
     QPointer<QWidget> edit;
@@ -60,6 +60,8 @@ public:
 
     QColor checkersColor1;
     QColor checkersColor2;
+
+    bool viewInStasis;
 
     QList<OptionalProperty> rightmostProperties(const KisBaseNode::PropertyList &props) const;
     int numProperties(const QModelIndex &index) const;
@@ -86,6 +88,7 @@ NodeDelegate::NodeDelegate(NodeView *view, QObject *parent)
 
     QApplication::instance()->installEventFilter(this);
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    connect(this, SIGNAL(resetVisibilityStasis()), SLOT(slotResetState()));
     slotConfigChanged();
 }
 
@@ -495,16 +498,12 @@ void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, Opt
     QModelIndex root(view->rootIndex());
 
     if ((modifier & Qt::ShiftModifier) == Qt::ShiftModifier && clickedProperty->canHaveStasis) {
-//        if(stasisIsDirty(root, clickedProperty)){ // clean inStasis if mixed!
-//            resetPropertyStateRecursive(root, clickedProperty);
-//        }
-        KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
-        OptionalProperty prop = findProperty(props, clickedProperty);
-
         bool mode = true;
-        bool record = !prop->isInStasis;
-        QList<QModelIndex> items;
 
+        OptionalProperty prop = findProperty(props, clickedProperty);
+        bool record = !prop->isInStasis;
+
+        QList<QModelIndex> items;
         if(modifier == (Qt::ControlModifier | Qt::ShiftModifier)) {
             mode = false; // inverted mode
             items.insert(0, index); // important!
@@ -762,7 +761,7 @@ void NodeDelegate::drawVisibilityIconHijack(QPainter *p, const QStyleOptionViewI
         p->setCompositionMode(QPainter::CompositionMode_HardLight);
         pixmapIcon = icon.pixmap(scm.visibilitySize(), QIcon::Active);
         QBitmap mask = pixmapIcon.mask();
-        pixmapIcon.fill((QColor(142,160,27,255)));
+        pixmapIcon.fill(d->view->palette().color(QPalette::Highlight));
         pixmapIcon.setMask(mask);
         p->drawPixmap(fitRect.x(), fitRect.center().y() - scm.visibilitySize() / 2, pixmapIcon);
         p->setCompositionMode(prevComposition);
@@ -1128,4 +1127,20 @@ void NodeDelegate::slotConfigChanged()
 void NodeDelegate::slotUpdateIcon()
 {
    KisLayerPropertiesIcons::instance()->updateIcons();
+}
+
+void NodeDelegate::slotResetState(){
+
+    NodeView *view = d->view;
+    QModelIndex root = view->rootIndex();
+    int childs = view->model()->rowCount(root);
+    if (childs > 0){
+        QModelIndex firstChild = view->model()->index(0, 0, root);
+        KisBaseNode::PropertyList props = firstChild.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
+
+        OptionalProperty visibilityProperty = d->findVisibilityProperty(props);
+        if(d->stasisIsDirty(root, visibilityProperty)){ // clean inStasis if mixed!
+            d->resetPropertyStateRecursive(root, visibilityProperty);
+        }
+    }
 }

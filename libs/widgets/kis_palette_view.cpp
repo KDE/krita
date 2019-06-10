@@ -223,11 +223,6 @@ void KisPaletteView::slotFGColorResourceChanged(const KoColor& color)
     slotFGColorChanged(color);
 }
 
-void KisPaletteView::slotSelectColor(const KoColor &color)
-{
-    selectClosestColor(color);
-}
-
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 {
     if (m_d->model) {

@@ -110,12 +110,6 @@ public Q_SLOTS:
      */
     void slotFGColorResourceChanged(const KoColor& color);
 
-    /**
-      * Slot that selects the right index for provided color.
-      * Called from KisPaletteComboBox when user selects color in the dropdown.
-      */
-    void slotSelectColor(const KoColor& color);
-
     void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
 
 private Q_SLOTS:

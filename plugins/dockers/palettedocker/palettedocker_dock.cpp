@@ -109,6 +109,7 @@ PaletteDockerDock::PaletteDockerDock( )
             SLOT(slotPaletteIndexClicked(QModelIndex)));
     connect(m_ui->paletteView, SIGNAL(doubleClicked(QModelIndex)),
             SLOT(slotPaletteIndexDoubleClicked(QModelIndex)));
+    connect(m_ui->cmbNameList, SIGNAL(sigColorSelected(const KoColor&)), SLOT(slotNameListSelection(const KoColor&)));
 
     m_viewContextMenu.addAction(m_actModify.data());
     m_viewContextMenu.addAction(m_actRemove.data());
@@ -377,6 +378,7 @@ void PaletteDockerDock::slotEditEntry()
 void PaletteDockerDock::slotNameListSelection(const KoColor &color)
 {
     m_colorSelfUpdate = true;
+    m_ui->paletteView->selectClosestColor(color);
     m_resourceProvider->setFGColor(color);
     m_colorSelfUpdate = false;
 }

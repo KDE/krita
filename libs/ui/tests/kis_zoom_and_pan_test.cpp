@@ -522,7 +522,7 @@ void KisZoomAndPanTest::testZoomOnBorderZoomLevels()
     ZoomAndPanTester t;
     initializeViewport(t, false, false, false);
 
-    QPoint widgetPoint(100,100);
+//    QPoint widgetPoint(100,100);
 
     warnKrita << "WARNING: testZoomOnBorderZoomLevels() is disabled due to some changes in KoZoomMode::minimum/maximumZoom()";
     return;

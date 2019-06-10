@@ -303,6 +303,9 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
         if (checkImage.width() != BACKGROUND_TEXTURE_SIZE || checkImage.height() != BACKGROUND_TEXTURE_SIZE) {
             img = checkImage.scaled(BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE);
         }
+#ifdef HAS_ONLY_OPENGL_ES
+        GLint format = GL_RGBA, internalFormat = GL_RGBA8;
+#else
         GLint format = GL_BGRA, internalFormat = GL_RGBA8;
         if (KisOpenGL::hasOpenGLES()) {
             if (ctx->hasExtension(QByteArrayLiteral("GL_EXT_texture_format_BGRA8888"))) {
@@ -312,6 +315,7 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
                 format = GL_RGBA;
             }
         }
+#endif
         f->glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
                         0, format, GL_UNSIGNED_BYTE, img.constBits());
     }
@@ -521,6 +525,11 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
     } else {
+#ifdef HAS_ONLY_OPENGL_ES
+        m_texturesInfo.internalFormat = GL_RGBA8;
+        m_texturesInfo.type = GL_UNSIGNED_BYTE;
+        m_texturesInfo.format = GL_RGBA;
+#else
         m_texturesInfo.internalFormat = GL_BGRA8_EXT;
         m_texturesInfo.type = GL_UNSIGNED_BYTE;
         m_texturesInfo.format = GL_BGRA_EXT;
@@ -531,6 +540,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
             m_texturesInfo.type = GL_UNSIGNED_BYTE;
             m_texturesInfo.format = GL_RGBA;
         }
+#endif
     }
 
     const bool useHDRMode = KisOpenGLModeProber::instance()->useHDRMode();

@@ -88,9 +88,7 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
 {
     gc.save();
     gc.resetTransform();
-    QPointF delta(0,0);//this is the difference between the vanishing point and the mouse-position//
     QPointF mousePos(0,0);
-    QPointF endPoint(0,0);//this is the final point that the line is being extended to, we seek it just outside the view port//
     
     if (canvas){
         //simplest, cheapest way to get the mouse-position//

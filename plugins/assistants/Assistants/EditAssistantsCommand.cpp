@@ -47,6 +47,7 @@ EditAssistantsCommand::EditAssistantsCommand(QPointer<KisCanvas2> canvas, Assist
     , m_firstRedo(true)
     , m_type(type)
 {
+    Q_UNUSED(m_index);
     KIS_ASSERT_RECOVER_RETURN(type != EDIT);
 }
 

@@ -100,9 +100,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
     gc.save();
     gc.resetTransform();
-    QPointF delta(0,0);
     QPointF mousePos(0,0);
-    QPointF endPoint(0,0);//this is the final point that the line is being extended to, we seek it just outside the view port//
     
     if (canvas){
         //simplest, cheapest way to get the mouse-position//

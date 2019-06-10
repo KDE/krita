@@ -212,9 +212,10 @@
     <p xml:lang="zh-TW">使用先進的筆刷引擎、驚人的濾鏡和許多方便的功能來開心地繪畫，讓 Krita 擁有巨大的生產力。</p>
   </description>
   <url type="homepage">https://www.krita.org/</url>
-  <url type="faq">https://krita.org/about/faq/</url>
+  <url type="faq">https://docs.krita.org/KritaFAQ.html</url>
   <url type="donation">https://krita.org/support-us/donations/</url>
-  <url type="help">https://docs.krita.org/Category:Tutorials</url>
+  <url type="help">https://docs.krita.org/</url>
+  <url type="bugtracker">https://docs.krita.org/en/untranslatable_pages/reporting_bugs.html</url>
   <screenshots>
     <screenshot type="default">
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_001.png</image>

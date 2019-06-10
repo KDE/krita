@@ -540,6 +540,11 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
     } else {
+#ifdef HAS_ONLY_OPENGL_ES
+        m_texturesInfo.internalFormat = GL_RGBA8;
+        m_texturesInfo.type = GL_UNSIGNED_BYTE;
+        m_texturesInfo.format = GL_RGBA;
+#else
         m_texturesInfo.internalFormat = GL_BGRA8_EXT;
         m_texturesInfo.type = GL_UNSIGNED_BYTE;
         m_texturesInfo.format = GL_BGRA_EXT;
@@ -550,6 +555,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
             m_texturesInfo.type = GL_UNSIGNED_BYTE;
             m_texturesInfo.format = GL_RGBA;
         }
+#endif
     }
 
     const bool useHDRMode = KisOpenGLModeProber::instance()->useHDRMode();

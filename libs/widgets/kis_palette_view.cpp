@@ -201,26 +201,20 @@ void KisPaletteView::selectClosestColor(const KoColor &color)
 
     selectionModel()->clearSelection();
     QModelIndex index = m_d->model->indexForClosest(color);
+
     selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+}
+
+const KoColor KisPaletteView::closestColor(const KoColor &color) const
+{
+    QModelIndex index = m_d->model->indexForClosest(color);
+    KisSwatch swatch = m_d->model->getEntry(index);
+    return swatch.color();
 }
 
 void KisPaletteView::slotFGColorChanged(const KoColor &color)
 {
-    KConfigGroup group(KSharedConfig::openConfig(), "");
-    if (group.readEntry("colorsettings/forcepalettecolors", false)) {
-        selectClosestColor(color);
-    }
-}
-
-void KisPaletteView::slotFGColorResourceChanged(const KoColor& color)
-{
-    // This slot is called, because fg color was changed in the resource manager.
-    // To enable re-picking the swatch color again, we reset currentIndex
-    // of the selectionModel. We are not clearing the selection itself,
-    // so the user can see the swatch selected previously.
-    // See bug 402072
-    selectionModel()->clearCurrentIndex();
-    slotFGColorChanged(color);
+    selectClosestColor(color);
 }
 
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)

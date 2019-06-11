@@ -44,7 +44,6 @@ void KisMagneticWorkerTest::testWorker()
     const QRect rect = dev->exactBounds();
     KisPaintDeviceSP grayscaleDev = KisPainter::convertToAlphaAsGray(dev);
     KisMagneticWorker worker;
-    worker.run(grayscaleDev, rect);
 
     KIS_DUMP_DEVICE_2(grayscaleDev, rect, "main", "dd");
 }

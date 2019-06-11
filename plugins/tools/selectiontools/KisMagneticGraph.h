@@ -26,7 +26,7 @@
 #include <QRect>
 #include <QColor>
 
-struct VertexDescriptor : public boost::equality_comparable<VertexDescriptor>{
+struct VertexDescriptor {
 
     long x,y;
 
@@ -42,12 +42,20 @@ struct VertexDescriptor : public boost::equality_comparable<VertexDescriptor>{
         x(0), y(0)
     { }
 
-    bool operator ==(const VertexDescriptor &rhs) const {
+    bool operator==(VertexDescriptor const &rhs) const {
         return rhs.x == x && rhs.y == y;
     }
 
-    bool operator ==(const QPoint &rhs) const {
+    bool operator==(QPoint const &rhs) const {
         return rhs.x() == x && rhs.y() == y;
+    }
+
+    bool operator !=(VertexDescriptor const &rhs) const {
+        return rhs.x != x || rhs.y != y;
+    }
+
+    bool operator<(VertexDescriptor const &rhs) const {
+        return x < rhs.x || (x == rhs.x && y < rhs.y);
     }
 };
 
@@ -70,13 +78,13 @@ struct KisMagneticGraph{
     typedef boost::disallow_parallel_edge_tag               edge_parallel_category;
     typedef boost::incidence_graph_tag                      traversal_category;
     typedef neighbour_iterator                              out_edge_iterator;
-    typedef long                                            degree_size_type;
+    typedef unsigned long                                   degree_size_type;
 
     degree_size_type outDegree;
     QPoint topLeft, bottomRight;
 
     double getIntensity(QPoint pt){
-        QColor *col;
+        QColor *col = new QColor;
         m_dev->pixel(pt.x(),pt.y(), col);
         double intensity = col->blackF();
         delete col;
@@ -93,13 +101,16 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
                                std::pair<VertexDescriptor, VertexDescriptor>>
 {
     neighbour_iterator(VertexDescriptor v, KisMagneticGraph g):
-        currentPoint(v), graph(g)
+        graph(g), currentPoint(v)
     {
         nextPoint = VertexDescriptor(g.topLeft.x(), g.topLeft.y());
         if(nextPoint == currentPoint){
             operator++();
         }
     }
+
+    neighbour_iterator()
+    { }
 
     std::pair<VertexDescriptor, VertexDescriptor>
     operator*() const {
@@ -108,6 +119,7 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
     }
 
     void operator++() {
+        // I am darn sure that Dmitry is wrong, definitely wrong
         if(nextPoint == graph.bottomRight)
             return; // we are done, no more points
 
@@ -158,11 +170,13 @@ struct graph_traits<KisMagneticGraph> {
 
 typename KisMagneticGraph::vertex_descriptor
 source(typename KisMagneticGraph::edge_descriptor e, KisMagneticGraph g) {
+    Q_UNUSED(g)
     return e.first;
 }
 
 typename KisMagneticGraph::vertex_descriptor
 target(typename KisMagneticGraph::edge_descriptor e, KisMagneticGraph g) {
+    Q_UNUSED(g)
     return e.second;
 }
 
@@ -176,6 +190,7 @@ out_edges(typename KisMagneticGraph::vertex_descriptor v, KisMagneticGraph g) {
 
 typename KisMagneticGraph::degree_size_type
 out_degree(typename KisMagneticGraph::vertex_descriptor v, KisMagneticGraph g) {
+    Q_UNUSED(v)
     return g.outDegree;
 }
 

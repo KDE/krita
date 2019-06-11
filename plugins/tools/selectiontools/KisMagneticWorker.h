@@ -22,15 +22,10 @@
 #include <kritaselectiontools_export.h>
 
 class KRITASELECTIONTOOLS_EXPORT KisMagneticWorker{
-    public:
-        KisMagneticWorker();
-        KisMagneticWorker(KisPaintDeviceSP dev, const QRect &rect);
-        void run(KisPaintDeviceSP dev, const QRect& rect);
-        void computeEdge(QPoint start, QPoint end);
-
-    private:
-        KisPaintDeviceSP m_dev;
-        const QRect m_rect;
+public:
+        QVector<QPoint> computeEdge(KisPaintDeviceSP dev, int radius, QPoint start, QPoint end);
+private:
+        QRect calculateRect(QPoint p1, QPoint p2, int radius) const;
 };
 
 #endif

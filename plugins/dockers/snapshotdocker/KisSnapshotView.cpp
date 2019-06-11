@@ -30,7 +30,7 @@ KisSnapshotView::KisSnapshotView()
     : QListView()
     , m_d(new Private)
 {
-    setEditTriggers(QAbstractItemView::SelectedClicked);
+    setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::SelectedClicked);
 }
 
 KisSnapshotView::~KisSnapshotView()

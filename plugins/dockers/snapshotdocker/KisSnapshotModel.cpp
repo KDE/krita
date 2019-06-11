@@ -127,6 +127,15 @@ bool KisSnapshotModel::setData(const QModelIndex &index, const QVariant &value, 
     return false;
 }
 
+Qt::ItemFlags KisSnapshotModel::flags(const QModelIndex &index) const
+{
+    if (!index.isValid()) {
+        return Qt::ItemIsEnabled;
+    }
+
+    return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
+}
+
 void KisSnapshotModel::setCanvas(QPointer<KisCanvas2> canvas)
 {
     if (m_d->curCanvas == canvas) {

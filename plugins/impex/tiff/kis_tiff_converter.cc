@@ -754,9 +754,9 @@ KisImportExportErrorCode KisTIFFConverter::buildFile(const QString &filename, Ki
     }
 
     KisTIFFWriterVisitor* visitor = new KisTIFFWriterVisitor(image, &options);
-    KIS_ASSERT_RECOVER(visitor->visit(root)) {
+    if (!(visitor->visit(root))) {
         TIFFClose(image);
-        return ImportExportCodes::InternalError;
+        return ImportExportCodes::Failure;
     }
 
     TIFFClose(image);

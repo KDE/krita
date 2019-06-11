@@ -326,11 +326,17 @@ void testExportToColorSpace(const QString& _dirname, QString mimetype, const KoC
     }
 
     statusImport = manager.importDocument(colorspaceFilename, mimetype.toUtf8());
-    QVERIFY(statusImport == ImportExportCodes::OK);
-    if (*(doc->image()->colorSpace()) != *space) {
+    if (!(statusImport == ImportExportCodes::OK)) {
+        fail = true;
+        failMessage = "Incorrect status";
+    }
+
+    bool mismatch = (*(doc->image()->colorSpace()) != *space) || (doc->image()->colorSpace()->profile() != space->profile());
+    if (mismatch) {
         qDebug() << "Document color space = " << (doc->image()->colorSpace())->id();
         qDebug() << "Saved color space = " << space->id();
-        QVERIFY(*(doc->image()->colorSpace()) == *space);
+        fail = true;
+        failMessage = "Mismatch of color spaces";
     }
 
     if (!useDocumentExport && statusExport == ImportExportCodes::FileFormatIncorrect) {
@@ -351,13 +357,15 @@ void testExportToColorSpace(const QString& _dirname, QString mimetype, const KoC
 
     QFile::remove(colorspaceFilename);
 
+    if (fail) {
+        QFAIL(failMessage.toUtf8());
+    }
+
     QVERIFY(statusExport.isOk());
     if (!useDocumentExport) {
         QVERIFY(statusExport == expected);
     }
-    if (fail) {
-        QFAIL(failMessage.toUtf8());
-    }
+
 }
 
 

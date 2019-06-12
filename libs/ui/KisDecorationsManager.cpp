@@ -28,6 +28,7 @@
 #include <kguiitem.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
+#include <KisDocument.h>
 
 
 KisDecorationsManager::KisDecorationsManager(KisViewManager* view)
@@ -82,6 +83,7 @@ void KisDecorationsManager::setView(QPointer<KisView> imageView)
         connect(m_toggleAssistant, SIGNAL(triggered()), assistantsDecoration(), SLOT(toggleAssistantVisible()));
         connect(m_togglePreview, SIGNAL(triggered()), assistantsDecoration(), SLOT(toggleOutlineVisible()));
         connect(assistantsDecoration(), SIGNAL(assistantChanged()), SLOT(updateAction()));
+        connect(m_imageView->document(), SIGNAL(sigAssistantsChanged), m_imageView->canvasBase(), SLOT(updateCanvas()));
     }
 
     if (m_imageView && referenceImagesDecoration()) {

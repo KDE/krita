@@ -473,6 +473,8 @@ Q_SIGNALS:
      **/
     void sigPaletteListChanged(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList);
 
+    void sigAssistantsChanged();
+
 private Q_SLOTS:
     void finishExportInBackground();
     void slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage);

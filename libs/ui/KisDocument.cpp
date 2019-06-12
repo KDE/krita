@@ -393,7 +393,7 @@ void KisDocument::Private::copyFrom(const Private &rhs, KisDocument *q)
     firstMod = rhs.firstMod;
     lastMod = rhs.lastMod;
     // XXX: the display properties will be shared between different snapshots
-    assistants = KisPaintingAssistant::cloneAssistantList(rhs.assistants);
+    q->setAssistants(KisPaintingAssistant::cloneAssistantList(rhs.assistants));
     globalAssistantsColor = rhs.globalAssistantsColor;
 
     QList<KoColorSet *> newPaletteList;
@@ -1986,7 +1986,10 @@ QList<KisPaintingAssistantSP> KisDocument::assistants() const
 
 void KisDocument::setAssistants(const QList<KisPaintingAssistantSP> &value)
 {
-    d->assistants = value;
+    if (d->assistants != value) {
+        d->assistants = value;
+        emit sigAssistantsChanged();
+    }
 }
 
 KisSharedPtr<KisReferenceImagesLayer> KisDocument::referenceImagesLayer() const

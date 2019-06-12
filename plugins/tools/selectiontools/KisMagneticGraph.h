@@ -89,9 +89,9 @@ struct KisMagneticGraph{
     degree_size_type outDegree;
     QPoint topLeft, bottomRight;
 
-    double getIntensity(QPoint pt){
+    double getIntensity(VertexDescriptor pt){
         QColor *col = new QColor;
-        m_dev->pixel(pt.x(),pt.y(), col);
+        m_dev->pixel(pt.x, pt.y, col);
         double intensity = col->blackF();
         delete col;
         return intensity;

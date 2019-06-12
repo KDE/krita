@@ -84,15 +84,14 @@ class AStarHeuristic : public boost::astar_heuristic<KisMagneticGraph, double> {
         PredecessorMap m_pmap;
         VertexDescriptor m_goal;
         double coeff_a, coeff_b;
-        KisMagneticGraph m_graph;
 
     public:
-        AStarHeuristic(VertexDescriptor goal, PredecessorMap pmap, double a, double b, KisMagneticGraph g):
-            m_pmap(pmap), m_goal(goal), coeff_a(a), coeff_b(b), m_graph(g)
+        AStarHeuristic(VertexDescriptor goal, PredecessorMap pmap, double a, double b):
+            m_pmap(pmap), m_goal(goal), coeff_a(a), coeff_b(b)
         { }
 
-        AStarHeuristic(VertexDescriptor goal, PredecessorMap pmap, KisMagneticGraph g):
-            m_pmap(pmap), m_goal(goal), coeff_a(0.5), coeff_b(0.5), m_graph(g)
+        AStarHeuristic(VertexDescriptor goal, PredecessorMap pmap):
+            m_pmap(pmap), m_goal(goal), coeff_a(0.5), coeff_b(0.5)
         { }
 
         double operator()(VertexDescriptor v){
@@ -102,8 +101,8 @@ class AStarHeuristic : public boost::astar_heuristic<KisMagneticGraph, double> {
             double dz = EuclideanDistance(prev, m_goal);
             di = di/dz;
             double dm = EuclideanDistance(v, m_goal);
-            double i = m_graph.getIntensity(QPoint(v.x,v.y));
-            return (coeff_a * di + coeff_b * (dm - dz)) * (i+1) ;
+            qDebug() << v << prev;
+            return coeff_a * di + coeff_b * (dm - dz) ;
         }
 };
 
@@ -131,15 +130,21 @@ struct WeightMap{
 
     WeightMap() { }
 
+    WeightMap(KisMagneticGraph g):
+        m_graph(g)
+    { }
+
     data_type& operator[](key_type const& k) {
         if (m_map.find(k) == m_map.end()) {
-             m_map[k] = EuclideanDistance(k.first, k.second);
+            double edge_gradient = m_graph.getIntensity((k.first)) + m_graph.getIntensity((k.second))/2;
+            m_map[k] = EuclideanDistance(k.first, k.second) * (edge_gradient + 1);
         }
         return m_map[k];
     }
 
 private:
     std::map<key_type, data_type> m_map;
+    KisMagneticGraph m_graph;
 };
 
 QRect KisMagneticWorker::calculateRect(QPoint p1, QPoint p2, int radius) const {
@@ -188,8 +193,8 @@ QVector<QPointF> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius
     std::map<VertexDescriptor, unsigned> rmap;
     std::map<VertexDescriptor, boost::default_color_type> cmap;
     std::map<VertexDescriptor, unsigned> imap;
-    WeightMap wmap;
-    AStarHeuristic heuristic(goal, pmap, g);
+    WeightMap wmap(g);
+    AStarHeuristic heuristic(goal, pmap);
     QVector<QPointF> result;
 
     try{

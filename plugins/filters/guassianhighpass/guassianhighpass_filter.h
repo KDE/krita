@@ -22,6 +22,8 @@
 #define KIS_GUASSIANHIGHPASS_FILTER_H
 
 #include "filter/kis_filter.h"
+#include "kis_cached_paint_device.h"
+
 
 class KisGuassianHighPassFilter : public KisFilter
 {
@@ -46,7 +48,7 @@ public:
     QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const override;
 
 private:
-    
+    mutable KisCachedPaintDevice m_cachedPaintDevice;
 };
 
 #endif

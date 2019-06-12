@@ -51,9 +51,9 @@
 KisGuassianHighPassFilter::KisGuassianHighPassFilter() : KisFilter(id(), FiltersCategoryEdgeDetectionId, i18n("&Guassian High Pass..."))
 {
     setSupportsPainting(true);
-    setSupportsAdjustmentLayers(false);
-    setSupportsThreading(false);
-    setSupportsLevelOfDetail(false);
+    setSupportsAdjustmentLayers(true);
+    setSupportsThreading(true);
+    setSupportsLevelOfDetail(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
@@ -75,9 +75,7 @@ void KisGuassianHighPassFilter::processImpl(KisPaintDeviceSP device,
                                    KoUpdater *
                                    ) const
 {
-    QPointer<KoUpdater> filterUpdater = 0;
     QPointer<KoUpdater> convolutionUpdater = 0;
-    const QRect deviceBounds = device->defaultBounds()->bounds();
 
     KisFilterConfigurationSP config = _config ? _config : new KisFilterConfiguration(id().id(), 1);
     
@@ -85,16 +83,23 @@ void KisGuassianHighPassFilter::processImpl(KisPaintDeviceSP device,
     KisLodTransformScalar t(device);
     const qreal blurAmount = t.scale(config->getProperty("blurAmount", value) ? value.toDouble() : 1.0);
     QBitArray channelFlags = config->channelFlags();
-    KisPaintDeviceSP blur = new KisPaintDevice(*device);
+
+    const QRect gaussNeedRect = this->neededRect(applyRect, config, device->defaultBounds()->currentLevelOfDetail());
+
+    KisPaintDeviceSP blur = m_cachedPaintDevice.getDevice(device);
+    KisPainter::copyAreaOptimizedOldData(gaussNeedRect.topLeft(), device, blur, gaussNeedRect);
     KisGaussianKernel::applyGaussian(blur, applyRect,
                                      blurAmount, blurAmount,
                                      channelFlags,
-                                     convolutionUpdater);
+                                     convolutionUpdater,
+                                     true); // make sure we cerate an internal transaction on temp device
     
     KisPainter painter(device);
     painter.setCompositeOp(blur->colorSpace()->compositeOp(COMPOSITE_GRAIN_EXTRACT));
-    painter.bitBlt(0, 0, blur, 0, 0, deviceBounds.width(), deviceBounds.height());
+    painter.bitBlt(applyRect.topLeft(), blur, applyRect);
     painter.end();
+
+    m_cachedPaintDevice.putDevice(blur);
 }
 
 
@@ -103,9 +108,10 @@ QRect KisGuassianHighPassFilter::neededRect(const QRect & rect, const KisFilterC
     KisLodTransformScalar t(lod);
 
     QVariant value;
-    const qreal blurAmount = t.scale(config->getProperty("blurAmount", value) ? value.toDouble() : 1.0);
 
-    return rect.adjusted(-blurAmount * 2, -blurAmount * 2, blurAmount * 2, blurAmount * 2);
+    const int halfSize = config->getProperty("blurAmount", value) ? KisGaussianKernel::kernelSizeFromRadius(t.scale(value.toFloat())) / 2 : 5;
+
+    return rect.adjusted( -halfSize * 2, -halfSize * 2, halfSize * 2, halfSize * 2);
 }
 
 QRect KisGuassianHighPassFilter::changedRect(const QRect & rect, const KisFilterConfigurationSP config, int lod) const
@@ -113,7 +119,8 @@ QRect KisGuassianHighPassFilter::changedRect(const QRect & rect, const KisFilter
     KisLodTransformScalar t(lod);
 
     QVariant value;
-    const qreal blurAmount = t.scale(config->getProperty("blurAmount", value) ? value.toDouble() : 1.0);
 
-    return rect.adjusted( -blurAmount, -blurAmount, blurAmount, blurAmount);
+    const int halfSize = config->getProperty("blurAmount", value) ? KisGaussianKernel::kernelSizeFromRadius(t.scale(value.toFloat())) / 2 : 5;
+
+    return rect.adjusted( -halfSize, -halfSize, halfSize, halfSize);
 }

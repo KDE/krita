@@ -59,6 +59,11 @@ struct VertexDescriptor {
     }
 };
 
+QDebug operator<<(QDebug dbg, const VertexDescriptor &v) {
+    dbg.nospace() << "(" << v.x << ", " << v.y << ")";
+    return dbg.space();
+}
+
 struct neighbour_iterator;
 
 struct KisMagneticGraph{
@@ -70,6 +75,7 @@ struct KisMagneticGraph{
         topLeft(graphRect.topLeft()), bottomRight(graphRect.bottomRight()), m_dev(dev)
     {
         outDegree = (bottomRight.y() - topLeft.y()) * (bottomRight.x() - topLeft.x()) - 1;
+        qDebug() << outDegree;
     }
 
     typedef VertexDescriptor                                vertex_descriptor;
@@ -100,12 +106,16 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
                                                 boost::forward_traversal_tag,
                                std::pair<VertexDescriptor, VertexDescriptor>>
 {
-    neighbour_iterator(VertexDescriptor v, KisMagneticGraph g):
-        graph(g), currentPoint(v)
+    enum position{
+        begin, end
+    };
+
+    neighbour_iterator(VertexDescriptor v, KisMagneticGraph g, position p):
+        graph(g), currentPoint(v), pos(p)
     {
         nextPoint = VertexDescriptor(g.topLeft.x(), g.topLeft.y());
         if(nextPoint == currentPoint){
-            operator++();
+            increment();
         }
     }
 
@@ -120,17 +130,24 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
 
     void operator++() {
         // I am darn sure that Dmitry is wrong, definitely wrong
-        if(nextPoint == graph.bottomRight)
-            return; // we are done, no more points
-
-        if(nextPoint.x == graph.bottomRight.x()) // end of a row move to next column
-            nextPoint = VertexDescriptor(graph.topLeft.x(), nextPoint.y++);
-        else
+        if(nextPoint == graph.bottomRight){
+            pos = position::end;
+            return;
+        }
+        if(nextPoint.x == graph.bottomRight.x()){ // end of a row move to next column
+            nextPoint = VertexDescriptor(graph.topLeft.x(), nextPoint.y + 1);
+        } else {
             nextPoint.x++;
+        }
+
+        if(nextPoint == currentPoint){
+            increment();
+        }
+
     }
 
     bool operator==(neighbour_iterator const& that) const {
-        return currentPoint == that.currentPoint && nextPoint == that.nextPoint;
+        return pos == that.pos;
     }
 
     bool equal(neighbour_iterator const& that) const {
@@ -144,6 +161,7 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
 private:
     KisMagneticGraph graph;
     VertexDescriptor currentPoint, nextPoint;
+    position pos;
 };
 
 namespace boost{
@@ -183,8 +201,8 @@ target(typename KisMagneticGraph::edge_descriptor e, KisMagneticGraph g) {
 std::pair<KisMagneticGraph::out_edge_iterator, KisMagneticGraph::out_edge_iterator>
 out_edges(typename KisMagneticGraph::vertex_descriptor v, KisMagneticGraph g) {
     return std::make_pair(
-                KisMagneticGraph::out_edge_iterator(v, g),
-                KisMagneticGraph::out_edge_iterator(v, g)
+                KisMagneticGraph::out_edge_iterator(v, g, neighbour_iterator::begin),
+                KisMagneticGraph::out_edge_iterator(v, g, neighbour_iterator::end)
                 );
 }
 
@@ -192,11 +210,6 @@ typename KisMagneticGraph::degree_size_type
 out_degree(typename KisMagneticGraph::vertex_descriptor v, KisMagneticGraph g) {
     Q_UNUSED(v)
     return g.outDegree;
-}
-
-QDebug operator<<(QDebug dbg, const KisMagneticGraph::vertex_descriptor &v) {
-    dbg.nospace() << "(" << v.x << ", " << v.y << ")";
-    return dbg.space();
 }
 
 #endif

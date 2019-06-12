@@ -169,7 +169,7 @@ QRect KisMagneticWorker::calculateRect(QPoint p1, QPoint p2, int radius) const {
     return p.boundingRect();
 }
 
-QVector<QPoint> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius, QPoint begin, QPoint end) {
+QVector<QPointF> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius, QPoint begin, QPoint end) {
 
     QRect rect = calculateRect(begin, end, radius);
     KisGaussianKernel::applyLoG(dev, rect, 2, -1.0, QBitArray(), 0);
@@ -188,7 +188,7 @@ QVector<QPoint> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius,
     std::map<VertexDescriptor, unsigned> imap;
     WeightMap wmap;
     AStarHeuristic heuristic(goal,pmap);
-    QVector<QPoint> result;
+    QVector<QPointF> result;
 
     try{
         boost::astar_search_no_init(
@@ -206,8 +206,14 @@ QVector<QPoint> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius,
 
     }catch(GoalFound const&){
         for(VertexDescriptor u=goal; u!=start; u = pmap[u]){
-            result.push_back(QPoint(u.x,u.y));
+            result.push_back(QPointF(u.x,u.y));
         }
+    }
+
+    result.push_back(QPoint(start.x,start.y));
+
+    for(auto val: result){
+        qDebug() << val;
     }
 
     return result;

@@ -84,14 +84,15 @@ class AStarHeuristic : public boost::astar_heuristic<KisMagneticGraph, double> {
         PredecessorMap m_pmap;
         VertexDescriptor m_goal;
         double coeff_a, coeff_b;
+        KisMagneticGraph m_graph;
 
     public:
-        AStarHeuristic(VertexDescriptor goal, PredecessorMap pmap, double a, double b):
-            m_pmap(pmap), m_goal(goal), coeff_a(a), coeff_b(b)
+        AStarHeuristic(VertexDescriptor goal, PredecessorMap pmap, double a, double b, KisMagneticGraph g):
+            m_pmap(pmap), m_goal(goal), coeff_a(a), coeff_b(b), m_graph(g)
         { }
 
-        AStarHeuristic(VertexDescriptor goal, PredecessorMap pmap):
-            m_pmap(pmap), m_goal(goal), coeff_a(0.5), coeff_b(0.5)
+        AStarHeuristic(VertexDescriptor goal, PredecessorMap pmap, KisMagneticGraph g):
+            m_pmap(pmap), m_goal(goal), coeff_a(0.5), coeff_b(0.5), m_graph(g)
         { }
 
         double operator()(VertexDescriptor v){
@@ -101,7 +102,8 @@ class AStarHeuristic : public boost::astar_heuristic<KisMagneticGraph, double> {
             double dz = EuclideanDistance(prev, m_goal);
             di = di/dz;
             double dm = EuclideanDistance(v, m_goal);
-            return coeff_a * di + coeff_b * (dm - dz);
+            double i = m_graph.getIntensity(QPoint(v.x,v.y));
+            return (coeff_a * di + coeff_b * (dm - dz)) * (i+1) ;
         }
 };
 
@@ -187,7 +189,7 @@ QVector<QPointF> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius
     std::map<VertexDescriptor, boost::default_color_type> cmap;
     std::map<VertexDescriptor, unsigned> imap;
     WeightMap wmap;
-    AStarHeuristic heuristic(goal,pmap);
+    AStarHeuristic heuristic(goal, pmap, g);
     QVector<QPointF> result;
 
     try{

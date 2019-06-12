@@ -133,6 +133,7 @@ KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevic
         case 2: modes.push_back(KisParasite::Incremental); break;
         case 3: modes.push_back(KisParasite::Pressure); break;
         case 4: modes.push_back(KisParasite::Angular); break;
+        case 5: modes.push_back(KisParasite::Velocity); break;
         default: modes.push_back(KisParasite::Incremental);
         }
 

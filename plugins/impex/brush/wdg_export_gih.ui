@@ -161,6 +161,11 @@
               <string>Angular</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>Velocity</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>

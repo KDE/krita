@@ -21,6 +21,7 @@
 #include <boost/operators.hpp>
 #include <boost/graph/graph_traits.hpp>
 #include <kis_paint_device.h>
+#include <kis_random_accessor_ng.h>
 
 #include <QDebug>
 #include <QRect>
@@ -90,11 +91,10 @@ struct KisMagneticGraph{
     QPoint topLeft, bottomRight;
 
     double getIntensity(VertexDescriptor pt){
-        QColor *col = new QColor;
-        m_dev->pixel(pt.x, pt.y, col);
-        double intensity = col->blackF();
-        delete col;
-        return intensity;
+        KisRandomAccessorSP randAccess = m_dev->createRandomAccessorNG(m_dev->exactBounds().x(),m_dev->exactBounds().y());
+        randAccess->moveTo(pt.x, pt.y);
+        qint8 val = *(randAccess->rawData());
+        return std::abs(val);
     }
 
 private:

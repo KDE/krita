@@ -46,24 +46,24 @@ void KisMagneticWorkerTest::testWorker()
     KisMagneticWorker worker;
     KIS_DUMP_DEVICE_2(dev, rect, "main", "dd");
 
-    const QPointF startPos(30, 10);
-    const QPointF endPos(50, 65);
+    const QPoint startPos(40, 10);
+    const QPoint endPos(50, 65);
 
 
-    auto points = worker.computeEdge(grayscaleDev, 10, QPoint(30,10), QPoint(50,65));
+    auto points = worker.computeEdge(grayscaleDev, 10, startPos, endPos);
     KIS_DUMP_DEVICE_2(grayscaleDev, rect, "draw", "dd");
 
     QImage img = grayscaleDev->convertToQImage(0, rect);
     img = img.convertToFormat(QImage::Format_ARGB32);
     QPainter gc(&img);
 
-    QPainterPath path;
-    path.moveTo(points[0]);
+    QPainterPath path(points[0]);
     for (int i = 1; i < points.size(); i++) {
         path.lineTo(points[i]);
+        qDebug() << points[i];
     }
 
-    gc.setPen(Qt::white);
+    gc.setPen(Qt::blue);
     gc.drawPath(path);
 
     gc.setPen(Qt::green);

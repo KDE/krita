@@ -101,7 +101,6 @@ class AStarHeuristic : public boost::astar_heuristic<KisMagneticGraph, double> {
             double dz = EuclideanDistance(prev, m_goal);
             di = di/dz;
             double dm = EuclideanDistance(v, m_goal);
-            qDebug() << v << prev;
             return coeff_a * di + coeff_b * (dm - dz) ;
         }
 };
@@ -179,7 +178,7 @@ QRect KisMagneticWorker::calculateRect(QPoint p1, QPoint p2, int radius) const {
 QVector<QPointF> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius, QPoint begin, QPoint end) {
 
     QRect rect = calculateRect(begin, end, radius);
-    KisGaussianKernel::applyLoG(dev, rect, 2, -1.0, QBitArray(), 0);
+    KisGaussianKernel::applyLoG(dev, rect, 2, -10.0, QBitArray(), 0);
 
     VertexDescriptor goal(end);
     VertexDescriptor start(begin);
@@ -218,10 +217,6 @@ QVector<QPointF> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius
     }
 
     result.push_back(QPoint(start.x,start.y));
-
-    for(auto val: result){
-        qDebug() << val;
-    }
 
     return result;
 }

@@ -703,10 +703,13 @@ void KisSelectionManager::selectOpaqueOnNode(KisNodeSP node, SelectionAction act
         KisPaintDeviceSP device = node->projection();
         if (!device) device = node->paintDevice();
         if (!device) device = node->original();
-        KIS_ASSERT_RECOVER_RETURN(canvas && device);
+
+        if (!device) return;
 
         QRect rc = device->exactBounds();
         if (rc.isEmpty()) return;
+
+        KIS_ASSERT_RECOVER_RETURN(canvas);
 
         /**
          * If there is nothing selected, just create a new selection

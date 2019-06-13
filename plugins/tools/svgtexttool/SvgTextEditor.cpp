@@ -270,6 +270,11 @@ void SvgTextEditor::checkFormat()
     QTextCharFormat format = m_textEditorWidget.richTextEdit->textCursor().charFormat();
     QTextBlockFormat blockFormat = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
 
+    /**
+     * Make sure that when we remove the very last symbol, the last used font will not change
+     */
+    m_textEditorWidget.richTextEdit->document()->setDefaultFont(format.font());
+
     // checkboxes do not emit signals on manual switching, so we
     // can avoid blocking them
 

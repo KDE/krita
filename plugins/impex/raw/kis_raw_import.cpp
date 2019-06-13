@@ -82,7 +82,12 @@ KisImportExportErrorCode KisRawImport::convert(KisDocument *document, QIODevice 
 
     slotUpdatePreview();
 
-    if (m_dialog->exec() == QDialog::Accepted) {
+    int r = QDialog::Accepted;
+    if (!batchMode()) {
+        r = m_dialog->exec();
+    }
+
+    if (r == QDialog::Accepted) {
 
         QApplication::setOverrideCursor(Qt::WaitCursor);
         // Do the decoding

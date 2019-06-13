@@ -42,6 +42,7 @@
 #include <KoColorSpaceTraits.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColor.h>
+#include <KoColorProfile.h>
 
 #include <KisDocument.h>
 #include <kis_group_layer.h>
@@ -197,22 +198,26 @@ ImageType imfTypeToKisType(Imf::PixelType type)
     }
 }
 
-const KoColorSpace* kisTypeToColorSpace(QString model, ImageType imageType)
+const KoColorSpace *kisTypeToColorSpace(QString colorModelID, ImageType imageType)
 {
-    const QString profileName = KisConfig(false).readEntry("ExrDefaultColorProfile", KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(model));
 
-    switch (imageType) {
+    QString colorDepthID = "UNKNOWN";
+    switch(imageType) {
     case IT_FLOAT16:
-        return KoColorSpaceRegistry::instance()->colorSpace(model, Float16BitsColorDepthID.id(), profileName);
+        colorDepthID = Float16BitsColorDepthID.id();
+        break;
     case IT_FLOAT32:
-        return KoColorSpaceRegistry::instance()->colorSpace(model, Float32BitsColorDepthID.id(), profileName);
-    case IT_UNKNOWN:
-    case IT_UNSUPPORTED:
-        return 0;
+        colorDepthID = Float32BitsColorDepthID.id();
+        break;
     default:
-        qFatal("Out of bound enum");
         return 0;
-    }
+    };
+
+    const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(colorModelID, colorDepthID);
+    const QString profileName = KisConfig(false).readEntry("ExrDefaultColorProfile", KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId));
+
+    return KoColorSpaceRegistry::instance()->colorSpace(colorModelID, colorDepthID, profileName);
+
 }
 
 template <typename T>

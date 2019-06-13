@@ -28,6 +28,7 @@
 #include <KisView.h>
 #include <KisViewManager.h>
 #include <kis_node_manager.h>
+#include <kis_name_server.h>
 
 struct KisSnapshotModel::Private
 {
@@ -35,13 +36,15 @@ struct KisSnapshotModel::Private
     virtual ~Private();
 
     QPointer<KisDocument> curDocument();
+    QScopedPointer<KisNameServer> curNameServer;
     bool switchToDocument(QPointer<KisDocument> doc);
 
     using DocPList = QList<QPair<QString, QPointer<KisDocument> > >;
 
     DocPList curDocList;
 
-    QMap<QPointer<KisDocument>, DocPList> documentGroups;
+    QMap<KisDocument *, DocPList> documentGroups;
+    QMap<KisDocument *, KisNameServer *> nameServers;
     QPointer<KisCanvas2> curCanvas;
 };
 
@@ -142,15 +145,16 @@ void KisSnapshotModel::setCanvas(QPointer<KisCanvas2> canvas)
         return;
     }
 
-    if (m_d->curCanvas) {
-        if (m_d->curDocument()) {
-            m_d->documentGroups.insert(m_d->curDocument(), m_d->curDocList);
-        } else {
-            Q_FOREACH (auto const &i, m_d->curDocList) {
-                delete i.second.data();
-            }
+    if (m_d->curDocument()) {
+        m_d->documentGroups.insert(m_d->curDocument(), m_d->curDocList);
+        m_d->nameServers.insert(m_d->curDocument(), m_d->curNameServer.take());
+    } else {
+        m_d->curNameServer.reset(0);
+        Q_FOREACH (auto const &i, m_d->curDocList) {
+            delete i.second.data();
         }
     }
+
     if (!m_d->curDocList.isEmpty()) {
         beginRemoveRows(QModelIndex(), 0, m_d->curDocList.size() - 1);
         m_d->curDocList.clear();
@@ -160,14 +164,16 @@ void KisSnapshotModel::setCanvas(QPointer<KisCanvas2> canvas)
 
     QPointer<KisDocument> curDoc = m_d->curDocument();
     if (curDoc) {
-        QMap<QPointer<KisDocument>, Private::DocPList>::const_iterator i = m_d->documentGroups.constFind(curDoc);
-        if (i != m_d->documentGroups.constEnd()) {
-            Private::DocPList docList = i.value();
-            beginInsertRows(QModelIndex(), docList.size(), docList.size());
-            m_d->curDocList = docList;
-            endInsertRows();
+        Private::DocPList docList = m_d->documentGroups.take(curDoc);
+        beginInsertRows(QModelIndex(), docList.size(), docList.size());
+        m_d->curDocList = docList;
+        endInsertRows();
+
+        KisNameServer *nameServer = m_d->nameServers.take(curDoc);
+        if (!nameServer) {
+            nameServer = new KisNameServer;
         }
-        // we have not found any existing group containing the current document
+        m_d->curNameServer.reset(nameServer);
     }
 
 }
@@ -177,7 +183,7 @@ bool KisSnapshotModel::slotCreateSnapshot()
     QPointer<KisDocument> clonedDoc(m_d->curDocument()->lockAndCreateSnapshot());
     if (clonedDoc) {
         beginInsertRows(QModelIndex(), m_d->curDocList.size(), m_d->curDocList.size());
-        m_d->curDocList << qMakePair(i18n("Snapshot"), clonedDoc);
+        m_d->curDocList << qMakePair(i18nc("snapshot names, e.g. \"Snapshot 1\"", "Snapshot %1", m_d->curNameServer->number()), clonedDoc);
         endInsertRows();
         return true;
     }

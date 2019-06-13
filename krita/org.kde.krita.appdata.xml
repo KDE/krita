@@ -224,21 +224,27 @@
   <url type="bugtracker">https://docs.krita.org/en/untranslatable_pages/reporting_bugs.html</url>
   <screenshots>
     <screenshot type="default">
+      <caption>Krita is a full-featured digital painting studio.</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_001.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>The startup window now also gives you the latest news about Krita.</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_002.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>There are over ten immensely powerful brush engines.</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_003.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>Create and use gamut masks to give your images a coherent feel.</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_004.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>Into animation? Krita provides everything you need for traditional, hand-drawn animation.</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_005.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>If you're new to digital painting, or want to know more about Krita's possibilities, there's an extensive, up-to-date manual.</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_006.png</image>
     </screenshot>
   </screenshots>

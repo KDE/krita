@@ -203,7 +203,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
     }
 
     if (m_activeDocument) {
-        m_activeDocument->disconnect(this);
+        m_connections.clear();
         for (KoColorSet * &cs : m_activeDocument->paletteList()) {
             KoColorSet *tmpAddr = cs;
             cs = new KoColorSet(*cs);
@@ -218,7 +218,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
         for (KoColorSet *cs : m_activeDocument->paletteList()) {
             m_rServer->addResource(cs);
         }
-        connect(m_activeDocument, &KisDocument::sigPaletteListChanged, this, &PaletteDockerDock::slotUpdatePaletteList);
+        m_connections.addConnection(m_activeDocument, SIGNAL(sigPaletteListChanged), this, SLOT(slotUpdatePaletteList));
     }
 
     if (!m_currentColorSet) {

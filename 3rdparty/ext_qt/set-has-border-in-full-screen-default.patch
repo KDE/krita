@@ -1,5 +1,34 @@
+From a659513803b55b09352c3a08a1c52027e389c141 Mon Sep 17 00:00:00 2001
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Wed, 21 Nov 2018 09:06:50 +0100
+Subject: [PATCH 20/27] Windows: Add a default setting for
+ hasBorderInFullScreen
+
+The hasBorderInFullScreen only has an effect when set before
+the window is shown or switched to fullscreen. This is currently
+not possible in the QML case since the window is only accessible
+after all properties (including visibility) have been set.
+Add a function to set a default value.
+
+[ChangeLog][QtPlatformHeaders][QWindowsWindowFunctions] Add a default
+setting for hasBorderInFullScreen
+
+Task-number: QTBUG-47247
+Task-number: QTBUG-71855
+Change-Id: I3952e3f34bc4eb134cf1c5265b4489fc74112688
+Reviewed-by: Andre de la Rocha <andre.rocha@qt.io>
+Reviewed-by: Andy Shaw <andy.shaw@qt.io>
+(cherry picked from commit 7264bf19dbc47b805bb7af5df584ce1aae081962)
+---
+ .../qwindowswindowfunctions.h                 |  9 +++++
+ .../qwindowswindowfunctions.qdoc              | 33 +++++++++++++++++++
+ .../windows/qwindowsnativeinterface.cpp       |  2 ++
+ .../platforms/windows/qwindowswindow.cpp      |  8 ++++-
+ .../platforms/windows/qwindowswindow.h        |  2 ++
+ 5 files changed, 53 insertions(+), 1 deletion(-)
+
 diff --git a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
-index e51c2fde6..032dcafa6 100644
+index e51c2fde..032dcafa 100644
 --- a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
 +++ b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.h
 @@ -81,6 +81,15 @@ public:
@@ -19,7 +48,7 @@ index e51c2fde6..032dcafa6 100644
      static const QByteArray setWindowActivationBehaviorIdentifier() { return QByteArrayLiteral("WindowsSetWindowActivationBehavior"); }
  
 diff --git a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
-index a52bbe061..0c52cde75 100644
+index a52bbe06..0c52cde7 100644
 --- a/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
 +++ b/src/platformheaders/windowsfunctions/qwindowswindowfunctions.qdoc
 @@ -93,7 +93,40 @@
@@ -64,7 +93,7 @@ index a52bbe061..0c52cde75 100644
  
  /*!
 diff --git a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp b/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
-index 1c5be4415..42193baf4 100644
+index 1c5be441..42193baf 100644
 --- a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
 +++ b/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
 @@ -293,6 +293,8 @@ QFunctionPointer QWindowsNativeInterface::platformFunction(const QByteArray &fun
@@ -77,7 +106,7 @@ index 1c5be4415..42193baf4 100644
          return QFunctionPointer(QWindowsNativeInterface::setWindowActivationBehavior);
      if (function == QWindowsWindowFunctions::isTabletModeIdentifier())
 diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
-index 76a443a89..967d479a0 100644
+index 76a443a8..967d479a 100644
 --- a/src/plugins/platforms/windows/qwindowswindow.cpp
 +++ b/src/plugins/platforms/windows/qwindowswindow.cpp
 @@ -1183,6 +1183,7 @@ QWindowCreationContext::QWindowCreationContext(const QWindow *w,
@@ -110,7 +139,7 @@ index 76a443a89..967d479a0 100644
  {
      if (testFlag(HasBorderInFullScreen) == border)
 diff --git a/src/plugins/platforms/windows/qwindowswindow.h b/src/plugins/platforms/windows/qwindowswindow.h
-index 2675990cf..0d8096ddf 100644
+index 2675990c..0d8096dd 100644
 --- a/src/plugins/platforms/windows/qwindowswindow.h
 +++ b/src/plugins/platforms/windows/qwindowswindow.h
 @@ -342,6 +342,7 @@ public:
@@ -129,3 +158,6 @@ index 2675990cf..0d8096ddf 100644
  };
  
  #ifndef QT_NO_DEBUG_STREAM
+-- 
+2.22.0.windows.1
+

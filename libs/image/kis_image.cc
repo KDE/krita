@@ -408,7 +408,7 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
         m_d->compositions << toQShared(new KisLayerComposition(*comp, this));
     }
 
-    rhs.m_d->nserver = KisNameServer(rhs.m_d->nserver);
+    m_d->nserver = rhs.m_d->nserver;
 
     vKisAnnotationSP newAnnotations;
     Q_FOREACH (KisAnnotationSP annotation, rhs.m_d->annotations) {

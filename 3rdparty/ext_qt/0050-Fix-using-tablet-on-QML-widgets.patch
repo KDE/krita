@@ -1,8 +1,25 @@
+From f56bfdc8a244fbd82a1901220fac642ca78d8c23 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Wed, 15 May 2019 19:39:44 +0300
+Subject: [PATCH 18/27] Fix using tablet on QML widgets
+
+In previous versions of Qt (wintab impeplementation) the events were
+marked by Qt::MouseEventSynthesizedBySystem flag only when they were
+synthesized from touch, not from tablet events. This is what
+QWindowsTabletSupport does and what QQuickWindow expects (it
+filters out all synthesized events). This patch recovers the old behavior
+for the new QWindowsPointerHandler tablet API implementation.
+
+See bug: https://bugs.kde.org/show_bug.cgi?id=406668
+---
+ src/plugins/platforms/windows/qwindowspointerhandler.cpp | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
 diff --git a/src/plugins/platforms/windows/qwindowspointerhandler.cpp b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
-index 9a8b5d512..4a8322337 100644
+index a83289de..5ba58c24 100644
 --- a/src/plugins/platforms/windows/qwindowspointerhandler.cpp
 +++ b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
-@@ -639,14 +639,16 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
+@@ -644,14 +644,16 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
  #endif
  }
  
@@ -21,7 +38,7 @@ index 9a8b5d512..4a8322337 100644
  }
  
  bool QWindowsPointerHandler::translateMouseWheelEvent(QWindow *window,
-@@ -716,7 +718,7 @@ bool QWindowsPointerHandler::translateMouseEvent(QWindow *window,
+@@ -721,7 +723,7 @@ bool QWindowsPointerHandler::translateMouseEvent(QWindow *window,
      }
  
      Qt::MouseEventSource source = Qt::MouseEventNotSynthesized;
@@ -30,59 +47,6 @@ index 9a8b5d512..4a8322337 100644
          if (QWindowsIntegration::instance()->options() & QWindowsIntegration::DontPassOsMouseEventsSynthesizedFromTouch)
              return false;
          source = Qt::MouseEventSynthesizedBySystem;
-diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-index fa209f09c..462be8b3f 100644
---- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-+++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-@@ -434,6 +434,14 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
-     if (m_currentDevice < 0) {
-         m_currentDevice = m_devices.size();
-         m_devices.push_back(tabletInit(uniqueId, cursorType));
-+    } else {
-+        /**
-+         * The user can switch pressure sensitivity level in the driver,
-+         * which will make our saved values invalid (this option is
-+         * provided by Wacom drivers for compatibility reasons, and
-+         * it can be adjusted on the fly)
-+         */
-+        m_devices[m_currentDevice] = tabletInit(uniqueId, cursorType);
-     }
-     m_devices[m_currentDevice].currentPointerType = pointerType(currentCursor);
-     m_state = PenProximity;
-@@ -454,7 +462,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
-         return false;
- 
-     const int currentDevice = m_devices.at(m_currentDevice).currentDevice;
--    const int currentPointer = m_devices.at(m_currentDevice).currentPointerType;
-     const qint64 uniqueId = m_devices.at(m_currentDevice).uniqueId;
- 
-     // The tablet can be used in 2 different modes (reflected in enum Mode),
-@@ -484,6 +491,28 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
-     for (int i = 0; i < packetCount ; ++i) {
-         const PACKET &packet = localPacketBuf[i];
- 
-+        int currentPointer = m_devices.at(m_currentDevice).currentPointerType;
-+
-+        const int packetPointerType = pointerType(packet.pkCursor);
-+        if (!packet.pkButtons && packetPointerType != currentPointer) {
-+
-+            QWindowSystemInterface::handleTabletLeaveProximityEvent(packet.pkTime,
-+                                                                    m_devices.at(m_currentDevice).currentDevice,
-+                                                                    m_devices.at(m_currentDevice).currentPointerType,
-+                                                                    m_devices.at(m_currentDevice).uniqueId);
-+
-+
-+
-+            m_devices[m_currentDevice].currentPointerType = packetPointerType;
-+
-+            QWindowSystemInterface::handleTabletEnterProximityEvent(packet.pkTime,
-+                                                                    m_devices.at(m_currentDevice).currentDevice,
-+                                                                    m_devices.at(m_currentDevice).currentPointerType,
-+                                                                    m_devices.at(m_currentDevice).uniqueId);
-+
-+            currentPointer = packetPointerType;
-+        }
-+
-         const int z = currentDevice == QTabletEvent::FourDMouse ? int(packet.pkZ) : 0;
- 
-         QPointF globalPosF =
+-- 
+2.22.0.windows.1
+

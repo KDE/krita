@@ -1,5 +1,47 @@
+From ec7b01f723961ca3efa7b279398d6680705bd453 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Wed, 15 May 2019 19:54:52 +0300
+Subject: [PATCH 19/27] Add workaround for handling table press correctly in
+ WinInk mode
+
+Original problem: widgets do not get synthesized mouse-down and
+mouse-press events until the stylus is released
+
+Reason: if the app accepts the event, WndProc should report
+that to the system (by returning true). This is the only way to
+prevent Windows from starting some system-wide gestures, like
+click+hold -> right button click. If we ignore the event, then
+OS postpones all synthesized mouse events until the entire gesture
+is completed.
+
+The patch implements a "hackish" workaround for the original problem
+by using the following rules:
+
+1) All tablet-move events are ignored (without synthesized mouse events
+   OS doesn't generate any Enter/Leave events)
+
+2) All not-accepted tablet press- and release-events and also reported as
+   ignored (without it D&D doesn't work).
+
+3) All accepted tablet press- and release-events are reported as "accepted",
+   **but** we artificially synthesize mouse events for them.
+
+TODO: there are still one problem:
+
+1) Perhaps this synthesizeMouseEvent() is not needed at all. But we should
+   first check if Qt relies on these synthesized messages anywhere in the
+   code or not.
+
+See bug: https://bugs.kde.org/show_bug.cgi?id=406668
+---
+ src/gui/kernel/qguiapplication.cpp            |  1 +
+ src/gui/kernel/qwindowsysteminterface.cpp     | 20 ++---
+ src/gui/kernel/qwindowsysteminterface.h       |  8 +-
+ .../windows/qwindowspointerhandler.cpp        | 88 ++++++++++++++++++-
+ 4 files changed, 99 insertions(+), 18 deletions(-)
+
 diff --git a/src/gui/kernel/qguiapplication.cpp b/src/gui/kernel/qguiapplication.cpp
-index fd01f8bb7..4d61d9fd8 100644
+index fd01f8bb..4d61d9fd 100644
 --- a/src/gui/kernel/qguiapplication.cpp
 +++ b/src/gui/kernel/qguiapplication.cpp
 @@ -2532,6 +2532,7 @@ void QGuiApplicationPrivate::processTabletEvent(QWindowSystemInterfacePrivate::T
@@ -11,7 +53,7 @@ index fd01f8bb7..4d61d9fd8 100644
          && !QWindowSystemInterfacePrivate::TabletEvent::platformSynthesizesMouse
          && qApp->testAttribute(Qt::AA_SynthesizeMouseForUnhandledTabletEvents)) {
 diff --git a/src/gui/kernel/qwindowsysteminterface.cpp b/src/gui/kernel/qwindowsysteminterface.cpp
-index b0f286912..b3b6167c9 100644
+index b0f28691..b3b6167c 100644
 --- a/src/gui/kernel/qwindowsysteminterface.cpp
 +++ b/src/gui/kernel/qwindowsysteminterface.cpp
 @@ -949,7 +949,7 @@ void QWindowSystemInterfacePrivate::TabletEvent::setPlatformSynthesizesMouse(boo
@@ -70,7 +112,7 @@ index b0f286912..b3b6167c9 100644
  #endif // QT_DEPRECATED_SINCE(5, 10)
  
 diff --git a/src/gui/kernel/qwindowsysteminterface.h b/src/gui/kernel/qwindowsysteminterface.h
-index bf98c33a1..fdc5a2fb5 100644
+index bf98c33a..fdc5a2fb 100644
 --- a/src/gui/kernel/qwindowsysteminterface.h
 +++ b/src/gui/kernel/qwindowsysteminterface.h
 @@ -247,20 +247,20 @@ public:
@@ -99,7 +141,7 @@ index bf98c33a1..fdc5a2fb5 100644
                                                  qreal tangentialPressure, qreal rotation, int z, qint64 uid,
                                                  Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 diff --git a/src/plugins/platforms/windows/qwindowspointerhandler.cpp b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
-index 9a8b5d512..93498d58b 100644
+index 5ba58c24..7319d83b 100644
 --- a/src/plugins/platforms/windows/qwindowspointerhandler.cpp
 +++ b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
 @@ -535,6 +535,58 @@ bool QWindowsPointerHandler::translateTouchEvent(QWindow *window, HWND hwnd,
@@ -161,7 +203,7 @@ index 9a8b5d512..93498d58b 100644
  bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWindows::WindowsEventType et,
                                                 MSG msg, PVOID vPenInfo)
  {
-@@ -622,10 +674,38 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
+@@ -627,10 +679,38 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
          }
          const Qt::KeyboardModifiers keyModifiers = QWindowsKeyMapper::queryKeyboardModifiers();
  
@@ -204,3 +246,6 @@ index 9a8b5d512..93498d58b 100644
      }
      }
      return true;
+-- 
+2.22.0.windows.1
+

@@ -1,7 +1,7 @@
-From 4fdc698603e5ac3bc0cf107fdf3880ba68dbfb02 Mon Sep 17 00:00:00 2001
+From f9f524b9cf964be802682e30571bf83d6cbf16b3 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Thu, 10 Nov 2016 14:17:53 +0100
-Subject: [PATCH 35/36] Deprecate QT_AUTO_SCREEN_SCALE_FACTOR
+Subject: [PATCH 26/27] Deprecate QT_AUTO_SCREEN_SCALE_FACTOR
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -26,7 +26,7 @@ Change-Id: I30033d91175a00db7837efc9c48c33396f5f0449
  1 file changed, 23 insertions(+), 6 deletions(-)
 
 diff --git a/src/gui/kernel/qhighdpiscaling.cpp b/src/gui/kernel/qhighdpiscaling.cpp
-index b1350599b7..52c0665b5b 100644
+index b1350599..52c0665b 100644
 --- a/src/gui/kernel/qhighdpiscaling.cpp
 +++ b/src/gui/kernel/qhighdpiscaling.cpp
 @@ -54,8 +54,10 @@ Q_LOGGING_CATEGORY(lcScaling, "qt.scaling");
@@ -97,5 +97,5 @@ index b1350599b7..52c0665b5b 100644
  
  qreal QHighDpiScaling::rawScaleFactor(const QPlatformScreen *screen)
 -- 
-2.18.0.windows.1
+2.22.0.windows.1
 

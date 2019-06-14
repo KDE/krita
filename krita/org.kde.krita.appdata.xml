@@ -256,6 +256,7 @@
     <binary>krita</binary>
     <id>org.kde.krita.desktop</id>
   </provides>
+  <content_rating type="oars-1.1"/>
   <releases>
     <release date="2019-05-29" version="4.3.0.0"/>
   </releases>

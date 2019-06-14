@@ -328,7 +328,7 @@ void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResource* workspace)
 void PaletteDockerDock::slotFGColorResourceChanged(const KoColor &color)
 {
     if (!m_colorSelfUpdate) {
-        m_ui->paletteView->slotFGColorResourceChanged(color);
+        m_ui->paletteView->slotFGColorChanged(color);
     }
 }
 

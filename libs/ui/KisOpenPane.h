@@ -49,8 +49,8 @@ public:
     KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const QString& templatesResourcePath = QString());
     ~KisOpenPane() override;
 
-    QTreeWidgetItem* addPane(const QString &title, const QString &iconName, QWidget *widget, int sortWeight);
-    QTreeWidgetItem* addPane(const QString& title, const QPixmap& icon, QWidget* widget, int sortWeight);
+    QTreeWidgetItem* addPane(const QString &title, const QString &untranslatedName, const QString &iconName, QWidget *widget, int sortWeight);
+    QTreeWidgetItem* addPane(const QString &title, const QString &untranslatedName, const QPixmap& icon, QWidget* widget, int sortWeight);
 
     /**
      * If the application has a way to create a document not based on a template, but on user
@@ -60,7 +60,7 @@ public:
      * @param title the title shown in the sidebar
      * @param icon the icon shown in the sidebar
      */
-    void addCustomDocumentWidget(QWidget *widget, const QString& title = QString(), const QString& icon = QString());
+    void addCustomDocumentWidget(QWidget *widget, const QString& title, const QString &untranslatedName, const QString& icon = QString());
 
 
 Q_SIGNALS:

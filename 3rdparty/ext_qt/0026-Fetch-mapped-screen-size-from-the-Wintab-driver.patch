@@ -1,5 +1,35 @@
+From b33666c064dc255e3d39a0646684445ab907d299 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sat, 13 Apr 2019 23:24:01 +0300
+Subject: [PATCH 15/27] Fetch mapped screen size from the Wintab driver
+
+Some devices, like Microsoft Surface Pro 5, don't map tablet's
+input range to the entire virtual screen area, but map it to
+the primary display that has actual built-in tablet sensor.
+
+In such cases we should fetch actualy mapped aread from Wintab's
+lcSys{Org,Ext}{X,Y} fields and use it for cursor mapping.
+
+If one wants to fall back to the old screen size detection method,
+then an environment variable can be set:
+
+QT_IGNORE_WINTAB_MAPPING=1
+
+When the variable is set, the scaling is done via virtual desktop
+area only.
+
+If the tablet driver is broken (e.g. Microsoft SP5, when primary
+display is set to an external monitor) the user might want to override
+mapping completely. Then the following variable can be used:
+
+QT_WINTAB_DESKTOP_RECT=x;y;width;height
+---
+ .../windows/qwindowstabletsupport.cpp         | 89 ++++++++++++++++++-
+ .../platforms/windows/qwindowstabletsupport.h | 13 ++-
+ 2 files changed, 99 insertions(+), 3 deletions(-)
+
 diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-index 3e35b1464..11e6769c8 100644
+index 3e35b146..11e6769c 100644
 --- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 +++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -53,6 +53,7 @@
@@ -127,7 +157,7 @@ index 3e35b1464..11e6769c8 100644
      if (QWindowsContext::verbose > 1)  {
          qCDebug(lcQpaTablet) << __FUNCTION__ << "processing" << packetCount
 diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.h b/src/plugins/platforms/windows/qwindowstabletsupport.h
-index 5b1ddb529..59c996cd3 100644
+index 5b1ddb52..e8b0c01b 100644
 --- a/src/plugins/platforms/windows/qwindowstabletsupport.h
 +++ b/src/plugins/platforms/windows/qwindowstabletsupport.h
 @@ -45,7 +45,9 @@
@@ -140,16 +170,15 @@ index 5b1ddb529..59c996cd3 100644
  
  #include <wintab.h>
  
-@@ -55,7 +57,7 @@ QT_BEGIN_NAMESPACE
- 
+@@ -56,6 +58,7 @@ QT_BEGIN_NAMESPACE
  class QDebug;
  class QWindow;
--class QRect;
+ class QRect;
 +class QScreen;
  
  struct QWindowsWinTab32DLL
  {
-@@ -108,7 +110,7 @@ struct QWindowsTabletDeviceData
+@@ -108,7 +111,7 @@ struct QWindowsTabletDeviceData
  QDebug operator<<(QDebug d, const QWindowsTabletDeviceData &t);
  #endif
  
@@ -158,7 +187,7 @@ index 5b1ddb529..59c996cd3 100644
  {
      Q_DISABLE_COPY(QWindowsTabletSupport)
  
-@@ -141,9 +143,14 @@ public:
+@@ -141,9 +144,14 @@ public:
      int absoluteRange() const { return m_absoluteRange; }
      void setAbsoluteRange(int a) { m_absoluteRange = a; }
  
@@ -173,7 +202,7 @@ index 5b1ddb529..59c996cd3 100644
  
      static QWindowsWinTab32DLL m_winTab32DLL;
      const HWND m_window;
-@@ -154,6 +161,9 @@ private:
+@@ -154,6 +162,9 @@ private:
      int m_currentDevice = -1;
      Mode m_mode = PenMode;
      State m_state = PenUp;
@@ -183,3 +212,6 @@ index 5b1ddb529..59c996cd3 100644
  };
  
  QT_END_NAMESPACE
+-- 
+2.22.0.windows.1
+

@@ -1,8 +1,8 @@
-From 9081571e58ceeaa4c623c83ecb41b04dfc7d90f9 Mon Sep 17 00:00:00 2001
+From 0cda446fe4dea3046cb0cea820b9934164df8f19 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Tue, 21 Jun 2016 14:50:07 +0300
-Subject: [PATCH 2/4] Don't request the MIME image every time Windows asks for
- the list of supported types
+Subject: [PATCH 01/27] Don't request the MIME image every time Windows asks
+ for the list of supported types
 
 Change-Id: I05516d83dc4e0f192bc94f92cefc722f25dae4d4
 ---
@@ -10,7 +10,7 @@ Change-Id: I05516d83dc4e0f192bc94f92cefc722f25dae4d4
  1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/src/plugins/platforms/windows/qwindowsmime.cpp b/src/plugins/platforms/windows/qwindowsmime.cpp
-index ff0dccb0d9..a702a2a90f 100644
+index 96e34fb4..ca6e0925 100644
 --- a/src/plugins/platforms/windows/qwindowsmime.cpp
 +++ b/src/plugins/platforms/windows/qwindowsmime.cpp
 @@ -1082,12 +1082,15 @@ bool QWindowsMimeImage::canConvertToMime(const QString &mimeType, IDataObject *p
@@ -33,5 +33,5 @@ index ff0dccb0d9..a702a2a90f 100644
  
  bool QWindowsMimeImage::convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM * pmedium) const
 -- 
-2.20.1.windows.1
+2.22.0.windows.1
 

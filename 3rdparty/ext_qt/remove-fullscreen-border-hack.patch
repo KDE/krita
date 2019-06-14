@@ -1,5 +1,18 @@
+From b609d09933ac9e8dfa910d9974f62947360bba33 Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvin@alvinhc.com>
+Date: Thu, 18 Apr 2019 18:59:58 +0800
+Subject: [PATCH 21/27] Hack to hide 1px border with OpenGL fullscreen hack
+
+Unfortunately can't hide all four sides because the bug returns. Now we
+leave the bottom border visible, which is probably the most we can do.
+
+Ref: https://bugreports.qt.io/browse/QTBUG-41309
+---
+ src/plugins/platforms/windows/qwindowswindow.cpp | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
 diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
-index 967d479a0..c888847ed 100644
+index 967d479a..c888847e 100644
 --- a/src/plugins/platforms/windows/qwindowswindow.cpp
 +++ b/src/plugins/platforms/windows/qwindowswindow.cpp
 @@ -1561,7 +1561,7 @@ void QWindowsWindow::show_sys() const
@@ -33,3 +46,6 @@ index 967d479a0..c888847ed 100644
                  if (!wasSync)
                      clearFlag(SynchronousGeometryChangeEvent);
                  clearFlag(MaximizeToFullScreen);
+-- 
+2.22.0.windows.1
+

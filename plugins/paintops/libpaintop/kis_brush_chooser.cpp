@@ -286,6 +286,8 @@ void KisPredefinedBrushChooser::slotOpenStampBrush()
         m_stampBrushWidget->setModal(false);
         connect(m_stampBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource*)),
                                     SLOT(slotNewPredefinedBrush(KoResource*)));
+    } else {
+        m_stampBrushWidget->setImage(m_image);
     }
 
     QDialog::DialogCode result = (QDialog::DialogCode)m_stampBrushWidget->exec();

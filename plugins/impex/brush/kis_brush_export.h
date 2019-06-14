@@ -21,11 +21,74 @@
 #define _KIS_Brush_EXPORT_H_
 
 #include <QVariant>
+#include <QSpinBox>
+#include <QPainter>
 
 #include <KisImportExportFilter.h>
 #include <ui_wdg_export_gih.h>
 #include <kis_config_widget.h>
 #include <kis_properties_configuration.h>
+
+class SelectionModeComboBox : public QComboBox
+{
+    Q_OBJECT
+
+public:
+    SelectionModeComboBox(QWidget *parent)
+        : QComboBox(parent)
+    {
+        this->addItem(i18n("Constant"));
+        this->addItem(i18n("Random"));
+        this->addItem(i18n("Incremental"));
+        this->addItem(i18n("Pressure"));
+        this->addItem(i18n("Angular"));
+        this->addItem(i18n("Velocity"));
+    }
+
+};
+
+class BrushPipeSelectionModeHelper : public QWidget
+{
+    Q_OBJECT
+
+public:
+    BrushPipeSelectionModeHelper(QWidget *parent)
+        : QWidget(parent)
+        , cmbSelectionMode(this)
+        , rank(this)
+        , rankLbl(this)
+        , horizLayout(this)
+    {
+        horizLayout.setSpacing(6);
+        horizLayout.setMargin(0);
+
+        QSizePolicy sizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed));
+        sizePolicy.setHorizontalStretch(1);
+        sizePolicy.setVerticalStretch(0);
+
+        this->setSizePolicy(sizePolicy);
+
+        cmbSelectionMode.setSizePolicy(sizePolicy);
+        cmbSelectionMode.setCurrentIndex(2);
+
+        rank.setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
+        rankLbl.setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
+
+        rankLbl.setText(i18n("Rank"));
+        horizLayout.addWidget(&rankLbl);
+        horizLayout.addWidget(&rank);
+        horizLayout.addWidget(&cmbSelectionMode);
+
+        this->hide();
+        this->setEnabled(false);
+    }
+
+    SelectionModeComboBox cmbSelectionMode;
+    QSpinBox rank;
+    QLabel rankLbl;
+    QHBoxLayout horizLayout;
+
+};
 
 class KisWdgOptionsBrush : public KisConfigWidget, public Ui::WdgExportGih
 {
@@ -34,21 +97,60 @@ class KisWdgOptionsBrush : public KisConfigWidget, public Ui::WdgExportGih
 public:
     KisWdgOptionsBrush(QWidget *parent)
         : KisConfigWidget(parent)
+        , currentDimensions(0)
     {
         setupUi(this);
         connect(this->brushStyle, SIGNAL(currentIndexChanged(int)), SLOT(enableSelectionMedthod(int)));
+        connect(this->dimensionSpin, SIGNAL(valueChanged(int)), SLOT(activateDimensionRanks()));
+
+        enableSelectionMedthod(brushStyle->currentIndex());
+
+        for (int i = 0; i < this->dimensionSpin->maximum(); i++) {
+            dimRankLayout->addWidget(new BrushPipeSelectionModeHelper(0));
+        }
+
+        activateDimensionRanks();
     }
 
     void setConfiguration(const KisPropertiesConfigurationSP  cfg) override;
     KisPropertiesConfigurationSP configuration() const override;
+
 public Q_SLOTS:
     void enableSelectionMedthod(int value) {
         if (value == 0) {
-            cmbSelectionMode->setEnabled(false);
+            animStyleGroup->setEnabled(false);
         } else {
-            cmbSelectionMode->setEnabled(true);
+            animStyleGroup->setEnabled(true);
         }
     }
+    void activateDimensionRanks()
+    {
+        QLayoutItem *item;
+        BrushPipeSelectionModeHelper *bp;
+        int dim = this->dimensionSpin->value();
+        if(dim >= currentDimensions) {
+            for (int i = currentDimensions; i < dim; ++i) {
+                if((item = dimRankLayout->itemAt(i)) != 0) {
+                    bp = dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget());
+                    bp->setEnabled(true);
+                    bp->show();
+                }
+            }
+        }
+        else {
+            for (int i = currentDimensions -1; i >= dim; --i) {
+                if((item = dimRankLayout->itemAt(i)) != 0) {
+                   bp = dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget());
+                   bp->setEnabled(false);
+                   bp->hide();
+                }
+            }
+        }
+        currentDimensions = dim;
+    }
+
+private:
+    int currentDimensions;
 };
 
 

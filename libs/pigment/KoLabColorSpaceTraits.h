@@ -22,7 +22,7 @@
 #define _KO_LAB_COLORSPACE_TRAITS_H_
 
 
-/** 
+/**
  * LAB traits, it provides some convenient functions to
  * access LAB channels through an explicit API.
  *
@@ -150,7 +150,7 @@ struct KoLabU8Traits : public KoLabTraits<quint8> {
             case a_pos:
             case b_pos:
                 b = qBound((float)0,
-                           (float)MAX_CHANNEL_AB * values[i],
+                           (float)MAX_CHANNEL_AB * values[i] + CHANNEL_AB_ZERO_OFFSET,
                            (float)MAX_CHANNEL_AB);
                 break;
             default:
@@ -228,7 +228,7 @@ struct KoLabU16Traits : public KoLabTraits<quint16> {
             case a_pos:
             case b_pos:
                 b = qBound((float)0,
-                           (float)MAX_CHANNEL_AB * values[i],
+                           (float)MAX_CHANNEL_AB * values[i] + CHANNEL_AB_ZERO_OFFSET,
                            (float)MAX_CHANNEL_AB);
                 break;
             default:

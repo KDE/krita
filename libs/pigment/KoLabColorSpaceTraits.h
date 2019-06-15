@@ -22,7 +22,7 @@
 #define _KO_LAB_COLORSPACE_TRAITS_H_
 
 
-/** 
+/**
  * LAB traits, it provides some convenient functions to
  * access LAB channels through an explicit API.
  *

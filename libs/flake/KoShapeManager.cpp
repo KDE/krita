@@ -46,6 +46,7 @@
 #include "KisQPainterStateSaver.h"
 #include "KoSvgTextChunkShape.h"
 #include "KoSvgTextShape.h"
+#include <QApplication>
 
 #include <QPainter>
 #include <QTimer>
@@ -124,6 +125,13 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &sha
     Q_ASSERT(d->canvas); // not optional.
     connect(d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
     setShapes(shapes);
+
+    /**
+     * Shape manager uses signal compressors with timers, therefore
+     * it might handle queued signals, therefore it should belong
+     * to the GUI thread.
+     */
+    this->moveToThread(qApp->thread());
 }
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
@@ -131,6 +139,9 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
 {
     Q_ASSERT(d->canvas); // not optional.
     connect(d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
+
+    // see a comment in another constructor
+    this->moveToThread(qApp->thread());
 }
 
 void KoShapeManager::Private::unlinkFromShapesRecursively(const QList<KoShape*> &shapes)

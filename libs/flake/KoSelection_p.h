@@ -21,7 +21,7 @@
 
 #include "KoShape_p.h"
 
-#include "kis_signal_compressor.h"
+#include "kis_thread_safe_signal_compressor.h"
 
 class KoShapeGroup;
 
@@ -36,7 +36,7 @@ public:
     QList<KoShape*> selectedShapes;
     KoShapeLayer *activeLayer;
 
-    KisSignalCompressor selectionChangedCompressor;
+    KisThreadSafeSignalCompressor selectionChangedCompressor;
 
     Q_DECLARE_PUBLIC(KoSelection)
 };

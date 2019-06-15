@@ -356,10 +356,18 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF* image)
     // Do not use the linear gamma profile for 16 bits/channel by default, tiff files are usually created with
     // gamma correction. XXX: Should we ask the user?
     if (!profile) {
+        dbgFile << "No profile found; trying to assign a default one.";
         if (colorSpaceIdTag.first == RGBAColorModelID.id()) {
             profile = KoColorSpaceRegistry::instance()->profileByName("sRGB-elle-V2-srgbtrc.icc");
         } else if (colorSpaceIdTag.first == GrayAColorModelID.id()) {
             profile = KoColorSpaceRegistry::instance()->profileByName("Gray-D50-elle-V2-srgbtrc.icc");
+        } else if (colorSpaceIdTag.first == CMYKAColorModelID.id()) {
+            profile = KoColorSpaceRegistry::instance()->profileByName("Chemical proof");
+        } else if (colorSpaceIdTag.first == LABAColorModelID.id()) {
+            profile = KoColorSpaceRegistry::instance()->profileByName("Lab identity build-in");
+        }
+        if (!profile) {
+            dbgFile << "No suitable default profile found.";
         }
     }
 

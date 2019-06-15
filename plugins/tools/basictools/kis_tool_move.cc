@@ -174,12 +174,9 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
      * But currently, we will just disable starting a new stroke
      * asynchronously.
      */
-    if (image->tryBarrierLock()) {
-        image->unlock();
-    } else {
+    if (!blockUntilOperationsFinished()) {
         return false;
     }
-
 
     initHandles(nodes);
 

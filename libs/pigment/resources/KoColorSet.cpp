@@ -104,6 +104,8 @@ const QString KoColorSet::KPL_SWATCH_TAG = "ColorSetEntry";
 const QString KoColorSet::KPL_GROUP_TAG = "Group";
 const QString KoColorSet::KPL_PALETTE_TAG = "ColorSet";
 
+const int MAXIMUM_ALLOWED_COLUMNS = 4096;
+
 KoColorSet::KoColorSet(const QString& filename)
     : KoResource(filename)
     , d(new Private(this))
@@ -116,7 +118,7 @@ KoColorSet::KoColorSet(const QString& filename)
 
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
-    : QObject(Q_NULLPTR)
+    : QObject(0)
     , KoResource(rhs)
     , d(new Private(this))
 {
@@ -431,7 +433,7 @@ int KoColorSet::rowCount() const
 KisSwatchGroup *KoColorSet::getGroup(const QString &name)
 {
     if (!d->groups.contains(name)) {
-        return Q_NULLPTR;
+        return 0;
     }
     return &(d->groups[name]);
 }
@@ -799,7 +801,13 @@ bool KoColorSet::Private::loadGpl()
     if (lines[index].toLower().contains("columns")) {
         columnsText = lines[index].split(":")[1].trimmed();
         columns = columnsText.toInt();
-        global().setColumnCount(columns);
+        if (columns > MAXIMUM_ALLOWED_COLUMNS) {
+            warnPigment << "Refusing to set unreasonable number of columns (" << columns << ") in GIMP Palette file " << colorSet->filename() << " - using maximum number of allowed columns instead";
+            global().setColumnCount(MAXIMUM_ALLOWED_COLUMNS);
+        }
+        else {
+            global().setColumnCount(columns);
+        }
         index = 3;
     }
 
@@ -811,7 +819,7 @@ bool KoColorSet::Private::loadGpl()
             QStringList a = lines[i].replace('\t', ' ').split(' ', QString::SkipEmptyParts);
 
             if (a.count() < 3) {
-                break;
+                continue;
             }
 
             r = qBound(0, a[0].toInt(), 255);
@@ -961,13 +969,23 @@ bool KoColorSet::Private::loadKpl()
         QByteArray ba = store->read(store->size());
         store->close();
 
+        int desiredColumnCount;
+
         QDomDocument doc;
         doc.setContent(ba);
         QDomElement e = doc.documentElement();
         colorSet->setName(e.attribute(KPL_PALETTE_NAME_ATTR));
-        colorSet->setColumnCount(e.attribute(KPL_PALETTE_COLUMN_COUNT_ATTR).toInt());
         colorSet->setIsEditable(e.attribute(KPL_PALETTE_READONLY_ATTR) != "true");
         comment = e.attribute(KPL_PALETTE_COMMENT_ATTR);
+
+        desiredColumnCount = e.attribute(KPL_PALETTE_COLUMN_COUNT_ATTR).toInt();
+        if (desiredColumnCount > MAXIMUM_ALLOWED_COLUMNS) {
+            warnPigment << "Refusing to set unreasonable number of columns (" << desiredColumnCount << ") in KPL palette file " << colorSet->filename() << " - setting maximum allowed column count instead.";
+            colorSet->setColumnCount(MAXIMUM_ALLOWED_COLUMNS);
+        }
+        else {
+            colorSet->setColumnCount(desiredColumnCount);
+        }
 
         loadKplGroup(doc, e, colorSet->getGlobalGroup());
 
@@ -1624,8 +1642,11 @@ void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElemen
         }
     }
 
-    if (parentEle.attribute(KPL_GROUP_ROW_COUNT_ATTR).isNull() && group->colorCount()/group->columnCount()+1 < 20) {
-        group->setRowCount(group->colorCount()/group->columnCount()+1);
+    if (parentEle.attribute(KPL_GROUP_ROW_COUNT_ATTR).isNull()
+            && group->colorCount() > 0
+            && group->columnCount() > 0
+            && (group->colorCount() / (group->columnCount()) + 1) < 20) {
+        group->setRowCount((group->colorCount() / group->columnCount()) + 1);
     }
 
 }

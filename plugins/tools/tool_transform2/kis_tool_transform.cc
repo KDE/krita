@@ -850,13 +850,9 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
      * stroke and pass it to the tool somehow. But currently, we will
      * just disable starting a new stroke asynchronously
      */
-
-    if (image()->tryBarrierLock()) {
-        image()->unlock();
-    } else {
+    if (!blockUntilOperationsFinished()) {
         return;
     }
-
 
     // set up and null checks before we do anything
     KisResourcesSnapshotSP resources =

@@ -95,7 +95,9 @@ class KRITAIMAGE_EXPORT KisBoxFilterStrategy : public KisFilterStrategy
 {
 public:
     KisBoxFilterStrategy() : KisFilterStrategy(KoID("NearestNeighbor", i18n("Nearest Neighbor"))) {
-        supportVal = 0.5; intSupportVal = 128;
+        // 0.5 and 128, but with a bit of margin to ensure the correct pixel will be used
+        // even in case of calculation errors
+        supportVal = 0.51; intSupportVal = 129;
     }
     ~KisBoxFilterStrategy() override {}
 

@@ -120,7 +120,7 @@ ecm_add_tests(
     kis_lazy_brush_test.cpp
     kis_colorize_mask_test.cpp
     kis_mask_similarity_test.cpp
-    KisMaskGeneratorBenchmark.cpp
+    KisMaskGeneratorTest.cpp
     kis_layer_style_filter_environment_test.cpp
     kis_asl_parser_test.cpp
     KisPerStrokeRandomSourceTest.cpp

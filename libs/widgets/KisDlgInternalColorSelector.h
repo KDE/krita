@@ -98,7 +98,7 @@ public:
      * @param parent parent widget.
      * @param caption the dialog caption.
      */
-    static KoColor getModalColorDialog(const KoColor color, QWidget* parent = Q_NULLPTR, QString caption = QString());
+    static KoColor getModalColorDialog(const KoColor color, QWidget* parent = 0, QString caption = QString());
 
     /**
      * @brief getCurrentColor

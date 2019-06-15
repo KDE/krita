@@ -644,6 +644,7 @@ struct RemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommand
     void populateChildCommands() override {
         KisNodeList filteredNodes = m_nodes;
         KisLayerUtils::filterMergableNodes(filteredNodes, true);
+        KisLayerUtils::filterUnlockedNodes(filteredNodes);
 
         if (filteredNodes.isEmpty()) return;
 

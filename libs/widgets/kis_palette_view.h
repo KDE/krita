@@ -42,7 +42,7 @@ class KRITAWIDGETS_EXPORT KisPaletteView : public QTableView
 private:
     static int MININUM_ROW_HEIGHT;
 public:
-    explicit KisPaletteView(QWidget *parent = Q_NULLPTR);
+    explicit KisPaletteView(QWidget *parent = 0);
     ~KisPaletteView() override;
 
     void setPaletteModel(KisPaletteModel *model);
@@ -109,12 +109,6 @@ public Q_SLOTS:
      * @param color
      */
     void slotFGColorResourceChanged(const KoColor& color);
-
-    /**
-      * Slot that selects the right index for provided color.
-      * Called from KisPaletteComboBox when user selects color in the dropdown.
-      */
-    void slotSelectColor(const KoColor& color);
 
     void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
 

@@ -1,5 +1,7 @@
 /*
- *  Copyright (c) 2018 Iván Santa María <ghevan@gmail.com>
+ * This file is part of Krita
+ *
+ * Copyright (c) 2019 Miguel Lopez <reptillia39@live.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +18,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISMASKGENERATORBENCHMARK_H
-#define KISMASKGENERATORBENCHMARK_H
+#include "guassianhighpass.h"
+#include <kpluginfactory.h>
 
-#include <QtTest>
+#include "guassianhighpass_filter.h"
 
-class KisMaskGeneratorBenchmark : public QObject
+#include <filter/kis_filter_registry.h>
+
+K_PLUGIN_FACTORY_WITH_JSON(GuassianHighPassPluginFactory, "kritaguassianhighpassfilter.json", registerPlugin<GuassianHighPassPlugin>();)
+
+GuassianHighPassPlugin::GuassianHighPassPlugin(QObject *parent, const QVariantList &)
+        : QObject(parent)
 {
-    Q_OBJECT
-private Q_SLOTS:
-    void testDefaultScalarMask();
-    void testDefaultVectorMask();
+    KisFilterRegistry::instance()->add(new KisGuassianHighPassFilter());
 
-    void testCircularGaussScalarMask();
-    void testCircularGaussVectorMask();
+}
 
-    void testCircularSoftScalarMask();
-    void testCircularSoftVectorMask();
+GuassianHighPassPlugin::~GuassianHighPassPlugin()
+{
+}
 
-    void testRectangularScalarMask();
-    void testRectangularVectorMask();
-
-    void testRectangularGaussScalarMask();
-    void testRectangularGaussVectorMask();
-
-    void testRectangularSoftScalarMask();
-    void testRectangularSoftVectorMask();
-
-};
-
-#endif // KISMASKGENERATORBENCHMARK_H
+#include "guassianhighpass.moc"

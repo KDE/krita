@@ -47,6 +47,7 @@
 #include <KoStoreDevice.h>
 #include <KoDialog.h>
 #include <KisImportExportErrorCode.h>
+#include <KoDocumentResourceManager.h>
 
 #include <KisUsageLogger.h>
 #include <klocalizedstring.h>
@@ -427,10 +428,11 @@ KisDocument::KisDocument()
     // preload the krita resources
     KisResourceServerProvider::instance();
 
-    d->shapeController = new KisShapeController(this, d->nserver),
-            d->koShapeController = new KoShapeController(0, d->shapeController),
+    d->shapeController = new KisShapeController(this, d->nserver);
+    d->koShapeController = new KoShapeController(0, d->shapeController);
+    d->shapeController->resourceManager()->setGlobalShapeController(d->koShapeController);
 
-            slotConfigChanged();
+    slotConfigChanged();
 }
 
 KisDocument::KisDocument(const KisDocument &rhs)
@@ -442,10 +444,11 @@ KisDocument::KisDocument(const KisDocument &rhs)
     connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setObjectName(rhs.objectName());
 
-    d->shapeController = new KisShapeController(this, d->nserver),
-            d->koShapeController = new KoShapeController(0, d->shapeController),
+    d->shapeController = new KisShapeController(this, d->nserver);
+    d->koShapeController = new KoShapeController(0, d->shapeController);
+    d->shapeController->resourceManager()->setGlobalShapeController(d->koShapeController);
 
-            slotConfigChanged();
+    slotConfigChanged();
 
     // clone the image with keeping the GUIDs of the layers intact
     // NOTE: we expect the image to be locked!
@@ -1586,8 +1589,11 @@ void KisDocument::slotUndoStackCleanChanged(bool value)
 void KisDocument::slotConfigChanged()
 {
     KisConfig cfg(true);
-    if (!d->undoStack->isClean() && d->undoStack->undoLimit() != cfg.undoStackLimit()) {
-        d->undoStack->clear();
+
+    if (d->undoStack->undoLimit() != cfg.undoStackLimit()) {
+        if (!d->undoStack->isClean()) {
+            d->undoStack->clear();
+        }
         d->undoStack->setUndoLimit(cfg.undoStackLimit());
     }
 

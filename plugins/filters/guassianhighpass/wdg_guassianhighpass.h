@@ -1,5 +1,7 @@
 /*
- *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
+ * This file is part of Krita
+ *
+ * Copyright (c) 2019 Miguel Lopez <reptillia39@live.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +18,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISPASTEACTIONFACTORY_H
-#define KISPASTEACTIONFACTORY_H
+#ifndef _KIS_WDG_GUASSIANHIGHPASS_H_
+#define _KIS_WDG_GUASSIANHIGHPASS_H_
 
-#include "operations/kis_operation.h"
-#include "operations/kis_operation_configuration.h"
+#include <kis_config_widget.h>
 
-struct KRITAUI_EXPORT KisPasteActionFactory : public KisOperation {
-    KisPasteActionFactory() : KisOperation("paste-ui-action") {}
+class Ui_WdgGuassianHighPass;
 
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override {
-        run(config.getBool("paste-at-cursor-position", false), view);
+class KisWdgGuassianHighPass : public KisConfigWidget
+{
+    Q_OBJECT
+public:
+    KisWdgGuassianHighPass(QWidget * parent);
+    ~KisWdgGuassianHighPass() override;
+    inline const Ui_WdgGuassianHighPass* widget() const {
+        return m_widget;
     }
-
-    void run(bool pasteAtCursorPosition, KisViewManager *view);
+    void setConfiguration(const KisPropertiesConfigurationSP) override;
+    KisPropertiesConfigurationSP configuration() const override;
+private:
+    Ui_WdgGuassianHighPass* m_widget;
 };
 
-#endif // KISPASTEACTIONFACTORY_H
+#endif

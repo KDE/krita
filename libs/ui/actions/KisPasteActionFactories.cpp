@@ -16,9 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KisPasteActionFactory.h"
-
-#include <QApplication>
+#include "KisPasteActionFactories.h"
 
 #include "kis_config.h"
 #include "kis_image.h"
@@ -26,6 +24,7 @@
 #include "kis_tool_proxy.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_controller.h"
+#include "kis_group_layer.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "kis_shape_layer.h"
@@ -37,6 +36,7 @@
 #include "KisTransformToolActivationCommand.h"
 #include "kis_processing_applicator.h"
 
+#include <KoDocumentInfo.h>
 #include <KoSvgPaste.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
@@ -49,6 +49,9 @@
 #include "kis_keyframe_channel.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_painter.h"
+#include <KisPart.h>
+#include <KisDocument.h>
+#include <KisReferenceImagesLayer.h>
 
 namespace {
 QPointF getFittingOffset(QList<KoShape*> shapes,
@@ -257,4 +260,49 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
         // XXX: "Add saving of XML data for Paste of shapes"
         view->canvasBase()->toolProxy()->paste();
     }
+}
+
+void KisPasteNewActionFactory::run(KisViewManager *viewManager)
+{
+    Q_UNUSED(viewManager);
+
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
+    if (!clip) return;
+
+    QRect rect = clip->exactBounds();
+    if (rect.isEmpty()) return;
+
+    KisDocument *doc = KisPart::instance()->createDocument();
+    doc->documentInfo()->setAboutInfo("title", i18n("Untitled"));
+    KisImageSP image = new KisImage(doc->createUndoStore(),
+                                    rect.width(),
+                                    rect.height(),
+                                    clip->colorSpace(),
+                                    i18n("Pasted"));
+    KisPaintLayerSP layer =
+            new KisPaintLayer(image.data(), image->nextLayerName() + " " + i18n("(pasted)"),
+                              OPACITY_OPAQUE_U8, clip->colorSpace());
+
+    KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), rect);
+
+    image->addNode(layer.data(), image->rootLayer());
+    doc->setCurrentImage(image);
+    KisPart::instance()->addDocument(doc);
+
+    KisMainWindow *win = viewManager->mainWindow();
+    win->addViewAndNotifyLoadingCompleted(doc);
+}
+
+void KisPasteReferenceActionFactory::run(KisViewManager *viewManager)
+{
+    KisCanvas2 *canvasBase = viewManager->canvasBase();
+    if (!canvasBase) return;
+
+    KisReferenceImage* reference = KisReferenceImage::fromClipboard(*canvasBase->coordinatesConverter());
+    if (!reference) return;
+
+    KisDocument *doc = viewManager->document();
+    doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
+
+    KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
 }

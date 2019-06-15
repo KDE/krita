@@ -63,7 +63,7 @@ namespace ImportExportCodes
 };
 
 
-struct KisImportExportErrorCode;
+class KisImportExportErrorCode;
 
 struct KRITAUI_EXPORT KisImportExportComplexError
 {
@@ -117,7 +117,7 @@ private:
 
 
 
-struct KRITAUI_EXPORT KisImportExportErrorCode
+class KRITAUI_EXPORT KisImportExportErrorCode
 {
 public:
     // required by kis_async_action_feedback

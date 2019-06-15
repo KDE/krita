@@ -16,22 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_HIGHLIGHTED_BUTTON_H
-#define __KIS_HIGHLIGHTED_BUTTON_H
+#ifndef __KIS_HIGHLIGHTED_TOOL_BUTTON_H
+#define __KIS_HIGHLIGHTED_TOOL_BUTTON_H
 
-template <class BaseButton>
-class HighlightedButtonBase : public BaseButton
+#include <QToolButton>
+
+#include "kritawidgetutils_export.h"
+
+class KRITAWIDGETUTILS_EXPORT KisHighlightedToolButton : public QToolButton
 {
 public:
-    HighlightedButtonBase(QWidget *parent = 0) : BaseButton(parent) {}
+    KisHighlightedToolButton(QWidget *parent = 0)
+        : QToolButton(parent)
+    {
+    }
+
 protected:
     void checkStateSet() override {
-        BaseButton::checkStateSet();
+        QToolButton::checkStateSet();
         updatePalette();
     }
 
     void nextCheckState() override {
-        BaseButton::nextCheckState();
+        QToolButton::nextCheckState();
         updatePalette();
     }
 
@@ -47,10 +54,5 @@ private:
     }
 };
 
-
-class QPushButton;
-class QToolButton;
-typedef HighlightedButtonBase<QPushButton> KisHighlightedButton;
-typedef HighlightedButtonBase<QToolButton> KisHighlightedToolButton;
 
 #endif /* __KIS_HIGHLIGHTED_BUTTON_H */

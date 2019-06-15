@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
   <id>org.kde.krita</id>
-  <launchable type="desktop-id">org.kde.krita</launchable>
+  <launchable type="desktop-id">org.kde.krita.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-only</project_license>
   <developer_name>Krita Foundation</developer_name>
@@ -218,51 +218,36 @@
     <p xml:lang="zh-TW">使用先進的筆刷引擎、驚人的濾鏡和許多方便的功能來開心地繪畫，讓 Krita 擁有巨大的生產力。</p>
   </description>
   <url type="homepage">https://www.krita.org/</url>
-  <url type="faq">https://krita.org/about/faq/</url>
+  <url type="faq">https://docs.krita.org/KritaFAQ.html</url>
   <url type="donation">https://krita.org/support-us/donations/</url>
-  <url type="help">https://docs.krita.org/Category:Tutorials</url>
+  <url type="help">https://docs.krita.org/</url>
+  <url type="bugtracker">https://docs.krita.org/en/untranslatable_pages/reporting_bugs.html</url>
   <screenshots>
     <screenshot type="default">
+      <caption>Krita is a full-featured digital painting studio.</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_001.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>The startup window now also gives you the latest news about Krita.</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_002.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>There are over ten immensely powerful brush engines.</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_003.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>Create and use gamut masks to give your images a coherent feel.</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_004.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>Into animation? Krita provides everything you need for traditional, hand-drawn animation.</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_005.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>If you're new to digital painting, or want to know more about Krita's possibilities, there's an extensive, up-to-date manual.</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_006.png</image>
     </screenshot>
   </screenshots>
-  <content_rating type="oars-1.0">
-    <content_attribute id="violence-cartoon">none</content_attribute>
-    <content_attribute id="violence-fantasy">none</content_attribute>
-    <content_attribute id="violence-realistic">none</content_attribute>
-    <content_attribute id="violence-bloodshed">none</content_attribute>
-    <content_attribute id="violence-sexual">none</content_attribute>
-    <content_attribute id="drugs-alcohol">none</content_attribute>
-    <content_attribute id="drugs-narcotics">none</content_attribute>
-    <content_attribute id="drugs-tobacco">none</content_attribute>
-    <content_attribute id="sex-nudity">none</content_attribute>
-    <content_attribute id="sex-themes">none</content_attribute>
-    <content_attribute id="language-profanity">none</content_attribute>
-    <content_attribute id="language-humor">none</content_attribute>
-    <content_attribute id="language-discrimination">none</content_attribute>
-    <content_attribute id="social-chat">none</content_attribute>
-    <content_attribute id="social-info">none</content_attribute>
-    <content_attribute id="social-audio">none</content_attribute>
-    <content_attribute id="social-location">none</content_attribute>
-    <content_attribute id="social-contacts">none</content_attribute>
-    <content_attribute id="money-purchasing">none</content_attribute>
-    <content_attribute id="money-gambling">none</content_attribute>
-  </content_rating>
   <categories>
     <category>Graphics</category>
   </categories>
@@ -271,6 +256,7 @@
     <binary>krita</binary>
     <id>org.kde.krita.desktop</id>
   </provides>
+  <content_rating type="oars-1.1"/>
   <releases>
     <release date="2019-05-29" version="4.3.0.0"/>
   </releases>

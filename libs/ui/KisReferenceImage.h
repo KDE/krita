@@ -63,7 +63,7 @@ public:
      * @return reference image or null if one could not be loaded
      */
     static KisReferenceImage * fromFile(const QString &filename, const KisCoordinatesConverter &converter, QWidget *parent /*= nullptr*/);
-    static KisReferenceImage * fromClipboard(const KisCoordinatesConverter &converter, QWidget *parent);
+    static KisReferenceImage * fromClipboard(const KisCoordinatesConverter &converter);
 
     void setSaturation(qreal saturation);
     qreal saturation() const;

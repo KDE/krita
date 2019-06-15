@@ -28,10 +28,11 @@ struct KRITAUI_NO_EXPORT KisFrameDataSerializer::Private
 {
     Private(const QString &frameCachePath)
         : framesDir(
-              (!frameCachePath.isEmpty() ? frameCachePath : QDir::tempPath()) +
-              QDir::separator() + "KritaFrameCacheXXXXXX")
+              (!frameCachePath.isEmpty() && QTemporaryDir(frameCachePath + "/KritaFrameCacheXXXXXX").isValid()
+               ? frameCachePath
+               : QDir::tempPath())
+              + "/KritaFrameCacheXXXXXX")
     {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(framesDir.isValid());
         framesDirObject = QDir(framesDir.path());
         framesDirObject.makeAbsolute();
     }

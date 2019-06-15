@@ -47,6 +47,9 @@ OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
     KisImageConfig config(true);
     ui->setupUi(mainWidget);
 
+    mainWidget->setContentsMargins(10, 10, 10, 10);
+
+
     ui->doubleTintFactor->setMinimum(0);
     ui->doubleTintFactor->setMaximum(100);
     ui->doubleTintFactor->setPrefix(i18n("Tint: "));
@@ -125,6 +128,9 @@ OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
     loadSettings();
     KisOnionSkinCompositor::instance()->configChanged();
 
+    // this mostly hides the checkboxes since no filtering is done by default
+    slotFilteredColorsChanged();
+
     resize(sizeHint());
 }
 
@@ -180,6 +186,15 @@ void OnionSkinsDocker::slotFilteredColorsChanged()
         selectedFilterColors << 0 << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8; // show everything
     }
 
+    ui->colorFilter0_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
+    ui->colorFilter1_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
+    ui->colorFilter2_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
+    ui->colorFilter3_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
+    ui->colorFilter4_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
+    ui->colorFilter5_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
+    ui->colorFilter6_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
+    ui->colorFilter7_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
+    ui->colorFilter8_checkbox->setVisible(ui->colorFilterGroupbox->isChecked());
 
     // existing code
     KisOnionSkinCompositor::instance()->setColorLabelFilter(selectedFilterColors);

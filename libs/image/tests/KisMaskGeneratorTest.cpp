@@ -21,7 +21,7 @@
 #include <KoColor.h>
 #include <QElapsedTimer>
 
-#include "KisMaskGeneratorBenchmark.h"
+#include "KisMaskGeneratorTest.h"
 
 #include "kis_mask_similarity_test.h"
 
@@ -32,10 +32,10 @@
 
 #include "testutil.h"
 
-class KisMaskGeneratorBenchmarkTester
+class KisMaskGeneratorTestTester
 {
 public:
-    KisMaskGeneratorBenchmarkTester(KisBrushMaskApplicatorBase *_applicatorBase, QRect _bounds)
+    KisMaskGeneratorTestTester(KisBrushMaskApplicatorBase *_applicatorBase, QRect _bounds)
         : m_bounds(_bounds),
           applicatorBase(_applicatorBase)
     {
@@ -67,27 +67,27 @@ protected:
     KisFixedPaintDeviceSP m_paintDev;
 };
 
-void KisMaskGeneratorBenchmark::testDefaultScalarMask()
+void KisMaskGeneratorTest::testDefaultScalarMask()
 {
     QRect bounds(0,0,1000,1000);
     {
         KisCircleMaskGenerator circScalar(1000, 1.0, 0.5, 0.5, 2, true);
         circScalar.resetMaskApplicator(true); // Force usage of scalar backend
 
-        KisMaskGeneratorBenchmarkTester(circScalar.applicator(), bounds);
+        KisMaskGeneratorTestTester(circScalar.applicator(), bounds);
     }
 }
 
-void KisMaskGeneratorBenchmark::testDefaultVectorMask()
+void KisMaskGeneratorTest::testDefaultVectorMask()
 {
     QRect bounds(0,0,1000,1000);
     {
         KisCircleMaskGenerator circVectr(1000, 1.0, 0.5, 0.5, 2, true);
-        KisMaskGeneratorBenchmarkTester(circVectr.applicator(), bounds);
+        KisMaskGeneratorTestTester(circVectr.applicator(), bounds);
     }
 }
 
-void KisMaskGeneratorBenchmark::testCircularGaussScalarMask()
+void KisMaskGeneratorTest::testCircularGaussScalarMask()
 {
     QRect bounds(0,0,1000,1000);
     {
@@ -95,21 +95,21 @@ void KisMaskGeneratorBenchmark::testCircularGaussScalarMask()
     circScalar.setDiameter(1000);
     circScalar.resetMaskApplicator(true); // Force usage of scalar backend
 
-    KisMaskGeneratorBenchmarkTester(circScalar.applicator(), bounds);
+    KisMaskGeneratorTestTester(circScalar.applicator(), bounds);
     }
 }
 
-void KisMaskGeneratorBenchmark::testCircularGaussVectorMask()
+void KisMaskGeneratorTest::testCircularGaussVectorMask()
 {
     QRect bounds(0,0,1000,1000);
     {
     KisGaussCircleMaskGenerator circVectr(1000, 1.0, 0.5, 0.5, 2, true);
     circVectr.setDiameter(1000);
-    KisMaskGeneratorBenchmarkTester(circVectr.applicator(), bounds);
+    KisMaskGeneratorTestTester(circVectr.applicator(), bounds);
     }
 }
 
-void KisMaskGeneratorBenchmark::testCircularSoftScalarMask()
+void KisMaskGeneratorTest::testCircularSoftScalarMask()
 {
     QRect bounds(0,0,1000,1000);
     KisCubicCurve pointsCurve;
@@ -119,11 +119,11 @@ void KisMaskGeneratorBenchmark::testCircularSoftScalarMask()
     circScalar.setSoftness(0.5);
     circScalar.resetMaskApplicator(true); // Force usage of scalar backend
 
-    KisMaskGeneratorBenchmarkTester(circScalar.applicator(), bounds);
+    KisMaskGeneratorTestTester(circScalar.applicator(), bounds);
     }
 }
 
-void KisMaskGeneratorBenchmark::testCircularSoftVectorMask()
+void KisMaskGeneratorTest::testCircularSoftVectorMask()
 {
     QRect bounds(0,0,1000,1000);
     KisCubicCurve pointsCurve;
@@ -131,29 +131,29 @@ void KisMaskGeneratorBenchmark::testCircularSoftVectorMask()
     {
     KisCurveCircleMaskGenerator circVectr(1000, 1.0, 0.5, 0.5, 2, pointsCurve, true);
     circVectr.setSoftness(0.5);
-    KisMaskGeneratorBenchmarkTester(circVectr.applicator(), bounds);
+    KisMaskGeneratorTestTester(circVectr.applicator(), bounds);
     }
 }
 
-void KisMaskGeneratorBenchmark::testRectangularScalarMask(){
+void KisMaskGeneratorTest::testRectangularScalarMask(){
     QRect bounds(0,0,1000,1000);
     {
         KisRectangleMaskGenerator rectScalar(1000, 1.0, 0.5, 0.5, 2, true);
         rectScalar.resetMaskApplicator(true); // Force usage of scalar backend
 
-        KisMaskGeneratorBenchmarkTester(rectScalar.applicator(), bounds);
+        KisMaskGeneratorTestTester(rectScalar.applicator(), bounds);
     }
 }
 
-void KisMaskGeneratorBenchmark::testRectangularVectorMask(){
+void KisMaskGeneratorTest::testRectangularVectorMask(){
     QRect bounds(0,0,1000,1000);
     {
         KisRectangleMaskGenerator rectScalar(1000, 1.0, 0.5, 0.5, 2, true);
-        KisMaskGeneratorBenchmarkTester(rectScalar.applicator(), bounds);
+        KisMaskGeneratorTestTester(rectScalar.applicator(), bounds);
     }
 }
 
-void KisMaskGeneratorBenchmark::testRectangularGaussScalarMask()
+void KisMaskGeneratorTest::testRectangularGaussScalarMask()
 {
     QRect bounds(0,0,1000,1000);
     {
@@ -161,20 +161,20 @@ void KisMaskGeneratorBenchmark::testRectangularGaussScalarMask()
 //    circScalar.setDiameter(1000);
     circScalar.resetMaskApplicator(true); // Force usage of scalar backend
 
-    KisMaskGeneratorBenchmarkTester(circScalar.applicator(), bounds);
+    KisMaskGeneratorTestTester(circScalar.applicator(), bounds);
     }
 }
-void KisMaskGeneratorBenchmark::testRectangularGaussVectorMask()
+void KisMaskGeneratorTest::testRectangularGaussVectorMask()
 {
     QRect bounds(0,0,1000,1000);
     {
     KisGaussRectangleMaskGenerator circVectr(1000, 1.0, 0.5, 0.5, 2, true);
 //    circVectr.setDiameter(1000);
-    KisMaskGeneratorBenchmarkTester(circVectr.applicator(), bounds);
+    KisMaskGeneratorTestTester(circVectr.applicator(), bounds);
     }
 }
 
-void KisMaskGeneratorBenchmark::testRectangularSoftScalarMask()
+void KisMaskGeneratorTest::testRectangularSoftScalarMask()
 {
     QRect bounds(0,0,1000,1000);
     KisCubicCurve pointsCurve;
@@ -184,10 +184,10 @@ void KisMaskGeneratorBenchmark::testRectangularSoftScalarMask()
 
     circScalar.resetMaskApplicator(true); // Force usage of scalar backend
 
-    KisMaskGeneratorBenchmarkTester(circScalar.applicator(), bounds);
+    KisMaskGeneratorTestTester(circScalar.applicator(), bounds);
     }
 }
-void KisMaskGeneratorBenchmark::testRectangularSoftVectorMask()
+void KisMaskGeneratorTest::testRectangularSoftVectorMask()
 {
     QRect bounds(0,0,1000,1000);
     KisCubicCurve pointsCurve;
@@ -195,8 +195,8 @@ void KisMaskGeneratorBenchmark::testRectangularSoftVectorMask()
     {
     KisCurveRectangleMaskGenerator circVectr(1000, 1.0, 0.5, 0.5, 2, pointsCurve, true);
 
-    KisMaskGeneratorBenchmarkTester(circVectr.applicator(), bounds);
+    KisMaskGeneratorTestTester(circVectr.applicator(), bounds);
     }
 }
 
-QTEST_MAIN(KisMaskGeneratorBenchmark)
+QTEST_MAIN(KisMaskGeneratorTest)

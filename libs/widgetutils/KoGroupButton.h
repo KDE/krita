@@ -22,8 +22,7 @@
 
 #include "kritawidgetutils_export.h"
 
-// Qt
-#include <QToolButton>
+#include <KisHighlightedToolButton.h>
 
 /**
  * A thin tool button which can be visually grouped with other buttons.
@@ -32,7 +31,7 @@
  * 
  * For groupping layout can be used. For exclusive checkable behaviour assign QButtonGroup on the buttons.
  */
-class KRITAWIDGETUTILS_EXPORT KoGroupButton : public QToolButton
+class KRITAWIDGETUTILS_EXPORT KoGroupButton : public KisHighlightedToolButton
 {
     Q_OBJECT
     Q_ENUMS( GroupPosition )

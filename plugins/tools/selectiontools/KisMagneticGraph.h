@@ -134,6 +134,7 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
             pos = position::end;
             return;
         }
+
         if(nextPoint.x == graph.bottomRight.x()){ // end of a row move to next column
             nextPoint = VertexDescriptor(graph.topLeft.x(), nextPoint.y + 1);
         } else {
@@ -143,7 +144,6 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
         if(nextPoint == currentPoint){
             increment();
         }
-
     }
 
     bool operator==(neighbour_iterator const& that) const {

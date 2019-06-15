@@ -53,7 +53,7 @@ void KisMagneticWorkerTest::testWorker()
     auto points = worker.computeEdge(grayscaleDev, 10, startPos, endPos);
     KIS_DUMP_DEVICE_2(grayscaleDev, rect, "draw", "dd");
 
-    QImage img = grayscaleDev->convertToQImage(0, rect);
+    QImage img = dev->convertToQImage(0, rect);
     img = img.convertToFormat(QImage::Format_ARGB32);
     QPainter gc(&img);
 

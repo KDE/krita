@@ -101,7 +101,7 @@ class AStarHeuristic : public boost::astar_heuristic<KisMagneticGraph, double> {
             double dz = EuclideanDistance(prev, m_goal);
             di = di/dz;
             double dm = EuclideanDistance(v, m_goal);
-            return coeff_a * di + coeff_b * (dm - dz) ;
+            return coeff_a * di + coeff_b * (dm - dz);
         }
 };
 
@@ -136,7 +136,7 @@ struct WeightMap{
     data_type& operator[](key_type const& k) {
         if (m_map.find(k) == m_map.end()) {
             double edge_gradient = m_graph.getIntensity((k.first)) + m_graph.getIntensity((k.second))/2;
-            m_map[k] = EuclideanDistance(k.first, k.second) * (edge_gradient + 1);
+            m_map[k] = EuclideanDistance(k.first, k.second) / (edge_gradient + 1);
         }
         return m_map[k];
     }

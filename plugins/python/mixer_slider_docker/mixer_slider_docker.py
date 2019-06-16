@@ -33,7 +33,7 @@ class MixerSliderDocker(DockWidget):
 
         main_program = Krita.instance()
         settings = main_program.readSetting("", "MixerSliderColors",
-                                            "RGBA,U8,sRGB-elle-V2-srgbtrc.icc,1,0.8,0.4,1," +
+                                            "RGBA,U8,sRGB-elle-V2-srgbtrc.icc,1,0.8,0.4,1|" +
                                             "RGBA,U8,sRGB-elle-V2-srgbtrc.icc,0,0,0,1")  # alpha=1 == non-transparent
 
         self.default_left_color = self.qcolor_to_managedcolor(QColor.fromRgbF(0.4, 0.8, 1, 1))
@@ -55,9 +55,9 @@ class MixerSliderDocker(DockWidget):
         self.layout.setSpacing(0)
         self.main_layout.addLayout(self.layout)
         for line in settings.split(";"):
-            colors = line.split(',')
-            left_color = self.parse_color(colors[0:7])
-            right_color = self.parse_color(colors[7:])
+            colors = line.split('|')
+            left_color = self.parse_color(colors[0].split(','))
+            right_color = self.parse_color(colors[1].split(','))
             widget = SliderLine(left_color, right_color, self)
             self.sliders.append(widget)
             self.layout.addWidget(widget)
@@ -99,7 +99,7 @@ class MixerSliderDocker(DockWidget):
     def write_settings(self):
         main_program = Krita.instance()
         setting = ';'.join(
-            [self.color_to_settings(line.left) + ',' + self.color_to_settings(line.right)
+            [self.color_to_settings(line.left) + '|' + self.color_to_settings(line.right)
              for line in self.sliders])
 
         main_program.writeSetting("", "MixerSliderColors", setting)
@@ -119,8 +119,7 @@ class MixerSliderDocker(DockWidget):
         pass
 
     def qcolor_to_managedcolor(self, qcolor):
-        mc = self.get_color_space()
-        mc.setComponents([qcolor.blueF(), qcolor.greenF(), qcolor.redF(), qcolor.alphaF()])
+        mc = ManagedColor.fromQColor(qcolor, self.canvas())
         return mc
 
     def managedcolor_to_qcolor(self, managedcolor):

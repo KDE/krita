@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with Krita-docker-color-slider.  If not, see <https://www.gnu.org/licenses/>.
 '''
-from PyQt5.QtWidgets import QDialogButtonBox, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit
+from PyQt5.QtWidgets import QDialogButtonBox, QLabel, QVBoxLayout, QHBoxLayout, QSpinBox
 from PyQt5.QtGui import QIntValidator
 from PyQt5.QtCore import Qt
 import krita
@@ -45,8 +45,8 @@ class UIMixerSliderDocker(object):
 
         self.vbox.addLayout(self.hbox)
         self.hbox.addWidget(QLabel(i18n('Number of slider lines: ')))
-        self.line_edit = QLineEdit(str(len(docker.sliders)))
-        self.line_edit.setValidator(QIntValidator(1, 8))
+        self.line_edit = QSpinBox()
+        self.line_edit.setValue(len(docker.sliders))
         self.hbox.addWidget(self.line_edit)
 
         self.vbox.addWidget(self.button_box)

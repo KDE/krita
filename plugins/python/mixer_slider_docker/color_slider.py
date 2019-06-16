@@ -56,11 +56,14 @@ class ColorSlider(QWidget):
         '''
         if self.need_redraw:
             patch_count = self.width()
-            base_hsva = self.docker.managedcolor_to_qcolor(self.left_color).getHsvF()
-            dest_hsva = self.docker.managedcolor_to_qcolor(self.right_color).getHsvF()
+            base_hsva = list(self.docker.managedcolor_to_qcolor(self.left_color).getHsvF())
+            dest_hsva = list(self.docker.managedcolor_to_qcolor(self.right_color).getHsvF())
             diff_hsva = [(dest_hsva[i] - base_hsva[i]) for i in range(4)]
             if dest_hsva[0] == -1.0:
                 diff_hsva[0] = 0
+            elif base_hsva[0] == -1.0:
+                diff_hsva[0] = 0
+                base_hsva[0] = dest_hsva[0]
             elif diff_hsva[0] > 0.5:  # make sure the sliding goes through a minor arc
                 diff_hsva[0] = diff_hsva[0] - 1.0
             elif diff_hsva[0] < -0.5:

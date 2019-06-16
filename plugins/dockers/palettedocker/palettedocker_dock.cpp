@@ -218,7 +218,8 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
         for (KoColorSet *cs : m_activeDocument->paletteList()) {
             m_rServer->addResource(cs);
         }
-        m_connections.addConnection(m_activeDocument, SIGNAL(sigPaletteListChanged), this, SLOT(slotUpdatePaletteList));
+        m_connections.addConnection(m_activeDocument, &KisDocument::sigPaletteListChanged,
+                                    this, &PaletteDockerDock::slotUpdatePaletteList);
     }
 
     if (!m_currentColorSet) {

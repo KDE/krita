@@ -83,7 +83,8 @@ void KisDecorationsManager::setView(QPointer<KisView> imageView)
         connect(m_toggleAssistant, SIGNAL(triggered()), assistantsDecoration(), SLOT(toggleAssistantVisible()));
         connect(m_togglePreview, SIGNAL(triggered()), assistantsDecoration(), SLOT(toggleOutlineVisible()));
         connect(assistantsDecoration(), SIGNAL(assistantChanged()), SLOT(updateAction()));
-        connect(m_imageView->document(), SIGNAL(sigAssistantsChanged), m_imageView->canvasBase(), SLOT(updateCanvas()));
+        connect(m_imageView->document(), &KisDocument::sigAssistantsChanged,
+                m_imageView->canvasBase(), QOverload<>::of(&KisCanvas2::updateCanvas));
     }
 
     if (m_imageView && referenceImagesDecoration()) {

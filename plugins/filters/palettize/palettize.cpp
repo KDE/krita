@@ -102,10 +102,6 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     spreadSpinBox->setSingleStep(0.125);
     QObject::connect(spreadSpinBox, &KisDoubleSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
 
-    colorCountSpinBox->setPrefix(QString("%1  ").arg(i18n("Colors:")));
-    colorCountSpinBox->setRange(2, 4); // Limit to 4 colours is arbitrary, but larger values give universally poor results
-    QObject::connect(colorCountSpinBox, &KisSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
-
     QObject::connect(alphaGroupBox, &QGroupBox::toggled, this, &KisConfigWidget::sigConfigurationItemChanged);
 
     QObject::connect(alphaModeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
@@ -134,7 +130,6 @@ void KisPalettizeWidget::setConfiguration(const KisPropertiesConfigurationSP con
     colorModeComboBox->setCurrentIndex(config->getInt("colorMode"));
     offsetScaleSpinBox->setValue(config->getDouble("offsetScale"));
     spreadSpinBox->setValue(config->getDouble("spread"));
-    colorCountSpinBox->setValue(config->getInt("colorCount"));
     alphaGroupBox->setChecked(config->getBool("alphaEnabled"));
     alphaModeComboBox->setCurrentIndex(config->getInt("alphaMode"));
     alphaClipSpinBox->setValue(config->getDouble("alphaClip"));
@@ -155,7 +150,6 @@ KisPropertiesConfigurationSP KisPalettizeWidget::configuration() const
     config->setProperty("colorMode", colorModeComboBox->currentIndex());
     config->setProperty("offsetScale", offsetScaleSpinBox->value());
     config->setProperty("spread", spreadSpinBox->value());
-    config->setProperty("colorCount", colorCountSpinBox->value());
     config->setProperty("alphaEnabled", alphaGroupBox->isChecked());
     config->setProperty("alphaMode", alphaModeComboBox->currentIndex());
     config->setProperty("alphaClip", alphaClipSpinBox->value());
@@ -180,13 +174,12 @@ KisFilterConfigurationSP KisFilterPalettize::factoryConfiguration() const
     config->setProperty("colorspace", Colorspace::Lab);
     config->setProperty("ditherEnabled", false);
     config->setProperty("thresholdMode", ThresholdMode::Pattern);
-    config->setProperty("pattern", "Grid01.pat");
+    config->setProperty("pattern", "DITH 0202 GEN ");
     config->setProperty("patternValueMode", PatternValueMode::Auto);
     config->setProperty("noiseSeed", rand());
     config->setProperty("colorMode", ColorMode::PerChannelOffset);
     config->setProperty("offsetScale", 0.125);
     config->setProperty("spread", 1.0);
-    config->setProperty("colorCount", 2);
     config->setProperty("alphaEnabled", true);
     config->setProperty("alphaMode", AlphaMode::Clip);
     config->setProperty("alphaClip", 0.5);
@@ -207,7 +200,6 @@ void KisFilterPalettize::processImpl(KisPaintDeviceSP device, const QRect& apply
     const int colorMode = config->getInt("colorMode");
     const double offsetScale = config->getDouble("offsetScale");
     const double spread = config->getDouble("spread");
-    const int colorCount = ditherEnabled && colorMode == ColorMode::NearestColors ? config->getInt("colorCount") : 1;
     const bool alphaEnabled = config->getBool("alphaEnabled");
     const int alphaMode = config->getInt("alphaMode");
     const double alphaClip = config->getDouble("alphaClip");
@@ -216,14 +208,20 @@ void KisFilterPalettize::processImpl(KisPaintDeviceSP device, const QRect& apply
     const KoColorSpace* colorspace = device->colorSpace();
     const KoColorSpace* workColorspace = (searchColorspace == Colorspace::Lab
                                               ? KoColorSpaceRegistry::instance()->lab16()
-                                              : KoColorSpaceRegistry::instance()->rgb16());
+                                              : KoColorSpaceRegistry::instance()->rgb16("sRGB-elle-V2-srgbtrc.icc"));
+
+    const quint8 colorCount = ditherEnabled && colorMode == ColorMode::NearestColors ? 2 : 1;
 
     KisRandomGenerator random(noiseSeed);
 
-    using TreeColor = boost::geometry::model::point<quint16, 3, boost::geometry::cs::cartesian>;
-    using TreeValue = std::tuple<TreeColor, KoColor, quint16>;
-    using Rtree = boost::geometry::index::rtree<TreeValue, boost::geometry::index::quadratic<16>>;
-    Rtree rtree;
+    using SearchColor = boost::geometry::model::point<quint16, 3, boost::geometry::cs::cartesian>;
+    struct ColorCandidate {
+        KoColor color;
+        quint16 index;
+        double distance;
+    };
+    using SearchEntry = std::pair<SearchColor, ColorCandidate>;
+    boost::geometry::index::rtree<SearchEntry, boost::geometry::index::quadratic<16>> rtree;
 
     if (palette) {
         // Add palette colors to search tree
@@ -234,44 +232,46 @@ void KisFilterPalettize::processImpl(KisPaintDeviceSP device, const QRect& apply
                 if (swatch.isValid()) {
                     KoColor color = swatch.color().convertedTo(colorspace);
                     KoColor workColor = swatch.color().convertedTo(workColorspace);
-                    TreeColor searchColor;
-                    memcpy(&searchColor, workColor.data(), sizeof(TreeColor));
+                    SearchColor searchColor;
+                    memcpy(&searchColor, workColor.data(), sizeof(SearchColor));
                     // Don't add duplicates so won't dither between identical colors
-                    std::vector<TreeValue> result;
+                    std::vector<SearchEntry> result;
                     rtree.query(boost::geometry::index::contains(searchColor), std::back_inserter(result));
-                    if (result.empty()) rtree.insert(std::make_tuple(searchColor, color, index++));
+                    if (result.empty()) rtree.insert(SearchEntry(searchColor, {color, index, 0.0}));
                 }
+                ++index;
             }
         }
 
+        // Automatically pick between lightness-based and alpha-based patterns by whichever has maximum range
         bool patternUseAlpha;
-        if (pattern && ditherEnabled && thresholdMode == ThresholdMode::Pattern) {
-            // Automatically pick between lightness-based and alpha-based patterns by whichever has maximum range
-            if (patternValueMode == PatternValueMode::Auto) {
-                qreal lightnessMin = 1.0, lightnessMax = 0.0;
-                qreal alphaMin = 1.0, alphaMax = 0.0;
-                const QImage &image = pattern->pattern();
-                for (int y = 0; y < image.height(); ++y) {
-                    for (int x = 0; x < image.width(); ++x) {
-                        const QColor pixel = image.pixelColor(x, y);
-                        lightnessMin = std::min(lightnessMin, pixel.lightnessF());
-                        lightnessMax = std::max(lightnessMax, pixel.lightnessF());
-                        alphaMin = std::min(alphaMin, pixel.alphaF());
-                        alphaMax = std::max(alphaMax, pixel.alphaF());
-                    }
+        if (pattern && ditherEnabled && thresholdMode == ThresholdMode::Pattern && patternValueMode == PatternValueMode::Auto) {
+            qreal lightnessMin = 1.0, lightnessMax = 0.0;
+            qreal alphaMin = 1.0, alphaMax = 0.0;
+            const QImage &image = pattern->pattern();
+            for (int y = 0; y < image.height(); ++y) {
+                for (int x = 0; x < image.width(); ++x) {
+                    const QColor pixel = image.pixelColor(x, y);
+                    lightnessMin = std::min(lightnessMin, pixel.lightnessF());
+                    lightnessMax = std::max(lightnessMax, pixel.lightnessF());
+                    alphaMin = std::min(alphaMin, pixel.alphaF());
+                    alphaMax = std::max(alphaMax, pixel.alphaF());
                 }
-                patternUseAlpha = (alphaMax - alphaMin > lightnessMax - lightnessMin);
             }
-            else {
-                patternUseAlpha = (patternValueMode == PatternValueMode::Alpha);
-            }
+            patternUseAlpha = (alphaMax - alphaMin > lightnessMax - lightnessMin);
+        }
+        else {
+            patternUseAlpha = (patternValueMode == PatternValueMode::Alpha);
         }
 
         KisSequentialIteratorProgress pixel(device, applyRect, progressUpdater);
         while (pixel.nextPixel()) {
+            KoColor workColor(pixel.oldRawData(), colorspace);
+            workColor.convertTo(workColorspace);
+
             // Find dither threshold
             double ditherPos = 0.5;
-            if (ditherEnabled) {
+            if (pattern && ditherEnabled) {
                 if (thresholdMode == ThresholdMode::Pattern) {
                     const QImage &image = pattern->pattern();
                     const QColor ditherPixel = image.pixelColor(pixel.x() % image.width(), pixel.y() % image.height());
@@ -280,76 +280,67 @@ void KisFilterPalettize::processImpl(KisPaintDeviceSP device, const QRect& apply
                 else if (thresholdMode == ThresholdMode::Noise) {
                     ditherPos = random.doubleRandomAt(pixel.x(), pixel.y());
                 }
+
+                // Traditional per-channel ordered dithering
+                if (colorMode == ColorMode::PerChannelOffset) {
+                    QVector<float> normalized(int(workColorspace->channelCount()));
+                    workColorspace->normalisedChannelsValue(workColor.data(), normalized);
+                    for (int channel = 0; channel < int(workColorspace->channelCount()); ++channel) {
+                        normalized[channel] += (ditherPos - 0.5) * offsetScale;
+                    }
+                    workColorspace->fromNormalisedChannelsValue(workColor.data(), normalized);
+                }
             }
             const double ditherThreshold = (0.5 - (spread / 2.0) + ditherPos * spread);
 
-            KoColor workColor(pixel.oldRawData(), colorspace);
-            workColor.convertTo(workColorspace);
-            if (ditherEnabled && colorMode == ColorMode::PerChannelOffset) {
-                // Traditional per-channel ordered dithering
-                QVector<float> normalized(workColorspace->channelCount());
-                workColorspace->normalisedChannelsValue(workColor.data(), normalized);
-                for (quint32 channel = 0; channel < workColorspace->channelCount(); ++channel) {
-                    normalized[channel] += (ditherPos - 0.5) * offsetScale;
-                }
-                workColorspace->fromNormalisedChannelsValue(workColor.data(), normalized);
-            }
-
             // Get candidate colors and their distances
-            TreeColor searchColor;
-            memcpy(reinterpret_cast<quint8 *>(&searchColor), workColor.data(), sizeof(TreeColor));
-            std::vector<std::tuple<TreeColor, KoColor, quint16, double>> candidateColors;
+            SearchColor searchColor;
+            memcpy(reinterpret_cast<quint8 *>(&searchColor), workColor.data(), sizeof(SearchColor));
+            std::vector<ColorCandidate> candidateColors;
             candidateColors.reserve(size_t(colorCount));
-            double invDistanceSum = 0.0;
+            double distanceSum = 0.0;
             for (auto it = rtree.qbegin(boost::geometry::index::nearest(searchColor, colorCount)); it != rtree.qend() && candidateColors.size() < colorCount; ++it) {
-                const double distance = boost::geometry::distance(searchColor, std::get<0>(*it));
-                const double invDistance = 1.0 / (distance * distance);
-                candidateColors.push_back(std::tuple_cat(*it, std::make_tuple(invDistance)));
-                invDistanceSum += invDistance;
+                ColorCandidate candidate = it->second;
+                candidate.distance = boost::geometry::distance(searchColor, it->first);
+                candidateColors.push_back(candidate);
+                distanceSum += candidate.distance;
             }
 
-            quint16 colorIndex = 0;
-            if (!ditherEnabled || colorMode == ColorMode::PerChannelOffset) {
-                memcpy(pixel.rawData(), std::get<1>(candidateColors[0]).data(), colorspace->pixelSize());
-                colorIndex = std::get<2>(candidateColors[0]);
+            // Select color candidate
+            quint16 selected;
+            if (ditherEnabled && colorMode == ColorMode::NearestColors) {
+                // Sort candidates by palette order for stable dither color ordering
+                const bool swap = candidateColors[0].index > candidateColors[1].index;
+                selected = swap ^ (candidateColors[swap].distance / distanceSum > ditherThreshold);
             }
-            else if (ditherEnabled && colorMode == ColorMode::NearestColors) {
-                // Find candidate at threshold
-                double probabilitySum = 0.0;
-                for (auto it = candidateColors.rbegin(); it != candidateColors.rend(); ++it) {
-                    const auto& candidate = *it;
-                    const double probability = std::get<3>(candidate) / invDistanceSum;
-                    const double prevProbabilitySum = probabilitySum;
-                    probabilitySum += probability;
-                    if (ditherThreshold >= prevProbabilitySum && ditherThreshold <= probabilitySum) {
-                        memcpy(pixel.rawData(), std::get<1>(candidate).data(), colorspace->pixelSize());
-                        colorIndex = std::get<2>(candidate);
-                        break;
-                    }
-                }
+            else {
+                selected = 0;
             }
+            ColorCandidate &candidate = candidateColors[selected];
 
             // Set alpha
+            const double oldAlpha = colorspace->opacityF(pixel.oldRawData());
+            double newAlpha = oldAlpha;
             if (alphaEnabled && !(!ditherEnabled && alphaMode == AlphaMode::UseDither)) {
-                double colorAlpha = colorspace->opacityF(pixel.oldRawData());
-                double alphaThreshold = 1.0;
                 if (alphaMode == AlphaMode::Clip) {
-                    alphaThreshold = alphaClip;
+                    newAlpha = oldAlpha < alphaClip? 0.0 : 1.0;
                 }
                 else if (alphaMode == AlphaMode::Index) {
-                    alphaThreshold = (colorIndex == alphaIndex ? 2.0 : 0.0);
+                    newAlpha = (candidate.index == alphaIndex ? 0.0 : 1.0);
                 }
                 else if (alphaMode == AlphaMode::UseDither) {
                     if (colorMode == ColorMode::PerChannelOffset) {
-                        alphaThreshold = 0.5;
-                        colorAlpha = colorspace->opacityF(workColor.convertedTo(colorspace).data());
+                        newAlpha = colorspace->opacityF(workColor.convertedTo(colorspace).data()) < 0.5 ? 0.0 : 1.0;
                     }
                     else if (colorMode == ColorMode::NearestColors) {
-                        alphaThreshold = ditherThreshold;
+                        newAlpha = oldAlpha < ditherThreshold ? 0.0 : 1.0;
                     }
                 }
-                colorspace->setOpacity(pixel.rawData(), (colorAlpha < alphaThreshold ? 0.0 : 1.0), 1);
             }
+            colorspace->setOpacity(candidate.color.data(), newAlpha, 1);
+
+            // Copy color to pixel
+            memcpy(pixel.rawData(), candidate.color.data(), colorspace->pixelSize());
         }
     }
 }

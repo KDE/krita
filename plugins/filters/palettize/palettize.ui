@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>286</width>
-    <height>507</height>
+    <height>468</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -244,7 +244,7 @@
          <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="colorModePerChannelOffsetWidget">
          <layout class="QFormLayout" name="formLayout_8">
@@ -255,9 +255,6 @@
         </widget>
         <widget class="QWidget" name="colorModeNearestColorWidget">
          <layout class="QFormLayout" name="formLayout_4">
-          <item row="1" column="0" colspan="2">
-           <widget class="KisSliderSpinBox" name="colorCountSpinBox"/>
-          </item>
           <item row="0" column="0" colspan="2">
            <widget class="KisDoubleSliderSpinBox" name="spreadSpinBox"/>
           </item>

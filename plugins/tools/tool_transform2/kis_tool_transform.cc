@@ -346,6 +346,8 @@ QMenu*  KisToolTransform::popupActionsMenu()
     if (m_contextMenu) {
         m_contextMenu->clear();
 
+        m_contextMenu->addSection(i18n("Transform Tool Actions"));
+        m_contextMenu->addSeparator();
         // add a quick switch to different transform types
         m_contextMenu->addAction(freeTransformAction);
         m_contextMenu->addAction(perspectiveAction);

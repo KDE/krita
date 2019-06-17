@@ -1666,7 +1666,11 @@ QMenu* DefaultTool::popupActionsMenu()
     if (m_contextMenu) {
         m_contextMenu->clear();
 
+        m_contextMenu->addSection(i18n("Vector Shape Actions"));
+        m_contextMenu->addSeparator();
+
         QMenu *transform = m_contextMenu->addMenu(i18n("Transform"));
+
         transform->addAction(action("object_transform_rotate_90_cw"));
         transform->addAction(action("object_transform_rotate_90_ccw"));
         transform->addAction(action("object_transform_rotate_180"));

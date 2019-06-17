@@ -465,9 +465,9 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
     if (QThread::currentThread() == qApp->thread()) {
         wdg = filter->createConfigurationWidget(0, from, to);
 
-        if(wdg) {
-            KisPart *kisPart = KisPart::instance();
-            KisViewManager *manager = kisPart->currentMainwindow()->viewManager();
+        KisMainWindow *kisMain = KisPart::instance()->currentMainwindow();
+        if(wdg && kisMain) {
+            KisViewManager *manager = kisMain->viewManager();
             wdg->setView(manager);
         }
     }

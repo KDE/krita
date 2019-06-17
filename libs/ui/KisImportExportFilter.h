@@ -156,6 +156,9 @@ public:
     /// Override and return false for the filters that use a library that cannot handle file handles, only file names.
     virtual bool supportsIO() const { return true; }
 
+    /// Verify whether the given file is correct and readable
+    virtual QString verify(const QString &fileName) const;
+
 protected:
     /**
      * This is the constructor your filter has to call, obviously.

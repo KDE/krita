@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 #include "KisImportExportFilter.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <kis_debug.h>
 #include <QStack>
 #include "KisImportExportManager.h"
@@ -205,6 +206,40 @@ QMap<QString, KisExportCheckBase *> KisImportExportFilter::exportChecks()
     qDeleteAll(d->capabilities);
     initializeCapabilities();
     return d->capabilities;
+}
+
+QString KisImportExportFilter::verify(const QString &fileName) const
+{
+    QFileInfo fi(fileName);
+
+    if (!fi.exists()) {
+        return i18n("%1 does not exit after writing. Try saving again under a different name, in another location.", fileName);
+    }
+
+    if (!fi.isReadable()) {
+        return i18n("%1 is not readable", fileName);
+    }
+
+    if (fi.size() < 10)  {
+        return i18n("%1 is smaller than 10 bytes, it must be corrupt. Try saving again under a different name, in another location.", fileName);
+    }
+
+    QFile f(fileName);
+    f.open(QFile::ReadOnly);
+    QByteArray ba = f.read(std::min(f.size(), (qint64)1000));
+    bool found = false;
+    for(int i = 0; i < ba.size(); ++i) {
+        if (ba.at(i) > 0) {
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        return i18n("%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try saving again under a different name, in another location.", fileName);
+    }
+
+    return QString();
 }
 
 void KisImportExportFilter::setUpdater(QPointer<KoUpdater> updater)

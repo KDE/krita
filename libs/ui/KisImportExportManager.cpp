@@ -680,6 +680,15 @@ KisImportExportErrorCode KisImportExportManager::doExportImpl(const QString &loc
 #endif
         }
     }
+
+    // Do some minimal verification
+    QString verificationResult = filter->verify(location);
+    if (!verificationResult.isEmpty()) {
+        status = KisImportExportErrorCode(ImportExportCodes::ErrorWhileWriting);
+        m_document->setErrorMessage(verificationResult);
+    }
+
+
     return status;
 
 }

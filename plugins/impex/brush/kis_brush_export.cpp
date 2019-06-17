@@ -150,10 +150,16 @@ KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevic
         parasite.dim = exportOptions.dimensions;
         parasite.ncells = devices.at(0).count();
 
+        int maxRanks = 0;
         for (int i = 0; i < KisPipeBrushParasite::MaxDim; ++i) {
             // ### This can mask some bugs, be careful here in the future
             parasite.rank[i] = exportOptions.ranks[i];
             parasite.selection[i] = modes.at(i);
+            maxRanks += exportOptions.ranks[i];
+        }
+
+        if (maxRanks > layers.count()) {
+            return ImportExportCodes::FileFormatIncorrect;
         }
         // XXX needs movement!
         parasite.setBrushesCount();

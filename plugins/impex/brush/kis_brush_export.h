@@ -52,12 +52,13 @@ class BrushPipeSelectionModeHelper : public QWidget
     Q_OBJECT
 
 public:
-    BrushPipeSelectionModeHelper(QWidget *parent)
+    BrushPipeSelectionModeHelper(QWidget *parent, int dimension)
         : QWidget(parent)
         , cmbSelectionMode(this)
         , rank(this)
         , rankLbl(this)
         , horizLayout(this)
+        , dimension(dimension)
     {
         horizLayout.setSpacing(6);
         horizLayout.setMargin(0);
@@ -79,6 +80,8 @@ public:
         horizLayout.addWidget(&rank);
         horizLayout.addWidget(&cmbSelectionMode);
 
+        connect(&rank, SIGNAL(valueChanged(int)), this, SLOT(slotRankChanged()));
+
         this->hide();
         this->setEnabled(false);
     }
@@ -88,7 +91,23 @@ public:
     QLabel rankLbl;
     QHBoxLayout horizLayout;
 
+    int dimension;
+
+
+Q_SIGNALS:
+    void rankChanged(int rankEmitter);
+
+public Q_SLOTS:
+    void slotRankChanged()
+    {
+        emit rankChanged(dimension);
+    }
+
 };
+
+#include <KisViewManager.h>
+#include <kis_image.h>
+#include <KoProperties.h>
 
 class KisWdgOptionsBrush : public KisConfigWidget, public Ui::WdgExportGih
 {
@@ -98,15 +117,20 @@ public:
     KisWdgOptionsBrush(QWidget *parent)
         : KisConfigWidget(parent)
         , currentDimensions(0)
+        , m_layersCount(0)
+        , m_view(0)
     {
         setupUi(this);
-        connect(this->brushStyle, SIGNAL(currentIndexChanged(int)), SLOT(enableSelectionMedthod(int)));
+        connect(this->brushStyle, SIGNAL(currentIndexChanged(int)), SLOT(enableSelectionMethod(int)));
         connect(this->dimensionSpin, SIGNAL(valueChanged(int)), SLOT(activateDimensionRanks()));
 
-        enableSelectionMedthod(brushStyle->currentIndex());
+        enableSelectionMethod(brushStyle->currentIndex());
 
+        BrushPipeSelectionModeHelper *bp;
         for (int i = 0; i < this->dimensionSpin->maximum(); i++) {
-            dimRankLayout->addWidget(new BrushPipeSelectionModeHelper(0));
+            bp = new BrushPipeSelectionModeHelper(0, i);
+            connect(bp, SIGNAL(rankChanged(int)), SLOT(recalculateRanks(int)));
+            dimRankLayout->addWidget(bp);
         }
 
         activateDimensionRanks();
@@ -116,13 +140,15 @@ public:
     KisPropertiesConfigurationSP configuration() const override;
 
 public Q_SLOTS:
-    void enableSelectionMedthod(int value) {
+
+    void enableSelectionMethod(int value) {
         if (value == 0) {
             animStyleGroup->setEnabled(false);
         } else {
             animStyleGroup->setEnabled(true);
         }
     }
+
     void activateDimensionRanks()
     {
         QLayoutItem *item;
@@ -149,8 +175,62 @@ public Q_SLOTS:
         currentDimensions = dim;
     }
 
+    void recalculateRanks(int rankDimension = 0) {
+//        currentDimensions;
+        int rankSum = 0;
+        int maxDim = this->dimensionSpin->maximum();
+
+        QVector<BrushPipeSelectionModeHelper *> bp;
+        QLayoutItem *item;
+
+        for (int i = 0; i < maxDim; ++i) {
+            if((item = dimRankLayout->itemAt(i)) != 0) {
+                bp.push_back(dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget()));
+                rankSum += bp.at(i)->rank.value();
+            }
+        }
+
+        BrushPipeSelectionModeHelper *currentBrushHelper;
+        BrushPipeSelectionModeHelper *callerBrushHelper = bp.at(rankDimension);
+        QVectorIterator<BrushPipeSelectionModeHelper*> bpIterator(bp);
+
+        while (rankSum > m_layersCount && bpIterator.hasNext()) {
+            currentBrushHelper = bpIterator.next();
+
+            if(currentBrushHelper != callerBrushHelper) {
+                int currentValue = currentBrushHelper->rank.value();
+                currentBrushHelper->rank.setValue(currentValue -1);
+                rankSum -= currentValue;
+            }
+        }
+
+        if (rankSum > m_layersCount) {
+            callerBrushHelper->rank.setValue(m_layersCount);
+        }
+
+        if (rankSum == 0) {
+            bp.at(0)->rank.setValue(m_layersCount);
+            return;
+        }
+    }
+
+    void setView(KisViewManager *view) override
+    {
+        if (view) {
+            m_view = view;
+            KoProperties properties;
+            properties.setProperty("visible", true);
+            m_layersCount = m_view->image()->root()->childNodes(QStringList("KisLayer"), properties).count();
+
+            recalculateRanks();
+        }
+    }
+
+
 private:
     int currentDimensions;
+    int m_layersCount;
+    KisViewManager *m_view;
 };
 
 

@@ -464,6 +464,12 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
 
     if (QThread::currentThread() == qApp->thread()) {
         wdg = filter->createConfigurationWidget(0, from, to);
+
+        if(wdg) {
+            KisPart *kisPart = KisPart::instance();
+            KisViewManager *manager = kisPart->currentMainwindow()->viewManager();
+            wdg->setView(manager);
+        }
     }
 
     // Extra checks that cannot be done by the checker, because the checker only has access to the image.

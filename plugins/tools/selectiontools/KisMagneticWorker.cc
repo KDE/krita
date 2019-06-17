@@ -17,7 +17,8 @@
 
 #include "KisMagneticWorker.h"
 
-#include "kis_gaussian_kernel.h"
+#include <kis_gaussian_kernel.h>
+#include <lazybrush/kis_lazy_fill_tools.h>
 
 #include <QtCore>
 #include <QPolygon>
@@ -136,7 +137,7 @@ struct WeightMap{
     data_type& operator[](key_type const& k) {
         if (m_map.find(k) == m_map.end()) {
             double edge_gradient = m_graph.getIntensity((k.first)) + m_graph.getIntensity((k.second))/2;
-            m_map[k] = EuclideanDistance(k.first, k.second) / (edge_gradient + 1);
+            m_map[k] = EuclideanDistance(k.first, k.second) * (edge_gradient + 1);
         }
         return m_map[k];
     }
@@ -178,7 +179,8 @@ QRect KisMagneticWorker::calculateRect(QPoint p1, QPoint p2, int radius) const {
 QVector<QPointF> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius, QPoint begin, QPoint end) {
 
     QRect rect = calculateRect(begin, end, radius);
-    KisGaussianKernel::applyLoG(dev, rect, 2, -10.0, QBitArray(), 0);
+    KisGaussianKernel::applyLoG(dev, rect, 2, 1.0, QBitArray(), 0);
+    KisLazyFillTools::normalizeAndInvertAlpha8Device(dev, rect);
 
     VertexDescriptor goal(end);
     VertexDescriptor start(begin);
@@ -189,9 +191,9 @@ QVector<QPointF> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius
     PredecessorMap pmap;
     DistanceMap dmap(std::numeric_limits<double>::max());
     dmap[start] = 0;
-    std::map<VertexDescriptor, unsigned> rmap;
+    std::map<VertexDescriptor, double> rmap;
     std::map<VertexDescriptor, boost::default_color_type> cmap;
-    std::map<VertexDescriptor, unsigned> imap;
+    std::map<VertexDescriptor, double> imap;
     WeightMap wmap(g);
     AStarHeuristic heuristic(goal, pmap);
     QVector<QPointF> result;
@@ -203,8 +205,8 @@ QVector<QPointF> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius
                     .distance_map(boost::associative_property_map<DistanceMap>(dmap))
                     .predecessor_map(boost::ref(pmap))
                     .weight_map(boost::associative_property_map<WeightMap>(wmap))
-                    .vertex_index_map(boost::associative_property_map<std::map<VertexDescriptor,unsigned>>(imap))
-                    .rank_map(boost::associative_property_map<std::map<VertexDescriptor, unsigned>>(rmap))
+                    .vertex_index_map(boost::associative_property_map<std::map<VertexDescriptor, double>>(imap))
+                    .rank_map(boost::associative_property_map<std::map<VertexDescriptor, double>>(rmap))
                     .color_map(boost::associative_property_map<std::map<VertexDescriptor, boost::default_color_type>>(cmap))
                     .distance_combine(std::plus<double>())
                     .distance_compare(std::less<double>())

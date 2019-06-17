@@ -87,11 +87,11 @@ class AStarHeuristic : public boost::astar_heuristic<KisMagneticGraph, double> {
         double coeff_a, coeff_b;
 
     public:
-        AStarHeuristic(VertexDescriptor goal, PredecessorMap pmap, double a, double b):
+        AStarHeuristic(VertexDescriptor goal, PredecessorMap const &pmap, double a, double b):
             m_pmap(pmap), m_goal(goal), coeff_a(a), coeff_b(b)
         { }
 
-        AStarHeuristic(VertexDescriptor goal, PredecessorMap pmap):
+        AStarHeuristic(VertexDescriptor goal, PredecessorMap const &pmap):
             m_pmap(pmap), m_goal(goal), coeff_a(0.5), coeff_b(0.5)
         { }
 
@@ -102,7 +102,8 @@ class AStarHeuristic : public boost::astar_heuristic<KisMagneticGraph, double> {
             double dz = EuclideanDistance(prev, m_goal);
             di = di/dz;
             double dm = EuclideanDistance(v, m_goal);
-            return coeff_a * di + coeff_b * (dm - dz);
+            //return coeff_a * di + coeff_b * (dm - dz);
+            return EuclideanDistance(v,m_goal);
         }
 };
 

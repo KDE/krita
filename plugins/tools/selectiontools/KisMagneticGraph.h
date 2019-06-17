@@ -31,6 +31,11 @@ struct VertexDescriptor {
 
     long x,y;
 
+    enum Direction {
+        MIN = 0,
+        N = MIN, S, E, W, NONE
+    };
+
     VertexDescriptor(long _x, long _y):
         x(_x), y(_y)
     { }
@@ -58,6 +63,28 @@ struct VertexDescriptor {
     bool operator<(VertexDescriptor const &rhs) const {
         return x < rhs.x || (x == rhs.x && y < rhs.y);
     }
+
+    VertexDescriptor neighbor(Direction direction) const {
+
+        int dx = 0, dy = 0;
+
+        switch (direction){
+            case W:
+                dx = -1;
+                break;
+            case E:
+                dx = 1;
+                break;
+            case N:
+                dy = -1;
+                break;
+            case S:
+                dy = 1;
+        }
+
+        VertexDescriptor const neighbor(x + dx, y + dy);
+        return neighbor;
+    }
 };
 
 QDebug operator<<(QDebug dbg, const VertexDescriptor &v) {
@@ -73,11 +100,8 @@ struct KisMagneticGraph{
 
     KisMagneticGraph() { }
     KisMagneticGraph(KisPaintDeviceSP dev, QRect graphRect):
-        topLeft(graphRect.topLeft()), bottomRight(graphRect.bottomRight()), m_dev(dev)
-    {
-        outDegree = (bottomRight.y() - topLeft.y()) * (bottomRight.x() - topLeft.x()) - 1;
-        qDebug() << outDegree;
-    }
+        m_rect(graphRect), m_dev(dev)
+    { }
 
     typedef VertexDescriptor                                vertex_descriptor;
     typedef std::pair<vertex_descriptor, vertex_descriptor> edge_descriptor;
@@ -85,10 +109,8 @@ struct KisMagneticGraph{
     typedef boost::disallow_parallel_edge_tag               edge_parallel_category;
     typedef boost::incidence_graph_tag                      traversal_category;
     typedef neighbour_iterator                              out_edge_iterator;
-    typedef unsigned long                                   degree_size_type;
+    typedef unsigned                                        degree_size_type;
 
-    degree_size_type outDegree;
-    QPoint topLeft, bottomRight;
 
     double getIntensity(VertexDescriptor pt){
         KisRandomAccessorSP randAccess = m_dev->createRandomAccessorNG(m_dev->exactBounds().x(),m_dev->exactBounds().y());
@@ -96,6 +118,29 @@ struct KisMagneticGraph{
         qint8 val = *(randAccess->rawData());
         return std::abs(val);
     }
+
+    unsigned outDegree(VertexDescriptor pt){
+        //corners
+        if(pt == m_rect.topLeft() || pt == m_rect.topRight() ||
+                pt == m_rect.bottomLeft() || pt == m_rect.bottomRight()){
+            if(m_rect.width() == 1 || m_rect.height() == 1)
+                return 1;
+            return 2;
+        }
+
+        //edges
+        if(pt.x == m_rect.topLeft().x() || pt.y == m_rect.topLeft().y()  ||
+                pt.x == m_rect.bottomRight().x() || pt.y == m_rect.bottomRight().y()){
+            if(m_rect.width() == 1 || m_rect.height() == 1)
+                return 2;
+            return 3;
+        }
+
+        return 4;
+
+    }
+
+    QRect m_rect;
 
 private:
     KisPaintDeviceSP m_dev;
@@ -106,17 +151,11 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
                                                 boost::forward_traversal_tag,
                                std::pair<VertexDescriptor, VertexDescriptor>>
 {
-    enum position{
-        begin, end
-    };
 
-    neighbour_iterator(VertexDescriptor v, KisMagneticGraph g, position p):
-        graph(g), currentPoint(v), pos(p)
+    neighbour_iterator(VertexDescriptor v, KisMagneticGraph g, VertexDescriptor::Direction d):
+        m_point(v), m_direction(d), m_graph(g)
     {
-        nextPoint = VertexDescriptor(g.topLeft.x(), g.topLeft.y());
-        if(nextPoint == currentPoint){
-            increment();
-        }
+        //qDebug() << v;
     }
 
     neighbour_iterator()
@@ -124,30 +163,24 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
 
     std::pair<VertexDescriptor, VertexDescriptor>
     operator*() const {
-        std::pair<VertexDescriptor, VertexDescriptor> const result = std::make_pair(currentPoint,nextPoint);
+        std::pair<VertexDescriptor, VertexDescriptor> const result = std::make_pair(m_point, m_point.neighbor(m_direction));
         return result;
     }
 
     void operator++() {
-        // I am darn sure that Dmitry is wrong, definitely wrong
-        if(nextPoint == graph.bottomRight){
-            pos = position::end;
+        m_direction = static_cast<VertexDescriptor::Direction>(int(m_direction)+1);
+        VertexDescriptor next = m_point.neighbor(m_direction);
+        if(m_direction == VertexDescriptor::NONE){
             return;
         }
-
-        if(nextPoint.x == graph.bottomRight.x()){ // end of a row move to next column
-            nextPoint = VertexDescriptor(graph.topLeft.x(), nextPoint.y + 1);
-        } else {
-            nextPoint.x++;
-        }
-
-        if(nextPoint == currentPoint){
-            increment();
+        if(!m_graph.m_rect.contains(next.x, next.y)){
+            qDebug() << next;
+            operator++();
         }
     }
 
     bool operator==(neighbour_iterator const& that) const {
-        return pos == that.pos;
+        return m_point == that.m_point && m_direction == that.m_direction;
     }
 
     bool equal(neighbour_iterator const& that) const {
@@ -159,9 +192,9 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
     }
 
 private:
-    KisMagneticGraph graph;
-    VertexDescriptor currentPoint, nextPoint;
-    position pos;
+    VertexDescriptor m_point;
+    VertexDescriptor::Direction m_direction;
+    KisMagneticGraph m_graph;
 };
 
 namespace boost{
@@ -201,15 +234,14 @@ target(typename KisMagneticGraph::edge_descriptor e, KisMagneticGraph g) {
 std::pair<KisMagneticGraph::out_edge_iterator, KisMagneticGraph::out_edge_iterator>
 out_edges(typename KisMagneticGraph::vertex_descriptor v, KisMagneticGraph g) {
     return std::make_pair(
-                KisMagneticGraph::out_edge_iterator(v, g, neighbour_iterator::begin),
-                KisMagneticGraph::out_edge_iterator(v, g, neighbour_iterator::end)
+                KisMagneticGraph::out_edge_iterator(v, g, VertexDescriptor::Direction::MIN),
+                KisMagneticGraph::out_edge_iterator(v, g, VertexDescriptor::Direction::NONE)
                 );
 }
 
 typename KisMagneticGraph::degree_size_type
 out_degree(typename KisMagneticGraph::vertex_descriptor v, KisMagneticGraph g) {
-    Q_UNUSED(v)
-    return g.outDegree;
+    return g.outDegree(v);
 }
 
 #endif

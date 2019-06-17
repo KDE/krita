@@ -105,10 +105,7 @@ KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevic
 
     QRect rc = document->savingImage()->bounds();
 
-    brush->setName(exportOptions.name);
     brush->setSpacing(exportOptions.spacing);
-    brush->setUseColorAsMask(exportOptions.mask);
-
 
 
 
@@ -148,14 +145,27 @@ KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevic
         parasite.setBrushesCount();
         pipeBrush->setParasite(parasite);
         pipeBrush->setDevices(devices, rc.width(), rc.height());
+
+        if(exportOptions.mask) {
+            QVector<KisGbrBrush*> brushes = pipeBrush->brushes();
+            Q_FOREACH(KisGbrBrush* brush, brushes) {
+                brush->setHasColor(false);
+            }
+        }
     }
     else {
-        QImage image = document->savingImage()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-        image.save("~/bla.png");
-        brush->setImage(image);
-        brush->setBrushTipImage(image);
+        if (exportOptions.mask){
+            QImage image = document->savingImage()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+            brush->setImage(image);
+            brush->setBrushTipImage(image);
+        } else {
+            brush->initFromPaintDev(document->savingImage()->projection(),0,0,rc.width(), rc.height());
+        }
     }
 
+    brush->setName(exportOptions.name);
+    // brushes are created after devices are loaded, mask mode must b after that
+    brush->setUseColorAsMask(exportOptions.mask);
     brush->setWidth(rc.width());
     brush->setHeight(rc.height());
 

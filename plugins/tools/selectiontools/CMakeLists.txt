@@ -1,6 +1,4 @@
-if (NOT WIN32 AND NOT APPLE)
-    add_subdirectory(tests)
-endif()
+add_subdirectory(tests)
 
 set(kritaselectiontools_SOURCES
     selection_tools.cc

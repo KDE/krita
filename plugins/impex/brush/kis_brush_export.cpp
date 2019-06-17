@@ -30,6 +30,9 @@
 
 #include <KisExportCheckRegistry.h>
 #include <kis_paint_device.h>
+#include <KisViewManager.h>
+#include <kis_image.h>
+#include <KoProperties.h>
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
@@ -38,6 +41,7 @@
 #include <kis_imagepipe_brush.h>
 #include <kis_pipebrush_parasite.h>
 #include <KisAnimatedBrushAnnotation.h>
+#include <KisWdgOptionsBrush.h>
 #include <KisImportExportManager.h>
 #include <kis_config.h>
 
@@ -241,50 +245,6 @@ void KisBrushExport::initializeCapabilities()
     if (mimeType() == "image/x-gimp-brush-animated") {
         addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
     }
-}
-
-
-void KisWdgOptionsBrush::setConfiguration(const KisPropertiesConfigurationSP cfg)
-{
-    spacingWidget->setSpacing(false, cfg->getDouble("spacing"));
-    if(nameLineEdit->text().isEmpty()){
-        nameLineEdit->setText(cfg->getString("name"));
-    }
-    colorAsMask->setChecked(cfg->getBool("mask"));
-    brushStyle->setCurrentIndex(cfg->getInt("brushStyle"));
-    dimensionSpin->setValue(cfg->getInt("dimensions"));
-
-    QLayoutItem *item;
-    BrushPipeSelectionModeHelper *bp;
-    for (int i = 0; i < dimensionSpin->maximum(); ++i) {
-        if((item = dimRankLayout->itemAt(i)) != 0) {
-            bp = dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget());
-            bp->cmbSelectionMode.setCurrentIndex(cfg->getInt("selectionMode" + QString::number(i)));
-            bp->rank.setValue(cfg->getInt("rank" + QString::number(i)));
-        }
-    }
-}
-
-KisPropertiesConfigurationSP KisWdgOptionsBrush::configuration() const
-{
-    KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
-    cfg->setProperty("spacing", spacingWidget->spacing());
-    cfg->setProperty("name", nameLineEdit->text());
-    cfg->setProperty("mask", colorAsMask->isChecked());
-    cfg->setProperty("brushStyle", brushStyle->currentIndex());
-    cfg->setProperty("dimensions", dimensionSpin->value());
-
-    QLayoutItem *item;
-    BrushPipeSelectionModeHelper *bp;
-    for (int i = 0; i < dimensionSpin->maximum(); ++i) {
-        if((item = dimRankLayout->itemAt(i)) != 0) {
-            bp = dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget());
-            cfg->setProperty("selectionMode" + QString::number(i), bp->cmbSelectionMode.currentIndex());
-            cfg->setProperty("rank" + QString::number(i),  bp->rank.value());
-        }
-    }
-
-    return cfg;
 }
 
 

@@ -11,6 +11,7 @@ set(kritaselectiontools_SOURCES
     kis_tool_select_similar.cc
     kis_selection_modifier_mapper.cc
     KisMagneticWorker.cc
+    KisToolSelectMagnetic.cc
 )
 
 qt5_add_resources(kritaselectiontools_SOURCES selectiontools.qrc)
@@ -31,5 +32,6 @@ install( FILES
         KisToolSelectRectangular.action
         KisToolSelectOutline.action
         KisToolSelectPath.action
+        KisToolSelectMagnetic.action
     DESTINATION  ${DATA_INSTALL_DIR}/krita/actions
 )

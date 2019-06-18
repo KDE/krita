@@ -64,6 +64,8 @@ struct VertexDescriptor {
         return x < rhs.x || (x == rhs.x && y < rhs.y);
     }
 
+    // returns one of the 8 neighboring pixel based on the direction
+    // it gives out multiple warnings, but I am lazy, sorry
     VertexDescriptor neighbor(Direction direction) const {
 
         int dx = 0, dy = 0;
@@ -146,9 +148,7 @@ struct KisMagneticGraph{
                 return 2;
             return 5;
         }
-
         return 8;
-
     }
 
     QRect m_rect;
@@ -205,6 +205,9 @@ private:
     KisMagneticGraph m_graph;
 };
 
+// Requirements for an Incidence Graph,
+// https://www.boost.org/doc/libs/1_70_0/libs/graph/doc/IncidenceGraph.html
+
 namespace boost{
 template<>
 struct graph_traits<KisMagneticGraph> {
@@ -223,9 +226,6 @@ struct graph_traits<KisMagneticGraph> {
     typedef void edges_size_type;
 };
 }
-
-// Requirements for an Incidence Graph,
-// https://www.boost.org/doc/libs/1_70_0/libs/graph/doc/IncidenceGraph.html
 
 typename KisMagneticGraph::vertex_descriptor
 source(typename KisMagneticGraph::edge_descriptor e, KisMagneticGraph g) {

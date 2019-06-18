@@ -53,25 +53,65 @@ void KisMagneticWorkerTest::testWorker()
     auto points = worker.computeEdge(grayscaleDev, 10, startPos, endPos);
     KIS_DUMP_DEVICE_2(grayscaleDev, rect, "draw", "dd");
 
-    QImage img = dev->convertToQImage(0, rect);
-    img = img.convertToFormat(QImage::Format_ARGB32);
-    QPainter gc(&img);
+    QVector<QPointF> result = { QPointF(50,65),
+                                QPointF(49,64),
+                                QPointF(48,63),
+                                QPointF(47,62),
+                                QPointF(46,61),
+                                QPointF(45,60),
+                                QPointF(44,59),
+                                QPointF(44,58),
+                                QPointF(44,57),
+                                QPointF(44,56),
+                                QPointF(44,55),
+                                QPointF(44,54),
+                                QPointF(44,53),
+                                QPointF(44,52),
+                                QPointF(44,51),
+                                QPointF(44,50),
+                                QPointF(44,49),
+                                QPointF(44,48),
+                                QPointF(44,47),
+                                QPointF(44,46),
+                                QPointF(44,45),
+                                QPointF(44,44),
+                                QPointF(44,43),
+                                QPointF(44,42),
+                                QPointF(43,41),
+                                QPointF(43,40),
+                                QPointF(43,39),
+                                QPointF(44,38),
+                                QPointF(44,37),
+                                QPointF(44,36),
+                                QPointF(44,35),
+                                QPointF(44,34),
+                                QPointF(44,33),
+                                QPointF(44,32),
+                                QPointF(44,31),
+                                QPointF(44,30),
+                                QPointF(44,29),
+                                QPointF(44,28),
+                                QPointF(44,27),
+                                QPointF(44,26),
+                                QPointF(44,25),
+                                QPointF(44,24),
+                                QPointF(44,23),
+                                QPointF(44,22),
+                                QPointF(44,21),
+                                QPointF(44,20),
+                                QPointF(44,19),
+                                QPointF(44,18),
+                                QPointF(43,17),
+                                QPointF(44,16),
+                                QPointF(44,15),
+                                QPointF(44,14),
+                                QPointF(44,13),
+                                QPointF(43,12),
+                                QPointF(42,11),
+                                QPointF(41,11),
+                                QPointF(40,10)};
 
-    QPainterPath path(points[0]);
-    for (int i = 1; i < points.size(); i++) {
-        path.lineTo(points[i]);
-        qDebug() << points[i];
-    }
-
-    gc.setPen(Qt::blue);
-    gc.drawPath(path);
-
-    gc.setPen(Qt::green);
-    gc.drawEllipse(startPos, 3, 3);
-    gc.setPen(Qt::red);
-    gc.drawEllipse(endPos, 2, 2);
-
-    img.save("result.png");
+    QCOMPARE(result, points);
 }
 
 QTEST_MAIN(KisMagneticWorkerTest)

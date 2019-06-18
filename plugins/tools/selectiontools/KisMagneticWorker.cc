@@ -141,7 +141,16 @@ private:
 };
 
 QRect KisMagneticWorker::calculateRect(QPoint p1, QPoint p2, int radius) const {
+
     // I am sure there is a simpler version of it which exists but well
+    // Calculates a bounding rectangle based on the radius,
+    // --------------------------------
+    // |    -------------------       |
+    // |    | A*              |       |
+    // |    |                 |       |
+    // |    |               *B|       |
+    // |    -------------------       |
+    // --------------------------------
 
     double slope = (p2.y() - p1.y())/(p2.x() - p1.x());
     QPoint a,b,c,d;
@@ -181,6 +190,7 @@ QVector<QPointF> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius
     KisMagneticGraph g(dev, rect);
 
     // How many maps does it require?
+    // Take a look here, if it doesn't make sense, https://www.boost.org/doc/libs/1_70_0/libs/graph/doc/astar_search.html
     PredecessorMap pmap;
     DistanceMap dmap(std::numeric_limits<double>::max());
     dmap[start] = 0;
@@ -208,7 +218,6 @@ QVector<QPointF> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius
     }catch(GoalFound const&){
         for(VertexDescriptor u=goal; u!=start; u = pmap[u]){
             result.push_back(QPointF(u.x,u.y));
-            //qDebug() << g.getIntensity(u);
         }
     }
 

@@ -246,7 +246,7 @@ KisNodeSP KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceS
 
     KisDlgAdjustmentLayer dialog(mask, mask.data(), originalDevice,
                                  mask->name(), i18n("New Filter Mask"),
-                                 m_view);
+                                 m_view, qApp->activeWindow());
 
     // If we are supposed to not disturb the user, don't start asking them about things.
     if(quiet) {

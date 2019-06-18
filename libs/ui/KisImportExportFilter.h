@@ -175,6 +175,8 @@ protected:
     void addCapability(KisExportCheckBase *capability);
     void addSupportedColorModels(QList<QPair<KoID, KoID> > supportedColorModels, const QString &name, KisExportCheckBase::Level level = KisExportCheckBase::PARTIALLY);
 
+    QString verifyZiPBasedFiles(const QString &fileName, const QStringList &filesToCheck) const;
+
 private:
 
     KisImportExportFilter(const KisImportExportFilter& rhs);

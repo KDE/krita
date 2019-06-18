@@ -667,6 +667,13 @@ public:
 
 private:
 
+    enum CopyPolicy {
+        CONSTRUCT = 0, ///< we are copy-constructing a new KisDocument
+        REPLACE ///< we are replacing the current KisDocument with another
+    };
+
+    void copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy);
+
     QString exportErrorToUserMessage(KisImportExportErrorCode status, const QString &errorMessage);
 
     QString prettyPathOrUrl() const;

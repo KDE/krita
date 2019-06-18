@@ -32,6 +32,8 @@ Boston, MA 02110-1301, USA.
 #include "KoUpdater.h"
 #include <klocalizedstring.h>
 #include "kis_config.h"
+#include <KoStore.h>
+#include <KisDocument.h>
 
 const QString KisImportExportFilter::ImageContainsTransparencyTag = "ImageContainsTransparency";
 const QString KisImportExportFilter::ColorModelIDTag = "ColorModelID";
@@ -321,4 +323,22 @@ void KisImportExportFilter::addSupportedColorModels(QList<QPair<KoID, KoID> > su
             }
         }
     }
+}
+
+QString KisImportExportFilter::verifyZiPBasedFiles(const QString &fileName, const QStringList &filesToCheck) const
+{
+    QScopedPointer<KoStore> store(KoStore::createStore(fileName, KoStore::Read, KIS_MIME_TYPE, KoStore::Zip));
+
+    if (!store || store->bad()) {
+        return i18n("Could not open the saved file %1. Please try to save again in a different location.", fileName);
+    }
+
+    Q_FOREACH(const QString &file, filesToCheck) {
+        if (!store->hasFile(file)) {
+            return i18n("File %1 is missing in %2 and is broken. Please try to save again in a different location.", file, fileName);
+        }
+    }
+
+    return QString();
+
 }

@@ -82,27 +82,19 @@ double EuclideanDistance(VertexDescriptor p1, VertexDescriptor p2){
 
 class AStarHeuristic : public boost::astar_heuristic<KisMagneticGraph, double> {
     private:
-        PredecessorMap m_pmap;
         VertexDescriptor m_goal;
         double coeff_a, coeff_b;
 
     public:
-        AStarHeuristic(VertexDescriptor goal, PredecessorMap const &pmap, double a, double b):
-            m_pmap(pmap), m_goal(goal), coeff_a(a), coeff_b(b)
+        AStarHeuristic(VertexDescriptor goal, double a, double b):
+            m_goal(goal), coeff_a(a), coeff_b(b)
         { }
 
-        AStarHeuristic(VertexDescriptor goal, PredecessorMap const &pmap):
-            m_pmap(pmap), m_goal(goal), coeff_a(0.5), coeff_b(0.5)
+        AStarHeuristic(VertexDescriptor goal):
+            m_goal(goal), coeff_a(0.5), coeff_b(0.5)
         { }
 
         double operator()(VertexDescriptor v){
-            auto prev = m_pmap[v];
-            double di = (m_goal.y - prev.y) * v.x + (m_goal.x - prev.x) * v.y;
-            di = std::abs(di + prev.x * m_goal.y + prev.y * m_goal.x);
-            double dz = EuclideanDistance(prev, m_goal);
-            di = di/dz;
-            double dm = EuclideanDistance(v, m_goal);
-            //return coeff_a * di + coeff_b * (dm - dz);
             return EuclideanDistance(v,m_goal);
         }
 };
@@ -137,7 +129,7 @@ struct WeightMap{
 
     data_type& operator[](key_type const& k) {
         if (m_map.find(k) == m_map.end()) {
-            double edge_gradient = m_graph.getIntensity((k.first)) + m_graph.getIntensity((k.second))/2;
+            double edge_gradient = (m_graph.getIntensity(k.first) + m_graph.getIntensity(k.second))/2;
             m_map[k] = EuclideanDistance(k.first, k.second) * (edge_gradient + 1);
         }
         return m_map[k];
@@ -196,7 +188,7 @@ QVector<QPointF> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius
     std::map<VertexDescriptor, boost::default_color_type> cmap;
     std::map<VertexDescriptor, double> imap;
     WeightMap wmap(g);
-    AStarHeuristic heuristic(goal, pmap);
+    AStarHeuristic heuristic(goal);
     QVector<QPointF> result;
 
     try{
@@ -216,6 +208,7 @@ QVector<QPointF> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius
     }catch(GoalFound const&){
         for(VertexDescriptor u=goal; u!=start; u = pmap[u]){
             result.push_back(QPointF(u.x,u.y));
+            //qDebug() << g.getIntensity(u);
         }
     }
 

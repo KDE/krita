@@ -33,7 +33,7 @@ struct VertexDescriptor {
 
     enum Direction {
         MIN = 0,
-        N = MIN, S, E, W, NONE
+        N = MIN, S, E, W, NW, NE, SW, SE, NONE
     };
 
     VertexDescriptor(long _x, long _y):
@@ -69,17 +69,27 @@ struct VertexDescriptor {
         int dx = 0, dy = 0;
 
         switch (direction){
-            case W:
-                dx = -1;
-                break;
-            case E:
-                dx = 1;
-                break;
-            case N:
-                dy = -1;
-                break;
-            case S:
-                dy = 1;
+        case W:
+        case SW:
+        case NW:
+            dx = -1;
+            break;
+        case E:
+        case SE:
+        case NE:
+            dx = 1;
+        }
+
+        switch(direction){
+        case N:
+        case NW:
+        case NE:
+            dy = -1;
+            break;
+        case S:
+        case SW:
+        case SE:
+            dy = 1;
         }
 
         VertexDescriptor const neighbor(x + dx, y + dy);
@@ -116,7 +126,8 @@ struct KisMagneticGraph{
         KisRandomAccessorSP randAccess = m_dev->createRandomAccessorNG(m_dev->exactBounds().x(),m_dev->exactBounds().y());
         randAccess->moveTo(pt.x, pt.y);
         qint8 val = *(randAccess->rawData());
-        return std::abs(val);
+        //offsetting the value, so we don't get negatives
+        return val + 255;
     }
 
     unsigned outDegree(VertexDescriptor pt){
@@ -125,7 +136,7 @@ struct KisMagneticGraph{
                 pt == m_rect.bottomLeft() || pt == m_rect.bottomRight()){
             if(m_rect.width() == 1 || m_rect.height() == 1)
                 return 1;
-            return 2;
+            return 3;
         }
 
         //edges
@@ -133,10 +144,10 @@ struct KisMagneticGraph{
                 pt.x == m_rect.bottomRight().x() || pt.y == m_rect.bottomRight().y()){
             if(m_rect.width() == 1 || m_rect.height() == 1)
                 return 2;
-            return 3;
+            return 5;
         }
 
-        return 4;
+        return 8;
 
     }
 
@@ -154,9 +165,7 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
 
     neighbour_iterator(VertexDescriptor v, KisMagneticGraph g, VertexDescriptor::Direction d):
         m_point(v), m_direction(d), m_graph(g)
-    {
-        //qDebug() << v;
-    }
+    { }
 
     neighbour_iterator()
     { }
@@ -174,7 +183,6 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,
             return;
         }
         if(!m_graph.m_rect.contains(next.x, next.y)){
-            qDebug() << next;
             operator++();
         }
     }

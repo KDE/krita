@@ -83,7 +83,6 @@ QString KraExport::verify(const QString &fileName) const
                                                           << "mimetype"
                                                           << "documentinfo.xml"
                                                           << "maindoc.xml"
-                                                          << "mergedimage.png"
                                                           << "preview.png");
     }
     return error;

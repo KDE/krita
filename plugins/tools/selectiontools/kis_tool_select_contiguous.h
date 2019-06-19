@@ -53,6 +53,8 @@ protected:
 
     bool wantsAutoScroll() const override { return false; }
 
+    bool isPixelOnly() const override { return true; }
+
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     virtual void slotSetFuzziness(int);

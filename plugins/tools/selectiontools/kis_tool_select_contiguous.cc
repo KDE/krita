@@ -168,7 +168,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
 
-    selectionWidget->disableSelectionModeOption();
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);

@@ -1555,7 +1555,10 @@ KoShape *SvgParser::parseTextElement(const KoXmlElement &e, KoSvgTextShape *merg
     uploadStyleToContext(e);
 
     KoSvgTextChunkShape *textChunk = rootTextShape ? rootTextShape : new KoSvgTextChunkShape();
-    textChunk->setZIndex(m_context.nextZIndex());
+
+    if (!mergeIntoShape) {
+        textChunk->setZIndex(m_context.nextZIndex());
+    }
 
     textChunk->loadSvg(e, m_context);
 

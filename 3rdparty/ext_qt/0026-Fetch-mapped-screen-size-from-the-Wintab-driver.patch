@@ -1,7 +1,7 @@
-From b33666c064dc255e3d39a0646684445ab907d299 Mon Sep 17 00:00:00 2001
+From 47be745d599f6cd11f3fe280b51c490682f7b2da Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Sat, 13 Apr 2019 23:24:01 +0300
-Subject: [PATCH 15/27] Fetch mapped screen size from the Wintab driver
+Subject: [PATCH 2/4] Fetch mapped screen size from the Wintab driver
 
 Some devices, like Microsoft Surface Pro 5, don't map tablet's
 input range to the entire virtual screen area, but map it to
@@ -23,13 +23,15 @@ display is set to an external monitor) the user might want to override
 mapping completely. Then the following variable can be used:
 
 QT_WINTAB_DESKTOP_RECT=x;y;width;height
+
+Change-Id: Idd8bcf0323ce0811d2ad8976eaed48ad13ac3af8
 ---
  .../windows/qwindowstabletsupport.cpp         | 89 ++++++++++++++++++-
  .../platforms/windows/qwindowstabletsupport.h | 13 ++-
  2 files changed, 99 insertions(+), 3 deletions(-)
 
 diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-index 3e35b146..11e6769c 100644
+index 44b94d044d..c39242917f 100644
 --- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 +++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -53,6 +53,7 @@
@@ -145,7 +147,7 @@ index 3e35b146..11e6769c 100644
      const UINT currentCursor = proximityBuffer[0].pkCursor;
      UINT physicalCursorId;
      QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + currentCursor, CSR_PHYSID, &physicalCursorId);
-@@ -535,8 +620,8 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
+@@ -537,8 +622,8 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
      //    in which case we snap the position to the mouse position.
      // It seems there is no way to find out the mode programmatically, the LOGCONTEXT orgX/Y/Ext
      // area is always the virtual desktop.
@@ -157,7 +159,7 @@ index 3e35b146..11e6769c 100644
      if (QWindowsContext::verbose > 1)  {
          qCDebug(lcQpaTablet) << __FUNCTION__ << "processing" << packetCount
 diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.h b/src/plugins/platforms/windows/qwindowstabletsupport.h
-index 5b1ddb52..e8b0c01b 100644
+index 8f97982308..fe7e7815d6 100644
 --- a/src/plugins/platforms/windows/qwindowstabletsupport.h
 +++ b/src/plugins/platforms/windows/qwindowstabletsupport.h
 @@ -45,7 +45,9 @@
@@ -165,7 +167,7 @@ index 5b1ddb52..e8b0c01b 100644
  #include <QtCore/qvector.h>
  #include <QtCore/qpoint.h>
 +#include <QtCore/qrect.h>
- #include <QtCore/qmap.h>
+ #include <QtCore/qhash.h>
 +#include <QtCore/qobject.h>
  
  #include <wintab.h>
@@ -213,5 +215,5 @@ index 5b1ddb52..e8b0c01b 100644
  
  QT_END_NAMESPACE
 -- 
-2.22.0.windows.1
+2.20.1.windows.1
 

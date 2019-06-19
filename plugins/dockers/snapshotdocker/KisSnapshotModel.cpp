@@ -180,6 +180,9 @@ void KisSnapshotModel::setCanvas(QPointer<KisCanvas2> canvas)
 
 bool KisSnapshotModel::slotCreateSnapshot()
 {
+    if (!m_d->curDocument()) {
+        return false;
+    }
     QPointer<KisDocument> clonedDoc(m_d->curDocument()->lockAndCreateSnapshot());
     if (clonedDoc) {
         beginInsertRows(QModelIndex(), m_d->curDocList.size(), m_d->curDocList.size());

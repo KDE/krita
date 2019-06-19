@@ -466,7 +466,7 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
         wdg = filter->createConfigurationWidget(0, from, to);
 
         KisMainWindow *kisMain = KisPart::instance()->currentMainwindow();
-        if(wdg && kisMain) {
+        if (wdg && kisMain) {
             KisViewManager *manager = kisMain->viewManager();
             wdg->setView(manager);
         }

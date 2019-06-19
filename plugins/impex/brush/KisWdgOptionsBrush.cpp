@@ -27,7 +27,7 @@
 
 KisWdgOptionsBrush::KisWdgOptionsBrush(QWidget *parent)
     : KisConfigWidget(parent)
-    , currentDimensions(0)
+    , m_currentDimensions(0)
     , m_layersCount(0)
     , m_view(0)
 {
@@ -47,12 +47,10 @@ KisWdgOptionsBrush::KisWdgOptionsBrush(QWidget *parent)
     slotActivateDimensionRanks();
 }
 
-
-
 void KisWdgOptionsBrush::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
     spacingWidget->setSpacing(false, cfg->getDouble("spacing"));
-    if(nameLineEdit->text().isEmpty()){
+    if (nameLineEdit->text().isEmpty()) {
         nameLineEdit->setText(cfg->getString("name"));
     }
     colorAsMask->setChecked(cfg->getBool("mask"));
@@ -62,7 +60,7 @@ void KisWdgOptionsBrush::setConfiguration(const KisPropertiesConfigurationSP cfg
     QLayoutItem *item;
     BrushPipeSelectionModeHelper *bp;
     for (int i = 0; i < dimensionSpin->maximum(); ++i) {
-        if((item = dimRankLayout->itemAt(i)) != 0) {
+        if ((item = dimRankLayout->itemAt(i)) != 0) {
             bp = dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget());
             bp->cmbSelectionMode.setCurrentIndex(cfg->getInt("selectionMode" + QString::number(i)));
             bp->rankSpinBox.setValue(cfg->getInt("rank" + QString::number(i)));
@@ -82,7 +80,7 @@ KisPropertiesConfigurationSP KisWdgOptionsBrush::configuration() const
     QLayoutItem *item;
     BrushPipeSelectionModeHelper *bp;
     for (int i = 0; i < dimensionSpin->maximum(); ++i) {
-        if((item = dimRankLayout->itemAt(i)) != 0) {
+        if ((item = dimRankLayout->itemAt(i)) != 0) {
             bp = dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget());
             cfg->setProperty("selectionMode" + QString::number(i), bp->cmbSelectionMode.currentIndex());
             cfg->setProperty("rank" + QString::number(i),  bp->rankSpinBox.value());
@@ -91,7 +89,6 @@ KisPropertiesConfigurationSP KisWdgOptionsBrush::configuration() const
 
     return cfg;
 }
-
 
 void KisWdgOptionsBrush::setView(KisViewManager *view)
 {
@@ -105,7 +102,8 @@ void KisWdgOptionsBrush::setView(KisViewManager *view)
     }
 }
 
-void KisWdgOptionsBrush::slotEnableSelectionMethod(int value) {
+void KisWdgOptionsBrush::slotEnableSelectionMethod(int value)
+{
     if (value == 0) {
         animStyleGroup->setEnabled(false);
     } else {
@@ -118,9 +116,9 @@ void KisWdgOptionsBrush::slotActivateDimensionRanks()
     QLayoutItem *item;
     BrushPipeSelectionModeHelper *bp;
     int dim = this->dimensionSpin->value();
-    if(dim >= currentDimensions) {
-        for (int i = currentDimensions; i < dim; ++i) {
-            if((item = dimRankLayout->itemAt(i)) != 0) {
+    if (dim >= m_currentDimensions) {
+        for (int i = m_currentDimensions; i < dim; ++i) {
+            if ((item = dimRankLayout->itemAt(i)) != 0) {
                 bp = dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget());
                 bp->setEnabled(true);
                 bp->show();
@@ -128,19 +126,19 @@ void KisWdgOptionsBrush::slotActivateDimensionRanks()
         }
     }
     else {
-        for (int i = currentDimensions -1; i >= dim; --i) {
-            if((item = dimRankLayout->itemAt(i)) != 0) {
+        for (int i = m_currentDimensions -1; i >= dim; --i) {
+            if ((item = dimRankLayout->itemAt(i)) != 0) {
                bp = dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget());
                bp->setEnabled(false);
                bp->hide();
             }
         }
     }
-    currentDimensions = dim;
+    m_currentDimensions = dim;
 }
 
-void KisWdgOptionsBrush::slotRecalculateRanks(int rankDimension) {
-//        currentDimensions;
+void KisWdgOptionsBrush::slotRecalculateRanks(int rankDimension)
+{
     int rankSum = 0;
     int maxDim = this->dimensionSpin->maximum();
 
@@ -148,7 +146,7 @@ void KisWdgOptionsBrush::slotRecalculateRanks(int rankDimension) {
     QLayoutItem *item;
 
     for (int i = 0; i < maxDim; ++i) {
-        if((item = dimRankLayout->itemAt(i)) != 0) {
+        if ((item = dimRankLayout->itemAt(i)) != 0) {
             bp.push_back(dynamic_cast<BrushPipeSelectionModeHelper*>(item->widget()));
             rankSum += bp.at(i)->rankSpinBox.value();
         }
@@ -161,7 +159,7 @@ void KisWdgOptionsBrush::slotRecalculateRanks(int rankDimension) {
     while (rankSum > m_layersCount && bpIterator.hasNext()) {
         currentBrushHelper = bpIterator.next();
 
-        if(currentBrushHelper != callerBrushHelper) {
+        if (currentBrushHelper != callerBrushHelper) {
             int currentValue = currentBrushHelper->rankSpinBox.value();
             currentBrushHelper->rankSpinBox.setValue(currentValue -1);
             rankSum -= currentValue;

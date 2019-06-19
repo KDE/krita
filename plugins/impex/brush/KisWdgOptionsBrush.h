@@ -114,7 +114,7 @@ public Q_SLOTS:
     void slotRecalculateRanks(int rankDimension = 0);
 
 private:
-    int currentDimensions;
+    int m_currentDimensions;
     int m_layersCount;
     KisViewManager *m_view;
 };

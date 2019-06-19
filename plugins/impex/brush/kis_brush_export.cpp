@@ -170,7 +170,7 @@ KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevic
         pipeBrush->setParasite(parasite);
         pipeBrush->setDevices(devices, rc.width(), rc.height());
 
-        if(exportOptions.mask) {
+        if (exportOptions.mask) {
             QVector<KisGbrBrush*> brushes = pipeBrush->brushes();
             Q_FOREACH(KisGbrBrush* brush, brushes) {
                 brush->setHasColor(false);
@@ -178,7 +178,7 @@ KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevic
         }
     }
     else {
-        if (exportOptions.mask){
+        if (exportOptions.mask) {
             QImage image = document->savingImage()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
             brush->setImage(image);
             brush->setBrushTipImage(image);
@@ -188,7 +188,7 @@ KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevic
     }
 
     brush->setName(exportOptions.name);
-    // brushes are created after devices are loaded, mask mode must b after that
+    // brushes are created after devices are loaded, call mask mode after that
     brush->setUseColorAsMask(exportOptions.mask);
     brush->setWidth(rc.width());
     brush->setHeight(rc.height());

@@ -137,6 +137,10 @@ public:
             &m_widgetHelper, SLOT(slotIntersectModeRequested()));
 
         updateActionShortcutToolTips();
+
+        if (isPixelOnly() && m_widgetHelper.optionWidget()) {
+            m_widgetHelper.optionWidget()->enablePixelOnlySelectionMode();
+        }
     }
 
     void deactivate()
@@ -155,6 +159,9 @@ public:
         this->connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(resetCursorStyle()));
 
         updateActionShortcutToolTips();
+        if (isPixelOnly() && m_widgetHelper.optionWidget()) {
+            m_widgetHelper.optionWidget()->enablePixelOnlySelectionMode();
+        }
 
         return m_widgetHelper.optionWidget();
     }
@@ -365,6 +372,10 @@ protected:
     using BaseClass::canvas;
     KisSelectionToolConfigWidgetHelper m_widgetHelper;
     SelectionAction m_selectionActionAlternate;
+
+    virtual bool isPixelOnly() const {
+        return false;
+    }
 
 private:
     Qt::KeyboardModifiers keysAtStart;

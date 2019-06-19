@@ -56,6 +56,8 @@ class MixerSliderDocker(DockWidget):
         self.main_layout.addLayout(self.layout)
         for line in settings.split(";"):
             colors = line.split('|')
+            if len(colors) < 2:  # discard old configurations
+                continue
             left_color = self.parse_color(colors[0].split(','))
             right_color = self.parse_color(colors[1].split(','))
             widget = SliderLine(left_color, right_color, self)

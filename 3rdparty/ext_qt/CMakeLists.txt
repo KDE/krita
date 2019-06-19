@@ -32,30 +32,20 @@ if (WIN32)
         list(APPEND _QT_conf -opengl desktop -no-angle)
     endif (QT_ENABLE_DYNAMIC_OPENGL)
 
-    if (NOT USE_QT_TABLET_WINDOWS)
-        set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-disable-wintab.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-winink.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Use-fast-path-for-unsupported-mime-types.patch
+    # MIME-type optimization patches
+    set(ext_qt_PATCH_COMMAND
+                     ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Use-fast-path-for-unsupported-mime-types.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Hack-always-return-we-support-DIBV5.patch
+            )
 
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Implement-openGL-surface-color-space-selection-in-An.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Implement-color-space-selection-for-QSurfaceFormat.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-Implement-color-conversion-for-the-backing-store-tex.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-Return-QScreen-s-HMONITOR-handle-via-QPlatformNative.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-Implement-a-manual-test-for-checking-is-HDR-features.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-Fix-notification-of-QDockWidget-when-it-gets-undocke.patch
+    # Tablet support patches
+    if (NOT USE_QT_TABLET_WINDOWS)
+        set(ext_qt_PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-disable-wintab.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-winink.patch
             )
     else()
-        set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Use-fast-path-for-unsupported-mime-types.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Hack-always-return-we-support-DIBV5.patch
-
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Implement-openGL-surface-color-space-selection-in-An.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Implement-color-space-selection-for-QSurfaceFormat.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-Implement-color-conversion-for-the-backing-store-tex.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-Return-QScreen-s-HMONITOR-handle-via-QPlatformNative.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-Implement-a-manual-test-for-checking-is-HDR-features.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-Fix-notification-of-QDockWidget-when-it-gets-undocke.patch
-
+        set(ext_qt_PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0020-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0023-Implement-a-switch-for-tablet-API-on-Windows.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0024-Fetch-stylus-button-remapping-from-WinTab-driver.patch
@@ -67,6 +57,18 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0051-Add-workaround-for-handling-table-press-correctly-in.patch
             )
     endif()
+
+    # HDR patches
+    set(ext_qt_PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Implement-openGL-surface-color-space-selection-in-An.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Implement-color-space-selection-for-QSurfaceFormat.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-Implement-color-conversion-for-the-backing-store-tex.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-Return-QScreen-s-HMONITOR-handle-via-QPlatformNative.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-Implement-a-manual-test-for-checking-is-HDR-features.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-Fix-notification-of-QDockWidget-when-it-gets-undocke.patch
+            )
+
+    # Other patches
     set(ext_qt_PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0060-Windows-Add-a-default-setting-for-hasBorderInFullScr.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0061-Hack-to-hide-1px-border-with-OpenGL-fullscreen-hack.patch

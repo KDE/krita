@@ -1,15 +1,15 @@
-From 6851994441cc48cf48853f009dd620e9cebd551a Mon Sep 17 00:00:00 2001
+From 82c789f75fc634ccbe5f1aad6d41895a6e6da17d Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Mon, 11 Mar 2019 16:17:17 +0300
-Subject: [PATCH] Poison Qt's headers with a mark about presence of Enter/Leave
- patch
+Subject: [PATCH 2/2] Poison Qt's headers with a mark about presence of
+ Enter/Leave patch
 
 ---
  src/gui/kernel/qevent.h | 4 ++++
  1 file changed, 4 insertions(+)
 
 diff --git a/src/gui/kernel/qevent.h b/src/gui/kernel/qevent.h
-index 2b1c6a6..69cafaa 100644
+index 2b1c6a6e31..69cafaaa29 100644
 --- a/src/gui/kernel/qevent.h
 +++ b/src/gui/kernel/qevent.h
 @@ -242,6 +242,10 @@ protected:
@@ -24,5 +24,5 @@ index 2b1c6a6..69cafaa 100644
  class Q_GUI_EXPORT QTabletEvent : public QInputEvent
  {
 -- 
-2.7.4
+2.20.1.windows.1
 

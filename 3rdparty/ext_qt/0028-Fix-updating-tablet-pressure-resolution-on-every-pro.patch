@@ -1,7 +1,7 @@
-From 41549d94ff3ad9a793c0c4c910a1a30976be9723 Mon Sep 17 00:00:00 2001
+From f83799913665e06e98c743326eafd47d78087477 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Thu, 18 Apr 2019 15:42:17 +0300
-Subject: [PATCH 3/4] Fix updating tablet pressure resolution on every
+Subject: [PATCH 15/17] Fix updating tablet pressure resolution on every
  proximity enter event
 
 The user can switch pressure sensitivity level in the driver,
@@ -17,7 +17,7 @@ Change-Id: I6cfdff27eaf5a587bf714871f1495a7ea150c553
  1 file changed, 8 insertions(+)
 
 diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-index c39242917f..45dc8a7d1a 100644
+index 02455536fe..e9d10a2b03 100644
 --- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 +++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -519,6 +519,14 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L

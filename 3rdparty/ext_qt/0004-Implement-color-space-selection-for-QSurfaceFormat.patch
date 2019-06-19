@@ -1,0 +1,276 @@
+From 806fae9657a13559332796ade9cf1b302d014e46 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Wed, 13 Feb 2019 16:56:11 +0300
+Subject: [PATCH 04/17] Implement color space selection for QSurfaceFormat
+
+With the patch one can select color space of openGL surface
+which is used a a root surface of the underlying native window.
+
+This feature is needed, e.g. when the user wants to render HDR
+content on screen. In such a case OS should be instructed about
+how to treat the graphical data in the application framebuffer.
+
+The easiest approach is to call QSurfaceFormat::setDefaultFormat()
+before creating the first application window. In such a case the
+root surface will (may) be in the requested format.
+
+Supported color spaces/formats:
+
+1) sRGB, SDR
+2) scRGB (Rec 709, gamma 1.0), HDR
+3) Rec 2020 PQ, HDR
+
+Please take into account that in real life the user should select
+proper bit depth for each color space, otherwise the system will
+refuse to create the surface:
+
+1) sRGB --- 8 bit or 10 bit
+2) scRGB --- 16 bit only
+3) Rec 2020 PQ --- 10 bit only
+
+Please note that color space selection is supported only on
+platforms with DXGI 1.4 and higher.
+
+Change-Id: I5f4945db9798d542f19c8ff1af1effa34f7745fd
+---
+ src/gui/kernel/qsurfaceformat.cpp             | 11 ++++
+ src/gui/kernel/qsurfaceformat.h               |  4 +-
+ src/gui/opengl/qopenglframebufferobject.cpp   |  7 ++-
+ .../platforms/windows/qwindowseglcontext.cpp  | 57 +++++++++++++++++--
+ .../platforms/windows/qwindowseglcontext.h    |  6 +-
+ .../platforms/windows/qwindowsopenglcontext.h |  2 +-
+ .../platforms/windows/qwindowswindow.cpp      |  8 ++-
+ 7 files changed, 83 insertions(+), 12 deletions(-)
+
+diff --git a/src/gui/kernel/qsurfaceformat.cpp b/src/gui/kernel/qsurfaceformat.cpp
+index 1a814ec21f..fc8b9c4f43 100644
+--- a/src/gui/kernel/qsurfaceformat.cpp
++++ b/src/gui/kernel/qsurfaceformat.cpp
+@@ -221,6 +221,17 @@ public:
+     set, the window will be created with an sRGB-capable default
+     framebuffer. Note that some platforms may return windows with a sRGB-capable
+     default framebuffer even when not requested explicitly.
++
++    \value scRGBColorSpace When \c{EGL_EXT_gl_colorspace_scrgb_linear}
++    is supported by the platform and this value is set, the window will
++    be created with an scRGB-capable default framebuffer. Note that some
++    platforms may return windows with a scRGB-capable default framebuffer
++    even when not requested explicitly. It usually happens when the application
++    requests 16-bit surface format.
++
++    \value bt2020PQColorSpace When \c{EGL_EXT_gl_colorspace_bt2020_pq}
++    is supported by the platform and this value is set, the window will
++    be created with an bt2020 PQ default framebuffer.
+  */
+ 
+ /*!
+diff --git a/src/gui/kernel/qsurfaceformat.h b/src/gui/kernel/qsurfaceformat.h
+index ed63eb8bbf..9ba6a29b7a 100644
+--- a/src/gui/kernel/qsurfaceformat.h
++++ b/src/gui/kernel/qsurfaceformat.h
+@@ -87,7 +87,9 @@ public:
+ 
+     enum ColorSpace {
+         DefaultColorSpace,
+-        sRGBColorSpace
++        sRGBColorSpace,
++        scRGBColorSpace,
++        bt2020PQColorSpace
+     };
+     Q_ENUM(ColorSpace)
+ 
+diff --git a/src/gui/opengl/qopenglframebufferobject.cpp b/src/gui/opengl/qopenglframebufferobject.cpp
+index cae3d516c4..ccdccb637a 100644
+--- a/src/gui/opengl/qopenglframebufferobject.cpp
++++ b/src/gui/opengl/qopenglframebufferobject.cpp
+@@ -545,10 +545,13 @@ void QOpenGLFramebufferObjectPrivate::initTexture(int idx)
+     ColorAttachment &color(colorAttachments[idx]);
+ 
+     GLuint pixelType = GL_UNSIGNED_BYTE;
+-    if (color.internalFormat == GL_RGB10_A2 || color.internalFormat == GL_RGB10)
++    if (color.internalFormat == GL_RGB10_A2 || color.internalFormat == GL_RGB10) {
+         pixelType = GL_UNSIGNED_INT_2_10_10_10_REV;
+-    else if (color.internalFormat == GL_RGB16  || color.internalFormat == GL_RGBA16)
++    } else if (color.internalFormat == GL_RGB16  || color.internalFormat == GL_RGBA16) {
+         pixelType = GL_UNSIGNED_SHORT;
++    } else if (color.internalFormat == GL_RGBA16F) {
++        pixelType = GL_HALF_FLOAT;
++    }
+ 
+     funcs.glTexImage2D(target, 0, color.internalFormat, color.size.width(), color.size.height(), 0,
+                        GL_RGBA, pixelType, NULL);
+diff --git a/src/plugins/platforms/windows/qwindowseglcontext.cpp b/src/plugins/platforms/windows/qwindowseglcontext.cpp
+index 063e81150e..4cd745eac6 100644
+--- a/src/plugins/platforms/windows/qwindowseglcontext.cpp
++++ b/src/plugins/platforms/windows/qwindowseglcontext.cpp
+@@ -151,8 +151,9 @@ bool QWindowsLibEGL::init()
+     eglGetCurrentDisplay = RESOLVE((EGLDisplay (EGLAPIENTRY *)(void)), eglGetCurrentDisplay);
+     eglSwapBuffers = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay , EGLSurface)), eglSwapBuffers);
+     eglGetProcAddress = RESOLVE((QFunctionPointer (EGLAPIENTRY * )(const char *)), eglGetProcAddress);
++    eglQueryString = RESOLVE((const char* (EGLAPIENTRY *)(EGLDisplay, EGLint)), eglQueryString);
+ 
+-    if (!eglGetError || !eglGetDisplay || !eglInitialize || !eglGetProcAddress)
++    if (!eglGetError || !eglGetDisplay || !eglInitialize || !eglGetProcAddress || !eglQueryString)
+         return false;
+ 
+     eglGetPlatformDisplayEXT = nullptr;
+@@ -197,8 +198,15 @@ bool QWindowsLibGLESv2::init()
+ }
+ 
+ QWindowsEGLStaticContext::QWindowsEGLStaticContext(EGLDisplay display)
+-    : m_display(display)
++    : m_display(display),
++      m_hasSRGBColorSpaceSupport(false),
++      m_hasSCRGBColorSpaceSupport(false),
++      m_hasBt2020PQColorSpaceSupport(false)
+ {
++    const char *eglExtensions = libEGL.eglQueryString(display, EGL_EXTENSIONS);
++    m_hasSRGBColorSpaceSupport = strstr(eglExtensions, "EGL_KHR_gl_colorspace") != nullptr;
++    m_hasSCRGBColorSpaceSupport = strstr(eglExtensions, "EGL_EXT_gl_colorspace_scrgb_linear") != nullptr;
++    m_hasBt2020PQColorSpaceSupport = strstr(eglExtensions, "EGL_EXT_gl_colorspace_bt2020_pq") != nullptr;
+ }
+ 
+ bool QWindowsEGLStaticContext::initializeAngle(QWindowsOpenGLTester::Renderers preferredType, HDC dc,
+@@ -297,11 +305,48 @@ QWindowsOpenGLContext *QWindowsEGLStaticContext::createContext(QOpenGLContext *c
+     return new QWindowsEGLContext(this, context->format(), context->shareHandle());
+ }
+ 
+-void *QWindowsEGLStaticContext::createWindowSurface(void *nativeWindow, void *nativeConfig, int *err)
++void *QWindowsEGLStaticContext::createWindowSurface(void *nativeWindow, void *nativeConfig,
++                                                    QSurfaceFormat::ColorSpace colorSpace, int *err)
+ {
+     *err = 0;
++
++    EGLint eglColorSpace = EGL_GL_COLORSPACE_LINEAR_KHR;
++    bool colorSpaceSupported = false;
++
++    switch (colorSpace) {
++    case QSurfaceFormat::DefaultColorSpace:
++        colorSpaceSupported = m_hasSRGBColorSpaceSupport;
++        break;
++    case QSurfaceFormat::sRGBColorSpace:
++        eglColorSpace = EGL_GL_COLORSPACE_SRGB_KHR;
++        colorSpaceSupported = m_hasSRGBColorSpaceSupport;
++        break;
++    case QSurfaceFormat::scRGBColorSpace:
++        eglColorSpace = EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT;
++        colorSpaceSupported = m_hasSCRGBColorSpaceSupport;
++        break;
++    case QSurfaceFormat::bt2020PQColorSpace:
++        eglColorSpace = EGL_GL_COLORSPACE_BT2020_PQ_EXT;
++        colorSpaceSupported = m_hasBt2020PQColorSpaceSupport;
++        break;
++    }
++
++    QVector<EGLint> attributes;
++
++    if (colorSpaceSupported) {
++        attributes << EGL_GL_COLORSPACE << eglColorSpace;
++    }
++
++    attributes << EGL_NONE;
++
++    if (!colorSpaceSupported && colorSpace != QSurfaceFormat::DefaultColorSpace) {
++        qWarning().nospace() << __FUNCTION__ << ": Requested color space is not supported by EGL implementation: " << colorSpace << " (egl: 0x" << hex << eglColorSpace << ")";
++    }
++
++
+     EGLSurface surface = libEGL.eglCreateWindowSurface(m_display, nativeConfig,
+-                                                       static_cast<EGLNativeWindowType>(nativeWindow), nullptr);
++                                                       static_cast<EGLNativeWindowType>(nativeWindow),
++                                                       attributes.constData());
+     if (surface == EGL_NO_SURFACE) {
+         *err = libEGL.eglGetError();
+         qWarning("%s: Could not create the EGL window surface: 0x%x", __FUNCTION__, *err);
+@@ -349,6 +394,7 @@ QSurfaceFormat QWindowsEGLStaticContext::formatFromConfig(EGLDisplay display, EG
+     format.setSamples(sampleCount);
+     format.setStereo(false);
+     format.setSwapInterval(referenceFormat.swapInterval());
++    format.setColorSpace(referenceFormat.colorSpace());
+ 
+     // Clear the EGL error state because some of the above may
+     // have errored out because the attribute is not applicable
+@@ -378,7 +424,6 @@ QSurfaceFormat QWindowsEGLStaticContext::formatFromConfig(EGLDisplay display, EG
+     \internal
+     \ingroup qt-lighthouse-win
+ */
+-
+ QWindowsEGLContext::QWindowsEGLContext(QWindowsEGLStaticContext *staticContext,
+                                        const QSurfaceFormat &format,
+                                        QPlatformOpenGLContext *share)
+@@ -483,6 +528,8 @@ bool QWindowsEGLContext::makeCurrent(QPlatformSurface *surface)
+             // Simulate context loss as the context is useless.
+             QWindowsEGLStaticContext::libEGL.eglDestroyContext(m_eglDisplay, m_eglContext);
+             m_eglContext = EGL_NO_CONTEXT;
++        } else if (err == EGL_BAD_MATCH) {
++            qCDebug(lcQpaGl) << "Got bad match in createWindowSurface() for context" << this << "Check color space configuration.";
+         }
+         return false;
+     }
+diff --git a/src/plugins/platforms/windows/qwindowseglcontext.h b/src/plugins/platforms/windows/qwindowseglcontext.h
+index 8a1e1ddae8..9f7742e6fb 100644
+--- a/src/plugins/platforms/windows/qwindowseglcontext.h
++++ b/src/plugins/platforms/windows/qwindowseglcontext.h
+@@ -80,6 +80,7 @@ struct QWindowsLibEGL
+     QFunctionPointer (EGLAPIENTRY *eglGetProcAddress)(const char *procname);
+ 
+     EGLDisplay (EGLAPIENTRY * eglGetPlatformDisplayEXT)(EGLenum platform, void *native_display, const EGLint *attrib_list);
++    const char* (EGLAPIENTRY * eglQueryString)(EGLDisplay dpy, EGLint name);
+ 
+ private:
+ #if !defined(QT_STATIC) || defined(QT_OPENGL_DYNAMIC)
+@@ -121,7 +122,7 @@ public:
+     void *moduleHandle() const override { return libGLESv2.moduleHandle(); }
+     QOpenGLContext::OpenGLModuleType moduleType() const override { return QOpenGLContext::LibGLES; }
+ 
+-    void *createWindowSurface(void *nativeWindow, void *nativeConfig, int *err) override;
++    void *createWindowSurface(void *nativeWindow, void *nativeConfig, QSurfaceFormat::ColorSpace colorSpace, int *err) override;
+     void destroyWindowSurface(void *nativeSurface) override;
+ 
+     QSurfaceFormat formatFromConfig(EGLDisplay display, EGLConfig config, const QSurfaceFormat &referenceFormat);
+@@ -135,6 +136,9 @@ private:
+                                 EGLDisplay *display, EGLint *major, EGLint *minor);
+ 
+     const EGLDisplay m_display;
++    bool m_hasSRGBColorSpaceSupport;
++    bool m_hasSCRGBColorSpaceSupport;
++    bool m_hasBt2020PQColorSpaceSupport;
+ };
+ 
+ class QWindowsEGLContext : public QWindowsOpenGLContext
+diff --git a/src/plugins/platforms/windows/qwindowsopenglcontext.h b/src/plugins/platforms/windows/qwindowsopenglcontext.h
+index cc6d93d35e..61c0e28767 100644
+--- a/src/plugins/platforms/windows/qwindowsopenglcontext.h
++++ b/src/plugins/platforms/windows/qwindowsopenglcontext.h
+@@ -63,7 +63,7 @@ public:
+ 
+     // If the windowing system interface needs explicitly created window surfaces (like EGL),
+     // reimplement these.
+-    virtual void *createWindowSurface(void * /*nativeWindow*/, void * /*nativeConfig*/, int * /*err*/) { return 0; }
++    virtual void *createWindowSurface(void * /*nativeWindow*/, void * /*nativeConfig*/, QSurfaceFormat::ColorSpace /*colorSpace*/, int * /*err*/) { return 0; }
+     virtual void destroyWindowSurface(void * /*nativeSurface*/) { }
+ 
+ protected:
+diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
+index 3bf424d0ac..7597fcb64d 100644
+--- a/src/plugins/platforms/windows/qwindowswindow.cpp
++++ b/src/plugins/platforms/windows/qwindowswindow.cpp
+@@ -2874,9 +2874,13 @@ void *QWindowsWindow::surface(void *nativeConfig, int *err)
+     return 0;
+ #endif
+ #ifndef QT_NO_OPENGL
++
++
++
+     if (!m_surface) {
+-        if (QWindowsStaticOpenGLContext *staticOpenGLContext = QWindowsIntegration::staticOpenGLContext())
+-            m_surface = staticOpenGLContext->createWindowSurface(m_data.hwnd, nativeConfig, err);
++        if (QWindowsStaticOpenGLContext *staticOpenGLContext = QWindowsIntegration::staticOpenGLContext()) {
++            m_surface = staticOpenGLContext->createWindowSurface(m_data.hwnd, nativeConfig, m_format.colorSpace(), err);
++        }
+     }
+ 
+     return m_surface;
+-- 
+2.20.1.windows.1
+

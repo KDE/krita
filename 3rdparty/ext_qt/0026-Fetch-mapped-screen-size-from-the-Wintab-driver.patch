@@ -1,7 +1,7 @@
-From 47be745d599f6cd11f3fe280b51c490682f7b2da Mon Sep 17 00:00:00 2001
+From 71466f90b0b554987a60e5c797d38d6c28f8ebef Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Sat, 13 Apr 2019 23:24:01 +0300
-Subject: [PATCH 2/4] Fetch mapped screen size from the Wintab driver
+Subject: [PATCH 13/17] Fetch mapped screen size from the Wintab driver
 
 Some devices, like Microsoft Surface Pro 5, don't map tablet's
 input range to the entire virtual screen area, but map it to
@@ -31,7 +31,7 @@ Change-Id: Idd8bcf0323ce0811d2ad8976eaed48ad13ac3af8
  2 files changed, 99 insertions(+), 3 deletions(-)
 
 diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-index 44b94d044d..c39242917f 100644
+index 6a9fe28e75..bfd0a9640b 100644
 --- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 +++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -53,6 +53,7 @@

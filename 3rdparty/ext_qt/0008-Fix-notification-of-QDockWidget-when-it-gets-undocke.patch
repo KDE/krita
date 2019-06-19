@@ -1,0 +1,29 @@
+From d06dc5de61c3574dd97c5aaae07561d8fc29c604 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Thu, 6 Dec 2018 16:16:27 +0300
+Subject: [PATCH 08/17] Fix notification of QDockWidget when it gets undocked
+
+Before the patch the notification was emitted only when the docker
+was attached to the panel or changed a position on it.
+
+Change-Id: Id3ffbd2018a8e68844d174328dd1c4ceb7fa01d3
+---
+ src/widgets/widgets/qdockwidget.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/widgets/widgets/qdockwidget.cpp b/src/widgets/widgets/qdockwidget.cpp
+index 6c871aae2c..19fc2d1677 100644
+--- a/src/widgets/widgets/qdockwidget.cpp
++++ b/src/widgets/widgets/qdockwidget.cpp
+@@ -1171,6 +1171,8 @@ void QDockWidgetPrivate::setWindowState(bool floating, bool unplug, const QRect
+             QMainWindowLayout *mwlayout = qt_mainwindow_layout_from_dock(q);
+             if (mwlayout)
+                 emit q->dockLocationChanged(mwlayout->dockWidgetArea(q));
++        } else {
++            emit q->dockLocationChanged(Qt::NoDockWidgetArea);
+         }
+     }
+ 
+-- 
+2.20.1.windows.1
+

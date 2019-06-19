@@ -1,8 +1,8 @@
-From 10e1c6c6912ccd43fedd46c3f59a9b61043f4fec Mon Sep 17 00:00:00 2001
+From dd25106c340d91d20432375a2a22b85779eddb18 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Wed, 17 Apr 2019 17:39:10 +0300
-Subject: [PATCH] Switch stylus pointer type when the tablet is in the tablet
- proximity
+Subject: [PATCH 14/17] Switch stylus pointer type when the tablet is in the
+ tablet proximity
 
 Some convertible tablet devices have a special stylus button that
 converts the stylus into an eraser. Such button can be pressed right
@@ -21,10 +21,10 @@ https://bugs.kde.org/show_bug.cgi?id=408454
  1 file changed, 25 insertions(+), 4 deletions(-)
 
 diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-index 45dc8a7d1a..4fc8e993d7 100644
+index bfd0a9640b..02455536fe 100644
 --- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 +++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-@@ -614,7 +614,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
+@@ -606,7 +606,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
          return false;
  
      const int currentDevice = m_devices.at(m_currentDevice).currentDevice;
@@ -32,7 +32,7 @@ index 45dc8a7d1a..4fc8e993d7 100644
      const qint64 uniqueId = m_devices.at(m_currentDevice).uniqueId;
  
      // The tablet can be used in 2 different modes (reflected in enum Mode),
-@@ -644,6 +643,31 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
+@@ -636,6 +635,31 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
      for (int i = 0; i < packetCount ; ++i) {
          const PACKET &packet = localPacketBuf[i];
  
@@ -64,7 +64,7 @@ index 45dc8a7d1a..4fc8e993d7 100644
          const int z = currentDevice == QTabletEvent::FourDMouse ? int(packet.pkZ) : 0;
  
          QPointF globalPosF =
-@@ -712,9 +736,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
+@@ -709,9 +733,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
                  << tiltY << "tanP:" << tangentialPressure << "rotation:" << rotation;
          }
  

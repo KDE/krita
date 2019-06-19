@@ -109,7 +109,8 @@ void KisMaskManager::adjustMaskPosition(KisNodeSP node, KisNodeSP activeNode, bo
     if (!avoidActiveNode && activeNode->allowAsChild(node)) {
         parent = activeNode;
         above = activeNode->lastChild();
-    } else if (activeNode->parent() && activeNode->parent()->allowAsChild(node)) {
+    } else if (activeNode->parent() && activeNode->parent()->allowAsChild(node)
+               && activeNode->parent()->parent() /* we don't want to add masks to root */) {
         parent = activeNode->parent();
         above = activeNode;
     } else {

@@ -509,12 +509,19 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->blockMouseEvents();
         //Reset signal compressor to prevent processing events before press late
         d->resetCompressor();
-        d->eatOneMousePress();
+
 
 #if defined Q_OS_LINUX && !defined QT_HAS_ENTER_LEAVE_PATCH
         // remove this hack when this patch is integrated:
         // https://codereview.qt-project.org/#/c/255384/
         event->setAccepted(false);
+        d->eatOneMousePress();
+#elif defined Q_OS_WIN32
+        /**
+         * Windows is the only platform that synthesizes mouse events for
+         * the tablet on OS-level, that is, even when we accept the event
+         */
+        d->eatOneMousePress();
 #endif
 
         break;

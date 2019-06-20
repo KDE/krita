@@ -322,7 +322,6 @@ public:
     KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
 
     QList<KoColorSetSP> paletteList;
-    bool ownsPaletteList = false;
 
     KisGridConfig gridConfig;
 
@@ -356,7 +355,7 @@ public:
 
     /// clones the palette list oldList
     /// the ownership of the returned KoColorSet * belongs to the caller
-    QList<KoColorSet *> clonePaletteList(const QList<KoColorSet *> &oldList);
+    QList<KoColorSetSP> clonePaletteList(const QList<KoColorSetSP> &oldList);
 
     class StrippedSafeSavingLocker;
 };
@@ -401,7 +400,7 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
     globalAssistantsColor = rhs.globalAssistantsColor;
 
     if (policy == REPLACE) {
-        QList<KoColorSet *> newPaletteList = clonePaletteList(rhs.paletteList);
+        QList<KoColorSetSP> newPaletteList = clonePaletteList(rhs.paletteList);
         q->setPaletteList(newPaletteList, /* emitSignal = */ true);
         // we still do not own palettes if we did not
     } else {
@@ -411,11 +410,11 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
     batchMode = rhs.batchMode;
 }
 
-QList<KoColorSet *> KisDocument::Private::clonePaletteList(const QList<KoColorSet *> &oldList)
+QList<KoColorSetSP> KisDocument::Private::clonePaletteList(const QList<KoColorSetSP> &oldList)
 {
-    QList<KoColorSet *> newList;
-    Q_FOREACH (KoColorSet *palette, oldList) {
-        newList << new KoColorSet(*palette);
+    QList<KoColorSetSP> newList;
+    Q_FOREACH (KoColorSetSP palette, oldList) {
+        newList.append(QSharedPointer<KoColorSet>(new KoColorSet(*palette.data())));
     }
     return newList;
 }
@@ -543,10 +542,6 @@ KisDocument::~KisDocument()
 
         // check if the image has actually been deleted
         KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
-    }
-
-    if (d->ownsPaletteList) {
-        qDeleteAll(d->paletteList);
     }
 
     delete d;
@@ -803,7 +798,6 @@ KisDocument *KisDocument::lockAndCreateSnapshot()
     if (doc) {
         // clone palette list
         doc->d->paletteList = doc->d->clonePaletteList(doc->d->paletteList);
-        doc->d->ownsPaletteList = true;
     }
     return doc;
 }
@@ -1737,7 +1731,7 @@ QList<KoColorSetSP > &KisDocument::paletteList()
 void KisDocument::setPaletteList(const QList<KoColorSetSP > &paletteList, bool emitSignal)
 {
     if (d->paletteList != paletteList) {
-        QList<KoColorSet *> oldPaletteList = d->paletteList;
+        QList<KoColorSetSP> oldPaletteList = d->paletteList;
         d->paletteList = paletteList;
         if (emitSignal) {
             emit sigPaletteListChanged(oldPaletteList, paletteList);

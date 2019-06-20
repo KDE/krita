@@ -471,7 +471,7 @@ Q_SIGNALS:
      * Emitted when the palette list has changed.
      * The pointers in oldPaletteList are to be deleted by the resource server.
      **/
-    void sigPaletteListChanged(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList);
+    void sigPaletteListChanged(const QList<KoColorSetSP> &oldPaletteList, const QList<KoColorSetSP> &newPaletteList);
 
     void sigAssistantsChanged();
 

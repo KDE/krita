@@ -181,6 +181,12 @@ void KisDlgInternalColorSelector::slotColorUpdated(KoColor newColor)
 {
     //if the update did not come from this selector...
     if (m_d->allowUpdates || QObject::sender() == this->parent()) {
+        // Enforce palette colors
+        KConfigGroup group(KSharedConfig::openConfig(), "");
+        if (group.readEntry("colorsettings/forcepalettecolors", false)) {
+            newColor = m_ui->paletteBox->closestColor(newColor);
+        }
+
         if (m_d->lockUsedCS){
             newColor.convertTo(m_d->currentColorSpace);
             m_d->currentColor = newColor;
@@ -283,8 +289,7 @@ void KisDlgInternalColorSelector::updateAllElements(QObject *source)
         m_d->hexColorInput->update();
     }
 
-    KConfigGroup group(KSharedConfig::openConfig(), "");
-    if (source != m_ui->paletteBox && group.readEntry("colorsettings/forcepalettecolors", false)) {
+    if (source != m_ui->paletteBox) {
         m_ui->paletteBox->selectClosestColor(m_d->currentColor);
     }
 

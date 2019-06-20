@@ -660,7 +660,7 @@ KisNodeSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
 
     KisPaintDeviceSP previewDevice = new KisPaintDevice(*adjl->original());
 
-    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), previewDevice, image->nextLayerName(), i18n("New Filter Layer"), m_view);
+    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), previewDevice, image->nextLayerName(), i18n("New Filter Layer"), m_view, qApp->activeWindow());
     dlg.resize(dlg.minimumSizeHint());
 
     // ensure that the device may be free'd by the dialog

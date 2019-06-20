@@ -344,6 +344,12 @@ bool KisProjectionLeaf::isStillInGraph() const
     return (bool)m_d->node->graphListener();
 }
 
+bool KisProjectionLeaf::hasClones() const
+{
+    KisLayer *layer = qobject_cast<KisLayer*>(m_d->node.data());
+    return layer ? layer->hasClones() : false;
+}
+
 bool KisProjectionLeaf::isDroppedMask() const
 {
     return qobject_cast<KisMask*>(m_d->node.data()) &&

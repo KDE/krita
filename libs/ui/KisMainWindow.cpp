@@ -1425,8 +1425,8 @@ void KisMainWindow::slotFileNew()
                                            i18n("Unnamed"));
 
     item.icon = "document-new";
-
-    startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
+    item.title = i18n("Custom Document");
+    startupWidget->addCustomDocumentWidget(item.widget, item.title, "Custom Document", item.icon);
 
     QSize sz = KisClipboard::instance()->clipSize();
     if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
@@ -1446,7 +1446,7 @@ void KisMainWindow::slotFileNew()
     item.title = i18n("Create from Clipboard");
     item.icon = "tab-new";
 
-    startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
+    startupWidget->addCustomDocumentWidget(item.widget, item.title, "Create from ClipBoard", item.icon);
 
     // calls deleteLater
     connect(startupWidget, SIGNAL(documentSelected(KisDocument*)), KisPart::instance(), SLOT(startCustomDocument(KisDocument*)));

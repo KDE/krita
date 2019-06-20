@@ -95,7 +95,7 @@
   <description>
     <p>Krita is the full-featured digital art studio.</p>
     <p xml:lang="bs">Krita je potpuni digitalni umjetnički studio.</p>
-    <p xml:lang="ca">Krita és l'estudi d'art digital ple de funcionalitats.</p>
+    <p xml:lang="ca">El Krita és l'estudi d'art digital ple de funcionalitats.</p>
     <p xml:lang="ca-valencia">Krita és l'estudi d'art digital ple de funcionalitats.</p>
     <p xml:lang="de">Krita ist ein digitales Designstudio mit umfangreichen Funktionen.</p>
     <p xml:lang="el">Το Krita είναι ένα πλήρες χαρακτηριστικών ψηφιακό ατελιέ.</p>
@@ -218,51 +218,96 @@
     <p xml:lang="zh-TW">使用先進的筆刷引擎、驚人的濾鏡和許多方便的功能來開心地繪畫，讓 Krita 擁有巨大的生產力。</p>
   </description>
   <url type="homepage">https://www.krita.org/</url>
-  <url type="faq">https://krita.org/about/faq/</url>
+  <url type="faq">https://docs.krita.org/KritaFAQ.html</url>
   <url type="donation">https://krita.org/support-us/donations/</url>
-  <url type="help">https://docs.krita.org/Category:Tutorials</url>
+  <url type="help">https://docs.krita.org/</url>
+  <url type="bugtracker">https://docs.krita.org/en/untranslatable_pages/reporting_bugs.html</url>
   <screenshots>
     <screenshot type="default">
+      <caption>Krita is a full-featured digital painting studio.</caption>
+      <caption xml:lang="ca">Krita és un estudi de pintura digital ple de funcionalitats.</caption>
+      <caption xml:lang="ca-valencia">Krita és un estudi de pintura digital ple de funcionalitats.</caption>
+      <caption xml:lang="es">Krita es un completo estudio de dibujo digital.</caption>
+      <caption xml:lang="it">Krita è uno studio d'arte digitale completo.</caption>
+      <caption xml:lang="ko">Krita는 다기능 디지털 예술 스튜디오입니다.</caption>
+      <caption xml:lang="nl">Krita is een digitale schilderstudio vol mogelijkheden.</caption>
+      <caption xml:lang="pt">O Krita é um estúdio de arte digital completo.</caption>
+      <caption xml:lang="sv">Krita är en fullfjädrad digital konststudio.</caption>
+      <caption xml:lang="uk">Krita — повноцінний комплекс для цифрового малювання.</caption>
+      <caption xml:lang="x-test">xxKrita is a full-featured digital painting studio.xx</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_001.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>The startup window now also gives you the latest news about Krita.</caption>
+      <caption xml:lang="ca">La finestra d'inici ara proporciona les darreres noticies quant al Krita.</caption>
+      <caption xml:lang="ca-valencia">La finestra d'inici ara proporciona les darreres noticies quant al Krita.</caption>
+      <caption xml:lang="es">La ventana de bienvenida también le proporciona ahora las últimas noticias sobre Krita.</caption>
+      <caption xml:lang="it">La finestra di avvio ora fornisce anche le ultime novità su Krita.</caption>
+      <caption xml:lang="ko">시작 창에서 Krita의 최신 소식을 볼 수 있습니다.</caption>
+      <caption xml:lang="nl">Het opstartvenster geeft u nu ook you het laatste nieuws over Krita.</caption>
+      <caption xml:lang="pt">A janela inicial agora também lhe dá as últimas notícias sobre o Krita.</caption>
+      <caption xml:lang="sv">Startfönstret ger nu också senaste nytt om Krita.</caption>
+      <caption xml:lang="uk">У початковому вікні програми ви можете бачити найсвіжіші новини щодо Krita.</caption>
+      <caption xml:lang="x-test">xxThe startup window now also gives you the latest news about Krita.xx</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_002.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>There are over ten immensely powerful brush engines.</caption>
+      <caption xml:lang="ca">Hi ha uns deu motors de pinzell immensament potents.</caption>
+      <caption xml:lang="ca-valencia">Hi ha uns deu motors de pinzell immensament potents.</caption>
+      <caption xml:lang="es">Existen unos diez inmensamente potentes motores de pinceles.</caption>
+      <caption xml:lang="it">Ci sono oltre dieci motori di pennelli incredibilmente potenti.</caption>
+      <caption xml:lang="ko">10가지 종류의 강력한 브러시 엔진을 사용할 수 있습니다.</caption>
+      <caption xml:lang="nl">Er zijn meer dan tien immens krachtige penseelengines.</caption>
+      <caption xml:lang="pt">Existem mais de dez motores de pincéis extremamente poderosos.</caption>
+      <caption xml:lang="sv">Det finns mer än tio enormt kraftfulla penselgränssnitt.</caption>
+      <caption xml:lang="uk">У програмі передбачено понад десяток надзвичайно потужних рушіїв пензлів.</caption>
+      <caption xml:lang="x-test">xxThere are over ten immensely powerful brush engines.xx</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_003.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>Create and use gamut masks to give your images a coherent feel.</caption>
+      <caption xml:lang="ca">Creeu i useu màscares de gamma per donar a les imatges una aparença coherent.</caption>
+      <caption xml:lang="ca-valencia">Creeu i useu màscares de gamma per donar a les imatges una aparença coherent.</caption>
+      <caption xml:lang="es">Cree y use gamas para proporcionar a sus imágenes un aspecto coherente.</caption>
+      <caption xml:lang="it">Crea e utilizza maschere gamut per dare alle tue immagini un aspetto coerente.</caption>
+      <caption xml:lang="ko">색역 마스크를 만들고 사용할 수 있습니다.</caption>
+      <caption xml:lang="nl">Maak en gebruik gamut-maskers om uw afbeeldingen een coherent gevoel te geven.</caption>
+      <caption xml:lang="pt">Crie e use máscaras de gamute para dar às suas imagens uma aparência coerente.</caption>
+      <caption xml:lang="sv">Att skapa och använda färgomfångsmasker ger bilder en sammanhängande känsla.</caption>
+      <caption xml:lang="uk">Створюйте маски палітри і користуйтеся ними для надання вашим малюнкам однорідного вигляду.</caption>
+      <caption xml:lang="x-test">xxCreate and use gamut masks to give your images a coherent feel.xx</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_004.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>Into animation? Krita provides everything you need for traditional, hand-drawn animation.</caption>
+      <caption xml:lang="ca">Esteu amb animacions? El Krita proporciona tol el que cal per a l'animació a mà tradicional.</caption>
+      <caption xml:lang="ca-valencia">Esteu amb animacions? El Krita proporciona tol el que cal per a l'animació a mà tradicional.</caption>
+      <caption xml:lang="es">¿Trabaja con animación? Krita proporciona todo lo necesario para la animación manual tradicional.</caption>
+      <caption xml:lang="it">Per le animazioni? Krita fornisce tutto ciò che ti server per l'animazione tradizionale, disegnata a mano.</caption>
+      <caption xml:lang="ko">애니메이션을 만들 계획이 있으신가요? Krita를 통해서 수작업 애니메이션을 작업할 수 있습니다.</caption>
+      <caption xml:lang="nl">Naar animatie? Krita biedt alles wat u nodig hebt voor traditionele, met de hand getekende animatie.</caption>
+      <caption xml:lang="pt">Gosta de animação? O Krita oferece tudo o que precisa para o desenho animado tradicional e desenhado à mão.</caption>
+      <caption xml:lang="sv">Gillar du animering? Krita tillhandahåller allt som behövs för traditionella, handritade animeringar.</caption>
+      <caption xml:lang="uk">Працюєте із анімацією? У Krita ви знайдете усе, що потрібно для створення традиційної, намальованої вручну анімації.</caption>
+      <caption xml:lang="x-test">xxInto animation? Krita provides everything you need for traditional, hand-drawn animation.xx</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_005.png</image>
     </screenshot>
     <screenshot type="default">
+      <caption>If you're new to digital painting, or want to know more about Krita's possibilities, there's an extensive, up-to-date manual.</caption>
+      <caption xml:lang="ca">Si sou nou a la pintura digital, o voleu conèixer més quant a les possibilitats del Krita, hi ha un ampli manual actualitzat.</caption>
+      <caption xml:lang="ca-valencia">Si sou nou a la pintura digital, o voleu conèixer més quant a les possibilitats del Krita, hi ha un ampli manual actualitzat.</caption>
+      <caption xml:lang="es">Si está empezando con el dibujo digital o si quiere saber más sobre la posibilidades de Krita, dispone de un extenso y actualizado manual.</caption>
+      <caption xml:lang="it">Se sei nuovo del disegno digitale, o vuoi saperne di più sulle possibilità di Krita, è disponibile un manuale completo e aggiornato.</caption>
+      <caption xml:lang="ko">디지털 페인팅을 처음 시작하시거나, Krita의 기능을 더 알아 보려면 사용 설명서를 참조하십시오.</caption>
+      <caption xml:lang="nl">Als u nieuw bent in digitaal schilderen of u wilt meer weten over de mogelijkheden van Krita, dan is er een uitgebreide, bijgewerkte handleiding.</caption>
+      <caption xml:lang="pt">Se é novo na pintura digital, ou deseja saber mais sobre as possibilidades do Krita, existe um manual extenso e actualizado.</caption>
+      <caption xml:lang="sv">Om digital målning är nytt för dig, eller om du vill veta mer om Kritas möjligheter, finns en omfattande, aktuell handbok.</caption>
+      <caption xml:lang="uk">Якщо ви не маєте достатнього досвіду у цифровому малюванні або хочете дізнатися більше про можливості Krita, скористайтеся нашим докладним і актуальним підручником.</caption>
+      <caption xml:lang="x-test">xxIf you're new to digital painting, or want to know more about Krita's possibilities, there's an extensive, up-to-date manual.xx</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_006.png</image>
     </screenshot>
   </screenshots>
-  <content_rating type="oars-1.0">
-    <content_attribute id="violence-cartoon">none</content_attribute>
-    <content_attribute id="violence-fantasy">none</content_attribute>
-    <content_attribute id="violence-realistic">none</content_attribute>
-    <content_attribute id="violence-bloodshed">none</content_attribute>
-    <content_attribute id="violence-sexual">none</content_attribute>
-    <content_attribute id="drugs-alcohol">none</content_attribute>
-    <content_attribute id="drugs-narcotics">none</content_attribute>
-    <content_attribute id="drugs-tobacco">none</content_attribute>
-    <content_attribute id="sex-nudity">none</content_attribute>
-    <content_attribute id="sex-themes">none</content_attribute>
-    <content_attribute id="language-profanity">none</content_attribute>
-    <content_attribute id="language-humor">none</content_attribute>
-    <content_attribute id="language-discrimination">none</content_attribute>
-    <content_attribute id="social-chat">none</content_attribute>
-    <content_attribute id="social-info">none</content_attribute>
-    <content_attribute id="social-audio">none</content_attribute>
-    <content_attribute id="social-location">none</content_attribute>
-    <content_attribute id="social-contacts">none</content_attribute>
-    <content_attribute id="money-purchasing">none</content_attribute>
-    <content_attribute id="money-gambling">none</content_attribute>
-  </content_rating>
   <categories>
     <category>Graphics</category>
   </categories>
@@ -271,6 +316,7 @@
     <binary>krita</binary>
     <id>org.kde.krita.desktop</id>
   </provides>
+  <content_rating type="oars-1.1"/>
   <releases>
     <release date="2019-05-29" version="4.3.0.0"/>
   </releases>

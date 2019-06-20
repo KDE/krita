@@ -93,10 +93,8 @@ void FisheyePointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect
 {
     gc.save();
     gc.resetTransform();
-    QPointF delta(0,0);
+
     QPointF mousePos(0,0);
-    QPointF endPoint(0,0);//this is the final point that the line is being extended to, we seek it just outside the view port//
-    QPointF otherHandle(0,0);
     
     if (canvas){
         //simplest, cheapest way to get the mouse-position//

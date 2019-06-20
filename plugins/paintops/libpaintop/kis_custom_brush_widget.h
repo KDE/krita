@@ -53,6 +53,8 @@ public:
     virtual ~KisCustomBrushWidget();
     KisBrushSP brush();
 
+    void setImage(KisImageWSP image);
+
 protected:
     virtual void showEvent(QShowEvent *);
 

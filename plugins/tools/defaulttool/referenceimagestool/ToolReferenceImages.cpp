@@ -57,6 +57,7 @@ void ToolReferenceImages::activate(ToolActivation toolActivation, const QSet<KoS
 
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     connect(kisCanvas->image(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));
+    connect(kisCanvas->imageView()->document(), &KisDocument::sigReferenceImagesLayerChanged, this, &ToolReferenceImages::slotNodeAdded);
 
     auto referenceImageLayer = document()->referenceImagesLayer();
     if (referenceImageLayer) {
@@ -114,7 +115,7 @@ void ToolReferenceImages::pasteReferenceImage()
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas)
 
-    KisReferenceImage* reference = KisReferenceImage::fromClipboard(*kisCanvas->coordinatesConverter(), canvas()->canvasWidget());
+    KisReferenceImage* reference = KisReferenceImage::fromClipboard(*kisCanvas->coordinatesConverter());
     if(reference) {
         KisDocument *doc = document();
         doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));

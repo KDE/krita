@@ -45,7 +45,6 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskOffImage()
     TestUtil::ReferenceImageChecker chk("flayer_tmask_offimage", "file_layer");
 
     QRect refRect(0,0,640,441);
-    QRect fillRect(400,400,100,100);
     TestUtil::MaskParent p(refRect);
 
     QString refName(TestUtil::fetchDataFileLazy("hakonepa.png"));
@@ -110,7 +109,6 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskSmallFileBigOffset()
     TestUtil::ReferenceImageChecker chk("flayer_tmask_huge_offset", "file_layer");
 
     QRect refRect(0,0,2000,1500);
-    QRect fillRect(400,400,100,100);
     TestUtil::MaskParent p(refRect);
 
     QString refName(TestUtil::fetchDataFileLazy("file_layer_source.png"));

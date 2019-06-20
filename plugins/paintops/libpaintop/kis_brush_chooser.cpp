@@ -282,6 +282,8 @@ void KisPredefinedBrushChooser::slotOpenStampBrush()
         m_stampBrushWidget->setModal(false);
         connect(m_stampBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResourceSP )),
                                     SLOT(slotNewPredefinedBrush(KoResourceSP )));
+    } else {
+        m_stampBrushWidget->setImage(m_image);
     }
 
     QDialog::DialogCode result = (QDialog::DialogCode)m_stampBrushWidget->exec();
@@ -366,9 +368,11 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResourceSP resource, bool isCha
         brushSizeSpinBox->setValue(m_brush->width() * m_brush->scale());
 
         // useColorAsMask support is only in gimp brush so far
+        bool prevColorAsMaskState = useColorAsMaskCheckbox->isChecked();
         KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(m_brush.data());
         if (gimpBrush) {
-            useColorAsMaskCheckbox->setChecked(gimpBrush->useColorAsMask());
+            useColorAsMaskCheckbox->setChecked(gimpBrush->useColorAsMask() || prevColorAsMaskState);
+            gimpBrush->setUseColorAsMask(prevColorAsMaskState);
         }
         useColorAsMaskCheckbox->setEnabled(m_brush->hasColor() && gimpBrush);
 

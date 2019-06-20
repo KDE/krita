@@ -1,8 +1,30 @@
+From dd25106c340d91d20432375a2a22b85779eddb18 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Wed, 17 Apr 2019 17:39:10 +0300
+Subject: [PATCH 14/17] Switch stylus pointer type when the tablet is in the
+ tablet proximity
+
+Some convertible tablet devices have a special stylus button that
+converts the stylus into an eraser. Such button can be pressed right
+when the stylus is in tablet surface proximity, so we should check
+that not only during proximity event handling, but also while parsing
+normal wintab packets.
+
+Make sure that we don't switch tablet pointer type while any **mapped**
+stylus button is pressed. Pressing the "eraser" button is reported
+in pkButtons, but it maps to none by CSR_SYSBTNMAP
+
+https://bugs.kde.org/show_bug.cgi?id=405747
+https://bugs.kde.org/show_bug.cgi?id=408454
+---
+ .../windows/qwindowstabletsupport.cpp         | 29 ++++++++++++++++---
+ 1 file changed, 25 insertions(+), 4 deletions(-)
+
 diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-index 11e6769c8..b04312769 100644
+index bfd0a9640b..02455536fe 100644
 --- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 +++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-@@ -604,7 +604,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
+@@ -606,7 +606,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
          return false;
  
      const int currentDevice = m_devices.at(m_currentDevice).currentDevice;
@@ -10,14 +32,17 @@ index 11e6769c8..b04312769 100644
      const qint64 uniqueId = m_devices.at(m_currentDevice).uniqueId;
  
      // The tablet can be used in 2 different modes (reflected in enum Mode),
-@@ -634,6 +633,28 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
+@@ -636,6 +635,31 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
      for (int i = 0; i < packetCount ; ++i) {
          const PACKET &packet = localPacketBuf[i];
  
 +        int currentPointer = m_devices.at(m_currentDevice).currentPointerType;
 +
 +        const int packetPointerType = pointerType(packet.pkCursor);
-+        if (!packet.pkButtons && packetPointerType != currentPointer) {
++        Qt::MouseButtons buttons =
++            convertTabletButtons(packet.pkButtons, m_devices.at(m_currentDevice));
++
++        if (buttons == Qt::NoButton && packetPointerType != currentPointer) {
 +
 +            QWindowSystemInterface::handleTabletLeaveProximityEvent(packet.pkTime,
 +                                                                    m_devices.at(m_currentDevice).currentDevice,
@@ -39,143 +64,16 @@ index 11e6769c8..b04312769 100644
          const int z = currentDevice == QTabletEvent::FourDMouse ? int(packet.pkZ) : 0;
  
          QPointF globalPosF =
-diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp.orig b/src/plugins/platforms/windows/qwindowstabletsupport.cpp.orig
-index 316551014..11e6769c8 100644
---- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp.orig
-+++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp.orig
-@@ -53,6 +53,7 @@
- #include <QtCore/qdebug.h>
- #include <QtCore/qvarlengtharray.h>
- #include <QtCore/qmath.h>
-+#include <QtCore/qregularexpression.h>
- 
- #include <private/qguiapplication_p.h>
- #include <QtCore/private/qsystemlibrary_p.h>
-@@ -216,6 +217,10 @@ QWindowsTabletSupport::QWindowsTabletSupport(HWND window, HCTX context)
-     // Some tablets don't support tilt, check if it is possible,
-     if (QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEVICES, DVC_ORIENTATION, &orientation))
-         m_tiltSupport = orientation[0].axResolution && orientation[1].axResolution;
-+
-+    connect(qGuiApp, &QGuiApplication::primaryScreenChanged,
-+            this, QWindowsTabletSupport::slotPrimaryScreenChanged);
-+    slotScreenGeometryChanged();
- }
- 
- QWindowsTabletSupport::~QWindowsTabletSupport()
-@@ -394,6 +399,84 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(qint64 uniqueId, UINT
-     return result;
- }
- 
-+void QWindowsTabletSupport::slotPrimaryScreenChanged(QScreen *screen)
-+{
-+    if (m_connectedScreen)
-+        disconnect(m_connectedScreen, 0, this, 0);
-+
-+    m_connectedScreen = screen;
-+
-+    if (m_connectedScreen)
-+        connect(m_connectedScreen, &QScreen::virtualGeometryChanged,
-+                this, &QWindowsTabletSupport::slotScreenGeometryChanged);
-+
-+    slotScreenGeometryChanged();
-+}
-+
-+void QWindowsTabletSupport::slotScreenGeometryChanged()
-+{
-+    /**
-+     * Some Wintab implementations map the tablet area to the entire
-+     * virtual screen, but others (e.g. Microsoft SP5) don't. They
-+     * may input range to a single (built-in) screen. The logic is
-+     * quite obvious: when the screen has integrated tablet device,
-+     * one cannot map this tablet device to another display.
-+     *
-+     * For such devices, we should always request mapped area from
-+     * lcSys{Org,Ext}{X,Y} fields and use it accordingly.
-+     */
-+
-+    LOGCONTEXT lc;
-+    QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEFSYSCTX, 0, &lc);
-+    m_wintabScreenGeometry = QRect(lc.lcSysOrgX, lc.lcSysOrgY, lc.lcSysExtX, lc.lcSysExtY);
-+
-+    qCDebug(lcQpaTablet) << "Updated tablet mapping: " << m_wintabScreenGeometry;
-+    if (QGuiApplication::primaryScreen()) {
-+        qCDebug(lcQpaTablet) << "   real desktop geometry: " << QWindowsScreen::virtualGeometry(QGuiApplication::primaryScreen()->handle());
-+    }
-+}
-+
-+void QWindowsTabletSupport::updateEffectiveScreenGeometry()
-+{
-+    QRect customGeometry;
-+    bool dontUseWintabDesktopRect = false;
-+
-+    const QString geometry = qEnvironmentVariable("QT_WINTAB_DESKTOP_RECT");
-+    if (!geometry.isEmpty()) {
-+        QString tmp = QString::fromLatin1("([+-]?\\d+);([+-]?\\d+);(\\d+);(\\d+)");
-+
-+        QRegularExpression rex(tmp);
-+        QRegularExpressionMatch match = rex.match(geometry);
-+
-+        if (match.hasMatch()) {
-+            customGeometry.setRect(match.captured(1).toInt(),
-+                                   match.captured(2).toInt(),
-+                                   match.captured(3).toInt(),
-+                                   match.captured(4).toInt());
-+
-+            qCDebug(lcQpaTablet) << "apply QT_WINTAB_DESKTOP_RECT:" << customGeometry;
-+        } else {
-+            qCWarning(lcQpaTablet) << "failed to parse QT_WINTAB_DESKTOP_RECT:" << geometry;
-+        }
-+    }
-+
-+    if (qEnvironmentVariableIsSet("QT_IGNORE_WINTAB_MAPPING")) {
-+        if (!customGeometry.isValid()) {
-+            qCDebug(lcQpaTablet) << "fallback mapping is requested via QT_IGNORE_WINTAB_MAPPING";
-+        } else {
-+            qCWarning(lcQpaTablet) << "ignoring QT_IGNORE_WINTAB_MAPPING, because QT_WINTAB_DESKTOP_RECT is set";
-+        }
-+        dontUseWintabDesktopRect = true;
-+    }
-+
-+    m_effectiveScreenGeometry =
-+        !customGeometry.isValid() ?
-+        (dontUseWintabDesktopRect ?
-+             QWindowsScreen::virtualGeometry(QGuiApplication::primaryScreen()->handle()) :
-+             m_wintabScreenGeometry) :
-+        customGeometry;
-+}
-+
- bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, LPARAM lParam)
- {
-     PACKET proximityBuffer[1]; // we are only interested in the first packet in this case
-@@ -421,6 +504,8 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
-     if (!totalPacks)
-         return false;
- 
-+    updateEffectiveScreenGeometry();
-+
-     const UINT currentCursor = proximityBuffer[0].pkCursor;
-     UINT physicalCursorId;
-     QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_CURSORS + currentCursor, CSR_PHYSID, &physicalCursorId);
-@@ -535,8 +620,8 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
-     //    in which case we snap the position to the mouse position.
-     // It seems there is no way to find out the mode programmatically, the LOGCONTEXT orgX/Y/Ext
-     // area is always the virtual desktop.
--    const QRect virtualDesktopArea =
--        QWindowsScreen::virtualGeometry(QGuiApplication::primaryScreen()->handle());
-+
-+    const QRect virtualDesktopArea = m_effectiveScreenGeometry;
- 
-     if (QWindowsContext::verbose > 1)  {
-         qCDebug(lcQpaTablet) << __FUNCTION__ << "processing" << packetCount
-@@ -562,6 +647,11 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
-             m_state = PenDown;
-             m_mode = (mouseLocation - globalPosF).manhattanLength() > m_absoluteRange
-                 ? MouseMode : PenMode;
-+
-+            // Krita doesn't support mouse mode. And this code may break
-+            // normal painting, so we just disable it.
-+            m_mode = PenMode;
-+
-             qCDebug(lcQpaTablet) << __FUNCTION__ << "mode=" << m_mode << "pen:"
-                 << globalPosF << "mouse:" << mouseLocation;
+@@ -709,9 +733,6 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
+                 << tiltY << "tanP:" << tangentialPressure << "rotation:" << rotation;
          }
+ 
+-        Qt::MouseButtons buttons =
+-            convertTabletButtons(packet.pkButtons, m_devices.at(m_currentDevice));
+-
+         QWindowSystemInterface::handleTabletEvent(target, packet.pkTime, QPointF(localPos), globalPosF,
+                                                   currentDevice, currentPointer,
+                                                   buttons,
+-- 
+2.20.1.windows.1
+

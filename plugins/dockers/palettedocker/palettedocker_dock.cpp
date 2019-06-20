@@ -108,6 +108,7 @@ PaletteDockerDock::PaletteDockerDock( )
             SLOT(slotPaletteIndexClicked(QModelIndex)));
     connect(m_ui->paletteView, SIGNAL(doubleClicked(QModelIndex)),
             SLOT(slotPaletteIndexDoubleClicked(QModelIndex)));
+    connect(m_ui->cmbNameList, SIGNAL(sigColorSelected(const KoColor&)), SLOT(slotNameListSelection(const KoColor&)));
 
     m_viewContextMenu.addAction(m_actModify.data());
     m_viewContextMenu.addAction(m_actRemove.data());
@@ -201,6 +202,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
     }
 
     if (m_activeDocument) {
+        m_connections.clear();
         for (KoColorSetSP  &cs : m_activeDocument->paletteList()) {
             KoColorSetSP tmpAddr = cs;
             cs = KoColorSetSP(new KoColorSet(*cs));
@@ -215,6 +217,8 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
         for (KoColorSetSP cs : m_activeDocument->paletteList()) {
             m_rServer->addResource(cs);
         }
+        m_connections.addConnection(m_activeDocument, &KisDocument::sigPaletteListChanged,
+                                    this, &PaletteDockerDock::slotUpdatePaletteList);
     }
 
     if (!m_currentColorSet) {
@@ -326,7 +330,7 @@ void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResourceSP workspace)
 void PaletteDockerDock::slotFGColorResourceChanged(const KoColor &color)
 {
     if (!m_colorSelfUpdate) {
-        m_ui->paletteView->slotFGColorResourceChanged(color);
+        m_ui->paletteView->slotFGColorChanged(color);
     }
 }
 
@@ -376,6 +380,22 @@ void PaletteDockerDock::slotEditEntry()
 void PaletteDockerDock::slotNameListSelection(const KoColor &color)
 {
     m_colorSelfUpdate = true;
+    m_ui->paletteView->selectClosestColor(color);
     m_resourceProvider->setFGColor(color);
     m_colorSelfUpdate = false;
+}
+
+void PaletteDockerDock::slotUpdatePaletteList(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList)
+{
+    for (KoColorSet *cs : oldPaletteList) {
+        m_rServer->removeResourceFromServer(cs);
+    }
+
+    for (KoColorSet *cs : newPaletteList) {
+        m_rServer->addResource(cs);
+    }
+
+    if (!m_currentColorSet) {
+        slotSetColorSet(0);
+    }
 }

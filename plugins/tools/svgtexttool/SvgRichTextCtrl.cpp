@@ -24,7 +24,6 @@
 SvgRichTextCtrl::SvgRichTextCtrl(QWidget* parent /*= nullptr*/)
     : QTextEdit(parent)
 {
-    setStyleSheet("background-color:white");
 }
 
 void SvgRichTextCtrl::insertFromMimeData(const QMimeData *source)

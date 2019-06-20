@@ -1,7 +1,7 @@
-From 676320297d7e5654cbe66fe4bd86125824e05840 Mon Sep 17 00:00:00 2001
+From 44d40db1bd8a101ee28414edd27f4fa7e73fbc97 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Mon, 25 Apr 2016 09:27:48 +0200
-Subject: [PATCH 31/36] Compute logical DPI on a per-screen basis
+Subject: [PATCH 22/27] Compute logical DPI on a per-screen basis
 
 The logical DPI reported to applications is the platform screen
 logical DPI divided by the platform screen scale factor.
@@ -21,7 +21,7 @@ Change-Id: I0f62b5878c37e3488e9a8cc48aef183ff822d0c4
  3 files changed, 13 insertions(+), 15 deletions(-)
 
 diff --git a/src/gui/kernel/qhighdpiscaling.cpp b/src/gui/kernel/qhighdpiscaling.cpp
-index 22e46e0851..541d4f12af 100644
+index 22e46e08..541d4f12 100644
 --- a/src/gui/kernel/qhighdpiscaling.cpp
 +++ b/src/gui/kernel/qhighdpiscaling.cpp
 @@ -224,7 +224,6 @@ bool QHighDpiScaling::m_usePixelDensity = false; // use scale factor from platfo
@@ -67,7 +67,7 @@ index 22e46e0851..541d4f12af 100644
  
  qreal QHighDpiScaling::factor(const QScreen *screen)
 diff --git a/src/gui/kernel/qhighdpiscaling_p.h b/src/gui/kernel/qhighdpiscaling_p.h
-index 83fc9452c5..ecd9ed6515 100644
+index 83fc9452..ecd9ed65 100644
 --- a/src/gui/kernel/qhighdpiscaling_p.h
 +++ b/src/gui/kernel/qhighdpiscaling_p.h
 @@ -85,7 +85,7 @@ public:
@@ -80,7 +80,7 @@ index 83fc9452c5..ecd9ed6515 100644
  private:
      static qreal screenSubfactor(const QPlatformScreen *screen);
 diff --git a/src/gui/kernel/qscreen.cpp b/src/gui/kernel/qscreen.cpp
-index f208eb02be..82ee62e6b4 100644
+index f208eb02..82ee62e6 100644
 --- a/src/gui/kernel/qscreen.cpp
 +++ b/src/gui/kernel/qscreen.cpp
 @@ -279,7 +279,7 @@ qreal QScreen::logicalDotsPerInchX() const
@@ -111,5 +111,5 @@ index f208eb02be..82ee62e6b4 100644
  }
  
 -- 
-2.18.0.windows.1
+2.22.0.windows.1
 

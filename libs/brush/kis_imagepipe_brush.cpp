@@ -25,7 +25,8 @@ class KisImageBrushesPipe : public KisBrushesPipe<KisGbrBrush>
 {
 public:
     KisImageBrushesPipe()
-        : m_isInitialized(false)
+        : m_currentBrushIndex(0)
+        , m_isInitialized(false)
     {
     }
 
@@ -46,6 +47,8 @@ protected:
                          const KisPaintInformation& info) {
 
         qreal angle;
+        qreal velocity;
+        qreal capSpeed = 3;
 
         switch (mode) {
         case KisParasite::Constant:
@@ -56,8 +59,8 @@ protected:
             index = static_cast<int>(info.pressure() * (rank - 1) + 0.5);
             break;
         case KisParasite::Angular:
-            // + m_d->PI_2 to be compatible with the gimp
-            angle = info.drawingAngle() + M_PI_2;
+            // + M_PI_2 + M_PI_4 to be compatible with the gimp
+            angle = info.drawingAngle() + M_PI_2 + M_PI_4;
             angle = normalizeAngle(angle);
 
             index = static_cast<int>(angle / (2.0 * M_PI) * rank);
@@ -67,6 +70,16 @@ protected:
             break;
         case KisParasite::TiltY:
             index = qRound(info.yTilt() / 2.0 * rank) + rank / 2;
+            break;
+        case KisParasite::Velocity:
+            // log is slow, but allows for nicer dab transition
+            velocity = log(info.drawingSpeed() + 1);
+            if (velocity > capSpeed) {
+                velocity = capSpeed;
+            }
+            velocity /= capSpeed;
+            velocity *= (rank - 1) + 0.5;
+            index = qRound(velocity);
             break;
         default:
             warnImage << "Parasite" << mode << "is not implemented";
@@ -87,13 +100,14 @@ protected:
             index = (seqNo >= 0 ? seqNo : (index + 1)) % rank;
             break;
         case KisParasite::Random:
-            index = info.randomSource()->generate(0, rank);
+            index = info.randomSource()->generate(0, rank-1);
             break;
         case KisParasite::Pressure:
         case KisParasite::Angular:
             break;
         case KisParasite::TiltX:
         case KisParasite::TiltY:
+        case KisParasite::Velocity:
             break;
         default:
             warnImage << "Parasite" << mode << "is not implemented";
@@ -125,8 +139,13 @@ protected:
 
             brushIndex += m_parasite.brushesCount[i] * index;
         }
-        brushIndex %= m_brushes.size();
+        brushIndex %= (quint32)m_brushes.size();
+        m_currentBrushIndex = brushIndex;
         return brushIndex;
+    }
+
+    int currentBrushIndex() override {
+        return m_currentBrushIndex;
     }
 
     void updateBrushIndexes(const KisPaintInformation& info, int seqNo) override {
@@ -141,6 +160,7 @@ protected:
 
 public:
     using KisBrushesPipe<KisGbrBrush>::addBrush;
+    using KisBrushesPipe<KisGbrBrush>::sizeBrush;
 
     void setParasite(const KisPipeBrushParasite& parasite) {
         m_parasite = parasite;
@@ -177,6 +197,7 @@ public:
 
 private:
     KisPipeBrushParasite m_parasite;
+    int m_currentBrushIndex;
     bool m_isInitialized;
 };
 
@@ -289,7 +310,7 @@ bool KisImagePipeBrush::initFromData(const QByteArray &data)
     m_d->brushesPipe.setParasite(parasite);
     i++; // Skip past the second newline
 
-    for (int brushIndex = 0;
+    for (int brushIndex = m_d->brushesPipe.sizeBrush();
             brushIndex < numOfBrushes && i < data.size(); brushIndex++) {
 
         KisGbrBrushSP brush = KisGbrBrushSP(new KisGbrBrush(name() + '_' + QString().setNum(brushIndex),
@@ -325,7 +346,7 @@ bool KisImagePipeBrush::saveToDevice(QIODevice* dev) const
     char const* name = utf8Name.data();
     int len = qstrlen(name);
 
-    if (m_d->brushesPipe.parasite().dim != 1) {
+    if (m_d->brushesPipe.parasite().dim >= KisPipeBrushParasite::MaxDim) {
         warnImage << "Save to file for pipe brushes with dim != not yet supported!";
         return false;
     }

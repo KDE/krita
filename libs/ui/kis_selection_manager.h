@@ -85,6 +85,7 @@ public Q_SLOTS:
     void paste();
     void pasteNew();
     void pasteAt();
+    void pasteAsReference();
     void cutToNewLayer();
     void selectAll();
     void deselect();
@@ -149,6 +150,7 @@ private:
     KisAction *m_cut;
     KisAction *m_paste;
     KisAction *m_pasteAt;
+    KisAction *m_pasteAsReference;
     KisAction *m_pasteNew;
     KisAction *m_cutToNewLayer;
     KisAction *m_selectAll;

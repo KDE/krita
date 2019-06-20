@@ -81,6 +81,12 @@ KisBrushSP KisCustomBrushWidget::brush()
     return m_brush;
 }
 
+void KisCustomBrushWidget::setImage(KisImageWSP image){
+    m_image = image;
+    createBrush();
+    updatePreviewImage();
+}
+
 void KisCustomBrushWidget::showEvent(QShowEvent *)
 {
     slotUpdateCurrentBrush(0);

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Iván Santa María <ghevan@gmail.com>
+ *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISMASKGENERATORBENCHMARK_H
-#define KISMASKGENERATORBENCHMARK_H
+#ifndef KIS_DOCUMENT_REPLACE_TEST_H_
+#define KIS_DOCUMENT_REPLACE_TEST_H_
 
 #include <QtTest>
 
-class KisMaskGeneratorBenchmark : public QObject
+class KisDocument;
+class KisImage;
+
+class KisDocumentReplaceTest : public QObject
 {
     Q_OBJECT
+    void init();
+    void finalize();
+
 private Q_SLOTS:
-    void testDefaultScalarMask();
-    void testDefaultVectorMask();
+    void testCopyFromDocument();
 
-    void testCircularGaussScalarMask();
-    void testCircularGaussVectorMask();
-
-    void testCircularSoftScalarMask();
-    void testCircularSoftVectorMask();
-
-    void testRectangularScalarMask();
-    void testRectangularVectorMask();
-
-    void testRectangularGaussScalarMask();
-    void testRectangularGaussVectorMask();
-
-    void testRectangularSoftScalarMask();
-    void testRectangularSoftVectorMask();
-
+private:
+    KisDocument *m_doc;
 };
 
-#endif // KISMASKGENERATORBENCHMARK_H
+#endif // KIS_DOCUMENT_REPLACE_TEST_H_

@@ -56,6 +56,7 @@
 #include <commands/kis_image_layer_add_command.h>
 #include <kis_undo_adapter.h>
 #include "KoSelectedShapesProxy.h"
+#include "kis_signal_auto_connection.h"
 
 
 struct KisShapeController::Private
@@ -63,6 +64,7 @@ struct KisShapeController::Private
 public:
     KisDocument *doc;
     KisNameServer *nameServer;
+    KisSignalAutoConnectionsStore imageConnections;
 
     KisNodeShapesGraph shapesGraph;
 };
@@ -85,6 +87,17 @@ KisShapeController::~KisShapeController()
     }
 
     delete m_d;
+}
+
+void KisShapeController::slotUpdateDocumentResolution()
+{
+    const qreal pixelsPerInch = m_d->doc->image()->xRes() * 72.0;
+    resourceManager()->setResource(KoDocumentResourceManager::DocumentResolution, pixelsPerInch);
+}
+
+void KisShapeController::slotUpdateDocumentSize()
+{
+    resourceManager()->setResource(KoDocumentResourceManager::DocumentRectInPixels, m_d->doc->image()->bounds());
 }
 
 void KisShapeController::addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
@@ -249,6 +262,19 @@ void KisShapeController::setInitialShapeForCanvas(KisCanvas2 *canvas)
             KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
         }
     }
+}
+
+void KisShapeController::setImage(KisImageWSP image)
+{
+    m_d->imageConnections.clear();
+
+    m_d->imageConnections.addConnection(m_d->doc->image(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotUpdateDocumentResolution()));
+    m_d->imageConnections.addConnection(m_d->doc->image(), SIGNAL(sigSizeChanged(QPointF, QPointF)), this, SLOT(slotUpdateDocumentSize()));
+
+    slotUpdateDocumentResolution();
+    slotUpdateDocumentSize();
+
+    KisDummiesFacadeBase::setImage(image);
 }
 
 KoShapeLayer* KisShapeController::shapeForNode(KisNodeSP node) const

@@ -33,9 +33,9 @@
 #include <QPainter>
 
 #include "kis_debug.h"
-
-KoSelection::KoSelection()
-    : KoShape(new KoSelectionPrivate(this))
+KoSelection::KoSelection(QObject *parent)
+    : QObject(parent),
+      KoShape(new KoSelectionPrivate(this))
 {
     Q_D(KoSelection);
     connect(&d->selectionChangedCompressor, SIGNAL(timeout()), SIGNAL(selectionChanged()));

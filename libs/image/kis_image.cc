@@ -274,29 +274,49 @@ KisImage *KisImage::clone(bool exactCopy)
     return new KisImage(*this, 0, exactCopy);
 }
 
-KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
-    : KisNodeFacade(),
-      KisNodeGraphListener(),
-      KisShared(),
-      m_d(new KisImagePrivate(this,
-                              rhs.width(), rhs.height(),
-                              rhs.colorSpace(),
-                              undoStore ? undoStore : new KisDumbUndoStore(),
-                              new KisImageAnimationInterface(*rhs.animationInterface(), this)))
+void KisImage::copyFromImage(const KisImage &rhs)
 {
-    // make sure KisImage belongs to the GUI thread
-    moveToThread(qApp->thread());
-    connect(this, SIGNAL(sigInternalStopIsolatedModeRequested()), SLOT(stopIsolatedMode()));
+    copyFromImageImpl(rhs, REPLACE);
+}
 
+void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
+{
+    // make sure we choose exactly one from REPLACE and CONSTRUCT
+    KIS_ASSERT_RECOVER_RETURN((policy & REPLACE) != (policy & CONSTRUCT));
+
+    // only when replacing do we need to emit signals
+#define EMIT_IF_NEEDED if (!(policy & REPLACE)) {} else emit
+
+    if (policy & REPLACE) { // if we are constructing the image, these are already set
+        if (m_d->width != rhs.width() || m_d->height != rhs.height()) {
+            m_d->width = rhs.width();
+            m_d->height = rhs.height();
+            emit sigSizeChanged(QPointF(), QPointF());
+        }
+        if (m_d->colorSpace != rhs.colorSpace()) {
+            m_d->colorSpace = rhs.colorSpace();
+            emit sigColorSpaceChanged(m_d->colorSpace);
+        }
+    }
+
+    // from KisImage::KisImage(const KisImage &, KisUndoStore *, bool)
     setObjectName(rhs.objectName());
 
-    m_d->xres = rhs.m_d->xres;
-    m_d->yres = rhs.m_d->yres;
+    if (m_d->xres != rhs.m_d->xres || m_d->yres != rhs.m_d->yres) {
+        m_d->xres = rhs.m_d->xres;
+        m_d->yres = rhs.m_d->yres;
+        EMIT_IF_NEEDED sigResolutionChanged(m_d->xres, m_d->yres);
+    }
 
     m_d->allowMasksOnRootNode = rhs.m_d->allowMasksOnRootNode;
 
     if (rhs.m_d->proofingConfig) {
-        m_d->proofingConfig = toQShared(new KisProofingConfiguration(*rhs.m_d->proofingConfig));
+        KisProofingConfigurationSP proofingConfig(new KisProofingConfiguration(*rhs.m_d->proofingConfig));
+        if (policy & REPLACE) {
+            setProofingConfiguration(proofingConfig);
+        } else {
+            m_d->proofingConfig = proofingConfig;
+        }
     }
 
     KisNodeSP newRoot = rhs.root()->clone();
@@ -305,33 +325,43 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
     m_d->rootLayer = dynamic_cast<KisGroupLayer*>(newRoot.data());
     setRoot(newRoot);
 
+    bool exactCopy = policy & EXACT_COPY;
+
     if (exactCopy || rhs.m_d->isolatedRootNode) {
         QQueue<KisNodeSP> linearizedNodes;
         KisLayerUtils::recursiveApplyNodes(rhs.root(),
-            [&linearizedNodes](KisNodeSP node) {
-                linearizedNodes.enqueue(node);
-            });
+                                           [&linearizedNodes](KisNodeSP node) {
+                                               linearizedNodes.enqueue(node);
+                                           });
         KisLayerUtils::recursiveApplyNodes(newRoot,
-            [&linearizedNodes, exactCopy, &rhs, this](KisNodeSP node) {
-                KisNodeSP refNode = linearizedNodes.dequeue();
+                                           [&linearizedNodes, exactCopy, &rhs, this](KisNodeSP node) {
+                                               KisNodeSP refNode = linearizedNodes.dequeue();
 
-                if (exactCopy) {
-                    node->setUuid(refNode->uuid());
-                }
+                                               if (exactCopy) {
+                                                   node->setUuid(refNode->uuid());
+                                               }
 
-                if (rhs.m_d->isolatedRootNode &&
-                    rhs.m_d->isolatedRootNode == refNode) {
-
-                    m_d->isolatedRootNode = node;
-                }
-            });
+                                               if (rhs.m_d->isolatedRootNode &&
+                                                   rhs.m_d->isolatedRootNode == refNode) {
+                                                   m_d->isolatedRootNode = node;
+                                               }
+                                           });
     }
+
+    KisLayerUtils::recursiveApplyNodes(newRoot,
+                                       [](KisNodeSP node) {
+                                           dbgImage << "Node: " << (void *)node.data();
+                                       });
+
+    m_d->compositions.clear();
 
     Q_FOREACH (KisLayerCompositionSP comp, rhs.m_d->compositions) {
         m_d->compositions << toQShared(new KisLayerComposition(*comp, this));
     }
 
-    rhs.m_d->nserver = KisNameServer(rhs.m_d->nserver);
+    EMIT_IF_NEEDED sigLayersChangedAsync();
+
+    m_d->nserver = rhs.m_d->nserver;
 
     vKisAnnotationSP newAnnotations;
     Q_FOREACH (KisAnnotationSP annotation, rhs.m_d->annotations) {
@@ -352,6 +382,24 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
         const QRect dirtyRect = rhs.m_d->overlaySelectionMask->extent();
         m_d->rootLayer->setDirty(dirtyRect);
     }
+#undef EMIT_IF_NEEDED
+}
+
+KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
+    : KisNodeFacade(),
+      KisNodeGraphListener(),
+      KisShared(),
+      m_d(new KisImagePrivate(this,
+                              rhs.width(), rhs.height(),
+                              rhs.colorSpace(),
+                              undoStore ? undoStore : new KisDumbUndoStore(),
+                              new KisImageAnimationInterface(*rhs.animationInterface(), this)))
+{
+    // make sure KisImage belongs to the GUI thread
+    moveToThread(qApp->thread());
+    connect(this, SIGNAL(sigInternalStopIsolatedModeRequested()), SLOT(stopIsolatedMode()));
+
+    copyFromImageImpl(rhs, CONSTRUCT | (exactCopy ? EXACT_COPY : 0));
 }
 
 void KisImage::aboutToAddANode(KisNode *parent, int index)

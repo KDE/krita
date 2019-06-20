@@ -75,6 +75,14 @@ public:
     void selectClosestColor(const KoColor &color);
 
     /**
+     * @brief closestColor
+     * determines closest swatch in the active palette and returns it's color as KoColor
+     * @param color
+     * @return KoColor
+     */
+    const KoColor closestColor(const KoColor& color) const;
+
+    /**
      * add an entry with a dialog window.
      * @warning deprecated.
      * kept for compatibility with PaletteView in libkis
@@ -103,18 +111,6 @@ public Q_SLOTS:
      *  This doesn't update the foreground color, just the visual selection.
      */
     void slotFGColorChanged(const KoColor &);
-
-    /**
-     * @brief slot that reacts to color changes in resource manager
-     * @param color
-     */
-    void slotFGColorResourceChanged(const KoColor& color);
-
-    /**
-      * Slot that selects the right index for provided color.
-      * Called from KisPaletteComboBox when user selects color in the dropdown.
-      */
-    void slotSelectColor(const KoColor& color);
 
     void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
 

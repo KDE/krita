@@ -853,6 +853,16 @@ double KisPaintingAssistant::norm2(const QPointF& p)
     return p.x() * p.x() + p.y() * p.y();
 }
 
+QList<KisPaintingAssistantSP> KisPaintingAssistant::cloneAssistantList(const QList<KisPaintingAssistantSP> &list)
+{
+    QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> handleMap;
+    QList<KisPaintingAssistantSP> clonedList;
+    for (auto i = list.begin(); i != list.end(); ++i) {
+        clonedList << (*i)->clone(handleMap);
+    }
+    return clonedList;
+}
+
 
 
 /*

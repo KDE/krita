@@ -27,6 +27,7 @@ ecm_add_tests(
     kis_asl_layer_style_serializer_test.cpp
     kis_animation_importer_test.cpp
     KisSpinBoxSplineUnitConverterTest.cpp
+    KisDocumentReplaceTest.cpp
 
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-"

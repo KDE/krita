@@ -70,7 +70,9 @@ private Q_SLOTS:
     void testProcessLine_NearestNeighbourFilter_077x();
     void testProcessLine_NearestNeighbourFilter_074x();
     void testProcessLine_NearestNeighbourFilter_075x();
+    void testProcessLine_NearestNeighbourFilter_051x();
     void testProcessLine_NearestNeighbourFilter_15x();
+    void testProcessLine_NearestNeighbourFilter_all();
     void testProcessLine_NearestNeighbourFilter_0098x_horizontal();
     void testProcessLine_NearestNeighbourFilter_0098x_vertical();
 

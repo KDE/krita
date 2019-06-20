@@ -140,6 +140,11 @@ protected:
         Q_UNUSED(info);
         return m_currentBrushIndex;
     }
+
+    int currentBrushIndex() override {
+        return m_currentBrushIndex;
+    }
+
     void updateBrushIndexes(const KisPaintInformation& info, int seqNo) override {
         Q_UNUSED(info);
 

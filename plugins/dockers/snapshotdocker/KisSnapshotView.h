@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2019 Tusooa Zhu <tusooa@vista.aero>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISPASTEACTIONFACTORY_H
-#define KISPASTEACTIONFACTORY_H
+#ifndef KIS_SNAPSHOT_VIEW_H_
+#define KIS_SNAPSHOT_VIEW_H_
 
-#include "operations/kis_operation.h"
-#include "operations/kis_operation_configuration.h"
+#include <QListView>
 
-struct KRITAUI_EXPORT KisPasteActionFactory : public KisOperation {
-    KisPasteActionFactory() : KisOperation("paste-ui-action") {}
+class KisSnapshotView : public QListView
+{
+public:
+    KisSnapshotView();
+    ~KisSnapshotView() override;
 
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override {
-        run(config.getBool("paste-at-cursor-position", false), view);
-    }
+    void setModel(QAbstractItemModel *model) override;
 
-    void run(bool pasteAtCursorPosition, KisViewManager *view);
+public Q_SLOTS:
+    void slotSwitchToSelectedSnapshot();
+    void slotRemoveSelectedSnapshot();
+private:
+    struct Private;
+    QScopedPointer<Private> m_d;
 };
 
-#endif // KISPASTEACTIONFACTORY_H
+#endif

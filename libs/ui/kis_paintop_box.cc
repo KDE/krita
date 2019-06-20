@@ -82,7 +82,7 @@
 #include "tool/kis_tool.h"
 #include "kis_signals_blocker.h"
 #include "kis_action_manager.h"
-#include "kis_highlighted_button.h"
+#include "KisHighlightedToolButton.h"
 
 KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *name)
     : QWidget(parent)

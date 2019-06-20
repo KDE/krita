@@ -31,6 +31,7 @@ public:
 public:
     KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
     void initializeCapabilities() override;
+    QString verify(const QString &fileName) const override;
 };
 
 #endif

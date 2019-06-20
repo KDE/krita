@@ -358,13 +358,12 @@ public:
 
 
     QList<KoColorSetSP > &paletteList();
-    void setPaletteList(const QList<KoColorSetSP > &paletteList);
+    void setPaletteList(const QList<KoColorSetSP> &paletteList, bool emitSignal = false);
 
     const KisMirrorAxisConfig& mirrorAxisConfig() const;
     void setMirrorAxisConfig(const KisMirrorAxisConfig& config);
 
     void clearUndoHistory();
-
 
     /**
      *  Sets the modified flag on the document. This means that it has
@@ -463,6 +462,18 @@ Q_SIGNALS:
     void sigReferenceImagesChanged();
 
     void sigMirrorAxisConfigChanged();
+
+    void sigGridConfigChanged(const KisGridConfig &config);
+
+    void sigReferenceImagesLayerChanged(KisSharedPtr<KisReferenceImagesLayer> layer);
+
+    /**
+     * Emitted when the palette list has changed.
+     * The pointers in oldPaletteList are to be deleted by the resource server.
+     **/
+    void sigPaletteListChanged(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList);
+
+    void sigAssistantsChanged();
 
 private Q_SLOTS:
     void finishExportInBackground();
@@ -641,14 +652,27 @@ private Q_SLOTS:
 
     void slotConfigChanged();
 
-
-private:
     /**
      * @brief try to clone the image. This method handles all the locking for you. If locking
      *        has failed, no cloning happens
      * @return cloned document on success, null otherwise
      */
     KisDocument *lockAndCloneForSaving();
+
+public:
+
+    KisDocument *lockAndCreateSnapshot();
+
+    void copyFromDocument(const KisDocument &rhs);
+
+private:
+
+    enum CopyPolicy {
+        CONSTRUCT = 0, ///< we are copy-constructing a new KisDocument
+        REPLACE ///< we are replacing the current KisDocument with another
+    };
+
+    void copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy);
 
     QString exportErrorToUserMessage(KisImportExportErrorCode status, const QString &errorMessage);
 

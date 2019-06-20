@@ -23,8 +23,7 @@
 #include <kis_popup_button.h>
 #include <kritaui_export.h>
 
-#include <QImage>
-
+#include <KoResource.h>
 
 /**
  * The icon widget is used in the control box where the current color and brush
@@ -36,15 +35,15 @@ class KRITAUI_EXPORT KisIconWidget : public KisPopupButton
     Q_OBJECT
 
 public:
-    KisIconWidget(QWidget *parent = 0, const QString &name = 0);
-
+    KisIconWidget(QWidget *parent = 0, const QString &name = QString());
     void setThumbnail(const QImage &thumbnail);
-
+    void setResource(KoResourceSP resource);
 protected:
     void paintEvent(QPaintEvent *) override;
 
 private:
     QImage m_thumbnail;
+    KoResourceSP m_resource;
 };
 
 #endif // KIS_ICONWIDGET_H_

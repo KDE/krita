@@ -30,7 +30,7 @@
 #include <boost/geometry/geometries/register/point.hpp>
 
 class KoColorSet;
-class KoResourceItemChooser;
+class KisResourceItemChooser;
 class QGroupBox;
 class KoPattern;
 class QCheckBox;
@@ -51,10 +51,10 @@ public:
     void setConfiguration(const KisPropertiesConfigurationSP) override;
     KisPropertiesConfigurationSP configuration() const override;
 private:
-    KoResourceItemChooser* m_paletteWidget;
+    KisResourceItemChooser* m_paletteWidget;
     QGroupBox* m_ditherGroupBox;
     QButtonGroup* m_ditherModeGroup;
-    KoResourceItemChooser* m_ditherPatternWidget;
+    KisResourceItemChooser* m_ditherPatternWidget;
     QCheckBox* m_ditherPatternUseAlphaCheckBox;
     QLineEdit* m_ditherNoiseSeedWidget;
     KisDoubleWidget* m_ditherWeightWidget;

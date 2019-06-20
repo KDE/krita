@@ -385,13 +385,13 @@ void PaletteDockerDock::slotNameListSelection(const KoColor &color)
     m_colorSelfUpdate = false;
 }
 
-void PaletteDockerDock::slotUpdatePaletteList(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList)
+void PaletteDockerDock::slotUpdatePaletteList(const QList<KoColorSetSP> &oldPaletteList, const QList<KoColorSetSP> &newPaletteList)
 {
-    for (KoColorSet *cs : oldPaletteList) {
+    for (KoColorSetSP cs : oldPaletteList) {
         m_rServer->removeResourceFromServer(cs);
     }
 
-    for (KoColorSet *cs : newPaletteList) {
+    for (KoColorSetSP cs : newPaletteList) {
         m_rServer->addResource(cs);
     }
 

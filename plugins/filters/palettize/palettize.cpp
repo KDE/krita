@@ -25,7 +25,6 @@
 #include <kis_types.h>
 #include <kis_filter_category_ids.h>
 #include <kis_filter_configuration.h>
-#include <KoResourceServerProvider.h>
 #include <KoResourceServer.h>
 #include <KoColorSet.h>
 #include <KoPattern.h>
@@ -48,8 +47,12 @@
 #include <QIntValidator>
 #include <QRadioButton>
 #include <QButtonGroup>
-#include <KoResourceServerAdapter.h>
-#include <KoResourceItemChooser.h>
+#include <KoResourceServerProvider.h>
+#include <KoResourceServer.h>
+#include <KisResourceModelProvider.h>
+#include <KisResourceModel.h>
+#include <KisResourceTypes.h>
+#include <KisResourceItemChooser.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(PalettizeFactory, "kritapalettize.json", registerPlugin<Palettize>();)
 
@@ -77,12 +80,11 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     layout->addWidget(paletteLabel, 0, 0);
     KisIconWidget* paletteIcon = new KisIconWidget(this);
     paletteIcon->setFixedSize(32, 32);
-    KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> paletteAdapter(new KoResourceServerAdapter<KoColorSet>(paletteServer));
-    m_paletteWidget = new KoResourceItemChooser(paletteAdapter, this, false);
+
+    m_paletteWidget = new KisResourceItemChooser(ResourceType::Palettes, false, this);
     paletteIcon->setPopupWidget(m_paletteWidget);
-    QObject::connect(m_paletteWidget, &KoResourceItemChooser::resourceSelected, paletteIcon, &KisIconWidget::setResource);
-    QObject::connect(m_paletteWidget, &KoResourceItemChooser::resourceSelected, this, &KisConfigWidget::sigConfigurationItemChanged);
+    QObject::connect(m_paletteWidget, &KisResourceItemChooser::resourceSelected, paletteIcon, &KisIconWidget::setResource);
+    QObject::connect(m_paletteWidget, &KisResourceItemChooser::resourceSelected, this, &KisConfigWidget::sigConfigurationItemChanged);
     paletteLabel->setBuddy(paletteIcon);
     layout->addWidget(paletteIcon, 0, 1, Qt::AlignLeft);
 
@@ -98,12 +100,11 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     ditherLayout->addWidget(ditherPatternRadio, 0, 0);
     KisIconWidget* ditherPatternIcon = new KisIconWidget(this);
     ditherPatternIcon->setFixedSize(32, 32);
-    KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> patternAdapter(new KoResourceServerAdapter<KoPattern>(patternServer));
-    m_ditherPatternWidget = new KoResourceItemChooser(patternAdapter, this, false);
+
+    m_ditherPatternWidget = new KisResourceItemChooser(ResourceType::Patterns, false, this);
     ditherPatternIcon->setPopupWidget(m_ditherPatternWidget);
-    QObject::connect(m_ditherPatternWidget, &KoResourceItemChooser::resourceSelected, ditherPatternIcon, &KisIconWidget::setResource);
-    QObject::connect(m_ditherPatternWidget, &KoResourceItemChooser::resourceSelected, this, &KisConfigWidget::sigConfigurationItemChanged);
+    QObject::connect(m_ditherPatternWidget, &KisResourceItemChooser::resourceSelected, ditherPatternIcon, &KisIconWidget::setResource);
+    QObject::connect(m_ditherPatternWidget, &KisResourceItemChooser::resourceSelected, this, &KisConfigWidget::sigConfigurationItemChanged);
     ditherLayout->addWidget(ditherPatternIcon, 0, 1, Qt::AlignLeft);
     m_ditherPatternUseAlphaCheckBox = new QCheckBox(i18n("Use alpha"), this);
     QObject::connect(m_ditherPatternUseAlphaCheckBox, &QCheckBox::toggled, this, &KisConfigWidget::sigConfigurationItemChanged);
@@ -136,7 +137,7 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
 
 void KisPalettizeWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
-    KoColorSet* palette = KoResourceServerProvider::instance()->paletteServer()->resourceByName(config->getString("palette"));
+    KoColorSetSP palette = KoResourceServerProvider::instance()->paletteServer()->resourceByName(config->getString("palette"));
     if (palette) m_paletteWidget->setCurrentResource(palette);
 
     m_ditherGroupBox->setChecked(config->getBool("ditherEnabled"));
@@ -144,7 +145,7 @@ void KisPalettizeWidget::setConfiguration(const KisPropertiesConfigurationSP con
     QAbstractButton* ditherModeButton = m_ditherModeGroup->button(config->getInt("ditherMode"));
     if (ditherModeButton) ditherModeButton->setChecked(true);
 
-    KoPattern* ditherPattern = KoResourceServerProvider::instance()->patternServer()->resourceByName(config->getString("ditherPattern"));
+    KoPatternSP ditherPattern = KoResourceServerProvider::instance()->patternServer()->resourceByName(config->getString("ditherPattern"));
     if (ditherPattern) m_ditherPatternWidget->setCurrentResource(ditherPattern);
 
     m_ditherPatternUseAlphaCheckBox->setChecked(config->getBool("ditherPatternUseAlpha"));
@@ -192,10 +193,10 @@ KisFilterConfigurationSP KisFilterPalettize::factoryConfiguration() const
 
 void KisFilterPalettize::processImpl(KisPaintDeviceSP device, const QRect& applyRect, const KisFilterConfigurationSP config, KoUpdater* progressUpdater) const
 {
-    const KoColorSet* palette = KoResourceServerProvider::instance()->paletteServer()->resourceByName(config->getString("palette"));
+    const KoColorSetSP palette = KoResourceServerProvider::instance()->paletteServer()->resourceByName(config->getString("palette"));
     const bool ditherEnabled = config->getBool("ditherEnabled");
     const int ditherMode = config->getInt("ditherMode");
-    const KoPattern* ditherPattern = KoResourceServerProvider::instance()->patternServer()->resourceByName(config->getString("ditherPattern"));
+    const KoPatternSP ditherPattern = KoResourceServerProvider::instance()->patternServer()->resourceByName(config->getString("ditherPattern"));
     const bool ditherPatternUseAlpha = config->getBool("ditherPatternUseAlpha");
     const quint64 ditherNoiseSeed = quint64(config->getInt("ditherNoiseSeed"));
     const double ditherWeight = config->getDouble("ditherWeight");

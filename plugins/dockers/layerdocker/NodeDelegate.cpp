@@ -52,7 +52,7 @@ typedef KisBaseNode::Property* OptionalProperty;
 class NodeDelegate::Private
 {
 public:
-    Private() : view(0), edit(0), viewInStasis(false) { }
+    Private() : view(0), edit(0) { }
 
     NodeView *view;
     QPointer<QWidget> edit;
@@ -61,7 +61,13 @@ public:
     QColor checkersColor1;
     QColor checkersColor2;
 
-    bool viewInStasis;
+    QList<QModelIndex> shiftClickedIndexes;
+
+    enum StasisOperation {
+        Record,
+        Review,
+        Restore
+    };
 
     QList<OptionalProperty> rightmostProperties(const KisBaseNode::PropertyList &props) const;
     int numProperties(const QModelIndex &index) const;
@@ -69,7 +75,7 @@ public:
     OptionalProperty findVisibilityProperty(KisBaseNode::PropertyList &props) const;
 
     void toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty prop, const Qt::KeyboardModifiers modifier, const QModelIndex &index);
-    void togglePropertyRecursive(const QModelIndex &root, const OptionalProperty &clickedProperty, const QList<QModelIndex> &items, bool record, bool mode);
+    void togglePropertyRecursive(const QModelIndex &root, const OptionalProperty &clickedProperty, const QList<QModelIndex> &items, StasisOperation record, bool mode);
 
     bool stasisIsDirty(const QModelIndex &root, const OptionalProperty &clickedProperty, bool on = false, bool off = false);
     void resetPropertyStateRecursive(const QModelIndex &root, const OptionalProperty &clickedProperty);
@@ -77,7 +83,6 @@ public:
     void getParentsIndex(QList<QModelIndex> &items, const QModelIndex &index);
     void getChildrenIndex(QList<QModelIndex> &items, const QModelIndex &index);
     void getSiblingsIndex(QList<QModelIndex> &items, const QModelIndex &index);
-
 };
 
 NodeDelegate::NodeDelegate(NodeView *view, QObject *parent)
@@ -501,10 +506,18 @@ void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, Opt
         bool mode = true;
 
         OptionalProperty prop = findProperty(props, clickedProperty);
-        bool record = !prop->isInStasis;
+
+        // XXX: Change to use NodeProperty
+        int position = shiftClickedIndexes.indexOf(index);
+
+        StasisOperation record = (!prop->isInStasis)? StasisOperation::Record :
+                      (position < 0) ? StasisOperation::Review : StasisOperation::Restore;
+
+        shiftClickedIndexes.clear();
+        shiftClickedIndexes.push_back(index);
 
         QList<QModelIndex> items;
-        if(modifier == (Qt::ControlModifier | Qt::ShiftModifier)) {
+        if (modifier == (Qt::ControlModifier | Qt::ShiftModifier)) {
             mode = false; // inverted mode
             items.insert(0, index); // important!
             getSiblingsIndex(items, index);
@@ -515,6 +528,7 @@ void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, Opt
         togglePropertyRecursive(root, clickedProperty, items, record, mode);
 
     } else {
+        shiftClickedIndexes.clear();
         resetPropertyStateRecursive(root, clickedProperty);
         clickedProperty->state = !clickedProperty->state.toBool();
         clickedProperty->isInStasis = false;
@@ -522,7 +536,7 @@ void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, Opt
     }
 }
 
-void NodeDelegate::Private::togglePropertyRecursive(const QModelIndex &root, const OptionalProperty &clickedProperty, const QList<QModelIndex> &items, bool record, bool mode)
+void NodeDelegate::Private::togglePropertyRecursive(const QModelIndex &root, const OptionalProperty &clickedProperty, const QList<QModelIndex> &items, StasisOperation record, bool mode)
 {
     int rowCount = view->model()->rowCount(root);
 
@@ -534,8 +548,11 @@ void NodeDelegate::Private::togglePropertyRecursive(const QModelIndex &root, con
         OptionalProperty prop = findProperty(props, clickedProperty);
 
         if (!prop) continue;
-        if (record){ // record
-            prop->stateInStasis = prop->state.toBool();
+
+        if (record == StasisOperation::Record) {
+             prop->stateInStasis = prop->state.toBool();
+        }
+        if (record == StasisOperation::Review || record ==  StasisOperation::Record) {
             prop->isInStasis = true;
             if(mode) { //include mode
                 prop->state = (items.contains(idx))? QVariant(true) : QVariant(false);
@@ -543,10 +560,11 @@ void NodeDelegate::Private::togglePropertyRecursive(const QModelIndex &root, con
                 prop->state = (!items.contains(idx))? prop->state :
                               (items.at(0) == idx)? QVariant(true) : QVariant(false);
             }
-        } else { // recover
+        } else { // restore
             prop->state = QVariant(prop->stateInStasis);
             prop->isInStasis = false;
         }
+
         view->model()->setData(idx, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
 
         togglePropertyRecursive(idx,clickedProperty, items, record, mode);
@@ -567,7 +585,7 @@ bool NodeDelegate::Private::stasisIsDirty(const QModelIndex &root, const Optiona
         OptionalProperty prop = findProperty(props, clickedProperty);
 
         if (!prop) continue;
-        if(prop->isInStasis) {
+        if (prop->isInStasis) {
             on = true;
         } else {
             off = true;
@@ -603,7 +621,7 @@ void NodeDelegate::Private::resetPropertyStateRecursive(const QModelIndex &root,
 
 void NodeDelegate::Private::getParentsIndex(QList<QModelIndex> &items, const QModelIndex &index)
 {
-    if(!index.isValid()) return;
+    if (!index.isValid()) return;
     items.append(index);
     getParentsIndex(items, index.parent());
 }

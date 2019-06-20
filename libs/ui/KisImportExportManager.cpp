@@ -689,7 +689,6 @@ KisImportExportErrorCode KisImportExportManager::doExportImpl(const QString &loc
 
     // Do some minimal verification
     QString verificationResult = filter->verify(location);
-    qDebug() << verificationResult;
     if (!verificationResult.isEmpty()) {
         status = KisImportExportErrorCode(ImportExportCodes::ErrorWhileWriting);
         m_document->setErrorMessage(verificationResult);

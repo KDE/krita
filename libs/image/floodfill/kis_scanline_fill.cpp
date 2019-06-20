@@ -360,9 +360,9 @@ struct Q_DECL_HIDDEN KisScanlineFill::Private
 
     inline void swapDirection() {
         rowIncrement *= -1;
-        SANITY_ASSERT_MSG(forwardStack.isEmpty(),
-                          "FATAL: the forward stack must be empty "
-                          "on a direction swap");
+        KIS_SAFE_ASSERT_RECOVER_NOOP(forwardStack.isEmpty() &&
+                                     "FATAL: the forward stack must be empty "
+                                     "on a direction swap");
 
         forwardStack = QStack<KisFillInterval>(backwardMap.fetchAllIntervals(rowIncrement));
         backwardMap.clear();

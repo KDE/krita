@@ -171,8 +171,8 @@ KisImportExportErrorCode KisBrushExport::convert(KisDocument *document, QIODevic
         pipeBrush->setDevices(devices, rc.width(), rc.height());
 
         if (exportOptions.mask) {
-            QVector<KisGbrBrush*> brushes = pipeBrush->brushes();
-            Q_FOREACH(KisGbrBrush* brush, brushes) {
+            QVector<KisGbrBrushSP> brushes = pipeBrush->brushes();
+            Q_FOREACH(KisGbrBrushSP brush, brushes) {
                 brush->setHasColor(false);
             }
         }

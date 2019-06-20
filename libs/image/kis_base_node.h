@@ -85,31 +85,32 @@ public:
         bool canHaveStasis;
 
         /** If the property isMutable and canHaveStasis, indicate whether it is in stasis or not */
-        bool isInStasis = false;
+        bool isInStasis;
 
         /** If the property isMutable and canHaveStasis, provide this value to store the property's
         state while in stasis */
         bool stateInStasis;
 
         bool operator==(const Property &rhs) const {
-            return rhs.name == name && rhs.state == state && rhs.isInStasis == false;
+            return rhs.name == name && rhs.state == state && isInStasis == rhs.isInStasis;
         }
 
-        Property(): isMutable( false ) { }
+        Property(): isMutable( false ), isInStasis(false) { }
 
         /// Constructor for a mutable property.
         Property( const KoID &n, const QIcon &on, const QIcon &off, bool isOn )
-                : id(n.id()), name( n.name() ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ), canHaveStasis( false ) { }
+                : id(n.id()), name( n.name() ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ),
+                  canHaveStasis( false ), isInStasis(false) { }
 
         /** Constructor for a mutable property accepting stasis */
         Property( const KoID &n, const QIcon &on, const QIcon &off, bool isOn,
-                  bool _isInStasis, bool _stateInStasis )
+                  bool _isInStasis, bool _stateInStasis = false )
                 : id(n.id()), name(n.name()), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ),
                   canHaveStasis( true ), isInStasis( _isInStasis ), stateInStasis( _stateInStasis ) { }
 
         /// Constructor for a nonmutable property.
         Property( const KoID &n, const QString &s )
-                : id(n.id()), name(n.name()), isMutable( false ), state( s ) { }
+                : id(n.id()), name(n.name()), isMutable( false ), state( s ), isInStasis(false) { }
     };
 
     /** Return this type for PropertiesRole. */

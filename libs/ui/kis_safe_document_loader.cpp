@@ -232,7 +232,7 @@ void KisSafeDocumentLoader::delayedLoadStart()
                     image->addNode(layer, image->rootLayer());
                     image->initialRefreshGraph();
                     m_d->doc->setCurrentImage(image);
-
+                    successfullyLoaded = true;
                 }
                 else {
                     qWarning() << "delayedLoadStart: Could not open mergedimage.png";

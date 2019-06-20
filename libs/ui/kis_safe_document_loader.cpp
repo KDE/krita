@@ -204,8 +204,6 @@ void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
 
 void KisSafeDocumentLoader::delayedLoadStart()
 {
-    qDebug() << "delayedLoadStart";
-
     QFileInfo originalInfo(m_d->path);
     QFileInfo tempInfo(m_d->temporaryPath);
     bool successfullyLoaded = false;

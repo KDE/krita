@@ -549,10 +549,12 @@ void KisScanlineFill::runImpl(T &pixelPolicy)
     }
 }
 
-void KisScanlineFill::fillColor(const KoColor &fillColor)
+void KisScanlineFill::fillColor(const KoColor &originalFillColor)
 {
     KisRandomConstAccessorSP it = m_d->device->createRandomConstAccessorNG(m_d->startPoint.x(), m_d->startPoint.y());
     KoColor srcColor(it->rawDataConst(), m_d->device->colorSpace());
+    KoColor fillColor(originalFillColor);
+    fillColor.convertTo(m_d->device->colorSpace());
 
     const int pixelSize = m_d->device->pixelSize();
 
@@ -584,10 +586,12 @@ void KisScanlineFill::fillColor(const KoColor &fillColor)
     }
 }
 
-void KisScanlineFill::fillColor(const KoColor &fillColor, KisPaintDeviceSP externalDevice)
+void KisScanlineFill::fillColor(const KoColor &originalFillColor, KisPaintDeviceSP externalDevice)
 {
     KisRandomConstAccessorSP it = m_d->device->createRandomConstAccessorNG(m_d->startPoint.x(), m_d->startPoint.y());
     KoColor srcColor(it->rawDataConst(), m_d->device->colorSpace());
+    KoColor fillColor(originalFillColor);
+    fillColor.convertTo(m_d->device->colorSpace());
 
     const int pixelSize = m_d->device->pixelSize();
 

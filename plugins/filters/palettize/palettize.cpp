@@ -112,8 +112,12 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     QObject::connect(alphaClipSpinBox, &KisDoubleSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
 
     alphaIndexSpinBox->setPrefix(QString("%1  ").arg(i18n("Index:")));
-    alphaIndexSpinBox->setRange(0, 255); // Limit to 4 colours is arbitrary, but larger values give universally poor results
+    alphaIndexSpinBox->setRange(0, 255);
     QObject::connect(alphaIndexSpinBox, &KisSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
+    QObject::connect(m_paletteWidget, &KoResourceItemChooser::resourceSelected, [this](){
+        const KoColorSet* const palette = static_cast<const KoColorSet*>(m_paletteWidget->currentResource());
+        alphaIndexSpinBox->setMaximum(palette ? int(palette->colorCount() - 1) : 0);
+    });
 }
 
 void KisPalettizeWidget::setConfiguration(const KisPropertiesConfigurationSP config)

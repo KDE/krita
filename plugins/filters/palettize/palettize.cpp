@@ -117,6 +117,7 @@ KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     QObject::connect(m_paletteWidget, &KoResourceItemChooser::resourceSelected, [this](){
         const KoColorSet* const palette = static_cast<const KoColorSet*>(m_paletteWidget->currentResource());
         alphaIndexSpinBox->setMaximum(palette ? int(palette->colorCount() - 1) : 0);
+        alphaIndexSpinBox->setValue(std::min(alphaIndexSpinBox->value(), alphaIndexSpinBox->maximum()));
     });
 }
 

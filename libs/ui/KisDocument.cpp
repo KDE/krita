@@ -253,32 +253,15 @@ public:
 
     Private(const Private &rhs, KisDocument *q)
         : docInfo(new KoDocumentInfo(*rhs.docInfo, q))
-        , unit(rhs.unit)
         , importExportManager(new KisImportExportManager(q))
-        , mimeType(rhs.mimeType)
-        , outputMimeType(rhs.outputMimeType)
         , autoSaveTimer(new QTimer(q))
         , undoStack(new UndoStack(q))
-        , guidesConfig(rhs.guidesConfig)
-        , mirrorAxisConfig(rhs.mirrorAxisConfig)
-        , m_bAutoDetectedMime(rhs.m_bAutoDetectedMime)
-        , m_url(rhs.m_url)
-        , m_file(rhs.m_file)
-        , modified(rhs.modified)
-        , readwrite(rhs.readwrite)
-        , firstMod(rhs.firstMod)
-        , lastMod(rhs.lastMod)
         , nserver(new KisNameServer(*rhs.nserver))
         , preActivatedNode(0) // the node is from another hierarchy!
         , imageIdleWatcher(2000 /*ms*/)
-        , assistants(rhs.assistants) // WARNING: assistants should not store pointers to the document!
-        , globalAssistantsColor(rhs.globalAssistantsColor)
-        , paletteList(rhs.paletteList)
-        , gridConfig(rhs.gridConfig)
         , savingLock(&savingMutex)
-        , batchMode(rhs.batchMode)
     {
-        // TODO: clone assistants
+        copyFromImpl(rhs, q, CONSTRUCT);
     }
 
     ~Private() {
@@ -339,6 +322,7 @@ public:
     KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
 
     QList<KoColorSet*> paletteList;
+    bool ownsPaletteList = false;
 
     KisGridConfig gridConfig;
 
@@ -367,8 +351,74 @@ public:
         }
     }
 
+    void copyFrom(const Private &rhs, KisDocument *q);
+    void copyFromImpl(const Private &rhs, KisDocument *q, KisDocument::CopyPolicy policy);
+
+    /// clones the palette list oldList
+    /// the ownership of the returned KoColorSet * belongs to the caller
+    QList<KoColorSet *> clonePaletteList(const QList<KoColorSet *> &oldList);
+
     class StrippedSafeSavingLocker;
 };
+
+void KisDocument::Private::copyFrom(const Private &rhs, KisDocument *q)
+{
+    copyFromImpl(rhs, q, KisDocument::REPLACE);
+}
+
+void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisDocument::CopyPolicy policy)
+{
+    if (policy == REPLACE) {
+        delete docInfo;
+    }
+    docInfo = (new KoDocumentInfo(*rhs.docInfo, q));
+    unit = rhs.unit;
+    mimeType = rhs.mimeType;
+    outputMimeType = rhs.outputMimeType;
+
+    if (policy == REPLACE) {
+        q->setGuidesConfig(rhs.guidesConfig);
+        q->setMirrorAxisConfig(rhs.mirrorAxisConfig);
+        q->setModified(rhs.modified);
+        q->setAssistants(KisPaintingAssistant::cloneAssistantList(rhs.assistants));
+        q->setGridConfig(rhs.gridConfig);
+    } else {
+        // in CONSTRUCT mode, we cannot use the functions of KisDocument
+        // because KisDocument does not yet have a pointer to us.
+        guidesConfig = rhs.guidesConfig;
+        mirrorAxisConfig = rhs.mirrorAxisConfig;
+        modified = rhs.modified;
+        assistants = KisPaintingAssistant::cloneAssistantList(rhs.assistants);
+        gridConfig = rhs.gridConfig;
+    }
+    m_bAutoDetectedMime = rhs.m_bAutoDetectedMime;
+    m_url = rhs.m_url;
+    m_file = rhs.m_file;
+    readwrite = rhs.readwrite;
+    firstMod = rhs.firstMod;
+    lastMod = rhs.lastMod;
+    // XXX: the display properties will be shared between different snapshots
+    globalAssistantsColor = rhs.globalAssistantsColor;
+
+    if (policy == REPLACE) {
+        QList<KoColorSet *> newPaletteList = clonePaletteList(rhs.paletteList);
+        q->setPaletteList(newPaletteList, /* emitSignal = */ true);
+        // we still do not own palettes if we did not
+    } else {
+        paletteList = rhs.paletteList;
+    }
+
+    batchMode = rhs.batchMode;
+}
+
+QList<KoColorSet *> KisDocument::Private::clonePaletteList(const QList<KoColorSet *> &oldList)
+{
+    QList<KoColorSet *> newList;
+    Q_FOREACH (KoColorSet *palette, oldList) {
+        newList << new KoColorSet(*palette);
+    }
+    return newList;
+}
 
 class KisDocument::Private::StrippedSafeSavingLocker {
 public:
@@ -439,27 +489,7 @@ KisDocument::KisDocument(const KisDocument &rhs)
     : QObject(),
       d(new Private(*rhs.d, this))
 {
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
-    connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(slotUndoStackCleanChanged(bool)));
-    connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
-    setObjectName(rhs.objectName());
-
-    d->shapeController = new KisShapeController(this, d->nserver);
-    d->koShapeController = new KoShapeController(0, d->shapeController);
-    d->shapeController->resourceManager()->setGlobalShapeController(d->koShapeController);
-
-    slotConfigChanged();
-
-    // clone the image with keeping the GUIDs of the layers intact
-    // NOTE: we expect the image to be locked!
-    setCurrentImage(rhs.image()->clone(true), false);
-
-    if (rhs.d->preActivatedNode) {
-        // since we clone uuid's, we can use them for lacating new
-        // nodes. Otherwise we would need to use findSymmetricClone()
-        d->preActivatedNode =
-                KisLayerUtils::findNodeByUuid(d->image->root(), rhs.d->preActivatedNode->uuid());
-    }
+    copyFromDocumentImpl(rhs, CONSTRUCT);
 }
 
 KisDocument::~KisDocument()
@@ -513,6 +543,10 @@ KisDocument::~KisDocument()
 
         // check if the image has actually been deleted
         KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
+    }
+
+    if (d->ownsPaletteList) {
+        qDeleteAll(d->paletteList);
     }
 
     delete d;
@@ -578,14 +612,14 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
     }
 
     const QString actionName =
-            job.flags & KritaUtils::SaveIsExporting ?
-                i18n("Exporting Document...") :
-                i18n("Saving Document...");
+        job.flags & KritaUtils::SaveIsExporting ?
+        i18n("Exporting Document...") :
+        i18n("Saving Document...");
 
     bool started =
-            initiateSavingInBackground(actionName,
-                                       this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, KisImportExportErrorCode ,QString)),
-                                       job, exportConfiguration);
+        initiateSavingInBackground(actionName,
+                                   this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, KisImportExportErrorCode ,QString)),
+                                   job, exportConfiguration);
     if (!started) {
         emit canceled(QString());
     }
@@ -761,6 +795,82 @@ KisDocument* KisDocument::lockAndCloneForSaving()
     }
 
     return new KisDocument(*this);
+}
+
+KisDocument *KisDocument::lockAndCreateSnapshot()
+{
+    KisDocument *doc = lockAndCloneForSaving();
+    if (doc) {
+        // clone palette list
+        doc->d->paletteList = doc->d->clonePaletteList(doc->d->paletteList);
+        doc->d->ownsPaletteList = true;
+    }
+    return doc;
+}
+
+void KisDocument::copyFromDocument(const KisDocument &rhs)
+{
+    copyFromDocumentImpl(rhs, REPLACE);
+}
+
+void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy)
+{
+    if (policy == REPLACE) {
+        d->copyFrom(*(rhs.d), this);
+
+        d->undoStack->clear();
+    } else {
+        // in CONSTRUCT mode, d should be already initialized
+        connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+        connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(slotUndoStackCleanChanged(bool)));
+        connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
+
+        d->shapeController = new KisShapeController(this, d->nserver);
+        d->koShapeController = new KoShapeController(0, d->shapeController);
+        d->shapeController->resourceManager()->setGlobalShapeController(d->koShapeController);
+    }
+
+    setObjectName(rhs.objectName());
+
+    slotConfigChanged();
+
+    if (rhs.d->image) {
+        if (policy == REPLACE) {
+            d->image->barrierLock(/* readOnly = */ false);
+            rhs.d->image->barrierLock(/* readOnly = */ true);
+            d->image->copyFromImage(*(rhs.d->image));
+            d->image->unlock();
+            rhs.d->image->unlock();
+            setCurrentImage(d->image, /* forceInitialUpdate = */ true);
+        } else {
+            // clone the image with keeping the GUIDs of the layers intact
+            // NOTE: we expect the image to be locked!
+            setCurrentImage(rhs.image()->clone(/* exactCopy = */ true), /* forceInitialUpdate = */ false);
+        }
+    }
+
+    if (rhs.d->preActivatedNode) {
+        QQueue<KisNodeSP> linearizedNodes;
+        KisLayerUtils::recursiveApplyNodes(rhs.d->image->root(),
+                                           [&linearizedNodes](KisNodeSP node) {
+                                               linearizedNodes.enqueue(node);
+                                           });
+        KisLayerUtils::recursiveApplyNodes(d->image->root(),
+                                           [&linearizedNodes, &rhs, this](KisNodeSP node) {
+                                               KisNodeSP refNode = linearizedNodes.dequeue();
+                                               if (rhs.d->preActivatedNode.data() == refNode.data()) {
+                                                   d->preActivatedNode = node;
+                                               }
+                                           });
+    }
+
+    KisNodeSP foundNode = KisLayerUtils::recursiveFindNode(image()->rootLayer(), [](KisNodeSP node) -> bool { return dynamic_cast<KisReferenceImagesLayer *>(node.data()); });
+    KisReferenceImagesLayer *refLayer = dynamic_cast<KisReferenceImagesLayer *>(foundNode.data());
+    setReferenceImagesLayer(refLayer, /* updateImage = */ false);
+
+    if (policy == REPLACE) {
+        setModified(true);
+    }
 }
 
 bool KisDocument::exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration)
@@ -1613,7 +1723,10 @@ KisGridConfig KisDocument::gridConfig() const
 
 void KisDocument::setGridConfig(const KisGridConfig &config)
 {
-    d->gridConfig = config;
+    if (d->gridConfig != config) {
+        d->gridConfig = config;
+        emit sigGridConfigChanged(config);
+    }
 }
 
 QList<KoColorSet *> &KisDocument::paletteList()
@@ -1621,9 +1734,15 @@ QList<KoColorSet *> &KisDocument::paletteList()
     return d->paletteList;
 }
 
-void KisDocument::setPaletteList(const QList<KoColorSet *> &paletteList)
+void KisDocument::setPaletteList(const QList<KoColorSet *> &paletteList, bool emitSignal)
 {
-    d->paletteList = paletteList;
+    if (d->paletteList != paletteList) {
+        QList<KoColorSet *> oldPaletteList = d->paletteList;
+        d->paletteList = paletteList;
+        if (emitSignal) {
+            emit sigPaletteListChanged(oldPaletteList, paletteList);
+        }
+    }
 }
 
 const KisGuidesConfig& KisDocument::guidesConfig() const
@@ -1882,7 +2001,10 @@ QList<KisPaintingAssistantSP> KisDocument::assistants() const
 
 void KisDocument::setAssistants(const QList<KisPaintingAssistantSP> &value)
 {
-    d->assistants = value;
+    if (d->assistants != value) {
+        d->assistants = value;
+        emit sigAssistantsChanged();
+    }
 }
 
 KisSharedPtr<KisReferenceImagesLayer> KisDocument::referenceImagesLayer() const
@@ -1892,6 +2014,10 @@ KisSharedPtr<KisReferenceImagesLayer> KisDocument::referenceImagesLayer() const
 
 void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateImage)
 {
+    if (d->referenceImagesLayer == layer) {
+        return;
+    }
+
     if (d->referenceImagesLayer) {
         d->referenceImagesLayer->disconnect(this);
     }
@@ -1910,6 +2036,7 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
         connect(d->referenceImagesLayer, SIGNAL(sigUpdateCanvas(QRectF)),
                 this, SIGNAL(sigReferenceImagesChanged()));
     }
+    emit sigReferenceImagesLayerChanged(layer);
 }
 
 void KisDocument::setPreActivatedNode(KisNodeSP activatedNode)

@@ -57,6 +57,7 @@ void ToolReferenceImages::activate(ToolActivation toolActivation, const QSet<KoS
 
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     connect(kisCanvas->image(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));
+    connect(kisCanvas->imageView()->document(), &KisDocument::sigReferenceImagesLayerChanged, this, &ToolReferenceImages::slotNodeAdded);
 
     auto referenceImageLayer = document()->referenceImagesLayer();
     if (referenceImageLayer) {

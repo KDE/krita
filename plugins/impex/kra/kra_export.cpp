@@ -74,5 +74,20 @@ void KraExport::initializeCapabilities()
     }
 }
 
+QString KraExport::verify(const QString &fileName) const
+{
+    QString error = KisImportExportFilter::verify(fileName);
+    if (error.isEmpty()) {
+        return KisImportExportFilter::verifyZiPBasedFiles(fileName,
+                                                          QStringList()
+                                                          << "mimetype"
+                                                          << "documentinfo.xml"
+                                                          << "maindoc.xml"
+                                                          << "preview.png");
+    }
+    return error;
+}
+
+
 #include <kra_export.moc>
 

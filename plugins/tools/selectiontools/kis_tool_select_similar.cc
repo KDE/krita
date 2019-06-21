@@ -92,6 +92,11 @@ KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
 void KisToolSelectSimilar::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     KisToolSelect::activate(toolActivation, shapes);
+    if (selectionOptionWidget()) {
+        // similar color selection tool doesn't use antialiasing option for now
+        // hence explicit disabling it
+        selectionOptionWidget()->disableAntiAliasSelectionOption();
+    }
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
@@ -153,8 +158,9 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
+    // similar color selection tool doesn't use antialiasing option for now
+    // hence explicit disabling it
     selectionWidget->disableAntiAliasSelectionOption();
-    selectionWidget->disableSelectionModeOption();
 
     QHBoxLayout* fl = new QHBoxLayout();
     QLabel * lbl = new QLabel(i18n("Fuzziness: "), selectionWidget);
@@ -162,7 +168,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
 
     KisSliderSpinBox* input = new KisSliderSpinBox(selectionWidget);
     input->setObjectName("fuzziness");
-    input->setRange(0, 200);
+    input->setRange(1, 200);
     input->setSingleStep(10);
     fl->addWidget(input);
     connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));

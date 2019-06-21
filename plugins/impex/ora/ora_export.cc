@@ -23,7 +23,7 @@
 #include <kpluginfactory.h>
 #include <QFileInfo>
 #include <QApplication>
-
+#include <KoStore.h>
 #include <KisImportExportManager.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpace.h>
@@ -95,6 +95,20 @@ void OraExport::initializeCapabilities()
             << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
             << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID);
     addSupportedColorModels(supportedColorModels, "OpenRaster");
+}
+
+QString OraExport::verify(const QString &fileName) const
+{
+    QString error = KisImportExportFilter::verify(fileName);
+    if (error.isEmpty()) {
+        return KisImportExportFilter::verifyZiPBasedFiles(fileName,
+                                                          QStringList()
+                                                          << "mimetype"
+                                                          << "stack.xml"
+                                                          << "mergedimage.png");
+    }
+
+    return error;
 }
 
 

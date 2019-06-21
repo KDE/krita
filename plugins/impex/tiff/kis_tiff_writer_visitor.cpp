@@ -58,27 +58,35 @@ namespace
             color_type = PHOTOMETRIC_SEPARATED;
             TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
 
-            if (isBitDepthFloat(depth)) {
-                destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer16BitsColorDepthID.id(), cs->profile());
+            if (depth == "F16") {
+                sample_format = SAMPLEFORMAT_IEEEFP;
+                destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Float32BitsColorDepthID.id(), cs->profile());
                 return false;
+            }
+
+            if (isBitDepthFloat(depth)) {
+                sample_format = SAMPLEFORMAT_IEEEFP;
             }
             return true;
 
         } else if (id.contains("LABA")) {
             color_type = PHOTOMETRIC_ICCLAB;
-            if (depth != "U16") {
-                destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(LABAColorModelID.id(), Integer16BitsColorDepthID.id(), cs->profile());
+
+            if (depth == "F16") {
+                sample_format = SAMPLEFORMAT_IEEEFP;
+                destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(LABAColorModelID.id(), Float32BitsColorDepthID.id(), cs->profile());
                 return false;
+            }
+
+            if (isBitDepthFloat(depth)) {
+                sample_format = SAMPLEFORMAT_IEEEFP;
             }
             return true;
 
         } else if (id.contains("GRAYA")) {
             color_type = PHOTOMETRIC_MINISBLACK;
-            QList<QString> possibleDepths;
-            possibleDepths << "U16" << "U8";
-            if (!possibleDepths.contains(depth)) {
-                destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), cs->profile());
-                return false;
+            if (isBitDepthFloat(depth)) {
+                sample_format = SAMPLEFORMAT_IEEEFP;
             }
             return true;
 

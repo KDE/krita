@@ -100,7 +100,7 @@ void KisAssistantTool::deactivate()
 void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 {
     setMode(KisTool::PAINT_MODE);
-    m_origAssistantList = cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants());
+    m_origAssistantList = KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants());
 
     bool newAssistantAllowed = true;
 
@@ -524,7 +524,7 @@ void KisAssistantTool::endPrimaryAction(KoPointerEvent *event)
             m_assistantDrag.clear();
         }
         dbgUI << "creating undo command...";
-        KUndo2Command *command = new EditAssistantsCommand(m_canvas, m_origAssistantList, cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()));
+        KUndo2Command *command = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()));
         m_canvas->viewManager()->undoAdapter()->addCommand(command);
         dbgUI << "done";
     } else if(m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
@@ -538,18 +538,6 @@ void KisAssistantTool::endPrimaryAction(KoPointerEvent *event)
     m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
 }
 
-QList<KisPaintingAssistantSP> KisAssistantTool::cloneAssistantList(const QList<KisPaintingAssistantSP> &list) const
-{
-    QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> handleMap;
-    QList<KisPaintingAssistantSP> clonedList;
-    dbgUI << "cloning assistants...";
-    for (auto i = list.begin(); i != list.end(); ++i) {
-        clonedList << (*i)->clone(handleMap);
-    }
-    dbgUI << "done";
-    return clonedList;
-}
-
 void KisAssistantTool::addAssistant()
 {
     m_canvas->paintingAssistantsDecoration()->addAssistant(m_newAssistant);
@@ -560,7 +548,7 @@ void KisAssistantTool::addAssistant()
     }
 
     QList<KisPaintingAssistantSP> assistants = m_canvas->paintingAssistantsDecoration()->assistants();
-    KUndo2Command *addAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, cloneAssistantList(assistants), EditAssistantsCommand::ADD, assistants.indexOf(m_newAssistant));
+    KUndo2Command *addAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(assistants), EditAssistantsCommand::ADD, assistants.indexOf(m_newAssistant));
     m_canvas->viewManager()->undoAdapter()->addCommand(addAssistantCmd);
 
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
@@ -580,7 +568,7 @@ void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
     }
     m_canvas->paintingAssistantsDecoration()->removeAssistant(assistant);
 
-    KUndo2Command *removeAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()), EditAssistantsCommand::REMOVE, assistants.indexOf(assistant));
+    KUndo2Command *removeAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()), EditAssistantsCommand::REMOVE, assistants.indexOf(assistant));
     m_canvas->viewManager()->undoAdapter()->addCommand(removeAssistantCmd);
 
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();

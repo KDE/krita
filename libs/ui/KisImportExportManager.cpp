@@ -464,6 +464,12 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
 
     if (QThread::currentThread() == qApp->thread()) {
         wdg = filter->createConfigurationWidget(0, from, to);
+
+        KisMainWindow *kisMain = KisPart::instance()->currentMainwindow();
+        if (wdg && kisMain) {
+            KisViewManager *manager = kisMain->viewManager();
+            wdg->setView(manager);
+        }
     }
 
     // Extra checks that cannot be done by the checker, because the checker only has access to the image.
@@ -680,6 +686,15 @@ KisImportExportErrorCode KisImportExportManager::doExportImpl(const QString &loc
 #endif
         }
     }
+
+    // Do some minimal verification
+    QString verificationResult = filter->verify(location);
+    if (!verificationResult.isEmpty()) {
+        status = KisImportExportErrorCode(ImportExportCodes::ErrorWhileWriting);
+        m_document->setErrorMessage(verificationResult);
+    }
+
+
     return status;
 
 }

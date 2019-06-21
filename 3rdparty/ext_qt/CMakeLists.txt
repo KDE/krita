@@ -32,21 +32,22 @@ if (WIN32)
         list(APPEND _QT_conf -opengl desktop -no-angle)
     endif (QT_ENABLE_DYNAMIC_OPENGL)
 
+    # MIME-type optimization patches
+    set(ext_qt_PATCH_COMMAND
+                     ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Use-fast-path-for-unsupported-mime-types.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Hack-always-return-we-support-DIBV5.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/tiff.patch
+            )
+
+    # Tablet support patches
     if (NOT USE_QT_TABLET_WINDOWS)
-        set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-disable-wintab.patch
+        set(ext_qt_PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-disable-wintab.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-winink.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Don-t-request-the-MIME-image-every-time-Windows-asks.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Hack-always-return-we-support-DIBV5.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Fix-debug-on-openGL-ES.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-cumulative-patch-for-hdr.patch
             )
     else()
-        set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Don-t-request-the-MIME-image-every-time-Windows-asks.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Hack-always-return-we-support-DIBV5.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Fix-debug-on-openGL-ES.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-cumulative-patch-for-hdr.patch
+        set(ext_qt_PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0020-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0022-Fix-generation-of-Leave-events-when-using-tablet-dev.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0023-Implement-a-switch-for-tablet-API-on-Windows.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0024-Fetch-stylus-button-remapping-from-WinTab-driver.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0025-Disable-tablet-relative-mode-in-Qt.patch
@@ -57,9 +58,21 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0051-Add-workaround-for-handling-table-press-correctly-in.patch
             )
     endif()
+
+    # HDR patches
     set(ext_qt_PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
-        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/set-has-border-in-full-screen-default.patch
-        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/remove-fullscreen-border-hack.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Implement-openGL-surface-color-space-selection-in-An.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Implement-color-space-selection-for-QSurfaceFormat.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-Implement-color-conversion-for-the-backing-store-tex.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-Return-QScreen-s-HMONITOR-handle-via-QPlatformNative.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-Implement-a-manual-test-for-checking-is-HDR-features.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-Fix-notification-of-QDockWidget-when-it-gets-undocke.patch
+            )
+
+    # Other patches
+    set(ext_qt_PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0060-Windows-Add-a-default-setting-for-hasBorderInFullScr.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0061-Hack-to-hide-1px-border-with-OpenGL-fullscreen-hack.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qttools -i ${CMAKE_CURRENT_SOURCE_DIR}/windeployqt-force-allow-debug-info.patch
 #        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0031-Compute-logical-DPI-on-a-per-screen-basis.patch
 #        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0032-Update-Dpi-and-scale-factor-computation.patch
@@ -72,8 +85,8 @@ if (WIN32)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-      URL https://download.qt.io/archive/qt/5.12/5.12.3/single/qt-everywhere-src-5.12.3.tar.xz
-      URL_MD5 38017e0ed88b9baba063bd723d9ca8b2
+      URL https://download.qt.io/official_releases/qt/5.12/5.12.4/single/qt-everywhere-src-5.12.4.tar.xz
+      URL_MD5 dda95b0239d13c5276834177af3a8588
 
       PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
 
@@ -92,13 +105,12 @@ elseif (NOT APPLE)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-      URL https://download.qt.io/archive/qt/5.12/5.12.3/single/qt-everywhere-src-5.12.3.tar.xz
-      URL_MD5 38017e0ed88b9baba063bd723d9ca8b2
+      URL https://download.qt.io/official_releases/qt/5.12/5.12.4/single/qt-everywhere-src-5.12.4.tar.xz
+      URL_MD5 dda95b0239d13c5276834177af3a8588
 
-      PATCH_COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0010-Fix-tablet-jitter-on-X11.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0011-Add-an-ID-for-recognition-of-UGEE-tablets.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0012-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch
+      PATCH_COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0012-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0013-Poison-Qt-s-headers-with-a-mark-about-presence-of-En.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/tiff.patch
 
       CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
 
@@ -204,6 +216,7 @@ else( APPLE )
         set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND}} -p1 -b -d <SOURCE_DIR>/qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/mac_standardpaths_qtbug-61159.diff
                 COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0012-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch
                 COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0013-Poison-Qt-s-headers-with-a-mark-about-presence-of-En.patch
+                COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/tiff.patch
 
                 #COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase/mkspecs/features/mac -i ${CMAKE_CURRENT_SOURCE_DIR}/mac-default.patch
             )
@@ -243,8 +256,8 @@ else( APPLE )
         LOG_INSTALL         ON
         BUILD_IN_SOURCE     ON
 
-       URL https://download.qt.io/archive/qt/5.12/5.12.3/single/qt-everywhere-src-5.12.3.tar.xz
-       URL_MD5 38017e0ed88b9baba063bd723d9ca8b2
+       URL https://download.qt.io/official_releases/qt/5.12/5.12.4/single/qt-everywhere-src-5.12.4.tar.xz
+       URL_MD5 dda95b0239d13c5276834177af3a8588
 
         CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
 

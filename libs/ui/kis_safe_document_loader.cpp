@@ -109,7 +109,6 @@ struct KisSafeDocumentLoader::Private
 
     QScopedPointer<KisDocument>  doc;
     KisSignalCompressor fileChangedSignalCompressor;
-    QTimer delayedLoadTimer;
     bool isLoading = false;
     bool fileChangedFlag = false;
     QString path;
@@ -128,12 +127,6 @@ KisSafeDocumentLoader::KisSafeDocumentLoader(const QString &path, QObject *paren
 
     connect(&m_d->fileChangedSignalCompressor, SIGNAL(timeout()),
             SLOT(fileChangedCompressed()));
-
-    connect(&m_d->delayedLoadTimer, SIGNAL(timeout()),
-            SLOT(delayedLoadStart()));
-
-    m_d->delayedLoadTimer.setSingleShot(true);
-    m_d->delayedLoadTimer.setInterval(100 /* ms */);
 
     setPath(path);
 }
@@ -202,7 +195,7 @@ void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
 
 
     if (!sync) {
-        m_d->delayedLoadTimer.start();
+        QTimer::singleShot(100, this, SLOT(delayedLoadStart()));
     } else {
         QApplication::processEvents();
         delayedLoadStart();
@@ -224,18 +217,27 @@ void KisSafeDocumentLoader::delayedLoadStart()
 
         if (m_d->path.toLower().endsWith("ora") || m_d->path.toLower().endsWith("kra")) {
             QScopedPointer<KoStore> store(KoStore::createStore(m_d->temporaryPath, KoStore::Read));
-            if (store) {
+            if (store && !store->bad()) {
                 if (store->open(QString("mergedimage.png"))) {
                     QByteArray bytes = store->read(store->size());
                     store->close();
                     QImage mergedImage;
                     mergedImage.loadFromData(bytes);
+                    Q_ASSERT(!mergedImage.isNull());
                     KisImageSP image = new KisImage(0, mergedImage.width(), mergedImage.height(), KoColorSpaceRegistry::instance()->rgb8(), "");
                     KisPaintLayerSP layer = new KisPaintLayer(image, "", OPACITY_OPAQUE_U8);
                     layer->paintDevice()->convertFromQImage(mergedImage, 0);
                     image->addNode(layer, image->rootLayer());
+                    image->initialRefreshGraph();
                     m_d->doc->setCurrentImage(image);
+                    successfullyLoaded = true;
                 }
+                else {
+                    qWarning() << "delayedLoadStart: Could not open mergedimage.png";
+                }
+            }
+            else {
+                qWarning() << "delayedLoadStart: Store was bad";
             }
         }
         else {

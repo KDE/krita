@@ -21,35 +21,12 @@
 #define _KIS_Brush_EXPORT_H_
 
 #include <QVariant>
+#include <QSpinBox>
+#include <QPainter>
 
 #include <KisImportExportFilter.h>
-#include <ui_wdg_export_gih.h>
 #include <kis_config_widget.h>
 #include <kis_properties_configuration.h>
-
-class KisWdgOptionsBrush : public KisConfigWidget, public Ui::WdgExportGih
-{
-    Q_OBJECT
-
-public:
-    KisWdgOptionsBrush(QWidget *parent)
-        : KisConfigWidget(parent)
-    {
-        setupUi(this);
-        connect(this->brushStyle, SIGNAL(currentIndexChanged(int)), SLOT(enableSelectionMedthod(int)));
-    }
-
-    void setConfiguration(const KisPropertiesConfigurationSP  cfg) override;
-    KisPropertiesConfigurationSP configuration() const override;
-public Q_SLOTS:
-    void enableSelectionMedthod(int value) {
-        if (value == 0) {
-            cmbSelectionMode->setEnabled(false);
-        } else {
-            cmbSelectionMode->setEnabled(true);
-        }
-    }
-};
 
 
 class KisBrushExport : public KisImportExportFilter

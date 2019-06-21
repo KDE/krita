@@ -1,7 +1,7 @@
-From b609d09933ac9e8dfa910d9974f62947360bba33 Mon Sep 17 00:00:00 2001
+From f14fa33b2c5452be7df163973c26a0d1222696a2 Mon Sep 17 00:00:00 2001
 From: Alvin Wong <alvin@alvinhc.com>
 Date: Thu, 18 Apr 2019 18:59:58 +0800
-Subject: [PATCH 21/27] Hack to hide 1px border with OpenGL fullscreen hack
+Subject: [PATCH 17/17] Hack to hide 1px border with OpenGL fullscreen hack
 
 Unfortunately can't hide all four sides because the bug returns. Now we
 leave the bottom border visible, which is probably the most we can do.
@@ -12,10 +12,10 @@ Ref: https://bugreports.qt.io/browse/QTBUG-41309
  1 file changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
-index 967d479a..c888847e 100644
+index 6949b9c669..10de52d4d6 100644
 --- a/src/plugins/platforms/windows/qwindowswindow.cpp
 +++ b/src/plugins/platforms/windows/qwindowswindow.cpp
-@@ -1561,7 +1561,7 @@ void QWindowsWindow::show_sys() const
+@@ -1634,7 +1634,7 @@ void QWindowsWindow::show_sys() const
                  restoreMaximize = true;
          } else {
              updateTransientParent();
@@ -24,7 +24,7 @@ index 967d479a..c888847e 100644
                  sm = SW_SHOWMAXIMIZED;
                  // Windows will not behave correctly when we try to maximize a window which does not
                  // have minimize nor maximize buttons in the window frame. Windows would then ignore
-@@ -1998,7 +1998,7 @@ bool QWindowsWindow::isFullScreen_sys() const
+@@ -2124,7 +2124,7 @@ bool QWindowsWindow::isFullScreen_sys() const
          return false;
      QRect geometry = geometry_sys();
      if (testFlag(HasBorderInFullScreen))
@@ -33,7 +33,7 @@ index 967d479a..c888847e 100644
      QPlatformScreen *screen = screenForGeometry(geometry);
      return screen && geometry == screen->geometry();
  }
-@@ -2069,7 +2069,11 @@ void QWindowsWindow::setWindowState_sys(Qt::WindowStates newState)
+@@ -2195,7 +2195,11 @@ void QWindowsWindow::setWindowState_sys(Qt::WindowStates newState)
                  const UINT swpf = SWP_FRAMECHANGED | SWP_NOACTIVATE;
                  const bool wasSync = testFlag(SynchronousGeometryChangeEvent);
                  setFlag(SynchronousGeometryChangeEvent);
@@ -47,5 +47,5 @@ index 967d479a..c888847e 100644
                      clearFlag(SynchronousGeometryChangeEvent);
                  clearFlag(MaximizeToFullScreen);
 -- 
-2.22.0.windows.1
+2.20.1.windows.1
 

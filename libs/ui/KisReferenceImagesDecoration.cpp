@@ -173,6 +173,8 @@ void KisReferenceImagesDecoration::setReferenceImageLayer(KisSharedPtr<KisRefere
         d->layer = layer;
         connect(layer.data(), SIGNAL(sigUpdateCanvas(QRectF)),
                 this, SLOT(slotReferenceImagesChanged(QRectF)));
-        slotReferenceImagesChanged(layer->extent());
+        if (layer->extent() != QRectF()) { // in case the reference layer is just being loaded from the .kra file
+            slotReferenceImagesChanged(layer->extent());
+        }
     }
 }

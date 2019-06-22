@@ -2093,7 +2093,8 @@ void KisDocument::hackPreliminarySetImage(KisImageSP image)
 
 void KisDocument::setImageModified()
 {
-    setModified(true);
+    // we only set as modified if undo stack is not at clean state
+    setModified(!d->undoStack->isClean());
 }
 
 

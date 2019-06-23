@@ -47,12 +47,13 @@ public:
      */
     void sampledRawData(quint8* dst);
 
-    inline void moveTo(double x, double y) {
+    inline void moveTo(qreal x, qreal y) {
         m_currentPoint.setX(x); m_currentPoint.setY(y);
     }
     inline void moveTo(const QPointF& p) {
         m_currentPoint = p;
     }
+
 private:
     KisPaintDeviceSP m_device;
     QPointF m_currentPoint;

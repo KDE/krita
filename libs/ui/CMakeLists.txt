@@ -270,6 +270,7 @@ set(kritaui_LIB_SRCS
     widgets/KoFillConfigWidget.cpp
     widgets/KisLayerStyleAngleSelector.cpp
     widgets/KisMemoryReportButton.cpp
+    widgets/KisDitherWidget.cpp
 
     KisPaletteEditor.cpp
     dialogs/KisDlgPaletteEditor.cpp
@@ -280,6 +281,7 @@ set(kritaui_LIB_SRCS
     utils/kis_document_aware_spin_box_unit_manager.cpp
     utils/KisSpinBoxSplineUnitConverter.cpp
     utils/KisClipboardUtil.cpp
+    utils/KisDitherUtil.cpp
 
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
@@ -463,6 +465,7 @@ endif()
 ki18n_wrap_ui(kritaui_LIB_SRCS
     widgets/KoFillConfigWidget.ui
     widgets/KoStrokeConfigWidget.ui
+    widgets/KisDitherWidget.ui
     forms/wdgdlgpngimport.ui
     forms/wdgfullscreensettings.ui
     forms/wdgautogradient.ui

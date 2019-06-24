@@ -130,7 +130,7 @@ private:
     inline quint32 calculateHash(qint32 col, qint32 row)
     {
 #ifdef SANITY_CHECK
-        KIS_ASSERT_RECOVER_NOOP(row < 0x7FFF && col < 0x7FFF)
+        KIS_SAFE_ASSERT_RECOVER_NOOP(row < 0x7FFF && col < 0x7FFF)
 #endif // SANITY_CHECK
 
         if (col == 0 && row == 0) {

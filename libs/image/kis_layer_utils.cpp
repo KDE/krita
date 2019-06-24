@@ -61,12 +61,13 @@ namespace KisLayerUtils {
     void fetchSelectionMasks(KisNodeList mergedNodes, QVector<KisSelectionMaskSP> &selectionMasks)
     {
         foreach (KisNodeSP node, mergedNodes) {
-            KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
 
-            KisSelectionMaskSP mask;
+            Q_FOREACH(KisNodeSP child, node->childNodes(QStringList("KisSelectionMask"), KoProperties())) {
 
-            if (layer && (mask = layer->selectionMask())) {
-                selectionMasks.append(mask);
+                KisSelectionMaskSP mask = qobject_cast<KisSelectionMask*>(child.data());
+                if (mask) {
+                    selectionMasks.append(mask);
+                }
             }
         }
     }

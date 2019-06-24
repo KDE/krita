@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,6 +24,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QVector>
+#include <QAction>
 
 #include <KoSelection.h>
 #include <KoShapeRegistry.h>
@@ -90,7 +92,7 @@ void ToolReferenceImages::addReferenceImage()
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas)
 
-    KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImage");
+            KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImage");
     dialog.setCaption(i18n("Select a Reference Image"));
 
     QStringList locations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
@@ -115,7 +117,7 @@ void ToolReferenceImages::pasteReferenceImage()
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas)
 
-    KisReferenceImage* reference = KisReferenceImage::fromClipboard(*kisCanvas->coordinatesConverter());
+            KisReferenceImage* reference = KisReferenceImage::fromClipboard(*kisCanvas->coordinatesConverter());
     if(reference) {
         KisDocument *doc = document();
         doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
@@ -137,7 +139,7 @@ void ToolReferenceImages::loadReferenceImages()
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas)
 
-    KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImageCollection");
+            KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImageCollection");
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-reference-images");
     dialog.setCaption(i18n("Load Reference Images"));
 
@@ -179,7 +181,7 @@ void ToolReferenceImages::saveReferenceImages()
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas)
 
-    KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::SaveFile, "SaveReferenceImageCollection");
+            KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::SaveFile, "SaveReferenceImageCollection");
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-reference-images");
     dialog.setCaption(i18n("Save Reference Images"));
 
@@ -232,7 +234,7 @@ QWidget *ToolReferenceImages::createOptionWidget()
         m_optionsWidget->layout()->addWidget(specialSpacer);
     }
     return m_optionsWidget;
- }
+}
 
 bool ToolReferenceImages::isValidForCurrentLayer() const
 {
@@ -281,24 +283,25 @@ KisDocument *ToolReferenceImages::document() const
 
 QList<QAction *> ToolReferenceImagesFactory::createActionsImpl()
 {
-    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
-    QList<QAction *> actions = DefaultToolFactory::createActionsImpl();
+    QList<QAction *> defaultActions = DefaultToolFactory::createActionsImpl();
+    QList<QAction *> actions;
 
-    actions << actionRegistry->makeQAction("object_order_front");
-    actions << actionRegistry->makeQAction("object_order_raise");
-    actions << actionRegistry->makeQAction("object_order_lower");
-    actions << actionRegistry->makeQAction("object_order_back");
-    actions << actionRegistry->makeQAction("object_group");
-    actions << actionRegistry->makeQAction("object_ungroup");
-    actions << actionRegistry->makeQAction("object_transform_rotate_90_cw");
-    actions << actionRegistry->makeQAction("object_transform_rotate_90_ccw");
-    actions << actionRegistry->makeQAction("object_transform_rotate_180");
-    actions << actionRegistry->makeQAction("object_transform_mirror_horizontally");
-    actions << actionRegistry->makeQAction("object_transform_mirror_vertically");
-    actions << actionRegistry->makeQAction("object_transform_reset");
-    actions << actionRegistry->makeQAction("object_unite");
-    actions << actionRegistry->makeQAction("object_intersect");
-    actions << actionRegistry->makeQAction("object_subtract");
-    actions << actionRegistry->makeQAction("object_split");
+    QStringList actionNames;
+    actionNames << "object_order_front"
+                << "object_order_raise"
+                << "object_order_lower"
+                << "object_order_back"
+                << "object_transform_rotate_90_cw"
+                << "object_transform_rotate_90_ccw"
+                << "object_transform_rotate_180"
+                << "object_transform_mirror_horizontally"
+                << "object_transform_mirror_vertically"
+                << "object_transform_reset";
+
+    Q_FOREACH(QAction *action, defaultActions) {
+        if (actionNames.contains(action->objectName())) {
+            actions << action;
+        }
+    }
     return actions;
 }

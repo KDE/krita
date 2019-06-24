@@ -20,39 +20,21 @@
 
 #include "palettize.h"
 
-#include <kis_config_widget.h>
-#include <KoUpdater.h>
 #include <kis_types.h>
+#include <kpluginfactory.h>
+#include <kis_config_widget.h>
+#include <kis_filter_registry.h>
+#include <kis_filter_configuration.h>
 #include <kis_filter_category_ids.h>
 #include <kis_filter_configuration.h>
+#include <KoUpdater.h>
+#include <KisSequentialIteratorProgress.h>
+#include <KoResourceServerProvider.h>
 #include <KoResourceServer.h>
+#include <KisResourceItemChooser.h>
 #include <KoColorSet.h>
 #include <KoPattern.h>
-#include <KisSequentialIteratorProgress.h>
-#include <kpluginfactory.h>
-#include <kis_filter_registry.h>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <kis_filter_configuration.h>
-#include <KisPaletteListWidget.h>
-#include <kis_pattern_chooser.h>
-#include <KoResourceServerProvider.h>
-#include <KoResourceServer.h>
 #include <kis_random_generator.h>
-#include <kis_iconwidget.h>
-#include <kis_double_widget.h>
-#include <kis_elided_label.h>
-#include <QLineEdit>
-#include <QCheckBox>
-#include <QIntValidator>
-#include <QRadioButton>
-#include <QButtonGroup>
-#include <KoResourceServerProvider.h>
-#include <KoResourceServer.h>
-#include <KisResourceModelProvider.h>
-#include <KisResourceModel.h>
-#include <KisResourceTypes.h>
-#include <KisResourceItemChooser.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(PalettizeFactory, "kritapalettize.json", registerPlugin<Palettize>();)
 
@@ -61,6 +43,8 @@ Palettize::Palettize(QObject *parent, const QVariantList &)
 {
     KisFilterRegistry::instance()->add(new KisFilterPalettize());
 }
+
+#include "palettize.moc"
 
 KisFilterPalettize::KisFilterPalettize() : KisFilter(id(), FiltersCategoryMapId, i18n("&Palettize..."))
 {
@@ -72,99 +56,104 @@ KisFilterPalettize::KisFilterPalettize() : KisFilter(id(), FiltersCategoryMapId,
 KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     : KisConfigWidget(parent)
 {
-    QGridLayout* layout = new QGridLayout(this);
-    layout->setColumnStretch(0, 0);
-    layout->setColumnStretch(1, 1);
+    setupUi(this);
 
-    KisElidedLabel* paletteLabel = new KisElidedLabel(i18n("Palette"), Qt::ElideRight, this);
-    layout->addWidget(paletteLabel, 0, 0);
-    KisIconWidget* paletteIcon = new KisIconWidget(this);
-    paletteIcon->setFixedSize(32, 32);
-
-    m_paletteWidget = new KisResourceItemChooser(ResourceType::Palettes, false, this);
-    paletteIcon->setPopupWidget(m_paletteWidget);
-    QObject::connect(m_paletteWidget, &KisResourceItemChooser::resourceSelected, paletteIcon, &KisIconWidget::setResource);
+    paletteIconWidget->setFixedSize(32, 32);
+    m_paletteWidget = new KisResourceItemChooser(ResourceType::Palettes, this);
+    paletteIconWidget->setPopupWidget(m_paletteWidget);
+    QObject::connect(m_paletteWidget, &KisResourceItemChooser::resourceSelected, paletteIconWidget, &KisIconWidget::setResource);
     QObject::connect(m_paletteWidget, &KisResourceItemChooser::resourceSelected, this, &KisConfigWidget::sigConfigurationItemChanged);
-    paletteLabel->setBuddy(paletteIcon);
-    layout->addWidget(paletteIcon, 0, 1, Qt::AlignLeft);
 
-    m_ditherGroupBox = new QGroupBox(i18n("Dither"), this);
-    m_ditherGroupBox->setCheckable(true);
-    QGridLayout* ditherLayout = new QGridLayout(m_ditherGroupBox);
-    QObject::connect(m_ditherGroupBox, &QGroupBox::toggled, this, &KisConfigWidget::sigConfigurationItemChanged);
-    ditherLayout->setColumnStretch(0, 0);
-    ditherLayout->setColumnStretch(1, 1);
-    layout->addWidget(m_ditherGroupBox, 1, 0, 1, 2);
+    QObject::connect(colorspaceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
 
-    QRadioButton* ditherPatternRadio = new QRadioButton(i18n("Pattern"), this);
-    ditherLayout->addWidget(ditherPatternRadio, 0, 0);
-    KisIconWidget* ditherPatternIcon = new KisIconWidget(this);
-    ditherPatternIcon->setFixedSize(32, 32);
+    QObject::connect(ditherGroupBox, &QGroupBox::toggled, this, &KisConfigWidget::sigConfigurationItemChanged);
 
-    m_ditherPatternWidget = new KisResourceItemChooser(ResourceType::Patterns, false, this);
-    ditherPatternIcon->setPopupWidget(m_ditherPatternWidget);
-    QObject::connect(m_ditherPatternWidget, &KisResourceItemChooser::resourceSelected, ditherPatternIcon, &KisIconWidget::setResource);
+    patternIconWidget->setFixedSize(32, 32);
+    m_ditherPatternWidget = new KisResourceItemChooser(ResourceType::Patterns, this);
+    patternIconWidget->setPopupWidget(m_ditherPatternWidget);
+    QObject::connect(m_ditherPatternWidget, &KisResourceItemChooser::resourceSelected, patternIconWidget, &KisIconWidget::setResource);
     QObject::connect(m_ditherPatternWidget, &KisResourceItemChooser::resourceSelected, this, &KisConfigWidget::sigConfigurationItemChanged);
-    ditherLayout->addWidget(ditherPatternIcon, 0, 1, Qt::AlignLeft);
-    m_ditherPatternUseAlphaCheckBox = new QCheckBox(i18n("Use alpha"), this);
-    QObject::connect(m_ditherPatternUseAlphaCheckBox, &QCheckBox::toggled, this, &KisConfigWidget::sigConfigurationItemChanged);
-    ditherLayout->addWidget(m_ditherPatternUseAlphaCheckBox, 0, 2, Qt::AlignLeft);
 
-    QRadioButton* ditherNoiseRadio = new QRadioButton(i18n("Noise"), this);
-    ditherLayout->addWidget(ditherNoiseRadio, 1, 0);
-    m_ditherNoiseSeedWidget = new QLineEdit(this);
-    m_ditherNoiseSeedWidget->setValidator(new QIntValidator(this));
-    QObject::connect(m_ditherNoiseSeedWidget, &QLineEdit::textChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
-    ditherLayout->addWidget(m_ditherNoiseSeedWidget, 1, 1, 1, 2);
+    QObject::connect(patternValueModeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
 
-    KisElidedLabel* ditherWeightLabel = new KisElidedLabel(i18n("Weight"), Qt::ElideRight, this);
-    ditherLayout->addWidget(ditherWeightLabel, 2, 0);
-    m_ditherWeightWidget = new KisDoubleWidget(this);
-    m_ditherWeightWidget->setRange(0.0, 1.0);
-    m_ditherWeightWidget->setSingleStep(0.0625);
-    m_ditherWeightWidget->setPageStep(0.25);
-    QObject::connect(m_ditherWeightWidget, &KisDoubleWidget::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
-    ditherWeightLabel->setBuddy(m_ditherWeightWidget);
-    ditherLayout->addWidget(m_ditherWeightWidget, 2, 1, 1, 2);
+    noiseSeedLineEdit->setValidator(new QIntValidator(this));
+    QObject::connect(noiseSeedLineEdit, &QLineEdit::textChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
 
-    m_ditherModeGroup = new QButtonGroup(this);
-    m_ditherModeGroup->addButton(ditherPatternRadio, 0);
-    m_ditherModeGroup->addButton(ditherNoiseRadio, 1);
-    QObject::connect(m_ditherModeGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &KisConfigWidget::sigConfigurationItemChanged);
+    QObject::connect(noiseSeedRandomizeButton, &QToolButton::clicked, [this](){
+        noiseSeedLineEdit->setText(QString::number(rand()));
+    });
 
-    layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Preferred, QSizePolicy::Expanding), 2, 0, 1, 2);
+    QObject::connect(thresholdModeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
+
+    QObject::connect(colorModeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
+
+    offsetScaleSpinBox->setPrefix(QString("%1  ").arg(i18n("Offset Scale:")));
+    offsetScaleSpinBox->setRange(0.0, 1.0, 3);
+    offsetScaleSpinBox->setSingleStep(0.125);
+    QObject::connect(offsetScaleSpinBox, &KisDoubleSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
+
+    spreadSpinBox->setPrefix(QString("%1  ").arg(i18n("Spread:")));
+    spreadSpinBox->setRange(0.0, 1.0, 3);
+    spreadSpinBox->setSingleStep(0.125);
+    QObject::connect(spreadSpinBox, &KisDoubleSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
+
+    QObject::connect(alphaGroupBox, &QGroupBox::toggled, this, &KisConfigWidget::sigConfigurationItemChanged);
+
+    QObject::connect(alphaModeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
+
+    alphaClipSpinBox->setPrefix(QString("%1  ").arg(i18n("Clip:")));
+    alphaClipSpinBox->setRange(0.0, 1.0, 3);
+    alphaClipSpinBox->setSingleStep(0.125);
+    QObject::connect(alphaClipSpinBox, &KisDoubleSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
+
+    alphaIndexSpinBox->setPrefix(QString("%1  ").arg(i18n("Index:")));
+    alphaIndexSpinBox->setRange(0, 255);
+    QObject::connect(alphaIndexSpinBox, &KisSliderSpinBox::valueChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
+    QObject::connect(m_paletteWidget, &KisResourceItemChooser::resourceSelected, [this](){
+        KoColorSetSP palette = m_paletteWidget->currentResource().staticCast<KoColorSet>();
+        alphaIndexSpinBox->setMaximum(palette ? int(palette->colorCount() - 1) : 0);
+        alphaIndexSpinBox->setValue(std::min(alphaIndexSpinBox->value(), alphaIndexSpinBox->maximum()));
+    });
 }
 
 void KisPalettizeWidget::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     KoColorSetSP palette = KoResourceServerProvider::instance()->paletteServer()->resourceByName(config->getString("palette"));
     if (palette) m_paletteWidget->setCurrentResource(palette);
-
-    m_ditherGroupBox->setChecked(config->getBool("ditherEnabled"));
-
-    QAbstractButton* ditherModeButton = m_ditherModeGroup->button(config->getInt("ditherMode"));
-    if (ditherModeButton) ditherModeButton->setChecked(true);
-
-    KoPatternSP ditherPattern = KoResourceServerProvider::instance()->patternServer()->resourceByName(config->getString("ditherPattern"));
-    if (ditherPattern) m_ditherPatternWidget->setCurrentResource(ditherPattern);
-
-    m_ditherPatternUseAlphaCheckBox->setChecked(config->getBool("ditherPatternUseAlpha"));
-
-    m_ditherNoiseSeedWidget->setText(QString::number(config->getInt("ditherNoiseSeed")));
-
-    m_ditherWeightWidget->setValue(config->getDouble("ditherWeight"));
+    colorspaceComboBox->setCurrentIndex(config->getInt("colorspace"));
+    ditherGroupBox->setChecked(config->getBool("ditherEnabled"));
+    thresholdModeComboBox->setCurrentIndex(config->getInt("thresholdMode"));
+    KoPatternSP pattern = KoResourceServerProvider::instance()->patternServer()->resourceByName(config->getString("pattern"));
+    if (pattern) m_ditherPatternWidget->setCurrentResource(pattern);
+    patternValueModeComboBox->setCurrentIndex(config->getInt("patternValueMode"));
+    noiseSeedLineEdit->setText(QString::number(config->getInt("noiseSeed")));
+    colorModeComboBox->setCurrentIndex(config->getInt("colorMode"));
+    offsetScaleSpinBox->setValue(config->getDouble("offsetScale"));
+    spreadSpinBox->setValue(config->getDouble("spread"));
+    alphaGroupBox->setChecked(config->getBool("alphaEnabled"));
+    alphaModeComboBox->setCurrentIndex(config->getInt("alphaMode"));
+    alphaClipSpinBox->setValue(config->getDouble("alphaClip"));
+    alphaIndexSpinBox->setValue(config->getInt("alphaIndex"));
 }
 
 KisPropertiesConfigurationSP KisPalettizeWidget::configuration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("palettize", 1);
+
     if (m_paletteWidget->currentResource()) config->setProperty("palette", QVariant(m_paletteWidget->currentResource()->name()));
-    config->setProperty("ditherEnabled", m_ditherGroupBox->isChecked());
-    config->setProperty("ditherMode", m_ditherModeGroup->checkedId());
-    if (m_ditherPatternWidget->currentResource()) config->setProperty("ditherPattern", QVariant(m_ditherPatternWidget->currentResource()->name()));
-    config->setProperty("ditherPatternUseAlpha", m_ditherPatternUseAlphaCheckBox->isChecked());
-    config->setProperty("ditherNoiseSeed", m_ditherNoiseSeedWidget->text().toInt());
-    config->setProperty("ditherWeight", m_ditherWeightWidget->value());
+    config->setProperty("colorspace", colorspaceComboBox->currentIndex());
+    config->setProperty("ditherEnabled", ditherGroupBox->isChecked());
+    config->setProperty("thresholdMode",thresholdModeComboBox->currentIndex());
+    if (m_ditherPatternWidget->currentResource()) config->setProperty("pattern", QVariant(m_ditherPatternWidget->currentResource()->name()));
+    config->setProperty("patternValueMode", patternValueModeComboBox->currentIndex());
+    config->setProperty("noiseSeed", noiseSeedLineEdit->text().toInt());
+    config->setProperty("colorMode", colorModeComboBox->currentIndex());
+    config->setProperty("offsetScale", offsetScaleSpinBox->value());
+    config->setProperty("spread", spreadSpinBox->value());
+    config->setProperty("alphaEnabled", alphaGroupBox->isChecked());
+    config->setProperty("alphaMode", alphaModeComboBox->currentIndex());
+    config->setProperty("alphaClip", alphaClipSpinBox->value());
+    config->setProperty("alphaIndex", alphaIndexSpinBox->value());
 
     return config;
 }
@@ -180,13 +169,21 @@ KisConfigWidget* KisFilterPalettize::createConfigurationWidget(QWidget *parent, 
 KisFilterConfigurationSP KisFilterPalettize::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("palettize", 1);
+
     config->setProperty("palette", "Default");
+    config->setProperty("colorspace", Colorspace::Lab);
     config->setProperty("ditherEnabled", false);
-    config->setProperty("ditherMode", DitherMode::Pattern);
-    config->setProperty("ditherPattern", "Grid01.pat");
-    config->setProperty("ditherPatternUseAlpha", true);
-    config->setProperty("ditherNoiseSeed", rand());
-    config->setProperty("ditherWeight", 1.0);
+    config->setProperty("thresholdMode", ThresholdMode::Pattern);
+    config->setProperty("pattern", "DITH 0202 GEN ");
+    config->setProperty("patternValueMode", PatternValueMode::Auto);
+    config->setProperty("noiseSeed", rand());
+    config->setProperty("colorMode", ColorMode::PerChannelOffset);
+    config->setProperty("offsetScale", 0.125);
+    config->setProperty("spread", 1.0);
+    config->setProperty("alphaEnabled", true);
+    config->setProperty("alphaMode", AlphaMode::Clip);
+    config->setProperty("alphaClip", 0.5);
+    config->setProperty("alphaIndex", 0);
 
     return config;
 }
@@ -194,84 +191,156 @@ KisFilterConfigurationSP KisFilterPalettize::factoryConfiguration() const
 void KisFilterPalettize::processImpl(KisPaintDeviceSP device, const QRect& applyRect, const KisFilterConfigurationSP config, KoUpdater* progressUpdater) const
 {
     const KoColorSetSP palette = KoResourceServerProvider::instance()->paletteServer()->resourceByName(config->getString("palette"));
+    const int searchColorspace = config->getInt("colorspace");
     const bool ditherEnabled = config->getBool("ditherEnabled");
-    const int ditherMode = config->getInt("ditherMode");
-    const KoPatternSP ditherPattern = KoResourceServerProvider::instance()->patternServer()->resourceByName(config->getString("ditherPattern"));
-    const bool ditherPatternUseAlpha = config->getBool("ditherPatternUseAlpha");
-    const quint64 ditherNoiseSeed = quint64(config->getInt("ditherNoiseSeed"));
-    const double ditherWeight = config->getDouble("ditherWeight");
+    const int thresholdMode = config->getInt("thresholdMode");
+    const KoPatternSP pattern = KoResourceServerProvider::instance()->patternServer()->resourceByName(config->getString("pattern"));
+    const int patternValueMode = config->getInt("patternValueMode");
+    const quint64 noiseSeed = quint64(config->getInt("noiseSeed"));
+    const int colorMode = config->getInt("colorMode");
+    const double offsetScale = config->getDouble("offsetScale");
+    const double spread = config->getDouble("spread");
+    const bool alphaEnabled = config->getBool("alphaEnabled");
+    const int alphaMode = config->getInt("alphaMode");
+    const double alphaClip = config->getDouble("alphaClip");
+    const int alphaIndex = config->getInt("alphaIndex");
 
-    const KoColorSpace* cs = device->colorSpace();
-    KisRandomGenerator random(ditherNoiseSeed);
+    const KoColorSpace* colorspace = device->colorSpace();
+    const KoColorSpace* workColorspace = (searchColorspace == Colorspace::Lab
+                                              ? KoColorSpaceRegistry::instance()->lab16()
+                                              : KoColorSpaceRegistry::instance()->rgb16("sRGB-elle-V2-srgbtrc.icc"));
 
-    using TreeColor = boost::geometry::model::point<quint16, 3, boost::geometry::cs::cartesian>;
-    using TreeValue = std::pair<TreeColor, std::pair<KoColor, quint16>>;
-    using Rtree = boost::geometry::index::rtree<TreeValue, boost::geometry::index::quadratic<16>>;
-    Rtree m_rtree;
+    const quint8 colorCount = ditherEnabled && colorMode == ColorMode::NearestColors ? 2 : 1;
+
+    KisRandomGenerator random(noiseSeed);
+
+    using SearchColor = boost::geometry::model::point<quint16, 3, boost::geometry::cs::cartesian>;
+    struct ColorCandidate {
+        KoColor color;
+        quint16 index;
+        double distance;
+    };
+    using SearchEntry = std::pair<SearchColor, ColorCandidate>;
+    boost::geometry::index::rtree<SearchEntry, boost::geometry::index::quadratic<16>> rtree;
 
     if (palette) {
+        // Add palette colors to search tree
         quint16 index = 0;
         for (int row = 0; row < palette->rowCount(); ++row) {
             for (int column = 0; column < palette->columnCount(); ++column) {
                 KisSwatch swatch = palette->getColorGlobal(column, row);
                 if (swatch.isValid()) {
-                    KoColor color = swatch.color().convertedTo(cs);
-                    TreeColor searchColor;
-                    KoColor tempColor;
-                    cs->toLabA16(color.data(), tempColor.data(), 1);
-                    memcpy(reinterpret_cast<quint8 *>(&searchColor), tempColor.data(), sizeof(TreeColor));
+                    KoColor color = swatch.color().convertedTo(colorspace);
+                    KoColor workColor = swatch.color().convertedTo(workColorspace);
+                    SearchColor searchColor;
+                    memcpy(&searchColor, workColor.data(), sizeof(SearchColor));
                     // Don't add duplicates so won't dither between identical colors
-                    std::vector<TreeValue> result;
-                    m_rtree.query(boost::geometry::index::contains(searchColor), std::back_inserter(result));
-                    if (result.empty()) m_rtree.insert(std::make_pair(searchColor, std::make_pair(color, index++)));
+                    std::vector<SearchEntry> result;
+                    rtree.query(boost::geometry::index::contains(searchColor), std::back_inserter(result));
+                    if (result.empty()) rtree.insert(SearchEntry(searchColor, {color, index, 0.0}));
                 }
+                ++index;
             }
         }
-    }
 
-    KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
-    while (it.nextPixel()) {
-        // Find 2 nearest palette colors to pixel color
-        TreeColor imageColor;
-        KoColor tempColor;
-        cs->toLabA16(it.oldRawData(), tempColor.data(), 1);
-        memcpy(reinterpret_cast<quint8 *>(&imageColor), tempColor.data(), sizeof(TreeColor));
-        std::vector<TreeValue> nearestColors;
-        nearestColors.reserve(2);
-        for (Rtree::const_query_iterator it = m_rtree.qbegin(boost::geometry::index::nearest(imageColor, 2)); it != m_rtree.qend(); ++it) {
-            nearestColors.push_back(*it);
+        // Automatically pick between lightness-based and alpha-based patterns by whichever has maximum range
+        bool patternUseAlpha;
+        if (pattern && ditherEnabled && thresholdMode == ThresholdMode::Pattern && patternValueMode == PatternValueMode::Auto) {
+            qreal lightnessMin = 1.0, lightnessMax = 0.0;
+            qreal alphaMin = 1.0, alphaMax = 0.0;
+            const QImage &image = pattern->pattern();
+            for (int y = 0; y < image.height(); ++y) {
+                for (int x = 0; x < image.width(); ++x) {
+                    const QColor pixel = image.pixelColor(x, y);
+                    lightnessMin = std::min(lightnessMin, pixel.lightnessF());
+                    lightnessMax = std::max(lightnessMax, pixel.lightnessF());
+                    alphaMin = std::min(alphaMin, pixel.alphaF());
+                    alphaMax = std::max(alphaMax, pixel.alphaF());
+                }
+            }
+            patternUseAlpha = (alphaMax - alphaMin > lightnessMax - lightnessMin);
+        }
+        else {
+            patternUseAlpha = (patternValueMode == PatternValueMode::Alpha);
         }
 
-        if (nearestColors.size() > 0) {
-            size_t nearestIndex;
-            // Dither not enabled or only one color found so don't dither
-            if (!ditherEnabled || nearestColors.size() == 1) nearestIndex = 0;
-            // Otherwise threshold between colors based on relative distance
+        KisSequentialIteratorProgress pixel(device, applyRect, progressUpdater);
+        while (pixel.nextPixel()) {
+            KoColor workColor(pixel.oldRawData(), colorspace);
+            workColor.convertTo(workColorspace);
+
+            // Find dither threshold
+            double ditherPos = 0.5;
+            if (pattern && ditherEnabled) {
+                if (thresholdMode == ThresholdMode::Pattern) {
+                    const QImage &image = pattern->pattern();
+                    const QColor ditherPixel = image.pixelColor(pixel.x() % image.width(), pixel.y() % image.height());
+                    ditherPos = (patternUseAlpha ? ditherPixel.alphaF() : ditherPixel.lightnessF());
+                }
+                else if (thresholdMode == ThresholdMode::Noise) {
+                    ditherPos = random.doubleRandomAt(pixel.x(), pixel.y());
+                }
+
+                // Traditional per-channel ordered dithering
+                if (colorMode == ColorMode::PerChannelOffset) {
+                    QVector<float> normalized(int(workColorspace->channelCount()));
+                    workColorspace->normalisedChannelsValue(workColor.data(), normalized);
+                    for (int channel = 0; channel < int(workColorspace->channelCount()); ++channel) {
+                        normalized[channel] += (ditherPos - 0.5) * offsetScale;
+                    }
+                    workColorspace->fromNormalisedChannelsValue(workColor.data(), normalized);
+                }
+            }
+            const double ditherThreshold = (0.5 - (spread / 2.0) + ditherPos * spread);
+
+            // Get candidate colors and their distances
+            SearchColor searchColor;
+            memcpy(reinterpret_cast<quint8 *>(&searchColor), workColor.data(), sizeof(SearchColor));
+            std::vector<ColorCandidate> candidateColors;
+            candidateColors.reserve(size_t(colorCount));
+            double distanceSum = 0.0;
+            for (auto it = rtree.qbegin(boost::geometry::index::nearest(searchColor, colorCount)); it != rtree.qend() && candidateColors.size() < colorCount; ++it) {
+                ColorCandidate candidate = it->second;
+                candidate.distance = boost::geometry::distance(searchColor, it->first);
+                candidateColors.push_back(candidate);
+                distanceSum += candidate.distance;
+            }
+
+            // Select color candidate
+            quint16 selected;
+            if (ditherEnabled && colorMode == ColorMode::NearestColors) {
+                // Sort candidates by palette order for stable dither color ordering
+                const bool swap = candidateColors[0].index > candidateColors[1].index;
+                selected = swap ^ (candidateColors[swap].distance / distanceSum > ditherThreshold);
+            }
             else {
-                std::vector<double> distances(nearestColors.size());
-                double distanceSum = 0.0;
-                for (size_t i = 0; i < nearestColors.size(); ++i) {
-                    distances[i] = boost::geometry::distance(imageColor, nearestColors[i].first);
-                    distanceSum += distances[i];
-                }
-                // Use palette ordering for stable dither color threshold ordering
-                size_t ditherIndices[2] = {0, 1};
-                if (nearestColors[ditherIndices[0]].second.second > nearestColors[ditherIndices[1]].second.second) std::swap(ditherIndices[0], ditherIndices[1]);
-                const double pos = distances[ditherIndices[0]] / distanceSum;
-                double threshold = 0.5;
-                if (ditherMode == DitherMode::Pattern) {
-                    const QImage &image = ditherPattern->pattern();
-                    const QColor pixel = image.pixelColor(it.x() % image.width(), it.y() % image.height());
-                    threshold = ditherPatternUseAlpha ? pixel.alphaF() :  pixel.lightnessF();
-                }
-                else if (ditherMode == DitherMode::Noise) {
-                    threshold = random.doubleRandomAt(it.x(), it.y());
-                }
-                nearestIndex = pos < (0.5 - (ditherWeight / 2.0) + threshold * ditherWeight) ? ditherIndices[0] : ditherIndices[1];
+                selected = 0;
             }
-            memcpy(it.rawData(), nearestColors[nearestIndex].second.first.data(), cs->pixelSize());
+            ColorCandidate &candidate = candidateColors[selected];
+
+            // Set alpha
+            const double oldAlpha = colorspace->opacityF(pixel.oldRawData());
+            double newAlpha = oldAlpha;
+            if (alphaEnabled && !(!ditherEnabled && alphaMode == AlphaMode::UseDither)) {
+                if (alphaMode == AlphaMode::Clip) {
+                    newAlpha = oldAlpha < alphaClip? 0.0 : 1.0;
+                }
+                else if (alphaMode == AlphaMode::Index) {
+                    newAlpha = (candidate.index == alphaIndex ? 0.0 : 1.0);
+                }
+                else if (alphaMode == AlphaMode::UseDither) {
+                    if (colorMode == ColorMode::PerChannelOffset) {
+                        newAlpha = colorspace->opacityF(workColor.convertedTo(colorspace).data()) < 0.5 ? 0.0 : 1.0;
+                    }
+                    else if (colorMode == ColorMode::NearestColors) {
+                        newAlpha = oldAlpha < ditherThreshold ? 0.0 : 1.0;
+                    }
+                }
+            }
+            colorspace->setOpacity(candidate.color.data(), newAlpha, 1);
+
+            // Copy color to pixel
+            memcpy(pixel.rawData(), candidate.color.data(), colorspace->pixelSize());
         }
     }
 }
-
-#include "palettize.moc"

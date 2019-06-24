@@ -141,6 +141,21 @@ void resetRotation()
 #endif
 
 #ifdef Q_OS_ANDROID
+extern "C" JNIEXPORT void JNICALL
+Java_org_krita_android_JNIWrappers_saveState(JNIEnv* /*env*/,
+                                             jobject /*obj*/,
+                                             jint    /*n*/)
+{
+    KisPart *kisPart = KisPart::instance();
+    QList<QPointer<KisDocument>> list = kisPart->documents();
+    for (auto doc: list)
+    {
+        doc->autoSaveOnPause();
+    }
+}
+#endif
+
+#ifdef Q_OS_ANDROID
 __attribute__ ((visibility ("default")))
 #endif
 extern "C" int main(int argc, char **argv)

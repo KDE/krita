@@ -123,7 +123,6 @@
 
 #include <KisMirrorAxisConfig.h>
 
-
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but QUrl didn't like it,
 // so let's simply make it "tar" !
@@ -1339,6 +1338,52 @@ bool KisDocument::openFile()
     undoStack()->clear();
 
     return true;
+}
+
+void KisDocument::autoSaveOnPause()
+{
+    if (!d->modified || !d->modifiedAfterAutosave) return;
+    const QString autoSaveFileName = generateAutoSaveFileName(localFilePath());
+
+    bool started = initiateSavingSynchronously(
+                KritaUtils::ExportFileJob(
+                   autoSaveFileName, nativeFormatMimeType(),
+                   KritaUtils::SaveIsExporting | KritaUtils::SaveInAutosaveMode));
+
+    // FIXME?: when the document is pushed to background while it is being
+    // drawn on, it doesn't get saved. One possible solution could be to block
+    // and emit signal when it finishes.
+    if (started)
+    {
+        d->modifiedAfterAutosave = false;
+    }
+    else
+    {
+        qDebug() << "Could not auto-save when paused";
+    }
+}
+
+bool KisDocument::initiateSavingSynchronously(const KritaUtils::ExportFileJob& job)
+{
+    KIS_ASSERT_RECOVER_RETURN_VALUE(job.isValid(), false)
+
+    QUrl url("file:/" + job.filePath);
+    bool started = exportDocumentSync(url, job.mimeType);
+
+    if (!started)
+    {
+        d->savingMutex.unlock();
+
+        // KisCloneDocumentStroke *stroke = new KisCloneDocumentStroke(this);
+        // KisStrokeId strokeId = d->image->startStroke(stroke);
+        // d->image->endStroke(strokeId);
+        // d->image->unlock();
+
+        // try again
+        started = exportDocumentSync(url, job.mimeType);
+    }
+
+    return started;
 }
 
 // shared between openFile and koMainWindow's "create new empty document" code

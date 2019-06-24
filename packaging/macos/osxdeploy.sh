@@ -268,7 +268,7 @@ strip_python_dmginstall() {
 
     cd ${PythonFrameworkBase}
     find . -name "test*" -type d | xargs rm -rf
-    find "${PythonFrameworkBase}/Versions/${PY_VERSION}/bin" -not -name "python*" | xargs rm -f
+    find "${PythonFrameworkBase}/Versions/${PY_VERSION}/bin" -type f -not -name "python*" | xargs rm -f
     cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/lib/python${PY_VERSION}"
     rm -rf distutils tkinter ensurepip venv lib2to3 idlelib
 }
@@ -280,7 +280,6 @@ fix_python_framework() {
     # Fix main library
     pythonLib="${PythonFrameworkBase}/Python"
     install_name_tool -id "${pythonLib##*/}" "${pythonLib}"
-    install_name_tool -rpath "${KIS_INSTALL_DIR}/lib" @loader_path/Frameworks
     install_name_tool -add_rpath @loader_path/../../../ "${pythonLib}" 2> /dev/null
     install_name_tool -change @loader_path/../../../../libintl.9.dylib @loader_path/../../../libintl.9.dylib "${pythonLib}"
 

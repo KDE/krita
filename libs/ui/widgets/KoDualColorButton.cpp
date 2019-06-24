@@ -348,7 +348,11 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
                 //this should toggle, but I don't know how to implement that...
                 d->colorSelectorDialog->show();
 #else
+#ifdef Q_OS_MACOS
+                QColor c = d->foregroundColor.toQColor();
+#else
                 QColor c = d->displayRenderer->toQColor(d->foregroundColor);
+#endif
                 c = QColorDialog::getColor(c, this);
                 if (c.isValid()) {
                     d->foregroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
@@ -373,7 +377,11 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
                 d->backgroundColor = c;
                 emit backgroundColorChanged(d->backgroundColor);
 #else
+#ifdef Q_OS_MACOS
+                QColor c = d->backgroundColor.toQColor();
+#else
                 QColor c = d->displayRenderer->toQColor(d->backgroundColor);
+#endif
                 c = QColorDialog::getColor(c, this);
                 if (c.isValid()) {
                     d->backgroundColor = d->displayRenderer->approximateFromRenderedQColor(c);

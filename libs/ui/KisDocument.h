@@ -494,6 +494,8 @@ private:
                                  bool showWarnings,
                                  KisPropertiesConfigurationSP exportConfiguration);
 
+    bool initiateSavingSynchronously(const KritaUtils::ExportFileJob& job);
+
     /**
      * Activate/deactivate/configure the autosave feature.
      * @param delay in seconds, 0 to disable
@@ -625,6 +627,10 @@ public:
      */
     QRectF documentBounds() const;
 
+    /**
+     * @brief Start saving when android activity is pushed to the background
+     */
+    void autoSaveOnPause();
 Q_SIGNALS:
 
     void completed();

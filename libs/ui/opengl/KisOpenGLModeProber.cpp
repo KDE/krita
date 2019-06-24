@@ -122,7 +122,7 @@ KisOpenGLModeProber::probeFormat(const QSurfaceFormat &format, bool adjustGlobal
     QScopedPointer<AppAttributeSetter> glSetter;
     QScopedPointer<AppAttributeSetter> glesSetter;
     QScopedPointer<SurfaceFormatSetter> formatSetter;
-    QScopedPointer<QApplication> application;
+    QScopedPointer<QGuiApplication> application;
 
     int argc = 1;
     QByteArray probeAppName("krita");
@@ -139,7 +139,10 @@ KisOpenGLModeProber::probeFormat(const QSurfaceFormat &format, bool adjustGlobal
         }
 
         formatSetter.reset(new SurfaceFormatSetter(format));
-        application.reset(new QApplication(argc, &argv));
+
+        QGuiApplication::setDesktopSettingsAware(false);
+        application.reset(new QGuiApplication(argc, &argv));
+        QGuiApplication::setDesktopSettingsAware(true);
     }
 
     QWindow surface;

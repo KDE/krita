@@ -273,6 +273,12 @@ strip_python_dmginstall() {
     rm -rf distutils tkinter ensurepip venv lib2to3 idlelib
 }
 
+# Some libraries require r_path to be removed
+# we must not apply delete rpath globally
+delete_install_rpath() {
+    xargs -P4 -I FILE install_name_tool -delete_rpath "${BUILDROOT}/i/lib" FILE 2> "${BUILDROOT}/deploy_error.log"
+}
+
 fix_python_framework() {
     # Fix python.framework rpath and slims down installation
     PythonFrameworkBase="${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework"
@@ -290,7 +296,8 @@ fix_python_framework() {
     install_name_tool -add_rpath @executable_path/../../../../ "${PythonFrameworkBase}/Versions/Current/bin/python${PY_VERSION}m"
 
     # Fix rpaths from Python.Framework
-    find ${PythonFrameworkBase} -type f -perm 755 | xargs -P4 -I FILE install_name_tool -delete_rpath "${BUILDROOT}/i/lib" FILE 2> /dev/null
+    find ${PythonFrameworkBase} -type f -perm 755 | delete_install_rpath
+    find "${PythonFrameworkBase}/Versions/Current/site-packages/PyQt5" -type f -name "*.so" | delete_install_rpath
 }
 
 # Checks for macdeployqt

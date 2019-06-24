@@ -268,7 +268,7 @@ strip_python_dmginstall() {
 
     cd ${PythonFrameworkBase}
     find . -name "test*" -type d | xargs rm -rf
-    find "${PythonFrameworkBase}/Versions/${PY_VERSION}/bin" -type f -not -name "python*" | xargs rm -f
+    find "${PythonFrameworkBase}/Versions/${PY_VERSION}/bin" -not -name "python*" \( -type f -or -type l \) | xargs rm -f
     cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/lib/python${PY_VERSION}"
     rm -rf distutils tkinter ensurepip venv lib2to3 idlelib
 }
@@ -455,6 +455,10 @@ krita_deploy () {
     # repair krita for plugins
     printf "Searching for missing libraries\n"
     krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
+
+    printf "removing absolute or broken linksys, if any\n"
+    find "${KRITA_DMG}/krita.app/Contents" -type l \( -lname "/*" -or -not -exec test -e {} \; \) -print | xargs rm
+
     echo "Done!"
 
 }

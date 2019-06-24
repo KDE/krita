@@ -152,6 +152,10 @@ Java_org_krita_android_JNIWrappers_saveState(JNIEnv* /*env*/,
     {
         doc->autoSaveOnPause();
     }
+
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    kritarc.setValue("canvasState", "OPENGL_SUCCESS");
 }
 #endif
 

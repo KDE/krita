@@ -351,7 +351,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
                       ", filename = :filename\n"
                       ", tooltip = :tooltip\n"
                       ", thumbnail = :thumbnail\n"
-                      "WHERE resource_id = :resource_id");
+                      "WHERE id = :id");
         if (!r) {
             qWarning() << "Could not prepare updateResource statement" << q.lastError();
             return r;
@@ -367,7 +367,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
         buf.close();
         q.bindValue(":thumbnail", ba);
 
-        q.bindValue(":resource_id", resourceId);
+        q.bindValue(":id", resourceId);
 
         r = q.exec();
         if (!r) {

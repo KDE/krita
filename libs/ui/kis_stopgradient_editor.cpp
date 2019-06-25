@@ -67,7 +67,6 @@ KisStopGradientEditor::KisStopGradientEditor(KoStopGradient* gradient, QWidget *
 {
     setObjectName(name);
     setWindowTitle(caption);
-
     setGradient(gradient);
 }
 

@@ -73,6 +73,7 @@
 #include "dialogs/kis_dlg_generator_layer.h"
 #include "dialogs/kis_dlg_file_layer.h"
 #include "dialogs/kis_dlg_layer_style.h"
+#include "dialogs/KisDlgChangeCloneSource.h"
 #include "kis_filter_manager.h"
 #include "kis_node_visitor.h"
 #include "kis_paint_layer.h"
@@ -304,7 +305,7 @@ void KisLayerManager::layerProperties()
         dlg->resize(dlg->minimumSizeHint());
 
         Qt::WindowFlags flags = dlg->windowFlags();
-        dlg->setWindowFlags(flags | Qt::WindowStaysOnTopHint | Qt::Dialog);
+        dlg->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
         dlg->show();
 
     }
@@ -346,10 +347,39 @@ void KisLayerManager::layerProperties()
         dialog->resize(dialog->minimumSizeHint());
         dialog->setAttribute(Qt::WA_DeleteOnClose);
         Qt::WindowFlags flags = dialog->windowFlags();
-        dialog->setWindowFlags(flags | Qt::WindowStaysOnTopHint | Qt::Dialog);
+        dialog->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
         dialog->show();
 
     }
+}
+
+void KisLayerManager::changeCloneSource()
+{
+    QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
+    if (selectedNodes.isEmpty()) {
+        return;
+    }
+
+    QList<KisCloneLayerSP> cloneLayers;
+    KisNodeSP node;
+    Q_FOREACH (node, selectedNodes) {
+        KisCloneLayerSP cloneLayer(qobject_cast<KisCloneLayer *>(node.data()));
+        if (cloneLayer) {
+            cloneLayers << cloneLayer;
+        }
+    }
+
+    if (cloneLayers.isEmpty()) {
+        return;
+    }
+
+    KisDlgChangeCloneSource *dialog = new KisDlgChangeCloneSource(cloneLayers, m_view);
+    dialog->setCaption(i18n("Change Clone Layer"));
+    dialog->resize(dialog->minimumSizeHint());
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    Qt::WindowFlags flags = dialog->windowFlags();
+    dialog->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
+    dialog->show();
 }
 
 void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
@@ -630,7 +660,7 @@ KisNodeSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
 
     KisPaintDeviceSP previewDevice = new KisPaintDevice(*adjl->original());
 
-    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), previewDevice, image->nextLayerName(), i18n("New Filter Layer"), m_view);
+    KisDlgAdjustmentLayer dlg(adjl, adjl.data(), previewDevice, image->nextLayerName(), i18n("New Filter Layer"), m_view, qApp->activeWindow());
     dlg.resize(dlg.minimumSizeHint());
 
     // ensure that the device may be free'd by the dialog

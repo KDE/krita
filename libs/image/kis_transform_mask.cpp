@@ -396,17 +396,26 @@ QRect KisTransformMask::extent() const
 
 QRect KisTransformMask::exactBounds() const
 {
-    QRect rc = KisMask::exactBounds();
-
-    QRect partialChangeRect;
     QRect existentProjection;
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
     if (parentLayer) {
-        partialChangeRect = parentLayer->partialChangeRect(const_cast<KisTransformMask*>(this), rc);
         existentProjection = parentLayer->projection()->exactBounds();
     }
 
-    return changeRect(partialChangeRect) | existentProjection;
+    return changeRect(sourceDataBounds()) | existentProjection;
+}
+
+QRect KisTransformMask::sourceDataBounds() const
+{
+    QRect rc = KisMask::exactBounds();
+
+    QRect partialChangeRect = rc;
+    KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
+    if (parentLayer) {
+        partialChangeRect = parentLayer->partialChangeRect(const_cast<KisTransformMask*>(this), rc);
+    }
+
+    return partialChangeRect;
 }
 
 void KisTransformMask::setX(qint32 x)

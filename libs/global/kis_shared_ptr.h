@@ -57,11 +57,11 @@ class KisWeakSharedPtr;
  *
  * KisSharedPtr requires the class to inherits KisShared.
  *
- * Difference with QSharedDataPointer
+ * Difference with QSharedPointer
  *
- * QSharedDataPointer and KisSharedPtr are very similar, but
- * QSharedDataPointer has an explicit constructor which makes it more
- * painful to use in some constructions. And QSharedDataPointer
+ * QSharedPointer and KisSharedPtr are very similar, but
+ * QSharedPointer has an explicit constructor which makes it more
+ * painful to use in some constructions. And QSharedPointer
  * doesn't offer a weak pointer.
  */
 template<class T>

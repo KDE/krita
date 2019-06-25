@@ -186,16 +186,29 @@ void KoDocumentResourceManager::setOdfDocument(KoDocumentBase *currentDocument)
     setResource(OdfDocument, variant);
 }
 
-KoShapeController *KoDocumentResourceManager::shapeController() const
+qreal KoDocumentResourceManager::documentResolution() const
 {
-    if (!hasResource(ShapeController))
-        return 0;
-    return resource(ShapeController).value<KoShapeController *>();
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(hasResource(DocumentResolution), 72.0);
+    return resource(DocumentResolution).toReal();
 }
 
-void KoDocumentResourceManager::setShapeController(KoShapeController *shapeController)
+QRectF KoDocumentResourceManager::documentRectInPixels() const
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(hasResource(DocumentRectInPixels), QRectF(0,0, 777, 666));
+    return resource(DocumentRectInPixels).toRectF();
+}
+
+KoShapeController *KoDocumentResourceManager::globalShapeController() const
+{
+    if (!hasResource(GlobalShapeController))
+        return 0;
+
+    return resource(GlobalShapeController).value<KoShapeController *>();
+}
+
+void KoDocumentResourceManager::setGlobalShapeController(KoShapeController *shapeController)
 {
     QVariant variant;
     variant.setValue<KoShapeController *>(shapeController);
-    setResource(ShapeController, variant);
+    setResource(GlobalShapeController, variant);
 }

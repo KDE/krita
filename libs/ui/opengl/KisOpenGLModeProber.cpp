@@ -122,7 +122,7 @@ KisOpenGLModeProber::probeFormat(const QSurfaceFormat &format, bool adjustGlobal
     QScopedPointer<AppAttributeSetter> glSetter;
     QScopedPointer<AppAttributeSetter> glesSetter;
     QScopedPointer<SurfaceFormatSetter> formatSetter;
-    QScopedPointer<QApplication> application;
+    QScopedPointer<QGuiApplication> application;
 
     int argc = 1;
     QByteArray probeAppName("krita");
@@ -139,7 +139,10 @@ KisOpenGLModeProber::probeFormat(const QSurfaceFormat &format, bool adjustGlobal
         }
 
         formatSetter.reset(new SurfaceFormatSetter(format));
-        application.reset(new QApplication(argc, &argv));
+
+        QGuiApplication::setDesktopSettingsAware(false);
+        application.reset(new QGuiApplication(argc, &argv));
+        QGuiApplication::setDesktopSettingsAware(true);
     }
 
     QWindow surface;
@@ -212,7 +215,11 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
         format->setRedBufferSize(8);
         format->setGreenBufferSize(8);
         format->setBlueBufferSize(8);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         format->setAlphaBufferSize(8);
+#else
+        format->setAlphaBufferSize(0);
+#endif
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         // TODO: check if we can use real sRGB space here

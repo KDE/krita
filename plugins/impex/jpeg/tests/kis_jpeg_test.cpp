@@ -34,6 +34,8 @@
 #error "JPEG_LIB_VERSION not set. libjpeg should set it."
 #endif
 
+const QString JpegMimetype = "image/jpeg";
+
 void KisJpegTest::testFiles()
 {
     KisExiv2::initialize();
@@ -43,13 +45,30 @@ void KisJpegTest::testFiles()
      */
     const int fuzziness = 1;
     const int maxNumFailingPixels = 2592 * 1952; // All pixels can be different...
+    const bool showDebug = false; // No need to write down all pixels that are different since all of them can be.
 
     if (JPEG_LIB_VERSION == 80){
-        TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), "_80", fuzziness, maxNumFailingPixels);
+        TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), "_80", fuzziness, maxNumFailingPixels, showDebug);
     }else {
-        TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), fuzziness, maxNumFailingPixels);
+        TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), fuzziness, maxNumFailingPixels, showDebug);
     }
+}
 
+void KisJpegTest::testImportFromWriteonly()
+{
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), JpegMimetype);
+}
+
+
+void KisJpegTest::testExportToReadonly()
+{
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), JpegMimetype);
+}
+
+
+void KisJpegTest::testImportIncorrectFormat()
+{
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), JpegMimetype);
 }
 KISTEST_MAIN(KisJpegTest)
 

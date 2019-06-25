@@ -64,6 +64,7 @@ public:
     void addAssistant(KisPaintingAssistantSP assistant);
     void removeAssistant(KisPaintingAssistantSP assistant);
     void removeAll();
+    void setAssistants(const QList<KisPaintingAssistantSP> &assistants);
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     void endStroke();
     QList<KisPaintingAssistantHandleSP> handles();

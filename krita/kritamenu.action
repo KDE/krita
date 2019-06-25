@@ -393,6 +393,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="paste_as_reference">
+      <icon></icon>
+      <text>Paste as R&amp;eference Image</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste as Reference Image</toolTip>
+      <iconText>Paste as Reference Image</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Ctrl+Shift+R</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="clear">
       <icon>edit-clear</icon>
       <text>C&amp;lear</text>
@@ -1324,7 +1336,7 @@
       <whatsThis></whatsThis>
       <toolTip>Select Opaque</toolTip>
       <iconText>Select Opaque</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>100</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -1336,7 +1348,7 @@
       <whatsThis></whatsThis>
       <toolTip>Select Opaque (Add)</toolTip>
       <iconText>Select Opaque (Add)</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>100</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -1348,7 +1360,7 @@
       <whatsThis></whatsThis>
       <toolTip>Select Opaque (Subtract)</toolTip>
       <iconText>Select Opaque (Subtract)</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>100</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -1360,7 +1372,7 @@
       <whatsThis></whatsThis>
       <toolTip>Select Opaque (Intersect)</toolTip>
       <iconText>Select Opaque (Intersect)</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>100</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>

@@ -45,6 +45,7 @@ public:
     bool isActive() const;
 
 public Q_SLOTS:
+    void setDelay(int delay);
     void start();
     void stop();
 
@@ -52,6 +53,7 @@ Q_SIGNALS:
     void timeout();
     void internalRequestSignal();
     void internalStopSignal();
+    void internalSetDelay(int delay);
 
 private:
     KisSignalCompressor *m_compressor;

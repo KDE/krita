@@ -44,6 +44,21 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="ditherGroupBox">
+     <property name="title">
+      <string>Dither</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0" colspan="2">
+       <widget class="KisDitherWidget" name="ditherWidget" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -68,6 +83,12 @@
    <class>KisStopGradientEditor</class>
    <extends>QWidget</extends>
    <header>kis_stopgradient_editor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisDitherWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">KisDitherWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

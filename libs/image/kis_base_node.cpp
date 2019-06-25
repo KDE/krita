@@ -351,6 +351,11 @@ KisImageWSP KisBaseNode::image() const
     return m_d->image;
 }
 
+bool KisBaseNode::isFakeNode() const
+{
+    return false;
+}
+
 void KisBaseNode::setSupportsLodMoves(bool value)
 {
     m_d->supportsLodMoves = value;

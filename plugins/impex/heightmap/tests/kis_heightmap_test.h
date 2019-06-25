@@ -26,6 +26,10 @@ class KisHeightmapTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testFiles();
+
+    void testImportFromWriteonly();
+    void testExportToReadonly();
+    void testImportIncorrectFormat();
 };
 
 #endif // _KIS_HEIGHTMAP_TEST_H_

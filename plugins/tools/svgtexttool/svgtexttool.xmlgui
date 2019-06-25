@@ -94,6 +94,7 @@
     <Action name="svg_align_right"/>
     <Action name="svg_line_height">
     </Action>
+    <Action name="svg_letter_spacing"></Action>
   </ToolBar>
   
   

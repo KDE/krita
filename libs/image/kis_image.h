@@ -122,6 +122,21 @@ public:
      */
     KisImage *clone(bool exactCopy = false);
 
+    void copyFromImage(const KisImage &rhs);
+
+private:
+
+    // must specify exactly one from CONSTRUCT or REPLACE.
+    enum CopyPolicy {
+        CONSTRUCT = 1, ///< we are copy-constructing a new KisImage
+        REPLACE = 2, ///< we are replacing the current KisImage with another
+        EXACT_COPY = 4, /// we need an exact copy of the original image
+    };
+
+    void copyFromImageImpl(const KisImage &rhs, int policy);
+
+public:
+
     /**
      * Render the projection onto a QImage.
      */
@@ -675,6 +690,18 @@ public:
      * \see mirrorAxesCenter() for details
      */
     void setMirrorAxesCenter(const QPointF &value) const;
+
+    /**
+     * Configure the image to allow masks on the root not (as reported by
+     * root()->allowAsChild()). By default it is not allowed (because it
+     * looks weird from GUI point of view)
+     */
+    void setAllowMasksOnRootNode(bool value);
+
+    /**
+     * \see setAllowMasksOnRootNode()
+     */
+    bool allowMasksOnRootNode() const;
 
 public Q_SLOTS:
 

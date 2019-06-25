@@ -120,6 +120,17 @@ void KisPaintingAssistantsDecoration::removeAll()
     emit assistantChanged();
 }
 
+void KisPaintingAssistantsDecoration::setAssistants(const QList<KisPaintingAssistantSP> &assistants)
+{
+    Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
+        assistant->setAssistantGlobalColorCache(view()->document()->assistantsGlobalColor());
+    }
+    view()->document()->setAssistants(assistants);
+    setVisible(!assistants.isEmpty());
+
+    emit assistantChanged();
+}
+
 QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
 

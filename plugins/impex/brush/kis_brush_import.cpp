@@ -55,7 +55,7 @@ KisBrushImport::~KisBrushImport()
 }
 
 
-KisImportExportFilter::ConversionStatus KisBrushImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisBrushImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP /*configuration*/)
 {
     KisBrush *brush;
 
@@ -66,17 +66,17 @@ KisImportExportFilter::ConversionStatus KisBrushImport::convert(KisDocument *doc
         brush = new KisImagePipeBrush(filename());
     }
     else {
-        return KisImportExportFilter::BadMimeType;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     if (!brush->loadFromDevice(io)) {
         delete brush;
-        return KisImportExportFilter::InvalidFormat;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     if (!brush->valid()) {
         delete brush;
-        return KisImportExportFilter::InvalidFormat;
+        return ImportExportCodes::FileFormatIncorrect;;
     }
 
     const KoColorSpace *colorSpace = 0;
@@ -117,7 +117,7 @@ KisImportExportFilter::ConversionStatus KisBrushImport::convert(KisDocument *doc
 
     document->setCurrentImage(image);
     delete brush;
-    return KisImportExportFilter::OK;
+    return ImportExportCodes::OK;
 
 }
 #include "kis_brush_import.moc"

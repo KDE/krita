@@ -360,7 +360,7 @@ public:
     void setMirrorAxisConfig(const KisMirrorAxisConfig& config);
 
     QList<KoColorSet *> &paletteList();
-    void setPaletteList(const QList<KoColorSet *> &paletteList);
+    void setPaletteList(const QList<KoColorSet *> &paletteList, bool emitSignal = false);
 
     void clearUndoHistory();
 
@@ -455,20 +455,32 @@ Q_SIGNALS:
 
     void sigGuidesConfigChanged(const KisGuidesConfig &config);
 
-    void sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    void sigBackgroundSavingFinished(KisImportExportErrorCode status, const QString &errorMessage);
 
-    void sigCompleteBackgroundSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    void sigCompleteBackgroundSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);
 
     void sigReferenceImagesChanged();
 
     void sigMirrorAxisConfigChanged();
 
+    void sigGridConfigChanged(const KisGridConfig &config);
+
+    void sigReferenceImagesLayerChanged(KisSharedPtr<KisReferenceImagesLayer> layer);
+
+    /**
+     * Emitted when the palette list has changed.
+     * The pointers in oldPaletteList are to be deleted by the resource server.
+     **/
+    void sigPaletteListChanged(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList);
+
+    void sigAssistantsChanged();
+
 private Q_SLOTS:
     void finishExportInBackground();
-    void slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
-    void slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    void slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage);
+    void slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);
 
-    void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);
 
     void slotInitiateAsyncAutosaving(KisDocument *clonedDocument);
 
@@ -646,8 +658,6 @@ private Q_SLOTS:
 
     void slotConfigChanged();
 
-
-private:
     /**
      * @brief try to clone the image. This method handles all the locking for you. If locking
      *        has failed, no cloning happens
@@ -655,7 +665,22 @@ private:
      */
     KisDocument *lockAndCloneForSaving();
 
-    QString exportErrorToUserMessage(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+public:
+
+    KisDocument *lockAndCreateSnapshot();
+
+    void copyFromDocument(const KisDocument &rhs);
+
+private:
+
+    enum CopyPolicy {
+        CONSTRUCT = 0, ///< we are copy-constructing a new KisDocument
+        REPLACE ///< we are replacing the current KisDocument with another
+    };
+
+    void copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy);
+
+    QString exportErrorToUserMessage(KisImportExportErrorCode status, const QString &errorMessage);
 
     QString prettyPathOrUrl() const;
 

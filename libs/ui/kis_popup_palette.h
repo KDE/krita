@@ -27,7 +27,7 @@
 #include "KisViewManager.h"
 #include "kactioncollection.h"
 #include "kis_tool_button.h"
-#include "kis_highlighted_button.h"
+#include "KisHighlightedToolButton.h"
 #include <KisColorSelectorInterface.h>
 
 class KisFavoriteResourceManager;
@@ -40,6 +40,7 @@ class KisRoundHudButton;
 class KisCanvasResourceProvider;
 class KisVisualColorSelector;
 class KisAcyclicSignalConnector;
+class KisMouseClickEater;
 
 class KisPopupPalette : public QWidget
 {
@@ -70,6 +71,7 @@ public:
 
 protected:
 
+    void showEvent(QShowEvent *event) override;
     void paintEvent(QPaintEvent*) override;
     void resizeEvent(QResizeEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
@@ -106,10 +108,6 @@ private:
     int m_hoveredPreset {0};
     int m_hoveredColor {0};
     int m_selectedColor {0};
-
-    QElapsedTimer m_timeSinceOpening;
-    bool m_hadMousePressSinceOpening {false};
-
 
     KisCoordinatesConverter *m_coordinatesConverter;
 
@@ -151,6 +149,7 @@ private:
 
     // updates the transparency and effects of the whole widget
     QGraphicsOpacityEffect *opacityChange {0};
+    KisMouseClickEater *m_clicksEater;
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);

@@ -68,7 +68,11 @@ int calculateNumberMemoryAllowedClones(KisImageSP image)
     const qint64 allowedMemory = 0.8 * stats.tilesHardLimit - stats.realMemorySize;
     const qint64 cloneSize = stats.projectionsSize;
 
-    return cloneSize > 0 ? allowedMemory / cloneSize : 0;
+    if (cloneSize > 0 && allowedMemory > 0) {
+        return allowedMemory / cloneSize;
+    }
+
+    return 0; // will become 1; either when the cloneSize = 0 or the allowedMemory is 0 or below
 }
 
 }
@@ -323,7 +327,7 @@ void KisAsyncAnimationRenderDialogBase::updateProgressLabel()
     const QString estimatedTimeString = estimatedTime.toString(timeFormat);
 
     const QString memoryLimitMessage(
-        i18n("\n\nMemory limit is reached!\nThe number of clones is limited to %1\n\n",
+        i18n("\n\nThe memory limit has been reached.\nThe number of frames saved simultaneously is limited to %1\n\n",
              m_d->asyncRenderers.size()));
 
 

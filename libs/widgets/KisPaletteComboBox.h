@@ -46,7 +46,7 @@ private /* typedef */:
     typedef QHash<SwatchPosType, int> PosIdxMapType;
 
 public:
-    explicit KisPaletteComboBox(QWidget *parent = Q_NULLPTR);
+    explicit KisPaletteComboBox(QWidget *parent = 0);
     ~KisPaletteComboBox();
 
 Q_SIGNALS:

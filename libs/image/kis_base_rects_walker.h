@@ -449,11 +449,18 @@ protected:
 
 private:
     inline int getNodeLevelOfDetail(KisProjectionLeafSP leaf) {
-        while (!leaf->projection()) {
+        while (leaf && !leaf->projection()) {
             leaf = leaf->parent();
         }
 
-        KIS_ASSERT_RECOVER(leaf->projection()) {
+        if (!leaf || !leaf->projection()) {
+            /**
+             * Such errors may happen during undo or too quick node removal,
+             * they shouldn't cause any real problems in Krita work.
+             */
+            qWarning() << "WARNING: KisBaseRectsWalker::getNodeLevelOfDetail() "
+                          "failed to fetch currentLevelOfDetail() from the node. "
+                          "Perhaps the node was removed from the image in the meantime.";
             return 0;
         }
 

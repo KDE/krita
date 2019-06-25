@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="421"
+version="430"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -53,6 +53,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="edit_paste"/>
       <Action name="paste_at"/>
       <Action name="paste_new"/>
+      <Action name="paste_as_reference"/>
       <Action name="clear"/>
       <Action name="fill_selection_foreground_color"/>
       <Action name="fill_selection_background_color"/>

@@ -348,6 +348,10 @@ void KarbonCalligraphyTool::activate(ToolActivation activation, const QSet<KoSha
 {
     KoToolBase::activate(activation, shapes);
 
+    if (!m_widget) {
+        createOptionWidgets();
+    }
+
     QAction *a = action("calligraphy_increase_width");
     connect(a, SIGNAL(triggered()), m_widget, SLOT(increaseWidth()), Qt::UniqueConnection);
 

@@ -1,16 +1,17 @@
 /*
  *  Copyright (c) 2018 Anna Medonosova <anna.medonosova@gmail.com>
  *
- *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- *  This library is distributed in the hope that it will be useful,
+ *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
+ *  GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public License
+ *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
@@ -27,6 +28,7 @@
 #include <QDomElement>
 #include <QByteArray>
 #include <QBuffer>
+#include <QScopedPointer>
 
 #include <FlakeDebug.h>
 
@@ -242,7 +244,7 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev)
     QBuffer buf(&d->data);
     buf.open(QBuffer::ReadOnly);
 
-    KoStore* store(KoStore::createStore(&buf, KoStore::Read, "application/x-krita-gamutmask", KoStore::Zip));
+    QScopedPointer<KoStore> store(KoStore::createStore(&buf, KoStore::Read, "application/x-krita-gamutmask", KoStore::Zip));
     if (!store || store->bad()) return false;
 
     bool storeOpened = store->open("gamutmask.svg");
@@ -286,7 +288,7 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev)
     setMaskShapes(shapes);
 
     if (store->open("preview.png")) {
-        KoStoreDevice previewDev(store);
+        KoStoreDevice previewDev(store.data());
         previewDev.open(QIODevice::ReadOnly);
 
         QImage preview = QImage();

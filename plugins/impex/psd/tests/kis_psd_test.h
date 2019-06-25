@@ -40,6 +40,11 @@ private Q_SLOTS:
     void testOpeningFromOpenCanvas();
     void testOpeningAllFormats();
     void testSavingAllFormats();
+
+
+    void testImportFromWriteonly();
+    void testExportToReadonly();
+    void testImportIncorrectFormat();
 };
 
 #endif

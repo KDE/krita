@@ -32,18 +32,9 @@ public:
     explicit KoZoomToolWidget(KoZoomTool* tool, QWidget *parent = 0);
     ~KoZoomToolWidget() override;
 
-protected:
-    bool eventFilter(QObject *object, QEvent *event) override;
-
 private Q_SLOTS:
     void changeZoomMode();
-
 private:
-    void paintBirdEye();
-
-    bool m_dirtyThumbnail;
-    QRect m_birdEyeRect;
-    QPixmap m_thumbnail;
     KoZoomTool *m_tool;
 };
 

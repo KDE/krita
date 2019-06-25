@@ -67,7 +67,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
 
     m_page->dirRequester->setMode(KoFileDialog::OpenDirectory);
 
-    m_page->intStart->setMinimum(doc->image()->animationInterface()->fullClipRange().start());
+    m_page->intStart->setMinimum(0);
     m_page->intStart->setMaximum(doc->image()->animationInterface()->fullClipRange().end());
     m_page->intStart->setValue(doc->image()->animationInterface()->playbackRange().start());
 

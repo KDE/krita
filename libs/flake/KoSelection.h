@@ -54,7 +54,7 @@ class KRITAFLAKE_EXPORT KoSelection : public QObject, public KoShape, public KoS
 
 public:
 
-    KoSelection();
+    KoSelection(QObject *parent = 0);
     ~KoSelection() override;
 
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;

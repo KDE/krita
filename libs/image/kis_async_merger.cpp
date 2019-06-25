@@ -261,7 +261,7 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
 
         if(item.m_position & KisMergeWalker::N_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY", currentLeaf, applyRect);
-            if (currentLeaf->visible()) {
+            if (currentLeaf->visible() || currentLeaf->hasClones()) {
                 currentLeaf->accept(originalVisitor);
                 currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode());
             }
@@ -269,7 +269,7 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         else if(item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_ABOVE_FILTHY", currentLeaf, applyRect);
             if(currentLeaf->dependsOnLowerNodes()) {
-                if (currentLeaf->visible()) {
+                if (currentLeaf->visible() || currentLeaf->hasClones()) {
                     currentLeaf->accept(originalVisitor);
                     currentLeaf->projectionPlane()->recalculate(applyRect, currentLeaf->node());
                 }
@@ -277,7 +277,7 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         }
         else if(item.m_position & KisMergeWalker::N_FILTHY_PROJECTION) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY_PROJECTION", currentLeaf, applyRect);
-            if (currentLeaf->visible()) {
+            if (currentLeaf->visible() || currentLeaf->hasClones()) {
                 currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode());
             }
         }

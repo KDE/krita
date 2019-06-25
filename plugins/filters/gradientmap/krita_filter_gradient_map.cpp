@@ -33,6 +33,7 @@
 #include <KoStopGradient.h>
 #include <KoColorSet.h>
 #include "gradientmap.h"
+#include <KisDitherUtil.h>
 
 #include <KisSequentialIteratorProgress.h>
 
@@ -69,13 +70,30 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
     }
     KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
 
+    const bool ditherEnabled = config->getBool("ditherEnabled");
+    KisDitherUtil ditherUtil;
+    if (ditherEnabled) ditherUtil.setConfiguration(*config, "dither/");
+
     KoColor outColor(Qt::white, device->colorSpace());
     KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
-    quint8 grey;
+    qreal grey;
     const int pixelSize = device->colorSpace()->pixelSize();
     while (it.nextPixel()) {
-        grey = device->colorSpace()->intensity8(it.oldRawData());
-        gradient.colorAt(outColor,(qreal)grey/255);
+        grey = qreal(device->colorSpace()->intensity8(it.oldRawData())) / 255;
+        if (ditherEnabled) {
+            KoGradientStop leftStop, rightStop;
+            if (!gradient.stopsAt(leftStop, rightStop, grey)) continue;
+            qreal localT = (grey - leftStop.first) / (rightStop.first - leftStop.first);
+            if (localT < ditherUtil.threshold(QPoint(it.x(), it.y()))) {
+                outColor = leftStop.second;
+            }
+            else {
+                outColor = rightStop.second;
+            }
+        }
+        else {
+            gradient.colorAt(outColor, grey);
+        }
         outColor.setOpacity(qMin(KoColor(it.oldRawData(), device->colorSpace()).opacityF(), outColor.opacityF()));
         outColor.convertTo(device->colorSpace());
         memcpy(it.rawData(), outColor.data(), pixelSize);
@@ -94,6 +112,10 @@ KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
     stopGradient.toXML(doc, elt);
     doc.appendChild(elt);
     config->setProperty("gradientXML", doc.toString());
+
+    config->setProperty("ditherEnabled", false);
+    KisDitherWidget::factoryConfiguration(*config, "dither/");
+
     return config;
 }
 

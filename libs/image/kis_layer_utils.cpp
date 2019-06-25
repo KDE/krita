@@ -61,12 +61,13 @@ namespace KisLayerUtils {
     void fetchSelectionMasks(KisNodeList mergedNodes, QVector<KisSelectionMaskSP> &selectionMasks)
     {
         foreach (KisNodeSP node, mergedNodes) {
-            KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
 
-            KisSelectionMaskSP mask;
+            Q_FOREACH(KisNodeSP child, node->childNodes(QStringList("KisSelectionMask"), KoProperties())) {
 
-            if (layer && (mask = layer->selectionMask())) {
-                selectionMasks.append(mask);
+                KisSelectionMaskSP mask = qobject_cast<KisSelectionMask*>(child.data());
+                if (mask) {
+                    selectionMasks.append(mask);
+                }
             }
         }
     }
@@ -663,7 +664,8 @@ namespace KisLayerUtils {
         KisNodeSP node = image->root()->firstChild();
         while (node) {
             if (!nodesToRemove.contains(node) &&
-                qobject_cast<KisLayer*>(node.data())) {
+                qobject_cast<KisLayer*>(node.data()) &&
+                !node->isFakeNode()) {
 
                 lastLayer = false;
                 break;
@@ -1215,6 +1217,19 @@ namespace KisLayerUtils {
         }
 
         return visibleNodes;
+    }
+
+    void filterUnlockedNodes(KisNodeList &nodes)
+    {
+        KisNodeList::iterator it = nodes.begin();
+
+        while (it != nodes.end()) {
+            if ((*it)->userLocked()) {
+                it = nodes.erase(it);
+            } else {
+                ++it;
+            }
+        }
     }
 
     void changeImageDefaultProjectionColor(KisImageSP image, const KoColor &color)

@@ -1,8 +1,8 @@
-From 7dd05b77fe213ca2feb125503eb10c2567a4faee Mon Sep 17 00:00:00 2001
+From f83799913665e06e98c743326eafd47d78087477 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Thu, 18 Apr 2019 15:42:17 +0300
-Subject: [PATCH] Fix updating tablet pressure resolution on every proximity
- enter event
+Subject: [PATCH 15/17] Fix updating tablet pressure resolution on every
+ proximity enter event
 
 The user can switch pressure sensitivity level in the driver,
 which will make our saved values invalid (this option is
@@ -10,12 +10,14 @@ provided by Wacom drivers for compatibility reasons, and
 it can be adjusted on the fly)
 
 See the bug: https://bugs.kde.org/show_bug.cgi?id=391054
+
+Change-Id: I6cfdff27eaf5a587bf714871f1495a7ea150c553
 ---
  src/plugins/platforms/windows/qwindowstabletsupport.cpp | 8 ++++++++
  1 file changed, 8 insertions(+)
 
 diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-index d82b33c1..3393b091 100644
+index 02455536fe..e9d10a2b03 100644
 --- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 +++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 @@ -519,6 +519,14 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L

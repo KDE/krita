@@ -151,6 +151,7 @@ void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
 
     if (!m_continuedMode) {
         finishSelectionAction();
+        m_points.clear(); // ensure points are always cleared
     }
 }
 

@@ -270,6 +270,11 @@ void SvgTextEditor::checkFormat()
     QTextCharFormat format = m_textEditorWidget.richTextEdit->textCursor().charFormat();
     QTextBlockFormat blockFormat = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
 
+    /**
+     * Make sure that when we remove the very last symbol, the last used font will not change
+     */
+    m_textEditorWidget.richTextEdit->document()->setDefaultFont(format.font());
+
     // checkboxes do not emit signals on manual switching, so we
     // can avoid blocking them
 
@@ -318,6 +323,12 @@ void SvgTextEditor::checkFormat()
         } else if(blockFormat.lineHeightType() == QTextBlockFormat::ProportionalHeight) {
             spnLineHeight->setValue(double(blockFormat.lineHeight()));
         }
+    }
+
+    {
+        QDoubleSpinBox* spnLetterSpacing = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_letter_spacing"))->defaultWidget());
+        KisSignalsBlocker b(spnLetterSpacing);
+        spnLetterSpacing->setValue(format.fontLetterSpacing());
     }
 }
 
@@ -658,6 +669,24 @@ void SvgTextEditor::setLineHeight(double lineHeightPercentage)
     m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
 }
 
+void SvgTextEditor::setLetterSpacing(double letterSpacing)
+{
+    QTextCursor cursor = setTextSelection();
+    if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
+        QTextCharFormat format;
+        format.setFontLetterSpacingType(QFont::AbsoluteSpacing);
+        format.setFontLetterSpacing(letterSpacing);
+        m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
+        m_textEditorWidget.richTextEdit->setTextCursor(cursor);
+    }
+    else {
+        if (cursor.hasSelection()) {
+            QString selectionModified = "<tspan style=\"letter-spacing:" + QString::number(letterSpacing) + "\">" + cursor.selectedText() + "</tspan>";
+            cursor.removeSelectedText();
+            cursor.insertText(selectionModified);
+        }
+    }
+}
 
 void SvgTextEditor::alignLeft()
 {
@@ -961,6 +990,10 @@ void SvgTextEditor::applySettings()
 
     QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().background().color());
     palette.setBrush(QPalette::Active, QPalette::Background, QBrush(background));
+    m_textEditorWidget.richTextEdit->setStyleSheet(QString("background-color:%1").arg(background.name()));
+    m_textEditorWidget.svgStylesEdit->setStyleSheet(QString("background-color:%1").arg(background.name()));
+    m_textEditorWidget.svgTextEdit->setStyleSheet(QString("background-color:%1").arg(background.name()));
+
     QColor foreground = cfg.readEntry("colorEditorForeground", qApp->palette().text().color());
     palette.setBrush(QPalette::Active, QPalette::Text, QBrush(foreground));
 
@@ -971,6 +1004,8 @@ void SvgTextEditor::applySettings()
         writingSystems.append((QFontDatabase::WritingSystem)QString(selectedWritingSystems.at(i)).toInt());
     }
     qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget())->refillComboBox(writingSystems);
+
+
 
     m_page->setUpdatesEnabled(true);
 }
@@ -1126,6 +1161,17 @@ void SvgTextEditor::createActions()
     actionCollection()->addAction("svg_line_height", lineHeight);
     m_richTextActions << lineHeight;
     actionRegistry->propertizeAction("svg_line_height", lineHeight);
+
+    QWidgetAction *letterSpacing = new QWidgetAction(this);
+    QDoubleSpinBox *spnletterSpacing = new QDoubleSpinBox();
+    spnletterSpacing->setToolTip(i18n("Letter Spacing"));
+    spnletterSpacing->setRange(-20.0, 20.0);
+    spnletterSpacing->setSingleStep(0.5);
+    connect(spnletterSpacing, SIGNAL(valueChanged(double)), SLOT(setLetterSpacing(double)));
+    letterSpacing->setDefaultWidget(spnletterSpacing);
+    actionCollection()->addAction("svg_letter_spacing", letterSpacing);
+    m_richTextActions << letterSpacing;
+    actionRegistry->propertizeAction("svg_letter_spacing", letterSpacing);
 }
 
 void SvgTextEditor::enableRichTextActions(bool enable)

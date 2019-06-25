@@ -225,7 +225,8 @@ void SvgTextTool::showEditor()
 
     if (!m_editor) {
         m_editor = new SvgTextEditor(QApplication::activeWindow());
-        m_editor->setWindowModality(Qt::NonModal);
+        m_editor->setWindowTitle(i18nc("@title:window", "Krita - Edit Text"));
+        m_editor->setWindowModality(Qt::ApplicationModal);
         m_editor->setAttribute( Qt::WA_QuitOnClose, false );
 
         connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*,QString,QString,bool)), SLOT(textUpdated(KoSvgTextShape*,QString,QString,bool)));

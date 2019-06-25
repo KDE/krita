@@ -45,7 +45,7 @@ KisGIFExport::~KisGIFExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisGIFExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisGIFExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(configuration);
     QRect rc = document->savingImage()->bounds();
@@ -54,7 +54,11 @@ KisImportExportFilter::ConversionStatus KisGIFExport::convert(KisDocument *docum
     QGIFLibHandler handler;
     handler.setDevice(io);
     bool result = handler.write(image);
-    return (result ? KisImportExportFilter::OK : KisImportExportFilter::InternalError);
+    if (!result) {
+       KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExportCodes::InternalError);
+       return ImportExportCodes::InternalError;
+    }
+    return ImportExportCodes::OK;
 }
 
 void KisGIFExport::initializeCapabilities()

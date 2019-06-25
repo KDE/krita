@@ -257,13 +257,15 @@ extern "C" int main(int argc, char **argv)
 
         logUsage = kritarc.value("LogUsage", true).toBool();
 
-        const QString preferredRendererString = kritarc.value("OpenGLRenderer", "auto").toString();
-        preferredRenderer = KisOpenGL::convertConfigToOpenGLRenderer(preferredRendererString);
-
 #ifdef Q_OS_WIN
         // Force ANGLE to use Direct3D11. D3D9 doesn't support OpenGL ES 3 and WARP
         //  might get weird crashes atm.
+        const QString preferredRendererString = kritarc.value("OpenGLRenderer", "angle").toString();
+        preferredRenderer = KisOpenGL::convertConfigToOpenGLRenderer(preferredRendererString);
         qputenv("QT_ANGLE_PLATFORM", "d3d11");
+#else
+        const QString preferredRendererString = kritarc.value("OpenGLRenderer", "auto").toString();
+        preferredRenderer = KisOpenGL::convertConfigToOpenGLRenderer(preferredRendererString);
 #endif
 
         const QSurfaceFormat format =

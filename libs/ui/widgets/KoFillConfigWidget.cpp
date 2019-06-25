@@ -877,7 +877,7 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
             break;
         case KoFillConfigWidget::Solid:
             d->ui->btnChooseSolidColor->setVisible(true);
-            d->ui->btnSolidColorPick->setVisible(true);
+            d->ui->btnSolidColorPick->setVisible(false);
             d->ui->soldStrokeColorLabel->setVisible(true);
             break;
         case KoFillConfigWidget::Gradient:

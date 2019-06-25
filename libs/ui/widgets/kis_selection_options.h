@@ -58,6 +58,7 @@ public:
     void setAction(int);
     void setMode(int);
     void setAntiAliasSelection(bool value);
+    void enablePixelOnlySelectionMode();
 
     void updateActionButtonToolTip(int action, const QKeySequence &shortcut);
 

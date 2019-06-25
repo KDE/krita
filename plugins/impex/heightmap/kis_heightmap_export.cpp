@@ -4,7 +4,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -107,9 +108,9 @@ void KisHeightMapExport::initializeCapabilities()
     }
 }
 
-KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisHeightMapExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    KIS_ASSERT_RECOVER_RETURN_VALUE(mimeType() == "image/x-r16" || mimeType() == "image/x-r8" || mimeType() == "image/x-r32", KisImportExportFilter::WrongFormat);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(mimeType() == "image/x-r16" || mimeType() == "image/x-r8" || mimeType() == "image/x-r32", ImportExportCodes::FileFormatIncorrect);
 
     KisImageSP image = document->savingImage();
     QDataStream::ByteOrder bo = configuration->getInt("endianness", 1) == 0 ? QDataStream::BigEndian : QDataStream::LittleEndian;
@@ -140,9 +141,10 @@ KisImportExportFilter::ConversionStatus KisHeightMapExport::convert(KisDocument 
         writeData<quint8>(pd, image->bounds(), s);
     }
     else {
-        return KisImportExportFilter::InternalError;
+        KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExportCodes::InternalError);
+        return ImportExportCodes::InternalError;
     }
-    return KisImportExportFilter::OK;
+    return ImportExportCodes::OK;
 }
 
 #include "kis_heightmap_export.moc"

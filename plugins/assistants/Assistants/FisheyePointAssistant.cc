@@ -6,7 +6,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -37,6 +38,18 @@
 FisheyePointAssistant::FisheyePointAssistant()
         : KisPaintingAssistant("fisheye-point", i18n("Fish Eye Point assistant"))
 {
+}
+
+FisheyePointAssistant::FisheyePointAssistant(const FisheyePointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : KisPaintingAssistant(rhs, handleMap)
+    , e(rhs.e)
+    , extraE(rhs.extraE)
+{
+}
+
+KisPaintingAssistantSP FisheyePointAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+{
+    return KisPaintingAssistantSP(new FisheyePointAssistant(*this, handleMap));
 }
 
 QPointF FisheyePointAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
@@ -81,10 +94,8 @@ void FisheyePointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect
 {
     gc.save();
     gc.resetTransform();
-    QPointF delta(0,0);
+
     QPointF mousePos(0,0);
-    QPointF endPoint(0,0);//this is the final point that the line is being extended to, we seek it just outside the view port//
-    QPointF otherHandle(0,0);
     
     if (canvas){
         //simplest, cheapest way to get the mouse-position//

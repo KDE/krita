@@ -1666,26 +1666,11 @@ QMenu* DefaultTool::popupActionsMenu()
     if (m_contextMenu) {
         m_contextMenu->clear();
 
-        m_contextMenu->addAction(action("edit_cut"));
-        m_contextMenu->addAction(action("edit_copy"));
-        m_contextMenu->addAction(action("edit_paste"));
-
-        m_contextMenu->addSeparator();
-
-        m_contextMenu->addAction(action("object_order_front"));
-        m_contextMenu->addAction(action("object_order_raise"));
-        m_contextMenu->addAction(action("object_order_lower"));
-        m_contextMenu->addAction(action("object_order_back"));
-
-        if (action("object_group")->isEnabled() || action("object_ungroup")->isEnabled()) {
-            m_contextMenu->addSeparator();
-            m_contextMenu->addAction(action("object_group"));
-            m_contextMenu->addAction(action("object_ungroup"));
-        }
-
+        m_contextMenu->addSection(i18n("Vector Shape Actions"));
         m_contextMenu->addSeparator();
 
         QMenu *transform = m_contextMenu->addMenu(i18n("Transform"));
+
         transform->addAction(action("object_transform_rotate_90_cw"));
         transform->addAction(action("object_transform_rotate_90_ccw"));
         transform->addAction(action("object_transform_rotate_180"));
@@ -1706,6 +1691,27 @@ QMenu* DefaultTool::popupActionsMenu()
             transform->addAction(action("object_subtract"));
             transform->addAction(action("object_split"));
         }
+
+        m_contextMenu->addSeparator();
+
+        m_contextMenu->addAction(action("edit_cut"));
+        m_contextMenu->addAction(action("edit_copy"));
+        m_contextMenu->addAction(action("edit_paste"));
+
+        m_contextMenu->addSeparator();
+
+        m_contextMenu->addAction(action("object_order_front"));
+        m_contextMenu->addAction(action("object_order_raise"));
+        m_contextMenu->addAction(action("object_order_lower"));
+        m_contextMenu->addAction(action("object_order_back"));
+
+        if (action("object_group")->isEnabled() || action("object_ungroup")->isEnabled()) {
+            m_contextMenu->addSeparator();
+            m_contextMenu->addAction(action("object_group"));
+            m_contextMenu->addAction(action("object_ungroup"));
+        }
+
+
     }
 
     return m_contextMenu.data();

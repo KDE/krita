@@ -8,6 +8,7 @@ include_directories(SYSTEM
 add_subdirectory( dtd )
 add_subdirectory( data )
 add_subdirectory( integration )
+# Install the application icons following the the freedesktop icon theme spec
 add_subdirectory( pics/app )
 
 if (ANDROID)
@@ -16,7 +17,7 @@ endif()
 
 set(krita_SRCS main.cc)
 
-
+# Set the application icon on the application
 if (NOT APPLE)
     file(GLOB ICON_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakrita.png")
 else()
@@ -32,6 +33,7 @@ else()
 endif() 
 ecm_add_app_icon(krita_SRCS ICONS ${ICON_SRCS})
 
+# Install the mimetype icons
 ecm_install_icons(ICONS
     "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/16-mimetypes-application-x-krita.png"
     "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/22-mimetypes-application-x-krita.png"

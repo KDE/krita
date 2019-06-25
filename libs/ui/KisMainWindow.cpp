@@ -683,6 +683,7 @@ void KisMainWindow::slotPreferences()
             }
 
         }
+        updateWindowMenu();
 
         d->viewManager->showHideScrollbars();
     }
@@ -1207,6 +1208,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                         setReadWrite(true);
                     } else {
                         dbgUI << "Failed Save As!";
+
                     }
                 }
                 else { // Export
@@ -1424,8 +1426,8 @@ void KisMainWindow::slotFileNew()
                                            i18n("Unnamed"));
 
     item.icon = "document-new";
-
-    startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
+    item.title = i18n("Custom Document");
+    startupWidget->addCustomDocumentWidget(item.widget, item.title, "Custom Document", item.icon);
 
     QSize sz = KisClipboard::instance()->clipSize();
     if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
@@ -1445,7 +1447,7 @@ void KisMainWindow::slotFileNew()
     item.title = i18n("Create from Clipboard");
     item.icon = "tab-new";
 
-    startupWidget->addCustomDocumentWidget(item.widget, item.title, item.icon);
+    startupWidget->addCustomDocumentWidget(item.widget, item.title, "Create from ClipBoard", item.icon);
 
     // calls deleteLater
     connect(startupWidget, SIGNAL(documentSelected(KisDocument*)), KisPart::instance(), SLOT(startCustomDocument(KisDocument*)));
@@ -1820,11 +1822,10 @@ void KisMainWindow::importAnimation()
         KoUpdaterPtr updater =
                 !document->fileBatchMode() ? viewManager()->createUnthreadedUpdater(i18n("Import frames")) : 0;
         KisAnimationImporter importer(document->image(), updater);
-        KisImportExportFilter::ConversionStatus status = importer.import(files, firstFrame, step);
+        KisImportExportErrorCode status = importer.import(files, firstFrame, step);
 
-        if (status != KisImportExportFilter::OK && status != KisImportExportFilter::InternalError) {
-            QString msg = KisImportExportFilter::conversionStatusString(status);
-
+        if (!status.isOk() && !status.isInternalError()) {
+            QString msg = status.errorMessage();
             if (!msg.isEmpty())
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not finish import animation:\n%1", msg));
         }

@@ -61,6 +61,8 @@ private:
     vQPointF m_points;
     bool m_continuedMode;
     QPointF m_lastCursorPos;
+    QPoint m_lastAnchor;
+    bool m_complete;
 };
 
 class KisToolSelectMagneticFactory : public KisSelectionToolFactoryBase

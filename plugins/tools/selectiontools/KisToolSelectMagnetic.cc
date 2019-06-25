@@ -48,6 +48,8 @@
 
 #include "kis_algebra_2d.h"
 
+#include "KisMagneticWorker.h"
+
 
 #define FEEDBACK_LINE_WIDTH 2
 
@@ -56,7 +58,7 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.svg", 16, 16),
                     i18n("Magnetic Selection")),
-      m_continuedMode(false)
+      m_continuedMode(false), m_complete(true)
 {
 }
 
@@ -90,9 +92,23 @@ void KisToolSelectMagnetic::keyReleaseEvent(QKeyEvent *event)
 void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
 {
     KisToolSelect::mouseMoveEvent(event);
-    if (selectionDragInProgress()) return;
-
+    if(m_complete){
+        finishSelectionAction();
+        return;
+    }
     m_lastCursorPos = convertToPixelCoord(event);
+    auto current = QPoint(m_lastCursorPos.x(), m_lastCursorPos.y());
+    //qDebug() << current;
+    KisMagneticWorker worker;
+    m_points = worker.computeEdge(image()->projection(), 2, m_lastAnchor, current);
+    m_paintPath = QPainterPath();
+    m_paintPath.moveTo(pixelToView(m_points[m_points.count()-1]));
+    for(int i=m_points.count()-2; i>0;i--){
+        m_paintPath.lineTo(pixelToView(m_points[i]));
+    }
+
+    updateFeedback();
+
     if (m_continuedMode && mode() != PAINT_MODE) {
         updateContinuedMode();
     }
@@ -100,52 +116,21 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
 {
-    KisToolSelectBase::beginPrimaryAction(event);
-    if (selectionDragInProgress()) return;
-
-    if (!selectionEditable()) {
-        event->ignore();
-        return;
-    }
-
     setMode(KisTool::PAINT_MODE);
-
-    if (m_continuedMode && !m_points.isEmpty()) {
-        m_paintPath.lineTo(pixelToView(convertToPixelCoord(event)));
-    } else {
-        m_paintPath.moveTo(pixelToView(convertToPixelCoord(event)));
-    }
-
-    m_points.append(convertToPixelCoord(event));
+    auto temp = convertToPixelCoord(event);
+    m_lastAnchor = QPoint(temp.x(), temp.y());
+    qDebug() << m_lastAnchor;
+    m_complete = !m_complete; //just for testing
 }
 
 void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 {
     KisToolSelectBase::continuePrimaryAction(event);
-    if (selectionDragInProgress()) return;
-
-    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
-
-    QPointF point = convertToPixelCoord(event);
-    m_paintPath.lineTo(pixelToView(point));
-    m_points.append(point);
-    updateFeedback();
-
-
 }
 
 void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
 {
-    const bool hadMoveInProgress = selectionDragInProgress();
     KisToolSelectBase::endPrimaryAction(event);
-    if (hadMoveInProgress) return;
-
-    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
-    setMode(KisTool::HOVER_MODE);
-
-    if (!m_continuedMode) {
-        finishSelectionAction();
-    }
 }
 
 void KisToolSelectMagnetic::finishSelectionAction()
@@ -153,6 +138,7 @@ void KisToolSelectMagnetic::finishSelectionAction()
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
     kisCanvas->updateCanvas();
+    setMode(KisTool::HOVER_MODE);
 
     QRectF boundingViewRect =
         pixelToView(KisAlgebra2D::accumulateBounds(m_points));
@@ -256,6 +242,7 @@ void KisToolSelectMagnetic::deactivate()
     kisCanvas->updateCanvas();
 
     m_continuedMode = false;
+    m_complete = true;
 
     KisTool::deactivate();
 }

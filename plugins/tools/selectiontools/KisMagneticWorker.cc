@@ -180,7 +180,9 @@ QRect KisMagneticWorker::calculateRect(QPoint p1, QPoint p2, int radius) const {
 
 QVector<QPointF> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius, QPoint begin, QPoint end) {
 
-    QRect rect = calculateRect(begin, end, radius);
+    //QRect rect = calculateRect(begin, end, radius);
+    QRect rect = QPolygon(QVector<QPoint>{begin, end}).boundingRect();
+    rect.setSize(rect.size()*10);
     KisGaussianKernel::applyLoG(dev, rect, 2, 1.0, QBitArray(), 0);
     KisLazyFillTools::normalizeAndInvertAlpha8Device(dev, rect);
 

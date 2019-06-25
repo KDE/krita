@@ -10,9 +10,6 @@
     <height>345</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Palettize</string>
-  </property>
   <layout class="QFormLayout" name="formLayout">
    <property name="leftMargin">
     <number>0</number>

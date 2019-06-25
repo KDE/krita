@@ -25,12 +25,12 @@
 class KoGradientSegment;
 class KoSegmentGradient;
 
-class KisAutogradient : public QWidget, public Ui::KisWdgAutogradient
+class KisAutogradientEditor : public QWidget, public Ui::KisWdgAutogradient
 {
     Q_OBJECT
 
 public:
-    KisAutogradient(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption);
+    KisAutogradientEditor(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption);
     void activate();
 private:
     KoSegmentGradient* m_autogradientResource;

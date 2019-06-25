@@ -253,8 +253,8 @@ else( APPLE )
         LOG_INSTALL         ON
         BUILD_IN_SOURCE     ON
 
-       URL https://download.qt.io/official_releases/qt/5.12/5.12.4/single/qt-everywhere-src-5.12.4.tar.xz
-       URL_MD5 dda95b0239d13c5276834177af3a8588
+        URL https://download.qt.io/archive/qt/5.12/5.12.3/single/qt-everywhere-src-5.12.3.tar.xz
+        URL_MD5 38017e0ed88b9baba063bd723d9ca8b2
 
         CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
 

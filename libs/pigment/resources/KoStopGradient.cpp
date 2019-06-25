@@ -144,20 +144,20 @@ QGradient* KoStopGradient::toQGradient() const
     return gradient;
 }
 
-void KoStopGradient::colorAt(KoColor& dst, qreal t) const
+bool KoStopGradient::stopsAt(KoGradientStop &leftStop, KoGradientStop &rightStop, qreal t) const
 {
-    KoColor buffer;
-
     if (! m_stops.count())
-        return;
+        return false;
     if (t <= m_stops.first().first || m_stops.count() == 1) {
         // we have only one stop or t is before the first stop
-        // -> use the color of the first stop
-        dst.fromKoColor(m_stops.first().second);
+        leftStop = m_stops.first();
+        rightStop = KoGradientStop(-std::numeric_limits<double>::infinity(), leftStop.second);
+        return true;
     } else if (t >= m_stops.last().first) {
         // t is after the last stop
-        // -> use the color of the last stop
-        dst.fromKoColor(m_stops.last().second);
+        rightStop = m_stops.last();
+        leftStop = KoGradientStop(std::numeric_limits<double>::infinity(), rightStop.second);
+        return true;
     } else {
         // we have at least two color stops
         // -> find the two stops which frame our t
@@ -170,53 +170,59 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
                 break;
         }
 
-        //if ( *buffer.colorSpace() != *colorSpace()) {
-        //    buffer = KoColor(colorSpace());
-        //}
-        //hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
-        const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
-
-        const KoGradientStop& leftStop = *(stop - 1);
-        const KoGradientStop& rightStop = *(stop);
-
-        KoColor startDummy, endDummy;
-        if (mixSpace){
-            startDummy = KoColor(leftStop.second, mixSpace);
-            endDummy = KoColor(rightStop.second, mixSpace);
-        } else {
-            startDummy = leftStop.second;
-            endDummy = rightStop.second;
-        }
-        const quint8 *colors[2];
-        colors[0] = startDummy.data();
-        colors[1] = endDummy.data();
-
-        qreal localT;
-        qreal stopDistance = rightStop.first - leftStop.first;
-        if (stopDistance < DBL_EPSILON) {
-            localT = 0.5;
-        } else {
-            localT = (t - leftStop.first) / stopDistance;
-        }
-        qint16 colorWeights[2];
-        colorWeights[0] = static_cast<quint8>((1.0 - localT) * 255 + 0.5);
-        colorWeights[1] = 255 - colorWeights[0];
-
-
-        //check if our mixspace exists, it doesn't at startup.
-        if (mixSpace){
-            if (*buffer.colorSpace() != *mixSpace) {
-                buffer = KoColor(mixSpace);
-            }
-            mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-        }
-        else {
-            buffer = KoColor(colorSpace());
-            colorSpace()->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-        }
-
-        dst.fromKoColor(buffer);
+        leftStop = *(stop - 1);
+        rightStop = *(stop);
+        return true;
     }
+}
+
+void KoStopGradient::colorAt(KoColor& dst, qreal t) const
+{
+    KoColor buffer;
+
+    KoGradientStop leftStop, rightStop;
+    if (!stopsAt(leftStop, rightStop, t)) return;
+
+    const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
+
+    KoColor startDummy, endDummy;
+    if (mixSpace){
+        startDummy = KoColor(leftStop.second, mixSpace);
+        endDummy = KoColor(rightStop.second, mixSpace);
+    } else {
+        startDummy = leftStop.second;
+        endDummy = rightStop.second;
+    }
+    const quint8 *colors[2];
+    colors[0] = startDummy.data();
+    colors[1] = endDummy.data();
+
+    qreal localT;
+    qreal stopDistance = rightStop.first - leftStop.first;
+    if (stopDistance < DBL_EPSILON) {
+        localT = 0.5;
+    } else {
+        localT = (t - leftStop.first) / stopDistance;
+    }
+    qint16 colorWeights[2];
+    colorWeights[0] = static_cast<quint8>((1.0 - localT) * 255 + 0.5);
+    colorWeights[1] = 255 - colorWeights[0];
+
+
+    //check if our mixspace exists, it doesn't at startup.
+    if (mixSpace){
+        if (*buffer.colorSpace() != *mixSpace) {
+            buffer = KoColor(mixSpace);
+        }
+        mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
+    }
+    else {
+        buffer = KoColor(colorSpace());
+        colorSpace()->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
+    }
+
+
+    dst.fromKoColor(buffer);
 }
 
 QSharedPointer<KoStopGradient> KoStopGradient::fromQGradient(const QGradient *gradient)

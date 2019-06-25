@@ -6,14 +6,23 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>286</width>
-    <height>468</height>
+    <width>242</width>
+    <height>345</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Palettize</string>
-  </property>
   <layout class="QFormLayout" name="formLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <widget class="QLabel" name="paletteLabel">
      <property name="sizePolicy">
@@ -70,139 +79,21 @@
       <bool>true</bool>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
-      <item row="1" column="0">
-       <widget class="QLabel" name="thresholdModeLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Threshold Mode</string>
-        </property>
-        <property name="buddy">
-         <cstring>thresholdModeComboBox</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
-       <widget class="QComboBox" name="thresholdModeComboBox">
+       <widget class="QComboBox" name="colorModeComboBox">
         <item>
          <property name="text">
-          <string>Pattern</string>
+          <string>Per Channel Offset</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Noise</string>
+          <string>Nearest Colors</string>
          </property>
         </item>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QStackedWidget" name="thresholdModeStackedWidget">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="currentIndex">
-         <number>1</number>
-        </property>
-        <property name="prefix" stdset="0">
-         <string>Amount:  </string>
-        </property>
-        <widget class="QWidget" name="patternWidget">
-         <layout class="QFormLayout" name="formLayout_2">
-          <item row="0" column="0">
-           <widget class="QLabel" name="patternLabel">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Pattern</string>
-            </property>
-            <property name="buddy">
-             <cstring>patternIconWidget</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="KisIconWidget" name="patternIconWidget">
-            <property name="text">
-             <string>...</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="patternValueModeLabel">
-            <property name="text">
-             <string>Value Mode</string>
-            </property>
-            <property name="buddy">
-             <cstring>patternValueModeComboBox</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QComboBox" name="patternValueModeComboBox">
-            <item>
-             <property name="text">
-              <string>Auto</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Lightness</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Alpha</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="noiseWidget">
-         <layout class="QFormLayout" name="formLayout_5">
-          <item row="0" column="0">
-           <widget class="QLabel" name="noiseSeedLabel">
-            <property name="text">
-             <string>Seed</string>
-            </property>
-            <property name="buddy">
-             <cstring>noiseSeedLineEdit</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="noiseSeedLineEdit"/>
-          </item>
-          <item row="1" column="1">
-           <widget class="QToolButton" name="noiseSeedRandomizeButton">
-            <property name="text">
-             <string>Randomize</string>
-            </property>
-            <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonTextOnly</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </widget>
-      </item>
-      <item row="3" column="0">
+      <item row="1" column="0">
        <widget class="QLabel" name="colorModeLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -218,21 +109,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QComboBox" name="colorModeComboBox">
-        <item>
-         <property name="text">
-          <string>Per Channel Offset</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Nearest Colors</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="4" column="0" colspan="2">
+      <item row="2" column="0" colspan="2">
        <widget class="QStackedWidget" name="colorModeStackedWidget">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -246,20 +123,23 @@
         <property name="currentIndex">
          <number>1</number>
         </property>
-        <widget class="QWidget" name="colorModePerChannelOffsetWidget">
+        <widget class="QWidget" name="colorModePerChannelOffsetPage">
          <layout class="QFormLayout" name="formLayout_8">
           <item row="0" column="0" colspan="2">
            <widget class="KisDoubleSliderSpinBox" name="offsetScaleSpinBox"/>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="colorModeNearestColorWidget">
-         <layout class="QFormLayout" name="formLayout_4">
-          <item row="0" column="0" colspan="2">
-           <widget class="KisDoubleSliderSpinBox" name="spreadSpinBox"/>
-          </item>
-         </layout>
+        <widget class="QWidget" name="colorModeNearestColorsPage">
+         <layout class="QFormLayout" name="formLayout_4"/>
         </widget>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="KisDitherWidget" name="ditherWidget" native="true">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
        </widget>
       </item>
      </layout>
@@ -273,7 +153,7 @@
      <property name="checkable">
       <bool>true</bool>
      </property>
-     <layout class="QGridLayout" name="gridLayout_9">
+     <layout class="QFormLayout" name="formLayout_2">
       <item row="0" column="0">
        <widget class="QLabel" name="alphaModeLabel">
         <property name="sizePolicy">
@@ -304,7 +184,7 @@
         </item>
         <item>
          <property name="text">
-          <string>Use Dither</string>
+          <string>Dither</string>
          </property>
         </item>
        </widget>
@@ -321,26 +201,32 @@
          <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
         <property name="prefix" stdset="0">
          <string>Amount:  </string>
         </property>
-        <widget class="QWidget" name="clipWidget">
+        <widget class="QWidget" name="clipPage">
          <layout class="QFormLayout" name="formLayout_7">
           <item row="0" column="0" colspan="2">
            <widget class="KisDoubleSliderSpinBox" name="alphaClipSpinBox"/>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="indexWidget">
+        <widget class="QWidget" name="indexPage">
          <layout class="QFormLayout" name="formLayout_6">
           <item row="0" column="0" colspan="2">
            <widget class="KisSliderSpinBox" name="alphaIndexSpinBox"/>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="ditherWidget"/>
+        <widget class="QWidget" name="alphaDitherPage">
+         <layout class="QFormLayout" name="formLayout_5">
+          <item row="0" column="0" colspan="2">
+           <widget class="KisDitherWidget" name="alphaDitherWidget" native="true"/>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </item>
      </layout>
@@ -349,6 +235,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisDitherWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">KisDitherWidget.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>KisIconWidget</class>
    <extends>QToolButton</extends>
@@ -365,72 +257,20 @@
    <header location="global">kis_slider_spin_box.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>paletteIconWidget</tabstop>
+  <tabstop>colorspaceComboBox</tabstop>
+  <tabstop>ditherGroupBox</tabstop>
+  <tabstop>ditherWidget</tabstop>
+  <tabstop>colorModeComboBox</tabstop>
+  <tabstop>offsetScaleSpinBox</tabstop>
+  <tabstop>alphaGroupBox</tabstop>
+  <tabstop>alphaModeComboBox</tabstop>
+  <tabstop>alphaClipSpinBox</tabstop>
+  <tabstop>alphaIndexSpinBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
-  <connection>
-   <sender>thresholdModeComboBox</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>thresholdModeStackedWidget</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>264</x>
-     <y>163</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>229</x>
-     <y>173</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>thresholdModeStackedWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>thresholdModeComboBox</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>264</x>
-     <y>246</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>264</x>
-     <y>163</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>colorModeComboBox</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>colorModeStackedWidget</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>264</x>
-     <y>278</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>264</x>
-     <y>331</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>colorModeStackedWidget</sender>
-   <signal>currentChanged(int)</signal>
-   <receiver>colorModeComboBox</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>264</x>
-     <y>331</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>264</x>
-     <y>278</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>alphaModeComboBox</sender>
    <signal>currentIndexChanged(int)</signal>
@@ -438,12 +278,12 @@
    <slot>setCurrentIndex(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>168</x>
-     <y>392</y>
+     <x>238</x>
+     <y>288</y>
     </hint>
     <hint type="destinationlabel">
-     <x>162</x>
-     <y>422</y>
+     <x>183</x>
+     <y>341</y>
     </hint>
    </hints>
   </connection>
@@ -454,12 +294,44 @@
    <slot>setCurrentIndex(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>86</x>
-     <y>422</y>
+     <x>107</x>
+     <y>341</y>
     </hint>
     <hint type="destinationlabel">
-     <x>127</x>
-     <y>398</y>
+     <x>228</x>
+     <y>288</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>colorModeComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>colorModeStackedWidget</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>143</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>139</x>
+     <y>162</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>colorModeStackedWidget</sender>
+   <signal>currentChanged(int)</signal>
+   <receiver>colorModeComboBox</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>167</x>
+     <y>164</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>169</x>
+     <y>143</y>
     </hint>
    </hints>
   </connection>

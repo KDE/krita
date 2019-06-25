@@ -564,7 +564,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     QString outputMimetype = KisMimeDatabase::mimeTypeForFile(exportFileName, false);
                     if (outputMimetype == "application/octetstream") {
                         dbgKrita << i18n("Mimetype not found, try using the -mimetype option") << endl;
-                        return 1;
+                        return false;
                     }
 
                     KisDocument *doc = kisPart->createDocument();
@@ -574,13 +574,13 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     if (!result) {
                         errKrita << "Could not load " << fileName << ":" << doc->errorMessage();
                         QTimer::singleShot(0, this, SLOT(quit()));
-                        return 1;
+                        return false;
                     }
 
                     if (exportFileName.isEmpty()) {
                         errKrita << "Export destination is not specified for" << fileName << "Please specify export destination with --export-filename option";
                         QTimer::singleShot(0, this, SLOT(quit()));
-                        return 1;
+                        return false;
                     }
 
                     qApp->processEvents(); // For vector layers to be updated
@@ -590,7 +590,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                         errKrita << "Could not export " << fileName << "to" << exportFileName << ":" << doc->errorMessage();
                     }
                     QTimer::singleShot(0, this, SLOT(quit()));
-                    return 0;
+                    return true;
                 }
                 else if (exportSequence) {
                     KisDocument *doc = kisPart->createDocument();
@@ -601,7 +601,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     if (!doc->image()->animationInterface()->hasAnimation()) {
                         errKrita << "This file has no animation." << endl;
                         QTimer::singleShot(0, this, SLOT(quit()));
-                        return 1;
+                        return false;
                     }
 
                     doc->setFileBatchMode(true);
@@ -619,7 +619,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                         errKrita << i18n("Failed to render animation frames!") << endl;
                     }
                     QTimer::singleShot(0, this, SLOT(quit()));
-                    return 0;
+                    return true;
                 }
                 else if (d->mainWindow) {
                     if (fileName.endsWith(".bundle")) {

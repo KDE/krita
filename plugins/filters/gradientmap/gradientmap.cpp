@@ -54,6 +54,9 @@ KritaGradientMapConfigWidget::KritaGradientMapConfigWidget(QWidget *parent, KisP
     connect(m_gradientPopUp, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground>)), this, SLOT(setAbstractGradientToEditor()));
     connect(m_page->gradientEditor, SIGNAL(sigGradientChanged()), m_gradientChangedCompressor, SLOT(start()));
     connect(m_gradientChangedCompressor, SIGNAL(timeout()), this, SIGNAL(sigConfigurationItemChanged()));
+
+    QObject::connect(m_page->ditherGroupBox, &QGroupBox::toggled, this, &KisConfigWidget::sigConfigurationItemChanged);
+    QObject::connect(m_page->ditherWidget, &KisDitherWidget::sigConfigurationItemChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
 }
 
 KritaGradientMapConfigWidget::~KritaGradientMapConfigWidget()
@@ -82,6 +85,9 @@ KisPropertiesConfigurationSP KritaGradientMapConfigWidget::configuration() const
         cfg->setProperty("gradientXML", doc.toString());
     }
 
+    cfg->setProperty("ditherEnabled", m_page->ditherGroupBox->isChecked());
+    m_page->ditherWidget->configuration(*cfg, "dither/");
+
     return cfg;
 }
 
@@ -98,6 +104,9 @@ void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigura
             m_activeGradient->setStops(gradient.stops());
         }
     }
+
+    m_page->ditherGroupBox->setChecked(config->getBool("ditherEnabled"));
+    m_page->ditherWidget->setConfiguration(*config, "dither/");
 }
 
 void KritaGradientMapConfigWidget::setView(KisViewManager *view)

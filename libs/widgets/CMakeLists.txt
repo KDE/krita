@@ -3,7 +3,6 @@ add_subdirectory( tests )
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set(kritawidgets_LIB_SRCS
-    KoGradientEditWidget.cpp
     KoVBox.cpp
     KoDialog.cpp
     KoZoomWidget.cpp

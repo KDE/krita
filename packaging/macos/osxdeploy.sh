@@ -268,9 +268,15 @@ strip_python_dmginstall() {
 
     cd ${PythonFrameworkBase}
     find . -name "test*" -type d | xargs rm -rf
-    find "${PythonFrameworkBase}/Versions/${PY_VERSION}/bin" -not -name "python*" | xargs rm -f
+    find "${PythonFrameworkBase}/Versions/${PY_VERSION}/bin" -not -name "python*" \( -type f -or -type l \) | xargs rm -f
     cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/lib/python${PY_VERSION}"
     rm -rf distutils tkinter ensurepip venv lib2to3 idlelib
+}
+
+# Some libraries require r_path to be removed
+# we must not apply delete rpath globally
+delete_install_rpath() {
+    xargs -P4 -I FILE install_name_tool -delete_rpath "${BUILDROOT}/i/lib" FILE 2> "${BUILDROOT}/deploy_error.log"
 }
 
 fix_python_framework() {
@@ -280,7 +286,6 @@ fix_python_framework() {
     # Fix main library
     pythonLib="${PythonFrameworkBase}/Python"
     install_name_tool -id "${pythonLib##*/}" "${pythonLib}"
-    install_name_tool -rpath "${KIS_INSTALL_DIR}/lib" @loader_path/Frameworks
     install_name_tool -add_rpath @loader_path/../../../ "${pythonLib}" 2> /dev/null
     install_name_tool -change @loader_path/../../../../libintl.9.dylib @loader_path/../../../libintl.9.dylib "${pythonLib}"
 
@@ -291,7 +296,8 @@ fix_python_framework() {
     install_name_tool -add_rpath @executable_path/../../../../ "${PythonFrameworkBase}/Versions/Current/bin/python${PY_VERSION}m"
 
     # Fix rpaths from Python.Framework
-    find ${PythonFrameworkBase} -type f -perm 755 | xargs -P4 -I FILE install_name_tool -delete_rpath "${BUILDROOT}/i/lib" FILE 2> /dev/null
+    find ${PythonFrameworkBase} -type f -perm 755 | delete_install_rpath
+    find "${PythonFrameworkBase}/Versions/Current/site-packages/PyQt5" -type f -name "*.so" | delete_install_rpath
 }
 
 # Checks for macdeployqt
@@ -449,6 +455,10 @@ krita_deploy () {
     # repair krita for plugins
     printf "Searching for missing libraries\n"
     krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
+
+    printf "removing absolute or broken linksys, if any\n"
+    find "${KRITA_DMG}/krita.app/Contents" -type l \( -lname "/*" -or -not -exec test -e {} \; \) -print | xargs rm
+
     echo "Done!"
 
 }

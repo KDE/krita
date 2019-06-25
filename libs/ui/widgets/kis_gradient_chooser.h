@@ -31,9 +31,10 @@
 class KisViewManager;
 class QLabel;
 class QPushButton;
-class KisAutogradient;
 
 class KisResourceItemChooser;
+class KisAutogradientEditor;
+class KoResource;
 
 class KisCustomGradientDialog : public KoDialog
 {
@@ -42,7 +43,7 @@ class KisCustomGradientDialog : public KoDialog
 
 public:
 
-    KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget * parent, const char *name);
+    KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name);
 
 private:
 

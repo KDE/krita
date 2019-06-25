@@ -60,7 +60,7 @@ public:
     enum AlphaMode {
         Clip,
         Index,
-        UseDither
+        Dither
     };
     enum ThresholdMode {
         Pattern,

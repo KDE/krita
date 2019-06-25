@@ -44,10 +44,9 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_stopgradient_editor.h"
 
-KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget * parent, const char *name)
-    : KoDialog(parent)
+KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name)
+    : KoDialog(parent, Qt::Dialog)
 {
-    setCaption(i18n("Custom Gradient"));
     setButtons(Close);
     setDefaultButton(Close);
     setObjectName(name);
@@ -55,12 +54,15 @@ KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, 
 
     KoStopGradientSP stopGradient = gradient.dynamicCast<KoStopGradient>();
     if (stopGradient) {
-        m_page = new KisStopGradientEditor(stopGradient, this, "autogradient", i18n("Custom Gradient"));
+        m_page = new KisStopGradientEditor(stopGradient, this, "autogradient", i18n("Custom Stop Gradient"));
     }
-    KoSegmentGradientSP segmentedGradient = gradient.dynamicCast<KoSegmentGradient>();
-    if (segmentedGradient) {
-        m_page = new KisAutogradient(segmentedGradient, this, "autogradient", i18n("Custom Gradient"));
+    else {
+        KoSegmentGradientSP segmentedGradient = gradient.dynamicCast<KoSegmentGradient>();
+        if (segmentedGradient) {
+            m_page = new KisAutogradientEditor(segmentedGradient, this, "autogradient", i18n("Custom Segmented Gradient"));
+        }
     }
+    setCaption(m_page->windowTitle());
     setMainWidget(m_page);
 }
 
@@ -182,7 +184,7 @@ void KisGradientChooser::addGradient(KoAbstractGradientSP gradient)
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
     QString saveLocation = rserver->saveLocation();
 
-    KisCustomGradientDialog dialog(gradient, this, "autogradient");
+    KisCustomGradientDialog dialog(gradient, this, "KisCustomGradientDialog");
     dialog.exec();
 
     gradient->setFilename(saveLocation + gradient->name() + gradient->defaultFileExtension());
@@ -193,7 +195,7 @@ void KisGradientChooser::addGradient(KoAbstractGradientSP gradient)
 
 void KisGradientChooser::editGradient()
 {
-    KisCustomGradientDialog dialog(currentResource().staticCast<KoAbstractGradient>(), this, "autogradient");
+    KisCustomGradientDialog dialog(currentResource().staticCast<KoAbstractGradient>(), this, "KisCustomGradientDialog");
     dialog.exec();
 }
 

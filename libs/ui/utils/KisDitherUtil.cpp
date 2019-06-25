@@ -1,0 +1,96 @@
+/*
+ * This file is part of the KDE project
+ *
+ * Copyright (c) 2019 Carl Olsson <carl.olsson@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include "KisDitherUtil.h"
+
+#include <kis_properties_configuration.h>
+#include <KoResourceServerProvider.h>
+#include <kis_random_generator.h>
+
+KisDitherUtil::KisDitherUtil()
+    : m_thresholdMode(ThresholdMode::Pattern), m_patternValueMode(PatternValueMode::Auto)
+    , m_noiseSeed(0), m_patternUseAlpha(false), m_spread(1.0)
+{
+}
+
+void KisDitherUtil::setThresholdMode(const ThresholdMode thresholdMode)
+{
+    m_thresholdMode = thresholdMode;
+}
+
+void KisDitherUtil::setPattern(const QString &name, const PatternValueMode valueMode)
+{
+    m_patternValueMode = valueMode;
+    m_pattern = KoResourceServerProvider::instance()->patternServer()->resourceByName(name);
+    if (m_pattern && m_thresholdMode == ThresholdMode::Pattern && m_patternValueMode == PatternValueMode::Auto) {
+        // Automatically pick between lightness-based and alpha-based patterns by whichever has maximum range
+        qreal lightnessMin = 1.0, lightnessMax = 0.0;
+        qreal alphaMin = 1.0, alphaMax = 0.0;
+        const QImage &image = m_pattern->pattern();
+        for (int y = 0; y < image.height(); ++y) {
+            for (int x = 0; x < image.width(); ++x) {
+                const QColor pixel = image.pixelColor(x, y);
+                lightnessMin = std::min(lightnessMin, pixel.lightnessF());
+                lightnessMax = std::max(lightnessMax, pixel.lightnessF());
+                alphaMin = std::min(alphaMin, pixel.alphaF());
+                alphaMax = std::max(alphaMax, pixel.alphaF());
+            }
+        }
+        m_patternUseAlpha = (alphaMax - alphaMin > lightnessMax - lightnessMin);
+    }
+    else {
+        m_patternUseAlpha = (m_patternValueMode == PatternValueMode::Alpha);
+    }
+}
+
+void KisDitherUtil::setNoiseSeed(const quint64 &noiseSeed)
+{
+    m_noiseSeed = noiseSeed;
+}
+
+void KisDitherUtil::setSpread(const qreal &spread)
+{
+    m_spread = spread;
+}
+
+qreal KisDitherUtil::threshold(const QPoint &pos)
+{
+    qreal threshold;
+    if (m_thresholdMode == ThresholdMode::Pattern && m_pattern) {
+        const QImage &image = m_pattern->pattern();
+        const QColor color = image.pixelColor(pos.x() % image.width(), pos.y() % image.height());
+        threshold = (m_patternUseAlpha ? color.alphaF() : color.lightnessF());
+    }
+    else if (m_thresholdMode == ThresholdMode::Noise) {
+        KisRandomGenerator random(m_noiseSeed);
+        threshold = random.doubleRandomAt(pos.x(), pos.y());
+    }
+    else threshold = 0.5;
+
+    return 0.5 - (m_spread / 2.0) + threshold * m_spread;
+}
+
+void KisDitherUtil::setConfiguration(const KisPropertiesConfiguration &config, const QString &prefix)
+{
+    setThresholdMode(ThresholdMode(config.getInt(prefix + "thresholdMode")));
+    setPattern(config.getString(prefix + "pattern"), PatternValueMode(config.getInt(prefix + "patternValueMode")));
+    setNoiseSeed(quint64(config.getInt(prefix + "noiseSeed")));
+    setSpread(config.getDouble(prefix + "spread"));
+}

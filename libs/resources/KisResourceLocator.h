@@ -30,14 +30,26 @@
 #include <KisResourceStorage.h>
 
 /**
- * The KisResourceLocator class is used by the cache database to find
- * resources in all known resource locations.
+ * The KisResourceLocator class locates all resource storages (folders,
+ * bundles, various adobe resource libraries) in the resource location.
+ *
+ * The resource location is always a writable folder.
+ *
+ * There is one resource locator which is owned by the QApplication
+ * object.
+ *
+ * The resource location is configurable, but there is only one location
+ * where Krita will look for resources.
  */
 class KRITARESOURCES_EXPORT KisResourceLocator : public QObject
 {
     Q_OBJECT
 public:
 
+    // The configuration key that holds the resource location
+    // for this installation of Krita. The location is
+    // QStandardPaths::AppDataLocation by default, but that
+    // can be changed.
     static const QString resourceLocationKey;
 
     static KisResourceLocator *instance();

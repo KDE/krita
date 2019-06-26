@@ -65,8 +65,8 @@ build_qt() {
         echo "Qt path provided; Skipping Qt build"
         return 0
     fi
-    cd $DEPS_BUILD
     configure_ext
+    cd $DEPS_BUILD
     cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_qt
     cd $BUILD_ROOT
 }
@@ -78,8 +78,8 @@ build_ext() {
         exit
     fi
 
-    cd $DEPS_BUILD
     configure_ext
+    cd $DEPS_BUILD
     # Please do not change the order
     cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_png
     cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_zlib

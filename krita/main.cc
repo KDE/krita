@@ -223,10 +223,7 @@ extern "C" int main(int argc, char **argv)
         //  might get weird crashes atm.
         const QString preferredRendererString = kritarc.value("OpenGLRenderer", "angle").toString();
         preferredRenderer = KisOpenGL::convertConfigToOpenGLRenderer(preferredRendererString);
-        QString
-        if (qgetenv("QT_ANGLE_PLATFORM").isEmpty()) {
-            qputenv("QT_ANGLE_PLATFORM", "d3d11");
-        }
+        qputenv("QT_ANGLE_PLATFORM", "d3d11");
 #else
         const QString preferredRendererString = kritarc.value("OpenGLRenderer", "auto").toString();
         preferredRenderer = KisOpenGL::convertConfigToOpenGLRenderer(preferredRendererString);

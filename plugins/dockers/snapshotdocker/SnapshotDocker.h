@@ -22,13 +22,13 @@
 #include <QDockWidget>
 #include <QScopedPointer>
 
-#include <KoCanvasObserverBase.h>
+#include <kis_mainwindow_observer.h>
 #include <klocalizedstring.h>
 
 #include <KoShapeController.h>
 #include <KoCanvasBase.h>
 
-class SnapshotDocker : public QDockWidget, public KoCanvasObserverBase
+class SnapshotDocker : public QDockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
 public:
@@ -36,8 +36,15 @@ public:
     ~SnapshotDocker() override;
 
     QString observerName() override { return "SnapshotDocker"; }
+
+    void setViewManager(KisViewManager* viewManager) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
+
+private Q_SLOTS:
+    void slotBnAddClicked();
+    void slotBnSwitchToClicked();
+    void slotBnRemoveClicked();
 
 private:
     struct Private;

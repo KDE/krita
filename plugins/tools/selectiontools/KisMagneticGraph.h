@@ -113,7 +113,9 @@ struct KisMagneticGraph{
     KisMagneticGraph() { }
     KisMagneticGraph(KisPaintDeviceSP dev, QRect graphRect):
         m_rect(graphRect), m_dev(dev)
-    { }
+    {
+        m_randAccess = m_dev->createRandomAccessorNG(m_dev->exactBounds().x(), m_dev->exactBounds().y());
+    }
 
     typedef VertexDescriptor                                vertex_descriptor;
     typedef std::pair<vertex_descriptor, vertex_descriptor> edge_descriptor;
@@ -124,10 +126,9 @@ struct KisMagneticGraph{
     typedef unsigned                                        degree_size_type;
 
 
-    double getIntensity(VertexDescriptor pt){
-        KisRandomAccessorSP randAccess = m_dev->createRandomAccessorNG(m_dev->exactBounds().x(),m_dev->exactBounds().y());
-        randAccess->moveTo(pt.x, pt.y);
-        qint8 val = *(randAccess->rawData());
+    double getIntensity(VertexDescriptor pt) {
+        m_randAccess->moveTo(pt.x, pt.y);
+        qint8 val = *(m_randAccess->rawData());
         //offsetting the value, so we don't get negatives
         return val + 255;
     }
@@ -155,6 +156,7 @@ struct KisMagneticGraph{
 
 private:
     KisPaintDeviceSP m_dev;
+    KisRandomAccessorSP m_randAccess;
 };
 
 struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator,

@@ -48,9 +48,6 @@
 
 #include "kis_algebra_2d.h"
 
-#include "KisMagneticWorker.h"
-
-
 #define FEEDBACK_LINE_WIDTH 2
 
 
@@ -58,9 +55,8 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.svg", 16, 16),
                     i18n("Magnetic Selection")),
-      m_continuedMode(false), m_complete(true)
-{
-}
+      m_continuedMode(false), m_complete(true), m_worker(image()->projection())
+{ }
 
 KisToolSelectMagnetic::~KisToolSelectMagnetic()
 {
@@ -89,6 +85,7 @@ void KisToolSelectMagnetic::keyReleaseEvent(QKeyEvent *event)
     KisToolSelect::keyReleaseEvent(event);
 }
 
+//the cursor is still tracked even when no mousebutton is pressed
 void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
 {
     KisToolSelect::mouseMoveEvent(event);
@@ -99,8 +96,7 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
     m_lastCursorPos = convertToPixelCoord(event);
     auto current = QPoint(m_lastCursorPos.x(), m_lastCursorPos.y());
     //qDebug() << current;
-    KisMagneticWorker worker;
-    m_points = worker.computeEdge(image()->projection(), 2, m_lastAnchor, current);
+    m_points = m_worker.computeEdge(2, m_lastAnchor, current);
     m_paintPath = QPainterPath();
     m_paintPath.moveTo(pixelToView(m_points[m_points.count()-1]));
     for(int i=m_points.count()-2; i>0;i--){
@@ -114,6 +110,7 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
     }
 }
 
+//press primary mouse button
 void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
 {
     setMode(KisTool::PAINT_MODE);
@@ -121,13 +118,16 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
     m_lastAnchor = QPoint(temp.x(), temp.y());
     qDebug() << m_lastAnchor;
     m_complete = !m_complete; //just for testing
+    m_worker = KisMagneticWorker(image()->projection());
 }
 
+//drag while primary mouse button is pressed
 void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 {
     KisToolSelectBase::continuePrimaryAction(event);
 }
 
+//release primary mouse button
 void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
 {
     KisToolSelectBase::endPrimaryAction(event);

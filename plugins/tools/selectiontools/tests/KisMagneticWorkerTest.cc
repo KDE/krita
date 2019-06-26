@@ -43,14 +43,14 @@ void KisMagneticWorkerTest::testWorker()
     KisPaintDeviceSP dev = loadTestImage("test_main.png", false);
     const QRect rect = dev->exactBounds();
     KisPaintDeviceSP grayscaleDev = KisPainter::convertToAlphaAsGray(dev);
-    KisMagneticWorker worker;
+    KisMagneticWorker worker(grayscaleDev);
     KIS_DUMP_DEVICE_2(dev, rect, "main", "dd");
 
     const QPoint startPos(40, 10);
     const QPoint endPos(50, 65);
 
 
-    auto points = worker.computeEdge(grayscaleDev, 10, startPos, endPos);
+    auto points = worker.computeEdge(10, startPos, endPos);
     KIS_DUMP_DEVICE_2(grayscaleDev, rect, "draw", "dd");
 
     QVector<QPointF> result = { QPointF(50,65),

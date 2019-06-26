@@ -23,9 +23,12 @@
 
 class KRITASELECTIONTOOLS_EXPORT KisMagneticWorker{
 public:
-        QVector<QPointF> computeEdge(KisPaintDeviceSP dev, int radius, QPoint start, QPoint end);
+    KisMagneticWorker(KisPaintDeviceSP dev);
+    QVector<QPointF> computeEdge(int radius, QPoint start, QPoint end);
 private:
-        QRect calculateRect(QPoint p1, QPoint p2, int radius) const;
+    QRect calculateRect(QPoint p1, QPoint p2, int radius) const;
+
+    KisPaintDeviceSP m_dev;
 };
 
 #endif

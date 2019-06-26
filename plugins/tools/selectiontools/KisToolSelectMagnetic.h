@@ -23,6 +23,7 @@
 #include "KisSelectionToolFactoryBase.h"
 #include <kis_tool_select_base.h>
 #include <kis_icon.h>
+#include "KisMagneticWorker.h"
 
 class QPainterPath;
 
@@ -63,6 +64,7 @@ private:
     QPointF m_lastCursorPos;
     QPoint m_lastAnchor;
     bool m_complete;
+    KisMagneticWorker m_worker;
 };
 
 class KisToolSelectMagneticFactory : public KisSelectionToolFactoryBase

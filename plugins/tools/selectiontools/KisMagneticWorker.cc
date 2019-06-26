@@ -140,6 +140,13 @@ private:
     KisMagneticGraph m_graph;
 };
 
+KisMagneticWorker::KisMagneticWorker(KisPaintDeviceSP dev) :
+    m_dev(dev)
+{
+    KisGaussianKernel::applyLoG(m_dev, m_dev->exactBounds(), 2, 1.0, QBitArray(), 0);
+    KisLazyFillTools::normalizeAndInvertAlpha8Device(m_dev, m_dev->exactBounds());
+}
+
 QRect KisMagneticWorker::calculateRect(QPoint p1, QPoint p2, int radius) const {
 
     // I am sure there is a simpler version of it which exists but well
@@ -178,18 +185,13 @@ QRect KisMagneticWorker::calculateRect(QPoint p1, QPoint p2, int radius) const {
     return p.boundingRect();
 }
 
-QVector<QPointF> KisMagneticWorker::computeEdge(KisPaintDeviceSP dev, int radius, QPoint begin, QPoint end) {
+QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint end) {
 
     //QRect rect = calculateRect(begin, end, radius);
-    QRect rect = QPolygon(QVector<QPoint>{begin, end}).boundingRect();
-    rect.setSize(rect.size()*10);
-    KisGaussianKernel::applyLoG(dev, rect, 2, 1.0, QBitArray(), 0);
-    KisLazyFillTools::normalizeAndInvertAlpha8Device(dev, rect);
 
     VertexDescriptor goal(end);
     VertexDescriptor start(begin);
-
-    KisMagneticGraph g(dev, rect);
+    KisMagneticGraph g(m_dev, m_dev->exactBounds());
 
     // How many maps does it require?
     // Take a look here, if it doesn't make sense, https://www.boost.org/doc/libs/1_70_0/libs/graph/doc/astar_search.html

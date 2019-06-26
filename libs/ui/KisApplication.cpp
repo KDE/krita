@@ -333,7 +333,7 @@ bool KisApplication::registerResources()
     reg->add(new KisResourceLoader<KoGamutMask>(ResourceType::GamutMasks, ResourceType::GamutMasks, i18n("Gamut masks"), QStringList() << "application/x-krita-gamutmask"));
 
     if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), i18n("Could not create the resources cache database. Krita will quit now."));
+        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), i18n("%1\n\nKrita will quit now.").arg(KisResourceCacheDb::lastError()));
         return false;
     }
 

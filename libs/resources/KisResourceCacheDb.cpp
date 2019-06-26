@@ -27,6 +27,7 @@
 #include <KritaVersionWrapper.h>
 #include <klocalizedstring.h>
 #include <kis_debug.h>
+#include <KisUsageLogger.h>
 
 #include "KisResourceLocator.h"
 #include "KisResourceLoaderRegistry.h"
@@ -39,10 +40,16 @@ const QString KisResourceCacheDb::databaseVersion {"0.0.2"};
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 
 bool KisResourceCacheDb::s_valid {false};
+QString KisResourceCacheDb::s_lastError {QString()};
 
 bool KisResourceCacheDb::isValid()
 {
     return s_valid;
+}
+
+QString KisResourceCacheDb::lastError()
+{
+    return s_lastError;
 }
 
 QSqlError initDb(const QString &location)
@@ -67,7 +74,7 @@ QSqlError initDb(const QString &location)
     QSqlDatabase db = QSqlDatabase::addDatabase(dbDriver);
     db.setDatabaseName(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
 
-    qDebug() << "QuerySize supported" << db.driver()->hasFeature(QSqlDriver::QuerySize);
+    //qDebug() << "QuerySize supported" << db.driver()->hasFeature(QSqlDriver::QuerySize);
 
     if (!db.open()) {
         infoResources << "Could not connect to resource cache database";
@@ -96,6 +103,10 @@ QSqlError initDb(const QString &location)
         }
 
         bool schemaIsOutDated = false;
+        QString schemaVersion = q.value(0).toString();
+        QString kritaVersion = q.value(1).toString();
+        int creationDate = q.value(2).toInt();
+
 
         if (dbTables.contains("version_information")) {
             // Verify the version number
@@ -104,18 +115,10 @@ QSqlError initDb(const QString &location)
                 QSqlQuery q(f.readAll());
                 if (q.size() > 0) {
                     q.first();
-                    QString schemaVersion = q.value(0).toString();
-                    QString kritaVersion = q.value(1).toString();
-                    int creationDate = q.value(2).toInt();
-
-                    infoResources << "Database version" << schemaVersion
-                                  << "Krita version that created the database" << kritaVersion
-                                  << "At" << QDateTime::fromSecsSinceEpoch(creationDate).toString();
-
                     if (schemaVersion != KisResourceCacheDb::databaseVersion) {
                         // XXX: Implement migration
-                        warnResources << "Database schema is outdated, migration is needed";
                         schemaIsOutDated = true;
+                        qFatal("Database schema is outdated, migration is needed. Database migration has NOT been implemented yet.");
                     }
                 }
             }
@@ -125,7 +128,10 @@ QSqlError initDb(const QString &location)
         }
 
         if (allTablesPresent && !schemaIsOutDated) {
-            infoResources << "All tables are present and up to date";
+            KisUsageLogger::log(QString("Database is up to date. Version: %1, created by Krita %2, at %3")
+                                .arg(schemaVersion)
+                                .arg(kritaVersion)
+                                .arg(QDateTime::fromSecsSinceEpoch(creationDate).toString()));
             return QSqlError();
         }
     }
@@ -242,10 +248,25 @@ QSqlError initDb(const QString &location)
 bool KisResourceCacheDb::initialize(const QString &location)
 {
     QSqlError err = initDb(location);
-    if (err.isValid()) {
-        qWarning() << "Could not initialize the database:" << err;
-    }
+
     s_valid = !err.isValid();
+    switch (err.type()) {
+    case QSqlError::NoError:
+        s_lastError = QString();
+        break;
+    case QSqlError::ConnectionError:
+        s_lastError = QString("Could not initialize the resource cache database. Connection error: %1").arg(err.text());
+        break;
+    case QSqlError::StatementError:
+        s_lastError = QString("Could not initialize the resource cache database. Statement error: %1").arg(err.text());
+        break;
+    case QSqlError::TransactionError:
+        s_lastError = QString("Could not initialize the resource cache database. Transaction error: %1").arg(err.text());
+        break;
+    case QSqlError::UnknownError:
+        s_lastError = QString("Could not initialize the resource cache database. Unknown error: %1").arg(err.text());
+        break;
+    }
 
     return s_valid;
 }

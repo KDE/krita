@@ -49,7 +49,14 @@ public:
     static bool isValid();
 
     /**
-     * @brief initialize
+     * @brief lastError returns the last SQL error.
+     */
+    static QString lastError();
+
+    /**
+     * @brief initializes the database and updates the scheme if necessary. Does not actually
+     * fill the database with pointers to resources.
+     *
      * @param location the location of the database
      * @return true if the database has been initialized correctly
      */
@@ -84,6 +91,7 @@ private:
     static QString makeAbsolute(const QString &location);
 
     static bool s_valid;
+    static QString s_lastError;
 };
 
 #endif // KISRESOURCECACHEDB_H

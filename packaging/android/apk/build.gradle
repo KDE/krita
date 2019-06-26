@@ -22,22 +22,32 @@ dependencies {
 
 ext {
     abi = System.getenv('ANDROID_ABI')
-    installPrefix = System.getenv('INSTALL_PREFIX')
+    installPrefix = '../krita-android-build'
 }
 
-task ("configure") {
+task configure() {
     doLast {
-        if (abi == null) {
-            logger.error('ANDROID_ABI not specified using the default one instead: armeabi-7a')
+        if (abi == null && !project.hasProperty("abi")) {
+            logger.error('ANDROID_ABI not specified using the default one instead: armeabi-v7a')
+            abi = 'armeabi-v7a'
         }
 
-        if (installPrefix == null) {
-            throw new GradleException('Please set INSTALL_PREFIX to the location where binaries are installed')
+        // if user specified the ABI through environment then overwrite the one in gradle.properties
+        if (System.getenv('ANDROID_ABI') != null) {
+            def f = file('gradle.properties')
+            def lines = f.readLines()
+            f.write("")
+            for (line in lines) {
+                if (line.matches('abi=.+'))
+                    continue
+                f.append("$line\n")
+            }
+            f.append("abi=${abi}\n")
         }
 
         def libs = new File(installPrefix, 'lib')
         if (!libs.exists()) {
-            throw new GradleException('Please run `make install` first')
+            throw new GradleException('Krita libraires not found, please check if -p=krita-bin finished without errors')
         }
     }
 }

@@ -123,7 +123,7 @@ void KisPaintingAssistantHandle::uncache()
 struct KisPaintingAssistant::Private {
     Private();
     explicit Private(const Private &rhs);
-    KisPaintingAssistantHandleSP reuseOrCreateHandle(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap, KisPaintingAssistantHandleSP origHandle, KisPaintingAssistant *q);
+    KisPaintingAssistantHandleSP reuseOrCreateHandle(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap, KisPaintingAssistantHandleSP origHandle, KisPaintingAssistant *q, bool registerAssistant = true);
     QList<KisPaintingAssistantHandleSP> handles, sideHandles;
     KisPaintingAssistantHandleSP topLeft, bottomLeft, topRight, bottomRight, topMiddle, bottomMiddle, rightMiddle, leftMiddle;
 
@@ -166,7 +166,7 @@ KisPaintingAssistant::Private::Private(const Private &rhs)
 {
 }
 
-KisPaintingAssistantHandleSP KisPaintingAssistant::Private::reuseOrCreateHandle(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap, KisPaintingAssistantHandleSP origHandle, KisPaintingAssistant *q)
+KisPaintingAssistantHandleSP KisPaintingAssistant::Private::reuseOrCreateHandle(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap, KisPaintingAssistantHandleSP origHandle, KisPaintingAssistant *q, bool registerAssistant)
 {
     KisPaintingAssistantHandleSP mappedHandle = handleMap.value(origHandle);
     if (!mappedHandle) {
@@ -181,7 +181,7 @@ KisPaintingAssistantHandleSP KisPaintingAssistant::Private::reuseOrCreateHandle(
             mappedHandle = KisPaintingAssistantHandleSP();
         }
     }
-    if (mappedHandle) {
+    if (mappedHandle && registerAssistant) {
         mappedHandle->registerAssistant(q);
     }
     return mappedHandle;
@@ -235,7 +235,7 @@ KisPaintingAssistant::KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap
     Q_FOREACH (const KisPaintingAssistantHandleSP origHandle, rhs.d->sideHandles) {
         d->sideHandles << d->reuseOrCreateHandle(handleMap, origHandle, this);
     }
-#define _REUSE_H(name) d->name = d->reuseOrCreateHandle(handleMap, rhs.d->name, this)
+#define _REUSE_H(name) d->name = d->reuseOrCreateHandle(handleMap, rhs.d->name, this, /* registerAssistant = */ false)
     _REUSE_H(topLeft);
     _REUSE_H(bottomLeft);
     _REUSE_H(topRight);

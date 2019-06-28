@@ -188,10 +188,11 @@ QRect KisMagneticWorker::calculateRect(QPoint p1, QPoint p2, int radius) const {
 QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint end) {
 
     //QRect rect = calculateRect(begin, end, radius);
-
+    QRect rect = QPolygon(QVector<QPoint>{begin, end}).boundingRect();
+    rect.setSize(rect.size()*radius);
     VertexDescriptor goal(end);
     VertexDescriptor start(begin);
-    KisMagneticGraph g(m_dev, m_dev->exactBounds());
+    KisMagneticGraph g(m_dev, rect);
 
     // How many maps does it require?
     // Take a look here, if it doesn't make sense, https://www.boost.org/doc/libs/1_70_0/libs/graph/doc/astar_search.html

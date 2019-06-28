@@ -53,6 +53,9 @@ void KisMagneticWorkerTest::testWorker()
     auto points = worker.computeEdge(10, startPos, endPos);
     KIS_DUMP_DEVICE_2(grayscaleDev, rect, "draw", "dd");
 
+
+
+    /*
     QVector<QPointF> result = { QPointF(50,65),
                                 QPointF(49,64),
                                 QPointF(48,63),
@@ -112,6 +115,32 @@ void KisMagneticWorkerTest::testWorker()
                                 QPointF(40,10)};
 
     QCOMPARE(result, points);
+    */
+
+    QImage img = dev->convertToQImage(0, rect);
+    img = img.convertToFormat(QImage::Format_ARGB32);
+    QPainter gc(&img);
+
+    QPainterPath path;
+
+    for (int i = 0; i < points.size(); i++) {
+        if (i == 0) {
+            path.moveTo(points[i]);
+        } else {
+            path.lineTo(points[i]);
+        }
+    }
+
+    gc.setPen(Qt::white);
+    gc.drawPath(path);
+
+    gc.setPen(Qt::green);
+    gc.drawEllipse(startPos, 3, 3);
+    gc.setPen(Qt::red);
+    gc.drawEllipse(endPos, 2, 2);
+
+    img.save("result.png");
+
 }
 
 QTEST_MAIN(KisMagneticWorkerTest)

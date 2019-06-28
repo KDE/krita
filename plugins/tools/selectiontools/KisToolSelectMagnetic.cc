@@ -96,7 +96,7 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
     m_lastCursorPos = convertToPixelCoord(event);
     auto current = QPoint(m_lastCursorPos.x(), m_lastCursorPos.y());
     //qDebug() << current;
-    m_points = m_worker.computeEdge(2, m_lastAnchor, current);
+    m_points = m_worker.computeEdge(10, m_lastAnchor, current);
     m_paintPath = QPainterPath();
     m_paintPath.moveTo(pixelToView(m_points[m_points.count()-1]));
     for(int i=m_points.count()-2; i>0;i--){

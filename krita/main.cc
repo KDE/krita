@@ -140,12 +140,6 @@ void resetRotation()
 extern "C" int main(int argc, char **argv)
 {
 
-#if defined HAVE_KCRASH
-    KCrash::initialize();
-#elif defined USE_DRMINGW
-    tryInitDrMingw();
-#endif
-
     // The global initialization of the random generator
     qsrand(time(0));
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
@@ -405,6 +399,11 @@ extern "C" int main(int argc, char **argv)
     }
 
 
+#if defined HAVE_KCRASH
+    KCrash::initialize();
+#elif defined USE_DRMINGW
+    tryInitDrMingw();
+#endif
 
     // If we should clear the config, it has to be done as soon as possible after
     // KisApplication has been created. Otherwise the config file may have been read

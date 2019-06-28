@@ -19,22 +19,23 @@
 #ifndef KOSHAPECONTAINERPRIVATE_H
 #define KOSHAPECONTAINERPRIVATE_H
 
-#include "KoShape_p.h"
 #include "KoShapeContainer.h"
 #include "kritaflake_export.h"
+
+#include <QSharedData>
 
 class KoShapeContainerModel;
 
 /**
  * \internal used private d-pointer class for the \a KoShapeContainer class.
  */
-class KRITAFLAKE_EXPORT KoShapeContainerPrivate : public KoShapePrivate
+class KRITAFLAKE_EXPORT KoShapeContainer::Private : public QSharedData
 {
 public:
-    explicit KoShapeContainerPrivate(KoShapeContainer *q);
-    ~KoShapeContainerPrivate() override;
+    explicit Private(KoShapeContainer *q);
+    virtual ~Private();
 
-    KoShapeContainerPrivate(const KoShapeContainerPrivate &rhs, KoShapeContainer *q);
+    Private(const Private &rhs, KoShapeContainer *q);
 
     KoShapeContainer::ShapeInterface shapeInterface;
     KoShapeContainerModel *model;

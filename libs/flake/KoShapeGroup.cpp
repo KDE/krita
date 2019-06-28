@@ -84,43 +84,34 @@ private: // members
     KoShapeGroup * m_group;
 };
 
-class KoShapeGroupPrivate : public KoShapeContainerPrivate
+class KoShapeGroup::Private
 {
 public:
-    KoShapeGroupPrivate(KoShapeGroup *q)
-        : KoShapeContainerPrivate(q)
-    {
-        model = new ShapeGroupContainerModel(q);
-    }
+    Private() {}
 
-    KoShapeGroupPrivate(const KoShapeGroupPrivate &rhs, KoShapeGroup *q)
-        : KoShapeContainerPrivate(rhs, q)
-    {
-        ShapeGroupContainerModel *otherModel = dynamic_cast<ShapeGroupContainerModel*>(rhs.model);
-        KIS_ASSERT_RECOVER_RETURN(otherModel);
-        model = new ShapeGroupContainerModel(*otherModel, q);
-    }
+    Private(const KoShapeGroupPrivate &rhs) {}
 
-    ~KoShapeGroupPrivate() override
-    {
-    }
+    virtual ~Private() = default;
 
     mutable QRectF savedOutlineRect;
     mutable bool sizeCached = false;
 
-    void tryUpdateCachedSize() const;
-
-    Q_DECLARE_PUBLIC(KoShapeGroup)
 };
 
 KoShapeGroup::KoShapeGroup()
-        : KoShapeContainer(new KoShapeGroupPrivate(this))
+    : KoShapeContainer()
+    , d(new Private)
 {
+    setModelInit(new ShapeGroupContainerModel(this));
 }
 
 KoShapeGroup::KoShapeGroup(const KoShapeGroup &rhs)
-    : KoShapeContainer(new KoShapeGroupPrivate(*rhs.d_func(), this))
+    : KoShapeContainer(rhs)
+    , d(new Private(*rhs.d))
 {
+    ShapeGroupContainerModel *otherModel = dynamic_cast<ShapeGroupContainerModel*>(rhs.model());
+    KIS_ASSERT_RECOVER_RETURN(otherModel);
+    setModelInit(new ShapeGroupContainerModel(*otherModel, this));
 }
 
 KoShapeGroup::~KoShapeGroup()
@@ -144,27 +135,23 @@ bool KoShapeGroup::hitTest(const QPointF &position) const
     return false;
 }
 
-void KoShapeGroupPrivate::tryUpdateCachedSize() const
+void KoShapeGroup::tryUpdateCachedSize() const
 {
-    Q_Q(const KoShapeGroup);
-
-    if (!sizeCached) {
+    if (!d->sizeCached) {
         QRectF bound;
-        Q_FOREACH (KoShape *shape, q->shapes()) {
+        Q_FOREACH (KoShape *shape, shapes()) {
             bound |= shape->transformation().mapRect(shape->outlineRect());
         }
-        savedOutlineRect = bound;
-        size = bound.size();
-        sizeCached = true;
+        d->savedOutlineRect = bound;
+        KoShape::setSizeImpl(bound.size());
+        d->sizeCached = true;
     }
 }
 
 QSizeF KoShapeGroup::size() const
 {
-    Q_D(const KoShapeGroup);
-
-    d->tryUpdateCachedSize();
-    return d->size;
+    tryUpdateCachedSize();
+    return KoShape::size();
 }
 
 void KoShapeGroup::setSize(const QSizeF &size)
@@ -182,9 +169,7 @@ void KoShapeGroup::setSize(const QSizeF &size)
 
 QRectF KoShapeGroup::outlineRect() const
 {
-    Q_D(const KoShapeGroup);
-
-    d->tryUpdateCachedSize();
+    tryUpdateCachedSize();
     return d->savedOutlineRect;
 }
 
@@ -219,7 +204,6 @@ void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
 
 bool KoShapeGroup::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    Q_D(KoShapeGroup);
     loadOdfAttributes(element, context, OdfMandatories | OdfStyle | OdfAdditionalAttributes | OdfCommonChildElements);
 
     KoXmlElement child;
@@ -281,6 +265,5 @@ void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
 
 void KoShapeGroup::invalidateSizeCache()
 {
-    Q_D(KoShapeGroup);
     d->sizeCached = false;
 }

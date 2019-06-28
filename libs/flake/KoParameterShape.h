@@ -135,7 +135,7 @@ protected:
     void setHandles(const QList<QPointF> &handles);
 
     /// constructor
-    KoParameterShape(KoParameterShapePrivate *);
+    KoParameterShape(const KoParameterShape &rhs);
 
     /**
      * @brief Updates the internal state of a KoParameterShape.
@@ -155,8 +155,9 @@ protected:
      */
     virtual void updatePath(const QSizeF &size) = 0;
 
-protected:
-    Q_DECLARE_PRIVATE(KoParameterShape)
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 #endif /* KOPARAMETERSHAPE_H */

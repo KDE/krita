@@ -475,16 +475,13 @@ public:
 protected:
     void notifyPointsChanged();
 
-private:
+protected:
     /// constructor: to be used in cloneShape(), not in descendants!
     /// \internal
+    /// XXX private?
     KoPathShape(const KoPathShape &rhs);
 
 protected:
-    /// constructor:to be used in descendant shapes
-    /// \internal
-    KoPathShape(KoPathShapePrivate *);
-
     /// reimplemented
     QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const override;
     /// reimplemented
@@ -515,7 +512,21 @@ protected:
     QTransform resizeMatrix( const QSizeF &newSize ) const;
 
 private:
-    Q_DECLARE_PRIVATE(KoPathShape)
+    /// close-merges specified subpath
+    void closeMergeSubpathPriv(KoSubpath *subpath);
+    /// closes specified subpath
+    void closeSubpathPriv(KoSubpath *subpath);
+    void updateLastPriv(KoPathPoint **lastPoint);
+
+protected:
+    const KoSubpathList &subpaths() const;
+    /// XXX: refactor this using setter?
+    KoSubpathList &subpaths();
+    void map(const QTransform &matrix);
+
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 Q_DECLARE_METATYPE(KoPathShape*)

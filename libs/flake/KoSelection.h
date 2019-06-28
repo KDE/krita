@@ -159,7 +159,12 @@ private:
     void saveOdf(KoShapeSavingContext &) const override;
     bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override;
 
-    Q_DECLARE_PRIVATE_D(KoShape::d_ptr, KoSelection)
+protected:
+    KoSelection(const KoSelection &rhs);
+
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 #endif

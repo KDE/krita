@@ -19,25 +19,7 @@
 
 #include "KoShapeBackground.h"
 
-#include "KoShapeBackground_p.h"
-
-KoShapeBackgroundPrivate::KoShapeBackgroundPrivate()
-{
-}
-
-KoShapeBackgroundPrivate::~KoShapeBackgroundPrivate()
-{
-}
-
-KoShapeBackground::KoShapeBackground(KisSharedDescendent<KoShapeBackgroundPrivate> &dd)
-    : d_ptr(&dd)
-{
-}
-
-
-
 KoShapeBackground::KoShapeBackground()
-    : d_ptr(KisSharedDescendent<KoShapeBackgroundPrivate>::pointerOf(KoShapeBackgroundPrivate()))
 {
 }
 

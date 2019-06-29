@@ -18,7 +18,6 @@
  */
 
 #include "KoPatternBackground.h"
-#include "KoShapeBackground_p.h"
 #include "KoShapeSavingContext.h"
 #include "KoImageData.h"
 #include "KoImageCollection.h"
@@ -38,19 +37,22 @@
 #include <QBrush>
 #include <QPainter>
 #include <QPointer>
+#include <QSharedData>
 
-class KoPatternBackgroundPrivate : public KoShapeBackgroundPrivate
+class KoPatternBackground::Private : public QSharedData
 {
 public:
-    KoPatternBackgroundPrivate()
-        : repeat(KoPatternBackground::Tiled)
+    Private()
+        : QSharedData()
+        , repeat(KoPatternBackground::Tiled)
         , refPoint(KoPatternBackground::TopLeft)
         , imageCollection(0)
         , imageData(0)
     {
     }
 
-    ~KoPatternBackgroundPrivate() override {
+    ~Private()
+    {
         delete imageData;
     }
 
@@ -133,9 +135,9 @@ public:
 
 
 KoPatternBackground::KoPatternBackground(KoImageCollection *imageCollection)
-    : KoShapeBackground(KisSharedDescendent<KoShapeBackgroundPrivate>::of(KoPatternBackgroundPrivate()))
+    : KoShapeBackground()
+    , d(new Private)
 {
-    SHARED_D(KoPatternBackground);
     d->imageCollection = imageCollection;
     Q_ASSERT(d->imageCollection);
 }
@@ -152,19 +154,16 @@ bool KoPatternBackground::compareTo(const KoShapeBackground *other) const
 
 void KoPatternBackground::setTransform(const QTransform &matrix)
 {
-    SHARED_D(KoPatternBackground);
     d->matrix = matrix;
 }
 
 QTransform KoPatternBackground::transform() const
 {
-    CONST_SHARED_D(KoPatternBackground);
     return d->matrix;
 }
 
 void KoPatternBackground::setPattern(const QImage &pattern)
 {
-    SHARED_D(KoPatternBackground);
     delete d->imageData;
     if (d->imageCollection) {
         d->imageData = d->imageCollection->createImageData(pattern);
@@ -173,7 +172,6 @@ void KoPatternBackground::setPattern(const QImage &pattern)
 
 void KoPatternBackground::setPattern(KoImageData *imageData)
 {
-    SHARED_D(KoPatternBackground);
     delete d->imageData;
 
     d->imageData = imageData;
@@ -181,7 +179,6 @@ void KoPatternBackground::setPattern(KoImageData *imageData)
 
 QImage KoPatternBackground::pattern() const
 {
-    CONST_SHARED_D(KoPatternBackground);
     if (d->imageData)
         return d->imageData->image();
     return QImage();
@@ -189,37 +186,31 @@ QImage KoPatternBackground::pattern() const
 
 void KoPatternBackground::setRepeat(PatternRepeat repeat)
 {
-    SHARED_D(KoPatternBackground);
     d->repeat = repeat;
 }
 
 KoPatternBackground::PatternRepeat KoPatternBackground::repeat() const
 {
-    CONST_SHARED_D(KoPatternBackground);
     return d->repeat;
 }
 
 KoPatternBackground::ReferencePoint KoPatternBackground::referencePoint() const
 {
-    CONST_SHARED_D(KoPatternBackground);
     return d->refPoint;
 }
 
 void KoPatternBackground::setReferencePoint(ReferencePoint referencePoint)
 {
-    SHARED_D(KoPatternBackground);
     d->refPoint = referencePoint;
 }
 
 QPointF KoPatternBackground::referencePointOffset() const
 {
-    CONST_SHARED_D(KoPatternBackground);
     return d->refPointOffsetPercent;
 }
 
 void KoPatternBackground::setReferencePointOffset(const QPointF &offset)
 {
-    SHARED_D(KoPatternBackground);
     qreal ox = qMax(qreal(0.0), qMin(qreal(100.0), offset.x()));
     qreal oy = qMax(qreal(0.0), qMin(qreal(100.0), offset.y()));
 
@@ -228,38 +219,32 @@ void KoPatternBackground::setReferencePointOffset(const QPointF &offset)
 
 QPointF KoPatternBackground::tileRepeatOffset() const
 {
-    CONST_SHARED_D(KoPatternBackground);
     return d->tileRepeatOffsetPercent;
 }
 
 void KoPatternBackground::setTileRepeatOffset(const QPointF &offset)
 {
-    SHARED_D(KoPatternBackground);
     d->tileRepeatOffsetPercent = offset;
 }
 
 QSizeF KoPatternBackground::patternDisplaySize() const
 {
-    CONST_SHARED_D(KoPatternBackground);
     return d->targetSize();
 }
 
 void KoPatternBackground::setPatternDisplaySize(const QSizeF &size)
 {
-    SHARED_D(KoPatternBackground);
     d->targetImageSizePercent = QSizeF();
     d->targetImageSize = size;
 }
 
 QSizeF KoPatternBackground::patternOriginalSize() const
 {
-    CONST_SHARED_D(KoPatternBackground);
     return d->imageData->imageSize();
 }
 
 void KoPatternBackground::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
 {
-    CONST_SHARED_D(KoPatternBackground);
     if (! d->imageData)
         return;
 
@@ -311,7 +296,6 @@ void KoPatternBackground::paint(QPainter &painter, const KoViewConverter &conver
 
 void KoPatternBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
 {
-    SHARED_D(KoPatternBackground);
     if (! d->imageData)
         return;
 
@@ -373,7 +357,6 @@ void KoPatternBackground::fillStyle(KoGenStyle &style, KoShapeSavingContext &con
 
 bool KoPatternBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &)
 {
-    SHARED_D(KoPatternBackground);
     KoStyleStack &styleStack = context.styleStack();
     if (! styleStack.hasProperty(KoXmlNS::draw, "fill"))
         return false;
@@ -477,7 +460,6 @@ bool KoPatternBackground::loadStyle(KoOdfLoadingContext &context, const QSizeF &
 
 QRectF KoPatternBackground::patternRectFromFillSize(const QSizeF &size)
 {
-    SHARED_D(KoPatternBackground);
     QRectF rect;
 
     switch (d->repeat) {

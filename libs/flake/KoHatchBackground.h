@@ -23,8 +23,6 @@
 
 #include "KoColorBackground.h"
 
-class KoHatchBackgroundPrivate;
-
 /**
  * A hatch shape background
  */
@@ -38,6 +36,7 @@ public:
     };
 
     KoHatchBackground();
+    ~KoHatchBackground() override;
 
     // reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
@@ -52,7 +51,8 @@ private:
     QString saveHatchStyle(KoShapeSavingContext &context) const;
 
 private:
-    SHARED_DECLARE_PRIVATE(KoHatchBackground)
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 #endif /* KOHATCHBACKGROUND_H */

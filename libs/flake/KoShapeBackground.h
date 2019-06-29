@@ -23,9 +23,6 @@
 #include "kritaflake_export.h"
 
 #include <QtGlobal>
-#include <QSharedDataPointer>
-
-#include <KisSharedDescendent.h>
 
 class QSizeF;
 class QPainter;
@@ -33,7 +30,6 @@ class QPainterPath;
 class KoGenStyle;
 class KoShapeSavingContext;
 class KoOdfLoadingContext;
-class KoShapeBackgroundPrivate;
 class KoShapePaintingContext;
 class KoViewConverter;
 
@@ -68,11 +64,6 @@ public:
 
     virtual explicit operator bool() const { return true; }
 
-protected:
-    KoShapeBackground(KisSharedDescendent<KoShapeBackgroundPrivate> &);
-    QSharedDataPointer<KisSharedDescendent<KoShapeBackgroundPrivate> > d_ptr;
-private:
-    SHARED_DECLARE_PRIVATE(KoShapeBackground)
 };
 
 #endif // KOSHAPEBACKGROUND_H

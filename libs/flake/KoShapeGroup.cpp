@@ -89,7 +89,7 @@ class KoShapeGroup::Private
 public:
     Private() {}
 
-    Private(const KoShapeGroupPrivate &rhs) {}
+    Private(const Private &) {}
 
     virtual ~Private() = default;
 

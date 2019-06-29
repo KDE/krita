@@ -150,6 +150,10 @@ void AnimationDocker::setViewManager(KisViewManager *view)
 
 void AnimationDocker::slotAddOpacityKeyframe()
 {
+    // remember current node's opacity and set it once we create a new opacity keyframe
+    KisNodeSP node = m_canvas->viewManager()->activeNode();
+    if (!node) return;
+
     addKeyframe(KisKeyframeChannel::Opacity.id(), false);
 }
 
@@ -600,8 +604,11 @@ void AnimationDocker::setActions(KisActionManager *actionMan)
     m_animationWidget->btnDeleteKeyframe->setMenu(m_deleteKeyframeMenu);
     m_animationWidget->btnDeleteKeyframe->setPopupMode(QToolButton::MenuButtonPopup);
 
-    m_addOpacityKeyframeAction = new KisAction(KisAnimationUtils::addOpacityKeyframeActionName);
-    m_deleteOpacityKeyframeAction = new KisAction(KisAnimationUtils::removeOpacityKeyframeActionName);
+
+    m_addOpacityKeyframeAction = m_actionManager->createAction("insert_opacity_keyframe");
+    m_deleteOpacityKeyframeAction = m_actionManager->createAction("remove_opacity_keyframe");
+
+
 
     m_addTransformKeyframeAction = new KisAction(KisAnimationUtils::addTransformKeyframeActionName);
     m_deleteTransformKeyframeAction = new KisAction(KisAnimationUtils::removeTransformKeyframeActionName);

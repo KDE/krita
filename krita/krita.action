@@ -2431,6 +2431,35 @@
       <statusTip></statusTip>
     </Action>
 
+
+    <Action name="insert_opacity_keyframe">
+      <icon></icon>
+      <text>Add opacity keyframe</text>
+      <whatsThis></whatsThis>
+      <toolTip>Adds keyframe to control layer opacity</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+
+    <Action name="remove_opacity_keyframe">
+      <icon></icon>
+      <text>Remove opacity keyframe</text>
+      <whatsThis></whatsThis>
+      <toolTip>Removes keyframe to control layer opacity</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+
     <Action name="mirror_frames">
       <icon></icon>
       <text>Mirror Frames</text>

@@ -692,6 +692,7 @@ void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QMode
         int row= index.isValid() ? index.row() : 0;
         selectionModel()->setCurrentIndex(m_d->model->index(row, selectedColumn), QItemSelectionModel::ClearAndSelect);
     }
+
 }
 
 void TimelineFramesView::slotHeaderDataChanged(Qt::Orientation orientation, int first, int last)
@@ -955,6 +956,13 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
 
     menu->addSeparator();
 
+    {   // Tween submenu.
+        QMenu *frames = menu->addMenu(i18nc("@item:inmenu", "Tweening"));
+        KisActionManager::safePopulateMenu(frames, "insert_opacity_keyframe", m_d->actionMan);
+        KisActionManager::safePopulateMenu(frames, "remove_opacity_keyframe", m_d->actionMan);
+    }
+
+
     {   //Frames submenu.
         QMenu *frames = menu->addMenu(i18nc("@item:inmenu", "Keyframes"));
         KisActionManager::safePopulateMenu(frames, "insert_keyframe_left", m_d->actionMan);
@@ -1216,10 +1224,12 @@ void TimelineFramesView::slotUpdateFrameActions()
     enableAction("copy_frames_to_clipboard", true);
     enableAction("cut_frames_to_clipboard", hasEditableFrames);
 
+    enableAction("insert_opacity_keyframe", hasEditableFrames);
+    enableAction("remove_opacity_keyframe", hasEditableFrames);
+
     QClipboard *cp = QApplication::clipboard();
     const QMimeData *data = cp->mimeData();
 
-    enableAction("paste_frames_from_clipboard", data && data->hasFormat("application/x-krita-frame"));
 
     //TODO: update column actions!
 }

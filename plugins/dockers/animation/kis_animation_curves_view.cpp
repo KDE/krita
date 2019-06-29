@@ -31,6 +31,8 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_zoom_button.h"
 #include "kis_custom_modifiers_catcher.h"
+#include "krita_utils.h"
+
 
 const int VERTICAL_PADDING = 30;
 
@@ -71,6 +73,7 @@ KisAnimationCurvesView::KisAnimationCurvesView(QWidget *parent)
     , m_d(new Private())
 {
     m_d->horizontalHeader = new TimelineRulerHeader(this);
+
     m_d->verticalHeader = new KisAnimationCurvesValueRuler(this);
     m_d->itemDelegate = new KisAnimationCurvesKeyframeDelegate(m_d->horizontalHeader, m_d->verticalHeader, this);
 
@@ -87,6 +90,7 @@ KisAnimationCurvesView::KisAnimationCurvesView(QWidget *parent)
         connect(scroller, SIGNAL(stateChanged(QScroller::State)),
                 this, SLOT(slotScrollerStateChanged(QScroller::State)));
     }
+
 }
 
 KisAnimationCurvesView::~KisAnimationCurvesView()
@@ -110,6 +114,7 @@ void KisAnimationCurvesView::setModel(QAbstractItemModel *model)
 
     connect(model, &QAbstractItemModel::headerDataChanged,
             this, &KisAnimationCurvesView::slotHeaderDataChanged);
+
 }
 
 void KisAnimationCurvesView::setZoomButtons(KisZoomButton *horizontal, KisZoomButton *vertical)
@@ -168,8 +173,47 @@ void KisAnimationCurvesView::paintEvent(QPaintEvent *e)
     int lastFrame = m_d->horizontalHeader->logicalIndexAt(r.right());
     if (lastFrame == -1) lastFrame = model()->columnCount();
 
+
+    paintFrames(painter);
+
     paintCurves(painter, firstFrame, lastFrame);
     paintKeyframes(painter, firstFrame, lastFrame);
+}
+
+void KisAnimationCurvesView::paintFrames(QPainter &painter)
+{
+    const QColor textColor = qApp->palette().text().color();
+    const QColor backgroundColor = qApp->palette().background().color();
+
+
+    // paint vertical lines so it is easier to tell where each frame starts/stops
+    QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.2);
+    painter.setPen(QPen(blendedColor, 1));
+    int channels = model()->rowCount();
+    for (int channel = 0; channel < channels; channel++) {
+
+        // draw border around entire frame, so override the height and Y position
+        for (int time = 0; time <= model()->columnCount(); time++) {
+
+            QModelIndex index = model()->index(channel, time);
+            QRect frameRect = m_d->itemDelegate->frameRect(index);
+
+            int offset = 0;
+            if (m_d->horizontalHeader && m_d->horizontalHeader->offset()) {
+                offset = m_d->horizontalHeader->offset();
+            }
+
+            int horizontalStepSize = m_d->horizontalHeader->defaultSectionSize();
+            int viewportHeight = 9999;// makes sure the vertical lines hit the bottom
+
+            frameRect.setX( (horizontalStepSize * time) - offset );
+            frameRect.setHeight(viewportHeight);
+            frameRect.setY(-10); // hides the top border
+
+            painter.drawLine(frameRect.topRight(), frameRect.bottomRight());
+        }
+
+    }
 }
 
 void KisAnimationCurvesView::paintCurves(QPainter &painter, int firstFrame, int lastFrame)
@@ -475,6 +519,7 @@ void KisAnimationCurvesView::mouseMoveEvent(QMouseEvent *e)
             m_d->verticalZoomButton->continueZoom(QPoint(0, e->pos().y()));
         }
     } else if (e->buttons() & Qt::LeftButton) {
+
         m_d->dragOffset = e->pos() - m_d->dragStart;
 
         if (m_d->isAdjustingHandle) {
@@ -497,6 +542,7 @@ void KisAnimationCurvesView::mouseMoveEvent(QMouseEvent *e)
 
 void KisAnimationCurvesView::mouseReleaseEvent(QMouseEvent *e)
 {
+
     if (e->button() == Qt::LeftButton) {
         m_d->panning = false;
 
@@ -553,6 +599,7 @@ void KisAnimationCurvesView::scrollContentsBy(int dx, int dy)
 
     scrollDirtyRegion(dx, dy);
     viewport()->scroll(dx, dy);
+    viewport()->update();
 }
 
 void KisAnimationCurvesView::updateGeometries()
@@ -588,8 +635,14 @@ void KisAnimationCurvesView::slotDataChanged(const QModelIndex &topLeft, const Q
 {
     Q_UNUSED(topLeft);
     Q_UNUSED(bottomRight);
+
     updateVerticalRange();
     viewport()->update();
+
+    // this forces the horizontal ruler to refresh. Repaint() doesn't do it for some reason
+    // If you remove this, scrubbing the timeline will probably stop updating the indicator
+    m_d->horizontalHeader->resize(m_d->horizontalHeader->width()-1, m_d->horizontalHeader->height());
+    m_d->horizontalHeader->resize(m_d->horizontalHeader->width()+1, m_d->horizontalHeader->height());
 }
 
 void KisAnimationCurvesView::slotHeaderDataChanged(Qt::Orientation orientation, int first, int last)
@@ -723,6 +776,7 @@ void KisAnimationCurvesView::removeKeyframes()
 {
     m_d->model->removeFrames(selectedIndexes());
 }
+
 
 void KisAnimationCurvesView::zoomToFit()
 {

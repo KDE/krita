@@ -44,6 +44,7 @@ public:
     QPointF unscaledTangent(QPointF handlePosition) const;
 
     QRect itemRect(const QModelIndex index) const;
+    QRect frameRect(const QModelIndex index) const;
     QRect visualRect(const QModelIndex index) const;
 
 private:
@@ -52,6 +53,7 @@ private:
 
     void paintHandle(QPainter *painter, QPointF nodePos, QPointF tangent) const;
     QPointF handlePosition(const QModelIndex index, bool active, int handle) const;
+
 };
 
 #endif

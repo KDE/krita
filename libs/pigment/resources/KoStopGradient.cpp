@@ -161,17 +161,11 @@ bool KoStopGradient::stopsAt(KoGradientStop &leftStop, KoGradientStop &rightStop
     } else {
         // we have at least two color stops
         // -> find the two stops which frame our t
-        QList<KoGradientStop>::const_iterator stop = m_stops.begin();
-        QList<KoGradientStop>::const_iterator lastStop = m_stops.end();
-        // we already checked the first stop, so we start at the second
-        for (++stop; stop != lastStop; ++stop) {
-            // we break at the stop which is just after our t
-            if (stop->first > t)
-                break;
-        }
-
-        leftStop = *(stop - 1);
-        rightStop = *(stop);
+        auto it = std::lower_bound(m_stops.begin(),  m_stops.end(), KoGradientStop(t, KoColor()), [](const KoGradientStop &a, const KoGradientStop &b){
+            return a.first < b.first;
+        });
+        leftStop = *(it - 1);
+        rightStop = *(it);
         return true;
     }
 }
@@ -208,7 +202,6 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
     colorWeights[0] = static_cast<quint8>((1.0 - localT) * 255 + 0.5);
     colorWeights[1] = 255 - colorWeights[0];
 
-
     //check if our mixspace exists, it doesn't at startup.
     if (mixSpace){
         if (*buffer.colorSpace() != *mixSpace) {
@@ -220,7 +213,6 @@ void KoStopGradient::colorAt(KoColor& dst, qreal t) const
         buffer = KoColor(colorSpace());
         colorSpace()->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
     }
-
 
     dst.fromKoColor(buffer);
 }

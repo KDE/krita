@@ -34,6 +34,11 @@ class KritaFilterGradientMap : public KisFilter
 public:
     KritaFilterGradientMap();
 public:
+    enum ColorMode {
+        Blend,
+        Nearest,
+        Dither,
+        };
 
     static inline KoID id() {
         return KoID("gradientmap", i18n("Gradient Map"));

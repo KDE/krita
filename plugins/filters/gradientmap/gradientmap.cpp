@@ -55,7 +55,7 @@ KritaGradientMapConfigWidget::KritaGradientMapConfigWidget(QWidget *parent, KisP
     connect(m_page->gradientEditor, SIGNAL(sigGradientChanged()), m_gradientChangedCompressor, SLOT(start()));
     connect(m_gradientChangedCompressor, SIGNAL(timeout()), this, SIGNAL(sigConfigurationItemChanged()));
 
-    QObject::connect(m_page->ditherGroupBox, &QGroupBox::toggled, this, &KisConfigWidget::sigConfigurationItemChanged);
+    QObject::connect(m_page->colorModeComboBox,  QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
     QObject::connect(m_page->ditherWidget, &KisDitherWidget::sigConfigurationItemChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
 }
 
@@ -85,7 +85,7 @@ KisPropertiesConfigurationSP KritaGradientMapConfigWidget::configuration() const
         cfg->setProperty("gradientXML", doc.toString());
     }
 
-    cfg->setProperty("ditherEnabled", m_page->ditherGroupBox->isChecked());
+    cfg->setProperty("colorMode", m_page->colorModeComboBox->currentIndex());
     m_page->ditherWidget->configuration(*cfg, "dither/");
 
     return cfg;
@@ -105,7 +105,7 @@ void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigura
         }
     }
 
-    m_page->ditherGroupBox->setChecked(config->getBool("ditherEnabled"));
+    m_page->colorModeComboBox->setCurrentIndex(config->getInt("colorMode"));
     m_page->ditherWidget->setConfiguration(*config, "dither/");
 }
 

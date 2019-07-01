@@ -103,9 +103,9 @@ QSqlError initDb(const QString &location)
         }
 
         bool schemaIsOutDated = false;
-        QString schemaVersion = q.value(0).toString();
-        QString kritaVersion = q.value(1).toString();
-        int creationDate = q.value(2).toInt();
+        QString schemaVersion = "Unknown";
+        QString kritaVersion = "Unknown";
+        int creationDate = 0;
 
 
         if (dbTables.contains("version_information")) {
@@ -115,6 +115,10 @@ QSqlError initDb(const QString &location)
                 QSqlQuery q(f.readAll());
                 if (q.size() > 0) {
                     q.first();
+                    schemaVersion = q.value(0).toString();
+                    kritaVersion = q.value(1).toString();
+                    creationDate = q.value(2).toInt();
+
                     if (schemaVersion != KisResourceCacheDb::databaseVersion) {
                         // XXX: Implement migration
                         schemaIsOutDated = true;

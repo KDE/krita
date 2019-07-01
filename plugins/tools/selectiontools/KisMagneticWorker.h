@@ -23,6 +23,10 @@
 
 class KRITASELECTIONTOOLS_EXPORT KisMagneticWorker{
 public:
+    KisMagneticWorker() {
+        //Do not use this, just for making the compiler happy
+    }
+
     KisMagneticWorker(KisPaintDeviceSP dev);
     QVector<QPointF> computeEdge(int radius, QPoint start, QPoint end);
 private:

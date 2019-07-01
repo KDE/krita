@@ -48,6 +48,7 @@ public:
 
 public Q_SLOTS:
     void deactivate() override;
+    void activate(KoToolBase::ToolActivation activation, const QSet<KoShape*> &shapes) override;
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
@@ -65,6 +66,7 @@ private:
     QPoint m_lastAnchor;
     bool m_complete;
     KisMagneticWorker m_worker;
+    int m_frequency;
 };
 
 class KisToolSelectMagneticFactory : public KisSelectionToolFactoryBase

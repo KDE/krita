@@ -55,7 +55,7 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.svg", 16, 16),
                     i18n("Magnetic Selection")),
-      m_continuedMode(false), m_complete(true), m_worker(image()->projection())
+      m_continuedMode(false), m_complete(true), m_frequency(20)
 { }
 
 KisToolSelectMagnetic::~KisToolSelectMagnetic()
@@ -90,13 +90,13 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
 {
     KisToolSelect::mouseMoveEvent(event);
     if(m_complete){
-        finishSelectionAction();
+        //finishSelectionAction();
         return;
     }
+
     m_lastCursorPos = convertToPixelCoord(event);
     auto current = QPoint(m_lastCursorPos.x(), m_lastCursorPos.y());
-    //qDebug() << current;
-    m_points = m_worker.computeEdge(10, m_lastAnchor, current);
+    m_points = m_worker.computeEdge(15, m_lastAnchor, current);
     m_paintPath = QPainterPath();
     m_paintPath.moveTo(pixelToView(m_points[m_points.count()-1]));
     for(int i=m_points.count()-2; i>0;i--){
@@ -118,7 +118,6 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
     m_lastAnchor = QPoint(temp.x(), temp.y());
     qDebug() << m_lastAnchor;
     m_complete = !m_complete; //just for testing
-    m_worker = KisMagneticWorker(image()->projection());
 }
 
 //drag while primary mouse button is pressed
@@ -189,7 +188,6 @@ void KisToolSelectMagnetic::finishSelectionAction()
         }
         QApplication::restoreOverrideCursor();
     }
-
     m_points.clear();
     m_paintPath = QPainterPath();
 }
@@ -208,8 +206,6 @@ void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter
         paintToolOutline(&gc, outline);
     }
 }
-
-
 
 void KisToolSelectMagnetic::updateFeedback()
 {
@@ -233,6 +229,12 @@ void KisToolSelectMagnetic::updateContinuedMode()
 
         updateCanvasPixelRect(updateRect);
     }
+}
+
+void KisToolSelectMagnetic::activate(KoToolBase::ToolActivation activation, const QSet<KoShape*> &shapes)
+{
+    m_worker = KisMagneticWorker(image()->projection());
+    KisToolSelect::activate(activation, shapes);
 }
 
 void KisToolSelectMagnetic::deactivate()

@@ -392,7 +392,7 @@ public:
 
         if (!m_locked) {
             m_image->requestStrokeEnd();
-            QApplication::processEvents();
+            QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
             // one more try...
             m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
@@ -743,7 +743,7 @@ void KisDocument::setFileBatchMode(const bool batchMode)
 KisDocument* KisDocument::lockAndCloneForSaving()
 {
     // force update of all the asynchronous nodes before cloning
-    QApplication::processEvents();
+    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     KisLayerUtils::forceAllDelayedNodesUpdate(d->image->root());
 
     KisMainWindow *window = KisPart::instance()->currentMainwindow();

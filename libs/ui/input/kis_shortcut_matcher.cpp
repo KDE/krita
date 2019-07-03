@@ -27,6 +27,7 @@
 #include "kis_stroke_shortcut.h"
 #include "kis_touch_shortcut.h"
 #include "kis_native_gesture_shortcut.h"
+#include "kis_config.h"
 
 
 #ifdef DEBUG_MATCHER
@@ -89,13 +90,15 @@ public:
     bool usingNativeGesture;
 
     inline bool actionsSuppressed() const {
-        return suppressAllActions || !cursorEntered;
+        return (suppressAllActions || !cursorEntered)
+                && KisConfig(true).disableTouchOnCanvas();
     }
 
     inline bool actionsSuppressedIgnoreFocus() const {
         return suppressAllActions;
     }
 
+    // only for touch events with touchPoints count >= 2
     inline bool isUsingTouch() const {
         return usingTouch || usingNativeGesture;
     }
@@ -204,14 +207,14 @@ bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QEvent *event)
 
     if (m_d->buttons.contains(button)) { DEBUG_ACTION("Peculiar, button was already pressed."); }
 
-    if (!m_d->runningShortcut) {
+    if (!hasRunningShortcut()) {
         prepareReadyShortcuts();
         retval = tryRunReadyShortcut(button, event);
     }
 
     m_d->buttons.insert(button);
 
-    if (!m_d->runningShortcut) {
+    if (!hasRunningShortcut()) {
         prepareReadyShortcuts();
         tryActivateReadyShortcut();
     }
@@ -609,12 +612,12 @@ bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
 
     if( goodCandidate ) {
         if( m_d->runningShortcut ) {
-            QMouseEvent mouseEvent(QEvent::MouseButtonRelease,
-                                   event->touchPoints().at(0).pos().toPoint(),
-                                   Qt::LeftButton,
-                                   Qt::LeftButton,
-                                   event->modifiers());
-            tryEndRunningShortcut(Qt::LeftButton, &mouseEvent);
+            QTouchEvent touchEvent(QEvent::TouchEnd,
+                                   event->device(),
+                                   event->modifiers(),
+                                   Qt::TouchPointReleased,
+                                   event->touchPoints());
+            tryEndRunningShortcut(Qt::LeftButton, &touchEvent);
         }
         goodCandidate->action()->activate(goodCandidate->shortcutIndex());
         goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);

@@ -71,6 +71,7 @@ struct KisResourcesSnapshot::Private {
     qreal effectiveZoom = 1.0;
     bool presetAllowsLod = false;
     KisSelectionSP selectionOverride;
+    bool hasOverrideSelection = false;
 };
 
 KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceProvider *resourceManager, KisDefaultBoundsBaseSP bounds)
@@ -288,7 +289,7 @@ KisSelectionSP KisResourcesSnapshot::activeSelection() const
      * It is possible to have/use the snapshot without the image. Such
      * usecase is present for example in the scratchpad.
      */
-    if (m_d->selectionOverride) {
+    if (m_d->hasOverrideSelection) {
         return m_d->selectionOverride;
     }
 
@@ -409,6 +410,7 @@ void KisResourcesSnapshot::setBGColorOverride(const KoColor &color)
 void KisResourcesSnapshot::setSelectionOverride(KisSelectionSP selection)
 {
     m_d->selectionOverride = selection;
+    m_d->hasOverrideSelection = true; // needed if selection passed is null to ignore selection
 }
 
 void KisResourcesSnapshot::setBrush(const KisPaintOpPresetSP &brush)

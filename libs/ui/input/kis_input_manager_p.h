@@ -79,6 +79,8 @@ public:
     PriorityList priorityEventFilter;
     int priorityEventFilterSeqNo;
 
+    bool touchStrokeShortcut = false;
+
     void blockMouseEvents();
     void allowMouseEvents();
     void eatOneMousePress();

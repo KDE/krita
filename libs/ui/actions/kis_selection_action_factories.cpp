@@ -609,7 +609,7 @@ void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelec
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polyline"),
                                        image,
                                        currentNode,
-                                       rManager ,
+                                       rManager,
                                        strokeStyle,
                                        fillStyle);
         helper.setFGColorOverride(color);

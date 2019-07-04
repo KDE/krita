@@ -1100,18 +1100,30 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
                                 i18nc("canvas renderer", "Unknown"));
 
     cmbPreferredRenderer->clear();
-    QString qtPreferredRendererText;
-    if (KisOpenGL::getQtPreferredOpenGLRenderer() == KisOpenGL::RendererOpenGLES) {
-        qtPreferredRendererText = rendererOpenGLESText;
-    } else if (KisOpenGL::getQtPreferredOpenGLRenderer() == KisOpenGL::RendererSoftware) {
-        qtPreferredRendererText = rendererSoftwareText;
+
+    const KisOpenGL::OpenGLRenderers supportedRenderers = KisOpenGL::getSupportedOpenGLRenderers();
+    const bool onlyOneRendererSupported =
+        supportedRenderers == KisOpenGL::RendererDesktopGL ||
+        supportedRenderers == KisOpenGL::RendererOpenGLES ||
+        supportedRenderers == KisOpenGL::RendererSoftware;
+
+
+    if (!onlyOneRendererSupported) {
+        QString qtPreferredRendererText;
+        if (KisOpenGL::getQtPreferredOpenGLRenderer() == KisOpenGL::RendererOpenGLES) {
+            qtPreferredRendererText = rendererOpenGLESText;
+        } else if (KisOpenGL::getQtPreferredOpenGLRenderer() == KisOpenGL::RendererSoftware) {
+            qtPreferredRendererText = rendererSoftwareText;
+        } else {
+            qtPreferredRendererText = rendererOpenGLText;
+        }
+        cmbPreferredRenderer->addItem(i18nc("canvas renderer", "Auto (%1)", qtPreferredRendererText), KisOpenGL::RendererAuto);
+        cmbPreferredRenderer->setCurrentIndex(0);
     } else {
-        qtPreferredRendererText = rendererOpenGLText;
+        cmbPreferredRenderer->setEnabled(false);
     }
 
-    cmbPreferredRenderer->addItem(i18nc("canvas renderer", "Auto (%1)", qtPreferredRendererText), KisOpenGL::RendererAuto);
-    cmbPreferredRenderer->setCurrentIndex(0);
-    if (KisOpenGL::getSupportedOpenGLRenderers() & KisOpenGL::RendererDesktopGL) {
+    if (supportedRenderers & KisOpenGL::RendererDesktopGL) {
         cmbPreferredRenderer->addItem(rendererOpenGLText, KisOpenGL::RendererDesktopGL);
         if (KisOpenGL::getUserPreferredOpenGLRendererConfig() == KisOpenGL::RendererDesktopGL) {
             cmbPreferredRenderer->setCurrentIndex(cmbPreferredRenderer->count() - 1);
@@ -1119,13 +1131,13 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     }
 
 #ifdef Q_OS_WIN
-    if (KisOpenGL::getSupportedOpenGLRenderers() & KisOpenGL::RendererOpenGLES) {
+    if (supportedRenderers & KisOpenGL::RendererOpenGLES) {
         cmbPreferredRenderer->addItem(rendererOpenGLESText, KisOpenGL::RendererOpenGLES);
         if (KisOpenGL::getUserPreferredOpenGLRendererConfig() == KisOpenGL::RendererOpenGLES) {
             cmbPreferredRenderer->setCurrentIndex(cmbPreferredRenderer->count() - 1);
         }
     }
-    if (KisOpenGL::getSupportedOpenGLRenderers() & KisOpenGL::RendererSoftware) {
+    if (supportedRenderers & KisOpenGL::RendererSoftware) {
         cmbPreferredRenderer->addItem(rendererSoftwareText, KisOpenGL::RendererSoftware);
         if (KisOpenGL::getUserPreferredOpenGLRendererConfig() == KisOpenGL::RendererSoftware) {
             cmbPreferredRenderer->setCurrentIndex(cmbPreferredRenderer->count() - 1);
@@ -1133,7 +1145,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     }
 #endif
 
-    if (!(KisOpenGL::getSupportedOpenGLRenderers() &
+    if (!(supportedRenderers &
           (KisOpenGL::RendererDesktopGL |
            KisOpenGL::RendererOpenGLES |
            KisOpenGL::RendererSoftware))) {

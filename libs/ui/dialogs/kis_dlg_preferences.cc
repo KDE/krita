@@ -1086,20 +1086,29 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     KisConfig cfg(true);
 
     const QString rendererOpenGLText = i18nc("canvas renderer", "OpenGL");
+    const QString rendererSoftwareText = i18nc("canvas renderer", "Software Renderer (very slow)");
 #ifdef Q_OS_WIN
     const QString rendererOpenGLESText = i18nc("canvas renderer", "Direct3D 11 via ANGLE");
 #else
     const QString rendererOpenGLESText = i18nc("canvas renderer", "OpenGL ES");
 #endif
-    lblCurrentRenderer->setText(KisOpenGL::hasOpenGLES() ? rendererOpenGLESText : rendererOpenGLText);
+
+    const KisOpenGL::OpenGLRenderer renderer = KisOpenGL::getCurrentOpenGLRenderer();
+    lblCurrentRenderer->setText(renderer == KisOpenGL::RendererOpenGLES ? rendererOpenGLESText :
+                                renderer == KisOpenGL::RendererDesktopGL ? rendererOpenGLText :
+                                renderer == KisOpenGL::RendererSoftware ? rendererSoftwareText :
+                                i18nc("canvas renderer", "Unknown"));
 
     cmbPreferredRenderer->clear();
     QString qtPreferredRendererText;
     if (KisOpenGL::getQtPreferredOpenGLRenderer() == KisOpenGL::RendererOpenGLES) {
         qtPreferredRendererText = rendererOpenGLESText;
+    } else if (KisOpenGL::getQtPreferredOpenGLRenderer() == KisOpenGL::RendererSoftware) {
+        qtPreferredRendererText = rendererSoftwareText;
     } else {
         qtPreferredRendererText = rendererOpenGLText;
     }
+
     cmbPreferredRenderer->addItem(i18nc("canvas renderer", "Auto (%1)", qtPreferredRendererText), KisOpenGL::RendererAuto);
     cmbPreferredRenderer->setCurrentIndex(0);
     if (KisOpenGL::getSupportedOpenGLRenderers() & KisOpenGL::RendererDesktopGL) {
@@ -1116,10 +1125,19 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
             cmbPreferredRenderer->setCurrentIndex(cmbPreferredRenderer->count() - 1);
         }
     }
+    if (KisOpenGL::getSupportedOpenGLRenderers() & KisOpenGL::RendererSoftware) {
+        cmbPreferredRenderer->addItem(rendererSoftwareText, KisOpenGL::RendererSoftware);
+        if (KisOpenGL::getUserPreferredOpenGLRendererConfig() == KisOpenGL::RendererSoftware) {
+            cmbPreferredRenderer->setCurrentIndex(cmbPreferredRenderer->count() - 1);
+        }
+    }
 #endif
 
     if (!(KisOpenGL::getSupportedOpenGLRenderers() &
-          (KisOpenGL::RendererDesktopGL | KisOpenGL::RendererOpenGLES))) {
+          (KisOpenGL::RendererDesktopGL |
+           KisOpenGL::RendererOpenGLES |
+           KisOpenGL::RendererSoftware))) {
+
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);

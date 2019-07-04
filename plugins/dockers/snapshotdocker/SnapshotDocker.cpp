@@ -75,7 +75,7 @@ SnapshotDocker::SnapshotDocker()
     m_d->bnAdd->setToolTip(i18nc("@info:tooltip", "Create snapshot"));
     connect(m_d->bnAdd, &QToolButton::clicked, this, &SnapshotDocker::slotBnAddClicked);
     buttonsLayout->addWidget(m_d->bnAdd);
-    m_d->bnSwitchTo->setIcon(KisIconUtils::loadIcon("draw-freehand")); /// XXX: which icon to use?
+    m_d->bnSwitchTo->setIcon(KisIconUtils::loadIcon("snapshot-load"));
     m_d->bnSwitchTo->setToolTip(i18nc("@info:tooltip", "Switch to selected snapshot"));
     connect(m_d->bnSwitchTo, &QToolButton::clicked, this, &SnapshotDocker::slotBnSwitchToClicked);
     buttonsLayout->addWidget(m_d->bnSwitchTo);

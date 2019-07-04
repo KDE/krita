@@ -31,7 +31,12 @@ private Q_SLOTS:
     void initTestCase();
     void testRowCount();
     void testData();
-    void testResource();
+    void testResourceForIndex();
+    void testRemoveResourceByIndex();
+    void testRemoveResource();
+    void testImportResourceFile();
+    void testAddResource();
+    void testUpdateResource();
     void cleanupTestCase();
 private:
 
@@ -39,7 +44,7 @@ private:
     QString m_dstLocation;
 
     KisResourceLocator *m_locator;
-    const QString resourceType = ResourceType::PaintOpPresets;
+    const QString m_resourceType = ResourceType::PaintOpPresets;
 
 };
 

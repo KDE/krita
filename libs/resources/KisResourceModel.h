@@ -136,10 +136,11 @@ public:
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexFromResource(KoResourceSP resource) const override;
     bool removeResource(const QModelIndex &index) override;
+    bool removeResource(KoResourceSP resource) override;
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, bool save = true) override;
     bool updateResource(KoResourceSP resource) override;
-    bool removeResource(KoResourceSP resource) override;
+
 
 Q_SIGNALS:
 

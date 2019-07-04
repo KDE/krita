@@ -83,19 +83,19 @@ void TestResourceModel::testRowCount()
                       ",      resource_types\n"
                       "WHERE  resources.resource_type_id = resource_types.id\n"
                       "AND    resource_types.name = :resource_type"));
-    q.bindValue(":resource_type", resourceType);
+    q.bindValue(":resource_type", m_resourceType);
     QVERIFY(q.exec());
     q.first();
     int rowCount = q.value(0).toInt();
     QVERIFY(rowCount == 1);
 
-    KisResourceModel resourceModel(resourceType);
+    KisResourceModel resourceModel(m_resourceType);
     QCOMPARE(resourceModel.rowCount(), rowCount);
 }
 
 void TestResourceModel::testData()
 {
-    KisResourceModel resourceModel(resourceType);
+    KisResourceModel resourceModel(m_resourceType);
 
     for (int i = 0; i < resourceModel.rowCount(); ++i)  {
         QVariant v = resourceModel.data(resourceModel.index(i, KisResourceModel::Name), Qt::DisplayRole);
@@ -104,11 +104,57 @@ void TestResourceModel::testData()
 }
 
 
-void TestResourceModel::testResource()
+void TestResourceModel::testResourceForIndex()
 {
-    KisResourceModel resourceModel(resourceType);
+    KisResourceModel resourceModel(m_resourceType);
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
     QVERIFY(resource);
+}
+
+void TestResourceModel::testRemoveResourceByIndex()
+{
+    KisResourceModel resourceModel(m_resourceType);
+    int resourceCount = resourceModel.rowCount();
+    bool r = resourceModel.removeResource(QModelIndex());
+    QVERIFY(r);
+    QCOMPARE(resourceCount - 1, resourceModel.rowCount());
+}
+
+void TestResourceModel::testRemoveResource()
+{
+    KisResourceModel resourceModel(m_resourceType);
+    int resourceCount = resourceModel.rowCount();
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+    QVERIFY(resource);
+    bool r = resourceModel.removeResource(resource);
+    QVERIFY(r);
+    QCOMPARE(resourceCount - 1, resourceModel.rowCount());
+}
+
+
+void TestResourceModel::testImportResourceFile()
+{
+    KisResourceModel resourceModel(m_resourceType);
+    bool r = resourceModel.importResourceFile(QString());
+    QVERIFY(r);
+}
+
+void TestResourceModel::testAddResource()
+{
+    KisResourceModel resourceModel(m_resourceType);
+    int resourceCount = resourceModel.rowCount();
+    bool r = resourceModel.addResource(0);
+    QVERIFY(r);
+    QCOMPARE(resourceCount + 1, resourceModel.rowCount());
+}
+
+void TestResourceModel::testUpdateResource()
+{
+    KisResourceModel resourceModel(m_resourceType);
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+    QVERIFY(resource);
+    bool r = resourceModel.updateResource(resource);
+    QVERIFY(r);
 }
 
 

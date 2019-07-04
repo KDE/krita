@@ -24,7 +24,7 @@
 #include <KisPart.h>
 #include <kis_layer_utils.h>
 #include <kis_group_layer.h>
-
+#include <sdk/tests/kistest.h>
 #include <QScopedPointer>
 
 void KisDocumentReplaceTest::init()
@@ -62,4 +62,4 @@ void KisDocumentReplaceTest::testCopyFromDocument()
     finalize();
 }
 
-QTEST_MAIN(KisDocumentReplaceTest)
+KISTEST_MAIN(KisDocumentReplaceTest)

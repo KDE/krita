@@ -341,14 +341,14 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
     {
         QSqlQuery q;
         r = q.prepare("INSERT INTO versioned_resources \n"
-                      "(resource_id, storage_id, version, location, timestamp, deleted)\n"
+                      "(resource_id, storage_id, version, location, timestamp)\n"
                       "VALUES\n"
                       "( :resource_id\n"
                       ", (SELECT id FROM storages \n"
                       "      WHERE location = :storage_location)\n"
                       ", (SELECT MAX(version) + 1 FROM versioned_resources\n"
                       "      WHERE  resource_id = :resource_id)\n"
-                      ", :location, :timestamp, 0\n"
+                      ", :location, :timestamp\n"
                       ");");
 
         if (!r) {
@@ -360,7 +360,6 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
         q.bindValue(":storage_location", makeRelative(storage->location()));
         q.bindValue(":location", makeRelative(resource->filename()));
         q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
-        q.bindValue(":deleted", 0);
 
         r = q.exec();
         if (!r) {
@@ -462,7 +461,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     // Then add a new version
     QSqlQuery q;
     r = q.prepare("INSERT INTO versioned_resources "
-                  "(resource_id, storage_id, version, location, timestamp, deleted) "
+                  "(resource_id, storage_id, version, location, timestamp) "
                   "VALUES "
                   "(:resource_id "
                   ",    (SELECT id FROM storages "
@@ -470,7 +469,6 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
                   ", 1 "
                   ", :location "
                   ", :timestamp "
-                  ", 0 "
                   ");");
 
     if (!r) {
@@ -482,7 +480,6 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     q.bindValue(":storage_location", makeRelative(storage->location()));
     q.bindValue(":location", makeRelative(resource->filename()));
     q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
-    q.bindValue(":deleted", 0);
 
     r = q.exec();
     if (!r) {

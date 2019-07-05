@@ -142,54 +142,17 @@ private:
 
 KisMagneticWorker::KisMagneticWorker(KisPaintDeviceSP dev) :
     m_dev(dev)
-{
-    KisGaussianKernel::applyLoG(m_dev, m_dev->exactBounds(), 2, 1.0, QBitArray(), 0);
-    KisLazyFillTools::normalizeAndInvertAlpha8Device(m_dev, m_dev->exactBounds());
-}
-
-QRect KisMagneticWorker::calculateRect(QPoint p1, QPoint p2, int radius) const {
-
-    // I am sure there is a simpler version of it which exists but well
-    // Calculates a bounding rectangle based on the radius,
-    // --------------------------------
-    // |    -------------------       |
-    // |    | A*              |       |
-    // |    |                 |       |
-    // |    |               *B|       |
-    // |    -------------------       |
-    // --------------------------------
-
-    double slope = (p2.y() - p1.y())/(p2.x() - p1.x());
-    QPoint a,b,c,d;
-    if(slope != 0){
-        slope = -1/slope;
-        double denom = 2 * std::sqrt(slope*slope+1);
-        double numer = radius/denom;
-        double fac1 = numer/denom;
-        denom = 2 * denom;
-        numer = 3 * slope * numer;
-        double fac2 = numer/denom;
-        a = QPoint(p1.x() - fac1, p1.y() - fac2);
-        b = QPoint(p1.x() + fac1, p1.y() + fac2);
-        c = QPoint(p2.x() - fac1, p2.y() - fac2);
-        d = QPoint(p2.x() + fac1, p2.y() + fac2);
-    }else{
-        double fac = radius/2;
-        a = QPoint(p1.x() - fac, p1.y() - fac);
-        b = QPoint(p1.x() + fac, p1.y() + fac);
-        c = QPoint(p2.x() - fac, p2.y() - fac);
-        d = QPoint(p2.x() + fac, p2.y() + fac);
-    }
-
-    QPolygon p(QVector<QPoint>{a,b,c,d});
-    return p.boundingRect();
-}
+{ }
 
 QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint end) {
 
     //QRect rect = calculateRect(begin, end, radius);
-    QRect rect = QPolygon(QVector<QPoint>{begin, end}).boundingRect();
-    rect.setSize(rect.size()*radius);
+    QRect rect(QPoint(0,0), QSize(radius*2, radius*2));
+    rect.moveCenter(begin);
+
+    KisGaussianKernel::applyLoG(m_dev, rect, 2, 1.0, QBitArray(), 0);
+    KisLazyFillTools::normalizeAndInvertAlpha8Device(m_dev, rect);
+
     VertexDescriptor goal(end);
     VertexDescriptor start(begin);
     KisMagneticGraph g(m_dev, rect);
@@ -222,11 +185,11 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint
 
     }catch(GoalFound const&){
         for(VertexDescriptor u=goal; u!=start; u = pmap[u]){
-            result.push_back(QPointF(u.x,u.y));
+            result.push_front(QPointF(u.x,u.y));
         }
     }
 
-    result.push_back(QPoint(start.x,start.y));
+    result.push_front(QPoint(start.x,start.y));
 
     return result;
 }

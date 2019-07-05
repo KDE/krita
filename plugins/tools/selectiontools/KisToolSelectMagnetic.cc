@@ -55,7 +55,7 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.svg", 16, 16),
                     i18n("Magnetic Selection")),
-      m_continuedMode(false), m_complete(true), m_frequency(20)
+      m_continuedMode(false), m_complete(true), m_checkPoint(0), m_radius(20)
 { }
 
 KisToolSelectMagnetic::~KisToolSelectMagnetic()
@@ -96,10 +96,21 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
 
     m_lastCursorPos = convertToPixelCoord(event);
     auto current = QPoint(m_lastCursorPos.x(), m_lastCursorPos.y());
-    m_points = m_worker.computeEdge(15, m_lastAnchor, current);
+    auto point_set = m_worker.computeEdge(m_radius, m_lastAnchor, current);
+
+    int num = m_points.count();
+    m_points.resize(m_radius * (num/m_radius));
+    m_points.append(point_set);
+    num = m_points.count();
+    if(num/20 >= 1) {
+        m_checkPoint = m_radius * (num/m_radius) - 1;
+        m_lastAnchor = QPoint(m_points[m_checkPoint].x(), m_points[m_checkPoint].y());
+        qDebug() << m_lastAnchor;
+    }
+
     m_paintPath = QPainterPath();
-    m_paintPath.moveTo(pixelToView(m_points[m_points.count()-1]));
-    for(int i=m_points.count()-2; i>0;i--){
+    m_paintPath.moveTo(pixelToView(m_points[0]));
+    for(int i=1; i<m_points.count();i++){
         m_paintPath.lineTo(pixelToView(m_points[i]));
     }
 

@@ -60,13 +60,14 @@ private:
     void updateCanvas();
 
     QPainterPath m_paintPath;
-    vQPointF m_points;
+    QVector<QPointF> m_points;
     bool m_continuedMode;
     QPointF m_lastCursorPos;
     QPoint m_lastAnchor;
     bool m_complete;
     KisMagneticWorker m_worker;
-    int m_frequency;
+    uint m_checkPoint;
+    uint m_radius;
 };
 
 class KisToolSelectMagneticFactory : public KisSelectionToolFactoryBase

@@ -89,7 +89,7 @@ void TestTagFilterResourceProxyModel::testRowCount()
     QVERIFY(q.exec());
     q.first();
     int rowCount = q.value(0).toInt();
-    QVERIFY(rowCount == 1);
+    QVERIFY(rowCount == 3);
 
     KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
     KisTagFilterResourceProxyModel proxyModel;
@@ -104,9 +104,12 @@ void TestTagFilterResourceProxyModel::testData()
     KisTagFilterResourceProxyModel proxyModel;
     proxyModel.setSourceModel(resourceModel);
 
+    QStringList names = QStringList() << "test0.kpp"
+                                      << "test1.kpp"
+                                      << "test2.kpp";
     for (int i = 0; i < proxyModel.rowCount(); ++i)  {
         QVariant v = resourceModel->data(proxyModel.mapToSource(proxyModel.index(i, 0)), Qt::UserRole + KisResourceModel::Name);
-        QCOMPARE(v.toString(), "test.kpp");
+        QVERIFY(names.contains(v.toString()));
     }
 }
 

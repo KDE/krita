@@ -112,7 +112,7 @@ void TestResourceLocator::testResources()
     QVERIFY(r);
     QVERIFY(query.lastError() == QSqlError());
     query.first();
-    QCOMPARE(query.value(0).toInt(), 5);
+    QCOMPARE(query.value(0).toInt(), 7);
 }
 
 void TestResourceLocator::testTags()
@@ -133,7 +133,7 @@ void TestResourceLocator::cleanupTestCase()
 
 void TestResourceLocator::testResource()
 {
-    KoResourceSP res = m_locator->resource("", "paintoppresets/test.kpp");
+    KoResourceSP res = m_locator->resource("", "paintoppresets/test0.kpp");
     QVERIFY(res);
 }
 

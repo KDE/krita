@@ -147,7 +147,7 @@ void KisMemoryStorage::addTag(const QString &resourceType, KisTagSP tag)
     if (!d->tags.contains(resourceType)) {
         d->tags[resourceType] = QVector<KisTagSP>();
     }
-    if (!d->tags.contains(tag)) {
+    if (!d->tags[resourceType].contains(tag)) {
         d->tags[resourceType].append(tag);
     }
 
@@ -158,7 +158,7 @@ void KisMemoryStorage::addResource(const QString &resourceType, KoResourceSP res
     if (!d->resources.contains(resourceType)) {
         d->resources[resourceType] = QVector<KoResourceSP>();
     }
-    if (!d->resources.contains(resource)) {
+    if (!d->resources[resourceType].contains(resource)) {
         d->resources[resourceType].append(resource);
     }
 }

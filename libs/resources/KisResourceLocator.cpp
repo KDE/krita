@@ -229,12 +229,6 @@ bool KisResourceLocator::removeResource(int resourceId)
 
 bool KisResourceLocator::importResourceFromFile(const QString &resourceType, const QString &fileName)
 {
-    KisResourceStorageSP folderStorage = d->storages[d->resourceLocation];
-    if (!folderStorage || !folderStorage->valid()) {
-        qWarning() << "Could not retrieve the folder storage object for the configured resource location" << d->resourceLocation;
-        return false;
-    }
-
     KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, KisMimeDatabase::mimeTypeForFile(fileName));
     QFile f(fileName);
     if (!f.open(QFile::ReadOnly)) {
@@ -243,25 +237,29 @@ bool KisResourceLocator::importResourceFromFile(const QString &resourceType, con
     }
 
     KoResourceSP resource = loader->load(fileName, f);
-
-    resource->setFilename(folderStorage->location() + "/" + resourceType + resource->name());
-
-    if (QFileInfo(resource->filename()).exists()) {
-        qWarning() << "Resource" << resource->filename() << "already exists";
+    if (!saveResourceToFolderStorage(resourceType, resource)) {
         return false;
     }
 
-    if (!resource->save()) {
-        qWarning() << "Could not save" << resource->filename();
-        return false;
+    return KisResourceCacheDb::addResource(folderStorage(), QFileInfo(resource->filename()).lastModified(), resource, resourceType);
+}
+
+bool KisResourceLocator::addResource(const QString &resourceType, const KoResourceSP resource, bool save)
+{
+    if (!resource || !resource->valid()) return false;
+
+    if (save) {
+        if (!saveResourceToFolderStorage(resourceType, resource)) {
+            return false;
+        }
     }
 
-    return KisResourceCacheDb::addResource(folderStorage, QFileInfo(resource->filename()).lastModified(), resource, resourceType);
+    return KisResourceCacheDb::addResource(folderStorage(), QFileInfo(resource->filename()).lastModified(), resource, resourceType, !save);
+
 }
 
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation)
 {
-
     emit progressMessage(i18n("Krita is running for the first time. Intialization will take some time."));
     Q_UNUSED(initalizationStatus);
 
@@ -361,6 +359,33 @@ void KisResourceLocator::findStorages()
 QList<KisResourceStorageSP> KisResourceLocator::storages() const
 {
     return d->storages.values();
+}
+
+bool KisResourceLocator::saveResourceToFolderStorage(const QString &resourceType, KoResourceSP resource)
+{
+
+    resource->setFilename(folderStorage()->location() + "/" + resourceType + "/" + resource->name());
+
+    if (QFileInfo(resource->filename()).exists()) {
+        qWarning() << "Resource" << resource->filename() << "already exists";
+        return false;
+    }
+
+    if (!resource->save()) {
+        qWarning() << "Could not save" << resource->filename();
+        return false;
+    }
+
+    return true;
+}
+
+KisResourceStorageSP KisResourceLocator::folderStorage() const
+{
+    KisResourceStorageSP folderStorage = d->storages[d->resourceLocation];
+    if (!folderStorage || !folderStorage->valid()) {
+        qWarning() << "Could not retrieve the folder storage object for the configured resource location" << d->resourceLocation;
+    }
+    return folderStorage;
 }
 
 bool KisResourceLocator::synchronizeDb()

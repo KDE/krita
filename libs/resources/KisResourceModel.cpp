@@ -230,6 +230,8 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
 
 QModelIndex KisResourceModel::indexFromResource(KoResourceSP resource) const
 {
+    if (!resource || !resource->valid()) return QModelIndex();
+
     // For now a linear seek to find the first resource with the right id
     d->resourcesQuery.first();
     do {
@@ -260,6 +262,8 @@ bool KisResourceModel::removeResource(const QModelIndex &index)
 
 bool KisResourceModel::removeResource(KoResourceSP resource)
 {
+    if (!resource || !resource->valid()) return false;
+
     if (!KisResourceLocator::instance()->removeResource(resource->resourceId())) {
         qWarning() << "Failed to remove resource" << resource->resourceId();
         return false;
@@ -270,7 +274,7 @@ bool KisResourceModel::removeResource(KoResourceSP resource)
 bool KisResourceModel::importResourceFile(const QString &filename)
 {
     if (!KisResourceLocator::instance()->importResourceFromFile(d->resourceType, filename)) {
-        qWarning() << "Failed to import resource"<< filename;
+        qWarning() << "Failed to import resource" << filename;
         return false;
     }
     return resetQuery();
@@ -279,15 +283,19 @@ bool KisResourceModel::importResourceFile(const QString &filename)
 
 bool KisResourceModel::addResource(KoResourceSP resource, bool save)
 {
-    beginResetModel();
-    endResetModel();
-    return false;
+    if (!resource || !resource->valid()) {
+        qWarning() << "Cannot add resource. Resource is null or not valid";
+        return false;
+    }
+
+    if (!KisResourceLocator::instance()->addResource(d->resourceType, resource, save)) {
+        qWarning() << "Failed to add resource" << resource->name();
+    }
+    return resetQuery();
 }
 
 bool KisResourceModel::updateResource(KoResourceSP resource)
 {
-    beginResetModel();
-    endResetModel();
     return false;
 }
 

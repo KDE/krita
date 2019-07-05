@@ -172,7 +172,19 @@ void TestResourceModel::testAddResource()
 {
     KisResourceModel resourceModel(m_resourceType);
     int resourceCount = resourceModel.rowCount();
-    bool r = resourceModel.addResource(0);
+    KoResourceSP resource(new DummyResource("dummy.kpp"));
+    resource->setValid(true);
+    bool r = resourceModel.addResource(resource);
+    QVERIFY(r);
+    QCOMPARE(resourceCount + 1, resourceModel.rowCount());
+}
+
+void TestResourceModel::testAddTemporaryResource()
+{
+    KisResourceModel resourceModel(m_resourceType);
+    int resourceCount = resourceModel.rowCount();
+    KoResourceSP resource(new DummyResource("dummy.kpp"));
+    bool r = resourceModel.addResource(resource, false);
     QVERIFY(r);
     QCOMPARE(resourceCount + 1, resourceModel.rowCount());
 }

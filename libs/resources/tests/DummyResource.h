@@ -27,8 +27,6 @@ public:
     bool load() override { setValid(true); return true; }
     bool loadFromDevice(QIODevice *) override { setValid(true); return true; }
     bool save() override { return true; }
-
-
 };
 
 #endif // DUMMYRESOURCE_H

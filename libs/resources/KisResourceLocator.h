@@ -82,6 +82,8 @@ public:
 
     bool importResourceFromFile(const QString &resourceType, const QString &fileName);
 
+    bool addResource(const QString &resourceType, const KoResourceSP resource, bool save = true);
+
 Q_SIGNALS:
 
     void progressMessage(const QString&);
@@ -117,6 +119,9 @@ private:
 
     void findStorages();
     QList<KisResourceStorageSP> storages() const;
+
+    bool saveResourceToFolderStorage(const QString &resourceType, KoResourceSP resource);
+    KisResourceStorageSP folderStorage() const;
 
     class Private;
     QScopedPointer<Private> d;

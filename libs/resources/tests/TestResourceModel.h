@@ -37,6 +37,7 @@ private Q_SLOTS:
     void testRemoveResource();
     void testImportResourceFile();
     void testAddResource();
+    void testAddTemporaryResource();
     void testUpdateResource();
     void cleanupTestCase();
 private:

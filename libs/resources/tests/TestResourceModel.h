@@ -32,6 +32,7 @@ private Q_SLOTS:
     void testRowCount();
     void testData();
     void testResourceForIndex();
+    void testIndexFromResource();
     void testRemoveResourceByIndex();
     void testRemoveResource();
     void testImportResourceFile();

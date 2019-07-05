@@ -87,8 +87,7 @@ void TestResourceModel::testRowCount()
     QVERIFY(q.exec());
     q.first();
     int rowCount = q.value(0).toInt();
-    QVERIFY(rowCount == 1);
-
+    QVERIFY(rowCount == 3);
     KisResourceModel resourceModel(m_resourceType);
     QCOMPARE(resourceModel.rowCount(), rowCount);
 }
@@ -97,10 +96,15 @@ void TestResourceModel::testData()
 {
     KisResourceModel resourceModel(m_resourceType);
 
+    QStringList resourceNames;
+
     for (int i = 0; i < resourceModel.rowCount(); ++i)  {
         QVariant v = resourceModel.data(resourceModel.index(i, KisResourceModel::Name), Qt::DisplayRole);
-        QCOMPARE(v.toString(), "test.kpp");
+        resourceNames << v.toString();
     }
+    QVERIFY(resourceNames.contains("test0.kpp"));
+    QVERIFY(resourceNames.contains("test1.kpp"));
+    QVERIFY(resourceNames.contains("test2.kpp"));
 }
 
 
@@ -109,6 +113,16 @@ void TestResourceModel::testResourceForIndex()
     KisResourceModel resourceModel(m_resourceType);
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
     QVERIFY(resource);
+}
+
+void TestResourceModel::testIndexFromResource()
+{
+    KisResourceModel resourceModel(m_resourceType);
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(1, 0));
+    qDebug() << resource->resourceId();
+    QModelIndex idx = resourceModel.indexFromResource(resource);
+    QVERIFY(idx.row() == 1);
+    QVERIFY(idx.column() == 0);
 }
 
 void TestResourceModel::testRemoveResourceByIndex()

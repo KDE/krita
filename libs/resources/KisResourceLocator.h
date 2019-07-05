@@ -78,6 +78,8 @@ public:
 
     KoResourceSP resource(QString storageLocation, const QString &resourceLocationBase);
 
+    bool removeResource(int resourceId);
+
 Q_SIGNALS:
 
     void progressMessage(const QString&);

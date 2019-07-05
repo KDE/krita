@@ -28,6 +28,9 @@
 #include <QMessageBox>
 #include <QVersionNumber>
 
+#include <QSqlQuery>
+#include <QSqlError>
+
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -175,6 +178,48 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         }
     }
     return resource;
+}
+
+bool KisResourceLocator::removeResource(int resourceId)
+{
+    // First remove the resource from the cache
+
+    // XXX: Should this query go into KisResourceCacheDb?
+    QSqlQuery q;
+    bool r = q.prepare("SELECT storages.location\n"
+                       ",      resources.filename\n"
+                       "FROM   resources\n"
+                       ",      storages\n"
+                       "WHERE  resources.id = :resource_id\n"
+                       "AND    resources.storage_id = storages.id");
+    if (!r) {
+        qWarning() << "KisResourceLocator::removeResource: could not prepare query." << q.lastError();
+        return false;
+    }
+
+    q.bindValue(":resource_id", resourceId);
+
+    r = q.exec();
+    if (!r) {
+        qWarning() << "KisResourceLocator::removeResource: could not execute query." << q.lastError();
+    }
+
+    q.first();
+
+    QString storageLocation = q.value("location").toString();
+    QString resourceLocation = q.value("filename").toString();
+
+    if (storageLocation.isEmpty()) {
+        storageLocation = resourceLocationBase();
+    }
+    else {
+        storageLocation = resourceLocationBase() + '/' + storageLocation;
+    }
+
+    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceLocation);
+    r = d->resourceCache.remove(key);
+
+    return KisResourceCacheDb::removeResource(resourceId);
 }
 
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation)

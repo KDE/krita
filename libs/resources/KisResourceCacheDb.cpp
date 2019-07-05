@@ -507,6 +507,28 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
     return true;
 }
 
+bool KisResourceCacheDb::removeResource(int resourceId)
+{
+    if (resourceId < 0) {
+        qWarning() << "Invalid resource id; cannot remove resource";
+        return false;
+    }
+    QSqlQuery q;
+    bool r = q.prepare("UPDATE resources\n"
+                       "SET    status = 0\n"
+                       "WHERE  id = :resource_id");
+    if (!r) {
+        qWarning() << "Could not prepare removeResource query" << q.lastError();
+    }
+    q.bindValue(":resource_id", resourceId);
+    if (!q.exec()) {
+        qWarning() << "Could not update resource" << resourceId << "to  inactive" << q.lastError();
+        return false;
+    }
+
+    return true;
+}
+
 bool KisResourceCacheDb::tagResource(KisResourceStorageSP storage, const QString resourceName, KisTagSP tag, const QString &resourceType)
 {
     // Get resource id

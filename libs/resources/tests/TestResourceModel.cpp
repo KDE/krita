@@ -128,20 +128,28 @@ void TestResourceModel::testRemoveResourceByIndex()
 {
     KisResourceModel resourceModel(m_resourceType);
     int resourceCount = resourceModel.rowCount();
-    bool r = resourceModel.removeResource(QModelIndex());
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(1, 0));
+    bool r = resourceModel.removeResource(resourceModel.index(1, 0));
     QVERIFY(r);
     QCOMPARE(resourceCount - 1, resourceModel.rowCount());
+    QVERIFY(!resourceModel.indexFromResource(resource).isValid());
+
 }
 
 void TestResourceModel::testRemoveResource()
 {
     KisResourceModel resourceModel(m_resourceType);
     int resourceCount = resourceModel.rowCount();
-    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(1, 0));
     QVERIFY(resource);
+
     bool r = resourceModel.removeResource(resource);
     QVERIFY(r);
     QCOMPARE(resourceCount - 1, resourceModel.rowCount());
+
+    QVERIFY(!resourceModel.indexFromResource(resource).isValid());
+
 }
 
 

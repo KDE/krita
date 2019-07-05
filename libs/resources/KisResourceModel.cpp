@@ -41,16 +41,39 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
     , d(new Private)
 {
     d->resourceType = resourceType;
-    prepareQuery();
 
-    bool r = d->tagQuery.prepare("SELECT tags.url\n"
-                                 ",      tags.name\n"
-                                 ",      tags.comment\n"
-                                 "FROM   tags\n"
-                                 ",      resource_tags\n"
-                                 "WHERE  tags.active > 0\n"
-                                 "AND    tags.id = resource_tags.tag_id\n"
-                                 "AND    resource_tags.resource_id = :resource_id\n");
+    bool r = d->resourcesQuery.prepare("SELECT  resources.id\n"
+                                        ",      resources.storage_id\n"
+                                        ",      resources.name\n"
+                                        ",      resources.filename\n"
+                                        ",      resources.tooltip\n"
+                                        ",      resources.thumbnail\n"
+                                        ",      resources.status\n"
+                                        ",      storages.location\n"
+                                        ",      resource_types.name as resource_type\n"
+                                        "FROM   resources\n"
+                                        ",      resource_types\n"
+                                        ",      storages\n"
+                                        "WHERE  resources.resource_type_id = resource_types.id\n"
+                                        "AND    resources.storage_id = storages.id\n"
+                                        "AND    resource_types.name = :resource_type\n"
+                                        "AND    resources.status = 1\n"
+                                        "AND    storages.active = 1");
+    if (!r) {
+        qWarning() << "Could not prepare KisResourceModel query" << d->resourcesQuery.lastError();
+    }
+    d->resourcesQuery.bindValue(":resource_type", d->resourceType);
+
+    resetQuery();
+
+    r = d->tagQuery.prepare("SELECT tags.url\n"
+                            ",      tags.name\n"
+                            ",      tags.comment\n"
+                            "FROM   tags\n"
+                            ",      resource_tags\n"
+                            "WHERE  tags.active > 0\n"
+                            "AND    tags.id = resource_tags.tag_id\n"
+                            "AND    resource_tags.resource_id = :resource_id\n");
     if (!r)  {
         qWarning() << "Could not prepare TagsForResource query" << d->tagQuery.lastError();
     }
@@ -218,6 +241,32 @@ QModelIndex KisResourceModel::indexFromResource(KoResourceSP resource) const
     return QModelIndex();
 }
 
+
+bool KisResourceModel::removeResource(const QModelIndex &index)
+{
+    if (index.row() > rowCount()) return false;
+    if (index.column() > d->columnCount) return false;
+
+    bool pos = d->resourcesQuery.seek(index.row());
+    if (!pos) return false;
+
+    int resourceId = d->resourcesQuery.value("id").toInt();
+    if (!KisResourceLocator::instance()->removeResource(resourceId)) {
+        qWarning() << "Failed to remove resource" << resourceId;
+        return false;
+    }
+    return resetQuery();
+}
+
+bool KisResourceModel::removeResource(KoResourceSP resource)
+{
+    if (!KisResourceLocator::instance()->removeResource(resource->resourceId())) {
+        qWarning() << "Failed to remove resource" << resource->resourceId();
+        return false;
+    }
+    return resetQuery();
+}
+
 bool KisResourceModel::importResourceFile(const QString &filename)
 {
     beginResetModel();
@@ -225,12 +274,6 @@ bool KisResourceModel::importResourceFile(const QString &filename)
     return false;
 }
 
-bool KisResourceModel::removeResource(const QModelIndex &index)
-{
-    beginResetModel();
-    endResetModel();
-    return false;
-}
 
 bool KisResourceModel::addResource(KoResourceSP resource, bool save)
 {
@@ -246,38 +289,11 @@ bool KisResourceModel::updateResource(KoResourceSP resource)
     return false;
 }
 
-bool KisResourceModel::removeResource(KoResourceSP resource)
-{
-    beginResetModel();
-    endResetModel();
-    return false;
-}
 
-bool KisResourceModel::prepareQuery()
+bool KisResourceModel::resetQuery()
 {
     beginResetModel();
-    bool r = d->resourcesQuery.prepare("SELECT resources.id\n"
-                                        ",      resources.storage_id\n"
-                                        ",      resources.name\n"
-                                        ",      resources.filename\n"
-                                        ",      resources.tooltip\n"
-                                        ",      resources.thumbnail\n"
-                                        ",      resources.status\n"
-                                        ",      storages.location\n"
-                                        ",      resource_types.name as resource_type\n"
-                                        "FROM   resources\n"
-                                        ",      resource_types\n"
-                                        ",      storages\n"
-                                        "WHERE  resources.resource_type_id = resource_types.id\n"
-                                        "AND    resources.storage_id = storages.id\n"
-                                        "AND    resource_types.name = :resource_type\n"
-                                        "AND    resources.status = 1\n"
-                                        "AND    storages.active = 1");
-    if (!r) {
-        qWarning() << "Could not prepare KisResourceModel query" << d->resourcesQuery.lastError();
-    }
-    d->resourcesQuery.bindValue(":resource_type", d->resourceType);
-    r = d->resourcesQuery.exec();
+    bool r = d->resourcesQuery.exec();
     if (!r) {
         qWarning() << "Could not select" << d->resourceType << "resources" << d->resourcesQuery.lastError() << d->resourcesQuery.boundValues();
     }
@@ -285,7 +301,6 @@ bool KisResourceModel::prepareQuery()
     endResetModel();
 
     return r;
-
 }
 
 QStringList KisResourceModel::tagsForResource(int resourceId) const
@@ -312,8 +327,12 @@ int KisResourceModel::rowCount(const QModelIndex &) const
         q.prepare("SELECT count(*)\n"
                   "FROM   resources\n"
                   ",      resource_types\n"
+                  ",      storages\n"
                   "WHERE  resources.resource_type_id = resource_types.id\n"
-                  "AND    resource_types.name = :resource_type");
+                  "AND    resource_types.name = :resource_type\n"
+                  "AND    resources.storage_id = storages.id\n"
+                  "AND    resources.status = 1\n"
+                  "AND    storages.active = 1");
         q.bindValue(":resource_type", d->resourceType);
         q.exec();
         q.first();

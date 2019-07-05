@@ -149,7 +149,7 @@ Q_SIGNALS:
 
 private:
 
-    bool prepareQuery();
+    bool resetQuery();
     QStringList tagsForResource(int resourceId) const;
 
     struct Private;

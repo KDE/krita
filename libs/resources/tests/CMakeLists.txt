@@ -13,6 +13,7 @@ ecm_add_tests(
     TestResourceLocator
     TestResourceStorage
     TestFolderStorage
+    TestMemoryStorage
     TestTag
     TestBundleStorage
     TestResourceModel

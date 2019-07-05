@@ -43,6 +43,7 @@
 #include "KisResourceStorage.h"
 #include "KisResourceCacheDb.h"
 #include "KisResourceLoaderRegistry.h"
+#include "KisMemoryStorage.h"
 
 
 const QString KisResourceLocator::resourceLocationKey {"ResourceDirectory"};
@@ -54,6 +55,7 @@ public:
     QMap<QString, KisResourceStorageSP> storages;
     QHash<QPair<QString, QString>, KoResourceSP> resourceCache;
     QStringList errorMessages;
+    KisMemoryStorage memoryStorage; // For temporary resources
 };
 
 KisResourceLocator::KisResourceLocator(QObject *parent)

@@ -19,6 +19,7 @@ set(kritaresources_LIB_SRCS
     KisAslStorage.cpp
     KisBundleStorage.cpp
     KisFolderStorage.cpp
+    KisMemoryStorage.cpp
 
     KisTag.cpp
     KisTagModel.cpp

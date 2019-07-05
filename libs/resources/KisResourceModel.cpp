@@ -42,23 +42,23 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
 {
     d->resourceType = resourceType;
 
-    bool r = d->resourcesQuery.prepare("SELECT  resources.id\n"
-                                        ",      resources.storage_id\n"
-                                        ",      resources.name\n"
-                                        ",      resources.filename\n"
-                                        ",      resources.tooltip\n"
-                                        ",      resources.thumbnail\n"
-                                        ",      resources.status\n"
-                                        ",      storages.location\n"
-                                        ",      resource_types.name as resource_type\n"
-                                        "FROM   resources\n"
-                                        ",      resource_types\n"
-                                        ",      storages\n"
-                                        "WHERE  resources.resource_type_id = resource_types.id\n"
-                                        "AND    resources.storage_id = storages.id\n"
-                                        "AND    resource_types.name = :resource_type\n"
-                                        "AND    resources.status = 1\n"
-                                        "AND    storages.active = 1");
+    bool r = d->resourcesQuery.prepare("SELECT resources.id\n"
+                                        ",     resources.storage_id\n"
+                                        ",     resources.name\n"
+                                        ",     resources.filename\n"
+                                        ",     resources.tooltip\n"
+                                        ",     resources.thumbnail\n"
+                                        ",     resources.status\n"
+                                        ",     storages.location\n"
+                                        ",     resource_types.name as resource_type\n"
+                                        "FROM  resources\n"
+                                        ",     resource_types\n"
+                                        ",     storages\n"
+                                        "WHERE resources.resource_type_id = resource_types.id\n"
+                                        "AND   resources.storage_id = storages.id\n"
+                                        "AND   resource_types.name = :resource_type\n"
+                                        "AND   resources.status = 1\n"
+                                        "AND   storages.active = 1");
     if (!r) {
         qWarning() << "Could not prepare KisResourceModel query" << d->resourcesQuery.lastError();
     }

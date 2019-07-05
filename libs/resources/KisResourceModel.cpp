@@ -180,7 +180,6 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             ;
         }
     }
-
     return v;
 }
 
@@ -198,7 +197,7 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
         QString storageLocation = d->resourcesQuery.value("location").toString();
         QString resourceLocation = d->resourcesQuery.value("filename").toString();
         resource = KisResourceLocator::instance()->resource(storageLocation, resourceLocation);
-        resource->setResourceId(index.row());
+        resource->setResourceId(d->resourcesQuery.value("id").toInt());
         resource->setFilename(resourceLocation);
         resource->setStorageLocation(storageLocation);
 
@@ -208,9 +207,14 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
 
 QModelIndex KisResourceModel::indexFromResource(KoResourceSP resource) const
 {
-    if (resource->resourceId() >= 0 && resource->resourceId() < rowCount()) {
-        return createIndex(resource->resourceId(), 0);
-    }
+    // For now a linear seek to find the first resource with the right id
+    d->resourcesQuery.first();
+    do {
+        if (d->resourcesQuery.value("id").toInt() == resource->resourceId()) {
+            return createIndex(d->resourcesQuery.at(), 0);
+        }
+    } while (d->resourcesQuery.next());
+
     return QModelIndex();
 }
 

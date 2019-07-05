@@ -104,9 +104,6 @@ public:
     bool permanent() const;
     void setPermanent(bool permanent);
 
-    /// @return the unique id of the resource in the resource database
-    int resourceId() const;
-
     /// @return the name of the storage location of the resource
     QString storageLocation() const;
 
@@ -125,7 +122,12 @@ public:
 private:
 
     friend class KisResourceModel;
+    friend class TestResourceModel;
+    /// @return the unique id of the resource in the resource database
+    int resourceId() const;
+
     void setResourceId(int id);
+
     void setStorageLocation(const QString &location);
 
 protected:

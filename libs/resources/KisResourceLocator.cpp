@@ -37,10 +37,13 @@
 #include <klocalizedstring.h>
 
 #include <KritaVersionWrapper.h>
+#include <KisMimeDatabase.h>
+
 #include "KoResourcePaths.h"
 #include "KisResourceStorage.h"
 #include "KisResourceCacheDb.h"
 #include "KisResourceLoaderRegistry.h"
+
 
 const QString KisResourceLocator::resourceLocationKey {"ResourceDirectory"};
 
@@ -220,6 +223,38 @@ bool KisResourceLocator::removeResource(int resourceId)
     r = d->resourceCache.remove(key);
 
     return KisResourceCacheDb::removeResource(resourceId);
+}
+
+bool KisResourceLocator::importResourceFromFile(const QString &resourceType, const QString &fileName)
+{
+    KisResourceStorageSP folderStorage = d->storages[d->resourceLocation];
+    if (!folderStorage || !folderStorage->valid()) {
+        qWarning() << "Could not retrieve the folder storage object for the configured resource location" << d->resourceLocation;
+        return false;
+    }
+
+    KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, KisMimeDatabase::mimeTypeForFile(fileName));
+    QFile f(fileName);
+    if (!f.open(QFile::ReadOnly)) {
+        qWarning() << "Could not open" << fileName << "for loading";
+        return false;
+    }
+
+    KoResourceSP resource = loader->load(fileName, f);
+
+    resource->setFilename(folderStorage->location() + "/" + resourceType + resource->name());
+
+    if (QFileInfo(resource->filename()).exists()) {
+        qWarning() << "Resource" << resource->filename() << "already exists";
+        return false;
+    }
+
+    if (!resource->save()) {
+        qWarning() << "Could not save" << resource->filename();
+        return false;
+    }
+
+    return KisResourceCacheDb::addResource(folderStorage, QFileInfo(resource->filename()).lastModified(), resource, resourceType);
 }
 
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation)

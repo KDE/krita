@@ -24,6 +24,8 @@
 #include <QDirIterator>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QTemporaryFile>
+#include <QDir>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -149,15 +151,21 @@ void TestResourceModel::testRemoveResource()
     QCOMPARE(resourceCount - 1, resourceModel.rowCount());
 
     QVERIFY(!resourceModel.indexFromResource(resource).isValid());
-
 }
-
 
 void TestResourceModel::testImportResourceFile()
 {
     KisResourceModel resourceModel(m_resourceType);
-    bool r = resourceModel.importResourceFile(QString());
+
+    QTemporaryFile f(QDir::tempPath() + "/testresourcemodel-testimportresourcefile-XXXXXX.kpp");
+    f.open();
+    f.write("0");
+    f.close();
+
+    int resourceCount = resourceModel.rowCount();
+    bool r = resourceModel.importResourceFile(f.fileName());
     QVERIFY(r);
+    QCOMPARE(resourceCount + 1, resourceModel.rowCount());
 }
 
 void TestResourceModel::testAddResource()

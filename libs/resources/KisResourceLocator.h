@@ -80,6 +80,8 @@ public:
 
     bool removeResource(int resourceId);
 
+    bool importResourceFromFile(const QString &resourceType, const QString &fileName);
+
 Q_SIGNALS:
 
     void progressMessage(const QString&);

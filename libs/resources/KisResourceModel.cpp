@@ -193,7 +193,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
         }
         case Qt::UserRole + MetaData:
         {
-            qDebug() << "REMINDER: implement KoResourceMetadata properly!";
+            qDebug() << "REMINDER: implement KoResource::Metadata properly!";
             QMap<QString, QVariant> r;
             r.insert("paintopid", "paintbrush");
             return r;
@@ -269,9 +269,11 @@ bool KisResourceModel::removeResource(KoResourceSP resource)
 
 bool KisResourceModel::importResourceFile(const QString &filename)
 {
-    beginResetModel();
-    endResetModel();
-    return false;
+    if (!KisResourceLocator::instance()->importResourceFromFile(d->resourceType, filename)) {
+        qWarning() << "Failed to import resource"<< filename;
+        return false;
+    }
+    return resetQuery();
 }
 
 

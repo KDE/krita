@@ -272,6 +272,8 @@ bool KisResourceCacheDb::initialize(const QString &location)
         break;
     }
 
+    deleteTemporaryResources();
+
     return s_valid;
 }
 
@@ -402,7 +404,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
     return r;
 }
 
-bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType)
+bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType, bool temporary)
 {
     bool r = false;
 
@@ -426,9 +428,20 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     else {
         QSqlQuery q;
         r = q.prepare("INSERT INTO resources \n"
-                      "(storage_id, resource_type_id, name, filename, tooltip, thumbnail, status) \n"
+                      "(storage_id, resource_type_id, name, filename, tooltip, thumbnail, status, temporary) \n"
                       "VALUES \n"
-                      "((SELECT id FROM storages WHERE location = :storage_location), (SELECT id FROM resource_types WHERE name = :resource_type), :name, :filename, :tooltip, :thumbnail, :status);");
+                      "((SELECT id "
+                      "  FROM storages "
+                      "  WHERE location = :storage_location)\n"
+                      ", (SELECT id\n"
+                      "   FROM resource_types\n"
+                      "   WHERE name = :resource_type)\n"
+                      ", :name\n"
+                      ", :filename\n"
+                      ", :tooltip\n"
+                      ", :thumbnail\n"
+                      ", :status\n"
+                      ", :temporary);");
 
         if (!r) {
             qWarning() << "Could not prepare addResource statement" << q.lastError();
@@ -449,6 +462,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
         q.bindValue(":thumbnail", ba);
 
         q.bindValue(":status", 1);
+        q.bindValue(":temporary", (temporary ? 1 : 0));
 
         r = q.exec();
         if (!r) {
@@ -882,5 +896,30 @@ QString KisResourceCacheDb::makeRelative(QString location)
 QString KisResourceCacheDb::makeAbsolute(const QString &location)
 {
     return KisResourceLocator::instance()->resourceLocationBase() + '/' + location;
+}
+
+void KisResourceCacheDb::deleteTemporaryResources()
+{
+    QSqlQuery q;
+    if (!q.prepare("DELETE FROM versioned_resources\n"
+                   "WHERE resource_id IN (SELECT id FROM resources\n"
+                   "                      WHERE  temporary = 1)")) {
+        qWarning() << "Could not prepare delete temporary versioned resources query." << q.lastError();
+        return;
+    }
+
+    if (!q.exec()) {
+        qWarning() << "Could not execute delete temporary versioned resources query." << q.lastError();
+    }
+
+    if (!q.prepare("DELETE FROM resources\n"
+                   "WHERE  temporary = 1")) {
+        qWarning() << "Could not prepare delete temporary resources query." << q.lastError();
+        return;
+    }
+
+    if (!q.exec()) {
+        qWarning() << "Could not execute delete temporary resources query." << q.lastError();
+    }
 }
 

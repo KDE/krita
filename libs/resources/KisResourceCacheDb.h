@@ -68,14 +68,14 @@ private:
     friend class TestResourceLocator;
     friend class TestResourceCacheDb;
 
-    explicit KisResourceCacheDb();
-    ~KisResourceCacheDb();
-    KisResourceCacheDb operator=(const KisResourceCacheDb&);
+    explicit KisResourceCacheDb(); // Deleted
+    ~KisResourceCacheDb(); // Deleted
+    KisResourceCacheDb operator=(const KisResourceCacheDb&); //Deleted
 
     static int resourceIdForResource(const QString &resourceName, const QString &resourceType, const QString &storageLocation);
     static bool resourceNeedsUpdating(int resourceId, QDateTime timestamp);
     static bool addResourceVersion(int resourceId, QDateTime timestamp, KisResourceStorageSP storage, KoResourceSP resource);
-    static bool addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType);
+    static bool addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType, bool temporary = false);
     static bool addResources(KisResourceStorageSP storage, QString resourceType);
 
     /// Make this resource inactive; this does not remove the resource from disk or from the database
@@ -92,6 +92,9 @@ private:
 
     static QString makeRelative(QString location);
     static QString makeAbsolute(const QString &location);
+
+    /// Delete all resources marked temporary
+    static void deleteTemporaryResources();
 
     static bool s_valid;
     static QString s_lastError;

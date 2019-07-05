@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS resources (
 ,   tooltip TEXT             /* a translated text that can be shown in the UI */
 ,   thumbnail BLOB           /* the image representing the resource visually*/
 ,   status INTEGER           /* active resources are visible in the UI, inactive resources are considered "deleted" */
+,   temporary INTEGER        /* temporary resources are removed from the database on startup */
 ,   FOREIGN KEY(resource_type_id) REFERENCES resource_types(id)
 ,   UNIQUE(storage_id, resource_type_id, name)
 ,   UNIQUE(storage_id, filename)

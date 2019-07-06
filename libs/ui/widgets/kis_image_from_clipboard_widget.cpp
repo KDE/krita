@@ -83,7 +83,8 @@ KisImageFromClipboard::~KisImageFromClipboard()
 void KisImageFromClipboard::createImage()
 {
     KisDocument *doc = createNewImage();
-    
+    if (!doc) return; // createNewImage can return 0;
+
     KisImageSP image = doc->image();
     if (image && image->root() && image->root()->firstChild()) {
         KisLayer * layer = qobject_cast<KisLayer*>(image->root()->firstChild().data());

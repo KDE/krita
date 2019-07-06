@@ -35,7 +35,7 @@ class CloseAction(QAction):
 
     @property
     def parent(self):
-        return 'File'
+        return 'File',
 
     def close(self):
         msgBox = QMessageBox(self.scripter.uicontroller.mainWidget)

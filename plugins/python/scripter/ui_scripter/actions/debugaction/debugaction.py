@@ -37,7 +37,7 @@ class DebugAction(QAction):
 
     @property
     def parent(self):
-        return 'toolBar'
+        return 'toolBar',
 
     def debug(self):
         if self.scripter.uicontroller.invokeAction('save'):

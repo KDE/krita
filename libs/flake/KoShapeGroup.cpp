@@ -116,6 +116,13 @@ KoShapeGroup::KoShapeGroup(const KoShapeGroup &rhs)
 
 KoShapeGroup::~KoShapeGroup()
 {
+    /**
+     * HACK alert: model will use KoShapeGroup::invalidateSizeCache(), which uses
+     * KoShapeGroup's d-pointer. We have to manually remove child shapes from the
+     * model in the destructor of KoShapeGroup as the instance d is no longer accessible
+     * since ~KoShapeGroup() is executed
+     */
+    model()->deleteOwnedShapes();
 }
 
 KoShape *KoShapeGroup::cloneShape() const

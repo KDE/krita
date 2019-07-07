@@ -196,7 +196,6 @@ void KisAnimationCurvesView::paintFrames(QPainter &painter)
         for (int time = 0; time <= model()->columnCount(); time++) {
 
             QModelIndex index = model()->index(channel, time);
-            QRect frameRect = m_d->itemDelegate->frameRect(index);
 
             int offset = 0;
             if (m_d->horizontalHeader && m_d->horizontalHeader->offset()) {
@@ -204,11 +203,8 @@ void KisAnimationCurvesView::paintFrames(QPainter &painter)
             }
 
             int horizontalStepSize = m_d->horizontalHeader->defaultSectionSize();
-            int viewportHeight = 9999;// makes sure the vertical lines hit the bottom
-
-            frameRect.setX( (horizontalStepSize * time) - offset );
-            frameRect.setHeight(viewportHeight);
-            frameRect.setY(-10); // hides the top border
+            int xPosition = horizontalStepSize * time - offset;
+            QRect frameRect = QRect(xPosition, -10, horizontalStepSize, 9999);
 
             painter.drawLine(frameRect.topRight(), frameRect.bottomRight());
         }

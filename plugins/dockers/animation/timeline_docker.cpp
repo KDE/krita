@@ -35,8 +35,6 @@
 #include "kis_image_animation_interface.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_node_manager.h"
-#include "kis_image_animation_interface.h"
-
 
 #include <QPointer>
 
@@ -127,12 +125,6 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
             m_d->model, SIGNAL(requestCurrentNodeChanged(KisNodeSP)),
             m_d->canvas->viewManager()->nodeManager(), SLOT(slotNonUiActivatedNode(KisNodeSP)));
 
-
-        m_d->canvasConnections.addConnection(
-            m_d->model, SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector<int>)),
-            this, SLOT(slotUIUpdate()));
-
-
         m_d->model->slotCurrentNodeChanged(m_d->canvas->viewManager()->activeNode());
 
         m_d->canvasConnections.addConnection(
@@ -158,11 +150,6 @@ void TimelineDocker::slotUpdateFrameCache()
     m_d->model->setFrameCache(m_d->canvas->frameCache());
 }
 
-void TimelineDocker::slotUIUpdate()
-{
-    m_d->canvas->image()->animationInterface()->switchCurrentTimeAsync(m_d->view->currentIndex().column());
-}
-
 void TimelineDocker::unsetCanvas()
 {
     setCanvas(0);
@@ -171,6 +158,7 @@ void TimelineDocker::unsetCanvas()
 void TimelineDocker::setViewManager(KisViewManager *view)
 {
     KisActionManager *actionManager = view->actionManager();
+
     m_d->view->setShowInTimeline(actionManager->actionByName("show_in_timeline"));
     m_d->view->setActionManager(actionManager);
 }

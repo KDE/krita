@@ -45,11 +45,6 @@ public Q_SLOTS:
     void slotUpdateIcons();
     void slotUpdateFrameCache();
 
-    /// This helps update other views that might need to know about timeline scrubbing
-    /// removing this slot will make scrubbing not update opacity keyframes when frame cache
-    /// is on
-    void slotUIUpdate();
-
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

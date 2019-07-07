@@ -958,8 +958,14 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
 
     {   // Tween submenu.
         QMenu *frames = menu->addMenu(i18nc("@item:inmenu", "Tweening"));
+
         KisActionManager::safePopulateMenu(frames, "insert_opacity_keyframe", m_d->actionMan);
         KisActionManager::safePopulateMenu(frames, "remove_opacity_keyframe", m_d->actionMan);
+
+        // only allow to add an opacity keyframe if one doesn't exist
+        bool opacityKeyframeExists = model()->data(currentIndex(), TimelineFramesModel::SpecialKeyframeExists).toBool();
+        m_d->actionMan->actionByName("insert_opacity_keyframe")->setEnabled(!opacityKeyframeExists);
+        m_d->actionMan->actionByName("remove_opacity_keyframe")->setEnabled(opacityKeyframeExists);
     }
 
 
@@ -1024,6 +1030,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             model()->setData(index, true, TimelineFramesModel::ActiveLayerRole);
             model()->setData(index, true, TimelineFramesModel::ActiveFrameRole);
             setCurrentIndex(index);
+
 
             if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool() ||
                     model()->data(index, TimelineFramesModel::SpecialKeyframeExists).toBool()) {

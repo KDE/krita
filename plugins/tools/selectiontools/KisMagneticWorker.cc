@@ -1,3 +1,5 @@
+#include <utility>
+
 /*
  *  Copyright (c) 2019 Kuntal Majumder <hellozee@disroot.org>
  *
@@ -19,6 +21,7 @@
 
 #include <kis_gaussian_kernel.h>
 #include <lazybrush/kis_lazy_fill_tools.h>
+#include <kis_algebra_2d.h>
 
 #include <QtCore>
 #include <QPolygon>
@@ -32,7 +35,7 @@ struct DistanceMap {
     typedef double data_type;
     typedef std::pair<key_type, data_type> value_type;
 
-    DistanceMap(double const& dval)
+    explicit DistanceMap(double const& dval)
             : m_default(dval)
     { }
 
@@ -48,16 +51,12 @@ private:
 };
 
 struct PredecessorMap{
-    PredecessorMap()
-    { }
+    PredecessorMap() = default;
 
-    PredecessorMap(PredecessorMap const& that):
-    m_map(that.m_map)
-    { }
+    PredecessorMap(PredecessorMap const& that) = default;
 
     typedef VertexDescriptor key_type;
     typedef VertexDescriptor value_type;
-    typedef VertexDescriptor & reference_type;
     typedef boost::read_write_property_map_tag category;
 
     VertexDescriptor &operator[](VertexDescriptor v){
@@ -68,7 +67,7 @@ struct PredecessorMap{
 };
 
 VertexDescriptor get(PredecessorMap const &m, VertexDescriptor v){
-    typename std::map<VertexDescriptor, VertexDescriptor>::const_iterator found = m.m_map.find(v);
+    auto found = m.m_map.find(v);
     return found != m.m_map.end() ? found->second : v;
 }
 
@@ -83,18 +82,13 @@ double EuclideanDistance(VertexDescriptor p1, VertexDescriptor p2){
 class AStarHeuristic : public boost::astar_heuristic<KisMagneticGraph, double> {
     private:
         VertexDescriptor m_goal;
-        double coeff_a, coeff_b;
 
     public:
-        AStarHeuristic(VertexDescriptor goal, double a, double b):
-            m_goal(goal), coeff_a(a), coeff_b(b)
+        explicit AStarHeuristic(VertexDescriptor goal):
+            m_goal(goal)
         { }
 
-        AStarHeuristic(VertexDescriptor goal):
-            m_goal(goal), coeff_a(0.5), coeff_b(0.5)
-        { }
-
-        double operator()(VertexDescriptor v){
+        double operator()(VertexDescriptor v) {
             return EuclideanDistance(v,m_goal);
         }
 };
@@ -103,7 +97,7 @@ struct GoalFound {};
 
 class AStarGoalVisitor : public boost::default_astar_visitor {
     public:
-        AStarGoalVisitor(VertexDescriptor goal) : m_goal(goal) { }
+        explicit AStarGoalVisitor(VertexDescriptor goal) : m_goal(goal) { }
 
         void examine_vertex(VertexDescriptor u, KisMagneticGraph const &g) {
             Q_UNUSED(g)
@@ -121,9 +115,9 @@ struct WeightMap{
     typedef double data_type;
     typedef std::pair<key_type, data_type> value_type;
 
-    WeightMap() { }
+    WeightMap() = default;
 
-    WeightMap(KisMagneticGraph g):
+    explicit WeightMap(const KisMagneticGraph &g):
         m_graph(g)
     { }
 
@@ -140,17 +134,18 @@ private:
     KisMagneticGraph m_graph;
 };
 
-KisMagneticWorker::KisMagneticWorker(KisPaintDeviceSP dev) :
+KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev) :
     m_dev(dev)
 { }
 
 QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint end) {
 
-    //QRect rect = calculateRect(begin, end, radius);
     QRect rect(QPoint(0,0), QSize(radius*2, radius*2));
     rect.moveCenter(begin);
 
-    KisGaussianKernel::applyLoG(m_dev, rect, 2, 1.0, QBitArray(), 0);
+    KisAlgebra2D::accumulateBounds(end, &rect);
+
+    KisGaussianKernel::applyLoG(m_dev, rect, 2, 1.0, QBitArray(), nullptr);
     KisLazyFillTools::normalizeAndInvertAlpha8Device(m_dev, rect);
 
     VertexDescriptor goal(end);

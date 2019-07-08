@@ -95,17 +95,16 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
     }
 
     m_lastCursorPos = convertToPixelCoord(event);
-    auto current = QPoint(m_lastCursorPos.x(), m_lastCursorPos.y());
-    auto point_set = m_worker.computeEdge(m_radius, m_lastAnchor, current);
-
+    QPoint current(m_lastCursorPos.x(), m_lastCursorPos.y());
+    QVector<QPointF> point_set = m_worker.computeEdge(m_radius, m_lastAnchor, current);
     int num = m_points.count();
     m_points.resize(m_radius * (num/m_radius));
     m_points.append(point_set);
     num = m_points.count();
-    if(num/20 >= 1) {
+    if(num/m_radius > 0) {
         m_checkPoint = m_radius * (num/m_radius) - 1;
         m_lastAnchor = QPoint(m_points[m_checkPoint].x(), m_points[m_checkPoint].y());
-        qDebug() << m_lastAnchor;
+        m_anchorPoints.push_back(m_lastAnchor);
     }
 
     m_paintPath = QPainterPath();
@@ -125,10 +124,22 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
 void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
 {
     setMode(KisTool::PAINT_MODE);
-    auto temp = convertToPixelCoord(event);
+    QPointF temp(convertToPixelCoord(event));
     m_lastAnchor = QPoint(temp.x(), temp.y());
-    qDebug() << m_lastAnchor;
-    m_complete = !m_complete; //just for testing
+
+    if(m_anchorPoints.count() == 0){
+        m_snapBound = QRect(QPoint(0,0), QSize(10,10));
+        m_snapBound.moveCenter(m_lastAnchor);
+    }
+
+    if(m_anchorPoints.count() > 0 && m_snapBound.contains(m_lastAnchor)){
+        m_complete = true;
+        finishSelectionAction();
+        return;
+    }
+
+    m_complete = false;
+    m_anchorPoints.push_back(m_lastAnchor);
 }
 
 //drag while primary mouse button is pressed

@@ -61,6 +61,7 @@ private:
 
     QPainterPath m_paintPath;
     QVector<QPointF> m_points;
+    QVector<QPoint> m_anchorPoints;
     bool m_continuedMode;
     QPointF m_lastCursorPos;
     QPoint m_lastAnchor;
@@ -68,6 +69,7 @@ private:
     KisMagneticWorker m_worker;
     uint m_checkPoint;
     uint m_radius;
+    QRectF m_snapBound;
 };
 
 class KisToolSelectMagneticFactory : public KisSelectionToolFactoryBase

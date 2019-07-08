@@ -45,6 +45,8 @@
 #include <KoSelection.h>
 #include <KoShapeController.h>
 
+#include <KisUsageLogger.h>
+
 #include <kis_lod_transform.h>
 #include "kis_tool_proxy.h"
 #include "kis_coordinates_converter.h"
@@ -1264,6 +1266,8 @@ void KisCanvas2::setLodAllowedInCanvas(bool value)
 
     KisConfig cfg(false);
     cfg.setLevelOfDetailEnabled(m_d->lodAllowedInImage);
+
+    KisUsageLogger::log(QString("Instant Preview Setting: %1").arg(m_d->lodAllowedInImage));
 }
 
 bool KisCanvas2::lodAllowedInCanvas() const

@@ -33,6 +33,8 @@
 #include "kis_input_profile_manager.h"
 #include "kis_extended_modifiers_mapper.h"
 
+#include "kis_zoom_and_rotate_action.h"
+
 /**
  * This hungry class EventEater encapsulates event masking logic.
  *
@@ -502,7 +504,9 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
 {
     KisTouchShortcut *shortcut = new KisTouchShortcut(action, index);
     switch(gesture) {
+    case KisShortcutConfiguration::RotateGesture:
     case KisShortcutConfiguration::PinchGesture:
+        shortcut = new KisTouchShortcut(new KisZoomAndRotateAction, index);
         shortcut->setMinimumTouchPoints(2);
         shortcut->setMaximumTouchPoints(2);
         break;

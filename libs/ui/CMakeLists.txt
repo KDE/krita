@@ -304,6 +304,7 @@ set(kritaui_LIB_SRCS
     input/kis_select_layer_action.cpp
     input/KisQtWidgetsTweaker.cpp
     input/KisInputActionGroup.cpp
+    input/kis_zoom_and_rotate_action.cpp
 
     operations/kis_operation.cpp
     operations/kis_operation_configuration.cpp

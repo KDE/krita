@@ -987,7 +987,7 @@ void KisNodeManager::mirrorAllNodesX()
 {
     KisNodeSP node = m_d->view->image()->root();
     mirrorNode(node, kundo2_i18n("Mirror All Layers X"),
-               Qt::Vertical, m_d->view->selection());
+               Qt::Horizontal, m_d->view->selection());
 }
 
 void KisNodeManager::mirrorAllNodesY()

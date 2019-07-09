@@ -46,7 +46,7 @@ KisUsageLogger::KisUsageLogger()
     d->logFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log");
 
     rotateLog();
-    d->logFile.open(QFile::Append);
+    d->logFile.open(QFile::Append | QFile::Text);
 }
 
 KisUsageLogger::~KisUsageLogger()

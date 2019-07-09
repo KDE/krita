@@ -20,6 +20,7 @@
 #include <kis_gaussian_kernel.h>
 #include <lazybrush/kis_lazy_fill_tools.h>
 #include <kis_algebra_2d.h>
+#include <kis_painter.h>
 
 #include <QtCore>
 #include <QPolygon>
@@ -132,9 +133,14 @@ private:
     KisMagneticGraph m_graph;
 };
 
-KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev) :
-    m_dev(dev)
-{ }
+KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev)
+{
+    KisPaintDevice *tempDevice = new KisPaintDevice(dev->colorSpace());
+    m_dev = KisPaintDeviceSP(tempDevice);
+    KisPainter::copyAreaOptimized(dev->exactBounds().topLeft(), dev, m_dev, dev->exactBounds());
+    KisGaussianKernel::applyLoG(m_dev, m_dev->exactBounds(), 2, 1.0, QBitArray(), nullptr);
+    KisLazyFillTools::normalizeAndInvertAlpha8Device(m_dev, m_dev->exactBounds());
+}
 
 QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint end) {
 
@@ -142,9 +148,6 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint
     rect.moveCenter(begin);
 
     KisAlgebra2D::accumulateBounds(end, &rect);
-
-    KisGaussianKernel::applyLoG(m_dev, rect, 2, 1.0, QBitArray(), nullptr);
-    KisLazyFillTools::normalizeAndInvertAlpha8Device(m_dev, rect);
 
     VertexDescriptor goal(end);
     VertexDescriptor start(begin);

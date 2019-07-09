@@ -309,17 +309,9 @@ bool shouldResetWheelDelta(QEvent * event)
 bool KisInputManager::eventFilterImpl(QEvent * event)
 {
     bool retval = false;
-    qDebug() << "event->type(): " << event->type();
 
     if (shouldResetWheelDelta(event)) {
         d->accumulatedScrollDelta = 0;
-    }
-
-    auto tev = dynamic_cast<QTouchEvent *>(event);
-    if (tev)
-    {
-        qDebug() << ppVar(tev->touchPoints()[0].pos());
-        qDebug() << ppVar(d->previousPos) << ", " << tev->touchPoints()[0].lastPos();
     }
 
     switch (event->type()) {
@@ -728,8 +720,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     default:
         break;
     }
-
-    qDebug() << ppVar(retval);
 
     return !retval ? d->processUnhandledEvent(event) : true;
 }

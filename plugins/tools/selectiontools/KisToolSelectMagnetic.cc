@@ -58,10 +58,6 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
       m_continuedMode(false), m_complete(true), m_checkPoint(0), m_radius(20)
 { }
 
-KisToolSelectMagnetic::~KisToolSelectMagnetic()
-{
-}
-
 void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Control) {
@@ -89,26 +85,31 @@ void KisToolSelectMagnetic::keyReleaseEvent(QKeyEvent *event)
 void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
 {
     KisToolSelect::mouseMoveEvent(event);
-    if(m_complete){
-        //finishSelectionAction();
+    if(m_complete)
         return;
-    }
+
 
     m_lastCursorPos = convertToPixelCoord(event);
-    QPoint current(m_lastCursorPos.x(), m_lastCursorPos.y());
+    QPoint current((int)m_lastCursorPos.x(), (int)m_lastCursorPos.y());
     QVector<QPointF> point_set = m_worker.computeEdge(m_radius, m_lastAnchor, current);
     int num = m_points.count();
     m_points.resize(m_radius * (num/m_radius));
     m_points.append(point_set);
     num = m_points.count();
-    if(num/m_radius > 0) {
-        m_checkPoint = m_radius * (num/m_radius) - 1;
-        m_lastAnchor = QPoint(m_points[m_checkPoint].x(), m_points[m_checkPoint].y());
+
+    if(num/m_radius > 0)
+        m_checkPoint = -1;
+
+    while(num/m_radius > 0){
+        m_checkPoint += m_radius;
+        m_lastAnchor = QPoint((int)m_points[m_checkPoint].x(), (int)m_points[m_checkPoint].y());
         m_anchorPoints.push_back(m_lastAnchor);
+        num -= m_radius;
     }
 
     m_paintPath = QPainterPath();
     m_paintPath.moveTo(pixelToView(m_points[0]));
+
     for(int i=1; i<m_points.count();i++){
         m_paintPath.lineTo(pixelToView(m_points[i]));
     }
@@ -125,7 +126,7 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
 {
     setMode(KisTool::PAINT_MODE);
     QPointF temp(convertToPixelCoord(event));
-    m_lastAnchor = QPoint(temp.x(), temp.y());
+    m_lastAnchor = QPoint((int)temp.x(), (int)temp.y());
 
     if(m_anchorPoints.count() == 0){
         m_snapBound = QRect(QPoint(0,0), QSize(10,10));
@@ -211,6 +212,7 @@ void KisToolSelectMagnetic::finishSelectionAction()
         QApplication::restoreOverrideCursor();
     }
     m_points.clear();
+    m_anchorPoints.clear();
     m_paintPath = QPainterPath();
 }
 

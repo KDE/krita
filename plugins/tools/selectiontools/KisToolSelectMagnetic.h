@@ -33,7 +33,7 @@ class KisToolSelectMagnetic : public KisToolSelect
 
 public:
     KisToolSelectMagnetic(KoCanvasBase *canvas);
-    ~KisToolSelectMagnetic() override;
+    ~KisToolSelectMagnetic() override = default;
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;

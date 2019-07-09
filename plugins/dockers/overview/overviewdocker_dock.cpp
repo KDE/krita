@@ -129,6 +129,7 @@ void OverviewDockerDock::unsetCanvas()
 
 void OverviewDockerDock::rotateCanvasView(qreal rotation)
 {
+    if (!m_canvas) return;
     KisCanvasController *canvasController =
             dynamic_cast<KisCanvasController*>(m_canvas->viewManager()->canvasBase()->canvasController());
     if (canvasController) {
@@ -138,6 +139,7 @@ void OverviewDockerDock::rotateCanvasView(qreal rotation)
 
 void OverviewDockerDock::updateSlider()
 {
+    if (!m_canvas) return;
     KisSignalsBlocker l(m_rotateSlider);
 
     qreal rotation = m_canvas->rotationAngle();

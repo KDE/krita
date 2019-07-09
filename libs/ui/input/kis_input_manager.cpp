@@ -614,15 +614,15 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
 #ifdef Q_OS_MAC
         int count = 0;
-        Q_FOREACH (const QTouchEvent::TouchPoint &point, tevent->touchPoints()) {
+        Q_FOREACH (const QTouchEvent::TouchPoint &point, touchEvent->touchPoints()) {
             if (point.state() != Qt::TouchPointReleased) {
                 count++;
             }
         }
 
-        if (count < 2 && tevent->touchPoints().length() > count) {
+        if (count < 2 && touchEvent->touchPoints().length() > count) {
             d->touchHasBlockedPressEvents = false;
-            retval = d->matcher.touchEndEvent(tevent);
+            retval = d->matcher.touchEndEvent(touchEvent);
         } else {
 #endif
             QPointF currentPos = touchEvent->touchPoints().at(0).pos();

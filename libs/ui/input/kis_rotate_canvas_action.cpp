@@ -32,10 +32,12 @@
 class KisRotateCanvasAction::Private
 {
 public:
-    Private() : angleDrift(0) {}
+    Private() : angleDrift(0), previousAngle(0) {}
 
     Shortcut mode;
     qreal angleDrift;
+
+    qreal previousAngle;
 };
 
 
@@ -83,6 +85,7 @@ void KisRotateCanvasAction::deactivate(int shortcut)
 void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
 {
     KisAbstractInputAction::begin(shortcut, event);
+    d->previousAngle = 0;
 
     KisCanvasController *canvasController =
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
@@ -143,6 +146,35 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
             const float angle = gevent->value();
             QPoint widgetPos = canvas->canvasWidget()->mapFromGlobal(gevent->globalPos());
             controller->rotateCanvas(angle, widgetPos);
+            return;
+        }
+        case QEvent::TouchUpdate: {
+            QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
+
+            if (touchEvent->touchPoints().count() != 2)
+                break;
+
+            QPointF p0 = touchEvent->touchPoints().at(0).pos();
+            QPointF p1 = touchEvent->touchPoints().at(1).pos();
+
+            // high school (y2 - y1) / (x2 - x1)
+            QPointF slope = p1 - p0;
+            qreal newAngle = atan2(slope.y(), slope.x());
+
+            if (!d->previousAngle)
+            {
+                d->previousAngle = newAngle;
+                return;
+            }
+
+            qreal delta = (180 / M_PI) * (newAngle - d->previousAngle);
+            qDebug() << ppVar(delta);
+
+            KisCanvas2 *canvas = inputManager()->canvas();
+            KisCanvasController *controller = static_cast<KisCanvasController*>(canvas->canvasController());
+            controller->rotateCanvas(delta);
+
+            d->previousAngle = newAngle;
             return;
         }
         default:

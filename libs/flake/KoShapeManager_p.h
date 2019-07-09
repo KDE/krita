@@ -103,7 +103,7 @@ public:
 
         void fireSignals() {
             Q_FOREACH (KoShape *shape, shapesWithCollisionDetection)
-                shape->priv()->shapeChanged(KoShape::CollisionDetected);
+                shape->shapeChangedPriv(KoShape::CollisionDetected);
         }
 
     private:

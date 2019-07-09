@@ -712,13 +712,6 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
     QVector<KisConfig::RootSurfaceFormat> formatSymbols({KisConfig::BT709_G22});
 #endif
 
-    QVector<RendererConfig> preferredConfigs;
-    for (auto it = renderersToTest.begin(); it != renderersToTest.end(); ++it) {
-        Q_FOREACH (const KisConfig::RootSurfaceFormat formatSymbol, formatSymbols) {
-            preferredConfigs << generateSurfaceConfig(it.key(), formatSymbol, enableDebug);
-        }
-    }
-
     KisOpenGL::RendererConfig defaultConfig = generateSurfaceConfig(KisOpenGL::RendererAuto,
                                                                     KisConfig::BT709_G22, false);
     Info info = KisOpenGLModeProber::instance()->probeFormat(defaultConfig);
@@ -775,6 +768,7 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
             info = KisOpenGLModeProber::instance()->
                     probeFormat(generateSurfaceConfig(it.key(),
                                                       KisConfig::BT709_G22, false));
+            *it = info;
         }
 
         compareOp.setOpenGLBlacklisted(
@@ -803,6 +797,15 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
         preferredByQt = RendererDesktopGL;
     }
 
+    QVector<RendererConfig> preferredConfigs;
+    for (auto it = renderersToTest.begin(); it != renderersToTest.end(); ++it) {
+        // if default mode of the renderer doesn't work, then custom won't either
+        if (!it.value()) continue;
+
+        Q_FOREACH (const KisConfig::RootSurfaceFormat formatSymbol, formatSymbols) {
+            preferredConfigs << generateSurfaceConfig(it.key(), formatSymbol, enableDebug);
+        }
+    }
 
     std::stable_sort(preferredConfigs.begin(), preferredConfigs.end(), compareOp);
 

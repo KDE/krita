@@ -26,8 +26,9 @@
 
 class QImage;
 
-class KoOdfGradientBackgroundPrivate;
 #include <KoXmlReaderForward.h>
+
+#include <QSharedDataPointer>
 class KoGenStyles;
 class KoGenStyle;
 
@@ -57,10 +58,9 @@ private:
 
 private:
     void debug() const;
-
 private:
-    Q_DECLARE_PRIVATE(KoOdfGradientBackground)
-    Q_DISABLE_COPY(KoOdfGradientBackground)
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 #endif

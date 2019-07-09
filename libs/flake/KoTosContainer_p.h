@@ -5,15 +5,17 @@
 #include "KoShapeContainer_p.h"
 
 #include "KoTosContainer.h"
+#include <QSharedData>
+#include <QRect>
 
-class KRITAFLAKE_EXPORT KoTosContainerPrivate : public KoShapeContainerPrivate
+class KoTosContainer::Private : public QSharedData
 {
 public:
 
-    explicit KoTosContainerPrivate(KoShapeContainer *q);
-    explicit KoTosContainerPrivate(const KoTosContainerPrivate &rhs, KoShapeContainer *q);
+    explicit Private();
+    explicit Private(const Private &rhs);
 
-    ~KoTosContainerPrivate() override;
+    virtual ~Private();
 
     KoTosContainer::ResizeBehavior resizeBehavior;
     QRectF preferredTextRect;

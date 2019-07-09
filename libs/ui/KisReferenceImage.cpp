@@ -24,6 +24,7 @@
 #include <QPainter>
 #include <QApplication>
 #include <QClipboard>
+#include <QSharedData>
 
 #include <kundo2command.h>
 #include <KoStore.h>
@@ -37,7 +38,8 @@
 #include <libs/brush/kis_qimage_pyramid.h>
 #include <utils/KisClipboardUtil.h>
 
-struct KisReferenceImage::Private {
+struct KisReferenceImage::Private : public QSharedData
+{
     // Filename within .kra (for embedding)
     QString internalFilename;
 
@@ -122,8 +124,8 @@ KisReferenceImage::KisReferenceImage()
 }
 
 KisReferenceImage::KisReferenceImage(const KisReferenceImage &rhs)
-    : KoTosContainer(new KoTosContainerPrivate(*rhs.d_func(), this))
-    , d(new Private(*rhs.d))
+    : KoTosContainer(rhs)
+    , d(rhs.d)
 {}
 
 KisReferenceImage::~KisReferenceImage()

@@ -1328,8 +1328,10 @@ QString EXRConverter::Private::fetchExtraLayersInfo(QList<ExrPaintLayerSaveInfo>
         quint32 unused;
         KisSaveXmlVisitor visitor(doc, rootElement, unused, QString(), false);
         QDomElement el = visitor.savePaintLayerAttributes(info.layer.data(), doc);
+
         // cut the ending '.'
         QString strippedName = info.name.left(info.name.size() - 1);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(info.layer->name() == strippedName);
 
         el.setAttribute(EXR_NAME, strippedName);
 

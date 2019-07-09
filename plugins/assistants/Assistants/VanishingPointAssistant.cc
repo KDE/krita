@@ -193,7 +193,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
     // draw references guide for vanishing points at specified density
     // this is shown as part of the preview, so don't show if preview is off
-    if( canvas->paintingAssistantsDecoration()->outlineVisibility() && this->isSnappingActive() ) {
+    if ( (assistantVisible && canvas->paintingAssistantsDecoration()->outlineVisibility()) && this->isSnappingActive() ) {
 
         // cycle through degrees from 0 to 180. We are doing an infinite line, so we don't need to go 360
         QTransform initialTransform = converter->documentToWidgetTransform();

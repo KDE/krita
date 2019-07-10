@@ -61,6 +61,7 @@
 #include <QScreen>
 #include <QAction>
 #include <QWindow>
+#include <QScrollArea>
 
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -185,7 +186,13 @@ public:
     {
         if (id.isNull()) this->id = QUuid::createUuid();
 
-        widgetStack->addWidget(welcomePage);
+        welcomeScroller = new QScrollArea();
+        welcomeScroller->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        welcomeScroller->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        welcomeScroller->setWidget(welcomePage);
+        welcomeScroller->setWidgetResizable(true);
+
+        widgetStack->addWidget(welcomeScroller);
         widgetStack->addWidget(mdiArea);
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
@@ -256,6 +263,7 @@ public:
 
     Digikam::ThemeManager *themeManager {0};
 
+    QScrollArea *welcomeScroller {0};
     KisWelcomePageWidget *welcomePage {0};
 
 

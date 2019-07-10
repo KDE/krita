@@ -120,9 +120,10 @@ void KisTiffTest::testRoundTripRGBF16()
 
 void KisTiffTest::testSaveTiffColorSpace(QString colorModel, QString colorDepth, QString colorProfile)
 {
-    KoColorSpaceRegistry registry;
     const KoColorSpace *space = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, colorProfile);
-    TestUtil::testExportToColorSpace(QString(FILES_DATA_DIR), TiffMimetype, space, ImportExportCodes::OK, true);
+    if (space) {
+        TestUtil::testExportToColorSpace(QString(FILES_DATA_DIR), TiffMimetype, space, ImportExportCodes::OK, true);
+    }
 }
 
 void KisTiffTest::testSaveTiffRgbaColorSpace()

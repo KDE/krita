@@ -484,8 +484,6 @@ const KoColorSpace * KoColorSpaceRegistry::Private::colorSpace1(const QString &c
         const KoColorProfile *profile =
             profileForCsIdWithFallbackImpl(csID, profileName);
 
-        // until kis_asert.h is not available in 3.1, use this combo
-        Q_ASSERT(profile);
         if (!profile) return 0;
 
         cs = lazyCreateColorSpaceImpl(csID, profile);

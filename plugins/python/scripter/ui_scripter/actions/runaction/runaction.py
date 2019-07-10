@@ -54,7 +54,7 @@ class RunAction(QAction):
 
     @property
     def parent(self):
-        return 'toolBar'
+        return 'toolBar',
 
     def run(self):
         """ This method execute python code from an activeDocument (file) or direct

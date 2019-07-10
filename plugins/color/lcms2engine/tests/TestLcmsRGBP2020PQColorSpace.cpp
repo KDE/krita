@@ -41,9 +41,10 @@ enum SourceType {
 
 void testRoundTrip(const KoColorSpace *srcCS, const KoColorSpace *dstCS, SourceType sourceIsPQ)
 {
-    qDebug() << "Testing:" << srcCS->id() << truncated(srcCS->profile()->name())
-             << "->"
-             << dstCS->id() << truncated(dstCS->profile()->name());
+    /*
+     *  On some systems these colorspaces cannot be created, so don't die:
+     */
+    if (!srcCS | !dstCS) return;
 
     KoColor srcColor(srcCS);
     KoColor dstColor(dstCS);

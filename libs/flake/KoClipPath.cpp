@@ -49,14 +49,16 @@ class Q_DECL_HIDDEN KoClipPath::Private : public QSharedData
 {
 public:
     Private()
+        : QSharedData()
     {}
 
     Private(const Private &rhs)
-        : clipPath(rhs.clipPath),
-          clipRule(rhs.clipRule),
-          coordinates(rhs.coordinates),
-          initialTransformToShape(rhs.initialTransformToShape),
-          initialShapeSize(rhs.initialShapeSize)
+        : QSharedData()
+        , clipPath(rhs.clipPath)
+        , clipRule(rhs.clipRule)
+        , coordinates(rhs.coordinates)
+        , initialTransformToShape(rhs.initialTransformToShape)
+        , initialShapeSize(rhs.initialShapeSize)
     {
         Q_FOREACH (KoShape *shape, rhs.shapes) {
             KoShape *clonedShape = shape->cloneShape();

@@ -80,28 +80,29 @@
 // KoShape::Private
 
 KoShape::Private::Private()
-    : size(50, 50),
-      parent(0),
-      shadow(0),
-      border(0),
-      filterEffectStack(0),
-      transparency(0.0),
-      zIndex(0),
-      runThrough(0),
-      visible(true),
-      printable(true),
-      geometryProtected(false),
-      keepAspect(false),
-      selectable(true),
-      detectCollision(false),
-      protectContent(false),
-      textRunAroundSide(KoShape::BiggestRunAroundSide),
-      textRunAroundDistanceLeft(0.0),
-      textRunAroundDistanceTop(0.0),
-      textRunAroundDistanceRight(0.0),
-      textRunAroundDistanceBottom(0.0),
-      textRunAroundThreshold(0.0),
-      textRunAroundContour(KoShape::ContourFull)
+    : QSharedData()
+    , size(50, 50)
+    , parent(0)
+    , shadow(0)
+    , border(0)
+    , filterEffectStack(0)
+    , transparency(0.0)
+    , zIndex(0)
+    , runThrough(0)
+    , visible(true)
+    , printable(true)
+    , geometryProtected(false)
+    , keepAspect(false)
+    , selectable(true)
+    , detectCollision(false)
+    , protectContent(false)
+    , textRunAroundSide(KoShape::BiggestRunAroundSide)
+    , textRunAroundDistanceLeft(0.0)
+    , textRunAroundDistanceTop(0.0)
+    , textRunAroundDistanceRight(0.0)
+    , textRunAroundDistanceBottom(0.0)
+    , textRunAroundThreshold(0.0)
+    , textRunAroundContour(KoShape::ContourFull)
 {
     connectors[KoConnectionPoint::TopConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::TopConnectionPoint);
     connectors[KoConnectionPoint::RightConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::RightConnectionPoint);
@@ -112,47 +113,47 @@ KoShape::Private::Private()
 
 KoShape::Private::Private(const Private &rhs)
     : QSharedData()
-    , size(rhs.size),
-      shapeId(rhs.shapeId),
-      name(rhs.name),
-      localMatrix(rhs.localMatrix),
-      connectors(rhs.connectors),
-      parent(0), // to be initialized later
-      shapeManagers(), // to be initialized later
-      toolDelegates(), // FIXME: how to initialize them?
-      userData(rhs.userData ? rhs.userData->clone() : 0),
-      stroke(rhs.stroke),
-      fill(rhs.fill),
-      inheritBackground(rhs.inheritBackground),
-      inheritStroke(rhs.inheritStroke),
-      dependees(), // FIXME: how to initialize them?
-      shadow(0), // WARNING: not implemented in Krita
-      border(0), // WARNING: not implemented in Krita
-      clipPath(rhs.clipPath ? rhs.clipPath->clone() : 0),
-      clipMask(rhs.clipMask ? rhs.clipMask->clone() : 0),
-      additionalAttributes(rhs.additionalAttributes),
-      additionalStyleAttributes(rhs.additionalStyleAttributes),
-      filterEffectStack(0), // WARNING: not implemented in Krita
-      transparency(rhs.transparency),
-      hyperLink(rhs.hyperLink),
+    , size(rhs.size)
+    , shapeId(rhs.shapeId)
+    , name(rhs.name)
+    , localMatrix(rhs.localMatrix)
+    , connectors(rhs.connectors)
+    , parent(0) // to be initialized later
+    , shapeManagers() // to be initialized later
+    , toolDelegates() // FIXME: how to initialize them?
+    , userData(rhs.userData ? rhs.userData->clone() : 0)
+    , stroke(rhs.stroke)
+    , fill(rhs.fill)
+    , inheritBackground(rhs.inheritBackground)
+    , inheritStroke(rhs.inheritStroke)
+    , dependees() // FIXME: how to initialize them?
+    , shadow(0) // WARNING: not implemented in Krita
+    , border(0) // WARNING: not implemented in Krita
+    , clipPath(rhs.clipPath ? rhs.clipPath->clone() : 0)
+    , clipMask(rhs.clipMask ? rhs.clipMask->clone() : 0)
+    , additionalAttributes(rhs.additionalAttributes)
+    , additionalStyleAttributes(rhs.additionalStyleAttributes)
+    , filterEffectStack(0) // WARNING: not implemented in Krita
+    , transparency(rhs.transparency)
+    , hyperLink(rhs.hyperLink)
 
-      zIndex(rhs.zIndex),
-      runThrough(rhs.runThrough),
-      visible(rhs.visible),
-      printable(rhs.visible),
-      geometryProtected(rhs.geometryProtected),
-      keepAspect(rhs.keepAspect),
-      selectable(rhs.selectable),
-      detectCollision(rhs.detectCollision),
-      protectContent(rhs.protectContent),
+    , zIndex(rhs.zIndex)
+    , runThrough(rhs.runThrough)
+    , visible(rhs.visible)
+    , printable(rhs.visible)
+    , geometryProtected(rhs.geometryProtected)
+    , keepAspect(rhs.keepAspect)
+    , selectable(rhs.selectable)
+    , detectCollision(rhs.detectCollision)
+    , protectContent(rhs.protectContent)
 
-      textRunAroundSide(rhs.textRunAroundSide),
-      textRunAroundDistanceLeft(rhs.textRunAroundDistanceLeft),
-      textRunAroundDistanceTop(rhs.textRunAroundDistanceTop),
-      textRunAroundDistanceRight(rhs.textRunAroundDistanceRight),
-      textRunAroundDistanceBottom(rhs.textRunAroundDistanceBottom),
-      textRunAroundThreshold(rhs.textRunAroundThreshold),
-      textRunAroundContour(rhs.textRunAroundContour)
+    , textRunAroundSide(rhs.textRunAroundSide)
+    , textRunAroundDistanceLeft(rhs.textRunAroundDistanceLeft)
+    , textRunAroundDistanceTop(rhs.textRunAroundDistanceTop)
+    , textRunAroundDistanceRight(rhs.textRunAroundDistanceRight)
+    , textRunAroundDistanceBottom(rhs.textRunAroundDistanceBottom)
+    , textRunAroundThreshold(rhs.textRunAroundThreshold)
+    , textRunAroundContour(rhs.textRunAroundContour)
 {
 }
 

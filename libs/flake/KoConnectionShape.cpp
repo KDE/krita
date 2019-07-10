@@ -39,26 +39,26 @@
 
 KoConnectionShape::Private::Private()
     : QSharedData()
-    , shape1(0),
-    shape2(0),
-    connectionPointId1(-1),
-    connectionPointId2(-1),
-    connectionType(KoConnectionShape::Standard),
-    forceUpdate(false),
-    hasCustomPath(false)
+    , shape1(0)
+    , shape2(0)
+    , connectionPointId1(-1)
+    , connectionPointId2(-1)
+    , connectionType(KoConnectionShape::Standard)
+    , forceUpdate(false)
+    , hasCustomPath(false)
 {
 }
 
 KoConnectionShape::Private::Private(const KoConnectionShape::Private &rhs)
     : QSharedData()
-    , path(rhs.path),
-      shape1(0), // FIXME: it should point to the new shapes!!!
-      shape2(0), // FIXME: it should point to the new shapes!!!
-      connectionPointId1(rhs.connectionPointId1),
-      connectionPointId2(rhs.connectionPointId2),
-      connectionType(rhs.connectionType),
-      forceUpdate(rhs.forceUpdate),
-      hasCustomPath(rhs.hasCustomPath)
+    , path(rhs.path)
+    , shape1(0) // FIXME: it should point to the new shapes!!!
+    , shape2(0) // FIXME: it should point to the new shapes!!!
+    , connectionPointId1(rhs.connectionPointId1)
+    , connectionPointId2(rhs.connectionPointId2)
+    , connectionType(rhs.connectionType)
+    , forceUpdate(rhs.forceUpdate)
+    , hasCustomPath(rhs.hasCustomPath)
 {
 
 }

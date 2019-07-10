@@ -36,7 +36,7 @@ class SaveAction(QAction):
 
     @property
     def parent(self):
-        return 'File'
+        return 'File',
 
     def save(self):
         text = self.editor.toPlainText()

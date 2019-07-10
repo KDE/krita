@@ -1678,7 +1678,7 @@ bool KisDlgPreferences::editPreferences()
             }
             else {
                 cfg.setMonitorProfile(i,
-                                      dialog->m_colorSettings->m_monitorProfileWidgets[i]->itemHighlighted(),
+                                      dialog->m_colorSettings->m_monitorProfileWidgets[i]->currentUnsqueezedText(),
                                       dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
             }
         }

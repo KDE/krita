@@ -120,7 +120,7 @@ struct EnvironmentSetter
         : m_env(env)
     {
         if (qEnvironmentVariableIsEmpty(m_env.latin1())) {
-            m_oldValue = qEnvironmentVariable(env.latin1());
+            m_oldValue = qgetenv(env.latin1());
         }
         if (!value.isEmpty()) {
             qputenv(env.latin1(), value.toLatin1());

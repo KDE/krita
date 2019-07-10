@@ -147,5 +147,3 @@ void SnapshotDocker::slotBnRemoveClicked()
         action->trigger();
     }
 }
-
-#include "SnapshotDocker.moc"

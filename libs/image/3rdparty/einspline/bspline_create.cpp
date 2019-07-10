@@ -262,7 +262,13 @@ find_coefs_1d_s (Ugrid grid, BCtype_s bc,
   }
   else {
     // Setup boundary conditions
-    float abcd_left[4], abcd_right[4];
+    float abcd_left[4];
+    float abcd_right[4];
+    for (int i = 0; i < 4; i++) {
+        abcd_left[i] = 0.0;
+        abcd_right[i] = 0.0;
+    }
+
     // Left boundary
     if (bc.lCode == FLAT || bc.lCode == NATURAL)
       bc.lVal = 0.0;
@@ -1139,7 +1145,12 @@ find_coefs_1d_d (Ugrid grid, BCtype_d bc,
   }
   else {
     // Setup boundary conditions
-    double abcd_left[4], abcd_right[4];
+    double abcd_left[4];
+    double abcd_right[4];
+    for (int i = 0; i < 4; i++) {
+        abcd_left[i] = 0.0;
+        abcd_right[i] = 0.0;
+    }
     // Left boundary
     if (bc.lCode == FLAT || bc.lCode == NATURAL)
       bc.lVal = 0.0;

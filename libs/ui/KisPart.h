@@ -260,6 +260,8 @@ public:
      */
     bool closingSession() const;
 
+    static bool exists();
+
 private Q_SLOTS:
 
     void slotDocumentSaved();

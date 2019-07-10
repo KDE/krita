@@ -146,9 +146,11 @@ Java_org_krita_android_JNIWrappers_saveState(JNIEnv* /*env*/,
                                              jobject /*obj*/,
                                              jint    /*n*/)
 {
+    if (!KisPart::exists()) return;
+
     KisPart *kisPart = KisPart::instance();
     QList<QPointer<KisDocument>> list = kisPart->documents();
-    for (auto doc: list)
+    for (QPointer<KisDocument> &doc: list)
     {
         doc->autoSaveOnPause();
     }

@@ -320,6 +320,11 @@ bool KisPart::closingSession() const
     return d->closingSession;
 }
 
+bool KisPart::exists()
+{
+    return s_instance.exists();
+}
+
 bool KisPart::closeSession(bool keepWindows)
 {
     d->closingSession = true;

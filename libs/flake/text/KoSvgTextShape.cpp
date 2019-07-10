@@ -64,7 +64,7 @@ public:
     {
     }
 
-    Private(const Private &rhs)
+    Private(const Private &)
         : QSharedData()
     {
     }

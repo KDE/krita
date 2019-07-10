@@ -90,7 +90,7 @@ KisColorSpaceSelector::~KisColorSpaceSelector()
 
 void KisColorSpaceSelector::fillCmbProfiles()
 {
-    const QString currentProfileName = d->colorSpaceSelector->cmbProfile->itemHighlighted();
+    const QString currentProfileName = d->colorSpaceSelector->cmbProfile->currentUnsqueezedText();
 
     const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem());
     const QString defaultProfileName = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId);
@@ -133,7 +133,7 @@ void KisColorSpaceSelector::fillCmbDepths(const KoID& id)
 
 const KoColorSpace* KisColorSpaceSelector::currentColorSpace()
 {
-    QString profilenamestring = d->colorSpaceSelector->cmbProfile->itemHighlighted();
+    QString profilenamestring = d->colorSpaceSelector->cmbProfile->currentUnsqueezedText();
     if (profilenamestring.contains(d->defaultsuffix)) {
         profilenamestring.remove(d->defaultsuffix);
         return KoColorSpaceRegistry::instance()->colorSpace(

@@ -57,7 +57,7 @@ KisDlgPngImport::KisDlgPngImport(const QString &path, const QString &colorModelI
 
 QString KisDlgPngImport::profile() const
 {
-    QString p = dlgWidget.cmbProfile->itemHighlighted();
+    QString p = dlgWidget.cmbProfile->currentUnsqueezedText();
     KisConfig cfg(false);
     cfg.writeEntry("pngImportProfile", p);
     return p;

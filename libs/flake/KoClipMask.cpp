@@ -30,14 +30,17 @@
 
 struct Q_DECL_HIDDEN KoClipMask::Private : public QSharedData
 {
-    Private() {}
+    Private()
+        : QSharedData()
+    {}
+
     Private(const Private &rhs)
-        : coordinates(rhs.coordinates),
-          contentCoordinates(rhs.contentCoordinates),
-          maskRect(rhs.maskRect),
-          extraShapeTransform(rhs.extraShapeTransform)
+        : QSharedData()
+        , coordinates(rhs.coordinates)
+        , contentCoordinates(rhs.contentCoordinates)
+        , maskRect(rhs.maskRect)
+        , extraShapeTransform(rhs.extraShapeTransform)
     {
-        // XXX: Use KisDescendent<KoShape> instead of this
         Q_FOREACH (KoShape *shape, rhs.shapes) {
             KoShape *clonedShape = shape->cloneShape();
             KIS_ASSERT_RECOVER(clonedShape) { continue; }

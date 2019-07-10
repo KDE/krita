@@ -22,14 +22,12 @@
 #include "KoShapeContainer.h"
 #include "kritaflake_export.h"
 
-#include <QSharedData>
-
 class KoShapeContainerModel;
 
 /**
  * \internal used private d-pointer class for the \a KoShapeContainer class.
  */
-class KRITAFLAKE_EXPORT KoShapeContainer::Private : public QSharedData
+class KRITAFLAKE_EXPORT KoShapeContainer::Private
 {
 public:
     explicit Private(KoShapeContainer *q);

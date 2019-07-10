@@ -33,8 +33,8 @@
 #include "kis_assert.h"
 
 KoShapeContainer::Private::Private(KoShapeContainer *q)
-    : shapeInterface(q),
-      model(0)
+    : shapeInterface(q)
+    , model(0)
 {
 }
 

@@ -856,14 +856,15 @@ KoSvgTextChunkShape::Private::Private()
 }
 
 KoSvgTextChunkShape::Private::Private(const Private &rhs)
-    : properties(rhs.properties),
-      font(rhs.font),
-      fontFamiliesList(rhs.fontFamiliesList),
-      localTransformations(rhs.localTransformations),
-      textLength(rhs.textLength),
-      lengthAdjust(rhs.lengthAdjust),
-      text(rhs.text),
-      isRichTextPreferred(rhs.isRichTextPreferred)
+    : QSharedData()
+    , properties(rhs.properties)
+    , font(rhs.font)
+    , fontFamiliesList(rhs.fontFamiliesList)
+    , localTransformations(rhs.localTransformations)
+    , textLength(rhs.textLength)
+    , lengthAdjust(rhs.lengthAdjust)
+    , text(rhs.text)
+    , isRichTextPreferred(rhs.isRichTextPreferred)
 {
 }
 

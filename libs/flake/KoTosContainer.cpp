@@ -38,12 +38,14 @@
 #include <QTextDocument>
 
 KoTosContainer::Private::Private()
-    : resizeBehavior(KoTosContainer::IndependentSizes)
+    : QSharedData()
+    , resizeBehavior(KoTosContainer::IndependentSizes)
 {
 }
 
 KoTosContainer::Private::Private(const Private &rhs)
-    : resizeBehavior(rhs.resizeBehavior)
+    : QSharedData()
+    , resizeBehavior(rhs.resizeBehavior)
     , preferredTextRect(rhs.preferredTextRect)
     , alignment(rhs.alignment)
 {

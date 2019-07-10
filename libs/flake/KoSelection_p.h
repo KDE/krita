@@ -29,11 +29,13 @@ class KoSelection::Private : public QSharedData
 {
 public:
     explicit Private()
-        : activeLayer(0)
+        : QSharedData()
+        , activeLayer(0)
         , selectionChangedCompressor(1, KisSignalCompressor::FIRST_INACTIVE)
     {}
     explicit Private(const Private &)
-        : activeLayer(0)
+        : QSharedData()
+        , activeLayer(0)
         , selectionChangedCompressor(1, KisSignalCompressor::FIRST_INACTIVE)
     {
     }

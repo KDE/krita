@@ -152,13 +152,6 @@ class KRITAUI_EXPORT KoDualColorButton : public QWidget
      */
     void backgroundColorChanged( const KoColor &color );
 
-    /**
-     * Emitted when the user clicks one of the two color patches.
-     * You should/could pop you own color chooser dialog in response.
-     * Also see the popDialog attribute.
-     */
-    void pleasePopDialog( const KoColor &color );
-
   protected:
     /**
      * Sets the supplied rectangles to the proper size and position for the

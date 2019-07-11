@@ -114,6 +114,12 @@ private:
 };
 
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+QString qEnvironmentVariable(const char *varName) {
+    return qgetenv(varName);
+}
+#endif
+
 struct EnvironmentSetter
 {
     EnvironmentSetter(const QLatin1String &env, const QString &value)

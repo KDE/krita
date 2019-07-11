@@ -1689,16 +1689,18 @@ bool KisDlgPreferences::editPreferences()
 
         dialog->m_performanceSettings->save();
 
-        {
+        if (!cfg.useOpenGL() && dialog->m_displaySettings->grpOpenGL->isChecked())
+            cfg.setCanvasState("TRY_OPENGL");
+
+        if (dialog->m_displaySettings->grpOpenGL->isChecked()) {
             KisOpenGL::OpenGLRenderer renderer = static_cast<KisOpenGL::OpenGLRenderer>(
                     dialog->m_displaySettings->cmbPreferredRenderer->itemData(
                             dialog->m_displaySettings->cmbPreferredRenderer->currentIndex()).toInt());
             KisOpenGL::setUserPreferredOpenGLRendererConfig(renderer);
+        } else {
+            KisOpenGL::setUserPreferredOpenGLRendererConfig(KisOpenGL::RendererNone);
         }
 
-        if (!cfg.useOpenGL() && dialog->m_displaySettings->grpOpenGL->isChecked())
-            cfg.setCanvasState("TRY_OPENGL");
-        cfg.setUseOpenGL(dialog->m_displaySettings->grpOpenGL->isChecked());
         cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
         cfg.setDisableVSync(dialog->m_displaySettings->chkDisableVsync->isChecked());

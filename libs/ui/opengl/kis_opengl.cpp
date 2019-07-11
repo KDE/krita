@@ -353,6 +353,8 @@ void KisOpenGL::setUserPreferredOpenGLRendererConfig(KisOpenGL::OpenGLRenderer r
 QString KisOpenGL::convertOpenGLRendererToConfig(KisOpenGL::OpenGLRenderer renderer)
 {
     switch (renderer) {
+    case RendererNone:
+        return QStringLiteral("none");
     case RendererSoftware:
         return QStringLiteral("software");
     case RendererDesktopGL:
@@ -372,6 +374,8 @@ KisOpenGL::OpenGLRenderer KisOpenGL::convertConfigToOpenGLRenderer(QString rende
         return RendererOpenGLES;
     } else if (renderer == "software") {
         return RendererSoftware;
+    } else if (renderer == "none") {
+        return RendererNone;
     } else {
         return RendererAuto;
     }
@@ -413,6 +417,8 @@ RendererInfo getRendererInfo(KisOpenGL::OpenGLRenderer renderer)
 
     switch (renderer) {
     case KisOpenGL::RendererNone:
+        info = {QSurfaceFormat::DefaultRenderableType, KisOpenGL::AngleRendererDefault};
+        break;
     case KisOpenGL::RendererAuto:
         break;
     case KisOpenGL::RendererDesktopGL:
@@ -643,7 +649,8 @@ private:
         KIS_SAFE_ASSERT_RECOVER_NOOP(r == KisOpenGL::RendererAuto ||
                                      r == KisOpenGL::RendererDesktopGL ||
                                      r == KisOpenGL::RendererOpenGLES ||
-                                     r == KisOpenGL::RendererSoftware);
+                                     r == KisOpenGL::RendererSoftware ||
+                                     r == KisOpenGL::RendererNone);
 
         return (r == KisOpenGL::RendererDesktopGL && m_openGLBlacklisted) ||
             (r == KisOpenGL::RendererOpenGLES && m_openGLESBlacklisted) ||
@@ -718,9 +725,6 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
 
 #ifdef Q_OS_WIN
     if (!info) {
-        renderersToTest.remove(RendererDesktopGL);
-        renderersToTest.remove(RendererOpenGLES);
-
         // try software rasterizer (WARP)
         defaultConfig = generateSurfaceConfig(KisOpenGL::RendererSoftware,
                                               KisConfig::BT709_G22, false);
@@ -737,7 +741,6 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
     const OpenGLRenderer defaultRenderer = getRendererFromProbeResult(*info);
 
     OpenGLRenderers supportedRenderers = RendererNone;
-    supportedRenderers |= defaultRenderer;
 
     FormatPositionLess compareOp;
     compareOp.setPreferredRendererByQt(defaultRenderer);
@@ -819,57 +822,62 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
 
     KisOpenGL::RendererConfig resultConfig = defaultConfig;
 
-    Q_FOREACH (const KisOpenGL::RendererConfig &config, preferredConfigs) {
+    if (preferredRenderer != RendererNone) {
+        Q_FOREACH (const KisOpenGL::RendererConfig &config, preferredConfigs) {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-        dbgDetection() <<"Probing format..." << config.format.colorSpace() << config.rendererId();
+            dbgDetection() <<"Probing format..." << config.format.colorSpace() << config.rendererId();
 #else
-        dbgDetection() <<"Probing format..." << config.rendererId();
+            dbgDetection() <<"Probing format..." << config.rendererId();
 #endif
-        Info info = KisOpenGLModeProber::instance()->probeFormat(config);
+            Info info = KisOpenGLModeProber::instance()->probeFormat(config);
 
-        if (info && info->isSupportedVersion()) {
+            if (info && info->isSupportedVersion()) {
 
 #ifdef Q_OS_WIN
-            // HACK: Block ANGLE with Direct3D9
-            //       Direct3D9 does not give OpenGL ES 3.0
-            //       Some versions of ANGLE returns OpenGL version 3.0 incorrectly
+                // HACK: Block ANGLE with Direct3D9
+                //       Direct3D9 does not give OpenGL ES 3.0
+                //       Some versions of ANGLE returns OpenGL version 3.0 incorrectly
 
-            if (info->isUsingAngle() &&
-                info->rendererString().contains("Direct3D9", Qt::CaseInsensitive)) {
+                if (info->isUsingAngle() &&
+                        info->rendererString().contains("Direct3D9", Qt::CaseInsensitive)) {
 
-                dbgDetection() << "Skipping Direct3D 9 Angle implementation, it shouldn't have happened.";
+                    dbgDetection() << "Skipping Direct3D 9 Angle implementation, it shouldn't have happened.";
 
-                continue;
+                    continue;
+                }
+#endif
+
+                dbgDetection() << "Found format:" << config.format;
+                dbgDetection() << "   " << config.rendererId();
+
+                resultConfig = config;
+                break;
             }
-#endif
-
-            dbgDetection() << "Found format:" << config.format;
-            dbgDetection() << "   " << config.rendererId();
-
-            resultConfig = config;
-            break;
         }
-    }
 
-    {
-        const bool colorSpaceIsCorrect =
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-            KisOpenGLModeProber::fuzzyCompareColorSpaces(compareOp.preferredColorSpace(),
-                                                         resultConfig.format.colorSpace());
+        {
+            const bool colorSpaceIsCorrect =
+        #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+                    KisOpenGLModeProber::fuzzyCompareColorSpaces(compareOp.preferredColorSpace(),
+                                                                 resultConfig.format.colorSpace());
 #else
-            true;
+                    true;
 #endif
 
-        const bool rendererIsCorrect =
-            compareOp.preferredRendererByUser() == KisOpenGL::RendererAuto ||
-            compareOp.preferredRendererByUser() == resultConfig.rendererId();
+            const bool rendererIsCorrect =
+                    compareOp.preferredRendererByUser() == KisOpenGL::RendererAuto ||
+                    compareOp.preferredRendererByUser() == resultConfig.rendererId();
 
-        if (!rendererIsCorrect && colorSpaceIsCorrect) {
-            warningMessages << ki18n("Preferred renderer doesn't support requested surface format. Another renderer has been selected.");
-        } else if (!colorSpaceIsCorrect) {
-            warningMessages << ki18n("Preferred output format is not supported by available renderers");
+            if (!rendererIsCorrect && colorSpaceIsCorrect) {
+                warningMessages << ki18n("Preferred renderer doesn't support requested surface format. Another renderer has been selected.");
+            } else if (!colorSpaceIsCorrect) {
+                warningMessages << ki18n("Preferred output format is not supported by available renderers");
+            }
+
         }
-
+    } else {
+        resultConfig.format = QSurfaceFormat();
+        resultConfig.angleRenderer = AngleRendererDefault;
     }
 
     overrideSupportedRenderers(supportedRenderers, preferredByQt);
@@ -893,7 +901,7 @@ void KisOpenGL::setDefaultSurfaceConfig(const KisOpenGL::RendererConfig &config)
 
     if (config.format.renderableType() == QSurfaceFormat::OpenGLES) {
         QCoreApplication::setAttribute(Qt::AA_UseOpenGLES, true);
-    } else {
+    } else if (config.format.renderableType() == QSurfaceFormat::OpenGL) {
         QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL, true);
     }
 }

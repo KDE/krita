@@ -126,11 +126,10 @@ struct KisMagneticGraph{
     typedef unsigned                                        degree_size_type;
 
 
-    double getIntensity(VertexDescriptor pt) {
+    quint8 getIntensity(VertexDescriptor pt) {
         m_randAccess->moveTo(pt.x, pt.y);
-        qint8 val = *(m_randAccess->rawData());
-        //offsetting the value, so we don't get negatives
-        return val + 255;
+        quint8 val = *(m_randAccess->rawData());
+        return val;
     }
 
     unsigned outDegree(VertexDescriptor pt){

@@ -228,6 +228,12 @@ void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter
             outline.lineTo(pixelToView(m_lastCursorPos));
         }
         paintToolOutline(&gc, outline);
+
+        Q_FOREACH(const QPoint pt, m_anchorPoints){
+            QRect tempRect(QPoint(0,0),QSize(2, 2));
+            tempRect.moveTo(pt);
+            gc.drawRect(pixelToView(tempRect));
+        }
     }
 }
 

@@ -47,7 +47,7 @@ void KisMagneticWorkerTest::testWorker()
     KIS_DUMP_DEVICE_2(dev, rect, "main", "dd");
 
     const QPoint startPos(40, 10);
-    const QPoint endPos(50, 65);
+    const QPoint endPos(100, 80);
 
 
     auto points = worker.computeEdge(10, startPos, endPos);

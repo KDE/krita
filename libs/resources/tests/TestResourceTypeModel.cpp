@@ -117,8 +117,8 @@ void TestResourceTypeModel::testData()
 
 void TestResourceTypeModel::cleanupTestCase()
 {
-//    ResourceTestHelper::rmTestDb();
-//    ResourceTestHelper::cleanDstLocation(m_dstLocation);
+    ResourceTestHelper::rmTestDb();
+    ResourceTestHelper::cleanDstLocation(m_dstLocation);
     qDebug() << m_dstLocation;
 }
 

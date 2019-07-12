@@ -36,7 +36,11 @@ private Q_SLOTS:
     void testResources();
     void testTags();
     void cleanupTestCase();
+
+    void testResourceLocationBase();
     void testResource();
+    void testResourceForId();
+
 private:
 
     QString m_srcLocation;

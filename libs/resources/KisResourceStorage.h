@@ -91,7 +91,8 @@ public:
         Folder = 2,
         Bundle = 3,
         AdobeBrushLibrary = 4,
-        AdobeStyleLibrary = 5
+        AdobeStyleLibrary = 5,
+        Memory = 6
     };
 
     KisResourceStorage(const QString &location);
@@ -107,6 +108,9 @@ public:
     KoResourceSP resource(const QString &url);
     QSharedPointer<ResourceIterator> resources(const QString &resourceType) const;
     QSharedPointer<TagIterator> tags(const QString &resourceType) const;
+
+    void addTag(const QString &resourceType, KisTagSP tag);
+    void addResource(const QString &resourceType, KoResourceSP resource);
 
 private:
     class Private;

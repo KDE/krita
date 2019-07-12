@@ -88,6 +88,7 @@ QVariant KisResourceTypeModel::data(const QModelIndex &index, int role) const
             case ResourceType:
                 return resourceType;
             case Name:
+            default:
                 return name;
             }
         }

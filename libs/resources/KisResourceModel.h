@@ -39,6 +39,7 @@ public:
      */
     virtual KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const = 0;
 
+
     /**
      * @brief indexFromResource
      * @param resource

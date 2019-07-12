@@ -29,6 +29,7 @@
 #include "KisBundleStorage.h"
 #include "KisAbrStorage.h"
 #include "KisAslStorage.h"
+#include "KisMemoryStorage.h"
 
 class KisResourceStorage::Private {
 public:
@@ -36,7 +37,7 @@ public:
     QString location;
     bool valid {false};
     KisResourceStorage::StorageType storageType {KisResourceStorage::StorageType::Unknown};
-    QScopedPointer<KisStoragePlugin> storagePlugin;
+    QSharedPointer<KisStoragePlugin> storagePlugin;
 };
 
 
@@ -50,6 +51,12 @@ KisResourceStorage::KisResourceStorage(const QString &location)
         d->name = location;
         d->storageType = StorageType::Folder;
         d->valid = fi.isWritable();
+    }
+    else if (location == "memory") {
+        d->storagePlugin.reset(new KisMemoryStorage);
+        d->name = "memory";
+        d->storageType = StorageType::Memory;
+        d->valid = true;
     }
     else {
         if (d->location.endsWith(".bundle")) {
@@ -115,6 +122,19 @@ QSharedPointer<KisResourceStorage::TagIterator> KisResourceStorage::tags(const Q
     return d->storagePlugin->tags(resourceType);
 }
 
+void KisResourceStorage::addTag(const QString &resourceType, KisTagSP tag)
+{
+    if (d->storagePlugin.dynamicCast<KisMemoryStorage>()) {
+        d->storagePlugin.dynamicCast<KisMemoryStorage>()->addTag(resourceType, tag);
+    }
+}
+
+void KisResourceStorage::addResource(const QString &resourceType, KoResourceSP resource)
+{
+    if (d->storagePlugin.dynamicCast<KisMemoryStorage>()) {
+        d->storagePlugin.dynamicCast<KisMemoryStorage>()->addResource(resourceType, resource);
+    }
+}
 
 bool KisResourceStorage::valid() const
 {

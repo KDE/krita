@@ -123,6 +123,8 @@ private:
 
     friend class KisResourceModel;
     friend class TestResourceModel;
+    friend class TestResourceLocator;
+
     /// @return the unique id of the resource in the resource database
     int resourceId() const;
 

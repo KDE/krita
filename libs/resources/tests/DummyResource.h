@@ -27,6 +27,20 @@ public:
     bool load() override { setValid(true); return true; }
     bool loadFromDevice(QIODevice *) override { setValid(true); return true; }
     bool save() override { return true; }
+
+    void setSomething(const QString &something)
+    {
+        m_something = something;
+    }
+
+    QString something() const
+    {
+        return m_something;
+    }
+
+private:
+
+    QString m_something;
 };
 
 #endif // DUMMYRESOURCE_H

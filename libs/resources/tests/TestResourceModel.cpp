@@ -65,7 +65,7 @@ void TestResourceModel::initTestCase()
     m_locator = KisResourceLocator::instance();
 
     if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {
-        qDebug() << "Could not initialize KisResourceCacheDb on" << QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        qWarning() << "Could not initialize KisResourceCacheDb on" << QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     }
     QVERIFY(KisResourceCacheDb::isValid());
 
@@ -142,7 +142,6 @@ void TestResourceModel::testRemoveResource()
 {
     KisResourceModel resourceModel(m_resourceType);
     int resourceCount = resourceModel.rowCount();
-
     KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(1, 0));
     QVERIFY(resource);
 
@@ -184,6 +183,7 @@ void TestResourceModel::testAddTemporaryResource()
     KisResourceModel resourceModel(m_resourceType);
     int resourceCount = resourceModel.rowCount();
     KoResourceSP resource(new DummyResource("dummy.kpp"));
+    resource->setValid(true);
     bool r = resourceModel.addResource(resource, false);
     QVERIFY(r);
     QCOMPARE(resourceCount + 1, resourceModel.rowCount());
@@ -191,18 +191,31 @@ void TestResourceModel::testAddTemporaryResource()
 
 void TestResourceModel::testUpdateResource()
 {
-    KisResourceModel resourceModel(m_resourceType);
-    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
-    QVERIFY(resource);
-    bool r = resourceModel.updateResource(resource);
-    QVERIFY(r);
-}
+    int resourceId;
+    {
+        KisResourceModel resourceModel(m_resourceType);
+        KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+        QVERIFY(resource);
+        QVERIFY(resource.dynamicCast<DummyResource>()->something().isEmpty());
+        resource.dynamicCast<DummyResource>()->setSomething("It's changed");
+        resourceId = resource->resourceId();
+        bool r = resourceModel.updateResource(resource);
+        QVERIFY(r);
+    }
+    {
+        KisResourceLocator::instance()->purge();
+        KoResourceSP resource = KisResourceLocator::instance()->resourceForId(resourceId);
+        QVERIFY(resource);
+        QVERIFY(!resource.dynamicCast<DummyResource>()->something().isEmpty());
+    }
 
+
+}
 
 void TestResourceModel::cleanupTestCase()
 {
-    ResourceTestHelper::rmTestDb();
-    ResourceTestHelper::cleanDstLocation(m_dstLocation);
+//    ResourceTestHelper::rmTestDb();
+//    ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -72,17 +72,60 @@ public:
      */
     LocatorError initialize(const QString &installationResourcesLocation);
 
+    /**
+     * @brief errorMessages
+     * @return
+     */
     QStringList errorMessages() const;
 
+    /**
+     * @brief resourceLocationBase
+     * @return
+     */
     QString resourceLocationBase() const;
 
+    /**
+     * @brief resource
+     * @param storageLocation
+     * @param resourceLocationBase
+     * @return
+     */
     KoResourceSP resource(QString storageLocation, const QString &resourceLocationBase);
 
+    /**
+     * @brief resourceForId returns the resource with the given id, or 0 if no such resource exists
+     * @param resourceId the id
+     */
+    KoResourceSP resourceForId(int resourceId);
+
+    /**
+     * @brief removeResource
+     * @param resourceId
+     * @return
+     */
     bool removeResource(int resourceId);
 
+    /**
+     * @brief importResourceFromFile
+     * @param resourceType
+     * @param fileName
+     * @return
+     */
     bool importResourceFromFile(const QString &resourceType, const QString &fileName);
 
+    /**
+     * @brief addResource
+     * @param resourceType
+     * @param resource
+     * @param save
+     * @return
+     */
     bool addResource(const QString &resourceType, const KoResourceSP resource, bool save = true);
+
+    /**
+     * @brief purge purges the local resource cache
+     */
+    void purge();
 
 Q_SIGNALS:
 
@@ -121,7 +164,18 @@ private:
     QList<KisResourceStorageSP> storages() const;
 
     bool saveResourceToFolderStorage(const QString &resourceType, KoResourceSP resource);
+
+    KisResourceStorageSP storageByName(const QString &name) const;
     KisResourceStorageSP folderStorage() const;
+    KisResourceStorageSP memoryStorage() const;
+
+    struct ResourceStorage {
+        QString storageLocation;
+        QString resourceLocation;
+    };
+
+    ResourceStorage getResourceStorage(int resourceId) const;
+
 
     class Private;
     QScopedPointer<Private> d;

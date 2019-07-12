@@ -26,7 +26,7 @@
 #include <KisResourceStorage.h>
 #include "kritaresources_export.h"
 /**
- * The KisResourceStoragePlugin class is the base class
+ * The KisStoragePlugin class is the base class
  * for storage plugins. A storage plugin is used by
  * KisResourceStorage to locate resources and tags in
  * a kind of storage, like a folder, a bundle or an adobe

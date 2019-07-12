@@ -55,7 +55,6 @@ public:
     QMap<QString, KisResourceStorageSP> storages;
     QHash<QPair<QString, QString>, KoResourceSP> resourceCache;
     QStringList errorMessages;
-    KisMemoryStorage memoryStorage; // For temporary resources
 };
 
 KisResourceLocator::KisResourceLocator(QObject *parent)
@@ -162,7 +161,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
     if (storageLocation.isEmpty()) {
         storageLocation = resourceLocationBase();
     }
-    else {
+    else if (!QFileInfo(storageLocation).isAbsolute()) {
         storageLocation = resourceLocationBase() + '/' + storageLocation;
     }
 
@@ -185,44 +184,19 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
     return resource;
 }
 
+KoResourceSP KisResourceLocator::resourceForId(int resourceId)
+{
+    ResourceStorage rs = getResourceStorage(resourceId);
+    return resource(rs.storageLocation, rs.resourceLocation);
+}
+
 bool KisResourceLocator::removeResource(int resourceId)
 {
     // First remove the resource from the cache
+    ResourceStorage rs = getResourceStorage(resourceId);
+    QPair<QString, QString> key = QPair<QString, QString> (rs.storageLocation, rs.resourceLocation);
 
-    // XXX: Should this query go into KisResourceCacheDb?
-    QSqlQuery q;
-    bool r = q.prepare("SELECT storages.location\n"
-                       ",      resources.filename\n"
-                       "FROM   resources\n"
-                       ",      storages\n"
-                       "WHERE  resources.id = :resource_id\n"
-                       "AND    resources.storage_id = storages.id");
-    if (!r) {
-        qWarning() << "KisResourceLocator::removeResource: could not prepare query." << q.lastError();
-        return false;
-    }
-
-    q.bindValue(":resource_id", resourceId);
-
-    r = q.exec();
-    if (!r) {
-        qWarning() << "KisResourceLocator::removeResource: could not execute query." << q.lastError();
-    }
-
-    q.first();
-
-    QString storageLocation = q.value("location").toString();
-    QString resourceLocation = q.value("filename").toString();
-
-    if (storageLocation.isEmpty()) {
-        storageLocation = resourceLocationBase();
-    }
-    else {
-        storageLocation = resourceLocationBase() + '/' + storageLocation;
-    }
-
-    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceLocation);
-    r = d->resourceCache.remove(key);
+    d->resourceCache.remove(key);
 
     return KisResourceCacheDb::removeResource(resourceId);
 }
@@ -253,9 +227,22 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
             return false;
         }
     }
+    else {
+        resource->setFilename("memory/" + resourceType + "/" + resource->name());
+        memoryStorage()->addResource(resourceType, resource);
+    }
 
-    return KisResourceCacheDb::addResource(folderStorage(), QFileInfo(resource->filename()).lastModified(), resource, resourceType, !save);
+    return KisResourceCacheDb::addResource(save ? folderStorage() : memoryStorage(),
+                                           QFileInfo(resource->filename()).lastModified(),
+                                           resource,
+                                           resourceType,
+                                           !save);
 
+}
+
+void KisResourceLocator::purge()
+{
+    d->resourceCache.clear();
 }
 
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation)
@@ -346,6 +333,9 @@ void KisResourceLocator::findStorages()
     KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(d->resourceLocation);
     d->storages[storage->location()] = storage;
 
+    // Add the memory storage
+    d->storages["memory"] = QSharedPointer<KisResourceStorage>::create("memory");
+
     // And add bundles and adobe libraries
     QStringList filters = QStringList() << "*.bundle" << "*.abr" << "*.asl";
     QDirIterator iter(d->resourceLocation, filters, QDir::Files, QDirIterator::Subdirectories);
@@ -363,7 +353,6 @@ QList<KisResourceStorageSP> KisResourceLocator::storages() const
 
 bool KisResourceLocator::saveResourceToFolderStorage(const QString &resourceType, KoResourceSP resource)
 {
-
     resource->setFilename(folderStorage()->location() + "/" + resourceType + "/" + resource->name());
 
     if (QFileInfo(resource->filename()).exists()) {
@@ -379,13 +368,71 @@ bool KisResourceLocator::saveResourceToFolderStorage(const QString &resourceType
     return true;
 }
 
+KisResourceStorageSP KisResourceLocator::storageByName(const QString &name) const
+{
+    if (!d->storages.contains(name)) {
+        qWarning() << "No" << name << "storage defined";
+        return 0;
+    }
+    KisResourceStorageSP storage = d->storages[name];
+    if (!storage || !storage->valid()) {
+        qWarning() << "Could not retrieve the" << name << "storage object or the object is not valid";
+        return 0;
+    }
+
+    return storage;
+}
+
 KisResourceStorageSP KisResourceLocator::folderStorage() const
 {
-    KisResourceStorageSP folderStorage = d->storages[d->resourceLocation];
-    if (!folderStorage || !folderStorage->valid()) {
-        qWarning() << "Could not retrieve the folder storage object for the configured resource location" << d->resourceLocation;
+    return storageByName(d->resourceLocation);
+}
+
+KisResourceStorageSP KisResourceLocator::memoryStorage() const
+{
+    return storageByName("memory");
+}
+
+KisResourceLocator::ResourceStorage KisResourceLocator::getResourceStorage(int resourceId) const
+{
+    ResourceStorage rs;
+
+    QSqlQuery q;
+    bool r = q.prepare("SELECT storages.location\n"
+                       ",      resources.filename\n"
+                       "FROM   resources\n"
+                       ",      storages\n"
+                       "WHERE  resources.id = :resource_id\n"
+                       "AND    resources.storage_id = storages.id");
+    if (!r) {
+        qWarning() << "KisResourceLocator::removeResource: could not prepare query." << q.lastError();
+        return rs;
     }
-    return folderStorage;
+
+    q.bindValue(":resource_id", resourceId);
+
+    r = q.exec();
+    if (!r) {
+        qWarning() << "KisResourceLocator::removeResource: could not execute query." << q.lastError();
+        return rs;
+    }
+
+    q.first();
+
+    QString storageLocation = q.value("location").toString();
+    QString resourceLocation = q.value("filename").toString();
+
+    if (storageLocation.isEmpty()) {
+        storageLocation = resourceLocationBase();
+    }
+    else {
+        storageLocation = resourceLocationBase() + '/' + storageLocation;
+    }
+
+    rs.storageLocation = storageLocation;
+    rs.resourceLocation = resourceLocation;
+
+    return rs;
 }
 
 bool KisResourceLocator::synchronizeDb()

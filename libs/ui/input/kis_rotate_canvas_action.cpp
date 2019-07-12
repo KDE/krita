@@ -168,7 +168,6 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
             }
 
             qreal delta = (180 / M_PI) * (newAngle - d->previousAngle);
-            qDebug() << ppVar(delta);
 
             KisCanvas2 *canvas = inputManager()->canvas();
             KisCanvasController *controller = static_cast<KisCanvasController*>(canvas->canvasController());

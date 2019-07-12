@@ -68,7 +68,7 @@ void addResourceTypes()
     KisOpenGL::testingInitializeDefaultSurfaceFormat();
 
     KisConfig cfg(false);
-    cfg.setUseOpenGL(false);
+    cfg.disableOpenGL();
 }
 
 void KisDerivedResourcesTest::test()

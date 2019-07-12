@@ -2,8 +2,8 @@
 
 | Jenkins CI Name | Master | Stable |
 | --------------- | ------ | ------ |
-| OpenSuse Qt 5.10 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.10/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.10/) |[![Build Status](https://build.kde.org/buildStatus/icon?job=Extragear%2Fkrita%2Fstable-kf5-qt5+SUSEQt5.10)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.10/)|
-| FreeBSD Qt 5.12 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20FreeBSDQt5.12/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20FreeBSDQt5.12/) |[![Build Status](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20FreeBSDQt5.12/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20FreeBSDQt5.12/)|
+| OpenSuse Qt 5.12 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.12/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.12/) |[![Build Status](https://build.kde.org/buildStatus/icon?job=Extragear%2Fkrita%2Fstable-kf5-qt5+SUSEQt5.12)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.12/)|
+| FreeBSD Qt 5.13 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20FreeBSDQt5.13/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20FreeBSDQt5.13/) |[![Build Status](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20FreeBSDQt5.13/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20FreeBSDQt5.13/)|
 
 
 Krita is a free and open source digital painting application. It is for artists who want to create professional work from start to end. Krita is used by comic book artists, illustrators, concept artists, matte and texture painters and in the digital VFX industry.

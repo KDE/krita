@@ -178,7 +178,7 @@ public:
     void setRenderIntent(qint32 monitorRenderIntent) const;
 
     bool useOpenGL(bool defaultValue = false) const;
-    void setUseOpenGL(bool useOpenGL) const;
+    void disableOpenGL() const;
 
     int openGLFilteringMode(bool defaultValue = false) const;
     void setOpenGLFilteringMode(int filteringMode);

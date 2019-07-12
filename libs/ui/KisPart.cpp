@@ -229,10 +229,10 @@ KisView *KisPart::createView(KisDocument *document,
     KisConfig cfg(false);
     KConfigGroup grp( KSharedConfig::openConfig(), "crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {
-        cfg.setUseOpenGL(false);
+        cfg.disableOpenGL();
     }
     if (cfg.canvasState() == "OPENGL_FAILED") {
-        cfg.setUseOpenGL(false);
+        cfg.disableOpenGL();
     }
     grp.writeEntry("CreatingCanvas", true);
     grp.sync();

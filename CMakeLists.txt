@@ -72,13 +72,13 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "4.2.2")
+set(KRITA_VERSION_STRING "4.2.3")
 # Major version: 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MAJOR 4)
 # Minor version: 0 for 4.0, 1 for 4.1, etc.
 set(KRITA_STABLE_VERSION_MINOR 2)
 # Bugfix release version, or 0 for before the first stable release
-set(KRITA_VERSION_RELEASE 2)
+set(KRITA_VERSION_RELEASE 3)
 # the 4th digit, really only used for the Windows installer:
 # - [Pre-]Alpha: Starts from 0, increment 1 per release
 # - Beta: Starts from 50, increment 1 per release

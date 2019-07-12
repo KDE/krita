@@ -323,6 +323,6 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release date="2019-06-24" version="4.2.2.0"/>
+    <release date="2019-07-16" version="4.2.3.0"/>
   </releases>
 </component>

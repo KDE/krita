@@ -53,6 +53,7 @@ public:
     void inputEvent(QEvent* event) override;
 
     KisInputActionGroup inputActionGroup(int shortcut) const override;
+    bool supportsHiResInputEvents() const;
 
 private:
     class Private;

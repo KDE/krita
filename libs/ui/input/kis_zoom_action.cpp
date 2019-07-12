@@ -310,6 +310,11 @@ bool KisZoomAction::isShortcutRequired(int shortcut) const
     return shortcut == ZoomModeShortcut;
 }
 
+bool KisZoomAction::supportsHiResInputEvents() const
+{
+    return true;
+}
+
 KisInputActionGroup KisZoomAction::inputActionGroup(int shortcut) const
 {
     Q_UNUSED(shortcut);

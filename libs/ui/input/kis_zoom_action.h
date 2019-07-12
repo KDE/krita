@@ -56,6 +56,7 @@ public:
     void cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos) override;
 
     bool isShortcutRequired(int shortcut) const override;
+    bool supportsHiResInputEvents() const override;
 
     KisInputActionGroup inputActionGroup(int shortcut) const override;
 

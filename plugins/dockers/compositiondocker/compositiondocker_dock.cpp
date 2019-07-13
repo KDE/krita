@@ -205,7 +205,7 @@ void CompositionDockerDock::exportClicked()
         QString filename = m_canvas->viewManager()->document()->localFilePath();
         if (!filename.isEmpty()) {
             QFileInfo info(filename);
-            path += info.baseName() + '_';
+            path += info.completeBaseName() + '_';
         }
 
         Q_FOREACH (KisLayerCompositionSP composition, m_canvas->viewManager()->image()->compositions()) {

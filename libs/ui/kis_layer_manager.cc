@@ -496,8 +496,8 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
     urlRequester->setMimeTypeFilters(listMimeFilter);
     urlRequester->setFileName(m_view->document()->url().toLocalFile());
     if (m_view->document()->url().isLocalFile()) {
-        QFileInfo location = QFileInfo(m_view->document()->url().toLocalFile()).baseName();
-        location.setFile(location.dir(), location.baseName() + "_" + source->name() + ".png");
+        QFileInfo location = QFileInfo(m_view->document()->url().toLocalFile()).completeBaseName();
+        location.setFile(location.dir(), location.completeBaseName() + "_" + source->name() + ".png");
         urlRequester->setFileName(location.absoluteFilePath());
     }
     else {
@@ -914,7 +914,7 @@ void KisLayerManager::saveGroupLayers()
         mimeType = "image/png";
     }
     QString extension = KisMimeDatabase::suffixesForMimeType(mimeType).first();
-    QString basename = f.baseName();
+    QString basename = f.completeBaseName();
 
     KisImageSP image = m_view->image();
     if (!image) return;

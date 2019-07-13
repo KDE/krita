@@ -287,12 +287,12 @@ void ResourceManager::slotImportBundles()
         }
 
         QFileInfo fi(res);
-        QString newFilename = KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + bundle->defaultFileExtension();
+        QString newFilename = KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.completeBaseName() + bundle->defaultFileExtension();
         QFileInfo fileInfo(newFilename);
 
         int i = 1;
         while (fileInfo.exists()) {
-            fileInfo.setFile(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
+            fileInfo.setFile(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.completeBaseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
             i++;
         }
         bundle->setFilename(fileInfo.filePath());

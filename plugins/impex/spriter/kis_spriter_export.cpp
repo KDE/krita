@@ -607,7 +607,7 @@ KisImportExportErrorCode KisSpriterExport::convert(KisDocument *document, QIODev
 
     // Generate scml
     QDomDocument scml;
-    fillScml(scml, fi.baseName());
+    fillScml(scml, fi.completeBaseName());
 
     bool openedHere = false;
     if (!io->isOpen()) {

@@ -848,7 +848,7 @@ bool KoColorSet::Private::loadGpl()
 bool KoColorSet::Private::loadAct()
 {
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
     KisSwatch e;
     for (int i = 0; i < data.size(); i += 3) {
         quint8 r = data[i];
@@ -864,7 +864,7 @@ bool KoColorSet::Private::loadRiff()
 {
     // http://worms2d.info/Palette_file
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
     KisSwatch e;
 
     RiffHeader header;
@@ -887,7 +887,7 @@ bool KoColorSet::Private::loadRiff()
 bool KoColorSet::Private::loadPsp()
 {
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
     KisSwatch e;
     qint32 r, g, b;
 
@@ -1005,7 +1005,7 @@ bool KoColorSet::Private::loadKpl()
 bool KoColorSet::Private::loadAco()
 {
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
 
     QBuffer buf(&data);
     buf.open(QBuffer::ReadOnly);

@@ -319,7 +319,7 @@ void KisDlgLayerStyle::slotSaveStyle()
         new KisPSDLayerStyleCollectionResource(filename));
 
     KisPSDLayerStyleSP newStyle = style()->clone();
-    newStyle->setName(QFileInfo(filename).baseName());
+    newStyle->setName(QFileInfo(filename).completeBaseName());
 
     KisPSDLayerStyleCollectionResource::StylesVector vector = collection->layerStyles();
     vector << newStyle;

@@ -51,7 +51,7 @@ KisResourceBundle::KisResourceBundle(QString const& fileName)
     : KoResource(fileName),
       m_bundleVersion("1")
 {
-    setName(QFileInfo(fileName).baseName());
+    setName(QFileInfo(fileName).completeBaseName());
     m_metadata["generator"] = "Krita (" + KritaVersionWrapper::versionString(true) + ")";
 
 }

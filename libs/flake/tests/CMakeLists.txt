@@ -33,6 +33,7 @@ ecm_add_tests(
     TestSegmentTypeCommand.cpp
     TestKoDrag.cpp
     TestKoMarkerCollection.cpp
+    KisGamutMaskViewConverterTest.cpp
 
     LINK_LIBRARIES kritaflake Qt5::Test
     NAME_PREFIX "libs-flake-")

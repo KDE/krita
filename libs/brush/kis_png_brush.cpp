@@ -93,7 +93,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev)
     }
     else {
         QFileInfo info(filename());
-        setName(info.baseName());
+        setName(info.completeBaseName());
     }
 
     QImage image = reader.read();

@@ -40,7 +40,7 @@ struct KisEmbeddedPatternManager::Private {
 
         if (name.isEmpty() || name != QFileInfo(name).fileName()) {
             QFileInfo info(filename);
-            name = info.baseName();
+            name = info.completeBaseName();
         }
 
         if (!img.isNull()) {

@@ -25,6 +25,7 @@ struct Q_DECL_HIDDEN KisCircleMaskGenerator::Private {
         ycoef(0),
         xfadecoef(0),
         yfadecoef(0),
+        safeSoftnessCoeff(1.0),
         transformedFadeX(0),
         transformedFadeY(0),
         copyOfAntialiasEdges(false)
@@ -36,6 +37,7 @@ struct Q_DECL_HIDDEN KisCircleMaskGenerator::Private {
         ycoef(rhs.ycoef),
         xfadecoef(rhs.xfadecoef),
         yfadecoef(rhs.yfadecoef),
+        safeSoftnessCoeff(rhs.safeSoftnessCoeff),
         transformedFadeX(rhs.transformedFadeX),
         transformedFadeY(rhs.transformedFadeY),
         copyOfAntialiasEdges(rhs.copyOfAntialiasEdges)
@@ -44,6 +46,7 @@ struct Q_DECL_HIDDEN KisCircleMaskGenerator::Private {
 
     double xcoef, ycoef;
     double xfadecoef, yfadecoef;
+    qreal safeSoftnessCoeff;
     double transformedFadeX, transformedFadeY;
     bool copyOfAntialiasEdges;
 

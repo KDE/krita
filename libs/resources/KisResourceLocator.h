@@ -123,6 +123,14 @@ public:
     bool addResource(const QString &resourceType, const KoResourceSP resource, bool save = true);
 
     /**
+     * @brief updateResource
+     * @param resourceType
+     * @param resource
+     * @return
+     */
+    bool updateResource(const QString &resourceType, const KoResourceSP resource);
+
+    /**
      * @brief purge purges the local resource cache
      */
     void purge();
@@ -175,7 +183,7 @@ private:
     };
 
     ResourceStorage getResourceStorage(int resourceId) const;
-
+    QString makeStorageLocationAbsolute(QString storageLocation) const;
 
     class Private;
     QScopedPointer<Private> d;

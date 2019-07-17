@@ -296,9 +296,8 @@ bool KisResourceModel::addResource(KoResourceSP resource, bool save)
 
 bool KisResourceModel::updateResource(KoResourceSP resource)
 {
-    return false;
+    return KisResourceLocator::instance()->updateResource(d->resourceType, resource);
 }
-
 
 bool KisResourceModel::resetQuery()
 {

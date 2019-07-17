@@ -373,11 +373,11 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
     {
         QSqlQuery q;
         r = q.prepare("UPDATE resources\n"
-                      "SET name = :name\n"
-                      ", filename = :filename\n"
-                      ", tooltip = :tooltip\n"
+                      "SET name    = :name\n"
+                      ", filename  = :filename\n"
+                      ", tooltip   = :tooltip\n"
                       ", thumbnail = :thumbnail\n"
-                      "WHERE id = :id");
+                      "WHERE id    = :id");
         if (!r) {
             qWarning() << "Could not prepare updateResource statement" << q.lastError();
             return r;

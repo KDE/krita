@@ -122,18 +122,14 @@ QSharedPointer<KisResourceStorage::TagIterator> KisResourceStorage::tags(const Q
     return d->storagePlugin->tags(resourceType);
 }
 
-void KisResourceStorage::addTag(const QString &resourceType, KisTagSP tag)
+bool KisResourceStorage::addTag(const QString &resourceType, KisTagSP tag)
 {
-    if (d->storagePlugin.dynamicCast<KisMemoryStorage>()) {
-        d->storagePlugin.dynamicCast<KisMemoryStorage>()->addTag(resourceType, tag);
-    }
+    return d->storagePlugin->addTag(resourceType, tag);
 }
 
-void KisResourceStorage::addResource(const QString &resourceType, KoResourceSP resource)
+bool KisResourceStorage::addResource(const QString &resourceType, KoResourceSP resource)
 {
-    if (d->storagePlugin.dynamicCast<KisMemoryStorage>()) {
-        d->storagePlugin.dynamicCast<KisMemoryStorage>()->addResource(resourceType, resource);
-    }
+    return d->storagePlugin->addResource(resourceType, resource);
 }
 
 bool KisResourceStorage::valid() const

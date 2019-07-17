@@ -144,13 +144,7 @@ QString KisResourceLocator::resourceLocationBase() const
 
 bool KisResourceLocator::resourceCached(QString storageLocation, const QString &resourceLocation) const
 {
-    if (storageLocation.isEmpty()) {
-        storageLocation = resourceLocationBase();
-    }
-    else {
-        storageLocation = resourceLocationBase() + '/' + storageLocation;
-    }
-
+    storageLocation = makeStorageLocationAbsolute(storageLocation);
     QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceLocation);
 
     return d->resourceCache.contains(key);
@@ -158,13 +152,7 @@ bool KisResourceLocator::resourceCached(QString storageLocation, const QString &
 
 KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString &resourceLocation)
 {
-    if (storageLocation.isEmpty()) {
-        storageLocation = resourceLocationBase();
-    }
-    else if (!QFileInfo(storageLocation).isAbsolute()) {
-        storageLocation = resourceLocationBase() + '/' + storageLocation;
-    }
-
+    storageLocation = makeStorageLocationAbsolute(storageLocation);
     QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceLocation);
 
     KoResourceSP resource;
@@ -177,17 +165,23 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         Q_ASSERT(storage);
 
         resource = storage->resource(resourceLocation);
+        Q_ASSERT(resource);
+
         if (resource) {
             d->resourceCache[key] = resource;
         }
     }
+    resource->setStorageLocation(storageLocation);
+    Q_ASSERT(!resource->storageLocation().isEmpty());
     return resource;
 }
 
 KoResourceSP KisResourceLocator::resourceForId(int resourceId)
 {
     ResourceStorage rs = getResourceStorage(resourceId);
-    return resource(rs.storageLocation, rs.resourceLocation);
+    KoResourceSP r = resource(rs.storageLocation, rs.resourceLocation);
+    r->setResourceId(resourceId);
+    return r;
 }
 
 bool KisResourceLocator::removeResource(int resourceId)
@@ -238,6 +232,33 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
                                            resourceType,
                                            !save);
 
+}
+
+bool KisResourceLocator::updateResource(const QString &resourceType, const KoResourceSP resource)
+{
+
+    QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
+
+    qDebug() << resourceType << storageLocation << d->storages.contains(storageLocation);
+
+    if (!d->storages.contains(storageLocation)) {
+        return false;
+    }
+    Q_ASSERT(resource->resourceId() > -1);
+
+    KisResourceStorageSP storage = d->storages[storageLocation];
+
+    if (!storage->addResource(resourceType, resource)) {
+        qWarning() << "Failed to save the new version of " << resource->name() << "to storage" << storageLocation;
+        return false;
+    }
+
+    if (!KisResourceCacheDb::addResourceVersion(resource->resourceId(), QDateTime::currentDateTime(), storage, resource)) {
+        qWarning() << "Failed to add a new version of the resource to the database" << resource->name();
+        return false;
+    }
+
+    return true;
 }
 
 void KisResourceLocator::purge()
@@ -433,6 +454,17 @@ KisResourceLocator::ResourceStorage KisResourceLocator::getResourceStorage(int r
     rs.resourceLocation = resourceLocation;
 
     return rs;
+}
+
+QString KisResourceLocator::makeStorageLocationAbsolute(QString storageLocation) const
+{
+    if (storageLocation.isEmpty()) {
+        storageLocation = resourceLocationBase();
+    }
+    else {
+        storageLocation = resourceLocationBase() + '/' + storageLocation;
+    }
+    return storageLocation;
 }
 
 bool KisResourceLocator::synchronizeDb()

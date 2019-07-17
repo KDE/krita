@@ -34,8 +34,8 @@ public:
     KisMemoryStorage();
     virtual ~KisMemoryStorage();
 
-    void addTag(const QString &resourceType, KisTagSP tag);
-    void addResource(const QString &resourceType, KoResourceSP resource);
+    bool addTag(const QString &resourceType, KisTagSP tag);
+    bool addResource(const QString &resourceType, KoResourceSP resource);
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
     KoResourceSP resource(const QString &url) override;

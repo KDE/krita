@@ -142,7 +142,7 @@ KisMemoryStorage::~KisMemoryStorage()
 {
 }
 
-void KisMemoryStorage::addTag(const QString &resourceType, KisTagSP tag)
+bool KisMemoryStorage::addTag(const QString &resourceType, KisTagSP tag)
 {
     if (!d->tags.contains(resourceType)) {
         d->tags[resourceType] = QVector<KisTagSP>();
@@ -150,10 +150,10 @@ void KisMemoryStorage::addTag(const QString &resourceType, KisTagSP tag)
     if (!d->tags[resourceType].contains(tag)) {
         d->tags[resourceType].append(tag);
     }
-
+    return true;
 }
 
-void KisMemoryStorage::addResource(const QString &resourceType, KoResourceSP resource)
+bool KisMemoryStorage::addResource(const QString &resourceType, KoResourceSP resource)
 {
     if (!d->resources.contains(resourceType)) {
         d->resources[resourceType] = QVector<KoResourceSP>();
@@ -161,6 +161,7 @@ void KisMemoryStorage::addResource(const QString &resourceType, KoResourceSP res
     if (!d->resources[resourceType].contains(resource)) {
         d->resources[resourceType].append(resource);
     }
+    return true;
 }
 
 KisResourceStorage::ResourceItem KisMemoryStorage::resourceItem(const QString &url)

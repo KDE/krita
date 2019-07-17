@@ -122,12 +122,13 @@ public:
 private:
 
     friend class KisResourceModel;
+    friend class KisResourceLocator;
     friend class TestResourceModel;
     friend class TestResourceLocator;
 
+
     /// @return the unique id of the resource in the resource database
     int resourceId() const;
-
     void setResourceId(int id);
 
     void setStorageLocation(const QString &location);

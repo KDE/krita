@@ -109,8 +109,8 @@ public:
     QSharedPointer<ResourceIterator> resources(const QString &resourceType) const;
     QSharedPointer<TagIterator> tags(const QString &resourceType) const;
 
-    void addTag(const QString &resourceType, KisTagSP tag);
-    void addResource(const QString &resourceType, KoResourceSP resource);
+    bool addTag(const QString &resourceType, KisTagSP tag);
+    bool addResource(const QString &resourceType, KoResourceSP resource);
 
 private:
     class Private;

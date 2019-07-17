@@ -57,6 +57,8 @@ private:
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
 
+    bool m_mirrorFlip;
+
     void loadSettings(const KisBrushBasedPaintOpSettings* settings);
 };
 

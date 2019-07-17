@@ -76,7 +76,7 @@ void KisSelectionPropertySliderBase::slotCompressedUpdate()
 void KisSelectionPropertySliderBase::setSelectionValue(qreal commonValue, bool mixed)
 {
     if (mixed) {
-        setValue(0.0);
+        setInternalValue(0.0, true); // BUG:409131
         setPrefix(m_d->mixedPrefix);
     } else {
         setValue(commonValue);

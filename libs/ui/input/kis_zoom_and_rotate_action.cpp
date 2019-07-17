@@ -60,10 +60,10 @@ void KisZoomAndRotateAction::begin(int shortcut, QEvent *event)
     d->rotateAction->begin(shortcut, event);
 }
 
-void KisZoomAndRotateAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
+void KisZoomAndRotateAction::cursorMovedAbsolute(const QPointF &lastPos, const QPointF &pos)
 {
-    d->zoomAction->cursorMoved(lastPos, pos);
-    d->rotateAction->cursorMoved(lastPos, pos);
+    d->zoomAction->cursorMovedAbsolute(lastPos, pos);
+    d->rotateAction->cursorMovedAbsolute(lastPos, pos);
 }
 
 void KisZoomAndRotateAction::inputEvent(QEvent *event)

@@ -171,9 +171,9 @@ void KisGammaExposureAction::begin(int shortcut, QEvent *event)
     }
 }
 
-void KisGammaExposureAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
+void KisGammaExposureAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos)
 {
-    QPointF diff = -(pos - lastPos);
+    QPointF diff = -(pos - startPos);
 
     const int step = 200;
 
@@ -184,11 +184,11 @@ void KisGammaExposureAction::cursorMoved(const QPointF &lastPos, const QPointF &
 
 
     if (d->mode == ExposureShortcut) {
-        d->baseExposure += qreal(diff.y()) / step;
-        interface->setCurrentExposure(d->baseExposure);
+        const qreal currentExposure = d->baseExposure + qreal(diff.y()) / step;
+        interface->setCurrentExposure(currentExposure);
     } else if (d->mode == GammaShortcut) {
-        d->baseGamma += qreal(diff.y()) / step;
-        interface->setCurrentGamma(d->baseGamma);
+        const qreal currentGamma = d->baseExposure + qreal(diff.y()) / step;
+        interface->setCurrentGamma(currentGamma);
     }
 }
 

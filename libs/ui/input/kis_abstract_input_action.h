@@ -203,6 +203,7 @@ protected:
      * The default implementation of inputEvent calls this function.
      */
     virtual void cursorMoved(const QPointF &lastPos, const QPointF &pos);
+    virtual void cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos);
 
     /**
      * Convenience method to extract the position from a cursor movement event.

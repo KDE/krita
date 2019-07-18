@@ -44,16 +44,12 @@ void KisMagneticWorkerTest::testWorker()
     const QRect rect = dev->exactBounds();
     KisPaintDeviceSP grayscaleDev = KisPainter::convertToAlphaAsGray(dev);
     KisMagneticWorker worker(grayscaleDev);
-    KIS_DUMP_DEVICE_2(dev, rect, "main", "dd");
 
-    const QPoint startPos(40, 10);
-    const QPoint endPos(100, 80);
+    const QPoint startPos(80, 10);
+    const QPoint endPos(10, 100);
 
-
-    auto points = worker.computeEdge(10, startPos, endPos);
+    auto points = worker.computeEdge(20, startPos, endPos);
     KIS_DUMP_DEVICE_2(grayscaleDev, rect, "draw", "dd");
-
-
 
     /*
     QVector<QPointF> result = { QPointF(50,65),
@@ -131,7 +127,7 @@ void KisMagneticWorkerTest::testWorker()
         }
     }
 
-    gc.setPen(Qt::white);
+    gc.setPen(Qt::blue);
     gc.drawPath(path);
 
     gc.setPen(Qt::green);

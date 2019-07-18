@@ -123,7 +123,7 @@ struct WeightMap{
     data_type& operator[](key_type const& k) {
         if (m_map.find(k) == m_map.end()) {
             double edge_gradient = (m_graph.getIntensity(k.first) + m_graph.getIntensity(k.second))/2;
-            m_map[k] = EuclideanDistance(k.first, k.second) * (edge_gradient + 1);
+            m_map[k] = EuclideanDistance(k.first, k.second) / (edge_gradient + 1);
         }
         return m_map[k];
     }
@@ -135,20 +135,20 @@ private:
 
 KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev)
 {
+
     KisPaintDevice *tempDevice = new KisPaintDevice(dev->colorSpace());
     KisPaintDeviceSP m_dev = KisPaintDeviceSP(tempDevice);
     KisPainter::copyAreaOptimized(dev->exactBounds().topLeft(), dev, m_dev, dev->exactBounds());
-    KisGaussianKernel::applyLoG(m_dev, m_dev->exactBounds(), 2, 1.0, QBitArray(), nullptr);
-    KisLazyFillTools::normalizeAndInvertAlpha8Device(m_dev, m_dev->exactBounds());
+    KisGaussianKernel::applyLoG(m_dev, m_dev->exactBounds(), 2, -1.0, QBitArray(), nullptr);
+    KisLazyFillTools::normalizeAlpha8Device(m_dev, m_dev->exactBounds());
     m_graph = new KisMagneticGraph(m_dev);
 }
 
 QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint end) {
 
-    QRect rect(QPoint(0,0), QSize(radius*2, radius*2));
-    rect.moveCenter(begin);
-
-    KisAlgebra2D::accumulateBounds(end, &rect);
+    QRect rect;
+    KisAlgebra2D::accumulateBounds(QVector<QPoint>{begin, end}, &rect);
+    rect.setSize(rect.size()*radius);
 
     VertexDescriptor goal(end);
     VertexDescriptor start(begin);

@@ -136,10 +136,11 @@ private:
 KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev)
 {
     KisPaintDevice *tempDevice = new KisPaintDevice(dev->colorSpace());
-    m_dev = KisPaintDeviceSP(tempDevice);
+    KisPaintDeviceSP m_dev = KisPaintDeviceSP(tempDevice);
     KisPainter::copyAreaOptimized(dev->exactBounds().topLeft(), dev, m_dev, dev->exactBounds());
     KisGaussianKernel::applyLoG(m_dev, m_dev->exactBounds(), 2, 1.0, QBitArray(), nullptr);
     KisLazyFillTools::normalizeAndInvertAlpha8Device(m_dev, m_dev->exactBounds());
+    m_graph = new KisMagneticGraph(m_dev);
 }
 
 QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint end) {
@@ -151,7 +152,7 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint
 
     VertexDescriptor goal(end);
     VertexDescriptor start(begin);
-    KisMagneticGraph g(m_dev, rect);
+    m_graph->m_rect = rect;
 
     // How many maps does it require?
     // Take a look here, if it doesn't make sense, https://www.boost.org/doc/libs/1_70_0/libs/graph/doc/astar_search.html
@@ -161,13 +162,13 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint
     std::map<VertexDescriptor, double> rmap;
     std::map<VertexDescriptor, boost::default_color_type> cmap;
     std::map<VertexDescriptor, double> imap;
-    WeightMap wmap(g);
+    WeightMap wmap(*m_graph);
     AStarHeuristic heuristic(goal);
     QVector<QPointF> result;
 
     try{
         boost::astar_search_no_init(
-                    g, start, heuristic
+                    *m_graph, start, heuristic
                     ,boost::visitor(AStarGoalVisitor(goal))
                     .distance_map(boost::associative_property_map<DistanceMap>(dmap))
                     .predecessor_map(boost::ref(pmap))
@@ -188,4 +189,9 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint
     result.push_front(QPoint(start.x,start.y));
 
     return result;
+}
+
+quint8 KisMagneticWorker::intensity(QPoint pt)
+{
+    return m_graph->getIntensity(VertexDescriptor(pt));
 }

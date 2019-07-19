@@ -52,7 +52,7 @@ public:
     void end(QEvent *event) override;
 
     void inputEvent(QEvent* event) override;
-    void cursorMoved(const QPointF &lastPos, const QPointF &pos) override;
+    void cursorMovedAbsolute(const QPointF &lastPos, const QPointF &pos) override;
 
     bool isShortcutRequired(int shortcut) const override;
 

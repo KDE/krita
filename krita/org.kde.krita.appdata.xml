@@ -239,6 +239,7 @@
       <caption xml:lang="sv">Krita är en fullfjädrad digital konststudio.</caption>
       <caption xml:lang="uk">Krita — повноцінний комплекс для цифрового малювання.</caption>
       <caption xml:lang="x-test">xxKrita is a full-featured digital painting studio.xx</caption>
+      <caption xml:lang="zh-CN">Krita 是一款功能齐全的数字绘画工作室软件。</caption>
       <caption xml:lang="zh-TW">Krita 是全功能的數位繪圖工作室。</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_001.png</image>
     </screenshot>
@@ -256,6 +257,7 @@
       <caption xml:lang="sv">Startfönstret ger nu också senaste nytt om Krita.</caption>
       <caption xml:lang="uk">У початковому вікні програми ви можете бачити найсвіжіші новини щодо Krita.</caption>
       <caption xml:lang="x-test">xxThe startup window now also gives you the latest news about Krita.xx</caption>
+      <caption xml:lang="zh-CN">启动画面现在可以为你呈现与 Krita 有关的最新资讯。</caption>
       <caption xml:lang="zh-TW">開始視窗也提供給您關於 Krita 的最新消息。</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_002.png</image>
     </screenshot>
@@ -273,6 +275,7 @@
       <caption xml:lang="sv">Det finns mer än tio enormt kraftfulla penselgränssnitt.</caption>
       <caption xml:lang="uk">У програмі передбачено понад десяток надзвичайно потужних рушіїв пензлів.</caption>
       <caption xml:lang="x-test">xxThere are over ten immensely powerful brush engines.xx</caption>
+      <caption xml:lang="zh-CN">它具备超过十种相当强大的笔刷引擎。</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_003.png</image>
     </screenshot>
     <screenshot type="default">
@@ -289,6 +292,7 @@
       <caption xml:lang="sv">Att skapa och använda färgomfångsmasker ger bilder en sammanhängande känsla.</caption>
       <caption xml:lang="uk">Створюйте маски палітри і користуйтеся ними для надання вашим малюнкам однорідного вигляду.</caption>
       <caption xml:lang="x-test">xxCreate and use gamut masks to give your images a coherent feel.xx</caption>
+      <caption xml:lang="zh-CN">创建并使用色域蒙版可以为你的图像带来更加一致的观感。</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_004.png</image>
     </screenshot>
     <screenshot type="default">
@@ -305,6 +309,7 @@
       <caption xml:lang="sv">Gillar du animering? Krita tillhandahåller allt som behövs för traditionella, handritade animeringar.</caption>
       <caption xml:lang="uk">Працюєте із анімацією? У Krita ви знайдете усе, що потрібно для створення традиційної, намальованої вручну анімації.</caption>
       <caption xml:lang="x-test">xxInto animation? Krita provides everything you need for traditional, hand-drawn animation.xx</caption>
+      <caption xml:lang="zh-CN">喜欢制作动画吗？Krita 提供了制作传统手绘动画的全套工具。</caption>
       <caption xml:lang="zh-TW">想做動畫？Krita 提供您在傳統、手繪動畫所需的任何東西。</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_005.png</image>
     </screenshot>
@@ -322,6 +327,7 @@
       <caption xml:lang="sv">Om digital målning är nytt för dig, eller om du vill veta mer om Kritas möjligheter, finns en omfattande, aktuell handbok.</caption>
       <caption xml:lang="uk">Якщо ви не маєте достатнього досвіду у цифровому малюванні або хочете дізнатися більше про можливості Krita, скористайтеся нашим докладним і актуальним підручником.</caption>
       <caption xml:lang="x-test">xxIf you're new to digital painting, or want to know more about Krita's possibilities, there's an extensive, up-to-date manual.xx</caption>
+      <caption xml:lang="zh-CN">不管你是数字绘画的新手，还是想发现 Krita 更多的用法，你都可以在我们详尽并持续更新的使用手册中找到答案。</caption>
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_006.png</image>
     </screenshot>
   </screenshots>

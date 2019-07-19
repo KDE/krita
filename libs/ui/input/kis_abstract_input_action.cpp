@@ -32,6 +32,7 @@ public:
     QHash<QString, int> indexes;
 
     QPointF lastCursorPosition;
+    QPointF startCursorPosition;
 
     static KisInputManager *inputManager;
 };
@@ -66,6 +67,7 @@ void KisAbstractInputAction::begin(int shortcut, QEvent *event)
 
     if (event) {
         d->lastCursorPosition = eventPosF(event);
+        d->startCursorPosition = d->lastCursorPosition;
     }
 }
 
@@ -74,6 +76,7 @@ void KisAbstractInputAction::inputEvent(QEvent *event)
     if (event) {
         QPointF newPosition = eventPosF(event);
         cursorMoved(d->lastCursorPosition, newPosition);
+        cursorMovedAbsolute(d->startCursorPosition, newPosition);
         d->lastCursorPosition = newPosition;
     }
 }
@@ -86,6 +89,12 @@ void KisAbstractInputAction::end(QEvent *event)
 void KisAbstractInputAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
 {
     Q_UNUSED(lastPos);
+    Q_UNUSED(pos);
+}
+
+void KisAbstractInputAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos)
+{
+    Q_UNUSED(startPos);
     Q_UNUSED(pos);
 }
 

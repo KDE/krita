@@ -269,6 +269,72 @@ KisImage::~KisImage()
     disconnect(); // in case Qt gets confused
 }
 
+KisImageSP KisImage::fromQImage(const QImage &image, KisUndoStore *undoStore)
+{
+    const KoColorSpace *colorSpace = 0;
+
+    switch (image.format()) {
+    case QImage::Format_Invalid:
+    case QImage::Format_Mono:
+    case QImage::Format_MonoLSB:
+        colorSpace = KoColorSpaceRegistry::instance()->graya8();
+        break;
+    case QImage::Format_Indexed8:
+    case QImage::Format_RGB32:
+    case QImage::Format_ARGB32:
+    case QImage::Format_ARGB32_Premultiplied:
+        colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+        break;
+    case QImage::Format_RGB16:
+        colorSpace = KoColorSpaceRegistry::instance()->rgb16();
+        break;
+    case QImage::Format_ARGB8565_Premultiplied:
+    case QImage::Format_RGB666:
+    case QImage::Format_ARGB6666_Premultiplied:
+    case QImage::Format_RGB555:
+    case QImage::Format_ARGB8555_Premultiplied:
+    case QImage::Format_RGB888:
+    case QImage::Format_RGB444:
+    case QImage::Format_ARGB4444_Premultiplied:
+    case QImage::Format_RGBX8888:
+    case QImage::Format_RGBA8888:
+    case QImage::Format_RGBA8888_Premultiplied:
+        colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+        break;
+    case QImage::Format_BGR30:
+    case QImage::Format_A2BGR30_Premultiplied:
+    case QImage::Format_RGB30:
+    case QImage::Format_A2RGB30_Premultiplied:
+        colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+        break;
+    case QImage::Format_Alpha8:
+        colorSpace = KoColorSpaceRegistry::instance()->alpha8();
+        break;
+    case QImage::Format_Grayscale8:
+        colorSpace = KoColorSpaceRegistry::instance()->graya8();
+        break;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+    case QImage::Format_Grayscale16:
+        colorSpace = KoColorSpaceRegistry::instance()->graya16();
+        break;
+    case QImage::Format_RGBX64:
+    case QImage::Format_RGBA64:
+    case QImage::Format_RGBA64_Premultiplied:
+        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID, 0);
+        break;
+#endif
+    default:
+        colorSpace = 0;
+    }
+
+    KisImageSP img = new KisImage(undoStore, image.width(), image.height(), colorSpace, i18n("Imported Image"));
+    KisPaintLayerSP layer = new KisPaintLayer(img, img->nextLayerName(), 255);
+    layer->paintDevice()->convertFromQImage(image, 0, 0, 0);
+    img->addNode(layer.data(), img->rootLayer().data());
+
+    return img;
+}
+
 KisImage *KisImage::clone(bool exactCopy)
 {
     return new KisImage(*this, 0, exactCopy);

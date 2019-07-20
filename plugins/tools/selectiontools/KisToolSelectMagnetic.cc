@@ -50,7 +50,6 @@
 
 #define FEEDBACK_LINE_WIDTH 2
 
-
 KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.svg", 16, 16),
@@ -93,7 +92,7 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
     vQPointF pointSet = m_worker.computeEdge(m_radius, m_lastAnchor, current);
     m_points.resize(m_checkPoint+1);
     m_points.append(pointSet);
-    for(int i=m_points.count()-1; i>= m_checkPoint; i--){
+    for(int i=m_points.count()-1; i>m_checkPoint; i--){
         QPoint pointInQuestion(m_points[i].x(), m_points[i].y());
         if(m_worker.intensity(pointInQuestion) >= m_threshold){
             m_checkPoint = i;
@@ -171,7 +170,6 @@ void KisToolSelectMagnetic::finishSelectionAction()
             helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
                                             selectionMode(),
                                             selectionAction());
-
         if (mode == PIXEL_SELECTION) {
 
             KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
@@ -202,7 +200,6 @@ void KisToolSelectMagnetic::finishSelectionAction()
                 path->lineTo(resolutionMatrix.map(m_points[i]));
             path->close();
             path->normalize();
-
             helper.addSelectionShape(path, selectionAction());
         }
         QApplication::restoreOverrideCursor();
@@ -290,6 +287,7 @@ void KisToolSelectMagnetic::requestUndoDuringStroke()
 
 void KisToolSelectMagnetic::requestStrokeEnd()
 {
+    if(m_complete) return;
     m_complete = true;
     finishSelectionAction();
 }

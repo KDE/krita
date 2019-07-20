@@ -128,6 +128,7 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
     , m_timeout(timeout)
     , m_priority(priority)
     , m_alignment(alignment)
+    , widgetQueuedForDeletion(false)
 {
     m_icon = KisIconUtils::loadIcon("calligrakrita").pixmap(256, 256).toImage();
 
@@ -139,6 +140,7 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
 
     m_timer.setSingleShot( true );
     connect(&m_timer, SIGNAL(timeout()), SLOT(startFade()));
+    connect(this, SIGNAL(destroyed()), SLOT(widgetDeleted()));
 }
 
 void KisFloatingMessage::tryOverrideMessage(const QString message,
@@ -160,6 +162,7 @@ void KisFloatingMessage::tryOverrideMessage(const QString message,
 
 void KisFloatingMessage::showMessage()
 {
+    if (widgetQueuedForDeletion) return;
 
     setGeometry(determineMetrics(fontMetrics().width('x')));
     setWindowOpacity(OSD_WINDOW_OPACITY);
@@ -320,6 +323,7 @@ void KisFloatingMessage::removeMessage()
 {
     m_timer.stop();
     m_fadeTimeLine.stop();
+    widgetQueuedForDeletion = true;
 
     hide();
     deleteLater();
@@ -328,4 +332,9 @@ void KisFloatingMessage::removeMessage()
 void KisFloatingMessage::updateOpacity(int /*value*/)
 {
     setWindowOpacity(OSD_WINDOW_OPACITY - 0.1);
+}
+
+void KisFloatingMessage::widgetDeleted()
+{
+    widgetQueuedForDeletion = false;
 }

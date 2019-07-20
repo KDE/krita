@@ -44,7 +44,7 @@ public:
 
     void mouseMoveEvent(KoPointerEvent *event) override;
 
-    void resetCursorStyle();
+    void resetCursorStyle() override;
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
 
@@ -64,7 +64,7 @@ private:
 
     QPainterPath m_paintPath;
     QVector<QPointF> m_points;
-    QVector<QPoint> m_anchorPoints;
+    QVector<int> m_anchorPoints;
     bool m_continuedMode;
     QPointF m_lastCursorPos;
     QPoint m_lastAnchor;

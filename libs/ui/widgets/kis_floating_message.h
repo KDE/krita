@@ -75,6 +75,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void startFade();
     void updateOpacity(int value);
+    void widgetDeleted();
 private:
 
     QRect determineMetrics(const int M);
@@ -89,6 +90,7 @@ private:
     int m_timeout;
     Priority m_priority;
     int m_alignment;
+    bool widgetQueuedForDeletion;
 };
 
 #endif // KIS_FLOATING_MESSAGE_H

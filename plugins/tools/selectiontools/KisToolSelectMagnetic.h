@@ -45,6 +45,8 @@ public:
     void mouseMoveEvent(KoPointerEvent *event) override;
 
     void resetCursorStyle();
+    void requestStrokeEnd() override;
+    void requestStrokeCancellation() override;
 
 public Q_SLOTS:
     void deactivate() override;

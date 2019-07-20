@@ -288,6 +288,22 @@ void KisToolSelectMagnetic::requestUndoDuringStroke()
     }
 }
 
+void KisToolSelectMagnetic::requestStrokeEnd()
+{
+    m_complete = true;
+    finishSelectionAction();
+}
+
+void KisToolSelectMagnetic::requestStrokeCancellation()
+{
+    setMode(KisTool::HOVER_MODE);
+    m_complete = true;
+    m_points.clear();
+    m_anchorPoints.clear();
+    m_paintPath = QPainterPath();
+    updateCanvasPixelRect(image()->bounds());
+}
+
 void KisToolSelectMagnetic::resetCursorStyle()
 {
     if (selectionAction() == SELECTION_ADD) {

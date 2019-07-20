@@ -72,10 +72,6 @@ bool KisCrashFilterTest::testFilter(KisFilterSP f)
     QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
     bool ok = false;
     Q_FOREACH (const KoColorSpace* colorSpace, colorSpaces) {
-        // XXX: Let's not check the painterly colorspaces right now
-        if (colorSpace->id().startsWith("KS", Qt::CaseInsensitive)) {
-            continue;
-        }
 
         // Alpha color spaces are never processed directly. They are
         // first converted into GrayA color space

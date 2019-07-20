@@ -313,14 +313,16 @@ KisImageSP KisImage::fromQImage(const QImage &image, KisUndoStore *undoStore)
     case QImage::Format_Grayscale8:
         colorSpace = KoColorSpaceRegistry::instance()->graya8();
         break;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
     case QImage::Format_Grayscale16:
         colorSpace = KoColorSpaceRegistry::instance()->graya16();
         break;
+#endif
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
     case QImage::Format_RGBX64:
     case QImage::Format_RGBA64:
     case QImage::Format_RGBA64_Premultiplied:
-        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID, 0);
+        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
         break;
 #endif
     default:

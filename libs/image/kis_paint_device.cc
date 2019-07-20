@@ -1530,19 +1530,111 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfil
                                        qint32 offsetX, qint32 offsetY)
 {
     QImage image = _image;
+    QImage::Format convertTo = QImage::Format_ARGB32;
+    bool sameFormat = false; // The qimage and the paint device have the same colormodel and channel depth
 
-    if (image.format() != QImage::Format_ARGB32) {
-        image = image.convertToFormat(QImage::Format_ARGB32);
+    switch (image.format()) {
+    case QImage::Format_Invalid:
+    case QImage::Format_Mono:
+    case QImage::Format_MonoLSB:
+        if (colorSpace()->colorModelId() == GrayAColorModelID && colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
+            convertTo = QImage::Format_Grayscale8;
+            sameFormat = true;
+        }
+        break;
+    case QImage::Format_Indexed8:
+    case QImage::Format_RGB32:
+    case QImage::Format_ARGB32:
+    case QImage::Format_ARGB32_Premultiplied:
+        if (colorSpace()->colorModelId() == RGBAColorModelID && colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
+            convertTo = QImage::Format_ARGB32;
+            sameFormat = true;
+        }
+        break;
+    case QImage::Format_RGB16:
+        if (colorSpace()->colorModelId() == RGBAColorModelID && colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
+            convertTo = QImage::Format_RGB16;
+            sameFormat = true;
+        }
+        break;
+    case QImage::Format_ARGB8565_Premultiplied:
+    case QImage::Format_RGB666:
+    case QImage::Format_ARGB6666_Premultiplied:
+    case QImage::Format_RGB555:
+    case QImage::Format_ARGB8555_Premultiplied:
+    case QImage::Format_RGB888:
+    case QImage::Format_RGB444:
+    case QImage::Format_ARGB4444_Premultiplied:
+    case QImage::Format_RGBX8888:
+    case QImage::Format_RGBA8888:
+    case QImage::Format_RGBA8888_Premultiplied:
+        if (colorSpace()->colorModelId() == RGBAColorModelID && colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
+            convertTo = QImage::Format_ARGB32;
+            sameFormat = true;
+        }
+        break;
+    case QImage::Format_BGR30:
+    case QImage::Format_A2BGR30_Premultiplied:
+    case QImage::Format_RGB30:
+    case QImage::Format_A2RGB30_Premultiplied:
+        if (colorSpace()->colorModelId() == RGBAColorModelID && colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
+            convertTo = QImage::Format_RGB16;
+            sameFormat = true;
+        }
+        break;
+    case QImage::Format_Alpha8:
+        if (colorSpace()->colorModelId() == AlphaColorModelID && colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
+            convertTo = QImage::Format_Alpha8;
+            sameFormat = true;
+        }
+        break;
+    case QImage::Format_Grayscale8:
+        if (colorSpace()->colorModelId() == GrayAColorModelID && colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
+            convertTo = QImage::Format_Grayscale8;
+            sameFormat = true;
+        }
+        break;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+    case QImage::Format_Grayscale16:
+        if (colorSpace()->colorModelId() == GrayAColorModelID && colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
+            convertTo = QImage::Format_Grayscale16;
+            sameFormat = true;
+        }
+       break;
+#endif
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+    case QImage::Format_RGBX64:
+    case QImage::Format_RGBA64:
+    case QImage::Format_RGBA64_Premultiplied:
+        if (colorSpace()->colorModelId() == RGBAColorModelID && (colorSpace()->colorDepthId() == Float16BitsColorDepthID
+                                                                 || colorSpace()->colorDepthId() == Float32BitsColorDepthID)) {
+            convertTo = QImage::Format_RBBA64;
+            sameFormat = true;
+        }
+        break;
+#endif
+    default:
+        convertTo = QImage::Format_Invalid;
     }
-    // Don't convert if not no profile is given and both paint dev and qimage are rgba.
-    if (!profile && colorSpace()->id() == "RGBA") {
+
+    if (convertTo == QImage::Format_Invalid) {
+        return;
+    }
+
+    // Make sure the qimage has the same format as the paint device
+    if (image.format() != convertTo) {
+        image = image.convertToFormat(convertTo);
+    }
+
+    // Don't convert if no profile is given and both paint dev and qimage are rgba.
+    if (!profile && sameFormat) {
         writeBytes(image.constBits(), offsetX, offsetY, image.width(), image.height());
     } else {
         try {
             quint8 * dstData = new quint8[image.width() * image.height() * pixelSize()];
             KoColorSpaceRegistry::instance()
-            ->colorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile)
-            ->convertPixelsTo(image.constBits(), dstData, colorSpace(), image.width() * image.height(),
+                ->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile)
+                ->convertPixelsTo(image.constBits(), dstData, colorSpace(), image.width() * image.height(),
                               KoColorConversionTransformation::internalRenderingIntent(),
                               KoColorConversionTransformation::internalConversionFlags());
 

@@ -257,18 +257,20 @@ public:
 };
 
 template<Vc::Implementation _impl>
-struct KoOptimizedCompositeOpAlphaDarkenHard32 :
+class KoOptimizedCompositeOpAlphaDarkenHard32 :
         public KoOptimizedCompositeOpAlphaDarken32Impl<_impl, KoAlphaDarkenParamsWrapperHard>
 {
+public:
     KoOptimizedCompositeOpAlphaDarkenHard32(const KoColorSpace *cs)
         : KoOptimizedCompositeOpAlphaDarken32Impl<_impl, KoAlphaDarkenParamsWrapperHard>(cs) {
     }
 };
 
 template<Vc::Implementation _impl>
-struct KoOptimizedCompositeOpAlphaDarkenCreamy32 :
+class KoOptimizedCompositeOpAlphaDarkenCreamy32 :
         public KoOptimizedCompositeOpAlphaDarken32Impl<_impl, KoAlphaDarkenParamsWrapperCreamy>
 {
+public:
     KoOptimizedCompositeOpAlphaDarkenCreamy32(const KoColorSpace *cs)
         : KoOptimizedCompositeOpAlphaDarken32Impl<_impl, KoAlphaDarkenParamsWrapperCreamy>(cs) {
     }

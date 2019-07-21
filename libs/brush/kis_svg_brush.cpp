@@ -97,7 +97,7 @@ bool KisSvgBrush::loadFromDevice(QIODevice *dev)
     setHeight(brushTipImage().height());
 
     QFileInfo fi(filename());
-    setName(fi.baseName());
+    setName(fi.completeBaseName());
 
     return !brushTipImage().isNull() && valid();
 }

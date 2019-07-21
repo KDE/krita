@@ -131,3 +131,14 @@ bool KisFilter::needsTransparentPixels(const KisFilterConfigurationSP config, co
 
     return false;
 }
+
+bool KisFilter::configurationAllowedForMask(KisFilterConfigurationSP config) const
+{
+    Q_UNUSED(config);
+    return supportsAdjustmentLayers();
+}
+
+void KisFilter::fixLoadedFilterConfigurationForMasks(KisFilterConfigurationSP config) const
+{
+    Q_UNUSED(config);
+}

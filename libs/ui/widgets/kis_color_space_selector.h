@@ -54,6 +54,10 @@ private Q_SLOTS:
     void installProfile();
     void slotOpenAdvancedSelector();
     void slotProfileValid(bool valid);
+
+    void slotModelsComboBoxActivated(const KoID& id);
+    void slotDepthsComboBoxActivated();
+    void slotProfilesComboBoxActivated();
 private:
     struct Private;
     KisAdvancedColorSpaceSelector *m_advancedSelector;

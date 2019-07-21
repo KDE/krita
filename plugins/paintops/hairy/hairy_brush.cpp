@@ -212,6 +212,11 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
         const QVector<QPointF> bristlePath = m_trajectory.getLinearTrajectory(QPointF(fx1, fy1), QPointF(fx2, fy2), 1.0);
         bristlePathSize = m_trajectory.size();
 
+        // avoid overlapping bristle caps with antialias on
+        if (m_properties->antialias) {
+            bristlePathSize -= 1;
+        }
+
         memcpy(bristleColor.data(), bristle->color().data() , m_pixelSize);
         for (int i = 0; i < bristlePathSize ; i++) {
 
@@ -331,8 +336,8 @@ void HairyBrush::paintParticle(QPointF pos, const KoColor& color, qreal weight)
 
     int ipx = int (pos.x());
     int ipy = int (pos.y());
-    qreal fx = pos.x() - ipx;
-    qreal fy = pos.y() - ipy;
+    qreal fx = qAbs(pos.x() - ipx);
+    qreal fy = qAbs(pos.y() - ipy);
 
     quint8 btl = qRound((1.0 - fx) * (1.0 - fy) * opacity);
     quint8 btr = qRound((fx)  * (1.0 - fy) * opacity);
@@ -370,8 +375,8 @@ void HairyBrush::paintParticle(QPointF pos, const KoColor& color)
 
     int ipx = int (pos.x());
     int ipy = int (pos.y());
-    qreal fx = pos.x() - ipx;
-    qreal fy = pos.y() - ipy;
+    qreal fx = qAbs(pos.x() - ipx);
+    qreal fy = qAbs(pos.y() - ipy);
 
     quint8 btl = qRound((1.0 - fx) * (1.0 - fy) * opacity);
     quint8 btr = qRound((fx)  * (1.0 - fy) * opacity);

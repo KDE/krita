@@ -84,10 +84,13 @@ public:
             return true;
         }
 
-        KisPaintDeviceSP originalDevice = layer->original();
-        originalDevice->clear(m_updateRect);
+        const QRect originalUpdateRect =
+            layer->projectionPlane()->needRectForOriginal(m_updateRect);
 
-        const QRect applyRect = m_updateRect & m_projection->extent();
+        KisPaintDeviceSP originalDevice = layer->original();
+        originalDevice->clear(originalUpdateRect);
+
+        const QRect applyRect = originalUpdateRect & m_projection->extent();
 
         // If the intersection of the updaterect and the projection extent is
         //      null, we are finish here.
@@ -258,7 +261,7 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
 
         if(item.m_position & KisMergeWalker::N_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY", currentLeaf, applyRect);
-            if (currentLeaf->visible()) {
+            if (currentLeaf->visible() || currentLeaf->hasClones()) {
                 currentLeaf->accept(originalVisitor);
                 currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode());
             }
@@ -266,7 +269,7 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         else if(item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_ABOVE_FILTHY", currentLeaf, applyRect);
             if(currentLeaf->dependsOnLowerNodes()) {
-                if (currentLeaf->visible()) {
+                if (currentLeaf->visible() || currentLeaf->hasClones()) {
                     currentLeaf->accept(originalVisitor);
                     currentLeaf->projectionPlane()->recalculate(applyRect, currentLeaf->node());
                 }
@@ -274,7 +277,7 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         }
         else if(item.m_position & KisMergeWalker::N_FILTHY_PROJECTION) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY_PROJECTION", currentLeaf, applyRect);
-            if (currentLeaf->visible()) {
+            if (currentLeaf->visible() || currentLeaf->hasClones()) {
                 currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode());
             }
         }

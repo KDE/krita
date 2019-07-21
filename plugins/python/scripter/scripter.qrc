@@ -3,6 +3,7 @@
     <file alias="debug.svg">icons/debug.svg</file>
     <file alias="debug_arrow.svg">icons/debug_arrow.svg</file>
     <file alias="run.svg">icons/run.svg</file>
+    <file alias="reload_script.svg">icons/reload_script.svg</file>
     <file alias="step.svg">icons/step.svg</file>
     <file alias="stop.svg">icons/stop.svg</file>
 </qresource>

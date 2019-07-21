@@ -24,6 +24,11 @@
 #include "kis_abstract_shortcut.h"
 
 class QTouchEvent;
+/**
+ * @brief The KisTouchShortcut class only handles touch gestures
+ * it _does not_ handle tool invocation i.e painting (which is being
+ * handled in KisShortcutMatcher).
+ */
 class KisTouchShortcut : public KisAbstractShortcut
 {
     public:

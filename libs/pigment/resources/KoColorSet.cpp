@@ -55,6 +55,32 @@
 #include "KoColorSet.h"
 #include "KoColorSet_p.h"
 
+namespace {
+
+/**
+ * readAllLinesSafe() reads all the lines in the byte array
+ * using the automated UTF8 and CR/LF transformations. That
+ * might be necessary for opening GPL palettes created on Linux
+ * in Windows environment.
+ */
+QStringList readAllLinesSafe(QByteArray *data)
+{
+    QStringList lines;
+
+    QBuffer buffer(data);
+    buffer.open(QBuffer::ReadOnly);
+    QTextStream stream(&buffer);
+
+    QString line;
+    while (stream.readLineInto(&line)) {
+        lines << line;
+    }
+
+    return lines;
+}
+}
+
+
 const QString KoColorSet::GLOBAL_GROUP_NAME = QString();
 const QString KoColorSet::KPL_VERSION_ATTR = "version";
 const QString KoColorSet::KPL_GROUP_ROW_COUNT_ATTR = "rows";
@@ -78,6 +104,8 @@ const QString KoColorSet::KPL_SWATCH_TAG = "ColorSetEntry";
 const QString KoColorSet::KPL_GROUP_TAG = "Group";
 const QString KoColorSet::KPL_PALETTE_TAG = "ColorSet";
 
+const int MAXIMUM_ALLOWED_COLUMNS = 4096;
+
 KoColorSet::KoColorSet(const QString& filename)
     : KoResource(filename)
     , d(new Private(this))
@@ -90,7 +118,7 @@ KoColorSet::KoColorSet(const QString& filename)
 
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
-    : QObject(Q_NULLPTR)
+    : QObject(0)
     , KoResource(rhs)
     , d(new Private(this))
 {
@@ -231,7 +259,7 @@ void KoColorSet::setPaletteType(PaletteType paletteType)
 
 quint32 KoColorSet::colorCount() const
 {
-    int colorCount = d->groups[GLOBAL_GROUP_NAME].colorCount();
+    int colorCount = 0;
     for (KisSwatchGroup &g : d->groups.values()) {
         colorCount += g.colorCount();
     }
@@ -263,6 +291,7 @@ void KoColorSet::clear()
 KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y) const
 {
     int yInGroup = y;
+    KisSwatch e;
     QString nameGroupFoundIn;
     for (const QString &groupName : d->groupNames) {
         if (yInGroup < d->groups[groupName].rowCount()) {
@@ -272,10 +301,14 @@ KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y) const
             yInGroup -= d->groups[groupName].rowCount();
         }
     }
-    const KisSwatchGroup &groupFoundIn = nameGroupFoundIn == GLOBAL_GROUP_NAME
-            ? d->global() : d->groups[nameGroupFoundIn];
-    Q_ASSERT(groupFoundIn.checkEntry(x, yInGroup));
-    return groupFoundIn.getEntry(x, yInGroup);
+    KisSwatchGroup &groupFoundIn = d->global();
+    if (nameGroupFoundIn != GLOBAL_GROUP_NAME) {
+        groupFoundIn = d->groups[nameGroupFoundIn];
+    }
+    if (groupFoundIn.checkEntry(x, yInGroup)) {
+        e = groupFoundIn.getEntry(x, yInGroup);
+    }
+    return e;
 }
 
 KisSwatch KoColorSet::getColorGroup(quint32 x, quint32 y, QString groupName)
@@ -405,7 +438,7 @@ int KoColorSet::rowCount() const
 KisSwatchGroup *KoColorSet::getGroup(const QString &name)
 {
     if (!d->groups.contains(name)) {
-        return Q_NULLPTR;
+        return 0;
     }
     return &(d->groups[name]);
 }
@@ -740,16 +773,14 @@ bool KoColorSet::Private::saveGpl(QIODevice *dev) const
 
 bool KoColorSet::Private::loadGpl()
 {
-    QString s = QString::fromUtf8(data.data(), data.count());
-
-    if (s.isEmpty() || s.isNull() || s.length() < 50) {
+    if (data.isEmpty() || data.isNull() || data.length() < 50) {
         warnPigment << "Illegal Gimp palette file: " << colorSet->filename();
         return false;
     }
 
     quint32 index = 0;
 
-    QStringList lines = s.split('\n', QString::SkipEmptyParts);
+    QStringList lines = readAllLinesSafe(&data);
 
     if (lines.size() < 3) {
         warnPigment << "Not enough lines in palette file: " << colorSet->filename();
@@ -775,7 +806,13 @@ bool KoColorSet::Private::loadGpl()
     if (lines[index].toLower().contains("columns")) {
         columnsText = lines[index].split(":")[1].trimmed();
         columns = columnsText.toInt();
-        global().setColumnCount(columns);
+        if (columns > MAXIMUM_ALLOWED_COLUMNS) {
+            warnPigment << "Refusing to set unreasonable number of columns (" << columns << ") in GIMP Palette file " << colorSet->filename() << " - using maximum number of allowed columns instead";
+            global().setColumnCount(MAXIMUM_ALLOWED_COLUMNS);
+        }
+        else {
+            global().setColumnCount(columns);
+        }
         index = 3;
     }
 
@@ -787,7 +824,7 @@ bool KoColorSet::Private::loadGpl()
             QStringList a = lines[i].replace('\t', ' ').split(' ', QString::SkipEmptyParts);
 
             if (a.count() < 3) {
-                break;
+                continue;
             }
 
             r = qBound(0, a[0].toInt(), 255);
@@ -816,7 +853,7 @@ bool KoColorSet::Private::loadGpl()
 bool KoColorSet::Private::loadAct()
 {
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
     KisSwatch e;
     for (int i = 0; i < data.size(); i += 3) {
         quint8 r = data[i];
@@ -832,7 +869,7 @@ bool KoColorSet::Private::loadRiff()
 {
     // http://worms2d.info/Palette_file
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
     KisSwatch e;
 
     RiffHeader header;
@@ -855,12 +892,11 @@ bool KoColorSet::Private::loadRiff()
 bool KoColorSet::Private::loadPsp()
 {
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
     KisSwatch e;
     qint32 r, g, b;
 
-    QString s = QString::fromUtf8(data.data(), data.count());
-    QStringList l = s.split('\n', QString::SkipEmptyParts);
+    QStringList l = readAllLinesSafe(&data);
     if (l.size() < 4) return false;
     if (l[0] != "JASC-PAL") return false;
     if (l[1] != "0100") return false;
@@ -938,13 +974,23 @@ bool KoColorSet::Private::loadKpl()
         QByteArray ba = store->read(store->size());
         store->close();
 
+        int desiredColumnCount;
+
         QDomDocument doc;
         doc.setContent(ba);
         QDomElement e = doc.documentElement();
         colorSet->setName(e.attribute(KPL_PALETTE_NAME_ATTR));
-        colorSet->setColumnCount(e.attribute(KPL_PALETTE_COLUMN_COUNT_ATTR).toInt());
         colorSet->setIsEditable(e.attribute(KPL_PALETTE_READONLY_ATTR) != "true");
         comment = e.attribute(KPL_PALETTE_COMMENT_ATTR);
+
+        desiredColumnCount = e.attribute(KPL_PALETTE_COLUMN_COUNT_ATTR).toInt();
+        if (desiredColumnCount > MAXIMUM_ALLOWED_COLUMNS) {
+            warnPigment << "Refusing to set unreasonable number of columns (" << desiredColumnCount << ") in KPL palette file " << colorSet->filename() << " - setting maximum allowed column count instead.";
+            colorSet->setColumnCount(MAXIMUM_ALLOWED_COLUMNS);
+        }
+        else {
+            colorSet->setColumnCount(desiredColumnCount);
+        }
 
         loadKplGroup(doc, e, colorSet->getGlobalGroup());
 
@@ -964,7 +1010,7 @@ bool KoColorSet::Private::loadKpl()
 bool KoColorSet::Private::loadAco()
 {
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
 
     QBuffer buf(&data);
     buf.open(QBuffer::ReadOnly);
@@ -1601,8 +1647,11 @@ void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElemen
         }
     }
 
-    if (parentEle.attribute(KPL_GROUP_ROW_COUNT_ATTR).isNull() && group->colorCount()/group->columnCount()+1 < 20) {
-        group->setRowCount(group->colorCount()/group->columnCount()+1);
+    if (parentEle.attribute(KPL_GROUP_ROW_COUNT_ATTR).isNull()
+            && group->colorCount() > 0
+            && group->columnCount() > 0
+            && (group->colorCount() / (group->columnCount()) + 1) < 20) {
+        group->setRowCount((group->colorCount() / group->columnCount()) + 1);
     }
 
 }

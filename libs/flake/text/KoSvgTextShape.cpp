@@ -54,15 +54,18 @@
 
 #include <FlakeDebug.h>
 
-class KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
+#include <QSharedData>
+
+class KoSvgTextShape::Private : public QSharedData
 {
-    KoSvgTextShapePrivate(KoSvgTextShape *_q)
-        : KoSvgTextChunkShapePrivate(_q)
+public:
+    Private()
+        : QSharedData()
     {
     }
 
-    KoSvgTextShapePrivate(const KoSvgTextShapePrivate &rhs, KoSvgTextShape *q)
-        : KoSvgTextChunkShapePrivate(rhs, q)
+    Private(const Private &)
+        : QSharedData()
     {
     }
 
@@ -73,18 +76,18 @@ class KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
 
     void clearAssociatedOutlines(KoShape *rootShape);
 
-
-    Q_DECLARE_PUBLIC(KoSvgTextShape)
 };
 
 KoSvgTextShape::KoSvgTextShape()
-    : KoSvgTextChunkShape(new KoSvgTextShapePrivate(this))
+    : KoSvgTextChunkShape()
+    , d(new Private)
 {
     setShapeId(KoSvgTextShape_SHAPEID);
 }
 
 KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
-    : KoSvgTextChunkShape(new KoSvgTextShapePrivate(*rhs.d_func(), this))
+    : KoSvgTextChunkShape(rhs)
+    , d(rhs.d)
 {
     setShapeId(KoSvgTextShape_SHAPEID);
     // QTextLayout has no copy-ctor, so just relayout everything!
@@ -111,7 +114,6 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
 
 void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
-    Q_D(KoSvgTextShape);
 
     Q_UNUSED(paintContext);
 
@@ -156,7 +158,6 @@ void KoSvgTextShape::paintStroke(QPainter &painter, const KoViewConverter &conve
 
 QPainterPath KoSvgTextShape::textOutline()
 {
-    Q_D(KoSvgTextShape);
 
     QPainterPath result;
     result.setFillRule(Qt::WindingFill);
@@ -405,7 +406,6 @@ private:
 
 void KoSvgTextShape::relayout()
 {
-    Q_D(KoSvgTextShape);
 
     d->cachedLayouts.clear();
     d->cachedLayoutsOffsets.clear();
@@ -553,7 +553,7 @@ void KoSvgTextShape::relayout()
     }
 }
 
-void KoSvgTextShapePrivate::clearAssociatedOutlines(KoShape *rootShape)
+void KoSvgTextShape::Private::clearAssociatedOutlines(KoShape *rootShape)
 {
     KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
@@ -596,7 +596,7 @@ KoShape *KoSvgTextShapeFactory::createDefaultShape(KoDocumentResourceManager *do
     converter.convertFromSvg("<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</text>",
                              "<defs/>",
                              QRectF(0, 0, 200, 60),
-                             documentResources->shapeController()->pixelsPerInch());
+                             documentResources->documentResolution());
 
     debugFlake << converter.errors() << converter.warnings();
 
@@ -617,13 +617,11 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
         shapeRect = rect.toRectF();
     }
 
-    KoShapeController *controller = documentResources->shapeController();
-
     KoSvgTextShapeMarkupConverter converter(shape);
     converter.convertFromSvg(svgText,
                              defs,
                              shapeRect,
-                             controller ? controller->pixelsPerInch() : 72);
+                             documentResources->documentResolution());
 
     shape->setPosition(shapeRect.topLeft());
 

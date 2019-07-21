@@ -177,7 +177,7 @@ bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
     return false;
 }
 
-void KisCanvasController::updateDocumentSize(const QSize &sz, bool recalculateCenter)
+void KisCanvasController::updateDocumentSize(const QSizeF &sz, bool recalculateCenter)
 {
     KoCanvasControllerWidget::updateDocumentSize(sz, recalculateCenter);
 

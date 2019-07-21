@@ -46,7 +46,7 @@ KisUsageLogger::KisUsageLogger()
     d->logFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log");
 
     rotateLog();
-    d->logFile.open(QFile::Append);
+    d->logFile.open(QFile::Append | QFile::Text);
 }
 
 KisUsageLogger::~KisUsageLogger()
@@ -147,18 +147,20 @@ void KisUsageLogger::writeHeader()
 
 void KisUsageLogger::rotateLog()
 {
-    d->logFile.open(QFile::ReadOnly);
-    QString log = QString::fromUtf8(d->logFile.readAll());
-    int sectionCount = log.count(s_sectionHeader);
-    int nextSectionIndex = log.indexOf(s_sectionHeader, s_sectionHeader.length());
-    while(sectionCount >= s_maxLogs) {
-        log = log.remove(0, log.indexOf(s_sectionHeader, nextSectionIndex));
-        nextSectionIndex = log.indexOf(s_sectionHeader, s_sectionHeader.length());
-        sectionCount = log.count(s_sectionHeader);
+    if (d->logFile.exists()) {
+        d->logFile.open(QFile::ReadOnly);
+        QString log = QString::fromUtf8(d->logFile.readAll());
+        int sectionCount = log.count(s_sectionHeader);
+        int nextSectionIndex = log.indexOf(s_sectionHeader, s_sectionHeader.length());
+        while(sectionCount >= s_maxLogs) {
+            log = log.remove(0, log.indexOf(s_sectionHeader, nextSectionIndex));
+            nextSectionIndex = log.indexOf(s_sectionHeader, s_sectionHeader.length());
+            sectionCount = log.count(s_sectionHeader);
+        }
+        d->logFile.close();
+        d->logFile.open(QFile::WriteOnly);
+        d->logFile.write(log.toUtf8());
+        d->logFile.close();
     }
-    d->logFile.close();
-    d->logFile.open(QFile::WriteOnly);
-    d->logFile.write(log.toUtf8());
-    d->logFile.close();
 }
 

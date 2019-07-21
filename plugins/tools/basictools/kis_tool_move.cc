@@ -174,12 +174,9 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
      * But currently, we will just disable starting a new stroke
      * asynchronously.
      */
-    if (image->tryBarrierLock()) {
-        image->unlock();
-    } else {
+    if (!blockUntilOperationsFinished()) {
         return false;
     }
-
 
     initHandles(nodes);
 
@@ -271,6 +268,8 @@ void KisToolMove::commitChanges()
 void KisToolMove::moveDiscrete(MoveDirection direction, bool big)
 {
     if (mode() == KisTool::PAINT_MODE) return;  // Don't interact with dragging
+    if (!currentNode()) return;
+    if (!image()) return;
     if (!currentNode()->isEditable()) return; // Don't move invisible nodes
 
     if (startStrokeImpl(MoveSelectedLayer, 0)) {
@@ -299,29 +298,23 @@ void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &
 {
     KisTool::activate(toolActivation, shapes);
 
-    QAction *a = action("movetool-move-up");
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Up, false);});
+    m_actionConnections.addConnection(action("movetool-move-up"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteUp()));
+    m_actionConnections.addConnection(action("movetool-move-down"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteDown()));
+    m_actionConnections.addConnection(action("movetool-move-left"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteLeft()));
+    m_actionConnections.addConnection(action("movetool-move-right"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteRight()));
 
-    a = action("movetool-move-down");
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Down, false);});
-
-    a = action("movetool-move-left");
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Left, false);});
-
-    a = action("movetool-move-right");
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Right, false);});
-
-    a = action("movetool-move-up-more");
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Up, true);});
-
-    a = action("movetool-move-down-more");
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Down, true);});
-
-    a = action("movetool-move-left-more");
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Left, true);});
-
-    a = action("movetool-move-right-more");
-    connect(a, &QAction::triggered, [&](){moveDiscrete(MoveDirection::Right, true);});
+    m_actionConnections.addConnection(action("movetool-move-up-more"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteUpMore()));
+    m_actionConnections.addConnection(action("movetool-move-down-more"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteDownMore()));
+    m_actionConnections.addConnection(action("movetool-move-left-more"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteLeftMore()));
+    m_actionConnections.addConnection(action("movetool-move-right-more"), SIGNAL(triggered(bool)),
+                                      this, SLOT(slotMoveDiscreteRightMore()));
 
     connect(m_showCoordinatesAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(setShowCoordinates(bool)), Qt::UniqueConnection);
     connect(m_optionsWidget, SIGNAL(showCoordinatesChanged(bool)), m_showCoordinatesAction, SLOT(setChecked(bool)), Qt::UniqueConnection);
@@ -369,29 +362,7 @@ void KisToolMove::initHandles(const KisNodeList &nodes)
 
 void KisToolMove::deactivate()
 {
-    QAction *a = action("movetool-move-up");
-    disconnect(a, 0, this, 0);
-
-    a = action("movetool-move-down");
-    disconnect(a, 0, this, 0);
-
-    a = action("movetool-move-left");
-    disconnect(a, 0, this, 0);
-
-    a = action("movetool-move-right");
-    disconnect(a, 0, this, 0);
-
-    a = action("movetool-move-up-more");
-    disconnect(a, 0, this, 0);
-
-    a = action("movetool-move-down-more");
-    disconnect(a, 0, this, 0);
-
-    a = action("movetool-move-left-more");
-    disconnect(a, 0, this, 0);
-
-    a = action("movetool-move-right-more");
-    disconnect(a, 0, this, 0);
+    m_actionConnections.clear();
 
     disconnect(m_showCoordinatesAction, 0, this, 0);
     disconnect(m_optionsWidget, 0, this, 0);
@@ -562,6 +533,46 @@ void KisToolMove::slotTrackerChangedConfig(KisToolChangesTrackerDataSP state)
     m_accumulatedOffset = newState->accumulatedOffset;
     image()->addJob(m_strokeId, new MoveStrokeStrategy::Data(m_accumulatedOffset));
     notifyGuiAfterMove();
+}
+
+void KisToolMove::slotMoveDiscreteLeft()
+{
+    moveDiscrete(MoveDirection::Left, false);
+}
+
+void KisToolMove::slotMoveDiscreteRight()
+{
+    moveDiscrete(MoveDirection::Right, false);
+}
+
+void KisToolMove::slotMoveDiscreteUp()
+{
+    moveDiscrete(MoveDirection::Up, false);
+}
+
+void KisToolMove::slotMoveDiscreteDown()
+{
+    moveDiscrete(MoveDirection::Down, false);
+}
+
+void KisToolMove::slotMoveDiscreteLeftMore()
+{
+    moveDiscrete(MoveDirection::Left, true);
+}
+
+void KisToolMove::slotMoveDiscreteRightMore()
+{
+    moveDiscrete(MoveDirection::Right, true);
+}
+
+void KisToolMove::slotMoveDiscreteUpMore()
+{
+    moveDiscrete(MoveDirection::Up, true);
+}
+
+void KisToolMove::slotMoveDiscreteDownMore()
+{
+    moveDiscrete(MoveDirection::Down, true);
 }
 
 void KisToolMove::cancelStroke()

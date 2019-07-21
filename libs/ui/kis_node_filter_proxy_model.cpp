@@ -48,7 +48,7 @@ KisNodeFilterProxyModel::KisNodeFilterProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent),
       m_d(new Private)
 {
-    connect(&m_d->activeNodeCompressor, SIGNAL(timeout()), SLOT(slotUpdateCurrentNodeFilter()));
+    connect(&m_d->activeNodeCompressor, SIGNAL(timeout()), SLOT(slotUpdateCurrentNodeFilter()), Qt::QueuedConnection);
 }
 
 KisNodeFilterProxyModel::~KisNodeFilterProxyModel()
@@ -133,15 +133,13 @@ void KisNodeFilterProxyModel::setAcceptedLabels(const QList<int> &value)
 
 void KisNodeFilterProxyModel::setActiveNode(KisNodeSP node)
 {
+    // NOTE: the current node might change due to beginRemoveRows, in such case
+    //       we must ensure we don't trigger recursive model invalidation.
+
     // the new node may temporary become null when the last layer
     // of the document in removed
     m_d->pendingActiveNode = node;
-
-    if (node && indexFromNode(node).isValid()) {
-        m_d->activeNodeCompressor.start();
-    } else {
-        slotUpdateCurrentNodeFilter();
-    }
+    m_d->activeNodeCompressor.start();
 }
 
 void KisNodeFilterProxyModel::slotUpdateCurrentNodeFilter()

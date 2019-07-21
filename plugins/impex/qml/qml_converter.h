@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,7 +26,7 @@
 #include <QFileInfo>
 
 #include "kis_types.h"
-#include <KisImageBuilderResult.h>
+#include <KisImportExportErrorCode.h>
 
 class QMLConverter : public QObject
 {
@@ -34,7 +35,7 @@ public:
     QMLConverter();
     ~QMLConverter() override;
 public:
-    KisImageBuilder_Result buildFile(const QString &filename, const QString &realFilename, QIODevice *io, KisImageSP image);
+    KisImportExportErrorCode buildFile(const QString &filename, const QString &realFilename, QIODevice *io, KisImageSP image);
 
 private:
     void writeString(QTextStream& out, int spacing, const QString& setting, const QString& value);

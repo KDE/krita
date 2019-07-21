@@ -93,11 +93,12 @@ SvgGraphicsContext *SvgLoadingContext::currentGC() const
 
 SvgGraphicsContext *SvgLoadingContext::pushGraphicsContext(const KoXmlElement &element, bool inherit)
 {
-    SvgGraphicsContext *gc = new SvgGraphicsContext;
-
+    SvgGraphicsContext *gc;
     // copy data from current context
     if (! d->gcStack.isEmpty() && inherit) {
-        *gc = *(d->gcStack.top());
+        gc = new SvgGraphicsContext(*d->gcStack.top());
+    } else {
+        gc = new SvgGraphicsContext();
     }
 
     gc->textProperties.resetNonInheritableToDefault(); // some of the text properties are not inherited

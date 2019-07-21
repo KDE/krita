@@ -276,7 +276,7 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
 
             if (attributes.hasAttribute("style")) {
                 QString filteredStyles;
-                QStringList svgStyles = QString("font-family font-size font-weight font-variant word-spacing text-decoration font-style font-size-adjust font-stretch direction").split(" ");
+                QStringList svgStyles = QString("font-family font-size font-weight font-variant word-spacing text-decoration font-style font-size-adjust font-stretch direction letter-spacing").split(" ");
                 QStringList styles = attributes.value("style").toString().split(";");
                 for(int i=0; i<styles.size(); i++) {
                     QStringList style = QString(styles.at(i)).split(":");
@@ -683,9 +683,10 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
             for (int c = 0; c<texts.size(); c++) {
                 QTextCharFormat diff = formatDifference(charFormats.at(c), mostCommonCharFormat).toCharFormat();
-                if (!diff.properties().isEmpty()) {
+                const QString subStyle = style(diff, QTextBlockFormat(), mostCommonCharFormat);
+                if (!subStyle.isEmpty()) {
                     svgWriter.writeStartElement("tspan");
-                    svgWriter.writeAttribute("style", style(diff, QTextBlockFormat(), mostCommonCharFormat));
+                    svgWriter.writeAttribute("style", subStyle);
                     svgWriter.writeCharacters(texts.at(c));
                     svgWriter.writeEndElement();
                 } else {
@@ -838,7 +839,7 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
 
             if (newBlock && absoluteLineOffset > 0) {
                 KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!formatStack.isEmpty(), false);
-                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cursor.block().layout()->lineCount() == 1, false);
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cursor.block().layout()->lineCount() > 0, false);
 
                 QTextLine line = cursor.block().layout()->lineAt(0);
 
@@ -1037,26 +1038,29 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
         }
     }
 
-    if (format.underlineStyle() != QTextCharFormat::NoUnderline &&
-        format.underlineStyle() != QTextCharFormat::SpellCheckUnderline) {
+    if (format.underlineStyle() != QTextCharFormat::SpellCheckUnderline) {
+        if(format.underlineStyle() != mostCommon.underlineStyle()){
+            QStringList values;
+            QString c;
 
-        QStringList values;
-        QString c;
+            if (format.fontUnderline()) {
+                values.append("underline");
+            }
+            if (format.fontOverline()) {
+                values.append("overline");
+            }
+            if (format.fontStrikeOut()) {
+                values.append("line-through");
+            }
+            if (values.isEmpty()) {
+                values.append("none");
+            }
+            c.append("text-decoration").append(":")
+                    .append(values.join(" "));
 
-        if (format.fontUnderline()) {
-            values.append("underline");
-        }
-        if(format.fontOverline()) {
-            values.append("overline");
-        }
-        if(format.fontStrikeOut()) {
-            values.append("line-through");
-        }
-        c.append("text-decoration").append(":")
-                .append(values.join(" "));
-
-        if (!values.isEmpty()) {
-            style.append(c);
+            if (!values.isEmpty()) {
+                style.append(c);
+            }
         }
     }
 
@@ -1237,8 +1241,15 @@ QTextFormat KoSvgTextShapeMarkupConverter::formatDifference(QTextFormat test, QT
     const QMap<int, QVariant> props = reference.properties();
     for (QMap<int, QVariant>::ConstIterator it = props.begin(), end = props.end();
          it != end; ++it)
-        if (it.value() == test.property(it.key()))
+        if (it.value() == test.property(it.key())) {
+            // Some props must not be removed as default state gets in the way.
+            if (it.key() == 0x2023) { // TextUnderlineStyle
+                continue;
+            } else if (it.key() == 0x2033) { // FontLetterSpacingType
+                continue;
+            }
             diff.clearProperty(it.key());
+        }
     return diff;
 }
 

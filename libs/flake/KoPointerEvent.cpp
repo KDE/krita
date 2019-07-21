@@ -33,6 +33,7 @@ public:
     Private()
         : tabletEvent(0)
         , mouseEvent(0)
+        , touchEvent(0)
         , deviceEvent(0)
         , tabletButton(Qt::NoButton)
         , globalPos(0, 0)
@@ -45,6 +46,7 @@ public:
 
     QTabletEvent *tabletEvent;
     QMouseEvent *mouseEvent;
+    QTouchEvent *touchEvent;
     KoInputDeviceHandlerEvent *deviceEvent;
     Qt::MouseButton tabletButton;
     QPoint globalPos, pos;
@@ -68,6 +70,16 @@ KoPointerEvent::KoPointerEvent(QTabletEvent *ev, const QPointF &pnt)
 {
     Q_ASSERT(m_event);
     d->tabletEvent = ev;
+}
+
+KoPointerEvent::KoPointerEvent(QTouchEvent* ev, const QPointF &pnt)
+    : point(pnt)
+    , m_event(ev)
+    , d(new Private)
+{
+    Q_ASSERT(m_event);
+    d->touchEvent = ev;
+    d->pos = ev->touchPoints().at(0).pos().toPoint();
 }
 
 KoPointerEvent::KoPointerEvent(KoInputDeviceHandlerEvent * ev, int x, int y, int z, int rx, int ry, int rz)

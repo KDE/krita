@@ -37,7 +37,7 @@ public:
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    bool wantsAutoScroll() const;
+    bool wantsAutoScroll() const override;
 
 private:
     QPoint m_lastPosition;

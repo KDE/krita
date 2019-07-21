@@ -26,6 +26,7 @@
 #include <QPaintDevice>
 #include <QTransform>
 #include <QScopedPointer>
+#include <QSharedData>
 
 #include <KoClipMask.h>
 
@@ -33,22 +34,13 @@ class KoBorder;
 class KoShapeManager;
 
 
-class KoShapePrivate
+class KoShape::Private : public QSharedData
 {
 public:
-    explicit KoShapePrivate(KoShape *shape);
-    virtual ~KoShapePrivate();
+    explicit Private();
+    virtual ~Private();
 
-    explicit KoShapePrivate(const KoShapePrivate &rhs, KoShape *q);
-
-    /**
-     * Notify the shape that a change was done. To be used by inheriting shapes.
-     * @param type the change type
-     */
-    void shapeChanged(KoShape::ChangeType type);
-
-    void addShapeManager(KoShapeManager *manager);
-    void removeShapeManager(KoShapeManager *manager);
+    explicit Private(const Private &rhs);
 
     /**
      * Fills the style stack and returns the value of the given style property (e.g fill, stroke).
@@ -61,10 +53,9 @@ public:
     // Loads the border style.
     KoBorder *loadOdfBorder(KoShapeLoadingContext &context) const;
 
+
 public:
     // Members
-
-    KoShape *q_ptr;             // Points the shape that owns this class.
 
     mutable QSizeF size; // size in pt
     QString shapeId;
@@ -86,6 +77,7 @@ public:
     QList<KoShape::ShapeChangeListener*> listeners;
     KoShapeShadow * shadow; ///< the current shape shadow
     KoBorder *border; ///< the current shape border
+    // XXX: change this to instance instead of pointer
     QScopedPointer<KoClipPath> clipPath; ///< the current clip path
     QScopedPointer<KoClipMask> clipMask; ///< the current clip mask
     QMap<QString, QString> additionalAttributes;
@@ -112,7 +104,6 @@ public:
     qreal textRunAroundThreshold;
     KoShape::TextRunAroundContour textRunAroundContour;
 
-
 public:
     /// Connection point converters
 
@@ -121,8 +112,6 @@ public:
 
     /// Convert connection point position to shape coordinates, taking alignment into account
     void convertToShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;
-
-    Q_DECLARE_PUBLIC(KoShape)
 };
 
 #endif

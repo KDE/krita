@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>361</width>
-    <height>341</height>
+    <width>219</width>
+    <height>133</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Gradient Map</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0" colspan="2">
     <widget class="KoColorPopupButton" name="btnGradientChooser">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -27,34 +27,75 @@
      </property>
     </widget>
    </item>
-   <item>
-    <widget class="KisStopGradientEditor" name="gradientEditor" native="true">
+   <item row="2" column="0">
+    <widget class="QLabel" name="colorModeLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Color Mode</string>
+     </property>
+     <property name="buddy">
+      <cstring>colorModeComboBox</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QComboBox" name="colorModeComboBox">
+     <item>
+      <property name="text">
+       <string>Blend</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Nearest</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Dither</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QStackedWidget" name="colorModeStackedWidget">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <property name="prefix" stdset="0">
+      <string>Amount:  </string>
+     </property>
+     <widget class="QWidget" name="blendPage">
+      <layout class="QFormLayout" name="formLayout_7"/>
+     </widget>
+     <widget class="QWidget" name="nearestPage">
+      <layout class="QFormLayout" name="formLayout_6"/>
+     </widget>
+     <widget class="QWidget" name="ditherPage">
+      <layout class="QFormLayout" name="formLayout_5">
+       <item row="0" column="0" colspan="2">
+        <widget class="KisDitherWidget" name="ditherWidget" native="true"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+   <item row="1" column="0" colspan="2">
+    <widget class="KisStopGradientEditor" name="gradientEditor" native="true"/>
    </item>
   </layout>
  </widget>
@@ -70,7 +111,46 @@
    <header>kis_stopgradient_editor.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>KisDitherWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">KisDitherWidget.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>colorModeComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>colorModeStackedWidget</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>227</x>
+     <y>101</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>241</x>
+     <y>121</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>colorModeStackedWidget</sender>
+   <signal>currentChanged(int)</signal>
+   <receiver>colorModeComboBox</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>297</x>
+     <y>124</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>295</x>
+     <y>89</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

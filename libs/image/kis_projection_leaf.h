@@ -57,6 +57,7 @@ public:
     quint8 opacity() const;
     QBitArray channelFlags() const;
     bool isStillInGraph() const;
+    bool hasClones() const;
 
     bool isDroppedMask() const;
     bool isOverlayProjectionLeaf() const;

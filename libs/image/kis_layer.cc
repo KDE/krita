@@ -200,6 +200,7 @@ KisLayer::KisLayer(KisImageWSP image, const QString &name, quint8 opacity)
     m_d->metaDataStore = new KisMetaData::Store();
     m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
     m_d->safeProjection = new KisSafeNodeProjectionStore();
+    m_d->safeProjection->setImage(image);
 }
 
 KisLayer::KisLayer(const KisLayer& rhs)
@@ -213,6 +214,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
         setName(rhs.name());
         m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
         m_d->safeProjection = new KisSafeNodeProjectionStore(*rhs.m_d->safeProjection);
+        m_d->safeProjection->setImage(image());
 
         if (rhs.m_d->layerStyle) {
             m_d->layerStyle = rhs.m_d->layerStyle->clone();
@@ -732,8 +734,8 @@ QRect KisLayer::updateProjection(const QRect& rect, KisNodeSP filthyNode)
     QRect updatedRect = rect;
     KisPaintDeviceSP originalDevice = original();
     if (!rect.isValid() ||
-            !visible() ||
-            !originalDevice) return QRect();
+        (!visible() && !hasClones()) ||
+        !originalDevice) return QRect();
 
     if (!needProjection() && !hasEffectMasks()) {
         m_d->safeProjection->releaseDevice();
@@ -859,6 +861,23 @@ QRect KisLayer::incomingChangeRect(const QRect &rect) const
 QRect KisLayer::outgoingChangeRect(const QRect &rect) const
 {
     return rect;
+}
+
+QRect KisLayer::needRectForOriginal(const QRect &rect) const
+{
+    QRect needRect = rect;
+
+    const QList<KisEffectMaskSP> masks = effectMasks();
+
+    if (!masks.isEmpty()) {
+        QStack<QRect> applyRects;
+        bool needRectVaries;
+
+        needRect = masksNeedRect(masks, rect,
+                                 applyRects, needRectVaries);
+    }
+
+    return needRect;
 }
 
 QImage KisLayer::createThumbnail(qint32 w, qint32 h)

@@ -222,6 +222,9 @@ QMenu *KisToolCrop::popupActionsMenu()
     if (m_contextMenu) {
         m_contextMenu->clear();
 
+        m_contextMenu->addSection(i18n("Crop Tool Actions"));
+        m_contextMenu->addSeparator();
+
         // keeps in sync with tool options
         growToggleOption->setChecked(allowGrow());
         centerToggleOption->setChecked(growCenter());

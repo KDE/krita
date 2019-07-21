@@ -30,7 +30,6 @@ class QPainterPath;
 class KoGenStyle;
 class KoShapeSavingContext;
 class KoOdfLoadingContext;
-class KoShapeBackgroundPrivate;
 class KoShapePaintingContext;
 class KoViewConverter;
 
@@ -63,12 +62,7 @@ public:
     /// load background from odf styles
     virtual bool loadStyle(KoOdfLoadingContext &context, const QSizeF &shapeSize) = 0;
 
-protected:
-    KoShapeBackground(KoShapeBackgroundPrivate &);
-    KoShapeBackgroundPrivate *d_ptr;
-private:
-    Q_DECLARE_PRIVATE(KoShapeBackground)
-
+    virtual explicit operator bool() const { return true; }
 
 };
 

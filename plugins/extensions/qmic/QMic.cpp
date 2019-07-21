@@ -385,7 +385,6 @@ void QMic::slotStartApplicator(QStringList gmicImages)
 
     m_gmicApplicator->setProperties(viewManager()->image(), rootNode, images, actionName, layers);
     m_gmicApplicator->apply();
-    m_gmicApplicator->finish();
 }
 
 bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)

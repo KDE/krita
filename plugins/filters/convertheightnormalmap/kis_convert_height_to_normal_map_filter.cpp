@@ -135,7 +135,7 @@ KisFilterConfigurationSP KisConvertHeightToNormalMapFilter::factoryConfiguration
     return config;
 }
 
-KisConfigWidget *KisConvertHeightToNormalMapFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisConvertHeightToNormalMapFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KisWdgConvertHeightToNormalMap(parent, dev->colorSpace());
 }

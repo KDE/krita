@@ -123,7 +123,7 @@ void KisPaletteEditor::addPalette()
 
 void KisPaletteEditor::importPalette()
 {
-    KoFileDialog dialog(Q_NULLPTR, KoFileDialog::OpenFile, "Open Palette");
+    KoFileDialog dialog(0, KoFileDialog::OpenFile, "Open Palette");
     dialog.setDefaultDir(QDir::homePath());
     dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset" << "application/x-gimp-color-palette");
     QString filename = dialog.filename();

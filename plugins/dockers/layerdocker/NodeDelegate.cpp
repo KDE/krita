@@ -36,6 +36,7 @@
 #include <QPointer>
 #include <QStyle>
 #include <QStyleOptionViewItem>
+#include <QBitmap>
 
 #include <klocalizedstring.h>
 #include "kis_node_view_color_scheme.h"
@@ -60,12 +61,28 @@ public:
     QColor checkersColor1;
     QColor checkersColor2;
 
+    QList<QModelIndex> shiftClickedIndexes;
+
+    enum StasisOperation {
+        Record,
+        Review,
+        Restore
+    };
+
     QList<OptionalProperty> rightmostProperties(const KisBaseNode::PropertyList &props) const;
     int numProperties(const QModelIndex &index) const;
     OptionalProperty findProperty(KisBaseNode::PropertyList &props, const OptionalProperty &refProp) const;
     OptionalProperty findVisibilityProperty(KisBaseNode::PropertyList &props) const;
 
-    void toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty prop, bool controlPressed, const QModelIndex &index);
+    void toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty prop, const Qt::KeyboardModifiers modifier, const QModelIndex &index);
+    void togglePropertyRecursive(const QModelIndex &root, const OptionalProperty &clickedProperty, const QList<QModelIndex> &items, StasisOperation record, bool mode);
+
+    bool stasisIsDirty(const QModelIndex &root, const OptionalProperty &clickedProperty, bool on = false, bool off = false);
+    void resetPropertyStateRecursive(const QModelIndex &root, const OptionalProperty &clickedProperty);
+
+    void getParentsIndex(QList<QModelIndex> &items, const QModelIndex &index);
+    void getChildrenIndex(QList<QModelIndex> &items, const QModelIndex &index);
+    void getSiblingsIndex(QList<QModelIndex> &items, const QModelIndex &index);
 };
 
 NodeDelegate::NodeDelegate(NodeView *view, QObject *parent)
@@ -76,6 +93,7 @@ NodeDelegate::NodeDelegate(NodeView *view, QObject *parent)
 
     QApplication::instance()->installEventFilter(this);
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    connect(this, SIGNAL(resetVisibilityStasis()), SLOT(slotResetState()));
     slotConfigChanged();
 }
 
@@ -480,6 +498,160 @@ OptionalProperty NodeDelegate::Private::findVisibilityProperty(KisBaseNode::Prop
     return 0;
 }
 
+void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty clickedProperty, const Qt::KeyboardModifiers modifier, const QModelIndex &index)
+{
+    QModelIndex root(view->rootIndex());
+
+    if ((modifier & Qt::ShiftModifier) == Qt::ShiftModifier && clickedProperty->canHaveStasis) {
+        bool mode = true;
+
+        OptionalProperty prop = findProperty(props, clickedProperty);
+
+        // XXX: Change to use NodeProperty
+        int position = shiftClickedIndexes.indexOf(index);
+
+        StasisOperation record = (!prop->isInStasis)? StasisOperation::Record :
+                      (position < 0) ? StasisOperation::Review : StasisOperation::Restore;
+
+        shiftClickedIndexes.clear();
+        shiftClickedIndexes.push_back(index);
+
+        QList<QModelIndex> items;
+        if (modifier == (Qt::ControlModifier | Qt::ShiftModifier)) {
+            mode = false; // inverted mode
+            items.insert(0, index); // important!
+            getSiblingsIndex(items, index);
+        } else {
+            getParentsIndex(items, index);
+            getChildrenIndex(items, index);
+        }
+        togglePropertyRecursive(root, clickedProperty, items, record, mode);
+
+    } else {
+        shiftClickedIndexes.clear();
+        resetPropertyStateRecursive(root, clickedProperty);
+        clickedProperty->state = !clickedProperty->state.toBool();
+        clickedProperty->isInStasis = false;
+        view->model()->setData(index, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
+    }
+}
+
+void NodeDelegate::Private::togglePropertyRecursive(const QModelIndex &root, const OptionalProperty &clickedProperty, const QList<QModelIndex> &items, StasisOperation record, bool mode)
+{
+    int rowCount = view->model()->rowCount(root);
+
+    for (int i = 0; i < rowCount; i++) {
+        QModelIndex idx = view->model()->index(i, 0, root);
+
+        // The entire property list has to be altered because model->setData cannot set individual properties
+        KisBaseNode::PropertyList props = idx.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
+        OptionalProperty prop = findProperty(props, clickedProperty);
+
+        if (!prop) continue;
+
+        if (record == StasisOperation::Record) {
+             prop->stateInStasis = prop->state.toBool();
+        }
+        if (record == StasisOperation::Review || record ==  StasisOperation::Record) {
+            prop->isInStasis = true;
+            if(mode) { //include mode
+                prop->state = (items.contains(idx))? QVariant(true) : QVariant(false);
+            } else { // exclude
+                prop->state = (!items.contains(idx))? prop->state :
+                              (items.at(0) == idx)? QVariant(true) : QVariant(false);
+            }
+        } else { // restore
+            prop->state = QVariant(prop->stateInStasis);
+            prop->isInStasis = false;
+        }
+
+        view->model()->setData(idx, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
+
+        togglePropertyRecursive(idx,clickedProperty, items, record, mode);
+    }
+}
+
+bool NodeDelegate::Private::stasisIsDirty(const QModelIndex &root, const OptionalProperty &clickedProperty, bool on, bool off)
+{
+
+    int rowCount = view->model()->rowCount(root);
+    bool result = false;
+
+    for (int i = 0; i < rowCount; i++) {
+        if (result) break; // return on first find
+        QModelIndex idx = view->model()->index(i, 0, root);
+        // The entire property list has to be altered because model->setData cannot set individual properties
+        KisBaseNode::PropertyList props = idx.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
+        OptionalProperty prop = findProperty(props, clickedProperty);
+
+        if (!prop) continue;
+        if (prop->isInStasis) {
+            on = true;
+        } else {
+            off = true;
+        }
+        // stop if both states exist
+        if (on && off) {
+            return true;
+        }
+
+        result = stasisIsDirty(idx,clickedProperty, on, off);
+    }
+    return result;
+}
+
+void NodeDelegate::Private::resetPropertyStateRecursive(const QModelIndex &root, const OptionalProperty &clickedProperty)
+{
+    if (!clickedProperty->canHaveStasis) return;
+    int rowCount = view->model()->rowCount(root);
+
+    for (int i = 0; i < rowCount; i++) {
+        QModelIndex idx = view->model()->index(i, 0, root);
+        // The entire property list has to be altered because model->setData cannot set individual properties
+        KisBaseNode::PropertyList props = idx.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
+        OptionalProperty prop = findProperty(props, clickedProperty);
+
+        if (!prop) continue;
+        prop->isInStasis = false;
+        view->model()->setData(idx, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
+
+        resetPropertyStateRecursive(idx,clickedProperty);
+    }
+}
+
+void NodeDelegate::Private::getParentsIndex(QList<QModelIndex> &items, const QModelIndex &index)
+{
+    if (!index.isValid()) return;
+    items.append(index);
+    getParentsIndex(items, index.parent());
+}
+
+void NodeDelegate::Private::getChildrenIndex(QList<QModelIndex> &items, const QModelIndex &index)
+{
+    qint32 childs = view->model()->rowCount(index);
+    QModelIndex child;
+    // STEP 1: Go.
+    for (quint16 i = 0; i < childs; ++i) {
+        child = view->model()->index(i, 0, index);
+        items.append(child);
+        getChildrenIndex(items, child);
+    }
+}
+
+void NodeDelegate::Private::getSiblingsIndex(QList<QModelIndex> &items, const QModelIndex &index)
+{
+    qint32 numberOfLeaves = view->model()->rowCount(index.parent());
+    QModelIndex item;
+    // STEP 1: Go.
+    for (quint16 i = 0; i < numberOfLeaves; ++i) {
+        item = view->model()->index(i, 0, index.parent());
+        if (item != index) {
+            items.append(item);
+        }
+    }
+}
+
+
 void NodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     KisNodeViewColorScheme scm;
@@ -599,8 +771,20 @@ void NodeDelegate::drawVisibilityIconHijack(QPainter *p, const QStyleOptionViewI
         p->setOpacity(0.35);
     }
 
-    p->drawPixmap(fitRect.x(), fitRect.center().y() - scm.visibilitySize() / 2,
-                  icon.pixmap(scm.visibilitySize(),  QIcon::Normal));
+    QPixmap pixmapIcon(icon.pixmap(scm.visibilitySize(), QIcon::Active));
+    p->drawPixmap(fitRect.x(), fitRect.center().y() - scm.visibilitySize() / 2, pixmapIcon);
+
+    if (prop->isInStasis) {
+        QPainter::CompositionMode prevComposition = p->compositionMode();
+        p->setCompositionMode(QPainter::CompositionMode_HardLight);
+        pixmapIcon = icon.pixmap(scm.visibilitySize(), QIcon::Active);
+        QBitmap mask = pixmapIcon.mask();
+        pixmapIcon.fill(d->view->palette().color(QPalette::Highlight));
+        pixmapIcon.setMask(mask);
+        p->drawPixmap(fitRect.x(), fitRect.center().y() - scm.visibilitySize() / 2, pixmapIcon);
+        p->setCompositionMode(prevComposition);
+    }
+
     p->setOpacity(oldOpacity);
 
     //// For debugging purposes only
@@ -659,58 +843,6 @@ void NodeDelegate::drawExpandButton(QPainter *p, const QStyleOptionViewItem &opt
                                  QIcon::Normal : QIcon::Disabled);
     p->drawPixmap(rc.bottomLeft()-QPoint(0, scm.decorationSize()-1), pixmap);
 }
-
-void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty clickedProperty, bool controlPressed, const QModelIndex &index)
-{
-    QAbstractItemModel *model = view->model();
-
-    // Using Ctrl+click to enter stasis
-    if (controlPressed && clickedProperty->canHaveStasis) {
-        // STEP 0: Prepare to Enter or Leave control key stasis
-        quint16 numberOfLeaves = model->rowCount(index.parent());
-        QModelIndex eachItem;
-        // STEP 1: Go.
-        if (clickedProperty->isInStasis == false) { // Enter
-            /* Make every leaf of this node go State = False, saving the old property value to stateInStasis */
-            for (quint16 i = 0; i < numberOfLeaves; ++i) { // Foreach leaf in the node (index.parent())
-                eachItem = model->index(i, 1, index.parent());
-                // The entire property list has to be altered because model->setData cannot set individual properties
-                KisBaseNode::PropertyList eachPropertyList = eachItem.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
-                OptionalProperty prop = findProperty(eachPropertyList, clickedProperty);
-                if (!prop) continue;
-                prop->stateInStasis = prop->state.toBool();
-                prop->state = eachItem == index;
-                prop->isInStasis = true;
-                model->setData(eachItem, QVariant::fromValue(eachPropertyList), KisNodeModel::PropertiesRole);
-
-            }
-
-            for (quint16 i = 0; i < numberOfLeaves; ++i) { // Foreach leaf in the node (index.parent())
-                eachItem = model->index(i, 1, index.parent());
-                KisBaseNode::PropertyList eachPropertyList = eachItem.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
-                OptionalProperty prop = findProperty(eachPropertyList, clickedProperty);
-                if (!prop) continue;
-            }
-        } else { // Leave
-            /* Make every leaf of this node go State = stateInStasis */
-            for (quint16 i = 0; i < numberOfLeaves; ++i) {
-                eachItem = model->index(i, 1, index.parent());
-                // The entire property list has to be altered because model->setData cannot set individual properties
-                KisBaseNode::PropertyList eachPropertyList = eachItem.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
-                OptionalProperty prop = findProperty(eachPropertyList, clickedProperty);
-                if (!prop) continue;
-
-                prop->state = prop->stateInStasis;
-                prop->isInStasis = false;
-                model->setData(eachItem, QVariant::fromValue(eachPropertyList), KisNodeModel::PropertiesRole);
-            }
-        }
-    } else {
-        clickedProperty->state = !clickedProperty->state.toBool();
-        model->setData(index, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
-    }
-}
-
 
 bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
@@ -773,14 +905,16 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
 
                 OptionalProperty clickedProperty = realProps[clickedIcon];
                 if (!clickedProperty) return false;
-                d->toggleProperty(props, clickedProperty, mouseEvent->modifiers() == Qt::ControlModifier, index);
+                d->toggleProperty(props, clickedProperty, mouseEvent->modifiers(), index);
                 return true;
             }
         } else if (leftButton && visibilityClicked) {
             KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
             OptionalProperty clickedProperty = d->findVisibilityProperty(props);
             if (!clickedProperty) return false;
-            d->toggleProperty(props, clickedProperty, mouseEvent->modifiers() == Qt::ControlModifier, index);
+
+            d->toggleProperty(props, clickedProperty, mouseEvent->modifiers(), index);
+
             return true;
         } else if (leftButton && decorationClicked) {
             bool isExpandable = model->hasChildren(index);
@@ -810,7 +944,8 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
             if (hasCorrectModifier) {
                 model->setData(index, QVariant(int(action)), KisNodeModel::SelectOpaqueRole);
             }
-            return true; //If not here then the item is !expanded when reaching return false;
+            d->view->setCurrentIndex(index);
+            return hasCorrectModifier; //If not here then the item is !expanded when reaching return false;
         }
 
         if (mouseEvent->button() == Qt::LeftButton &&
@@ -834,20 +969,15 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
     return false;
 }
 
-QWidget *NodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
+QWidget *NodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex &index) const
 {
-    d->edit = new QLineEdit(parent);
+    // #400357 do not override QAbstractItemDelegate::setEditorData to update editor's text
+    // because replacing the text while user type is confusing
+    const QString &text = index.data(Qt::DisplayRole).toString();
+    d->edit = new QLineEdit(text, parent);
     d->edit->setFocusPolicy(Qt::StrongFocus);
     d->edit->installEventFilter(const_cast<NodeDelegate*>(this)); //hack?
     return d->edit;
-}
-
-void NodeDelegate::setEditorData(QWidget *widget, const QModelIndex &index) const
-{
-    QLineEdit *edit = qobject_cast<QLineEdit*>(widget);
-    Q_ASSERT(edit);
-
-    edit->setText(index.data(Qt::DisplayRole).toString());
 }
 
 void NodeDelegate::setModelData(QWidget *widget, QAbstractItemModel *model, const QModelIndex &index) const
@@ -976,10 +1106,12 @@ void NodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &opti
         const QRect iconsRectR    = iconsRect(option, index);
         const int height = 5;
         const QRect rc = QRect(
-            ((option.direction == Qt::RightToLeft) ? iconsRectR.bottomRight()
-                                                   : thumbnailRect.bottomRight()) - QPoint(0, height),
-            ((option.direction == Qt::RightToLeft) ? thumbnailRect.bottomLeft()
-                                                   : iconsRectR.bottomLeft()));
+            ((option.direction == Qt::RightToLeft) ?
+              iconsRectR.bottomRight() :
+              thumbnailRect.bottomRight()) - QPoint(0, height),
+            ((option.direction == Qt::RightToLeft) ?
+              thumbnailRect.bottomLeft() :
+              iconsRectR.bottomLeft()));
 
         p->save();
         {
@@ -987,6 +1119,7 @@ void NodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &opti
             QStyle* style = QApplication::style();
             QStyleOptionProgressBar opt;
 
+            opt.rect = rc;
             opt.minimum = 0;
             opt.maximum = 100;
             opt.progress = value.toInt();
@@ -1012,4 +1145,20 @@ void NodeDelegate::slotConfigChanged()
 void NodeDelegate::slotUpdateIcon()
 {
    KisLayerPropertiesIcons::instance()->updateIcons();
+}
+
+void NodeDelegate::slotResetState(){
+
+    NodeView *view = d->view;
+    QModelIndex root = view->rootIndex();
+    int childs = view->model()->rowCount(root);
+    if (childs > 0){
+        QModelIndex firstChild = view->model()->index(0, 0, root);
+        KisBaseNode::PropertyList props = firstChild.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
+
+        OptionalProperty visibilityProperty = d->findVisibilityProperty(props);
+        if(d->stasisIsDirty(root, visibilityProperty)){ // clean inStasis if mixed!
+            d->resetPropertyStateRecursive(root, visibilityProperty);
+        }
+    }
 }

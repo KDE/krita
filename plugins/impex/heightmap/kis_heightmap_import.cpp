@@ -74,13 +74,13 @@ KisHeightMapImport::~KisHeightMapImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisHeightMapImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(configuration);
     KoID depthId = KisHeightmapUtils::mimeTypeToKoID(mimeType());
     if (depthId.id().isNull()) {
         document->setErrorMessage(i18n("Unknown file type"));
-        return KisImportExportFilter::WrongFormat;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 
     int w = 0;
@@ -88,6 +88,10 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument 
 
     KIS_ASSERT(io->isOpen());
     const quint64 size = io->size();
+    if (size == 0) {
+        return ImportExportCodes::FileFormatIncorrect;
+    }
+
     QDataStream::ByteOrder bo = QDataStream::LittleEndian;
 
     if (!batchMode()) {
@@ -133,11 +137,12 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument 
             wdg->typeLabel->setText("Float");
         }
         else {
-            return KisImportExportFilter::InternalError;
+            KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExportCodes::InternalError);
+            return ImportExportCodes::InternalError;
         }
 
         if (kdb->exec() == QDialog::Rejected) {
-            return KisImportExportFilter::UserCancelled;
+            return ImportExportCodes::Cancelled;
         }
 
         cfg->setProperty("endianness", wdg->radioBig->isChecked() ? 0 : 1);
@@ -187,12 +192,13 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument 
         fillData<quint8>(layer->paintDevice(), w, h, s);
     }
     else {
-        return KisImportExportFilter::InternalError;
+        KIS_ASSERT_RECOVER_RETURN_VALUE(true, ImportExportCodes::InternalError);
+        return ImportExportCodes::InternalError;
     }
 
     image->addNode(layer.data(), image->rootLayer().data());
     document->setCurrentImage(image);
-    return KisImportExportFilter::OK;
+    return ImportExportCodes::OK;
 }
 
 #include "kis_heightmap_import.moc"

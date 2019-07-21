@@ -126,7 +126,7 @@ public:
      * highlighted item.
      * @return full text of the highlighted item
      */
-    QString itemHighlighted();
+    QString currentUnsqueezedText();
 
     /**
      * remove the squeezed item at index

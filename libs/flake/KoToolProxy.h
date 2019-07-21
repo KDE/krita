@@ -142,6 +142,8 @@ public:
     /// Set the new active tool.
     virtual void setActiveTool(KoToolBase *tool);
 
+    void touchEvent(QTouchEvent* event, const QPointF& point);
+
     /// \internal
     KoToolProxyPrivate *priv();
 

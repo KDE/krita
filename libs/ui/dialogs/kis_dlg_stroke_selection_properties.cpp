@@ -250,10 +250,10 @@ int KisDlgStrokeSelection::getLineSize() const
 {
     int value = m_page->lineSize->value();
 
-    if (m_page->sizeBox->currentText() == "px") {
+    if (m_page->sizeBox->currentText() == i18n("px")) {
         return value;
     }
-    else if (m_page->sizeBox->currentText() == "mm"){
+    else if (m_page->sizeBox->currentText() == i18n("mm")) {
              int pixels =  static_cast<int>(KoUnit::convertFromUnitToUnit(value,KoUnit(KoUnit::Millimeter), KoUnit(KoUnit::Pixel)));
              return pixels;
     }

@@ -36,6 +36,8 @@
     <true/>
     <key>LSRequiresCarbon</key>
     <true/>
+    <key>NSSupportsAutomaticGraphicsSwitching</key>
+    <true/>
     <key>NSHumanReadableCopyright</key>
     <string>${MACOSX_BUNDLE_COPYRIGHT}</string>
     <key>CFBundleDocumentTypes</key>

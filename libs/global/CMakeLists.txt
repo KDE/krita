@@ -18,7 +18,6 @@ set(kritaglobal_LIB_SRCS
     kis_painting_tweaks.cpp
     KisHandlePainterHelper.cpp
     KisHandleStyle.cpp
-    kis_relaxed_timer.cpp
     kis_signal_compressor.cpp
     kis_signal_compressor_with_param.cpp
     kis_thread_safe_signal_compressor.cpp

@@ -120,6 +120,8 @@ const QString COMPOSITE_SUPER_LIGHT  = "super_light";
 const QString COMPOSITE_TINT_IFS_ILLUSIONS = "tint_ifs_illusions";
 const QString COMPOSITE_FOG_LIGHTEN_IFS_ILLUSIONS = "fog_lighten_ifs_illusions";
 const QString COMPOSITE_EASY_DODGE        = "easy dodge";
+const QString COMPOSITE_LUMINOSITY_SAI        = "luminosity_sai";
+
 
 const QString COMPOSITE_HUE            = "hue";
 const QString COMPOSITE_COLOR          = "color";
@@ -209,8 +211,9 @@ public:
         KoIDList list;
 
         for(; begin!=end; ++begin){
-            if( colorSpaceHasCompositeOp(colorSpace, *begin) == removeInvaliOps)
+            if (colorSpaceHasCompositeOp(colorSpace, *begin) == removeInvaliOps) {
                 list.push_back(*begin);
+            }
         }
 
         return list;

@@ -172,7 +172,7 @@ QString SvgSavingContext::createFileName(const QString &extension)
 
     QFileInfo fi(file->fileName());
     QString path = fi.absolutePath();
-    QString dstBaseFilename = fi.baseName();
+    QString dstBaseFilename = fi.completeBaseName();
 
     // create a filename for the image file at the destination directory
     QString fname = dstBaseFilename + '_' + createUID("file");

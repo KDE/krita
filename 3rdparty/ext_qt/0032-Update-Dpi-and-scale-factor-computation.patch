@@ -1,7 +1,7 @@
-From 3ef20bcb114c316efb74a0a704e918731847620c Mon Sep 17 00:00:00 2001
+From 0735b61f7e0868ab2272838ef52fe34aed0dfe25 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Mon, 25 Apr 2016 11:31:34 +0200
-Subject: [PATCH 32/36] Update Dpi and scale factor computation
+Subject: [PATCH 23/27] Update Dpi and scale factor computation
 
 Remove pixelScale() in favor of logicalBaseDpi(). Compute scale factor
 based on logical DPI and logical base DPI, or optionally based on the
@@ -34,7 +34,7 @@ Change-Id: I4846f223186df665eb0a9c827eaef0a96d1f458f
  12 files changed, 264 insertions(+), 51 deletions(-)
 
 diff --git a/src/gui/kernel/qhighdpiscaling.cpp b/src/gui/kernel/qhighdpiscaling.cpp
-index 541d4f12af..ae531569ce 100644
+index 541d4f12..ae531569 100644
 --- a/src/gui/kernel/qhighdpiscaling.cpp
 +++ b/src/gui/kernel/qhighdpiscaling.cpp
 @@ -44,6 +44,9 @@
@@ -323,7 +323,7 @@ index 541d4f12af..ae531569ce 100644
  
  qreal QHighDpiScaling::factor(const QScreen *screen)
 diff --git a/src/gui/kernel/qhighdpiscaling_p.h b/src/gui/kernel/qhighdpiscaling_p.h
-index ecd9ed6515..55bddfeb88 100644
+index ecd9ed65..55bddfeb 100644
 --- a/src/gui/kernel/qhighdpiscaling_p.h
 +++ b/src/gui/kernel/qhighdpiscaling_p.h
 @@ -71,7 +71,33 @@ typedef QPair<qreal, qreal> QDpi;
@@ -371,10 +371,10 @@ index ecd9ed6515..55bddfeb88 100644
  
      static qreal m_factor;
 diff --git a/src/gui/kernel/qplatformscreen.cpp b/src/gui/kernel/qplatformscreen.cpp
-index b7b312e89e..07a2231228 100644
+index 21ae75ba..ff76528a 100644
 --- a/src/gui/kernel/qplatformscreen.cpp
 +++ b/src/gui/kernel/qplatformscreen.cpp
-@@ -194,6 +194,20 @@ QDpi QPlatformScreen::logicalDpi() const
+@@ -197,6 +197,20 @@ QDpi QPlatformScreen::logicalDpi() const
                  25.4 * s.height() / ps.height());
  }
  
@@ -396,7 +396,7 @@ index b7b312e89e..07a2231228 100644
      Reimplement this function in subclass to return the device pixel ratio
      for the screen. This is the ratio between physical pixels and the
 diff --git a/src/gui/kernel/qplatformscreen.h b/src/gui/kernel/qplatformscreen.h
-index e9d64c8a29..63b5d5a4a7 100644
+index e9d64c8a..63b5d5a4 100644
 --- a/src/gui/kernel/qplatformscreen.h
 +++ b/src/gui/kernel/qplatformscreen.h
 @@ -113,6 +113,7 @@ public:
@@ -408,7 +408,7 @@ index e9d64c8a29..63b5d5a4a7 100644
      virtual qreal pixelDensity()  const;
  
 diff --git a/src/plugins/platforms/android/qandroidplatformscreen.cpp b/src/plugins/platforms/android/qandroidplatformscreen.cpp
-index 7dc8bb8080..80757c2135 100644
+index 7dc8bb80..80757c21 100644
 --- a/src/plugins/platforms/android/qandroidplatformscreen.cpp
 +++ b/src/plugins/platforms/android/qandroidplatformscreen.cpp
 @@ -401,15 +401,17 @@ void QAndroidPlatformScreen::doRedraw()
@@ -433,7 +433,7 @@ index 7dc8bb8080..80757c2135 100644
  
  Qt::ScreenOrientation QAndroidPlatformScreen::orientation() const
 diff --git a/src/plugins/platforms/android/qandroidplatformscreen.h b/src/plugins/platforms/android/qandroidplatformscreen.h
-index f15aeae3fd..5dc158e351 100644
+index f15aeae3..5dc158e3 100644
 --- a/src/plugins/platforms/android/qandroidplatformscreen.h
 +++ b/src/plugins/platforms/android/qandroidplatformscreen.h
 @@ -103,7 +103,7 @@ protected:
@@ -446,7 +446,7 @@ index f15aeae3fd..5dc158e351 100644
      Qt::ScreenOrientation nativeOrientation() const override;
      void surfaceChanged(JNIEnv *env, jobject surface, int w, int h) override;
 diff --git a/src/plugins/platforms/cocoa/qcocoascreen.h b/src/plugins/platforms/cocoa/qcocoascreen.h
-index 9ded98df32..a73b97c771 100644
+index 9ded98df..a73b97c7 100644
 --- a/src/plugins/platforms/cocoa/qcocoascreen.h
 +++ b/src/plugins/platforms/cocoa/qcocoascreen.h
 @@ -64,6 +64,7 @@ public:
@@ -458,7 +458,7 @@ index 9ded98df32..a73b97c771 100644
      QString name() const override { return m_name; }
      QPlatformCursor *cursor() const override { return m_cursor; }
 diff --git a/src/plugins/platforms/windows/qwindowsscreen.cpp b/src/plugins/platforms/windows/qwindowsscreen.cpp
-index 8a5f0e6577..ebde684038 100644
+index b70b0bbe..e34a8e3c 100644
 --- a/src/plugins/platforms/windows/qwindowsscreen.cpp
 +++ b/src/plugins/platforms/windows/qwindowsscreen.cpp
 @@ -254,15 +254,6 @@ QWindow *QWindowsScreen::windowAt(const QPoint &screenPoint, unsigned flags)
@@ -478,7 +478,7 @@ index 8a5f0e6577..ebde684038 100644
      \brief Determine siblings in a virtual desktop system.
  
 diff --git a/src/plugins/platforms/windows/qwindowsscreen.h b/src/plugins/platforms/windows/qwindowsscreen.h
-index 33c9effa2a..a7b1c64e29 100644
+index 33c9effa..a7b1c64e 100644
 --- a/src/plugins/platforms/windows/qwindowsscreen.h
 +++ b/src/plugins/platforms/windows/qwindowsscreen.h
 @@ -87,7 +87,7 @@ public:
@@ -491,7 +491,7 @@ index 33c9effa2a..a7b1c64e29 100644
      qreal refreshRate() const override { return m_data.refreshRateHz; }
      QString name() const override { return m_data.name; }
 diff --git a/src/plugins/platforms/xcb/qxcbscreen.cpp b/src/plugins/platforms/xcb/qxcbscreen.cpp
-index 57dbdc9bec..9af0794d29 100644
+index 57dbdc9b..9af0794d 100644
 --- a/src/plugins/platforms/xcb/qxcbscreen.cpp
 +++ b/src/plugins/platforms/xcb/qxcbscreen.cpp
 @@ -671,11 +671,6 @@ QDpi QXcbScreen::logicalDpi() const
@@ -520,7 +520,7 @@ index 57dbdc9bec..9af0794d29 100644
      m_availableGeometry = geometry & m_virtualDesktop->workArea();
      QWindowSystemInterface::handleScreenGeometryChange(QPlatformScreen::screen(), m_geometry, m_availableGeometry);
 diff --git a/src/plugins/platforms/xcb/qxcbscreen.h b/src/plugins/platforms/xcb/qxcbscreen.h
-index be6c45e415..3f619d71c2 100644
+index be6c45e4..3f619d71 100644
 --- a/src/plugins/platforms/xcb/qxcbscreen.h
 +++ b/src/plugins/platforms/xcb/qxcbscreen.h
 @@ -161,7 +161,7 @@ public:
@@ -541,7 +541,7 @@ index be6c45e415..3f619d71c2 100644
  };
  
 diff --git a/tests/manual/highdpi/highdpi.pro b/tests/manual/highdpi/highdpi.pro
-index 9db083cd82..2de8ed3bb5 100644
+index 9db083cd..2de8ed3b 100644
 --- a/tests/manual/highdpi/highdpi.pro
 +++ b/tests/manual/highdpi/highdpi.pro
 @@ -15,3 +15,4 @@ HEADERS += \
@@ -550,5 +550,5 @@ index 9db083cd82..2de8ed3bb5 100644
  
 +DEFINES += HAVE_SCREEN_BASE_DPI
 -- 
-2.18.0.windows.1
+2.22.0.windows.1
 

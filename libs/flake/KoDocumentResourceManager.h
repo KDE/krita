@@ -76,7 +76,9 @@ enum DocumentResource {
     HandleRadius,           ///< The handle radius used for drawing handles of any kind
     GrabSensitivity,        ///< The grab sensitivity used for grabbing handles of any kind
     MarkerCollection,       ///< The collection holding all markers
-    ShapeController,       ///< The KoShapeController for the document
+    GlobalShapeController,  ///< The KoShapeController for the document
+    DocumentResolution,     ///< Pixels-per-inch resoluton of the document
+    DocumentRectInPixels,   ///< Bounds of the document in pixels
 
     KarbonStart = 1000,      ///< Base number for Karbon specific values.
     KexiStart = 2000,        ///< Base number for Kexi specific values.
@@ -229,8 +231,16 @@ enum DocumentResource {
     KoDocumentBase *odfDocument() const;
     void setOdfDocument(KoDocumentBase *currentDocument);
 
-    KoShapeController *shapeController() const;
-    void setShapeController(KoShapeController *shapeController);
+    qreal documentResolution() const;
+    QRectF documentRectInPixels() const;
+
+    /**
+     * TODO: remove these methods after legacy ODF text shape is removed.
+     * New code must use documentResolution() and documentRectInPixels()
+     * instead.
+     */
+    Q_DECL_DEPRECATED KoShapeController *globalShapeController() const;
+    Q_DECL_DEPRECATED void setGlobalShapeController(KoShapeController *globalShapeController);
 
 Q_SIGNALS:
     /**

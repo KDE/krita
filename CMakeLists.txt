@@ -4,7 +4,7 @@ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
-set(MIN_QT_VERSION 5.6.0)
+set(MIN_QT_VERSION 5.9.0)
 
 set(MIN_FRAMEWORKS_VERSION 5.18.0)
 
@@ -61,7 +61,7 @@ if (APPLE)
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
-    add_definitions(-Wno-suggest-override)
+    add_definitions(-Wno-suggest-override -Wextra)
 endif()
 
  ######################
@@ -72,11 +72,11 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "4.2.0-alpha")
+set(KRITA_VERSION_STRING "4.3.0-prealpha")
 # Major version: 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MAJOR 4)
 # Minor version: 0 for 4.0, 1 for 4.1, etc.
-set(KRITA_STABLE_VERSION_MINOR 2)
+set(KRITA_STABLE_VERSION_MINOR 3)
 # Bugfix release version, or 0 for before the first stable release
 set(KRITA_VERSION_RELEASE 0)
 # the 4th digit, really only used for the Windows installer:
@@ -278,6 +278,7 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         ItemModels
         ItemViews
         WindowSystem
+        Archive
 )
 
 # KConfig deprecated authorizeKAction. In order to be warning free,
@@ -723,12 +724,12 @@ if(HAVE_VC)
     include (VcMacros)
 
     if(Vc_COMPILER_IS_CLANG)
-        set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast")
+        set(ADDITIONAL_VC_FLAGS "-ffp-contract=fast")
         if(NOT WIN32)
             set(ADDITIONAL_VC_FLAGS "${ADDITIONAL_VC_FLAGS} -fPIC")
         endif()
     elseif (NOT MSVC)
-        set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast")
+        set(ADDITIONAL_VC_FLAGS "-fabi-version=0 -ffp-contract=fast")
         if(NOT WIN32)
             set(ADDITIONAL_VC_FLAGS "${ADDITIONAL_VC_FLAGS} -fPIC")
         endif()
@@ -811,7 +812,9 @@ include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}
 
 add_subdirectory(libs)
 add_subdirectory(plugins)
-add_subdirectory(benchmarks)
+if (BUILD_TESTING)
+    add_subdirectory(benchmarks)
+endif()
 add_subdirectory(krita)
 
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )

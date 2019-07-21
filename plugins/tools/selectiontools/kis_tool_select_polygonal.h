@@ -49,7 +49,7 @@ class KisToolSelectPolygonal : public KisToolSelectBase<__KisToolSelectPolygonal
     Q_OBJECT
 public:
     KisToolSelectPolygonal(KoCanvasBase* canvas);
-    void resetCursorStyle();
+    void resetCursorStyle() override;
 };
 
 
@@ -73,7 +73,7 @@ public:
         return new KisToolSelectPolygonal(canvas);
     }
 
-    QList<QAction *> createActionsImpl()
+    QList<QAction *> createActionsImpl() override
     {
         KisActionRegistry *actionRegistry = KisActionRegistry::instance();
         QList<QAction *> actions = KisSelectionToolFactoryBase::createActionsImpl();

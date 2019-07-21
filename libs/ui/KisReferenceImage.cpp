@@ -22,6 +22,9 @@
 #include <QImage>
 #include <QMessageBox>
 #include <QPainter>
+#include <QApplication>
+#include <QClipboard>
+#include <QSharedData>
 
 #include <kundo2command.h>
 #include <KoStore.h>
@@ -33,8 +36,10 @@
 #include <SvgUtil.h>
 #include <libs/flake/svg/parsers/SvgTransformParser.h>
 #include <libs/brush/kis_qimage_pyramid.h>
+#include <utils/KisClipboardUtil.h>
 
-struct KisReferenceImage::Private {
+struct KisReferenceImage::Private : public QSharedData
+{
     // Filename within .kra (for embedding)
     QString internalFilename;
 
@@ -52,6 +57,11 @@ struct KisReferenceImage::Private {
     bool loadFromFile() {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!externalFilename.isEmpty(), false);
         return image.load(externalFilename);
+    }
+
+    bool loadFromClipboard() {
+        image = KisClipboardUtil::getImageFromClipboard();
+        return !image.isNull();
     }
 
     void updateCache() {
@@ -114,8 +124,8 @@ KisReferenceImage::KisReferenceImage()
 }
 
 KisReferenceImage::KisReferenceImage(const KisReferenceImage &rhs)
-    : KoTosContainer(new KoTosContainerPrivate(*rhs.d_func(), this))
-    , d(new Private(*rhs.d))
+    : KoTosContainer(rhs)
+    , d(rhs.d)
 {}
 
 KisReferenceImage::~KisReferenceImage()
@@ -139,6 +149,23 @@ KisReferenceImage * KisReferenceImage::fromFile(const QString &filename, const K
         }
 
         return nullptr;
+    }
+
+    return reference;
+}
+
+KisReferenceImage *KisReferenceImage::fromClipboard(const KisCoordinatesConverter &converter)
+{
+    KisReferenceImage *reference = new KisReferenceImage();
+    bool ok = reference->d->loadFromClipboard();
+
+    if (ok) {
+        QRect r = QRect(QPoint(), reference->d->image.size());
+        QSizeF size = converter.imageToDocument(r).size();
+        reference->setSize(size);
+    } else {
+        delete reference;
+        reference = nullptr;
     }
 
     return reference;

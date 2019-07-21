@@ -231,6 +231,15 @@ template<> void copyEventHack(QTabletEvent *src, QScopedPointer<QEvent> &dst) {
     dst.reset(tmp);
 }
 
+template<> void copyEventHack(QTouchEvent *src, QScopedPointer<QEvent> &dst) {
+    QTouchEvent *tmp = new QTouchEvent(src->type(),
+                                       src->device(),
+                                       src->modifiers(),
+                                       src->touchPointStates(),
+                                       src->touchPoints());
+    tmp->setTimestamp(src->timestamp());
+    dst.reset(tmp);
+}
 
 
 template <class Event>
@@ -241,7 +250,8 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
      * has a correct type.
      */
     static_assert(std::is_same<Event, QMouseEvent>::value ||
-                  std::is_same<Event, QTabletEvent>::value,
+                  std::is_same<Event, QTabletEvent>::value ||
+                  std::is_same<Event, QTouchEvent>::value,
                   "event should be a mouse or a tablet event");
 
     bool retval = false;
@@ -250,7 +260,8 @@ bool KisInputManager::compressMoveEventCommon(Event *event)
      * Compress the events if the tool doesn't need high resolution input
      */
     if ((event->type() == QEvent::MouseMove ||
-         event->type() == QEvent::TabletMove) &&
+         event->type() == QEvent::TabletMove ||
+         event->type() == QEvent::TouchUpdate) &&
             (!d->matcher.supportsHiResInputEvents() ||
              d->testingCompressBrushEvents)) {
 
@@ -509,12 +520,19 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         d->blockMouseEvents();
         //Reset signal compressor to prevent processing events before press late
         d->resetCompressor();
-        d->eatOneMousePress();
+
 
 #if defined Q_OS_LINUX && !defined QT_HAS_ENTER_LEAVE_PATCH
         // remove this hack when this patch is integrated:
         // https://codereview.qt-project.org/#/c/255384/
         event->setAccepted(false);
+        d->eatOneMousePress();
+#elif defined Q_OS_WIN32
+        /**
+         * Windows is the only platform that synthesizes mouse events for
+         * the tablet on OS-level, that is, even when we accept the event
+         */
+        d->eatOneMousePress();
 #endif
 
         break;
@@ -569,43 +587,101 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::TouchBegin:
     {
         if (startTouch(retval)) {
-            QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
+            QTouchEvent *touchEvent = static_cast<QTouchEvent *> (event);
             KisAbstractInputAction::setInputManager(this);
-            retval = d->matcher.touchBeginEvent(tevent);
+
+            if (!KisConfig(true).disableTouchOnCanvas()
+                && touchEvent->touchPoints().count() == 1)
+            {
+                d->previousPos = touchEvent->touchPoints().at(0).pos();
+                d->buttonPressed = false;
+            }
+            else {
+                retval = d->matcher.touchBeginEvent(touchEvent);
+            }
             event->accept();
         }
+
+        // if the event isn't handled, Qt starts to send MouseEvents
+        if (!KisConfig(true).disableTouchOnCanvas())
+            retval = true;
         break;
     }
+
     case QEvent::TouchUpdate:
     {
-        QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
+        QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
+
 #ifdef Q_OS_MAC
         int count = 0;
-        Q_FOREACH (const QTouchEvent::TouchPoint &point, tevent->touchPoints()) {
+        Q_FOREACH (const QTouchEvent::TouchPoint &point, touchEvent->touchPoints()) {
             if (point.state() != Qt::TouchPointReleased) {
                 count++;
             }
         }
 
-        if (count < 2 && tevent->touchPoints().length() > count) {
+        if (count < 2 && touchEvent->touchPoints().length() > count) {
             d->touchHasBlockedPressEvents = false;
-            retval = d->matcher.touchEndEvent(tevent);
+            retval = d->matcher.touchEndEvent(touchEvent);
         } else {
 #endif
-            d->touchHasBlockedPressEvents = KisConfig(true).disableTouchOnCanvas();
-            KisAbstractInputAction::setInputManager(this);
-            retval = d->matcher.touchUpdateEvent(tevent);
+            QPointF currentPos = touchEvent->touchPoints().at(0).pos();
+            if (d->touchStrokeStarted || (!KisConfig(true).disableTouchOnCanvas()
+                && !d->touchHasBlockedPressEvents
+                && touchEvent->touchPoints().count() == 1
+                && touchEvent->touchPointStates() != Qt::TouchPointStationary
+                && (qAbs(currentPos.x() - d->previousPos.x()) > 1		// stop wobbiliness which Qt sends us
+                ||  qAbs(currentPos.y() - d->previousPos.y()) > 1)))
+            {
+                d->previousPos = currentPos;
+                if (!d->buttonPressed)
+                {
+                    // we start it here not in TouchBegin, because Qt::TouchPointStationary doesn't work with hpdi devices.
+                    retval = d->matcher.buttonPressed(Qt::LeftButton, touchEvent);
+                    d->buttonPressed = true;
+                    break;
+                }
+
+                // if it is a full-fledged stroke, then ignore (currentPos.x - previousPos.x)
+                d->touchStrokeStarted = true;
+                retval = compressMoveEventCommon(touchEvent);
+                d->blockMouseEvents();
+                d->resetCompressor();
+            }
+            else if (!d->touchStrokeStarted){
+                KisAbstractInputAction::setInputManager(this);
+
+                retval = d->matcher.touchUpdateEvent(touchEvent);
+                d->touchHasBlockedPressEvents = retval;
+            }
 #ifdef Q_OS_MACOS
         }
 #endif
+        // if the event isn't handled, Qt starts to send MouseEvents
+        if (!KisConfig(true).disableTouchOnCanvas())
+            retval = true;
+
         event->accept();
         break;
     }
+
     case QEvent::TouchEnd:
     {
         endTouch();
-        QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
-        retval = d->matcher.touchEndEvent(tevent);
+        QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
+        retval = d->matcher.touchEndEvent(touchEvent);
+        if (d->touchStrokeStarted)
+        {
+            retval = d->matcher.buttonReleased(Qt::LeftButton, touchEvent);
+
+            d->previousPos = {0, 0};
+            d->touchStrokeStarted = false; // stroke ended
+        }
+
+        // if the event isn't handled, Qt starts to send MouseEvents
+        if (!KisConfig(true).disableTouchOnCanvas())
+            retval = true;
+
         event->accept();
         break;
     }
@@ -650,7 +726,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
 bool KisInputManager::startTouch(bool &retval)
 {
-    d->touchHasBlockedPressEvents = KisConfig(true).disableTouchOnCanvas();
     // Touch rejection: if touch is disabled on canvas, no need to block mouse press events
     if (KisConfig(true).disableTouchOnCanvas()) {
         d->eatOneMousePress();

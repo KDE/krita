@@ -54,8 +54,7 @@ void KoResourceManager::setResource(int key, const QVariant &value)
             m_resources[sourceKey] = newSourceValue;
             notifyResourceChanged(sourceKey, newSourceValue);
         }
-
-    } else {
+	} else if (m_resources.contains(key)) {
         const QVariant oldValue = m_resources.value(key, QVariant());
         m_resources[key] = value;
 
@@ -66,7 +65,14 @@ void KoResourceManager::setResource(int key, const QVariant &value)
         if (oldValue != value) {
             notifyResourceChanged(key, value);
         }
+    } else {
+        m_resources[key] = value;
+        if (m_updateMediators.contains(key)) {
+            m_updateMediators[key]->connectResource(value);
+        }
+        notifyResourceChanged(key, value);
     }
+
 }
 
 void KoResourceManager::notifyResourceChanged(int key, const QVariant &value)

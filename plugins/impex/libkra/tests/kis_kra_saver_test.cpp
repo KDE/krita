@@ -55,6 +55,9 @@
 
 #include <KoResourcePaths.h>
 #include  <sdk/tests/kistest.h>
+#include <filestest.h>
+
+const QString KraMimetype = "application/x-krita";
 
 void KisKraSaverTest::initTestCase()
 {
@@ -538,6 +541,12 @@ void KisKraSaverTest::testRoundTripShapeSelection()
     QVERIFY(newMask->selection()->hasShapeSelection());
 
     QVERIFY(chk.testPassed());
+}
+
+
+void KisKraSaverTest::testExportToReadonly()
+{
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), KraMimetype);
 }
 
 KISTEST_MAIN(KisKraSaverTest)

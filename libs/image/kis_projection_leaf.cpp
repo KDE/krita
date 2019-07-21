@@ -262,12 +262,14 @@ bool KisProjectionLeaf::isRoot() const
 
 bool KisProjectionLeaf::isLayer() const
 {
-    return (bool)qobject_cast<const KisLayer*>(m_d->node.data());
+    return (bool)qobject_cast<const KisLayer*>(m_d->node.data()) &&
+        !m_d->node->isFakeNode();
 }
 
 bool KisProjectionLeaf::isMask() const
 {
-    return (bool)qobject_cast<const KisMask*>(m_d->node.data());
+    return (bool)qobject_cast<const KisMask*>(m_d->node.data()) &&
+        !m_d->node->isFakeNode();
 }
 
 bool KisProjectionLeaf::canHaveChildLayers() const
@@ -340,6 +342,12 @@ QBitArray KisProjectionLeaf::channelFlags() const
 bool KisProjectionLeaf::isStillInGraph() const
 {
     return (bool)m_d->node->graphListener();
+}
+
+bool KisProjectionLeaf::hasClones() const
+{
+    KisLayer *layer = qobject_cast<KisLayer*>(m_d->node.data());
+    return layer ? layer->hasClones() : false;
 }
 
 bool KisProjectionLeaf::isDroppedMask() const

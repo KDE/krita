@@ -29,7 +29,7 @@
 class KoResource;
 class KoColorSet;
 
-class KisPaletteListWidgetPrivate;
+struct KisPaletteListWidgetPrivate;
 
 class KRITAWIDGETS_EXPORT KisPaletteListWidget : public QWidget
 {

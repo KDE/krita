@@ -57,7 +57,6 @@ KisGeneratorLayer::KisGeneratorLayer(KisImageWSP image,
       m_d(new Private)
 {
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
-    update();
 }
 
 KisGeneratorLayer::KisGeneratorLayer(const KisGeneratorLayer& rhs)

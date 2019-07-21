@@ -29,6 +29,7 @@
 #include <kis_filter_mask.h>
 #include <kis_node.h>
 #include <kis_layer.h>
+#include <kis_paint_layer.h>
 #include <KisViewManager.h>
 #include <kis_config.h>
 
@@ -131,8 +132,8 @@ void KisDlgFilter::startApplyingFilter(KisFilterConfigurationSP config)
 {
     if (!d->uiFilterDialog.filterSelection->configuration()) return;
 
-    if (d->node->inherits("KisLayer")) {
-        config->setChannelFlags(qobject_cast<KisLayer*>(d->node.data())->channelFlags());
+    if (d->node->inherits("KisPaintLayer")) {
+        config->setChannelFlags(qobject_cast<KisPaintLayer*>(d->node.data())->channelLockFlags());
     }
 
     d->filterManager->apply(config);
@@ -140,8 +141,11 @@ void KisDlgFilter::startApplyingFilter(KisFilterConfigurationSP config)
 
 void KisDlgFilter::updatePreview()
 {
-    if (!d->uiFilterDialog.filterSelection->configuration()) return;
+    KisFilterConfigurationSP config = d->uiFilterDialog.filterSelection->configuration();
+    if (!config) return;
 
+    bool maskCreationAllowed = !d->currentFilter || d->currentFilter->configurationAllowedForMask(config);
+    d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(maskCreationAllowed);
 
     if (d->uiFilterDialog.checkBoxPreview->isChecked()) {
         KisFilterConfigurationSP config(d->uiFilterDialog.filterSelection->configuration());

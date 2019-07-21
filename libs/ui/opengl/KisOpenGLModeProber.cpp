@@ -113,16 +113,55 @@ private:
     QSurfaceFormat m_oldFormat;
 };
 
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+QString qEnvironmentVariable(const char *varName) {
+    return qgetenv(varName);
+}
+#endif
+
+struct EnvironmentSetter
+{
+    EnvironmentSetter(const QLatin1String &env, const QString &value)
+        : m_env(env)
+    {
+        if (qEnvironmentVariableIsEmpty(m_env.latin1())) {
+            m_oldValue = qgetenv(env.latin1());
+        }
+        if (!value.isEmpty()) {
+            qputenv(env.latin1(), value.toLatin1());
+        } else {
+            qunsetenv(env.latin1());
+        }
+    }
+
+    ~EnvironmentSetter() {
+        if (m_oldValue) {
+            qputenv(m_env.latin1(), (*m_oldValue).toLatin1());
+        } else {
+            qunsetenv(m_env.latin1());
+        }
+    }
+
+private:
+    const QLatin1String m_env;
+    boost::optional<QString> m_oldValue;
+};
+
 }
 
 boost::optional<KisOpenGLModeProber::Result>
-KisOpenGLModeProber::probeFormat(const QSurfaceFormat &format, bool adjustGlobalState)
+KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig,
+                                 bool adjustGlobalState)
 {
+    const QSurfaceFormat &format = rendererConfig.format;
+
     QScopedPointer<AppAttributeSetter> sharedContextSetter;
     QScopedPointer<AppAttributeSetter> glSetter;
     QScopedPointer<AppAttributeSetter> glesSetter;
     QScopedPointer<SurfaceFormatSetter> formatSetter;
-    QScopedPointer<QApplication> application;
+    QScopedPointer<EnvironmentSetter> rendererSetter;
+    QScopedPointer<QGuiApplication> application;
 
     int argc = 1;
     QByteArray probeAppName("krita");
@@ -138,8 +177,12 @@ KisOpenGLModeProber::probeFormat(const QSurfaceFormat &format, bool adjustGlobal
             glesSetter.reset(new AppAttributeSetter(Qt::AA_UseOpenGLES, format.renderableType() == QSurfaceFormat::OpenGLES));
         }
 
+        rendererSetter.reset(new EnvironmentSetter(QLatin1String("QT_ANGLE_PLATFORM"), angleRendererToString(rendererConfig.angleRenderer)));
         formatSetter.reset(new SurfaceFormatSetter(format));
-        application.reset(new QApplication(argc, &argv));
+
+        QGuiApplication::setDesktopSettingsAware(false);
+        application.reset(new QGuiApplication(argc, &argv));
+        QGuiApplication::setDesktopSettingsAware(true);
     }
 
     QWindow surface;
@@ -212,7 +255,11 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
         format->setRedBufferSize(8);
         format->setGreenBufferSize(8);
         format->setBlueBufferSize(8);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         format->setAlphaBufferSize(8);
+#else
+        format->setAlphaBufferSize(0);
+#endif
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         // TODO: check if we can use real sRGB space here
@@ -244,6 +291,27 @@ bool KisOpenGLModeProber::isFormatHDR(const QSurfaceFormat &format)
     Q_UNUSED(format);
     return false;
 #endif
+}
+
+QString KisOpenGLModeProber::angleRendererToString(KisOpenGL::AngleRenderer renderer)
+{
+    QString value;
+
+    switch (renderer) {
+    case KisOpenGL::AngleRendererDefault:
+        break;
+    case KisOpenGL::AngleRendererD3d9:
+        value = "d3d9";
+        break;
+    case KisOpenGL::AngleRendererD3d11:
+        value = "d3d11";
+        break;
+    case KisOpenGL::AngleRendererD3d11Warp:
+        value = "warp";
+        break;
+    };
+
+    return value;
 }
 
 KisOpenGLModeProber::Result::Result(QOpenGLContext &context) {

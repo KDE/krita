@@ -1,7 +1,7 @@
-From 880c9387d5e889e52e0db22f629443c1006988f0 Mon Sep 17 00:00:00 2001
+From d95b6e9a4029a46acbe5df4b068de8a646887430 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Wed, 3 Apr 2019 18:37:56 +0300
-Subject: [PATCH] Implement a switch for tablet API on Windows
+Subject: [PATCH 10/17] Implement a switch for tablet API on Windows
 
 Qt has support for two tablet APIs: WinTab and Windows Pointer API.
 The former one is used in professional graphical tablet devices,
@@ -35,7 +35,7 @@ testing this attribute.
  2 files changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/src/corelib/global/qnamespace.h b/src/corelib/global/qnamespace.h
-index dec2c446..3ab99219 100644
+index dec2c44637..3ab9921986 100644
 --- a/src/corelib/global/qnamespace.h
 +++ b/src/corelib/global/qnamespace.h
 @@ -525,6 +525,7 @@ public:
@@ -47,7 +47,7 @@ index dec2c446..3ab99219 100644
          // Add new attributes before this line
          AA_AttributeCount
 diff --git a/src/plugins/platforms/windows/qwindowsintegration.cpp b/src/plugins/platforms/windows/qwindowsintegration.cpp
-index 2c90b048..c415cf28 100644
+index 5c1fa00088..d2d12ff7e5 100644
 --- a/src/plugins/platforms/windows/qwindowsintegration.cpp
 +++ b/src/plugins/platforms/windows/qwindowsintegration.cpp
 @@ -236,10 +236,16 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL

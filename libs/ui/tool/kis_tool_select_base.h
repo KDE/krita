@@ -137,6 +137,10 @@ public:
             &m_widgetHelper, SLOT(slotIntersectModeRequested()));
 
         updateActionShortcutToolTips();
+
+        if (isPixelOnly() && m_widgetHelper.optionWidget()) {
+            m_widgetHelper.optionWidget()->enablePixelOnlySelectionMode();
+        }
     }
 
     void deactivate()
@@ -155,6 +159,9 @@ public:
         this->connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(resetCursorStyle()));
 
         updateActionShortcutToolTips();
+        if (isPixelOnly() && m_widgetHelper.optionWidget()) {
+            m_widgetHelper.optionWidget()->enablePixelOnlySelectionMode();
+        }
 
         return m_widgetHelper.optionWidget();
     }
@@ -293,11 +300,11 @@ public:
                 KisStrokeStrategy *strategy = new MoveStrokeStrategy({selectionMask}, this->image().data(), this->image().data());
                 m_moveStrokeId = this->image()->startStroke(strategy);
                 m_dragStartPos = pos;
-
+                m_didMove = true;
                 return;
             }
         }
-
+        m_didMove = false;
         keysAtStart = event->modifiers();
 
         setAlternateSelectionAction(KisSelectionModifierMapper::map(keysAtStart));
@@ -349,6 +356,10 @@ public:
         return m_moveStrokeId;
     }
 
+    bool selectionDidMove() const {
+        return m_didMove;
+    }
+
     QMenu* popupActionsMenu() {
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, 0);
@@ -362,11 +373,16 @@ protected:
     KisSelectionToolConfigWidgetHelper m_widgetHelper;
     SelectionAction m_selectionActionAlternate;
 
+    virtual bool isPixelOnly() const {
+        return false;
+    }
+
 private:
     Qt::KeyboardModifiers keysAtStart;
 
     QPointF m_dragStartPos;
     KisStrokeId m_moveStrokeId;
+    bool m_didMove = false;
 
     KisSignalAutoConnectionsStore m_modeConnections;
 };

@@ -521,7 +521,6 @@ void KisAnimationPlayer::uploadFrame(int frame, bool forceSyncAudio)
     if (m_d->canvas->frameCache() &&
         m_d->canvas->frameCache()->shouldUploadNewFrame(frame, m_d->lastPaintedFrame)) {
 
-
         if (m_d->canvas->frameCache()->uploadFrame(frame)) {
             m_d->canvas->updateCanvas();
 
@@ -531,14 +530,17 @@ void KisAnimationPlayer::uploadFrame(int frame, bool forceSyncAudio)
         }
     }
 
-    if (useFallbackUploadMethod) {
+    if (useFallbackUploadMethod &&
+        m_d->canvas->image()->animationInterface()->hasAnimation()) {
+
         m_d->useFastFrameUpload = false;
 
-        m_d->canvas->image()->barrierLock(true);
-        m_d->canvas->image()->unlock();
+        if (m_d->canvas->image()->tryBarrierLock(true)) {
+            m_d->canvas->image()->unlock();
 
-        // no OpenGL cache or the frame just not cached yet
-        animationInterface->switchCurrentTimeAsync(frame);
+            // no OpenGL cache or the frame just not cached yet
+            animationInterface->switchCurrentTimeAsync(frame);
+        }
     }
 
     if (!m_d->realFpsTimer.isValid()) {

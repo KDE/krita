@@ -37,7 +37,7 @@ public:
     void beginPrimaryAction(KoPointerEvent *event) override;
     void paint(QPainter&, const KoViewConverter &) override {}
     QWidget* createOptionWidget() override;
-    void resetCursorStyle();
+    void resetCursorStyle() override;
 
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
@@ -45,6 +45,7 @@ public Q_SLOTS:
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
+    bool isPixelOnly() const override { return true; }
 
 private:
     int m_fuzziness;

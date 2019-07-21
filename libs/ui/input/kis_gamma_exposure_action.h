@@ -50,7 +50,7 @@ public:
     void deactivate(int shortcut) override;
 
     void begin(int shortcut, QEvent *event = 0) override;
-    void cursorMoved(const QPointF &lastPos, const QPointF &pos) override;
+    void cursorMovedAbsolute(const QPointF &lastPos, const QPointF &pos) override;
 
     bool isShortcutRequired(int shortcut) const override;
 

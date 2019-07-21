@@ -1,7 +1,7 @@
-From 8e4d9b59af6b64345dd2a23656cf157ad76614eb Mon Sep 17 00:00:00 2001
+From 8f8d32fd20b774f4857b557be665a243870edd8d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
 Date: Sat, 7 Oct 2017 01:35:29 +0200
-Subject: [PATCH 36/36] Add high-DPI scale factor rounding policy C++ API
+Subject: [PATCH 27/27] Add high-DPI scale factor rounding policy C++ API
 
 This API enables tuning of how Qt rounds fractional scale factors, and
 corresponds to the QT_SCALE_FACTOR_ROUNDING_POLICY environment
@@ -26,7 +26,7 @@ Change-Id: Ic360f26a173caa757e4ebde35ce08a6b74290b7d
  7 files changed, 106 insertions(+), 31 deletions(-)
 
 diff --git a/src/corelib/global/qnamespace.h b/src/corelib/global/qnamespace.h
-index 3ab9921986..fea3d4d8da 100644
+index 3ab99219..fea3d4d8 100644
 --- a/src/corelib/global/qnamespace.h
 +++ b/src/corelib/global/qnamespace.h
 @@ -1728,6 +1728,15 @@ public:
@@ -54,7 +54,7 @@ index 3ab9921986..fea3d4d8da 100644
  #endif // Q_DOC
  
 diff --git a/src/corelib/global/qnamespace.qdoc b/src/corelib/global/qnamespace.qdoc
-index 5bba8c5fe5..a3ca70a74d 100644
+index 5bba8c5f..a3ca70a7 100644
 --- a/src/corelib/global/qnamespace.qdoc
 +++ b/src/corelib/global/qnamespace.qdoc
 @@ -3252,3 +3252,25 @@
@@ -84,7 +84,7 @@ index 5bba8c5fe5..a3ca70a74d 100644
 +  \value PassThrough Don't round.
 +*/
 diff --git a/src/gui/kernel/qguiapplication.cpp b/src/gui/kernel/qguiapplication.cpp
-index fd01f8bb7b..3541c1ae59 100644
+index 4d61d9fd..681cbd85 100644
 --- a/src/gui/kernel/qguiapplication.cpp
 +++ b/src/gui/kernel/qguiapplication.cpp
 @@ -146,6 +146,8 @@ QString QGuiApplicationPrivate::styleOverride;
@@ -105,7 +105,7 @@ index fd01f8bb7b..3541c1ae59 100644
      QGuiApplicationPrivate::highDpiScalingUpdated = false;
      QGuiApplicationPrivate::currentDragWindow = nullptr;
      QGuiApplicationPrivate::tabletDevicePoints.clear();
-@@ -3448,6 +3452,46 @@ Qt::ApplicationState QGuiApplication::applicationState()
+@@ -3449,6 +3453,46 @@ Qt::ApplicationState QGuiApplication::applicationState()
      return QGuiApplicationPrivate::applicationState;
  }
  
@@ -153,7 +153,7 @@ index fd01f8bb7b..3541c1ae59 100644
      \since 5.2
      \fn void QGuiApplication::applicationStateChanged(Qt::ApplicationState state)
 diff --git a/src/gui/kernel/qguiapplication.h b/src/gui/kernel/qguiapplication.h
-index 02dffef0fe..2814ba1d1b 100644
+index 02dffef0..2814ba1d 100644
 --- a/src/gui/kernel/qguiapplication.h
 +++ b/src/gui/kernel/qguiapplication.h
 @@ -156,6 +156,9 @@ public:
@@ -167,7 +167,7 @@ index 02dffef0fe..2814ba1d1b 100644
      bool notify(QObject *, QEvent *) override;
  
 diff --git a/src/gui/kernel/qguiapplication_p.h b/src/gui/kernel/qguiapplication_p.h
-index 042a36c31f..7962bb0177 100644
+index 042a36c3..7962bb01 100644
 --- a/src/gui/kernel/qguiapplication_p.h
 +++ b/src/gui/kernel/qguiapplication_p.h
 @@ -216,6 +216,7 @@ public:
@@ -179,7 +179,7 @@ index 042a36c31f..7962bb0177 100644
      static QPointer<QWindow> currentDragWindow;
  
 diff --git a/src/gui/kernel/qhighdpiscaling.cpp b/src/gui/kernel/qhighdpiscaling.cpp
-index 52c0665b5b..29b6d7e7c2 100644
+index 52c0665b..29b6d7e7 100644
 --- a/src/gui/kernel/qhighdpiscaling.cpp
 +++ b/src/gui/kernel/qhighdpiscaling.cpp
 @@ -329,24 +329,24 @@ static QByteArray joinEnumValues(const EnumLookup<EnumType> *i1, const EnumLooku
@@ -289,7 +289,7 @@ index 52c0665b5b..29b6d7e7c2 100644
  
      return roundedFactor;
 diff --git a/src/gui/kernel/qhighdpiscaling_p.h b/src/gui/kernel/qhighdpiscaling_p.h
-index d3f71854a8..ae361a9ddb 100644
+index d3f71854..ae361a9d 100644
 --- a/src/gui/kernel/qhighdpiscaling_p.h
 +++ b/src/gui/kernel/qhighdpiscaling_p.h
 @@ -73,16 +73,6 @@ typedef QPair<qreal, qreal> QDpi;
@@ -310,5 +310,5 @@ index d3f71854a8..ae361a9ddb 100644
          NotSet,
          Enabled,
 -- 
-2.18.0.windows.1
+2.22.0.windows.1
 

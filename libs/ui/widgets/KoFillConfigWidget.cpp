@@ -194,7 +194,7 @@ public:
     KisSignalCompressor colorChangedCompressor;
     KisAcyclicSignalConnector shapeChangedAcyclicConnector;
     KisAcyclicSignalConnector resourceManagerAcyclicConnector;
-    KoFillConfigWidget::StyleButton selectedFillIndex;
+    KoFillConfigWidget::StyleButton selectedFillIndex {KoFillConfigWidget::None};
 
     QSharedPointer<KoStopGradient> activeGradient;
     KisSignalCompressor gradientChangedCompressor;
@@ -877,7 +877,7 @@ void KoFillConfigWidget::updateWidgetComponentVisbility()
             break;
         case KoFillConfigWidget::Solid:
             d->ui->btnChooseSolidColor->setVisible(true);
-            d->ui->btnSolidColorPick->setVisible(true);
+            d->ui->btnSolidColorPick->setVisible(false);
             d->ui->soldStrokeColorLabel->setVisible(true);
             break;
         case KoFillConfigWidget::Gradient:

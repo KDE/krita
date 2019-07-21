@@ -54,12 +54,14 @@
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-#include <QTimer>
 #include "kis_signal_auto_connection.h"
+#include "kis_signal_compressor.h"
 
 
 struct KisNodeModel::Private
 {
+    Private() : updateCompressor(100, KisSignalCompressor::FIRST_ACTIVE) {}
+
     KisImageWSP image;
     KisShapeController *shapeController = 0;
     KisNodeSelectionAdapter *nodeSelectionAdapter = 0;
@@ -71,7 +73,7 @@ struct KisNodeModel::Private
     KisSignalAutoConnectionsStore nodeDisplayModeAdapterConnections;
 
     QList<KisNodeDummy*> updateQueue;
-    QTimer updateTimer;
+    KisSignalCompressor updateCompressor;
 
     KisModelIndexConverterBase *indexConverter = 0;
     QPointer<KisDummiesFacadeBase> dummiesFacade = 0;
@@ -90,8 +92,7 @@ KisNodeModel::KisNodeModel(QObject * parent)
         : QAbstractItemModel(parent)
         , m_d(new Private)
 {
-    m_d->updateTimer.setSingleShot(true);
-    connect(&m_d->updateTimer, SIGNAL(timeout()), SLOT(processUpdateQueue()));
+    connect(&m_d->updateCompressor, SIGNAL(timeout()), SLOT(processUpdateQueue()));
 }
 
 KisNodeModel::~KisNodeModel()
@@ -357,7 +358,7 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
     if (!dummy) return;
 
     // FIXME: is it really what we want?
-    m_d->updateTimer.stop();
+    m_d->updateCompressor.stop();
     m_d->updateQueue.clear();
 
     m_d->parentOfRemovedNode = dummy->parent();
@@ -389,7 +390,7 @@ void KisNodeModel::slotDummyChanged(KisNodeDummy *dummy)
     if (!m_d->updateQueue.contains(dummy)) {
         m_d->updateQueue.append(dummy);
     }
-    m_d->updateTimer.start(1000);
+    m_d->updateCompressor.start();
 }
 
 void addChangedIndex(const QModelIndex &idx, QSet<QModelIndex> *indexes)

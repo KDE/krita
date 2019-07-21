@@ -1,17 +1,17 @@
-From 30f28be2a239d82c2d7f2d6a37df4acb300d7cef Mon Sep 17 00:00:00 2001
+From c5ee9030553cc37d92391b6f60e978eb27b15768 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Sat, 13 Apr 2019 20:29:14 +0300
-Subject: [PATCH] Disable tablet relative mode in Qt
+Subject: [PATCH 12/17] Disable tablet relative mode in Qt
 
 ---
  src/plugins/platforms/windows/qwindowstabletsupport.cpp | 5 +++++
  1 file changed, 5 insertions(+)
 
 diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-index 31655101..3e35b146 100644
+index 44b94d044d..6a9fe28e75 100644
 --- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
 +++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
-@@ -562,6 +562,11 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
+@@ -564,6 +564,11 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
              m_state = PenDown;
              m_mode = (mouseLocation - globalPosF).manhattanLength() > m_absoluteRange
                  ? MouseMode : PenMode;

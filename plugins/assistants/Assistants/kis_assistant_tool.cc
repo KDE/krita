@@ -5,7 +5,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -48,6 +49,8 @@
 #include <kis_painting_assistants_decoration.h>
 #include "kis_global.h"
 #include "VanishingPointAssistant.h"
+#include "EditAssistantsCommand.h"
+#include <kis_undo_adapter.h>
 
 #include <math.h>
 
@@ -98,6 +101,8 @@ void KisAssistantTool::deactivate()
 void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 {
     setMode(KisTool::PAINT_MODE);
+    m_origAssistantList = KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants());
+
     bool newAssistantAllowed = true;
 
     KisPaintingAssistantsDecorationSP canvasDecoration = m_canvas->paintingAssistantsDecoration();
@@ -508,16 +513,21 @@ void KisAssistantTool::endPrimaryAction(KoPointerEvent *event)
 {
     setMode(KisTool::HOVER_MODE);
 
-    if (m_handleDrag) {
-        if (!(event->modifiers() & Qt::ShiftModifier) && m_handleCombine) {
-            m_handleCombine->mergeWith(m_handleDrag);
-            m_handleCombine->uncache();
-            m_handles = m_canvas->paintingAssistantsDecoration()->handles();
+    if (m_handleDrag || m_assistantDrag) {
+        if (m_handleDrag) {
+            if (!(event->modifiers() & Qt::ShiftModifier) && m_handleCombine) {
+                m_handleCombine->mergeWith(m_handleDrag);
+                m_handleCombine->uncache();
+                m_handles = m_canvas->paintingAssistantsDecoration()->handles();
+            }
+            m_handleDrag = m_handleCombine = 0;
+        } else {
+            m_assistantDrag.clear();
         }
-        m_handleDrag = m_handleCombine = 0;
-
-    } else if (m_assistantDrag) {
-        m_assistantDrag.clear();
+        dbgUI << "creating undo command...";
+        KUndo2Command *command = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()));
+        m_canvas->viewManager()->undoAdapter()->addCommand(command);
+        dbgUI << "done";
     } else if(m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
         addAssistant();
         m_internalMode = MODE_CREATION;
@@ -532,26 +542,37 @@ void KisAssistantTool::endPrimaryAction(KoPointerEvent *event)
 void KisAssistantTool::addAssistant()
 {
     m_canvas->paintingAssistantsDecoration()->addAssistant(m_newAssistant);
-    m_handles = m_canvas->paintingAssistantsDecoration()->handles();
-    m_canvas->paintingAssistantsDecoration()->setSelectedAssistant(m_newAssistant);
-    updateToolOptionsUI(); // vanishing point assistant will get an extra option
 
     KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(m_newAssistant.data());
     if (grid) {
         m_canvas->viewManager()->canvasResourceProvider()->addPerspectiveGrid(grid);
     }
+
+    QList<KisPaintingAssistantSP> assistants = m_canvas->paintingAssistantsDecoration()->assistants();
+    KUndo2Command *addAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(assistants), EditAssistantsCommand::ADD, assistants.indexOf(m_newAssistant));
+    m_canvas->viewManager()->undoAdapter()->addCommand(addAssistantCmd);
+
+    m_handles = m_canvas->paintingAssistantsDecoration()->handles();
+    m_canvas->paintingAssistantsDecoration()->setSelectedAssistant(m_newAssistant);
+    updateToolOptionsUI(); // vanishing point assistant will get an extra option
+
     m_newAssistant.clear();
 }
 
 void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
 {
+    QList<KisPaintingAssistantSP> assistants = m_canvas->paintingAssistantsDecoration()->assistants();
+
     KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
     if (grid) {
         m_canvas->viewManager()->canvasResourceProvider()->removePerspectiveGrid(grid);
     }
     m_canvas->paintingAssistantsDecoration()->removeAssistant(assistant);
-    m_handles = m_canvas->paintingAssistantsDecoration()->handles();
 
+    KUndo2Command *removeAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()), EditAssistantsCommand::REMOVE, assistants.indexOf(assistant));
+    m_canvas->viewManager()->undoAdapter()->addCommand(removeAssistantCmd);
+
+    m_handles = m_canvas->paintingAssistantsDecoration()->handles();
     m_canvas->paintingAssistantsDecoration()->deselectAssistant();
     updateToolOptionsUI();
 }

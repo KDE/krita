@@ -118,7 +118,7 @@ KisFilterConfigurationSP KisFilterWave::factoryConfiguration() const
     return config;
 }
 
-KisConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     return new KisWdgWave((KisFilter*)this, (QWidget*)parent);
 }

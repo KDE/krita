@@ -378,7 +378,7 @@ void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
                           i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n Krita will disable OpenGL and close now.", context),
                           QMessageBox::Close);
 
-    cfg.setUseOpenGL(false);
+    cfg.disableOpenGL();
     cfg.setCanvasState("OPENGL_FAILED");
 }
 

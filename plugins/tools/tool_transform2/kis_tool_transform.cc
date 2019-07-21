@@ -346,6 +346,8 @@ QMenu*  KisToolTransform::popupActionsMenu()
     if (m_contextMenu) {
         m_contextMenu->clear();
 
+        m_contextMenu->addSection(i18n("Transform Tool Actions"));
+        m_contextMenu->addSeparator();
         // add a quick switch to different transform types
         m_contextMenu->addAction(freeTransformAction);
         m_contextMenu->addAction(perspectiveAction);
@@ -850,13 +852,9 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
      * stroke and pass it to the tool somehow. But currently, we will
      * just disable starting a new stroke asynchronously
      */
-
-    if (image()->tryBarrierLock()) {
-        image()->unlock();
-    } else {
+    if (!blockUntilOperationsFinished()) {
         return;
     }
-
 
     // set up and null checks before we do anything
     KisResourcesSnapshotSP resources =
@@ -939,7 +937,11 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
             // that are locked and will not be transformed
             if (node->inherits("KisGroupLayer")) continue;
 
-            srcRect |= node->exactBounds();
+            if (const KisTransformMask *mask = dynamic_cast<const KisTransformMask*>(node.data())) {
+                srcRect |= mask->sourceDataBounds();
+            } else {
+                srcRect |= node->exactBounds();
+            }
         }
     }
 

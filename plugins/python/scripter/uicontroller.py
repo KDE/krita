@@ -132,8 +132,10 @@ class UIController(object):
             m = importlib.import_module(module['module'])
             action_class = getattr(m, module['klass'])
             obj = action_class(self.scripter)
-            parent = self.mainWidget.findChild(QObject, obj.parent)
-            self.actions.append(dict(action=obj, parent=parent))
+            obj_parent = obj.parent
+            for name in obj_parent:
+                parent = self.mainWidget.findChild(QObject, i18n(name))
+                self.actions.append(dict(action=obj, parent=parent))
 
         for action in self.actions:
             action['parent'].addAction(action['action'])

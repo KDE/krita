@@ -67,7 +67,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
 
     m_page->dirRequester->setMode(KoFileDialog::OpenDirectory);
 
-    m_page->intStart->setMinimum(doc->image()->animationInterface()->fullClipRange().start());
+    m_page->intStart->setMinimum(0);
     m_page->intStart->setMaximum(doc->image()->animationInterface()->fullClipRange().end());
     m_page->intStart->setValue(doc->image()->animationInterface()->playbackRange().start());
 
@@ -324,6 +324,7 @@ void DlgAnimationRenderer::selectRenderOptions()
         KisConfig cfg(false);
         cfg.setExportConfiguration("VIDEO_ENCODER", encoderConfigWidget->configuration());
         m_customFFMpegOptionsString = encoderConfigWidget->customUserOptionsString();
+        m_forceHDRVideo = encoderConfigWidget->forceHDRModeForFrames();
     }
 
     dlg.setMainWidget(0);
@@ -538,8 +539,6 @@ void DlgAnimationRenderer::slotExportTypeChanged()
         m_page->imageSequenceOptionsGroup->setVisible(false);
         m_page->videoOptionsGroup->setVisible(false); //shrinks the horizontal space temporarily to help resize() work
         m_page->videoOptionsGroup->setVisible(true);
-
-        cfg.writeEntry<QString>("AnimationRenderer/export_type", "Video");
     }
 
 
@@ -549,16 +548,12 @@ void DlgAnimationRenderer::slotExportTypeChanged()
         m_page->videoOptionsGroup->setVisible(false);
         m_page->imageSequenceOptionsGroup->setVisible(false);
         m_page->imageSequenceOptionsGroup->setVisible(true);
-
-        cfg.writeEntry<QString>("AnimationRenderer/export_type", "ImageSequence");
     }
 
     // show all options
      if (m_page->shouldExportAll->isChecked() ) {
          m_page->imageSequenceOptionsGroup->setVisible(true);
          m_page->videoOptionsGroup->setVisible(true);
-
-         cfg.writeEntry<QString>("AnimationRenderer/export_type", "VideoAndImageSequence");
      }
 
 

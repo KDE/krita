@@ -35,7 +35,6 @@ class KUndo2Command;
 class QWidget;
 class KoUnit;
 class KisImageViewConverter;
-class KisSignalCompressor;
 
 
 class KisShapeLayerCanvasBase : public KoCanvasBase
@@ -124,7 +123,7 @@ private:
 private:
     KisPaintDeviceSP m_projection;
     KisShapeLayer *m_parentLayer {0};
-    KisSignalCompressor m_canvasUpdateCompressor;
+    KisThreadSafeSignalCompressor m_canvasUpdateCompressor;
 
     KisThreadSafeSignalCompressor m_asyncUpdateSignalCompressor;
     volatile bool m_hasUpdateInCompressor = false;

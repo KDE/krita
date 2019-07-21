@@ -41,6 +41,9 @@ public:
     static KisConvolutionKernelSP
         createVerticalKernel(qreal radius);
 
+    static KisConvolutionKernelSP
+        createUniform2DKernel(qreal xRadius, qreal yRadius);
+
     static qreal sigmaFromRadius(qreal radius);
     static int kernelSizeFromRadius(qreal radius);
 

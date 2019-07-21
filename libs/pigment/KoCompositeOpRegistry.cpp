@@ -96,6 +96,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[3], KoID(COMPOSITE_TINT_IFS_ILLUSIONS, i18n("Tint (IFS Illusions)")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_FOG_LIGHTEN_IFS_ILLUSIONS, i18n("Fog Lighten (IFS Illusions)")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_EASY_DODGE       , i18n("Easy Dodge")));
+    m_map.insert(m_categories[3], KoID(COMPOSITE_LUMINOSITY_SAI       , i18n("Luminosity/Shine (SAI)")));
     
     m_map.insert(m_categories[4], KoID(COMPOSITE_MOD              , i18n("Modulo")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_MOD_CON          , i18n("Modulo - Continuous")));

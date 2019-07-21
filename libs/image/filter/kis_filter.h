@@ -112,6 +112,9 @@ public:
 
     virtual bool needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const;
 
+    virtual bool configurationAllowedForMask(KisFilterConfigurationSP config) const;
+    virtual void fixLoadedFilterConfigurationForMasks(KisFilterConfigurationSP config) const;
+
 protected:
 
     QString configEntryGroup() const;

@@ -64,6 +64,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_delayed_save_dialog.cpp
     dialogs/KisSessionManagerDialog.cpp
     dialogs/KisNewWindowLayoutDialog.cpp
+    dialogs/KisDlgChangeCloneSource.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -155,6 +156,7 @@ set(kritaui_LIB_SRCS
     kis_multinode_property.cpp
     kis_stopgradient_editor.cpp
     KisWelcomePageWidget.cpp
+    KisChangeCloneLayersCommand.cpp
 
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
@@ -268,6 +270,7 @@ set(kritaui_LIB_SRCS
     widgets/KoFillConfigWidget.cpp
     widgets/KisLayerStyleAngleSelector.cpp
     widgets/KisMemoryReportButton.cpp
+    widgets/KisDitherWidget.cpp
 
     KisPaletteEditor.cpp
     dialogs/KisDlgPaletteEditor.cpp
@@ -277,6 +280,8 @@ set(kritaui_LIB_SRCS
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
     utils/KisSpinBoxSplineUnitConverter.cpp
+    utils/KisClipboardUtil.cpp
+    utils/KisDitherUtil.cpp
 
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
@@ -299,6 +304,7 @@ set(kritaui_LIB_SRCS
     input/kis_select_layer_action.cpp
     input/KisQtWidgetsTweaker.cpp
     input/KisInputActionGroup.cpp
+    input/kis_zoom_and_rotate_action.cpp
 
     operations/kis_operation.cpp
     operations/kis_operation_configuration.cpp
@@ -307,7 +313,7 @@ set(kritaui_LIB_SRCS
     operations/kis_operation_ui_widget.cpp
     operations/kis_filter_selection_operation.cpp
     actions/kis_selection_action_factories.cpp
-    actions/KisPasteActionFactory.cpp
+    actions/KisPasteActionFactories.cpp
     actions/KisTransformToolActivationCommand.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
@@ -343,7 +349,6 @@ set(kritaui_LIB_SRCS
     KisCloneDocumentStroke.cpp
     kis_node_view_color_scheme.cpp
     KisImportExportFilter.cpp
-    KisFilterEntry.cpp
     KisImportExportManager.cpp
     KisImportExportUtils.cpp
     kis_async_action_feedback.cpp
@@ -360,6 +365,7 @@ set(kritaui_LIB_SRCS
     KisUndoActionsUpdateManager.cpp
     KisView.cpp
     KisImportExportErrorCode.cpp
+    KisImportExportAdditionalChecks.cpp
 
     thememanager.cpp
 
@@ -391,7 +397,7 @@ set(kritaui_LIB_SRCS
     KisReferenceImage.cpp
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
-
+    KisMouseClickEater.cpp
 )
 
 if(WIN32)
@@ -459,6 +465,7 @@ endif()
 ki18n_wrap_ui(kritaui_LIB_SRCS
     widgets/KoFillConfigWidget.ui
     widgets/KoStrokeConfigWidget.ui
+    widgets/KisDitherWidget.ui
     forms/wdgdlgpngimport.ui
     forms/wdgfullscreensettings.ui
     forms/wdgautogradient.ui
@@ -508,6 +515,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/WdgDlgPaletteEditor.ui
     forms/KisNewsPage.ui
     forms/wdgGamutMaskToolbar.ui
+    forms/wdgchangeclonesource.ui
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui

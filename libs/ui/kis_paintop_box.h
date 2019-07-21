@@ -142,7 +142,6 @@ private:
 
 private Q_SLOTS:
 
-    void slotUpdatePreset();
     void slotSetupDefaultPreset();
     void slotNodeChanged(const KisNodeSP node);
     void slotToggleEraseMode(bool checked);
@@ -223,7 +222,6 @@ private:
 
     struct TabletToolID {
         TabletToolID(const KoInputDevice& dev) {
-            uniqueID = dev.uniqueTabletId();
             // Only the eraser is special, and we don't look at Cursor
             pointer = QTabletEvent::Pen;
             if (dev.pointer() == QTabletEvent::Eraser) {
@@ -232,17 +230,14 @@ private:
         }
 
         bool operator == (const TabletToolID& id) const {
-            return pointer == id.pointer && uniqueID == id.uniqueID;
+            return pointer == id.pointer;
         }
 
         bool operator < (const TabletToolID& id) const {
-            if (uniqueID == id.uniqueID)
-                return pointer < id.pointer;
-            return uniqueID < id.uniqueID;
+            return pointer < id.pointer;
         }
 
         QTabletEvent::PointerType  pointer;
-        qint64                     uniqueID;
     };
 
     struct TabletToolData {

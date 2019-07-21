@@ -1,5 +1,5 @@
 name: krita
-version: 4.1.7.101
+version: 4.2.2
 summary: Krita is the digital painting studio for artists
 description: Krita is a creative application for raster images. Whether you want to create
  from scratch or work with existing images, Krita is for you. You can work with
@@ -20,8 +20,9 @@ parts:
     - "-DCMAKE_BUILD_TYPE=Release"
     - "-DENABLE_TESTING=OFF"
     - "-DBUILD_TESTING=OFF"
+    - "-DHIDE_SAFE_ASSERTS=OFF"
     - "-DKDE_SKIP_TEST_SETTINGS=ON"
-    source: https://download.kde.org/stable/krita/4.1.7/krita-4.1.7.101.tar.gz
+    source: https://download.kde.org/stable/krita/4.2.2/krita-4.2.2.tar.xz
 # Use these instead to build from the git source
 #    source: https://anongit.kde.org/krita.git
 #    source-type: git
@@ -77,6 +78,10 @@ parts:
         - libqt5x11extras5-dev
         - libqt5opengl5-dev
         - libquazip5-dev
+        - qtmultimedia5-dev
+        - qtdeclarative5-dev
+        - libkf5crash-dev
+
   runtime:
     plugin: nil
     stage-packages:
@@ -100,7 +105,6 @@ parts:
         - shared-mime-info
         - libboost-system1.65.1
         - librtmp1
-        - libqt5multimedia5
         - libqt5quickwidgets5
         - libkf5archive5
         - libkf5completion5
@@ -125,7 +129,16 @@ parts:
         - libqt5xml5
         - locales
         - libc-bin
-        - libquazip5
+        - libquazip5-1
+        - libqt5quick5
+        - libqt5quickparticles5
+        - libqt5quickshapes5
+        - qt5-qmltooling-plugins
+        - libqt5qml5
+        - libqt5multimedia5
+        - libqt5multimediagsttools5
+        - libqt5multimediaquick5
+        - libqt5multimediawidgets5
     prime:
     - "-usr/share/wallpapers/*"
     - "-usr/share/fonts/*"

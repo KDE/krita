@@ -290,7 +290,10 @@ void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *lay
 {
     if (el.hasAttribute(NAME)) {
         QString layerName = el.attribute(NAME);
-        KIS_ASSERT_RECOVER_RETURN(layerName == layer->name());
+        if (layerName != layer->name()) {
+            // Make the EXR layername leading in case of conflicts
+            layer->setName(layerName);
+        }
     }
 
     if (el.hasAttribute(CHANNEL_FLAGS)) {

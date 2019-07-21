@@ -233,8 +233,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     bool hasIndirectPainting = supportsIndirectPainting() && m_resources->needsIndirectPainting();
     const QString indirectCompositeOp = m_resources->indirectPaintingCompositeOp();
 
-
-    KisSelectionSP selection = m_resources->activeSelection();
+    KisSelectionSP selection =  m_resources->activeSelection();
 
     if (hasIndirectPainting) {
         KisIndirectPaintingSupport *indirect =
@@ -263,7 +262,6 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     else {
         m_transaction = new KisTransaction(name(), targetDevice);
     }
-
 
     // WARNING: masked brush cannot work without indirect painting mode!
     KIS_SAFE_ASSERT_RECOVER_NOOP(!(supportsMaskingBrush() &&

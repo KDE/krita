@@ -89,4 +89,4 @@ private:
     QSlider* m_iconSizeSlider;
 };
 
-#endif //KOSHAPECOLLECTIONDOCKER_H
+#endif

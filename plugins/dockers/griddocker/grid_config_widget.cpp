@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -36,7 +37,7 @@ struct GridConfigWidget::Private
 
     KisGridConfig gridConfig;
     KisGuidesConfig guidesConfig;
-    bool guiSignalsBlocked;
+    bool guiSignalsBlocked {false};
 };
 
 GridConfigWidget::GridConfigWidget(QWidget *parent) :
@@ -64,9 +65,6 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
 
 
     connect(ui->gridTypeCombobox, SIGNAL(currentIndexChanged(int)), SLOT(slotGridTypeChanged()));
-
-
-    m_isGridEnabled = false;
 
     setGridConfig(m_d->gridConfig);
     setGuidesConfig(m_d->guidesConfig);
@@ -153,7 +151,9 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
     ui->spacingAspectButton->setKeepAspectRatio(m_d->gridConfig.spacingAspectLocked());
     ui->chkShowGrid->setChecked(m_d->gridConfig.showGrid());
     ui->intHSpacing->setValue(m_d->gridConfig.spacing().x());
+    ui->intHSpacing->setMaximum(std::numeric_limits<int>::max());
     ui->intVSpacing->setValue(m_d->gridConfig.spacing().y());
+    ui->intVSpacing->setMaximum(std::numeric_limits<int>::max());
     ui->intXOffset->setValue(m_d->gridConfig.offset().x());
     ui->intYOffset->setValue(m_d->gridConfig.offset().y());
     ui->intSubdivision->setValue(m_d->gridConfig.subdivision());
@@ -200,12 +200,6 @@ KisGridConfig GridConfigWidget::gridConfig() const
 KisGuidesConfig GridConfigWidget::guidesConfig() const
 {
     return m_d->guidesConfig;
-}
-
-void GridConfigWidget::setGridDivision(int w, int h)
-{
-    ui->intHSpacing->setMaximum(w);
-    ui->intVSpacing->setMaximum(h);
 }
 
 KisGridConfig GridConfigWidget::fetchGuiGridConfig() const

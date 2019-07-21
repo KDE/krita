@@ -23,6 +23,8 @@
 #include "KoShapeBackground.h"
 #include "kritaflake_export.h"
 
+#include <QSharedDataPointer>
+
 class KoImageCollection;
 class KoOdfLoadingContext;
 class KoPatternBackgroundPrivate;
@@ -121,8 +123,8 @@ public:
     /// Returns the bounding rect of the pattern image based on the given fill size
     QRectF patternRectFromFillSize(const QSizeF &size);
 private:
-    Q_DECLARE_PRIVATE(KoPatternBackground)
-    Q_DISABLE_COPY(KoPatternBackground)
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 #endif // KOPATTERNBACKGROUND_H

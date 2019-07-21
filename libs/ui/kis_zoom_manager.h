@@ -105,7 +105,7 @@ private:
     qreal m_physicalDpiX;
     qreal m_physicalDpiY;
     qreal m_devicePixelRatio;
-    bool m_aspectMode;
+    bool m_aspectMode {false};
 };
 
 

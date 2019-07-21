@@ -66,7 +66,10 @@ public:
     QTabletEvent::PointerType pointer() const;
 
     /**
-     * Return the unique tablet id as registered by QTabletEvents.
+     * Return the unique tablet id as registered by QTabletEvents. Note that this
+     * id can change randomly, so it's not dependable.
+     *
+     * See https://bugs.kde.org/show_bug.cgi?id=407659
      */
     qint64 uniqueTabletId() const;
 

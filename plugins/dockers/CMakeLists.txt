@@ -33,3 +33,4 @@ if(NOT APPLE AND HAVE_QT_QUICK)
 endif()
 
 add_subdirectory(logdocker)
+add_subdirectory(snapshotdocker)

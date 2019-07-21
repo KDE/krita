@@ -27,13 +27,12 @@
 #include "kis_qmic_synchronize_layers_command.h"
 #include "kis_qmic_synchronize_image_size_command.h"
 
-KisQmicApplicator::KisQmicApplicator():m_applicator(0),m_applicatorStrokeEnded(false)
+KisQmicApplicator::KisQmicApplicator()
 {
 }
 
 KisQmicApplicator::~KisQmicApplicator()
 {
-    delete m_applicator;
 }
 
 void KisQmicApplicator::setProperties(KisImageWSP image, KisNodeSP node, QVector<gmic_image<float> *> images, const KUndo2MagicString &actionName, KisNodeListSP kritaNodes)
@@ -56,9 +55,11 @@ void KisQmicApplicator::apply()
     KisImageSignalVector emitSignals;
     emitSignals << ComplexSizeChangedSignal() << ModifiedSignal;
 
-    m_applicator = new KisProcessingApplicator(m_image, m_node,
-            KisProcessingApplicator::RECURSIVE | KisProcessingApplicator::NO_UI_UPDATES,
-            emitSignals, m_actionName);
+    m_applicator.reset(
+        new KisProcessingApplicator(m_image, m_node,
+                                    KisProcessingApplicator::RECURSIVE |
+                                    KisProcessingApplicator::NO_UI_UPDATES,
+                                    emitSignals, m_actionName));
     dbgPlugins << "Created applicator " << m_applicator;
 
     m_gmicData = KisQmicDataSP(new KisQmicData());
@@ -91,20 +92,11 @@ void KisQmicApplicator::cancel()
     dbgPlugins << "KisQmicApplicator::cancel";
     if (m_applicator) {
 
-        if (!m_applicatorStrokeEnded) {
-            dbgPlugins << "Cancelling applicator: Yes!";
-            m_applicator->cancel();
-        }
-        else {
-            dbgPlugins << "Cancelling applicator: No! Reason: Already finished!";
-        }
+        dbgPlugins << "Cancelling applicator!";
+        m_applicator->cancel();
 
         dbgPlugins << "deleting applicator: " << m_applicator;
-        delete m_applicator;
-        m_applicator = 0;
-
-        m_applicatorStrokeEnded = false;
-        dbgPlugins << ppVar(m_applicatorStrokeEnded);
+        m_applicator.reset();
     }
     else  {
         dbgPlugins << "Cancelling applicator: No! Reason: Null applicator!";
@@ -116,9 +108,8 @@ void KisQmicApplicator::finish()
     dbgPlugins << "Applicator " << m_applicator << " finished";
     if (m_applicator) {
         m_applicator->end();
-        m_applicatorStrokeEnded = true;
+        m_applicator.reset();
     }
-    dbgPlugins << ppVar(m_applicatorStrokeEnded);
 }
 
 float KisQmicApplicator::getProgress() const

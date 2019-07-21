@@ -30,7 +30,6 @@ void KisNodeJugglerCompressedTest::init()
 
     QRect rect1(100, 100, 100, 100);
     QRect rect2(150, 150, 150, 150);
-    QRect rect3(50, 50, 100, 100);
 
     layer1 = p->layer;
     layer1->paintDevice()->fill(rect1, KoColor(Qt::red, layer1->colorSpace()));

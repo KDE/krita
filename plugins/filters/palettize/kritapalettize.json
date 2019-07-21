@@ -1,0 +1,9 @@
+{
+    "Id": "Palettize Filter",
+    "Type": "Service",
+    "X-KDE-Library": "kritapalettize",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "30"
+}

@@ -52,7 +52,7 @@
 
 KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
-                    KisCursor::load("tool_magnetic_selection_cursor.svg", 16, 16),
+                    KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
       m_continuedMode(false), m_complete(true), m_radius(20), m_threshold(100), m_checkPoint(-1)
 { }
@@ -93,6 +93,8 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
     m_points.resize(m_checkPoint+1);
     m_points.append(pointSet);
 
+    int lastCheckPoint = m_checkPoint;
+
     for(int i=m_points.count()-1; i>m_checkPoint; i--){
         QPoint pointInQuestion(m_points[i].x(), m_points[i].y());
         if(m_worker.intensity(pointInQuestion) >= m_threshold){
@@ -102,10 +104,9 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
         }
     }
 
-
-    for(int i=0; i < m_checkPoint; i++){
-
-        if((m_checkPoint - i)%m_radius == 0){
+    for(int i=lastCheckPoint; i < m_checkPoint; i++){
+        int temp = m_checkPoint - i;
+        if(temp%m_radius == 0 && temp != 0){
             m_lastAnchor = m_points[i].toPoint();
             m_anchorPoints.push_back(i);
         }

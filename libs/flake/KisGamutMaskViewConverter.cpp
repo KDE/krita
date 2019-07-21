@@ -22,6 +22,7 @@
 #include <QRectF>
 #include <QSizeF>
 
+#include <kis_assert.h>
 #include <FlakeDebug.h>
 
 //#define DEBUG_GAMUT_MASK_CONVERTER
@@ -155,6 +156,9 @@ void KisGamutMaskViewConverter::setViewSize(QSize viewSize)
 
 void KisGamutMaskViewConverter::setMaskSize(QSizeF maskSize)
 {
+    KIS_ASSERT(!qIsNull(maskSize.width()));
+    KIS_ASSERT(!qIsNull(maskSize.height()));
+
     m_maskSize = maskSize;
     m_maskResolution = maskSize.width();
 

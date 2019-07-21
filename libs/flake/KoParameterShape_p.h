@@ -23,18 +23,19 @@
 
 #include "kritaflake_export.h"
 #include <KoParameterShape.h>
-#include "KoPathShape_p.h"
 
 #include <QList>
 #include <QPointF>
+#include <QSharedData>
 
 class KoParameterShape;
 
-class KRITAFLAKE_EXPORT KoParameterShapePrivate : public KoPathShapePrivate
+class KRITAFLAKE_EXPORT KoParameterShape::Private : public QSharedData
 {
 public:
-    explicit KoParameterShapePrivate(KoParameterShape *shape);
-    explicit KoParameterShapePrivate(const KoParameterShapePrivate &rhs, KoParameterShape *q);
+    explicit Private();
+    explicit Private(const KoParameterShape::Private &rhs);
+    virtual ~Private() = default;
 
     bool parametric;
 

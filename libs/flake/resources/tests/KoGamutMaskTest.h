@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2019 Anna Medonosova <anna.medonosova@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +16,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_PPM_TEST_H_
-#define _KIS_PPM_TEST_H_
+#ifndef KOGAMUTMASKTEST_H
+#define KOGAMUTMASKTEST_H
 
-#include <QtTest>
+#include <QObject>
 
-class KisPPMTest : public QObject
+class KoGamutMaskTest : public QObject
 {
     Q_OBJECT
-private Q_SLOTS:
-    void testFiles();
+public:
+    explicit KoGamutMaskTest(QObject *parent = nullptr);
 
-    void testImportFromWriteonly();
-    void testExportToReadonly();
-    void testImportIncorrectFormat();
+private Q_SLOTS:
+    void testCoordIsClear();
+    void testCoordIsClear_data();
+
+    void testLoad();
+    void testLoad_data();
+// TODO: add preview vs. non-preview testing
 };
 
-#endif
+#endif // KOGAMUTMASKTEST_H

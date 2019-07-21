@@ -85,9 +85,12 @@ private:
     KoShapeGroup(const KoShapeGroup &rhs);
 
 private:
+    void tryUpdateCachedSize() const;
+
     void shapeChanged(ChangeType type, KoShape *shape = 0) override;
 
-    Q_DECLARE_PRIVATE(KoShapeGroup)
+    class Private;
+    QScopedPointer<Private> d;
 };
 
 #endif

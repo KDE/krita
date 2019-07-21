@@ -36,7 +36,7 @@ public:
     void activate(int shortcut) override;
     void deactivate(int shortcut) override;
     void begin(int shortcut, QEvent *event) override;
-    void cursorMoved(const QPointF &lastPos, const QPointF &pos) override;
+    void cursorMovedAbsolute(const QPointF &lastPos, const QPointF &pos) override;
     void inputEvent(QEvent* event) override;
 
     KisInputActionGroup inputActionGroup(int shortcut) const override;

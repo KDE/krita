@@ -100,9 +100,28 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
     , KisShared()
     , m_d(new Private(*rhs.m_d))
 {
-    if (rhs.m_d->opacityChannel) {
-        m_d->opacityChannel.reset(new KisScalarKeyframeChannel(*rhs.m_d->opacityChannel, 0));
-        m_d->keyframeChannels.insert(m_d->opacityChannel->id(), m_d->opacityChannel.data());
+    if (rhs.m_d->keyframeChannels.size() > 0) {
+        Q_FOREACH(QString key, rhs.m_d->keyframeChannels.keys()) {
+            KisKeyframeChannel* channel = rhs.m_d->keyframeChannels.value(key);
+            if (!channel) {
+                continue;
+            }
+
+            if (channel->inherits("KisScalarKeyframeChannel")) {
+                KisScalarKeyframeChannel* pchannel = qobject_cast<KisScalarKeyframeChannel*>(channel);
+                KIS_ASSERT_RECOVER(pchannel) { continue; }
+
+                KisScalarKeyframeChannel* channelNew = new KisScalarKeyframeChannel(*pchannel, 0);
+                KIS_ASSERT(channelNew);
+
+                m_d->keyframeChannels.insert(channelNew->id(), channelNew);
+
+                if (KoID(key) == KisKeyframeChannel::Opacity) {
+                    m_d->opacityChannel.reset(channelNew);
+                }
+            }
+
+        }
     }
 }
 

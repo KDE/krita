@@ -933,4 +933,20 @@ inline T cfFlatLight(T src, T dst) {
     
     return clamp<T>(cfHardMixPhotoshop(inv(src),dst)==unitValue<T>() ? cfPenumbraB(src,dst) : cfPenumbraA(src,dst)); 
 }
+
+
+template<class HSXType, class TReal>
+inline void cfAdditionSAI(TReal src, TReal sa, TReal& dst, TReal& da)
+{
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<TReal>::compositetype composite_type;
+
+    Q_UNUSED(da);
+    composite_type newsrc;
+    newsrc = mul(src, sa);
+    dst = clamp<TReal>(newsrc + dst);
+}
+
+
+
 #endif // KOCOMPOSITEOP_FUNCTIONS_H_

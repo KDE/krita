@@ -50,6 +50,9 @@ public:
 
     void slotUpdateIcon();
 
+Q_SIGNALS:
+    void resetVisibilityStasis();
+
 protected:
     bool eventFilter(QObject *object, QEvent *event) override;
 
@@ -83,6 +86,7 @@ private:
 
 private Q_SLOTS:
     void slotConfigChanged();
+    void slotResetState();
 };
 
 #endif

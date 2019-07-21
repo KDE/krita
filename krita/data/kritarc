@@ -69,9 +69,6 @@ ToolsBlacklist=CreatePathTool,KoPencilTool,ConnectionTool,KarbonFilterEffectsToo
 ToolPlugins=,,
 ToolPluginsDisabled=
 
-[KoShapeCollection]
-QuickShapes=ArtisticText,TextShapeID,EllipseShape,RectangleShape
-
 [colorhotkeys]
 steps_blueyellow=10
 steps_hue=36

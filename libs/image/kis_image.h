@@ -82,6 +82,8 @@ public:
     KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace, const QString& name);
     ~KisImage() override;
 
+    static KisImageSP fromQImage(const QImage &image, KisUndoStore *undoStore);
+
 public: // KisNodeGraphListener implementation
 
     void aboutToAddANode(KisNode *parent, int index) override;

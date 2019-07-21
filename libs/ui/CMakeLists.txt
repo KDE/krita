@@ -354,7 +354,6 @@ set(kritaui_LIB_SRCS
     KisCloneDocumentStroke.cpp
     kis_node_view_color_scheme.cpp
     KisImportExportFilter.cpp
-    KisFilterEntry.cpp
     KisImportExportManager.cpp
     KisImportExportUtils.cpp
     kis_async_action_feedback.cpp

@@ -37,7 +37,7 @@ class OpenAction(QAction):
 
     @property
     def parent(self):
-        return 'File'
+        return 'File',
 
     def open(self):
         dialog = QFileDialog(self.scripter.uicontroller.mainWidget)

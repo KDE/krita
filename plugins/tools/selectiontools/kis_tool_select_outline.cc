@@ -75,7 +75,6 @@ void KisToolSelectOutline::keyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key_Control) {
         m_continuedMode = true;
     }
-
     KisToolSelect::keyPressEvent(event);
 }
 
@@ -95,7 +94,6 @@ void KisToolSelectOutline::keyReleaseEvent(QKeyEvent *event)
 
 void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
 {
-    KisToolSelect::mouseMoveEvent(event);
     if (selectionDragInProgress()) return;
 
     m_lastCursorPos = convertToPixelCoord(event);
@@ -106,7 +104,6 @@ void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolSelectOutline::beginPrimaryAction(KoPointerEvent *event)
 {
-    KisToolSelectBase::beginPrimaryAction(event);
     if (selectionDragInProgress()) return;
 
     if (!selectionEditable()) {
@@ -127,7 +124,6 @@ void KisToolSelectOutline::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolSelectOutline::continuePrimaryAction(KoPointerEvent *event)
 {
-    KisToolSelectBase::continuePrimaryAction(event);
     if (selectionDragInProgress()) return;
 
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
@@ -136,14 +132,13 @@ void KisToolSelectOutline::continuePrimaryAction(KoPointerEvent *event)
     m_paintPath.lineTo(pixelToView(point));
     m_points.append(point);
     updateFeedback();
-
-
 }
 
 void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
 {
+    Q_UNUSED(event);
     const bool hadMoveInProgress = selectionDragInProgress();
-    KisToolSelectBase::endPrimaryAction(event);
+
     if (hadMoveInProgress) return;
 
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);

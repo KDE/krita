@@ -264,6 +264,7 @@ void KisToolLine::endStroke()
     NodePaintAbility nodeAbility = nodePaintAbility();
 
     if (!m_strokeIsRunning || m_startPoint == m_endPoint || nodeAbility == UNPAINTABLE) {
+        m_helper->clearPoints();
         return;
     }
 

@@ -70,9 +70,9 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
     }
     KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
 
-    const bool ditherEnabled = config->getBool("ditherEnabled");
+    const ColorMode colorMode = ColorMode(config->getInt("colorMode"));
     KisDitherUtil ditherUtil;
-    if (ditherEnabled) ditherUtil.setConfiguration(*config, "dither/");
+    if (colorMode == ColorMode::Dither) ditherUtil.setConfiguration(*config, "dither/");
 
     KoColor outColor(Qt::white, device->colorSpace());
     KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
@@ -80,7 +80,17 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
     const int pixelSize = device->colorSpace()->pixelSize();
     while (it.nextPixel()) {
         grey = qreal(device->colorSpace()->intensity8(it.oldRawData())) / 255;
-        if (ditherEnabled) {
+        if (colorMode == ColorMode::Nearest) {
+            KoGradientStop leftStop, rightStop;
+            if (!gradient.stopsAt(leftStop, rightStop, grey)) continue;
+            if (std::abs(grey - leftStop.first) < std::abs(grey - rightStop.first)) {
+                outColor = leftStop.second;
+            }
+            else {
+                outColor = rightStop.second;
+            }
+        }
+        else if (colorMode == ColorMode::Dither) {
             KoGradientStop leftStop, rightStop;
             if (!gradient.stopsAt(leftStop, rightStop, grey)) continue;
             qreal localT = (grey - leftStop.first) / (rightStop.first - leftStop.first);
@@ -113,7 +123,7 @@ KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
     doc.appendChild(elt);
     config->setProperty("gradientXML", doc.toString());
 
-    config->setProperty("ditherEnabled", false);
+    config->setProperty("colorMode", false);
     KisDitherWidget::factoryConfiguration(*config, "dither/");
 
     return config;

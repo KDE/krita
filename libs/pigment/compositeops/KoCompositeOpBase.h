@@ -96,18 +96,18 @@ private:
         const quint8* srcRowStart  = params.srcRowStart;
         const quint8* maskRowStart = params.maskRowStart;
 
-        for(qint32 r=0; r<params.rows; ++r) {
+        for (qint32 r=0; r<params.rows; ++r) {
             const channels_type* src  = reinterpret_cast<const channels_type*>(srcRowStart);
             channels_type*       dst  = reinterpret_cast<channels_type*>(dstRowStart);
             const quint8*        mask = maskRowStart;
 
-            for(qint32 c=0; c<params.cols; ++c) {
+            for (qint32 c=0; c<params.cols; ++c) {
                 channels_type srcAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : src[alpha_pos];
                 channels_type dstAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : dst[alpha_pos];
                 channels_type mskAlpha = useMask ? scale<channels_type>(*mask) : unitValue<channels_type>();
 
                 if (!allChannelFlags && dstAlpha == zeroValue<channels_type>()) {
-                    memset(dst, 0, pixel_size);
+                    memset(reinterpret_cast<quint8*>(dst), 0, pixel_size);
                 }
 
                 channels_type newDstAlpha = _compositeOp::template composeColorChannels<alphaLocked,allChannelFlags>(

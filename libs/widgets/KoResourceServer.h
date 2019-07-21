@@ -254,7 +254,7 @@ public:
             }
 
             if (fileInfo.exists()) {
-                QString filename = fileInfo.path() + "/" + fileInfo.baseName() + "XXXXXX" + "." + fileInfo.suffix();
+                QString filename = fileInfo.path() + "/" + fileInfo.completeBaseName() + "XXXXXX" + "." + fileInfo.suffix();
                 debugWidgets << "fileName is " << filename;
                 QTemporaryFile file(filename);
                 if (file.open()) {
@@ -383,12 +383,12 @@ public:
             Q_ASSERT(!resource->defaultFileExtension().isEmpty());
             Q_ASSERT(!saveLocation().isEmpty());
 
-            QString newFilename = saveLocation() + fi.baseName() + resource->defaultFileExtension();
+            QString newFilename = saveLocation() + fi.completeBaseName() + resource->defaultFileExtension();
             QFileInfo fileInfo(newFilename);
 
             int i = 1;
             while (fileInfo.exists()) {
-                fileInfo.setFile(saveLocation() + fi.baseName() + QString("%1").arg(i) + resource->defaultFileExtension());
+                fileInfo.setFile(saveLocation() + fi.completeBaseName() + QString("%1").arg(i) + resource->defaultFileExtension());
                 i++;
             }
             resource->setFilename(fileInfo.filePath());

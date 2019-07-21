@@ -16,18 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *  MA 02110-1301, USA.
  */
-
-/**
- * @file kis_adjustment_layer.h
- * This file is part of the Krita calligra application. It handles
- * a contains a KisFilter OR a KisLayer, and this class is created
- * to influence the rendering of layers below this one. Can also
- * function as a fixating layer.
- *
- * @author Boudewijn Rempt
- * @author comments by hscott
- * @since 1.5
- */
 #ifndef KIS_ADJUSTMENT_LAYER_H_
 #define KIS_ADJUSTMENT_LAYER_H_
 
@@ -35,19 +23,8 @@
 #include <kritaimage_export.h>
 #include "kis_selection_based_layer.h"
 
-
 class KisFilterConfiguration;
 
-/**
- * @class KisAdjustmentLayer
- * @brief Contains a KisFilter and a KisSelection.
- * 
- * If the selection is present, it is a mask used by the adjustment layer
- * to know where to apply the filter, thus the  combination is used
- * to influence the rendering of the layers under this layer
- * in the layerstack. AdjustmentLayers also function as a kind
- * of "fixating layers".
- */
 class KRITAIMAGE_EXPORT KisAdjustmentLayer : public KisSelectionBasedLayer
 {
     Q_OBJECT

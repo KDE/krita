@@ -201,18 +201,17 @@ qint64 KisTileDataSwapper::pass(qint64 needToFreeMetric)
     typename strategy::iterator *iter =
         strategy::beginIteration(m_d->store);
 
-    KisTileData *item;
+    KisTileData *item = 0;
 
-    while(iter->hasNext()) {
+    while (iter->hasNext()) {
         item = iter->next();
 
-        if(freedMetric >= needToFreeMetric) break;
+        if (freedMetric >= needToFreeMetric) break;
 
+        if (!strategy::isInteresting(item)) continue;
 
-        if(!strategy::isInteresting(item)) continue;
-
-        if(strategy::swapOutFirst(item)) {
-            if(iter->trySwapOut(item)) {
+        if (strategy::swapOutFirst(item)) {
+            if (iter->trySwapOut(item)) {
                 freedMetric += item->pixelSize();
             }
         }
@@ -224,9 +223,9 @@ qint64 KisTileDataSwapper::pass(qint64 needToFreeMetric)
     }
 
     Q_FOREACH (item, additionalCandidates) {
-        if(freedMetric >= needToFreeMetric) break;
+        if (freedMetric >= needToFreeMetric) break;
 
-        if(iter->trySwapOut(item)) {
+        if (iter->trySwapOut(item)) {
             freedMetric += item->pixelSize();
         }
     }

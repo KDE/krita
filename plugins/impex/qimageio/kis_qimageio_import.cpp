@@ -51,9 +51,9 @@ KisQImageIOImport::~KisQImageIOImport()
 
 KisImportExportErrorCode KisQImageIOImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    QFileInfo fi(filename());
+
     QImage img;
-    if (!img.loadFromData(io->readAll(), fi.suffix().toLower().toLatin1())) {
+    if (!img.loadFromData(io->readAll()/*, fi.suffix().toLower().toLatin1()*/)) {
         return ImportExportCodes::FileFormatIncorrect;
     }
 

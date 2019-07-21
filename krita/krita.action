@@ -228,6 +228,42 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="create_snapshot">
+      <icon></icon>
+      <text>Create Snapshot</text>
+      <whatsThis></whatsThis>
+      <toolTip>Create Snapshot</toolTip>
+      <iconText></iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="switchto_snapshot">
+      <icon></icon>
+      <text>Switch to Selected Snapshot</text>
+      <whatsThis></whatsThis>
+      <toolTip>Switch to selected snapshot</toolTip>
+      <iconText></iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="remove_snapshot">
+      <icon></icon>
+      <text>Remove Selected Snapshot</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove Selected Snapshot</toolTip>
+      <iconText></iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
 
   </Actions>
 

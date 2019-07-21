@@ -46,7 +46,7 @@ KarbonCalligraphicShape::KarbonCalligraphicShape(qreal caps)
 }
 
 KarbonCalligraphicShape::KarbonCalligraphicShape(const KarbonCalligraphicShape &rhs)
-    : KoParameterShape(new KoParameterShapePrivate(*rhs.d_func(), this)),
+    : KoParameterShape(rhs),
       m_points(rhs.m_points),
       m_lastWasFlip(rhs.m_lastWasFlip),
       m_caps(rhs.m_caps)

@@ -530,6 +530,12 @@ void KisNodeManager::slotUpdateIsolateModeAction()
 
 void KisNodeManager::slotTryRestartIsolatedMode()
 {
+    /**
+     * It might be that we have multiple Krita windows open. In such a case
+     * only the currently active one should restart isolated mode
+     */
+    if (!m_d->view->mainWindow()->isActiveWindow()) return;
+
     KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
     if (!isolatedRootNode && !m_d->lastRequestedIsolatedModeStatus) return;
 
@@ -981,7 +987,7 @@ void KisNodeManager::mirrorAllNodesX()
 {
     KisNodeSP node = m_d->view->image()->root();
     mirrorNode(node, kundo2_i18n("Mirror All Layers X"),
-               Qt::Vertical, m_d->view->selection());
+               Qt::Horizontal, m_d->view->selection());
 }
 
 void KisNodeManager::mirrorAllNodesY()

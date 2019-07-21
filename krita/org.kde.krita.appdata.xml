@@ -141,7 +141,7 @@
     <p xml:lang="it">Perfetto per fare schizzi e dipingere, prevede una soluzione completa che consente agli artisti di creare file di dipinti digitali partendo da zero.</p>
     <p xml:lang="ko">스케치, 페인팅을 위한 완벽한 도구이며, 생각에서부터 디지털 페인팅 파일을 만들어 낼 수 있는 종합적인 도구를 제공합니다.</p>
     <p xml:lang="nl">Het is perfect voor schetsen en schilderen en zet een end–to–end oplossing voor het maken van digitale bestanden voor schilderingen vanuit het niets door meesters.</p>
-    <p xml:lang="nn">Passar perfekt for både teikning og måling, og dekkjer alle ledd i prosessen med å laga digitale målerifiler frå grunnen av.</p>
+    <p xml:lang="nn">Passar perfekt for både teikning og måling, og dekkjer alle ledd i prosessen med å laga digitale måleri frå grunnen av.</p>
     <p xml:lang="pl">Nadaje się perfekcyjnie do szkicowania i malowania i dostarcza zupełnego rozwiązania dla tworzenia plików malowideł cyfrowych od zalążka.</p>
     <p xml:lang="pt">É perfeito para desenhos e pinturas, oferecendo uma solução final para criar ficheiros de pintura digital do zero por mestres.</p>
     <p xml:lang="pt-BR">É perfeito para desenhos e pinturas, oferecendo uma solução final para criar arquivos de desenho digital feitos a partir do zero por mestres.</p>
@@ -174,7 +174,7 @@
     <p xml:lang="ja">コンセプトアート、コミック、3DCG 用テクスチャ、マットペイントを制作する方にとって、Krita は最適な選択です。Krita は、8/16 ビット整数/チャンネル、および 16/32 ビット浮動小数点/チャンネルの RGB や CMYK をはじめ、さまざまな色空間をサポートしています。</p>
     <p xml:lang="ko">Krita는 컨셉 아트, 만화, 렌더링용 텍스처, 풍경화 등을 그릴 때 사용할 수 있는 완벽한 도구입니다. RGB, CMYK와 같은 여러 색 공간 및 8비트/16비트 정수 채널, 16비트/32비트 부동 소수점 채널을 지원합니다.</p>
     <p xml:lang="nl">Krita is een goede keuze voor het maken van kunstconcepten, strips, textuur voor weergeven en matte schilderijen. Krita ondersteunt vele kleurruimten zoals RGB en CMYK in 8 en 16 bits kanalen met gehele getallen, evenals 16 en 32 bits kanalen met drijvende komma.</p>
-    <p xml:lang="nn">Krita er det ideelle valet dersom du vil laga konseptskisser, teikneseriar, teksturar for 3D-rendering eller «matte paintings». Programmet støttar fleire fargerom, som RGB og CMYK med 8- og 16-bits heiltals- eller flyttalskanalar.</p>
+    <p xml:lang="nn">Krita er det ideelle valet dersom du vil laga konseptskisser, teikneseriar, teksturar for 3D-rendering eller «matte paintings». Programmet støttar fleire fargerom, både RGB- og CMYK-baserte, med 8- og 16-bits heiltals- eller flyttalskanalar.</p>
     <p xml:lang="pl">Krita jest świetnym wyborem przy tworzeniu koncepcyjnej sztuki, komiksów, tekstur do wyświetlania i kaszet. Krita obsługuje wiele przestrzeni barw takich jak RGB oraz CMYK dla kanałów 8 oraz 16 bitowych wyrażonych w l. całkowitych, a także  16 oraz 32 bitowych wyrażonych w l. zmiennoprzecinkowych.</p>
     <p xml:lang="pt">O Krita é uma óptima escolha para criar arte conceptual, banda desenhada, texturas para desenho e pinturas. O Krita suporta diversos espaços de cores como o RGB e o CMYK com canais de cores inteiros a 8 e 16 bits, assim como canais de vírgula flutuante a 16 e a 32 bits.</p>
     <p xml:lang="pt-BR">O Krita é uma ótima escolha para criação de arte conceitual, histórias em quadrinhos, texturas para desenhos e pinturas. O Krita tem suporte a diversos espaços de cores como RGB e CMYK com canais de cores inteiros de 8 e 16 bits, assim como canais de ponto flutuante de 16 e 32 bits.</p>
@@ -252,6 +252,7 @@
       <caption xml:lang="it">La finestra di avvio ora fornisce anche le ultime novità su Krita.</caption>
       <caption xml:lang="ko">시작 창에서 Krita의 최신 소식을 볼 수 있습니다.</caption>
       <caption xml:lang="nl">Het opstartvenster geeft u nu ook you het laatste nieuws over Krita.</caption>
+      <caption xml:lang="nn">Oppstartsvindauget viser no siste nytt om Krita.</caption>
       <caption xml:lang="pl">Okno początkowe teraz wyświetla wieści o Kricie.</caption>
       <caption xml:lang="pt">A janela inicial agora também lhe dá as últimas notícias sobre o Krita.</caption>
       <caption xml:lang="sv">Startfönstret ger nu också senaste nytt om Krita.</caption>
@@ -270,6 +271,7 @@
       <caption xml:lang="it">Ci sono oltre dieci motori di pennelli incredibilmente potenti.</caption>
       <caption xml:lang="ko">10가지 종류의 강력한 브러시 엔진을 사용할 수 있습니다.</caption>
       <caption xml:lang="nl">Er zijn meer dan tien immens krachtige penseelengines.</caption>
+      <caption xml:lang="nn">Det finst meir enn ti enormt kraftige penselmotorar.</caption>
       <caption xml:lang="pl">Istnieje ponad dziesięć zaawansowanych silników pędzli.</caption>
       <caption xml:lang="pt">Existem mais de dez motores de pincéis extremamente poderosos.</caption>
       <caption xml:lang="sv">Det finns mer än tio enormt kraftfulla penselgränssnitt.</caption>
@@ -287,6 +289,7 @@
       <caption xml:lang="it">Crea e utilizza maschere gamut per dare alle tue immagini un aspetto coerente.</caption>
       <caption xml:lang="ko">색역 마스크를 만들고 사용할 수 있습니다.</caption>
       <caption xml:lang="nl">Maak en gebruik gamut-maskers om uw afbeeldingen een coherent gevoel te geven.</caption>
+      <caption xml:lang="nn">Bruk fargeområde-masker for å gje bileta eit heilsleg uttrykk.</caption>
       <caption xml:lang="pl">Stwórz i używaj masek gamut, aby nadać swoim obrazom spójny wygląd.</caption>
       <caption xml:lang="pt">Crie e use máscaras de gamute para dar às suas imagens uma aparência coerente.</caption>
       <caption xml:lang="sv">Att skapa och använda färgomfångsmasker ger bilder en sammanhängande känsla.</caption>
@@ -304,6 +307,7 @@
       <caption xml:lang="it">Per le animazioni? Krita fornisce tutto ciò che ti server per l'animazione tradizionale, disegnata a mano.</caption>
       <caption xml:lang="ko">애니메이션을 만들 계획이 있으신가요? Krita를 통해서 수작업 애니메이션을 작업할 수 있습니다.</caption>
       <caption xml:lang="nl">Naar animatie? Krita biedt alles wat u nodig hebt voor traditionele, met de hand getekende animatie.</caption>
+      <caption xml:lang="nn">Interessert i animasjon? Krita har alt du treng for tradisjonelle, handteikna animasjonar.</caption>
       <caption xml:lang="pl">Zajmujesz się animacjami? Krita zapewnia wszystko czego potrzebujesz do tworzenia tradycyjnych, ręcznie rysowanych animacji.</caption>
       <caption xml:lang="pt">Gosta de animação? O Krita oferece tudo o que precisa para o desenho animado tradicional e desenhado à mão.</caption>
       <caption xml:lang="sv">Gillar du animering? Krita tillhandahåller allt som behövs för traditionella, handritade animeringar.</caption>
@@ -322,6 +326,7 @@
       <caption xml:lang="it">Se sei nuovo del disegno digitale, o vuoi saperne di più sulle possibilità di Krita, è disponibile un manuale completo e aggiornato.</caption>
       <caption xml:lang="ko">디지털 페인팅을 처음 시작하시거나, Krita의 기능을 더 알아 보려면 사용 설명서를 참조하십시오.</caption>
       <caption xml:lang="nl">Als u nieuw bent in digitaal schilderen of u wilt meer weten over de mogelijkheden van Krita, dan is er een uitgebreide, bijgewerkte handleiding.</caption>
+      <caption xml:lang="nn">Viss du er nybegynnar innan digital teikning, eller ønskjer å veta meir om kva som er mogleg med Krita, finst det ei omfattande og oppdatert brukarhandbok.</caption>
       <caption xml:lang="pl">Jeśli cyfrowe malowanie to dla ciebie nowość, lub jeśli chcesz dowiedzieć się więcej o możliwościach Krity, to dostępny jest wyczerpująca i aktualna instrukcja obsługi.</caption>
       <caption xml:lang="pt">Se é novo na pintura digital, ou deseja saber mais sobre as possibilidades do Krita, existe um manual extenso e actualizado.</caption>
       <caption xml:lang="sv">Om digital målning är nytt för dig, eller om du vill veta mer om Kritas möjligheter, finns en omfattande, aktuell handbok.</caption>

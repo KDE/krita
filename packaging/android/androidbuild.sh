@@ -167,10 +167,10 @@ build_kf5() {
         echoerr "Qt Android libraries path doesn't exist. Exiting."
         exit
     fi
-    
+
     sed -E -i "s|use-modules.+|use-modules kconfig ki18n |g" $BUILD_ROOT/kf5/kdesrc-conf-android/kdesrc-buildrc
     rm -rf $BUILD_ROOT/kf5/kde/build/* # clean build folders
-    
+
     # Please do not change the order
     ./kdesrc-build libintl-lite
     ./kdesrc-build ki18n kcoreaddons \
@@ -191,8 +191,6 @@ build_krita() {
          -DCMAKE_BUILD_TYPE=$BUILD_TYPE                                                     \
          -DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake      \
          -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL                                       \
-         -DPYTHON_INCLUDE_DIR=$PYTHON_INCLUDE_PATH                                          \
-         -DPYTHON_LIBRARY=$PYTHON_LIBRARY                                                   \
          -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF                                         \
          -DBoost_NO_BOOST_CMAKE=TRUE                                                        \
          -DBoost_NO_SYSTEM_PATHS=TRUE                                                       \
@@ -293,17 +291,6 @@ export ANDROID_NATIVE_API_LEVEL=android-$ANDROID_API_LEVEL
 export INSTALL_PREFIX=$BUILD_ROOT/krita-android-build
 if [[ -z $QT_ANDROID ]]; then
     export QT_ANDROID=$BUILD_ROOT/i
-fi
-
-# setting default expected paths
-: ${PYTHON_INCLUDE_PATH:="/usr/include/python3.6/"}
-: ${PYTHON_LIBRARY:="/usr/lib/python3.6"}
-
-if [[ ! -d $PYTHON_INCLUDE_PATH  || ! -d $PYTHON_LIBRARY ]]; then
-    echoerr "python not found"
-    echo "Please specify it manually, by setting PYTHON_INCLUDE_PATH and PYTHON_LIBRARY"
-    echo "Exiting Now."
-    exit
 fi
 
 setup_directories

@@ -34,6 +34,7 @@
 #include <resources/KoStopGradient.h>
 #include "KoColorSpaceRegistry.h"
 #include "KoResourcePaths.h"
+#include "klocalizedstring.h"
 #include <iostream>
 using namespace std;
 
@@ -54,7 +55,7 @@ public:
 
         KoStopGradient* gradient = new KoStopGradient();
         gradient->setType(QGradient::LinearGradient);
-        gradient->setName("Foreground to Transparent");
+        gradient->setName(i18n("Foreground to Transparent"));
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs));
 
         gradient->setStops(stops);
@@ -65,7 +66,7 @@ public:
 
         gradient = new KoStopGradient();
         gradient->setType(QGradient::LinearGradient);
-        gradient->setName("Foreground to Background");
+        gradient->setName(i18n("Foreground to Background"));
 
         stops.clear();
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(Qt::white, cs));

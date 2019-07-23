@@ -11,12 +11,12 @@ Krita Flatpak
 
 3. compile krita and install it into a local repository:
 
-`$ flatpak-builder --repo=repo_dir --force-clean build_dir org.kde.krita-nightly.json`
+`$ flatpak-builder --repo=repo_dir --force-clean build_dir org.kde.krita.yaml`
 
 4. export krita from the local repository to a bundle:
 
-`$ flatpak build-bundle repo_dir krita-nightly-x86_64.flatpak org.kde.krita master`
+`$ flatpak build-bundle repo_dir krita--x86_64.flatpak org.kde.krita master`
 
 5. install the bundle:
 
-`$ flatpak install krita-nightly-x86_64.flatpak` 
+`$ flatpak install krita-x86_64.flatpak` 

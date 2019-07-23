@@ -1,5 +1,4 @@
 app-id: org.kde.krita-stable
-default-branch: krita\/4.2
 runtime: org.kde.Platform
 runtime-version: '5.12'
 sdk: org.kde.Sdk
@@ -278,4 +277,4 @@ modules:
     sources:
       - type: git
         url: https://anongit.kde.org/krita
-        branch: krita\/4.2
+        branch: krita/4.2

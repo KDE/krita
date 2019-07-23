@@ -1,0 +1,46 @@
+{
+    "id": "org.kde.krita",
+    "branch": "master",
+    "runtime": "org.kde.Platform",
+    "runtime-version": "5.12",
+    "sdk": "org.kde.Sdk",
+    "command": "krita",
+    "rename-icon": "calligrakrita",
+    "tags": ["nightly"],
+    "desktop-file-name-suffix": " (Nightly)",
+    "finish-args": [
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=wayland",
+        "--device=dri"
+    ],
+    "modules": [
+        "boost.json",
+        "eigen.json",
+        {
+            "name": "exiv2",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://www.exiv2.org/builds/exiv2-0.27.0a-Source.tar.gz",
+                    "sha256": "a4adfa7aaf295b0383adead476f8e0493b9d6c6c7570d5884d2ebf8a2871902f"
+                }
+            ]
+        },
+        {
+            "name": "quazip",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [ "-DBUILD_WITH_QT4=OFF" ],
+            "sources": [ { "type": "git", "url": "https://github.com/stachenov/quazip.git" } ]
+        },
+        {
+            "name": "krita",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "sources": [ { "type": "git", "url": "git://anongit.kde.org/krita.git" } ]
+        }
+    ]
+}

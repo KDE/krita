@@ -137,9 +137,15 @@ protected:
 
     /// reimplemented
     void shapeChanged(ChangeType type, KoShape *shape) override;
+private:
+    QPointF escapeDirection(int handleId) const;
+
+    /// Populate the path list by a normal way
+    void normalPath(const qreal MinimumEscapeLength);
 
 private:
-    Q_DECLARE_PRIVATE(KoConnectionShape)
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 #endif

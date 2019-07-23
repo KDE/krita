@@ -61,6 +61,7 @@
         <file>dark_curve-preset-l.svg</file>
         <file>dark_curve-preset-j.svg</file>
         <file>dark_curve-preset-arch.svg</file>
+        <file>dark_snapshot-load.svg</file>
         <file alias="dark_object-align-horizontal-right-calligra.svg">dark_ox16-action-object-align-horizontal-right-calligra.svg</file>
         <file alias="dark_object-align-horizontal-left-calligra.svg">dark_ox16-action-object-align-horizontal-left-calligra.svg</file>
     </qresource>

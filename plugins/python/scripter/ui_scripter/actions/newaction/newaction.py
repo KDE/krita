@@ -35,7 +35,7 @@ class NewAction(QAction):
 
     @property
     def parent(self):
-        return 'File'
+        return 'File',
 
     def new(self):
         msgBox = QMessageBox(self.scripter.uicontroller.mainWidget)

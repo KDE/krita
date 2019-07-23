@@ -47,7 +47,7 @@ KisImportExportErrorCode QMLConverter::buildFile(const QString &filename, const 
     QFileInfo info(filename);
     QFileInfo infoRealFile(realFilename);
     KisNodeSP node = image->rootLayer()->firstChild();
-    QString imageDir = infoRealFile.baseName() + "_images";
+    QString imageDir = infoRealFile.completeBaseName() + "_images";
     QString imagePath = infoRealFile.absolutePath() + '/' + imageDir;
     if (node) {
         QDir dir;

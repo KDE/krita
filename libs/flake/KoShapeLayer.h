@@ -23,8 +23,6 @@
 #include "KoShapeContainer.h"
 #include "kritaflake_export.h"
 
-class KoShapeLayerPrivate;
-
 /**
  * Provides arranging shapes into layers.
  * This makes it possible to have a higher key of a number of objects
@@ -50,9 +48,6 @@ public:
     QRectF boundingRect() const override;
     void saveOdf(KoShapeSavingContext & context) const override;
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) override;
-
-private:
-    Q_DECLARE_PRIVATE(KoShapeLayer)
 };
 
 #endif // __KOSHAPELAYER_H__

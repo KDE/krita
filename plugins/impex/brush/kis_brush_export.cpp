@@ -231,7 +231,7 @@ KisConfigWidget *KisBrushExport::createConfigurationWidget(QWidget *parent, cons
 
     // preload gih name with chosen filename
     QFileInfo fileLocation(filename());
-    wdg->nameLineEdit->setText(fileLocation.baseName());
+    wdg->nameLineEdit->setText(fileLocation.completeBaseName());
     return wdg;
 }
 

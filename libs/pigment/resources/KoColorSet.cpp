@@ -291,6 +291,7 @@ void KoColorSet::clear()
 KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y) const
 {
     int yInGroup = y;
+    KisSwatch e;
     QString nameGroupFoundIn;
     for (const QString &groupName : d->groupNames) {
         if (yInGroup < d->groups[groupName].rowCount()) {
@@ -300,10 +301,14 @@ KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y) const
             yInGroup -= d->groups[groupName].rowCount();
         }
     }
-    const KisSwatchGroup &groupFoundIn = nameGroupFoundIn == GLOBAL_GROUP_NAME
-            ? d->global() : d->groups[nameGroupFoundIn];
-    Q_ASSERT(groupFoundIn.checkEntry(x, yInGroup));
-    return groupFoundIn.getEntry(x, yInGroup);
+    KisSwatchGroup &groupFoundIn = d->global();
+    if (nameGroupFoundIn != GLOBAL_GROUP_NAME) {
+        groupFoundIn = d->groups[nameGroupFoundIn];
+    }
+    if (groupFoundIn.checkEntry(x, yInGroup)) {
+        e = groupFoundIn.getEntry(x, yInGroup);
+    }
+    return e;
 }
 
 KisSwatch KoColorSet::getColorGroup(quint32 x, quint32 y, QString groupName)
@@ -848,7 +853,7 @@ bool KoColorSet::Private::loadGpl()
 bool KoColorSet::Private::loadAct()
 {
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
     KisSwatch e;
     for (int i = 0; i < data.size(); i += 3) {
         quint8 r = data[i];
@@ -864,7 +869,7 @@ bool KoColorSet::Private::loadRiff()
 {
     // http://worms2d.info/Palette_file
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
     KisSwatch e;
 
     RiffHeader header;
@@ -887,7 +892,7 @@ bool KoColorSet::Private::loadRiff()
 bool KoColorSet::Private::loadPsp()
 {
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
     KisSwatch e;
     qint32 r, g, b;
 
@@ -1005,7 +1010,7 @@ bool KoColorSet::Private::loadKpl()
 bool KoColorSet::Private::loadAco()
 {
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
 
     QBuffer buf(&data);
     buf.open(QBuffer::ReadOnly);

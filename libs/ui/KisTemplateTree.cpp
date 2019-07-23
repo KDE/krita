@@ -238,7 +238,7 @@ void KisTemplateTree::readTemplates()
                     // Found a PNG file - the template must be here in the same dir.
                     icon = filePath;
                     QFileInfo fi(filePath);
-                    text = fi.baseName();
+                    text = fi.completeBaseName();
                     templatePath = filePath; // Note that we store the .png file as the template !
                     // That's the way it's always been done. Then the app replaces the extension...
                 }

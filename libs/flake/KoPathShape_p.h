@@ -20,27 +20,21 @@
 #define KOPATHSHAPEPRIVATE_H
 
 #include "KoPathShape.h"
-#include "KoTosContainer_p.h"
 #include "KoMarker.h"
 
-class KoPathShapePrivate : public KoTosContainerPrivate
+#include <QSharedData>
+
+class KoPathShape::Private : public QSharedData
 {
 public:
-    explicit KoPathShapePrivate(KoPathShape *q);
-    explicit KoPathShapePrivate(const KoPathShapePrivate &rhs, KoPathShape *q);
+    explicit Private();
+    explicit Private(const Private &rhs);
 
     QRectF handleRect(const QPointF &p, qreal radius) const;
     /// Applies the viewbox transformation defined in the given element
     void applyViewboxTransformation(const KoXmlElement &element);
 
     void map(const QTransform &matrix);
-
-    void updateLast(KoPathPoint **lastPoint);
-
-    /// closes specified subpath
-    void closeSubpath(KoSubpath *subpath);
-    /// close-merges specified subpath
-    void closeMergeSubpath(KoSubpath *subpath);
 
     /**
      * @brief Saves the node types
@@ -88,8 +82,6 @@ public:
 #endif
 
     Qt::FillRule fillRule;
-
-    Q_DECLARE_PUBLIC(KoPathShape)
 
     KoSubpathList subpaths;
 

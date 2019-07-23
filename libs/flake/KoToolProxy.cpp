@@ -375,6 +375,29 @@ void KoToolProxy::setActiveTool(KoToolBase *tool)
     }
 }
 
+void KoToolProxy::touchEvent(QTouchEvent* event, const QPointF& point)
+{
+    // only one "touchpoint" events should be here
+    KoPointerEvent ev(event, point);
+
+    if (!d->activeTool) return;
+
+    switch (event->touchPointStates())
+    {
+    case Qt::TouchPointPressed:
+        d->activeTool->mousePressEvent(&ev);
+        break;
+    case Qt::TouchPointMoved:
+        d->activeTool->mouseMoveEvent(&ev);
+        break;
+    case Qt::TouchPointReleased:
+        d->activeTool->mouseReleaseEvent(&ev);
+        break;
+    default: // don't care
+        ;
+    }
+}
+
 void KoToolProxyPrivate::setCanvasController(KoCanvasController *c)
 {
     controller = c;

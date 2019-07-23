@@ -166,7 +166,7 @@ QString KisSqueezedComboBox::squeezeText(const QString& original, const QWidget 
     return sqItem;
 }
 
-QString KisSqueezedComboBox::itemHighlighted()
+QString KisSqueezedComboBox::currentUnsqueezedText()
 {
     int curItem = currentIndex();
     return m_originalItems[curItem];

@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
@@ -653,10 +654,10 @@ void KisSelectionManager::slotStrokeSelection()
 {
     KisImageWSP image = m_view->image();
 
-    if (!image )     {
-
+    if (!image ) {
         return;
     }
+
     KisNodeSP currentNode = m_view->canvasResourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
     bool isVectorLayer = false;
     if (currentNode->inherits("KisShapeLayer")) {

@@ -61,7 +61,7 @@ if (APPLE)
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
-    add_definitions(-Wno-suggest-override)
+    add_definitions(-Wno-suggest-override -Wextra)
 endif()
 
  ######################
@@ -443,6 +443,8 @@ add_definitions(
   -DQT_STRICT_ITERATORS
   -DQT_NO_SIGNALS_SLOTS_KEYWORDS
   -DQT_NO_URL_CAST_FROM_STRING
+  -DQT_USE_FAST_CONCATENATION 
+  -DQT_USE_FAST_OPERATOR_PLUS
 )
 
 if (${Qt5_VERSION} VERSION_GREATER "5.8.0" )

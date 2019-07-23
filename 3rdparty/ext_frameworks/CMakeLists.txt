@@ -12,6 +12,7 @@ SET(EXTPREFIX_frameworks "${EXTPREFIX}" )
 #        ItemModels 
 #        ItemViews
 #        WindowSystem
+#        kimageformats
 # On Linux:
 #        KCrash
 

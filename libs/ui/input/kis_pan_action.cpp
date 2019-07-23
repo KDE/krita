@@ -41,6 +41,7 @@ public:
     const int panDistance;
 
     QPointF lastPosition;
+    QPointF originalPreferredCenter;
 };
 
 KisPanAction::KisPanAction()
@@ -104,6 +105,8 @@ void KisPanAction::begin(int shortcut, QEvent *event)
                 break;
             }
 
+            d->originalPreferredCenter = inputManager()->canvas()->canvasController()->preferredCenter();
+
             break;
         }
         case PanLeftShortcut:
@@ -161,10 +164,9 @@ void KisPanAction::inputEvent(QEvent *event)
     KisAbstractInputAction::inputEvent(event);
 }
 
-void KisPanAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
+void KisPanAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos)
 {
-    QPointF relMovement = -(pos - lastPos);
-    inputManager()->canvas()->canvasController()->pan(relMovement.toPoint());
+    inputManager()->canvas()->canvasController()->setPreferredCenter(-pos + startPos + d->originalPreferredCenter);
 }
 
 QPointF KisPanAction::Private::averagePoint( QTouchEvent* event )
@@ -195,4 +197,9 @@ KisInputActionGroup KisPanAction::inputActionGroup(int shortcut) const
 {
     Q_UNUSED(shortcut);
     return ViewTransformActionGroup;
+}
+
+bool KisPanAction::supportsHiResInputEvents() const
+{
+    return true;
 }

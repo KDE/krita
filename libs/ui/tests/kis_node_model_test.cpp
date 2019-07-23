@@ -41,6 +41,8 @@ void KisNodeModelTest::init()
     m_nodeModel = new KisNodeModel(0);
 
     initBase();
+
+    m_doc->setCurrentImage(m_image);
 }
 
 void KisNodeModelTest::cleanup()

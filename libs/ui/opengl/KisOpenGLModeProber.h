@@ -26,6 +26,7 @@
 #include <QSurfaceFormat>
 #include "KisSurfaceColorSpace.h"
 #include <boost/optional.hpp>
+#include "kis_opengl.h"
 
 class KoColorProfile;
 
@@ -45,11 +46,12 @@ public:
 
     const KoColorProfile *rootSurfaceColorProfile() const;
 
-    boost::optional<Result> probeFormat(const QSurfaceFormat &format,
+    boost::optional<Result> probeFormat(const KisOpenGL::RendererConfig &rendererConfig,
                                         bool adjustGlobalState = true);
 
     static bool fuzzyCompareColorSpaces(const KisSurfaceColorSpace &lhs,
                                         const KisSurfaceColorSpace &rhs);
+    static QString angleRendererToString(KisOpenGL::AngleRenderer renderer);
 
 public:
     static void initSurfaceFormatFromConfig(KisConfig::RootSurfaceFormat config,

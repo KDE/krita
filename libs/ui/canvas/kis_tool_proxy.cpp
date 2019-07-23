@@ -73,6 +73,14 @@ KoPointerEvent KisToolProxy::convertEventToPointerEvent(QEvent *event, const QPo
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         return KoPointerEvent(mouseEvent, docPoint);
     }
+    case QEvent::TouchBegin:
+    case QEvent::TouchUpdate:
+    case QEvent::TouchEnd:
+    {
+        *result = true;
+        QTouchEvent *touchEvent = static_cast<QTouchEvent *> (event);
+        return KoPointerEvent(touchEvent, docPoint);
+    }
     default:
         ;
     }
@@ -115,6 +123,7 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
 
     QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event);
     QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+    QTouchEvent *touchEvent = dynamic_cast<QTouchEvent *> (event);
 
     if (tabletEvent) {
         QPointF docPoint = widgetToDocument(tabletEvent->posF());
@@ -137,6 +146,13 @@ bool KisToolProxy::forwardEvent(ActionState state, KisTool::ToolAction action, Q
         }
         forwardToTool(state, action, originalEvent, docPoint);
         retval = mouseEvent->isAccepted();
+    }
+    else if (touchEvent) {
+        QPointF docPoint = widgetToDocument(touchEvent->touchPoints().at(0).pos());
+        touchEvent->accept();
+        this->touchEvent(touchEvent, docPoint);
+        forwardToTool(state, action, touchEvent, docPoint);
+        retval = touchEvent->isAccepted();
     }
     else if (event && event->type() == QEvent::KeyPress) {
         QKeyEvent* kevent = static_cast<QKeyEvent*>(event);

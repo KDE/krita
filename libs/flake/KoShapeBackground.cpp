@@ -19,31 +19,12 @@
 
 #include "KoShapeBackground.h"
 
-#include "KoShapeBackground_p.h"
-
-KoShapeBackgroundPrivate::KoShapeBackgroundPrivate()
-{
-}
-
-KoShapeBackgroundPrivate::~KoShapeBackgroundPrivate()
-{
-}
-
-KoShapeBackground::KoShapeBackground(KoShapeBackgroundPrivate &dd)
-    :d_ptr(&dd)
-{
-}
-
-
-
 KoShapeBackground::KoShapeBackground()
-    : d_ptr(new KoShapeBackgroundPrivate())
 {
 }
 
 KoShapeBackground::~KoShapeBackground()
 {
-    delete d_ptr;
 }
 
 bool KoShapeBackground::hasTransparency() const

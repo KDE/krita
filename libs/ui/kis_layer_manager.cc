@@ -243,8 +243,8 @@ void KisLayerManager::layerProperties()
     const bool multipleLayersSelected = selectedNodes.size() > 1;
 
     KisAdjustmentLayerSP adjustmentLayer = KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(layer.data()));
-    KisGeneratorLayerSP groupLayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()));
-    KisFileLayerSP filterLayer = KisFileLayerSP(dynamic_cast<KisFileLayer*>(layer.data()));
+    KisGeneratorLayerSP generatorLayer = KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(layer.data()));
+    KisFileLayerSP fileLayer = KisFileLayerSP(dynamic_cast<KisFileLayer*>(layer.data()));
 
     if (adjustmentLayer && !multipleLayersSelected) {
 
@@ -292,12 +292,12 @@ void KisLayerManager::layerProperties()
             }
         }
     }
-    else if (groupLayer && !multipleLayersSelected) {
-        KisFilterConfigurationSP configBefore(groupLayer->filter());
+    else if (generatorLayer && !multipleLayersSelected) {
+        KisFilterConfigurationSP configBefore(generatorLayer->filter());
         Q_ASSERT(configBefore);
         QString xmlBefore = configBefore->toXML();
 
-        KisDlgGeneratorLayer *dlg = new KisDlgGeneratorLayer(groupLayer->name(), m_view, m_view->mainWindow(), groupLayer, configBefore);
+        KisDlgGeneratorLayer *dlg = new KisDlgGeneratorLayer(generatorLayer->name(), m_view, m_view->mainWindow(), generatorLayer, configBefore);
         dlg->setCaption(i18n("Fill Layer Properties"));
         dlg->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -309,11 +309,11 @@ void KisLayerManager::layerProperties()
         dlg->show();
 
     }
-    else if (filterLayer && !multipleLayersSelected){
+    else if (fileLayer && !multipleLayersSelected){
         QString basePath = QFileInfo(m_view->document()->url().toLocalFile()).absolutePath();
-        QString fileNameOld = filterLayer->fileName();
-        KisFileLayer::ScalingMethod scalingMethodOld = filterLayer->scalingMethod();
-        KisDlgFileLayer dlg(basePath, filterLayer->name(), m_view->mainWindow());
+        QString fileNameOld = fileLayer->fileName();
+        KisFileLayer::ScalingMethod scalingMethodOld = fileLayer->scalingMethod();
+        KisDlgFileLayer dlg(basePath, fileLayer->name(), m_view->mainWindow());
         dlg.setCaption(i18n("File Layer Properties"));
         dlg.setFileName(fileNameOld);
         dlg.setScalingMethod(scalingMethodOld);
@@ -326,11 +326,11 @@ void KisLayerManager::layerProperties()
                 QMessageBox::critical(m_view->mainWindow(), i18nc("@title:window", "Krita"), i18n("No file name specified"));
                 return;
             }
-            filterLayer->setName(dlg.layerName());
+            fileLayer->setName(dlg.layerName());
 
             if (fileNameOld!= fileNameNew || scalingMethodOld != scalingMethodNew) {
                 KisChangeFileLayerCmd *cmd
-                        = new KisChangeFileLayerCmd(filterLayer,
+                        = new KisChangeFileLayerCmd(fileLayer,
                                                     basePath,
                                                     fileNameOld,
                                                     scalingMethodOld,
@@ -496,8 +496,8 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
     urlRequester->setMimeTypeFilters(listMimeFilter);
     urlRequester->setFileName(m_view->document()->url().toLocalFile());
     if (m_view->document()->url().isLocalFile()) {
-        QFileInfo location = QFileInfo(m_view->document()->url().toLocalFile()).baseName();
-        location.setFile(location.dir(), location.baseName() + "_" + source->name() + ".png");
+        QFileInfo location = QFileInfo(m_view->document()->url().toLocalFile()).completeBaseName();
+        location.setFile(location.dir(), location.completeBaseName() + "_" + source->name() + ".png");
         urlRequester->setFileName(location.absoluteFilePath());
     }
     else {
@@ -914,7 +914,7 @@ void KisLayerManager::saveGroupLayers()
         mimeType = "image/png";
     }
     QString extension = KisMimeDatabase::suffixesForMimeType(mimeType).first();
-    QString basename = f.baseName();
+    QString basename = f.completeBaseName();
 
     KisImageSP image = m_view->image();
     if (!image) return;

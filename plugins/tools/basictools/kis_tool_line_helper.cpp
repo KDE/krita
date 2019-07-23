@@ -162,7 +162,7 @@ void KisToolLineHelper::end()
     KIS_ASSERT_RECOVER_RETURN(isRunning());
 
     endPaint();
-    m_d->linePoints.clear();
+    clearPoints();
 }
 
 
@@ -172,6 +172,12 @@ void KisToolLineHelper::cancel()
     KIS_ASSERT_RECOVER_RETURN(isRunning());
 
     cancelPaint();
+    clearPoints();
+}
+
+
+void KisToolLineHelper::clearPoints()
+{
     m_d->linePoints.clear();
 }
 

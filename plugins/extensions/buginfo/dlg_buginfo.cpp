@@ -90,7 +90,7 @@ DlgBugInfo::DlgBugInfo(QWidget *parent)
     }
     else {
         QFile f(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log");
-        f.open(QFile::ReadOnly);
+        f.open(QFile::ReadOnly | QFile::Text);
         info = QString::fromUtf8(f.readAll());
         f.close();
     }

@@ -45,8 +45,6 @@ void KisPngTest::testWriteonly()
 
 void roudTripHdrImage(const KoColorSpace *savingColorSpace)
 {
-    qDebug() << "Test saving" << savingColorSpace->id() << savingColorSpace->profile()->name();
-
     const KoColorSpace * scRGBF32 =
         KoColorSpaceRegistry::instance()->colorSpace(
             RGBAColorModelID.id(),
@@ -130,18 +128,37 @@ void KisPngTest::testSaveHDR()
     colorDepthIds << Float32BitsColorDepthID;
 
     QVector<const KoColorProfile*> profiles;
-    profiles << KoColorSpaceRegistry::instance()->p709G10Profile();
-    profiles << KoColorSpaceRegistry::instance()->p2020G10Profile();
-    profiles << KoColorSpaceRegistry::instance()->p2020PQProfile();
-
+    const KoColorProfile *profile = KoColorSpaceRegistry::instance()->p709G10Profile();
+    if (!profile) {
+        qWarning() << "Could not get a p709G10 Profile";
+    }
+    else {
+        profiles << profile;
+    }
+    profile = KoColorSpaceRegistry::instance()->p2020G10Profile();
+    if (!profile) {
+        qWarning() << "Could not get a p2020G10 Profile";
+    }
+    else {
+        profiles << profile;
+    }
+    profile = KoColorSpaceRegistry::instance()->p2020PQProfile();;
+    if (!profile) {
+        qWarning() << "Could not get a p2020PQ Profile";
+    }
+    else {
+        profiles << profile;
+    }
 
     Q_FOREACH(const KoID &depth, colorDepthIds) {
         Q_FOREACH(const KoColorProfile *profile, profiles) {
-            roudTripHdrImage(
-                KoColorSpaceRegistry::instance()->colorSpace(
-                            RGBAColorModelID.id(),
-                            depth.id(),
-                            profile));
+            if (profile) {
+                roudTripHdrImage(
+                    KoColorSpaceRegistry::instance()->colorSpace(
+                                RGBAColorModelID.id(),
+                                depth.id(),
+                                profile));
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-app-id: org.kde.krita
+app-id: org.kde.krita-nightly
 default-branch: stable
 runtime: org.kde.Platform
 runtime-version: '5.12'

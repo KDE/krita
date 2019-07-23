@@ -1,10 +1,11 @@
-app-id: org.kde.krita-stable
-default-branch: stable
+app-id: org.kde.krita-nightly
+default-branch: master
 runtime: org.kde.Platform
 runtime-version: '5.12'
 sdk: org.kde.Sdk
 command: krita
 rename-icon: calligrakrita
+rename-desktop-file: org.kde.krita-nightly
 finish-args:
   - --share=ipc
   - --socket=x11

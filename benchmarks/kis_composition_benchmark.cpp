@@ -63,8 +63,6 @@
 #define MEMALIGN_FREE(p) free((p))
 #endif
 
-const int alpha_pos = 3;
-
 enum AlphaRange {
     ALPHA_ZERO,
     ALPHA_UNIT,

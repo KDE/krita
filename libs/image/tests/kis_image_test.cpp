@@ -877,7 +877,6 @@ void KisImageTest::testMergeMultiple()
 
 void testMergeCrossColorSpaceImpl(bool useProjectionColorSpace, bool swapSpaces)
 {
-    QRect refRect;
     TestUtil::MaskParent p;
 
     KisPaintLayerSP layer1;

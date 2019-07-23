@@ -276,3 +276,4 @@ modules:
     sources:
       - type: git
         url: https://anongit.kde.org/krita
+        branch: krita/4.2

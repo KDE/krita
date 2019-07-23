@@ -57,10 +57,11 @@ ExternalProject_Add(
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kconfig.diff
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
-            -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
-                ${GLOBAL_PROFILE}
-                -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-                -DBUILD_TESTING=false
+               -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
+               ${GLOBAL_PROFILE}
+               -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
+               -DBUILD_TESTING=false
+               -DKCONFIG_USE_DBUS=off
     UPDATE_COMMAND ""
     DEPENDS ext_karchive
 )

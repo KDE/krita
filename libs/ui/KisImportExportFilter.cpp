@@ -215,7 +215,7 @@ QString KisImportExportFilter::verify(const QString &fileName) const
     QFileInfo fi(fileName);
 
     if (!fi.exists()) {
-        return i18n("%1 does not exit after writing. Try saving again under a different name, in another location.", fileName);
+        return i18n("%1 does not exist after writing. Try saving again under a different name, in another location.", fileName);
     }
 
     if (!fi.isReadable()) {

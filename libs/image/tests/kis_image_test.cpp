@@ -944,7 +944,6 @@ void KisImageTest::testMergeCrossColorSpace()
 
 void KisImageTest::testMergeSelectionMasks()
 {
-    QRect refRect;
     TestUtil::MaskParent p;
 
     QRect rect1(100, 100, 100, 100);

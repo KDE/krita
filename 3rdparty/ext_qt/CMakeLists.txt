@@ -84,8 +84,8 @@ if (WIN32)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-      URL https://download.qt.io/official_releases/qt/5.12/5.12.4/single/qt-everywhere-src-5.12.4.tar.xz
-      URL_MD5 dda95b0239d13c5276834177af3a8588
+      URL https://download.qt.io/official_releases/qt/5.12/5.12.4/single/qt-everywhere-src-5.12.4.ziphttps://download.qt.io/official_releases/qt/5.12/5.12.4/single/
+      URL_MD5 16526e08adfad46e8e686b8af984b9b5
 
       PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
 

@@ -996,9 +996,9 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
 
 void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(isSaving());
+    KIS_ASSERT_RECOVER_RETURN(isSaving());
 
-    KIS_SAFE_ASSERT_RECOVER(d->backgroundSaveDocument) {
+    KIS_ASSERT_RECOVER(d->backgroundSaveDocument) {
         d->savingMutex.unlock();
         return;
     }
@@ -1009,7 +1009,7 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
 
     d->backgroundSaveDocument.take()->deleteLater();
 
-    KIS_SAFE_ASSERT_RECOVER(d->backgroundSaveJob.isValid()) {
+    KIS_ASSERT_RECOVER(d->backgroundSaveJob.isValid()) {
         d->savingMutex.unlock();
         return;
     }

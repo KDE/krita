@@ -67,7 +67,7 @@ build_qt() {
     fi
     configure_ext
     cd $DEPS_BUILD
-    cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_qt
+    cmake --build . --config $BUILD_TYPE --target ext_qt -- -j$PROC_COUNT
     cd $BUILD_ROOT
 }
 
@@ -81,18 +81,18 @@ build_ext() {
     configure_ext
     cd $DEPS_BUILD
     # Please do not change the order
-    cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_png
-    cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_zlib
-    cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_quazip
-    cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_lcms2
-    cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_expat
-    cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_exiv2
-    cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_gsl
-    cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_tiff
-    cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_fftw3
-    cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_jpeg
-    cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_giflib
-    cmake --build . -j $PROC_COUNT --config $BUILD_TYPE --target ext_eigen3
+    cmake --build . --config $BUILD_TYPE --target ext_png -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_zlib -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_quazip -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_lcms2 -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_expat -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_exiv2 -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_gsl -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_tiff -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_fftw3 -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_jpeg -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_giflib -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_eigen3 -- -j$PROC_COUNT
 
     cd $BUILD_ROOT
 }

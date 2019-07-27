@@ -87,6 +87,16 @@ void KisConfig::setDisableTouchOnCanvas(bool value) const
     m_cfg.writeEntry("disableTouchOnCanvas", value);
 }
 
+bool KisConfig::disableTouchRotation(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("disableTouchRotation", false));
+}
+
+void KisConfig::setDisableTouchRotation(bool value) const
+{
+    m_cfg.writeEntry("disableTouchRotation", value);
+}
+
 bool KisConfig::useProjections(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("useProjections", true));

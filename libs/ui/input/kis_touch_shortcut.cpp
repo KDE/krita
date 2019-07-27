@@ -19,20 +19,27 @@
  */
 
 #include "kis_touch_shortcut.h"
+#include "kis_abstract_input_action.h"
 
 #include <QTouchEvent>
 
 class KisTouchShortcut::Private
 {
 public:
-    Private() : minTouchPoints(0), maxTouchPoints(0) { }
+    Private(GestureAction type)
+        : minTouchPoints(0)
+        , maxTouchPoints(0)
+        , type(type)
+    { }
 
     int minTouchPoints;
     int maxTouchPoints;
+    GestureAction type;
 };
 
-KisTouchShortcut::KisTouchShortcut( KisAbstractInputAction* action, int index )
-    : KisAbstractShortcut(action, index), d( new Private )
+KisTouchShortcut::KisTouchShortcut(KisAbstractInputAction* action, int index, GestureAction type)
+    : KisAbstractShortcut(action, index)
+    , d(new Private(type))
 {
 
 }

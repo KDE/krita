@@ -22,6 +22,7 @@
 #define KISTOUCHSHORTCUT_H
 
 #include "kis_abstract_shortcut.h"
+#include "kis_shortcut_configuration.h"
 
 class QTouchEvent;
 /**
@@ -31,8 +32,10 @@ class QTouchEvent;
  */
 class KisTouchShortcut : public KisAbstractShortcut
 {
+        using GestureAction = KisShortcutConfiguration::GestureAction;
+
     public:
-        KisTouchShortcut( KisAbstractInputAction* action, int index );
+        KisTouchShortcut(KisAbstractInputAction* action, int index, GestureAction type);
         ~KisTouchShortcut() override;
 
         int priority() const override;

@@ -502,11 +502,12 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
 
 void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture)
 {
-    KisTouchShortcut *shortcut = new KisTouchShortcut(action, index);
+    KisTouchShortcut *shortcut = new KisTouchShortcut(action, index, gesture);
+    dbgKrita << "TouchAction:" << action->name();
     switch(gesture) {
     case KisShortcutConfiguration::RotateGesture:
     case KisShortcutConfiguration::PinchGesture:
-        shortcut = new KisTouchShortcut(new KisZoomAndRotateAction, index);
+    case KisShortcutConfiguration::ZoomAndRotateGesture:
         shortcut->setMinimumTouchPoints(2);
         shortcut->setMaximumTouchPoints(2);
         break;

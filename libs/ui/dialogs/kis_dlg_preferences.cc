@@ -188,6 +188,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     cmbFlowMode->setCurrentIndex((int)!cfg.readEntry<bool>("useCreamyAlphaDarken", true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
+    chkEnableTouchRotation->setChecked(!cfg.disableTouchRotation());
     chkEnableTranformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste());
 
     m_groupBoxKineticScrollingSettings->setChecked(cfg.kineticScrollingEnabled());
@@ -305,6 +306,7 @@ void GeneralTab::setDefault()
     m_chkKineticScrollingHideScrollbars->setChecked(cfg.kineticScrollingHiddenScrollbars(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas(true));
+    chkEnableTouchRotation->setChecked(!cfg.disableTouchRotation(true));
     chkEnableTranformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste(true));
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
 
@@ -1637,6 +1639,7 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setSwitchSelectionCtrlAlt(dialog->m_general->switchSelectionCtrlAlt());
         cfg.setDisableTouchOnCanvas(!dialog->m_general->chkEnableTouch->isChecked());
+        cfg.setDisableTouchRotation(!dialog->m_general->chkEnableTouchRotation->isChecked());
         cfg.setActivateTransformToolAfterPaste(dialog->m_general->chkEnableTranformToolAfterPaste->isChecked());
         cfg.setConvertToImageColorspaceOnImport(dialog->m_general->convertToImageColorspaceOnImport());
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());

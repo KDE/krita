@@ -18,6 +18,7 @@
  */
 
 #include <klocalizedstring.h>
+#include <kis_config.h>
 
 #include "kis_zoom_and_rotate_action.h"
 #include "kis_zoom_action.h"
@@ -39,7 +40,8 @@ KisZoomAndRotateAction::KisZoomAndRotateAction()
 
 int KisZoomAndRotateAction::priority() const
 {
-    return 5;
+    // if rotation is disabled, we set the lowest priority, so that, this action isn't triggered
+    return KisConfig(true).disableTouchRotation() ? 0 : 5;
 }
 
 void KisZoomAndRotateAction::activate(int shortcut)

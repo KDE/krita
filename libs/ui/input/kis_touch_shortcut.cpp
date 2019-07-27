@@ -51,7 +51,7 @@ KisTouchShortcut::~KisTouchShortcut()
 
 int KisTouchShortcut::priority() const
 {
-    return d->maxTouchPoints;
+    return action()->priority();
 }
 
 void KisTouchShortcut::setMinimumTouchPoints(int min)

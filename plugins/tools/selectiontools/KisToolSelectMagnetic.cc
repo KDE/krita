@@ -96,7 +96,7 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
     int lastCheckPoint = m_checkPoint;
 
     for(int i=m_points.count()-1; i>m_checkPoint; i--){
-        QPoint pointInQuestion(m_points[i].x(), m_points[i].y());
+        QPoint pointInQuestion(m_points[i].toPoint());
         if(m_worker.intensity(pointInQuestion) >= m_threshold){
             m_checkPoint = i;
             m_lastAnchor = pointInQuestion;
@@ -307,6 +307,13 @@ void KisToolSelectMagnetic::requestStrokeCancellation()
     m_anchorPoints.clear();
     m_paintPath = QPainterPath();
     updateCanvasPixelRect(image()->bounds());
+}
+
+QWidget* KisToolSelectMagnetic::createOptionWidget()
+{
+    KisToolSelectBase::createOptionWidget();
+    KisSelectionOptions *selectionWidget = selectionOptionWidget();
+    return selectionWidget;
 }
 
 void KisToolSelectMagnetic::resetCursorStyle()

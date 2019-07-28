@@ -47,6 +47,7 @@ public:
     void resetCursorStyle() override;
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
+    QWidget* createOptionWidget() override;
 
 public Q_SLOTS:
     void deactivate() override;

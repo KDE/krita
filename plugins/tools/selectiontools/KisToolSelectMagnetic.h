@@ -47,11 +47,11 @@ public:
     void resetCursorStyle() override;
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
-    QWidget* createOptionWidget() override;
+    QWidget * createOptionWidget() override;
 
 public Q_SLOTS:
     void deactivate() override;
-    void activate(KoToolBase::ToolActivation activation, const QSet<KoShape*> &shapes) override;
+    void activate(KoToolBase::ToolActivation activation, const QSet<KoShape *> &shapes) override;
     void requestUndoDuringStroke() override;
     void slotSetRadius(int);
     void slotSetThreshold(int);
@@ -91,13 +91,13 @@ public:
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }
 
-    ~KisToolSelectMagneticFactory() override {}
+    ~KisToolSelectMagneticFactory() override { }
 
-    KoToolBase * createTool(KoCanvasBase *canvas) override {
+    KoToolBase * createTool(KoCanvasBase *canvas) override
+    {
         return new KisToolSelectMagnetic(canvas);
     }
 };
 
 
-#endif //__selecttoolmagnetic_h__
-
+#endif // __selecttoolmagnetic_h__

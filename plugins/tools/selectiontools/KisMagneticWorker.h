@@ -23,10 +23,11 @@
 
 class KisMagneticGraph;
 
-class KRITASELECTIONTOOLS_EXPORT KisMagneticWorker{
+class KRITASELECTIONTOOLS_EXPORT KisMagneticWorker {
 public:
-    KisMagneticWorker() {
-        //Do not use this, just for making the compiler happy
+    KisMagneticWorker()
+    {
+        // Do not use this, just for making the compiler happy
     }
 
     KisMagneticWorker(const KisPaintDeviceSP &dev);
@@ -38,4 +39,4 @@ private:
     KisMagneticGraph *m_graph;
 };
 
-#endif
+#endif // ifndef KISMAGNETICWORKER_H

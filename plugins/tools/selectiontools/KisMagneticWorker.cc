@@ -35,10 +35,11 @@ struct DistanceMap {
     typedef std::pair<key_type, data_type> value_type;
 
     explicit DistanceMap(double const& dval)
-            : m_default(dval)
+        : m_default(dval)
     { }
 
-    data_type &operator[](key_type const& k) {
+    data_type &operator [] (key_type const& k)
+    {
         if (m.find(k) == m.end())
             m[k] = m_default;
         return m[k];
@@ -46,10 +47,10 @@ struct DistanceMap {
 
 private:
     std::map<key_type, data_type> m;
-    data_type const m_default;
+    data_type const               m_default;
 };
 
-struct PredecessorMap{
+struct PredecessorMap {
     PredecessorMap() = default;
 
     PredecessorMap(PredecessorMap const& that) = default;
@@ -58,71 +59,78 @@ struct PredecessorMap{
     typedef VertexDescriptor value_type;
     typedef boost::read_write_property_map_tag category;
 
-    VertexDescriptor &operator[](VertexDescriptor v){
+    VertexDescriptor &operator [] (VertexDescriptor v)
+    {
         return m_map[v];
     }
 
     std::map<VertexDescriptor, VertexDescriptor> m_map;
 };
 
-VertexDescriptor get(PredecessorMap const &m, VertexDescriptor v){
+VertexDescriptor get(PredecessorMap const &m, VertexDescriptor v)
+{
     auto found = m.m_map.find(v);
     return found != m.m_map.end() ? found->second : v;
 }
 
-void put(PredecessorMap &m, VertexDescriptor key, VertexDescriptor value){
+void put(PredecessorMap &m, VertexDescriptor key, VertexDescriptor value)
+{
     m.m_map[key] = value;
 }
 
-double EuclideanDistance(VertexDescriptor p1, VertexDescriptor p2){
-    return std::sqrt(std::pow(p1.y-p2.y, 2) + std::pow(p1.x-p2.x, 2));
+double EuclideanDistance(VertexDescriptor p1, VertexDescriptor p2)
+{
+    return std::sqrt(std::pow(p1.y - p2.y, 2) + std::pow(p1.x - p2.x, 2));
 }
 
 class AStarHeuristic : public boost::astar_heuristic<KisMagneticGraph, double> {
-    private:
-        VertexDescriptor m_goal;
+private:
+    VertexDescriptor m_goal;
 
-    public:
-        explicit AStarHeuristic(VertexDescriptor goal):
-            m_goal(goal)
-        { }
+public:
+    explicit AStarHeuristic(VertexDescriptor goal) :
+        m_goal(goal)
+    { }
 
-        double operator()(VertexDescriptor v) {
-            return EuclideanDistance(v,m_goal);
-        }
+    double operator () (VertexDescriptor v)
+    {
+        return EuclideanDistance(v, m_goal);
+    }
 };
 
-struct GoalFound {};
+struct GoalFound { };
 
 class AStarGoalVisitor : public boost::default_astar_visitor {
-    public:
-        explicit AStarGoalVisitor(VertexDescriptor goal) : m_goal(goal) { }
+public:
+    explicit AStarGoalVisitor(VertexDescriptor goal) : m_goal(goal){ }
 
-        void examine_vertex(VertexDescriptor u, KisMagneticGraph const &g) {
-            Q_UNUSED(g)
-            if(u == m_goal){
-                throw GoalFound();
-            }
+    void examine_vertex(VertexDescriptor u, KisMagneticGraph const &g)
+    {
+        Q_UNUSED(g)
+        if (u == m_goal) {
+            throw GoalFound();
         }
+    }
 
-    private:
-        VertexDescriptor m_goal;
+private:
+    VertexDescriptor m_goal;
 };
 
-struct WeightMap{
+struct WeightMap {
     typedef std::pair<VertexDescriptor, VertexDescriptor> key_type;
     typedef double data_type;
     typedef std::pair<key_type, data_type> value_type;
 
     WeightMap() = default;
 
-    explicit WeightMap(const KisMagneticGraph &g):
+    explicit WeightMap(const KisMagneticGraph &g) :
         m_graph(g)
     { }
 
-    data_type& operator[](key_type const& k) {
+    data_type& operator [] (key_type const& k)
+    {
         if (m_map.find(k) == m_map.end()) {
-            double edge_gradient = (m_graph.getIntensity(k.first) + m_graph.getIntensity(k.second))/2;
+            double edge_gradient = (m_graph.getIntensity(k.first) + m_graph.getIntensity(k.second)) / 2;
             m_map[k] = EuclideanDistance(k.first, k.second) / (edge_gradient + 1);
         }
         return m_map[k];
@@ -130,11 +138,11 @@ struct WeightMap{
 
 private:
     std::map<key_type, data_type> m_map;
-    KisMagneticGraph m_graph;
+    KisMagneticGraph              m_graph;
 };
 
 KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev)
-{   
+{
     KisPaintDeviceSP m_dev = KisPainter::convertToAlphaAsGray(dev);
     KisPainter::copyAreaOptimized(dev->exactBounds().topLeft(), dev, m_dev, dev->exactBounds());
     KisGaussianKernel::applyLoG(m_dev, m_dev->exactBounds(), 2, -1.0, QBitArray(), nullptr);
@@ -142,11 +150,11 @@ KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev)
     m_graph = new KisMagneticGraph(m_dev);
 }
 
-QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint end) {
-
+QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint end)
+{
     QRect rect;
-    KisAlgebra2D::accumulateBounds(QVector<QPoint>{begin, end}, &rect);
-    rect.setSize(rect.size()*radius);
+    KisAlgebra2D::accumulateBounds(QVector<QPoint> { begin, end }, &rect);
+    rect.setSize(rect.size() * radius);
 
     VertexDescriptor goal(end);
     VertexDescriptor start(begin);
@@ -166,28 +174,27 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint
 
     try{
         boost::astar_search_no_init(
-                    *m_graph, start, heuristic
-                    ,boost::visitor(AStarGoalVisitor(goal))
-                    .distance_map(boost::associative_property_map<DistanceMap>(dmap))
-                    .predecessor_map(boost::ref(pmap))
-                    .weight_map(boost::associative_property_map<WeightMap>(wmap))
-                    .vertex_index_map(boost::associative_property_map<std::map<VertexDescriptor, double>>(imap))
-                    .rank_map(boost::associative_property_map<std::map<VertexDescriptor, double>>(rmap))
-                    .color_map(boost::associative_property_map<std::map<VertexDescriptor, boost::default_color_type>>(cmap))
-                    .distance_combine(std::plus<double>())
-                    .distance_compare(std::less<double>())
-                    );
-
-    }catch(GoalFound const&){
-        for(VertexDescriptor u=goal; u!=start; u = pmap[u]){
-            result.push_front(QPointF(u.x,u.y));
+            *m_graph, start, heuristic,
+            boost::visitor(AStarGoalVisitor(goal))
+            .distance_map(boost::associative_property_map<DistanceMap>(dmap))
+            .predecessor_map(boost::ref(pmap))
+            .weight_map(boost::associative_property_map<WeightMap>(wmap))
+            .vertex_index_map(boost::associative_property_map<std::map<VertexDescriptor, double> >(imap))
+            .rank_map(boost::associative_property_map<std::map<VertexDescriptor, double> >(rmap))
+            .color_map(boost::associative_property_map<std::map<VertexDescriptor, boost::default_color_type> >(cmap))
+            .distance_combine(std::plus<double>())
+            .distance_compare(std::less<double>())
+            );
+    }catch (GoalFound const&) {
+        for (VertexDescriptor u = goal; u != start; u = pmap[u]) {
+            result.push_front(QPointF(u.x, u.y));
         }
     }
 
-    result.push_front(QPoint(start.x,start.y));
+    result.push_front(QPoint(start.x, start.y));
 
     return result;
-}
+} // KisMagneticWorker::computeEdge
 
 quint8 KisMagneticWorker::intensity(QPoint pt)
 {

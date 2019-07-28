@@ -48,6 +48,8 @@
 
 #include "kis_algebra_2d.h"
 
+#include <kis_slider_spin_box.h>
+
 #define FEEDBACK_LINE_WIDTH 2
 
 KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
@@ -268,6 +270,7 @@ void KisToolSelectMagnetic::updateContinuedMode()
 void KisToolSelectMagnetic::activate(KoToolBase::ToolActivation activation, const QSet<KoShape*> &shapes)
 {
     m_worker = KisMagneticWorker(image()->projection());
+    m_configGroup =  KSharedConfig::openConfig()->group(toolId());
     KisToolSelect::activate(activation, shapes);
 }
 
@@ -313,7 +316,48 @@ QWidget* KisToolSelectMagnetic::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
+    QHBoxLayout* f1 = new QHBoxLayout();
+    QLabel * lblRad = new QLabel(i18n("Radius: "), selectionWidget);
+    f1->addWidget(lblRad);
+
+    KisSliderSpinBox* radInput = new KisSliderSpinBox(selectionWidget);
+    radInput->setObjectName("radius");
+    radInput->setRange(20, 200);
+    radInput->setSingleStep(10);
+    f1->addWidget(radInput);
+    connect(radInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetRadius(int)));
+
+    QHBoxLayout* f2 = new QHBoxLayout();
+    QLabel * lblThreshold = new QLabel(i18n("Threshold: "), selectionWidget);
+    f2->addWidget(lblThreshold);
+
+    KisSliderSpinBox* threshInput = new KisSliderSpinBox(selectionWidget);
+    threshInput->setObjectName("threshold");
+    threshInput->setRange(60, 200);
+    threshInput->setSingleStep(10);
+    f2->addWidget(threshInput);
+    connect(threshInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
+
+    QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
+    Q_ASSERT(l);
+    l->insertLayout(1, f1);
+    l->insertLayout(2, f2);
+
+    radInput->setValue(m_configGroup.readEntry("radius", 20));
+    threshInput->setValue(m_configGroup.readEntry("threshold", 100));
     return selectionWidget;
+}
+
+void KisToolSelectMagnetic::slotSetRadius(int r)
+{
+    m_radius = r;
+    m_configGroup.writeEntry("radius", r);
+}
+
+void KisToolSelectMagnetic::slotSetThreshold(int t)
+{
+    m_threshold = t;
+    m_configGroup.writeEntry("threshold", t);
 }
 
 void KisToolSelectMagnetic::resetCursorStyle()

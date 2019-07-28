@@ -63,12 +63,14 @@ private Q_SLOTS:
 
     void slotSetColorSpaceLabel();
     void okClicked();
+    void disableDownScaleIfPossible(bool disable);
 
 private:
 
     WdgSeparations * m_page;
     QString m_imageCS;
     QString m_layerCS;
+    bool m_canDownScale {true};
 
 };
 

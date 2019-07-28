@@ -623,9 +623,9 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                         "should be done on perceptually uniform RGB. Make sure you use the V4 versions for editing high bit depth "
                                                                         "images.</p>"));
         }
-        if (profileName.contains("-srgbtrc") || profileName.contains("-g22") || profileName.contains("-g18") || profileName.contains("-bt709")) {
+        if (profileName.contains("-srgbtrc") || profileName.contains("-g22") || profileName.contains("-g18") || profileName.contains("-rec709")) {
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
-                                                                        "<p>The profiles that end in '-srgbtrc.icc', '-g22.icc', and '-bt709.icc' have approximately but not exactly "
+                                                                        "<p>The profiles that end in '-srgbtrc.icc', '-g22.icc', and '-rec709.icc' have approximately but not exactly "
                                                                         "perceptually uniform TRCs. ProPhotoRGB's gamma=1.8 TRC is not quite as close to being perceptually uniform.</p>"));
         }
         if (d->colorSpaceSelector->cmbColorDepth->currentItem().id()=="U8") {

@@ -338,6 +338,8 @@
   </screenshots>
   <categories>
     <category>Graphics</category>
+    <category>2DGraphics</category>
+    <category>RasterGraphics</category>
   </categories>
   <project_group>KDE</project_group>
   <provides>

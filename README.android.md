@@ -24,6 +24,7 @@ cd <extracted-android-sdk-tools>/tools/bin
 ./sdkmanager --licenses
 ./sdkmanager platform-tools
 ./sdkmanager "platforms;android-21"
+./sdkmanager "platforms;android-28"    # for androiddeployqt
 ./sdkmanager "build-tools;28.0.2"
 ```
 

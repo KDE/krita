@@ -972,12 +972,12 @@
            </item>
            <item>
             <property name="text">
-             <string>Landscape</string>
+             <string comment="Photos of landscapes">Landscape</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Portrait</string>
+             <string comment="Photos of people">Portrait</string>
             </property>
            </item>
            <item>

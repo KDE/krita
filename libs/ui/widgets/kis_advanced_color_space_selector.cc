@@ -563,9 +563,9 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                         "The ProPhotoRGB primaries are "
                                                                         "hard-coded into Adobe products such as Lightroom and the Dng-DCP camera 'profiles'. However, "
                                                                         "other than being large enough to hold a lot of colors, ProPhotoRGB has no particular merit "
-                                                                        "as an RGB working space. Personally I recommend the Rec.2020 or ACEScg profiles over"
-                                                                        "ProPhotoRGB. But if you have an already well-established workflow using ProPhotoRGB, you"
-                                                                        "might find a shift to another RGB working space a little odd, at least at first, and so you"
+                                                                        "as an RGB working space. Personally I recommend the Rec.2020 or ACEScg profiles over "
+                                                                        "ProPhotoRGB. But if you have an already well-established workflow using ProPhotoRGB, you "
+                                                                        "might find a shift to another RGB working space a little odd, at least at first, and so you "
                                                                         "have to weight the pros and cons of changing your workflow.</p>"));
         }
         if (profileName.contains("Rec2020-")) {

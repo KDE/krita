@@ -419,7 +419,7 @@
            </item>
            <item>
             <property name="text">
-             <string>Spot</string>
+             <string comment="Autofocus metering mode">Spot</string>
             </property>
            </item>
            <item>

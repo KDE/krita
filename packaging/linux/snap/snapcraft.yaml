@@ -20,7 +20,6 @@ parts:
     - "-DCMAKE_BUILD_TYPE=Release"
     - "-DENABLE_TESTING=OFF"
     - "-DBUILD_TESTING=OFF"
-    - "-DHIDE_SAFE_ASSERTS=OFF"
     - "-DKDE_SKIP_TEST_SETTINGS=ON"
     source: https://download.kde.org/stable/krita/4.2.3/krita-4.2.3.tar.xz
 # Use these instead to build from the git source

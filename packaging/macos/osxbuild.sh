@@ -370,7 +370,6 @@ build_krita () {
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
         -DDEFINE_NO_DEPRECATED=1 \
         -DBUILD_TESTING=OFF \
-        -DHIDE_SAFE_ASSERTS=OFF \
         -DKDE_INSTALL_BUNDLEDIR=${KIS_INSTALL_DIR}/bin \
         -DPYQT_SIP_DIR_OVERRIDE=${KIS_INSTALL_DIR}/share/sip/ \
         -DCMAKE_BUILD_TYPE=RelWithDebInfo \

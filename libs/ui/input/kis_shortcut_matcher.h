@@ -249,6 +249,7 @@ private:
     void tryActivateReadyShortcut();
     bool tryEndRunningShortcut( Qt::MouseButton button, QEvent* event );
     void forceEndRunningShortcut(const QPointF &localPos);
+    void forceDeactivateAllActions();
 
     bool tryRunTouchShortcut(QTouchEvent *event);
     bool tryEndTouchShortcut(QTouchEvent *event);

@@ -29,14 +29,15 @@
 #include "kis_native_gesture_shortcut.h"
 #include "kis_config.h"
 
+//#define DEBUG_MATCHER
 
 #ifdef DEBUG_MATCHER
 #include <kis_debug.h>
-#define DEBUG_ACTION(text) dbgInput << __FUNCTION__ << "-" << text;
-#define DEBUG_SHORTCUT(text, shortcut) dbgInput << __FUNCTION__ << "-" << text << "act:" << shortcut->action()->name();
-#define DEBUG_KEY(text) dbgInput << __FUNCTION__ << "-" << text << "keys:" << m_d->keys;
-#define DEBUG_BUTTON_ACTION(text, button) dbgInput << __FUNCTION__ << "-" << text << "button:" << button << "btns:" << m_d->buttons << "keys:" << m_d->keys;
-#define DEBUG_EVENT_ACTION(text, event) if (event) {dbgInput << __FUNCTION__ << "-" << text << "type:" << event->type();}
+#define DEBUG_ACTION(text) qDebug() << __FUNCTION__ << "-" << text;
+#define DEBUG_SHORTCUT(text, shortcut) qDebug() << __FUNCTION__ << "-" << text << "act:" << shortcut->action()->name();
+#define DEBUG_KEY(text) qDebug() << __FUNCTION__ << "-" << text << "keys:" << m_d->keys;
+#define DEBUG_BUTTON_ACTION(text, button) qDebug() << __FUNCTION__ << "-" << text << "button:" << button << "btns:" << m_d->buttons << "keys:" << m_d->keys;
+#define DEBUG_EVENT_ACTION(text, event) if (event) {qDebug() << __FUNCTION__ << "-" << text << "type:" << event->type();}
 #else
 #define DEBUG_ACTION(text)
 #define DEBUG_KEY(text)

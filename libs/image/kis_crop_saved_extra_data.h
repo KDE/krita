@@ -52,6 +52,10 @@ public:
         return m_cropNode;
     }
 
+    KUndo2CommandExtraData* clone() const override {
+        return new KisCropSavedExtraData(*this);
+    }
+
 private:
     Type m_type;
     QRect m_cropRect;

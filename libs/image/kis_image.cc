@@ -1369,6 +1369,11 @@ KisPostExecutionUndoAdapter* KisImage::postExecutionUndoAdapter() const
         &m_d->postExecutionUndoAdapter;
 }
 
+const KUndo2Command* KisImage::lastExecutedCommand() const
+{
+    return m_d->undoStore->presentCommand();
+}
+
 void KisImage::setUndoStore(KisUndoStore *undoStore)
 {
 
@@ -1745,6 +1750,21 @@ void KisImage::enableDirtyRequests()
 void KisImage::disableUIUpdates()
 {
     m_d->disableUIUpdateSignals.ref();
+}
+
+void KisImage::notifyBatchUpdateStarted()
+{
+    m_d->signalRouter.emitNotifyBatchUpdateStarted();
+}
+
+void KisImage::notifyBatchUpdateEnded()
+{
+    m_d->signalRouter.emitNotifyBatchUpdateEnded();
+}
+
+void KisImage::notifyUIUpdateCompleted(const QRect &rc)
+{
+    notifyProjectionUpdated(rc);
 }
 
 QVector<QRect> KisImage::enableUIUpdates()

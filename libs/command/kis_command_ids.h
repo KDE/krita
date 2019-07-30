@@ -33,7 +33,8 @@ enum CommandId {
     ChangeRectangleShapeId,
     ChangePathShapePointId,
     ChangePathShapeControlPointId,
-    ChangePaletteId
+    ChangePaletteId,
+    TransformToolId
 };
 
 }

@@ -399,6 +399,12 @@ public:
     KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const override;
 
     /**
+     * Return the lastly executed LoD0 command. It is effectively the same
+     * as to call undoAdapter()->presentCommand();
+     */
+    const KUndo2Command* lastExecutedCommand() const;
+
+    /**
      * Replace current undo store with the new one. The old store
      * will be deleted.
      * This method is used by KisDocument for dropping all the commands
@@ -956,6 +962,29 @@ public Q_SLOTS:
      * that were requested while they were blocked.
      */
     void disableUIUpdates() override;
+
+    /**
+     * Notify GUI about a bunch of updates planned. GUI is expected to wait
+     * until all the updates are completed, and render them on screen only
+     * in the very and of the batch.
+     */
+    void notifyBatchUpdateStarted() override;
+
+    /**
+     * Notify GUI that batch update has been completed. Now GUI can start
+     * showing all of them on screen.
+     */
+    void notifyBatchUpdateEnded() override;
+
+    /**
+     * Notify GUI that rect \p rc is now prepared in the image and
+     * GUI can read data from it.
+     *
+     * WARNING: GUI will read the data right in the handler of this
+     *          signal, so exclusive access to the area must be guaranteed
+     *          by the caller.
+     */
+    void notifyUIUpdateCompleted(const QRect &rc) override;
 
     /**
      * \see disableUIUpdates

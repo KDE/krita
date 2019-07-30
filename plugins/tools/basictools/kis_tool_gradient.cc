@@ -57,6 +57,9 @@
 #include <kis_cursor.h>
 #include <kis_config.h>
 #include "kis_resources_snapshot.h"
+#include "kis_command_utils.h"
+#include "kis_processing_applicator.h"
+#include "kis_processing_visitor.h"
 
 
 KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
@@ -145,44 +148,58 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
-    if (!currentNode() || !blockUntilOperationsFinished())
+    if (!currentNode())
         return;
 
     if (m_startPos == m_endPos) {
         return;
     }
 
-    KisPaintDeviceSP device;
     KisImageSP image = this->image();
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image, currentNode(), this->canvas()->resourceManager());
 
-    if (image && (device = resources->currentNode()->paintDevice())) {
-        QApplication::setOverrideCursor(Qt::BusyCursor);
+    if (image && resources->currentNode()->paintDevice()) {
+        // TODO: refactor out local variables when we switch to C++14
+        QPointF startPos = m_startPos;
+        QPointF endPos = m_endPos;
+        KisGradientPainter::enumGradientShape shape = m_shape;
+        KisGradientPainter::enumGradientRepeat repeat = m_repeat;
+        bool reverse = m_reverse;
+        double antiAliasThreshold = m_antiAliasThreshold;
 
         KUndo2MagicString actionName = kundo2_i18n("Gradient");
-        KisUndoAdapter *undoAdapter = image->undoAdapter();
-        undoAdapter->beginMacro(actionName);
+        KisProcessingApplicator applicator(image, resources->currentNode(),
+                                           KisProcessingApplicator::NONE,
+                                           KisImageSignalVector() << ModifiedSignal,
+                                           actionName);
 
-        KisGradientPainter painter(device, resources->activeSelection());
-        resources->setupPainter(&painter);
+        applicator.applyCommand(
+            new KisCommandUtils::LambdaCommand(
+                [resources, startPos, endPos,
+                 shape, repeat, reverse, antiAliasThreshold] () mutable {
 
-        painter.beginTransaction();
+                    KisNodeSP node = resources->currentNode();
+                    KisPaintDeviceSP device = node->paintDevice();
+                    KisProcessingVisitor::ProgressHelper helper(node);
+                    const QRect bounds = device->defaultBounds()->bounds();
 
-        KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
-        KoUpdaterPtr updater = canvas->viewManager()->createUnthreadedUpdater(i18nc("@info:progress", "Gradient..."));
+                    KisGradientPainter painter(device, resources->activeSelection());
+                    resources->setupPainter(&painter);
+                    painter.setProgress(helper.updater());
 
-        painter.setProgress(updater);
+                    painter.beginTransaction();
 
-        painter.setGradientShape(m_shape);
-        painter.paintGradient(m_startPos, m_endPos, m_repeat, m_antiAliasThreshold, m_reverse, 0, 0, image->width(), image->height());
-        painter.endTransaction(undoAdapter);
-        undoAdapter->endMacro();
+                    painter.setGradientShape(shape);
+                    painter.paintGradient(startPos, endPos,
+                                          repeat, antiAliasThreshold,
+                                          reverse, 0, 0,
+                                          bounds.width(), bounds.height());
 
-        QApplication::restoreOverrideCursor();
-        currentNode()->setDirty();
-        notifyModified();
+                    return painter.endAndTakeTransaction();
+                }));
+        applicator.end();
     }
     canvas()->updateCanvas(convertToPt(currentImage()->bounds()));
 }

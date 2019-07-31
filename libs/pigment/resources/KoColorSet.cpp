@@ -837,7 +837,7 @@ bool KoColorSet::Private::loadGpl()
                 a.pop_front();
             }
             QString name = a.join(" ");
-            e.setName(name.isEmpty() ? i18n("Untitled") : name);
+            e.setName(name.isEmpty() || name == "Untitled" ? i18n("Untitled") : name);
 
             global().addEntry(e);
         }

@@ -24,7 +24,7 @@
 
 #include "kis_types.h"
 
-class KisHDRMetadataOptions;
+struct KisHDRMetadataOptions;
 
 
 namespace Ui {

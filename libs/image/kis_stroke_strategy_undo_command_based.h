@@ -25,15 +25,35 @@
 
 #include "kis_types.h"
 #include "kis_simple_stroke_strategy.h"
+#include "KisRunnableBasedStrokeStrategy.h"
 
 
 class KisStrokeJob;
 class KisSavedMacroCommand;
 class KisStrokeUndoFacade;
+class KisStrokesQueueMutatedJobInterface;
 
-class KRITAIMAGE_EXPORT KisStrokeStrategyUndoCommandBased : public KisSimpleStrokeStrategy
+
+class KRITAIMAGE_EXPORT KisStrokeStrategyUndoCommandBased : public KisRunnableBasedStrokeStrategy
 {
 public:
+    struct MutatedCommandInterface
+    {
+        virtual ~MutatedCommandInterface() {}
+
+        void setRunnableJobsInterface(KisRunnableStrokeJobsInterface *interface) {
+            m_mutatedJobsInterface = interface;
+        }
+
+        KisRunnableStrokeJobsInterface* runnableJobsInterface() const {
+            return m_mutatedJobsInterface;
+        }
+
+    private:
+        KisRunnableStrokeJobsInterface *m_mutatedJobsInterface;
+    };
+
+
     class Data : public KisStrokeJobData {
     public:
         Data(KUndo2CommandSP _command,
@@ -119,6 +139,8 @@ protected:
     KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs);
 
     virtual void postProcessToplevelCommand(KUndo2Command *command);
+
+    KisStrokeUndoFacade* undoFacade() const;
 
 private:
     void executeCommand(KUndo2CommandSP command, bool undo);

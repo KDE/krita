@@ -441,7 +441,7 @@ public:
 
         if (!m_locked) {
             m_image->requestStrokeEnd();
-            QApplication::processEvents();
+            QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
             // one more try...
             m_locked = std::try_lock(m_imageLock, m_savingLock) < 0;
@@ -776,7 +776,7 @@ void KisDocument::setFileBatchMode(const bool batchMode)
 KisDocument* KisDocument::lockAndCloneForSaving()
 {
     // force update of all the asynchronous nodes before cloning
-    QApplication::processEvents();
+    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     KisLayerUtils::forceAllDelayedNodesUpdate(d->image->root());
 
     KisMainWindow *window = KisPart::instance()->currentMainwindow();
@@ -995,23 +995,29 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
 
 void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage)
 {
-    KIS_SAFE_ASSERT_RECOVER(!d->savingMutex.tryLock()) {
+    KIS_ASSERT_RECOVER_RETURN(isSaving());
+
+    KIS_ASSERT_RECOVER(d->backgroundSaveDocument) {
         d->savingMutex.unlock();
         return;
     }
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN(d->backgroundSaveDocument);
 
     if (d->backgroundSaveJob.flags & KritaUtils::SaveInAutosaveMode) {
         d->backgroundSaveDocument->d->isAutosaving = false;
     }
 
     d->backgroundSaveDocument.take()->deleteLater();
-    d->savingMutex.unlock();
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN(d->backgroundSaveJob.isValid());
+    KIS_ASSERT_RECOVER(d->backgroundSaveJob.isValid()) {
+        d->savingMutex.unlock();
+        return;
+    }
+
     const KritaUtils::ExportFileJob job = d->backgroundSaveJob;
     d->backgroundSaveJob = KritaUtils::ExportFileJob();
+
+    // unlock at the very end
+    d->savingMutex.unlock();
 
     KisUsageLogger::log(QString("Completed saving %1 (mime: %2). Result: %3")
                         .arg(job.filePath)

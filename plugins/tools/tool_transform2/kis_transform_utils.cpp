@@ -24,6 +24,28 @@
 #include "tool_transform_args.h"
 #include "kis_paint_device.h"
 #include "kis_algebra_2d.h"
+#include "transform_transaction_properties.h"
+
+struct TransformTransactionPropertiesRegistrar {
+    TransformTransactionPropertiesRegistrar() {
+        qRegisterMetaType<TransformTransactionProperties>("TransformTransactionProperties");
+    }
+};
+static TransformTransactionPropertiesRegistrar __registrar1;
+
+struct ToolTransformArgsRegistrar {
+    ToolTransformArgsRegistrar() {
+        qRegisterMetaType<ToolTransformArgs>("ToolTransformArgs");
+    }
+};
+static ToolTransformArgsRegistrar __registrar2;
+
+struct QPainterPathRegistrar {
+    QPainterPathRegistrar() {
+        qRegisterMetaType<QPainterPath>("QPainterPath");
+    }
+};
+static QPainterPathRegistrar __registrar3;
 
 
 const int KisTransformUtils::rotationHandleVisualRadius = 12;
@@ -394,4 +416,75 @@ KisTransformUtils::AnchorHolder::~AnchorHolder() {
     const QPointF diff = m_oldStaticPointInView - newStaticPointInView;
 
     m_config->setTransformedCenter(m_config->transformedCenter() + diff);
+}
+
+void KisTransformUtils::setDefaultWarpPoints(int pointsPerLine,
+                                             const TransformTransactionProperties *transaction,
+                                             ToolTransformArgs *config)
+{
+    static const int DEFAULT_POINTS_PER_LINE = 3;
+
+    if (pointsPerLine < 0) {
+        pointsPerLine = DEFAULT_POINTS_PER_LINE;
+    }
+
+    int nbPoints = pointsPerLine * pointsPerLine;
+    QVector<QPointF> origPoints(nbPoints);
+    QVector<QPointF> transfPoints(nbPoints);
+    qreal gridSpaceX, gridSpaceY;
+
+    if (nbPoints == 1) {
+        //there is actually no grid
+        origPoints[0] = transaction->originalCenterGeometric();
+        transfPoints[0] = transaction->originalCenterGeometric();
+    }
+    else if (nbPoints > 1) {
+        gridSpaceX = transaction->originalRect().width() / (pointsPerLine - 1);
+        gridSpaceY = transaction->originalRect().height() / (pointsPerLine - 1);
+        double y = transaction->originalRect().top();
+        for (int i = 0; i < pointsPerLine; ++i) {
+            double x = transaction->originalRect().left();
+            for (int j = 0 ; j < pointsPerLine; ++j) {
+                origPoints[i * pointsPerLine + j] = QPointF(x, y);
+                transfPoints[i * pointsPerLine + j] = QPointF(x, y);
+                x += gridSpaceX;
+            }
+            y += gridSpaceY;
+        }
+    }
+
+    config->setDefaultPoints(nbPoints > 0);
+    config->setPoints(origPoints, transfPoints);
+}
+
+ToolTransformArgs KisTransformUtils::resetArgsForMode(ToolTransformArgs::TransformMode mode,
+                                                      const QString &filterId,
+                                                      const TransformTransactionProperties &transaction)
+{
+    ToolTransformArgs args;
+
+    args.setOriginalCenter(transaction.originalCenterGeometric());
+    args.setTransformedCenter(transaction.originalCenterGeometric());
+    args.setFilterId(filterId);
+
+    if (mode == ToolTransformArgs::FREE_TRANSFORM) {
+        args.setMode(ToolTransformArgs::FREE_TRANSFORM);
+    } else if (mode == ToolTransformArgs::WARP) {
+        args.setMode(ToolTransformArgs::WARP);
+        KisTransformUtils::setDefaultWarpPoints(-1, &transaction, &args);
+        args.setEditingTransformPoints(false);
+    } else if (mode == ToolTransformArgs::CAGE) {
+        args.setMode(ToolTransformArgs::CAGE);
+        args.setEditingTransformPoints(true);
+    } else if (mode == ToolTransformArgs::LIQUIFY) {
+        args.setMode(ToolTransformArgs::LIQUIFY);
+        const QRect srcRect = transaction.originalRect().toAlignedRect();
+        if (!srcRect.isEmpty()) {
+            args.initLiquifyTransformMode(transaction.originalRect().toAlignedRect());
+        }
+    } else if (mode == ToolTransformArgs::PERSPECTIVE_4POINT) {
+        args.setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
+    }
+
+    return args;
 }

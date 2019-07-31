@@ -282,7 +282,7 @@ KisImportExportErrorCode KraConverter::loadXML(const KoXmlDocument &doc, KoStore
     root = doc.documentElement();
     int syntaxVersion = root.attribute("syntaxVersion", "3").toInt();
     if (syntaxVersion > 2) {
-        errUI << "The file is too new for this version of Krita: " + syntaxVersion;
+        errUI << "The file is too new for this version of Krita: " + QString::number(syntaxVersion);
         return ImportExportCodes::FormatFeaturesUnsupported;
     }
 

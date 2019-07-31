@@ -43,7 +43,7 @@
 #include "kis_change_frame_action.h"
 #include "kis_zoom_and_rotate_action.h"
 
-#define PROFILE_VERSION 3
+#define PROFILE_VERSION 4
 
 
 class Q_DECL_HIDDEN KisInputProfileManager::Private

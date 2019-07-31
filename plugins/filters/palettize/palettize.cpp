@@ -58,6 +58,7 @@ KisFilterPalettize::KisFilterPalettize() : KisFilter(id(), FiltersCategoryMapId,
 KisPalettizeWidget::KisPalettizeWidget(QWidget* parent)
     : KisConfigWidget(parent)
 {
+    Q_UNUSED(m_ditherPatternWidget);
     setupUi(this);
 
     paletteIconWidget->setFixedSize(32, 32);

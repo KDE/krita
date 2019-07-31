@@ -57,10 +57,13 @@ MoveStrokeStrategy::MoveStrokeStrategy(KisNodeList nodes,
     }
 
     setSupportsWrapAroundMode(true);
+
+    enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER);
 }
 
 MoveStrokeStrategy::MoveStrokeStrategy(const MoveStrokeStrategy &rhs)
-    : KisStrokeStrategyUndoCommandBased(rhs),
+    : QObject(),
+      KisStrokeStrategyUndoCommandBased(rhs),
       m_nodes(rhs.m_nodes),
       m_blacklistedNodes(rhs.m_blacklistedNodes),
       m_updatesFacade(rhs.m_updatesFacade),
@@ -86,11 +89,16 @@ void MoveStrokeStrategy::saveInitialNodeOffsets(KisNodeSP node)
 
 void MoveStrokeStrategy::initStrokeCallback()
 {
+    QRect handlesRect;
+
     Q_FOREACH(KisNodeSP node, m_nodes) {
         saveInitialNodeOffsets(node);
+        handlesRect |= node->exactBounds();
     }
 
     KisStrokeStrategyUndoCommandBased::initStrokeCallback();
+
+    emit sigHandlesRectCalculated(handlesRect);
 }
 
 void MoveStrokeStrategy::finishStrokeCallback()

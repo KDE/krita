@@ -28,8 +28,5 @@ GSYMS
 BROWSE
 *.kate-swp
 /po/
-/kf5/
-/build-android/
-/b/
-/i/
-/d/
+build_dir
+.flatpak-builder

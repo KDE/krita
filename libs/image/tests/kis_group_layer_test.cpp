@@ -45,10 +45,10 @@ void KisGroupLayerTest::testRemoveAndUndo()
 {
     KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
 
-    QRect transpRect(50,50,300,300);
-    QRect blurRect(66,66,300,300);
-    QPoint blurShift(34,34);
-    QPoint cloneShift(75,75);
+//    QRect transpRect(50,50,300,300);
+//    QRect blurRect(66,66,300,300);
+//    QPoint blurShift(34,34);
+//    QPoint cloneShift(75,75);
 
     QRect imageRect = QRect(0, 0, 64, 64);
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();

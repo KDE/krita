@@ -1165,40 +1165,9 @@ void KisToolTransformConfigWidget::slotSetWarpDensity(int value)
 
 void KisToolTransformConfigWidget::setDefaultWarpPoints(int pointsPerLine)
 {
-    if (pointsPerLine < 0) {
-        pointsPerLine = DEFAULT_POINTS_PER_LINE;
-    }
-
-    int nbPoints = pointsPerLine * pointsPerLine;
-    QVector<QPointF> origPoints(nbPoints);
-    QVector<QPointF> transfPoints(nbPoints);
-    qreal gridSpaceX, gridSpaceY;
-
-    if (nbPoints == 1) {
-        //there is actually no grid
-        origPoints[0] = m_transaction->originalCenterGeometric();
-        transfPoints[0] = m_transaction->originalCenterGeometric();
-    }
-    else if (nbPoints > 1) {
-        gridSpaceX = m_transaction->originalRect().width() / (pointsPerLine - 1);
-        gridSpaceY = m_transaction->originalRect().height() / (pointsPerLine - 1);
-        double y = m_transaction->originalRect().top();
-        for (int i = 0; i < pointsPerLine; ++i) {
-            double x = m_transaction->originalRect().left();
-            for (int j = 0 ; j < pointsPerLine; ++j) {
-                origPoints[i * pointsPerLine + j] = QPointF(x, y);
-                transfPoints[i * pointsPerLine + j] = QPointF(x, y);
-                x += gridSpaceX;
-            }
-            y += gridSpaceY;
-        }
-    }
-
     ToolTransformArgs *config = m_transaction->currentConfig();
 
-    config->setDefaultPoints(nbPoints > 0);
-    config->setPoints(origPoints, transfPoints);
-
+    KisTransformUtils::setDefaultWarpPoints(pointsPerLine, m_transaction, config);
     notifyConfigChanged();
 }
 

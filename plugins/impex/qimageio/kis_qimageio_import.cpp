@@ -51,19 +51,13 @@ KisQImageIOImport::~KisQImageIOImport()
 
 KisImportExportErrorCode KisQImageIOImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    QFileInfo fi(filename());
+
     QImage img;
-    if (!img.loadFromData(io->readAll(), fi.suffix().toLower().toLatin1())) {
+    if (!img.loadFromData(io->readAll()/*, fi.suffix().toLower().toLatin1()*/)) {
         return ImportExportCodes::FileFormatIncorrect;
     }
 
-    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(document->createUndoStore(), img.width(), img.height(), colorSpace, i18n("Imported Image"));
-
-    KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
-    layer->paintDevice()->convertFromQImage(img, 0, 0, 0);
-    image->addNode(layer.data(), image->rootLayer().data());
-
+    KisImageSP image = KisImage::fromQImage(img, document->createUndoStore());
     document->setCurrentImage(image);
     return ImportExportCodes::OK;
 

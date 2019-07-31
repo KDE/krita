@@ -1270,6 +1270,11 @@ void KisMainWindow::redo()
 
 void KisMainWindow::closeEvent(QCloseEvent *e)
 {
+    if (hackIsSaving()) {
+        e->setAccepted(false);
+        return;
+    }
+
     if (!KisPart::instance()->closingSession()) {
         QAction *action= d->viewManager->actionCollection()->action("view_show_canvas_only");
         if ((action) && (action->isChecked())) {
@@ -1675,6 +1680,12 @@ bool KisMainWindow::slotFileCloseAll()
 
 void KisMainWindow::slotFileQuit()
 {
+    // Do not close while KisMainWindow has the savingEntryMutex locked, bug409395.
+    // After the background saving job is initiated, KisDocument blocks closing
+    // while it saves itself.
+    if (hackIsSaving()) {
+        return;
+    }
     KisPart::instance()->closeSession();
 }
 

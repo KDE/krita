@@ -446,6 +446,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="chkEnableTouchRotation">
+         <property name="text">
+          <string>Enable Touch Rotation</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="m_groupBoxKineticScrollingSettings">
          <property name="title">
           <string>Kinetic Scrolling (needs restart)</string>

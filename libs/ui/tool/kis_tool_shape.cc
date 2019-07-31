@@ -51,6 +51,7 @@
 #include <commands/KoKeepShapesSelectedCommand.h>
 #include "kis_selection_mask.h"
 #include "kis_shape_selection.h"
+#include "kis_processing_applicator.h"
 
 
 KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)
@@ -223,13 +224,13 @@ void KisToolShape::addShape(KoShape* shape)
     parentCommand->setText(cmd->text());
     new KoKeepShapesSelectedCommand(oldSelectedShapes, {shape}, canvas()->selectedShapesProxy(), true, parentCommand);
 
-    canvas()->addCommand(parentCommand);
+    KisProcessingApplicator::runSingleCommandStroke(image(), cmd);
 }
 
 void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name)
 {
     KisNodeSP node = currentNode();
-    if (!node || !blockUntilOperationsFinished()) {
+    if (!node) {
         return;
     }
 
@@ -253,6 +254,4 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
         addShape(pathShape);
 
     }
-
-    notifyModified();
 }

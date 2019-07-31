@@ -246,6 +246,39 @@ public:
     const KoColorSpace *alpha32f();
 
     /**
+     * Convenience method to get a GRAYA 8 bit colorspace. If a profile is not specified,
+     * the default profile defined in the GRAY colorspace will be used
+     * @param profile the profile name
+     * @return an 8 bit graya colorspace with the default profile or 0.
+     */
+    const KoColorSpace *graya8(const QString &profile = QString());
+
+    /**
+     * Convenience method to get a GRAYA 8 bit colorspace. If a profile is not specified,
+     * the default profile defined in the GRAY colorspace will be used
+     * @param profile the profile
+     * @return an 8 bit graya colorspace with the default profile or 0.
+     */
+    const KoColorSpace *graya8(const KoColorProfile *profile);
+
+    /**
+     * Convenience method to get a GRAYA 16 bit colorspace. If a profile is not specified,
+     * the default profile defined in the GRAY colorspace will be used
+     * @param the profile
+     * @return an 8 bit graya colorspace with the default profile or 0.
+     */
+    const KoColorSpace *graya16(const QString &profile = QString());
+
+    /**
+     * Convenience method to get a GRAYA 16 bit colorspace. If a profile is not specified,
+     * the default profile defined in the GRAY colorspace will be used
+     * @param the profile
+     * @return an 8 bit graya colorspace with the default profile or 0.
+     */
+    const KoColorSpace *graya16(const KoColorProfile *profile);
+
+
+    /**
      * Convenience method to get an RGBA 8bit colorspace. If a profile is not specified,
      * an sRGB profile will be used.
      * @param profileName the name of an RGB color profile

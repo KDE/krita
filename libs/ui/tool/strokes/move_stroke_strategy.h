@@ -20,6 +20,7 @@
 #define __MOVE_STROKE_STRATEGY_H
 
 #include <QHash>
+#include <QObject>
 
 #include "kritaui_export.h"
 #include "kis_stroke_strategy_undo_command_based.h"
@@ -31,8 +32,9 @@ class KisUpdatesFacade;
 class KisPostExecutionUndoAdapter;
 
 
-class KRITAUI_EXPORT MoveStrokeStrategy : public KisStrokeStrategyUndoCommandBased
+class KRITAUI_EXPORT MoveStrokeStrategy : public QObject, public KisStrokeStrategyUndoCommandBased
 {
+    Q_OBJECT
 public:
     class Data : public KisStrokeJobData {
     public:
@@ -67,6 +69,9 @@ public:
     void doStrokeCallback(KisStrokeJobData *data) override;
 
     KisStrokeStrategy* createLodClone(int levelOfDetail) override;
+
+Q_SIGNALS:
+    void sigHandlesRectCalculated(const QRect &handlesRect);
 
 private:
     MoveStrokeStrategy(const MoveStrokeStrategy &rhs);

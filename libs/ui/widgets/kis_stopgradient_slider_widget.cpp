@@ -164,6 +164,11 @@ void KisStopGradientSliderWidget::mousePressEvent(QMouseEvent * e)
         return;
     }
 
+    if (e->buttons() != Qt::LeftButton ) {
+        QWidget::mousePressEvent(e);
+        return;
+    }
+
     const QRect handlesRect = this->handlesStipeRect();
     const qreal t = (qreal(e->x()) - handlesRect.x()) / handlesRect.width();
     const QList<KoGradientStop> stops = m_gradient->stops();

@@ -419,7 +419,7 @@
            </item>
            <item>
             <property name="text">
-             <string>Spot</string>
+             <string comment="Autofocus metering mode">Spot</string>
             </property>
            </item>
            <item>
@@ -972,12 +972,12 @@
            </item>
            <item>
             <property name="text">
-             <string>Landscape</string>
+             <string comment="Photos of landscapes">Landscape</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Portrait</string>
+             <string comment="Photos of people">Portrait</string>
             </property>
            </item>
            <item>

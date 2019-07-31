@@ -351,7 +351,7 @@ void KisTool::notifyModified() const
     }
 }
 
-KoPatternSP  KisTool::currentPattern()
+KoPatternSP KisTool::currentPattern()
 {
     return d->currentPattern;
 }
@@ -592,16 +592,25 @@ bool KisTool::overrideCursorIfNotEditable()
 
 bool KisTool::blockUntilOperationsFinished()
 {
-    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-    KisViewManager* viewManager = kiscanvas->viewManager();
-    return viewManager->blockUntilOperationsFinished(image());
+    // we cannot show any dialogs in the tool's code,
+    // it can make KisShortcutsMatcher crazy
+    image()->waitForDone();
+    return true;
+
+//    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+//    KisViewManager* viewManager = kiscanvas->viewManager();
+//    return viewManager->blockUntilOperationsFinished(image());
 }
 
 void KisTool::blockUntilOperationsFinishedForced()
 {
-    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-    KisViewManager* viewManager = kiscanvas->viewManager();
-    viewManager->blockUntilOperationsFinishedForced(image());
+    // we cannot show any dialogs in the tool's code,
+    // it can make KisShortcutsMatcher crazy
+    image()->waitForDone();
+
+//    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+//    KisViewManager* viewManager = kiscanvas->viewManager();
+//    viewManager->blockUntilOperationsFinishedForced(image());
 }
 
 bool KisTool::isActive() const

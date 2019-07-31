@@ -49,11 +49,11 @@ public:
     void activate(int shortcut) override;
     void deactivate(int shortcut) override;
     void begin(int shortcut, QEvent *event) override;
-    void cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos);
+    void cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos) override;
     void inputEvent(QEvent* event) override;
 
     KisInputActionGroup inputActionGroup(int shortcut) const override;
-    bool supportsHiResInputEvents() const;
+    bool supportsHiResInputEvents() const override;
 
 private:
     class Private;

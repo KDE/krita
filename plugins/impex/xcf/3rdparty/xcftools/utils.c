@@ -29,6 +29,7 @@ int verboseFlag = 0 ;
 void
 vFatalGeneric(int status,const char *format,va_list args)
 {
+  (void) status; /* mark as unused */
   if( format ) {
     if( *format == '!' ) {
       vfprintf(stderr,format+1,args);

@@ -320,7 +320,7 @@ struct AddGeneralAlphaOps<Traits, true>
 
     static void add(KoColorSpace* cs)
     {
-        add<&cfAdditionSAI <HSVType,Arg> >(cs, COMPOSITE_LUMINOSITY_SAI         , i18n("Luminosity (SAI)")         , KoCompositeOp::categoryHSV());
+        add<&cfAdditionSAI <HSVType,Arg> >(cs, COMPOSITE_LUMINOSITY_SAI         , i18n("Luminosity/Shine (SAI)")         , KoCompositeOp::categoryHSV());
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2019 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_PPM_TEST_H_
-#define _KIS_PPM_TEST_H_
+#ifndef KISMOVEBOUNDSCALCULATIONJOB_H
+#define KISMOVEBOUNDSCALCULATIONJOB_H
 
-#include <QtTest>
+#include <QObject>
+#include "kis_spontaneous_job.h"
+#include "kis_types.h"
+#include "kis_selection.h"
 
-class KisPPMTest : public QObject
+class KisMoveBoundsCalculationJob : public QObject, public KisSpontaneousJob
 {
     Q_OBJECT
-private Q_SLOTS:
-    void testFiles();
+public:
+    KisMoveBoundsCalculationJob(KisNodeList nodes, KisSelectionSP selection, QObject *requestedBy);
 
-    void testImportFromWriteonly();
-    void testExportToReadonly();
-    void testImportIncorrectFormat();
+    void run() override;
+    bool overrides(const KisSpontaneousJob *otherJob) override;
+    int levelOfDetail() const override;
+
+Q_SIGNALS:
+    void sigCalcualtionFinished(const QRect &bounds);
+
+private:
+    KisNodeList m_nodes;
+    KisSelectionSP m_selection;
+    QObject *m_requestedBy;
 };
 
-#endif
+#endif // KISMOVEBOUNDSCALCULATIONJOB_H

@@ -151,6 +151,7 @@ const KoColorSpace* KisColorSpaceSelector::currentColorSpace()
 void KisColorSpaceSelector::setCurrentColorModel(const KoID& id)
 {
     d->colorSpaceSelector->cmbColorModels->setCurrent(id);
+    d->previousModel = id;
     fillCmbDepths(id);
 }
 
@@ -236,6 +237,7 @@ void KisColorSpaceSelector::slotOpenAdvancedSelector()
     if (result) {
         if (d->profileValid==true) {
             setCurrentColorSpace(m_advancedSelector->currentColorSpace());
+            d->profileSetManually = true;
         }
     }
 }

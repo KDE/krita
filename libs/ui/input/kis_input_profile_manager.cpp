@@ -41,8 +41,9 @@
 #include "kis_select_layer_action.h"
 #include "kis_gamma_exposure_action.h"
 #include "kis_change_frame_action.h"
+#include "kis_zoom_and_rotate_action.h"
 
-#define PROFILE_VERSION 3
+#define PROFILE_VERSION 4
 
 
 class Q_DECL_HIDDEN KisInputProfileManager::Private
@@ -369,6 +370,7 @@ void KisInputProfileManager::Private::createActions()
     actions.append(new KisSelectLayerAction());
     actions.append(new KisGammaExposureAction());
     actions.append(new KisChangeFrameAction());
+    actions.append(new KisZoomAndRotateAction());
 }
 
 QString KisInputProfileManager::Private::profileFileName(const QString &profileName)

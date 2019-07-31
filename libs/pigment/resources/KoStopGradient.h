@@ -29,6 +29,13 @@
 
 typedef QPair<qreal, KoColor> KoGradientStop;
 
+struct KoGradientStopValueSort
+{
+    inline bool operator() (const KoGradientStop& a, const KoGradientStop& b) {
+        return (a.second.toQColor().valueF() < b.second.toQColor().valueF());
+    }
+};
+
 /**
  * Resource for colorstop based gradients like SVG gradients
  */

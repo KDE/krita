@@ -47,7 +47,7 @@ public:
                      KoUpdater* progressUpdater
                      ) const override;
     static inline KoID id() {
-        return KoID("noise", i18n("Noise"));
+        return KoID("noise", i18n("Random Noise"));
     }
     KisFilterConfigurationSP factoryConfiguration() const override;
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;

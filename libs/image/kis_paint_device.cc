@@ -1608,7 +1608,7 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfil
     case QImage::Format_RGBA64_Premultiplied:
         if (colorSpace()->colorModelId() == RGBAColorModelID && (colorSpace()->colorDepthId() == Float16BitsColorDepthID
                                                                  || colorSpace()->colorDepthId() == Float32BitsColorDepthID)) {
-            convertTo = QImage::Format_RBBA64;
+            convertTo = QImage::Format_RGBA64;
             sameFormat = true;
         }
         break;

@@ -151,6 +151,11 @@ KisCoordinatesConverter::~KisCoordinatesConverter()
     delete m_d;
 }
 
+QSizeF KisCoordinatesConverter::getCanvasWidgetSize() const
+{
+    return m_d->canvasWidgetSize;
+}
+
 void KisCoordinatesConverter::setCanvasWidgetSize(QSizeF size)
 {
     m_d->canvasWidgetSize = size;
@@ -294,7 +299,7 @@ QPoint KisCoordinatesConverter::resetRotation(QPointF center)
     return m_d->documentOffset.toPoint();
 }
 
-QTransform KisCoordinatesConverter::imageToWidgetTransform() const{
+QTransform KisCoordinatesConverter::imageToWidgetTransform() const {
     return m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToWidget;
 }
 
@@ -310,8 +315,7 @@ QTransform KisCoordinatesConverter::flakeToWidgetTransform() const {
     return m_d->flakeToWidget;
 }
 
-QTransform KisCoordinatesConverter::documentToWidgetTransform() const
-{
+QTransform KisCoordinatesConverter::documentToWidgetTransform() const {
     return m_d->documentToFlake * m_d->flakeToWidget;
 }
 

@@ -203,7 +203,7 @@ QRect FisheyePointAssistant::boundingRect() const
     }
 }
 
-QPointF FisheyePointAssistant::buttonPosition() const
+QPointF FisheyePointAssistant::getEditorPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
 }

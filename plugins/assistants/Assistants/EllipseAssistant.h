@@ -31,7 +31,7 @@ public:
     EllipseAssistant();
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
-    QPointF buttonPosition() const override;
+    QPointF getEditorPosition() const override;
     int numHandles() const override { return 3; }
     bool isAssistantComplete() const override;
 

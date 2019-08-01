@@ -111,24 +111,20 @@ public:
      */
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) = 0;
     virtual void endStroke() { }
-    virtual QPointF buttonPosition() const = 0;
+    virtual QPointF getEditorPosition() const = 0; // Returns editor widget position in document-space coordinates.
     virtual int numHandles() const = 0;
 
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle, HandleType type);
 
-    QColor effectiveAssistantColor() const;
+    QPointF viewportConstrainedEditorPosition(const KisCoordinatesConverter* converter, const QSize editorSize);
 
-    /// should this assistant use a custom color for the display? global color will be used if this is false
+    QColor effectiveAssistantColor() const;
     bool useCustomColor();
     void setUseCustomColor(bool useCustomColor);
-
-    /// getter and setter for assistant's custom color
     void setAssistantCustomColor(QColor color);
     QColor assistantCustomColor();
-
     void setAssistantGlobalColorCache(const QColor &color);
-
 
     virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true,KisCanvas2 *canvas=0, bool assistantVisible=true, bool previewVisible=true);
     void uncache();

@@ -647,8 +647,6 @@ QString KisPaletteEditor::newPaletteFileName(bool isGlobal, const QString &filen
     KoColorSet tmpColorSet;
     QString result = (filename.isEmpty() ? "new_palette" : filename);
 
-    qDebug() << "savelocation" << m_d->rServer->saveLocation();
-
     if (isGlobal) {
         result = m_d->rServer->saveLocation() + result;
     }

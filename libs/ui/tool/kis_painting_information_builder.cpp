@@ -101,6 +101,20 @@ qreal KisPaintingInformationBuilder::calculatePerspective(const QPointF &documen
     return 1.0;
 }
 
+qreal KisPaintingInformationBuilder::canvasRotation() const
+{
+    return 0;
+}
+
+bool KisPaintingInformationBuilder::canvasMirroredX() const
+{
+    return false;
+}
+
+bool KisPaintingInformationBuilder::canvasMirroredY() const
+{
+    return false;
+}
 
 KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoPointerEvent *event,
                                                                              int timeElapsed)
@@ -111,7 +125,7 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
     qreal perspective = calculatePerspective(adjusted);
     qreal speed = m_speedSmoother->getNextSpeed(imageToView(imagePoint));
 
-    return KisPaintInformation(imagePoint,
+    KisPaintInformation pi(imagePoint,
                                !m_pressureDisabled ? 1.0 : pressureToCurve(event->pressure()),
                                event->xTilt(), event->yTilt(),
                                event->rotation(),
@@ -119,6 +133,12 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
                                perspective,
                                timeElapsed,
                                speed);
+
+    pi.setCanvasRotation(canvasRotation());
+    pi.setCanvasMirroredH(canvasMirroredX());
+    pi.setCanvasMirroredV(canvasMirroredY());
+
+    return pi;
 }
 
 KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoint,
@@ -134,9 +154,16 @@ KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoi
                                                            event->rotation(),
                                                            event->tangentialPressure(),
                                                            perspective,
-                                                           speed);
+                                                           speed,
+                                                           canvasRotation(),
+                                                           canvasMirroredX(),
+                                                           canvasMirroredY());
     } else {
-        return KisPaintInformation::createHoveringModeInfo(imagePoint);
+        KisPaintInformation pi = KisPaintInformation::createHoveringModeInfo(imagePoint);
+        pi.setCanvasRotation(canvasRotation());
+        pi.setCanvasMirroredH(canvasMirroredX());
+        pi.setCanvasMirroredV(canvasMirroredY());
+        return pi;
     }
 }
 
@@ -166,11 +193,27 @@ QPointF KisConverterPaintingInformationBuilder::imageToView(const QPointF &point
     return m_converter->documentToWidget(point);
 }
 
+qreal KisConverterPaintingInformationBuilder::canvasRotation() const
+{
+    return m_converter->rotationAngle();
+}
+
+bool KisConverterPaintingInformationBuilder::canvasMirroredX() const
+{
+    return m_converter->xAxisMirrored();
+}
+
+bool KisConverterPaintingInformationBuilder::canvasMirroredY() const
+{
+    return m_converter->yAxisMirrored();
+}
+
 /***********************************************************************/
-/*           KisToolFreehandPaintingInformationBuilder                        */
+/*           KisToolFreehandPaintingInformationBuilder                 */
 /***********************************************************************/
 
 #include "kis_tool_freehand.h"
+#include "kis_canvas2.h"
 
 KisToolFreehandPaintingInformationBuilder::KisToolFreehandPaintingInformationBuilder(KisToolFreehand *tool)
     : m_tool(tool)
@@ -195,4 +238,22 @@ QPointF KisToolFreehandPaintingInformationBuilder::adjustDocumentPoint(const QPo
 qreal KisToolFreehandPaintingInformationBuilder::calculatePerspective(const QPointF &documentPoint)
 {
     return m_tool->calculatePerspective(documentPoint);
+}
+
+qreal KisToolFreehandPaintingInformationBuilder::canvasRotation() const
+{
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(m_tool->canvas());
+    return canvas->coordinatesConverter()->rotationAngle();
+}
+
+bool KisToolFreehandPaintingInformationBuilder::canvasMirroredX() const
+{
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(m_tool->canvas());
+    return canvas->coordinatesConverter()->xAxisMirrored();
+}
+
+bool KisToolFreehandPaintingInformationBuilder::canvasMirroredY() const
+{
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(m_tool->canvas());
+    return canvas->coordinatesConverter()->yAxisMirrored();
 }

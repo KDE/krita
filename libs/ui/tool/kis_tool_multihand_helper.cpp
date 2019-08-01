@@ -22,6 +22,7 @@
 
 #include "kis_painter.h"
 #include <strokes/KisFreehandStrokeInfo.h>
+#include "kis_algebra_2d.h"
 
 struct KisToolMultihandHelper::Private
 {
@@ -61,6 +62,25 @@ void KisToolMultihandHelper::createPainters(QVector<KisFreehandStrokeInfo*> &str
     }
 }
 
+void adjustPointInformationRotation(KisPaintInformation &pi, const QTransform &t)
+{
+    KisAlgebra2D::DecomposedMatix d(t);
+
+    qreal rotation = d.angle;
+    const bool mirrorX = KisAlgebra2D::signPZ(d.scaleX) < 0;
+    const bool mirrorY = KisAlgebra2D::signPZ(d.scaleY) < 0;
+
+    pi.setCanvasMirroredH(pi.canvasMirroredH() ^ mirrorX);
+    pi.setCanvasMirroredV(pi.canvasMirroredV() ^ mirrorY);
+
+    if (pi.canvasMirroredH()!= pi.canvasMirroredV()) {
+        rotation = normalizeAngleDegrees(360.0 - rotation);
+    }
+
+    pi.setCanvasRotation(normalizeAngleDegrees(pi.canvasRotation() - rotation));
+}
+
+
 void KisToolMultihandHelper::paintAt(const KisPaintInformation &pi)
 {
     for (int i = 0; i < d->transformations.size(); i++) {
@@ -72,12 +92,7 @@ void KisToolMultihandHelper::paintAt(const KisPaintInformation &pi)
         QLineF rotated = transform.map(rotateme);
 
         __pi.setPos(transform.map(__pi.pos()));
-        __pi.setCanvasRotation(rotated.angle());
-
-        if (__pi.canvasMirroredH()) {
-            __pi.setCanvasRotation(180-__pi.canvasRotation());
-            __pi.setCanvasRotation(__pi.canvasRotation()+180);
-        }
+        adjustPointInformationRotation(__pi, transform);
 
         paintAt(i, __pi);
     }
@@ -94,23 +109,8 @@ void KisToolMultihandHelper::paintLine(const KisPaintInformation &pi1,
         __pi1.setPos(transform.map(__pi1.pos()));
         __pi2.setPos(transform.map(__pi2.pos()));
 
-        QLineF rotateme(QPointF (0.0,0.0), QPointF (10.0,10.0));
-        rotateme.setAngle(__pi1.canvasRotation());
-        QLineF rotated = transform.map(rotateme);
-        __pi1.setCanvasRotation(rotated.angle());
-
-        rotateme.setAngle(__pi2.canvasRotation());
-        rotated = transform.map(rotateme);
-        __pi2.setCanvasRotation(rotated.angle());
-
-        //check mirroring
-        if (__pi2.canvasMirroredH()) {
-            __pi1.setCanvasRotation(180-__pi1.canvasRotation());
-            __pi1.setCanvasRotation(__pi1.canvasRotation()+180);
-            __pi2.setCanvasRotation(180-__pi2.canvasRotation());
-            __pi2.setCanvasRotation(__pi2.canvasRotation()+180);
-        }
-
+        adjustPointInformationRotation(__pi1, transform);
+        adjustPointInformationRotation(__pi2, transform);
 
         paintLine(i, __pi1, __pi2);
     }
@@ -129,22 +129,8 @@ void KisToolMultihandHelper::paintBezierCurve(const KisPaintInformation &pi1,
         __pi1.setPos(transform.map(__pi1.pos()));
         __pi2.setPos(transform.map(__pi2.pos()));
 
-        QLineF rotateme(QPointF (0.0,0.0), QPointF (10.0,10.0));
-        rotateme.setAngle(__pi1.canvasRotation());
-        QLineF rotated = transform.map(rotateme);
-        __pi1.setCanvasRotation(rotated.angle());
-
-        rotateme.setAngle(__pi2.canvasRotation());
-        rotated = transform.map(rotateme);
-        __pi2.setCanvasRotation(rotated.angle());
-
-        if (__pi2.canvasMirroredH()) {
-            __pi1.setCanvasRotation(180-__pi1.canvasRotation());
-            __pi1.setCanvasRotation(__pi1.canvasRotation()+180);
-            __pi2.setCanvasRotation(180-__pi2.canvasRotation());
-            __pi2.setCanvasRotation(__pi2.canvasRotation()+180);
-        }
-
+        adjustPointInformationRotation(__pi1, transform);
+        adjustPointInformationRotation(__pi2, transform);
 
         QPointF __control1 = transform.map(control1);
         QPointF __control2 = transform.map(control2);

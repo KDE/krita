@@ -83,10 +83,7 @@ public:
                                 const KoPointerEvent *event,
                                 const KisPaintOpSettingsSP globalSettings,
                                 KisPaintOpSettings::OutlineMode mode) const;
-    int canvasRotation();
-    void setCanvasRotation(int rotation = 0);
-    bool canvasMirroredH();
-    void setCanvasHorizontalMirrorState (bool mirrored = false);
+
 Q_SIGNALS:
     /**
      * The signal is emitted when the outline should be updated

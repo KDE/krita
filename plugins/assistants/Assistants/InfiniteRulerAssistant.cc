@@ -137,7 +137,7 @@ void InfiniteRulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConvert
     
 }
 
-QPointF InfiniteRulerAssistant::buttonPosition() const
+QPointF InfiniteRulerAssistant::getEditorPosition() const
 {
     return (*handles()[0]);
 }

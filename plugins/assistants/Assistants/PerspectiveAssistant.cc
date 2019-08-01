@@ -343,7 +343,7 @@ void PerspectiveAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter
     
 }
 
-QPointF PerspectiveAssistant::buttonPosition() const
+QPointF PerspectiveAssistant::getEditorPosition() const
 {
     QPointF centroid(0, 0);
     for (int i = 0; i < 4; ++i) {

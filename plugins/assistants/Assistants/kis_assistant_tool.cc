@@ -275,13 +275,13 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
             } else if (m_handleDrag == assistant->handles()[1]) {
                 m_dragStart = *assistant->handles()[0];
             } else if (m_handleDrag == assistant->handles()[2]) {
-                m_dragStart = assistant->buttonPosition();
+                m_dragStart = assistant->getEditorPosition();
                 m_radius = QLineF(m_dragStart, *assistant->handles()[0]);
                 m_snapIsRadial = true;
             }
 
         } else {
-            m_dragStart = assistant->buttonPosition();
+            m_dragStart = assistant->getEditorPosition();
             m_snapIsRadial = false;
         }
     }
@@ -300,21 +300,20 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
     m_assistantDrag.clear();
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
 
-        // This code contains the click event behavior.
-        QTransform initialTransform = m_canvas->coordinatesConverter()->documentToWidgetTransform();
-        QPointF actionsPosition = initialTransform.map(assistant->buttonPosition());
+        AssistantEditorData editorShared; // shared position data between assistant tool and decoration
+        const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
 
+        // This code contains the click event behavior.
+        QTransform initialTransform = converter->documentToWidgetTransform();
+        QPointF actionsPosition = initialTransform.map(assistant->viewportConstrainedEditorPosition(converter, editorShared.boundingSize));
 
         // for UI editor widget controls with move, show, and delete -- disregard document transforms like rotating and mirroring.
         // otherwise the UI controls get awkward to use when they are at 45 degree angles or the order of controls gets flipped backwards
-        QPointF uiMousePosition = initialTransform.map( canvasDecoration->snapToGuide(event, QPointF(), false));
-
-        AssistantEditorData editorShared; // shared position data between assistant tool and decoration
+        QPointF uiMousePosition = initialTransform.map(canvasDecoration->snapToGuide(event, QPointF(), false));
 
         QPointF iconMovePosition(actionsPosition + editorShared.moveIconPosition);
         QPointF iconSnapPosition(actionsPosition + editorShared.snapIconPosition);
         QPointF iconDeletePosition(actionsPosition + editorShared.deleteIconPosition);
-
 
         QRectF deleteRect(iconDeletePosition, QSizeF(editorShared.deleteIconSize, editorShared.deleteIconSize));
         QRectF visibleRect(iconSnapPosition, QSizeF(editorShared.snapIconSize, editorShared.snapIconSize));

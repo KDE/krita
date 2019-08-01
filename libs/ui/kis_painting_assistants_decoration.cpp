@@ -446,14 +446,11 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
         return;
     }
 
+    AssistantEditorData toolData; // shared const data for positioning and sizing
+
     QTransform initialTransform = converter->documentToWidgetTransform();
 
-    // We are going to put all of the assistant actions below the bounds of the assistant
-    // so they are out of the way
-    // assistant->buttonPosition() gets the center X/Y position point
-    QPointF actionsPosition = initialTransform.map(assistant->buttonPosition());
-
-    AssistantEditorData toolData; // shared const data for positioning and sizing
+    QPointF actionsPosition = initialTransform.map(assistant->viewportConstrainedEditorPosition(converter, toolData.boundingSize));
 
     QPointF iconMovePosition(actionsPosition + toolData.moveIconPosition);
     QPointF iconSnapPosition(actionsPosition + toolData.snapIconPosition);
@@ -466,13 +463,13 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     gc.setRenderHint(QPainter::Antialiasing);
 
     QPainterPath bgPath;
-    bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), 110, 40), 6, 6);
+    bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), toolData.boundingSize.width(), toolData.boundingSize.height()), 6, 6);
     QPen stroke(QColor(60, 60, 60, 80), 2);
 
     // if the assistant is selected, make outline stroke fatter and use theme's highlight color
     // for better visual feedback
     if (selectedAssistant()) { // there might not be a selected assistant, so do not seg fault
-        if (assistant->buttonPosition() == selectedAssistant()->buttonPosition()) {
+        if (assistant->getEditorPosition() == selectedAssistant()->getEditorPosition()) {
             stroke.setWidth(4);
             stroke.setColor(qApp->palette().color(QPalette::Highlight));
         }

@@ -341,6 +341,22 @@ void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle, Handle
     handle.data()->setType(type);
 }
 
+QPointF KisPaintingAssistant::viewportConstrainedEditorPosition(const KisCoordinatesConverter* converter, const QSize editorSize)
+{
+    QPointF editorDocumentPos = getEditorPosition();
+    QPointF editorWidgetPos = converter->documentToWidgetTransform().map(editorDocumentPos);
+    QSizeF canvasSize = converter->getCanvasWidgetSize();
+    const int padding = 16;
+
+    editorWidgetPos.rx() = qBound(0.0,
+                                  editorWidgetPos.x(),
+                                  canvasSize.width() - (editorSize.width() + padding));
+    editorWidgetPos.ry() = qBound(0.0,
+                                  editorWidgetPos.y(),
+                                  canvasSize.height() - (editorSize.height() + padding));
+
+    return converter->widgetToDocument(editorWidgetPos);
+}
 
 void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool useCache, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {

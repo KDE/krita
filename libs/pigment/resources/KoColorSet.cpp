@@ -495,8 +495,6 @@ KisSwatchGroup::SwatchInfo KoColorSet::getClosestColorInfo(KoColor compare, bool
 
 KoColorSet::Private::Private(KoColorSet *a_colorSet)
     : colorSet(a_colorSet)
-    , isGlobal(true)
-    , isEditable(false)
 {
     groups[KoColorSet::GLOBAL_GROUP_NAME] = KisSwatchGroup();
     groupNames.append(KoColorSet::GLOBAL_GROUP_NAME);

@@ -102,19 +102,26 @@ void KisPaletteEditor::addPalette()
 {
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
+
     KoDialog dlg;
     QFormLayout layout;
     dlg.mainWidget()->setLayout(&layout);
     QLabel lbl(i18nc("Label for line edit to set a palette name.","Name"));
     QLineEdit le(i18nc("Default name for a new palette","New Palette"));
     layout.addRow(&lbl, &le);
+    QCheckBox chkGlobal(i18n("Save Palette in the Current Document"));
+    chkGlobal.setChecked(false);
+    layout.addRow(&chkGlobal);
+
     if (dlg.exec() != QDialog::Accepted) { return; }
+
     KoColorSet *newColorSet = new KoColorSet(newPaletteFileName(false));
     newColorSet->setPaletteType(KoColorSet::KPL);
-    newColorSet->setIsGlobal(false);
+    newColorSet->setIsGlobal(!chkGlobal.isChecked());
     newColorSet->setIsEditable(true);
     newColorSet->setValid(true);
     newColorSet->setName(le.text());
+
     m_d->rServer->addResource(newColorSet);
     m_d->rServer->removeFromBlacklist(newColorSet);
 

@@ -50,8 +50,6 @@ void KisToolPolygon::resetCursorStyle()
 
 void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
 {
-    if (!blockUntilOperationsFinished()) return;
-
     const KisToolShape::ShapeAddInfo info =
         shouldAddShape(currentNode());
 

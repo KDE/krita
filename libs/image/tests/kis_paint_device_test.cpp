@@ -871,7 +871,6 @@ void checkReadWriteRoundTrip(KisPaintDeviceSP dev,
 {
     KisPaintDeviceSP deviceCopy = new KisPaintDevice(*dev.data());
 
-    QRect readRect(10, 10, 20, 20);
     int bufSize = rc.width() * rc.height() * dev->pixelSize();
 
     QScopedArrayPointer<quint8> buf1(new quint8[bufSize]);

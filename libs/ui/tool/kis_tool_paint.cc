@@ -436,8 +436,9 @@ int KisToolPaint::colorPreviewResourceId(AlternateAction action)
     return resource;
 }
 
-void KisToolPaint::slotColorPickingFinished(const KoColor &color)
+void KisToolPaint::slotColorPickingFinished(KoColor color)
 {
+    color.setOpacity(OPACITY_OPAQUE_U8);
     canvas()->resourceManager()->setResource(m_pickingResource, color);
 
     if (!m_showColorPreview) return;

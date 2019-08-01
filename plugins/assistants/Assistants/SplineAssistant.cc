@@ -205,7 +205,7 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
 
 }
 
-QPointF SplineAssistant::buttonPosition() const
+QPointF SplineAssistant::getEditorPosition() const
 {
     return B(0.5, *handles()[0], *handles()[2], *handles()[3], *handles()[1]);
 }

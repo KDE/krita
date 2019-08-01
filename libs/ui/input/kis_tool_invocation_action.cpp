@@ -43,6 +43,8 @@ public:
 
     bool active;
     bool lineToolActivated;
+    QPointer<KisToolProxy> activatedToolProxy;
+    QPointer<KisToolProxy> runningToolProxy;
 };
 
 KisToolInvocationAction::KisToolInvocationAction()
@@ -75,7 +77,8 @@ void KisToolInvocationAction::activate(int shortcut)
         d->lineToolActivated = true;
     }
 
-    inputManager()->toolProxy()->activateToolAction(KisTool::Primary);
+    d->activatedToolProxy = inputManager()->toolProxy();
+    d->activatedToolProxy->activateToolAction(KisTool::Primary);
 }
 
 void KisToolInvocationAction::deactivate(int shortcut)
@@ -83,7 +86,14 @@ void KisToolInvocationAction::deactivate(int shortcut)
     Q_UNUSED(shortcut);
     if (!inputManager()) return;
 
-    inputManager()->toolProxy()->deactivateToolAction(KisTool::Primary);
+    /**
+     * Activate call might ave come before actual input manager or tool proxy
+     * was attached. So we may end up wil null activatedToolProxy.
+     */
+    if (d->activatedToolProxy) {
+        d->activatedToolProxy->deactivateToolAction(KisTool::Primary);
+        d->activatedToolProxy.clear();
+    }
 
     if (shortcut == LineToolShortcut && d->lineToolActivated) {
         d->lineToolActivated = false;
@@ -104,8 +114,9 @@ bool KisToolInvocationAction::canIgnoreModifiers() const
 void KisToolInvocationAction::begin(int shortcut, QEvent *event)
 {
     if (shortcut == ActivateShortcut || shortcut == LineToolShortcut) {
+        d->runningToolProxy = inputManager()->toolProxy();
         d->active =
-            inputManager()->toolProxy()->forwardEvent(
+            d->runningToolProxy->forwardEvent(
                 KisToolProxy::BEGIN, KisTool::Primary, event, event);
     } else if (shortcut == ConfirmShortcut) {
         QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, 0);
@@ -147,9 +158,11 @@ void KisToolInvocationAction::end(QEvent *event)
     if (d->active) {
         // It might happen that the action is still running, while the
         // canvas has been removed, which kills the toolProxy.
-        if (inputManager() && inputManager()->toolProxy()) {
-            inputManager()->toolProxy()->
-                    forwardEvent(KisToolProxy::END, KisTool::Primary, event, event);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(d->runningToolProxy);
+        if (d->runningToolProxy) {
+            d->runningToolProxy->
+                forwardEvent(KisToolProxy::END, KisTool::Primary, event, event);
+            d->runningToolProxy.clear();
         }
         d->active = false;
     }
@@ -160,10 +173,9 @@ void KisToolInvocationAction::end(QEvent *event)
 void KisToolInvocationAction::inputEvent(QEvent* event)
 {
     if (!d->active) return;
-    if (!inputManager()) return;
-    if (!inputManager()->toolProxy()) return;
+    if (!d->runningToolProxy) return;
 
-    inputManager()->toolProxy()->
+    d->runningToolProxy->
         forwardEvent(KisToolProxy::CONTINUE, KisTool::Primary, event, event);
 }
 

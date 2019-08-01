@@ -25,6 +25,7 @@
 #include <QCoreApplication>
 #include <klocalizedstring.h>
 #include <kis_assert_exception.h>
+#include <KisUsageLogger.h>
 #include <string>
 #include "config-hide-safe-asserts.h"
 
@@ -58,6 +59,8 @@ void kis_assert_common(const char *assertion, const char *file, int line, bool t
             "Press Ignore to try to continue.\n"
             "Press Abort to see developers information (all unsaved data will be lost)")
         .arg(shortMessage);
+
+    KisUsageLogger::log(shortMessage);
 
     bool disableAssertMsg =
         QProcessEnvironment::systemEnvironment().value("KRITA_NO_ASSERT_MSG", "0").toInt();

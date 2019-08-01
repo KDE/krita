@@ -377,7 +377,7 @@ KisConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent,
 {
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(1, 200, 80, i18n("Drop size"), "dropsize"));
-    param.push_back(KisIntegerWidgetParam(1, 500, 80, i18n("Number"), "number"));
+    param.push_back(KisIntegerWidgetParam(1, 500, 80, i18n("Number of drops"), "number"));
     param.push_back(KisIntegerWidgetParam(1, 100, 30, i18n("Fish eyes"), "fishEyes"));
     KisMultiIntegerFilterWidget * w = new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
     w->setConfiguration(factoryConfiguration());

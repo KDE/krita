@@ -283,7 +283,6 @@ void KisTiledDataManagerTest::testBitBltOldData()
 
     QRect rect(0,0,512,512);
     QRect cloneRect(81,80,250,250);
-    QRect tilesRect(2,2,3,3);
 
     quint8 *buffer = new quint8[rect.width()*rect.height()];
 

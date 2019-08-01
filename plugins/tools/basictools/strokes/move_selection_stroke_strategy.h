@@ -21,13 +21,17 @@
 
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_types.h"
+#include "kis_selection.h"
+#include "kis_paint_layer.h"
 
 class KisPostExecutionUndoAdapter;
 class KisUpdatesFacade;
 
 
-class MoveSelectionStrokeStrategy : public KisStrokeStrategyUndoCommandBased
+class MoveSelectionStrokeStrategy : public QObject, public KisStrokeStrategyUndoCommandBased
 {
+    Q_OBJECT
+
 public:
     MoveSelectionStrokeStrategy(KisPaintLayerSP paintLayer,
                                 KisSelectionSP selection,
@@ -38,6 +42,9 @@ public:
     void finishStrokeCallback() override;
     void cancelStrokeCallback() override;
     void doStrokeCallback(KisStrokeJobData *data) override;
+
+Q_SIGNALS:
+    void sigHandlesRectCalculated(const QRect &handlesRect);
 
 private:
     MoveSelectionStrokeStrategy(const MoveSelectionStrokeStrategy &rhs);

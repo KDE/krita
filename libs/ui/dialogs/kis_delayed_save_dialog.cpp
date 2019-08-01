@@ -94,7 +94,7 @@ void KisDelayedSaveDialog::blockIfImageIsBusy()
     t.start();
 
     while (t.elapsed() < m_d->busyWait) {
-        QApplication::processEvents();
+        QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
         if (m_d->checkImageIdle()) {
             setResult(Accepted);

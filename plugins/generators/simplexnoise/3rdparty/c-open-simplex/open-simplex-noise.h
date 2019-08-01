@@ -20,9 +20,11 @@
  *   will be the same when ported to other languages.
  */
 
-#if ((__GNUC_STDC_INLINE__) || (__STDC_VERSION__ >= 199901L))
-	#include <stdint.h>
-	#define INLINE inline
+#if (defined (__STDC_VERSION__) || defined (__GNUC_STDC_INLINE__))
+    #if ((__GNUC_STDC_INLINE__) || (__STDC_VERSION__ >= 199901L))
+        #include <stdint.h>
+        #define INLINE inline
+    #endif
 #elif (defined (_MSC_VER) || defined (__GNUC_GNU_INLINE__))
 	#include <stdint.h>
 	#define INLINE __inline

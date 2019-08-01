@@ -55,7 +55,7 @@ void KisToolRectangle::resetCursorStyle()
 
 void KisToolRectangle::finishRect(const QRectF &rect, qreal roundCornersX, qreal roundCornersY)
 {
-    if (rect.isNull() || !blockUntilOperationsFinished())
+    if (rect.isNull())
         return;
 
     const KisToolShape::ShapeAddInfo info =
@@ -94,7 +94,5 @@ void KisToolRectangle::finishRect(const QRectF &rect, qreal roundCornersX, qreal
 
         addShape(shape);
     }
-
-    notifyModified();
 }
 

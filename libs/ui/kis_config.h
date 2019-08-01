@@ -51,6 +51,9 @@ public:
     bool disableTouchOnCanvas(bool defaultValue = false) const;
     void setDisableTouchOnCanvas(bool value) const;
 
+    bool disableTouchRotation(bool defaultValue = false) const;
+    void setDisableTouchRotation(bool value) const;
+
     bool useProjections(bool defaultValue = false) const;
     void setUseProjections(bool useProj) const;
 
@@ -438,7 +441,7 @@ public:
     void setDefaultBackgroundOpacity(quint8 value);
 
     QColor defaultBackgroundColor(bool defaultValue = false) const;
-    void setDefaultBackgroundColor(QColor value);
+    void setDefaultBackgroundColor(const QColor &value);
 
     enum BackgroundStyle {
         RASTER_LAYER = 0,

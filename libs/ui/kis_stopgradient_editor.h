@@ -31,6 +31,13 @@ class KRITAUI_EXPORT KisStopGradientEditor : public QWidget, public Ui::KisWdgSt
     Q_OBJECT
 
 public:
+    enum SortFlag {
+        SORT_ASCENDING = 1 << 0,
+        EVEN_DISTRIBUTION = 1 << 1
+    };
+    Q_DECLARE_FLAGS( SortFlags, SortFlag);
+
+
     KisStopGradientEditor(QWidget *parent);
     KisStopGradientEditor(KoStopGradient* gradient, QWidget *parent, const char* name, const QString& caption);
 
@@ -53,6 +60,9 @@ private Q_SLOTS:
     void opacityChanged(qreal value);
     void nameChanged();
     void reverse();
+    void sortByValue(SortFlags flags);
+    void showContextMenu( const class QPoint& origin );
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisStopGradientEditor::SortFlags);
 #endif

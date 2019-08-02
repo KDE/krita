@@ -107,7 +107,7 @@ struct KisSafeDocumentLoader::Private
     {
     }
 
-    QScopedPointer<KisDocument>  doc;
+    QScopedPointer<KisDocument> doc;
     KisSignalCompressor fileChangedSignalCompressor;
     bool isLoading = false;
     bool fileChangedFlag = false;

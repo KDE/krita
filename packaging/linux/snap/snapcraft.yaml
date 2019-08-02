@@ -1,5 +1,5 @@
 name: krita
-version: 4.2.4
+version: 4.2.5
 summary: Krita is the digital painting studio for artists
 description: Krita is a creative application for raster images. Whether you want to create
  from scratch or work with existing images, Krita is for you. You can work with
@@ -21,7 +21,7 @@ parts:
     - "-DENABLE_TESTING=OFF"
     - "-DBUILD_TESTING=OFF"
     - "-DKDE_SKIP_TEST_SETTINGS=ON"
-    source: https://download.kde.org/stable/krita/4.2.4/krita-4.2.4.tar.xz
+    source: https://download.kde.org/stable/krita/4.2.5/krita-4.2.5.tar.xz
 # Use these instead to build from the git source
 #    source: https://anongit.kde.org/krita.git
 #    source-type: git

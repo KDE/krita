@@ -269,8 +269,16 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
             m_ui->lblWebsite->setText(metrics.elidedText(bundle->getMeta("website"), Qt::ElideRight, m_ui->lblWebsite->width()));
             m_ui->lblWebsite->setToolTip(bundle->getMeta("website"));
             m_ui->lblDescription->setPlainText(bundle->getMeta("description"));
-            m_ui->lblCreated->setText(bundle->getMeta("created"));
-            m_ui->lblUpdated->setText(bundle->getMeta("updated"));
+            if (QDateTime::fromString(bundle->getMeta("created")).isValid()) {
+                m_ui->lblCreated->setText(QDateTime::fromString(bundle->getMeta("created")).toString());
+            } else {
+                m_ui->lblCreated->setText(QDate::fromString(bundle->getMeta("created"), "dd/MM/yyyy").toString());
+            }
+            if (QDateTime::fromString(bundle->getMeta("updated")).isValid()) {
+                m_ui->lblCreated->setText(QDateTime::fromString(bundle->getMeta("updated")).toString());
+            } else {
+                m_ui->lblCreated->setText(QDate::fromString(bundle->getMeta("updated"), "dd/MM/yyyy").toString());
+            }
             m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image().scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
             m_ui->listBundleContents->clear();
 

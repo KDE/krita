@@ -226,6 +226,7 @@ void KisDlgFilter::filterSelectionChanged()
 {
     KisFilterSP filter = d->uiFilterDialog.filterSelection->currentFilter();
     setDialogTitle(filter);
+    d->currentFilter = filter;
     d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(filter.isNull() ? false : filter->supportsAdjustmentLayers());
     updatePreview();
 }

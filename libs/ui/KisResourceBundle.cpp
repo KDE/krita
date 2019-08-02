@@ -280,7 +280,7 @@ bool KisResourceBundle::save()
 {
     if (filename().isEmpty()) return false;
 
-    addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
+    addMeta("updated", QDateTime::currentDateTime().toString(Qt::ISODate));
 
     QDir bundleDir = KoResourcePaths::saveLocation("data", "bundles");
     bundleDir.cdUp();
@@ -597,7 +597,7 @@ void KisResourceBundle::recreateBundle(QScopedPointer<KoStore> &oldStore)
         KoHashGenerator *generator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
         KisResourceBundleManifest newManifest;
 
-        addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
+        addMeta("updated", QDateTime::currentDateTime().toString(Qt::ISODate));
 
         Q_FOREACH (KisResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
             // Wrong manifest entry found, skip it

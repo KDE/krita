@@ -190,7 +190,7 @@ bool KisSavedMacroCommand::mergeWith(const KUndo2Command* command)
     const KisSavedMacroCommand *other =
         dynamic_cast<const KisSavedMacroCommand*>(command);
 
-    if (!other || other->id() != id()) return false;
+    if (!other || other->id() != id() || id() < 0 || other->id() < 0) return false;
 
     QVector<Private::SavedCommand> &otherCommands = other->m_d->commands;
 
@@ -203,7 +203,11 @@ bool KisSavedMacroCommand::mergeWith(const KUndo2Command* command)
             }
         }
 
-        setExtraData(other->extraData()->clone());
+        if (other->extraData()) {
+            setExtraData(other->extraData()->clone());
+        } else {
+            setExtraData(0);
+        }
         return true;
     }
 
@@ -217,7 +221,9 @@ bool KisSavedMacroCommand::mergeWith(const KUndo2Command* command)
 
     bool sameCommands = true;
     while (it != end && otherIt != otherEnd) {
-        if (it->command->id() != otherIt->command->id() ||
+        if (it->command->id() < 0 ||
+            otherIt->command->id() < 0 ||
+            it->command->id() != otherIt->command->id() ||
             it->sequentiality != otherIt->sequentiality ||
             it->exclusivity != otherIt->exclusivity) {
 
@@ -240,6 +246,12 @@ bool KisSavedMacroCommand::mergeWith(const KUndo2Command* command)
         }
         ++it;
         ++otherIt;
+    }
+
+    if (other->extraData()) {
+        setExtraData(other->extraData()->clone());
+    } else {
+        setExtraData(0);
     }
 
     return true;

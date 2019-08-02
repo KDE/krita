@@ -275,9 +275,9 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
                 m_ui->lblCreated->setText(QDate::fromString(bundle->getMeta("created"), "dd/MM/yyyy").toString());
             }
             if (QDateTime::fromString(bundle->getMeta("updated"), Qt::ISODate).isValid()) {
-                m_ui->lblCreated->setText(QDateTime::fromString(bundle->getMeta("updated"), Qt::ISODate).toString());
+                m_ui->lblUpdated->setText(QDateTime::fromString(bundle->getMeta("updated"), Qt::ISODate).toString());
             } else {
-                m_ui->lblCreated->setText(QDate::fromString(bundle->getMeta("updated"), "dd/MM/yyyy").toString());
+                m_ui->lblUpdated->setText(QDate::fromString(bundle->getMeta("updated"), "dd/MM/yyyy").toString());
             }
             m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image().scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
             m_ui->listBundleContents->clear();

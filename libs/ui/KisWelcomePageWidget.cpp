@@ -218,8 +218,10 @@ void KisWelcomePageWidget::populateRecentDocuments()
             recentItem->setIcon(m_thumbnailMap[recentFileUrlPath]);
         }
         else {
-            if (QFileInfo(recentFileUrlPath).exists()) {
-                if (recentFileUrlPath.toLower().endsWith("ora") || recentFileUrlPath.toLower().endsWith("kra")) {
+            QFileInfo fi(recentFileUrlPath);
+
+            if (fi.exists()) {
+                if (fi.suffix() == "ora" || fi.suffix() == "kra") {
 
                     QScopedPointer<KoStore> store(KoStore::createStore(recentFileUrlPath, KoStore::Read));
                     if (store) {
@@ -242,7 +244,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
                         }
                     }
                 }
-                else if (recentFileUrlPath.toLower().endsWith("tif")) {
+                else if (fi.suffix() == "tiff" || fi.suffix() == "tif") {
                     // Workaround for a bug in Qt tiff QImageIO plugin
                     QScopedPointer<KisDocument> doc;
                     doc.reset(KisPart::instance()->createDocument());

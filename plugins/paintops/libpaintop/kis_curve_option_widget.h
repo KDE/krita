@@ -53,6 +53,9 @@ protected:
 
 private Q_SLOTS:
 
+    void slotModified();
+    void slotStateChanged();
+
     void transferCurve();
     void updateSensorCurveLabels(KisDynamicSensorSP sensor);
     void updateCurve(KisDynamicSensorSP sensor);

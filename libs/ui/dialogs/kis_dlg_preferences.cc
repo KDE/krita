@@ -1321,6 +1321,14 @@ void DisplaySettingsTab::setDefault()
     }
 
     chkMoving->setChecked(cfg.scrollCheckers(true));
+
+    KisImageConfig imageCfg(false);
+    KoColor c;
+    c.fromQColor(imageCfg.selectionOverlayMaskColor(true));
+    c.setOpacity(1.0);
+    btnSelectionOverlayColor->setColor(c);
+    sldSelectionOverlayOpacity->setValue(imageCfg.selectionOverlayMaskColor(true).alphaF());
+
     intCheckSize->setValue(cfg.checkSize(true));
     KoColor ck1(KoColorSpaceRegistry::instance()->rgb8());
     ck1.fromQColor(cfg.checkersColor1(true));

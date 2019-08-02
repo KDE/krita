@@ -111,9 +111,6 @@ struct KisToolFreehandHelper::Private
 
     QTimer asynchronousUpdatesThresholdTimer;
 
-    int canvasRotation;
-    bool canvasMirroredH;
-
     qreal effectiveSmoothnessDistance() const;
 };
 
@@ -127,7 +124,6 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
     m_d->transactionText = transactionText;
     m_d->smoothingOptions = KisSmoothingOptionsSP(
                 smoothingOptions ? smoothingOptions : new KisSmoothingOptions());
-    m_d->canvasRotation = 0;
 
     m_d->fakeDabRandomSource = new KisRandomSource();
     m_d->fakeStrokeRandomSource = new KisPerStrokeRandomSource();
@@ -173,8 +169,6 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
     KisPaintInformation info = m_d->infoBuilder->hover(savedCursorPos, event);
     QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(savedCursorPos);
     qreal startAngle = KisAlgebra2D::directionBetweenPoints(prevPoint, savedCursorPos, 0);
-    info.setCanvasRotation(m_d->canvasRotation);
-    info.setCanvasHorizontalMirrorState( m_d->canvasMirroredH );
     KisDistanceInformation distanceInfo(prevPoint, startAngle);
 
     if (!m_d->strokeInfos.isEmpty()) {
@@ -440,9 +434,6 @@ void KisToolFreehandHelper::paintEvent(KoPointerEvent *event)
     KisPaintInformation info =
             m_d->infoBuilder->continueStroke(event,
                                              elapsedStrokeTime());
-    info.setCanvasRotation( m_d->canvasRotation );
-    info.setCanvasHorizontalMirrorState( m_d->canvasMirroredH );
-
     KisUpdateTimeMonitor::instance()->reportMouseMove(info.pos());
 
     paint(info);
@@ -981,23 +972,4 @@ void KisToolFreehandHelper::paintBezierCurve(const KisPaintInformation &pi1,
                                              const KisPaintInformation &pi2)
 {
     paintBezierCurve(0, pi1, control1, control2, pi2);
-}
-
-int KisToolFreehandHelper::canvasRotation()
-{
-    return m_d->canvasRotation;
-}
-
-void KisToolFreehandHelper::setCanvasRotation(int rotation)
-{
-   m_d->canvasRotation = rotation;
-}
-bool KisToolFreehandHelper::canvasMirroredH()
-{
-    return m_d->canvasMirroredH;
-}
-
-void KisToolFreehandHelper::setCanvasHorizontalMirrorState(bool mirrored)
-{
-   m_d->canvasMirroredH = mirrored;
 }

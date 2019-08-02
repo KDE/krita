@@ -432,25 +432,6 @@ QPainterPath KisPaintOpSettings::makeTiltIndicator(KisPaintInformation const& in
     return ret;
 }
 
-void KisPaintOpSettings::setCanvasRotation(qreal angle)
-{
-    Private::DirtyNotificationsLocker locker(d.data());
-
-    setProperty("runtimeCanvasRotation", angle);
-    setPropertyNotSaved("runtimeCanvasRotation");
-}
-
-void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirrored)
-{
-    Private::DirtyNotificationsLocker locker(d.data());
-
-    setProperty("runtimeCanvasMirroredX", xAxisMirrored);
-    setPropertyNotSaved("runtimeCanvasMirroredX");
-
-    setProperty("runtimeCanvasMirroredY", yAxisMirrored);
-    setPropertyNotSaved("runtimeCanvasMirroredY");
-}
-
 void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
 {
     if (value != KisPropertiesConfiguration::getProperty(name) && !d->disableDirtyNotifications) {

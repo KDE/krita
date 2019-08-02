@@ -88,10 +88,6 @@ public:
         KisPaintOpPresetSP preset =
             manager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
 
-        preset->settings()->setCanvasRotation(rotation);
-        preset->settings()->setCanvasMirroring(mirrorY, mirrorX);
-
-
         if (mirrorDabX || mirrorDabY) {
             KisPaintOpSettingsSP settings = preset->settings()->clone();
 
@@ -143,13 +139,16 @@ public:
 
         resources->setupPainter(&gc);
 
-        doPaint(gc);
+        doPaint(gc, rotation, mirrorX, mirrorY);
 
         checkOneLayer(image, paint1, testName);
     }
 
-    virtual void doPaint(KisPainter &gc) {
+    virtual void doPaint(KisPainter &gc, qreal rotation, bool mirrorX, bool mirrorY) {
         KisPaintInformation pi(QPointF(100, 100), 1.0);
+        pi.setCanvasRotation(rotation);
+        pi.setCanvasMirroredH(mirrorX);
+        pi.setCanvasMirroredV(mirrorY);
 
         KisDistanceInformation dist;
         gc.paintAt(pi, &dist);
@@ -166,13 +165,20 @@ public:
         : TestBrushOp(presetFileName) {
     }
 
-    void doPaint(KisPainter &gc) override {
+    void doPaint(KisPainter &gc, qreal rotation, bool mirrorX, bool mirrorY) override {
 
         QVector<KisPaintInformation> vector;
 
         vector << KisPaintInformation(QPointF(100, 100));
         vector << KisPaintInformation(QPointF(200, 150));
         vector << KisPaintInformation(QPointF(100, 350));
+
+
+        for (auto pi : vector) {
+            pi.setCanvasRotation(rotation);
+            pi.setCanvasMirroredH(mirrorX);
+            pi.setCanvasMirroredV(mirrorY);
+        }
 
         KisDistanceInformation dist;
 
@@ -189,7 +195,7 @@ public:
         : TestBrushOp(presetFileName, prefix) {
     }
 
-    void doPaint(KisPainter &gc) override {
+    void doPaint(KisPainter &gc, qreal rotation, bool mirrorX, bool mirrorY) override {
 
         QVector<KisPaintInformation> vector;
 
@@ -198,6 +204,12 @@ public:
         vector << KisPaintInformation(QPointF(100, 250), 0.0);
         vector << KisPaintInformation(QPointF(200, 150), 1.0);
         vector << KisPaintInformation(QPointF(100, 350), 1.0);
+
+        for (auto pi : vector) {
+            pi.setCanvasRotation(rotation);
+            pi.setCanvasMirroredH(mirrorX);
+            pi.setCanvasMirroredV(mirrorY);
+        }
 
         KisDistanceInformation dist;
 

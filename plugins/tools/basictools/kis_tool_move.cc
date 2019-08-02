@@ -52,7 +52,7 @@
 struct KisToolMoveState : KisToolChangesTrackerData, boost::equality_comparable<KisToolMoveState>
 {
     KisToolMoveState(QPoint _accumulatedOffset) : accumulatedOffset(_accumulatedOffset) {}
-    KisToolChangesTrackerData* clone() const { return new KisToolMoveState(*this); }
+    KisToolChangesTrackerData* clone() const override { return new KisToolMoveState(*this); }
 
     bool operator ==(const KisToolMoveState &rhs) {
         return accumulatedOffset == rhs.accumulatedOffset;
@@ -246,7 +246,7 @@ void KisToolMove::notifyGuiAfterMove(bool showFloatingMessage)
     }
 }
 
-bool KisToolMove::tryEndPreviousStroke(KisNodeList nodes)
+bool KisToolMove::tryEndPreviousStroke(const KisNodeList &nodes)
 {
     if (!m_strokeId) return false;
 
@@ -665,7 +665,7 @@ void KisToolMove::requestHandlesRectUpdate()
     notifyGuiAfterMove(false);
 }
 
-void KisToolMove::slotNodeChanged(KisNodeList nodes)
+void KisToolMove::slotNodeChanged(const KisNodeList &nodes)
 {
     if (m_strokeId && !tryEndPreviousStroke(nodes)) {
         return;

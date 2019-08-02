@@ -280,7 +280,7 @@ bool KisResourceBundle::save()
 {
     if (filename().isEmpty()) return false;
 
-    addMeta("updated", QDateTime::currentDateTime().toString(Qt::ISODate));
+    addMeta("updated", QDateTime::currentDateTime().toOffsetFromUtc(0).toString(Qt::ISODate));
 
     QDir bundleDir = KoResourcePaths::saveLocation("data", "bundles");
     bundleDir.cdUp();

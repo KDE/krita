@@ -37,6 +37,7 @@ public:
     virtual QRect dirtyViewportRect();
     virtual QRect dirtyImageRect() const = 0;
     virtual int levelOfDetail() const = 0;
+    virtual bool canBeCompressed() const;
 };
 
 Q_DECLARE_METATYPE(KisUpdateInfoSP)
@@ -159,6 +160,7 @@ public:
 
     QRect dirtyImageRect() const override;
     int levelOfDetail() const override;
+    bool canBeCompressed() const override;
 
 private:
     Type m_type;

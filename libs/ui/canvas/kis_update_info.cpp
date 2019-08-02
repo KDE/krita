@@ -42,6 +42,11 @@ QRect KisUpdateInfo::dirtyViewportRect()
     return QRect();
 }
 
+bool KisUpdateInfo::canBeCompressed() const
+{
+    return true;
+}
+
 QRect KisPPUpdateInfo::dirtyViewportRect() {
     return viewportRect.toAlignedRect();
 }
@@ -118,4 +123,9 @@ int KisMarkerUpdateInfo::levelOfDetail() const
     // return invalid level of detail to avoid merging the update info
     // with other updates
     return -1 - (int)m_type;
+}
+
+bool KisMarkerUpdateInfo::canBeCompressed() const
+{
+    return false;
 }

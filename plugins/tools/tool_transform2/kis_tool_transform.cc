@@ -303,6 +303,7 @@ void KisToolTransform::beginActionImpl(KoPointerEvent *event, bool usePrimaryAct
 void KisToolTransform::continueActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action)
 {
     if (mode() != KisTool::PAINT_MODE) return;
+    if (!m_transaction.rootNode()) return;
 
     m_actuallyMoveWhileSelected = true;
 

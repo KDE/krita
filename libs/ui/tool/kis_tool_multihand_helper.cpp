@@ -85,15 +85,9 @@ void KisToolMultihandHelper::paintAt(const KisPaintInformation &pi)
 {
     for (int i = 0; i < d->transformations.size(); i++) {
         const QTransform &transform = d->transformations[i];
-
         KisPaintInformation __pi = pi;
-        QLineF rotateme(QPointF (0.0,0.0), QPointF (10.0,10.0));
-        rotateme.setAngle(__pi.canvasRotation());
-        QLineF rotated = transform.map(rotateme);
-
         __pi.setPos(transform.map(__pi.pos()));
         adjustPointInformationRotation(__pi, transform);
-
         paintAt(i, __pi);
     }
 }

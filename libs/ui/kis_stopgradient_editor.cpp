@@ -46,12 +46,12 @@ KisStopGradientEditor::KisStopGradientEditor(QWidget *parent)
     connect(opacitySlider, SIGNAL(valueChanged(qreal)), this, SLOT(opacityChanged(qreal)));
 
 
-    buttonReverse->setIcon(KisIconUtils::loadIcon("view-refresh"));
+    buttonReverse->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_x"));
     buttonReverse->setToolTip(i18n("Flip Gradient"));
     KisIconUtils::updateIcon(buttonReverse);
     connect(buttonReverse, SIGNAL(pressed()), SLOT(reverse()));
 
-    buttonReverseSecond->setIcon(KisIconUtils::loadIcon("view-refresh"));
+    buttonReverseSecond->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_x"));
     buttonReverseSecond->setToolTip(i18n("Flip Gradient"));
     KisIconUtils::updateIcon(buttonReverseSecond);
     connect(buttonReverseSecond, SIGNAL(clicked()), SLOT(reverse()));

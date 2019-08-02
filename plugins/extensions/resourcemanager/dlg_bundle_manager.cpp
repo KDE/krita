@@ -269,13 +269,13 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
             m_ui->lblWebsite->setText(metrics.elidedText(bundle->getMeta("website"), Qt::ElideRight, m_ui->lblWebsite->width()));
             m_ui->lblWebsite->setToolTip(bundle->getMeta("website"));
             m_ui->lblDescription->setPlainText(bundle->getMeta("description"));
-            if (QDateTime::fromString(bundle->getMeta("created")).isValid()) {
-                m_ui->lblCreated->setText(QDateTime::fromString(bundle->getMeta("created")).toString());
+            if (QDateTime::fromString(bundle->getMeta("created"), Qt::ISODate).isValid()) {
+                m_ui->lblCreated->setText(QDateTime::fromString(bundle->getMeta("created"), Qt::ISODate).toString());
             } else {
                 m_ui->lblCreated->setText(QDate::fromString(bundle->getMeta("created"), "dd/MM/yyyy").toString());
             }
-            if (QDateTime::fromString(bundle->getMeta("updated")).isValid()) {
-                m_ui->lblCreated->setText(QDateTime::fromString(bundle->getMeta("updated")).toString());
+            if (QDateTime::fromString(bundle->getMeta("updated"), Qt::ISODate).isValid()) {
+                m_ui->lblCreated->setText(QDateTime::fromString(bundle->getMeta("updated"), Qt::ISODate).toString());
             } else {
                 m_ui->lblCreated->setText(QDate::fromString(bundle->getMeta("updated"), "dd/MM/yyyy").toString());
             }

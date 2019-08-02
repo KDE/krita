@@ -3016,6 +3016,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+        <Action name="convert_to_animated">
+      <icon></icon>
+      <text>Convert to &amp;animated layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Convert layer into animation frames</toolTip>
+      <iconText>Convert layer into animation frames</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="convert_to_file_layer">
       <icon>fileLayer</icon>
       <text>to &amp;File Layer</text>

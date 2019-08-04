@@ -1,0 +1,252 @@
+diff --git a/src/plugins/platforms/android/androidjnimenu.cpp b/src/plugins/platforms/android/androidjnimenu.cpp
+index 6f548aba528..e9359def0fc 100644
+--- a/src/plugins/platforms/android/androidjnimenu.cpp
++++ b/src/plugins/platforms/android/androidjnimenu.cpp
+@@ -225,10 +225,11 @@ namespace QtAndroidMenu
+              QString itemText = removeAmpersandEscapes(item->text());
+              jstring jtext = env->NewString(reinterpret_cast<const jchar *>(itemText.data()),
+                                            itemText.length());
++             jint menuId = platformMenu->menuId(item);
+              jobject menuItem = env->CallObjectMethod(menu,
+                                                       addMenuItemMethodID,
+                                                       menuNoneValue,
+-                                                      int(item->tag()),
++                                                      menuId,
+                                                       order++,
+                                                       jtext);
+              env->DeleteLocalRef(jtext);
+@@ -262,10 +263,11 @@ namespace QtAndroidMenu
+                 QString itemText = removeAmpersandEscapes(item->text());
+                 jstring jtext = env->NewString(reinterpret_cast<const jchar *>(itemText.data()),
+                                                itemText.length());
++                jint menuId = visibleMenuBar->menuId(item);
+                 jobject menuItem = env->CallObjectMethod(menu,
+                                                          addMenuItemMethodID,
+                                                          menuNoneValue,
+-                                                         int(item->tag()),
++                                                         menuId,
+                                                          order++,
+                                                          jtext);
+                 env->DeleteLocalRef(jtext);
+@@ -290,7 +292,7 @@ namespace QtAndroidMenu
+ 
+         const QAndroidPlatformMenuBar::PlatformMenusType &menus = visibleMenuBar->menus();
+         if (menus.size() == 1) { // Expanded menu
+-            QAndroidPlatformMenuItem *item = static_cast<QAndroidPlatformMenuItem *>(menus.front()->menuItemForTag(menuId));
++            QAndroidPlatformMenuItem *item = static_cast<QAndroidPlatformMenuItem *>(menus.front()->menuItemForId(menuId));
+             if (item) {
+                 if (item->menu()) {
+                     showContextMenu(item->menu(), QRect(), env);
+@@ -301,7 +303,7 @@ namespace QtAndroidMenu
+                 }
+             }
+         } else {
+-            QAndroidPlatformMenu *menu = static_cast<QAndroidPlatformMenu *>(visibleMenuBar->menuForTag(menuId));
++            QAndroidPlatformMenu *menu = static_cast<QAndroidPlatformMenu *>(visibleMenuBar->menuForId(menuId));
+             if (menu)
+                 showContextMenu(menu, QRect(), env);
+         }
+@@ -341,7 +343,7 @@ namespace QtAndroidMenu
+     static jboolean onContextItemSelected(JNIEnv *env, jobject /*thiz*/, jint menuId, jboolean checked)
+     {
+         QMutexLocker lock(&visibleMenuMutex);
+-        QAndroidPlatformMenuItem * item = static_cast<QAndroidPlatformMenuItem *>(visibleMenu->menuItemForTag(menuId));
++        QAndroidPlatformMenuItem * item = static_cast<QAndroidPlatformMenuItem *>(visibleMenu->menuItemForId(menuId));
+         if (item) {
+             if (item->menu()) {
+                 showContextMenu(item->menu(), QRect(), env);
+diff --git a/src/plugins/platforms/android/qandroidplatformmenu.cpp b/src/plugins/platforms/android/qandroidplatformmenu.cpp
+index d9cecebf2c1..7ce603831f3 100644
+--- a/src/plugins/platforms/android/qandroidplatformmenu.cpp
++++ b/src/plugins/platforms/android/qandroidplatformmenu.cpp
+@@ -62,6 +62,7 @@ void QAndroidPlatformMenu::insertMenuItem(QPlatformMenuItem *menuItem, QPlatform
+                                  m_menuItems.end(),
+                                  static_cast<QAndroidPlatformMenuItem *>(before)),
+                        static_cast<QAndroidPlatformMenuItem *>(menuItem));
++    m_menuHash.insert(m_nextMenuId++, menuItem);
+ }
+ 
+ void QAndroidPlatformMenu::removeMenuItem(QPlatformMenuItem *menuItem)
+@@ -72,6 +73,21 @@ void QAndroidPlatformMenu::removeMenuItem(QPlatformMenuItem *menuItem)
+                                                    static_cast<QAndroidPlatformMenuItem *>(menuItem));
+     if (it != m_menuItems.end())
+         m_menuItems.erase(it);
++
++    {
++        int maxId = -1;
++        QHash<int, QPlatformMenuItem *>::iterator it = m_menuHash.begin();
++        while (it != m_menuHash.end()) {
++            if (it.value() == menuItem) {
++                it = m_menuHash.erase(it);
++            } else {
++                maxId = qMax(maxId, it.key());
++                ++it;
++            }
++        }
++
++        m_nextMenuId = maxId + 1;
++    }
+ }
+ 
+ void QAndroidPlatformMenu::syncMenuItem(QPlatformMenuItem *menuItem)
+@@ -139,6 +155,16 @@ void QAndroidPlatformMenu::showPopup(const QWindow *parentWindow, const QRect &t
+     QtAndroidMenu::showContextMenu(this, targetRect, QJNIEnvironmentPrivate());
+ }
+ 
++QPlatformMenuItem *QAndroidPlatformMenu::menuItemForTag(quintptr tag) const
++{
++    for (QAndroidPlatformMenuItem *menuItem : m_menuItems) {
++        if (menuItem->tag() == tag)
++            return menuItem;
++    }
++
++    return nullptr;
++}
++
+ QPlatformMenuItem *QAndroidPlatformMenu::menuItemAt(int position) const
+ {
+     if (position < m_menuItems.size())
+@@ -146,13 +172,20 @@ QPlatformMenuItem *QAndroidPlatformMenu::menuItemAt(int position) const
+     return 0;
+ }
+ 
+-QPlatformMenuItem *QAndroidPlatformMenu::menuItemForTag(quintptr tag) const
++int QAndroidPlatformMenu::menuId(QPlatformMenuItem *menu) const
+ {
+-    for (QPlatformMenuItem *menuItem : m_menuItems) {
+-        if (menuItem->tag() == tag)
+-            return menuItem;
++    QHash<int, QPlatformMenuItem *>::const_iterator it;
++    for (it = m_menuHash.constBegin(); it != m_menuHash.constEnd(); ++it) {
++        if (it.value() == menu)
++            return it.key();
+     }
+-    return 0;
++
++    return -1;
++}
++
++QPlatformMenuItem *QAndroidPlatformMenu::menuItemForId(int menuId) const
++{
++    return m_menuHash.value(menuId);
+ }
+ 
+ QAndroidPlatformMenu::PlatformMenuItemsType QAndroidPlatformMenu::menuItems() const
+diff --git a/src/plugins/platforms/android/qandroidplatformmenu.h b/src/plugins/platforms/android/qandroidplatformmenu.h
+index 47e650f2d78..b1d6a887877 100644
+--- a/src/plugins/platforms/android/qandroidplatformmenu.h
++++ b/src/plugins/platforms/android/qandroidplatformmenu.h
+@@ -73,6 +73,8 @@ class QAndroidPlatformMenu: public QPlatformMenu
+ 
+     QPlatformMenuItem *menuItemAt(int position) const override;
+     QPlatformMenuItem *menuItemForTag(quintptr tag) const override;
++    QPlatformMenuItem *menuItemForId(int menuId) const;
++    int menuId(QPlatformMenuItem *menuItem) const;
+ 
+     PlatformMenuItemsType menuItems() const;
+     QMutex *menuItemsMutex();
+@@ -84,6 +86,9 @@ class QAndroidPlatformMenu: public QPlatformMenu
+     bool m_enabled;
+     bool m_isVisible;
+     QMutex m_menuItemsMutex;
++
++    int m_nextMenuId = 0;
++    QHash<int, QPlatformMenuItem *> m_menuHash;
+ };
+ 
+ QT_END_NAMESPACE
+diff --git a/src/plugins/platforms/android/qandroidplatformmenubar.cpp b/src/plugins/platforms/android/qandroidplatformmenubar.cpp
+index 35930f06283..7c6299b4b79 100644
+--- a/src/plugins/platforms/android/qandroidplatformmenubar.cpp
++++ b/src/plugins/platforms/android/qandroidplatformmenubar.cpp
+@@ -61,6 +61,7 @@ void QAndroidPlatformMenuBar::insertMenu(QPlatformMenu *menu, QPlatformMenu *bef
+                              m_menus.end(),
+                              static_cast<QAndroidPlatformMenu *>(before)),
+                    static_cast<QAndroidPlatformMenu *>(menu));
++    m_menuHash.insert(m_nextMenuId++, menu);
+ }
+ 
+ void QAndroidPlatformMenuBar::removeMenu(QPlatformMenu *menu)
+@@ -69,6 +70,30 @@ void QAndroidPlatformMenuBar::removeMenu(QPlatformMenu *menu)
+     m_menus.erase(std::find(m_menus.begin(),
+                             m_menus.end(),
+                             static_cast<QAndroidPlatformMenu *>(menu)));
++
++    int maxId = -1;
++    QHash<int, QPlatformMenu *>::iterator it = m_menuHash.begin();
++    while (it != m_menuHash.end()) {
++        if (it.value() == menu) {
++            it = m_menuHash.erase(it);
++        } else {
++            maxId = qMax(maxId, it.key());
++            ++it;
++        }
++    }
++
++    m_nextMenuId = maxId + 1;
++}
++
++int QAndroidPlatformMenuBar::menuId(QPlatformMenu *menu) const
++{
++    QHash<int, QPlatformMenu *>::const_iterator it;
++    for (it = m_menuHash.constBegin(); it != m_menuHash.constEnd(); ++it) {
++        if (it.value() == menu)
++            return it.key();
++    }
++
++    return -1;
+ }
+ 
+ void QAndroidPlatformMenuBar::syncMenu(QPlatformMenu *menu)
+@@ -86,12 +111,17 @@ void QAndroidPlatformMenuBar::handleReparent(QWindow *newParentWindow)
+ 
+ QPlatformMenu *QAndroidPlatformMenuBar::menuForTag(quintptr tag) const
+ {
+-    for (QPlatformMenu *menu : m_menus) {
++    for (QAndroidPlatformMenu *menu : m_menus) {
+         if (menu->tag() == tag)
+             return menu;
+     }
+ 
+-    return 0;
++    return nullptr;
++}
++
++QPlatformMenu *QAndroidPlatformMenuBar::menuForId(int menuId) const
++{
++    return m_menuHash.value(menuId);
+ }
+ 
+ QWindow *QAndroidPlatformMenuBar::parentWindow() const
+diff --git a/src/plugins/platforms/android/qandroidplatformmenubar.h b/src/plugins/platforms/android/qandroidplatformmenubar.h
+index f5935b81779..81a26c72f44 100644
+--- a/src/plugins/platforms/android/qandroidplatformmenubar.h
++++ b/src/plugins/platforms/android/qandroidplatformmenubar.h
+@@ -43,6 +43,7 @@
+ #include <qpa/qplatformmenu.h>
+ #include <qvector.h>
+ #include <qmutex.h>
++#include <qhash.h>
+ 
+ QT_BEGIN_NAMESPACE
+ 
+@@ -60,6 +61,8 @@ class QAndroidPlatformMenuBar: public QPlatformMenuBar
+     void syncMenu(QPlatformMenu *menu) override;
+     void handleReparent(QWindow *newParentWindow) override;
+     QPlatformMenu *menuForTag(quintptr tag) const override;
++    QPlatformMenu *menuForId(int menuId) const;
++    int menuId(QPlatformMenu *menu) const;
+ 
+     QWindow *parentWindow() const override;
+     PlatformMenusType menus() const;
+@@ -69,6 +72,9 @@ class QAndroidPlatformMenuBar: public QPlatformMenuBar
+     PlatformMenusType m_menus;
+     QWindow *m_parentWindow;
+     QMutex m_menusListMutex;
++
++    int m_nextMenuId = 0;
++    QHash<int, QPlatformMenu *> m_menuHash;
+ };
+ 
+ QT_END_NAMESPACE
+

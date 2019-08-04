@@ -44,7 +44,7 @@ static const KStandardActionInfo g_rgActionInfo[] = {
     { Save,          KStandardShortcut::Save, "file_save", I18N_NOOP("&Save"), I18N_NOOP("Save document"), "document-save" },
     { SaveAs,        KStandardShortcut::SaveAs, "file_save_as", I18N_NOOP("Save &As..."), I18N_NOOP("Save document under a new name"), "document-save-as" },
     { Revert,        KStandardShortcut::Revert, "file_revert", I18N_NOOP("Re&vert"), I18N_NOOP("Revert unsaved changes made to document"), "document-revert" },
-    { Close,         KStandardShortcut::Close, "file_close", I18N_NOOP("&Close"), I18N_NOOP("Close document"), "window-close" },
+    { Close,         KStandardShortcut::Close, "file_close", I18N_NOOP("&Close"), I18N_NOOP("Close document"), "document-close" },
     { Print,         KStandardShortcut::Print, "file_print", I18N_NOOP("&Print..."), I18N_NOOP("Print document"), "document-print" },
     { PrintPreview,  KStandardShortcut::PrintPreview, "file_print_preview", I18N_NOOP("Print Previe&w"), I18N_NOOP("Show a print preview of document"), "document-print-preview" },
     { Mail,          KStandardShortcut::Mail, "file_mail", I18N_NOOP("&Mail..."), I18N_NOOP("Send document by mail"), "mail-send" },

@@ -323,10 +323,10 @@ QWidget * KisToolBrush::createOptionWidget()
     // Line smoothing configuration
     m_cmbSmoothingType = new QComboBox(optionsWidget);
     m_cmbSmoothingType->addItems(QStringList()
-                                 << i18n("None")
-                                 << i18n("Basic")
-                                 << i18n("Weighted")
-                                 << i18n("Stabilizer"));
+                                 << i18nc("@item:inlistbox Brush Smoothing", "None")
+                                 << i18nc("@item:inlistbox Brush Smoothing", "Basic")
+                                 << i18nc("@item:inlistbox Brush Smoothing", "Weighted")
+                                 << i18nc("@item:inlistbox Brush Smoothing", "Stabilizer"));
     connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
     addOptionWidgetOption(m_cmbSmoothingType, new QLabel(i18n("Brush Smoothing:")));
 

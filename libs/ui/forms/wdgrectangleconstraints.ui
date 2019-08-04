@@ -174,7 +174,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Height</string>
+        <string>Horizontal radius of rectangle corners</string>
        </property>
        <property name="suffix">
         <string> px</string>
@@ -216,7 +216,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Height</string>
+        <string>Vertical radius of rectangle corners</string>
        </property>
        <property name="suffix">
         <string> px</string>

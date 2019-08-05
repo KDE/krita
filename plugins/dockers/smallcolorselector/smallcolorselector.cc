@@ -58,7 +58,7 @@ public:
 SmallColorSelectorPlugin::SmallColorSelectorPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    if (KisOpenGL::hasOpenGL3()) {
+    if (KisOpenGL::hasOpenGL3() || KisOpenGL::hasOpenGLES()) {
         KoDockRegistry::instance()->add(new SmallColorSelectorDockFactory());
     }
 }

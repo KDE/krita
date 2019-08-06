@@ -767,6 +767,9 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
     m_page->chkUseRightMiddleClickWorkaround->setChecked(
          cfg.useRightMiddleTabletButtonWorkaround());
 
+    //
+    connect(m_page->pressure_callibration, SIGNAL(callibrationDone()), this, SLOT(slotSetPressureCurve()));
+
 #if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
 #ifdef USE_QT_TABLET_WINDOWS
     // ask Qt if WinInk is actually available
@@ -813,6 +816,12 @@ void TabletSettingsTab::slotResolutionSettings()
     KisDlgCustomTabletResolution dlg(this);
     dlg.exec();
 #endif
+}
+
+void TabletSettingsTab::slotSetPressureCurve()
+{
+    KisCubicCurve curve(m_page->pressure_callibration->callibrationInfo());
+    m_page->pressureCurve->setCurve(curve);
 }
 
 

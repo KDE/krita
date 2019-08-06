@@ -263,6 +263,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_elided_label.cpp
     widgets/kis_stopgradient_slider_widget.cpp
     widgets/kis_preset_live_preview_view.cpp
+    widgets/kis_pressure_callibration_helper.cpp
     widgets/KisScreenColorPicker.cpp
     widgets/KoDualColorButton.cpp
     widgets/KoStrokeConfigWidget.cpp

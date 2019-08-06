@@ -198,6 +198,7 @@ public:
 private Q_SLOTS:
     void slotTabletTest();
     void slotResolutionSettings();
+    void slotSetPressureCurve();
 
 public:
     void setDefault();

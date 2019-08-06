@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>569</width>
-    <height>461</height>
+    <width>778</width>
+    <height>554</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -32,6 +32,63 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="3" column="0">
+    <widget class="QCheckBox" name="chkUseRightMiddleClickWorkaround">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Some tablet devices don't pass barrel-button clicks via tablet API. If you have such a device, you can try activate this workaround. Krita will try to read right- and middle-button clicks from the mouse events stream. It may or may not work on your device (depends on the tablet driver implementation).&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;After changing this option Krita should be restarted.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Use mouse events for right- and middle-clicks (workaround for convertible devices, needs restart)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QGroupBox" name="grpTabletApi">
+     <property name="title">
+      <string>Tablet Input API (changing this requires restarting Krita)</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QRadioButton" name="radioWintab">
+          <property name="text">
+           <string>WinTab</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnResolutionSettings">
+          <property name="text">
+           <string>Advanced...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioWin8PointerInput">
+        <property name="text">
+         <string>Windows 8+ Pointer Input (Windows Ink)</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item row="1" column="1">
     <spacer name="horizontalSpacer_2">
@@ -158,13 +215,6 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QPushButton" name="btnTabletTest">
-     <property name="text">
-      <string>Open Tablet Tester...</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -172,60 +222,26 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="QGroupBox" name="grpTabletApi">
-     <property name="title">
-      <string>Tablet Input API (changing this requires restarting Krita)</string>
+   <item row="4" column="0" colspan="2">
+    <widget class="QPushButton" name="btnTabletTest">
+     <property name="text">
+      <string>Open Tablet Tester...</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QRadioButton" name="radioWintab">
-          <property name="text">
-           <string>WinTab</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="btnResolutionSettings">
-          <property name="text">
-           <string>Advanced...</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="radioWin8PointerInput">
-        <property name="text">
-         <string>Windows 8+ Pointer Input (Windows Ink)</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QCheckBox" name="chkUseRightMiddleClickWorkaround">
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Some tablet devices don't pass barrel-button clicks via tablet API. If you have such a device, you can try activate this workaround. Krita will try to read right- and middle-button clicks from the mouse events stream. It may or may not work on your device (depends on the tablet driver implementation).&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;After changing this option Krita should be restarted.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   <item row="6" column="0">
+    <widget class="KisPressureCallibrationHelper" name="pressure_callibration" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="text">
-      <string>Use mouse events for right- and middle-clicks (workaround for convertible devices, needs restart)</string>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>256</height>
+      </size>
      </property>
     </widget>
    </item>
@@ -236,6 +252,12 @@
    <class>KisCurveWidget</class>
    <extends>QWidget</extends>
    <header>widgets/kis_curve_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisPressureCallibrationHelper</class>
+   <extends>QWidget</extends>
+   <header>widgets/kis_pressure_callibration_helper.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

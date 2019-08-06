@@ -90,7 +90,14 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
         return;
 
     m_lastCursorPos = convertToPixelCoord(event);
-    QPoint current((int) m_lastCursorPos.x(), (int) m_lastCursorPos.y());
+    QPoint current = m_lastCursorPos.toPoint();
+
+    if (m_anchorPoints.count() > 0 && m_snapBound.contains(m_lastAnchor)) {
+        //set a freaking cursor
+        //useCursor(KisCursor::load("tool_outline_selection_cursor_add.png", 6, 6));
+        return;
+    }
+
     vQPointF pointSet = m_worker.computeEdge(m_radius, m_lastAnchor, current);
     m_points.resize(m_checkPoint + 1);
     m_points.append(pointSet);
@@ -235,6 +242,10 @@ void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter
         paintToolOutline(&gc, outline);
 
         Q_FOREACH (const int pt, m_anchorPoints) {
+            if(pt < 0){
+                //no points are set
+                break;
+            }
             QRect tempRect(QPoint(0, 0), QSize(1, 1));
             tempRect.moveTo(m_points[pt].toPoint());
             gc.drawRect(pixelToView(tempRect));

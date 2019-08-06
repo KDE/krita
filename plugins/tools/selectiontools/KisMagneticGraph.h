@@ -75,31 +75,43 @@ struct VertexDescriptor {
 
         switch (direction) {
             case W:
+                Q_FALLTHROUGH();
             case SW:
+                Q_FALLTHROUGH();
             case NW:
                 dx = -1;
                 break;
             case E:
+                Q_FALLTHROUGH();
             case SE:
+                Q_FALLTHROUGH();
             case NE:
                 dx = 1;
+            default:
+                ;
         }
 
         switch (direction) {
             case N:
+                Q_FALLTHROUGH();
             case NW:
+                Q_FALLTHROUGH();
             case NE:
                 dy = -1;
                 break;
             case S:
+                Q_FALLTHROUGH();
             case SW:
+                Q_FALLTHROUGH();
             case SE:
                 dy = 1;
+            default:
+                ;
         }
 
         VertexDescriptor const neighbor(x + dx, y + dy);
         return neighbor;
-    }
+    } // neighbor
 };
 
 QDebug operator << (QDebug dbg, const VertexDescriptor &v)

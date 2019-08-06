@@ -402,7 +402,7 @@ public:
      * Return the lastly executed LoD0 command. It is effectively the same
      * as to call undoAdapter()->presentCommand();
      */
-    const KUndo2Command* lastExecutedCommand() const;
+    const KUndo2Command* lastExecutedCommand() const override;
 
     /**
      * Replace current undo store with the new one. The old store
@@ -552,7 +552,7 @@ public:
     void mergeMultipleLayers(QList<KisNodeSP> mergedLayers, KisNodeSP putAfter);
 
     /// @return the exact bounds of the image in pixel coordinates.
-    QRect bounds() const;
+    QRect bounds() const override;
 
     /**
      * Returns the actual bounds of the image, taking LevelOfDetail

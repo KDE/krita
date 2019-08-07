@@ -447,15 +447,7 @@ add_definitions(
   -DQT_USE_FAST_OPERATOR_PLUS
 )
 
-if (${Qt5_VERSION} VERSION_GREATER "5.8.0" )
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50900)
-elseif(${Qt5_VERSION} VERSION_GREATER "5.7.0" )
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50800)
-elseif(${Qt5_VERSION} VERSION_GREATER "5.6.0" )
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
-else()
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50600)
-endif()
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50900)
 
 add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
 

@@ -872,7 +872,7 @@
                  <string>Horizontal Scale</string>
                 </property>
                 <property name="text">
-                 <string>w&amp;idth:</string>
+                 <string>Width:</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -932,7 +932,7 @@
                  <string>Vertical Scale</string>
                 </property>
                 <property name="text">
-                 <string>&amp;height:</string>
+                 <string>Height:</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

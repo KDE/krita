@@ -530,7 +530,7 @@
            <item>
             <widget class="QRadioButton" name="freeMoveRadioButton">
              <property name="text">
-              <string>Posi&amp;tion</string>
+              <string comment="@option:radio Type of transformation">Position</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -543,7 +543,7 @@
            <item>
             <widget class="QRadioButton" name="freeRotationRadioButton">
              <property name="text">
-              <string>&amp;Rotate</string>
+              <string comment="@option:radio Type of transformation">Rotate</string>
              </property>
              <attribute name="buttonGroup">
               <string notr="true">freeTransformRadioGroup</string>
@@ -553,7 +553,7 @@
            <item>
             <widget class="QRadioButton" name="freeScaleRadioButton">
              <property name="text">
-              <string>Scale</string>
+              <string comment="@option:radio Type of transformation">Scale</string>
              </property>
              <attribute name="buttonGroup">
               <string notr="true">freeTransformRadioGroup</string>
@@ -563,7 +563,7 @@
            <item>
             <widget class="QRadioButton" name="freeShearRadioButton">
              <property name="text">
-              <string>Shear</string>
+              <string comment="@option:radio Type of transformation">Shear</string>
              </property>
              <attribute name="buttonGroup">
               <string notr="true">freeTransformRadioGroup</string>

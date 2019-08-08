@@ -128,7 +128,7 @@ struct KisKeyframeChannel::Private
     }
 
     void addCycle(QSharedPointer<KisAnimationCycle> cycle) {
-        cycles.insert(cycle->time(), cycle);
+        cycles.insert(cycle->originalRange().start(), cycle);
 
         Q_FOREACH(QWeakPointer<KisRepeatFrame> repeatWP, cycle->repeats()) {
             KisKeyframeBaseSP repeat = repeatWP.toStrongRef();
@@ -137,7 +137,7 @@ struct KisKeyframeChannel::Private
     }
 
     void removeCycle(QSharedPointer<KisAnimationCycle> cycle) {
-        cycles.remove(cycle->time());
+        cycles.remove(cycle->originalRange().start());
     }
 };
 

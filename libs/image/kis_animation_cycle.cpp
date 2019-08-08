@@ -22,14 +22,19 @@
 #include "kis_keyframe_channel.h"
 
 KisAnimationCycle::KisAnimationCycle(KisKeyframeChannel *channel, KisTimeSpan sourceRange)
-    : KisKeyframeBase(channel, sourceRange.start())
+    : m_channel(channel)
     , m_range(sourceRange)
 {}
 
 KisAnimationCycle::KisAnimationCycle(const KisAnimationCycle &cycle, KisTimeSpan newRange)
-    : KisKeyframeBase(cycle.channel(), newRange.start())
+    : m_channel(cycle.m_channel)
     , m_range(newRange)
 {}
+
+KisKeyframeChannel* KisAnimationCycle::channel() const
+{
+    return m_channel;
+}
 
 KisTimeSpan KisAnimationCycle::originalRange() const
 {
@@ -112,16 +117,14 @@ QRect KisAnimationCycle::affectedRect() const
 {
     QRect rect;
 
-    for (auto keyframe : channel()->itemsWithin(m_range)) {
-        rect |= keyframe->affectedRect();
+    for (auto keyframe : m_channel->itemsWithin(m_range)) {
+        const QSharedPointer<KisKeyframe> key = keyframe.dynamicCast<KisKeyframe>();
+        KIS_SAFE_ASSERT_RECOVER(key) { continue; }
+
+        rect |= key->affectedRect();
     }
 
     return rect;
-}
-
-KisKeyframeSP KisAnimationCycle::getOriginalKeyframeFor(int time) const
-{
-    return channel()->activeKeyframeAt(time);
 }
 
 KisRepeatFrame::KisRepeatFrame(KisKeyframeChannel *channel, int time, QSharedPointer<KisAnimationCycle> cycle)

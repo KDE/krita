@@ -26,11 +26,13 @@ class KisTimeSpan;
 class KisFrameSet;
 class KisRepeatFrame;
 
-class KRITAIMAGE_EXPORT KisAnimationCycle : public KisKeyframeBase {
+class KRITAIMAGE_EXPORT KisAnimationCycle {
 
 public:
     KisAnimationCycle(KisKeyframeChannel *channel, KisTimeSpan sourceRange);
     KisAnimationCycle(const KisAnimationCycle &cycle, KisTimeSpan newRange);
+
+    KisKeyframeChannel *channel() const;
 
     /**
      * The full source range repeated by the cycle.
@@ -42,14 +44,14 @@ public:
     void removeRepeat(QSharedPointer<KisRepeatFrame> repeat);
     const QVector<QWeakPointer<KisRepeatFrame>>& repeats() const;
 
-    QRect affectedRect() const override;
-    KisKeyframeSP getOriginalKeyframeFor(int time) const override;
+    QRect affectedRect() const;
 
     KisFrameSet instancesWithin(KisKeyframeSP original, KisTimeSpan range) const;
 
 private:
     friend class KisKeyframeChannel;
 
+    KisKeyframeChannel *m_channel;
     KisTimeSpan m_range;
     QVector<QWeakPointer<KisRepeatFrame>> m_repeats;
 };

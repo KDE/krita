@@ -56,7 +56,7 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
-    m_continuedMode(false), m_complete(true), m_radius(20), m_threshold(100), m_checkPoint(-1)
+    m_continuedMode(false), m_complete(true), m_radius(20), m_threshold(70), m_checkPoint(-1)
 { }
 
 void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)
@@ -95,29 +95,51 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
     if (m_anchorPoints.count() > 0 && m_snapBound.contains(m_lastAnchor)) {
         //set a freaking cursor
         //useCursor(KisCursor::load("tool_outline_selection_cursor_add.png", 6, 6));
-        return;
     }
 
     vQPointF pointSet = m_worker.computeEdge(m_radius, m_lastAnchor, current);
-    m_points.resize(m_checkPoint + 1);
+    m_points.resize(m_checkPoint+1);
     m_points.append(pointSet);
 
     int lastCheckPoint = m_checkPoint;
 
-    for (int i = m_points.count() - 1; i > m_checkPoint; i--) {
-        QPoint pointInQuestion(m_points[i].toPoint());
-        if (m_worker.intensity(pointInQuestion) >= m_threshold) {
-            m_checkPoint = i;
-            m_lastAnchor = pointInQuestion;
-            break;
-        }
-    }
+    int freq = 100;
 
-    for (int i = lastCheckPoint; i < m_checkPoint; i++) {
-        int temp = m_checkPoint - i;
-        if (temp % m_radius == 0 && temp != 0) {
-            m_lastAnchor = m_points[i].toPoint();
-            m_anchorPoints.push_back(i);
+    if(m_points.count() - m_checkPoint > freq){
+        bool foundSomething = false;
+
+        for(int i = m_checkPoint+freq; i < qMin(2*freq, m_points.count()); i++){
+            if(m_worker.intensity(m_points.at(i).toPoint()) >= m_threshold){
+                m_checkPoint = i;
+                m_lastAnchor = m_points.at(i).toPoint();
+                m_anchorPoints.push_back(i);
+                foundSomething = true;
+                break;
+            }
+        }
+
+        if(!foundSomething){
+            for(int i = m_checkPoint+freq-1; i > m_checkPoint+freq/3; i--){
+                if(m_worker.intensity(m_points.at(i).toPoint()) >= m_threshold){
+                    m_checkPoint = i;
+                    m_lastAnchor = m_points.at(i).toPoint();
+                    m_anchorPoints.push_back(i);
+                    foundSomething = true;
+                    break;
+                }
+            }
+        }
+
+        if(!foundSomething){
+            m_checkPoint = m_checkPoint+freq;
+            m_lastAnchor = m_points.at(m_checkPoint).toPoint();
+            m_anchorPoints.push_back(m_checkPoint);
+            foundSomething = true;
+        }
+
+
+        if (foundSomething) {
+            qDebug() << ppVar(m_checkPoint) << ppVar(lastCheckPoint) << m_lastAnchor;
         }
     }
 
@@ -244,10 +266,11 @@ void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter
         Q_FOREACH (const int pt, m_anchorPoints) {
             if(pt < 0){
                 //no points are set
-                break;
+                continue;
             }
-            QRect tempRect(QPoint(0, 0), QSize(1, 1));
+            QRect tempRect(QPoint(0, 0), QSize(4, 4));
             tempRect.moveTo(m_points[pt].toPoint());
+            qDebug() << tempRect;
             gc.drawRect(pixelToView(tempRect));
         }
     }

@@ -272,7 +272,7 @@ bool KisKeyframeChannel::moveKeyframe(KisKeyframeBaseSP keyframe, int newTime, K
 
     const int srcTime = keyframe->time();
 
-    KUndo2Command *cmd = new KisReplaceKeyframeCommand(keyframe, newTime, parentCommand);
+    KUndo2Command *cmd = new KisReplaceKeyframeCommand(this, newTime, keyframe, parentCommand);
     cmd->redo();
 
     if (srcTime == 0) {
@@ -848,8 +848,7 @@ KisKeyframeSP KisKeyframeChannel::copyExternalKeyframe(KisKeyframeChannel *srcCh
     KisKeyframeSP newKeyframe = createKeyframe(dstTime, KisKeyframeSP(), parentCommand);
     uploadExternalKeyframe(srcChannel, srcTime, newKeyframe);
 
-    KUndo2Command *cmd = KisKeyframeCommands::tryAddKeyframes(this, {newKeyframe}, parentCommand).command;
-    if (!cmd) return KisKeyframeSP();
+    KUndo2Command *cmd = new KisReplaceKeyframeCommand(this, newKeyframe->time(), newKeyframe, parentCommand);
 
     cmd->redo();
 

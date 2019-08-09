@@ -114,8 +114,7 @@ namespace KisKeyframeCommands
 class KRITAIMAGE_EXPORT KisReplaceKeyframeCommand : public KUndo2Command
 {
 public:
-    KisReplaceKeyframeCommand(KisKeyframeBaseSP keyframe, int newTime, KUndo2Command *parentCommand);
-    KRITAIMAGE_DEPRECATED KisReplaceKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeBaseSP keyframe, KUndo2Command *parentCommand);
+    KisReplaceKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeBaseSP keyframe, KUndo2Command *parentCommand);
 
     void redo() override;
     void undo() override;
@@ -124,7 +123,7 @@ private:
     KisKeyframeChannel *m_channel;
     KisKeyframeBaseSP m_keyframe;
     KisKeyframeBaseSP m_overwrittenKeyframe;
-    int m_oldTime;
+    int m_oldTime{-1};
     int m_newTime;
 
     void moveKeyframeTo(int dstTime);

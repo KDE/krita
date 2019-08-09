@@ -404,7 +404,10 @@ KisReplaceKeyframeCommand::KisReplaceKeyframeCommand(KisKeyframeBaseSP keyframe,
 
 KisReplaceKeyframeCommand::KisReplaceKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeBaseSP keyframe,
                                                      KUndo2Command *parentCommand)
-    : KisReplaceKeyframeCommand(keyframe, time, parentCommand)
+    : KUndo2Command(parentCommand)
+    , m_channel(channel)
+    , m_keyframe(keyframe)
+    , m_newTime(time)
 {}
 
 void KisReplaceKeyframeCommand::redo() {
@@ -416,8 +419,10 @@ void KisReplaceKeyframeCommand::redo() {
         }
     }
 
-    const bool currentlyOnChannel = m_channel->itemAt(m_keyframe->time()) == m_keyframe;
-    m_oldTime = currentlyOnChannel ? m_keyframe->time() : -1;
+    if (m_keyframe) {
+        const bool currentlyOnChannel = m_channel->itemAt(m_keyframe->time()) == m_keyframe;
+        m_oldTime = currentlyOnChannel ? m_keyframe->time() : -1;
+    }
 
     moveKeyframeTo(m_newTime);
 }
@@ -434,6 +439,8 @@ void KisReplaceKeyframeCommand::undo() {
 
 void KisReplaceKeyframeCommand::moveKeyframeTo(int dstTime)
 {
+    if (!m_keyframe) return;
+
     const bool currentlyOnChannel = m_channel->itemAt(m_keyframe->time()) == m_keyframe;
 
     if (dstTime < 0) {

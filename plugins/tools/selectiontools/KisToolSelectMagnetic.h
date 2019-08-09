@@ -55,6 +55,7 @@ public Q_SLOTS:
     void requestUndoDuringStroke() override;
     void slotSetRadius(int);
     void slotSetThreshold(int);
+    void slotSetFrequency(int);
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
@@ -73,7 +74,7 @@ private:
     QPoint m_lastAnchor;
     bool m_complete;
     KisMagneticWorker m_worker;
-    int m_radius, m_threshold, m_checkPoint;
+    int m_radius, m_threshold, m_checkPoint, m_frequency;
     QRectF m_snapBound;
     KConfigGroup m_configGroup;
 };

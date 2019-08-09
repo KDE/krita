@@ -24,6 +24,7 @@
 
 #include <QtCore>
 #include <QPolygon>
+#include <QPainter>
 
 #include <boost/graph/astar_search.hpp>
 
@@ -143,7 +144,7 @@ private:
 
 KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev)
 {
-    KisPaintDeviceSP m_dev = KisPainter::convertToAlphaAsGray(dev);
+    m_dev = KisPainter::convertToAlphaAsGray(dev);
     KisPainter::copyAreaOptimized(dev->exactBounds().topLeft(), dev, m_dev, dev->exactBounds());
     KisGaussianKernel::applyLoG(m_dev, m_dev->exactBounds(), 2, -1.0, QBitArray(), nullptr);
     KisLazyFillTools::normalizeAlpha8Device(m_dev, m_dev->exactBounds());
@@ -195,6 +196,34 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint
 
     return result;
 } // KisMagneticWorker::computeEdge
+
+void KisMagneticWorker::saveTheImage(vQPointF points)
+{
+    QImage img = m_dev->convertToQImage(0, m_dev->exactBounds());
+
+    img = img.convertToFormat(QImage::Format_ARGB32);
+    QPainter gc(&img);
+
+    QPainterPath path;
+
+    for (int i = 0; i < points.size(); i++) {
+        if (i == 0) {
+            path.moveTo(points[i]);
+        } else {
+            path.lineTo(points[i]);
+        }
+    }
+
+    gc.setPen(Qt::blue);
+    gc.drawPath(path);
+
+    gc.setPen(Qt::green);
+    gc.drawEllipse(points[0], 3, 3);
+    gc.setPen(Qt::red);
+    gc.drawEllipse(points[points.count() -1], 2, 2);
+
+    img.save("result.png");
+}
 
 quint8 KisMagneticWorker::intensity(QPoint pt)
 {

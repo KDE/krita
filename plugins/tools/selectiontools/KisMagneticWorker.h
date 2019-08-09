@@ -34,9 +34,11 @@ public:
 
     QVector<QPointF> computeEdge(int radius, QPoint start, QPoint end);
     quint8 intensity(QPoint pt);
+    void saveTheImage(vQPointF points);
 
 private:
     KisMagneticGraph *m_graph;
+    KisPaintDeviceSP m_dev;
 };
 
 #endif // ifndef KISMAGNETICWORKER_H

@@ -104,6 +104,11 @@
 
 #include "kis_time_range.h"
 
+#include "KisRunnableBasedStrokeStrategy.h"
+#include "KisRunnableStrokeJobData.h"
+#include "KisRunnableStrokeJobUtils.h"
+#include "KisRunnableStrokeJobsInterface.h"
+
 // #define SANITY_CHECKS
 
 #ifdef SANITY_CHECKS
@@ -238,7 +243,7 @@ public:
 
     bool tryCancelCurrentStrokeAsync();
 
-    void notifyProjectionUpdatedInPatches(const QRect &rc);
+    void notifyProjectionUpdatedInPatches(const QRect &rc, QVector<KisRunnableStrokeJobData *> &jobs);
 };
 
 KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name)
@@ -1369,6 +1374,11 @@ KisPostExecutionUndoAdapter* KisImage::postExecutionUndoAdapter() const
         &m_d->postExecutionUndoAdapter;
 }
 
+const KUndo2Command* KisImage::lastExecutedCommand() const
+{
+    return m_d->undoStore->presentCommand();
+}
+
 void KisImage::setUndoStore(KisUndoStore *undoStore)
 {
 
@@ -1515,7 +1525,7 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
     return m_d->scheduler.startStroke(strokeStrategy);
 }
 
-void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc)
+void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc, QVector<KisRunnableStrokeJobData*> &jobs)
 {
     KisImageConfig imageConfig(true);
     int patchWidth = imageConfig.updatePatchWidth();
@@ -1526,20 +1536,21 @@ void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc
             QRect patchRect(x, y, patchWidth, patchHeight);
             patchRect &= rc;
 
-            QtConcurrent::run(std::bind(&KisImage::notifyProjectionUpdated, q, patchRect));
+            KritaUtils::addJobConcurrent(jobs, std::bind(&KisImage::notifyProjectionUpdated, q, patchRect));
         }
     }
 }
 
 bool KisImage::startIsolatedMode(KisNodeSP node)
 {
-    struct StartIsolatedModeStroke : public KisSimpleStrokeStrategy {
+    struct StartIsolatedModeStroke : public KisRunnableBasedStrokeStrategy {
         StartIsolatedModeStroke(KisNodeSP node, KisImageSP image)
-            : KisSimpleStrokeStrategy("start-isolated-mode", kundo2_noi18n("start-isolated-mode")),
+            : KisRunnableBasedStrokeStrategy("start-isolated-mode", kundo2_noi18n("start-isolated-mode")),
               m_node(node),
               m_image(image)
         {
             this->enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+            this->enableJob(JOB_DOSTROKE, true);
             setClearsRedoOnStart(false);
         }
 
@@ -1553,7 +1564,10 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
 
             // the GUI uses our thread to do the color space conversion so we
             // need to emit this signal in multiple threads
-            m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds());
+            QVector<KisRunnableStrokeJobData*> jobs;
+            m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds(), jobs);
+            this->runnableJobsInterface()->addRunnableJobs(jobs);
+
 
             m_image->invalidateAllFrames();
         }
@@ -1573,12 +1587,13 @@ void KisImage::stopIsolatedMode()
 {
     if (!m_d->isolatedRootNode)  return;
 
-    struct StopIsolatedModeStroke : public KisSimpleStrokeStrategy {
+    struct StopIsolatedModeStroke : public KisRunnableBasedStrokeStrategy {
         StopIsolatedModeStroke(KisImageSP image)
-            : KisSimpleStrokeStrategy("stop-isolated-mode", kundo2_noi18n("stop-isolated-mode")),
+            : KisRunnableBasedStrokeStrategy("stop-isolated-mode", kundo2_noi18n("stop-isolated-mode")),
               m_image(image)
         {
             this->enableJob(JOB_INIT);
+            this->enableJob(JOB_DOSTROKE, true);
             setClearsRedoOnStart(false);
         }
 
@@ -1590,10 +1605,13 @@ void KisImage::stopIsolatedMode()
 
             emit m_image->sigIsolatedModeChanged();
 
+            m_image->invalidateAllFrames();
+
             // the GUI uses our thread to do the color space conversion so we
             // need to emit this signal in multiple threads
-            m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds());
-            m_image->invalidateAllFrames();
+            QVector<KisRunnableStrokeJobData*> jobs;
+            m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds(), jobs);
+            this->runnableJobsInterface()->addRunnableJobs(jobs);
 
             // TODO: Substitute notifyProjectionUpdated() with this code
             // when update optimization is implemented
@@ -1745,6 +1763,21 @@ void KisImage::enableDirtyRequests()
 void KisImage::disableUIUpdates()
 {
     m_d->disableUIUpdateSignals.ref();
+}
+
+void KisImage::notifyBatchUpdateStarted()
+{
+    m_d->signalRouter.emitNotifyBatchUpdateStarted();
+}
+
+void KisImage::notifyBatchUpdateEnded()
+{
+    m_d->signalRouter.emitNotifyBatchUpdateEnded();
+}
+
+void KisImage::notifyUIUpdateCompleted(const QRect &rc)
+{
+    notifyProjectionUpdated(rc);
 }
 
 QVector<QRect> KisImage::enableUIUpdates()

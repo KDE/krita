@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2019 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,28 +16,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_PAINTOP_TRANSFORMATION_CONNECTOR_H
-#define __KIS_PAINTOP_TRANSFORMATION_CONNECTOR_H
+#ifndef KISMOVEBOUNDSCALCULATIONJOB_H
+#define KISMOVEBOUNDSCALCULATIONJOB_H
 
 #include <QObject>
-#include <QPointer>
+#include "kis_spontaneous_job.h"
+#include "kis_types.h"
+#include "kis_selection.h"
 
-#include <kis_canvas2.h>
-
-class KisPaintopTransformationConnector : public QObject
+class KisMoveBoundsCalculationJob : public QObject, public KisSpontaneousJob
 {
     Q_OBJECT
 public:
-    KisPaintopTransformationConnector(KisCanvas2 *canvas, QObject *parent);
+    KisMoveBoundsCalculationJob(KisNodeList nodes, KisSelectionSP selection, QObject *requestedBy);
 
-public:
-    void notifyTransformationChanged();
+    void run() override;
+    bool overrides(const KisSpontaneousJob *otherJob) override;
+    int levelOfDetail() const override;
 
-public Q_SLOTS:
-    void slotCanvasResourceChanged(int key, const QVariant &resource);
+Q_SIGNALS:
+    void sigCalcualtionFinished(const QRect &bounds);
 
 private:
-    QPointer<KisCanvas2> m_canvas;
+    KisNodeList m_nodes;
+    KisSelectionSP m_selection;
+    QObject *m_requestedBy;
 };
 
-#endif /* __KIS_PAINTOP_TRANSFORMATION_CONNECTOR_H */
+#endif // KISMOVEBOUNDSCALCULATIONJOB_H

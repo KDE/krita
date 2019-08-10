@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2019 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,17 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KUNDO2COMMANDEXTRADATA_H
-#define __KUNDO2COMMANDEXTRADATA_H
+#ifndef KISHOLDUIUPDATESCOMMAND_H
+#define KISHOLDUIUPDATESCOMMAND_H
 
-#include "kritacommand_export.h"
+#include "kis_stroke_strategy_undo_command_based.h"
+#include "kis_node.h"
+#include "kis_command_utils.h"
+#include <QSharedPointer>
+
+class KisUpdatesFacade;
 
 
-class KRITACOMMAND_EXPORT KUndo2CommandExtraData
+class KRITAIMAGE_EXPORT KisHoldUIUpdatesCommand : public KisCommandUtils::FlipFlopCommand, public KisStrokeStrategyUndoCommandBased::MutatedCommandInterface
 {
 public:
-    virtual ~KUndo2CommandExtraData();
-    virtual KUndo2CommandExtraData* clone() const = 0;
+    KisHoldUIUpdatesCommand(KisUpdatesFacade *updatesFacade, State state);
+
+    void partA() override;
+    void partB() override;
+
+private:
+    KisUpdatesFacade *m_updatesFacade;
+    QSharedPointer<bool> m_batchUpdateStarted;
 };
 
-#endif /* __KUNDO2COMMANDEXTRADATA_H */
+#endif // KISHOLDUIUPDATESCOMMAND_H

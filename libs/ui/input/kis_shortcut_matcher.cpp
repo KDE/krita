@@ -29,14 +29,15 @@
 #include "kis_native_gesture_shortcut.h"
 #include "kis_config.h"
 
+//#define DEBUG_MATCHER
 
 #ifdef DEBUG_MATCHER
 #include <kis_debug.h>
-#define DEBUG_ACTION(text) dbgInput << __FUNCTION__ << "-" << text;
-#define DEBUG_SHORTCUT(text, shortcut) dbgInput << __FUNCTION__ << "-" << text << "act:" << shortcut->action()->name();
-#define DEBUG_KEY(text) dbgInput << __FUNCTION__ << "-" << text << "keys:" << m_d->keys;
-#define DEBUG_BUTTON_ACTION(text, button) dbgInput << __FUNCTION__ << "-" << text << "button:" << button << "btns:" << m_d->buttons << "keys:" << m_d->keys;
-#define DEBUG_EVENT_ACTION(text, event) if (event) {dbgInput << __FUNCTION__ << "-" << text << "type:" << event->type();}
+#define DEBUG_ACTION(text) qDebug() << __FUNCTION__ << "-" << text;
+#define DEBUG_SHORTCUT(text, shortcut) qDebug() << __FUNCTION__ << "-" << text << "act:" << shortcut->action()->name();
+#define DEBUG_KEY(text) qDebug() << __FUNCTION__ << "-" << text << "keys:" << m_d->keys;
+#define DEBUG_BUTTON_ACTION(text, button) qDebug() << __FUNCTION__ << "-" << text << "button:" << button << "btns:" << m_d->buttons << "keys:" << m_d->keys;
+#define DEBUG_EVENT_ACTION(text, event) if (event) {qDebug() << __FUNCTION__ << "-" << text << "type:" << event->type();}
 #else
 #define DEBUG_ACTION(text)
 #define DEBUG_KEY(text)
@@ -88,6 +89,46 @@ public:
     bool cursorEntered;
     bool usingTouch;
     bool usingNativeGesture;
+
+    int recursiveCounter = 0;
+    int brokenByRecursion = 0;
+
+
+    struct RecursionNotifier {
+        RecursionNotifier(KisShortcutMatcher *_q)
+            : q(_q)
+        {
+            q->m_d->recursiveCounter++;
+            q->m_d->brokenByRecursion++;
+        }
+
+        ~RecursionNotifier() {
+            q->m_d->recursiveCounter--;
+        }
+
+        bool isInRecursion() const {
+            return q->m_d->recursiveCounter > 1;
+        }
+
+        KisShortcutMatcher *q;
+    };
+
+    struct RecursionGuard {
+        RecursionGuard(KisShortcutMatcher *_q)
+            : q(_q)
+        {
+            q->m_d->brokenByRecursion = 0;
+        }
+
+        ~RecursionGuard() {
+        }
+
+        bool brokenByRecursion() const {
+            return q->m_d->brokenByRecursion > 0;
+        }
+
+        KisShortcutMatcher *q;
+    };
 
     inline bool actionsSuppressed() const {
         return (suppressAllActions || !cursorEntered)
@@ -147,18 +188,22 @@ bool KisShortcutMatcher::supportsHiResInputEvents()
 
 bool KisShortcutMatcher::keyPressed(Qt::Key key)
 {
+    Private::RecursionNotifier notifier(this);
+
     bool retval = false;
 
     if (m_d->keys.contains(key)) { DEBUG_ACTION("Peculiar, records show key was already pressed"); }
 
-    if (!m_d->runningShortcut) {
+    if (!m_d->runningShortcut && !notifier.isInRecursion()) {
         retval =  tryRunSingleActionShortcutImpl(key, (QEvent*)0, m_d->keys);
     }
 
     m_d->keys.insert(key);
     DEBUG_KEY("Pressed");
 
-    if (!m_d->runningShortcut) {
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
         tryActivateReadyShortcut();
     }
@@ -168,11 +213,16 @@ bool KisShortcutMatcher::keyPressed(Qt::Key key)
 
 bool KisShortcutMatcher::autoRepeatedKeyPressed(Qt::Key key)
 {
+    Private::RecursionNotifier notifier(this);
+
+
     bool retval = false;
 
     if (!m_d->keys.contains(key)) { DEBUG_ACTION("Peculiar, autorepeated key but can't remember it was pressed"); }
 
-    if (!m_d->runningShortcut) {
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!m_d->runningShortcut) {
         // Autorepeated key should not be included in the shortcut
         QSet<Qt::Key> filteredKeys = m_d->keys;
         filteredKeys.remove(key);
@@ -184,10 +234,14 @@ bool KisShortcutMatcher::autoRepeatedKeyPressed(Qt::Key key)
 
 bool KisShortcutMatcher::keyReleased(Qt::Key key)
 {
+    Private::RecursionNotifier notifier(this);
+
     if (!m_d->keys.contains(key)) reset("Peculiar, key released but can't remember it was pressed");
     else m_d->keys.remove(key);
 
-    if (!m_d->runningShortcut) {
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
         tryActivateReadyShortcut();
     }
@@ -197,6 +251,7 @@ bool KisShortcutMatcher::keyReleased(Qt::Key key)
 
 bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QEvent *event)
 {
+    Private::RecursionNotifier notifier(this);
     DEBUG_BUTTON_ACTION("entered", button);
 
     bool retval = false;
@@ -207,14 +262,16 @@ bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QEvent *event)
 
     if (m_d->buttons.contains(button)) { DEBUG_ACTION("Peculiar, button was already pressed."); }
 
-    if (!hasRunningShortcut()) {
+    if (!m_d->runningShortcut && !notifier.isInRecursion()) {
         prepareReadyShortcuts();
         retval = tryRunReadyShortcut(button, event);
     }
 
     m_d->buttons.insert(button);
 
-    if (!hasRunningShortcut()) {
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
         tryActivateReadyShortcut();
     }
@@ -224,6 +281,7 @@ bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QEvent *event)
 
 bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QEvent *event)
 {
+    Private::RecursionNotifier notifier(this);
     DEBUG_BUTTON_ACTION("entered", button);
 
     bool retval = false;
@@ -232,7 +290,9 @@ bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QEvent *event)
         return retval;
     }
 
-    if (m_d->runningShortcut && !m_d->readyShortcut) {
+    if (m_d->runningShortcut) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!notifier.isInRecursion());
+
         retval = tryEndRunningShortcut(button, event);
         DEBUG_BUTTON_ACTION("ended", button);
     }
@@ -240,7 +300,9 @@ bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QEvent *event)
     if (!m_d->buttons.contains(button)) reset("Peculiar, button released but we can't remember it was pressed");
     else m_d->buttons.remove(button);
 
-    if (!m_d->runningShortcut) {
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
         tryActivateReadyShortcut();
     }
@@ -250,7 +312,10 @@ bool KisShortcutMatcher::buttonReleased(Qt::MouseButton button, QEvent *event)
 
 bool KisShortcutMatcher::wheelEvent(KisSingleActionShortcut::WheelAction wheelAction, QWheelEvent *event)
 {
-    if (m_d->runningShortcut || m_d->isUsingTouch()) {
+    Private::RecursionNotifier notifier(this);
+
+
+    if (m_d->runningShortcut || m_d->isUsingTouch() || notifier.isInRecursion()) {
         DEBUG_ACTION("Wheel event canceled.");
         return false;
     }
@@ -260,7 +325,10 @@ bool KisShortcutMatcher::wheelEvent(KisSingleActionShortcut::WheelAction wheelAc
 
 bool KisShortcutMatcher::pointerMoved(QEvent *event)
 {
-    if (m_d->isUsingTouch() || !m_d->runningShortcut) {
+    Private::RecursionNotifier notifier(this);
+
+
+    if (m_d->isUsingTouch() || !m_d->runningShortcut || notifier.isInRecursion()) {
         return false;
     }
 
@@ -270,9 +338,13 @@ bool KisShortcutMatcher::pointerMoved(QEvent *event)
 
 void KisShortcutMatcher::enterEvent()
 {
+    Private::RecursionNotifier notifier(this);
+
     m_d->cursorEntered = true;
 
-    if (!m_d->runningShortcut) {
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
         tryActivateReadyShortcut();
     }
@@ -280,9 +352,13 @@ void KisShortcutMatcher::enterEvent()
 
 void KisShortcutMatcher::leaveEvent()
 {
+    Private::RecursionNotifier notifier(this);
+
     m_d->cursorEntered = false;
 
-    if (!m_d->runningShortcut) {
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
         tryActivateReadyShortcut();
     }
@@ -291,7 +367,10 @@ void KisShortcutMatcher::leaveEvent()
 bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
 {
     Q_UNUSED(event)
-    return true;
+
+    Private::RecursionNotifier notifier(this);
+
+    return !notifier.isInRecursion();
 }
 
 bool KisShortcutMatcher::touchUpdateEvent( QTouchEvent* event )
@@ -328,7 +407,10 @@ bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
 bool KisShortcutMatcher::nativeGestureBeginEvent(QNativeGestureEvent *event)
 {
     Q_UNUSED(event)
-    return true;
+
+    Private::RecursionNotifier notifier(this);
+
+    return !notifier.isInRecursion();
 }
 
 bool KisShortcutMatcher::nativeGestureEvent(QNativeGestureEvent *event)
@@ -364,8 +446,14 @@ Qt::MouseButtons listToFlags(const QList<Qt::MouseButton> &list) {
 
 void KisShortcutMatcher::reinitialize()
 {
+    Private::RecursionNotifier notifier(this);
+
+
     reset("reinitialize");
-    if (!m_d->runningShortcut) {
+
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
         tryActivateReadyShortcut();
     }
@@ -373,6 +461,9 @@ void KisShortcutMatcher::reinitialize()
 
 void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &keys)
 {
+    Private::RecursionNotifier notifier(this);
+
+
     Q_FOREACH (Qt::Key key, m_d->keys) {
         if (!keys.contains(key)) {
             keyReleased(key);
@@ -385,7 +476,9 @@ void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &k
         }
     }
 
-    if (!m_d->runningShortcut) {
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!m_d->runningShortcut) {
         prepareReadyShortcuts();
         tryActivateReadyShortcut();
     }
@@ -466,7 +559,7 @@ bool KisShortcutMatcher::tryRunSingleActionShortcutImpl(T param, U *event, const
     }
 
     if (goodCandidate) {
-        DEBUG_EVENT_ACTION("Beginning action for event", event)
+        DEBUG_EVENT_ACTION("Beginning action for event", event);
         goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
         goodCandidate->action()->end(0);
     } else {
@@ -514,11 +607,23 @@ bool KisShortcutMatcher::tryRunReadyShortcut( Qt::MouseButton button, QEvent* ev
         }
 
         DEBUG_SHORTCUT("Starting new action", goodCandidate);
-        goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
-        m_d->runningShortcut = goodCandidate;
+
+        {
+            m_d->runningShortcut = goodCandidate;
+            Private::RecursionGuard guard(this);
+            goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
+
+            // the tool migh have opened some dialog, which could break our event loop
+            if (guard.brokenByRecursion()) {
+                goodCandidate->action()->end(event);
+                m_d->runningShortcut = 0;
+
+                forceDeactivateAllActions();
+            }
+        }
     }
 
-    return goodCandidate;
+    return m_d->runningShortcut;
 }
 
 void KisShortcutMatcher::tryActivateReadyShortcut()
@@ -552,8 +657,12 @@ void KisShortcutMatcher::tryActivateReadyShortcut()
 
 bool KisShortcutMatcher::tryEndRunningShortcut( Qt::MouseButton button, QEvent* event )
 {
-    Q_ASSERT(m_d->runningShortcut);
-    Q_ASSERT(!m_d->readyShortcut);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->runningShortcut, true);
+    KIS_SAFE_ASSERT_RECOVER(!m_d->readyShortcut) {
+        // it shouldn't have happened, running and ready shortcuts
+        // at the same time should not be possible
+        forceDeactivateAllActions();
+    }
 
     if (m_d->runningShortcut->matchBegin(button)) {
 
@@ -576,7 +685,11 @@ bool KisShortcutMatcher::tryEndRunningShortcut( Qt::MouseButton button, QEvent* 
 void KisShortcutMatcher::forceEndRunningShortcut(const QPointF &localPos)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->runningShortcut);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->readyShortcut);
+    KIS_SAFE_ASSERT_RECOVER(!m_d->readyShortcut) {
+        // it shouldn't have happened, running and ready shortcuts
+        // at the same time should not be possible
+        forceDeactivateAllActions();
+    }
 
     // first reset running shortcut to avoid infinite recursion via end()
     KisStrokeShortcut *runningShortcut = m_d->runningShortcut;
@@ -591,6 +704,15 @@ void KisShortcutMatcher::forceEndRunningShortcut(const QPointF &localPos)
 
         action->end(&event);
         action->deactivate(shortcutIndex);
+    }
+}
+
+void KisShortcutMatcher::forceDeactivateAllActions()
+{
+    if (m_d->readyShortcut) {
+        DEBUG_SHORTCUT("Forcefully deactivating action", m_d->readyShortcut);
+        m_d->readyShortcut->action()->deactivate(m_d->readyShortcut->shortcutIndex());
+        m_d->readyShortcut = 0;
     }
 }
 
@@ -619,14 +741,24 @@ bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
                                    event->touchPoints());
             tryEndRunningShortcut(Qt::LeftButton, &touchEvent);
         }
-        goodCandidate->action()->activate(goodCandidate->shortcutIndex());
-        goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
 
         m_d->touchShortcut = goodCandidate;
         m_d->usingTouch = true;
+
+        Private::RecursionGuard guard(this);
+        goodCandidate->action()->activate(goodCandidate->shortcutIndex());
+        goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
+
+        // the tool migh have opened some dialog, which could break our event loop
+        if (guard.brokenByRecursion()) {
+            goodCandidate->action()->end(event);
+            m_d->touchShortcut = 0;
+
+            forceDeactivateAllActions();
+        }
     }
 
-    return goodCandidate;
+    return m_d->touchShortcut;
 }
 
 bool KisShortcutMatcher::tryEndTouchShortcut( QTouchEvent* event )
@@ -660,16 +792,23 @@ bool KisShortcutMatcher::tryRunNativeGestureShortcut(QNativeGestureEvent* event)
     }
 
     if (goodCandidate) {
-        goodCandidate->action()->activate(goodCandidate->shortcutIndex());
-        goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
-
         m_d->nativeGestureShortcut = goodCandidate;
         m_d->usingNativeGesture = true;
 
-        return true;
+        Private::RecursionGuard guard(this);
+        goodCandidate->action()->activate(goodCandidate->shortcutIndex());
+        goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
+
+        // the tool migh have opened some dialog, which could break our event loop
+        if (guard.brokenByRecursion()) {
+            goodCandidate->action()->end(event);
+            m_d->nativeGestureShortcut = 0;
+
+            forceDeactivateAllActions();
+        }
     }
 
-    return false;
+    return m_d->nativeGestureShortcut;
 }
 
 bool KisShortcutMatcher::tryEndNativeGestureShortcut(QNativeGestureEvent* event)

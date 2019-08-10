@@ -38,10 +38,7 @@ public:
 };
 
 KisTangentTiltOption::KisTangentTiltOption()
-: KisPaintOpOption(KisPaintOpOption::GENERAL, false),
-            m_canvasAngle(0.0),
-            m_canvasAxisXMirrored(false),
-            m_canvasAxisYMirrored(false)
+: KisPaintOpOption(KisPaintOpOption::GENERAL, false)
 {
     m_checkable = false;
     m_options = new KisTangentTiltOptionWidget();
@@ -156,28 +153,27 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,qreal *r,qreal 
     //have the azimuth and altitude in degrees.
     qreal direction = KisPaintInformation::tiltDirection(info, true)*360.0;
     qreal elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
-    if (directionType()==0) {
+
+    if (directionType() == 0) {
         direction = KisPaintInformation::tiltDirection(info, true)*360.0;
-	elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
-    } else if (directionType()==1) {
+        elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
+    } else if (directionType() == 1) {
         direction = (0.75 + info.drawingAngle() / (2.0 * M_PI))*360.0;
-	elevation= 0;//turns out that tablets that don't support tilt just return 90 degrees for elevation.
-    } else if (directionType()==2) {
+        elevation= 0;//turns out that tablets that don't support tilt just return 90 degrees for elevation.
+    } else if (directionType() == 2) {
         direction = info.rotation();
-	elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);//artpens have tilt-recognition, so this should work.
-    } else if (directionType()==3) {//mix of tilt+direction
-	qreal mixamount = mixValue()/100.0;
+        elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);//artpens have tilt-recognition, so this should work.
+    } else if (directionType() == 3) {//mix of tilt+direction
+        qreal mixamount = mixValue()/100.0;
         direction = (KisPaintInformation::tiltDirection(info, true)*360.0*(1.0-mixamount))+((0.75 + info.drawingAngle() / (2.0 * M_PI))*360.0*(mixamount));
-	elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
+        elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
     }
+
+    const qreal oldDirection = direction;
 
     //subtract/add the rotation of the canvas.
-
-    if (info.canvasRotation()!=m_canvasAngle && info.canvasMirroredH()==m_canvasAxisXMirrored) {
-       m_canvasAngle=info.canvasRotation();
-    }
-    if (directionType()!=1) {
-        direction = direction-m_canvasAngle;
+    if (directionType() != 1) {
+        direction = normalizeAngleDegrees(direction - info.canvasRotation());
     }
 
     //limit the direction/elevation
@@ -211,8 +207,8 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,qreal *r,qreal 
         vertical = halfvalue-(fabs(vertical)*halfvalue);
     }
 
-    if (m_canvasAxisXMirrored && info.canvasMirroredH()) {horizontal = maxvalue-horizontal;}
-    if (m_canvasAxisYMirrored && info.canvasMirroredH()) {vertical = maxvalue-vertical;}
+    if (info.canvasMirroredH()) {horizontal = maxvalue - horizontal;}
+    if (info.canvasMirroredV()) {vertical = maxvalue - vertical;}
 
     depth = sin(elevation)*maxvalue;
 
@@ -244,26 +240,21 @@ void KisTangentTiltOption::readOptionSetting(const KisPropertiesConfigurationSP 
 
     if (setting->getInt(TANGENT_TYPE)== 0){
         m_options->optionTilt->setChecked(true);
-	m_options->sliderMixValue->setVisible(false);
+        m_options->sliderMixValue->setVisible(false);
     }
     else if (setting->getInt(TANGENT_TYPE)== 1) {
         m_options->optionDirection->setChecked(true);
-	m_options->sliderMixValue->setVisible(false);
+        m_options->sliderMixValue->setVisible(false);
     }
     else if (setting->getInt(TANGENT_TYPE)== 2) {
         m_options->optionRotation->setChecked(true);
-	m_options->sliderMixValue->setVisible(false);
+        m_options->sliderMixValue->setVisible(false);
     }
     else if (setting->getInt(TANGENT_TYPE)== 3) {
         m_options->optionMix->setChecked(true);
-	m_options->sliderMixValue->setVisible(true);
+        m_options->sliderMixValue->setVisible(true);
     }
-
-    m_canvasAngle = setting->getDouble("runtimeCanvasRotation", 0.0);//in degrees please.
-    m_canvasAxisXMirrored = setting->getBool("runtimeCanvasMirroredX", false);
-    m_canvasAxisYMirrored = setting->getBool("runtimeCanvasMirroredY", false);
 
     m_options->sliderElevationSensitivity->setValue(setting->getDouble(TANGENT_EV_SEN, 100));
     m_options->sliderMixValue->setValue(setting->getDouble(TANGENT_MIX_VAL, 50));
-
 }

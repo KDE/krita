@@ -292,11 +292,12 @@ QPointF KisTool::pixelToView(const QPointF &pixelCoord) const
 
 QRectF KisTool::pixelToView(const QRectF &pixelRect) const
 {
-    if (!image())
+    if (!image()) {
         return pixelRect;
+    }
     QPointF topLeft = pixelToView(pixelRect.topLeft());
     QPointF bottomRight = pixelToView(pixelRect.bottomRight());
-    return QRectF(topLeft, bottomRight);
+    return {topLeft, bottomRight};
 }
 
 QPainterPath KisTool::pixelToView(const QPainterPath &pixelPolygon) const
@@ -342,13 +343,6 @@ KisImageWSP KisTool::image() const
 QCursor KisTool::cursor() const
 {
     return d->cursor;
-}
-
-void KisTool::notifyModified() const
-{
-    if (image()) {
-        image()->setModified();
-    }
 }
 
 KoPattern * KisTool::currentPattern()

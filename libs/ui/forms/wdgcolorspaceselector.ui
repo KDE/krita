@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>411</width>
-    <height>74</height>
+    <width>276</width>
+    <height>151</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -33,6 +45,10 @@
        </property>
       </widget>
      </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="lblColorModels">
        <property name="text">
@@ -50,13 +66,6 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bnAdvanced">
-       <property name="text">
-        <string>Color Space Browser</string>
        </property>
       </widget>
      </item>
@@ -99,8 +108,14 @@
      </item>
     </layout>
    </item>
+   <item>
+    <widget class="QPushButton" name="bnAdvanced">
+     <property name="text">
+      <string>Color Space Browser</string>
+     </property>
+    </widget>
+   </item>
   </layout>
-  <zorder>lblColorSpaces</zorder>
  </widget>
  <customwidgets>
   <customwidget>

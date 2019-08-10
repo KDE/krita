@@ -203,7 +203,7 @@ void KarbonCalligraphyOptionWidget::loadProfile(const QString &name)
 void KarbonCalligraphyOptionWidget::updateCurrentProfile()
 {
     if (!m_changingProfile) {
-        saveProfile("Current");
+        saveProfile(i18n("Current"));
     }
 }
 

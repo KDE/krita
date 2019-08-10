@@ -47,7 +47,8 @@ MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLa
 }
 
 MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(const MoveSelectionStrokeStrategy &rhs)
-    : KisStrokeStrategyUndoCommandBased(rhs),
+    : QObject(),
+      KisStrokeStrategyUndoCommandBased(rhs),
       m_paintLayer(rhs.m_paintLayer),
       m_selection(rhs.m_selection),
       m_updatesFacade(rhs.m_updatesFacade)
@@ -84,6 +85,8 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
     m_initialDeviceOffset = QPoint(movedDevice->x(), movedDevice->y());
 
     m_selection->setVisible(false);
+
+    emit sigHandlesRectCalculated(movedDevice->exactBounds());
 }
 
 void MoveSelectionStrokeStrategy::finishStrokeCallback()

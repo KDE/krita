@@ -65,7 +65,10 @@ public:
     public:
 
         Calculations() : m_max(0.0), m_min(0.0), m_mean(0.0), m_total(0.0), m_median(0.0),
-                m_stddev(0.0), m_high(0), m_low(0), m_count(0) {}
+                m_stddev(0.0), m_high(0), m_low(0), m_count(0) {
+            Q_UNUSED(m_median);
+            Q_UNUSED(m_stddev);
+        }
         /**
          * This function return the maximum bound of the histogram
          * (values at greater position than the maximum are null)

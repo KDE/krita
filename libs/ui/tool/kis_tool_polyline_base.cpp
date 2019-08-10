@@ -172,7 +172,6 @@ void KisToolPolylineBase::undoSelection()
         if (m_points.size() > 2) {
             rect = pixelToView(QRectF(m_points.last(), m_points.at(m_points.size()-2)).normalized());
             rect.adjust(-PREVIEW_LINE_WIDTH, -PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH);
-            rect |= rect;
             updateCanvasViewRect(rect);
         }
         if (m_points.size() > 0) {

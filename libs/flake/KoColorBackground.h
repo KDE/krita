@@ -60,7 +60,7 @@ public:
     // reimplemented from KoShapeBackground
     bool loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize) override;
 private:
-    struct Private;
+    class Private;
     QSharedDataPointer<Private> d;
 };
 

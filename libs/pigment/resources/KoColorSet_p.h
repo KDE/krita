@@ -51,14 +51,14 @@ public:
     bool loadKpl();
 
 public:
-    KoColorSet *colorSet;
+    KoColorSet *colorSet {0};
     KoColorSet::PaletteType paletteType;
     QByteArray data;
     QString comment;
     QStringList groupNames; //names of the groups, this is used to determine the order they are in.
     QHash<QString, KisSwatchGroup> groups; //grouped colors.
-    bool isGlobal;
-    bool isEditable;
+    bool isGlobal {true};
+    bool isEditable {false};
 
 private:
     KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &ba);

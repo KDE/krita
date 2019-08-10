@@ -31,8 +31,11 @@
 // for kisSquareDistance only
 #include "kis_global.h"
 
+#include "tool_transform_args.h"
+
 class ToolTransformArgs;
 class KisTransformWorker;
+class TransformTransactionProperties;
 
 class KisTransformUtils
 {
@@ -152,6 +155,15 @@ public:
         QPointF m_oldStaticPointInView;
 
     };
+
+    static void setDefaultWarpPoints(int pointsPerLine,
+                                     const TransformTransactionProperties *transaction,
+                                     ToolTransformArgs *config);
+
+    static ToolTransformArgs resetArgsForMode(ToolTransformArgs::TransformMode mode,
+                                              const QString &filterId,
+                                              const TransformTransactionProperties &transaction);
+
 };
 
 #endif /* __KIS_TRANSFORM_UTILS_H */

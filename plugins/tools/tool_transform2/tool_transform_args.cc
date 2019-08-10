@@ -115,7 +115,7 @@ void ToolTransformArgs::clear()
 }
 
 ToolTransformArgs::ToolTransformArgs(const ToolTransformArgs& args)
-    : m_liquifyProperties(args.m_liquifyProperties)
+    : m_liquifyProperties(new KisLiquifyProperties(*args.m_liquifyProperties.data()))
 {
     init(args);
 }

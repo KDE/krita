@@ -22,6 +22,8 @@
 #include <QDesktopServices>
 #include <QFileInfo>
 #include <QMimeData>
+#include <QPixmap>
+#include <QImage>
 
 #include "kis_action_manager.h"
 #include "kactioncollection.h"
@@ -36,6 +38,10 @@
 #include "krita_utils.h"
 #include "KoStore.h"
 #include "kis_config.h"
+#include "KisDocument.h"
+#include <kis_image.h>
+#include <kis_paint_device.h>
+#include <KisPart.h>
 
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
@@ -212,8 +218,10 @@ void KisWelcomePageWidget::populateRecentDocuments()
             recentItem->setIcon(m_thumbnailMap[recentFileUrlPath]);
         }
         else {
-            if (QFileInfo(recentFileUrlPath).exists()) {
-                if (recentFileUrlPath.toLower().endsWith("ora") || recentFileUrlPath.toLower().endsWith("kra")) {
+            QFileInfo fi(recentFileUrlPath);
+
+            if (fi.exists()) {
+                if (fi.suffix() == "ora" || fi.suffix() == "kra") {
 
                     QScopedPointer<KoStore> store(KoStore::createStore(recentFileUrlPath, KoStore::Read));
                     if (store) {
@@ -234,6 +242,16 @@ void KisWelcomePageWidget::populateRecentDocuments()
                                 recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
                             }
                         }
+                    }
+                }
+                else if (fi.suffix() == "tiff" || fi.suffix() == "tif") {
+                    // Workaround for a bug in Qt tiff QImageIO plugin
+                    QScopedPointer<KisDocument> doc;
+                    doc.reset(KisPart::instance()->createDocument());
+                    bool r = doc->openUrl(QUrl::fromLocalFile(recentFileUrlPath), KisDocument::DontAddToRecent);
+                    if (r) {
+                        KisPaintDeviceSP projection = doc->image()->projection();
+                        recentItem->setIcon(QIcon(QPixmap::fromImage(projection->createThumbnail(48, 48, projection->exactBounds()))));
                     }
                 }
                 else {

@@ -258,6 +258,14 @@ QString KisImageConfig::safelyGetWritableTempLocation(const QString &suffix, con
     if (!configuredSwap.isEmpty()) {
         swap = configuredSwap;
     }
+
+    // Gosh, everything fails, nothing is writable, swap to the homedir
+    if (!QFileInfo(swap).isWritable()) {
+        swap = QDir::homePath();
+        Q_ASSERT(QFileInfo(swap).isWritable());
+    }
+
+
     return swap;
 }
 

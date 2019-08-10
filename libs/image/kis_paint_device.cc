@@ -698,6 +698,8 @@ void KisPaintDevice::Private::updateLodDataManager(KisDataManager *srcDataManage
                                                    const QRect &originalRect,
                                                    int lod)
 {
+    if (originalRect.isEmpty()) return;
+
     const int srcStepSize = 1 << lod;
 
     KIS_ASSERT_RECOVER_RETURN(lod > 0);

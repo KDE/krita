@@ -21,6 +21,8 @@
 #include <QPainter>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
+#include <QPoint>
+#include <QMenu>
 
 #include <KoColorSpace.h>
 #include <resources/KoStopGradient.h>
@@ -46,15 +48,19 @@ KisStopGradientEditor::KisStopGradientEditor(QWidget *parent)
     connect(opacitySlider, SIGNAL(valueChanged(qreal)), this, SLOT(opacityChanged(qreal)));
 
 
-    buttonReverse->setIcon(KisIconUtils::loadIcon("view-refresh"));
+    buttonReverse->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_x"));
     buttonReverse->setToolTip(i18n("Flip Gradient"));
     KisIconUtils::updateIcon(buttonReverse);
     connect(buttonReverse, SIGNAL(pressed()), SLOT(reverse()));
 
-    buttonReverseSecond->setIcon(KisIconUtils::loadIcon("view-refresh"));
+    buttonReverseSecond->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_x"));
     buttonReverseSecond->setToolTip(i18n("Flip Gradient"));
     KisIconUtils::updateIcon(buttonReverseSecond);
     connect(buttonReverseSecond, SIGNAL(clicked()), SLOT(reverse()));
+
+    this->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
+            this, SLOT(showContextMenu(const QPoint &)));
 
     setCompactMode(false);
 
@@ -193,5 +199,59 @@ void KisStopGradientEditor::reverse()
     gradientSlider->setSelectedStop(stops.size() - 1 - gradientSlider->selectedStop());
 
     emit sigGradientChanged();
+}
+
+void KisStopGradientEditor::sortByValue( SortFlags flags = SORT_ASCENDING )
+{
+    if (!m_gradient) return;
+
+    bool ascending = (flags & SORT_ASCENDING) > 0;
+    bool evenDistribution = (flags & EVEN_DISTRIBUTION) > 0;
+
+    QList<KoGradientStop> stops = m_gradient->stops();
+    const int stopCount = stops.size();
+
+    QList<KoGradientStop> sortedStops;
+    std::sort(stops.begin(), stops.end(), KoGradientStopValueSort());
+
+    int stopIndex = 0;
+    for (const KoGradientStop& stop : stops) {
+        const float value = evenDistribution ? (float)stopIndex / (float)(stopCount - 1) : stop.second.toQColor().valueF();
+        const float position = ascending ? value : 1.f - value;
+
+        if (ascending) {
+            sortedStops.push_back(KoGradientStop(position, stop.second));
+        } else {
+            sortedStops.push_front(KoGradientStop(position, stop.second));
+        }
+
+        stopIndex++;
+    }
+
+    m_gradient->setStops(sortedStops);
+    gradientSlider->setSelectedStop(stopCount - 1);
+    gradientSlider->update();
+
+    emit sigGradientChanged();
+}
+
+void KisStopGradientEditor::showContextMenu(const QPoint &origin)
+{
+    QMenu contextMenu(i18n("Options"), this);
+
+    QAction reverseValues(i18n("Reverse Values"), this);
+    connect(&reverseValues, &QAction::triggered, this, &KisStopGradientEditor::reverse);
+
+    QAction sortAscendingValues(i18n("Sort by Value"), this);
+    connect(&sortAscendingValues, &QAction::triggered, this, [this]{ this->sortByValue(SORT_ASCENDING); } );
+    QAction sortAscendingDistributed(i18n("Sort by Value (Even Distribution)"), this);
+    connect(&sortAscendingDistributed, &QAction::triggered, this, [this]{ this->sortByValue(SORT_ASCENDING | EVEN_DISTRIBUTION);} );
+
+    contextMenu.addAction(&reverseValues);
+    contextMenu.addSeparator();
+    contextMenu.addAction(&sortAscendingValues);
+    contextMenu.addAction(&sortAscendingDistributed);
+
+    contextMenu.exec(mapToGlobal(origin));
 }
 

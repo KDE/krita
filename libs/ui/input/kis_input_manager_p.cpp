@@ -507,7 +507,9 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
     switch(gesture) {
     case KisShortcutConfiguration::RotateGesture:
     case KisShortcutConfiguration::PinchGesture:
+#ifndef Q_OS_MACOS
     case KisShortcutConfiguration::ZoomAndRotateGesture:
+#endif
         shortcut->setMinimumTouchPoints(2);
         shortcut->setMaximumTouchPoints(2);
         break;

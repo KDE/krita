@@ -54,13 +54,13 @@
 
 #define FEEDBACK_LINE_WIDTH 2
 
-#define distBetwn(x, y) kisDistance(pixelToView(m_points[x]), pixelToView(m_points[y]))
+#define distBetween(x, y) kisDistance(pixelToView(m_points[x]), pixelToView(m_points[y]))
 
 KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
-    m_continuedMode(false), m_complete(true), m_radius(20), m_threshold(70), m_checkPoint(-1), m_frequency(50)
+    m_continuedMode(false), m_complete(true), m_threshold(70), m_checkPoint(-1), m_frequency(50), m_radius(2.0)
 { }
 
 void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)
@@ -101,18 +101,18 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
         //useCursor(KisCursor::load("tool_outline_selection_cursor_add.png", 6, 6));
     }
 
-    vQPointF pointSet = m_worker.computeEdge(m_radius, m_lastAnchor, current);
+    vQPointF pointSet = m_worker.computeEdge(m_frequency, m_lastAnchor, current);
     m_points.resize(m_checkPoint);
     m_points.append(pointSet);
 
-    qreal dist = distBetwn(m_points.count() - 1, m_checkPoint);
+    qreal dist = distBetween(m_points.count() - 1, m_checkPoint);
 
     if(dist > 2*m_frequency){
         bool foundSomething = false;
 
         int midPoint = m_checkPoint;
 
-        while(distBetwn(midPoint, m_checkPoint) < m_frequency)
+        while(distBetween(midPoint, m_checkPoint) < m_frequency)
             midPoint++;
 
         for(int i = midPoint; i < m_points.count(); i++){
@@ -126,7 +126,7 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
         }
 
         if(!foundSomething){
-            for(int i = midPoint - 1; i>= 0 && distBetwn(i, midPoint) > m_frequency/3; i--){
+            for(int i = midPoint - 1; i>= 0 && distBetween(i, midPoint) > m_frequency/3; i--){
                 if(m_worker.intensity(m_points.at(i).toPoint()) >= m_threshold){
                     m_checkPoint = i;
                     m_lastAnchor = m_points.at(i).toPoint();
@@ -305,7 +305,7 @@ void KisToolSelectMagnetic::updateContinuedMode()
 
 void KisToolSelectMagnetic::activate(KoToolBase::ToolActivation activation, const QSet<KoShape *> &shapes)
 {
-    m_worker      = KisMagneticWorker(image()->projection());
+    m_worker      = KisMagneticWorker(image()->projection(), m_radius);
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
     KisToolSelect::activate(activation, shapes);
 }
@@ -358,12 +358,12 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     QLabel *lblRad  = new QLabel(i18n("Radius: "), selectionWidget);
     f1->addWidget(lblRad);
 
-    KisSliderSpinBox *radInput = new KisSliderSpinBox(selectionWidget);
+    KisDoubleSliderSpinBox *radInput = new KisDoubleSliderSpinBox(selectionWidget);
     radInput->setObjectName("radius");
-    radInput->setRange(20, 200);
-    radInput->setSingleStep(10);
+    radInput->setRange(1.0, 100.0, 2);
+    radInput->setSingleStep(0.5);
     f1->addWidget(radInput);
-    connect(radInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetRadius(int)));
+    connect(radInput, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetRadius(qreal)));
 
     QHBoxLayout *f2      = new QHBoxLayout();
     QLabel *lblThreshold = new QLabel(i18n("Threshold: "), selectionWidget);
@@ -371,7 +371,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
 
     KisSliderSpinBox *threshInput = new KisSliderSpinBox(selectionWidget);
     threshInput->setObjectName("threshold");
-    threshInput->setRange(60, 200);
+    threshInput->setRange(1, 255);
     threshInput->setSingleStep(10);
     f2->addWidget(threshInput);
     connect(threshInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
@@ -393,15 +393,16 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     l->insertLayout(2, f2);
     l->insertLayout(3, f3);
 
-    radInput->setValue(m_configGroup.readEntry("radius", 20));
+    radInput->setValue(m_configGroup.readEntry("radius", 2.0));
     threshInput->setValue(m_configGroup.readEntry("threshold", 100));
     freqInput->setValue(m_configGroup.readEntry("frequency", 50));
     return selectionWidget;
 } // KisToolSelectMagnetic::createOptionWidget
 
-void KisToolSelectMagnetic::slotSetRadius(int r)
+void KisToolSelectMagnetic::slotSetRadius(qreal r)
 {
     m_radius = r;
+    m_worker = KisMagneticWorker(image()->projection(), m_radius);
     m_configGroup.writeEntry("radius", r);
 }
 

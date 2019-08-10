@@ -30,7 +30,7 @@ public:
         // Do not use this, just for making the compiler happy
     }
 
-    KisMagneticWorker(const KisPaintDeviceSP &dev);
+    KisMagneticWorker(const KisPaintDeviceSP &dev, qreal radius);
 
     QVector<QPointF> computeEdge(int radius, QPoint start, QPoint end);
     quint8 intensity(QPoint pt);

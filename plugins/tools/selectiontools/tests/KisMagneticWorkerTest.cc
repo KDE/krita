@@ -43,7 +43,7 @@ void KisMagneticWorkerTest::testWorker()
     KisPaintDeviceSP dev = loadTestImage("test_main.png", false);
     const QRect rect = dev->exactBounds();
     KisPaintDeviceSP grayscaleDev = KisPainter::convertToAlphaAsGray(dev);
-    KisMagneticWorker worker(grayscaleDev);
+    KisMagneticWorker worker(grayscaleDev, 2.0);
 
     const QPoint startPos(80, 10);
     const QPoint endPos(10, 100);

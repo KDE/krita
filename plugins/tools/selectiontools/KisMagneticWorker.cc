@@ -142,11 +142,11 @@ private:
     KisMagneticGraph              m_graph;
 };
 
-KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev)
+KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev, qreal radius)
 {
     m_dev = KisPainter::convertToAlphaAsGray(dev);
     KisPainter::copyAreaOptimized(dev->exactBounds().topLeft(), dev, m_dev, dev->exactBounds());
-    KisGaussianKernel::applyLoG(m_dev, m_dev->exactBounds(), 2, -1.0, QBitArray(), nullptr);
+    KisGaussianKernel::applyLoG(m_dev, m_dev->exactBounds(), radius, -1.0, QBitArray(), nullptr);
     KisLazyFillTools::normalizeAlpha8Device(m_dev, m_dev->exactBounds());
     m_graph = new KisMagneticGraph(m_dev);
 }
@@ -155,7 +155,7 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int radius, QPoint begin, QPoint
 {
     QRect rect;
     KisAlgebra2D::accumulateBounds(QVector<QPoint> { begin, end }, &rect);
-    rect.setSize(rect.size() * radius);
+    rect = kisGrowRect(rect, radius);
 
     VertexDescriptor goal(end);
     VertexDescriptor start(begin);

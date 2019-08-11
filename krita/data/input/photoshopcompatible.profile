@@ -14,7 +14,7 @@
 
 [General]
 name=Photoshop Compatible
-version=3
+version=4
 
 [Pan Canvas]
 0={0;4;[];0;0;2}

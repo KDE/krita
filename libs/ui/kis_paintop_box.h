@@ -25,7 +25,7 @@
 #include <QMap>
 #include <QWidget>
 #include <QList>
-
+#include <QLineEdit>
 
 #include <KoID.h>
 #include <KoInputDevice.h>
@@ -38,8 +38,6 @@
 #include "kritaui_export.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_signal_compressor.h"
-
-
 
 class QToolButton;
 class QString;
@@ -62,6 +60,7 @@ class KisWidgetChooser;
 class KisFavoriteResourceManager;
 class KisAction;
 class KisPresetSaveWidget;
+class KisActionSearchLine;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -197,6 +196,7 @@ private:
     KisPaintOpPresetsPopup*             m_presetsPopup;
     KisPaintOpPresetsChooserPopup*      m_presetsChooserPopup;
     KisViewManager*                     m_viewManager;
+    KisActionSearchLine*                m_actionSearch;
     KisPopupButton*                     m_workspaceWidget;
     KisWidgetChooser*                   m_sliderChooser[3];
     QMap<KoID, KisPaintOpConfigWidget*> m_paintopOptionWidgets;

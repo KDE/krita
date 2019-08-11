@@ -82,6 +82,8 @@
 #include "kis_action_manager.h"
 #include "KisHighlightedToolButton.h"
 
+#include <KisActionSearchWidget.h>
+
 typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
 typedef KoResourceServerAdapter<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServerAdapter;
 
@@ -283,6 +285,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         m_viewManager->actionManager()->addAction(a->text(), a);
     }
 
+    m_actionSearch = new KisActionSearchLine(view->actionCollection(), this);
+    m_actionSearch->setText(i18n("Search Actions..."));
+    m_actionSearch->setToolTip(i18n("Search for Krita actions"));
+    m_actionSearch->setFixedHeight(m_cmbCompositeOp->height());
+
     m_workspaceWidget = new KisPopupButton(this);
     m_workspaceWidget->setIcon(KisIconUtils::loadIcon("view-choose"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
@@ -388,9 +395,16 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     view->actionCollection()->addAction("mirror_actions", action);
 
     action = new QWidgetAction(this);
+    KisActionRegistry::instance()->propertizeAction("actionsearch", action);
+    view->actionCollection()->addAction("actionsearch", action);
+    action->setDefaultWidget(m_actionSearch);
+
+
+    action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("workspaces", action);
     view->actionCollection()->addAction("workspaces", action);
     action->setDefaultWidget(m_workspaceWidget);
+
 
     if (!cfg.toolOptionsInDocker()) {
         m_toolOptionsPopup = new KisToolOptionsPopup();

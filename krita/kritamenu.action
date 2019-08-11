@@ -1823,6 +1823,16 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="actionsearch">
+      <icon></icon>
+      <text>Search Actions</text>
+      <whatsThis></whatsThis>
+      <toolTip>Workspaces</toolTip>
+      <iconText>Workspaces</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
 
 
   </Actions>

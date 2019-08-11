@@ -36,7 +36,7 @@ class KRITAWIDGETS_EXPORT KisPaletteListWidget : public QWidget
     Q_OBJECT
 public:
     explicit KisPaletteListWidget(QWidget *parent = nullptr);
-    virtual ~KisPaletteListWidget();
+    virtual ~KisPaletteListWidget() override;
 
 public:
     void setAllowModification(bool allowModification);

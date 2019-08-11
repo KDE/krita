@@ -61,6 +61,7 @@
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
+      <tags>bundle,resource,preset</tags>
     </Action>
     <Action name="mainToolBar">
       <icon></icon>

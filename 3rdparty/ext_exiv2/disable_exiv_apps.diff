@@ -1,0 +1,35 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index aecd621..d879cf8 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -315,14 +315,14 @@ msvc_runtime_configure(${EXIV2_ENABLE_SHARED} ${EXIV2_ENABLE_DYNAMIC_RUNTIME})
+ 
+ # ******************************************************************************
+ # exiv2 application
+-ADD_EXECUTABLE( exiv2 ${EXIV2_SRC}  ${EXIV2_HDR} )
+-TARGET_LINK_LIBRARIES( exiv2 exiv2lib )
+-INSTALL( TARGETS exiv2 ${INSTALL_TARGET_STANDARD_ARGS} )
++#ADD_EXECUTABLE( exiv2 ${EXIV2_SRC}  ${EXIV2_HDR} )
++#TARGET_LINK_LIBRARIES( exiv2 exiv2lib )
++#INSTALL( TARGETS exiv2 ${INSTALL_TARGET_STANDARD_ARGS} )
+ 
+ # ******************************************************************************
+ # connection test application
+-ADD_EXECUTABLE( conntest ${CONNTEST} )
+-TARGET_LINK_LIBRARIES( conntest ${PRIVATE_VAR}  exiv2lib ${CURL_LIBRARIES} ${SSH_LIBRARIES})
++#ADD_EXECUTABLE( conntest ${CONNTEST} )
++#TARGET_LINK_LIBRARIES( conntest ${PRIVATE_VAR}  exiv2lib ${CURL_LIBRARIES} ${SSH_LIBRARIES})
+ 
+ # ******************************************************************************
+ # exifprint application
+@@ -331,8 +331,8 @@ TARGET_LINK_LIBRARIES( conntest ${PRIVATE_VAR}  exiv2lib ${CURL_LIBRARIES} ${SSH
+ 
+ # ******************************************************************************
+ # remotetest application
+-ADD_EXECUTABLE( remotetest ${REMOTETEST} )
+-TARGET_LINK_LIBRARIES( remotetest exiv2lib )
++#ADD_EXECUTABLE( remotetest ${REMOTETEST} )
++#TARGET_LINK_LIBRARIES( remotetest exiv2lib )
+ 
+ # ******************************************************************************
+ # Headers

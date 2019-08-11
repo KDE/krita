@@ -83,7 +83,7 @@ public:
 private:
     /**
      * Construction of a magic string is allowed only with the means
-     * of speacial macros which resemble their kde-wide counterparts
+     * of special macros which resemble their kde-wide counterparts
      */
     explicit KUndo2MagicString(const QString &text);
 

@@ -21,8 +21,11 @@
 #include <QTreeView>
 #include <QStyle>
 
+#include "krita_utils.h"
+#include <QApplication>
 
 #include <QGlobalStatic>
+#include <kis_config.h>
 Q_GLOBAL_STATIC(KisNodeViewColorScheme, s_instance)
 
 struct KisNodeViewColorScheme::Private
@@ -38,6 +41,11 @@ struct KisNodeViewColorScheme::Private
             colorLabels << QColor(238,50,51);
             colorLabels << QColor(191,106,209);
             colorLabels << QColor(118,119,114);
+
+            const QColor noLabelSetColor = qApp->palette().color(QPalette::Highlight);
+            for (auto it = colorLabels.begin(); it != colorLabels.end(); ++it) {
+                KritaUtils::dragColor(&(*it), noLabelSetColor, 0.35);
+            }
         }
     }
 
@@ -81,7 +89,8 @@ int KisNodeViewColorScheme::visibilityMargin() const
 
 int KisNodeViewColorScheme::thumbnailSize() const
 {
-    return 20;
+    KisConfig cfg(true);
+    return cfg.layerThumbnailSize(false);
 }
 
 int KisNodeViewColorScheme::thumbnailMargin() const
@@ -140,20 +149,25 @@ int KisNodeViewColorScheme::indentation() const
         border();
 }
 
+QRect KisNodeViewColorScheme::relVisibilityRect() const
+{
+    return QRect(0, 0,
+                 visibilitySize() + 2 * visibilityMargin() + 2 * border(),
+                 visibilitySize() + 2 * visibilityMargin() + 1 * border());
+}
+
 QRect KisNodeViewColorScheme::relThumbnailRect() const
 {
-    return QRect(-indentation(),
-                 border(),
-                 thumbnailSize() + 2 * thumbnailMargin(),
-                 thumbnailSize() + 2 * thumbnailMargin());
+    return QRect(0, 0,
+                 thumbnailSize() + 2 * thumbnailMargin() + 2 * border(),
+                 thumbnailSize() + 2 * thumbnailMargin() + 1 * border());
 }
 
 QRect KisNodeViewColorScheme::relDecorationRect() const
 {
-    return QRect(border() + decorationMargin(),
-                 border() + decorationMargin(),
-                 decorationSize(),
-                 decorationSize());
+    return QRect(0, 0,
+                 decorationSize() + 2 * decorationMargin() + 2 * border(),
+                 decorationSize() + 2 * decorationMargin() + 1 * border());
 }
 
 QRect KisNodeViewColorScheme::relExpandButtonRect() const

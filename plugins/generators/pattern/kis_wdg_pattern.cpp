@@ -40,6 +40,7 @@ KisWdgPattern::KisWdgPattern(QWidget* parent)
     m_widget->lblPattern->setVisible(false);
     m_widget->lblColor->setVisible(false);
     m_widget->bnColor->setVisible(false);
+    connect(m_widget->patternChooser, SIGNAL(resourceSelected(KoResource*)), this, SIGNAL(sigConfigurationUpdated()));
 }
 
 KisWdgPattern::~KisWdgPattern()

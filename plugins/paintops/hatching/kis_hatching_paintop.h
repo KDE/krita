@@ -65,7 +65,6 @@ protected:
 
 private:
     KisHatchingPaintOpSettingsSP m_settings;
-    KisImageWSP m_image;
     HatchingBrush *m_hatchingBrush;
 
     /**

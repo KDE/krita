@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
-    <height>328</height>
+    <width>500</width>
+    <height>317</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
     <horstretch>255</horstretch>
     <verstretch>255</verstretch>
    </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>425</width>
+    <width>500</width>
     <height>290</height>
    </size>
   </property>
@@ -41,21 +41,18 @@
      <property name="labelAlignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
-     <item row="0" column="0">
-      <widget class="QCheckBox" name="speedCHBox">
+     <item row="0" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="speed" native="true">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="text">
-        <string>Speed</string>
-       </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="speed">
+     <item row="1" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="smoothThreshold" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -71,13 +68,16 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="smoothThreshold">
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="speedCHBox">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Speed</string>
        </property>
       </widget>
      </item>
@@ -100,7 +100,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisDoubleSliderSpinBox" name="displaceStrength"/>
+      <widget class="KisDoubleSliderSpinBox" name="displaceStrength" native="true"/>
      </item>
     </layout>
    </item>
@@ -121,6 +121,50 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="fillStylGroupBox">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>90</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Fill Style</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>5</number>
+      </property>
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="QRadioButton" name="solidColorButton">
+        <property name="text">
+         <string>Foreground Color</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="patternButton">
+        <property name="text">
+         <string>Global Pattern</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <spacer name="verticalSpacer">

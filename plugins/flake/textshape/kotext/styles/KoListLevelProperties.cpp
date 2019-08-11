@@ -828,7 +828,6 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
     }
     else if (style() == KoListStyle::ImageItem) {
         KoImageData *imageData = d->stylesPrivate.value(KoListStyle::BulletImage).value<KoImageData *>();
-        Q_ASSERT(imageData->priv()->collection);
         if (imageData && imageData->priv()->collection) {
             writer->startElement("text:list-level-style-image");
             writer->addAttribute("xlink:show", "embed");
@@ -871,10 +870,10 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
     writer->startElement("style:list-level-properties", false);
 
     if (d->stylesPrivate.contains(KoListStyle::Width)) {
-        writer->addAttributePt("fo:width", width());
+        writer->addAttribute("fo:width", width());
     }
     if (d->stylesPrivate.contains(KoListStyle::Height)) {
-        writer->addAttributePt("fo:height", height());
+        writer->addAttribute("fo:height", height());
     }
 
     if(d->stylesPrivate.contains(KoListStyle::AlignmentMode) && alignmentMode()==false) {
@@ -882,16 +881,16 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
         writer->addAttribute("text:list-level-position-and-space-mode","label-width-and-position");
 
         if (d->stylesPrivate.contains(KoListStyle::Indent))
-            writer->addAttributePt("text:space-before", indent());
+            writer->addAttribute("text:space-before", indent());
 
         if (d->stylesPrivate.contains(KoListStyle::MinimumWidth))
-            writer->addAttributePt("text:min-label-width", minimumWidth());
+            writer->addAttribute("text:min-label-width", minimumWidth());
 
         if (d->stylesPrivate.contains(KoListStyle::Alignment))
             writer->addAttribute("fo:text-align", KoText::alignmentToString(alignment()));
 
         if (d->stylesPrivate.contains(KoListStyle::MinimumDistance))
-            writer->addAttributePt("text:min-label-distance", minimumDistance());
+            writer->addAttribute("text:min-label-distance", minimumDistance());
     } else {
         writer->addAttribute("text:list-level-position-and-space-mode","label-alignment");
 
@@ -902,15 +901,15 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
 
         if(labelFollowedBy()==KoListStyle::ListTab) {
             writer->addAttribute("text:label-followed-by","listtab");
-            writer->addAttributePt("text:list-tab-stop-position", tabStopPosition());
+            writer->addAttribute("text:list-tab-stop-position", tabStopPosition());
         } else if (labelFollowedBy()==KoListStyle::Nothing){
             writer->addAttribute("text:label-followed-by","nothing");
         }else{
             writer->addAttribute("text:label-followed-by","space");
         }
 
-        writer->addAttributePt("fo:text-indent", textIndent());
-        writer->addAttributePt("fo:margin-left", margin());
+        writer->addAttribute("fo:text-indent", textIndent());
+        writer->addAttribute("fo:margin-left", margin());
 
         writer->endElement();
     }

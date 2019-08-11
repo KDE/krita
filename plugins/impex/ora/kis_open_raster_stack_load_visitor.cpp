@@ -215,8 +215,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
             } else if (node.nodeName() == "layer") {
                 QString filename = subelem.attribute("src");
                 if (!filename.isNull()) {
-                    double opacity = 1.0;
-                    opacity = KisDomUtils::toDouble(subelem.attribute("opacity", "1.0"));
+                    const qreal opacity = KisDomUtils::toDouble(subelem.attribute("opacity", "1.0"));
                     KisImageSP pngImage = d->loadContext->loadDeviceData(filename);
                     if (pngImage) {
                         // If ORA doesn't have resolution info, load the default value(75 ppi) else fetch from stack.xml

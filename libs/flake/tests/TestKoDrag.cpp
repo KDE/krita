@@ -37,8 +37,7 @@ void TestKoDrag::test()
     QFile testShapes(fileName);
     testShapes.open(QIODevice::ReadOnly);
 
-    KoXmlDocument doc;
-    doc.setContent(testShapes.readAll());
+    KoXmlDocument doc = SvgParser::createDocumentFromSvg(&testShapes);
 
     KoDocumentResourceManager resourceManager;
     SvgParser parser(&resourceManager);

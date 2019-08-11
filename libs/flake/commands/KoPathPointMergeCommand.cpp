@@ -25,6 +25,7 @@
 #include <klocalizedstring.h>
 #include <QPointF>
 #include "kis_assert.h"
+#include "KoPathMergeUtils.h"
 
 
 class Q_DECL_HIDDEN KoPathPointMergeCommand::Private
@@ -32,9 +33,8 @@ class Q_DECL_HIDDEN KoPathPointMergeCommand::Private
 public:
     Private(const KoPathPointData &pointData1, const KoPathPointData &pointData2)
     : pathShape(pointData1.pathShape)
-    , endPoint(pointData1.pointIndex)
-    , startPoint(pointData2.pointIndex)
-    , splitIndex(KoPathPointIndex(-1, -1))
+    , pointIndex1(pointData1.pointIndex)
+    , pointIndex2(pointData2.pointIndex)
     , removedPoint(0)
     , mergedPointIndex(-1, -1)
     , reverse(ReverseNone)
@@ -46,50 +46,45 @@ public:
         delete removedPoint;
     }
 
-    KoPathPoint * mergePoints(KoPathPoint * p1, KoPathPoint * p2)
-    {
-        QPointF mergePosition = 0.5 * (p1->point() + p2->point());
-        QPointF mergeControlPoint1 = mergePosition + (p1->controlPoint1() - p1->point());
-        QPointF mergeControlPoint2 = mergePosition + (p2->controlPoint2() - p2->point());
-
-        // change position and control points of first merged point
-        p1->setPoint(mergePosition);
-        if (p1->activeControlPoint1()) {
-            p1->setControlPoint1(mergeControlPoint1);
-        }
-        if (p2->activeControlPoint2()) {
-            p1->setControlPoint2(mergeControlPoint2);
-        }
-
-        // remove the second merged point
-        KoPathPointIndex removeIndex = pathShape->pathPointIndex(p2);
-        return pathShape->removePoint(removeIndex);
+    void savePointState(KoPathPoint *point) {
+        savedNodePoint1 = point->point();
+        savedControlPoint11 = KritaUtils::fetchControlPoint(point, true);
+        savedControlPoint12 = KritaUtils::fetchControlPoint(point, false);
     }
 
-    void resetPoints(KoPathPointIndex index1, KoPathPointIndex index2)
+    void restorePointState(KoPathPoint *point) {
+        point->setPoint(savedNodePoint1);
+        KritaUtils::restoreControlPoint(point, true, savedControlPoint11);
+        KritaUtils::restoreControlPoint(point, false, savedControlPoint12);
+    }
+
+    void mergePoints(KoPathPoint * p1, KoPathPoint * p2, KoPathPoint *dstPoint)
     {
-        KoPathPoint * p1 = pathShape->pointByIndex(index1);
-        KoPathPoint * p2 = pathShape->pointByIndex(index2);
-        p1->setPoint(pathShape->documentToShape(oldNodePoint1));
-        p2->setPoint(pathShape->documentToShape(oldNodePoint2));
+        QPointF mergePosition = 0.5 * (p1->point() + p2->point());
+
+        boost::optional<QPointF> mergedControlPoint1;
+        boost::optional<QPointF> mergedControlPoint2;
+
         if (p1->activeControlPoint1()) {
-            p1->setControlPoint1(pathShape->documentToShape(oldControlPoint1));
+            mergedControlPoint1 = mergePosition + (p1->controlPoint1() - p1->point());
         }
-        if (p2->activeControlPoint2()) {
-            p2->setControlPoint2(pathShape->documentToShape(oldControlPoint2));
+
+        if (p1->activeControlPoint1()) {
+            mergedControlPoint2 = mergePosition + (p2->controlPoint2() - p2->point());
         }
+
+        dstPoint->setPoint(mergePosition);
+        KritaUtils::restoreControlPoint(dstPoint, true, mergedControlPoint1);
+        KritaUtils::restoreControlPoint(dstPoint, false, mergedControlPoint2);
+    }
+
+    bool closeSubpathMode() const {
+        return pointIndex2.first == pointIndex1.first;
     }
 
     KoPathShape * pathShape;
-    KoPathPointIndex endPoint;
-    KoPathPointIndex startPoint;
-    KoPathPointIndex splitIndex;
-
-    // the control points have to be stored in document positions
-    QPointF oldNodePoint1;
-    QPointF oldControlPoint1;
-    QPointF oldNodePoint2;
-    QPointF oldControlPoint2;
+    KoPathPointIndex pointIndex1;
+    KoPathPointIndex pointIndex2;
 
     KoPathPoint * removedPoint;
     KoPathPointIndex mergedPointIndex;
@@ -99,7 +94,13 @@ public:
         ReverseFirst = 1,
         ReverseSecond = 2
     };
+
     int reverse;
+
+    QPointF savedNodePoint1;
+
+    boost::optional<QPointF> savedControlPoint11;
+    boost::optional<QPointF> savedControlPoint12;
 };
 
 /**
@@ -114,48 +115,34 @@ KoPathPointMergeCommand::KoPathPointMergeCommand(const KoPathPointData &pointDat
     KIS_ASSERT(pointData1.pathShape == pointData2.pathShape);
     KIS_ASSERT(d->pathShape);
 
-    KIS_ASSERT(!d->pathShape->isClosedSubpath(d->endPoint.first));
-    KIS_ASSERT(!d->pathShape->isClosedSubpath(d->startPoint.first));
+    KIS_ASSERT(!d->pathShape->isClosedSubpath(d->pointIndex1.first));
+    KIS_ASSERT(!d->pathShape->isClosedSubpath(d->pointIndex2.first));
 
-    KIS_ASSERT(d->endPoint.second == 0 ||
-             d->endPoint.second == d->pathShape->subpathPointCount(d->endPoint.first) - 1);
+    KIS_ASSERT(d->pointIndex1.second == 0 ||
+             d->pointIndex1.second == d->pathShape->subpathPointCount(d->pointIndex1.first) - 1);
 
-    KIS_ASSERT(d->startPoint.second == 0 ||
-             d->startPoint.second == d->pathShape->subpathPointCount(d->startPoint.first) - 1);
+    KIS_ASSERT(d->pointIndex2.second == 0 ||
+             d->pointIndex2.second == d->pathShape->subpathPointCount(d->pointIndex2.first) - 1);
 
-    KIS_ASSERT(d->startPoint != d->endPoint);
+    KIS_ASSERT(d->pointIndex2 != d->pointIndex1);
+
+    if (d->pointIndex2 < d->pointIndex1) {
+        std::swap(d->pointIndex2, d->pointIndex1);
+    }
 
     // if we have two different subpaths we might need to reverse them
-    if (d->endPoint.first != d->startPoint.first) {
-        // sort by point index
-        if (d->startPoint < d->endPoint)
-            std::swap(d->endPoint, d->startPoint);
-        // mark first subpath to be reversed if first point starts a subpath with more than one point
-        if (d->endPoint.second == 0 && d->pathShape->subpathPointCount(d->endPoint.first) > 1)
+    if (!d->closeSubpathMode()) {
+        if (d->pointIndex1.second == 0 &&
+            d->pathShape->subpathPointCount(d->pointIndex1.first) > 1) {
+
             d->reverse |= Private::ReverseFirst;
-        // mark second subpath to be reversed if second point does not start a subpath with more than one point
-        if (d->startPoint.second != 0 && d->pathShape->subpathPointCount(d->startPoint.first) > 1)
+        }
+
+        if (d->pointIndex2.second != 0 &&
+            d->pathShape->subpathPointCount(d->pointIndex2.first) > 1) {
+
             d->reverse |= Private::ReverseSecond;
-    } else {
-        Q_ASSERT(d->endPoint.second != d->startPoint.second);
-        if (d->endPoint < d->startPoint)
-            std::swap(d->endPoint, d->startPoint);
-    }
-
-    KoPathPoint * p1 = d->pathShape->pointByIndex(d->endPoint);
-    KoPathPoint * p2 = d->pathShape->pointByIndex(d->startPoint);
-
-    d->oldNodePoint1 = d->pathShape->shapeToDocument(p1->point());
-    if (d->reverse & Private::ReverseFirst) {
-        d->oldControlPoint1 = d->pathShape->shapeToDocument(p1->controlPoint2());
-    } else {
-        d->oldControlPoint1 = d->pathShape->shapeToDocument(p1->controlPoint1());
-    }
-    d->oldNodePoint2 = d->pathShape->shapeToDocument(p2->point());
-    if (d->reverse & Private::ReverseSecond) {
-        d->oldControlPoint2 = d->pathShape->shapeToDocument(p2->controlPoint1());
-    } else {
-        d->oldControlPoint2 = d->pathShape->shapeToDocument(p2->controlPoint2());
+        }
     }
 
     setText(kundo2_i18n("Merge points"));
@@ -170,46 +157,44 @@ void KoPathPointMergeCommand::redo()
 {
     KUndo2Command::redo();
 
-    if (d->removedPoint)
-        return;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!d->removedPoint);
+
+    KoPathPoint * point1 = d->pathShape->pointByIndex(d->pointIndex1);
+    KoPathPoint * point2 = d->pathShape->pointByIndex(d->pointIndex2);
 
     d->pathShape->update();
 
-    KoPathPoint * endPoint = d->pathShape->pointByIndex(d->endPoint);
-    KoPathPoint * startPoint = d->pathShape->pointByIndex(d->startPoint);
+    if (d->closeSubpathMode()) {
+        d->savePointState(point1);
+        d->mergePoints(point2, point1, point1);
+        d->removedPoint = d->pathShape->removePoint(d->pointIndex2);
 
-    // are we just closing a single subpath ?
-    if (d->endPoint.first == d->startPoint.first) {
-        // change the endpoint of the subpath
-        d->removedPoint = d->mergePoints(endPoint, startPoint);
-        // set endpoint of subpath to close the subpath
-        endPoint->setProperty(KoPathPoint::CloseSubpath);
-        // set new startpoint of subpath to close the subpath
-        KoPathPointIndex newStartIndex(d->startPoint.first,0);
-        d->pathShape->pointByIndex(newStartIndex)->setProperty(KoPathPoint::CloseSubpath);
+        KoPathPointIndex newStartIndex(d->pointIndex1.first, 0);
 
-        d->mergedPointIndex = d->pathShape->pathPointIndex(endPoint);
+        d->pathShape->closeSubpath(newStartIndex);
+        d->mergedPointIndex = newStartIndex;
 
     } else {
-        // first revert subpaths if needed
         if (d->reverse & Private::ReverseFirst) {
-            d->pathShape->reverseSubpath(d->endPoint.first);
+            d->pathShape->reverseSubpath(d->pointIndex1.first);
         }
-        if (d->reverse & Private::ReverseSecond) {
-            d->pathShape->reverseSubpath(d->startPoint.first);
-        }
-        // move the subpaths so the second is directly after the first
-        d->pathShape->moveSubpath(d->startPoint.first, d->endPoint.first + 1);
-        d->splitIndex = d->pathShape->pathPointIndex(endPoint);
-        // join both subpaths
-        d->pathShape->join(d->endPoint.first);
-        // change the first point of the points to merge
-        d->removedPoint = d->mergePoints(endPoint, startPoint);
 
-        d->mergedPointIndex = d->pathShape->pathPointIndex(endPoint);
+        if (d->reverse & Private::ReverseSecond) {
+            d->pathShape->reverseSubpath(d->pointIndex2.first);
+        }
+
+        d->pathShape->moveSubpath(d->pointIndex2.first, d->pointIndex1.first + 1);
+        d->mergedPointIndex = d->pathShape->pathPointIndex(point1);
+        d->pathShape->join(d->pointIndex1.first);
+
+        d->savePointState(point1);
+        d->mergePoints(point1, point2, point1);
+
+        KoPathPointIndex removeIndex = d->pathShape->pathPointIndex(point2);
+        d->removedPoint = d->pathShape->removePoint(removeIndex);
     }
 
-    d->pathShape->normalize();
+    d->pathShape->recommendPointSelectionChange({d->mergedPointIndex});
     d->pathShape->update();
 }
 
@@ -217,43 +202,36 @@ void KoPathPointMergeCommand::undo()
 {
     KUndo2Command::undo();
 
-    if (!d->removedPoint)
-        return;
-
     d->pathShape->update();
 
-    // check if we just have closed a single subpath
-    if (d->endPoint.first == d->startPoint.first) {
-        // open the subpath at the old/new first point
-        d->pathShape->openSubpath(d->startPoint);
-        // reinsert the old first point
-        d->pathShape->insertPoint(d->removedPoint, d->startPoint);
-        // reposition the points
-        d->resetPoints(d->endPoint, d->startPoint);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->removedPoint);
+
+    if (d->closeSubpathMode()) {
+        d->pathShape->openSubpath(d->mergedPointIndex);
+        d->pathShape->insertPoint(d->removedPoint, d->pointIndex2);
+        d->restorePointState(d->pathShape->pointByIndex(d->pointIndex1));
     } else {
-        // break merged subpaths apart
-        d->pathShape->breakAfter(d->splitIndex);
-        // reinsert the old second point
-        d->pathShape->insertPoint(d->removedPoint, KoPathPointIndex(d->splitIndex.first+1,0));
-        // reposition the first point
-        d->resetPoints(d->splitIndex, KoPathPointIndex(d->splitIndex.first+1,0));
-        // move second subpath to its old position
-        d->pathShape->moveSubpath(d->splitIndex.first+1, d->startPoint.first);
+        d->pathShape->breakAfter(d->mergedPointIndex);
+        d->pathShape->insertPoint(d->removedPoint, KoPathPointIndex(d->mergedPointIndex.first+1,0));
+        d->restorePointState(d->pathShape->pointByIndex(d->mergedPointIndex));
+        d->pathShape->moveSubpath(d->mergedPointIndex.first+1, d->pointIndex2.first);
+
         // undo the reversion of the subpaths
         if (d->reverse & Private::ReverseFirst) {
-            d->pathShape->reverseSubpath(d->endPoint.first);
+            d->pathShape->reverseSubpath(d->pointIndex1.first);
         }
+
         if (d->reverse & Private::ReverseSecond) {
-            d->pathShape->reverseSubpath(d->startPoint.first);
+            d->pathShape->reverseSubpath(d->pointIndex2.first);
         }
     }
-
-    d->pathShape->normalize();
-    d->pathShape->update();
 
     // reset the removed point
     d->removedPoint = 0;
     d->mergedPointIndex = KoPathPointIndex(-1,-1);
+
+    d->pathShape->recommendPointSelectionChange({d->pointIndex1, d->pointIndex2});
+    d->pathShape->update();
 }
 
 KoPathPointData KoPathPointMergeCommand::mergedPointData() const

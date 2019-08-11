@@ -49,7 +49,7 @@ KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
 
         setConfigurationPage(widget);
 
-        connect(ui.list    , SIGNAL(clicked(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
+        connect(ui.list    , SIGNAL(clicked(QModelIndex)), this, SLOT(slotCompositeOpChanged(QModelIndex)));
         connect(ui.bnEraser, SIGNAL(toggled(bool))                , this, SLOT(slotEraserToggled(bool)));
     }
 
@@ -73,7 +73,7 @@ void KisCompositeOpOption::readOptionSetting(const KisPropertiesConfigurationSP 
     KoID    compositeOp = KoCompositeOpRegistry::instance().getKoID(ompositeOpID);
     changeCompositeOp(compositeOp);
 
-    const bool eraserMode = setting->getBool("EraserMode", false);;
+    const bool eraserMode = setting->getBool("EraserMode", false);
     slotEraserToggled(eraserMode);
 }
 

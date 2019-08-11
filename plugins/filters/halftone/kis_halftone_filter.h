@@ -45,11 +45,11 @@ public:
  * This filter will allow the user to input an image and have it be approximated with
  * a halftone pattern. https://en.wikipedia.org/wiki/Halftone
  *
- * The primary usecase of such a filter is for specialised printing techniques, but for
+ * The primary usecase of such a filter is for specialized printing techniques, but for
  * many people the half-tone pattern also serves as a neutral pattern that is more pleasant
  * than plain flat look. The half tone in this case also becomes a stylistic technique.
  *
- * Based on that, there's a few ways a user could want to use this techique:
+ * Based on that, there's a few ways a user could want to use this technique:
  * 1. Per-component. Per patch, each component will have a halftone approximated.
  * 2. Intensity only. The relative luminosity of the patch is determined and will be used
  * for the approximation, resulting in a black/white pattern.
@@ -79,7 +79,7 @@ public:
 
     KisFilterConfigurationSP factoryConfiguration() const override;
 
-    KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const override;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 
 private:
     QPolygonF m_gridPoints;

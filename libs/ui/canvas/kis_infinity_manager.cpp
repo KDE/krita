@@ -61,7 +61,7 @@ void KisInfinityManager::imagePositionChanged()
     const QRect imageRect = m_canvas->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
     const QRect widgetRect = m_canvas->canvasWidget()->rect();
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     qreal vastScrolling = cfg.vastScrolling();
 
     int xReserve = vastScrolling * widgetRect.width();
@@ -143,7 +143,7 @@ void KisInfinityManager::drawDecoration(QPainter& gc, const QRectF& updateArea, 
     gc.save();
     gc.setTransform(QTransform(), false);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     QColor color = cfg.canvasBorderColor();
     gc.fillPath(m_decorationPath, color.darker(115));
 
@@ -172,7 +172,8 @@ inline QPoint getPointFromEvent(QEvent *event)
 
     if (event->type() == QEvent::MouseMove ||
         event->type() == QEvent::MouseButtonPress ||
-        event->type() == QEvent::MouseButtonRelease) {
+        event->type() == QEvent::MouseButtonRelease ||
+        event->type() == QEvent::Enter) {
 
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         result = mouseEvent->pos();
@@ -226,7 +227,6 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
 
     switch (event->type()) {
     case QEvent::Enter:
-    case QEvent::Leave:
     case QEvent::MouseMove:
     case QEvent::TabletMove: {
         QPoint pos = getPointFromEvent(event);
@@ -239,6 +239,13 @@ bool KisInfinityManager::eventFilter(QObject *obj, QEvent *event)
             m_canvas->canvasWidget()->setCursor(Qt::PointingHandCursor);
             retval = true;
         } else if (m_cursorSwitched) {
+            m_canvas->canvasWidget()->setCursor(m_oldCursor);
+            m_cursorSwitched = false;
+        }
+        break;
+    }
+    case QEvent::Leave: {
+        if (m_cursorSwitched) {
             m_canvas->canvasWidget()->setCursor(m_oldCursor);
             m_cursorSwitched = false;
         }

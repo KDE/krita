@@ -31,8 +31,8 @@
 
 template<typename channels_type, typename pixel_type, bool alphaLocked, bool allChannelsFlag>
 struct OverCompositor128 {
-    struct OptionalParams {
-        OptionalParams(const KoCompositeOp::ParameterInfo& params)
+    struct ParamsWrapper {
+        ParamsWrapper(const KoCompositeOp::ParameterInfo& params)
             : channelFlags(params.channelFlags)
         {
         }
@@ -48,7 +48,7 @@ struct OverCompositor128 {
 
     // \see docs in AlphaDarkenCompositor32
     template<bool haveMask, bool src_aligned, Vc::Implementation _impl>
-    static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const OptionalParams &oparams)
+    static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const ParamsWrapper &oparams)
     {
 #if INFO_DEBUG
         static quint32 countTotal = 0;
@@ -58,7 +58,7 @@ struct OverCompositor128 {
         static quint32 countFour = 0;
 
         if (++countTotal % 250000 == 0) {
-            qDebug() << "count" << countOne << countTwo << countThree << countFour << countTotal << opacity;
+            qInfo() << "count" << countOne << countTwo << countThree << countFour << countTotal << opacity;
         }
 #endif
         Q_UNUSED(oparams);
@@ -144,7 +144,7 @@ struct OverCompositor128 {
     }
 
     template <bool haveMask, Vc::Implementation _impl>
-    static ALWAYS_INLINE void compositeOnePixelScalar(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const OptionalParams &oparams)
+    static ALWAYS_INLINE void compositeOnePixelScalar(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const ParamsWrapper &oparams)
     {
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
@@ -164,7 +164,7 @@ struct OverCompositor128 {
         static int xx = 0;
         bool display = xx > 45 && xx < 50;
         if (display) {
-            qDebug() << "O" << s[alpha_pos] << srcAlpha << haveMask << opacity;
+            qInfo() << "O" << s[alpha_pos] << srcAlpha << haveMask << opacity;
         }
 #endif
 
@@ -189,7 +189,7 @@ struct OverCompositor128 {
 
 #if INFO_DEBUG
             if (display) {
-                qDebug() << "params" << srcBlendNorm << allChannelsFlag << alphaLocked << dstAlpha << haveMask;
+                qInfo() << "params" << srcBlendNorm << allChannelsFlag << alphaLocked << dstAlpha << haveMask;
             }
 #endif
             if(allChannelsFlag) {
@@ -204,7 +204,7 @@ struct OverCompositor128 {
                 } else if (srcBlendNorm != 0.0){
 #if INFO_DEBUG
                     if (display) {
-                        qDebug() << "calc" << s[0] << d[0] << srcBlendNorm * (s[0] - d[0]) + d[0] << s[0] - d[0] << srcBlendNorm * (s[0] - d[0]) << srcBlendNorm;
+                        qInfo() << "calc" << s[0] << d[0] << srcBlendNorm * (s[0] - d[0]) + d[0] << s[0] - d[0] << srcBlendNorm * (s[0] - d[0]) << srcBlendNorm;
                     }
 #endif
                     d[0] = srcBlendNorm * (s[0] - d[0]) + d[0];
@@ -230,7 +230,7 @@ struct OverCompositor128 {
             }
 #if INFO_DEBUG
             if (display) {
-                qDebug() << "result" << d[0] << d[1] << d[2] << d[3];
+                qInfo() << "result" << d[0] << d[1] << d[2] << d[3];
             }
             ++xx;
 #endif

@@ -21,7 +21,6 @@
 #include <kis_sketchop_option.h>
 
 #include <kis_paint_action_type_option.h>
-#include <kis_airbrush_option.h>
 #include "kis_current_outline_fetcher.h"
 
 
@@ -34,7 +33,7 @@ bool KisSketchPaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
+QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
 {
     bool isSimpleMode = getBool(SKETCH_USE_SIMPLE_MODE);
 
@@ -42,21 +41,20 @@ QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &i
         return KisBrushBasedPaintOpSettings::brushOutline(info, mode);
     }
 
-    KisBrushBasedPaintopOptionWidget *widget = dynamic_cast<KisBrushBasedPaintopOptionWidget*>(optionsWidget());
     QPainterPath path;
 
-    if (widget && (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline)) {
-        KisBrushSP brush = widget->brush();
+    KisBrushSP brush = this->brush();
+
+    if (brush && mode.isVisible) {
         // just circle supported
         qreal diameter = qMax(brush->width(), brush->height());
-        path = ellipseOutline(diameter, diameter, 1.0, 0.0/*brush->scale(), brush->angle()*/);
+        path = ellipseOutline(diameter, diameter, 1.0, 0.0);
 
-        QPainterPath tiltLine =
-            makeTiltIndicator(info, path.boundingRect().center(), diameter * 0.5, 3.0);
-        path = outlineFetcher()->fetchOutline(info, this, path);
-        if (mode == CursorTiltOutline) {
-            tiltLine.translate(info.pos());
-            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, 1.0, 0.0, true, path.boundingRect().center().x(), path.boundingRect().center().y()));
+        path = outlineFetcher()->fetchOutline(info, this, path, mode);
+        if (mode.showTiltDecoration) {
+            QPainterPath tiltLine =
+                makeTiltIndicator(info, path.boundingRect().center(), diameter * 0.5, 3.0);
+            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, 1.0, 0.0, true, path.boundingRect().center().x(), path.boundingRect().center().y()));
         }
     }
     return path;

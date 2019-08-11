@@ -42,7 +42,7 @@
  * @brief The KoRTree class is a template class that provides a R-tree.
  *
  * This class implements a R-tree as described in
- * "R-TREES. A DYNAMIC INDEX STRUCTURE FOR SPATIAL SEARCHING" by Antomn Guttman
+ * "R-TREES. A DYNAMIC INDEX STRUCTURE FOR SPATIAL SEARCHING" by Antonin Guttman
  *
  * It only supports 2 dimensional bounding boxes which are represented by a QRectF.
  * For node splitting the Quadratic-Cost Algorithm is used as described by Guttman.
@@ -359,7 +359,7 @@ KoRTree<T>::KoRTree(int capacity, int minimum)
 {
     if (minimum > capacity / 2)
         qFatal("KoRTree::KoRTree minimum can be maximal capacity/2");
-    //qDebug() << "root node " << m_root->nodeId();
+    //debugFlake << "root node " << m_root->nodeId();
 }
 
 template <typename T>
@@ -399,7 +399,7 @@ void KoRTree<T>::insertHelper(const QRectF& bb, const T& data, int id)
     }
 
     LeafNode * leaf = m_root->chooseLeaf(nbb);
-    //qDebug() << " leaf" << leaf->nodeId() << nbb;
+    //debugFlake << " leaf" << leaf->nodeId() << nbb;
 
     if (leaf->childCount() < m_capacity) {
         leaf->insert(nbb, data, id);
@@ -451,10 +451,10 @@ bool KoRTree<T>::contains(const T &data)
 template <typename T>
 void KoRTree<T>::remove(const T&data)
 {
-    //qDebug() << "KoRTree remove";
+    //debugFlake << "KoRTree remove";
     LeafNode * leaf = m_leafMap[data];
 
-    // Trying to remove unexistent leaf. Most probably, this leaf hasn't been added
+    // Trying to remove inexistent leaf. Most probably, this leaf hasn't been added
     // to the shape manager correctly
     KIS_SAFE_ASSERT_RECOVER_RETURN(leaf);
 
@@ -553,7 +553,7 @@ void KoRTree<T>::debug() const
 template <typename T>
 QPair< typename KoRTree<T>::Node*, typename KoRTree<T>::Node* > KoRTree<T>::splitNode(typename KoRTree<T>::Node* node)
 {
-    //qDebug() << "KoRTree::splitNode" << node;
+    //debugFlake << "KoRTree::splitNode" << node;
     Node * n1;
     Node * n2;
     if (node->isLeaf()) {
@@ -563,8 +563,8 @@ QPair< typename KoRTree<T>::Node*, typename KoRTree<T>::Node* > KoRTree<T>::spli
         n1 = createNonLeafNode(m_capacity + 1, node->level(), node->parent());
         n2 = createNonLeafNode(m_capacity + 1, node->level(), node->parent());
     }
-    //qDebug() << " n1" << n1 << n1->nodeId();
-    //qDebug() << " n2" << n2 << n2->nodeId();
+    //debugFlake << " n1" << n1 << n1->nodeId();
+    //debugFlake << " n2" << n2 << n2->nodeId();
 
     QVector<bool> marker(m_capacity + 1);
 
@@ -615,7 +615,7 @@ QPair< typename KoRTree<T>::Node*, typename KoRTree<T>::Node* > KoRTree<T>::spli
         node->move(n1, i);
     }
 
-    //qDebug() << " delete n1" << n1 << n1->nodeId();
+    //debugFlake << " delete n1" << n1 << n1->nodeId();
     // clear is needed as the data items are not removed
     n1->clear();
     delete n1;
@@ -635,7 +635,7 @@ QPair<int, int> KoRTree<T>::pickSeeds(Node *node)
                 QRectF bb2(node->childBoundingBox(j));
                 QRectF comp(node->childBoundingBox(i).united(node->childBoundingBox(j)));
                 qreal area = comp.width() * comp.height() - bb1.width() * bb1.height() - bb2.width() * bb2.height();
-                //qDebug() << " ps" << i << j << area;
+                //debugFlake << " ps" << i << j << area;
                 if (area > max) {
                     max = area;
                     s1 = i;
@@ -650,7 +650,7 @@ QPair<int, int> KoRTree<T>::pickSeeds(Node *node)
 template <typename T>
 QPair<int, int> KoRTree<T>::pickNext(Node * node, QVector<bool> & marker, Node * group1, Node * group2)
 {
-    //qDebug() << "KoRTree::pickNext" << marker;
+    //debugFlake << "KoRTree::pickNext" << marker;
     qreal max = -1.0;
     int select = 0;
     int group = 0;
@@ -661,17 +661,17 @@ QPair<int, int> KoRTree<T>::pickNext(Node * node, QVector<bool> & marker, Node *
             qreal d1 = bb1.width() * bb1.height() - group1->boundingBox().width() * group1->boundingBox().height();
             qreal d2 = bb2.width() * bb2.height() - group2->boundingBox().width() * group2->boundingBox().height();
             qreal diff = qAbs(d1 - d2);
-            //qDebug() << " diff" << diff << i << d1 << d2;
+            //debugFlake << " diff" << diff << i << d1 << d2;
             if (diff > max) {
                 max = diff;
                 select = i;
-                //qDebug() << "  i =" <<  i;
+                //debugFlake << "  i =" <<  i;
                 if (qAbs(d1) > qAbs(d2)) {
                     group = 1;
                 } else {
                     group = 0;
                 }
-                //qDebug() << "  group =" << group;
+                //debugFlake << "  group =" << group;
             }
         }
     }
@@ -682,15 +682,15 @@ QPair<int, int> KoRTree<T>::pickNext(Node * node, QVector<bool> & marker, Node *
 template <typename T>
 void KoRTree<T>::adjustTree(Node *node1, Node *node2)
 {
-    //qDebug() << "KoRTree::adjustTree";
+    //debugFlake << "KoRTree::adjustTree";
     if (node1->isRoot()) {
-        //qDebug() << "  root";
+        //debugFlake << "  root";
         if (node2) {
             NonLeafNode * newRoot = createNonLeafNode(m_capacity + 1, node1->level() + 1, 0);
             newRoot->insert(node1->boundingBox(), node1);
             newRoot->insert(node2->boundingBox(), node2);
             m_root = newRoot;
-            //qDebug() << "new root" << m_root->nodeId();
+            //debugFlake << "new root" << m_root->nodeId();
         }
     } else {
         NonLeafNode * parent = dynamic_cast<NonLeafNode *>(node1->parent());
@@ -701,18 +701,18 @@ void KoRTree<T>::adjustTree(Node *node1, Node *node2)
         //QRectF pbbold( parent->boundingBox() );
         parent->setChildBoundingBox(node1->place(), node1->boundingBox());
         parent->updateBoundingBox();
-        //qDebug() << "  bb1 =" << node1->boundingBox() << node1->place() << pbbold << "->" << parent->boundingBox() << parent->nodeId();
+        //debugFlake << "  bb1 =" << node1->boundingBox() << node1->place() << pbbold << "->" << parent->boundingBox() << parent->nodeId();
 
         if (!node2) {
-            //qDebug() << "  update";
+            //debugFlake << "  update";
             adjustTree(parent, 0);
         } else {
             if (parent->childCount() < m_capacity) {
-                //qDebug() << "  no split needed";
+                //debugFlake << "  no split needed";
                 parent->insert(node2->boundingBox(), node2);
                 adjustTree(parent, 0);
             } else {
-                //qDebug() << "  split again";
+                //debugFlake << "  split again";
                 parent->insert(node2->boundingBox(), node2);
                 QPair<Node *, Node *> newNodes = splitNode(parent);
                 adjustTree(newNodes.first, newNodes.second);
@@ -724,13 +724,13 @@ void KoRTree<T>::adjustTree(Node *node1, Node *node2)
 template <typename T>
 void KoRTree<T>::condenseTree(Node *node, QVector<Node*> & reinsert)
 {
-    //qDebug() << "KoRTree::condenseTree begin reinsert.size()" << reinsert.size();
+    //debugFlake << "KoRTree::condenseTree begin reinsert.size()" << reinsert.size();
     if (!node->isRoot()) {
         Node * parent = node->parent();
-        //qDebug() << " !node->isRoot us" << node->childCount();
+        //debugFlake << " !node->isRoot us" << node->childCount();
 
         if (node->childCount() < m_minimum) {
-            //qDebug() << "  remove node";
+            //debugFlake << "  remove node";
             parent->remove(node->place());
             reinsert.push_back(node);
 
@@ -742,15 +742,15 @@ void KoRTree<T>::condenseTree(Node *node, QVector<Node*> & reinsert)
              */
 
         } else {
-            //qDebug() << "  update BB parent is root" << parent->isRoot();
+            //debugFlake << "  update BB parent is root" << parent->isRoot();
             parent->setChildBoundingBox(node->place(), node->boundingBox());
             parent->updateBoundingBox();
         }
         condenseTree(parent, reinsert);
     } else {
-        //qDebug() << " node->isRoot us" << node->childCount();
+        //debugFlake << " node->isRoot us" << node->childCount();
         if (node->childCount() == 1 && !node->isLeaf()) {
-            //qDebug() << "  usedSpace = 1";
+            //debugFlake << "  usedSpace = 1";
             NonLeafNode * n = dynamic_cast<NonLeafNode *>(node);
             if (n) {
                 Node * kid = n->getNode(0);
@@ -759,13 +759,13 @@ void KoRTree<T>::condenseTree(Node *node, QVector<Node*> & reinsert)
                 delete m_root;
                 m_root = kid;
                 m_root->setParent(0);
-                //qDebug() << " new root" << m_root;
+                //debugFlake << " new root" << m_root;
             } else {
                 qFatal("KoRTree::condenseTree cast to NonLeafNode failed");
             }
         }
     }
-    //qDebug() << "KoRTree::condenseTree end reinsert.size()" << reinsert.size();
+    //debugFlake << "KoRTree::condenseTree end reinsert.size()" << reinsert.size();
 }
 
 #ifdef CALLIGRA_RTREE_DEBUG
@@ -843,13 +843,13 @@ KoRTree<T>::NonLeafNode::NonLeafNode(int capacity, int level, Node * parent)
         : Node(capacity, level, parent)
         , m_childs(capacity)
 {
-    //qDebug() << "NonLeafNode::NonLeafNode()" << this;
+    //debugFlake << "NonLeafNode::NonLeafNode()" << this;
 }
 
 template <typename T>
 KoRTree<T>::NonLeafNode::~NonLeafNode()
 {
-    //qDebug() << "NonLeafNode::~NonLeafNode()" << this;
+    //debugFlake << "NonLeafNode::~NonLeafNode()" << this;
     for (int i = 0; i < this->m_counter; ++i) {
         delete m_childs[i];
     }
@@ -863,7 +863,7 @@ void KoRTree<T>::NonLeafNode::insert(const QRectF& bb, Node * data)
     data->setParent(this);
     this->m_childBoundingBox[this->m_counter] = bb;
     this->m_boundingBox = this->m_boundingBox.united(bb);
-    //qDebug() << "NonLeafNode::insert" << this->nodeId() << data->nodeId();
+    //debugFlake << "NonLeafNode::insert" << this->nodeId() << data->nodeId();
     ++this->m_counter;
 }
 
@@ -880,7 +880,7 @@ void KoRTree<T>::NonLeafNode::remove(int index)
 template <typename T>
 void KoRTree<T>::NonLeafNode::move(Node * node, int index)
 {
-    //qDebug() << "NonLeafNode::move" << this << node << index << node->nodeId() << "->" << this->nodeId();
+    //debugFlake << "NonLeafNode::move" << this << node << index << node->nodeId() << "->" << this->nodeId();
     NonLeafNode * n = dynamic_cast<NonLeafNode *>(node);
     if (n) {
         QRectF bb = n->childBoundingBox(index);
@@ -960,7 +960,7 @@ typename KoRTree<T>::Node * KoRTree<T>::NonLeafNode::getNode(int index) const
 template <typename T>
 typename KoRTree<T>::Node * KoRTree<T>::NonLeafNode::getLeastEnlargement(const QRectF& bb) const
 {
-    //qDebug() << "NonLeafNode::getLeastEnlargement";
+    //debugFlake << "NonLeafNode::getLeastEnlargement";
     QVarLengthArray<qreal> area(this->m_counter);
     for (int i = 0; i < this->m_counter; ++i) {
         QSizeF big(this->m_childBoundingBox[i].united(bb).size());
@@ -969,13 +969,13 @@ typename KoRTree<T>::Node * KoRTree<T>::NonLeafNode::getLeastEnlargement(const Q
 
     int minIndex = 0;
     qreal minArea = area[minIndex];
-    //qDebug() << " min" << minIndex << minArea;
+    //debugFlake << " min" << minIndex << minArea;
 
     for (int i = 1; i < this->m_counter; ++i) {
         if (area[i] < minArea) {
             minIndex = i;
             minArea = area[i];
-            //qDebug() << " min" << minIndex << minArea;
+            //debugFlake << " min" << minIndex << minArea;
         }
     }
 
@@ -1012,13 +1012,13 @@ KoRTree<T>::LeafNode::LeafNode(int capacity, int level, Node * parent)
         , m_data(capacity)
         , m_dataIds(capacity)
 {
-    //qDebug() << "LeafNode::LeafNode" << this;
+    //debugFlake << "LeafNode::LeafNode" << this;
 }
 
 template <typename T>
 KoRTree<T>::LeafNode::~LeafNode()
 {
-    //qDebug() << "LeafNode::~LeafNode" << this;
+    //debugFlake << "LeafNode::~LeafNode" << this;
 }
 
 template <typename T>
@@ -1047,7 +1047,7 @@ void KoRTree<T>::LeafNode::remove(const T& data)
     int old_counter = this->m_counter;
     for (int i = 0; i < this->m_counter; ++i) {
         if (m_data[i] == data) {
-            //qDebug() << "LeafNode::remove id" << i;
+            //debugFlake << "LeafNode::remove id" << i;
             remove(i);
             break;
         }
@@ -1062,7 +1062,7 @@ void KoRTree<T>::LeafNode::move(Node * node, int index)
 {
     LeafNode * n = dynamic_cast<LeafNode*>(node);
     if (n) {
-        //qDebug() << "LeafNode::move" << this << node << index
+        //debugFlake << "LeafNode::move" << this << node << index
         //         << node->nodeId() << "->" << this->nodeId() << n->childBoundingBox( index );
         QRectF bb = n->childBoundingBox(index);
         insert(bb, n->getData(index), n->getDataId(index));
@@ -1149,7 +1149,7 @@ void KoRTree<T>::LeafNode::debug(QString line) const
 {
     for (int i = 0; i < this->m_counter; ++i) {
         qDebug("%s %d %d %p", qPrintable(line), this->nodeId(), i, &(m_data[i]));
-        qDebug() << this->m_childBoundingBox[i].toRect();
+        debugFlake << this->m_childBoundingBox[i].toRect();
     }
 }
 

@@ -65,36 +65,31 @@
 #include "colorspaces/ycbcr_u16/YCbCrU16ColorSpace.h"
 #include "colorspaces/ycbcr_f32/YCbCrF32ColorSpace.h"
 
+#include "LcmsRGBP2020PQColorSpace.h"
+
 #include <KoConfig.h>
+
 #ifdef HAVE_OPENEXR
-#include <half.h>
-
-#ifdef HAVE_LCMS24
-#include "colorspaces/gray_f16/GrayF16ColorSpace.h"
-#include "colorspaces/xyz_f16/XyzF16ColorSpace.h"
-#include "colorspaces/rgb_f16/RgbF16ColorSpace.h"
+#   include <half.h>
+#   ifdef HAVE_LCMS24
+#       include "colorspaces/gray_f16/GrayF16ColorSpace.h"
+#       include "colorspaces/xyz_f16/XyzF16ColorSpace.h"
+#       include "colorspaces/rgb_f16/RgbF16ColorSpace.h"
+#   endif
 #endif
 
-#endif
 void lcms2LogErrorHandlerFunction(cmsContext /*ContextID*/, cmsUInt32Number ErrorCode, const char *Text)
 {
     qCritical() << "Lcms2 error: " << ErrorCode << Text;
 }
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kolcmsengine.json",
-                           registerPlugin<LcmsEnginePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kolcmsengine.json", registerPlugin<LcmsEnginePlugin>();)
 
 LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    // We need all resource paths to be properly initialized via KisApplication, otherwise we will
-    // initialize this instance with lacking color profiles which will cause lookup errors later on.
-
-    KIS_ASSERT_X(KoResourcePaths::isReady() ||
-                 (QApplication::instance()->applicationName() != "krita" &&
-                  QApplication::instance()->applicationName() != "krita.exe"),
-                 "LcmsEnginePlugin::LcmsEnginePlugin", "Resource paths are not ready yet.");
-
+    KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
 
     // Set the lmcs error reporting function
     cmsSetLogErrorHandler(&lcms2LogErrorHandlerFunction);
@@ -111,11 +106,29 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.ICC",  KoResourcePaths::Recursive);
     profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.icc",  KoResourcePaths::Recursive);
 
+    QStringList iccProfileDirs;
+
+#ifdef Q_OS_MAC
+    iccProfileDirs.append(QDir::homePath() + "/Library/ColorSync/Profiles/");
+    iccProfileDirs.append("/System/Library/ColorSync/Profiles/");
+    iccProfileDirs.append("/Library/ColorSync/Profiles/");
+#endif
+#ifdef Q_OS_WIN
+    QString winPath = QString::fromUtf8(qgetenv("windir"));
+    winPath.replace('\\','/');
+    iccProfileDirs.append(winPath + "/System32/Spool/Drivers/Color/");
+
+#endif
+    Q_FOREACH(const QString &iccProfiledir, iccProfileDirs) {
+        QDir profileDir(iccProfiledir);
+        Q_FOREACH(const QString &entry, profileDir.entryList(QStringList() << "*.icm" << "*.icc", QDir::NoDotAndDotDot | QDir::Files | QDir::Readable)) {
+            profileFilenames << iccProfiledir + "/" + entry;
+        }
+    }
     // Load the profiles
     if (!profileFilenames.empty()) {
-        KoColorProfile *profile = 0;
         for (QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it) {
-            profile = new IccColorProfile(*it);
+            KoColorProfile *profile = new IccColorProfile(*it);
             Q_CHECK_PTR(profile);
 
             profile->load();
@@ -140,49 +153,49 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-            (KoID("LABAU8HISTO", i18n("L*a*b* Histogram")), LABAColorModelID.id(), Integer8BitsColorDepthID.id()));
+            (KoID("LABAU8HISTO", i18n("L*a*b*/8 Histogram")), LABAColorModelID.id(), Integer8BitsColorDepthID.id()));
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("LABAU16HISTO", i18n("L*a*b* Histogram")), LABAColorModelID.id(), Integer16BitsColorDepthID.id()));
+            (KoID("LABAU16HISTO", i18n("L*a*b*/16 Histogram")), LABAColorModelID.id(), Integer16BitsColorDepthID.id()));
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-            (KoID("LABAF32HISTO", i18n("L*a*b* Histogram")), LABAColorModelID.id(), Float32BitsColorDepthID.id()));
+            (KoID("LABAF32HISTO", i18n("L*a*b*/32 Histogram")), LABAColorModelID.id(), Float32BitsColorDepthID.id()));
 
     // ------------------- RGB ---------------------------------
 
     KoColorProfile *rgbProfile = LcmsColorProfileContainer::createFromLcmsProfile(cmsCreate_sRGBProfile());
     registry->addProfile(rgbProfile);
 
-    registry->add(new RgbU8ColorSpaceFactory());
-    registry->add(new RgbU16ColorSpaceFactory());
+    registry->add(new LcmsRGBP2020PQColorSpaceFactoryWrapper<RgbU8ColorSpaceFactory>());
+    registry->add(new LcmsRGBP2020PQColorSpaceFactoryWrapper<RgbU16ColorSpaceFactory>());
 #ifdef HAVE_LCMS24
 #ifdef HAVE_OPENEXR
-    registry->add(new RgbF16ColorSpaceFactory());
+    registry->add(new LcmsRGBP2020PQColorSpaceFactoryWrapper<RgbF16ColorSpaceFactory>());
 #endif
 #endif
-    registry->add(new RgbF32ColorSpaceFactory());
+    registry->add(new LcmsRGBP2020PQColorSpaceFactoryWrapper<RgbF32ColorSpaceFactory>());
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-            (KoID("RGBU8HISTO", i18n("RGB8 Histogram")), RGBAColorModelID.id(), Integer8BitsColorDepthID.id()));
+            (KoID("RGBU8HISTO", i18n("RGBA/8 Histogram")), RGBAColorModelID.id(), Integer8BitsColorDepthID.id()));
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("RGBU16HISTO", i18n("RGB16 Histogram")), RGBAColorModelID.id(), Integer16BitsColorDepthID.id()));
+            (KoID("RGBU16HISTO", i18n("RGBA/16 Histogram")), RGBAColorModelID.id(), Integer16BitsColorDepthID.id()));
 
 #ifdef HAVE_LCMS24
 #ifdef HAVE_OPENEXR
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicF16HalfHistogramProducer>
-            (KoID("RGBF16HISTO", i18n("RGBF16 Histogram")), RGBAColorModelID.id(), Float16BitsColorDepthID.id()));
+            (KoID("RGBF16HISTO", i18n("RGBA/F16 Histogram")), RGBAColorModelID.id(), Float16BitsColorDepthID.id()));
 #endif
 #endif
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-            (KoID("RGF328HISTO", i18n("RGBF32 Histogram")), RGBAColorModelID.id(), Float32BitsColorDepthID.id()));
+            (KoID("RGF328HISTO", i18n("RGBA/F32 Histogram")), RGBAColorModelID.id(), Float32BitsColorDepthID.id()));
 
     // ------------------- GRAY ---------------------------------
 
@@ -203,22 +216,22 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-            (KoID("GRAYA8HISTO", i18n("GRAY/Alpha8 Histogram")), GrayAColorModelID.id(), Integer8BitsColorDepthID.id()));
+            (KoID("GRAYA8HISTO", i18n("GRAY/8 Histogram")), GrayAColorModelID.id(), Integer8BitsColorDepthID.id()));
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("GRAYA16HISTO", i18n("GRAY/Alpha16 Histogram")), GrayAColorModelID.id(), Integer16BitsColorDepthID.id()));
+            (KoID("GRAYA16HISTO", i18n("GRAY/16 Histogram")), GrayAColorModelID.id(), Integer16BitsColorDepthID.id()));
 #ifdef HAVE_LCMS24
 #ifdef HAVE_OPENEXR
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicF16HalfHistogramProducer>
-            (KoID("GRAYF16HISTO", i18n("GRAYF16 Histogram")), GrayAColorModelID.id(), Float16BitsColorDepthID.id()));
+            (KoID("GRAYF16HISTO", i18n("GRAYF/F16 Histogram")), GrayAColorModelID.id(), Float16BitsColorDepthID.id()));
 #endif
 #endif
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-            (KoID("GRAYAF32HISTO", i18n("GRAY/Alpha 32 float Histogram")), GrayAColorModelID.id(), Float32BitsColorDepthID.id()));
+            (KoID("GRAYAF32HISTO", i18n("GRAY/F32 float Histogram")), GrayAColorModelID.id(), Float32BitsColorDepthID.id()));
 
     // ------------------- CMYK ---------------------------------
 
@@ -228,15 +241,15 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-            (KoID("CMYK8HISTO", i18n("CMYK8 Histogram")), CMYKAColorModelID.id(), Integer8BitsColorDepthID.id()));
+            (KoID("CMYK8HISTO", i18n("CMYK/8 Histogram")), CMYKAColorModelID.id(), Integer8BitsColorDepthID.id()));
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("CMYK16HISTO", i18n("CMYK16 Histogram")), CMYKAColorModelID.id(), Integer16BitsColorDepthID.id()));
+            (KoID("CMYK16HISTO", i18n("CMYK/16 Histogram")), CMYKAColorModelID.id(), Integer16BitsColorDepthID.id()));
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-            (KoID("CMYKF32HISTO", i18n("CMYK F32 Histogram")), CMYKAColorModelID.id(), Float32BitsColorDepthID.id()));
+            (KoID("CMYKF32HISTO", i18n("CMYK/F32 Histogram")), CMYKAColorModelID.id(), Float32BitsColorDepthID.id()));
 
     // ------------------- XYZ ---------------------------------
 
@@ -254,17 +267,17 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-            (KoID("XYZ8HISTO", i18n("XYZ8 Histogram")), XYZAColorModelID.id(), Integer8BitsColorDepthID.id()));
+            (KoID("XYZ8HISTO", i18n("XYZ/8 Histogram")), XYZAColorModelID.id(), Integer8BitsColorDepthID.id()));
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("XYZ16HISTO", i18n("XYZ16 Histogram")), XYZAColorModelID.id(), Integer16BitsColorDepthID.id()));
+            (KoID("XYZ16HISTO", i18n("XYZ/16 Histogram")), XYZAColorModelID.id(), Integer16BitsColorDepthID.id()));
 
 #ifdef HAVE_LCMS24
 #ifdef HAVE_OPENEXR
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-            (KoID("XYZF16HISTO", i18n("XYZF16 Histogram")), XYZAColorModelID.id(), Float16BitsColorDepthID.id()));
+            (KoID("XYZF16HISTO", i18n("XYZ/F16 Histogram")), XYZAColorModelID.id(), Float16BitsColorDepthID.id()));
 #endif
 #endif
 
@@ -283,15 +296,15 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU8HistogramProducer>
-            (KoID("YCBCR8HISTO", i18n("YCBCR8 Histogram")), YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id()));
+            (KoID("YCBCR8HISTO", i18n("YCbCr/8 Histogram")), YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id()));
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicU16HistogramProducer>
-            (KoID("YCBCR16HISTO", i18n("YCBCR16 Histogram")), YCbCrAColorModelID.id(), Integer16BitsColorDepthID.id()));
+            (KoID("YCBCR16HISTO", i18n("YCbCr/16 Histogram")), YCbCrAColorModelID.id(), Integer16BitsColorDepthID.id()));
 
     KoHistogramProducerFactoryRegistry::instance()->add(
         new KoBasicHistogramProducerFactory<KoBasicF32HistogramProducer>
-            (KoID("YCBCRF32HISTO", i18n("YCBCRF32 Histogram")), YCbCrAColorModelID.id(), Float32BitsColorDepthID.id()));
+            (KoID("YCBCRF32HISTO", i18n("YCbCr/F32 Histogram")), YCbCrAColorModelID.id(), Float32BitsColorDepthID.id()));
 
     // Add profile alias for default profile from lcms1
     registry->addProfileAlias("sRGB built-in - (lcms internal)", "sRGB built-in");

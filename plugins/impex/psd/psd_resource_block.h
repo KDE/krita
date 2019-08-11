@@ -26,7 +26,6 @@ class QIODevice;
 #include <QBuffer>
 
 #include <kis_annotation.h>
-#include <kis_debug.h>
 
 #include "psd.h"
 #include "psd_utils.h"
@@ -76,7 +75,7 @@ public:
     }
 
     KisAnnotation* clone() const Q_DECL_OVERRIDE {
-        // HACK ALERT: we are evil! use notmal copying instead!
+        // HACK ALERT: we are evil! use normal copying instead!
 
         PSDResourceBlock *copied = new PSDResourceBlock();
 

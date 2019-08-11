@@ -21,14 +21,16 @@
 
 #include <kpluginfactory.h>
 #include <QFileInfo>
+#include "kis_config.h"
 
+#include <QInputDialog>
 #include <KisDocument.h>
 #include <kis_image.h>
 
 #include <SvgParser.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_shape_layer.h"
-#include <KoShapeBasedDocumentBase.h>
+#include <KoShapeControllerBase.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(SVGImportFactory, "krita_svg_import.json", registerPlugin<KisSVGImport>();)
 
@@ -40,7 +42,7 @@ KisSVGImport::~KisSVGImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisSVGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisSVGImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     Q_UNUSED(configuration);
 
@@ -48,7 +50,26 @@ KisImportExportFilter::ConversionStatus KisSVGImport::convert(KisDocument *docum
 
     const QString baseXmlDir = QFileInfo(filename()).canonicalPath();
 
-    const qreal resolutionPPI = 100;
+    KisConfig cfg(false);
+
+    qreal resolutionPPI = cfg.preferredVectorImportResolutionPPI(true);
+
+    if (!batchMode()) {
+        bool okay = false;
+        const QString name = QFileInfo(filename()).fileName();
+        resolutionPPI = QInputDialog::getInt(0,
+                                             i18n("Import SVG"),
+                                             i18n("Enter preferred resolution (PPI) for \"%1\"", name),
+                                             cfg.preferredVectorImportResolutionPPI(),
+                                             0, 100000, 1, &okay);
+
+        if (!okay) {
+            return ImportExportCodes::Cancelled;
+        }
+
+        cfg.setPreferredVectorImportResolutionPPI(resolutionPPI);
+    }
+
     const qreal resolution = resolutionPPI / 72.0;
 
     QSizeF fragmentSize;
@@ -76,7 +97,7 @@ KisImportExportFilter::ConversionStatus KisSVGImport::convert(KisDocument *docum
     }
 
     image->addNode(shapeLayer);
-    return KisImportExportFilter::OK;
+    return ImportExportCodes::OK;
 }
 
 #include <kis_svg_import.moc>

@@ -46,10 +46,6 @@ public: // KisAbstractCanvasWidget
 
     KoToolProxy *toolProxy() const override;
 
-
-    /// set the specified display filter on the canvas
-    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) override = 0;
-
     /**
      * Draw the specified decorations on the view.
      */
@@ -78,6 +74,9 @@ public: // KisAbstractCanvasWidget
 
 
     KisCoordinatesConverter* coordinatesConverter() const;
+
+    QVector<QRect> updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects) override;
+    using KisAbstractCanvasWidget::updateCanvasProjection;
 
 protected:
     KisCanvas2 *canvas() const;

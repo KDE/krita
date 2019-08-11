@@ -92,7 +92,7 @@ KisAbstractSliderSpinBox::KisAbstractSliderSpinBox(QWidget* parent, KisAbstractS
     QPalette pal = d->edit->palette();
     pal.setColor(QPalette::Base, Qt::transparent);
     d->edit->setPalette(pal);
-
+    d->edit->setContextMenuPolicy(Qt::PreventContextMenu);
     connect(d->edit, SIGNAL(editingFinished()), this, SLOT(editLostFocus()));
 
     d->validator = new QDoubleValidator(d->edit);
@@ -397,7 +397,6 @@ void KisAbstractSliderSpinBox::mousePressEvent(QMouseEvent* e)
         showEdit();
     }
 
-
     update();
 }
 
@@ -422,7 +421,6 @@ void KisAbstractSliderSpinBox::mouseReleaseEvent(QMouseEvent* e)
     } else { // Confirm the last known value, since we might be ignoring move events
         setInternalValue(d->value);
     }
-
     d->upButtonDown = false;
     d->downButtonDown = false;
     update();
@@ -747,7 +745,8 @@ int KisAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) 
     }
 
     //Final value
-    qreal realvalue = ((dValues * pow(percent, d->exponentRatio)) + minDbl);
+    qreal exp_percent = pow(percent, d->exponentRatio);
+    qreal realvalue = ((dValues * (percent * exp_percent >= 0 ? exp_percent : -exp_percent)) + minDbl);
     //If key CTRL is pressed, round to the closest step.
     if( modifiers & Qt::ControlModifier ) {
         qreal fstep = d->fastSliderStep;

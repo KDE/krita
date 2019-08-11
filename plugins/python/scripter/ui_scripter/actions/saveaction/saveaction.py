@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 from PyQt5.QtWidgets import QAction, QFileDialog
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtCore import Qt
+import krita
 
 
 class SaveAction(QAction):
@@ -29,13 +30,13 @@ class SaveAction(QAction):
 
         self.triggered.connect(self.save)
 
-        self.setText('Save')
+        self.setText(i18n("Save"))
         self.setObjectName('save')
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_S))
 
     @property
     def parent(self):
-        return 'File'
+        return 'File',
 
     def save(self):
         text = self.editor.toPlainText()
@@ -43,8 +44,8 @@ class SaveAction(QAction):
 
         if not self.scripter.documentcontroller.activeDocument:
             fileName = QFileDialog.getSaveFileName(self.scripter.uicontroller.mainWidget,
-                                                   'Save Python File', '',
-                                                   'Python File (*.py)')[0]
+                                                   i18n("Save Python File"), '',
+                                                   i18n("Python File (*.py)"))[0]
             if not fileName:
                 return
 

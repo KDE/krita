@@ -37,6 +37,7 @@
 #include <QGroupBox>
 #include <QClipboard>
 #include <QProcess>
+#include <QDialogButtonBox>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -48,7 +49,7 @@ class KCheckAcceleratorsInitializer : public QObject
 {
     Q_OBJECT
 public:
-    explicit KCheckAcceleratorsInitializer(QObject *parent = Q_NULLPTR)
+    explicit KCheckAcceleratorsInitializer(QObject *parent = 0)
         : QObject(parent)
     {
     }
@@ -128,7 +129,7 @@ bool KCheckAccelerators::eventFilter(QObject *obj, QEvent *e)
         if (!static_cast<QChildEvent *>(e)->child()->isWidgetType()) {
             break;
         }
-    // fall-through
+        Q_FALLTHROUGH();
     case QEvent::Resize:
     case QEvent::LayoutRequest:
     case QEvent::WindowActivate:
@@ -237,10 +238,9 @@ void KCheckAccelerators::createDialog(QWidget *actWin, bool automatic)
         connect(disableAutoCheck, SIGNAL(toggled(bool)), SLOT(slotDisableCheck(bool)));
         layout->addWidget(disableAutoCheck);
     }
-    QPushButton *btnClose = new QPushButton(i18nc("@action:button", "Close"), drklash);
-    btnClose->setDefault(true);
-    layout->addWidget(btnClose);
-    connect(btnClose, SIGNAL(clicked()), drklash, SLOT(close()));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close, drklash);
+    layout->addWidget(buttonBox);
+    connect(buttonBox, SIGNAL(rejected()), drklash, SLOT(close()));
     if (disableAutoCheck) {
         disableAutoCheck->setFocus();
     } else {

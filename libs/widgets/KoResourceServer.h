@@ -57,8 +57,8 @@ class KRITAWIDGETS_EXPORT KoResourceServerBase {
 public:
     /**
     * Constructs a KoResourceServerBase
-    * @param resource type, has to be the same as used by KoResourcePaths
-    * @param extensions the file extensions separate by ':', e.g. "*.kgr:*.svg:*.ggr"
+    * @param type type, has to be the same as used by KoResourcePaths
+    * @param extensions the file extensions separate by ':', e.g. *.svg:*.ggr"
     */
     KoResourceServerBase(const QString& type, const QString& extensions)
         : m_type(type)
@@ -76,7 +76,7 @@ public:
 
     /**
     * File extensions for resources of the server
-    * @returns the file extensions separated by ':', e.g. "*.kgr:*.svg:*.ggr"
+    * @returns the file extensions separated by ':', e.g. "*.svg:*.ggr"
     */
     QString extensions() const { return m_extensions; }
 
@@ -215,7 +215,7 @@ public:
                         notifyResourceAdded(resource);
                     }
                     else {
-                        warnWidgets << "Loading resource " << front << "failed";
+                        warnWidgets << "Loading resource " << front << "failed." << type();
                         Policy::deleteResource(resource);
                     }
                 }
@@ -255,7 +255,7 @@ public:
             }
 
             if (fileInfo.exists()) {
-                QString filename = fileInfo.path() + "/" + fileInfo.baseName() + "XXXXXX" + "." + fileInfo.suffix();
+                QString filename = fileInfo.path() + "/" + fileInfo.completeBaseName() + "XXXXXX" + "." + fileInfo.suffix();
                 debugWidgets << "fileName is " << filename;
                 QTemporaryFile file(filename);
                 if (file.open()) {
@@ -384,12 +384,12 @@ public:
             Q_ASSERT(!resource->defaultFileExtension().isEmpty());
             Q_ASSERT(!saveLocation().isEmpty());
 
-            QString newFilename = saveLocation() + fi.baseName() + resource->defaultFileExtension();
+            QString newFilename = saveLocation() + fi.completeBaseName() + resource->defaultFileExtension();
             QFileInfo fileInfo(newFilename);
 
             int i = 1;
             while (fileInfo.exists()) {
-                fileInfo.setFile(saveLocation() + fi.baseName() + QString("%1").arg(i) + resource->defaultFileExtension());
+                fileInfo.setFile(saveLocation() + fi.completeBaseName() + QString("%1").arg(i) + resource->defaultFileExtension());
                 i++;
             }
             resource->setFilename(fileInfo.filePath());
@@ -404,7 +404,7 @@ public:
     }
 
     /// Removes the resource file from the resource server
-    virtual void removeResourceFile(const QString & filename)
+    void removeResourceFile(const QString & filename)
     {
         QFileInfo fi(filename);
 
@@ -413,9 +413,7 @@ public:
             warnWidgets << "Resource file do not exist ";
             return;
         }
-
-        if (!removeResourceFromServer(resource))
-            return;
+        removeResourceFromServer(resource);
     }
 
 

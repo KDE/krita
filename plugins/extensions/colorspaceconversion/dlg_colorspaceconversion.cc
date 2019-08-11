@@ -34,7 +34,7 @@
 #include "KoID.h"
 
 #include "widgets/kis_cmb_idlist.h"
-#include <squeezedcombobox.h>// TODO: add a label that would display if there isn't a good color conversion path (use KoColorConversionSystem::isGoodPath), all color spaces shipped with Calligra are expected to have a good path, but better warn the user in case
+#include <KisSqueezedComboBox.h>// TODO: add a label that would display if there isn't a good color conversion path (use KoColorConversionSystem::isGoodPath), all color spaces shipped with Calligra are expected to have a good path, but better warn the user in case
 
 DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
         const char * name)
@@ -76,7 +76,7 @@ void DlgColorSpaceConversion::setInitialColorSpace(const KoColorSpace *cs)
         return;
     }
     if (cs->profile()->getEstimatedTRC()[0]==1.0) {
-    //this tries to automatically determine whether optimisations ought to be checked or not.
+    //this tries to automatically determine whether optimizations ought to be checked or not.
     //if the space you're converting from is linear TRC, uncheck.
         m_page->chkAllowLCMSOptimization->setCheckState(Qt::Unchecked);
     } else {

@@ -23,6 +23,7 @@
 #include "KoShapeBackground.h"
 #include "kritaflake_export.h"
 #include <Qt>
+#include <QSharedDataPointer>
 
 class KoColorBackgroundPrivate;
 class QColor;
@@ -58,11 +59,9 @@ public:
     void fillStyle(KoGenStyle &style, KoShapeSavingContext &context) override;
     // reimplemented from KoShapeBackground
     bool loadStyle(KoOdfLoadingContext & context, const QSizeF &shapeSize) override;
-protected:
-    KoColorBackground(KoShapeBackgroundPrivate &dd);
 private:
-    Q_DECLARE_PRIVATE(KoColorBackground)
-    Q_DISABLE_COPY(KoColorBackground)
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 #endif // KOCOLORBACKGROUND_H

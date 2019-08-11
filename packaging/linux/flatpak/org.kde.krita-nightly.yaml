@@ -1,0 +1,280 @@
+app-id: org.kde.krita-nightly
+default-branch: master
+runtime: org.kde.Platform
+runtime-version: '5.12'
+sdk: org.kde.Sdk
+command: krita
+rename-icon: calligrakrita
+rename-desktop-file: org.kde.krita.desktop
+desktop-file-name-suffix: nightly
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --share=network
+  - --device=dri
+  - --socket=pulseaudio
+  - --filesystem=host
+  - --filesystem=xdg-config/kdeglobals:ro
+  - --env=PYTHONPATH=/app/lib/python3/dist-packages
+  - --env=TMPDIR=/var/tmp
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /lib/cmake
+  - /share/aclocal
+  - /share/pkgconfig
+  - /share/info
+  - /share/man
+  - /cmake
+  - '*.a'
+  - '*.la'
+  - '*.cmake'
+modules:
+  - name: sip
+    buildsystem: simple
+    build-commands:
+      - python3 configure.py
+        --bindir=/app/bin
+        --destdir=/app/lib/python3/dist-packages
+        --incdir=/app/include/python3
+        --sipdir=/app/share/sip
+        --stubsdir=/app/lib/python3/dist-packages
+        --sip-module=PyQt5.sip
+      - make -j $FLATPAK_BUILDER_N_JOBS
+      - make install
+    cleanup:
+      - /bin
+    sources:
+      - type: archive
+        url: https://www.riverbankcomputing.com/static/Downloads/sip/4.19.17/sip-4.19.17.tar.gz
+        sha256: 12bcd8f4d5feefc105bc075d12c5090ee783f7380728563c91b8b95d0ec45df3
+
+  - name: pyqt
+    buildsystem: simple
+    build-commands:
+      - python3 configure.py
+        --confirm-license
+        --sip-incdir=/app/include/python3
+        --bindir=/app/bin
+        --destdir=/app/lib/python3/dist-packages
+        --designer-plugindir=/app/lib/plugins/designer
+        --qml-plugindir=/app/lib/plugins/PyQt5
+        --sipdir=/app/share/sip
+        --stubsdir=/app/lib/python3/dist-packages/PyQt5
+      - make -j $FLATPAK_BUILDER_N_JOBS
+      - make install
+    cleanup:
+      - /bin
+    sources:
+      - type: archive
+        url: https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.12.2/PyQt5_gpl-5.12.2.tar.gz
+        sha256: c565829e77dc9c281aa1a0cdf2eddaead4e0f844cbaf7a4408441967f03f5f0f
+
+  - name: boost
+    buildsystem: simple
+    build-commands:
+      - ./bootstrap.sh --prefix=/app --with-libraries=system
+      - ./b2 -j $FLATPAK_BUILDER_N_JOBS install
+    sources:
+      - type: archive
+        url: https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.bz2
+        sha256: 8f32d4617390d1c2d16f26a27ab60d97807b35440d45891fa340fc2648b04406
+
+  - name: eigen
+    buildsystem: cmake-ninja
+    builddir: true
+    cleanup:
+      - '*'
+    sources:
+      - type: archive
+        url: https://bitbucket.org/eigen/eigen/get/3.3.7.tar.bz2
+        sha256: 9f13cf90dedbe3e52a19f43000d71fdf72e986beb9a5436dddcd61ff9d77a3ce
+
+  - name: quazip
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+    sources:
+      - type: archive
+        url: https://github.com/stachenov/quazip/archive/0.7.6.tar.gz
+        sha256: 4118a830a375a81211956611cc34b1b5b4ddc108c126287b91b40c2493046b70
+      - type: shell
+        commands:
+          - sed -i 's|${CMAKE_ROOT}/Modules|share/cmake|' CMakeLists.txt
+
+  - name: exiv2
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+    cleanup:
+      - /bin
+    sources:
+      - type: archive
+        url: https://www.exiv2.org/builds/exiv2-0.27.1-Source.tar.gz
+        sha256: f125286980fd1bcb28e188c02a93946951c61e10784720be2301b661a65b3081
+  
+  - name: ilmbase
+    config-opts:
+      - --disable-static
+    sources:
+      - type: archive
+        url: https://github.com/openexr/openexr/releases/download/v2.3.0/ilmbase-2.3.0.tar.gz
+        sha256: 456978d1a978a5f823c7c675f3f36b0ae14dba36638aeaa3c4b0e784f12a3862
+
+  - name: openexr
+    config-opts:
+      - --disable-static
+    cleanup:
+      - /bin
+      - /share/doc
+    sources:
+      - type: archive
+        url: https://github.com/openexr/openexr/releases/download/v2.3.0/openexr-2.3.0.tar.gz
+        sha256: fd6cb3a87f8c1a233be17b94c74799e6241d50fc5efd4df75c7a4b9cf4e25ea6
+
+  - name: libraw
+    config-opts:
+      - --disable-static
+    cleanup:
+      - /bin
+      - /share/doc
+    sources:
+      - type: archive
+        url: https://www.libraw.org/data/LibRaw-0.19.2.tar.gz
+        sha256: 400d47969292291d297873a06fb0535ccce70728117463927ddd9452aa849644
+
+  - name: opencolorio
+    buildsystem: cmake # ninja build broken (fixed in 2.0)
+    builddir: true
+    build-options:
+      arch:
+        arm:
+          config-opts:
+          - -DOCIO_USE_SSE=OFF
+        aarch64:
+          config-opts:
+          - -DOCIO_USE_SSE=OFF
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DOCIO_BUILD_STATIC=OFF
+      - -DCMAKE_CXX_FLAGS='-Wno-error=deprecated-declarations -Wno-error=unused-function -Wno-error=cast-function-type'
+    cleanup:
+      - /bin
+    sources:
+      - type: archive
+        url: https://github.com/imageworks/OpenColorIO/archive/v1.1.1.tar.gz
+        sha256: c9b5b9def907e1dafb29e37336b702fff22cc6306d445a13b1621b8a754c14c8
+
+  - name: vc
+    skip-arches:
+      - aarch64
+      - arm
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+    cleanup:
+      - '*'
+    sources:
+      - type: archive
+        url: https://github.com/VcDevel/Vc/releases/download/1.3.3/Vc-1.3.3.tar.gz
+        sha256: 08c629d2e14bfb8e4f1a10f09535e4a3c755292503c971ab46637d2986bdb4fe
+      - type: shell
+        commands:
+          - sed -i 's/x86|/x86|i686|/' CMakeLists.txt
+
+  - name: poppler-data
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+    sources:
+      - type: archive
+        url: https://poppler.freedesktop.org/poppler-data-0.4.9.tar.gz
+        sha256: 1f9c7e7de9ecd0db6ab287349e31bf815ca108a5a175cf906a90163bdbe32012
+
+  - name: poppler
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DBUILD_GTK_TESTS=OFF
+      - -DBUILD_QT5_TESTS=OFF
+      - -DBUILD_CPP_TESTS=OFF
+      - -DENABLE_UTILS=OFF
+      - -DENABLE_CPP=OFF
+      - -DENABLE_GLIB=OFF
+      - -DENABLE_LIBOPENJPEG=none
+    sources:
+      - type: archive
+        url: https://poppler.freedesktop.org/poppler-0.77.0.tar.xz
+        sha256: 7267eb4cbccd64a58244b8211603c1c1b6bf32c7f6a4ced2642865346102f36b
+
+  - name: gsl
+    config-opts:
+      - --disable-static
+    cleanup:
+      - /bin
+    sources:
+      - type: archive
+        url: https://ftpmirror.gnu.org/gnu/gsl/gsl-2.5.tar.gz
+        sha256: 0460ad7c2542caaddc6729762952d345374784100223995eb14d614861f2258d
+
+  - name: gmic-qt
+    buildsystem: cmake-ninja
+    builddir: true
+    subdir: gmic-qt
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DGMIC_QT_HOST=krita
+      - -DGMIC_PATH=../src
+      - -DCMAKE_CXX_FLAGS=-lfftw3_threads
+    sources:
+      - type: archive
+        url: https://gmic.eu/files/source/gmic_2.6.4.tar.gz
+        sha256: 4cd88b2dca6b9b1a330ab4556d36656bafb98e4e9814bf0448545b27ef18dae3
+
+  - name: x264
+    config-opts:
+      - --disable-cli
+      - --enable-shared
+    sources:
+      - type: archive
+        url: https://download.videolan.org/x264/snapshots/x264-snapshot-20190305-2245-stable.tar.bz2
+        sha256: be52c96ef8bd930fbc1ecff03abac9b94976b444ea7641345e08e20d9e594d16
+
+  - name: ffmpeg
+    config-opts:
+      - --enable-rpath
+      - --enable-gpl
+      - --disable-static
+      - --enable-shared
+      - --disable-doc
+      - --disable-ffplay
+      - --disable-ffprobe
+      - --enable-libopus
+      - --enable-libvpx
+      - --enable-libx264
+    cleanup:
+      - /share/ffmpeg/examples
+    sources:
+      - type: archive
+        url: https://www.ffmpeg.org/releases/ffmpeg-4.1.4.tar.xz
+        sha256: f1f049a82fcfbf156564e73a3935d7e750891fab2abf302e735104fd4050a7e1
+
+  - name: krita
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DBUILD_TESTING=OFF
+    build-options:
+      env:
+        PYTHONPATH: /app/lib/python3/dist-packages
+    post-install:
+      - rm -r /app/share/icons/hicolor/{1024x1024,scalable}
+    sources:
+      - type: git
+        url: https://anongit.kde.org/krita

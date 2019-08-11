@@ -73,7 +73,7 @@ bool QGIFLibHandler::read ( QImage * image )
     GifRecordType recordType;
     ColorMapObject* ColorMap;
 
-    int	i, row, imageNum = 0, topRow, leftCol, width, height;
+    int	i, row, imageNum = 0, topRow, width, height;
     int transColor = -1;
     do
     {
@@ -87,10 +87,9 @@ bool QGIFLibHandler::read ( QImage * image )
                 return false;
             }
             topRow = gifFile->Image.Top; /* Image Position relative to Screen. */
-            leftCol = gifFile->Image.Left;
             width = gifFile->Image.Width;
             height = gifFile->Image.Height;
-            qDebug("Image %d at (%d, %d) [%dx%d]", ++imageNum, leftCol, topRow, width, height);
+            //qDebug("Image %d at (%d, %d) [%dx%d]", ++imageNum, gifFile->Image.Left, topRow, width, height);
             if (gifFile->Image.Left + width > gifFile->SWidth ||
                     gifFile->Image.Top + height > gifFile->SHeight)
             {
@@ -302,8 +301,13 @@ bool QGIFLibHandler::write ( const QImage & image )
         qWarning("EGifPutImageDesc returned error %d", gif->Error);
 
     int lc = toWrite.height();
-    int llen = toWrite.bytesPerLine();
+
+    // NOTE: we suppose that the pixel size is exactly 1 byte, right now we
+    //       cannot save anything else
+    int llen = toWrite.width();
+
     //	qDebug("will write %d lines, %d bytes each", lc, llen);
+
     for (int l = 0; l < lc; ++l)
     {
         uchar* line = toWrite.scanLine(l);
@@ -315,6 +319,7 @@ bool QGIFLibHandler::write ( const QImage & image )
     }
 
     EGifCloseFile(gif, &err);
+    free(colorValues);
 
     return true;
 }

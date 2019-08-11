@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -38,6 +39,8 @@
 #include <KisPart.h>
 #include <KisViewManager.h>
 #include <kis_canvas2.h>
+#include <KisKineticScroller.h>
+
 #include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_painter.h>
@@ -64,11 +67,10 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     saveButton->setToolTip(i18n("New Composition"));
     exportButton->setToolTip(i18n("Export Composition"));
 
-
     setWidget(widget);
 
     connect( compositionView, SIGNAL(doubleClicked(QModelIndex)),
-             this, SLOT(activated ( const QModelIndex & ) ) );
+             this, SLOT(activated(QModelIndex)) );
 
     compositionView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect( compositionView, SIGNAL(customContextMenuRequested(QPoint)),
@@ -79,6 +81,10 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     connect( exportButton, SIGNAL(clicked(bool)), this, SLOT(exportClicked()));
     saveNameEdit->setPlaceholderText(i18n("Insert Name"));
 
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(compositionView);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 
 }
 
@@ -199,7 +205,7 @@ void CompositionDockerDock::exportClicked()
         QString filename = m_canvas->viewManager()->document()->localFilePath();
         if (!filename.isEmpty()) {
             QFileInfo info(filename);
-            path += info.baseName() + '_';
+            path += info.completeBaseName() + '_';
         }
 
         Q_FOREACH (KisLayerCompositionSP composition, m_canvas->viewManager()->image()->compositions()) {
@@ -217,7 +223,7 @@ void CompositionDockerDock::exportClicked()
 
             KisDocument *d = KisPart::instance()->createDocument();
 
-            KisImageWSP dst = new KisImage(d->createUndoStore(), r.width(), r.height(), image->colorSpace(), composition->name());
+            KisImageSP dst = new KisImage(d->createUndoStore(), r.width(), r.height(), image->colorSpace(), composition->name());
             dst->setResolution(image->xRes(), image->yRes());
             d->setCurrentImage(dst);
             KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", OPACITY_OPAQUE_U8);

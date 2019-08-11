@@ -29,8 +29,7 @@
 /**
  * A class for writing out XML (to any QIODevice), with a special attention on performance.
  * The XML is being written out along the way, which avoids requiring the entire
- * document in memory (like QDom does), and avoids using QTextStream at all
- * (which in Qt3 has major performance issues when converting to utf8).
+ * document in memory (like QDom does).
  */
 class KRITASTORE_EXPORT KoXmlWriter
 {
@@ -106,20 +105,6 @@ public:
      * (unlike QString::number and setNum, which default to 6 digits)
      */
     void addAttribute(const char* attrName, float value);
-    /**
-     * Add an attribute which represents a distance, measured in pt
-     * The number is written out with the highest possible precision
-     * (unlike QString::number and setNum, which default to 6 digits),
-     * and the unit name ("pt") is appended to it.
-     */
-    void addAttributePt(const char* attrName, double value);
-    /**
-     * Add an attribute which represents a distance, measured in pt
-     * The number is written out with the highest possible precision
-     * (unlike QString::number and setNum, which default to 6 digits),
-     * and the unit name ("pt") is appended to it.
-     */
-    void addAttributePt(const char* attrName, float value);
 
     /// Overloaded version of the one taking a const char* argument, for convenience
     void addAttribute(const char* attrName, const QByteArray& value);
@@ -285,7 +270,7 @@ private:
         }
     }
     char* escapeForXML(const char* source, int length) const;
-    bool prepareForChild();
+    bool prepareForChild(bool indentInside = true);
     void prepareForTextNode();
     void init();
 

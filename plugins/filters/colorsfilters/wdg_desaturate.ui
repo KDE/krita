@@ -82,7 +82,7 @@
       <item>
        <widget class="QRadioButton" name="radioMax">
         <property name="text">
-         <string>&amp;Max</string>
+         <string>M&amp;ax</string>
         </property>
        </widget>
       </item>

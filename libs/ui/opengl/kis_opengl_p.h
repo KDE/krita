@@ -66,7 +66,7 @@ public:
 
     bool isSupportedVersion() const {
         return
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
                 ((m_glMajorVersion * 100 + m_glMinorVersion) >= 302)
 #else
                 (m_glMajorVersion >= 3 && (m_supportsDeprecatedFunctions || m_isOpenGLES)) ||
@@ -102,6 +102,7 @@ void appendPlatformOpenGLDebugText(QDebug &/*debugOut*/) {}
 #endif
 
 void appendOpenGLWarningString(KLocalizedString warning);
+void overrideOpenGLWarningString(QVector<KLocalizedString> warnings);
 
 bool isDefaultFormatSet();
 

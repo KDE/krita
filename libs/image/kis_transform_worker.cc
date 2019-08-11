@@ -216,7 +216,7 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
         KisFilterWeightsApplicator::LinePos dstPos;
         KisFilterWeightsApplicator::LinePos srcPos(srcStart, srcLen);
 
-        dstPos = applicator.processLine<T>(srcPos, i, &buf, filterStrategy->support());
+        dstPos = applicator.processLine<T>(srcPos, i, &buf, filterStrategy->support(buf.weightsPositionScale().toFloat()));
         dstBounds.unite(dstPos);
 
         progressHelper.step();
@@ -452,11 +452,16 @@ void mirror_impl(KisPaintDeviceSP dev, qreal axis, bool isHorizontal)
         rightEnd = mirrorRect.y() + mirrorRect.height();
     }
 
+    /**
+     * If the axis is not aligned, that is crosses some pixel cell, we should just skip this
+     * column and not process it. Actually, how can we mirror the central single-pixel column?
+     */
+    const bool axisNonAligned = qFloor(axis) < axis;
 
-    int leftCenterPoint = qFloor(axis) < axis ? qFloor(axis) : qFloor(axis);
+    int leftCenterPoint = qFloor(axis);
     int leftEnd = qMin(leftCenterPoint, rightEnd);
 
-    int rightCenterPoint = qFloor(axis) < axis ? qCeil(axis) : qFloor(axis);
+    int rightCenterPoint = axisNonAligned ? qCeil(axis) : qFloor(axis);
     int rightStart = qMax(rightCenterPoint, leftStart);
 
     int leftSize = qMax(0, leftEnd - leftStart);

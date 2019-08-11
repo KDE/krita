@@ -21,6 +21,25 @@
 #include <cmath>
 #include <algorithm>
 
+#include <config-vc.h>
+#ifdef HAVE_VC
+#if defined(__clang__)
+#pragma GCC diagnostic ignored "-Wundef"
+#pragma GCC diagnostic ignored "-Wlocal-type-template-args"
+#endif
+#if defined _MSC_VER
+// Lets shut up the "possible loss of data" and "forcing value to bool 'true' or 'false'
+#pragma warning ( push )
+#pragma warning ( disable : 4244 )
+#pragma warning ( disable : 4800 )
+#endif
+#include <Vc/Vc>
+#include <Vc/IO>
+#if defined _MSC_VER
+#pragma warning ( pop )
+#endif
+#endif
+
 #include <QDomDocument>
 #include <QVector>
 #include <QPointF>
@@ -30,8 +49,11 @@
 #include "kis_fast_math.h"
 
 #include "kis_base_mask_generator.h"
-#include "kis_gauss_rect_mask_generator.h"
 #include "kis_antialiasing_fade_maker.h"
+#include "kis_brush_mask_applicator_factories.h"
+#include "kis_brush_mask_applicator_base.h"
+#include "kis_gauss_rect_mask_generator.h"
+#include "kis_gauss_rect_mask_generator_p.h"
 
 #define M_SQRT_2 1.41421356237309504880
 
@@ -41,42 +63,21 @@
 #define erf(x) boost::math::erf(x)
 #endif
 
-struct Q_DECL_HIDDEN KisGaussRectangleMaskGenerator::Private
-{
-    Private(bool enableAntialiasing)
-        : fadeMaker(*this, enableAntialiasing)
-    {
-    }
 
-    Private(const Private &rhs)
-        : xfade(rhs.xfade),
-        yfade(rhs.yfade),
-        halfWidth(rhs.halfWidth),
-        halfHeight(rhs.halfHeight),
-        alphafactor(rhs.alphafactor),
-        fadeMaker(rhs.fadeMaker, *this)
-    {
-    }
-
-    qreal xfade, yfade;
-    qreal halfWidth, halfHeight;
-    qreal alphafactor;
-
-    KisAntialiasingFadeMaker2D <Private> fadeMaker;
-
-    inline quint8 value(qreal x, qreal y) const;
-};
 
 KisGaussRectangleMaskGenerator::KisGaussRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
     : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, RECTANGLE, GaussId), d(new Private(antialiasEdges))
 {
     setScale(1.0, 1.0);
+
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
 }
 
 KisGaussRectangleMaskGenerator::KisGaussRectangleMaskGenerator(const KisGaussRectangleMaskGenerator &rhs)
     : KisMaskGenerator(rhs),
       d(new Private(*rhs.d))
 {
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
 }
 
 KisMaskGenerator* KisGaussRectangleMaskGenerator::clone() const
@@ -98,6 +99,8 @@ void KisGaussRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
     d->halfWidth = width * 0.5 - 2.5 * xfade;
     d->halfHeight = height * 0.5 - 2.5 * yfade;
     d->alphafactor = 255.0 / (4.0 * erf(d->halfWidth * d->xfade) * erf(d->halfHeight * d->yfade));
+
+    if (std::isnan(d->alphafactor)) d->alphafactor = 0.0f; // erf can return nan if ratio is 0
 
     d->fadeMaker.setLimits(0.5 * width, 0.5 * height);
 }
@@ -125,4 +128,19 @@ quint8 KisGaussRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     }
 
     return d->value(xr, yr);
+}
+
+bool KisGaussRectangleMaskGenerator::shouldVectorize() const
+{
+    return !shouldSupersample() && spikes() == 2;
+}
+
+KisBrushMaskApplicatorBase* KisGaussRectangleMaskGenerator::applicator()
+{
+    return d->applicator.data();
+}
+
+void KisGaussRectangleMaskGenerator::resetMaskApplicator(bool forceScalar)
+{
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this,forceScalar));
 }

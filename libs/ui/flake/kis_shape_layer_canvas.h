@@ -46,6 +46,7 @@ public:
     virtual void setImage(KisImageWSP image) = 0;
     void prepareForDestroying();
     virtual void forceRepaint() = 0;
+    virtual bool hasPendingUpdates() const = 0;
 
     bool hasChangedWhileBeingInvisible();
     virtual void rerenderAfterBeingInvisible() = 0;
@@ -65,12 +66,16 @@ public:
     void updateInputMethodInfo() override {}
     void setCursor(const QCursor &) override {}
 
+    void setUpdatesBlocked(bool value);
+    bool updatesBlocked() const;
+
 protected:
     QScopedPointer<KisImageViewConverter> m_viewConverter;
     QScopedPointer<KoShapeManager> m_shapeManager;
     QScopedPointer<KoSelectedShapesProxy> m_selectedShapesProxy;
     bool m_hasChangedWhileBeingInvisible {false};
     bool m_isDestroying {false};
+    bool m_updatesBlocked {false};
 };
 
 /**
@@ -97,6 +102,7 @@ public:
     void updateCanvas(const QRectF& rc) override;
     void updateCanvas(const QVector<QRectF> &region);
     void forceRepaint() override;
+    bool hasPendingUpdates() const override;
 
     void resetCache() override;
     void rerenderAfterBeingInvisible() override;
@@ -105,17 +111,23 @@ private Q_SLOTS:
     friend class KisRepaintShapeLayerLayerJob;
     void repaint();
     void slotStartAsyncRepaint();
+    void slotStartDirectSyncRepaint();
     void slotImageSizeChanged();
 
 Q_SIGNALS:
     void forwardRepaint();
 
 private:
+    void updateUpdateCompressorDelay();
+
+private:
     KisPaintDeviceSP m_projection;
-    KisShapeLayer *m_parentLayer;
+    KisShapeLayer *m_parentLayer {0};
+    KisThreadSafeSignalCompressor m_canvasUpdateCompressor;
 
     KisThreadSafeSignalCompressor m_asyncUpdateSignalCompressor;
     volatile bool m_hasUpdateInCompressor = false;
+    volatile bool m_hasDirectSyncRepaintInitiated = false;
 
     QRegion m_dirtyRegion;
     QMutex m_dirtyRegionMutex;

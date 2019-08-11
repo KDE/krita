@@ -27,7 +27,7 @@ class QPointF;
 class QPainterPath;
 class QBitArray;
 class QPainter;
-class KisRenderedDab;
+struct KisRenderedDab;
 
 #include <QVector>
 #include "kritaimage_export.h"
@@ -93,6 +93,20 @@ namespace KritaUtils
     QImage KRITAIMAGE_EXPORT convertQImageToGrayA(const QImage &image);
     QColor KRITAIMAGE_EXPORT blendColors(const QColor &c1, const QColor &c2, qreal r1);
 
+    /**
+     * \return an approximate difference between \p c1 and \p c2
+     *         in a (nonlinear) range [0, 3]
+     *
+     * The colors are compared using the formula:
+     *     difference = sqrt(2 * diff_R^2 + 4 * diff_G^2 + 3 * diff_B^2)
+     */
+    qreal KRITAIMAGE_EXPORT colorDifference(const QColor &c1, const QColor &c2);
+
+    /**
+     * Make the color \p color differ from \p baseColor for at least \p threshold value
+     */
+    void KRITAIMAGE_EXPORT dragColor(QColor *color, const QColor &baseColor, qreal threshold);
+
     void KRITAIMAGE_EXPORT applyToAlpha8Device(KisPaintDeviceSP dev, const QRect &rc, std::function<void(quint8)> func);
     void KRITAIMAGE_EXPORT filterAlpha8Device(KisPaintDeviceSP dev, const QRect &rc, std::function<quint8(quint8)> func);
 
@@ -100,6 +114,7 @@ namespace KritaUtils
 
     void KRITAIMAGE_EXPORT mirrorDab(Qt::Orientation dir, const QPoint &center, KisRenderedDab *dab);
     void KRITAIMAGE_EXPORT mirrorRect(Qt::Orientation dir, const QPoint &center, QRect *rc);
+    void KRITAIMAGE_EXPORT mirrorPoint(Qt::Orientation dir, const QPoint &center, QPointF *pt);
 }
 
 #endif /* __KRITA_UTILS_H */

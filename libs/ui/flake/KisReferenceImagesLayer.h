@@ -24,16 +24,21 @@
 
 #include <kis_types.h>
 
+class KisDocument;
+
 class KRITAUI_EXPORT KisReferenceImagesLayer : public KisShapeLayer
 {
     Q_OBJECT
 
 public:
-    KisReferenceImagesLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image);
+    KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image);
     KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs);
 
-    KUndo2Command * addReferenceImage(KisReferenceImage *referenceImage);
+    static KUndo2Command * addReferenceImages(KisDocument *document, QList<KoShape*> referenceImages);
+    KUndo2Command * removeReferenceImages(KisDocument *document, QList<KoShape*> referenceImages);
+    QVector<KisReferenceImage*> referenceImages() const;
 
+    QRectF boundingImageRect() const;
     QColor getPixel(QPointF position) const;
 
     void paintReferences(QPainter &painter);
@@ -47,6 +52,8 @@ public:
         return new KisReferenceImagesLayer(*this);
     }
 
+    bool isFakeNode() const override;
+
 Q_SIGNALS:
     /**
      * The content of the layer has changed, and the canvas decoration
@@ -56,8 +63,9 @@ Q_SIGNALS:
 
 private:
     void signalUpdate(const QRectF &rect);
-    friend struct AddReferenceImageCommand;
-    friend struct ReferenceImagesCanvas;
+    friend struct AddReferenceImagesCommand;
+    friend struct RemoveReferenceImagesCommand;
+    friend class ReferenceImagesCanvas;
 };
 
 

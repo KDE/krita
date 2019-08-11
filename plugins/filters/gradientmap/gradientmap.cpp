@@ -57,6 +57,9 @@ KritaGradientMapConfigWidget::KritaGradientMapConfigWidget(QWidget *parent, KisP
     connect(m_gradientPopUp, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground>)), this, SLOT(setAbstractGradientToEditor()));
     connect(m_page->gradientEditor, SIGNAL(sigGradientChanged()), m_gradientChangedCompressor, SLOT(start()));
     connect(m_gradientChangedCompressor, SIGNAL(timeout()), this, SIGNAL(sigConfigurationItemChanged()));
+
+    QObject::connect(m_page->colorModeComboBox,  QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KisConfigWidget::sigConfigurationItemChanged);
+    QObject::connect(m_page->ditherWidget, &KisDitherWidget::sigConfigurationItemChanged, this, &KisConfigWidget::sigConfigurationItemChanged);
 }
 
 KritaGradientMapConfigWidget::~KritaGradientMapConfigWidget()
@@ -85,6 +88,9 @@ KisPropertiesConfigurationSP KritaGradientMapConfigWidget::configuration() const
         cfg->setProperty("gradientXML", doc.toString());
     }
 
+    cfg->setProperty("colorMode", m_page->colorModeComboBox->currentIndex());
+    m_page->ditherWidget->configuration(*cfg, "dither/");
+
     return cfg;
 }
 
@@ -96,12 +102,14 @@ void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigura
     QDomDocument doc;
     if (config->hasProperty("gradientXML")) {
         doc.setContent(config->getString("gradientXML", ""));
-        qDebug()<<config->getString("gradientXML", "");
         KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
         if (gradient.stops().size()>0) {
             m_activeGradient->setStops(gradient.stops());
         }
     }
+
+    m_page->colorModeComboBox->setCurrentIndex(config->getInt("colorMode"));
+    m_page->ditherWidget->setConfiguration(*config, "dither/");
 }
 
 void KritaGradientMapConfigWidget::setView(KisViewManager *view)

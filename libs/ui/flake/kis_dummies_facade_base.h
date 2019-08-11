@@ -42,7 +42,7 @@ public:
     KisDummiesFacadeBase(QObject *parent = 0);
     ~KisDummiesFacadeBase() override;
 
-    void setImage(KisImageWSP image);
+    virtual void setImage(KisImageWSP image);
 
     virtual bool hasDummyForNode(KisNodeSP node) const = 0;
     virtual KisNodeDummy* dummyForNode(KisNodeSP node) const = 0;

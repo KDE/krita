@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="KarbonCalligraphyTool">
+<Actions category="General">
+<text>General</text>
+ <Action name="calligraphy_increase_width">
+  <icon></icon>
+  <text>Calligraphy: increase width</text>
+  <whatsThis></whatsThis>
+  <toolTip>Calligraphy: increase width</toolTip>
+  <iconText>Calligraphy: increase width</iconText>
+  <shortcut></shortcut>
+  <isCheckable>false</isCheckable>
+  <statusTip></statusTip>
+ </Action>
+ <Action name="calligraphy_increase_angle">
+  <icon></icon>
+  <text>Calligraphy: increase angle</text>
+  <whatsThis></whatsThis>
+  <toolTip>Calligraphy: increase angle</toolTip>
+  <iconText>Calligraphy: increase angle</iconText>
+  <shortcut></shortcut>
+  <isCheckable>false</isCheckable>
+  <statusTip></statusTip>
+ </Action>
+ <Action name="calligraphy_decrease_width">
+  <icon></icon>
+  <text>Calligraphy: decrease width</text>
+  <whatsThis></whatsThis>
+  <toolTip>Calligraphy: decrease width</toolTip>
+  <iconText>Calligraphy: decrease width</iconText>
+  <shortcut></shortcut>
+  <isCheckable>false</isCheckable>
+  <statusTip></statusTip>
+ </Action>
+ <Action name="calligraphy_decrease_angle">
+  <icon></icon>
+  <text>Calligraphy: decrease angle</text>
+  <whatsThis></whatsThis>
+  <toolTip>Calligraphy: decrease angle</toolTip>
+  <iconText>Calligraphy: decrease angle</iconText>
+  <shortcut></shortcut>
+  <isCheckable>false</isCheckable>
+  <statusTip></statusTip>
+ </Action>
+</Actions>
+</ActionCollection>

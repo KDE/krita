@@ -34,7 +34,8 @@
 #include <SvgStyleWriter.h>
 
 RectangleShape::RectangleShape()
-    : m_cornerRadiusX(0)
+    : KoParameterShape()
+    , m_cornerRadiusX(0)
     , m_cornerRadiusY(0)
 {
     QList<QPointF> handles;
@@ -46,7 +47,7 @@ RectangleShape::RectangleShape()
 }
 
 RectangleShape::RectangleShape(const RectangleShape &rhs)
-    : KoParameterShape(new KoParameterShapePrivate(*rhs.d_func(), this)),
+    : KoParameterShape(rhs),
       m_cornerRadiusX(rhs.m_cornerRadiusX),
       m_cornerRadiusY(rhs.m_cornerRadiusY)
 {
@@ -94,8 +95,8 @@ void RectangleShape::saveOdf(KoShapeSavingContext &context) const
         context.xmlWriter().startElement("draw:rect");
         saveOdfAttributes(context, OdfAllAttributes);
         if (m_cornerRadiusX > 0 && m_cornerRadiusY > 0) {
-            context.xmlWriter().addAttributePt("svg:rx", m_cornerRadiusX * (0.5 * size().width()) / 100.0);
-            context.xmlWriter().addAttributePt("svg:ry", m_cornerRadiusY * (0.5 * size().height()) / 100.0);
+            context.xmlWriter().addAttribute("svg:rx", m_cornerRadiusX * (0.5 * size().width()) / 100.0);
+            context.xmlWriter().addAttribute("svg:ry", m_cornerRadiusY * (0.5 * size().height()) / 100.0);
         }
         saveOdfCommonChildElements(context);
         saveText(context);
@@ -159,8 +160,6 @@ void RectangleShape::updateHandles()
 
 void RectangleShape::updatePath(const QSizeF &size)
 {
-    Q_D(KoParameterShape);
-
     qreal rx = 0;
     qreal ry = 0;
     if (m_cornerRadiusX > 0 && m_cornerRadiusY > 0) {
@@ -183,7 +182,7 @@ void RectangleShape::updatePath(const QSizeF &size)
 
     createPoints(requiredCurvePointCount);
 
-    KoSubpath &points = *d->subpaths[0];
+    KoSubpath &points = *subpaths()[0];
 
     int cp = 0;
 
@@ -266,27 +265,29 @@ void RectangleShape::updatePath(const QSizeF &size)
     // last point stops and closes path
     points.last()->setProperty(KoPathPoint::StopSubpath);
     points.last()->setProperty(KoPathPoint::CloseSubpath);
+
+    notifyPointsChanged();
 }
 
 void RectangleShape::createPoints(int requiredPointCount)
 {
-    Q_D(KoParameterShape);
-
-    if (d->subpaths.count() != 1) {
+    if (subpaths().count() != 1) {
         clear();
-        d->subpaths.append(new KoSubpath());
+        subpaths().append(new KoSubpath());
     }
-    int currentPointCount = d->subpaths[0]->count();
+    int currentPointCount = subpaths()[0]->count();
     if (currentPointCount > requiredPointCount) {
         for (int i = 0; i < currentPointCount - requiredPointCount; ++i) {
-            delete d->subpaths[0]->front();
-            d->subpaths[0]->pop_front();
+            delete subpaths()[0]->front();
+            subpaths()[0]->pop_front();
         }
     } else if (requiredPointCount > currentPointCount) {
         for (int i = 0; i < requiredPointCount - currentPointCount; ++i) {
-            d->subpaths[0]->append(new KoPathPoint(this, QPointF()));
+            subpaths()[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
+
+    notifyPointsChanged();
 }
 
 qreal RectangleShape::cornerRadiusX() const
@@ -296,11 +297,10 @@ qreal RectangleShape::cornerRadiusX() const
 
 void RectangleShape::setCornerRadiusX(qreal radius)
 {
-    if (radius >= 0.0 && radius <= 100.0) {
-        m_cornerRadiusX = radius;
-        updatePath(size());
-        updateHandles();
-    }
+    radius = qBound(0.0, radius, 100.0);
+    m_cornerRadiusX = radius;
+    updatePath(size());
+    updateHandles();
 }
 
 qreal RectangleShape::cornerRadiusY() const
@@ -310,11 +310,10 @@ qreal RectangleShape::cornerRadiusY() const
 
 void RectangleShape::setCornerRadiusY(qreal radius)
 {
-    if (radius >= 0.0 && radius <= 100.0) {
-        m_cornerRadiusY = radius;
-        updatePath(size());
-        updateHandles();
-    }
+    radius = qBound(0.0, radius, 100.0);
+    m_cornerRadiusY = radius;
+    updatePath(size());
+    updateHandles();
 }
 
 QString RectangleShape::pathShapeId() const
@@ -334,16 +333,16 @@ bool RectangleShape::saveSvg(SvgSavingContext &context)
     SvgStyleWriter::saveSvgStyle(this, context);
 
     const QSizeF size = this->size();
-    context.shapeWriter().addAttributePt("width", size.width());
-    context.shapeWriter().addAttributePt("height", size.height());
+    context.shapeWriter().addAttribute("width", size.width());
+    context.shapeWriter().addAttribute("height", size.height());
 
     double rx = cornerRadiusX();
     if (rx > 0.0) {
-        context.shapeWriter().addAttributePt("rx", 0.01 * rx * 0.5 * size.width());
+        context.shapeWriter().addAttribute("rx", 0.01 * rx * 0.5 * size.width());
     }
     double ry = cornerRadiusY();
     if (ry > 0.0) {
-        context.shapeWriter().addAttributePt("ry", 0.01 * ry * 0.5 * size.height());
+        context.shapeWriter().addAttribute("ry", 0.01 * ry * 0.5 * size.height());
     }
 
     context.shapeWriter().endElement();

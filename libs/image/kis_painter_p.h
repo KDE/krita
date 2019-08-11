@@ -100,6 +100,8 @@ struct Q_DECL_HIDDEN KisPainter::Private {
                                   const KoColorSpace *srcColorSpace,
                                   KoCompositeOp::ParameterInfo &localParamInfo);
 
+    template<class T> QVector<T> calculateMirroredObjects(const T &object);
+
 };
 
 #endif // KISPAINTERPRIVATE_H

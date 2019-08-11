@@ -22,13 +22,14 @@
 
 #include <QObject>
 #include <QPointer>
+#include <kis_types.h>
 
 #include "KisView.h"
 
 class KisViewManager;
 class KActionCollection;
 class KisMirrorAxis;
-
+class KisMirrorAxisConfig;
 
 class KisMirrorManager : public QObject
 {
@@ -39,18 +40,18 @@ public:
     ~KisMirrorManager() override;
 
     void setup(KActionCollection* collection);
-
     void setView(QPointer<KisView> imageView);
 
 private Q_SLOTS:
     void updateAction();
+    void slotDocumentConfigChanged();
+    void slotMirrorAxisConfigChanged();
 
 private:
-
     QPointer<KisView> m_imageView;
     QAction *m_mirrorCanvas;
-    KisMirrorAxis* hasDecoration();
-
+    void setDecorationConfig();
+    KisMirrorAxisSP decoration() const;
 };
 
-#endif // KIS_PAINTING_ASSISTANTS_MANAGER_H
+#endif // KIS_MIRROR_MANAGER_H

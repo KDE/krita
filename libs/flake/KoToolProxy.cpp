@@ -51,15 +51,9 @@
 
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
-    : activeTool(0),
-      tabletPressed(false),
-      hasSelection(false),
-      controller(0),
-      parent(p)
+    : parent(p)
 {
     scrollTimer.setInterval(100);
-    mouseLeaveWorkaround = false;
-    multiClickCount = 0;
 }
 
 void KoToolProxyPrivate::timeout() // Auto scroll the canvas
@@ -381,14 +375,32 @@ void KoToolProxy::setActiveTool(KoToolBase *tool)
     }
 }
 
+void KoToolProxy::touchEvent(QTouchEvent* event, const QPointF& point)
+{
+    // only one "touchpoint" events should be here
+    KoPointerEvent ev(event, point);
+
+    if (!d->activeTool) return;
+
+    switch (event->touchPointStates())
+    {
+    case Qt::TouchPointPressed:
+        d->activeTool->mousePressEvent(&ev);
+        break;
+    case Qt::TouchPointMoved:
+        d->activeTool->mouseMoveEvent(&ev);
+        break;
+    case Qt::TouchPointReleased:
+        d->activeTool->mouseReleaseEvent(&ev);
+        break;
+    default: // don't care
+        ;
+    }
+}
+
 void KoToolProxyPrivate::setCanvasController(KoCanvasController *c)
 {
     controller = c;
-}
-
-QHash<QString, QAction *> KoToolProxy::actions() const
-{
-    return d->activeTool ? d->activeTool->actions() : QHash<QString, QAction *>();
 }
 
 bool KoToolProxy::hasSelection() const

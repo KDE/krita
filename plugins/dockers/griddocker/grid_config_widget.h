@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -42,9 +43,9 @@ public:
     void setGuidesConfig(const KisGuidesConfig &value);
     KisGuidesConfig guidesConfig() const;
 
-    void setGridDivision(int w, int h);
-
     bool showRulers() const;
+
+    void enableIsometricGrid(bool value);
 
 public Q_SLOTS:
     void setShowRulers(bool value);
@@ -53,6 +54,7 @@ private Q_SLOTS:
     void slotGridGuiChanged();
     void slotGuidesGuiChanged();
     void slotGridTypeChanged();
+    void slotPreferencesUpdated();
 
 Q_SIGNALS:
     void gridValueChanged();
@@ -72,7 +74,9 @@ private:
 
     struct Private;
     const QScopedPointer<Private> m_d;
-    bool m_isGridEnabled;
+    bool m_isGridEnabled {false};
+
+    bool m_isIsometricGridEnabled {true};
 };
 
 #endif // GRID_CONFIG_WIDGET_H

@@ -65,8 +65,8 @@ class KRITAUI_EXPORT KisViewManager : public QObject
 public:
     /**
      * Construct a new view on the krita document.
-     * @param document   the document we show.
      * @param parent   a parent widget we show ourselves in.
+     * @param actionCollection an action collection.
      */
     KisViewManager(QWidget *parent, KActionCollection *actionCollection);
     ~KisViewManager() override;
@@ -87,7 +87,7 @@ public:  // Krita specific interfaces
 
     /// The resource provider contains all per-view settings, such as
     /// current color, current paint op etc.
-    KisCanvasResourceProvider *resourceProvider();
+    KisCanvasResourceProvider *canvasResourceProvider();
 
     /// Return the canvasbase class
     KisCanvas2 *canvasBase() const;
@@ -97,21 +97,6 @@ public:  // Krita specific interfaces
 
     /// Return the wrapper class around the statusbar
     KisStatusBar *statusBar() const;
-
-    /**
-      * This adds a widget to the statusbar for this view.
-      * If you use this method instead of using statusBar() directly,
-      * KisView will take care of removing the items when the view GUI is deactivated
-      * and readding them when it is reactivated.
-      * The parameters are the same as QStatusBar::addWidget().
-    */
-    void addStatusBarItem(QWidget * widget, int stretch = 0, bool permanent = false);
-
-
-    /**
-      * Remove a widget from the statusbar for this view.
-      */
-    void removeStatusBarItem(QWidget * widget);
 
     KisPaintopBox* paintOpBox() const;
 
@@ -210,7 +195,7 @@ public:
     /// with a non-null value. To make it return shell() again, simply pass null to this function.
     void setQtMainWindow(QMainWindow* newMainWindow);
 
-    static void initializeResourceManager(KoCanvasResourceManager *resourceManager);
+    static void initializeResourceManager(KoCanvasResourceProvider *resourceManager);
 
 public Q_SLOTS:
 
@@ -227,6 +212,12 @@ public Q_SLOTS:
 
     void slotViewAdded(KisView *view);
     void slotViewRemoved(KisView *view);
+    
+    void slotActivateTransformTool();
+
+    // Change and update author
+    void changeAuthorProfile(const QString &profileName);
+    void slotUpdateAuthorProfileActions();
 
 Q_SIGNALS:
 
@@ -250,12 +241,11 @@ private Q_SLOTS:
     void openResourcesDirectory();
     void initializeStatusBarVisibility();
     void guiUpdateTimeout();
-    void changeAuthorProfile(const QString &profileName);
-    void slotUpdateAuthorProfileActions();
     void slotUpdatePixelGridAction();
     void slotSaveShowRulersState(bool value);
     void slotSaveRulersTrackMouseState(bool value);
-
+    void slotToggleFgBg();
+    void slotResetFgBg();
 private:
     void createActions();
     void setupManagers();

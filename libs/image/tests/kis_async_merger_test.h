@@ -30,6 +30,13 @@ private Q_SLOTS:
     void debugObligeChild();
     void testFullRefreshWithClones();
     void testSubgraphingWithoutUpdatingParent();
+
+    void testFullRefreshGroupWithMask();
+    void testFullRefreshGroupWithStyle();
+    void testFullRefreshGroupWithMaskAndStyle();
+    void testFullRefreshAdjustmentWithMask();
+    void testFullRefreshAdjustmentWithStyle();
+
 };
 
 #endif /* KIS_ASYNC_MERGER_TEST_H */

@@ -12,6 +12,7 @@ set(kritaassistanttool_SOURCES
     RulerAssistant.cc
     SplineAssistant.cc
     VanishingPointAssistant.cc
+    EditAssistantsCommand.cpp
 )
 
 ki18n_wrap_ui(kritaassistanttool_SOURCES AssistantsToolOptions.ui )

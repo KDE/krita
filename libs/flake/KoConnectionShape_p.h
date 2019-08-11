@@ -19,25 +19,20 @@
 #ifndef KOCONNECTIONSHAPEPRIVATE_P
 #define KOCONNECTIONSHAPEPRIVATE_P
 
-#include "KoParameterShape_p.h"
+#include <QSharedData>
+#include "KoConnectionShape.h"
 
-class KoConnectionShapePrivate : public KoParameterShapePrivate
+class KoConnectionShape::Private : public QSharedData
 {
 public:
-    explicit KoConnectionShapePrivate(KoConnectionShape *q);
-    explicit KoConnectionShapePrivate(const KoConnectionShapePrivate &rhs, KoConnectionShape *q);
-
-    /// Returns escape direction of given handle
-    QPointF escapeDirection(int handleId) const;
+    explicit Private();
+    explicit Private(const Private &rhs);
 
     /// Checks if rays from given points into given directions intersect
     bool intersects(const QPointF &p1, const QPointF &d1, const QPointF &p2, const QPointF &d2, QPointF &isect);
 
     /// Returns perpendicular direction from given point p1 and direction d1 toward point p2
     QPointF perpendicularDirection(const QPointF &p1, const QPointF &d1, const QPointF &p2);
-
-    /// Populate the path list by a normal way
-    void normalPath(const qreal MinimumEscapeLength);
 
     qreal scalarProd(const QPointF &v1, const QPointF &v2) const;
     qreal crossProd(const QPointF &v1, const QPointF &v2) const;
@@ -54,7 +49,6 @@ public:
     KoConnectionShape::Type connectionType;
     bool forceUpdate;
     bool hasCustomPath;
-    Q_DECLARE_PUBLIC(KoConnectionShape)
 };
 
 #endif

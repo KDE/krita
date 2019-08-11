@@ -137,7 +137,7 @@ void FiltersModel::addFilter(KisFilterSP filter)
         // point in time, but for now it has no side effects, as this filter's default
         // config is fine anyway.
         if (filter->showConfigurationWidget() && filter->id() != QLatin1String("colortransfer")) {
-            KisConfigWidget* wdg = filter->createConfigurationWidget(0, d->view->activeNode()->original());
+            KisConfigWidget* wdg = filter->createConfigurationWidget(0, d->view->activeNode()->original(), false);
             wdg->deleteLater();
             d->configurations << KisFilterConfigurationSP(dynamic_cast<KisFilterConfiguration*>(wdg->configuration().data()));
 
@@ -169,7 +169,7 @@ QObject* FiltersModel::configuration(int index)
     if (!d->configurations[index]) {
         // if we have a config widget to show, reinitialise the configuration, just in case
         if(d->filters[index]->showConfigurationWidget() && d->filters[index]->id() != QLatin1String("colortransfer")) {
-            KisConfigWidget* wdg = d->filters[index]->createConfigurationWidget(0, d->view->activeNode()->original());
+            KisConfigWidget* wdg = d->filters[index]->createConfigurationWidget(0, d->view->activeNode()->original(), false);
             wdg->deleteLater();
             d->configurations[index] = KisFilterConfigurationSP(dynamic_cast<KisFilterConfiguration*>(wdg->configuration().data()));
         }

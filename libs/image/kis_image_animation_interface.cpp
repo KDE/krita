@@ -105,13 +105,13 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     m_d->framerate = 24;
     m_d->fullClipRange = KisTimeRange::fromTime(0, 100);
 
-    connect(this, SIGNAL(sigInternalRequestTimeSwitch(int, bool)), SLOT(switchCurrentTimeAsync(int, bool)));
+    connect(this, SIGNAL(sigInternalRequestTimeSwitch(int,bool)), SLOT(switchCurrentTimeAsync(int,bool)));
 }
 
 KisImageAnimationInterface::KisImageAnimationInterface(const KisImageAnimationInterface &rhs, KisImage *newImage)
     : m_d(new Private(*rhs.m_d, newImage))
 {
-    connect(this, SIGNAL(sigInternalRequestTimeSwitch(int, bool)), SLOT(switchCurrentTimeAsync(int, bool)));
+    connect(this, SIGNAL(sigInternalRequestTimeSwitch(int,bool)), SLOT(switchCurrentTimeAsync(int,bool)));
 }
 
 KisImageAnimationInterface::~KisImageAnimationInterface()
@@ -146,9 +146,23 @@ const KisTimeRange& KisImageAnimationInterface::fullClipRange() const
     return m_d->fullClipRange;
 }
 
-void KisImageAnimationInterface::setFullClipRange(const KisTimeRange range) {
+void KisImageAnimationInterface::setFullClipRange(const KisTimeRange range)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->fullClipRange = range;
     emit sigFullClipRangeChanged();
+}
+
+void KisImageAnimationInterface::setFullClipRangeStartTime(int column)
+{
+    KisTimeRange newRange(column,  m_d->fullClipRange.end(), false);
+    setFullClipRange(newRange);
+}
+
+void KisImageAnimationInterface::setFullClipRangeEndTime(int column)
+{
+    KisTimeRange newRange(m_d->fullClipRange.start(), column, false);
+    setFullClipRange(newRange);
 }
 
 const KisTimeRange& KisImageAnimationInterface::playbackRange() const
@@ -158,6 +172,7 @@ const KisTimeRange& KisImageAnimationInterface::playbackRange() const
 
 void KisImageAnimationInterface::setPlaybackRange(const KisTimeRange range)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->playbackRange = range;
     emit sigPlaybackRangeChanged();
 }
@@ -250,9 +265,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
 {
     if (currentUITime() == frameId) return;
 
-    KisTimeRange range = KisTimeRange::infinite(0);
-    KisTimeRange::calculateTimeRangeRecursive(m_d->image->root(), currentUITime(), range, true);
-
+    const KisTimeRange range = KisTimeRange::calculateIdenticalFramesRecursive(m_d->image->root(), currentUITime());
     const bool needsRegeneration = !range.contains(frameId);
 
     KisSwitchTimeStrokeStrategy::SharedTokenSP token =
@@ -343,22 +356,18 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
                                                    bool recursive)
 {
     if (externalFrameActive() || m_d->frameInvalidationBlocked) return;
+
+    // even overlay selection masks are not rendered in the cache
     if (node->inherits("KisSelectionMask")) return;
 
-    KisKeyframeChannel *channel =
-        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
-
+    const int currentTime = m_d->currentTime();
     KisTimeRange invalidateRange;
 
     if (recursive) {
-        KisTimeRange::calculateTimeRangeRecursive(node, currentTime(), invalidateRange, false);
-    } else if (channel) {
-        const int currentTime = m_d->currentTime();
-        invalidateRange = channel->affectedFrames(currentTime);
+        invalidateRange = KisTimeRange::calculateAffectedFramesRecursive(node, currentTime);
     } else {
-        invalidateRange = KisTimeRange::infinite(0);
+        invalidateRange = KisTimeRange::calculateNodeAffectedFrames(node, currentTime);
     }
-
 
     // we compress the updated rect (atm, no one uses it anyway)
     QRect unitedRect;

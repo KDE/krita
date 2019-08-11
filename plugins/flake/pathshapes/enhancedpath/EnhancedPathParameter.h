@@ -81,7 +81,7 @@ public:
     /// Constructs named parameter from given identifier string
     EnhancedPathNamedParameter(const QString &identifier, EnhancedPathShape *parent);
     qreal evaluate() override;
-    /// Returns identfier type from given string
+    /// Returns identifier type from given string
     static Identifier identifierFromString(const QString &text);
     QString toString() const override;
 private:

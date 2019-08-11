@@ -42,6 +42,7 @@
 #include <kis_layer.h>
 #include <widgets/kis_multi_integer_filter_widget.h>
 #include <kis_selection.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_types.h>
@@ -50,7 +51,7 @@
 #include <KoProgressUpdater.h>
 
 
-KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::categoryMap(), i18n("&Round Corners..."))
+KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), FiltersCategoryMapId, i18n("&Round Corners..."))
 {
     setSupportsPainting(false);
 
@@ -138,7 +139,7 @@ void KisRoundCornersFilter::processImpl(KisPaintDeviceSP device,
     }
 }
 
-KisConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(2, 100, 30, i18n("Radius"), "radius"));

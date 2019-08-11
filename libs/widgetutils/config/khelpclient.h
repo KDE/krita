@@ -22,8 +22,8 @@
 #define KHELPCLIENT_H
 
 #include "kritawidgetutils_export.h"
-#include <QtCore/QString>
-#include <QtCore/QByteArray>
+#include <QString>
+#include <QByteArray>
 
 namespace KHelpClient
 {

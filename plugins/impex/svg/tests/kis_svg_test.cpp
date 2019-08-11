@@ -22,7 +22,7 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <QTest>
+#include  <sdk/tests/kistest.h>
 
 #include "filestest.h"
 
@@ -31,9 +31,27 @@
 #endif
 
 
+const QString SvgMimetype = "image/svg+xml";
+
+
 void KisSvgTest::testFiles()
 {
-    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
+    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), 30, 50);
 }
-QTEST_MAIN(KisSvgTest)
 
+
+
+void KisSvgTest::testImportFromWriteonly()
+{
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), SvgMimetype);
+}
+
+
+
+void KisSvgTest::testImportIncorrectFormat()
+{
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), SvgMimetype);
+}
+
+
+KISTEST_MAIN(KisSvgTest)

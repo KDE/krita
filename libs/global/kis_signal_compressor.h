@@ -22,7 +22,9 @@
 #include <QObject>
 #include "kritaglobal_export.h"
 
-class KisRelaxedTimer;
+#include <QElapsedTimer>
+
+class QTimer;
 
 /**
  * Sets a timer to delay or throttle activation of a Qt slot. One example of
@@ -72,9 +74,10 @@ public:
     KisSignalCompressor(int delay, Mode mode, QObject *parent = 0);
     bool isActive() const;
     void setMode(Mode mode);
-    void setDelay(int delay);
+
 
 public Q_SLOTS:
+    void setDelay(int delay);
     void start();
     void stop();
 
@@ -85,9 +88,15 @@ Q_SIGNALS:
     void timeout();
 
 private:
-    KisRelaxedTimer *m_timer;
-    Mode m_mode;
-    bool m_gotSignals;
+    bool tryEmitOnTick(bool isFromTimer);
+    bool tryEmitSignalSafely();
+
+private:
+    QTimer *m_timer = 0;
+    Mode m_mode = UNDEFINED;
+    bool m_signalsPending = false;
+    QElapsedTimer m_lastEmittedTimer;
+    int m_isEmitting = 0;
 };
 
 #endif /* __KIS_SIGNAL_COMPRESSOR_H */

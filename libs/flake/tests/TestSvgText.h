@@ -38,6 +38,7 @@ private Q_SLOTS:
     void testHindiText();
     void testTextBaselineShift();
     void testTextSpacing();
+    void testTextTabSpacing();
     void testTextDecorations();
     void testRightToLeft();
 
@@ -53,6 +54,7 @@ private Q_SLOTS:
     void testConvertFromIncorrectStrippedSvg();
 
     void testEmptyTextChunk();
+    void testTrailingWhitespace();
 
     void testConvertHtmlToSvg();
     void testTextWithMultipleRelativeOffsets();

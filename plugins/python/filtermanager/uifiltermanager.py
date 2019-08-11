@@ -1,20 +1,22 @@
-'''
-This script is licensed CC 0 1.0, so that you can learn from it.
+# This script is licensed CC 0 1.0, so that you can learn from it.
 
------- CC 0 1.0 ---------------
+# ------ CC 0 1.0 ---------------
 
-The person who associated a work with this deed has dedicated the work to the public domain by waiving all of his or her rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law.
+# The person who associated a work with this deed has dedicated the
+# work to the public domain by waiving all of his or her rights to the
+# work worldwide under copyright law, including all related and
+# neighboring rights, to the extent allowed by law.
 
-You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.
+# You can copy, modify, distribute and perform the work, even for
+# commercial purposes, all without asking permission.
 
-https://creativecommons.org/publicdomain/zero/1.0/legalcode
-'''
-from filtermanager import filtermanagerdialog
-from filtermanager.components import (filtercombobox, filtermanagertreemodel)
+# https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
+from . import filtermanagerdialog
+from .components import (filtercombobox, filtermanagertreemodel)
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QFormLayout, QAbstractItemView, QDialogButtonBox,
-                             QVBoxLayout, QFrame, QAbstractScrollArea, QWidget,
-                             QTreeView)
+                             QVBoxLayout, QFrame, QTreeView)
 import krita
 
 
@@ -24,7 +26,8 @@ class UIFilterManager(object):
         self.mainDialog = filtermanagerdialog.FilterManagerDialog()
         self.mainLayout = QVBoxLayout(self.mainDialog)
         self.formLayout = QFormLayout()
-        self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        self.buttonBox = QDialogButtonBox(
+            QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
 
         self.kritaInstance = krita.Krita.instance()
         self._filters = sorted(self.kritaInstance.filters())
@@ -37,17 +40,18 @@ class UIFilterManager(object):
         self.buttonBox.accepted.connect(self.confirmButton)
         self.buttonBox.rejected.connect(self.mainDialog.close)
 
-        self.documentsTreeView.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.documentsTreeView.setSelectionMode(
+            QAbstractItemView.SingleSelection)
         self.mainDialog.setWindowModality(Qt.NonModal)
 
     def initialize(self):
         self.documentsTreeView.setModel(self.treeModel)
-        self.documentsTreeView.setWindowTitle("Document Tree Model")
+        self.documentsTreeView.setWindowTitle(i18n("Document Tree Model"))
         self.documentsTreeView.resizeColumnToContents(0)
         self.documentsTreeView.resizeColumnToContents(1)
         self.documentsTreeView.resizeColumnToContents(2)
 
-        self.formLayout.addRow("Filters", self.filterComboBox)
+        self.formLayout.addRow(i18n("Filters:"), self.filterComboBox)
 
         self.line = QFrame()
         self.line.setFrameShape(QFrame.HLine)
@@ -59,7 +63,7 @@ class UIFilterManager(object):
         self.mainLayout.addWidget(self.buttonBox)
 
         self.mainDialog.resize(500, 300)
-        self.mainDialog.setWindowTitle("Filter Manager")
+        self.mainDialog.setWindowTitle(i18n("Filter Manager"))
         self.mainDialog.setSizeGripEnabled(True)
         self.mainDialog.show()
         self.mainDialog.activateWindow()
@@ -92,8 +96,9 @@ class UIFilterManager(object):
         _filter.apply(node, 0, 0, document.width(), document.height())
 
     def applyFilterOverDocument(self, document):
-        """ This method applies the selected filter just to topLevelNodes, then
-            if topLevelNodes are GroupLayers, that filter will not be applied. """
+        """This method applies the selected filter just to topLevelNodes,
+        then if topLevelNodes are GroupLayers, that filter will not be
+        applied."""
 
         for node in document.topLevelNodes():
             self.applyFilterOverNode(node, document)

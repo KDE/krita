@@ -18,30 +18,78 @@
  */
 
 #include <KoShapeCreateCommand.h>
+#include <KoShapeDeleteCommand.h>
 #include <kis_node_visitor.h>
 #include <kis_processing_visitor.h>
 #include <kis_shape_layer_canvas.h>
 
 #include "KisReferenceImagesLayer.h"
 #include "KisReferenceImage.h"
+#include "KisDocument.h"
 
-struct AddReferenceImageCommand : KoShapeCreateCommand
+struct AddReferenceImagesCommand : KoShapeCreateCommand
 {
-    AddReferenceImageCommand(KisReferenceImagesLayer *layer, KisReferenceImage* referenceImage)
-        : KoShapeCreateCommand(layer->shapeController(), {referenceImage}, layer, nullptr, kundo2_i18n("Add reference image"))
+    AddReferenceImagesCommand(KisDocument *document, KisSharedPtr<KisReferenceImagesLayer> layer, const QList<KoShape*> referenceImages)
+        : KoShapeCreateCommand(layer->shapeController(), referenceImages, layer.data(), nullptr, kundo2_i18n("Add reference image"))
+        , m_document(document)
         , m_layer(layer)
     {}
 
     void redo() override {
+        auto layer = m_document->referenceImagesLayer();
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!layer || layer == m_layer)
+
+        if (!layer) {
+            m_document->setReferenceImagesLayer(m_layer, true);
+        }
+
         KoShapeCreateCommand::redo();
     }
 
     void undo() override {
         KoShapeCreateCommand::undo();
+
+        if (m_layer->shapeCount() == 0) {
+            m_document->setReferenceImagesLayer(nullptr, true);
+        }
     }
 
 private:
-    KisReferenceImagesLayer *m_layer;
+    KisDocument *m_document;
+    KisSharedPtr<KisReferenceImagesLayer> m_layer;
+};
+
+struct RemoveReferenceImagesCommand : KoShapeDeleteCommand
+{
+    RemoveReferenceImagesCommand(KisDocument *document, KisSharedPtr<KisReferenceImagesLayer> layer, QList<KoShape *> referenceImages)
+        : KoShapeDeleteCommand(layer->shapeController(), referenceImages)
+        , m_document(document)
+        , m_layer(layer)
+    {}
+
+
+    void redo() override {
+        KoShapeDeleteCommand::redo();
+
+        if (m_layer->shapeCount() == 0) {
+            m_document->setReferenceImagesLayer(nullptr, true);
+        }
+    }
+
+    void undo() override {
+        auto layer = m_document->referenceImagesLayer();
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!layer || layer == m_layer)
+
+        if (!layer) {
+            m_document->setReferenceImagesLayer(m_layer, true);
+        }
+
+        KoShapeDeleteCommand::undo();
+    }
+
+private:
+    KisDocument *m_document;
+    KisSharedPtr<KisReferenceImagesLayer> m_layer;
 };
 
 class ReferenceImagesCanvas : public KisShapeLayerCanvasBase
@@ -64,28 +112,59 @@ public:
 
     void forceRepaint() override
     {
-        m_layer->signalUpdate(m_layer->extent());
+        m_layer->signalUpdate(m_layer->boundingImageRect());
+    }
+
+    bool hasPendingUpdates() const override
+    {
+        return false;
     }
 
     void rerenderAfterBeingInvisible() override {}
     void resetCache() override {}
-    void setImage(KisImageWSP /*image*/) override {}
+    void setImage(KisImageWSP image) override
+    {
+        m_viewConverter->setImage(image);
+    }
 
 private:
     KisReferenceImagesLayer *m_layer;
 };
 
-KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image)
+KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image)
     : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8, new ReferenceImagesCanvas(this, image))
 {}
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs)
-    : KisShapeLayer(rhs)
+    : KisShapeLayer(rhs, rhs.shapeController(), new ReferenceImagesCanvas(this, rhs.image()))
 {}
 
-KUndo2Command * KisReferenceImagesLayer::addReferenceImage(KisReferenceImage *referenceImage)
+KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *document, const QList<KoShape*> referenceImages)
 {
-    return new AddReferenceImageCommand(this, referenceImage);
+    KisSharedPtr<KisReferenceImagesLayer> layer = document->referenceImagesLayer();
+    if (!layer) {
+        layer = new KisReferenceImagesLayer(document->shapeController(), document->image());
+    }
+
+    return new AddReferenceImagesCommand(document, layer, referenceImages);
+}
+
+KUndo2Command * KisReferenceImagesLayer::removeReferenceImages(KisDocument *document, QList<KoShape*> referenceImages)
+{
+    return new RemoveReferenceImagesCommand(document, this, referenceImages);
+}
+
+QVector<KisReferenceImage*> KisReferenceImagesLayer::referenceImages() const
+{
+    QVector<KisReferenceImage*> references;
+
+    Q_FOREACH(auto shape, shapes()) {
+        KisReferenceImage *referenceImage = dynamic_cast<KisReferenceImage*>(shape);
+        if (referenceImage) {
+            references.append(referenceImage);
+        }
+    }
+    return references;
 }
 
 void KisReferenceImagesLayer::paintReferences(QPainter &painter) {
@@ -107,9 +186,19 @@ void KisReferenceImagesLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapt
     visitor.visit(this, undoAdapter);
 }
 
+bool KisReferenceImagesLayer::isFakeNode() const
+{
+    return true;
+}
+
 void KisReferenceImagesLayer::signalUpdate(const QRectF &rect)
 {
     emit sigUpdateCanvas(rect);
+}
+
+QRectF KisReferenceImagesLayer::boundingImageRect() const
+{
+    return converter()->documentToView(boundingRect());
 }
 
 QColor KisReferenceImagesLayer::getPixel(QPointF position) const

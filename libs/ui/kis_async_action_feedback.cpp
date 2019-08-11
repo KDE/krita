@@ -52,14 +52,14 @@ T runActionImpl(std::function<T()> func)
     watcher.setFuture(result);
 
     while (watcher.isRunning()) {
-        qApp->processEvents();
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     }
 
     watcher.waitForFinished();
     return watcher.result();
 }
 
-KisImportExportFilter::ConversionStatus KisAsyncActionFeedback::runAction(std::function<KisImportExportFilter::ConversionStatus()> func)
+KisImportExportErrorCode KisAsyncActionFeedback::runAction(std::function<KisImportExportErrorCode()> func)
 {
     return runActionImpl(func);
 }
@@ -71,7 +71,7 @@ void KisAsyncActionFeedback::runVoidAction(std::function<void()> func)
     watcher.setFuture(result);
 
     while (watcher.isRunning()) {
-        qApp->processEvents();
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     }
 
     watcher.waitForFinished();
@@ -80,7 +80,7 @@ void KisAsyncActionFeedback::runVoidAction(std::function<void()> func)
 void KisAsyncActionFeedback::waitForMutex(QMutex *mutex)
 {
     while (!mutex->tryLock()) {
-        qApp->processEvents();
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     }
 
     mutex->unlock();

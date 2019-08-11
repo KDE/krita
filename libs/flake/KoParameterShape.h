@@ -80,19 +80,16 @@ public:
     /**
      * @brief Paint the handles
      *
-     * @param painter the painter to paint the handles on
-     * @param converter the view converter for applying the actual zoom
-     * @param handleRadius the radius of the handles used for painting
+     * @param handlesHelper the helper of the handles used for painting
+     * @sa KisHandlePainterHelper
      */
     void paintHandles(KisHandlePainterHelper &handlesHelper);
 
     /**
      * @brief Paint the given handles
      *
-     * @param painter the painter to paint the handles on
-     * @param converter the view converter for applying the actual zoom
+     * @param handlesHelper the helper of the handle used for painting
      * @param handleId of the handle which should be repainted
-     * @param handleRadius the radius of the handle used for painting
      */
     void paintHandle(KisHandlePainterHelper &handlesHelper, int handleId);
 
@@ -138,7 +135,7 @@ protected:
     void setHandles(const QList<QPointF> &handles);
 
     /// constructor
-    KoParameterShape(KoParameterShapePrivate *);
+    KoParameterShape(const KoParameterShape &rhs);
 
     /**
      * @brief Updates the internal state of a KoParameterShape.
@@ -158,8 +155,9 @@ protected:
      */
     virtual void updatePath(const QSizeF &size) = 0;
 
-protected:
-    Q_DECLARE_PRIVATE(KoParameterShape)
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 #endif /* KOPARAMETERSHAPE_H */

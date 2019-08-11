@@ -1,2 +1,3 @@
-# let's make a module
-from .highpass import *
+from .highpass import HighpassExtension
+
+Scripter.addExtension(HighpassExtension(Krita.instance()))

@@ -23,8 +23,10 @@
 #include <QAbstractItemDelegate>
 #include "KoCheckerBoardPainter.h"
 
+#include "kritawidgets_export.h"
+
 /// The resource item delegate for rendering the resource preview
-class KoResourceItemDelegate : public QAbstractItemDelegate
+class KRITAWIDGETS_EXPORT KoResourceItemDelegate : public QAbstractItemDelegate
 {
 public:
     explicit KoResourceItemDelegate(QObject *parent = 0);

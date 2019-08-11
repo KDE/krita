@@ -117,7 +117,6 @@ public:
      */
     QPolygonF estimatedTRCXYY() const;
 
-    QVector <qreal> colorants() const;
     QVector <qreal> lumaCoefficients() const;
 
     //========== Channels =====================================================//
@@ -306,6 +305,7 @@ public:
      * @param height in pixels
      * @param dstProfile destination profile
      * @param renderingIntent the rendering intent
+     * @param conversionFlags conversion flags
      */
     virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                    const KoColorProfile *  dstProfile,
@@ -381,16 +381,10 @@ public:
                                                              quint8 *gamutWarning, double adaptationState) const;
     /**
      * @brief proofPixelsTo
-     * @param src
-     * @param dst
-     * @param dstColorSpace the colorspace to which we go to.
-     * @param proofingSpace the proofing space.
+     * @param src source
+     * @param dst destination
      * @param numPixels the amount of pixels.
-     * @param renderingIntent the rendering intent used for rendering.
-     * @param proofingIntent the intent used for proofing.
-     * @param conversionFlags the conversion flags.
-     * @param gamutWarning the data() of a KoColor.
-     * @param adaptationState the state of adaptation, only affects absolute colorimetric.
+     * @param proofingTransform the intent used for proofing.
      * @return
      */
     virtual bool proofPixelsTo(const quint8 * src,
@@ -544,9 +538,11 @@ public:
      * colorspace.
      *
      * @param srcSpace the colorspace of the source pixels that will be composited onto "us"
-     * @param param the information needed for blitting e.g. the source and destination pixel data,
+     * @param params the information needed for blitting e.g. the source and destination pixel data,
      *        the opacity and flow, ...
      * @param op the composition operator to use, e.g. COPY_OVER
+     * @param renderingIntent the rendering intent
+     * @param conversionFlags the conversion flags.
      *
      */
     virtual void bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op,
@@ -557,13 +553,13 @@ public:
      * Serialize this color following Create's swatch color specification available
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
      *
-     * This function doesn't create the <color /> element but rather the <CMYK />,
-     * <sRGB />, <RGB /> ... elements. It is assumed that colorElt is the <color />
+     * This function doesn't create the \<color /\> element but rather the \<CMYK /\>,
+     * \<sRGB /\>, \<RGB /\> ... elements. It is assumed that colorElt is the \<color /\>
      * element.
      *
      * @param pixel buffer to serialized
      * @param colorElt root element for the serialization, it is assumed that this
-     *                 element is <color />
+     *                 element is \<color /\>
      * @param doc is the document containing colorElt
      */
     virtual void colorToXML(const quint8* pixel, QDomDocument& doc, QDomElement& colorElt) const = 0;
@@ -573,7 +569,7 @@ public:
      * at http://create.freedesktop.org/wiki/index.php/Swatches_-_colour_file_format
      *
      * @param pixel buffer where the color will be unserialized
-     * @param elt the element to unserialize (<CMYK />, <sRGB />, <RGB />)
+     * @param elt the element to unserialize (\<CMYK /\>, \<sRGB /\>, \<RGB /\>)
      * @return the unserialize color, or an empty color object if the function failed
      *         to unserialize the color
      */

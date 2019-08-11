@@ -153,13 +153,13 @@ void DlgBundleManager::accept()
                     //this removes the bundle from the blacklist and add it to the server without saving or putting it in front//
                     if (!bundleServer->addResource(bundle, false, false)){
 
-                        feedback = QString(i18n("Couldn't add bundle \"%1\" to resource server")).arg(name);
+                        feedback = i18n("Couldn't add bundle \"%1\" to resource server", name);
                         bundleFeedback.setText(feedback);
                         bundleFeedback.exec();
                     }
                     if (!isKrita3Bundle) {
                         if (!bundleServer->removeFromBlacklist(bundle)) {
-                            feedback = QString(i18n("Couldn't remove bundle \"%1\" from blacklist")).arg(name);
+                            feedback = i18n("Couldn't remove bundle \"%1\" from blacklist", name);
                             bundleFeedback.setText(feedback);
                             bundleFeedback.exec();
                         }
@@ -174,7 +174,7 @@ void DlgBundleManager::accept()
             }
         }
         else{
-            QString feedback = QString(i18n("Bundle \"%1\" doesn't exist!")).arg(name);
+            QString feedback = i18n("Bundle \"%1\" doesn't exist!", name);
             bundleFeedback.setText(feedback);
             bundleFeedback.exec();
 
@@ -269,8 +269,16 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
             m_ui->lblWebsite->setText(metrics.elidedText(bundle->getMeta("website"), Qt::ElideRight, m_ui->lblWebsite->width()));
             m_ui->lblWebsite->setToolTip(bundle->getMeta("website"));
             m_ui->lblDescription->setPlainText(bundle->getMeta("description"));
-            m_ui->lblCreated->setText(bundle->getMeta("created"));
-            m_ui->lblUpdated->setText(bundle->getMeta("updated"));
+            if (QDateTime::fromString(bundle->getMeta("created"), Qt::ISODate).isValid()) {
+                m_ui->lblCreated->setText(QDateTime::fromString(bundle->getMeta("created"), Qt::ISODate).toLocalTime().toString(Qt::DefaultLocaleShortDate));
+            } else {
+                m_ui->lblCreated->setText(QDate::fromString(bundle->getMeta("created"), "dd/MM/yyyy").toString(Qt::DefaultLocaleShortDate));
+            }
+            if (QDateTime::fromString(bundle->getMeta("updated"), Qt::ISODate).isValid()) {
+                m_ui->lblUpdated->setText(QDateTime::fromString(bundle->getMeta("updated"), Qt::ISODate).toLocalTime().toString(Qt::DefaultLocaleShortDate));
+            } else {
+                m_ui->lblUpdated->setText(QDate::fromString(bundle->getMeta("updated"), "dd/MM/yyyy").toString(Qt::DefaultLocaleShortDate));
+            }
             m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image().scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
             m_ui->listBundleContents->clear();
 
@@ -295,6 +303,10 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
                 else if (resType  == "paintoppresets") {
                     toplevel->setText(0, i18n("Brush Presets"));
                 }
+                else if (resType  == "gamutmasks") {
+                    toplevel->setText(0, i18n("Gamut Masks"));
+                }
+
 
                 m_ui->listBundleContents->addTopLevelItem(toplevel);
 

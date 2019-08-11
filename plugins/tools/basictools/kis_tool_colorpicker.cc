@@ -80,10 +80,11 @@ void KisToolColorPicker::deactivate()
     KisTool::deactivate();
 }
 
-void KisToolColorPicker::pickColor(const QPointF &pos)
+bool KisToolColorPicker::pickColor(const QPointF &pos)
 {
+    // Timer check.
     if (m_colorPickerDelayTimer.isActive()) {
-        return;
+        return false;
     }
     else {
         m_colorPickerDelayTimer.setSingleShot(true);
@@ -94,13 +95,14 @@ void KisToolColorPicker::pickColor(const QPointF &pos)
 
     m_pickedColor.setOpacity(0.0);
 
+    // Pick from reference images.
     if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
         auto *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
-        KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
-        KisReferenceImagesLayer *referenceImageLayer =
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, false);
+        KisSharedPtr<KisReferenceImagesLayer> referenceImageLayer =
             kisCanvas->imageView()->document()->referenceImagesLayer();
 
-        if (referenceImageLayer) {
+        if (referenceImageLayer && kisCanvas->referenceImagesDecoration()->visible()) {
             QColor color = referenceImageLayer->getPixel(pos);
             if (color.isValid()) {
                 m_pickedColor.fromQColor(color);
@@ -109,6 +111,11 @@ void KisToolColorPicker::pickColor(const QPointF &pos)
     }
 
     if (m_pickedColor.opacityU8() == OPACITY_TRANSPARENT_U8) {
+        if (!currentImage()->bounds().contains(pos.toPoint()) &&
+            !currentImage()->wrapAroundModePermitted()) {
+            return false;
+        }
+
         KisPaintDeviceSP dev;
 
         if (m_optionsWidget->cmbSources->currentIndex() != SAMPLE_MERGED &&
@@ -120,82 +127,26 @@ void KisToolColorPicker::pickColor(const QPointF &pos)
             dev = currentImage()->projection();
         }
 
-        // Color sampling radius.
-        if (m_config->radius == 1) {
-            QPoint realPos = pos.toPoint();
-            if (currentImage()->wrapAroundModePermitted()) {
-                realPos = KisWrappedRect::ptToWrappedPt(realPos, currentImage()->bounds());
-            }
+        KoColor previousColor = canvas()->resourceManager()->foregroundColor();
 
-            dev->pixel(realPos.x(), realPos.y(), &m_pickedColor);
+        KisToolUtils::pickColor(m_pickedColor, dev, pos.toPoint(), &previousColor, m_config->radius, m_config->blend);
+    }
+
+    if (m_config->updateColor &&
+        m_pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8) {
+
+        KoColor publicColor = m_pickedColor;
+        publicColor.setOpacity(OPACITY_OPAQUE_U8); // Alpha is unwanted for FG and BG colors.
+
+        if (m_config->toForegroundColor) {
+            canvas()->resourceManager()->setResource(KoCanvasResourceProvider::ForegroundColor, publicColor);
         }
         else {
-            const KoColorSpace *cs = dev->colorSpace();
-            int pixelSize = cs->pixelSize();
-
-            quint8 *dstColor = new quint8[pixelSize];
-            QVector<const quint8 *> pixels;
-
-            KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
-
-            for (int y = -m_config->radius; y <= m_config->radius; y++) {
-                for (int x = -m_config->radius; x <= m_config->radius; x++) {
-                    if (((x * x) + (y * y)) < m_config->radius * m_config->radius) {
-
-                        QPoint realPos(pos.x() + x, pos.y() + y);
-
-                        if (currentImage()->wrapAroundModePermitted()) {
-                            realPos = KisWrappedRect::ptToWrappedPt(realPos, currentImage()->bounds());
-                        }
-
-                        accessor->moveTo(realPos.x(), realPos.y());
-                        pixels << accessor->oldRawData();
-                    }
-                }
-            }
-
-            const quint8 **cpixels = const_cast<const quint8 **>(pixels.constData());
-            cs->mixColorsOp()->mixColors(cpixels, pixels.size(), dstColor);
-
-            m_pickedColor = KoColor(dstColor, cs);
-
-            delete[] dstColor;
-        }
-
-        // Color blending.
-        if(m_config->blend < 100){
-            //Scale from 0..100% to 0..255 range for mixOp weights.
-            quint8 blendScaled = static_cast<quint8>(m_config->blend * 2.55f);
-
-            KoColor previousColor = canvas()->resourceManager()->foregroundColor();
-
-            const quint8 *colors[2];
-            colors[0] = previousColor.data();
-            colors[1] = m_pickedColor.data();
-            qint16 weights[2];
-            weights[0] = 255 - blendScaled;
-            weights[1] = blendScaled;
-
-            const KoMixColorsOp *mixOp = dev->colorSpace()->mixColorsOp();
-            mixOp->mixColors(colors, weights, 2, m_pickedColor.data());
-        }
-
-        m_pickedColor.convertTo(dev->compositionSourceColorSpace());
-
-        if (m_config->updateColor &&
-                m_pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8) {
-
-            KoColor publicColor = m_pickedColor;
-            publicColor.setOpacity(OPACITY_OPAQUE_U8);
-
-            if (m_config->toForegroundColor) {
-                canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, publicColor);
-            }
-            else {
-                canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, publicColor);
-            }
+            canvas()->resourceManager()->setResource(KoCanvasResourceProvider::BackgroundColor, publicColor);
         }
     }
+
+    return true;
 }
 
 void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
@@ -215,15 +166,16 @@ void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
     }
 
     QPoint pos = convertToImagePixelCoordFloored(event);
-    // Color picking has to start in the visible part of the layer
-    if (!currentImage()->bounds().contains(pos) &&
-        !currentImage()->wrapAroundModePermitted()) {
+
+    setMode(KisTool::PAINT_MODE);
+
+    bool picked = pickColor(pos);
+    if (!picked) {
+        // Color picking has to start in the visible part of the layer
         event->ignore();
         return;
     }
 
-    setMode(KisTool::PAINT_MODE);
-    pickColor(pos);
     displayPickedColor();
 }
 
@@ -236,14 +188,17 @@ void KisToolColorPicker::continuePrimaryAction(KoPointerEvent *event)
     displayPickedColor();
 }
 
+#include "kis_canvas2.h"
+#include "kis_display_color_converter.h"
+
 void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     if (m_config->addPalette) {
-        KoColorSetEntry ent;
-        ent.color = m_pickedColor;
+        KisSwatch ent;
+        ent.setColor(m_pickedColor);
         // We don't ask for a name, too intrusive here
 
         KoColorSet *palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
@@ -253,6 +208,7 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
         }
     }
+
 }
 
 struct PickedChannel {
@@ -292,6 +248,17 @@ void KisToolColorPicker::displayPickedColor()
             item->setText(0, pc.name);
             item->setText(1, pc.valueText);
         }
+
+        KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        KoColor newColor = kritaCanvas->displayColorConverter()->applyDisplayFiltering(m_pickedColor, Float32BitsColorDepthID);
+        QVector<float> values(4);
+        newColor.colorSpace()->normalisedChannelsValue(newColor.data(), values);
+
+        for (int i = 0; i < values.size(); i++) {
+            QTreeWidgetItem *item = new QTreeWidgetItem(m_optionsWidget->listViewChannels);
+            item->setText(0, QString("DisplayCh%1").arg(i));
+            item->setText(1, QString::number(values[i]));
+        }
     }
 }
 
@@ -309,6 +276,7 @@ QWidget* KisToolColorPicker::createOptionWidget()
 
     // Initialize blend KisSliderSpinBox
     m_optionsWidget->blend->setRange(0,100);
+    m_optionsWidget->blend->setSuffix("%");
 
     updateOptionWidget();
 

@@ -117,7 +117,7 @@ qint32 KisImageManager::importImage(const QUrl &urlArg, const QString &layerType
         KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenFiles, "OpenDocument");
         dialog.setCaption(i18n("Import Image"));
         dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
-        dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
+        dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
         QStringList fileNames = dialog.filenames();
         Q_FOREACH (const QString &fileName, fileNames) {
             urls << QUrl::fromLocalFile(fileName);
@@ -127,11 +127,17 @@ qint32 KisImageManager::importImage(const QUrl &urlArg, const QString &layerType
         urls.push_back(urlArg);
     }
 
-    if (urls.empty())
+    if (urls.empty()) {
         return 0;
+    }
 
-    for (QList<QUrl>::iterator it = urls.begin(); it != urls.end(); ++it) {
-        new KisImportCatcher(*it, m_view, layerType);
+    Q_FOREACH(const QUrl &url, urls) {
+        if (url.toLocalFile().endsWith("svg")) {
+            new KisImportCatcher(url, m_view, "KisShapeLayer");
+        }
+        else {
+            new KisImportCatcher(url, m_view, layerType);
+        }
     }
 
     m_view->canvas()->update();
@@ -193,7 +199,7 @@ void KisImageManager::slotImageColor()
 
     QColorDialog dlg;
     dlg.setOption(QColorDialog::ShowAlphaChannel, true);
-
+    dlg.setWindowTitle(i18n("Select a Color"));
     KoColor bg = image->defaultProjectionColor();
     dlg.setCurrentColor(bg.toQColor());
 

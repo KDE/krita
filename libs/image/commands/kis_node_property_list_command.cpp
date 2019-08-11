@@ -187,13 +187,12 @@ void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImag
 
     QScopedPointer<KUndo2Command> cmd(new KisNodePropertyListCommand(node, proplist));
 
+    image->setModified();
+
     if (undo.contains(true)) {
         image->undoAdapter()->addCommand(cmd.take());
-        image->setModified();
     }
     else {
-        cmd->redo();
-
         /**
          * HACK ALERT!
          *
@@ -206,13 +205,22 @@ void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImag
          */
 
         struct SimpleLodResettingStroke : public KisSimpleStrokeStrategy {
-            SimpleLodResettingStroke()
+            SimpleLodResettingStroke(KUndo2Command *cmd)
+                : m_cmd(cmd)
             {
                 setClearsRedoOnStart(false);
+                this->enableJob(JOB_INIT, true);
             }
+
+            void initStrokeCallback() {
+                m_cmd->redo();
+            }
+
+        private:
+            QScopedPointer<KUndo2Command> m_cmd;
         };
 
-        KisStrokeId strokeId = image->startStroke(new SimpleLodResettingStroke());
+        KisStrokeId strokeId = image->startStroke(new SimpleLodResettingStroke(cmd.take()));
         image->endStroke(strokeId);
     }
 

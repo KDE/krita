@@ -89,7 +89,7 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
     /**
      * Reset configuration to the desired settings
      */
-    KisImageConfig config;
+    KisImageConfig config(false);
     qreal oldHardLimit = config.memoryHardLimitPercent();
     qreal oldSoftLimit = config.memorySoftLimitPercent();
     qreal oldPoolLimit = config.memoryPoolLimitPercent();

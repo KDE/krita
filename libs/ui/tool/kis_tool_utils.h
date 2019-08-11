@@ -46,10 +46,21 @@ private:
 };
 
 /**
- * return the color at the given position on the given paint device.
+ * Pick a color based on the given position on the given paint device.
+ *
+ * out_color   - Output parameter returning newly picked color.
+ * dev         - Paint device to pick from.
+ * pos         - Position to pick from.
+ * blendColor  - Optional color to be blended with.
+ * radius      - Picking area radius in pixels.
+ * blend       - Blend percentage. 100% all picked, 0% all blendColor.
+ * pure        - Whether to bypass radius, blending, and active layer settings for pure picking.
+ *
+ * RETURN      - Returns TRUE whenever a valid color is picked.
  */
-bool KRITAUI_EXPORT pick(KisPaintDeviceSP dev, const QPoint &pos, KoColor *color,
-                         KoColor *previousColor = nullptr, int radius = 1, int blend = 100);
+bool KRITAUI_EXPORT pickColor(KoColor &out_color, KisPaintDeviceSP dev, const QPoint &pos,
+                              KoColor const *const blendColor = nullptr, int radius = 1,
+                              int blend = 100, bool pure = false);
 
 /**
  * Recursively search a node with a non-transparent pixel

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>486</width>
+    <width>503</width>
     <height>464</height>
    </rect>
   </property>
@@ -17,20 +17,7 @@
       <number>15</number>
      </property>
      <item>
-      <widget class="QLabel" name="strengthLabel">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Strength:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KisDoubleSliderSpinBox" name="slider" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="strengthSlider" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -302,8 +289,11 @@
        </item>
        <item row="0" column="1">
         <layout class="QGridLayout" name="gridLayout">
-         <item row="3" column="2">
+         <item row="2" column="1">
           <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_7"/>
+           </item>
            <item>
             <widget class="QLabel" name="label_ymax">
              <property name="sizePolicy">
@@ -331,6 +321,54 @@
             </spacer>
            </item>
            <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <item>
+              <widget class="QSpinBox" name="intOut">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="wrapping">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
             <widget class="QLabel" name="label_ymin">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -345,7 +383,7 @@
            </item>
           </layout>
          </item>
-         <item row="4" column="1">
+         <item row="3" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
             <widget class="QLabel" name="label_xmin">
@@ -361,14 +399,51 @@
             </widget>
            </item>
            <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="intIn">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>10</width>
-               <height>10</height>
+               <width>40</width>
+               <height>20</height>
               </size>
              </property>
             </spacer>
@@ -388,7 +463,7 @@
            </item>
           </layout>
          </item>
-         <item row="3" column="1">
+         <item row="2" column="0">
           <widget class="KisCurveWidget" name="curveWidget" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -472,7 +547,6 @@
     </layout>
    </item>
   </layout>
-  <zorder>curveWidget</zorder>
  </widget>
  <customwidgets>
   <customwidget>
@@ -482,15 +556,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisMultiSensorsSelector</class>
-   <extends>QWidget</extends>
-   <header>kis_multi_sensors_selector.h</header>
+   <class>KisCurveWidget</class>
+   <extends></extends>
+   <header>widgets/kis_curve_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisCurveWidget</class>
+   <class>KisMultiSensorsSelector</class>
    <extends>QWidget</extends>
-   <header location="global">widgets/kis_curve_widget.h</header>
+   <header>kis_multi_sensors_selector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

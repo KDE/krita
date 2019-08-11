@@ -31,14 +31,14 @@
 class KoCanvasBase;
 class KoShape;
 class KoShapeContainer;
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 class KUndo2Command;
 class KoDocumentResourceManager;
 
 /**
  * Class used by tools to maintain the list of shapes.
  * All applications have some sort of list of all shapes that belong to the document.
- * The applications implement the KoShapeBasedDocumentBase interface (all pure virtuals)
+ * The applications implement the KoShapeControllerBase interface (all pure virtuals)
  * to add and remove shapes from the document. To ensure that an application can expect
  * a certain protocol to be adhered to when adding/removing shapes, all tools use the API
  * from this class for maintaining the list of shapes in the document. So no tool gets
@@ -53,9 +53,9 @@ public:
      * Create a new Controller; typically not called by applications, only
      * by the KonCanvasBase constructor.
      * @param canvas the canvas this controller works for. The canvas can be 0
-     * @param shapeBasedDocument the application provided shapeBasedDocument that we can call.
+     * @param shapeController the application provided shapeController that we can call.
      */
-    KoShapeController(KoCanvasBase *canvas, KoShapeBasedDocumentBase *shapeBasedDocument);
+    KoShapeController(KoCanvasBase *canvas, KoShapeControllerBase *shapeController);
     /// destructor
     ~KoShapeController() override;
 
@@ -69,6 +69,7 @@ public:
      * If the shape has no parent, the active layer will become its parent.
      *
      * @param shape to add to the document
+     * @param parentShape the parent shape
      * @param parent the parent command if the resulting command is a compound undo command.
      *
      * @return command which will insert the shape into the document or 0 if the
@@ -80,6 +81,7 @@ public:
      * @brief Add a shape to the document, skipping any dialogs or other user interaction.
      *
      * @param shape to add to the document
+     * @param parentShape the parent shape
      * @param parent the parent command if the resulting command is a compound undo command.
      *
      * @return command which will insert the shape into the document. The command is not yet executed.
@@ -89,7 +91,8 @@ public:
     /**
      * @brief Add shapes to the document, skipping any dialogs or other user interaction.
      *
-     * @param shapes to add to the document
+     * @param shape  the shape to add to the document
+     * @param parentShape the parent shape
      * @param parent the parent command if the resulting command is a compound undo command.
      *
      * @return command which will insert the shapes into the document. The command is not yet executed.
@@ -119,15 +122,15 @@ public:
     KUndo2Command* removeShapes(const QList<KoShape*> &shapes, KUndo2Command *parent = 0);
 
     /**
-     * @brief Set the KoShapeBasedDocumentBase used to add/remove shapes.
+     * @brief Set the KoShapeControllerBase used to add/remove shapes.
      *
      * NOTE: only Sheets uses this method. Do not use it in your application. Sheets
      * has to also call:
-     * <code>KoToolManager::instance()->updateShapeControllerBase(shapeBasedDocument, canvas->canvasController());</code>
+     * <code>KoToolManager::instance()->updateShapeControllerBase(shapeController, canvas->canvasController());</code>
      *
-     * @param shapeBasedDocument the new shapeBasedDocument.
+     * @param shapeController the new shapeController.
      */
-    void setShapeControllerBase(KoShapeBasedDocumentBase *shapeBasedDocument);
+    void setShapeControllerBase(KoShapeControllerBase *shapeController);
 
     /**
      * The size of the document measured in rasterized pixels. This information is needed for loading
@@ -136,7 +139,7 @@ public:
     QRectF documentRectInPixels() const;
 
     /**
-     * Resolution of the rasterized representaiton of the document. Used to load SVG documents correctly.
+     * Resolution of the rasterized representation of the document. Used to load SVG documents correctly.
      */
     qreal pixelsPerInch() const;
 
@@ -154,11 +157,11 @@ public:
     KoDocumentResourceManager *resourceManager() const;
 
     /**
-     * @brief Returns the KoShapeBasedDocumentBase used to add/remove shapes.
+     * @brief Returns the KoShapeControllerBase used to add/remove shapes.
      *
-     * @return the KoShapeBasedDocumentBase
+     * @return the KoShapeControllerBase
      */
-    KoShapeBasedDocumentBase *documentBase() const;
+    KoShapeControllerBase *documentBase() const;
 
 private:
     class Private;

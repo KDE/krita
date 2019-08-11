@@ -42,6 +42,8 @@ public:
     static QString categoryColor();
 
     static QString categoryArithmetic();
+    static QString categoryBinary();
+    static QString categoryModulo();
     static QString categoryNegative();
     static QString categoryLight();
     static QString categoryDark();
@@ -50,7 +52,8 @@ public:
     static QString categoryHSL();
     static QString categoryHSV();
     static QString categoryMix();
-    static QString categoryMisc();
+    static QString categoryMisc();    
+    static QString categoryQuadratic();
 
     struct KRITAPIGMENT_EXPORT ParameterInfo
     {

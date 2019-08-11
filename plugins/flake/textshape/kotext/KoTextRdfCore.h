@@ -104,6 +104,7 @@ QList<Soprano::Statement> KRITATEXT_EXPORT loadList(QSharedPointer<Soprano::Mode
  * model again.
  *
  * The result will be like:
+ * @verbatim
  * ListHeadSubject 22-rdf-syntax-ns#first dataBNodeList[0]
  * ListHeadSubject 22-rdf-syntax-ns#rest  bnodeA
  * bnodeA          22-rdf-syntax-ns#first dataBNodeList[1]
@@ -111,6 +112,7 @@ QList<Soprano::Statement> KRITATEXT_EXPORT loadList(QSharedPointer<Soprano::Mode
  * ...
  * bnodeZ          22-rdf-syntax-ns#first dataBNodeList[N]
  * bnodeZ          22-rdf-syntax-ns#rest  nil
+ * @endverbatim
  *
  */
 void KRITATEXT_EXPORT saveList(QSharedPointer<Soprano::Model> model, Soprano::Node ListHeadSubject,

@@ -26,6 +26,7 @@
 
 #include <KoPathShape.h>
 
+#include "kis_algebra_2d.h"
 #include "kis_painter.h"
 #include <brushengine/kis_paintop_registry.h>
 #include "kis_selection_options.h"
@@ -52,9 +53,20 @@ void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &point
     if (!kisCanvas)
         return;
 
+    const QRectF boundingViewRect = pixelToView(KisAlgebra2D::accumulateBounds(points));
+
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Polygon"));
 
-    if (selectionMode() == PIXEL_SELECTION) {
+    if (helper.tryDeselectCurrentSelection(pixelToView(boundingViewRect), selectionAction())) {
+        return;
+    }
+
+    const SelectionMode mode =
+        helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
+                                        selectionMode(),
+                                        selectionAction());
+
+    if (mode == PIXEL_SELECTION) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
         KisPainter painter(tmpSel);
@@ -83,7 +95,7 @@ void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &point
         path->close();
         path->normalize();
 
-        helper.addSelectionShape(path);
+        helper.addSelectionShape(path, selectionAction());
     }
 }
 
@@ -91,22 +103,16 @@ void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &point
 KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas):
     KisToolSelectBase<__KisToolSelectPolygonalLocal>(canvas, i18n("Polygonal Selection"))
 {
-    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
-            this, &KisToolSelectPolygonal::setSelectionAction);
 }
 
-void KisToolSelectPolygonal::setSelectionAction(int action)
+void KisToolSelectPolygonal::resetCursorStyle()
 {
-    changeSelectionAction(action);
-}
-
-
-QMenu* KisToolSelectPolygonal::popupActionsMenu()
-{
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
-
-
-    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
+    if (selectionAction() == SELECTION_ADD) {
+        useCursor(KisCursor::load("tool_polygonal_selection_cursor_add.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SUBTRACT) {
+        useCursor(KisCursor::load("tool_polygonal_selection_cursor_sub.png", 6, 6));
+    } else {
+        KisToolSelectBase<__KisToolSelectPolygonalLocal>::resetCursorStyle();
+    }
 }
 

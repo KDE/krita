@@ -66,7 +66,7 @@ public:
 
     /**
      * @brief guidesVisible
-     * Returns guide visiiblity.
+     * Returns guide visibility.
      * @return whether the guides are visible.
      */
     bool guidesVisible() const;
@@ -92,7 +92,7 @@ public Q_SLOTS:
     bool batchmode() const;
 
     /**
-     * Set batchmode to @param value. If batchmode is true, then there should be no popups
+     * Set batchmode to @p value. If batchmode is true, then there should be no popups
      * or dialogs shown to the user.
      */
     void setBatchmode(bool value);
@@ -190,6 +190,22 @@ public Q_SLOTS:
      */
     bool setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
 
+    /**
+     * @brief backgroundColor returns the current background color of the document. The color will
+     * also include the opacity.
+     *
+     * @return QColor
+     */
+    QColor backgroundColor();
+
+    /**
+     * @brief setBackgroundColor sets the background color of the document. It will trigger a projection
+     * update.
+     *
+     * @param color A QColor. The color will be converted from sRGB.
+     * @return bool
+     */
+    bool setBackgroundColor(const QColor &color);
 
     /**
      * @brief documentInfo creates and XML document representing document and author information.
@@ -266,12 +282,12 @@ public Q_SLOTS:
     void setHeight(int value);
 
     /**
-     * @return the name of the document. This is the title field in the @see documentInfo
+     * @return the name of the document. This is the title field in the @ref documentInfo
      */
     QString name() const;
 
     /**
-     * @brief setName sets the name of the document to @param value. This is the title field in the @see documentInfo
+     * @brief setName sets the name of the document to @p value. This is the title field in the @ref documentInfo
      */
     void setName(QString value);
 
@@ -320,7 +336,7 @@ public Q_SLOTS:
     int xOffset() const;
 
     /**
-     * @brief setXOffset sets the left edge of the canvas to @param x.
+     * @brief setXOffset sets the left edge of the canvas to @p x.
      */
     void setXOffset(int x);
 
@@ -330,7 +346,7 @@ public Q_SLOTS:
     int yOffset() const;
 
     /**
-     * @brief setYOffset sets the top edge of the canvas to @param y.
+     * @brief setYOffset sets the top edge of the canvas to @p y.
      */
     void setYOffset(int y);
 
@@ -401,8 +417,12 @@ public Q_SLOTS:
     bool close();
 
     /**
-     * @brief crop the image to rectangle described by @param x, @param y,
-     * @param w and @param h
+     * @brief crop the image to rectangle described by @p x, @p y,
+     * @p w and @p h
+     * @param x x coordinate of the top left corner
+     * @param y y coordinate of the top left corner
+     * @param w width
+     * @param h height
      */
     void crop(int x, int y, int w, int h);
 
@@ -505,8 +525,8 @@ public Q_SLOTS:
     bool save();
 
     /**
-     * @brief saveAs save the document under the @param filename. The document's
-     * filename will be reset to @param filename.
+     * @brief saveAs save the document under the @p filename. The document's
+     * filename will be reset to @p filename.
      * @param filename the new filename (full path) for the document
      * @return true if saving succeeded, false otherwise.
      */
@@ -628,9 +648,20 @@ print(root.childNodes())
      * Creates a filter mask object that much like a filterlayer can apply a filter non-destructively.
      * @param name the name of the layer.
      * @param filter the filter assigned.
+     * @param selection the selection to be used by the filter mask
      * @return a FilterMask
      */
-    FilterMask* createFilterMask(const QString &name, Filter &filter);
+    FilterMask* createFilterMask(const QString &name, Filter &filter, Selection &selection);
+
+    /**
+     * @brief createFilterMask
+     * Creates a filter mask object that much like a filterlayer can apply a filter non-destructively.
+     * @param name the name of the layer.
+     * @param filter the filter assigned.
+     * @param selection_source a node from which the selection should be initialized
+     * @return a FilterMask
+     */
+    FilterMask* createFilterMask(const QString &name, Filter &filter, const Node* selection_source);
 
     /**
      * @brief createSelectionMask
@@ -695,13 +726,13 @@ print(root.childNodes())
     /**
      * @brief setHorizontalGuides
      * replace all existing horizontal guides with the entries in the list.
-     * @param list a list of floats containing the new guides.
+     * @param lines a list of floats containing the new guides.
      */
     void setHorizontalGuides(const QList<qreal> &lines);
     /**
      * @brief setVerticalGuides
      * replace all existing horizontal guides with the entries in the list.
-     * @param list a list of floats containing the new guides.
+     * @param lines a list of floats containing the new guides.
      */
     void setVerticalGuides(const QList<qreal> &lines);
 
@@ -718,6 +749,105 @@ print(root.childNodes())
      * @param locked whether or not to lock the guides on this document.
      */
     void setGuidesLocked(bool locked);
+
+    /**
+     * @brief modified returns true if the document has unsaved modifications.
+     */
+    bool modified() const;
+
+    /**
+     * @brief bounds return the bounds of the image
+     * @return the bounds
+     */
+    QRect bounds() const;
+
+
+
+
+
+
+
+    /****
+     * Animation Related API
+    *****/
+
+
+    /**
+     * @brief Import an image sequence of files from a directory. This will grab all
+     * images from the directory and import them with a potential offset (firstFrame)
+     * and step (images on 2s, 3s, etc)
+     * @returns whether the animation import was successful
+     */
+    bool importAnimation(const QList<QString> &files, int firstFrame, int step);
+
+    /**
+     * @brief frames per second of document
+     * @return the fps of the document
+     */
+    int framesPerSecond();
+
+    /**
+     * @brief set frames per second of document
+     */
+    void setFramesPerSecond(int fps);
+
+    /**
+     * @brief set start time of animation
+     */
+    void setFullClipRangeStartTime(int startTime);
+
+    /**
+     * @brief get the full clip range start time
+     * @return full clip range start time
+     */
+    int fullClipRangeStartTime();
+
+
+    /**
+     * @brief set full clip range end time
+     */
+    void setFullClipRangeEndTime(int endTime);
+
+    /**
+     * @brief get the full clip range end time
+     * @return full clip range end time
+     */
+    int fullClipRangeEndTime();
+
+    /**
+     * @brief get total frame range for animation
+     * @return total frame range for animation
+     */
+    int animationLength();
+
+    /**
+     * @brief set temporary playback range of document
+     */
+    void setPlayBackRange(int start, int stop);
+
+    /**
+     * @brief get start time of current playback
+     * @return start time of current playback
+     */
+    int playBackStartTime();
+
+    /**
+     * @brief get end time of current playback
+     * @return end time of current playback
+     */
+    int playBackEndTime();
+
+    /**
+     * @brief get current frame selected of animation
+     * @return current frame selected of animation
+     */
+    int currentTime();
+
+    /**
+     * @brief set current time of document's animation
+     */
+    void setCurrentTime(int time);
+
 
 private:
 

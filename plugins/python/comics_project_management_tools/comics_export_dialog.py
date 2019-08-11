@@ -40,10 +40,10 @@ class comic_export_resize_widget(QGroupBox):
     def __init__(self, configName, batch=False, fileType=True):
         super().__init__()
         self.configName = configName
-        self.setTitle("Adjust Workingfile")
+        self.setTitle(i18n("Adjust Working File"))
         formLayout = QFormLayout()
         self.setLayout(formLayout)
-        self.crop = QCheckBox(i18n("Crop files before resize."))
+        self.crop = QCheckBox(i18n("Crop files before resize"))
         self.cmbFile = QComboBox()
         self.cmbFile.addItems(["png", "jpg", "webp"])
         self.resizeMethod = QComboBox()
@@ -217,7 +217,7 @@ class comic_export_setting_dialog(QDialog):
     def __init__(self):
         super().__init__()
         self.setLayout(QVBoxLayout())
-        self.setWindowTitle(i18n("Export settings"))
+        self.setWindowTitle(i18n("Export Settings"))
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
 
         buttons.accepted.connect(self.accept)
@@ -230,14 +230,14 @@ class comic_export_setting_dialog(QDialog):
         # Set which layers to remove before export.
         mainExportSettings = QWidget()
         mainExportSettings.setLayout(QVBoxLayout())
-        groupExportCrop = QGroupBox(i18n("Crop settings"))
+        groupExportCrop = QGroupBox(i18n("Crop Settings"))
         formCrop = QFormLayout()
         groupExportCrop.setLayout(formCrop)
         self.chk_toOutmostGuides = QCheckBox(i18n("Crop to outmost guides"))
         self.chk_toOutmostGuides.setChecked(True)
         self.chk_toOutmostGuides.setToolTip(i18n("This will crop to the outmost guides if possible and otherwise use the underlying crop settings."))
         formCrop.addRow("", self.chk_toOutmostGuides)
-        btn_fromSelection = QPushButton(i18n("Set margins from active selection"))
+        btn_fromSelection = QPushButton(i18n("Set Margins from Active Selection"))
         btn_fromSelection.clicked.connect(self.slot_set_margin_from_selection)
         # This doesn't work.
         formCrop.addRow("", btn_fromSelection)
@@ -263,9 +263,9 @@ class comic_export_setting_dialog(QDialog):
         self.cmbLabelsRemove = labelSelector()
         formLayers.addRow(i18n("Label for removal:"), self.cmbLabelsRemove)
         self.ln_text_layer_name = QLineEdit()
-        self.ln_text_layer_name.setToolTip(i18n("These are keywords that can be used to identify text layers. A layer only needs to contain the keyword to be recognised. Keywords should be comma separated."))
+        self.ln_text_layer_name.setToolTip(i18n("These are keywords that can be used to identify text layers. A layer only needs to contain the keyword to be recognized. Keywords should be comma separated."))
         self.ln_panel_layer_name = QLineEdit()
-        self.ln_panel_layer_name.setToolTip(i18n("These are keywords that can be used to identify panel layers. A layer only needs to contain the keyword to be recognised. Keywords should be comma separated."))
+        self.ln_panel_layer_name.setToolTip(i18n("These are keywords that can be used to identify panel layers. A layer only needs to contain the keyword to be recognized. Keywords should be comma separated."))
         formLayers.addRow(i18n("Text Layer Key:"), self.ln_text_layer_name)
         formLayers.addRow(i18n("Panel Layer Key:"), self.ln_panel_layer_name)
 
@@ -281,11 +281,11 @@ class comic_export_setting_dialog(QDialog):
         self.CBZgroupResize = comic_export_resize_widget("CBZ")
         CBZexportSettings.layout().addWidget(self.CBZgroupResize)
         self.CBZactive.clicked.connect(self.CBZgroupResize.setEnabled)
-        CBZgroupMeta = QGroupBox(i18n("Metadata to add"))
+        CBZgroupMeta = QGroupBox(i18n("Metadata to Add"))
         # CBZexportSettings.layout().addWidget(CBZgroupMeta)
         CBZgroupMeta.setLayout(QFormLayout())
 
-        mainWidget.addTab(CBZexportSettings, "CBZ")
+        mainWidget.addTab(CBZexportSettings, i18n("CBZ"))
 
         # ACBF, crop, resize, creator name, version history, panel layer, text layers.
         ACBFExportSettings = QWidget()
@@ -294,28 +294,25 @@ class comic_export_setting_dialog(QDialog):
         ACBFdocInfo = QGroupBox()
         ACBFdocInfo.setTitle(i18n("ACBF Document Info"))
         ACBFdocInfo.setLayout(ACBFform)
-        self.lnACBFSource = QLineEdit()
-        self.lnACBFSource.setToolTip(i18n("Whether the acbf file is an adaption of an existing source, and if so, how to find information about that source. So for example, for an adapted webcomic, the official website url should go here."))
         self.lnACBFID = QLabel()
-        self.lnACBFID.setToolTip(i18n("By default this will be filled with a generated universal unique identifier. The ID by itself is merely so that comic book library management programs can figure out if this particular comic is already in their database and whether it has been rated. Of course, the UUID can be changed into something else by manually changing the json, but this is advanced usage."))
+        self.lnACBFID.setToolTip(i18n("By default this will be filled with a generated universal unique identifier. The ID by itself is merely so that comic book library management programs can figure out if this particular comic is already in their database and whether it has been rated. Of course, the UUID can be changed into something else by manually changing the JSON, but this is advanced usage."))
         self.spnACBFVersion = QSpinBox()
         self.ACBFhistoryModel = QStandardItemModel()
         acbfHistoryList = QListView()
         acbfHistoryList.setModel(self.ACBFhistoryModel)
-        btn_add_history = QPushButton(i18n("Add history entry"))
+        btn_add_history = QPushButton(i18n("Add History Entry"))
         btn_add_history.clicked.connect(self.slot_add_history_item)
         self.chkIncludeTranslatorComments = QCheckBox()
-        self.chkIncludeTranslatorComments.setText(i18n("Include Translator's Comments"))
+        self.chkIncludeTranslatorComments.setText(i18n("Include translator's comments"))
         self.chkIncludeTranslatorComments.setToolTip(i18n("A PO file can contain translator's comments. If this is checked, the translations comments will be added as references into the ACBF file."))
         self.lnTranslatorHeader = QLineEdit()
 
-        ACBFform.addRow(i18n("Source:"), self.lnACBFSource)
         ACBFform.addRow(i18n("ACBF UID:"), self.lnACBFID)
         ACBFform.addRow(i18n("Version:"), self.spnACBFVersion)
-        ACBFform.addRow(i18n("Version History:"), acbfHistoryList)
+        ACBFform.addRow(i18n("Version history:"), acbfHistoryList)
         ACBFform.addRow("", btn_add_history)
         ACBFform.addRow("", self.chkIncludeTranslatorComments)
-        ACBFform.addRow(i18n("Translator Header:"), self.lnTranslatorHeader)
+        ACBFform.addRow(i18n("Translator header:"), self.lnTranslatorHeader)
 
         ACBFAuthorInfo = QWidget()
         acbfAVbox = QVBoxLayout(ACBFAuthorInfo)
@@ -333,10 +330,10 @@ class comic_export_setting_dialog(QDialog):
         self.ACBFauthorTable.verticalHeader().setSectionsMovable(True)
         self.ACBFauthorTable.verticalHeader().sectionMoved.connect(self.slot_reset_author_row_visual)
         AuthorButtons = QHBoxLayout()
-        btn_add_author = QPushButton(i18n("Add author"))
+        btn_add_author = QPushButton(i18n("Add Author"))
         btn_add_author.clicked.connect(self.slot_add_author)
         AuthorButtons.addWidget(btn_add_author)
-        btn_remove_author = QPushButton(i18n("Remove author"))
+        btn_remove_author = QPushButton(i18n("Remove Author"))
         btn_remove_author.clicked.connect(self.slot_remove_author)
         AuthorButtons.addWidget(btn_remove_author)
         acbfAVbox.addLayout(AuthorButtons)
@@ -349,7 +346,7 @@ class comic_export_setting_dialog(QDialog):
         ACBFStyle.layout().addWidget(self.ACBFStyleClass)
         ACBFStyleEdit = QWidget()
         ACBFStyleEditVB = QVBoxLayout(ACBFStyleEdit)
-        self.ACBFuseFont = QCheckBox(i18n("Use Font"))
+        self.ACBFuseFont = QCheckBox(i18n("Use font"))
         self.ACBFFontList = QListView()
         self.ACBFFontList.setItemDelegate(font_list_delegate())
         self.ACBFuseFont.toggled.connect(self.font_slot_enable_font_view)
@@ -411,7 +408,7 @@ class comic_export_setting_dialog(QDialog):
         self.EPUBgroupResize = comic_export_resize_widget("EPUB")
         EPUBexportSettings.layout().addWidget(self.EPUBgroupResize)
         self.EPUBactive.clicked.connect(self.EPUBgroupResize.setEnabled)
-        mainWidget.addTab(EPUBexportSettings, "EPUB")
+        mainWidget.addTab(EPUBexportSettings, i18n("EPUB"))
 
         # For Print. Crop, no resize.
         TIFFExportSettings = QWidget()
@@ -421,12 +418,12 @@ class comic_export_setting_dialog(QDialog):
         self.TIFFgroupResize = comic_export_resize_widget("TIFF")
         TIFFExportSettings.layout().addWidget(self.TIFFgroupResize)
         self.TIFFactive.clicked.connect(self.TIFFgroupResize.setEnabled)
-        mainWidget.addTab(TIFFExportSettings, "TIFF")
+        mainWidget.addTab(TIFFExportSettings, i18n("TIFF"))
 
         # SVG, crop, resize, embed vs link.
         #SVGExportSettings = QWidget()
 
-        #mainWidget.addTab(SVGExportSettings, "SVG")
+        #mainWidget.addTab(SVGExportSettings, i18n("SVG"))
 
     """
     Add a history item to the acbf version history list.
@@ -434,7 +431,7 @@ class comic_export_setting_dialog(QDialog):
 
     def slot_add_history_item(self):
         newItem = QStandardItem()
-        newItem.setText("v" + str(self.spnACBFVersion.value()) + "-" + i18n("in this version..."))
+        newItem.setText(str(i18n("v{version}-in this version...")).format(version=str(self.spnACBFVersion.value())))
         self.ACBFhistoryModel.appendRow(newItem)
 
     """
@@ -627,12 +624,13 @@ class comic_export_setting_dialog(QDialog):
                     listItems.append(QStandardItem())  # First name
                 self.ACBFauthorModel.appendRow(listItems)
 
-        if "acbfSource" in config.keys():
-            self.lnACBFSource.setText(config["acbfSource"])
-        if "acbfID" in config.keys():
+        if "uuid" in config.keys():
+            self.lnACBFID.setText(config["uuid"])
+        elif "acbfID" in config.keys():
             self.lnACBFID.setText(config["acbfID"])
         else:
-            self.lnACBFID.setText(QUuid.createUuid().toString())
+            config["uuid"] = QUuid.createUuid().toString()
+            self.lnACBFID.setText(config["uuid"])
         if "acbfVersion" in config.keys():
             self.spnACBFVersion.setValue(config["acbfVersion"])
         if "acbfHistory" in config.keys():
@@ -726,8 +724,6 @@ class comic_export_setting_dialog(QDialog):
                     author.pop(listEntries[i])
             authorList.append(author)
         config["acbfAuthor"] = authorList
-        config["acbfSource"] = self.lnACBFSource.text()
-        config["acbfID"] = self.lnACBFID.text()
         config["acbfVersion"] = self.spnACBFVersion.value()
         versionList = []
         for r in range(self.ACBFhistoryModel.rowCount()):
@@ -761,7 +757,7 @@ class comic_export_setting_dialog(QDialog):
         config["translatorHeader"] = self.lnTranslatorHeader.text()
         config["includeTranslComment"] = self.chkIncludeTranslatorComments.isChecked()
 
-        # Turn this into something that retreives from a line-edit when string freeze is over.
+        # Turn this into something that retrieves from a line-edit when string freeze is over.
         config["textLayerNames"] = self.ln_text_layer_name.text().split(",")
         config["panelLayerNames"] = self.ln_panel_layer_name.text().split(",")
         return config

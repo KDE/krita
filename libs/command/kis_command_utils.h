@@ -76,6 +76,7 @@ namespace KisCommandUtils
         std::function<KUndo2Command*()> m_createCommandFunc;
     };
 
+
     struct KRITACOMMAND_EXPORT SkipFirstRedoWrapper : public KUndo2Command {
         SkipFirstRedoWrapper(KUndo2Command *child = 0, KUndo2Command *parent = 0);
         void redo() override;
@@ -86,12 +87,13 @@ namespace KisCommandUtils
         QScopedPointer<KUndo2Command> m_child;
     };
 
+
     struct KRITACOMMAND_EXPORT SkipFirstRedoBase : public KUndo2Command {
         SkipFirstRedoBase(bool skipFirstRedo, KUndo2Command *parent = 0);
         SkipFirstRedoBase(bool skipFirstRedo, const KUndo2MagicString &text, KUndo2Command *parent = 0);
 
-        void redo() final;
-        void undo() final;
+        void redo() override final;
+        void undo() override final;
 
         void setSkipOneRedo(bool value);
 
@@ -105,19 +107,26 @@ namespace KisCommandUtils
 
 
     struct KRITACOMMAND_EXPORT FlipFlopCommand : public KUndo2Command {
-        FlipFlopCommand(bool finalize, KUndo2Command *parent = 0);
+        enum State {
+            INITIALIZING, // Before redo; after undo.
+            FINALIZING    // After redo; before undo.
+        };
 
-        void redo() override;
-        void undo() override;
+        FlipFlopCommand(State initialState, KUndo2Command *parent = 0);
+        FlipFlopCommand(bool finalizing = false, KUndo2Command *parent = 0);
+
+        void redo() override; // partA -> redo command -> partB
+        void undo() override; // partB -> undo command -> partA
 
     protected:
-        virtual void init();
-        virtual void end();
-        bool isFinalizing() const { return m_finalize; }
+        virtual void partA();
+        virtual void partB();
+
+        State getState() const { return m_currentState; }
         bool isFirstRedo() const { return m_firstRedo; }
 
     private:
-        bool m_finalize;
+        State m_currentState;
         bool m_firstRedo;
     };
 

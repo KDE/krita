@@ -22,9 +22,9 @@
 #define KIS_APPLICATION_H
 
 #include <QPointer>
+#include <QScopedPointer>
 #include <qtsingleapplication/qtsingleapplication.h>
 #include "kritaui_export.h"
-#include <KisAutoSaveRecoveryDialog.h>
 
 class KisMainWindow;
 class KisApplicationPrivate;
@@ -115,12 +115,10 @@ private:
     void clearConfig();
 
 private:
-    KisApplicationPrivate * const d;
+    class Private;
+    QScopedPointer<Private> d;
     class ResetStarting;
     friend class ResetStarting;
-    KisAutoSaveRecoveryDialog *m_autosaveDialog;
-    QPointer<KisMainWindow> m_mainWindow; // The first mainwindow we create on startup
-    bool m_batchRun;
 };
 
 #endif

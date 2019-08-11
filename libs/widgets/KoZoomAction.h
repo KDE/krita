@@ -28,7 +28,7 @@
 /**
  * Class KoZoomAction implements an action to provide zoom values.
  * In a toolbar, KoZoomAction will show a dropdown list (combobox), also with
- * the possibility for the user to enter arbritrary zoom value
+ * the possibility for the user to enter arbitrary zoom value
  * (must be an integer). The values shown on the list are always
  * sorted.
  * In a statusbar it provides a scale (slider) plus an editable value plus
@@ -54,19 +54,6 @@ public:
      */
     QWidget* createWidget(QWidget* parent) override;
 
-    enum SpecialButton {
-        AspectMode = 1, ///< changing aspect mode
-        ZoomToSelection = 2, ///< zooms to current selection
-        ZoomToAll = 4 ///< zooms to the whole content of the document
-    };
-    Q_DECLARE_FLAGS(SpecialButtons, SpecialButton)
-
-    /**
-     * Enables specified special buttons.
-     * This should be called immediately after calling the constructor.
-     * @param buttons mask of the special button flags to enable
-     */
-    void setSpecialButtons( SpecialButtons buttons );
 
     qreal effectiveZoom() const;
 
@@ -227,7 +214,5 @@ private:
     class Private;
     Private * const d;
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(KoZoomAction::SpecialButtons)
 
 #endif

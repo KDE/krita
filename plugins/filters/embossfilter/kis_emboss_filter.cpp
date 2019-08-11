@@ -43,6 +43,7 @@
 #include <kis_global.h>
 #include <kis_selection.h>
 #include <kis_types.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
@@ -51,7 +52,7 @@
 #include <KisSequentialIteratorProgress.h>
 
 
-KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), categoryEmboss(), i18n("&Emboss with Variable Depth..."))
+KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), FiltersCategoryEmbossId, i18n("&Emboss with Variable Depth..."))
 {
     setSupportsPainting(false);
     setColorSpaceIndependence(TO_RGBA8);
@@ -76,7 +77,7 @@ KisFilterConfigurationSP KisEmbossFilter::factoryConfiguration() const
  * d                => Emboss value
  *
  * Theory           => This is an amazing effect. And the theory is very simple to
- *                     understand. You get the diference between the colors and
+ *                     understand. You get the difference between the colors and
  *                     increase it. After this, get the gray tone
  */
 void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
@@ -105,7 +106,7 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
     QColor color2;
     KisRandomConstAccessorSP acc = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
     while (it.nextPixel()) {
-    
+
         // XXX: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
         device->colorSpace()->toQColor(it.oldRawData(), &color1);
         acc->moveTo(srcTopLeft.x() + it.x() + Lim_Max(it.x(), 1, Width), srcTopLeft.y() + it.y() + Lim_Max(it.y(), 1, Height));
@@ -147,12 +148,12 @@ int KisEmbossFilter::Lim_Max(int Now, int Up, int Max) const
     return (Up);
 }
 
-KisConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisEmbossFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
 
     vKisIntegerWidgetParam param;
-    param.push_back(KisIntegerWidgetParam(10, 300, 30, i18n("Depth"), "depth"));
+    param.push_back(KisIntegerWidgetParam(10, 300, 30, i18nc("Emboss depth", "Depth"), "depth"));
     KisConfigWidget * w = new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
     Q_CHECK_PTR(w);
     return w;

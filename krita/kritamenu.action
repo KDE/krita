@@ -113,18 +113,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="file_export_pdf">
-      <icon>application-pdf</icon>
-      <text>&amp;Export as PDF...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Export as PDF</toolTip>
-      <iconText>Export as PDF</iconText>
-      <activationFlags>1</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="file_import_animation">
       <icon></icon>
       <text>Import animation frames...</text>
@@ -149,11 +137,11 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-      <Action name="render_image_sequence_again">
+      <Action name="render_animation_again">
       <icon></icon>
-      <text>&amp;Render Image Sequence Again</text>
+      <text>&amp;Render Animation Again</text>
       <whatsThis></whatsThis>
-      <toolTip>Render Animation to Image Sequence Again</toolTip>
+      <toolTip>Render Animation Again</toolTip>
       <iconText>Render Animation</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -265,7 +253,7 @@
       <iconText>Close</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
+      <shortcut>Ctrl+W</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -402,6 +390,18 @@
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Shift+N</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="paste_as_reference">
+      <icon></icon>
+      <text>Paste as R&amp;eference Image</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste as Reference Image</toolTip>
+      <iconText>Paste as Reference Image</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Ctrl+Shift+R</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -574,7 +574,7 @@
   <Actions category="View">
     <text>View</text>
     <Action name="view_show_canvas_only">
-      <icon></icon>
+      <icon>document-new</icon>
       <text>&amp;Show Canvas Only</text>
       <whatsThis></whatsThis>
       <toolTip>Show just the canvas or the whole window</toolTip>
@@ -617,7 +617,7 @@
       <iconText>Wrap Around Mode</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut>W</shortcut>
+      <shortcut></shortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -814,7 +814,7 @@
       <toolTip>Show Pixel Grid</toolTip>
       <iconText>Show Pixel Grid</iconText>
       <activationFlags>1000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationConditions>1000</activationConditions>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
@@ -890,6 +890,17 @@
       <statusTip></statusTip>
     </Action>
 
+    <Action name="view_snap_to_pixel">
+      <icon></icon>
+      <text>Snap Pixel</text>
+      <whatsThis></whatsThis>
+      <toolTip>Snap Pixel</toolTip>
+      <iconText>Snap Pixel</iconText>
+      <activationFlags>1000</activationFlags>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="view_snap_intersection">
       <icon></icon>
       <text>Snap Intersection</text>
@@ -1212,7 +1223,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="deselect">
-      <icon>edit-select-all</icon>
+      <icon>edit-select-none</icon>
       <text>&amp;Deselect</text>
       <whatsThis></whatsThis>
       <toolTip>Deselect</toolTip>
@@ -1235,26 +1246,38 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="krita_filter_invert">
-      <icon></icon>
-      <text>&amp;Invert</text>
-      <whatsThis></whatsThis>
-      <toolTip>Invert</toolTip>
-      <iconText>Invert</iconText>
-      <activationFlags>10000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut>Ctrl+I</shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="convert_to_vector_selection">
       <icon></icon>
       <text>&amp;Convert to Vector Selection</text>
       <whatsThis></whatsThis>
       <toolTip>Convert to Vector Selection</toolTip>
       <iconText>Convert to Vector Selection</iconText>
-      <activationFlags>10000000000</activationFlags>
+      <activationFlags>100000000000000000</activationFlags>
       <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="convert_to_raster_selection">
+      <icon></icon>
+      <text>&amp;Convert to Raster Selection</text>
+      <whatsThis></whatsThis>
+      <toolTip>Convert to Raster Selection</toolTip>
+      <iconText>Convert to Raster Selection</iconText>
+      <activationFlags>10000000000000000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="edit_selection">
+      <icon></icon>
+      <text>Edit Selection</text>
+      <whatsThis></whatsThis>
+      <toolTip>Edit Selection</toolTip>
+      <iconText>Edit Selection</iconText>
+      <activationFlags>10000000000</activationFlags>
+      <activationConditions>100</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -1321,11 +1344,47 @@
     </Action>
     <Action name="selectopaque">
       <icon></icon>
-      <text>Select &amp;Opaque</text>
+      <text>Select &amp;Opaque (Replace)</text>
       <whatsThis></whatsThis>
       <toolTip>Select Opaque</toolTip>
       <iconText>Select Opaque</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1</activationFlags>
+      <activationConditions>100</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selectopaque_add">
+      <icon></icon>
+      <text>Select Opaque (&amp;Add)</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select Opaque (Add)</toolTip>
+      <iconText>Select Opaque (Add)</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>100</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selectopaque_subtract">
+      <icon></icon>
+      <text>Select Opaque (&amp;Subtract)</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select Opaque (Subtract)</toolTip>
+      <iconText>Select Opaque (Subtract)</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>100</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selectopaque_intersect">
+      <icon></icon>
+      <text>Select Opaque (&amp;Intersect)</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select Opaque (Intersect)</toolTip>
+      <iconText>Select Opaque (Intersect)</iconText>
+      <activationFlags>1</activationFlags>
       <activationConditions>100</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -1501,58 +1560,6 @@
       <whatsThis></whatsThis>
       <toolTip>Apply the last G'Mic-Qt action again</toolTip>
       <iconText>Apply the last G'Mic-Qt action again</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-  </Actions>
-
-  <Actions category="Tools">
-    <text>Tools</text>
-    <Action name="Recording_Start_Recording_Macro">
-      <icon>media-record</icon>
-      <text>&amp;Start recording macro</text>
-      <whatsThis></whatsThis>
-      <toolTip>Start recording macro</toolTip>
-      <iconText>Start recording macro</iconText>
-      <activationFlags>1000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="Recording_Stop_Recording_Macro">
-      <icon>media-playback-stop</icon>
-      <text>Stop &amp;recording actions</text>
-      <whatsThis></whatsThis>
-      <toolTip>Stop recording actions</toolTip>
-      <iconText>Stop recording actions</iconText>
-      <activationFlags>1000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="Macro_Open_Play">
-      <icon>media-playback-start</icon>
-      <text>&amp;Open and play...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Open and play</toolTip>
-      <iconText>Open and play</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="Macro_Open_Edit">
-      <icon>document-edit</icon>
-      <text>Open &amp;and edit...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Open and edit</toolTip>
-      <iconText>Open and edit</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

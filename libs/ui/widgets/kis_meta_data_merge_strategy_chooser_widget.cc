@@ -21,7 +21,7 @@
 
 #include <KoDialog.h>
 #include <kis_debug.h>
-#include <metadata/kis_meta_data_merge_strategy_registry.h>
+#include <kis_meta_data_merge_strategy_registry.h>
 
 #include "ui_wdgmetadatamergestrategychooser.h"
 

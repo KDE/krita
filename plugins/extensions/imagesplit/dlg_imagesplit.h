@@ -42,6 +42,7 @@ public:
     DlgImagesplit(KisViewManager* view, const QString &suffix, QStringList listMimeType, int defaultMimeIndex);
     ~DlgImagesplit() override;
     bool autoSave();
+    bool sortHorizontal();
     int horizontalLines();
     int verticalLines();
     int cmbIndex;

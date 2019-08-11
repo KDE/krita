@@ -28,7 +28,7 @@
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_annotation.h"
-#include <KisImageBuilderResult.h>
+#include <KisImportExportErrorCode.h>
 class KisDocument;
 
 struct KisTIFFOptions {
@@ -38,7 +38,6 @@ struct KisTIFFOptions {
     bool flatten = true;
     quint16 jpegQuality = 80;
     quint16 deflateCompress = 6;
-    quint16 faxMode = 1;
     quint16 pixarLogCompress = 6;
     bool saveProfile = true;
 
@@ -53,16 +52,16 @@ public:
     KisTIFFConverter(KisDocument *doc);
     ~KisTIFFConverter() override;
 public:
-    KisImageBuilder_Result buildImage(const QString &filename);
-    KisImageBuilder_Result buildFile(const QString &filename, KisImageSP layer, KisTIFFOptions);
+    KisImportExportErrorCode buildImage(const QString &filename);
+    KisImportExportErrorCode buildFile(const QString &filename, KisImageSP layer, KisTIFFOptions);
     /** Retrieve the constructed image
     */
     KisImageSP image();
 public Q_SLOTS:
     virtual void cancel();
 private:
-    KisImageBuilder_Result decode(const QString &filename);
-    KisImageBuilder_Result readTIFFDirectory(TIFF* image);
+    KisImportExportErrorCode decode(const QString &filename);
+    KisImportExportErrorCode readTIFFDirectory(TIFF* image);
 private:
     KisImageSP m_image;
     KisDocument *m_doc;

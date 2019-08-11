@@ -23,6 +23,8 @@
 
 #include <QDockWidget>
 #include <QPointer>
+#include <QScroller>
+#include <KisKineticScroller.h>
 
 class QWidget;
 
@@ -45,27 +47,19 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
-
-protected:
-    void resizeEvent(QResizeEvent* event) override; ///< reimplemented from QWidget
 public Q_SLOTS:
     /**
      * Update the option widgets to the argument one, removing the currently set widget.
      */
     void setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList);
+    void slotScrollerStateChange(QScroller::State state);
 
     /**
      * Returns whether the docker has an optionwidget attached
      */
     bool hasOptionWidget();
 
-    /**
-     * set the tab option
-     */
-    void setTabEnabled(bool enabled);
-
 private:
-    Q_PRIVATE_SLOT(d, void toggleTab())
     Q_PRIVATE_SLOT(d, void locationChanged(Qt::DockWidgetArea area))
 
     class Private;

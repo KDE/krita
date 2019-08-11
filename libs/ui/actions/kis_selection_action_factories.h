@@ -19,21 +19,12 @@
 #ifndef __KIS_SELECTION_ACTION_FACTORIES_H
 #define __KIS_SELECTION_ACTION_FACTORIES_H
 
+#include "KisNoParameterActionFactory.h"
 #include "operations/kis_operation.h"
 #include "operations/kis_operation_configuration.h"
 #include "operations/kis_filter_selection_operation.h"
 #include "dialogs/kis_dlg_stroke_selection_properties.h"
 
-class KRITAUI_EXPORT KisNoParameterActionFactory : public KisOperation
-{
-public:
-    KisNoParameterActionFactory(const QString &id) : KisOperation(id) {}
-    void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override {
-        Q_UNUSED(config);
-        run(view);
-    }
-    virtual void run(KisViewManager *view) = 0;
-};
 
 struct KRITAUI_EXPORT KisSelectAllActionFactory : public KisNoParameterActionFactory {
     KisSelectAllActionFactory() : KisNoParameterActionFactory("select-all-ui-action") {}
@@ -89,23 +80,23 @@ struct KRITAUI_EXPORT KisCopyMergedActionFactory : public KisNoParameterActionFa
     void run(KisViewManager *view) override;
 };
 
-struct KRITAUI_EXPORT KisPasteNewActionFactory : public KisNoParameterActionFactory {
-    KisPasteNewActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
-    void run(KisViewManager *view) override;
-};
-
 struct KisInvertSelectionOperation : public KisFilterSelectionOperation {
     KisInvertSelectionOperation() : KisFilterSelectionOperation("invertselection") {}
     void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override;
 };
 
 struct KRITAUI_EXPORT KisSelectionToVectorActionFactory : public KisNoParameterActionFactory {
-    KisSelectionToVectorActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
+    KisSelectionToVectorActionFactory() : KisNoParameterActionFactory("selection-to-vector") {}
+    void run(KisViewManager *view) override;
+};
+
+struct KRITAUI_EXPORT KisSelectionToRasterActionFactory : public KisNoParameterActionFactory {
+    KisSelectionToRasterActionFactory() : KisNoParameterActionFactory("selection-to-raster") {}
     void run(KisViewManager *view) override;
 };
 
 struct KRITAUI_EXPORT KisShapesToVectorSelectionActionFactory : public KisNoParameterActionFactory {
-    KisShapesToVectorSelectionActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
+    KisShapesToVectorSelectionActionFactory() : KisNoParameterActionFactory("shapes-to-vector-selection") {}
     void run(KisViewManager *view) override;
 };
 

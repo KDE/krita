@@ -119,6 +119,10 @@ public:
     const KisTimeRange& fullClipRange() const;
     void setFullClipRange(const KisTimeRange range);
 
+    void setFullClipRangeStartTime(int column);
+    void setFullClipRangeEndTime(int column);
+
+
     const KisTimeRange &playbackRange() const;
     void setPlaybackRange(const KisTimeRange range);
 

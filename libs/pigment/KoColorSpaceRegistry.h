@@ -29,6 +29,7 @@
 #include <KoGenericRegistry.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceFactory.h>
+#include <KoConfig.h>
 
 class KoColorProfile;
 class KoColorConversionSystem;
@@ -219,7 +220,7 @@ public:
     QString colorSpaceId(const KoID& colorModelId, const KoID& colorDepthId) const;
 
     /**
-     * @return a the identifiant of the color model for the given color space id.
+     * @return the identifier of the color model for the given color space id.
      *
      * This function is a compatibility function used to get the color space from
      * all kra files.
@@ -227,7 +228,7 @@ public:
     KoID colorSpaceColorModelId(const QString & _colorSpaceId) const;
 
     /**
-     * @return a the identifiant of the color depth for the given color space id.
+     * @return the identifier of the color depth for the given color space id.
      *
      * This function is a compatibility function used to get the color space from
      * all kra files.
@@ -239,11 +240,43 @@ public:
      */
     const KoColorSpace *alpha8();
     const KoColorSpace *alpha16();
-#include <KoConfig.h>
 #ifdef HAVE_OPENEXR
     const KoColorSpace *alpha16f();
 #endif
     const KoColorSpace *alpha32f();
+
+    /**
+     * Convenience method to get a GRAYA 8 bit colorspace. If a profile is not specified,
+     * the default profile defined in the GRAY colorspace will be used
+     * @param profile the profile name
+     * @return an 8 bit graya colorspace with the default profile or 0.
+     */
+    const KoColorSpace *graya8(const QString &profile = QString());
+
+    /**
+     * Convenience method to get a GRAYA 8 bit colorspace. If a profile is not specified,
+     * the default profile defined in the GRAY colorspace will be used
+     * @param profile the profile
+     * @return an 8 bit graya colorspace with the default profile or 0.
+     */
+    const KoColorSpace *graya8(const KoColorProfile *profile);
+
+    /**
+     * Convenience method to get a GRAYA 16 bit colorspace. If a profile is not specified,
+     * the default profile defined in the GRAY colorspace will be used
+     * @param the profile
+     * @return an 8 bit graya colorspace with the default profile or 0.
+     */
+    const KoColorSpace *graya16(const QString &profile = QString());
+
+    /**
+     * Convenience method to get a GRAYA 16 bit colorspace. If a profile is not specified,
+     * the default profile defined in the GRAY colorspace will be used
+     * @param the profile
+     * @return an 8 bit graya colorspace with the default profile or 0.
+     */
+    const KoColorSpace *graya16(const KoColorProfile *profile);
+
 
     /**
      * Convenience method to get an RGBA 8bit colorspace. If a profile is not specified,
@@ -291,6 +324,29 @@ public:
     const KoColorSpace * lab16(const KoColorProfile * profile);
 
     /**
+     * Convenience method to get a standard profile for Rec.2020 linear light
+     * color space
+     */
+    const KoColorProfile *p2020G10Profile() const;
+
+    /**
+     * Convenience method to get a standard profile for Rec.2020 PQ color space
+     */
+    const KoColorProfile *p2020PQProfile() const;
+
+    /**
+     * Convenience method to get a standard profile for Rec. 709 linear light
+     * color space
+     */
+    const KoColorProfile *p709G10Profile() const;
+
+    /**
+     * Convenience method to get a standard profile for Rec. 709 sRGB-tone-
+     * response-curve profile
+     */
+    const KoColorProfile *p709SRGBProfile() const;
+
+    /**
      * @return the list of available color models
      */
     QList<KoID> colorModelsList(ColorSpaceListVisibility option) const;
@@ -326,13 +382,13 @@ private:
 
     friend class KisCsConversionTest;
     friend class KisIteratorTest;
+    friend class KisIteratorNGTest;
     friend class KisPainterTest;
     friend class KisCrashFilterTest;
     friend class KoColorSpacesBenchmark;
     friend class TestKoColorSpaceSanity;
-    friend class KisActionRecorderTest;
     friend class TestColorConversionSystem;
-    friend class FriendOfColorSpaceRegistry;
+    friend struct FriendOfColorSpaceRegistry;
 
     /**
      * @return a list with an instance of all color space with their default profile.
@@ -343,8 +399,8 @@ private:
      * @return the color conversion system use by the registry and the color
      * spaces to create color conversion transformation.
      *
-     * WARNING: conversion system is guared by the registry locks, don't
-     *          use it anywhere other than unttests!
+     * WARNING: conversion system is guarded by the registry locks, don't
+     *          use it anywhere other than unittests!
      */
     const KoColorConversionSystem* colorConversionSystem() const;
 

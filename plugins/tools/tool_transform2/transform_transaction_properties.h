@@ -27,7 +27,6 @@
 
 class ToolTransformArgs;
 
-
 class TransformTransactionProperties
 {
 public:
@@ -42,16 +41,19 @@ TransformTransactionProperties(const QRectF &originalRect,
         : m_originalRect(originalRect),
           m_currentConfig(currentConfig),
           m_rootNode(rootNode),
-          m_shouldAvoidPerspectiveTransform(false),
-          m_transformedNodes(transformedNodes)
+          m_transformedNodes(transformedNodes),
+          m_shouldAvoidPerspectiveTransform(false)
     {
-        Q_FOREACH (KisNodeSP node, m_transformedNodes) {
+        m_hasInvisibleNodes = false;
+        Q_FOREACH (KisNodeSP node, transformedNodes) {
             if (KisExternalLayer *extLayer = dynamic_cast<KisExternalLayer*>(node.data())) {
                 if (!extLayer->supportsPerspectiveTransform()) {
                     m_shouldAvoidPerspectiveTransform = true;
                     break;
                 }
             }
+
+            m_hasInvisibleNodes |= !node->visible(false);
         }
     }
 
@@ -119,6 +121,10 @@ TransformTransactionProperties(const QRectF &originalRect,
         return m_rootNode;
     }
 
+    KisNodeList transformedNodes() const {
+        return m_transformedNodes;
+    }
+
     qreal basePreviewOpacity() const {
         return 0.9 * qreal(m_rootNode->opacity()) / 255.0;
     }
@@ -127,8 +133,12 @@ TransformTransactionProperties(const QRectF &originalRect,
         return m_shouldAvoidPerspectiveTransform;
     }
 
-    QList<KisNodeSP> nodesList() const {
-        return m_transformedNodes;
+    bool hasInvisibleNodes() const {
+        return m_hasInvisibleNodes;
+    }
+
+    void setCurrentConfigLocation(ToolTransformArgs *config) {
+        m_currentConfig = config;
     }
 
 private:
@@ -139,8 +149,9 @@ private:
     QRectF m_originalRect;
     ToolTransformArgs *m_currentConfig;
     KisNodeSP m_rootNode;
+    KisNodeList m_transformedNodes;
     bool m_shouldAvoidPerspectiveTransform;
-    QList<KisNodeSP> m_transformedNodes;
+    bool m_hasInvisibleNodes;
 };
 
 #endif /* __TRANSFORM_TRANSACTION_PROPERTIES_H */

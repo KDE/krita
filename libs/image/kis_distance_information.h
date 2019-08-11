@@ -155,6 +155,9 @@ public:
                                qreal startTime,
                                qreal endTime);
 
+    qreal getSpacingInterval() const;
+    qreal getTimingUpdateInterval() const;
+
     /**
      * \return true if at least one dab has been painted with this
      *         distance information

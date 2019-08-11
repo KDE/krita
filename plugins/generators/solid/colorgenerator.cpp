@@ -69,7 +69,7 @@ KisFilterConfigurationSP KisColorGenerator::factoryConfiguration() const
     return config;
 }
 
-KisConfigWidget * KisColorGenerator::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisColorGenerator::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     return new KisWdgColor(parent);

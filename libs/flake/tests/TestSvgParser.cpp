@@ -2406,6 +2406,7 @@ void TestSvgParser::testRenderImage_AspectNone()
             "</svg>";
 
     SvgRenderTester t (data);
+    t.setFuzzyThreshold(5);
     t.parser.setFileFetcher(fileFetcherFunc);
 
     t.test_standard_30px_72ppi("image_aspect_none", false);
@@ -2963,7 +2964,7 @@ void TestSvgParser::testMarkersOnClosedPath()
 }
 
 
-void TestSvgParser::testGradientRecoveringTrasnform()
+void TestSvgParser::testGradientRecoveringTransform()
 {
     // used for experimenting purposes only!
 
@@ -2983,12 +2984,12 @@ void TestSvgParser::testGradientRecoveringTrasnform()
     gradient.setColorAt(0.0, Qt::red);
     gradient.setColorAt(1.0, Qt::blue);
 
-    QTransform gradientTrasnform;
-    gradientTrasnform.shear(0.2, 0);
+    QTransform gradientTransform;
+    gradientTransform.shear(0.2, 0);
 
     {
         QBrush brush(gradient);
-        brush.setTransform(gradientTrasnform);
+        brush.setTransform(gradientTransform);
         painter.setBrush(brush);
     }
 
@@ -3016,7 +3017,7 @@ void TestSvgParser::testGradientRecoveringTrasnform()
     {
         gradient.setCoordinateMode(QGradient::LogicalMode);
         QBrush brush(gradient);
-        brush.setTransform(gradientTrasnform * gradientToUser * smallShapeTransform.inverted());
+        brush.setTransform(gradientTransform * gradientToUser * smallShapeTransform.inverted());
         painter.setBrush(brush);
         painter.setPen(Qt::NoPen);
     }

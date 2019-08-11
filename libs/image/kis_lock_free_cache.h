@@ -117,7 +117,7 @@ public:
     virtual ~KisLockFreeCache() {}
 
     /**
-     * Notify the chache that the value has changed
+     * Notify the cache that the value has changed
      */
     void invalidate() {
         m_state.invalidate();

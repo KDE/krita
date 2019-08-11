@@ -16,8 +16,8 @@ set(kritadefaulttools_SOURCES
     kis_tool_path.cc
     kis_tool_move.cc
     kis_tool_movetooloptionswidget.cpp
-    strokes/move_stroke_strategy.cpp
     strokes/move_selection_stroke_strategy.cpp
+    KisMoveBoundsCalculationJob.cpp
     kis_tool_multihand.cpp
     kis_tool_multihand_config.cpp
     kis_tool_pencil.cc

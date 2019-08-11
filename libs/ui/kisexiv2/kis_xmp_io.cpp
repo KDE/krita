@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,17 +18,16 @@
 #include "kis_xmp_io.h"
 
 #include <string>
-#include <exiv2/xmp.hpp>
 
 #include "kis_exiv2.h"
 
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_entry.h>
-#include <metadata/kis_meta_data_parser.h>
-#include <metadata/kis_meta_data_value.h>
-#include <metadata/kis_meta_data_schema.h>
-#include <metadata/kis_meta_data_schema_registry.h>
-#include <metadata/kis_meta_data_type_info.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_entry.h>
+#include <kis_meta_data_parser.h>
+#include <kis_meta_data_value.h>
+#include <kis_meta_data_schema.h>
+#include <kis_meta_data_schema_registry.h>
+#include <kis_meta_data_type_info.h>
 
 #include <kis_debug.h>
 
@@ -161,18 +161,18 @@ bool parseTagName(const QString &tagString,
                   QString &structName,
                   int &arrayIndex,
                   QString &tagName,
-                  const KisMetaData::TypeInfo* typeInfo,
+                  const KisMetaData::TypeInfo** typeInfo,
                   const KisMetaData::Schema *schema)
 {
     arrayIndex = -1;
-    typeInfo = 0;
+    *typeInfo = 0;
 
     int numSubNames = tagString.count('/') + 1;
 
     if (numSubNames == 1) {
         structName.clear();
         tagName = tagString;
-        typeInfo = schema->propertyType(tagName);
+        *typeInfo = schema->propertyType(tagName);
         return true;
     }
 
@@ -182,10 +182,10 @@ bool parseTagName(const QString &tagString,
         if (regexp.indexIn(tagString) != -1) {
             structName = regexp.capturedTexts()[1];
             tagName =  regexp.capturedTexts()[3];
-            typeInfo = schema->propertyType(structName);
+            *typeInfo = schema->propertyType(structName);
 
-            if (typeInfo && typeInfo->propertyType() == KisMetaData::TypeInfo::StructureType) {
-                typeInfo = typeInfo->structureSchema()->propertyType(tagName);
+            if (*typeInfo && (*typeInfo)->propertyType() == KisMetaData::TypeInfo::StructureType) {
+                *typeInfo = (*typeInfo)->structureSchema()->propertyType(tagName);
             }
 
             return true;
@@ -198,11 +198,11 @@ bool parseTagName(const QString &tagString,
             tagName = regexp2.capturedTexts()[4];
 
             if (schema->propertyType(structName)) {
-                typeInfo = schema->propertyType(structName)->embeddedPropertyType();
-                Q_ASSERT(typeInfo);
+                *typeInfo = schema->propertyType(structName)->embeddedPropertyType();
+                Q_ASSERT(*typeInfo);
 
-                if (typeInfo->propertyType() == KisMetaData::TypeInfo::StructureType) {
-                    typeInfo = typeInfo->structureSchema()->propertyType(tagName);
+                if ((*typeInfo)->propertyType() == KisMetaData::TypeInfo::StructureType) {
+                    *typeInfo = (*typeInfo)->structureSchema()->propertyType(tagName);
                 }
             }
 
@@ -253,7 +253,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 
             if (!parseTagName(key.tagName().c_str(),
                               structName, arrayIndex, tagName,
-                              typeInfo, schema)) continue;
+                              &typeInfo, schema)) continue;
 
             bool isStructureEntry = !structName.isEmpty() && arrayIndex == -1;
             bool isStructureInArrayEntry = !structName.isEmpty() && arrayIndex != -1;
@@ -277,9 +277,8 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 const Exiv2::XmpArrayValue* xav = dynamic_cast<const Exiv2::XmpArrayValue*>(value.get());
                 Q_ASSERT(xav);
                 QList<KisMetaData::Value> array;
-                for (std::vector< std::string >::const_iterator it = xav->value_.begin();
-                        it != xav->value_.end(); ++it) {
-                    QString value = it->c_str();
+                for (int i = 0; i < xav->count(); ++i) {
+                    QString value = QString::fromStdString(xav->toString(i));
                     if (parser) {
                         array.push_back(parser->parse(value));
                     } else {

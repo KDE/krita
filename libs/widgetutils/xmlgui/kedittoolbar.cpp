@@ -28,8 +28,8 @@
 #include <QDialogButtonBox>
 #include <QDomDocument>
 #include <QLayout>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
+#include <QDir>
+#include <QFile>
 #include <QHeaderView>
 #include <QToolButton>
 #include <QLabel>
@@ -1278,7 +1278,6 @@ KActionCollection *KEditToolBarWidget::actionCollection() const
 
 void KEditToolBarWidgetPrivate::slotToolBarSelected(int index)
 {
-    const QLatin1String attrName("name");
     // We need to find the XmlData and toolbar element for this index
     // To do that, we do the same iteration as the one which filled in the combobox.
 

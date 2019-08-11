@@ -329,20 +329,11 @@ void KisBorderSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
         double tmpx, tmpy, dist;
         quint8 a;
 
-        if (x > 0)
-            tmpx = x - 0.5;
-        else if (x < 0)
-            tmpx = x + 0.5;
-        else
-            tmpx = 0.0;
+        tmpx = x > 0.0 ? x - 0.5 : 0.0;
 
         for (qint32 y = 0; y < (m_yRadius + 1); y++) {
-            if (y > 0)
-                tmpy = y - 0.5;
-            else if (y < 0)
-                tmpy = y + 0.5;
-            else
-                tmpy = 0.0;
+            tmpy = y > 0.0 ? y - 0.5 : 0.0;
+
             dist = ((tmpy * tmpy) / (m_yRadius * m_yRadius) +
                     (tmpx * tmpx) / (m_xRadius * m_xRadius));
             if (dist < 1.0)
@@ -485,8 +476,8 @@ void KisFeatherSelectionFilter::process(KisPixelSelectionSP pixelSelection, cons
     const uint kernelSize = m_radius * 2 + 1;
     Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> gaussianMatrix(1, kernelSize);
 
-    const qreal multiplicand = 1 / (2 * M_PI * m_radius * m_radius);
-    const qreal exponentMultiplicand = 1 / (2 * m_radius * m_radius);
+    const qreal multiplicand = 1.0 / (2.0 * M_PI * m_radius * m_radius);
+    const qreal exponentMultiplicand = 1.0 / (2.0 * m_radius * m_radius);
 
     for (uint x = 0; x < kernelSize; x++) {
         uint xDistance = qAbs((int)m_radius - (int)x);
@@ -621,7 +612,7 @@ void KisGrowSelectionFilter::process(KisPixelSelectionSP pixelSelection, const Q
         }
         pixelSelection->writeBytes(out, rect.x(), rect.y() + y, rect.width(), 1);
     }
-    /* undo the offsets to the pointers so we can free the malloced memmory */
+    /* undo the offsets to the pointers so we can free the malloced memory */
     circ -= m_xRadius;
     max -= m_xRadius;
 
@@ -771,7 +762,7 @@ void KisShrinkSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
         pixelSelection->writeBytes(out, rect.x(), rect.y() + y, rect.width(), 1);
     }
 
-    // undo the offsets to the pointers so we can free the malloced memmory
+    // undo the offsets to the pointers so we can free the malloced memory
     circ -= m_xRadius;
     max -= m_xRadius;
 

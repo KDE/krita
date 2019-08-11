@@ -35,3 +35,21 @@ void KisMoveFrameCommand::redo() {
 void KisMoveFrameCommand::undo() {
     m_channel->moveKeyframeImpl(m_keyframe, m_oldTime);
 }
+
+KisSwapFramesCommand::KisSwapFramesCommand(KisKeyframeChannel *channel, KisKeyframeSP lhsFrame, KisKeyframeSP rhsFrame, KUndo2Command *parentCommand)
+    : KUndo2Command(parentCommand),
+      m_channel(channel),
+      m_lhsFrame(lhsFrame),
+      m_rhsFrame(rhsFrame)
+{
+}
+
+void KisSwapFramesCommand::redo()
+{
+    m_channel->swapKeyframesImpl(m_lhsFrame, m_rhsFrame);
+}
+
+void KisSwapFramesCommand::undo()
+{
+    m_channel->swapKeyframesImpl(m_lhsFrame, m_rhsFrame);
+}

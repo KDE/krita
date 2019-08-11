@@ -28,7 +28,7 @@
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-#include "KisUpdateSchedulerConfigNotifier.h"
+#include "KisImageConfigNotifier.h"
 
 
 Q_GLOBAL_STATIC(KisStrokeSpeedMonitor, s_instance)
@@ -70,8 +70,8 @@ struct KisStrokeSpeedMonitor::Private
 KisStrokeSpeedMonitor::KisStrokeSpeedMonitor()
     : m_d(new Private())
 {
-    connect(KisUpdateSchedulerConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetAccumulatedValues()));
-    connect(KisUpdateSchedulerConfigNotifier::instance(), SIGNAL(configChanged()), SIGNAL(sigStatsUpdated()));
+    connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetAccumulatedValues()));
+    connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SIGNAL(sigStatsUpdated()));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 
     slotConfigChanged();
@@ -105,7 +105,7 @@ void KisStrokeSpeedMonitor::resetAccumulatedValues()
 
 void KisStrokeSpeedMonitor::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->haveStrokeSpeedMeasurement = cfg.enableBrushSpeedLogging();
     resetAccumulatedValues();
     emit sigStatsUpdated();
@@ -121,7 +121,7 @@ void KisStrokeSpeedMonitor::notifyStrokeFinished(qreal cursorSpeed, qreal render
         m_d->lastPresetName == preset->name() &&
         qFuzzyCompare(m_d->lastPresetSize, preset->settings()->paintOpSize());
 
-    ENTER_FUNCTION() << ppVar(isSamePreset);
+    //ENTER_FUNCTION() << ppVar(isSamePreset);
 
     if (!isSamePreset) {
         resetAccumulatedValues();

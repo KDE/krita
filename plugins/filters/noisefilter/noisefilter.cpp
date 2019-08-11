@@ -40,6 +40,7 @@
 #include <kis_random_generator.h>
 #include <kis_selection.h>
 #include <kis_types.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 
@@ -61,7 +62,7 @@ KritaNoiseFilter::~KritaNoiseFilter()
 {
 }
 
-KisFilterNoise::KisFilterNoise() : KisFilter(id(), categoryOther(), i18n("&Random Noise..."))
+KisFilterNoise::KisFilterNoise() : KisFilter(id(), FiltersCategoryOtherId, i18n("&Random Noise..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
@@ -79,7 +80,7 @@ KisFilterConfigurationSP KisFilterNoise::factoryConfiguration() const
     return config;
 }
 
-KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     return new KisWdgNoise((KisFilter*)this, (QWidget*)parent);

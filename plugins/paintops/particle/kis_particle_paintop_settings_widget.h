@@ -22,7 +22,7 @@
 #include <kis_paintop_settings_widget.h>
 
 #include "ui_wdgparticleoptions.h"
-#include "widgets/kis_popup_button.h"
+#include "kis_popup_button.h"
 
 class KisPaintActionTypeOption;
 class KisParticleOpOption;

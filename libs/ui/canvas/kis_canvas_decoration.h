@@ -57,11 +57,22 @@ public:
     bool visible() const;
 
     /**
-     * Will paint the decoration on the QPainter, if the visible is set to true.
+     * Will paint the decoration on the QPainter, if the visible is set to @c true.
      *
+     * @param gc the painter
      * @param updateRect dirty rect in document pixels
+     * @param converter coordinate converter
+     * @param canvas the canvas
      */
     void paint(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
+
+    /**
+     * Return z-order priority of the decoration. The higher the priority, the higher
+     * the decoration is painted.
+     */
+    int priority() const;
+
+    static bool comparePriority(KisCanvasDecorationSP decoration1, KisCanvasDecorationSP decoration2);
 
 public Q_SLOTS:
     /**
@@ -82,6 +93,13 @@ protected:
      * @return the parent KisView
      */
     QPointer<KisView> view() const;
+
+    /**
+     * Set the priority of the decoration. The higher the priority, the higher
+     * the decoration is painted.
+     */
+    void setPriority(int value);
+
 private:
     struct Private;
     Private* const d;

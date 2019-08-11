@@ -52,7 +52,7 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     , m_image(image)
 {
     setWindowTitle(caption);
-    preview->setScaledContents(true);
+    preview->setScaledContents(false);
     preview->setFixedSize(preview->size());
     preview->setStyleSheet("border: 2px solid #222; border-radius: 4px; padding: 5px; font: normal 10px;");
 
@@ -64,6 +64,7 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
     connect(this, SIGNAL(accepted()), SLOT(slotAddPredefined()));
     connect(brushStyle, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
     connect(colorAsMask, SIGNAL(toggled(bool)), this, SLOT(slotUpdateUseColorAsMask(bool)));
+    connect(comboBox2, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdateCurrentBrush(int)));
 
 
     colorAsMask->setChecked(true); // use color as mask by default. This is by far the most common way to make tip.
@@ -81,9 +82,26 @@ KisBrushSP KisCustomBrushWidget::brush()
     return m_brush;
 }
 
+void KisCustomBrushWidget::setImage(KisImageWSP image){
+    m_image = image;
+    createBrush();
+    updatePreviewImage();
+}
+
 void KisCustomBrushWidget::showEvent(QShowEvent *)
 {
     slotUpdateCurrentBrush(0);
+}
+
+void KisCustomBrushWidget::updatePreviewImage()
+{
+    QImage brushImage = m_brush ? m_brush->brushTipImage() : QImage();
+
+    if (!brushImage.isNull()) {
+        brushImage = brushImage.scaled(preview->size(), Qt::KeepAspectRatio);
+    }
+
+    preview->setPixmap(QPixmap::fromImage(brushImage));
 }
 
 void KisCustomBrushWidget::slotUpdateCurrentBrush(int)
@@ -95,9 +113,7 @@ void KisCustomBrushWidget::slotUpdateCurrentBrush(int)
     }
     if (m_image) {
         createBrush();
-        if (m_brush) {
-            preview->setPixmap(QPixmap::fromImage(m_brush->brushTipImage()));
-        }
+        updatePreviewImage();
     }
 }
 
@@ -113,7 +129,7 @@ void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
     if (m_brush) {
         static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
-        preview->setPixmap(QPixmap::fromImage(m_brush->brushTipImage()));
+        updatePreviewImage();
     }
 }
 
@@ -249,5 +265,3 @@ void KisCustomBrushWidget::createBrush()
     m_brush->setName(TEMPORARY_BRUSH_NAME);
     m_brush->setValid(true);
 }
-
-

@@ -15,8 +15,13 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 """
-from scripter.debugger_scripter import debugger
-import asyncio
+from .debugger_scripter import debugger
+import sys
+if sys.version_info[0] > 2:
+    import asyncio
+else:
+    # trollius is a port of asyncio for python2.
+    import trollius as asyncio
 
 
 class DebugController (object):
@@ -67,7 +72,7 @@ class DebugController (object):
             return 0
 
     def updateUIDebugger(self):
-        widget = self.scripter.uicontroller.findTabWidget('Debugger')
+        widget = self.scripter.uicontroller.findTabWidget(i18n('Debugger'))
         exception = self._debuggerException()
 
         if exception:

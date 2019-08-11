@@ -268,7 +268,7 @@ QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition
         }
         number = number%1000;
         loop = number/500;
-        for (int i=1; i<=loop && number/500!=0; i++) {
+        if (loop > 0) {
             roman.append("d");
         }
         number = number%500;
@@ -278,8 +278,8 @@ QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition
         }
         number = number%100;
         loop = number/50;
-        for (int i=1; i<=loop && number/50!=0; i++) {
-             roman.append("l");
+        if (loop > 0) {
+            roman.append("l");
         }
         number = number%50;
         loop = number/10;
@@ -315,7 +315,7 @@ QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition
         }
         number = number%1000;
         loop = number/500;
-        for (int i=1; i<=loop && number/500!=0; i++) {
+        if (loop > 0) {
             roman.append("D");
         }
         number = number%500;
@@ -325,7 +325,7 @@ QString KoOdfNumberDefinition::formattedNumber(int number, KoOdfNumberDefinition
         }
         number = number%100;
         loop = number/50;
-        for (int i=1; i<=loop && number/50!=0; i++) {
+        if (loop > 0) {
              roman.append("L");
         }
         number = number%50;

@@ -30,6 +30,7 @@
 #include <kis_convolution_painter.h>
 #include <kis_global.h>
 #include <widgets/kis_multi_integer_filter_widget.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_paint_device.h>
@@ -38,7 +39,7 @@
 
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
-    : KisFilter(id(), categoryEnhance(), i18n("&Gaussian Noise Reduction..."))
+    : KisFilter(id(), FiltersCategoryEnhanceId, i18n("&Gaussian Noise Reduction..."))
 {
     setSupportsPainting(false);
 }
@@ -47,7 +48,7 @@ KisSimpleNoiseReducer::~KisSimpleNoiseReducer()
 {
 }
 
-KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     vKisIntegerWidgetParam param;

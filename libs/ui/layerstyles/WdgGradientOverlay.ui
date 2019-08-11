@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>411</width>
-    <height>294</height>
+    <width>473</width>
+    <height>358</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -171,41 +171,11 @@
             <string>&amp;Angle:</string>
            </property>
            <property name="buddy">
-            <cstring>dialAngle</cstring>
+            <cstring>angleSelector</cstring>
            </property>
           </widget>
          </item>
-         <item row="4" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QDial" name="dialAngle">
-             <property name="toolTip">
-              <string>Set the angle of the light source</string>
-             </property>
-             <property name="minimum">
-              <number>-179</number>
-             </property>
-             <property name="maximum">
-              <number>180</number>
-             </property>
-             <property name="wrapping">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="KisIntParseSpinBox" name="intAngle">
-             <property name="minimum">
-              <number>-179</number>
-             </property>
-             <property name="maximum">
-              <number>180</number>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="5" column="0">
+         <item row="6" column="0">
           <widget class="QLabel" name="label_8">
            <property name="text">
             <string>S&amp;cale:</string>
@@ -215,7 +185,7 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item row="6" column="1">
           <widget class="KisSliderSpinBox" name="intScale" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -227,6 +197,33 @@
             <string>Set size of gradation</string>
            </property>
           </widget>
+         </item>
+         <item row="4" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="KisLayerStyleAngleSelector" name="angleSelector" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
          </item>
         </layout>
         <zorder>label_6</zorder>
@@ -260,11 +257,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
@@ -274,6 +266,12 @@
    <class>KisCompositeOpComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">kis_cmb_composite.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisLayerStyleAngleSelector</class>
+   <extends>QWidget</extends>
+   <header>KisLayerStyleAngleSelector.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisCmbGradient</class>

@@ -375,6 +375,7 @@ bool KDcraw::Private::loadFromLibraw(const QString& filePath, QByteArray& imageD
             raw.imgdata.params.fbdd_noiserd = lround(m_parent->m_rawDecodingSettings.NRThreshold / 100.0);
             break;
         }
+#if !LIBRAW_COMPILE_CHECK_VERSION_NOTLESS(0, 19)
         case RawDecodingSettings::LINENR:
         {
             // (100 - 1000) => (0.001 - 0.02) conversion.
@@ -391,23 +392,28 @@ bool KDcraw::Private::loadFromLibraw(const QString& filePath, QByteArray& imageD
             raw.imgdata.params.cfa_clean    = true;
             break;
         }
+#endif
         default:   // No Noise Reduction
         {
             raw.imgdata.params.threshold    = 0;
             raw.imgdata.params.fbdd_noiserd = 0;
+#if !LIBRAW_COMPILE_CHECK_VERSION_NOTLESS(0, 19)
             raw.imgdata.params.linenoise    = 0;
             raw.imgdata.params.cfaline      = false;
             raw.imgdata.params.lclean       = 0;
             raw.imgdata.params.cclean       = 0;
             raw.imgdata.params.cfa_clean    = false;
+#endif
             break;
         }
     }
 
+#if !LIBRAW_COMPILE_CHECK_VERSION_NOTLESS(0, 19)
     // Chromatic aberration correction.
     raw.imgdata.params.ca_correc  = m_parent->m_rawDecodingSettings.enableCACorrection;
     raw.imgdata.params.cared      = m_parent->m_rawDecodingSettings.caMultiplier[0];
     raw.imgdata.params.cablue     = m_parent->m_rawDecodingSettings.caMultiplier[1];
+#endif
 
     // Exposure Correction before interpolation.
     raw.imgdata.params.exp_correc = m_parent->m_rawDecodingSettings.expoCorrection;
@@ -461,8 +467,10 @@ bool KDcraw::Private::loadFromLibraw(const QString& filePath, QByteArray& imageD
 
     raw.imgdata.params.dcb_iterations = m_parent->m_rawDecodingSettings.dcbIterations;
     raw.imgdata.params.dcb_enhance_fl = m_parent->m_rawDecodingSettings.dcbEnhanceFl;
+#if !LIBRAW_COMPILE_CHECK_VERSION_NOTLESS(0, 19)
     raw.imgdata.params.eeci_refine    = m_parent->m_rawDecodingSettings.eeciRefine;
     raw.imgdata.params.es_med_passes  = m_parent->m_rawDecodingSettings.esMedPasses;
+#endif
 
     //-------------------------------------------------------------------------------------------
 

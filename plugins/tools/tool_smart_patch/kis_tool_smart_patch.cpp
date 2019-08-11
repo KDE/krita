@@ -31,7 +31,7 @@
 
 #include "kundo2magicstring.h"
 #include "kundo2stack.h"
-#include "kis_transaction_based_command.h"
+#include "commands_new/kis_transaction_based_command.h"
 #include "kis_transaction.h"
 
 #include "kis_processing_applicator.h"
@@ -217,7 +217,7 @@ void KisToolSmartPatch::requestUpdateOutline(const QPointF &outlineDocPoint, con
     QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
 
     // This adjusted call is needed as we paint with a 3 pixel wide brush and the pen is outside the bounds of the path
-    // Pen uses view coordinates so we have to zoom the document value to match 2 pixel in view coordiates
+    // Pen uses view coordinates so we have to zoom the document value to match 2 pixel in view coordinates
     // See BUG 275829
     qreal zoomX;
     qreal zoomY;
@@ -245,9 +245,8 @@ void KisToolSmartPatch::paint(QPainter &painter, const KoViewConverter &converte
     Q_UNUSED(converter);
 
     painter.save();
-    painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-    painter.setPen(QColor(128, 255, 128));
-    painter.drawPath(pixelToView(m_d->brushOutline));
+    QPainterPath path = pixelToView(m_d->brushOutline);
+    paintToolOutline(&painter, path);
     painter.restore();
 
     painter.save();
@@ -263,7 +262,7 @@ QWidget * KisToolSmartPatch::createOptionWidget()
 {
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
 
-    m_d->optionsWidget = new KisToolSmartPatchOptionsWidget(kiscanvas->viewManager()->resourceProvider(), 0);
+    m_d->optionsWidget = new KisToolSmartPatchOptionsWidget(kiscanvas->viewManager()->canvasResourceProvider(), 0);
     m_d->optionsWidget->setObjectName(toolId() + "option widget");
 
     return m_d->optionsWidget;

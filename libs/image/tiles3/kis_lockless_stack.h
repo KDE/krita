@@ -43,12 +43,9 @@ private:
 public:
     KisLocklessStack() { }
     ~KisLocklessStack() {
-        T temp;
 
-        while(pop(temp)) {
-        }
-
-        cleanUpNodes();
+        freeList(m_top.fetchAndStoreOrdered(0));
+        freeList(m_freeNodes.fetchAndStoreOrdered(0));
     }
 
     void push(T data) {
@@ -144,6 +141,28 @@ public:
         m_deleteBlockers.deref();
     }
 
+    void mergeFrom(KisLocklessStack<T> &other) {
+        Node *otherTop = other.m_top.fetchAndStoreOrdered(0);
+        if (!otherTop) return;
+
+        int removedChunkSize = 1;
+        Node *last = otherTop;
+        while(last->next) {
+            removedChunkSize++;
+            last = last->next;
+        }
+        other.m_numNodes.fetchAndAddOrdered(-removedChunkSize);
+
+        Node *top;
+
+        do {
+            top = m_top;
+            last->next = top;
+        } while (!m_top.testAndSetOrdered(top, otherTop));
+
+        m_numNodes.fetchAndAddOrdered(removedChunkSize);
+    }
+
     /**
      * This is impossible to measure the size of the stack
      * in highly concurrent environment. So we return approximate
@@ -168,9 +187,27 @@ private:
     }
 
     inline void cleanUpNodes() {
-        Node *top = m_freeNodes.fetchAndStoreOrdered(0);
-        if(top) {
-            freeList(top);
+        Node *cleanChain = m_freeNodes.fetchAndStoreOrdered(0);
+        if (!cleanChain) return;
+
+        /**
+         * If we are the only users of the objects is cleanChain,
+         * then just free it. Otherwise, push them back into the
+         * recycling list and keep them there till another
+         * chance comes.
+         */
+        if (m_deleteBlockers == 1) {
+            freeList(cleanChain);
+        } else {
+            Node *last = cleanChain;
+            while (last->next) last = last->next;
+
+            Node *freeTop;
+
+            do {
+                freeTop = m_freeNodes;
+                last->next = freeTop;
+            } while (!m_freeNodes.testAndSetOrdered(freeTop, cleanChain));
         }
     }
 

@@ -147,7 +147,7 @@ void parseColorStopsList(QDomElement parent,
                     QString typeId = childEl.attribute("typeId", "");
 
                     if (typeId != "Clry") {
-                        warnKrita << "WARNING: Invalid typeId of a greadient stop type" << typeId;
+                        warnKrita << "WARNING: Invalid typeId of a gradient stop type" << typeId;
                     }
 
                     QString value = childEl.attribute("value", "");
@@ -198,7 +198,7 @@ void parseTransparencyStopsList(QDomElement parent,
                 } else if (type == "UnitFloat" && key == "Opct") {
                     QString unit = childEl.attribute("unit", "");
                     if (unit != "#Prc") {
-                        warnKrita << "WARNING: Invalid unit of a greadient stop transparency" << unit;
+                        warnKrita << "WARNING: Invalid unit of a gradient stop transparency" << unit;
                     }
 
                     qreal value = KisDomUtils::toDouble(childEl.attribute("value", "100"));

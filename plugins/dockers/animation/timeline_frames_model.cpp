@@ -50,9 +50,13 @@
 
 #include "kis_node_view_color_scheme.h"
 #include "krita_utils.h"
+#include "KisPart.h"
 #include <QApplication>
+#include "KisDocument.h"
+#include "KisViewManager.h"
 #include "kis_processing_applicator.h"
 #include <KisImageBarrierLockerWithFeedback.h>
+#include "kis_node_uuid_info.h"
 
 
 struct TimelineFramesModel::Private
@@ -103,6 +107,20 @@ struct TimelineFramesModel::Private
         return (primaryChannel && primaryChannel->keyframeAt(column));
     }
 
+    bool frameHasContent(int row, int column) {
+
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        if (!primaryChannel) return false;
+
+        // first check if we are a key frame
+        KisKeyframeSP frame = primaryChannel->activeKeyframeAt(column);
+        if (!frame) return false;
+
+        return frame->hasContent();
+    }
+
     bool specialKeyframeExists(int row, int column) {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
@@ -121,7 +139,7 @@ struct TimelineFramesModel::Private
         KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
         if (!primaryChannel) return -1;
 
-        KisKeyframeSP frame = primaryChannel->keyframeAt(column);
+        KisKeyframeSP frame = primaryChannel->activeKeyframeAt(column);
         if (!frame) return -1;
 
         return frame->colorLabel();
@@ -158,7 +176,7 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
 
-        KisNodePropertyListCommand::setNodePropertiesNoUndo(dummy->node(), image, props);
+        nodeInterface->setNodeProperties(dummy->node(), image, props);
         return true;
     }
 
@@ -259,6 +277,7 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
                 SIGNAL(sigAudioChannelChanged()), SIGNAL(sigAudioChannelChanged()));
         connect(m_d->image->animationInterface(),
                 SIGNAL(sigAudioVolumeChanged()), SIGNAL(sigAudioChannelChanged()));
+        connect(m_d->image, SIGNAL(sigImageModified()), SLOT(slotImageContentChanged()));
     }
 
     if (m_d->dummiesFacade != oldDummiesFacade) {
@@ -278,6 +297,16 @@ void TimelineFramesModel::slotDummyChanged(KisNodeDummy *dummy)
         m_d->updateQueue.append(dummy);
     }
     m_d->updateTimer.start();
+}
+
+void TimelineFramesModel::slotImageContentChanged()
+{
+    if (m_d->activeLayerIndex < 0) return;
+
+    KisNodeDummy *dummy = m_d->converter->dummyFromRow(m_d->activeLayerIndex);
+    if (!dummy) return;
+
+    slotDummyChanged(dummy);
 }
 
 void TimelineFramesModel::processUpdateQueue()
@@ -337,6 +366,9 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     }
     case FrameEditableRole: {
         return m_d->layerEditable(index.row());
+    }
+    case FrameHasContent: {
+        return m_d->frameHasContent(index.row(), index.column());
     }
     case FrameExistsRole: {
         return m_d->frameExists(index.row(), index.column());
@@ -538,21 +570,40 @@ void TimelineFramesModel::setLastClickedIndex(const QModelIndex &index)
 
 QMimeData* TimelineFramesModel::mimeData(const QModelIndexList &indexes) const
 {
+    return mimeDataExtended(indexes, m_d->lastClickedIndex, UndefinedPolicy);
+}
+
+QMimeData *TimelineFramesModel::mimeDataExtended(const QModelIndexList &indexes,
+                                                 const QModelIndex &baseIndex,
+                                                 TimelineFramesModel::MimeCopyPolicy copyPolicy) const
+{
     QMimeData *data = new QMimeData();
 
     QByteArray encoded;
     QDataStream stream(&encoded, QIODevice::WriteOnly);
 
-    const int baseRow = m_d->lastClickedIndex.row();
-    const int baseColumn = m_d->lastClickedIndex.column();
+    const int baseRow = baseIndex.row();
+    const int baseColumn = baseIndex.column();
+
+    const QByteArray uuidDataRoot = m_d->image->root()->uuid().toRfc4122();
+    stream << int(uuidDataRoot.size());
+    stream.writeRawData(uuidDataRoot.data(), uuidDataRoot.size());
 
     stream << indexes.size();
     stream << baseRow << baseColumn;
 
     Q_FOREACH (const QModelIndex &index, indexes) {
+        KisNodeSP node = nodeAt(index);
+        KIS_SAFE_ASSERT_RECOVER(node) { continue; }
+
         stream << index.row() - baseRow << index.column() - baseColumn;
+
+        const QByteArray uuidData = node->uuid().toRfc4122();
+        stream << int(uuidData.size());
+        stream.writeRawData(uuidData.data(), uuidData.size());
     }
 
+    stream << int(copyPolicy);
     data->setData("application/x-krita-frame", encoded);
 
     return data;
@@ -582,35 +633,121 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
     Q_UNUSED(row);
     Q_UNUSED(column);
 
+    return dropMimeDataExtended(data, action, parent);
+}
+
+bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAction action, const QModelIndex &parent, bool *dataMoved)
+{
     bool result = false;
 
-    if ((action != Qt::MoveAction &&
-         action != Qt::CopyAction) || !parent.isValid()) return result;
-
-    const bool copyFrames = action == Qt::CopyAction;
+    if ((action != Qt::MoveAction && action != Qt::CopyAction) ||
+        !parent.isValid()) return result;
 
     QByteArray encoded = data->data("application/x-krita-frame");
     QDataStream stream(&encoded, QIODevice::ReadOnly);
 
+    int uuidLenRoot = 0;
+    stream >> uuidLenRoot;
+    QByteArray uuidDataRoot(uuidLenRoot, '\0');
+    stream.readRawData(uuidDataRoot.data(), uuidLenRoot);
+    QUuid nodeUuidRoot = QUuid::fromRfc4122(uuidDataRoot);
+
+    KisPart *partInstance = KisPart::instance();
+    QList<QPointer<KisDocument>> documents = partInstance->documents();
+
+    KisImageSP srcImage = 0;
+    Q_FOREACH(KisDocument *doc, documents) {
+        KisImageSP tmpSrcImage = doc->image();
+        if (tmpSrcImage->root()->uuid() == nodeUuidRoot) {
+            srcImage = tmpSrcImage;
+            break;
+        }
+    }
+
+    if (!srcImage) {
+        KisPart *kisPartInstance = KisPart::instance();
+        kisPartInstance->currentMainwindow()->viewManager()->showFloatingMessage(
+                    i18n("Dropped frames are not available in this Krita instance")
+                    , QIcon());
+        return false;
+    }
 
     int size, baseRow, baseColumn;
     stream >> size >> baseRow >> baseColumn;
 
-    QModelIndexList srcIndexes;
+    const QPoint offset(parent.column() - baseColumn, parent.row() - baseRow);
+
+    KisAnimationUtils::FrameMovePairList frameMoves;
 
     for (int i = 0; i < size; i++) {
         int relRow, relColumn;
         stream >> relRow >> relColumn;
 
-        int srcRow = baseRow + relRow;
-        int srcColumn = baseColumn + relColumn;
+        const int srcRow = baseRow + relRow;
+        const int srcColumn = baseColumn + relColumn;
 
-        srcIndexes << index(srcRow, srcColumn);
+        int uuidLen = 0;
+        stream >> uuidLen;
+        QByteArray uuidData(uuidLen, '\0');
+        stream.readRawData(uuidData.data(), uuidLen);
+        QUuid nodeUuid = QUuid::fromRfc4122(uuidData);
+
+        KisNodeSP srcNode;
+
+        if (!nodeUuid.isNull()) {
+            KisNodeUuidInfo nodeInfo(nodeUuid);
+            srcNode = nodeInfo.findNode(srcImage->root());
+        } else {
+            QModelIndex index = this->index(srcRow, srcColumn);
+            srcNode = nodeAt(index);
+        }
+
+        KIS_SAFE_ASSERT_RECOVER(srcNode) { continue; }
+
+        const QModelIndex dstRowIndex = this->index(srcRow + offset.y(), 0);
+        if (!dstRowIndex.isValid()) continue;
+
+        KisNodeSP dstNode = nodeAt(dstRowIndex);
+        KIS_SAFE_ASSERT_RECOVER(dstNode) { continue; }
+
+        Q_FOREACH (KisKeyframeChannel *channel, srcNode->keyframeChannels().values()) {
+            KisAnimationUtils::FrameItem srcItem(srcNode, channel->id(), srcColumn);
+            KisAnimationUtils::FrameItem dstItem(dstNode, channel->id(), srcColumn + offset.x());
+            frameMoves << std::make_pair(srcItem, dstItem);
+        }
     }
 
-    const QPoint offset(parent.column() - baseColumn, parent.row() - baseRow);
+    MimeCopyPolicy copyPolicy = UndefinedPolicy;
 
-    return offsetFrames(srcIndexes, offset, copyFrames);
+    if (!stream.atEnd()) {
+        int value = 0;
+        stream >> value;
+        copyPolicy = MimeCopyPolicy(value);
+    }
+
+    const bool copyFrames =
+        copyPolicy == UndefinedPolicy ?
+        action == Qt::CopyAction :
+        copyPolicy == CopyFramesPolicy;
+
+    if (dataMoved) {
+        *dataMoved = !copyFrames;
+    }
+
+    KUndo2Command *cmd = 0;
+
+    if (!frameMoves.isEmpty()) {
+        KisImageBarrierLockerWithFeedback locker(m_d->image);
+        cmd = KisAnimationUtils::createMoveKeyframesCommand(frameMoves, copyFrames, false, 0);
+    }
+
+    if (cmd) {
+        KisProcessingApplicator::runSingleCommandStroke(m_d->image, cmd,
+                                                        KisStrokeJobData::BARRIER,
+                                                        KisStrokeJobData::EXCLUSIVE);
+    }
+
+    return cmd;
 }
 
 Qt::ItemFlags TimelineFramesModel::flags(const QModelIndex &index) const
@@ -692,9 +829,10 @@ bool TimelineFramesModel::copyFrame(const QModelIndex &dstIndex)
     return m_d->addKeyframe(dstIndex.row(), dstIndex.column(), true);
 }
 
-bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows, int count)
+bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows, int count, int timing)
 {
     if (dstRows.isEmpty() || count <= 0) return true;
+    timing = qMax(timing, 1);
 
     KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Insert frame", "Insert %1 frames", count));
 
@@ -709,10 +847,9 @@ bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows,
             }
         }
 
-        setLastVisibleFrame(columnCount() + count - 1);
+        setLastVisibleFrame(columnCount() + (count * timing) - 1);
 
-
-        createOffsetFramesCommand(indexes, QPoint(count, 0), false, parentCommand);
+        createOffsetFramesCommand(indexes, QPoint((count * timing), 0), false, false, parentCommand);
 
         Q_FOREACH (int row, dstRows) {
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(row);
@@ -721,24 +858,124 @@ bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows,
             KisNodeSP node = dummy->node();
             if (!KisAnimationUtils::supportsContentFrames(node)) continue;
 
-            for (int column = dstColumn; column < dstColumn + count; column++) {
+            for (int column = dstColumn; column < dstColumn + (count * timing); column += timing) {
                 KisAnimationUtils::createKeyframeCommand(m_d->image, node, KisKeyframeChannel::Content.id(), column, false, parentCommand);
             }
         }
 
         const int oldTime = m_d->image->animationInterface()->currentUITime();
-        const int newTime = dstColumn > oldTime ? dstColumn : dstColumn + count - 1;
+        const int newTime = dstColumn > oldTime ? dstColumn : dstColumn + (count * timing) - 1;
 
         new KisSwitchCurrentTimeCommand(m_d->image->animationInterface(),
                                         oldTime,
                                         newTime, parentCommand);
     }
 
-    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand,
+                                                    KisStrokeJobData::BARRIER,
+                                                    KisStrokeJobData::EXCLUSIVE);
 
     return true;
 }
 
+bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int count)
+{
+    if (selectedIndexes.isEmpty() || count == 0) return true;
+
+    QScopedPointer<KUndo2Command> parentCommand(new KUndo2Command(kundo2_i18np("Insert frame", "Insert %1 frames", count)));
+
+    {
+        KisImageBarrierLockerWithFeedback locker(m_d->image);
+
+        QSet<KisKeyframeSP> uniqueKeyframesInSelection;
+
+        int minSelectedTime = std::numeric_limits<int>::max();
+
+        Q_FOREACH (const QModelIndex &index, selectedIndexes) {
+            KisNodeSP node = nodeAt(index);
+            KIS_SAFE_ASSERT_RECOVER(node) { continue; }
+
+            KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+            if (!channel) continue;
+
+            minSelectedTime = qMin(minSelectedTime, index.column());
+            KisKeyframeSP keyFrame = channel->activeKeyframeAt(index.column());
+
+            if (keyFrame) {
+                uniqueKeyframesInSelection.insert(keyFrame);
+            }
+        }
+
+        QList<KisKeyframeSP> keyframesToMove;
+
+        for (auto it = uniqueKeyframesInSelection.begin(); it != uniqueKeyframesInSelection.end(); ++it) {
+            KisKeyframeSP keyframe = *it;
+
+            KisKeyframeChannel *channel = keyframe->channel();
+            KisKeyframeSP nextKeyframe = channel->nextKeyframe(keyframe);
+
+            if (nextKeyframe) {
+                keyframesToMove << nextKeyframe;
+            }
+        }
+
+        std::sort(keyframesToMove.begin(), keyframesToMove.end(),
+            [] (KisKeyframeSP lhs, KisKeyframeSP rhs) {
+                return lhs->time() > rhs->time();
+            });
+
+        if (keyframesToMove.isEmpty()) return true;
+
+        const int maxColumn = columnCount();
+
+        if (count > 0) {
+            setLastVisibleFrame(columnCount() + count);
+        }
+
+        Q_FOREACH (KisKeyframeSP keyframe, keyframesToMove) {
+            int plannedFrameMove = count;
+
+            if (count < 0) {
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(keyframe->time() > 0, false);
+
+                KisKeyframeSP prevFrame = keyframe->channel()->previousKeyframe(keyframe);
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(prevFrame, false);
+
+                plannedFrameMove = qMax(count, prevFrame->time() - keyframe->time() + 1);
+
+                minSelectedTime = qMin(minSelectedTime, prevFrame->time());
+            }
+
+            KisNodeDummy *dummy = m_d->dummiesFacade->dummyForNode(keyframe->channel()->node());
+            KIS_SAFE_ASSERT_RECOVER(dummy) { continue; }
+
+            const int row = m_d->converter->rowForDummy(dummy);
+            KIS_SAFE_ASSERT_RECOVER(row >= 0) { continue; }
+
+            QModelIndexList indexes;
+            for (int column = keyframe->time(); column < maxColumn; column++) {
+                indexes << index(row, column);
+            }
+
+            createOffsetFramesCommand(indexes,
+                                      QPoint(plannedFrameMove, 0),
+                                      false, true, parentCommand.data());
+        }
+
+        const int oldTime = m_d->image->animationInterface()->currentUITime();
+        const int newTime = minSelectedTime;
+
+        new KisSwitchCurrentTimeCommand(m_d->image->animationInterface(),
+                                        oldTime,
+                                        newTime, parentCommand.data());
+    }
+
+
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.take(),
+                                                    KisStrokeJobData::BARRIER,
+                                                    KisStrokeJobData::EXCLUSIVE);
+    return true;
+}
 
 QString TimelineFramesModel::audioChannelFileName() const
 {
@@ -771,4 +1008,14 @@ void TimelineFramesModel::setAudioVolume(qreal value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
     m_d->image->animationInterface()->setAudioVolume(value);
+}
+
+void TimelineFramesModel::setFullClipRangeStart(int column)
+{
+    m_d->image->animationInterface()->setFullClipRangeStartTime(column);
+}
+
+void TimelineFramesModel::setFullClipRangeEnd(int column)
+{
+    m_d->image->animationInterface()->setFullClipRangeEndTime(column);
 }

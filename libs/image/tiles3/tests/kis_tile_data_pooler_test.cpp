@@ -28,10 +28,10 @@
 
 #ifdef DEBUG_TILES
 #define PRETTY_TILE(idx, td)                                    \
-    dbgKrita << "tile" << i                                     \
-             << "\tusers" << td->numUsers()                     \
-             << "\tclones" << td->m_clonesStack.size()          \
-             << "\tage" << td->age();
+    qDebug << "tile" << i                                     \
+           << "\tusers" << td->numUsers()                     \
+           << "\tclones" << td->m_clonesStack.size()          \
+           << "\tage" << td->age();
 
 #else
 #define PRETTY_TILE(idx, td)
@@ -98,6 +98,10 @@ void KisTileDataPoolerTest::testCycles()
         }
 
         PRETTY_TILE(i, item);
+        if (item->m_clonesStack.size() != expectedClones) {
+            qDebug() << ppVar(item->m_clonesStack.size()) << ppVar(expectedClones);
+            QEXPECT_FAIL("", "The clonesStack's size is not as expected", Continue);
+        }
         QCOMPARE(item->m_clonesStack.size(), expectedClones);
         i++;
     }

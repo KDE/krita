@@ -62,7 +62,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     , m_avgSpacing(50)
     , m_avgNumDabs(50)
     , m_avgUpdateTimePerDab(50)
-    , m_idealNumRects(KisImageConfig().maxNumberOfThreads())
+    , m_idealNumRects(KisImageConfig(true).maxNumberOfThreads())
     , m_minUpdatePeriod(10)
     , m_maxUpdatePeriod(100)
 {

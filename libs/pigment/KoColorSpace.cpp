@@ -47,12 +47,12 @@
 #include <math.h>
 
 KoColorSpace::KoColorSpace()
-        : d(new Private())
+    : d(new Private())
 {
 }
 
 KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp* mixColorsOp, KoConvolutionOp* convolutionOp)
-        : d(new Private())
+    : d(new Private())
 {
     d->id = id;
     d->idNumber = KoUniqueNumberForIdServer::instance()->numberForId(d->id);
@@ -205,9 +205,9 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
         for (quint32 i=0; i<colorChannelCount(); i++) {
             qreal colorantY=1.0;
             if (colorModelId().id()!="CMYKA") {
-                for (int j=5; j>0; j--){
+                for (int j=4; j>=0; j--){
                     channelValuesF.fill(0.0);
-                    channelValuesF[i] = ((max/4)*(5-j));
+                    channelValuesF[i] = ((max/4)*(4-j));
 
                     if (colorModelId().id()!="XYZA") { //no need for conversion when using xyz.
                         fromNormalisedChannelsValue(data, channelValuesF);
@@ -224,7 +224,7 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
                             d->colorants[i+2]= channelValuesF[1];
                         }
                     }
-                    d->TRCXYY << QPointF(channelValuesF[1]/colorantY, ((1.0/4)*(5-j)));
+                    d->TRCXYY << QPointF(channelValuesF[1]/colorantY, ((1.0/4)*(4-j)));
                 }
             } else {
                 for (int j=0; j<5; j++){
@@ -259,19 +259,6 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
     }
 }
 
-QVector <qreal> KoColorSpace::colorants() const
-{
-    if (d->colorants.size()>1){
-        return d->colorants;
-    } else if (profile() && profile()->hasColorants()) {
-        d->colorants.resize(3*colorChannelCount());
-        d->colorants = profile()->getColorantsxyY();
-        return d->colorants;
-    } else {
-        estimatedTRCXYY();
-        return d->colorants;
-    }
-}
 QVector <qreal> KoColorSpace::lumaCoefficients() const
 {
     if (d->lumaCoefficients.size()>1){
@@ -281,7 +268,16 @@ QVector <qreal> KoColorSpace::lumaCoefficients() const
         if (colorModelId().id()!="RGBA") {
             d->lumaCoefficients.fill(0.33);
         } else {
-            colorants();
+            if (d->colorants.size() <= 0) {
+                if (profile() && profile()->hasColorants()) {
+                    d->colorants.resize(3 * colorChannelCount());
+                    d->colorants = profile()->getColorantsxyY();
+                }
+                else {
+                    QPolygonF p = estimatedTRCXYY();
+                    Q_UNUSED(p);
+                }
+            }
             if (d->colorants[2]<0 || d->colorants[5]<0 || d->colorants[8]<0) {
                 d->lumaCoefficients[0]=0.2126;
                 d->lumaCoefficients[1]=0.7152;
@@ -467,32 +463,32 @@ void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::Par
         return;
 
     if(!(*this == *srcSpace)) {
-         if (preferCompositionInSourceColorSpace() &&
-             srcSpace->hasCompositeOp(op->id())) {
+        if (preferCompositionInSourceColorSpace() &&
+                srcSpace->hasCompositeOp(op->id())) {
 
-             quint32           conversionDstBufferStride = params.cols * srcSpace->pixelSize();
-             QVector<quint8> * conversionDstCache        = threadLocalConversionCache(params.rows * conversionDstBufferStride);
-             quint8*           conversionDstData         = conversionDstCache->data();
+            quint32           conversionDstBufferStride = params.cols * srcSpace->pixelSize();
+            QVector<quint8> * conversionDstCache        = threadLocalConversionCache(params.rows * conversionDstBufferStride);
+            quint8*           conversionDstData         = conversionDstCache->data();
 
-             for(qint32 row=0; row<params.rows; row++) {
-                 convertPixelsTo(params.dstRowStart + row * params.dstRowStride,
-                                 conversionDstData  + row * conversionDstBufferStride, srcSpace, params.cols,
-                                 renderingIntent, conversionFlags);
-             }
+            for(qint32 row=0; row<params.rows; row++) {
+                convertPixelsTo(params.dstRowStart + row * params.dstRowStride,
+                                conversionDstData  + row * conversionDstBufferStride, srcSpace, params.cols,
+                                renderingIntent, conversionFlags);
+            }
 
-             // FIXME: do not calculate the otherOp every time
-             const KoCompositeOp *otherOp = srcSpace->compositeOp(op->id());
+            // FIXME: do not calculate the otherOp every time
+            const KoCompositeOp *otherOp = srcSpace->compositeOp(op->id());
 
-             KoCompositeOp::ParameterInfo paramInfo(params);
-             paramInfo.dstRowStart  = conversionDstData;
-             paramInfo.dstRowStride = conversionDstBufferStride;
-             otherOp->composite(paramInfo);
+            KoCompositeOp::ParameterInfo paramInfo(params);
+            paramInfo.dstRowStart  = conversionDstData;
+            paramInfo.dstRowStride = conversionDstBufferStride;
+            otherOp->composite(paramInfo);
 
-             for(qint32 row=0; row<params.rows; row++) {
-                 srcSpace->convertPixelsTo(conversionDstData  + row * conversionDstBufferStride,
-                                           params.dstRowStart + row * params.dstRowStride, this, params.cols,
-                                           renderingIntent, conversionFlags);
-             }
+            for(qint32 row=0; row<params.rows; row++) {
+                srcSpace->convertPixelsTo(conversionDstData  + row * conversionDstBufferStride,
+                                          params.dstRowStart + row * params.dstRowStride, this, params.cols,
+                                          renderingIntent, conversionFlags);
+            }
 
         } else {
             quint32           conversionBufferStride = params.cols * pixelSize();
@@ -569,7 +565,7 @@ void KoColorSpace::increaseLuminosity(quint8 * pixel, qreal step) const{
         luma = qMin(1.0, luma + step);
         luma = pow(luma, 2.2);
         channelValues = fromHSY(&hue, &sat, &luma);
-    profile()->delinearizeFloatValue(channelValues);
+        profile()->delinearizeFloatValue(channelValues);
     } else {
         qreal hue, sat, luma = 0.0;
         toHSY(channelValues, &hue, &sat, &luma);

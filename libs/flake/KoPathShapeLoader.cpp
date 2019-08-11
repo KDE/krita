@@ -78,7 +78,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             switch (command) {
             case 'm':
                 relative = true;
-                /* Falls through. */
+                Q_FALLTHROUGH();
             case 'M': {
                 ptr = getCoord(ptr, tox);
                 ptr = getCoord(ptr, toy);
@@ -94,7 +94,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             }
             case 'l':
                 relative = true;
-                /* Falls through. */
+                Q_FALLTHROUGH();
             case 'L': {
                 ptr = getCoord(ptr, tox);
                 ptr = getCoord(ptr, toy);
@@ -145,7 +145,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
                 break;
             }
             case 'z':
-                /* Falls through. */
+                Q_FALLTHROUGH();
             case 'Z': {
                 // reset curx, cury for next path
                 if (process) {
@@ -157,7 +157,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             }
             case 'c':
                 relative = true;
-                /* Falls through. */
+                Q_FALLTHROUGH();
             case 'C': {
                 ptr = getCoord(ptr, x1);
                 ptr = getCoord(ptr, y1);
@@ -187,7 +187,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             }
             case 's':
                 relative = true;
-                /* Falls through. */
+                Q_FALLTHROUGH();
             case 'S': {
                 ptr = getCoord(ptr, x2);
                 ptr = getCoord(ptr, y2);
@@ -219,7 +219,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             }
             case 'q':
                 relative = true;
-                /* Falls through. */
+                Q_FALLTHROUGH();
             case 'Q': {
                 ptr = getCoord(ptr, x1);
                 ptr = getCoord(ptr, y1);
@@ -246,7 +246,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             }
             case 't':
                 relative = true;
-                /* Falls through. */
+                Q_FALLTHROUGH();
             case 'T': {
                 ptr = getCoord(ptr, tox);
                 ptr = getCoord(ptr, toy);
@@ -279,7 +279,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
             }
             case 'a':
                 relative = true;
-                /* Falls through. */
+                Q_FALLTHROUGH();
             case 'A': {
                 bool largeArc, sweep;
                 qreal angle, rx, ry;
@@ -313,7 +313,7 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
 
             lastCommand = command;
 
-            if (*ptr == '+' || *ptr == '-' || (*ptr >= '0' && *ptr <= '9')) {
+            if (*ptr == '+' || *ptr == '-' || *ptr == '.' || (*ptr >= '0' && *ptr <= '9')) {
                 // there are still coords in this command
                 if (command == 'M')
                     command = 'L';

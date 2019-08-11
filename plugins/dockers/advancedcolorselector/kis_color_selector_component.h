@@ -20,6 +20,9 @@
 
 #include <QObject>
 #include <QColor>
+
+#include <resources/KoGamutMask.h>
+
 #include "kis_color_selector.h"
 
 class KoColorSpace;
@@ -39,7 +42,7 @@ public:
     void paintEvent(QPainter*);
 
     /// saves the mouse position, so that a blip can be created.
-    void mouseEvent(int x, int y);
+    virtual void mouseEvent(int x, int y);
 
     /// return the color, that was selected by calling mouseEvent
     KoColor currentColor();
@@ -51,13 +54,18 @@ public:
     void setConfiguration(Parameter param, Type type);
 
     /// set the color, blibs etc
-    virtual void setColor(const KoColor& color) = 0;
+    virtual void setColor(const KoColor& color);
 
     /// force subsequent redraw of the component
     void setDirty();
 
     /// returns true, if this component wants to grab the mouse (normally true, if containsPoint returns true)
     bool wantsGrab(int x, int y) {return containsPointInComponentCoords(x-m_x, y-m_y);}
+
+    void setGamutMask(KoGamutMask* gamutMask);
+    void unsetGamutMask();
+    void updateGamutMaskPreview();
+    void toggleGamutMask(bool state);
 
 public Q_SLOTS:
     /// set hue, saturation, value or/and lightness
@@ -70,10 +78,10 @@ Q_SIGNALS:
     void paramChanged(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness, qreal hsiSaturation, qreal intensity, qreal hsySaturation, qreal luma);
 protected:
     const KoColorSpace* colorSpace() const;
-    /// returns true, if ether the colour space, the size or the parameters have changed since the last paint event
+    /// returns true, if ether the color space, the size or the parameters have changed since the last paint event
     bool isDirty() const;
 
-    /// this method must be overloaded to return the colour at position x/y and draw a marker on that position
+    /// this method must be overloaded to return the color at position x/y and draw a marker on that position
     virtual KoColor selectColor(int x, int y) = 0;
 
     /// paint component using given painter
@@ -84,6 +92,11 @@ protected:
     /// a subclass can implement this method, the default returns true if the coordinates are in the component rect
     /// values for the subclasses are provided in component coordinates, eg (0,0) is top left of component
     virtual bool containsPointInComponentCoords(int x, int y) const;
+
+    /// a subclass can implement this method to note that the point, although it is in
+    /// containsPointInComponentCoords area, still cannot be selected as a color (e.g.
+    /// it is masked out). Default implementation always returns true.
+    virtual bool allowsColorSelectionAtPoint(const QPoint &) const;
 
     // Workaround for Bug 287001
     void setLastMousePosition(int x, int y);
@@ -100,15 +113,19 @@ protected:
     Parameter m_parameter;
     Type m_type;
     KisColorSelector* m_parent;
+    bool m_gamutMaskOn;
+    KoGamutMask* m_currentGamutMask;
+    bool m_maskPreviewActive;
+    qreal m_lastX;
+    qreal m_lastY;
+    int m_x;
+    int m_y;
 private:
     int m_width;
     int m_height;
-    int m_x;
-    int m_y;
     bool m_dirty;
     const KoColorSpace* m_lastColorSpace;
-    qreal m_lastX;
-    qreal m_lastY;
+    KoColor m_lastSelectedColor;
 };
 
 #endif // KIS_COLOR_SELECTOR_COMPONENT_H

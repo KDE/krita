@@ -33,6 +33,7 @@
 #include <QDomElement>
 #include <QBuffer>
 
+#include <kis_dom_utils.h>
 
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpace.h"
@@ -281,19 +282,19 @@ void KoSegmentGradient::toXML(QDomDocument &doc, QDomElement &gradientElt) const
         QDomElement segmentElt = doc.createElement("segment");
         QDomElement start = doc.createElement("start");
         QDomElement end = doc.createElement("end");
-        segmentElt.setAttribute("start-offset", segment->startOffset());
+        segmentElt.setAttribute("start-offset", KisDomUtils::toString(segment->startOffset()));
         const KoColor startColor = segment->startColor();
         segmentElt.setAttribute("start-bitdepth", startColor.colorSpace()->colorDepthId().id());
-        segmentElt.setAttribute("start-alpha", startColor.opacityF());
+        segmentElt.setAttribute("start-alpha", KisDomUtils::toString(startColor.opacityF()));
         startColor.toXML(doc, start);
-        segmentElt.setAttribute("middle-offset", segment->middleOffset());
-        segmentElt.setAttribute("end-offset", segment->endOffset());
+        segmentElt.setAttribute("middle-offset", KisDomUtils::toString(segment->middleOffset()));
+        segmentElt.setAttribute("end-offset", KisDomUtils::toString(segment->endOffset()));
         const KoColor endColor = segment->endColor();
         segmentElt.setAttribute("end-bitdepth", endColor.colorSpace()->colorDepthId().id());
-        segmentElt.setAttribute("end-alpha", endColor.opacityF());
+        segmentElt.setAttribute("end-alpha", KisDomUtils::toString(endColor.opacityF()));
         endColor.toXML(doc, end);
-        segmentElt.setAttribute("interpolation", segment->interpolation());
-        segmentElt.setAttribute("color-interpolation", segment->colorInterpolation());
+        segmentElt.setAttribute("interpolation", KisDomUtils::toString(segment->interpolation()));
+        segmentElt.setAttribute("color-interpolation", KisDomUtils::toString(segment->colorInterpolation()));
         segmentElt.appendChild(start);
         segmentElt.appendChild(end);
         gradientElt.appendChild(segmentElt);
@@ -305,19 +306,19 @@ KoSegmentGradient KoSegmentGradient::fromXML(const QDomElement &elt)
     KoSegmentGradient gradient;
     QDomElement segmentElt = elt.firstChildElement("segment");
     while (!segmentElt.isNull()) {
-        int interpolation = segmentElt.attribute("interpolation", "0.0").toInt();
-        int colorInterpolation = segmentElt.attribute("color-interpolation", "0.0").toInt();
-        double startOffset = segmentElt.attribute("start-offset", "0.0").toDouble();
-        qreal middleOffset = segmentElt.attribute("middle-offset", "0.0").toDouble();
-        qreal endOffset = segmentElt.attribute("end-offset", "0.0").toDouble();
+        int interpolation = KisDomUtils::toInt(segmentElt.attribute("interpolation", "0.0"));
+        int colorInterpolation = KisDomUtils::toInt(segmentElt.attribute("color-interpolation", "0.0"));
+        double startOffset = KisDomUtils::toDouble(segmentElt.attribute("start-offset", "0.0"));
+        qreal middleOffset = KisDomUtils::toDouble(segmentElt.attribute("middle-offset", "0.0"));
+        qreal endOffset = KisDomUtils::toDouble(segmentElt.attribute("end-offset", "0.0"));
         QDomElement start = segmentElt.firstChildElement("start");
         QString startBitdepth = segmentElt.attribute("start-bitdepth", Integer8BitsColorDepthID.id());
         QColor left = KoColor::fromXML(start.firstChildElement(), startBitdepth).toQColor();
-        left.setAlphaF(segmentElt.attribute("start-alpha", "1.0").toDouble());
+        left.setAlphaF(KisDomUtils::toDouble(segmentElt.attribute("start-alpha", "1.0")));
         QString endBitdepth = segmentElt.attribute("end-bitdepth", Integer8BitsColorDepthID.id());
         QDomElement end = segmentElt.firstChildElement("end");
         QColor right = KoColor::fromXML(end.firstChildElement(), endBitdepth).toQColor();
-        right.setAlphaF(segmentElt.attribute("end-alpha", "1.0").toDouble());
+        right.setAlphaF(KisDomUtils::toDouble(segmentElt.attribute("end-alpha", "1.0")));
         gradient.createSegment(interpolation, colorInterpolation, startOffset, endOffset, middleOffset, left, right);
         segmentElt = segmentElt.nextSiblingElement("segment");
     }

@@ -26,6 +26,7 @@
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_layer_utils.h"
 #include "kis_command_utils.h"
+#include "kis_image_signal_router.h"
 
 class DisableUIUpdatesCommand : public KisCommandUtils::FlipFlopCommand
 {
@@ -37,11 +38,11 @@ public:
     {
     }
 
-    void init() override {
+    void partA() override {
         m_image->disableUIUpdates();
     }
 
-    void end() override {
+    void partB() override {
         m_image->enableUIUpdates();
     }
 
@@ -64,7 +65,7 @@ public:
     }
 
 private:
-    void init() override {
+    void partA() override {
         /**
          * We disable all non-centralized updates here. Everything
          * should be done by this command's explicit updates.
@@ -76,7 +77,7 @@ private:
         m_image->disableDirtyRequests();
     }
 
-    void end() override {
+    void partB() override {
         m_image->enableDirtyRequests();
 
         if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
@@ -129,8 +130,8 @@ public:
     {
     }
 
-    void end() override {
-        if (isFinalizing()) {
+    void partB() override {
+        if (getState() == State::FINALIZING) {
             doUpdate(m_emitSignals);
         } else {
             KisImageSignalVector reverseSignals;
@@ -207,6 +208,12 @@ void KisProcessingApplicator::applyVisitor(KisProcessingVisitorSP visitor,
                                            KisStrokeJobData::Sequentiality sequentiality,
                                            KisStrokeJobData::Exclusivity exclusivity)
 {
+    KUndo2Command *initCommand = visitor->createInitCommand();
+    if (initCommand) {
+        applyCommand(initCommand,
+                     KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
+    }
+
     if(!m_flags.testFlag(RECURSIVE)) {
         applyCommand(new KisProcessingCommand(visitor, m_node),
                      sequentiality, exclusivity);
@@ -220,13 +227,19 @@ void KisProcessingApplicator::applyVisitorAllFrames(KisProcessingVisitorSP visit
                                                     KisStrokeJobData::Sequentiality sequentiality,
                                                     KisStrokeJobData::Exclusivity exclusivity)
 {
+    KUndo2Command *initCommand = visitor->createInitCommand();
+    if (initCommand) {
+        applyCommand(initCommand,
+                     KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
+    }
+
     KisLayerUtils::FrameJobs jobs;
 
-    if (m_flags.testFlag(RECURSIVE)) {
-        KisLayerUtils::updateFrameJobsRecursive(&jobs, m_node);
-    } else {
-        KisLayerUtils::updateFrameJobsRecursive(&jobs, m_node);
-    }
+    // TODO: implement a nonrecursive case when !m_flags.testFlag(RECURSIVE)
+    //       (such case is not yet used anywhere)
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_flags.testFlag(RECURSIVE));
+
+    KisLayerUtils::updateFrameJobsRecursive(&jobs, m_node);
 
     if (jobs.isEmpty()) {
         applyVisitor(visitor, sequentiality, exclusivity);

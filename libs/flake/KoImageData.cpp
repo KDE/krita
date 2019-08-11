@@ -93,7 +93,7 @@ QPixmap KoImageData::pixmap(const QSize &size)
         }
         case KoImageDataPrivate::StateNotLoaded:
             image(); // forces load
-            // fall through
+            Q_FALLTHROUGH();
         case KoImageDataPrivate::StateImageLoaded:
         case KoImageDataPrivate::StateImageOnly:
             if (!d->image.isNull()) {

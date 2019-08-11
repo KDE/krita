@@ -27,7 +27,7 @@
 
 #include "kritaimage_export.h"
 
-class KisRenderedDab;
+struct KisRenderedDab;
 
 namespace KisPaintOpUtils {
 
@@ -118,8 +118,8 @@ void paintLine(PaintOp &op,
  * A special class containing the previous position of the cursor for
  * the sake of painting the outline of the paint op. The main purpose
  * of this class is to ensure that the saved point does not equal to
- * the current one, which would cause a outline flicker. To echieve
- * this the class stores two previosly requested points instead of the
+ * the current one, which would cause a outline flicker. To achieve
+ * this the class stores two previously requested points instead of the
  * last one.
  */
 class KRITAIMAGE_EXPORT PositionHistory

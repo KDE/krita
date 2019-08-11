@@ -30,7 +30,7 @@ KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
                                   KisStrokeUndoFacade *undoFacade,
                                   KUndo2CommandSP initCommand,
                                   KUndo2CommandSP finishCommand)
-  : KisSimpleStrokeStrategy("STROKE_UNDO_COMMAND_BASED", name),
+  : KisRunnableBasedStrokeStrategy("STROKE_UNDO_COMMAND_BASED", name),
     m_undo(undo),
     m_initCommand(initCommand),
     m_finishCommand(finishCommand),
@@ -46,7 +46,7 @@ KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
 
 KisStrokeStrategyUndoCommandBased::
 KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs)
-  : KisSimpleStrokeStrategy(rhs),
+  : KisRunnableBasedStrokeStrategy(rhs),
     m_undo(false),
     m_initCommand(rhs.m_initCommand),
     m_finishCommand(rhs.m_finishCommand),
@@ -66,6 +66,10 @@ void KisStrokeStrategyUndoCommandBased::setUsedWhileUndoRedo(bool value)
 void KisStrokeStrategyUndoCommandBased::executeCommand(KUndo2CommandSP command, bool undo)
 {
     if(!command) return;
+
+    if (MutatedCommandInterface *mutatedCommand = dynamic_cast<MutatedCommandInterface*>(command.data())) {
+        mutatedCommand->setRunnableJobsInterface(this->runnableJobsInterface());
+    }
 
     if(undo) {
         command->undo();
@@ -115,8 +119,14 @@ void KisStrokeStrategyUndoCommandBased::cancelStrokeCallback()
 void KisStrokeStrategyUndoCommandBased::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
-    executeCommand(d->command, d->undo);
-    notifyCommandDone(d->command, d->sequentiality(), d->exclusivity());
+
+    if (d) {
+        executeCommand(d->command, d->undo);
+        notifyCommandDone(d->command, d->sequentiality(), d->exclusivity());
+    } else {
+        KisRunnableBasedStrokeStrategy::doStrokeCallback(data);
+    }
+
 }
 
 void KisStrokeStrategyUndoCommandBased::runAndSaveCommand(KUndo2CommandSP command,
@@ -125,7 +135,7 @@ void KisStrokeStrategyUndoCommandBased::runAndSaveCommand(KUndo2CommandSP comman
 {
     if (!command) return;
 
-    command->redo();
+    executeCommand(command, false);
     notifyCommandDone(command, sequentiality, exclusivity);
 }
 
@@ -168,3 +178,8 @@ void KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(KUndo2Command
         savedCommand->setMacroId(m_macroId);
     }
 }
+
+ KisStrokeUndoFacade* KisStrokeStrategyUndoCommandBased::undoFacade() const
+ {
+     return m_undoFacade;
+ }

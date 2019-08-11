@@ -26,7 +26,7 @@ import os  # For finding the script location.
 from pathlib import Path  # For reading all the files in a directory.
 import random  # For selecting two random words from a list.
 from PyQt5.QtWidgets import QWidget, QWizard, QWizardPage, QHBoxLayout, QFormLayout, QFileDialog, QLineEdit, QPushButton, QCheckBox, QLabel, QDialog
-from PyQt5.QtCore import QDate, QLocale
+from PyQt5.QtCore import QDate, QLocale, QUuid
 from krita import *
 from . import comics_metadata_dialog
 
@@ -59,9 +59,15 @@ class ComicsProjectSetupWizard():
         self.setupDictionary = {}
 
         # ask for a project directory.
-        self.projectDirectory = QFileDialog.getExistingDirectory(caption=i18n("Where should the comic project go?"), options=QFileDialog.ShowDirsOnly)
-        if os.path.exists(self.projectDirectory) is False:
-            return
+        self.projectDirectory = None
+        
+        while self.projectDirectory == None:
+            self.projectDirectory = QFileDialog.getExistingDirectory(caption=i18n("Where should the comic project go?"), options=QFileDialog.ShowDirsOnly)
+            if os.path.exists(self.projectDirectory) is False:
+                return
+            if os.access(self.projectDirectory, os.W_OK) is False:
+                QMessageBox.warning(None, i18n("Folder cannot be used"), i18n("Krita doesn't have write access to this folder, so files cannot be made. Please choose a different folder."), QMessageBox.Ok)
+                self.projectDirectory = None
         self.pagesDirectory = os.path.relpath(self.projectDirectory, self.projectDirectory)
         self.exportDirectory = os.path.relpath(self.projectDirectory, self.projectDirectory)
 
@@ -85,15 +91,18 @@ class ComicsProjectSetupWizard():
         projectLayout.addWidget(self.lnProjectName)
         projectLayout.addWidget(btnRandom)
         lnConcept = QLineEdit()
-        lnConcept.setToolTip(i18n("What is your comic about? This is mostly for your own convenience so don't worry about what it says too much."))
+        lnConcept.setToolTip(i18n("What is your comic about? This is mostly for your own convenience so do not worry about what it says too much."))
         self.cmbLanguage = comics_metadata_dialog.language_combo_box()
         self.cmbLanguage.setToolTip(i18n("The main language the comic is in"))
         self.cmbLanguage.setEntryToCode(str(QLocale.system().name()).split("_")[0])
         self.cmbCountry = comics_metadata_dialog.country_combo_box()
         if QLocale.system() != QLocale.c():
+            self.slot_update_countries()
             self.cmbCountry.setEntryToCode(str(QLocale.system().name()).split("_")[-1])
         else:
+            self.cmbLanguage.setEntryToCode("en")
             self.slot_update_countries()
+            self.cmbCountry.setEntryToCode("US")
         self.cmbLanguage.currentIndexChanged.connect(self.slot_update_countries)
         self.lnProjectDirectory = QLabel(self.projectDirectory)
         self.chkMakeProjectDirectory = QCheckBox()
@@ -105,10 +114,10 @@ class ComicsProjectSetupWizard():
         self.chkMakeProjectDirectory.setChecked(True)
         self.lnPagesDirectory = QLineEdit()
         self.lnPagesDirectory.setText(i18n("pages"))
-        self.lnPagesDirectory.setToolTip(i18n("The name for the folder where the pages are contained. If it doesn't exist, it will be created."))
+        self.lnPagesDirectory.setToolTip(i18n("The name for the folder where the pages are contained. If it does not exist, it will be created."))
         self.lnExportDirectory = QLineEdit()
         self.lnExportDirectory.setText(i18n("export"))
-        self.lnExportDirectory.setToolTip(i18n("The name for the folder where the export is put. If it doesn't exist, it will be created."))
+        self.lnExportDirectory.setToolTip(i18n("The name for the folder where the export is put. If it does not exist, it will be created."))
         self.lnTemplateLocation = QLineEdit()
         self.lnTemplateLocation.setText(i18n("templates"))
         self.lnTemplateLocation.setToolTip(i18n("The name for the folder where the page templates are sought in."))
@@ -116,9 +125,9 @@ class ComicsProjectSetupWizard():
         self.lnTranslationLocation = QLineEdit()
         self.lnTranslationLocation.setText(i18n("translations"))
         self.lnTranslationLocation.setToolTip("This is the location that POT files will be stored to and PO files will be read from.")
-        formLayout.addRow(i18n("Comic Concept:"), lnConcept)
-        formLayout.addRow(i18n("Project Name:"), projectLayout)
-        formLayout.addRow(i18n("Main Language:"), self.cmbLanguage)
+        formLayout.addRow(i18n("Comic concept:"), lnConcept)
+        formLayout.addRow(i18n("Project name:"), projectLayout)
+        formLayout.addRow(i18n("Main language:"), self.cmbLanguage)
         formLayout.addRow("", self.cmbCountry)
 
         buttonMetaData = QPushButton(i18n("Meta Data"))
@@ -130,12 +139,12 @@ class ComicsProjectSetupWizard():
         foldersPage.setTitle(i18n("Folder names and other."))
         folderFormLayout = QFormLayout()
         foldersPage.setLayout(folderFormLayout)
-        folderFormLayout.addRow(i18n("Project Directory:"), self.lnProjectDirectory)
+        folderFormLayout.addRow(i18n("Project directory:"), self.lnProjectDirectory)
         folderFormLayout.addRow(self.chkMakeProjectDirectory, labelDirectory)
-        folderFormLayout.addRow(i18n("Pages Directory"), self.lnPagesDirectory)
-        folderFormLayout.addRow(i18n("Export Directory"), self.lnExportDirectory)
-        folderFormLayout.addRow(i18n("Template Directory"), self.lnTemplateLocation)
-        folderFormLayout.addRow(i18n("Translation Directory"), self.lnTranslationLocation)
+        folderFormLayout.addRow(i18n("Pages directory"), self.lnPagesDirectory)
+        folderFormLayout.addRow(i18n("Export directory"), self.lnExportDirectory)
+        folderFormLayout.addRow(i18n("Template directory"), self.lnTemplateLocation)
+        folderFormLayout.addRow(i18n("Translation directory"), self.lnTranslationLocation)
         folderFormLayout.addRow("", buttonMetaData)
         wizard.addPage(foldersPage)
 
@@ -148,6 +157,7 @@ class ComicsProjectSetupWizard():
             self.templateLocation = self.lnTemplateLocation.text()
             self.translationLocation = self.lnTranslationLocation.text()
             projectPath = Path(self.projectDirectory)
+            
             # Only make a project directory if the checkbox for that has been checked.
             if self.chkMakeProjectDirectory.isChecked():
                 projectPath = projectPath / self.lnProjectName.text()
@@ -171,6 +181,7 @@ class ComicsProjectSetupWizard():
             self.setupDictionary["exportLocation"] = self.exportDirectory
             self.setupDictionary["templateLocation"] = self.templateLocation
             self.setupDictionary["translationLocation"] = self.translationLocation
+            self.setupDictionary["uuid"] = QUuid.createUuid().toString()
 
             # Finally, write the dictionary into the json file.
             self.writeConfig()

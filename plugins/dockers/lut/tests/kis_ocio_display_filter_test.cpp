@@ -38,7 +38,7 @@
 void KisOcioDisplayFilterTest::test()
 {
     KisExposureGammaCorrectionInterface *egInterface =
-        new KisDumbExposureGammaCorrectionInterface();
+            new KisDumbExposureGammaCorrectionInterface();
 
     QSharedPointer<OcioDisplayFilter> filter(new OcioDisplayFilter(egInterface));
 
@@ -48,7 +48,7 @@ void KisOcioDisplayFilterTest::test()
     Q_ASSERT(QFile::exists(configFile));
 
     OCIO::ConstConfigRcPtr ocioConfig =
-        OCIO::Config::CreateFromFile(configFile.toUtf8());
+            OCIO::Config::CreateFromFile(configFile.toUtf8());
 
     filter->config = ocioConfig;
     filter->inputColorSpaceName = ocioConfig->getColorSpaceNameByIndex(0);
@@ -73,17 +73,17 @@ void KisOcioDisplayFilterTest::test()
     dbgKrita << ppVar(filter->exposure);
 
     const KoColorSpace *paintingCS =
-                KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
+            KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
 
     KisImageSP image = utils::createImage(0, QSize(100, 100));
     image->convertImageColorSpace(paintingCS, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     image->waitForDone();
 
-dbgKrita << ppVar(paintingCS) << ppVar(image->root()->firstChild()->colorSpace());
+    dbgKrita << ppVar(paintingCS) << ppVar(image->root()->firstChild()->colorSpace());
 
-    KoCanvasResourceManager *resourceManager =
-        utils::createResourceManager(image,
-                                     image->root(), "");
+    KoCanvasResourceProvider *resourceManager =
+            utils::createResourceManager(image,
+                                         image->root(), "");
 
     KisDisplayColorConverter converter(resourceManager, 0);
 

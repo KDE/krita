@@ -21,6 +21,7 @@
 
 #include <QScopedPointer>
 #include <QTableView>
+#include <KisKineticScroller.h>
 
 class KisAction;
 class KisZoomButton;
@@ -64,6 +65,8 @@ public Q_SLOTS:
     void removeKeyframes();
 
     void zoomToFit();
+
+    void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
 
 protected Q_SLOTS:
     void updateGeometries() override;

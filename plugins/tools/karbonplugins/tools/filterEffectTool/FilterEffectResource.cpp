@@ -124,10 +124,7 @@ FilterEffectResource *FilterEffectResource::fromFilterEffectStack(KoFilterEffect
 
 KoFilterEffectStack *FilterEffectResource::toFilterStack() const
 {
-    KoFilterEffectStack *filterStack = new KoFilterEffectStack();
-    if (!filterStack) {
-        return 0;
-    }
+    QScopedPointer<KoFilterEffectStack> filterStack(new KoFilterEffectStack());
 
     QByteArray data = m_data.toByteArray();
     KoXmlDocument doc;
@@ -183,7 +180,7 @@ KoFilterEffectStack *FilterEffectResource::toFilterStack() const
         filterStack->appendFilterEffect(filterEffect);
     }
 
-    return filterStack;
+    return filterStack.take();
 }
 
 QByteArray FilterEffectResource::generateMD5() const

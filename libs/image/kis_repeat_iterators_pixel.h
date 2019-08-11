@@ -42,7 +42,13 @@ public:
     friend class KisRepeatHLineIteratorPixelBase<T>;
     friend class KisRepeatVLineIteratorPixelBase<T>;
     /**
-     * @param rc indicates the rectangle that truly contains data
+     * @param dm data manager
+     * @param x x of top left corner
+     * @param y y of top left corner
+     * @param offsetx x offset
+     * @param offsety y offset
+     * @param _rc indicates the rectangle that truly contains data
+     * @param completeListener completion listener
      */
     inline KisRepeatLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 offsetx, qint32 offsety, const QRect& _rc, KisIteratorCompleteListener *completeListener);
     virtual inline ~KisRepeatLineIteratorPixelBase();
@@ -75,7 +81,14 @@ class KisRepeatHLineIteratorPixelBase : public KisRepeatLineIteratorPixelBase<T>
 {
 public:
     /**
-     * @param rc indicates the rectangle that trully contains data
+     * @param dm data manager
+     * @param x x of top left corner
+     * @param y y of top left corner
+     * @param w width
+     * @param offsetx x offset
+     * @param offsety y offset
+     * @param _rc indicates the rectangle that truly contains data
+     * @param completeListener completion listener
      */
     inline KisRepeatHLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 w, qint32 offsetx, qint32 offsety, const QRect& _rc, KisIteratorCompleteListener *completeListener);
     inline ~KisRepeatHLineIteratorPixelBase() override;
@@ -101,7 +114,14 @@ class KisRepeatVLineIteratorPixelBase : public KisRepeatLineIteratorPixelBase<T>
 {
 public:
     /**
-     * @param rc indicates the rectangle that trully contains data
+     * @param dm data manager
+     * @param x x of top left corner
+     * @param y y of top left corner
+     * @param h height
+     * @param offsetx x offset
+     * @param offsety y offset
+     * @param _rc indicates the rectangle that truly contains data
+     * @param completeListener completion listener
      */
     inline KisRepeatVLineIteratorPixelBase(KisDataManager *dm, qint32 x, qint32 y, qint32 h, qint32 offsetx, qint32 offsety, const QRect& _rc, KisIteratorCompleteListener *completeListener);
     inline ~KisRepeatVLineIteratorPixelBase() override;

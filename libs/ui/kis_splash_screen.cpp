@@ -24,6 +24,8 @@
 #include <QCheckBox>
 #include <kis_debug.h>
 #include <QFile>
+#include <QScreen>
+#include <QWindow>
 
 #include <KisPart.h>
 #include <KisApplication.h>
@@ -36,7 +38,7 @@
 #include <kconfiggroup.h>
 #include <QIcon>
 
-KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, bool themed, QWidget *parent, Qt::WindowFlags f)
+KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, const QPixmap &pixmap_x2, bool themed, QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint
 #ifdef Q_OS_LINUX
               | Qt::WindowStaysOnTopHint
@@ -49,6 +51,11 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
     QImage img = pixmap.toImage();
+    if (devicePixelRatioF() > 1.01) {
+        img = pixmap_x2.toImage();
+        img.setDevicePixelRatio(2);
+    }
+
     QFont font = this->font();
     font.setPointSize(11);
     font.setBold(true);
@@ -161,7 +168,7 @@ void KisSplashScreen::displayLinks(bool show) {
 
                                "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</span></a></p>"
 
-                               "<p><a href=\"https://docs.krita.org/Category:Getting_Started\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
+                               "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
                                "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>"
                                "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>"
                                "<p><a href=\"https://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"
@@ -241,7 +248,17 @@ void KisSplashScreen::show()
 {
     QRect r(QPoint(), sizeHint());
     resize(r.size());
-    move(QApplication::desktop()->availableGeometry().center() - r.center());
+    if (!this->parentWidget()) {
+        this->winId(); // Force creation of native window
+        if (this->windowHandle()) {
+            // At least on Windows, the window may be created on a non-primary
+            // screen with a different scale factor. If we don't explicitly
+            // move it to the primary screen, the position will be scaled with
+            // the wrong factor and the splash will be offset.
+            this->windowHandle()->setScreen(QApplication::primaryScreen());
+        }
+    }
+    move(QApplication::primaryScreen()->availableGeometry().center() - r.center());
     if (isVisible()) {
         repaint();
     }

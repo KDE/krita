@@ -21,7 +21,7 @@
 
 #include <kritawidgetutils_export.h>
 #include <kstandardshortcut.h>
-#include <QtCore/QList>
+#include <QList>
 
 class QObject;
 class QStringList;
@@ -211,7 +211,7 @@ KRITAWIDGETUTILS_EXPORT QList<StandardAction> actionIds();
 /**
  * Returns the standardshortcut associated with @a actionId.
  *
- * @param actionId    The actionId whose associated shortcut is wanted.
+ * @param id    The actionId whose associated shortcut is wanted.
  *
  * @since 4.2
  */

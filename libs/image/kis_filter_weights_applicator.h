@@ -52,13 +52,13 @@ namespace tmp {
  * and offset (\p dx) parameters.
  *
  * Notation:
- * <pixel_name>_l -- leftmost border of the pixel
- * <pixel_name>_c -- center of the pixel
+ * \<pixel_name\>_l -- leftmost border of the pixel
+ * \<pixel_name\>_c -- center of the pixel
  *
  *
  * Example calculation of an offset (see calculateBlendSpan()):
  * scale = 0.5;
- * offset = <very small value>
+ * offset = \<very small value\>
  *
  *                    +------ dst_l
  *                    |
@@ -77,11 +77,11 @@ namespace tmp {
  *                       |++--- offset (near zero, measured in dst coordinates)
  *                       |
  *                       +-- _l position of the pixel, which is considered
- *                           cetral in the weights buffer
+ *                           central in the weights buffer
  *
  * Another example calculation of an offset (see calculateBlendSpan()):
  * scale = 0.5;
- * offset = <high value near 0.5>
+ * offset = \<high value near 0.5\>
  *
  *                      +------ dst_l
  *                      |
@@ -100,7 +100,7 @@ namespace tmp {
  *                          +|-+--- offset (near 0.5, measured in dst coordinates)
  *                           |
  *                           +-- _l position of the pixel, which is considered
- *                               cetral in the weights buffer
+ *                               central in the weights buffer
  */
 
 class KisFilterWeightsApplicator
@@ -131,6 +131,7 @@ public:
         KisFixedPoint dst_c = l_to_c(dst_l);
         KisFixedPoint dst_c_in_src = dstToSrc(dst_c.toFloat(), line);
 
+        // gives the nearest center of the pixel in src ( x e (0, 1> => f(x) = 0.5, x e (1, 2> => f(x) = 1.5 etc. )
         KisFixedPoint next_c_in_src = (dst_c_in_src - qreal(0.5)).toIntCeil() + qreal(0.5);
 
         BlendSpan span;
@@ -219,8 +220,12 @@ public:
 
         if (dstStart >= dstEnd)  return LinePos(dstStart, 0);
         if (leftSrcBorder >= rightSrcBorder) return LinePos(dstStart, 0);
-        if (leftSrcBorder > srcLine.start()) return LinePos(dstStart, 0);
-        if (srcLine.end() > rightSrcBorder) return LinePos(dstStart, 9);
+        if (leftSrcBorder > srcLine.start()) {
+            leftSrcBorder = srcLine.start();
+        }
+        if (srcLine.end() > rightSrcBorder) {
+            rightSrcBorder = srcLine.end();
+        }
 
         int pixelSize = m_src->pixelSize();
         KoMixColorsOp *mixOp = m_src->colorSpace()->mixColorsOp();

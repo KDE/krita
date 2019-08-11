@@ -104,7 +104,7 @@ void KisConstrainedRect::moveHandle(HandleType handle, const QPoint &offset, con
         break;
     case Creation:
         baseSizeCoeff = 0;
-        /* Falls through */
+        Q_FALLTHROUGH();
     case LowerRight:
         xSizeCoeff =  1;
         ySizeCoeff =  1;

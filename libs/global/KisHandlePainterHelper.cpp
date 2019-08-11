@@ -82,17 +82,31 @@ void KisHandlePainterHelper::setHandleStyle(const KisHandleStyle &style)
     m_handleStyle = style;
 }
 
-void KisHandlePainterHelper::drawHandleRect(const QPointF &center, qreal radius) {
+void KisHandlePainterHelper::drawHandleRect(const QPointF &center, qreal radius, QPoint offset = QPoint(0,0))
+{
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_painter);
 
     QRectF handleRect(-radius, -radius, 2 * radius, 2 * radius);
     QPolygonF handlePolygon = m_handleTransform.map(QPolygonF(handleRect));
     handlePolygon.translate(m_painterTransform.map(center));
 
+    handlePolygon.translate(offset);
+
+    const QPen originalPen = m_painter->pen();
+
+    // temporarily set the pen width to 2 to avoid pixel shifting dropping pixels the border
+    QPen *tempPen = new QPen(m_painter->pen());
+    tempPen->setWidth(4);
+    const QPen customPen = *tempPen;
+    m_painter->setPen(customPen);
+
+
     Q_FOREACH (KisHandleStyle::IterationStyle it, m_handleStyle.handleIterations) {
         PenBrushSaver saver(it.isValid ? m_painter : 0, it.stylePair, PenBrushSaver::allow_noop);
         m_painter->drawPolygon(handlePolygon);
     }
+
+    m_painter->setPen(originalPen);
 }
 
 void KisHandlePainterHelper::drawHandleCircle(const QPointF &center, qreal radius) {
@@ -277,4 +291,39 @@ void KisHandlePainterHelper::drawPath(const QPainterPath &path)
         PenBrushSaver saver(it.isValid ? m_painter : 0, it.stylePair, PenBrushSaver::allow_noop);
         m_painter->drawPath(realPath);
     }
+}
+
+void KisHandlePainterHelper::drawPixmap(const QPixmap &pixmap, QPointF position, int size, QRectF sourceRect)
+{
+    QPointF handlePolygon = m_painterTransform.map(position);
+
+    QPoint offsetPosition(0, 40);
+    handlePolygon += offsetPosition;
+
+    handlePolygon -= QPointF(size*0.5,size*0.5);
+
+    m_painter->drawPixmap(QRect(handlePolygon.x(), handlePolygon.y(),
+                                size, size),
+                                pixmap,
+                                sourceRect);
+}
+
+void KisHandlePainterHelper::fillHandleRect(const QPointF &center, qreal radius, QColor fillColor, QPoint offset = QPoint(0,0))
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_painter);
+
+    QRectF handleRect(-radius, -radius, 2 * radius, 2 * radius);
+    QPolygonF handlePolygon = m_handleTransform.map(QPolygonF(handleRect));
+    handlePolygon.translate(m_painterTransform.map(center));
+
+    QPainterPath painterPath;
+    painterPath.addPolygon(handlePolygon);
+
+    // offset that happens after zoom transform. This means the offset will be the same, no matter the zoom level
+    // this is good for UI elements that need to be below the bounding box
+    painterPath.translate(offset);
+
+    const QPainterPath pathToSend = painterPath;
+    const QBrush brushStyle(fillColor);
+    m_painter->fillPath(pathToSend, brushStyle);
 }

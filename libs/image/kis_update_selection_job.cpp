@@ -18,12 +18,22 @@
 
 #include "kis_update_selection_job.h"
 #include "kis_image.h"
+#include "kis_projection_leaf.h"
 
 
 KisUpdateSelectionJob::KisUpdateSelectionJob(KisSelectionSP selection, const QRect &updateRect)
     : m_selection(selection),
       m_updateRect(updateRect)
 {
+    /**
+     * TODO: we should implement correct KisShapeSelectionCanvas for
+     * projection. See a comment in KisUpdateSelectionJob::run().
+     *
+     * Right now, since this job accesses some projections for write, we
+     * should declare it as exclusive
+     */
+
+    setExclusive(true);
 }
 
 bool KisUpdateSelectionJob::overrides(const KisSpontaneousJob *_otherJob)
@@ -45,6 +55,13 @@ bool KisUpdateSelectionJob::overrides(const KisSpontaneousJob *_otherJob)
 
 void KisUpdateSelectionJob::run()
 {
+    QRect dirtyRect;
+
+    KisNodeSP parentNode = m_selection->parentNode();
+    if (parentNode) {
+        dirtyRect = parentNode->extent();
+    }
+
     if (!m_updateRect.isEmpty()) {
         m_selection->updateProjection(m_updateRect);
     } else {
@@ -52,6 +69,17 @@ void KisUpdateSelectionJob::run()
     }
 
     m_selection->notifySelectionChanged();
+
+    /**
+     * TODO: in the future we should remove selection projection calculation
+     *       from this job and to reuse a fully-featured shape layer canvas
+     *       from KisShapeLayer. Then projection calculation will be a little
+     *       bit more efficient.
+     */
+    if (parentNode && parentNode->projectionLeaf()->isOverlayProjectionLeaf()) {
+        dirtyRect |= parentNode->extent();
+        parentNode->setDirty(dirtyRect);
+    }
 }
 
 int KisUpdateSelectionJob::levelOfDetail() const

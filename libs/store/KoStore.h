@@ -74,31 +74,6 @@ public:
                                 const QByteArray &appIdentification = QByteArray(),
                                 Backend backend = Auto, bool writeMimetype = true);
 
-    /**
-     * Open a store (i.e. the representation on disk of a Krita document).
-     *
-     * @param url URL of the file to open
-     * @param mode if KoStore::Read, open an existing store to read it.
-     *             if KoStore::Write, create or replace a store.
-     * @param backend the backend to use for the data storage.
-     * Auto means automatically-determined for reading,
-     * and the current format (now Zip) for writing.
-     *
-     * @param appIdentification the application's mimetype,
-     * to be written in the file for "mime-magic" identification.
-     * Only meaningful if mode is Write, and if backend!=Directory.
-     *
-     * If the file is remote, the backend Directory cannot be used!
-     *
-     * @param writeMimetype If true, some backends (notably the Zip
-     * store) will write a file called 'mimetype' automatically and
-     * fill it with data from the appIdentification. This is only
-     * applicable if Mode is set to Write.
-     *
-     * @bug saving not completely implemented (fixed temporary file)
-     */
-    static KoStore *createStore(const QUrl &url, Mode mode,
-                                const QByteArray &appIdentification = QByteArray(), Backend backend = Auto, bool writeMimetype = true);
 
     /**
      * Destroys the store (i.e. closes the file on the hard disk)
@@ -191,7 +166,7 @@ public:
      * opening a stream.
      * Note: Operates on internal names
      */
-    bool enterDirectory(const QString &directory);
+    virtual bool enterDirectory(const QString &directory);
 
     /**
      * Leaves a directory. Equivalent to "cd .."
@@ -223,6 +198,11 @@ public:
      * i.e. if open(fileName) will work.
      */
     bool hasFile(const QString &fileName) const;
+
+    /**
+     *@return true if the given directory exists in the archive
+     */
+    bool hasDirectory(const QString &directoryName);
 
     /**
      * Extracts a file out of the store to a buffer
@@ -284,6 +264,9 @@ public:
      */
     virtual void setCompressionEnabled(bool e);
 
+    /// When reading, in the paths in the store where name occurs, substitution is used.
+    void setSubstitution(const QString &name, const QString &substitution);
+
 protected:
     KoStore(Mode mode, bool writeMimetype = true);
 
@@ -325,6 +308,7 @@ protected:
      * The directory might not exist yet in Write mode.
      */
     virtual bool enterRelativeDirectory(const QString &dirName) = 0;
+
     /**
      * Enter a directory where we've been before.
      * It is guaranteed to always exist.

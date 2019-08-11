@@ -25,6 +25,7 @@ set ( defaulttools_SRCS
 
     referenceimagestool/ToolReferenceImages.cpp
     referenceimagestool/ToolReferenceImagesWidget.cpp
+    referenceimagestool/KisReferenceImageCollection.cpp
 )
 
 ki18n_wrap_ui(defaulttools_SRCS

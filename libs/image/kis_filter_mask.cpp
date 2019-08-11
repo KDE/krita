@@ -59,9 +59,6 @@ QIcon KisFilterMask::icon() const
 
 void KisFilterMask::setFilter(KisFilterConfigurationSP  filterConfig)
 {
-    if (parent() && parent()->inherits("KisLayer")) {
-        filterConfig->setChannelFlags(qobject_cast<KisLayer*>(parent().data())->channelFlags());
-    }
     KisNodeFilterInterface::setFilter(filterConfig);
 }
 
@@ -74,10 +71,13 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
 
     KisFilterConfigurationSP filterConfig = filter();
 
-    Q_ASSERT(nodeProgressProxy());
-    Q_ASSERT_X(src != dst, "KisFilterMask::decorateRect",
-               "src must be != dst, because we can't create transactions "
-               "during merge, as it breaks reentrancy");
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(nodeProgressProxy(), rc);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(
+        src != dst &&
+            "KisFilterMask::decorateRect: "
+            "src must be != dst, because we can't create transactions "
+            "during merge, as it breaks reentrancy",
+        rc);
 
     if (!filterConfig) {
         return QRect();

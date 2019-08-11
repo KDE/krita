@@ -193,14 +193,19 @@ public:
     }
 
     void addInitialUpdate(MoveNodeStructSP moveStruct) {
-        QMutexLocker l(&m_mutex);
-        addToHashLazy(&m_movedNodesInitial, moveStruct);
+        {
+            QMutexLocker l(&m_mutex);
+            addToHashLazy(&m_movedNodesInitial, moveStruct);
+
+            // the juggler might directly forward the signal to processUnhandledUpdates,
+            // which would also like to get a lock, so we should release it beforehand
+        }
         if (m_parentJuggler) {
             emit m_parentJuggler->requestUpdateAsyncFromCommand();
         }
     }
 
-    void emitFinalUpdates(bool undo) {
+    void emitFinalUpdates(KisCommandUtils::FlipFlopCommand::State state) {
         QMutexLocker l(&m_mutex);
 
         if (m_movedNodesUpdated.isEmpty()) return;
@@ -209,7 +214,7 @@ public:
         MovedNodesHash::const_iterator end = m_movedNodesUpdated.constEnd();
 
         for (; it != end; ++it) {
-            if (!undo) {
+            if (state == KisCommandUtils::FlipFlopCommand::State::FINALIZING) {
                 it.value()->doRedoUpdates();
             } else {
                 it.value()->doUndoUpdates();
@@ -233,8 +238,10 @@ public:
     {
     }
 
-    void end() override {
-        if (isFinalizing() && isFirstRedo()) {
+    void partB() override {
+        State currentState = getState();
+
+        if (currentState == FINALIZING && isFirstRedo()) {
             /**
              * When doing the first redo() some of the updates might
              * have already been executed by the juggler itself, so we
@@ -248,7 +255,7 @@ public:
              * that for us (juggler, which did it in the previous
              * case, might have already died).
              */
-            m_updateData->emitFinalUpdates(isFinalizing());
+            m_updateData->emitFinalUpdates(currentState);
         }
     }
 private:
@@ -270,10 +277,24 @@ public:
     {
     }
 
-    void end() override {
+    void partA() override {
         QList<KisSelectionMaskSP> *newActiveMasks;
 
-        if (isFinalizing()) {
+        if (getState() == FINALIZING) {
+            newActiveMasks = &m_activeAfter;
+        } else {
+            newActiveMasks = &m_activeBefore;
+        }
+
+        Q_FOREACH (KisSelectionMaskSP mask, *newActiveMasks) {
+            mask->setActive(false);
+        }
+    }
+
+    void partB() override {
+        QList<KisSelectionMaskSP> *newActiveMasks;
+
+        if (getState() == FINALIZING) {
             newActiveMasks = &m_activeAfter;
         } else {
             newActiveMasks = &m_activeBefore;
@@ -456,7 +477,6 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
         ADD
     };
 
-
     DuplicateLayers(BatchMoveUpdateDataSP updateData,
                     KisImageSP image,
                     const KisNodeList &nodes,
@@ -488,6 +508,14 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
 
         const int indexOfActiveNode = filteredNodes.indexOf(m_activeNode);
         QList<KisSelectionMaskSP> activeMasks = findActiveSelectionMasks(filteredNodes);
+
+        // we will deactivate the masks before processing, so we should
+        // save their list in a convenient form
+        QSet<KisNodeSP> activeMaskNodes;
+        Q_FOREACH (KisSelectionMaskSP mask, activeMasks) {
+            activeMaskNodes.insert(mask);
+        }
+
         const bool haveActiveMasks = !activeMasks.isEmpty();
 
         if (!newParent) return;
@@ -497,6 +525,15 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
                                                                m_image, false));
 
         if (haveActiveMasks) {
+            /**
+             * We should first disable the currently active masks, after the operation
+             * completed their cloned counterparts will be activated instead.
+             *
+             * HINT: we should deactivate the masks before cloning, because otherwise
+             *       KisGroupLayer::allowAsChild() will not let the second mask to be
+             *       added to the list of child nodes. See bug 382315.
+             */
+
             addCommand(new ActivateSelectionMasksCommand(activeMasks,
                                                          QList<KisSelectionMaskSP>(),
                                                          false));
@@ -517,7 +554,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
                 }
 
                 newNodes << newNode;
-                if (haveActiveMasks && toActiveSelectionMask(node)) {
+                if (haveActiveMasks && activeMaskNodes.contains(node)) {
                     KisSelectionMaskSP mask = dynamic_cast<KisSelectionMask*>(newNode.data());
                     newActiveMasks << mask;
                 }
@@ -534,7 +571,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
                 KisNodeSP newNode = node;
 
                 newNodes << newNode;
-                if (haveActiveMasks && toActiveSelectionMask(node)) {
+                if (haveActiveMasks && activeMaskNodes.contains(node)) {
                     KisSelectionMaskSP mask = dynamic_cast<KisSelectionMask*>(newNode.data());
                     newActiveMasks << mask;
                 }
@@ -552,6 +589,10 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
 
 
         if (haveActiveMasks) {
+            /**
+             * Activate the cloned counterparts of the masks after the operation
+             * is complete.
+             */
             addCommand(new ActivateSelectionMasksCommand(QList<KisSelectionMaskSP>(),
                                                          newActiveMasks,
                                                          true));
@@ -603,6 +644,7 @@ struct RemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommand
     void populateChildCommands() override {
         KisNodeList filteredNodes = m_nodes;
         KisLayerUtils::filterMergableNodes(filteredNodes, true);
+        KisLayerUtils::filterUnlockedNodes(filteredNodes);
 
         if (filteredNodes.isEmpty()) return;
 

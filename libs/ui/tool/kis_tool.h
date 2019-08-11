@@ -24,7 +24,7 @@
 #include <KoColor.h>
 #include <KoToolBase.h>
 #include <KoID.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <kritaui_export.h>
 #include <kis_types.h>
 
@@ -43,7 +43,6 @@ class KisFilterConfiguration;
 class QPainter;
 class QPainterPath;
 class QPolygonF;
-class KisRecordedPaintAction;
 
 /// Definitions of the toolgroups of Krita
 static const QString TOOL_TYPE_SHAPE = "0 Krita/Shape";         // Geometric shapes like ellipses and lines
@@ -162,6 +161,14 @@ public:
         NONE = 10000
     };
 
+    enum NodePaintAbility {
+        VECTOR,
+        CLONE,
+        PAINT,
+        UNPAINTABLE
+    };
+    Q_ENUMS(NodePaintAbility)
+
     static AlternateAction actionToAlternateAction(ToolAction action);
 
     virtual void activateAlternateAction(AlternateAction action);
@@ -181,6 +188,8 @@ public:
 
     bool isActive() const;
 
+    KisTool::NodePaintAbility nodePaintAbility();
+
 public Q_SLOTS:
     void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;
@@ -192,7 +201,7 @@ public Q_SLOTS:
     virtual void updateSettingsViews();
 
 Q_SIGNALS:
-    void isActiveChanged();
+    void isActiveChanged(bool isActivated);
 
 protected:
     // conversion methods are also needed by the paint information builder
@@ -217,6 +226,7 @@ protected:
     QPoint convertToImagePixelCoordFloored(KoPointerEvent *e);
 
     QRectF convertToPt(const QRectF &rect);
+    qreal convertToPt(qreal value);
 
     QPointF viewToPixel(const QPointF &viewCoord) const;
     /// Convert an integer pixel coordinate into a view coordinate.
@@ -258,9 +268,6 @@ protected:
     KisImageWSP image() const;
     QCursor cursor() const;
 
-    /// Call this to set the document modified
-    void notifyModified() const;
-
     KisImageWSP currentImage();
     KoPattern* currentPattern();
     KoAbstractGradient *currentGradient();
@@ -270,8 +277,6 @@ protected:
     KoColor currentBgColor();
     KisPaintOpPresetSP currentPaintOpPreset();
     KisFilterConfigurationSP currentGenerator();
-
-    virtual void setupPaintAction(KisRecordedPaintAction* action);
 
     /// paint the path which is in view coordinates, default paint mode is XOR_MODE, BW_MODE is also possible
     /// never apply transformations to the painter, they would be useless, if drawing in OpenGL mode. The coordinates in the path should be in view coordinates.
@@ -290,14 +295,15 @@ protected:
     void blockUntilOperationsFinishedForced();
 
 protected:
-    enum ToolMode {
+    enum ToolMode: int {
         HOVER_MODE,
         PAINT_MODE,
         SECONDARY_PAINT_MODE,
         MIRROR_AXIS_SETUP_MODE,
         GESTURE_MODE,
         PAN_MODE,
-        OTHER // not used now
+        OTHER, // tool-specific modes, like multibrush's symmetry axis setup
+        OTHER_1
     };
 
     virtual void setMode(ToolMode mode);
@@ -309,10 +315,6 @@ protected Q_SLOTS:
      * Called whenever the configuration settings change.
      */
     virtual void resetCursorStyle();
-
-private Q_SLOTS:
-    void slotToggleFgBg();
-    void slotResetFgBg();
 
 private:
     struct Private;

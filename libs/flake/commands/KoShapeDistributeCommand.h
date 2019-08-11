@@ -33,7 +33,7 @@ class KoShape;
 class KRITAFLAKE_EXPORT KoShapeDistributeCommand : public KUndo2Command
 {
 public:
-    /// The different options to ditribute with this command
+    /// The different options to distribute with this command
     enum Distribute {
         HorizontalCenterDistribution,   ///< Horizontal centered
         HorizontalGapsDistribution,     ///< Horizontal Gaps

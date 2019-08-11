@@ -77,9 +77,7 @@ QString kisBacktrace()
         s += QString::number(i) + QLatin1String(": ") +
              maybeDemangledName(strings[i]) + QLatin1Char('\n');
     s += QLatin1String("]\n");
-    if (strings) {
-        free(strings);
-    }
+    free(strings);
 #endif
     return s;
 }

@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,7 +23,7 @@
 
 #include <klocalizedstring.h>
 
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoCanvasBase.h>
 
 #include "kis_canvas2.h"
@@ -66,16 +67,17 @@ void PresetDockerDock::setCanvas(KoCanvasBase *canvas)
 
     connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), m_presetChooser, SLOT(slotThemeChanged()));
 
+    canvasResourceChanged();
 }
 
 void PresetDockerDock::canvasResourceChanged(int /*key*/, const QVariant& /*v*/)
 {
     if (m_canvas && m_canvas->resourceManager()) {
-        sender()->blockSignals(true);
+        if (sender()) sender()->blockSignals(true);
         KisPaintOpPresetSP preset = m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         if(preset)
             m_presetChooser->canvasResourceChanged(preset);
-        sender()->blockSignals(false);
+        if (sender()) sender()->blockSignals(false);
         m_presetChooser->updateViewSettings();
     }
 }

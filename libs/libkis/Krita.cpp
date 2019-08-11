@@ -19,9 +19,11 @@
 
 #include <QPointer>
 #include <QVariant>
+#include <QStringList>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+#include <klocalizedstring.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -52,7 +54,6 @@
 #include <KoResourceServerProvider.h>
 #include <kis_action_registry.h>
 #include <kis_icon_utils.h>
-#include <KisPart.h>
 
 #include "View.h"
 #include "Document.h"
@@ -179,7 +180,7 @@ QStringList Krita::colorModels() const
     Q_FOREACH(KoID id, ids) {
         colorModelsIds << id.id();
     }
-    return colorModelsIds.toList();;
+    return colorModelsIds.toList();
 }
 
 QStringList Krita::colorDepths(const QString &colorModel) const
@@ -189,7 +190,7 @@ QStringList Krita::colorDepths(const QString &colorModel) const
     Q_FOREACH(KoID id, ids) {
         colorDepthsIds << id.id();
     }
-    return colorDepthsIds.toList();;
+    return colorDepthsIds.toList();
 }
 
 QStringList Krita::filterStrategies() const
@@ -205,7 +206,9 @@ QStringList Krita::profiles(const QString &colorModel, const QString &colorDepth
     Q_FOREACH(const KoColorProfile *profile, profiles) {
         profileNames << profile->name();
     }
-    return profileNames.toList();
+    QStringList r = profileNames.toList();
+    r.sort();
+    return r;
 }
 
 bool Krita::addProfile(const QString &profilePath)
@@ -317,22 +320,21 @@ Document* Krita::createDocument(int width, int height, const QString &name, cons
     qc.setAlpha(0);
     KoColor bgColor(qc, cs);
 
-    if (!document->newImage(name, width, height, cs, bgColor, true, 1, "", double(resolution / 72) )) {
-        qDebug() << "Could not create a new image";
+    if (!document->newImage(name, width, height, cs, bgColor, KisConfig::RASTER_LAYER, 1, "", double(resolution / 72) )) {
         return 0;
     }
 
     Q_ASSERT(document->image());
-    qDebug() << document->image()->objectName();
-
     return new Document(document);
 }
 
 Document* Krita::openDocument(const QString &filename)
 {
     KisDocument *document = KisPart::instance()->createDocument();
+    document->setFileBatchMode(this->batchmode());
     KisPart::instance()->addDocument(document);
     document->openUrl(QUrl::fromLocalFile(filename), KisDocument::DontAddToRecent);
+    document->setFileBatchMode(false);
     return new Document(document);
 }
 
@@ -405,6 +407,11 @@ QObject *Krita::fromVariant(const QVariant& v)
     }
     else
         return 0;
+}
+
+QString Krita::krita_i18n(const QString &text)
+{
+    return i18n(text.toUtf8().constData());
 }
 
 void Krita::mainWindowAdded(KisMainWindow *kisWindow)

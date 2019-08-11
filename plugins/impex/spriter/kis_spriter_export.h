@@ -70,13 +70,13 @@ struct Bone {
 
     ~Bone() {
         qDeleteAll(bones);
-        bones.clear();;
+        bones.clear();
     }
 };
 
 struct SpriterSlot {
     QString name;
-    bool defaultAttachmentFlag;
+    bool defaultAttachmentFlag = false;
 };
 
 struct SpriterObject {
@@ -110,12 +110,12 @@ public:
     KisSpriterExport(QObject *parent, const QVariantList &);
     ~KisSpriterExport() override;
     bool supportsIO() const override { return false; }
-    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
     void initializeCapabilities() override;
 private:
 
-    bool savePaintDevice(KisPaintDeviceSP dev, const QString &fileName);
-    void parseFolder(KisGroupLayerSP parentGroup, const QString &folderName, const QString &basePath, int *folderId = 0);
+    KisImportExportErrorCode savePaintDevice(KisPaintDeviceSP dev, const QString &fileName);
+    KisImportExportErrorCode parseFolder(KisGroupLayerSP parentGroup, const QString &folderName, const QString &basePath, int *folderId = 0);
     Bone *parseBone(const Bone *parent, KisGroupLayerSP groupLayer);
     void fixBone(Bone *bone);
     void fillScml(QDomDocument &scml, const QString &entityName);

@@ -10,6 +10,7 @@ include_directories(
 
 add_subdirectory(styles)
 add_subdirectory(tests)
+add_subdirectory(resources/tests)
 
 set(kritaflake_SRCS
     KoGradientHelper.cpp
@@ -18,7 +19,7 @@ set(kritaflake_SRCS
     KoResourceManager_p.cpp
     KoDerivedResourceConverter.cpp
     KoResourceUpdateMediator.cpp
-    KoCanvasResourceManager.cpp
+    KoCanvasResourceProvider.cpp
     KoDocumentResourceManager.cpp
     KoCanvasObserverBase.cpp
     KoCanvasSupervisor.cpp
@@ -34,7 +35,7 @@ set(kritaflake_SRCS
     KoSelectedShapesProxySimple.cpp
     KoShape.cpp
     KoShapeAnchor.cpp
-    KoShapeBasedDocumentBase.cpp
+    KoShapeControllerBase.cpp
     KoShapeApplicationData.cpp
     KoShapeContainer.cpp
     KoShapeContainerModel.cpp
@@ -119,6 +120,7 @@ set(kritaflake_SRCS
     KoClipMask.cpp
     KoClipMaskPainter.cpp
     KoCurveFit.cpp
+    KisGamutMaskViewConverter.cpp
 
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
@@ -165,6 +167,7 @@ set(kritaflake_SRCS
     commands/KoMultiPathPointMergeCommand.cpp
     commands/KoMultiPathPointJoinCommand.cpp
     commands/KoKeepShapesSelectedCommand.cpp
+    commands/KoPathMergeUtils.cpp
 
     html/HtmlSavingContext.cpp
     html/HtmlWriter.cpp
@@ -216,6 +219,7 @@ set(kritaflake_SRCS
     text/KoSvgTextShapeMarkupConverter.cpp
 
     resources/KoSvgSymbolCollectionResource.cpp
+    resources/KoGamutMask.cpp
 
     FlakeDebug.cpp
     tests/MockShapes.cpp

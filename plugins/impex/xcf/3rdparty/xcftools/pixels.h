@@ -67,8 +67,8 @@ void mk_scaletable(void);
 extern const rgba graytable[256] ;
 extern rgba colormap[256] ;
 extern unsigned colormapLength ;
-void initLayer(struct xcfLayer *);
-void initColormap();
+int initLayer(struct xcfLayer *);
+int initColormap();
 
 int degrayPixel(rgba); /* returns -1 for non-gray pixels */
 

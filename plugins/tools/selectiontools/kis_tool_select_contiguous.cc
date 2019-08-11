@@ -48,23 +48,19 @@
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
 #include "kis_slider_spin_box.h"
-#include "kis_paint_device.h"
-#include "kis_pixel_selection.h"
 #include "tiles3/kis_hline_iterator.h"
 
 
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
-    : KisToolSelectBase<KisTool>(canvas,
-                                 KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
-                                 i18n("Contiguous Area Selection")),
+    : KisToolSelect(canvas,
+                    KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
+                    i18n("Contiguous Area Selection")),
     m_fuzziness(20),
     m_sizemod(0),
     m_feather(0),
     m_limitToCurrentLayer(false)
 {
     setObjectName("tool_select_contiguous");
-    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
-            this, &KisToolSelectContiguous::setSelectionAction);
 }
 
 KisToolSelectContiguous::~KisToolSelectContiguous()
@@ -73,7 +69,7 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 
 void KisToolSelectContiguous::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KisTool::activate(toolActivation, shapes);
+    KisToolSelect::activate(toolActivation, shapes);
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
@@ -87,6 +83,10 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
         !currentNode()->visible() ||
         !selectionEditable()) {
         event->ignore();
+        return;
+    }
+
+    if (KisToolSelect::selectionDidMove()) {
         return;
     }
 
@@ -168,7 +168,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
 
-    selectionWidget->disableSelectionModeOption();
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);
@@ -208,9 +207,9 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         feather->setSingleStep(1);
         gridLayout->addWidget(feather, 2, 1, 1, 1);
 
-        connect (input  , SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int) ));
-        connect (sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)   ));
-        connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)   ));
+        connect (input  , SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
+        connect (sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
+        connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
 
         QCheckBox* limitToCurrentLayer = new QCheckBox(i18n("Limit to current layer"), selectionWidget);
         l->insertWidget(4, limitToCurrentLayer);
@@ -239,18 +238,13 @@ void KisToolSelectContiguous::slotLimitToCurrentLayer(int state)
     m_configGroup.writeEntry("limitToCurrentLayer", state);
 }
 
-
-void KisToolSelectContiguous::setSelectionAction(int action)
+void KisToolSelectContiguous::resetCursorStyle()
 {
-    changeSelectionAction(action);
-}
-
-
-QMenu* KisToolSelectContiguous::popupActionsMenu()
-{
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
-
-
-    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
+    if (selectionAction() == SELECTION_ADD) {
+        useCursor(KisCursor::load("tool_contiguous_selection_cursor_add.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SUBTRACT) {
+        useCursor(KisCursor::load("tool_contiguous_selection_cursor_sub.png", 6, 6));
+    } else {
+        KisToolSelect::resetCursorStyle();
+    }
 }

@@ -64,6 +64,7 @@ public:
 
     QRect extent() const override;
     QRect exactBounds() const override;
+    QRect sourceDataBounds() const;
 
     void setTransformParams(KisTransformMaskParamsInterfaceSP params);
     KisTransformMaskParamsInterfaceSP transformParams() const;
@@ -75,12 +76,20 @@ public:
     void setY(qint32 y) override;
 
     void forceUpdateTimedNode() override;
+    bool hasPendingTimedUpdates() const override;
+
+    void threadSafeForceStaticImageUpdate();
 
 protected:
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
 
+Q_SIGNALS:
+    void sigInternalForceStaticImageUpdate();
+
 private Q_SLOTS:
     void slotDelayedStaticUpdate();
+
+    void slotInternalForceStaticImageUpdate();
 
 private:
     struct Private;

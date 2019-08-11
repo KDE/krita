@@ -32,7 +32,7 @@
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoChannelInfo.h"
-
+#include "kis_assert.h"
 
 #include <QGlobalStatic>
 
@@ -61,7 +61,7 @@ struct DefaultKoColorInitializer
     KoColor *value = 0;
 };
 
-Q_GLOBAL_STATIC(DefaultKoColorInitializer, s_defaultKoColor);
+Q_GLOBAL_STATIC(DefaultKoColorInitializer, s_defaultKoColor)
 
 }
 
@@ -304,13 +304,13 @@ qreal KoColor::opacityF() const
     return m_colorSpace->opacityF(m_data);
 }
 
-KoColor KoColor::fromXML(const QDomElement& elt, const QString& bitDepthId)
+KoColor KoColor::fromXML(const QDomElement& elt, const QString& channelDepthId)
 {
     bool ok;
-    return fromXML(elt, bitDepthId, &ok);
+    return fromXML(elt, channelDepthId, &ok);
 }
 
-KoColor KoColor::fromXML(const QDomElement& elt, const QString& bitDepthId, bool* ok)
+KoColor KoColor::fromXML(const QDomElement& elt, const QString& channelDepthId, bool* ok)
 {
     *ok = true;
     QString modelId;
@@ -336,7 +336,7 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString& bitDepthId, bool
             profileName.clear();
         }
     }
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, bitDepthId, profileName);
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, channelDepthId, profileName);
     if (cs == 0) {
         QList<KoID> list =  KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces);
         if (!list.empty()) {
@@ -352,6 +352,29 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString& bitDepthId, bool
         *ok = false;
         return KoColor();
     }
+}
+
+QString KoColor::toXML() const
+{
+    QDomDocument cdataDoc = QDomDocument("color");
+    QDomElement cdataRoot = cdataDoc.createElement("color");
+    cdataDoc.appendChild(cdataRoot);
+    cdataRoot.setAttribute("channeldepth", colorSpace()->colorDepthId().id());
+    toXML(cdataDoc, cdataRoot);
+    return cdataDoc.toString();
+}
+
+KoColor KoColor::fromXML(const QString &xml)
+{
+    KoColor c;
+    QDomDocument doc;
+    if (doc.setContent(xml)) {
+        QDomElement e = doc.documentElement().firstChild().toElement();
+        QString channelDepthID = e.attribute("channeldepth", Integer16BitsColorDepthID.id());
+        bool ok;
+        c = KoColor::fromXML(e, channelDepthID, &ok);
+    }
+    return c;
 }
 
 QString KoColor::toQString(const KoColor &color)
@@ -389,12 +412,16 @@ QDebug operator<<(QDebug dbg, const KoColor &color)
             const quint32 *ptr = reinterpret_cast<const quint32*>(color.data() + ch->pos());
             dbg.nospace() << *ptr;
             break;
-#ifdef HAVE_OPENEXR
         } case KoChannelInfo::FLOAT16: {
+
+#ifdef HAVE_OPENEXR
             const half *ptr = reinterpret_cast<const half*>(color.data() + ch->pos());
             dbg.nospace() << *ptr;
-            break;
+#else
+            const quint16 *ptr = reinterpret_cast<const quint16*>(color.data() + ch->pos());
+            dbg.nospace() << "UNSUPPORTED_F16(" << *ptr << ")";
 #endif
+            break;
         } case KoChannelInfo::FLOAT32: {
             const float *ptr = reinterpret_cast<const float*>(color.data() + ch->pos());
             dbg.nospace() << *ptr;

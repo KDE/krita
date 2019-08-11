@@ -36,7 +36,9 @@
 #include <kconfig.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+#include <KisKineticScroller.h>
 
+#include <KoResourceItemView.h>
 #include <KoResourceItemChooser.h>
 
 #include <kis_icon.h>
@@ -118,7 +120,6 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     QObject::connect(brushSizeSpinBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSize(qreal)));
 
-
     brushRotationSpinBox->setRange(0, 360, 0);
     brushRotationSpinBox->setValue(0);
     brushRotationSpinBox->setSuffix(QChar(Qt::Key_degree));
@@ -127,9 +128,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     brushSpacingSelectionWidget->setSpacing(true, 1.0);
     connect(brushSpacingSelectionWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 
-
     QObject::connect(useColorAsMaskCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
-
 
     KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
     QSharedPointer<KisBrushResourceServerAdapter> adapter(new KisBrushResourceServerAdapter(rServer));
@@ -147,11 +146,6 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     m_itemChooser->setMinimumHeight(150);
     m_itemChooser->showButtons(false); // turn the import and delete buttons since we want control over them
 
-    KisConfig cfg;
-    m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
-                                         cfg.kineticScrollingSensitivity(),
-                                         cfg.kineticScrollingScrollbar());
-
 
     addPresetButton->setIcon(KisIconUtils::loadIcon("list-add"));
     deleteBrushTipButton->setIcon(KisIconUtils::loadIcon("trash-empty"));
@@ -164,7 +158,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     presetsLayout->addWidget(m_itemChooser);
 
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)), this, SLOT(update(KoResource *)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)), this, SLOT(updateBrushTip(KoResource*)));
 
     stampButton->setIcon(KisIconUtils::loadIcon("list-add"));
     stampButton->setToolTip(i18n("Creates a brush tip from the current image selection."
@@ -172,7 +166,6 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     clipboardButton->setIcon(KisIconUtils::loadIcon("list-add"));
     clipboardButton->setToolTip(i18n("Creates a brush tip from the image in the clipboard."));
-
 
     connect(stampButton, SIGNAL(clicked()), this,  SLOT(slotOpenStampBrush()));
     connect(clipboardButton, SIGNAL(clicked()), SLOT(slotOpenClipboardBrush()));
@@ -183,7 +176,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     resetBrushButton->setToolTip(i18n("Reloads Spacing from file\nSets Scale to 1.0\nSets Rotation to 0.0"));
     connect(resetBrushButton, SIGNAL(clicked()), SLOT(slotResetBrush()));
 
-    update(m_itemChooser->currentResource());
+    updateBrushTip(m_itemChooser->currentResource());
 }
 
 KisPredefinedBrushChooser::~KisPredefinedBrushChooser()
@@ -217,7 +210,7 @@ void KisPredefinedBrushChooser::setBrush(KisBrushSP brush)
     }
 
     m_itemChooser->setCurrentResource(resource);
-    update(brush.data());
+    updateBrushTip(brush.data(), true);
 }
 
 void KisPredefinedBrushChooser::slotResetBrush()
@@ -236,7 +229,7 @@ void KisPredefinedBrushChooser::slotResetBrush()
         brush->setScale(1.0);
         brush->setAngle(0.0);
 
-        update(brush);
+        updateBrushTip(brush);
         emit sigBrushChanged();
     }
 }
@@ -291,14 +284,16 @@ void KisPredefinedBrushChooser::slotOpenStampBrush()
     if(!m_stampBrushWidget) {
         m_stampBrushWidget = new KisCustomBrushWidget(this, i18n("Stamp"), m_image);
         m_stampBrushWidget->setModal(false);
-        connect(m_stampBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource *)),
-                                    SLOT(slotNewPredefinedBrush(KoResource *)));
+        connect(m_stampBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource*)),
+                                    SLOT(slotNewPredefinedBrush(KoResource*)));
+    } else {
+        m_stampBrushWidget->setImage(m_image);
     }
 
     QDialog::DialogCode result = (QDialog::DialogCode)m_stampBrushWidget->exec();
 
     if(result) {
-        update(m_itemChooser->currentResource());
+        updateBrushTip(m_itemChooser->currentResource());
     }
 }
 void KisPredefinedBrushChooser::slotOpenClipboardBrush()
@@ -306,18 +301,18 @@ void KisPredefinedBrushChooser::slotOpenClipboardBrush()
     if(!m_clipboardBrushWidget) {
         m_clipboardBrushWidget = new KisClipboardBrushWidget(this, i18n("Clipboard"), m_image);
         m_clipboardBrushWidget->setModal(true);
-        connect(m_clipboardBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource *)),
-                                        SLOT(slotNewPredefinedBrush(KoResource *)));
+        connect(m_clipboardBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource*)),
+                                        SLOT(slotNewPredefinedBrush(KoResource*)));
     }
 
     QDialog::DialogCode result = (QDialog::DialogCode)m_clipboardBrushWidget->exec();
 
     if(result) {
-        update(m_itemChooser->currentResource());
+        updateBrushTip(m_itemChooser->currentResource());
     }
 }
 
-void KisPredefinedBrushChooser::update(KoResource * resource)
+void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isChangingBrushPresets)
 {
 
 
@@ -352,7 +347,6 @@ void KisPredefinedBrushChooser::update(KoResource * resource)
             brushTypeString = i18n("Animated Image");
         }
 
-
         QString brushDetailsText = QString("%1 (%2 x %3) %4")
                        .arg(brushTypeString)
                        .arg(m_brush->width())
@@ -363,13 +357,12 @@ void KisPredefinedBrushChooser::update(KoResource * resource)
 
         // keep the current preset's tip settings if we are preserving it
         // this will set the brush's model data to keep what it currently has for size, spacing, etc.
-        if (preserveBrushPresetSettings->isChecked()) {
+        if (preserveBrushPresetSettings->isChecked() && !isChangingBrushPresets) {
             m_brush->setAutoSpacing(brushSpacingSelectionWidget->autoSpacingActive(), brushSpacingSelectionWidget->autoSpacingCoeff());
             m_brush->setAngle(brushRotationSpinBox->value() * M_PI / 180);
             m_brush->setSpacing(brushSpacingSelectionWidget->spacing());
             m_brush->setUserEffectiveSize(brushSizeSpinBox->value());
         }
-
 
         brushSpacingSelectionWidget->setSpacing(m_brush->autoSpacingActive(),
                                 m_brush->autoSpacingActive() ?
@@ -378,22 +371,23 @@ void KisPredefinedBrushChooser::update(KoResource * resource)
         brushRotationSpinBox->setValue(m_brush->angle() * 180 / M_PI);
         brushSizeSpinBox->setValue(m_brush->width() * m_brush->scale());
 
-
         // useColorAsMask support is only in gimp brush so far
+        bool prevColorAsMaskState = useColorAsMaskCheckbox->isChecked();
         KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(m_brush.data());
         if (gimpBrush) {
-            useColorAsMaskCheckbox->setChecked(gimpBrush->useColorAsMask());
+            useColorAsMaskCheckbox->setChecked(gimpBrush->useColorAsMask() || prevColorAsMaskState);
+            gimpBrush->setUseColorAsMask(prevColorAsMaskState);
         }
         useColorAsMaskCheckbox->setEnabled(m_brush->hasColor() && gimpBrush);
 
         emit sigBrushChanged();
-    }  
+    }
 }
 
 void KisPredefinedBrushChooser::slotNewPredefinedBrush(KoResource *resource)
 {
     m_itemChooser->setCurrentResource(resource);
-    update(resource);
+    updateBrushTip(resource);
 }
 
 void KisPredefinedBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)

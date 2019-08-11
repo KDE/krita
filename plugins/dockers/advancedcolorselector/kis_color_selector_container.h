@@ -27,6 +27,7 @@ class KisMyPaintShadeSelector;
 class KisMinimalShadeSelector;
 class QBoxLayout;
 class QAction;
+class KisGamutMaskToolbar;
 
 class KisColorSelectorContainer : public QWidget
 {
@@ -58,8 +59,10 @@ private:
     KisMyPaintShadeSelector* m_myPaintShadeSelector;
     KisMinimalShadeSelector* m_minimalShadeSelector;
     QWidget* m_shadeSelector;
+    KisGamutMaskToolbar* m_gamutMaskToolbar;
 
     int m_onDockerResizeSetting;
+    bool m_showColorSelector;
 
     QBoxLayout* m_widgetLayout;
 

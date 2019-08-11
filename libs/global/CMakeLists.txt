@@ -18,7 +18,6 @@ set(kritaglobal_LIB_SRCS
     kis_painting_tweaks.cpp
     KisHandlePainterHelper.cpp
     KisHandleStyle.cpp
-    kis_relaxed_timer.cpp
     kis_signal_compressor.cpp
     kis_signal_compressor_with_param.cpp
     kis_thread_safe_signal_compressor.cpp
@@ -28,7 +27,10 @@ set(kritaglobal_LIB_SRCS
     KisSharedThreadPoolAdapter.cpp
     KisSharedRunnable.cpp
     KisRollingMeanAccumulatorWrapper.cpp
-    KisLoggingManager.cpp
+    kis_config_notifier.cpp
+    KisDeleteLaterWrapper.cpp
+    KisUsageLogger.cpp
+    KisFileUtils.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )
@@ -36,6 +38,7 @@ generate_export_header(kritaglobal BASE_NAME kritaglobal)
 
 target_link_libraries(kritaglobal 
     PUBLIC
+        kritaversion
         Qt5::Concurrent 
         Qt5::Core 
         Qt5::Gui 

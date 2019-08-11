@@ -216,6 +216,55 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="invert_selection">
+      <icon></icon>
+      <text>&amp;Invert Selection</text>
+      <whatsThis></whatsThis>
+      <toolTip>Invert current selection</toolTip>
+      <iconText>Invert Selection</iconText>
+      <activationFlags>10000000000</activationFlags>
+      <activationConditions>100</activationConditions>
+      <shortcut>Ctrl+Shift+I</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="create_snapshot">
+      <icon></icon>
+      <text>Create Snapshot</text>
+      <whatsThis></whatsThis>
+      <toolTip>Create Snapshot</toolTip>
+      <iconText></iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="switchto_snapshot">
+      <icon></icon>
+      <text>Switch to Selected Snapshot</text>
+      <whatsThis></whatsThis>
+      <toolTip>Switch to selected snapshot</toolTip>
+      <iconText></iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="remove_snapshot">
+      <icon></icon>
+      <text>Remove Selected Snapshot</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove Selected Snapshot</toolTip>
+      <iconText></iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
   </Actions>
 
   <Actions category="Painting">
@@ -461,7 +510,7 @@
     </Action>
    <Action name="mirrorX-moveToCenter">
       <icon></icon>
-      <text>Move to Canvas Center</text>
+      <text>Move to Canvas Center X</text>
       <whatsThis></whatsThis>
       <toolTip>Move to Canvas Center X</toolTip>
       <iconText>Move to Canvas Center X</iconText>
@@ -478,18 +527,6 @@
       <iconText>Move to Canvas Center Y</iconText>
       <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="invert">
-      <icon></icon>
-      <text>&amp;Invert Selection</text>
-      <whatsThis></whatsThis>
-      <toolTip>Invert current selection</toolTip>
-      <iconText>Invert Selection</iconText>
-      <activationFlags>10000000000</activationFlags>
-      <activationConditions>100</activationConditions>
-      <shortcut>Ctrl+Shift+I</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -562,6 +599,46 @@
       <toolTip>Swap Foreground and Background Color</toolTip>
       <iconText>Swap Foreground and Background Color</iconText>
       <shortcut>X</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selection_tool_mode_add">
+      <icon></icon>
+      <text>Selection Mode: Add</text>
+      <whatsThis></whatsThis>
+      <toolTip>Selection Mode: Add</toolTip>
+      <iconText>Selection Mode: Add</iconText>
+      <shortcut>A</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selection_tool_mode_subtract">
+      <icon></icon>
+      <text>Selection Mode: Subtract</text>
+      <whatsThis></whatsThis>
+      <toolTip>Selection Mode: Subtract</toolTip>
+      <iconText>Selection Mode: Subtract</iconText>
+      <shortcut>S</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selection_tool_mode_intersect">
+      <icon></icon>
+      <text>Selection Mode: Intersect</text>
+      <whatsThis></whatsThis>
+      <toolTip>Selection Mode: Intersect</toolTip>
+      <iconText>Selection Mode: Intersect</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selection_tool_mode_replace">
+      <icon></icon>
+      <text>Selection Mode: Replace</text>
+      <whatsThis></whatsThis>
+      <toolTip>Selection Mode: Replace</toolTip>
+      <iconText>Selection Mode: Replace</iconText>
+      <shortcut>R</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -693,18 +770,6 @@
       <iconText>Convert to Shape</iconText>
       <activationFlags>10000000000</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="select_opaque">
-      <icon></icon>
-      <text>&amp;Select Opaque</text>
-      <whatsThis></whatsThis>
-      <toolTip>Select Opaque</toolTip>
-      <iconText>Select Opaque</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>100</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -905,6 +970,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="krita_filter_invert">
+      <icon></icon>
+      <text>&amp;Invert</text>
+      <whatsThis></whatsThis>
+      <toolTip>Invert</toolTip>
+      <iconText>Invert</iconText>
+      <activationFlags>10000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Ctrl+I</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="krita_filter_perchannel">
       <icon></icon>
       <text>&amp;Color Adjustment curves...</text>
@@ -1015,10 +1092,10 @@
     </Action>
     <Action name="krita_filter_colorbalance">
       <icon></icon>
-      <text>Colo&amp;r Balance..</text>
+      <text>Colo&amp;r Balance...</text>
       <whatsThis></whatsThis>
-      <toolTip>Color Balance..</toolTip>
-      <iconText>Color Balance..</iconText>
+      <toolTip>Color Balance</toolTip>
+      <iconText>Color Balance</iconText>
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+B</shortcut>
@@ -1309,10 +1386,10 @@
     </Action>
     <Action name="KritaShape/KisToolLazyBrush">
       <icon></icon>
-      <text>Lazy Brush Tool</text>
+      <text>Colorize Mask Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Lazy Brush Tool</toolTip>
-      <iconText>Lazy Brush Tool</iconText>
+      <toolTip>Colorize Mask Tool</toolTip>
+      <iconText>Colorize Mask Tool</iconText>
       <shortcut></shortcut>
       <statusTip></statusTip>
     </Action>
@@ -1336,10 +1413,10 @@
     </Action>
     <Action name="InteractionTool">
       <icon></icon>
-      <text>Shape Manipulation Tool</text>
+      <text>Select Shapes Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Shape Manipulation Tool</toolTip>
-      <iconText>Shape Manipulation Tool</iconText>
+      <toolTip>Select Shapes Tool</toolTip>
+      <iconText>Select Shapes Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -1354,16 +1431,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="TextTool">
-      <icon></icon>
-      <text>Text Editing Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Text editing</toolTip>
-      <iconText>Text editing</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KisToolSelectOutline">
       <icon></icon>
       <text>Outline Selection Tool</text>
@@ -1374,21 +1441,11 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="ArtisticTextTool">
-      <icon></icon>
-      <text>Artistic Text Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Artistic text editing</toolTip>
-      <iconText>Artistic text editing</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KisToolSelectPath">
       <icon></icon>
       <text>Bezier Curve Selection Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Select a </toolTip>
+      <toolTip>Bezier Curve Selection Tool</toolTip>
       <iconText>Bezier Curve Selection Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -1398,7 +1455,7 @@
       <icon></icon>
       <text>Similar Color Selection Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Select a </toolTip>
+      <toolTip>Similar Color Selection Tool</toolTip>
       <iconText>Similar Color Selection Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -1438,8 +1495,8 @@
       <icon></icon>
       <text>Bezier Curve Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Bezier Curve Tool. Shift-mouseclick ends the curve.</toolTip>
-      <iconText>Bezier Curve Tool. Shift-mouseclick ends the curve.</iconText>
+      <toolTip>Bezier Curve Tool. Shift-mouseclick or double-click ends the curve.</toolTip>
+      <iconText>Bezier Curve Tool. Shift-mouseclick or double-click ends the curve.</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -1634,22 +1691,22 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="KritaShape/KisToolText">
-      <icon></icon>
-      <text>Text tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Text tool</toolTip>
-      <iconText>Text tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KarbonGradientTool">
       <icon></icon>
       <text>Gradient Editing Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Gradient editing</toolTip>
       <iconText>Gradient editing</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="ToolReferenceImages">
+      <icon></icon>
+      <text>Reference Images Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Reference Images Tool</toolTip>
+      <iconText>Reference Images Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -2034,8 +2091,8 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_blank_frame">
-      <icon></icon>
-      <text>Add blank frame</text>
+      <icon>addblankframe</icon>
+      <text>Create Blank Frame</text>
       <whatsThis></whatsThis>
       <toolTip>Add blank frame</toolTip>
       <iconText>Add blank frame</iconText>
@@ -2046,8 +2103,8 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_duplicate_frame">
-      <icon></icon>
-      <text>Copy Frame</text>
+      <icon>addduplicateframe</icon>
+      <text>Create Duplicate Frame</text>
       <whatsThis></whatsThis>
       <toolTip>Add duplicate frame</toolTip>
       <iconText>Add duplicate frame</iconText>
@@ -2139,73 +2196,12 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="insert_n_frames_left">
-      <icon></icon>
-      <text>Insert N Frame Left</text>
-      <whatsThis></whatsThis>
-      <toolTip>Insert N Frame Left</toolTip>
-      <iconText>Insert N Frame Left</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="insert_n_frames_right">
-      <icon></icon>
-      <text>Insert N Frame Right</text>
-      <whatsThis></whatsThis>
-      <toolTip>Insert N Frame Right</toolTip>
-      <iconText>Insert N Frame Right</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="clear_animation_columns">
-      <icon></icon>
-      <text>Clear Columns</text>
-      <whatsThis></whatsThis>
-      <toolTip>Clear Columns</toolTip>
-      <iconText>Clear Columns</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="remove_animation_columns">
-      <icon></icon>
-      <text>Remove Columns</text>
-      <whatsThis></whatsThis>
-      <toolTip>Remove Columns</toolTip>
-      <iconText>Remove Columns</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
 
-    <Action name="insert_keyframes_right">
-      <icon></icon>
-      <text>Insert Keyframe Right</text>
-      <whatsThis></whatsThis>
-      <toolTip>Insert keyframes to the right of selection moving the tail of animation to the right</toolTip>
-      <iconText></iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-
-    <Action name="insert_keyframes_left">
+    <Action name="insert_keyframe_left">
       <icon></icon>
       <text>Insert Keyframe Left</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert keyframes to the left of selection moving the tail of animation to the right</toolTip>
+      <toolTip>Insert keyframes to the left of selection, moving the tail of animation to the right.</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2214,11 +2210,11 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="insert_n_keyframes_right">
+    <Action name="insert_keyframe_right">
       <icon></icon>
-      <text>Insert N Keyframes Right</text>
+      <text>Insert Keyframe Right</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert several keyframes to the right of selection moving the tail of animation to the right</toolTip>
+      <toolTip>Insert keyframes to the right of selection, moving the tail of animation to the right.</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2227,11 +2223,11 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="insert_n_keyframes_left">
+    <Action name="insert_multiple_keyframes">
       <icon></icon>
-      <text>Insert N Keyframes Left</text>
+      <text>Insert Multiple Keyframes</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert several keyframes to the left of selection moving the tail of animation to the right</toolTip>
+      <toolTip>Insert several keyframes based on user parameters.</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2240,9 +2236,9 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="remove_frames_and_shift">
+    <Action name="remove_frames_and_pull">
       <icon></icon>
-      <text>Remove Frame and Shift</text>
+      <text>Remove Frame and Pull</text>
       <whatsThis></whatsThis>
       <toolTip>Remove keyframes moving the tail of animation to the left</toolTip>
       <iconText></iconText>
@@ -2254,10 +2250,10 @@
     </Action>
 
     <Action name="remove_frames">
-      <icon></icon>
-      <text>Remove Frame</text>
+      <icon>deletekeyframe</icon>
+      <text>Remove Keyframe</text>
       <whatsThis></whatsThis>
-      <toolTip>Just remove keyframes without moving anything around</toolTip>
+      <toolTip>Remove keyframes without moving anything around</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2266,24 +2262,11 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="insert_columns_right">
-      <icon></icon>
-      <text>Insert Column Right</text>
-      <whatsThis></whatsThis>
-      <toolTip>Insert keyframes to the right of selection moving the tail of animation to the right</toolTip>
-      <iconText></iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-
-    <Action name="insert_columns_left">
+    <Action name="insert_column_left">
       <icon></icon>
       <text>Insert Column Left</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert column to the left of selection moving the tail of animation to the right</toolTip>
+      <toolTip>Insert column to the left of selection, moving the tail of animation to the right</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2292,11 +2275,11 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="insert_n_columns_right">
+    <Action name="insert_column_right">
       <icon></icon>
-      <text>Insert N Columns Right</text>
+      <text>Insert Column Right</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert several columns to the right of selection moving the tail of animation to the right</toolTip>
+      <toolTip>Insert column to the right of selection, moving the tail of animation to the right</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2305,11 +2288,11 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="insert_n_columns_left">
+    <Action name="insert_multiple_columns">
       <icon></icon>
-      <text>Insert N Columns Left</text>
+      <text>Insert Multiple Columns</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert several columns to the left of selection moving the tail of animation to the right</toolTip>
+      <toolTip>Insert several columns based on user parameters.</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2318,9 +2301,9 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="remove_columns_and_shift">
+    <Action name="remove_columns_and_pull">
       <icon></icon>
-      <text>Remove Column and Shift</text>
+      <text>Remove Column and Pull</text>
       <whatsThis></whatsThis>
       <toolTip>Remove columns moving the tail of animation to the left</toolTip>
       <iconText></iconText>
@@ -2335,7 +2318,215 @@
       <icon></icon>
       <text>Remove Column</text>
       <whatsThis></whatsThis>
-      <toolTip>Just remove columns without moving anything around</toolTip>
+      <toolTip>Remove columns without moving anything around</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_hold_frame">
+      <icon></icon>
+      <text>Insert Hold Frame</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert a hold frame after every keyframe</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_multiple_hold_frames">
+      <icon></icon>
+      <text>Insert Multiple Hold Frames</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert N hold frames after every keyframe</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="remove_hold_frame">
+      <icon></icon>
+      <text>Remove Hold Frame</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove a hold frame after every keyframe</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="remove_multiple_hold_frames">
+      <icon></icon>
+      <text>Remove Multiple Hold Frames</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove N hold frames after every keyframe</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_hold_column">
+      <icon></icon>
+      <text>Insert Hold Column</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert a hold column into the frame at the current position</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_multiple_hold_columns">
+      <icon></icon>
+      <text>Insert Multiple Hold Columns</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert N hold columns into the frame at the current position</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="remove_hold_column">
+      <icon></icon>
+      <text>Remove Hold Column</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove a hold column from the frame at the current position</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="remove_multiple_hold_columns">
+      <icon></icon>
+      <text>Remove Multiple Hold Columns</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove N hold columns from the frame at the current position</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="mirror_frames">
+      <icon></icon>
+      <text>Mirror Frames</text>
+      <whatsThis></whatsThis>
+      <toolTip>Mirror frames' position</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="mirror_columns">
+      <icon></icon>
+      <text>Mirror Columns</text>
+      <whatsThis></whatsThis>
+      <toolTip>Mirror columns' position</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="copy_frames_to_clipboard">
+      <icon></icon>
+      <text>Copy to Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Copy frames to clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="cut_frames_to_clipboard">
+      <icon></icon>
+      <text>Cut to Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Cut frames to clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="paste_frames_from_clipboard">
+      <icon></icon>
+      <text>Paste from Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste frames from clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="copy_columns_to_clipboard">
+      <icon></icon>
+      <text>Copy Columns to Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Copy columns to clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="cut_columns_to_clipboard">
+      <icon></icon>
+      <text>Cut Columns to Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Cut columns to clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="paste_columns_from_clipboard">
+      <icon></icon>
+      <text>Paste Columns from Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste columns from clipboard</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2345,7 +2536,47 @@
     </Action>
 
 
-  </Actions>
+
+    <Action name="set_start_time">
+      <icon></icon>
+      <text>Set Start Time</text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+
+    <Action name="set_end_time">
+      <icon></icon>
+      <text>Set End Time</text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+
+    <Action name="update_playback_range">
+      <icon></icon>
+      <text>Update Playback Range</text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
 
 
   </Actions>
@@ -2683,7 +2914,7 @@
       <whatsThis></whatsThis>
       <toolTip>Create a group layer containing selected layers</toolTip>
       <iconText>Quick Group</iconText>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+G</shortcut>
       <isCheckable>false</isCheckable>
@@ -2821,7 +3052,19 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="convert_layer_to_file_layer">
+        <Action name="convert_to_animated">
+      <icon></icon>
+      <text>Convert to &amp;animated layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Convert layer into animation frames</toolTip>
+      <iconText>Convert layer into animation frames</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="convert_to_file_layer">
       <icon>fileLayer</icon>
       <text>to &amp;File Layer</text>
       <whatsThis></whatsThis>
@@ -3097,6 +3340,102 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="mirrorAllNodesX">
+      <icon>symmetry-horizontal</icon>
+      <text>Mirror All Layers Hori&amp;zontally</text>
+      <whatsThis></whatsThis>
+      <toolTip>Mirror All Layers Horizontally</toolTip>
+      <iconText>Mirror All Layers Horizontally</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="mirrorAllNodesY">
+      <icon>symmetry-vertical</icon>
+      <text>Mirror All Layers &amp;Vertically</text>
+      <whatsThis></whatsThis>
+      <toolTip>Mirror All Layers Vertically</toolTip>
+      <iconText>Mirror All Layers Vertically</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="rotateAllLayers">
+      <icon></icon>
+      <text>&amp;Rotate All Layers...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Rotate All Layers</toolTip>
+      <iconText>Rotate All Layers</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="rotateAllLayersCW90">
+      <icon>object-rotate-right</icon>
+      <text>Rotate All &amp;Layers 90° to the Right</text>
+      <whatsThis></whatsThis>
+      <toolTip>Rotate All Layers 90° to the Right</toolTip>
+      <iconText>Rotate All Layers 90° to the Right</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="rotateAllLayersCCW90">
+      <icon>object-rotate-left</icon>
+      <text>Rotate All Layers &amp;90° to the Left</text>
+      <whatsThis></whatsThis>
+      <toolTip>Rotate All Layers 90° to the Left</toolTip>
+      <iconText>Rotate All Layers 90° to the Left</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="rotateAllLayers180">
+      <icon></icon>
+      <text>Rotate All Layers &amp;180°</text>
+      <whatsThis></whatsThis>
+      <toolTip>Rotate All Layers 180°</toolTip>
+      <iconText>Rotate All Layers 180°</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="scaleAllLayers">
+      <icon></icon>
+      <text>Scale All &amp;Layers to new Size...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Scale All Layers to new Size</toolTip>
+      <iconText>Scale All Layers to new Size</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="shearAllLayers">
+      <icon></icon>
+      <text>&amp;Shear All Layers...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Shear All Layers</toolTip>
+      <iconText>Shear All Layers</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="offsetlayer">
       <icon></icon>
       <text>&amp;Offset Layer...</text>
@@ -3294,6 +3633,18 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut>F3</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="set-copy-from">
+      <icon></icon>
+      <text>Set Copy F&amp;rom...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Set the source for the selected clone layer(s).</toolTip>
+      <iconText>Set Copy From</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

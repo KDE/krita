@@ -57,7 +57,7 @@
 #define isOdd(x) ((x) & 0x01)
 
 /**
- * Aligns @value to the lowest integer not smaller than @value and
+ * Aligns @p value to the lowest integer not smaller than @p value and
  * that is a divident of alignment
  */
 inline void alignByPow2Hi(qint32 &value, qint32 alignment)
@@ -68,7 +68,7 @@ inline void alignByPow2Hi(qint32 &value, qint32 alignment)
 }
 
 /**
- * Aligns @value to the lowest integer not smaller than @value and
+ * Aligns @p value to the lowest integer not smaller than @p value and
  * that is, increased by one, a divident of alignment
  */
 inline void alignByPow2ButOneHi(qint32 &value, qint32 alignment)
@@ -78,8 +78,8 @@ inline void alignByPow2ButOneHi(qint32 &value, qint32 alignment)
 }
 
 /**
- * Aligns @value to the highest integer not exceeding @value and
- * that is a divident of @alignment
+ * Aligns @p value to the highest integer not exceeding @p value and
+ * that is a divident of @p alignment
  */
 inline void alignByPow2Lo(qint32 &value, qint32 alignment)
 {
@@ -182,7 +182,7 @@ void KisImagePyramid::setImage(KisImageWSP newImage)
         // Get the full image size
         QRect rc = m_originalImage->projection()->exactBounds();
 
-        KisImageConfig config;
+        KisImageConfig config(true);
 
         int patchWidth = config.updatePatchWidth();
         int patchHeight = config.updatePatchHeight();
@@ -286,7 +286,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
             int channelSize = channelInfo[m_selectedChannelIndex]->size();
             int pixelSize = projectionCs->pixelSize();
 
-            KisConfig cfg;
+            KisConfig cfg(true);
 
             if (m_onlyOneChannelSelected && !cfg.showSingleChannelAsColor()) {
                 int selectedChannelPos = channelInfo[m_selectedChannelIndex]->pos();
@@ -531,7 +531,7 @@ QImage KisImagePyramid::convertToQImageFast(KisPaintDeviceSP paintDevice,
 
 void KisImagePyramid::configChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_useOcio = cfg.useOcio();
 }
 

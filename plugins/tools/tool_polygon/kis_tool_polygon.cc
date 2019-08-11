@@ -31,12 +31,6 @@
 #include <brushengine/kis_paintop_registry.h>
 #include "kis_figure_painting_tool_helper.h"
 
-#include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_path_paint_action.h>
-#include <recorder/kis_node_query_path.h>
-
-
-
 KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
         : KisToolPolylineBase(canvas,  KisToolPolylineBase::PAINT, KisCursor::load("tool_polygon_cursor.png", 6, 6))
 {
@@ -56,18 +50,10 @@ void KisToolPolygon::resetCursorStyle()
 
 void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
 {
-    if (!blockUntilOperationsFinished()) return;
+    const KisToolShape::ShapeAddInfo info =
+        shouldAddShape(currentNode());
 
-    if (image()) {
-        KisRecordedPathPaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()),
-                                                   currentPaintOpPreset(),
-                                                   KisDistanceInitInfo());
-        setupPaintAction(&linePaintAction);
-        linePaintAction.addPolyLine(points.toList());
-        linePaintAction.addLine(KisPaintInformation(points.last()), KisPaintInformation(points.first()));
-        image()->actionRecorder()->addAction(linePaintAction);
-    }
-    if (!currentNode()->inherits("KisShapeLayer")) {
+    if (!info.shouldAddShape) {
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polygon"),
                                            image(),
                                            currentNode(),
@@ -86,6 +72,8 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
             path->lineTo(resolutionMatrix.map(points[i]));
         path->close();
         path->normalize();
+
+        info.markAsSelectionShapeIfNeeded(path);
 
         addShape(path);
     }

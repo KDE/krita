@@ -33,6 +33,7 @@
 #include <kis_types.h>
 #include <kis_selection.h>
 #include <kis_layer.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 #include "KoColorModelStandardIds.h"
@@ -49,7 +50,7 @@ KritaExample::~KritaExample()
 {
 }
 
-KisFilterInvert::KisFilterInvert() : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Invert"))
+KisFilterInvert::KisFilterInvert() : KisColorTransformationFilter(id(), FiltersCategoryAdjustId, i18n("&Invert"))
 {
     setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
     setColorSpaceIndependence(FULLY_INDEPENDENT);

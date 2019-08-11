@@ -21,7 +21,7 @@
 
 #include <kis_brush_size_option.h>
 
-#include <kis_airbrush_option.h>
+#include <kis_airbrush_option_widget.h>
 #include <kis_deform_option.h>
 
 struct KisDeformPaintOpSettings::Private
@@ -42,7 +42,7 @@ KisDeformPaintOpSettings::~KisDeformPaintOpSettings()
 
 void KisDeformPaintOpSettings::setPaintOpSize(qreal value)
 {
-    BrushSizeOption option;
+    KisBrushSizeOptionProperties option;
     option.readOptionSetting(this);
     option.brush_diameter = value;
     option.writeOptionSetting(this);
@@ -50,7 +50,7 @@ void KisDeformPaintOpSettings::setPaintOpSize(qreal value)
 
 qreal KisDeformPaintOpSettings::paintOpSize() const
 {
-    BrushSizeOption option;
+    KisBrushSizeOptionProperties option;
     option.readOptionSetting(this);
     return option.brush_diameter;
 }
@@ -71,30 +71,19 @@ bool KisDeformPaintOpSettings::isAirbrushing() const
     }
 }
 
-QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
+QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
 {
     QPainterPath path;
-    if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
+    if (mode.isVisible) {
         qreal width = getInt(BRUSH_DIAMETER);
         qreal height = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT);
         path = ellipseOutline(width, height, getDouble(BRUSH_SCALE), getDouble(BRUSH_ROTATION));
 
-        QPainterPath tiltLine;
-        QLineF tiltAngle(QPointF(0.0,0.0), QPointF(0.0,width));
-        tiltAngle.setLength(qMax(width*0.5, 50.0) * (1 - info.tiltElevation(info, 60.0, 60.0, true)));
-        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))-3.0);
-        tiltLine.moveTo(tiltAngle.p1());
-        tiltLine.lineTo(tiltAngle.p2());
-        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))+3.0);
-        tiltLine.lineTo(tiltAngle.p2());
-        tiltLine.lineTo(tiltAngle.p1());
+        path = outlineFetcher()->fetchOutline(info, this, path, mode);
 
-
-        path = outlineFetcher()->fetchOutline(info, this, path);
-
-        if (mode == CursorTiltOutline) {
+        if (mode.showTiltDecoration) {
             QPainterPath tiltLine = makeTiltIndicator(info, QPointF(0.0, 0.0), width * 0.5, 3.0);
-            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, 1.0, 0.0, true, 0, 0));
+            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, 1.0, 0.0, true, 0, 0));
         }
     }
     return path;
@@ -105,8 +94,6 @@ QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &i
 #include <brushengine/kis_combo_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
-#include "kis_brush_size_option.h"
-#include "kis_deform_option.h"
 #include "kis_standard_uniform_properties_factory.h"
 
 
@@ -201,14 +188,14 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    BrushSizeOption option;
+                    KisBrushSizeOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
 
                     prop->setValue(int(option.brush_rotation));
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    BrushSizeOption option;
+                    KisBrushSizeOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
                     option.brush_rotation = prop->value().toInt();
                     option.writeOptionSetting(prop->settings().data());

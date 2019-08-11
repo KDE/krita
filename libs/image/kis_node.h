@@ -76,7 +76,7 @@ public:
     /**
      * Create an empty node without a parent.
      */
-    KisNode();
+    KisNode(KisImageWSP image);
 
     /**
      * Create a copy of this node. The copy will not have a parent
@@ -196,6 +196,9 @@ public:
      */
     virtual KisProjectionLeafSP projectionLeaf() const;
 
+
+    void setImage(KisImageWSP image) override;
+
 protected:
 
     /**
@@ -233,7 +236,7 @@ protected:
      * Example. You have a layer that needs to prepare some rect on a
      * projection, say expectedRect. To perform this, the projection
      * of all the layers below of the size needRect(expectedRect)
-     * should be calculeated by the merger beforehand and the layer
+     * should be calculated by the merger beforehand and the layer
      * will access some other area of image inside the rect
      * accessRect(expectedRect) during updateProjection call.
      *
@@ -348,6 +351,12 @@ public: // Graph methods
      * @return the first child with the given name
      */
     KisNodeSP findChildByName(const QString &name);
+
+Q_SIGNALS:
+    /**
+     * Don't use this signal anywhere other than KisNodeShape. It's a hack.
+     */
+    void sigNodeChangedInternal();
 
 public:
 

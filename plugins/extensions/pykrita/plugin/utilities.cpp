@@ -76,7 +76,11 @@ namespace PyKrita
             return initStatus;
         }
 
+#if defined(IS_PY3K)
         if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PyInit_pykrita)) {
+#else
+        if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, initpykrita)) {
+#endif
             initStatus = INIT_CANNOT_LOAD_PYKRITA_MODULE;
             return initStatus;
         }
@@ -84,6 +88,10 @@ namespace PyKrita
         Python::ensureInitialized();
         Python py = Python();
 
+        // NOTE: This code is not needed on Python 3.
+        //       This might also fail if private sip module for PyQt5 is used,
+        //       as required by newer PyQt5. It's fine since any exceptions
+        //       in this script will be ignored.
         PyRun_SimpleString(
                 "import sip\n"
                         "sip.setapi('QDate', 2)\n"
@@ -101,6 +109,7 @@ namespace PyKrita
 
         pluginManagerInstance.reset(new PythonPluginManager());
 
+#if defined(IS_PY3K)
         // Initialize our built-in module.
         auto pykritaModule = PyInit_pykrita();
 
@@ -109,6 +118,9 @@ namespace PyKrita
             return initStatus;
             //return i18nc("@info:tooltip ", "No <icode>pykrita</icode> built-in module");
         }
+#else
+        initpykrita();
+#endif
 
         initStatus = INIT_OK;
         return initStatus;
@@ -257,45 +269,22 @@ QString Python::lastTraceback() const
 bool Python::libraryLoad()
 {
     // no-op on Windows
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
     if (!s_pythonLibrary) {
 
         QFileInfo fi(PYKRITA_PYTHON_LIBRARY);
-        dbgScript << fi.canonicalFilePath() << fi.exists();
-        if (fi.exists()) {
-            dbgScript << "Creating s_pythonLibrary" << PYKRITA_PYTHON_LIBRARY;
-            s_pythonLibrary = new QLibrary(PYKRITA_PYTHON_LIBRARY);
-        }
-        else {
-            QString libraryName = fi.fileName();
-            QString applicationRoot = KoResourcePaths::getApplicationRoot();
-            QStringList locations;
-            locations << applicationRoot + "/lib"
-                      << applicationRoot + "/lib64"
-                      << applicationRoot + "/lib/X64_86-linux-gnu";
-            Q_FOREACH(const QString &location, locations) {
-                QDir d(location);
-                QStringList entries = d.entryList(QStringList() << libraryName + "*");
-                dbgScript << entries;
-                Q_FOREACH(const QString &entry, entries) {
-                     QFileInfo fi2(location + "/" + entry);
-                     if (fi2.exists()) {
-                        s_pythonLibrary = new QLibrary(fi2.canonicalFilePath());
-                        break;
-                     }
-                }
-            }
-        }
-        if (!s_pythonLibrary) {
-            dbgScript << "Could not create" << PYKRITA_PYTHON_LIBRARY;
-            return false;
-        }
-
+        // get the filename of the configured Python library, without the .so suffix
+        const QString libraryName = fi.completeBaseName();
+        // 1.0 is the SONAME of the shared Python library
+        s_pythonLibrary = new QLibrary(libraryName, "1.0");
         s_pythonLibrary->setLoadHints(QLibrary::ExportExternalSymbolsHint);
         if (!s_pythonLibrary->load()) {
             dbgScript << QString("Could not load %1 -- Reason: %2").arg(s_pythonLibrary->fileName()).arg(s_pythonLibrary->errorString());
+            delete s_pythonLibrary;
+            s_pythonLibrary = 0;
             return false;
         }
+        dbgScript << QString("Loaded %1").arg(s_pythonLibrary->fileName());
     }
 #endif
     return true;
@@ -334,8 +323,13 @@ bool Python::setPath(const QStringList& scriptPaths)
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!Py_IsInitialized(), false);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!isPythonPathSet, false);
 
-    bool runningInBundle = (KoResourcePaths::getApplicationRoot().toLower().contains(".mount_krita") || KoResourcePaths::getApplicationRoot().toLower().contains("krita.app"));
-    qDebug() << "Python::setPath. Script paths:" << scriptPaths << runningInBundle;
+//    qDebug() << ">>>>>>>>>>>" << qgetenv("APPDIR")
+//             << KoResourcePaths::getApplicationRoot()
+//             << (!qgetenv("APPDIR").isNull() && KoResourcePaths::getApplicationRoot().contains(qgetenv("APPDIR")));
+
+
+    bool runningInBundle = ((!qgetenv("APPDIR").isNull() && KoResourcePaths::getApplicationRoot().contains(qgetenv("APPDIR"))) || KoResourcePaths::getApplicationRoot().toLower().contains("krita.app"));
+    dbgScript << "Python::setPath. Script paths:" << scriptPaths << runningInBundle;
 
 #ifdef Q_OS_WIN
     constexpr char pathSeparator = ';';
@@ -349,7 +343,7 @@ bool Python::setPath(const QStringList& scriptPaths)
 
     // Append the Krita libraries path
     QString pythonLibsPath = findKritaPythonLibsPath("krita-python-libs");
-    qDebug() << "pythonLibsPath (krita-python-libs)" << pythonLibsPath;
+    dbgScript << "pythonLibsPath (krita-python-libs)" << pythonLibsPath;
     if (pythonLibsPath.isEmpty()) {
         dbgScript << "Cannot find krita-python-libs";
         return false;
@@ -360,7 +354,7 @@ bool Python::setPath(const QStringList& scriptPaths)
 #ifndef Q_OS_WIN
     // Append the sip libraries path
     pythonLibsPath = findKritaPythonLibsPath("sip");
-    qDebug() << "pythonLibsPath (sip)" << pythonLibsPath;
+    dbgScript << "pythonLibsPath (sip)" << pythonLibsPath;
     if (!pythonLibsPath.isEmpty()) {
         dbgScript << "Found sip at" << pythonLibsPath;
         paths.append(pythonLibsPath);
@@ -383,15 +377,34 @@ bool Python::setPath(const QStringList& scriptPaths)
     }
 #else
     // If using a system Python install, respect the current PYTHONPATH
-    if (KoResourcePaths::getApplicationRoot().toLower().contains(".mount_krita")) {
+    if (runningInBundle) {
         // We're running from an appimage, so we need our local python
         QString p = QFileInfo(PYKRITA_PYTHON_LIBRARY).fileName();
+#ifdef Q_OS_MAC
+        QString p2 = p.remove("lib").remove("m.dy");
+#else
         QString p2 = p.remove("lib").remove("m.so");
+#endif
         dbgScript << "\t" << p << p2;
         originalPath = findKritaPythonLibsPath(p);
-        paths.append(originalPath + "/lib-dynload");
-        paths.append(originalPath + "/site-packages");
-        paths.append(originalPath + "/site-packages/PyQt5");
+#ifdef Q_OS_MAC
+        // Are we running with a system Python library instead?
+        if (originalPath.isEmpty()) {
+            // Keep the original Python search path.
+            originalPath = QString::fromWCharArray(Py_GetPath());
+            QString d = QFileInfo(PYKRITA_PYTHON_LIBRARY).absolutePath();
+
+            paths.append(d + "/" + p2 + "/site-packages");
+            paths.append(d + "/" + p2 + "/site-packages/PyQt5");
+        }
+        else {
+#endif
+            paths.append(originalPath + "/lib-dynload");
+            paths.append(originalPath + "/site-packages");
+            paths.append(originalPath + "/site-packages/PyQt5");
+#ifdef Q_OS_MAC
+        }
+#endif
     }
     else {
         // Use the system path
@@ -409,7 +422,7 @@ bool Python::setPath(const QStringList& scriptPaths)
     joinedPaths.toWCharArray(joinedPathsWChars.data());
     Py_SetPath(joinedPathsWChars.data());
 #else
-    if (KoResourcePaths::getApplicationRoot().contains(".mount_Krita")) {
+    if (runningInBundle) {
         QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
         joinedPaths.toWCharArray(joinedPathsWChars.data());
         Py_SetPath(joinedPathsWChars.data());

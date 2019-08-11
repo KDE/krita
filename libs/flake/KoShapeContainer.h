@@ -177,6 +177,7 @@ public:
      *
      * @param painter used for painting the shape
      * @param converter to convert between internal and view coordinates.
+     * @param paintcontext the painting context
      * @see applyConversion()
      */
     virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) = 0;
@@ -196,6 +197,18 @@ public:
      */
     KoShapeContainerModel *model() const;
 
+protected:
+
+    /**
+     * set the model for this container
+     */
+    void setModel(KoShapeContainerModel *model);
+    /**
+     * set the model, and take control of all its children
+     */
+    void setModelInit(KoShapeContainerModel *model);
+
+public:
 
     /**
      * A special interface for KoShape to use during setParent call. Don't use
@@ -231,6 +244,8 @@ public:
     ShapeInterface* shapeInterface();
 
 protected:
+    KoShapeContainer(const KoShapeContainer &rhs);
+
     /**
      * This hook is for inheriting classes that need to do something on adding/removing
      * of children.
@@ -241,11 +256,9 @@ protected:
 
     void shapeChanged(ChangeType type, KoShape *shape = 0) override;
 
-    /// constructor
-    KoShapeContainer(KoShapeContainerPrivate *);
-
 private:
-    Q_DECLARE_PRIVATE(KoShapeContainer)
+    class Private;
+    QScopedPointer<Private> d;
 };
 
 #endif

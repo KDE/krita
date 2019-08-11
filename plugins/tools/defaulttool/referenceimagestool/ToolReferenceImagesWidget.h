@@ -39,15 +39,17 @@ public:
 
     void selectionChanged(KoSelection *selection);
 
+
 private Q_SLOTS:
     void slotOpacitySliderChanged(qreal);
     void slotSaturationSliderChanged(qreal);
     void slotKeepAspectChanged();
-    void slotEmbeddingChanged();
+    void slotSaveLocationChanged(int index);
 
 private:
     struct Private;
     const QScopedPointer<Private> d;
+    void updateVisibility(bool hasSelection);
 };
 
 #endif

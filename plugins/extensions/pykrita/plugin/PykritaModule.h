@@ -25,9 +25,19 @@
 
 #include <Python.h>
 
+#if PY_MAJOR_VERSION >= 3
+#ifndef IS_PY3K
+#define IS_PY3K
+#endif
+#endif
+
 /**
  * Initializer for the built-in Python module.
  */
+#if defined(IS_PY3K)
 PyMODINIT_FUNC PyInit_pykrita();
+#else
+void initpykrita();
+#endif
 
 #endif

@@ -79,10 +79,10 @@ public Q_SLOTS:
     void activateResource(Resource *resource);
 
     /**
-     * @brief foreGroundColor allows access to the currently active color.
+     * @brief foregroundColor allows access to the currently active color.
      * This is nominally per canvas/view, but in practice per mainwindow.
      * @code
-color = Application.activeWindow().activeView().foreGroundColor()
+color = Application.activeWindow().activeView().foregroundColor()
 components = color.components()
 components[0] = 1.0
 components[1] = 0.6
@@ -91,10 +91,10 @@ color.setComponents(components)
 Application.activeWindow().activeView().setForeGroundColor(color)
      * @endcode
      */
-    ManagedColor *foreGroundColor() const;
+    ManagedColor *foregroundColor() const;
     void setForeGroundColor(ManagedColor *color);
 
-    ManagedColor *backGroundColor() const;
+    ManagedColor *backgroundColor() const;
     void setBackGroundColor(ManagedColor *color);
 
     Resource *currentBrushPreset() const;

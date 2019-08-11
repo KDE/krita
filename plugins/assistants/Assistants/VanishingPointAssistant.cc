@@ -6,7 +6,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -30,12 +31,24 @@
 #include <kis_canvas2.h>
 #include <kis_coordinates_converter.h>
 #include <kis_algebra_2d.h>
-
+#include <kis_dom_utils.h>
 #include <math.h>
 
 VanishingPointAssistant::VanishingPointAssistant()
     : KisPaintingAssistant("vanishing point", i18n("Vanishing Point assistant"))
 {
+}
+
+VanishingPointAssistant::VanishingPointAssistant(const VanishingPointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : KisPaintingAssistant(rhs, handleMap)
+    , m_canvas(rhs.m_canvas)
+    , m_referenceLineDensity(rhs.m_referenceLineDensity)
+{
+}
+
+KisPaintingAssistantSP VanishingPointAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+{
+    return KisPaintingAssistantSP(new VanishingPointAssistant(*this, handleMap));
 }
 
 QPointF VanishingPointAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
@@ -88,9 +101,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
     gc.save();
     gc.resetTransform();
-    QPointF delta(0,0);
     QPointF mousePos(0,0);
-    QPointF endPoint(0,0);//this is the final point that the line is being extended to, we seek it just outside the view port//
     
     if (canvas){
         //simplest, cheapest way to get the mouse-position//
@@ -157,14 +168,17 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
         pathCenter.addEllipse(ellipse);
         drawPath(gc, pathCenter, isSnappingActive());
 
+        QColor paintingColor = effectiveAssistantColor();
+
+
         // draw the lines connecting the different nodes
-        QPen penStyle(m_canvas->paintingAssistantsDecoration()->assistantsColor(), 2.0, Qt::SolidLine);
+        QPen penStyle(paintingColor, 2.0, Qt::SolidLine);
 
         if (!isSnappingActive()) {
-            penStyle.setColor(QColor(m_canvas->paintingAssistantsDecoration()->assistantsColor().red(),
-                                     m_canvas->paintingAssistantsDecoration()->assistantsColor().green(),
-                                     m_canvas->paintingAssistantsDecoration()->assistantsColor().blue(),
-                                     m_canvas->paintingAssistantsDecoration()->assistantsColor().alpha()*.2));
+            QColor snappingColor = paintingColor;
+            snappingColor.setAlpha(snappingColor.alpha() * 0.2);
+
+            penStyle.setColor(snappingColor);
         }
 
         gc.save();
@@ -177,12 +191,40 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
     }
 
 
+    // draw references guide for vanishing points at specified density
+    // this is shown as part of the preview, so don't show if preview is off
+    if ( (assistantVisible && canvas->paintingAssistantsDecoration()->outlineVisibility()) && this->isSnappingActive() ) {
+
+        // cycle through degrees from 0 to 180. We are doing an infinite line, so we don't need to go 360
+        QTransform initialTransform = converter->documentToWidgetTransform();
+        QPointF p0 = initialTransform.map(*handles()[0]); // main vanishing point
+
+        for (int currentAngle=0; currentAngle <= 180; currentAngle = currentAngle + m_referenceLineDensity ) {
+
+           // determine the correct angle based on the iteration
+           float xPos = cos(currentAngle * M_PI / 180);
+           float yPos = sin(currentAngle * M_PI / 180);
+           QPointF unitAngle;
+           unitAngle.setX(p0.x() + xPos);
+           unitAngle.setY(p0.y() + yPos);
+
+           // find point
+           QLineF snapLine= QLineF(p0, unitAngle);
+           QRect viewport= gc.viewport();
+           KisAlgebra2D::intersectLineRect(snapLine, viewport);
+
+           // make a line from VP center to edge of canvas with that angle
+           QPainterPath path;
+           path.moveTo(snapLine.p1());
+           path.lineTo(snapLine.p2());
+           drawPreview(gc, path);//and we draw the preview.
+        }
+    }
+
+
     gc.restore();
 
     KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
-
-
-
 }
 
 void VanishingPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *converter, bool assistantVisible)
@@ -210,14 +252,45 @@ void VanishingPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConver
     drawPath(gc, path, isSnappingActive());
 }
 
-QPointF VanishingPointAssistant::buttonPosition() const
+QPointF VanishingPointAssistant::getEditorPosition() const
 {
     return (*handles()[0]);
+}
+
+void VanishingPointAssistant::setReferenceLineDensity(float value)
+{
+    // cannot have less than 1 degree value
+    if (value < 1.0) {
+        value = 1.0;
+    }
+
+    m_referenceLineDensity = value;
+}
+
+float VanishingPointAssistant::referenceLineDensity()
+{
+    return m_referenceLineDensity;
 }
 
 bool VanishingPointAssistant::isAssistantComplete() const
 {
     return handles().size() > 0; // only need one point to be ready
+}
+
+void VanishingPointAssistant::saveCustomXml(QXmlStreamWriter* xml)
+{
+    xml->writeStartElement("angleDensity");
+    xml->writeAttribute("value", KisDomUtils::toString( this->referenceLineDensity()));
+    xml->writeEndElement();
+}
+
+bool VanishingPointAssistant::loadCustomXml(QXmlStreamReader* xml)
+{
+    if (xml && xml->name() == "angleDensity") {
+         this->setReferenceLineDensity((float)KisDomUtils::toDouble(xml->attributes().value("value").toString()));
+    }
+
+    return true;
 }
 
 

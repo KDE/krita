@@ -17,8 +17,26 @@
  */
 
 #include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
-
 #include <cmath>
+
+#include <config-vc.h>
+#ifdef HAVE_VC
+#if defined(__clang__)
+#pragma GCC diagnostic ignored "-Wundef"
+#pragma GCC diagnostic ignored "-Wlocal-type-template-args"
+#endif
+#if defined _MSC_VER
+// Lets shut up the "possible loss of data" and "forcing value to bool 'true' or 'false'
+#pragma warning ( push )
+#pragma warning ( disable : 4244 )
+#pragma warning ( disable : 4800 )
+#endif
+#include <Vc/Vc>
+#include <Vc/IO>
+#if defined _MSC_VER
+#pragma warning ( pop )
+#endif
+#endif
 
 #include <QDomDocument>
 #include <QVector>
@@ -29,38 +47,13 @@
 #include "kis_fast_math.h"
 
 #include "kis_base_mask_generator.h"
-#include "kis_curve_circle_mask_generator.h"
-#include "kis_cubic_curve.h"
 #include "kis_antialiasing_fade_maker.h"
+#include "kis_brush_mask_applicator_factories.h"
 
+#include "kis_curve_circle_mask_generator.h"
+#include "kis_curve_circle_mask_generator_p.h"
+#include "kis_cubic_curve.h"
 
-struct Q_DECL_HIDDEN KisCurveCircleMaskGenerator::Private
-{
-    Private(bool enableAntialiasing)
-        : fadeMaker(*this, enableAntialiasing)
-    {
-    }
-
-    Private(const Private &rhs)
-        : xcoef(rhs.xcoef),
-        ycoef(rhs.ycoef),
-        curveResolution(rhs.curveResolution),
-        curveData(rhs.curveData),
-        curvePoints(rhs.curvePoints),
-        dirty(true),
-        fadeMaker(rhs.fadeMaker,*this)
-    {
-    }
-
-    qreal xcoef, ycoef;
-    qreal curveResolution;
-    QVector<qreal> curveData;
-    QList<QPointF> curvePoints;
-    bool dirty;
-
-    KisAntialiasingFadeMaker1D<Private> fadeMaker;
-    inline quint8 value(qreal dist) const;
-};
 
 KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve, bool antialiasEdges)
     : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, SoftId), d(new Private(antialiasEdges))
@@ -73,12 +66,15 @@ KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal r
     d->dirty = false;
 
     setScale(1.0, 1.0);
+
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCurveCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
 }
 
 KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(const KisCurveCircleMaskGenerator &rhs)
     : KisMaskGenerator(rhs),
       d(new Private(*rhs.d))
 {
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCurveCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
 }
 
 KisCurveCircleMaskGenerator::~KisCurveCircleMaskGenerator()
@@ -103,9 +99,14 @@ void KisCurveCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
     d->fadeMaker.setSquareNormCoeffs(d->xcoef, d->ycoef);
 }
 
-bool KisCurveCircleMaskGenerator::shouldSupersample() const
+bool KisCurveCircleMaskGenerator::shouldVectorize() const
 {
-    return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
+    return !shouldSupersample() && spikes() == 2;
+}
+
+KisBrushMaskApplicatorBase* KisCurveCircleMaskGenerator::applicator()
+{
+    return d->applicator.data();
 }
 
 inline quint8 KisCurveCircleMaskGenerator::Private::value(qreal dist) const
@@ -118,6 +119,7 @@ inline quint8 KisCurveCircleMaskGenerator::Private::value(qreal dist) const
     qreal alpha = (
         (1.0 - alphaValueF) * curveData.at(alphaValue) +
         alphaValueF * curveData.at(alphaValue+1));
+
     return (1.0 - alpha) * 255;
 }
 
@@ -177,4 +179,9 @@ void KisCurveCircleMaskGenerator::transformCurveForSoftness(qreal softness,const
     // compute the data
     KisCubicCurve curve(newList);
     result = curve.floatTransfer( curveResolution );
+}
+
+void KisCurveCircleMaskGenerator::resetMaskApplicator(bool forceScalar)
+{
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCurveCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this,forceScalar));
 }

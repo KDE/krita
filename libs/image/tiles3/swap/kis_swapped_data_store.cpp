@@ -28,7 +28,7 @@
 KisSwappedDataStore::KisSwappedDataStore()
     : m_memoryMetric(0)
 {
-    KisImageConfig config;
+    KisImageConfig config(true);
     const quint64 maxSwapSize = config.maxSwapSize() * MiB;
     const quint64 swapSlabSize = config.swapSlabSize() * MiB;
     const quint64 swapWindowSize = config.swapWindowSize() * MiB;

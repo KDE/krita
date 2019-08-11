@@ -23,6 +23,7 @@
 
 #include <KoShapeContainer.h>
 #include <SvgShape.h>
+#include <KoSvgText.h>
 
 class HtmlSavingContext;
 class KoSvgTextProperties;
@@ -32,7 +33,7 @@ class KoSvgTextChunkShapeLayoutInterface;
 /**
  * KoSvgTextChunkShape is an elementary block of SVG text object.
  *
- * KoSvgTextChunkShape represents either a <tspan> or <text> element of SVG.
+ * KoSvgTextChunkShape represents either a \<tspan\> or \<text\> element of SVG.
  * The chunk shape uses flake hierarchy to represent the DOM hierarchy of the
  * supplied text. All the attributes of text blocks can be fetched using
  * textProperties() method.
@@ -47,10 +48,10 @@ class KoSvgTextChunkShapeLayoutInterface;
  *
  * WARNING: beware the difference between "svg-text-chunk" and
  * KoSvgTextChunkShape! The chunk shape is **not** a "text chunk" in SVG's
- * definition. Accrding to SVG, "text chunk" is a set of characters anchored to
+ * definition. According to SVG, "text chunk" is a set of characters anchored to
  * a specific absolute position on canvas. And KoSvgTextChunkShape is just one
- * <tspan> or <text> element. Obviously, one <tspan> can contain multiple "text
- * chunks" and, vice versa, a "text chunk" can spread onto multiple <span>'s.
+ * \<tspan\> or \<text\> element. Obviously, one \<tspan\> can contain multiple "text
+ * chunks" and, vice versa, a "text chunk" can spread onto multiple \<span\>'s.
  */
 class KRITAFLAKE_EXPORT KoSvgTextChunkShape : public KoShapeContainer, public SvgShape
 {
@@ -101,7 +102,7 @@ public:
      * or not. That is not a problem for normal shapes, but it cannot work for
      * text shapes. The text has different inheritance rules: if the parent
      * text chunk has a gradient fill, its inheriting descendants will
-     * **smoothly continue** this grandient. They will not start a new gradient
+     * **smoothly continue** this gradient. They will not start a new gradient
      * in their local coordinate system.
      *
      * Therefore, after loading, the loading code calls
@@ -131,7 +132,7 @@ public:
      * itself, of an "intermediate chunk" that doesn't contain any text itself,
      * but works as a group for a set of child chunks, which might be either
      * text (leaf) or intermediate chunks. Such groups are needed to define a
-     * common text style for a group of '<tspan>' objects.
+     * common text style for a group of '\<tspan\>' objects.
      *
      * @return true if the chunk is a "text chunk" false if it is "intermediate chunk"
      */
@@ -142,6 +143,20 @@ public:
      * unless you are KoSvgTextShape.
      */
     KoSvgTextChunkShapeLayoutInterface* layoutInterface();
+
+    /**
+     * WARNING: this propperty is available only if isRootTextNode() is true
+     *
+     * @return true if the shape should be edited in a rich-text editor
+     */
+    bool isRichTextPreferred() const;
+
+    /**
+     * WARNING: this propperty is available only if isRootTextNode() is true
+     *
+     * Sets whether the shape should be edited in rich-text editor
+     */
+    void setRichTextPreferred(bool value);
 
 protected:
     /**
@@ -154,7 +169,13 @@ protected:
     KoSvgTextChunkShape(KoSvgTextChunkShapePrivate *dd);
 
 private:
-    Q_DECLARE_PRIVATE(KoSvgTextChunkShape)
+    KoSvgText::KoSvgCharChunkFormat fetchCharFormat() const;
+
+    void applyParentCharTransformations(const QVector<KoSvgText::CharTransformation> transformations);
+
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 #endif // KOSVGTEXTCHUNKSHAPE_H

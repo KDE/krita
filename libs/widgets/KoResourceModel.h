@@ -23,14 +23,15 @@
 
 #include <QSharedPointer>
 
-#include "KoResourceModelBase.h"
+#include "QAbstractTableModel"
+
 #include "kritawidgets_export.h"
 
 class KoAbstractResourceServerAdapter;
 class KoResource;
 
 /// The resource model managing the resource data
-class KRITAWIDGETS_EXPORT KoResourceModel : public KoResourceModelBase
+class KRITAWIDGETS_EXPORT KoResourceModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
@@ -56,29 +57,29 @@ public:
         TagsRole
     };
 
-    QModelIndex indexFromResource(KoResource* resource) const override;
+    QModelIndex indexFromResource(KoResource* resource) const;
 
     /// facade for KoAbstractResourceServerAdapter
     QString extensions() const;
     void importResourceFile(const QString &filename);
     void importResourceFile(const QString &filename, bool fileCreation);
-    bool removeResource(KoResource* resource) override;
+    bool removeResource(KoResource* resource);
     void removeResourceFile(const QString & filename);
-    QStringList assignedTagsList(KoResource *resource) const override;
-    void addTag(KoResource* resource, const QString& tag) override;
-    void deleteTag( KoResource* resource, const QString& tag) override;
-    QStringList tagNamesList() const override;
+    QStringList assignedTagsList(KoResource *resource) const;
+    void addTag(KoResource* resource, const QString& tag);
+    void deleteTag( KoResource* resource, const QString& tag);
+    QStringList tagNamesList() const;
     QStringList searchTag(const QString& lineEditText);
-    void enableResourceFiltering(bool enable) override;
-    void setCurrentTag(const QString& currentTag) override;
-    void searchTextChanged(const QString& searchString) override;
-    void updateServer() override;
-    int resourcesCount() const override;
-    QList<KoResource *> currentlyVisibleResources() const override;
-    QList<KoResource *> serverResources() const override;
-    void tagCategoryMembersChanged() override;
-    void tagCategoryAdded(const QString& tag) override;
-    void tagCategoryRemoved(const QString& tag) override;
+    void enableResourceFiltering(bool enable);
+    void setCurrentTag(const QString& currentTag);
+    void searchTextChanged(const QString& searchString);
+    void updateServer();
+    int resourcesCount() const;
+    QList<KoResource *> currentlyVisibleResources() const;
+    QList<KoResource *> serverResources() const;
+    void tagCategoryMembersChanged();
+    void tagCategoryAdded(const QString& tag);
+    void tagCategoryRemoved(const QString& tag);
 
     QString serverType() const;
 
@@ -95,12 +96,12 @@ private:
     void doSafeLayoutReset(KoResource *activateAfterReformat);
 
 private Q_SLOTS:
-    void resourceAdded(KoResource *resource) override;
-    void resourceRemoved(KoResource *resource) override;
-    void resourceChanged(KoResource *resource) override;
-    void tagBoxEntryWasModified() override;
-    void tagBoxEntryWasAdded(const QString& tag) override;
-    void tagBoxEntryWasRemoved(const QString& tag) override;
+    void resourceAdded(KoResource *resource);
+    void resourceRemoved(KoResource *resource);
+    void resourceChanged(KoResource *resource);
+    void tagBoxEntryWasModified();
+    void tagBoxEntryWasAdded(const QString& tag);
+    void tagBoxEntryWasRemoved(const QString& tag);
 
 private:
     QSharedPointer<KoAbstractResourceServerAdapter> m_resourceAdapter;

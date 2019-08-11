@@ -118,12 +118,6 @@ public:
     /// shortcuts. call it from the canvas' event function and forward it to QWidget::event() later.
     void processEvent(QEvent *) const;
 
-    /**
-     * Retrieves the entire collection of actions for the active tool
-     * or an empty hash if there is no active tool yet.
-     */
-    QHash<QString, QAction *> actions() const;
-
     /// returns true if the current tool holds a selection
     bool hasSelection() const;
 
@@ -147,6 +141,8 @@ public:
 
     /// Set the new active tool.
     virtual void setActiveTool(KoToolBase *tool);
+
+    void touchEvent(QTouchEvent* event, const QPointF& point);
 
     /// \internal
     KoToolProxyPrivate *priv();

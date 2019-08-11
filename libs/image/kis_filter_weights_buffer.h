@@ -98,7 +98,7 @@ static bool checkForAsymmetricZeros = false;
  * this class is created before a pass of the transformation basing on
  * the desired scale factor and the filter strategy used for resampling.
  *
- * Here is an exmple of a calculation of the span for a pixel with
+ * Here is an example of a calculation of the span for a pixel with
  * scale equal to 1.0. The result of the blending will be written into
  * the dst(0) pixel, which is marked with '*' sign. Note that all the
  * coordinates here are related to the center of the pixel, not to its
@@ -167,12 +167,13 @@ public:
         KisFixedPoint supportDst;
 
         if (realScale < 1.0) {
-            supportSrc.from256Frac(filterStrategy->intSupport() / realScale);
-            supportDst.from256Frac(filterStrategy->intSupport());
             m_weightsPositionScale = KisFixedPoint(realScale);
+            supportSrc.from256Frac(filterStrategy->intSupport(m_weightsPositionScale.toFloat()) / realScale);
+            supportDst.from256Frac(filterStrategy->intSupport(m_weightsPositionScale.toFloat()));
+
         } else {
-            supportSrc.from256Frac(filterStrategy->intSupport());
-            supportDst.from256Frac(filterStrategy->intSupport());
+            supportSrc.from256Frac(filterStrategy->intSupport(m_weightsPositionScale.toFloat()));
+            supportDst.from256Frac(filterStrategy->intSupport(m_weightsPositionScale.toFloat()));
         }
 
         for (int i = 0; i < 256; i++) {
@@ -203,7 +204,7 @@ public:
 
             int sum = 0;
             for (int j = 0; j < span; j++) {
-                int t = filterStrategy->intValueAt(scaledIter.to256Frac());
+                int t = filterStrategy->intValueAt(scaledIter.to256Frac(), m_weightsPositionScale.toFloat());
                 m_filterWeights[i].weight[j] = t;
                 sum += t;
 

@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -33,11 +34,11 @@
 
 #include "kis_exiv2.h"
 
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_entry.h>
-#include <metadata/kis_meta_data_value.h>
-#include <metadata/kis_meta_data_schema.h>
-#include <metadata/kis_meta_data_schema_registry.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_entry.h>
+#include <kis_meta_data_value.h>
+#include <kis_meta_data_schema.h>
+#include <kis_meta_data_schema_registry.h>
 
 struct KisExifIO::Private {
 };
@@ -143,6 +144,7 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value,
     const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
     Q_ASSERT(dvalue);
     QByteArray array(dvalue->count(), 0);
+
     dvalue->copy((Exiv2::byte*)array.data());
     int columns = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[0], order);
     int rows = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[1], order);
@@ -168,13 +170,14 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value,
             names.append(KisMetaData::Value(""));
         }
     }
+
     oecfStructure["Names"] = KisMetaData::Value(names, KisMetaData::Value::OrderedArray);
     QList<KisMetaData::Value> values;
-    qint16* dataIt = reinterpret_cast<qint16*>(array.data() + index);
+    qint32* dataIt = reinterpret_cast<qint32*>(array.data() + index);
     for (int i = 0; i < columns; i++) {
         for (int j = 0; j < rows; j++) {
             values.append(KisMetaData::Value(KisMetaData::Rational(fixEndianess<qint32>(dataIt[0], order), fixEndianess<qint32>(dataIt[1], order))));
-            dataIt += 8;
+            dataIt += 2;
         }
     }
     oecfStructure["Values"] = KisMetaData::Value(values, KisMetaData::Value::OrderedArray);
@@ -210,7 +213,7 @@ Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
             index += name.size();
         }
     }
-    qint16* dataIt = reinterpret_cast<qint16*>(array.data() + index);
+    qint32* dataIt = reinterpret_cast<qint32*>(array.data() + index);
     for (QList<KisMetaData::Value>::iterator it = values.begin();
             it != values.end(); ++it) {
         dataIt[0] = it->asRational().numerator;
@@ -226,8 +229,7 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
     QByteArray array;
 
     const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
-    if(dvalue)
-    {
+    if (dvalue) {
         array.resize(dvalue->count());
         dvalue->copy((Exiv2::byte*)array.data());
     } else {
@@ -244,8 +246,11 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
 
     for (int index = 4; index < array.size(); )
     {
-        int lastIndex = array.indexOf(null, index);
-        QString setting = QString::fromUtf16((ushort*)(void*)( array.data() + index), lastIndex - index + 2);
+        const int lastIndex = array.indexOf(null, index);
+        if (lastIndex < 0) break; // Data is not a String, ignore
+        const int numChars = (lastIndex - index) / 2; // including trailing zero
+
+        QString setting = QString::fromUtf16((ushort*)(void*)( array.data() + index), numChars);
         index = lastIndex + 2;
         dbgMetaData << "Setting << " << setting;
         settings.append(KisMetaData::Value(setting));
@@ -314,7 +319,7 @@ Exiv2::Value* cfaPatternKMDToExif(const KisMetaData::Value& value)
     (reinterpret_cast<quint16*>(array.data()))[0] = columns;
     (reinterpret_cast<quint16*>(array.data()))[1] = rows;
     for (int i = 0; i < columns * rows; i++) {
-        int val = values[i].asVariant().toInt();
+        quint8 val = values[i].asVariant().toUInt();
         *(array.data() + 4 + i) = val;
     }
     dbgMetaData << "Cfa Array " << ppVar(columns) << ppVar(rows) << ppVar(array.size());
@@ -434,11 +439,10 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                     if (entry.value().asArray().size() > 0) {
                         creator = entry.value().asArray()[0];
                     }
-#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 20
+#if !EXIV2_TEST_VERSION(0,21,0)
                     v = kmdValueToExivValue(creator, Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
 #else
                     v = kmdValueToExivValue(creator, exifKey.defaultTypeId());
-
 #endif
                 } else if (exivKey == "Exif.Photo.OECF") {
                     v = kmdOECFStructureToExifOECF(entry.value());
@@ -452,13 +456,13 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                     Q_ASSERT(entry.value().type() == KisMetaData::Value::LangArray);
                     QMap<QString, KisMetaData::Value> langArr = entry.value().asLangArray();
                     if (langArr.contains("x-default")) {
-#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 20
+#if !EXIV2_TEST_VERSION(0,21,0)
                         v = kmdValueToExivValue(langArr.value("x-default"), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
 #else
                         v = kmdValueToExivValue(langArr.value("x-default"), exifKey.defaultTypeId());
 #endif
                     } else if (langArr.size() > 0) {
-#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 20
+#if !EXIV2_TEST_VERSION(0,21,0)
                         v = kmdValueToExivValue(langArr.begin().value(), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
 #else
                         v = kmdValueToExivValue(langArr.begin().value(), exifKey.defaultTypeId());
@@ -466,7 +470,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                     }
                 } else {
                     dbgMetaData << exifKey.tag();
-#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 20
+#if !EXIV2_TEST_VERSION(0,21,0)
                     v = kmdValueToExivValue(entry.value(), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
 #else
                     v = kmdValueToExivValue(entry.value(), exifKey.defaultTypeId());
@@ -483,7 +487,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
             dbgMetaData << "exiv error " << e.what();
         }
     }
-#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 17
+#if !EXIV2_TEST_VERSION(0,18,0)
     Exiv2::DataBuf rawData = exifData.copy();
     ioDevice->write((const char*) rawData.pData_, rawData.size_);
 #else
@@ -510,7 +514,7 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
     QByteArray arr = ioDevice->readAll();
     Exiv2::ExifData exifData;
     Exiv2::ByteOrder byteOrder;
-#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 17
+#if !EXIV2_TEST_VERSION(0,18,0)
     exifData.load((const Exiv2::byte*)arr.data(), arr.size());
     byteOrder = exifData.byteOrder();
 #else
@@ -525,7 +529,6 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
         dbgKrita << "Received unknown exception trying to parse exiv data";
         return false;
     }
-
 #endif
     dbgMetaData << "Byte order = " << byteOrder << ppVar(Exiv2::bigEndian) << ppVar(Exiv2::littleEndian);
     dbgMetaData << "There are" << exifData.count() << " entries in the exif section";
@@ -573,43 +576,45 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             }
         } else if (it->groupName() == "Photo" || (it->groupName() == "GPS")) {
             // Exif tags (and GPS tags)
-            KisMetaData::Value v;
+            KisMetaData::Value metaDataValue;
             if (it->key() == "Exif.Photo.ExifVersion" || it->key() == "Exif.Photo.FlashpixVersion") {
-                v = exifVersionToKMDValue(it->getValue());
+                metaDataValue = exifVersionToKMDValue(it->getValue());
             } else if (it->key() == "Exif.Photo.FileSource") {
-                v = KisMetaData::Value(3);
+                metaDataValue = KisMetaData::Value(3);
             } else if (it->key() == "Exif.Photo.SceneType") {
-                v = KisMetaData::Value(1);
+                metaDataValue = KisMetaData::Value(1);
             } else if (it->key() == "Exif.Photo.ComponentsConfiguration") {
-                v = exifArrayToKMDIntOrderedArray(it->getValue());
+                metaDataValue = exifArrayToKMDIntOrderedArray(it->getValue());
             } else if (it->key() == "Exif.Photo.OECF") {
-                v = exifOECFToKMDOECFStructure(it->getValue(), byteOrder);
+                metaDataValue = exifOECFToKMDOECFStructure(it->getValue(), byteOrder);
             } else if (it->key() == "Exif.Photo.DateTimeDigitized" || it->key() == "Exif.Photo.DateTimeOriginal") {
-                v = KisMetaData::Value(exivValueToDateTime(it->getValue()));
+                metaDataValue = KisMetaData::Value(exivValueToDateTime(it->getValue()));
             } else if (it->key() == "Exif.Photo.DeviceSettingDescription") {
-                v = deviceSettingDescriptionExifToKMD(it->getValue());
+                metaDataValue = deviceSettingDescriptionExifToKMD(it->getValue());
             } else if (it->key() == "Exif.Photo.CFAPattern") {
-                v = cfaPatternExifToKMD(it->getValue(), byteOrder);
+                metaDataValue = cfaPatternExifToKMD(it->getValue(), byteOrder);
             } else if (it->key() == "Exif.Photo.Flash") {
-                v = flashExifToKMD(it->getValue());
+                metaDataValue = flashExifToKMD(it->getValue());
             } else if (it->key() == "Exif.Photo.UserComment") {
-                KisMetaData::Value vUC = exivValueToKMDValue(it->getValue(), false);
-                Q_ASSERT(vUC.type() == KisMetaData::Value::Variant);
-                QVariant commentVar = vUC.asVariant();
-                QString comment;
-                if (commentVar.type() == QVariant::String) {
-                    comment = commentVar.toString();
-                } else if (commentVar.type() == QVariant::ByteArray) {
-                    const QByteArray commentString = commentVar.toByteArray();
-                    comment = QString::fromLatin1(commentString.constData(), commentString.size());
-                } else {
-                    warnKrita << "KisExifIO: Unhandled UserComment value type.";
+                if (it->getValue()->typeId() != Exiv2::undefined) {
+                    KisMetaData::Value vUC = exivValueToKMDValue(it->getValue(), false);
+                    Q_ASSERT(vUC.type() == KisMetaData::Value::Variant);
+                    QVariant commentVar = vUC.asVariant();
+                    QString comment;
+                    if (commentVar.type() == QVariant::String) {
+                        comment = commentVar.toString();
+                    } else if (commentVar.type() == QVariant::ByteArray) {
+                        const QByteArray commentString = commentVar.toByteArray();
+                        comment = QString::fromLatin1(commentString.constData(), commentString.size());
+                    } else {
+                        warnKrita << "KisExifIO: Unhandled UserComment value type.";
+                    }
+                    KisMetaData::Value vcomment(comment);
+                    vcomment.addPropertyQualifier("xml:lang", KisMetaData::Value("x-default"));
+                    QList<KisMetaData::Value> alt;
+                    alt.append(vcomment);
+                    metaDataValue = KisMetaData::Value(alt, KisMetaData::Value::LangArray);
                 }
-                KisMetaData::Value vcomment(comment);
-                vcomment.addPropertyQualifier("xml:lang", KisMetaData::Value("x-default"));
-                QList<KisMetaData::Value> alt;
-                alt.append(vcomment);
-                v = KisMetaData::Value(alt, KisMetaData::Value::LangArray);
             } else {
                 bool forceSeq = false;
                 KisMetaData::Value::ValueType arrayType = KisMetaData::Value::UnorderedArray;
@@ -617,12 +622,12 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                     forceSeq = true;
                     arrayType = KisMetaData::Value::OrderedArray;
                 }
-                v = exivValueToKMDValue(it->getValue(), forceSeq, arrayType);
+                metaDataValue = exivValueToKMDValue(it->getValue(), forceSeq, arrayType);
             }
-            if (it->key() == "Exif.Photo.InteroperabilityTag" || it->key() == "Exif.Photo.0xea1d") { // InteroperabilityTag isn't useful for XMP, 0xea1d isn't a valid Exif tag
-                dbgMetaData << "Ignoring " << it->key().c_str();
+            if (it->key() == "Exif.Photo.InteroperabilityTag" || it->key() == "Exif.Photo.0xea1d" || metaDataValue.type() == KisMetaData::Value::Invalid) { // InteroperabilityTag isn't useful for XMP, 0xea1d isn't a valid Exif tag
+                warnMetaData << "Ignoring " << it->key().c_str();
             } else {
-                store->addEntry(KisMetaData::Entry(exifSchema, it->tagName().c_str(), v));
+                store->addEntry(KisMetaData::Entry(exifSchema, it->tagName().c_str(), metaDataValue));
             }
         } else if (it->groupName() == "Thumbnail") {
             dbgMetaData << "Ignoring thumbnail tag :" << it->key().c_str();

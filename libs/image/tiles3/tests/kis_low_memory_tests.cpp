@@ -27,11 +27,12 @@
 #include "tiles3/kis_tiled_data_manager.h"
 #include "tiles3/kis_tile_data_store.h"
 #include <kis_debug.h>
+#include "config-limit-long-tests.h"
 
 void KisLowMemoryTests::initTestCase()
 {
     // hard limit of 1MiB, no undo in memory, no clones
-    KisImageConfig config;
+    KisImageConfig config(false);
     config.setMemoryHardLimitPercent(1.1 * 100.0 / KisImageConfig::totalRAM());
     config.setMemorySoftLimitPercent(0);
     config.setMemoryPoolLimitPercent(0);
@@ -68,7 +69,7 @@ public:
                     KisTileSP voidTile = m_srcDM.getTile(i, 0, true);
                     voidTile->lockForWrite();
                     QTest::qSleep(1);
-                    voidTile->unlock();
+                    voidTile->unlockForWrite();
                 }
 
                 QRect cloneRect(0, 0, m_numTiles * 64, 64);
@@ -87,7 +88,7 @@ public:
                     char temp = *voidTile->data();
                     Q_UNUSED(temp);
                     QTest::qSleep(1);
-                    voidTile->unlock();
+                    voidTile->unlockForRead();
                 }
 
                 if(j % 50 == 0) dbgKrita << "Consumer_src:" << j << "of" << m_numCycles;
@@ -103,7 +104,7 @@ public:
                     char temp = *voidTile->data();
                     Q_UNUSED(temp);
                     QTest::qSleep(1);
-                    voidTile->unlock();
+                    voidTile->unlockForRead();
                 }
 
                 if(j % 50 == 0) dbgKrita << "Consumer_dst:" << j << "of" << m_numCycles;
@@ -129,7 +130,12 @@ void KisLowMemoryTests::readWriteOnSharedTiles()
     KisTiledDataManager dstDM(1, &defaultPixel);
 
     const int NUM_TILES = 10;
+
+#ifdef LIMIT_LONG_TESTS
+    const int NUM_CYCLES = 800;
+#else
     const int NUM_CYCLES = 10000;
+#endif
 
     QThreadPool pool;
     pool.setMaxThreadCount(10);
@@ -190,8 +196,8 @@ void KisLowMemoryTests::hangingTilesTest()
 
     QCOMPARE((int)weirdTileData->m_usersCount, 2);
 
-    srcTile->unlock();
-    srcTile->unlock();
+    srcTile->unlockForWrite();
+    srcTile->unlockForRead();
     srcTile = 0;
 
     srcDM.clear();
@@ -207,8 +213,8 @@ void KisLowMemoryTests::hangingTilesTest()
 
     QCOMPARE((int)weirdTileData->m_usersCount, 1);
 
-    dstTile->unlock();
-    dstTile->unlock();
+    dstTile->unlockForWrite();
+    dstTile->unlockForRead();
     dstTile = 0;
 }
 

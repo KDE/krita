@@ -108,8 +108,10 @@ public:
      *
      * @param parent the Qt owner widget of this widget
      * @param dev the paintdevice this filter will act on
+     * @param useForMasks shown if the filer is going to be used in a mask. Some filters
+     *        may provide limited options when applied as a mask (e.g. Gaussian Blur)
      */
-    virtual KisConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev, bool useForMasks) const;
     // "Support" functions
 public:
     /**

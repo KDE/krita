@@ -48,7 +48,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
                                              const QString &layerName,
                                              const QString &caption,
                                              KisViewManager *view, QWidget *parent)
-    : KoDialog(parent)
+    : KoDialog(parent, Qt::Dialog)
     , m_node(node)
     , m_nodeFilterInterface(nfi)
     , m_currentFilter(0)
@@ -73,7 +73,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
     connect(wdgFilterNodeCreation.buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     wdgFilterNodeCreation.filterSelector->setView(view);
-    wdgFilterNodeCreation.filterSelector->showFilterGallery(KisConfig().showFilterGalleryLayerMaskDialog());
+    wdgFilterNodeCreation.filterSelector->showFilterGallery(KisConfig(true).showFilterGalleryLayerMaskDialog());
 
     wdgFilterNodeCreation.filterSelector->setPaintDevice(false, paintDevice);
     wdgFilterNodeCreation.layerName->setText(layerName);
@@ -86,7 +86,7 @@ KisDlgAdjustmentLayer::KisDlgAdjustmentLayer(KisNodeSP node,
 
 KisDlgAdjustmentLayer::~KisDlgAdjustmentLayer()
 {
-    KisConfig().setShowFilterGalleryLayerMaskDialog(wdgFilterNodeCreation.filterSelector->isFilterGalleryVisible());
+    KisConfig(true).setShowFilterGalleryLayerMaskDialog(wdgFilterNodeCreation.filterSelector->isFilterGalleryVisible());
 }
 
 void KisDlgAdjustmentLayer::slotNameChanged(const QString &text)

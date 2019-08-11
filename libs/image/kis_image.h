@@ -28,7 +28,6 @@
 
 #include <KoColorConversionTransformation.h>
 
-#include "kis_paint_device.h" // msvc cannot handle forward declarations, so include kis_paint_device here
 #include "kis_types.h"
 #include "kis_shared.h"
 #include "kis_node_graph_listener.h"
@@ -38,12 +37,10 @@
 
 #include <kritaimage_export.h>
 
-class KisDocument;
 class KoColorSpace;
 class KoColor;
 
 class KisCompositeProgressProxy;
-class KisActionRecorder;
 class KisUndoStore;
 class KisUndoAdapter;
 class KisImageSignalRouter;
@@ -55,6 +52,7 @@ class KisSpontaneousJob;
 class KisImageAnimationInterface;
 class KUndo2MagicString;
 class KisProofingConfiguration;
+class KisPaintDevice;
 
 namespace KisMetaData
 {
@@ -80,9 +78,11 @@ class KRITAIMAGE_EXPORT KisImage : public QObject,
 
 public:
 
-    /// @param colorSpace can be null. in that case it will be initialised to a default color space.
+    /// @p colorSpace can be null. In that case, it will be initialised to a default color space.
     KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace, const QString& name);
     ~KisImage() override;
+
+    static KisImageSP fromQImage(const QImage &image, KisUndoStore *undoStore);
 
 public: // KisNodeGraphListener implementation
 
@@ -95,6 +95,7 @@ public: // KisNodeGraphListener implementation
     void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
     void invalidateFrames(const KisTimeRange &range, const QRect &rect) override;
     void requestTimeSwitch(int time) override;
+    KisNode* graphOverlayNode() const override;
 
 public: // KisProjectionUpdateListener implementation
     void notifyProjectionUpdated(const QRect &rc) override;
@@ -122,6 +123,21 @@ public:
      * this option if you plan to work with the copied image later.
      */
     KisImage *clone(bool exactCopy = false);
+
+    void copyFromImage(const KisImage &rhs);
+
+private:
+
+    // must specify exactly one from CONSTRUCT or REPLACE.
+    enum CopyPolicy {
+        CONSTRUCT = 1, ///< we are copy-constructing a new KisImage
+        REPLACE = 2, ///< we are replacing the current KisImage with another
+        EXACT_COPY = 4, /// we need an exact copy of the original image
+    };
+
+    void copyFromImageImpl(const KisImage &rhs, int policy);
+
+public:
 
     /**
      * Render the projection onto a QImage.
@@ -182,6 +198,23 @@ public:
     bool locked() const;
 
     /**
+     * Sets the mask (it must be a part of the node hierarchy already) to be paited on
+     * the top of all layers. This method does all the locking and syncing for you. It
+     * is executed asynchronously.
+     */
+    void setOverlaySelectionMask(KisSelectionMaskSP mask);
+
+    /**
+     * \see setOverlaySelectionMask
+     */
+    KisSelectionMaskSP overlaySelectionMask() const;
+
+    /**
+     * \see setOverlaySelectionMask
+     */
+    bool hasOverlaySelectionMask() const;
+
+    /**
      * @return the global selection object or 0 if there is none. The
      * global selection is always read-write.
      */
@@ -210,7 +243,7 @@ public:
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the image having new size
-     * right after ths call.
+     * right after this call.
      */
     void resizeImage(const QRect& newRect);
 
@@ -226,7 +259,7 @@ public:
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the image having new size
-     * right after ths call.
+     * right after this call.
      */
     void cropImage(const QRect& newRect);
 
@@ -237,11 +270,12 @@ public:
      * The method will **drop** all the layer data outside \p newRect. Neither
      * image nor a layer will be moved anywhere
      *
+     * @param node node to crop
      * @param newRect the rectangle of the layer which will be cut-out
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the image having new size
-     * right after ths call.
+     * right after this call.
      */
     void cropNode(KisNodeSP node, const QRect& newRect);
 
@@ -254,21 +288,24 @@ public:
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the image having new size
-     * right after ths call.
+     * right after this call.
      */
     void scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);
 
     /**
      * @brief start asynchronous operation on scaling a subtree of nodes starting at \p node
      * @param node node to scale
-     * @param scaleX, @param scaleY scale coefficient to be applied to the node
+     * @param center the center of the scaling
+     * @param scaleX x-scale coefficient to be applied to the node
+     * @param scaleY y-scale coefficient to be applied to the node
      * @param filterStrategy filtering strategy
+     * @param selection the selection we based on
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the image having new size
-     * right after ths call.
+     * right after this call.
      */
-    void scaleNode(KisNodeSP node, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy);
+    void scaleNode(KisNodeSP node, const QPointF &center, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy, KisSelectionSP selection);
 
     /**
      * @brief start asynchronous operation on rotating the image
@@ -290,19 +327,20 @@ public:
      *
      * @param node the root of the subtree to rotate
      * @param radians rotation angle in radians
+     * @param selection the selection we based on
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the operation being completed
      * right after the call
      */
-    void rotateNode(KisNodeSP node, double radians);
+    void rotateNode(KisNodeSP node, double radians, KisSelectionSP selection);
 
     /**
      * @brief start asynchronous operation on shearing the image
      *
      * The image is resized to fit the sheared polygon
      *
-     * @param angleX, @param angleY are given in degrees.
+     * @p angleX, @p angleY are given in degrees.
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the operation being completed
@@ -316,13 +354,15 @@ public:
      * The image is not resized!
      *
      * @param node the root of the subtree to rotate
-     * @param angleX, @param angleY are given in degrees.
+     * @param angleX x-shear given in degrees.
+     * @param angleY y-shear given in degrees.
+     * @param selection the selection we based on
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the operation being completed
      * right after the call
      */
-    void shearNode(KisNodeSP node, double angleX, double angleY);
+    void shearNode(KisNodeSP node, double angleX, double angleY, KisSelectionSP selection);
 
     /**
      * Convert the image and all its layers to the dstColorSpace
@@ -335,7 +375,7 @@ public:
      * Set the color space of  the projection (and the root layer)
      * to dstColorSpace. No conversion is done for other layers,
      * their colorspace can differ.
-     * NOTE: Note conversion is done, only regeneration, so no rendering
+     * @note No conversion is done, only regeneration, so no rendering
      * intent needed
      */
     void convertProjectionColorSpace(const KoColorSpace *dstColorSpace);
@@ -376,6 +416,12 @@ public:
     KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const override;
 
     /**
+     * Return the lastly executed LoD0 command. It is effectively the same
+     * as to call undoAdapter()->presentCommand();
+     */
+    const KUndo2Command* lastExecutedCommand() const;
+
+    /**
      * Replace current undo store with the new one. The old store
      * will be deleted.
      * This method is used by KisDocument for dropping all the commands
@@ -387,11 +433,6 @@ public:
      * Return current undo store of the image
      */
     KisUndoStore* undoStore();
-
-    /**
-     * @return the action recorder associated with this image
-     */
-    KisActionRecorder* actionRecorder() const;
 
     /**
      * Tell the image it's modified; this emits the sigImageModified
@@ -506,7 +547,7 @@ public:
     /**
      * Merge all visible layers and discard hidden ones.
      */
-    void flatten();
+    void flatten(KisNodeSP activeNode);
 
     /**
      * Merge the specified layer with the layer
@@ -575,7 +616,7 @@ public:
     vKisAnnotationSP_it endAnnotations();
 
     /**
-     * Called before the image is delted and sends the sigAboutToBeDeleted signal
+     * Called before the image is deleted and sends the sigAboutToBeDeleted signal
      */
     void notifyAboutToBeDeleted();
 
@@ -658,6 +699,18 @@ public:
      */
     void setMirrorAxesCenter(const QPointF &value) const;
 
+    /**
+     * Configure the image to allow masks on the root not (as reported by
+     * root()->allowAsChild()). By default it is not allowed (because it
+     * looks weird from GUI point of view)
+     */
+    void setAllowMasksOnRootNode(bool value);
+
+    /**
+     * \see setAllowMasksOnRootNode()
+     */
+    bool allowMasksOnRootNode() const;
+
 public Q_SLOTS:
 
     /**
@@ -699,18 +752,18 @@ public:
      */
     KisProofingConfigurationSP proofingConfiguration() const;
 
-public:
+public Q_SLOTS:
     bool startIsolatedMode(KisNodeSP node);
     void stopIsolatedMode();
+
+public:
     KisNodeSP isolatedModeRoot() const;
 
 Q_SIGNALS:
 
     /**
      *  Emitted whenever an action has caused the image to be
-     *  recomposited.
-     *
-     * @param rc The rect that has been recomposited.
+     *  recomposited. Parameter is the rect that has been recomposited.
      */
     void sigImageUpdated(const QRect &);
 
@@ -851,6 +904,12 @@ Q_SIGNALS:
      */
     void sigProofingConfigChanged();
 
+    /**
+     * Internal signal for asynchronously requesting isolated mode to stop. Don't use it
+     * outside KisImage, use sigIsolatedModeChanged() instead.
+     */
+    void sigInternalStopIsolatedModeRequested();
+
 public Q_SLOTS:
     KisCompositeProgressProxy* compositeProgressProxy();
 
@@ -915,13 +974,39 @@ public Q_SLOTS:
      * when we change the size of the image. In this case, the whole
      * image will be reloaded into UI by sigSizeChanged(), so there is
      * no need to inform the UI about individual dirty rects.
+     *
+     * The last call to enableUIUpdates() will return the list of udpates
+     * that were requested while they were blocked.
      */
     void disableUIUpdates() override;
 
     /**
+     * Notify GUI about a bunch of updates planned. GUI is expected to wait
+     * until all the updates are completed, and render them on screen only
+     * in the very and of the batch.
+     */
+    void notifyBatchUpdateStarted() override;
+
+    /**
+     * Notify GUI that batch update has been completed. Now GUI can start
+     * showing all of them on screen.
+     */
+    void notifyBatchUpdateEnded() override;
+
+    /**
+     * Notify GUI that rect \p rc is now prepared in the image and
+     * GUI can read data from it.
+     *
+     * WARNING: GUI will read the data right in the handler of this
+     *          signal, so exclusive access to the area must be guaranteed
+     *          by the caller.
+     */
+    void notifyUIUpdateCompleted(const QRect &rc) override;
+
+    /**
      * \see disableUIUpdates
      */
-    void enableUIUpdates() override;
+    QVector<QRect> enableUIUpdates() override;
 
     /**
      * Disables the processing of all the setDirty() requests that
@@ -1031,7 +1116,7 @@ public Q_SLOTS:
 
     /**
      * Same as requestStrokeEnd() but is called by view manager when
-     * the current node is changed. Use to dintinguish
+     * the current node is changed. Use to distinguish
      * sigStrokeEndRequested() and
      * sigStrokeEndRequestedActiveNodeFiltered() which are used by
      * KisNodeJugglerCompressed
@@ -1046,11 +1131,10 @@ private:
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
-    void rotateImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
-                    bool resizeImage, double radians);
+    void rotateImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode, double radians,
+                    bool resizeImage, KisSelectionSP selection);
     void shearImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
-                   bool resizeImage, double angleX, double angleY,
-                   const QPointF &origin);
+                   bool resizeImage, double angleX, double angleY, KisSelectionSP selection);
 
     void safeRemoveTwoNodes(KisNodeSP node1, KisNodeSP node2);
 

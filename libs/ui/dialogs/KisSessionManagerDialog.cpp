@@ -17,8 +17,8 @@
  */
 #include <KisSessionResource.h>
 #include <KisResourceServerProvider.h>
-#include <QtWidgets/QInputDialog>
-#include <QtWidgets/QMessageBox>
+#include <QInputDialog>
+#include <QMessageBox>
 #include <KisPart.h>
 #include "KisSessionManagerDialog.h"
 
@@ -35,7 +35,7 @@ KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
     connect(btnDelete, SIGNAL(clicked()), this, SLOT(slotDeleteSession()));
     connect(btnClose, SIGNAL(clicked()), this, SLOT(slotClose()));
 
-    connect(lstSessions, SIGNAL(itemDoubleClicked(QListWidgetItem *item)), this, SLOT(slotSessionDoubleClicked(QListWidgetItem* item)));
+    connect(lstSessions, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotSessionDoubleClicked(QListWidgetItem*)));
 }
 
 void KisSessionManagerDialog::updateSessionList() {
@@ -72,6 +72,8 @@ void KisSessionManagerDialog::slotNewSession()
 
     server->addResource(session);
 
+    KisPart::instance()->setCurrentSession(session);
+
     updateSessionList();
 }
 
@@ -84,6 +86,8 @@ void KisSessionManagerDialog::slotRenameSession()
     if (name.isNull() || name.isEmpty()) return;
 
     KisSessionResource *session = getSelectedSession();
+    if (!session) return;
+
     session->setName(name);
     session->save();
 
@@ -128,10 +132,13 @@ void KisSessionManagerDialog::slotDeleteSession()
         QString(i18n("Permanently delete session %1?", session->name())),
         QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
 
+        KisPart::instance()->setCurrentSession(0);
+        const QString filename = session->filename();
+
         KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
         server->removeResourceFromServer(session);
 
-        QFile file(session->filename());
+        QFile file(filename);
         file.remove();
 
         updateSessionList();

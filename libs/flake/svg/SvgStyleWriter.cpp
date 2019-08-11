@@ -77,9 +77,9 @@ void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 
 void SvgStyleWriter::saveSvgBasicStyle(KoShape *shape, SvgSavingContext &context)
 {
-    if (! shape->isVisible(false)) {
+    if (!shape->isVisible(false)) {
         context.shapeWriter().addAttribute("display", "none");
-    } if (shape->transparency() > 0.0) {
+    } else if (shape->transparency() > 0.0) {
         context.shapeWriter().addAttribute("opacity", 1.0 - shape->transparency());
     }
 }
@@ -249,10 +249,10 @@ void SvgStyleWriter::saveSvgMasking(KoShape *shape, SvgSavingContext &context)
         context.styleWriter().addAttribute("width", rect.width());
         context.styleWriter().addAttribute("height", rect.height());
     } else {
-        context.styleWriter().addAttributePt("x", rect.x());
-        context.styleWriter().addAttributePt("y", rect.y());
-        context.styleWriter().addAttributePt("width", rect.width());
-        context.styleWriter().addAttributePt("height", rect.height());
+        context.styleWriter().addAttribute("x", rect.x());
+        context.styleWriter().addAttribute("y", rect.y());
+        context.styleWriter().addAttribute("width", rect.width());
+        context.styleWriter().addAttribute("height", rect.height());
     }
 
     embedShapes(clipMask->shapes(), context.styleWriter());
@@ -346,8 +346,6 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
 {
     if (! gradient)
         return QString();
-
-    Q_ASSERT(gradient->coordinateMode() == QGradient::ObjectBoundingMode);
 
     const QString spreadMethod[3] = {
         QString("pad"),
@@ -516,10 +514,10 @@ QString SvgStyleWriter::saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackg
         context.styleWriter().addAttribute("width", rect.width());
         context.styleWriter().addAttribute("height", rect.height());
     } else {
-        context.styleWriter().addAttributePt("x", rect.x());
-        context.styleWriter().addAttributePt("y", rect.y());
-        context.styleWriter().addAttributePt("width", rect.width());
-        context.styleWriter().addAttributePt("height", rect.height());
+        context.styleWriter().addAttribute("x", rect.x());
+        context.styleWriter().addAttribute("y", rect.y());
+        context.styleWriter().addAttribute("width", rect.width());
+        context.styleWriter().addAttribute("height", rect.height());
     }
 
     SvgUtil::writeTransformAttributeLazy("patternTransform", pattern->patternTransform(), context.styleWriter());

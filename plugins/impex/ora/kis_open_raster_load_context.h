@@ -21,15 +21,22 @@
 
 class QString;
 class QDomDocument;
+class KoStore;
 
+#include <KoStoreDevice.h>
+#include <kis_image.h>
+#include <kis_paint_device.h>
+#include "kis_png_converter.h"
 #include <kis_types.h>
 
 class KisOpenRasterLoadContext
 {
 public:
-    virtual ~KisOpenRasterLoadContext() {}
-    virtual KisImageSP loadDeviceData(const QString & fileName) = 0;
-    virtual QDomDocument loadStack() = 0;
+    KisOpenRasterLoadContext(KoStore *store);
+    KisImageSP loadDeviceData(const QString &fileName);
+    QDomDocument loadStack();
+private:
+    KoStore *m_store;
 };
 
 

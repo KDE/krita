@@ -32,10 +32,13 @@
 class KisRotateCanvasAction::Private
 {
 public:
-    Private() : angleDrift(0) {}
+    Private() : previousAngle(0) {}
 
     Shortcut mode;
-    qreal angleDrift;
+
+    qreal previousAngle;
+    qreal startRotation;
+    qreal previousRotation;
 };
 
 
@@ -83,17 +86,17 @@ void KisRotateCanvasAction::deactivate(int shortcut)
 void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
 {
     KisAbstractInputAction::begin(shortcut, event);
+    d->previousAngle = 0;
 
     KisCanvasController *canvasController =
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
 
     switch(shortcut) {
         case RotateModeShortcut:
-            d->mode = (Shortcut)shortcut;
-            break;
         case DiscreteRotateModeShortcut:
             d->mode = (Shortcut)shortcut;
-            d->angleDrift = 0;
+            d->startRotation = inputManager()->canvas()->rotationAngle();
+            d->previousRotation = 0;
             break;
         case RotateLeftShortcut:
             canvasController->rotateCanvasLeft15();
@@ -107,29 +110,27 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
     }
 }
 
-void KisRotateCanvasAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
+void KisRotateCanvasAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos)
 {
     const KisCoordinatesConverter *converter = inputManager()->canvas()->coordinatesConverter();
-    QPointF centerPoint = converter->flakeToWidget(converter->flakeCenterPoint());
-    QPointF oldPoint = lastPos - centerPoint;
-    QPointF newPoint = pos - centerPoint;
+    const QPointF centerPoint = converter->flakeToWidget(converter->flakeCenterPoint());
+    const QPointF startPoint = startPos - centerPoint;
+    const QPointF newPoint = pos - centerPoint;
 
-    qreal oldAngle = atan2(oldPoint.y(), oldPoint.x());
-    qreal newAngle = atan2(newPoint.y(), newPoint.x());
+    const qreal oldAngle = atan2(startPoint.y(), startPoint.x());
+    const qreal newAngle = atan2(newPoint.y(), newPoint.x());
 
-    qreal angle = (180 / M_PI) * (newAngle - oldAngle);
+    qreal newRotation = (180 / M_PI) * (newAngle - oldAngle);
 
     if (d->mode == DiscreteRotateModeShortcut) {
         const qreal angleStep = 15;
-        qreal initialAngle = inputManager()->canvas()->rotationAngle();
-        qreal roundedAngle = qRound((initialAngle + angle + d->angleDrift) / angleStep) * angleStep - initialAngle;
-        d->angleDrift += angle - roundedAngle;
-        angle = roundedAngle;
+        newRotation = qRound(newRotation / angleStep) * angleStep;
     }
 
     KisCanvasController *canvasController =
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
-    canvasController->rotateCanvas(angle);
+    canvasController->rotateCanvas(newRotation - d->previousRotation);
+    d->previousRotation = newRotation;
 }
 
 void KisRotateCanvasAction::inputEvent(QEvent* event)
@@ -145,6 +146,34 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
             controller->rotateCanvas(angle, widgetPos);
             return;
         }
+        case QEvent::TouchUpdate: {
+            QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
+
+            if (touchEvent->touchPoints().count() != 2)
+                break;
+
+            QPointF p0 = touchEvent->touchPoints().at(0).pos();
+            QPointF p1 = touchEvent->touchPoints().at(1).pos();
+
+            // high school (y2 - y1) / (x2 - x1)
+            QPointF slope = p1 - p0;
+            qreal newAngle = atan2(slope.y(), slope.x());
+
+            if (!d->previousAngle)
+            {
+                d->previousAngle = newAngle;
+                return;
+            }
+
+            qreal delta = (180 / M_PI) * (newAngle - d->previousAngle);
+
+            KisCanvas2 *canvas = inputManager()->canvas();
+            KisCanvasController *controller = static_cast<KisCanvasController*>(canvas->canvasController());
+            controller->rotateCanvas(delta);
+
+            d->previousAngle = newAngle;
+            return;
+        }
         default:
             break;
     }
@@ -155,4 +184,9 @@ KisInputActionGroup KisRotateCanvasAction::inputActionGroup(int shortcut) const
 {
     Q_UNUSED(shortcut);
     return ViewTransformActionGroup;
+}
+
+bool KisRotateCanvasAction::supportsHiResInputEvents() const
+{
+    return true;
 }

@@ -41,10 +41,11 @@
 #include "kis_processing_information.h"
 #include "kis_selection.h"
 #include "kis_types.h"
+#include <filter/kis_filter_category_ids.h>
 #include "filter/kis_color_transformation_configuration.h"
 
 KisLevelFilter::KisLevelFilter()
-        : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Levels..."))
+        : KisColorTransformationFilter(id(), FiltersCategoryAdjustId, i18n("&Levels..."))
 {
     setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
     setSupportsPainting(false);
@@ -55,7 +56,7 @@ KisLevelFilter::~KisLevelFilter()
 {
 }
 
-KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisLevelFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KisLevelConfigWidget(parent, dev);
 }
@@ -133,17 +134,17 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     connect(m_page.outgradient, SIGNAL(sigModifiedBlack(int)), m_page.outblackspin, SLOT(setValue(int)));
     connect(m_page.outgradient, SIGNAL(sigModifiedWhite(int)), m_page.outwhitespin, SLOT(setValue(int)));
 
-    connect(m_page.butauto, SIGNAL(clicked(bool)), this, SLOT(slotAutoLevel(void)));
-    connect(m_page.butinvert, SIGNAL(clicked(bool)), this, SLOT(slotInvert(void)));
+    connect(m_page.butauto, SIGNAL(clicked(bool)), this, SLOT(slotAutoLevel()));
+    connect(m_page.butinvert, SIGNAL(clicked(bool)), this, SLOT(slotInvert()));
 
     connect((QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(slotDrawHistogram(bool)));
 
     KoHistogramProducer *producer = new KoGenericLabHistogramProducer();
     m_histogram.reset( new KisHistogram(dev, dev->exactBounds(), producer, LINEAR) );
-    m_histlog = false;
-    m_page.histview->resize(288,100);
+    m_isLogarithmic = false;
+    //m_page.histview->resize(288,100);
     m_inverted = false;
-    slotDrawHistogram();
+    slotDrawHistogram(m_page.chkLogarithmic->isChecked());
 
 }
 
@@ -151,23 +152,23 @@ KisLevelConfigWidget::~KisLevelConfigWidget()
 {
 }
 
-void KisLevelConfigWidget::slotDrawHistogram(bool logarithmic)
+void KisLevelConfigWidget::slotDrawHistogram(bool isLogarithmic)
 {
     int wHeight = m_page.histview->height();
     int wHeightMinusOne = wHeight - 1;
     int wWidth = m_page.histview->width();
 
-    if (m_histlog != logarithmic) {
+    if (m_isLogarithmic != isLogarithmic) {
         // Update the m_histogram
-        if (logarithmic)
+        if (isLogarithmic)
             m_histogram->setHistogramType(LOGARITHMIC);
         else
             m_histogram->setHistogramType(LINEAR);
-        m_histlog = logarithmic;
+        m_isLogarithmic = isLogarithmic;
     }
 
     QPalette appPalette = QApplication::palette();
-    QPixmap pix(wWidth-100, wHeight);
+    QPixmap pix(wWidth, wHeight);
 
     pix.fill(QColor(appPalette.color(QPalette::Base)));
     QPainter p(&pix);

@@ -92,11 +92,10 @@ void TestXmlWriter::testAttributes()
     writer->addAttribute("b", "<\">");
     writer->addAttribute("c", -42);
     writer->addAttribute("d", 1234.56789012345);
-    writer->addAttributePt("e", 1234.56789012345);
     writer->addAttribute("f", false);
     writer->addAttribute("g", true);
     writer->endElement();
-    QCOMPARE(content(), QString("<test a=\"val\" b=\"&lt;&quot;&gt;\" c=\"-42\" d=\"1234.56789012345\" e=\"1234.56789012345pt\" f=\"false\" g=\"true\"/>"));
+    QCOMPARE(content(), QString("<test a=\"val\" b=\"&lt;&quot;&gt;\" c=\"-42\" d=\"1234.56789012345\" f=\"false\" g=\"true\"/>"));
 }
 
 void TestXmlWriter::testEmtpyElement()
@@ -130,7 +129,7 @@ void TestXmlWriter::testTextNode()
     writer->addTextNode("xt");
     writer->endElement();
     writer->endElement();
-    QCOMPARE(content(), QString("<a>\n  <b><c/>text</b>\n </a>"));
+    QCOMPARE(content(), QString("<a><b><c/>text</b>\n </a>"));
 }
 
 void TestXmlWriter::testTextSpan()

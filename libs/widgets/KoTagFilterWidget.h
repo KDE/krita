@@ -37,6 +37,7 @@ public:
     ~KoTagFilterWidget() override;
     void allowSave(bool allow);
     void clear();
+
 Q_SIGNALS:
     void filterTextChanged(const QString &filterText);
     void saveButtonClicked();

@@ -37,7 +37,7 @@ public:
 
     void setModel(QAbstractItemModel *model) override;
 
-    void setActionManager( KisActionManager * actionManager);
+    void setActionManager(KisActionManager *actionManager);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -50,7 +50,6 @@ protected:
     void changeEvent(QEvent *event) override;
 
 private:
-    KisAction *addActionToMenu(QMenu *menu, const QString &actionId);
     void updateMinimumSize();
 
     void paintSpan(QPainter *painter, int userFrameId,
@@ -62,12 +61,23 @@ private:
                    const QPen &gridPen) const;
 
 Q_SIGNALS:
-    void sigInsertColumnsLeft();
-    void sigInsertColumnsRight();
-    void sigInsertColumnsLeftCustom();
-    void sigInsertColumnsRightCustom();
+    void sigInsertColumnLeft();
+    void sigInsertColumnRight();
+    void sigInsertMultipleColumns();
+
     void sigRemoveColumns();
     void sigRemoveColumnsAndShift();
+
+    void sigInsertHoldColumns();
+    void sigRemoveHoldColumns();
+    void sigInsertHoldColumnsCustom();
+    void sigRemoveHoldColumnsCustom();
+
+    void sigMirrorColumns();
+
+    void sigCutColumns();
+    void sigCopyColumns();
+    void sigPasteColumns();
 
 private:
     struct Private;

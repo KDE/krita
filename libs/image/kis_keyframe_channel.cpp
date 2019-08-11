@@ -46,12 +46,14 @@ struct KisKeyframeChannel::Private
         node = newParentNode;
         id = rhs.id;
         defaultBounds = rhs.defaultBounds;
+        haveBrokenFrameTimeBug = rhs.haveBrokenFrameTimeBug;
     }
 
     KeyframesMap keys;
     KisNodeWSP node;
     KoID id;
     KisDefaultBoundsBaseSP defaultBounds;
+    bool haveBrokenFrameTimeBug = false;
 };
 
 KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP defaultBounds)
@@ -173,6 +175,29 @@ bool KisKeyframeChannel::moveKeyframe(KisKeyframeSP keyframe, int newTime, KUndo
     return true;
 }
 
+bool KisKeyframeChannel::swapFrames(int lhsTime, int rhsTime, KUndo2Command *parentCommand)
+{
+    LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);
+
+    if (lhsTime == rhsTime) return false;
+
+    KisKeyframeSP lhsFrame = keyframeAt(lhsTime);
+    KisKeyframeSP rhsFrame = keyframeAt(rhsTime);
+
+    if (!lhsFrame && !rhsFrame) return false;
+
+    if (lhsFrame && !rhsFrame) {
+        moveKeyframe(lhsFrame, rhsTime, parentCommand);
+    } else if (!lhsFrame && rhsFrame) {
+        moveKeyframe(rhsFrame, lhsTime, parentCommand);
+    } else {
+        KUndo2Command *cmd = new KisSwapFramesCommand(this, lhsFrame, rhsFrame, parentCommand);
+        cmd->redo();
+    }
+
+    return true;
+}
+
 bool KisKeyframeChannel::deleteKeyframeImpl(KisKeyframeSP keyframe, KUndo2Command *parentCommand, bool recreate)
 {
     LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);
@@ -212,6 +237,42 @@ void KisKeyframeChannel::moveKeyframeImpl(KisKeyframeSP keyframe, int newTime)
 
     requestUpdate(rangeSrc, rectSrc);
     requestUpdate(rangeDst, rectDst);
+}
+
+void KisKeyframeChannel::swapKeyframesImpl(KisKeyframeSP lhsKeyframe, KisKeyframeSP rhsKeyframe)
+{
+    KIS_ASSERT_RECOVER_RETURN(lhsKeyframe);
+    KIS_ASSERT_RECOVER_RETURN(rhsKeyframe);
+
+    KisTimeRange rangeLhs = affectedFrames(lhsKeyframe->time());
+    KisTimeRange rangeRhs = affectedFrames(rhsKeyframe->time());
+
+    const QRect rectLhsSrc = affectedRect(lhsKeyframe);
+    const QRect rectRhsSrc = affectedRect(rhsKeyframe);
+
+    const int lhsTime = lhsKeyframe->time();
+    const int rhsTime = rhsKeyframe->time();
+
+    emit sigKeyframeAboutToBeMoved(lhsKeyframe, rhsTime);
+    emit sigKeyframeAboutToBeMoved(rhsKeyframe, lhsTime);
+
+    m_d->keys.remove(lhsTime);
+    m_d->keys.remove(rhsTime);
+
+    rhsKeyframe->setTime(lhsTime);
+    lhsKeyframe->setTime(rhsTime);
+
+    m_d->keys.insert(lhsTime, rhsKeyframe);
+    m_d->keys.insert(rhsTime, lhsKeyframe);
+
+    emit sigKeyframeMoved(lhsKeyframe, lhsTime);
+    emit sigKeyframeMoved(rhsKeyframe, rhsTime);
+
+    const QRect rectLhsDst = affectedRect(lhsKeyframe);
+    const QRect rectRhsDst = affectedRect(rhsKeyframe);
+
+    requestUpdate(rangeLhs, rectLhsSrc | rectRhsDst);
+    requestUpdate(rangeRhs, rectRhsSrc | rectLhsDst);
 }
 
 KisKeyframeSP KisKeyframeChannel::replaceKeyframeAt(int time, KisKeyframeSP newKeyframe)
@@ -457,6 +518,7 @@ void KisKeyframeChannel::loadXML(const QDomElement &channelNode)
         if (keyframeNode.nodeName().toUpper() != "KEYFRAME") continue;
 
         KisKeyframeSP keyframe = loadKeyframe(keyframeNode);
+        KIS_SAFE_ASSERT_RECOVER(keyframe) { continue; }
 
         if (keyframeNode.hasAttribute("color-label")) {
             keyframe->setColorLabel(keyframeNode.attribute("color-label").toUInt());
@@ -465,6 +527,45 @@ void KisKeyframeChannel::loadXML(const QDomElement &channelNode)
         m_d->keys.insert(keyframe->time(), keyframe);
     }
 }
+
+bool KisKeyframeChannel::swapExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand)
+{
+    if (srcChannel->id() != id()) {
+        warnKrita << "Cannot copy frames from different ids:" << ppVar(srcChannel->id()) << ppVar(id());
+        return KisKeyframeSP();
+    }
+
+    LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);
+
+    KisKeyframeSP srcFrame = srcChannel->keyframeAt(srcTime);
+    KisKeyframeSP dstFrame = keyframeAt(dstTime);
+
+    if (!dstFrame && srcFrame) {
+        copyExternalKeyframe(srcChannel, srcTime, dstTime, parentCommand);
+        srcChannel->deleteKeyframe(srcFrame, parentCommand);
+    } else if (dstFrame && !srcFrame) {
+        srcChannel->copyExternalKeyframe(this, dstTime, srcTime, parentCommand);
+        deleteKeyframe(dstFrame, parentCommand);
+    } else if (dstFrame && srcFrame) {
+        const int fakeFrameTime = -1;
+
+        KisKeyframeSP newKeyframe = createKeyframe(fakeFrameTime, KisKeyframeSP(), parentCommand);
+        uploadExternalKeyframe(srcChannel, srcTime, newKeyframe);
+
+        srcChannel->copyExternalKeyframe(this, dstTime, srcTime, parentCommand);
+
+        // do not recreate frame!
+        deleteKeyframeImpl(dstFrame, parentCommand, false);
+
+        newKeyframe->setTime(dstTime);
+
+        KUndo2Command *cmd = new KisReplaceKeyframeCommand(this, newKeyframe->time(), newKeyframe, parentCommand);
+        cmd->redo();
+    }
+
+    return true;
+}
+
 
 KisKeyframeSP KisKeyframeChannel::copyExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand)
 {
@@ -506,6 +607,33 @@ void KisKeyframeChannel::requestUpdate(const KisTimeRange &range, const QRect &r
         int currentTime = m_d->defaultBounds->currentTime();
         if (range.contains(currentTime)) {
             m_d->node->setDirty(rect);
+        }
+    }
+}
+
+void KisKeyframeChannel::workaroundBrokenFrameTimeBug(int *time)
+{
+    /**
+     * Between Krita 4.1 and 4.4 Krita had a bug which resulted in creating frames
+     * with negative time stamp. The bug has been fixed, but there might be some files
+     * still in the wild.
+     *
+     * TODO: remove this workaround in Krita 5.0, when no such file are left :)
+     */
+
+    if (*time < 0) {
+        qWarning() << "WARNING: Loading a file with negative animation frames!";
+        qWarning() << "         The file has been saved with a buggy version of Krita.";
+        qWarning() << "         All the frames with negative ids will be dropped!";
+        qWarning() << "         " << ppVar(this->id()) << ppVar(*time);
+
+        m_d->haveBrokenFrameTimeBug = true;
+        *time = 0;
+    }
+
+    if (m_d->haveBrokenFrameTimeBug) {
+        while (keyframeAt(*time)) {
+            (*time)++;
         }
     }
 }

@@ -30,6 +30,7 @@
 
 #include "ui_wdg_gaussian_blur.h"
 
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -40,7 +41,7 @@
 #include <math.h>
 
 
-KisGaussianBlurFilter::KisGaussianBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Gaussian Blur..."))
+KisGaussianBlurFilter::KisGaussianBlurFilter() : KisFilter(id(), FiltersCategoryBlurId, i18n("&Gaussian Blur..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);
@@ -48,9 +49,9 @@ KisGaussianBlurFilter::KisGaussianBlurFilter() : KisFilter(id(), categoryBlur(),
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisGaussianBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisGaussianBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool usedForMasks) const
 {
-    return new KisWdgGaussianBlur(parent);
+    return new KisWdgGaussianBlur(usedForMasks, parent);
 }
 
 KisFilterConfigurationSP KisGaussianBlurFilter::factoryConfiguration() const
@@ -100,7 +101,7 @@ QRect KisGaussianBlurFilter::neededRect(const QRect & rect, const KisFilterConfi
 
     QVariant value;
     /**
-     * NOTE: integer devision by two is done on purpose,
+     * NOTE: integer division by two is done on purpose,
      *       because the kernel size is always odd
      */
     const int halfWidth = _config->getProperty("horizRadius", value) ? KisGaussianKernel::kernelSizeFromRadius(t.scale(value.toFloat())) / 2 : 5;
@@ -119,4 +120,29 @@ QRect KisGaussianBlurFilter::changedRect(const QRect & rect, const KisFilterConf
     const int halfHeight = _config->getProperty("vertRadius", value) ? KisGaussianKernel::kernelSizeFromRadius(t.scale(value.toFloat())) / 2 : 5;
 
     return rect.adjusted( -halfWidth, -halfHeight, halfWidth, halfHeight);
+}
+
+bool KisGaussianBlurFilter::configurationAllowedForMask(KisFilterConfigurationSP config) const
+{
+    //ENTER_FUNCTION() << config->getFloat("horizRadius", 5.0) << config->getFloat("vertRadius", 5.0);
+
+    const float maxRadiusForMask = 100.0;
+
+    return config->getFloat("horizRadius", 5.0) <= maxRadiusForMask &&
+            config->getFloat("vertRadius", 5.0) <= maxRadiusForMask;
+}
+
+void KisGaussianBlurFilter::fixLoadedFilterConfigurationForMasks(KisFilterConfigurationSP config) const
+{
+    ENTER_FUNCTION();
+
+    const float maxRadiusForMask = 100.0;
+
+    if (config->getFloat("horizRadius", 5.0) > maxRadiusForMask) {
+        config->setProperty("horizRadius", maxRadiusForMask);
+    }
+
+    if (config->getFloat("vertRadius", 5.0) > maxRadiusForMask) {
+        config->setProperty("vertRadius", maxRadiusForMask);
+    }
 }

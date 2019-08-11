@@ -74,6 +74,7 @@ public Q_SLOTS:
     void setSnapBoundingBox(bool value);
     void setSnapImageBounds(bool value);
     void setSnapImageCenter(bool value);
+    void setSnapToPixel(bool value);
 
     void slotUploadConfigToDocument();
 

@@ -105,7 +105,7 @@ void KisPresetSaveWidget::loadImageFromFile()
 {
     // create a dialog to retrieve an image file.
     KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
+    dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
     QString filename = dialog.filename(); // the filename() returns the entire path & file name, not just the file name
 
@@ -182,7 +182,7 @@ void KisPresetSaveWidget::savePreset()
         QString presetFilename = saveLocation + presetName.replace(" ", "_") + "_backup_" + currentDate + "-" + currentTime + oldPreset->defaultFileExtension();
         oldPreset->setFilename(presetFilename);
         oldPreset->setName(presetName);
-        oldPreset->setPresetDirty(false);
+        oldPreset->setDirty(false);
         oldPreset->setValid(true);
 
         // add backup resource to the blacklist
@@ -203,7 +203,7 @@ void KisPresetSaveWidget::savePreset()
         newPreset->setFilename(currentPresetFileName);
         newPreset->setName(presetName);
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
-        newPreset->setPresetDirty(false);
+        newPreset->setDirty(false);
         newPreset->setValid(true);
 
 
@@ -237,8 +237,10 @@ void KisPresetSaveWidget::savePreset()
         if (curPreset->image().isNull()) {
             curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
         }
+
+        // we should not load() the brush right after saving because it will reset all our saved
+        // eraser size and opacity values
         curPreset->save();
-        curPreset->load();
     }
 
 

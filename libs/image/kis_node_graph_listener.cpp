@@ -100,3 +100,8 @@ void KisNodeGraphListener::requestTimeSwitch(int time)
 {
     Q_UNUSED(time);
 }
+
+KisNode *KisNodeGraphListener::graphOverlayNode() const
+{
+    return 0;
+}

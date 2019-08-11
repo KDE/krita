@@ -20,8 +20,17 @@ along with the CPMT.  If not, see <http://www.gnu.org/licenses/>.
 """
 Another metadata format but then a json dump stored into the zipfile comment.
 The logic here being that the zipfile information can be read quicker.
-Doesn't seem to be supported much. :/
+Doesn't seem to be supported much. :/ (except by comicbooklovers, which is dead...
 https://code.google.com/archive/p/comicbookinfo/wikis/Example.wiki
+
+https://docs.google.com/document/pub?id=1Tu9eoPWc_8SPgxx5J4-6mEaaRWLLv-bEA8i_jcIe3IE
+
+Missing:
+
+numberOfIssues
+numberOfVolumes
+rating (1-5)
+country
 """
 
 import json
@@ -32,6 +41,7 @@ def writeJson(configDictionary = {}):
     metadata = {}
     authorList = []
     taglist = []
+    listOfRoles = ["Writer", "Inker", "Creator", "Editor", "Cartoonist", "Colorist", "Letterer", "Penciller", "Painter", "Cover", "Artist"]
 
     if "authorList" in configDictionary.keys():
         for authorE in range(len(configDictionary["authorList"])):
@@ -47,7 +57,13 @@ def writeJson(configDictionary = {}):
                 stringName.append("(" + authorDict["nickname"] + ")")
             author["person"] = ",".join(stringName)
             if "role" in authorDict.keys():
-                author["role"] = str(authorDict["role"]).title()
+                role = str(authorDict["role"]).title()
+                if "editor" in role.lower():
+                    role = "Editor"
+                if "cover" in role.lower():
+                    role = "Cover"
+                if role in listOfRoles:
+                    author["role"] = role
             authorList.append(author)
 
     if "characters" in configDictionary.keys():
@@ -95,8 +111,11 @@ def writeJson(configDictionary = {}):
     else:
         metadata["comments"] = "File generated without summary"
 
+    # 
+
     basedata["appID"] = "Krita"
     basedata["lastModified"] = QDateTime.currentDateTimeUtc().toString(Qt.ISODate)
     basedata["ComicBookInfo/1.0"] = metadata
+    
 
     return json.dumps(basedata)

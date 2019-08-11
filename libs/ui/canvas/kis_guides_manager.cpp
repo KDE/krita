@@ -37,7 +37,6 @@
 #include "kis_snap_line_strategy.h"
 #include "kis_change_guides_command.h"
 #include "kis_snap_config.h"
-#include "kis_coordinates_converter.h"
 #include  "kis_canvas2.h"
 #include "kis_signal_compressor.h"
 
@@ -50,13 +49,13 @@ struct KisGuidesManager::Private
           currentGuide(invalidGuide),
           cursorSwitched(false),
           dragStartGuidePos(0),
-          updateDocumentCompressor(40, KisSignalCompressor::FIRST_ACTIVE),
           shouldSetModified(false) {}
 
     KisGuidesManager *q;
 
     KisGuidesDecoration *decoration;
     KisGuidesConfig guidesConfig;
+    KisGuidesConfig oldGuidesConfig;
     KisSnapConfig snapConfig;
     QPointer<KisView> view;
 
@@ -84,6 +83,8 @@ struct KisGuidesManager::Private
     Qt::MouseButton getButtonFromEvent(QEvent *event);
     QAction* createShortenedAction(const QString &text, const QString &parentId, QObject *parent);
     void syncAction(const QString &actionName, bool value);
+    bool needsUndoCommand();
+    void createUndoCommandIfNeeded();
 
     GuideHandle currentGuide;
 
@@ -96,7 +97,6 @@ struct KisGuidesManager::Private
 
     KisSignalAutoConnectionsStore viewConnections;
 
-    KisSignalCompressor updateDocumentCompressor;
     bool shouldSetModified;
 };
 
@@ -104,7 +104,6 @@ KisGuidesManager::KisGuidesManager(QObject *parent)
     : QObject(parent),
       m_d(new Private(this))
 {
-    connect(&m_d->updateDocumentCompressor, SIGNAL(timeout()), SLOT(slotUploadConfigToDocument()));
 }
 
 KisGuidesManager::~KisGuidesManager()
@@ -114,7 +113,8 @@ KisGuidesManager::~KisGuidesManager()
 void KisGuidesManager::setGuidesConfig(const KisGuidesConfig &config)
 {
     if (config == m_d->guidesConfig) return;
-    setGuidesConfigImpl(config, true);
+    setGuidesConfigImpl(config, !config.hasSamePositionAs(m_d->guidesConfig));
+    slotUploadConfigToDocument();
 }
 
 void KisGuidesManager::slotDocumentRequestedConfig(const KisGuidesConfig &config)
@@ -131,12 +131,9 @@ void KisGuidesManager::slotUploadConfigToDocument()
     if (doc) {
         KisSignalsBlocker b(doc);
 
-        if (m_d->shouldSetModified) {
-            KUndo2Command *cmd = new KisChangeGuidesCommand(doc, value);
-            doc->addCommand(cmd);
-        } else {
-            doc->setGuidesConfig(value);
-        }
+        // we've made KisChangeGuidesCommand post-exec, so in all situations
+        // we will replace the whole config
+        doc->setGuidesConfig(value);
 
         value.saveStaticData();
     }
@@ -154,7 +151,6 @@ void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value, bool em
     }
 
     m_d->shouldSetModified |= emitModified;
-    m_d->updateDocumentCompressor.start();
 
     const bool shouldFilterEvent =
         value.showGuides() && !value.lockGuides() && value.hasGuides();
@@ -197,6 +193,20 @@ void KisGuidesManager::Private::syncAction(const QString &actionName, bool value
     action->setChecked(value);
 }
 
+bool KisGuidesManager::Private::needsUndoCommand()
+{
+    return !(oldGuidesConfig.hasSamePositionAs(guidesConfig));
+}
+
+void KisGuidesManager::Private::createUndoCommandIfNeeded()
+{
+    KisDocument *doc = view ? view->document() : 0;
+    if (doc && needsUndoCommand()) {
+        KUndo2Command *cmd = new KisChangeGuidesCommand(doc, oldGuidesConfig, guidesConfig);
+        doc->addCommand(cmd);
+    }
+}
+
 void KisGuidesManager::syncActionsStatus()
 {
     if (!m_d->view) return;
@@ -212,6 +222,7 @@ void KisGuidesManager::syncActionsStatus()
     m_d->syncAction("view_snap_bounding_box", m_d->snapConfig.boundingBox());
     m_d->syncAction("view_snap_image_bounds", m_d->snapConfig.imageBounds());
     m_d->syncAction("view_snap_image_center", m_d->snapConfig.imageCenter());
+    m_d->syncAction("view_snap_to_pixel",m_d->snapConfig.toPixel());
 }
 
 void KisGuidesManager::Private::updateSnappingStatus(const KisGuidesConfig &value)
@@ -237,6 +248,7 @@ void KisGuidesManager::Private::updateSnappingStatus(const KisGuidesConfig &valu
     snapGuide->enableSnapStrategy(KoSnapGuide::BoundingBoxSnapping, snapConfig.boundingBox());
     snapGuide->enableSnapStrategy(KoSnapGuide::DocumentBoundsSnapping, snapConfig.imageBounds());
     snapGuide->enableSnapStrategy(KoSnapGuide::DocumentCenterSnapping, snapConfig.imageCenter());
+    snapGuide->enableSnapStrategy(KoSnapGuide::PixelSnapping, snapConfig.toPixel());
 
     snapConfig.saveStaticData();
 }
@@ -250,6 +262,7 @@ void KisGuidesManager::setShowGuides(bool value)
 {
     m_d->guidesConfig.setShowGuides(value);
     setGuidesConfigImpl(m_d->guidesConfig);
+    slotUploadConfigToDocument();
 }
 
 bool KisGuidesManager::lockGuides() const
@@ -261,6 +274,7 @@ void KisGuidesManager::setLockGuides(bool value)
 {
     m_d->guidesConfig.setLockGuides(value);
     setGuidesConfigImpl(m_d->guidesConfig);
+    slotUploadConfigToDocument();
 }
 
 bool KisGuidesManager::snapToGuides() const
@@ -272,6 +286,7 @@ void KisGuidesManager::setSnapToGuides(bool value)
 {
     m_d->guidesConfig.setSnapToGuides(value);
     setGuidesConfigImpl(m_d->guidesConfig);
+    slotUploadConfigToDocument();
 }
 
 bool KisGuidesManager::rulersMultiple2() const
@@ -283,6 +298,7 @@ void KisGuidesManager::setRulersMultiple2(bool value)
 {
     m_d->guidesConfig.setRulersMultiple2(value);
     setGuidesConfigImpl(m_d->guidesConfig);
+    slotUploadConfigToDocument();
 }
 
 KoUnit::Type KisGuidesManager::unitType() const
@@ -294,6 +310,7 @@ void KisGuidesManager::setUnitType(const KoUnit::Type type)
 {
     m_d->guidesConfig.setUnitType(type);
     setGuidesConfigImpl(m_d->guidesConfig, false);
+    slotUploadConfigToDocument();
 }
 
 void KisGuidesManager::setup(KisActionManager *actionManager)
@@ -333,6 +350,9 @@ void KisGuidesManager::setup(KisActionManager *actionManager)
     action = actionManager->createAction("view_snap_image_center");
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setSnapImageCenter(bool)));
 
+    action = actionManager->createAction("view_snap_to_pixel");
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setSnapToPixel(bool)));
+
     m_d->updateSnappingStatus(m_d->guidesConfig);
     syncActionsStatus();
 }
@@ -344,10 +364,7 @@ void KisGuidesManager::setView(QPointer<KisView> view)
         snapGuide->overrideSnapStrategy(KoSnapGuide::GuideLineSnapping, 0);
         snapGuide->enableSnapStrategy(KoSnapGuide::GuideLineSnapping, false);
 
-        if (m_d->updateDocumentCompressor.isActive()) {
-            m_d->updateDocumentCompressor.stop();
-            slotUploadConfigToDocument();
-        }
+        slotUploadConfigToDocument();
 
         m_d->decoration = 0;
         m_d->viewConnections.clear();
@@ -368,24 +385,24 @@ void KisGuidesManager::setView(QPointer<KisView> view)
         setGuidesConfigImpl(m_d->guidesConfig, false);
 
         m_d->viewConnections.addUniqueConnection(
-            m_d->view->zoomManager()->horizontalRuler(), SIGNAL(guideCreationInProgress(Qt::Orientation, const QPoint&)),
-            this, SLOT(slotGuideCreationInProgress(Qt::Orientation, const QPoint&)));
+            m_d->view->zoomManager()->horizontalRuler(), SIGNAL(guideCreationInProgress(Qt::Orientation,QPoint)),
+            this, SLOT(slotGuideCreationInProgress(Qt::Orientation,QPoint)));
 
         m_d->viewConnections.addUniqueConnection(
-            m_d->view->zoomManager()->horizontalRuler(), SIGNAL(guideCreationFinished(Qt::Orientation, const QPoint&)),
-            this, SLOT(slotGuideCreationFinished(Qt::Orientation, const QPoint&)));
+            m_d->view->zoomManager()->horizontalRuler(), SIGNAL(guideCreationFinished(Qt::Orientation,QPoint)),
+            this, SLOT(slotGuideCreationFinished(Qt::Orientation,QPoint)));
 
         m_d->viewConnections.addUniqueConnection(
-            m_d->view->zoomManager()->verticalRuler(), SIGNAL(guideCreationInProgress(Qt::Orientation, const QPoint&)),
-            this, SLOT(slotGuideCreationInProgress(Qt::Orientation, const QPoint&)));
+            m_d->view->zoomManager()->verticalRuler(), SIGNAL(guideCreationInProgress(Qt::Orientation,QPoint)),
+            this, SLOT(slotGuideCreationInProgress(Qt::Orientation,QPoint)));
 
         m_d->viewConnections.addUniqueConnection(
-            m_d->view->zoomManager()->verticalRuler(), SIGNAL(guideCreationFinished(Qt::Orientation, const QPoint&)),
-            this, SLOT(slotGuideCreationFinished(Qt::Orientation, const QPoint&)));
+            m_d->view->zoomManager()->verticalRuler(), SIGNAL(guideCreationFinished(Qt::Orientation,QPoint)),
+            this, SLOT(slotGuideCreationFinished(Qt::Orientation,QPoint)));
 
         m_d->viewConnections.addUniqueConnection(
-            m_d->view->document(), SIGNAL(sigGuidesConfigChanged(const KisGuidesConfig &)),
-            this, SLOT(slotDocumentRequestedConfig(const KisGuidesConfig &)));
+            m_d->view->document(), SIGNAL(sigGuidesConfigChanged(KisGuidesConfig)),
+            this, SLOT(slotDocumentRequestedConfig(KisGuidesConfig)));
     }
 }
 
@@ -548,7 +565,7 @@ bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
 
             /**
              * When we delete a guide, it might happen that we are
-             * delting the last guide. Therefore we should eat the
+             * deleting the last guide. Therefore we should eat the
              * corresponding event so that the event filter would stop
              * the filter processing.
              */
@@ -565,6 +582,9 @@ bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
 
         updateSnappingStatus(guidesConfig);
     }
+
+    q->slotUploadConfigToDocument();
+    createUndoCommandIfNeeded();
 
     return updateCursor(docPos) | result;
 }
@@ -653,6 +673,7 @@ bool KisGuidesManager::eventFilter(QObject *obj, QEvent *event)
         const bool guideValid = m_d->isGuideValid(guide);
 
         if (guideValid) {
+            m_d->oldGuidesConfig = m_d->guidesConfig;
             m_d->initDragStart(guide, docPos, m_d->guideValue(guide), true);
         }
 
@@ -690,6 +711,8 @@ void KisGuidesManager::slotGuideCreationInProgress(Qt::Orientation orientation, 
         m_d->mouseMoveHandler(docPos, modifiers);
     } else {
         m_d->guidesConfig.setShowGuides(true);
+
+        m_d->oldGuidesConfig = m_d->guidesConfig;
 
         if (orientation == Qt::Horizontal) {
             QList<qreal> guides = m_d->guidesConfig.horizontalGuideLines();
@@ -747,6 +770,7 @@ void KisGuidesManager::slotShowSnapOptions()
     menu.addSection(i18n("Snap to:"));
     menu.addAction(m_d->createShortenedAction(i18n("Grid"), "view_snap_to_grid", &menu));
     menu.addAction(m_d->createShortenedAction(i18n("Guides"), "view_snap_to_guides", &menu));
+    menu.addAction(m_d->createShortenedAction(i18n("Pixel"), "view_snap_to_pixel", &menu));
     menu.addAction(m_d->createShortenedAction(i18n("Orthogonal"), "view_snap_orthogonal", &menu));
 
     menu.addAction(m_d->createShortenedAction(i18n("Node"), "view_snap_node", &menu));
@@ -799,5 +823,11 @@ void KisGuidesManager::setSnapImageBounds(bool value)
 void KisGuidesManager::setSnapImageCenter(bool value)
 {
     m_d->snapConfig.setImageCenter(value);
+    m_d->updateSnappingStatus(m_d->guidesConfig);
+}
+
+void KisGuidesManager::setSnapToPixel(bool value)
+{
+    m_d->snapConfig.setToPixel(value);
     m_d->updateSnappingStatus(m_d->guidesConfig);
 }

@@ -37,8 +37,8 @@ namespace {
  * These strings are added intentionally so we could relayout the threshold slider after
  * the string freeze for 4.0. Please translate them :)
  */
-static const QString stringForInstantPreviewThreshold1 = i18nc("@label:slider", "Threshold:");
-static const QString stringForInstantPreviewThreshold2 = i18nc("@label:slider", "Instant preview threshold:");
+static const KLocalizedString stringForInstantPreviewThreshold1 = ki18nc("@label:slider", "Threshold:");
+static const KLocalizedString stringForInstantPreviewThreshold2 = ki18nc("@label:slider", "Instant preview threshold:");
 }
 
 
@@ -50,7 +50,7 @@ struct KisLodAvailabilityWidget::Private
     QPushButton *btnLod;
     QScopedPointer<QMenu> thresholdMenu;
     KisDoubleSliderSpinBox *thresholdSlider = 0;
-    KoCanvasResourceManager *resourceManager;
+    KoCanvasResourceProvider *resourceManager;
 
     KisPaintopLodLimitations limitations;
     bool thresholdSupported = true;
@@ -77,7 +77,7 @@ KisLodAvailabilityWidget::KisLodAvailabilityWidget(QWidget *parent)
         connect(m_d->btnLod, SIGNAL(customContextMenuRequested(QPoint)),
                 this, SLOT(showLodThresholdWidget(QPoint)));
 
-        KisConfig cfg;
+        KisConfig cfg(true);
         m_d->thresholdSlider = new KisDoubleSliderSpinBox(m_d->thresholdMenu.data());
 
         m_d->thresholdSlider->setRange(0, cfg.readEntry("maximumBrushSize", 1000), 2);
@@ -220,6 +220,7 @@ void KisLodAvailabilityWidget::slotUserChangedLodAvailability(bool value)
     KisSignalsBlocker b(m_d->chkLod);
 
     m_d->chkLod->setChecked(value);
+    setLimitations(m_d->limitations);
 }
 
 void KisLodAvailabilityWidget::slotUserChangedLodThreshold(qreal value)
@@ -236,7 +237,7 @@ void KisLodAvailabilityWidget::slotUserChangedSize(qreal value)
     setLimitations(m_d->limitations);
 }
 
-void KisLodAvailabilityWidget::setCanvasResourceManager(KoCanvasResourceManager *resourceManager)
+void KisLodAvailabilityWidget::setCanvasResourceManager(KoCanvasResourceProvider *resourceManager)
 {
     m_d->resourceManager = resourceManager;
 }

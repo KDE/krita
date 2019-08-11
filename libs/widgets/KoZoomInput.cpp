@@ -44,7 +44,7 @@ class KoZoomInput::Private
 KoZoomInput::KoZoomInput(QWidget* parent)
     : QStackedWidget(parent), d(new Private)
 {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     setAttribute(Qt::WA_MacMiniSize, true);
 #endif
 
@@ -73,7 +73,7 @@ KoZoomInput::KoZoomInput(QWidget* parent)
     addWidget(d->combo);
     d->inside = false;
 
-    connect(d->combo, SIGNAL(activated(const QString&)), this, SIGNAL(zoomLevelChanged(const QString&)));
+    connect(d->combo, SIGNAL(activated(QString)), this, SIGNAL(zoomLevelChanged(QString)));
 }
 
 KoZoomInput::~KoZoomInput()

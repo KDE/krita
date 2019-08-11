@@ -21,7 +21,7 @@
 #include <QPen>
 #include <QPainter>
 #include <QApplication>
-
+#include "krita_utils.h"
 #include "timeline_frames_model.h"
 #include "timeline_color_scheme.h"
 
@@ -71,17 +71,30 @@ void TimelineFramesItemDelegate::paintActiveFrameSelector(QPainter *painter, con
     }
 }
 
-void TimelineFramesItemDelegate::paintSpecialKeyframeIndicator(QPainter *painter, const QModelIndex &index, const QRect &rc)
+void TimelineFramesItemDelegate::paintSpecialKeyframeIndicator(QPainter *painter, const QModelIndex &index, const QRect &rc) const
 {
-    bool active = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
-    bool framePresent = index.data(TimelineFramesModel::FrameExistsRole).toBool();
-    bool editable = index.data(TimelineFramesModel::FrameEditableRole).toBool();
+    bool doesFrameExist = index.data(TimelineFramesModel::FrameExistsRole).toBool();   /// does normal keyframe exist
+    bool isEditable = index.data(TimelineFramesModel::FrameEditableRole).toBool();
+    bool hasContent = index.data(TimelineFramesModel::FrameHasContent).toBool();     /// find out if frame is empty
 
-    QColor color = TimelineColorScheme::instance()->frameColor(!framePresent, active);
+    QColor color = qApp->palette().color(QPalette::Highlight);
+    QColor baseColor = qApp->palette().color(QPalette::Base);
+    QColor noLabelSetColor = qApp->palette().color(QPalette::Highlight); // if no color label is used
 
-    if (!editable && color.alpha() > 0) {
-        const int l = color.lightness();
-        color = QColor(l, l, l);
+    // use color label if it exists. coloring follows very similar logic to the drawBackground() function except this is a bit simpler
+    QVariant colorLabel = index.data(TimelineFramesModel::FrameColorLabelIndexRole);
+    if (colorLabel.isValid()) {
+        color = labelColors.at(colorLabel.toInt());
+    } else {
+        color = noLabelSetColor;
+    }
+
+    if (!isEditable) {
+        color = KritaUtils::blendColors(baseColor, color, 0.5);
+    }
+
+    if (doesFrameExist && hasContent) {
+        color = baseColor; // special keyframe will be over filled in frame, so switch color so it is shown
     }
 
     QPen oldPen = painter->pen();
@@ -105,27 +118,95 @@ void TimelineFramesItemDelegate::paintSpecialKeyframeIndicator(QPainter *painter
 
 void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc) const
 {
-    bool active = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
-    bool present = index.data(TimelineFramesModel::FrameExistsRole).toBool();
-    bool editable = index.data(TimelineFramesModel::FrameEditableRole).toBool();
-    QVariant colorLabel = index.data(TimelineFramesModel::FrameColorLabelIndexRole);
+    /// is the current layer actively selected (this is not the same as visibility)
+    bool hasActiveLayerRole = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
+    bool doesFrameExist = index.data(TimelineFramesModel::FrameExistsRole).toBool();   /// does keyframe exist
+    bool isEditable = index.data(TimelineFramesModel::FrameEditableRole).toBool(); /// is layer editable
+    bool hasContent = index.data(TimelineFramesModel::FrameHasContent).toBool();     /// find out if frame is empty
 
-    QColor color = colorLabel.isValid() ? labelColors.at(colorLabel.toInt()) :
-            TimelineColorScheme::instance()->frameColor(present, active);
+    QColor color; // will get re-used for determining color
+    QColor noLabelSetColor = qApp->palette().color(QPalette::Highlight); // if no color label is used
+    QColor highlightColor = qApp->palette().color(QPalette::Highlight);
+    QColor baseColor = qApp->palette().color(QPalette::Base);
 
-    if (!editable && color.alpha() > 0) {
-        const int l = color.lightness();
-        color = QColor(l, l, l);
+
+    // pass for filling in the active row with slightly color difference
+    if (hasActiveLayerRole) {
+        color = KritaUtils::blendColors(baseColor, highlightColor, 0.8);
+        painter->fillRect(rc, color);
     }
 
-    painter->fillRect(rc, color);
+    // assign background color for frame depending on if the frame has a color label or not
+    QVariant colorLabel = index.data(TimelineFramesModel::FrameColorLabelIndexRole);
+    if (colorLabel.isValid()) {
+        color = labelColors.at(colorLabel.toInt());
+    } else {
+        color = noLabelSetColor;
+    }
+
+
+    // if layer is hidden, make the entire color more subtle.
+    // this should be in effect for both fill color and empty outline color
+    if (!isEditable) {
+        color = KritaUtils::blendColors(baseColor, color, 0.7);
+    }
+
+
+    // how do we fill in a frame that has content
+    // a keyframe will be totally filled in. A hold frame will have a line running through it
+    if (hasContent && doesFrameExist) {
+        painter->fillRect(rc, color);
+    }
+
+
+
+    // pass of outline for empty keyframes
+    if (doesFrameExist && !hasContent) {
+
+        QPen oldPen = painter->pen();
+        QBrush oldBrush(painter->brush());
+
+        painter->setPen(QPen(color, 2));
+        painter->setBrush(Qt::NoBrush);
+        painter->drawRect(rc);
+
+        painter->setBrush(oldBrush);
+        painter->setPen(oldPen);
+    }
+
+
+    // pass of hold frame line
+    if (!doesFrameExist && hasContent) {
+
+        // pretty much the same check as "isValid" above, but that isn't working with hold frames
+         if (colorLabel.toInt() == 0) {
+             color = noLabelSetColor;
+
+             if (!isEditable) {
+                 color = KritaUtils::blendColors(baseColor, color, 0.7);
+             }
+         }
+
+
+        QPoint lineStart(rc.x(), (rc.y() + rc.height()/2));
+        QPoint lineEnd(rc.x() + rc.width(), (rc.y() + rc.height()/2));
+
+        QPen holdFramePen(color);
+        holdFramePen.setWidth(1);
+
+        painter->setPen(holdFramePen);
+        painter->drawLine(QLine(lineStart, lineEnd));
+    }
+
+
+
 }
 
 void TimelineFramesItemDelegate::drawFocus(QPainter *painter,
                                            const QStyleOptionViewItem &option,
                                            const QRect &rect) const
 {
-    // copied form Qt 4.8!
+    // copied from Qt 4.8!
 
     if ((option.state & QStyle::State_HasFocus) == 0 || !rect.isValid())
         return;
@@ -146,12 +227,13 @@ void TimelineFramesItemDelegate::drawFocus(QPainter *painter,
 void TimelineFramesItemDelegate::paint(QPainter *painter,
                                const QStyleOptionViewItem &option,
                                const QModelIndex &index) const
-{
+{    
+    // draws background as well as fills normal keyframes
     drawBackground(painter, index, option.rect);
 
+    // creates a semi transparent orange rectangle in the frame that is actively selected on the active row
     if (option.showDecorationSelected &&
         (option.state & QStyle::State_Selected)) {
-
         QPalette::ColorGroup cg = option.state & QStyle::State_Enabled
             ? QPalette::Normal : QPalette::Disabled;
         if (cg == QPalette::Normal && !(option.state & QStyle::State_Active))
@@ -165,13 +247,16 @@ void TimelineFramesItemDelegate::paint(QPainter *painter,
         painter->setOpacity(oldOpacity);
     }
 
+    // not sure what this is drawing
     drawFocus(painter, option, option.rect);
 
+    // opacity keyframe, but NOT normal keyframes
     bool specialKeys = index.data(TimelineFramesModel::SpecialKeyframeExists).toBool();
     if (specialKeys) {
         paintSpecialKeyframeIndicator(painter, index, option.rect);
     }
 
+    // creates a border and dot on the selected frame on the active row
     bool active = index.data(TimelineFramesModel::ActiveFrameRole).toBool();
     bool layerIsCurrent = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
     if (active) {

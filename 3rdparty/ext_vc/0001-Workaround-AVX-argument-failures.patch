@@ -1,0 +1,36 @@
+From 9cba6ee74397e2b3a6f1f225e2e716bf903bc7f0 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Wed, 10 Apr 2019 11:03:29 +0300
+Subject: [PATCH] Workaround AVX argument failures
+
+Define Vector::AsArg to be a const reference. The interleave functions
+already use AsArg.
+
+Refs: gh-241
+---
+ avx/vector.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/avx/vector.h b/avx/vector.h
+index d815cd45..9858ed68 100644
+--- a/avx/vector.h
++++ b/avx/vector.h
+@@ -107,7 +107,15 @@ public:
+                                           SimdArray<int, Size, SSE::int_v, 4>,
+                                           SimdArray<int, Size, Scalar::int_v, 1>>::type IndexType;
+ #endif
++
++#if defined __WIN64__ && defined __GNUC__
++        // Passing Vector by value leads to misaligned loads and stores. This works around
++        // the bug https://github.com/VcDevel/Vc/issues/241
++        using AsArg = const Vector<T, abi> &;
++#else
+         typedef Vector<T, abi> AsArg;
++#endif
++
+         typedef VectorType VectorTypeArg;
+ 
+     protected:
+-- 
+2.20.1.windows.1
+

@@ -27,7 +27,6 @@
 #include <QImage>
 #include <QPoint>
 #include <QColor>
-#include <QtEndian>
 #include <QByteArray>
 #include <kis_debug.h>
 #include <QString>
@@ -509,6 +508,7 @@ qint32 KisAbrBrushCollection::abr_brush_load(QDataStream & abr, AbrInfo *abr_hdr
     qint32 layer_ID = -1;
     switch (abr_hdr->version) {
     case 1:
+        Q_FALLTHROUGH();
         // fall through, version 1 and 2 are compatible
     case 2:
         layer_ID = abr_brush_load_v12(abr, abr_hdr, filename, image_ID, id);

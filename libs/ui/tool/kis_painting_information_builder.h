@@ -30,7 +30,7 @@ class KoPointerEvent;
 class KisToolFreehand;
 class KisCoordinatesConverter;
 class KisSpeedSmoother;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 
 class KRITAUI_EXPORT KisPaintingInformationBuilder : public QObject
 {
@@ -40,7 +40,7 @@ public:
     KisPaintingInformationBuilder();
     ~KisPaintingInformationBuilder() override;
 
-    KisPaintInformation startStroke(KoPointerEvent *event, int timeElapsed, const KoCanvasResourceManager *manager);
+    KisPaintInformation startStroke(KoPointerEvent *event, int timeElapsed, const KoCanvasResourceProvider *manager);
 
     KisPaintInformation continueStroke(KoPointerEvent *event,
                                        int timeElapsed);
@@ -58,6 +58,10 @@ protected:
     virtual QPointF documentToImage(const QPointF &point);
     virtual QPointF imageToView(const QPointF &point);
     virtual qreal calculatePerspective(const QPointF &documentPoint);
+
+    virtual qreal canvasRotation() const;
+    virtual bool canvasMirroredX() const;
+    virtual bool canvasMirroredY() const;
 
 private:
 
@@ -88,6 +92,10 @@ protected:
     QPointF documentToImage(const QPointF &point) override;
     QPointF imageToView(const QPointF &point) override;
 
+    qreal canvasRotation() const override;
+    bool canvasMirroredX() const override;
+    bool canvasMirroredY() const override;
+
 private:
     const KisCoordinatesConverter *m_converter;
 };
@@ -104,6 +112,10 @@ protected:
     QPointF imageToView(const QPointF &point) override;
     QPointF adjustDocumentPoint(const QPointF &point, const QPointF &startPoint) override;
     qreal calculatePerspective(const QPointF &documentPoint) override;
+
+    qreal canvasRotation() const override;
+    bool canvasMirroredX() const override;
+    bool canvasMirroredY() const override;
 
 private:
     KisToolFreehand *m_tool;

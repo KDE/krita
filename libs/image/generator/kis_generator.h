@@ -57,6 +57,7 @@ public:
      * @param dst the destination paint device
      * @param size the size of the area that is to be filled
      * @param config the parameters of the filter
+     * @param progressUpdater the progress updater
      */
     virtual void generate(KisProcessingInformation dst,
                           const QSize& size,

@@ -40,7 +40,7 @@ class KisViewManager;
  *   - fetch the list of dirtly frames using calcDirtyFrames()
  *   - create some clones of the image according to the user's settings
  *     to facilitate multithreaded rendering and processing of the frames
- *   - if the user doesn't have anough RAM, the clones will not be created
+ *   - if the user doesn't have enough RAM, the clones will not be created
  *     (the memory overhead is calculated using "projections" metric of the
  *      statistics server).
  *   - feed the images/threads with dirty frames until the all the frames
@@ -55,7 +55,7 @@ class KisViewManager;
  *   - one should implement two methods to make the rendering work:
  *     - calcDirtyFrames()
  *     - createRenderer(KisImageSP image)
- *   - these methids will be called on the start of the rendering
+ *   - these methods will be called on the start of the rendering
  */
 class KRITAUI_EXPORT KisAsyncAnimationRenderDialogBase : public QObject
 {
@@ -87,6 +87,17 @@ public:
     virtual Result regenerateRange(KisViewManager *viewManager);
 
     /**
+     * Set area of image that will be regenerated. If \p roi is empty,
+     * full area of the image is regenerated.
+     */
+    void setRegionOfInterest(const QRegion &roi);
+
+    /**
+     * @see setRegionOfInterest()
+     */
+    QRegion regionOfInterest() const;
+
+    /**
      * @brief setting batch mode to true will prevent any dialogs or message boxes from
      *        showing on screen. Please take it into account that using batch mode prevents
      *        some potentially dangerous recovery execution paths (e.g. delete the existing
@@ -105,6 +116,7 @@ private Q_SLOTS:
     void slotFrameCancelled(int frame);
 
     void slotCancelRegeneration();
+    void slotUpdateCompressedProgressData();
 
 private:
     void tryInitiateFrameRegeneration();

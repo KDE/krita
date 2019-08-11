@@ -37,27 +37,34 @@
 #include <QTextCursor>
 #include <QTextDocument>
 
-KoTosContainerPrivate::KoTosContainerPrivate(KoShapeContainer *q)
-    : KoShapeContainerPrivate(q)
+KoTosContainer::Private::Private()
+    : QSharedData()
     , resizeBehavior(KoTosContainer::IndependentSizes)
 {
 }
 
-KoTosContainerPrivate::KoTosContainerPrivate(const KoTosContainerPrivate &rhs, KoShapeContainer *q)
-    : KoShapeContainerPrivate(rhs, q),
-      resizeBehavior(rhs.resizeBehavior),
-      preferredTextRect(rhs.preferredTextRect),
-      alignment(rhs.alignment)
+KoTosContainer::Private::Private(const Private &rhs)
+    : QSharedData()
+    , resizeBehavior(rhs.resizeBehavior)
+    , preferredTextRect(rhs.preferredTextRect)
+    , alignment(rhs.alignment)
 {
 }
 
-KoTosContainerPrivate::~KoTosContainerPrivate()
+KoTosContainer::Private::~Private()
 {
 }
 
 
 KoTosContainer::KoTosContainer()
-    : KoShapeContainer(new KoTosContainerPrivate(this))
+    : KoShapeContainer()
+    , d(new Private)
+{
+}
+
+KoTosContainer::KoTosContainer(const KoTosContainer &rhs)
+    : KoShapeContainer(rhs)
+    , d(rhs.d)
 {
 }
 
@@ -66,19 +73,12 @@ KoTosContainer::~KoTosContainer()
     delete textShape();
 }
 
-KoTosContainer::KoTosContainer(KoTosContainerPrivate *dd)
-    : KoShapeContainer(dd)
-{
-}
-
 void KoTosContainer::paintComponent(QPainter &, const KoViewConverter &, KoShapePaintingContext &)
 {
 }
 
 bool KoTosContainer::loadText(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    Q_D(const KoTosContainer);
-
     KoXmlElement child;
     forEachElement(child, element) {
         // only recreate the text shape if there's something to be loaded
@@ -107,8 +107,6 @@ bool KoTosContainer::loadText(const KoXmlElement &element, KoShapeLoadingContext
 
 void KoTosContainer::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    Q_D(KoTosContainer);
-
     KoShapeContainer::loadStyle(element, context);
 
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
@@ -197,26 +195,22 @@ void KoTosContainer::setPlainText(const QString &text)
 
 void KoTosContainer::setResizeBehavior(ResizeBehavior resizeBehavior)
 {
-    Q_D(KoTosContainer);
     if (d->resizeBehavior == resizeBehavior) {
         return;
     }
     d->resizeBehavior = resizeBehavior;
-    if (d->model) {
-        d->model->containerChanged(this, KoShape::SizeChanged);
+    if (model()) {
+        model()->containerChanged(this, KoShape::SizeChanged);
     }
 }
 
 KoTosContainer::ResizeBehavior KoTosContainer::resizeBehavior() const
 {
-    Q_D(const KoTosContainer);
     return d->resizeBehavior;
 }
 
 void KoTosContainer::setTextAlignment(Qt::Alignment alignment)
 {
-    Q_D(KoTosContainer);
-
     KoShape *textShape = this->textShape();
     if (textShape == 0) {
         warnFlake << "No text shape present in KoTosContainer";
@@ -262,7 +256,6 @@ Qt::Alignment KoTosContainer::textAlignment() const
 
 void KoTosContainer::setPreferredTextRect(const QRectF &rect)
 {
-    Q_D(KoTosContainer);
     d->preferredTextRect = rect;
     KoShape *textShape = this->textShape();
     //debugFlake << rect << textShape << d->resizeBehavior;
@@ -275,7 +268,6 @@ void KoTosContainer::setPreferredTextRect(const QRectF &rect)
 
 QRectF KoTosContainer::preferredTextRect() const
 {
-    Q_D(const KoTosContainer);
     return d->preferredTextRect;
 }
 
@@ -286,12 +278,10 @@ KoShape *KoTosContainer::createTextShape(KoDocumentResourceManager *documentReso
         return 0;
     }
 
-    Q_D(KoTosContainer);
-
     delete textShape();
-    delete d->model;
+    delete model();
 
-    d->model = new KoTosContainerModel();
+    setModel(new KoTosContainerModel());
 
     QSet<KoShape*> delegates;
     delegates << this;
@@ -335,17 +325,16 @@ KoShape *KoTosContainer::textShape() const
 void KoTosContainer::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
-    Q_D(KoTosContainer);
-    if (d->model == 0) {
+    if (model() == 0) {
         return;
     }
 
     if (type == SizeChanged || type == ContentChanged) {
-        d->model->containerChanged(this, type);
+        model()->containerChanged(this, type);
     }
     // TODO is this needed?
 #if 0
-    Q_FOREACH (KoShape *shape, d->model->shapes())
+    Q_FOREACH (KoShape *shape, model()->shapes())
         shape->notifyChanged();
 #endif
 }

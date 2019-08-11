@@ -439,7 +439,7 @@ void DeleteCommand::doDelete()
         KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(range);
         if (anchorRange) {
             // we should only delete the anchor if the selection is covering it... not if the selection is
-            // just adjecent to the anchor. This is more in line with what other wordprocessors do
+            // just adjacent to the anchor. This is more in line with what other wordprocessors do
             if (anchorRange->position() != textEditor->selectionStart()
                     && anchorRange->position() != textEditor->selectionEnd()) {
                 KoShape *shape = anchorRange->anchor()->shape();

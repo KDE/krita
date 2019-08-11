@@ -34,9 +34,6 @@
 #include <commands_new/kis_node_move_command2.h>
 #include <QMimeData>
 
-#include <QTemporaryFile>
-#include <kis_debug.h>
-
 #include <kis_icon.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -56,7 +53,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoStore.h>
-#include <KoShapeBasedDocumentBase.h>
+#include <KoShapeControllerBase.h>
 #include <KoStoreDevice.h>
 #include <KoViewConverter.h>
 #include <KoXmlNS.h>
@@ -142,13 +139,13 @@ public:
 
     KisPaintDeviceSP paintDevice;
     KisShapeLayerCanvasBase * canvas;
-    KoShapeBasedDocumentBase* controller;
+    KoShapeControllerBase* controller;
     int x;
     int y;
 };
 
 
-KisShapeLayer::KisShapeLayer(KoShapeBasedDocumentBase* controller,
+KisShapeLayer::KisShapeLayer(KoShapeControllerBase* controller,
                              KisImageWSP image,
                              const QString &name,
                              quint8 opacity)
@@ -164,13 +161,13 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& rhs)
 {
 }
 
-KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase* controller)
+KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller, KisShapeLayerCanvasBase *canvas)
         : KisExternalLayer(_rhs)
         , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _rhs here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
 {
     // copy the projection to avoid extra round of updates!
-    initShapeLayer(controller, _rhs.m_d->paintDevice);
+    initShapeLayer(controller, _rhs.m_d->paintDevice, canvas);
 
     /**
      * The transformaitons of the added shapes are automatically merged into the transformation
@@ -178,12 +175,16 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase
      */
     const QTransform thisInvertedTransform = this->absoluteTransformation(0).inverted();
 
+    m_d->canvas->setUpdatesBlocked(true);
+
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
         clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
         addShape(clonedShape);
     }
+
+    m_d->canvas->setUpdatesBlocked(false);
 }
 
 KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_addShapes)
@@ -232,7 +233,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
     }
 }
 
-KisShapeLayer::KisShapeLayer(KoShapeBasedDocumentBase* controller,
+KisShapeLayer::KisShapeLayer(KoShapeControllerBase* controller,
                              KisImageWSP image,
                              const QString &name,
                              quint8 opacity,
@@ -260,7 +261,7 @@ KisShapeLayer::~KisShapeLayer()
     delete m_d;
 }
 
-void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller, KisPaintDeviceSP copyFromProjection, KisShapeLayerCanvasBase *canvas)
+void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller, KisPaintDeviceSP copyFromProjection, KisShapeLayerCanvasBase *canvas)
 {
     setSupportsLodMoves(false);
     setShapeId(KIS_SHAPE_LAYER_ID);
@@ -291,7 +292,7 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller, KisPain
     connect(m_d->canvas->selectedShapesProxy(), SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
-    connect(this, SIGNAL(sigMoveShapes(const QPointF&)), SLOT(slotMoveShapes(const QPointF&)));
+    connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
 }
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
@@ -478,8 +479,10 @@ void KisShapeLayer::forceUpdateTimedNode()
     m_d->canvas->forceRepaint();
 }
 
-#include "SvgWriter.h"
-#include "SvgParser.h"
+bool KisShapeLayer::hasPendingTimedUpdates() const
+{
+    return m_d->canvas->hasPendingUpdates();
+}
 
 bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, const QSizeF &sizeInPt)
 {
@@ -509,9 +512,8 @@ QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QSt
     int errorLine = 0;
     int errorColumn;
 
-    KoXmlDocument doc;
-    bool ok = doc.setContent(device, false, &errorMsg, &errorLine, &errorColumn);
-    if (!ok) {
+    KoXmlDocument doc = SvgParser::createDocumentFromSvg(device, &errorMsg, &errorLine, &errorColumn);
+    if (doc.isNull()) {
         errKrita << "Parsing error in " << "contents.svg" << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
         << " Error message: " << errorMsg << endl;
@@ -716,7 +718,7 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
     return parentCommand;
 }
 
-KoShapeBasedDocumentBase *KisShapeLayer::shapeController() const
+KoShapeControllerBase *KisShapeLayer::shapeController() const
 {
     return m_d->controller;
 }

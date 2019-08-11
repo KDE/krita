@@ -7,23 +7,24 @@ include_directories (
 include(ECMAddTests)
 
 ecm_add_tests(
+    KisActionsSnapshotTest.cpp
     KoPropertiesTest.cpp
+    kis_simple_math_parser_test.cpp # FIXME this test should be in the ui directory
+    TestKoProgressUpdater.cpp
+    TestSqueezedComboBox.cpp
+    kis_parse_spin_boxes_test.cpp
     NAME_PREFIX "libs-widgetutils-"
-    LINK_LIBRARIES kritawidgetutils Qt5::Test
+    LINK_LIBRARIES kritawidgetutils kritaimage Qt5::Test
 )
 
-# FIXME this test should be in the ui directory
-ecm_add_test(
-    kis_simple_math_parser_test.cpp
-    TEST_NAME krita-ui-KisSimpleMathParserTest
-    LINK_LIBRARIES kritaui Qt5::Test)
+ki18n_wrap_ui(DialogStateSaver_SRCS
+    dialogsavertestwidget.ui
+)
 
 ecm_add_test(
-    TestKoProgressUpdater.cpp
-    TEST_NAME TestKoProgressUpdater
-    LINK_LIBRARIES kritaui Qt5::Test)
+    KisDialogStateSaverTest.cpp
+    ${DialogStateSaver_SRCS}
+    TEST_NAME KisDialogStateSaverTest
+    LINK_LIBRARIES kritawidgetutils Qt5::Test KF5::ConfigCore
+    NAME_PREFIX "libs-widgetutils-")
 
-ecm_add_test(
-    KisActionsSnapshotTest.cpp
-    NAME_PREFIX "libs-widgetutils-"
-    LINK_LIBRARIES kritawidgetutils Qt5::Test)

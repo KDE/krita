@@ -27,6 +27,7 @@
 #include <kis_global.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceRegistry.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_color_transformation_configuration.h>
 #include <widgets/kis_multi_integer_filter_widget.h>
 
@@ -45,7 +46,7 @@ IndexColors::~IndexColors()
 {
 }
 
-KisFilterIndexColors::KisFilterIndexColors() : KisColorTransformationFilter(id(), categoryArtistic(), i18n("&Index Colors..."))
+KisFilterIndexColors::KisFilterIndexColors() : KisColorTransformationFilter(id(), FiltersCategoryArtisticId, i18n("&Index Colors..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT); // Technically it is TO_LAB16 but that would only display a warning we don't want
     // This filter will always degrade the color space, that is it's purpose
@@ -73,7 +74,7 @@ KoColorTransformation* KisFilterIndexColors::createTransformation(const KoColorS
     return new KisIndexColorTransformation(pal, cs, config->getInt("alphaSteps"));
 }
 
-KisConfigWidget* KisFilterIndexColors::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget* KisFilterIndexColors::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     KisWdgIndexColors* w = new KisWdgIndexColors(parent);

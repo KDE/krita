@@ -57,7 +57,7 @@ KoID KisCompositeOpListWidget::selectedCompositeOp() const {
 // ---- KisCompositeOpComboBox -------------------------------------------------------- //
 
 KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
-    QComboBox(parent),
+    KisSqueezedComboBox(parent),
     m_model(new KisSortedCompositeOpListModel(this)),
     m_allowToHidePopup(true)
 {
@@ -74,8 +74,8 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     setView(m_view);
     setItemDelegate(new KisCategorizedItemDelegate(this));
 
-    connect(m_view, SIGNAL(sigCategoryToggled(const QModelIndex&, bool)), SLOT(slotCategoryToggled(const QModelIndex&, bool)));
-    connect(m_view, SIGNAL(sigEntryChecked(const QModelIndex&)), SLOT(slotEntryChecked(const QModelIndex&)));
+    connect(m_view, SIGNAL(sigCategoryToggled(QModelIndex,bool)), SLOT(slotCategoryToggled(QModelIndex,bool)));
+    connect(m_view, SIGNAL(sigEntryChecked(QModelIndex)), SLOT(slotEntryChecked(QModelIndex)));
 
     selectCompositeOp(KoCompositeOpRegistry::instance().getDefaultCompositeOp());
 
@@ -315,7 +315,7 @@ void KisCompositeOpComboBox::slotCategoryToggled(const QModelIndex& index, bool 
     //      popup widget to the view
     //      don't know if this is expected behaviour
     //      on all supported platforms.
-    //      Thre is nothing written about this in the docs.
+    //      There is nothing written about this in the docs.
     showPopup();
 }
 

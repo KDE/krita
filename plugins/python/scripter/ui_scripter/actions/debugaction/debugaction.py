@@ -19,6 +19,7 @@ from PyQt5.QtWidgets import QAction
 from PyQt5.QtGui import QIcon, QPixmap, QKeySequence
 from scripter import resources_rc
 from PyQt5.QtCore import Qt
+import krita
 
 
 class DebugAction(QAction):
@@ -29,18 +30,18 @@ class DebugAction(QAction):
 
         self.triggered.connect(self.debug)
 
-        self.setText('Debug')
-        self.setToolTip('Debug Ctrl+D')
+        self.setText(i18n("Debug"))
+        self.setToolTip(i18n("Debug Ctrl+D"))
         self.setIcon(QIcon(':/icons/debug.svg'))
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_D))
 
     @property
     def parent(self):
-        return 'toolBar'
+        return 'toolBar',
 
     def debug(self):
         if self.scripter.uicontroller.invokeAction('save'):
-            self.scripter.uicontroller.setActiveWidget('Debugger')
+            self.scripter.uicontroller.setActiveWidget(i18n('Debugger'))
             self.scripter.debugcontroller.start(self.scripter.documentcontroller.activeDocument)
-            widget = self.scripter.uicontroller.findTabWidget('Debugger')
+            widget = self.scripter.uicontroller.findTabWidget(i81n('Debugger'))
             widget.startDebugger()

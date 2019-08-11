@@ -87,7 +87,7 @@ struct Q_DECL_HIDDEN KisUpdateTimeMonitor::Private
           mousePath(0.0),
           loggingEnabled(false)
     {
-        loggingEnabled = KisImageConfig().enablePerfLog();
+        loggingEnabled = KisImageConfig(true).enablePerfLog();
     }
 
     QHash<void*, StrokeTicket*> preliminaryTickets;
@@ -183,7 +183,7 @@ void KisUpdateTimeMonitor::printValues()
     qint64 strokeTime = m_d->strokeTime.elapsed();
     qreal responseTime = qreal(m_d->responseTime) / m_d->numTickets;
     qreal nonUpdateTime = qreal(m_d->jobsTime) / m_d->numTickets;
-    qreal jobsPerUpdate = qreal(m_d->numTickets) / m_d->numUpdates;    
+    qreal jobsPerUpdate = qreal(m_d->numTickets) / m_d->numUpdates;
     qreal mouseSpeed = qreal(m_d->mousePath) / strokeTime;
 
     QString prefix;

@@ -28,17 +28,15 @@ class Q_DECL_HIDDEN KoCanvasController::Private
 {
 public:
     Private()
-        : canvasMode(Centered)
-        , margin(0)
+        : margin(0)
         , preferredCenterFractionX(0.5)
         , preferredCenterFractionY(0.5)
         , actionCollection(0)
     {
     }
 
-    CanvasMode canvasMode;
     int margin;
-    QSize documentSize;
+    QSizeF documentSize;
     QPoint documentOffset;
     qreal preferredCenterFractionX;
     qreal preferredCenterFractionY;
@@ -59,26 +57,6 @@ KoCanvasController::~KoCanvasController()
     delete proxyObject;
 }
 
-void KoCanvasController::setCanvasMode(CanvasMode mode)
-{
-    d->canvasMode = mode;
-    switch (mode) {
-    case AlignTop:
-        d->preferredCenterFractionX = 0;
-        d->preferredCenterFractionY = 0.5;
-        break;
-    case Infinite:
-    case Centered:
-        d->preferredCenterFractionX = 0.5;
-        d->preferredCenterFractionY = 0.5;
-        break;
-    case Spreadsheet:
-        d->preferredCenterFractionX = 0;
-        d->preferredCenterFractionY = 0;
-        break;
-    };
-}
-
 void KoCanvasController::setMargin(int margin)
 {
     d->margin = margin;
@@ -89,23 +67,17 @@ int KoCanvasController::margin() const
     return d->margin;
 }
 
-
-KoCanvasController::CanvasMode KoCanvasController::canvasMode() const
-{
-    return d->canvasMode;
-}
-
 KoCanvasBase* KoCanvasController::canvas() const
 {
     return 0;
 }
 
-void KoCanvasController::setDocumentSize(const QSize &sz)
+void KoCanvasController::setDocumentSize(const QSizeF &sz)
 {
     d->documentSize = sz;
 }
 
-QSize KoCanvasController::documentSize() const
+QSizeF KoCanvasController::documentSize() const
 {
     return d->documentSize;
 }
@@ -139,9 +111,6 @@ QPoint KoCanvasController::documentOffset() const
 {
     return d->documentOffset;
 }
-
-
-
 
 KoCanvasControllerProxyObject::KoCanvasControllerProxyObject(KoCanvasController *controller, QObject *parent)
     : QObject(parent)

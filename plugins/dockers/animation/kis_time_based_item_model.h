@@ -21,6 +21,7 @@
 
 #include <QAbstractTableModel>
 #include <QList>
+#include <KisKineticScroller.h>
 
 #include "kritaanimationdocker_export.h"
 
@@ -52,9 +53,10 @@ public:
     bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role) override;
 
     bool removeFrames(const QModelIndexList &indexes);
-    bool offsetFrames(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames);
 
-    bool removeFramesAndOffset(const QModelIndexList &indexes);
+    bool removeFramesAndOffset(QModelIndexList indicesToRemove);
+
+    bool mirrorFrames(QModelIndexList indexes);
 
     void setScrubState(bool active);
     void scrubTo(int time, bool preview);
@@ -71,7 +73,8 @@ public:
         FrameCachedRole,
         FrameEditableRole,
         FramesPerSecondRole,
-        UserRole
+        UserRole,
+        FrameHasContent // is it an empty frame with nothing in it?
     };
 
 protected:
@@ -79,14 +82,15 @@ protected:
     virtual QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const = 0;
     KisImageWSP image() const;
 
-    KUndo2Command* createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand = 0);
+    KUndo2Command* createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset,
+                                             bool copyFrames, bool moveEmptyFrames,
+                                             KUndo2Command *parentCommand = 0);
+
 
 private Q_SLOTS:
     void slotFramerateChanged();
     void slotCurrentTimeChanged(int time);
-
     void slotCacheChanged();
-
     void slotInternalScrubPreviewRequested(int time);
 
     void slotPlaybackFrameChanged();

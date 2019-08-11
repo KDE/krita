@@ -112,7 +112,6 @@ Q_SIGNALS:
     void dirtyPresetToggled(bool value);
     void eraserBrushSizeToggled(bool value);
     void eraserBrushOpacityToggled(bool value);
-    void sizeChanged();
     void brushEditorShown();
     void createPresetFromScratch(const QString& paintOpName);
 

@@ -97,7 +97,10 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
                 } else {
                     engineNode = insertEngine(engine);
                 }
-                connectToEngine(n, engineNode);
+
+                if (engine->supportsColorSpace(modelId, depthId, profile)) {
+                    connectToEngine(n, engineNode);
+                }
             }
         }
     }
@@ -138,7 +141,10 @@ void KoColorConversionSystem::insertColorProfile(const KoColorProfile* _profile)
             Q_ASSERT(engine);
             Node* engineNode = d->graph[ NodeKey(engine->id(), engine->id(), engine->id())];
             Q_ASSERT(engineNode);
-            connectToEngine(n, engineNode);
+
+            if (engine->supportsColorSpace(modelId, depthId, _profile)) {
+                connectToEngine(n, engineNode);
+            }
         }
         const QList<KoColorConversionTransformationFactory*> cctfs = factory->colorConversionLinks();
         Q_FOREACH (KoColorConversionTransformationFactory* cctf, cctfs) {
@@ -235,8 +241,8 @@ KoColorConversionTransformation* KoColorConversionSystem::createColorConverter(c
     dbgPigmentCCS << srcColorSpace->id() << (srcColorSpace->profile() ? srcColorSpace->profile()->name() : "default");
     dbgPigmentCCS << dstColorSpace->id() << (dstColorSpace->profile() ? dstColorSpace->profile()->name() : "default");
     Path path = findBestPath(
-                     nodeFor(srcColorSpace),
-                     nodeFor(dstColorSpace));
+                nodeFor(srcColorSpace),
+                nodeFor(dstColorSpace));
     Q_ASSERT(path.length() > 0);
     KoColorConversionTransformation* transfo = createTransformationFromPath(path, srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
     Q_ASSERT(*transfo->srcColorSpace() == *srcColorSpace);
@@ -303,7 +309,7 @@ KoColorConversionTransformation* KoColorConversionSystem::createTransformationFr
         dbgPigmentCCS << pathOfNode[ 0 ].first->id() << " to " << pathOfNode[ 1 ].first->id();
 
         const KoColorSpace* intermCS =
-            defaultColorSpaceForNode(pathOfNode[1].first);
+                defaultColorSpaceForNode(pathOfNode[1].first);
 
         mccTransfo->appendTransfo(pathOfNode[1].second->createColorTransformation(srcColorSpace, intermCS, renderingIntent, conversionFlags));
 
@@ -398,8 +404,8 @@ QString KoColorConversionSystem::bestPathToDot(const QString& srcKey, const QStr
     Path p = findBestPath(srcNode, dstNode);
     Q_ASSERT(!p.isEmpty());
     QString dot = "digraph CCS {\n" +
-                  QString("  \"%1\" [color=red]\n").arg(srcNode->id()) +
-                  QString("  \"%1\" [color=red]\n").arg(dstNode->id());
+            QString("  \"%1\" [color=red]\n").arg(srcNode->id()) +
+            QString("  \"%1\" [color=red]\n").arg(dstNode->id());
     Q_FOREACH (Vertex* oV, d->vertexes) {
         QString options;
         if (p.vertexes.contains(oV)) {
@@ -427,7 +433,7 @@ inline KoColorConversionSystem::Path KoColorConversionSystem::findBestPathImpl2(
                 p.isGood = true;
                 return p;
             } else {
-                Q_ASSERT(!node2path.contains(endNode));   // That would be a total fuck up if there are two vertices between two nodes
+                //Q_ASSERT(!node2path.contains(endNode));   // That would be a total fuck up if there are two vertices between two nodes
                 node2path.insert(endNode, p);
                 possiblePaths.append(p);
             }
@@ -452,11 +458,13 @@ inline KoColorConversionSystem::Path KoColorConversionSystem::findBestPathImpl2(
                             newP.isGood = true;
                             return newP;
                         } else if (pQC.lessWorseThan(newP, currentBestPath)) {
-                            Q_ASSERT(newP.startNode()->id() == currentBestPath.startNode()->id());
-                            Q_ASSERT(newP.endNode()->id() == currentBestPath.endNode()->id());
-                            // Can we do better than dumping memory values???
-                            // warnPigment << pQC.lessWorseThan(newP, currentBestPath) << " " << newP << "  " << currentBestPath;
-                            currentBestPath = newP;
+                            if (newP.startNode() && newP.endNode() && currentBestPath.startNode() && currentBestPath.endNode()) {
+                                Q_ASSERT(newP.startNode()->id() == currentBestPath.startNode()->id());
+                                Q_ASSERT(newP.endNode()->id() == currentBestPath.endNode()->id());
+                                // Can we do better than dumping memory values???
+                                // warnPigment << pQC.lessWorseThan(newP, currentBestPath) << " " << newP << "  " << currentBestPath;
+                                currentBestPath = newP;
+                            }
                         }
                     } else {
                         // This is an incomplete path. Check if there's a better way to get to its endpoint.

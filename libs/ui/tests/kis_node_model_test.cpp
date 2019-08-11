@@ -28,6 +28,7 @@
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
 
+#include <sdk/tests/testutil.h>
 
 #include "modeltest.h"
 
@@ -40,6 +41,8 @@ void KisNodeModelTest::init()
     m_nodeModel = new KisNodeModel(0);
 
     initBase();
+
+    m_doc->setCurrentImage(m_image);
 }
 
 void KisNodeModelTest::cleanup()
@@ -106,9 +109,7 @@ void KisNodeModelTest::testSubstituteRootNode()
     m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0, 0, 0);
     new ModelTest(m_nodeModel, this);
 
-    m_image->flatten();
+    m_image->flatten(0);
 }
 
-QTEST_MAIN(KisNodeModelTest)
-
-
+KISTEST_MAIN(KisNodeModelTest)

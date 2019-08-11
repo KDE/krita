@@ -63,9 +63,9 @@ public:
         if (rhs.isInfinite() || isInfinite()) {
             m_end = std::numeric_limits<int>::min();
         } else if (!isValid()) {
-            m_end = rhs.end();
+            m_end = rhs.m_end;
         } else {
-            m_end = std::max(m_end, rhs.end());
+            m_end = std::max(m_end, rhs.m_end);
         }
 
         return *this;
@@ -76,16 +76,16 @@ public:
             return *this;
         } else if (!rhs.isValid()) {
             m_start = rhs.start();
-            m_end = rhs.end();
+            m_end = rhs.m_end;
             return *this;
         } else {
             m_start = std::max(m_start, rhs.start());
         }
 
         if (isInfinite()) {
-            m_end = rhs.end();
+            m_end = rhs.m_end;
         } else if (!rhs.isInfinite()) {
-            m_end = std::min(m_end, rhs.end());
+            m_end = std::min(m_end, rhs.m_end);
         }
 
         return *this;
@@ -127,8 +127,11 @@ public:
         return KisTimeRange(start, std::numeric_limits<int>::min(), true);
     }
 
-    static void calculateTimeRangeRecursive(const KisNode *node, int time, KisTimeRange &range, bool exclusive);
+    static KisTimeRange calculateIdenticalFramesRecursive(const KisNode *node, int time);
+    static KisTimeRange calculateAffectedFramesRecursive(const KisNode *node, int time);
 
+    static KisTimeRange calculateNodeIdenticalFrames(const KisNode *node, int time);
+    static KisTimeRange calculateNodeAffectedFrames(const KisNode *node, int time);
 
 private:
     int m_start;
@@ -142,7 +145,7 @@ namespace KisDomUtils {
 
 
 
-Q_DECLARE_METATYPE(KisTimeRange);
+Q_DECLARE_METATYPE(KisTimeRange)
 
 KRITAIMAGE_EXPORT QDebug operator<<(QDebug dbg, const KisTimeRange &r);
 

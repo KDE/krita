@@ -39,6 +39,8 @@
 #include "KisViewManager.h"
 #include "kis_selection_manager.h"
 #include "KisDocument.h"
+#include "kis_update_info.h"
+
 
 struct KisCanvasWidgetBase::Private
 {
@@ -72,7 +74,7 @@ KisCanvasWidgetBase::KisCanvasWidgetBase(KisCanvas2 * canvas, KisCoordinatesConv
 KisCanvasWidgetBase::~KisCanvasWidgetBase()
 {
     /**
-     * Clear all the attached decoration. Oherwise they might decide
+     * Clear all the attached decoration. Otherwise they might decide
      * to process some events or signals after the canvas has been
      * destroyed
      */
@@ -162,6 +164,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 void KisCanvasWidgetBase::addDecoration(KisCanvasDecorationSP deco)
 {
     m_d->decorations.push_back(deco);
+    std::stable_sort(m_d->decorations.begin(), m_d->decorations.end(), KisCanvasDecoration::comparePriority);
 }
 
 void KisCanvasWidgetBase::removeDecoration(const QString &id)
@@ -187,6 +190,7 @@ KisCanvasDecorationSP KisCanvasWidgetBase::decoration(const QString& id) const
 void KisCanvasWidgetBase::setDecorations(const QList<KisCanvasDecorationSP > &decorations)
 {
     m_d->decorations=decorations;
+    std::stable_sort(m_d->decorations.begin(), m_d->decorations.end(), KisCanvasDecoration::comparePriority);
 }
 
 QList<KisCanvasDecorationSP > KisCanvasWidgetBase::decorations() const
@@ -201,7 +205,7 @@ void KisCanvasWidgetBase::setWrapAroundViewingMode(bool value)
 
 QImage KisCanvasWidgetBase::createCheckersImage(qint32 checkSize)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     if(checkSize < 0)
         checkSize = cfg.checkSize();
@@ -221,7 +225,7 @@ QImage KisCanvasWidgetBase::createCheckersImage(qint32 checkSize)
 
 void KisCanvasWidgetBase::notifyConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->borderColor = cfg.canvasBorderColor();
 }
 
@@ -238,6 +242,17 @@ KisCanvas2 *KisCanvasWidgetBase::canvas() const
 KisCoordinatesConverter* KisCanvasWidgetBase::coordinatesConverter() const
 {
     return m_d->coordinatesConverter;
+}
+
+QVector<QRect> KisCanvasWidgetBase::updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects)
+{
+    QVector<QRect> dirtyViewRects;
+
+    Q_FOREACH (KisUpdateInfoSP info, infoObjects) {
+        dirtyViewRects << this->updateCanvasProjection(info);
+    }
+
+    return dirtyViewRects;
 }
 
 KoToolProxy *KisCanvasWidgetBase::toolProxy() const

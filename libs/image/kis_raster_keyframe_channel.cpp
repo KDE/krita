@@ -26,8 +26,9 @@
 #include "kundo2command.h"
 #include "kis_onion_skin_compositor.h"
 
-struct KisRasterKeyframe : public KisKeyframe
+class KisRasterKeyframe : public KisKeyframe
 {
+public:
     KisRasterKeyframe(KisRasterKeyframeChannel *channel, int time, int frameId)
         : KisKeyframe(channel, time)
         , frameId(frameId)
@@ -45,6 +46,12 @@ struct KisRasterKeyframe : public KisKeyframe
         return toQShared(new KisRasterKeyframe(this, channel));
     }
 
+    bool hasContent() const override {
+        KisRasterKeyframeChannel *channel = dynamic_cast<KisRasterKeyframeChannel*>(this->channel());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(channel, true);
+
+        return channel->keyframeHasContent(this);
+    }
 };
 
 struct KisRasterKeyframeChannel::Private
@@ -83,8 +90,13 @@ KisRasterKeyframeChannel::~KisRasterKeyframeChannel()
 
 int KisRasterKeyframeChannel::frameId(KisKeyframeSP keyframe) const
 {
-    KisRasterKeyframe *key = dynamic_cast<KisRasterKeyframe*>(keyframe.data());
-    Q_ASSERT(key != 0);
+    return frameId(keyframe.data());
+}
+
+int KisRasterKeyframeChannel::frameId(const KisKeyframe *keyframe) const
+{
+    const KisRasterKeyframe *key = dynamic_cast<const KisRasterKeyframe*>(keyframe);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(key, -1);
     return key->frameId;
 }
 
@@ -249,7 +261,8 @@ void KisRasterKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement 
 
 KisKeyframeSP KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
-    int time = keyframeNode.attribute("time").toUInt();
+    int time = keyframeNode.attribute("time").toInt();
+    workaroundBrokenFrameTimeBug(&time);
 
     QPoint offset;
     KisDomUtils::loadValue(keyframeNode, "offset", &offset);
@@ -260,7 +273,7 @@ KisKeyframeSP KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframe
     if (m_d->frameFilenames.isEmpty()) {
         // First keyframe loaded: use the existing frame
 
-        Q_ASSERT(keyframeCount() == 1);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(keyframeCount() == 1);
         keyframe = constKeys().begin().value();
 
         // Remove from keys. It will get reinserted with new time once we return
@@ -278,6 +291,11 @@ KisKeyframeSP KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframe
     setFrameFilename(frameId(keyframe), frameFilename);
 
     return keyframe;
+}
+
+bool KisRasterKeyframeChannel::keyframeHasContent(const KisKeyframe *keyframe) const
+{
+    return !m_d->paintDevice->framesInterface()->frameBounds(frameId(keyframe)).isEmpty();
 }
 
 bool KisRasterKeyframeChannel::hasScalarValue() const

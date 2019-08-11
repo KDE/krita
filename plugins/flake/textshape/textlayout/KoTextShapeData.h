@@ -55,8 +55,6 @@ public:
     /**
      * Replace the QTextDocument this shape will render.
      * @param document the new document. If there was an old document owned, it will be deleted.
-     * @param transferOwnership if true then the document will be considered the responsibility
-     *    of this data and the doc will be deleted when this shapeData dies.
      */
     void setDocument(QTextDocument *document);
 

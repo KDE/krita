@@ -36,6 +36,8 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 
+#include <KisMimeDatabase.h>
+
 // kritaimage
 #include <kis_types.h>
 #include <kis_paint_device.h>
@@ -43,6 +45,8 @@
 #include <kis_annotation.h>
 #include <kis_node.h>
 #include <kis_image.h>
+#include <kis_time_range.h>
+#include <utils/KisClipboardUtil.h>
 
 // local
 #include "kis_config.h"
@@ -76,7 +80,7 @@ KisClipboard* KisClipboard::instance()
     return s_instance;
 }
 
-void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
+void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const KisTimeRange &range)
 {
     if (!dev)
         return;
@@ -90,7 +94,6 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
     KisStorePaintDeviceWriter writer(store);
     Q_ASSERT(store);
     Q_ASSERT(!store->bad());
-    
 
     // Layer data
     if (store->open("layerdata")) {
@@ -100,6 +103,12 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
             delete store;
             return;
         }
+        store->close();
+    }
+
+    // copied frame time limits
+    if (range.isValid() && store->open("timeRange")) {
+        store->write(QString("%1 %2").arg(range.start()).arg(range.end()).toLatin1());
         store->close();
     }
 
@@ -148,7 +157,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
 
     // We also create a QImage so we can interchange with other applications
     QImage qimage;
-    KisConfig cfg;
+    KisConfig cfg(true);
     const KoColorProfile *monitorProfile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
     qimage = dev->convertToQImage(monitorProfile, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     if (!qimage.isNull() && mimeData) {
@@ -163,9 +172,18 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
 
 }
 
-KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
+void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
+{
+    setClip(dev, topLeft, KisTimeRange());
+}
+
+KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, KisTimeRange *clipRange)
 {
     QByteArray mimeType("application/x-krita-selection");
+
+    if (clipRange) {
+        *clipRange = KisTimeRange();
+    }
 
     QClipboard *cb = QApplication::clipboard();
     const QMimeData *cbData = cb->mimeData();
@@ -176,7 +194,7 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
         KoStore* store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
-        
+
         const KoColorProfile *profile = 0;
 
         QString csDepth, csModel;
@@ -239,6 +257,18 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
                     clip->setX(clip->x() + diff.x());
                     clip->setY(clip->y() + diff.y());
                 }
+
+                if (store->hasFile("timeRange") && clipRange) {
+                    store->open("timeRange");
+                    QString str = store->read(store->size());
+                    store->close();
+                    QStringList list = str.split(' ');
+                    if (list.size() == 2) {
+                        KisTimeRange range(list[0].toInt(), list[1].toInt(), true);
+                        *clipRange = range;
+                        qDebug() << "Pasted time range" << range;
+                    }
+                }
             }
         }
 
@@ -246,12 +276,14 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
     }
 
     if (!clip) {
-        QImage qimage = cb->image();
 
-        if (qimage.isNull())
+        QImage qimage = KisClipboardUtil::getImageFromClipboard();
+
+        if (qimage.isNull()) {
             return KisPaintDeviceSP(0);
+        }
 
-        KisConfig cfg;
+        KisConfig cfg(true);
         quint32 behaviour = cfg.pasteBehaviour();
         bool saveColorSetting = false;
 
@@ -263,8 +295,6 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
 
             dontPrompt.blockSignals(true);
 
-
-
             mb.setWindowTitle(i18nc("@title:window", "Missing Color Profile"));
             mb.setText(i18n("The image data you are trying to paste has no color profile information. How do you want to interpret these data? \n\n As Web (sRGB) -  Use standard colors that are displayed from computer monitors.  This is the most common way that images are stored. \n\nAs on Monitor - If you know a bit about color management and want to use your monitor to determine the color profile.\n\n"));
 
@@ -273,8 +303,6 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
             mb.addButton(i18n("As on &Monitor"), QMessageBox::AcceptRole);
             mb.addButton(i18n("Cancel"), QMessageBox::RejectRole);
             mb.addButton(&dontPrompt, QMessageBox::ActionRole);
-
-
 
             behaviour = mb.exec();
 
@@ -323,14 +351,14 @@ void KisClipboard::clipboardDataChanged()
         m_hasClip = false;
         QClipboard *cb = QApplication::clipboard();
         if (cb->mimeData()->hasImage()) {
-            QImage qimage = cb->image();
-            const QMimeData *cbData = cb->mimeData();
-            QByteArray mimeType("application/x-krita-selection");
 
-            if (cbData && cbData->hasFormat(mimeType))
+            QImage qimage = cb->image();
+            if (!qimage.isNull())
                 m_hasClip = true;
 
-            if (!qimage.isNull())
+            const QMimeData *cbData = cb->mimeData();
+            QByteArray mimeType("application/x-krita-selection");
+            if (cbData && cbData->hasFormat(mimeType))
                 m_hasClip = true;
         }
     }

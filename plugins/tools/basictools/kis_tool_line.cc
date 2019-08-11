@@ -41,15 +41,8 @@
 #include "kis_figure_painting_tool_helper.h"
 #include "kis_canvas2.h"
 
-
-#include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_path_paint_action.h>
-#include <recorder/kis_node_query_path.h>
-
 #include "kis_painting_information_builder.h"
 #include "kis_tool_line_helper.h"
-
-#define ENABLE_RECORDING
 
 const KisCoordinatesConverter* getCoordinatesConverter(KoCanvasBase * canvas)
 {
@@ -179,17 +172,20 @@ void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
 {
     NodePaintAbility nodeAbility = nodePaintAbility();
-    if (nodeAbility == NONE || !nodeEditable()) {
+    if (nodeAbility == UNPAINTABLE || !nodeEditable()) {
         event->ignore();
         return;
     }
 
     setMode(KisTool::PAINT_MODE);
 
+    const KisToolShape::ShapeAddInfo info =
+        shouldAddShape(currentNode());
+
     // Always show guideline on vector layers
     m_showGuideline = m_chkShowGuideline->isChecked() || nodeAbility != PAINT;
     updatePreviewTimer(m_showGuideline);
-    m_helper->setEnabled(nodeAbility == PAINT);
+    m_helper->setEnabled((nodeAbility == PAINT && !info.shouldAddShape) || info.shouldAddSelectionShape);
     m_helper->setUseSensors(m_chkUseSensors->isChecked());
     m_helper->start(event, canvas()->resourceManager());
 
@@ -237,7 +233,7 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
     if (m_chkShowPreview->isChecked()) {
         // If the cursor has moved a significant amount, immediately clear the
         // current preview and redraw. Otherwise, do slow redraws periodically.
-        auto updateDistance = (pixelToView(m_lastUpdatedPoint) - pixelToView(pos)).manhattanLength(); 
+        auto updateDistance = (pixelToView(m_lastUpdatedPoint) - pixelToView(pos)).manhattanLength();
         if (updateDistance > 10) {
             m_helper->clearPaint();
             m_longStrokeUpdateCompressor.stop();
@@ -267,11 +263,15 @@ void KisToolLine::endStroke()
 {
     NodePaintAbility nodeAbility = nodePaintAbility();
 
-    if (!m_strokeIsRunning || m_startPoint == m_endPoint || nodeAbility == NONE) {
+    if (!m_strokeIsRunning || m_startPoint == m_endPoint || nodeAbility == UNPAINTABLE) {
+        m_helper->clearPoints();
         return;
     }
 
-    if (nodeAbility == PAINT) {
+    const KisToolShape::ShapeAddInfo info =
+        shouldAddShape(currentNode());
+
+    if ((nodeAbility == PAINT && !info.shouldAddShape) || info.shouldAddSelectionShape) {
         updateStroke();
         m_helper->end();
     }

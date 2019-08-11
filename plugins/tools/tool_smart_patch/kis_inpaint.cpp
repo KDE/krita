@@ -595,8 +595,8 @@ public:
     //initialize field from an existing (possibly smaller) nearest neighbor field
     void initialize(const NearestNeighborField& nnf)
     {
-        float xscale = imSize.width() / nnf.imSize.width();
-        float yscale = imSize.height() / nnf.imSize.height();
+        float xscale = qreal(imSize.width()) / nnf.imSize.width();
+        float yscale = qreal(imSize.height()) / nnf.imSize.height();
 
         for (int y = 0; y < imSize.height(); y++) {
             for (int x = 0; x < imSize.width(); x++) {
@@ -761,10 +761,10 @@ private:
 
 public:
     Inpaint(KisPaintDeviceSP dev, KisPaintDeviceSP devMask, int _radius, QRect maskRect)
+    : devCache(dev)
+    , initial(new MaskedImage(dev, devMask, maskRect))
+    , radius(_radius)
     {
-        initial = new MaskedImage(dev, devMask, maskRect);
-        radius = _radius;
-        devCache = dev;
     }
     MaskedImageSP patch(void);
     MaskedImageSP patch_simple(void);
@@ -977,7 +977,7 @@ QRect patchImage(const KisPaintDeviceSP imageDev, const KisPaintDeviceSP maskDev
     QRect maskRect = getMaskBoundingBox(maskDev);
     QRect imageRect = imageDev->exactBounds();
 
-    float scale = 1 + (accuracy / 25); //higher accuracy means we include more surrounding area around the patch. Minimum 2x padding.
+    float scale = 1.0 + (accuracy / 25.0); //higher accuracy means we include more surrounding area around the patch. Minimum 2x padding.
     int dx = maskRect.width() * scale;
     int dy = maskRect.height() * scale;
     maskRect.adjust(-dx, -dy, dx, dy);

@@ -2,15 +2,11 @@ project(krita)
 
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 
-set(MIN_QT_VERSION 5.6.0)
-option(OVERRIDE_QT_VERSION "Use this to make it possible to build with Qt < 5.6.0. There will be bugs." OFF)
-if (OVERRIDE_QT_VERSION)
-    set(MIN_QT_VERSION 5.4.0)
-endif()
+set(MIN_QT_VERSION 5.9.0)
 
-set(MIN_FRAMEWORKS_VERSION 5.7.0)
+set(MIN_FRAMEWORKS_VERSION 5.44.0)
 
 if (POLICY CMP0002)
     cmake_policy(SET CMP0002 OLD)
@@ -52,6 +48,9 @@ if (POLICY CMP0064)
     cmake_policy(SET CMP0064 OLD)
 endif()
 
+if (POLICY CMP0071)
+    cmake_policy(SET CMP0071 OLD)
+endif()
 
 if (APPLE)
     set(APPLE_SUPPRESS_X11_WARNING TRUE)
@@ -61,10 +60,8 @@ if (APPLE)
     add_definitions(-mmacosx-version-min=10.11 -Wno-macro-redefined -Wno-deprecated-register)
 endif()
 
-if (LINUX)
-    if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WINDOWS)
-        add_definitions(-Werror=delete-incomplete)
-    endif()
+if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
+    add_definitions(-Wno-suggest-override -Wextra)
 endif()
 
  ######################
@@ -75,11 +72,11 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "4.1.0-pre-alpha")
+set(KRITA_VERSION_STRING "4.3.0-prealpha")
 # Major version: 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MAJOR 4)
 # Minor version: 0 for 4.0, 1 for 4.1, etc.
-set(KRITA_STABLE_VERSION_MINOR 1)
+set(KRITA_STABLE_VERSION_MINOR 3)
 # Bugfix release version, or 0 for before the first stable release
 set(KRITA_VERSION_RELEASE 0)
 # the 4th digit, really only used for the Windows installer:
@@ -133,19 +130,6 @@ if(GIT_SHA1)
    endif()
 endif()
 
-if(NOT DEFINED RELEASE_BUILD)
-    # estimate mode by CMAKE_BUILD_TYPE content if not set on cmdline
-    string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
-    set(RELEASE_BUILD_TYPES "release" "relwithdebinfo" "minsizerel")
-    list(FIND RELEASE_BUILD_TYPES "${CMAKE_BUILD_TYPE_TOLOWER}" INDEX)
-    if (INDEX EQUAL -1)
-        set(RELEASE_BUILD FALSE)
-    else()
-        set(RELEASE_BUILD TRUE)
-    endif()
-endif()
-message(STATUS "Release build: ${RELEASE_BUILD}")
-
 # create test make targets
 enable_testing()
 # collect list of broken tests, empty here to start fresh with each cmake run
@@ -186,7 +170,11 @@ endif ()
 
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
 configure_file(config-hide-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hide-safe-asserts.h)
-add_feature_info("Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
+add_feature_info("Hide Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
+
+option(USE_LOCK_FREE_HASH_TABLE "Use lock free hash table instead of blocking." ON)
+configure_file(config-hash-table-implementaion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hash-table-implementaion.h)
+add_feature_info("Lock free hash table" USE_LOCK_FREE_HASH_TABLE "Use lock free hash table instead of blocking.")
 
 option(FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true." OFF)
 add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true.")
@@ -194,6 +182,14 @@ add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a bi
 option(KRITA_ENABLE_BROKEN_TESTS "Enable tests that are marked as broken" OFF)
 add_feature_info("Enable Broken Tests" KRITA_ENABLE_BROKEN_TESTS "Runs broken test when \"make test\" is invoked (use -DKRITA_ENABLE_BROKEN_TESTS=ON to enable).")
 
+option(LIMIT_LONG_TESTS "Run long running unittests in a limited quick mode" ON)
+configure_file(config-limit-long-tests.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-limit-long-tests.h)
+add_feature_info("Limit long tests" LIMIT_LONG_TESTS "Run long running unittests in a limited quick mode")
+
+option(ENABLE_PYTHON_2 "Enables the compiler to look for Python 2.7 instead of Python 3. Some packaged scripts are not compatible with Python 2 and this should only be used if you really have to use 2.7." OFF)
+
+option(BUILD_KRITA_QT_DESIGNER_PLUGINS "Build Qt Designer plugins for Krita widgets" OFF)
+add_feature_info("Build Qt Designer plugins" BUILD_KRITA_QT_DESIGNER_PLUGINS "Builds Qt Designer plugins for Krita widgets (use -DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON to enable).")
 
 include(MacroJPEG)
 
@@ -218,18 +214,31 @@ int main(int argc, char *argv[]) {
 endfunction()
 
 if(MINGW)
-    find_package(PythonInterp 3.6 EXACT)
-    find_package(PythonLibs 3.6 EXACT)
+    if(ENABLE_PYTHON_2)
+        message(FATAL_ERROR "Python 2.7 is not supported on Windows at the moment.")
+    else(ENABLE_PYTHON_2)
+        find_package(PythonInterp 3.6 EXACT)
+        find_package(PythonLibs 3.6 EXACT)
+    endif(ENABLE_PYTHON_2)
     if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
-        find_package(PythonLibrary 3.6)
+        if(ENABLE_PYTHON_2)
+            find_package(PythonLibrary 2.7)
+        else(ENABLE_PYTHON_2)
+            find_package(PythonLibrary 3.6)
+        endif(ENABLE_PYTHON_2)
         TestCompileLinkPythonLibs(CAN_USE_PYTHON_LIBS)
         if (NOT CAN_USE_PYTHON_LIBS)
             message(FATAL_ERROR "Compiling with Python library failed, please check whether the architecture is correct. Python will be disabled.")
         endif (NOT CAN_USE_PYTHON_LIBS)
     endif (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 else(MINGW)
-    find_package(PythonInterp 3.0)
-    find_package(PythonLibrary 3.0)
+    if(ENABLE_PYTHON_2)
+        find_package(PythonInterp 2.7)
+        find_package(PythonLibrary 2.7)
+    else(ENABLE_PYTHON_2)
+        find_package(PythonInterp 3.0)
+        find_package(PythonLibrary 3.0)
+    endif(ENABLE_PYTHON_2)
 endif(MINGW)
 
  ########################
@@ -238,7 +247,7 @@ endif(MINGW)
 #########################
 ########################
 
-find_package(ECM 5.19 REQUIRED NOMODULE)
+find_package(ECM 5.22 REQUIRED NOMODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(ECMOptionalAddSubdirectory)
 include(ECMAddAppIcon)
@@ -260,7 +269,6 @@ include(KDECompilerSettings)
 # do not reorder to be alphabetical: this is the order in which the frameworks
 # depend on each other.
 find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
-        Archive
         Config
         WidgetsAddons
         Completion
@@ -270,6 +278,7 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         ItemModels
         ItemViews
         WindowSystem
+        Archive
 )
 
 # KConfig deprecated authorizeKAction. In order to be warning free,
@@ -294,11 +303,75 @@ find_package(Qt5 ${MIN_QT_VERSION}
         Concurrent
 )
 
+if (WIN32)
+    set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS})
+    set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES})
+
+    CHECK_CXX_SOURCE_COMPILES("
+#include <QCoreApplication>
+int main(int argc, char *argv[]) {
+QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI);
+}
+"
+    QT_HAS_WINTAB_SWITCH
+    )
+
+    unset(CMAKE_REQUIRED_INCLUDES)
+    unset(CMAKE_REQUIRED_LIBRARIES)
+
+    option(USE_QT_TABLET_WINDOWS "Do not use Krita's forked Wintab and Windows Ink support on Windows, but leave everything to Qt." ON)
+	add_feature_info("Use Qt's Windows Tablet Support" USE_QT_TABLET_WINDOWS "Do not use Krita's forked Wintab and Windows Ink support on Windows, but leave everything to Qt.")
+    configure_file(config_use_qt_tablet_windows.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_use_qt_tablet_windows.h)
+endif ()     
+
+
+set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
+set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES})
+
+CHECK_CXX_SOURCE_COMPILES("
+#include <QSurfaceFormat>
+int main(int argc, char *argv[]) {
+QSurfaceFormat fmt;
+fmt.setColorSpace(QSurfaceFormat::scRGBColorSpace);
+fmt.setColorSpace(QSurfaceFormat::bt2020PQColorSpace);
+}
+"
+HAVE_HDR
+)
+configure_file(config-hdr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hdr.h)
+
+CHECK_CXX_SOURCE_COMPILES("
+#include <QGuiApplication>
+int main(int argc, char *argv[]) {
+QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::Round);
+QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
+QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+}
+"
+HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+)
+configure_file(config-high-dpi-scale-factor-rounding-policy.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-high-dpi-scale-factor-rounding-policy.h)
+
+if (WIN32)
+    CHECK_CXX_SOURCE_COMPILES("
+#include <QtPlatformHeaders/QWindowsWindowFunctions>
+int main(int argc, char *argv[]) {
+QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
+}
+"
+    HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
+    )
+    configure_file(config-set-has-border-in-full-screen-default.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-set-has-border-in-full-screen-default.h)
+endif (WIN32)
+
+unset(CMAKE_REQUIRED_INCLUDES)
+unset(CMAKE_REQUIRED_LIBRARIES)
+
+
 include (MacroAddFileDependencies)
 include (MacroBoolTo01)
 include (MacroEnsureOutOfSourceBuild)
 macro_ensure_out_of_source_build("Compiling Krita inside the source directory is not possible. Please refer to the build instruction https://community.kde.org/Krita#Build_Instructions")
-
 
 
 # Note: OPTIONAL_COMPONENTS does not seem to be reliable
@@ -314,6 +387,7 @@ set_package_properties(Qt5Multimedia PROPERTIES
 macro_bool_to_01(Qt5Multimedia_FOUND HAVE_QT_MULTIMEDIA)
 configure_file(config-qtmultimedia.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qtmultimedia.h )
 
+if (NOT APPLE)
 find_package(Qt5Quick ${MIN_QT_VERSION})
 set_package_properties(Qt5Quick PROPERTIES
         DESCRIPTION "QtQuick"
@@ -329,7 +403,7 @@ set_package_properties(Qt5QuickWidgets PROPERTIES
         URL "http://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used for the touch gui for Krita")
-
+endif()
 
 if (NOT WIN32 AND NOT APPLE)
 
@@ -342,14 +416,6 @@ if (NOT WIN32 AND NOT APPLE)
         URL "http://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used to provide a dbus api on Linux")
-
-    find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION})
-    macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
-    set_package_properties(KF5KIO PROPERTIES
-        DESCRIPTION "KDE's KIO Framework"
-        URL "http://api.kde.org/frameworks-api/frameworks5-apidocs/kio/html/index.html"
-        TYPE OPTIONAL
-        PURPOSE "Optionally used for recent document handling")
 
     find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION})
     macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
@@ -376,9 +442,9 @@ add_definitions(
   -DQT_USE_QSTRINGBUILDER
   -DQT_STRICT_ITERATORS
   -DQT_NO_SIGNALS_SLOTS_KEYWORDS
-  -DQT_USE_FAST_OPERATOR_PLUS
-  -DQT_USE_FAST_CONCATENATION
   -DQT_NO_URL_CAST_FROM_STRING
+  -DQT_USE_FAST_CONCATENATION 
+  -DQT_USE_FAST_OPERATOR_PLUS
 )
 
 if (${Qt5_VERSION} VERSION_GREATER "5.8.0" )
@@ -397,8 +463,12 @@ add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
 # The reason for this mode is that the Debug mode disable inlining
 #
 if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS_KRITADEVS "-O3 -g" CACHE STRING "" FORCE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fext-numeric-literals")
+endif()
+
+option(KRITA_DEVS "For Krita developers. This modifies the DEBUG build type to use -O3 -g, while still enabling Q_ASSERT. This is necessary because the Qt5 cmake modules normally append QT_NO_DEBUG to any build type that is not labeled Debug")
+if (KRITA_DEVS)
+    set(CMAKE_CXX_FLAGS_DEBUG "-O3 -g" CACHE STRING "" FORCE)
 endif()
 
 if(UNIX)
@@ -417,6 +487,18 @@ endif()
 if(MINGW)
     string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
     string(REPLACE "-Wl,--export-all-symbols" "" CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+endif(MINGW)
+
+if(MINGW)
+    # Hack CMake's variables to tell AR to create thin archives to reduce unnecessary writes.
+    # Source of definition: https://github.com/Kitware/CMake/blob/v3.14.1/Modules/Platform/Windows-GNU.cmake#L128
+    # Thin archives: https://sourceware.org/binutils/docs/binutils/ar.html#index-thin-archives
+    macro(mingw_use_thin_archive lang)
+        foreach(rule CREATE_SHARED_MODULE CREATE_SHARED_LIBRARY LINK_EXECUTABLE)
+            string(REGEX REPLACE "(<CMAKE_AR> [^ T]+) " "\\1T " CMAKE_${lang}_${rule} "${CMAKE_${lang}_${rule}}")
+        endforeach()
+    endmacro()
+    mingw_use_thin_archive(CXX)
 endif(MINGW)
 
 # enable exceptions globally
@@ -458,7 +540,7 @@ if (APPLE)
 endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
-find_package(Boost 1.55 REQUIRED COMPONENTS system) 
+find_package(Boost 1.55 REQUIRED COMPONENTS system)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 ##
 ## Test for GNU Scientific Library
@@ -521,6 +603,13 @@ set_package_properties(GIF PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita GIF filter")
 
+find_package(HEIF "1.3.0")
+set_package_properties(HEIF PROPERTIES
+    DESCRIPTION "Library for loading and saving heif files."
+    URL "https://github.com/strukturag/libheif"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita HEIF filter")
+
 set(LIBRAW_MIN_VERSION  "0.16")
 find_package(LibRaw ${LIBRAW_MIN_VERSION})
 set_package_properties(LibRaw PROPERTIES
@@ -552,7 +641,7 @@ set_package_properties(PythonLibrary PROPERTIES
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYTHONLIBS_FOUND HAVE_PYTHONLIBS)
 
-find_package(SIP "4.18.0")
+find_package(SIP "4.19.13")
 set_package_properties(SIP PROPERTIES
     DESCRIPTION "Support for generating SIP Python bindings"
     URL "https://www.riverbankcomputing.com/software/sip/download"
@@ -591,11 +680,7 @@ set_package_properties(Eigen3 PROPERTIES
 ##
 ## Test for exiv2
 ##
-find_package(Exiv2 0.16 REQUIRED)
-set_package_properties(Exiv2 PROPERTIES
-    DESCRIPTION "Image metadata library and tools"
-    URL "http://www.exiv2.org"
-    PURPOSE "Required by Krita")
+find_package(LibExiv2 0.16 REQUIRED)
 
 ##
 ## Test for lcms
@@ -620,7 +705,7 @@ endif()
 set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 set(HAVE_VC FALSE)
-if (NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm") 
+if (NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
     if(NOT MSVC)
         find_package(Vc 1.1.0)
         set_package_properties(Vc PROPERTIES
@@ -630,8 +715,8 @@ if (NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
             PURPOSE "Required by the Krita for vectorization")
         macro_bool_to_01(Vc_FOUND HAVE_VC)
     endif()
-    configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
 endif()
+configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
 
 if(HAVE_VC)
     message(STATUS "Vc found!")
@@ -641,12 +726,12 @@ if(HAVE_VC)
     include (VcMacros)
 
     if(Vc_COMPILER_IS_CLANG)
-        set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast")
+        set(ADDITIONAL_VC_FLAGS "-ffp-contract=fast")
         if(NOT WIN32)
             set(ADDITIONAL_VC_FLAGS "${ADDITIONAL_VC_FLAGS} -fPIC")
         endif()
     elseif (NOT MSVC)
-        set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast")
+        set(ADDITIONAL_VC_FLAGS "-fabi-version=0 -ffp-contract=fast")
         if(NOT WIN32)
             set(ADDITIONAL_VC_FLAGS "${ADDITIONAL_VC_FLAGS} -fPIC")
         endif()
@@ -688,6 +773,25 @@ set_package_properties(Poppler PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita PDF filter.")
 
+
+##
+## Test for quazip
+## 
+find_package(QuaZip 0.6)
+set_package_properties(QuaZip PROPERTIES
+    DESCRIPTION "A library for reading and writing zip files"
+    URL "https://stachenov.github.io/quazip/"
+    TYPE REQUIRED
+    PURPOSE "Needed for reading and writing KRA and ORA files"
+)
+
+
+
+##
+## Test for Atomics
+##
+include(CheckAtomic)
+
  ############################
 #############################
 ## Add Krita helper macros ##
@@ -710,7 +814,9 @@ include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}
 
 add_subdirectory(libs)
 add_subdirectory(plugins)
-add_subdirectory(benchmarks)
+if (BUILD_TESTING)
+    add_subdirectory(benchmarks)
+endif()
 add_subdirectory(krita)
 
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
@@ -721,7 +827,7 @@ check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
 
 if(WIN32)
-    include(${CMAKE_CURRENT_LIST_DIR}/packaging/windows/ConfigureInstallerNsis.cmake)
+    include(${CMAKE_CURRENT_LIST_DIR}/packaging/windows/installer/ConfigureInstallerNsis.cmake)
 endif()
 
 message("\nBroken tests:")
@@ -730,3 +836,8 @@ foreach(tst ${KRITA_BROKEN_TESTS})
 endforeach()
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po )
+  find_package(KF5I18n CONFIG REQUIRED)
+  ki18n_install(po)
+endif()

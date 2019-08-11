@@ -52,6 +52,7 @@ inline double drand48()
 //#define SAVE_OUTPUT
 
 static const int LINES = 20;
+static const int RECTANGLES = 20;
 const QString OUTPUT_FORMAT = ".png";
 
 void KisStrokeBenchmark::initTestCase()
@@ -76,6 +77,8 @@ void KisStrokeBenchmark::initTestCase()
     initCurvePoints(width, height);
     // for the lines test
     initLines(width,height);
+    // for the rectangles test
+    initRectangles(width, height);
 }
 
 void KisStrokeBenchmark::init()
@@ -113,6 +116,32 @@ void KisStrokeBenchmark::initLines(int width, int height)
         m_endPoints.append(QPointF(ex * width,ey * height));
     }
 }
+
+void KisStrokeBenchmark::initRectangles(int width, int height)
+{
+    qreal margin = 0.5;
+    qreal skip = 0.01;
+
+    qreal marginWidth = margin*width;
+    qreal marginHeight = margin*height;
+
+    qreal skipWidth = skip*width >= 1 ? skip*width : 1;
+    qreal skipHeight = skip*width >= 1 ? skip*width : 1;
+
+    // "concentric" rectangles
+
+    for (int i = 0; i < RECTANGLES; i++){
+        QPoint corner1 = QPoint(marginWidth + i*skipWidth, marginHeight + i*skipHeight);
+        QPoint corner2 = QPoint(width - marginWidth - i*skipWidth, height - marginHeight - i*skipHeight);
+
+        if(corner1.x() < corner2.x() && corner1.y() < corner2.y()) {
+            // if the rectangle is not empty
+            m_rectangleLeftLowerCorners.append(corner1);
+            m_rectangleRightUpperCorners.append(corner2);
+        }
+    }
+}
+
 
 
 void KisStrokeBenchmark::cleanupTestCase()
@@ -327,6 +356,52 @@ void KisStrokeBenchmark::colorsmudgeRL()
     benchmarkStroke(presetFileName);
 }
 
+
+void KisStrokeBenchmark::roundMarker()
+{
+    // Quick Brush engine ( b) Basic - 1 brush, size 40px)
+    QString presetFileName = "roundmarker40px.kpp";
+    benchmarkStroke(presetFileName);
+}
+
+void KisStrokeBenchmark::roundMarkerRandomLines()
+{
+    // Quick Brush engine ( b) Basic - 1 brush, size 40px)
+    QString presetFileName = "roundmarker40px.kpp";
+    benchmarkRandomLines(presetFileName);
+}
+
+void KisStrokeBenchmark::roundMarkerRectangle()
+{
+    // Quick Brush engine ( b) Basic - 1 brush, size 40px)
+    QString presetFileName = "roundmarker40px.kpp";
+    benchmarkStroke(presetFileName);
+}
+
+
+void KisStrokeBenchmark::roundMarkerHalfPixel()
+{
+    // Quick Brush engine ( b) Basic - 1 brush, size 0.5px)
+    QString presetFileName = "roundmarker05px.kpp";
+    benchmarkStroke(presetFileName);
+}
+
+void KisStrokeBenchmark::roundMarkerRandomLinesHalfPixel()
+{
+    // Quick Brush engine ( b) Basic - 1 brush, size 0.5px)
+    QString presetFileName = "roundmarker05px.kpp";
+    benchmarkRandomLines(presetFileName);
+}
+
+void KisStrokeBenchmark::roundMarkerRectangleHalfPixel()
+{
+    // Quick Brush engine ( b) Basic - 1 brush, size 0.5px)
+    QString presetFileName = "roundmarker05px.kpp";
+    benchmarkStroke(presetFileName);
+}
+
+
+
 /*
 void KisStrokeBenchmark::predefinedBrush()
 {
@@ -462,6 +537,37 @@ void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
 #endif
 }
 
+
+
+void KisStrokeBenchmark::benchmarkRectangle(QString presetFileName)
+{
+    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
+    bool loadedOk = preset->load();
+    if (!loadedOk){
+        dbgKrita << "The preset was not loaded correctly. Done.";
+        return;
+    }else{
+        dbgKrita << "preset : " << presetFileName;
+    }
+    m_painter->setPaintOpPreset(preset, m_layer, m_image);
+
+    int rectangleNumber = m_rectangleLeftLowerCorners.size(); // see initRectangles
+
+    QBENCHMARK{
+        KisDistanceInformation currentDistance;
+        for (int i = 0; i < rectangleNumber; i++){
+            QPainterPath path;
+            QRect rect = QRect(m_rectangleLeftLowerCorners[i], m_rectangleRightUpperCorners[i]);
+            path.addRect(rect);
+            m_painter->paintPainterPath(path);
+        }
+    }
+
+#ifdef SAVE_OUTPUT
+    m_layer->paintDevice()->convertToQImage(0).save(m_outputPath + presetFileName + "_rectangle" + OUTPUT_FORMAT);
+#endif
+}
+
 void KisStrokeBenchmark::benchmarkStroke(QString presetFileName)
 {
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
@@ -493,7 +599,8 @@ void KisStrokeBenchmark::benchmarkRand48()
 QBENCHMARK
     {
         for (int i = 0 ; i < COUNT; i++){
-            drand48();
+            double result = drand48();
+            Q_UNUSED(result);
         }
     }
 }

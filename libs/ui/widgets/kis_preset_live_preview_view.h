@@ -62,7 +62,7 @@ public:
     /**
      * @brief set the current preset from resource manager for the live preview to use.
      * Good to call this every stroke update in case the preset has changed
-     * @param the current preset from the resource manager
+     * @param preset the current preset from the resource manager
      */
     void setCurrentPreset(KisPaintOpPresetSP preset);
     void updateStroke();
@@ -117,7 +117,7 @@ private:
 
     /// internal reference for internal brush size
     /// used to check if our brush size has changed
-    /// do zooming and other things internall if it has changed
+    /// do zooming and other things internally if it has changed
     float m_currentBrushSize = 1.0;
 
     /// the range of brush sizes that will control zooming in/out

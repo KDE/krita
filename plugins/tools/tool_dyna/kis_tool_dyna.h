@@ -21,7 +21,7 @@
 
 #include "kis_tool_freehand.h"
 
-#include "KoToolFactoryBase.h"
+#include "KisToolPaintFactoryBase.h"
 #include "KoPointerEvent.h"
 
 #include <flake/kis_node_shape.h>
@@ -40,16 +40,7 @@ class KoCanvasBase;
 class DynaFilter
 {
 public:
-    DynaFilter() {
-        curx = 0;
-        cury = 0;
-        lastx = 0;
-        lasty = 0;
-        velx = 0.0;
-        vely = 0.0;
-        accx = 0.0;
-        accy = 0.0;
-    }
+    DynaFilter() {}
 
     void init(qreal x, qreal y) {
         curx = x;
@@ -65,13 +56,13 @@ public:
     ~DynaFilter() {}
 
 public:
-    qreal curx, cury;
-    qreal velx, vely, vel;
-    qreal accx, accy, acc;
-    qreal angx, angy;
-    qreal mass, drag;
-    qreal lastx, lasty;
-    bool fixedangle;
+    qreal curx {0.0}, cury {0.0};
+    qreal velx {0.0}, vely {0.0}, vel {0.0};
+    qreal accx {0.0}, accy {0.0}, acc {0.0};
+    qreal angx {0.0}, angy {0.0};
+    qreal mass {0.0}, drag {0.0};
+    qreal lastx {0.0}, lasty {0.0};
+    bool fixedangle {false};
 };
 
 
@@ -149,19 +140,16 @@ private:
 };
 
 
-class KisToolDynaFactory : public KoToolFactoryBase
+class KisToolDynaFactory : public KisToolPaintFactoryBase
 {
 
 public:
     KisToolDynaFactory()
-            : KoToolFactoryBase("KritaShape/KisToolDyna") {
+            : KisToolPaintFactoryBase("KritaShape/KisToolDyna") {
 
         setToolTip(i18n("Dynamic Brush Tool"));
-
-        // Temporarily
         setSection(TOOL_TYPE_SHAPE);
         setIconName(koIconNameCStr("krita_tool_dyna"));
-        // TODO
         //setShortcut(QKeySequence(Qt::Key_F));
         setPriority(10);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
@@ -169,7 +157,7 @@ public:
 
     ~KisToolDynaFactory() override {}
 
-    KoToolBase * createTool(KoCanvasBase *canvas) override {
+    KoToolBase *createTool(KoCanvasBase *canvas) override {
         return new KisToolDyna(canvas);
     }
 

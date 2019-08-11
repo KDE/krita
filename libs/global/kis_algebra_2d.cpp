@@ -350,12 +350,13 @@ int quadraticEquation(qreal a, qreal b, qreal c, qreal *x1, qreal *x2)
     int numSolutions = 0;
 
     const qreal D = pow2(b) - 4 * a * c;
+    const qreal eps = 1e-14;
 
-    if (D < 0) {
-        return 0;
-    } else if (qFuzzyCompare(D, 0)) {
+    if (qAbs(D) <= eps) {
         *x1 = -b / (2 * a);
         numSolutions = 1;
+    } else if (D < 0) {
+        return 0;
     } else {
         const qreal sqrt_D = std::sqrt(D);
 
@@ -382,7 +383,7 @@ QVector<QPointF> intersectTwoCircles(const QPointF &center1, qreal r1,
     if (centerDistance < qAbs(r1 - r2)) return points;
 
     if (centerDistance < qAbs(r1 - r2) + 0.001) {
-        qDebug() << "Skipping intersection" << ppVar(center1) << ppVar(center2) << ppVar(r1) << ppVar(r2) << ppVar(centerDistance) << ppVar(qAbs(r1-r2));
+        dbgKrita << "Skipping intersection" << ppVar(center1) << ppVar(center2) << ppVar(r1) << ppVar(r2) << ppVar(centerDistance) << ppVar(qAbs(r1-r2));
         return points;
     }
 
@@ -393,7 +394,9 @@ QVector<QPointF> intersectTwoCircles(const QPointF &center1, qreal r1,
         0.5 * (pow2(x_kp1) +
                pow2(y_kp1) + pow2(r1) - pow2(r2));
 
-    if (qFuzzyCompare(diff.y(), 0)) {
+    const qreal eps = 1e-6;
+
+    if (qAbs(diff.y()) < eps) {
         qreal x = F2 / diff.x();
         qreal y1, y2;
         int result = KisAlgebra2D::quadraticEquation(
@@ -528,7 +531,7 @@ DecomposedMatix::DecomposedMatix(const QTransform &t0)
     if (!qFuzzyCompare(t.m33(), 1.0)) {
         const qreal invM33 = 1.0 / t.m33();
 
-        for (auto row : rows) {
+        for (auto &row : rows) {
             row *= invM33;
         }
     }

@@ -31,6 +31,7 @@ class KoToolProxy;
 class KisDisplayFilter;
 class KisDisplayColorConverter;
 class QBitArray;
+class KoColorSpace;
 
 #include "kis_types.h"
 #include "kis_ui_types.h"
@@ -63,13 +64,16 @@ public:
     /// set the specified display filter on the canvas
     virtual void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) = 0;
 
+    /// set/update the color space of the attached image
+    virtual void notifyImageColorSpaceChanged(const KoColorSpace *cs) = 0;
+
     virtual void setWrapAroundViewingMode(bool value) = 0;
 
     // Called from KisCanvas2::channelSelectionChanged
     virtual void channelSelectionChanged(const QBitArray &channelFlags) = 0;
 
     // Called from KisCanvas2::slotSetDisplayProfile
-    virtual void setDisplayProfile(KisDisplayColorConverter *colorConverter) = 0;
+    virtual void setDisplayColorConverter(KisDisplayColorConverter *colorConverter) = 0;
 
     // Called from KisCanvas2::finishResizingImage
     virtual void finishResizingImage(qint32 w, qint32 h) = 0;
@@ -79,14 +83,17 @@ public:
 
     // Called from KisCanvas2::updateCanvasProjection
     virtual QRect updateCanvasProjection(KisUpdateInfoSP info) = 0;
+    virtual QVector<QRect> updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects) = 0;
 
     /**
-     * Returns true if the asynchromous engine of the canvas
+     * Returns true if the asynchronous engine of the canvas
      * (e.g. openGL pipeline) is busy with processing of the previous
      * update events. This will make KisCanvas2 to postpone and
      * compress update events.
      */
     virtual bool isBusy() const = 0;
+
+    virtual void setLodResetInProgress(bool value) = 0;
 };
 
 #endif // _KIS_ABSTRACT_CANVAS_WIDGET_

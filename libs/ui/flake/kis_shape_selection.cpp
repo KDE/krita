@@ -24,8 +24,8 @@
 #include <QTimer>
 #include <kundo2command.h>
 #include <QMimeData>
-
-#include <QTemporaryFile>
+#include <QApplication>
+#include <QThread>
 
 #include <KoShapeStroke.h>
 #include <KoPathShape.h>
@@ -66,21 +66,24 @@
 
 #include <kis_debug.h>
 
-KisShapeSelection::KisShapeSelection(KisImageWSP image, KisSelectionWSP selection)
-        : KoShapeLayer(m_model = new KisShapeSelectionModel(image, selection, this))
-        , m_image(image)
+KisShapeSelection::KisShapeSelection(KoShapeControllerBase *shapeControllerBase, KisImageWSP image, KisSelectionWSP selection)
+    : KoShapeLayer(m_model = new KisShapeSelectionModel(image, selection, this))
+    , m_image(image)
+    , m_shapeControllerBase(shapeControllerBase)
 {
     Q_ASSERT(m_image);
     setShapeId("KisShapeSelection");
     setSelectable(false);
     m_converter = new KisImageViewConverter(image);
-    m_canvas = new KisShapeSelectionCanvas();
+    m_canvas = new KisShapeSelectionCanvas(shapeControllerBase);
     m_canvas->shapeManager()->addShape(this);
 
     m_model->setObjectName("KisShapeSelectionModel");
     m_model->moveToThread(image->thread());
     m_canvas->setObjectName("KisShapeSelectionCanvas");
     m_canvas->moveToThread(image->thread());
+
+    connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
 }
 
 KisShapeSelection::~KisShapeSelection()
@@ -91,11 +94,12 @@ KisShapeSelection::~KisShapeSelection()
 }
 
 KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection* selection)
-        : KoShapeLayer(m_model = new KisShapeSelectionModel(rhs.m_image, selection, this))
+    : KoShapeLayer(m_model = new KisShapeSelectionModel(rhs.m_image, selection, this))
 {
     m_image = rhs.m_image;
+    m_shapeControllerBase = rhs.m_shapeControllerBase;
     m_converter = new KisImageViewConverter(m_image);
-    m_canvas = new KisShapeSelectionCanvas();
+    m_canvas = new KisShapeSelectionCanvas(m_shapeControllerBase);
     m_canvas->shapeManager()->addShape(this);
 
     Q_FOREACH (KoShape *shape, rhs.shapes()) {
@@ -107,6 +111,12 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
 
 KisSelectionComponent* KisShapeSelection::clone(KisSelection* selection)
 {
+    /**
+     * TODO: make cloning of vector selections safe! Right now it crashes
+     * on Windows because of manipulations with timers from non-gui thread.
+     */
+    KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+
     return new KisShapeSelection(*this, selection);
 }
 
@@ -159,10 +169,10 @@ bool KisShapeSelection::loadSelection(KoStore* store)
 
     KoXmlElement contents = odfStore.contentDoc().documentElement();
 
-//    dbgKrita <<"Start loading OASIS document..." << contents.text();
-//    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().localName();
-//    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
-//    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().isElement();
+    //    dbgKrita <<"Start loading OASIS document..." << contents.text();
+    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().localName();
+    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
+    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().isElement();
 
     KoXmlElement body(KoXml::namedItemNS(contents, KoXmlNS::office, "body"));
 
@@ -196,7 +206,7 @@ bool KisShapeSelection::loadSelection(KoStore* store)
 
     if (master) {
         const KoXmlElement *style = odfStore.styles().findStyle(
-                                        master->attributeNS(KoXmlNS::style, "page-layout-name", QString()));
+                    master->attributeNS(KoXmlNS::style, "page-layout-name", QString()));
         KoPageLayout pageLayout;
         pageLayout.loadOdf(*style);
         setSize(QSizeF(pageLayout.width, pageLayout.height));
@@ -294,13 +304,23 @@ void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection, const QR
     renderSelection(projection, r);
 }
 
-void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect& r)
+void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect& requestedRect)
 {
-    Q_ASSERT(projection);
-    Q_ASSERT(m_image);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(projection);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_image);
 
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;
+
+    const QPainterPath selectionOutline = outlineCache();
+
+    if (*projection->defaultPixel().data() == OPACITY_TRANSPARENT_U8) {
+        projection->clear(requestedRect);
+    } else {
+        KoColor transparentColor(Qt::transparent, projection->colorSpace());
+        projection->fill(requestedRect, transparentColor);
+    }
+    const QRect r = requestedRect & selectionOutline.boundingRect().toAlignedRect();
 
     QImage polygonMaskImage(MASK_IMAGE_WIDTH, MASK_IMAGE_HEIGHT, QImage::Format_ARGB32);
     QPainter maskPainter(&polygonMaskImage);
@@ -312,7 +332,7 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
 
             maskPainter.fillRect(polygonMaskImage.rect(), Qt::black);
             maskPainter.translate(-x, -y);
-            maskPainter.fillPath(outlineCache(), Qt::white);
+            maskPainter.fillPath(selectionOutline, Qt::white);
             maskPainter.translate(x, y);
 
             qint32 rectWidth = qMin(r.x() + r.width() - x, MASK_IMAGE_WIDTH);
@@ -332,27 +352,29 @@ KoShapeManager* KisShapeSelection::shapeManager() const
 }
 
 KisShapeSelectionFactory::KisShapeSelectionFactory()
-        : KoShapeFactoryBase("KisShapeSelection", "selection shape container")
+    : KoShapeFactoryBase("KisShapeSelection", "selection shape container")
 {
     setHidden(true);
 }
 
 void KisShapeSelection::moveX(qint32 x)
 {
-    Q_FOREACH (KoShape* shape, shapeManager()->shapes()) {
-        if (shape != this) {
-            QPointF pos = shape->position();
-            shape->setPosition(QPointF(pos.x() + x/m_image->xRes(), pos.y()));
-        }
-    }
+    const QPointF diff(x / m_image->xRes(), 0);
+    emit sigMoveShapes(diff);
 }
 
 void KisShapeSelection::moveY(qint32 y)
 {
+    const QPointF diff(0, y / m_image->yRes());
+    emit sigMoveShapes(diff);
+}
+
+void KisShapeSelection::slotMoveShapes(const QPointF &diff)
+{
     Q_FOREACH (KoShape* shape, shapeManager()->shapes()) {
         if (shape != this) {
             QPointF pos = shape->position();
-            shape->setPosition(QPointF(pos.x(), pos.y() + y/m_image->yRes()));
+            shape->setPosition(pos + diff);
         }
     }
 }
@@ -363,7 +385,7 @@ KUndo2Command* KisShapeSelection::transform(const QTransform &transform) {
     if(shapes.isEmpty()) return 0;
 
     QTransform realTransform = m_converter->documentToView() *
-        transform * m_converter->viewToDocument();
+            transform * m_converter->viewToDocument();
 
     QList<QTransform> oldTransformations;
     QList<QTransform> newTransformations;

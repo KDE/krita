@@ -25,6 +25,7 @@
 
 #include <klocalizedstring.h>
 #include <kis_node.h>
+#include <kis_group_layer.h>
 #include <kis_external_layer_iface.h>
 #include <kis_transaction.h>
 #include <kis_painter.h>
@@ -38,54 +39,44 @@
 #include "kis_projection_leaf.h"
 #include "kis_modify_transform_mask_command.h"
 
+#include "kis_sequential_iterator.h"
+#include "kis_selection_mask.h"
+#include "kis_image_config.h"
+#include "kis_layer_utils.h"
+#include <QQueue>
+#include <KisDeleteLaterWrapper.h>
+#include "transform_transaction_properties.h"
+#include "krita_container_utils.h"
+#include "commands_new/kis_saved_commands.h"
+#include "kis_command_ids.h"
+#include "KisRunnableStrokeJobUtils.h"
+#include "commands_new/KisHoldUIUpdatesCommand.h"
 
-TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
+
+TransformStrokeStrategy::TransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
+                                                 bool workRecursively,
+                                                 const QString &filterId,
+                                                 bool forceReset,
+                                                 KisNodeSP rootNode,
                                                  KisSelectionSP selection,
-                                                 KisStrokeUndoFacade *undoFacade)
+                                                 KisStrokeUndoFacade *undoFacade,
+                                                 KisUpdatesFacade *updatesFacade)
     : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Transform"), false, undoFacade),
+      m_updatesFacade(updatesFacade),
+      m_mode(mode),
+      m_workRecursively(workRecursively),
+      m_filterId(filterId),
+      m_forceReset(forceReset),
       m_selection(selection)
 {
-    if (rootNode->childCount() || !rootNode->paintDevice()) {
-        KisPaintDeviceSP device;
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!selection || !dynamic_cast<KisTransformMask*>(rootNode.data()));
 
-        if (KisTransformMask* tmask =
-            dynamic_cast<KisTransformMask*>(rootNode.data())) {
-
-            device = tmask->buildPreviewDevice();
-
-            /**
-             * When working with transform mask, selections are not
-             * taken into account.
-             */
-            m_selection = 0;
-        } else {
-            rootNode->projectionLeaf()->explicitlyRegeneratePassThroughProjection();
-            device = rootNode->projection();
-        }
-
-        m_previewDevice = createDeviceCache(device);
-
-    } else {
-        m_previewDevice = createDeviceCache(rootNode->paintDevice());
-        putDeviceCache(rootNode->paintDevice(), m_previewDevice);
-    }
-
-    Q_ASSERT(m_previewDevice);
-    m_savedRootNode = rootNode;
+    m_rootNode = rootNode;
+    setMacroId(KisCommandUtils::TransformToolId);
 }
 
 TransformStrokeStrategy::~TransformStrokeStrategy()
 {
-}
-
-KisPaintDeviceSP TransformStrokeStrategy::previewDevice() const
-{
-    return m_previewDevice;
-}
-
-KisSelectionSP TransformStrokeStrategy::realSelection() const
-{
-    return m_selection;
 }
 
 KisPaintDeviceSP TransformStrokeStrategy::createDeviceCache(KisPaintDeviceSP dev)
@@ -140,10 +131,139 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     TransformData *td = dynamic_cast<TransformData*>(data);
     ClearSelectionData *csd = dynamic_cast<ClearSelectionData*>(data);
+    PreparePreviewData *ppd = dynamic_cast<PreparePreviewData*>(data);
+    TransformAllData *runAllData = dynamic_cast<TransformAllData*>(data);
 
-    if(td) {
-        m_savedTransformArgs = td->config;
 
+    if (runAllData) {
+        m_savedTransformArgs = runAllData->config;
+
+        QVector<KisStrokeJobData *> mutatedJobs;
+        Q_FOREACH (KisNodeSP node, m_processedNodes) {
+            mutatedJobs << new TransformData(TransformData::PAINT_DEVICE,
+                                             runAllData->config,
+                                             node);
+        }
+        mutatedJobs << new TransformData(TransformData::SELECTION,
+                                         runAllData->config,
+                                         m_rootNode);
+        addMutatedJobs(mutatedJobs);
+
+    } else if (ppd) {
+        KisNodeSP rootNode = m_rootNode;
+        KisNodeList processedNodes = m_processedNodes;
+        KisPaintDeviceSP previewDevice;
+
+
+        if (rootNode->childCount() || !rootNode->paintDevice()) {
+            if (KisTransformMask* tmask =
+                dynamic_cast<KisTransformMask*>(rootNode.data())) {
+                previewDevice = createDeviceCache(tmask->buildPreviewDevice());
+
+                KIS_SAFE_ASSERT_RECOVER(!m_selection) {
+                    m_selection = 0;
+                }
+
+            } else if (KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(rootNode.data())) {
+                const QRect bounds = group->image()->bounds();
+
+                KisImageSP clonedImage = new KisImage(0,
+                                                      bounds.width(),
+                                                      bounds.height(),
+                                                      group->colorSpace(),
+                                                      "transformed_image");
+
+                KisGroupLayerSP clonedGroup = dynamic_cast<KisGroupLayer*>(group->clone().data());
+
+                // In case the group is pass-through, it needs to be disabled for the preview,
+                //   otherwise it will crash (no parent for a preview leaf).
+                // Also it needs to be done before setting the root layer for clonedImage.
+                // Result: preview for pass-through group is the same as for standard group
+                //   (i.e. filter layers in the group won't affect the layer stack for a moment).
+                clonedGroup->setPassThroughMode(false);
+                clonedImage->setRootLayer(clonedGroup);
+
+                QQueue<KisNodeSP> linearizedSrcNodes;
+                KisLayerUtils::recursiveApplyNodes(rootNode, [&linearizedSrcNodes] (KisNodeSP node) {
+                    linearizedSrcNodes.enqueue(node);
+                });
+
+                KisLayerUtils::recursiveApplyNodes(KisNodeSP(clonedGroup), [&linearizedSrcNodes, processedNodes] (KisNodeSP node) {
+                    KisNodeSP srcNode = linearizedSrcNodes.dequeue();
+
+                    if (!processedNodes.contains(srcNode)) {
+                        node->setVisible(false);
+                    }
+                });
+
+                clonedImage->refreshGraph();
+
+                KisLayerUtils::forceAllDelayedNodesUpdate(clonedGroup);
+                clonedImage->waitForDone();
+
+                previewDevice = createDeviceCache(clonedImage->projection());
+                previewDevice->setDefaultBounds(group->projection()->defaultBounds());
+
+                // we delete the cloned image in GUI thread to ensure
+                // no signals are still pending
+                makeKisDeleteLaterWrapper(clonedImage)->deleteLater();
+
+            } else {
+                rootNode->projectionLeaf()->explicitlyRegeneratePassThroughProjection();
+                previewDevice = createDeviceCache(rootNode->projection());
+            }
+
+
+
+        } else {
+            KisPaintDeviceSP cacheDevice = createDeviceCache(rootNode->paintDevice());
+
+            if (dynamic_cast<KisSelectionMask*>(rootNode.data())) {
+                KIS_SAFE_ASSERT_RECOVER (cacheDevice->colorSpace()->colorModelId() == GrayAColorModelID &&
+                                         cacheDevice->colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
+
+                    cacheDevice->convertTo(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id()));
+                }
+
+                previewDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+                const QRect srcRect = cacheDevice->exactBounds();
+
+                KisSequentialConstIterator srcIt(cacheDevice, srcRect);
+                KisSequentialIterator dstIt(previewDevice, srcRect);
+
+                const int pixelSize = previewDevice->colorSpace()->pixelSize();
+
+
+                KisImageConfig cfg(true);
+                KoColor pixel(cfg.selectionOverlayMaskColor(), previewDevice->colorSpace());
+
+                const qreal coeff = 1.0 / 255.0;
+                const qreal baseOpacity = 0.5;
+
+                while (srcIt.nextPixel() && dstIt.nextPixel()) {
+                    qreal gray = srcIt.rawDataConst()[0];
+                    qreal alpha = srcIt.rawDataConst()[1];
+
+                    pixel.setOpacity(quint8(gray * alpha * baseOpacity * coeff));
+                    memcpy(dstIt.rawData(), pixel.data(), pixelSize);
+                }
+
+            } else {
+                previewDevice = cacheDevice;
+            }
+
+            putDeviceCache(rootNode->paintDevice(), cacheDevice);
+        }
+
+        QPainterPath selectionOutline;
+        if (m_selection && m_selection->outlineCacheValid()) {
+            selectionOutline = m_selection->outlineCache();
+        } else if (previewDevice) {
+            selectionOutline.addRect(previewDevice->exactBounds());
+        }
+
+        emit sigPreviewDeviceReady(previewDevice, selectionOutline);
+    } else if(td) {
         if (td->destination == TransformData::PAINT_DEVICE) {
             QRect oldExtent = td->node->extent();
             KisPaintDeviceSP device = td->node->paintDevice();
@@ -163,7 +283,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                   KisStrokeJobData::NORMAL);
 
                 td->node->setDirty(oldExtent | td->node->extent());
-            } if (KisExternalLayer *extLayer =
+            } else if (KisExternalLayer *extLayer =
                   dynamic_cast<KisExternalLayer*>(td->node.data())) {
 
                 if (td->config.mode() == ToolTransformArgs::FREE_TRANSFORM ||
@@ -208,11 +328,28 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         }
     } else if (csd) {
         KisPaintDeviceSP device = csd->node->paintDevice();
+
         if (device && !checkBelongsToSelection(device)) {
             if (!haveDeviceInCache(device)) {
                 putDeviceCache(device, createDeviceCache(device));
             }
             clearSelection(device);
+
+            /**
+             * Selection masks might have an overlay enabled, we should disable that
+             */
+            if (KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(csd->node.data())) {
+                KisSelectionSP selection = mask->selection();
+                if (selection) {
+                    selection->setVisible(false);
+                    m_deactivatedSelections.append(selection);
+                    mask->setDirty();
+                }
+            }
+        } else if (KisExternalLayer *externalLayer = dynamic_cast<KisExternalLayer*>(csd->node.data())) {
+            externalLayer->projectionLeaf()->setTemporaryHiddenFromRendering(true);
+            externalLayer->setDirty();
+            m_hiddenProjectionLeaves.append(csd->node);
         } else if (KisTransformMask *transformMask =
                    dynamic_cast<KisTransformMask*>(csd->node.data())) {
 
@@ -264,27 +401,134 @@ struct TransformExtraData : public KUndo2CommandExtraData
 {
     ToolTransformArgs savedTransformArgs;
     KisNodeSP rootNode;
+    KisNodeList transformedNodes;
+
+    KUndo2CommandExtraData* clone() const override {
+        return new TransformExtraData(*this);
+    }
 };
 
 void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
 {
     TransformExtraData *data = new TransformExtraData();
     data->savedTransformArgs = m_savedTransformArgs;
-    data->rootNode = m_savedRootNode;
+    data->rootNode = m_rootNode;
+    data->transformedNodes = m_processedNodes;
 
     command->setExtraData(data);
+
+    KisSavedMacroCommand *macroCommand = dynamic_cast<KisSavedMacroCommand*>(command);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(macroCommand);
+
+    if (m_overriddenCommand && macroCommand) {
+        macroCommand->setOverrideInfo(m_overriddenCommand, m_skippedWhileMergeCommands);
+    }
+
+    KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(command);
 }
 
-bool TransformStrokeStrategy::fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode)
+bool TransformStrokeStrategy::fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode, KisNodeList *transformedNodes)
 {
     const TransformExtraData *data = dynamic_cast<const TransformExtraData*>(command->extraData());
 
     if (data) {
         *args = data->savedTransformArgs;
         *rootNode = data->rootNode;
+        *transformedNodes = data->transformedNodes;
     }
 
     return bool(data);
+}
+
+QList<KisNodeSP> TransformStrokeStrategy::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive)
+{
+    QList<KisNodeSP> result;
+
+    auto fetchFunc =
+        [&result, mode, root] (KisNodeSP node) {
+        if (node->isEditable(node == root) &&
+                (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
+                !node->inherits("KisFileLayer") &&
+                (!node->inherits("KisTransformMask") || node == root)) {
+
+                result << node;
+            }
+    };
+
+    if (recursive) {
+        KisLayerUtils::recursiveApplyNodes(root, fetchFunc);
+    } else {
+        fetchFunc(root);
+    }
+
+    return result;
+}
+
+bool TransformStrokeStrategy::tryInitArgsFromNode(KisNodeSP node, ToolTransformArgs *args)
+{
+    bool result = false;
+
+    if (KisTransformMaskSP mask =
+        dynamic_cast<KisTransformMask*>(node.data())) {
+
+        KisTransformMaskParamsInterfaceSP savedParams =
+            mask->transformParams();
+
+        KisTransformMaskAdapter *adapter =
+            dynamic_cast<KisTransformMaskAdapter*>(savedParams.data());
+
+        if (adapter) {
+            *args = adapter->transformArgs();
+            result = true;
+        }
+    }
+
+    return result;
+}
+
+bool TransformStrokeStrategy::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *outArgs,
+                                                             ToolTransformArgs::TransformMode mode,
+                                                             KisNodeSP currentNode,
+                                                             KisNodeList selectedNodes,
+                                                             QVector<KisStrokeJobData *> *undoJobs)
+{
+    bool result = false;
+
+    const KUndo2Command *lastCommand = undoFacade()->lastExecutedCommand();
+    KisNodeSP oldRootNode;
+    KisNodeList oldTransformedNodes;
+
+    ToolTransformArgs args;
+
+    if (lastCommand &&
+        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand, &args, &oldRootNode, &oldTransformedNodes) &&
+        args.mode() == mode &&
+        oldRootNode == currentNode) {
+
+        if (KritaUtils::compareListsUnordered(oldTransformedNodes, selectedNodes)) {
+            args.saveContinuedState();
+
+            *outArgs = args;
+
+            const KisSavedMacroCommand *command = dynamic_cast<const KisSavedMacroCommand*>(lastCommand);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(command, false);
+
+            command->getCommandExecutionJobs(undoJobs, true);
+
+            m_overriddenCommand = command;
+            Q_FOREACH (KisStrokeJobData *commonData, *undoJobs) {
+                Data *data = dynamic_cast<Data*>(commonData);
+                KIS_SAFE_ASSERT_RECOVER(data) { continue; }
+
+                m_skippedWhileMergeCommands << data->command.data();
+            }
+
+
+            result = true;
+        }
+    }
+
+    return result;
 }
 
 void TransformStrokeStrategy::initStrokeCallback()
@@ -293,13 +537,86 @@ void TransformStrokeStrategy::initStrokeCallback()
 
     if (m_selection) {
         m_selection->setVisible(false);
+        m_deactivatedSelections.append(m_selection);
     }
+
+    ToolTransformArgs initialTransformArgs;
+    m_processedNodes = fetchNodesList(m_mode, m_rootNode, m_workRecursively);
+
+    bool argsAreInitialized = false;
+    QVector<KisStrokeJobData *> lastCommandUndoJobs;
+
+    if (!m_forceReset && tryFetchArgsFromCommandAndUndo(&initialTransformArgs,
+                                                        m_mode,
+                                                        m_rootNode,
+                                                        m_processedNodes,
+                                                        &lastCommandUndoJobs)) {
+        argsAreInitialized = true;
+    } else if (!m_forceReset && tryInitArgsFromNode(m_rootNode, &initialTransformArgs)) {
+        argsAreInitialized = true;
+    }
+
+    QVector<KisStrokeJobData *> extraInitJobs;
+
+    extraInitJobs << new Data(new KisHoldUIUpdatesCommand(m_updatesFacade, KisCommandUtils::FlipFlopCommand::INITIALIZING), false, KisStrokeJobData::BARRIER);
+
+    extraInitJobs << lastCommandUndoJobs;
+
+    KritaUtils::addJobSequential(extraInitJobs, [this]() {
+        /**
+         * We must ensure that the currently selected subtree
+         * has finished all its updates.
+         */
+        KisLayerUtils::forceAllDelayedNodesUpdate(m_rootNode);
+    });
+
+    KritaUtils::addJobBarrier(extraInitJobs, [this, initialTransformArgs, argsAreInitialized]() mutable {
+        QRect srcRect;
+
+        if (m_selection) {
+            srcRect = m_selection->selectedExactRect();
+        } else {
+            srcRect = QRect();
+            Q_FOREACH (KisNodeSP node, m_processedNodes) {
+                // group layers may have a projection of layers
+                // that are locked and will not be transformed
+                if (node->inherits("KisGroupLayer")) continue;
+
+                if (const KisTransformMask *mask = dynamic_cast<const KisTransformMask*>(node.data())) {
+                    srcRect |= mask->sourceDataBounds();
+                } else {
+                    srcRect |= node->exactBounds();
+                }
+            }
+        }
+
+        TransformTransactionProperties transaction(srcRect, &initialTransformArgs, m_rootNode, m_processedNodes);
+        if (!argsAreInitialized) {
+            initialTransformArgs = KisTransformUtils::resetArgsForMode(m_mode, m_filterId, transaction);
+        }
+
+        emit this->sigTransactionGenerated(transaction, initialTransformArgs);
+    });
+
+    extraInitJobs << new PreparePreviewData();
+
+    Q_FOREACH (KisNodeSP node, m_processedNodes) {
+        extraInitJobs << new ClearSelectionData(node);
+    }
+
+    extraInitJobs << new Data(toQShared(new KisHoldUIUpdatesCommand(m_updatesFacade, KisCommandUtils::FlipFlopCommand::FINALIZING)), false, KisStrokeJobData::BARRIER);
+
+    addMutatedJobs(extraInitJobs);
 }
 
 void TransformStrokeStrategy::finishStrokeCallback()
 {
-    if (m_selection) {
-        m_selection->setVisible(true);
+    Q_FOREACH (KisSelectionSP selection, m_deactivatedSelections) {
+        selection->setVisible(true);
+    }
+
+    Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
+        node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
     }
 
     KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
@@ -309,7 +626,11 @@ void TransformStrokeStrategy::cancelStrokeCallback()
 {
     KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
 
-    if (m_selection) {
-        m_selection->setVisible(true);
+    Q_FOREACH (KisSelectionSP selection, m_deactivatedSelections) {
+        selection->setVisible(true);
+    }
+
+    Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
+        node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
     }
 }

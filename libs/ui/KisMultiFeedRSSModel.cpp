@@ -70,9 +70,7 @@ public:
                     item.link = streamReader.readElementText();
                 else if (streamReader.name() == QLatin1String("pubDate")) {
                     QString dateStr = streamReader.readElementText();
-                    // fixme: honor time zone!
-                    dateStr = dateStr.left(dateStr.indexOf('+')-1);
-                    item.pubDate = QLocale(QLocale::English).toDateTime(dateStr, "ddd, dd MMM yyyy HH:mm:ss");
+                    item.pubDate = QDateTime::fromString(dateStr, Qt::RFC2822Date);
                 }
                 else if (streamReader.name() == QLatin1String("description"))
                     item.description = streamReader.readElementText(); //shortenHtml(streamReader.readElementText());
@@ -197,7 +195,12 @@ QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
     RssItem item = m_aggregatedFeed.at(index.row());
 
     switch (role) {
-    case Qt::DisplayRole: // fall through
+    case Qt::DisplayRole:
+    {
+        return QString("<b><a href=\"" + item.link + "\">" + item.title + "</a></b>"
+               "<br><small>(" + item.pubDate.toLocalTime().toString(Qt::DefaultLocaleShortDate) + ") "
+               + item.description.left(90).append("...") + "</small><hr>");
+    }
     case TitleRole:
         return item.title;
     case DescriptionRole:

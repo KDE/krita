@@ -76,7 +76,7 @@ void KisRandomIteratorBenchmark::benchmarkReadBytes()
         for (int i = 0; i < TEST_IMAGE_HEIGHT; i++){
             for (int j = 0; j < TEST_IMAGE_WIDTH; j++) {
                 it->moveTo(j,i);
-                memcpy(it->rawData(), m_color->data(), m_colorSpace->pixelSize());
+                memcpy(m_color->data(), it->rawData(), m_colorSpace->pixelSize());
             }
         }
     }

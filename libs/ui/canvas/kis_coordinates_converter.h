@@ -59,10 +59,14 @@ public:
     KisCoordinatesConverter();
     ~KisCoordinatesConverter() override;
 
-    void setCanvasWidgetSize(QSize size);
-    void setImage(KisImageWSP image);
-    void setDocumentOffset(const QPoint &offset);
+    QSizeF getCanvasWidgetSize() const;
 
+    void setCanvasWidgetSize(QSizeF size);
+    void setDevicePixelRatio(qreal value);
+    void setImage(KisImageWSP image);
+    void setDocumentOffset(const QPointF &offset);
+
+    qreal devicePixelRatio() const;
     QPoint documentOffset() const;
     qreal rotationAngle() const;
 
@@ -139,6 +143,7 @@ public:
     QRectF imageRectInViewportPixels() const;
     QSizeF imageSizeInFlakePixels() const;
     QRectF widgetRectInFlakePixels() const;
+    QRectF widgetRectInImagePixels() const;
     QRect imageRectInImagePixels() const;
     QRectF imageRectInDocumentPixels() const;
 
@@ -146,6 +151,9 @@ public:
     QPointF widgetCenterPoint() const;
 
     void imageScale(qreal *scaleX, qreal *scaleY) const;
+    void imagePhysicalScale(qreal *scaleX, qreal *scaleY) const;
+
+    QPointF snapToDevicePixel(const QPointF &point) const;
 
 private:
     friend class KisZoomAndPanTest;

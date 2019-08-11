@@ -1,0 +1,139 @@
+From 8485c169f76c074256616a55308c1a57174ae064 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sat, 13 Apr 2019 18:08:33 +0300
+Subject: [PATCH 11/17] Fetch stylus button remapping from WinTab driver
+
+The user can remap the stylus buttons using tablet driver settings.
+This information is available to the application via CSR_SYSBTNMAP
+WinTab feature. We should fetch this information every time the
+stylus gets into proximity, because the user can change these settings
+on the fly.
+
+Change-Id: Idc839905c3485179d782814f78fa862fd4a99127
+---
+ .../windows/qwindowstabletsupport.cpp         | 72 ++++++++++++++++++-
+ .../platforms/windows/qwindowstabletsupport.h |  2 +
+ 2 files changed, 73 insertions(+), 1 deletion(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+index fa209f09c4..44b94d044d 100644
+--- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
++++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+@@ -435,6 +435,27 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
+         m_currentDevice = m_devices.size();
+         m_devices.push_back(tabletInit(uniqueId, cursorType));
+     }
++
++    /**
++     * We should check button map for changes on every proximity event, not
++     * only during initialization phase.
++     *
++     * WARNING: in 2016 there were some Wacom table drivers, which could mess up
++     *          button mapping if the remapped button was pressed, while the
++     *          application **didn't have input focus**. This bug is somehow
++     *          related to the fact that Wacom drivers allow user to configure
++     *          per-application button-mappings. If the bug shows up again,
++     *          just move this button-map fetching into initialization block.
++     *
++     *          See https://bugs.kde.org/show_bug.cgi?id=359561
++     */
++    BYTE logicalButtons[32];
++    memset(logicalButtons, 0, 32);
++    m_winTab32DLL.wTInfo(WTI_CURSORS + currentCursor, CSR_SYSBTNMAP, &logicalButtons);
++    m_devices[m_currentDevice].buttonsMap[0x1] = logicalButtons[0];
++    m_devices[m_currentDevice].buttonsMap[0x2] = logicalButtons[1];
++    m_devices[m_currentDevice].buttonsMap[0x4] = logicalButtons[2];
++
+     m_devices[m_currentDevice].currentPointerType = pointerType(currentCursor);
+     m_state = PenProximity;
+     qCDebug(lcQpaTablet) << "enter proximity for device #"
+@@ -446,6 +467,52 @@ bool QWindowsTabletSupport::translateTabletProximityEvent(WPARAM /* wParam */, L
+     return true;
+ }
+ 
++Qt::MouseButton buttonValueToEnum(DWORD button,
++                                  const QWindowsTabletDeviceData &tdd) {
++
++    enum : unsigned {
++        leftButtonValue = 0x1,
++        middleButtonValue = 0x2,
++        rightButtonValue = 0x4,
++        doubleClickButtonValue = 0x7
++    };
++
++    button = tdd.buttonsMap.value(button);
++
++    return button == leftButtonValue ? Qt::LeftButton :
++        button == rightButtonValue ? Qt::RightButton :
++        button == doubleClickButtonValue ? Qt::MiddleButton :
++        button == middleButtonValue ? Qt::MiddleButton :
++        button ? Qt::LeftButton /* fallback item */ :
++        Qt::NoButton;
++}
++
++Qt::MouseButtons convertTabletButtons(DWORD btnNew,
++                                      const QWindowsTabletDeviceData &tdd) {
++
++    Qt::MouseButtons buttons = Qt::NoButton;
++    for (unsigned int i = 0; i < 3; i++) {
++        unsigned int btn = 0x1 << i;
++
++        if (btn & btnNew) {
++            Qt::MouseButton convertedButton =
++                buttonValueToEnum(btn, tdd);
++
++            buttons |= convertedButton;
++
++            /**
++             * If a button that is present in hardware input is
++             * mapped to a Qt::NoButton, it means that it is going
++             * to be eaten by the driver, for example by its
++             * "Pan/Scroll" feature. Therefore we shouldn't handle
++             * any of the events associated to it. We'll just return
++             * Qt::NoButtons here.
++             */
++        }
++    }
++    return buttons;
++}
++
+ bool QWindowsTabletSupport::translateTabletPacketEvent()
+ {
+     static PACKET localPacketBuf[TabletPacketQSize];  // our own tablet packet queue.
+@@ -552,9 +619,12 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
+                 << tiltY << "tanP:" << tangentialPressure << "rotation:" << rotation;
+         }
+ 
++        Qt::MouseButtons buttons =
++            convertTabletButtons(packet.pkButtons, m_devices.at(m_currentDevice));
++
+         QWindowSystemInterface::handleTabletEvent(target, packet.pkTime, QPointF(localPos), globalPosF,
+                                                   currentDevice, currentPointer,
+-                                                  static_cast<Qt::MouseButtons>(packet.pkButtons),
++                                                  buttons,
+                                                   pressureNew, tiltX, tiltY,
+                                                   tangentialPressure, rotation, z,
+                                                   uniqueId,
+diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.h b/src/plugins/platforms/windows/qwindowstabletsupport.h
+index d91701d6a5..8f97982308 100644
+--- a/src/plugins/platforms/windows/qwindowstabletsupport.h
++++ b/src/plugins/platforms/windows/qwindowstabletsupport.h
+@@ -45,6 +45,7 @@
+ 
+ #include <QtCore/qvector.h>
+ #include <QtCore/qpoint.h>
++#include <QtCore/qhash.h>
+ 
+ #include <wintab.h>
+ 
+@@ -100,6 +101,7 @@ struct QWindowsTabletDeviceData
+     qint64 uniqueId = 0;
+     int currentDevice = 0;
+     int currentPointerType = 0;
++    QHash<quint8, quint8> buttonsMap;
+ };
+ 
+ #ifndef QT_NO_DEBUG_STREAM
+-- 
+2.20.1.windows.1
+

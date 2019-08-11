@@ -30,7 +30,7 @@
 #include <KoColorSpaceEngine.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
-#include <KoShapeBasedDocumentBase.h>
+#include <KoShapeControllerBase.h>
 #include <KoResourceServerProvider.h>
 #include <kis_icon.h>
 
@@ -60,22 +60,15 @@
 #include <KisMimeDatabase.h>
 #include <dialogs/KisSessionManagerDialog.h>
 
-#include "KisView.h"
-#include "KisDocument.h"
 #include "kis_config.h"
 #include "kis_shape_controller.h"
 #include "KisResourceServerProvider.h"
 #include "kis_animation_cache_populator.h"
 #include "kis_idle_watcher.h"
 #include "kis_image.h"
-#include "KisImportExportManager.h"
-#include "KisDocument.h"
-#include "KoToolManager.h"
-#include "KisViewManager.h"
 #include "KisOpenPane.h"
 
 #include "kis_color_manager.h"
-#include "kis_debug.h"
 
 #include "kis_action.h"
 #include "kis_action_registry.h"
@@ -118,7 +111,7 @@ public:
             }
         }
 
-        return false;
+        return true;
     }
 };
 
@@ -228,16 +221,18 @@ KisMainWindow *KisPart::createMainWindow(QUuid id)
     return mw;
 }
 
-KisView *KisPart::createView(KisDocument *document, KisViewManager *viewManager, QWidget *parent)
+KisView *KisPart::createView(KisDocument *document,
+                             KisViewManager *viewManager,
+                             QWidget *parent)
 {
     // If creating the canvas fails, record this and disable OpenGL next time
-    KisConfig cfg;
+    KisConfig cfg(false);
     KConfigGroup grp( KSharedConfig::openConfig(), "crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {
-        cfg.setUseOpenGL(false);
+        cfg.disableOpenGL();
     }
     if (cfg.canvasState() == "OPENGL_FAILED") {
-        cfg.setUseOpenGL(false);
+        cfg.disableOpenGL();
     }
     grp.writeEntry("CreatingCanvas", true);
     grp.sync();
@@ -336,7 +331,7 @@ bool KisPart::closeSession(bool keepWindows)
     }
 
     if (d->currentSession) {
-        KisConfig kisCfg;
+        KisConfig kisCfg(false);
         if (kisCfg.saveSessionOnQuit(false)) {
 
             d->currentSession->storeCurrentWindows();
@@ -438,10 +433,6 @@ void KisPart::openExistingFile(const QUrl &url)
 void KisPart::updateShortcuts()
 {
     // Update any non-UI actionCollections.  That includes:
-    //  - Shortcuts called inside of tools
-    //  - Perhaps other things?
-    KoToolManager::instance()->updateToolShortcuts();
-
     // Now update the UI actions.
     Q_FOREACH (KisMainWindow *mainWindow, d->mainWindows) {
         KActionCollection *ac = mainWindow->actionCollection();
@@ -457,7 +448,7 @@ void KisPart::updateShortcuts()
             QString strippedTooltip = action->toolTip().remove(QRegExp("\\s\\(.*\\)"));
 
             // Now update the tooltips with the new shortcut info.
-            if(action->shortcut() == QKeySequence(0))
+            if (action->shortcut() == QKeySequence(0))
                 action->setToolTip(strippedTooltip);
             else
                 action->setToolTip( strippedTooltip + " (" + action->shortcut().toString() + ")");
@@ -480,6 +471,7 @@ void KisPart::openTemplate(const QUrl &url)
         mimeType.remove( QRegExp( "-template$" ) );
         document->setMimeTypeAfterLoading(mimeType);
         document->resetURL();
+        document->setReadWrite(true);
     }
     else {
         if (document->errorMessage().isEmpty()) {

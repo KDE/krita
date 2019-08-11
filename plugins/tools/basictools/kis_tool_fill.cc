@@ -49,9 +49,6 @@
 #include <widgets/kis_cmb_composite.h>
 #include <widgets/kis_slider_spin_box.h>
 #include <kis_cursor.h>
-#include <recorder/kis_recorded_fill_paint_action.h>
-#include <recorder/kis_node_query_path.h>
-#include <recorder/kis_action_recorder.h>
 #include "kis_resources_snapshot.h"
 
 #include <processing/fill_processing_visitor.h>
@@ -127,23 +124,6 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
         return;
     }
 
-    // TODO: remove this block after recording refactoring
-    if (image()) {
-        KisNodeSP projectionNode;
-        if(m_unmerged) {
-            projectionNode = currentNode();
-        } else {
-            projectionNode = image()->root();
-        }
-        KisRecordedFillPaintAction paintAction(KisNodeQueryPath::absolutePath(currentNode()), m_startPos, KisNodeQueryPath::absolutePath(projectionNode));
-        setupPaintAction(&paintAction);
-        paintAction.setPattern(currentPattern());
-        if(m_usePattern) {
-            paintAction.setFillStyle(KisPainter::FillStylePattern);
-        }
-        image()->actionRecorder()->addAction(paintAction);
-    }
-
     bool useFastMode = m_useFastMode->isChecked();
 
     KisProcessingApplicator applicator(currentImage(), currentNode(),
@@ -205,12 +185,12 @@ QWidget* KisToolFill::createOptionWidget()
     m_featherWidget = new KisSliderSpinBox(widget);
     m_featherWidget->setObjectName("feather");
     m_featherWidget->setRange(0, 40);
-    m_featherWidget->setSingleStep(1);   
+    m_featherWidget->setSingleStep(1);
     m_featherWidget->setSuffix(i18n(" px"));
 
     QLabel *lbl_usePattern = new QLabel(i18n("Use pattern:"), widget);
     m_checkUsePattern = new QCheckBox(QString(), widget);
-    m_checkUsePattern->setToolTip(i18n("When checked do not use the foreground color, but the gradient selected to fill with"));
+    m_checkUsePattern->setToolTip(i18n("When checked do not use the foreground color, but the pattern selected to fill with"));
 
     QLabel *lbl_sampleMerged = new QLabel(i18n("Limit to current layer:"), widget);
     m_checkSampleMerged = new QCheckBox(QString(), widget);

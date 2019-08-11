@@ -28,7 +28,7 @@ import types
 from pathlib import Path  # For reading all the files in a directory.
 from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QPainter, QPalette, QFontDatabase
 from PyQt5.QtWidgets import QComboBox, QCompleter, QStyledItemDelegate, QLineEdit, QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QTabWidget, QWidget, QPlainTextEdit, QHBoxLayout, QSpinBox, QDateEdit, QPushButton, QLabel, QTableView
-from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate, QSize
+from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate, QSize, QUuid
 """
 multi entry completer cobbled together from the two examples on stackoverflow:3779720
 
@@ -123,7 +123,7 @@ class country_combo_box(QComboBox):
             self.codesList.sort()
             
         for country in self.codesList:
-            locale = QLocale(languageCode+"_"+country)
+            locale = QLocale(languageCode+"-"+country)
             if locale:
                 countryName = locale.nativeCountryName()
                 self.countryList.append(countryName.title())
@@ -270,7 +270,7 @@ class comic_meta_data_editor(QDialog):
         genreCompletion.setModel(QStringListModel(self.genreKeysList))
         self.lnGenre.setCompleter(genreCompletion)
         genreCompletion.setCaseSensitivity(False)
-        self.lnGenre.setToolTip(i18n("The genre of the work. Prefilled values are from the ACBF, but you can fill in your own. Separate genres with commas. Try to limit the amount to about two or three"))
+        self.lnGenre.setToolTip(i18n("The genre of the work. Prefilled values are from the ACBF, but you can fill in your own. Separate genres with commas. Try to limit the amount to about two or three."))
 
         self.lnCharacters = QLineEdit()
         characterCompletion = multi_entry_completer()
@@ -299,9 +299,9 @@ class comic_meta_data_editor(QDialog):
         self.lnSeriesName = QLineEdit()
         self.lnSeriesName.setToolTip(i18n("If this is part of a series, enter the name of the series and the number."))
         self.spnSeriesNumber = QSpinBox()
-        self.spnSeriesNumber.setPrefix("No. ")
+        self.spnSeriesNumber.setPrefix(i18n("No. "))
         self.spnSeriesVol = QSpinBox()
-        self.spnSeriesVol.setPrefix("Vol. ")
+        self.spnSeriesVol.setPrefix(i18n("Vol. "))
         seriesLayout = QHBoxLayout()
         seriesLayout.addWidget(self.lnSeriesName)
         seriesLayout.addWidget(self.spnSeriesVol)
@@ -313,7 +313,7 @@ class comic_meta_data_editor(QDialog):
         otherCompletion.setFilterMode(Qt.MatchContains)
         self.lnOtherKeywords = QLineEdit()
         self.lnOtherKeywords.setCompleter(otherCompletion)
-        self.lnOtherKeywords.setToolTip(i18n("Other keywords that don't fit in the previously mentioned sets. As always, comma-separated"))
+        self.lnOtherKeywords.setToolTip(i18n("Other keywords that do not fit in the previously mentioned sets. As always, comma-separated."))
 
         self.cmbLanguage = language_combo_box()
         self.cmbCountry = country_combo_box()
@@ -323,14 +323,14 @@ class comic_meta_data_editor(QDialog):
         self.cmbReadingMode.addItem(i18n("Right to Left"))
 
         self.cmbCoverPage = QComboBox()
-        self.cmbCoverPage.setToolTip(i18n("Which page is the cover page? This will be empty if there's no pages."))
+        self.cmbCoverPage.setToolTip(i18n("Which page is the cover page? This will be empty if there are no pages."))
 
         mformLayout.addRow(i18n("Title:"), self.lnTitle)
-        mformLayout.addRow(i18n("Cover Page:"), self.cmbCoverPage)
+        mformLayout.addRow(i18n("Cover page:"), self.cmbCoverPage)
         mformLayout.addRow(i18n("Summary:"), self.teSummary)
         mformLayout.addRow(i18n("Language:"), self.cmbLanguage)
         mformLayout.addRow("", self.cmbCountry)
-        mformLayout.addRow(i18n("Reading Direction:"), self.cmbReadingMode)
+        mformLayout.addRow(i18n("Reading direction:"), self.cmbReadingMode)
         mformLayout.addRow(i18n("Genre:"), self.lnGenre)
         mformLayout.addRow(i18n("Characters:"), self.lnCharacters)
         mformLayout.addRow(i18n("Format:"), self.lnFormat)
@@ -343,7 +343,7 @@ class comic_meta_data_editor(QDialog):
         # The page for the authors.
         authorPage = QWidget()
         authorPage.setLayout(QVBoxLayout())
-        explanation = QLabel(i18n("The following is a table of the authors that contributed to this comic. You can set their nickname, proper names (first, middle, last), Role (Penciller, Inker, etc), email and homepage."))
+        explanation = QLabel(i18n("The following is a table of the authors that contributed to this comic. You can set their nickname, proper names (first, middle, last), role (penciller, inker, etc), email and homepage."))
         explanation.setWordWrap(True)
         self.authorModel = QStandardItemModel(0, 8)
         labels = [i18n("Nick Name"), i18n("Given Name"), i18n("Middle Name"), i18n("Family Name"), i18n("Role"), i18n("Email"), i18n("Homepage"), i18n("Language")]
@@ -393,10 +393,14 @@ class comic_meta_data_editor(QDialog):
         self.license.completer().setCompletionMode(QCompleter.PopupCompletion)
         dataBaseReference = QVBoxLayout()
         self.ln_database_name = QLineEdit()
-        self.ln_database_name.setToolTip(i18n("If there's an entry in a comics data base, that should be added here. It is unlikely to be a factor for comics from scratch, but useful when doing a conversion."))
+        self.ln_database_name.setToolTip(i18n("If there is an entry in a comics data base, that should be added here. It is unlikely to be a factor for comics from scratch, but useful when doing a conversion."))
         self.cmb_entry_type = QComboBox()
         self.cmb_entry_type.addItems(["IssueID", "SeriesID", "URL"])
         self.cmb_entry_type.setEditable(True)
+        self.ln_source = QLineEdit()
+        self.ln_source.setToolTip(i18n("Whether the comic is an adaption of an existing source, and if so, how to find information about that source. So for example, for an adapted webcomic, the official website url should go here."))
+        self.label_uuid = QLabel()
+        self.label_uuid.setToolTip(i18n("By default this will be filled with a generated universal unique identifier. The ID by itself is merely so that comic book library management programs can figure out if this particular comic is already in their database and whether it has been rated. Of course, the UUID can be changed into something else by manually changing the JSON, but this is advanced usage."))
         self.ln_database_entry = QLineEdit()
         dbHorizontal = QHBoxLayout()
         dbHorizontal.addWidget(self.ln_database_name)
@@ -407,6 +411,8 @@ class comic_meta_data_editor(QDialog):
         publisherLayout.addRow(i18n("City:"), self.publishCity)
         publisherLayout.addRow(i18n("Date:"), publishDateLayout)
         publisherLayout.addRow(i18n("ISBN:"), self.isbn)
+        publisherLayout.addRow(i18n("Source:"), self.ln_source)
+        publisherLayout.addRow(i18n("UUID:"), self.label_uuid)
         publisherLayout.addRow(i18n("License:"), self.license)
         publisherLayout.addRow(i18n("Database:"), dataBaseReference)
 
@@ -602,6 +608,9 @@ class comic_meta_data_editor(QDialog):
             if "_" in code:
                 self.cmbLanguage.setEntryToCode(code.split("_")[0])
                 self.cmbCountry.setEntryToCode(code.split("_")[-1])
+            elif "-" in code:
+                self.cmbLanguage.setEntryToCode(code.split("-")[0])
+                self.cmbCountry.setEntryToCode(code.split("-")[-1])
             else:
                 self.cmbLanguage.setEntryToCode(code)
         if "readingDirection" in config.keys():
@@ -619,6 +628,23 @@ class comic_meta_data_editor(QDialog):
             self.publishDate.setDate(QDate.fromString(config["publishingDate"], Qt.ISODate))
         if "isbn-number" in config.keys():
             self.isbn.setText(config["isbn-number"])
+        if "source" in config.keys():
+            self.ln_source.setText(config["source"])
+        elif "acbfSource" in config.keys():
+            self.ln_source.setText(config["acbfSource"])
+        if "uuid" in config.keys():
+            self.label_uuid.setText(config["uuid"])
+        else:
+            uuid = str()
+            if "acbfID" in config.keys():
+                uuid = config["acbfID"]
+                uuid = uuid.strip("{")
+                uuid = uuid.strip("}")
+                uuidVerify = uuid.split("-")
+                if len(uuidVerify[0])!=8 or len(uuidVerify[1])!=4 or len(uuidVerify[2])!=4 or len(uuidVerify[3])!=4 or len(uuidVerify[4])!=12:
+                    uuid = QUuid.createUuid().toString()
+            self.label_uuid.setText(uuid)
+            config["uuid"] = uuid
         if "license" in config.keys():
             self.license.setCurrentText(config["license"])
         else:
@@ -718,7 +744,7 @@ class comic_meta_data_editor(QDialog):
             config["seriesNumber"] = self.spnSeriesNumber.value()
             if self.spnSeriesVol.value() > 0:
                 config["seriesVolume"] = self.spnSeriesVol.value()
-        config["language"] = str(self.cmbLanguage.codeForCurrentEntry()+"_"+self.cmbCountry.codeForCurrentEntry())
+        config["language"] = str(self.cmbLanguage.codeForCurrentEntry()+"-"+self.cmbCountry.codeForCurrentEntry())
         if self.cmbReadingMode.currentIndex() is int(Qt.LeftToRight):
             config["readingDirection"] = "leftToRight"
         else:
@@ -746,6 +772,7 @@ class comic_meta_data_editor(QDialog):
         config["publisherCity"] = self.publishCity.text()
         config["publishingDate"] = self.publishDate.date().toString(Qt.ISODate)
         config["isbn-number"] = self.isbn.text()
+        config["source"] = self.ln_source.text()
         config["license"] = self.license.currentText()
         if self.ln_database_name.text().isalnum() and self.ln_database_entry.text().isalnum():
             dbRef = {}

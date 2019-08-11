@@ -39,11 +39,11 @@
  * this class is however not reentrant
  *
  * Needs to be used like this, otherwise will crash:
- * <sl>
+ * <ul>
  * <li>add content with newItem()</li>
  * <li>finish adding content with squeeze()</li>
  * <li>just read content with operator[]</li>
- * </sl>
+ * </ul>
  *
  * @param uncompressedItemCount when number of buffered items reach this,
  *      compression will start small value will give better memory usage at the

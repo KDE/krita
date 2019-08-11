@@ -38,7 +38,7 @@
          <double>0.000100000000000</double>
         </property>
         <property name="maximum">
-         <double>100000000.000000000000000</double>
+         <double>90000.000000000000000</double>
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>
@@ -80,7 +80,7 @@
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
         <property name="buddy">
-         <cstring>printWidth</cstring>
+         <cstring>pixelFilterCmb</cstring>
         </property>
        </widget>
       </item>
@@ -116,7 +116,7 @@
          <double>0.000100000000000</double>
         </property>
         <property name="maximum">
-         <double>100000000.000000000000000</double>
+         <double>90000.000000000000000</double>
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>
@@ -185,7 +185,7 @@
          <double>0.000100000000000</double>
         </property>
         <property name="maximum">
-         <double>100000000.000000000000000</double>
+         <double>1000000.000000000000000</double>
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>
@@ -220,7 +220,7 @@
          <double>0.000100000000000</double>
         </property>
         <property name="maximum">
-         <double>100000000.000000000000000</double>
+         <double>1000000.000000000000000</double>
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>
@@ -366,25 +366,25 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisCmbIDList</class>
-   <extends></extends>
-   <header>widgets/kis_cmb_idlist.h</header>
-  </customwidget>
-  <customwidget>
    <class>KoAspectButton</class>
    <extends>QWidget</extends>
    <header>KoAspectButton.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisDoubleParseSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>kis_double_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisDoubleParseUnitSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>kis_double_parse_unit_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisCmbIDList</class>
+   <extends></extends>
+   <header>widgets/kis_cmb_idlist.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

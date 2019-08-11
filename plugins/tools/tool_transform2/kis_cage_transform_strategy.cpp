@@ -47,6 +47,8 @@ KisCageTransformStrategy::KisCageTransformStrategy(const KisCoordinatesConverter
     overrideDrawingItems(true, false, true);
     setCloseOnStartPointClick(true);
     setClipOriginalPointsPosition(false);
+    setTransformType(TransformType::CAGE_TRANSFORM);
+
 }
 
 KisCageTransformStrategy::~KisCageTransformStrategy()
@@ -86,13 +88,11 @@ QImage KisCageTransformStrategy::calculateTransformedImage(ToolTransformArgs &cu
                                                            const QPointF &srcOffset,
                                                            QPointF *dstOffset)
 {
-    Q_UNUSED(currentArgs);
-
     KisCageTransformWorker worker(srcImage,
                                   srcOffset,
                                   origPoints,
                                   0,
-                                  16);
+                                  currentArgs.previewPixelPrecision());
     worker.prepareTransform();
     worker.setTransformedCage(transfPoints);
     return worker.runOnQImage(dstOffset);

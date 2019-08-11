@@ -62,6 +62,9 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
                 else if (selectionMode == "ytilt") {
                     selection[selIndex] = KisParasite::TiltY;
                 }
+                else if (selectionMode == "velocity") {
+                    selection[selIndex] = KisParasite::Velocity;
+                }
                 else {
                     selection[selIndex] = KisParasite::Constant;
                 }
@@ -175,5 +178,5 @@ bool KisPipeBrushParasite::saveToDevice(QIODevice* dev) const
 bool loadFromDevice(QIODevice */*dev*/)
 {
     // XXX: implement...
-    return true;;
+    return true;
 }

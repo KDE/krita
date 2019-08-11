@@ -25,6 +25,9 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoViewConverter.h>
+#include "kis_canvas2.h"
+#include "KisViewManager.h"
+#include <kis_icon.h>
 
 #include "kis_rectangle_constraint_widget.h"
 
@@ -40,6 +43,8 @@ KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectang
     , m_forcedRatio(1.0)
     , m_forcedWidth(0)
     , m_forcedHeight(0)
+    , m_roundCornersX(0)
+    , m_roundCornersY(0)
 {
 }
 
@@ -48,7 +53,7 @@ QList<QPointer<QWidget> > KisToolRectangleBase::createOptionWidgets()
 {
   QList<QPointer<QWidget> > widgetsList = KisToolShape::createOptionWidgets();
 
-  widgetsList.append(new KisRectangleConstraintWidget(0, this));
+  widgetsList.append(new KisRectangleConstraintWidget(0, this, showRoundCornersGUI()));
 
   return widgetsList;
 }
@@ -67,6 +72,12 @@ void KisToolRectangleBase::constraintsChanged(bool forceRatio, bool forceWidth, 
   if (ratio < 0.0001f) m_isRatioForced = false;
 }
 
+void KisToolRectangleBase::roundCornersChanged(int rx, int ry)
+{
+    m_roundCornersX = rx;
+    m_roundCornersY = ry;
+}
+
 void KisToolRectangleBase::paint(QPainter& gc, const KoViewConverter &converter)
 {
     if(mode() == KisTool::PAINT_MODE) {
@@ -74,6 +85,13 @@ void KisToolRectangleBase::paint(QPainter& gc, const KoViewConverter &converter)
     }
 
     KisToolPaint::paint(gc, converter);
+}
+
+void KisToolRectangleBase::activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape *> &shapes)
+{
+    KisToolShape::activate(toolActivation, shapes);
+
+    emit sigRequestReloadConfig();
 }
 
 void KisToolRectangleBase::deactivate()
@@ -93,8 +111,14 @@ bool KisToolRectangleBase::listeningToModifiers()
 
 void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
 {
-    if ((m_type == PAINT && (!nodeEditable() || nodePaintAbility() == NONE)) ||
-        (m_type == SELECT && !selectionEditable())) {
+    NodePaintAbility paintability = nodePaintAbility();
+    if ((m_type == PAINT && (!nodeEditable() || paintability == UNPAINTABLE || paintability  == KisToolPaint::CLONE)) || (m_type == SELECT && !selectionEditable())) {
+
+        if (paintability == KisToolPaint::CLONE){
+            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+            QString message = i18n("This tool cannot paint on clone layers.  Please select a paint or vector layer or mask.");
+            kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+        }
 
         event->ignore();
         return;
@@ -197,7 +221,7 @@ void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)
 
     updateArea();
 
-    finishRect(createRect(m_dragStart, m_dragEnd));
+    finishRect(createRect(m_dragStart, m_dragEnd), m_roundCornersX, m_roundCornersY);
     event->accept();
 }
 
@@ -226,14 +250,32 @@ QRectF KisToolRectangleBase::createRect(const QPointF &start, const QPointF &end
     return result.normalized();
 }
 
+bool KisToolRectangleBase::showRoundCornersGUI() const
+{
+    return true;
+}
+
 void KisToolRectangleBase::paintRectangle(QPainter &gc, const QRectF &imageRect)
 {
     KIS_ASSERT_RECOVER_RETURN(canvas());
 
-    QRect viewRect = pixelToView(imageRect).toAlignedRect();
+    const QRect viewRect = pixelToView(imageRect).toAlignedRect();
+
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(kritaCanvas);
+
+    const KisCoordinatesConverter *converter = kritaCanvas->coordinatesConverter();
+    const qreal roundCornersX = converter->effectiveZoom() * m_roundCornersX;
+    const qreal roundCornersY = converter->effectiveZoom() * m_roundCornersY;
 
     QPainterPath path;
-    path.addRect(viewRect);
+
+    if (m_roundCornersX > 0 || m_roundCornersY > 0) {
+        path.addRoundedRect(viewRect,
+                            roundCornersX, roundCornersY);
+    } else {
+        path.addRect(viewRect);
+    }
     paintToolOutline(&gc, path);
 }
 

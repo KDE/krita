@@ -39,27 +39,21 @@
 #include "kis_slider_spin_box.h"
 #include "kundo2magicstring.h"
 
+#include <KisUsageLogger.h>
+
 #define MAXIMUM_SMOOTHNESS_DISTANCE 1000.0 // 0..1000.0 == weight in gui
 #define MAXIMUM_MAGNETISM 1000
 
 
-void KisToolBrush::addSmoothingAction(int enumId, const QString &id, const QString &name, const QIcon &icon, KActionCollection *globalCollection)
+void KisToolBrush::addSmoothingAction(int enumId, const QString &id)
 {
     /**
      * KisToolBrush is the base of several tools, but the actions
      * should be unique, so let's be careful with them
      */
-    if (!globalCollection->action(id)) {
-        QAction *action = new QAction(name, globalCollection);
-        action->setIcon(icon);
-        globalCollection->addAction(id, action);
-    }
-
-    QAction *action = dynamic_cast<QAction*>(globalCollection->action(id));
-    addAction(id, action);
-
-    connect(action, SIGNAL(triggered()), &m_signalMapper, SLOT(map()));
-    m_signalMapper.setMapping(action, enumId);
+    QAction *a = action(id);
+    connect(a, SIGNAL(triggered()), &m_signalMapper, SLOT(map()));
+    m_signalMapper.setMapping(a, enumId);
 }
 
 KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
@@ -68,14 +62,15 @@ KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
                       kundo2_i18n("Freehand Brush Stroke"))
 {
     setObjectName("tool_brush");
+
+    createOptionWidget();
+
     connect(this, SIGNAL(smoothingTypeChanged()), this, SLOT(resetCursorStyle()));
 
-    KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
-
-    addSmoothingAction(KisSmoothingOptions::NO_SMOOTHING, "set_no_brush_smoothing", i18nc("@action", "Brush Smoothing: Disabled"), KisIconUtils::loadIcon("smoothing-no"), collection);
-    addSmoothingAction(KisSmoothingOptions::SIMPLE_SMOOTHING, "set_simple_brush_smoothing", i18nc("@action", "Brush Smoothing: Basic"), KisIconUtils::loadIcon("smoothing-basic"), collection);
-    addSmoothingAction(KisSmoothingOptions::WEIGHTED_SMOOTHING, "set_weighted_brush_smoothing", i18nc("@action", "Brush Smoothing: Weighted"), KisIconUtils::loadIcon("smoothing-weighted"), collection);
-    addSmoothingAction(KisSmoothingOptions::STABILIZER, "set_stabilizer_brush_smoothing", i18nc("@action", "Brush Smoothing: Stabilizer"), KisIconUtils::loadIcon("smoothing-stabilizer"), collection);
+    addSmoothingAction(KisSmoothingOptions::NO_SMOOTHING, "set_no_brush_smoothing");
+    addSmoothingAction(KisSmoothingOptions::SIMPLE_SMOOTHING, "set_simple_brush_smoothing");
+    addSmoothingAction(KisSmoothingOptions::WEIGHTED_SMOOTHING, "set_weighted_brush_smoothing");
+    addSmoothingAction(KisSmoothingOptions::STABILIZER, "set_stabilizer_brush_smoothing");
 
 }
 
@@ -88,12 +83,18 @@ void KisToolBrush::activate(ToolActivation activation, const QSet<KoShape*> &sha
     KisToolFreehand::activate(activation, shapes);
     connect(&m_signalMapper, SIGNAL(mapped(int)), SLOT(slotSetSmoothingType(int)), Qt::UniqueConnection);
 
+    QAction *toggleaction = action("toggle_assistant");
+    connect(toggleaction, SIGNAL(triggered(bool)), m_chkAssistant, SLOT(toggle()), Qt::UniqueConnection);
+
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
 void KisToolBrush::deactivate()
 {
     disconnect(&m_signalMapper, 0, this, 0);
+    QAction *toggleaction = action("toggle_assistant");
+    disconnect(toggleaction, 0, m_chkAssistant, 0);
+
     KisToolFreehand::deactivate();
 }
 
@@ -129,6 +130,7 @@ void KisToolBrush::slotSetSmoothingType(int index)
 
     switch (index) {
     case 0:
+        KisUsageLogger::log("Disabled smoothing.");
         smoothingOptions()->setSmoothingType(KisSmoothingOptions::NO_SMOOTHING);
         showControl(m_sliderSmoothnessDistance, false);
         showControl(m_sliderTailAggressiveness, false);
@@ -139,6 +141,7 @@ void KisToolBrush::slotSetSmoothingType(int index)
         showControl(m_chkStabilizeSensors, false);
         break;
     case 1:
+        KisUsageLogger::log("Enabled simple smoothing.");
         smoothingOptions()->setSmoothingType(KisSmoothingOptions::SIMPLE_SMOOTHING);
         showControl(m_sliderSmoothnessDistance, false);
         showControl(m_sliderTailAggressiveness, false);
@@ -149,6 +152,7 @@ void KisToolBrush::slotSetSmoothingType(int index)
         showControl(m_chkStabilizeSensors, false);
         break;
     case 2:
+        KisUsageLogger::log("Enabled weighted smoothing.");
         smoothingOptions()->setSmoothingType(KisSmoothingOptions::WEIGHTED_SMOOTHING);
         showControl(m_sliderSmoothnessDistance, true);
         showControl(m_sliderTailAggressiveness, true);
@@ -160,6 +164,7 @@ void KisToolBrush::slotSetSmoothingType(int index)
         break;
     case 3:
     default:
+        KisUsageLogger::log("Enabled stabilizer.");
         smoothingOptions()->setSmoothingType(KisSmoothingOptions::STABILIZER);
         showControl(m_sliderSmoothnessDistance, true);
         showControl(m_sliderTailAggressiveness, false);
@@ -211,15 +216,15 @@ void KisToolBrush::setUseScalableDistance(bool value)
 
 void KisToolBrush::resetCursorStyle()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     CursorStyle cursorStyle = cfg.newCursorStyle();
 
     // When the stabilizer is in use, we avoid using the brush outline cursor,
     // because it would hide the real position of the cursor to the user,
     // yielding unexpected results.
     if (smoothingOptions()->smoothingType() == KisSmoothingOptions::STABILIZER &&
-        smoothingOptions()->useDelayDistance() &&
-        cursorStyle == CURSOR_STYLE_NO_CURSOR) {
+            smoothingOptions()->useDelayDistance() &&
+            cursorStyle == CURSOR_STYLE_NO_CURSOR) {
 
         useCursor(KisCursor::roundCursor());
     } else {
@@ -318,15 +323,18 @@ QWidget * KisToolBrush::createOptionWidget()
     // Line smoothing configuration
     m_cmbSmoothingType = new QComboBox(optionsWidget);
     m_cmbSmoothingType->addItems(QStringList()
-            << i18n("None")
-            << i18n("Basic")
-            << i18n("Weighted")
-            << i18n("Stabilizer"));
+                                 << i18nc("@item:inlistbox Brush Smoothing", "None")
+                                 << i18nc("@item:inlistbox Brush Smoothing", "Basic")
+                                 << i18nc("@item:inlistbox Brush Smoothing", "Weighted")
+                                 << i18nc("@item:inlistbox Brush Smoothing", "Stabilizer"));
     connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
     addOptionWidgetOption(m_cmbSmoothingType, new QLabel(i18n("Brush Smoothing:")));
 
     m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
+    m_sliderSmoothnessDistance->setExponentRatio(3.0); // help pick smaller values
+
+
     m_sliderSmoothnessDistance->setEnabled(true);
     connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
     m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
@@ -355,6 +363,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderDelayDistance = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderDelayDistance->setToolTip(i18n("Radius where the brush is blocked"));
     m_sliderDelayDistance->setRange(0, 500);
+    m_sliderDelayDistance->setExponentRatio(3.0); // help pick smaller values
     m_sliderDelayDistance->setSuffix(i18n(" px"));
     connect(m_sliderDelayDistance, SIGNAL(valueChanged(qreal)), SLOT(setDelayDistance(qreal)));
 
@@ -408,19 +417,16 @@ QWidget * KisToolBrush::createOptionWidget()
     line->setFrameShape(QFrame::HLine);
     addOptionWidgetOption(line);
 
-
-
     // Drawing assistant configuration
     QWidget* assistantWidget = new QWidget(optionsWidget);
     QGridLayout* assistantLayout = new QGridLayout(assistantWidget);
     assistantLayout->setContentsMargins(10,0,0,0);
     assistantLayout->setSpacing(5);
 
-
     m_chkAssistant = new QCheckBox(optionsWidget);
     m_chkAssistant->setText(i18n("Snap to Assistants"));
 
-    assistantWidget->setToolTip(i18n("You need to add Ruler Assistants before this tool will work."));
+    assistantWidget->setToolTip(i18n("You need to add Assistants before this tool will work."));
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
     addOptionWidgetOption(assistantWidget, m_chkAssistant);
 
@@ -430,11 +436,6 @@ QWidget * KisToolBrush::createOptionWidget()
 
     m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);
     connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
-
-    QAction *toggleaction =  KisActionRegistry::instance()->makeQAction("toggle_assistant", this);
-    addAction("toggle_assistant", toggleaction);
-    toggleaction->setShortcut(QKeySequence(Qt::ControlModifier + Qt::ShiftModifier + Qt::Key_L));
-    connect(toggleaction, SIGNAL(triggered(bool)), m_chkAssistant, SLOT(toggle()));
 
     QLabel* magnetismLabel = new QLabel(i18n("Magnetism:"));
     addOptionWidgetOption(m_sliderMagnetism, magnetismLabel);
@@ -447,23 +448,37 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkOnlyOneAssistant, SIGNAL(toggled(bool)), this, SLOT(setOnlyOneAssistantSnap(bool)));
     addOptionWidgetOption(m_chkOnlyOneAssistant, snapSingleLabel);
 
-
     // set the assistant snapping options to hidden by default and toggle their visibility based based off snapping checkbox
     m_sliderMagnetism->setVisible(false);
     m_chkOnlyOneAssistant->setVisible(false);
     snapSingleLabel->setVisible(false);
     magnetismLabel->setVisible(false);
 
-   connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setVisible(bool)));
-   connect(m_chkAssistant, SIGNAL(toggled(bool)), m_chkOnlyOneAssistant, SLOT(setVisible(bool)));
-   connect(m_chkAssistant, SIGNAL(toggled(bool)), snapSingleLabel, SLOT(setVisible(bool)));
+    connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setVisible(bool)));
+    connect(m_chkAssistant, SIGNAL(toggled(bool)), m_chkOnlyOneAssistant, SLOT(setVisible(bool)));
+    connect(m_chkAssistant, SIGNAL(toggled(bool)), snapSingleLabel, SLOT(setVisible(bool)));
     connect(m_chkAssistant, SIGNAL(toggled(bool)), magnetismLabel, SLOT(setVisible(bool)));
 
 
-    KisConfig cfg;
+    KisConfig cfg(true);
+
     slotSetSmoothingType(cfg.lineSmoothingType());
 
     return optionsWidget;
 }
 
+QList<QAction *> KisToolBrushFactory::createActionsImpl()
+{
+    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
 
+    QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
+
+    actions << actionRegistry->makeQAction("set_no_brush_smoothing");
+    actions << actionRegistry->makeQAction("set_simple_brush_smoothing");
+    actions << actionRegistry->makeQAction("set_weighted_brush_smoothing");
+    actions << actionRegistry->makeQAction("set_stabilizer_brush_smoothing");
+    actions << actionRegistry->makeQAction("toggle_assistant");
+
+    return actions;
+
+}

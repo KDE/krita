@@ -24,8 +24,8 @@
 
 #include <kritawidgetutils_export.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
+#include <QObject>
+#include <QString>
 
 class QMenu;
 class QWidget;
@@ -166,7 +166,7 @@ public:
      *
      * The returned menu is configured with an icon, a title and
      * menu entries. Therefore adding the returned pointer to your menu
-     * is enougth to have access to the help menu.
+     * is enough to have access to the help menu.
      *
      * Note: This method will only create one instance of the menu. If
      * you call this method twice or more the same pointer is returned.

@@ -864,7 +864,7 @@ void KisLazyBrushTest::testCutOnGraph()
 
         qDebug() << ppVar(aLabelImage.offset());
     }
-    QImage bLabelImage(bLabelRect.size(), QImage::Format_ARGB32);;
+    QImage bLabelImage(bLabelRect.size(), QImage::Format_ARGB32);
     {
         QPainter gc(&bLabelImage);
         gc.fillRect(QRect(QPoint(), bLabelRect.size()), Qt::red);

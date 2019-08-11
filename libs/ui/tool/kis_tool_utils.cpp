@@ -26,21 +26,30 @@
 #include <kis_properties_configuration.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+#include "kis_command_utils.h"
+#include "kis_processing_applicator.h"
 
 namespace KisToolUtils {
 
-    bool pick(KisPaintDeviceSP dev, const QPoint &pos, KoColor *color, KoColor *previousColor, int radius, int blend)
+    bool pickColor(KoColor &out_color, KisPaintDeviceSP dev, const QPoint &pos,
+                   KoColor const *const blendColor, int radius, int blend, bool pure)
     {
         KIS_ASSERT(dev);
-        const KoColorSpace* cs = dev->colorSpace();
+
+        // Bugfix hack forcing pure on first sample to avoid wrong
+        // format blendColor on newly initialized Krita.
+        static bool firstTime = true;
+        if (firstTime == true) {
+            pure = true;
+            firstTime = false;
+        }
+
+        const KoColorSpace *cs = dev->colorSpace();
         KoColor pickedColor(Qt::transparent, cs);
 
-        // Ctrl picker sampling radius.
-        if (radius <= 1) {
-            dev->pixel(pos.x(), pos.y(), &pickedColor);
-        } else {
+        // Sampling radius.
+        if (!pure && radius > 1) {
             QVector<const quint8*> pixels;
-
             const int effectiveRadius = radius - 1;
 
             const QRect pickRect(pos.x() - effectiveRadius, pos.y() - effectiveRadius,
@@ -59,15 +68,17 @@ namespace KisToolUtils {
 
             const quint8 **cpixels = const_cast<const quint8**>(pixels.constData());
             cs->mixColorsOp()->mixColors(cpixels, pixels.size(), pickedColor.data());
+        } else {
+            dev->pixel(pos.x(), pos.y(), &pickedColor);
         }
         
-        // Ctrl picker color blending.
-        if (previousColor && blend < 100) {
+        // Color blending.
+        if (!pure && blendColor && blend < 100) {
             //Scale from 0..100% to 0..255 range for mixOp weights.
             quint8 blendScaled = static_cast<quint8>(blend * 2.55f);
 
             const quint8 *colors[2];
-            colors[0] = previousColor->data();
+            colors[0] = blendColor->data();
             colors[1] = pickedColor.data();
             qint16 weights[2];
             weights[0] = 255 - blendScaled;
@@ -79,12 +90,10 @@ namespace KisToolUtils {
 
         pickedColor.convertTo(dev->compositionSourceColorSpace());
 
-        bool validColorPicked =
-            pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8;
+        bool validColorPicked = pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8;
 
         if (validColorPicked) {
-            pickedColor.setOpacity(OPACITY_OPAQUE_U8);
-            *color = pickedColor;
+            out_color = pickedColor;
         }
 
         return validColorPicked;
@@ -128,24 +137,26 @@ namespace KisToolUtils {
     bool clearImage(KisImageSP image, KisNodeSP node, KisSelectionSP selection)
     {
         if(node && node->hasEditablePaintDevice()) {
-            KisPaintDeviceSP device = node->paintDevice();
+            KUndo2Command *cmd =
+                new KisCommandUtils::LambdaCommand(kundo2_i18n("Clear"),
+                    [node, selection] () {
+                        KisPaintDeviceSP device = node->paintDevice();
 
-            image->barrierLock();
-            KisTransaction transaction(kundo2_i18n("Clear"), device);
+                        KisTransaction transaction(kundo2_noi18n("internal-clear-command"), device);
 
-            QRect dirtyRect;
-            if (selection) {
-                dirtyRect = selection->selectedRect();
-                device->clearSelection(selection);
-            }
-            else {
-                dirtyRect = device->extent();
-                device->clear();
-            }
+                        QRect dirtyRect;
+                        if (selection) {
+                            dirtyRect = selection->selectedRect();
+                            device->clearSelection(selection);
+                        } else {
+                            dirtyRect = device->extent();
+                            device->clear();
+                        }
 
-            transaction.commit(image->undoAdapter());
-            device->setDirty(dirtyRect);
-            image->unlock();
+                        device->setDirty(dirtyRect);
+                        return transaction.endAndTake();
+                    });
+            KisProcessingApplicator::runSingleCommandStroke(image, cmd);
             return true;
         }
         return false;
@@ -200,5 +211,4 @@ namespace KisToolUtils {
         radius = props.getInt("radius", 1);
         blend = props.getInt("blend", 100);
     }
-
 }

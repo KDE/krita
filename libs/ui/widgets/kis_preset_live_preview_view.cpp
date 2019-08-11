@@ -198,7 +198,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     double textureScale = settings->getDouble("Texture/Pattern/Scale");
     if ( textureOffsetX*textureScale> maxTextureSize || textureOffsetY*textureScale > maxTextureSize) {
         int maxSize = qMax(textureOffsetX, textureOffsetY);
-        double result = maxTextureSize/maxSize;
+        double result = qreal(maxTextureSize) / maxSize;
         settings->setProperty("Texture/Pattern/Scale", result);
     }
     if (m_currentPreset->paintOp().id() == "spraybrush") {
@@ -236,6 +236,17 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
             settings->setProperty("brush_definition", d.toString());
         }
     }
+
+    // Preset preview cannot display gradient color source: there is
+    // no resource manager for KisResourcesSnapshot, therefore gradient is nullptr.
+    // BUG: 385521 (Selecting "Gradient" in brush editor crashes krita)
+    if (m_currentPreset->paintOp().id() == "paintbrush") {
+        QString colorSourceType = settings->getString("ColorSource/Type", "plain");
+        if (colorSourceType == "gradient") {
+            settings->setProperty("ColorSource/Type", "plain");
+        }
+    }
+
     proxy_preset->setSettings(settings);
 
 

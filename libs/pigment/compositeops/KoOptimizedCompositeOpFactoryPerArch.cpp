@@ -38,10 +38,19 @@
 
 template<>
 template<>
-KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32>::ReturnType
-KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32>::create<Vc::CurrentImplementation::current()>(ParamType param)
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarkenHard32>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarkenHard32>::create<Vc::CurrentImplementation::current()>(ParamType param)
 {
-    return new KoOptimizedCompositeOpAlphaDarken32<Vc::CurrentImplementation::current()>(param);
+    return new KoOptimizedCompositeOpAlphaDarkenHard32<Vc::CurrentImplementation::current()>(param);
+}
+
+
+template<>
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarkenCreamy32>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarkenCreamy32>::create<Vc::CurrentImplementation::current()>(ParamType param)
+{
+    return new KoOptimizedCompositeOpAlphaDarkenCreamy32<Vc::CurrentImplementation::current()>(param);
 }
 
 template<>
@@ -54,11 +63,20 @@ KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::create<Vc::C
 
 template<>
 template<>
-KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken128>::ReturnType
-KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken128>::create<Vc::CurrentImplementation::current()>(ParamType param)
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarkenHard128>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarkenHard128>::create<Vc::CurrentImplementation::current()>(ParamType param)
 {
-    return new KoOptimizedCompositeOpAlphaDarken128<Vc::CurrentImplementation::current()>(param);
+    return new KoOptimizedCompositeOpAlphaDarkenHard128<Vc::CurrentImplementation::current()>(param);
 }
+
+template<>
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarkenCreamy128>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarkenCreamy128>::create<Vc::CurrentImplementation::current()>(ParamType param)
+{
+    return new KoOptimizedCompositeOpAlphaDarkenCreamy128<Vc::CurrentImplementation::current()>(param);
+}
+
 
 template<>
 template<>

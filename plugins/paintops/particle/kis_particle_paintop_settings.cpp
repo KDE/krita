@@ -21,7 +21,7 @@
 #include "kis_particleop_option.h"
 
 #include <kis_paint_action_type_option.h>
-#include <kis_airbrush_option.h>
+#include <kis_airbrush_option_widget.h>
 
 struct KisParticlePaintOpSettings::Private
 {
@@ -51,7 +51,6 @@ bool KisParticlePaintOpSettings::paintIncremental()
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
-#include "kis_particleop_option.h"
 #include "kis_standard_uniform_properties_factory.h"
 
 

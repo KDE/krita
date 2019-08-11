@@ -63,11 +63,7 @@ void KoCanvasControllerWidget::Private::setDocumentOffset()
         // If it isn't an OpenGL canvas
         if (qobject_cast<QOpenGLWidget*>(canvasWidget) == 0) {
             QPoint diff = q->documentOffset() - pt;
-            if (q->canvasMode() == Spreadsheet && canvasWidget->layoutDirection() == Qt::RightToLeft) {
-                canvasWidget->scroll(-diff.x(), diff.y());
-            } else {
-                canvasWidget->scroll(diff.x(), diff.y());
-            }
+            canvasWidget->scroll(diff.x(), diff.y(), canvasWidget->rect());
         }
     }
 
@@ -79,8 +75,8 @@ void KoCanvasControllerWidget::Private::resetScrollBars()
     // The scrollbar value always points at the top-left corner of the
     // bit of image we paint.
 
-    int docH = q->documentSize().height() + q->margin();
-    int docW = q->documentSize().width() + q->margin();
+    int docH = (int)q->documentSize().height() + q->margin();
+    int docW = (int)q->documentSize().width() + q->margin();
     int drawH = viewportWidget->height();
     int drawW = viewportWidget->width();
 
@@ -195,7 +191,7 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetX()));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetY()));
     connect(d->viewportWidget, SIGNAL(sizeChanged()), this, SLOT(updateCanvasOffsetX()));
-    connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->viewportWidget, SLOT(documentOffsetMoved(const QPoint&)));
+    connect(proxyObject, SIGNAL(moveDocumentOffset(QPoint)), d->viewportWidget, SLOT(documentOffsetMoved(QPoint)));
 }
 
 KoCanvasControllerWidget::~KoCanvasControllerWidget()
@@ -215,14 +211,13 @@ void KoCanvasControllerWidget::scrollContentsBy(int dx, int dy)
     d->setDocumentOffset();
 }
 
-QSize KoCanvasControllerWidget::viewportSize() const
+QSizeF KoCanvasControllerWidget::viewportSize() const
 {
-    return viewport()->size();
-}
-
-void KoCanvasControllerWidget::setDrawShadow(bool drawShadow)
-{
-    d->viewportWidget->setDrawShadow(drawShadow);
+    // Calculate viewport size aligned to device pixels to match KisOpenGLCanvas2.
+    qreal dpr = viewport()->devicePixelRatioF();
+    int viewportWidth = static_cast<int>(viewport()->width() * dpr);
+    int viewportHeight = static_cast<int>(viewport()->height() * dpr);
+    return QSizeF(viewportWidth / dpr, viewportHeight / dpr);
 }
 
 void KoCanvasControllerWidget::resizeEvent(QResizeEvent *resizeEvent)
@@ -231,7 +226,7 @@ void KoCanvasControllerWidget::resizeEvent(QResizeEvent *resizeEvent)
 
     // XXX: When resizing, keep the area we're looking at now in the
     // center of the resized view.
-    d->resetScrollBars();
+    resetScrollBars();
     d->setDocumentOffset();
 }
 
@@ -440,7 +435,7 @@ void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
     zoomBy(viewRect.center(), scale);
 }
 
-void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalculateCenter)
+void KoCanvasControllerWidget::updateDocumentSize(const QSizeF &sz, bool recalculateCenter)
 {
     // Don't update if the document-size didn't changed to prevent infinite loops and unneeded updates.
     if (KoCanvasController::documentSize() == sz)
@@ -456,7 +451,7 @@ void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalcul
     d->ignoreScrollSignals = true;
     KoCanvasController::setDocumentSize(sz);
     d->viewportWidget->setDocumentSize(sz);
-    d->resetScrollBars();
+    resetScrollBars();
 
     // Always emit the new offset.
     updateCanvasOffsetX();
@@ -599,6 +594,16 @@ void KoCanvasControllerWidget::setScrollBarValue(const QPoint &value)
 
     hBar->setValue(value.x());
     vBar->setValue(value.y());
+}
+
+void KoCanvasControllerWidget::resetScrollBars()
+{
+    d->resetScrollBars();
+}
+
+qreal KoCanvasControllerWidget::vastScrollingFactor() const
+{
+    return d->vastScrollingFactor;
 }
 
 KoCanvasControllerWidget::Private *KoCanvasControllerWidget::priv()

@@ -45,7 +45,7 @@ namespace KritaUtils
 
     QSize optimalPatchSize()
     {
-        KisImageConfig cfg;
+        KisImageConfig cfg(true);
         return QSize(cfg.updatePatchWidth(),
                      cfg.updatePatchHeight());
     }
@@ -475,4 +475,44 @@ namespace KritaUtils
             rc->moveTop(mirrorY);
         }
     }
+
+    void mirrorPoint(Qt::Orientation dir, const QPoint &center, QPointF *pt)
+    {
+        if (dir == Qt::Horizontal) {
+            pt->rx() = -(pt->x() - qreal(center.x())) + center.x();
+        } else /* if (dir == Qt::Vertical) */ {
+            pt->ry() = -(pt->y() - qreal(center.y())) + center.y();
+        }
+    }
+
+    qreal colorDifference(const QColor &c1, const QColor &c2)
+    {
+        const qreal dr = c1.redF() - c2.redF();
+        const qreal dg = c1.greenF() - c2.greenF();
+        const qreal db = c1.blueF() - c2.blueF();
+
+        return std::sqrt(2 * pow2(dr) + 4 * pow2(dg) + 3 * pow2(db));
+    }
+
+    void dragColor(QColor *color, const QColor &baseColor, qreal threshold)
+    {
+        while (colorDifference(*color, baseColor) < threshold) {
+
+            QColor newColor = *color;
+
+            if (newColor.lightnessF() > baseColor.lightnessF()) {
+                newColor = newColor.lighter(120);
+            } else {
+                newColor = newColor.darker(120);
+            }
+
+            if (newColor == *color) {
+                break;
+            }
+
+            *color = newColor;
+        }
+    }
+
+
 }

@@ -61,8 +61,11 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     QByteArray vertSource;
 
 // XXX Check can be removed and set to the MAC version after we move to Qt5.7
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     vertSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
+    // OpenColorIO doesn't support the new GLSL version yet.
+    vertSource.append("#define texture2D texture\n");
+    vertSource.append("#define texture3D texture\n");
 #else
     if (KisOpenGL::hasOpenGLES()) {
         vertSource.append("#version 300 es\n");
@@ -83,11 +86,21 @@ KisShaderProgram *KisOpenGLShaderLoader::loadShader(QString vertPath, QString fr
     QByteArray fragSource;
 
 // XXX Check can be removed and set to the MAC version after we move to Qt5.7
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     fragSource.append(KisOpenGL::hasOpenGL3() ? "#version 150 core\n" : "#version 120\n");
+    // OpenColorIO doesn't support the new GLSL version yet.
+    fragSource.append("#define texture2D texture\n");
+    fragSource.append("#define texture3D texture\n");
 #else
     if (KisOpenGL::hasOpenGLES()) {
-        fragSource.append("#version 300 es\nprecision mediump float;\n");
+        fragSource.append(
+                    "#version 300 es\n"
+                    "precision mediump float;\n"
+                    "precision mediump sampler3D;\n");
+
+        // OpenColorIO doesn't support the new GLSL version yet.
+        fragSource.append("#define texture2D texture\n");
+        fragSource.append("#define texture3D texture\n");
     } else {
         fragSource.append(KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n");
     }

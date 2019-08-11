@@ -19,8 +19,8 @@
 
 #include "kbugreport.h"
 
-#include <QtCore/QProcess>
-#include <QtCore/QCoreApplication>
+#include <QProcess>
+#include <QCoreApplication>
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QLayout>
@@ -34,7 +34,6 @@
 #include <QStandardPaths>
 #include <QComboBox>
 #include <QLineEdit>
-#include <QStandardPaths>
 #include <QDebug>
 #include <QTextEdit>
 #include <QDesktopServices>
@@ -173,9 +172,11 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
     // Point to the web form
 
     lay->addSpacing(10);
-    QString text = i18n("<qt>To submit a bug report, click on the button below. This will open a web browser "
+    QString text = i18n("<qt>"
+                        "<p>Please read <b><a href=\"https://docs.krita.org/en/untranslatable_pages/reporting_bugs.html\">this guide</a></b> for reporting bugs first!</p>"
+                        "<p>To submit a bug report, click on the button below. This will open a web browser "
                         "window on <a href=\"http://bugs.kde.org\">http://bugs.kde.org</a> where you will find "
-                        "a form to fill in. The information displayed above will be transferred to that server.</qt>");
+                        "a form to fill in. The information displayed above will be transferred to that server.</p></qt>");
     QLabel *label = new QLabel(text, this);
     label->setOpenExternalLinks(true);
     label->setTextInteractionFlags(Qt::LinksAccessibleByMouse | Qt::LinksAccessibleByKeyboard);
@@ -188,7 +189,7 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
     d->_k_updateUrl();
 
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
-    okButton->setText(i18n("&Launch Bug Report Wizard"));
+    okButton->setText(i18n("&Submit Bug Report"));
     okButton->setIcon(KisIconUtils::loadIcon(QStringLiteral("tools-report-bug")));
     lay->addWidget(buttonBox);
     setMinimumHeight(sizeHint().height() + 20);   // WORKAROUND: prevent "cropped" qcombobox

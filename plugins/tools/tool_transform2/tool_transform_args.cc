@@ -31,33 +31,30 @@
 
 
 ToolTransformArgs::ToolTransformArgs()
-    : m_liquifyProperties(new KisLiquifyProperties())
+    : m_mode(FREE_TRANSFORM)
+    , m_defaultPoints(true)
+    , m_origPoints {QVector<QPointF>()}
+    , m_transfPoints {QVector<QPointF>()}
+    , m_warpType(KisWarpTransformWorker::RIGID_TRANSFORM)
+    , m_alpha(1.0)
+    , m_transformedCenter(QPointF(0, 0))
+    , m_originalCenter(QPointF(0, 0))
+    , m_rotationCenterOffset(QPointF(0, 0))
+    , m_aX(0)
+    , m_aY(0)
+    , m_aZ(0)
+    , m_scaleX(1.0)
+    , m_scaleY(1.0)
+    , m_shearX(0.0)
+    , m_shearY(0.0)
+    , m_liquifyProperties(new KisLiquifyProperties())
+    , m_pixelPrecision(8)
+    , m_previewPixelPrecision(16)
 {
-    m_mode = FREE_TRANSFORM;
-    m_transformedCenter = QPointF(0, 0);
-    m_originalCenter = QPointF(0, 0);
-    m_rotationCenterOffset = QPointF(0, 0);
-    m_cameraPos = QVector3D(0,0,1024);
-    m_aX = 0;
-    m_aY = 0;
-    m_aZ = 0;
-    m_scaleX = 1.0;
-    m_scaleY = 1.0;
-    m_shearX = 0.0;
-    m_shearY = 0.0;
-    m_origPoints = QVector<QPointF>();
-    m_transfPoints = QVector<QPointF>();
-    m_warpType = KisWarpTransformWorker::RIGID_TRANSFORM;
-    m_alpha = 1.0;
-    m_keepAspectRatio = false;
-    m_defaultPoints = true;
-
     KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
     QString savedFilterId = configGroup.readEntry("filterId", "Bicubic");
     setFilterId(savedFilterId);
     m_transformAroundRotationCenter = configGroup.readEntry("transformAroundRotationCenter", "0").toInt();
-
-    m_editTransformPoints = false;
 }
 
 void ToolTransformArgs::setFilterId(const QString &id) {
@@ -101,6 +98,8 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_filter = args.m_filter;
     m_flattenedPerspectiveTransform = args.m_flattenedPerspectiveTransform;
     m_editTransformPoints = args.m_editTransformPoints;
+    m_pixelPrecision = args.pixelPrecision();
+    m_previewPixelPrecision = args.previewPixelPrecision();
 
     if (args.m_liquifyWorker) {
         m_liquifyWorker.reset(new KisLiquifyTransformWorker(*args.m_liquifyWorker.data()));
@@ -116,16 +115,21 @@ void ToolTransformArgs::clear()
 }
 
 ToolTransformArgs::ToolTransformArgs(const ToolTransformArgs& args)
-    : m_liquifyProperties(args.m_liquifyProperties)
+    : m_liquifyProperties(new KisLiquifyProperties(*args.m_liquifyProperties.data()))
 {
     init(args);
+}
+
+KisToolChangesTrackerData *ToolTransformArgs::clone() const
+{
+    return new ToolTransformArgs(*this);
 }
 
 ToolTransformArgs& ToolTransformArgs::operator=(const ToolTransformArgs& args)
 {
     clear();
 
-    m_liquifyProperties = args.m_liquifyProperties;
+    m_liquifyProperties.reset(new KisLiquifyProperties(*args.m_liquifyProperties.data()));
     init(args);
 
     return *this;
@@ -166,7 +170,9 @@ bool ToolTransformArgs::operator==(const ToolTransformArgs& other) const
 
         ((m_liquifyWorker && other.m_liquifyWorker &&
           *m_liquifyWorker == *other.m_liquifyWorker)
-         || m_liquifyWorker == other.m_liquifyWorker);
+         || m_liquifyWorker == other.m_liquifyWorker) &&
+            m_pixelPrecision == other.m_pixelPrecision &&
+            m_previewPixelPrecision == other.m_previewPixelPrecision;
 }
 
 bool ToolTransformArgs::isSameMode(const ToolTransformArgs& other) const
@@ -227,30 +233,30 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
                                      KisWarpTransformWorker::WarpType warpType,
                                      double alpha,
                                      bool defaultPoints,
-                                     const QString &filterId)
-    : m_liquifyProperties(new KisLiquifyProperties())
+                                     const QString &filterId,
+                                     int pixelPrecision, int previewPixelPrecision)
+    : m_mode(mode)
+    , m_defaultPoints(defaultPoints)
+    , m_origPoints {QVector<QPointF>()}
+    , m_transfPoints {QVector<QPointF>()}
+    , m_warpType(warpType)
+    , m_alpha(alpha)
+    , m_transformedCenter(transformedCenter)
+    , m_originalCenter(originalCenter)
+    , m_rotationCenterOffset(rotationCenterOffset)
+    , m_transformAroundRotationCenter(transformAroundRotationCenter)
+    , m_aX(aX)
+    , m_aY(aY)
+    , m_aZ(aZ)
+    , m_scaleX(scaleX)
+    , m_scaleY(scaleY)
+    , m_shearX(shearX)
+    , m_shearY(shearY)
+    , m_liquifyProperties(new KisLiquifyProperties())
+    , m_pixelPrecision(pixelPrecision)
+    , m_previewPixelPrecision(previewPixelPrecision)
 {
-    m_mode = mode;
-    m_transformedCenter = transformedCenter;
-    m_originalCenter = originalCenter;
-    m_rotationCenterOffset = rotationCenterOffset;
-    m_transformAroundRotationCenter = transformAroundRotationCenter;
-    m_cameraPos = QVector3D(0,0,1024);
-    m_aX = aX;
-    m_aY = aY;
-    m_aZ = aZ;
-    m_scaleX = scaleX;
-    m_scaleY = scaleY;
-    m_shearX = shearX;
-    m_shearY = shearY;
-    m_origPoints = QVector<QPointF>();
-    m_transfPoints = QVector<QPointF>();
-    m_warpType = warpType;
-    m_alpha = alpha;
-    m_defaultPoints = defaultPoints;
-    m_keepAspectRatio = false;
     setFilterId(filterId);
-    m_editTransformPoints = false;
 }
 
 
@@ -361,6 +367,11 @@ void ToolTransformArgs::toXML(QDomElement *e) const
         KisDomUtils::saveValue(&warpEl, "warpType", (int)m_warpType); // limited!
         KisDomUtils::saveValue(&warpEl, "alpha", m_alpha);
 
+        if(m_mode == CAGE){
+            KisDomUtils::saveValue(&warpEl,"pixelPrecision",m_pixelPrecision);
+            KisDomUtils::saveValue(&warpEl,"previewPixelPrecision",m_previewPixelPrecision);
+        }
+
     } else if (m_mode == LIQUIFY) {
         QDomElement liqEl = doc.createElement("liquify_transform");
         e->appendChild(liqEl);
@@ -400,7 +411,6 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
             KisDomUtils::loadValue(freeEl, "transformedCenter", &args.m_transformedCenter) &&
             KisDomUtils::loadValue(freeEl, "originalCenter", &args.m_originalCenter) &&
             KisDomUtils::loadValue(freeEl, "rotationCenterOffset", &args.m_rotationCenterOffset) &&
-            KisDomUtils::loadValue(freeEl, "transformAroundRotationCenter", &args.m_transformAroundRotationCenter) &&
 
             KisDomUtils::loadValue(freeEl, "aX", &args.m_aX) &&
             KisDomUtils::loadValue(freeEl, "aY", &args.m_aY) &&
@@ -416,8 +426,13 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
 
             KisDomUtils::loadValue(freeEl, "keepAspectRatio", &args.m_keepAspectRatio) &&
             KisDomUtils::loadValue(freeEl, "flattenedPerspectiveTransform", &args.m_flattenedPerspectiveTransform) &&
-
             KisDomUtils::loadValue(freeEl, "filterId", &filterId);
+
+        // transformAroundRotationCenter is a new parameter introduced in Krita 4.0,
+        // so it might be not present in older transform masks
+        if (!KisDomUtils::loadValue(freeEl, "transformAroundRotationCenter", &args.m_transformAroundRotationCenter)) {
+            args.m_transformAroundRotationCenter = false;
+        }
 
         if (result) {
             args.m_filter = KisFilterStrategyRegistry::instance()->value(filterId);
@@ -440,6 +455,15 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
             KisDomUtils::loadValue(warpEl, "warpType", &warpType) &&
             KisDomUtils::loadValue(warpEl, "alpha", &args.m_alpha);
 
+        if(args.m_mode == CAGE){
+            // Pixel precision is a parameter introduced in Krita 4.2, so we should
+            // expect it not being present in older files. In case it is not found,
+            // just use the defalt value initialized by c-tor (that is, do nothing).
+
+            (void) KisDomUtils::loadValue(warpEl, "pixelPrecision", &args.m_pixelPrecision);
+            (void) KisDomUtils::loadValue(warpEl, "previewPixelPrecision", &args.m_previewPixelPrecision);
+        }
+
         if (result && warpType >= 0 && warpType < KisWarpTransformWorker::N_MODES) {
             args.m_warpType = (KisWarpTransformWorker::WarpType_) warpType;
         } else {
@@ -458,7 +482,7 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
         KIS_ASSERT_RECOVER_NOOP(0 && "Unknown transform mode");
     }
 
-    if (!result) {
+    KIS_SAFE_ASSERT_RECOVER(result) {
         args = ToolTransformArgs();
     }
 

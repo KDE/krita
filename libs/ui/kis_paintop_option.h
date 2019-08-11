@@ -24,7 +24,7 @@
 #include <kritaui_export.h>
 #include <kis_properties_configuration.h>
 #include <brushengine/kis_locked_properties_proxy.h>
-#include <kis_base_option.h>
+#include <KisPaintopPropertiesBase.h>
 
 class QWidget;
 class QString;
@@ -36,6 +36,11 @@ class KisPaintopLodLimitations;
  * can be enabled/disabled, has a configuration page
  * (for example, a curve), a user-visible name and can
  * be serialized and deserialized into KisPaintOpPresets
+ *
+ * Because KisPaintOpOption classes create a QWidget in
+ * their constructor (the configuration page) you CANNOT
+ * create those objects in a KisPaintOp. KisPaintOps are
+ * created in non-gui threads.
  *
  * Options are disabled by default.
  */
@@ -74,13 +79,13 @@ public:
     void startReadOptionSetting(const KisPropertiesConfigurationSP setting);
     void startWriteOptionSetting(KisPropertiesConfigurationSP setting) const;
 
-    QWidget* configurationPage() const;
+    QWidget *configurationPage() const;
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
 protected:
 
-    void setConfigurationPage(QWidget * page);
+    void setConfigurationPage(QWidget *page);
 
 protected:
     /**
@@ -91,7 +96,7 @@ protected:
     }
 
     /**
-     * Re-implement this to set te widgets with the values in @param setting.
+     * Re-implement this to set te widgets with the values in @p setting.
      */
     virtual void readOptionSetting(const KisPropertiesConfigurationSP setting) {
         Q_UNUSED(setting);

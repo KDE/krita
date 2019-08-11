@@ -28,7 +28,7 @@ import shutil
 import enum
 from math import floor
 import xml.etree.ElementTree as ET
-from PyQt5.QtCore import QElapsedTimer, QSize, Qt, QRect
+from PyQt5.QtCore import QElapsedTimer, QSize, Qt, QRect, QFileSystemWatcher
 from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics, QPainter, QPalette, QFont
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QListView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp, QSplitter, QSlider, QLabel, QStyledItemDelegate, QStyle, QMessageBox
 import math
@@ -189,7 +189,7 @@ and finally export the result.
 
 The logic behind this docker is that it is very easy to get lost in a comics project due to the massive amount of files.
 By having a docker that gives the user quick access to the pages and also allows them to do all of the meta-stuff, like
-meta data, but also reordering the pages, the chaos of managing the project should take up less time, and more time can be focussed on actual writing and drawing.
+meta data, but also reordering the pages, the chaos of managing the project should take up less time, and more time can be focused on actual writing and drawing.
 """
 
 
@@ -197,6 +197,7 @@ class comics_project_manager_docker(DockWidget):
     setupDictionary = {}
     stringName = i18n("Comics Manager")
     projecturl = None
+    pagesWatcher = None
 
     def __init__(self):
         super().__init__()
@@ -285,7 +286,7 @@ class comics_project_manager_docker(DockWidget):
 
         self.action_add_page = QAction(i18n("Add Page"), self)
         self.action_add_page.triggered.connect(self.slot_add_new_page_single)
-        self.action_add_template = QAction(i18n("Add Page From Template"), self)
+        self.action_add_template = QAction(i18n("Add Page from Template"), self)
         self.action_add_template.triggered.connect(self.slot_add_new_page_from_template)
         self.action_add_existing = QAction(i18n("Add Existing Pages"), self)
         self.action_add_existing.triggered.connect(self.slot_add_page_from_url)
@@ -297,7 +298,7 @@ class comics_project_manager_docker(DockWidget):
         self.action_show_page_viewer = QAction(i18n("View Page In Window"), self)
         self.action_show_page_viewer.triggered.connect(self.slot_show_page_viewer)
         self.action_scrape_authors = QAction(i18n("Scrape Author Info"), self)
-        self.action_scrape_authors.setToolTip(i18n("Search for author information in documents and add it to the author list. This doesn't check for duplicates."))
+        self.action_scrape_authors.setToolTip(i18n("Search for author information in documents and add it to the author list. This does not check for duplicates."))
         self.action_scrape_authors.triggered.connect(self.slot_scrape_author_list)
         self.action_scrape_translations = QAction(i18n("Scrape Text for Translation"), self)
         self.action_scrape_translations.triggered.connect(self.slot_scrape_translations)
@@ -332,8 +333,9 @@ class comics_project_manager_docker(DockWidget):
         buttonLayout.addWidget(self.btn_project_url)
 
         self.page_viewer_dialog = comics_project_page_viewer.comics_project_page_viewer()
-
-        Application.notifier().imageSaved.connect(self.slot_check_for_page_update)
+        
+        self.pagesWatcher = QFileSystemWatcher()
+        self.pagesWatcher.fileChanged.connect(self.slot_check_for_page_update)
 
         buttonLayout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.MinimumExpanding))
 
@@ -342,8 +344,11 @@ class comics_project_manager_docker(DockWidget):
     """
 
     def slot_open_config(self):
-        self.path_to_config = QFileDialog.getOpenFileName(caption=i18n("Please select the json comic config file."), filter=str(i18n("json files") + "(*.json)"))[0]
+        self.path_to_config = QFileDialog.getOpenFileName(caption=i18n("Please select the JSON comic config file."), filter=str(i18n("JSON files") + "(*.json)"))[0]
         if os.path.exists(self.path_to_config) is True:
+            if os.access(self.path_to_config, os.W_OK) is False:
+                QMessageBox.warning(None, i18n("Config cannot be used"), i18n("Krita doesn't have write access to this folder, so new files cannot be made. Please configure the folder access or move the project to a folder that can be written to."), QMessageBox.Ok)
+                return
             configFile = open(self.path_to_config, "r", newline="", encoding="utf-16")
             self.setupDictionary = json.load(configFile)
             self.projecturl = os.path.dirname(str(self.path_to_config))
@@ -368,15 +373,18 @@ class comics_project_manager_docker(DockWidget):
     def fill_pages(self):
         self.loadingPages = True
         self.pagesModel.clear()
+        if len(self.pagesWatcher.files())>0:
+            self.pagesWatcher.removePaths(self.pagesWatcher.files())
         pagesList = []
         if "pages" in self.setupDictionary.keys():
             pagesList = self.setupDictionary["pages"]
         progress = QProgressDialog()
         progress.setMinimum(0)
         progress.setMaximum(len(pagesList))
-        progress.setWindowTitle(i18n("Loading pages..."))
+        progress.setWindowTitle(i18n("Loading Pages..."))
         for url in pagesList:
             absurl = os.path.join(self.projecturl, url)
+            relative = os.path.relpath(absurl, self.projecturl)
             if (os.path.exists(absurl)):
                 #page = Application.openDocument(absurl)
                 page = zipfile.ZipFile(absurl, "r")
@@ -391,11 +399,12 @@ class comics_project_manager_docker(DockWidget):
                 pageItem.setEditable(False)
                 pageItem.setIcon(QIcon(QPixmap.fromImage(thumbnail)))
                 pageItem.setData(dataList[1], role = CPE.DESCRIPTION)
-                pageItem.setData(url, role = CPE.URL)
+                pageItem.setData(relative, role = CPE.URL)
+                self.pagesWatcher.addPath(absurl)
                 pageItem.setData(dataList[2], role = CPE.KEYWORDS)
                 pageItem.setData(dataList[3], role = CPE.LASTEDIT)
                 pageItem.setData(dataList[4], role = CPE.EDITOR)
-                pageItem.setToolTip(url)
+                pageItem.setToolTip(relative)
                 page.close()
                 self.pagesModel.appendRow(pageItem)
                 progress.setValue(progress.value() + 1)
@@ -550,6 +559,7 @@ class comics_project_manager_docker(DockWidget):
                 newPageItem.setText(dataList[0].replace("_", " "))
                 newPageItem.setData(dataList[1], role = CPE.DESCRIPTION)
                 newPageItem.setData(relative, role = CPE.URL)
+                self.pagesWatcher.addPath(url)
                 newPageItem.setData(dataList[2], role = CPE.KEYWORDS)
                 newPageItem.setData(dataList[3], role = CPE.LASTEDIT)
                 newPageItem.setData(dataList[4], role = CPE.EDITOR)
@@ -594,7 +604,7 @@ class comics_project_manager_docker(DockWidget):
 
     """
     This function always asks for a template showing the new template window. This allows users to have multiple different
-    templates created for back covers, spreads, other and have them accesible, while still having the convenience of a singular
+    templates created for back covers, spreads, other and have them accessible, while still having the convenience of a singular
     "add page" that adds a default.
     """
 
@@ -667,13 +677,14 @@ class comics_project_manager_docker(DockWidget):
         while os.path.exists(absoluteUrl) is False:
             qApp.processEvents()
 
+        self.pagesWatcher.addPath(absoluteUrl)
         newPage.close()
 
         # add item to page.
         self.pagesModel.appendRow(newPageItem)
 
     """
-    Write to the json configuratin file.
+    Write to the json configuration file.
     This also checks the current state of the pages list.
     """
 
@@ -734,8 +745,9 @@ class comics_project_manager_docker(DockWidget):
             self.slot_write_config()
 
     """
-    An attempt at making the description editable from the comic pages list. It is currently not working because ZipFile
-    has no overwrite mechanism, and I don't have the energy to write one yet.
+    An attempt at making the description editable from the comic pages list.
+    It is currently not working because ZipFile has no overwrite mechanism,
+    and I don't have the energy to write one yet.
     """
 
     def slot_write_description(self, index):
@@ -779,12 +791,22 @@ class comics_project_manager_docker(DockWidget):
     """
 
     def slot_export(self):
+        
+        #ensure there is a unique identifier
+        if "uuid" not in self.setupDictionary.keys():
+            uuid = str()
+            if "acbfID" in self.setupDictionary.keys():
+                uuid = str(self.setupDictionary["acbfID"])
+            else:
+                uuid = QUuid.createUuid().toString()
+            self.setupDictionary["uuid"] = uuid
+        
         exporter = comics_exporter.comicsExporter()
         exporter.set_config(self.setupDictionary, self.projecturl)
         exportSuccess = exporter.export()
         if exportSuccess:
             print("CPMT: Export success! The files have been written to the export folder!")
-            QMessageBox.information(self, "Export success!", "The files have been written to the export folder!", QMessageBox.Ok)
+            QMessageBox.information(self, i18n("Export success"), i18n("The files have been written to the export folder."), QMessageBox.Ok)
 
     """
     Calls up the comics project setup wizard so users can create a new json file with the basic information.
@@ -793,6 +815,13 @@ class comics_project_manager_docker(DockWidget):
     def slot_new_project(self):
         setup = comics_project_setup_wizard.ComicsProjectSetupWizard()
         setup.showDialog()
+        self.path_to_config = os.path.join(setup.projectDirectory, "comicConfig.json")
+        if os.path.exists(self.path_to_config) is True:
+            configFile = open(self.path_to_config, "r", newline="", encoding="utf-16")
+            self.setupDictionary = json.load(configFile)
+            self.projecturl = os.path.dirname(str(self.path_to_config))
+            configFile.close()
+            self.load_config()
     """
     This is triggered by any document save.
     It checks if the given url in in the pages list, and if so,
@@ -810,6 +839,14 @@ class comics_project_manager_docker(DockWidget):
             if relUrl in self.setupDictionary["pages"]:
                 index = self.pagesModel.index(self.setupDictionary["pages"].index(relUrl), 0)
                 if index.isValid():
+                    if os.path.exists(url) is False:
+                        # we cannot check from here whether the file in question has been renamed or deleted.
+                        self.pagesModel.removeRow(index.row())
+                        return
+                    else:
+                        # Krita will trigger the filesystemwatcher when doing backupfiles,
+                        # so ensure the file is still watched if it exists.
+                        self.pagesWatcher.addPath(url)
                     pageItem = self.pagesModel.itemFromIndex(index)
                     page = zipfile.ZipFile(url, "r")
                     dataList = self.get_description_and_title(page.read("documentinfo.xml"))
@@ -819,7 +856,7 @@ class comics_project_manager_docker(DockWidget):
                     pageItem.setIcon(QIcon(QPixmap.fromImage(thumbnail)))
                     pageItem.setText(dataList[0])
                     pageItem.setData(dataList[1], role = CPE.DESCRIPTION)
-                    pageItem.setData(url, role = CPE.URL)
+                    pageItem.setData(relUrl, role = CPE.URL)
                     pageItem.setData(dataList[2], role = CPE.KEYWORDS)
                     pageItem.setData(dataList[3], role = CPE.LASTEDIT)
                     pageItem.setData(dataList[4], role = CPE.EDITOR)
@@ -827,13 +864,14 @@ class comics_project_manager_docker(DockWidget):
 
     """
     Resize all the pages in the pages list.
-    It will show a dialog with the options for resizing. Then, it will try to pop up a progress dialog while resizing.
+    It will show a dialog with the options for resizing.
+    Then, it will try to pop up a progress dialog while resizing.
     The progress dialog shows the remaining time and pages.
     """
 
     def slot_batch_resize(self):
         dialog = QDialog()
-        dialog.setWindowTitle(i18n("Risize all pages."))
+        dialog.setWindowTitle(i18n("Resize all Pages"))
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttons.accepted.connect(dialog.accept)
         buttons.rejected.connect(dialog.reject)
@@ -845,7 +883,7 @@ class comics_project_manager_docker(DockWidget):
 
         if dialog.exec_() == QDialog.Accepted:
             progress = QProgressDialog(i18n("Resizing pages..."), str(), 0, len(self.setupDictionary["pages"]))
-            progress.setWindowTitle(i18n("Resizing pages."))
+            progress.setWindowTitle(i18n("Resizing Pages"))
             progress.setCancelButton(None)
             timer = QElapsedTimer()
             timer.start()
@@ -907,7 +945,7 @@ class comics_project_manager_docker(DockWidget):
         metadata["keywords"] = ", ".join(self.setupDictionary.get("otherKeywords", [""]))
         metadata["transnotes"] = self.setupDictionary.get("translatorHeader", "Translator's Notes")
         scraper.start(self.setupDictionary["pages"], language, metadata)
-        QMessageBox.information(self, i18n("Scraping success!"), i18n("POT file has been written to: ")+fullTranslationPath, QMessageBox.Ok)
+        QMessageBox.information(self, i18n("Scraping success"), str(i18n("POT file has been written to: {file}")).format(file=fullTranslationPath), QMessageBox.Ok)
     """
     This is required by the dockwidget class, otherwise unused.
     """

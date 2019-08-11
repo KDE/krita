@@ -21,6 +21,8 @@
 #include <QTest>
 #include <QCoreApplication>
 
+#include  <sdk/tests/kistest.h>
+
 #include "filestest.h"
 
 #ifndef FILES_DATA_DIR
@@ -28,9 +30,33 @@
 #endif
 
 
+const QString HeightmapMimetype = "image/x-r8";
+
+
 void KisHeightmapTest::testFiles()
 {
-    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
+    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), 1);
 }
-QTEST_MAIN(KisHeightmapTest)
+
+
+
+void KisHeightmapTest::testImportFromWriteonly()
+{
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), HeightmapMimetype);
+}
+
+
+void KisHeightmapTest::testExportToReadonly()
+{
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), HeightmapMimetype);
+}
+
+
+void KisHeightmapTest::testImportIncorrectFormat()
+{
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), HeightmapMimetype);
+}
+
+
+KISTEST_MAIN(KisHeightmapTest)
 

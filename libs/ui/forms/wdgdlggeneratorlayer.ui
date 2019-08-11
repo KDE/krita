@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>500</width>
     <height>300</height>
    </rect>
   </property>
@@ -35,7 +35,7 @@
     </layout>
    </item>
    <item>
-    <widget class="KisWdgGenerator" name="wdgGenerator">
+    <widget class="KisWdgGenerator" name="wdgGenerator" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -47,11 +47,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>QLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
   <customwidget>
    <class>KisWdgGenerator</class>
    <extends>QWidget</extends>

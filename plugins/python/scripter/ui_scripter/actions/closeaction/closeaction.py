@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 from PyQt5.QtWidgets import QAction, QMessageBox
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtCore import Qt
+import krita
 
 
 class CloseAction(QAction):
@@ -28,22 +29,22 @@ class CloseAction(QAction):
 
         self.triggered.connect(self.close)
 
-        self.setText('Close')
+        self.setText(i18n("Close"))
         self.setObjectName('close')
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Q))
 
     @property
     def parent(self):
-        return 'File'
+        return 'File',
 
     def close(self):
         msgBox = QMessageBox(self.scripter.uicontroller.mainWidget)
 
-        msgBox.setInformativeText("Do you want to save the current document?")
+        msgBox.setInformativeText(i18n("Do you want to save the current document?"))
         msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
         msgBox.setDefaultButton(QMessageBox.Save)
 
-        ret = msgBox.exec()
+        ret = msgBox.exec_()
 
         if ret == QMessageBox.Cancel:
             return

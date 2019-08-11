@@ -48,10 +48,9 @@
 #endif
 
 
-KisGridPaintOp::KisGridPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
+KisGridPaintOp::KisGridPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP /*image*/)
     : KisPaintOp(painter)
     , m_settings(static_cast<KisGridPaintOpSettings*>(const_cast<KisPaintOpSettings*>(settings.data())))
-    , m_image(image)
     , m_node(node)
 {
     m_properties.readOptionSetting(settings);
@@ -86,7 +85,6 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     KisRandomSourceSP randomSource = info.randomSource();
     const qreal additionalScale = KisLodTransform::lodToScale(painter()->device());
 
-    if (!painter()) return KisSpacingInformation(m_spacing * additionalScale);
     m_dab->clear();
 
     qreal gridWidth = m_properties.gridWidth * m_properties.scale * additionalScale;

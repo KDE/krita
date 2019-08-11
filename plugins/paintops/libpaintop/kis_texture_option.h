@@ -32,7 +32,6 @@
 #include <QRect>
 
 class KisTextureChooser;
-class KisTextureOptionWidget;
 class KoPattern;
 class KoResource;
 class KisPropertiesConfiguration;
@@ -78,6 +77,7 @@ public:
      * @brief apply combine the texture map with the dab
      * @param dab the colored, final representation of the dab, after mirroring and everything.
      * @param offset the position of the dab on the image. used to calculate the position of the mask pattern
+     * @param info the paint information
      */
     void apply(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation & info);
     void fillProperties(const KisPropertiesConfigurationSP setting);

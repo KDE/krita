@@ -508,7 +508,7 @@ void KisCIETongueWidget::drawLabels()
     }
 }
  
-void KisCIETongueWidget::drawSmallElipse(QPointF xy, int r, int g, int b, int sz)
+void KisCIETongueWidget::drawSmallEllipse(QPointF xy, int r, int g, int b, int sz)
 {
     int icx, icy;
  
@@ -529,9 +529,9 @@ void KisCIETongueWidget::drawColorantTriangle()
     d->painter.setPen(qRgb(80, 80, 80));
     d->painter.setRenderHint(QPainter::Antialiasing);
     if (d->colorModel ==KisCIETongueWidget::RGBA) {
-        drawSmallElipse((QPointF(d->Primaries[0],d->Primaries[1])),   255, 128, 128, 6);
-        drawSmallElipse((QPointF(d->Primaries[3],d->Primaries[4])), 128, 255, 128, 6);
-        drawSmallElipse((QPointF(d->Primaries[6],d->Primaries[7])),  128, 128, 255, 6);
+        drawSmallEllipse((QPointF(d->Primaries[0],d->Primaries[1])),   255, 128, 128, 6);
+        drawSmallEllipse((QPointF(d->Primaries[3],d->Primaries[4])), 128, 255, 128, 6);
+        drawSmallEllipse((QPointF(d->Primaries[6],d->Primaries[7])),  128, 128, 255, 6);
         
         int x1, y1, x2, y2, x3, y3;
  
@@ -544,7 +544,7 @@ void KisCIETongueWidget::drawColorantTriangle()
         biasedLine(x3, y3, x1, y1);
     } /*else if (d->colorModel ==CMYK){
         for (i=0; i<d->Primaries.size();i+++){
-            drawSmallElipse((QPointF(d->Primaries[0],d->Primaries[1])),   160, 160, 160, 6);//greyscale for now
+            drawSmallEllipse((QPointF(d->Primaries[0],d->Primaries[1])),   160, 160, 160, 6);//greyscale for now
             //int x1, y1, x2, y2;
             //mapPoint(x1, y1, (QPointF(d->Primaries[i],d->Primaries[i+1])) );
             //mapPoint(x2, y2, (QPointF(d->Primaries[i+3],d->Primaries[i+4])) );
@@ -558,7 +558,7 @@ void KisCIETongueWidget::drawColorantTriangle()
  
 void KisCIETongueWidget::drawWhitePoint()
 {
-    drawSmallElipse(QPointF (d->whitePoint[0],d->whitePoint[1]),  255, 255, 255, 8);
+    drawSmallEllipse(QPointF (d->whitePoint[0],d->whitePoint[1]),  255, 255, 255, 8);
 }
 
 void KisCIETongueWidget::drawGamut()

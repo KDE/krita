@@ -13,6 +13,7 @@ set(kritalibkis_LIB_SRCS
     PresetChooser
     Palette.cpp
     PaletteView.cpp
+    Swatch.cpp
     Resource.cpp
     Selection.cpp
     View.cpp

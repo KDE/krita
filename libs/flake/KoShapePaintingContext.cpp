@@ -20,7 +20,7 @@
 #include "KoShapePaintingContext.h"
 
 #include "KoCanvasBase.h"
-#include "KoCanvasResourceManager.h"
+#include "KoCanvasResourceProvider.h"
 
 KoShapePaintingContext::KoShapePaintingContext()
     : showFormattingCharacters(false)
@@ -36,9 +36,9 @@ KoShapePaintingContext::KoShapePaintingContext()
 
 KoShapePaintingContext::KoShapePaintingContext(KoCanvasBase *canvas, bool forPrint)
 {
-    KoCanvasResourceManager *rm = canvas->resourceManager();
+    KoCanvasResourceProvider *rm = canvas->resourceManager();
 
-    showFormattingCharacters = rm->boolResource(KoCanvasResourceManager::ShowFormattingCharacters);
+    showFormattingCharacters = rm->boolResource(KoCanvasResourceProvider::ShowFormattingCharacters);
     if (forPrint) {
         showTextShapeOutlines = false;
         showFormattingCharacters = false;
@@ -46,15 +46,15 @@ KoShapePaintingContext::KoShapePaintingContext(KoCanvasBase *canvas, bool forPri
         showSectionBounds = false;
         showInlineObjectVisualization = false;
     } else {
-        showTextShapeOutlines = rm->boolResource(KoCanvasResourceManager::ShowTextShapeOutlines);
-        showInlineObjectVisualization = rm->boolResource(KoCanvasResourceManager::ShowInlineObjectVisualization);
-        if (rm->hasResource(KoCanvasResourceManager::ShowTableBorders)) {
-            showTableBorders = rm->boolResource(KoCanvasResourceManager::ShowTableBorders);
+        showTextShapeOutlines = rm->boolResource(KoCanvasResourceProvider::ShowTextShapeOutlines);
+        showInlineObjectVisualization = rm->boolResource(KoCanvasResourceProvider::ShowInlineObjectVisualization);
+        if (rm->hasResource(KoCanvasResourceProvider::ShowTableBorders)) {
+            showTableBorders = rm->boolResource(KoCanvasResourceProvider::ShowTableBorders);
         } else {
             showTableBorders = true;
         }
-        if (rm->hasResource(KoCanvasResourceManager::ShowSectionBounds)) {
-            showSectionBounds = rm->boolResource(KoCanvasResourceManager::ShowSectionBounds);
+        if (rm->hasResource(KoCanvasResourceProvider::ShowSectionBounds)) {
+            showSectionBounds = rm->boolResource(KoCanvasResourceProvider::ShowSectionBounds);
         } else {
             showSectionBounds = true;
         }

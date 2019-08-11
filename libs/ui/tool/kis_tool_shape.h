@@ -24,11 +24,12 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
+#include <kis_painter.h>
+
 #include "kis_tool_paint.h"
-#include "kis_painter.h"
+#include "KisSelectionToolFactoryBase.h"
+
 #include "ui_wdggeometryoptions.h"
-
-
 
 class KoCanvasBase;
 class KoPathShape;
@@ -71,7 +72,14 @@ protected:
 
     qreal currentStrokeWidth() const;
 
-    void setupPaintAction(KisRecordedPaintAction* action) override;
+    struct KRITAUI_EXPORT ShapeAddInfo {
+        bool shouldAddShape = false;
+        bool shouldAddSelectionShape = false;
+
+        void markAsSelectionShapeIfNeeded(KoShape *shape) const;
+    };
+
+    ShapeAddInfo shouldAddShape(KisNodeSP currentNode) const;
 
     void addShape(KoShape* shape);
 

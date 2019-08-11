@@ -353,9 +353,16 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="chkDisableAVXOptimizations">
+         <property name="text">
+          <string>Disable AVX vector optimizations</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCheckBox" name="chkDisableVectorOptimizations">
          <property name="text">
-          <string>Disable vector optimizations (for AMD CPUs)</string>
+          <string>Disable all vector optimizations (for AMD CPUs)</string>
          </property>
         </widget>
        </item>
@@ -398,6 +405,107 @@
           </size>
          </property>
         </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>Animation Cache</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,1">
+       <item>
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string>Cache Storage Backend</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QRadioButton" name="optInMemory">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Animation frame cache will be stored in RAM completely without any limitations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;WARNING:&lt;/span&gt; please make sure your computer has enough RAM &lt;span style=&quot; text-decoration: underline;&quot;&gt;above&lt;/span&gt; the amount you requested in General tab. Otherwise you might face system freezes.&lt;/p&gt;&lt;p&gt;* for 1 second of FullHD@25fps video you need extra 200 MiB of memory&lt;/p&gt;&lt;p&gt;* for 1 second of 4K UltraHD@25fps video you need extra 800 MiB of memory&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>In-memory</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="optOnDisk">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Animation frames are stored on hard disk in the same folder as swap file. The cache is stored in a compressed way. Little amount of extra RAM is needed.&lt;/p&gt;&lt;p&gt;Since data transfer speed of the hard drive is low, you might want to limit cached frame size to be able to play your video at 25 fps. The limit of 2500 px is usually a good choice.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>On-disk</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>Cache Generation Options</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_4">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="chkCachedFramesSizeLimit">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Render scaled down version of the frame if the image is bigger than the provided limit. Make sure you enable this option when using on-disk storage backend.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Limit cached frame size:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="KisSliderSpinBox" name="intCachedFramesSizeLimit" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Size limit after which the frames will be scaled down&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Recommended value:&lt;/span&gt; 2500&amp;nbsp;px&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="chkUseRegionOfInterest">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When the image is too big, render only currently visible part of it&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Use region of interest</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="KisSliderSpinBox" name="intRegionOfInterestMargin" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add extra area to the region of interest to each side of the canvas.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Recommended value:&lt;/span&gt; 25%. The region of interest will be extended by 25% to each side.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="chkBackgroundCacheGeneration">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Automatically prerender animation cache in background when the user is idle&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Enable background cache generation</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>

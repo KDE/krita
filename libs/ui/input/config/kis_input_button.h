@@ -109,7 +109,7 @@ public:
      *
      * Only applicable when type is `WheelType`.
      *
-     * \param newButtons The wheel movement to display.
+     * \param wheel The wheel movement to display.
      */
     void setWheel(KisShortcutConfiguration::MouseWheelMovement wheel);
 

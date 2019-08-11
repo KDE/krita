@@ -26,6 +26,7 @@
 #include <KoUpdater.h>
 #include <KoCompositeOps.h>
 
+#include <filter/kis_filter_category_ids.h>
 #include "kis_filter_configuration.h"
 #include <kis_filter_registry.h>
 
@@ -51,7 +52,7 @@ KritaHalftone::~KritaHalftone()
 }
 
 KisHalftoneFilter::KisHalftoneFilter()
-    : KisFilter(id(), categoryArtistic(), i18n("&Halftone..."))
+    : KisFilter(id(), FiltersCategoryArtisticId, i18n("&Halftone..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 
@@ -62,7 +63,7 @@ KisHalftoneFilter::KisHalftoneFilter()
     setSupportsThreading(false);
 }
 
-//I am pretty terrible at trigionometry, hence all the comments.
+//I am pretty terrible at trigonometry, hence all the comments.
 void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
                                     const QRect &applyRect,
                                     const KisFilterConfigurationSP config,
@@ -120,7 +121,7 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     painter.setCompositeOp(device->colorSpace()->compositeOp(COMPOSITE_OVER));
     KisPaintDeviceSP dab = device->createCompositionSourceDevice();
     KisPainter dbPainter(dab);
-    KisSelectionSP alpha = new KisSelection();
+    KisSelectionSP alpha = new KisSelection(new KisSelectionEmptyBounds(0));
     alpha->pixelSelection()->copyAlphaFrom(device, applyRect);
     device->fill(applyRect, backgroundC);
     dbPainter.setAntiAliasPolygonFill(config->getBool("antiAliasing", true));
@@ -191,7 +192,7 @@ KisFilterConfigurationSP KisHalftoneFilter::factoryConfiguration() const
     return config;
 }
 
-KisConfigWidget *KisHalftoneFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisHalftoneFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KisHalftoneConfigWidget(parent, dev);
 }

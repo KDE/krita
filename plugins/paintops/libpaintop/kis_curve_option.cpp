@@ -121,6 +121,21 @@ void KisCurveOption::lodLimitations(KisPaintopLodLimitations *l) const
     Q_UNUSED(l);
 }
 
+int KisCurveOption::intMinValue() const
+{
+    return 0;
+}
+
+int KisCurveOption::intMaxValue() const
+{
+    return 100;
+}
+
+QString KisCurveOption::valueSuffix() const
+{
+    return i18n("%");
+}
+
 void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting)
 {
     if (!setting) return;

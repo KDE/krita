@@ -20,18 +20,14 @@
 #ifndef KIS_POPUP_PALETTE_H
 #define KIS_POPUP_PALETTE_H
 
-#include <kis_types.h>
-#include <QWidget>
-#include <QQueue>
+#include <QElapsedTimer>
 #include <QPushButton>
 #include <QSlider>
-#include <KoColorDisplayRendererInterface.h>
-#include "kis_action_manager.h"
+#include <QGraphicsOpacityEffect>
 #include "KisViewManager.h"
 #include "kactioncollection.h"
-#include "kis_coordinates_converter.h"
 #include "kis_tool_button.h"
-#include "kis_highlighted_button.h"
+#include "KisHighlightedToolButton.h"
 #include <KisColorSelectorInterface.h>
 
 class KisFavoriteResourceManager;
@@ -43,6 +39,8 @@ class KisBrushHud;
 class KisRoundHudButton;
 class KisCanvasResourceProvider;
 class KisVisualColorSelector;
+class KisAcyclicSignalConnector;
+class KisMouseClickEater;
 
 class KisPopupPalette : public QWidget
 {
@@ -69,10 +67,11 @@ public:
     int selectedColor() const;
     void setParent(QWidget *parent);
 
-    void tabletEvent(QTabletEvent * event) override;
+    void tabletEvent(QTabletEvent *event) override;
 
 protected:
 
+    void showEvent(QShowEvent *event) override;
     void paintEvent(QPaintEvent*) override;
     void resizeEvent(QResizeEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
@@ -92,7 +91,6 @@ protected:
     void setHoveredColor(int x);
     int hoveredColor() const;
 
-
 private:
     void setVisible(bool b) override;
 
@@ -105,28 +103,28 @@ private:
 
     int numSlots();
     void adjustLayout(const QPoint &p);
-private:
 
+private:
     int m_hoveredPreset {0};
     int m_hoveredColor {0};
     int m_selectedColor {0};
 
-    KisCoordinatesConverter* m_coordinatesConverter;
+    KisCoordinatesConverter *m_coordinatesConverter;
 
-    KisViewManager* m_viewManager;
-    KisActionManager* m_actionManager;
-    KisFavoriteResourceManager* m_resourceManager;
-    KisColorSelectorInterface* m_triangleColorSelector {0};
+    KisViewManager *m_viewManager;
+    KisActionManager *m_actionManager;
+    KisFavoriteResourceManager *m_resourceManager;
+    KisColorSelectorInterface *m_triangleColorSelector {0};
     const KoColorDisplayRendererInterface *m_displayRenderer;
     QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
-    KActionCollection* m_actionCollection;
+    KActionCollection *m_actionCollection;
 
     QTimer m_timer;
 
     KisBrushHud *m_brushHud {0};
     float m_popupPaletteSize {385.0};
     float m_colorHistoryInnerRadius {72.0};
-    float m_colorHistoryOuterRadius {92.0};
+    qreal m_colorHistoryOuterRadius {92.0};
 
     KisRoundHudButton *m_settingsButton {0};
     KisRoundHudButton *m_brushHudButton {0};
@@ -135,6 +133,8 @@ private:
     QRect m_resetCanvasRotationIndicatorRect;
     bool m_isOverCanvasRotationIndicator {false};
     bool m_isRotatingCanvasIndicator {false};
+    bool m_isZoomingCanvas {false};
+
 
     KisHighlightedToolButton *mirrorMode {0};
     KisHighlightedToolButton *canvasOnlyButton {0};
@@ -142,6 +142,14 @@ private:
     QSlider *zoomCanvasSlider {0};
     int zoomSliderMinValue {10};
     int zoomSliderMaxValue {200};
+    KisAcyclicSignalConnector *m_acyclicConnector = 0;
+
+    int m_cachedNumSlots {0};
+    qreal m_cachedRadius {0.0};
+
+    // updates the transparency and effects of the whole widget
+    QGraphicsOpacityEffect *opacityChange {0};
+    KisMouseClickEater *m_clicksEater;
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);
@@ -171,11 +179,11 @@ private Q_SLOTS:
     void slotHide() { showPopupPalette(false); }
     void slotShowTagsPopup();
     void showHudWidget(bool visible);
-    void slotmirroModeClicked();
-    void slotCanvasonlyModeClicked();
     void slotZoomToOneHundredPercentClicked();
     void slotZoomSliderChanged(int zoom);
 
+    void slotZoomSliderPressed();
+    void slotZoomSliderReleased();
 
 };
 

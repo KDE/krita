@@ -290,10 +290,9 @@ bool KisAnimationCurvesModel::adjustKeyframes(const QModelIndexList &indexes, in
         KisImageBarrierLockerWithFeedback locker(image());
 
         if (timeOffset != 0) {
-            bool ok = createOffsetFramesCommand(indexes, QPoint(timeOffset, 0), false, command.data());
+            bool ok = createOffsetFramesCommand(indexes, QPoint(timeOffset, 0), false, false, command.data());
             if (!ok) return false;
         }
-
 
         using KisAnimationUtils::FrameItem;
         using KisAnimationUtils::FrameItemList;
@@ -336,7 +335,9 @@ bool KisAnimationCurvesModel::adjustKeyframes(const QModelIndexList &indexes, in
         });
     }
 
-    KisProcessingApplicator::runSingleCommandStroke(image(), command.take(), KisStrokeJobData::BARRIER);
+    KisProcessingApplicator::runSingleCommandStroke(image(), command.take(),
+                                                    KisStrokeJobData::BARRIER,
+                                                    KisStrokeJobData::EXCLUSIVE);
 
     return true;
 }

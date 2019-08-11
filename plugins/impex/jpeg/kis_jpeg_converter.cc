@@ -55,17 +55,15 @@ extern "C" {
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
 #include <kis_group_layer.h>
-#include <metadata/kis_meta_data_entry.h>
-#include <metadata/kis_meta_data_value.h>
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_io_backend.h>
+#include <kis_meta_data_entry.h>
+#include <kis_meta_data_value.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_io_backend.h>
 #include <kis_paint_device.h>
 #include <kis_transform_worker.h>
 #include <kis_jpeg_source.h>
 #include <kis_jpeg_destination.h>
 #include "kis_iterator_ng.h"
-
-#include <KoColorModelStandardIds.h>
 
 #define ICC_MARKER  (JPEG_APP0 + 2) /* JPEG marker code for ICC */
 #define ICC_OVERHEAD_LEN  14    /* size of non-profile data in APP2 */
@@ -88,7 +86,7 @@ void jpegErrorExit ( j_common_ptr cinfo )
     ( *( cinfo->err->format_message ) ) ( cinfo, jpegLastErrorMsg );
 
     /* Jump to the setjmp point */
-    throw std::runtime_error( jpegLastErrorMsg ); // or your preffered exception ...
+    throw std::runtime_error( jpegLastErrorMsg ); // or your preferred exception ...
 }
 
 J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)
@@ -143,7 +141,7 @@ KisJPEGConverter::~KisJPEGConverter()
 {
 }
 
-KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
+KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
 {
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
@@ -174,7 +172,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
         if (modelId.isEmpty()) {
             dbgFile << "unsupported colorspace :" << cinfo.out_color_space;
             jpeg_destroy_decompress(&cinfo);
-            return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+            return ImportExportCodes::FormatColorSpaceUnsupported;
         }
         uchar* profile_data;
         uint profile_len;
@@ -215,7 +213,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
         if (cs == 0) {
             dbgFile << "unknown colorspace";
             jpeg_destroy_decompress(&cinfo);
-            return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+            return ImportExportCodes::FormatColorSpaceUnsupported;
         }
         // TODO fixit
         // Create the cmsTransform if needed
@@ -298,7 +296,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
                 } while (it->nextPixel());
                 break;
             default:
-                return KisImageBuilder_RESULT_UNSUPPORTED;
+                return ImportExportCodes::FormatFeaturesUnsupported;
             }
         }
 
@@ -322,6 +320,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
                     GETJOCTET(marker->data[4]) != (JOCTET) 0x00 ||
                     GETJOCTET(marker->data[5]) != (JOCTET) 0x00)
                 continue; /* no Exif header */
+
             dbgFile << "Found exif information of length :" << marker->data_length;
             KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
             Q_ASSERT(exifIO);
@@ -392,7 +391,8 @@ KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
                 if (sizeIptc) {
                     // Decode the IPTC data
                     QByteArray byteArray((const char*)(record + sizeHdr), sizeIptc);
-                    iptcIO->loadFrom(layer->metaData(), new QBuffer(&byteArray));
+                    QBuffer buf(&byteArray);
+                    iptcIO->loadFrom(layer->metaData(), &buf);
                 } else {
                     dbgFile << "IPTC Not found in Photoshop marker";
                 }
@@ -435,17 +435,17 @@ KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
         jpeg_finish_decompress(&cinfo);
         jpeg_destroy_decompress(&cinfo);
         delete [] row_pointer;
-        return KisImageBuilder_RESULT_OK;
+        return ImportExportCodes::OK;
     }
     catch( std::runtime_error &e) {
         jpeg_destroy_decompress(&cinfo);
-        return KisImageBuilder_RESULT_FAILURE;
+        return ImportExportCodes::FileFormatIncorrect;
     }
 }
 
 
 
-KisImageBuilder_Result KisJPEGConverter::buildImage(QIODevice *io)
+KisImportExportErrorCode KisJPEGConverter::buildImage(QIODevice *io)
 {
     return decode(io);
 }
@@ -457,29 +457,25 @@ KisImageSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(QIODevice *io, KisPaintLayerSP layer, KisJPEGOptions options, KisMetaData::Store* metaData)
+KisImportExportErrorCode KisJPEGConverter::buildFile(QIODevice *io, KisPaintLayerSP layer, KisJPEGOptions options, KisMetaData::Store* metaData)
 {
-    if (!layer)
-        return KisImageBuilder_RESULT_INVALID_ARG;
+    KIS_ASSERT_RECOVER_RETURN_VALUE(layer, ImportExportCodes::InternalError);
 
     KisImageSP image = KisImageSP(layer->image());
-    if (!image)
-        return KisImageBuilder_RESULT_EMPTY;
+    KIS_ASSERT_RECOVER_RETURN_VALUE(layer, ImportExportCodes::InternalError);
 
     const KoColorSpace * cs = layer->colorSpace();
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
 
     if (color_type == JCS_UNKNOWN) {
-        KUndo2Command *tmp = layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-        delete tmp;
+        layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
         cs = KoColorSpaceRegistry::instance()->rgb8();
         color_type = JCS_RGB;
     }
 
     if (options.forceSRGB) {
         const KoColorSpace* dst = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), layer->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
-        KUndo2Command *tmp = layer->paintDevice()->convertTo(dst);
-        delete tmp;
+        layer->paintDevice()->convertTo(dst);
         cs = dst;
         color_type = JCS_RGB;
     }
@@ -707,7 +703,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(QIODevice *io, KisPaintLayerS
         default:
             delete [] row_pointer;
             jpeg_destroy_compress(&cinfo);
-            return KisImageBuilder_RESULT_UNSUPPORTED;
+            return ImportExportCodes::FormatFeaturesUnsupported;
         }
         jpeg_write_scanlines(&cinfo, &row_pointer, 1);
     }
@@ -720,7 +716,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(QIODevice *io, KisPaintLayerS
     // Free memory
     jpeg_destroy_compress(&cinfo);
 
-    return KisImageBuilder_RESULT_OK;
+    return ImportExportCodes::OK;
 }
 
 

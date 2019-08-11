@@ -47,7 +47,7 @@ public:
     qreal effectiveZoom;
 };
 
-KoZoomWidget::KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons specialButtons, int maxZoom )
+KoZoomWidget::KoZoomWidget(QWidget* parent, int maxZoom )
     : QWidget(parent)
     , d(new Private)
 {
@@ -57,7 +57,7 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons special
     layout->setSpacing(0);
 
     d->input = new KoZoomInput(this);
-    connect(d->input, SIGNAL(zoomLevelChanged(const QString&)), this, SIGNAL(zoomLevelChanged(const QString&)));
+    connect(d->input, SIGNAL(zoomLevelChanged(QString)), this, SIGNAL(zoomLevelChanged(QString)));
     layout->addWidget(d->input);
 
     d->slider = new QSlider(Qt::Horizontal);
@@ -71,35 +71,16 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons special
     layout->addWidget(d->slider);
     layout->setStretch(1, 1);
 
-    if (specialButtons & KoZoomAction::AspectMode) {
-        d->aspectButton = new QToolButton(this);
-        d->aspectButton->setIcon(koIcon("zoom-pixels"));
-        d->aspectButton->setIconSize(QSize(16,16));
-        d->aspectButton->setCheckable(true);
-        d->aspectButton->setChecked(true);
-        d->aspectButton->setAutoRaise(true);
-        d->aspectButton->setToolTip(i18n("Use same aspect as pixels"));
-        connect(d->aspectButton, SIGNAL(toggled(bool)), this, SIGNAL(aspectModeChanged(bool)));
-        layout->addWidget(d->aspectButton);
-    }
-    if (specialButtons & KoZoomAction::ZoomToSelection) {
-        QToolButton * zoomToSelectionButton = new QToolButton(this);
-        zoomToSelectionButton->setIcon(koIcon("zoom-select"));
-        zoomToSelectionButton->setIconSize(QSize(16,16));
-        zoomToSelectionButton->setAutoRaise(true);
-        zoomToSelectionButton->setToolTip(i18n("Zoom to Selection"));
-        connect(zoomToSelectionButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToSelection()));
-        layout->addWidget(zoomToSelectionButton);
-    }
-    if (specialButtons & KoZoomAction::ZoomToAll) {
-        QToolButton * zoomToAllButton = new QToolButton(this);
-        zoomToAllButton->setIcon(koIcon("zoom-draw"));
-        zoomToAllButton->setIconSize(QSize(16,16));
-        zoomToAllButton->setAutoRaise(true);
-        zoomToAllButton->setToolTip(i18n("Zoom to All"));
-        connect(zoomToAllButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToAll()));
-        layout->addWidget(zoomToAllButton);
-    }
+    d->aspectButton = new QToolButton(this);
+    d->aspectButton->setIcon(koIcon("zoom-pixels"));
+    d->aspectButton->setIconSize(QSize(16,16));
+    d->aspectButton->setCheckable(true);
+    d->aspectButton->setChecked(true);
+    d->aspectButton->setAutoRaise(true);
+    d->aspectButton->setToolTip(i18n("Use same aspect as pixels"));
+    connect(d->aspectButton, SIGNAL(toggled(bool)), this, SIGNAL(aspectModeChanged(bool)));
+    layout->addWidget(d->aspectButton);
+
     connect(d->slider, SIGNAL(valueChanged(int)), this, SIGNAL(sliderValueChanged(int)));
 }
 

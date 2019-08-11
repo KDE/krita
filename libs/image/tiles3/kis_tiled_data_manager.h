@@ -25,11 +25,17 @@
 
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>
+#include "config-hash-table-implementaion.h"
 
 //#include "kis_debug.h"
 #include "kritaimage_export.h"
 
+#ifdef USE_LOCK_FREE_HASH_TABLE
+#include "kis_tile_hash_table2.h"
+#else
 #include "kis_tile_hash_table.h"
+#endif // USE_LOCK_FREE_HASH_TABLE
+
 #include "kis_memento_manager.h"
 #include "kis_memento.h"
 #include "KisTiledExtentManager.h"
@@ -265,6 +271,11 @@ public:
      * Copy the bytes in the specified rect to a vector. The caller is responsible
      * for managing the vector.
      *
+     * \param bytes the bytes
+     * \param x x of top left corner
+     * \param y y of top left corner
+     * \param w width
+     * \param h height
      * \param dataRowStride is the step (in bytes) which should be
      *                      added to \p bytes pointer to get to the
      *                      next row
@@ -279,6 +290,11 @@ public:
      * not enough bytes, the rest of the rect will be filled with the default value
      * given (by default, 0);
      *
+     * \param bytes the bytes
+     * \param x x of top left corner
+     * \param y y of top left corner
+     * \param w width
+     * \param h height
      * \param dataRowStride is the step (in bytes) which should be
      *                      added to \p bytes pointer to get to the
      *                      next row

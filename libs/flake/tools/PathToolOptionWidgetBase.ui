@@ -42,7 +42,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="pathPage">
       <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,1">
@@ -228,7 +228,7 @@
          <item>
           <widget class="QPushButton" name="convertToPath">
            <property name="text">
-            <string>Convert To Path</string>
+            <string>Convert to Path</string>
            </property>
           </widget>
          </item>

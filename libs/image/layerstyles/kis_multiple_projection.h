@@ -23,22 +23,24 @@
 #include "kis_types.h"
 #include "kritaimage_export.h"
 
+class KisLayerStyleFilterEnvironment;
 
 class KRITAIMAGE_EXPORT KisMultipleProjection
 {
 public:
     KisMultipleProjection();
+    KisMultipleProjection(const KisMultipleProjection &rhs);
     ~KisMultipleProjection();
 
     static QString defaultProjectionId();
 
-    KisPaintDeviceSP getProjection(const QString &id, const QString &compositeOpId, KisPaintDeviceSP prototype);
+    KisPaintDeviceSP getProjection(const QString &id, const QString &compositeOpId, quint8 opacity, const QBitArray &channelFlags, KisPaintDeviceSP prototype);
     void freeProjection(const QString &id);
     void freeAllProjections();
 
     void clear(const QRect &rc);
 
-    void apply(KisPaintDeviceSP dstDevice, const QRect &rect);
+    void apply(KisPaintDeviceSP dstDevice, const QRect &rect, KisLayerStyleFilterEnvironment *env);
 
     KisPaintDeviceList getLodCapableDevices() const;
 

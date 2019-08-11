@@ -23,6 +23,7 @@
 #include <QVariant>
 
 #include <KisActionPlugin.h>
+#include "kis_types.h"
 
 class ImageSize : public KisActionPlugin
 {
@@ -31,12 +32,17 @@ public:
     ImageSize(QObject *parent, const QVariantList &);
     ~ImageSize() override;
 
+private:
+    void scaleLayerImpl(KisNodeSP rootNode);
+
 private Q_SLOTS:
 
     void slotImageSize();
     void slotCanvasSize();
     void slotLayerSize();
     void slotSelectionScale();
+
+    void slotScaleAllLayers();
 };
 
 #endif // IMAGESIZE_H

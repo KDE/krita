@@ -352,7 +352,9 @@ void ConvolveMatrixEffect::save(KoXmlWriter &writer)
         break;
     case Duplicate:
         // fall through as it is the default
-        break;
+        Q_FALLTHROUGH();
+    default:
+        ;
     }
     writer.addAttribute("kernelUnitLength", QString("%1 %2").arg(m_kernelUnitLength.x()).arg(m_kernelUnitLength.y()));
     if (m_preserveAlpha) {

@@ -32,6 +32,7 @@ class KoColorSpace;
 class KisCanvas2;
 class KisColorPreviewPopup;
 class KisDisplayColorConverter;
+class KoGamutMask;
 
 
 /// Base class for all color selectors, that should support color management and zooming.
@@ -50,6 +51,8 @@ public:
     const KoColorSpace* colorSpace() const;
 
     KisDisplayColorConverter* converter() const;
+
+    void tryHideAllPopups();
 
 public:
     void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset);
@@ -84,6 +87,8 @@ protected:
     void setHidingTime(int time);
     bool isPopup() const { return m_isPopup; }
     void mouseMoveEvent(QMouseEvent *event) override;
+    void changeEvent(QEvent *event) override;
+    void showEvent(QShowEvent *event) override;
     void requestUpdateColorAndPreview(const KoColor &color, Acs::ColorRole role);
 
 private:
@@ -93,7 +98,7 @@ private:
 protected Q_SLOTS:
     void hidePopup();
 
-    /// if you overwrite this, keep in mind, that you should set the colour only, if m_colorUpdateAllowed is true
+    /// if you overwrite this, keep in mind, that you should set the color only, if m_colorUpdateAllowed is true
     virtual void canvasResourceChanged(int key, const QVariant& v);
 
     void updateLastUsedColorPreview(const KoColor &color);

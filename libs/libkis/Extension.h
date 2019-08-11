@@ -65,7 +65,7 @@ public:
 
     /**
      * Create a new extension. The extension will be
-     * owned by @param parent.
+     * owned by @p parent.
      */
     explicit Extension(QObject *parent = 0);
     ~Extension() override;

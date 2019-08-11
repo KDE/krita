@@ -21,6 +21,7 @@
 #include <kis_cubic_curve.h>
 #include <QApplication>
 #include <QPalette>
+#include <KisSpinBoxSplineUnitConverter.h>
 
 enum enumState {
     ST_NORMAL,
@@ -34,6 +35,7 @@ class Q_DECL_HIDDEN KisCurveWidget::Private
 {
 
     KisCurveWidget *m_curveWidget;
+    KisSpinBoxSplineUnitConverter unitConverter;
 
 
 public:
@@ -67,8 +69,10 @@ public:
     QSpinBox *m_intOut;
 
     /* Working range of them */
-    int m_inOutMin;
-    int m_inOutMax;
+    int m_inMin;
+    int m_inMax;
+    int m_outMin;
+    int m_outMax;
 
     /**
      * State functions.
@@ -86,7 +90,7 @@ public:
     /**
      * Common update routines
      */
-    void setCurveModified();
+    void setCurveModified(bool rewriteSpinBoxesValues);
     void setCurveRepaint();
 
 
@@ -94,17 +98,18 @@ public:
      * Convert working range of
      * In/Out controls to normalized
      * range of spline (and reverse)
+     * See notes on KisSpinBoxSplineUnitConverter
      */
-    double io2sp(int x);
-    int sp2io(double x);
+    double io2sp(int x, int min, int max);
+    int sp2io(double x, int min, int max);
 
 
     /**
-     * Check whether newly created/moved point @pt doesn't overlap
-     * with any of existing ones from @m_points and adjusts its coordinates.
-     * @skipIndex is the index of the point, that shouldn't be taken
+     * Check whether newly created/moved point @p pt doesn't overlap
+     * with any of existing ones from @p m_points and adjusts its coordinates.
+     * @p skipIndex is the index of the point, that shouldn't be taken
      * into account during the search
-     * (e.g. because it's @pt itself)
+     * (e.g. because it's @p pt itself)
      *
      * Returns false in case the point can't be placed anywhere
      * without overlapping
@@ -118,7 +123,7 @@ public:
     void syncIOControls();
 
     /**
-     * Find the nearest point to @pt from m_points
+     * Find the nearest point to @p pt from m_points
      */
     int nearestPointInRange(QPointF pt, int wWidth, int wHeight) const;
 
@@ -135,16 +140,14 @@ KisCurveWidget::Private::Private(KisCurveWidget *parent)
     m_curveWidget = parent;
 }
 
-double KisCurveWidget::Private::io2sp(int x)
+double KisCurveWidget::Private::io2sp(int x, int min, int max)
 {
-    int rangeLen = m_inOutMax - m_inOutMin;
-    return double(x - m_inOutMin) / rangeLen;
+    return unitConverter.io2sp(x, min, max);
 }
 
-int KisCurveWidget::Private::sp2io(double x)
+int KisCurveWidget::Private::sp2io(double x, int min, int max)
 {
-    int rangeLen = m_inOutMax - m_inOutMin;
-    return int(x*rangeLen + 0.5) + m_inOutMin;
+    return unitConverter.sp2io(x, min, max);
 }
 
 
@@ -153,9 +156,10 @@ bool KisCurveWidget::Private::jumpOverExistingPoints(QPointF &pt, int skipIndex)
     Q_FOREACH (const QPointF &it, m_curve.points()) {
         if (m_curve.points().indexOf(it) == skipIndex)
             continue;
-        if (fabs(it.x() - pt.x()) < POINT_AREA)
+        if (fabs(it.x() - pt.x()) < POINT_AREA) {
             pt.rx() = pt.x() >= it.x() ?
                       it.x() + POINT_AREA : it.x() - POINT_AREA;
+        }
     }
     return (pt.x() >= 0 && pt.x() <= 1.);
 }
@@ -231,8 +235,8 @@ void KisCurveWidget::Private::syncIOControls()
         m_intIn->blockSignals(true);
         m_intOut->blockSignals(true);
 
-        m_intIn->setValue(sp2io(m_curve.points()[m_grab_point_index].x()));
-        m_intOut->setValue(sp2io(m_curve.points()[m_grab_point_index].y()));
+        m_intIn->setValue(sp2io(m_curve.points()[m_grab_point_index].x(), m_inMin, m_inMax));
+        m_intOut->setValue(sp2io(m_curve.points()[m_grab_point_index].y(), m_outMin, m_outMax));
 
         m_intIn->blockSignals(false);
         m_intOut->blockSignals(false);
@@ -241,9 +245,12 @@ void KisCurveWidget::Private::syncIOControls()
     }
 }
 
-void KisCurveWidget::Private::setCurveModified()
+void KisCurveWidget::Private::setCurveModified(bool rewriteSpinBoxesValues = true)
 {
-    syncIOControls();
+
+    if (rewriteSpinBoxesValues) {
+        syncIOControls();
+    }
     m_splineDirty = true;
     m_curveWidget->update();
     m_curveWidget->emit modified();

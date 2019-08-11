@@ -52,7 +52,7 @@ public:
      * Returns the unique number of this page for internal purposes. All pages
      * are numbered consecutively starting by 1.
      *
-     * This is used for example to anchor images to pages. The image then referes
+     * This is used for example to anchor images to pages. The image then refers
      * to the unique page-number.
      */
     virtual int pageNumber() const = 0;

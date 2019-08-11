@@ -1,2 +1,5 @@
-# let's make a module
-from .exportlayers import *
+import krita
+from .exportlayers import ExportLayersExtension
+
+
+Scripter.addExtension(ExportLayersExtension(krita.Krita.instance()))

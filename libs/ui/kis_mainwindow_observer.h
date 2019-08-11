@@ -6,13 +6,17 @@
 
 class KisViewManager;
 
+/**
+ * @brief The KisMainwindowObserver class is an interface for dock widgets
+ * that want to keep track of the main window as well as the canvas.
+ */
 class KRITAUI_EXPORT KisMainwindowObserver : public KoCanvasObserverBase
-{   
+{
 public:
     KisMainwindowObserver();
     ~KisMainwindowObserver() override;
 
-    virtual void setMainWindow(KisViewManager* kisview) = 0;
+    virtual void setViewManager(KisViewManager* kisview) = 0;
 
 };
 

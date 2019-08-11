@@ -16,162 +16,143 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include <KoColorSpaceMaths.h>
+#include <KoColor.h>
 #include "kis_color.h"
+#include <kis_arcs_constants.h>
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// --------- CoreImpl ------------------------------------------------------------------------ //
 
-template<class HSXType>
-struct CoreImpl: public KisColor::Core
+KisColor::KisColor(KisDisplayColorConverter* converter, Type type,
+                   qreal lR, qreal lG, qreal lB, qreal lGamma)
 {
-    void setRGB(float r, float g, float b, float a) override {
-        rgb(0) = r;
-        rgb(1) = g;
-        rgb(2) = b;
-        hsx(3) = a;
-        updateHSX();
-    }
-    
-    void setHSX(float h, float s, float x, float a) override {
-        hsx(0) = h;
-        hsx(1) = s;
-        hsx(2) = x;
-        hsx(3) = a;
-        updateRGB();
-    }
-    
-    void updateRGB() override {
-        float h = qBound(0.0f, hsx(0), 1.0f);
-        float s = qBound(0.0f, hsx(1), 1.0f);
-        float x = qBound(0.0f, hsx(2), 1.0f);
-        
-        KisColor::VecRGB gray(x, x, x);
-        ::getRGB(rgb(0), rgb(1), rgb(2), h);
-        ::setLightness<HSXType>(rgb(0), rgb(1), rgb(2), x);
-        rgb = gray + (rgb - gray) * s;
-    }
-    
-    void updateHSX() override {
-        float r = qBound(0.0f, rgb(0), 1.0f);
-        float g = qBound(0.0f, rgb(1), 1.0f);
-        float b = qBound(0.0f, rgb(2), 1.0f);
-        
-        float            h = ::getHue(r, g, b);
-        float            x = ::getLightness<HSXType>(r, g, b);
-        KisColor::VecRGB hue(0.0, 0.0, 0.0);
-        ::getRGB(hue(0), hue(1), hue(2), h);
-        ::setLightness<HSXType>(hue(0), hue(1), hue(2), x);
-        KisColor::VecRGB diff1 = hue - KisColor::VecRGB(x,x,x);
-        KisColor::VecRGB diff2 = rgb - KisColor::VecRGB(x,x,x);
-        
-        hsx(0) = h;
-        hsx(1) = diff1.dot(diff2) / diff1.squaredNorm(); // project rgb onto (VecRGB(x,x,x) - hue)
-        hsx(2) = x;
-    }
-};
+    m_colorConverter = converter;
+    m_type = type;
+    m_lumaR = lR;
+    m_lumaG = lG;
+    m_lumaB = lB;
+    m_lumaGamma = lGamma;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// --------- KisColor ------------------------------------------------------------------------ //
-
-KisColor::KisColor(Type type)
-{
-    initRGB(type, 0.0f, 0.0f, 0.0f, 0.0f);
+    initHSX(type, 0.0, 0.0, 0.0);
 }
 
-KisColor::KisColor(float hue, float a, Type type)
+KisColor::KisColor(qreal hue, KisDisplayColorConverter* converter, Type type,
+                   qreal lR, qreal lG, qreal lB, qreal lGamma)
 {
-    float r = 0;
-    float g = 0;
-    float b = 0;
-    ::getRGB(r, g, b, hue);
-    initRGB(type, r, g, b, a);
+    m_colorConverter = converter;
+    m_type = type;
+    m_lumaR = lR;
+    m_lumaG = lG;
+    m_lumaB = lB;
+    m_lumaGamma = lGamma;
+
+    initHSX(type, hue, 0.0, 0.0);
 }
 
-KisColor::KisColor(float r, float g, float b, float a, Type type)
+KisColor::KisColor(const QColor& color, KisDisplayColorConverter* converter, Type type,
+                   qreal lR, qreal lG, qreal lB, qreal lGamma)
 {
-    initRGB(type, r, g, b, a);
+    m_colorConverter = converter;
+    m_type = type;
+    m_lumaR = lR;
+    m_lumaG = lG;
+    m_lumaB = lB;
+    m_lumaGamma = lGamma;
+
+    KoColor koColor = m_colorConverter->approximateFromRenderedQColor(color);
+    fromKoColor(koColor);
 }
 
-KisColor::KisColor(const QColor& color, Type type)
-{
-    initRGB(type, color.redF(), color.greenF(), color.blueF(), color.alphaF());
-}
-
-KisColor::KisColor(Qt::GlobalColor color, Type type)
+KisColor::KisColor(Qt::GlobalColor color, KisDisplayColorConverter* converter,
+                   Type type, qreal lR, qreal lG, qreal lB, qreal lGamma)
 {
     QColor c(color);
-    initRGB(type, c.redF(), c.greenF(), c.blueF(), c.alphaF());
+    m_colorConverter = converter;
+    m_type = type;
+    m_lumaR = lR;
+    m_lumaG = lG;
+    m_lumaB = lB;
+    m_lumaGamma = lGamma;
+
+    KoColor koColor = m_colorConverter->approximateFromRenderedQColor(c);
+    fromKoColor(koColor);
 }
 
-KisColor::KisColor(const KisColor& color)
+KisColor::KisColor(const KoColor &color, KisDisplayColorConverter* converter, KisColor::Type type,
+                   qreal lR, qreal lG, qreal lB, qreal lGamma)
 {
-    initHSX(color.getType(), color.getH(), color.getS(), color.getX(), color.getA());
+    m_colorConverter = converter;
+    m_type = type;
+    m_lumaR = lR;
+    m_lumaG = lG;
+    m_lumaB = lB;
+    m_lumaGamma = lGamma;
+    fromKoColor(color);
 }
 
-KisColor::KisColor(const KisColor& color, KisColor::Type type)
+KisColor::KisColor(const KisColor& color, KisDisplayColorConverter* converter, KisColor::Type type,
+                   qreal lR, qreal lG, qreal lB, qreal lGamma)
 {
-    if(color.getType() == type)
-        initHSX(type, color.getH(), color.getS(), color.getX(), color.getA());
-    else
-        initRGB(type, color.getR(), color.getG(), color.getB(), color.getA());
+    m_colorConverter = converter;
+    m_type = type;
+    m_lumaR = lR;
+    m_lumaG = lG;
+    m_lumaB = lB;
+    m_lumaGamma = lGamma;
+    initHSX(type, color.getH(), color.getS(), color.getX());
 }
 
 KisColor::~KisColor()
 {
-	core()->~Core();
 }
 
-void KisColor::initRGB(Type type, float r, float g, float b, float a)
+QColor KisColor::toQColor() const
 {
-	// an offset that is added to the m_coreData buffer to make sure
-	// the struct created with the placement new operator is aligned at 16 bytes
-	// this is required by Eigen for vectorization
-	m_offset = quint8(16 - (reinterpret_cast<size_t>(m_coreData) % 16)) % 16;
-	
-    switch(type)
-    {
-        case HSY: { new (m_coreData + m_offset) CoreImpl<HSYType>; } break;
-        case HSV: { new (m_coreData + m_offset) CoreImpl<HSVType>; } break;
-        case HSL: { new (m_coreData + m_offset) CoreImpl<HSLType>; } break;
-        case HSI: { new (m_coreData + m_offset) CoreImpl<HSIType>; } break;
+    return m_colorConverter->toQColor(toKoColor());
+}
+
+KoColor KisColor::toKoColor() const
+{
+    KoColor color;
+
+    switch (m_type) {
+    case HSV:
+        color = m_colorConverter->fromHsvF(m_hue, m_saturation, m_value);
+        break;
+    case HSI:
+        color = m_colorConverter->fromHsiF(m_hue, m_saturation, m_value);
+        break;
+    case HSL:
+        color = m_colorConverter->fromHslF(m_hue, m_saturation, m_value);
+        break;
+    case HSY:
+        color = m_colorConverter->fromHsyF(m_hue, m_saturation, m_value, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
+        break;
     }
-    
-    core()->type = type;
-    core()->setRGB(r, g, b, a);
+
+    return color;
 }
 
-void KisColor::initHSX(Type type, float h, float s, float x, float a)
+void KisColor::fromKoColor(const KoColor& color)
 {
-	// an offset that is added to the m_coreData buffer to make sure
-	// the struct created with the placement new operator is aligned at 16 bytes
-	// this is required by Eigen for vectorization
-	m_offset = quint8(16 - (reinterpret_cast<size_t>(m_coreData) % 16)) % 16;
-	
-    switch(type)
-    {
-        case HSY: { new (m_coreData + m_offset) CoreImpl<HSYType>; } break;
-        case HSV: { new (m_coreData + m_offset) CoreImpl<HSVType>; } break;
-        case HSL: { new (m_coreData + m_offset) CoreImpl<HSLType>; } break;
-        case HSI: { new (m_coreData + m_offset) CoreImpl<HSIType>; } break;
+    switch (m_type) {
+    case HSV:
+        m_colorConverter->getHsvF(color, &m_hue, &m_saturation, &m_value);
+        break;
+    case HSI:
+        m_colorConverter->getHsiF(color, &m_hue, &m_saturation, &m_value);
+        break;
+    case HSL:
+        m_colorConverter->getHsvF(color, &m_hue, &m_saturation, &m_value);
+        break;
+    case HSY:
+        m_colorConverter->getHsyF(color, &m_hue, &m_saturation, &m_value, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
+        break;
     }
-    
-    core()->type = type;
-    core()->setHSX(h, s, x, a);
 }
 
-void KisColor::setRGBfromHue(float hue, float alpha)
+void KisColor::initHSX(Type type, qreal h, qreal s, qreal x)
 {
-    float r = 0;
-    float g = 0;
-    float b = 0;
-    ::getRGB(r, g, b, hue);
-    core()->setRGB(r, g, b, alpha);
+    m_type = type;
+    m_hue = h;
+    m_saturation = s;
+    m_value = x;
 }
-
-KisColor& KisColor::operator=(const KisColor& color)
-{
-    initHSX(color.getType(), color.getH(), color.getS(), color.getX(), color.getA());
-    return *this;
-}
-

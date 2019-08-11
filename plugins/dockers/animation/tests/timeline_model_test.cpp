@@ -34,7 +34,6 @@
 #include "flake/kis_shape_controller.h"
 #include "kis_undo_adapter.h"
 
-
 #include "timeline_frames_view.h"
 #include "timeline_frames_model.h"
 
@@ -46,6 +45,9 @@
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
 
+#include  <sdk/tests/kistest.h>
+#include <sdk/tests/testutil.h>
+
 void TimelineModelTest::init()
 {
     m_doc = KisPart::instance()->createDocument();
@@ -55,6 +57,8 @@ void TimelineModelTest::init()
     //m_nodeModel = new KisNodeModel(0);
 
     initBase();
+
+    m_doc->setCurrentImage(m_image);
 }
 
 void TimelineModelTest::cleanup()
@@ -145,12 +149,21 @@ struct TestingInterface : TimelineFramesModel::NodeManipulationInterface
             new KisImageLayerRemoveCommand(m_image, node));
     }
 
+    bool setNodeProperties(KisNodeSP, KisImageSP, KisBaseNode::PropertyList) const override
+    {
+        return false;
+    }
+
 private:
     KisImageSP m_image;
 };
 
 void TimelineModelTest::testView()
 {
+#ifndef ENABLE_GUI_TESTS
+    return;
+#endif
+
     QDialog dlg;
 
     QFont font;
@@ -270,6 +283,9 @@ void TimelineModelTest::slotGuiChangedNode(KisNodeSP node)
 
 void TimelineModelTest::testOnionSkins()
 {
+#ifndef ENABLE_GUI_TESTS
+    return;
+#endif
     QDialog dlg;
 
     QFont font;
@@ -295,4 +311,4 @@ void TimelineModelTest::slotBang()
     ENTER_FUNCTION() << "!!!!";
 }
 
-QTEST_MAIN(TimelineModelTest)
+KISTEST_MAIN(TimelineModelTest)

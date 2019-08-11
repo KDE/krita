@@ -43,7 +43,7 @@ public:
     QString observerName() override { return "OnionSkinsDocker"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
-    void setMainWindow(KisViewManager *kisview) override;
+    void setViewManager(KisViewManager *kisview) override;
 
 private:
     Ui::OnionSkinsDocker *ui;

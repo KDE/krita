@@ -23,7 +23,7 @@
 #include <KoSelectedShapesProxySimple.h>
 #include <KoShapeGroup.h>
 #include <KoCanvasBase.h>
-#include <KoShapeBasedDocumentBase.h>
+#include <KoShapeControllerBase.h>
 #include <KoShapeContainerModel.h>
 #include <QPainter>
 #include "KoShapeManager.h"
@@ -79,7 +79,7 @@ class KRITAFLAKE_EXPORT MockGroup : public KoShapeGroup
 
 class KoToolProxy;
 
-class KRITAFLAKE_EXPORT MockShapeController : public KoShapeBasedDocumentBase
+class KRITAFLAKE_EXPORT MockShapeController : public KoShapeControllerBase
 {
 public:
     void addShapes(const QList<KoShape*> shapes) override {
@@ -121,12 +121,12 @@ class KRITAFLAKE_EXPORT MockCanvas : public KoCanvasBase
 {
     Q_OBJECT
 public:
-    MockCanvas(KoShapeBasedDocumentBase *aKoShapeBasedDocumentBase =0)//made for TestSnapStrategy.cpp
-            : KoCanvasBase(aKoShapeBasedDocumentBase),
+    MockCanvas(KoShapeControllerBase *aKoShapeControllerBase =0)//made for TestSnapStrategy.cpp
+            : KoCanvasBase(aKoShapeControllerBase),
               m_shapeManager(new KoShapeManager(this)),
               m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
     {
-        if (MockShapeController *controller = dynamic_cast<MockShapeController*>(aKoShapeBasedDocumentBase)) {
+        if (MockShapeController *controller = dynamic_cast<MockShapeController*>(aKoShapeControllerBase)) {
             controller->setShapeManager(m_shapeManager.data());
         }
     }

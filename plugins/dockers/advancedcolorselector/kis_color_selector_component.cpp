@@ -22,6 +22,7 @@
 #include "KoColorSpace.h"
 #include <QPainter>
 #include <QMouseEvent>
+#include <resources/KoGamutMask.h>
 
 
 KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelector* parent) :
@@ -36,14 +37,17 @@ KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelector* parent) :
     m_hsySaturation(1),
     m_luma(0.299),
     m_parent(parent),
-    m_width(0),
-    m_height(0),
+    m_gamutMaskOn(false),
+    m_currentGamutMask(nullptr),
+    m_maskPreviewActive(true),
+    m_lastX(0),
+    m_lastY(0),
     m_x(0),
     m_y(0),
+    m_width(0),
+    m_height(0),
     m_dirty(true),
-    m_lastColorSpace(0),
-    m_lastX(0),
-    m_lastY(0)
+    m_lastColorSpace(0)
 {
     Q_ASSERT(parent);
 }
@@ -73,9 +77,11 @@ void KisColorSelectorComponent::mouseEvent(int x, int y)
     int newX=qBound(0, (x-m_x), width());
     int newY=qBound(0, (y-m_y), height());
 
-    selectColor(newX, newY);
-    m_lastX=newX;
-    m_lastY=newY;
+    if (allowsColorSelectionAtPoint(QPoint(newX, newY))) {
+        m_lastSelectedColor = selectColor(newX, newY);
+        m_lastX=newX;
+        m_lastY=newY;
+    }
 }
 
 const KoColorSpace* KisColorSelectorComponent::colorSpace() const
@@ -88,7 +94,34 @@ const KoColorSpace* KisColorSelectorComponent::colorSpace() const
 void KisColorSelectorComponent::setDirty()
 {
     m_dirty = true;
+    setColor(m_lastSelectedColor);
 }
+
+void KisColorSelectorComponent::setGamutMask(KoGamutMask *gamutMask)
+{
+    m_currentGamutMask = gamutMask;
+    m_gamutMaskOn = true;
+}
+
+void KisColorSelectorComponent::unsetGamutMask()
+{
+    m_gamutMaskOn = false;
+    m_currentGamutMask = nullptr;
+}
+
+void KisColorSelectorComponent::updateGamutMaskPreview()
+{
+    setDirty();
+    update();
+}
+
+void KisColorSelectorComponent::toggleGamutMask(bool state)
+{
+    m_gamutMaskOn = state;
+    setDirty();
+    update();
+}
+
 
 bool KisColorSelectorComponent::isDirty() const
 {
@@ -101,6 +134,11 @@ bool KisColorSelectorComponent::containsPointInComponentCoords(int x, int y) con
         return true;
     else
         return false;
+}
+
+bool KisColorSelectorComponent::allowsColorSelectionAtPoint(const QPoint & /*pt*/) const
+{
+    return true;
 }
 
 KoColor KisColorSelectorComponent::currentColor()
@@ -198,6 +236,11 @@ void KisColorSelectorComponent::setConfiguration(Parameter param, Type type)
 {
     m_parameter = param;
     m_type = type;
+}
+
+void KisColorSelectorComponent::setColor(const KoColor &color)
+{
+    m_lastSelectedColor = color;
 }
 
 void KisColorSelectorComponent::setLastMousePosition(int x, int y)

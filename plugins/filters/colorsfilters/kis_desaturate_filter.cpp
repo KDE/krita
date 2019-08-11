@@ -39,6 +39,7 @@
 #include "KoBasicHistogramProducers.h"
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_color_transformation_configuration.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
@@ -55,7 +56,7 @@
 #include <kis_iterator_ng.h>
 
 KisDesaturateFilter::KisDesaturateFilter()
-   : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Desaturate..."))
+   : KisColorTransformationFilter(id(), FiltersCategoryAdjustId, i18n("&Desaturate..."))
 {
     setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_U));
     setSupportsPainting(true);
@@ -65,7 +66,7 @@ KisDesaturateFilter::~KisDesaturateFilter()
 {
 }
 
-KisConfigWidget *KisDesaturateFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisDesaturateFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     return new KisDesaturateConfigWidget(parent);

@@ -70,12 +70,6 @@ public:
     void setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bevelAndEmboss);
     void fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAndEmboss) const;
 
-private Q_SLOTS:
-    void slotDialAngleChanged(int value);
-    void slotIntAngleChanged(int value);
-
-    void slotGlobalLightToggled();
-
 Q_SIGNALS:
     void configChanged();
     void globalAngleChanged(int value);
@@ -127,12 +121,6 @@ public:
     void setShadow(const psd_layer_effects_shadow_common *shadow);
     void fetchShadow(psd_layer_effects_shadow_common *shadow) const;
 
-private Q_SLOTS:
-    void slotDialAngleChanged(int value);
-    void slotIntAngleChanged(int value);
-
-    void slotGlobalLightToggled();
-
 Q_SIGNALS:
     void configChanged();
     void globalAngleChanged(int value);
@@ -148,10 +136,6 @@ public:
     GradientOverlay(KisCanvasResourceProvider *resourceProvider, QWidget *parent);
     void setGradientOverlay(const psd_layer_effects_gradient_overlay *gradient);
     void fetchGradientOverlay(psd_layer_effects_gradient_overlay *gradient) const;
-
-private Q_SLOTS:
-    void slotDialAngleChanged(int value);
-    void slotIntAngleChanged(int value);
 
 Q_SIGNALS:
     void configChanged();
@@ -204,10 +188,6 @@ public:
     void setSatin(const psd_layer_effects_satin *satin);
     void fetchSatin(psd_layer_effects_satin *satin) const;
 
-private Q_SLOTS:
-    void slotDialAngleChanged(int value);
-    void slotIntAngleChanged(int value);
-
 Q_SIGNALS:
     void configChanged();
 
@@ -221,10 +201,6 @@ public:
     Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent);
     void setStroke(const psd_layer_effects_stroke *stroke);
     void fetchStroke(psd_layer_effects_stroke *stroke) const;
-
-private Q_SLOTS:
-    void slotDialAngleChanged(int value);
-    void slotIntAngleChanged(int value);
 
 Q_SIGNALS:
     void configChanged();
@@ -275,6 +251,8 @@ public Q_SLOTS:
 
     void notifyGuiConfigChanged();
     void notifyPredefinedStyleSelected(KisPSDLayerStyleSP style);
+
+    void slotBevelAndEmbossChanged(QListWidgetItem*);
 
     void changePage(QListWidgetItem *, QListWidgetItem*);
 

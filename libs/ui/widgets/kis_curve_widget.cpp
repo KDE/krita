@@ -90,7 +90,7 @@ KisCurveWidget::~KisCurveWidget()
     delete d;
 }
 
-void KisCurveWidget::setupInOutControls(QSpinBox *in, QSpinBox *out, int min, int max)
+void KisCurveWidget::setupInOutControls(QSpinBox *in, QSpinBox *out, int inMin, int inMax, int outMin, int outMax)
 {
     d->m_intIn = in;
     d->m_intOut = out;
@@ -98,15 +98,20 @@ void KisCurveWidget::setupInOutControls(QSpinBox *in, QSpinBox *out, int min, in
     if (!d->m_intIn || !d->m_intOut)
         return;
 
-    d->m_inOutMin = min;
-    d->m_inOutMax = max;
+    d->m_inMin = inMin;
+    d->m_inMax = inMax;
+    d->m_outMin = outMin;
+    d->m_outMax = outMax;
 
-    d->m_intIn->setRange(d->m_inOutMin, d->m_inOutMax);
-    d->m_intOut->setRange(d->m_inOutMin, d->m_inOutMax);
+    int realInMin = qMin(inMin, inMax); // tilt elevation has range (90, 0), which QSpinBox can't handle
+    int realInMax = qMax(inMin, inMax);
 
+    d->m_intIn->setRange(realInMin, realInMax);
+    d->m_intOut->setRange(d->m_outMin, d->m_outMax);
 
-    connect(d->m_intIn, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
-    connect(d->m_intOut, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
+    connect(d->m_intIn, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)), Qt::UniqueConnection);
+    connect(d->m_intOut, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)), Qt::UniqueConnection);
+
     d->syncIOControls();
 
 }
@@ -128,27 +133,34 @@ void KisCurveWidget::inOutChanged(int)
 
     Q_ASSERT(d->m_grab_point_index >= 0);
 
-    pt.setX(d->io2sp(d->m_intIn->value()));
-    pt.setY(d->io2sp(d->m_intOut->value()));
+    pt.setX(d->io2sp(d->m_intIn->value(), d->m_inMin, d->m_inMax));
+    pt.setY(d->io2sp(d->m_intOut->value(), d->m_outMin, d->m_outMax));
 
+    bool newPoint = false;
     if (d->jumpOverExistingPoints(pt, d->m_grab_point_index)) {
+        newPoint = true;
+
         d->m_curve.setPoint(d->m_grab_point_index, pt);
         d->m_grab_point_index = d->m_curve.points().indexOf(pt);
         emit pointSelectedChanged();
-    } else
+    } else {
         pt = d->m_curve.points()[d->m_grab_point_index];
+    }
 
+    if (!newPoint) {
+        // if there is a new Point, no point in rewriting values in spinboxes
 
-    d->m_intIn->blockSignals(true);
-    d->m_intOut->blockSignals(true);
+        d->m_intIn->blockSignals(true);
+        d->m_intOut->blockSignals(true);
 
-    d->m_intIn->setValue(d->sp2io(pt.x()));
-    d->m_intOut->setValue(d->sp2io(pt.y()));
+        d->m_intIn->setValue(d->sp2io(pt.x(), d->m_inMin, d->m_inMax));
+        d->m_intOut->setValue(d->sp2io(pt.y(), d->m_outMin, d->m_outMax));
 
-    d->m_intIn->blockSignals(false);
-    d->m_intOut->blockSignals(false);
+        d->m_intIn->blockSignals(false);
+        d->m_intOut->blockSignals(false);
+    }
 
-    d->setCurveModified();
+    d->setCurveModified(false);
 }
 
 
@@ -276,7 +288,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
      QPalette appPalette = QApplication::palette();
      p.fillRect(rect(), appPalette.color(QPalette::Base)); // clear out previous paint call results
 
-     // make the entire widget greyed out if it is disabled
+     // make the entire widget grayed out if it is disabled
      if (!this->isEnabled()) {
         p.setOpacity(0.2);
      }
@@ -299,9 +311,10 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
 
     d->drawGrid(p, wWidth, wHeight);
 
-    KisConfig cfg;
-    if (cfg.antialiasCurves())
+    KisConfig cfg(true);
+    if (cfg.antialiasCurves()) {
         p.setRenderHint(QPainter::Antialiasing);
+    }
 
     // Draw curve.
     double curY;
@@ -348,14 +361,21 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
             curveX = d->m_curve.points().at(i).x();
             curveY = d->m_curve.points().at(i).y();
 
+            int handleSize = 12; // how big should control points be (diamater size)
+
             if (i == d->m_grab_point_index) {
-                p.setPen(QPen(appPalette.color(QPalette::Text), 6, Qt::SolidLine));
-                p.drawEllipse(QRectF(curveX * wWidth - 2,
-                                     wHeight - 2 - curveY * wHeight, 4, 4));
+                // active point is slightly more "bold"
+                p.setPen(QPen(appPalette.color(QPalette::Text), 4, Qt::SolidLine));
+                p.drawEllipse(QRectF(curveX * wWidth - (handleSize*0.5),
+                                     wHeight - (handleSize*0.5) - curveY * wHeight,
+                                     handleSize,
+                                     handleSize));
             } else {
                 p.setPen(QPen(appPalette.color(QPalette::Text), 2, Qt::SolidLine));
-                p.drawEllipse(QRectF(curveX * wWidth - 3,
-                                     wHeight - 3 - curveY * wHeight, 6, 6));
+                p.drawEllipse(QRectF(curveX * wWidth - (handleSize*0.5),
+                                     wHeight - (handleSize*0.5) - curveY * wHeight,
+                                     handleSize,
+                                     handleSize));
             }
         }
     }

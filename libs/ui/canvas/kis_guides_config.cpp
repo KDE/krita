@@ -97,6 +97,12 @@ bool KisGuidesConfig::operator==(const KisGuidesConfig &rhs) const
     return *d == *rhs.d;
 }
 
+bool KisGuidesConfig::hasSamePositionAs(const KisGuidesConfig &rhs) const
+{
+    return horizontalGuideLines() == rhs.horizontalGuideLines() &&
+        verticalGuideLines() == rhs.verticalGuideLines();
+}
+
 void KisGuidesConfig::setHorizontalGuideLines(const QList<qreal> &lines)
 {
     d->horzGuideLines = lines;
@@ -227,14 +233,14 @@ bool KisGuidesConfig::hasGuides() const
 
 void KisGuidesConfig::loadStaticData()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->guidesLineType = LineTypeInternal(cfg.guidesLineStyle());
     d->guidesColor = cfg.guidesColor();
 }
 
 void KisGuidesConfig::saveStaticData() const
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setGuidesLineStyle(d->guidesLineType);
     cfg.setGuidesColor(d->guidesColor);
 }

@@ -70,7 +70,7 @@ public:
         preset->settings()->setNode(view->resourceProvider()->currentNode());
 #endif
 
-        view->resourceProvider()->setPaintOpPreset(preset);
+        view->canvasResourceProvider()->setPaintOpPreset(preset);
     }
 };
 
@@ -157,8 +157,8 @@ void PresetModel::setView(QObject* newView)
 {
     d->view = qobject_cast<KisViewManager*>( newView );
     if (d->view && d->view->canvasBase()) {
-        connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                this, SLOT(resourceChanged(int, const QVariant&)));
+        connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+                this, SLOT(resourceChanged(int,QVariant)));
     }
     emit viewChanged();
 }

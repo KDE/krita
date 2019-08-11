@@ -32,16 +32,8 @@
 Q_GLOBAL_STATIC(TimelineColorScheme, s_instance)
 
 
-struct TimelineColorScheme::Private
-{
-    QColor baseColor;
-};
-
-
 TimelineColorScheme::TimelineColorScheme()
-    : m_d(new Private)
 {
-    m_d->baseColor = QColor(137, 192, 221);
 }
 
 TimelineColorScheme::~TimelineColorScheme()
@@ -87,27 +79,9 @@ QBrush TimelineColorScheme::headerActive() const
     return selectorColor();
 }
 
-QColor TimelineColorScheme::frameColor(bool present, bool active) const
-{
-    QColor color = Qt::transparent;
-
-    if (present && !active) {
-        color = m_d->baseColor;
-    } else if (present && active) {
-        QColor bgColor = qApp->palette().color(QPalette::Base);
-        int darkenCoeff = bgColor.value() > 128 ? 130 : 80;
-        color = m_d->baseColor.darker(darkenCoeff);
-    } else if (!present && active) {
-        QColor bgColor = qApp->palette().color(QPalette::Base);
-        return KritaUtils::blendColors(m_d->baseColor, bgColor, 0.2);
-    }
-
-    return color;
-}
-
 QColor TimelineColorScheme::onionSkinsSliderEnabledColor() const
 {
-    return m_d->baseColor;
+    return qApp->palette().color(QPalette::Highlight);
 }
 
 QColor TimelineColorScheme::onionSkinsSliderDisabledColor() const
@@ -119,7 +93,7 @@ QColor TimelineColorScheme::onionSkinsButtonColor() const
 {
     QColor bgColor = qApp->palette().color(QPalette::Base);
     const int lighterCoeff = bgColor.value() > 128 ? 120 : 80;
-    return m_d->baseColor.lighter(lighterCoeff);
+    return qApp->palette().color(QPalette::Highlight).lighter(lighterCoeff);
 }
 
 QFont TimelineColorScheme::getOnionSkinsFont(const QString &maxString, const QSize &availableSize) const

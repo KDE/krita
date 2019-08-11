@@ -22,6 +22,7 @@
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoID.h>
+#include <KoColorSpaceRegistry.h>
 
 #include <KoConfig.h>
 #ifdef HAVE_OPENEXR
@@ -30,32 +31,74 @@
 
 namespace
 {
-    bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16& color_type, uint16& sample_format)
+    bool isBitDepthFloat(QString depth) {
+        return depth.contains("F");
+    }
+
+    bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16& color_type, uint16& sample_format, const KoColorSpace* &destColorSpace)
     {
         dbgKrita << cs->id();
-        if (cs->id() == "GRAYA" || cs->id() == "GRAYAU16") {
-            color_type = PHOTOMETRIC_MINISBLACK;
-            return true;
-        }
-        if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
+        QString id = cs->id();
+        QString depth = cs->colorDepthId().id();
+        // destColorSpace should be reassigned to a proper color space to convert to
+        // if the return value of this function is false
+        destColorSpace = 0;
+
+        // sample_format and color_type should be assigned to the destination color space,
+        // not /always/ the one we get here
+
+        if (id.contains("RGBA")) {
             color_type = PHOTOMETRIC_RGB;
+            if (isBitDepthFloat(depth)) {
+                sample_format = SAMPLEFORMAT_IEEEFP;
+            }
             return true;
-        }
-       if (KoID(cs->id()) == KoID("RGBAF16") || KoID(cs->id()) == KoID("RGBAF32")) {
-           color_type = PHOTOMETRIC_RGB;
-           sample_format = SAMPLEFORMAT_IEEEFP;
-           return true;
-       }
-        if (cs->id() == "CMYK" || cs->id() == "CMYKAU16") {
+
+        } else if (id.contains("CMYK")) {
             color_type = PHOTOMETRIC_SEPARATED;
             TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
+
+            if (depth == "F16") {
+                sample_format = SAMPLEFORMAT_IEEEFP;
+                destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Float32BitsColorDepthID.id(), cs->profile());
+                return false;
+            }
+
+            if (isBitDepthFloat(depth)) {
+                sample_format = SAMPLEFORMAT_IEEEFP;
+            }
             return true;
-        }
-        if (cs->id() == "LABA") {
+
+        } else if (id.contains("LABA")) {
             color_type = PHOTOMETRIC_ICCLAB;
+
+            if (depth == "F16") {
+                sample_format = SAMPLEFORMAT_IEEEFP;
+                destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(LABAColorModelID.id(), Float32BitsColorDepthID.id(), cs->profile());
+                return false;
+            }
+
+            if (isBitDepthFloat(depth)) {
+                sample_format = SAMPLEFORMAT_IEEEFP;
+            }
             return true;
+
+        } else if (id.contains("GRAYA")) {
+            color_type = PHOTOMETRIC_MINISBLACK;
+            if (isBitDepthFloat(depth)) {
+                sample_format = SAMPLEFORMAT_IEEEFP;
+            }
+            return true;
+
+        } else {
+            color_type = PHOTOMETRIC_RGB;
+            const QString profile = "sRGB-elle-V2-srgbtrc";
+            destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), depth, profile);
+            if (isBitDepthFloat(depth)) {
+                sample_format = SAMPLEFORMAT_IEEEFP;
+            }
+            return false;
         }
-        return false;
 
     }
 }
@@ -135,6 +178,19 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
 {
     dbgFile << "visiting on layer" << layer->name() << "";
     KisPaintDeviceSP pd = layer->projection();
+
+    uint16 color_type;
+    uint16 sample_format = SAMPLEFORMAT_UINT;
+    const KoColorSpace* destColorSpace;
+    // Check colorspace
+    if (!writeColorSpaceInformation(image(), pd->colorSpace(), color_type, sample_format, destColorSpace)) { // unsupported colorspace
+        if (!destColorSpace) {
+            return false;
+        }
+        pd.attach(new KisPaintDevice(*pd));
+        pd->convertTo(destColorSpace);
+    }
+
     // Save depth
     int depth = 8 * pd->pixelSize() / pd->channelCount();
     TIFFSetField(image(), TIFFTAG_BITSPERSAMPLE, depth);
@@ -147,12 +203,8 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
         TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->channelCount() - 1);
         TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 0);
     }
+
     // Save colorspace information
-    uint16 color_type;
-    uint16 sample_format = SAMPLEFORMAT_UINT;
-    if (!writeColorSpaceInformation(image(), pd->colorSpace(), color_type, sample_format)) { // unsupported colorspace
-        return false;
-    }
     TIFFSetField(image(), TIFFTAG_PHOTOMETRIC, color_type);
     TIFFSetField(image(), TIFFTAG_SAMPLEFORMAT, sample_format);
     TIFFSetField(image(), TIFFTAG_IMAGEWIDTH, layer->image()->width());
@@ -160,7 +212,6 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
 
     // Set the compression options
     TIFFSetField(image(), TIFFTAG_COMPRESSION, m_options->compressionType);
-    TIFFSetField(image(), TIFFTAG_FAXMODE, m_options->faxMode);
     TIFFSetField(image(), TIFFTAG_JPEGQUALITY, m_options->jpegQuality);
     TIFFSetField(image(), TIFFTAG_ZIPQUALITY, m_options->deflateCompress);
     TIFFSetField(image(), TIFFTAG_PIXARLOGQUALITY, m_options->pixarLogCompress);

@@ -41,9 +41,10 @@ private Q_SLOTS:
     void testAddNode();
     void testRemoveAllNodes();
     void testRemoveIncludingRoot();
-    void testSubstituteRootNode();
 
 private:
+    void testSubstituteRootNode();
+
     KisDocument *m_doc;
     KisNameServer *m_nameServer;
     KisShapeController *m_shapeController;

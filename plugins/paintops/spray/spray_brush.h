@@ -44,7 +44,7 @@ public:
     ~SprayBrush();
 
     void paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,  const KisPaintInformation& info, qreal rotation, qreal scale, qreal additionalScale, const KoColor &color, const KoColor &bgColor);
-    void setProperties(KisSprayProperties * properties,
+    void setProperties(KisSprayOptionProperties * properties,
                        KisColorProperties * colorProperties,
                        KisShapeProperties * shapeProperties,
                        KisShapeDynamicsProperties * shapeDynamicsProperties,
@@ -65,7 +65,7 @@ private:
 
     KoColorTransformation* m_transfo;
 
-    const KisSprayProperties * m_properties;
+    const KisSprayOptionProperties * m_properties;
     const KisColorProperties * m_colorProperties;
     const KisShapeProperties * m_shapeProperties;
     const KisShapeDynamicsProperties * m_shapeDynamicsProperties;

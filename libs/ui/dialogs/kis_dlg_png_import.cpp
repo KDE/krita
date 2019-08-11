@@ -25,7 +25,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceEngine.h>
 #include <KoID.h>
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 #include "kis_config.h"
 
 KisDlgPngImport::KisDlgPngImport(const QString &path, const QString &colorModelID, const QString &colorDepthID, QWidget *parent)
@@ -50,15 +50,15 @@ KisDlgPngImport::KisDlgPngImport(const QString &path, const QString &colorModelI
     Q_FOREACH (QString stringName, profileNames) {
         dlgWidget.cmbProfile->addSqueezedItem(stringName);
     }
-    KisConfig cfg;
+    KisConfig cfg(true);
     QString profile = cfg.readEntry<QString>("pngImportProfile", KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId));
     dlgWidget.cmbProfile->setCurrent(profile);
 }
 
 QString KisDlgPngImport::profile() const
 {
-    QString p = dlgWidget.cmbProfile->itemHighlighted();
-    KisConfig cfg;
+    QString p = dlgWidget.cmbProfile->currentUnsqueezedText();
+    KisConfig cfg(false);
     cfg.writeEntry("pngImportProfile", p);
     return p;
 }

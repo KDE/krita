@@ -1,0 +1,31 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7034bb6..9115197 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -73,25 +73,10 @@ IF( MINGW OR UNIX )
+                     -Wmissing-format-attribute
+                     -Woverloaded-virtual
+                     -W
++                    -std=c++98
+                    )
+     ENDIF()
+ 
+-    execute_process(COMMAND ${CMAKE_CXX_COMPILER} --version OUTPUT_VARIABLE COMPILER_VERSION)
+-    string(REGEX MATCHALL "[a-z\+]+" GCC_COMPILER_COMPONENTS ${COMPILER_VERSION})
+-    list(GET GCC_COMPILER_COMPONENTS 0 COMPILER)
+-
+-    execute_process(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
+-    string(REGEX MATCHALL "[0-9]+" GCC_VERSION_COMPONENTS ${GCC_VERSION})
+-    list(GET GCC_VERSION_COMPONENTS 0 GCC_MAJOR)
+-    list(GET GCC_VERSION_COMPONENTS 1 GCC_MINOR)
+-
+-    message(STATUS Compiler: ${COMPILER} " Major:" ${GCC_MAJOR} " Minor:" ${GCC_MINOR})
+-
+-    IF ( CYGWIN OR ( ${GCC_MAJOR} GREATER 5 ))
+-        ADD_DEFINITIONS( -std=gnu++98 ) # to support snprintf
+-    ELSE()
+-        ADD_DEFINITIONS( -std=c++98 )
+-    ENDIF()
+ 
+ ENDIF( MINGW OR UNIX )
+ 

@@ -27,7 +27,7 @@
 #include "kis_sketch_paintop_settings.h"
 
 #include "kis_painter.h"
-#include <kis_airbrush_option.h>
+#include <kis_airbrush_option_widget.h>
 #include <kis_pressure_size_option.h>
 #include <kis_brush_option.h>
 #include <kis_pressure_rotation_option.h>
@@ -74,9 +74,9 @@ private:
     KisDensityOption m_densityOption;
     KisLineWidthOption m_lineWidthOption;
     KisOffsetScaleOption m_offsetScaleOption;
-    KisAirbrushOption m_airbrushOption;
+    KisAirbrushOptionProperties m_airbrushOption;
 
-    KisBrushOption m_brushOption;
+    KisBrushOptionProperties m_brushOption;
     SketchProperties m_sketchProperties;
 
     QVector<QPointF> m_points;

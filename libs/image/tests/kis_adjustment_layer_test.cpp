@@ -73,7 +73,7 @@ void KisAdjustmentLayerTest::testInverted()
     KisSelectionSP sel2 = new KisSelection();
     sel2->pixelSelection()->invert();
     KisAdjustmentLayerSP l2 = new KisAdjustmentLayer(image, "bla", kfc, sel2);
-    QCOMPARE(sel2->selectedExactRect(), l2->internalSelection()->selectedExactRect());
+    QCOMPARE(l2->internalSelection()->selectedExactRect(), image->bounds());
 
     KisSelectionSP sel3 = new KisSelection();
     sel3->pixelSelection()->select(QRect(50, -10, 800, 30), 128);

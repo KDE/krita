@@ -31,8 +31,6 @@
 #include <QStylePainter>
 #include <QStyleOption>
 
-#include <kis_icon.h>
-
 #include "kis_config.h"
 
 KisWidgetChooser::KisWidgetChooser(int id, QWidget* parent)
@@ -113,7 +111,7 @@ QLayout* KisWidgetChooser::createLayout()
     layout->setSpacing(0);
 
     for(Iterator i=m_widgets.begin(); i!=m_widgets.end(); ++i) {
-        if(i->choosen) {
+        if(i->chosen) {
             if (i->label) {
                 layout->addWidget(i->label);
             }
@@ -139,7 +137,7 @@ QLayout* KisWidgetChooser::createPopupLayout()
     QList<QAbstractButton*> buttons = m_buttons->buttons();
 
     for(Iterator i=m_widgets.begin(); i!=m_widgets.end(); ++i) {
-        if(!i->choosen) {
+        if(!i->chosen) {
             if(row == buttons.size()) {
                 QToolButton* bn = new QToolButton();
 
@@ -171,7 +169,7 @@ QLayout* KisWidgetChooser::createPopupLayout()
     delete m_buttons;
 
     m_buttons = group;
-    connect(m_buttons, SIGNAL(buttonClicked(int)), SLOT(slotWidgetChoosen(int)));
+    connect(m_buttons, SIGNAL(buttonClicked(int)), SLOT(slotWidgetChosen(int)));
 
     return layout;
 }
@@ -181,7 +179,7 @@ void KisWidgetChooser::removeWidget(const QString& id)
     Iterator data = std::find(m_widgets.begin(), m_widgets.end(), Data(id));
 
     if(data != m_widgets.end()) {
-        if(!data->choosen) {
+        if(!data->chosen) {
             delete m_popup->layout();
             m_popup->setLayout(createPopupLayout());
             m_popup->adjustSize();
@@ -198,14 +196,14 @@ void KisWidgetChooser::removeWidget(const QString& id)
 
 QWidget* KisWidgetChooser::chooseWidget(const QString& id)
 {
-    QWidget* choosenWidget = 0;
+    QWidget* chosenWidget = 0;
 
     for(Iterator i=m_widgets.begin(); i!=m_widgets.end(); ++i) {
         if(i->id == id) {
-            choosenWidget = i->widget;
-            i->choosen    = true;
+            chosenWidget = i->widget;
+            i->chosen    = true;
         }
-        else i->choosen = false;
+        else i->chosen = false;
     }
 
     delete m_popup->layout();
@@ -215,10 +213,10 @@ QWidget* KisWidgetChooser::chooseWidget(const QString& id)
     delete QWidget::layout();
     QWidget::setLayout(createLayout());
 
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setToolbarSlider(m_chooserid, id);
 
-    return choosenWidget;
+    return chosenWidget;
 }
 
 QWidget* KisWidgetChooser::getWidget(const QString& id) const
@@ -266,7 +264,7 @@ void KisWidgetChooser::slotButtonPressed()
     showPopupWidget();
 }
 
-void KisWidgetChooser::slotWidgetChoosen(int index)
+void KisWidgetChooser::slotWidgetChosen(int index)
 {
     chooseWidget(m_widgets[index].id);
     m_popup->hide();

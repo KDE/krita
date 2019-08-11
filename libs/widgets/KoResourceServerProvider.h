@@ -32,8 +32,8 @@
 #include <resources/KoPattern.h>
 #include <resources/KoAbstractGradient.h>
 #include <resources/KoColorSet.h>
-#include <resources/KoAbstractGradient.h>
 #include <resources/KoSvgSymbolCollectionResource.h>
+#include <resources/KoGamutMask.h>
 
 
 /**
@@ -62,6 +62,7 @@ public:
     KoResourceServer<KoAbstractGradient>* gradientServer();
     KoResourceServer<KoColorSet>* paletteServer();
     KoResourceServer<KoSvgSymbolCollectionResource>* svgSymbolCollectionServer();
+    KoResourceServer<KoGamutMask>* gamutMaskServer();
 
 private:
     KoResourceServerProvider(const KoResourceServerProvider&);

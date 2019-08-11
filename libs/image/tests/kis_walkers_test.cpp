@@ -36,6 +36,7 @@
 #include "filter/kis_filter_registry.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
+#include <sdk/tests/kistest.h>
 
 //#define DEBUG_VISITORS
 
@@ -330,7 +331,7 @@ void KisWalkersTest::testVisitingWithTopmostMask()
     KisFilterMaskSP filterMask1 = new KisFilterMask();
     filterMask1->initSelection(groupLayer);
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
-    Q_ASSERT(filter);
+    KIS_ASSERT(filter);
     KisFilterConfigurationSP configuration1 = filter->defaultConfiguration();
     filterMask1->setFilter(configuration1);
 
@@ -752,11 +753,11 @@ void KisWalkersTest::testRefreshSubtreeVisiting()
         QString order("root,paint5,cplx2,group,paint1,"
                       "paint4,paint3,cplx1,paint2");
         QStringList orderList = order.split(',');
-        QRect accessRect(-10,-10,50,50);
+        QRect accessRect(-4,-4,38,38);
 
         reportStartWith("root");
         walker.collectRects(image->rootLayer(), testRect);
-        verifyResult(walker, orderList, accessRect, true, true);
+        verifyResult(walker, orderList, accessRect, false, true);
     }
 }
 
@@ -813,7 +814,7 @@ void KisWalkersTest::testFullRefreshVisiting()
 
         reportStartWith("root");
         walker.collectRects(groupLayer, testRect);
-        verifyResult(walker, orderList, accessRect, true, true);
+        verifyResult(walker, orderList, accessRect, false, true);
     }
 }
 
@@ -1289,5 +1290,5 @@ void KisWalkersTest::testGraphStructureChecksum()
     QCOMPARE(walker.checksumValid(), true);
 }
 
-QTEST_MAIN(KisWalkersTest)
+KISTEST_MAIN(KisWalkersTest)
 

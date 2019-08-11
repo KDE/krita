@@ -252,7 +252,7 @@ struct ChannelFlagAdapter : public BaseAdapter {
     }
 
     QString name() const {
-        return m_prop.name;;
+        return m_prop.name;
     }
 
     static PropertyList adaptersList(KisNodeList nodes) {

@@ -23,11 +23,13 @@
 #include <QSpinBox>
 
 #include <KoColorSpaceMaths.h>
+#include <KoConfig.h>
 #include <KoUpdater.h>
 
 #include "kis_progress_update_helper.h"
 #include <kis_paint_device.h>
 #include <kis_selection.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 
@@ -37,7 +39,7 @@
 #include <KisSequentialIteratorProgress.h>
 
 KisFilterColorToAlpha::KisFilterColorToAlpha()
-    : KisFilter(id(), categoryColors(), i18n("&Color to Alpha..."))
+    : KisFilter(id(), FiltersCategoryColorId, i18n("&Color to Alpha..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);
@@ -45,7 +47,7 @@ KisFilterColorToAlpha::KisFilterColorToAlpha()
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     return new KisWdgColorToAlpha(parent);
 }
@@ -170,7 +172,6 @@ void KisFilterColorToAlpha::processImpl(KisPaintDeviceSP device,
                                         threshold, cs);
         break;
     case KoChannelInfo::FLOAT16:
-#include <KoConfig.h>
 #ifdef HAVE_OPENEXR
 #include <half.h>
         applyToIterator<half, half>(channelIndex.size(), channelIndex.data(),

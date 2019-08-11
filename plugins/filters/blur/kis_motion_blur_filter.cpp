@@ -29,6 +29,7 @@
 
 #include "ui_wdg_motion_blur.h"
 
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -41,7 +42,7 @@
 #include <math.h>
 
 
-KisMotionBlurFilter::KisMotionBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Motion Blur..."))
+KisMotionBlurFilter::KisMotionBlurFilter() : KisFilter(id(), FiltersCategoryBlurId, i18n("&Motion Blur..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);
@@ -49,7 +50,7 @@ KisMotionBlurFilter::KisMotionBlurFilter() : KisFilter(id(), categoryBlur(), i18
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisMotionBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisMotionBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     return new KisWdgMotionBlur(parent);
 }

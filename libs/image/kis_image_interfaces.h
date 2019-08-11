@@ -47,7 +47,13 @@ public:
     virtual void unblockUpdates() = 0;
 
     virtual void disableUIUpdates() = 0;
-    virtual void enableUIUpdates() = 0;
+    virtual QVector<QRect> enableUIUpdates() = 0;
+
+    virtual void notifyBatchUpdateStarted() = 0;
+    virtual void notifyBatchUpdateEnded() = 0;
+    virtual void notifyUIUpdateCompleted(const QRect &rc) = 0;
+
+    virtual QRect bounds() const = 0;
 
     virtual void disableDirtyRequests() = 0;
     virtual void enableDirtyRequests() = 0;
@@ -72,6 +78,7 @@ class KRITAIMAGE_EXPORT KisStrokeUndoFacade
 public:
     virtual ~KisStrokeUndoFacade();
     virtual KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const = 0;
+    virtual const KUndo2Command* lastExecutedCommand() const = 0;
 };
 
 #endif /* __KIS_IMAGE_INTERFACES_H */

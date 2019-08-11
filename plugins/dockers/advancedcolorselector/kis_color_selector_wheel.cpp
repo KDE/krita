@@ -25,14 +25,21 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
+#include <KisGamutMaskViewConverter.h>
+
 #include "kis_display_color_converter.h"
 #include "kis_acs_pixel_cache_renderer.h"
 
 
 KisColorSelectorWheel::KisColorSelectorWheel(KisColorSelector *parent) :
     KisColorSelectorComponent(parent),
-    m_lastClickPos(-1,-1)
+    m_lastClickPos(-1,-1),
+    m_renderAreaSize(1,1),
+    m_renderAreaOffsetX(0.0),
+    m_renderAreaOffsetY(0.0),
+    m_toRenderArea(QTransform())
 {
+    m_viewConverter = new KisGamutMaskViewConverter();
 }
 
 KoColor KisColorSelectorWheel::selectColor(int x, int y)
@@ -170,6 +177,8 @@ void KisColorSelectorWheel::setColor(const KoColor &color)
 
         setLastMousePosition(pos.x(), pos.y());
     }
+
+    KisColorSelectorComponent::setColor(color);
 }
 
 void KisColorSelectorWheel::paint(QPainter* painter)
@@ -186,6 +195,17 @@ void KisColorSelectorWheel::paint(QPainter* painter)
         tmpPainter.setCompositionMode(QPainter::CompositionMode_Clear);
         int size=qMin(width(), height());
 
+        m_renderAreaSize = QSize(size,size);
+        m_renderAreaOffsetX = ((qreal)width()-(qreal)m_renderAreaSize.width())*0.5;
+        m_renderAreaOffsetY = ((qreal)height()-(qreal)m_renderAreaSize.height())*0.5;
+        m_toRenderArea.reset();
+        m_toRenderArea.translate(-m_renderAreaOffsetX,-m_renderAreaOffsetY);
+
+        m_viewConverter->setViewSize(m_renderAreaSize);
+        if (m_currentGamutMask) {
+           m_viewConverter->setMaskSize(m_currentGamutMask->maskSize());
+        }
+
         QPoint ellipseCenter(width() / 2 - size / 2, height() / 2 - size / 2);
         ellipseCenter -= m_pixelCacheOffset;
 
@@ -193,6 +213,35 @@ void KisColorSelectorWheel::paint(QPainter* painter)
     }
 
     painter->drawImage(m_pixelCacheOffset.x(),m_pixelCacheOffset.y(), m_pixelCache);
+
+    // draw gamut mask
+    if (m_gamutMaskOn && m_currentGamutMask) {
+        QImage maskBuffer  = QImage(m_renderAreaSize.width(), m_renderAreaSize.height(), QImage::Format_ARGB32_Premultiplied);
+        maskBuffer.fill(0);
+        QPainter maskPainter(&maskBuffer);
+
+        QRect rect = QRect(0, 0, m_renderAreaSize.width(), m_renderAreaSize.height());
+        maskPainter.setRenderHint(QPainter::Antialiasing, true);
+
+        maskPainter.resetTransform();
+        maskPainter.translate(rect.width()/2, rect.height()/2);
+        maskPainter.scale(rect.width()/2, rect.height()/2);
+
+        maskPainter.setPen(QPen(QBrush(Qt::white), 0.002));
+        maskPainter.setBrush(QColor(128,128,128,255)); // middle gray
+
+        maskPainter.drawEllipse(QPointF(0,0), 1.0, 1.0);
+
+        maskPainter.resetTransform();
+
+        maskPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        m_currentGamutMask->paint(maskPainter, *m_viewConverter, m_maskPreviewActive);
+
+        maskPainter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+        m_currentGamutMask->paintStroke(maskPainter, *m_viewConverter, m_maskPreviewActive);
+
+        painter->drawImage(m_renderAreaOffsetX, m_renderAreaOffsetY, maskBuffer);
+    }
 
     // draw blips
 
@@ -217,18 +266,19 @@ KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
     Q_ASSERT(x>=0 && x<=width());
     Q_ASSERT(y>=0 && y<=height());
 
-    qreal xRel = x-width()/2.;
-    qreal yRel = y-height()/2.;
+    const qreal xRel = x - 0.5 * width();
+    const qreal yRel = y - 0.5 * height();
+    const qreal minDimension = qMin(width(), height());
 
     qreal radius = sqrt(xRel*xRel+yRel*yRel);
-    if(radius > qMin(width(), height())/2) {
+    if (radius > 0.5 * minDimension) {
         if (!forceValid) {
             return color;
         } else {
-            radius = qMin(width(), height())/2;
+            radius = 0.5 * minDimension;
         }
     }
-    radius /= qMin(width(), height())/2.;
+    radius /= 0.5 * minDimension;
 
     qreal angle = std::atan2(yRel, xRel);
     angle += M_PI;
@@ -265,4 +315,11 @@ KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
         return color;
     }
     return color;
+}
+
+bool KisColorSelectorWheel::allowsColorSelectionAtPoint(const QPoint &pt) const
+{
+    return !m_gamutMaskOn || !m_currentGamutMask ||
+        m_currentGamutMask->coordIsClear(m_toRenderArea.map(QPointF(pt)),
+                                         *m_viewConverter, m_maskPreviewActive);
 }

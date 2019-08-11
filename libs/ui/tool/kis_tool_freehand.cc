@@ -57,7 +57,6 @@
 #include <kis_painting_assistants_decoration.h>
 #include "kis_painting_information_builder.h"
 #include "kis_tool_freehand_helper.h"
-#include "kis_recording_adapter.h"
 #include "strokes/freehand_stroke.h"
 
 using namespace std::placeholders; // For _1 placeholder
@@ -73,20 +72,17 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_only_one_assistant = true;
 
     setSupportOutline(true);
-    setMaskSyntheticEvents(KisConfig().disableTouchOnCanvas()); // Disallow mouse events from finger presses unless enabled
+    setMaskSyntheticEvents(KisConfig(true).disableTouchOnCanvas()); // Disallow mouse events from finger presses unless enabled
 
     m_infoBuilder = new KisToolFreehandPaintingInformationBuilder(this);
-    m_recordingAdapter = new KisRecordingAdapter();
-    m_helper = new KisToolFreehandHelper(m_infoBuilder, transactionText, m_recordingAdapter);
+    m_helper = new KisToolFreehandHelper(m_infoBuilder, transactionText);
 
-    connect(m_helper, SIGNAL(requestExplicitUpdateOutline()),
-            SLOT(explicitUpdateOutline()));
+    connect(m_helper, SIGNAL(requestExplicitUpdateOutline()), SLOT(explicitUpdateOutline()));
 }
 
 KisToolFreehand::~KisToolFreehand()
 {
     delete m_helper;
-    delete m_recordingAdapter;
     delete m_infoBuilder;
 }
 
@@ -103,7 +99,7 @@ KisSmoothingOptionsSP KisToolFreehand::smoothingOptions() const
 
 void KisToolFreehand::resetCursorStyle()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     switch (cfg.newCursorStyle()) {
     case CURSOR_STYLE_NO_CURSOR:
@@ -140,11 +136,6 @@ void KisToolFreehand::resetCursorStyle()
 KisPaintingInformationBuilder* KisToolFreehand::paintingInformationBuilder() const
 {
     return m_infoBuilder;
-}
-
-KisRecordingAdapter* KisToolFreehand::recordingAdapter() const
-{
-    return m_recordingAdapter;
 }
 
 void KisToolFreehand::resetHelper(KisToolFreehandHelper *helper)
@@ -185,18 +176,14 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
 
 void KisToolFreehand::doStroke(KoPointerEvent *event)
 {
-    //set canvas information here?//
-    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-    if (canvas2) {
-        m_helper->setCanvasHorizontalMirrorState(canvas2->xAxisMirrored());
-        m_helper->setCanvasRotation(canvas2->rotationAngle());
-    }
     m_helper->paintEvent(event);
 }
 
 void KisToolFreehand::endStroke()
 {
     m_helper->endPaint();
+    bool paintOpIgnoredEvent = currentPaintOpPreset()->settings()->mouseReleaseEvent();
+    Q_UNUSED(paintOpIgnoredEvent);
 }
 
 bool KisToolFreehand::primaryActionSupportsHiResEvents() const
@@ -257,7 +244,6 @@ void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
         static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->endStroke();
     }
 
-    notifyModified();
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     if (canvas2) {
         canvas2->viewManager()->enableControls();
@@ -276,7 +262,7 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
      */
     QPointF pos = adjustPosition(event->point, event->point);
     qreal perspective = 1.0;
-    Q_FOREACH (const QPointer<KisAbstractPerspectiveGrid> grid, static_cast<KisCanvas2*>(canvas())->viewManager()->resourceProvider()->perspectiveGrids()) {
+    Q_FOREACH (const QPointer<KisAbstractPerspectiveGrid> grid, static_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider()->perspectiveGrids()) {
         if (grid && grid->contains(pos)) {
             perspective = grid->distance(pos);
             break;
@@ -294,6 +280,8 @@ bool KisToolFreehand::tryPickByPaintOp(KoPointerEvent *event, AlternateAction ac
                                             perspective, 0, 0),
                         event->modifiers(),
                         currentNode());
+    // DuplicateOP during the picking of new source point (origin)
+    // is the only paintop that returns "false" here
     return !paintOpIgnoredEvent;
 }
 
@@ -360,7 +348,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
     qreal scaleY = 0;
     canvas2->coordinatesConverter()->imageScale(&scaleX, &scaleY);
 
-    const qreal maxBrushSize = KisConfig().readEntry("maximumBrushSize", 1000);
+    const qreal maxBrushSize = KisConfig(true).readEntry("maximumBrushSize", 1000);
     const qreal effectiveMaxDragSize = 0.5 * screenRect.width();
     const qreal effectiveMaxBrushSize = qMin(maxBrushSize, effectiveMaxDragSize / scaleX);
 
@@ -435,7 +423,7 @@ QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& str
 qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
 {
     qreal perspective = 1.0;
-    Q_FOREACH (const QPointer<KisAbstractPerspectiveGrid> grid, static_cast<KisCanvas2*>(canvas())->viewManager()->resourceProvider()->perspectiveGrids()) {
+    Q_FOREACH (const QPointer<KisAbstractPerspectiveGrid> grid, static_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider()->perspectiveGrids()) {
         if (grid && grid->contains(documentPoint)) {
             perspective = grid->distance(documentPoint);
             break;

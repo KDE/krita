@@ -26,7 +26,7 @@
 
 #include <QKeySequence>
 
-#include <KoToolFactoryBase.h>
+#include <KisToolPaintFactoryBase.h>
 
 #include <kis_tool_paint.h>
 #include <kis_global.h>
@@ -105,12 +105,12 @@ private:
     KConfigGroup m_configGroup;
 };
 
-class KisToolGradientFactory : public KoToolFactoryBase
+class KisToolGradientFactory : public KisToolPaintFactoryBase
 {
 
 public:
     KisToolGradientFactory()
-            : KoToolFactoryBase("KritaFill/KisToolGradient") {
+            : KisToolPaintFactoryBase("KritaFill/KisToolGradient") {
         setToolTip(i18n("Gradient Tool"));
         setSection(TOOL_TYPE_FILL);
         setIconName(koIconNameCStr("krita_tool_gradient"));

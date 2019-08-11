@@ -42,7 +42,19 @@ public:
 
     QPointF offset() const;
     QPointF position() const;
+    /**
+     * This function is called by a tool when the mouse is pressed.
+     * Returns false if picking new origin is in action,
+     * and returns true otherwise (i.e. if brush is starting a new stroke).
+     * See kis_tool_freehand:tryPickByPaintOp()
+     */
     bool mousePressEvent(const KisPaintInformation& pos, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode) override;
+    /**
+     * This function is called by a tool when the mouse is released.
+     * If the tool is supposed to ignore the event, the paint op should return true
+     * and if the tool is supposed to use the event, return false.
+     */
+    bool mouseReleaseEvent() override;
     void activate() override;
 
     void fromXML(const QDomElement& elt) override;
@@ -50,7 +62,7 @@ public:
 
     KisPaintOpSettingsSP clone() const override;
     using KisBrushBasedPaintOpSettings::brushOutline;
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
+    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode) override;
 
     KisNodeWSP sourceNode() const;
 
@@ -61,9 +73,10 @@ public:
     Q_DISABLE_COPY(KisDuplicateOpSettings)
 
     QPointF m_offset;
-    bool m_isOffsetNotUptodate;
+    bool m_isOffsetNotUptodate; // true between the act of setting a new origin and the first stroke
+    bool m_duringPaintingStroke; // true if the stroke is begin painted now, false otherwise
     QPointF m_position; // Give the position of the last alt-click
-    KisNodeWSP m_sourceNode;
+    KisNodeWSP m_sourceNode; // Give the node of the source point (origin)
     QList<KisUniformPaintOpPropertyWSP> m_uniformProperties;
 };
 

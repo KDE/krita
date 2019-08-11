@@ -38,39 +38,39 @@ public:
     ~KoConvolutionOpImpl() override { }
 
     /**
-     * Calculates a weighted average of the pixels, mentioned in @colors
-     * using weight values from @kernelValues
+     * Calculates a weighted average of the pixels, mentioned in @p colors
+     * using weight values from @p kernelValues
      *
      * Note:
      * It behaves in a quite unclear way, when at least one pixel is
      * fully transparent. There are three cases:
      * Case A) None of the pixels is fully transparent.
-     *    * Every color channel AND alpha channel of @dst stores a sum
-     *      of the corresponding channels from @colors, divided by @factor
-     *      and incremented by @offset
-     * Case B) At least one pixel of @colors is transparent and @factor
+     *    * Every color channel AND alpha channel of @p dst stores a sum
+     *      of the corresponding channels from @p colors, divided by @p factor
+     *      and incremented by @p offset
+     * Case B) At least one pixel of @p colors is transparent and @p factor
      * stores a weight of the kernel (sum of it's items).
-     *    * Every color channel of @dst stores a sum of the corresponding
+     *    * Every color channel of @p dst stores a sum of the corresponding
      *      channels from non-transparent pixels, divided by a weight
-     *      of non-transparent pixels and incremented by @offset.
-     *    * Alpha channel of @dst stores a sum of the corresponding
+     *      of non-transparent pixels and incremented by @p offset.
+     *    * Alpha channel of @p dst stores a sum of the corresponding
      *      channels from non-transparent pixels, divided by a weight
-     *      of all the pixels (equals to @factor) and incremented
-     *      by @offset.
-     * Case C) At least one pixel of @colors is transparent and @factor
+     *      of all the pixels (equals to @p factor) and incremented
+     *      by @p offset.
+     * Case C) At least one pixel of @p colors is transparent and @p factor
      * is set to an arbitrary value.
-     *    * Every color channel of @dst stores a sum of the corresponding
+     *    * Every color channel of @p dst stores a sum of the corresponding
      *      channels from non-transparent pixels, divided by a "scaled
-     *      down factor" and incremented by @offset. "Scaled
+     *      down factor" and incremented by @p offset. "Scaled
      *      down factor" is calculated in the following way:
      *
      *                                   [weight of non-transparent pixels]
-     *      scaledDownFactor = @factor * ----------------------------------
+     *      scaledDownFactor = @p factor * ----------------------------------
      *                                       [weight of all the pixels]
      *
-     *    * Alpha channel of @dst stores a sum of the corresponding
+     *    * Alpha channel of @p dst stores a sum of the corresponding
      *      channels from non-transparent pixels, divided by unscaled
-     *      @factor and incremented by @offset.
+     *      @p factor and incremented by @p offset.
      */
 
     void convolveColors(const quint8* const* colors, const qreal* kernelValues, quint8 *dst, qreal factor, qreal offset, qint32 nPixels, const QBitArray & channelFlags) const override {

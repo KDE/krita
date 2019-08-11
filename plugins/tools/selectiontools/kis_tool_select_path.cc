@@ -35,7 +35,7 @@ KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
     : KisToolSelectBase<KisDelegatedSelectPathWrapper>(canvas,
                                                        KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
                                                        i18n("Select path"),
-                                                       (KisTool*) (new __KisToolSelectPathLocalTool(canvas, this)))
+                                                       new __KisToolSelectPathLocalTool(canvas, this))
 {
 }
 
@@ -90,18 +90,6 @@ QList<QPointer<QWidget> > KisToolSelectPath::createOptionWidgets()
     return filteredWidgets;
 }
 
-void KisToolSelectPath::setAlternateSelectionAction(SelectionAction action)
-{
-    // We will turn off the ability to change the selection in the middle of drawing a path.
-    if (!m_localTool->listeningToModifiers()) {
-        KisToolSelectBase<KisDelegatedSelectPathWrapper>::setAlternateSelectionAction(action);
-    }
-}
-
-bool KisDelegatedSelectPathWrapper::listeningToModifiers() {
-    return m_localTool->listeningToModifiers();
-}
-
 void KisDelegatedSelectPathWrapper::beginPrimaryAction(KoPointerEvent *event) {
     mousePressEvent(event);
 }
@@ -114,10 +102,23 @@ void KisDelegatedSelectPathWrapper::endPrimaryAction(KoPointerEvent *event) {
     mouseReleaseEvent(event);
 }
 
+bool KisDelegatedSelectPathWrapper::hasUserInteractionRunning() const
+{
+    /**
+     * KoCreatePathTool doesn't support moving interventions from KisToolselectBase,
+     * because it doesn't use begin/continue/endPrimaryAction and uses direct event
+     * handling instead.
+     *
+     * TODO: refactor KoCreatePathTool and port it to action infrastructure
+     */
+    return true;
+}
+
 
 __KisToolSelectPathLocalTool::__KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool)
     : KoCreatePathTool(canvas), m_selectionTool(parentTool)
 {
+    setEnableClosePathShortcut(false);
 }
 
 void __KisToolSelectPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
@@ -146,7 +147,12 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select by Bezier Curve"));
 
-    if (m_selectionTool->selectionMode() == PIXEL_SELECTION) {
+    const SelectionMode mode =
+        helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
+                                        m_selectionTool->selectionMode(),
+                                        m_selectionTool->selectionAction());
+
+    if (mode == PIXEL_SELECTION) {
 
         KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
@@ -168,7 +174,18 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 
         delete pathShape;
     } else {
-        helper.addSelectionShape(pathShape);
+        helper.addSelectionShape(pathShape, m_selectionTool->selectionAction());
+    }
+}
+
+void KisToolSelectPath::resetCursorStyle()
+{
+    if (selectionAction() == SELECTION_ADD) {
+        useCursor(KisCursor::load("tool_polygonal_selection_cursor_add.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SUBTRACT) {
+        useCursor(KisCursor::load("tool_polygonal_selection_cursor_sub.png", 6, 6));
+    } else {
+        KisToolSelectBase<KisDelegatedSelectPathWrapper>::resetCursorStyle();
     }
 }
 

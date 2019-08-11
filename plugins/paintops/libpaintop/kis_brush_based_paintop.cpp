@@ -43,8 +43,8 @@ TextBrushInitializationWorkaround *TextBrushInitializationWorkaround::instance()
 
 void TextBrushInitializationWorkaround::preinitialize(KisPropertiesConfigurationSP settings)
 {
-    if (KisBrushOption::isTextBrush(settings.data())) {
-        KisBrushOption brushOption;
+    if (KisBrushOptionProperties::isTextBrush(settings.data())) {
+        KisBrushOptionProperties brushOption;
         brushOption.readOptionSetting(settings);
         m_brush = brushOption.brush();
         m_settings = settings;
@@ -89,7 +89,7 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfigurationSP se
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
     if (!m_brush) {
-        KisBrushOption brushOption;
+        KisBrushOptionProperties brushOption;
         brushOption.readOptionSetting(settings);
         m_brush = brushOption.brush();
     }
@@ -136,7 +136,7 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal 
 }
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation,
-                                                             const KisAirbrushOption *airbrushOption,
+                                                             const KisAirbrushOptionProperties *airbrushOption,
                                                              const KisPressureSpacingOption *spacingOption,
                                                              const KisPaintInformation &pi) const
 {

@@ -23,7 +23,7 @@
 #include "KoShape.h"
 #include "KoShapeContainer.h"
 #include "KoSharedLoadingData.h"
-#include "KoShapeBasedDocumentBase.h"
+#include "KoShapeControllerBase.h"
 #include "KoImageCollection.h"
 #include "KoMarkerCollection.h"
 #include "KoDocumentResourceManager.h"

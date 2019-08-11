@@ -34,6 +34,7 @@
 #include <resources/KoStopGradient.h>
 #include "KoColorSpaceRegistry.h"
 #include "KoResourcePaths.h"
+#include "klocalizedstring.h"
 #include <iostream>
 using namespace std;
 
@@ -54,7 +55,7 @@ public:
 
         KoStopGradient* gradient = new KoStopGradient();
         gradient->setType(QGradient::LinearGradient);
-        gradient->setName("Foreground to Transparent");
+        gradient->setName(i18n("Foreground to Transparent"));
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs));
 
         gradient->setStops(stops);
@@ -65,7 +66,7 @@ public:
 
         gradient = new KoStopGradient();
         gradient->setType(QGradient::LinearGradient);
-        gradient->setName("Foreground to Background");
+        gradient->setName(i18n("Foreground to Background"));
 
         stops.clear();
         stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(Qt::white, cs));
@@ -121,6 +122,7 @@ struct Q_DECL_HIDDEN KoResourceServerProvider::Private
     KoResourceServer<KoAbstractGradient>* gradientServer;
     KoResourceServer<KoColorSet>* paletteServer;
     KoResourceServer<KoSvgSymbolCollectionResource> *svgSymbolCollectionServer;
+    KoResourceServer<KoGamutMask>* gamutMaskServer;
 };
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
@@ -128,7 +130,7 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
     d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
     d->patternServer->loadResources(blacklistFileNames(d->patternServer->fileNames(), d->patternServer->blackListedFiles()));
 
-    d->gradientServer = new GradientResourceServer("ko_gradients", "*.kgr:*.svg:*.ggr");
+    d->gradientServer = new GradientResourceServer("ko_gradients", "*.svg:*.ggr");
     d->gradientServer->loadResources(blacklistFileNames(d->gradientServer->fileNames(), d->gradientServer->blackListedFiles()));
 
     d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>("ko_palettes", "*.kpl:*.gpl:*.pal:*.act:*.aco:*.css:*.colors:*.xml:*.sbz");
@@ -136,6 +138,9 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 
     d->svgSymbolCollectionServer = new KoResourceServerSimpleConstruction<KoSvgSymbolCollectionResource>("symbols", "*.svg");
     d->svgSymbolCollectionServer->loadResources(blacklistFileNames(d->svgSymbolCollectionServer->fileNames(), d->svgSymbolCollectionServer->blackListedFiles()));
+
+    d->gamutMaskServer = new KoResourceServerSimpleConstruction<KoGamutMask>("ko_gamutmasks", "*.kgm");
+    d->gamutMaskServer->loadResources(blacklistFileNames(d->gamutMaskServer->fileNames(), d->gamutMaskServer->blackListedFiles()));
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()
@@ -144,11 +149,12 @@ KoResourceServerProvider::~KoResourceServerProvider()
     delete d->gradientServer;
     delete d->paletteServer;
     delete d->svgSymbolCollectionServer;
+    delete d->gamutMaskServer;
 
     delete d;
 }
 
-Q_GLOBAL_STATIC(KoResourceServerProvider, s_instance);
+Q_GLOBAL_STATIC(KoResourceServerProvider, s_instance)
 
 KoResourceServerProvider* KoResourceServerProvider::instance()
 {
@@ -184,4 +190,10 @@ KoResourceServer<KoSvgSymbolCollectionResource> *KoResourceServerProvider::svgSy
 {
     return d->svgSymbolCollectionServer;
 }
+
+KoResourceServer<KoGamutMask>* KoResourceServerProvider::gamutMaskServer()
+{
+    return d->gamutMaskServer;
+}
+
 

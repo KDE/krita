@@ -20,7 +20,7 @@
 #ifndef KISREFERENCEIMAGE_H
 #define KISREFERENCEIMAGE_H
 
-#include <QScopedPointer>
+#include <QSharedDataPointer>
 
 #include <kundo2command.h>
 #include <kritaui_export.h>
@@ -57,7 +57,13 @@ public:
 
     KoShape *cloneShape() const override;
 
-    static KisReferenceImage * fromFile(const QString &filename, const KisCoordinatesConverter &converter);
+    /**
+     * Load a reference image from specified file.
+     * If parent is provided and the image cannot be loaded, a warning message will be displayed to user.
+     * @return reference image or null if one could not be loaded
+     */
+    static KisReferenceImage * fromFile(const QString &filename, const KisCoordinatesConverter &converter, QWidget *parent /*= nullptr*/);
+    static KisReferenceImage * fromClipboard(const KisCoordinatesConverter &converter);
 
     void setSaturation(qreal saturation);
     qreal saturation() const;
@@ -65,6 +71,10 @@ public:
     void setEmbed(bool embed);
     bool embed();
     bool hasLocalFile();
+
+    void setFilename(const QString &filename);
+    QString filename() const;
+    QString internalFile() const;
 
     void paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 
@@ -81,7 +91,7 @@ public:
 
 private:
     struct Private;
-    const QScopedPointer<Private> d;
+    QSharedDataPointer<Private> d;
 };
 
 #endif // KISREFERENCEIMAGE_H

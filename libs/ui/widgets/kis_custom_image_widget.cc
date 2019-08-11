@@ -35,6 +35,7 @@
 #include <QMessageBox>
 #include <KoResourcePaths.h>
 
+#include <KFormat>
 
 #include <kis_debug.h>
 
@@ -60,7 +61,7 @@
 #include "kis_clipboard.h"
 #include "KisDocument.h"
 #include "widgets/kis_cmb_idlist.h"
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 
 
 KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
@@ -109,7 +110,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
 
 
     // Create image
-    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setText(i18n("Create"));
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setText(i18n("&Create"));
     connect(newDialogConfirmationButtonBox, SIGNAL(accepted()), this, SLOT(createImage()));
 
 
@@ -141,7 +142,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SLOT(setEnabled(bool)));
 
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     intNumLayers->setValue(cfg.numDefaultLayers());
     KoColor bcol(KoColorSpaceRegistry::instance()->rgb8());
     bcol.fromQColor(cfg.defaultBackgroundColor());
@@ -150,8 +151,10 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
 
     KisConfig::BackgroundStyle bgStyle = cfg.defaultBackgroundStyle();
 
-    if (bgStyle == KisConfig::LAYER) {
-      radioBackgroundAsLayer->setChecked(true);
+    if (bgStyle == KisConfig::RASTER_LAYER) {
+      radioBackgroundAsRaster->setChecked(true);
+    } else if (bgStyle == KisConfig::FILL_LAYER) {
+      radioBackgroundAsFill->setChecked(true);
     } else {
       radioBackgroundAsProjection->setChecked(true);
     }
@@ -209,7 +212,7 @@ void KisCustomImageWidget::widthUnitChanged(int index)
         doubleWidth->setDecimals(2);
     }
 
-    doubleWidth->setValue(KoUnit::ptToUnit(m_width, m_widthUnit));
+    doubleWidth->setValue(m_widthUnit.toUserValuePrecise(m_width));
 
     doubleWidth->blockSignals(false);
     changeDocumentInfoLabel();
@@ -233,7 +236,7 @@ void KisCustomImageWidget::heightUnitChanged(int index)
         doubleHeight->setDecimals(2);
     }
 
-    doubleHeight->setValue(KoUnit::ptToUnit(m_height, m_heightUnit));
+    doubleHeight->setValue(m_heightUnit.toUserValuePrecise(m_height));
 
     doubleHeight->blockSignals(false);
     changeDocumentInfoLabel();
@@ -257,7 +260,6 @@ void KisCustomImageWidget::createImage()
 
 KisDocument* KisCustomImageWidget::createNewImage()
 {
-
     const KoColorSpace * cs = colorSpaceSelector->currentColorSpace();
 
     if (cs->colorModelId() == RGBAColorModelID &&
@@ -276,7 +278,7 @@ KisDocument* KisCustomImageWidget::createNewImage()
                                      i18n("Linear gamma RGB color spaces are not supposed to be used "
                                           "in 8-bit integer modes. It is suggested to use 16-bit integer "
                                           "or any floating point colorspace for linear profiles.\n\n"
-                                          "Press \"Continue\" to create a 8-bit integer linear RGB color space "
+                                          "Press \"Ok\" to create a 8-bit integer linear RGB color space "
                                           "or \"Cancel\" to return to the settings dialog."),
                                      QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
 
@@ -295,22 +297,27 @@ KisDocument* KisCustomImageWidget::createNewImage()
     double resolution;
     resolution = doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
 
-    width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
-    height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
+    width = static_cast<qint32>(0.5  + KoUnit(KoUnit::Pixel, resolution).toUserValuePrecise(m_width));
+    height = static_cast<qint32>(0.5 + KoUnit(KoUnit::Pixel, resolution).toUserValuePrecise(m_height));
 
     QColor qc = cmbColor->color().toQColor();
     qc.setAlpha(backgroundOpacity());
     KoColor bgColor(qc, cs);
 
-    bool backgroundAsLayer = radioBackgroundAsLayer->isChecked();
+    KisConfig::BackgroundStyle bgStyle = KisConfig::CANVAS_COLOR;
+    if( radioBackgroundAsRaster->isChecked() ){
+        bgStyle = KisConfig::RASTER_LAYER;
+    } else if( radioBackgroundAsFill->isChecked() ){
+        bgStyle = KisConfig::FILL_LAYER;
+    }
 
-    doc->newImage(txtName->text(), width, height, cs, bgColor, backgroundAsLayer, intNumLayers->value(), txtDescription->toPlainText(), resolution);
+    doc->newImage(txtName->text(), width, height, cs, bgColor, bgStyle, intNumLayers->value(), txtDescription->toPlainText(), resolution);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     cfg.setNumDefaultLayers(intNumLayers->value());
     cfg.setDefaultBackgroundOpacity(backgroundOpacity());
     cfg.setDefaultBackgroundColor(cmbColor->color().toQColor());
-    cfg.setDefaultBackgroundStyle(backgroundAsLayer ? KisConfig::LAYER : KisConfig::PROJECTION);
+    cfg.setDefaultBackgroundStyle(bgStyle);
 
     return doc;
 }
@@ -456,6 +463,9 @@ void KisCustomImageWidget::switchWidthHeight()
     double width = doubleWidth->value();
     double height = doubleHeight->value();
 
+    doubleHeight->clearFocus();
+    doubleWidth->clearFocus();
+
     doubleHeight->blockSignals(true);
     doubleWidth->blockSignals(true);
     cmbWidthUnit->blockSignals(true);
@@ -492,34 +502,20 @@ void KisCustomImageWidget::changeDocumentInfoLabel()
     double resolution;
     resolution = doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
 
-    width = static_cast<qint64>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
-    height = static_cast<qint64>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
+    width = static_cast<qint64>(0.5  + KoUnit(KoUnit::Pixel, resolution).toUserValuePrecise(m_width));
+    height = static_cast<qint64>(0.5 + KoUnit(KoUnit::Pixel, resolution).toUserValuePrecise(m_height));
 
     qint64 layerSize = width * height;
     const KoColorSpace *cs = colorSpaceSelector->currentColorSpace();
     int bitSize = 8 * cs->pixelSize(); //pixelsize is in bytes.
     layerSize = layerSize * cs->pixelSize();
-    QString byte = i18n("bytes");
-    if (layerSize>1024) {
-        layerSize/=1024;
-        byte = i18nc("Abbreviation for kilobyte", "KB");
-    }
-    if (layerSize>1024) {
-        layerSize/=1024;
-        byte = i18nc("Abbreviation for megabyte", "MB");
-    }
-    if (layerSize>1024) {
-        layerSize/=1024;
-        byte = i18nc("Abbreviation for gigabyte", "GB");
-    }
-    QString text = i18nc("arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in bits. arg5: size in unites of arg6. Arg6: KB, MB or GB",
-                         "This document will be %1 pixels by %2 pixels in %3, which means the pixel size is %4 bit. A single paint layer will thus take up %5 %6 of RAM.",
+    QString text = i18nc("arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in bits. arg5: image size",
+                         "This document will be %1 pixels by %2 pixels in %3, which means the pixel size is %4 bit. A single paint layer will thus take up %5 of RAM.",
                          width,
                          height,
                          cs->name(),
                          bitSize,
-                         layerSize,
-                         byte);
+                         KFormat().formatByteSize(layerSize));
     lblDocumentInfo->setText(text);
 }
 

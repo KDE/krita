@@ -41,12 +41,7 @@ public:
     QWidget *canvas() const {
         return m_canvas;
     }
-    void setDocumentSize(const QSize &size);
-
-    /**
-     * When true, a shadow is drawn around the canvas widet.
-     */
-    void setDrawShadow(bool drawShadow);
+    void setDocumentSize(const QSizeF &size);
 
 public Q_SLOTS:
     void documentOffsetMoved(const QPoint &);
@@ -81,9 +76,8 @@ private:
     KoCanvasControllerWidget *m_parent;
     KoShape *m_draggedShape;
 
-    bool m_drawShadow;
     QWidget *m_canvas;
-    QSize m_documentSize; // Size in pixels of the document
+    QSizeF m_documentSize; // Size in pixels of the document
     QPoint m_documentOffset; // Place where the canvas widget should
     int m_margin; // The viewport margin around the document
 };

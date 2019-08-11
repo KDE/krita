@@ -22,13 +22,20 @@
 #include <kis_types.h>
 
 class QDomDocument;
+class KoStore;
+
+#include <kis_meta_data_entry.h>
 
 class KisOpenRasterSaveContext
 {
 public:
-    virtual ~KisOpenRasterSaveContext() {}
-    virtual QString saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store *metaData, const QRect &imageRect, const qreal xRes, const qreal yRes) = 0;
-    virtual void saveStack(const QDomDocument& doc) = 0;
+    KisOpenRasterSaveContext(KoStore *store);
+    QString saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store *metaData, const QRect &imageRect, qreal xRes, qreal yRes);
+    void saveStack(const QDomDocument& doc);
+private:
+    int m_id;
+    KoStore *m_store;
+
 };
 
 

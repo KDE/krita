@@ -26,6 +26,8 @@
 #include "filter/kis_filter.h"
 #include "kis_pixel_selection.h"
 #include <KoColorSpaceRegistry.h>
+#include "kis_transaction.h"
+#include <sdk/tests/testing_timed_default_bounds.h>
 
 
 bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
@@ -34,7 +36,7 @@ bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "carrot.png");
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-//    dev->fill(0, 0, 100, 100, dev->defaultPixel());
+    dev->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(qimage.rect()));
     dev->convertFromQImage(qimage, 0, 0, 0);
 
     // Get the predefined configuration from a file
@@ -56,7 +58,10 @@ bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
     }
     dbgKrita << f->id() << ", " << cs->id() << ", " << cs->profile()->name();// << kfc->toXML() << "\n";
 
-    f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
+    {
+        KisTransaction t(kundo2_noi18n(f->name()), dev);
+        f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
+    }
 
     return true;
 
@@ -64,13 +69,16 @@ bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
 
 bool KisCrashFilterTest::testFilter(KisFilterSP f)
 {
-    QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::AllProfiles);
+    QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
     bool ok = false;
     Q_FOREACH (const KoColorSpace* colorSpace, colorSpaces) {
-        // XXX: Let's not check the painterly colorspaces right now
-        if (colorSpace->id().startsWith("KS", Qt::CaseInsensitive)) {
+
+        // Alpha color spaces are never processed directly. They are
+        // first converted into GrayA color space
+        if (colorSpace->id().startsWith("ALPHA", Qt::CaseInsensitive)) {
             continue;
         }
+
         ok = applyFilter(colorSpace, f);
     }
 
@@ -79,12 +87,22 @@ bool KisCrashFilterTest::testFilter(KisFilterSP f)
 
 void KisCrashFilterTest::testCrashFilters()
 {
+    QStringList excludeFilters;
+    excludeFilters << "colortransfer";
+    excludeFilters << "gradientmap";
+    excludeFilters << "phongbumpmap";
+    excludeFilters << "perchannel";
+    excludeFilters << "height to normal";
+
+
     QStringList failures;
     QStringList successes;
 
     QList<QString> filterList = KisFilterRegistry::instance()->keys();
     std::sort(filterList.begin(), filterList.end());
     for (QList<QString>::Iterator it = filterList.begin(); it != filterList.end(); ++it) {
+        if (excludeFilters.contains(*it)) continue;
+
         if (testFilter(KisFilterRegistry::instance()->value(*it)))
             successes << *it;
         else
@@ -96,4 +114,5 @@ void KisCrashFilterTest::testCrashFilters()
     }
 }
 
-QTEST_MAIN(KisCrashFilterTest)
+#include <sdk/tests/kistest.h>
+KISTEST_MAIN(KisCrashFilterTest)

@@ -4,7 +4,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -47,17 +48,6 @@ const int thumbnailTileDim = 128;
 
 struct OverviewThumbnailStrokeStrategy::Private {
 
-    class InitData : public KisStrokeJobData
-    {
-    public:
-        InitData(KisPaintDeviceSP _device)
-            : KisStrokeJobData(SEQUENTIAL),
-              device(_device)
-        {}
-
-        KisPaintDeviceSP device;
-    };
-
     class ProcessData : public KisStrokeJobData
     {
     public:
@@ -74,11 +64,12 @@ struct OverviewThumbnailStrokeStrategy::Private {
     class FinishProcessing : public KisStrokeJobData
     {
     public:
-        FinishProcessing(KisPaintDeviceSP _thumbDev)
+        FinishProcessing(KisPaintDeviceSP _thumbDev, const QSize& _thumbnailSize)
             : KisStrokeJobData(SEQUENTIAL),
-              thumbDev(_thumbDev)
+              thumbDev(_thumbDev), thumbnailSize(_thumbnailSize)
         {}
         KisPaintDeviceSP thumbDev;
+        QSize thumbnailSize;
     };
 };
 
@@ -89,8 +80,8 @@ OverviewWidget::OverviewWidget(QWidget * parent)
     , m_imageIdleWatcher(250)
 {
     setMouseTracking(true);
-    KisConfig cfg;
-    m_outlineColor = qApp->palette().color(QPalette::Highlight);
+    KisConfig cfg(true);
+    slotThemeChanged();
 }
 
 OverviewWidget::~OverviewWidget()
@@ -111,45 +102,54 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
         connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &OverviewWidget::generateThumbnail);
 
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)),SLOT(startUpdateCanvasProjection()));
-        connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF, QPointF)),SLOT(startUpdateCanvasProjection()));
+        connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),SLOT(startUpdateCanvasProjection()));
 
         connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
+        connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()));
         generateThumbnail();
     }
 }
 
-QSize OverviewWidget::calculatePreviewSize()
+QSize OverviewWidget::recalculatePreviewSize()
 {
     QSize imageSize(m_canvas->image()->bounds().size());
-    imageSize.scale(size(), Qt::KeepAspectRatio);
-    return imageSize;
+
+    const qreal hScale = 1.0 * this->width() / imageSize.width();
+    const qreal vScale = 1.0 * this->height() / imageSize.height();
+
+    m_previewScale = qMin(hScale, vScale);
+
+    return imageSize * m_previewScale;
 }
 
 QPointF OverviewWidget::previewOrigin()
 {
-    return QPointF((width() - m_pixmap.width()) / 2.0f, (height() - m_pixmap.height()) / 2.0f);
+    const QSize previewSize = recalculatePreviewSize();
+    return QPointF((width() - previewSize.width()) / 2.0f, (height() - previewSize.height()) / 2.0f);
 }
 
 QPolygonF OverviewWidget::previewPolygon()
 {
     if (m_canvas) {
-        const KisCoordinatesConverter* converter = m_canvas->coordinatesConverter();
-        QPolygonF canvasPoly = QPolygonF(QRectF(m_canvas->canvasWidget()->rect()));
-        QPolygonF imagePoly = converter->widgetToImage<QPolygonF>(canvasPoly);
-
-        QTransform imageToPreview = imageToPreviewTransform();
-
-        return imageToPreview.map(imagePoly);
+        const QRectF &canvasRect = QRectF(m_canvas->canvasWidget()->rect());
+        return canvasToPreviewTransform().map(canvasRect);
     }
     return QPolygonF();
 }
 
-QTransform OverviewWidget::imageToPreviewTransform()
+QTransform OverviewWidget::previewToCanvasTransform()
 {
-    QTransform imageToPreview;
-    imageToPreview.scale(calculatePreviewSize().width() / (float)m_canvas->image()->width(),
-                         calculatePreviewSize().height() / (float)m_canvas->image()->height());
-    return imageToPreview;
+    QTransform previewToImage =
+            QTransform::fromTranslate(-this->width() / 2.0, -this->height() / 2.0) *
+            QTransform::fromScale(1.0 / m_previewScale, 1.0 / m_previewScale) *
+            QTransform::fromTranslate(m_canvas->image()->width() / 2.0, m_canvas->image()->height() / 2.0);
+
+    return previewToImage * m_canvas->coordinatesConverter()->imageToWidgetTransform();
+}
+
+QTransform OverviewWidget::canvasToPreviewTransform()
+{
+    return previewToCanvasTransform().inverted();
 }
 
 void OverviewWidget::startUpdateCanvasProjection()
@@ -168,7 +168,7 @@ void OverviewWidget::resizeEvent(QResizeEvent *event)
     Q_UNUSED(event);
     if (m_canvas) {
         if (!m_oldPixmap.isNull()) {
-            QSize newSize = calculatePreviewSize();
+            QSize newSize = recalculatePreviewSize();
             m_pixmap = m_oldPixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         m_imageIdleWatcher.startCountdown();
@@ -178,12 +178,16 @@ void OverviewWidget::resizeEvent(QResizeEvent *event)
 void OverviewWidget::mousePressEvent(QMouseEvent* event)
 {
     if (m_canvas) {
-        QPointF previewPos = event->pos() - previewOrigin();
+        QPointF previewPos = event->pos();
 
-        if (previewPolygon().containsPoint(previewPos, Qt::WindingFill)) {
-            m_lastPos = previewPos;
-            m_dragging = true;
+        if (!previewPolygon().containsPoint(previewPos, Qt::WindingFill)) {
+            const QRect& canvasRect = m_canvas->canvasWidget()->rect();
+            const QPointF newCanvasPos = previewToCanvasTransform().map(previewPos) -
+                    QPointF(canvasRect.width() / 2.0f, canvasRect.height() / 2.0f);
+            m_canvas->canvasController()->pan(newCanvasPos.toPoint());
         }
+        m_lastPos = previewPos;
+        m_dragging = true;
     }
     event->accept();
     update();
@@ -192,19 +196,11 @@ void OverviewWidget::mousePressEvent(QMouseEvent* event)
 void OverviewWidget::mouseMoveEvent(QMouseEvent* event)
 {
     if (m_dragging) {
-        QPointF previewPos = event->pos() - previewOrigin();
+        QPointF previewPos = event->pos();
+        const QPointF lastCanvasPos = previewToCanvasTransform().map(m_lastPos);
+        const QPointF newCanvasPos = previewToCanvasTransform().map(event->pos());
 
-        // position is mapped from preview image->image->canvas coordinates
-        QTransform previewToImage = imageToPreviewTransform().inverted();
-        const KisCoordinatesConverter* converter = m_canvas->coordinatesConverter();
-
-        QPointF lastImagePos = previewToImage.map(m_lastPos);
-        QPointF newImagePos = previewToImage.map(previewPos);
-
-        QPointF lastWidgetPos = converter->imageToWidget<QPointF>(lastImagePos);
-        QPointF newWidgetPos = converter->imageToWidget<QPointF>(newImagePos);
-
-        QPointF diff = newWidgetPos - lastWidgetPos;
+        QPointF diff = newCanvasPos - lastCanvasPos;
         m_canvas->canvasController()->pan(diff.toPoint());
         m_lastPos = previewPos;
     }
@@ -234,7 +230,7 @@ void OverviewWidget::generateThumbnail()
     if (isVisible()) {
         QMutexLocker locker(&mutex);
         if (m_canvas) {
-            QSize previewSize = calculatePreviewSize();
+            QSize previewSize = recalculatePreviewSize();
             if(previewSize.isValid()){
                 KisImageSP image = m_canvas->image();
 
@@ -270,6 +266,11 @@ void OverviewWidget::updateThumbnail(QImage pixmap)
     update();
 }
 
+void OverviewWidget::slotThemeChanged()
+{
+    m_outlineColor = qApp->palette().color(QPalette::Highlight);
+}
+
 
 void OverviewWidget::paintEvent(QPaintEvent* event)
 {
@@ -277,11 +278,12 @@ void OverviewWidget::paintEvent(QPaintEvent* event)
 
     if (m_canvas) {
         QPainter p(this);
-        p.translate(previewOrigin());
 
-        p.drawPixmap(0, 0, m_pixmap.width(), m_pixmap.height(), m_pixmap);
+        const QSize previewSize = recalculatePreviewSize();
+        const QRectF previewRect = QRectF(previewOrigin(), previewSize);
+        p.drawPixmap(previewRect.toRect(), m_pixmap);
 
-        QRect r = rect().translated(-previewOrigin().toPoint());
+        QRect r = rect();
         QPolygonF outline;
         outline << r.topLeft() << r.topRight() << r.bottomRight() << r.bottomLeft();
 
@@ -325,7 +327,7 @@ QList<KisStrokeJobData *> OverviewThumbnailStrokeStrategy::createJobsData(KisPai
     Q_FOREACH (const QRect &tileRectangle, tileRects) {
         jobsData << new OverviewThumbnailStrokeStrategy::Private::ProcessData(dev, thumbDev, thumbnailOversampledSize, tileRectangle);
     }
-    jobsData << new OverviewThumbnailStrokeStrategy::Private::FinishProcessing(thumbDev);
+    jobsData << new OverviewThumbnailStrokeStrategy::Private::FinishProcessing(thumbDev, thumbnailSize);
 
     return jobsData;
 }
@@ -364,7 +366,8 @@ void OverviewThumbnailStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                   &updater, KisFilterStrategyRegistry::instance()->value("Bilinear"));
         worker.run();
 
-        overviewImage = d_fp->thumbDev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile());
+        overviewImage = d_fp->thumbDev->convertToQImage(KoColorSpaceRegistry::instance()->rgb8()->profile(),
+                                                        QRect(QPoint(0,0), d_fp->thumbnailSize));
         emit thumbnailUpdated(overviewImage);
         return;
     }

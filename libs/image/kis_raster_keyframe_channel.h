@@ -49,6 +49,7 @@ public:
      * Copy the content of the sourceDevice into a new keyframe at given time
      * @param time position of new keyframe
      * @param sourceDevice source for content
+     * @param parentCommand parent command used for stacking
      */
     void importFrame(int time, KisPaintDeviceSP sourceDevice, KUndo2Command *parentCommand);
 
@@ -79,10 +80,14 @@ protected:
     void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) override;
     KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) override;
 
+    friend class KisRasterKeyframe;
+    bool keyframeHasContent(const KisKeyframe *keyframe) const;
+
 private:
     void setFrameFilename(int frameId, const QString &filename);
     QString chooseFrameFilename(int frameId, const QString &layerFilename);
     int frameId(KisKeyframeSP keyframe) const;
+    int frameId(const KisKeyframe *keyframe) const;
 
     struct Private;
     QScopedPointer<Private> m_d;

@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -68,12 +69,12 @@ void GridDockerDock::setCanvas(KoCanvasBase * canvas)
     m_canvas = canvas ? dynamic_cast<KisCanvas2*>(canvas) : 0;
     setEnabled(m_canvas);
 
-    if (m_canvas) {
+    if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->document()) {
         m_canvasConnections.addConnection(
             m_canvas->viewManager()->gridManager(),
-            SIGNAL(sigRequestUpdateGridConfig(const KisGridConfig&)),
+            SIGNAL(sigRequestUpdateGridConfig(KisGridConfig)),
             this,
-            SLOT(slotGridConfigUpdateRequested(const KisGridConfig&)));
+            SLOT(slotGridConfigUpdateRequested(KisGridConfig)));
 
         slotGridConfigUpdateRequested(m_canvas->viewManager()->document()->gridConfig());
 
@@ -85,12 +86,18 @@ void GridDockerDock::setCanvas(KoCanvasBase * canvas)
 
         m_canvasConnections.addConnection(
             m_canvas->viewManager()->guidesManager(),
-            SIGNAL(sigRequestUpdateGuidesConfig(const KisGuidesConfig&)),
+            SIGNAL(sigRequestUpdateGuidesConfig(KisGuidesConfig)),
             this,
-            SLOT(slotGuidesConfigUpdateRequested(const KisGuidesConfig&)));
+            SLOT(slotGuidesConfigUpdateRequested(KisGuidesConfig)));
         slotGuidesConfigUpdateRequested(m_canvas->viewManager()->document()->guidesConfig());
-        QRect rc = m_canvas->image()->bounds();
-        m_configWidget->setGridDivision(rc.width() / 2, rc.height() / 2);
+
+        // isometric grid only available with OpenGL
+        if (m_canvas->canvasIsOpenGL()) {
+            m_configWidget->enableIsometricGrid(true);
+        } else {
+            m_configWidget->enableIsometricGrid(false);
+        }
+
     }
 }
 

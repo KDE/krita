@@ -53,6 +53,7 @@ public:
     QPainterPath fetchOutline(const KisPaintInformation &info,
                               const KisPaintOpSettingsSP settings,
                               const QPainterPath &originalOutline,
+                              const KisPaintOpSettings::OutlineMode &mode,
                               qreal additionalScale = 1.0,
                               qreal additionalRotation = 0.0,
                               bool tilt = false, qreal tiltcenterx = 1.0, qreal tiltcentery = 1.0) const;

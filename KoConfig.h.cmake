@@ -49,9 +49,6 @@
 /* Defines if we use lcms2.4 */
 #cmakedefine HAVE_LCMS24 1
 
-/* Defines if KIO is present */
-#cmakedefine HAVE_KIO 1
-
 /* Defines if DBUS is present */
 #cmakedefine HAVE_DBUS 1
 
@@ -60,3 +57,6 @@
 
 /* This variable contains the path to the current build directory */
 #define KRITA_BUILD_DIR "${CMAKE_BINARY_DIR}"
+
+/* This variable contains the path to the data install dir */
+#define KRITA_EXTRA_RESOURCE_DIRS "${CMAKE_INSTALL_PREFIX}/${DATA_INSTALL_DIR}:${CMAKE_SOURCE_DIR}/krita/data"

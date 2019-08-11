@@ -43,6 +43,7 @@ public:
 
     /**
      * Constructor.
+     * @param actionCollection the action collection for this widget
      * @param parent the parent this widget will belong to
      */
     explicit KoCanvasControllerWidget(KActionCollection * actionCollection, KoCanvasSupervisor *observerProvider, QWidget *parent = 0);
@@ -53,7 +54,7 @@ public:
      */
     void scrollContentsBy(int dx, int dy) override;
 
-    QSize viewportSize() const override;
+    QSizeF viewportSize() const override;
 
     /// Reimplemented from KoCanvasController
 
@@ -61,8 +62,6 @@ public:
      * Activate this canvascontroller
      */
     virtual void activate();
-
-    void setDrawShadow(bool drawShadow) override;
 
     void setCanvas(KoCanvasBase *canvas) override;
 
@@ -107,6 +106,7 @@ public:
     /**
      * Zoom document keeping point \p widgetPoint unchanged
      * \param widgetPoint sticky point in widget pixels
+     * \param zoomCoeff the zoom
      */
     virtual void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomCoeff);
 
@@ -134,7 +134,7 @@ public:
      */
     void setScrollBarValue(const QPoint &value) override;
 
-    void updateDocumentSize(const QSize &sz, bool recalculateCenter = true) override;
+    void updateDocumentSize(const QSizeF &sz, bool recalculateCenter = true) override;
 
     /**
      * Set mouse wheel to zoom behaviour
@@ -145,6 +145,8 @@ public:
     void setVastScrolling(qreal factor) override;
 
     QPointF currentCursorPosition() const override;
+
+    void resetScrollBars() override;
 
     /**
      * \internal
@@ -162,6 +164,8 @@ private Q_SLOTS:
 
 protected:
     friend class KisZoomAndPanTest;
+
+    qreal vastScrollingFactor() const;
 
     /// reimplemented from QWidget
     void paintEvent(QPaintEvent *event) override;

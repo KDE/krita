@@ -31,7 +31,8 @@
 class KisFilterConfiguration;
 
 /**
- * @class KisSelectionBasedLayer describes base behaviour for
+ * @class KisSelectionBasedLayer
+ * @brief Describes base behaviour for
  * selection base classes like KisAdjustmentLayer and KisGeneratorLayer.
  * These classes should have a persistent selection that controls
  * the area where filter/generators are applied. The area outside
@@ -73,7 +74,7 @@ public:
      * resets cached projection of lower layer to a new device
      * @return void
      */
-    void resetCache();
+    virtual void resetCache();
 
     /**
      * for KisLayer::setDirty(const QRegion&)

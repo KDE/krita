@@ -103,14 +103,14 @@ public:
     /// Converts from shape coordinates to viewbox coordinates
     QPointF shapeToViewbox(const QPointF &point) const;
 
-    /// Sets if the shape is to be mirrored horizontally before aplying any other transformations
+    /// Sets if the shape is to be mirrored horizontally before applying any other transformations
     //NOTE: in the standard nothing is mentioned about the priorities of the transformations"
     //it's assumed like this because of the behavior shwon in OOo
     void setMirrorHorizontally(bool mirrorHorizontally);
 
-    /// Sets if the shape is to be mirrored vertically before aplying any other transformations
+    /// Sets if the shape is to be mirrored vertically before applying any other transformations
     //NOTE: in the standard nothing is mentioned about the priorities of the transformations"
-    //it's assumed like this because of the behavior shwon in OOo
+    //it's assumed like this because of the behavior shown in OOo
     void setMirrorVertically(bool mirrorVertically);
 
     // Sets member variable representing draw:path-stretchpoint-x attribute
@@ -149,13 +149,13 @@ private:
     /// Updates the size and position of an optionally existing text-on-shape text area
     void updateTextArea();
 
-    /// Enables chaching results
+    /// Enables caching results
     void enableResultCache(bool enable);
 
     // This function checks if draw:path-stretchpoint-x or draw:path-stretchpoint-y attributes are set.
     // If the attributes are set the path shape coordinates (m_subpaths) are changed so that the form
     // of the shape is preserved after stretching. It is needed for example in round-rectangles, to
-    // have the corners round after stretching. Without it the corners would be eliptical.
+    // have the corners round after stretching. Without it the corners would be elliptical.
     // Returns true if any points were actually changed, otherwise false.
     bool useStretchPoints(const QSizeF &size, qreal &scale);
 
@@ -170,7 +170,7 @@ private:
     QPointF m_viewBoxOffset;
     QStringList m_textArea;
     QList<EnhancedPathCommand *> m_commands; ///< the commands creating the outline
-    QList<EnhancedPathHandle *> m_enhancedHandles; ///< the handles for modifiying the shape
+    QList<EnhancedPathHandle *> m_enhancedHandles; ///< the handles for modifying the shape
     FormulaStore m_formulae;     ///< the formulae
     ModifierStore m_modifiers;   ///< the modifier values
     ParameterStore m_parameters; ///< the shared parameters
@@ -178,7 +178,7 @@ private:
     bool m_mirrorHorizontally; ///<whether or not the shape is to be mirrored horizontally before transforming it
     qreal m_pathStretchPointX; ///< draw:path-stretchpoint-x attribute
     qreal m_pathStretchPointY; ///< draw:path-stretchpoint-y attribute
-    QHash<QString, qreal> m_resultChache; ///< cache for intermediate results used when evaluating path
+    QHash<QString, qreal> m_resultCache; ///< cache for intermediate results used when evaluating path
     bool m_cacheResults; ///< indicates if result cache is enabled
 };
 

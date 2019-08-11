@@ -81,6 +81,12 @@ KisAnimationCurvesView::KisAnimationCurvesView(QWidget *parent)
 
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+    if (scroller){
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 }
 
 KisAnimationCurvesView::~KisAnimationCurvesView()

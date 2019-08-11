@@ -26,7 +26,7 @@
 #include <QMimeData>
 #include <QDomDocument>
 #include <QDomElement>
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 #include <QWidgetAction>
 #include <QMenu>
 
@@ -185,6 +185,11 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     m_wdgSvgCollection->listCollection->setDragDropMode(QAbstractItemView::DragOnly);
     m_wdgSvgCollection->listCollection->setSelectionMode(QListView::SingleSelection);
 
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(m_wdgSvgCollection->listCollection);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 
     // thumbnail icon changer
     QMenu* configureMenu = new QMenu(this);

@@ -33,7 +33,6 @@
 #include <boost/random/mersenne_twister.hpp>
 #include "kis_random_accessor_ng.h"
 #include "kis_iterator_ng.h"
-#include "kis_pixel_selection.h"
 
 
 struct Q_DECL_HIDDEN KisLayerStyleFilterEnvironment::Private
@@ -103,24 +102,6 @@ int KisLayerStyleFilterEnvironment::currentLevelOfDetail() const
 {
     return m_d->sourceLayer ?
         m_d->sourceLayer->original()->defaultBounds()->currentLevelOfDetail() : 0;
-}
-
-QPainterPath KisLayerStyleFilterEnvironment::layerOutlineCache() const
-{
-    // TODO: make it really cachable!
-    Q_ASSERT(m_d->sourceLayer);
-    KisPaintDeviceSP srcDevice = m_d->sourceLayer->projection();
-    QRect srcRect = srcDevice->exactBounds();
-    if (srcRect.isEmpty()) return QPainterPath();
-
-    KisSelectionSP baseSelection =
-        KisLsUtils::selectionFromAlphaChannel(srcDevice, srcRect);
-    KisPixelSelectionSP selection = baseSelection->pixelSelection();
-
-    // needs no 'invalidate' call
-    selection->recalculateOutlineCache();
-
-    return selection->outlineCache();
 }
 
 void KisLayerStyleFilterEnvironment::setupFinalPainter(KisPainter *gc,

@@ -47,7 +47,6 @@
 #include <QBuffer>
 #include <QDomDocument>
 #include <QDomElement>
-#include <QTemporaryFile>
 #include <QDesktopWidget>
 #include <QDir>
 
@@ -102,6 +101,7 @@ KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
     }
 
     KisImageSP image = new KisImage(0, rc.width(), rc.height(), nodes.first()->colorSpace(), nodes.first()->name());
+    image->setAllowMasksOnRootNode(true);
 
     {
         KisImageBarrierLockerWithFeedbackAllowNull locker(srcImage);
@@ -142,7 +142,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     Q_ASSERT(m_nodes.size() > 0);
 
     if (mimetype == "application/x-qt-image") {
-        KisConfig cfg;
+        KisConfig cfg(true);
 
         KisDocument *doc = createDocument(m_nodes, m_image);
 
@@ -294,7 +294,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         QBuffer buf(&ba);
         KisImportExportFilter *filter = tempDoc->importExportManager()->filterForMimeType(tempDoc->nativeFormatMimeType(), KisImportExportManager::Import);
         filter->setBatchMode(true);
-        bool result = (filter->convert(tempDoc, &buf) == KisImportExportFilter::OK);
+        bool result = (filter->convert(tempDoc, &buf).isOk());
 
         if (result) {
             KisImageWSP tempImage = tempDoc->image();
@@ -332,9 +332,9 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
         device->convertFromQImage(qimage, 0);
 
-		if (image) {
-			nodes << new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, device);
-		}
+        if (image) {
+            nodes << new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, device);
+        }
 
         alwaysRecenter = true;
     }

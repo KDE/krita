@@ -22,18 +22,37 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <QTest>
-
 #include "filestest.h"
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
 
+const QString CsvMimetype = "text/csv";
+
 
 void KisCsvTest::testFiles()
 {
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
 }
+
+
+void KisCsvTest::testImportFromWriteonly()
+{
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), CsvMimetype);
+}
+
+
+void KisCsvTest::testExportToReadonly()
+{
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), CsvMimetype);
+}
+
+
+void KisCsvTest::testImportIncorrectFormat()
+{
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), CsvMimetype);
+}
+
 QTEST_MAIN(KisCsvTest)
 

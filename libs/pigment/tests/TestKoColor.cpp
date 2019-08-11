@@ -30,6 +30,8 @@
 #include "KoColorSpaceRegistry.h"
 #include "DebugPigment.h"
 
+#include "sdk/tests/kistest.h"
+
 bool nearEqualValue(int a, int b)
 {
     return qAbs(a - b) <= 1;
@@ -85,4 +87,14 @@ void TestKoColor::testConversion()
     kc.convertTo(csDst);
 }
 
-QTEST_GUILESS_MAIN(TestKoColor)
+void TestKoColor::testSimpleSerialization()
+{
+    QColor c = Qt::green;
+    KoColor k;
+    k.fromQColor(c);
+    QString xml = k.toXML();
+    KoColor k2 = KoColor::fromXML(xml);
+    QVERIFY(k2.colorSpace() == k.colorSpace());
+}
+
+KISTEST_MAIN(TestKoColor)

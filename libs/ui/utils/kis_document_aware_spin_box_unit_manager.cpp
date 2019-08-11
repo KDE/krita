@@ -82,6 +82,10 @@ qreal KisDocumentAwareSpinBoxUnitManager::getConversionFactor(int dim, QString p
 
     factor = 1; //fall back to something natural in case document is unreachable (1 px = 1 pt = 1vw = 1vh). So a virtual document of 100x100 with a resolution of 1.
 
+    if (!KisPart::instance()->currentMainwindow()) {
+        return factor;
+    }
+
     KisView* view = KisPart::instance()->currentMainwindow()->activeView();
 
     if (view == nullptr) {

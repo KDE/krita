@@ -20,6 +20,7 @@
 
 #include <QLabel>
 #include <kis_brush.h>
+#include <QScroller>
 
 #include "kritapaintop_export.h"
 #include "ui_wdgpredefinedbrushchooser.h"
@@ -68,7 +69,7 @@ private Q_SLOTS:
     void slotImportNewBrushResource();
     void slotDeleteBrushResource();
     void slotNewPredefinedBrush(KoResource *);
-    void update(KoResource *);
+    void updateBrushTip(KoResource *, bool isChangingBrushPresets = false);
 
 Q_SIGNALS:
 

@@ -89,6 +89,38 @@ void TestSaveLoadTransformArgs::testWarp()
     QCOMPARE(newArgs, args);
 }
 
+void TestSaveLoadTransformArgs::testCage()
+{
+    ToolTransformArgs args;
+
+    args.setMode(ToolTransformArgs::CAGE);
+    args.setDefaultPoints(false);
+    qDebug() << "Running";
+
+    args.refOriginalPoints() << QPointF(1.0, 2.0);
+    args.refOriginalPoints() << QPointF(2.0, 3.0);
+    args.refOriginalPoints() << QPointF(3.0, 4.0);
+    args.refOriginalPoints() << QPointF(4.0, 5.0);
+
+    args.refTransformedPoints() << QPointF(6.0, 7.0);
+    args.refTransformedPoints() << QPointF(7.0, 8.0);
+    args.refTransformedPoints() << QPointF(8.0, 9.0);
+    args.refTransformedPoints() << QPointF(9.0, 8.0);
+    args.setWarpType(KisWarpTransformWorker::RIGID_TRANSFORM);
+    args.setAlpha(0.5);
+    args.setPixelPrecision(8);
+    args.setPreviewPixelPrecision(16);
+
+    QDomDocument doc("test_type");
+    QDomElement root = doc.createElement("root");
+    doc.appendChild(root);
+
+    args.toXML(&root);
+
+    ToolTransformArgs newArgs = ToolTransformArgs::fromXML(root);
+    QCOMPARE(newArgs, args);
+}
+
 void TestSaveLoadTransformArgs::testLiquify()
 {
     ToolTransformArgs args;

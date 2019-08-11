@@ -19,7 +19,9 @@
  */
 
 #include "KoResourceItemView.h"
+#include <KisKineticScroller.h>
 #include <QEvent>
+#include <QScroller>
 #include <QHelpEvent>
 
 #include <QDebug>
@@ -28,6 +30,11 @@ KoResourceItemView::KoResourceItemView(QWidget *parent)
     : KoTableView(parent)
 {
     connect(this, SIGNAL(clicked(QModelIndex)), SLOT(slotItemClicked(QModelIndex)));
+
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChange(QScroller::State)));
+    }
 }
 
 bool KoResourceItemView::viewportEvent(QEvent *event)

@@ -1,9 +1,0 @@
-{
-    "Id": "Default Dockers",
-    "Type": "Service",
-    "X-KDE-Library": "kritadefaultdockers",
-    "X-KDE-ServiceTypes": [
-        "Krita/Dock"
-    ],
-    "X-Krita-Version": "28"
-}

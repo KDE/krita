@@ -32,7 +32,9 @@ enum CommandId {
     ChangeEllipseShapeId,
     ChangeRectangleShapeId,
     ChangePathShapePointId,
-    ChangePathShapeControlPointId
+    ChangePathShapeControlPointId,
+    ChangePaletteId,
+    TransformToolId
 };
 
 }

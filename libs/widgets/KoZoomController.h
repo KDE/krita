@@ -66,12 +66,11 @@ public:
     * @param controller the canvasController
     * @param zoomHandler the zoom handler (viewconverter with setter methods)
     * @param actionCollection the action collection where the KoZoomAction is added to
-    * @param specialButtons controls which special buttons to show
+    * @param parent the parent QObject
     */
     KoZoomController(KoCanvasController *controller,
                      KoZoomHandler *zoomHandler,
                      KActionCollection *actionCollection,
-                     KoZoomAction::SpecialButtons specialButtons = 0,
                      QObject *parent = 0);
 
     /// destructor
@@ -148,14 +147,6 @@ public Q_SLOTS:
     QSizeF pageSize() const;
 
     /**
-    * Set the dimensions of where text can appear which allows zoom modes that use the text
-    * to update.
-    * @param min the minimum x value (in document coordinates) where text can appear
-    * @param max the maximum x value (in document coordinates) where text can appear
-    */
-    void setTextMinMax(qreal min, qreal max);
-
-    /**
     * Set the size of the whole document currently being shown on the canvas.
     * The document size will be used together with the current zoom level to calculate the size of the
     * canvas in the canvasController.
@@ -197,7 +188,8 @@ Q_SIGNALS:
     void zoomedToAll();
 
 protected:
-    virtual QSize documentToViewport(const QSizeF &size);
+    virtual QSizeF documentToViewport(const QSizeF &size);
+    QSize documentToViewportCeil(const QSizeF &size);
 
 private:
     Q_PRIVATE_SLOT(d, void setAvailableSize())

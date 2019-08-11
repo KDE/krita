@@ -22,7 +22,6 @@
 #include <QIODevice>
 #include <QString>
 
-#include <QtEndian>
 #include "psd.h"
 
 bool psdwrite(QIODevice* io, quint8 v)
@@ -215,7 +214,7 @@ bool psdread_pascalstring(QIODevice* io, QString& s, int padding)
         for (int i = 0; i < padding -1; ++i) {
             io->seek(io->pos() + 1);
         }
-        return (length == 0);
+        return true;
     }
 
     QByteArray chars = io->read(length);

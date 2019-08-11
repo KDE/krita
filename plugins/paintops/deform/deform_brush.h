@@ -24,6 +24,7 @@
 
 #include <kis_brush_size_option.h>
 #include <kis_deform_option.h>
+#include "kis_algebra_2d.h"
 
 #include <time.h>
 
@@ -72,7 +73,7 @@ public:
         return m_factor;
     }
     void transform(qreal* x, qreal* y, qreal distance) override {
-        qreal scaleFactor = (1.0 - distance) * m_factor + distance;
+        qreal scaleFactor = KisAlgebra2D::signPZ(m_factor) * (qAbs((1.0 - distance) * m_factor) + distance);
         *x = *x / scaleFactor;
         *y = *y / scaleFactor;
     }
@@ -206,7 +207,7 @@ public:
                                     qreal scale, qreal rotation, QPointF pos,
                                     qreal subPixelX, qreal subPixelY, int dabX, int dabY);
 
-    void setSizeProperties(BrushSizeOption * properties) {
+    void setSizeProperties(KisBrushSizeOptionProperties * properties) {
         m_sizeProperties = properties;
     }
     void setProperties(DeformOption * properties) {
@@ -245,7 +246,7 @@ private:
     DeformBase * m_deformAction;
 
     DeformOption * m_properties;
-    BrushSizeOption * m_sizeProperties;
+    KisBrushSizeOptionProperties * m_sizeProperties;
 };
 
 

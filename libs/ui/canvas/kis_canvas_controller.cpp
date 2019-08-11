@@ -19,15 +19,16 @@
 #include "kis_canvas_controller.h"
 
 #include <QMouseEvent>
+#include <QScrollBar>
 #include <QTabletEvent>
 
 #include <klocalizedstring.h>
-
+#include <kactioncollection.h>
 #include "kis_canvas_decoration.h"
-#include "kis_paintop_transformation_connector.h"
 #include "kis_coordinates_converter.h"
 #include "kis_canvas2.h"
 #include "opengl/kis_opengl_canvas2.h"
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "KisViewManager.h"
 #include "KisView.h"
@@ -40,8 +41,7 @@ static const int gRulersUpdateDelay = 80 /* ms */;
 
 struct KisCanvasController::Private {
     Private(KisCanvasController *qq)
-        : q(qq),
-          paintOpTransformationConnector(0)
+        : q(qq)
     {
         using namespace std::placeholders;
 
@@ -58,7 +58,6 @@ struct KisCanvasController::Private {
     QPointer<KisView> view;
     KisCoordinatesConverter *coordinatesConverter;
     KisCanvasController *q;
-    KisPaintopTransformationConnector *paintOpTransformationConnector;
     QScopedPointer<KisSignalCompressorWithParam<QPoint> > mousePositionCompressor;
 
     void emitPointerPositionChangedSignals(QPoint pointerPos);
@@ -110,22 +109,11 @@ void KisCanvasController::setCanvas(KoCanvasBase *canvas)
 
         m_d->coordinatesConverter =
             const_cast<KisCoordinatesConverter*>(kritaCanvas->coordinatesConverter());
-
-        m_d->paintOpTransformationConnector =
-            new KisPaintopTransformationConnector(kritaCanvas, this);
     } else {
         m_d->coordinatesConverter = 0;
-
-        delete m_d->paintOpTransformationConnector;
-        m_d->paintOpTransformationConnector = 0;
     }
 
     KoCanvasControllerWidget::setCanvas(canvas);
-}
-
-void KisCanvasController::changeCanvasWidget(QWidget *widget)
-{
-    KoCanvasControllerWidget::changeCanvasWidget(widget);
 }
 
 void KisCanvasController::activate()
@@ -180,7 +168,7 @@ bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)
     return false;
 }
 
-void KisCanvasController::updateDocumentSize(const QSize &sz, bool recalculateCenter)
+void KisCanvasController::updateDocumentSize(const QSizeF &sz, bool recalculateCenter)
 {
     KoCanvasControllerWidget::updateDocumentSize(sz, recalculateCenter);
 
@@ -203,7 +191,6 @@ void KisCanvasController::mirrorCanvas(bool enable)
     QPoint newOffset = m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), enable, false);
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
-    m_d->paintOpTransformationConnector->notifyTransformationChanged();
     m_d->showMirrorStateOnCanvas();
 }
 
@@ -222,7 +209,6 @@ void KisCanvasController::rotateCanvas(qreal angle, const QPointF &center)
     QPoint newOffset = m_d->coordinatesConverter->rotate(center, angle);
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
-    m_d->paintOpTransformationConnector->notifyTransformationChanged();
     m_d->showRotationValueOnCanvas();
 }
 
@@ -251,7 +237,6 @@ void KisCanvasController::resetCanvasRotation()
     QPoint newOffset = m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
-    m_d->paintOpTransformationConnector->notifyTransformationChanged();
     m_d->showRotationValueOnCanvas();
 }
 
@@ -264,7 +249,6 @@ void KisCanvasController::slotToggleWrapAroundMode(bool value)
         m_d->view->viewManager()->showFloatingMessage(i18n("You are activating wrap-around mode, but have not enabled OpenGL.\n"
                                                           "To visualize wrap-around mode, enable OpenGL."), QIcon());
     }
-
     kritaCanvas->setWrapAroundViewingMode(value);
     kritaCanvas->image()->setWrapAroundModePermitted(value);
 }
@@ -279,7 +263,7 @@ bool KisCanvasController::wrapAroundMode() const
 
 void KisCanvasController::slotTogglePixelGrid(bool value)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.enablePixelGrid(value);
 
     KisConfigNotifier::instance()->notifyPixelGridModeChanged();
@@ -356,4 +340,47 @@ void KisCanvasController::restoreCanvasState(const KisPropertiesConfiguration &c
 
     slotToggleWrapAroundMode(config.getBool("wrapAround", false));
     kritaCanvas->setLodAllowedInCanvas(config.getBool("enableInstantPreview", false));
+}
+
+void KisCanvasController::resetScrollBars()
+{
+    // The scrollbar value always points at the top-left corner of the
+    // bit of image we paint.
+
+    KisDocument *doc = m_d->view->document();
+    if (!doc) return;
+
+    QRectF documentBounds = doc->documentBounds();
+    QRectF viewRect = m_d->coordinatesConverter->imageToWidget(documentBounds);
+
+    // Cancel out any existing pan
+    const QRectF imageBounds = m_d->view->image()->bounds();
+    const QRectF imageBB = m_d->coordinatesConverter->imageToWidget(imageBounds);
+    QPointF pan = imageBB.topLeft();
+    viewRect.translate(-pan);
+
+    int drawH = viewport()->height();
+    int drawW = viewport()->width();
+
+    qreal horizontalReserve = vastScrollingFactor() * drawW;
+    qreal verticalReserve = vastScrollingFactor() * drawH;
+
+    qreal xMin = viewRect.left() - horizontalReserve;
+    qreal yMin = viewRect.top() - verticalReserve;
+
+    qreal xMax = viewRect.right() - drawW + horizontalReserve;
+    qreal yMax = viewRect.bottom() - drawH + verticalReserve;
+
+    QScrollBar *hScroll = horizontalScrollBar();
+    QScrollBar *vScroll = verticalScrollBar();
+
+    hScroll->setRange(static_cast<int>(xMin), static_cast<int>(xMax));
+    vScroll->setRange(static_cast<int>(yMin), static_cast<int>(yMax));
+
+    int fontHeight = QFontMetrics(font()).height();
+
+    vScroll->setPageStep(drawH);
+    vScroll->setSingleStep(fontHeight);
+    hScroll->setPageStep(drawW);
+    hScroll->setSingleStep(fontHeight);
 }

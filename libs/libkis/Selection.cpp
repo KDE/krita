@@ -25,7 +25,6 @@
 #include <kis_selection_filters.h>
 #include <kis_painter.h>
 #include <kis_clipboard.h>
-#include <kis_painter.h>
 #include <QByteArray>
 
 #include <Node.h>
@@ -292,6 +291,12 @@ void Selection::intersect(Selection *selection)
 {
     if (!d->selection) return;
     d->selection->pixelSelection()->applySelection(selection->selection()->pixelSelection(), SELECTION_INTERSECT);
+}
+
+void Selection::symmetricdifference(Selection *selection)
+{
+    if (!d->selection) return;
+    d->selection->pixelSelection()->applySelection(selection->selection()->pixelSelection(), SELECTION_SYMMETRICDIFFERENCE);
 }
 
 

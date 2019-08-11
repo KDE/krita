@@ -19,6 +19,7 @@
 #ifndef __TRANSFORM_STROKE_STRATEGY_H
 #define __TRANSFORM_STROKE_STRATEGY_H
 
+#include <QObject>
 #include <QMutex>
 #include <KoUpdater.h>
 #include <kis_stroke_strategy_undo_command_based.h>
@@ -28,13 +29,24 @@
 #include <kritatooltransform_export.h>
 
 
-
 class KisPostExecutionUndoAdapter;
+class TransformTransactionProperties;
+class KisUpdatesFacade;
 
 
-class TransformStrokeStrategy : public KisStrokeStrategyUndoCommandBased
+class TransformStrokeStrategy : public QObject, public KisStrokeStrategyUndoCommandBased
 {
+    Q_OBJECT
 public:
+    struct TransformAllData : public KisStrokeJobData {
+        TransformAllData(const ToolTransformArgs &_config)
+            : KisStrokeJobData(SEQUENTIAL, NORMAL),
+              config(_config) {}
+
+        ToolTransformArgs config;
+    };
+
+
     class TransformData : public KisStrokeJobData {
     public:
         enum Destination {
@@ -66,23 +78,35 @@ public:
         KisNodeSP node;
     };
 
+    class PreparePreviewData : public KisStrokeJobData {
+    public:
+        PreparePreviewData()
+            : KisStrokeJobData(BARRIER, NORMAL)
+        {
+        }
+    };
+
 public:
-    TransformStrokeStrategy(KisNodeSP rootNode,
+    TransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
+                            bool workRecursively,
+                            const QString &filterId,
+                            bool forceReset,
+                            KisNodeSP rootNode,
                             KisSelectionSP selection,
-                            KisStrokeUndoFacade *undoFacade);
+                            KisStrokeUndoFacade *undoFacade, KisUpdatesFacade *updatesFacade);
 
     ~TransformStrokeStrategy() override;
-
-    KisPaintDeviceSP previewDevice() const;
-    KisSelectionSP realSelection() const;
-
 
     void initStrokeCallback() override;
     void finishStrokeCallback() override;
     void cancelStrokeCallback() override;
     void doStrokeCallback(KisStrokeJobData *data) override;
 
-    static bool fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode);
+    static bool fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode, KisNodeList *transformedNodes);
+
+Q_SIGNALS:
+    void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args);
+    void sigPreviewDeviceReady(KisPaintDeviceSP device, const QPainterPath &selectionOutline);
 
 protected:
     void postProcessToplevelCommand(KUndo2Command *command) override;
@@ -109,18 +133,39 @@ private:
     void putDeviceCache(KisPaintDeviceSP src, KisPaintDeviceSP cache);
     KisPaintDeviceSP getDeviceCache(KisPaintDeviceSP src);
 
+    QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive);
+    ToolTransformArgs resetArgsForMode(ToolTransformArgs::TransformMode mode,
+                                       const QString &filterId,
+                                       const TransformTransactionProperties &transaction);
+    bool tryInitArgsFromNode(KisNodeSP node, ToolTransformArgs *args);
+    bool tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args,
+                                        ToolTransformArgs::TransformMode mode,
+                                        KisNodeSP currentNode,
+                                        KisNodeList selectedNodes, QVector<KisStrokeJobData *> *undoJobs);
+
+
 private:
+    KisUpdatesFacade *m_updatesFacade;
+    ToolTransformArgs::TransformMode m_mode;
+    bool m_workRecursively;
+    QString m_filterId;
+    bool m_forceReset;
+
     KisSelectionSP m_selection;
 
     QMutex m_devicesCacheMutex;
     QHash<KisPaintDevice*, KisPaintDeviceSP> m_devicesCacheHash;
 
-    KisPaintDeviceSP m_previewDevice;
     KisTransformMaskSP writeToTransformMask;
 
-
     ToolTransformArgs m_savedTransformArgs;
-    KisNodeSP m_savedRootNode;
+    KisNodeSP m_rootNode;
+    KisNodeList m_processedNodes;
+    QList<KisSelectionSP> m_deactivatedSelections;
+    QList<KisNodeSP> m_hiddenProjectionLeaves;
+
+    const KisSavedMacroCommand *m_overriddenCommand = 0;
+    QVector<const KUndo2Command*> m_skippedWhileMergeCommands;
 };
 
 #endif /* __TRANSFORM_STROKE_STRATEGY_H */

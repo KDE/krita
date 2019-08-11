@@ -35,6 +35,7 @@
 #include <QComboBox>
 #include <QApplication>
 #include <QMatrix4x4>
+#include <QMenu>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
@@ -81,6 +82,7 @@
 #include "kis_transform_mask.h"
 #include "kis_transform_mask_adapter.h"
 
+#include "krita_container_utils.h"
 #include "kis_layer_utils.h"
 #include <KisDelayedUpdateNodeInterface.h>
 
@@ -89,7 +91,6 @@
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::rotateCursor())
     , m_workRecursively(true)
-    , m_changesTracker(&m_transaction)
     , m_warpStrategy(
         new KisWarpTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
@@ -120,10 +121,27 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     useCursor(KisCursor::selectCursor());
     m_optionsWidget = 0;
 
+    warpAction = new KisAction(i18n("Warp"));
+    liquifyAction = new KisAction(i18n("Liquify"));
+    cageAction = new KisAction(i18n("Cage"));
+    freeTransformAction = new KisAction(i18n("Free"));
+    perspectiveAction = new KisAction(i18n("Perspective"));
+
+    // extra actions for free transform that are in the tool options
+    mirrorHorizontalAction = new KisAction(i18n("Mirror Horizontal"));
+    mirrorVericalAction = new KisAction(i18n("Mirror Vertical"));
+    rotateNinteyCWAction = new KisAction(i18n("Rotate 90 degrees Clockwise"));
+    rotateNinteyCCWAction = new KisAction(i18n("Rotate 90 degrees CounterClockwise"));
+
+    applyTransformation = new KisAction(i18n("Apply"));
+    resetTransformation = new KisAction(i18n("Reset"));
+
+    m_contextMenu.reset(new QMenu());
+
     connect(m_warpStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_cageStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_liquifyStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
-    connect(m_liquifyStrategy.data(), SIGNAL(requestCursorOutlineUpdate(const QPointF&)), SLOT(cursorOutlineUpdateRequested(const QPointF&)));
+    connect(m_liquifyStrategy.data(), SIGNAL(requestCursorOutlineUpdate(QPointF)), SLOT(cursorOutlineUpdateRequested(QPointF)));
     connect(m_liquifyStrategy.data(), SIGNAL(requestUpdateOptionWidget()), SLOT(updateOptionWidget()));
     connect(m_freeStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestResetRotationCenterButtons()), SLOT(resetRotationCenterButtonsRequested()));
@@ -131,8 +149,8 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     connect(m_perspectiveStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_perspectiveStrategy.data(), SIGNAL(requestShowImageTooBig(bool)), SLOT(imageTooBigRequested(bool)));
 
-    connect(&m_changesTracker, SIGNAL(sigConfigChanged()),
-            this, SLOT(slotTrackerChangedConfig()));
+    connect(&m_changesTracker, SIGNAL(sigConfigChanged(KisToolChangesTrackerDataSP)),
+            this, SLOT(slotTrackerChangedConfig(KisToolChangesTrackerDataSP)));
 }
 
 KisToolTransform::~KisToolTransform()
@@ -187,7 +205,7 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
-    if (!m_strokeData.strokeId()) return;
+    if (!m_strokeId || !m_transaction.rootNode()) return;
 
     QRectF newRefRect = KisTransformUtils::imageToFlake(m_canvas->coordinatesConverter(), QRectF(0.0,0.0,1.0,1.0));
     if (m_refRect != newRefRect) {
@@ -219,8 +237,11 @@ void KisToolTransform::setFunctionalCursor()
         return;
     }
 
-    if (!m_strokeData.strokeId()) {
+    if (!m_strokeId) {
         useCursor(KisCursor::pointingHandCursor());
+    } else if (m_strokeId && !m_transaction.rootNode()) {
+        // we are in the middle of stroke initialization
+        useCursor(KisCursor::waitCursor());
     } else {
         useCursor(currentStrategy()->getCurrentCursor());
     }
@@ -258,7 +279,7 @@ void KisToolTransform::beginActionImpl(KoPointerEvent *event, bool usePrimaryAct
         return;
     }
 
-    if (!m_strokeData.strokeId()) {
+    if (!m_strokeId) {
         startStroke(m_currentArgs.mode(), false);
     } else {
         bool result = false;
@@ -282,6 +303,7 @@ void KisToolTransform::beginActionImpl(KoPointerEvent *event, bool usePrimaryAct
 void KisToolTransform::continueActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action)
 {
     if (mode() != KisTool::PAINT_MODE) return;
+    if (!m_transaction.rootNode()) return;
 
     m_actuallyMoveWhileSelected = true;
 
@@ -321,6 +343,37 @@ void KisToolTransform::endActionImpl(KoPointerEvent *event, bool usePrimaryActio
 
     updateOptionWidget();
     updateApplyResetAvailability();
+}
+
+QMenu*  KisToolTransform::popupActionsMenu()
+{
+    if (m_contextMenu) {
+        m_contextMenu->clear();
+
+        m_contextMenu->addSection(i18n("Transform Tool Actions"));
+        m_contextMenu->addSeparator();
+        // add a quick switch to different transform types
+        m_contextMenu->addAction(freeTransformAction);
+        m_contextMenu->addAction(perspectiveAction);
+        m_contextMenu->addAction(warpAction);
+        m_contextMenu->addAction(cageAction);
+        m_contextMenu->addAction(liquifyAction);
+
+        // extra options if free transform is selected
+        if (transformMode() == FreeTransformMode) {
+            m_contextMenu->addSeparator();
+            m_contextMenu->addAction(mirrorHorizontalAction);
+            m_contextMenu->addAction(mirrorVericalAction);
+            m_contextMenu->addAction(rotateNinteyCWAction);
+            m_contextMenu->addAction(rotateNinteyCCWAction);
+        }
+
+        m_contextMenu->addSeparator();
+        m_contextMenu->addAction(applyTransformation);
+        m_contextMenu->addAction(resetTransformation);
+    }
+
+    return m_contextMenu.data();
 }
 
 void KisToolTransform::beginPrimaryAction(KoPointerEvent *event)
@@ -583,85 +636,9 @@ void KisToolTransform::setWarpPointDensity( int density )
     m_optionsWidget->slotSetWarpDensity(density);
 }
 
-bool KisToolTransform::tryInitTransformModeFromNode(KisNodeSP node)
-{
-    bool result = false;
-
-    if (KisTransformMaskSP mask =
-        dynamic_cast<KisTransformMask*>(node.data())) {
-
-        KisTransformMaskParamsInterfaceSP savedParams =
-            mask->transformParams();
-
-        KisTransformMaskAdapter *adapter =
-            dynamic_cast<KisTransformMaskAdapter*>(savedParams.data());
-
-        if (adapter) {
-            m_currentArgs = adapter->transformArgs();
-            initGuiAfterTransformMode();
-            result = true;
-        }
-    }
-
-    return result;
-}
-
-bool KisToolTransform::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, ToolTransformArgs::TransformMode mode, KisNodeSP currentNode)
-{
-    bool result = false;
-
-    const KUndo2Command *lastCommand = image()->undoAdapter()->presentCommand();
-    KisNodeSP oldRootNode;
-
-    if (lastCommand &&
-        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand, args, &oldRootNode) &&
-        args->mode() == mode &&
-        oldRootNode == currentNode) {
-
-        args->saveContinuedState();
-
-        image()->undoAdapter()->undoLastCommand();
-
-        // FIXME: can we make it async?
-        image()->waitForDone();
-        forceRepaintDelayedLayers(oldRootNode);
-
-        result = true;
-    }
-
-    return result;
-}
-
 void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
 {
-    // NOTE: we are requesting an old value of m_currentArgs variable
-    //       here, which is global, don't forget about this on higher
-    //       levels.
-    QString filterId = m_currentArgs.filterId();
-
-    m_currentArgs = ToolTransformArgs();
-    m_currentArgs.setOriginalCenter(m_transaction.originalCenterGeometric());
-    m_currentArgs.setTransformedCenter(m_transaction.originalCenterGeometric());
-
-    if (mode == ToolTransformArgs::FREE_TRANSFORM) {
-        m_currentArgs.setMode(ToolTransformArgs::FREE_TRANSFORM);
-    } else if (mode == ToolTransformArgs::WARP) {
-        m_currentArgs.setMode(ToolTransformArgs::WARP);
-        m_optionsWidget->setDefaultWarpPoints();
-        m_currentArgs.setEditingTransformPoints(false);
-    } else if (mode == ToolTransformArgs::CAGE) {
-        m_currentArgs.setMode(ToolTransformArgs::CAGE);
-        m_currentArgs.setEditingTransformPoints(true);
-    } else if (mode == ToolTransformArgs::LIQUIFY) {
-        m_currentArgs.setMode(ToolTransformArgs::LIQUIFY);
-        const QRect srcRect = m_transaction.originalRect().toAlignedRect();
-        if (!srcRect.isEmpty()) {
-            m_currentArgs.initLiquifyTransformMode(m_transaction.originalRect().toAlignedRect());
-        }
-    } else if (mode == ToolTransformArgs::PERSPECTIVE_4POINT) {
-        m_currentArgs.setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
-    }
-
+    m_currentArgs = KisTransformUtils::resetArgsForMode(mode, m_currentArgs.filterId(), m_transaction);
     initGuiAfterTransformMode();
 }
 
@@ -671,23 +648,12 @@ void KisToolTransform::initGuiAfterTransformMode()
     outlineChanged();
     updateOptionWidget();
     updateApplyResetAvailability();
+    setFunctionalCursor();
 }
 
-void KisToolTransform::updateSelectionPath()
+void KisToolTransform::updateSelectionPath(const QPainterPath &selectionOutline)
 {
-    m_selectionPath = QPainterPath();
-
-    KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
-
-    QPainterPath selectionOutline;
-    KisSelectionSP selection = resources->activeSelection();
-
-    if (selection && selection->outlineCacheValid()) {
-        selectionOutline = selection->outlineCache();
-    } else {
-        selectionOutline.addRect(m_selectedPortionCache->exactBounds());
-    }
+    m_selectionPath = selectionOutline;
 
     const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
     QTransform i2f = converter->imageToDocumentTransform() * converter->documentToFlakeTransform();
@@ -708,25 +674,27 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
     int x, y, w, h;
     srcRect.getRect(&x, &y, &w, &h);
 
-    if (w > maxSize || h > maxSize) {
-        qreal scale = qreal(maxSize) / (w > h ? w : h);
-        QTransform scaleTransform = QTransform::fromScale(scale, scale);
+    if (m_selectedPortionCache) {
+        if (w > maxSize || h > maxSize) {
+            qreal scale = qreal(maxSize) / (w > h ? w : h);
+            QTransform scaleTransform = QTransform::fromScale(scale, scale);
 
-        QRect thumbRect = scaleTransform.mapRect(m_transaction.originalRect()).toAlignedRect();
+            QRect thumbRect = scaleTransform.mapRect(m_transaction.originalRect()).toAlignedRect();
 
-        origImg = m_selectedPortionCache->
-            createThumbnail(thumbRect.width(),
-                            thumbRect.height(),
-                            srcRect, 1,
-                            KoColorConversionTransformation::internalRenderingIntent(),
-                            KoColorConversionTransformation::internalConversionFlags());
-        thumbToImageTransform = scaleTransform.inverted();
+            origImg = m_selectedPortionCache->
+                    createThumbnail(thumbRect.width(),
+                                    thumbRect.height(),
+                                    srcRect, 1,
+                                    KoColorConversionTransformation::internalRenderingIntent(),
+                                    KoColorConversionTransformation::internalConversionFlags());
+            thumbToImageTransform = scaleTransform.inverted();
 
-    } else {
-        origImg = m_selectedPortionCache->convertToQImage(0, x, y, w, h,
-                                                            KoColorConversionTransformation::internalRenderingIntent(),
-                                                            KoColorConversionTransformation::internalConversionFlags());
-        thumbToImageTransform = QTransform();
+        } else {
+            origImg = m_selectedPortionCache->convertToQImage(0, x, y, w, h,
+                                                              KoColorConversionTransformation::internalRenderingIntent(),
+                                                              KoColorConversionTransformation::internalConversionFlags());
+            thumbToImageTransform = QTransform();
+        }
     }
 
     // init both strokes since the thumbnail is initialized only once
@@ -758,9 +726,13 @@ void KisToolTransform::deactivate()
 
 void KisToolTransform::requestUndoDuringStroke()
 {
-    if (!m_strokeData.strokeId()) return;
+    if (!m_strokeId) return;
 
-    m_changesTracker.requestUndo();
+    if (m_changesTracker.isEmpty()) {
+        cancelStroke();
+    } else {
+        m_changesTracker.requestUndo();
+    }
 }
 
 void KisToolTransform::requestStrokeEnd()
@@ -770,48 +742,39 @@ void KisToolTransform::requestStrokeEnd()
 
 void KisToolTransform::requestStrokeCancellation()
 {
-    cancelStroke();
+    if (m_currentArgs.isIdentity()) {
+        cancelStroke();
+    } else {
+        slotResetTransform();
+    }
 }
 
 void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool forceReset)
 {
-    Q_ASSERT(!m_strokeData.strokeId());
+    Q_ASSERT(!m_strokeId);
 
+    // set up and null checks before we do anything
     KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
-
     KisNodeSP currentNode = resources->currentNode();
+    if (!currentNode || !currentNode->isEditable()) return;
 
-    if (!currentNode || !currentNode->isEditable()) {
+    m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
+    m_currentArgs = ToolTransformArgs();
+
+    // some layer types cannot be transformed. Give a message and return if a user tries it
+    if (currentNode->inherits("KisColorizeMask") ||
+        currentNode->inherits("KisFileLayer") ||
+        currentNode->inherits("KisCloneLayer")) {
+
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in transformation tool",
+                      "Layer type cannot use the transform tool"),
+                 koIcon("object-locked"), 4000, KisFloatingMessage::High);
+
         return;
-    }
-
-    /**
-     * FIXME: The transform tool is not completely asynchronous, it
-     * needs the content of the layer for creation of the stroke
-     * strategy. It means that we cannot start a new stroke until the
-     * previous one is finished. Ideally, we should create the
-     * m_selectedPortionCache and m_selectionPath somewhere in the
-     * stroke and pass it to the tool somehow. But currently, we will
-     * just disable starting a new stroke asynchronously
-     */
-    if (image()->tryBarrierLock()) {
-        image()->unlock();
-    } else {
-        return;
-    }
-
-    /**
-     * We must ensure that the currently selected subtree
-     * has finished all its updates.
-     */
-    forceRepaintDelayedLayers(currentNode);
-
-    ToolTransformArgs fetchedArgs;
-    bool fetchedFromCommand = false;
-
-    if (!forceReset) {
-        fetchedFromCommand = tryFetchArgsFromCommandAndUndo(&fetchedArgs, mode, currentNode);
     }
 
     if (m_optionsWidget) {
@@ -819,41 +782,55 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
             !currentNode->paintDevice();
     }
 
-    QList<KisNodeSP> nodesList = fetchNodesList(mode, currentNode, m_workRecursively);
+    KisSelectionSP selection = resources->activeSelection();
 
-    if (nodesList.isEmpty()) {
-        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        kisCanvas->viewManager()->
-            showFloatingMessage(
-                i18nc("floating message in transformation tool",
-                      "Selected layer cannot be transformed with active transformation mode "),
-                 koIcon("object-locked"), 4000, KisFloatingMessage::High);
-
-        // force-reset transform mode to default
-        initTransformMode(mode);
-
-        return;
-    }
-
-
-    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, resources->activeSelection(), image().data());
-    KisPaintDeviceSP previewDevice = strategy->previewDevice();
-
-    KisSelectionSP selection = strategy->realSelection();
-    QRect srcRect = selection ? selection->selectedExactRect() : previewDevice->exactBounds();
-
-    if (!selection && resources->activeSelection()) {
+    /**
+     * When working with transform mask, selections are not
+     * taken into account.
+     */
+    if (selection && dynamic_cast<KisTransformMask*>(currentNode.data())) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         kisCanvas->viewManager()->
             showFloatingMessage(
                 i18nc("floating message in transformation tool",
                       "Selections are not used when editing transform masks "),
                 QIcon(), 4000, KisFloatingMessage::Low);
+
+        selection = 0;
     }
 
-    if (srcRect.isEmpty()) {
-        delete strategy;
+    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data());
+    connect(strategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP, QPainterPath)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP, QPainterPath)));
+    connect(strategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs)));
 
+    m_strokeId = image()->startStroke(strategy);
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
+
+    slotPreviewDeviceGenerated(0, QPainterPath());
+}
+
+void KisToolTransform::endStroke()
+{
+    if (!m_strokeId) return;
+
+    if (!m_currentArgs.isIdentity()) {
+        image()->addJob(m_strokeId,
+                        new TransformStrokeStrategy::TransformAllData(m_currentArgs));
+        image()->endStroke(m_strokeId);
+    } else {
+        image()->cancelStroke(m_strokeId);
+    }
+
+    m_strokeId.clear();
+    m_changesTracker.reset();
+    m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
+    outlineChanged();
+}
+
+void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args)
+{
+    if (transaction.transformedNodes().isEmpty()) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         kisCanvas->viewManager()->
             showFloatingMessage(
@@ -861,28 +838,20 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
                       "Cannot transform empty layer "),
                 QIcon(), 1000, KisFloatingMessage::Medium);
 
-        // force-reset transform mode to default
-        initTransformMode(mode);
-
+        cancelStroke();
         return;
     }
 
-    m_transaction = TransformTransactionProperties(srcRect, &m_currentArgs, currentNode, nodesList);
+    m_transaction = transaction;
+    m_currentArgs = args;
+    m_transaction.setCurrentConfigLocation(&m_currentArgs);
 
-    initThumbnailImage(previewDevice);
-    updateSelectionPath();
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
+    commitChanges();
 
-    if (!forceReset && fetchedFromCommand) {
-        m_currentArgs = fetchedArgs;
-        initGuiAfterTransformMode();
-    } else if (forceReset || !tryInitTransformModeFromNode(currentNode)) {
-        initTransformMode(mode);
-    }
+    initGuiAfterTransformMode();
 
-    m_strokeData = StrokeData(image()->startStroke(strategy));
-
-    bool haveInvisibleNodes = clearDevices(nodesList);
-    if (haveInvisibleNodes) {
+    if (m_transaction.hasInvisibleNodes()) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         kisCanvas->viewManager()->
             showFloatingMessage(
@@ -890,46 +859,36 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
                       "Invisible sublayers will also be transformed. Lock layers if you do not want them to be transformed "),
                 QIcon(), 4000, KisFloatingMessage::Low);
     }
-
-
-    Q_ASSERT(m_changesTracker.isEmpty());
-    commitChanges();
 }
 
-void KisToolTransform::endStroke()
+void KisToolTransform::slotPreviewDeviceGenerated(KisPaintDeviceSP device, const QPainterPath &selectionOutline)
 {
-    if (!m_strokeData.strokeId()) return;
+    if (device && device->exactBounds().isEmpty()) {
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in transformation tool",
+                      "Cannot transform empty layer "),
+                QIcon(), 1000, KisFloatingMessage::Medium);
 
-    if (!m_currentArgs.isIdentity()) {
-        transformClearedDevices();
-
-        image()->addJob(m_strokeData.strokeId(),
-                        new TransformStrokeStrategy::TransformData(
-                            TransformStrokeStrategy::TransformData::SELECTION,
-                            m_currentArgs,
-                            m_transaction.rootNode())); // root node is used for progress only
-
-        image()->endStroke(m_strokeData.strokeId());
+        cancelStroke();
     } else {
-        image()->cancelStroke(m_strokeData.strokeId());
+        initThumbnailImage(device);
+        updateSelectionPath(selectionOutline);
+        initGuiAfterTransformMode();
     }
-
-    m_strokeData.clear();
-    m_changesTracker.reset();
-    m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
-    outlineChanged();
 }
 
 void KisToolTransform::cancelStroke()
 {
-    if (!m_strokeData.strokeId()) return;
+    if (!m_strokeId) return;
 
     if (m_currentArgs.continuedTransform()) {
         m_currentArgs.restoreContinuedState();
         endStroke();
     } else {
-        image()->cancelStroke(m_strokeData.strokeId());
-        m_strokeData.clear();
+        image()->cancelStroke(m_strokeId);
+        m_strokeId.clear();
         m_changesTracker.reset();
         m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
         outlineChanged();
@@ -938,13 +897,18 @@ void KisToolTransform::cancelStroke()
 
 void KisToolTransform::commitChanges()
 {
-    if (!m_strokeData.strokeId()) return;
+    if (!m_strokeId) return;
 
-    m_changesTracker.commitConfig(m_currentArgs);
+    m_changesTracker.commitConfig(toQShared(m_currentArgs.clone()));
 }
 
-void KisToolTransform::slotTrackerChangedConfig()
+void KisToolTransform::slotTrackerChangedConfig(KisToolChangesTrackerDataSP status)
 {
+    const ToolTransformArgs *newArgs = dynamic_cast<const ToolTransformArgs*>(status.data());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(newArgs);
+
+    *m_transaction.currentConfig() = *newArgs;
+
     slotUiChangedConfig();
     updateOptionWidget();
 }
@@ -955,7 +919,7 @@ QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMo
 
     auto fetchFunc =
         [&result, mode, root] (KisNodeSP node) {
-            if (node->isEditable() &&
+        if (node->isEditable(node == root) &&
                 (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
                 !node->inherits("KisFileLayer") &&
                 (!node->inherits("KisTransformMask") || node == root)) {
@@ -971,40 +935,6 @@ QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMo
     }
 
     return result;
-}
-
-bool KisToolTransform::clearDevices(const QList<KisNodeSP> &nodes)
-{
-    bool haveInvisibleNodes = false;
-
-    Q_FOREACH (KisNodeSP node, nodes) {
-        haveInvisibleNodes |= !node->visible(false);
-
-        image()->addJob(m_strokeData.strokeId(),
-                        new TransformStrokeStrategy::ClearSelectionData(node));
-
-        /**
-         * It might happen that the editablity state of the node would
-         * change during the stroke, so we need to save the set of
-         * applicable nodes right in the beginning of the processing
-         */
-        m_strokeData.addClearedNode(node);
-    }
-
-    return haveInvisibleNodes;
-}
-
-void KisToolTransform::transformClearedDevices()
-{
-    Q_FOREACH (KisNodeSP node, m_strokeData.clearedNodes()) {
-        KIS_ASSERT_RECOVER_RETURN(node);
-
-        image()->addJob(m_strokeData.strokeId(),
-                        new TransformStrokeStrategy::TransformData(
-                            TransformStrokeStrategy::TransformData::PAINT_DEVICE,
-                            m_currentArgs,
-                            node));
-    }
 }
 
 QWidget* KisToolTransform::createOptionWidget() {
@@ -1033,6 +963,23 @@ QWidget* KisToolTransform::createOptionWidget() {
 
     connect(m_optionsWidget, SIGNAL(sigEditingFinished()),
             this, SLOT(slotEditingFinished()));
+
+
+    connect(mirrorHorizontalAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotFlipX()));
+    connect(mirrorVericalAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotFlipY()));
+    connect(rotateNinteyCWAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotRotateCW()));
+    connect(rotateNinteyCCWAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotRotateCCW()));
+
+
+    connect(warpAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToWarpType()));
+    connect(perspectiveAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToPerspectiveType()));
+    connect(freeTransformAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToFreeTransformType()));
+    connect(liquifyAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToLiquifyType()));
+    connect(cageAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToCageType()));
+
+    connect(applyTransformation, SIGNAL(triggered(bool)), this, SLOT(slotApplyTransform()));
+    connect(resetTransformation, SIGNAL(triggered(bool)), this, SLOT(slotResetTransform()));
+
 
     updateOptionWidget();
 
@@ -1099,17 +1046,13 @@ void KisToolTransform::slotResetTransform()
 
         if (transformDiffers &&
             m_currentArgs.continuedTransform()->mode() == savedMode) {
-
             m_currentArgs.restoreContinuedState();
             initGuiAfterTransformMode();
             slotEditingFinished();
 
         } else {
             KisNodeSP root = m_transaction.rootNode() ? m_transaction.rootNode() : image()->root();
-
             cancelStroke();
-            image()->waitForDone();
-            forceRepaintDelayedLayers(root);
             startStroke(savedMode, true);
 
             KIS_ASSERT_RECOVER_NOOP(!m_currentArgs.continuedTransform());
@@ -1122,30 +1065,44 @@ void KisToolTransform::slotResetTransform()
 
 void KisToolTransform::slotRestartTransform()
 {
-    if (!m_strokeData.strokeId()) return;
+    if (!m_strokeId) return;
 
     KisNodeSP root = m_transaction.rootNode();
     KIS_ASSERT_RECOVER_RETURN(root); // the stroke is guaranteed to be started by an 'if' above
 
     ToolTransformArgs savedArgs(m_currentArgs);
     cancelStroke();
-    image()->waitForDone();
-    forceRepaintDelayedLayers(root);
     startStroke(savedArgs.mode(), true);
 }
-
-void KisToolTransform::forceRepaintDelayedLayers(KisNodeSP root)
-{
-    KIS_SAFE_ASSERT_RECOVER_RETURN(root);
-
-    KisLayerUtils::forceAllDelayedNodesUpdate(root);
-    image()->waitForDone();
-}
-
 
 void KisToolTransform::slotEditingFinished()
 {
     commitChanges();
+}
+
+void KisToolTransform::slotUpdateToWarpType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::WarpTransformMode);
+}
+
+void KisToolTransform::slotUpdateToPerspectiveType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::PerspectiveTransformMode);
+}
+
+void KisToolTransform::slotUpdateToFreeTransformType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::FreeTransformMode);
+}
+
+void KisToolTransform::slotUpdateToLiquifyType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::LiquifyTransformMode);
+}
+
+void KisToolTransform::slotUpdateToCageType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::CageTransformMode);
 }
 
 void KisToolTransform::setShearY(double shear)
@@ -1177,4 +1134,3 @@ void KisToolTransform::setTranslateX(double translation)
 {
     m_optionsWidget->slotSetTranslateX(translation);
 }
-

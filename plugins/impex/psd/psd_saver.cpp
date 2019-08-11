@@ -35,8 +35,6 @@
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
 #include <kis_debug.h>
-#include <kis_annotation.h>
-#include <kis_types.h>
 
 #include "psd.h"
 #include "psd_header.h"
@@ -47,6 +45,9 @@
 #include "psd_resource_block.h"
 #include "psd_image_data.h"
 
+
+
+const int MAX_PSD_SIZE = 30000;
 
 
 QPair<psd_color_mode, quint16> colormodelid_to_psd_colormode(const QString &colorSpaceId, const QString &colorDepthId)
@@ -101,13 +102,12 @@ KisImageSP PSDSaver::image()
     return m_image;
 }
 
-KisImageBuilder_Result PSDSaver::buildFile(QIODevice *io)
+KisImportExportErrorCode PSDSaver::buildFile(QIODevice *io)
 {
-    if (!m_image)
-        return KisImageBuilder_RESULT_EMPTY;
+    KIS_ASSERT_RECOVER_RETURN_VALUE(m_image, ImportExportCodes::InternalError);
 
-    if (m_image->width() > 30000 || m_image->height() > 30000) {
-        return KisImageBuilder_RESULT_FAILURE;
+    if (m_image->width() > MAX_PSD_SIZE || m_image->height() > MAX_PSD_SIZE) {
+        return ImportExportCodes::Failure;
     }
 
     const bool haveLayers = m_image->rootLayer()->childCount() > 1 ||
@@ -129,7 +129,8 @@ KisImageBuilder_Result PSDSaver::buildFile(QIODevice *io)
                                                                           m_image->colorSpace()->colorDepthId().id());
 
     if (colordef.first == COLORMODE_UNKNOWN || colordef.second == 0 || colordef.second == 32) {
-        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+        m_image->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb16(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        colordef = colormodelid_to_psd_colormode(m_image->colorSpace()->colorModelId().id(), m_image->colorSpace()->colorDepthId().id());
     }
     header.colormode = colordef.first;
     header.channelDepth = colordef.second;
@@ -138,7 +139,7 @@ KisImageBuilder_Result PSDSaver::buildFile(QIODevice *io)
 
     if (!header.write(io)) {
         dbgFile << "Failed to write header. Error:" << header.error << io->pos();
-        return KisImageBuilder_RESULT_FAILURE;
+        return ImportExportCodes::ErrorWhileWriting;
     }
 
     // COLORMODE BlOCK
@@ -153,7 +154,7 @@ KisImageBuilder_Result PSDSaver::buildFile(QIODevice *io)
     dbgFile << "colormode block" << io->pos();
     if (!colorModeBlock.write(io)) {
         dbgFile << "Failed to write colormode block. Error:" << colorModeBlock.error << io->pos();
-        return KisImageBuilder_RESULT_FAILURE;
+        return ImportExportCodes::ErrorWhileWriting;
     }
 
     // IMAGE RESOURCES SECTION
@@ -208,7 +209,7 @@ KisImageBuilder_Result PSDSaver::buildFile(QIODevice *io)
     dbgFile << "resource section" << io->pos();
     if (!resourceSection.write(io)) {
         dbgFile << "Failed to write resource section. Error:" << resourceSection.error << io->pos();
-        return KisImageBuilder_RESULT_FAILURE;
+        return ImportExportCodes::ErrorWhileWriting;
     }
 
     // LAYER AND MASK DATA
@@ -222,7 +223,7 @@ KisImageBuilder_Result PSDSaver::buildFile(QIODevice *io)
 
         if (!layerSection.write(io, m_image->rootLayer())) {
             dbgFile << "failed to write layer section. Error:" << layerSection.error << io->pos();
-            return KisImageBuilder_RESULT_FAILURE;
+            return ImportExportCodes::ErrorWhileWriting;
         }
     }
     else {
@@ -236,10 +237,10 @@ KisImageBuilder_Result PSDSaver::buildFile(QIODevice *io)
     PSDImageData imagedata(&header);
     if (!imagedata.write(io, m_image->projection(), haveLayers)) {
         dbgFile << "Failed to write image data. Error:"  << imagedata.error;
-        return KisImageBuilder_RESULT_FAILURE;
+        return ImportExportCodes::ErrorWhileWriting;
     }
 
-    return KisImageBuilder_RESULT_OK;
+    return ImportExportCodes::OK;
 }
 
 

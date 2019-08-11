@@ -27,6 +27,7 @@
 KisRecalculateGeneratorLayerJob::KisRecalculateGeneratorLayerJob(KisGeneratorLayerSP layer)
     : m_layer(layer)
 {
+    setExclusive(true);
 }
 
 bool KisRecalculateGeneratorLayerJob::overrides(const KisSpontaneousJob *_otherJob)

@@ -26,24 +26,24 @@ class KisToolLineHelper : private KisToolFreehandHelper
 {
 public:
     KisToolLineHelper(KisPaintingInformationBuilder *infoBuilder,
-                      const KUndo2MagicString &transactionText,
-                      KisRecordingAdapter *recordingAdapter = 0);
+                      const KUndo2MagicString &transactionText);
 
     ~KisToolLineHelper() override;
 
     void setEnabled(bool value);
     void setUseSensors(bool value);
 
-    void repaintLine(KoCanvasResourceManager *resourceManager,
+    void repaintLine(KoCanvasResourceProvider *resourceManager,
                      KisImageWSP image,
                      KisNodeSP node,
                      KisStrokesFacade *strokesFacade);
 
-    void start(KoPointerEvent *event, KoCanvasResourceManager *resourceManager);
+    void start(KoPointerEvent *event, KoCanvasResourceProvider *resourceManager);
     void addPoint(KoPointerEvent *event, const QPointF &overridePos = QPointF());
     void translatePoints(const QPointF &offset);
     void end();
     void cancel();
+    void clearPoints();
     void clearPaint();
 
     using KisToolFreehandHelper::isRunning;

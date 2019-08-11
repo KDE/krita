@@ -29,6 +29,9 @@ class KisCanvasResourceProvider;
 class KoColor;
 
 
+/**
+ * @brief The KisToolLazyBrushOptionsWidget class
+ */
 class KisToolLazyBrushOptionsWidget : public QWidget
 {
     Q_OBJECT

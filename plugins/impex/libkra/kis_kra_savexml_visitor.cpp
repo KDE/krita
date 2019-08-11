@@ -118,6 +118,7 @@ QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QD
 {
     QDomElement element = doc.createElement(LAYER);
     saveLayer(element, PAINT_LAYER, layer);
+    element.setAttribute(CHANNEL_LOCK_FLAGS, flagsToString(layer->channelLockFlags()));
     element.setAttribute(COLORSPACE_NAME, layer->paintDevice()->colorSpace()->id());
 
     element.setAttribute(ONION_SKIN_ENABLED, layer->onionSkinEnabled());
@@ -129,6 +130,10 @@ QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QD
 void KisSaveXmlVisitor::loadPaintLayerAttributes(const QDomElement &el, KisPaintLayer *layer)
 {
     loadLayerAttributes(el, layer);
+
+    if (el.hasAttribute(CHANNEL_LOCK_FLAGS)) {
+        layer->setChannelLockFlags(stringToFlags(el.attribute(CHANNEL_LOCK_FLAGS)));
+    }
 }
 
 bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)
@@ -285,7 +290,10 @@ void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *lay
 {
     if (el.hasAttribute(NAME)) {
         QString layerName = el.attribute(NAME);
-        KIS_ASSERT_RECOVER_RETURN(layerName == layer->name());
+        if (layerName != layer->name()) {
+            // Make the EXR layername leading in case of conflicts
+            layer->setName(layerName);
+        }
     }
 
     if (el.hasAttribute(CHANNEL_FLAGS)) {

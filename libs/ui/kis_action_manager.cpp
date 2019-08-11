@@ -33,15 +33,12 @@
 #include "KisDocument.h"
 #include "kis_clipboard.h"
 #include <kis_image_animation_interface.h>
+#include "kis_config.h"
 
+#include <QMenu>
 #include "QFile"
 #include <QDomDocument>
 #include <QDomElement>
-
-#include "QFile"
-#include <QDomDocument>
-#include <QDomElement>
-
 
 class Q_DECL_HIDDEN KisActionManager::Private {
 
@@ -103,7 +100,7 @@ KisActionManager::~KisActionManager()
            addElement("toolTip" , action->toolTip());
            addElement("iconText" , action->iconText());
            addElement("shortcut" , action->shortcut().toString());
-           addElement("activationFlags" , QString::number(action->activationFlags(),2));;
+           addElement("activationFlags" , QString::number(action->activationFlags(),2));
            addElement("activationConditions" , QString::number(action->activationConditions(),2));
            addElement("defaultShortcut" , action->defaultShortcut().toString());
            addElement("isCheckable" , QString((action->isChecked() ? "true" : "false")));
@@ -279,7 +276,15 @@ void KisActionManager::updateGUI()
                 flags |= KisAction::SHAPES_SELECTED;
             }
 
-            if (selectionManager->havePixelSelectionWithPixels()) {
+            if (selectionManager->haveAnySelectionWithPixels()) {
+                flags |= KisAction::ANY_SELECTION_WITH_PIXELS;
+            }
+
+            if (selectionManager->haveShapeSelectionWithShapes()) {
+                flags |= KisAction::SHAPE_SELECTION_WITH_SHAPES;
+            }
+
+            if (selectionManager->haveRasterSelectionWithPixels()) {
                 flags |= KisAction::PIXEL_SELECTION_WITH_PIXELS;
             }
 
@@ -301,6 +306,10 @@ void KisActionManager::updateGUI()
         }
     }
 
+    KisConfig cfg(true);
+    if (cfg.useOpenGL()) {
+        conditions |= KisAction::OPENGL_ENABLED;
+    }
 
     // loop through all actions in action manager and determine what should be enabled
     Q_FOREACH (QPointer<KisAction> action, d->actions) {
@@ -368,6 +377,16 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
     addAction(standardAction->objectName(), action);
     delete standardAction;
     return action;
+}
+
+void KisActionManager::safePopulateMenu(QMenu *menu, const QString &actionId, KisActionManager *actionManager)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(actionManager);
+
+    KisAction *action = actionManager->actionByName(actionId);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(action);
+
+    menu->addAction(action);
 }
 
 void KisActionManager::registerOperationUIFactory(KisOperationUIFactory* factory)
@@ -443,8 +462,8 @@ void KisActionManager::dumpActionFlags()
             if (flags & KisAction::SHAPES_SELECTED) {
                 out << "    Shapes selected\n";
             }
-            if (flags & KisAction::PIXEL_SELECTION_WITH_PIXELS) {
-                out << "    Pixel selection with pixels\n";
+            if (flags & KisAction::ANY_SELECTION_WITH_PIXELS) {
+                out << "    Any selection with pixels\n";
             }
             if (flags & KisAction::PIXELS_IN_CLIPBOARD) {
                 out << "    Pixels in clipboard\n";
@@ -470,6 +489,9 @@ void KisActionManager::dumpActionFlags()
             }
             if (conditions & KisAction::SELECTION_EDITABLE) {
                 out << "    Selection is editable\n";
+            }
+            if (conditions & KisAction::OPENGL_ENABLED) {
+                out << "    OpenGL is enabled\n";
             }
             out << "\n\n";
         }

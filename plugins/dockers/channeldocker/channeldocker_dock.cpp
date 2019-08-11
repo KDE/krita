@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -30,7 +31,6 @@
 #include <kis_node_manager.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
-#include <kis_layer.h>
 #include <kis_paint_device.h>
 #include "kis_signal_compressor.h"
 #include <KisView.h>
@@ -49,6 +49,12 @@ ChannelDockerDock::ChannelDockerDock( ) :
     m_channelTable->verticalHeader()->setVisible(false);
     m_channelTable->horizontalHeader()->setVisible(false);
     m_channelTable->setSelectionBehavior( QAbstractItemView::SelectRows );
+
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(m_channelTable);
+    if (scroller){
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 
     setWidget(m_channelTable);
 

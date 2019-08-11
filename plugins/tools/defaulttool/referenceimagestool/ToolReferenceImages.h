@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -29,6 +30,7 @@
 #include <kis_canvas2.h>
 
 #include <defaulttool/DefaultTool.h>
+#include <defaulttool/DefaultToolFactory.h>
 
 class ToolReferenceImagesWidget;
 class KisReferenceImagesLayer;
@@ -47,6 +49,8 @@ public:
 
     void mouseDoubleClickEvent(KoPointerEvent */*event*/) override {}
 
+    void deleteSelection() override;
+
 protected:
     QList<QPointer<QWidget>> createOptionWidgets() override;
     QWidget *createOptionWidget() override;
@@ -55,35 +59,40 @@ protected:
     KoShapeManager *shapeManager() const override;
     KoSelection *koSelection() const override;
 
+    void updateDistinctiveActions(const QList<KoShape*> &editableShapes) override;
+
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
     void addReferenceImage();
+    void pasteReferenceImage();
     void removeAllReferenceImages();
     void saveReferenceImages();
     void loadReferenceImages();
 
+    void slotNodeAdded(KisNodeSP node);
     void slotSelectionChanged();
 
 private:
     friend class ToolReferenceImagesWidget;
     ToolReferenceImagesWidget *m_optionsWidget = nullptr;
+    KisWeakSharedPtr<KisReferenceImagesLayer> m_layer;
 
-    KisReferenceImagesLayer *referenceImagesLayer() const;
-    KisReferenceImagesLayer *getOrCreteReferenceImagesLayer();
+    KisDocument *document() const;
+    void setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer);
 };
 
 
-class ToolReferenceImagesFactory : public KoToolFactoryBase
+class ToolReferenceImagesFactory : public DefaultToolFactory
 {
 public:
     ToolReferenceImagesFactory()
-    : KoToolFactoryBase("ToolReferenceImages") {
+    : DefaultToolFactory("ToolReferenceImages") {
         setToolTip(i18n("Reference Images Tool"));
         setSection(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("krita_tool_reference_images"));
-        setPriority(0);
+        setPriority(2);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     };
 
@@ -93,6 +102,8 @@ public:
     KoToolBase * createTool(KoCanvasBase * canvas) override {
         return new ToolReferenceImages(canvas);
     }
+
+    QList<QAction *> createActionsImpl() override;
 
 };
 

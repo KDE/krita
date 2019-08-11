@@ -26,7 +26,6 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 
-#include "KisDocument.h"
 #include "kis_image.h"
 #include "testutil.h"
 #include "KisPart.h"
@@ -37,6 +36,13 @@
 #include "kis_image_animation_interface.h"
 #include "kis_keyframe_channel.h"
 #include "kis_time_range.h"
+
+#include <filestest.h>
+
+#include  <sdk/tests/kistest.h>
+
+
+const QString KraMimetype = "application/x-krita";
 
 void KisKraLoaderTest::initTestCase()
 {
@@ -169,4 +175,18 @@ void KisKraLoaderTest::testLoadAnimated()
 }
 
 
-QTEST_MAIN(KisKraLoaderTest)
+
+void KisKraLoaderTest::testImportFromWriteonly()
+{
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), KraMimetype);
+}
+
+
+void KisKraLoaderTest::testImportIncorrectFormat()
+{
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), KraMimetype);
+}
+
+
+
+KISTEST_MAIN(KisKraLoaderTest)

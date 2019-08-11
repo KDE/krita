@@ -52,7 +52,7 @@ KisSpacingSelectionWidget::KisSpacingSelectionWidget(QWidget *parent)
       m_d(new Private(this))
 {
     m_d->slider = new KisDoubleSliderSpinBox(this);
-    m_d->slider->setRange(0.01, 10.0, 2);
+    m_d->slider->setRange(0.02, 10.0, 2);
     m_d->slider->setExponentRatio(3);
     m_d->slider->setSingleStep(0.01);
     m_d->slider->setValue(0.1);

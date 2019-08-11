@@ -43,8 +43,10 @@
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 #include <QMessageBox>
+#include "KisOpenGLModeProber.h"
+#include <KoColorModelStandardIds.h>
 
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
 #include <QOpenGLFunctions_2_1>
 #endif
 
@@ -102,7 +104,7 @@ public:
     QVector3D vertices[6];
     QVector2D texCoords[6];
 
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
     QOpenGLFunctions_2_1 *glFn201;
 #endif
 
@@ -110,6 +112,8 @@ public:
     bool pixelGridEnabled;
     QColor gridColor;
     QColor cursorColor;
+
+    bool lodSwitchInProgress = false;
 
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
@@ -144,12 +148,12 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setCanvasState("OPENGL_STARTED");
 
     d->openGLImageTextures =
             KisOpenGLImageTextures::getImageTextures(image,
-                                                     colorConverter->monitorProfile(),
+                                                     colorConverter->openGLCanvasSurfaceProfile(),
                                                      colorConverter->renderingIntent(),
                                                      colorConverter->conversionFlags());
 
@@ -158,13 +162,34 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
 
     setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_NoSystemBackground, true);
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     setAttribute(Qt::WA_AcceptTouchEvents, false);
 #else
     setAttribute(Qt::WA_AcceptTouchEvents, true);
 #endif
     setAttribute(Qt::WA_InputMethodEnabled, false);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    // we should make sure the texture doesn't have alpha channel,
+    // otherwise blending will not work correctly.
+    if (KisOpenGLModeProber::instance()->useHDRMode()) {
+        setTextureFormat(GL_RGBA16F);
+    } else {
+        /**
+         * When in pure OpenGL mode, the canvas surface will have alpha
+         * channel. Therefore, if our canvas blending algorithm produces
+         * semi-transparent pixels (and it does), then Krita window itself
+         * will become transparent. Which is not good.
+         *
+         * In Angle mode, GL_RGB8 is not available (and the transparence effect
+         * doesn't exist at all).
+         */
+        if (!KisOpenGL::hasOpenGLES()) {
+            setTextureFormat(GL_RGB8);
+        }
+    }
+#endif
 
     setDisplayFilterImpl(colorConverter->displayFilter(), true);
 
@@ -202,6 +227,16 @@ void KisOpenGLCanvas2::setDisplayFilterImpl(QSharedPointer<KisDisplayFilter> dis
     }
 }
 
+void KisOpenGLCanvas2::notifyImageColorSpaceChanged(const KoColorSpace *cs)
+{
+    // FIXME: on color space change the data is refetched multiple
+    //        times by different actors!
+
+    if (d->openGLImageTextures->setImageColorSpace(cs)) {
+        canvas()->startUpdateInPatches(canvas()->image()->bounds());
+    }
+}
+
 void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
 {
     d->wrapAroundMode = value;
@@ -232,7 +267,7 @@ void KisOpenGLCanvas2::initializeGL()
 {
     KisOpenGL::initializeContext(context());
     initializeOpenGLFunctions();
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
     if (!KisOpenGL::hasOpenGLES()) {
         d->glFn201 = context()->versionFunctions<QOpenGLFunctions_2_1>();
         if (!d->glFn201) {
@@ -243,7 +278,7 @@ void KisOpenGLCanvas2::initializeGL()
     }
 #endif
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
     d->openGLImageTextures->initGL(context()->functions());
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
@@ -336,27 +371,29 @@ void KisOpenGLCanvas2::initializeDisplayShader()
  */
 void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
 
     qDebug() << "Shader Compilation Failure: " << context;
     QMessageBox::critical(this, i18nc("@title:window", "Krita"),
-                          QString(i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n Krita will disable OpenGL and close now.")).arg(context),
+                          i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n Krita will disable OpenGL and close now.", context),
                           QMessageBox::Close);
 
-    cfg.setUseOpenGL(false);
+    cfg.disableOpenGL();
     cfg.setCanvasState("OPENGL_FAILED");
 }
 
-void KisOpenGLCanvas2::resizeGL(int width, int height)
+void KisOpenGLCanvas2::resizeGL(int /*width*/, int /*height*/)
 {
-    coordinatesConverter()->setCanvasWidgetSize(QSize(width, height));
+    // The given size is the widget size but here we actually want to give
+    // KisCoordinatesConverter the viewport size aligned to device pixels.
+    coordinatesConverter()->setCanvasWidgetSize(widgetSizeAlignedToDevicePixel());
     paintGL();
 }
 
 void KisOpenGLCanvas2::paintGL()
 {
     if (!OPENGL_SUCCESS) {
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
     }
 
@@ -374,7 +411,7 @@ void KisOpenGLCanvas2::paintGL()
     gc.end();
 
     if (!OPENGL_SUCCESS) {
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
         OPENGL_SUCCESS = true;
     }
@@ -386,10 +423,14 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         return;
     }
 
+    QSizeF widgetSize = widgetSizeAlignedToDevicePixel();
+
     // setup the mvp transformation
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
-    projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+    // FIXME: It may be better to have the projection in device pixel, but
+    //       this requires introducing a new coordinate system.
+    projectionMatrix.ortho(0, widgetSize.width(), widgetSize.height(), 0, NEAR_VAL, FAR_VAL);
 
     // Set view/projection matrices
     QMatrix4x4 modelMatrix(coordinatesConverter()->flakeToWidgetTransform());
@@ -401,7 +442,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
         glEnable(GL_COLOR_LOGIC_OP);
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
         if (d->glFn201) {
             d->glFn201->glLogicOp(GL_XOR);
         }
@@ -469,6 +510,11 @@ bool KisOpenGLCanvas2::isBusy() const
     return isBusyStatus;
 }
 
+void KisOpenGLCanvas2::setLodResetInProgress(bool value)
+{
+    d->lodSwitchInProgress = value;
+}
+
 void KisOpenGLCanvas2::drawCheckers()
 {
     if (!d->checkerShader) {
@@ -481,9 +527,15 @@ void KisOpenGLCanvas2::drawCheckers()
     QRectF textureRect;
     QRectF modelRect;
 
+    QSizeF widgetSize = widgetSizeAlignedToDevicePixel();
     QRectF viewportRect = !d->wrapAroundMode ?
                 converter->imageRectInViewportPixels() :
-                converter->widgetToViewport(this->rect());
+                converter->widgetToViewport(QRectF(0, 0, widgetSize.width(), widgetSize.height()));
+
+    if (!canvas()->renderingLimit().isEmpty()) {
+        const QRect vrect = converter->imageToViewport(canvas()->renderingLimit()).toAlignedRect();
+        viewportRect &= vrect;
+    }
 
     converter->getOpenGLCheckersInfo(viewportRect,
                                      &textureTransform, &modelTransform, &textureRect, &modelRect, d->scrollCheckers);
@@ -498,7 +550,9 @@ void KisOpenGLCanvas2::drawCheckers()
 
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
-    projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+    // FIXME: It may be better to have the projection in device pixel, but
+    //       this requires introducing a new coordinate system.
+    projectionMatrix.ortho(0, widgetSize.width(), widgetSize.height(), 0, NEAR_VAL, FAR_VAL);
 
     // Set view/projection matrices
     QMatrix4x4 modelMatrix(modelTransform);
@@ -546,9 +600,13 @@ void KisOpenGLCanvas2::drawGrid()
         return;
     }
 
+    QSizeF widgetSize = widgetSizeAlignedToDevicePixel();
+
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
-    projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+    // FIXME: It may be better to have the projection in device pixel, but
+    //       this requires introducing a new coordinate system.
+    projectionMatrix.ortho(0, widgetSize.width(), widgetSize.height(), 0, NEAR_VAL, FAR_VAL);
 
     // Set view/projection matrices
     QMatrix4x4 modelMatrix(coordinatesConverter()->imageToWidgetTransform());
@@ -568,7 +626,7 @@ void KisOpenGLCanvas2::drawGrid()
         d->lineBuffer.bind();
     }
 
-    QRectF widgetRect(0,0, width(), height());
+    QRectF widgetRect(0,0, widgetSize.width(), widgetSize.height());
     QRectF widgetRectInImagePixels = coordinatesConverter()->documentToImage(coordinatesConverter()->widgetToDocument(widgetRect));
     QRect wr = widgetRectInImagePixels.toAlignedRect();
 
@@ -621,9 +679,13 @@ void KisOpenGLCanvas2::drawImage()
 
     d->displayShader->bind();
 
+    QSizeF widgetSize = widgetSizeAlignedToDevicePixel();
+
     QMatrix4x4 projectionMatrix;
     projectionMatrix.setToIdentity();
-    projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
+    // FIXME: It may be better to have the projection in device pixel, but
+    //       this requires introducing a new coordinate system.
+    projectionMatrix.ortho(0, widgetSize.width(), widgetSize.height(), 0, NEAR_VAL, FAR_VAL);
 
     // Set view/projection matrices
     QMatrix4x4 modelMatrix(converter->imageToWidgetTransform());
@@ -635,11 +697,18 @@ void KisOpenGLCanvas2::drawImage()
     textureMatrix.setToIdentity();
     d->displayShader->setUniformValue(d->displayShader->location(Uniform::TextureMatrix), textureMatrix);
 
-    QRectF widgetRect(0,0, width(), height());
+    QRectF widgetRect(0,0, widgetSize.width(), widgetSize.height());
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
 
+    const QRect renderingLimit = canvas()->renderingLimit();
+
+    if (!renderingLimit.isEmpty()) {
+        widgetRectInImagePixels &= renderingLimit;
+    }
+
     qreal scaleX, scaleY;
-    converter->imageScale(&scaleX, &scaleY);
+    converter->imagePhysicalScale(&scaleX, &scaleY);
+
     d->displayShader->setUniformValue(d->displayShader->location(Uniform::ViewportScale), (GLfloat) scaleX);
     d->displayShader->setUniformValue(d->displayShader->location(Uniform::TexelSize), (GLfloat) d->openGLImageTextures->texelSize());
 
@@ -699,8 +768,18 @@ void KisOpenGLCanvas2::drawImage()
              * "history reasons" in calculation of right()
              * and bottom() coordinates of integer rects.
              */
-            QRectF textureRect(tile->tileRectInTexturePixels());
-            QRectF modelRect(tile->tileRectInImagePixels().translated(tileWrappingTranslation.x(), tileWrappingTranslation.y()));
+
+            QRectF textureRect;
+            QRectF modelRect;
+
+            if (renderingLimit.isEmpty()) {
+                textureRect = tile->tileRectInTexturePixels();
+                modelRect = tile->tileRectInImagePixels().translated(tileWrappingTranslation.x(), tileWrappingTranslation.y());
+            } else {
+                const QRect limitedTileRect = tile->tileRectInImagePixels() & renderingLimit;
+                textureRect = tile->imageRectInTexturePixels(limitedTileRect);
+                modelRect = limitedTileRect.translated(tileWrappingTranslation.x(), tileWrappingTranslation.y());
+            }
 
             //Setup the geometry for rendering
             if (KisOpenGL::hasOpenGL3()) {
@@ -728,14 +807,14 @@ void KisOpenGLCanvas2::drawImage()
                 d->displayShader->setUniformValue(d->displayShader->location(Uniform::Texture1), 1);
             }
 
-            int currentLodPlane = tile->currentLodPlane();
+            glActiveTexture(GL_TEXTURE0);
+
+            const int currentLodPlane = tile->bindToActiveTexture(d->lodSwitchInProgress);
+
             if (d->displayShader->location(Uniform::FixedLodLevel) >= 0) {
                 d->displayShader->setUniformValue(d->displayShader->location(Uniform::FixedLodLevel),
                                                   (GLfloat) currentLodPlane);
             }
-
-            glActiveTexture(GL_TEXTURE0);
-            tile->bindToActiveTexture();
 
             if (currentLodPlane > 0) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
@@ -776,9 +855,26 @@ void KisOpenGLCanvas2::drawImage()
     glDisable(GL_BLEND);
 }
 
+QSize KisOpenGLCanvas2::viewportDevicePixelSize() const
+{
+    // This is how QOpenGLCanvas sets the FBO and the viewport size. If
+    // devicePixelRatioF() is non-integral, the result is truncated.
+    int viewportWidth = static_cast<int>(width() * devicePixelRatioF());
+    int viewportHeight = static_cast<int>(height() * devicePixelRatioF());
+    return QSize(viewportWidth, viewportHeight);
+}
+
+QSizeF KisOpenGLCanvas2::widgetSizeAlignedToDevicePixel() const
+{
+    QSize viewportSize = viewportDevicePixelSize();
+    qreal scaledWidth = viewportSize.width() / devicePixelRatioF();
+    qreal scaledHeight = viewportSize.height() / devicePixelRatioF();
+    return QSizeF(scaledWidth, scaledHeight);
+}
+
 void KisOpenGLCanvas2::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
     d->scrollCheckers = cfg.scrollCheckers();
 
@@ -793,7 +889,7 @@ void KisOpenGLCanvas2::slotConfigChanged()
 
 void KisOpenGLCanvas2::slotPixelGridModeChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     d->pixelGridDrawingThreshold = cfg.getPixelGridDrawingThreshold();
     d->pixelGridEnabled = cfg.pixelGridEnabled();
@@ -814,9 +910,17 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
 
 void KisOpenGLCanvas2::renderCanvasGL()
 {
-    // Draw the border (that is, clear the whole widget to the border color)
-    QColor widgetBackgroundColor = borderColor();
-    glClearColor(widgetBackgroundColor.redF(), widgetBackgroundColor.greenF(), widgetBackgroundColor.blueF(), 1.0);
+    {
+        // Draw the border (that is, clear the whole widget to the border color)
+        QColor widgetBackgroundColor = borderColor();
+        KoColor convertedBackgroudColor =
+            canvas()->displayColorConverter()->applyDisplayFiltering(
+                KoColor(widgetBackgroundColor, KoColorSpaceRegistry::instance()->rgb8()),
+                Float32BitsColorDepthID);
+        const float *pixel = reinterpret_cast<const float*>(convertedBackgroudColor.data());
+        glClearColor(pixel[0], pixel[1], pixel[2], 1.0);
+    }
+
     glClear(GL_COLOR_BUFFER_BIT);
 
     if ((d->displayFilter && d->displayFilter->updateShader()) ||
@@ -850,9 +954,9 @@ void KisOpenGLCanvas2::renderDecorations(QPainter *painter)
 }
 
 
-void KisOpenGLCanvas2::setDisplayProfile(KisDisplayColorConverter *colorConverter)
+void KisOpenGLCanvas2::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
 {
-    d->openGLImageTextures->setMonitorProfile(colorConverter->monitorProfile(),
+    d->openGLImageTextures->setMonitorProfile(colorConverter->openGLCanvasSurfaceProfile(),
                                               colorConverter->renderingIntent(),
                                               colorConverter->conversionFlags());
 }
@@ -886,21 +990,38 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
     // See KisQPainterCanvas::updateCanvasProjection for more info
     bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
     if (isOpenGLUpdateInfo) {
-        d->openGLImageTextures->recalculateCache(info);
+        d->openGLImageTextures->recalculateCache(info, d->lodSwitchInProgress);
     }
+    return QRect(); // FIXME: Implement dirty rect for OpenGL
+}
 
-#ifdef Q_OS_OSX
+QVector<QRect> KisOpenGLCanvas2::updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects)
+{
+#ifdef Q_OS_MACOS
     /**
-     * There is a bug on OSX: if we issue frame redraw before the tiles finished
-     * uploading, the tiles will become corrupted. Depending on the GPU/driver
-     * version either the tile itself, or its mipmaps will become totally
-     * transparent.
+     * On OSX openGL defferent (shared) contexts have different execution queues.
+     * It means that the textures uploading and their painting can be easily reordered.
+     * To overcome the issue, we should ensure that the textures are uploaded in the
+     * same openGL context as the painting is done.
      */
 
-    glFinish();
+    QOpenGLContext *oldContext = QOpenGLContext::currentContext();
+    QSurface *oldSurface = oldContext ? oldContext->surface() : 0;
+
+    this->makeCurrent();
 #endif
 
-    return QRect(); // FIXME: Implement dirty rect for OpenGL
+    QVector<QRect> result = KisCanvasWidgetBase::updateCanvasProjection(infoObjects);
+
+#ifdef Q_OS_MACOS
+    if (oldContext) {
+        oldContext->makeCurrent(oldSurface);
+    } else {
+        this->doneCurrent();
+    }
+#endif
+
+    return result;
 }
 
 bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)

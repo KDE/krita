@@ -36,7 +36,7 @@ struct KisAsyncAnimationFramesSavingRenderer::Private
           exportConfiguration(_exportConfiguration)
     {
 
-        savingDoc->setAutoSaveDelay(0);
+        savingDoc->setInfiniteAutoSaveInterval();
         savingDoc->setFileBatchMode(true);
 
         KisImageSP savingImage = new KisImage(savingDoc->createUndoStore(),
@@ -92,28 +92,28 @@ KisAsyncAnimationFramesSavingRenderer::~KisAsyncAnimationFramesSavingRenderer()
 {
 }
 
-void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame)
+void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, const QRegion &requestedRegion)
 {
     KisImageSP image = requestedImage();
     if (!image) return;
 
-    m_d->savingDevice->makeCloneFromRough(image->projection(), image->bounds());
-
-    KisTimeRange range(frame, 1);
-
-    KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
-
-    for (int i = range.start(); i <= range.end(); i++) {
-        QString frameNumber = QString("%1").arg(i - m_d->range.start() + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
-        QString filename = m_d->filenamePrefix + frameNumber + m_d->filenameSuffix;
-
-        if (!m_d->savingDoc->exportDocumentSync(QUrl::fromLocalFile(filename), m_d->outputMimeType, m_d->exportConfiguration)) {
-            status = KisImportExportFilter::InternalError;
-            break;
-        }
+    KIS_SAFE_ASSERT_RECOVER (requestedRegion == image->bounds()) {
+        emit sigCancelRegenerationInternal(frame);
+        return;
     }
 
-    if (status == KisImportExportFilter::OK) {
+    m_d->savingDevice->makeCloneFromRough(image->projection(), image->bounds());
+
+    KisImportExportErrorCode status = ImportExportCodes::OK;
+
+    QString frameNumber = QString("%1").arg(frame + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
+    QString filename = m_d->filenamePrefix + frameNumber + m_d->filenameSuffix;
+
+    if (!m_d->savingDoc->exportDocumentSync(QUrl::fromLocalFile(filename), m_d->outputMimeType, m_d->exportConfiguration)) {
+        status = ImportExportCodes::InternalError;
+    }
+
+    if (status.isOk()) {
         emit sigCompleteRegenerationInternal(frame);
     } else {
         emit sigCancelRegenerationInternal(frame);

@@ -1,0 +1,219 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b05c7e4..c4f60f3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,6 +9,12 @@ if(NOT DEFINED CMAKE_FIRST_RUN)
+     SET(CMAKE_FIRST_RUN 1 CACHE INTERNAL "")
+ endif()
+ 
++if (WIN32)
++    set(PATCH myptch)
++else()
++    set(PATCH patch)
++endif ()
++
+ ###############################################################################
+ ### GLOBAL ###
+ 
+@@ -29,7 +35,7 @@ option(OCIO_INLINES_HIDDEN "Specify whether to build with -fvisibility-inlines-h
+ 
+ # Use boost's shared_ptr by default on Windows (as <VS2010 doesn't have it),
+ # Use std::tr1::shared_ptr by default on other platforms
+-option(OCIO_USE_BOOST_PTR "Set to ON to enable boost shared_ptr (necessary when tr1 is not available)" WIN32)
++option(OCIO_USE_BOOST_PTR "Set to ON to enable boost shared_ptr (necessary when tr1 is not available)" MSVC)
+ 
+ option(OCIO_PYGLUE_LINK "If ON, link the Python module to the core shared library" OFF)
+ option(OCIO_PYGLUE_RESPECT_ABI "If ON, the Python module install path includes Python UCS version" OFF)
+@@ -231,7 +237,7 @@ else(USE_EXTERNAL_TINYXML)
+             INSTALL_DIR     ext/dist
+             CMAKE_ARGS      ${TINYXML_CMAKE_ARGS}
+         )
+-        if(WIN32)
++        if(MSVC)
+             set(TINYXML_STATIC_LIBRARIES  ${PROJECT_BINARY_DIR}/ext/dist/lib/tinyxml.lib)
+         else()
+             set(TINYXML_STATIC_LIBRARIES ${PROJECT_BINARY_DIR}/ext/dist/lib/libtinyxml.a)
+@@ -348,7 +354,7 @@ else(USE_EXTERNAL_YAML) ## provide 2 ways to build this dependency
+         set(YAML_CPP_INCLUDE_DIRS ${PROJECT_BINARY_DIR}/ext/dist/include)
+         set(YAML_CPP_LIBRARY_DIRS ${PROJECT_BINARY_DIR}/ext/dist/lib)
+         add_library(YAML_CPP_LIB STATIC IMPORTED)
+-        if(WIN32)
++        if(MSVC)
+             set(YAML_CPP_STATIC_DEBUG_LIBRARIES     ${PROJECT_BINARY_DIR}/ext/dist/lib/libyaml-cppmdd.lib)
+             set(YAML_CPP_STATIC_OPTIMIZED_LIBRARIES ${PROJECT_BINARY_DIR}/ext/dist/lib/libyaml-cppmd.lib)
+             set_property(TARGET YAML_CPP_LIB PROPERTY IMPORTED_LOCATION_DEBUG   ${YAML_CPP_STATIC_DEBUG_LIBRARIES})
+@@ -415,7 +421,7 @@ endif()
+ messageonce("SSE Optimizations: ${OCIO_USE_SSE}")
+ 
+ if(OCIO_USE_SSE)
+-    if(WIN32)
++    if(MSVC)
+         # SSE instructions are automatically compiled into 64-bit applications so enabling the option is redundant and
+         # actually produces an unknown option warning in Visual Studio.
+         if(NOT CMAKE_CL_64)
+diff --git a/export/OpenColorIO/OpenColorIO.h b/export/OpenColorIO/OpenColorIO.h
+index 1c699c1..ff1554c 100644
+--- a/export/OpenColorIO/OpenColorIO.h
++++ b/export/OpenColorIO/OpenColorIO.h
+@@ -101,16 +101,16 @@ OCIO_NAMESPACE_ENTER
+         
+     private:
+         //Add pragma warnings, STL member is private and not consumed by client of DLL
+-        #ifdef _WIN32
++        #ifdef _MSC_VER
+         #pragma warning(push)
+         #pragma warning(disable:4251)
+-        #endif // _WIN32
++        #endif // _MSC_VER
+ 
+         std::string msg_;
+ 
+-        #ifdef _WIN32
++        #ifdef _MSC_VER
+         #pragma warning(pop)
+-        #endif // _WIN32
++        #endif // _MSC_VER
+     };
+     
+     //!cpp:class:: An exception class for errors detected at
+diff --git a/src/core/CMakeLists.txt b/src/core/CMakeLists.txt
+index 1eb691b..fe226aa 100644
+--- a/src/core/CMakeLists.txt
++++ b/src/core/CMakeLists.txt
+@@ -18,13 +18,15 @@ list(APPEND core_export_headers ${CMAKE_BINARY_DIR}/export/OpenColorABI.h)
+ 
+ # Process all warnings as errors
+ 
+-if(WIN32)
++if(MSVC)
+     # On debug mode there are other kinds of warning...
+     if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+         set(EXTERNAL_COMPILE_FLAGS "${EXTERNAL_COMPILE_FLAGS} /WX")
+     endif()
+ else()
+-    set(EXTERNAL_COMPILE_FLAGS "${EXTERNAL_COMPILE_FLAGS} -Werror")
++    if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
++        set(EXTERNAL_COMPILE_FLAGS "${EXTERNAL_COMPILE_FLAGS} -Werror")
++    endif()
+ endif()
+ 
+ # SHARED
+@@ -48,7 +50,7 @@ if(OCIO_BUILD_SHARED)
+         target_link_libraries(OpenColorIO ${EXTERNAL_LIBRARIES})
+     endif()
+ 
+-    if(WIN32)
++    if(MSVC)
+         # Mute a design issue where the Exception public class inherits 
+         # from a STL Exception. STL classes are never supposed to
+         # be exported among different dynamic libraries.
+diff --git a/src/core/OCIOYaml.cpp b/src/core/OCIOYaml.cpp
+index 68fcef6..24c7afd 100644
+--- a/src/core/OCIOYaml.cpp
++++ b/src/core/OCIOYaml.cpp
+@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ #include <OpenColorIO/OpenColorIO.h>
+ 
+-#ifndef WIN32
++#ifndef _MSC_VER
+ 
+ // fwd declare yaml-cpp visibility
+ #pragma GCC visibility push(hidden)
+@@ -67,14 +67,14 @@ namespace YAML {
+ 
+ #endif
+ 
+-#ifdef WIN32
++#ifdef _MSC_VER
+ #pragma warning( push )
+ #pragma warning( disable: 4146 )
+ #endif
+ 
+ #include <yaml-cpp/yaml.h>
+ 
+-#ifdef WIN32
++#ifdef _MSC_VER
+ #pragma warning( pop )
+ #endif
+ 
+diff --git a/src/core/Platform.cpp b/src/core/Platform.cpp
+index 40db06b..b54091f 100644
+--- a/src/core/Platform.cpp
++++ b/src/core/Platform.cpp
+@@ -18,7 +18,7 @@ OCIO_NAMESPACE_ENTER
+         // 
+         void getenv (const char* name, std::string& value)
+         {
+-#ifdef WINDOWS
++#ifdef _MSC_VER
+             // To remove the security compilation warning, the _dupenv_s method
+             // must be used (instead of the getenv). The improvement is that
+             // the buffer length is now under control to mitigate buffer overflow attacks.
+diff --git a/src/core/UnitTest.cpp b/src/core/UnitTest.cpp
+index 5a60923..d887a3f 100644
+--- a/src/core/UnitTest.cpp
++++ b/src/core/UnitTest.cpp
+@@ -31,14 +31,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ #ifdef OCIO_UNIT_TEST
+ 
+-#ifndef WIN32
++#ifndef _MSC_VER
+ #pragma GCC visibility push(default)
+ #endif
+ 
+ #include <unittest.h> // OIIO unit tests header
+ OIIO_TEST_APP(OpenColorIO_Core_Unit_Tests)
+ 
+-#ifndef WIN32
++#ifndef _MSC_VER
+ #pragma GCC visibility pop
+ #endif
+ 
+diff --git a/src/core/UnitTest.h b/src/core/UnitTest.h
+index fd86a9e..82fd4e3 100644
+--- a/src/core/UnitTest.h
++++ b/src/core/UnitTest.h
+@@ -31,13 +31,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ #ifdef OCIO_UNIT_TEST
+ 
+-#ifndef WIN32
++#ifndef _MSC_VER
+ #pragma GCC visibility push(default)
+ #endif
+ 
+ #include <unittest.h> // OIIO unit tests header
+ 
+-#ifndef WIN32
++#ifndef _MSC_VER
+ #pragma GCC visibility pop
+ #endif
+ 
+diff --git a/src/core_tests/CMakeLists.txt b/src/core_tests/CMakeLists.txt
+index a5c563d..78cb78b 100644
+--- a/src/core_tests/CMakeLists.txt
++++ b/src/core_tests/CMakeLists.txt
+@@ -11,7 +11,7 @@ include_directories(
+     ${EXTERNAL_INCLUDE_DIRS}
+     )
+ 
+-if(WIN32)
++if(MSVC)
+     # Hack to get around the "Debug" and "Release" sub directories 
+     #  cmake tries to add with Windows VC+++ IDE
+ 
+diff --git a/src/pyglue/CMakeLists.txt b/src/pyglue/CMakeLists.txt
+index a90ca1c..eda8ead 100644
+--- a/src/pyglue/CMakeLists.txt
++++ b/src/pyglue/CMakeLists.txt
+@@ -13,7 +13,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing -Wno-missing-field-initializers")
+ endif()
+ 
+-if(WIN32)
++if(MSVC)
+     # Mute a design issue where the Exception public class inherits 
+     # from a STL Exception. STL classes are never supposed to
+     # be exported among different dynamic libraries.

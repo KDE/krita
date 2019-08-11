@@ -1,0 +1,251 @@
+From c37ff0abfed81284721ec00665579b73107a38ca Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Wed, 15 May 2019 19:54:52 +0300
+Subject: [PATCH 3/3] Add workaround for handling table press correctly in
+ WinInk mode
+
+Original problem: widgets do not get synthesized mouse-down and
+mouse-press events until the stylus is released
+
+Reason: if the app accepts the event, WndProc should report
+that to the system (by returning true). This is the only way to
+prevent Windows from starting some system-wide gestures, like
+click+hold -> right button click. If we ignore the event, then
+OS postpones all synthesized mouse events until the entire gesture
+is completed.
+
+The patch implements a "hackish" workaround for the original problem
+by using the following rules:
+
+1) All tablet-move events are ignored (without synthesized mouse events
+   OS doesn't generate any Enter/Leave events)
+
+2) All not-accepted tablet press- and release-events and also reported as
+   ignored (without it D&D doesn't work).
+
+3) All accepted tablet press- and release-events are reported as "accepted",
+   **but** we artificially synthesize mouse events for them.
+
+TODO: there are still one problem:
+
+1) Perhaps this synthesizeMouseEvent() is not needed at all. But we should
+   first check if Qt relies on these synthesized messages anywhere in the
+   code or not.
+
+See bug: https://bugs.kde.org/show_bug.cgi?id=406668
+---
+ src/gui/kernel/qguiapplication.cpp            |  1 +
+ src/gui/kernel/qwindowsysteminterface.cpp     | 20 ++---
+ src/gui/kernel/qwindowsysteminterface.h       |  8 +-
+ .../windows/qwindowspointerhandler.cpp        | 88 ++++++++++++++++++-
+ 4 files changed, 99 insertions(+), 18 deletions(-)
+
+diff --git a/src/gui/kernel/qguiapplication.cpp b/src/gui/kernel/qguiapplication.cpp
+index a67214bd9a..d431f37d35 100644
+--- a/src/gui/kernel/qguiapplication.cpp
++++ b/src/gui/kernel/qguiapplication.cpp
+@@ -2537,6 +2537,7 @@ void QGuiApplicationPrivate::processTabletEvent(QWindowSystemInterfacePrivate::T
+     tabletEvent.setTimestamp(e->timestamp);
+     QGuiApplication::sendSpontaneousEvent(window, &tabletEvent);
+     pointData.state = e->buttons;
++    e->eventAccepted = tabletEvent.isAccepted();
+     if (!tabletEvent.isAccepted()
+         && !QWindowSystemInterfacePrivate::TabletEvent::platformSynthesizesMouse
+         && qApp->testAttribute(Qt::AA_SynthesizeMouseForUnhandledTabletEvents)) {
+diff --git a/src/gui/kernel/qwindowsysteminterface.cpp b/src/gui/kernel/qwindowsysteminterface.cpp
+index b0f2869128..b3b6167c9d 100644
+--- a/src/gui/kernel/qwindowsysteminterface.cpp
++++ b/src/gui/kernel/qwindowsysteminterface.cpp
+@@ -949,7 +949,7 @@ void QWindowSystemInterfacePrivate::TabletEvent::setPlatformSynthesizesMouse(boo
+     platformSynthesizesMouse = v;
+ }
+ 
+-void QWindowSystemInterface::handleTabletEvent(QWindow *window, ulong timestamp, const QPointF &local, const QPointF &global,
++bool QWindowSystemInterface::handleTabletEvent(QWindow *window, ulong timestamp, const QPointF &local, const QPointF &global,
+                                                int device, int pointerType, Qt::MouseButtons buttons, qreal pressure, int xTilt, int yTilt,
+                                                qreal tangentialPressure, qreal rotation, int z, qint64 uid,
+                                                Qt::KeyboardModifiers modifiers)
+@@ -960,36 +960,36 @@ void QWindowSystemInterface::handleTabletEvent(QWindow *window, ulong timestamp,
+                                                        QHighDpi::fromNativePixels(global, window),
+                                                        device, pointerType, buttons, pressure,
+                                                        xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
+-    QWindowSystemInterfacePrivate::handleWindowSystemEvent(e);
++    return QWindowSystemInterfacePrivate::handleWindowSystemEvent<QWindowSystemInterface::SynchronousDelivery>(e);
+ }
+ 
+-void QWindowSystemInterface::handleTabletEvent(QWindow *window, const QPointF &local, const QPointF &global,
++bool QWindowSystemInterface::handleTabletEvent(QWindow *window, const QPointF &local, const QPointF &global,
+                                                int device, int pointerType, Qt::MouseButtons buttons, qreal pressure, int xTilt, int yTilt,
+                                                qreal tangentialPressure, qreal rotation, int z, qint64 uid,
+                                                Qt::KeyboardModifiers modifiers)
+ {
+     ulong time = QWindowSystemInterfacePrivate::eventTime.elapsed();
+-    handleTabletEvent(window, time, local, global, device, pointerType, buttons, pressure,
++    return handleTabletEvent(window, time, local, global, device, pointerType, buttons, pressure,
+                       xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
+ }
+ 
+ #if QT_DEPRECATED_SINCE(5, 10)
+-void QWindowSystemInterface::handleTabletEvent(QWindow *window, ulong timestamp, bool down, const QPointF &local, const QPointF &global,
++bool QWindowSystemInterface::handleTabletEvent(QWindow *window, ulong timestamp, bool down, const QPointF &local, const QPointF &global,
+                                                int device, int pointerType, qreal pressure, int xTilt, int yTilt,
+                                                qreal tangentialPressure, qreal rotation, int z, qint64 uid,
+                                                Qt::KeyboardModifiers modifiers)
+ {
+-    handleTabletEvent(window, timestamp, local, global, device, pointerType, (down ? Qt::LeftButton : Qt::NoButton), pressure,
+-                      xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
++    return handleTabletEvent(window, timestamp, local, global, device, pointerType, (down ? Qt::LeftButton : Qt::NoButton), pressure,
++                             xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
+ }
+ 
+-void QWindowSystemInterface::handleTabletEvent(QWindow *window, bool down, const QPointF &local, const QPointF &global,
++bool QWindowSystemInterface::handleTabletEvent(QWindow *window, bool down, const QPointF &local, const QPointF &global,
+                                                int device, int pointerType, qreal pressure, int xTilt, int yTilt,
+                                                qreal tangentialPressure, qreal rotation, int z, qint64 uid,
+                                                Qt::KeyboardModifiers modifiers)
+ {
+-    handleTabletEvent(window, local, global, device, pointerType, (down ? Qt::LeftButton : Qt::NoButton), pressure,
+-                      xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
++    return handleTabletEvent(window, local, global, device, pointerType, (down ? Qt::LeftButton : Qt::NoButton), pressure,
++                             xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
+ }
+ #endif // QT_DEPRECATED_SINCE(5, 10)
+ 
+diff --git a/src/gui/kernel/qwindowsysteminterface.h b/src/gui/kernel/qwindowsysteminterface.h
+index bf98c33a1a..fdc5a2fb50 100644
+--- a/src/gui/kernel/qwindowsysteminterface.h
++++ b/src/gui/kernel/qwindowsysteminterface.h
+@@ -247,20 +247,20 @@ public:
+     static void handleFileOpenEvent(const QString& fileName);
+     static void handleFileOpenEvent(const QUrl &url);
+ 
+-    static void handleTabletEvent(QWindow *window, ulong timestamp, const QPointF &local, const QPointF &global,
++    static bool handleTabletEvent(QWindow *window, ulong timestamp, const QPointF &local, const QPointF &global,
+                                   int device, int pointerType, Qt::MouseButtons buttons, qreal pressure, int xTilt, int yTilt,
+                                   qreal tangentialPressure, qreal rotation, int z, qint64 uid,
+                                   Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+-    static void handleTabletEvent(QWindow *window, const QPointF &local, const QPointF &global,
++    static bool handleTabletEvent(QWindow *window, const QPointF &local, const QPointF &global,
+                                   int device, int pointerType, Qt::MouseButtons buttons, qreal pressure, int xTilt, int yTilt,
+                                   qreal tangentialPressure, qreal rotation, int z, qint64 uid,
+                                   Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+ #if QT_DEPRECATED_SINCE(5, 10)
+-    QT_DEPRECATED static void handleTabletEvent(QWindow *window, ulong timestamp, bool down, const QPointF &local, const QPointF &global,
++    QT_DEPRECATED static bool handleTabletEvent(QWindow *window, ulong timestamp, bool down, const QPointF &local, const QPointF &global,
+                                                 int device, int pointerType, qreal pressure, int xTilt, int yTilt,
+                                                 qreal tangentialPressure, qreal rotation, int z, qint64 uid,
+                                                 Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+-    QT_DEPRECATED static void handleTabletEvent(QWindow *window, bool down, const QPointF &local, const QPointF &global,
++    QT_DEPRECATED static bool handleTabletEvent(QWindow *window, bool down, const QPointF &local, const QPointF &global,
+                                                 int device, int pointerType, qreal pressure, int xTilt, int yTilt,
+                                                 qreal tangentialPressure, qreal rotation, int z, qint64 uid,
+                                                 Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+diff --git a/src/plugins/platforms/windows/qwindowspointerhandler.cpp b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
+index bf201b87e0..60112f7610 100644
+--- a/src/plugins/platforms/windows/qwindowspointerhandler.cpp
++++ b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
+@@ -541,6 +541,58 @@ bool QWindowsPointerHandler::translateTouchEvent(QWindow *window, HWND hwnd,
+     return false; // Allow mouse messages to be generated.
+ }
+ 
++void synthesizeMouseEvent(QEvent::Type type, Qt::MouseButton button, const POINTER_PEN_INFO &penInfo)
++{
++    // Update the cursor position
++    BOOL result = SetCursorPos(penInfo.pointerInfo.ptPixelLocationRaw.x, penInfo.pointerInfo.ptPixelLocationRaw.y);
++    if (!result) {
++        qCDebug(lcQpaEvents).noquote().nospace() << showbase
++            << __FUNCTION__ << "SetCursorPos failed, err" << GetLastError();
++        return;
++    }
++    // Send mousebutton down/up events. Windows stores the button state.
++    DWORD inputDataFlags = 0;
++    switch (type) {
++    case QEvent::TabletPress:
++        switch (button) {
++        case Qt::LeftButton:
++            inputDataFlags = MOUSEEVENTF_LEFTDOWN;
++            break;
++        case Qt::RightButton:
++            inputDataFlags = MOUSEEVENTF_RIGHTDOWN;
++            break;
++        default:
++            return;
++        }
++        break;
++    case QEvent::TabletRelease:
++        switch (button) {
++        case Qt::LeftButton:
++            inputDataFlags = MOUSEEVENTF_LEFTUP;
++            break;
++        case Qt::RightButton:
++            inputDataFlags = MOUSEEVENTF_RIGHTUP;
++            break;
++        default:
++            return;
++        }
++        break;
++    case QEvent::TabletMove:
++    default:
++        return;
++    }
++    INPUT inputData = {};
++    inputData.type = INPUT_MOUSE;
++    inputData.mi.dwFlags = inputDataFlags;
++    inputData.mi.dwExtraInfo = 0xFF515700 | 0x01; // https://msdn.microsoft.com/en-us/library/windows/desktop/ms703320%28v=vs.85%29.aspx
++    UINT result2 = SendInput(1, &inputData, sizeof(inputData));
++    if (result2 != 1) {
++        qCDebug(lcQpaEvents).noquote().nospace() << showbase
++            << __FUNCTION__ << "SendInput failed, err" << GetLastError();
++        return;
++    }
++}
++
+ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWindows::WindowsEventType et,
+                                                MSG msg, PVOID vPenInfo)
+ {
+@@ -631,10 +683,38 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
+         }
+         const Qt::KeyboardModifiers keyModifiers = QWindowsKeyMapper::queryKeyboardModifiers();
+ 
+-        QWindowSystemInterface::handleTabletEvent(target, localPos, hiResGlobalPos, device, type, mouseButtons,
+-                                                  pressure, xTilt, yTilt, tangentialPressure, rotation, z,
+-                                                  sourceDevice, keyModifiers);
+-        return false;  // Allow mouse messages to be generated.
++        const Qt::MouseButtons oldButtons = QGuiApplicationPrivate::tabletDevicePoint(sourceDevice).state;
++
++        const bool accepted =
++            QWindowSystemInterface::handleTabletEvent(target, localPos, hiResGlobalPos, device, type, mouseButtons,
++                                                      pressure, xTilt, yTilt, tangentialPressure, rotation, z,
++                                                      sourceDevice, keyModifiers);
++
++        const Qt::MouseButtons changedButtons =
++            oldButtons ^ QGuiApplicationPrivate::tabletDevicePoint(sourceDevice).state;
++
++        Qt::MouseButton pressedButton = Qt::NoButton;
++
++        const QVector<Qt::MouseButton> supportedButtons =
++            {Qt::LeftButton, Qt::RightButton, Qt::MiddleButton};
++
++        for (Qt::MouseButton button : supportedButtons) {
++            if (changedButtons & button) {
++                pressedButton = button;
++                break;
++            }
++        }
++
++        if (accepted && pressedButton != Qt::NoButton &&
++            (msg.message == WM_POINTERDOWN || msg.message == WM_POINTERUP)) {
++
++            QEvent::Type type = (msg.message == WM_POINTERDOWN) ? QEvent::TabletPress : QEvent::TabletRelease;
++
++            synthesizeMouseEvent(type, pressedButton, *penInfo);
++            return true;
++        } else {
++            return false; // Allow mouse messages to be generated by OS
++        }
+     }
+     }
+     return true;
+-- 
+2.20.1.windows.1
+

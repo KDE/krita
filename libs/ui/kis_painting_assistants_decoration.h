@@ -43,6 +43,7 @@ struct AssistantEditorData {
     const QPointF moveIconPosition = QPointF(15, 15);
     const QPointF snapIconPosition = QPointF(54, 20);
     const QPointF deleteIconPosition = QPointF(83, 18);
+    const QSize boundingSize = QSize(110, 40);
 };
 
 /**
@@ -64,10 +65,19 @@ public:
     void addAssistant(KisPaintingAssistantSP assistant);
     void removeAssistant(KisPaintingAssistantSP assistant);
     void removeAll();
+    void setAssistants(const QList<KisPaintingAssistantSP> &assistants);
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     void endStroke();
     QList<KisPaintingAssistantHandleSP> handles();
     QList<KisPaintingAssistantSP> assistants() const;
+
+
+    /// getter and setter functions for what assistant is currently selected
+    /// this is used to control some tool options that are specific to a assistant
+    KisPaintingAssistantSP selectedAssistant();
+    void setSelectedAssistant(KisPaintingAssistantSP assistant);
+    void deselectAssistant();
+
 
     /// called when assistant editor is activated
     /// right now this happens when the assistants tool is selected
@@ -101,16 +111,16 @@ public:
     /// uncache all assistants
     void uncache();
 
-    /// retrieves the assistants color specified in the tool options
-    /// all assistants will share the same color
-    QColor assistantsColor();
-
     int handleSize();
     void setHandleSize(int handleSize);
 
+    QColor globalAssistantsColor();
+    void setGlobalAssistantsColor(QColor color);
 
 Q_SIGNALS:
     void assistantChanged();
+    void selectedAssistantChanged();
+
 public Q_SLOTS:
 
     /// toggles whether the assistant is active or not
@@ -118,7 +128,6 @@ public Q_SLOTS:
 
     /// toggles whether there will be a preview of the assistant result when painting
     void toggleOutlineVisible();
-    void setAssistantsColor(QColor color);
     QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);
     QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
 

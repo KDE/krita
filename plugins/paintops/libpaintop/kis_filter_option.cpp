@@ -71,7 +71,7 @@ KisFilterOption::KisFilterOption()
         }
     }
     m_filterOptionWidget->filtersList->setIDList(l2);
-    connect(m_filterOptionWidget->filtersList, SIGNAL(activated(const KoID &)), SLOT(setCurrentFilter(const KoID &)));
+    connect(m_filterOptionWidget->filtersList, SIGNAL(activated(KoID)), SLOT(setCurrentFilter(KoID)));
     if (!l2.empty()) {
         setCurrentFilter(l2.first());
     }
@@ -159,7 +159,7 @@ void KisFilterOption::updateFilterConfigWidget()
     if (m_currentFilter && m_image && m_paintDevice) {
 
         m_currentFilterConfigWidget =
-            m_currentFilter->createConfigurationWidget(m_filterOptionWidget->grpFilterOptions, m_paintDevice);
+            m_currentFilter->createConfigurationWidget(m_filterOptionWidget->grpFilterOptions, m_paintDevice, true);
 
         if (m_currentFilterConfigWidget) {
             m_layout->addWidget(m_currentFilterConfigWidget);

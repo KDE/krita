@@ -40,7 +40,7 @@ class Q_DECL_HIDDEN KoShapeManager::Private
 {
 public:
     Private(KoShapeManager *shapeManager, KoCanvasBase *c)
-        : selection(new KoSelection()),
+        : selection(new KoSelection(shapeManager)),
           canvas(c),
           tree(4, 2),
           q(shapeManager),
@@ -103,7 +103,7 @@ public:
 
         void fireSignals() {
             Q_FOREACH (KoShape *shape, shapesWithCollisionDetection)
-                shape->priv()->shapeChanged(KoShape::CollisionDetected);
+                shape->shapeChangedPriv(KoShape::CollisionDetected);
         }
 
     private:

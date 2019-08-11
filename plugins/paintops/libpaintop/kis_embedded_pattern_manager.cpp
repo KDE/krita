@@ -40,7 +40,7 @@ struct KisEmbeddedPatternManager::Private {
 
         if (name.isEmpty() || name != QFileInfo(name).fileName()) {
             QFileInfo info(filename);
-            name = info.baseName();
+            name = info.completeBaseName();
         }
 
         if (!img.isNull()) {
@@ -49,22 +49,6 @@ struct KisEmbeddedPatternManager::Private {
 
         return pattern;
     }
-
-    static KoPattern* tryFetchPatternByMd5(const QByteArray &md5) {
-        KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
-        return server->resourceByMD5(md5);
-    }
-
-    static KoPattern* tryFetchPatternByName(const QString &name) {
-        KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
-        return server->resourceByName(name);
-    }
-
-    static KoPattern* tryFetchPatternByFileName(const QString &fileName) {
-        KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
-        return server->resourceByFilename(fileName);
-    }
-
 };
 
 void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfigurationSP setting, const KoPattern *pattern)
@@ -92,32 +76,29 @@ void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfigurationSP
     buffer.open(QIODevice::WriteOnly);
     pattern->pattern().save(&buffer, "PNG");
     setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
-
-
 }
 
 KoPattern* KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesConfigurationSP setting)
 {
     KoPattern *pattern = 0;
+    KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
 
     QByteArray md5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
-    pattern = Private::tryFetchPatternByMd5(md5);
+    pattern = server->resourceByMD5(md5);
     if (pattern) return pattern;
 
     QString name = setting->getString("Texture/Pattern/Name");
-    pattern = Private::tryFetchPatternByName(name);
+    pattern = server->resourceByName(name);
     if (pattern) return pattern;
 
     QString fileName = setting->getString("Texture/Pattern/PatternFileName");
-    pattern = Private::tryFetchPatternByFileName(fileName);
+    pattern = server->resourceByFilename(fileName);
     if (pattern) return pattern;
-
 
     pattern = Private::tryLoadEmbeddedPattern(setting);
     if (pattern) {
         KoResourceServerProvider::instance()->patternServer()->addResource(pattern, false);
     }
-
 
     return pattern;
 }

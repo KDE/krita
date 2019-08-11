@@ -257,6 +257,7 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
     emit update();
     //Workaround for bug 317648
     setLastMousePosition((m_lastClickPos.x()*width()), (m_lastClickPos.y()*height()));
+    KisColorSelectorComponent::setColor(color);
 }
 
 void KisColorSelectorSimple::paint(QPainter* painter)

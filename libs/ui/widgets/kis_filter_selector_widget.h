@@ -23,10 +23,11 @@
 #include <QWidget>
 #include <QTreeView>
 #include <QHeaderView>
-#include <kis_debug.h>
 #include <QResizeEvent>
 #include <QSize>
 
+#include <kis_debug.h>
+#include <KisKineticScroller.h>
 #include <kis_types.h>
 
 class QModelIndex;
@@ -77,6 +78,12 @@ class KisFilterTree: public QTreeView
 public:
 
     KisFilterTree(QWidget *parent) : QTreeView(parent) {
+        QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+        if (scroller) {
+            connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                    this, SLOT(slotScrollerStateChanged(QScroller::State)));
+        }
+
         connect(this, SIGNAL(expanded(QModelIndex)), this, SLOT(update_scroll_area(QModelIndex)));
         connect(this, SIGNAL(collapsed(QModelIndex)), this, SLOT(update_scroll_area(QModelIndex)));
     }
@@ -133,6 +140,9 @@ private Q_SLOTS:
     {
         resizeColumnToContents(i.column());
     }
+
+public Q_SLOTS:
+    void slotScrollerStateChanged(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
 
 private:
 

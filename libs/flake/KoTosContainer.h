@@ -26,7 +26,6 @@
 
 #include "kritaflake_export.h"
 
-class KoTosContainerPrivate;
 class KoDocumentResourceManager;
 
 
@@ -94,8 +93,7 @@ public:
     void setRunThrough(short int runThrough) override;
 
 protected:
-    /// constructor
-    KoTosContainer(KoTosContainerPrivate *);
+    KoTosContainer(const KoTosContainer &rhs);
 
     //reimplemented
     void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context) override;
@@ -125,8 +123,9 @@ protected:
 
     void shapeChanged(ChangeType type, KoShape *shape = 0) override;
 
-protected:
-    Q_DECLARE_PRIVATE(KoTosContainer)
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 #endif

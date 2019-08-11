@@ -222,14 +222,14 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "gpl" << "pal" << "act" << "aco" << "colors" << "xml" << "sbz";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "krita/x-colorset";
+        mimeType.description = i18nc("description of a file type", "Krita Color Palette");
+        mimeType.suffixes = QStringList() << "kpl";
+        s_mimeDatabase << mimeType;
+
         mimeType.mimeType = "application/x-opencolorio-configuration";
         mimeType.description = i18nc("description of a file type", "OpenColorIO Configuration");
         mimeType.suffixes = QStringList() << "ocio";
-        s_mimeDatabase << mimeType;
-
-        mimeType.mimeType = "application/x-krita-recorded-macro";
-        mimeType.description = i18nc("description of a file type", "Krita Recorded Action");
-        mimeType.suffixes = QStringList() << "krarec";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-gimp-gradient";
@@ -240,11 +240,6 @@ void KisMimeDatabase::fillMimeData()
         mimeType.mimeType = "application/x-gimp-pattern";
         mimeType.description = i18nc("description of a file type", "GIMP Patterns");
         mimeType.suffixes = QStringList() << "pat";
-        s_mimeDatabase << mimeType;
-
-        mimeType.mimeType = "application/x-karbon-gradient";
-        mimeType.description = i18nc("description of a file type", "Karbon Gradients");
-        mimeType.suffixes = QStringList() << "kgr";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-krita-bundle";
@@ -262,9 +257,19 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "kts";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "application/x-krita-reference-images";
+        mimeType.description = i18nc("description of a file type", "Krita Reference Image Collection");
+        mimeType.suffixes = QStringList() << "krf";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-krita-shortcuts";
+        mimeType.description = i18nc("description of a file type", "Krita Shortcut Scheme");
+        mimeType.suffixes = QStringList() << "shortcuts";
+        s_mimeDatabase << mimeType;
+
         mimeType.mimeType = "image/x-krita-raw";
         mimeType.description = i18nc("description of a file type", "Camera Raw Files");
-        mimeType.suffixes = QStringList() << "nef" << "cr2" << "sr2" << "crw" << "pef" << "x3f" << "kdc" << "mrw" << "arw" << "k25" << "dcr" << "orf" << "raw" << "raw" << "raf" << "srf" << "dng";
+        mimeType.suffixes = QStringList() << "bay" << "bmq" << "cr2" << "crw" << "cs1" << "dc2" << "dcr" << "dng" << "erf" << "fff" << "hdr" << "k25" << "kdc" << "mdc" << "mos" << "mrw" << "nef" << "orf" << "pef" << "pxn" << "raf" << "raw" << "rdc" << "sr2" << "srf" << "x3f" << "arw" << "3fr" << "cine" << "ia" << "kc2" << "mef" << "nrw" << "qtk" << "rw2" << "sti" << "rwl" << "srw";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-extension-exr";
@@ -275,6 +280,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.mimeType = "image/x-psb";
         mimeType.description = i18nc("description of a file type", "Photoshop Image (Large)");
         mimeType.suffixes = QStringList() << "psb";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "image/heic";
+        mimeType.description = i18nc("description of a file type", "HEIC/HEIF Image");
+        mimeType.suffixes = QStringList() << "heic" << "heif";
         s_mimeDatabase << mimeType;
 
         debugPlugin << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";

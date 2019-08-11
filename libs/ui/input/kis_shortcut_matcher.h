@@ -203,6 +203,16 @@ public:
     void reinitialize();
 
     /**
+     * Resets the internal state of the matcher, tries to resync it to the state
+     * passed via argument and activates the prepared action if possible.
+     *
+     * This synchronization should happen when the user hovers Krita windows,
+     * **without** having keyboard focus set to it (therefore matcher cannot
+     * get key press and release events).
+     */
+    void recoveryModifiersWithoutFocus(const QVector<Qt::Key> &keys);
+
+    /**
      * Kirta lost focus, it means that all the running actions should be ended
      * forcefully.
      */
@@ -239,6 +249,7 @@ private:
     void tryActivateReadyShortcut();
     bool tryEndRunningShortcut( Qt::MouseButton button, QEvent* event );
     void forceEndRunningShortcut(const QPointF &localPos);
+    void forceDeactivateAllActions();
 
     bool tryRunTouchShortcut(QTouchEvent *event);
     bool tryEndTouchShortcut(QTouchEvent *event);

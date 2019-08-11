@@ -90,6 +90,10 @@ public:
 
     void performCancel(KisStrokeId id, bool strokeUndo);
 
+    void getCommandExecutionJobs(QVector<KisStrokeJobData*> *jobs, bool undo) const;
+
+    void setOverrideInfo(const KisSavedMacroCommand *overriddenCommand, const QVector<const KUndo2Command *> &skipWhileOverride);
+
 protected:
     void addCommands(KisStrokeId id, bool undo) override;
 

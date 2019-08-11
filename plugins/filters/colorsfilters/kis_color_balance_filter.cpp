@@ -18,19 +18,20 @@
 */
 
 #include "kis_color_balance_filter.h"
+#include <filter/kis_filter_category_ids.h>
 #include "filter/kis_color_transformation_configuration.h"
 #include "kis_selection.h"
 #include "kis_paint_device.h"
 #include "kis_processing_information.h"
 
 KisColorBalanceFilter::KisColorBalanceFilter() 
-		: KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Color Balance..."))
+        : KisColorTransformationFilter(id(), FiltersCategoryAdjustId, i18n("&Color Balance..."))
 {
     setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 	setSupportsPainting(true);
 }
 
-KisConfigWidget * KisColorBalanceFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisColorBalanceFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     return new KisColorBalanceConfigWidget(parent);

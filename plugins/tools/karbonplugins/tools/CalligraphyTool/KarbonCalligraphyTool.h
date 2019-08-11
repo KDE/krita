@@ -24,6 +24,8 @@
 #include <KoPathShape.h>
 #include <QPointer>
 
+#include "KarbonCalligraphyOptionWidget.h"
+
 class KoPathShape;
 class KarbonCalligraphicShape;
 
@@ -105,6 +107,8 @@ private:
 
     // last calligraphic shape drawn, if any
     KarbonCalligraphicShape *m_lastShape;
+
+    KarbonCalligraphyOptionWidget *m_widget {0};
 };
 
 #endif // KARBONCALLIGRAPHYTOOL_H

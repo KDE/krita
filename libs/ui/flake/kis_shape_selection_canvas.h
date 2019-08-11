@@ -30,6 +30,7 @@ class KoViewConverter;
 class KUndo2Command;
 class QWidget;
 class KoUnit;
+class KisShapeController;
 
 /**
  * Dummy canvas just to have a shapemanager for the shape selection
@@ -39,7 +40,7 @@ class KisShapeSelectionCanvas : public KoCanvasBase
     Q_OBJECT
 public:
 
-    KisShapeSelectionCanvas();
+    KisShapeSelectionCanvas(KoShapeControllerBase *shapeController);
     ~KisShapeSelectionCanvas() override;
 
     void gridSize(QPointF *offset, QSizeF *spacing) const override;

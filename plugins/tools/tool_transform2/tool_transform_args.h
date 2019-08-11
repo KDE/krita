@@ -28,7 +28,7 @@
 #include "kis_liquify_properties.h"
 #include "kritatooltransform_export.h"
 #include "kis_global.h"
-
+#include "KisToolChangesTrackerData.h"
 
 #include <QScopedPointer>
 class KisLiquifyTransformWorker;
@@ -41,7 +41,7 @@ class QDomElement;
  * memory.
  */
 
-class KRITATOOLTRANSFORM_EXPORT ToolTransformArgs
+class KRITATOOLTRANSFORM_EXPORT ToolTransformArgs : public KisToolChangesTrackerData
 {
 public:
     enum TransformMode {FREE_TRANSFORM = 0,
@@ -62,6 +62,8 @@ public:
      */
     ToolTransformArgs(const ToolTransformArgs& args);
 
+    KisToolChangesTrackerData *clone() const;
+
     /**
      * If mode is warp, original and transformed vector points will be of size 0.
      * Use setPoints method to set those vectors.
@@ -76,7 +78,8 @@ public:
                       KisWarpTransformWorker::WarpType warpType,
                       double alpha,
                       bool defaultPoints,
-                      const QString &filterId);
+                      const QString &filterId,
+                      int pixelPrecision, int previewPixelPrecision);
     ~ToolTransformArgs();
     ToolTransformArgs& operator=(const ToolTransformArgs& args);
 
@@ -88,6 +91,22 @@ public:
     }
     inline void setMode(TransformMode mode) {
         m_mode = mode;
+    }
+
+    inline int pixelPrecision() const {
+        return m_pixelPrecision;
+    }
+
+    inline void setPixelPrecision(int precision) {
+        m_pixelPrecision = precision;
+    }
+
+    inline int previewPixelPrecision() const {
+        return m_previewPixelPrecision;
+    }
+
+    inline void setPreviewPixelPrecision(int precision) {
+        m_previewPixelPrecision = precision;
     }
 
     //warp-related
@@ -131,6 +150,13 @@ public:
     inline void setWarpType(KisWarpTransformWorker::WarpType warpType) {
         m_warpType = warpType;
     }
+    inline void setWarpCalculation(KisWarpTransformWorker::WarpCalculation warpCalc) {
+        m_warpCalculation = warpCalc;
+    }
+    inline KisWarpTransformWorker::WarpCalculation warpCalculation() {
+        return m_warpCalculation;
+    }
+
     inline void setAlpha(double alpha) {
         m_alpha = alpha;
     }
@@ -284,6 +310,7 @@ private:
     QVector<QPointF> m_origPoints;
     QVector<QPointF> m_transfPoints;
     KisWarpTransformWorker::WarpType m_warpType;
+    KisWarpTransformWorker::WarpCalculation m_warpCalculation; // DRAW or GRID
     double m_alpha;
 
     //'free transform'-related
@@ -299,18 +326,18 @@ private:
     double m_aX;
     double m_aY;
     double m_aZ;
-    QVector3D m_cameraPos;
+    QVector3D m_cameraPos {QVector3D(0,0,1024)};
     double m_scaleX;
     double m_scaleY;
     double m_shearX;
     double m_shearY;
-    bool m_keepAspectRatio;
+    bool m_keepAspectRatio {false};
 
     // perspective trasform related
     QTransform m_flattenedPerspectiveTransform;
 
     KisFilterStrategy *m_filter;
-    bool m_editTransformPoints;
+    bool m_editTransformPoints {false};
     QSharedPointer<KisLiquifyProperties> m_liquifyProperties;
     QScopedPointer<KisLiquifyTransformWorker> m_liquifyWorker;
 
@@ -320,6 +347,10 @@ private:
      * operations should revert to it.
      */
     QScopedPointer<ToolTransformArgs> m_continuedTransformation;
+
+    //PixelPrecision should always be in powers of 2
+    int m_pixelPrecision;
+    int m_previewPixelPrecision;
 };
 
 #endif // TOOL_TRANSFORM_ARGS_H_

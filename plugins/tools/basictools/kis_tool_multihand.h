@@ -31,7 +31,6 @@ class QStackedWidget;
 class KisSliderSpinBox;
 class KisToolMultihandHelper;
 
-
 class KisToolMultihand : public KisToolBrush
 {
     Q_OBJECT
@@ -42,10 +41,16 @@ public:
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
 
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+
+    void mouseMoveEvent(KoPointerEvent* event) override;
+
 
 protected:
     void paint(QPainter& gc, const KoViewConverter &converter) override;
-
+    
     QWidget* createOptionWidget() override;
 
 private:
@@ -57,17 +62,19 @@ private Q_SLOTS:
     void activateAxesPointModeSetup();
     void resetAxes();
     void slotSetHandsCount(int count);
-    void slotSetAxesAngle(int angle);
+    void slotSetAxesAngle(qreal angle);
     void slotSetTransformMode(int qcomboboxIndex);
     void slotSetAxesVisible(bool vis);
     void slotSetMirrorVertically(bool mirror);
     void slotSetMirrorHorizontally(bool mirror);
     void slotSetTranslateRadius(int radius);
+    void slotAddSubbrushesMode(bool checked);
+    void slotRemoveAllSubbrushes();
 
 private:
     KisToolMultihandHelper *m_helper;
 
-    enum enumTransforModes { SYMMETRY, MIRROR, TRANSLATE, SNOWFLAKE };
+    enum enumTransforModes:int { SYMMETRY=0, MIRROR, TRANSLATE, SNOWFLAKE, COPYTRANSLATE };
     enumTransforModes m_transformMode;
     QPointF m_axesPoint;
     qreal m_angle;
@@ -78,27 +85,20 @@ private:
     int m_translateRadius;
 
     bool m_setupAxesFlag;
-    QComboBox * m_transformModesComboBox;
-    KisSliderSpinBox *m_handsCountSlider;
-    KisDoubleSliderSpinBox *m_axesAngleSlider;
-    QCheckBox *m_axesChCkBox;
-    QStackedWidget *m_modeCustomOption;
-    QCheckBox *m_mirrorVerticallyChCkBox;
-    QCheckBox *m_mirrorHorizontallyChCkBox;
-    KisSliderSpinBox *m_translateRadiusSlider;
-    QPushButton *m_axesPointBtn;
-
+    bool m_addSubbrushesMode;
+    QPointF m_lastToolPos;
+    QVector<QPointF> m_subbrOriginalLocations;
 
     KisToolMultiHandConfigWidget* customUI;
 };
 
 
-class KisToolMultiBrushFactory : public KoToolFactoryBase
+class KisToolMultiBrushFactory : public KisToolPaintFactoryBase
 {
 
 public:
     KisToolMultiBrushFactory()
-            : KoToolFactoryBase("KritaShape/KisToolMultiBrush") {
+        : KisToolPaintFactoryBase("KritaShape/KisToolMultiBrush") {
 
         setToolTip(i18n("Multibrush Tool"));
 

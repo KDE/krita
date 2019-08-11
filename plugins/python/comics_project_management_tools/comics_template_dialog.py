@@ -23,7 +23,7 @@ Template dialog
 import os
 import shutil
 #from PyQt5.QtGui import *
-from PyQt5.QtWidgets import QDialog, QComboBox, QDialogButtonBox, QVBoxLayout, QFormLayout, QGridLayout, QWidget, QPushButton, QHBoxLayout, QLabel, QSpinBox, QDoubleSpinBox, QLineEdit, QTabWidget
+from PyQt5.QtWidgets import QDialog, QComboBox, QDialogButtonBox, QVBoxLayout, QFormLayout, QGridLayout, QWidget, QPushButton, QHBoxLayout, QLabel, QSpinBox, QDoubleSpinBox, QLineEdit, QTabWidget, QColorDialog, QProgressDialog
 from PyQt5.QtCore import QLocale, Qt, QByteArray, QRectF
 from PyQt5.QtGui import QImage, QPainter, QPixmap
 from krita import *
@@ -84,12 +84,11 @@ class comics_template_dialog(QDialog):
     def __init__(self, templateDirectory):
         super().__init__()
         self.templateDirectory = templateDirectory
-        self.setWindowTitle(i18n("Add new template"))
+        self.setWindowTitle(i18n("Add new Template"))
         self.setLayout(QVBoxLayout())
 
         self.templates = QComboBox()
         self.templates.setEnabled(False)
-        self.fill_templates()
 
         self.buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         self.buttons.accepted.connect(self.accept)
@@ -100,13 +99,14 @@ class comics_template_dialog(QDialog):
         self.layout().addWidget(self.buttons)
         mainWidget.setLayout(QVBoxLayout())
 
-        btn_create = QPushButton(i18n("Create a template"))
+        btn_create = QPushButton(i18n("Create Template"))
         btn_create.clicked.connect(self.slot_create_template)
-        btn_import = QPushButton(i18n("Import templates"))
+        btn_import = QPushButton(i18n("Import Templates"))
         btn_import.clicked.connect(self.slot_import_template)
         mainWidget.layout().addWidget(self.templates)
         mainWidget.layout().addWidget(btn_create)
         mainWidget.layout().addWidget(btn_import)
+        self.fill_templates()
 
     def fill_templates(self):
         self.templates.clear()
@@ -138,11 +138,12 @@ class comics_template_dialog(QDialog):
 class comics_template_create(QDialog):
     urlSavedTemplate = str()
     templateDirectory = str()
+    currentColor = QColor(Qt.white)
 
     def __init__(self, templateDirectory):
         super().__init__()
         self.templateDirectory = templateDirectory
-        self.setWindowTitle(i18n("Create new template"))
+        self.setWindowTitle(i18n("Create new Template"))
         self.setLayout(QVBoxLayout())
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttons.accepted.connect(self.accept)
@@ -156,14 +157,21 @@ class comics_template_create(QDialog):
         mainWidget.setLayout(QHBoxLayout())
         elements = QWidget()
         elements.setLayout(QVBoxLayout())
+        previewLayout = QWidget()
+        previewLayout.setLayout(QVBoxLayout())
         mainWidget.layout().addWidget(elements)
+        mainWidget.layout().addWidget(previewLayout)
         self.imagePreview = QLabel()
         self.imagePreview.setMinimumSize(256, 256)
-        mainWidget.layout().addWidget(self.imagePreview)
+        previewLayout.layout().addWidget(self.imagePreview)
 
         self.templateName = QLineEdit()
         self.templateName.setPlaceholderText("...")
         elements.layout().addWidget(self.templateName)
+        
+        templateBGColor = QPushButton(i18n("Select background color"))
+        templateBGColor.clicked.connect(self.slot_call_color_dialog)
+        previewLayout.layout().addWidget(templateBGColor)
 
         self.DPI = QSpinBox()
         self.DPI.setMaximum(1200)
@@ -279,6 +287,14 @@ class comics_template_create(QDialog):
 
         self.updateImagePreview()
 
+    def slot_call_color_dialog(self):
+        dialog = QColorDialog(self)
+        dialog.setCurrentColor(self.currentColor)
+        
+        if dialog.exec_() == QDialog.Accepted:
+            self.currentColor = dialog.currentColor()
+            self.updateImagePreview()
+
     def prepare_krita_file(self):
         wBase = max(self.widthUnit.pixelsForUnit(self.spn_width.value(), self.DPI.value()), 1)
         bL = self.bleedLeftUnit.pixelsForUnit(self.bleedLeft.value(), self.DPI.value())
@@ -294,13 +310,36 @@ class comics_template_create(QDialog):
 
         template = Application.createDocument((wBase + bL + bR), (hBase + bT + bB), self.templateName.text(), "RGBA", "U8", "sRGB built-in", self.DPI.value())
 
-        backgroundNode = template.createNode(i18n("Background"), "paintlayer")
-        template.rootNode().addChildNode(backgroundNode, None)
+        backgroundName = i18n("Background")
+        if len(template.topLevelNodes()) > 0:
+            backgroundNode = template.topLevelNodes()[0]
+            backgroundNode.setName(backgroundName)
+        else:
+            backgroundNode = template.createNode(backgroundName, "paintlayer")
+            template.rootNode().addChildNode(backgroundNode, None)
+        
         pixelByteArray = QByteArray()
-        pixelByteArray = backgroundNode.pixelData(0, 0, (wBase + bL + bR), (hBase + bT + bB))
-        white = int(255)
-        pixelByteArray.fill(white.to_bytes(1, byteorder='little'))
-        backgroundNode.setPixelData(pixelByteArray, 0, 0, (wBase + bL + bR), (hBase + bT + bB))
+        if self.currentColor == Qt.white:
+            pixelByteArray = backgroundNode.pixelData(0, 0, template.width(), template.height())
+            pixelByteArray.fill(int(255).to_bytes(1, byteorder='little'))
+        else:
+            red   = int(self.currentColor.redF()*255).to_bytes(1, byteorder='little')
+            green = int(self.currentColor.greenF()*255).to_bytes(1, byteorder='little')
+            blue  = int(self.currentColor.blueF()*255).to_bytes(1, byteorder='little')
+            alpha = int(self.currentColor.alphaF()*255).to_bytes(1, byteorder='little')
+        
+            progress = QProgressDialog(i18n("Creating template"), str(), 0, template.width()*template.height())
+            progress.setCancelButton(None)
+            progress.show()
+            qApp.processEvents()
+            for byteNumber in range(template.width()*template.height()):
+                pixelByteArray.append( blue)
+                pixelByteArray.append(green)
+                pixelByteArray.append(  red)
+                pixelByteArray.append(alpha)
+                progress.setValue(byteNumber)
+        backgroundNode.setPixelData(pixelByteArray, 0, 0, template.width(), template.height())
+        backgroundNode.setOpacity(255)
         backgroundNode.setLocked(True)
 
         sketchNode = template.createNode(i18n("Sketch"), "paintlayer")
@@ -322,6 +361,7 @@ class comics_template_create(QDialog):
         template.setVerticalGuides(verticalGuides)
         template.setGuidesVisible(True)
         template.setGuidesLocked(True)
+        template.refreshProjection()
 
         self.urlSavedTemplate = os.path.join(self.templateDirectory, self.templateName.text() + ".kra")
         success = template.exportImage(self.urlSavedTemplate, InfoObject())
@@ -359,7 +399,7 @@ class comics_template_create(QDialog):
 
         p = QPainter(image)
 
-        p.setBrush(Qt.white)
+        p.setBrush(self.currentColor)
 
         CanvasSize = QRectF(topLeft[0], topLeft[1], width, height)
         p.drawRect(CanvasSize.toRect())

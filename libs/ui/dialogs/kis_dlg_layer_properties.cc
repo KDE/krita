@@ -103,7 +103,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
     d->nameProperty->connectIgnoreCheckBox(d->page->chkName);
     d->nameProperty->connectAutoEnableWidget(d->page->editName);
     d->nameProperty->connectValueChangedSignal(this, SLOT(slotNameValueChangedInternally()));
-    connect(d->page->editName, SIGNAL(textChanged(const QString &)), SLOT(slotNameValueChangedExternally()));
+    connect(d->page->editName, SIGNAL(textChanged(QString)), SLOT(slotNameValueChangedExternally()));
 
     d->page->intOpacity->setRange(0, 100);
     d->page->intOpacity->setSuffix("%");
@@ -136,6 +136,13 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
             d->page->lblProfile->setText(profile->name());
         }
 
+        QRect bounds = d->nodes.first()->exactBounds();
+        d->page->lblDimensions->setText(i18nc("layer dimensions", "(%1, %2), (%3, %4)",
+                                        bounds.x(),
+                                        bounds.y(),
+                                        bounds.width(),
+                                        bounds.height()));
+
         ChannelFlagAdapter::PropertyList props = ChannelFlagAdapter::adaptersList(nodes);
         if (!props.isEmpty()) {
             QVBoxLayout *vbox = new QVBoxLayout;
@@ -166,7 +173,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
         d->page->lineActiveChannels->setVisible(false);
         d->page->cmbComposite->setEnabled(false);
         d->page->chkCompositeOp->setEnabled(false);
-
+        d->page->lblDimensions->setText(i18n("*varies*"));
         d->page->lblColorSpace->setText(i18n("*varies*"));
         d->page->lblProfile->setText(i18n("*varies*"));
     }
@@ -266,14 +273,20 @@ void KisDlgLayerProperties::slotOpacityValueChangedExternally()
 
 void KisDlgLayerProperties::slotNameValueChangedInternally()
 {
-    d->page->editName->setText(d->nameProperty->value());
+    if (d->page->editName->text() != d->nameProperty->value()) {
+        d->page->editName->setText(d->nameProperty->value());
+    }
+
     d->page->editName->setEnabled(!d->nameProperty->isIgnored());
 }
 
 void KisDlgLayerProperties::slotNameValueChangedExternally()
 {
     if (d->nameProperty->isIgnored()) return;
-    d->nameProperty->setValue(d->page->editName->text());
+
+    if (d->page->editName->text() != d->nameProperty->value()) {
+        d->nameProperty->setValue(d->page->editName->text());
+    }
 }
 
 void KisDlgLayerProperties::slotPropertyValueChangedInternally()

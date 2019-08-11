@@ -24,7 +24,8 @@
 #include <functional>
 
 /**
- * \class KisDeferredSignal is used for calling a specified callback
+ * \class KisDeferredSignal
+ *        \brief This class is used for calling a specified callback
  *        function (which is a std::function) after a specified time
  *        delay. The callback is called from the QTimer event, so the
  *        usage of the class does not block the Qt's event loop.

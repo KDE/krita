@@ -146,7 +146,7 @@ public Q_SLOTS:
      * be registered with krita and be compatible with the current color model and depth; the image data
      * is <i>not</i> converted.
      * @param colorProfile
-     * @return if assigining the colorprofiel worked
+     * @return if assigning the color profile worked
      */
     bool setColorProfile(const QString &colorProfile);
 
@@ -184,6 +184,18 @@ public Q_SLOTS:
      * @brief enableAnimation make the current layer animated, so it can have frames.
      */
     void enableAnimation() const;
+
+    /**
+     * @brief Should the node be visible in the timeline. It defaults to false
+     * with new layer
+     */
+    void setShowInTimeline(bool showInTimeline) const;
+
+    /**
+     * @return is layer is shown in the timeline
+     */
+    bool showInTimeline() const;
+
 
     /**
      * Sets the state of the node to the value of @param collapsed
@@ -231,6 +243,13 @@ public Q_SLOTS:
      * set the Locked flag to the give value
      */
     void setLocked(bool value);
+
+    /**
+     * @brief does the node have any content in it?
+     * @return if node has any content in it
+     */
+    bool hasExtents();
+
 
     /**
      * @return the user-visible name of this node.
@@ -292,6 +311,11 @@ public Q_SLOTS:
      * Check whether the current Node is visible in the layer stack
      */
     bool visible() const;
+
+    /**
+     * Check to see if frame number on layer is a keyframe
+     */
+    bool hasKeyframeAtTime(int frameNumber);
 
     /**
      * Set the visibility of the current node to @param visible
@@ -433,7 +457,9 @@ public Q_SLOTS:
     void move(int x, int y);
 
     /**
-     * @brief position returns the position of the paint device of this node
+     * @brief position returns the position of the paint device of this node. The position is
+     * always 0,0 unless the layer has been moved. If you want to know the topleft position of
+     * the rectangle around the actual non-transparent pixels in the node, use bounds().
      * @return the top-left position of the node
      */
     QPoint position() const;
@@ -444,7 +470,7 @@ public Q_SLOTS:
     bool remove();
 
     /**
-     * @brief duplicate returns a full copy of the current node. The node is not inserted in the graphc
+     * @brief duplicate returns a full copy of the current node. The node is not inserted in the graphic
      * @return a valid Node object or 0 if the node couldn't be duplicated.
      */
     Node* duplicate();
@@ -454,21 +480,26 @@ public Q_SLOTS:
      * @param filename the filename including extension
      * @param xRes the horizontal resolution in pixels per pt (there are 72 pts in an inch)
      * @param yRes the horizontal resolution in pixels per pt (there are 72 pts in an inch)
+     * @param exportConfiguration a configuration object appropriate to the file format.
+     * @param exportRect the export bounds for saving a node as a QRect
+     * If \p exportRect is empty, then save exactBounds() of the node. If you'd like to save the image-
+     * aligned area of the node, just pass image->bounds() there.
+     * See Document->exportImage for InfoObject details.
      * @return true if saving succeeded, false if it failed.
      */
-    bool save(const QString &filename, double xRes, double yRes);
+    bool save(const QString &filename, double xRes, double yRes, const InfoObject &exportConfiguration, const QRect &exportRect = QRect());
 
     /**
      * @brief mergeDown merges the given node with the first visible node underneath this node in the layerstack.
      * This will drop all per-layer metadata.
-     * @param node the node to merge down; this node will be removed from the layer stack
      */
     Node *mergeDown();
 
     /**
      * @brief scaleNode
-     * @param width
-     * @param height
+     * @param origin the origin point
+     * @param width the width
+     * @param height the height
      * @param strategy the scaling strategy. There's several ones amongst these that aren't available in the regular UI.
      * <ul>
      * <li>Hermite</li>
@@ -481,7 +512,7 @@ public Q_SLOTS:
      * <li>Mitchell</li>
      * </ul>
      */
-    void scaleNode(int width, int height, QString strategy);
+    void scaleNode(QPointF origin, int width, int height, QString strategy);
 
     /**
      * @brief rotateNode rotate this layer by the given radians.

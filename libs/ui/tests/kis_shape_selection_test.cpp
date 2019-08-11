@@ -31,11 +31,19 @@
 #include "flake/kis_shape_selection.h"
 #include "kis_image.h"
 #include "testutil.h"
+#include "kistest.h"
+#include <KisPart.h>
+#include <KisDocument.h>
 
 void KisShapeSelectionTest::testAddChild()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, 300, 300, cs, "test");
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    QColor qc(Qt::white);
+    qc.setAlpha(0);
+    KoColor bgColor(qc, cs);
+    doc->newImage("test", 300, 300, cs, bgColor, KisConfig::CANVAS_COLOR, 1, "test", 100);
+    KisImageSP image = doc->image();
 
     KisSelectionSP selection = new KisSelection();
     QVERIFY(selection->hasPixelSelection() == false);
@@ -47,7 +55,7 @@ void KisShapeSelectionTest::testAddChild()
     QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 25, 25), MAX_SELECTED);
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 100, 100));
 
-    QRect rect(50, 50, 100, 100);
+    QRectF rect(50, 50, 100, 100);
     QTransform matrix;
     matrix.scale(1 / image->xRes(), 1 / image->yRes());
     rect = matrix.mapRect(rect);
@@ -55,24 +63,23 @@ void KisShapeSelectionTest::testAddChild()
     KoPathShape* shape = new KoPathShape();
     shape->setShapeId(KoPathShapeId);
     shape->moveTo(rect.topLeft());
-    shape->lineTo(rect.topLeft() + QPointF(rect.width(), 0));
+    shape->lineTo(rect.topRight());
     shape->lineTo(rect.bottomRight());
-    shape->lineTo(rect.topLeft() + QPointF(0, rect.height()));
+    shape->lineTo(rect.bottomLeft());
     shape->close();
-    shape->normalize();
 
-    KisShapeSelection * shapeSelection = new KisShapeSelection(image, selection);
+    KisShapeSelection * shapeSelection = new KisShapeSelection(doc->shapeController(), image, selection);
     selection->setShapeSelection(shapeSelection);
     shapeSelection->addShape(shape);
 
-    QTest::qWait(500);
+    QVERIFY(selection->hasShapeSelection());
+
+    selection->updateProjection();
     image->waitForDone();
 
     QCOMPARE(selection->selectedExactRect(), QRect(50, 50, 100, 100));
-
-    selection->updateProjection();
 }
 
-QTEST_MAIN(KisShapeSelectionTest)
+KISTEST_MAIN(KisShapeSelectionTest)
 
 

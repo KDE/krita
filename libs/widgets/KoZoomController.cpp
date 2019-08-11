@@ -31,6 +31,8 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 
+#include <QtMath>
+
 void KoZoomController::Private::init(KoCanvasController *co,
                                      KoZoomHandler *zh,
                                      KActionCollection *actionCollection)
@@ -38,8 +40,8 @@ void KoZoomController::Private::init(KoCanvasController *co,
     canvasController = co;
     fitMargin = co->margin();
     zoomHandler = zh;
-    connect(action, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
-            parent, SLOT(setZoom(KoZoomMode::Mode, qreal)));
+    connect(action, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
+            parent, SLOT(setZoom(KoZoomMode::Mode,qreal)));
     connect(action, SIGNAL(aspectModeChanged(bool)),
             parent, SIGNAL(aspectModeChanged(bool)));
     connect(action, SIGNAL(zoomedToSelection()),
@@ -49,14 +51,14 @@ void KoZoomController::Private::init(KoCanvasController *co,
 
     actionCollection->addAction("view_zoom", action);
 
-    connect(canvasController->proxyObject, SIGNAL( sizeChanged(const QSize & ) ), parent, SLOT( setAvailableSize() ) );
+    connect(canvasController->proxyObject, SIGNAL(sizeChanged(QSize)), parent, SLOT(setAvailableSize()) );
 
-    connect(canvasController->proxyObject, SIGNAL( zoomRelative(const qreal, const QPointF& ) ), parent, SLOT( requestZoomRelative( const qreal, const QPointF& ) ) );
+    connect(canvasController->proxyObject, SIGNAL(zoomRelative(qreal,QPointF)), parent, SLOT(requestZoomRelative(qreal,QPointF)) );
 }
 
-KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons, QObject *parent)
+KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, QObject *parent)
     : QObject(parent),
-    d(new Private(this, specialButtons))
+      d(new Private(this))
 {
     d->init(co, zh, actionCollection);
 }
@@ -97,18 +99,6 @@ QSizeF KoZoomController::pageSize() const
     return d->pageSize;
 }
 
-void KoZoomController::setTextMinMax(qreal min, qreal max)
-{
-    if(d->textMinX == min && d->textMaxX == max) {
-        return;
-    }
-    d->textMinX = min;
-    d->textMaxX = max;
-
-    if(d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_TEXT)
-        setZoom(KoZoomMode::ZOOM_TEXT, 0);
-}
-
 void KoZoomController::setDocumentSize(const QSizeF &documentSize, bool recalculateCenter)
 {
     d->documentSize = documentSize;
@@ -141,19 +131,17 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
 void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resolutionX, qreal resolutionY, const QPointF &stillPoint)
 {
     if (d->zoomHandler->zoomMode() == mode &&
-        qFuzzyCompare(d->zoomHandler->zoom(), zoom) &&
-        qFuzzyCompare(d->zoomHandler->resolutionX(), resolutionX) &&
-        qFuzzyCompare(d->zoomHandler->resolutionY(), resolutionY)) {
+            qFuzzyCompare(d->zoomHandler->zoom(), zoom) &&
+            qFuzzyCompare(d->zoomHandler->resolutionX(), resolutionX) &&
+            qFuzzyCompare(d->zoomHandler->resolutionY(), resolutionY)) {
         return; // no change
     }
 
     qreal oldEffectiveZoom = d->action->effectiveZoom();
-    QSize oldPageViewportSize = documentToViewport(d->pageSize);
-    QSize oldTextViewportSize = documentToViewport(QSizeF(d->textMaxX-d->textMinX, 1));
-    qreal yfixAlignTop = d->canvasController->viewportSize().height();
+    QSizeF oldPageViewportSize = documentToViewport(d->pageSize);
 
     if(!qFuzzyCompare(d->zoomHandler->resolutionX(), resolutionX) ||
-       !qFuzzyCompare(d->zoomHandler->resolutionY(), resolutionY)) {
+            !qFuzzyCompare(d->zoomHandler->resolutionY(), resolutionY)) {
 
         d->zoomHandler->setResolution(resolutionX, resolutionY);
     }
@@ -164,22 +152,16 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
     }
     else if(mode == KoZoomMode::ZOOM_WIDTH) {
         zoom = (d->canvasController->viewportSize().width() - 2 * d->fitMargin)
-                    / (oldPageViewportSize.width() / d->zoomHandler->zoom());
+                / (oldPageViewportSize.width() / d->zoomHandler->zoom());
         d->action->setSelectedZoomMode(mode);
         d->action->setEffectiveZoom(zoom);
     }
     else if(mode == KoZoomMode::ZOOM_PAGE) {
         zoom = (d->canvasController->viewportSize().width() - 2 * d->fitMargin)
-                     / (oldPageViewportSize.width() / d->zoomHandler->zoom());
+                / (oldPageViewportSize.width() / d->zoomHandler->zoom());
         zoom = qMin(zoom, (d->canvasController->viewportSize().height() - 2 * d->fitMargin)
-                     / (oldPageViewportSize.height() / d->zoomHandler->zoom()));
+                    / (oldPageViewportSize.height() / d->zoomHandler->zoom()));
 
-        d->action->setSelectedZoomMode(mode);
-        d->action->setEffectiveZoom(zoom);
-    }
-    else if (mode == KoZoomMode::ZOOM_TEXT) {
-        zoom = (d->canvasController->viewportSize().width() - 2 * d->fitMargin)
-                    / (oldTextViewportSize.width() / d->zoomHandler->zoom());
         d->action->setSelectedZoomMode(mode);
         d->action->setEffectiveZoom(zoom);
     }
@@ -192,10 +174,10 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
         warnWidgets << "Setting zoom while there is no document size set, this will fail";
     else if (d->pageSize.width() > d->documentSize.width() || d->pageSize.height() > d->documentSize.height())
         warnWidgets << "ZoomController; Your page size is larger than your document size (" <<
-            d->pageSize << " > " << d->documentSize << ")\n";
+                       d->pageSize << " > " << d->documentSize << ")\n";
 #endif
 
-    QSize documentViewportSize = documentToViewport(d->documentSize);
+    QSizeF documentViewportSize = documentToViewport(d->documentSize);
 
     // Tell the canvasController that the zoom has changed
     // Actually canvasController doesn't know about zoom, but the document in pixels
@@ -207,44 +189,28 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
     d->canvasController->proxyObject->blockSignals(false);
 
     // Finally ask the canvasController to recenter
-    if (d->canvasController->canvasMode() == KoCanvasController::Infinite) {
-        QPointF documentCenter;
-        if (mode == KoZoomMode::ZOOM_WIDTH || mode == KoZoomMode::ZOOM_PAGE) {
-            documentCenter = QRectF(QPointF(), documentViewportSize).center();
-        }
-        else {
-            qreal zoomCoeff = d->action->effectiveZoom() / oldEffectiveZoom;
-            QPointF oldCenter = d->canvasController->preferredCenter();
-            documentCenter = stillPoint * zoomCoeff - (stillPoint - 1.0 / zoomCoeff * oldCenter);
-        }
-        d->canvasController->setPreferredCenter(documentCenter);
+    QPointF documentCenter;
+    if (mode == KoZoomMode::ZOOM_WIDTH || mode == KoZoomMode::ZOOM_PAGE) {
+        documentCenter = QRectF(QPointF(), documentViewportSize).center();
     }
-    else if (mode == KoZoomMode::ZOOM_TEXT) {
-            QPointF documentCenter = d->canvasController->preferredCenter();
-            yfixAlignTop -= d->canvasController->viewportSize().height();
-
-            documentCenter.setX(d->zoomHandler->documentToViewX(d->textMinX + d->textMaxX) * 0.5);
-            documentCenter.setY(documentCenter.y() - yfixAlignTop);
-            d->canvasController->setPreferredCenter(documentCenter);
-    } else {
-        if (d->canvasController->canvasMode() == KoCanvasController::AlignTop) {
-            QPointF documentCenter = d->canvasController->preferredCenter();
-            documentCenter.setX(0.0);
-            d->canvasController->setPreferredCenter(documentCenter);
-        } else {
-            d->canvasController->recenterPreferred();
-        }
+    else {
+        qreal zoomCoeff = d->action->effectiveZoom() / oldEffectiveZoom;
+        QPointF oldCenter = d->canvasController->preferredCenter();
+        documentCenter = stillPoint * zoomCoeff - (stillPoint - 1.0 / zoomCoeff * oldCenter);
     }
-
-    // now that we have the final offset, let's emit some signals
-    //d->canvasController->proxyObject->emitCanvasOffsetXChanged(d->canvasController->canvasOffsetX());
-    //d->canvasController->proxyObject->emitCanvasOffsetYChanged(d->canvasController->canvasOffsetY());
+    d->canvasController->setPreferredCenter(documentCenter);
     emit zoomChanged(mode, d->action->effectiveZoom());
 }
 
-QSize KoZoomController::documentToViewport(const QSizeF &size)
+QSizeF KoZoomController::documentToViewport(const QSizeF &size)
 {
     return d->zoomHandler->documentToView(size).toSize();
+}
+
+QSize KoZoomController::documentToViewportCeil(const QSizeF &size)
+{
+    QSizeF viewport = documentToViewport(size);
+    return QSize(qCeil(viewport.width()), qCeil(viewport.height()));
 }
 
 void KoZoomController::setAspectMode(bool status)

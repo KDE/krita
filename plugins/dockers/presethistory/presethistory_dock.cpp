@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -24,7 +25,7 @@
 
 #include <klocalizedstring.h>
 
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoCanvasBase.h>
 
 #include "kis_config.h"
@@ -34,6 +35,7 @@
 #include "kis_paintop_presets_chooser_popup.h"
 #include "kis_canvas_resource_provider.h"
 #include "KisResourceServerProvider.h"
+#include <KisKineticScroller.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_types.h>
 
@@ -52,6 +54,11 @@ PresetHistoryDock::PresetHistoryDock( )
     m_presetHistory->setSelectionMode(QAbstractItemView::SingleSelection);
     m_presetHistory->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     setWidget(m_presetHistory);
+
+    QScroller* scroller = KisKineticScroller::createPreconfiguredScroller(m_presetHistory);
+    if( scroller ) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 
     connect(m_presetHistory, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(presetSelected(QListWidgetItem*)));
 }
@@ -72,7 +79,7 @@ void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
     connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)), SLOT(canvasResourceChanged(int,QVariant)));
 
     if (!m_initialized) {
-        KisConfig cfg;
+        KisConfig cfg(true);
         QStringList presetHistory = cfg.readEntry<QString>("presethistory", "").split(",", QString::SkipEmptyParts);
         KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
         Q_FOREACH (const QString &p, presetHistory) {
@@ -94,7 +101,7 @@ void PresetHistoryDock::unsetCanvas()
         KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
         presetHistory << preset->name();
     }
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.writeEntry("presethistory", presetHistory.join(","));
 }
 

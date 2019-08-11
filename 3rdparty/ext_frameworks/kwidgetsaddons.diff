@@ -1,48 +1,8 @@
-diff --git a/src/kcollapsiblegroupbox.cpp b/src/kcollapsiblegroupbox.cpp
-index edda7af..3ae7d86 100644
---- a/src/kcollapsiblegroupbox.cpp
-+++ b/src/kcollapsiblegroupbox.cpp
-@@ -94,9 +94,9 @@ void KCollapsibleGroupBox::setTitle(const QString& title)
-     }
- 
-     d->shortcutId = grabShortcut(QKeySequence::mnemonic(title));
--
-+#ifndef QT_NO_ACCESSIBILITY
-     setAccessibleName(title);
--
-+#endif
-     emit titleChanged();
- }
- 
-diff --git a/src/kled.cpp b/src/kled.cpp
-index 1e46929..63a817b 100644
---- a/src/kled.cpp
-+++ b/src/kled.cpp
-@@ -57,7 +57,9 @@ KLed::KLed(const QColor &color, QWidget *parent)
-       d(new Private)
- {
-     setColor(color);
-+#ifndef QT_NO_ACCESSIBILITY
-     updateAccessibleName();
-+#endif
- }
- 
- KLed::KLed(const QColor &color, State state, Look look, Shape shape,
-@@ -70,7 +72,9 @@ KLed::KLed(const QColor &color, State state, Look look, Shape shape,
-     d->shape = shape;
- 
-     setColor(color);
-+#ifndef QT_NO_ACCESSIBILITY
-     updateAccessibleName();
-+#endif
- }
- 
- KLed::~KLed()
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 8baeda3..bd5491e 100755
+index f7eb931..3f0f6d6 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -36,8 +36,8 @@ if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
+@@ -39,8 +39,8 @@ if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
  endif()
  
  add_subdirectory(src)
@@ -53,4 +13,3 @@ index 8baeda3..bd5491e 100755
  
  # create a Config.cmake and a ConfigVersion.cmake file and install them
  set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5WidgetsAddons")
-

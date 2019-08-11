@@ -63,6 +63,7 @@ public:
         patternServer = KoResourceServerProvider::instance()->patternServer();
         paletteServer = KoResourceServerProvider::instance()->paletteServer();
         workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
+        gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
     }
 
     KisBrushResourceServer* brushServer;
@@ -71,7 +72,7 @@ public:
     KoResourceServer<KoPattern> *patternServer;
     KoResourceServer<KoColorSet>* paletteServer;
     KoResourceServer<KisWorkspaceResource>* workspaceServer;
-
+    KoResourceServer<KoGamutMask>* gamutMaskServer;
 };
 
 K_PLUGIN_FACTORY_WITH_JSON(ResourceManagerFactory, "kritaresourcemanager.json", registerPlugin<ResourceManager>();)
@@ -196,8 +197,14 @@ KisResourceBundle *ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
         newBundle->addResource("kis_workspaces", res->filename(), d->workspaceServer->assignedTagsList(res), res->md5());
     }
 
+    res = dlgCreateBundle.selectedGamutMasks();
+    Q_FOREACH (const QString &r, res) {
+        KoResource *res = d->gamutMaskServer->resourceByFilename(r);
+        newBundle->addResource("ko_gamutmasks", res->filename(), d->gamutMaskServer->assignedTagsList(res), res->md5());
+    }
+
     newBundle->addMeta("fileName", bundlePath);
-    newBundle->addMeta("created", QDate::currentDate().toString("dd/MM/yyyy"));
+    newBundle->addMeta("created", QDateTime::currentDateTime().toOffsetFromUtc(0).toString(Qt::ISODate));
 
     if (!newBundle->save()) {
         QMessageBox::critical(viewManager()->mainWindow(), i18nc("@title:window", "Krita"), i18n("Could not create the new bundle."));
@@ -258,8 +265,7 @@ void ResourceManager::slotImportPresets()
 void ResourceManager::slotImportGradients()
 {
     QStringList resources = importResources(i18n("Import Gradients"), QStringList() << "image/svg+xml"
-                                   << "application/x-gimp-gradient"
-                                   << "applicaition/x-karbon-gradient");
+                                   << "application/x-gimp-gradient");
     Q_FOREACH (const QString &res, resources) {
         d->gradientServer->importResourceFile(res);
     }
@@ -273,20 +279,20 @@ void ResourceManager::slotImportBundles()
         bundle->load();
         if (bundle->valid()) {
             if (!bundle->install()) {
-                QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not install the resources for bundle %1.").arg(res));
+                QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not install the resources for bundle %1.", res));
             }
         }
         else {
-            QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not load bundle %1.").arg(res));
+            QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not load bundle %1.", res));
         }
 
         QFileInfo fi(res);
-        QString newFilename = KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + bundle->defaultFileExtension();
+        QString newFilename = KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.completeBaseName() + bundle->defaultFileExtension();
         QFileInfo fileInfo(newFilename);
 
         int i = 1;
         while (fileInfo.exists()) {
-            fileInfo.setFile(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
+            fileInfo.setFile(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.completeBaseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
             i++;
         }
         bundle->setFilename(fileInfo.filePath());

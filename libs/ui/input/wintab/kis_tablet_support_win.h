@@ -26,7 +26,7 @@
 class KRITAUI_EXPORT KisTabletSupportWin
 {
 public:
-    static void init();
+    static bool init();
 
 };
 

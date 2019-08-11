@@ -34,12 +34,19 @@ struct Q_DECL_HIDDEN KisLayerStyleProjectionPlane::Private
 {
     KisAbstractProjectionPlaneWSP sourceProjectionPlane;
 
-    QVector<KisAbstractProjectionPlaneSP> stylesBefore;
-    QVector<KisAbstractProjectionPlaneSP> stylesAfter;
+    QVector<KisLayerStyleFilterProjectionPlaneSP> stylesBefore;
+    QVector<KisLayerStyleFilterProjectionPlaneSP> stylesAfter;
 
     KisPSDLayerStyleSP style;
     bool canHaveChildNodes = false;
     bool dependsOnLowerNodes = false;
+
+    void initSourcePlane(KisLayer *sourceLayer) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(sourceLayer);
+        sourceProjectionPlane = sourceLayer->internalProjectionPlane();
+        canHaveChildNodes = sourceLayer->projectionLeaf()->canHaveChildLayers();
+        dependsOnLowerNodes = sourceLayer->projectionLeaf()->dependsOnLowerNodes();
+    }
 };
 
 KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer)
@@ -54,6 +61,25 @@ KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer
     init(sourceLayer, style);
 }
 
+KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(const KisLayerStyleProjectionPlane &rhs, KisLayer *sourceLayer, KisPSDLayerStyleSP clonedStyle)
+    : m_d(new Private)
+{
+    m_d->initSourcePlane(sourceLayer);
+    m_d->style = clonedStyle;
+
+    KIS_SAFE_ASSERT_RECOVER(m_d->style) {
+        m_d->style = toQShared(new KisPSDLayerStyle());
+    }
+
+    Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, rhs.m_d->stylesBefore) {
+        m_d->stylesBefore << toQShared(new KisLayerStyleFilterProjectionPlane(*plane, sourceLayer, m_d->style));
+    }
+
+    Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, rhs.m_d->stylesAfter) {
+        m_d->stylesAfter << toQShared(new KisLayerStyleFilterProjectionPlane(*plane, sourceLayer, m_d->style));
+    }
+}
+
 // for testing purposes only!
 KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer, KisPSDLayerStyleSP layerStyle)
     : m_d(new Private)
@@ -63,11 +89,9 @@ KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer
 
 void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyleSP style)
 {
-    Q_ASSERT(sourceLayer);
-    m_d->sourceProjectionPlane = sourceLayer->internalProjectionPlane();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(sourceLayer);
+    m_d->initSourcePlane(sourceLayer);
     m_d->style = style;
-    m_d->canHaveChildNodes = sourceLayer->projectionLeaf()->canHaveChildLayers();
-    m_d->dependsOnLowerNodes = sourceLayer->projectionLeaf()->dependsOnLowerNodes();
 
     {
         KisLayerStyleFilterProjectionPlane *dropShadow =
@@ -153,7 +177,7 @@ KisAbstractProjectionPlaneSP KisLayerStyleProjectionPlane::factoryObject(KisLaye
 QRect KisLayerStyleProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode)
 {
     KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
-    QRect result = sourcePlane->recalculate(rect, filthyNode);
+    QRect result = sourcePlane->recalculate(stylesNeedRect(rect), filthyNode);
 
     if (m_d->style->isEnabled()) {
         Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
@@ -213,31 +237,22 @@ QRect KisLayerStyleProjectionPlane::needRect(const QRect &rect, KisLayer::Positi
 {
     /**
      * Need rect should also be adjust for the layers that generate their 'original'
-     * based on the contents of the underlying/child layers like
-     * KisGroupLayer/KisAdjustmentLayer.
+     * based on the contents of the underlying layers like KisAdjustmentLayer
      *
      * \see bug 390299
      */
 
-    KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
-    const QRect layerNeedRect = sourcePlane->needRect(rect, pos);
-    QRect needRect = layerNeedRect;
+    QRect needRect = rect;
 
-    const bool dirtyGroupWithChildren = m_d->canHaveChildNodes && (pos & KisLayer::N_FILTHY);
-    const bool adjustmentAboveDirty =
-        m_d->canHaveChildNodes &&
+    const bool adjustmentAboveDirty = m_d->dependsOnLowerNodes &&
         (pos & KisLayer::N_FILTHY || pos & KisLayer::N_ABOVE_FILTHY);
 
-    if (m_d->style->isEnabled() && (dirtyGroupWithChildren || adjustmentAboveDirty)) {
-
-        Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
-            needRect |= plane->needRect(layerNeedRect, KisLayer::N_ABOVE_FILTHY);
-        }
-
-        Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
-            needRect |= plane->needRect(layerNeedRect, KisLayer::N_ABOVE_FILTHY);
-        }
+    if (m_d->style->isEnabled() && adjustmentAboveDirty) {
+        needRect |= stylesNeedRect(rect);
     }
+
+    KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
+    needRect = sourcePlane->needRect(needRect, pos);
 
     return needRect;
 }
@@ -279,3 +294,38 @@ QRect KisLayerStyleProjectionPlane::accessRect(const QRect &rect, KisLayer::Posi
     return accessRect;
 }
 
+QRect KisLayerStyleProjectionPlane::needRectForOriginal(const QRect &rect) const
+{
+    /**
+     * Need rect should also be adjust for the layers that generate their 'original'
+     * based on the contents of the child layers like KisGroupLayer
+     *
+     * \see bug 366419
+     */
+
+    QRect needRect = rect;
+
+    if (m_d->style->isEnabled()) {
+        needRect |= stylesNeedRect(needRect);
+    }
+
+    KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
+    needRect = sourcePlane->needRectForOriginal(needRect);
+
+    return needRect;
+}
+
+QRect KisLayerStyleProjectionPlane::stylesNeedRect(const QRect &rect) const
+{
+    QRect needRect = rect;
+
+    Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
+        needRect |= plane->needRect(rect, KisLayer::N_ABOVE_FILTHY);
+    }
+
+    Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
+        needRect |= plane->needRect(rect, KisLayer::N_ABOVE_FILTHY);
+    }
+
+    return needRect;
+}

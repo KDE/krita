@@ -163,7 +163,7 @@ public:
     /**
      * Overloaded method to also set backup properties to search in
      *
-     * If the list is graphic, paragraph it will search first in graphic-properties and then in paragraph-properites
+     * If the list is graphic, paragraph it will search first in graphic-properties and then in paragraph-properties
      */
     void setTypeProperties(const QList<QString> &typeProperties);
 

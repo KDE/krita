@@ -46,11 +46,11 @@ KisUniformPaintOpPropertyWidget::KisUniformPaintOpPropertyWidget(KisUniformPaint
       m_d(new Private(property))
 {
     KisAcyclicSignalConnector *conn = new KisAcyclicSignalConnector(this);
-    conn->connectForwardVariant(property.data(), SIGNAL(valueChanged(const QVariant&)),
-                                this, SLOT(setValue(const QVariant&)));
+    conn->connectForwardVariant(property.data(), SIGNAL(valueChanged(QVariant)),
+                                this, SLOT(setValue(QVariant)));
 
-    conn->connectBackwardVariant(this, SIGNAL(valueChanged(const QVariant&)),
-                                 property.data(), SLOT(setValue(const QVariant&)));
+    conn->connectBackwardVariant(this, SIGNAL(valueChanged(QVariant)),
+                                 property.data(), SLOT(setValue(QVariant)));
 }
 
 KisUniformPaintOpPropertyWidget::~KisUniformPaintOpPropertyWidget()
@@ -60,6 +60,16 @@ KisUniformPaintOpPropertyWidget::~KisUniformPaintOpPropertyWidget()
 KisUniformPaintOpPropertySP KisUniformPaintOpPropertyWidget::property() const
 {
     return m_d->property;
+}
+
+void KisUniformPaintOpPropertyWidget::slotThemeChanged(QPalette pal)
+{
+    for(int i=0; i<this->children().size(); i++) {
+        QWidget *w = qobject_cast<QWidget*>(this->children().at(i));
+        if (w) {
+            w->setPalette(pal);
+        }
+    }
 }
 
 /****************************************************************/

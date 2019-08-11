@@ -32,13 +32,14 @@ public:
     QHash<QString, int> indexes;
 
     QPointF lastCursorPosition;
+    QPointF startCursorPosition;
 
-    static KisInputManager* inputManager;
+    static KisInputManager *inputManager;
 };
 
 KisInputManager *KisAbstractInputAction::Private::inputManager = 0;
 
-KisAbstractInputAction::KisAbstractInputAction(const QString & id)
+KisAbstractInputAction::KisAbstractInputAction(const QString &id)
     : d(new Private)
 {
     d->id = id;
@@ -66,14 +67,16 @@ void KisAbstractInputAction::begin(int shortcut, QEvent *event)
 
     if (event) {
         d->lastCursorPosition = eventPosF(event);
+        d->startCursorPosition = d->lastCursorPosition;
     }
 }
 
-void KisAbstractInputAction::inputEvent(QEvent* event)
+void KisAbstractInputAction::inputEvent(QEvent *event)
 {
     if (event) {
         QPointF newPosition = eventPosF(event);
         cursorMoved(d->lastCursorPosition, newPosition);
+        cursorMovedAbsolute(d->startCursorPosition, newPosition);
         d->lastCursorPosition = newPosition;
     }
 }
@@ -86,6 +89,12 @@ void KisAbstractInputAction::end(QEvent *event)
 void KisAbstractInputAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
 {
     Q_UNUSED(lastPos);
+    Q_UNUSED(pos);
+}
+
+void KisAbstractInputAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos)
+{
+    Q_UNUSED(startPos);
     Q_UNUSED(pos);
 }
 
@@ -135,17 +144,17 @@ QString KisAbstractInputAction::id() const
     return d->id;
 }
 
-void KisAbstractInputAction::setName(const QString& name)
+void KisAbstractInputAction::setName(const QString &name)
 {
     d->name = name;
 }
 
-void KisAbstractInputAction::setDescription(const QString& description)
+void KisAbstractInputAction::setDescription(const QString &description)
 {
     d->description = description;
 }
 
-void KisAbstractInputAction::setShortcutIndexes(const QHash< QString, int >& indexes)
+void KisAbstractInputAction::setShortcutIndexes(const QHash< QString, int > &indexes)
 {
     d->indexes = indexes;
 }
@@ -161,9 +170,8 @@ bool KisAbstractInputAction::isShortcutRequired(int shortcut) const
     return false;
 }
 
-
-QPoint KisAbstractInputAction::eventPos(const QEvent *event) {
-
+QPoint KisAbstractInputAction::eventPos(const QEvent *event)
+{
     if(!event) {
         return QPoint();
     }
@@ -171,6 +179,7 @@ QPoint KisAbstractInputAction::eventPos(const QEvent *event) {
     switch (event->type()) {
     case QEvent::MouseMove:
     case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonDblClick:
     case QEvent::MouseButtonRelease:
         return static_cast<const QMouseEvent*>(event)->pos();
 
@@ -191,12 +200,12 @@ QPoint KisAbstractInputAction::eventPos(const QEvent *event) {
     }
 }
 
-
 QPointF KisAbstractInputAction::eventPosF(const QEvent *event) {
 
     switch (event->type()) {
     case QEvent::MouseMove:
     case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonDblClick:
     case QEvent::MouseButtonRelease:
         return static_cast<const QMouseEvent*>(event)->localPos();
 

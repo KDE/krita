@@ -29,7 +29,6 @@
 #include "kactioncategory.h"
 #include "kxmlguiclient.h"
 #include "kxmlguifactory.h"
-#include "kactioncategory.h"
 #include "kis_action_registry.h"
 
 #include <kauthorized.h>
@@ -37,11 +36,11 @@
 #include <ksharedconfig.h>
 
 #include <QDebug>
-#include <QtXml/QDomDocument>
-#include <QtCore/QSet>
+#include <QDomDocument>
+#include <QSet>
 #include <QGuiApplication>
-#include <QtCore/QMap>
-#include <QtCore/QList>
+#include <QMap>
+#include <QList>
 #include <QAction>
 #include <QMetaMethod>
 
@@ -147,7 +146,7 @@ KActionCategory *KActionCollection::getCategory(const QString &name) {
         category = new KActionCategory(name, this);
     }
     return category;
-};
+}
 
 
 void KActionCollection::clear()

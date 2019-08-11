@@ -41,6 +41,7 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT KisNodeList sortMergableNodes(KisNodeSP root, KisNodeList nodes);
     KRITAIMAGE_EXPORT void filterMergableNodes(KisNodeList &nodes, bool allowMasks = false);
     KRITAIMAGE_EXPORT bool checkIsChildOf(KisNodeSP node, const KisNodeList &parents);
+    KRITAIMAGE_EXPORT void filterUnlockedNodes(KisNodeList &nodes);
 
     /**
      * Returns true if:
@@ -51,6 +52,7 @@ namespace KisLayerUtils
      */
     KRITAIMAGE_EXPORT bool checkIsCloneOf(KisNodeSP node, const KisNodeList &nodes);
     KRITAIMAGE_EXPORT void forceAllDelayedNodesUpdate(KisNodeSP root);
+    KRITAIMAGE_EXPORT bool hasDelayedNodeWithUpdates(KisNodeSP root);
 
     KRITAIMAGE_EXPORT KisNodeList sortAndFilterMergableInternalNodes(KisNodeList nodes, bool allowMasks = false);
 
@@ -65,7 +67,7 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT bool tryMergeSelectionMasks(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter);
 
     KRITAIMAGE_EXPORT void flattenLayer(KisImageSP image, KisLayerSP layer);
-    KRITAIMAGE_EXPORT void flattenImage(KisImageSP image);
+    KRITAIMAGE_EXPORT void flattenImage(KisImageSP image, KisNodeSP activeNode);
 
     KRITAIMAGE_EXPORT void addCopyOfNameTag(KisNodeSP node);
     KRITAIMAGE_EXPORT KisNodeList findNodesWithProps(KisNodeSP root, const KoProperties &props, bool excludeRoot);
@@ -93,8 +95,8 @@ namespace KisLayerUtils
         ~SwitchFrameCommand() override;
 
     private:
-        void init() override;
-        void end() override;
+        void partA() override;
+        void partB() override;
 
     private:
         KisImageWSP m_image;
@@ -115,7 +117,7 @@ namespace KisLayerUtils
                              KisNodeSP activeAfter,
                              KisImageSP image,
                              bool finalize, KUndo2Command *parent = 0);
-    void end() override;
+    void partB() override;
 
     private:
         KisNodeList m_selectedBefore;
@@ -125,7 +127,13 @@ namespace KisLayerUtils
         KisImageWSP m_image;
     };
 
-    KRITAIMAGE_EXPORT KisLayerSP constructDefaultLayer(KisImageSP image);
+    struct KRITAIMAGE_EXPORT SelectGlobalSelectionMask : public KUndo2Command
+    {
+        SelectGlobalSelectionMask(KisImageSP image);
+        void redo() override;
+
+        KisImageSP m_image;
+    };
 
     class KRITAIMAGE_EXPORT RemoveNodeHelper {
     public:
@@ -159,7 +167,7 @@ namespace KisLayerUtils
     {
     public:
         KisSimpleUpdateCommand(KisNodeList nodes, bool finalize, KUndo2Command *parent = 0);
-        void end() override;
+        void partB() override;
         static void updateNodes(const KisNodeList &nodes);
     private:
         KisNodeList m_nodes;
@@ -186,7 +194,18 @@ namespace KisLayerUtils
     /**
      * Applies \p func to \p node and all its children recursively
      */
-    void KRITAIMAGE_EXPORT recursiveApplyNodes(KisNodeSP node, std::function<void(KisNodeSP)> func);
+    template <typename NodePointer, typename Functor>
+    void recursiveApplyNodes(NodePointer node, Functor func)
+    {
+        func(node);
+
+        node = node->firstChild();
+        while (node) {
+            recursiveApplyNodes(node, func);
+            node = node->nextSibling();
+        }
+    }
+
 
     /**
      * Walks through \p node and all its children recursively until
@@ -200,6 +219,8 @@ namespace KisLayerUtils
      * Recursively searches for a node with specified Uuid
      */
     KisNodeSP KRITAIMAGE_EXPORT findNodeByUuid(KisNodeSP root, const QUuid &uuid);
-};
+
+    KisImageSP KRITAIMAGE_EXPORT findImageByHierarchy(KisNodeSP node);
+}
 
 #endif /* __KIS_LAYER_UTILS_H */

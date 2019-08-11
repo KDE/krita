@@ -59,11 +59,6 @@ struct KisGLTexturesInfo {
     GLint type;
 };
 
-inline QRect stretchRect(const QRect &rc, int delta)
-{
-    return rc.adjusted(-delta, -delta, delta, delta);
-}
-
 class KisTextureTile
 {
 public:
@@ -80,7 +75,7 @@ public:
         m_numMipmapLevels = num;
     }
 
-    void update(const KisTextureTileUpdateInfo &updateInfo);
+    void update(const KisTextureTileUpdateInfo &updateInfo, bool blockMipmapRegeneration);
 
     inline QRect tileRectInImagePixels() {
         return m_tileRectInImagePixels;
@@ -94,14 +89,20 @@ public:
         return m_tileRectInTexturePixels;
     }
 
-    void bindToActiveTexture();
-    int currentLodPlane() const;
+    QRectF imageRectInTexturePixels(const QRect &imageRect) const;
+
+    /**
+     * Binds the tile's testure to the current GL_TEXTURE_2D binding point,
+     * regenerates the mipmap if needed and returns the levelOfDetail that
+     * should be used for painting
+     */
+    int bindToActiveTexture(bool blockMipmapRegeneration);
 
 private:
     inline void setTextureParameters();
 
     void setNeedsMipmapRegeneration();
-    void setCurrentLodPlane(int lod);
+    void setPreparedLodPlane(int lod);
 
     GLuint m_textureId;
 
@@ -116,7 +117,7 @@ private:
     KisOpenGL::FilterMode m_filter;
     const KisGLTexturesInfo *m_texturesInfo;
     bool m_needsMipmapRegeneration;
-    int m_currentLodPlane;
+    int m_preparedLodPlane;
     bool m_useBuffer;
     int m_numMipmapLevels;
     QOpenGLFunctions *f;

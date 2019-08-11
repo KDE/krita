@@ -28,7 +28,7 @@
 #include "config-xmlgui.h"
 #include <kritawidgetutils_export.h>
 #include <kstandardaction.h>
-#include <QtCore/QObject>
+#include <QObject>
 
 class QAction;
 class KXMLGUIClient;
@@ -212,7 +212,7 @@ public:
      * \warning Don't call this method on a KActionCollection that contains
      * actions. This is not supported.
      *
-     * \param componentData the name which is to be associated with this action collection,
+     * \param componentName the name which is to be associated with this action collection,
      * or QString() to indicate the app name. This is used to load/save settings into XML files.
      * KXmlGuiClient::setComponentName takes care of calling this.
      */

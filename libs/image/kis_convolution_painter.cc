@@ -58,6 +58,25 @@
 #endif
 
 
+bool KisConvolutionPainter::useFFTImplemenation(const KisConvolutionKernelSP kernel) const
+{
+    bool result = false;
+
+#ifdef HAVE_FFTW3
+    #define THRESHOLD_SIZE 5
+
+    result =
+        m_enginePreference == FFTW ||
+        (m_enginePreference == NONE &&
+         (kernel->width() > THRESHOLD_SIZE ||
+          kernel->height() > THRESHOLD_SIZE));
+#else
+    Q_UNUSED(kernel);
+#endif
+
+    return result;
+}
+
 template<class factory>
 KisConvolutionWorker<factory>* KisConvolutionPainter::createWorker(const KisConvolutionKernelSP kernel,
                                                                    KisPainter *painter,
@@ -66,17 +85,10 @@ KisConvolutionWorker<factory>* KisConvolutionPainter::createWorker(const KisConv
     KisConvolutionWorker<factory> *worker;
 
 #ifdef HAVE_FFTW3
-    #define THRESHOLD_SIZE 5
-
-    if(m_enginePreference == SPATIAL ||
-       (m_enginePreference != FFTW &&
-        kernel->width() <= THRESHOLD_SIZE &&
-        kernel->height() <= THRESHOLD_SIZE)) {
-
-        worker = new KisConvolutionWorkerSpatial<factory>(painter, progress);
-    }
-    else {
+    if (useFFTImplemenation(kernel)) {
         worker = new KisConvolutionWorkerFFT<factory>(painter, progress);
+    } else {
+        worker = new KisConvolutionWorkerSpatial<factory>(painter, progress);
     }
 #else
     Q_UNUSED(kernel);
@@ -84,6 +96,16 @@ KisConvolutionWorker<factory>* KisConvolutionPainter::createWorker(const KisConv
 #endif
 
     return worker;
+}
+
+
+bool KisConvolutionPainter::supportsFFTW()
+{
+#ifdef HAVE_FFTW3
+    return true;
+#else
+    return false;
+#endif
 }
 
 
@@ -155,4 +177,9 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
         delete worker;
     }
     }
+}
+
+bool KisConvolutionPainter::needsTransaction(const KisConvolutionKernelSP kernel) const
+{
+    return !useFFTImplemenation(kernel);
 }

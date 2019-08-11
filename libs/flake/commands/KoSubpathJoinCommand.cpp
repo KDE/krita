@@ -20,6 +20,9 @@
 
 #include "KoSubpathJoinCommand.h"
 #include <klocalizedstring.h>
+#include "kis_assert.h"
+#include "KoPathMergeUtils.h"
+
 
 KoSubpathJoinCommand::KoSubpathJoinCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KUndo2Command *parent)
         : KUndo2Command(parent)
@@ -30,34 +33,37 @@ KoSubpathJoinCommand::KoSubpathJoinCommand(const KoPathPointData &pointData1, co
         , m_oldProperties2(KoPathPoint::Normal)
         , m_reverse(0)
 {
-    Q_ASSERT(m_pointData1.pathShape == m_pointData2.pathShape);
+    KIS_ASSERT(m_pointData1.pathShape == m_pointData2.pathShape);
     KoPathShape * pathShape = m_pointData1.pathShape;
-    Q_ASSERT(!pathShape->isClosedSubpath(m_pointData1.pointIndex.first));
-    Q_ASSERT(m_pointData1.pointIndex.second == 0 ||
-             m_pointData1.pointIndex.second == pathShape->subpathPointCount(m_pointData1.pointIndex.first) - 1);
-    Q_ASSERT(!pathShape->isClosedSubpath(m_pointData2.pointIndex.first));
-    Q_ASSERT(m_pointData2.pointIndex.second == 0 ||
-             m_pointData2.pointIndex.second == pathShape->subpathPointCount(m_pointData2.pointIndex.first) - 1);
+    KIS_ASSERT(!pathShape->isClosedSubpath(m_pointData1.pointIndex.first));
+    KIS_ASSERT(m_pointData1.pointIndex.second == 0 ||
+               m_pointData1.pointIndex.second == pathShape->subpathPointCount(m_pointData1.pointIndex.first) - 1);
+    KIS_ASSERT(!pathShape->isClosedSubpath(m_pointData2.pointIndex.first));
+    KIS_ASSERT(m_pointData2.pointIndex.second == 0 ||
+               m_pointData2.pointIndex.second == pathShape->subpathPointCount(m_pointData2.pointIndex.first) - 1);
     //TODO check that points are not the same
 
-    if (m_pointData2 < m_pointData1)
+    if (m_pointData2 < m_pointData1) {
         std::swap(m_pointData1, m_pointData2);
+    }
 
-    if (m_pointData1.pointIndex.first != m_pointData2.pointIndex.first) {
-        if (m_pointData1.pointIndex.second == 0 && pathShape->subpathPointCount(m_pointData1.pointIndex.first) > 1)
+    if (!closeSubpathMode()) {
+        if (m_pointData1.pointIndex.second == 0 &&
+            pathShape->subpathPointCount(m_pointData1.pointIndex.first) > 1)
             m_reverse |= ReverseFirst;
         if (m_pointData2.pointIndex.second != 0)
             m_reverse |= ReverseSecond;
-        setText(kundo2_i18n("Close subpath"));
-    } else {
         setText(kundo2_i18n("Join subpaths"));
+    } else {
+        setText(kundo2_i18n("Close subpath"));
     }
 
     KoPathPoint * point1 = pathShape->pointByIndex(m_pointData1.pointIndex);
     KoPathPoint * point2 = pathShape->pointByIndex(m_pointData2.pointIndex);
 
-    m_oldControlPoint1 = QPointF(pathShape->shapeToDocument(m_reverse & 1 ? point1->controlPoint1() : point1->controlPoint2()));
-    m_oldControlPoint2 = QPointF(pathShape->shapeToDocument(m_reverse & 2 ? point2->controlPoint1() : point2->controlPoint2()));
+    m_savedControlPoint1 = KritaUtils::fetchControlPoint(point1, m_reverse & ReverseFirst);
+    m_savedControlPoint2 = KritaUtils::fetchControlPoint(point2, !(m_reverse & ReverseSecond));
+
     m_oldProperties1 = point1->properties();
     m_oldProperties2 = point2->properties();
 }
@@ -66,30 +72,31 @@ KoSubpathJoinCommand::~KoSubpathJoinCommand()
 {
 }
 
+
+
 void KoSubpathJoinCommand::redo()
 {
     KUndo2Command::redo();
     KoPathShape * pathShape = m_pointData1.pathShape;
 
-    bool closeSubpath = m_pointData1.pointIndex.first == m_pointData2.pointIndex.first;
-
     KoPathPoint * point1 = pathShape->pointByIndex(m_pointData1.pointIndex);
     KoPathPoint * point2 = pathShape->pointByIndex(m_pointData2.pointIndex);
 
+    KIS_SAFE_ASSERT_RECOVER_RETURN(point1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(point2);
+
     // if the endpoint has a control point create a control point for the new segment to be
     // at the symmetric position to the exiting one
-    if (m_reverse & ReverseFirst || closeSubpath) {
-        if (point1->activeControlPoint2())
-            point1->setControlPoint1(2.0 * point1->point() - point1->controlPoint2());
-    } else if (point1->activeControlPoint1())
-        point1->setControlPoint2(2.0 * point1->point() - point1->controlPoint1());
-    if (m_reverse & ReverseSecond || closeSubpath) {
-        if (point2->activeControlPoint1())
-            point2->setControlPoint2(2.0 * point2->point() - point2->controlPoint1());
-    } else if (point2->activeControlPoint2())
-        point2->setControlPoint1(2.0 * point2->point() - point2->controlPoint2());
 
-    if (closeSubpath) {
+    if (closeSubpathMode()) {
+        KritaUtils::makeSymmetric(point1, false);
+        KritaUtils::makeSymmetric(point2, true);
+    } else {
+        KritaUtils::makeSymmetric(point1, !(m_reverse & ReverseFirst));
+        KritaUtils::makeSymmetric(point2, m_reverse & ReverseSecond);
+    }
+
+    if (closeSubpathMode()) {
         pathShape->closeSubpath(m_pointData1.pointIndex);
     } else {
         if (m_reverse & ReverseFirst) {
@@ -103,6 +110,12 @@ void KoSubpathJoinCommand::redo()
         m_splitIndex.second = pathShape->subpathPointCount(m_pointData1.pointIndex.first) - 1;
         pathShape->join(m_pointData1.pointIndex.first);
     }
+
+    QList<KoPathPointIndex> pointIndexes;
+    pointIndexes << pathShape->pathPointIndex(point1);
+    pointIndexes << pathShape->pathPointIndex(point2);
+    pathShape->recommendPointSelectionChange(pointIndexes);
+
     pathShape->normalize();
     pathShape->update();
 }
@@ -112,7 +125,8 @@ void KoSubpathJoinCommand::undo()
     KUndo2Command::undo();
     KoPathShape * pathShape = m_pointData1.pathShape;
     pathShape->update();
-    if (m_pointData1.pointIndex.first == m_pointData2.pointIndex.first) {
+
+    if (closeSubpathMode()) {
         pathShape->openSubpath(m_pointData1.pointIndex);
     } else {
         pathShape->breakAfter(m_splitIndex);
@@ -128,22 +142,32 @@ void KoSubpathJoinCommand::undo()
     KoPathPoint * point1 = pathShape->pointByIndex(m_pointData1.pointIndex);
     KoPathPoint * point2 = pathShape->pointByIndex(m_pointData2.pointIndex);
 
+    KIS_SAFE_ASSERT_RECOVER_RETURN(point1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(point2);
+
     // restore the old end points
-    if (m_reverse & ReverseFirst)
-        point1->setControlPoint1(pathShape->documentToShape(m_oldControlPoint1));
-    else
-        point1->setControlPoint2(pathShape->documentToShape(m_oldControlPoint1));
+    if (closeSubpathMode()) {
+        KritaUtils::restoreControlPoint(point1, true, m_savedControlPoint1);
+        KritaUtils::restoreControlPoint(point2, false, m_savedControlPoint2);
+    } else {
+        KritaUtils::restoreControlPoint(point1, m_reverse & ReverseFirst, m_savedControlPoint1);
+        KritaUtils::restoreControlPoint(point2, !(m_reverse & ReverseSecond), m_savedControlPoint2);
+    }
 
     point1->setProperties(m_oldProperties1);
-
-    if (m_reverse & ReverseSecond)
-        point2->setControlPoint1(pathShape->documentToShape(m_oldControlPoint2));
-    else
-        point2->setControlPoint2(pathShape->documentToShape(m_oldControlPoint2));
-
     point2->setProperties(m_oldProperties2);
+
+    QList<KoPathPointIndex> pointIndexes;
+    pointIndexes << pathShape->pathPointIndex(point1);
+    pointIndexes << pathShape->pathPointIndex(point2);
+    pathShape->recommendPointSelectionChange(pointIndexes);
 
     pathShape->normalize();
     pathShape->update();
+}
+
+bool KoSubpathJoinCommand::closeSubpathMode() const
+{
+    return m_pointData1.pointIndex.first == m_pointData2.pointIndex.first;
 }
 

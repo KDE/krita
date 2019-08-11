@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,7 +23,6 @@
 #include <QQmlContext>
 #include <QAction>
 #include <QUrl>
-#include <QAction>
 #include <QKeyEvent>
 #include <QApplication>
 
@@ -45,12 +45,26 @@
 #include <KisMimeDatabase.h>
 #include <kis_action_manager.h>
 #include <kis_action.h>
-#include <kis_config.h>
 
 #include <Theme.h>
 #include <Settings.h>
 #include <DocumentManager.h>
 #include <KisSketchView.h>
+
+#include <QVersionNumber>
+
+namespace
+{
+
+bool shouldSetAcceptTouchEvents()
+{
+    // See https://bugreports.qt.io/browse/QTBUG-66718
+    static QVersionNumber qtVersion = QVersionNumber::fromString(qVersion());
+    static bool retval = qtVersion > QVersionNumber(5, 9, 3) && qtVersion.normalized() != QVersionNumber(5, 10);
+    return retval;
+}
+
+} // namespace
 
 class TouchDockerDock::Private
 {
@@ -88,7 +102,7 @@ TouchDockerDock::TouchDockerDock()
                                                << "previous_preset"
                                                << "clear";
 
-    QStringList mapping = KisConfig().readEntry<QString>("touchdockermapping", defaultMapping.join(',')).split(',');
+    QStringList mapping = KisConfig(true).readEntry<QString>("touchdockermapping", defaultMapping.join(',')).split(',');
     for (int i = 0; i < 8; ++i) {
         if (i < mapping.size()) {
             d->buttonMapping[QString("button%1").arg(i + 1)] = mapping[i];
@@ -99,6 +113,9 @@ TouchDockerDock::TouchDockerDock()
     }
 
     m_quickWidget = new QQuickWidget(this);
+    if (shouldSetAcceptTouchEvents()) {
+        m_quickWidget->setAttribute(Qt::WA_AcceptTouchEvents);
+    }
     setWidget(m_quickWidget);
     setEnabled(true);
     m_quickWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
@@ -297,10 +314,37 @@ void TouchDockerDock::showFileOpenDialog()
 
 void TouchDockerDock::showFileSaveAsDialog()
 {
-    if (!d->openDialog) {
-        d->openDialog = createDialog("qrc:/saveasdialog.qml");
+    if (!d->saveAsDialog) {
+        d->saveAsDialog = createDialog("qrc:/saveasdialog.qml");
     }
-    d->openDialog->exec();
+    d->saveAsDialog->exec();
+}
+
+void TouchDockerDock::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::PaletteChange) {
+        m_quickWidget->setSource(QUrl("qrc:/touchstrip.qml"));
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
+void TouchDockerDock::tabletEvent(QTabletEvent *event)
+{
+#ifdef Q_OS_WIN
+    /**
+     * On Windows (only in WinInk mode), unless we accept the tablet event,
+     * OS will start windows gestures, like click+hold for right click.
+     * It will block any mouse events generation.
+     *
+     * In our own (hacky) implementation, if we accept the event, we block
+     * the gesture, but still generate a fake mouse event.
+     */
+    event->accept();
+#else
+    QDockWidget::tabletEvent(event);
+#endif
 }
 
 KoDialog *TouchDockerDock::createDialog(const QString qml)
@@ -309,6 +353,9 @@ KoDialog *TouchDockerDock::createDialog(const QString qml)
     dlg->setButtons(KoDialog::None);
 
     QQuickWidget *quickWidget = new QQuickWidget(this);
+    if (shouldSetAcceptTouchEvents()) {
+        quickWidget->setAttribute(Qt::WA_AcceptTouchEvents);
+    }
     dlg->setMainWidget(quickWidget);
 
     setEnabled(true);

@@ -26,32 +26,27 @@
 #include "kis_painter.h"
 #include "kis_default_bounds.h"
 
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 class KoCompositeOp;
 class KisPainter;
 class KisPostExecutionUndoAdapter;
-class KisRecordedPaintAction;
 class KoPattern;
 
 /**
  * @brief The KisResourcesSnapshot class takes a snapshot of the various resources
- * like colors and settings used at the begin of a stroke or a recording so subsequent
+ * like colors and settings used at the begin of a stroke so subsequent
  * changes don't impact the running stroke. The main reason for the snapshot is that the
  * user can *change* the options while the stroke is being executed in the background.
  */
 class KRITAUI_EXPORT KisResourcesSnapshot : public KisShared
 {
 public:
-    KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds = 0);
+    KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceProvider *resourceManager, KisDefaultBoundsBaseSP bounds = 0);
     KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisDefaultBoundsBaseSP bounds = 0);
     ~KisResourcesSnapshot();
 
     void setupPainter(KisPainter *painter);
     void setupMaskingBrushPainter(KisPainter *painter);
-
-    // XXX: This was marked as KDE_DEPRECATED, but no althernative was
-    //      given in the apidox.
-    void setupPaintAction(KisRecordedPaintAction *action);
 
     KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const;
     void setCurrentNode(KisNodeSP node);

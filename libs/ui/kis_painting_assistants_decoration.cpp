@@ -33,6 +33,7 @@
 #include "KisViewManager.h"
 
 #include <QPainter>
+#include <QApplication>
 
 struct KisPaintingAssistantsDecoration::Private {
     Private()
@@ -41,17 +42,18 @@ struct KisPaintingAssistantsDecoration::Private {
         , snapOnlyOneAssistant(true)
         , firstAssistant(0)
         , aFirstStroke(false)
+        , m_handleSize(14)
     {}
 
     bool assistantVisible;
     bool outlineVisible;
     bool snapOnlyOneAssistant;
     KisPaintingAssistantSP firstAssistant;
+    KisPaintingAssistantSP selectedAssistant;
     bool aFirstStroke;
-    QColor m_assistantsColor = QColor(176, 176, 176, 255); // kis_assistant_tool has same default color specified
     bool m_isEditingAssistants = false;
     bool m_outlineVisible = false;
-    int m_handleSize = 14; // size of editor handles on assistants
+    int m_handleSize; // size of editor handles on assistants
 
     // move, visibility, delete icons for each assistant. These only display while the assistant tool is active
     // these icons will be covered by the kis_paintint_assistant_decoration with things like the perspective assistant
@@ -74,6 +76,7 @@ KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisVie
 {
     setAssistantVisible(true);
     setOutlineVisible(true);
+    setPriority(95);
     d->snapOnlyOneAssistant = true; //turn on by default.
 }
 
@@ -88,6 +91,7 @@ void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistantSP assist
     if (assistants.contains(assistant)) return;
 
     assistants.append(assistant);
+    assistant->setAssistantGlobalColorCache(view()->document()->assistantsGlobalColor());
 
     view()->document()->setAssistants(assistants);
     setVisible(!assistants.isEmpty());
@@ -110,6 +114,17 @@ void KisPaintingAssistantsDecoration::removeAll()
 {
     QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
     assistants.clear();
+    view()->document()->setAssistants(assistants);
+    setVisible(!assistants.isEmpty());
+
+    emit assistantChanged();
+}
+
+void KisPaintingAssistantsDecoration::setAssistants(const QList<KisPaintingAssistantSP> &assistants)
+{
+    Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
+        assistant->setAssistantGlobalColorCache(view()->document()->assistantsGlobalColor());
+    }
     view()->document()->setAssistants(assistants);
     setVisible(!assistants.isEmpty());
 
@@ -161,7 +176,13 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
         }
     } else if(d->firstAssistant) {
         //make sure there's a first assistant to begin with.//
-        best = d->firstAssistant->adjustPosition(point, strokeBegin);
+        QPointF newpoint = d->firstAssistant->adjustPosition(point, strokeBegin);
+        // BUGFIX: 402535
+        // assistants might return (NaN,NaN), must always check for that
+        if (newpoint.x() == newpoint.x()) {
+            // not a NaN
+            best = newpoint;
+        }
     } else {
         d->aFirstStroke=false;
     }
@@ -204,8 +225,6 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
     }
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
-
-        assistant->setAssistantColor(assistantsColor());
         assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), d->m_outlineVisible);
 
         if (isEditingAssistants()) {
@@ -225,7 +244,10 @@ void KisPaintingAssistantsDecoration::drawHandles(KisPaintingAssistantSP assista
 {
         QTransform initialTransform = converter->documentToWidgetTransform();
 
+        QColor colorToPaint = assistant->effectiveAssistantColor();
+
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->handles()) {
+
 
             QPointF transformedHandle = initialTransform.map(*handle);
             QRectF ellipse(transformedHandle -  QPointF(handleSize() * 0.5, handleSize() * 0.5), QSizeF(handleSize(), handleSize()));
@@ -235,7 +257,7 @@ void KisPaintingAssistantsDecoration::drawHandles(KisPaintingAssistantSP assista
 
             gc.save();
             gc.setPen(Qt::NoPen);
-            gc.setBrush(assistantsColor());
+            gc.setBrush(colorToPaint);
             gc.drawPath(path);
             gc.restore();
         }
@@ -250,7 +272,7 @@ void KisPaintingAssistantsDecoration::drawHandles(KisPaintingAssistantSP assista
 
              gc.save();
              gc.setPen(Qt::NoPen);
-             gc.setBrush(assistantsColor());
+             gc.setBrush(colorToPaint);
              gc.drawPath(path);
              gc.restore();
          }
@@ -289,6 +311,23 @@ QList<KisPaintingAssistantSP> KisPaintingAssistantsDecoration::assistants() cons
     QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
     return assistants;
 }
+
+KisPaintingAssistantSP KisPaintingAssistantsDecoration::selectedAssistant()
+{
+    return d->selectedAssistant;
+}
+
+void KisPaintingAssistantsDecoration::setSelectedAssistant(KisPaintingAssistantSP assistant)
+{
+    d->selectedAssistant = assistant;
+    emit selectedAssistantChanged();
+}
+
+void KisPaintingAssistantsDecoration::deselectAssistant()
+{
+    d->selectedAssistant.clear();
+}
+
 
 void KisPaintingAssistantsDecoration::setAssistantVisible(bool set)
 {
@@ -330,13 +369,21 @@ void KisPaintingAssistantsDecoration::toggleOutlineVisible()
     setOutlineVisible(!outlineVisibility());
 }
 
-QColor KisPaintingAssistantsDecoration::assistantsColor() {
-    return d->m_assistantsColor;
+QColor KisPaintingAssistantsDecoration::globalAssistantsColor()
+{
+    return view()->document()->assistantsGlobalColor();
 }
 
-void KisPaintingAssistantsDecoration::setAssistantsColor(QColor color)
+void KisPaintingAssistantsDecoration::setGlobalAssistantsColor(QColor color)
 {
-    d->m_assistantsColor = color;
+    // view()->document() is referenced multiple times in this class
+    // it is used to later store things in the KRA file when saving.
+    view()->document()->setAssistantsGlobalColor(color);
+
+    Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
+        assistant->setAssistantGlobalColorCache(color);
+    }
+
     uncache();
 }
 
@@ -399,14 +446,11 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
         return;
     }
 
+    AssistantEditorData toolData; // shared const data for positioning and sizing
+
     QTransform initialTransform = converter->documentToWidgetTransform();
 
-    // We are going to put all of the assistant actions below the bounds of the assistant
-    // so they are out of the way
-    // assistant->buttonPosition() gets the center X/Y position point
-    QPointF actionsPosition = initialTransform.map(assistant->buttonPosition());
-
-    AssistantEditorData toolData; // shared const data for positioning and sizing
+    QPointF actionsPosition = initialTransform.map(assistant->viewportConstrainedEditorPosition(converter, toolData.boundingSize));
 
     QPointF iconMovePosition(actionsPosition + toolData.moveIconPosition);
     QPointF iconSnapPosition(actionsPosition + toolData.snapIconPosition);
@@ -419,8 +463,19 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     gc.setRenderHint(QPainter::Antialiasing);
 
     QPainterPath bgPath;
-    bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), 110, 40), 6, 6);
+    bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), toolData.boundingSize.width(), toolData.boundingSize.height()), 6, 6);
     QPen stroke(QColor(60, 60, 60, 80), 2);
+
+    // if the assistant is selected, make outline stroke fatter and use theme's highlight color
+    // for better visual feedback
+    if (selectedAssistant()) { // there might not be a selected assistant, so do not seg fault
+        if (assistant->getEditorPosition() == selectedAssistant()->getEditorPosition()) {
+            stroke.setWidth(4);
+            stroke.setColor(qApp->palette().color(QPalette::Highlight));
+        }
+    }
+
+    // draw the final result
     gc.setPen(stroke);
     gc.fillPath(bgPath, backgroundColor);
     gc.drawPath(bgPath);
@@ -438,5 +493,6 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     }
 
     gc.drawPixmap(iconDeletePosition, d->m_iconDelete);
+
 
 }

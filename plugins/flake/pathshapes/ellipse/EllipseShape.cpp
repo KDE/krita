@@ -56,7 +56,7 @@ EllipseShape::EllipseShape()
 }
 
 EllipseShape::EllipseShape(const EllipseShape &rhs)
-    : KoParameterShape(new KoParameterShapePrivate(*rhs.d_func(), this)),
+    : KoParameterShape(rhs),
       m_startAngle(rhs.m_startAngle),
       m_endAngle(rhs.m_endAngle),
       m_kindAngle(rhs.m_kindAngle),
@@ -248,8 +248,6 @@ void EllipseShape::moveHandleAction(int handleId, const QPointF &point, Qt::Keyb
 
 void EllipseShape::updatePath(const QSizeF &size)
 {
-    Q_D(KoParameterShape);
-
     Q_UNUSED(size);
     QPointF startpoint(handles()[0]);
 
@@ -271,7 +269,7 @@ void EllipseShape::updatePath(const QSizeF &size)
 
     createPoints(requiredPointCount);
 
-    KoSubpath &points = *d->subpaths[0];
+    KoSubpath &points = *subpaths()[0];
 
     int curveIndex = 0;
     points[0]->setPoint(startpoint);
@@ -297,37 +295,39 @@ void EllipseShape::updatePath(const QSizeF &size)
         points[i]->unsetProperty(KoPathPoint::StopSubpath);
         points[i]->unsetProperty(KoPathPoint::CloseSubpath);
     }
-    d->subpaths[0]->last()->setProperty(KoPathPoint::StopSubpath);
+    subpaths()[0]->last()->setProperty(KoPathPoint::StopSubpath);
     if (m_type == Arc && !sameAngles) {
-        d->subpaths[0]->first()->unsetProperty(KoPathPoint::CloseSubpath);
-        d->subpaths[0]->last()->unsetProperty(KoPathPoint::CloseSubpath);
+        subpaths()[0]->first()->unsetProperty(KoPathPoint::CloseSubpath);
+        subpaths()[0]->last()->unsetProperty(KoPathPoint::CloseSubpath);
     } else {
-        d->subpaths[0]->first()->setProperty(KoPathPoint::CloseSubpath);
-        d->subpaths[0]->last()->setProperty(KoPathPoint::CloseSubpath);
+        subpaths()[0]->first()->setProperty(KoPathPoint::CloseSubpath);
+        subpaths()[0]->last()->setProperty(KoPathPoint::CloseSubpath);
     }
+
+    notifyPointsChanged();
 
     normalize();
 }
 
 void EllipseShape::createPoints(int requiredPointCount)
 {
-    Q_D(KoParameterShape);
-
-    if (d->subpaths.count() != 1) {
+    if (subpaths().count() != 1) {
         clear();
-        d->subpaths.append(new KoSubpath());
+        subpaths().append(new KoSubpath());
     }
-    int currentPointCount = d->subpaths[0]->count();
+    int currentPointCount = subpaths()[0]->count();
     if (currentPointCount > requiredPointCount) {
         for (int i = 0; i < currentPointCount - requiredPointCount; ++i) {
-            delete d->subpaths[0]->front();
-            d->subpaths[0]->pop_front();
+            delete subpaths()[0]->front();
+            subpaths()[0]->pop_front();
         }
     } else if (requiredPointCount > currentPointCount) {
         for (int i = 0; i < requiredPointCount - currentPointCount; ++i) {
-            d->subpaths[0]->append(new KoPathPoint(this, QPointF()));
+            subpaths()[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
+
+    notifyPointsChanged();
 }
 
 void EllipseShape::updateKindHandle()
@@ -438,13 +438,13 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
         SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
 
         if (isCircle) {
-            context.shapeWriter().addAttributePt("r", 0.5 * size.width());
+            context.shapeWriter().addAttribute("r", 0.5 * size.width());
         } else {
-            context.shapeWriter().addAttributePt("rx", 0.5 * size.width());
-            context.shapeWriter().addAttributePt("ry", 0.5 * size.height());
+            context.shapeWriter().addAttribute("rx", 0.5 * size.width());
+            context.shapeWriter().addAttribute("ry", 0.5 * size.height());
         }
-        context.shapeWriter().addAttributePt("cx", 0.5 * size.width());
-        context.shapeWriter().addAttributePt("cy", 0.5 * size.height());
+        context.shapeWriter().addAttribute("cx", 0.5 * size.width());
+        context.shapeWriter().addAttribute("cy", 0.5 * size.height());
 
         SvgStyleWriter::saveSvgStyle(this, context);
 
@@ -456,11 +456,11 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
 
         context.shapeWriter().addAttribute("sodipodi:type", "arc");
 
-        context.shapeWriter().addAttributePt("sodipodi:rx", m_radii.x());
-        context.shapeWriter().addAttributePt("sodipodi:ry", m_radii.y());
+        context.shapeWriter().addAttribute("sodipodi:rx", m_radii.x());
+        context.shapeWriter().addAttribute("sodipodi:ry", m_radii.y());
 
-        context.shapeWriter().addAttributePt("sodipodi:cx", m_center.x());
-        context.shapeWriter().addAttributePt("sodipodi:cy", m_center.y());
+        context.shapeWriter().addAttribute("sodipodi:cx", m_center.x());
+        context.shapeWriter().addAttribute("sodipodi:cy", m_center.y());
 
         context.shapeWriter().addAttribute("sodipodi:start", 2 * M_PI - kisDegreesToRadians(endAngle()));
         context.shapeWriter().addAttribute("sodipodi:end", 2 * M_PI - kisDegreesToRadians(startAngle()));

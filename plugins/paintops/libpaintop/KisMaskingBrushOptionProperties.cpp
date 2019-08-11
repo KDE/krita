@@ -48,7 +48,7 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting,
         KisPropertiesConfigurationSP embeddedConfig = new KisPropertiesConfiguration();
 
         {
-            KisBrushOption option;
+            KisBrushOptionProperties option;
             option.setBrush(brush);
             option.writeOptionSetting(embeddedConfig);
         }
@@ -75,7 +75,7 @@ void KisMaskingBrushOptionProperties::read(const KisPropertiesConfiguration *set
     KisPropertiesConfigurationSP embeddedConfig = new KisPropertiesConfiguration();
     setting->getPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, embeddedConfig);
 
-    KisBrushOption option;
+    KisBrushOptionProperties option;
     option.readOptionSetting(embeddedConfig);
 
     brush = option.brush();

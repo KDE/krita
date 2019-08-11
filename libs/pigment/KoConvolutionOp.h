@@ -36,7 +36,7 @@ public:
      * Convolve the colors.
      *
      * @param colors a pointer toward the source pixels
-     * @param kernelValues the coeffient of the source pixels
+     * @param kernelValues the coefficient of the source pixels
      * @param dst the destination pixel
      * @param factor usually the factor is equal to the sum of kernelValues
      * @param offset the offset which is added to the result, useful

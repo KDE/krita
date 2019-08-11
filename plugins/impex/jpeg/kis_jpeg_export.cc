@@ -26,6 +26,7 @@
 #include <QStringList>
 #include <QApplication>
 #include <QFileInfo>
+#include <QScopedPointer>
 
 #include <kpluginfactory.h>
 
@@ -44,15 +45,14 @@
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_entry.h>
-#include <metadata/kis_meta_data_value.h>
-#include <metadata/kis_meta_data_schema.h>
-#include <metadata/kis_meta_data_schema_registry.h>
-#include <metadata/kis_meta_data_filter_registry_model.h>
-#include <metadata/kis_exif_info_visitor.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_entry.h>
+#include <kis_meta_data_value.h>
+#include <kis_meta_data_schema.h>
+#include <kis_meta_data_schema_registry.h>
+#include <kis_meta_data_filter_registry_model.h>
+#include <kis_exif_info_visitor.h>
 #include <generator/kis_generator_layer.h>
-#include <KisImportExportManager.h>
 #include <KisExportCheckRegistry.h>
 #include "kis_jpeg_converter.h"
 
@@ -68,7 +68,7 @@ KisJPEGExport::~KisJPEGExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisJPEGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     KisImageSP image = document->savingImage();
     Q_CHECK_PTR(image);
@@ -104,19 +104,15 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
     KisJPEGConverter kpc(document, batchMode());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
 
-    KisExifInfoVisitor eIV;
-    eIV.visit(image->rootLayer().data());
+    KisExifInfoVisitor exivInfoVisitor;
+    exivInfoVisitor.visit(image->rootLayer().data());
 
-    KisMetaData::Store* eI = 0;
-    if (eIV.countPaintLayer() == 1) {
-        eI = eIV.exifInfo();
+    QScopedPointer<KisMetaData::Store> metaDataStore;
+    if (exivInfoVisitor.metaDataCount() == 1) {
+        metaDataStore.reset(new KisMetaData::Store(*exivInfoVisitor.exifInfo()));
     }
-    if (eI) {
-        KisMetaData::Store* copy = new KisMetaData::Store(*eI);
-        eI = copy;
-    }
-    if (!eI) {
-        eI = new KisMetaData::Store();
+    else {
+        metaDataStore.reset(new KisMetaData::Store());
     }
 
     //add extra meta-data here
@@ -125,10 +121,10 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
     if (options.storeDocumentMetaData) {
         QString title = document->documentInfo()->aboutInfo("title");
         if (!title.isEmpty()) {
-            if (eI->containsEntry("title")) {
-                eI->removeEntry("title");
+            if (metaDataStore->containsEntry("title")) {
+                metaDataStore->removeEntry("title");
             }
-            eI->addEntry(KisMetaData::Entry(dcSchema, "title", KisMetaData::Value(QVariant(title))));
+            metaDataStore->addEntry(KisMetaData::Entry(dcSchema, "title", KisMetaData::Value(QVariant(title))));
         }
         QString description = document->documentInfo()->aboutInfo("subject");
         if (description.isEmpty()) {
@@ -139,21 +135,21 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
             if (!keywords.isEmpty()) {
                 description = description + " keywords: " + keywords;
             }
-            if (eI->containsEntry("description")) {
-                eI->removeEntry("description");
+            if (metaDataStore->containsEntry("description")) {
+                metaDataStore->removeEntry("description");
             }
-            eI->addEntry(KisMetaData::Entry(dcSchema, "description", KisMetaData::Value(QVariant(description))));
+            metaDataStore->addEntry(KisMetaData::Entry(dcSchema, "description", KisMetaData::Value(QVariant(description))));
         }
         QString license = document->documentInfo()->aboutInfo("license");
         if (!license.isEmpty()) {
-            if (eI->containsEntry("rights")) {
-                eI->removeEntry("rights");
+            if (metaDataStore->containsEntry("rights")) {
+                metaDataStore->removeEntry("rights");
             }
-            eI->addEntry(KisMetaData::Entry(dcSchema, "rights", KisMetaData::Value(QVariant(license))));
+            metaDataStore->addEntry(KisMetaData::Entry(dcSchema, "rights", KisMetaData::Value(QVariant(license))));
         }
         QString date = document->documentInfo()->aboutInfo("date");
-        if (!date.isEmpty() && !eI->containsEntry("rights")) {
-            eI->addEntry(KisMetaData::Entry(dcSchema, "date", KisMetaData::Value(QVariant(date))));
+        if (!date.isEmpty() && !metaDataStore->containsEntry("rights")) {
+            metaDataStore->addEntry(KisMetaData::Entry(dcSchema, "date", KisMetaData::Value(QVariant(date))));
         }
     }
     if (options.storeAuthor) {
@@ -165,22 +161,15 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
                     author = author+"("+contact+")";
                 }
             }
-            if (eI->containsEntry("creator")) {
-                eI->removeEntry("creator");
+            if (metaDataStore->containsEntry("creator")) {
+                metaDataStore->removeEntry("creator");
             }
-            eI->addEntry(KisMetaData::Entry(dcSchema, "creator", KisMetaData::Value(QVariant(author))));
+            metaDataStore->addEntry(KisMetaData::Entry(dcSchema, "creator", KisMetaData::Value(QVariant(author))));
         }
     }
 
-    KisImageBuilder_Result res = kpc.buildFile(io, l, options, eI);
-
-    if (res == KisImageBuilder_RESULT_OK) {
-        delete eI;
-        return KisImportExportFilter::OK;
-    }
-    delete eI;
-    dbgFile << " Result =" << res;
-    return KisImportExportFilter::InternalError;
+    KisImportExportErrorCode res = kpc.buildFile(io, l, options, metaDataStore.data());
+    return res;
 }
 
 KisPropertiesConfigurationSP KisJPEGExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const

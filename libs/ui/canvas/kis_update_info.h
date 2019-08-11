@@ -37,6 +37,7 @@ public:
     virtual QRect dirtyViewportRect();
     virtual QRect dirtyImageRect() const = 0;
     virtual int levelOfDetail() const = 0;
+    virtual bool canBeCompressed() const;
 };
 
 Q_DECLARE_METATYPE(KisUpdateInfoSP)
@@ -56,7 +57,7 @@ struct ConversionOptions {
 
 
     bool m_needsConversion;
-    const KoColorSpace *m_destinationColorSpace;
+    const KoColorSpace *m_destinationColorSpace = 0;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
 };
@@ -67,7 +68,7 @@ typedef KisSharedPtr<KisOpenGLUpdateInfo> KisOpenGLUpdateInfoSP;
 class KisOpenGLUpdateInfo : public KisUpdateInfo
 {
 public:
-    KisOpenGLUpdateInfo(ConversionOptions options);
+    KisOpenGLUpdateInfo();
 
     KisTextureTileUpdateInfoSPList tileList;
 
@@ -77,14 +78,12 @@ public:
     void assignDirtyImageRect(const QRect &rect);
     void assignLevelOfDetail(int lod);
 
-    bool needsConversion() const;
-    void convertColorSpace();
-
     int levelOfDetail() const override;
+
+    bool tryMergeWith(const KisOpenGLUpdateInfo& rhs);
 
 private:
     QRect m_dirtyImageRect;
-    ConversionOptions m_options;
     int m_levelOfDetail;
 };
 
@@ -107,13 +106,13 @@ public:
     QRect dirtyImageRectVar;
 
     /**
-     * Rect of KisImage corresponding to @viewportRect.
+     * Rect of KisImage corresponding to @ref viewportRect .
      * It is cropped and aligned corresponding to the canvas.
      */
     QRect imageRect;
 
     /**
-     * Rect of canvas widget corresponding to @imageRect
+     * Rect of canvas widget corresponding to @ref imageRect
      */
     QRectF viewportRect;
 
@@ -138,10 +137,34 @@ public:
     qint32 borderWidth;
 
     /**
-     * Used for temporary sorage of KisImage's data
+     * Used for temporary storage of KisImage's data
      * by KisProjectionCache
      */
     KisImagePatch patch;
+};
+
+class KisMarkerUpdateInfo : public KisUpdateInfo
+{
+public:
+    enum Type {
+        StartBatch = 0,
+        EndBatch,
+        BlockLodUpdates,
+        UnblockLodUpdates,
+    };
+
+public:
+    KisMarkerUpdateInfo(Type type, const QRect &dirtyImageRect);
+
+    Type type() const;
+
+    QRect dirtyImageRect() const override;
+    int levelOfDetail() const override;
+    bool canBeCompressed() const override;
+
+private:
+    Type m_type;
+    QRect m_dirtyImageRect;
 };
 
 #endif /* KIS_UPDATE_INFO_H_ */

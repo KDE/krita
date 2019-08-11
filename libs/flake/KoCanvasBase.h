@@ -30,12 +30,12 @@
 class KUndo2Command;
 
 class KoUnit;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 class KoShapeManager;
 class KoToolProxy;
 class KoViewConverter;
 class KoShapeController;
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 class KoCanvasController;
 class KoShape;
 class KoSnapGuide;
@@ -61,10 +61,10 @@ public:
 
     /**
      * The constructor.
-     * @param shapeBasedDocument the implementation of the shapeController that the
+     * @param shapeController the implementation of the shapeController that the
      *   application provides to allow shapes to be added in multiple views.
      */
-    explicit KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument, KoCanvasResourceManager *sharedResourceManager = 0);
+    explicit KoCanvasBase(KoShapeControllerBase *shapeController, KoCanvasResourceProvider *sharedResourceManager = 0);
     ~KoCanvasBase() override;
 
 public:
@@ -213,7 +213,7 @@ public:
      * @endcode
      * @see KoShapeController::resourceManager()
      */
-    KoCanvasResourceManager *resourceManager() const;
+    KoCanvasResourceProvider *resourceManager() const;
 
     /**
      * Return the shape controller for this canvas.
@@ -244,7 +244,7 @@ public:
     void setCanvasController(KoCanvasController *controller);
 
 private:
-    // we need a KoShapeBasedDocumentBase so that it can work
+    // we need a KoShapeControllerBase so that it can work
     KoCanvasBase();
 
     class Private;

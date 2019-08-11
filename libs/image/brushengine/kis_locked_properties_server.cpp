@@ -21,7 +21,7 @@
 
 #include <QGlobalStatic>
 
-Q_GLOBAL_STATIC(KisLockedPropertiesServer, s_instance);
+Q_GLOBAL_STATIC(KisLockedPropertiesServer, s_instance)
 
 
 

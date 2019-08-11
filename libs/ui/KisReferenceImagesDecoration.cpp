@@ -43,6 +43,7 @@ struct KisReferenceImagesDecoration::Private {
     KisWeakSharedPtr<KisReferenceImagesLayer> layer;
     Buffer buffer;
     QTransform previousTransform;
+    QSizeF previousViewSize;
 
     explicit Private(KisReferenceImagesDecoration *q)
         : q(q)
@@ -61,20 +62,29 @@ struct KisReferenceImagesDecoration::Private {
     }
 
 private:
-    void updateBuffer(const QRectF &widgetRect, const QRectF &imageRect)
+    void updateBuffer(QRectF widgetRect, QRectF imageRect)
     {
         KisCoordinatesConverter *viewConverter = q->view()->viewConverter();
         QTransform transform = viewConverter->imageToWidgetTransform();
 
         if (buffer.image.isNull() || !buffer.bounds().contains(widgetRect)) {
-            // TODO: only use enough buffer to cover the BB of the shapes
-            buffer.position = QPointF();
-            buffer.image = QImage(q->view()->width(), q->view()->height(), QImage::Format_ARGB32);
+            const QRectF boundingImageRect = layer->boundingImageRect();
+            const QRectF boundingWidgetRect = q->view()->viewConverter()->imageToWidget(boundingImageRect);
+            widgetRect = boundingWidgetRect.intersected(q->view()->rect());
+
+            if (widgetRect.isNull()) return;
+
+            buffer.position = widgetRect.topLeft();
+            buffer.image = QImage(widgetRect.size().toSize(), QImage::Format_ARGB32);
             buffer.image.fill(Qt::transparent);
+
+            imageRect = q->view()->viewConverter()->widgetToImage(widgetRect);
         }
 
         QPainter gc(&buffer.image);
-        gc.setTransform(transform);
+
+        gc.translate(-buffer.position);
+        gc.setTransform(transform, true);
 
         gc.save();
         gc.setCompositionMode(QPainter::CompositionMode_Source);
@@ -86,21 +96,27 @@ private:
     }
 };
 
-KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> parent)
+KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> parent, KisDocument *document)
     : KisCanvasDecoration("referenceImagesDecoration", parent)
     , d(new Private(this))
-{}
+{
+    connect(document->image().data(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));
+    connect(document, &KisDocument::sigReferenceImagesLayerChanged, this, &KisReferenceImagesDecoration::slotNodeAdded);
+
+    auto referenceImageLayer = document->referenceImagesLayer();
+    if (referenceImageLayer) {
+        setReferenceImageLayer(referenceImageLayer);
+    }
+}
 
 KisReferenceImagesDecoration::~KisReferenceImagesDecoration()
 {}
 
 void KisReferenceImagesDecoration::addReferenceImage(KisReferenceImage *referenceImage)
 {
-    KisSharedPtr<KisReferenceImagesLayer> layer = view()->document()->createReferenceImagesLayer();
-    KIS_SAFE_ASSERT_RECOVER_RETURN(layer);
-
-    KUndo2Command *cmd = layer->addReferenceImage(referenceImage);
-    view()->document()->addCommand(cmd);
+    KisDocument *document = view()->document();
+    KUndo2Command *cmd = KisReferenceImagesLayer::addReferenceImages(document, {referenceImage});
+    document->addCommand(cmd);
 }
 
 bool KisReferenceImagesDecoration::documentHasReferenceImages() const
@@ -108,24 +124,36 @@ bool KisReferenceImagesDecoration::documentHasReferenceImages() const
     return view()->document()->referenceImagesLayer() != nullptr;
 }
 
-void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter */*converter*/, KisCanvas2 */*canvas*/)
+void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &/*updateRect*/, const KisCoordinatesConverter *converter, KisCanvas2 */*canvas*/)
 {
+    // TODO: can we use partial updates here?
+
     KisSharedPtr<KisReferenceImagesLayer> layer = d->layer.toStrongRef();
-    if (layer.isNull()) {
-        layer = d->layer = view()->document()->referenceImagesLayer();
-        if (layer.isNull()) return;
 
-        connect(layer.data(), SIGNAL(sigUpdateCanvas(const QRectF&)), this, SLOT(slotReferenceImagesChanged(const QRectF&)));
+    if (!layer.isNull()) {
+        QSizeF viewSize = view()->size();
 
-        d->updateBufferByWidgetCoordinates(updateRect);
-    } else {
-        QTransform transform = view()->viewConverter()->imageToWidgetTransform();
-        if (!KisAlgebra2D::fuzzyMatrixCompare(transform, d->previousTransform, 1e-4)) {
-            d->updateBufferByWidgetCoordinates(QRectF(0, 0, view()->width(), view()->height()));
+        QTransform transform = converter->imageToWidgetTransform();
+        if (d->previousViewSize != viewSize || !KisAlgebra2D::fuzzyMatrixCompare(transform, d->previousTransform, 1e-4)) {
+            d->previousViewSize = viewSize;
+            d->previousTransform = transform;
+            d->buffer.image = QImage();
+            d->updateBufferByWidgetCoordinates(QRectF(QPointF(0,0), viewSize));
+        }
+
+        if (!d->buffer.image.isNull()) {
+            gc.drawImage(d->buffer.position, d->buffer.image);
         }
     }
+}
 
-    gc.drawImage(d->buffer.position, d->buffer.image);
+void KisReferenceImagesDecoration::slotNodeAdded(KisNodeSP node)
+{
+    auto *referenceImagesLayer = dynamic_cast<KisReferenceImagesLayer*>(node.data());
+
+    if (referenceImagesLayer) {
+        setReferenceImageLayer(referenceImagesLayer);
+    }
 }
 
 void KisReferenceImagesDecoration::slotReferenceImagesChanged(const QRectF &dirtyRect)
@@ -134,4 +162,19 @@ void KisReferenceImagesDecoration::slotReferenceImagesChanged(const QRectF &dirt
 
     QRectF documentRect = view()->viewConverter()->imageToDocument(dirtyRect);
     view()->canvasBase()->updateCanvas(documentRect);
+}
+
+void KisReferenceImagesDecoration::setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer)
+{
+    if (d->layer.data() != layer.data()) {
+        if (d->layer) {
+            d->layer->disconnect(this);
+        }
+        d->layer = layer;
+        connect(layer.data(), SIGNAL(sigUpdateCanvas(QRectF)),
+                this, SLOT(slotReferenceImagesChanged(QRectF)));
+        if (layer->extent() != QRectF()) { // in case the reference layer is just being loaded from the .kra file
+            slotReferenceImagesChanged(layer->extent());
+        }
+    }
 }

@@ -33,7 +33,7 @@ OdfTextTrackStyles *OdfTextTrackStyles::instance(KoStyleManager *manager)
 {
     if (! instances.contains(manager)) {
         instances[manager] = new OdfTextTrackStyles(manager);
-        connect(manager,SIGNAL(destroyed(QObject *)),instances[manager], SLOT(styleManagerDied(QObject *)));
+        connect(manager,SIGNAL(destroyed(QObject*)),instances[manager], SLOT(styleManagerDied(QObject*)));
     }
 
     return instances[manager];
@@ -43,7 +43,7 @@ void OdfTextTrackStyles::registerDocument(QTextDocument *qDoc)
 {
     if (! m_documents.contains(qDoc)) {
         m_documents.append(qDoc);
-        connect(qDoc,SIGNAL(destroyed(QObject *)), this, SLOT(documentDied(QObject *)));
+        connect(qDoc,SIGNAL(destroyed(QObject*)), this, SLOT(documentDied(QObject*)));
     }
 }
 
@@ -61,12 +61,13 @@ OdfTextTrackStyles::OdfTextTrackStyles(KoStyleManager *manager)
 {
     connect(manager, SIGNAL(editHasBegun()), this, SLOT(beginEdit()));
     connect(manager, SIGNAL(editHasEnded()), this, SLOT(endEdit()));
-    connect(manager, SIGNAL(styleHasChanged(int, const KoCharacterStyle *, const KoCharacterStyle *)), this, SLOT(recordStyleChange(int, const KoCharacterStyle *, const KoCharacterStyle *)));
-    connect(manager, SIGNAL(styleHasChanged(int, const KoParagraphStyle *, const KoParagraphStyle *)), this, SLOT(recordStyleChange(int, const KoParagraphStyle *, const KoParagraphStyle *)));
+    connect(manager, SIGNAL(styleHasChanged(int,const KoCharacterStyle*,const KoCharacterStyle*)), this, SLOT(recordStyleChange(int,const KoCharacterStyle*,const KoCharacterStyle*)));
+    connect(manager, SIGNAL(styleHasChanged(int,const KoParagraphStyle*,const KoParagraphStyle*)), this, SLOT(recordStyleChange(int,const KoParagraphStyle*,const KoParagraphStyle*)));
 }
 
 OdfTextTrackStyles::~OdfTextTrackStyles()
 {
+    delete m_changeCommand;
 }
 
 void OdfTextTrackStyles::beginEdit()

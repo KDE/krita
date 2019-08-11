@@ -50,11 +50,16 @@ class KoSvgTextShape;
 
 class KRITAFLAKE_EXPORT SvgParser
 {
-    class DeferredUseStore;
+    struct DeferredUseStore;
 
 public:
     explicit SvgParser(KoDocumentResourceManager *documentResourceManager);
     virtual ~SvgParser();
+
+    static KoXmlDocument createDocumentFromSvg(QIODevice *device, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    static KoXmlDocument createDocumentFromSvg(const QByteArray &data, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    static KoXmlDocument createDocumentFromSvg(const QString &data, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    static KoXmlDocument createDocumentFromSvg(QXmlInputSource *source, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
 
     /// Parses a svg fragment, returning the list of top level child shapes
     QList<KoShape*> parseSvg(const KoXmlElement &e, QSizeF * fragmentSize = 0);
@@ -64,7 +69,7 @@ public:
 
     void setResolution(const QRectF boundsInPixels, qreal pixelsPerInch);
 
-    /// A special workaround coeff for usign when loading old ODF-embedded SVG files,
+    /// A special workaround coeff for using when loading old ODF-embedded SVG files,
     /// which used hard-coded 96 ppi for font size
     void setForcedFontSizeResolution(qreal value);
 
@@ -198,7 +203,7 @@ protected:
     void applyId(const QString &id, KoShape *shape);
 
     /// Applies viewBox transformation to the current graphical context
-    /// NOTE: after applying the function currectBoundingBox can become null!
+    /// NOTE: after applying the function currentBoundingBox can become null!
     void applyViewBoxTransform(const KoXmlElement &element);
 
 private:

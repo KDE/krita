@@ -48,6 +48,8 @@ struct KisColorSpaceSelector::Private {
     QString knsrcFile;
     bool profileValid;
     QString defaultsuffix;
+    bool profileSetManually;
+    KoID previousModel;
 };
 
 KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent), m_advancedSelector(0), d(new Private)
@@ -61,18 +63,18 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
     d->colorSpaceSelector->bnInstallProfile->setIcon(KisIconUtils::loadIcon("document-open"));
     d->colorSpaceSelector->bnInstallProfile->setToolTip( i18n("Open Color Profile") );
 
-    connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(const KoID &)),
-            this, SLOT(fillCmbDepths(const KoID &)));
-    connect(d->colorSpaceSelector->cmbColorDepth, SIGNAL(activated(const KoID &)),
-            this, SLOT(fillCmbProfiles()));
-    connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(const KoID &)),
-            this, SLOT(fillCmbProfiles()));
-    connect(d->colorSpaceSelector->cmbProfile, SIGNAL(activated(const QString &)),
-            this, SLOT(colorSpaceChanged()));
+    connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(KoID)),
+            this, SLOT(slotModelsComboBoxActivated(KoID)));
+    connect(d->colorSpaceSelector->cmbColorDepth, SIGNAL(activated(KoID)),
+            this, SLOT(slotDepthsComboBoxActivated()));
+    connect(d->colorSpaceSelector->cmbProfile, SIGNAL(activated(QString)),
+            this, SLOT(slotProfilesComboBoxActivated()));
     connect(d->colorSpaceSelector->bnInstallProfile, SIGNAL(clicked()),
             this, SLOT(installProfile()));
 
     d->defaultsuffix = " "+i18nc("This is appended to the color profile which is the default for the given colorspace and bit-depth","(Default)");
+    d->profileSetManually = false;
+    d->previousModel = d->colorSpaceSelector->cmbColorModels->currentItem();
 
     connect(d->colorSpaceSelector->bnAdvanced, SIGNAL(clicked()), this,  SLOT(slotOpenAdvancedSelector()));
 
@@ -88,6 +90,8 @@ KisColorSpaceSelector::~KisColorSpaceSelector()
 
 void KisColorSpaceSelector::fillCmbProfiles()
 {
+    const QString currentProfileName = d->colorSpaceSelector->cmbProfile->currentUnsqueezedText();
+
     const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(d->colorSpaceSelector->cmbColorModels->currentItem(), d->colorSpaceSelector->cmbColorDepth->currentItem());
     const QString defaultProfileName = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId);
 
@@ -106,7 +110,11 @@ void KisColorSpaceSelector::fillCmbProfiles()
             d->colorSpaceSelector->cmbProfile->addSqueezedItem(stringName);
         }
     }
-    d->colorSpaceSelector->cmbProfile->setCurrent(defaultProfileName + d->defaultsuffix);
+    if (d->profileSetManually && profileNames.contains(currentProfileName)) {
+        d->colorSpaceSelector->cmbProfile->setCurrent(currentProfileName);
+    } else {
+        d->colorSpaceSelector->cmbProfile->setCurrent(defaultProfileName + d->defaultsuffix);
+    }
     colorSpaceChanged();
 }
 
@@ -115,54 +123,17 @@ void KisColorSpaceSelector::fillCmbDepths(const KoID& id)
     KoID activeDepth = d->colorSpaceSelector->cmbColorDepth->currentItem();
     d->colorSpaceSelector->cmbColorDepth->clear();
     QList<KoID> depths = KoColorSpaceRegistry::instance()->colorDepthList(id, KoColorSpaceRegistry::OnlyUserVisible);
-
-    // order the depth by name
-    std::sort(depths.begin(), depths.end(), sortBitDepthsComparer);
-
-    d->colorSpaceSelector->cmbColorDepth->setIDList(depths);
+    d->colorSpaceSelector->cmbColorDepth->setIDList(depths, false);
     if (depths.contains(activeDepth)) {
         d->colorSpaceSelector->cmbColorDepth->setCurrent(activeDepth);
     }
 }
 
 
-bool KisColorSpaceSelector::sortBitDepthsComparer(KoID depthOne, KoID depthTwo) {
-
-    // to order these right, we need to first order by bit depth, then by if it is floating or not
-    QString bitDepthOne = depthOne.name().split(" ")[0];
-    QString bitDepthTwo = depthTwo.name().split(" ")[0];
-
-
-    if (bitDepthOne.toInt() > bitDepthTwo.toInt()) {
-        return false;
-    }
-
-    if (bitDepthOne.toInt() == bitDepthTwo.toInt()) {
-        // bit depth number is the same, so now we need to compare if it is a floating type or not
-        // the second value [1], just says 'bits', so that is why we look for [2] which has the float word
-        QString bitDepthOneType = "";
-        QString bitDepthTwoType = "";
-
-        if (depthOne.name().split(" ").length() > 2) {
-            bitDepthOneType = depthOne.name().split(" ")[2];
-        }
-        if (depthTwo.name().split(" ").length() > 2) {
-            bitDepthTwoType = depthTwo.name().split(" ")[2];
-        }
-
-        if (bitDepthOneType.length() > bitDepthTwoType.length()) {
-            return false;
-        }
-    }
-
-
-    return true;
-}
-
 
 const KoColorSpace* KisColorSpaceSelector::currentColorSpace()
 {
-    QString profilenamestring = d->colorSpaceSelector->cmbProfile->itemHighlighted();
+    QString profilenamestring = d->colorSpaceSelector->cmbProfile->currentUnsqueezedText();
     if (profilenamestring.contains(d->defaultsuffix)) {
         profilenamestring.remove(d->defaultsuffix);
         return KoColorSpaceRegistry::instance()->colorSpace(
@@ -180,13 +151,16 @@ const KoColorSpace* KisColorSpaceSelector::currentColorSpace()
 void KisColorSpaceSelector::setCurrentColorModel(const KoID& id)
 {
     d->colorSpaceSelector->cmbColorModels->setCurrent(id);
+    d->previousModel = id;
     fillCmbDepths(id);
 }
 
 void KisColorSpaceSelector::setCurrentColorDepth(const KoID& id)
 {
     d->colorSpaceSelector->cmbColorDepth->setCurrent(id);
-    fillCmbProfiles();
+    if (!d->profileSetManually) {
+        fillCmbProfiles();
+    }
 }
 
 void KisColorSpaceSelector::setCurrentProfile(const QString& name)
@@ -250,7 +224,7 @@ void KisColorSpaceSelector::installProfile()
 void KisColorSpaceSelector::slotOpenAdvancedSelector()
 {
     if (!m_advancedSelector) {
-        m_advancedSelector = new KisAdvancedColorSpaceSelector(this, "Select a Colorspace");
+        m_advancedSelector = new KisAdvancedColorSpaceSelector(this, i18n("Select a Colorspace"));
         m_advancedSelector->setModal(true);
         if (currentColorSpace()) {
             m_advancedSelector->setCurrentColorSpace(currentColorSpace());
@@ -263,6 +237,7 @@ void KisColorSpaceSelector::slotOpenAdvancedSelector()
     if (result) {
         if (d->profileValid==true) {
             setCurrentColorSpace(m_advancedSelector->currentColorSpace());
+            d->profileSetManually = true;
         }
     }
 }
@@ -270,5 +245,28 @@ void KisColorSpaceSelector::slotOpenAdvancedSelector()
 void KisColorSpaceSelector::slotProfileValid(bool valid)
 {
     d->profileValid = valid;
+}
+
+
+void KisColorSpaceSelector::slotModelsComboBoxActivated(const KoID& id)
+{
+    if (d->previousModel != id) {
+        d->previousModel = id;
+        d->profileSetManually = false;
+        fillCmbDepths(id);
+        fillCmbProfiles();
+    }
+}
+
+void KisColorSpaceSelector::slotDepthsComboBoxActivated()
+{
+    fillCmbProfiles();
+}
+
+
+void KisColorSpaceSelector::slotProfilesComboBoxActivated()
+{
+    d->profileSetManually = true;
+    colorSpaceChanged();
 }
 

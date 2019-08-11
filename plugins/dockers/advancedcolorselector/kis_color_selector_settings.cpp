@@ -52,7 +52,7 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
 
     /* color docker selector drop down */
     ui->dockerColorSettingsComboBox->addItem(i18n("Advanced Color Selector"));
-    ui->dockerColorSettingsComboBox->addItem(i18n("Color Sliders"));
+    //ui->dockerColorSettingsComboBox->addItem(i18n("Color Sliders"));
     ui->dockerColorSettingsComboBox->addItem(i18n("Color Hotkeys"));
     ui->dockerColorSettingsComboBox->setCurrentIndex(0); // start off seeing advanced color selector properties
 
@@ -170,14 +170,12 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("onDockerResize", ui->dockerResizeOptionsComboBox->currentIndex());
     cfg.writeEntry("zoomSelectorOptions", ui->zoomSelectorOptionComboBox->currentIndex() );
     cfg.writeEntry("zoomSize", ui->popupSize->value());
-
-
+    cfg.writeEntry("showColorSelector", ui->chkShowColorSelector->isChecked());
 
     bool useCustomColorSpace =  ui->useDifferentColorSpaceCheckbox->isChecked();
     const KoColorSpace* colorSpace = useCustomColorSpace ? ui->colorSpace->currentColorSpace() : 0;
 
-
-    KisConfig kisconfig;
+    KisConfig kisconfig(false);
     kisconfig.setCustomColorSelectorColorSpace(colorSpace);
 
     //color patches
@@ -301,11 +299,12 @@ void KisColorSelectorSettings::changedColorDocker(int index)
         ui->colorSliderOptions->hide();
         ui->hotKeyOptions->hide();
     }
-    else if (index == 1) {  // color slider options selected
-        ui->advancedColorSelectorOptions->hide();
-        ui->hotKeyOptions->hide();
-        ui->colorSliderOptions->show();
-    } else {
+//    else if (index == 1) {  // color slider options selected
+//        ui->advancedColorSelectorOptions->hide();
+//        ui->hotKeyOptions->hide();
+//        ui->colorSliderOptions->show();
+//    }
+    else {
        ui->colorSliderOptions->hide();
        ui->advancedColorSelectorOptions->hide();
        ui->hotKeyOptions->show();
@@ -317,10 +316,10 @@ void KisColorSelectorSettings::changedACSColorSelectorType(int index)
     ui->lumaCoefficientGroupbox->setVisible(false);
 
     if (index == 0)     {  // HSV
-        ui->ACSTypeDescriptionLabel->setText(i18n("Values goes from black to white, or black to the most saturated colour. Saturation, in turn, goes from the most saturated colour to white, grey or black."));
+        ui->ACSTypeDescriptionLabel->setText(i18n("Values goes from black to white, or black to the most saturated color. Saturation, in turn, goes from the most saturated color to white, gray or black."));
     }
     else if (index == 1)     {  // HSL
-        ui->ACSTypeDescriptionLabel->setText(i18n("Lightness goes from black to white, with middle grey being equal to the most saturated colour."));
+        ui->ACSTypeDescriptionLabel->setText(i18n("Lightness goes from black to white, with middle gray being equal to the most saturated color."));
     }
     else if (index == 2)     {  // HSI
         ui->ACSTypeDescriptionLabel->setText(i18n("Intensity maps to the sum of rgb components"));
@@ -359,8 +358,6 @@ void KisColorSelectorSettings::changedACSLastUsedColorAlignment(bool toggled)
     ui->lbl_lastUsedNumRows->setEnabled(toggled);
     ui->lastUsedColorsNumRows->setEnabled(toggled);
 }
-
-
 
 void KisColorSelectorSettings::changedACSShadeSelectorType(int index)
 {
@@ -401,10 +398,10 @@ void KisColorSelectorSettings::loadPreferences()
     ui->dockerResizeOptionsComboBox->setCurrentIndex(  (int)cfg.readEntry("onDockerResize", 0) );
     ui->zoomSelectorOptionComboBox->setCurrentIndex(   (int) cfg.readEntry("zoomSelectorOptions", 0) );
     ui->popupSize->setValue(cfg.readEntry("zoomSize", 280));
-
+    ui->chkShowColorSelector->setChecked((bool) cfg.readEntry("showColorSelector", true));
 
     {
-        KisConfig kisconfig;
+        KisConfig kisconfig(true);
         const KoColorSpace *cs = kisconfig.customColorSelectorColorSpace();
 
         if (cs) {
@@ -434,7 +431,7 @@ void KisColorSelectorSettings::loadPreferences()
     a = cfg.readEntry("commonColorsAlignment", false);
     ui->commonColorsAlignVertical->setChecked(a);
     ui->commonColorsAlignHorizontal->setChecked(!a);
-    ui->commonColorsAllowScrolling->setChecked(cfg.readEntry("commonColorsScrolling", false));
+    ui->commonColorsAllowScrolling->setChecked(cfg.readEntry("commonColorsScrolling", true));
     ui->commonColorsNumCols->setValue(cfg.readEntry("commonColorsNumCols", 1));
     ui->commonColorsNumRows->setValue(cfg.readEntry("commonColorsNumRows", 1));
     ui->commonColorsPatchCount->setValue(cfg.readEntry("commonColorsCount", 12));
@@ -527,6 +524,7 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->dockerResizeOptionsComboBox->setCurrentIndex(0);
     ui->zoomSelectorOptionComboBox->setCurrentIndex(0);
     ui->popupSize->setValue(280);
+    ui->chkShowColorSelector->setChecked(true);
 
 
     ui->useDifferentColorSpaceCheckbox->setChecked(false);
@@ -548,7 +546,7 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->commonColorsShow->setChecked(true);
     ui->commonColorsAlignVertical->setChecked(false);
     ui->commonColorsAlignHorizontal->setChecked(true);
-    ui->commonColorsAllowScrolling->setChecked(false);
+    ui->commonColorsAllowScrolling->setChecked(true);
     ui->commonColorsNumCols->setValue(1);
     ui->commonColorsNumRows->setValue(1);
     ui->commonColorsPatchCount->setValue(12);

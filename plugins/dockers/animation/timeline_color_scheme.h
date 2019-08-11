@@ -43,17 +43,11 @@ public:
     QBrush headerCachedFrame() const;
     QBrush headerActive() const;
 
-    QColor frameColor(bool present, bool active)const ;
-
     QColor onionSkinsSliderEnabledColor() const;
     QColor onionSkinsSliderDisabledColor() const;
     QColor onionSkinsButtonColor() const;
 
     QFont getOnionSkinsFont(const QString &maxString, const QSize &availableSize) const;
-
-private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
 };
 
 #endif /* __TIMELINE_COLOR_SCHEME_H */

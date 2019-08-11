@@ -408,7 +408,7 @@ void KisCubicCurve::removePoint(int idx)
     d->data->invalidate();
 }
 
-bool KisCubicCurve::isNull() const
+bool KisCubicCurve::isIdentity() const
 {
     const QList<QPointF> &points = d->data->points;
 
@@ -417,6 +417,19 @@ bool KisCubicCurve::isNull() const
             return false;
         }
     }
+
+    return true;
+}
+
+bool KisCubicCurve::isConstant(qreal c) const
+{
+    const QList<QPointF> &points = d->data->points;
+
+    Q_FOREACH (const QPointF &pt, points) {
+            if (!qFuzzyCompare(c, pt.y())) {
+                return false;
+            }
+        }
 
     return true;
 }

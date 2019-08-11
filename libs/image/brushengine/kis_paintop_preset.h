@@ -80,9 +80,12 @@ public:
     QString defaultFileExtension() const override {
         return ".kpp";
     }
-    void setPresetDirty(bool value);
 
-    bool isPresetDirty() const;
+    /// Mark the preset as modified but not saved
+    void setDirty(bool value);
+
+    /// @return true if the preset has been modified, but not saved
+    bool isDirty() const;
 
     /**
      * Never use manual save/restore calls to
@@ -93,12 +96,12 @@ public:
     class KRITAIMAGE_EXPORT DirtyStateSaver {
     public:
         DirtyStateSaver(KisPaintOpPreset *preset)
-            : m_preset(preset), m_isDirty(preset->isPresetDirty())
+            : m_preset(preset), m_isDirty(preset->isDirty())
         {
         }
 
         ~DirtyStateSaver() {
-            m_preset->setPresetDirty(m_isDirty);
+            m_preset->setDirty(m_isDirty);
         }
 
     private:

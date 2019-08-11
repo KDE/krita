@@ -33,7 +33,7 @@ public:
     KisShapeOptionsWidget(QWidget *parent = 0)
         : QWidget(parent) {
         setupUi(this);
-        imageUrl->setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
+        imageUrl->setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
     }
 
 };

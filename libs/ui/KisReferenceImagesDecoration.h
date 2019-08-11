@@ -26,6 +26,7 @@
 #include <kis_shared_ptr.h>
 
 class KisReferenceImagesDecoration;
+class KisReferenceImagesLayer;
 typedef KisSharedPtr<KisReferenceImagesDecoration> KisReferenceImagesDecorationSP;
 
 #include <kis_coordinates_converter.h>
@@ -41,7 +42,7 @@ class KisReferenceImagesDecoration : public KisCanvasDecoration
 {
     Q_OBJECT
 public:
-    KisReferenceImagesDecoration(QPointer<KisView> parent);
+    KisReferenceImagesDecoration(QPointer<KisView> parent, KisDocument *document);
     ~KisReferenceImagesDecoration() override;
 
     void addReferenceImage(KisReferenceImage *referenceImage);
@@ -49,6 +50,7 @@ public:
     bool documentHasReferenceImages() const;
 
 private Q_SLOTS:
+    void slotNodeAdded(KisNodeSP);
     void slotReferenceImagesChanged(const QRectF &dirtyRect);
 
 protected:
@@ -57,6 +59,8 @@ protected:
 private:
     struct Private;
     const QScopedPointer<Private> d;
+
+    void setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer);
 };
 
 #endif // KISREFERENCEIMAGESDECORATION_H

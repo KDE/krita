@@ -225,7 +225,7 @@ bool KUndo2Command::mergeWith(const KUndo2Command *command)
     Applies a change to the document. This function must be implemented in
     the derived class. Calling KUndo2QStack::push(),
     KUndo2QStack::undo() or KUndo2QStack::redo() from this function leads to
-    undefined beahavior.
+    undefined behavior.
 
     The default implementation calls redo() on all child commands.
 
@@ -243,7 +243,7 @@ void KUndo2Command::redo()
     the document should be the same as before redo() was called. This function must
     be implemented in the derived class. Calling KUndo2QStack::push(),
     KUndo2QStack::undo() or KUndo2QStack::redo() from this function leads to
-    undefined beahavior.
+    undefined behavior.
 
     The default implementation calls undo() on all child commands in reverse order.
 
@@ -502,10 +502,9 @@ void KUndo2Command::setExtraData(KUndo2CommandExtraData *data)
 
 KUndo2Action::KUndo2Action(const QString &textTemplate, const QString &defaultText, QObject *parent)
     : QAction(parent)
+    , m_textTemplate(textTemplate)
+    , m_defaultText(defaultText)
 {
-    m_textTemplate = textTemplate;
-    m_defaultText = defaultText;
-
 }
 
 void KUndo2Action::setPrefixedText(const QString &text)
@@ -583,7 +582,7 @@ void KUndo2QStack::purgeRedoState()
 }
 
 /*! \internal
-    If the number of commands on the stack exceedes the undo limit, deletes commands from
+    If the number of commands on the stack exceeds the undo limit, deletes commands from
     the bottom of the stack.
 
     Returns true if commands were deleted.
@@ -743,7 +742,7 @@ void KUndo2QStack::push(KUndo2Command *cmd)
      * T1 : Time lapsed between current command and previously merged command
      *      -- signal to merge throughout the stack.
      *
-     * T2 : Time elapsed between two commands signalling both commands belong
+     * T2 : Time elapsed between two commands signaling both commands belong
      *      of the same set
      *
      * Whenever a KUndo2Command is initialized -- it consists of a start-time

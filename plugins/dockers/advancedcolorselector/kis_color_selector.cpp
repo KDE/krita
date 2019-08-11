@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -33,7 +34,7 @@
 
 #include <kis_debug.h>
 
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <kis_icon.h>
 
 #include "kis_color_selector_ring.h"
@@ -128,7 +129,7 @@ void KisColorSelector::setConfiguration(KisColorSelectorConfiguration conf)
     connect(m_mainComponent, SIGNAL(paramChanged(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)),
             m_subComponent,  SLOT(setParam(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)), Qt::UniqueConnection);
     connect(m_subComponent,  SIGNAL(paramChanged(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)),
-            m_mainComponent, SLOT(setParam(qreal,qreal,qreal,qreal, qreal, qreal, qreal, qreal, qreal)), Qt::UniqueConnection);
+            m_mainComponent, SLOT(setParam(qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal,qreal)), Qt::UniqueConnection);
 
     connect(m_mainComponent, SIGNAL(update()), m_signalCompressor, SLOT(start()), Qt::UniqueConnection);
     connect(m_subComponent,  SIGNAL(update()), m_signalCompressor, SLOT(start()), Qt::UniqueConnection);
@@ -149,7 +150,36 @@ void KisColorSelector::updateSettings()
 {
     KisColorSelectorBase::updateSettings();
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+
     setConfiguration(KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelectorConfiguration().toString())));
+}
+
+void KisColorSelector::slotGamutMaskSet(KoGamutMask *gamutMask)
+{
+    m_mainComponent->setGamutMask(gamutMask);
+    m_subComponent->setGamutMask(gamutMask);
+
+    slotGamutMaskToggle(true);
+}
+
+void KisColorSelector::slotGamutMaskUnset()
+{
+    m_mainComponent->unsetGamutMask();
+    m_subComponent->unsetGamutMask();
+
+    slotGamutMaskToggle(false);
+}
+
+void KisColorSelector::slotGamutMaskPreviewUpdate()
+{
+    m_mainComponent->updateGamutMaskPreview();
+    m_subComponent->updateGamutMaskPreview();
+}
+
+void KisColorSelector::slotGamutMaskToggle(bool state)
+{
+    m_mainComponent->toggleGamutMask(state);
+    m_subComponent->toggleGamutMask(state);
 }
 
 void KisColorSelector::updateIcons() {
@@ -165,8 +195,6 @@ void KisColorSelector::hasAtLeastOneDocument(bool value)
 
 void KisColorSelector::reset()
 {
-    KisColorSelectorBase::reset();
-
     if (m_mainComponent) {
         m_mainComponent->setDirty();
     }
@@ -174,6 +202,8 @@ void KisColorSelector::reset()
     if (m_subComponent) {
         m_subComponent->setDirty();
     }
+
+    KisColorSelectorBase::reset();
 }
 
 void KisColorSelector::paintEvent(QPaintEvent* e)
@@ -261,7 +291,7 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
         }
     }
 
-    // reset the currect color after resizing the widget
+    // reset the correct color after resizing the widget
     setColor(m_lastRealColor);
 
     KisColorSelectorBase::resizeEvent(e);
@@ -295,7 +325,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* e)
 void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
 {
     e->setAccepted(false);
-    KisColorSelectorBase::mousePressEvent(e);
+    KisColorSelectorBase::mouseReleaseEvent(e);
 
     if(!e->isAccepted() &&
        !(m_lastRealColor == m_currentRealColor)) {

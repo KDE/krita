@@ -5,7 +5,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -36,6 +37,17 @@
 SplineAssistant::SplineAssistant()
     : KisPaintingAssistant("spline", i18n("Spline assistant"))
 {
+}
+
+SplineAssistant::SplineAssistant(const SplineAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : KisPaintingAssistant(rhs, handleMap)
+    , m_canvas(rhs.m_canvas)
+{
+}
+
+KisPaintingAssistantSP SplineAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+{
+    return KisPaintingAssistantSP(new SplineAssistant(*this, handleMap));
 }
 
 // parametric form of a cubic spline (B(t) = (1-t)^3 P0 + 3 (1-t)^2 t P1 + 3 (1-t) t^2 P2 + t^3 P3)
@@ -158,7 +170,7 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
 
     {  // Draw bezier handles control lines only if we are editing the assistant
         gc.save();
-        QColor assistantColor = m_canvas->paintingAssistantsDecoration()->assistantsColor();
+        QColor assistantColor = effectiveAssistantColor();
         QPen bezierlinePen(assistantColor);
         bezierlinePen.setStyle(Qt::DotLine);
         bezierlinePen.setWidth(1);
@@ -166,7 +178,10 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
         if (m_canvas->paintingAssistantsDecoration()->isEditingAssistants()) {
 
             if (!isSnappingActive()) {
-                bezierlinePen.setColor(QColor(assistantColor.red(), assistantColor.green(), assistantColor.blue(), assistantColor.alpha()*.2));
+                QColor snappingColor = assistantColor;
+                snappingColor.setAlpha(snappingColor.alpha() * 0.2);
+
+                bezierlinePen.setColor(snappingColor);
             }
 
             gc.setPen(bezierlinePen);
@@ -190,7 +205,7 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
 
 }
 
-QPointF SplineAssistant::buttonPosition() const
+QPointF SplineAssistant::getEditorPosition() const
 {
     return B(0.5, *handles()[0], *handles()[2], *handles()[3], *handles()[1]);
 }

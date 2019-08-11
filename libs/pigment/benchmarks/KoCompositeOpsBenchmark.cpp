@@ -30,8 +30,8 @@
 const int TILE_WIDTH = 64;
 const int TILE_HEIGHT = 64;
 
-const int IMG_WIDTH = 4096;
-const int IMG_HEIGHT = 4096;
+const int IMG_WIDTH = 2048;
+const int IMG_HEIGHT = 2048;
 
 const quint8 OPACITY_HALF = 128;
 
@@ -41,10 +41,12 @@ const int TILES_IN_HEIGHT = IMG_HEIGHT / TILE_HEIGHT;
 
 #define COMPOSITE_BENCHMARK \
         for (int y = 0; y < TILES_IN_HEIGHT; y++){                                              \
-            for (int x = 0; x < TILES_IN_WIDTH; x++){                                           \
-                compositeOp->composite(m_dstBuffer, TILE_WIDTH * KoBgrU16Traits::pixelSize,      \
-                                      m_srcBuffer, TILE_WIDTH * KoBgrU16Traits::pixelSize,      \
-                                      0, 0,                                                            \
+            for (int x = 0; x < TILES_IN_WIDTH; x++) {                                           \
+                const int rowStride = IMG_WIDTH * KoBgrU8Traits::pixelSize;  \
+                const int bufOffset = y * rowStride + x * TILE_WIDTH * KoBgrU8Traits::pixelSize;  \
+                compositeOp->composite(m_dstBuffer + bufOffset, rowStride,      \
+                                      m_srcBuffer + bufOffset, rowStride,      \
+                                      m_mskBuffer + bufOffset, rowStride,                                                            \
                                       TILE_WIDTH, TILE_HEIGHT,                                         \
                                       OPACITY_HALF);                                                   \
             }                                                                                   \
@@ -52,15 +54,25 @@ const int TILES_IN_HEIGHT = IMG_HEIGHT / TILE_HEIGHT;
 
 void KoCompositeOpsBenchmark::initTestCase()
 {
-    m_dstBuffer = new quint8[ TILE_WIDTH * TILE_HEIGHT * KoBgrU16Traits::pixelSize ];
-    m_srcBuffer = new quint8[ TILE_WIDTH * TILE_HEIGHT * KoBgrU16Traits::pixelSize ];
+    const int bufLen = IMG_HEIGHT * IMG_WIDTH * KoBgrU8Traits::pixelSize;
+
+    m_dstBuffer = new quint8[bufLen];
+    m_srcBuffer = new quint8[bufLen];
+    m_mskBuffer = new quint8[bufLen];
 }
 
 // this is called before every benchmark
 void KoCompositeOpsBenchmark::init()
 {
-    memset(m_dstBuffer, 42 , TILE_WIDTH * TILE_HEIGHT * KoBgrU16Traits::pixelSize);
-    memset(m_srcBuffer, 42 , TILE_WIDTH * TILE_HEIGHT * KoBgrU16Traits::pixelSize);
+    qsrand(42);
+
+    for (int i = 0; i < int(IMG_WIDTH * IMG_HEIGHT * KoBgrU8Traits::pixelSize); i++) {
+        const int randVal = qrand();
+
+        m_srcBuffer[i] = randVal & 0x0000FF;
+        m_dstBuffer[i] = (randVal & 0x00FF000) >> 8;
+        m_mskBuffer[i] = (randVal & 0xFF0000) >> 16;
+    }
 }
 
 
@@ -68,20 +80,29 @@ void KoCompositeOpsBenchmark::cleanupTestCase()
 {
     delete [] m_dstBuffer;
     delete [] m_srcBuffer;
+    delete [] m_mskBuffer;
 }
 
 void KoCompositeOpsBenchmark::benchmarkCompositeOver()
 {
-    KoCompositeOp *compositeOp = KoOptimizedCompositeOpFactory::createOverOp32(KoColorSpaceRegistry::instance()->rgb16());
+    KoCompositeOp *compositeOp = KoOptimizedCompositeOpFactory::createOverOp32(KoColorSpaceRegistry::instance()->rgb8());
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }
 }
 
-void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarken()
+void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarkenHard()
 {
-    //KoCompositeOpAlphaDarken<KoBgrU16Traits> compositeOp(0);
-    KoCompositeOp *compositeOp = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(KoColorSpaceRegistry::instance()->rgb16());
+    KoCompositeOp *compositeOp = KoOptimizedCompositeOpFactory::createAlphaDarkenOpHard32(KoColorSpaceRegistry::instance()->rgb8());
+    QBENCHMARK{
+        COMPOSITE_BENCHMARK
+    }
+}
+
+
+void KoCompositeOpsBenchmark::benchmarkCompositeAlphaDarkenCreamy()
+{
+    KoCompositeOp *compositeOp = KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy32(KoColorSpaceRegistry::instance()->rgb8());
     QBENCHMARK{
         COMPOSITE_BENCHMARK
     }

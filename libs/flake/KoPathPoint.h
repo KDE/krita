@@ -253,7 +253,7 @@ public:
     /**
      * Returns if this point is a smooth join of adjacent path segments.
      *
-     * The smoothess is defined by the parallelness of the tangents emanating
+     * The smoothness is defined by the parallelness of the tangents emanating
      * from the knot point, i.e. the normalized vectors from the knot to the
      * first and second control point.
      * The previous and next path points are used to determine the smoothness

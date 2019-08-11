@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,8 +21,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <QFileInfo>
-
 #include <kis_image.h>
 #include <kis_group_layer.h>
 
@@ -35,7 +34,7 @@ QMLConverter::~QMLConverter()
 {
 }
 
-KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, const QString &realFilename, QIODevice *io, KisImageSP image)
+KisImportExportErrorCode QMLConverter::buildFile(const QString &filename, const QString &realFilename, QIODevice *io, KisImageSP image)
 {
     QTextStream out(io);
     out.setCodec("UTF-8");
@@ -48,12 +47,17 @@ KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, const QS
     QFileInfo info(filename);
     QFileInfo infoRealFile(realFilename);
     KisNodeSP node = image->rootLayer()->firstChild();
-    QString imageDir = infoRealFile.baseName() + "_images";
+    QString imageDir = infoRealFile.completeBaseName() + "_images";
     QString imagePath = infoRealFile.absolutePath() + '/' + imageDir;
     if (node) {
         QDir dir;
-        dir.mkpath(imagePath);
+        bool success = dir.mkpath(imagePath);
+        if (!success)
+        {
+            return ImportExportCodes::CannotCreateFile;
+        }
     }
+
     dbgFile << "Saving images to " << imagePath;
     while(node) {
         KisPaintDeviceSP projection = node->projection();
@@ -76,7 +80,7 @@ KisImageBuilder_Result QMLConverter::buildFile(const QString &filename, const QS
     }
     out << "}\n";
 
-    return KisImageBuilder_RESULT_OK;
+    return ImportExportCodes::OK;
 }
 
 void QMLConverter::writeString(QTextStream&  out, int spacing, const QString& setting, const QString& value) {

@@ -164,7 +164,6 @@ void KisCageTransformWorker::prepareTransform()
 
     // no need to process empty devices
     if (srcBounds.isEmpty()) return;
-
     m_d->gridSize =
         GridIterationTools::calcGridSize(srcBounds, m_d->pixelPrecision);
 
@@ -172,7 +171,6 @@ void KisCageTransformWorker::prepareTransform()
     GridIterationTools::processGrid(pointsOp, srcBounds, m_d->pixelPrecision);
 
     const int numPoints = pointsOp.m_points.size();
-
     KIS_ASSERT_RECOVER_RETURN(numPoints == m_d->gridSize.width() * m_d->gridSize.height());
 
     m_d->allSrcPoints = pointsOp.m_points;

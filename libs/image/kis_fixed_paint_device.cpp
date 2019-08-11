@@ -144,6 +144,21 @@ void KisFixedPaintDevice::convertTo(const KoColorSpace* dstColorSpace,
     m_data = dstData;
 }
 
+void KisFixedPaintDevice::setProfile(const KoColorProfile *profile)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(profile);
+
+    const KoColorSpace *dstColorSpace =
+        KoColorSpaceRegistry::instance()->colorSpace(
+                colorSpace()->colorModelId().id(),
+                colorSpace()->colorDepthId().id(),
+                profile);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(dstColorSpace);
+
+    m_colorSpace = dstColorSpace;
+}
+
 void KisFixedPaintDevice::convertFromQImage(const QImage& _image, const QString &srcProfileName)
 {
     QImage image = _image;
@@ -211,7 +226,7 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, 
             QImage image = colorSpace()->convertToQImage(newData, w, h, dstProfile, intent, conversionFlags);
             return image;
         }
-        catch(std::bad_alloc) {
+        catch(const std::bad_alloc&) {
             return QImage();
         }
     }

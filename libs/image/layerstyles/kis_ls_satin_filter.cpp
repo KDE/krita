@@ -47,6 +47,16 @@ KisLsSatinFilter::KisLsSatinFilter()
 {
 }
 
+KisLsSatinFilter::KisLsSatinFilter(const KisLsSatinFilter &rhs)
+    : KisLayerStyleFilter(rhs)
+{
+}
+
+KisLayerStyleFilter *KisLsSatinFilter::clone() const
+{
+    return new KisLsSatinFilter(*this);
+}
+
 struct SatinRectsData
 {
     enum Direction {
@@ -144,7 +154,7 @@ void applySatin(KisPaintDeviceSP srcDevice,
 
     KisPixelSelectionSP tempSelection = new KisPixelSelection(*selection);
 
-    KisLsUtils::applyGaussian(tempSelection, d.satinNeedRect, d.blur_size);
+    KisLsUtils::applyGaussianWithTransaction(tempSelection, d.satinNeedRect, d.blur_size);
 
     //tempSelection->convertToQImage(0, QRect(0,0,300,300)).save("2_selection_blurred.png");
 

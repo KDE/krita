@@ -36,7 +36,7 @@ KisChangeFrameAction::KisChangeFrameAction()
       m_d(new Private)
 {
     setName(i18n("Switch Time"));
-    setDescription(i18n("The <i>Switch Time</i> action changes the current time of the image."));
+    setDescription(i18n("The <i>Switch Time</i> action changes the current time of the animation."));
 
     QHash< QString, int > shortcuts;
     shortcuts.insert(i18n("Next Frame"), NextFrameShortcut);

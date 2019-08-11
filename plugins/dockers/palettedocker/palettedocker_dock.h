@@ -22,64 +22,97 @@
 
 #include <QDockWidget>
 #include <QModelIndex>
+#include <QScopedPointer>
+#include <QVector>
 #include <QPointer>
+#include <QPair>
+#include <QAction>
+#include <QMenu>
 
-#include <KoCanvasObserverBase.h>
-#include <KoResourceServerAdapter.h>
 #include <KoResourceServerObserver.h>
+#include <KoResourceServer.h>
 #include <resources/KoColorSet.h>
 
 #include <kis_canvas2.h>
 #include <kis_mainwindow_observer.h>
+#include <KisView.h>
+#include <kis_signal_auto_connection.h>
 
 class KisViewManager;
 class KisCanvasResourceProvider;
 class KisWorkspaceResource;
-class KisColorsetChooser;
+class KisPaletteListWidget;
 class KisPaletteModel;
+
+class KisPaletteEditor;
 class Ui_WdgPaletteDock;
 
-
-class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver, public KoResourceServerObserver<KoColorSet> {
+class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver
+{
     Q_OBJECT
 public:
     PaletteDockerDock();
     ~PaletteDockerDock() override;
-    QString observerName() override { return "PaletteDockerDock"; }
-    void setMainWindow(KisViewManager* kisview) override;
+
+public: // QDockWidget
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
-public: // KoResourceServerObserver
-
-    void unsetResourceServer() override;
-    void resourceAdded(KoColorSet *) override {}
-    void removingResource(KoColorSet *resource) override;
-    void resourceChanged(KoColorSet *resource) override;
-    void syncTaggedResourceView() override {}
-    void syncTagAddition(const QString&) override {}
-    void syncTagRemoval(const QString&) override {}
+public: // KisMainWindowObserver
+    void setViewManager(KisViewManager* kisview) override;
 
 private Q_SLOTS:
-    void addColorForeground();
-    void removeColor();
-    void entrySelected(KoColorSetEntry entry);
-    void entrySelectedBack(KoColorSetEntry entry);
-    void setColorSet(KoColorSet* colorSet);
+    void slotContextMenu(const QModelIndex &);
 
-    void setColorFromNameList(int index);
+    void slotAddPalette();
+    void slotRemovePalette(KoColorSet *);
+    void slotImportPalette();
+    void slotExportPalette(KoColorSet *);
+
+    void slotAddColor();
+    void slotRemoveColor();
+    void slotEditEntry();
+    void slotEditPalette();
+
+    void slotPaletteIndexSelected(const QModelIndex &index);
+    void slotPaletteIndexClicked(const QModelIndex &index);
+    void slotPaletteIndexDoubleClicked(const QModelIndex &index);
+    void slotNameListSelection(const KoColor &color);
+    void slotSetColorSet(KoColorSet* colorSet);
 
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
 
-private:    
-    Ui_WdgPaletteDock* m_wdgPaletteDock;
+    void slotFGColorResourceChanged(const KoColor& color);
+    void slotUpdatePaletteList(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList);
+
+private:
+    void setEntryByForeground(const QModelIndex &index);
+    void setFGColorByPalette(const KisSwatch &entry);
+
+private /* member variables */:
+    QScopedPointer<Ui_WdgPaletteDock> m_ui;
     KisPaletteModel *m_model;
-    QSharedPointer<KoAbstractResourceServerAdapter> m_serverAdapter;
-    KoColorSet *m_currentColorSet;
-    KisColorsetChooser *m_colorSetChooser;
+    KisPaletteListWidget *m_paletteChooser;
+
+    QPointer<KisViewManager> m_view;
     KisCanvasResourceProvider *m_resourceProvider;
-    QPointer<KisCanvas2> m_canvas;
+
+    KoResourceServer<KoColorSet> * const m_rServer;
+
+    QPointer<KisDocument> m_activeDocument;
+    QPointer<KoColorSet> m_currentColorSet;
+    QScopedPointer<KisPaletteEditor> m_paletteEditor;
+
+    QScopedPointer<QAction> m_actAdd;
+    QScopedPointer<QAction> m_actRemove;
+    QScopedPointer<QAction> m_actModify;
+    QScopedPointer<QAction> m_actEditPalette;
+    QMenu m_viewContextMenu;
+
+    bool m_colorSelfUpdate;
+
+    KisSignalAutoConnectionsStore m_connections;
 };
 
 

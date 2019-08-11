@@ -33,7 +33,6 @@
 #include "KisViewManager.h"
 #include <kis_image_signal_router.h>
 #include <input/kis_input_manager.h>
-#include <input/kis_tablet_event.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_selection_manager.h>
 #include <KisPart.h>
@@ -109,7 +108,6 @@ KisSketchView::KisSketchView(QQuickItem* parent)
     setAcceptHoverEvents(true);
 
     d->actionCollection = new KActionCollection(this, "krita");
-    qDebug() << ">>>>>>>>>>>>>" << qApp->activeWindow();
     d->viewManager = 0; //new KisViewManager(qApp->activeWindow(), d->actionCollection);
 
     // QT5TODO
@@ -480,13 +478,6 @@ bool KisSketchView::event( QEvent* event )
 
 //            return true;
 //        }
-//        case KisTabletEvent::TabletPressEx:
-//        case KisTabletEvent::TabletReleaseEx:
-//            emit interactionStarted();
-//            d->canvas->globalInputManager()->eventFilter(this, event);
-//            return true;
-//        case KisTabletEvent::TabletMoveEx:
-//            d->tabletEventCount++; //Note that this will wraparound at some point; This is intentional.
 //#ifdef Q_OS_X11
 //            if(d->tabletEventCount % 2 == 0)
 //#endif

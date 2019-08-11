@@ -22,6 +22,7 @@
 #include <QDockWidget>
 #include <kis_mainwindow_observer.h>
 #include <QScopedPointer>
+#include <KisKineticScroller.h>
 
 class KisCanvas2;
 class KisAction;
@@ -36,7 +37,10 @@ public:
     QString observerName() override { return "AnimationCurveDocker"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
-    void setMainWindow(KisViewManager *kisview) override;
+    void setViewManager(KisViewManager *kisview) override;
+
+public Q_SLOTS:
+    void slotScrollerStateChanged(QScroller::State state);
 
 private Q_SLOTS:
     void slotUpdateIcons();

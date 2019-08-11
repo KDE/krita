@@ -19,7 +19,7 @@
 #ifndef KIS_TOOL_SELECT_SIMILAR_H_
 #define KIS_TOOL_SELECT_SIMILAR_H_
 
-#include <KoToolFactoryBase.h>
+#include <KisSelectionToolFactoryBase.h>
 #include <kis_icon.h>
 #include <kconfig.h>
 #include "kis_tool_select_base.h"
@@ -37,15 +37,15 @@ public:
     void beginPrimaryAction(KoPointerEvent *event) override;
     void paint(QPainter&, const KoViewConverter &) override {}
     QWidget* createOptionWidget() override;
-    QMenu* popupActionsMenu() override;
+    void resetCursorStyle() override;
 
-    public Q_SLOTS:
+public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void slotSetFuzziness(int);
-    void setSelectionAction(int);
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
+    bool isPixelOnly() const override { return true; }
 
 private:
     int m_fuzziness;
@@ -53,11 +53,11 @@ private:
 };
 
 
-class KisToolSelectSimilarFactory : public KoToolFactoryBase
+class KisToolSelectSimilarFactory : public KisSelectionToolFactoryBase
 {
 public:
     KisToolSelectSimilarFactory()
-        : KoToolFactoryBase("KisToolSelectSimilar")
+        : KisSelectionToolFactoryBase("KisToolSelectSimilar")
     {
         setToolTip(i18n("Similar Color Selection Tool"));
         setSection(TOOL_TYPE_SELECTION);

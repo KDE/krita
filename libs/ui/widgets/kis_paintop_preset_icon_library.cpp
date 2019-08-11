@@ -22,7 +22,6 @@
 #include <QSlider>
 #include <QPainter>
 #include <QLabel>
-#include <QSlider>
 #include <QListView>
 #include <kis_icon.h>
 #include <QDebug>
@@ -86,8 +85,8 @@ KisPaintopPresetIconLibrary::KisPaintopPresetIconLibrary(QWidget *parent): QWidg
         m_optionalModel->appendRow(image);
     }
 
-    connect(ui->vwBase->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection &)), this, SLOT(updateIcon()));
-    connect(ui->vwOptional->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection &)), this, SLOT(updateIcon()));
+    connect(ui->vwBase->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(updateIcon()));
+    connect(ui->vwOptional->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(updateIcon()));
     connect(ui->sldHue, SIGNAL(valueChanged(qreal)), this, SLOT(updateIcon()));
     connect(ui->sldSat, SIGNAL(valueChanged(qreal)), this, SLOT(updateIcon()));
     connect(ui->sldLevels, SIGNAL(valueChanged(qreal)), this, SLOT(updateIcon()));

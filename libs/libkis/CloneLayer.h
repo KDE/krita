@@ -45,8 +45,8 @@ public:
     /**
      * @brief CloneLayer
      * function for wrapping a preexisting node into a clonelayer object.
-     * @param clone
-     * @param parent
+     * @param layer the clone layer
+     * @param parent the parent QObject
      */
     explicit CloneLayer(KisCloneLayerSP layer, QObject *parent = 0);
     ~CloneLayer() override;

@@ -231,7 +231,12 @@ QCursor KisCursor::triangleRightHandedCursor()
 
 QCursor KisCursor::moveCursor()
 {
-    return KisCursorCache::instance()->moveCursor;
+    return load("move-tool.png");
+}
+
+QCursor KisCursor::moveSelectionCursor()
+{
+    return load("move-selection.png");
 }
 
 QCursor KisCursor::handCursor()

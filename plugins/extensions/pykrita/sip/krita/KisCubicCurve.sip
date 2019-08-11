@@ -11,7 +11,8 @@ public:
     void setPoint(int idx, const QPointF& point);
     int addPoint(const QPointF& point);
     void removePoint(int idx);
-    bool isNull() const;
+    bool isIdentity() const;
+    bool isConstant(qreal x) const;
     void setName(const QString& name);
     const QString& name() const;
     QString toString() const;

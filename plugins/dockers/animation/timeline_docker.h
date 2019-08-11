@@ -39,10 +39,11 @@ public:
     QString observerName() override { return "TimelineDocker"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
-    void setMainWindow(KisViewManager *kisview) override;
+    void setViewManager(KisViewManager *kisview) override;
 
 public Q_SLOTS:
     void slotUpdateIcons();
+    void slotUpdateFrameCache();
 
 private:
     struct Private;

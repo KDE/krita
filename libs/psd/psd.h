@@ -199,18 +199,18 @@ struct psd_gradient_color {
 
 struct psd_pattern {
 
-    psd_color_mode color_mode; // The image mode of the file.
-    quint8 height; // Point: vertical, 2 bytes and horizontal, 2 bytes
-    quint8 width;
+    psd_color_mode color_mode = Bitmap; // The image mode of the file.
+    quint8 height = 0; // Point: vertical, 2 bytes and horizontal, 2 bytes
+    quint8 width = 0;
     QString name;
     QString uuid;
-    qint32 version;
-    quint8 top; // Rectangle: top, left, bottom, right
-    quint8 left;
-    quint8 bottom;
-    quint8 right;
-    qint32 max_channel; // Max channels
-    qint32 channel_number;
+    qint32 version = 0;
+    quint8 top = 0; // Rectangle: top, left, bottom, right
+    quint8 left = 0;
+    quint8 bottom = 0;
+    quint8 right = 0;
+    qint32 max_channel = 0; // Max channels
+    qint32 channel_number = 0;
     QVector<QRgb> color_table;
 };
 

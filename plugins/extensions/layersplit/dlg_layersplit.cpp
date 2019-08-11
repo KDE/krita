@@ -46,11 +46,11 @@ DlgLayerSplit::DlgLayerSplit()
     m_page->intFuzziness->setRange(0, 200);
     m_page->intFuzziness->setSingleStep(1);
 
-    m_colorSetChooser = new KisColorsetChooser();
+    m_colorSetChooser = new KisPaletteListWidget();
     m_page->paletteChooser->setPopupWidget(m_colorSetChooser);
-    connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(slotSetPalette(KoColorSet*)));
+    connect(m_colorSetChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), this, SLOT(slotSetPalette(KoColorSet*)));
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_page->intFuzziness->setValue(cfg.readEntry<int>("layersplit/fuzziness", 20));
     m_page->chkCreateGroupLayer->setChecked(cfg.readEntry<bool>("layerspit/createmastergroup", true));
     m_page->chkSeparateGroupLayers->setChecked(cfg.readEntry<bool>("layerspit/separategrouplayers", false));
@@ -81,7 +81,7 @@ DlgLayerSplit::~DlgLayerSplit()
 
 void DlgLayerSplit::applyClicked()
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.writeEntry("layersplit/fuzziness", m_page->intFuzziness->value());
     cfg.writeEntry("layerspit/createmastergroup", m_page->chkCreateGroupLayer->isChecked());
     cfg.writeEntry("layerspit/separategrouplayers", m_page->chkSeparateGroupLayers->isChecked());

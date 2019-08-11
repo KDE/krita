@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,7 +27,7 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
-#include "KoCanvasResourceManager.h"
+#include "KoCanvasResourceProvider.h"
 
 #include "kis_shade_selector_line.h"
 
@@ -161,8 +162,8 @@ void KisMinimalShadeSelector::canvasResourceChanged(int key, const QVariant &v)
     bool onForeground = cfg.readEntry("shadeSelectorUpdateOnForeground", false);
     bool onBackground = cfg.readEntry("shadeSelectorUpdateOnBackground", true);
 
-    if ((key == KoCanvasResourceManager::ForegroundColor && onForeground)
-        || (key == KoCanvasResourceManager::BackgroundColor && onBackground)) {
+    if ((key == KoCanvasResourceProvider::ForegroundColor && onForeground)
+        || (key == KoCanvasResourceProvider::BackgroundColor && onBackground)) {
 
         setColor(v.value<KoColor>());
     }

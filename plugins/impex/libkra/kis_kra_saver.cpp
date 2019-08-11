@@ -26,6 +26,7 @@
 #include <QDomElement>
 #include <QString>
 #include <QStringList>
+#include <QScopedPointer>
 
 #include <QUrl>
 #include <QBuffer>
@@ -35,6 +36,9 @@
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoColor.h>
+#include <KoColorSet.h>
+#include <KoResourceServer.h>
+#include <KoResourceServerProvider.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
@@ -57,6 +61,8 @@
 #include "kis_guides_config.h"
 #include "KisProofingConfiguration.h"
 
+#include <KisMirrorAxisConfig.h>
+
 #include <QFileInfo>
 #include <QDir>
 
@@ -70,13 +76,15 @@ public:
     QMap<const KisNode*, QString> nodeFileNames;
     QMap<const KisNode*, QString> keyframeFilenames;
     QString imageName;
+    QString filename;
     QStringList errorMessages;
 };
 
-KisKraSaver::KisKraSaver(KisDocument* document)
+KisKraSaver::KisKraSaver(KisDocument* document, const QString &filename)
         : m_d(new Private)
 {
     m_d->doc = document;
+    m_d->filename = filename;
 
     m_d->imageName = m_d->doc->documentInfo()->aboutInfo("title");
     if (m_d->imageName.isEmpty()) {
@@ -91,7 +99,7 @@ KisKraSaver::~KisKraSaver()
 
 QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
 {
-    QDomElement imageElement = doc.createElement("IMAGE"); // Legacy!
+    QDomElement imageElement = doc.createElement("IMAGE");
 
     Q_ASSERT(image);
     imageElement.setAttribute(NAME, m_d->imageName);
@@ -126,12 +134,15 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     m_d->keyframeFilenames = visitor.keyframeFileNames();
 
     saveBackgroundColor(doc, imageElement, image);
+    saveAssistantsGlobalColor(doc, imageElement);
     saveWarningColor(doc, imageElement, image);
     saveCompositions(doc, imageElement, image);
     saveAssistantsList(doc, imageElement);
-    saveGrid(doc,imageElement);
-    saveGuides(doc,imageElement);
-    saveAudio(doc,imageElement);
+    saveGrid(doc, imageElement);
+    saveGuides(doc, imageElement);
+    saveMirrorAxis(doc, imageElement);
+    saveAudio(doc, imageElement);
+    savePalettesToXML(doc, imageElement);
 
     QDomElement animationElement = doc.createElement("animation");
     KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
@@ -140,6 +151,47 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     imageElement.appendChild(animationElement);
 
     return imageElement;
+}
+
+bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &uri)
+{
+    Q_UNUSED(image);
+    Q_UNUSED(uri);
+
+    bool res = false;
+    if (m_d->doc->paletteList().size() == 0) {
+        return true;
+    }
+    for (const KoColorSet *palette : m_d->doc->paletteList()) {
+        if (!palette->isGlobal()) {
+            if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
+                m_d->errorMessages << i18n("could not save palettes");
+                return false;
+            }
+            QByteArray ba = palette->toByteArray();
+            if (!ba.isEmpty()) {
+                store->write(ba);
+            } else {
+                qWarning() << "Cannot save the palette to a byte array:" << palette->name();
+            }
+            store->close();
+            res = true;
+        }
+    }
+    return res;
+}
+
+void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
+{
+    QDomElement ePalette = doc.createElement(PALETTES);
+    for (const KoColorSet *palette : m_d->doc->paletteList()) {
+        if (!palette->isGlobal()) {
+            QDomElement eFile =  doc.createElement("palette");
+            eFile.setAttribute("filename", palette->filename());
+            ePalette.appendChild(eFile);
+        }
+    }
+    element.appendChild(ePalette);
 }
 
 bool KisKraSaver::saveKeyframes(KoStore *store, const QString &uri, bool external)
@@ -302,6 +354,14 @@ void KisKraSaver::saveBackgroundColor(QDomDocument& doc, QDomElement& element, K
     element.appendChild(e);
 }
 
+void KisKraSaver::saveAssistantsGlobalColor(QDomDocument& doc, QDomElement& element)
+{
+    QDomElement e = doc.createElement(GLOBALASSISTANTSCOLOR);
+    QString colorString = KisDomUtils::qColorToQString(m_d->doc->assistantsGlobalColor());
+    e.setAttribute(SIMPLECOLORDATA, QString(colorString));
+    element.appendChild(e);
+}
+
 void KisKraSaver::saveWarningColor(QDomDocument& doc, QDomElement& element, KisImageSP image)
 {
     if (image->proofingConfiguration()) {
@@ -328,9 +388,11 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
     QString location;
     QMap<QString, int> assistantcounters;
     QByteArray data;
+
     QList<KisPaintingAssistantSP> assistants =  m_d->doc->assistants();
     QMap<KisPaintingAssistantHandleSP, int> handlemap;
     if (!assistants.isEmpty()) {
+
         Q_FOREACH (KisPaintingAssistantSP assist, assistants){
             if (!assistantcounters.contains(assist->id())){
                 assistantcounters.insert(assist->id(),0);
@@ -338,6 +400,7 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
             location = external ? QString() : uri;
             location += m_d->imageName + ASSISTANTS_PATH;
             location += QString(assist->id()+"%1.assistant").arg(assistantcounters[assist->id()]);
+
             data = assist->saveXml(handlemap);
             store->open(location);
             store->write(data);
@@ -422,6 +485,18 @@ bool KisKraSaver::saveGuides(QDomDocument& doc, QDomElement& element)
     return true;
 }
 
+bool KisKraSaver::saveMirrorAxis(QDomDocument &doc, QDomElement &element)
+{
+    KisMirrorAxisConfig mirrorAxisConfig = m_d->doc->mirrorAxisConfig();
+
+    if (!mirrorAxisConfig.isDefault()) {
+        QDomElement mirrorAxisElement = mirrorAxisConfig.saveToXml(doc, MIRROR_AXIS);
+        element.appendChild(mirrorAxisElement);
+    }
+
+    return true;
+}
+
 bool KisKraSaver::saveAudio(QDomDocument& doc, QDomElement& element)
 {
     const KisImageAnimationInterface *interface = m_d->doc->image()->animationInterface();
@@ -433,7 +508,7 @@ bool KisKraSaver::saveAudio(QDomDocument& doc, QDomElement& element)
         return false;
     }
 
-    const QDir documentDir = QFileInfo(m_d->doc->localFilePath()).absoluteDir();
+    const QDir documentDir = QFileInfo(m_d->filename).absoluteDir();
     KIS_ASSERT_RECOVER_RETURN_VALUE(documentDir.exists(), false);
 
     fileName = documentDir.relativeFilePath(fileName);

@@ -57,7 +57,7 @@ ImageShape::ImageShape()
 }
 
 ImageShape::ImageShape(const ImageShape &rhs)
-    : KoTosContainer(new KoTosContainerPrivate(*rhs.d_func(), this)),
+    : KoTosContainer(rhs),
       m_d(new Private(*rhs.m_d))
 {
 }

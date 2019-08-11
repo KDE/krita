@@ -48,7 +48,6 @@
 #include "KisViewManager.h"
 #include "kis_canvas2.h"
 #include "kis_prescaled_projection.h"
-#include "kis_config.h"
 #include "kis_canvas_resource_provider.h"
 #include "KisDocument.h"
 #include "kis_selection_manager.h"
@@ -80,7 +79,7 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter
     setAttribute(Qt::WA_InputMethodEnabled, false);
     setAttribute(Qt::WA_StaticContents);
     setAttribute(Qt::WA_OpaquePaintEvent);
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     setAttribute(Qt::WA_AcceptTouchEvents, false);
 #else
     setAttribute(Qt::WA_AcceptTouchEvents, true);
@@ -170,7 +169,7 @@ void KisQPainterCanvas::channelSelectionChanged(const QBitArray &channelFlags)
     m_d->prescaledProjection->setChannelFlags(channelFlags);
 }
 
-void KisQPainterCanvas::setDisplayProfile(KisDisplayColorConverter *colorConverter)
+void KisQPainterCanvas::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
 {
     Q_ASSERT(m_d->prescaledProjection);
     m_d->prescaledProjection->setMonitorProfile(colorConverter->monitorProfile(),
@@ -186,6 +185,13 @@ void KisQPainterCanvas::setDisplayFilter(QSharedPointer<KisDisplayFilter> displa
         canvas()->startUpdateInPatches(canvas()->image()->bounds());
 }
 
+void KisQPainterCanvas::notifyImageColorSpaceChanged(const KoColorSpace *cs)
+{
+    Q_UNUSED(cs);
+    // FIXME: on color space change the data is refetched multiple
+    //        times by different actors!
+    canvas()->startUpdateInPatches(canvas()->image()->bounds());
+}
 
 void KisQPainterCanvas::setWrapAroundViewingMode(bool value)
 {
@@ -240,7 +246,7 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 
 void KisQPainterCanvas::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     m_d->checkBrush = QBrush(createCheckersImage());
     m_d->scrollCheckers = cfg.scrollCheckers();

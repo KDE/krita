@@ -27,7 +27,8 @@ KisSnapConfig::KisSnapConfig(bool loadValues)
       m_intersection(false),
       m_boundingBox(false),
       m_imageBounds(true),
-      m_imageCenter(true)
+      m_imageCenter(true),
+      m_toPixel(false)
 {
     if (loadValues) {
         loadStaticData();
@@ -41,12 +42,12 @@ KisSnapConfig::~KisSnapConfig()
 
 void KisSnapConfig::saveStaticData() const
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.saveSnapConfig(*this);
 }
 
 void KisSnapConfig::loadStaticData()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     cfg.loadSnapConfig(this);
 }

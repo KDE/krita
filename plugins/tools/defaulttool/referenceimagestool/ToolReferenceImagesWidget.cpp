@@ -27,6 +27,10 @@
 #include <kis_signals_blocker.h>
 #include <KisReferenceImage.h>
 
+#include <QClipboard>
+#include <QApplication>
+#include <QStandardItemModel>
+
 #include "ToolReferenceImages.h"
 
 struct ToolReferenceImagesWidget::Private {
@@ -64,7 +68,27 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
         }
     );
 
+    d->ui->bnAddReferenceImage->setToolTip(i18n("Add Reference Image"));
+    d->ui->bnAddReferenceImage->setIcon(KisIconUtils::loadIcon("addlayer"));
+
+
+    d->ui->bnDelete->setToolTip(i18n("Delete all Reference Images"));
+    d->ui->bnDelete->setIcon(KisIconUtils::loadIcon("edit-clear"));
+
+    d->ui->bnLoad->setToolTip(i18n("Load Reference Images Set"));
+    d->ui->bnLoad->setIcon(KisIconUtils::loadIcon("document-open"));
+
+
+    d->ui->bnSave->setToolTip(i18n("Export Reference Images Set"));
+    d->ui->bnSave->setIcon(KisIconUtils::loadIcon("document-save"));
+
+    d->ui->bnPasteReferenceImage->setToolTip(i18n("Paste Reference Image From System Clipboard"));
+    d->ui->bnPasteReferenceImage->setIcon(KisIconUtils::loadIcon("edit-paste"));
+
+
     connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), tool, SLOT(addReferenceImage()));
+    connect(d->ui->bnPasteReferenceImage, SIGNAL(clicked()), tool, SLOT(pasteReferenceImage()));
+
     connect(d->ui->bnDelete, SIGNAL(clicked()), tool, SLOT(removeAllReferenceImages()));
     connect(d->ui->bnSave, SIGNAL(clicked()), tool, SLOT(saveReferenceImages()));
     connect(d->ui->bnLoad, SIGNAL(clicked()), tool, SLOT(loadReferenceImages()));
@@ -73,8 +97,11 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->opacitySlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotOpacitySliderChanged(qreal)));
     connect(d->ui->saturationSlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotSaturationSliderChanged(qreal)));
 
-    connect(d->ui->radioEmbed, SIGNAL(toggled(bool)), this, SLOT(slotEmbeddingChanged()));
-    connect(d->ui->radioLinkExternal, SIGNAL(toggled(bool)), this, SLOT(slotEmbeddingChanged()));
+    d->ui->referenceImageLocationCombobox->addItem(i18n("Embed to .KRA"));
+    d->ui->referenceImageLocationCombobox->addItem(i18n("Link to Image"));
+    connect(d->ui->referenceImageLocationCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSaveLocationChanged(int)));
+
+    updateVisibility(false); // no selection when we start
 }
 
 ToolReferenceImagesWidget::~ToolReferenceImagesWidget()
@@ -110,19 +137,21 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
 
     KisSignalsBlocker blocker(
         d->ui->chkKeepAspectRatio,
-        d->ui->radioEmbed,
-        d->ui->radioLinkExternal
+        d->ui->referenceImageLocationCombobox
     );
 
     d->ui->chkKeepAspectRatio->setCheckState(
         (anyKeepingAspectRatio && anyNotKeepingAspectRatio) ? Qt::PartiallyChecked :
          anyKeepingAspectRatio ? Qt::Checked : Qt::Unchecked);
 
-    d->ui->radioEmbed->setChecked(anyEmbedded && !anyLinked);
-    d->ui->radioLinkExternal->setChecked(anyLinked && !anyEmbedded);
-    d->ui->radioEmbed->setEnabled(!anyNonLinkable && anySelected);
-    d->ui->radioLinkExternal->setEnabled(!anyNonLinkable && anySelected);
-    d->ui->chkKeepAspectRatio->setEnabled(anySelected);
+
+    // set save location combobox
+    bool imagesEmbedded = anyEmbedded && !anyLinked;
+    int comboBoxIndex = imagesEmbedded ? 0 : 1; // maps state to combobox index
+    d->ui->referenceImageLocationCombobox->setCurrentIndex(comboBoxIndex);
+
+
+    updateVisibility(anySelected);
 }
 
 void ToolReferenceImagesWidget::slotKeepAspectChanged()
@@ -158,19 +187,60 @@ void ToolReferenceImagesWidget::slotSaturationSliderChanged(qreal newSaturation)
     d->tool->canvas()->addCommand(cmd);
 }
 
-void ToolReferenceImagesWidget::slotEmbeddingChanged()
+void ToolReferenceImagesWidget::slotSaveLocationChanged(int index)
 {
     KoSelection *selection = d->tool->koSelection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
+
 
     Q_FOREACH(KoShape *shape, shapes) {
         KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
         KIS_SAFE_ASSERT_RECOVER_RETURN(reference);
 
-        if (d->ui->radioEmbed->isChecked()) {
+        if (index == 0) { // embed to KRA
             reference->setEmbed(true);
-        } else if (d->ui->radioLinkExternal->isChecked()) {
-            reference->setEmbed(false);
+        } else { // link to file
+            if (reference->hasLocalFile()) {
+                reference->setEmbed(false);
+            } else {
+                //In the case no local file is found, switch back to embed file data.
+                d->ui->referenceImageLocationCombobox->setCurrentIndex(0);
+            }
+        }
+    }
+}
+
+void ToolReferenceImagesWidget::updateVisibility(bool hasSelection)
+{
+    // hide UI elements if nothing is selected.
+    d->ui->referenceImageLocationCombobox->setVisible(hasSelection);
+    d->ui->chkKeepAspectRatio->setVisible(hasSelection);
+    d->ui->saveLocationLabel->setVisible(hasSelection);
+    d->ui->opacitySlider->setVisible(hasSelection);
+    d->ui->saturationSlider->setVisible(hasSelection);
+
+    // show a label indicating that a selection is required to show options
+    d->ui->referenceImageOptionsLabel->setVisible(!hasSelection);
+
+    if (hasSelection) {
+        KoSelection* selection = d->tool->koSelection();
+        QList<KoShape*> shapes = selection->selectedEditableShapes();
+        bool usesLocalFile = true;
+
+        Q_FOREACH(KoShape *shape, shapes) {
+            KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
+
+            if (reference) {
+                usesLocalFile &= reference->hasLocalFile();
+            }
+        }
+
+        QStandardItemModel* model = dynamic_cast<QStandardItemModel*>(d->ui->referenceImageLocationCombobox->model());
+
+        if (model) {
+            QStandardItem* item = model->item(1);
+            item->setFlags(usesLocalFile ? item->flags() | Qt::ItemIsEnabled :
+                                           item->flags() & ~Qt::ItemIsEnabled);
         }
     }
 }

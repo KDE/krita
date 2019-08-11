@@ -57,7 +57,7 @@
 #include <KoPathShapeMarkerCommand.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoDocumentResourceManager.h>
 #include <KoSelection.h>
 #include <KoShapeController.h>
@@ -66,10 +66,10 @@
 #include <KoSelectedShapesProxy.h>
 #include "ui_KoStrokeConfigWidget.h"
 #include <KoFlakeUtils.h>
-#include <KoCanvasBase.h>
 #include <KoFillConfigWidget.h>
 #include "kis_canvas_resource_provider.h"
 #include "kis_acyclic_signal_connector.h"
+#include <kis_signal_compressor.h>
 
 // Krita
 #include "kis_double_parse_unit_spin_box.h"
@@ -170,7 +170,7 @@ public:
         active(true),
         allowLocalUnitManagement(true),
         fillConfigWidget(0),
-        noSelectionTrackingMode(false)
+        selectionChangedCompressor(200, KisSignalCompressor::FIRST_ACTIVE)
     {
     }
 
@@ -190,10 +190,12 @@ public:
     bool allowLocalUnitManagement;
 
     KoFillConfigWidget *fillConfigWidget;
-    bool noSelectionTrackingMode;
+    bool noSelectionTrackingMode {false};
 
     KisAcyclicSignalConnector shapeChangedAcyclicConnector;
     KisAcyclicSignalConnector resourceManagerAcyclicConnector;
+    KisSignalCompressor selectionChangedCompressor;
+
 
     std::vector<KisAcyclicSignalConnector::Blocker> deactivationLocks;
 
@@ -205,7 +207,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     : QWidget(parent)
     , d(new Private())
 {
-    // confure GUI
+    // configure GUI
     d->ui = new Ui_KoStrokeConfigWidget();
     d->ui->setupUi(this);
 
@@ -214,23 +216,24 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     { // connect the canvas
         d->shapeChangedAcyclicConnector.connectBackwardVoid(
             canvas->selectedShapesProxy(), SIGNAL(selectionChanged()),
-            this, SLOT(selectionChanged()));
+            &d->selectionChangedCompressor, SLOT(start()));
 
         d->shapeChangedAcyclicConnector.connectBackwardVoid(
             canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()),
-            this, SLOT(selectionChanged()));
+            &d->selectionChangedCompressor, SLOT(start()));
+
+        connect(&d->selectionChangedCompressor, SIGNAL(timeout()), this, SLOT(selectionChanged()));
 
         d->resourceManagerAcyclicConnector.connectBackwardResourcePair(
-            canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            this, SLOT(canvasResourceChanged(int, const QVariant &)));
+            canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            this, SLOT(canvasResourceChanged(int,QVariant)));
 
         d->canvas = canvas;
     }
 
-
     {
 
-       d->fillConfigWidget = new KoFillConfigWidget(canvas, KoFlake::StrokeFill, false, this);
+       d->fillConfigWidget = new KoFillConfigWidget(canvas, KoFlake::StrokeFill, true, this);
        d->fillConfigWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
        d->ui->fillConfigWidgetLayout->addWidget(d->fillConfigWidget);
        connect(d->fillConfigWidget, SIGNAL(sigFillChanged()), SIGNAL(sigStrokeChanged()));
@@ -240,7 +243,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     d->ui->thicknessLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     // set min/max/step and value in points, then set actual unit
-    d->ui->lineWidth->setMinMaxStep(0.0, 1000.0, 0.5);
+    d->ui->lineWidth->setMinMaxStep(0.5, 1000.0, 0.5); // if someone wants 0, just set to "none" on UI
     d->ui->lineWidth->setDecimals(2);
     d->ui->lineWidth->setUnit(KoUnit(KoUnit::Point));
     d->ui->lineWidth->setToolTip(i18n("Set line width of actual selection"));
@@ -323,7 +326,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
         }
     }
 
-    selectionChanged();
+    d->selectionChangedCompressor.start();
 
     d->fillConfigWidget->activate();
     deactivate();
@@ -339,7 +342,7 @@ void KoStrokeConfigWidget::setNoSelectionTrackingMode(bool value)
     d->fillConfigWidget->setNoSelectionTrackingMode(value);
     d->noSelectionTrackingMode = value;
     if (!d->noSelectionTrackingMode) {
-        selectionChanged();
+        d->selectionChangedCompressor.start();
     }
 }
 
@@ -466,7 +469,8 @@ void KoStrokeConfigWidget::activate()
     d->fillConfigWidget->activate();
 
     if (!d->noSelectionTrackingMode) {
-        selectionChanged();
+       // selectionChanged();
+        d->selectionChangedCompressor.start();
     } else {
         loadCurrentStrokeFillFromResourceServer();
     }
@@ -669,10 +673,10 @@ void KoStrokeConfigWidget::selectionChanged()
 
     // we need to linearize update order, and force the child widget to update
     // before we start doing it
-    d->fillConfigWidget->forceUpdateOnSelectionChanged();
-
 
     QList<KoShape*> shapes = selection->selectedEditableShapes();
+
+    d->fillConfigWidget->forceUpdateOnSelectionChanged(); // calls shapeChanged() logic
 
     KoShape *shape = !shapes.isEmpty() ? shapes.first() : 0;
 
@@ -739,7 +743,7 @@ void KoStrokeConfigWidget::selectionChanged()
         }
     }
 
-    const bool lineOptionsVisible =  d->fillConfigWidget->selectedFillIndex() != 0;
+    const bool lineOptionsVisible = (d->fillConfigWidget->selectedFillIndex() != 0);
 
     // This switch statement is to help the tab widget "pages" to be closer to the correct size
     // if we don't do this the internal widgets get rendered, then the tab page has to get resized to
@@ -779,10 +783,10 @@ void KoStrokeConfigWidget::selectionChanged()
 void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
 {
     switch (key) {
-    case KoCanvasResourceManager::Unit:
+    case KoCanvasResourceProvider::Unit:
         // we request the whole selection to reload because the
         // unit of the stroke width depends on the selected shape
-        selectionChanged();
+        d->selectionChangedCompressor.start();
         break;
     case KisCanvasResourceProvider::Size:
         if (d->noSelectionTrackingMode) {

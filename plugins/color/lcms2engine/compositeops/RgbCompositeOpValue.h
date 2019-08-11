@@ -34,7 +34,7 @@ class RgbCompositeOpValue: public KoCompositeOp
 public:
 
     RgbCompositeOpValue(KoColorSpace *cs)
-        : KoCompositeOp(cs, COMPOSITE_VALUE, i18n("Value"), "")
+        : KoCompositeOp(cs, COMPOSITE_VALUE, i18nc("HSV Value","Value"), "")
     {
     }
 

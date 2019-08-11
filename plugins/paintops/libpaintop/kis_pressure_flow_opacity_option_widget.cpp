@@ -46,8 +46,10 @@ KisFlowOpacityOptionWidget::KisFlowOpacityOptionWidget():
     ui.layout->addWidget(curveWidget());
 
     m_opacitySlider = ui.opacitySlider;
-    m_opacitySlider->setRange(0.0, 1.0, 2);
-    m_opacitySlider->setValue(1.0);
+    m_opacitySlider->setRange(0.0, 100.0, 0);
+    m_opacitySlider->setValue(100);
+    m_opacitySlider->setPrefix("Opacity: ");
+    m_opacitySlider->setSuffix("%");
 
     setConfigurationPage(widget);
 
@@ -60,13 +62,14 @@ void KisFlowOpacityOptionWidget::readOptionSetting(const KisPropertiesConfigurat
     KisFlowOpacityOption* option = static_cast<KisFlowOpacityOption*>(curveOption());
 
     m_opacitySlider->blockSignals(true);
-    m_opacitySlider->setValue(option->getStaticOpacity());
+    m_opacitySlider->setValue(option->getStaticOpacity()*100);
     m_opacitySlider->blockSignals(false);
 }
 
 void KisFlowOpacityOptionWidget::slotSliderValueChanged()
 {
     KisFlowOpacityOption* option = static_cast<KisFlowOpacityOption*>(curveOption());
-    option->setOpacity(m_opacitySlider->value());
+    option->setOpacity(m_opacitySlider->value()/100.0);
+
     emitSettingChanged();
 }

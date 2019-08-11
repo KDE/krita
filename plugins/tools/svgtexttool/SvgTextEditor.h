@@ -34,7 +34,6 @@
 #include "ui_WdgSvgTextSettings.h"
 
 class KoSvgTextShape;
-class KisFileNameRequester;
 class KoDialog;
 
 class SvgTextEditor : public KXmlGuiWindow
@@ -60,25 +59,32 @@ public:
     void setShape(KoSvgTextShape *shape);
 
 private Q_SLOTS:
-
     /**
      * switch the text editor tab.
      */
-    void switchTextEditorTab();
+    void switchTextEditorTab(bool convertData = true);
+
+    void slotCloseEditor();
+
     /**
      * in rich text, check the current format, and toggle the given buttons.
      */
     void checkFormat();
 
+    void slotFixUpEmptyTextBlock();
+
     void save();
 
     void undo();
     void redo();
+
     void cut();
     void copy();
     void paste();
+
     void selectAll();
     void deselect();
+
     void find();
     void findNext();
     void findPrev();
@@ -107,6 +113,7 @@ private Q_SLOTS:
     void decreaseTextSize();
 
     void setLineHeight(double lineHeightPercentage);
+    void setLetterSpacing(double letterSpacing);
     void alignLeft();
     void alignRight();
     void alignCenter();
@@ -126,28 +133,32 @@ private Q_SLOTS:
     void dialogButtonClicked(QAbstractButton *button);
 
 Q_SIGNALS:
-
-    void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs);
+    void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextPreferred);
+    void textEditorClosed();
 
 protected:
-
     void wheelEvent(QWheelEvent *event) override;
+    /**
+     * Selects all if there is no selection
+     * @returns a copy of the previous cursor.
+     */
+    QTextCursor setTextSelection();
 
 private:
-
     void applySettings();
 
     QAction *createAction(const QString &name,
                           const char *member);
     void createActions();
     void enableRichTextActions(bool enable);
-
-
+    void enableSvgTextActions(bool enable);
 
     Ui_WdgSvgTextEditor m_textEditorWidget;
     QTextEdit *m_currentEditor {0};
     QWidget *m_page {0};
     QList<QAction*> m_richTextActions;
+    QList<QAction*> m_svgTextActions;
+
     KoSvgTextShape *m_shape {0};
 #ifndef Q_OS_WIN
     KoDialog *m_charSelectDialog {0};

@@ -1,2 +1,4 @@
-# let's make a module
-from .documenttools import *
+import krita
+from .documenttools import DocumentToolsExtension
+
+Scripter.addExtension(DocumentToolsExtension(krita.Krita.instance()))

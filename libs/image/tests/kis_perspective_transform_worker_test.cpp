@@ -21,6 +21,8 @@
 #include <QTest>
 
 #include "testutil.h"
+
+#define USE_DOCUMENT 0
 #include "qimage_based_test.h"
 
 #include "kis_perspectivetransform_worker.h"
@@ -46,7 +48,7 @@ public:
 
     void checkLayer(const QString &testName) {
         KisNodeSP node = findNode(image->root(), "paint1");
-        QVERIFY(checkOneLayer(image, node, testName, 0));
+        QVERIFY(checkOneLayer(image, node, testName, 3));
     }
 
 

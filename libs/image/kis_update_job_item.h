@@ -28,6 +28,7 @@
 #include "kis_spontaneous_job.h"
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
+#include "kis_updater_context.h"
 
 
 class KisUpdateJobItem :  public QObject, public QRunnable
@@ -43,8 +44,8 @@ public:
     };
 
 public:
-    KisUpdateJobItem(QReadWriteLock *exclusiveJobLock)
-        : m_exclusiveJobLock(exclusiveJobLock),
+    KisUpdateJobItem(KisUpdaterContext *updaterContext)
+        : m_updaterContext(updaterContext),
           m_atomicType(Type::EMPTY),
           m_runnableJob(0)
     {
@@ -76,9 +77,9 @@ public:
             KIS_SAFE_ASSERT_RECOVER_RETURN(isRunning());
 
             if(m_exclusive) {
-                m_exclusiveJobLock->lockForWrite();
+                m_updaterContext->m_exclusiveJobLock.lockForWrite();
             } else {
-                m_exclusiveJobLock->lockForRead();
+                m_updaterContext->m_exclusiveJobLock.lockForRead();
             }
 
             if(m_atomicType == Type::MERGE) {
@@ -93,12 +94,12 @@ public:
             setDone();
 
 
-            emit sigDoSomeUsefulWork();
+            m_updaterContext->doSomeUsefulWork();
 
             // may flip the current state from Waiting -> Running again
-            emit sigJobFinished();
+            m_updaterContext->jobFinished();
 
-            m_exclusiveJobLock->unlock();
+            m_updaterContext->m_exclusiveJobLock.unlock();
 
             // try to exit the loop. Please note, that no one can flip the state from
             // WAITING to EMPTY except ourselves!
@@ -117,7 +118,7 @@ public:
         m_merger.startMerge(*m_walker);
 
         QRect changeRect = m_walker->changeRect();
-        emit sigContinueUpdate(changeRect);
+        m_updaterContext->continueUpdate(changeRect);
     }
 
     // return true if the thread should actually be started
@@ -156,7 +157,7 @@ public:
 
         m_runnableJob = spontaneousJob;
 
-        m_exclusive = false;
+        m_exclusive = spontaneousJob->isExclusive();
         m_walker = 0;
         m_accessRect = m_changeRect = QRect();
 
@@ -191,20 +192,16 @@ public:
         return m_strokeJobSequentiality;
     }
 
-Q_SIGNALS:
-    void sigContinueUpdate(const QRect& rc);
-    void sigDoSomeUsefulWork();
-    void sigJobFinished();
-
 private:
     /**
      * Open walker and stroke job for the testing suite.
      * Please, do not use it in production code.
      */
+    friend class KisTestableUpdaterContext;
     friend class KisSimpleUpdateQueueTest;
     friend class KisStrokesQueueTest;
     friend class KisUpdateSchedulerTest;
-    friend class KisTestableUpdaterContext;
+    friend class KisUpdaterContext;
 
     inline KisBaseRectsWalkerSP walker() const {
         return m_walker;
@@ -222,10 +219,7 @@ private:
     }
 
 private:
-    /**
-     * \see KisUpdaterContext::m_exclusiveJobLock
-     */
-    QReadWriteLock *m_exclusiveJobLock;
+    KisUpdaterContext *m_updaterContext;
 
     bool m_exclusive;
 

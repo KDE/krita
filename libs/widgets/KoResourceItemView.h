@@ -23,12 +23,16 @@
 
 #include <KoTableView.h>
 #include <KoIconToolTip.h>
+#include <QScroller>
+#include <KisKineticScroller.h>
 
 class QEvent;
 class QModelIndex;
 
+#include "kritawidgets_export.h"
+
 /// The resource view
-class KoResourceItemView : public KoTableView
+class KRITAWIDGETS_EXPORT KoResourceItemView : public KoTableView
 {
     Q_OBJECT
 
@@ -55,6 +59,7 @@ protected:
 
 private Q_SLOTS:
     void slotItemClicked(const QModelIndex &index);
+    void slotScrollerStateChange(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
 
 private:
     KoIconToolTip m_tip;

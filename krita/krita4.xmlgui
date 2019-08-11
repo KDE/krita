@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="401"
+version="430"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -53,6 +53,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="edit_paste"/>
       <Action name="paste_at"/>
       <Action name="paste_new"/>
+      <Action name="paste_as_reference"/>
       <Action name="clear"/>
       <Action name="fill_selection_foreground_color"/>
       <Action name="fill_selection_background_color"/>
@@ -115,6 +116,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
         <text>&amp;Snap To</text>
         <Action name="view_snap_to_guides"/>
             <Action name="view_snap_to_grid"/>
+            <Action name="view_snap_to_pixel"/>
           <Action name="view_snap_orthogonal" />
             <Action name="view_snap_node" />
             <Action name="view_snap_extension" />
@@ -202,7 +204,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
         <Action name="convert_to_transparency_mask"/>
         <Action name="convert_to_filter_mask"/>
         <Action name="convert_to_selection_mask"/>
-        <Action name="convert_layer_to_file_layer"/>
+        <Action name="convert_to_file_layer"/>
         <Action name="convert_group_to_animated"/>
         <Action name="layercolorspaceconversion"/>
       </Menu>
@@ -237,6 +239,21 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
          <Action name="shearlayer"/>
          <Action name="offsetlayer"/>
       </Menu>
+      <Menu name="LayerTransformAll">
+         <text>Transform &amp;All Layers</text>
+         <Action name="mirrorAllNodesX"/>
+         <Action name="mirrorAllNodesY"/>
+         <Action name="scaleAllLayers"/>
+         <Menu name="Rotate">
+             <text>&amp;Rotate</text>
+             <Action name="rotateAllLayers"/>
+             <Separator/>
+             <Action name="rotateAllLayersCW90"/>
+             <Action name="rotateAllLayersCCW90"/>
+             <Action name="rotateAllLayers180"/>
+         </Menu>
+         <Action name="shearAllLayers"/>
+      </Menu>
       <Menu name="LayerSplitAlpha">
          <text>S&amp;plit</text>
          <Menu name="LayerSplitAlpha">
@@ -268,8 +285,11 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="select_all"/>
       <Action name="deselect"/>
       <Action name="reselect"/>
-      <Action name="invert"/>
+      <Action name="invert_selection"/>
+      <Separator/>
+      <Action name="edit_selection"/>
       <Action name="convert_to_vector_selection"/>
+      <Action name="convert_to_raster_selection"/>
       <Action name="convert_shapes_to_vector_selection"/>
       <Action name="convert_selection_to_shape"/>
       <Separator/>
@@ -281,7 +301,14 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="selectionscale"/>
       <Separator/>
       <Action name="colorrange"/>
-      <Action name="selectopaque"/>
+      <Menu name="selectopaquemenu">
+        <text>Select &amp;Opaque</text>
+        <Action name="selectopaque"/>
+        <Separator/>
+        <Action name="selectopaque_add"/>
+        <Action name="selectopaque_subtract"/>
+        <Action name="selectopaque_intersect"/>
+      </Menu>
       <Separator/>
       <Action name="featherselection"/>
       <Action name="growselection"/>
@@ -300,8 +327,8 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="color_filters"/>
       <Action name="decor_filters"/>
       <Action name="edge_filters"/>
-      <Action name="enhance_filters"/>
       <Action name="emboss_filters"/>
+      <Action name="enhance_filters"/>
       <Action name="map_filters"/>
       <Action name="nonphotorealistic_filters"/>
       <Action name="other_filters"/>
@@ -311,17 +338,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     </Menu>
     <Menu name="tools">
       <text>&amp;Tools</text>
-      <Menu name="scripts"><text>Scripting</text></Menu>
-      <Menu name="Recording">
-        <text>Recording</text>
-        <Action name="Recording_Start_Recording_Macro"/>
-        <Action name="Recording_Stop_Recording_Macro"/>
-      </Menu>
-      <Menu name="Macros">
-        <text>Macros</text>
-        <Action name="Macro_Open_Play"/>
-        <Action name="Macro_Open_Edit"/>
-      </Menu>
+      <Menu name="scripts"><text>Scripts</text></Menu>
     </Menu>
     <Menu name="settings">
       <text>Setti&amp;ngs</text>

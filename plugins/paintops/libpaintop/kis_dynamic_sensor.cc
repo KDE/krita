@@ -4,7 +4,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -282,6 +283,105 @@ QString KisDynamicSensor::maximumLabel(DynamicSensorType sensorType, int max)
     };
 }
 
+int KisDynamicSensor::minimumValue(DynamicSensorType sensorType)
+{
+    switch (sensorType) {
+    case FUZZY_PER_DAB:
+    case FUZZY_PER_STROKE:
+    case FADE:
+    case DISTANCE:
+    case TIME:
+    case ANGLE:
+    case SPEED:
+    case ROTATION:
+    case PRESSURE:
+    case TILT_DIRECTION:
+    case PERSPECTIVE:
+    case PRESSURE_IN:
+        return 0;
+    case XTILT:
+    case YTILT:
+        return -30;
+    case TILT_ELEVATATION:
+        return 90;
+    case TANGENTIAL_PRESSURE:
+    default:
+        return 0;
+    }
+
+}
+
+int KisDynamicSensor::maximumValue(DynamicSensorType sensorType, int max)
+{
+    switch (sensorType) {
+    case FUZZY_PER_DAB:
+    case FUZZY_PER_STROKE:
+    case SPEED:
+    case PERSPECTIVE:
+    case TANGENTIAL_PRESSURE:
+    case PRESSURE_IN:
+    case PRESSURE:
+        return 100;
+    case FADE:
+        if (max < 0) {
+            return 1000;
+	} else {
+            return  max;
+	}
+    case DISTANCE:
+        if (max < 0) {
+            return 30;
+	} else {
+            return max;
+	}
+    case TIME:
+        if (max < 0) {
+           return 3000;
+	} else {
+            return max;
+	}
+    case ANGLE:
+    case ROTATION:
+    case TILT_DIRECTION:
+        return 360;
+    case XTILT:
+    case YTILT:
+        return 30;
+    case TILT_ELEVATATION:
+        return 0;
+    default:
+        return 100;
+    };
+}
+
+QString KisDynamicSensor::valueSuffix(DynamicSensorType sensorType)
+{
+    switch (sensorType) {
+    case FUZZY_PER_DAB:
+    case FUZZY_PER_STROKE:
+    case SPEED:
+    case PRESSURE:
+    case PERSPECTIVE:
+    case TANGENTIAL_PRESSURE:
+    case PRESSURE_IN:
+        return i18n("%");
+    case FADE:
+        return QString();
+    case DISTANCE:
+        return i18n(" px");
+    case TIME:
+        return i18n(" ms");
+    case ANGLE:
+    case ROTATION:
+    case XTILT:
+    case YTILT:
+    case TILT_DIRECTION:
+    case TILT_ELEVATATION:
+        return i18n("°");
+    default:
+        return i18n("%");
+    };
+}
 
 KisDynamicSensorSP KisDynamicSensor::createFromXML(const QString& s, const QString &parentOptionName)
 {

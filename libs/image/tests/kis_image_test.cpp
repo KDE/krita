@@ -387,8 +387,6 @@ void KisImageTest::testLayerComposition()
     QVERIFY(!newLayer2->visible());
 }
 
-#include "testutil.h"
-#include "kis_group_layer.h"
 #include "kis_transparency_mask.h"
 #include "kis_psd_layer_style.h"
 
@@ -588,7 +586,7 @@ void KisImageTest::testFlattenLayer()
     }
 }
 
-#include <metadata/kis_meta_data_merge_strategy_registry.h>
+#include <kis_meta_data_merge_strategy_registry.h>
 
 template<class ContainerTest>
 KisLayerSP mergeHelper(ContainerTest &p, KisLayerSP layer)
@@ -879,7 +877,6 @@ void KisImageTest::testMergeMultiple()
 
 void testMergeCrossColorSpaceImpl(bool useProjectionColorSpace, bool swapSpaces)
 {
-    QRect refRect;
     TestUtil::MaskParent p;
 
     KisPaintLayerSP layer1;
@@ -947,7 +944,6 @@ void KisImageTest::testMergeCrossColorSpace()
 
 void KisImageTest::testMergeSelectionMasks()
 {
-    QRect refRect;
     TestUtil::MaskParent p;
 
     QRect rect1(100, 100, 100, 100);
@@ -1004,7 +1000,41 @@ void KisImageTest::testFlattenImage()
     TestUtil::ReferenceImageChecker img("flatten", "imagetest");
 
     {
-        KisLayerUtils::flattenImage(p.image);
+        KisLayerUtils::flattenImage(p.image, 0);
+        p.image->waitForDone();
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+
+        p.undoStore->undo();
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+    }
+
+    {
+        KisLayerUtils::flattenImage(p.image, p.layer5); // flatten with active layer just under the root (not inside any group)
+        p.image->waitForDone();
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+
+        p.undoStore->undo();
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+    }
+
+    {
+        KisLayerUtils::flattenImage(p.image, p.layer2); // flatten with active layer just under the root (not inside any group), but with a mask
+        p.image->waitForDone();
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+
+        p.undoStore->undo();
+        p.image->waitForDone();
+
+        QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
+    }
+
+    {
+        KisLayerUtils::flattenImage(p.image, p.layer3); // flatten with active layer inside of a group
+        p.image->waitForDone();
         QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
 
         p.undoStore->undo();
@@ -1153,6 +1183,55 @@ void KisImageTest::testMergePassThroughOverPaintLayer()
         QVERIFY(chk.checkDevice(p.image->projection(), p.image, "00_initial"));
         QVERIFY(newLayer->inherits("KisPaintLayer"));
     }
+}
+
+#include "kis_paint_device_debug_utils.h"
+#include "kis_algebra_2d.h"
+
+void KisImageTest::testPaintOverlayMask()
+{
+    QRect refRect(0, 0, 512, 512);
+    TestUtil::MaskParent p(refRect);
+
+    QRect fillRect(50, 50, 412, 412);
+    QRect selectionRect(200, 200, 100, 50);
+
+    KisPaintLayerSP layer1 = p.layer;
+    layer1->paintDevice()->fill(fillRect, KoColor(Qt::yellow, layer1->colorSpace()));
+
+    KisSelectionMaskSP mask = new KisSelectionMask(p.image);
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(layer1->paintDevice(), p.image));
+
+    selection->pixelSelection()->select(selectionRect, 128);
+    selection->pixelSelection()->select(KisAlgebra2D::blowRect(selectionRect,-0.3), 255);
+
+    mask->setSelection(selection);
+
+    //mask->setVisible(false);
+    //mask->setActive(false);
+
+    p.image->addNode(mask, layer1);
+
+    // a simple layer to disable oblidge child mechanism
+    KisPaintLayerSP layer2 = new KisPaintLayer(p.image, "layer2", OPACITY_OPAQUE_U8);
+    p.image->addNode(layer2);
+
+    p.image->initialRefreshGraph();
+
+    KIS_DUMP_DEVICE_2(p.image->projection(), refRect, "00_initial", "dd");
+
+    p.image->setOverlaySelectionMask(mask);
+    p.image->waitForDone();
+
+    KIS_DUMP_DEVICE_2(p.image->projection(), refRect, "01_activated", "dd");
+
+    p.image->setOverlaySelectionMask(0);
+    p.image->waitForDone();
+
+    KIS_DUMP_DEVICE_2(p.image->projection(), refRect, "02_deactivated", "dd");
+
+
+
 }
 
 

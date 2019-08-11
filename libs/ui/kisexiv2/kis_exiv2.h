@@ -20,8 +20,8 @@
 #define _KIS_EXIV2_H_
 
 
-#include <metadata/kis_meta_data_value.h>
-#include <exiv2/value.hpp>
+#include <kis_meta_data_value.h>
+#include <exiv2/exiv2.hpp>
 #include "kritaui_export.h"
 
 /// Convert an exiv value to a KisMetaData value

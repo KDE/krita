@@ -64,7 +64,7 @@ public:
 
     /**
      * Draw the projection onto a QPainter.
-     * Color profiling accurs here
+     * Color profiling occurs here
      */
     void drawImage(qreal scale,
                    QPainter& gc,

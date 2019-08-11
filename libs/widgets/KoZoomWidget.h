@@ -31,7 +31,7 @@ class KoZoomWidget : public QWidget
     Q_OBJECT
 
 public:
-    KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons specialButtons, int maxZoom);
+    KoZoomWidget(QWidget* parent, int maxZoom);
     ~KoZoomWidget() override;
 
 Q_SIGNALS:
@@ -43,7 +43,7 @@ Q_SIGNALS:
 
    /**
     * Signal zoomLevelChanged is triggered when the user changes the KoZoomInput combobox widget
-    * @param value value of the slider
+    * @param level value of the slider
     */
     void zoomLevelChanged(const QString& level);
 

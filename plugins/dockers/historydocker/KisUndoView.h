@@ -65,6 +65,7 @@
 #include <QMenu>
 #include <kis_types.h>
 #include <klocalizedstring.h>
+#include <KisKineticScroller.h>
 #include <kis_icon.h>
 #include "kis_canvas2.h"
 
@@ -111,6 +112,9 @@ public Q_SLOTS:
 #ifndef QT_NO_UNDOGROUP
     void setGroup(KUndo2Group *group);
 #endif
+
+    void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
+
 
 private:
     KisUndoViewPrivate* const d;

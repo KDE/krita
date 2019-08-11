@@ -47,6 +47,15 @@ public:
     KisConvolutionPainter(KisPaintDeviceSP device);
     KisConvolutionPainter(KisPaintDeviceSP device, KisSelectionSP selection);
 
+    enum TestingEnginePreference {
+        NONE,
+        SPATIAL,
+        FFTW
+    };
+
+
+    KisConvolutionPainter(KisPaintDeviceSP device, TestingEnginePreference enginePreference);
+
     /**
      * Convolve all channels in src using the specified kernel; there is only one kernel for all
      * channels possible. By default the border pixels are not convolved, that is, convolving
@@ -67,16 +76,18 @@ public:
     void applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize,
                      KisConvolutionBorderOp borderOp = BORDER_REPEAT);
 
+    /**
+     * The caller should ask if the painter needs an explicit transaction iff
+     * the source and destination devices coincide. Otherwise, the transaction is
+     * just not needed.
+     */
+    bool needsTransaction(const KisConvolutionKernelSP kernel) const;
+
+    static bool supportsFFTW();
+
 protected:
     friend class KisConvolutionPainterTest;
-    enum TestingEnginePreference {
-        NONE,
-        SPATIAL,
-        FFTW
-    };
 
-
-    KisConvolutionPainter(KisPaintDeviceSP device, TestingEnginePreference enginePreference);
 
 
 private:
@@ -84,6 +95,8 @@ private:
         KisConvolutionWorker<factory>* createWorker(const KisConvolutionKernelSP kernel,
                                                     KisPainter *painter,
                                                     KoUpdater *progress);
+
+     bool useFFTImplemenation(const KisConvolutionKernelSP kernel) const;
 
 private:
     TestingEnginePreference m_enginePreference;

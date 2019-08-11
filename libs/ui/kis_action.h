@@ -60,14 +60,16 @@ public:
         ACTIVE_LAYER                = 0x0020, ///< Activate if the current node is a layer (vector or pixel)
         ACTIVE_TRANSPARENCY_MASK    = 0x0040, ///< Activate if the current node is a transparency mask
         ACTIVE_SHAPE_LAYER          = 0x0080, ///< Activate if the current node is a vector layer
-        PIXELS_SELECTED             = 0x0100, ///< Activate if there is an active pixel selection
-        SHAPES_SELECTED             = 0x0200, ///< Activate if there is an active vector selection
-        PIXEL_SELECTION_WITH_PIXELS = 0x0400, ///< ???
+        PIXELS_SELECTED             = 0x0100, ///< Activate if any pixels are selected (with any kind of selection)
+        SHAPES_SELECTED             = 0x0200, ///< Activate if any vector shape is selected
+        ANY_SELECTION_WITH_PIXELS   = 0x0400, ///< ???
         PIXELS_IN_CLIPBOARD         = 0x0800, ///< Activate if the clipboard contains pixels
         SHAPES_IN_CLIPBOARD         = 0x1000, ///< Activate if the clipboard contains vector data
         NEVER_ACTIVATE              = 0x2000, ///< ???
         LAYERS_IN_CLIPBOARD         = 0x4000, ///< ???
         IMAGE_HAS_ANIMATION         = 0x8000, ///< Activate if the image has an animation
+        SHAPE_SELECTION_WITH_SHAPES = 0x10000, ///< Activate there is a vector selection active
+        PIXEL_SELECTION_WITH_PIXELS = 0x20000, ///< Activate there is a raster selection active
     };
     Q_DECLARE_FLAGS(ActivationFlags, ActivationFlag)
 
@@ -75,7 +77,8 @@ public:
         NO_CONDITION = 0,
         ACTIVE_NODE_EDITABLE = 0x1,
         ACTIVE_NODE_EDITABLE_PAINT_DEVICE = 0x2,
-        SELECTION_EDITABLE = 0x4
+        SELECTION_EDITABLE = 0x4,
+        OPENGL_ENABLED = 0x8,
     };
     Q_DECLARE_FLAGS(ActivationConditions, ActivationCondition)
 

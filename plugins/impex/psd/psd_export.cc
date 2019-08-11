@@ -50,17 +50,10 @@ psdExport::~psdExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus psdExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode psdExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     PSDSaver psdSaver(document);
-    KisImageBuilder_Result res;
-
-    if ((res = psdSaver.buildFile(io)) == KisImageBuilder_RESULT_OK) {
-        dbgFile <<"success !";
-        return KisImportExportFilter::OK;
-    }
-    dbgFile <<" Result =" << res;
-    return KisImportExportFilter::InternalError;
+    return psdSaver.buildFile(io);
 }
 
 void psdExport::initializeCapabilities()

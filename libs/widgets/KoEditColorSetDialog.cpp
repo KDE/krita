@@ -138,9 +138,9 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
         for (quint32 i = 0; i < m_activeColorSet->nColors(); i++) {
             KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
             KoColorSetEntry c = m_activeColorSet->getColorGlobal(i);
-            patch->setColor(c.color);
-            patch->setToolTip(c.name);
-            connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
+            patch->setColor(c.color());
+            patch->setToolTip(c.name());
+            connect(patch, SIGNAL(triggered(KoColorPatch*)), this, SLOT(setTextLabel(KoColorPatch*)));
             m_gridLayout->addWidget(patch, i/columns, i%columns);
         }
     }
@@ -169,13 +169,13 @@ void KoEditColorSetWidget::addColor()
 
     color = QColorDialog::getColor(color);
     if (color.isValid()) {
-        KoColorSetEntry newEntry;
-        newEntry.color = KoColor(color, KoColorSpaceRegistry::instance()->rgb8());
-        newEntry.name = QInputDialog::getText(this, i18n("Add Color To Palette"), i18n("Color name:"));
+        KoColorSetEntry newEntry(
+                    KoColor(color, KoColorSpaceRegistry::instance()->rgb8()),
+                    QInputDialog::getText(this, i18n("Add Color To Palette"), i18n("Color name:")));
         KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
-        patch->setColor(newEntry.color);
-        patch->setToolTip(newEntry.name);
-        connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
+        patch->setColor(newEntry.color());
+        patch->setToolTip(newEntry.name());
+        connect(patch, SIGNAL(triggered(KoColorPatch*)), this, SLOT(setTextLabel(KoColorPatch*)));
         Q_ASSERT(m_gridLayout);
         Q_ASSERT(m_activeColorSet);
         m_gridLayout->addWidget(patch, m_activeColorSet->nColors()/m_activeColorSet->columnCount(), m_activeColorSet->nColors()%m_activeColorSet->columnCount());
@@ -188,7 +188,7 @@ void KoEditColorSetWidget::removeColor()
     Q_ASSERT(m_activeColorSet);
     for (quint32 i = 0; i < m_activeColorSet->nColors(); i++) {
         KoColorSetEntry c = m_activeColorSet->getColorGlobal(i);
-        if (m_activePatch->color() == c.color) {
+        if (m_activePatch->color() == c.color()) {
             m_activeColorSet->removeAt(i);
             setActiveColorSet(widget.selector->currentIndex());
             break;

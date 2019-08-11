@@ -44,7 +44,7 @@ SpiralShape::SpiralShape()
 }
 
 SpiralShape::SpiralShape(const SpiralShape &rhs)
-    : KoParameterShape(new KoParameterShapePrivate(*rhs.d_func(), this)),
+    : KoParameterShape(rhs),
       m_fade(rhs.m_fade),
       m_kindAngle(rhs.m_kindAngle),
       m_center(rhs.m_center),
@@ -203,8 +203,6 @@ void SpiralShape::updatePath(const QSizeF &size)
 
 void SpiralShape::createPath(const QSizeF &size)
 {
-    Q_D(KoParameterShape);
-
     Q_UNUSED(size);
     clear();
     QPointF center = QPointF(m_radii.x() / 2.0, m_radii.y() / 2.0);
@@ -242,7 +240,9 @@ void SpiralShape::createPath(const QSizeF &size)
         r *= m_fade;
     }
     //m_handles[1] = QPointF(center.x(), (m_clockwise ? -1.0 : 1.0) * m_radius + center.y());
-    m_points = *d->subpaths[0];
+    m_points = *subpaths()[0];
+
+    notifyPointsChanged();
 }
 
 void SpiralShape::updateKindHandle()

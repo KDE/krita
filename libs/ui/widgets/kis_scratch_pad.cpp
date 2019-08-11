@@ -110,7 +110,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     m_cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
     setCursor(m_cursor);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     QImage checkImage = KisCanvasWidgetBase::createCheckersImage(cfg.checkSize());
     m_checkBrush = QBrush(checkImage);
 
@@ -211,7 +211,7 @@ void KisScratchPad::pointerMove(KoPointerEvent *event)
 
 void KisScratchPad::beginStroke(KoPointerEvent *event)
 {
-    KoCanvasResourceManager *resourceManager = m_resourceProvider->resourceManager();
+    KoCanvasResourceProvider *resourceManager = m_resourceProvider->resourceManager();
     m_helper->initPaint(event,
                         documentToWidget().map(event->point),
                         resourceManager,
@@ -257,7 +257,7 @@ void KisScratchPad::endPan(KoPointerEvent *event)
 void KisScratchPad::pick(KoPointerEvent *event)
 {
     KoColor color;
-    if (KisToolUtils::pick(m_paintLayer->projection(), event->point.toPoint(), &color)) {
+    if (KisToolUtils::pickColor(color, m_paintLayer->projection(), event->point.toPoint())) {
         emit colorSelected(color);
     }
 }
@@ -349,15 +349,15 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
                                     const QColor &defaultColor)
 {
     m_resourceProvider = resourceProvider;
-    KisConfig cfg;
+    KisConfig cfg(true);
     setDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(this)));
     connect(m_resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)),
             SLOT(setDisplayProfile(const KoColorProfile*)));
 
     connect(m_resourceProvider, SIGNAL(sigOnScreenResolutionChanged(qreal,qreal)),
             SLOT(setOnScreenResolution(qreal,qreal)));
-    connect(this, SIGNAL(colorSelected(const KoColor&)),
-            m_resourceProvider, SLOT(slotSetFGColor(const KoColor&)));
+    connect(this, SIGNAL(colorSelected(KoColor)),
+            m_resourceProvider, SLOT(slotSetFGColor(KoColor)));
 
     m_defaultColor = KoColor(defaultColor, KoColorSpaceRegistry::instance()->rgb8());
 

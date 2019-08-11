@@ -34,7 +34,7 @@
 #include "kis_cached_paint_device.h"
 #include "kis_paint_device_debug_utils.h"
 #include "kis_layer_properties_icons.h"
-#include "kis_signal_compressor.h"
+#include "kis_thread_safe_signal_compressor.h"
 
 #include "kis_colorize_stroke_strategy.h"
 #include "kis_multiway_cut.h"
@@ -61,9 +61,9 @@ struct KisColorizeMask::Private
           showColoring(true),
           needsUpdate(true),
           originalSequenceNumber(-1),
-          updateCompressor(1000, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, _q),
-          dirtyParentUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, _q),
-          prefilterRecalculationCompressor(1000, KisSignalCompressor::POSTPONE, _q),
+          updateCompressor(1000, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT),
+          dirtyParentUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT),
+          prefilterRecalculationCompressor(1000, KisSignalCompressor::POSTPONE),
           updateIsRunning(false),
           filteringOptions(false, 4.0, 15, 0.7),
           limitToDeviceBounds(false)
@@ -81,9 +81,9 @@ struct KisColorizeMask::Private
           showColoring(rhs.showColoring),
           needsUpdate(false),
           originalSequenceNumber(-1),
-          updateCompressor(1000, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, _q),
-          dirtyParentUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, _q),
-          prefilterRecalculationCompressor(1000, KisSignalCompressor::POSTPONE, _q),
+          updateCompressor(1000, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT),
+          dirtyParentUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT),
+          prefilterRecalculationCompressor(1000, KisSignalCompressor::POSTPONE),
           offset(rhs.offset),
           updateIsRunning(false),
           filteringOptions(rhs.filteringOptions),
@@ -115,9 +115,9 @@ struct KisColorizeMask::Private
     bool needsUpdate;
     int originalSequenceNumber;
 
-    KisSignalCompressor updateCompressor;
-    KisSignalCompressor dirtyParentUpdateCompressor;
-    KisSignalCompressor prefilterRecalculationCompressor;
+    KisThreadSafeSignalCompressor updateCompressor;
+    KisThreadSafeSignalCompressor dirtyParentUpdateCompressor;
+    KisThreadSafeSignalCompressor prefilterRecalculationCompressor;
     QPoint offset;
 
     bool updateIsRunning;
@@ -276,8 +276,8 @@ KUndo2Command* KisColorizeMask::setColorSpace(const KoColorSpace * dstColorSpace
 
     CompositeCommand *composite = new CompositeCommand();
 
-    composite->addCommand(m_d->fakePaintDevice->convertTo(dstColorSpace, renderingIntent, conversionFlags));
-    composite->addCommand(m_d->coloringProjection->convertTo(dstColorSpace, renderingIntent, conversionFlags));
+    m_d->fakePaintDevice->convertTo(dstColorSpace, renderingIntent, conversionFlags, composite);
+    m_d->coloringProjection->convertTo(dstColorSpace, renderingIntent, conversionFlags, composite);
 
     KUndo2Command *strokesConversionCommand =
         new SetKeyStrokesColorSpaceCommand(
@@ -377,6 +377,15 @@ void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
 
 void KisColorizeMask::slotUpdateOnDirtyParent()
 {
+    if (!parent()) {
+        // When the colorize mask is being merged,
+        // the update is performed for all the layers,
+        // so the invisible areas around the canvas are included in the merged layer.
+        // Colorize Mask gets the info that its parent is "dirty" (needs updating),
+        // but when it arrives, the parent doesn't exists anymore and is set to null.
+        // Colorize Mask doesn't work outside of the canvas anyway (at least in time of writing).
+        return;
+    }
     KisPaintDeviceSP src = parent()->original();
     KIS_ASSERT_RECOVER_RETURN(src);
 
@@ -713,13 +722,13 @@ struct KeyStrokeAddRemoveCommand : public KisCommandUtils::FlipFlopCommand {
           m_index(index), m_stroke(stroke),
           m_list(list), m_node(node) {}
 
-    void init() override {
+    void partA() override {
         m_list->insert(m_index, m_stroke);
         m_node->setNeedsUpdate(true);
         emit m_node->sigKeyStrokesListChanged();
     }
 
-    void end() override {
+    void partB() override {
         KIS_ASSERT_RECOVER_RETURN((*m_list)[m_index] == m_stroke);
         m_list->removeAt(m_index);
         m_node->setNeedsUpdate(true);
@@ -1078,6 +1087,7 @@ void KisColorizeMask::testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &c
 void KisColorizeMask::testingRegenerateMask()
 {
     slotUpdateRegenerateFilling();
+    m_d->updateIsRunning = false;
 }
 
 KisPaintDeviceSP KisColorizeMask::testingFilteredSource() const

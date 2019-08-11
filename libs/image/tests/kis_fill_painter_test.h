@@ -36,6 +36,8 @@ private Q_SLOTS:
     void benchmarkFillPainterOffsetCompositioning();
     void benchmarkFillingScanlineColor();
     void benchmarkFillingScanlineSelection();
+
+    void testPatternFill();
 };
 
 #endif

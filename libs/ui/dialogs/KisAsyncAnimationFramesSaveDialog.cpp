@@ -68,7 +68,7 @@ KisAsyncAnimationFramesSaveDialog::KisAsyncAnimationFramesSaveDialog(KisImageSP 
                                                                      const QString &baseFilename,
                                                                      int sequenceNumberingOffset,
                                                                      KisPropertiesConfigurationSP exportConfiguration)
-    : KisAsyncAnimationRenderDialogBase("Saving frames...", originalImage, 0),
+    : KisAsyncAnimationRenderDialogBase(i18n("Saving frames..."), originalImage, 0),
       m_d(new Private(originalImage, range, baseFilename, sequenceNumberingOffset, exportConfiguration))
 {
 
@@ -96,6 +96,19 @@ KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::reg
         if (batchMode()) {
             return RenderFailed;
         }
+
+        QStringList filesWithinRange;
+        const int numberOfDigits = 4;
+        Q_FOREACH(const QString &filename, filesList) {
+            // Counting based on suffix, since prefix may include the path while filename doesn't
+            int digitsPosition = filename.length() - m_d->filenameSuffix.length() - numberOfDigits;
+            int fileNumber = filename.midRef(digitsPosition, numberOfDigits).toInt();
+            auto frameNumber = fileNumber - m_d->sequenceNumberingOffset;
+            if (m_d->range.contains(frameNumber)) {
+                filesWithinRange.append(filename);
+            }
+        }
+        filesList = filesWithinRange;
 
         QStringList truncatedList = filesList;
 

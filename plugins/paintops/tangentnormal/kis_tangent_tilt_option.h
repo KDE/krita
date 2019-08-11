@@ -38,7 +38,7 @@ const QString TANGENT_MIX_VAL = "Tangent/mixValue";
 class KisPropertiesConfiguration;
 class KisTangentTiltOptionWidget;
 
-class KisTangentTiltOption: public KisPaintOpOption//not really//
+class KisTangentTiltOption: public KisPaintOpOption //not really//
 {
 public:
     KisTangentTiltOption();
@@ -50,9 +50,6 @@ public:
     int directionType() const;
     double elevationSensitivity() const;
     double mixValue() const;
-    qreal m_canvasAngle;
-    bool m_canvasAxisXMirrored;
-    bool m_canvasAxisYMirrored;
     /*This assigns the right axis to the component, based on index and maximum value*/
     void swizzleAssign(qreal const horizontal, qreal const vertical, qreal const depth, qreal *component, int index, qreal maxvalue);
 

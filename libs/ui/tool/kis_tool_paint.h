@@ -19,15 +19,13 @@
 #ifndef KIS_TOOL_PAINT_H_
 #define KIS_TOOL_PAINT_H_
 
-#include <vector>
+#include "kis_tool.h"
 
-#include <QCursor>
-#include <QLayout>
 #include <QGridLayout>
-#include <QVariant>
 #include <QTimer>
+#include <QCheckBox>
 
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoToolBase.h>
 #include <resources/KoAbstractGradient.h>
 
@@ -37,18 +35,11 @@
 #include <kis_image.h>
 #include "kis_signal_compressor_with_param.h"
 #include <brushengine/kis_paintop_settings.h>
-
 #include <resources/KoPattern.h>
-
-#include "kis_tool.h"
-#include <QCheckBox>
 
 class QGridLayout;
 class KoCompositeOp;
-
-
 class KoCanvasBase;
-
 
 class KRITAUI_EXPORT KisToolPaint : public KisTool
 {
@@ -56,7 +47,7 @@ class KRITAUI_EXPORT KisToolPaint : public KisTool
     Q_OBJECT
 
 public:
-    KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor);
+    KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor);
     ~KisToolPaint() override;
     int flags() const override;
 
@@ -68,9 +59,9 @@ protected:
 
     void setMode(ToolMode mode) override;
 
-    void canvasResourceChanged(int key, const QVariant & v) override;
+    void canvasResourceChanged(int key, const QVariant &v) override;
 
-    void paint(QPainter& gc, const KoViewConverter &converter) override;
+    void paint(QPainter &gc, const KoViewConverter &converter) override;
 
     void activatePrimaryAction() override;
     void deactivatePrimaryAction() override;
@@ -119,18 +110,6 @@ protected:
         return QString();
     }
 
-    void setupPaintAction(KisRecordedPaintAction* action) override;
-
-    enum NodePaintAbility {
-        NONE,
-        PAINT,
-        VECTOR,
-        CLONE
-    };
-
-    /// Checks if and how the tool can paint on the current node
-    NodePaintAbility nodePaintAbility();
-
     const KoCompositeOp* compositeOp();
 
 public Q_SLOTS:
@@ -146,7 +125,7 @@ private Q_SLOTS:
 
     void activatePickColorDelayed();
 
-    void slotColorPickingFinished(const KoColor &color);
+    void slotColorPickingFinished(KoColor color);
 
 protected:
     quint8 m_opacity;

@@ -44,6 +44,8 @@ struct Q_DECL_HIDDEN KisGeneratorLayer::Private
     }
 
     KisThreadSafeSignalCompressor updateSignalCompressor;
+    QRect preparedRect;
+    KisFilterConfigurationSP preparedForFilter;
 };
 
 
@@ -55,7 +57,6 @@ KisGeneratorLayer::KisGeneratorLayer(KisImageWSP image,
       m_d(new Private)
 {
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
-    update();
 }
 
 KisGeneratorLayer::KisGeneratorLayer(const KisGeneratorLayer& rhs)
@@ -72,6 +73,7 @@ KisGeneratorLayer::~KisGeneratorLayer()
 void KisGeneratorLayer::setFilter(KisFilterConfigurationSP filterConfig)
 {
     KisSelectionBasedLayer::setFilter(filterConfig);
+    m_d->preparedRect = QRect();
     update();
 }
 
@@ -93,32 +95,43 @@ void KisGeneratorLayer::slotDelayedStaticUpdate()
 
 void KisGeneratorLayer::update()
 {
-    KisFilterConfigurationSP filterConfig = filter();
+    KisImageSP image = this->image().toStrongRef();
+    const QRect updateRect = extent() | image->bounds();
 
-    if (!filterConfig) {
-        warnImage << "BUG: No Filter configuration in KisGeneratorLayer";
-        return;
+    KisFilterConfigurationSP filterConfig = filter();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
+
+    if (filterConfig != m_d->preparedForFilter) {
+        resetCache();
     }
 
+    const QRegion processRegion(QRegion(updateRect) - m_d->preparedRect);
+    if (processRegion.isEmpty()) return;
+
     KisGeneratorSP f = KisGeneratorRegistry::instance()->value(filterConfig->name());
-    if (!f) return;
-
-    QRect processRect = exactBounds();
-
-    resetCache();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(f);
 
     KisPaintDeviceSP originalDevice = original();
 
-    KisProcessingInformation dstCfg(originalDevice,
-                                    processRect.topLeft(),
-                                    KisSelectionSP());
+    QVector<QRect> dirtyRegion;
 
-    f->generate(dstCfg, processRect.size(), filterConfig.data());
+    Q_FOREACH (const QRect &rc, processRegion.rects()) {
+        KisProcessingInformation dstCfg(originalDevice,
+                                        rc.topLeft(),
+                                        KisSelectionSP());
 
+        f->generate(dstCfg, rc.size(), filterConfig.data());
+
+        dirtyRegion << rc;
+
+    }
+
+    m_d->preparedRect = updateRect;
+    m_d->preparedForFilter = filterConfig;
 
     // HACK ALERT!!!
     // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
-    KisSelectionBasedLayer::setDirty(QVector<QRect>() << extent());
+    KisSelectionBasedLayer::setDirty(dirtyRegion);
 }
 
 bool KisGeneratorLayer::accept(KisNodeVisitor & v)
@@ -150,12 +163,21 @@ KisBaseNode::PropertyList KisGeneratorLayer::sectionModelProperties() const
 void KisGeneratorLayer::setX(qint32 x)
 {
     KisSelectionBasedLayer::setX(x);
+    m_d->preparedRect = QRect();
     m_d->updateSignalCompressor.start();
 }
 
 void KisGeneratorLayer::setY(qint32 y)
 {
     KisSelectionBasedLayer::setY(y);
+    m_d->preparedRect = QRect();
+    m_d->updateSignalCompressor.start();
+}
+
+void KisGeneratorLayer::resetCache()
+{
+    KisSelectionBasedLayer::resetCache();
+    m_d->preparedRect = QRect();
     m_d->updateSignalCompressor.start();
 }
 

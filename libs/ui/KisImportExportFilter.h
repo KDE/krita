@@ -21,6 +21,8 @@ Boston, MA 02110-1301, USA.
 #ifndef KIS_IMPORT_EXPORT_FILTER_H
 #define KIS_IMPORT_EXPORT_FILTER_H
 
+#include "KisImageBuilderResult.h"
+
 #include <QObject>
 #include <QIODevice>
 #include <QMap>
@@ -39,7 +41,7 @@ class KisDocument;
 class KisConfigWidget;
 
 #include "kritaui_export.h"
-
+#include "KisImportExportErrorCode.h"
 
 /**
  * @brief The base class for import and export filters.
@@ -112,7 +114,7 @@ public:
      * @return The error status, see the @ref #ConversionStatus enum.
      *         KisImportExportFilter::OK means that everything is alright.
      */
-    virtual ConversionStatus convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration = 0) = 0;
+    virtual KisImportExportErrorCode convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration = 0) = 0;
 
     /**
      * Get the text version of the status value
@@ -137,7 +139,7 @@ public:
 
     /**
      * @brief createConfigurationWidget creates a widget that can be used to define the settings for a given import/export filter
-     * @param parent the ownder of the widget; the caller is responsible for deleting
+     * @param parent the owner of the widget; the caller is responsible for deleting
      * @param from The mimetype of the source file/document
      * @param to The mimetype of the destination file/document
      *
@@ -154,6 +156,9 @@ public:
     /// Override and return false for the filters that use a library that cannot handle file handles, only file names.
     virtual bool supportsIO() const { return true; }
 
+    /// Verify whether the given file is correct and readable
+    virtual QString verify(const QString &fileName) const;
+
 protected:
     /**
      * This is the constructor your filter has to call, obviously.
@@ -169,6 +174,8 @@ protected:
     virtual void initializeCapabilities();
     void addCapability(KisExportCheckBase *capability);
     void addSupportedColorModels(QList<QPair<KoID, KoID> > supportedColorModels, const QString &name, KisExportCheckBase::Level level = KisExportCheckBase::PARTIALLY);
+
+    QString verifyZiPBasedFiles(const QString &fileName, const QStringList &filesToCheck) const;
 
 private:
 

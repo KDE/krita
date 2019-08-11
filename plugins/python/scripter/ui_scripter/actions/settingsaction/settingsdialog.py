@@ -17,6 +17,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 """
 from PyQt5.QtWidgets import QDialog, QFormLayout
 from . import syntaxstylescombobox, fontscombobox
+import krita
 
 
 class SettingsDialog(QDialog):
@@ -25,10 +26,10 @@ class SettingsDialog(QDialog):
         super(SettingsDialog, self).__init__(parent)
 
         self.scripter = scripter
-        self.setWindowTitle('Settings')
+        self.setWindowTitle(i18n("Settings"))
         self.mainLayout = QFormLayout(self)
-        self.mainLayout.addRow('Syntax Highlither', syntaxstylescombobox.SyntaxStylesComboBox(self.scripter.uicontroller.highlight, self.scripter.uicontroller.editor))
-        self.mainLayout.addRow('Fonts', fontscombobox.FontsComboBox(self.scripter.uicontroller.editor))
+        self.mainLayout.addRow(i18n("Syntax highlighter:"), syntaxstylescombobox.SyntaxStylesComboBox(self.scripter.uicontroller.highlight, self.scripter.uicontroller.editor))
+        self.mainLayout.addRow(i18n("Fonts:"), fontscombobox.FontsComboBox(self.scripter.uicontroller.editor))
 
     def readSettings(self, settings):
         for index in range(self.mainLayout.rowCount()):

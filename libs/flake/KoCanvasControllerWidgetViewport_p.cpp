@@ -52,7 +52,6 @@
 Viewport::Viewport(KoCanvasControllerWidget *parent)
     : QWidget(parent)
     , m_draggedShape(0)
-    , m_drawShadow(false)
     , m_canvas(0)
     , m_documentOffset(QPoint(0, 0))
     , m_margin(0)
@@ -79,7 +78,7 @@ void Viewport::setCanvas(QWidget *canvas)
     resetLayout();
 }
 
-void Viewport::setDocumentSize(const QSize &size)
+void Viewport::setDocumentSize(const QSizeF &size)
 {
     m_documentSize = size;
     resetLayout();
@@ -89,11 +88,6 @@ void Viewport::documentOffsetMoved(const QPoint &pt)
 {
     m_documentOffset = pt;
     resetLayout();
-}
-
-void Viewport::setDrawShadow(bool drawShadow)
-{
-    m_drawShadow = drawShadow;
 }
 
 void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
@@ -296,16 +290,6 @@ void Viewport::handleDragLeaveEvent(QDragLeaveEvent *event)
 void Viewport::handlePaintEvent(QPainter &painter, QPaintEvent *event)
 {
     Q_UNUSED(event);
-    // Draw the shadow around the canvas.
-    if (m_parent->canvas() && m_parent->canvas()->canvasWidget() && m_drawShadow) {
-        QWidget *canvas = m_parent->canvas()->canvasWidget();
-        painter.setPen(QPen(Qt::black, 0));
-        QRect rect(canvas->x(), canvas->y(), canvas->width(), canvas->height());
-        rect.adjust(-1, -1, 0, 0);
-        painter.drawRect(rect);
-        painter.drawLine(rect.right() + 2, rect.top() + 2, rect.right() + 2, rect.bottom() + 2);
-        painter.drawLine(rect.left() + 2, rect.bottom() + 2, rect.right() + 2, rect.bottom() + 2);
-    }
     if (m_draggedShape) {
         const KoViewConverter *vc = m_parent->canvas()->viewConverter();
 
@@ -332,86 +316,13 @@ void Viewport::resetLayout()
     const int viewH = viewRect.height();
     const int viewW = viewRect.width();
 
-    const int docH = m_documentSize.height();
-    const int docW = m_documentSize.width();
-
-    int moveX = 0;
-    int moveY = 0;
-
-    int resizeW = viewW;
-    int resizeH = viewH;
-
-    //     debugFlake <<"viewH:" << viewH << endl
-    //              << "docH: " << docH << endl
-    //              << "viewW: " << viewW << endl
-    //              << "docW: " << docW << endl;
-
-    if (viewH == docH && viewW == docW) {
-        // Do nothing
-        resizeW = docW;
-        resizeH = docH;
-    } else if (viewH > docH && viewW > docW) {
-        // Show entire canvas centered
-        moveX = (viewW - docW) / 2;
-        moveY = (viewH - docH) / 2;
-        resizeW = docW;
-        resizeH = docH;
-    } else  if (viewW > docW) {
-        // Center canvas horizontally
-        moveX = (viewW - docW) / 2;
-        resizeW = docW;
-
-        int marginTop = m_margin - m_documentOffset.y();
-        int marginBottom = viewH  - (m_documentSize.height() - m_documentOffset.y());
-
-        if (marginTop > 0) moveY = marginTop;
-        if (marginTop > 0) resizeH = viewH - marginTop;
-        if (marginBottom > 0) resizeH = viewH - marginBottom;
-    } else  if (viewH > docH) {
-        // Center canvas vertically
-        moveY = (viewH - docH) / 2;
-        resizeH = docH;
-
-        int marginLeft = m_margin - m_documentOffset.x();
-        int marginRight = viewW - (m_documentSize.width() - m_documentOffset.x());
-
-        if (marginLeft > 0) moveX = marginLeft;
-        if (marginLeft > 0) resizeW = viewW - marginLeft;
-        if (marginRight > 0) resizeW = viewW - marginRight;
-    } else {
-        // Take care of the margin around the canvas
-        int marginTop = m_margin - m_documentOffset.y();
-        int marginLeft = m_margin - m_documentOffset.x();
-        int marginRight = viewW - (m_documentSize.width() - m_documentOffset.x());
-        int marginBottom = viewH  - (m_documentSize.height() - m_documentOffset.y());
-
-        if (marginTop > 0) moveY = marginTop;
-        if (marginLeft > 0) moveX = marginLeft;
-
-        if (marginTop > 0) resizeH = viewH - marginTop;
-        if (marginLeft > 0) resizeW = viewW - marginLeft;
-        if (marginRight > 0) resizeW = viewW - marginRight;
-        if (marginBottom > 0) resizeH = viewH - marginBottom;
-    }
-    if (m_parent->canvasMode() == KoCanvasController::AlignTop) {
-        // have up to m_margin pixels at top.
-        moveY = qMin(m_margin, moveY);
-    }
     if (m_canvas) {
-        QRect geom;
-        if (m_parent->canvasMode() == KoCanvasController::Infinite)
-            geom = QRect(0, 0, viewW, viewH);
-        else
-            geom = QRect(moveX, moveY, resizeW, resizeH);
+        QRect geom = QRect(0, 0, viewW, viewH);
         if (m_canvas->geometry() != geom) {
             m_canvas->setGeometry(geom);
             m_canvas->update();
         }
     }
-    if (m_drawShadow) {
-        update();
-    }
-
     emit sizeChanged();
 #if 0
     debugFlake <<"View port geom:" << geometry();

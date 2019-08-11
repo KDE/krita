@@ -38,11 +38,9 @@ struct KisToolLineHelper::Private
 };
 
 KisToolLineHelper::KisToolLineHelper(KisPaintingInformationBuilder *infoBuilder,
-                                     const KUndo2MagicString &transactionText,
-                                     KisRecordingAdapter *recordingAdapter)
+                                     const KUndo2MagicString &transactionText)
     : KisToolFreehandHelper(infoBuilder,
                             transactionText,
-                            recordingAdapter,
                             new KisSmoothingOptions(false)),
       m_d(new Private(infoBuilder))
 {
@@ -63,7 +61,7 @@ void KisToolLineHelper::setUseSensors(bool value)
     m_d->useSensors = value;
 }
 
-void KisToolLineHelper::repaintLine(KoCanvasResourceManager *resourceManager,
+void KisToolLineHelper::repaintLine(KoCanvasResourceProvider *resourceManager,
                                     KisImageWSP image, KisNodeSP node,
                                     KisStrokesFacade *strokesFacade)
 {
@@ -91,7 +89,7 @@ void KisToolLineHelper::repaintLine(KoCanvasResourceManager *resourceManager,
     }
 }
 
-void KisToolLineHelper::start(KoPointerEvent *event, KoCanvasResourceManager *resourceManager)
+void KisToolLineHelper::start(KoPointerEvent *event, KoCanvasResourceProvider *resourceManager)
 {
     if (!m_d->enabled) return;
 
@@ -164,7 +162,7 @@ void KisToolLineHelper::end()
     KIS_ASSERT_RECOVER_RETURN(isRunning());
 
     endPaint();
-    m_d->linePoints.clear();
+    clearPoints();
 }
 
 
@@ -174,6 +172,12 @@ void KisToolLineHelper::cancel()
     KIS_ASSERT_RECOVER_RETURN(isRunning());
 
     cancelPaint();
+    clearPoints();
+}
+
+
+void KisToolLineHelper::clearPoints()
+{
     m_d->linePoints.clear();
 }
 

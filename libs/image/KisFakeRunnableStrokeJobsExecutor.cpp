@@ -23,9 +23,9 @@
 
 #include <QVector>
 
-void KisFakeRunnableStrokeJobsExecutor::addRunnableJobs(const QVector<KisRunnableStrokeJobData *> &list)
+void KisFakeRunnableStrokeJobsExecutor::addRunnableJobs(const QVector<KisRunnableStrokeJobDataBase *> &list)
 {
-    Q_FOREACH (KisRunnableStrokeJobData *data, list) {
+    Q_FOREACH (KisRunnableStrokeJobDataBase *data, list) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(data->sequentiality() != KisStrokeJobData::BARRIER && "barrier jobs are not supported on the fake executor");
         KIS_SAFE_ASSERT_RECOVER_NOOP(data->exclusivity() != KisStrokeJobData::EXCLUSIVE && "exclusive jobs are not supported on the fake executor");
 

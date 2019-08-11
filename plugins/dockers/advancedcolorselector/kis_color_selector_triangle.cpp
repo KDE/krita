@@ -136,6 +136,7 @@ void KisColorSelectorTriangle::setColor(const KoColor &color)
 
     emit paramChanged(-1, s, v, -1, -1, -1, -1, -1, -1);
     emit update();
+    KisColorSelectorComponent::setColor(color);
 }
 
 int KisColorSelectorTriangle::triangleWidth() const

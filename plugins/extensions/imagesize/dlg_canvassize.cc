@@ -27,8 +27,6 @@
 #include <kis_size_group.h>
 #include <klocalizedstring.h>
 
-#include <kis_config.h>
-
 #include <kis_document_aware_spin_box_unit_manager.h>
 
 #include <QComboBox>
@@ -67,7 +65,7 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
     _widthUnitManager = new KisDocumentAwareSpinBoxUnitManager(this);
     _heightUnitManager = new KisDocumentAwareSpinBoxUnitManager(this, KisDocumentAwareSpinBoxUnitManager::PIX_DIR_Y);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     _widthUnitManager->setApparentUnitFromSymbol("px");
     _heightUnitManager->setApparentUnitFromSymbol("px");
@@ -201,7 +199,7 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
 
 DlgCanvasSize::~DlgCanvasSize()
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.writeEntry<bool>("CanvasSize/KeepAspectRatio", m_page->aspectRatioBtn->keepAspectRatio());
     cfg.writeEntry<bool>("CanvasSize/ConstrainProportions", m_page->constrainProportionsCkb->isChecked());
 

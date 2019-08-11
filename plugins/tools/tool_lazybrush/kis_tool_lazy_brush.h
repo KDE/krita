@@ -22,7 +22,7 @@
 #include <QScopedPointer>
 #include "kis_tool_freehand.h"
 
-#include "KoToolFactoryBase.h"
+#include "KisToolPaintFactoryBase.h"
 
 #include <flake/kis_node_shape.h>
 #include <kis_icon.h>
@@ -86,12 +86,12 @@ private:
 };
 
 
-class KisToolLazyBrushFactory : public KoToolFactoryBase
+class KisToolLazyBrushFactory : public KisToolPaintFactoryBase
 {
 
 public:
     KisToolLazyBrushFactory()
-            : KoToolFactoryBase("KritaShape/KisToolLazyBrush") {
+            : KisToolPaintFactoryBase("KritaShape/KisToolLazyBrush") {
 
         setToolTip(i18n("Colorize Mask Editing Tool"));
 

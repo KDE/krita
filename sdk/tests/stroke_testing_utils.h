@@ -20,7 +20,7 @@
 #define __STROKE_TESTING_UTILS_H
 
 #include <QString>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include "kis_node.h"
 #include "kis_types.h"
 #include "kis_stroke_strategy.h"
@@ -33,7 +33,7 @@ class KisUndoStore;
 namespace utils {
 
     KisImageSP createImage(KisUndoStore *undoStore, const QSize &imageSize);
-    KoCanvasResourceManager* createResourceManager(KisImageWSP image,
+    KoCanvasResourceProvider* createResourceManager(KisImageWSP image,
                                              KisNodeSP node = 0,
                                              const QString &presetFileName = "autobrush_300px.kpp");
 
@@ -46,6 +46,7 @@ namespace utils {
         void testSimpleStroke();
         void test();
         void benchmark();
+        void testSimpleStrokeNoVerification();
 
         void setNumIterations(int value);
         void setBaseFuzziness(int value);
@@ -57,13 +58,13 @@ namespace utils {
             return m_strokeId;
         }
 
-        virtual void modifyResourceManager(KoCanvasResourceManager *manager,
+        virtual void modifyResourceManager(KoCanvasResourceProvider *manager,
                                            KisImageWSP image, int iteration);
 
         virtual void initImage(KisImageWSP image, KisNodeSP activeNode, int iteration);
 
         // overload
-        virtual void modifyResourceManager(KoCanvasResourceManager *manager,
+        virtual void modifyResourceManager(KoCanvasResourceProvider *manager,
                                            KisImageWSP image);
 
         // overload

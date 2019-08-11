@@ -39,11 +39,11 @@ class ChangeListCommand : public KoTextCommandBase
 {
 public:
 
-    //FIXME: following comments seems to describe another function
     /**
-     * Change the list property of 'block'.
-     * @param block the paragraph to change the list property of
-     * @param style indicates which style to use.
+     * Change the list command.
+     * @param cursor text cursor properties.
+     * @param levelProperties level properties.
+     * @param flags the list flags.
      * @param parent the parent undo command for macro functionality
      */
     ChangeListCommand(const QTextCursor &cursor,
@@ -52,10 +52,11 @@ public:
                       KUndo2Command *parent = 0);
 
     /**
-     * Change the list property of 'block'.
-     * @param block the paragraph to change the list property of
-     * @param style the style to apply
-     * @param exact if true then the actual style 'style' should be set, if false we possibly  merge with another similar style that is near the block
+     * Change the list command.
+     * @param cursor text cursor properties.
+     * @param style the style to apply.
+     * @param level the level in the list.
+     * @param flags the list flags.
      * @param parent the parent undo command for macro functionality
      */
     ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level,
@@ -68,11 +69,11 @@ public:
     /// revert the actions done in redo
     void undo() override;
 
-    /// reimplemnted from KUndo2Command
+    /// reimplemented from KUndo2Command
     int id() const override {
         return 58450687;
     }
-    /// reimplemnted from KUndo2Command
+    /// reimplemented from KUndo2Command
     bool mergeWith(const KUndo2Command *other) override;
 
 private:

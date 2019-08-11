@@ -48,7 +48,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter
 
     m_dev = node ? node->paintDevice() : 0;
 
-    KisBrushOption brushOption;
+    KisBrushOptionProperties brushOption;
     brushOption.readOptionSetting(settings);
     KisBrushSP brush = brushOption.brush();
     KisFixedPaintDeviceSP dab = cachedDab(painter->device()->compositionSourceColorSpace());
@@ -77,6 +77,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter
     m_opacityOption.resetAllSensors();
     m_sizeOption.resetAllSensors();
 }
+
 
 void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings *settings)
 {
@@ -147,11 +148,13 @@ void KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintIn
     qreal rotation = m_rotationOption.apply(pi);
     quint8 origOpacity = m_opacityOption.apply(painter(), pi);
 
+    const bool mirrorFlip = pi1.canvasMirroredH() != pi1.canvasMirroredV();
+
     // we don't use spacing here (the brush itself is used only once
     // during initialization), so we should just skip the distance info
     // update
 
-    m_brush.paintLine(m_dab, m_dev, pi1, pi, scale * m_properties.scaleFactor, rotation);
+    m_brush.paintLine(m_dab, m_dev, pi1, pi, scale * m_properties.scaleFactor, mirrorFlip ? -rotation : rotation);
 
     //QRect rc = m_dab->exactBounds();
     QRect rc = m_dab->extent();

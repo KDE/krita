@@ -26,11 +26,25 @@
 #include <klocalizedstring.h>
 #include <kis_icon.h>
 #include "kis_debug.h"
+#include <KisKineticScroller.h>
 
 KisCategorizedListView::KisCategorizedListView(QWidget* parent):
     QListView(parent)
 {
     connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(slotIndexChanged(QModelIndex)));
+
+    // Because this widget has a darker background, the checkbox borders get hidden with default palette
+    // This palette update makes the checkboxes easier to see by starting with the text color
+    QPalette newPall = palette();
+    newPall.setColor(QPalette::Active, QPalette::Background, palette().text().color() );
+    setPalette(newPall);
+
+    {
+        QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+        if (scroller) {
+            connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChange(QScroller::State)));
+        }
+    }
 }
 
 KisCategorizedListView::~KisCategorizedListView()
@@ -165,6 +179,11 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
 void KisCategorizedListView::mouseReleaseEvent(QMouseEvent* event)
 {
     QListView::mouseReleaseEvent(event);
+}
+
+void KisCategorizedListView::slotScrollerStateChange(QScroller::State state)
+{
+    KisKineticScroller::updateCursor(this, state);
 }
 
 

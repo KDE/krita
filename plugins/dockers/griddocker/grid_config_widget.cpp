@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -24,6 +25,11 @@
 #include "kis_aspect_ratio_locker.h"
 #include "kis_int_parse_spin_box.h"
 
+#include <kis_config.h>
+#include <kis_config_notifier.h>
+
+#include <QStandardItem>
+#include <QStandardItemModel>
 
 struct GridConfigWidget::Private
 {
@@ -31,7 +37,7 @@ struct GridConfigWidget::Private
 
     KisGridConfig gridConfig;
     KisGuidesConfig guidesConfig;
-    bool guiSignalsBlocked;
+    bool guiSignalsBlocked {false};
 };
 
 GridConfigWidget::GridConfigWidget(QWidget *parent) :
@@ -53,14 +59,12 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
 
     ui->gridTypeCombobox->addItem(i18n("Rectangle"));
     ui->gridTypeCombobox->addItem(i18n("Isometric"));
+
     ui->gridTypeCombobox->setCurrentIndex(0); // set to rectangle by default
     slotGridTypeChanged(); // update the UI to hide any elements we don't need
 
 
     connect(ui->gridTypeCombobox, SIGNAL(currentIndexChanged(int)), SLOT(slotGridTypeChanged()));
-
-
-    m_isGridEnabled = false;
 
     setGridConfig(m_d->gridConfig);
     setGuidesConfig(m_d->guidesConfig);
@@ -92,11 +96,11 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     connect(ui->cellSpacingSpinbox, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
 
     connect(ui->selectMainStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGridGuiChanged()));
-    connect(ui->colorMain, SIGNAL(changed(const QColor&)), SLOT(slotGridGuiChanged()));
+    connect(ui->colorMain, SIGNAL(changed(QColor)), SLOT(slotGridGuiChanged()));
     connect(ui->selectSubdivisionStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGridGuiChanged()));
-    connect(ui->colorSubdivision, SIGNAL(changed(const QColor&)), SLOT(slotGridGuiChanged()));
+    connect(ui->colorSubdivision, SIGNAL(changed(QColor)), SLOT(slotGridGuiChanged()));
     connect(ui->selectGuidesStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGuidesGuiChanged()));
-    connect(ui->colorGuides, SIGNAL(changed(const QColor&)), SLOT(slotGuidesGuiChanged()));
+    connect(ui->colorGuides, SIGNAL(changed(QColor)), SLOT(slotGuidesGuiChanged()));
 
     ui->chkOffset->setChecked(false);
 
@@ -113,6 +117,8 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     connect(spacingLocker, SIGNAL(aspectButtonChanged()), SLOT(slotGridGuiChanged()));
 
     connect(ui->chkShowRulers,SIGNAL(toggled(bool)),SIGNAL(showRulersChanged(bool)));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotPreferencesUpdated()));
 }
 
 GridConfigWidget::~GridConfigWidget()
@@ -145,7 +151,9 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
     ui->spacingAspectButton->setKeepAspectRatio(m_d->gridConfig.spacingAspectLocked());
     ui->chkShowGrid->setChecked(m_d->gridConfig.showGrid());
     ui->intHSpacing->setValue(m_d->gridConfig.spacing().x());
+    ui->intHSpacing->setMaximum(std::numeric_limits<int>::max());
     ui->intVSpacing->setValue(m_d->gridConfig.spacing().y());
+    ui->intVSpacing->setMaximum(std::numeric_limits<int>::max());
     ui->intXOffset->setValue(m_d->gridConfig.offset().x());
     ui->intYOffset->setValue(m_d->gridConfig.offset().y());
     ui->intSubdivision->setValue(m_d->gridConfig.subdivision());
@@ -192,12 +200,6 @@ KisGridConfig GridConfigWidget::gridConfig() const
 KisGuidesConfig GridConfigWidget::guidesConfig() const
 {
     return m_d->guidesConfig;
-}
-
-void GridConfigWidget::setGridDivision(int w, int h)
-{
-    ui->intHSpacing->setMaximum(w);
-    ui->intVSpacing->setMaximum(h);
 }
 
 KisGridConfig GridConfigWidget::fetchGuiGridConfig() const
@@ -259,6 +261,12 @@ void GridConfigWidget::slotGridGuiChanged()
     setGridConfigImpl(currentConfig);
 }
 
+void GridConfigWidget::slotPreferencesUpdated()
+{
+    KisConfig cfg(true);
+    enableIsometricGrid(cfg.useOpenGL()); // Isometric view needs OpenGL
+}
+
 void GridConfigWidget::slotGuidesGuiChanged()
 {
     if (m_d->guiSignalsBlocked) return;
@@ -312,19 +320,36 @@ void GridConfigWidget::slotGridTypeChanged() {
 
 
 
-
-
-
-
-
-
-
     slotGridGuiChanged();
 }
 
 bool GridConfigWidget::showRulers() const
 {
     return ui->chkShowRulers->isChecked();
+}
+
+void GridConfigWidget::enableIsometricGrid(bool value)
+{
+    m_isIsometricGridEnabled = value;
+
+    // Isometric grids disabled if OpenGL is disabled
+    QStandardItemModel *model = qobject_cast<QStandardItemModel*>(ui->gridTypeCombobox->model());
+    QStandardItem *item = model->item(1); // isometric option
+
+   // item->setFlags(m_isIsometricGridEnabled ? item->flags() & ~Qt::ItemIsEnabled:
+     //                                         item->flags() | Qt::ItemIsEnabled);
+
+
+     item->setEnabled(m_isIsometricGridEnabled);
+
+    if (m_isIsometricGridEnabled) {
+        item->setText(i18n("Isometric"));
+    } else {
+        item->setText(i18n("Isometric (requires OpenGL)"));
+
+        // change drop down index to Rectangular in case it was previously set to isometric
+        ui->gridTypeCombobox->setCurrentIndex(0);
+    }
 }
 
 void GridConfigWidget::setShowRulers(bool value)

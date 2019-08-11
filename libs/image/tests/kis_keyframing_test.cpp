@@ -56,7 +56,7 @@ void KisKeyframingTest::cleanupTestCase()
 
 void KisKeyframingTest::testScalarChannel()
 {
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), -17, 31, 0);
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID(""), -17, 31, 0);
     KisKeyframeSP key;
     bool ok;
 
@@ -111,7 +111,7 @@ void KisKeyframingTest::testScalarChannel()
 
 void KisKeyframingTest::testScalarChannelUndoRedo()
 {
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), -17, 31, 0);
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID(""), -17, 31, 0);
     KisKeyframeSP key;
 
     QCOMPARE(channel->hasScalarValue(), true);
@@ -150,7 +150,7 @@ void KisKeyframingTest::testScalarChannelUndoRedo()
 
 void KisKeyframingTest::testScalarInterpolation()
 {
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), 0, 30, 0);
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID(""), 0, 30, 0);
 
     KisKeyframeSP key1 = channel->addKeyframe(0);
     channel->setScalarValue(key1, 15);
@@ -268,7 +268,7 @@ void KisKeyframingTest::testRasterChannel()
 
 void KisKeyframingTest::testChannelSignals()
 {
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), -17, 31, 0);
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID(""), -17, 31, 0);
     KisKeyframeSP key;
     KisKeyframeSP resKey;
 
@@ -280,7 +280,7 @@ void KisKeyframingTest::testChannelSignals()
     QSignalSpy spyPostRemove(channel, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)));
 
     QSignalSpy spyPreMove(channel, SIGNAL(sigKeyframeAboutToBeMoved(KisKeyframeSP,int)));
-    QSignalSpy spyPostMove(channel, SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)));
+    QSignalSpy spyPostMove(channel, SIGNAL(sigKeyframeMoved(KisKeyframeSP,int)));
 
     QVERIFY(spyPreAdd.isValid());
     QVERIFY(spyPostAdd.isValid());
@@ -444,7 +444,7 @@ void KisKeyframingTest::testDeleteFirstRasterChannel()
 
 void KisKeyframingTest::testAffectedFrames()
 {
-    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID("", ""), -17, 31, 0);
+    KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID(""), -17, 31, 0);
     KisTimeRange range;
 
     channel->addKeyframe(10);
@@ -489,7 +489,7 @@ void KisKeyframingTest::testMovingFrames()
     srcChannel->addKeyframe(10);
     srcChannel->addKeyframe(50);
 
-    KisPaintDeviceSP dev2 = new KisPaintDevice(*dev, true);
+    KisPaintDeviceSP dev2 = new KisPaintDevice(*dev, KritaUtils::CopyAllFrames);
     KisRasterKeyframeChannel * dstChannel = dev->keyframeChannel();
 
 

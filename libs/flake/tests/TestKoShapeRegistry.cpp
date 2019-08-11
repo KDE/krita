@@ -38,7 +38,7 @@
 
 #include <FlakeDebug.h>
 #include "kis_debug.h"
-
+#include <sdk/tests/kistest.h>
 
 void TestKoShapeRegistry::testGetKoShapeRegistryInstance()
 {
@@ -194,7 +194,7 @@ void TestKoShapeRegistry::testFramedSvgShapes()
     QScopedPointer<MockCanvas> canvas(new MockCanvas(document.data()));
 
     QScopedPointer<KoShapeController> shapeController(new KoShapeController(canvas.data(), document.data()));
-    resourceManager->setShapeController(shapeController.data());
+    resourceManager->setGlobalShapeController(shapeController.data());
 
 
     KoOdfLoadingContext odfContext(stylesReader, store.data());
@@ -210,4 +210,4 @@ void TestKoShapeRegistry::testFramedSvgShapes()
     QCOMPARE(shape->absoluteOutlineRect(0), QRectF(83, 41, 226,141));
 }
 
-QTEST_MAIN(TestKoShapeRegistry)
+KISTEST_MAIN(TestKoShapeRegistry)

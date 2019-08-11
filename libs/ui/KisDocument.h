@@ -30,6 +30,7 @@
 #include <KoPageLayout.h>
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
+#include <KoColorSet.h>
 
 #include <kis_image.h>
 #include <KisImportExportFilter.h>
@@ -39,8 +40,11 @@
 #include <KisReferenceImage.h>
 #include <kis_debug.h>
 #include <KisImportExportUtils.h>
+#include <kis_config.h>
 
 #include "kritaui_export.h"
+
+#include <memory>
 
 class QString;
 
@@ -49,7 +53,7 @@ class KoUnit;
 
 class KoColor;
 class KoColorSpace;
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 class KoShapeLayer;
 class KoStore;
 class KoOdfReadStore;
@@ -60,6 +64,7 @@ class KisUndoStore;
 class KisPart;
 class KisGridConfig;
 class KisGuidesConfig;
+class KisMirrorAxisConfig;
 class QDomDocument;
 class KisReferenceImagesLayer;
 
@@ -146,6 +151,11 @@ public:
      */
     bool exportDocument(const QUrl &url, const QByteArray &mimeType, bool showWarnings = false, KisPropertiesConfigurationSP exportConfiguration = 0);
 
+    /**
+     * Exports he document is a synchronous way. The caller must ensure that the
+     * image is not accessed by any other actors, because the exporting happens
+     * without holding the image lock.
+     */
     bool exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration = 0);
 
 private:
@@ -275,10 +285,20 @@ public:
     bool loadNativeFormat(const QString & file);
 
     /**
-     * Activate/deactivate/configure the autosave feature.
-     * @param delay in seconds, 0 to disable
+     * Set standard autosave interval that is set by a config file
      */
-    void setAutoSaveDelay(int delay);
+    void setNormalAutoSaveInterval();
+
+    /**
+     * Set emergency interval that autosave uses when the image is busy,
+     * by default it is 10 sec
+     */
+    void setEmergencyAutoSaveInterval();
+
+    /**
+     * Disable autosave
+     */
+    void setInfiniteAutoSaveInterval();
 
     /**
      * @return the information concerning this document.
@@ -289,7 +309,7 @@ public:
     /**
      * Performs a cleanup of unneeded backup files
      */
-    void removeAutoSaveFiles();
+    void removeAutoSaveFiles(const QString &autosaveBaseName, bool wasRecovered);
 
     /**
      * Returns true if this document or any of its internal child documents are modified.
@@ -335,6 +355,12 @@ public:
     /// returns the guides data for this document.
     const KisGuidesConfig& guidesConfig() const;
     void setGuidesConfig(const KisGuidesConfig &data);
+
+    const KisMirrorAxisConfig& mirrorAxisConfig() const;
+    void setMirrorAxisConfig(const KisMirrorAxisConfig& config);
+
+    QList<KoColorSet *> &paletteList();
+    void setPaletteList(const QList<KoColorSet *> &paletteList, bool emitSignal = false);
 
     void clearUndoHistory();
 
@@ -429,20 +455,45 @@ Q_SIGNALS:
 
     void sigGuidesConfigChanged(const KisGuidesConfig &config);
 
-    void sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    void sigBackgroundSavingFinished(KisImportExportErrorCode status, const QString &errorMessage);
 
-    void sigCompleteBackgroundSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    void sigCompleteBackgroundSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);
+
+    void sigReferenceImagesChanged();
+
+    void sigMirrorAxisConfigChanged();
+
+    void sigGridConfigChanged(const KisGridConfig &config);
+
+    void sigReferenceImagesLayerChanged(KisSharedPtr<KisReferenceImagesLayer> layer);
+
+    /**
+     * Emitted when the palette list has changed.
+     * The pointers in oldPaletteList are to be deleted by the resource server.
+     **/
+    void sigPaletteListChanged(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList);
+
+    void sigAssistantsChanged();
 
 private Q_SLOTS:
     void finishExportInBackground();
-    void slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
-    void slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    void slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage);
+    void slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);
 
-    void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+    void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage);
+
+    void slotInitiateAsyncAutosaving(KisDocument *clonedDocument);
+
 private:
 
     friend class KisPart;
     friend class SafeSavingLocker;
+
+    bool initiateSavingInBackground(const QString actionName,
+                                    const QObject *receiverObject, const char *receiverMethod,
+                                    const KritaUtils::ExportFileJob &job,
+                                    KisPropertiesConfigurationSP exportConfiguration,
+                                    std::unique_ptr<KisDocument> &&optionalClonedDocument);
 
     bool initiateSavingInBackground(const QString actionName,
                                     const QObject *receiverObject, const char *receiverMethod,
@@ -454,6 +505,12 @@ private:
                                  const QByteArray &mimeType,
                                  bool showWarnings,
                                  KisPropertiesConfigurationSP exportConfiguration);
+
+    /**
+     * Activate/deactivate/configure the autosave feature.
+     * @param delay in seconds, 0 to disable
+     */
+    void setAutoSaveDelay(int delay);
 
     /**
      * Generate a name for the document.
@@ -473,9 +530,6 @@ private:
      * This method is called from the KReadOnlyPart::openUrl method.
      */
     bool openFile();
-
-    /** @internal */
-    void setModified();
 
 public:
 
@@ -501,7 +555,7 @@ public:
      * Create a new image that has this document as a parent and
      * replace the current image with this image.
      */
-    bool newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, bool backgroundAsLayer,
+    bool newImage(const QString& name, qint32 width, qint32 height, const KoColorSpace * cs, const KoColor &bgColor, KisConfig::BackgroundStyle bgStyle,
                   int numberOfLayers, const QString &imageDescription, const double imageResolution);
 
     bool isSaving() const;
@@ -541,7 +595,7 @@ public:
      * The shape controller matches internal krita image layers with
      * the flake shape hierarchy.
      */
-    KoShapeBasedDocumentBase * shapeController() const;
+    KoShapeControllerBase * shapeController() const;
 
     KoShapeLayer* shapeForNode(KisNodeSP layer) const;
 
@@ -563,17 +617,25 @@ public:
     /// @replace the current list of assistants with @param value
     void setAssistants(const QList<KisPaintingAssistantSP> &value);
 
-    /**
-     * Get existing reference images layer or create new if none exists.
-     */
-    KisSharedPtr<KisReferenceImagesLayer> createReferenceImagesLayer(KisImageSP targetImage = KisImageSP());
+
+    void setAssistantsGlobalColor(QColor color);
+    QColor assistantsGlobalColor();
+
+
 
     /**
      * Get existing reference images layer or null if none exists.
      */
-    KisReferenceImagesLayer *referenceImagesLayer() const;
+    KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer() const;
+
+    void setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateImage);
 
     bool save(bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
+
+    /**
+     * Return the bounding box of the image and associated elements (e.g. reference images)
+     */
+    QRectF documentBounds() const;
 
 Q_SIGNALS:
 
@@ -590,8 +652,6 @@ private Q_SLOTS:
 
     void slotConfigChanged();
 
-
-private:
     /**
      * @brief try to clone the image. This method handles all the locking for you. If locking
      *        has failed, no cloning happens
@@ -599,11 +659,28 @@ private:
      */
     KisDocument *lockAndCloneForSaving();
 
-    QString exportErrorToUserMessage(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+public:
+
+    KisDocument *lockAndCreateSnapshot();
+
+    void copyFromDocument(const KisDocument &rhs);
+
+private:
+
+    enum CopyPolicy {
+        CONSTRUCT = 0, ///< we are copy-constructing a new KisDocument
+        REPLACE ///< we are replacing the current KisDocument with another
+    };
+
+    void copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy);
+
+    QString exportErrorToUserMessage(KisImportExportErrorCode status, const QString &errorMessage);
 
     QString prettyPathOrUrl() const;
 
     bool openUrlInternal(const QUrl &url);
+
+    void slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalClonedDocument);
 
     class Private;
     Private *const d;

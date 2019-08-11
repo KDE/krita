@@ -44,7 +44,7 @@ void KisRoundMarkerOpSettings::setPaintOpSize(qreal value)
 {
     RoundMarkerOption op;
     op.readOptionSetting(*this);
-    op.diameter = qBound(0.01, value, 1000.0);
+    op.diameter = value;
     op.writeOptionSetting(this);
 }
 
@@ -55,11 +55,11 @@ qreal KisRoundMarkerOpSettings::paintOpSize() const
     return op.diameter;
 }
 
-QPainterPath KisRoundMarkerOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
+QPainterPath KisRoundMarkerOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
 {
     QPainterPath path;
 
-    if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
+    if (mode.isVisible) {
         qreal finalScale = 1.0;
 
         RoundMarkerOption op;
@@ -69,14 +69,14 @@ QPainterPath KisRoundMarkerOpSettings::brushOutline(const KisPaintInformation &i
         QPainterPath realOutline;
         realOutline.addEllipse(QPointF(), radius, radius);
 
-        path = outlineFetcher()->fetchOutline(info, this, realOutline, finalScale);
+        path = outlineFetcher()->fetchOutline(info, this, realOutline, mode, finalScale);
 
-        if (mode == CursorTiltOutline) {
+        if (mode.showTiltDecoration) {
             QPainterPath tiltLine = makeTiltIndicator(info,
                 realOutline.boundingRect().center(),
                 realOutline.boundingRect().width() * 0.5,
                 3.0);
-            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, finalScale, 0.0, true, realOutline.boundingRect().center().x(), realOutline.boundingRect().center().y()));
+            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, finalScale, 0.0, true, realOutline.boundingRect().center().x(), realOutline.boundingRect().center().y()));
         }
     }
 

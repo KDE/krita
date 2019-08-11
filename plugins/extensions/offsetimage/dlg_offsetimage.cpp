@@ -66,7 +66,7 @@ DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize image
     m_page->unitXComboBox->setModel(_widthUnitManager);
     m_page->unitYComboBox->setModel(_heightUnitManager);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     QString unitx = cfg.readEntry<QString>(PARAM_XOFFSET_UNIT, "px");
     QString unity = cfg.readEntry<QString>(PARAM_YOFFSET_UNIT, "px");
@@ -95,7 +95,7 @@ DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize image
 
 DlgOffsetImage::~DlgOffsetImage()
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
 
     cfg.writeEntry<QString>(PARAM_XOFFSET_UNIT, _widthUnitManager->getApparentUnitSymbol());
     cfg.writeEntry<QString>(PARAM_YOFFSET_UNIT, _heightUnitManager->getApparentUnitSymbol());
@@ -105,12 +105,12 @@ DlgOffsetImage::~DlgOffsetImage()
 
 void DlgOffsetImage::slotOffsetXChanged(double newOffsetX)
 {
-    m_offsetX = newOffsetX;
+    m_offsetX = qRound(newOffsetX);
 }
 
 void DlgOffsetImage::slotOffsetYChanged(double newOffsetY)
 {
-    m_offsetY = newOffsetY;
+    m_offsetY = qRound(newOffsetY);
 }
 
 void DlgOffsetImage::slotMiddleOffset()

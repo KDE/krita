@@ -38,7 +38,7 @@ public:
     ~KisAsyncAnimationFramesSavingRenderer();
 
 protected:
-    void frameCompletedCallback(int frame) override;
+    void frameCompletedCallback(int frame, const QRegion &requestedRegion) override;
     void frameCancelledCallback(int frame) override;
 
 Q_SIGNALS:

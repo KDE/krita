@@ -66,9 +66,7 @@ QVariant DockerStylesComboModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case AbstractStylesModel::isTitleRole: {
-        if (index.internalId() == (quintptr)UsedStyleId || index.internalId() == (quintptr)UnusedStyleId) {
-            return true;
-        }
+        return (index.internalId() == (quintptr)UsedStyleId || index.internalId() == (quintptr)UnusedStyleId);
     }
     case Qt::DisplayRole: {
         if (index.internalId() == (quintptr)UsedStyleId) {

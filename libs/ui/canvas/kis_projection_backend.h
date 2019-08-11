@@ -50,7 +50,7 @@ public:
 
     /**
      * Updates the cache of the backend by reading from
-     * an accociated image. All data transfers with
+     * an associated image. All data transfers with
      * KisImage should happen here
      */
     virtual void updateCache(const QRect &dirtyImageRect) = 0;
@@ -78,20 +78,20 @@ public:
      * scale or even original scale (e.g. KisProjectionCache)
      *
      * If info.borderWidth is non-zero, info.requestedRect will
-     * be axpended by info.borderWidth pixels to all directions and
+     * be expended by info.borderWidth pixels to all directions and
      * image of this rect will actually be written to the patch's QImage.
      * That is done to eliminate border effects in smooth scaling.
      */
     virtual KisImagePatch getNearestPatch(KisPPUpdateInfoSP info) = 0;
 
     /**
-     * Draws a piece of original image onto @gc's canvas
-     * @param info.imageRect - area in KisImage pixels where to read from
-     * @param info.viewportRect - area in canvas pixels where to write to
+     * Draws a piece of original image onto @p gc 's canvas
+     * @p info.imageRect - area in KisImage pixels where to read from
+     * @p info.viewportRect - area in canvas pixels where to write to
      * If info.imageRect and info.viewportRect don't agree, the image
      * will be scaled
-     * @param info.borderWidth has the same meaning as in getNearestPatch
-     * @param info.renderHints - hints, transmitted to QPainter during darwing
+     * @p info.borderWidth has the same meaning as in getNearestPatch
+     * @p info.renderHints - hints, transmitted to QPainter during darwing
      */
     virtual void drawFromOriginalImage(QPainter& gc,
                                        KisPPUpdateInfoSP info) = 0;

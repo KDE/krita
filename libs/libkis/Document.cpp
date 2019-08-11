@@ -52,8 +52,10 @@
 #include <kis_filter_strategy.h>
 #include <kis_guides_config.h>
 #include <kis_coordinates_converter.h>
+#include <kis_time_range.h>
+#include <KisImportExportErrorCode.h>
 
-#include <KisMimeDatabase.h>
+#include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
@@ -64,6 +66,13 @@
 #include <Node.h>
 #include <Selection.h>
 #include <LibKisUtils.h>
+
+#include "kis_animation_importer.h"
+#include <kis_canvas2.h>
+#include <KoUpdater.h>
+#include <QMessageBox>
+
+#include <kis_image_animation_interface.h>
 
 struct Document::Private {
     Private() {}
@@ -110,12 +119,14 @@ Node *Document::activeNode() const
     Q_FOREACH(QPointer<KisView> view, KisPart::instance()->views()) {
         if (view && view->document() == d->document) {
             activeNodes << view->currentNode();
+
         }
     }
     if (activeNodes.size() > 0) {
         QList<Node*> nodes = LibKisUtils::createNodeList(activeNodes, d->document->image());
         return nodes.first();
     }
+
     return 0;
 }
 
@@ -197,6 +208,28 @@ bool Document::setColorSpace(const QString &colorModel, const QString &colorDept
     return true;
 }
 
+QColor Document::backgroundColor()
+{
+    if (!d->document) return QColor();
+    if (!d->document->image()) return QColor();
+
+    const KoColor color = d->document->image()->defaultProjectionColor();
+    return color.toQColor();
+}
+
+bool Document::setBackgroundColor(const QColor &color)
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    KoColor background = KoColor(color, d->document->image()->colorSpace());
+    d->document->image()->setDefaultProjectionColor(background);
+
+    d->document->image()->setModified();
+    d->document->image()->initialRefreshGraph();
+
+    return true;
+}
 
 QString Document::documentInfo() const
 {
@@ -417,6 +450,7 @@ bool Document::close()
     Q_FOREACH(KisView *view, KisPart::instance()->views()) {
         if (view->document() == d->document) {
             view->close();
+            view->closeView();
             view->deleteLater();
         }
     }
@@ -449,7 +483,7 @@ void Document::flatten()
 {
     if (!d->document) return;
     if (!d->document->image()) return;
-    d->document->image()->flatten();
+    d->document->image()->flatten(0);
 }
 
 void Document::resizeImage(int x, int y, int w, int h)
@@ -632,13 +666,41 @@ VectorLayer *Document::createVectorLayer(const QString &name)
     return new VectorLayer(d->document->shapeController(), image, name);
 }
 
-FilterMask *Document::createFilterMask(const QString &name, Filter &filter)
+FilterMask *Document::createFilterMask(const QString &name, Filter &filter, const Node *selection_source)
 {
-    if (!d->document) return 0;
-    if (!d->document->image()) return 0;
-    KisImageSP image = d->document->image();
+    if (!d->document)
+        return 0;
 
-    return new FilterMask(image, name, filter);
+    if (!d->document->image())
+        return 0;
+
+    if(!selection_source)
+        return 0;
+
+    KisLayerSP layer = qobject_cast<KisLayer*>(selection_source->node().data());
+    if(layer.isNull())
+        return 0;
+
+    KisImageSP image = d->document->image();
+    FilterMask* mask = new FilterMask(image, name, filter);
+    qobject_cast<KisMask*>(mask->node().data())->initSelection(layer);
+
+    return mask;
+}
+
+FilterMask *Document::createFilterMask(const QString &name, Filter &filter, Selection &selection)
+{
+    if (!d->document)
+        return 0;
+
+    if (!d->document->image())
+        return 0;
+
+    KisImageSP image = d->document->image();
+    FilterMask* mask = new FilterMask(image, name, filter);
+    qobject_cast<KisMask*>(mask->node().data())->setSelection(selection.selection());
+
+    return mask;
 }
 
 SelectionMask *Document::createSelectionMask(const QString &name)
@@ -732,12 +794,12 @@ QList<qreal> Document::verticalGuides() const
 
 bool Document::guidesVisible() const
 {
-    return d->document->guidesConfig().lockGuides();
+    return d->document->guidesConfig().showGuides();
 }
 
 bool Document::guidesLocked() const
 {
-    return d->document->guidesConfig().showGuides();
+    return d->document->guidesConfig().lockGuides();
 }
 
 Document *Document::clone() const
@@ -797,7 +859,136 @@ void Document::setGuidesLocked(bool locked)
     d->document->setGuidesConfig(config);
 }
 
+bool Document::modified() const
+{
+    if (!d->document) return false;
+    return d->document->isModified();
+}
+
+QRect Document::bounds() const
+{
+    if (!d->document) return QRect();
+    return d->document->image()->bounds();
+}
+
 QPointer<KisDocument> Document::document() const
 {
     return d->document;
+}
+
+/* Animation related function */
+
+bool Document::importAnimation(const QList<QString> &files, int firstFrame, int step)
+{
+    KisView *activeView = KisPart::instance()->currentMainwindow()->activeView();
+
+    KoUpdaterPtr updater = 0;
+    if (activeView && d->document->fileBatchMode()) {
+         updater = activeView->viewManager()->createUnthreadedUpdater(i18n("Import frames"));
+    }
+
+    KisAnimationImporter importer(d->document->image(), updater);
+    KisImportExportErrorCode status = importer.import(files, firstFrame, step);
+
+    return status.isOk();
+}
+
+int Document::framesPerSecond()
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    return d->document->image()->animationInterface()->framerate();
+}
+
+void Document::setFramesPerSecond(int fps)
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+
+    d->document->image()->animationInterface()->setFramerate(fps);
+}
+
+void Document::setFullClipRangeStartTime(int startTime)
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+
+    d->document->image()->animationInterface()->setFullClipRangeStartTime(startTime);
+}
+
+
+int Document::fullClipRangeStartTime()
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    return d->document->image()->animationInterface()->fullClipRange().start();
+}
+
+
+void Document::setFullClipRangeEndTime(int endTime)
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+
+    d->document->image()->animationInterface()->setFullClipRangeEndTime(endTime);
+}
+
+
+int Document::fullClipRangeEndTime()
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    return d->document->image()->animationInterface()->fullClipRange().end();
+}
+
+int Document::animationLength()
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    return d->document->image()->animationInterface()->totalLength();
+}
+
+void Document::setPlayBackRange(int start, int stop)
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+
+    const KisTimeRange newTimeRange = KisTimeRange(start, (stop-start));
+    d->document->image()->animationInterface()->setPlaybackRange(newTimeRange);
+}
+
+int Document::playBackStartTime()
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    return d->document->image()->animationInterface()->playbackRange().start();
+}
+
+int Document::playBackEndTime()
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    return d->document->image()->animationInterface()->playbackRange().end();
+}
+
+int Document::currentTime()
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    return d->document->image()->animationInterface()->currentTime();
+}
+
+void Document::setCurrentTime(int time)
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+
+    return d->document->image()->animationInterface()->requestTimeSwitchWithUndo(time);
 }

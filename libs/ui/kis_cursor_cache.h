@@ -37,7 +37,6 @@ public:
     KisCursorCache();
 
     QCursor selectCursor;
-    QCursor moveCursor;
     QCursor pickerPlusCursor;
     QCursor pickerMinusCursor;
     QCursor penCursor;

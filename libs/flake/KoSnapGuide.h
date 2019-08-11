@@ -69,7 +69,8 @@ public:
         GuideLineSnapping = 0x40,
         DocumentBoundsSnapping = 0x80,
         DocumentCenterSnapping = 0x100,
-        CustomSnapping = 0x200
+        CustomSnapping = 0x200,
+        PixelSnapping = 0x400
     };
     Q_DECLARE_FLAGS(Strategies, Strategy)
 

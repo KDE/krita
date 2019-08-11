@@ -19,14 +19,12 @@
 #include "kshortcutschemeseditor.h"
 #include "KisShortcutsDialog_p.h"
 
-#include <QDir>
 #include <QLabel>
 #include <QMenu>
 #include <QFile>
 #include <QPushButton>
 #include <QTextStream>
-#include <QtXml/QDomDocument>
-#include <QFileDialog>
+#include <QDomDocument>
 #include <QStandardPaths>
 #include <QInputDialog>
 #include <QComboBox>
@@ -36,6 +34,7 @@
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <ksharedconfig.h>
+#include <KoFileDialog.h>
 
 #include "KisShortcutsDialog.h"
 #include "kshortcutschemeshelper_p.h"
@@ -156,48 +155,48 @@ QString KShortcutSchemesEditor::currentScheme()
 
 void KShortcutSchemesEditor::exportShortcutsScheme()
 {
-    //ask user about dir
-    QFileDialog dlg(m_dialog,
-                    i18n("Export Shortcuts"),
-                    KoResourcePaths::saveLocation("kis_shortcuts"),
-                    i18n("Shortcuts (*.shortcuts)"));
-    dlg.setDefaultSuffix(QStringLiteral(".shortcuts"));
-    dlg.setAcceptMode(QFileDialog::AcceptSave);
-    if (dlg.exec()) {
-        auto path = dlg.selectedFiles().first();
+    KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
+    QString proposedPath = group.readEntry("ExportShortcuts", KoResourcePaths::saveLocation("kis_shortcuts"));
 
-        if (!path.isEmpty()) {
-            m_dialog->exportConfiguration(path);
-        }
+    KoFileDialog dialog(m_dialog, KoFileDialog::SaveFile, "ExportShortcuts");
+    dialog.setCaption(i18n("Export Shortcuts"));
+    dialog.setDefaultDir(proposedPath);
+    dialog.setMimeTypeFilters(QStringList() << "application/x-krita-shortcuts", "application/x-krita-shortcuts");
+    QString path = dialog.filename();
 
+    if (!path.isEmpty()) {
+        m_dialog->exportConfiguration(path);
     }
 }
 
 void KShortcutSchemesEditor::saveCustomShortcuts()
 {
-    //ask user about dir
-    QFileDialog dlg(m_dialog,
-                    i18n("Save Shortcuts"),
-                    QDir::currentPath(),
-                    i18n("Shortcuts (*.shortcuts)"));
-    dlg.setDefaultSuffix(QStringLiteral(".shortcuts"));
-    dlg.setAcceptMode(QFileDialog::AcceptSave);
-    if (dlg.exec()) {
-        auto path = dlg.selectedFiles().first();
+    KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
+    QString proposedPath = group.readEntry("SaveCustomShortcuts", QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 
-        if (!path.isEmpty()) {
-            m_dialog->saveCustomShortcuts(path);
-        }
+    KoFileDialog dialog(m_dialog, KoFileDialog::SaveFile, "SaveCustomShortcuts");
+    dialog.setCaption(i18n("Save Shortcuts"));
+    dialog.setDefaultDir(proposedPath);
+    dialog.setMimeTypeFilters(QStringList() << "application/x-krita-shortcuts", "application/x-krita-shortcuts");
+    QString path = dialog.filename();
+
+    if (!path.isEmpty()) {
+        m_dialog->saveCustomShortcuts(path);
     }
 }
 
 
+
 void KShortcutSchemesEditor::loadCustomShortcuts()
 {
-    auto path = QFileDialog::getOpenFileName(m_dialog,
-                                             i18n("Import Shortcuts"),
-                                             QDir::currentPath(),
-                                             i18n("Shortcuts (*.shortcuts)"));
+    KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
+    QString proposedPath = group.readEntry("ImportShortcuts", QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+
+    KoFileDialog dialog(m_dialog, KoFileDialog::ImportFile, "ImportShortcuts");
+    dialog.setCaption(i18n("Import Shortcuts"));
+    dialog.setDefaultDir(proposedPath);
+    dialog.setMimeTypeFilters(QStringList() << "application/x-krita-shortcuts", "application/x-krita-shortcuts");
+    QString path = dialog.filename();
 
     if (path.isEmpty()) {
         return;
@@ -211,8 +210,15 @@ void KShortcutSchemesEditor::loadCustomShortcuts()
 
 void KShortcutSchemesEditor::importShortcutsScheme()
 {
-    //ask user about dir
-    QString path = QFileDialog::getOpenFileName(m_dialog, i18n("Import Shortcuts"), QDir::currentPath(), i18n("Shortcuts (*.shortcuts)"));
+    KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
+    QString proposedPath = group.readEntry("ImportShortcuts", QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+
+    KoFileDialog dialog(m_dialog, KoFileDialog::ImportFile, "ImportShortcuts");
+    dialog.setCaption(i18n("Import Shortcuts"));
+    dialog.setDefaultDir(proposedPath);
+    dialog.setMimeTypeFilters(QStringList() << "application/x-krita-shortcuts", "application/x-krita-shortcuts");
+    QString path = dialog.filename();
+
     if (path.isEmpty()) {
         return;
     }

@@ -24,7 +24,7 @@
 #include "kis_exif_io.h"
 #include "kis_xmp_io.h"
 
-#include <metadata/kis_meta_data_value.h>
+#include <kis_meta_data_value.h>
 #include <kis_debug.h>
 
 // ---- Generic conversion functions ---- //
@@ -166,9 +166,9 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
             return new Exiv2::ValueType<Exiv2::URational>(Exiv2::URational(value.asRational().numerator, value.asRational().denominator));
         }
     case KisMetaData::Value::OrderedArray:
-        /* Falls through */
+        Q_FALLTHROUGH();
     case KisMetaData::Value::UnorderedArray:
-        /* Falls through */
+        Q_FALLTHROUGH();
     case KisMetaData::Value::AlternativeArray: {
         switch (type) {
         case Exiv2::unsignedByte:
@@ -192,13 +192,15 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
             break;
         default:
             dbgMetaData << type << " " << value;
-            //Q_ASSERT(false);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(0 && "Unknown alternative array type", 0);
+            break;
         }
-        /* Falls through */
+        break;
     }
     default:
         dbgMetaData << type << " " << value;
-        //Q_ASSERT(false);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(0 && "Unknown array type", 0);
+        break;
     }
     return 0;
 }

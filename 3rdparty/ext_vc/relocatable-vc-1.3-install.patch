@@ -1,0 +1,42 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a9882637..2c2bad85 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -206,8 +206,12 @@ set(Vc_VERSION_MAJOR ${CMAKE_MATCH_1})
+ set(Vc_VERSION_MINOR ${CMAKE_MATCH_2})
+ set(Vc_VERSION_PATCH ${CMAKE_MATCH_3})
+ 
+-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VcConfig.cmake.in
+-   ${CMAKE_CURRENT_BINARY_DIR}/cmake/VcConfig.cmake @ONLY)
++include(CMakePackageConfigHelpers)
++configure_package_config_file(
++   ${CMAKE_CURRENT_SOURCE_DIR}/cmake/VcConfig.cmake.in
++   ${CMAKE_CURRENT_BINARY_DIR}/cmake/VcConfig.cmake
++   INSTALL_DESTINATION lib${LIB_SUFFIX}/cmake/Vc
++   PATH_VARS CMAKE_INSTALL_PREFIX)
+ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VcConfigVersion.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/cmake/VcConfigVersion.cmake @ONLY)
+ 
+diff --git a/cmake/VcConfig.cmake.in b/cmake/VcConfig.cmake.in
+index 4a47e41e..48d37a80 100644
+--- a/cmake/VcConfig.cmake.in
++++ b/cmake/VcConfig.cmake.in
+@@ -1,13 +1,15 @@
++@PACKAGE_INIT@
++
+ set(Vc_VERSION_MAJOR @Vc_VERSION_MAJOR@)
+ set(Vc_VERSION_MINOR @Vc_VERSION_MINOR@)
+ set(Vc_VERSION_PATCH @Vc_VERSION_PATCH@)
+ set(Vc_VERSION @Vc_VERSION_MAJOR@.@Vc_VERSION_MINOR@.@Vc_VERSION_PATCH@)
+ set(Vc_VERSION_STRING "@Vc_VERSION_MAJOR@.@Vc_VERSION_MINOR@.@Vc_VERSION_PATCH@")
+ 
+-set(Vc_INSTALL_DIR "@CMAKE_INSTALL_PREFIX@")
++set(Vc_INSTALL_DIR "@PACKAGE_CMAKE_INSTALL_PREFIX@")
+ 
+-set(Vc_LIB_DIR              "@CMAKE_INSTALL_PREFIX@/lib@LIB_SUFFIX@")
+-find_path(Vc_INCLUDE_DIR       Vc/global.h HINTS "@CMAKE_INSTALL_PREFIX@/include")
++set(Vc_LIB_DIR              "@PACKAGE_CMAKE_INSTALL_PREFIX@/lib@LIB_SUFFIX@")
++find_path(Vc_INCLUDE_DIR       Vc/global.h HINTS "@PACKAGE_CMAKE_INSTALL_PREFIX@/include")
+ find_path(Vc_CMAKE_MODULES_DIR AddCompilerFlag.cmake HINTS "${Vc_LIB_DIR}/cmake/Vc")
+ list(APPEND CMAKE_MODULE_PATH "${Vc_CMAKE_MODULES_DIR}")
+ 

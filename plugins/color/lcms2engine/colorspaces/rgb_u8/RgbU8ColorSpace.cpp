@@ -34,33 +34,6 @@
 #define downscale(quantum)  (quantum) //((unsigned char) ((quantum)/257UL))
 #define upscale(value)  (value) // ((quint8) (257UL*(value)))
 
-class KoRgbU8InvertColorTransformation : public KoColorTransformation
-{
-
-public:
-
-    KoRgbU8InvertColorTransformation(const KoColorSpace *cs) : m_psize(cs->pixelSize())
-    {
-    }
-
-    void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override
-    {
-        while (nPixels--) {
-            dst[0] = KoColorSpaceMathsTraits<quint8>::max - src[0];
-            dst[1] = KoColorSpaceMathsTraits<quint8>::max - src[1];
-            dst[2] = KoColorSpaceMathsTraits<quint8>::max - src[2];
-            dst[3] = src[3];
-
-            src += m_psize;
-            dst += m_psize;
-        }
-
-    }
-
-private:
-    quint32 m_psize;
-};
-
 RgbU8ColorSpace::RgbU8ColorSpace(const QString &name, KoColorProfile *p) :
     LcmsColorSpace<KoBgrU8Traits>(colorSpaceId(), name, TYPE_BGRA_8, cmsSigRgbData, p)
 {
@@ -76,11 +49,6 @@ RgbU8ColorSpace::RgbU8ColorSpace(const QString &name, KoColorProfile *p) :
     addCompositeOp(new RgbCompositeOpIn<KoBgrU8Traits>(this));
     addCompositeOp(new RgbCompositeOpOut<KoBgrU8Traits>(this));
     addCompositeOp(new RgbCompositeOpBumpmap<KoBgrU8Traits>(this));
-}
-
-KoColorTransformation *RgbU8ColorSpace::createInvertTransformation() const
-{
-    return new KoRgbU8InvertColorTransformation(this);
 }
 
 KoColorSpace *RgbU8ColorSpace::clone() const

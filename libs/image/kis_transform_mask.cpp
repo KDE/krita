@@ -107,9 +107,8 @@ KisTransformMask::KisTransformMask()
             new KisDumbTransformMaskParams()));
 
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
-
-    KisImageConfig cfg;
-    m_d->offBoundsReadArea = cfg.transformMaskOffBoundsReadArea();
+    connect(this, SIGNAL(sigInternalForceStaticImageUpdate()), SLOT(slotInternalForceStaticImageUpdate()));
+    m_d->offBoundsReadArea = KisImageConfig(true).transformMaskOffBoundsReadArea();
 }
 
 KisTransformMask::~KisTransformMask()
@@ -397,17 +396,26 @@ QRect KisTransformMask::extent() const
 
 QRect KisTransformMask::exactBounds() const
 {
-    QRect rc = KisMask::exactBounds();
-
-    QRect partialChangeRect;
     QRect existentProjection;
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
     if (parentLayer) {
-        partialChangeRect = parentLayer->partialChangeRect(const_cast<KisTransformMask*>(this), rc);
         existentProjection = parentLayer->projection()->exactBounds();
     }
 
-    return changeRect(partialChangeRect) | existentProjection;
+    return changeRect(sourceDataBounds()) | existentProjection;
+}
+
+QRect KisTransformMask::sourceDataBounds() const
+{
+    QRect rc = KisMask::exactBounds();
+
+    QRect partialChangeRect = rc;
+    KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
+    if (parentLayer) {
+        partialChangeRect = parentLayer->partialChangeRect(const_cast<KisTransformMask*>(this), rc);
+    }
+
+    return partialChangeRect;
 }
 
 void KisTransformMask::setX(qint32 x)
@@ -426,12 +434,28 @@ void KisTransformMask::setY(qint32 y)
 
 void KisTransformMask::forceUpdateTimedNode()
 {
-    if (m_d->updateSignalCompressor.isActive()) {
+    if (hasPendingTimedUpdates()) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->staticCacheValid);
 
         m_d->updateSignalCompressor.stop();
         slotDelayedStaticUpdate();
     }
+}
+
+bool KisTransformMask::hasPendingTimedUpdates() const
+{
+    return m_d->updateSignalCompressor.isActive();
+}
+
+void KisTransformMask::threadSafeForceStaticImageUpdate()
+{
+    emit sigInternalForceStaticImageUpdate();
+}
+
+void KisTransformMask::slotInternalForceStaticImageUpdate()
+{
+    m_d->updateSignalCompressor.stop();
+    slotDelayedStaticUpdate();
 }
 
 KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)

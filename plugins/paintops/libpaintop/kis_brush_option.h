@@ -22,14 +22,14 @@
 #define KIS_BRUSH_OPTION_H_
 
 #include <kis_brush.h>
-#include <kis_base_option.h>
+#include <KisPaintopPropertiesBase.h>
 #include <kis_properties_configuration.h>
 #include <kis_threaded_text_rendering_workaround.h>
 
 
 #include <kritapaintop_export.h>
 
-class PAINTOP_EXPORT KisBrushOption : public KisBaseOption
+class PAINTOP_EXPORT KisBrushOptionProperties : public KisPaintopPropertiesBase
 {
 public:
 

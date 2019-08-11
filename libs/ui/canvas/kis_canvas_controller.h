@@ -37,11 +37,10 @@ public:
     ~KisCanvasController() override;
 
     void setCanvas(KoCanvasBase *canvas) override;
-    void changeCanvasWidget(QWidget *widget) override;
     void keyPressEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
-    void updateDocumentSize(const QSize &sz, bool recalculateCenter) override;
+    void updateDocumentSize(const QSizeF &sz, bool recalculateCenter) override;
     void activate() override;
 
     QPointF currentCursorPosition() const override;
@@ -53,6 +52,8 @@ public:
 
     void saveCanvasState(KisPropertiesConfiguration &config) const;
     void restoreCanvasState(const KisPropertiesConfiguration &config);
+
+    void resetScrollBars() override;
 
 public Q_SLOTS:
     void mirrorCanvas(bool enable);

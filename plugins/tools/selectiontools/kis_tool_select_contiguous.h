@@ -23,7 +23,7 @@
 #ifndef __KIS_TOOL_SELECT_CONTIGUOUS_H__
 #define __KIS_TOOL_SELECT_CONTIGUOUS_H__
 
-#include "KoToolFactoryBase.h"
+#include "KisSelectionToolFactoryBase.h"
 #include "kis_tool_select_base.h"
 #include <kis_icon.h>
 #include <kconfig.h>
@@ -33,7 +33,7 @@
  * The 'magic wand' selection tool -- in fact just
  * a floodfill that only creates a selection.
  */
-class KisToolSelectContiguous : public KisToolSelectBase<KisTool>
+class KisToolSelectContiguous : public KisToolSelect
 {
 
     Q_OBJECT
@@ -47,11 +47,13 @@ public:
 
     void beginPrimaryAction(KoPointerEvent *event) override;
 
-    QMenu* popupActionsMenu() override;
+    void resetCursorStyle() override;
 
 protected:
 
     bool wantsAutoScroll() const override { return false; }
+
+    bool isPixelOnly() const override { return true; }
 
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
@@ -59,7 +61,6 @@ public Q_SLOTS:
     virtual void slotSetSizemod(int);
     virtual void slotSetFeather(int);
     virtual void slotLimitToCurrentLayer(int);
-    void setSelectionAction(int);
     //virtual bool antiAliasSelection();
 
 protected:
@@ -73,11 +74,11 @@ private:
     KConfigGroup m_configGroup;
 };
 
-class KisToolSelectContiguousFactory : public KoToolFactoryBase
+class KisToolSelectContiguousFactory : public KisSelectionToolFactoryBase
 {
 public:
     KisToolSelectContiguousFactory()
-        : KoToolFactoryBase("KisToolSelectContiguous")
+        : KisSelectionToolFactoryBase("KisToolSelectContiguous")
     {
         setToolTip(i18n("Contiguous Selection Tool"));
         setSection(TOOL_TYPE_SELECTION);

@@ -71,11 +71,6 @@ public:
 
     void activeDocumentChanged(KisDocument *document);
 
-    /**
-     * The name of the last activated window layout or session.
-     * Used by the layout selector.
-     */
-    QString lastLayoutName();
     void setLastUsedLayout(const KisWindowLayoutResource *layout);
 
 private Q_SLOTS:

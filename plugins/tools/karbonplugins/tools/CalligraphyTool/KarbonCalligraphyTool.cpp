@@ -32,7 +32,7 @@
 #include <KoSelection.h>
 #include <KoCurveFit.h>
 #include <KoColorBackground.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoColor.h>
 #include <KoShapePaintingContext.h>
 #include <KoViewConverter.h>
@@ -288,7 +288,7 @@ qreal KarbonCalligraphyTool::calculateWidth(qreal pressure)
 
 qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed, const QPointF &newSpeed)
 {
-    // calculate the avarage of the speed (sum of the normalized values)
+    // calculate the average of the speed (sum of the normalized values)
     qreal oldLength = QLineF(QPointF(0, 0), oldSpeed).length();
     qreal newLength = QLineF(QPointF(0, 0), newSpeed).length();
     QPointF oldSpeedNorm = !qFuzzyCompare(oldLength + 1, 1) ?
@@ -348,12 +348,41 @@ void KarbonCalligraphyTool::activate(ToolActivation activation, const QSet<KoSha
 {
     KoToolBase::activate(activation, shapes);
 
+    if (!m_widget) {
+        createOptionWidgets();
+    }
+
+    QAction *a = action("calligraphy_increase_width");
+    connect(a, SIGNAL(triggered()), m_widget, SLOT(increaseWidth()), Qt::UniqueConnection);
+
+    a = action("calligraphy_decrease_width");
+    connect(a, SIGNAL(triggered()), m_widget, SLOT(decreaseWidth()), Qt::UniqueConnection);
+
+    a = action("calligraphy_increase_angle");
+    connect(a, SIGNAL(triggered()), m_widget, SLOT(increaseAngle()), Qt::UniqueConnection);
+
+    a = action("calligraphy_decrease_angle");
+    connect(a, SIGNAL(triggered()), m_widget, SLOT(decreaseAngle()), Qt::UniqueConnection);
+
+
     useCursor(Qt::CrossCursor);
     m_lastShape = 0;
 }
 
 void KarbonCalligraphyTool::deactivate()
 {
+    QAction *a = action("calligraphy_increase_width");
+    disconnect(a, 0, this, 0);
+
+    a = action("calligraphy_decrease_width");
+    disconnect(a, 0, this, 0);
+
+    a = action("calligraphy_increase_angle");
+    disconnect(a, 0, this, 0);
+
+    a = action("calligraphy_decrease_angle");
+    disconnect(a, 0, this, 0);
+
     if (m_lastShape && canvas()->shapeManager()->shapes().contains(m_lastShape)) {
         KoSelection *selection = canvas()->shapeManager()->selection();
         selection->deselectAll();
@@ -372,66 +401,45 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     //fillWidget->setWindowTitle(i18n("Fill"));
     //widgets.append(fillWidget);
 
-    KarbonCalligraphyOptionWidget *widget = new KarbonCalligraphyOptionWidget;
-    connect(widget, SIGNAL(usePathChanged(bool)),
+    m_widget = new KarbonCalligraphyOptionWidget();
+    connect(m_widget, SIGNAL(usePathChanged(bool)),
             this, SLOT(setUsePath(bool)));
 
-    connect(widget, SIGNAL(usePressureChanged(bool)),
+    connect(m_widget, SIGNAL(usePressureChanged(bool)),
             this, SLOT(setUsePressure(bool)));
 
-    connect(widget, SIGNAL(useAngleChanged(bool)),
+    connect(m_widget, SIGNAL(useAngleChanged(bool)),
             this, SLOT(setUseAngle(bool)));
 
-    connect(widget, SIGNAL(widthChanged(double)),
+    connect(m_widget, SIGNAL(widthChanged(double)),
             this, SLOT(setStrokeWidth(double)));
 
-    connect(widget, SIGNAL(thinningChanged(double)),
+    connect(m_widget, SIGNAL(thinningChanged(double)),
             this, SLOT(setThinning(double)));
 
-    connect(widget, SIGNAL(angleChanged(int)),
+    connect(m_widget, SIGNAL(angleChanged(int)),
             this, SLOT(setAngle(int)));
 
-    connect(widget, SIGNAL(fixationChanged(double)),
+    connect(m_widget, SIGNAL(fixationChanged(double)),
             this, SLOT(setFixation(double)));
 
-    connect(widget, SIGNAL(capsChanged(double)),
+    connect(m_widget, SIGNAL(capsChanged(double)),
             this, SLOT(setCaps(double)));
 
-    connect(widget, SIGNAL(massChanged(double)),
+    connect(m_widget, SIGNAL(massChanged(double)),
             this, SLOT(setMass(double)));
 
-    connect(widget, SIGNAL(dragChanged(double)),
+    connect(m_widget, SIGNAL(dragChanged(double)),
             this, SLOT(setDrag(double)));
 
     connect(this, SIGNAL(pathSelectedChanged(bool)),
-            widget, SLOT(setUsePathEnabled(bool)));
-
-    // add shortcuts
-    QAction *action = new QAction(i18n("Calligraphy: increase width"), this);
-    action->setShortcut(Qt::Key_Right);
-    connect(action, SIGNAL(triggered()), widget, SLOT(increaseWidth()));
-    addAction("calligraphy_increase_width", action);
-
-    action = new QAction(i18n("Calligraphy: decrease width"), this);
-    action->setShortcut(Qt::Key_Left);
-    connect(action, SIGNAL(triggered()), widget, SLOT(decreaseWidth()));
-    addAction("calligraphy_decrease_width", action);
-
-    action = new QAction(i18n("Calligraphy: increase angle"), this);
-    action->setShortcut(Qt::Key_Up);
-    connect(action, SIGNAL(triggered()), widget, SLOT(increaseAngle()));
-    addAction("calligraphy_increase_angle", action);
-
-    action = new QAction(i18n("Calligraphy: decrease angle"), this);
-    action->setShortcut(Qt::Key_Down);
-    connect(action, SIGNAL(triggered()), widget, SLOT(decreaseAngle()));
-    addAction("calligraphy_decrease_angle", action);
+            m_widget, SLOT(setUsePathEnabled(bool)));
 
     // sync all parameters with the loaded profile
-    widget->emitAll();
-    widget->setObjectName(i18n("Calligraphy"));
-    widget->setWindowTitle(i18n("Calligraphy"));
-    widgets.append(widget);
+    m_widget->emitAll();
+    m_widget->setObjectName(i18n("Calligraphy"));
+    m_widget->setWindowTitle(i18n("Calligraphy"));
+    widgets.append(m_widget);
 
     return widgets;
 }

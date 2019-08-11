@@ -26,9 +26,12 @@
 #include <QFile>
 #include <QObject>
 #include <QColor>
+#include <QXmlStreamWriter>
+#include <QMap>
 
 #include <kritaui_export.h>
 #include <kis_shared.h>
+#include <kis_types.h>
 
 class QPainter;
 class QRect;
@@ -73,12 +76,12 @@ public:
     void uncache();
     KisPaintingAssistantHandle& operator=(const QPointF&);
     void setType(char type);
-    char handleType();
+    char handleType() const;
 
 private:
     void registerAssistant(KisPaintingAssistant*);
     void unregisterAssistant(KisPaintingAssistant*);
-    bool containsAssistant(KisPaintingAssistant*);
+    bool containsAssistant(KisPaintingAssistant*) const;
 
 private:
     struct Private;
@@ -94,10 +97,12 @@ class KRITAUI_EXPORT KisPaintingAssistant
 public:
     KisPaintingAssistant(const QString& id, const QString& name);
     virtual ~KisPaintingAssistant();
+    virtual KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const = 0;
     const QString& id() const;
     const QString& name() const;
     bool isSnappingActive() const;
     void setSnappingActive(bool set);
+
 
     /**
      * Adjust the position given in parameter.
@@ -106,14 +111,20 @@ public:
      */
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) = 0;
     virtual void endStroke() { }
-    virtual QPointF buttonPosition() const = 0;
+    virtual QPointF getEditorPosition() const = 0; // Returns editor widget position in document-space coordinates.
     virtual int numHandles() const = 0;
+
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle, HandleType type);
 
-    /// grabs the assistant color/opacity specified from the tool options
-    /// each assistant might have to use this differently, so just save a reference
-    void setAssistantColor(QColor color);
+    QPointF viewportConstrainedEditorPosition(const KisCoordinatesConverter* converter, const QSize editorSize);
+
+    QColor effectiveAssistantColor() const;
+    bool useCustomColor();
+    void setUseCustomColor(bool useCustomColor);
+    void setAssistantCustomColor(QColor color);
+    QColor assistantCustomColor();
+    void setAssistantGlobalColorCache(const QColor &color);
 
     virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true,KisCanvas2 *canvas=0, bool assistantVisible=true, bool previewVisible=true);
     void uncache();
@@ -121,8 +132,13 @@ public:
     QList<KisPaintingAssistantHandleSP> handles();
     const QList<KisPaintingAssistantHandleSP>& sideHandles() const;
     QList<KisPaintingAssistantHandleSP> sideHandles();
+
     QByteArray saveXml( QMap<KisPaintingAssistantHandleSP, int> &handleMap);
+    virtual void saveCustomXml(QXmlStreamWriter* xml); //in case specific assistants have custom properties (like vanishing point)
+
     void loadXml(KoStore *store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path);
+    virtual bool loadCustomXml(QXmlStreamReader* xml);
+
     void saveXmlList(QDomDocument& doc, QDomElement& ssistantsElement, int count);
     void findPerspectiveAssistantHandleLocation();
     KisPaintingAssistantHandleSP oppHandleOne();
@@ -172,6 +188,8 @@ public:
     static double norm2(const QPointF& p);
 
 protected:
+    explicit KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
+
     virtual QRect boundingRect() const;
 
     /// performance layer where the graphics can be drawn from a cache instead of generated every render update
@@ -181,6 +199,11 @@ protected:
     QList<KisPaintingAssistantHandleSP> m_handles;
 
     QPointF pixelToView(const QPoint pixelCoords) const;
+public:
+    /// clones the list of assistants
+    /// the originally shared handles will still be shared
+    /// the cloned assistants do not share any handle with the original assistants
+    static QList<KisPaintingAssistantSP> cloneAssistantList(const QList<KisPaintingAssistantSP> &list);
 
 private:
     struct Private;

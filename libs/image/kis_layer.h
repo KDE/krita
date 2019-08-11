@@ -169,9 +169,6 @@ public:
      */
     void setTemporary(bool t);
 
-    /// returns the image this layer belongs to, or null if there is no image
-    KisImageWSP image() const;
-
     /**
      * Set the image this layer belongs to.
      */
@@ -227,7 +224,7 @@ public:
     /**
      * Informs this layers that its masks might have changed.
      */
-    void notifyChildMaskChanged(KisNodeSP changedChildMask);
+    void notifyChildMaskChanged();
 
 public:
     qint32 x() const override;
@@ -261,7 +258,7 @@ public:
     /**
      * @return the list of effect masks
      */
-    const QList<KisEffectMaskSP> &effectMasks() const;
+    QList<KisEffectMaskSP> effectMasks() const;
 
     /**
      * @return the list of effect masks up to a certain node
@@ -351,6 +348,21 @@ protected:
     virtual QRect outgoingChangeRect(const QRect &rect) const;
 
     /**
+     * Return need rect that should be prepared on original()
+     * device of the layer to get \p rect on its projection.
+     *
+     * This method is used either for layers that can have other
+     * layers as children (yes, KisGroupLayer, I'm looking at you!),
+     * or for layers that depend on the lower nodes (it's you,
+     * KisAdjustmentLayer!).
+     *
+     * These layers may have some filter masks that need a bit
+     * more pixels than requested, therefore child nodes should do
+     * a bit more work to prepare them.
+     */
+    QRect needRectForOriginal(const QRect &rect) const;
+
+    /**
      * @param rectVariesFlag (out param) a flag, showing whether
      *        a rect varies from mask to mask
      * @return an area that should be updated because of
@@ -384,13 +396,10 @@ protected:
 
     bool canMergeAndKeepBlendOptions(KisLayerSP otherLayer);
 
-    void updateSelectionMask();
-
-    void updateEffectMasks();
-
     QList<KisEffectMaskSP> searchEffectMasks(KisNodeSP lastNode) const;
 
 private:
+    friend class KisLayerMasksCache;
     friend class KisLayerProjectionPlane;
     friend class KisTransformMask;
     friend class KisLayerTest;

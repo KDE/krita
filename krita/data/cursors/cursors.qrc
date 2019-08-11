@@ -16,6 +16,8 @@
         <file>precise-pick-layer-icon.xpm</file>
         <file>rotate_discrete.xpm</file>
         <file>rotate_smooth.xpm</file>
+        <file>move-tool.png</file>
+        <file>move-selection.png</file>
         <file>shear_x.xpm</file>
         <file>shear_y.xpm</file>
         <file>zoom_discrete.xpm</file>

@@ -39,6 +39,7 @@
 #include "KoIntegerMaths.h"
 #include <KoUpdater.h>
 
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_filter.h>
 #include <kis_global.h>
@@ -53,7 +54,7 @@
 
 
 KisRainDropsFilter::KisRainDropsFilter()
-    : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Raindrops..."))
+    : KisFilter(id(), FiltersCategoryArtisticId, i18n("&Raindrops..."))
 {
     setSupportsPainting(false);
     setSupportsThreading(false);
@@ -372,11 +373,11 @@ uchar KisRainDropsFilter::LimitValues(int ColorValue) const
     return ((uchar) ColorValue);
 }
 
-KisConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(1, 200, 80, i18n("Drop size"), "dropsize"));
-    param.push_back(KisIntegerWidgetParam(1, 500, 80, i18n("Number"), "number"));
+    param.push_back(KisIntegerWidgetParam(1, 500, 80, i18n("Number of drops"), "number"));
     param.push_back(KisIntegerWidgetParam(1, 100, 30, i18n("Fish eyes"), "fishEyes"));
     KisMultiIntegerFilterWidget * w = new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
     w->setConfiguration(factoryConfiguration());

@@ -57,6 +57,7 @@ function(install_pykrita_plugin name)
                 PATTERN "*.csv"
                 PATTERN "*.html"
                 PATTERN "__pycache__*" EXCLUDE
+                PATTERN "tests*" EXCLUDE
            )
         # TODO Is there any way to form a long PATTERN options string
         # and use it in a single install() call?
@@ -68,6 +69,7 @@ function(install_pykrita_plugin name)
                 FILES_MATCHING
                     PATTERN "${_pattern}"
                     PATTERN "__pycache__*" EXCLUDE
+		    PATTERN "tests*" EXCLUDE
               )
         endforeach()
     else()
@@ -85,12 +87,13 @@ install_pykrita_plugin(exportlayers)
 #install_pykrita_plugin(highpass)
 install_pykrita_plugin(tenbrushes)
 install_pykrita_plugin(tenscripts)
-install_pykrita_plugin(palette_docker)
+#install_pykrita_plugin(palette_docker)  # Needs fixing -> bug 405194
 install_pykrita_plugin(quick_settings_docker)
 install_pykrita_plugin(lastdocumentsdocker)
 # install_pykrita_plugin(scriptdocker)
 install_pykrita_plugin(comics_project_management_tools)
 install_pykrita_plugin(krita_script_starter)
+install_pykrita_plugin(plugin_importer)
 
 # if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)
 #     install_pykrita_plugin(cmake_utils)
@@ -99,15 +102,10 @@ install_pykrita_plugin(krita_script_starter)
 # endif()
 
 install( FILES
-    hello/hello.xmlgui
-DESTINATION ${DATA_INSTALL_DIR}/kritaplugins/)
-
-
-
-install( FILES
     hello/hello.action
     tenbrushes/tenbrushes.action
     tenscripts/tenscripts.action
+    plugin_importer/plugin_importer.action
 DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
 
 install(

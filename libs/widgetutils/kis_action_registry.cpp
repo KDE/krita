@@ -193,7 +193,8 @@ QAction * KisActionRegistry::makeQAction(const QString &name, QObject *parent)
 {
     QAction * a = new QAction(parent);
     if (!d->actionInfoList.contains(name)) {
-        dbgAction << "Warning: requested data for unknown action" << name;
+        qWarning() << "Warning: requested data for unknown action" << name;
+        a->setObjectName(name);
         return a;
     }
 
@@ -275,7 +276,9 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
         bool isCheckable  = getChildContent(actionXml, "isCheckable") == QString("true");
 
         a->setObjectName(name); // This is helpful, should be added more places in Krita
-        a->setIcon(KisIconUtils::loadIcon(icon.toLatin1()));
+        if (!icon.isEmpty()) {
+            a->setIcon(KisIconUtils::loadIcon(icon.toLatin1()));
+        }
         a->setText(text);
         a->setObjectName(name);
         a->setWhatsThis(whatsthis);
@@ -349,7 +352,7 @@ void KisActionRegistry::Private::loadActionFiles()
                     }
 
                     else if (actionInfoList.contains(name)) {
-                        errAction << "NOT COOL: Duplicated action name from xml data: " << name;
+                        qWarning() << "NOT COOL: Duplicated action name from xml data: " << name;
                     }
 
                     else {

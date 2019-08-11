@@ -46,7 +46,7 @@ class KisInputManager;
 class KoZoomController;
 class KoZoomController;
 struct KoPageLayout;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 
 // KDE classes
 class QAction;
@@ -55,6 +55,7 @@ class KConfigGroup;
 
 // Qt classes
 class QDragEnterEvent;
+class QDragMoveEvent;
 class QDropEvent;
 class QPrintDialog;
 class QCloseEvent;
@@ -208,9 +209,12 @@ public:
     KisSelectionSP selection();
 
     void notifyCurrentStateChanged(bool isCurrent);
+    bool isCurrent() const;
 
     void setShowFloatingMessage(bool show);
-    void showFloatingMessageImpl(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment);
+    void showFloatingMessage(const QString &message, const QIcon& icon, int timeout = 4500,
+                             KisFloatingMessage::Priority priority = KisFloatingMessage::Medium,
+                             int alignment = Qt::AlignCenter | Qt::TextWordWrap);
 
     bool canvasIsMirrored() const;
 
@@ -246,6 +250,10 @@ public Q_SLOTS:
 
     bool queryClose();
 
+    void slotScreenChanged();
+
+    void slotThemeChanged(QPalette pal);
+
 private Q_SLOTS:
     void slotImageNodeAdded(KisNodeSP node);
     void slotContinueAddNode(KisNodeSP newActiveNode);
@@ -266,8 +274,9 @@ Q_SIGNALS:
 protected:
 
     // QWidget overrides
-    void dragEnterEvent(QDragEnterEvent * event) override;
-    void dropEvent(QDropEvent * event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
 
     /**

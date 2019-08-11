@@ -25,8 +25,8 @@
 #include <KisImportExportFilter.h>
 #include <kis_config_widget.h>
 #include "ui_kis_wdg_options_jpeg.h"
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_filter_registry_model.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_filter_registry_model.h>
 
 
 class KisWdgOptionsJPEG : public KisConfigWidget, public Ui::WdgOptionsJPEG
@@ -49,7 +49,7 @@ public:
     KisJPEGExport(QObject *parent, const QVariantList &);
     ~KisJPEGExport() override;
 public:
-    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
     KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const override;
     KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const override;
     void initializeCapabilities() override;

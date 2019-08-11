@@ -137,7 +137,7 @@ public:
     }
 
     inline void recalculate(const QRect& requestedRect) {
-        Q_ASSERT(m_startNode);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_startNode);
 
         KisProjectionLeafSP startLeaf = m_startNode->projectionLeaf();
 
@@ -166,7 +166,7 @@ public:
     }
 
     bool checksumValid() {
-        Q_ASSERT(m_startNode);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_startNode, false);
         return
             m_nodeChecksum == calculateChecksum(m_startNode->projectionLeaf(), m_requestedRect) &&
             m_graphChecksum == m_startNode->graphSequenceNumber();
@@ -284,11 +284,10 @@ protected:
     /**
      * Used by KisFullRefreshWalker as it has a special changeRect strategy
      */
-    inline void setExplicitChangeRect(KisProjectionLeafSP leaf, const QRect &changeRect, bool changeRectVaries) {
+    inline void setExplicitChangeRect(const QRect &changeRect, bool changeRectVaries) {
         m_resultChangeRect = changeRect;
         m_resultUncroppedChangeRect = changeRect;
         m_changeRectVaries = changeRectVaries;
-        registerCloneNotification(leaf->node(), N_FILTHY);
     }
 
     /**
@@ -322,7 +321,7 @@ protected:
          * avobe its own clone
          */
 
-        if(hasClones(node) && position & (N_FILTHY | N_FILTHY_PROJECTION)) {
+        if(hasClones(node) && position & (N_FILTHY | N_FILTHY_PROJECTION | N_EXTRA)) {
             m_cloneNotifications.append(
                 CloneNotification(node, m_resultUncroppedChangeRect));
         }
@@ -339,10 +338,29 @@ protected:
             m_resultAccessRect = m_resultNeedRect = m_childNeedRect =
                 m_lastNeedRect = m_resultChangeRect;
 
-        QRect currentNeedRect;
+        if (leaf->parent() && position & N_TOPMOST) {
+            bool parentNeedRectFound = false;
+            QRect parentNeedRect;
 
-        if(position & N_TOPMOST)
-            m_lastNeedRect = m_childNeedRect;
+            Q_FOREACH(const JobItem &job, m_mergeTask) {
+                if (job.m_leaf == leaf->parent()) {
+                    parentNeedRect =
+                        job.m_leaf->projectionPlane()->needRectForOriginal(job.m_applyRect);
+                    parentNeedRectFound = true;
+                }
+            }
+
+            // TODO: check if we can put this requirement
+            // KIS_SAFE_ASSERT_RECOVER_NOOP(parentNeedRectFound);
+
+            if (parentNeedRectFound) {
+                m_lastNeedRect = parentNeedRect;
+            } else {
+                // legacy way of fetching parent need rect, just
+                // takes need rect of the last visited filthy node
+                m_lastNeedRect = m_childNeedRect;
+            }
+        }
 
         if (!leaf->visible()) {
             if (!m_lastNeedRect.isEmpty()) {
@@ -406,7 +424,7 @@ protected:
         }
 
         KisProjectionLeafSP parentLayer = firstMask->parent();
-        Q_ASSERT(parentLayer);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(parentLayer);
 
         registerCloneNotification(parentLayer->node(), N_FILTHY_PROJECTION);
     }
@@ -431,11 +449,18 @@ protected:
 
 private:
     inline int getNodeLevelOfDetail(KisProjectionLeafSP leaf) {
-        while (!leaf->projection()) {
+        while (leaf && !leaf->projection()) {
             leaf = leaf->parent();
         }
 
-        KIS_ASSERT_RECOVER(leaf->projection()) {
+        if (!leaf || !leaf->projection()) {
+            /**
+             * Such errors may happen during undo or too quick node removal,
+             * they shouldn't cause any real problems in Krita work.
+             */
+            qWarning() << "WARNING: KisBaseRectsWalker::getNodeLevelOfDetail() "
+                          "failed to fetch currentLevelOfDetail() from the node. "
+                          "Perhaps the node was removed from the image in the meantime.";
             return 0;
         }
 

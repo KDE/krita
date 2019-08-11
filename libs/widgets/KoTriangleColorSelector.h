@@ -54,6 +54,7 @@ class KRITAWIDGETS_EXPORT KoTriangleColorSelector : public KisColorSelectorInter
         void slotSetColor(const KoColor& ) override;
     Q_SIGNALS:
         void colorChanged(const QColor& );
+        void requestCloseContainer();
     private Q_SLOTS:
         void configurationChanged();
     private:

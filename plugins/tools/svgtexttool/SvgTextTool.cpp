@@ -51,6 +51,8 @@
 #include <KoPointerEvent.h>
 #include <KoProperties.h>
 #include <KoSelectedShapesProxy.h>
+#include "KoToolManager.h"
+#include "KoCanvasResourceProvider.h"
 
 #include "SvgTextEditor.h"
 #include "KisHandlePainterHelper.h"
@@ -68,6 +70,9 @@ SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
 
 SvgTextTool::~SvgTextTool()
 {
+    if(m_editor) {
+        m_editor->close();
+    }
 }
 
 void SvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes)
@@ -79,6 +84,11 @@ void SvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &sha
         KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(*shapes.constBegin());
         if (!textShape) {
             koSelection()->deselectAll();
+        } else {
+            // if we are a text shape...and the proxy tells us we want to edit the shape. open the text editor
+            if (canvas()->selectedShapesProxy()->isRequestingToBeEdited()) {
+                showEditor();
+            }
         }
     } else if (shapes.size() > 1) {
         KoSvgTextShape *foundTextShape = 0;
@@ -131,7 +141,11 @@ QWidget *SvgTextTool::createOptionWidget()
         m_defPointSize->addItem(QString::number(size)+" pt");
     }
     int storedSize = m_configGroup.readEntry<int>("defaultSize", QApplication::font().pointSize());
-    m_defPointSize->setCurrentIndex(QFontDatabase::standardSizes().indexOf(storedSize));
+    int sizeIndex = 0;
+    if (QFontDatabase::standardSizes().contains(storedSize)) {
+        sizeIndex = QFontDatabase::standardSizes().indexOf(storedSize);
+    }
+    m_defPointSize->setCurrentIndex(sizeIndex);
 
     int checkedAlignment = m_configGroup.readEntry<int>("defaultAlignment", 0);
 
@@ -214,26 +228,38 @@ void SvgTextTool::showEditor()
     if (!shape) return;
 
     if (!m_editor) {
-        m_editor = new SvgTextEditor();
+        m_editor = new SvgTextEditor(QApplication::activeWindow());
+        m_editor->setWindowTitle(i18nc("@title:window", "Krita - Edit Text"));
         m_editor->setWindowModality(Qt::ApplicationModal);
-        connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*, QString, QString)), SLOT(textUpdated(KoSvgTextShape*, QString, QString)));
-    }
+        m_editor->setAttribute( Qt::WA_QuitOnClose, false );
 
+        connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*,QString,QString,bool)), SLOT(textUpdated(KoSvgTextShape*,QString,QString,bool)));
+        connect(m_editor, SIGNAL(textEditorClosed()), SLOT(slotTextEditorClosed()));
+
+        m_editor->activateWindow(); // raise on creation only
+    }
     m_editor->setShape(shape);
     m_editor->show();
-    m_editor->activateWindow();
 }
 
-void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs)
+void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextUpdated)
 {
-    SvgTextChangeCommand *cmd = new SvgTextChangeCommand(shape, svg, defs);
+    SvgTextChangeCommand *cmd = new SvgTextChangeCommand(shape, svg, defs, richTextUpdated);
     canvas()->addCommand(cmd);
+}
+
+void SvgTextTool::slotTextEditorClosed()
+{
+    // change tools to the shape selection tool when we close the text editor to allow moving and further editing of the object.
+    // most of the time when we edit text, the shape selection tool is where we left off anyway
+    KoToolManager::instance()->switchToolRequested("InteractionTool");
 }
 
 QString SvgTextTool::generateDefs()
 {
     QString font = m_defFont->currentFont().family();
-    QString size = QString::number(QFontDatabase::standardSizes().at(m_defPointSize->currentIndex()));
+    QString size = QString::number(QFontDatabase::standardSizes().at(m_defPointSize->currentIndex() > -1 ? m_defPointSize->currentIndex() : 0));
+
     QString textAnchor = "middle";
     if (m_defAlignment->button(0)->isChecked()) {
         textAnchor = "start";
@@ -242,14 +268,16 @@ QString SvgTextTool::generateDefs()
         textAnchor = "end";
     }
 
-    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ;   text-anchor:%3;\n  }\n </style>\n</defs>").arg(font, size, textAnchor);
+    QString fontColor = canvas()->resourceManager()->foregroundColor().toQColor().name();
+
+    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4;\n  }\n </style>\n</defs>").arg(font, size, fontColor, textAnchor);
 }
 
 void SvgTextTool::storeDefaults()
 {
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
     m_configGroup.writeEntry("defaultFont", m_defFont->currentFont().family());
-    m_configGroup.writeEntry("defaultSize", QFontDatabase::standardSizes().at(m_defPointSize->currentIndex()));
+    m_configGroup.writeEntry("defaultSize", QFontDatabase::standardSizes().at(m_defPointSize->currentIndex() > -1 ? m_defPointSize->currentIndex() : 0));
     m_configGroup.writeEntry("defaultAlignment", m_defAlignment->checkedId());
 }
 
@@ -296,11 +324,8 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
         } else {
             m_dragStart = m_dragEnd = event->point;
             m_dragging = true;
+            event->accept();
         }
-
-        event->accept();
-    } else {
-        event->ignore();
     }
 }
 
@@ -347,7 +372,7 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
 
             //The following show only happen when we're creating preformatted text. If we're making
             //Word-wrapped text, it should take the rectangle unmodified.
-            int size = QFontDatabase::standardSizes().at(m_defPointSize->currentIndex());
+            int size = QFontDatabase::standardSizes().at(m_defPointSize->currentIndex() > -1 ? m_defPointSize->currentIndex() : 0);
             QFont font = m_defFont->currentFont();
             font.setPointSize(size);
             rectangle.setTop(rectangle.top()+QFontMetrics(font).lineSpacing());
@@ -375,8 +400,12 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
         canvas()->addCommand(parentCommand);
 
         showEditor();
+        event->accept();
+
+    } else if (m_editor) {
+        showEditor();
+        event->accept();
     }
-    event->accept();
 }
 
 void SvgTextTool::keyPressEvent(QKeyEvent *event)
@@ -397,5 +426,10 @@ void SvgTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
         return;
     }
     showEditor();
+    if(m_editor) {
+        m_editor->raise();
+        m_editor->activateWindow();
+    }
+    event->accept();
 }
 

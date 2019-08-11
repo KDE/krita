@@ -20,27 +20,21 @@
 #define KOPATHSHAPEPRIVATE_H
 
 #include "KoPathShape.h"
-#include "KoTosContainer_p.h"
 #include "KoMarker.h"
 
-class KoPathShapePrivate : public KoTosContainerPrivate
+#include <QSharedData>
+
+class KoPathShape::Private : public QSharedData
 {
 public:
-    explicit KoPathShapePrivate(KoPathShape *q);
-    explicit KoPathShapePrivate(const KoPathShapePrivate &rhs, KoPathShape *q);
+    explicit Private();
+    explicit Private(const Private &rhs);
 
     QRectF handleRect(const QPointF &p, qreal radius) const;
     /// Applies the viewbox transformation defined in the given element
     void applyViewboxTransformation(const KoXmlElement &element);
 
     void map(const QTransform &matrix);
-
-    void updateLast(KoPathPoint **lastPoint);
-
-    /// closes specified subpath
-    void closeSubpath(KoSubpath *subpath);
-    /// close-merges specified subpath
-    void closeMergeSubpath(KoSubpath *subpath);
 
     /**
      * @brief Saves the node types
@@ -56,7 +50,7 @@ public:
      * z symmetric
      *
      * The first point of a path is always of the type c.
-     * If the path is closed the type of the first point is saved in the last elemeent
+     * If the path is closed the type of the first point is saved in the last element
      * E.g. you have a closed path with 2 points in it. The first one (start/end of path)
      * is symmetric and the second one is smooth that will result in the nodeType="czs"
      * So if there is a closed sub path the nodeTypes contain one more entry then there
@@ -89,12 +83,12 @@ public:
 
     Qt::FillRule fillRule;
 
-    Q_DECLARE_PUBLIC(KoPathShape)
-
     KoSubpathList subpaths;
 
     QMap<KoFlake::MarkerPosition, QExplicitlySharedDataPointer<KoMarker>> markersNew;
     bool autoFillMarkers;
+
+    QList<KoPathShape::PointSelectionChangeListener*> pointChangeListeners;
 };
 
 #endif

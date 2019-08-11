@@ -69,7 +69,7 @@ class KoTableCellStyle;
  *
  * will result in this output:
  *
- * <pre>
+ * @verbatim
  * <document defaultfont="Sans Serif,9,-1,5,50,0,0,0,0,0">
  *   <frame margin="4" top-margin="4" bottom-margin="4" left-margin="4" right-margin="4" border-style="Outset">
  *     <block type="char">
@@ -85,7 +85,7 @@ class KoTableCellStyle;
  *     </block>
  *   </frame>
  * </document>
- * </pre>
+ * @endverbatim
  *
  * @sa dumpDocument(), dumpFrame(), dumpBlock()
  */
@@ -123,7 +123,7 @@ public:
      *
      * @sa tableAttributes()
      *
-     * @param a pointer to the table that should be dumped.
+     * @param table pointer to the table that should be dumped.
      * @param out output stream to dump to.
      */
     static void dumpTable(const QTextTable *table, QTextStream &out);
@@ -143,7 +143,7 @@ public:
      *
      * @note { The fragment content will be enclosed in '|' characters. }
      *
-     * @param fragment the fragment which's content should be dumped.
+     * @param fragment the fragment which content should be dumped.
      * @param out output stream to dump to.
      */
     static void dumpFragment(const QTextFragment &fragment, QTextStream &out);
@@ -239,7 +239,7 @@ public:
      *
      * <pre>"key=value key2=value2 ..."</pre>
      *
-     * @param tableStyle the table cell style from which properties should be fetched.
+     * @param tableCellStyle the table cell style from which properties should be fetched.
      * @return the formatted attribute string.
      */
     static QString tableCellAttributes(const KoTableCellStyle &tableCellStyle);
@@ -263,7 +263,7 @@ public:
      *
      * <pre>"key=value key2=value2 ..."</pre>
      *
-     * @param format the text frame format from which properties should be fetched.
+     * @param frameFormat the text frame format from which properties should be fetched.
      * @return the formatted attribute string.
      */
     static QString frameAttributes(const QTextFrameFormat &frameFormat);
@@ -275,7 +275,7 @@ public:
      *
      * <pre>"key=value key2=value2 ..."</pre>
      *
-     * @param format the character format of the object from which properties should be fetched.
+     * @param textFormat the character format of the object from which properties should be fetched.
      * @return the formatted attribute string.
      */
     static QString inlineObjectAttributes(const QTextCharFormat &textFormat);

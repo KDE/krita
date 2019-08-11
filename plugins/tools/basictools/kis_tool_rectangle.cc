@@ -31,10 +31,6 @@
 #include "kis_shape_tool_helper.h"
 #include "kis_figure_painting_tool_helper.h"
 
-#include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_shape_paint_action.h>
-#include <recorder/kis_node_query_path.h>
-
 #include <KoCanvasController.h>
 #include <KoShapeStroke.h>
 
@@ -57,37 +53,46 @@ void KisToolRectangle::resetCursorStyle()
     overrideCursorIfNotEditable();
 }
 
-void KisToolRectangle::finishRect(const QRectF &rect)
+void KisToolRectangle::finishRect(const QRectF &rect, qreal roundCornersX, qreal roundCornersY)
 {
-    if (rect.isNull() || !blockUntilOperationsFinished())
+    if (rect.isNull())
         return;
 
-    if (image()) {
-        KisRecordedShapePaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), KisRecordedShapePaintAction::Rectangle, rect);
-        setupPaintAction(&linePaintAction);
-        image()->actionRecorder()->addAction(linePaintAction);
-    }
+    const KisToolShape::ShapeAddInfo info =
+        shouldAddShape(currentNode());
 
-    if (!currentNode()->inherits("KisShapeLayer")) {
+    if (!info.shouldAddShape) {
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Rectangle"),
                                            image(),
                                            currentNode(),
                                            canvas()->resourceManager(),
                                            strokeStyle(),
                                            fillStyle());
-        helper.paintRect(rect);
+
+        QPainterPath path;
+
+        if (roundCornersX > 0 || roundCornersY > 0) {
+            path.addRoundedRect(rect, roundCornersX, roundCornersY);
+        } else {
+            path.addRect(rect);
+        }
+
+        helper.paintPainterPath(path);
     } else {
-        QRectF r = convertToPt(rect);
-        KoShape* shape = KisShapeToolHelper::createRectangleShape(r);
+        const QRectF r = convertToPt(rect);
+        const qreal docRoundCornersX = convertToPt(roundCornersX);
+        const qreal docRoundCornersY = convertToPt(roundCornersY);
+        KoShape* shape = KisShapeToolHelper::createRectangleShape(r, docRoundCornersX, docRoundCornersY);
 
         KoShapeStrokeSP border;
         if (strokeStyle() == KisPainter::StrokeStyleBrush) {
             border = toQShared(new KoShapeStroke(currentStrokeWidth(), currentFgColor().toQColor()));
         }
         shape->setStroke(border);
+
+        info.markAsSelectionShapeIfNeeded(shape);
+
         addShape(shape);
     }
-
-    notifyModified();
 }
 

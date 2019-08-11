@@ -33,7 +33,6 @@
 #include "KisView.h"
 #include "KisPart.h"
 #include <KisDocument.h>
-#include <KisPart.h>
 #include <kis_action_manager.h>
 #include "KisMainWindow.h"
 #include "kis_selection_mask.h"
@@ -65,14 +64,14 @@ public:
         KoPattern *newPattern = new KoPattern(fetchDataFileLazy("HR_SketchPaper_01.pat"));
         newPattern->load();
         Q_ASSERT(newPattern->valid());
-        view->resourceProvider()->slotPatternActivated(newPattern);
+        view->canvasResourceProvider()->slotPatternActivated(newPattern);
 
         KoColor fgColor(Qt::black, image->colorSpace());
         KoColor bgColor(Qt::white, image->colorSpace());
-        view->resourceProvider()->blockSignals(true);
-        view->resourceProvider()->setBGColor(bgColor);
-        view->resourceProvider()->setFGColor(fgColor);
-        view->resourceProvider()->setOpacity(1.0);
+        view->canvasResourceProvider()->blockSignals(true);
+        view->canvasResourceProvider()->setBGColor(bgColor);
+        view->canvasResourceProvider()->setFGColor(fgColor);
+        view->canvasResourceProvider()->setOpacity(1.0);
 
         KisNodeSP paint1 = findNode(image->root(), "paint1");
         Q_ASSERT(paint1);

@@ -4,7 +4,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -121,12 +122,13 @@ public:
     virtual void reset();
 
     /**
+     * @param parent the parent QWidget
      * @param selector is a \ref QWidget that contains a signal called "parametersChanged()"
      */
     virtual QWidget* createConfigurationWidget(QWidget* parent, QWidget* selector);
 
     /**
-     * Creates a sensor from its identifiant.
+     * Creates a sensor from its identifier.
      */
     static KisDynamicSensorSP id2Sensor(const KoID& id, const QString &parentOptionName);
     static KisDynamicSensorSP id2Sensor(const QString& s, const QString &parentOptionName) {
@@ -145,6 +147,9 @@ public:
 
     static QString minimumLabel(DynamicSensorType sensorType);
     static QString maximumLabel(DynamicSensorType sensorType, int max = -1);
+    static int minimumValue(DynamicSensorType sensorType);
+    static int maximumValue(DynamicSensorType sensorType, int max = -1);
+    static QString valueSuffix(DynamicSensorType sensorType);
 
     static KisDynamicSensorSP createFromXML(const QString&, const QString &parentOptionName);
     static KisDynamicSensorSP createFromXML(const QDomElement&, const QString &parentOptionName);
@@ -156,7 +161,7 @@ public:
     static QList<DynamicSensorType> sensorsTypes();
 
     /**
-     * @return the identifiant of this sensor
+     * @return the identifier of this sensor
      */
     static QString id(DynamicSensorType sensorType);
 

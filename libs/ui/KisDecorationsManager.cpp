@@ -28,6 +28,7 @@
 #include <kguiitem.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
+#include <KisDocument.h>
 
 
 KisDecorationsManager::KisDecorationsManager(KisViewManager* view)
@@ -68,13 +69,13 @@ void KisDecorationsManager::setView(QPointer<KisView> imageView)
 
     m_imageView = imageView;
 
-    if (m_imageView && !assistantsDecoration()) {
-        KisPaintingAssistantsDecoration *deco = new KisPaintingAssistantsDecoration(m_imageView);
+    if (m_imageView && !referenceImagesDecoration()) {
+        KisReferenceImagesDecoration *deco = new KisReferenceImagesDecoration(m_imageView, imageView->document());
         m_imageView->canvasBase()->addDecoration(deco);
     }
 
-    if (m_imageView && !referenceImagesDecoration()) {
-        KisReferenceImagesDecoration *deco = new KisReferenceImagesDecoration(m_imageView);
+    if (m_imageView && !assistantsDecoration()) {
+        KisPaintingAssistantsDecoration *deco = new KisPaintingAssistantsDecoration(m_imageView);
         m_imageView->canvasBase()->addDecoration(deco);
     }
 
@@ -82,11 +83,12 @@ void KisDecorationsManager::setView(QPointer<KisView> imageView)
         connect(m_toggleAssistant, SIGNAL(triggered()), assistantsDecoration(), SLOT(toggleAssistantVisible()));
         connect(m_togglePreview, SIGNAL(triggered()), assistantsDecoration(), SLOT(toggleOutlineVisible()));
         connect(assistantsDecoration(), SIGNAL(assistantChanged()), SLOT(updateAction()));
+        connect(m_imageView->document(), &KisDocument::sigAssistantsChanged,
+                m_imageView->canvasBase(), QOverload<>::of(&KisCanvas2::updateCanvas));
     }
 
     if (m_imageView && referenceImagesDecoration()) {
-        connect(m_toggleReferenceImages, SIGNAL(triggered(bool)), referenceImagesDecoration(), SLOT(setVisible(bool)));
-        connect(referenceImagesDecoration(), SIGNAL(referenceImagesChanged()), SLOT(updateAction()));
+        connect(m_toggleReferenceImages, SIGNAL(triggered(bool)), referenceImagesDecoration(), SLOT(setVisible(bool)), Qt::UniqueConnection);
     }
 
 

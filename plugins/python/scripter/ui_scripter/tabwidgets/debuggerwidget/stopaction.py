@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 from PyQt5.QtWidgets import QAction
 from PyQt5.QtGui import QIcon
 from scripter import resources_rc
+import krita
 
 
 class StopAction(QAction):
@@ -29,7 +30,7 @@ class StopAction(QAction):
 
         self.triggered.connect(self.stop)
 
-        self.setText('Stop')
+        self.setText(i18n("Stop"))
         # path to the icon
         self.setIcon(QIcon(':/icons/stop.svg'))
 

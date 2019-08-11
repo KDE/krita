@@ -57,7 +57,8 @@ public:
     }
 
     BrushType* currentBrush(const KisPaintInformation& info) {
-        return !m_brushes.isEmpty() ? m_brushes.at(chooseNextBrush(info)) : 0;
+        Q_UNUSED(info);
+        return !m_brushes.isEmpty() ? m_brushes.at(currentBrushIndex()) : 0;
     }
 
     int brushIndex(const KisPaintInformation& info) {
@@ -155,15 +156,27 @@ protected:
         m_brushes.append(brush);
     }
 
+    int sizeBrush() {
+        return m_brushes.size();
+    }
+
     /**
-     * Returns the index of the brush that corresponds to the current
+     * Returns the index of the next brush that corresponds to the current
      * values of \p info. This method is called *before* the dab is
+     * actually painted.
+     *
+     */
+    virtual int chooseNextBrush(const KisPaintInformation& info) = 0;
+
+    /**
+     * Returns the current index of the brush
+     * This method is called *before* the dab is
      * actually painted.
      *
      * The method is const, so no internal counters of the brush should
      * change during its execution
      */
-    virtual int chooseNextBrush(const KisPaintInformation& info) = 0;
+    virtual int currentBrushIndex() = 0;
 
     /**
      * Updates internal counters of the brush *after* a dab has been

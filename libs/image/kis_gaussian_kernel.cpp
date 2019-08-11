@@ -21,6 +21,7 @@
 #include "kis_global.h"
 #include "kis_convolution_kernel.h"
 #include <kis_convolution_painter.h>
+#include <kis_transaction.h>
 #include <QRect>
 
 
@@ -99,15 +100,42 @@ KisGaussianKernel::createVerticalKernel(qreal radius)
     return KisConvolutionKernel::fromMatrix(matrix, 0, matrix.sum());
 }
 
+KisConvolutionKernelSP
+KisGaussianKernel::createUniform2DKernel(qreal xRadius, qreal yRadius)
+{
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> h = createHorizontalMatrix(xRadius);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> v = createVerticalMatrix(yRadius);
+
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> uni = v * h;
+    return KisConvolutionKernel::fromMatrix(uni, 0, uni.sum());
+}
+
+
 void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
                                       const QRect& rect,
                                       qreal xRadius, qreal yRadius,
                                       const QBitArray &channelFlags,
-                                      KoUpdater *progressUpdater)
+                                      KoUpdater *progressUpdater,
+                                      bool createTransaction)
 {
     QPoint srcTopLeft = rect.topLeft();
 
-    if (xRadius > 0.0 && yRadius > 0.0) {
+
+    if (KisConvolutionPainter::supportsFFTW()) {
+        KisConvolutionPainter painter(device, KisConvolutionPainter::FFTW);
+        painter.setChannelFlags(channelFlags);
+        painter.setProgress(progressUpdater);
+
+        KisConvolutionKernelSP kernel2D = KisGaussianKernel::createUniform2DKernel(xRadius, yRadius);
+
+        QScopedPointer<KisTransaction> transaction;
+        if (createTransaction && painter.needsTransaction(kernel2D)) {
+            transaction.reset(new KisTransaction(device));
+        }
+
+        painter.applyMatrix(kernel2D, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+
+    } else if (xRadius > 0.0 && yRadius > 0.0) {
         KisPaintDeviceSP interm = new KisPaintDevice(device->colorSpace());
 
         KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(xRadius);
@@ -135,6 +163,12 @@ void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
         painter.setProgress(progressUpdater);
 
         KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(xRadius);
+
+        QScopedPointer<KisTransaction> transaction;
+        if (createTransaction && painter.needsTransaction(kernelHoriz)) {
+            transaction.reset(new KisTransaction(device));
+        }
+
         painter.applyMatrix(kernelHoriz, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
 
     } else if (yRadius > 0.0) {
@@ -143,6 +177,12 @@ void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
         painter.setProgress(progressUpdater);
 
         KisConvolutionKernelSP kernelVertical = KisGaussianKernel::createVerticalKernel(yRadius);
+
+        QScopedPointer<KisTransaction> transaction;
+        if (createTransaction && painter.needsTransaction(kernelVertical)) {
+            transaction.reset(new KisTransaction(device));
+        }
+
         painter.applyMatrix(kernelVertical, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
     }
 }
@@ -230,4 +270,89 @@ void KisGaussianKernel::applyLoG(KisPaintDeviceSP device,
                                          0);
 
     painter.applyMatrix(kernel, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+}
+
+Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisGaussianKernel::createDilateMatrix(qreal radius)
+{
+    const int kernelSize = 2 * std::ceil(radius) + 1;
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix(kernelSize, kernelSize);
+
+    const qreal fadeStart = qMax(1.0, radius - 1.0);
+
+    /**
+     * The kernel size should always be odd, then the position of the
+     * central pixel can be easily calculated
+     */
+    KIS_ASSERT_RECOVER_NOOP(kernelSize & 0x1);
+    const int center = kernelSize / 2;
+
+    for (int y = 0; y < kernelSize; y++) {
+        const qreal yDistance = center - y;
+        for (int x = 0; x < kernelSize; x++) {
+            const qreal xDistance = center - x;
+
+            const qreal distance = std::sqrt(pow2(xDistance) + pow2(yDistance));
+
+            qreal value = 1.0;
+
+            if (distance >= radius) {
+                value = 0.0;
+            } else if (distance > fadeStart) {
+                value = radius - distance;
+            }
+
+            matrix(x, y) = value;
+        }
+    }
+
+    return matrix;
+}
+
+void KisGaussianKernel::applyDilate(KisPaintDeviceSP device, const QRect &rect, qreal radius, const QBitArray &channelFlags, KoUpdater *progressUpdater, bool createTransaction)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(device->colorSpace()->pixelSize() == 1);
+
+    QPoint srcTopLeft = rect.topLeft();
+
+    KisConvolutionPainter painter(device);
+    painter.setChannelFlags(channelFlags);
+    painter.setProgress(progressUpdater);
+
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createDilateMatrix(radius);
+    KisConvolutionKernelSP kernel =
+        KisConvolutionKernel::fromMatrix(matrix,
+                                         0,
+                                         1.0);
+
+    QScopedPointer<KisTransaction> transaction;
+    if (createTransaction && painter.needsTransaction(kernel)) {
+        transaction.reset(new KisTransaction(device));
+    }
+
+    painter.applyMatrix(kernel, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+}
+
+#include "kis_sequential_iterator.h"
+
+void KisGaussianKernel::applyErodeU8(KisPaintDeviceSP device, const QRect &rect, qreal radius, const QBitArray &channelFlags, KoUpdater *progressUpdater, bool createTransaction)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(device->colorSpace()->pixelSize() == 1);
+
+    {
+        KisSequentialIterator dstIt(device, rect);
+        while (dstIt.nextPixel()) {
+            quint8 *dstPtr = dstIt.rawData();
+            *dstPtr = 255 - *dstPtr;
+        }
+    }
+
+    applyDilate(device, rect, radius, channelFlags, progressUpdater, createTransaction);
+
+    {
+        KisSequentialIterator dstIt(device, rect);
+        while (dstIt.nextPixel()) {
+            quint8 *dstPtr = dstIt.rawData();
+            *dstPtr = 255 - *dstPtr;
+        }
+    }
 }

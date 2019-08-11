@@ -124,11 +124,11 @@ void KoOdfGraphicStyles::saveOdfStrokeStyle(KoGenStyle &styleStroke, KoGenStyles
         dashStyle.addAttribute("draw:style", "rect");
         QVector<qreal> dashes = pen.dashPattern();
         dashStyle.addAttribute("draw:dots1", static_cast<int>(1));
-        dashStyle.addAttributePt("draw:dots1-length", dashes[0]*pen.widthF());
-        dashStyle.addAttributePt("draw:distance", dashes[1]*pen.widthF());
+        dashStyle.addAttribute("draw:dots1-length", dashes[0]*pen.widthF());
+        dashStyle.addAttribute("draw:distance", dashes[1]*pen.widthF());
         if (dashes.size() > 2) {
             dashStyle.addAttribute("draw:dots2", static_cast<int>(1));
-            dashStyle.addAttributePt("draw:dots2-length", dashes[2]*pen.widthF());
+            dashStyle.addAttribute("draw:dots2-length", dashes[2]*pen.widthF());
         }
         QString dashStyleName = mainStyles.insert(dashStyle, "dash");
         styleStroke.addProperty("draw:stroke-dash", dashStyleName, KoGenStyle::GraphicType);
@@ -338,7 +338,7 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader &s
         qreal border = 0.01 * e->attributeNS(KoXmlNS::draw, "border", "0").remove('%').toDouble();
         QGradientStops stops;
         if (type != "axial") {
-            // In case of radial gradients the colors are reversed, because OOo saves them as the oppsite of the SVG direction
+            // In case of radial gradients the colors are reversed, because OOo saves them as the opposite of the SVG direction
             // see bug 137639
             QGradientStop start;
             start.first = (type != "radial") ? border : 1.0 - border;

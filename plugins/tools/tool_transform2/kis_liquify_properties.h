@@ -53,6 +53,11 @@ public:
     {
     }
 
+
+    KisLiquifyProperties(const KisLiquifyProperties &rhs);
+
+    KisLiquifyProperties& operator=(const KisLiquifyProperties &rhs);
+
     bool operator==(const KisLiquifyProperties &other) const;
 
     LiquifyMode mode() const {

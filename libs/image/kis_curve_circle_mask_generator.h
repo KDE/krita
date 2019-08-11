@@ -19,11 +19,12 @@
 #ifndef _KIS_CURVE_CIRCLE_MASK_GENERATOR_H_
 #define _KIS_CURVE_CIRCLE_MASK_GENERATOR_H_
 
-#include <QScopedPointer>
-#include "kritaimage_export.h"
-
 #include <QList>
 #include <QVector>
+#include <QScopedPointer>
+
+#include "kritaimage_export.h"
+#include "kis_mask_generator.h"
 
 class KisCubicCurve;
 class QDomElement;
@@ -38,7 +39,8 @@ class QPointF;
  */
 class KRITAIMAGE_EXPORT KisCurveCircleMaskGenerator : public KisMaskGenerator
 {
-
+public:
+    struct FastRowProcessor;
 public:
 
     KisCurveCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes,const KisCubicCurve& curve, bool antialiasEdges);
@@ -50,10 +52,13 @@ public:
 
     void setScale(qreal scaleX, qreal scaleY) override;
 
-    bool shouldSupersample() const override;
-
     void toXML(QDomDocument& , QDomElement&) const override;
     void setSoftness(qreal softness) override;
+
+    bool shouldVectorize() const override;
+    KisBrushMaskApplicatorBase* applicator() override;
+
+    void resetMaskApplicator(bool forceScalar);
 
     static void transformCurveForSoftness(qreal softness,const QList<QPointF> &points, int curveResolution, QVector<qreal> &result);
 

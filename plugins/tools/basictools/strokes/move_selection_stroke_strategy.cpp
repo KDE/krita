@@ -37,13 +37,18 @@ MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLa
       m_selection(selection),
       m_updatesFacade(updatesFacade)
 {
-    enableJob(KisSimpleStrokeStrategy::JOB_INIT);
+    /**
+     * Selection might have some update projection jobs pending, so we should ensure
+     * all of them are completed before we start our stroke.
+     */
+    enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER);
     enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
     enableJob(KisSimpleStrokeStrategy::JOB_CANCEL);
 }
 
 MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(const MoveSelectionStrokeStrategy &rhs)
-    : KisStrokeStrategyUndoCommandBased(rhs),
+    : QObject(),
+      KisStrokeStrategyUndoCommandBased(rhs),
       m_paintLayer(rhs.m_paintLayer),
       m_selection(rhs.m_selection),
       m_updatesFacade(rhs.m_updatesFacade)
@@ -80,6 +85,8 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
     m_initialDeviceOffset = QPoint(movedDevice->x(), movedDevice->y());
 
     m_selection->setVisible(false);
+
+    emit sigHandlesRectCalculated(movedDevice->exactBounds());
 }
 
 void MoveSelectionStrokeStrategy::finishStrokeCallback()
@@ -135,7 +142,7 @@ void MoveSelectionStrokeStrategy::cancelStrokeCallback()
     KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
 }
 
-#include "move_stroke_strategy.h"
+#include "tool/strokes/move_stroke_strategy.h"
 
 void MoveSelectionStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {

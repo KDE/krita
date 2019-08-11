@@ -74,7 +74,7 @@
          <number>2</number>
         </property>
         <item row="5" column="1">
-         <widget class="SqueezedComboBox" name="m_cmbView">
+         <widget class="KisSqueezedComboBox" name="m_cmbView">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -110,7 +110,7 @@
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="SqueezedComboBox" name="m_cmbDisplayDevice">
+         <widget class="KisSqueezedComboBox" name="m_cmbDisplayDevice">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -120,7 +120,7 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="SqueezedComboBox" name="m_cmbInputColorSpace">
+         <widget class="KisSqueezedComboBox" name="m_cmbInputColorSpace">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -130,7 +130,7 @@
          </widget>
         </item>
         <item row="8" column="0">
-         <widget class="QLabel" name="label_7">
+         <widget class="QLabel" name="m_lblExposure">
           <property name="text">
            <string>Exposure:</string>
           </property>
@@ -241,7 +241,7 @@
          </layout>
         </item>
         <item row="7" column="1">
-         <widget class="SqueezedComboBox" name="m_cmbComponents">
+         <widget class="KisSqueezedComboBox" name="m_cmbComponents">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -261,7 +261,7 @@
          </widget>
         </item>
         <item row="9" column="0">
-         <widget class="QLabel" name="label_8">
+         <widget class="QLabel" name="m_lblGamma">
           <property name="text">
            <string>Gamma:</string>
           </property>
@@ -326,7 +326,7 @@
          </widget>
         </item>
         <item row="6" column="1">
-         <widget class="SqueezedComboBox" name="m_cmbLook">
+         <widget class="KisSqueezedComboBox" name="m_cmbLook">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -418,9 +418,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>SqueezedComboBox</class>
+   <class>KisSqueezedComboBox</class>
    <extends>QComboBox</extends>
-   <header>squeezedcombobox.h</header>
+   <header>KisSqueezedComboBox.h</header>
   </customwidget>
   <customwidget>
    <class>KisDoubleWidget</class>

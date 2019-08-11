@@ -1,0 +1,1368 @@
+From fc02647fc01c20f3bfcc53f38a060328b9e2ab90 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sun, 10 Feb 2019 22:55:59 +0300
+Subject: [PATCH 07/17] Implement a manual test for checking is HDR features
+ work
+
+Test plan:
+
+1) Run without arguments: `hdr-openglwidget.exe`
+   It should show you three rectangles: the left one should be HDR'ly
+   bright, the other ones should be SDR'ly dim and look exactly the same.
+
+3) Run in Bt. 2020 PQ mode: `hdr-openglwidget.exe --bt2020pq`
+   The result should look exactly the same.
+
+4) Run in SDR sRGB mode: `hdr-openglwidget.exe --srgb`.
+   All three images should look SDR'ly dim.
+
+NOTE:
+Please note that the current implementation of SDR compositing
+in QOpenGLTextureBlitter doesn't support user configuration for
+SDR brightness from the system. This API is available for UWP
+applications only. It means that when changing "SDR brightness"
+slider in Windows' settings, the brightness of our SDR widget
+will not change. More that that, it might even be different from
+the brightness of other SDR applications.
+
+Change-Id: Idccc790937c9061ec618ab21f6b71bd0620cd2cc
+---
+ .../hdr-qopenglwidget/KisGLImageF16.cpp       | 131 +++++++++
+ .../manual/hdr-qopenglwidget/KisGLImageF16.h  |  68 +++++
+ .../hdr-qopenglwidget/KisGLImageWidget.cpp    | 252 ++++++++++++++++++
+ .../hdr-qopenglwidget/KisGLImageWidget.h      |  77 ++++++
+ .../hdr-qopenglwidget/hdr-openglwidget.pro    |  20 ++
+ .../kis_gl_image_widget.frag                  |  23 ++
+ .../hdr-qopenglwidget/kis_gl_image_widget.qrc |   6 +
+ .../kis_gl_image_widget.vert                  |  17 ++
+ tests/manual/hdr-qopenglwidget/main.cpp       | 153 +++++++++++
+ .../hdr-qopenglwidget/openglprobeutils.cpp    | 139 ++++++++++
+ .../hdr-qopenglwidget/openglprobeutils.h      |  42 +++
+ tests/manual/hdr-qopenglwidget/window.cpp     | 219 +++++++++++++++
+ tests/manual/hdr-qopenglwidget/window.h       |  69 +++++
+ tests/manual/manual.pro                       |   2 +-
+ 14 files changed, 1217 insertions(+), 1 deletion(-)
+ create mode 100644 tests/manual/hdr-qopenglwidget/KisGLImageF16.cpp
+ create mode 100644 tests/manual/hdr-qopenglwidget/KisGLImageF16.h
+ create mode 100644 tests/manual/hdr-qopenglwidget/KisGLImageWidget.cpp
+ create mode 100644 tests/manual/hdr-qopenglwidget/KisGLImageWidget.h
+ create mode 100644 tests/manual/hdr-qopenglwidget/hdr-openglwidget.pro
+ create mode 100644 tests/manual/hdr-qopenglwidget/kis_gl_image_widget.frag
+ create mode 100644 tests/manual/hdr-qopenglwidget/kis_gl_image_widget.qrc
+ create mode 100644 tests/manual/hdr-qopenglwidget/kis_gl_image_widget.vert
+ create mode 100644 tests/manual/hdr-qopenglwidget/main.cpp
+ create mode 100644 tests/manual/hdr-qopenglwidget/openglprobeutils.cpp
+ create mode 100644 tests/manual/hdr-qopenglwidget/openglprobeutils.h
+ create mode 100644 tests/manual/hdr-qopenglwidget/window.cpp
+ create mode 100644 tests/manual/hdr-qopenglwidget/window.h
+
+diff --git a/tests/manual/hdr-qopenglwidget/KisGLImageF16.cpp b/tests/manual/hdr-qopenglwidget/KisGLImageF16.cpp
+new file mode 100644
+index 0000000000..a84b676f5b
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/KisGLImageF16.cpp
+@@ -0,0 +1,131 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "KisGLImageF16.h"
++
++#include <QByteArray>
++#include <QSize>
++
++struct KisGLImageF16::Private : public QSharedData
++{
++    QSize size;
++    QByteArray data;
++};
++
++KisGLImageF16::KisGLImageF16()
++    : m_d(new Private)
++{
++}
++
++KisGLImageF16::KisGLImageF16(const QSize &size, bool clearPixels)
++    : m_d(new Private)
++{
++    resize(size, clearPixels);
++}
++
++KisGLImageF16::KisGLImageF16(int width, int height, bool clearPixels)
++    : KisGLImageF16(QSize(width, height), clearPixels)
++{
++}
++
++KisGLImageF16::KisGLImageF16(const KisGLImageF16 &rhs)
++    : m_d(rhs.m_d)
++{
++}
++
++KisGLImageF16 &KisGLImageF16::operator=(const KisGLImageF16 &rhs)
++{
++    m_d = rhs.m_d;
++}
++
++bool operator==(const KisGLImageF16 &lhs, const KisGLImageF16 &rhs)
++{
++    return lhs.m_d == rhs.m_d;
++}
++
++bool operator!=(const KisGLImageF16 &lhs, const KisGLImageF16 &rhs)
++{
++    return !(lhs == rhs);
++}
++
++KisGLImageF16::~KisGLImageF16()
++{
++}
++
++void KisGLImageF16::clearPixels()
++{
++    if (!m_d->data.isEmpty()) {
++        m_d->data.fill(0);
++    }
++}
++
++void KisGLImageF16::resize(const QSize &size, bool clearPixels)
++{
++    const int pixelSize = 2 * 4;
++
++    m_d->size = size;
++    m_d->data.resize(size.width() * size.height() * pixelSize);
++
++    if (clearPixels) {
++        m_d->data.fill(0);
++    }
++}
++
++const qfloat16 *KisGLImageF16::constData() const
++{
++    Q_ASSERT(!m_d->data.isNull());
++    return reinterpret_cast<const qfloat16*>(m_d->data.data());
++}
++
++qfloat16 *KisGLImageF16::data()
++{
++    m_d->data.detach();
++    Q_ASSERT(!m_d->data.isNull());
++
++    return reinterpret_cast<qfloat16*>(m_d->data.data());
++}
++
++QSize KisGLImageF16::size() const
++{
++    return m_d->size;
++}
++
++int KisGLImageF16::width() const
++{
++    return m_d->size.width();
++}
++
++int KisGLImageF16::height() const
++{
++    return m_d->size.height();
++}
++
++bool KisGLImageF16::isNull() const
++{
++    return m_d->data.isNull();
++}
+diff --git a/tests/manual/hdr-qopenglwidget/KisGLImageF16.h b/tests/manual/hdr-qopenglwidget/KisGLImageF16.h
+new file mode 100644
+index 0000000000..335e42ee68
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/KisGLImageF16.h
+@@ -0,0 +1,68 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef KISGLIMAGEF16_H
++#define KISGLIMAGEF16_H
++
++#include <QSharedDataPointer>
++#include <QFloat16>
++
++class QSize;
++
++class KisGLImageF16
++{
++public:
++    KisGLImageF16();
++    KisGLImageF16(const QSize &size, bool clearPixels = false);
++    KisGLImageF16(int width, int height, bool clearPixels = false);
++    KisGLImageF16(const KisGLImageF16 &rhs);
++    KisGLImageF16& operator=(const KisGLImageF16 &rhs);
++
++    friend bool operator==(const KisGLImageF16 &lhs, const KisGLImageF16 &rhs);
++    friend bool operator!=(const KisGLImageF16 &lhs, const KisGLImageF16 &rhs);
++
++    ~KisGLImageF16();
++
++    void clearPixels();
++    void resize(const QSize &size, bool clearPixels = false);
++
++    const qfloat16* constData() const;
++    qfloat16* data();
++
++    QSize size() const;
++    int width() const;
++    int height() const;
++
++    bool isNull() const;
++
++private:
++    struct Private;
++    QSharedDataPointer<Private> m_d;
++};
++
++#endif // KISGLIMAGEF16_H
+diff --git a/tests/manual/hdr-qopenglwidget/KisGLImageWidget.cpp b/tests/manual/hdr-qopenglwidget/KisGLImageWidget.cpp
+new file mode 100644
+index 0000000000..da36ac1619
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/KisGLImageWidget.cpp
+@@ -0,0 +1,252 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "KisGLImageWidget.h"
++
++#include <QPainter>
++#include <QFile>
++#include <QResizeEvent>
++
++#include "KisGLImageF16.h"
++
++namespace {
++inline void rectToVertices(QVector3D* vertices, const QRectF &rc)
++{
++    vertices[0] = QVector3D(rc.left(),  rc.bottom(), 0.f);
++    vertices[1] = QVector3D(rc.left(),  rc.top(),    0.f);
++    vertices[2] = QVector3D(rc.right(), rc.bottom(), 0.f);
++    vertices[3] = QVector3D(rc.left(),  rc.top(), 0.f);
++    vertices[4] = QVector3D(rc.right(), rc.top(), 0.f);
++    vertices[5] = QVector3D(rc.right(), rc.bottom(),    0.f);
++}
++
++inline void rectToTexCoords(QVector2D* texCoords, const QRectF &rc)
++{
++    texCoords[0] = QVector2D(rc.left(), rc.bottom());
++    texCoords[1] = QVector2D(rc.left(), rc.top());
++    texCoords[2] = QVector2D(rc.right(), rc.bottom());
++    texCoords[3] = QVector2D(rc.left(), rc.top());
++    texCoords[4] = QVector2D(rc.right(), rc.top());
++    texCoords[5] = QVector2D(rc.right(), rc.bottom());
++}
++}
++
++KisGLImageWidget::KisGLImageWidget(QWidget *parent)
++    : KisGLImageWidget(QSurfaceFormat::sRGBColorSpace, parent)
++{
++}
++
++KisGLImageWidget::KisGLImageWidget(QSurfaceFormat::ColorSpace colorSpace,
++                                   QWidget *parent)
++    : QOpenGLWidget(parent),
++      m_texture(QOpenGLTexture::Target2D)
++{
++
++    qDebug() << "Crating gl widget";
++
++    setTextureFormat(GL_RGBA16F);
++    setTextureColorSpace(colorSpace);
++
++    setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
++}
++
++void KisGLImageWidget::initializeGL()
++{
++    initializeOpenGLFunctions();
++
++    qDebug() << "Initialized with format:" << context()->format();
++
++    QFile vertexShaderFile(QString(":/") + "kis_gl_image_widget.vert");
++    vertexShaderFile.open(QIODevice::ReadOnly);
++    QString vertSource = vertexShaderFile.readAll();
++
++    QFile fragShaderFile(QString(":/") + "kis_gl_image_widget.frag");
++    fragShaderFile.open(QIODevice::ReadOnly);
++    QString fragSource = fragShaderFile.readAll();
++
++    if (context()->isOpenGLES()) {
++        const char *versionHelper = "#define USE_OPENGLES\n";
++        vertSource.prepend(versionHelper);
++        fragSource.prepend(versionHelper);
++
++        const char *versionDefinition = "#version 100\n";
++        vertSource.prepend(versionDefinition);
++        fragSource.prepend(versionDefinition);
++    } else {
++        const char *versionDefinition = "#version 330 core\n";
++        vertSource.prepend(versionDefinition);
++        fragSource.prepend(versionDefinition);
++    }
++
++    if (!m_shader.addShaderFromSourceCode(QOpenGLShader::Vertex, vertSource)) {
++        qDebug() << "Could not add vertex code";
++        return;
++    }
++
++    if (!m_shader.addShaderFromSourceCode(QOpenGLShader::Fragment, fragSource)) {
++        qDebug() << "Could not add fragment code";
++        return;
++    }
++
++    if (!m_shader.link()) {
++        qDebug() << "Could not link";
++        return;
++    }
++
++    if (!m_shader.bind()) {
++        qDebug() << "Could not bind";
++        return;
++    }
++
++    m_shader.release();
++
++
++    m_vao.create();
++    m_vao.bind();
++
++    m_verticesBuffer.create();
++    updateVerticesBuffer(this->rect());
++
++    QVector<QVector2D> textureVertices(6);
++    rectToTexCoords(textureVertices.data(), QRect(0.0, 0.0, 1.0, 1.0));
++
++    m_textureVerticesBuffer.create();
++    m_textureVerticesBuffer.bind();
++    m_textureVerticesBuffer.setUsagePattern(QOpenGLBuffer::DynamicDraw);
++    m_textureVerticesBuffer.allocate(2 * 3 * sizeof(QVector2D));
++    m_verticesBuffer.write(0, textureVertices.data(), m_textureVerticesBuffer.size());
++    m_textureVerticesBuffer.release();
++
++    m_vao.release();
++
++
++    if (!m_sourceImage.isNull()) {
++        loadImage(m_sourceImage);
++    }
++}
++
++void KisGLImageWidget::updateVerticesBuffer(const QRect &rect)
++{
++    if (!m_vao.isCreated() || !m_verticesBuffer.isCreated()) return;
++
++    QVector<QVector3D> vertices(6);
++    rectToVertices(vertices.data(), rect);
++
++    m_verticesBuffer.bind();
++    m_verticesBuffer.setUsagePattern(QOpenGLBuffer::DynamicDraw);
++    m_verticesBuffer.allocate(2 * 3 * sizeof(QVector3D));
++    m_verticesBuffer.write(0, vertices.data(), m_verticesBuffer.size());
++    m_verticesBuffer.release();
++}
++
++
++void KisGLImageWidget::paintGL()
++{
++    const QColor bgColor = palette().background().color();
++    glClearColor(bgColor.redF(), bgColor.greenF(), bgColor.blueF(), 1.0f);
++    glClear(GL_COLOR_BUFFER_BIT);
++
++    if (!m_texture.isCreated()) return;
++
++    glViewport(0, 0, width(), height());
++
++    m_vao.bind();
++    m_shader.bind();
++
++    {
++        QMatrix4x4 projectionMatrix;
++        projectionMatrix.setToIdentity();
++        projectionMatrix.ortho(0, width(), height(), 0, -1, 1);
++        QMatrix4x4 viewProjectionMatrix;
++
++        // use a QTransform to scale, translate, rotate your view
++        QTransform transform; // TODO: noop!
++        viewProjectionMatrix = projectionMatrix * QMatrix4x4(transform);
++
++        m_shader.setUniformValue("viewProjectionMatrix", viewProjectionMatrix);
++    }
++
++    m_shader.enableAttributeArray("vertexPosition");
++    m_verticesBuffer.bind();
++    m_shader.setAttributeBuffer("vertexPosition", GL_FLOAT, 0, 3);
++
++    m_shader.enableAttributeArray("texturePosition");
++    m_textureVerticesBuffer.bind();
++    m_shader.setAttributeBuffer("texturePosition", GL_FLOAT, 0, 2);
++
++    glActiveTexture(GL_TEXTURE0);
++    m_texture.bind();
++
++    // draw 2 triangles = 6 vertices starting at offset 0 in the buffer
++    glDrawArrays(GL_TRIANGLES, 0, 6);
++
++    m_verticesBuffer.release();
++    m_textureVerticesBuffer.release();
++    m_texture.release();
++    m_shader.release();
++    m_vao.release();
++}
++
++void KisGLImageWidget::loadImage(const KisGLImageF16 &image)
++{
++    if (m_sourceImage != image) {
++        m_sourceImage = image;
++    }
++
++    if (m_vao.isCreated()) {
++        m_texture.setFormat(QOpenGLTexture::RGBA16F);
++        m_texture.setSize(image.width(), image.height());
++        m_texture.allocateStorage(QOpenGLTexture::RGBA, QOpenGLTexture::Float16);
++        m_texture.setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
++        m_texture.setMagnificationFilter(QOpenGLTexture::Linear);
++        m_texture.setData(QOpenGLTexture::RGBA, QOpenGLTexture::Float16, image.constData());
++        updateGeometry();
++    }
++}
++
++void KisGLImageWidget::paintEvent(QPaintEvent *event)
++{
++    QOpenGLWidget::paintEvent(event);
++}
++
++void KisGLImageWidget::resizeEvent(QResizeEvent *event)
++{
++    updateVerticesBuffer(QRect(QPoint(),event->size()));
++    QOpenGLWidget::resizeEvent(event);
++}
++
++QSize KisGLImageWidget::sizeHint() const
++{
++    return m_sourceImage.size();
++}
++
++KisGLImageF16 KisGLImageWidget::image() const
++{
++    return m_sourceImage;
++}
++
+diff --git a/tests/manual/hdr-qopenglwidget/KisGLImageWidget.h b/tests/manual/hdr-qopenglwidget/KisGLImageWidget.h
+new file mode 100644
+index 0000000000..e807064cb4
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/KisGLImageWidget.h
+@@ -0,0 +1,77 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef KISGLIMAGEWIDGET_H
++#define KISGLIMAGEWIDGET_H
++
++#include <QOpenGLWidget>
++#include <QOpenGLFunctions>
++#include <QOpenGLTexture>
++#include <QOpenGLShaderProgram>
++#include <QOpenGLVertexArrayObject>
++#include <QOpenGLBuffer>
++#include <QTransform>
++#include <KisGLImageF16.h>
++
++
++class KisGLImageWidget : public QOpenGLWidget, protected QOpenGLFunctions
++{
++    Q_OBJECT
++public:
++    KisGLImageWidget(QWidget *parent = nullptr);
++    KisGLImageWidget(QSurfaceFormat::ColorSpace colorSpace,
++                     QWidget *parent = nullptr);
++
++    void initializeGL() override;
++    void paintGL() override;
++
++    void loadImage(const KisGLImageF16 &image);
++
++    void paintEvent(QPaintEvent *event) override;
++    void resizeEvent(QResizeEvent *event) override;
++
++    QSize sizeHint() const override;
++
++    KisGLImageF16 image() const;
++
++public Q_SLOTS:
++
++private:
++    void updateVerticesBuffer(const QRect &rect);
++
++private:
++    KisGLImageF16 m_sourceImage;
++
++    QOpenGLShaderProgram m_shader;
++    QOpenGLVertexArrayObject m_vao;
++    QOpenGLBuffer m_verticesBuffer;
++    QOpenGLBuffer m_textureVerticesBuffer;
++    QOpenGLTexture m_texture;
++};
++
++#endif // KISGLIMAGEWIDGET_H
+diff --git a/tests/manual/hdr-qopenglwidget/hdr-openglwidget.pro b/tests/manual/hdr-qopenglwidget/hdr-openglwidget.pro
+new file mode 100644
+index 0000000000..b418e54b43
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/hdr-openglwidget.pro
+@@ -0,0 +1,20 @@
++QT += widgets widgets-private gui-private core-private
++
++TARGET = hdr-openglwidget
++TEMPLATE = app
++
++SOURCES += main.cpp \
++        #hdr-openglwidget.cpp \
++        openglprobeutils.cpp \
++        KisGLImageWidget.cpp \
++        KisGLImageF16.cpp \
++        window.cpp
++
++HEADERS  += \
++#hdr-openglwidget.h \
++    openglprobeutils.h \
++    KisGLImageWidget.h \
++    KisGLImageF16.h \
++    window.h
++
++RESOURCES += kis_gl_image_widget.qrc
+diff --git a/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.frag b/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.frag
+new file mode 100644
+index 0000000000..b57c657046
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.frag
+@@ -0,0 +1,23 @@
++#ifndef USE_OPENGLES
++#define INATTR in
++#define OUTATTR out
++#define DECLARE_OUT_VAR out vec4 f_fragColor;
++#define OUT_VAR f_fragColor
++#define highp
++#define texture2D texture
++#else
++#define INATTR varying
++#define DECLARE_OUT_VAR
++#define OUT_VAR gl_FragColor
++#endif
++// vertices data
++INATTR highp vec4 textureCoordinates;
++uniform sampler2D f_tileTexture;
++DECLARE_OUT_VAR
++
++void main()
++{
++    // get the fragment color from the tile texture
++    highp vec4 color = texture2D(f_tileTexture, textureCoordinates.st);
++    OUT_VAR = vec4(color);
++}
+diff --git a/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.qrc b/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.qrc
+new file mode 100644
+index 0000000000..ab5b5719a9
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.qrc
+@@ -0,0 +1,6 @@
++<RCC>
++    <qresource prefix="/">
++        <file>kis_gl_image_widget.frag</file>
++        <file>kis_gl_image_widget.vert</file>
++    </qresource>
++</RCC>
+diff --git a/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.vert b/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.vert
+new file mode 100644
+index 0000000000..9578f47945
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/kis_gl_image_widget.vert
+@@ -0,0 +1,17 @@
++#ifndef USE_OPENGLES
++#define INATTR in
++#define OUTATTR out
++#define highp
++#else
++#define INATTR attribute
++#define OUTATTR varying
++#endif
++uniform mat4 viewProjectionMatrix;
++INATTR highp vec3 vertexPosition;
++INATTR highp vec2 texturePosition;
++OUTATTR highp vec4 textureCoordinates;
++void main()
++{
++   textureCoordinates = vec4(texturePosition.x, texturePosition.y, 0.0, 1.0);
++   gl_Position = viewProjectionMatrix * vec4(vertexPosition.x, vertexPosition.y, 0.0, 1.0);
++}
+diff --git a/tests/manual/hdr-qopenglwidget/main.cpp b/tests/manual/hdr-qopenglwidget/main.cpp
+new file mode 100644
+index 0000000000..e517ef8579
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/main.cpp
+@@ -0,0 +1,153 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include <QApplication>
++#include "window.h"
++
++#include "openglprobeutils.h"
++#include <QDebug>
++
++QSurfaceFormat generateSurfaceFormat(QSurfaceFormat::RenderableType renderer,
++                                     QSurfaceFormat::ColorSpace colorSpace,
++                                     int bitDepth)
++{
++    QSurfaceFormat format;
++#ifdef Q_OS_MACOS
++    format.setVersion(3, 2);
++    format.setProfile(QSurfaceFormat::CoreProfile);
++#else
++    format.setVersion(3, 0);
++    format.setProfile(QSurfaceFormat::CoreProfile);
++#endif
++    format.setDepthBufferSize(24);
++    format.setStencilBufferSize(8);
++
++    switch (bitDepth) {
++    case 8:
++        format.setRedBufferSize(8);
++        format.setGreenBufferSize(8);
++        format.setBlueBufferSize(8);
++        format.setAlphaBufferSize(8);
++        break;
++    case 10:
++        format.setRedBufferSize(10);
++        format.setGreenBufferSize(10);
++        format.setBlueBufferSize(10);
++        format.setAlphaBufferSize(2);
++        break;
++    case 16:
++        format.setRedBufferSize(16);
++        format.setGreenBufferSize(16);
++        format.setBlueBufferSize(16);
++        format.setAlphaBufferSize(16);
++        break;
++    default:
++        qFatal("Unsupported surface bit depth %d", bitDepth);
++    }
++
++    format.setRenderableType(renderer);
++    format.setColorSpace(colorSpace);
++
++    format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
++    format.setSwapInterval(0); // Disable vertical refresh syncing
++
++    return format;
++}
++
++int main(int argc, char *argv[])
++{
++    QVector<QSurfaceFormat> allFormats;
++
++    QVector<QSurfaceFormat::RenderableType> availableRenderers;
++    availableRenderers << QSurfaceFormat::OpenGL;
++    availableRenderers << QSurfaceFormat::OpenGLES;
++
++    for (QSurfaceFormat::RenderableType renderer : availableRenderers) {
++        allFormats << generateSurfaceFormat(renderer, QSurfaceFormat::sRGBColorSpace, 8);
++        allFormats << generateSurfaceFormat(renderer, QSurfaceFormat::bt2020PQColorSpace, 8);
++        allFormats << generateSurfaceFormat(renderer, QSurfaceFormat::sRGBColorSpace, 10);
++        allFormats << generateSurfaceFormat(renderer, QSurfaceFormat::bt2020PQColorSpace, 10);
++        allFormats << generateSurfaceFormat(renderer, QSurfaceFormat::scRGBColorSpace, 16);
++    }
++
++    for (QSurfaceFormat format : allFormats) {
++        qDebug() << "Probing: " << format;
++        bool result = OpenGLProbeUtils::probeFormat(format, true);
++        qDebug() << "    result:" << result;
++    }
++
++
++    if (argc > 1 && !strcmp(argv[1], "--sharecontext")) {
++        qDebug("Requesting all contexts to share");
++        QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
++    }
++
++    QApplication a(argc, argv);
++
++    QSurfaceFormat::RenderableType renderer = QSurfaceFormat::OpenGLES;
++    QSurfaceFormat::ColorSpace colorSpace = QSurfaceFormat::scRGBColorSpace;
++    int bitDepth = 16;
++
++
++    if (QCoreApplication::arguments().contains(QLatin1String("--scrgb"))) {
++        colorSpace = QSurfaceFormat::scRGBColorSpace;
++        bitDepth = 16;
++    } else if (QCoreApplication::arguments().contains(QLatin1String("--bt2020pq"))) {
++        colorSpace = QSurfaceFormat::bt2020PQColorSpace;
++        bitDepth = 10;
++    } else if (QCoreApplication::arguments().contains(QLatin1String("--srgb"))) {
++        colorSpace = QSurfaceFormat::sRGBColorSpace;
++        bitDepth = 8;
++    }
++
++    if (QCoreApplication::arguments().contains(QLatin1String("--opengl"))) {
++        renderer = QSurfaceFormat::OpenGL;
++    } else if (QCoreApplication::arguments().contains(QLatin1String("--opengles"))) {
++        renderer = QSurfaceFormat::OpenGLES;
++    }
++
++    QSurfaceFormat format = generateSurfaceFormat(renderer, colorSpace, bitDepth);
++
++    if (QCoreApplication::arguments().contains(QLatin1String("--multisample"))) {
++        format.setSamples(4);
++    }
++
++    if (format.renderableType() == QSurfaceFormat::OpenGL) {
++        QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL, true);
++    } else if (format.renderableType() == QSurfaceFormat::OpenGLES) {
++        QCoreApplication::setAttribute(Qt::AA_UseOpenGLES, true);
++    }
++
++    qDebug() << "Requesting" << format.renderableType() << format;
++    QSurfaceFormat::setDefaultFormat(format);
++
++    Window window;
++    window.show();
++
++    return a.exec();
++}
+diff --git a/tests/manual/hdr-qopenglwidget/openglprobeutils.cpp b/tests/manual/hdr-qopenglwidget/openglprobeutils.cpp
+new file mode 100644
+index 0000000000..687cc08904
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/openglprobeutils.cpp
+@@ -0,0 +1,139 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "openglprobeutils.h"
++
++#include <QApplication>
++#include <QSurfaceFormat>
++#include <QOpenGLContext>
++#include <QDebug>
++#include <QWindow>
++
++namespace OpenGLProbeUtils {
++
++namespace {
++
++struct AppAttributeSetter
++{
++    AppAttributeSetter(Qt::ApplicationAttribute attribute, bool useOpenGLES)
++        : m_attribute(attribute),
++          m_oldValue(QCoreApplication::testAttribute(attribute))
++    {
++        QCoreApplication::setAttribute(attribute, useOpenGLES);
++    }
++
++    ~AppAttributeSetter() {
++        QCoreApplication::setAttribute(m_attribute, m_oldValue);
++    }
++
++private:
++    Qt::ApplicationAttribute m_attribute;
++    bool m_oldValue = false;
++};
++
++struct SurfaceFormatSetter
++{
++    SurfaceFormatSetter(const QSurfaceFormat &format)
++        : m_oldFormat(QSurfaceFormat::defaultFormat())
++    {
++        QSurfaceFormat::setDefaultFormat(format);
++    }
++
++    ~SurfaceFormatSetter() {
++        QSurfaceFormat::setDefaultFormat(m_oldFormat);
++    }
++
++private:
++    QSurfaceFormat m_oldFormat;
++};
++
++}
++
++bool fuzzyCompareColorSpaces(const QSurfaceFormat::ColorSpace &lhs, const QSurfaceFormat::ColorSpace &rhs)
++{
++    return lhs == rhs ||
++        ((lhs == QSurfaceFormat::DefaultColorSpace ||
++          lhs == QSurfaceFormat::sRGBColorSpace) &&
++         (rhs == QSurfaceFormat::DefaultColorSpace ||
++          rhs == QSurfaceFormat::sRGBColorSpace));
++}
++
++bool probeFormat(const QSurfaceFormat &format, bool adjustGlobalState)
++{
++    QScopedPointer<AppAttributeSetter> sharedContextSetter;
++    QScopedPointer<AppAttributeSetter> glSetter;
++    QScopedPointer<AppAttributeSetter> glesSetter;
++    QScopedPointer<SurfaceFormatSetter> formatSetter;
++    QScopedPointer<QApplication> application;
++
++    if (adjustGlobalState) {
++        sharedContextSetter.reset(new AppAttributeSetter(Qt::AA_ShareOpenGLContexts, false));
++
++        if (format.renderableType() != QSurfaceFormat::DefaultRenderableType) {
++            glSetter.reset(new AppAttributeSetter(Qt::AA_UseDesktopOpenGL, format.renderableType() != QSurfaceFormat::OpenGLES));
++            glesSetter.reset(new AppAttributeSetter(Qt::AA_UseOpenGLES, format.renderableType() == QSurfaceFormat::OpenGLES));
++        }
++
++        formatSetter.reset(new SurfaceFormatSetter(format));
++
++        int argc = 1;
++        QByteArray data("krita");
++        char *argv = data.data();
++        application.reset(new QApplication(argc, &argv));
++    }
++
++    QWindow surface;
++    surface.setFormat(format);
++    surface.setSurfaceType(QSurface::OpenGLSurface);
++    surface.create();
++    QOpenGLContext context;
++    context.setFormat(format);
++
++
++    if (!context.create()) {
++        qCritical() << "OpenGL context cannot be created";
++        return false;
++    }
++    if (!context.isValid()) {
++        qCritical() << "OpenGL context is not valid while checking Qt's OpenGL status";
++        return false;
++    }
++    if (!context.makeCurrent(&surface)) {
++        qCritical() << "OpenGL context cannot be made current";
++        return false;
++    }
++
++    if (!fuzzyCompareColorSpaces(context.format().colorSpace(), format.colorSpace())) {
++        qCritical() << "Failed to create an OpenGL context with requested color space. Requested:" << format.colorSpace() << "Actual:" << context.format().colorSpace();
++        return false;
++    }
++
++    return true;
++}
++
++}
+diff --git a/tests/manual/hdr-qopenglwidget/openglprobeutils.h b/tests/manual/hdr-qopenglwidget/openglprobeutils.h
+new file mode 100644
+index 0000000000..3b2f1ec3d0
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/openglprobeutils.h
+@@ -0,0 +1,42 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef OPENGLPROBEUTILS_H
++#define OPENGLPROBEUTILS_H
++
++#include <QSurfaceFormat>
++
++namespace OpenGLProbeUtils
++{
++
++bool fuzzyCompareColorSpaces(const QSurfaceFormat::ColorSpace &lhs, const QSurfaceFormat::ColorSpace &rhs);
++bool probeFormat(const QSurfaceFormat &format, bool adjustGlobalState);
++
++};
++
++#endif // OPENGLPROBEUTILS_H
+diff --git a/tests/manual/hdr-qopenglwidget/window.cpp b/tests/manual/hdr-qopenglwidget/window.cpp
+new file mode 100644
+index 0000000000..5729660a4f
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/window.cpp
+@@ -0,0 +1,219 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "window.h"
++
++#include "KisGLImageWidget.h"
++#include "KisGLImageF16.h"
++
++#include <cmath>
++
++#include <QMenu>
++#include <QMenuBar>
++#include <QToolBar>
++#include <QAction>
++#include <QDebug>
++
++#include <QVBoxLayout>
++#include <QHBoxLayout>
++#include <QLabel>
++
++#include <cmath>
++
++
++Window::Window()
++{
++    setWindowTitle("16 bit float QOpenGLWidget test");
++    QMenu *menu = menuBar()->addMenu("File");
++    QToolBar *tb = addToolBar("File");
++
++    m_quitAction = new QAction("Quit", this);
++    connect(m_quitAction, SIGNAL(triggered(bool)), this, SLOT(close()));
++    menu->addAction(m_quitAction);
++    tb->addAction(m_quitAction);
++
++    QWidget *centralWidget = new QWidget(this);
++    QVBoxLayout *layout = new QVBoxLayout(centralWidget);
++
++    QHBoxLayout *hLayout = new QHBoxLayout(centralWidget);
++
++    m_imageWidget = new KisGLImageWidget(QSurfaceFormat::scRGBColorSpace, this);
++    m_imageWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
++    hLayout->addWidget(m_imageWidget, 0, Qt::AlignLeft);
++
++    m_imageWidgetSdr = new KisGLImageWidget(QSurfaceFormat::scRGBColorSpace, this);
++    m_imageWidgetSdr->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
++    hLayout->addWidget(m_imageWidgetSdr, 0, Qt::AlignLeft);
++
++    QImage image(QSize(255,255), QImage::Format_ARGB32);
++    image.fill(Qt::red);
++
++    QLabel *label = new QLabel(this);
++    label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
++    hLayout->addWidget(label, 0, Qt::AlignLeft);
++
++    m_imageWidget->loadImage(initializeImage(false));
++    m_imageWidgetSdr->loadImage(initializeImage(true));
++    label->setPixmap(QPixmap::fromImage(convertToQImage(m_imageWidget->image())));
++
++    layout->addLayout(hLayout);
++
++    m_lblContextInfo = new QLabel(this);
++    layout->addWidget(m_lblContextInfo);
++
++    QLabel *lblNotes = new QLabel(this);
++    lblNotes->setWordWrap(true);
++    lblNotes->setText("* In SDR display mode all three images should look exactly the same\n"
++                      "* In HDR display mode: image 1 should look brighter than the others "
++                      "(it is HDR), images 2 and 3 should have exactly the same brightness and look");
++
++    layout->addWidget(lblNotes);
++
++    centralWidget->setLayout(layout);
++    setCentralWidget(centralWidget);
++}
++
++inline qfloat16 floatToFloat16(float x) {
++    qfloat16 result;
++    qFloatToFloat16(&result, &x, 1);
++    return result;
++}
++
++inline float float16ToFloat(qfloat16 x) {
++    float result;
++    qFloatFromFloat16(&result, &x, 1);
++    return result;
++}
++
++
++KisGLImageF16 Window::initializeImage(bool cropRange) const
++{
++    const int size = 256;
++    KisGLImageF16 image(size, size);
++    image.clearPixels();
++    qfloat16 *pixelPtr = image.data();
++
++    for (int y = 0; y < size; y++) {
++        for (int x = 0; x < size; x++) {
++            qfloat16 *pxl = reinterpret_cast<qfloat16*>(pixelPtr);
++
++            float hdrRedValue = 25.0f * std::pow(float(x) / size, 5.0f);
++
++            if (cropRange) {
++                hdrRedValue = qMin(hdrRedValue, 1.0f);
++            }
++
++            pxl[0] = floatToFloat16(hdrRedValue);
++
++            if (y > size / 2) {
++                const float portion = (float(y) / size - 0.5f) * 2.0f;
++                const float value = qMin(1.0f, 0.2f + 1.8f * portion);
++
++                pxl[1] = floatToFloat16(value);
++                pxl[2] = floatToFloat16(value);
++            } else {
++                pxl[1] = floatToFloat16(0.2);
++                pxl[2] = floatToFloat16(0.2);
++            }
++
++            pxl[3] = floatToFloat16(1.0);
++
++            pixelPtr += 4;
++        }
++    }
++
++    return image;
++}
++
++inline float linearToSRGB(float value)
++{
++    if (value <= 0.0f) {
++        value = 0.0f;
++    } else if (value < 0.0031308f) {
++        value = value * 12.92f;
++    } else if (value < 1.0f) {
++        value = std::pow(value, 0.41666f) * 1.055f - 0.055f;
++    } else {
++        value = 1.0f;
++    }
++    return value;
++}
++
++QImage Window::convertToQImage(const KisGLImageF16 &image) const
++{
++    const QSize size = image.size();
++    const qfloat16 *pixelPtr = image.constData();
++
++    QImage qimage(size, QImage::Format_ARGB32);
++    quint8 *qimagePixelPtr = qimage.bits();
++
++
++    for (int y = 0; y < size.height(); y++) {
++        for (int x = 0; x < size.width(); x++) {
++            const qfloat16 *srcPxl = pixelPtr;
++            quint8 *dstPxl = qimagePixelPtr;
++
++            auto convertChannel = [] (qfloat16 x) {
++                float value = float16ToFloat(x);
++                return quint8(linearToSRGB(value) * 255.0f);
++            };
++
++            dstPxl[0] =  convertChannel(srcPxl[2]);
++            dstPxl[1] =  convertChannel(srcPxl[1]);
++            dstPxl[2] =  convertChannel(srcPxl[0]);
++            dstPxl[3] =  convertChannel(srcPxl[3]);
++
++            pixelPtr += 4;
++            qimagePixelPtr += 4;
++        }
++    }
++
++    return qimage;
++}
++
++void Window::updateSurfaceInfo()
++{
++    const QSurfaceFormat format = m_imageWidget->context()->format();
++
++    m_lblContextInfo->setText(
++        QString("renderer: %1\ncolorSpace: %2\n\n")
++                .arg(format.renderableType() == QSurfaceFormat::OpenGL ? "openGL" : "openGL ES")
++                .arg(format.colorSpace() == QSurfaceFormat::sRGBColorSpace ? "sRGB" :
++                     format.colorSpace() == QSurfaceFormat::scRGBColorSpace ? "scRGB" :
++                     format.colorSpace() == QSurfaceFormat::bt2020PQColorSpace ? "Bt. 2020 PQ" :
++                     "unknown"));
++}
++
++void Window::showEvent(QShowEvent *ev)
++{
++    QMainWindow::showEvent(ev);
++
++    if (m_lblContextInfo->text().isEmpty()) {
++        updateSurfaceInfo();
++    }
++}
+diff --git a/tests/manual/hdr-qopenglwidget/window.h b/tests/manual/hdr-qopenglwidget/window.h
+new file mode 100644
+index 0000000000..fd8e5c0393
+--- /dev/null
++++ b/tests/manual/hdr-qopenglwidget/window.h
+@@ -0,0 +1,69 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef WINDOW_H
++#define WINDOW_H
++
++#include <QMainWindow>
++
++class QAction;
++
++class GLWidget;
++class KisGLImageWidget;
++class KisGLImageF16;
++class QLabel;
++
++class Window : public QMainWindow
++{
++    Q_OBJECT
++
++public:
++    Window();
++
++    void showEvent(QShowEvent *ev) override;
++
++public Q_SLOTS:
++
++
++private:
++    KisGLImageF16 initializeImage(bool cropRange) const;
++    QImage convertToQImage(const KisGLImageF16 &image) const;
++
++    void updateSurfaceInfo();
++
++private:
++    GLWidget *m_glWidget {0};
++    QAction *m_openAction {0};
++    QAction *m_quitAction {0};
++    KisGLImageWidget *m_imageWidget;
++    KisGLImageWidget *m_imageWidgetSdr;
++    QLabel *m_lblContextInfo;
++
++};
++
++#endif
+diff --git a/tests/manual/manual.pro b/tests/manual/manual.pro
+index ab00a5ef60..b202ed0431 100644
+--- a/tests/manual/manual.pro
++++ b/tests/manual/manual.pro
+@@ -59,7 +59,7 @@ qtabbar
+ 
+ qtConfig(opengl) {
+     SUBDIRS += qopengltextureblitter
+-    qtConfig(egl): SUBDIRS += qopenglcontext
++    qtConfig(egl): SUBDIRS += qopenglcontext hdr-qopenglwidget
+ }
+ 
+ win32: SUBDIRS -= network_remote_stresstest network_stresstest
+-- 
+2.20.1.windows.1
+

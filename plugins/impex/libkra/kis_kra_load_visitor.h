@@ -31,6 +31,7 @@
 
 class KisFilterConfiguration;
 class KoStore;
+class KoShapeControllerBase;
 
 class KRITALIBKRA_EXPORT KisKraLoadVisitor : public KisNodeVisitor
 {
@@ -39,6 +40,7 @@ public:
 
     KisKraLoadVisitor(KisImageSP image,
                       KoStore *store,
+                      KoShapeControllerBase *shapeController,
                       QMap<KisNode *, QString> &layerFilenames,
                       QMap<KisNode *, QString> &keyframeFilenames,
                       const QString & name,
@@ -74,6 +76,7 @@ private:
 
     bool loadProfile(KisPaintDeviceSP device,  const QString& location);
     bool loadFilterConfiguration(KisFilterConfigurationSP kfc, const QString& location);
+    void fixOldFilterConfigurations(KisFilterConfigurationSP kfc);
     bool loadMetaData(KisNode* node);
     void initSelectionForMask(KisMask *mask);
     bool loadSelection(const QString& location, KisSelectionSP dstSelection);
@@ -87,7 +90,7 @@ private:
      * conversion needs to be handled in the perchannel class because those filters
      * have their own xml loading functionality.
      */
-    KisFilterConfigurationSP loadDeprecatedFilter(KisFilterConfigurationSP cfg);
+    void loadDeprecatedFilter(KisFilterConfigurationSP cfg);
 
 private:
     KisImageSP m_image;
@@ -100,6 +103,7 @@ private:
     int m_syntaxVersion;
     QStringList m_errorMessages;
     QStringList m_warningMessages;
+    KoShapeControllerBase *m_shapeController;
 };
 
 #endif // KIS_KRA_LOAD_VISITOR_H_

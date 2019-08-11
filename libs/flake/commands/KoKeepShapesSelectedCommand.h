@@ -36,7 +36,7 @@ public:
                                 KUndo2Command *parent);
 
 protected:
-    void end();
+    void partB();
 
 private:
     QList<KoShape*> m_selectedBefore;

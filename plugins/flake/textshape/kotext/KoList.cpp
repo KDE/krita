@@ -71,7 +71,7 @@ KoList *KoList::applyStyle(const QTextBlock &block, KoListStyle *style, int leve
 
     // Ok, so we are now ready to add the block to another list, but which other list?
     // For headers we always want to continue from any previous header
-    // For normal lists we either want to continue an adjecent list or create a new one
+    // For normal lists we either want to continue an adjacent list or create a new one
     if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel)) {
         for (QTextBlock b = block.previous();b.isValid(); b = b.previous()) {
             list = document.list(b);

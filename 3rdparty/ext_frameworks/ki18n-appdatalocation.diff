@@ -1,22 +1,48 @@
+diff --git a/docs/programmers-guide.md b/docs/programmers-guide.md
+index 9505366..65fc9a5 100644
+--- a/docs/programmers-guide.md
++++ b/docs/programmers-guide.md
+@@ -2246,7 +2246,7 @@ then a call to
+ 
+ ~~~
+ QString splashPath = QStandardPaths::locate(
+-    QStandardPaths::GenericDataLocation, "splash.png");
++    QStandardPaths::AppDataLocation, "splash.png");
+ splashPath = KLocalizedString::localizedFilePath(splashPath);
+ ~~~
+ 
 diff --git a/src/kcatalog.cpp b/src/kcatalog.cpp
-index 7711e9b..b6280ed 100644
+index c47ffac..e24eb84 100644
 --- a/src/kcatalog.cpp
 +++ b/src/kcatalog.cpp
-@@ -112,7 +112,7 @@ QString KCatalog::catalogLocaleDir(const QByteArray &domain,
- {
-     QString relpath = QString::fromLatin1("%1/LC_MESSAGES/%2.mo")
-                       .arg(language, QFile::decodeName(domain));
--    QString file = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-+    QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation,
-                                           QString::fromLatin1("locale/") + relpath);
+@@ -144,7 +144,7 @@ QString KCatalog::catalogLocaleDir(const QByteArray &domain,
+     }
+     return file;
+ #else
+-    const QString file = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("locale/") + relpath);
++    const QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("locale/") + relpath);
+ 
      QString localeDir;
-     if (file.isEmpty()) {
-@@ -127,7 +127,7 @@ QString KCatalog::catalogLocaleDir(const QByteArray &domain,
+     if (!file.isEmpty()) {
+@@ -158,7 +158,7 @@ QString KCatalog::catalogLocaleDir(const QByteArray &domain,
  QSet<QString> KCatalog::availableCatalogLanguages(const QByteArray &domain_)
  {
      QString domain = QFile::decodeName(domain_);
 -    QStringList localeDirPaths = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
 +    QStringList localeDirPaths = QStandardPaths::locateAll(QStandardPaths::AppDataLocation,
-                                  QString::fromLatin1("locale"),
+                                  QStringLiteral("locale"),
                                   QStandardPaths::LocateDirectory);
-     QSet<QString> availableLanguages;
+ 
+diff --git a/src/klocalizedstring.cpp b/src/klocalizedstring.cpp
+index eb42c81..219bb51 100644
+--- a/src/klocalizedstring.cpp
++++ b/src/klocalizedstring.cpp
+@@ -1363,7 +1363,7 @@ void KLocalizedStringPrivate::locateScriptingModule(const QByteArray &domain,
+ 
+     // Try to find this module.
+     QString modapath = QStandardPaths::locate(
+-                           QStandardPaths::GenericDataLocation,
++                           QStandardPaths::AppDataLocation,
+                            QLatin1String("locale") + QLatin1Char('/') + modrpath);
+ 
+     // If the module exists and hasn't been already included.

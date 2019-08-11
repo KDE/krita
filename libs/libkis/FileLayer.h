@@ -69,6 +69,11 @@ public Q_SLOTS:
     void setProperties(QString fileName, QString scalingMethod = QString("None"));
 
     /**
+     * @brief makes the file layer to reload the connected image from disk
+     */
+    void resetCache();
+
+    /**
      * @brief path
      * @return A QString with the full path of the referenced image.
      */
@@ -78,9 +83,11 @@ public Q_SLOTS:
      * @brief scalingMethod
      * returns how the file referenced is scaled.
      * @return one of the following:
+     * <ul>
      *  <li> None - The file is not scaled in any way.
      *  <li> ToImageSize - The file is scaled to the full image size;
      *  <li> ToImagePPI - The file is scaled by the PPI of the image. This keep the physical dimensions the same.
+     * </ul>
      */
     QString scalingMethod() const;
 
@@ -93,7 +100,7 @@ private:
      * @param absolutePath the absolute location of the file referenced.
      * @return the appropriate relative path.
      */
-    QString getFileNameFromAbsolute(QString baseName, QString absolutePath);
+    QString getFileNameFromAbsolute(const QString &basePath, QString filePath);
     QString m_baseName;
 };
 

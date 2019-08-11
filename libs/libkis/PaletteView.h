@@ -29,7 +29,12 @@
 #include <kis_palette_view.h>
 #include <KisPaletteModel.h>
 
+#include <Swatch.h>
+
+class KisSwatch;
+
 /**
+ * @class PaletteView
  * @brief The PaletteView class is a wrapper around a MVC method for handling
  * palettes. This class shows a nice widget that can drag and drop, edit colors in a colorset
  * and will handle adding and removing entries if you'd like it to.
@@ -82,17 +87,25 @@ Q_SIGNALS:
      * fires when a swatch is selected with leftclick.
      * @param entry
      */
-    void entrySelectedForeGround(KoColorSetEntry entry);
+    void entrySelectedForeGround(Swatch entry);
     /**
      * @brief entrySelectedBackGround
      * fires when a swatch is selected with rightclick.
      * @param entry
      */
-    void entrySelectedBackGround(KoColorSetEntry entry);
+    void entrySelectedBackGround(Swatch entry);
+
+private Q_SLOTS:
+
+    void fgSelected(KisSwatch swatch);
+    void bgSelected(KisSwatch swatch);
+
 private:
+
+
+
     struct Private;
     const QScopedPointer<Private> d;
-
 };
 
 #endif // LIBKIS_PALETTE_VIEW_H

@@ -52,6 +52,7 @@ KisDuplicateOpOption::KisDuplicateOpOption()
     connect(m_optionWidget->cbHealing, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_optionWidget->cbPerspective, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_optionWidget->cbSourcePoint, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
+    connect(m_optionWidget->cbResetSourcePoint, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_optionWidget->chkCloneProjection, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
     setConfigurationPage(m_optionWidget);
@@ -92,6 +93,16 @@ void KisDuplicateOpOption::setMoveSourcePoint(bool move)
     m_optionWidget->cbSourcePoint->setChecked(move);
 }
 
+bool KisDuplicateOpOption::resetSourcePoint() const
+{
+    return m_optionWidget->cbResetSourcePoint->isChecked();
+}
+
+void KisDuplicateOpOption::setResetSourcePoint(bool reset)
+{
+    m_optionWidget->cbResetSourcePoint->setChecked(reset);
+}
+
 bool KisDuplicateOpOption::cloneFromProjection() const
 {
     return m_optionWidget->chkCloneProjection->isChecked();
@@ -104,11 +115,12 @@ void KisDuplicateOpOption::setCloneFromProjection(bool cloneFromProjection)
 
 void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    DuplicateOption op;
+    KisDuplicateOptionProperties op;
 
     op.duplicate_healing = healing();
     op.duplicate_correct_perspective = correctPerspective();
     op.duplicate_move_source_point = moveSourcePoint();
+    op.duplicate_reset_source_point = resetSourcePoint();
     op.duplicate_clone_from_projection = cloneFromProjection();
 
     op.writeOptionSetting(setting);
@@ -116,12 +128,13 @@ void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfigurationSP setti
 
 void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    DuplicateOption op;
+    KisDuplicateOptionProperties op;
     op.readOptionSetting(setting);
 
     m_optionWidget->cbHealing->setChecked(op.duplicate_healing);
     m_optionWidget->cbPerspective->setChecked(op.duplicate_correct_perspective);
     m_optionWidget->cbSourcePoint->setChecked(op.duplicate_move_source_point);
+    m_optionWidget->cbResetSourcePoint->setChecked(op.duplicate_reset_source_point);
     m_optionWidget->chkCloneProjection->setChecked(op.duplicate_clone_from_projection);
 }
 

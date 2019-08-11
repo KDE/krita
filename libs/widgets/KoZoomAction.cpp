@@ -61,8 +61,6 @@ public:
 
     qreal effectiveZoom;
 
-    KoZoomAction::SpecialButtons specialButtons;
-
     QList<qreal> generateSliderZoomLevels() const;
     QList<qreal> filterMenuZoomLevels(const QList<qreal> &zoomLevels) const;
 
@@ -119,7 +117,6 @@ KoZoomAction::KoZoomAction(KoZoomMode::Modes zoomModes, const QString& text, QOb
     , d(new Private(this))
 {
     d->zoomModes = zoomModes;
-    d->specialButtons = 0;
     setIcon(koIcon("zoom-original"));
     setEditable( true );
     setMaxComboViewCount( 15 );
@@ -129,7 +126,7 @@ KoZoomAction::KoZoomAction(KoZoomMode::Modes zoomModes, const QString& text, QOb
     d->effectiveZoom = 1.0;
     regenerateItems(d->effectiveZoom, true);
 
-    connect( this, SIGNAL( triggered( const QString& ) ), SLOT( triggered( const QString& ) ) );
+    connect( this, SIGNAL(triggered(QString)), SLOT(triggered(QString)) );
 }
 
 KoZoomAction::~KoZoomAction()
@@ -192,9 +189,6 @@ void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
     QStringList values;
     if(d->zoomModes & KoZoomMode::ZOOM_WIDTH) {
         values << KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH);
-    }
-    if(d->zoomModes & KoZoomMode::ZOOM_TEXT) {
-        values << KoZoomMode::toString(KoZoomMode::ZOOM_TEXT);
     }
     if(d->zoomModes & KoZoomMode::ZOOM_PAGE) {
         values << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
@@ -273,13 +267,13 @@ void KoZoomAction::zoomOut()
 
 QWidget * KoZoomAction::createWidget(QWidget *parent)
 {
-    KoZoomWidget* zoomWidget = new KoZoomWidget(parent, d->specialButtons, d->sliderLookup.size() - 1);
+    KoZoomWidget* zoomWidget = new KoZoomWidget(parent, d->sliderLookup.size() - 1);
     connect(this, SIGNAL(zoomLevelsChanged(QStringList)), zoomWidget, SLOT(setZoomLevels(QStringList)));
     connect(this, SIGNAL(currentZoomLevelChanged(QString)), zoomWidget, SLOT(setCurrentZoomLevel(QString)));
     connect(this, SIGNAL(sliderChanged(int)), zoomWidget, SLOT(setSliderValue(int)));
     connect(this, SIGNAL(aspectModeChanged(bool)), zoomWidget, SLOT(setAspectMode(bool)));
     connect(zoomWidget, SIGNAL(sliderValueChanged(int)), this, SLOT(sliderValueChanged(int)));
-    connect(zoomWidget, SIGNAL(zoomLevelChanged(const QString&)), this, SLOT(triggered(const QString&)));
+    connect(zoomWidget, SIGNAL(zoomLevelChanged(QString)), this, SLOT(triggered(QString)));
     connect(zoomWidget, SIGNAL(aspectModeChanged(bool)), this, SIGNAL(aspectModeChanged(bool)));
     connect(zoomWidget, SIGNAL(zoomedToSelection()), this, SIGNAL(zoomedToSelection()));
     connect(zoomWidget, SIGNAL(zoomedToAll()), this, SIGNAL(zoomedToAll()));
@@ -304,11 +298,6 @@ void KoZoomAction::setSelectedZoomMode(KoZoomMode::Mode mode)
     setCurrentAction(modeString);
 
     emit currentZoomLevelChanged(modeString);
-}
-
-void KoZoomAction::setSpecialButtons( SpecialButtons buttons )
-{
-    d->specialButtons = buttons;
 }
 
 void KoZoomAction::setAspectMode(bool status)

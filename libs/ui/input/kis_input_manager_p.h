@@ -23,7 +23,6 @@
 #include <QEvent>
 #include <QTouchEvent>
 #include <QScopedPointer>
-#include <QPointer>
 #include <QQueue>
 #include <QElapsedTimer>
 
@@ -74,18 +73,21 @@ public:
     QScopedPointer<QEvent> compressedMoveEvent;
     bool testingAcceptCompressedTabletEvents = false;
     bool testingCompressBrushEvents = false;
-    bool tabletActive = false; // Indicates whether or not tablet is in proximity
 
     typedef QPair<int, QPointer<QObject> > PriorityPair;
     typedef QList<PriorityPair> PriorityList;
     PriorityList priorityEventFilter;
     int priorityEventFilterSeqNo;
 
+    bool touchStrokeStarted = false;
+
+    QPointF previousPos;
+    bool buttonPressed = false;
+
     void blockMouseEvents();
     void allowMouseEvents();
     void eatOneMousePress();
     void setMaskSyntheticEvents(bool value);
-    void setTabletActive(bool value);
     void resetCompressor();
 
     template <class Event, bool useBlocking>
@@ -129,6 +131,8 @@ public:
 
     struct EventEater
     {
+        EventEater();
+
         bool eventFilter(QObject* target, QEvent* event);
 
         // This should be called after we're certain a tablet stroke has started.
@@ -142,6 +146,7 @@ public:
         bool hungry{false};   // Continue eating mouse strokes
         bool peckish{false};  // Eat a single mouse press event
         bool eatSyntheticEvents{false}; // Mask all synthetic events
+        bool activateSecondaryButtonsWorkaround{false}; // Use mouse events for right- and middle-clicks
     };
     EventEater eventEater;
 

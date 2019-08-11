@@ -44,15 +44,18 @@ class KoColorPopupAction::KoColorPopupActionPrivate
 {
 public:
     KoColorPopupActionPrivate()
-        : colorSetWidget(0), colorChooser(0), opacitySlider(0), menu(0), checkerPainter(4)
-        , showFilter(true), applyMode(true), firstTime(true)
+        : colorSetWidget(0)
+        , colorChooser(0)
+        , opacitySlider(0)
+        , menu(0)
+        , checkerPainter(4)
+        , showFilter(true)
+        , applyMode(true)
+        , firstTime(true)
     {}
 
     ~KoColorPopupActionPrivate()
     {
-        delete colorSetWidget;
-        delete colorChooser;
-        delete opacitySlider;
         delete menu;
     }
 
@@ -79,12 +82,12 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
     QWidgetAction *wdgAction = new QWidgetAction(d->menu);
     d->colorSetWidget = new KoColorSetWidget(widget);
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+
     QPointer<KoColorSet> defaultColorSet = rServer->resourceByName("Default");
-    if (defaultColorSet) {
-        d->colorSetWidget->setColorSet(defaultColorSet);
-    } else {
-        d->colorSetWidget->setColorSet(rServer->resources().first());
+    if (!defaultColorSet && rServer->resources().count() > 0) {
+        defaultColorSet = rServer->resources().first();
     }
+    d->colorSetWidget->setColorSet(defaultColorSet);
 
     d->colorChooser = new KoTriangleColorSelector( widget );
     // prevent mouse release on color selector from closing popup
@@ -110,12 +113,12 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
 
     connect(this, SIGNAL(triggered()), this, SLOT(emitColorChanged()));
 
-    connect(d->colorSetWidget, SIGNAL(colorChanged(const KoColor &, bool)), this, SLOT(colorWasSelected(const KoColor &, bool)));
-
-    connect( d->colorChooser, SIGNAL( colorChanged( const QColor &) ),
-             this, SLOT( colorWasEdited( const QColor &) ) );
-    connect( d->opacitySlider, SIGNAL(valueChanged(int)),
-             this, SLOT(opacityWasChanged(int)));
+    connect(d->colorSetWidget, SIGNAL(colorChanged(KoColor,bool)),
+            this, SLOT(colorWasSelected(KoColor,bool)));
+    connect(d->colorChooser, SIGNAL(colorChanged(QColor)),
+            this, SLOT(colorWasEdited(QColor)));
+    connect(d->opacitySlider, SIGNAL(valueChanged(int)),
+            this, SLOT(opacityWasChanged(int)));
 }
 
 KoColorPopupAction::~KoColorPopupAction()
@@ -241,16 +244,4 @@ void KoColorPopupAction::opacityWasChanged( int opacity )
     d->currentColor.setOpacity( quint8(opacity) );
 
     emitColorChanged();
-}
-
-void KoColorPopupAction::slotTriggered(bool)
-{
-    if (d->firstTime) {
-        KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
-        QList<KoColorSet*> palettes = srv->resources();
-        if (!palettes.empty()) {
-            d->colorSetWidget->setColorSet(palettes.first());
-        }
-        d->firstTime = false;
-    }
 }

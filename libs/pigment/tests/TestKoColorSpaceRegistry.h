@@ -22,11 +22,11 @@
 
 #include <QObject>
 
-class TestColorSpaceRegistry : public QObject
+class TestBaseColorSpaceRegistry : public QObject
 {
     Q_OBJECT
 public:
-    TestColorSpaceRegistry();
+    TestBaseColorSpaceRegistry();
 private Q_SLOTS:
     void testLab16();
     void testRgb8();

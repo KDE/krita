@@ -54,7 +54,15 @@ public:
     int addPoint(const QPointF& point);
     void removePoint(int idx);
 
-    bool isNull() const;
+    /*
+     * Check whether the curve maps all values to themselves.
+     */
+    bool isIdentity() const;
+
+    /*
+     * Check whether the curve maps all values to given constant.
+     */
+    bool isConstant(qreal c) const;
 
     /**
      * This allows us to carry around a display name for the curve internally. It is used

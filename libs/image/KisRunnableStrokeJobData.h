@@ -20,12 +20,12 @@
 #define KISRUNNABLESTROKEJOBDATA_H
 
 #include "kritaimage_export.h"
-#include "kis_stroke_job_strategy.h"
+#include "KisRunnableStrokeJobDataBase.h"
 #include <functional>
 
 class QRunnable;
 
-class KRITAIMAGE_EXPORT KisRunnableStrokeJobData : public KisStrokeJobData {
+class KRITAIMAGE_EXPORT KisRunnableStrokeJobData : public KisRunnableStrokeJobDataBase {
 public:
     KisRunnableStrokeJobData(QRunnable *runnable, KisStrokeJobData::Sequentiality sequentiality = KisStrokeJobData::SEQUENTIAL,
                              KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL);
@@ -35,7 +35,7 @@ public:
 
     ~KisRunnableStrokeJobData();
 
-    void run();
+    void run() override;
 
 private:
     QRunnable *m_runnable = 0;

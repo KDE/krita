@@ -208,7 +208,7 @@ class bk_max_flow {
           } else if(get(m_res_cap_map, from_source)){
             // there is no sink connect, so we can't augment this path, but to
             // avoid adding m_source to the active nodes, we just activate this
-            // node and set the approciate things
+            // node and set the appropriate things
             set_tree(current_node, tColorTraits::black());
             set_edge_to_parent(current_node, from_source);
             put(m_dist_map, current_node, 1);
@@ -612,7 +612,7 @@ class bk_max_flow {
       }
 
       /**
-       * checks if vertex v has a connect to the sink-vertex (@var m_sink)
+       * checks if vertex v has a connect to the sink-vertex (@p m_sink)
        * @param v the vertex which is checked
        * @return true if a path to the sink was found, false if not
        */
@@ -649,7 +649,7 @@ class bk_max_flow {
       }
 
       /**
-       * checks if vertex v has a connect to the source-vertex (@var m_source)
+       * checks if vertex v has a connect to the source-vertex (@p m_source)
        * @param v the vertex which is checked
        * @return true if a path to the source was found, false if not
        */

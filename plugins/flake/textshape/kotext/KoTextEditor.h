@@ -101,7 +101,7 @@ public: // KoToolSelection overloads
     bool hasSelection() const;
 
     /** returns true if the current cursor position is protected from editing
-     * @param cached use cached value if available.
+     * @param useCached use cached value if available.
      */
     bool isEditProtected(bool useCached = false) const;
 
@@ -159,15 +159,15 @@ private:
 
 public Q_SLOTS:
 
-    /// This adds the \ref command to the calligra undo stack.
+    /// This adds the \p command to the calligra undo stack.
     ///
     /// From this point forward all text manipulation is placed in the qt text systems internal
-    /// undostack while also adding representative subcommands to \ref command.
+    /// undostack while also adding representative subcommands to \p command.
     ///
-    /// The \ref command is not redone as part of this process.
+    /// The \p command is not redone as part of this process.
     ///
-    /// Note: Be aware that many KoTextEditor methods start their own commands thus terminating
-    /// the recording of this \ref command. Only use QTextCursor manipulation (with all the issues
+    /// \note Be aware that many KoTextEditor methods start their own commands thus terminating
+    /// the recording of this \p command. Only use QTextCursor manipulation (with all the issues
     /// that brings) or only use KoTextEditor methods that don't start their own command.
     ///
     /// The recording is automatically terminated when another command is added, which as mentioned
@@ -176,12 +176,12 @@ public Q_SLOTS:
 
     /// This instantly "redo" the command thus placing all the text manipulation the "redo" does
     /// (should be implemented with a "first redo" pattern) in the qt text systems internal
-    /// undostack while also adding representative subcommands to \ref command.
+    /// undostack while also adding representative subcommands to \p command.
     ///
-    /// When \ref command is done "redoing" no further text manipulation is added as subcommands.
+    /// When \p command is done "redoing" no further text manipulation is added as subcommands.
     ///
-    /// \ref command is not put on the calligra undo stack. That is the responsibility of the
-    /// caller, or the caller can choose to quickly undo and then delete the \ref command.
+    /// \p command is not put on the calligra undo stack. That is the responsibility of the
+    /// caller, or the caller can choose to quickly undo and then delete the \p command.
     void instantlyExecuteCommand(KUndo2Command *command);
 
     void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, const KUndo2MagicString &title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
@@ -225,7 +225,7 @@ public Q_SLOTS:
     /**
      * Insert an inlineObject (such as a variable) at the current cursor position. Possibly replacing the selection.
      * @param inliner the object to insert.
-     * @param cmd a parent command for the commands created by this methods. If present, the commands
+     * @param parent a parent command for the commands created by this methods. If present, the commands
      *    will not be added to the document's undo stack automatically.
      */
     void insertInlineObject(KoInlineObject *inliner, KUndo2Command *parent = 0);
@@ -335,6 +335,7 @@ public Q_SLOTS:
      * Warning: From the outside this method should only be used with a parent command
      * and only if there is a selection
      * @param previous should be true if act like backspace
+     * @param parent the parent command used for stacking
      */
     void deleteChar(bool previous, KUndo2Command *parent = 0);
 
@@ -392,6 +393,8 @@ public Q_SLOTS:
      * Sets the width of a table column.
      * @param table is the table to be adjusted.
      * @param column the column that is to be adjusted.
+     * @param width the new width of the column.
+     * @param parentCommand the parent command used for stacking.
      */
     void adjustTableColumnWidth(QTextTable *table, int column, qreal width, KUndo2Command *parentCommand = 0);
 
@@ -399,6 +402,8 @@ public Q_SLOTS:
      * Sets the height of a table row.
      * @param table is the table to be adjusted.
      * @param row the row that is to be adjusted.
+     * @param height the row height.
+     * @param parentCommand the parent command used for stacking.
      */
     void adjustTableRowHeight(QTextTable *table, int row, qreal height, KUndo2Command *parentCommand = 0);
 
@@ -413,8 +418,10 @@ public Q_SLOTS:
     /**
      * Sets the border formatting of a side in a table cell.
      * @param table is the table to be adjusted.
-     * @param column the column coordinate of the cell that is to be adjusted.
      * @param row the row coordinate of the cell that is to be adjusted.
+     * @param column the column coordinate of the cell that is to be adjusted.
+     * @param cellSide the side border of the cell.
+     * @param data the border data.
      */
     void setTableBorderData(QTextTable *table, int row, int column, KoBorder::BorderSide cellSide,
                 const KoBorder::BorderData &data);

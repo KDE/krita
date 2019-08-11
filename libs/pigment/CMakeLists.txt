@@ -72,10 +72,13 @@ set(kritapigment_SRCS
     colorspaces/KoSimpleColorSpaceEngine.cpp
     compositeops/KoOptimizedCompositeOpFactory.cpp
     compositeops/KoOptimizedCompositeOpFactoryPerArch_Scalar.cpp
+    compositeops/KoAlphaDarkenParamsWrapper.cpp
     ${__per_arch_factory_objs}
     colorprofiles/KoDummyColorProfile.cpp
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp
+    resources/KisSwatch.cpp
+    resources/KisSwatchGroup.cpp
     resources/KoPattern.cpp
     resources/KoResource.cpp
     resources/KoMD5Generator.cpp

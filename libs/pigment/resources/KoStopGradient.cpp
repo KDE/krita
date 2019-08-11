@@ -34,6 +34,8 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoMixColorsOp.h"
 
+#include "kis_dom_utils.h"
+
 #include <math.h>
 #include <KoColorModelStandardIds.h>
 
@@ -85,12 +87,7 @@ bool KoStopGradient::loadFromDevice(QIODevice *dev)
     QByteArray ba = dev->readAll();
 
     QBuffer buf(&ba);
-    if (strExt == ".kgr") {
-        loadKarbonGradient(&buf);
-    }
-    else if (strExt == ".svg") {
-        loadSvgGradient(&buf);
-    }
+    loadSvgGradient(&buf);
     if (m_stops.count() >= 2) {
         setValid(true);
     }
@@ -147,79 +144,77 @@ QGradient* KoStopGradient::toQGradient() const
     return gradient;
 }
 
+bool KoStopGradient::stopsAt(KoGradientStop &leftStop, KoGradientStop &rightStop, qreal t) const
+{
+    if (! m_stops.count())
+        return false;
+    if (t <= m_stops.first().first || m_stops.count() == 1) {
+        // we have only one stop or t is before the first stop
+        leftStop = m_stops.first();
+        rightStop = KoGradientStop(-std::numeric_limits<double>::infinity(), leftStop.second);
+        return true;
+    } else if (t >= m_stops.last().first) {
+        // t is after the last stop
+        rightStop = m_stops.last();
+        leftStop = KoGradientStop(std::numeric_limits<double>::infinity(), rightStop.second);
+        return true;
+    } else {
+        // we have at least two color stops
+        // -> find the two stops which frame our t
+        auto it = std::lower_bound(m_stops.begin(),  m_stops.end(), KoGradientStop(t, KoColor()), [](const KoGradientStop &a, const KoGradientStop &b){
+            return a.first < b.first;
+        });
+        leftStop = *(it - 1);
+        rightStop = *(it);
+        return true;
+    }
+}
+
 void KoStopGradient::colorAt(KoColor& dst, qreal t) const
 {
     KoColor buffer;
 
-    if (! m_stops.count())
-        return;
-    if (t <= m_stops.first().first || m_stops.count() == 1) {
-        // we have only one stop or t is before the first stop
-        // -> use the color of the first stop
-        dst.fromKoColor(m_stops.first().second);
-    } else if (t >= m_stops.last().first) {
-        // t is after the last stop
-        // -> use the color of the last stop
-        dst.fromKoColor(m_stops.last().second);
+    KoGradientStop leftStop, rightStop;
+    if (!stopsAt(leftStop, rightStop, t)) return;
+
+    const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
+
+    KoColor startDummy, endDummy;
+    if (mixSpace){
+        startDummy = KoColor(leftStop.second, mixSpace);
+        endDummy = KoColor(rightStop.second, mixSpace);
     } else {
-        // we have at least two color stops
-        // -> find the two stops which frame our t
-        QList<KoGradientStop>::const_iterator stop = m_stops.begin();
-        QList<KoGradientStop>::const_iterator lastStop = m_stops.end();
-        // we already checked the first stop, so we start at the second
-        for (++stop; stop != lastStop; ++stop) {
-            // we break at the stop which is just after our t
-            if (stop->first > t)
-                break;
-        }
-
-        //if ( *buffer.colorSpace() != *colorSpace()) {
-        //    buffer = KoColor(colorSpace());
-        //}
-        //hack to get a color space with the bitdepth of the gradients(8bit), but with the colour profile of the image//
-        const KoColorSpace* mixSpace = KoColorSpaceRegistry::instance()->rgb8(dst.colorSpace()->profile());
-
-        const KoGradientStop& leftStop = *(stop - 1);
-        const KoGradientStop& rightStop = *(stop);
-
-        KoColor startDummy, endDummy;
-        if (mixSpace){
-            startDummy = KoColor(leftStop.second, mixSpace);
-            endDummy = KoColor(rightStop.second, mixSpace);
-        } else {
-            startDummy = leftStop.second;
-            endDummy = rightStop.second;
-        }
-        const quint8 *colors[2];
-        colors[0] = startDummy.data();
-        colors[1] = endDummy.data();
-
-        qreal localT;
-        qreal stopDistance = rightStop.first - leftStop.first;
-        if (stopDistance < DBL_EPSILON) {
-            localT = 0.5;
-        } else {
-            localT = (t - leftStop.first) / stopDistance;
-        }
-        qint16 colorWeights[2];
-        colorWeights[0] = static_cast<quint8>((1.0 - localT) * 255 + 0.5);
-        colorWeights[1] = 255 - colorWeights[0];
-
-
-        //check if our mixspace exists, it doesn't at startup.
-        if (mixSpace){
-            if (*buffer.colorSpace() != *mixSpace) {
-                buffer = KoColor(mixSpace);
-            }
-            mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-        }
-        else {
-            buffer = KoColor(colorSpace());
-            colorSpace()->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
-        }
-
-        dst.fromKoColor(buffer);
+        startDummy = leftStop.second;
+        endDummy = rightStop.second;
     }
+    const quint8 *colors[2];
+    colors[0] = startDummy.data();
+    colors[1] = endDummy.data();
+
+    qreal localT;
+    qreal stopDistance = rightStop.first - leftStop.first;
+    if (stopDistance < DBL_EPSILON) {
+        localT = 0.5;
+    } else {
+        localT = (t - leftStop.first) / stopDistance;
+    }
+    qint16 colorWeights[2];
+    colorWeights[0] = static_cast<quint8>((1.0 - localT) * 255 + 0.5);
+    colorWeights[1] = 255 - colorWeights[0];
+
+    //check if our mixspace exists, it doesn't at startup.
+    if (mixSpace){
+        if (*buffer.colorSpace() != *mixSpace) {
+            buffer = KoColor(mixSpace);
+        }
+        mixSpace->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
+    }
+    else {
+        buffer = KoColor(colorSpace());
+        colorSpace()->mixColorsOp()->mixColors(colors, colorWeights, 2, buffer.data());
+    }
+
+    dst.fromKoColor(buffer);
 }
 
 KoStopGradient * KoStopGradient::fromQGradient(const QGradient * gradient)
@@ -287,27 +282,6 @@ QList<KoGradientStop> KoStopGradient::stops() const
     return m_stops;
 }
 
-void KoStopGradient::loadKarbonGradient(QIODevice *file)
-{
-    QDomDocument doc;
-
-    if (!(doc.setContent(file))) {
-        file->close();
-        setValid(false);
-        return;
-    }
-
-    QDomElement e;
-    QDomNode n = doc.documentElement().firstChild();
-
-    if (!n.isNull()) {
-        e = n.toElement();
-        if (!e.isNull() && e.tagName() == "GRADIENT") {
-            parseKarbonGradient(e);
-        }
-    }
-}
-
 void KoStopGradient::loadSvgGradient(QIODevice *file)
 {
     QDomDocument doc;
@@ -341,106 +315,6 @@ void KoStopGradient::loadSvgGradient(QIODevice *file)
     }
 }
 
-void KoStopGradient::parseKarbonGradient(const QDomElement& element)
-{
-    m_start = QPointF(element.attribute("originX", "0.0").toDouble(), element.attribute("originY", "0.0").toDouble());
-    m_focalPoint = QPointF(element.attribute("focalX", "0.0").toDouble(), element.attribute("focalY", "0.0").toDouble());
-    m_stop = QPointF(element.attribute("vectorX", "0.0").toDouble(), element.attribute("vectorY", "0.0").toDouble());
-
-    setType((QGradient::Type)element.attribute("type", 0).toInt());
-    setSpread((QGradient::Spread)element.attribute("repeatMethod", 0).toInt());
-
-    m_stops.clear();
-
-    qreal color1, color2, color3, color4, opacity;
-    KoColor color;
-    // load stops
-    QDomNodeList list = element.childNodes();
-    for (int i = 0; i < list.count(); ++i) {
-
-        if (list.item(i).isElement()) {
-            QDomElement colorstop = list.item(i).toElement();
-
-            if (colorstop.tagName() == "COLORSTOP") {
-                QDomElement e = colorstop.firstChild().toElement();
-
-                opacity = e.attribute("opacity", "1.0").toFloat();
-
-                QColor tmpColor;
-                const KoColorSpace* stopColorSpace;
-                switch (e.attribute("colorSpace").toUShort()) {
-                case 1:  // cmyk
-                    color1 = e.attribute("v1", "0.0").toFloat();
-                    color2 = e.attribute("v2", "0.0").toFloat();
-                    color3 = e.attribute("v3", "0.0").toFloat();
-                    color4 = e.attribute("v4", "0.0").toFloat();
-
-                    stopColorSpace = KoColorSpaceRegistry::instance()->colorSpace( CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), QString());
-                    if (stopColorSpace) {
-                        quint8 data[5];
-                        data[0] = static_cast<quint8>(color1 * 255 + 0.5);
-                        data[1] = static_cast<quint8>(color2 * 255 + 0.5);
-                        data[2] = static_cast<quint8>(color3 * 255 + 0.5);
-                        data[3] = static_cast<quint8>(color4 * 255 + 0.5);
-                        data[4] = static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5);
-                        color.setColor(data, stopColorSpace);
-                    } else {
-                        // cmyk colorspace not found fallback to rgb
-                        color.convertTo(KoColorSpaceRegistry::instance()->rgb8());
-                        tmpColor.setCmykF(color1, color2, color3, color4);
-                        tmpColor.setAlpha(static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5));
-                        color.fromQColor(tmpColor);
-                    }
-                    break;
-                case 2: // hsv
-                    color1 = e.attribute("v1", "0.0").toFloat();
-                    color2 = e.attribute("v2", "0.0").toFloat();
-                    color3 = e.attribute("v3", "0.0").toFloat();
-
-                    color.convertTo(KoColorSpaceRegistry::instance()->rgb8());
-                    tmpColor.setHsvF(color1, color2, color3);
-                    tmpColor.setAlpha(static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5));
-                    color.fromQColor(tmpColor);
-                    break;
-                case 3: // gray
-                    color1 = e.attribute("v1", "0.0").toFloat();
-                    stopColorSpace = KoColorSpaceRegistry::instance()->colorSpace( GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), QString());
-                    if (stopColorSpace) {
-                        quint8 data[2];
-                        data[0] = static_cast<quint8>(color1 * 255 + 0.5);
-                        data[1] = static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5);
-                        color.setColor(data, stopColorSpace);
-                    } else {
-                        // gray colorspace not found fallback to rgb
-                        color.convertTo(KoColorSpaceRegistry::instance()->rgb8());
-                        tmpColor.setRgbF(color1, color1, color1);
-                        tmpColor.setAlpha(static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5));
-                        color.fromQColor(tmpColor);
-                    }
-                    break;
-                default: // rgb
-                    color1 = e.attribute("v1", "0.0").toFloat();
-                    color2 = e.attribute("v2", "0.0").toFloat();
-                    color3 = e.attribute("v3", "0.0").toFloat();
-                    stopColorSpace = KoColorSpaceRegistry::instance()->rgb8();
-
-                    quint8 data[4];
-                    data[2] = static_cast<quint8>(color1 * 255 + 0.5);
-                    data[1] = static_cast<quint8>(color2 * 255 + 0.5);
-                    data[0] = static_cast<quint8>(color3 * 255 + 0.5);
-                    data[3] = static_cast<quint8>(opacity * OPACITY_OPAQUE_U8 + 0.5);
-
-                    color.setColor(data, stopColorSpace);
-                }
-
-                qreal offset = colorstop.attribute("ramppoint", "0.0").toFloat();
-//              midpoint = colorstop.attribute("midpoint", "0.5").toFloat();
-
-                m_stops.append(KoGradientStop(offset, color));
-            }
-        }
-    }
-}
 
 void KoStopGradient::parseSvgGradient(const QDomElement& element)
 {
@@ -661,12 +535,12 @@ QString KoStopGradient::defaultFileExtension() const
 void KoStopGradient::toXML(QDomDocument &doc, QDomElement &gradientElt) const
 {
     gradientElt.setAttribute("type", "stop");
-    for (int s = 0; s<m_stops.size(); s++) {
+    for (int s = 0; s < m_stops.size(); s++) {
         KoGradientStop stop = m_stops.at(s);
         QDomElement stopElt = doc.createElement("stop");
-        stopElt.setAttribute("offset", stop.first);
+        stopElt.setAttribute("offset", KisDomUtils::toString(stop.first));
         stopElt.setAttribute("bitdepth", stop.second.colorSpace()->colorDepthId().id());
-        stopElt.setAttribute("alpha", stop.second.opacityF());
+        stopElt.setAttribute("alpha", KisDomUtils::toString(stop.second.opacityF()));
         stop.second.toXML(doc, stopElt);
         gradientElt.appendChild(stopElt);
     }
@@ -678,10 +552,10 @@ KoStopGradient KoStopGradient::fromXML(const QDomElement &elt)
     QList<KoGradientStop> stops;
     QDomElement stopElt = elt.firstChildElement("stop");
     while (!stopElt.isNull()) {
-        qreal offset = stopElt.attribute("offset", "0").toDouble();
+        qreal offset = KisDomUtils::toDouble(stopElt.attribute("offset", "0.0"));
         QString bitDepth = stopElt.attribute("bitdepth", Integer8BitsColorDepthID.id());
         KoColor color = KoColor::fromXML(stopElt.firstChildElement(), bitDepth);
-        color.setOpacity(stopElt.attribute("alpha", "1.0").toDouble());
+        color.setOpacity(KisDomUtils::toDouble(stopElt.attribute("alpha", "1.0")));
         stops.append(KoGradientStop(offset, color));
         stopElt = stopElt.nextSiblingElement("stop");
     }

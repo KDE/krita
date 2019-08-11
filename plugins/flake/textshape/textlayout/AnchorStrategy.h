@@ -45,7 +45,7 @@ public:
 
     /**
      * Reparent the anchored shape under the rootArea's container this AnchorStrategy acts for
-    .*
+     *
      * If needed changes the parent KoShapeContainerModel and KoShapeContainer of the anchored shape.
      * It is changed so the anchored shape is now under the rootArea
      */

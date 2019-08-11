@@ -34,6 +34,7 @@ class KSqueezedTextLabel;
 class KisViewManager;
 class KisProgressWidget;
 class KoProgressUpdater;
+class KisMemoryReportButton;
 
 #include "kritaui_export.h"
 
@@ -76,17 +77,13 @@ class KRITAUI_EXPORT KisStatusBar : public QObject
 
 public:
 
-    KisStatusBar(KisViewManager *view);
+    explicit KisStatusBar(KisViewManager *view);
     ~KisStatusBar() override;
 
     void setup();
     void setView(QPointer<KisView> imageView);
-    void addStatusBarItem(QWidget *widget, int stretch = 0, bool permanent = false);
-    void removeStatusBarItem(QWidget *widget);
     void hideAllStatusBarItems();
     void showAllStatusBarItems();
-
-    static QString formatSize(qint64 size);
 
     KoProgressUpdater *progressUpdater();
 
@@ -112,29 +109,33 @@ Q_SIGNALS:
     void memoryStatusUpdated();
 
 private:
-   void updateMemoryStatus();
+
+    void removeStatusBarItem(QWidget *widget);
+    void addStatusBarItem(QWidget *widget, int stretch = 0, bool permanent = false);
+    void updateMemoryStatus();
 
 private:
 
-    QPointer<KisViewManager> m_view;
+    QPointer<KisViewManager> m_viewManager;
     QPointer<KisView> m_imageView;
     QPointer<QStatusBar> m_statusBar;
     KisProgressWidget *m_progress;
     QScopedPointer<KoProgressUpdater> m_progressUpdater;
 
     QToolButton *m_selectionStatus;
-    QPushButton *m_memoryReportBox;
+    KisMemoryReportButton *m_memoryReportBox;
     QLabel *m_pointerPositionLabel;
 
     KSqueezedTextLabel *m_statusBarStatusLabel;
     KSqueezedTextLabel *m_statusBarProfileLabel;
-
 
     QString m_shortMemoryTag;
     QString m_longMemoryTag;
     QIcon m_memoryStatusIcon;
 
     QVector<StatusBarItem> m_statusBarItems;
+
+    bool m_memoryWarningLogged {false};
 };
 
 #endif

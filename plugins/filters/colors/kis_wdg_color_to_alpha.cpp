@@ -48,9 +48,9 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent)
 
     m_widget->intThreshold->setRange(1, 255, 0);
 
-    connect(m_widget->colorSelector, SIGNAL(sigNewColor(KoColor)), SLOT(slotColorSelectorChanged(const KoColor&)));
+    connect(m_widget->colorSelector, SIGNAL(sigNewColor(KoColor)), SLOT(slotColorSelectorChanged(KoColor)));
     connect(m_widget->intThreshold, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_widget->btnCustomColor, SIGNAL(changed(const KoColor)), SLOT(slotCustomColorSelected(const KoColor&)));
+    connect(m_widget->btnCustomColor, SIGNAL(changed(KoColor)), SLOT(slotCustomColorSelected(KoColor)));
 
     KoColor c(Qt::white, KoColorSpaceRegistry::instance()->rgb8());
     m_widget->btnCustomColor->setColor(c);
@@ -111,14 +111,14 @@ KisPropertiesConfigurationSP KisWdgColorToAlpha::configuration() const
 void KisWdgColorToAlpha::hideEvent(QHideEvent *)
 {
     if (m_view) {
-        disconnect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(slotFgColorChanged(const KoColor&)));
+        disconnect(m_view->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), this, SLOT(slotFgColorChanged(KoColor)));
     }
 }
 
 void KisWdgColorToAlpha::showEvent(QShowEvent *)
 {
     if (m_view) {
-        connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(slotFgColorChanged(const KoColor&)));
+        connect(m_view->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), this, SLOT(slotFgColorChanged(KoColor)));
     }
 }
 

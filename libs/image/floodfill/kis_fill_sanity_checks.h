@@ -28,7 +28,7 @@
 #include <stdexcept>
 #define SANITY_ASSERT_MSG(cond, msg) ((!(cond)) ? throw std::invalid_argument(msg) : qt_noop())
 #else
-#define SANITY_ASSERT_MSG(cond, msg) Q_ASSERT((cond))
+#define SANITY_ASSERT_MSG(cond, msg) KIS_SAFE_ASSERT_RECOVER_NOOP((cond))
 #endif /* ENABLE_CHECKS_FOR_TESTING */
 
 #else

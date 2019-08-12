@@ -39,7 +39,7 @@ KisCanvasWindow::KisCanvasWindow(KisMainWindow *mainWindow)
     setLayout(layout);
 }
 
-KisCanvasWindow::~KisCanvasWindow() {}
+KisCanvasWindow::~KisCanvasWindow() = default;
 
 void KisCanvasWindow::closeEvent(QCloseEvent *event)
 {

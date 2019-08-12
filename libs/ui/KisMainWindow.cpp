@@ -110,7 +110,6 @@
 #include "dialogs/kis_about_application.h"
 #include "dialogs/kis_delayed_save_dialog.h"
 #include "dialogs/kis_dlg_preferences.h"
-#include "kis_action.h"
 #include "kis_action_manager.h"
 #include "KisApplication.h"
 #include "kis_canvas2.h"
@@ -148,6 +147,7 @@
 #include <KritaVersionWrapper.h>
 #include <kritaversion.h>
 #include "KisCanvasWindow.h"
+#include "kis_action.h"
 
 #include <mutex>
 
@@ -733,7 +733,7 @@ void KisMainWindow::slotThemeChanged()
 
 bool KisMainWindow::canvasDetached() const
 {
-    return centralWidget() != d->mdiArea;
+    return centralWidget() != d->widgetStack;
 }
 
 void KisMainWindow::setCanvasDetached(bool detach)
@@ -748,14 +748,10 @@ void KisMainWindow::setCanvasDetached(bool detach)
     }
 
     if (detach) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(outgoingWidget == d->mdiArea);
         d->canvasWindow->show();
     } else {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(incomingWidget == d->mdiArea);
         d->canvasWindow->hide();
     }
-
-    d->toggleDetachCanvas->setChecked(detach);
 }
 
 QWidget * KisMainWindow::canvasWindow() const
@@ -2602,6 +2598,7 @@ void KisMainWindow::createActions()
     d->toggleDetachCanvas = actionManager->createAction("view_detached_canvas");
     d->toggleDetachCanvas->setChecked(false);
     connect(d->toggleDetachCanvas, SIGNAL(toggled(bool)), SLOT(setCanvasDetached(bool)));
+    setCanvasDetached(false);
 
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
     actionCollection()->addAction("window", d->windowMenu);

@@ -49,6 +49,8 @@ public:
     virtual void disableUIUpdates() = 0;
     virtual QVector<QRect> enableUIUpdates() = 0;
 
+    virtual bool hasUpdatesRunning() const = 0;
+
     virtual void notifyBatchUpdateStarted() = 0;
     virtual void notifyBatchUpdateEnded() = 0;
     virtual void notifyUIUpdateCompleted(const QRect &rc) = 0;

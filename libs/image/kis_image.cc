@@ -1621,6 +1621,11 @@ void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
     m_d->scheduler.addSpontaneousJob(spontaneousJob);
 }
 
+bool KisImage::hasUpdatesRunning() const
+{
+    return m_d->scheduler.hasUpdatesRunning();
+}
+
 void KisImage::setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter)
 {
     // update filters are *not* recursive!

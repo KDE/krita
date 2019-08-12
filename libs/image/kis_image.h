@@ -1058,6 +1058,14 @@ public Q_SLOTS:
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
     /**
+     * \return true if there are some updates in the updates queue
+     * Please note, that is doesn't guarantee that there are no updates
+     * running in in the updater context at the very moment. To guarantee that
+     * there are no updates left at all, please use barrier jobs instead.
+     */
+    bool hasUpdatesRunning() const;
+
+    /**
      * This method is called by the UI (*not* by the creator of the
      * stroke) when it thinks the current stroke should undo its last
      * action, for example, when the user presses Ctrl+Z while some

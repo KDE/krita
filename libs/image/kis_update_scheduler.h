@@ -142,6 +142,8 @@ public:
     void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
+    bool hasUpdatesRunning() const;
+
     KisStrokeId startStroke(KisStrokeStrategy *strokeStrategy) override;
     void addJob(KisStrokeId id, KisStrokeJobData *data) override;
     void endStroke(KisStrokeId id) override;

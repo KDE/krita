@@ -120,6 +120,10 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         connect(clearRecentFilesLink, SIGNAL(clicked(bool)), this, SLOT(slotClearRecentFiles()));
 
         slotUpdateThemeColors();
+
+        // allows RSS news items to apply analytics tracking.
+        newsWidget->setAnalyticsTracking("?" + analyticsString);
+
     }
 }
 
@@ -186,13 +190,26 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(20));
 
     // HTML links seem to be a bit more stubborn with theme changes... setting inline styles to help with color change
-    userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://forum.kde.org/viewforum.php?f=136\">").append(i18n("User Community")).append("</a>"));
-    gettingStartedLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org/en/user_manual/getting_started.html\">").append(i18n("Getting Started")).append("</a>"));
-    manualLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org/\">").append(i18n("User Manual")).append("</a>"));
-    supportKritaLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita.org/en/support-us/donations/\">").append(i18n("Support Krita")).append("</a>"));
-    kritaWebsiteLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://www.krita.org\">").append(i18n("Krita Website")).append("</a>"));
-    sourceCodeLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://phabricator.kde.org/source/krita/\">").append(i18n("Source Code")).append("</a>"));
-    poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE\">").append(i18n("Powered by KDE")).append("</a>"));
+    userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://forum.kde.org/viewforum.php?f=136&" + analyticsString + "user-community" + "\">")
+                               .append(i18n("User Community")).append("</a>"));
+
+    gettingStartedLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org/en/user_manual/getting_started.html?" + analyticsString + "getting-started" + "\">")
+                                .append(i18n("Getting Started")).append("</a>"));
+
+    manualLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org?" + analyticsString + "documentation-site" + "\">")
+                        .append(i18n("User Manual")).append("</a>"));
+
+    supportKritaLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita.org/en/support-us/donations?" + analyticsString + "donations" + "\">")
+                              .append(i18n("Support Krita")).append("</a>"));
+
+    kritaWebsiteLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://www.krita.org?" + analyticsString + "marketing-site" + "\">")
+                              .append(i18n("Krita Website")).append("</a>"));
+
+    sourceCodeLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://invent.kde.org/kde/krita?" + analyticsString + "source-code" + "\">")
+                            .append(i18n("Source Code")).append("</a>"));
+
+    poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE?" + analyticsString + "what-is-kde" + "\">")
+                              .append(i18n("Powered by KDE")).append("</a>"));
 
     // re-populate recent files since they might have themed icons
     populateRecentDocuments();

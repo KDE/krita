@@ -205,8 +205,7 @@ public:
      * views, and if the document wasn't known yet, it's registered as well.
      */
     KisView *createView(KisDocument *document,
-                        KoCanvasResourceProvider *resourceManager,
-                        KActionCollection *actionCollection,
+                        KisViewManager *viewManager,
                         QWidget *parent);
 
     /**

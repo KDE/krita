@@ -363,6 +363,7 @@ set(kritaui_LIB_SRCS
     KisTemplateTree.cpp
     KisUndoActionsUpdateManager.cpp
     KisView.cpp
+    KisCanvasWindow.cpp
     KisImportExportErrorCode.cpp
     KisImportExportAdditionalChecks.cpp
 

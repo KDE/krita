@@ -1063,7 +1063,7 @@ public Q_SLOTS:
      * running in in the updater context at the very moment. To guarantee that
      * there are no updates left at all, please use barrier jobs instead.
      */
-    bool hasUpdatesRunning() const;
+    bool hasUpdatesRunning() const override;
 
     /**
      * This method is called by the UI (*not* by the creator of the

@@ -46,9 +46,7 @@ class KisAnimationCachePopulator;
 class KisSessionResource;
 
 /**
- * KisPart is the Great Deku Tree of Krita.
- *
- * It is a singleton class which provides the main entry point to the application.
+ * KisPart a singleton class which provides the main entry point to the application.
  * Krita supports multiple documents, multiple main windows, and multiple
  * components.  KisPart manages these resources and provides them to the rest of
  * Krita.  It manages lists of Actions and shortcuts as well.

@@ -383,6 +383,9 @@
      <property name="bottomMargin">
       <number>5</number>
      </property>
+     <property name="spacing">
+      <number>5</number>
+     </property>
      <item row="2" column="1">
       <widget class="QComboBox" name="cmbType">
        <property name="currentIndex">

@@ -94,7 +94,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
 
     sliderOpacity->setRange(0, 100, 0);
     sliderOpacity->setValue(100);
-    sliderOpacity->setSuffix("%");
+    sliderOpacity->setSuffix(i18n("%"));
 
     connect(cmbPredefined, SIGNAL(activated(int)), SLOT(predefinedClicked(int)));
     connect(doubleResolution, SIGNAL(valueChanged(double)),

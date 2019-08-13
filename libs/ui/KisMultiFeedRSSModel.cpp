@@ -72,6 +72,8 @@ public:
                     QString dateStr = streamReader.readElementText();
                     item.pubDate = QDateTime::fromString(dateStr, Qt::RFC2822Date);
                 }
+                else if (streamReader.name() == QLatin1String("category"))
+                    item.category = streamReader.readElementText();
                 else if (streamReader.name() == QLatin1String("description"))
                     item.description = streamReader.readElementText(); //shortenHtml(streamReader.readElementText());
                 break;
@@ -146,6 +148,7 @@ QHash<int, QByteArray> MultiFeedRssModel::roleNames() const
     roleNames[DescriptionRole] = "description";
     roleNames[PubDateRole] = "pubDate";
     roleNames[LinkRole] = "link";
+    roleNames[CategoryRole] = "category";
     roleNames[BlogNameRole] = "blogName";
     roleNames[BlogIconRole] = "blogIcon";
     return roleNames;
@@ -209,6 +212,8 @@ QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
         return item.pubDate.toString("dd-MM-yyyy hh:mm");
     case LinkRole:
         return item.link;
+    case CategoryRole:
+        return item.category;
     case BlogNameRole:
         return item.blogName;
     case BlogIconRole:

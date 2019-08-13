@@ -48,6 +48,7 @@ struct RssItem {
     QString title;
     QString link;
     QString description;
+    QString category;
     QString blogName;
     QString blogIcon;
     QDateTime pubDate;
@@ -58,7 +59,7 @@ typedef QList<RssItem> RssItemList;
 class KisNetworkAccessManager;
 
 enum RssRoles { TitleRole = Qt::UserRole + 1, DescriptionRole, LinkRole,
-                PubDateRole, BlogNameRole, BlogIconRole
+                PubDateRole, CategoryRole, BlogNameRole, BlogIconRole
               };
 
 class KRITAUI_EXPORT MultiFeedRssModel : public QAbstractListModel

@@ -238,9 +238,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
             slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity");
             slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow");
             slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size");
-            slOpacity->setPrefix(QString("%1  ").arg(i18n("Opacity:")));
-            slFlow->setPrefix(QString("%1  ").arg(i18n("Flow:")));
-            slSize->setPrefix(QString("%1  ").arg(i18n("Size:")));
+            slOpacity->setPrefix(QString("%1 ").arg(i18n("Opacity:")));
+            slFlow->setPrefix(QString("%1 ").arg(i18n("Flow:")));
+            slSize->setPrefix(QString("%1 ").arg(i18n("Size:")));
         }
         else {
             slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));

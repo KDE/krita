@@ -419,7 +419,7 @@ public:
      * Return the lastly executed LoD0 command. It is effectively the same
      * as to call undoAdapter()->presentCommand();
      */
-    const KUndo2Command* lastExecutedCommand() const;
+    const KUndo2Command* lastExecutedCommand() const override;
 
     /**
      * Replace current undo store with the new one. The old store
@@ -569,7 +569,7 @@ public:
     void mergeMultipleLayers(QList<KisNodeSP> mergedLayers, KisNodeSP putAfter);
 
     /// @return the exact bounds of the image in pixel coordinates.
-    QRect bounds() const;
+    QRect bounds() const override;
 
     /**
      * Returns the actual bounds of the image, taking LevelOfDetail
@@ -1073,6 +1073,14 @@ public Q_SLOTS:
      * from the existing paint devices.
      */
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
+
+    /**
+     * \return true if there are some updates in the updates queue
+     * Please note, that is doesn't guarantee that there are no updates
+     * running in in the updater context at the very moment. To guarantee that
+     * there are no updates left at all, please use barrier jobs instead.
+     */
+    bool hasUpdatesRunning() const override;
 
     /**
      * This method is called by the UI (*not* by the creator of the

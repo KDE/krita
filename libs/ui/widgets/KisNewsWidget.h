@@ -44,7 +44,7 @@ class KisNewsWidget : public QWidget, public Ui::KisNewsPage
 public:
     explicit KisNewsWidget(QWidget *parent = nullptr);
 
-
+    void setAnalyticsTracking(QString text);
 
 private Q_SLOTS:
     void toggleNews(bool toggle);
@@ -52,6 +52,7 @@ private Q_SLOTS:
 private:
     bool m_getNews {false};
     MultiFeedRssModel *m_rssModel {0};
+    QString analyticsTrackingParameters;
 };
 
 #endif // KISNEWSWIDGET_H

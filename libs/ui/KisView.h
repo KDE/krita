@@ -75,7 +75,7 @@ public:
     /**
      * Creates a new view for the document.
      */
-    KisView(KisDocument *document, KoCanvasResourceProvider *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
+    KisView(KisDocument *document, KisViewManager *viewManager, QWidget *parent = 0);
     ~KisView() override;
 
     // Temporary while teasing apart view and mainwindow

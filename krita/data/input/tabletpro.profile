@@ -14,7 +14,7 @@
 
 [General]
 name=Tablet Pro (for use with the Tablet Pro application on Windows)
-version=3
+version=4
 
 [Pan Canvas]
 0={4;1;[];0;0;0}

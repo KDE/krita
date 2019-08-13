@@ -23,6 +23,7 @@
 #include "kis_paintop_settings.h"
 #include <strokes/freehand_stroke.h>
 #include <strokes/KisFreehandStrokeInfo.h>
+#include "KisAsyncronousStrokeUpdateHelper.h"
 #include <kis_brush.h>
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent): QGraphicsView(parent)
@@ -306,7 +307,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                                              QPointF(pointTwo.pos().x(),
                                                                      handleY),
                                                              pointTwo));
-            m_image->addJob(strokeId, new FreehandStrokeStrategy::UpdateData(true));
+            m_image->addJob(strokeId, new KisAsyncronousStrokeUpdateHelper::UpdateData(true));
         }
 
     } else {
@@ -330,7 +331,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                                          QPointF(m_canvasCenterPoint.x(),
                                                                  m_canvasCenterPoint.y()+this->height()),
                                                          m_curvePointPI2));
-        m_image->addJob(strokeId, new FreehandStrokeStrategy::UpdateData(true));
+        m_image->addJob(strokeId, new KisAsyncronousStrokeUpdateHelper::UpdateData(true));
     }
     m_image->endStroke(strokeId);
     m_image->waitForDone();

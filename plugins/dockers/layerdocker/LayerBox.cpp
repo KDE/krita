@@ -636,6 +636,8 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
             menu.addAction(m_removeAction);
             addActionToMenu(&menu, "duplicatelayer");
             addActionToMenu(&menu, "merge_layer");
+            addActionToMenu(&menu, "new_from_visible");
+
 
             if (singleLayer) {
                 addActionToMenu(&menu, "flatten_image");

@@ -218,7 +218,7 @@
           <string>Height</string>
          </property>
          <property name="text">
-          <string>H:</string>
+          <string>Height:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -316,7 +316,7 @@
           <string>Width</string>
          </property>
          <property name="text">
-          <string>W:</string>
+          <string>Width:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

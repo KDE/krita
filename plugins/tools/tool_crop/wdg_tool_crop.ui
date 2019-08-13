@@ -290,7 +290,7 @@
           </size>
          </property>
          <property name="toolTip">
-          <string>Ratio</string>
+          <string>Aspect ratio</string>
          </property>
          <property name="singleStep">
           <double>0.100000000000000</double>

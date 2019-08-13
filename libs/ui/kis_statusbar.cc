@@ -232,7 +232,7 @@ void KisStatusBar::imageSizeChanged()
     if (image) {
         qint32 w = image->width();
         qint32 h = image->height();
-        sizeText = QString("%1 &x %2 (%3)").arg(w).arg(h).arg(m_shortMemoryTag);
+        sizeText = QString(i18nc("@info:status width x height (file size)", "%1 &x %2 (%3)")).arg(w).arg(h).arg(m_shortMemoryTag);
     } else {
         sizeText = m_shortMemoryTag;
     }

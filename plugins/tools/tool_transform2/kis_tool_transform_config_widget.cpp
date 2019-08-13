@@ -133,8 +133,6 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     translateYBox->setRange(-10000, 10000);
 
 
-    scaleXBox->setSuffix("%");
-    scaleYBox->setSuffix("%");
     scaleXBox->setRange(-10000, 10000);
     scaleYBox->setRange(-10000, 10000);
     scaleXBox->setValue(100.0);

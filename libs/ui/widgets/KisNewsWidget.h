@@ -49,10 +49,21 @@ public:
 private Q_SLOTS:
     void toggleNews(bool toggle);
     void itemSelected(const QModelIndex &idx);
+    void rssDataChanged();
 private:
     bool m_getNews {false};
     MultiFeedRssModel *m_rssModel {0};
     QString analyticsTrackingParameters;
+
+    /// for new Krita version notification
+    QString newVersionNumber;
+    QString newVersionLink;
+
+    // version checking logic tells us we need to update our Krita
+    void calculateVersionUpdateStatus();
+    bool isDevelopmentVersion = false;
+    bool needsVersionUpdate = false;
+
 };
 
 #endif // KISNEWSWIDGET_H

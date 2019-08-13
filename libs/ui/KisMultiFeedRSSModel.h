@@ -90,6 +90,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void articleCountChanged(int arg);
+    void feedDataChanged();
 
 private Q_SLOTS:
     void appendFeedData(QNetworkReply *reply);

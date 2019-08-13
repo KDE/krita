@@ -1184,7 +1184,7 @@ void SvgTextEditor::createActions()
     spnLineHeight->setToolTip(i18n("Line height"));
     spnLineHeight->setRange(0.0, 1000.0);
     spnLineHeight->setSingleStep(10.0);
-    spnLineHeight->setSuffix("%");
+    spnLineHeight->setSuffix(i18n("%"));
     connect(spnLineHeight, SIGNAL(valueChanged(double)), SLOT(setLineHeight(double)));
     lineHeight->setDefaultWidget(spnLineHeight);
     actionCollection()->addAction("svg_line_height", lineHeight);

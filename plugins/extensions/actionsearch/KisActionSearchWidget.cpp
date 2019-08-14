@@ -154,7 +154,7 @@ KisActionSearchLine::KisActionSearchLine(KActionCollection *actionCollection, QW
 {
     d->frame = new QFrame(this);
     d->searchWidget = new KisActionSearchWidget(actionCollection, this);
-    connect(d->searchWidget, SIGNAL(actionTriggered), SLOT(hidePopup()));
+    connect(d->searchWidget, SIGNAL(actionTriggered()), SLOT(hidePopup()));
     d->frame->setFrameStyle(QFrame::Box |  QFrame::Plain);
     d->frame->setWindowFlags(Qt::Popup);
     d->frameLayout = new QHBoxLayout(d->frame);

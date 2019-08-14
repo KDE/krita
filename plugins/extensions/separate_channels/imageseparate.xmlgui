@@ -1,9 +1,0 @@
-<!DOCTYPE gui SYSTEM "gui.dtd">
-<gui library="kritaseparatechannels" version="6" translationDomain="krita">
-<MenuBar>
-    <Menu name="Image"><text>Image</text>
-	<Separator/>
-	<Action name="separate"/>
-    </Menu>
-</MenuBar>
-</gui>

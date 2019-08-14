@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ActionCollection version="2" name="ActionSearch">
+<ActionCollection version="2" name="Krita">
   <Actions category="General">
+    <text>General</text>
     <Action name="actionsearch">
       <icon></icon>
-      <text>Search Actions</text>
+      <text>Search in Krita</text>
       <whatsThis></whatsThis>
-      <toolTip>Workspaces</toolTip>
-      <iconText>Workspaces</iconText>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

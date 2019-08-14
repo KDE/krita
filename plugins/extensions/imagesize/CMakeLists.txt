@@ -17,4 +17,3 @@ ki18n_wrap_ui(kritaimagesize_SOURCES
 add_library(kritaimagesize MODULE ${kritaimagesize_SOURCES})
 target_link_libraries(kritaimagesize kritaui)
 install(TARGETS kritaimagesize  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-install( FILES  imagesize.xmlgui  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

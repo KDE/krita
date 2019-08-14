@@ -11,6 +11,4 @@ target_link_libraries(kritaactionsearch kritaui)
 
 install(TARGETS kritaactionsearch  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( FILES  ActionSearch.xmlgui  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-
-install( FILES actionsearch.action DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
+install( FILES ActionSearch.action DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)

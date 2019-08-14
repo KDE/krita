@@ -1,8 +1,0 @@
-<!DOCTYPE gui SYSTEM "gui.dtd">
-<gui library="kritametadataeditor" version="2" translationDomain="krita">
-<MenuBar>
-    <Menu name="Layer"><text>La&amp;yer</text>
-        <Action name="EditLayerMetaData"  group="layer_properties_merge"/>
-    </Menu>
-</MenuBar>
-</gui>

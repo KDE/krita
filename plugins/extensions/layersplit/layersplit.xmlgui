@@ -1,8 +1,0 @@
-<!DOCTYPE gui SYSTEM "gui.dtd">
-<gui library="kritaimagesize" version="6" translationDomain="krita">
-<MenuBar>
-    <Menu name="Layer"><text>&amp;Layer</text>
-	<Action name="layersplit"/>
-    </Menu>
-</MenuBar>
-</gui>

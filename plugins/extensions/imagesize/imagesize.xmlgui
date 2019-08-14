@@ -1,5 +1,5 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritaimagesize" version="7" translationDomain="krita">
+<!DOCTYPE gui SYSTEM "gui.dtd">
+<gui library="kritaimagesize" version="7" translationDomain="krita">
 <MenuBar>
     <Menu name="Image"><text>Image</text>
 	<Action name="imagesize" group="image_transform_merge"/>
@@ -13,4 +13,4 @@
 	<Action name="selectionscale"/>
     </Menu>
 </MenuBar>
-</kpartgui>
+</gui>

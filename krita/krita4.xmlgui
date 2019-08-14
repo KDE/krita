@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
+<gui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
 version="431"
@@ -402,7 +402,6 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     <Action name="mirror_actions"/>
     <Action name="expanding_spacer_1"/>
     <Action name="select_layout"/>
-    <Action name="actionsearch"/>
     <Action name="workspaces"/>
   </ToolBar>
-</kpartgui>
+</gui>

@@ -1,5 +1,5 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritamodifyselection" version="6" translationDomain="krita">
+<!DOCTYPE gui SYSTEM "gui.dtd">
+<gui library="kritamodifyselection" version="6" translationDomain="krita">
     <MenuBar>
         <Menu name="Select"><text>&amp;Select</text>
             <Action name="featherselection"/>
@@ -9,4 +9,4 @@
             <Action name="smoothselection"/>
         </Menu>
     </MenuBar>
-</kpartgui>
+</gui>

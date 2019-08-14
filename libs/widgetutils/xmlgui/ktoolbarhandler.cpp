@@ -41,13 +41,13 @@ namespace
 const char actionListName[] = "show_menu_and_toolbar_actionlist";
 
 const char guiDescription[] = ""
-                             "<!DOCTYPE kpartgui><kpartgui name=\"StandardToolBarMenuHandler\">"
+                             "<!DOCTYPE gui><gui name=\"StandardToolBarMenuHandler\">"
                              "<MenuBar>"
                              "    <Menu name=\"settings\">"
                              "        <ActionList name=\"%1\" />"
                              "    </Menu>"
                              "</MenuBar>"
-                             "</kpartgui>";
+                             "</gui>";
 
 class BarActionBuilder
 {

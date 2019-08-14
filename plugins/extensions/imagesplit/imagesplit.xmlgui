@@ -1,8 +1,8 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritaimagesize" version="6" translationDomain="krita">
+<!DOCTYPE gui SYSTEM "gui.dtd">
+<gui library="kritaimagesize" version="6" translationDomain="krita">
 <MenuBar>
     <Menu name="Image"><text>Image</text>
 	<Action name="imagesplit"/>
     </Menu>
 </MenuBar>
-</kpartgui>
+</gui>

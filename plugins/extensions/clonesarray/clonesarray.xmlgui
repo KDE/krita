@@ -1,9 +1,9 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritaclonesarray" version="9" translationDomain="krita">
+<!DOCTYPE gui SYSTEM "gui.dtd">
+<gui library="kritaclonesarray" version="9" translationDomain="krita">
     <MenuBar>
         <Menu name="Layer">
             <text>La&amp;yer</text>
             <Action name="clones_array" group="layer_transform_merge"/>
         </Menu>
     </MenuBar>
-</kpartgui>
+</gui>

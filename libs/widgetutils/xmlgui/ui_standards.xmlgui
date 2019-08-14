@@ -1,5 +1,5 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="standard_containers" version="17" translationDomain="kxmlgui5">
+<!DOCTYPE gui SYSTEM "gui.dtd">
+<gui name="standard_containers" version="17" translationDomain="kxmlgui5">
 <MenuBar>
   <MergeLocal name="first_menu"/>
   <Menu name="file"><text>&amp;File</text>
@@ -216,4 +216,4 @@
   <Action name="help"/>
 </ToolBar>
 <StatusBar/>
-</kpartgui>
+</gui>

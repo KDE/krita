@@ -1,5 +1,5 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritaresourcemanager" version="8" translationDomain="krita">
+<!DOCTYPE gui SYSTEM "gui.dtd">
+<gui library="kritaresourcemanager" version="8" translationDomain="krita">
 <MenuBar>
      <Menu name="edit"><text>&amp;Edit</text>
          <Menu name="resources"><text>&amp;Resources</text>
@@ -10,4 +10,4 @@
  </Menu>
 
 </MenuBar>
-</kpartgui>
+</gui>

@@ -1,5 +1,5 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui library="kritashearimage" version="7" translationDomain="krita">
+<!DOCTYPE gui SYSTEM "gui.dtd">
+<gui library="kritashearimage" version="7" translationDomain="krita">
 <MenuBar>
     <Menu name="Image"><text>&amp;Image</text>
 	<Action name="shearimage" group="image_transform_merge"/>
@@ -8,4 +8,4 @@
 	<Action name="shearlayer" group="layer_transform_merge"/>
     </Menu>
 </MenuBar>
-</kpartgui>
+</gui>

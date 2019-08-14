@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>WdgActionSearch</class>
- <widget class="QWidget" name="WdgActionSearch">
+ <class>WdgSearch</class>
+ <widget class="QWidget" name="WdgSearch">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -27,7 +27,7 @@
    <item>
     <widget class="QPushButton" name="bnTrigger">
      <property name="text">
-      <string>E&amp;xecute Action</string>
+      <string>&amp;Go</string>
      </property>
     </widget>
    </item>

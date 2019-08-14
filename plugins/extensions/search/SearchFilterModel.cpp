@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ActionFilterModel.h"
+#include "SearchFilterModel.h"
 
 #include <QDebug>
 #include <QPushButton>
@@ -28,24 +28,22 @@
 
 #include <kis_global.h>
 
-#include "ActionModel.h"
-
-ActionFilterModel::ActionFilterModel(QObject *parent)
+SearchFilterModel::SearchFilterModel(QObject *parent)
 {
 
 }
 
-void ActionFilterModel::setFilterText(const QString &filter)
+void SearchFilterModel::setFilterText(const QString &filter)
 {
     m_filter = filter;
 }
 
-bool ActionFilterModel::filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const
+bool SearchFilterModel::filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const
 {
     return true;
 }
 
-bool ActionFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+bool SearchFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     const QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
     if (!index.isValid()) return false;
@@ -62,7 +60,7 @@ bool ActionFilterModel::filterAcceptsRow(int source_row, const QModelIndex &sour
     return hit;
 }
 
-bool ActionFilterModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
+bool SearchFilterModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
     QVariant leftData = sourceModel()->data(source_left, Qt::DisplayRole);
     QVariant rightData = sourceModel()->data(source_right, Qt::DisplayRole);

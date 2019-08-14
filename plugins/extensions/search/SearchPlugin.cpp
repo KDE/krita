@@ -18,7 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ActionSearch.h"
+#include "SearchPlugin.h"
 
 #include <QDebug>
 
@@ -32,24 +32,19 @@
 #include <QAction>
 #include <QWidgetAction>
 
-#include "ActionSearchLine.h"
+#include "SearchWidget.h"
 
-K_PLUGIN_FACTORY_WITH_JSON(ActionSearchFactory, "kritaactionsearch.json", registerPlugin<ActionSearch>();)
+K_PLUGIN_FACTORY_WITH_JSON(SearchPluginFactory, "kritasearch.json", registerPlugin<SearchPluginFactory>();)
 
-ActionSearch::ActionSearch(QObject *parent, const QVariantList &)
+SearchPlugin::SearchPlugin(QObject *parent, const QVariantList &)
     : KisActionPlugin(parent)
 {
-    m_actionSearchLine = new ActionSearchLine(viewManager()->actionCollection(), 0);
+    m_actionSearchLine = new SearchWidget(viewManager()->actionCollection(), 0);
     m_searchAction = new QWidgetAction(this);
-    KisActionRegistry::instance()->propertizeAction("actionsearch", m_searchAction);
-    viewManager()->actionCollection()->addAction("actionsearch", m_searchAction);
+    KisActionRegistry::instance()->propertizeAction("searchaction", m_searchAction);
+    viewManager()->actionCollection()->addAction("searchaction", m_searchAction);
     m_searchAction->setDefaultWidget(m_actionSearchLine);
 }
 
-ActionSearch::~ActionSearch()
-{
-    qDebug() << "We get deleted";
-}
 
-
-#include "ActionSearch.moc"
+#include "SearchPlugin.moc"

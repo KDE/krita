@@ -1,5 +1,7 @@
 /*
- *  Copyright (c) 2019 Boudewijn Rempt <boud@valdyas.org>
+ * actionsearch.h -- Part of Krita
+ *
+ * Copyright (c) 2004 Michael Thaler (michael.thaler@physik.tu-muenchen.de)
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,33 +15,27 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA. */
 
-#ifndef ACTIONSEARCHWIDGET_H
-#define ACTIONSEARCHWIDGET_H
+#ifndef ACTIONSEARCH_H
+#define ACTIONSEARCH_H
 
-#include <QObject>
-#include <QWidget>
+#include <QVariant>
 
-#include <kactioncollection.h>
+#include <KisActionPlugin.h>
 
-#include "ui_WdgActionSearch.h"
+class QWidgetAction;
+class SearchWidget;
 
-class ActionSearchWidget : public QWidget, public Ui_WdgActionSearch
+class SearchPlugin : public KisActionPlugin
 {
     Q_OBJECT
 public:
-    explicit ActionSearchWidget(KActionCollection *actionCollection, QWidget *parent = 0);
-    virtual ~ActionSearchWidget() override;
-Q_SIGNALS:
-    void actionTriggered();
-private Q_SLOTS:
-    void actionSelected(const QModelIndex &idx);
+    SearchPlugin(QObject *parent, const QVariantList &);
+
 private:
-    class Private;
-    QScopedPointer<Private> d;
+    QWidgetAction *m_searchAction {0};
+    SearchWidget *m_actionSearchLine {0};
 };
 
-
-#endif
+#endif // ACTIONSEARCH_H

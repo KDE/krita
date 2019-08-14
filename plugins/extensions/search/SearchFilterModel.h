@@ -16,26 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef ACTIONMODEL_H
-#define ACTIONMODEL_H
+#ifndef SEARCHFILTERMODEL_H
+#define SEARCHFILTERMODEL_H
 
 #include <QObject>
-#include <QAbstractListModel>
+#include <QSortFilterProxyModel>
 
-class KActionCollection;
+#include <kactioncollection.h>
 
-class ActionModel : public QAbstractListModel {
+
+class SearchFilterModel : public QSortFilterProxyModel
+{
     Q_OBJECT
 public:
-    explicit ActionModel(KActionCollection *actionCollection, QObject *parent = 0);
 
-    // reimp from QAbstractListModel
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-
+    explicit SearchFilterModel(QObject *parent = 0);
+    void setFilterText(const QString &filter);
+protected:
+    bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+    bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 private:
-    KActionCollection *m_actionCollection {0};
+    QString m_filter;
 };
+
 
 #endif

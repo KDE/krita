@@ -2,7 +2,7 @@
 <ActionCollection version="2" name="Krita">
   <Actions category="General">
     <text>General</text>
-    <Action name="actionsearch">
+    <Action name="search">
       <icon></icon>
       <text>Search in Krita</text>
       <whatsThis></whatsThis>

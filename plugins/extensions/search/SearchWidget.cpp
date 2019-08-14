@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ActionSearchLine.h"
+#include "SearchWidget.h"
 
 #include <QDebug>
 #include <QPushButton>
@@ -28,23 +28,23 @@
 
 #include <kis_global.h>
 
-#include "ActionSearchWidget.h"
+#include "SearchPopup.h"
 
-class ActionSearchLine::Private
+class SearchWidget::Private
 {
 public:
     bool popupVisible {false};
     QFrame *frame {0};
-    ActionSearchWidget *searchWidget {0};
+    SearchPopup *searchWidget {0};
     QHBoxLayout *frameLayout {0};
 };
 
-ActionSearchLine::ActionSearchLine(KActionCollection *actionCollection, QWidget *parent)
+SearchWidget::SearchWidget(KActionCollection *actionCollection, QWidget *parent)
     : QLineEdit(parent)
-    , d(new ActionSearchLine::Private())
+    , d(new SearchWidget::Private())
 {
     d->frame = new QFrame(this);
-    d->searchWidget = new ActionSearchWidget(actionCollection, this);
+    d->searchWidget = new SearchPopup(actionCollection, this);
     connect(d->searchWidget, SIGNAL(actionTriggered()), SLOT(hidePopup()));
     d->frame->setFrameStyle(QFrame::Box |  QFrame::Plain);
     d->frame->setWindowFlags(Qt::Popup);
@@ -57,11 +57,11 @@ ActionSearchLine::ActionSearchLine(KActionCollection *actionCollection, QWidget 
     d->frame->setFrameStyle(Qt::Popup);
 }
 
-ActionSearchLine::~ActionSearchLine()
+SearchWidget::~SearchWidget()
 {
 }
 
-void ActionSearchLine::showPopup()
+void SearchWidget::showPopup()
 {
     if (d->searchWidget && !d->searchWidget->isVisible()) {
         d->frame->raise();
@@ -73,20 +73,20 @@ void ActionSearchLine::showPopup()
     }
 }
 
-void ActionSearchLine::hidePopup()
+void SearchWidget::hidePopup()
 {
     if (d->searchWidget) {
         d->frame->setVisible(false);
     }
 }
 
-void ActionSearchLine::focusInEvent(QFocusEvent *ev)
+void SearchWidget::focusInEvent(QFocusEvent *ev)
 {
     QLineEdit::focusInEvent(ev);
     showPopup();
 }
 
-void ActionSearchLine::adjustPosition()
+void SearchWidget::adjustPosition()
 {
     QSize popSize = d->searchWidget->size();
     QRect popupRect(this->mapToGlobal(QPoint(0, this->size().height())), popSize);

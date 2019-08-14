@@ -16,28 +16,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef ACTIONFILTERMODEL_H
-#define ACTIONFILTERMODEL_H
+#ifndef SearchPopup_H
+#define SearchPopup_H
 
 #include <QObject>
-#include <QSortFilterProxyModel>
+#include <QWidget>
 
 #include <kactioncollection.h>
 
+#include "ui_WdgSearch.h"
 
-class ActionFilterModel : public QSortFilterProxyModel
+class SearchPopup : public QWidget, public Ui_WdgSearch
 {
     Q_OBJECT
 public:
+    explicit SearchPopup(KActionCollection *actionCollection, QWidget *parent = 0);
+    virtual ~SearchPopup() override;
+Q_SIGNALS:
+    void actionTriggered();
+private Q_SLOTS:
+    void actionSelected(const QModelIndex &idx);
 
-    explicit ActionFilterModel(QObject *parent = 0);
-    void setFilterText(const QString &filter);
-protected:
-    bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
-    bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
 private:
-    QString m_filter;
+    class Private;
+    QScopedPointer<Private> d;
 };
 
 

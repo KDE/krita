@@ -386,7 +386,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
     <Separator/>
-    <Action name="actionsearch"/>
+    <Action name="search"/>
   </ToolBar>
   <ToolBar name="BrushesAndStuff" position="top">
     <Text>Brushes and Stuff</Text>

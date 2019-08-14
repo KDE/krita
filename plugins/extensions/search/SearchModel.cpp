@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ActionModel.h"
+#include "SearchModel.h"
 
 #include <QDebug>
 #include <QPushButton>
@@ -29,25 +29,25 @@
 #include <kis_global.h>
 #include <kactioncollection.h>
 
-ActionModel::ActionModel(KActionCollection *actionCollection, QObject *parent)
+SearchModel::SearchModel(KActionCollection *actionCollection, QObject *parent)
     : QAbstractListModel(parent)
     , m_actionCollection(actionCollection)
 {
 }
 
 // reimp from QAbstractListModel
-int ActionModel::rowCount(const QModelIndex &/*parent*/) const
+int SearchModel::rowCount(const QModelIndex &/*parent*/) const
 {
     qDebug() << "Count" << m_actionCollection->count();
     return m_actionCollection->count();
 }
 
-int ActionModel::columnCount(const QModelIndex &/*parent*/) const
+int SearchModel::columnCount(const QModelIndex &/*parent*/) const
 {
     return 1;
 }
 
-QVariant ActionModel::data(const QModelIndex &index, int role) const
+QVariant SearchModel::data(const QModelIndex &index, int role) const
 {
     qDebug() << index.isValid() << index;
 

@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef ACTIONSEARCHLINE_H
-#define ACTIONSEARCHLINE_H
+#ifndef SearchWidget_H
+#define SearchWidget_H
 
 #include <QObject>
 #include <QWidget>
@@ -30,12 +30,12 @@
 
 #include "ui_WdgActionSearch.h"
 
-class ActionSearchLine : public QLineEdit
+class SearchWidget : public QLineEdit
 {
     Q_OBJECT
 public:
-    explicit ActionSearchLine(KActionCollection *actionCollection, QWidget *parent = 0);
-    virtual ~ActionSearchLine() override;
+    explicit SearchWidget(KActionCollection *actionCollection, QWidget *parent = 0);
+    virtual ~SearchWidget() override;
 
 private Q_SLOTS:
     void showPopup();

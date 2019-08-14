@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ActionSearchWidget.h"
+#include "SearchPopup.h"
 
 #include <QDebug>
 #include <QPushButton>
@@ -28,35 +28,35 @@
 
 #include <kis_global.h>
 
-#include "ActionModel.h"
-#include "ActionFilterModel.h"
+#include "SearchModel.h"
+#include "SearchFilterModel.h"
 
-class ActionSearchWidget::Private
+class SearchPopup::Private
 {
 public:
-    ActionFilterModel *searchModel;
+    SearchFilterModel *searchModel;
 
 };
 
-ActionSearchWidget::ActionSearchWidget(KActionCollection *actionCollection, QWidget *parent)
+SearchPopup::SearchPopup(KActionCollection *actionCollection, QWidget *parent)
     : QWidget(parent)
-    , Ui_WdgActionSearch()
-    , d(new ActionSearchWidget::Private())
+    , Ui_WdgSearch()
+    , d(new SearchPopup::Private())
 {
     setupUi(this);
     connect(bnTrigger, SIGNAL(pressed()), SIGNAL(actionTriggered()));
     connect(lstAction, SIGNAL(activated(QModelIndex)), SLOT(actionSelected(QModelIndex)));
-    ActionModel *actionModel = new ActionModel(actionCollection, this);
-    d->searchModel = new ActionFilterModel(this);
-    d->searchModel->setSourceModel(actionModel);
-    lstAction->setModel(actionModel);
+    SearchModel *searchModel = new SearchModel(actionCollection, this);
+    d->searchModel = new SearchFilterModel(this);
+    d->searchModel->setSourceModel(searchModel);
+    lstAction->setModel(searchModel);
 }
 
-ActionSearchWidget::~ActionSearchWidget()
+SearchPopup::~SearchPopup()
 {
 }
 
-void ActionSearchWidget::actionSelected(const QModelIndex &idx)
+void SearchPopup::actionSelected(const QModelIndex &idx)
 {
     lblWhatsThis->setText(idx.data(Qt::WhatsThisRole).toString());
 }

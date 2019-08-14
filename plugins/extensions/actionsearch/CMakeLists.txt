@@ -1,6 +1,9 @@
 set(kritaactionsearch_SOURCES 
     ActionSearch.cpp
-    KisActionSearchWidget.cpp
+    ActionSearchWidget.cpp
+    ActionModel.cpp
+    ActionFilterModel.cpp
+    ActionSearchLine.cpp
 )
 
 ki18n_wrap_ui(kritaactionsearch_SOURCES WdgActionSearch.ui )

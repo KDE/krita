@@ -32,14 +32,14 @@
 #include <QAction>
 #include <QWidgetAction>
 
-#include "KisActionSearchWidget.h"
+#include "ActionSearchLine.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(ActionSearchFactory, "kritaactionsearch.json", registerPlugin<ActionSearch>();)
 
 ActionSearch::ActionSearch(QObject *parent, const QVariantList &)
     : KisActionPlugin(parent)
 {
-    m_actionSearchLine = new KisActionSearchLine(viewManager()->actionCollection(), 0);
+    m_actionSearchLine = new ActionSearchLine(viewManager()->actionCollection(), 0);
     m_searchAction = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("actionsearch", m_searchAction);
     viewManager()->actionCollection()->addAction("actionsearch", m_searchAction);

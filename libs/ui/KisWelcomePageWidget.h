@@ -65,6 +65,14 @@ private:
 
     QMap<QString, QIcon> m_thumbnailMap;
 
+
+    /// help us see how many people are clicking startup screen links
+    /// you can see the results in Matomo (stats.kde.org)
+    /// this will be listed in the "Acquisition" section of Matomo
+    /// just append some text to this to associate it with an event/page
+    const QString analyticsString = "pk_campaign=startup-sceen&pk_kwd=";
+
+
 private Q_SLOTS:
     void slotNewFileClicked();
     void slotOpenFileClicked();

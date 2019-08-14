@@ -28,7 +28,7 @@
 #include "KoShapeContainer.h"
 #include "KoShapeManager.h"
 #include <KoRTree.h>
-#include "kis_thread_safe_signal_compressor.h"
+#include <QMutex>
 
 
 class KoCanvasBase;
@@ -44,10 +44,8 @@ public:
           canvas(c),
           tree(4, 2),
           q(shapeManager),
-          shapeInterface(shapeManager),
-          updateTreeCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
+          shapeInterface(shapeManager)
     {
-        connect(&updateTreeCompressor, SIGNAL(timeout()), q, SLOT(updateTree()));
     }
 
     ~Private() {
@@ -118,7 +116,7 @@ public:
     QHash<KoShape*, int> shapeIndexesBeforeUpdate;
     KoShapeManager *q;
     KoShapeManager::ShapeInterface shapeInterface;
-    KisThreadSafeSignalCompressor updateTreeCompressor;
+    QMutex mutex;
 };
 
 #endif

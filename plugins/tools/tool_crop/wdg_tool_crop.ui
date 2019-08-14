@@ -218,7 +218,7 @@
           <string>Height</string>
          </property>
          <property name="text">
-          <string>H:</string>
+          <string>Height:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -290,7 +290,7 @@
           </size>
          </property>
          <property name="toolTip">
-          <string>Ratio</string>
+          <string>Aspect ratio</string>
          </property>
          <property name="singleStep">
           <double>0.100000000000000</double>
@@ -316,7 +316,7 @@
           <string>Width</string>
          </property>
          <property name="text">
-          <string>W:</string>
+          <string>Width:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -381,6 +381,9 @@
       <number>5</number>
      </property>
      <property name="bottomMargin">
+      <number>5</number>
+     </property>
+     <property name="spacing">
       <number>5</number>
      </property>
      <item row="2" column="1">

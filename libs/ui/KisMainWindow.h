@@ -188,6 +188,12 @@ public:
     QStringList showOpenFileDialog(bool isImporting);
 
     /**
+     * The top-level window used for a detached canvas.
+     */
+    QWidget *canvasWindow() const;
+    bool canvasDetached() const;
+
+    /**
      * Shows if the main window is saving anything right now. If the
      * user presses Ctrl+W too fast, then the document can be close
      * before the saving is completed. I'm not sure if it is fixable
@@ -297,7 +303,10 @@ public Q_SLOTS:
      */
     void reloadRecentFileList();
 
-
+    /**
+     * Detach canvas onto a separate window, or restore it back to to main window.
+     */
+    void setCanvasDetached(bool detached);
 
 private Q_SLOTS:
     /**

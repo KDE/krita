@@ -74,6 +74,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <text>&amp;View</text>
       <Action name="view_show_canvas_only"/>
       <Action name="fullscreen"/>
+      <Action name="view_detached_canvas"/>
       <Action name="wrap_around_mode"/>
       <Action name="level_of_detail_mode"/>
       <Action name="softProof"/>

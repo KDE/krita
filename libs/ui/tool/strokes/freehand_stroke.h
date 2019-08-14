@@ -176,29 +176,6 @@ public:
         KoColor customColor;
     };
 
-    class UpdateData : public KisStrokeJobData {
-    public:
-        UpdateData(bool _forceUpdate)
-            : KisStrokeJobData(KisStrokeJobData::SEQUENTIAL),
-              forceUpdate(_forceUpdate)
-        {}
-
-
-        KisStrokeJobData* createLodClone(int levelOfDetail) override {
-            return new UpdateData(*this, levelOfDetail);
-        }
-
-    private:
-        UpdateData(const UpdateData &rhs, int levelOfDetail)
-            : KisStrokeJobData(rhs),
-              forceUpdate(rhs.forceUpdate)
-        {
-            Q_UNUSED(levelOfDetail);
-        }
-    public:
-        bool forceUpdate = false;
-    };
-
 public:
     FreehandStrokeStrategy(KisResourcesSnapshotSP resources,
                            KisFreehandStrokeInfo *strokeInfo,

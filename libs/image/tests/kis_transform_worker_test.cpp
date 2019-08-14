@@ -430,10 +430,6 @@ void KisTransformWorkerTest::testXScaleDown()
     t.end();
 
     QRect rc = dev->exactBounds();
-
-    QCOMPARE(rc.width(), qCeil(image.width() * 0.123));
-    QCOMPARE(rc.height(), image.height());
-
     QImage result = dev->convertToQImage(0, rc.x(), rc.y(), rc.width(), rc.height());
     QPoint errpoint;
     image.load(QString(FILES_DATA_DIR) + QDir::separator() + "scaledownx_result.png");

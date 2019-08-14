@@ -50,6 +50,8 @@ public Q_SLOTS:
     /// have a preview, an icon is used that needs to be updated
     void populateRecentDocuments();
 
+    void slotUpdateVersionMessage();
+
 protected:
 
     // QWidget overrides
@@ -71,6 +73,13 @@ private:
     /// this will be listed in the "Acquisition" section of Matomo
     /// just append some text to this to associate it with an event/page
     const QString analyticsString = "pk_campaign=startup-sceen&pk_kwd=";
+
+
+    // keeping track of link colors with theme change
+    QColor textColor;
+    QColor backgroundColor;
+    QColor blendedColor;
+    QString blendedStyle;
 
 
 private Q_SLOTS:

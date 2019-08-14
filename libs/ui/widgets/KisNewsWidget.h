@@ -46,6 +46,12 @@ public:
 
     void setAnalyticsTracking(QString text);
 
+    bool isDevelopmentBuild();
+    bool hasUpdateAvailable();
+
+Q_SIGNALS:
+    void newsDataChanged();
+
 private Q_SLOTS:
     void toggleNews(bool toggle);
     void itemSelected(const QModelIndex &idx);

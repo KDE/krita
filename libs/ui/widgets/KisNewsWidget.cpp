@@ -97,6 +97,16 @@ void KisNewsWidget::setAnalyticsTracking(QString text)
     analyticsTrackingParameters = text;
 }
 
+bool KisNewsWidget::isDevelopmentBuild()
+{
+    return isDevelopmentVersion;
+}
+
+bool KisNewsWidget::hasUpdateAvailable()
+{
+    return needsVersionUpdate;
+}
+
 void KisNewsWidget::toggleNews(bool toggle)
 {
     KisConfig cfg(false);
@@ -152,9 +162,8 @@ void KisNewsWidget::rssDataChanged()
 
            QString linkTitle = idx.data(RssRoles::TitleRole).toString();
 
-           // come up with a regex pattern to find version number
+           // regex to capture version number
            QRegularExpression versionRegex("\\d\\.\\d\\.?\\d?\\.?\\d");
-
            QRegularExpressionMatch matched = versionRegex.match(linkTitle);
 
            // only take the top match for release version since that is the newest
@@ -169,6 +178,8 @@ void KisNewsWidget::rssDataChanged()
 
     // see if we need to update our version, or we are on a dev version
     calculateVersionUpdateStatus();
+
+    emit newsDataChanged();
 }
 
 void KisNewsWidget::calculateVersionUpdateStatus()

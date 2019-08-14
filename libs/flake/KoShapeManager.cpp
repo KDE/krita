@@ -166,8 +166,6 @@ KoShapeManager::~KoShapeManager()
 
 void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
 {
-    QMutexLocker l(&d->mutex);
-
     //clear selection
     d->selection->deselectAll();
     d->unlinkFromShapesRecursively(d->shapes);
@@ -182,8 +180,6 @@ void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
 
 void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
 {
-    QMutexLocker l(&d->mutex);
-
     if (d->shapes.contains(shape))
         return;
     shape->priv()->addShapeManager(this);
@@ -214,8 +210,6 @@ void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
 
 void KoShapeManager::remove(KoShape *shape)
 {
-    QMutexLocker l(&d->mutex);
-
     Private::DetectCollision detector;
     detector.detect(d->tree, shape, shape->zIndex());
     detector.fireSignals();
@@ -246,8 +240,6 @@ KoShapeManager::ShapeInterface::ShapeInterface(KoShapeManager *_q)
 
 void KoShapeManager::ShapeInterface::notifyShapeDestructed(KoShape *shape)
 {
-    QMutexLocker l(&q->d->mutex);
-
     q->d->selection->deselect(shape);
     q->d->aggregate4update.remove(shape);
 
@@ -269,8 +261,6 @@ KoShapeManager::ShapeInterface *KoShapeManager::shapeInterface()
 
 void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, bool forPrint)
 {
-    QMutexLocker l(&d->mutex);
-
     d->updateTree();
     painter.setPen(Qt::NoPen);  // painters by default have a black stroke, lets turn that off.
     painter.setBrush(Qt::NoBrush);
@@ -503,8 +493,6 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
 
 KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelection selection, bool omitHiddenShapes)
 {
-    QMutexLocker l(&d->mutex);
-
     d->updateTree();
     QList<KoShape*> sortedShapes(d->tree.contains(position));
     std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
@@ -555,8 +543,6 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
 
 QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenShapes, bool containedMode)
 {
-    QMutexLocker l(&d->mutex);
-
     d->updateTree();
     QList<KoShape*> shapes(containedMode ? d->tree.contained(rect) : d->tree.intersects(rect));
 
@@ -589,8 +575,6 @@ QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenSha
 
 void KoShapeManager::update(const QRectF &rect, const KoShape *shape, bool selectionHandles)
 {
-    // TODO: do we need locking here?
-
     d->canvas->updateCanvas(rect);
     if (selectionHandles && d->selection->isSelected(shape)) {
         if (d->canvas->toolProxy())
@@ -600,8 +584,6 @@ void KoShapeManager::update(const QRectF &rect, const KoShape *shape, bool selec
 
 void KoShapeManager::notifyShapeChanged(KoShape *shape)
 {
-    QMutexLocker l(&d->mutex);
-
     Q_ASSERT(shape);
     if (d->aggregate4update.contains(shape)) {
         return;
@@ -619,15 +601,11 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
 
 QList<KoShape*> KoShapeManager::shapes() const
 {
-    QMutexLocker l(&d->mutex);
-
     return d->shapes;
 }
 
 QList<KoShape*> KoShapeManager::topLevelShapes() const
 {
-    QMutexLocker l(&d->mutex);
-
     QList<KoShape*> shapes;
     // get all toplevel shapes
     Q_FOREACH (KoShape *shape, d->shapes) {

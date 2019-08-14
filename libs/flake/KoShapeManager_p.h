@@ -28,7 +28,6 @@
 #include "KoShapeContainer.h"
 #include "KoShapeManager.h"
 #include <KoRTree.h>
-#include <QMutex>
 
 
 class KoCanvasBase;
@@ -116,7 +115,6 @@ public:
     QHash<KoShape*, int> shapeIndexesBeforeUpdate;
     KoShapeManager *q;
     KoShapeManager::ShapeInterface shapeInterface;
-    QMutex mutex;
 };
 
 #endif

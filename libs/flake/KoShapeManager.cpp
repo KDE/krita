@@ -588,7 +588,7 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
     if (d->aggregate4update.contains(shape)) {
         return;
     }
-    const bool wasEmpty = d->aggregate4update.isEmpty();
+
     d->aggregate4update.insert(shape);
     d->shapeIndexesBeforeUpdate.insert(shape, shape->zIndex());
 
@@ -596,10 +596,6 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
     if (container) {
         Q_FOREACH (KoShape *child, container->shapes())
             notifyShapeChanged(child);
-    }
-
-    if (wasEmpty && !d->aggregate4update.isEmpty()) {
-        d->updateTreeCompressor.start();
     }
 }
 

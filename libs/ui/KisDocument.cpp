@@ -702,7 +702,7 @@ QByteArray KisDocument::serializeToNativeByteArray()
 
     return byteArray;
 }
-::saveas
+
 void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage)
 {
     if (status.isCancelled())

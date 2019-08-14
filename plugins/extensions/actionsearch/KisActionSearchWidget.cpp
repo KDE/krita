@@ -66,11 +66,6 @@ QVariant KisActionModel::data(const QModelIndex &index, int role) const
 //    };
 }
 
-QVariant KisActionModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    return QVariant();
-}
-
 KisActionSearchModel::KisActionSearchModel(QObject *parent)
 {
 

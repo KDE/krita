@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="ActionSearch">
+  <Actions category="General">
+    <Action name="actionsearch">
+      <icon></icon>
+      <text>Search Actions</text>
+      <whatsThis></whatsThis>
+      <toolTip>Workspaces</toolTip>
+      <iconText>Workspaces</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+</ActionCollection>

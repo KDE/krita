@@ -93,8 +93,6 @@ set(kritawidgets_LIB_SRCS
 
     kis_popup_button.cc
     kis_color_button.cpp
-
-    KisActionSearchWidget.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
@@ -106,7 +104,6 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoShadowConfigWidget.ui
     WdgDlgInternalColorSelector.ui
     WdgPaletteListWidget.ui
-    WdgActionSearch.ui
 )
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})

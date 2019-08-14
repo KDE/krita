@@ -89,6 +89,11 @@ KisNewsWidget::KisNewsWidget(QWidget *parent)
     connect(listNews, SIGNAL(clicked(QModelIndex)), this, SLOT(itemSelected(QModelIndex)));
 }
 
+void KisNewsWidget::setAnalyticsTracking(QString text)
+{
+    analyticsTrackingParameters = text;
+}
+
 void KisNewsWidget::toggleNews(bool toggle)
 {
     KisConfig cfg(false);
@@ -106,6 +111,22 @@ void KisNewsWidget::itemSelected(const QModelIndex &idx)
 {
     if (idx.isValid()) {
         QString link = idx.data(RssRoles::LinkRole).toString();
-        QDesktopServices::openUrl(QUrl(link));
+
+        // append query string for analytics tracking if we set it
+        if (analyticsTrackingParameters != "") {
+
+            // use title in analytics query string
+            QString linkTitle = idx.data(RssRoles::TitleRole).toString();
+            linkTitle = linkTitle.simplified(); // trims and makes 1 white space
+            linkTitle = linkTitle.replace(" ", "");
+
+            analyticsTrackingParameters = analyticsTrackingParameters.append(linkTitle);
+            QDesktopServices::openUrl(QUrl(link.append(analyticsTrackingParameters)));
+
+        } else {
+            QDesktopServices::openUrl(QUrl(link));
+        }
+
+
     }
 }

@@ -227,9 +227,9 @@ KisWdgOptionsJPEG::KisWdgOptionsJPEG(QWidget *parent)
 
     metaDataFilters->setModel(&m_filterRegistryModel);
     qualityLevel->setRange(0, 100, 0);
-    qualityLevel->setSuffix("%");
+    qualityLevel->setSuffix(i18n("%"));
     smoothLevel->setRange(0, 100, 0);
-    smoothLevel->setSuffix("%");
+    smoothLevel->setSuffix(i18n("%"));
 }
 
 

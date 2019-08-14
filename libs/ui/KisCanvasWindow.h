@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007-2010 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2018 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,25 +15,28 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KISCANVASWINDOW_H
+#define KISCANVASWINDOW_H
 
-#include "zoomcontroller_test.h"
+#include <QWidget>
 
-#include <QTest>
-#include <QCoreApplication>
+class KisMainWindow;
 
-#include <kactioncollection.h>
-#include <WidgetsDebug.h>
-
-#include "KoCanvasControllerWidget.h"
-#include "KoZoomHandler.h"
-#include "KoZoomController.h"
-
-void zoomcontroller_test::testApi()
+/**
+ * Window for the canvas (mdi) area. Used when detached canvas mode is enabled.
+ */
+class KisCanvasWindow : public QWidget
 {
-    KoZoomHandler zoomHandler;
-    KoZoomController zoomController(new KoCanvasControllerWidget(0, 0), &zoomHandler, new KActionCollection(this));
-    Q_UNUSED(zoomController);
+public:
+    explicit KisCanvasWindow(KisMainWindow *mainWindow);
+    ~KisCanvasWindow() override;
 
-}
+    QWidget * swapMainWidget(QWidget *widget);
 
-QTEST_MAIN(zoomcontroller_test)
+    void closeEvent(QCloseEvent *event) override;
+private:
+    struct Private;
+    QScopedPointer<Private> d;
+};
+
+#endif

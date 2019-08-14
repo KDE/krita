@@ -44,6 +44,7 @@
 
 #include "strokes/freehand_stroke.h"
 #include "strokes/KisFreehandStrokeInfo.h"
+#include "KisAsyncronousStrokeUpdateHelper.h"
 
 #include <math.h>
 
@@ -66,6 +67,7 @@ struct KisToolFreehandHelper::Private
 {
     KisPaintingInformationBuilder *infoBuilder;
     KisStrokesFacade *strokesFacade;
+    KisAsyncronousStrokeUpdateHelper asyncUpdateHelper;
 
     KUndo2MagicString transactionText;
 
@@ -109,8 +111,6 @@ struct KisToolFreehandHelper::Private
     KisStabilizedEventsSampler stabilizedSampler;
     KisStabilizerDelayedPaintHelper stabilizerDelayedPaintHelper;
 
-    QTimer asynchronousUpdatesThresholdTimer;
-
     qreal effectiveSmoothnessDistance() const;
 };
 
@@ -131,7 +131,6 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
     m_d->strokeTimeoutTimer.setSingleShot(true);
     connect(&m_d->strokeTimeoutTimer, SIGNAL(timeout()), SLOT(finishStroke()));
     connect(&m_d->airbrushingTimer, SIGNAL(timeout()), SLOT(doAirbrushing()));
-    connect(&m_d->asynchronousUpdatesThresholdTimer, SIGNAL(timeout()), SLOT(doAsynchronousUpdate()));
     connect(&m_d->stabilizerPollTimer, SIGNAL(timeout()), SLOT(stabilizerPollAndPaint()));
     connect(m_d->smoothingOptions.data(), SIGNAL(sigSmoothingTypeChanged()), SLOT(slotSmoothingTypeChanged()));
 
@@ -313,8 +312,7 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
         m_d->airbrushingTimer.setInterval(computeAirbrushTimerInterval());
         m_d->airbrushingTimer.start();
     } else if (m_d->resources->presetNeedsAsynchronousUpdates()) {
-        m_d->asynchronousUpdatesThresholdTimer.setInterval(80 /* msec */);
-        m_d->asynchronousUpdatesThresholdTimer.start();
+        m_d->asyncUpdateHelper.startUpdateStream(m_d->strokesFacade, m_d->strokeId);
     }
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
@@ -615,12 +613,12 @@ void KisToolFreehandHelper::endPaint()
         m_d->airbrushingTimer.stop();
     }
 
-    if (m_d->asynchronousUpdatesThresholdTimer.isActive()) {
-        m_d->asynchronousUpdatesThresholdTimer.stop();
-    }
-
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
         stabilizerEnd();
+    }
+
+    if (m_d->asyncUpdateHelper.isActive()) {
+        m_d->asyncUpdateHelper.endUpdateStream();
     }
 
     /**
@@ -630,9 +628,6 @@ void KisToolFreehandHelper::endPaint()
      * is needed
      */
     m_d->strokeInfos.clear();
-
-    // last update to complete rendering if there is still something pending
-    doAsynchronousUpdate(true);
 
     m_d->strokesFacade->endStroke(m_d->strokeId);
     m_d->strokeId.clear();
@@ -648,8 +643,8 @@ void KisToolFreehandHelper::cancelPaint()
         m_d->airbrushingTimer.stop();
     }
 
-    if (m_d->asynchronousUpdatesThresholdTimer.isActive()) {
-        m_d->asynchronousUpdatesThresholdTimer.stop();
+    if (m_d->asyncUpdateHelper.isActive()) {
+        m_d->asyncUpdateHelper.cancelUpdateStream();
     }
 
     if (m_d->stabilizerPollTimer.isActive()) {
@@ -879,12 +874,6 @@ void KisToolFreehandHelper::doAirbrushing()
                                       0.0);
         paint(nextPaint);
     }
-}
-
-void KisToolFreehandHelper::doAsynchronousUpdate(bool forceUpdate)
-{
-    m_d->strokesFacade->addJob(m_d->strokeId,
-                               new FreehandStrokeStrategy::UpdateData(forceUpdate));
 }
 
 int KisToolFreehandHelper::computeAirbrushTimerInterval() const

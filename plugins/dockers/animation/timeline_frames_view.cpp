@@ -229,7 +229,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     m_d->volumeSlider = new KisSliderSpinBox(this);
     m_d->volumeSlider->setRange(0, 100);
-    m_d->volumeSlider->setSuffix("%");
+    m_d->volumeSlider->setSuffix(i18n("%"));
     m_d->volumeSlider->setPrefix(i18nc("@item:inmenu, slider", "Volume:"));
     m_d->volumeSlider->setSingleStep(1);
     m_d->volumeSlider->setPageStep(10);

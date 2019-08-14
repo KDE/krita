@@ -597,6 +597,18 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="view_detached_canvas">
+      <icon></icon>
+      <text>Detach canvas</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show the canvas on a separate window</toolTip>
+      <iconText>Detach canvas</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="wrap_around_mode">
       <icon></icon>
       <text>&amp;Wrap Around Mode</text>

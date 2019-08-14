@@ -46,8 +46,9 @@ public:
 
     void setAnalyticsTracking(QString text);
 
-    bool isDevelopmentBuild();
     bool hasUpdateAvailable();
+    QString versionNumber();
+    QString versionLink();
 
 Q_SIGNALS:
     void newsDataChanged();
@@ -67,7 +68,6 @@ private:
 
     // version checking logic tells us we need to update our Krita
     void calculateVersionUpdateStatus();
-    bool isDevelopmentVersion = false;
     bool needsVersionUpdate = false;
 
 };

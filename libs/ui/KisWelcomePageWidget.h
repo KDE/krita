@@ -39,6 +39,8 @@ class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcom
 
     void setMainWindow(KisMainWindow* m_mainWindow);
 
+    bool isDevelopmentBuild();
+
 public Q_SLOTS:
     /// if a document is placed over this area, a dotted line will appear as an indicator
     /// that it is a droppable area. KisMainwindow is what triggers this

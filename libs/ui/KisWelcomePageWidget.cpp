@@ -34,6 +34,7 @@
 
 #include <QListWidget>
 #include <QListWidgetItem>
+
 #include "kis_icon_utils.h"
 #include "krita_utils.h"
 #include "KoStore.h"
@@ -42,6 +43,7 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <KisPart.h>
+
 
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
@@ -132,6 +134,13 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         newsWidget->setAnalyticsTracking("?" + analyticsString);
 
     }
+}
+
+bool KisWelcomePageWidget::isDevelopmentBuild()
+{
+    // dev builds contain GIT hash in it and the word git
+    // stable versions do not contain this
+    return qApp->applicationVersion().contains("git");
 }
 
 void KisWelcomePageWidget::showDropAreaIndicator(bool show)
@@ -315,13 +324,25 @@ void KisWelcomePageWidget::slotUpdateVersionMessage()
     // find out if we need an update...or if this is a development version
     // TODO: show app version if dev version. Show version number available and provide link
     QString versionText = "";
-    if (newsWidget->isDevelopmentBuild()) {
+    if (isDevelopmentBuild()) {
+        // Development build
         versionText = i18n("DEV BUILD");
         versionNotificationLabel->setVisible(true);
+        versionNotificationLabel->setText(versionText); // no link
     } else if (newsWidget->hasUpdateAvailable()) {
-        versionText = i18n("New Update Available");
+        // Version update available
+        versionText = QString("Krita " + newsWidget->versionNumber() + " ")
+                .append(i18n("Available!"));
         versionNotificationLabel->setVisible(true);
+        versionNotificationLabel->setText(QString("<a style=\"color: " +
+                                                  blendedColor.name() +
+                                                  " \" href=\"  " +
+                                                  newsWidget->versionLink() +
+                                                  analyticsString + "version-update" + "\">")
+                                  .append(versionText).append("</a>"));
+
     } else {
+        // message needed... exit
         versionNotificationLabel->setVisible(false);
         return;
     }
@@ -330,8 +351,6 @@ void KisWelcomePageWidget::slotUpdateVersionMessage()
         versionNotificationLabel->setStyleSheet(blendedStyle);
     }
 
-    versionNotificationLabel->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE?" + analyticsString + "what-is-kde" + "\">")
-                              .append(versionText).append("</a>"));
 }
 
 void KisWelcomePageWidget::dragEnterEvent(QDragEnterEvent *event)

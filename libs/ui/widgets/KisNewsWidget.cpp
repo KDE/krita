@@ -97,14 +97,19 @@ void KisNewsWidget::setAnalyticsTracking(QString text)
     analyticsTrackingParameters = text;
 }
 
-bool KisNewsWidget::isDevelopmentBuild()
-{
-    return isDevelopmentVersion;
-}
-
 bool KisNewsWidget::hasUpdateAvailable()
 {
     return needsVersionUpdate;
+}
+
+QString KisNewsWidget::versionNumber()
+{
+    return newVersionNumber;
+}
+
+QString KisNewsWidget::versionLink()
+{
+    return newVersionLink;
 }
 
 void KisNewsWidget::toggleNews(bool toggle)
@@ -194,18 +199,10 @@ void KisNewsWidget::calculateVersionUpdateStatus()
         needsVersionUpdate = true; // we are a major version behind
         return;
     }
-    else if (onlineReleaseAnnouncement[0] < currentVersionParts[0] ) {
-        isDevelopmentVersion = true;
-        return;
-    }
 
     // major versions are the same, so check minor versions
      if (onlineReleaseAnnouncement[1] > currentVersionParts[1] ) {
          needsVersionUpdate = true; // we are a minor version behind
-         return;
-     }
-     else if (onlineReleaseAnnouncement[1] < currentVersionParts[1] ) {
-         isDevelopmentVersion = true;
          return;
      }
 
@@ -222,8 +219,5 @@ void KisNewsWidget::calculateVersionUpdateStatus()
          needsVersionUpdate = true; // we are a bugfix version behind
          return;
      }
-     else if (onlineReleaseAnnouncement[2] < currentVersionParts[2] ) {
-         isDevelopmentVersion = true;
-         return;
-     }
+
 }

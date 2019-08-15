@@ -321,14 +321,23 @@ void KisWelcomePageWidget::populateRecentDocuments()
 
 void KisWelcomePageWidget::slotUpdateVersionMessage()
 {
+
+    alertIcon->setIcon(KisIconUtils::loadIcon("warning"));
+    alertIcon->setVisible(false);
+
     // find out if we need an update...or if this is a development version
-    // TODO: show app version if dev version. Show version number available and provide link
-    QString versionText = "";
     if (isDevelopmentBuild()) {
         // Development build
-        versionText = i18n("DEV BUILD");
+        QString versionLabelText = QString("<a style=\"color: " +
+                                           blendedColor.name() +
+                                           " \" href=\"https://docs.krita.org/en/untranslatable_pages/triaging_bugs.html?"
+                                           + analyticsString + "dev-build" + "\">")
+                                  .append(i18n("DEV BUILD")).append("</a>");
+
+        versionNotificationLabel->setText(versionLabelText);
+        alertIcon->setVisible(true);
         versionNotificationLabel->setVisible(true);
-        versionNotificationLabel->setText(versionText); // no link
+
     } else if (newsWidget->hasUpdateAvailable()) {
 
         // build URL for label
@@ -341,9 +350,10 @@ void KisWelcomePageWidget::slotUpdateVersionMessage()
 
         versionNotificationLabel->setVisible(true);
         versionNotificationLabel->setText(versionLabelText);
+        alertIcon->setVisible(true);
 
     } else {
-        // message needed... exit
+        // no message needed... exit
         versionNotificationLabel->setVisible(false);
         return;
     }

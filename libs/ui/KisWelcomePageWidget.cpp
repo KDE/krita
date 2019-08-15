@@ -330,16 +330,17 @@ void KisWelcomePageWidget::slotUpdateVersionMessage()
         versionNotificationLabel->setVisible(true);
         versionNotificationLabel->setText(versionText); // no link
     } else if (newsWidget->hasUpdateAvailable()) {
-        // Version update available
-        versionText = QString("Krita " + newsWidget->versionNumber() + " ")
-                .append(i18n("Available!"));
+
+        // build URL for label
+        QString versionLabelText = QString("<a style=\"color: " +
+                                           blendedColor.name() +
+                                           " \" href=\"" +
+                                           newsWidget->versionLink() + "?" +
+                                           analyticsString + "version-update" + "\">")
+                           .append(i18n("New Version Available!")).append("</a>");
+
         versionNotificationLabel->setVisible(true);
-        versionNotificationLabel->setText(QString("<a style=\"color: " +
-                                                  blendedColor.name() +
-                                                  " \" href=\"  " +
-                                                  newsWidget->versionLink() +
-                                                  analyticsString + "version-update" + "\">")
-                                  .append(versionText).append("</a>"));
+        versionNotificationLabel->setText(versionLabelText);
 
     } else {
         // message needed... exit

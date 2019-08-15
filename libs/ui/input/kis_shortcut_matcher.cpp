@@ -488,6 +488,8 @@ void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &k
 
 void KisShortcutMatcher::lostFocusEvent(const QPointF &localPos)
 {
+    Private::RecursionNotifier notifier(this);
+
     if (m_d->runningShortcut) {
         forceEndRunningShortcut(localPos);
     }

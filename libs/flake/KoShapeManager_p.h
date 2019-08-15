@@ -116,7 +116,8 @@ public:
     QHash<KoShape*, int> shapeIndexesBeforeUpdate;
     KoShapeManager *q;
     KoShapeManager::ShapeInterface shapeInterface;
-    QMutex mutex;
+    QMutex shapesMutex;
+    QMutex treeMutex;
 };
 
 #endif

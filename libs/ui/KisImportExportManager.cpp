@@ -489,7 +489,7 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
     if (!batchMode && !errors.isEmpty()) {
         QString error =  "<html><body><p><b>"
                 + i18n("Error: cannot save this image as a %1.", mimeUserDescription)
-                + "</b> Reasons:</p>"
+                + "</b> " + i18n("Reasons:") + "</p>"
                 + "<p/><ul>";
         Q_FOREACH(const QString &w, errors) {
             error += "\n<li>" + w + "</li>";
@@ -534,10 +534,10 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
                     + i18n("You will lose information when saving this image as a %1.", mimeUserDescription);
 
             if (warnings.size() == 1) {
-                warning += "</b> Reason:</p>";
+                warning += "</b> " + i18n("Reason:") + "</p>";
             }
             else {
-                warning += "</b> Reasons:</p>";
+                warning += "</b> " + i18n("Reasons:") + "</p>";
             }
             warning += "<p/><ul>";
 

@@ -274,6 +274,7 @@ void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter
                 continue;
             }
             KisHandlePainterHelper helper(&gc, handleRadius());
+            helper.setHandleStyle(KisHandleStyle::primarySelection());
             helper.drawHandleRect(pixelToView(m_points[pt]), 2, QPoint(0,0));
         }
     }

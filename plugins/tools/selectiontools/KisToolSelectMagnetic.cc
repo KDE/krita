@@ -86,25 +86,8 @@ void KisToolSelectMagnetic::keyReleaseEvent(QKeyEvent *event)
     KisToolSelect::keyReleaseEvent(event);
 }
 
-// the cursor is still tracked even when no mousebutton is pressed
-void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
+void KisToolSelectMagnetic::calculateCheckPoints()
 {
-    KisToolSelect::mouseMoveEvent(event);
-    if (m_complete)
-        return;
-
-    m_lastCursorPos = convertToPixelCoord(event);
-    QPoint current = m_lastCursorPos.toPoint();
-
-    if (m_anchorPoints.count() > 0 && m_snapBound.contains(m_lastAnchor)) {
-        //set a freaking cursor
-        //useCursor(KisCursor::load("tool_outline_selection_cursor_add.png", 6, 6));
-    }
-
-    vQPointF pointSet = m_worker.computeEdge(m_frequency, m_lastAnchor, current);
-    m_points.resize(m_checkPoint);
-    m_points.append(pointSet);
-
     qreal totalDistance = 0.0;
     int finalPoint = m_checkPoint + 1;
     int midPoint = m_checkPoint + 1;
@@ -159,6 +142,40 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
             foundSomething = true;
         }
     }
+
+    totalDistance = 0.0;
+
+    for(; finalPoint<m_points.count(); finalPoint++){
+        totalDistance += kisDistance(pixelToView(m_points[finalPoint]),
+                                     pixelToView(m_points[m_checkPoint]));
+
+        if(totalDistance > 2*m_frequency){
+            calculateCheckPoints();
+        }
+    }
+
+}
+
+// the cursor is still tracked even when no mousebutton is pressed
+void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
+{
+    KisToolSelect::mouseMoveEvent(event);
+    if (m_complete)
+        return;
+
+    m_lastCursorPos = convertToPixelCoord(event);
+    QPoint current = m_lastCursorPos.toPoint();
+
+    if (m_anchorPoints.count() > 0 && m_snapBound.contains(m_lastAnchor)) {
+        //set a freaking cursor
+        //useCursor(KisCursor::load("tool_outline_selection_cursor_add.png", 6, 6));
+    }
+
+    vQPointF pointSet = m_worker.computeEdge(m_frequency, m_lastAnchor, current);
+    m_points.resize(m_checkPoint);
+    m_points.append(pointSet);
+
+    calculateCheckPoints();
 
     m_paintPath = QPainterPath();
     m_paintPath.moveTo(pixelToView(m_points[0]));
@@ -222,7 +239,7 @@ void KisToolSelectMagnetic::finishSelectionAction()
     QRectF boundingViewRect =
         pixelToView(KisAlgebra2D::accumulateBounds(m_points));
 
-    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select by Outline"));
+    KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Magnetic Selection"));
 
     if (m_points.count() > 2 &&
         !helper.tryDeselectCurrentSelection(boundingViewRect, selectionAction()))
@@ -290,7 +307,7 @@ void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter
             }
             KisHandlePainterHelper helper(&gc, handleRadius());
             helper.setHandleStyle(KisHandleStyle::primarySelection());
-            helper.drawHandleRect(pixelToView(m_points[pt]), 2, QPoint(0,0));
+            helper.drawHandleRect(pixelToView(m_points[pt]), 4, QPoint(0,0));
         }
     }
 }

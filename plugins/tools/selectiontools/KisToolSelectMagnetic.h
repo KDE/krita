@@ -65,6 +65,7 @@ private:
     void updateFeedback();
     void updateContinuedMode();
     void updateCanvas();
+    void calculateCheckPoints();
 
     QPainterPath m_paintPath;
     QVector<QPointF> m_points;

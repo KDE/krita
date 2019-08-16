@@ -202,6 +202,11 @@ void KisMagneticWorker::saveTheImage(vQPointF points)
 {
     QImage img = m_dev->convertToQImage(0, m_dev->exactBounds());
 
+    const QPointF offset = m_dev->exactBounds().topLeft();
+    for (QPointF &pt : points) {
+        pt -= offset;
+    }
+
     img = img.convertToFormat(QImage::Format_ARGB32);
     QPainter gc(&img);
 

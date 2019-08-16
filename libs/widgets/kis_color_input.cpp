@@ -292,6 +292,24 @@ QWidget* KisFloatColorInput::createInput()
     m_dblNumInput->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     m_dblNumInput->setMinimumWidth(60);
     m_dblNumInput->setMaximumWidth(60);
+    
+    quint8* data = m_color->data() + m_channelInfo->pos();
+    qreal value = 1.0;
+
+    switch (m_channelInfo->channelValueType()) {
+#ifdef HAVE_OPENEXR
+    case KoChannelInfo::FLOAT16:
+        value = *(reinterpret_cast<half*>(data));
+        break;
+#endif
+    case KoChannelInfo::FLOAT32:
+        value = *(reinterpret_cast<float*>(data));
+        break;
+    default:
+        Q_ASSERT(false);
+    }
+    m_dblNumInput->setValue(value);
+
     return m_dblNumInput;
 }
 

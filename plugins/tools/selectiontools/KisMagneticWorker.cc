@@ -132,7 +132,7 @@ struct WeightMap {
     {
         if (m_map.find(k) == m_map.end()) {
             double edge_gradient = (m_graph.getIntensity(k.first) + m_graph.getIntensity(k.second)) / 2;
-            m_map[k] = EuclideanDistance(k.first, k.second) / (edge_gradient + 1);
+            m_map[k] = EuclideanDistance(k.first, k.second) + 255.0 - edge_gradient;
         }
         return m_map[k];
     }

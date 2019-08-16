@@ -105,17 +105,32 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
     m_points.resize(m_checkPoint);
     m_points.append(pointSet);
 
-    qreal dist = distBetween(m_points.count() - 1, m_checkPoint);
+    qreal totalDistance = 0.0;
+    int finalPoint = m_checkPoint + 1;
+    int midPoint = m_checkPoint + 1;
+    int minPoint = m_checkPoint;
 
-    if(dist > 2*m_frequency){
+    for(; finalPoint<m_points.count(); finalPoint++){
+        totalDistance += kisDistance(pixelToView(m_points[finalPoint]),
+                                     pixelToView(m_points[m_checkPoint]));
+
+        if(totalDistance <= m_frequency/3){
+            minPoint = finalPoint;
+        }
+
+        if(totalDistance <= m_frequency){
+            midPoint = finalPoint;
+        }
+
+        if(totalDistance > 2*m_frequency){
+            break;
+        }
+    }
+
+    if(totalDistance > 2*m_frequency){
         bool foundSomething = false;
 
-        int midPoint = m_checkPoint;
-
-        while(distBetween(midPoint, m_checkPoint) < m_frequency)
-            midPoint++;
-
-        for(int i = midPoint; i < m_points.count(); i++){
+        for(int i = midPoint; i < finalPoint; i++){
             if(m_worker.intensity(m_points.at(i).toPoint()) >= m_threshold){
                 m_checkPoint = i;
                 m_lastAnchor = m_points.at(i).toPoint();
@@ -126,7 +141,7 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
         }
 
         if(!foundSomething){
-            for(int i = midPoint - 1; i>= 0 && distBetween(i, midPoint) > m_frequency/3; i--){
+            for(int i = midPoint - 1; i>= minPoint; i--){
                 if(m_worker.intensity(m_points.at(i).toPoint()) >= m_threshold){
                     m_checkPoint = i;
                     m_lastAnchor = m_points.at(i).toPoint();

@@ -55,6 +55,7 @@ public Q_SLOTS:
     void slotGamutMaskUnset();
     void slotGamutMaskPreviewUpdate();
     void slotGamutMaskToggle(bool state);
+    void slotGamutMaskDeactivate();
 
 Q_SIGNALS:
     void settingsButtonClicked();

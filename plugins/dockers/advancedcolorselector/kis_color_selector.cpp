@@ -176,6 +176,11 @@ void KisColorSelector::slotGamutMaskPreviewUpdate()
     m_subComponent->updateGamutMaskPreview();
 }
 
+void KisColorSelector::slotGamutMaskDeactivate()
+{
+    slotGamutMaskToggle(false);
+}
+
 void KisColorSelector::slotGamutMaskToggle(bool state)
 {
     m_mainComponent->toggleGamutMask(state);

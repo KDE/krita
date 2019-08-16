@@ -525,8 +525,8 @@ void KisCurveWidget::setCurve(KisCubicCurve inlist)
 {
     d->m_curve = inlist;
     d->m_grab_point_index = qBound(0, d->m_grab_point_index, d->m_curve.points().count() - 1);
-    emit pointSelectedChanged();
     d->setCurveModified();
+    emit pointSelectedChanged();
 }
 
 void KisCurveWidget::leaveEvent(QEvent *)

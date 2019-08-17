@@ -29,7 +29,7 @@ TabletTester::TabletTester(QWidget *parent)
 
 QSize TabletTester::sizeHint() const
 {
-    return QSize(356, 373);
+    return QSize(500, 200);
 }
 
 void TabletTester::clear()

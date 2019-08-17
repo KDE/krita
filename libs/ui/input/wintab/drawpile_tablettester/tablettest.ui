@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Tablet Tester</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,2">
    <item>
     <widget class="TabletTester" name="tablettest">
      <property name="minimumSize">

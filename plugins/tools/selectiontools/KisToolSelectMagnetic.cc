@@ -86,6 +86,12 @@ void KisToolSelectMagnetic::keyReleaseEvent(QKeyEvent *event)
     KisToolSelect::keyReleaseEvent(event);
 }
 
+/*
+ * Calculates the checkpoints responsible to determining the last point from where
+ * the edge is calculated.
+ * Takes 3 point, min, median and max, searches for an edge point from median to max, if fails,
+ * searches for the same from median to min, if fails, median becomes that edge point.
+ */
 void KisToolSelectMagnetic::calculateCheckPoints()
 {
     qreal totalDistance = 0.0;
@@ -169,6 +175,7 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
 
     if (m_anchorPoints.count() > 0 && m_snapBound.contains(m_lastAnchor)) {
         //set a freaking cursor
+        //or we can just change the handle color on hover
         //useCursor(KisCursor::load("tool_outline_selection_cursor_add.png", 6, 6));
     }
 
@@ -235,7 +242,7 @@ void KisToolSelectMagnetic::finishSelectionAction()
     setMode(KisTool::HOVER_MODE);
 
     //just for testing out
-    m_worker.saveTheImage(m_points);
+    //m_worker.saveTheImage(m_points);
 
     QRectF boundingViewRect =
         pixelToView(KisAlgebra2D::accumulateBounds(m_points));
@@ -301,6 +308,7 @@ void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter
         }
         paintToolOutline(&gc, outline);
 
+        //printing the handles
         Q_FOREACH (const int pt, m_anchorPoints) {
             if(pt < 0){
                 //no points are set

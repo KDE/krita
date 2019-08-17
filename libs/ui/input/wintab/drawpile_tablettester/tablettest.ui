@@ -15,7 +15,14 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
    <item>
-    <widget class="TabletTester" name="tablettest"/>
+    <widget class="TabletTester" name="tablettest">
+     <property name="minimumSize">
+      <size>
+       <width>150</width>
+       <height>150</height>
+      </size>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">

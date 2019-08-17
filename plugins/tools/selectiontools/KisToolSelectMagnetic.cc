@@ -404,6 +404,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     radInput->setObjectName("radius");
     radInput->setRange(2.5, 100.0, 2);
     radInput->setSingleStep(0.5);
+    radInput->setToolTip("Radius of the filter for the detecting edges, might take some time to calculate");
     f1->addWidget(radInput);
     connect(radInput, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetRadius(qreal)));
 
@@ -415,6 +416,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     threshInput->setObjectName("threshold");
     threshInput->setRange(1, 255);
     threshInput->setSingleStep(10);
+    threshInput->setToolTip("Threshold for determining the minimum intensity of the edges");
     f2->addWidget(threshInput);
     connect(threshInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 
@@ -426,6 +428,8 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     freqInput->setObjectName("frequency");
     freqInput->setRange(20, 200);
     freqInput->setSingleStep(10);
+    freqInput->setToolTip("Average distance between 2 anchors in screen pixels");
+    freqInput->setSuffix(" px");
     f3->addWidget(freqInput);
     connect(freqInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetFrequency(int)));
 

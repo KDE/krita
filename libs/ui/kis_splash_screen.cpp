@@ -48,7 +48,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 {
 
     setupUi(this);
-    setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
+    setWindowIcon(KisIconUtils::loadIcon("krita"));
 
     QImage img = pixmap.toImage();
     if (devicePixelRatioF() > 1.01) {

@@ -1691,7 +1691,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="help_about_app">
-      <icon>calligrakrita</icon>
+      <icon>krita</icon>
       <text>&amp;About Krita</text>
       <whatsThis></whatsThis>
       <toolTip>About Krita</toolTip>

@@ -60,7 +60,7 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
-    m_continuedMode(false), m_complete(true), m_threshold(70), m_checkPoint(-1), m_frequency(30), m_radius(2.0)
+    m_continuedMode(false), m_complete(true), m_threshold(70), m_checkPoint(-1), m_frequency(30), m_radius(3.0)
 { }
 
 void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)
@@ -394,7 +394,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
 
     KisDoubleSliderSpinBox *radInput = new KisDoubleSliderSpinBox(selectionWidget);
     radInput->setObjectName("radius");
-    radInput->setRange(1.0, 100.0, 2);
+    radInput->setRange(2.5, 100.0, 2);
     radInput->setSingleStep(0.5);
     f1->addWidget(radInput);
     connect(radInput, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetRadius(qreal)));
@@ -427,7 +427,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     l->insertLayout(2, f2);
     l->insertLayout(3, f3);
 
-    radInput->setValue(m_configGroup.readEntry("radius", 2.0));
+    radInput->setValue(m_configGroup.readEntry("radius", 3.0));
     threshInput->setValue(m_configGroup.readEntry("threshold", 100));
     freqInput->setValue(m_configGroup.readEntry("frequency", 30));
     return selectionWidget;

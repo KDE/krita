@@ -146,8 +146,8 @@ KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev, qreal radius)
 {
     m_dev = KisPainter::convertToAlphaAsGray(dev);
     KisPainter::copyAreaOptimized(dev->exactBounds().topLeft(), dev, m_dev, dev->exactBounds());
-    //KisGaussianKernel::applyTightLoG(m_dev, m_dev->exactBounds(), radius, -1.0, QBitArray(), nullptr);
-    KisGaussianKernel::applyLoG(m_dev, m_dev->exactBounds(), radius, -1.0, QBitArray(), nullptr);
+    KisGaussianKernel::applyTightLoG(m_dev, m_dev->exactBounds(), radius, -1.0, QBitArray(), nullptr);
+    //KisGaussianKernel::applyLoG(m_dev, m_dev->exactBounds(), radius, -1.0, QBitArray(), nullptr);
     KisLazyFillTools::normalizeAlpha8Device(m_dev, m_dev->exactBounds());
 
     m_graph = new KisMagneticGraph(m_dev);

@@ -5,7 +5,7 @@
     "runtime-version": "5.9",
     "sdk": "org.kde.Sdk",
     "command": "krita",
-    "rename-icon": "calligrakrita",
+    "rename-icon": "krita",
     "tags": [
         "nightly"
     ],

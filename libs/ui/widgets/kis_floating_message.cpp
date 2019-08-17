@@ -129,7 +129,7 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
     , m_priority(priority)
     , m_alignment(alignment)
 {
-    m_icon = KisIconUtils::loadIcon("calligrakrita").pixmap(256, 256).toImage();
+    m_icon = KisIconUtils::loadIcon("krita").pixmap(256, 256).toImage();
 
     setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip);
     setFocusPolicy(Qt::NoFocus);

@@ -39,6 +39,8 @@ class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcom
 
     void setMainWindow(KisMainWindow* m_mainWindow);
 
+    bool isDevelopmentBuild();
+
 public Q_SLOTS:
     /// if a document is placed over this area, a dotted line will appear as an indicator
     /// that it is a droppable area. KisMainwindow is what triggers this
@@ -49,6 +51,8 @@ public Q_SLOTS:
     /// this could be called multiple times. If a recent document doesn't
     /// have a preview, an icon is used that needs to be updated
     void populateRecentDocuments();
+
+    void slotUpdateVersionMessage();
 
 protected:
 
@@ -71,6 +75,13 @@ private:
     /// this will be listed in the "Acquisition" section of Matomo
     /// just append some text to this to associate it with an event/page
     const QString analyticsString = "pk_campaign=startup-sceen&pk_kwd=";
+
+
+    // keeping track of link colors with theme change
+    QColor textColor;
+    QColor backgroundColor;
+    QColor blendedColor;
+    QString blendedStyle;
 
 
 private Q_SLOTS:

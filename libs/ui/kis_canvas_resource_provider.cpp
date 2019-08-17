@@ -84,6 +84,8 @@ void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceProvider *res
             this, SLOT(slotCanvasResourceChanged(int,QVariant)));
 
     m_resourceManager->setResource(KoCanvasResourceProvider::ApplicationSpeciality, KoCanvasResourceProvider::NoAdvancedText);
+
+    m_resourceManager->setResource(GamutMaskActive, false);
 }
 
 
@@ -161,6 +163,11 @@ KoGamutMask *KisCanvasResourceProvider::currentGamutMask() const
     else {
         return nullptr;
     }
+}
+
+bool KisCanvasResourceProvider::gamutMaskActive() const
+{
+    return m_resourceManager->resource(GamutMaskActive).toBool();
 }
 
 KisPaintOpPresetSP KisCanvasResourceProvider::currentPreset() const
@@ -369,11 +376,15 @@ void KisCanvasResourceProvider::slotGamutMaskActivated(KoGamutMask *mask)
     QVariant v;
     v.setValue<KoGamutMask*>(mask);
     m_resourceManager->setResource(CurrentGamutMask, v);
+
+    m_resourceManager->setResource(GamutMaskActive, QVariant::fromValue(true));
+
     emit sigGamutMaskChanged(mask);
 }
 
 void KisCanvasResourceProvider::slotGamutMaskUnset()
 {
+    m_resourceManager->setResource(GamutMaskActive, QVariant::fromValue(false));
     m_resourceManager->clearResource(CurrentGamutMask);
     emit sigGamutMaskUnset();
 }
@@ -381,6 +392,12 @@ void KisCanvasResourceProvider::slotGamutMaskUnset()
 void KisCanvasResourceProvider::slotGamutMaskPreviewUpdate()
 {
     emit sigGamutMaskPreviewUpdate();
+}
+
+void KisCanvasResourceProvider::slotGamutMaskDeactivate()
+{
+    m_resourceManager->setResource(GamutMaskActive, QVariant::fromValue(false));
+    emit sigGamutMaskDeactivated();
 }
 
 void KisCanvasResourceProvider::slotResetEnableFGChange(bool b)

@@ -60,7 +60,7 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
-    m_continuedMode(false), m_complete(true), m_threshold(70), m_checkPoint(-1), m_frequency(100), m_radius(2.0)
+    m_continuedMode(false), m_complete(true), m_threshold(70), m_checkPoint(-1), m_frequency(30), m_radius(2.0)
 { }
 
 void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)
@@ -89,13 +89,13 @@ void KisToolSelectMagnetic::keyReleaseEvent(QKeyEvent *event)
 void KisToolSelectMagnetic::calculateCheckPoints()
 {
     qreal totalDistance = 0.0;
-    int finalPoint = m_checkPoint + 1;
+    int finalPoint = m_checkPoint + 2;
     int midPoint = m_checkPoint + 1;
     int minPoint = m_checkPoint;
 
     for(; finalPoint<m_points.count(); finalPoint++){
         totalDistance += kisDistance(pixelToView(m_points[finalPoint]),
-                                     pixelToView(m_points[m_checkPoint]));
+                                     pixelToView(m_points[finalPoint - 1]));
 
         if(totalDistance <= m_frequency/3){
             minPoint = finalPoint;
@@ -151,6 +151,7 @@ void KisToolSelectMagnetic::calculateCheckPoints()
 
         if(totalDistance > 2*m_frequency){
             calculateCheckPoints();
+            totalDistance = 0.0;
         }
     }
 
@@ -234,7 +235,7 @@ void KisToolSelectMagnetic::finishSelectionAction()
     setMode(KisTool::HOVER_MODE);
 
     //just for testing out
-    //m_worker.saveTheImage(m_points);
+    m_worker.saveTheImage(m_points);
 
     QRectF boundingViewRect =
         pixelToView(KisAlgebra2D::accumulateBounds(m_points));
@@ -415,7 +416,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
 
     KisSliderSpinBox *freqInput = new KisSliderSpinBox(selectionWidget);
     freqInput->setObjectName("frequency");
-    freqInput->setRange(50, 500);
+    freqInput->setRange(20, 200);
     freqInput->setSingleStep(10);
     f3->addWidget(freqInput);
     connect(freqInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetFrequency(int)));
@@ -428,7 +429,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
 
     radInput->setValue(m_configGroup.readEntry("radius", 2.0));
     threshInput->setValue(m_configGroup.readEntry("threshold", 100));
-    freqInput->setValue(m_configGroup.readEntry("frequency", 100));
+    freqInput->setValue(m_configGroup.readEntry("frequency", 30));
     return selectionWidget;
 } // KisToolSelectMagnetic::createOptionWidget
 

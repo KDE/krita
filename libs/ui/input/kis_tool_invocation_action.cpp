@@ -182,9 +182,14 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
 void KisToolInvocationAction::processUnhandledEvent(QEvent* event)
 {
     bool savedState = d->active;
+    KisToolProxy *savedToolProxy = d->runningToolProxy;
+    if (!d->runningToolProxy) {
+        d->runningToolProxy = inputManager()->toolProxy();
+    }
     d->active = true;
     inputEvent(event);
     d->active = savedState;
+    d->runningToolProxy = savedToolProxy;
 }
 
 bool KisToolInvocationAction::supportsHiResInputEvents() const

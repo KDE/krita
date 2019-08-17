@@ -4,7 +4,7 @@ runtime: org.kde.Platform
 runtime-version: '5.12'
 sdk: org.kde.Sdk
 command: krita
-rename-icon: calligrakrita
+rename-icon: krita
 rename-desktop-file: org.kde.krita.desktop
 desktop-file-name-suffix: nightly
 finish-args:

@@ -247,8 +247,8 @@ void KisToolMove::notifyGuiAfterMove(bool showFloatingMessage)
             showFloatingMessage(
                 i18nc("floating message in move tool",
                       "X: %1 px, Y: %2 px",
-                      currentTopLeft.x(),
-                      currentTopLeft.y()),
+                      QLocale().toString(currentTopLeft.x()),
+                      QLocale().toString(currentTopLeft.y())),
                 QIcon(), 1000, KisFloatingMessage::High);
     }
 }

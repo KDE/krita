@@ -34,6 +34,7 @@
 
 #include <QListWidget>
 #include <QListWidgetItem>
+
 #include "kis_icon_utils.h"
 #include "krita_utils.h"
 #include "KoStore.h"
@@ -42,6 +43,7 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <KisPart.h>
+
 
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
@@ -85,7 +87,14 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(20));
 
 
+    versionNotificationLabel->setTextFormat(Qt::RichText);
+    versionNotificationLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    versionNotificationLabel->setOpenExternalLinks(true);
+
     connect(chkShowNews, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
+
+    connect(newsWidget, SIGNAL(newsDataChanged()), this, SLOT(slotUpdateVersionMessage()));
+
 
     // configure the News area
     KisConfig cfg(true);
@@ -127,6 +136,13 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
     }
 }
 
+bool KisWelcomePageWidget::isDevelopmentBuild()
+{
+    // dev builds contain GIT hash in it and the word git
+    // stable versions do not contain this
+    return qApp->applicationVersion().contains("git");
+}
+
 void KisWelcomePageWidget::showDropAreaIndicator(bool show)
 {
     if (!show) {
@@ -146,12 +162,12 @@ void KisWelcomePageWidget::showDropAreaIndicator(bool show)
 void KisWelcomePageWidget::slotUpdateThemeColors()
 {
 
-    QColor textColor = qApp->palette().color(QPalette::Text);
-    QColor backgroundColor = qApp->palette().color(QPalette::Background);
+    textColor = qApp->palette().color(QPalette::Text);
+    backgroundColor = qApp->palette().color(QPalette::Background);
 
     // make the welcome screen labels a subtle color so it doesn't clash with the main UI elements
-    QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
-    QString blendedStyle = QString("color: ").append(blendedColor.name());
+    blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
+    blendedStyle = QString("color: ").append(blendedColor.name());
 
 
     // what labels to change the color...
@@ -210,6 +226,10 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
     poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE?" + analyticsString + "what-is-kde" + "\">")
                               .append(i18n("Powered by KDE")).append("</a>"));
+
+
+    slotUpdateVersionMessage(); // text set from RSS feed
+
 
     // re-populate recent files since they might have themed icons
     populateRecentDocuments();
@@ -297,6 +317,51 @@ void KisWelcomePageWidget::populateRecentDocuments()
 
     recentDocumentsListView->setIconSize(QSize(48, 48));
     recentDocumentsListView->setModel(&m_recentFilesModel);
+}
+
+void KisWelcomePageWidget::slotUpdateVersionMessage()
+{
+
+    alertIcon->setIcon(KisIconUtils::loadIcon("warning"));
+    alertIcon->setVisible(false);
+
+    // find out if we need an update...or if this is a development version
+    if (isDevelopmentBuild()) {
+        // Development build
+        QString versionLabelText = QString("<a style=\"color: " +
+                                           blendedColor.name() +
+                                           " \" href=\"https://docs.krita.org/en/untranslatable_pages/triaging_bugs.html?"
+                                           + analyticsString + "dev-build" + "\">")
+                                  .append(i18n("DEV BUILD")).append("</a>");
+
+        versionNotificationLabel->setText(versionLabelText);
+        alertIcon->setVisible(true);
+        versionNotificationLabel->setVisible(true);
+
+    } else if (newsWidget->hasUpdateAvailable()) {
+
+        // build URL for label
+        QString versionLabelText = QString("<a style=\"color: " +
+                                           blendedColor.name() +
+                                           " \" href=\"" +
+                                           newsWidget->versionLink() + "?" +
+                                           analyticsString + "version-update" + "\">")
+                           .append(i18n("New Version Available!")).append("</a>");
+
+        versionNotificationLabel->setVisible(true);
+        versionNotificationLabel->setText(versionLabelText);
+        alertIcon->setVisible(true);
+
+    } else {
+        // no message needed... exit
+        versionNotificationLabel->setVisible(false);
+        return;
+    }
+
+    if (!blendedStyle.isNull()) {
+        versionNotificationLabel->setStyleSheet(blendedStyle);
+    }
+
 }
 
 void KisWelcomePageWidget::dragEnterEvent(QDragEnterEvent *event)

@@ -211,6 +211,8 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
         return;
     }
 
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_helper->isRunning());
+
     setMode(KisTool::PAINT_MODE);
 
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());

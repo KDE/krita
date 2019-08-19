@@ -206,6 +206,8 @@ public:
         return *this == defaultGrid();
     }
 
+    void transform(const QTransform &transform);
+
 private:
     static Qt::PenStyle toPenStyle(LineTypeInternal type) {
         return type == LINE_SOLID ? Qt::SolidLine :

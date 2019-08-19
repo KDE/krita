@@ -52,7 +52,7 @@ public:
 public Q_SLOTS:
     void deactivate() override;
     void activate(KoToolBase::ToolActivation activation, const QSet<KoShape *> &shapes) override;
-    void requestUndoDuringStroke() override;
+    void undoPoints();
     void slotSetRadius(qreal);
     void slotSetThreshold(int);
     void slotSetFrequency(int);
@@ -99,6 +99,16 @@ public:
     KoToolBase * createTool(KoCanvasBase *canvas) override
     {
         return new KisToolSelectMagnetic(canvas);
+    }
+
+    QList<QAction *> createActionsImpl() override
+    {
+        KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+        QList<QAction *> actions = KisSelectionToolFactoryBase::createActionsImpl();
+
+        actions << actionRegistry->makeQAction("undo_polygon_selection");
+
+        return actions;
     }
 };
 

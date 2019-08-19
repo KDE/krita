@@ -349,6 +349,7 @@ void KisToolSelectMagnetic::activate(KoToolBase::ToolActivation activation, cons
 {
     m_worker      = KisMagneticWorker(image()->projection(), m_radius);
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
+    connect(action("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoPoints()), Qt::UniqueConnection);
     KisToolSelect::activate(activation, shapes);
 }
 
@@ -361,10 +362,12 @@ void KisToolSelectMagnetic::deactivate()
     m_continuedMode = false;
     m_complete      = true;
 
+    disconnect(action("undo_polygon_selection"), 0, this, 0);
+
     KisTool::deactivate();
 }
 
-void KisToolSelectMagnetic::requestUndoDuringStroke()
+void KisToolSelectMagnetic::undoPoints()
 {
     if (m_complete) return;
 

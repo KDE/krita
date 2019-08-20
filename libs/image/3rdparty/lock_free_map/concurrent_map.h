@@ -48,7 +48,7 @@ public:
 
     bool migrationInProcess()
     {
-        return (quint64) m_root.loadNonatomic()->jobCoordinator.loadConsume() != 1;
+        return quint64(m_root.loadNonatomic()->jobCoordinator.loadConsume()) > 1;
     }
 
     // publishTableMigration() is called by exactly one thread from Details::TableMigration::run()

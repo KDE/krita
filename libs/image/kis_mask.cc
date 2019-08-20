@@ -192,7 +192,10 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
 
         KisPixelSelectionSP pixelSelection = selection->pixelSelection();
         if (pixelSelection->framesInterface()) {
-            q->addKeyframeChannel(pixelSelection->keyframeChannel());
+            KisRasterKeyframeChannel *keyframeChannel = pixelSelection->keyframeChannel();
+            keyframeChannel->setFilenameSuffix(".pixelselection");
+
+            q->addKeyframeChannel(keyframeChannel);
             q->enableAnimation();
         }
     } else {

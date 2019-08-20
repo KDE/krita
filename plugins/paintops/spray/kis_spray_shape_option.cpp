@@ -137,8 +137,8 @@ void KisSprayShapeOption::changeSizeUI(bool proportionalSize)
     }
     else {
         m_options->widthSpin->setMaximum(100);
-        m_options->widthSpin->setSuffix("%");
+        m_options->widthSpin->setSuffix(i18n("%"));
         m_options->heightSpin->setMaximum(100);
-        m_options->heightSpin->setSuffix("%");
+        m_options->heightSpin->setSuffix(i18n("%"));
     }
 }

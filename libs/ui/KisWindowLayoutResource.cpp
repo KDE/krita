@@ -35,12 +35,80 @@ static const int WINDOW_LAYOUT_VERSION = 1;
 
 struct KisWindowLayoutResource::Private
 {
-    struct Window {
-        QUuid windowId;
-        QByteArray geometry;
-        QByteArray windowState;
+    struct WindowGeometry{
         int screen = -1;
         Qt::WindowStates stateFlags = Qt::WindowNoState;
+        QByteArray data;
+
+        static WindowGeometry fromWindow(const QWidget *window, QList<QScreen*> screens)
+        {
+            WindowGeometry geometry;
+            QWindow *windowHandle = window->windowHandle();
+
+            geometry.data = window->saveGeometry();
+            geometry.stateFlags = windowHandle->windowState();
+
+            int index = screens.indexOf(windowHandle->screen());
+            if (index >= 0) {
+                geometry.screen = index;
+            }
+
+            return geometry;
+        }
+
+        void forceOntoCorrectScreen(QWidget *window, QList<QScreen*> screens)
+        {
+            QWindow *windowHandle = window->windowHandle();
+
+            if (screens.indexOf(windowHandle->screen()) != screen) {
+                QScreen *qScreen = screens[screen];
+                windowHandle->setScreen(qScreen);
+                windowHandle->setPosition(qScreen->availableGeometry().topLeft());
+            }
+
+            if (stateFlags) {
+                window->setWindowState(stateFlags);
+            }
+        }
+
+        void save(QDomDocument &doc, QDomElement &elem) const
+        {
+            if (screen >= 0) {
+                elem.setAttribute("screen", screen);
+            }
+
+            if (stateFlags & Qt::WindowMaximized) {
+                elem.setAttribute("maximized", "1");
+            }
+
+            QDomElement geometry = doc.createElement("geometry");
+            geometry.appendChild(doc.createCDATASection(data.toBase64()));
+            elem.appendChild(geometry);
+        }
+
+        static WindowGeometry load(const QDomElement &element)
+        {
+            WindowGeometry geometry;
+            geometry.screen = element.attribute("screen", "-1").toInt();
+
+            if (element.attribute("maximized", "0") != "0") {
+                geometry.stateFlags |= Qt::WindowMaximized;
+            }
+
+            QDomElement dataElement = element.firstChildElement("geometry");
+            geometry.data = QByteArray::fromBase64(dataElement.text().toLatin1());
+
+            return geometry;
+        }
+    };
+
+    struct Window {
+        QUuid windowId;
+        QByteArray windowState;
+        WindowGeometry geometry;
+
+        bool canvasDetached = false;
+        WindowGeometry canvasWindowGeometry;
     };
 
     QVector<Window> windows;
@@ -196,27 +264,31 @@ void KisWindowLayoutResource::applyLayout()
         QPointer<KisMainWindow> mainWindow = kisPart->windowById(window.windowId);
         KIS_SAFE_ASSERT_RECOVER_BREAK(mainWindow);
 
-        mainWindow->restoreGeometry(window.geometry);
+        mainWindow->restoreGeometry(window.geometry.data);
         mainWindow->restoreWorkspaceState(window.windowState);
+
+        mainWindow->setCanvasDetached(window.canvasDetached);
+        if (window.canvasDetached) {
+            QWidget *canvasWindow = mainWindow->canvasWindow();
+            canvasWindow->restoreGeometry(window.canvasWindowGeometry.data);
+        }
     }
 
     QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
     QList<QScreen*> screens = d->getScreensInConsistentOrder();
     Q_FOREACH(const auto &window, d->windows) {
-        if (window.screen >= 0 && window.screen < screens.size()) {
-            QPointer<KisMainWindow> mainWindow = kisPart->windowById(window.windowId);
-            KIS_SAFE_ASSERT_RECOVER_BREAK(mainWindow);
+        Private::WindowGeometry geometry = window.geometry;
+        QPointer<KisMainWindow> mainWindow = kisPart->windowById(window.windowId);
+        KIS_SAFE_ASSERT_RECOVER_BREAK(mainWindow);
 
-            QWindow *windowHandle = mainWindow->windowHandle();
-            if (screens.indexOf(windowHandle->screen()) != window.screen) {
-                QScreen *screen = screens[window.screen];
-                windowHandle->setScreen(screen);
-                windowHandle->setPosition(screen->availableGeometry().topLeft());
-            }
-
-            if (window.stateFlags) {
-                mainWindow->setWindowState(window.stateFlags);
+        if (geometry.screen >= 0 && geometry.screen < screens.size()) {
+            geometry.forceOntoCorrectScreen(mainWindow, screens);
+        }
+        if (window.canvasDetached) {
+            Private::WindowGeometry canvasWindowGeometry = window.canvasWindowGeometry;
+            if (canvasWindowGeometry.screen >= 0 && canvasWindowGeometry.screen < screens.size()) {
+                canvasWindowGeometry.forceOntoCorrectScreen(mainWindow->canvasWindow(), screens);
             }
         }
     }
@@ -302,17 +374,13 @@ void KisWindowLayoutResource::saveXml(QDomDocument &doc, QDomElement &root) cons
         QDomElement elem = doc.createElement("window");
         elem.setAttribute("id", window.windowId.toString());
 
-        if (window.screen >= 0) {
-            elem.setAttribute("screen", window.screen);
-        }
+        window.geometry.save(doc, elem);
 
-        if (window.stateFlags & Qt::WindowMaximized) {
-            elem.setAttribute("maximized", "1");
+        if (window.canvasDetached) {
+            QDomElement canvasWindowElement = doc.createElement("canvasWindow");
+            window.canvasWindowGeometry.save(doc, canvasWindowElement);
+            elem.appendChild(canvasWindowElement);
         }
-
-        QDomElement geometry = doc.createElement("geometry");
-        geometry.appendChild(doc.createCDATASection(window.geometry.toBase64()));
-        elem.appendChild(geometry);
 
         QDomElement state = doc.createElement("windowState");
         state.appendChild(doc.createCDATASection(window.windowState.toBase64()));
@@ -338,16 +406,15 @@ void KisWindowLayoutResource::loadXml(const QDomElement &element) const
             window.windowId = QUuid::createUuid();
         }
 
-        window.screen = windowElement.attribute("screen", "-1").toInt();
+        window.geometry = Private::WindowGeometry::load(windowElement);
 
-        if (windowElement.attribute("maximized", "0") != "0") {
-            window.stateFlags |= Qt::WindowMaximized;
+        QDomElement canvasWindowElement = windowElement.firstChildElement("canvasWindow");
+        if (!canvasWindowElement.isNull()) {
+            window.canvasDetached = true;
+            window.canvasWindowGeometry = Private::WindowGeometry::load(canvasWindowElement);
         }
 
-        QDomElement geometry = windowElement.firstChildElement("geometry");
         QDomElement state = windowElement.firstChildElement("windowState");
-
-        window.geometry = QByteArray::fromBase64(geometry.text().toLatin1());
         window.windowState = QByteArray::fromBase64(state.text().toLatin1());
 
         d->windows.append(window);
@@ -370,16 +437,12 @@ void KisWindowLayoutResource::setWindows(const QList<QPointer<KisMainWindow>> &m
 
         Private::Window state;
         state.windowId = window->id();
-        state.geometry = window->saveGeometry();
         state.windowState = window->saveState();
-        state.stateFlags = window->windowState();
+        state.geometry = Private::WindowGeometry::fromWindow(window, screens);
 
-        QWindow *windowHandle = window->windowHandle();
-        if (windowHandle) {
-            int index = screens.indexOf(windowHandle->screen());
-            if (index >= 0) {
-                state.screen = index;
-            }
+        state.canvasDetached = window->canvasDetached();
+        if (state.canvasDetached) {
+            state.canvasWindowGeometry = Private::WindowGeometry::fromWindow(window->canvasWindow(), screens);
         }
 
         d->windows.append(state);

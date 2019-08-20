@@ -20,9 +20,11 @@
 #include "KisGamutMaskToolbar.h"
 #include <kis_icon_utils.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_signals_blocker.h>
 
 KisGamutMaskToolbar::KisGamutMaskToolbar(QWidget* parent) : QWidget(parent)
   , m_selectedMask(nullptr)
+  , m_selfUpdate(false)
 {
     m_ui = new Ui_wdgGamutMaskToolbar();
     m_ui->setupUi(this);
@@ -57,11 +59,22 @@ void KisGamutMaskToolbar::connectMaskSignals(KisCanvasResourceProvider* resource
 
     connect(this, SIGNAL(sigGamutMaskChanged(KoGamutMaskSP)),
             resourceProvider, SLOT(slotGamutMaskActivated(KoGamutMaskSP)), Qt::UniqueConnection);
+
+    connect(this, SIGNAL(sigGamutMaskDeactivated()),
+            resourceProvider, SLOT(slotGamutMaskDeactivate()), Qt::UniqueConnection);
+
+    connect(resourceProvider, SIGNAL(sigGamutMaskDeactivated()),
+            this, SLOT(slotGamutMaskDeactivate()), Qt::UniqueConnection);
+
 }
 
 void KisGamutMaskToolbar::slotGamutMaskSet(KoGamutMaskSP mask)
 {
     if (!mask) {
+        return;
+    }
+
+    if (m_selfUpdate) {
         return;
     }
 
@@ -81,6 +94,15 @@ void KisGamutMaskToolbar::slotGamutMaskUnset()
     m_ui->labelMaskName->setText(m_textNoMask);
 }
 
+void KisGamutMaskToolbar::slotGamutMaskDeactivate()
+{
+    if (m_selfUpdate) {
+        return;
+    }
+
+    slotGamutMaskToggle(false);
+}
+
 void KisGamutMaskToolbar::slotGamutMaskToggle(bool state)
 {
     bool b = (!m_selectedMask) ? false : state;
@@ -95,14 +117,21 @@ void KisGamutMaskToolbar::slotGamutMaskToggle(bool state)
         m_ui->rotationSlider->blockSignals(true);
         m_ui->rotationSlider->setValue(m_selectedMask->rotation());
         m_ui->rotationSlider->blockSignals(false);
+
+        m_selfUpdate = true;
+        emit sigGamutMaskChanged(m_selectedMask);
+        m_selfUpdate = false;
+
     } else {
         m_ui->bnToggleMask->setIcon(m_iconMaskOff);
         m_ui->rotationSlider->hide();
         m_ui->labelMaskName->show();
         m_ui->labelMaskName->setText(m_textMaskDisabled);
-    }
 
-    emit sigGamutMaskToggle(state);
+        m_selfUpdate = true;
+        emit sigGamutMaskDeactivated();
+        m_selfUpdate = false;
+    }
 }
 
 void KisGamutMaskToolbar::slotGamutMaskRotate(int angle)

@@ -155,7 +155,7 @@ QWidget* KisIntegerColorInput::createInput()
     m_colorSlider->setMinimum(0);
 
     if (m_usePercentage) {
-        m_intNumInput->setSuffix("%");
+        m_intNumInput->setSuffix(i18n("%"));
     } else {
         m_intNumInput->setSuffix("");
     }
@@ -198,7 +198,7 @@ void KisIntegerColorInput::setPercentageWise(bool val)
     m_usePercentage = val;
 
     if (m_usePercentage) {
-        m_intNumInput->setSuffix("%");
+        m_intNumInput->setSuffix(i18n("%"));
     } else {
         m_intNumInput->setSuffix("");
     }

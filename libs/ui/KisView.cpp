@@ -104,13 +104,13 @@ class Q_DECL_HIDDEN KisView::Private
 public:
     Private(KisView *_q,
             KisDocument *document,
-            KoCanvasResourceProvider *resourceManager,
-            KActionCollection *actionCollection)
-        : actionCollection(actionCollection)
+            KisViewManager *viewManager)
+        : actionCollection(viewManager->actionCollection())
         , viewConverter()
-        , canvasController(_q, actionCollection)
-        , canvas(&viewConverter, resourceManager, _q, document->shapeController())
+        , canvasController(_q, viewManager->mainWindow(), viewManager->actionCollection())
+        , canvas(&viewConverter, viewManager->canvasResourceProvider()->resourceManager(), viewManager->mainWindow(), _q, document->shapeController())
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
+        , viewManager(viewManager)
         , paintingAssistantsDecoration(new KisPaintingAssistantsDecoration(_q))
         , referenceImagesDecoration(new KisReferenceImagesDecoration(_q, document))
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
@@ -206,9 +206,9 @@ public:
 
 };
 
-KisView::KisView(KisDocument *document, KoCanvasResourceProvider *resourceManager, KActionCollection *actionCollection, QWidget *parent)
+KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *parent)
     : QWidget(parent)
-    , d(new Private(this, document, resourceManager, actionCollection))
+    , d(new Private(this, document, viewManager))
 {
     Q_ASSERT(document);
     connect(document, SIGNAL(titleModified(QString,bool)), this, SIGNAL(titleModified(QString,bool)));
@@ -661,7 +661,7 @@ QPrintDialog *KisView::createPrintDialog(KisPrintJob *printJob, QWidget *parent)
 
 KisMainWindow * KisView::mainWindow() const
 {
-    return dynamic_cast<KisMainWindow *>(window());
+    return d->viewManager->mainWindow();
 }
 
 void KisView::setSubWindow(QMdiSubWindow *subWindow)

@@ -100,6 +100,8 @@ void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
     if (m_continuedMode && mode() != PAINT_MODE) {
         updateContinuedMode();
     }
+
+    KisToolSelect::mouseMoveEvent(event);
 }
 
 void KisToolSelectOutline::beginPrimaryAction(KoPointerEvent *event)

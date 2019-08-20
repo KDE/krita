@@ -33,6 +33,7 @@
 #include "KisToolChangesTracker.h"
 #include "kis_signal_compressor.h"
 #include "kis_signal_auto_connection.h"
+#include "KisAsyncronousStrokeUpdateHelper.h"
 
 #include "kis_canvas2.h"
 
@@ -175,6 +176,8 @@ private:
     QPoint m_lastCursorPos;
     KisSignalCompressor m_updateCursorCompressor;
     KisSignalAutoConnectionsStore m_actionConnections;
+
+    KisAsyncronousStrokeUpdateHelper m_asyncUpdateHelper;
 };
 
 

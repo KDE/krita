@@ -204,7 +204,7 @@ KisResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreate
     }
 
     newBundle->addMeta("fileName", bundlePath);
-    newBundle->addMeta("created", QDateTime::currentDateTime().toString(Qt::ISODate));
+    newBundle->addMeta("created", QDateTime::currentDateTime().toOffsetFromUtc(0).toString(Qt::ISODate));
 
     if (!newBundle->save()) {
         QMessageBox::critical(viewManager()->mainWindow(), i18nc("@title:window", "Krita"), i18n("Could not create the new bundle."));

@@ -112,7 +112,6 @@
 #include "dialogs/kis_about_application.h"
 #include "dialogs/kis_delayed_save_dialog.h"
 #include "dialogs/kis_dlg_preferences.h"
-#include "kis_action.h"
 #include "kis_action_manager.h"
 #include "KisApplication.h"
 #include "kis_canvas2.h"
@@ -149,6 +148,9 @@
 #include "KisWelcomePageWidget.h"
 #include <KritaVersionWrapper.h>
 #include <kritaversion.h>
+#include "KisCanvasWindow.h"
+#include "kis_action.h"
+
 #include <mutex>
 
 class ToolDockerFactory : public KoDockFactoryBase
@@ -238,6 +240,7 @@ public:
     KisAction *mdiPreviousWindow {0};
     KisAction *toggleDockers {0};
     KisAction *toggleDockerTitleBars {0};
+    KisAction *toggleDetachCanvas {0};
     KisAction *fullScreenMode {0};
     KisAction *showSessionManager {0};
 
@@ -275,6 +278,7 @@ public:
     QMdiSubWindow *activeSubWindow  {0};
     QSignalMapper *windowMapper;
     QSignalMapper *documentMapper;
+    KisCanvasWindow *canvasWindow {0};
 
     QByteArray lastExportedFormat;
     QScopedPointer<KisSignalCompressorWithParam<int> > tabSwitchCompressor;
@@ -399,6 +403,9 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
     connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
     connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
+
+    d->canvasWindow = new KisCanvasWindow(this);
+    actionCollection()->addAssociatedWidget(d->canvasWindow);
 
     createActions();
 
@@ -723,6 +730,34 @@ void KisMainWindow::slotThemeChanged()
     emit themeChanged();
 }
 
+bool KisMainWindow::canvasDetached() const
+{
+    return centralWidget() != d->widgetStack;
+}
+
+void KisMainWindow::setCanvasDetached(bool detach)
+{
+    if (detach == canvasDetached()) return;
+
+    QWidget *outgoingWidget = centralWidget() ? takeCentralWidget() : nullptr;
+    QWidget *incomingWidget = d->canvasWindow->swapMainWidget(outgoingWidget);
+
+    if (incomingWidget) {
+        setCentralWidget(incomingWidget);
+    }
+
+    if (detach) {
+        d->canvasWindow->show();
+    } else {
+        d->canvasWindow->hide();
+    }
+}
+
+QWidget * KisMainWindow::canvasWindow() const
+{
+    return d->canvasWindow;
+}
+
 void KisMainWindow::updateReloadFileAction(KisDocument *doc)
 {
     Q_UNUSED(doc);
@@ -950,7 +985,7 @@ KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
 {
     showWelcomeScreen(false); // see workaround in function header
 
-    KisView *view = KisPart::instance()->createView(document, resourceManager(), actionCollection(), this);
+    KisView *view = KisPart::instance()->createView(document, d->viewManager, this);
     addView(view);
 
     emit guiLoadingFinished();
@@ -1299,6 +1334,7 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
     if (childrenList.isEmpty()) {
         d->deferredClosingEvent = e;
         saveWindowState(true);
+        d->canvasWindow->close();
     } else {
         e->setAccepted(false);
     }
@@ -2553,6 +2589,11 @@ void KisMainWindow::createActions()
     KisConfig(true).showDockers(true);
     d->toggleDockers->setChecked(true);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
+
+    d->toggleDetachCanvas = actionManager->createAction("view_detached_canvas");
+    d->toggleDetachCanvas->setChecked(false);
+    connect(d->toggleDetachCanvas, SIGNAL(toggled(bool)), SLOT(setCanvasDetached(bool)));
+    setCanvasDetached(false);
 
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
     actionCollection()->addAction("window", d->windowMenu);

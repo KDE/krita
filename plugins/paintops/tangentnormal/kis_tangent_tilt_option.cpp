@@ -49,11 +49,11 @@ KisTangentTiltOption::KisTangentTiltOption()
 
     m_options->sliderElevationSensitivity->setRange(0, 100, 0);
     m_options->sliderElevationSensitivity->setValue(100);
-    m_options->sliderElevationSensitivity->setSuffix("%");
+    m_options->sliderElevationSensitivity->setSuffix(i18n("%"));
 
     m_options->sliderMixValue->setRange(0, 100, 0);
     m_options->sliderMixValue->setValue(50);
-    m_options->sliderMixValue->setSuffix("%");
+    m_options->sliderMixValue->setSuffix(i18n("%"));
 
     connect(m_options->comboRed, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
     connect(m_options->comboGreen, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));

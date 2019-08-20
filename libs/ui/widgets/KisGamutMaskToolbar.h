@@ -39,10 +39,12 @@ public:
 Q_SIGNALS:
     void sigGamutMaskToggle(bool state);
     void sigGamutMaskChanged(KoGamutMaskSP);
+    void sigGamutMaskDeactivated();
 
 public Q_SLOTS:
     void slotGamutMaskSet(KoGamutMaskSP mask);
     void slotGamutMaskUnset();
+    void slotGamutMaskDeactivate();
 
 private Q_SLOTS:
     void slotGamutMaskToggle(bool state);
@@ -57,6 +59,8 @@ private:
 
     QString m_textNoMask;
     QString m_textMaskDisabled;
+
+    bool m_selfUpdate;
 };
 
 #endif // KISGAMUTMASKTOOLBAR_H

@@ -154,10 +154,10 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
         connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigGamutMaskPreviewUpdate()),
                 m_colorSelector, SLOT(slotGamutMaskPreviewUpdate()), Qt::UniqueConnection);
 
-        m_gamutMaskToolbar->connectMaskSignals(m_canvas->viewManager()->canvasResourceProvider());
+        connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigGamutMaskDeactivated()),
+                m_colorSelector, SLOT(slotGamutMaskDeactivate()), Qt::UniqueConnection);
 
-        // gamut mask connections
-        connect(m_gamutMaskToolbar, SIGNAL(sigGamutMaskToggle(bool)), m_colorSelector, SLOT(slotGamutMaskToggle(bool)), Qt::UniqueConnection);
+        m_gamutMaskToolbar->connectMaskSignals(m_canvas->viewManager()->canvasResourceProvider());
 
         KActionCollection* actionCollection = canvas->viewManager()->actionCollection();
         actionCollection->addAction("show_color_selector", m_colorSelAction);

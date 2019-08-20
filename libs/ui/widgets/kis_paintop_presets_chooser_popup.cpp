@@ -52,7 +52,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     QMenu* menu = new QMenu(this);
     menu->setStyleSheet("margin: 6px");
 
-    menu->addSection(i18n("Display"));
+    menu->addSection(i18nc("@title Which elements to display (e.g., thumbnails or details)", "Display"));
 
     QActionGroup *actionGroup = new QActionGroup(this);
 

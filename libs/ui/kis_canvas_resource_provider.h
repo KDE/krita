@@ -58,6 +58,7 @@ public:
         HdrExposure = KoCanvasResourceProvider::KritaStart + 1,
         CurrentPattern,
         CurrentGamutMask,
+        GamutMaskActive,
         CurrentGradient,
         CurrentDisplayProfile,
         CurrentKritaNode,
@@ -119,6 +120,7 @@ public:
     KisNodeSP currentNode() const;
 
     KoGamutMaskSP currentGamutMask() const;
+    bool gamutMaskActive() const;
 
     KisPaintOpPresetSP currentPreset() const;
     void setPaintOpPreset(const KisPaintOpPresetSP preset);
@@ -188,6 +190,7 @@ public Q_SLOTS:
     void slotGamutMaskActivated(KoGamutMaskSP mask);
     void slotGamutMaskUnset();
     void slotGamutMaskPreviewUpdate();
+    void slotGamutMaskDeactivate();
 
     /**
      * Set the image size in pixels. The resource provider will store
@@ -229,6 +232,7 @@ Q_SIGNALS:
     void sigGamutMaskChanged(KoGamutMaskSP mask);
     void sigGamutMaskUnset();
     void sigGamutMaskPreviewUpdate();
+    void sigGamutMaskDeactivated();
 
 private:
 

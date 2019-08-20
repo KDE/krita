@@ -8,7 +8,7 @@ application-x-krita
 application-x-wmf
 artistictext-detach-path
 artistictext-tool
-calligrakrita
+krita
 character-set
 draw-arrow-back
 draw-arrow-down

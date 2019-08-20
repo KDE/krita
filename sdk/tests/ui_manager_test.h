@@ -58,7 +58,7 @@ public:
         image->initialRefreshGraph();
 
         mainWindow = new KisMainWindow();
-        imageView = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
+        imageView = new KisView(doc, mainWindow->viewManager(), mainWindow);
         view = new KisViewManager(mainWindow, mainWindow->actionCollection());
 
         KoPatternSP newPattern(new KoPattern(fetchDataFileLazy("HR_SketchPaper_01.pat")));

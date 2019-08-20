@@ -224,7 +224,7 @@ void KisToolShape::addShape(KoShape* shape)
     parentCommand->setText(cmd->text());
     new KoKeepShapesSelectedCommand(oldSelectedShapes, {shape}, canvas()->selectedShapesProxy(), true, parentCommand);
 
-    KisProcessingApplicator::runSingleCommandStroke(image(), cmd);
+    KisProcessingApplicator::runSingleCommandStroke(image(), cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 }
 
 void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name)

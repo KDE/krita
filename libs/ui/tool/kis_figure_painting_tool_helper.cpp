@@ -25,6 +25,7 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include <strokes/KisFreehandStrokeInfo.h>
+#include "KisAsyncronousStrokeUpdateHelper.h"
 
 
 KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString &name,
@@ -55,7 +56,7 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString
 KisFigurePaintingToolHelper::~KisFigurePaintingToolHelper()
 {
     m_strokesFacade->addJob(m_strokeId,
-        new FreehandStrokeStrategy::UpdateData(true));
+        new KisAsyncronousStrokeUpdateHelper::UpdateData(true));
     m_strokesFacade->endStroke(m_strokeId);
 }
 

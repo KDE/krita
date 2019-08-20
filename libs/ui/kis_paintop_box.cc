@@ -237,9 +237,9 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
             slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity");
             slFlow    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("flow");
             slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size");
-            slOpacity->setPrefix(QString("%1  ").arg(i18n("Opacity:")));
-            slFlow->setPrefix(QString("%1  ").arg(i18n("Flow:")));
-            slSize->setPrefix(QString("%1  ").arg(i18n("Size:")));
+            slOpacity->setPrefix(QString("%1 ").arg(i18n("Opacity:")));
+            slFlow->setPrefix(QString("%1 ").arg(i18n("Flow:")));
+            slSize->setPrefix(QString("%1 ").arg(i18n("Size:")));
         }
         else {
             slOpacity = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("opacity", i18n("Opacity:"));
@@ -250,7 +250,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         slOpacity->setRange(0, 100, 0);
         slOpacity->setValue(100);
         slOpacity->setSingleStep(5);
-        slOpacity->setSuffix("%");
+        slOpacity->setSuffix(i18n("%"));
         slOpacity->setMinimumWidth(qMax(sliderWidth, slOpacity->sizeHint().width()));
         slOpacity->setFixedHeight(iconsize);
         slOpacity->setBlockUpdateSignalOnDrag(true);
@@ -258,7 +258,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
         slFlow->setRange(0, 100, 0);
         slFlow->setValue(100);
         slFlow->setSingleStep(5);
-        slFlow->setSuffix("%");
+        slFlow->setSuffix(i18n("%"));
         slFlow->setMinimumWidth(qMax(sliderWidth, slFlow->sizeHint().width()));
         slFlow->setFixedHeight(iconsize);
         slFlow->setBlockUpdateSignalOnDrag(true);

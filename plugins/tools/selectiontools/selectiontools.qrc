@@ -20,5 +20,7 @@
         <file>tool_similar_selection_cursor.png</file>
         <file>tool_similar_selection_cursor_sub.png</file>
         <file>tool_magnetic_selection_cursor.png</file>
+        <file>tool_magnetic_selection_cursor_sub.png</file>
+        <file>tool_magnetic_selection_cursor_add.png</file>
     </qresource>
 </RCC>

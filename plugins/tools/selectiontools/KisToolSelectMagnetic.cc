@@ -309,12 +309,19 @@ void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter
         paintToolOutline(&gc, outline);
 
         //printing the handles
+        bool firstPoint = true;
         Q_FOREACH (const int pt, m_anchorPoints) {
             if(pt < 0){
                 //no points are set
                 continue;
             }
             KisHandlePainterHelper helper(&gc, handleRadius());
+            if(m_snapBound.contains(m_lastCursorPos) && firstPoint){
+                helper.setHandleStyle(KisHandleStyle::secondarySelection());
+                helper.drawHandleRect(pixelToView(m_points[pt]), 4, QPoint(0,0));
+                firstPoint = false;
+                continue;
+            }
             helper.setHandleStyle(KisHandleStyle::primarySelection());
             helper.drawHandleRect(pixelToView(m_points[pt]), 4, QPoint(0,0));
         }

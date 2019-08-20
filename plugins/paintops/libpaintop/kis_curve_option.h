@@ -85,6 +85,12 @@ public:
 
     int getCurveMode() const;
 
+    /**
+     * Returns the curve that is being used instead of sensor ones
+     * in case "Use the same curve" is checked.
+     */
+    KisCubicCurve getCommonCurve() const;
+
     void setSeparateCurveValue(bool separateCurveValue);
 
     void setChecked(bool checked);
@@ -92,6 +98,12 @@ public:
     void setCurve(DynamicSensorType sensorType, bool useSameCurve, const KisCubicCurve &curve);
     void setValue(qreal value);
     void setCurveMode(int mode);
+
+    /**
+     * Sets the curve that is being used instead of sensor ones
+     * in case "Use the same curve" is checked.
+     */
+    void setCommonCurve(KisCubicCurve curve);
 
     struct ValueComponents {
 
@@ -197,6 +209,12 @@ protected:
     bool m_useCurve;
     bool m_useSameCurve;
     bool m_separateCurveValue;
+
+    /**
+     * Curve that is being used instead of sensors' internal ones
+     * in case "Use the same curve" is checked.
+     */
+    KisCubicCurve m_commonCurve;
 
     int m_curveMode;
 

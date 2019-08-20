@@ -114,6 +114,13 @@ public:
      * @return the value of this sensor for the given KisPaintInformation
      */
     qreal parameter(const KisPaintInformation& info);
+    /**
+     * @return the value of this sensor for the given KisPaintInformation
+     * curve -- a custom, temporary curve that should be used instead of the one for the sensor
+     * customCurve -- if it's a new curve or not; should always be true if the function is called from outside
+     * (aka not in parameter(info) function)
+     */
+    qreal parameter(const KisPaintInformation& info, const KisCubicCurve curve, const bool customCurve);
 
     /**
      * This function is call before beginning a stroke to reset the sensor.

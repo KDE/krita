@@ -123,12 +123,11 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP 
     m_curveOptionWidget->sensorSelector->reload();
     m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->activeSensors().first());
     updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
-    updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
 
     if (m_curveOption->isSameCurveUsed()) {
-        // make sure the curve is transfered to all sensors to avoid updating from a wrong curve later
-        transferCurve();
+        m_curveOption->setCommonCurve(m_curveOptionWidget->sensorSelector->currentHighlighted()->curve());
     }
+    updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
 }
 
 void KisCurveOptionWidget::lodLimitations(KisPaintopLodLimitations *l) const
@@ -204,7 +203,8 @@ void KisCurveOptionWidget::updateCurve(KisDynamicSensorSP sensor)
 {
     if (sensor) {
         bool blockSignal = m_curveOptionWidget->curveWidget->blockSignals(true);
-        m_curveOptionWidget->curveWidget->setCurve(sensor->curve());
+        KisCubicCurve curve = m_curveOption->isSameCurveUsed() ? m_curveOption->getCommonCurve() : sensor->curve();
+        m_curveOptionWidget->curveWidget->setCurve(curve);
         m_curveOptionWidget->curveWidget->blockSignals(blockSignal);
     }
 }

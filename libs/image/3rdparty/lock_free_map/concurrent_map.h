@@ -344,6 +344,9 @@ public:
 
         bool isValid() const
         {
+#ifdef SANITY_CHECK
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_value != Value(ValueTraits::Redirect), false);
+#endif
             return m_value != Value(ValueTraits::NullValue);
         }
 

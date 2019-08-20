@@ -262,12 +262,9 @@ bool KisTileDataStore::trySwapTileData(KisTileData *td)
     if (!td->m_swapLock.tryLockForWrite()) return result;
 
     if (td->data()) {
-        unregisterTileDataImp(td);
         if (m_swappedStore.trySwapOutTileData(td)) {
+            unregisterTileDataImp(td);
             result = true;
-        } else {
-            result = false;
-            registerTileDataImp(td);
         }
     }
     td->m_swapLock.unlock();

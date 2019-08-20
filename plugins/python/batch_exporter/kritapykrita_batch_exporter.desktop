@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=batch_exporter
+X-Krita-Manual=Manual.html
+X-Python-2-Compatible=false
+Name=Batch Exporter
+Name[en_GB]=Batch Exporter
+Name[es]=Exportador por Lotes
+Name[pt]=Exportador de Lote
+Name[pt_BR]=Exportador de Lote
+Name[ja]=バッチ処理書き出す
+Comment=Smart export tool that uses layer names to scale and (re-)export art assets in batches fast
+Comment[en_GB]=Smart export tool that uses layer names to scale and (re-)export art assets in batches fast
+Comment[es]=Herramienta de exportacíon por lotes inteligente que usa los nombres de las capas para adaptar el tamaño y exportar imagenes por lote rápido

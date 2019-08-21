@@ -98,10 +98,10 @@ void KisToolSelectMagnetic::calculateCheckPoints()
     int finalPoint = m_checkPoint + 2;
     int midPoint = m_checkPoint + 1;
     int minPoint = m_checkPoint;
+    qreal maxFactor = 1.7;
 
     for(; finalPoint<m_points.count(); finalPoint++){
-        totalDistance += kisDistance(pixelToView(m_points[finalPoint]),
-                                     pixelToView(m_points[finalPoint - 1]));
+        totalDistance += kisDistance(m_points[finalPoint], m_points[finalPoint - 1]);
 
         if(totalDistance <= m_frequency/3){
             minPoint = finalPoint;
@@ -111,12 +111,12 @@ void KisToolSelectMagnetic::calculateCheckPoints()
             midPoint = finalPoint;
         }
 
-        if(totalDistance > 2*m_frequency){
+        if(totalDistance > maxFactor*m_frequency){
             break;
         }
     }
 
-    if(totalDistance > 2*m_frequency){
+    if(totalDistance > maxFactor*m_frequency){
         bool foundSomething = false;
 
         for(int i = midPoint; i < finalPoint; i++){
@@ -152,10 +152,9 @@ void KisToolSelectMagnetic::calculateCheckPoints()
     totalDistance = 0.0;
 
     for(; finalPoint<m_points.count(); finalPoint++){
-        totalDistance += kisDistance(pixelToView(m_points[finalPoint]),
-                                     pixelToView(m_points[m_checkPoint]));
+        totalDistance += kisDistance(m_points[finalPoint], m_points[m_checkPoint]);
 
-        if(totalDistance > 2*m_frequency){
+        if(totalDistance > maxFactor*m_frequency){
             calculateCheckPoints();
             totalDistance = 0.0;
         }
@@ -172,12 +171,6 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
 
     m_lastCursorPos = convertToPixelCoord(event);
     QPoint current = m_lastCursorPos.toPoint();
-
-    if (m_anchorPoints.count() > 0 && m_snapBound.contains(m_lastAnchor)) {
-        //set a freaking cursor
-        //or we can just change the handle color on hover
-        //useCursor(KisCursor::load("tool_outline_selection_cursor_add.png", 6, 6));
-    }
 
     vQPointF pointSet = m_worker.computeEdge(m_frequency, m_lastAnchor, current);
     m_points.resize(m_checkPoint);
@@ -220,6 +213,7 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
 
     m_anchorPoints.push_back(m_checkPoint);
     m_complete = false;
+    updateCanvasPixelRect(image()->bounds());
 }
 
 // drag while primary mouse button is pressed

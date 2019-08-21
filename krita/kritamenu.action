@@ -597,6 +597,18 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="view_detached_canvas">
+      <icon></icon>
+      <text>Detach canvas</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show the canvas on a separate window</toolTip>
+      <iconText>Detach canvas</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="wrap_around_mode">
       <icon></icon>
       <text>&amp;Wrap Around Mode</text>
@@ -1211,7 +1223,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="deselect">
-      <icon>edit-select-all</icon>
+      <icon>edit-select-none</icon>
       <text>&amp;Deselect</text>
       <whatsThis></whatsThis>
       <toolTip>Deselect</toolTip>
@@ -1691,7 +1703,7 @@
       <statusTip></statusTip>
     </Action>
     <Action name="help_about_app">
-      <icon>calligrakrita</icon>
+      <icon>krita</icon>
       <text>&amp;About Krita</text>
       <whatsThis></whatsThis>
       <toolTip>About Krita</toolTip>

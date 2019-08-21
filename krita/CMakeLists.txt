@@ -19,16 +19,16 @@ set(krita_SRCS main.cc)
 
 # Set the application icon on the application
 if (NOT APPLE)
-    file(GLOB ICON_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakrita.png")
+    file(GLOB ICON_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-krita.png")
 else()
     set(ICON_SRCS
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/16-apps-calligrakrita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/32-apps-calligrakrita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/48-apps-calligrakrita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/128-apps-calligrakrita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/256-apps-calligrakrita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/512-apps-calligrakrita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/1024-apps-calligrakrita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/16-apps-krita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/32-apps-krita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/48-apps-krita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/128-apps-krita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/256-apps-krita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/512-apps-krita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/1024-apps-krita.png"
     )
 endif() 
 ecm_add_app_icon(krita_SRCS ICONS ${ICON_SRCS})

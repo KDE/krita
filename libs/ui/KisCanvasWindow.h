@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2018 Jouni Pentikäinen <joupent@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,29 +15,28 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KISCANVASWINDOW_H
+#define KISCANVASWINDOW_H
 
-#ifndef __KIS_PAINTOP_TRANSFORMATION_CONNECTOR_H
-#define __KIS_PAINTOP_TRANSFORMATION_CONNECTOR_H
+#include <QWidget>
 
-#include <QObject>
-#include <QPointer>
+class KisMainWindow;
 
-#include <kis_canvas2.h>
-
-class KisPaintopTransformationConnector : public QObject
+/**
+ * Window for the canvas (mdi) area. Used when detached canvas mode is enabled.
+ */
+class KisCanvasWindow : public QWidget
 {
-    Q_OBJECT
 public:
-    KisPaintopTransformationConnector(KisCanvas2 *canvas, QObject *parent);
+    explicit KisCanvasWindow(KisMainWindow *mainWindow);
+    ~KisCanvasWindow() override;
 
-public:
-    void notifyTransformationChanged();
+    QWidget * swapMainWidget(QWidget *widget);
 
-public Q_SLOTS:
-    void slotCanvasResourceChanged(int key, const QVariant &resource);
-
+    void closeEvent(QCloseEvent *event) override;
 private:
-    QPointer<KisCanvas2> m_canvas;
+    struct Private;
+    QScopedPointer<Private> d;
 };
 
-#endif /* __KIS_PAINTOP_TRANSFORMATION_CONNECTOR_H */
+#endif

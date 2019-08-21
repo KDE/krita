@@ -276,7 +276,7 @@ QWidget* KisToolColorPicker::createOptionWidget()
 
     // Initialize blend KisSliderSpinBox
     m_optionsWidget->blend->setRange(0,100);
-    m_optionsWidget->blend->setSuffix("%");
+    m_optionsWidget->blend->setSuffix(i18n("%"));
 
     updateOptionWidget();
 

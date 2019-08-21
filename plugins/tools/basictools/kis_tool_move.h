@@ -33,6 +33,7 @@
 #include "KisToolChangesTracker.h"
 #include "kis_signal_compressor.h"
 #include "kis_signal_auto_connection.h"
+#include "KisAsyncronousStrokeUpdateHelper.h"
 
 #include "kis_canvas2.h"
 
@@ -116,7 +117,7 @@ public Q_SLOTS:
     void moveBySpinX(int newX);
     void moveBySpinY(int newY);
 
-    void slotNodeChanged(KisNodeList nodes);
+    void slotNodeChanged(const KisNodeList &nodes);
     void slotSelectionChanged();
     void commitChanges();
 
@@ -135,7 +136,7 @@ private:
 
     QPoint currentOffset() const;
     void notifyGuiAfterMove(bool showFloatingMessage = true);
-    bool tryEndPreviousStroke(KisNodeList nodes);
+    bool tryEndPreviousStroke(const KisNodeList &nodes);
     KisNodeList fetchSelectedNodes(MoveToolMode mode, const QPoint *pixelPoint, KisSelectionSP selection);
     void requestHandlesRectUpdate();
 
@@ -175,6 +176,8 @@ private:
     QPoint m_lastCursorPos;
     KisSignalCompressor m_updateCursorCompressor;
     KisSignalAutoConnectionsStore m_actionConnections;
+
+    KisAsyncronousStrokeUpdateHelper m_asyncUpdateHelper;
 };
 
 

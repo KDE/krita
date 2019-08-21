@@ -441,7 +441,7 @@ public:
     void setDefaultBackgroundOpacity(quint8 value);
 
     QColor defaultBackgroundColor(bool defaultValue = false) const;
-    void setDefaultBackgroundColor(QColor value);
+    void setDefaultBackgroundColor(const QColor &value);
 
     enum BackgroundStyle {
         RASTER_LAYER = 0,

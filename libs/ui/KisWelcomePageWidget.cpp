@@ -22,6 +22,8 @@
 #include <QDesktopServices>
 #include <QFileInfo>
 #include <QMimeData>
+#include <QPixmap>
+#include <QImage>
 
 #include "kis_action_manager.h"
 #include "kactioncollection.h"
@@ -32,10 +34,16 @@
 
 #include <QListWidget>
 #include <QListWidgetItem>
+
 #include "kis_icon_utils.h"
 #include "krita_utils.h"
 #include "KoStore.h"
 #include "kis_config.h"
+#include "KisDocument.h"
+#include <kis_image.h>
+#include <kis_paint_device.h>
+#include <KisPart.h>
+
 
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
@@ -79,7 +87,14 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(20));
 
 
+    versionNotificationLabel->setTextFormat(Qt::RichText);
+    versionNotificationLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    versionNotificationLabel->setOpenExternalLinks(true);
+
     connect(chkShowNews, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
+
+    connect(newsWidget, SIGNAL(newsDataChanged()), this, SLOT(slotUpdateVersionMessage()));
+
 
     // configure the News area
     KisConfig cfg(true);
@@ -114,7 +129,18 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         connect(clearRecentFilesLink, SIGNAL(clicked(bool)), this, SLOT(slotClearRecentFiles()));
 
         slotUpdateThemeColors();
+
+        // allows RSS news items to apply analytics tracking.
+        newsWidget->setAnalyticsTracking("?" + analyticsString);
+
     }
+}
+
+bool KisWelcomePageWidget::isDevelopmentBuild()
+{
+    // dev builds contain GIT hash in it and the word git
+    // stable versions do not contain this
+    return qApp->applicationVersion().contains("git");
 }
 
 void KisWelcomePageWidget::showDropAreaIndicator(bool show)
@@ -136,12 +162,12 @@ void KisWelcomePageWidget::showDropAreaIndicator(bool show)
 void KisWelcomePageWidget::slotUpdateThemeColors()
 {
 
-    QColor textColor = qApp->palette().color(QPalette::Text);
-    QColor backgroundColor = qApp->palette().color(QPalette::Background);
+    textColor = qApp->palette().color(QPalette::Text);
+    backgroundColor = qApp->palette().color(QPalette::Background);
 
     // make the welcome screen labels a subtle color so it doesn't clash with the main UI elements
-    QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
-    QString blendedStyle = QString("color: ").append(blendedColor.name());
+    blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
+    blendedStyle = QString("color: ").append(blendedColor.name());
 
 
     // what labels to change the color...
@@ -180,13 +206,30 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(20));
 
     // HTML links seem to be a bit more stubborn with theme changes... setting inline styles to help with color change
-    userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://forum.kde.org/viewforum.php?f=136\">").append(i18n("User Community")).append("</a>"));
-    gettingStartedLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org/en/user_manual/getting_started.html\">").append(i18n("Getting Started")).append("</a>"));
-    manualLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org/\">").append(i18n("User Manual")).append("</a>"));
-    supportKritaLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita.org/en/support-us/donations/\">").append(i18n("Support Krita")).append("</a>"));
-    kritaWebsiteLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://www.krita.org\">").append(i18n("Krita Website")).append("</a>"));
-    sourceCodeLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://phabricator.kde.org/source/krita/\">").append(i18n("Source Code")).append("</a>"));
-    poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE\">").append(i18n("Powered by KDE")).append("</a>"));
+    userCommunityLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://forum.kde.org/viewforum.php?f=136&" + analyticsString + "user-community" + "\">")
+                               .append(i18n("User Community")).append("</a>"));
+
+    gettingStartedLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org/en/user_manual/getting_started.html?" + analyticsString + "getting-started" + "\">")
+                                .append(i18n("Getting Started")).append("</a>"));
+
+    manualLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://docs.krita.org?" + analyticsString + "documentation-site" + "\">")
+                        .append(i18n("User Manual")).append("</a>"));
+
+    supportKritaLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://krita.org/en/support-us/donations?" + analyticsString + "donations" + "\">")
+                              .append(i18n("Support Krita")).append("</a>"));
+
+    kritaWebsiteLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://www.krita.org?" + analyticsString + "marketing-site" + "\">")
+                              .append(i18n("Krita Website")).append("</a>"));
+
+    sourceCodeLink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://invent.kde.org/kde/krita?" + analyticsString + "source-code" + "\">")
+                            .append(i18n("Source Code")).append("</a>"));
+
+    poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE?" + analyticsString + "what-is-kde" + "\">")
+                              .append(i18n("Powered by KDE")).append("</a>"));
+
+
+    slotUpdateVersionMessage(); // text set from RSS feed
+
 
     // re-populate recent files since they might have themed icons
     populateRecentDocuments();
@@ -212,8 +255,10 @@ void KisWelcomePageWidget::populateRecentDocuments()
             recentItem->setIcon(m_thumbnailMap[recentFileUrlPath]);
         }
         else {
-            if (QFileInfo(recentFileUrlPath).exists()) {
-                if (recentFileUrlPath.toLower().endsWith("ora") || recentFileUrlPath.toLower().endsWith("kra")) {
+            QFileInfo fi(recentFileUrlPath);
+
+            if (fi.exists()) {
+                if (fi.suffix() == "ora" || fi.suffix() == "kra") {
 
                     QScopedPointer<KoStore> store(KoStore::createStore(recentFileUrlPath, KoStore::Read));
                     if (store) {
@@ -234,6 +279,16 @@ void KisWelcomePageWidget::populateRecentDocuments()
                                 recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
                             }
                         }
+                    }
+                }
+                else if (fi.suffix() == "tiff" || fi.suffix() == "tif") {
+                    // Workaround for a bug in Qt tiff QImageIO plugin
+                    QScopedPointer<KisDocument> doc;
+                    doc.reset(KisPart::instance()->createDocument());
+                    bool r = doc->openUrl(QUrl::fromLocalFile(recentFileUrlPath), KisDocument::DontAddToRecent);
+                    if (r) {
+                        KisPaintDeviceSP projection = doc->image()->projection();
+                        recentItem->setIcon(QIcon(QPixmap::fromImage(projection->createThumbnail(48, 48, projection->exactBounds()))));
                     }
                 }
                 else {
@@ -262,6 +317,51 @@ void KisWelcomePageWidget::populateRecentDocuments()
 
     recentDocumentsListView->setIconSize(QSize(48, 48));
     recentDocumentsListView->setModel(&m_recentFilesModel);
+}
+
+void KisWelcomePageWidget::slotUpdateVersionMessage()
+{
+
+    alertIcon->setIcon(KisIconUtils::loadIcon("warning"));
+    alertIcon->setVisible(false);
+
+    // find out if we need an update...or if this is a development version
+    if (isDevelopmentBuild()) {
+        // Development build
+        QString versionLabelText = QString("<a style=\"color: " +
+                                           blendedColor.name() +
+                                           " \" href=\"https://docs.krita.org/en/untranslatable_pages/triaging_bugs.html?"
+                                           + analyticsString + "dev-build" + "\">")
+                                  .append(i18n("DEV BUILD")).append("</a>");
+
+        versionNotificationLabel->setText(versionLabelText);
+        alertIcon->setVisible(true);
+        versionNotificationLabel->setVisible(true);
+
+    } else if (newsWidget->hasUpdateAvailable()) {
+
+        // build URL for label
+        QString versionLabelText = QString("<a style=\"color: " +
+                                           blendedColor.name() +
+                                           " \" href=\"" +
+                                           newsWidget->versionLink() + "?" +
+                                           analyticsString + "version-update" + "\">")
+                           .append(i18n("New Version Available!")).append("</a>");
+
+        versionNotificationLabel->setVisible(true);
+        versionNotificationLabel->setText(versionLabelText);
+        alertIcon->setVisible(true);
+
+    } else {
+        // no message needed... exit
+        versionNotificationLabel->setVisible(false);
+        return;
+    }
+
+    if (!blendedStyle.isNull()) {
+        versionNotificationLabel->setStyleSheet(blendedStyle);
+    }
+
 }
 
 void KisWelcomePageWidget::dragEnterEvent(QDragEnterEvent *event)

@@ -24,7 +24,6 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas2.cpp
     canvas/kis_canvas_updates_compressor.cpp
     canvas/kis_canvas_controller.cpp
-    canvas/kis_paintop_transformation_connector.cpp
     canvas/kis_display_color_converter.cpp
     canvas/kis_display_filter.cpp
     canvas/kis_exposure_gamma_correction_interface.cpp
@@ -195,6 +194,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_freehand_helper.cpp
     tool/kis_tool_multihand_helper.cpp
     tool/kis_figure_painting_tool_helper.cpp
+    tool/KisAsyncronousStrokeUpdateHelper.cpp
     tool/kis_tool_paint.cc
     tool/kis_tool_shape.cc
     tool/kis_tool_ellipse_base.cpp
@@ -369,6 +369,7 @@ set(kritaui_LIB_SRCS
     KisTemplateTree.cpp
     KisUndoActionsUpdateManager.cpp
     KisView.cpp
+    KisCanvasWindow.cpp
     KisImportExportErrorCode.cpp
     KisImportExportAdditionalChecks.cpp
 

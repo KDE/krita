@@ -52,7 +52,7 @@
 struct KisToolMoveState : KisToolChangesTrackerData, boost::equality_comparable<KisToolMoveState>
 {
     KisToolMoveState(QPoint _accumulatedOffset) : accumulatedOffset(_accumulatedOffset) {}
-    KisToolChangesTrackerData* clone() const { return new KisToolMoveState(*this); }
+    KisToolChangesTrackerData* clone() const override { return new KisToolMoveState(*this); }
 
     bool operator ==(const KisToolMoveState &rhs) {
         return accumulatedOffset == rhs.accumulatedOffset;
@@ -174,6 +174,8 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
     KisPaintLayerSP paintLayer = node ?
         dynamic_cast<KisPaintLayer*>(node.data()) : 0;
 
+    bool isMoveSelection = false;
+
     if (paintLayer && selection &&
         (!selection->selectedRect().isEmpty() &&
          !selection->selectedExactRect().isEmpty())) {
@@ -189,6 +191,7 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
                 SLOT(slotHandlesRectCalculated(const QRect&)));
 
         strategy = moveStrategy;
+        isMoveSelection = true;
 
     } else {
 
@@ -207,6 +210,10 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
     m_strokeId = image->startStroke(strategy);
     m_currentlyProcessingNodes = nodes;
     m_accumulatedOffset = QPoint();
+
+    if (!isMoveSelection) {
+        m_asyncUpdateHelper.startUpdateStream(image.data(), m_strokeId);
+    }
 
     KIS_SAFE_ASSERT_RECOVER(m_changesTracker.isEmpty()) {
         m_changesTracker.reset();
@@ -240,13 +247,13 @@ void KisToolMove::notifyGuiAfterMove(bool showFloatingMessage)
             showFloatingMessage(
                 i18nc("floating message in move tool",
                       "X: %1 px, Y: %2 px",
-                      currentTopLeft.x(),
-                      currentTopLeft.y()),
+                      QLocale().toString(currentTopLeft.x()),
+                      QLocale().toString(currentTopLeft.y())),
                 QIcon(), 1000, KisFloatingMessage::High);
     }
 }
 
-bool KisToolMove::tryEndPreviousStroke(KisNodeList nodes)
+bool KisToolMove::tryEndPreviousStroke(const KisNodeList &nodes)
 {
     if (!m_strokeId) return false;
 
@@ -507,6 +514,10 @@ void KisToolMove::endStroke()
 {
     if (!m_strokeId) return;
 
+    if (m_asyncUpdateHelper.isActive()) {
+        m_asyncUpdateHelper.endUpdateStream();
+    }
+
     KisImageSP image = currentImage();
     image->endStroke(m_strokeId);
     m_strokeId.clear();
@@ -572,6 +583,10 @@ void KisToolMove::slotMoveDiscreteDownMore()
 void KisToolMove::cancelStroke()
 {
     if (!m_strokeId) return;
+
+    if (m_asyncUpdateHelper.isActive()) {
+        m_asyncUpdateHelper.cancelUpdateStream();
+    }
 
     KisImageSP image = currentImage();
     image->cancelStroke(m_strokeId);
@@ -665,7 +680,7 @@ void KisToolMove::requestHandlesRectUpdate()
     notifyGuiAfterMove(false);
 }
 
-void KisToolMove::slotNodeChanged(KisNodeList nodes)
+void KisToolMove::slotNodeChanged(const KisNodeList &nodes)
 {
     if (m_strokeId && !tryEndPreviousStroke(nodes)) {
         return;

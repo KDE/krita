@@ -35,6 +35,7 @@
 #include <kis_debug.h>
 
 #include <KoCanvasResourceProvider.h>
+#include <kis_canvas_resource_provider.h>
 #include <kis_icon.h>
 
 #include "kis_color_selector_ring.h"
@@ -152,6 +153,19 @@ void KisColorSelector::updateSettings()
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
     setConfiguration(KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelectorConfiguration().toString())));
+
+    if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->canvasResourceProvider()) {
+        bool gamutMaskActive = m_canvas->viewManager()->canvasResourceProvider()->gamutMaskActive();
+
+        if (gamutMaskActive) {
+            KoGamutMask* currentMask = m_canvas->viewManager()->canvasResourceProvider()->currentGamutMask();
+            if (currentMask) {
+                slotGamutMaskSet(currentMask);
+            }
+        } else {
+            slotGamutMaskToggle(false);
+        }
+    }
 }
 
 void KisColorSelector::slotGamutMaskSet(KoGamutMask *gamutMask)
@@ -174,6 +188,11 @@ void KisColorSelector::slotGamutMaskPreviewUpdate()
 {
     m_mainComponent->updateGamutMaskPreview();
     m_subComponent->updateGamutMaskPreview();
+}
+
+void KisColorSelector::slotGamutMaskDeactivate()
+{
+    slotGamutMaskToggle(false);
 }
 
 void KisColorSelector::slotGamutMaskToggle(bool state)

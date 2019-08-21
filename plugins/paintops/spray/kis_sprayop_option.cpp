@@ -57,7 +57,7 @@ KisSprayOpOption::KisSprayOpOption()
 
     m_options->coverageSpin->setRange(0.001, 0.02, 3);
     m_options->coverageSpin->setValue(0.003);
-    m_options->coverageSpin->setSuffix("%");
+    m_options->coverageSpin->setSuffix(i18n("%"));
 
     m_options->particlesSpinBox->setRange(1.0, 1000.0, 0);
     m_options->particlesSpinBox->setValue(12);

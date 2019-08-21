@@ -71,6 +71,8 @@ private Q_SLOTS:
      */
     void checkFormat();
 
+    void slotFixUpEmptyTextBlock();
+
     void save();
 
     void undo();

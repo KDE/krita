@@ -89,7 +89,7 @@
       <whatsThis></whatsThis>
       <statusTip></statusTip>
       <isCheckable>false</isCheckable>
-      <text>Move right</text>
+      <text>Move right more</text>
     </Action>
   </Actions>
 </ActionCollection>

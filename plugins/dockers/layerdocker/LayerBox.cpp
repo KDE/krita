@@ -194,7 +194,7 @@ LayerBox::LayerBox()
         m_wdgLayerBox->doubleOpacity->setPrefix(QString("%1:  ").arg(i18n("Opacity")));
     }
     m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
-    m_wdgLayerBox->doubleOpacity->setSuffix("%");
+    m_wdgLayerBox->doubleOpacity->setSuffix(i18n("%"));
 
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
     connect(&m_opacityDelayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
@@ -636,6 +636,8 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
             menu.addAction(m_removeAction);
             addActionToMenu(&menu, "duplicatelayer");
             addActionToMenu(&menu, "merge_layer");
+            addActionToMenu(&menu, "new_from_visible");
+
 
             if (singleLayer) {
                 addActionToMenu(&menu, "flatten_image");

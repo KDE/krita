@@ -48,7 +48,7 @@ public:
 
     bool migrationInProcess()
     {
-        return (quint64) m_root.loadNonatomic()->jobCoordinator.loadConsume() != 1;
+        return quint64(m_root.loadNonatomic()->jobCoordinator.loadConsume()) > 1;
     }
 
     // publishTableMigration() is called by exactly one thread from Details::TableMigration::run()
@@ -344,6 +344,9 @@ public:
 
         bool isValid() const
         {
+#ifdef SANITY_CHECK
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_value != Value(ValueTraits::Redirect), false);
+#endif
             return m_value != Value(ValueTraits::NullValue);
         }
 

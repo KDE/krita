@@ -55,12 +55,12 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QS
     updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
     updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
 
-    connect(m_curveOptionWidget->curveWidget, SIGNAL(modified()), this, SLOT(transferCurve()));
+    connect(m_curveOptionWidget->curveWidget, SIGNAL(modified()), this, SLOT(slotModified()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SLOT(emitSettingChanged()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SLOT(updateLabelsOfCurrentSensor()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateSensorCurveLabels(KisDynamicSensorSP)));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateCurve(KisDynamicSensorSP)));
-    connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(transferCurve()));
+    connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(slotStateChanged()));
 
 
     // set all the icons for the curve preset shapes
@@ -124,6 +124,11 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP 
     m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->activeSensors().first());
     updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
     updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
+
+    if (m_curveOption->isSameCurveUsed()) {
+        // make sure the curve is transfered to all sensors to avoid updating from a wrong curve later
+        transferCurve();
+    }
 }
 
 void KisCurveOptionWidget::lodLimitations(KisPaintopLodLimitations *l) const
@@ -155,6 +160,17 @@ QWidget* KisCurveOptionWidget::curveWidget()
 {
     return m_widget;
 }
+
+void KisCurveOptionWidget::slotModified()
+{
+    transferCurve();
+}
+
+void KisCurveOptionWidget::slotStateChanged()
+{
+    transferCurve();
+}
+
 
 void KisCurveOptionWidget::transferCurve()
 {

@@ -70,10 +70,10 @@ public:
                     item.link = streamReader.readElementText();
                 else if (streamReader.name() == QLatin1String("pubDate")) {
                     QString dateStr = streamReader.readElementText();
-                    // fixme: honor time zone!
-                    dateStr = dateStr.left(dateStr.indexOf('+')-1);
-                    item.pubDate = QLocale(QLocale::English).toDateTime(dateStr, "ddd, dd MMM yyyy HH:mm:ss");
+                    item.pubDate = QDateTime::fromString(dateStr, Qt::RFC2822Date);
                 }
+                else if (streamReader.name() == QLatin1String("category"))
+                    item.category = streamReader.readElementText();
                 else if (streamReader.name() == QLatin1String("description"))
                     item.description = streamReader.readElementText(); //shortenHtml(streamReader.readElementText());
                 break;
@@ -148,6 +148,7 @@ QHash<int, QByteArray> MultiFeedRssModel::roleNames() const
     roleNames[DescriptionRole] = "description";
     roleNames[PubDateRole] = "pubDate";
     roleNames[LinkRole] = "link";
+    roleNames[CategoryRole] = "category";
     roleNames[BlogNameRole] = "blogName";
     roleNames[BlogIconRole] = "blogIcon";
     return roleNames;
@@ -173,6 +174,8 @@ void MultiFeedRssModel::appendFeedData(QNetworkReply *reply)
     setArticleCount(m_aggregatedFeed.size());
     beginResetModel();
     endResetModel();
+
+    emit feedDataChanged();
 }
 
 void MultiFeedRssModel::removeFeed(const QString &feed)
@@ -200,7 +203,7 @@ QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole:
     {
         return QString("<b><a href=\"" + item.link + "\">" + item.title + "</a></b>"
-               "<br><small>(" + item.pubDate.toString("MMMM d, yyyy") + ") "
+               "<br><small>(" + item.pubDate.toLocalTime().toString(Qt::DefaultLocaleShortDate) + ") "
                + item.description.left(90).append("...") + "</small><hr>");
     }
     case TitleRole:
@@ -211,6 +214,8 @@ QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
         return item.pubDate.toString("dd-MM-yyyy hh:mm");
     case LinkRole:
         return item.link;
+    case CategoryRole:
+        return item.category;
     case BlogNameRole:
         return item.blogName;
     case BlogIconRole:

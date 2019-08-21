@@ -283,15 +283,6 @@ public:
     virtual bool isLoadable();
 
     /**
-     * These methods are populating properties with runtime
-     * information about canvas rotation/mirroring. This information
-     * is set directly by KisToolFreehand. Later the data is accessed
-     * by the pressure options to make a final decision.
-     */
-    void setCanvasRotation(qreal angle);
-    void setCanvasMirroring(bool xAxisMirrored, bool yAxisMirrored);
-
-    /**
      * Overrides the method in KisPropertiesCofiguration to allow
      * onPropertyChanged() callback
      */

@@ -86,7 +86,10 @@ void KisToolInvocationAction::deactivate(int shortcut)
     Q_UNUSED(shortcut);
     if (!inputManager()) return;
 
-    KIS_SAFE_ASSERT_RECOVER_NOOP(d->activatedToolProxy);
+    /**
+     * Activate call might ave come before actual input manager or tool proxy
+     * was attached. So we may end up wil null activatedToolProxy.
+     */
     if (d->activatedToolProxy) {
         d->activatedToolProxy->deactivateToolAction(KisTool::Primary);
         d->activatedToolProxy.clear();
@@ -179,9 +182,14 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
 void KisToolInvocationAction::processUnhandledEvent(QEvent* event)
 {
     bool savedState = d->active;
+    KisToolProxy *savedToolProxy = d->runningToolProxy;
+    if (!d->runningToolProxy) {
+        d->runningToolProxy = inputManager()->toolProxy();
+    }
     d->active = true;
     inputEvent(event);
     d->active = savedState;
+    d->runningToolProxy = savedToolProxy;
 }
 
 bool KisToolInvocationAction::supportsHiResInputEvents() const

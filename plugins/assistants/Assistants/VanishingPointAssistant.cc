@@ -252,7 +252,7 @@ void VanishingPointAssistant::drawCache(QPainter& gc, const KisCoordinatesConver
     drawPath(gc, path, isSnappingActive());
 }
 
-QPointF VanishingPointAssistant::buttonPosition() const
+QPointF VanishingPointAssistant::getEditorPosition() const
 {
     return (*handles()[0]);
 }

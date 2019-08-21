@@ -1321,6 +1321,14 @@ void DisplaySettingsTab::setDefault()
     }
 
     chkMoving->setChecked(cfg.scrollCheckers(true));
+
+    KisImageConfig imageCfg(false);
+    KoColor c;
+    c.fromQColor(imageCfg.selectionOverlayMaskColor(true));
+    c.setOpacity(1.0);
+    btnSelectionOverlayColor->setColor(c);
+    sldSelectionOverlayOpacity->setValue(imageCfg.selectionOverlayMaskColor(true).alphaF());
+
     intCheckSize->setValue(cfg.checkSize(true));
     KoColor ck1(KoColorSpaceRegistry::instance()->rgb8());
     ck1.fromQColor(cfg.checkersColor1(true));
@@ -1414,7 +1422,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     setWindowTitle(i18n("Configure Krita"));
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
 
-    setFaceType(KPageDialog::Tree);
+    setFaceType(KPageDialog::List);
 
     // General
     KoVBox *vbox = new KoVBox();
@@ -1504,7 +1512,6 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setIcon(KisIconUtils::loadIcon("im-user"));
     m_pages << page;
 
-
     QPushButton *restoreDefaultsButton = button(QDialogButtonBox::RestoreDefaults);
     restoreDefaultsButton->setText(i18nc("@action:button", "Restore Defaults"));
 
@@ -1512,7 +1519,10 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     connect(this, SIGNAL(rejected()), m_inputConfiguration, SLOT(revertChanges()));
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
-    Q_FOREACH (KisAbstractPreferenceSetFactory *preferenceSetFactory, preferenceSetRegistry->values()) {
+    QStringList keys = preferenceSetRegistry->keys();
+    keys.sort();
+    Q_FOREACH(const QString &key, keys) {
+        KisAbstractPreferenceSetFactory *preferenceSetFactory = preferenceSetRegistry->value(key);
         KisPreferenceSet* preferenceSet = preferenceSetFactory->createPreferenceSet();
         vbox = new KoVBox();
         page = new KPageWidgetItem(vbox, preferenceSet->name());

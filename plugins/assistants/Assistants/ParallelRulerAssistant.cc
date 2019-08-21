@@ -144,7 +144,7 @@ void ParallelRulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConvert
     
 }
 
-QPointF ParallelRulerAssistant::buttonPosition() const
+QPointF ParallelRulerAssistant::getEditorPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
 }

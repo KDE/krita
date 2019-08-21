@@ -292,11 +292,12 @@ QPointF KisTool::pixelToView(const QPointF &pixelCoord) const
 
 QRectF KisTool::pixelToView(const QRectF &pixelRect) const
 {
-    if (!image())
+    if (!image()) {
         return pixelRect;
+    }
     QPointF topLeft = pixelToView(pixelRect.topLeft());
     QPointF bottomRight = pixelToView(pixelRect.bottomRight());
-    return QRectF(topLeft, bottomRight);
+    return {topLeft, bottomRight};
 }
 
 QPainterPath KisTool::pixelToView(const QPainterPath &pixelPolygon) const
@@ -585,25 +586,16 @@ bool KisTool::overrideCursorIfNotEditable()
 
 bool KisTool::blockUntilOperationsFinished()
 {
-    // we cannot show any dialogs in the tool's code,
-    // it can make KisShortcutsMatcher crazy
-    image()->waitForDone();
-    return true;
-
-//    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-//    KisViewManager* viewManager = kiscanvas->viewManager();
-//    return viewManager->blockUntilOperationsFinished(image());
+    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+    KisViewManager* viewManager = kiscanvas->viewManager();
+    return viewManager->blockUntilOperationsFinished(image());
 }
 
 void KisTool::blockUntilOperationsFinishedForced()
 {
-    // we cannot show any dialogs in the tool's code,
-    // it can make KisShortcutsMatcher crazy
-    image()->waitForDone();
-
-//    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-//    KisViewManager* viewManager = kiscanvas->viewManager();
-//    viewManager->blockUntilOperationsFinishedForced(image());
+    KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+    KisViewManager* viewManager = kiscanvas->viewManager();
+    viewManager->blockUntilOperationsFinishedForced(image());
 }
 
 bool KisTool::isActive() const

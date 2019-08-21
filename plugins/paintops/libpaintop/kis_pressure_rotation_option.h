@@ -43,13 +43,6 @@ public:
     QString valueSuffix() const override;
 
 private:
-    qreal m_defaultAngle;
-    bool m_canvasAxisXMirrored;
-    bool m_canvasAxisYMirrored;
-
-
-
-
 
 };
 

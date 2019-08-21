@@ -25,7 +25,6 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include "kis_canvas_decoration.h"
-#include "kis_paintop_transformation_connector.h"
 #include "kis_coordinates_converter.h"
 #include "kis_canvas2.h"
 #include "opengl/kis_opengl_canvas2.h"
@@ -42,8 +41,7 @@ static const int gRulersUpdateDelay = 80 /* ms */;
 
 struct KisCanvasController::Private {
     Private(KisCanvasController *qq)
-        : q(qq),
-          paintOpTransformationConnector(0)
+        : q(qq)
     {
         using namespace std::placeholders;
 
@@ -60,7 +58,6 @@ struct KisCanvasController::Private {
     QPointer<KisView> view;
     KisCoordinatesConverter *coordinatesConverter;
     KisCanvasController *q;
-    KisPaintopTransformationConnector *paintOpTransformationConnector;
     QScopedPointer<KisSignalCompressorWithParam<QPoint> > mousePositionCompressor;
 
     void emitPointerPositionChangedSignals(QPoint pointerPos);
@@ -92,8 +89,8 @@ void KisCanvasController::Private::updateDocumentSizeAfterTransform()
 }
 
 
-KisCanvasController::KisCanvasController(QPointer<KisView>parent, KActionCollection * actionCollection)
-    : KoCanvasControllerWidget(actionCollection, parent),
+KisCanvasController::KisCanvasController(QPointer<KisView>parent, KoCanvasSupervisor *observerProvider, KActionCollection * actionCollection)
+    : KoCanvasControllerWidget(actionCollection, observerProvider, parent),
       m_d(new Private(this))
 {
     m_d->view = parent;
@@ -112,14 +109,8 @@ void KisCanvasController::setCanvas(KoCanvasBase *canvas)
 
         m_d->coordinatesConverter =
             const_cast<KisCoordinatesConverter*>(kritaCanvas->coordinatesConverter());
-
-        m_d->paintOpTransformationConnector =
-            new KisPaintopTransformationConnector(kritaCanvas, this);
     } else {
         m_d->coordinatesConverter = 0;
-
-        delete m_d->paintOpTransformationConnector;
-        m_d->paintOpTransformationConnector = 0;
     }
 
     KoCanvasControllerWidget::setCanvas(canvas);
@@ -200,7 +191,6 @@ void KisCanvasController::mirrorCanvas(bool enable)
     QPoint newOffset = m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), enable, false);
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
-    m_d->paintOpTransformationConnector->notifyTransformationChanged();
     m_d->showMirrorStateOnCanvas();
 }
 
@@ -219,7 +209,6 @@ void KisCanvasController::rotateCanvas(qreal angle, const QPointF &center)
     QPoint newOffset = m_d->coordinatesConverter->rotate(center, angle);
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
-    m_d->paintOpTransformationConnector->notifyTransformationChanged();
     m_d->showRotationValueOnCanvas();
 }
 
@@ -248,7 +237,6 @@ void KisCanvasController::resetCanvasRotation()
     QPoint newOffset = m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
-    m_d->paintOpTransformationConnector->notifyTransformationChanged();
     m_d->showRotationValueOnCanvas();
 }
 

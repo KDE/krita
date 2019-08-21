@@ -6,6 +6,7 @@
 #include "stroke_testing_utils.h"
 #include "strokes/freehand_stroke.h"
 #include "strokes/KisFreehandStrokeInfo.h"
+#include "KisAsyncronousStrokeUpdateHelper.h"
 #include "kis_resources_snapshot.h"
 #include "kis_image.h"
 #include <brushengine/kis_paint_information.h>
@@ -85,7 +86,7 @@ protected:
 
         image->addJob(strokeId(), data.take());
 
-        image->addJob(strokeId(), new FreehandStrokeStrategy::UpdateData(true));
+        image->addJob(strokeId(), new KisAsyncronousStrokeUpdateHelper::UpdateData(true));
     }
 
 

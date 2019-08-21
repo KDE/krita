@@ -510,7 +510,7 @@
     </Action>
    <Action name="mirrorX-moveToCenter">
       <icon></icon>
-      <text>Move to Canvas Center</text>
+      <text>Move to Canvas Center X</text>
       <whatsThis></whatsThis>
       <toolTip>Move to Canvas Center X</toolTip>
       <iconText>Move to Canvas Center X</iconText>
@@ -1445,7 +1445,7 @@
       <icon></icon>
       <text>Bezier Curve Selection Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Select a </toolTip>
+      <toolTip>Bezier Curve Selection Tool</toolTip>
       <iconText>Bezier Curve Selection Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -1455,7 +1455,7 @@
       <icon></icon>
       <text>Similar Color Selection Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Select a </toolTip>
+      <toolTip>Similar Color Selection Tool</toolTip>
       <iconText>Similar Color Selection Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -3046,6 +3046,18 @@
       <whatsThis></whatsThis>
       <toolTip>Convert child layers into animation frames</toolTip>
       <iconText>Convert child layers into animation frames</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+        <Action name="convert_to_animated">
+      <icon></icon>
+      <text>Convert to &amp;animated layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Convert layer into animation frames</toolTip>
+      <iconText>Convert layer into animation frames</iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

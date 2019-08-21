@@ -130,7 +130,7 @@ public:
             const qreal realScalingPart = hasScaling ? KisDynamicSensor::scalingToAdditive(scaling) : 0.0;
             const qreal realAdditivePart = hasAdditive ? additive : 0;
 
-            qreal value = wrapInRange(2 * offset + constant * realScalingPart + realAdditivePart, -1.0, 1.0);
+            qreal value = wrapInRange(2 * offset + constant * (realScalingPart + realAdditivePart), -1.0, 1.0);
             if (qIsNaN(value)) {
                 qWarning() << "rotationLikeValue returns NaN!" << normalizedBaseAngle << absoluteAxesFlipped;
                 value = 0;

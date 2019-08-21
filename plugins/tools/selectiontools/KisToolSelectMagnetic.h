@@ -23,6 +23,7 @@
 #include "KisSelectionToolFactoryBase.h"
 #include <kis_tool_select_base.h>
 #include <kis_icon.h>
+#include <kis_signal_compressor.h>
 #include "KisMagneticWorker.h"
 
 class QPainterPath;
@@ -56,6 +57,8 @@ public Q_SLOTS:
     void slotSetRadius(qreal);
     void slotSetThreshold(int);
     void slotSetFrequency(int);
+    void slotUpdateRadius();
+    void slotCalculateEdge();
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
@@ -79,6 +82,7 @@ private:
     qreal m_radius;
     QRectF m_snapBound;
     KConfigGroup m_configGroup;
+    KisSignalCompressor m_radiusSliderCompressor, m_mouseHoverCompressor;
 };
 
 class KisToolSelectMagneticFactory : public KisSelectionToolFactoryBase

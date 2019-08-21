@@ -60,7 +60,8 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
-    m_continuedMode(false), m_complete(true), m_threshold(70), m_checkPoint(-1), m_frequency(30), m_radius(3.0)
+    m_continuedMode(false), m_complete(true), m_threshold(70), m_checkPoint(-1), m_frequency(30), m_radius(3.0),
+    m_radiusSliderCompressor(1000, KisSignalCompressor::FIRST_ACTIVE), m_mouseHoverCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
 { }
 
 void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)
@@ -98,7 +99,7 @@ void KisToolSelectMagnetic::calculateCheckPoints()
     int finalPoint = m_checkPoint + 2;
     int midPoint = m_checkPoint + 1;
     int minPoint = m_checkPoint;
-    qreal maxFactor = 1.7;
+    qreal maxFactor = 2;
 
     for(; finalPoint<m_points.count(); finalPoint++){
         totalDistance += kisDistance(m_points[finalPoint], m_points[finalPoint - 1]);
@@ -159,17 +160,10 @@ void KisToolSelectMagnetic::calculateCheckPoints()
             totalDistance = 0.0;
         }
     }
-
 }
 
-// the cursor is still tracked even when no mousebutton is pressed
-void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
+void KisToolSelectMagnetic::slotCalculateEdge()
 {
-    KisToolSelect::mouseMoveEvent(event);
-    if (m_complete)
-        return;
-
-    m_lastCursorPos = convertToPixelCoord(event);
     QPoint current = m_lastCursorPos.toPoint();
 
     vQPointF pointSet = m_worker.computeEdge(m_frequency, m_lastAnchor, current);
@@ -190,6 +184,19 @@ void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
     if (m_continuedMode && mode() != PAINT_MODE) {
         updateContinuedMode();
     }
+}
+
+// the cursor is still tracked even when no mousebutton is pressed
+void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
+{
+    KisToolSelect::mouseMoveEvent(event);
+    if (m_complete)
+        return;
+
+    m_lastCursorPos = convertToPixelCoord(event);
+
+    m_mouseHoverCompressor.start();
+
 } // KisToolSelectMagnetic::mouseMoveEvent
 
 // press primary mouse button
@@ -236,7 +243,7 @@ void KisToolSelectMagnetic::finishSelectionAction()
     setMode(KisTool::HOVER_MODE);
 
     //just for testing out
-    //m_worker.saveTheImage(m_points);
+    m_worker.saveTheImage(m_points);
 
     QRectF boundingViewRect =
         pixelToView(KisAlgebra2D::accumulateBounds(m_points));
@@ -351,6 +358,8 @@ void KisToolSelectMagnetic::activate(KoToolBase::ToolActivation activation, cons
     m_worker      = KisMagneticWorker(image()->projection(), m_radius);
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
     connect(action("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoPoints()), Qt::UniqueConnection);
+    connect(&m_radiusSliderCompressor, SIGNAL(timeout()), this, SLOT(slotUpdateRadius()));
+    connect(&m_mouseHoverCompressor, SIGNAL(timeout()), this, SLOT(slotCalculateEdge()));
     KisToolSelect::activate(activation, shapes);
 }
 
@@ -451,8 +460,8 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
 
 void KisToolSelectMagnetic::slotSetRadius(qreal r)
 {
+    m_radiusSliderCompressor.start();
     m_radius = r;
-    m_worker = KisMagneticWorker(image()->projection(), m_radius);
     m_configGroup.writeEntry("radius", r);
 }
 
@@ -466,6 +475,11 @@ void KisToolSelectMagnetic::slotSetFrequency(int f)
 {
     m_frequency = f;
     m_configGroup.writeEntry("frequency", f);
+}
+
+void KisToolSelectMagnetic::slotUpdateRadius()
+{
+    m_worker = KisMagneticWorker(image()->projection(), m_radius);
 }
 
 void KisToolSelectMagnetic::resetCursorStyle()

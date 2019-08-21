@@ -34,6 +34,7 @@
 
 #include "kis_global.h"
 #include <cmath>
+#include <QTemporaryFile>
 
 #ifdef Q_OS_MACOS
 #include <errno.h>
@@ -259,14 +260,39 @@ QString KisImageConfig::safelyGetWritableTempLocation(const QString &suffix, con
         swap = configuredSwap;
     }
 
-    // Gosh, everything fails, nothing is writable, swap to the homedir
-    if (!QFileInfo(swap).isWritable()) {
-        swap = QDir::homePath();
-        Q_ASSERT(QFileInfo(swap).isWritable());
+    QString chosenLocation;
+    QStringList proposedSwapLocations;
+    proposedSwapLocations << swap;
+    proposedSwapLocations << QDir::tempPath();
+    proposedSwapLocations << QDir::homePath();
+
+    Q_FOREACH (const QString location, proposedSwapLocations) {
+        if (!QFileInfo(location).isWritable()) continue;
+
+        /**
+         * On NTFS, isWritable() doesn't check for attributes due to performance
+         * reasons, so we should try it in a brute-force way...
+         * (yes, there is a hacky-global-variable workaround, but let's be safe)
+         */
+        QTemporaryFile tempFile;
+        tempFile.setFileTemplate(location + QDir::separator() + "krita_test_swap_location");
+        if (tempFile.open() && !tempFile.fileName().isEmpty()) {
+            chosenLocation = location;
+            break;
+        }
     }
 
+    if (chosenLocation.isEmpty()) {
+        qCritical() << "CRITICAL: no writable location for a swap file found! Tried the following paths:" << proposedSwapLocations;
+        qCritical() << "CRITICAL: hope I don't crash...";
+        chosenLocation = swap;
+    }
 
-    return swap;
+    if (chosenLocation != swap) {
+        qWarning() << "WARNING: configured swap location is not writable, using a fall-back location" << swap << "->" << chosenLocation;
+    }
+
+    return chosenLocation;
 }
 
 

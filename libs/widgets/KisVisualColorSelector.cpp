@@ -62,8 +62,6 @@ KisVisualColorSelector::KisVisualColorSelector(QWidget *parent)
     , m_d(new Private)
 {
     this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    QVBoxLayout *layout = new QVBoxLayout;
-    this->setLayout(layout);
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     m_d->acs_config = KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelectorConfiguration().toString()));
@@ -120,22 +118,21 @@ void KisVisualColorSelector::slotRebuildSelectors()
 
     qDeleteAll(children());
     m_d->widgetlist.clear();
+    // TODO: Layout only used for monochrome selector currently, but always present
     QLayout *layout = new QHBoxLayout;
-    //redraw all the widgets.
-    int sizeValue = qMin(width(), height());
-    int borderWidth = qMax(sizeValue*0.1, 20.0);
+    //recreate all the widgets.
 
     if (m_d->currentCS->colorChannelCount() == 1) {
 
         KisVisualColorSelectorShape *bar;
 
         if (m_d->circular==false) {
-            bar = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::onedimensional,KisVisualColorSelectorShape::Channel, m_d->currentCS, 0, 0,m_d->displayRenderer, borderWidth);
+            bar = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::onedimensional,KisVisualColorSelectorShape::Channel, m_d->currentCS, 0, 0,m_d->displayRenderer, 20);
             bar->setMaximumWidth(width()*0.1);
             bar->setMaximumHeight(height());
         }
         else {
-            bar = new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::onedimensional,KisVisualColorSelectorShape::Channel, m_d->currentCS, 0, 0,m_d->displayRenderer, borderWidth, KisVisualEllipticalSelectorShape::borderMirrored);
+            bar = new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::onedimensional,KisVisualColorSelectorShape::Channel, m_d->currentCS, 0, 0,m_d->displayRenderer, 20, KisVisualEllipticalSelectorShape::borderMirrored);
             layout->setMargin(0);
         }
 
@@ -144,8 +141,6 @@ void KisVisualColorSelector::slotRebuildSelectors()
         m_d->widgetlist.append(bar);
     }
     else if (m_d->currentCS->colorChannelCount() == 3) {
-        QRect newrect(0,0, this->geometry().width(), this->geometry().height());
-
         KisVisualColorSelectorShape::ColorModel modelS = KisVisualColorSelectorShape::HSV;
         int channel1 = 0;
         int channel2 = 1;
@@ -248,26 +243,21 @@ void KisVisualColorSelector::slotRebuildSelectors()
                                                        KisVisualColorSelectorShape::onedimensional,
                                                        modelS,
                                                        m_d->currentCS, channel1, channel1,
-                                                       m_d->displayRenderer, borderWidth,KisVisualEllipticalSelectorShape::border);
-            bar->resize(sizeValue, sizeValue);
+                                                       m_d->displayRenderer, 20,KisVisualEllipticalSelectorShape::border);
         }
         else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular == false) {
             bar = new KisVisualRectangleSelectorShape(this,
                                                       KisVisualColorSelectorShape::onedimensional,
                                                       modelS,
                                                       m_d->currentCS, channel1, channel1,
-                                                      m_d->displayRenderer, borderWidth);
-            bar->setMaximumWidth(borderWidth);
-            bar->setMinimumWidth(borderWidth);
-            bar->setMinimumHeight(sizeValue);
+                                                      m_d->displayRenderer, 20);
         }
         else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular == true) {
             bar = new KisVisualEllipticalSelectorShape(this,
                                                        KisVisualColorSelectorShape::onedimensional,
                                                        modelS,
                                                        m_d->currentCS, channel1, channel1,
-                                                       m_d->displayRenderer, borderWidth, KisVisualEllipticalSelectorShape::borderMirrored);
-            bar->resize(sizeValue, sizeValue);
+                                                       m_d->displayRenderer, 20, KisVisualEllipticalSelectorShape::borderMirrored);
         } else {
             // Accessing bar below would crash since it's not initialized.
             // Hopefully this can never happen.
@@ -285,22 +275,18 @@ void KisVisualColorSelector::slotRebuildSelectors()
                                                        modelS,
                                                        m_d->currentCS, channel2, channel3,
                                                        m_d->displayRenderer);
-            block->setGeometry(bar->getSpaceForTriangle(newrect));
         }
         else if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Square) {
             block = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
                                                         modelS,
                                                         m_d->currentCS, channel2, channel3,
                                                         m_d->displayRenderer);
-            block->setGeometry(bar->getSpaceForSquare(newrect));
         }
         else {
             block = new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
                                                          modelS,
                                                          m_d->currentCS, channel2, channel3,
                                                          m_d->displayRenderer);
-            block->setGeometry(bar->getSpaceForCircle(newrect));
-
         }
 
         block->setColor(m_d->currentcolor);
@@ -313,21 +299,15 @@ void KisVisualColorSelector::slotRebuildSelectors()
     else if (m_d->currentCS->colorChannelCount() == 4) {
         KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,KisVisualColorSelectorShape::Channel, m_d->currentCS, 0, 1);
         KisVisualRectangleSelectorShape *block2 =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,KisVisualColorSelectorShape::Channel, m_d->currentCS, 2, 3);
-        block->setMaximumWidth(width()*0.5);
-        block->setMaximumHeight(height());
-        block2->setMaximumWidth(width()*0.5);
-        block2->setMaximumHeight(height());
-        block->setColor(m_d->currentcolor);
-        block2->setColor(m_d->currentcolor);
         connect (block, SIGNAL(sigNewColor(KoColor)), block2, SLOT(setColorFromSibling(KoColor)));
         connect (block2, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
-        layout->addWidget(block);
-        layout->addWidget(block2);
         m_d->widgetlist.append(block);
         m_d->widgetlist.append(block2);
     }
 
     this->setLayout(layout);
+    // make sure we call "our" resize function
+    KisVisualColorSelector::resizeEvent(0);
 }
 
 void KisVisualColorSelector::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer) {
@@ -411,6 +391,11 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *) {
         else if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Wheel) {
             m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForCircle(newrect));
         }
+    }
+    else if (m_d->currentCS->colorChannelCount() == 4) {
+        int sizeBlock = qMin(width()/2 - 8, height());
+        m_d->widgetlist.at(0)->setGeometry(0, 0, sizeBlock, sizeBlock);
+        m_d->widgetlist.at(1)->setGeometry(sizeBlock + 8, 0, sizeBlock, sizeBlock);
     }
     Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
         shape->update();

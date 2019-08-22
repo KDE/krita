@@ -26,9 +26,12 @@
 #include "KoColorSet.h"
 
 #include <QScopedPointer>
+#include <QDialog>
 
 #include "KisScreenColorPickerBase.h"
-#include "ui_WdgDlgInternalColorSelector.h"
+
+class Ui_WdgDlgInternalColorSelector;
+class KoColorPatch;
 
 /**
  * @brief The KisInternalColorSelector class

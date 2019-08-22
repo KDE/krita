@@ -610,6 +610,9 @@ set_package_properties(HEIF PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita HEIF filter")
 
+macro_optional_find_package(OpenJPEG)
+macro_log_feature(OPENJPEG_FOUND "openjpeg" "Free library for JPEG 2000 image compression" "http://www.openjpeg.org" FALSE "" "Required by the Krita JPEG 2000 filter")
+
 set(LIBRAW_MIN_VERSION  "0.16")
 find_package(LibRaw ${LIBRAW_MIN_VERSION})
 set_package_properties(LibRaw PROPERTIES

@@ -47,8 +47,8 @@ parts:
         - libjpeg-dev
         - liblcms2-dev
         - libopenexr-dev
-        - libpng-dev
         - libpoppler-qt5-dev
+        - libopenjpeg-dev
         - libtiff5-dev
         - libvc-dev
         - libopencolorio-dev

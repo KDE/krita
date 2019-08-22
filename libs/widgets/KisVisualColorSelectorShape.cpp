@@ -149,7 +149,7 @@ void KisVisualColorSelectorShape::setColorFromSibling(KoColor c)
         c.convertTo(m_d->colorSpace);
     }
     m_d->currentColor = c;
-    Q_EMIT sigNewColor(c);
+
     m_d->imagesNeedUpdate = true;
     update();
 }

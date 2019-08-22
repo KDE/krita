@@ -215,15 +215,11 @@ QImage KisVisualColorSelectorShape::getImageMap()
     //qDebug() << this  << ">>>>>>>>> getImageMap()" << m_d->imagesNeedUpdate;
 
     if (m_d->imagesNeedUpdate == true) {
-        m_d->gradient = QImage(width(), height(), QImage::Format_ARGB32);
-        m_d->gradient.fill(Qt::transparent);
-//        KoColor c = m_d->currentColor;
-
         // Fill a buffer with the right kocolors
         quint8 *data = new quint8[width() * height() * m_d->currentColor.colorSpace()->pixelSize()];
         quint8 *dataPtr = data;
-        for (int y = 0; y < m_d->gradient.height(); y++) {
-            for (int x=0; x < m_d->gradient.width(); x++) {
+        for (int y = 0; y < height(); y++) {
+            for (int x=0; x < width(); x++) {
                 QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPoint(x, y));
                 KoColor c = convertShapeCoordinateToKoColor(newcoordinate);
                 memcpy(dataPtr, c.data(), m_d->currentColor.colorSpace()->pixelSize());
@@ -240,6 +236,12 @@ QImage KisVisualColorSelectorShape::getImageMap()
         delete[] data;
 
         m_d->imagesNeedUpdate = false;
+        // safeguard:
+        if (m_d->gradient.isNull())
+        {
+            m_d->gradient = QImage(width(), height(), QImage::Format_ARGB32);
+            m_d->gradient.fill(Qt::black);
+        }
     }
     return m_d->gradient;
 }

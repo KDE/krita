@@ -179,6 +179,8 @@ public:
     /// it will return false if we are in the middle of creating the assistant.
     virtual bool isAssistantComplete() const;
 
+    virtual void transform(const QTransform &transform);
+
 public:
     /**
      * This will render the final output. The drawCache does rendering most of the time so be sure to check that

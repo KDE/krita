@@ -23,6 +23,7 @@
 #include "kis_processing_visitor.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
+#include "kis_painting_assistant.h"
 
 struct KisDecorationsWrapperLayer::Private
 {
@@ -126,6 +127,10 @@ KUndo2Command *KisDecorationsWrapperLayer::transform(const QTransform &transform
 
     private:
         void doTransform(const QTransform &transform) {
+            const QTransform imageToDocument =
+                QTransform::fromScale(1 / m_document->image()->xRes(),
+                                      1 / m_document->image()->yRes());
+
             KisGridConfig gridConfig = m_document->gridConfig();
             if (gridConfig.showGrid()) {
                 gridConfig.transform(transform);
@@ -134,13 +139,15 @@ KUndo2Command *KisDecorationsWrapperLayer::transform(const QTransform &transform
 
             KisGuidesConfig guidesConfig = m_document->guidesConfig();
             if (guidesConfig.hasGuides()) {
-                const QTransform imageToDocument =
-                    QTransform::fromScale(1 / m_document->image()->xRes(),
-                                          1 / m_document->image()->yRes());
-
                 guidesConfig.transform(imageToDocument.inverted() * transform * imageToDocument);
                 m_document->setGuidesConfig(guidesConfig);
             }
+
+            QList<KisPaintingAssistantSP> assistants = m_document->assistants();
+            Q_FOREACH(KisPaintingAssistantSP assistant, assistants) {
+                assistant->transform(imageToDocument.inverted() * transform * imageToDocument);
+            }
+            m_document->setAssistants(assistants);
         }
 
     private:

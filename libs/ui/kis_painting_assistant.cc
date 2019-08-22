@@ -436,6 +436,15 @@ bool KisPaintingAssistant::isAssistantComplete() const
     return true;
 }
 
+void KisPaintingAssistant::transform(const QTransform &transform)
+{
+    Q_FOREACH(KisPaintingAssistantHandleSP handle, handles()) {
+        *handle = transform.map(*handle);
+    }
+
+    uncache();
+}
+
 QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int> &handleMap)
 {
     QByteArray data;

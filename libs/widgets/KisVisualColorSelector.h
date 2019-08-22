@@ -71,19 +71,15 @@ public Q_SLOTS:
     void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer) override;
 
 private Q_SLOTS:
-    void updateFromWidgets(KoColor c);
     void slotCursorMoved(QPointF pos);
-    void HSXwrangler();
 
 protected:
-    void leaveEvent(QEvent *) override;
     void resizeEvent(QResizeEvent *) override;
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 
-    void updateSelectorElements(QObject *source);
     void drawGradients();
 
 };

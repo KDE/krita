@@ -41,13 +41,12 @@
 
 KisVisualRectangleSelectorShape::KisVisualRectangleSelectorShape(QWidget *parent,
                                                                  Dimensions dimension,
-                                                                 ColorModel model,
                                                                  const KoColorSpace *cs,
                                                                  int channel1, int channel2,
                                                                  const KoColorDisplayRendererInterface *displayRenderer,
                                                                  int width,
                                                                  singelDTypes d)
-    : KisVisualColorSelectorShape(parent, dimension, model, cs, channel1, channel2, displayRenderer)
+    : KisVisualColorSelectorShape(parent, dimension, cs, channel1, channel2, displayRenderer)
 {
     //qDebug()  << "creating KisVisualRectangleSelectorShape" << this;
     m_type = d;

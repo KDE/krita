@@ -52,7 +52,8 @@ void KisGridConfig::transform(const QTransform &transform)
         QTransform t = m.scaleTransform();
 
         const qreal eps = 1e-3;
-        if (KisAlgebra2D::wrapValue(m.angle, 90.0) <= eps) {
+        const qreal wrappedRotation = KisAlgebra2D::wrapValue(m.angle, 90.0);
+        if (wrappedRotation <= eps || wrappedRotation >= 90.0 - eps) {
             t *= m.rotateTransform();
         }
 

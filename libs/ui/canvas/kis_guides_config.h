@@ -121,6 +121,8 @@ public:
 
     bool isDefault() const;
 
+    void transform(const QTransform &transform);
+
 private:
     class Private;
     const QScopedPointer<Private> d;

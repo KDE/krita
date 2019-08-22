@@ -22,6 +22,7 @@
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
 #include "kis_grid_config.h"
+#include "kis_guides_config.h"
 
 struct KisDecorationsWrapperLayer::Private
 {
@@ -129,6 +130,16 @@ KUndo2Command *KisDecorationsWrapperLayer::transform(const QTransform &transform
             if (gridConfig.showGrid()) {
                 gridConfig.transform(transform);
                 m_document->setGridConfig(gridConfig);
+            }
+
+            KisGuidesConfig guidesConfig = m_document->guidesConfig();
+            if (guidesConfig.hasGuides()) {
+                const QTransform imageToDocument =
+                    QTransform::fromScale(1 / m_document->image()->xRes(),
+                                          1 / m_document->image()->yRes());
+
+                guidesConfig.transform(imageToDocument.inverted() * transform * imageToDocument);
+                m_document->setGuidesConfig(guidesConfig);
             }
         }
 

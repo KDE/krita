@@ -50,7 +50,7 @@ struct KisVisualColorSelector::Private
     const KoColorSpace *currentCS {0};
     QList<KisVisualColorSelectorShape*> widgetlist;
     bool updateSelf {false};
-    bool updateLonesome {false}; // for modal dialogs.
+    bool updateLonesome {false}; // currently redundant; remove?
     bool circular {false};
     const KoColorDisplayRendererInterface *displayRenderer {0};
     KisColorSelectorConfiguration acs_config;
@@ -76,11 +76,9 @@ KisVisualColorSelector::~KisVisualColorSelector()
 
 void KisVisualColorSelector::slotSetColor(const KoColor &c)
 {
-    if (m_d->updateSelf == false) {
-        m_d->currentcolor = c;
-        if (m_d->currentCS != c.colorSpace()) {
-            slotsetColorSpace(c.colorSpace());
-        }
+    m_d->currentcolor = c;
+    if (m_d->currentCS != c.colorSpace()) {
+        slotsetColorSpace(c.colorSpace());
     }
     updateSelectorElements(QObject::sender());
 }
@@ -290,7 +288,7 @@ void KisVisualColorSelector::slotRebuildSelectors()
         }
 
         block->setColor(m_d->currentcolor);
-        connect (bar, SIGNAL(sigNewColor(KoColor)), block, SLOT(setColorFromSibling(KoColor)));
+        connect (bar, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
         connect (block, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
         connect (bar, SIGNAL(sigHSXchange()), SLOT(HSXwrangler()));
         connect (block, SIGNAL(sigHSXchange()), SLOT(HSXwrangler()));
@@ -299,7 +297,7 @@ void KisVisualColorSelector::slotRebuildSelectors()
     else if (m_d->currentCS->colorChannelCount() == 4) {
         KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,KisVisualColorSelectorShape::Channel, m_d->currentCS, 0, 1);
         KisVisualRectangleSelectorShape *block2 =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional,KisVisualColorSelectorShape::Channel, m_d->currentCS, 2, 3);
-        connect (block, SIGNAL(sigNewColor(KoColor)), block2, SLOT(setColorFromSibling(KoColor)));
+        connect (block, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
         connect (block2, SIGNAL(sigNewColor(KoColor)), SLOT(updateFromWidgets(KoColor)));
         m_d->widgetlist.append(block);
         m_d->widgetlist.append(block2);
@@ -321,11 +319,6 @@ void KisVisualColorSelector::setDisplayRenderer (const KoColorDisplayRendererInt
 
 void KisVisualColorSelector::updateSelectorElements(QObject *source)
 {
-    //first lock all elements from sending updates, then update all elements.
-    Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
-        shape->blockSignals(true);
-    }
-
     Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
         if (shape!=source) {
             if (m_d->updateSelf) {
@@ -334,24 +327,19 @@ void KisVisualColorSelector::updateSelectorElements(QObject *source)
                 shape->setColor(m_d->currentcolor);
             }
         }
+        else if(!m_d->updateSelf)
+        {
+            shape->setColor(m_d->currentcolor);
+        }
     }
-    Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
-        shape->blockSignals(false);
-    }
-
 }
 
 void KisVisualColorSelector::updateFromWidgets(KoColor c)
 {
     m_d->currentcolor = c;
     m_d->updateSelf = true;
-    if (m_d->updateLonesome) {
-        slotSetColor(c);
-        Q_EMIT sigNewColor(c);
-
-    } else {
-        Q_EMIT sigNewColor(c);
-    }
+    updateSelectorElements(QObject::sender());
+    Q_EMIT sigNewColor(c);
 }
 
 void KisVisualColorSelector::leaveEvent(QEvent *)

@@ -73,7 +73,7 @@ public:
      * @brief getDimensions
      * @return whether this is a single or twodimensional widget.
      */
-    Dimensions getDimensions();
+    Dimensions getDimensions() const;
     /**
      * @brief getColorModel
      * @return the model of this widget.
@@ -138,7 +138,7 @@ public:
      * get used channels
      * @return
      */
-    QVector <int> getChannels();
+    QVector <int> getChannels() const;
 
     /**
      * @brief setHSX
@@ -204,14 +204,14 @@ private:
      * @brief convertShapeCoordinateToWidgetCoordinate
      * @return take the position in the shape and convert it to screen coordinates.
      */
-    virtual QPointF convertShapeCoordinateToWidgetCoordinate(QPointF) = 0;
+    virtual QPointF convertShapeCoordinateToWidgetCoordinate(QPointF) const = 0;
 
     /**
      * @brief convertWidgetCoordinateToShapeCoordinate
      * Convert a coordinate in the widget's height/width to a shape coordinate.
      * @param coordinate the position your wish to have the shape coordinates of.
      */
-    virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) = 0;
+    virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const = 0;
 
     /**
      * @brief updateCursor

@@ -108,7 +108,7 @@ QRect KisVisualEllipticalSelectorShape::getSpaceForTriangle(QRect geom)
     return r;
 }
 
-QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
+QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const
 {
     qreal x;
     qreal y;
@@ -133,7 +133,7 @@ QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordina
     return QPointF(x,y);
 }
 
-QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPoint coordinate)
+QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const
 {
     //default implementation:
     qreal x = 0.5;

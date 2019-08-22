@@ -105,9 +105,26 @@ Q_SIGNALS:
      * Emitted whenever the status of whether a control point is selected or not changes
      */
     void pointSelectedChanged();
+    /**
+     * Emitted to notify that the start() function in compressor can be activated.
+     * Thanks to that, blocking signals in curve widget blocks "sending signals"
+     * (calling start() function) *to* the signal compressor.
+     * It effectively makes signals work nearly the same way they worked before
+     * adding the signal compressor in between.
+     */
+    void compressorShouldEmitModified();
+
 
 protected Q_SLOTS:
     void inOutChanged(int);
+    void notifyModified();
+
+    /**
+     * This function is called when compressorShouldEmitModified() is emitted.
+     * For why it's needed, \see compressorShouldEmitModified()
+     */
+    void slotCompressorShouldEmitModified();
+
 
 
 protected:

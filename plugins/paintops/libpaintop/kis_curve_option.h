@@ -100,8 +100,13 @@ public:
     void setCurveMode(int mode);
 
     /**
+     * Sets the bool indicating whether "Share curve across all settings" is checked.
+     */
+    void setUseSameCurve(bool useSameCurve);
+
+    /**
      * Sets the curve that is being used instead of sensor ones
-     * in case "Use the same curve" is checked.
+     * in case "Share curve across all settings" is checked.
      */
     void setCommonCurve(KisCubicCurve curve);
 
@@ -219,7 +224,6 @@ protected:
     int m_curveMode;
 
     QMap<DynamicSensorType, KisDynamicSensorSP> m_sensorMap;
-    QMap<DynamicSensorType, KisCubicCurve> m_curveCache;
 
 private:
 

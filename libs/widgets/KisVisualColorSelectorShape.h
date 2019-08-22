@@ -58,7 +58,6 @@ public:
     enum ColorModel{Channel, HSV, HSL, HSI, HSY, YUV};
     explicit KisVisualColorSelectorShape(QWidget *parent,
                                          KisVisualColorSelectorShape::Dimensions dimension,
-                                         KisVisualColorSelectorShape::ColorModel model,
                                          const KoColorSpace *cs,
                                          int channel1, int channel2,
                                          const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
@@ -74,11 +73,6 @@ public:
      * @return whether this is a single or twodimensional widget.
      */
     Dimensions getDimensions() const;
-    /**
-     * @brief getColorModel
-     * @return the model of this widget.
-     */
-    ColorModel getColorModel();
     /**
      * @brief getPixmap
      * @return the pixmap of the gradient, for drawing on with a subclass.
@@ -141,23 +135,6 @@ public:
     QVector <int> getChannels() const;
 
     /**
-     * @brief setHSX
-     * This is for the cursor not to change when selecting
-     * black, white, and desaturated values. Will not change the non-native values.
-     * @param hsx the hsx value.
-     * @param wrangler defines whether this docker will update luminosity if there's not at the least 3\% more variation
-     */
-    void setHSX(QVector <qreal> hsx, bool wrangler=false);
-    /**
-     * @brief getHSX sets the sat and hue so they won't
-     * switch around much.
-     * @param hsx the hsx values.
-     * @param wrangler defines whether this docker will update luminosity if there's not at the least 3\% more variation
-     * @return returns hsx, corrected.
-     */
-    QVector <qreal> getHSX(QVector <qreal> hsx, bool wrangler= false);
-
-    /**
       * @brief setCursorPosition
       * Set the cursor to normalized shape coordinates. This will only repaint the cursor.
       * @param position normalized shape coordinates ([0,1] range, not yet transformed to actual channel values!)
@@ -178,24 +155,9 @@ public:
 
 
 Q_SIGNALS:
-    void sigNewColor(KoColor col);
-    void sigHSXchange();
     void sigCursorMoved(QPointF pos);
 
 public Q_SLOTS:
-    /**
-     * @brief setColor
-     * Set this widget's current color and change the cursor position.
-     * @param c
-     */
-    void setColor(KoColor c);
-    /**
-     * @brief setColorFromSibling
-     * set this widget's current color, but don't change the cursor position,
-     * instead sent out a signal of the new color.
-     * @param c
-     */
-    void setColorFromSibling(KoColor c);
     /**
      * @brief slotSetActiveChannels
      * Change the active channels if necessary.
@@ -234,23 +196,11 @@ private:
     virtual QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const = 0;
 
     /**
-     * @brief updateCursor
-     * Update the cursor position.
-     */
-    void updateCursor();
-
-    QPointF convertKoColorToShapeCoordinate(KoColor c);
-    KoColor convertShapeCoordinateToKoColor(QPointF coordinates, bool cursor = false);
-
-    /**
      * @brief getPixmap
      * @return the pixmap of this shape.
      */
     virtual QRegion getMaskMap() = 0;
     virtual void drawCursor() = 0;
-
-    QVector <float> convertvectorqrealTofloat(QVector<qreal> real);
-    QVector <qreal> convertvectorfloatToqreal(QVector <float> vloat);
 };
 
 #endif

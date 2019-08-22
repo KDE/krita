@@ -42,12 +42,11 @@
 
 KisVisualTriangleSelectorShape::KisVisualTriangleSelectorShape(QWidget *parent,
                                                                  Dimensions dimension,
-                                                                 ColorModel model,
                                                                  const KoColorSpace *cs,
                                                                  int channel1, int channel2,
                                                                  const KoColorDisplayRendererInterface *displayRenderer,
                                                                  int barwidth)
-    : KisVisualColorSelectorShape(parent, dimension, model, cs, channel1, channel2, displayRenderer)
+    : KisVisualColorSelectorShape(parent, dimension, cs, channel1, channel2, displayRenderer)
 {
     //qDebug() << "creating KisVisualTriangleSelectorShape" << this;
     m_barWidth = barwidth;

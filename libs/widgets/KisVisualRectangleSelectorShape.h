@@ -38,7 +38,6 @@ public:
     enum singelDTypes{vertical, horizontal, border, borderMirrored};
     explicit KisVisualRectangleSelectorShape(QWidget *parent,
                                              Dimensions dimension,
-                                             ColorModel model,
                                              const KoColorSpace *cs,
                                              int channel1, int channel2,
                                              const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), int width=20,

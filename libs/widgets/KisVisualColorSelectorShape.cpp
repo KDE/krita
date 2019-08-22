@@ -23,6 +23,7 @@
 #include <QPainterPath>
 #include <QRect>
 #include <QVector>
+#include <QVector4D>
 #include <QVBoxLayout>
 #include <QList>
 #include <QPolygon>
@@ -45,19 +46,20 @@ struct KisVisualColorSelectorShape::Private
     QImage gradient;
     QImage fullSelector;
     bool imagesNeedUpdate {true};
-    QPointF currentCoordinates;
+    QPointF currentCoordinates; // somewhat redundant?
+    QVector4D currentChannelValues;
     Dimensions dimension;
     ColorModel model;
     const KoColorSpace *colorSpace;
-    KoColor currentColor;
+    KoColor currentColor;// TODO: relocate to parent
     int channel1;
     int channel2;
-    KisSignalCompressor *updateTimer {0};
+    KisSignalCompressor *updateTimer {0}; // To be removed
     bool mousePressActive = false;
     const KoColorDisplayRendererInterface *displayRenderer = 0;
-    qreal hue = 0.0;
-    qreal sat = 0.0;
-    qreal tone = 0.0;
+    qreal hue = 0.0; // To be removed
+    qreal sat = 0.0; // To be removed
+    qreal tone = 0.0; // To be removed
     bool usesOCIO = false;
     bool isRGBA = false;
     bool is8Bit = false;
@@ -107,7 +109,7 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     // HACK: the updateTimer isn't connected to anything, we only check whether it's still active
     //       and running in order to determine whether we will emit a certain signal.
-    m_d->updateTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
+    //m_d->updateTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
     setDisplayRenderer(displayRenderer);
     show();
 
@@ -127,6 +129,42 @@ void KisVisualColorSelectorShape::updateCursor()
 
 QPointF KisVisualColorSelectorShape::getCursorPosition() {
     return m_d->currentCoordinates;
+}
+
+void KisVisualColorSelectorShape::setCursorPosition(QPointF position, bool signal)
+{
+    QPointF newPos(qBound(0.0, position.x(), 1.0), qBound(0.0, position.y(), 1.0));
+    if (newPos != m_d->currentCoordinates)
+    {
+        m_d->currentCoordinates = newPos;
+        // for internal consistency, because we have a bit of redundancy here
+        m_d->currentChannelValues[m_d->channel1] = newPos.x();
+        if (m_d->dimension == Dimensions::twodimensional){
+            m_d->currentChannelValues[m_d->channel2] = newPos.y();
+        }
+        update();
+        if (signal){
+            emit sigCursorMoved(newPos);
+        }
+    }
+}
+
+void KisVisualColorSelectorShape::setChannelValues(QVector4D channelValues, bool setCursor)
+{
+    //qDebug() << this  << "setChannelValues";
+    m_d->currentChannelValues = channelValues;
+    if (setCursor) {
+        m_d->currentCoordinates = QPointF(channelValues[m_d->channel1], channelValues[m_d->channel2]);
+    }
+    else {
+        // for internal consistency, because we have a bit of redundancy here
+        m_d->currentChannelValues[m_d->channel1] = m_d->currentCoordinates.x();
+        if (m_d->dimension == Dimensions::twodimensional){
+            m_d->currentChannelValues[m_d->channel2] = m_d->currentCoordinates.y();
+        }
+    }
+    m_d->imagesNeedUpdate = true;
+    update();
 }
 
 void KisVisualColorSelectorShape::setColor(KoColor c)
@@ -173,7 +211,7 @@ void KisVisualColorSelectorShape::updateFromChangedDisplayRenderer()
 {
     //qDebug() << this  << "updateFromChangedDisplayRenderer();";
     m_d->imagesNeedUpdate = true;
-    updateCursor();
+    //updateCursor();
     //m_d->currentColor = convertShapeCoordinateToKoColor(getCursorPosition());
     update();
 }
@@ -196,6 +234,7 @@ QColor KisVisualColorSelectorShape::getColorFromConverter(KoColor c){
     return col;
 }
 
+// currently unused?
 void KisVisualColorSelectorShape::slotSetActiveChannels(int channel1, int channel2)
 {
     //qDebug() << this  << "slotSetActiveChannels";
@@ -213,25 +252,31 @@ bool KisVisualColorSelectorShape::imagesNeedUpdate() const {
 QImage KisVisualColorSelectorShape::getImageMap()
 {
     //qDebug() << this  << ">>>>>>>>> getImageMap()" << m_d->imagesNeedUpdate;
+    const KisVisualColorSelector *selector = qobject_cast<KisVisualColorSelector*>(parent());
 
     if (m_d->imagesNeedUpdate == true) {
         // Fill a buffer with the right kocolors
-        quint8 *data = new quint8[width() * height() * m_d->currentColor.colorSpace()->pixelSize()];
+        quint8 *data = new quint8[width() * height() * m_d->colorSpace->pixelSize()];
         quint8 *dataPtr = data;
+        QVector4D coordinates = m_d->currentChannelValues;
         for (int y = 0; y < height(); y++) {
             for (int x=0; x < width(); x++) {
                 QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPoint(x, y));
-                KoColor c = convertShapeCoordinateToKoColor(newcoordinate);
-                memcpy(dataPtr, c.data(), m_d->currentColor.colorSpace()->pixelSize());
-                dataPtr += m_d->currentColor.colorSpace()->pixelSize();
+                coordinates[m_d->channel1] = newcoordinate.x();
+                if (m_d->dimension == Dimensions::twodimensional){
+                    coordinates[m_d->channel2] = newcoordinate.y();
+                }
+                KoColor c = selector->convertShapeCoordsToKoColor(coordinates);
+                memcpy(dataPtr, c.data(), m_d->colorSpace->pixelSize());
+                dataPtr += m_d->colorSpace->pixelSize();
             }
         }
         // Convert the buffer to a qimage
         if (m_d->displayRenderer) {
-            m_d->gradient = m_d->displayRenderer->convertToQImage(m_d->currentColor.colorSpace(), data, width(), height());
+            m_d->gradient = m_d->displayRenderer->convertToQImage(m_d->colorSpace, data, width(), height());
         }
         else {
-            m_d->gradient = m_d->currentColor.colorSpace()->convertToQImage(data, width(), height(), 0, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+            m_d->gradient = m_d->colorSpace->convertToQImage(data, width(), height(), 0, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
         }
         delete[] data;
 
@@ -489,36 +534,25 @@ void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)
     if (e->button()==Qt::LeftButton) {
         m_d->mousePressActive = true;
         QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
-        KoColor col = convertShapeCoordinateToKoColor(coordinates, true);
-        setColor(col);
-        Q_EMIT sigNewColor(col);
-        m_d->updateTimer->start();
+        setCursorPosition(coordinates, true);
     }
 }
 
 void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
 {
-    if (m_d->mousePressActive==true && this->mask().contains(e->pos())) {
+    if (m_d->mousePressActive==true) {
         QPointF coordinates = convertWidgetCoordinateToShapeCoordinate(e->pos());
-        quint8* oldData = m_d->currentColor.data();
-        KoColor col = convertShapeCoordinateToKoColor(coordinates, true);
-        QRect offsetrect(this->geometry().topLeft() + QPoint(7.0, 7.0), this->geometry().bottomRight() - QPoint(7.0, 7.0));
-        if (offsetrect.contains(e->pos()) || (m_d->colorSpace->difference(col.data(), oldData) > 5)) {
-            setColor(col);
-            if (!m_d->updateTimer->isActive()) {
-                Q_EMIT sigNewColor(col);
-                m_d->updateTimer->start();
-            }
-        }
-
+        setCursorPosition(coordinates, true);
     } else {
         e->ignore();
     }
 }
 
-void KisVisualColorSelectorShape::mouseReleaseEvent(QMouseEvent *)
+void KisVisualColorSelectorShape::mouseReleaseEvent(QMouseEvent *e)
 {
-    m_d->mousePressActive = false;
+    if (e->button()==Qt::LeftButton) {
+        m_d->mousePressActive = false;
+    }
 }
 void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
 {
@@ -549,7 +583,12 @@ void KisVisualColorSelectorShape::setFullImage(QImage full)
 }
 KoColor KisVisualColorSelectorShape::getCurrentColor()
 {
-    return m_d->currentColor;
+    const KisVisualColorSelector *selector = qobject_cast<KisVisualColorSelector*>(parent());
+    if (selector)
+    {
+        return selector->convertShapeCoordsToKoColor(m_d->currentChannelValues);
+    }
+    return KoColor(m_d->colorSpace);
 }
 
 QVector <qreal> KisVisualColorSelectorShape::getHSX(QVector<qreal> hsx, bool wrangler)

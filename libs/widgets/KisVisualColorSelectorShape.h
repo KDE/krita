@@ -157,10 +157,30 @@ public:
      */
     QVector <qreal> getHSX(QVector <qreal> hsx, bool wrangler= false);
 
+    /**
+      * @brief setCursorPosition
+      * Set the cursor to normalized shape coordinates. This will only repaint the cursor.
+      * @param position normalized shape coordinates ([0,1] range, not yet transformed to actual channel values!)
+      * @param signal if true, emit a sigCursorMoved signal
+      */
+    void setCursorPosition(QPointF position, bool signal = false);
+
+    /**
+      * @brief setChannelValues
+      * Set the current channel values;
+      * Note that channel values controlled by the shape itself have no effect unless setCursor is true.
+      * This will trigger a full widget repaint.
+      * @param position normalized shape coordinates ([0,1] range)
+      * these are not yet transformed to color space specific ranges!
+      * @param setCursor if true, sets the cursor too, otherwise the shape-controlled channels are not set
+      */
+    void setChannelValues(QVector4D channelValues, bool setCursor);
+
 
 Q_SIGNALS:
     void sigNewColor(KoColor col);
     void sigHSXchange();
+    void sigCursorMoved(QPointF pos);
 
 public Q_SLOTS:
     /**

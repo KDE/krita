@@ -28,6 +28,7 @@
 struct KisDecorationsWrapperLayer::Private
 {
     KisDocument *document = 0;
+    KisPaintDeviceSP fakeOriginalDevice;
 };
 
 KisDecorationsWrapperLayer::KisDecorationsWrapperLayer(KisDocument *document)
@@ -35,6 +36,7 @@ KisDecorationsWrapperLayer::KisDecorationsWrapperLayer(KisDocument *document)
       m_d(new Private)
 {
     m_d->document = document;
+    m_d->fakeOriginalDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
 }
 
 
@@ -43,6 +45,7 @@ KisDecorationsWrapperLayer::KisDecorationsWrapperLayer(const KisDecorationsWrapp
       m_d(new Private)
 {
     m_d->document = rhs.m_d->document;
+    m_d->fakeOriginalDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
 }
 
 KisDecorationsWrapperLayer::~KisDecorationsWrapperLayer()
@@ -83,7 +86,7 @@ KisNodeSP KisDecorationsWrapperLayer::clone() const {
 
 KisPaintDeviceSP KisDecorationsWrapperLayer::original() const
 {
-    return 0;
+    return m_d->fakeOriginalDevice;
 }
 
 KisPaintDeviceSP KisDecorationsWrapperLayer::paintDevice() const

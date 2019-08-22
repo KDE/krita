@@ -25,6 +25,12 @@
 
 class KisDocument;
 
+/**
+ * KisDecorationsWrapperLayer is a node for holding the grids, guides and assistants,
+ * so they can work together with the KisNodeVisitor system. This allows things like
+ * crops and transformations to be applied to these decoration style items.
+ */
+
 class KisDecorationsWrapperLayer : public KisExternalLayer
 {
     Q_OBJECT

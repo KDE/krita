@@ -371,6 +371,8 @@ public:
 
 void KisDocument::Private::syncDecorationsWrapperLayerState()
 {
+    if (!this->image) return;
+
     KisImageSP image = this->image;
     KisDecorationsWrapperLayerSP decorationsLayer =
         KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(image->root());
@@ -1512,6 +1514,7 @@ bool KisDocument::openFile()
     }
 
     setMimeTypeAfterLoading(typeName);
+    d->syncDecorationsWrapperLayerState();
     emit sigLoadingFinished();
 
     undoStack()->clear();

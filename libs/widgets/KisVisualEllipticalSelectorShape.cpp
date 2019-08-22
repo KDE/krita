@@ -143,24 +143,23 @@ QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordina
     qreal a = (this->width()/2);
     qreal xRel = center.x()-coordinate.x();
     qreal yRel = center.y()-coordinate.y();
-    qreal angle = atan2(xRel, yRel);
     qreal radius = sqrt(xRel*xRel+yRel*yRel);
-    angle = kisRadiansToDegrees(angle);
 
     if (m_type!=KisVisualEllipticalSelectorShape::borderMirrored){
-        angle = fmod(angle-90, 360.0);
-        angle = 180.0-angle;
-        angle = angle+180.0;
+        qreal angle = atan2(yRel, xRel);
+        angle = kisRadiansToDegrees(angle);
+        angle = fmod(angle+360, 360.0);
         x = angle/360.0;
         if (getDimensions()==KisVisualColorSelectorShape::twodimensional) {
             y = qBound(0.0,radius/(a-offset), 1.0);
         }
 
     } else {
+        qreal angle = atan2(xRel, yRel);
+        angle = kisRadiansToDegrees(angle);
         angle = fmod(angle+180, 360.0);
         if (angle>180.0) {
-            angle = 180.0-angle;
-            angle = angle+180;
+            angle = 360.0-angle;
         }
         x = (angle/360.0)*2;
         if (getDimensions()==KisVisualColorSelectorShape::twodimensional) {

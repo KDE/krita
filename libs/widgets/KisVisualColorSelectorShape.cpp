@@ -533,7 +533,7 @@ void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
     painter.drawImage(0,0,m_d->fullSelector);
 }
 
-KisVisualColorSelectorShape::Dimensions KisVisualColorSelectorShape::getDimensions()
+KisVisualColorSelectorShape::Dimensions KisVisualColorSelectorShape::getDimensions() const
 {
     return m_d->dimension;
 }
@@ -612,7 +612,7 @@ void KisVisualColorSelectorShape::setHSX(QVector<qreal> hsx, bool wrangler)
     }
 }
 
-QVector <int> KisVisualColorSelectorShape::getChannels()
+QVector <int> KisVisualColorSelectorShape::getChannels() const
 {
     QVector <int> channels(2);
     channels[0] = m_d->channel1;

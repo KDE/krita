@@ -63,8 +63,8 @@ protected:
 
 private:
 
-    QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) override;
-    QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) override;
+    QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const override;
+    QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const override;
 
     singelDTypes m_type;
     int m_barWidth;

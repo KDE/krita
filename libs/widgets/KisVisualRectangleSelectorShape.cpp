@@ -95,7 +95,7 @@ QRect KisVisualRectangleSelectorShape::getSpaceForTriangle(QRect geom)
     return getSpaceForSquare(geom);
 }
 
-QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
+QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const
 {
     qreal x = 0.5 * m_barWidth;
     qreal y = 0.5 * m_barWidth;
@@ -182,7 +182,7 @@ QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinat
     return QPointF(x,y);
 }
 
-QPointF KisVisualRectangleSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPoint coordinate)
+QPointF KisVisualRectangleSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const
 {
     //default implementation:
     qreal x = 0.5;

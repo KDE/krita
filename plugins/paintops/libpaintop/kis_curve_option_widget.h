@@ -54,9 +54,8 @@ protected:
 private Q_SLOTS:
 
     void slotModified();
-    void slotStateChanged();
+    void slotUseSameCurveChanged();
 
-    void transferCurve();
     void updateSensorCurveLabels(KisDynamicSensorSP sensor);
     void updateCurve(KisDynamicSensorSP sensor);
     void updateValues();
@@ -82,6 +81,10 @@ private:
     Ui_WdgCurveOption* m_curveOptionWidget;
     QComboBox* m_curveMode;
     KisCurveOption* m_curveOption;
+
+    KisCubicCurve getWidgetCurve();
+    KisCubicCurve getHighlightedSensorCurve();
+
 };
 
 #endif // KIS_CURVE_OPTION_WIDGET_H

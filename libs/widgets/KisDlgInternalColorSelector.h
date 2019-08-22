@@ -150,12 +150,6 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     /**
-     * @brief slotLockSelector
-     * This slot will prevent the color from being updated.
-     */
-    void slotLockSelector();
-
-    /**
      * @brief slotConfigurationChanged
      * Wrapper slot for changes to the colorspace.
      */

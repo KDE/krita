@@ -220,7 +220,7 @@ QImage KisVisualColorSelectorShape::getImageMap()
 //        KoColor c = m_d->currentColor;
 
         // Fill a buffer with the right kocolors
-        quint8 *data = new quint8[width() * height() * height()];
+        quint8 *data = new quint8[width() * height() * m_d->currentColor.colorSpace()->pixelSize()];
         quint8 *dataPtr = data;
         for (int y = 0; y < m_d->gradient.height(); y++) {
             for (int x=0; x < m_d->gradient.width(); x++) {

@@ -1774,6 +1774,11 @@ void KisDocument::slotConfigChanged()
     setNormalAutoSaveInterval();
 }
 
+void KisDocument::slotImageRootChanged()
+{
+    d->syncDecorationsWrapperLayerState();
+}
+
 void KisDocument::clearUndoHistory()
 {
     d->undoStack->clear();
@@ -2143,6 +2148,7 @@ void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
     d->shapeController->setImage(image);
     setModified(false);
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);
+    connect(d->image, SIGNAL(sigLayersChangedAsync()), this, SLOT(slotImageRootChanged()));
 
     if (forceInitialUpdate) {
         d->image->initialRefreshGraph();

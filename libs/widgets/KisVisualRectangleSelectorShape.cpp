@@ -176,8 +176,8 @@ QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinat
 
         }
     } else {
-        x = qMin(coordinate.x()*(height()-offset*2)+offset, (qreal)height());
-        y = qMin((1.0 - coordinate.y())*(width()-offset*2)+offset, (qreal)width());
+        x = qMin(coordinate.x()*(width()-offset*2)+offset, (qreal)width());
+        y = qMin((1.0 - coordinate.y())*(height()-offset*2)+offset, (qreal)height());
     }
     return QPointF(x,y);
 }

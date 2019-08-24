@@ -96,13 +96,14 @@ QRect KisVisualRectangleSelectorShape::getSpaceForTriangle(QRect geom)
 
 QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const
 {
+    // Reminder: in Qt widget space, origin is top-left, but we want zero y to be at the bottom
     qreal x = 0.5 * m_barWidth;
     qreal y = 0.5 * m_barWidth;
     qreal offset = 5.0;
     KisVisualColorSelectorShape::Dimensions dimension = getDimensions();
     if (dimension == KisVisualColorSelectorShape::onedimensional) {
         if ( m_type == KisVisualRectangleSelectorShape::vertical) {
-            y = qMin(coordinate.x()*(height()-offset*2)+offset, (qreal)height());
+            y = qMin((1.0 - coordinate.x())*(height()-offset*2)+offset, (qreal)height());
         } else if (m_type == KisVisualRectangleSelectorShape::horizontal) {
             x = qMin(coordinate.x()*(width()-offset*2)+offset, (qreal)width());
         } else if (m_type == KisVisualRectangleSelectorShape::border) {
@@ -176,21 +177,22 @@ QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinat
         }
     } else {
         x = qMin(coordinate.x()*(height()-offset*2)+offset, (qreal)height());
-        y = qMin(coordinate.y()*(width()-offset*2)+offset, (qreal)width());
+        y = qMin((1.0 - coordinate.y())*(width()-offset*2)+offset, (qreal)width());
     }
     return QPointF(x,y);
 }
 
 QPointF KisVisualRectangleSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const
 {
-    //default implementation:
+    // Reminder: in Qt widget space, origin is top-left, but we want zero y to be at the bottom
+    //default values:
     qreal x = 0.5;
     qreal y = 0.5;
     qreal offset = 5.0;
     KisVisualColorSelectorShape::Dimensions dimension = getDimensions();
     if (dimension == KisVisualColorSelectorShape::onedimensional ) {
         if (m_type == KisVisualRectangleSelectorShape::vertical) {
-            x = (coordinate.y()-offset)/(height()-offset*2);
+            x = 1.0 - (coordinate.y()-offset)/(height()-offset*2);
         } else if (m_type == KisVisualRectangleSelectorShape::horizontal) {
             x = (coordinate.x()-offset)/(width()-offset*2);
         } else if (m_type == KisVisualRectangleSelectorShape::border) {
@@ -267,7 +269,7 @@ QPointF KisVisualRectangleSelectorShape::convertWidgetCoordinateToShapeCoordinat
     }
     else {
         x = (coordinate.x()-offset)/(width()-offset*2);
-        y = (coordinate.y()-offset)/(height()-offset*2);
+        y = 1.0 - (coordinate.y()-offset)/(height()-offset*2);
     }
     x = qBound((qreal)0.0, x, (qreal)1.0);
     y = qBound((qreal)0.0, y, (qreal)1.0);

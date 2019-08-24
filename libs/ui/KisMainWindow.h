@@ -308,6 +308,8 @@ public Q_SLOTS:
      */
     void setCanvasDetached(bool detached);
 
+    void slotFileSelected(QString path);
+    void slotEmptyFilePath();
 private Q_SLOTS:
     /**
      * Save the list of recent files.
@@ -428,7 +430,6 @@ private Q_SLOTS:
     void switchTab(int index);
 
     void windowScreenChanged(QScreen *screen);
-
 protected:
 
     void closeEvent(QCloseEvent * e) override;
@@ -503,7 +504,6 @@ private:
 
     QString m_errorMessage;
     bool m_dieOnError;
-
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisMainWindow::OpenFlags)

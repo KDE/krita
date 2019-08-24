@@ -10,6 +10,7 @@ include_directories(SYSTEM
 if (ANDROID)
     add_definitions(-DQT_OPENGL_ES_3)
     add_definitions(-DHAS_ONLY_OPENGL_ES)
+    include_directories (${Qt5AndroidExtras_INCLUDE_DIRS})
 endif()
 
 add_subdirectory( tests )
@@ -468,6 +469,10 @@ if(APPLE)
     )
 endif()
 
+if (ANDROID)
+    set (kritaui_LIB_SRCS ${kritaui_LIB_SRCS} KisAndroidFileManager.cpp)
+endif()
+
 ki18n_wrap_ui(kritaui_LIB_SRCS
     widgets/KoFillConfigWidget.ui
     widgets/KoStrokeConfigWidget.ui
@@ -576,6 +581,7 @@ target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::Ite
 if (ANDROID)
     target_link_libraries(kritaui GLESv3)
     target_link_libraries(kritaui Qt5::Gui)
+    target_link_libraries(kritaui Qt5::AndroidExtras)
 endif()
 
 if (HAVE_QT_MULTIMEDIA)

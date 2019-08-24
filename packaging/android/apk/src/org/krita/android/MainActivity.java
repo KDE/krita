@@ -7,7 +7,7 @@ import org.qtproject.qt5.android.bindings.QtActivity;
 
 public class MainActivity extends QtActivity {
 
-    public boolean isStartup = true;
+	public boolean isStartup = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

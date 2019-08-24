@@ -57,7 +57,7 @@ class ConfigsManager {
 	 */
 	private void recurse(String path) {
 		AssetManager assetManager = mActivity.getAssets();
-		String assets[];
+		String[] assets;
 		try {
 			assets = assetManager.list(path);
 			if (assets == null) {

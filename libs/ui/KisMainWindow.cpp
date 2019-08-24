@@ -107,6 +107,10 @@
 #include <KoResourceModel.h>
 #include <KisUsageLogger.h>
 
+#ifdef Q_OS_ANDROID
+#include <KisAndroidFileManager.h>
+#endif
+
 #include <brushengine/kis_paintop_settings.h>
 #include "dialogs/kis_about_application.h"
 #include "dialogs/kis_delayed_save_dialog.h"
@@ -184,6 +188,10 @@ public:
         , mdiArea(new QMdiArea(parent))
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
+    #ifdef Q_OS_ANDROID
+        , fileManager(new KisAndroidFileManager)
+    #endif
+
     {
         if (id.isNull()) this->id = QUuid::createUuid();
 
@@ -283,6 +291,10 @@ public:
 
     QUuid workspaceBorrowedBy;
     KisSignalAutoConnectionsStore screenConnectionsStore;
+
+#ifdef Q_OS_ANDROID
+    KisAndroidFileManager *fileManager;
+#endif
 
     KisActionManager * actionManager() {
         return viewManager->actionManager();
@@ -736,6 +748,16 @@ void KisMainWindow::slotThemeChanged()
     emit themeChanged();
 }
 
+void KisMainWindow::slotFileSelected(QString path)
+{
+    QString url = path;
+    if (!url.isEmpty()) {
+        bool res = openDocument(QUrl::fromLocalFile(url), Import);
+        if (!res) {
+            warnKrita << "Loading" << url << "failed";
+        }
+    }
+}
 void KisMainWindow::updateReloadFileAction(KisDocument *doc)
 {
     Q_UNUSED(doc);
@@ -1513,6 +1535,7 @@ void KisMainWindow::slotImportFile()
 
 void KisMainWindow::slotFileOpen(bool isImporting)
 {
+#ifndef Q_OS_ANDROID
     QStringList urls = showOpenFileDialog(isImporting);
 
     if (urls.isEmpty())
@@ -1528,6 +1551,13 @@ void KisMainWindow::slotFileOpen(bool isImporting)
             }
         }
     }
+#else
+    Q_UNUSED(isImporting)
+
+    d->fileManager->openImportFile();
+    connect(d->fileManager, SIGNAL(sigFileSelected(QString)), this, SLOT(slotFileSelected(QString)));
+    connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
+#endif
 }
 
 void KisMainWindow::slotFileOpenRecent(const QUrl &url)

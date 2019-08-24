@@ -306,6 +306,7 @@ public Q_SLOTS:
 
 
 
+    void slotFileSelected(QString path);
 private Q_SLOTS:
     /**
      * Save the list of recent files.
@@ -504,7 +505,6 @@ private:
 
     QString m_errorMessage;
     bool m_dieOnError;
-
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisMainWindow::OpenFlags)

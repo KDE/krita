@@ -79,6 +79,7 @@ void KisAndroidFileManager::ActivityResultReceiver::handleActivityResult(int req
                                                                   uri.object());
                 // TODO add a debug statement
                 QString path = pathObject.toString();
+                dbgAndroid << path;
                 if (path.isEmpty())
                 {
                     emit _manager->sigEmptyFilePath();

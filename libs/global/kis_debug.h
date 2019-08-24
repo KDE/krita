@@ -48,6 +48,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41013();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41014();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41015();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41016();
+extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41017();
 
 #define dbgResources qCDebug(_30009)
 #define dbgKrita qCDebug(_41000)
@@ -67,6 +68,7 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41016();
 #define dbgTablet qCDebug(_41014)
 #define dbgOpenGL qCDebug(_41015)
 #define dbgMetaData qCDebug(_41016)
+#define dbgAndroid qCDebug(_41017)
 
 // Defined in Qt 5.6
 #if QT_VERSION >= 0x050600

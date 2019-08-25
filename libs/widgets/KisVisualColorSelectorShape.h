@@ -172,6 +172,24 @@ public Q_SLOTS:
     void updateFromChangedDisplayRenderer();
 
 protected:
+    /**
+     * @brief convertImageMap
+     * convert image data containing raw KoColor data into a QImage
+     * @param data must point to memory of size width()*height()*pixelSize
+     * @param size the number of bytes to read from data, must match aforementioned cirteria
+     * @return the converted QImage guaranteed to match the widget size (black content on failure)
+     */
+    QImage convertImageMap(const quint8 *rawColor, quint32 size) const;
+    /**
+     * @brief renderBackground
+     * Render the widget background visible inside the widget's mask in current color space
+     * Rendering shall be done with the conversion functions of KisVisualColorSelector
+     * @param data points to zero-initialized memory of size width()*height()*pixelSize
+     * @param pixelSize the data size to transfer from KoColor::data() to data per pixel
+     * in the current color space
+     * @param channelValues the normalized channel values of the currently picked color
+     */
+    virtual QImage renderBackground(const QVector4D &channelValues, quint32 pixelSize) const;
 
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;

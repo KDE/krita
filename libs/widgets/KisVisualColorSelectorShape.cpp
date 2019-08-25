@@ -174,43 +174,58 @@ bool KisVisualColorSelectorShape::imagesNeedUpdate() const {
 QImage KisVisualColorSelectorShape::getImageMap()
 {
     //qDebug() << this  << ">>>>>>>>> getImageMap()" << m_d->imagesNeedUpdate;
-    const KisVisualColorSelector *selector = qobject_cast<KisVisualColorSelector*>(parent());
 
-    if (m_d->imagesNeedUpdate == true) {
+    if (m_d->imagesNeedUpdate) {
         // Fill a buffer with the right kocolors
-        quint8 *data = new quint8[width() * height() * m_d->colorSpace->pixelSize()];
-        quint8 *dataPtr = data;
-        QVector4D coordinates = m_d->currentChannelValues;
-        for (int y = 0; y < height(); y++) {
-            for (int x=0; x < width(); x++) {
-                QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPoint(x, y));
-                coordinates[m_d->channel1] = newcoordinate.x();
-                if (m_d->dimension == Dimensions::twodimensional){
-                    coordinates[m_d->channel2] = newcoordinate.y();
-                }
-                KoColor c = selector->convertShapeCoordsToKoColor(coordinates);
-                memcpy(dataPtr, c.data(), m_d->colorSpace->pixelSize());
-                dataPtr += m_d->colorSpace->pixelSize();
-            }
-        }
-        // Convert the buffer to a qimage
-        if (m_d->displayRenderer) {
-            m_d->gradient = m_d->displayRenderer->convertToQImage(m_d->colorSpace, data, width(), height());
-        }
-        else {
-            m_d->gradient = m_d->colorSpace->convertToQImage(data, width(), height(), 0, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-        }
-        delete[] data;
-
+        m_d->gradient = renderBackground(m_d->currentChannelValues, m_d->colorSpace->pixelSize());
         m_d->imagesNeedUpdate = false;
-        // safeguard:
-        if (m_d->gradient.isNull())
-        {
-            m_d->gradient = QImage(width(), height(), QImage::Format_ARGB32);
-            m_d->gradient.fill(Qt::black);
-        }
     }
     return m_d->gradient;
+}
+
+QImage KisVisualColorSelectorShape::convertImageMap(const quint8 *rawColor, quint32 size) const
+{
+    Q_ASSERT(size == width()*height()*m_d->colorSpace->pixelSize());
+    QImage image;
+    // Convert the buffer to a qimage
+    if (m_d->displayRenderer) {
+        image = m_d->displayRenderer->convertToQImage(m_d->colorSpace, rawColor, width(), height());
+    }
+    else {
+        image = m_d->colorSpace->convertToQImage(rawColor, width(), height(), 0, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    }
+    // safeguard:
+    if (image.isNull())
+    {
+        image = QImage(width(), height(), QImage::Format_ARGB32);
+        image.fill(Qt::black);
+    }
+
+    return image;
+}
+
+QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelValues, quint32 pixelSize) const
+{
+    const KisVisualColorSelector *selector = qobject_cast<KisVisualColorSelector*>(parent());
+    Q_ASSERT(selector);
+
+    quint32 imageSize = width() * height() * m_d->colorSpace->pixelSize();
+    QScopedArrayPointer<quint8> raw(new quint8[imageSize] {});
+    quint8 *dataPtr = raw.data();
+    QVector4D coordinates = channelValues;
+    for (int y = 0; y < height(); y++) {
+        for (int x=0; x < width(); x++) {
+            QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPoint(x, y));
+            coordinates[m_d->channel1] = newcoordinate.x();
+            if (m_d->dimension == Dimensions::twodimensional){
+                coordinates[m_d->channel2] = newcoordinate.y();
+            }
+            KoColor c = selector->convertShapeCoordsToKoColor(coordinates);
+            memcpy(dataPtr, c.data(), pixelSize);
+            dataPtr += pixelSize;
+        }
+    }
+    return convertImageMap(raw.data(), imageSize);
 }
 
 void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)

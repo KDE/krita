@@ -444,6 +444,8 @@ void KisVisualColorSelector::slotRebuildSelectors()
     m_d->channelValues = convertKoColorToShapeCoordinates(m_d->currentcolor);
     Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
         shape->setChannelValues(m_d->channelValues, true);
+        // if this widget is currently visible, new children are hidden by default
+        shape->show();
     }
 }
 
@@ -517,8 +519,5 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *) {
         int sizeBlock = qMin(width()/2 - 8, height());
         m_d->widgetlist.at(0)->setGeometry(0, 0, sizeBlock, sizeBlock);
         m_d->widgetlist.at(1)->setGeometry(sizeBlock + 8, 0, sizeBlock, sizeBlock);
-    }
-    Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
-        shape->update();
     }
 }

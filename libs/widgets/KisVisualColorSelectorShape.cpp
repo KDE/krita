@@ -70,8 +70,6 @@ KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
     m_d->channel2 = qBound(0, channel2, maxchannel);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setDisplayRenderer(displayRenderer);
-    show();
-
 }
 
 KisVisualColorSelectorShape::~KisVisualColorSelectorShape()

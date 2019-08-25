@@ -23,6 +23,7 @@
 #include <QPainterPath>
 #include <QRect>
 #include <QVector>
+#include <QVector4D>
 #include <QVBoxLayout>
 #include <QList>
 #include <QPolygon>
@@ -66,6 +67,8 @@ QSize KisVisualEllipticalSelectorShape::sizeHint() const
 void KisVisualEllipticalSelectorShape::setBorderWidth(int width)
 {
     m_barWidth = width;
+    forceImageUpdate();
+    update();
 }
 
 QRect KisVisualEllipticalSelectorShape::getSpaceForSquare(QRect geom)
@@ -178,6 +181,65 @@ QRegion KisVisualEllipticalSelectorShape::getMaskMap()
     return mask;
 }
 
+QImage KisVisualEllipticalSelectorShape::renderBackground(const QVector4D &channelValues, quint32 pixelSize) const
+{
+    const KisVisualColorSelector *selector = qobject_cast<KisVisualColorSelector*>(parent());
+    Q_ASSERT(selector);
+    // optimization assumes widget is (close to) square, but should still render correctly as ellipse
+    int rMaxSquare = qRound(qMax(width(), height()) * 0.5f + 0.5f);
+    rMaxSquare *= rMaxSquare;
+    int rMinSquare = 0;
+    if (getDimensions() == Dimensions::onedimensional)
+    {
+        rMinSquare = qMax(0, qRound(qMin(width(), height()) * 0.5f - m_barWidth));
+        rMinSquare *= rMinSquare;
+    }
+    int cx = width()/2;
+    int cy = height()/2;
+
+    // Fill a buffer with the right kocolors
+    quint32 imageSize = width() * height() * pixelSize;
+    QScopedArrayPointer<quint8> raw(new quint8[imageSize] {});
+    quint8 *dataPtr = raw.data();
+    bool is2D = (getDimensions() == Dimensions::twodimensional);
+    QVector4D coordinates = channelValues;
+    QVector<int> channels = getChannels();
+    for (int y = 0; y < height(); y++) {
+        int dy = y - cy;
+        for (int x=0; x < width(); x++) {
+            int dx = x - cx;
+            int radSquare = dx*dx + dy*dy;
+            if (radSquare >= rMinSquare && radSquare < rMaxSquare)
+            {
+                QPointF newcoordinate = convertWidgetCoordinateToShapeCoordinate(QPoint(x, y));
+                coordinates[channels.at(0)] = newcoordinate.x();
+                if (is2D){
+                    coordinates[channels.at(1)] = newcoordinate.y();
+                }
+                KoColor c = selector->convertShapeCoordsToKoColor(coordinates);
+                memcpy(dataPtr, c.data(), pixelSize);
+            }
+            dataPtr += pixelSize;
+        }
+    }
+    QImage image = convertImageMap(raw.data(), imageSize);
+    // cleanup edges by erasing with antialiased circles
+    QPainter painter(&image);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setCompositionMode(QPainter::CompositionMode_Clear);
+    QPen pen;
+    pen.setWidth(5);
+    painter.setPen(pen);
+    painter.drawEllipse(QRect(0,0,width(),height()));
+
+    if (getDimensions()==KisVisualColorSelectorShape::onedimensional) {
+        QRect innerRect(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2));
+        painter.setBrush(Qt::SolidPattern);
+        painter.drawEllipse(innerRect);
+    }
+    return image;
+}
+
 void KisVisualEllipticalSelectorShape::drawCursor()
 {
     //qDebug() << this << "KisVisualEllipticalSelectorShape::drawCursor: image needs update" << imagesNeedUpdate();
@@ -188,20 +250,6 @@ void KisVisualEllipticalSelectorShape::drawCursor()
     painter.begin(&fullSelector);
     painter.setRenderHint(QPainter::Antialiasing);
     QRect innerRect(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2));
-
-    painter.save();
-    painter.setCompositionMode(QPainter::CompositionMode_Clear);
-    QPen pen;
-    pen.setWidth(5);
-    painter.setPen(pen);
-    painter.drawEllipse(QRect(0,0,width(),height()));
-
-    if (getDimensions()==KisVisualColorSelectorShape::onedimensional) {
-        painter.setBrush(Qt::SolidPattern);
-        painter.drawEllipse(innerRect);
-    }
-    painter.restore();
-
     QBrush fill;
     fill.setStyle(Qt::SolidPattern);
 

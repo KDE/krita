@@ -42,6 +42,7 @@ class UIExportLayers(object):
         self.exportFilterLayersCheckBox = QCheckBox(
             i18n("Export filter layers"))
         self.batchmodeCheckBox = QCheckBox(i18n("Export in batchmode"))
+        self.groupAsLayer = QCheckBox(i18n("Group as layer"))
         self.ignoreInvisibleLayersCheckBox = QCheckBox(
             i18n("Ignore invisible layers"))
         self.cropToImageBounds = QCheckBox(
@@ -89,6 +90,7 @@ class UIExportLayers(object):
 
         self.optionsLayout.addWidget(self.exportFilterLayersCheckBox)
         self.optionsLayout.addWidget(self.batchmodeCheckBox)
+        self.optionsLayout.addWidget(self.groupAsLayer)
         self.optionsLayout.addWidget(self.ignoreInvisibleLayersCheckBox)
         self.optionsLayout.addWidget(self.cropToImageBounds)
 
@@ -182,7 +184,7 @@ class UIExportLayers(object):
 
         for node in parentNode.childNodes():
             newDir = ''
-            if node.type() == 'grouplayer':
+            if node.type() == 'grouplayer' and not self.groupAsLayer.isChecked():
                 newDir = os.path.join(parentDir, node.name())
                 self.mkdir(newDir)
             elif (not self.exportFilterLayersCheckBox.isChecked()
@@ -210,7 +212,7 @@ class UIExportLayers(object):
                 node.save(layerFileName, self.resSpinBox.value() / 72.,
                           self.resSpinBox.value() / 72., krita.InfoObject(), bounds)
 
-            if node.childNodes():
+            if node.childNodes() and not self.groupAsLayer.isChecked():
                 self._exportLayers(node, fileFormat, newDir)
 
     def _selectDir(self):

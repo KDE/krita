@@ -146,11 +146,11 @@ QRegion KisVisualTriangleSelectorShape::getMaskMap()
     return mask;
 }
 
-void KisVisualTriangleSelectorShape::resizeEvent(QResizeEvent *)
+void KisVisualTriangleSelectorShape::resizeEvent(QResizeEvent *e)
 {
     //qDebug() << this << "KisVisualTriangleSelectorShape::resizeEvent(QResizeEvent *)";
     setTriangle();
-    forceImageUpdate();
+    KisVisualColorSelectorShape::resizeEvent(e);
 }
 
 void KisVisualTriangleSelectorShape::drawCursor()

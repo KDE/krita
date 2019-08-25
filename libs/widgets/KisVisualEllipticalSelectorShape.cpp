@@ -178,12 +178,6 @@ QRegion KisVisualEllipticalSelectorShape::getMaskMap()
     return mask;
 }
 
-void KisVisualEllipticalSelectorShape::resizeEvent(QResizeEvent *)
-{
-    //qDebug() << this << "KisVisualEllipticalSelectorShape::resizeEvent";
-    forceImageUpdate();
-}
-
 void KisVisualEllipticalSelectorShape::drawCursor()
 {
     //qDebug() << this << "KisVisualEllipticalSelectorShape::drawCursor: image needs update" << imagesNeedUpdate();

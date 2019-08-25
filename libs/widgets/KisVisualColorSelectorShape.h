@@ -177,6 +177,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void paintEvent(QPaintEvent*) override;
+    void resizeEvent(QResizeEvent *) override;
 
 private:
     struct Private;

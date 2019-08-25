@@ -58,7 +58,7 @@ public:
     QRect getSpaceForTriangle(QRect geom) override;
 
 protected:
-    void resizeEvent(QResizeEvent *) override;
+    void resizeEvent(QResizeEvent *e) override;
 
 private:
 

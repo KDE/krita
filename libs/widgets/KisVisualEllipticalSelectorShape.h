@@ -56,7 +56,6 @@ public:
     QRect getSpaceForCircle(QRect geom) override;
     QRect getSpaceForTriangle(QRect geom) override;
 protected:
-    void resizeEvent(QResizeEvent *) override;
 private:
     QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const override;
     QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const override;

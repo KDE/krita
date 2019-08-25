@@ -490,20 +490,17 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *) {
         slotsetColorSpace(m_d->currentcolor.colorSpace());
     }
     if (m_d->currentCS->colorChannelCount()==3) {
-
+        // set border width first, else the resized painting may have happened already, and we'd have to re-render
+        m_d->widgetlist.at(0)->setBorderWidth(borderWidth);
         if (m_d->acs_config.subType == KisColorSelectorConfiguration::Ring) {
             m_d->widgetlist.at(0)->resize(sizeValue,sizeValue);
         }
         else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular==false) {
-            m_d->widgetlist.at(0)->setMaximumWidth(borderWidth);
-            m_d->widgetlist.at(0)->setMinimumWidth(borderWidth);
-            m_d->widgetlist.at(0)->setMinimumHeight(sizeValue);
-            m_d->widgetlist.at(0)->setMaximumHeight(sizeValue);
+            m_d->widgetlist.at(0)->resize(borderWidth, sizeValue);
         }
         else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular==true) {
             m_d->widgetlist.at(0)->resize(sizeValue,sizeValue);
         }
-        m_d->widgetlist.at(0)->setBorderWidth(borderWidth);
 
         if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
             m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForTriangle(newrect));

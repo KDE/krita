@@ -284,11 +284,6 @@ QRegion KisVisualRectangleSelectorShape::getMaskMap()
     }
     return mask;
 }
-void KisVisualRectangleSelectorShape::resizeEvent(QResizeEvent *)
-{
-    //qDebug()  << this << "KisVisualRectangleSelectorShape::resizeEvent";
-    forceImageUpdate();
-}
 
 void KisVisualRectangleSelectorShape::drawCursor()
 {

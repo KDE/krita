@@ -242,13 +242,14 @@ void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
 
-    //check if old and new colors differ.
-
-    if (m_d->imagesNeedUpdate) {
-        setMask(getMaskMap());
-    }
     drawCursor();
     painter.drawImage(0,0,m_d->fullSelector);
+}
+
+void KisVisualColorSelectorShape::resizeEvent(QResizeEvent *)
+{
+    forceImageUpdate();
+    setMask(getMaskMap());
 }
 
 KisVisualColorSelectorShape::Dimensions KisVisualColorSelectorShape::getDimensions() const

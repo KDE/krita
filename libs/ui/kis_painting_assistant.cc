@@ -442,6 +442,10 @@ void KisPaintingAssistant::transform(const QTransform &transform)
         *handle = transform.map(*handle);
     }
 
+    Q_FOREACH(KisPaintingAssistantHandleSP handle, sideHandles()) {
+        *handle = transform.map(*handle);
+    }
+
     uncache();
 }
 

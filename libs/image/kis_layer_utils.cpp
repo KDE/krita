@@ -313,9 +313,11 @@ namespace KisLayerUtils {
                 node = node->nextSibling();
             }
 
-            // TODO: it would be better to count up changeRect inside
-            // node's extent() method
-            currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds());
+            if (!rootNode->isFakeNode()) {
+                // TODO: it would be better to count up changeRect inside
+                // node's extent() method
+                currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds());
+            }
 
             return currentRect;
         }

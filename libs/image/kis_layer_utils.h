@@ -221,6 +221,14 @@ namespace KisLayerUtils
     KisNodeSP KRITAIMAGE_EXPORT findNodeByUuid(KisNodeSP root, const QUuid &uuid);
 
     KisImageSP KRITAIMAGE_EXPORT findImageByHierarchy(KisNodeSP node);
+
+    template <class T>
+    T* findNodeByType(KisNodeSP root) {
+        return dynamic_cast<T*>(recursiveFindNode(root, [] (KisNodeSP node) {
+            return bool(dynamic_cast<T*>(node.data()));
+        }).data());
+    }
+
 }
 
 #endif /* __KIS_LAYER_UTILS_H */

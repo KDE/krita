@@ -22,6 +22,7 @@
 
 #include "kis_config.h"
 #include "kis_dom_utils.h"
+#include "kis_algebra_2d.h"
 
 
 struct KisGridConfigStaticRegistrar {
@@ -37,6 +38,33 @@ const KisGridConfig& KisGridConfig::defaultGrid()
 {
     staticDefaultObject->loadStaticData();
     return *staticDefaultObject;
+}
+
+void KisGridConfig::transform(const QTransform &transform)
+{
+    if (transform.type() >= QTransform::TxShear) return;
+
+    KisAlgebra2D::DecomposedMatix m(transform);
+
+
+
+    if (m_gridType == 0) {
+        QTransform t = m.scaleTransform();
+
+        const qreal eps = 1e-3;
+        const qreal wrappedRotation = KisAlgebra2D::wrapValue(m.angle, 90.0);
+        if (wrappedRotation <= eps || wrappedRotation >= 90.0 - eps) {
+            t *= m.rotateTransform();
+        }
+
+        m_spacing = KisAlgebra2D::abs(t.map(m_spacing));
+
+    } else {
+        if (qFuzzyCompare(m.scaleX, m.scaleY)) {
+            m_cellSpacing = qRound(qAbs(m_cellSpacing * m.scaleX));
+        }
+    }
+    m_offset = KisAlgebra2D::wrapValue(transform.map(m_offset), m_spacing);
 }
 
 void KisGridConfig::loadStaticData()

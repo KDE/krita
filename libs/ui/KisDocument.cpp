@@ -124,6 +124,8 @@
 #include "KisCloneDocumentStroke.h"
 
 #include <KisMirrorAxisConfig.h>
+#include <KisDecorationsWrapperLayer.h>
+#include "kis_simple_stroke_strategy.h"
 
 
 // Define the protocol used here for embedded documents' URL
@@ -228,11 +230,12 @@ private:
 class Q_DECL_HIDDEN KisDocument::Private
 {
 public:
-    Private(KisDocument *q)
-        : docInfo(new KoDocumentInfo(q)) // deleted by QObject
-        , importExportManager(new KisImportExportManager(q)) // deleted manually
-        , autoSaveTimer(new QTimer(q))
-        , undoStack(new UndoStack(q)) // deleted by QObject
+    Private(KisDocument *_q)
+        : q(_q)
+        , docInfo(new KoDocumentInfo(_q)) // deleted by QObject
+        , importExportManager(new KisImportExportManager(_q)) // deleted manually
+        , autoSaveTimer(new QTimer(_q))
+        , undoStack(new UndoStack(_q)) // deleted by QObject
         , m_bAutoDetectedMime(false)
         , modified(false)
         , readwrite(true)
@@ -251,17 +254,18 @@ public:
         }
     }
 
-    Private(const Private &rhs, KisDocument *q)
-        : docInfo(new KoDocumentInfo(*rhs.docInfo, q))
-        , importExportManager(new KisImportExportManager(q))
-        , autoSaveTimer(new QTimer(q))
-        , undoStack(new UndoStack(q))
+    Private(const Private &rhs, KisDocument *_q)
+        : q(_q)
+        , docInfo(new KoDocumentInfo(*rhs.docInfo, _q))
+        , importExportManager(new KisImportExportManager(_q))
+        , autoSaveTimer(new QTimer(_q))
+        , undoStack(new UndoStack(_q))
         , nserver(new KisNameServer(*rhs.nserver))
         , preActivatedNode(0) // the node is from another hierarchy!
         , imageIdleWatcher(2000 /*ms*/)
         , savingLock(&savingMutex)
     {
-        copyFromImpl(rhs, q, CONSTRUCT);
+        copyFromImpl(rhs, _q, CONSTRUCT);
     }
 
     ~Private() {
@@ -269,6 +273,7 @@ public:
         delete nserver;
     }
 
+    KisDocument *q = 0;
     KoDocumentInfo *docInfo = 0;
 
     KoUnit unit;
@@ -338,6 +343,8 @@ public:
 
     bool batchMode { false };
 
+    void syncDecorationsWrapperLayerState();
+
     void setImageAndInitIdleWatcher(KisImageSP _image) {
         image = _image;
 
@@ -360,6 +367,48 @@ public:
 
     class StrippedSafeSavingLocker;
 };
+
+
+void KisDocument::Private::syncDecorationsWrapperLayerState()
+{
+    if (!this->image) return;
+
+    KisImageSP image = this->image;
+    KisDecorationsWrapperLayerSP decorationsLayer =
+        KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(image->root());
+
+    const bool needsDecorationsWrapper =
+            gridConfig.showGrid() || (guidesConfig.showGuides() && guidesConfig.hasGuides()) || !assistants.isEmpty();
+
+    struct SyncDecorationsWrapperStroke : public KisSimpleStrokeStrategy {
+        SyncDecorationsWrapperStroke(KisDocument *document, bool needsDecorationsWrapper)
+            : KisSimpleStrokeStrategy("sync-decorations-wrapper", kundo2_noi18n("start-isolated-mode")),
+              m_document(document),
+              m_needsDecorationsWrapper(needsDecorationsWrapper)
+        {
+            this->enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+            setClearsRedoOnStart(false);
+        }
+
+        void initStrokeCallback() {
+            KisDecorationsWrapperLayerSP decorationsLayer =
+                KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(m_document->image()->root());
+
+            if (m_needsDecorationsWrapper && !decorationsLayer) {
+                m_document->image()->addNode(new KisDecorationsWrapperLayer(m_document));
+            } else if (!m_needsDecorationsWrapper && decorationsLayer) {
+                m_document->image()->removeNode(decorationsLayer);
+            }
+        }
+
+    private:
+        KisDocument *m_document = 0;
+        bool m_needsDecorationsWrapper = false;
+    };
+
+    KisStrokeId id = image->startStroke(new SyncDecorationsWrapperStroke(q, needsDecorationsWrapper));
+    image->endStroke(id);
+}
 
 void KisDocument::Private::copyFrom(const Private &rhs, KisDocument *q)
 {
@@ -867,6 +916,13 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
     KisNodeSP foundNode = KisLayerUtils::recursiveFindNode(image()->rootLayer(), [](KisNodeSP node) -> bool { return dynamic_cast<KisReferenceImagesLayer *>(node.data()); });
     KisReferenceImagesLayer *refLayer = dynamic_cast<KisReferenceImagesLayer *>(foundNode.data());
     setReferenceImagesLayer(refLayer, /* updateImage = */ false);
+
+    KisDecorationsWrapperLayerSP decorationsLayer =
+        KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(d->image->root());
+    if (decorationsLayer) {
+        decorationsLayer->setDocument(this);
+    }
+
 
     if (policy == REPLACE) {
         setModified(true);
@@ -1458,6 +1514,7 @@ bool KisDocument::openFile()
     }
 
     setMimeTypeAfterLoading(typeName);
+    d->syncDecorationsWrapperLayerState();
     emit sigLoadingFinished();
 
     undoStack()->clear();
@@ -1717,6 +1774,11 @@ void KisDocument::slotConfigChanged()
     setNormalAutoSaveInterval();
 }
 
+void KisDocument::slotImageRootChanged()
+{
+    d->syncDecorationsWrapperLayerState();
+}
+
 void KisDocument::clearUndoHistory()
 {
     d->undoStack->clear();
@@ -1731,6 +1793,7 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
 {
     if (d->gridConfig != config) {
         d->gridConfig = config;
+        d->syncDecorationsWrapperLayerState();
         emit sigGridConfigChanged(config);
     }
 }
@@ -1761,6 +1824,7 @@ void KisDocument::setGuidesConfig(const KisGuidesConfig &data)
     if (d->guidesConfig == data) return;
 
     d->guidesConfig = data;
+    d->syncDecorationsWrapperLayerState();
     emit sigGuidesConfigChanged(d->guidesConfig);
 }
 
@@ -2009,6 +2073,7 @@ void KisDocument::setAssistants(const QList<KisPaintingAssistantSP> &value)
 {
     if (d->assistants != value) {
         d->assistants = value;
+        d->syncDecorationsWrapperLayerState();
         emit sigAssistantsChanged();
     }
 }
@@ -2083,6 +2148,7 @@ void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
     d->shapeController->setImage(image);
     setModified(false);
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);
+    connect(d->image, SIGNAL(sigLayersChangedAsync()), this, SLOT(slotImageRootChanged()));
 
     if (forceInitialUpdate) {
         d->image->initialRefreshGraph();

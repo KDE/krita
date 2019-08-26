@@ -364,6 +364,30 @@ inline Point abs(const Point &pt) {
     return Point(qAbs(pt.x()), qAbs(pt.y()));
 }
 
+template<typename T, typename std::enable_if<std::is_integral<T>::value, T>::type* = nullptr>
+inline T wrapValue(T value, T wrapBounds) {
+    value %= wrapBounds;
+    if (value < 0) {
+        value += wrapBounds;
+    }
+    return value;
+}
+
+template<typename T, typename std::enable_if<std::is_floating_point<T>::value, T>::type* = nullptr>
+inline T wrapValue(T value, T wrapBounds) {
+    value = std::fmod(value, wrapBounds);
+    if (value < 0) {
+        value += wrapBounds;
+    }
+    return value;
+}
+
+template<typename T, typename std::enable_if<std::is_same<decltype(T().x()), decltype(T().y())>::value, T>::type* = nullptr>
+inline T wrapValue(T value, T wrapBounds) {
+    value.rx() = wrapValue(value.x(), wrapBounds.x());
+    value.ry() = wrapValue(value.y(), wrapBounds.y());
+    return value;
+}
 
 class RightHalfPlane {
 public:
@@ -617,6 +641,9 @@ struct KRITAGLOBAL_EXPORT DecomposedMatix {
 private:
     bool valid = true;
 };
+
+std::pair<QPointF, QTransform> KRITAGLOBAL_EXPORT transformEllipse(const QPointF &axes, const QTransform &fullLocalToGlobal);
+
 
 }
 

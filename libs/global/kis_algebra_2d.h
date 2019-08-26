@@ -642,6 +642,9 @@ private:
     bool valid = true;
 };
 
+std::pair<QPointF, QTransform> KRITAGLOBAL_EXPORT transformEllipse(const QPointF &axes, const QTransform &fullLocalToGlobal);
+
+
 }
 
 

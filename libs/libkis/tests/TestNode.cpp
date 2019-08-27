@@ -132,11 +132,7 @@ void TestNode::testThumbnail()
     // it makes it 10x10 empty, then puts 8x8 pixels in there... Not a bug in the Node class
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
             QVERIFY(thumb.pixelColor(i, j) == QColor(Qt::gray));
-#else
-            QVERIFY(QColor(thumb.pixel(i, j)) == QColor(Qt::gray));
-#endif
         }
     }
 }

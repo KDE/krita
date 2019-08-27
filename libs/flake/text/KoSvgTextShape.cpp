@@ -381,7 +381,7 @@ private:
         KIS_SAFE_ASSERT_RECOVER_NOOP(skippedChar.isSpace() || !skippedChar.isPrint());
 
         QFontMetrics metrics(format.font());
-        return metrics.width(skippedChar);
+        return metrics.horizontalAdvance(skippedChar);
     }
 
     static QTextCharFormat formatForPos(int pos, const QVector<QTextLayout::FormatRange> &formats)

@@ -1,4 +1,4 @@
-/*  This file is part of the KDE Libraries
+/*  This file is part of the KDE Librariesfsignals
  *  Copyright (C) 1998 Thomas Tanghus (tanghus@earthling.net)
  *  Additions 1999-2000 by Espen Sand (espen@kde.org)
  *                      and Holger Freyther <freyther@kde.org>

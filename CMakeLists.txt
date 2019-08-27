@@ -447,7 +447,22 @@ add_definitions(
   -DQT_USE_FAST_OPERATOR_PLUS
 )
 
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50900)
+
+#if (${Qt5_VERSION} VERSION_GREATER "5.14.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50F00)
+#elseif (${Qt5_VERSION} VERSION_GREATER "5.13.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50E00)
+#elseif (${Qt5_VERSION} VERSION_GREATER "5.12.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50D00)
+#elseif (${Qt5_VERSION} VERSION_GREATER "5.11.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50C00)
+#if(${Qt5_VERSION} VERSION_GREATER "5.10.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50B00)
+#if(${Qt5_VERSION} VERSION_GREATER "5.9.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50A00)
+#else()
+    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50900)
+#endif()
 
 add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
 

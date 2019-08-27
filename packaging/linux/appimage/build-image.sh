@@ -89,6 +89,8 @@ fi
 # Return to our build root
 cd $BUILD_PREFIX
 
+# place the icon where linuxdeployqt seems to expect it
+cp $APPDIR/share/icons/hicolor/256x256/apps/krita.png $APPDIR
 
 # Step 4: Build the image!!!
 linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \

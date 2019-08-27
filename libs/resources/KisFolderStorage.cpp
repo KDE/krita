@@ -170,6 +170,17 @@ KisFolderStorage::~KisFolderStorage()
 {
 }
 
+bool KisFolderStorage::addTag(const QString &resourceType, KisTagSP tag)
+{
+    return false;
+}
+
+bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP _resource)
+{
+    qDebug() << location() << _resource->filename() << _resource->shortFilename() << _resource->name();
+    return false;
+}
+
 KisResourceStorage::ResourceItem KisFolderStorage::resourceItem(const QString &url)
 {
     QFileInfo fi(url);

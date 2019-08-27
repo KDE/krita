@@ -241,9 +241,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
 
     qDebug() << resourceType << storageLocation << d->storages.contains(storageLocation);
 
-    if (!d->storages.contains(storageLocation)) {
-        return false;
-    }
+    Q_ASSERT(d->storages.contains(storageLocation));
     Q_ASSERT(resource->resourceId() > -1);
 
     KisResourceStorageSP storage = d->storages[storageLocation];
@@ -460,9 +458,6 @@ QString KisResourceLocator::makeStorageLocationAbsolute(QString storageLocation)
 {
     if (storageLocation.isEmpty()) {
         storageLocation = resourceLocationBase();
-    }
-    else {
-        storageLocation = resourceLocationBase() + '/' + storageLocation;
     }
     return storageLocation;
 }

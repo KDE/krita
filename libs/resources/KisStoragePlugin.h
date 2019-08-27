@@ -25,6 +25,7 @@
 
 #include <KisResourceStorage.h>
 #include "kritaresources_export.h"
+
 /**
  * The KisStoragePlugin class is the base class
  * for storage plugins. A storage plugin is used by

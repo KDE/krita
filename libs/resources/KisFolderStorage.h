@@ -30,6 +30,12 @@ public:
     KisFolderStorage(const QString &location);
     virtual ~KisFolderStorage();
 
+    /// Adds or updates this tag to the storage
+    bool addTag(const QString &resourceType, KisTagSP tag);
+
+    /// Adds or updates this resource to the storage
+    bool addResource(const QString &resourceType, KoResourceSP resource);
+
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
     KoResourceSP resource(const QString &url) override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;

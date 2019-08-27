@@ -28,6 +28,7 @@
 
 #include <kis_canvas2.h>
 #include <kis_coordinates_converter.h>
+#include "kis_algebra_2d.h"
 
 #include <math.h>
 
@@ -155,7 +156,25 @@ bool EllipseAssistant::isAssistantComplete() const
     return handles().size() >= 3;
 }
 
+void EllipseAssistant::transform(const QTransform &transform)
+{
+    e.set(*handles()[0], *handles()[1], *handles()[2]);
 
+    QPointF newAxes;
+    QTransform newTransform;
+
+    std::tie(newAxes, newTransform) = KisAlgebra2D::transformEllipse(QPointF(e.semiMajor(), e.semiMinor()), e.getInverse() * transform);
+
+    const QPointF p1 = newTransform.map(QPointF(newAxes.x(), 0));
+    const QPointF p2 = newTransform.map(QPointF(-newAxes.x(), 0));
+    const QPointF p3 = newTransform.map(QPointF(0, newAxes.y()));
+
+    *handles()[0] = p1;
+    *handles()[1] = p2;
+    *handles()[2] = p3;
+
+    uncache();
+}
 
 EllipseAssistantFactory::EllipseAssistantFactory()
 {

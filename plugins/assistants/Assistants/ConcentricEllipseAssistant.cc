@@ -183,6 +183,25 @@ bool ConcentricEllipseAssistant::isAssistantComplete() const
     return handles().size() >= 3;
 }
 
+void ConcentricEllipseAssistant::transform(const QTransform &transform)
+{
+    m_ellipse.set(*handles()[0], *handles()[1], *handles()[2]);
+
+    QPointF newAxes;
+    QTransform newTransform;
+
+    std::tie(newAxes, newTransform) = KisAlgebra2D::transformEllipse(QPointF(m_ellipse.semiMajor(), m_ellipse.semiMinor()), m_ellipse.getInverse() * transform);
+
+    const QPointF p1 = newTransform.map(QPointF(newAxes.x(), 0));
+    const QPointF p2 = newTransform.map(QPointF(-newAxes.x(), 0));
+    const QPointF p3 = newTransform.map(QPointF(0, newAxes.y()));
+
+    *handles()[0] = p1;
+    *handles()[1] = p2;
+    *handles()[2] = p3;
+
+    uncache();
+}
 
 ConcentricEllipseAssistantFactory::ConcentricEllipseAssistantFactory()
 {

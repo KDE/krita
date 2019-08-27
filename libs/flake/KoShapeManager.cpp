@@ -228,6 +228,7 @@ void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
 
 void KoShapeManager::remove(KoShape *shape)
 {
+    QRectF dirtyRect;
     {
         QMutexLocker l1(&d->shapesMutex);
         QMutexLocker l2(&d->treeMutex);
@@ -236,7 +237,8 @@ void KoShapeManager::remove(KoShape *shape)
         detector.detect(d->tree, shape, shape->zIndex());
         detector.fireSignals();
 
-        shape->update();
+        dirtyRect = shape->absoluteOutlineRect();
+
         shape->removeShapeManager(this);
         d->selection->deselect(shape);
         d->aggregate4update.remove(shape);
@@ -245,6 +247,10 @@ void KoShapeManager::remove(KoShape *shape)
             d->tree.remove(shape);
         }
         d->shapes.removeAll(shape);
+    }
+
+    if (!dirtyRect.isEmpty()) {
+        d->canvas->updateCanvas(dirtyRect);
     }
 
     // remove the children of a KoShapeContainer

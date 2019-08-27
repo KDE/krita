@@ -43,6 +43,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void sigBrushChanged();
+    void fontSizeChanged(qreal);
 
 private:
     KisBrushSP m_textBrush;

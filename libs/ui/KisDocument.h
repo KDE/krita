@@ -652,6 +652,8 @@ private Q_SLOTS:
 
     void slotConfigChanged();
 
+    void slotImageRootChanged();
+
     /**
      * @brief try to clone the image. This method handles all the locking for you. If locking
      *        has failed, no cloning happens

@@ -171,13 +171,19 @@ void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
         // add division guide lines if using multiple brushes
         if ((m_handsCount > 1 && m_transformMode == SYMMETRY) ||
             (m_handsCount > 1 && m_transformMode == SNOWFLAKE) ) {
-
-            qreal axesAngle = 360.0 / float(m_handsCount);
+            int axesCount;
+            if (m_transformMode == SYMMETRY){
+                 axesCount = m_handsCount;
+            }
+            else {
+                axesCount = m_handsCount*2;
+            }
+            qreal axesAngle = 360.0 / float(axesCount);
             float currentAngle = 0.0;
             float startingInsetLength = 20; // don't start each line at the origin so we can see better when all points converge
 
             // draw lines radiating from the origin
-            for( int i=0; i < m_handsCount; i++) {
+            for( int i=0; i < axesCount; i++) {
 
                 currentAngle = i*axesAngle;
 

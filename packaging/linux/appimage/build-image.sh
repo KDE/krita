@@ -46,7 +46,8 @@ cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/krita
 cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/lib/python3.5 $APPDIR/usr/lib
-cp -r $DEPS_INSTALL_PREFIX/sip $APPDIR/usr/lib/
+find $DEPS_INSTALL_PREFIX -name sip
+#cp -r $DEPS_INSTALL_PREFIX/sip $APPDIR/usr/lib/
 cp -r $DEPS_INSTALL_PREFIX/translations $APPDIR/usr/
 
 # Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages

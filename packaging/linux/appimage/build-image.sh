@@ -69,8 +69,7 @@ done
 patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so
 patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/sketch/libkritasketchplugin.so
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so
-find $APPDIR -name sip.so
-patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/sip/sip.so
+patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/python3.5/site-packages/PyQt5/sip.so
 
 # Step 5: Find out what version of Krita we built and give the Appimage a proper name
 cd $BUILD_PREFIX/krita-build

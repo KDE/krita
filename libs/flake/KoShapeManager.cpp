@@ -306,7 +306,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
         QRectF rect = converter.viewToDocument(KisPaintingTweaks::safeClipBoundingRect(painter));
         unsortedShapes = d->tree.intersects(rect);
     } else {
-        unsortedShapes = shapes();
+        unsortedShapes = d->shapes;
         warnFlake << "KoShapeManager::paint  Painting with a painter that has no clipping will lead to too much being painted!";
     }
 

@@ -125,7 +125,9 @@ inline void KisTileDataStore::registerTileDataImp(KisTileData *td)
 {
     int index = m_counter.fetchAndAddOrdered(1);
     td->m_tileNumber = index;
+    m_tileDataMap.getGC().lockRawPointerAccess();
     m_tileDataMap.assign(index, td);
+    m_tileDataMap.getGC().unlockRawPointerAccess();
     m_numTiles.ref();
     m_memoryMetric += td->pixelSize();
 }
@@ -138,6 +140,7 @@ void KisTileDataStore::registerTileData(KisTileData *td)
 
 inline void KisTileDataStore::unregisterTileDataImp(KisTileData *td)
 {
+    m_tileDataMap.getGC().lockRawPointerAccess();
     if (m_clockIndex == td->m_tileNumber) {
         do {
             m_clockIndex.ref();
@@ -149,6 +152,7 @@ inline void KisTileDataStore::unregisterTileDataImp(KisTileData *td)
     m_tileDataMap.erase(index);
     m_numTiles.deref();
     m_memoryMetric -= td->pixelSize();
+    m_tileDataMap.getGC().unlockRawPointerAccess();
 }
 
 void KisTileDataStore::unregisterTileData(KisTileData *td)

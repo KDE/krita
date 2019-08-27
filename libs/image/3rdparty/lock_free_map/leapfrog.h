@@ -324,7 +324,7 @@ struct Leapfrog {
                 migration->getSources()[0].sourceIndex.storeNonatomic(0);
                 migration->m_destination = Table::create(nextTableSize);
                 // Publish the new migration.
-                table->jobCoordinator.storeRelease(migration);
+                table->jobCoordinator.storeRelease(migration, &map.getGC());
             }
         }
     }
@@ -562,12 +562,13 @@ endMigration:
 
             migration->m_unitsRemaining.storeNonatomic(unitsRemaining);
             // Publish the new migration.
-            origTable->jobCoordinator.storeRelease(migration);
+            origTable->jobCoordinator.storeRelease(migration, &m_map.getGC());
         }
     }
 
     // We're done with this TableMigration. Queue it for GC.
     m_map.getGC().enqueue(&TableMigration::destroy, this, true);
+    m_map.getGC().update(m_map.migrationInProcess());
 }
 
 #endif // LEAPFROG_H

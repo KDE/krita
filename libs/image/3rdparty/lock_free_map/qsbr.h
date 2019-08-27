@@ -108,6 +108,10 @@ public:
         releasePoolSafely(&m_migrationReclaimActions, true);
     }
 
+    int rawPointerUsers() const {
+        return m_rawPointerUsers.loadAcquire();
+    }
+
     void lockRawPointerAccess()
     {
         m_rawPointerUsers.ref();

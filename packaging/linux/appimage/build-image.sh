@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Halt on errors and be verbose about what we are doing
-#set -e
+set -e
 set -x
 
 # Read in our parameters
@@ -91,6 +91,7 @@ cd $BUILD_PREFIX
 
 # place the icon where linuxdeployqt seems to expect it
 cp $APPDIR/share/icons/hicolor/256x256/apps/krita.png $APPDIR
+ls $APPDIR
 
 # Step 4: Build the image!!!
 linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \

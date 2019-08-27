@@ -57,8 +57,6 @@ public Q_SLOTS:
     void slotSetRadius(qreal);
     void slotSetThreshold(int);
     void slotSetFrequency(int);
-    void slotUpdateRadius();
-    void slotCalculateEdge();
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
@@ -68,11 +66,10 @@ private:
     void updateFeedback();
     void updateContinuedMode();
     void updateCanvas();
-    void calculateCheckPoints();
 
     QPainterPath m_paintPath;
     QVector<QPointF> m_points;
-    QVector<int> m_anchorPoints;
+    QVector<QPoint> m_anchorPoints;
     bool m_continuedMode;
     QPointF m_lastCursorPos;
     QPoint m_lastAnchor;
@@ -82,7 +79,6 @@ private:
     qreal m_radius;
     QRectF m_snapBound;
     KConfigGroup m_configGroup;
-    KisSignalCompressor m_radiusSliderCompressor, m_mouseHoverCompressor;
 };
 
 class KisToolSelectMagneticFactory : public KisSelectionToolFactoryBase

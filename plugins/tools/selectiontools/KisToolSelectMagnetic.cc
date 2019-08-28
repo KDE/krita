@@ -99,7 +99,7 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
     QPointF temp(convertToPixelCoord(event));
 
     if(m_points.count() != 0){
-        vQPointF edge = m_worker.computeEdge(m_frequency, m_anchorPoints.last(), temp.toPoint());
+        vQPointF edge = m_worker.computeEdge(m_frequency, m_anchorPoints.last(), temp.toPoint(), m_radius);
         m_points.append(edge);
         if(m_snapBound.contains(temp.toPoint())){
             m_complete = true;
@@ -260,7 +260,7 @@ void KisToolSelectMagnetic::updateContinuedMode()
 
 void KisToolSelectMagnetic::activate(KoToolBase::ToolActivation activation, const QSet<KoShape *> &shapes)
 {
-    m_worker      = KisMagneticWorker(image()->projection(), m_radius);
+    m_worker      = KisMagneticWorker(image()->projection());
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
     connect(action("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoPoints()), Qt::UniqueConnection);
     KisToolSelect::activate(activation, shapes);
@@ -372,7 +372,6 @@ void KisToolSelectMagnetic::slotSetRadius(qreal r)
 {
     m_radius = r;
     m_configGroup.writeEntry("radius", r);
-    m_worker = KisMagneticWorker(image()->projection(), m_radius);
 }
 
 void KisToolSelectMagnetic::slotSetThreshold(int t)

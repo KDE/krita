@@ -21,8 +21,6 @@
 #include <kis_paint_device.h>
 #include <kritaselectiontools_export.h>
 
-class KisMagneticGraph;
-
 class KRITASELECTIONTOOLS_EXPORT KisMagneticWorker {
 public:
     KisMagneticWorker()
@@ -30,14 +28,13 @@ public:
         // Do not use this, just for making the compiler happy
     }
 
-    KisMagneticWorker(const KisPaintDeviceSP &dev, qreal radius);
+    KisMagneticWorker(const KisPaintDeviceSP &dev);
 
-    QVector<QPointF> computeEdge(int radius, QPoint start, QPoint end);
-    quint8 intensity(QPoint pt);
+    QVector<QPointF> computeEdge(int extraBounds, QPoint start, QPoint end, qreal radius);
     void saveTheImage(vQPointF points);
 
 private:
-    KisMagneticGraph *m_graph;
+    void filterDevice(qreal radius, QRect &bounds);
     KisPaintDeviceSP m_dev;
 };
 

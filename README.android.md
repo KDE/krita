@@ -11,7 +11,7 @@ I would recommend to use that. Download it from [google's website](https://devel
 then extract it.
 
 Next, Android SDK. You can either download Android Studio or just
-the `sdk-tools`. Both could be downloaded from [googl'e website](https://developer.android.com/studio).
+the `sdk-tools`. Both could be downloaded from [google's website](https://developer.android.com/studio).
 
 If you downloaded Android Studio then open sdk manager and download
 `Android SDK Build-Tools`.

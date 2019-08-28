@@ -58,7 +58,7 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
-    m_continuedMode(false), m_complete(true), m_threshold(70), m_checkPoint(-1), m_frequency(30), m_radius(3.0)
+    m_continuedMode(false), m_complete(false), m_threshold(70), m_checkPoint(-1), m_frequency(30), m_radius(3.0)
 { }
 
 void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)
@@ -87,19 +87,9 @@ void KisToolSelectMagnetic::keyReleaseEvent(QKeyEvent *event)
 // the cursor is still tracked even when no mousebutton is pressed
 void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
 {
+    m_lastCursorPos = convertToPixelCoord(event);
     KisToolSelect::mouseMoveEvent(event);
-    m_paintPath = QPainterPath();
-    m_paintPath.moveTo(pixelToView(m_points[0]));
-
-    for (int i = 1; i < m_points.count(); i++) {
-        m_paintPath.lineTo(pixelToView(m_points[i]));
-    }
-
-    updateFeedback();
-
-    if (m_continuedMode && mode() != PAINT_MODE) {
-        updateContinuedMode();
-    }
+    updatePaintPath();
 } // KisToolSelectMagnetic::mouseMoveEvent
 
 // press primary mouse button
@@ -112,7 +102,7 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
         vQPointF edge = m_worker.computeEdge(m_frequency, m_anchorPoints.last(), temp.toPoint());
         m_points.append(edge);
         if(m_snapBound.contains(temp.toPoint())){
-            finishSelectionAction();
+            m_complete = true;
             return;
         }
     } else {
@@ -124,6 +114,8 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
     m_anchorPoints.push_back(m_lastAnchor);
     updateCanvasPixelRect(image()->bounds());
     m_complete = false;
+
+    updatePaintPath();
 }
 
 // drag while primary mouse button is pressed
@@ -200,6 +192,24 @@ void KisToolSelectMagnetic::finishSelectionAction()
     m_paintPath = QPainterPath();
 } // KisToolSelectMagnetic::finishSelectionAction
 
+void KisToolSelectMagnetic::updatePaintPath()
+{
+    m_paintPath = QPainterPath();
+    m_paintPath.moveTo(pixelToView(m_points[0]));
+
+    for (int i = 1; i < m_points.count(); i++) {
+        m_paintPath.lineTo(pixelToView(m_points[i]));
+    }
+
+    updateFeedback();
+
+    if (m_continuedMode && mode() != PAINT_MODE) {
+        updateContinuedMode();
+    }
+
+    updateCanvasPixelRect(image()->bounds());
+}
+
 void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
@@ -214,7 +224,11 @@ void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter
         paintToolOutline(&gc, outline);
         Q_FOREACH (const QPoint pt, m_anchorPoints) {
             KisHandlePainterHelper helper(&gc, handleRadius());
-            helper.setHandleStyle(KisHandleStyle::primarySelection());
+            if(m_complete && QRect(pt, QSize(5,5)).contains(m_lastCursorPos.toPoint())){
+                helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
+            }else{
+                helper.setHandleStyle(KisHandleStyle::primarySelection());
+            }
             helper.drawHandleRect(pixelToView(pt), 4, QPoint(0, 0));
         }
     }
@@ -268,16 +282,37 @@ void KisToolSelectMagnetic::deactivate()
 
 void KisToolSelectMagnetic::undoPoints()
 {
+    if(m_complete) return;
+
+    m_anchorPoints.pop_back();
+
+    if(m_anchorPoints.size() == 1){
+        m_points.resize(1);
+    }else{
+        int last = m_points.count() - 1;
+        for(; last>=0;last--){
+            if(m_points[last] == m_anchorPoints.last()){
+                break;
+            }
+        }
+        m_points.resize(last);
+    }
+    updatePaintPath();
 }
 
 void KisToolSelectMagnetic::requestStrokeEnd()
 {
-    if(m_complete) return;
+    if(m_complete || m_anchorPoints.count() < 2) return;
     finishSelectionAction();
 }
 
 void KisToolSelectMagnetic::requestStrokeCancellation()
 {
+    m_complete = true;
+    m_points.clear();
+    m_anchorPoints.clear();
+    m_paintPath = QPainterPath();
+    updatePaintPath();
 }
 
 QWidget * KisToolSelectMagnetic::createOptionWidget()

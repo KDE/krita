@@ -195,8 +195,9 @@ void KisToolSelectMagnetic::finishSelectionAction()
 void KisToolSelectMagnetic::updatePaintPath()
 {
     m_paintPath = QPainterPath();
-    m_paintPath.moveTo(pixelToView(m_points[0]));
-
+    if (m_points.size() > 0) {
+        m_paintPath.moveTo(pixelToView(m_points[0]));
+    }
     for (int i = 1; i < m_points.count(); i++) {
         m_paintPath.lineTo(pixelToView(m_points[i]));
     }
@@ -357,7 +358,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     connect(freqInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetFrequency(int)));
 
     QVBoxLayout *l = dynamic_cast<QVBoxLayout *>(selectionWidget->layout());
-    Q_ASSERT(l);
+
     l->insertLayout(1, f1);
     l->insertLayout(2, f2);
     l->insertLayout(3, f3);

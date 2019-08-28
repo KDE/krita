@@ -24,12 +24,12 @@
 #include <QObject>
 #include <QVariant>
 
-class GuassianHighPassPlugin : public QObject
+class GaussianHighPassPlugin : public QObject
 {
     Q_OBJECT
 public:
-    GuassianHighPassPlugin(QObject *parent, const QVariantList &);
-    ~GuassianHighPassPlugin() override;
+    GaussianHighPassPlugin(QObject *parent, const QVariantList &);
+    ~GaussianHighPassPlugin() override;
 };
 
 #endif

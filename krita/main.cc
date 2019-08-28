@@ -218,7 +218,11 @@ extern "C" int main(int argc, char **argv)
 
         logUsage = kritarc.value("LogUsage", true).toBool();
 
+#ifdef Q_OS_WIN
+        const QString preferredRendererString = kritarc.value("OpenGLRenderer", "angle").toString();
+#else
         const QString preferredRendererString = kritarc.value("OpenGLRenderer", "auto").toString();
+#endif
         preferredRenderer = KisOpenGL::convertConfigToOpenGLRenderer(preferredRendererString);
 
         const KisOpenGL::RendererConfig config =

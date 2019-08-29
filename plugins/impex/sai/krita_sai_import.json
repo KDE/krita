@@ -1,0 +1,12 @@
+{
+    "Id": "Krita Painttool Sai Import Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Import": "application/x-painttool-sai",
+    "X-KDE-Library": "kritasaiimport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": "1",
+    "X-KDE-Extensions" : "sai"
+}

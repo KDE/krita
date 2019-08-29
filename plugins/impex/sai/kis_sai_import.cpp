@@ -27,17 +27,9 @@
 
 #include <kpluginfactory.h>
 
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
-
-#include <kis_transaction.h>
-#include <kis_paint_device.h>
 #include <KisDocument.h>
 #include <kis_image.h>
-#include <kis_paint_layer.h>
-#include <kis_node.h>
-#include <kis_group_layer.h>
-#include <sai.hpp>
+#include <kis_sai_converter.h>
 
 
 K_PLUGIN_FACTORY_WITH_JSON(KisQImageIOImportFactory, "krita_sai_import.json", registerPlugin<KisQImageIOImport>();)
@@ -52,20 +44,12 @@ KisQImageIOImport::~KisQImageIOImport()
 
 KisImportExportErrorCode KisQImageIOImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    sai::Document saiFile(QFile::encodeName(filename()));
-    if (!saiFile.IsOpen()) {
-        dbgFile << "Could not open the file, either it does not exist, either it is not a Sai file :" << filename();
-        return ImportExportCodes::FileFormatIncorrect;
+    KisSaiConverter SaiConverter(document);
+    KisImportExportErrorCode result = SaiConverter.buildImage(filename());
+    if (result.isOk()) {
+        document->setCurrentImage(SaiConverter.image());
     }
-    std::tuple<std::uint32_t, std::uint32_t> size = saiFile.GetCanvasSize();
-    KisImageSP image = new KisImage(document->createUndoStore(),
-                                    int(std::get<0>(size)),
-                                    int(std::get<1>(size)),
-                                    KoColorSpaceRegistry::instance()->rgb8(),
-                                    "file");
-
-    document->setCurrentImage(image);
-    return ImportExportCodes::OK;
+    return result;
 }
 
 #include "kis_sai_import.moc"

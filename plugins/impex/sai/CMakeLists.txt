@@ -21,6 +21,7 @@ include_directories(3rdparty/libsai/include)
 
 set(kritasaiimport_SOURCES
     kis_sai_import.cpp
+    kis_sai_converter.cpp
     3rdparty/libsai/source/sai.cpp
 )
 

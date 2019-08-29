@@ -79,9 +79,6 @@ public:
     /// @return the md5sum calculated over the contents of the resource.
     QByteArray md5() const;
 
-    /// @returns true if resource can be removed by the user
-    bool removable() const;
-
     /// @return the full path to this resource
     QString filename() const;
     void setFilename(const QString& filename);

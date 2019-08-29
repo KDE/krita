@@ -157,7 +157,7 @@ void KisGradientChooser::update(KoResourceSP resource)
 {
     KoAbstractGradientSP gradient = resource.staticCast<KoAbstractGradient>();
     m_lbName->setText(gradient ? i18n(gradient->name().toUtf8().data()) : "");
-    m_editGradient->setEnabled(gradient && gradient->removable());
+    m_editGradient->setEnabled(true);
 }
 
 void KisGradientChooser::addStopGradient()

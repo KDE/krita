@@ -32,7 +32,6 @@ struct Q_DECL_HIDDEN KoResource::Private {
     QString name;
     QString filename;
     bool valid {false};
-    bool removable;
     QByteArray md5;
     QImage image;
     bool permanent {false};
@@ -47,8 +46,6 @@ KoResource::KoResource(const QString& filename)
     : d(new Private)
 {
     d->filename = filename;
-    QFileInfo fileInfo(filename);
-    d->removable = fileInfo.isWritable();
 }
 
 KoResource::~KoResource()
@@ -117,8 +114,6 @@ QString KoResource::filename() const
 void KoResource::setFilename(const QString& filename)
 {
     d->filename = filename;
-    QFileInfo fileInfo(filename);
-    d->removable = ! fileInfo.exists() || fileInfo.isWritable();
 }
 
 QString KoResource::shortFilename() const
@@ -147,10 +142,6 @@ void KoResource::setValid(bool valid)
     d->valid = valid;
 }
 
-bool KoResource::removable() const
-{
-    return d->removable;
-}
 
 QString KoResource::defaultFileExtension() const
 {

@@ -205,7 +205,10 @@ bool KisResourceLocator::importResourceFromFile(const QString &resourceType, con
     }
 
     KoResourceSP resource = loader->load(fileName, f);
-    if (!saveResourceToFolderStorage(resourceType, resource)) {
+    KisResourceStorageSP storage = d->storages[d->resourceLocation];
+    Q_ASSERT(storage);
+    if (!storage->addResource(resourceType, resource)) {
+        qWarning() << "Could not add resource" << resource->filename() << "to the folder storage";
         return false;
     }
 
@@ -217,7 +220,10 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
     if (!resource || !resource->valid()) return false;
 
     if (save) {
-        if (!saveResourceToFolderStorage(resourceType, resource)) {
+        KisResourceStorageSP storage = d->storages[d->resourceLocation];
+        Q_ASSERT(storage);
+        if (!storage->addResource(resourceType, resource)) {
+            qWarning() << "Could not add resource" << resource->filename() << "to the folder storage";
             return false;
         }
     }
@@ -350,7 +356,8 @@ void KisResourceLocator::findStorages()
 
     // Add the folder
     KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(d->resourceLocation);
-    d->storages[storage->location()] = storage;
+    Q_ASSERT(storage->location() == d->resourceLocation);
+    d->storages[d->resourceLocation] = storage;
 
     // Add the memory storage
     d->storages["memory"] = QSharedPointer<KisResourceStorage>::create("memory");
@@ -368,23 +375,6 @@ void KisResourceLocator::findStorages()
 QList<KisResourceStorageSP> KisResourceLocator::storages() const
 {
     return d->storages.values();
-}
-
-bool KisResourceLocator::saveResourceToFolderStorage(const QString &resourceType, KoResourceSP resource)
-{
-    resource->setFilename(folderStorage()->location() + "/" + resourceType + "/" + resource->name());
-
-    if (QFileInfo(resource->filename()).exists()) {
-        qWarning() << "Resource" << resource->filename() << "already exists";
-        return false;
-    }
-
-    if (!resource->save()) {
-        qWarning() << "Could not save" << resource->filename();
-        return false;
-    }
-
-    return true;
 }
 
 KisResourceStorageSP KisResourceLocator::storageByName(const QString &name) const

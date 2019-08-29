@@ -1,4 +1,4 @@
-/*
+    /*
  * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -178,6 +178,8 @@ bool KisFolderStorage::addTag(const QString &resourceType, KisTagSP tag)
 bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP _resource)
 {
     qDebug() << location() << _resource->filename() << _resource->shortFilename() << _resource->name();
+    // Find a new filename for the resource if it already exists: we do not rename old resources, but rename updated resources
+
     return false;
 }
 

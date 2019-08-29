@@ -171,8 +171,6 @@ private:
     void findStorages();
     QList<KisResourceStorageSP> storages() const;
 
-    bool saveResourceToFolderStorage(const QString &resourceType, KoResourceSP resource);
-
     KisResourceStorageSP storageByName(const QString &name) const;
     KisResourceStorageSP folderStorage() const;
     KisResourceStorageSP memoryStorage() const;

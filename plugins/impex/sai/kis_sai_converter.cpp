@@ -33,6 +33,40 @@
 
 #include "kis_sai_converter.h"
 
+class SaiLayerVisitor : public sai::VirtualFileVisitor
+{
+public:
+    SaiLayerVisitor(KisImageSP image)
+        : m_image(image)
+        , FolderDepth(0)
+    {
+    }
+    ~SaiLayerVisitor() override
+    {
+    }
+    bool VisitFolderBegin(sai::VirtualFileEntry& Entry) override
+    {
+        qDebug() << "begin folder"
+                 << Entry.GetSize() << Entry.GetTimeStamp() << Entry.GetName();
+        ++FolderDepth;
+        return true;
+    }
+    bool VisitFolderEnd(sai::VirtualFileEntry& /*Entry*/) override
+    {
+        qDebug() << "end folder";
+        --FolderDepth;
+        return true;
+    }
+    bool VisitFile(sai::VirtualFileEntry& Entry) override
+    {
+        qDebug() << Entry.GetSize() << Entry.GetTimeStamp() << Entry.GetName();
+        return true;
+    }
+private:
+    KisImageSP m_image;
+    std::uint32_t FolderDepth;
+
+};
 
 KisSaiConverter::KisSaiConverter(KisDocument *doc)
     : QObject(0),
@@ -54,6 +88,10 @@ KisImportExportErrorCode KisSaiConverter::buildImage(const QString &filename)
                                 int(std::get<1>(size)),
                                 KoColorSpaceRegistry::instance()->rgb8(),
                                 "file");
+
+    SaiLayerVisitor visitor(m_image);
+    saiFile.IterateFileSystem(visitor);
+
     return ImportExportCodes::OK;
 }
 

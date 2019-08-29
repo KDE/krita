@@ -19,6 +19,7 @@
 #ifndef KIS_SAI_CONVERTER_H
 #define KIS_SAI_CONVERTER_H
 
+
 #include <QObject>
 
 #include "kis_types.h"

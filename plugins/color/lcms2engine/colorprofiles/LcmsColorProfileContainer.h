@@ -92,6 +92,7 @@ public:
 
     bool hasColorants() const override;
     virtual bool hasTRC() const;
+    bool isLinear() const;
     QVector <double> getColorantsXYZ() const override;
     QVector <double> getColorantsxyY() const override;
     QVector <double> getWhitePointXYZ() const override;

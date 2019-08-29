@@ -157,6 +157,10 @@ public:
      */
     virtual bool hasTRC() const = 0;
     /**
+     * @return if the profile's TRCs are linear.
+     */
+    virtual bool isLinear() const = 0;
+    /**
      * Linearizes first 3 values of QVector, leaving other values unchanged.
      * Returns the same QVector if it is not possible to linearize.
      */

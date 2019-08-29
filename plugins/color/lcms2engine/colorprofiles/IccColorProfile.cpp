@@ -199,6 +199,12 @@ bool IccColorProfile::hasTRC() const
         return d->shared->lcmsProfile->hasTRC();
     return false;
 }
+bool IccColorProfile::isLinear() const
+{
+    if (d->shared->lcmsProfile)
+        return d->shared->lcmsProfile->isLinear();
+    return false;
+}
 QVector <qreal> IccColorProfile::getColorantsXYZ() const
 {
     if (d->shared->lcmsProfile) {

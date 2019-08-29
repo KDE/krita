@@ -79,6 +79,10 @@ bool KoDummyColorProfile::hasTRC() const
 {
     return true;
 }
+bool KoDummyColorProfile::isLinear() const
+{
+    return true;
+}
 QVector<double> KoDummyColorProfile::getColorantsXYZ() const
 {
     QVector<double> d50Dummy(3);

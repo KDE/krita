@@ -193,6 +193,11 @@ int KoResource::version() const
     return d->version;
 }
 
+void KoResource::setVersion(int version)
+{
+    d->version = version;
+}
+
 void KoResource::setResourceId(int id)
 {
     d->resourceId = id;

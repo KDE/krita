@@ -448,15 +448,22 @@ add_definitions(
   -DQT_USE_FAST_OPERATOR_PLUS
 )
 
-if (${Qt5_VERSION} VERSION_GREATER "5.8.0" )
+
+#if (${Qt5_VERSION} VERSION_GREATER "5.14.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50F00)
+#elseif (${Qt5_VERSION} VERSION_GREATER "5.13.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50E00)
+#elseif (${Qt5_VERSION} VERSION_GREATER "5.12.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50D00)
+#elseif (${Qt5_VERSION} VERSION_GREATER "5.11.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50C00)
+#if(${Qt5_VERSION} VERSION_GREATER "5.10.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50B00)
+#if(${Qt5_VERSION} VERSION_GREATER "5.9.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50A00)
+#else()
     add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50900)
-elseif(${Qt5_VERSION} VERSION_GREATER "5.7.0" )
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50800)
-elseif(${Qt5_VERSION} VERSION_GREATER "5.6.0" )
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
-else()
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50600)
-endif()
+#endif()
 
 add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
 

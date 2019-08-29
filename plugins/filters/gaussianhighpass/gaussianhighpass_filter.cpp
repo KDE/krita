@@ -19,7 +19,7 @@
  */
 
 #include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
-#include "guassianhighpass_filter.h"
+#include "gaussianhighpass_filter.h"
 #include <QBitArray>
 
 #include <KoColorSpace.h>
@@ -42,13 +42,13 @@
 #include <kis_paint_device.h>
 #include "kis_lod_transform.h"
 
-#include "wdg_guassianhighpass.h"
-#include "ui_wdgguassianhighpass.h"
+#include "wdg_gaussianhighpass.h"
+#include "ui_wdggaussianhighpass.h"
 #include "KoColorSpaceTraits.h"
 #include <KisSequentialIteratorProgress.h>
 
 
-KisGuassianHighPassFilter::KisGuassianHighPassFilter() : KisFilter(id(), FiltersCategoryEdgeDetectionId, i18n("&Guassian High Pass..."))
+KisGaussianHighPassFilter::KisGaussianHighPassFilter() : KisFilter(id(), FiltersCategoryEdgeDetectionId, i18n("&Gaussian High Pass..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);
@@ -57,19 +57,19 @@ KisGuassianHighPassFilter::KisGuassianHighPassFilter() : KisFilter(id(), Filters
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisGuassianHighPassFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool /* useForMasks */) const
+KisConfigWidget * KisGaussianHighPassFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool /* useForMasks */) const
 {
-    return new KisWdgGuassianHighPass(parent);
+    return new KisWdgGaussianHighPass(parent);
 }
 
-KisFilterConfigurationSP KisGuassianHighPassFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisGaussianHighPassFilter::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("blurAmount", 1);
     return config;
 }
 
-void KisGuassianHighPassFilter::processImpl(KisPaintDeviceSP device,
+void KisGaussianHighPassFilter::processImpl(KisPaintDeviceSP device,
                                    const QRect& applyRect,
                                    const KisFilterConfigurationSP _config,
                                    KoUpdater *
@@ -103,7 +103,7 @@ void KisGuassianHighPassFilter::processImpl(KisPaintDeviceSP device,
 }
 
 
-QRect KisGuassianHighPassFilter::neededRect(const QRect & rect, const KisFilterConfigurationSP config, int lod) const
+QRect KisGaussianHighPassFilter::neededRect(const QRect & rect, const KisFilterConfigurationSP config, int lod) const
 {
     KisLodTransformScalar t(lod);
 
@@ -114,7 +114,7 @@ QRect KisGuassianHighPassFilter::neededRect(const QRect & rect, const KisFilterC
     return rect.adjusted( -halfSize * 2, -halfSize * 2, halfSize * 2, halfSize * 2);
 }
 
-QRect KisGuassianHighPassFilter::changedRect(const QRect & rect, const KisFilterConfigurationSP config, int lod) const
+QRect KisGaussianHighPassFilter::changedRect(const QRect & rect, const KisFilterConfigurationSP config, int lod) const
 {
     KisLodTransformScalar t(lod);
 

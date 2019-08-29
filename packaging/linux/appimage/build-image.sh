@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Halt on errors and be verbose about what we are doing
-#set -e
+set -e
 set -x
 
 # Read in our parameters
@@ -46,7 +46,7 @@ cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/krita
 cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/lib/python3.5 $APPDIR/usr/lib
-cp -r $DEPS_INSTALL_PREFIX/sip $APPDIR/usr/lib/
+cp -r $DEPS_INSTALL_PREFIX/share/sip $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/translations $APPDIR/usr/
 
 # Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages
@@ -69,7 +69,7 @@ done
 patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so
 patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/sketch/libkritasketchplugin.so
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so
-patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/sip/sip.so
+patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/python3.5/site-packages/PyQt5/sip.so
 
 # Step 5: Find out what version of Krita we built and give the Appimage a proper name
 cd $BUILD_PREFIX/krita-build
@@ -90,7 +90,9 @@ fi
 cd $BUILD_PREFIX
 
 # place the icon where linuxdeployqt seems to expect it
-cp $APPDIR/share/icons/hicolor/256x256/apps/krita.png $APPDIR
+find $APPDIR -name krita.png
+cp /home/appimage//appimage-workspace/krita.appdir/usr/share/icons/hicolor/256x256/apps/krita.png $APPDIR
+ls $APPDIR
 
 # Step 4: Build the image!!!
 linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \

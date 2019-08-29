@@ -24,6 +24,8 @@
 #include "KoDialog_p.h"
 
 #include <QApplication>
+#include <QScreen>
+#include <QGuiApplication>
 #include <QDesktopWidget>
 #include <QDialogButtonBox>
 #include <QHBoxLayout>
@@ -157,10 +159,8 @@ void KoDialogPrivate::appendButton(KoDialog::ButtonCode key, const KGuiItem &ite
     mButtonBox->addButton(button, role);
 
     mButtonList.insert(key, button);
-    mButtonSignalMapper.setMapping(button, key);
 
-    QObject::connect(button, SIGNAL(clicked()),
-                     &mButtonSignalMapper, SLOT(map()));
+    QObject::connect(button, &QPushButton::clicked, [=] { q->slotButtonClicked(key); });
 
     if (key == mDefaultButton) {
         // Now that it exists, set it as default
@@ -176,8 +176,6 @@ void KoDialogPrivate::init(KoDialog *q)
 
     q->setButtons(KoDialog::Ok | KoDialog::Cancel);
     q->setDefaultButton(KoDialog::Ok);
-
-    q->connect(&mButtonSignalMapper, SIGNAL(mapped(int)), q, SLOT(slotButtonClicked(int)));
 
     q->setPlainCaption(qApp->applicationDisplayName()); // set appropriate initial window title for case it gets not set later
 }

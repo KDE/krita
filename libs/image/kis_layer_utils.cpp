@@ -1282,7 +1282,7 @@ namespace KisLayerUtils {
         KisNodeList invisibleNodes;
         mergedNodes = filterInvisibleNodes(originalNodes, &invisibleNodes, &putAfter);
 
-        if (!invisibleNodes.isEmpty()) {
+        if (!invisibleNodes.isEmpty() && !mergedNodes.isEmpty()) {
             /* If the putAfter node is invisible,
              * we should instead pick one of the nodes
              * to be merged to avoid a null putAfter.
@@ -1314,7 +1314,7 @@ namespace KisLayerUtils {
             applicator.applyCommand(new DisableExtraCompositing(info));
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
-            if (info->frames.size() > 0) {
+            if (!info->frames.isEmpty()) {
                 foreach (int frame, info->frames) {
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 

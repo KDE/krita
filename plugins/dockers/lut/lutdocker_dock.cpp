@@ -31,6 +31,8 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QToolButton>
+#include <QDir>
+
 
 #include <klocalizedstring.h>
 
@@ -488,7 +490,7 @@ void LutDockerDock::selectOcioConfiguration()
 
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "lutdocker");
     dialog.setCaption(i18n("Select OpenColorIO Configuration"));
-    dialog.setDefaultDir(QDir::cleanPath(filename));
+    dialog.setDefaultDir(QDir::cleanPath(filename.isEmpty() ? QDir::homePath() : filename));
     dialog.setMimeTypeFilters(QStringList() << "application/x-opencolorio-configuration");
     filename = dialog.filename();
     QFile f(filename);

@@ -15,6 +15,7 @@
         <file alias="create_resource_metadata.sql">sql/create_resource_metadata.sql</file>
         <file alias="get_version_information.sql">sql/get_version_information.sql</file>
         <file alias="create_index_storages.sql">sql/create_index_storages.sql</file>
+        <file alias="create_index_versioned_resources.sql">sql/create_index_versioned_resources.sql</file>
         <file alias="select_resource_id.sql">sql/select_resource_id.sql</file>
         <file alias="select_tag.sql">sql/select_tag.sql</file>
         <file alias="update_from_001.sql">sql/update_from_001.sql</file>

@@ -1,1 +1,1 @@
-CREATE UNIQUE INDEX location ON storages(location);
+CREATE UNIQUE INDEX storages_location_index ON storages(location);

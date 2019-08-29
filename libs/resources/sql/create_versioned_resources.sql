@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS versioned_resources (
 ,   version INTEGER
 ,   location TEXT NOT NULL
 ,   timestamp INTEGER
-,   uuid TEXT
 ,   FOREIGN KEY(resource_id) REFERENCES resources(id)
 ,   FOREIGN KEY(storage_id) REFERENCES storages(id)
 );

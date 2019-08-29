@@ -157,7 +157,7 @@ QSqlError initDb(const QString &location)
     }
 
     // Create indexes
-    QStringList indexes = QStringList() << "storages";
+    QStringList indexes = QStringList() << "storages" << "versioned_resources";
 
     Q_FOREACH(const QString &index, indexes) {
         QFile f(":/create_index_" + index + ".sql");

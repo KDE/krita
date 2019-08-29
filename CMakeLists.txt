@@ -5,6 +5,9 @@ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
 set(MIN_QT_VERSION 5.9.0)
+set( CMAKE_CXX_STANDARD 11 )
+set( CMAKE_CXX_STANDARD_REQUIRED ON )
+
 
 set(MIN_FRAMEWORKS_VERSION 5.44.0)
 
@@ -741,14 +744,6 @@ if(HAVE_VC)
         set(ADDITIONAL_VC_FLAGS "-fabi-version=0 -ffp-contract=fast")
         if(NOT WIN32)
             set(ADDITIONAL_VC_FLAGS "${ADDITIONAL_VC_FLAGS} -fPIC")
-        endif()
-    endif()
-
-    #Handle Vc master
-    if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
-        AddCompilerFlag("-std=c++11" _ok)
-        if(NOT _ok)
-            AddCompilerFlag("-std=c++0x" _ok)
         endif()
     endif()
 

@@ -285,6 +285,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
                     // Workaround for a bug in Qt tiff QImageIO plugin
                     QScopedPointer<KisDocument> doc;
                     doc.reset(KisPart::instance()->createDocument());
+                    doc->setFileBatchMode(true);
                     bool r = doc->openUrl(QUrl::fromLocalFile(recentFileUrlPath), KisDocument::DontAddToRecent);
                     if (r) {
                         KisPaintDeviceSP projection = doc->image()->projection();

@@ -831,6 +831,13 @@ void KisMainWindow::clearRecentFiles()
     d->welcomePage->slotClearRecentFiles();
 }
 
+void KisMainWindow::removeRecentUrl(const QUrl &url)
+{
+    d->recentFiles->removeUrl(url);
+    KSharedConfigPtr config =  KSharedConfig::openConfig();
+    d->recentFiles->saveEntries(config->group("RecentFiles"));
+    config->sync();
+}
 
 void KisMainWindow::reloadRecentFileList()
 {

@@ -31,25 +31,24 @@
 struct Q_DECL_HIDDEN KoResource::Private {
     QString name;
     QString filename;
-    bool valid;
+    bool valid {false};
     bool removable;
     QByteArray md5;
     QImage image;
-    bool permanent;
+    bool permanent {false};
     int resourceId {-1};
     QString storageLocation;
     bool dirty;
     QMap<QString, QVariant> metadata;
+    int version {0};
 };
 
 KoResource::KoResource(const QString& filename)
     : d(new Private)
 {
     d->filename = filename;
-    d->valid = false;
     QFileInfo fileInfo(filename);
     d->removable = fileInfo.isWritable();
-    d->permanent = false;
 }
 
 KoResource::~KoResource()
@@ -196,6 +195,11 @@ void KoResource::addMetaData(QString key, QVariant value)
 QMap<QString, QVariant> KoResource::metadata() const
 {
     return d->metadata;
+}
+
+int KoResource::version() const
+{
+    return d->version;
 }
 
 void KoResource::setResourceId(int id)

@@ -1,4 +1,4 @@
-/*  This file is part of the KDE project
+﻿/*  This file is part of the KDE project
     Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
     Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
 
@@ -119,6 +119,9 @@ public:
     /// get a map with all the metadata
     QMap<QString, QVariant> metadata() const;
 
+    /// Get the version of the resource
+    int version() const;
+
 private:
 
     friend class KisResourceModel;
@@ -126,10 +129,11 @@ private:
     friend class TestResourceModel;
     friend class TestResourceLocator;
 
-
     /// @return the unique id of the resource in the resource database
     int resourceId() const;
     void setResourceId(int id);
+
+    void setVersion(int version);
 
     void setStorageLocation(const QString &location);
 

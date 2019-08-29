@@ -283,7 +283,6 @@ set(kritaui_LIB_SRCS
     utils/KisSpinBoxSplineUnitConverter.cpp
     utils/KisClipboardUtil.cpp
     utils/KisDitherUtil.cpp
-
     input/kis_input_manager.cpp
     input/kis_input_manager_p.cpp
     input/kis_extended_modifiers_mapper.cpp
@@ -381,6 +380,7 @@ set(kritaui_LIB_SRCS
     KisApplicationArguments.cpp
 
     KisNetworkAccessManager.cpp
+    KisRssReader.cpp
     KisMultiFeedRSSModel.cpp
     KisRemoteFileFetcher.cpp
 
@@ -452,6 +452,23 @@ if (UNIX)
         qtlockedfile/qtlockedfile_unix.cpp
         )
 endif()
+
+if (ENABLE_UPDATERS)
+	if (UNIX)
+    	set(kritaui_LIB_SRCS
+        	${kritaui_LIB_SRCS}
+        	utils/KisAppimageUpdater.cpp
+        	)
+	endif()
+
+	set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+    	utils/KisUpdaterBase.cpp
+    	utils/KisManualUpdater.cpp
+    	utils/KisUpdaterStatus.cpp
+		)
+endif()
+
 
 if(APPLE)
     set(kritaui_LIB_SRCS
@@ -565,7 +582,7 @@ add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
 target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
-                      kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils kritaresources ${PNG_LIBRARIES} LibExiv2::LibExiv2
+                      kritaversion kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils kritaresources ${PNG_LIBRARIES} LibExiv2::LibExiv2
 )
 
 if (ANDROID)
@@ -619,4 +636,10 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 if (APPLE)
     install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/krita)
+endif ()
+
+if (UNIX AND BUILD_TESTING AND ENABLE_UPDATERS)
+    install(FILES tests/data/AppImageUpdateDummy
+            PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 endif ()

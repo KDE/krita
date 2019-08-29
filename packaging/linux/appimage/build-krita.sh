@@ -8,7 +8,7 @@ set -x
 export BUILD_PREFIX=$1
 export KRITA_SOURCES=$2
 
-# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. 
+# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment.
 # That's not always the case, so make sure it is
 export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
@@ -25,6 +25,29 @@ export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
 export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip:$DEPS_INSTALL_PREFIX/lib/python3.8/site-packages:$DEPS_INSTALL_PREFIX/lib/python3.8
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
+cd $KRITA_SOURCES
+
+# determine the channel for branding
+if [[ -d .git ]]; then
+	BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+	if [ "$BRANCH" = "master" ]; then
+    BRANDING="Next"
+	else
+    BRANDING="Plus"
+	fi
+else
+	#if KRITA_BETA is set, set channel to Beta, otherwise set it to stable
+	grep "define KRITA_BETA 1" libs/version/kritaversion.h;
+	is_beta=$?
+	if [ is_beta -eq 0 ]; then
+		BRANDING="Beta"
+	else
+		BRANDING="default"
+	fi
+fi
+
+BUILD_TYPE="Release"
+
 # Make sure our build directory exists
 if [ ! -d $BUILD_PREFIX/krita-build/ ] ; then
     mkdir -p $BUILD_PREFIX/krita-build/
@@ -36,17 +59,18 @@ cd $BUILD_PREFIX/krita-build/
 # Determine how many CPUs we have
 CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
 
+
 # Configure Krita
 cmake $KRITA_SOURCES \
     -DCMAKE_INSTALL_PREFIX:PATH=$BUILD_PREFIX/krita.appdir/usr \
     -DDEFINE_NO_DEPRECATED=1 \
-    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" \
     -DFOUNDATION_BUILD=1 \
     -DHIDE_SAFE_ASSERTS=ON \
-    -DBUILD_TESTING=FALSE \
+    -DBUILD_TESTING=TRUE \
     -DPYQT_SIP_DIR_OVERRIDE=$DEPS_INSTALL_PREFIX/share/sip/ \
-    -DHAVE_MEMORY_LEAK_TRACKER=FALSE
-    
+    -DHAVE_MEMORY_LEAK_TRACKER=FALSE \
+    -DBRANDING="${BRANDING}"
+
 # Build and Install Krita (ready for the next phase)
 make -j$CPU_COUNT install
-

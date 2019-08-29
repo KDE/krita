@@ -193,6 +193,16 @@ option(ENABLE_PYTHON_2 "Enables the compiler to look for Python 2.7 instead of P
 option(BUILD_KRITA_QT_DESIGNER_PLUGINS "Build Qt Designer plugins for Krita widgets" OFF)
 add_feature_info("Build Qt Designer plugins" BUILD_KRITA_QT_DESIGNER_PLUGINS "Builds Qt Designer plugins for Krita widgets (use -DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON to enable).")
 
+option(ENABLE_UPDATERS "Enable updaters/update notifications" OFF)
+configure_file(config-updaters.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-updaters.h)
+add_feature_info("Enable updaters" ENABLE_UPDATERS "Enable updaters/update notifications.")
+
+# Branding. Available options: default, Beta, Plus, Next. Can be set from command line
+if (NOT DEFINED BRANDING)
+	set(BRANDING "default")
+endif()
+message(STATUS "Branding selected: ${BRANDING}")
+
 include(MacroJPEG)
 
  #########################################################

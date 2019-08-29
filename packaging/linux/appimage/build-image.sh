@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Halt on errors and be verbose about what we are doing
-set -e
+#set -e
 set -x
 
 # Read in our parameters
@@ -12,7 +12,7 @@ export KRITA_SOURCES=$2
 export APPDIR=$BUILD_PREFIX/krita.appdir
 export PLUGINS=$APPDIR/usr/lib/kritaplugins/
 
-# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. 
+# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment.
 # That's not always the case, so make sure it is
 export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
@@ -29,6 +29,12 @@ export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
 export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip/:$DEPS_INSTALL_PREFIX/lib/python3.8/site-packages/:$DEPS_INSTALL_PREFIX/lib/python3.8/
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
+# download
+mkdir -p $DOWNLOADS_DIR
+cd $DOWNLOADS_DIR
+wget "https://files.kde.org/krita/build/AppImageUpdate-x86_64.AppImage" -O AppImageUpdate
+echo -n "ebc4763e8eac6aa7b9dfcbea77ec07d2e01fa1b9f10a38d4af0fc040bc965c1f AppImageUpdate" | sha256sum -c -
+
 # Switch over to our build prefix
 cd $BUILD_PREFIX
 
@@ -41,7 +47,7 @@ if [ -d $APPDIR/usr/share/locale ] ; then
     mv $APPDIR/usr/share/locale $APPDIR/usr/share/krita
 fi
 
-# Step 1: Copy over all the resources provided by dependencies that we need 
+# Step 1: Copy over all the resources provided by dependencies that we need
 cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/krita
 cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
@@ -55,7 +61,7 @@ rm -rf $APPDIR/usr/lib/x86_64-linux-gnu/
 
 # Step 3: Update the rpath in the various plugins we have to make sure they'll be loadable in an Appimage context
 for lib in $PLUGINS/*.so*; do
-  patchelf --set-rpath '$ORIGIN/..' $lib; 
+  patchelf --set-rpath '$ORIGIN/..' $lib;
 done
 
 for lib in $APPDIR/usr/lib/python3.8/site-packages/PyQt5/*.so*; do
@@ -71,21 +77,61 @@ patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/sketch/
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/python3.8/site-packages/PyQt5/sip.so
 
+# Step 4: Install AppImageUpdate
+if [ -f $DOWNLOADS_DIR/AppImageUpdate ]; then
+	cp $DOWNLOADS_DIR/AppImageUpdate $APPDIR/usr/bin/
+	chmod +x $APPDIR/usr/bin/AppImageUpdate
+fi
+
 # Step 5: Find out what version of Krita we built and give the Appimage a proper name
 cd $BUILD_PREFIX/krita-build
 
 KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h | cut -d '"' -f 2)
-
 # Also find out the revision of Git we built
 # Then use that to generate a combined name we'll distribute
 cd $KRITA_SOURCES
 if [[ -d .git ]]; then
 	GIT_REVISION=$(git rev-parse --short HEAD)
-	VERSION=$KRITA_VERSION-$GIT_REVISION
+	export VERSION=$KRITA_VERSION-$GIT_REVISION
+	VERSION_TYPE="developement"
+	BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+	if [ "$BRANCH" = "master" ]; then
+		CHANNEL="Next"
+	else
+		CHANNEL="Plus"
+	fi
 else
-	VERSION=$KRITA_VERSION
+	export VERSION=$KRITA_VERSION
+
+	#if KRITA_BETA is set, set channel to Beta, otherwise set it to stable
+	grep "define KRITA_BETA 1" libs/version/kritaversion.h;
+	is_beta=$?
+	if [ is_beta -eq 0 ]; then
+		VERSION_TYPE="developement"
+		CHANNEL="Beta"
+	else
+		VERSION_TYPE="stable"
+		CHANNEL="Stable"
+	fi
 fi
 
+DATE=$(git log -1 --format="%ct" | xargs -I{} date -d @{} +%Y-%m-%d)
+if [ "$DATE" = "" ] ; then
+	DATE=$(date +%Y-%m-%d)
+fi
+
+sed -e "s|<release version=\"\" date=\"\" />|<release version=\"$VERSION\" date=\"$DATE\" type=\"$VERSION_TYPE\"/>|" -i $APPDIR/usr/share/metainfo/org.kde.krita.appdata.xml
+
+# set zsync url for linuxdeployqt
+if [ "$CHANNEL" = "Next" ]; then
+	ZSYNC_URL="zsync|https://binary-factory.kde.org/job/Krita_Nightly_Appimage_Build/lastSuccessfulBuild/artifact/Krita-${CHANNEL}-x86_64.AppImage.zsync"
+elif [ "$CHANNEL" = "Plus" ]; then
+	ZSYNC_URL="zsync|https://binary-factory.kde.org/job/Krita_Stable_Appimage_Build/lastSuccessfulBuild/artifact/Krita-${CHANNEL}-x86_64.AppImage.zsync"
+elif [ "$CHANNEL" = "Stable" ]; then
+	ZSYNC_URL="zsync|https://download.kde.org/stable/krita/updates/Krita-${CHANNEL}-x86_64.AppImage.zsync"
+elif [ "$CHANNEL" = "Beta" ]; then
+	ZSYNC_URL="zsync|https://download.kde.org/unstable/krita/updates/Krita-${CHANNEL}-x86_64.AppImage.zsync"
+fi
 # Return to our build root
 cd $BUILD_PREFIX
 
@@ -101,10 +147,9 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -verbose=2 \
   -bundle-non-qt-libs \
   -extra-plugins=$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so,$APPDIR/usr/lib//qml/org/krita/sketch/libkritasketchplugin.so,$APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so  \
-  -appimage 
-  
-# Generate a new name for the Appimage file and rename it accordingly
-APPIMAGE=krita-"$VERSION"-x86_64.appimage
+  -updateinformation="${ZSYNC_URL}" \
+  -appimage
 
-mv Krita*x86_64.AppImage $APPIMAGE
 
+# the zsync will be regenerated after signing
+rm Krita-${VERSION}-x86_64.AppImage.zsync

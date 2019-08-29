@@ -61,5 +61,19 @@ void TestFolderStorage::testTagIterator()
     QVERIFY(count == 1);
 }
 
+void TestFolderStorage::testAddResource()
+{
+    KoResourceSP resource(new DummyResource("dummy.kpp"));
+    resource->setValid(true);
+    KisFolderStorage folderStorage(QString(FILES_DATA_DIR));
+    bool r = folderStorage.addResource("paintoppresets", resource);
+    QVERIFY(r);
+
+    resource.dynamicCast<DummyResource>()->setSomething("It's changed");
+    r = folderStorage.addResource("paintoppresets", resource);
+    QVERIFY(r);
+
+}
+
 QTEST_MAIN(TestFolderStorage)
 

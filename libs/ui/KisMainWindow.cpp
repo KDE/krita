@@ -828,6 +828,7 @@ QList<QUrl> KisMainWindow::recentFilesUrls()
 void KisMainWindow::clearRecentFiles()
 {
     d->recentFiles->clear();
+    d->welcomePage->slotClearRecentFiles();
 }
 
 
@@ -835,8 +836,6 @@ void KisMainWindow::reloadRecentFileList()
 {
     d->recentFiles->loadEntries(KSharedConfig::openConfig()->group("RecentFiles"));
 }
-
-
 
 void KisMainWindow::updateCaption()
 {

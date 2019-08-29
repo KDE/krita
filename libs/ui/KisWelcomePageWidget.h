@@ -54,6 +54,8 @@ public Q_SLOTS:
 
     void slotUpdateVersionMessage();
 
+    void slotClearRecentFiles();
+
 protected:
 
     // QWidget overrides
@@ -84,10 +86,11 @@ private:
     QString blendedStyle;
 
 
+
 private Q_SLOTS:
     void slotNewFileClicked();
     void slotOpenFileClicked();
-    void slotClearRecentFiles();
+
     void recentDocumentClicked(QModelIndex index);
 };
 

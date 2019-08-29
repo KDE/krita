@@ -125,6 +125,7 @@ private:
     friend class KisResourceLocator;
     friend class TestResourceModel;
     friend class TestResourceLocator;
+    friend class TestFolderStorage;
     friend class KisFolderStorage;
 
     void setVersion(int version);

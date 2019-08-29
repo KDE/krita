@@ -1,4 +1,4 @@
-    /*
+/*
  * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -193,10 +193,26 @@ bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP _re
         f.close();
     }
     else {
-        qWarning() << "Resource already exists";
-        return false;
-    }
+        QFileInfo fi(_resource->filename());
+        QString newFileName = fi.baseName() +
+                "_"
+                + QString("%1").arg(_resource->version() + 1, 4, 10, QChar('0'))
+                + "."
+                + fi.completeSuffix();
+        QFile f(location() + "/" + resourceType + "/" + newFileName);
+        if (!f.open(QFile::WriteOnly)) {
+            qWarning() << "Could not open resource file for writing" << fn;
+            return false;
+        }
+        if (!_resource->saveToDevice(&f)) {
+            qWarning() << "Could not save resource file" << fn;
+            return false;
+        }
 
+        _resource->setVersion(_resource->version() + 1);
+        _resource->setFilename(newFileName);
+        f.close();
+    }
 
     return true;
 }

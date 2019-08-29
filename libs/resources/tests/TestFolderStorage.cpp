@@ -103,18 +103,26 @@ void TestFolderStorage::testAddResource()
 {
     KoResourceSP resource(new DummyResource("anewresource.kpp"));
     resource->setValid(true);
+    resource->setVersion(0);
+
     KisFolderStorage folderStorage(QString(FILES_DEST_DIR));
     bool r = folderStorage.addResource("paintoppresets", resource);
     QVERIFY(r);
+    QString fileName = resource->filename();
 
-//    resource.dynamicCast<DummyResource>()->setSomething("It's changed");
-//    r = folderStorage.addResource("paintoppresets", resource);
-//    QVERIFY(r);
+    resource.dynamicCast<DummyResource>()->setSomething("It's changed");
+    r = folderStorage.addResource("paintoppresets", resource);
+    QVERIFY(r);
+    QVERIFY(resource->filename() != fileName);
+    QVERIFY(resource->version() == 1);
 
+    QDir d(m_dstLocation + "/" + "paintoppresets");
+    QVERIFY(d.entryList().contains("anewresource_0001.kpp"));
 }
 
 void TestFolderStorage::cleanupTestCase()
 {
+    ResourceTestHelper::rmTestDb();
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 

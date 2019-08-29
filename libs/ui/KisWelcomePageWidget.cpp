@@ -218,7 +218,6 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
     poweredByKDELink->setText(QString("<a style=\"color: " + blendedColor.name() + " \" href=\"https://userbase.kde.org/What_is_KDE?" + analyticsString + "what-is-kde" + "\">")
                               .append(i18n("Powered by KDE")).append("</a>"));
-
     // re-populate recent files since they might have themed icons
     populateRecentDocuments();
 
@@ -238,6 +237,8 @@ void KisWelcomePageWidget::populateRecentDocuments()
 
         QString recentFileUrlPath = m_mainWindow->recentFilesUrls().at(i).toLocalFile();
         QString fileName = recentFileUrlPath.split("/").last();
+
+        QList<QUrl> brokenUrls;
 
         if (m_thumbnailMap.contains(recentFileUrlPath)) {
             recentItem->setIcon(m_thumbnailMap[recentFileUrlPath]);
@@ -268,6 +269,9 @@ void KisWelcomePageWidget::populateRecentDocuments()
                             }
                         }
                     }
+                    else {
+                        brokenUrls << m_mainWindow->recentFilesUrls().at(i);
+                    }
                 }
                 else if (fi.suffix() == "tiff" || fi.suffix() == "tif") {
                     // Workaround for a bug in Qt tiff QImageIO plugin
@@ -279,6 +283,9 @@ void KisWelcomePageWidget::populateRecentDocuments()
                         KisPaintDeviceSP projection = doc->image()->projection();
                         recentItem->setIcon(QIcon(QPixmap::fromImage(projection->createThumbnail(48, 48, projection->exactBounds()))));
                     }
+                    else {
+                        brokenUrls << m_mainWindow->recentFilesUrls().at(i);
+                    }
                 }
                 else {
                     QImage img;
@@ -287,15 +294,24 @@ void KisWelcomePageWidget::populateRecentDocuments()
                     if (!img.isNull()) {
                         recentItem->setIcon(QIcon(QPixmap::fromImage(img.scaledToWidth(48))));
                     }
+                    else {
+                        brokenUrls << m_mainWindow->recentFilesUrls().at(i);
+                    }
                 }
-                m_thumbnailMap[recentFileUrlPath] = recentItem->icon();
+                if (brokenUrls.size() > 0 && brokenUrls.last().toLocalFile() != recentFileUrlPath) {
+                    m_thumbnailMap[recentFileUrlPath] = recentItem->icon();
+                }
             }
         }
-
+        Q_FOREACH(const QUrl &url, brokenUrls) {
+            m_mainWindow->removeRecentUrl(url);
+        }
         // set the recent object with the data
-        recentItem->setText(fileName); // what to display for the item
-        recentItem->setToolTip(recentFileUrlPath);
-        m_recentFilesModel.appendRow(recentItem);
+        if (brokenUrls.isEmpty() || brokenUrls.last().toLocalFile() != recentFileUrlPath) {
+            recentItem->setText(fileName); // what to display for the item
+            recentItem->setToolTip(recentFileUrlPath);
+            m_recentFilesModel.appendRow(recentItem);
+        }
     }
 
     // hide clear and Recent files title if there are none

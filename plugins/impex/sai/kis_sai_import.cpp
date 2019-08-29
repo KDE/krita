@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 XXX
+ *  Copyright (c) 2019 Wolthera van Hövell tot Westerflier
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@
 #include <kis_paint_layer.h>
 #include <kis_node.h>
 #include <kis_group_layer.h>
+#include <sai.hpp>
 
 
 K_PLUGIN_FACTORY_WITH_JSON(KisQImageIOImportFactory, "krita_sai_import.json", registerPlugin<KisQImageIOImport>();)
@@ -49,8 +50,21 @@ KisQImageIOImport::~KisQImageIOImport()
 {
 }
 
-KisImportExportErrorCode KisQImageIOImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisQImageIOImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
 {
+    sai::Document saiFile(QFile::encodeName(filename()));
+    if (!saiFile.IsOpen()) {
+        dbgFile << "Could not open the file, either it does not exist, either it is not a Sai file :" << filename();
+        return ImportExportCodes::FileFormatIncorrect;
+    }
+    std::tuple<std::uint32_t, std::uint32_t> size = saiFile.GetCanvasSize();
+    KisImageSP image = new KisImage(document->createUndoStore(),
+                                    int(std::get<0>(size)),
+                                    int(std::get<1>(size)),
+                                    KoColorSpaceRegistry::instance()->rgb8(),
+                                    "file");
+
+    document->setCurrentImage(image);
     return ImportExportCodes::OK;
 }
 

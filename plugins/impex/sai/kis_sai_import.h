@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019 XXX
+ *  Copyright (c) 2019 Wolthera van Hövell tot Westerflier
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ public:
     KisQImageIOImport(QObject *parent, const QVariantList &);
     ~KisQImageIOImport() override;
 public:
-    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    KisImportExportErrorCode convert(KisDocument *document, QIODevice *,  KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

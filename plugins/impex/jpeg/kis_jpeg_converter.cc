@@ -79,14 +79,13 @@ const QByteArray photoshopIptc_((char*)&photoshopIptc, 2);
 namespace
 {
 
-void jpegErrorExit ( j_common_ptr cinfo )
+void jpegErrorExit (j_common_ptr cinfo)
 {
     char jpegLastErrorMsg[JMSG_LENGTH_MAX];
-    /* Create the message */
+
     ( *( cinfo->err->format_message ) ) ( cinfo, jpegLastErrorMsg );
 
-    /* Jump to the setjmp point */
-    throw std::runtime_error( jpegLastErrorMsg ); // or your preferred exception ...
+    throw std::runtime_error(jpegLastErrorMsg);
 }
 
 J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)
@@ -487,236 +486,247 @@ KisImportExportErrorCode KisJPEGConverter::buildFile(QIODevice *io, KisPaintLaye
     // Initialize error output
     struct jpeg_error_mgr jerr;
     cinfo.err = jpeg_std_error(&jerr);
-    jpeg_create_compress(&cinfo);
-    // Initialize output stream
-    KisJPEGDestination::setDestination(&cinfo, io);
+    jerr.error_exit = jpegErrorExit;
 
-    cinfo.image_width = width;  // image width and height, in pixels
-    cinfo.image_height = height;
-    cinfo.input_components = cs->colorChannelCount(); // number of color channels per pixel */
-    cinfo.in_color_space = color_type;   // colorspace of input image
+    try {
 
-    // Set default compression parameters
-    jpeg_set_defaults(&cinfo);
-    // Customize them
-    jpeg_set_quality(&cinfo, options.quality, (boolean)options.baseLineJPEG);
 
-    if (options.progressive) {
-        jpeg_simple_progression(&cinfo);
-    }
-    // Optimize ?
-    cinfo.optimize_coding = (boolean)options.optimize;
+        jpeg_create_compress(&cinfo);
+        // Initialize output stream
+        KisJPEGDestination::setDestination(&cinfo, io);
 
-    // Smoothing
-    cinfo.smoothing_factor = (boolean)options.smooth;
+        cinfo.image_width = width;  // image width and height, in pixels
+        cinfo.image_height = height;
+        cinfo.input_components = cs->colorChannelCount(); // number of color channels per pixel */
+        cinfo.in_color_space = color_type;   // colorspace of input image
 
-    // Subsampling
-    switch (options.subsampling) {
-    default:
-    case 0: {
-        cinfo.comp_info[0].h_samp_factor = 2;
-        cinfo.comp_info[0].v_samp_factor = 2;
-        cinfo.comp_info[1].h_samp_factor = 1;
-        cinfo.comp_info[1].v_samp_factor = 1;
-        cinfo.comp_info[2].h_samp_factor = 1;
-        cinfo.comp_info[2].v_samp_factor = 1;
+        // Set default compression parameters
+        jpeg_set_defaults(&cinfo);
+        // Customize them
+        jpeg_set_quality(&cinfo, options.quality, (boolean)options.baseLineJPEG);
 
-    }
-        break;
-    case 1: {
-        cinfo.comp_info[0].h_samp_factor = 2;
-        cinfo.comp_info[0].v_samp_factor = 1;
-        cinfo.comp_info[1].h_samp_factor = 1;
-        cinfo.comp_info[1].v_samp_factor = 1;
-        cinfo.comp_info[2].h_samp_factor = 1;
-        cinfo.comp_info[2].v_samp_factor = 1;
-    }
-        break;
-    case 2: {
-        cinfo.comp_info[0].h_samp_factor = 1;
-        cinfo.comp_info[0].v_samp_factor = 2;
-        cinfo.comp_info[1].h_samp_factor = 1;
-        cinfo.comp_info[1].v_samp_factor = 1;
-        cinfo.comp_info[2].h_samp_factor = 1;
-        cinfo.comp_info[2].v_samp_factor = 1;
-    }
-        break;
-    case 3: {
-        cinfo.comp_info[0].h_samp_factor = 1;
-        cinfo.comp_info[0].v_samp_factor = 1;
-        cinfo.comp_info[1].h_samp_factor = 1;
-        cinfo.comp_info[1].v_samp_factor = 1;
-        cinfo.comp_info[2].h_samp_factor = 1;
-        cinfo.comp_info[2].v_samp_factor = 1;
-    }
-        break;
-    }
-
-    // Save resolution
-    cinfo.X_density = INCH_TO_POINT(image->xRes()); // It is the "invert" macro because we convert from pointer-per-inchs to points
-    cinfo.Y_density = INCH_TO_POINT(image->yRes()); // It is the "invert" macro because we convert from pointer-per-inchs to points
-    cinfo.density_unit = 1;
-    cinfo.write_JFIF_header = (boolean)true;
-
-    // Start compression
-    jpeg_start_compress(&cinfo, (boolean)true);
-    // Save exif and iptc information if any available
-
-    if (metaData && !metaData->empty()) {
-        metaData->applyFilters(options.filters);
-        // Save EXIF
-        if (options.exif) {
-            dbgFile << "Trying to save exif information";
-
-            KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
-            Q_ASSERT(exifIO);
-
-            QBuffer buffer;
-            exifIO->saveTo(metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
-
-            dbgFile << "Exif information size is" << buffer.data().size();
-            QByteArray data = buffer.data();
-            if (data.size() < MAX_DATA_BYTES_IN_MARKER) {
-                jpeg_write_marker(&cinfo, JPEG_APP0 + 1, (const JOCTET*)data.data(), data.size());
-            } else {
-                dbgFile << "EXIF information could not be saved."; // TODO: warn the user ?
-            }
+        if (options.progressive) {
+            jpeg_simple_progression(&cinfo);
         }
-        // Save IPTC
-        if (options.iptc) {
-            dbgFile << "Trying to save exif information";
-            KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
-            Q_ASSERT(iptcIO);
+        // Optimize ?
+        cinfo.optimize_coding = (boolean)options.optimize;
 
-            QBuffer buffer;
-            iptcIO->saveTo(metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
+        // Smoothing
+        cinfo.smoothing_factor = (boolean)options.smooth;
 
-            dbgFile << "IPTC information size is" << buffer.data().size();
-            QByteArray data = buffer.data();
-            if (data.size() < MAX_DATA_BYTES_IN_MARKER) {
-                jpeg_write_marker(&cinfo, JPEG_APP0 + 13, (const JOCTET*)data.data(), data.size());
-            } else {
-                dbgFile << "IPTC information could not be saved."; // TODO: warn the user ?
-            }
-        }
-        // Save XMP
-        if (options.xmp) {
-            dbgFile << "Trying to save XMP information";
-            KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
-            Q_ASSERT(xmpIO);
-
-            QBuffer buffer;
-            xmpIO->saveTo(metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
-
-            dbgFile << "XMP information size is" << buffer.data().size();
-            QByteArray data = buffer.data();
-            if (data.size() < MAX_DATA_BYTES_IN_MARKER) {
-                jpeg_write_marker(&cinfo, JPEG_APP0 + 14, (const JOCTET*)data.data(), data.size());
-            } else {
-                dbgFile << "XMP information could not be saved."; // TODO: warn the user ?
-            }
-        }
-    }
-
-
-    KisPaintDeviceSP dev = new KisPaintDevice(layer->colorSpace());
-    KoColor c(options.transparencyFillColor, layer->colorSpace());
-    dev->fill(QRect(0, 0, width, height), c);
-    KisPainter gc(dev);
-    gc.bitBlt(QPoint(0, 0), layer->paintDevice(), QRect(0, 0, width, height));
-    gc.end();
-
-
-    if (options.saveProfile) {
-        const KoColorProfile* colorProfile = layer->colorSpace()->profile();
-        QByteArray colorProfileData = colorProfile->rawData();
-        write_icc_profile(& cinfo, (uchar*) colorProfileData.data(), colorProfileData.size());
-    }
-
-    // Write data information
-
-    JSAMPROW row_pointer = new JSAMPLE[width*cinfo.input_components];
-    int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
-
-    for (; cinfo.next_scanline < height;) {
-        KisHLineConstIteratorSP it = dev->createHLineConstIteratorNG(0, cinfo.next_scanline, width);
-        quint8 *dst = row_pointer;
-        switch (color_type) {
-        case JCS_GRAYSCALE:
-            if (color_nb_bits == 16) {
-                do {
-                    //const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
-                    const quint8 *d = it->oldRawData();
-                    *(dst++) = cs->scaleToU8(d, 0);//d[0] / quint8_MAX;
-
-                } while (it->nextPixel());
-            } else {
-                do {
-                    const quint8 *d = it->oldRawData();
-                    *(dst++) = d[0];
-
-                } while (it->nextPixel());
-            }
-            break;
-        case JCS_RGB:
-            if (color_nb_bits == 16) {
-                do {
-                    //const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
-                    const quint8 *d = it->oldRawData();
-                    *(dst++) = cs->scaleToU8(d, 2); //d[2] / quint8_MAX;
-                    *(dst++) = cs->scaleToU8(d, 1); //d[1] / quint8_MAX;
-                    *(dst++) = cs->scaleToU8(d, 0); //d[0] / quint8_MAX;
-
-                } while (it->nextPixel());
-            } else {
-                do {
-                    const quint8 *d = it->oldRawData();
-                    *(dst++) = d[2];
-                    *(dst++) = d[1];
-                    *(dst++) = d[0];
-
-                } while (it->nextPixel());
-            }
-            break;
-        case JCS_CMYK:
-            if (color_nb_bits == 16) {
-                do {
-                    //const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
-                    const quint8 *d = it->oldRawData();
-                    *(dst++) = quint8_MAX - cs->scaleToU8(d, 0);//quint8_MAX - d[0] / quint8_MAX;
-                    *(dst++) = quint8_MAX - cs->scaleToU8(d, 1);//quint8_MAX - d[1] / quint8_MAX;
-                    *(dst++) = quint8_MAX - cs->scaleToU8(d, 2);//quint8_MAX - d[2] / quint8_MAX;
-                    *(dst++) = quint8_MAX - cs->scaleToU8(d, 3);//quint8_MAX - d[3] / quint8_MAX;
-
-                } while (it->nextPixel());
-            } else {
-                do {
-                    const quint8 *d = it->oldRawData();
-                    *(dst++) = quint8_MAX - d[0];
-                    *(dst++) = quint8_MAX - d[1];
-                    *(dst++) = quint8_MAX - d[2];
-                    *(dst++) = quint8_MAX - d[3];
-
-                } while (it->nextPixel());
-            }
-            break;
+        // Subsampling
+        switch (options.subsampling) {
         default:
-            delete [] row_pointer;
-            jpeg_destroy_compress(&cinfo);
-            return ImportExportCodes::FormatFeaturesUnsupported;
+        case 0: {
+            cinfo.comp_info[0].h_samp_factor = 2;
+            cinfo.comp_info[0].v_samp_factor = 2;
+            cinfo.comp_info[1].h_samp_factor = 1;
+            cinfo.comp_info[1].v_samp_factor = 1;
+            cinfo.comp_info[2].h_samp_factor = 1;
+            cinfo.comp_info[2].v_samp_factor = 1;
+
         }
-        jpeg_write_scanlines(&cinfo, &row_pointer, 1);
+            break;
+        case 1: {
+            cinfo.comp_info[0].h_samp_factor = 2;
+            cinfo.comp_info[0].v_samp_factor = 1;
+            cinfo.comp_info[1].h_samp_factor = 1;
+            cinfo.comp_info[1].v_samp_factor = 1;
+            cinfo.comp_info[2].h_samp_factor = 1;
+            cinfo.comp_info[2].v_samp_factor = 1;
+        }
+            break;
+        case 2: {
+            cinfo.comp_info[0].h_samp_factor = 1;
+            cinfo.comp_info[0].v_samp_factor = 2;
+            cinfo.comp_info[1].h_samp_factor = 1;
+            cinfo.comp_info[1].v_samp_factor = 1;
+            cinfo.comp_info[2].h_samp_factor = 1;
+            cinfo.comp_info[2].v_samp_factor = 1;
+        }
+            break;
+        case 3: {
+            cinfo.comp_info[0].h_samp_factor = 1;
+            cinfo.comp_info[0].v_samp_factor = 1;
+            cinfo.comp_info[1].h_samp_factor = 1;
+            cinfo.comp_info[1].v_samp_factor = 1;
+            cinfo.comp_info[2].h_samp_factor = 1;
+            cinfo.comp_info[2].v_samp_factor = 1;
+        }
+            break;
+        }
+
+        // Save resolution
+        cinfo.X_density = INCH_TO_POINT(image->xRes()); // It is the "invert" macro because we convert from pointer-per-inchs to points
+        cinfo.Y_density = INCH_TO_POINT(image->yRes()); // It is the "invert" macro because we convert from pointer-per-inchs to points
+        cinfo.density_unit = 1;
+        cinfo.write_JFIF_header = (boolean)true;
+
+        // Start compression
+        jpeg_start_compress(&cinfo, (boolean)true);
+        // Save exif and iptc information if any available
+
+        if (metaData && !metaData->empty()) {
+            metaData->applyFilters(options.filters);
+            // Save EXIF
+            if (options.exif) {
+                dbgFile << "Trying to save exif information";
+
+                KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+                Q_ASSERT(exifIO);
+
+                QBuffer buffer;
+                exifIO->saveTo(metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
+
+                dbgFile << "Exif information size is" << buffer.data().size();
+                QByteArray data = buffer.data();
+                if (data.size() < MAX_DATA_BYTES_IN_MARKER) {
+                    jpeg_write_marker(&cinfo, JPEG_APP0 + 1, (const JOCTET*)data.data(), data.size());
+                } else {
+                    dbgFile << "EXIF information could not be saved."; // TODO: warn the user ?
+                }
+            }
+            // Save IPTC
+            if (options.iptc) {
+                dbgFile << "Trying to save exif information";
+                KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
+                Q_ASSERT(iptcIO);
+
+                QBuffer buffer;
+                iptcIO->saveTo(metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
+
+                dbgFile << "IPTC information size is" << buffer.data().size();
+                QByteArray data = buffer.data();
+                if (data.size() < MAX_DATA_BYTES_IN_MARKER) {
+                    jpeg_write_marker(&cinfo, JPEG_APP0 + 13, (const JOCTET*)data.data(), data.size());
+                } else {
+                    dbgFile << "IPTC information could not be saved."; // TODO: warn the user ?
+                }
+            }
+            // Save XMP
+            if (options.xmp) {
+                dbgFile << "Trying to save XMP information";
+                KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
+                Q_ASSERT(xmpIO);
+
+                QBuffer buffer;
+                xmpIO->saveTo(metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
+
+                dbgFile << "XMP information size is" << buffer.data().size();
+                QByteArray data = buffer.data();
+                if (data.size() < MAX_DATA_BYTES_IN_MARKER) {
+                    jpeg_write_marker(&cinfo, JPEG_APP0 + 14, (const JOCTET*)data.data(), data.size());
+                } else {
+                    dbgFile << "XMP information could not be saved."; // TODO: warn the user ?
+                }
+            }
+        }
+
+
+        KisPaintDeviceSP dev = new KisPaintDevice(layer->colorSpace());
+        KoColor c(options.transparencyFillColor, layer->colorSpace());
+        dev->fill(QRect(0, 0, width, height), c);
+        KisPainter gc(dev);
+        gc.bitBlt(QPoint(0, 0), layer->paintDevice(), QRect(0, 0, width, height));
+        gc.end();
+
+
+        if (options.saveProfile) {
+            const KoColorProfile* colorProfile = layer->colorSpace()->profile();
+            QByteArray colorProfileData = colorProfile->rawData();
+            write_icc_profile(& cinfo, (uchar*) colorProfileData.data(), colorProfileData.size());
+        }
+
+        // Write data information
+
+        JSAMPROW row_pointer = new JSAMPLE[width*cinfo.input_components];
+        int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
+
+        for (; cinfo.next_scanline < height;) {
+            KisHLineConstIteratorSP it = dev->createHLineConstIteratorNG(0, cinfo.next_scanline, width);
+            quint8 *dst = row_pointer;
+            switch (color_type) {
+            case JCS_GRAYSCALE:
+                if (color_nb_bits == 16) {
+                    do {
+                        //const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
+                        const quint8 *d = it->oldRawData();
+                        *(dst++) = cs->scaleToU8(d, 0);//d[0] / quint8_MAX;
+
+                    } while (it->nextPixel());
+                } else {
+                    do {
+                        const quint8 *d = it->oldRawData();
+                        *(dst++) = d[0];
+
+                    } while (it->nextPixel());
+                }
+                break;
+            case JCS_RGB:
+                if (color_nb_bits == 16) {
+                    do {
+                        //const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
+                        const quint8 *d = it->oldRawData();
+                        *(dst++) = cs->scaleToU8(d, 2); //d[2] / quint8_MAX;
+                        *(dst++) = cs->scaleToU8(d, 1); //d[1] / quint8_MAX;
+                        *(dst++) = cs->scaleToU8(d, 0); //d[0] / quint8_MAX;
+
+                    } while (it->nextPixel());
+                } else {
+                    do {
+                        const quint8 *d = it->oldRawData();
+                        *(dst++) = d[2];
+                        *(dst++) = d[1];
+                        *(dst++) = d[0];
+
+                    } while (it->nextPixel());
+                }
+                break;
+            case JCS_CMYK:
+                if (color_nb_bits == 16) {
+                    do {
+                        //const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
+                        const quint8 *d = it->oldRawData();
+                        *(dst++) = quint8_MAX - cs->scaleToU8(d, 0);//quint8_MAX - d[0] / quint8_MAX;
+                        *(dst++) = quint8_MAX - cs->scaleToU8(d, 1);//quint8_MAX - d[1] / quint8_MAX;
+                        *(dst++) = quint8_MAX - cs->scaleToU8(d, 2);//quint8_MAX - d[2] / quint8_MAX;
+                        *(dst++) = quint8_MAX - cs->scaleToU8(d, 3);//quint8_MAX - d[3] / quint8_MAX;
+
+                    } while (it->nextPixel());
+                } else {
+                    do {
+                        const quint8 *d = it->oldRawData();
+                        *(dst++) = quint8_MAX - d[0];
+                        *(dst++) = quint8_MAX - d[1];
+                        *(dst++) = quint8_MAX - d[2];
+                        *(dst++) = quint8_MAX - d[3];
+
+                    } while (it->nextPixel());
+                }
+                break;
+            default:
+                delete [] row_pointer;
+                jpeg_destroy_compress(&cinfo);
+                return ImportExportCodes::FormatFeaturesUnsupported;
+            }
+            jpeg_write_scanlines(&cinfo, &row_pointer, 1);
+        }
+
+
+        // Writing is over
+        jpeg_finish_compress(&cinfo);
+
+        delete [] row_pointer;
+        // Free memory
+        jpeg_destroy_compress(&cinfo);
+
+        return ImportExportCodes::OK;
+
+    } catch( std::runtime_error &e) {
+        jpeg_destroy_compress(&cinfo);
+        return ImportExportCodes::ErrorWhileWriting;
     }
 
-
-    // Writing is over
-    jpeg_finish_compress(&cinfo);
-
-    delete [] row_pointer;
-    // Free memory
-    jpeg_destroy_compress(&cinfo);
-
-    return ImportExportCodes::OK;
 }
 
 

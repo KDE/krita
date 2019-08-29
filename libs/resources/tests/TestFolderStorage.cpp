@@ -20,20 +20,58 @@
 #include "TestFolderStorage.h"
 #include <QTest>
 
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+
+#include <KritaVersionWrapper.h>
+
 #include <KisFolderStorage.h>
 #include <KisResourceLoader.h>
 #include <KoResource.h>
 #include <KisResourceLoaderRegistry.h>
+#include <KisResourceCacheDb.h>
+
+#include <KisResourceLocator.h>
+#include <KisResourceLoaderRegistry.h>
 
 #include "DummyResource.h"
+#include "ResourceTestHelper.h"
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
 #endif
 
+#ifndef FILES_DEST_DIR
+#error "FILES_DEST_DIR not set. A directory where data will be written to for testing installing resources"
+#endif
+
+
+void TestFolderStorage::initTestCase()
+{
+    ResourceTestHelper::initTestDb();
+
+    m_srcLocation = QString(FILES_DATA_DIR);
+    QVERIFY2(QDir(m_srcLocation).exists(), m_srcLocation.toUtf8());
+
+    m_dstLocation = QString(FILES_DEST_DIR);
+    ResourceTestHelper::cleanDstLocation(m_dstLocation);
+
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    cfg.writeEntry(KisResourceLocator::resourceLocationKey, m_dstLocation);
+
+    m_locator = KisResourceLocator::instance();
+
+    ResourceTestHelper::createDummyLoaderRegistry();
+
+    KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    m_locator->initialize(m_srcLocation);
+    if (!m_locator->errorMessages().isEmpty()) qDebug() << m_locator->errorMessages();
+}
+
 void TestFolderStorage ::testStorage()
 {
-    KisFolderStorage folderStorage(QString(FILES_DATA_DIR));
+
+    KisFolderStorage folderStorage(m_dstLocation);
 
     KisResourceLoaderRegistry::instance()->add(ResourceType::Brushes, new KisResourceLoader<DummyResource>("dummy", ResourceType::Brushes, i18n("Brush tips"), QStringList() << "image/x-gimp-brush"));
     QSharedPointer<KisResourceStorage::ResourceIterator> iter = folderStorage.resources(ResourceType::Brushes);
@@ -49,7 +87,7 @@ void TestFolderStorage ::testStorage()
 
 void TestFolderStorage::testTagIterator()
 {
-    KisFolderStorage folderStorage(QString(FILES_DATA_DIR));
+    KisFolderStorage folderStorage(m_dstLocation);
     QSharedPointer<KisResourceStorage::TagIterator> iter = folderStorage.tags(ResourceType::PaintOpPresets);
     QVERIFY(iter->hasNext());
     int count = 0;
@@ -63,16 +101,21 @@ void TestFolderStorage::testTagIterator()
 
 void TestFolderStorage::testAddResource()
 {
-    KoResourceSP resource(new DummyResource("dummy.kpp"));
+    KoResourceSP resource(new DummyResource("anewresource.kpp"));
     resource->setValid(true);
-    KisFolderStorage folderStorage(QString(FILES_DATA_DIR));
+    KisFolderStorage folderStorage(QString(FILES_DEST_DIR));
     bool r = folderStorage.addResource("paintoppresets", resource);
     QVERIFY(r);
 
-    resource.dynamicCast<DummyResource>()->setSomething("It's changed");
-    r = folderStorage.addResource("paintoppresets", resource);
-    QVERIFY(r);
+//    resource.dynamicCast<DummyResource>()->setSomething("It's changed");
+//    r = folderStorage.addResource("paintoppresets", resource);
+//    QVERIFY(r);
 
+}
+
+void TestFolderStorage::cleanupTestCase()
+{
+    ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
 QTEST_MAIN(TestFolderStorage)

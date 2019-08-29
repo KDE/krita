@@ -21,6 +21,7 @@
 #include <QImageReader>
 #include <QDir>
 #include <QStandardPaths>
+#include <QDirIterator>
 
 #include <KisMimeDatabase.h>
 #include <KisResourceLoaderRegistry.h>

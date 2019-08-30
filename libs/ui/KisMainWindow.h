@@ -118,6 +118,11 @@ public:
      */
     void clearRecentFiles();
 
+    /**
+     * removes the given url from the list of recent files
+     */
+    void removeRecentUrl(const QUrl &url);
+
 
     /**
      * Load the desired document and show it.

@@ -5,6 +5,9 @@ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 
 set(MIN_QT_VERSION 5.9.0)
+set( CMAKE_CXX_STANDARD 11 )
+set( CMAKE_CXX_STANDARD_REQUIRED ON )
+
 
 set(MIN_FRAMEWORKS_VERSION 5.44.0)
 
@@ -57,7 +60,7 @@ if (APPLE)
     set(KDE_SKIP_RPATH_SETTINGS TRUE)
     set(CMAKE_MACOSX_RPATH 1)
     set(BUILD_WITH_INSTALL_RPATH 1)
-    add_definitions(-mmacosx-version-min=10.11 -Wno-macro-redefined -Wno-deprecated-register)
+    add_definitions(-mmacosx-version-min=10.12 -Wno-macro-redefined -Wno-deprecated-register)
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
@@ -742,14 +745,6 @@ if(HAVE_VC)
         set(ADDITIONAL_VC_FLAGS "-fabi-version=0 -ffp-contract=fast")
         if(NOT WIN32)
             set(ADDITIONAL_VC_FLAGS "${ADDITIONAL_VC_FLAGS} -fPIC")
-        endif()
-    endif()
-
-    #Handle Vc master
-    if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
-        AddCompilerFlag("-std=c++11" _ok)
-        if(NOT _ok)
-            AddCompilerFlag("-std=c++0x" _ok)
         endif()
     endif()
 

@@ -827,15 +827,21 @@ QList<QUrl> KisMainWindow::recentFilesUrls()
 void KisMainWindow::clearRecentFiles()
 {
     d->recentFiles->clear();
+    d->welcomePage->slotClearRecentFiles();
 }
 
+void KisMainWindow::removeRecentUrl(const QUrl &url)
+{
+    d->recentFiles->removeUrl(url);
+    KSharedConfigPtr config =  KSharedConfig::openConfig();
+    d->recentFiles->saveEntries(config->group("RecentFiles"));
+    config->sync();
+}
 
 void KisMainWindow::reloadRecentFileList()
 {
     d->recentFiles->loadEntries(KSharedConfig::openConfig()->group("RecentFiles"));
 }
-
-
 
 void KisMainWindow::updateCaption()
 {

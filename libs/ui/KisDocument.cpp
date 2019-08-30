@@ -1448,7 +1448,7 @@ public:
 bool KisDocument::openFile()
 {
     //dbgUI <<"for" << localFilePath();
-    if (!QFile::exists(localFilePath())) {
+    if (!QFile::exists(localFilePath()) && !fileBatchMode()) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("File %1 does not exist.", localFilePath()));
         return false;
     }
@@ -1491,7 +1491,7 @@ bool KisDocument::openFile()
             updater->cancel();
         }
         QString msg = status.errorMessage();
-        if (!msg.isEmpty()) {
+        if (!msg.isEmpty() && !fileBatchMode()) {
             DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
                                 i18n("Could not open %2.\nReason: %1.", msg, prettyPathOrUrl()),
                                 errorMessage().split("\n") + warningMessage().split("\n"));
@@ -1499,7 +1499,7 @@ bool KisDocument::openFile()
         }
         return false;
     }
-    else if (!warningMessage().isEmpty()) {
+    else if (!warningMessage().isEmpty() && !fileBatchMode()) {
         DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
                             i18n("There were problems opening %1.", prettyPathOrUrl()),
                             warningMessage().split("\n"));

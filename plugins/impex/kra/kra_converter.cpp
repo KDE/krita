@@ -76,6 +76,7 @@ KisImportExportErrorCode KraConverter::buildImage(QIODevice *io)
 
         } else {
             errUI << "ERROR: No maindoc.xml" << endl;
+            m_doc->setErrorMessage(i18n("Invalid document: no file 'maindoc.xml'."));
             return ImportExportCodes::FileFormatIncorrect;
         }
 
@@ -251,6 +252,7 @@ KisImportExportErrorCode KraConverter::oldLoadAndParse(KoStore *store, const QSt
 
     if (!store->open(filename)) {
         warnUI << "Entry " << filename << " not found!";
+        m_doc->setErrorMessage(i18n("Could not find %1", filename));
         return ImportExportCodes::FileNotExist;
     }
     // Error variables for QDomDocument::setContent
@@ -262,6 +264,9 @@ KisImportExportErrorCode KraConverter::oldLoadAndParse(KoStore *store, const QSt
         errUI << "Parsing error in " << filename << "! Aborting!" << endl
               << " In line: " << errorLine << ", column: " << errorColumn << endl
               << " Error message: " << errorMsg << endl;
+        m_doc->setErrorMessage(i18n("Parsing error in %1 at line %2, column %3\nError message: %4",
+                                    filename, errorLine, errorColumn,
+                                    QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0)));
         return ImportExportCodes::FileFormatIncorrect;
     }
     dbgUI << "File" << filename << " loaded and parsed";
@@ -277,17 +282,20 @@ KisImportExportErrorCode KraConverter::loadXML(const KoXmlDocument &doc, KoStore
 
     if (doc.doctype().name() != "DOC") {
        errUI << "The format is not supported or the file is corrupted";
+       m_doc->setErrorMessage(i18n("The format is not supported or the file is corrupted"));
        return ImportExportCodes::FileFormatIncorrect;
     }
     root = doc.documentElement();
     int syntaxVersion = root.attribute("syntaxVersion", "3").toInt();
     if (syntaxVersion > 2) {
         errUI << "The file is too new for this version of Krita: " + QString::number(syntaxVersion);
+        m_doc->setErrorMessage(i18n("The file is too new for this version of Krita (%1).", syntaxVersion));
         return ImportExportCodes::FormatFeaturesUnsupported;
     }
 
     if (!root.hasChildNodes()) {
         errUI << "The file has no layers.";
+        m_doc->setErrorMessage(i18n("The file has no layers."));
         return ImportExportCodes::FileFormatIncorrect;
     }
 
@@ -304,8 +312,10 @@ KisImportExportErrorCode KraConverter::loadXML(const KoXmlDocument &doc, KoStore
 
                     if (m_kraLoader->errorMessages().isEmpty()) {
                         errUI << "Unknown error while opening the .kra file.";
+                        m_doc->setErrorMessage(i18n("Unknown error."));
                     }
                     else {
+                        m_doc->setErrorMessage(m_kraLoader->errorMessages().join("\n"));
                         errUI << m_kraLoader->errorMessages().join("\n");
                     }
                     return ImportExportCodes::Failure;

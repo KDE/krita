@@ -89,15 +89,17 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         return;
     }
 
+
+
     QString location = index.data(Qt::UserRole + KisResourceModel::Location).toString();
+    QString resourceType = index.data(Qt::UserRole + KisResourceModel::ResourceType).toString();
     QString filename = index.data(Qt::UserRole + KisResourceModel::Filename).toString();
 
     // XXX: We should be able to get all interesting data without actually loading the preset, but that's not possible yet.
     qWarning() << "KisPresetDelegate::paint: we shouldn't use KisResourceLocator here";
-    KoResourceSP resource;
     KisPaintOpPreset *preset {0};
     if (!location.isNull() && !filename.isNull()) {
-        resource = KisResourceLocator::instance()->resource(location, filename);
+        KoResourceSP resource = dynamic_cast<const KisResourceModel*>(index.model())->resourceForIndex(index);
         preset = dynamic_cast<KisPaintOpPreset*>(resource.data());
     }
 

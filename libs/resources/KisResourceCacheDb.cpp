@@ -847,7 +847,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                 typeResourceMap[resourceType] << iter->url();
                 if (resource) {
                     if (!addResource(storage, iter->lastModified(), resource, iter->type())) {
-                        qWarning() << "Could not add resource" << makeRelative(resource->filename()) << "to the database";
+                        qWarning() << "Could not add/update resource" << makeRelative(resource->filename()) << "to the database";
                         success = false;
                     }
                 }

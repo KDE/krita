@@ -23,6 +23,7 @@
 #include <QString>
 #include <QHash>
 #include <QSharedPointer>
+#include <QDebug>
 
 #include "KisResourceTypes.h"
 
@@ -34,6 +35,11 @@ class QDomElement;
 /**
  * The KoResource class provides a representation of resources.  This
  * includes, but not limited to, brushes and patterns.
+ *
+ * A resource knows its filename, but not the location where it's stored.
+ * A new version of a resource is stored with an updated filename, the old
+ * version isn't renamed.
+ *
  */
 class KRITARESOURCES_EXPORT KoResource
 {
@@ -164,8 +170,20 @@ static inline uint qHash(const KoResource &resource)
     return qHash(resource.md5());
 }
 
+
 typedef QSharedPointer<KoResource> KoResourceSP;
 Q_DECLARE_METATYPE(QSharedPointer<KoResource>)
+
+inline QDebug operator<<(QDebug dbg, const KoResourceSP res)
+{
+    dbg.nospace() << "[RESOURCE] Name: " << res->name()
+                  << " Version: " << res->version()
+                  << " Filename: " << res->filename()
+                  << " Valid: " << res->valid()
+                  << " Storage: " << res->storageLocation();
+
+    return dbg.space();
+}
 
 #endif // KORESOURCE_H_
 

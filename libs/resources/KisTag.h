@@ -20,6 +20,7 @@
 #ifndef KISTAGLOADER_H
 #define KISTAGLOADER_H
 
+#include <QDebug>
 #include <QString>
 #include <QScopedPointer>
 #include <QSharedPointer>
@@ -75,5 +76,14 @@ private:
 };
 
 typedef QSharedPointer<KisTag> KisTagSP;
+
+inline QDebug operator<<(QDebug dbg, const KisTagSP tag)
+{
+    dbg.space() << "[TAG] Name" << tag->name()
+                << "Url" << tag->url()
+                << "Comment" << tag->comment()
+                << "Default resources" << tag->defaultResources().join(", ");
+    return dbg.space();
+}
 
 #endif // KISTAGLOADER_H

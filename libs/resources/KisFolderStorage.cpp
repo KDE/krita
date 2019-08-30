@@ -24,6 +24,7 @@
 #include <kis_debug.h>
 #include <KisTag.h>
 #include <KisResourceLoaderRegistry.h>
+#include <kbackup.h>
 
 class FolderTagIterator : public KisResourceStorage::TagIterator
 {
@@ -194,6 +195,11 @@ bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP _re
     }
     else {
         QFileInfo fi(_resource->filename());
+
+        // Rename the old resource
+        KBackup::backupFile(fn);
+
+        // Save the new resource
         QString newFileName = fi.baseName() +
                 "_"
                 + QString("%1").arg(_resource->version() + 1, 4, 10, QChar('0'))

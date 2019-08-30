@@ -43,10 +43,18 @@
 #include <kis_paint_device.h>
 #include <KisPart.h>
 
+#include <kritaversion.h>
+
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
+
+#ifndef KRITA_BETA
+    lblSurveyLink->setVisible(false);
+    lblSurveyLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
+#endif
+
     recentDocumentsListView->setDragEnabled(false);
     recentDocumentsListView->viewport()->setAutoFillBackground(false);
     recentDocumentsListView->setSpacing(2);

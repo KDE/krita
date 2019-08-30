@@ -29,7 +29,7 @@
 #include "KoShapeManager.h"
 #include <KoRTree.h>
 #include <QMutex>
-
+#include "kis_thread_safe_signal_compressor.h"
 
 class KoCanvasBase;
 class KoShapeGroup;
@@ -44,7 +44,8 @@ public:
           canvas(c),
           tree(4, 2),
           q(shapeManager),
-          shapeInterface(shapeManager)
+          shapeInterface(shapeManager),
+          updateCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
     {
     }
 
@@ -57,6 +58,8 @@ public:
      * updates to the tree are done when they are asked for but when they are needed.
      */
     void updateTree();
+
+    void forwardCompressedUdpate();
 
     /**
      * Returns whether the shape should be added to the RTree for collision and ROI
@@ -118,6 +121,10 @@ public:
     KoShapeManager::ShapeInterface shapeInterface;
     QMutex shapesMutex;
     QMutex treeMutex;
+
+    KisThreadSafeSignalCompressor updateCompressor;
+    QRectF compressedUpdate;
+    QSet<const KoShape*> compressedUpdatedShapes;
 };
 
 #endif

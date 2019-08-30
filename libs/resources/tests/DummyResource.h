@@ -24,9 +24,38 @@
 class DummyResource : public KoResource {
 public:
     DummyResource(const QString &f) : KoResource(f) {}
-    bool load() override { setValid(true); return true; }
-    bool loadFromDevice(QIODevice *) override { setValid(true); return true; }
-    bool save() override { return true; }
+
+    bool load() override
+    {
+        Q_ASSERT(false);
+        setValid(true);
+        return true;
+    }
+
+    bool loadFromDevice(QIODevice *dev) override
+    {
+        if (!dev->isOpen()) {
+            dev->open(QIODevice::ReadOnly);
+        }
+        m_something = QString::fromUtf8(dev->readAll());
+        setValid(true);
+        return true;
+    }
+
+    bool save() override
+    {
+        Q_ASSERT(false);
+        return true;
+    }
+
+    bool saveToDevice(QIODevice *dev) const
+    {
+        if (!dev->isOpen()) {
+            dev->open(QIODevice::WriteOnly);
+        }
+        dev->write(m_something.toUtf8());
+        return true;
+    }
 
     void setSomething(const QString &something)
     {

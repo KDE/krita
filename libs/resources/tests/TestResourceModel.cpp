@@ -203,12 +203,12 @@ void TestResourceModel::testUpdateResource()
         bool r = resourceModel.updateResource(resource);
         QVERIFY(r);
     }
+
     {
         // Check the resource itself
         KisResourceLocator::instance()->purge();
         KoResourceSP resource = KisResourceLocator::instance()->resourceForId(resourceId);
 
-        qDebug() << resource->storageLocation() << resource->resourceId();
         QVERIFY(resource);
         QVERIFY(!resource.dynamicCast<DummyResource>()->something().isEmpty());
         QVERIFY(resource->resourceId() == resourceId);
@@ -224,8 +224,6 @@ void TestResourceModel::testUpdateResource()
         int rowCount = q.value(0).toInt();
         QCOMPARE(rowCount, 2);
     }
-
-
 }
 
 void TestResourceModel::cleanupTestCase()
@@ -233,8 +231,6 @@ void TestResourceModel::cleanupTestCase()
     ResourceTestHelper::rmTestDb();
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
-
-
 
 
 QTEST_MAIN(TestResourceModel)

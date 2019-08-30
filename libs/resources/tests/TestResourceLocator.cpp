@@ -97,7 +97,12 @@ void TestResourceLocator::testStorageInitialization()
     QVERIFY(r);
     QVERIFY(query.lastError() == QSqlError());
     query.first();
-    QVERIFY(query.value(0).toInt() == m_locator->storages().count());
+
+//    Q_FOREACH(KisResourceStorageSP storage, m_locator->storages()) {
+//        qDebug() << storage;
+//    }
+
+    QCOMPARE(query.value(0).toInt(), m_locator->storages().count());
 }
 
 void TestResourceLocator::testLocatorSynchronization()
@@ -133,23 +138,45 @@ void TestResourceLocator::testResourceLocationBase()
 
 void TestResourceLocator::testResource()
 {
-    KoResourceSP res = m_locator->resource("", "paintoppresets/test0.kpp");
+    KoResourceSP res = m_locator->resource("", "paintoppresets", "test0.kpp");
     QVERIFY(res);
 }
 
 void TestResourceLocator::testResourceForId()
 {
-    KoResourceSP res = m_locator->resource("", "paintoppresets/test0.kpp");
+    KoResourceSP res = m_locator->resource("", "paintoppresets", "test0.kpp");
     int resourceId = KisResourceCacheDb::resourceIdForResource("test0.kpp", "paintoppresets", "");
     QVERIFY(resourceId > -1);
     KoResourceSP res2 = m_locator->resourceForId(resourceId);
     QCOMPARE(res, res2);
 }
 
+void TestResourceLocator::testRemoveResource()
+{
+
+}
+
+void TestResourceLocator::testImportResourceFromFile()
+{
+
+}
+
+void TestResourceLocator::testAddResource()
+{
+
+}
+
+void TestResourceLocator::testUpdateResource()
+{
+
+}
+
+
+
 void TestResourceLocator::cleanupTestCase()
 {
-    ResourceTestHelper::rmTestDb();
-    ResourceTestHelper::cleanDstLocation(m_dstLocation);
+//    ResourceTestHelper::rmTestDb();
+//    ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
 QTEST_MAIN(TestResourceLocator)

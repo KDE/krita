@@ -35,11 +35,16 @@ private Q_SLOTS:
     void testLocatorSynchronization();
     void testResources();
     void testTags();
-    void cleanupTestCase();
 
     void testResourceLocationBase();
     void testResource();
     void testResourceForId();
+    void testRemoveResource();
+    void testImportResourceFromFile();
+    void testAddResource();
+    void testUpdateResource();
+
+    void cleanupTestCase();
 
 private:
 

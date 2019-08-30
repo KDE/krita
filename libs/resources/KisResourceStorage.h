@@ -95,6 +95,26 @@ public:
         Memory = 6
     };
 
+    static QString storageTypeToString(StorageType storageType) {
+        switch (storageType) {
+        case StorageType::Unknown:
+            return "Unknown";
+        case StorageType::Folder:
+            return "Folder";
+        case StorageType::Bundle:
+            return "Bundle";
+        case StorageType::AdobeBrushLibrary:
+            return "Adobe Brush Library";
+        case StorageType::AdobeStyleLibrary:
+            return "Adobe Style Library";
+        case StorageType::Memory:
+            return "Memory";
+        default:
+            return "Invalid";
+        }
+    }
+
+
     KisResourceStorage(const QString &location);
     ~KisResourceStorage();
 
@@ -119,5 +139,17 @@ private:
 
 
 typedef QSharedPointer<KisResourceStorage> KisResourceStorageSP;
+
+inline QDebug operator<<(QDebug dbg, const KisResourceStorageSP storage)
+{
+    dbg.nospace() << "[RESOURCESTORAGE] Name: " << storage->name()
+                  << " Version: " << storage->location()
+                  << " Valid: " << storage->valid()
+                  << " Storage: " << KisResourceStorage::storageTypeToString(storage->type())
+                  << " Timestamp: " << storage->timestamp();
+
+    return dbg.space();
+}
+
 
 #endif // KISRESOURCESTORAGE_H

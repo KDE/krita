@@ -65,6 +65,7 @@ void TestFolderStorage::initTestCase()
 
     KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     m_locator->initialize(m_srcLocation);
+
     if (!m_locator->errorMessages().isEmpty()) qDebug() << m_locator->errorMessages();
 }
 

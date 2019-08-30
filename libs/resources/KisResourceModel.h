@@ -134,6 +134,9 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
 // Resources API
+    /**
+     * @brief resourceForIndex returns a properly versioned and id's resource object
+     */
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexFromResource(KoResourceSP resource) const override;
     bool removeResource(const QModelIndex &index) override;

@@ -79,24 +79,11 @@ public:
     QStringList errorMessages() const;
 
     /**
-     * @brief resourceLocationBase
-     * @return
+     * @brief resourceLocationBase is the place where all resource storages (folder,
+     * bundles etc. are located. This is a writable place.
+     * @return the base location for all storages.
      */
     QString resourceLocationBase() const;
-
-    /**
-     * @brief resource
-     * @param storageLocation
-     * @param resourceLocationBase
-     * @return
-     */
-    KoResourceSP resource(QString storageLocation, const QString &resourceLocationBase);
-
-    /**
-     * @brief resourceForId returns the resource with the given id, or 0 if no such resource exists
-     * @param resourceId the id
-     */
-    KoResourceSP resourceForId(int resourceId);
 
     /**
      * @brief removeResource
@@ -142,11 +129,33 @@ Q_SIGNALS:
 private:
 
     friend class KisResourceModel;
+    friend class TestResourceLocator;
+    friend class TestResourceModel;
 
     /// @return true if the resource is present in the cache, false if it hasn't been loaded
-    bool resourceCached(QString storageLocation, const QString &resourceLocationBase) const;
+    bool resourceCached(QString storageLocation, const QString &resourceType, const QString &filename) const;
 
-    friend class TestResourceLocator;
+    /**
+     * @brief resource finds a physical resource in one of the storages
+     * @param storageLocation the storage containing the resource. If empty,
+     * this is the folder storage.
+     *
+     * Note that the resource does not have the version or id field set, so this cannot be used directly,
+     * but only through KisResourceModel.
+     *
+     * @param resourceType the type of the resource
+     * @param filename the filename of the resource including extension, but withou
+     * any paths
+     * @return A resource if found, or 0
+     */
+    KoResourceSP resource(QString storageLocation, const QString &resourceType, const QString &filename);
+
+    /**
+     * @brief resourceForId returns the resource with the given id, or 0 if no such resource exists.
+     * The resource object will have its id set but not its version.
+     * @param resourceId the id
+     */
+    KoResourceSP resourceForId(int resourceId);
 
     KisResourceLocator(QObject *parent);
     KisResourceLocator(const KisResourceLocator&);
@@ -177,7 +186,8 @@ private:
 
     struct ResourceStorage {
         QString storageLocation;
-        QString resourceLocation;
+        QString resourceType;
+        QString resourceFileName;
     };
 
     ResourceStorage getResourceStorage(int resourceId) const;

@@ -142,18 +142,19 @@ QString KisResourceLocator::resourceLocationBase() const
     return d->resourceLocation;
 }
 
-bool KisResourceLocator::resourceCached(QString storageLocation, const QString &resourceLocation) const
+bool KisResourceLocator::resourceCached(QString storageLocation, const QString &resourceType, const QString &filename) const
 {
     storageLocation = makeStorageLocationAbsolute(storageLocation);
-    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceLocation);
+    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + filename);
 
     return d->resourceCache.contains(key);
 }
 
-KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString &resourceLocation)
+KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString &resourceType, const QString &filename)
 {
     storageLocation = makeStorageLocationAbsolute(storageLocation);
-    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceLocation);
+
+    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + filename);
 
     KoResourceSP resource;
     if (d->resourceCache.contains(key)) {
@@ -164,7 +165,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         KisResourceStorageSP storage = d->storages[storageLocation];
         Q_ASSERT(storage);
 
-        resource = storage->resource(resourceLocation);
+        resource = storage->resource(resourceType + "/" + filename);
         Q_ASSERT(resource);
 
         if (resource) {
@@ -179,8 +180,9 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
 KoResourceSP KisResourceLocator::resourceForId(int resourceId)
 {
     ResourceStorage rs = getResourceStorage(resourceId);
-    KoResourceSP r = resource(rs.storageLocation, rs.resourceLocation);
+    KoResourceSP r = resource(rs.storageLocation, rs.resourceType, rs.resourceFileName);
     r->setResourceId(resourceId);
+
     return r;
 }
 
@@ -188,7 +190,7 @@ bool KisResourceLocator::removeResource(int resourceId)
 {
     // First remove the resource from the cache
     ResourceStorage rs = getResourceStorage(resourceId);
-    QPair<QString, QString> key = QPair<QString, QString> (rs.storageLocation, rs.resourceLocation);
+    QPair<QString, QString> key = QPair<QString, QString> (rs.storageLocation, rs.resourceType + "/" + rs.resourceFileName);
 
     d->resourceCache.remove(key);
 
@@ -265,6 +267,11 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
         qWarning() << "Failed to add a new version of the resource to the database" << resource->name();
         return false;
     }
+
+    // Update the resource in the cache
+    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + QFileInfo(resource->filename()).fileName());
+    qDebug() << key;
+    d->resourceCache[key] = resource;
 
     return true;
 }
@@ -412,11 +419,14 @@ KisResourceLocator::ResourceStorage KisResourceLocator::getResourceStorage(int r
 
     QSqlQuery q;
     bool r = q.prepare("SELECT storages.location\n"
+                       ",      resource_types.name as resource_type\n"
                        ",      resources.filename\n"
                        "FROM   resources\n"
                        ",      storages\n"
+                       ",      resource_types\n"
                        "WHERE  resources.id = :resource_id\n"
-                       "AND    resources.storage_id = storages.id");
+                       "AND    resources.storage_id = storages.id\n"
+                       "AND    resource_types.id = resources.resource_type_id");
     if (!r) {
         qWarning() << "KisResourceLocator::removeResource: could not prepare query." << q.lastError();
         return rs;
@@ -433,7 +443,8 @@ KisResourceLocator::ResourceStorage KisResourceLocator::getResourceStorage(int r
     q.first();
 
     QString storageLocation = q.value("location").toString();
-    QString resourceLocation = q.value("filename").toString();
+    QString resourceType= q.value("resource_type").toString();
+    QString resourceFilename = q.value("filename").toString();
 
     if (storageLocation.isEmpty()) {
         storageLocation = resourceLocationBase();
@@ -443,7 +454,8 @@ KisResourceLocator::ResourceStorage KisResourceLocator::getResourceStorage(int r
     }
 
     rs.storageLocation = storageLocation;
-    rs.resourceLocation = resourceLocation;
+    rs.resourceType = resourceType;
+    rs.resourceFileName = resourceFilename;
 
     return rs;
 }

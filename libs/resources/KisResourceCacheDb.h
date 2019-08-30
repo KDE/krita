@@ -74,6 +74,16 @@ private:
 
     static int resourceIdForResource(const QString &resourceName, const QString &resourceType, const QString &storageLocation);
     static bool resourceNeedsUpdating(int resourceId, QDateTime timestamp);
+
+    /**
+     * @brief addResourceVersion addes a new version of the resource to the database.
+     * The resource itself already should be updated with the updated filename and version.
+     * @param resourceId unique identifier for the resource
+     * @param timestamp
+     * @param storage
+     * @param resource
+     * @return true if the database was succesfully updated
+     */
     static bool addResourceVersion(int resourceId, QDateTime timestamp, KisResourceStorageSP storage, KoResourceSP resource);
     static bool addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType, bool temporary = false);
     static bool addResources(KisResourceStorageSP storage, QString resourceType);
@@ -90,8 +100,8 @@ private:
     static bool deleteStorage(KisResourceStorageSP storage);
     static bool synchronizeStorage(KisResourceStorageSP storage);
 
+    /// Returns only the filename of the resource
     static QString makeRelative(QString location);
-    static QString makeAbsolute(const QString &location);
 
     /// Delete all resources marked temporary
     static void deleteTemporaryResources();

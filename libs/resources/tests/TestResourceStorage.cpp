@@ -38,7 +38,7 @@ void TestResourceStorage ::testStorage()
     {
         KisResourceStorage storage(QString(FILES_DATA_DIR) + "/bundles/test1.bundle");
         QVERIFY(storage.type() == KisResourceStorage::StorageType::Bundle);
-        QVERIFY(!storage.valid());
+        QVERIFY(storage.valid());
     }
 
     {
@@ -47,13 +47,11 @@ void TestResourceStorage ::testStorage()
         QVERIFY(storage.valid());
     }
 
-
     {
-        KisResourceStorage storage(QString(FILES_DATA_DIR) + "/brushes/test.abr");
+        KisResourceStorage storage(QString(FILES_DATA_DIR) + "/abr/test.abr");
         QVERIFY(storage.type() == KisResourceStorage::StorageType::AdobeBrushLibrary);
         QVERIFY(storage.valid());
     }
-
 
     {
         KisResourceStorage storage(QString(FILES_DATA_DIR) + "/brushes/test.gbr");

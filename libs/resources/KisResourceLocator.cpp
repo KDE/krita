@@ -204,7 +204,8 @@ bool KisResourceLocator::importResourceFromFile(const QString &resourceType, con
         return false;
     }
 
-    KoResourceSP resource = loader->load(fileName, f);
+    KoResourceSP resource = loader->load(QFileInfo(fileName).fileName(), f);
+
     KisResourceStorageSP storage = d->storages[d->resourceLocation];
     Q_ASSERT(storage);
     if (!storage->addResource(resourceType, resource)) {
@@ -245,17 +246,20 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
 
     QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
 
-    qDebug() << resourceType << storageLocation << d->storages.contains(storageLocation);
-
     Q_ASSERT(d->storages.contains(storageLocation));
     Q_ASSERT(resource->resourceId() > -1);
 
     KisResourceStorageSP storage = d->storages[storageLocation];
 
+    int version = resource->version();
+
     if (!storage->addResource(resourceType, resource)) {
         qWarning() << "Failed to save the new version of " << resource->name() << "to storage" << storageLocation;
         return false;
     }
+
+    // It's the storages that keep track of the version
+    Q_ASSERT(resource->version() == version + 1);
 
     if (!KisResourceCacheDb::addResourceVersion(resource->resourceId(), QDateTime::currentDateTime(), storage, resource)) {
         qWarning() << "Failed to add a new version of the resource to the database" << resource->name();

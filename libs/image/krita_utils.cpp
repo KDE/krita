@@ -182,7 +182,7 @@ namespace KritaUtils
 
     QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value)
     {
-        return QString("%1").arg(value, 6, 'f', 1);
+        return QLocale().toString(value, 'f', 1);
     }
 
     qreal KRITAIMAGE_EXPORT maxDimensionPortion(const QRectF &bounds, qreal portion, qreal minValue)

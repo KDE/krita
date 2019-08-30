@@ -103,7 +103,8 @@ void KisVisualColorSelectorShape::setChannelValues(QVector4D channelValues, bool
     //qDebug() << this  << "setChannelValues";
     m_d->currentChannelValues = channelValues;
     if (setCursor) {
-        m_d->currentCoordinates = QPointF(channelValues[m_d->channel1], channelValues[m_d->channel2]);
+        m_d->currentCoordinates = QPointF(qBound(0.f, channelValues[m_d->channel1], 1.f),
+                                          qBound(0.f, channelValues[m_d->channel2], 1.f));
     }
     else {
         // for internal consistency, because we have a bit of redundancy here
@@ -126,16 +127,6 @@ void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRender
     } else {
         m_d->displayRenderer = KoDumbColorDisplayRenderer::instance();
     }
-    connect(m_d->displayRenderer, SIGNAL(displayConfigurationChanged()),
-            SLOT(updateFromChangedDisplayRenderer()), Qt::UniqueConnection);
-
-}
-
-void KisVisualColorSelectorShape::updateFromChangedDisplayRenderer()
-{
-    //qDebug() << this  << "updateFromChangedDisplayRenderer();";
-    m_d->imagesNeedUpdate = true;
-    update();
 }
 
 void KisVisualColorSelectorShape::forceImageUpdate()

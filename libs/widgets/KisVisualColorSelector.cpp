@@ -35,6 +35,7 @@
 
 #include "KoColorConversions.h"
 #include "KoColorDisplayRendererInterface.h"
+#include "KoColorProfile.h"
 #include "KoChannelInfo.h"
 #include <KoColorModelStandardIds.h>
 #include <QPointer>
@@ -55,9 +56,11 @@ struct KisVisualColorSelector::Private
     bool circular {false};
     bool exposureSupported = false;
     bool isRGBA = false;
+    bool isLinear = false;
     int displayPosition[4]; // map channel index to storage index for display
     int colorChannelCount;
     QVector4D channelValues;
+    QVector4D channelMaxValues;
     ColorModel model;
     const KoColorDisplayRendererInterface *displayRenderer {0};
     KisColorSelectorConfiguration acs_config;
@@ -151,6 +154,15 @@ KoColor KisVisualColorSelector::convertShapeCoordsToKoColor(const QVector4D &coo
             baseValues.setY(temp[1]);
             baseValues.setZ(temp[2]);
         }
+        if (m_d->isLinear) {
+            for (int i=0; i<3; i++) {
+                baseValues[i] = pow(baseValues[i], 2.2);
+            }
+        }
+    }
+
+    if (m_d->exposureSupported) {
+        baseValues *= m_d->channelMaxValues;
     }
 
     for (int i=0; i<m_d->colorChannelCount; i++) {
@@ -173,13 +185,21 @@ QVector4D KisVisualColorSelector::convertKoColorToShapeCoordinates(KoColor c) co
     channelValues.fill(1.0);
     m_d->currentCS->normalisedChannelsValue(c.data(), channelValues);
     QVector4D channelValuesDisplay(0, 0, 0, 0), coordinates(0, 0, 0, 0);
-    // TODO: proper exposure control
     // TODO: L*a*b is apparently not [0, 1]^3 as "normalized" values, needs extra transform (old bug)
     for (int i =0; i<m_d->colorChannelCount; i++) {
-        channelValuesDisplay[i] = qBound(0.f, channelValues[m_d->displayPosition[i]], 1.f);
+        channelValuesDisplay[i] = channelValues[m_d->displayPosition[i]];
+    }
+
+    if (m_d->exposureSupported) {
+        channelValuesDisplay /= m_d->channelMaxValues;
     }
     if (m_d->model != ColorModel::Channel && m_d->isRGBA == true) {
         if (m_d->isRGBA == true) {
+            if (m_d->isLinear) {
+                for (int i=0; i<3; i++) {
+                    channelValuesDisplay[i] = pow(channelValuesDisplay[i], 1/2.2);
+                }
+            }
             if (m_d->model == ColorModel::HSV){
                 QVector3D hsv;
                 // TODO: handle undefined hue case (returns -1)
@@ -201,10 +221,12 @@ QVector4D KisVisualColorSelector::convertKoColorToShapeCoordinates(KoColor c) co
                 RGBToHSY(channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2], &hsy[0], &hsy[1], &hsy[2], luma[0], luma[1], luma[2]);
                 coordinates = QVector4D(hsy[0], hsy[1], hsy[2], 0.f);
             }
+            for (int i=0; i<3; i++) {
+                coordinates[i] = qBound(0.f, coordinates[i], 1.f);
+            }
         }
     } else {
-        for (int i=0; i<4; i++)
-        {
+        for (int i=0; i<4; i++) {
             coordinates[i] = qBound(0.f, channelValuesDisplay[i], 1.f);
         }
     }
@@ -215,6 +237,26 @@ void KisVisualColorSelector::configurationChanged()
 {
     if (m_d->updateTimer) {
         m_d->updateTimer->start();
+    }
+}
+
+void KisVisualColorSelector::slotDisplayConfigurationChanged()
+{
+    Q_ASSERT(m_d->displayRenderer);
+
+    if (m_d->currentCS)
+    {
+        m_d->channelMaxValues = QVector4D(1, 1, 1, 1);
+        QList<KoChannelInfo *> channels = m_d->currentCS->channels();
+        for (int i=0; i<m_d->colorChannelCount; ++i)
+        {
+            m_d->channelMaxValues[i] = m_d->displayRenderer->maxVisibleFloatValue(channels[m_d->displayPosition[i]]);
+        }
+        // need to re-scale our normalized channel values on exposure changes:
+        m_d->channelValues = convertKoColorToShapeCoordinates(m_d->currentcolor);
+        Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
+            shape->setChannelValues(m_d->channelValues, true);
+        }
     }
 }
 
@@ -248,11 +290,9 @@ void KisVisualColorSelector::slotRebuildSelectors()
     } else {
         m_d->exposureSupported = false;
     }
-    if (m_d->currentCS->colorModelId() == RGBAColorModelID) {
-        m_d->isRGBA = true;
-    } else {
-        m_d->isRGBA = false;
-    }
+    m_d->isRGBA = (m_d->currentCS->colorModelId() == RGBAColorModelID);
+    const KoColorProfile *profile = m_d->currentCS->profile();
+    m_d->isLinear = (profile && profile->isLinear());
 
     qDeleteAll(children());
     m_d->widgetlist.clear();
@@ -441,6 +481,9 @@ void KisVisualColorSelector::slotRebuildSelectors()
     KisVisualColorSelector::resizeEvent(0);
 
     // finally recalculate channel values and update widgets
+    if (m_d->displayRenderer) {
+        slotDisplayConfigurationChanged();
+    }
     m_d->channelValues = convertKoColorToShapeCoordinates(m_d->currentcolor);
     Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
         shape->setChannelValues(m_d->channelValues, true);
@@ -456,6 +499,9 @@ void KisVisualColorSelector::setDisplayRenderer (const KoColorDisplayRendererInt
             shape->setDisplayRenderer(displayRenderer);
         }
     }
+    connect(m_d->displayRenderer, SIGNAL(displayConfigurationChanged()),
+            SLOT(slotDisplayConfigurationChanged()), Qt::UniqueConnection);
+    slotDisplayConfigurationChanged();
 }
 
 void KisVisualColorSelector::slotCursorMoved(QPointF pos)

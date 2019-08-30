@@ -165,11 +165,6 @@ public Q_SLOTS:
      * @param channel2 only used by twodimensional widgets.
      */
     void slotSetActiveChannels(int channel1, int channel2);
-    /**
-     * @brief updateFromChangedDisplayRenderer
-     * for updating from the display renderer... not sure why this one is public.
-     */
-    void updateFromChangedDisplayRenderer();
 
 protected:
     /**

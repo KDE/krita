@@ -66,12 +66,13 @@ public Q_SLOTS:
 
     void slotSetColor(const KoColor &c) override;
     void slotsetColorSpace(const KoColorSpace *cs);
-    void slotRebuildSelectors();
     void configurationChanged();
     void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer) override;
 
 private Q_SLOTS:
     void slotCursorMoved(QPointF pos);
+    void slotDisplayConfigurationChanged();
+    void slotRebuildSelectors();
 
 protected:
     void resizeEvent(QResizeEvent *) override;

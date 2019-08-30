@@ -708,13 +708,18 @@ void VirtualFileSystem::IterateFATBlock(
 	VirtualFileVisitor& Visitor
 )
 {
-	VirtualPage CurPage;
+	VirtualPage CurPage = {};
 	Read(
 		PageIndex * VirtualPage::PageSize,
 		CurPage
 	);
 
-	for( std::size_t i = 0; CurPage.FATEntries[i].Flags; i++ )
+	for(
+		std::size_t i = 0;
+		i < std::extent<decltype(VirtualPage::FATEntries)>::value
+		&& CurPage.FATEntries[i].Flags;
+		i++
+	)
 	{
 		VirtualFileEntry CurEntry;
 		CurEntry.FATData = CurPage.FATEntries[i];

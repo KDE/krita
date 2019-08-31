@@ -399,6 +399,8 @@ set(kritaui_LIB_SRCS
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
     KisMouseClickEater.cpp
+
+    KisDecorationsWrapperLayer.cpp
 )
 
 if(WIN32)

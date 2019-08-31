@@ -661,6 +661,10 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 void KisPaintopBox::slotUpdateOptionsWidgetPopup()
 {
     KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
+
+    // This happens when we have a new brush engine for which no default preset exists yet.
+    if (!preset) return;
+
     KIS_SAFE_ASSERT_RECOVER_RETURN(preset);
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_optionWidget);
 

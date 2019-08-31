@@ -49,6 +49,8 @@ public:
         GradientShapeSquare,
         GradientShapeConical,
         GradientShapeConicalSymetric,
+        GradientShapeSpiral,
+        GradientShapeReverseSpiral,
         GradientShapePolygonal
     };
 

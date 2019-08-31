@@ -63,17 +63,15 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
     p.setClipping(true);
 
     p.setBrush(this->palette().background());
-    p.drawRect(QRect(0,0,cw,ch));
-
-    if (m_resource) {
+    p.drawRect(QRect(0, 0, cw, ch));
+    if (m_resource && !m_resource->image().isNull()) {
         QImage img = QImage(iconWidth, iconHeight, QImage::Format_ARGB32);
         img.fill(Qt::transparent);
-        if (m_resource->image().width()<iconWidth ||
-                m_resource->image().height()<iconHeight) {
+        if (m_resource->image().width() < iconWidth ||  m_resource->image().height() < iconHeight) {
             QPainter paint2;
             paint2.begin(&img);
-            for (int x=0; x< iconWidth; x+=m_resource->image().width()) {
-                for (int y=0; y< iconHeight; y+=m_resource->image().height()) {
+            for (int x = 0; x < iconWidth; x += m_resource->image().width()) {
+                for (int y = 0; y < iconHeight; y += m_resource->image().height()) {
                     paint2.drawImage(x, y, m_resource->image());
                 }
             }
@@ -82,7 +80,7 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
         }
         p.drawImage(QRect(border, border, iconWidth, iconHeight), img);
     } else if (!icon().isNull()) {
-        int border2 = qRound((cw-16)*0.5);
+        int border2 = qRound((cw - 16) * 0.5);
         p.drawImage(QRect(border2, border2, 16, 16), icon().pixmap(16, 16).toImage());
     }
     p.setClipping(false);

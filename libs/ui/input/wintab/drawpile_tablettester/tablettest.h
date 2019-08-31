@@ -40,6 +40,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent *e) override;
     void tabletEvent(QTabletEvent *e) override;
 
+    QSize sizeHint() const override;
+
 private:
     QPolygon m_mousePath;
     QPolygon m_tabletPath;

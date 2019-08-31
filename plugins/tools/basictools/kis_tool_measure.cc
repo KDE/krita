@@ -89,7 +89,7 @@ void KisToolMeasureOptionsWidget::slotUnitChanged(int index)
 
 void KisToolMeasureOptionsWidget::updateDistance()
 {
-    m_distanceLabel->setText(QString("%1").arg(m_unit.toUserValue(m_distance), 5, 'f', 1));
+    m_distanceLabel->setText(KritaUtils::prettyFormatReal(m_unit.toUserValue(m_distance)));
 }
 
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>WdgGuassianHighPass</class>
- <widget class="QWidget" name="WdgGuassianHighPass">
+ <class>WdgGaussianHighPass</class>
+ <widget class="QWidget" name="WdgGaussianHighPass">
   <property name="geometry">
    <rect>
     <x>0</x>

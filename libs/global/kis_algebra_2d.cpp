@@ -31,6 +31,8 @@
 #include <QVector2D>
 #include <QVector3D>
 
+#include <Eigen/Eigenvalues>
+
 #define SANITY_CHECKS
 
 namespace KisAlgebra2D {
@@ -590,6 +592,77 @@ DecomposedMatix::DecomposedMatix(const QTransform &t0)
             rows[2].x(), rows[2].y(), rows[2].z());
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(fuzzyMatrixCompare(leftOver, QTransform(), 1e-4));
+}
+
+inline QTransform toQTransformStraight(const Eigen::Matrix3d &m)
+{
+    return QTransform(m(0,0), m(0,1), m(0,2),
+                      m(1,0), m(1,1), m(1,2),
+                      m(2,0), m(2,1), m(2,2));
+}
+
+inline Eigen::Matrix3d fromQTransformStraight(const QTransform &t)
+{
+    Eigen::Matrix3d m;
+
+    m << t.m11() , t.m12() , t.m13()
+        ,t.m21() , t.m22() , t.m23()
+        ,t.m31() , t.m32() , t.m33();
+
+    return m;
+}
+
+std::pair<QPointF, QTransform> transformEllipse(const QPointF &axes, const QTransform &fullLocalToGlobal)
+{
+    KisAlgebra2D::DecomposedMatix decomposed(fullLocalToGlobal);
+    const QTransform localToGlobal =
+            decomposed.scaleTransform() *
+            decomposed.shearTransform() *
+            decomposed.rotateTransform();
+
+    const QTransform localEllipse = QTransform(1.0 / pow2(axes.x()), 0.0, 0.0,
+                                               0.0, 1.0 / pow2(axes.y()), 0.0,
+                                               0.0, 0.0, 1.0);
+
+
+    const QTransform globalToLocal = localToGlobal.inverted();
+
+    Eigen::Matrix3d eqM =
+        fromQTransformStraight(globalToLocal *
+                               localEllipse *
+                               globalToLocal.transposed());
+
+//    std::cout << "eqM:" << std::endl << eqM << std::endl;
+
+    Eigen::EigenSolver<Eigen::Matrix3d> eigenSolver(eqM);
+
+    const Eigen::Matrix3d T = eigenSolver.eigenvalues().real().asDiagonal();
+    const Eigen::Matrix3d U = eigenSolver.eigenvectors().real();
+
+    const Eigen::Matrix3d Ti = eigenSolver.eigenvalues().imag().asDiagonal();
+    const Eigen::Matrix3d Ui = eigenSolver.eigenvectors().imag();
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(Ti.isZero());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(Ui.isZero());
+    KIS_SAFE_ASSERT_RECOVER_NOOP((U * U.transpose()).isIdentity());
+
+//    std::cout << "T:" << std::endl << T << std::endl;
+//    std::cout << "U:" << std::endl << U << std::endl;
+
+//    std::cout << "Ti:" << std::endl << Ti << std::endl;
+//    std::cout << "Ui:" << std::endl << Ui << std::endl;
+
+//    std::cout << "UTU':" << std::endl << U * T * U.transpose() << std::endl;
+
+    const qreal newA = 1.0 / std::sqrt(T(0,0) * T(2,2));
+    const qreal newB = 1.0 / std::sqrt(T(1,1) * T(2,2));
+
+    const QTransform newGlobalToLocal = toQTransformStraight(U);
+    const QTransform newLocalToGlobal = QTransform::fromScale(-1,-1) *
+            newGlobalToLocal.inverted() *
+            decomposed.translateTransform();
+
+    return std::make_pair(QPointF(newA, newB), newLocalToGlobal);
 }
 
 }

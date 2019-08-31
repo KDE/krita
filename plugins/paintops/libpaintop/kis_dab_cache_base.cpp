@@ -267,7 +267,13 @@ void KisDabCacheBase::fetchDabGenerationInfo(bool hasDabInCache,
                                                     di->softnessFactor,
                                                     di->mirrorProperties);
 
-    const int precisionLevel = m_d->precisionOption ? m_d->precisionOption->precisionLevel() - 1 : 3;
+    int precisionLevel = 3;
+    if (m_d->precisionOption) {
+        if (m_d->precisionOption->autoPrecisionEnabled()) {
+            m_d->precisionOption->setAutoPrecision(resources->brush->userEffectiveSize());
+        }
+        precisionLevel = m_d->precisionOption->precisionLevel() - 1;
+    }
     *shouldUseCache = hasDabInCache && di->solidColorFill &&
             newParams.compare(m_d->lastSavedDabParameters, precisionLevel);
 

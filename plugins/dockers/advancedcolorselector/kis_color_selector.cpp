@@ -156,7 +156,6 @@ void KisColorSelector::updateSettings()
 
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->canvasResourceProvider()) {
         bool gamutMaskActive = m_canvas->viewManager()->canvasResourceProvider()->gamutMaskActive();
-        qDebug() << "KisColorSelector::updateSettings()" << gamutMaskActive;
 
         if (gamutMaskActive) {
             KoGamutMask* currentMask = m_canvas->viewManager()->canvasResourceProvider()->currentGamutMask();

@@ -232,11 +232,7 @@ void ChannelModel::updateThumbnails(void)
         m_thumbnails.resize(m_channelCount);
 
         for (quint32 i = 0; i < (quint32)m_channelCount; ++i) {
-#if QT_VERSION >= 0x050500
             m_thumbnails[i] = QImage(thumbnailSize, QImage::Format_Grayscale8);
-#else
-            m_thumbnails[i] = QImage(thumbnailSize, QImage::Format_ARGB32_Premultiplied);
-#endif
         }
 
         KisSequentialConstIterator it(thumbnailDev, QRect(0, 0, thumbnailSize.width(), thumbnailSize.height()));
@@ -247,12 +243,7 @@ void ChannelModel::updateThumbnails(void)
                 const quint8* pixel = it.rawDataConst();
                 for (int chan = 0; chan < m_channelCount; ++chan) {
                     QImage &img = m_thumbnails[chan];
-#if QT_VERSION >= 0x050500
                     *(img.scanLine(y) + x) = cs->scaleToU8(pixel, chan);
-#else
-                    quint8 v = cs->scaleToU8(pixel, chan);
-                    img.setPixel(x, y, qRgb(v, v, v));
-#endif
                 }
             }
         }

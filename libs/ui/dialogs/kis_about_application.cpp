@@ -90,7 +90,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     authors.chop(2);
     authors.append(".</p></body></html>");
     lblAuthors->setText(authors);
-    wdgTab->addTab(lblAuthors, i18n("Authors"));
+    wdgTab->addTab(lblAuthors, i18nc("Heading for the list of Krita authors/developers", "Authors"));
 
     QTextEdit *lblKickstarter = new QTextEdit();
     lblKickstarter->setReadOnly(true);

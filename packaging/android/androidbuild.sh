@@ -205,7 +205,11 @@ build_krita() {
 
 build_apk() {
     cd $BUILD_ROOT
-    make create-apk
+    if [[ $BUILD_TYPE == "Release" ]]; then
+        make create-apk ARGS="--release"
+    else
+        make create-apk
+    fi
 }
 
 # if no arguments are passed

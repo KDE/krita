@@ -18,8 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_GUASSIANHIGHPASS_FILTER_H
-#define KIS_GUASSIANHIGHPASS_FILTER_H
+#ifndef KIS_GAUSSIANHIGHPASS_FILTER_H
+#define KIS_GAUSSIANHIGHPASS_FILTER_H
 
 #include "filter/kis_filter.h"
 #include "kis_cached_paint_device.h"

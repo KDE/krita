@@ -6,7 +6,7 @@ echoerr() { printf "ERROR: %s\n" "$*" >&2;  }
 
 print_usage() {
     printf "\nUsage: "$0" [-p=PACKAGE] [ARGUMENTS..]\n"
-    printf "Packages: [all|krita-bin|apk|qt|3rdparty|boost]\n"
+    printf "Packages: [all|krita-bin|apk|qt|3rdparty|boost|kf5]\n"
     printf "Arguments: \n"
     printf  "\t--src=PATH                  Source files\n"
     printf  "\t--build-type=TYPE          TYPE=[Debug|RelWithDebInfo|Release]\n"
@@ -318,6 +318,10 @@ case $PACKAGE in
         ;;
     boost)
         build_boost
+        ;;
+    kf5)
+        build_qt
+        build_kf5
         ;;
     *)
         echoerr "Invalid package"

@@ -6,65 +6,14 @@
 #include <codecvt>
 #include <locale>
 
+#include <string>
+#include <iostream>
+
+
 #include <immintrin.h>
 
 namespace sai
 {
-/// Internal Structures
-
-#pragma pack(push, 1)
-
-struct ThumbnailHeader
-{
-	std::uint32_t Width;
-	std::uint32_t Height;
-	std::uint32_t Magic; // BM32
-};
-
-enum class LayerClass
-{
-	RootLayer = 0x00,
-	// Parent Canvas layer object
-	Layer = 0x03,
-	Unknown4 = 0x4,
-	Linework = 0x05,
-	Mask = 0x06,
-	Unknown7 = 0x07,
-	Set = 0x08
-};
-
-struct LayerReference
-{
-	std::uint32_t Identifier;
-	std::uint16_t LayerClass;
-	// These all get added and sent as a windows message 0x80CA for some reason
-	std::uint16_t Unknown;
-};
-
-struct LayerBounds
-{
-	std::int32_t X; // (X / 32) * 32
-	std::int32_t Y; // (Y / 32) * 32
-	std::uint32_t Width; // Width - 31
-	std::uint32_t Height; // Height - 31
-};
-
-struct LayerHeader
-{
-	std::uint32_t LayerClass;
-	std::uint32_t Identifier;
-	LayerBounds Bounds;
-	std::uint32_t Unknown;
-	std::uint8_t Opacity;
-	std::uint8_t Visible;
-	std::uint8_t PreserveOpacity;
-	std::uint8_t Clipping;
-	std::uint8_t Unknown4;
-	std::uint32_t Blending;
-};
-
-#pragma pack(pop)
-
 /// VirtualPage
 #if defined(__AVX2__)
 inline __m256i KeySum8(
@@ -933,7 +882,7 @@ std::tuple<
 
 		return std::make_tuple(std::move(Pixels), Header.Width, Header.Height);
 	}
-	return std::make_tuple(nullptr, 0, 0);
+    return std::make_tuple(nullptr, 0, 0);
 }
 
 /// Keys
@@ -1083,4 +1032,103 @@ const std::uint32_t System[256] =
 	0xE29AEF25,0x4984D7A2,0x051F247B,0x29AB9055,0xFD2101F4,0x96FB2E1C,0x5BF04327,0x3C8F1BEB,
 };
 }
+
+Layer::Layer(VirtualFileEntry &entry):
+    ParentLayer(0)
+{
+    entry.Read<LayerHeader>(header);
+
+    std::uint32_t CurTag = 0;
+    std::uint32_t CurTagSize = 0;
+    //std::cout << "starting tags" << entry.Tell();
+    entry.Read(CurTag);
+    while(CurTag)
+    {
+        entry.Read(CurTagSize);
+        switch( CurTag )
+        {
+            //lorg
+            case 'name':
+            {
+                entry.Read(layerName);
+                break;
+            }
+            case 'pfid':
+            {
+                entry.Read(ParentLayer);
+                break;
+            }
+            default:
+            {
+                // for any streams that we do not handle,
+                // we just skip forward in the stream
+                entry.Seek(entry.Tell() + CurTagSize);
+                break;
+            }
+        }
+        entry.Read(CurTag);
+    }
+    //std::cout << " end" << entry.Tell() << " ";
+}
+
+Layer::~Layer()
+{
+
+}
+
+sai::LayerClass Layer::LayerType()
+{
+    return sai::LayerClass(header.LayerClass);
+}
+
+uint32_t Layer::Identifier()
+{
+    return header.Identifier;
+}
+
+std::tuple<int32_t, int32_t> Layer::Position()
+{
+    return std::make_tuple(header.Bounds.X, header.Bounds.Y);
+}
+
+std::tuple<uint32_t, uint32_t> Layer::Size()
+{
+    return std::make_tuple(header.Bounds.Width, header.Bounds.Height);
+}
+
+int Layer::Opacity()
+{
+    return int(header.Opacity);
+}
+
+bool Layer::IsVisible()
+{
+    return bool(header.Visible);
+}
+
+bool Layer::IsPreserveOpacity()
+{
+    return bool(header.PreserveOpacity);
+}
+
+bool Layer::IsClipping()
+{
+    return bool(header.Clipping);
+}
+
+BlendingMode Layer::Blending()
+{
+    return BlendingMode(header.Blending);
+}
+
+char *Layer::LayerName()
+{
+    return layerName;
+}
+
+uint32_t Layer::ParentID()
+{
+    return ParentLayer;
+}
+
 }

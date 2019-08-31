@@ -54,6 +54,70 @@ struct FATEntry
 	std::uint64_t UnknownB;
 };
 
+/// Internal Structures
+
+struct ThumbnailHeader
+{
+    std::uint32_t Width;
+    std::uint32_t Height;
+    std::uint32_t Magic; // BM32
+};
+
+enum BlendingMode : std::uint32_t
+{
+    PassThrough = 'pass',
+    Normal = 'norm',
+    Multiply = 'mul ',
+    Screen = 'scrn',
+    Overlay = 'over',
+    Luminosity = 'add ',
+    Shade = 'sub ',
+    LumiShade = 'adsb',
+    Binary = 'cbin'
+};
+
+enum class LayerClass : std::uint32_t
+{
+    RootLayer = 0x00,
+    // Parent Canvas layer object
+    Layer = 0x03,
+    Unknown4 = 0x4,
+    Linework = 0x05,
+    Mask = 0x06,
+    Unknown7 = 0x07,
+    Set = 0x08
+};
+
+struct LayerReference
+{
+    std::uint32_t Identifier;
+    std::uint16_t LayerClass;
+    // These all get added and sent as a windows message 0x80CA for some reason
+    std::uint16_t Unknown;
+};
+
+struct LayerBounds
+{
+    std::int32_t X; // (X / 32) * 32
+    std::int32_t Y; // (Y / 32) * 32
+    std::uint32_t Width; // Width - 31
+    std::uint32_t Height; // Height - 31
+};
+
+struct LayerHeader
+{
+    std::uint32_t LayerClass;
+    std::uint32_t Identifier;
+    LayerBounds Bounds;
+    std::uint32_t Unknown;
+    std::uint8_t Opacity;
+    std::uint8_t Visible;
+    std::uint8_t PreserveOpacity;
+    std::uint8_t Clipping;
+    std::uint8_t Unknown4;
+    std::uint32_t Blending;
+};
+
 union VirtualPage
 {
 	static constexpr std::size_t PageSize = 0x1000;
@@ -293,6 +357,39 @@ private:
 	std::size_t ReadPoint;
 
 	FATEntry FATData;
+};
+
+class Layer
+{
+public:
+    Layer(VirtualFileEntry& entry);
+    ~Layer();
+
+    LayerClass LayerType();
+    std::uint32_t Identifier();
+
+    std::tuple<
+        std::int32_t,
+        std::int32_t
+    > Position();
+    std::tuple<
+        std::uint32_t,
+        std::uint32_t
+    > Size();
+
+    int Opacity();
+    bool IsVisible();
+    bool IsPreserveOpacity();
+    bool IsClipping();
+    BlendingMode Blending();
+
+    char* LayerName();
+    std::uint32_t ParentID();
+private:
+
+    LayerHeader header;
+    char layerName[256];
+    std::uint32_t ParentLayer;
 };
 
 class Document : public VirtualFileSystem

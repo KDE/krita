@@ -43,5 +43,5 @@ class DebugAction(QAction):
         if self.scripter.uicontroller.invokeAction('save'):
             self.scripter.uicontroller.setActiveWidget(i18n('Debugger'))
             self.scripter.debugcontroller.start(self.scripter.documentcontroller.activeDocument)
-            widget = self.scripter.uicontroller.findTabWidget(i81n('Debugger'))
+            widget = self.scripter.uicontroller.findTabWidget(i18n('Debugger'))
             widget.startDebugger()

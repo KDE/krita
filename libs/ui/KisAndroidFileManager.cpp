@@ -77,7 +77,6 @@ void KisAndroidFileManager::ActivityResultReceiver::handleActivityResult(int req
                                                                   "(Landroid/content/Context;Landroid/net/Uri;)Ljava/lang/String;",
                                                                   QtAndroid::androidContext().object(),
                                                                   uri.object());
-                // TODO add a debug statement
                 QString path = pathObject.toString();
                 dbgAndroid << path;
                 if (path.isEmpty())

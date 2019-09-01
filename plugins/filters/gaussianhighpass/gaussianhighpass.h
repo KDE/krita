@@ -18,26 +18,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_WDG_GUASSIANHIGHPASS_H_
-#define _KIS_WDG_GUASSIANHIGHPASS_H_
+#ifndef _GAUSSIANHIGHPASS_PLUGIN_H_
+#define _GAUSSIANHIGHPASS_PLUGIN_H_
 
-#include <kis_config_widget.h>
+#include <QObject>
+#include <QVariant>
 
-class Ui_WdgGuassianHighPass;
-
-class KisWdgGuassianHighPass : public KisConfigWidget
+class GaussianHighPassPlugin : public QObject
 {
     Q_OBJECT
 public:
-    KisWdgGuassianHighPass(QWidget * parent);
-    ~KisWdgGuassianHighPass() override;
-    inline const Ui_WdgGuassianHighPass* widget() const {
-        return m_widget;
-    }
-    void setConfiguration(const KisPropertiesConfigurationSP) override;
-    KisPropertiesConfigurationSP configuration() const override;
-private:
-    Ui_WdgGuassianHighPass* m_widget;
+    GaussianHighPassPlugin(QObject *parent, const QVariantList &);
+    ~GaussianHighPassPlugin() override;
 };
 
 #endif

@@ -191,11 +191,7 @@ bool KisScreenColorPicker::handleColorPickingMouseButtonRelease(QMouseEvent *e)
 
 bool KisScreenColorPicker::handleColorPickingKeyPress(QKeyEvent *e)
 {
-#if QT_VERSION >= 0x050600
     if (e->matches(QKeySequence::Cancel)) {
-#else
-    if (e->key() == Qt::Key_Escape) {
-#endif
         releaseColorPicking();
         setCurrentColor(m_d->beforeScreenColorPicking);
     } else if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {

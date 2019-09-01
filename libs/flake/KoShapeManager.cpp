@@ -102,6 +102,35 @@ void KoShapeManager::Private::updateTree()
     }
 }
 
+void KoShapeManager::Private::forwardCompressedUdpate()
+{
+    bool shouldUpdateDecorations = false;
+    QRectF scheduledUpdate;
+
+    {
+        QMutexLocker l(&shapesMutex);
+
+        if (!compressedUpdate.isEmpty()) {
+            scheduledUpdate = compressedUpdate;
+            compressedUpdate = QRect();
+        }
+
+        Q_FOREACH (const KoShape *shape, compressedUpdatedShapes) {
+            if (selection->isSelected(shape)) {
+                shouldUpdateDecorations = true;
+                break;
+            }
+        }
+        compressedUpdatedShapes.clear();
+    }
+
+    if (shouldUpdateDecorations && canvas->toolProxy()) {
+        canvas->toolProxy()->repaintDecorations();
+    }
+    canvas->updateCanvas(scheduledUpdate);
+
+}
+
 void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     QList<KoShape*> shapes = group->shapes();
@@ -134,6 +163,7 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &sha
      * to the GUI thread.
      */
     this->moveToThread(qApp->thread());
+    connect(&d->updateCompressor, SIGNAL(timeout()), this, SLOT(forwardCompressedUdpate()));
 }
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
@@ -144,6 +174,7 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
 
     // see a comment in another constructor
     this->moveToThread(qApp->thread());
+    connect(&d->updateCompressor, SIGNAL(timeout()), this, SLOT(forwardCompressedUdpate()));
 }
 
 void KoShapeManager::Private::unlinkFromShapesRecursively(const QList<KoShape*> &shapes)
@@ -175,6 +206,8 @@ void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
         //clear selection
         d->selection->deselectAll();
         d->unlinkFromShapesRecursively(d->shapes);
+        d->compressedUpdate = QRect();
+        d->compressedUpdatedShapes.clear();
         d->aggregate4update.clear();
         d->shapeIndexesBeforeUpdate.clear();
         d->tree.clear();
@@ -228,6 +261,7 @@ void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
 
 void KoShapeManager::remove(KoShape *shape)
 {
+    QRectF dirtyRect;
     {
         QMutexLocker l1(&d->shapesMutex);
         QMutexLocker l2(&d->treeMutex);
@@ -236,15 +270,21 @@ void KoShapeManager::remove(KoShape *shape)
         detector.detect(d->tree, shape, shape->zIndex());
         detector.fireSignals();
 
-        shape->update();
+        dirtyRect = shape->absoluteOutlineRect();
+
         shape->removeShapeManager(this);
         d->selection->deselect(shape);
         d->aggregate4update.remove(shape);
+        d->compressedUpdatedShapes.remove(shape);
 
         if (d->shapeUsedInRenderingTree(shape)) {
             d->tree.remove(shape);
         }
         d->shapes.removeAll(shape);
+    }
+
+    if (!dirtyRect.isEmpty()) {
+        d->canvas->updateCanvas(dirtyRect);
     }
 
     // remove the children of a KoShapeContainer
@@ -268,6 +308,7 @@ void KoShapeManager::ShapeInterface::notifyShapeDestructed(KoShape *shape)
 
     q->d->selection->deselect(shape);
     q->d->aggregate4update.remove(shape);
+    q->d->compressedUpdatedShapes.remove(shape);
 
     // we cannot access RTTI of the semi-destructed shape, so just
     // unlink it lazily
@@ -300,7 +341,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
         QRectF rect = converter.viewToDocument(KisPaintingTweaks::safeClipBoundingRect(painter));
         unsortedShapes = d->tree.intersects(rect);
     } else {
-        unsortedShapes = shapes();
+        unsortedShapes = d->shapes;
         warnFlake << "KoShapeManager::paint  Painting with a painter that has no clipping will lead to too much being painted!";
     }
 
@@ -620,15 +661,18 @@ QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenSha
 
 void KoShapeManager::update(const QRectF &rect, const KoShape *shape, bool selectionHandles)
 {
-    // TODO: do we need locking here?
+    {
+        QMutexLocker l(&d->shapesMutex);
 
-    d->canvas->updateCanvas(rect);
-    if (selectionHandles && d->selection->isSelected(shape)) {
-        if (d->canvas->toolProxy())
-            d->canvas->toolProxy()->repaintDecorations();
+        d->compressedUpdate |= rect;
+
+        if (selectionHandles) {
+            d->compressedUpdatedShapes.insert(shape);
+        }
     }
-}
 
+    d->updateCompressor.start();
+}
 void KoShapeManager::notifyShapeChanged(KoShape *shape)
 {
     {

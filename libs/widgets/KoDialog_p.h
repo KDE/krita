@@ -76,7 +76,6 @@ protected:
 
     QDialogButtonBox *mButtonBox;
     QHash<int, QPushButton *> mButtonList;
-    QSignalMapper mButtonSignalMapper;
 
 protected Q_SLOTS:
     void queuedLayoutUpdate();

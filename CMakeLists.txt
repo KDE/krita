@@ -5,6 +5,9 @@ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 
 set(MIN_QT_VERSION 5.9.0)
+set( CMAKE_CXX_STANDARD 11 )
+set( CMAKE_CXX_STANDARD_REQUIRED ON )
+
 
 set(MIN_FRAMEWORKS_VERSION 5.44.0)
 
@@ -57,7 +60,7 @@ if (APPLE)
     set(KDE_SKIP_RPATH_SETTINGS TRUE)
     set(CMAKE_MACOSX_RPATH 1)
     set(BUILD_WITH_INSTALL_RPATH 1)
-    add_definitions(-mmacosx-version-min=10.11 -Wno-macro-redefined -Wno-deprecated-register)
+    add_definitions(-mmacosx-version-min=10.12 -Wno-macro-redefined -Wno-deprecated-register)
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
@@ -447,15 +450,22 @@ add_definitions(
   -DQT_USE_FAST_OPERATOR_PLUS
 )
 
-if (${Qt5_VERSION} VERSION_GREATER "5.8.0" )
+
+#if (${Qt5_VERSION} VERSION_GREATER "5.14.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50F00)
+#elseif (${Qt5_VERSION} VERSION_GREATER "5.13.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50E00)
+#elseif (${Qt5_VERSION} VERSION_GREATER "5.12.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50D00)
+#elseif (${Qt5_VERSION} VERSION_GREATER "5.11.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50C00)
+#if(${Qt5_VERSION} VERSION_GREATER "5.10.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50B00)
+#if(${Qt5_VERSION} VERSION_GREATER "5.9.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50A00)
+#else()
     add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50900)
-elseif(${Qt5_VERSION} VERSION_GREATER "5.7.0" )
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50800)
-elseif(${Qt5_VERSION} VERSION_GREATER "5.6.0" )
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
-else()
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50600)
-endif()
+#endif()
 
 add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
 
@@ -734,14 +744,6 @@ if(HAVE_VC)
         set(ADDITIONAL_VC_FLAGS "-fabi-version=0 -ffp-contract=fast")
         if(NOT WIN32)
             set(ADDITIONAL_VC_FLAGS "${ADDITIONAL_VC_FLAGS} -fPIC")
-        endif()
-    endif()
-
-    #Handle Vc master
-    if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
-        AddCompilerFlag("-std=c++11" _ok)
-        if(NOT _ok)
-            AddCompilerFlag("-std=c++0x" _ok)
         endif()
     endif()
 

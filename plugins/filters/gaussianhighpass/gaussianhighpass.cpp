@@ -18,18 +18,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _GUASSIANHIGHPASS_PLUGIN_H_
-#define _GUASSIANHIGHPASS_PLUGIN_H_
+#include "gaussianhighpass.h"
+#include <kpluginfactory.h>
 
-#include <QObject>
-#include <QVariant>
+#include "gaussianhighpass_filter.h"
 
-class GuassianHighPassPlugin : public QObject
+#include <filter/kis_filter_registry.h>
+
+K_PLUGIN_FACTORY_WITH_JSON(GaussianHighPassPluginFactory, "kritagaussianhighpassfilter.json", registerPlugin<GaussianHighPassPlugin>();)
+
+GaussianHighPassPlugin::GaussianHighPassPlugin(QObject *parent, const QVariantList &)
+        : QObject(parent)
 {
-    Q_OBJECT
-public:
-    GuassianHighPassPlugin(QObject *parent, const QVariantList &);
-    ~GuassianHighPassPlugin() override;
-};
+    KisFilterRegistry::instance()->add(new KisGaussianHighPassFilter());
 
-#endif
+}
+
+GaussianHighPassPlugin::~GaussianHighPassPlugin()
+{
+}
+
+#include "gaussianhighpass.moc"

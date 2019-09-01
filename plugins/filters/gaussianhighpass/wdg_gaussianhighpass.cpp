@@ -18,7 +18,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "wdg_guassianhighpass.h"
+#include "wdg_gaussianhighpass.h"
 #include <QLayout>
 #include <QToolButton>
 
@@ -26,30 +26,30 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 
-#include "ui_wdgguassianhighpass.h"
+#include "ui_wdggaussianhighpass.h"
 
-KisWdgGuassianHighPass::KisWdgGuassianHighPass(QWidget * parent) : KisConfigWidget(parent)
+KisWdgGaussianHighPass::KisWdgGaussianHighPass(QWidget * parent) : KisConfigWidget(parent)
 {
-    m_widget = new Ui_WdgGuassianHighPass();
+    m_widget = new Ui_WdgGaussianHighPass();
     m_widget->setupUi(this);
 
     connect(widget()->doubleblurAmount, SIGNAL(valueChanged(double)), SIGNAL(sigConfigurationItemChanged()));
 }
 
-KisWdgGuassianHighPass::~KisWdgGuassianHighPass()
+KisWdgGaussianHighPass::~KisWdgGaussianHighPass()
 {
     delete m_widget;
 }
 
-void KisWdgGuassianHighPass::setConfiguration(const KisPropertiesConfigurationSP config)
+void KisWdgGaussianHighPass::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     QVariant value;
     widget()->doubleblurAmount->setValue((config->getProperty("blurAmount", value)) ? value.toDouble() : 1.0);
 }
 
-KisPropertiesConfigurationSP KisWdgGuassianHighPass::configuration() const
+KisPropertiesConfigurationSP KisWdgGaussianHighPass::configuration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("guassianhighpass", 1);
+    KisFilterConfigurationSP config = new KisFilterConfiguration("gaussianhighpass", 1);
     config->setProperty("blurAmount", widget()->doubleblurAmount->value());
     return config;
 }

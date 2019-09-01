@@ -189,7 +189,7 @@ void Selection::erode()
 {
     if (!d->selection) return;
     KisErodeSelectionFilter esf;
-    QRect rc = esf.changeRect(d->selection->selectedExactRect());
+    QRect rc = esf.changeRect(d->selection->selectedExactRect(), d->selection->pixelSelection()->defaultBounds());
     esf.process(d->selection->pixelSelection(), rc);
 }
 
@@ -197,7 +197,7 @@ void Selection::dilate()
 {
     if (!d->selection) return;
     KisDilateSelectionFilter dsf;
-    QRect rc = dsf.changeRect(d->selection->selectedExactRect());
+    QRect rc = dsf.changeRect(d->selection->selectedExactRect(), d->selection->pixelSelection()->defaultBounds());
     dsf.process(d->selection->pixelSelection(), rc);
 }
 
@@ -205,7 +205,7 @@ void Selection::border(int xRadius, int yRadius)
 {
     if (!d->selection) return;
     KisBorderSelectionFilter sf(xRadius, yRadius);
-    QRect rc = sf.changeRect(d->selection->selectedExactRect());
+    QRect rc = sf.changeRect(d->selection->selectedExactRect(), d->selection->pixelSelection()->defaultBounds());
     sf.process(d->selection->pixelSelection(), rc);
 }
 
@@ -213,7 +213,7 @@ void Selection::feather(int radius)
 {
     if (!d->selection) return;
     KisFeatherSelectionFilter fsf(radius);
-    QRect rc = fsf.changeRect(d->selection->selectedExactRect());
+    QRect rc = fsf.changeRect(d->selection->selectedExactRect(), d->selection->pixelSelection()->defaultBounds());
     fsf.process(d->selection->pixelSelection(), rc);
 }
 
@@ -221,7 +221,7 @@ void Selection::grow(int xradius, int yradius)
 {
     if (!d->selection) return;
     KisGrowSelectionFilter gsf(xradius, yradius);
-    QRect rc = gsf.changeRect(d->selection->selectedExactRect());
+    QRect rc = gsf.changeRect(d->selection->selectedExactRect(), d->selection->pixelSelection()->defaultBounds());
     gsf.process(d->selection->pixelSelection(), rc);
 }
 
@@ -230,7 +230,7 @@ void Selection::shrink(int xRadius, int yRadius, bool edgeLock)
 {
     if (!d->selection) return;
     KisShrinkSelectionFilter sf(xRadius, yRadius, edgeLock);
-    QRect rc = sf.changeRect(d->selection->selectedExactRect());
+    QRect rc = sf.changeRect(d->selection->selectedExactRect(), d->selection->pixelSelection()->defaultBounds());
     sf.process(d->selection->pixelSelection(), rc);
 }
 
@@ -238,7 +238,7 @@ void Selection::smooth()
 {
     if (!d->selection) return;
     KisSmoothSelectionFilter sf;
-    QRect rc = sf.changeRect(d->selection->selectedExactRect());
+    QRect rc = sf.changeRect(d->selection->selectedExactRect(), d->selection->pixelSelection()->defaultBounds());
     sf.process(d->selection->pixelSelection(), rc);
 }
 
@@ -247,7 +247,7 @@ void Selection::invert()
 {
     if (!d->selection) return;
     KisInvertSelectionFilter sf;
-    QRect rc = sf.changeRect(d->selection->selectedExactRect());
+    QRect rc = sf.changeRect(d->selection->selectedExactRect(), d->selection->pixelSelection()->defaultBounds());
     sf.process(d->selection->pixelSelection(), rc);
 }
 

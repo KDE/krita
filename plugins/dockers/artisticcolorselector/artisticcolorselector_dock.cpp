@@ -212,9 +212,6 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     connect(m_selectorUI->colorSelector         , SIGNAL(sigFgColorChanged(KisColor))     , SLOT(slotFgColorChanged(KisColor)));
     connect(m_selectorUI->colorSelector         , SIGNAL(sigBgColorChanged(KisColor))     , SLOT(slotBgColorChanged(KisColor)));
 
-    // gamut mask connections
-    connect(m_selectorUI->gamutMaskToolbar, SIGNAL(sigGamutMaskToggle(bool)), SLOT(slotGamutMaskToggle(bool)));
-
     connect(m_hsxButtons                        , SIGNAL(buttonClicked(int))                     , SLOT(slotColorSpaceSelected()));
 
     setWidget(m_selectorUI);
@@ -240,6 +237,9 @@ void ArtisticColorSelectorDock::setViewManager(KisViewManager* kisview)
 
     connect(m_resourceProvider, SIGNAL(sigGamutMaskPreviewUpdate()),
             this, SLOT(slotGamutMaskPreviewUpdate()), Qt::UniqueConnection);
+
+    connect(m_resourceProvider, SIGNAL(sigGamutMaskDeactivated()),
+            this, SLOT(slotGamutMaskDeactivate()), Qt::UniqueConnection);
 
     m_selectorUI->gamutMaskToolbar->connectMaskSignals(m_resourceProvider);
 }
@@ -452,6 +452,11 @@ void ArtisticColorSelectorDock::slotGamutMaskUnset()
 void ArtisticColorSelectorDock::slotGamutMaskPreviewUpdate()
 {
     m_selectorUI->colorSelector->setDirty();
+}
+
+void ArtisticColorSelectorDock::slotGamutMaskDeactivate()
+{
+    slotGamutMaskToggle(false);
 }
 
 void ArtisticColorSelectorDock::slotSelectorSettingsChanged()

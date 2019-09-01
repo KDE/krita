@@ -61,6 +61,7 @@
 
 #include "kis_extended_modifiers_mapper.h"
 #include "kis_input_manager_p.h"
+#include "kis_algebra_2d.h"
 
 template <typename T>
 uint qHash(QPointer<T> value) {
@@ -433,15 +434,23 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             }
         }
 
-        if (qAbs(d->accumulatedScrollDelta) >= QWheelEvent::DefaultDeltasPerStep) {
+        bool wasScrolled = false;
+
+        while (qAbs(d->accumulatedScrollDelta) >= QWheelEvent::DefaultDeltasPerStep) {
             //Make sure the input actions know we are active.
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.wheelEvent(action, wheelEvent);
+            d->accumulatedScrollDelta -=
+                KisAlgebra2D::signPZ(d->accumulatedScrollDelta) *
+                QWheelEvent::DefaultDeltasPerStep;
+            wasScrolled = true;
+        }
+
+        if (wasScrolled) {
             d->accumulatedScrollDelta = 0;
         }
-        else {
-            retval = true;
-        }
+
+        retval = !wasScrolled;
         break;
     }
     case QEvent::Enter:

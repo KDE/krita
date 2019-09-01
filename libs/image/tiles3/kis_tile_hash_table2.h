@@ -315,52 +315,56 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
     // to a shared pointer...
     m_map.getGC().lockRawPointerAccess();
 
-    TileTypeSP tile;
+    TileTypeSP tile = m_map.get(idx);
 
-    while (!(tile = m_map.get(idx))) {
+    while (!tile) {
+        // we shouldn't try to aquire **any** lock with
+        // raw-pointer lock held
+        m_map.getGC().unlockRawPointerAccess();
+
+        {
+            QReadLocker locker(&m_defaultPixelDataLock);
+            tile = new TileType(col, row, m_defaultTileData, 0);
+        }
+
+        TileTypeSP::ref(&tile, tile.data());
+        TileType *discardedTile = 0;
+
+        // iterator lock should be taken **before**
+        // the pointers are locked
+        m_iteratorLock.lockForRead();
+
+        // and now lock raw-pointers again
+        m_map.getGC().lockRawPointerAccess();
+
+        // mutator might have become invalidated when
+        // we released raw pointers, so we need to reinitialize it
         LockFreeTileMapMutator mutator = m_map.insertOrFind(idx);
         if (!mutator.getValue()) {
-            // we shouldn't try to aquire **any** lock with
-            // raw-pointer lock held
-            m_map.getGC().unlockRawPointerAccess();
-
-            {
-                QReadLocker locker(&m_defaultPixelDataLock);
-                tile = new TileType(col, row, m_defaultTileData, 0);
-            }
-
-            TileTypeSP::ref(&tile, tile.data());
-            TileType *item = 0;
-
-            // iterator lock should be taken **before**
-            // the pointers are locked
-            m_iteratorLock.lockForRead();
-
-            // and now lock raw-pointers again
-            m_map.getGC().lockRawPointerAccess();
-
-            item = mutator.exchangeValue(tile.data());
-            m_iteratorLock.unlock();
-
-            if (item) {
-                // we've got our tile back, it didn't manage to
-                // get into the table. Now release the allocated
-                // tile and push TO/GA switch.
-                tile = 0;
-
-                item->notifyDeadWithoutDetaching();
-                m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(item));
-
-                continue;
-
-            } else {
-                newTile = true;
-                m_numTiles.fetchAndAddRelaxed(1);
-
-                tile->notifyAttachedToDataManager(m_mementoManager);
-            }
+            discardedTile = mutator.exchangeValue(tile.data());
         } else {
-            tile = mutator.getValue();
+            discardedTile = tile.data();
+        }
+
+        m_iteratorLock.unlock();
+
+        if (discardedTile) {
+            // we've got our tile back, it didn't manage to
+            // get into the table. Now release the allocated
+            // tile and push TO/GA switch.
+            tile = 0;
+
+            discardedTile->notifyDeadWithoutDetaching();
+            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(discardedTile));
+
+            tile = m_map.get(idx);
+            continue;
+
+        } else {
+            newTile = true;
+            m_numTiles.fetchAndAddRelaxed(1);
+
+            tile->notifyAttachedToDataManager(m_mementoManager);
         }
     }
     m_map.getGC().unlockRawPointerAccess();

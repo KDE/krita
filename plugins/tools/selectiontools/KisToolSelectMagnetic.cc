@@ -58,8 +58,8 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
-    m_continuedMode(false), m_complete(false), m_threshold(70), m_checkPoint(-1), m_frequency(30), m_radius(3.0),
-    m_selected(false), m_finished(false)
+    m_continuedMode(false), m_complete(false), m_selected(false), m_finished(false), m_threshold(70),
+    m_frequency(30), m_radius(3.0)
 { }
 
 void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)
@@ -255,7 +255,8 @@ void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter
         paintToolOutline(&gc, outline);
         Q_FOREACH (const QPoint pt, m_anchorPoints) {
             KisHandlePainterHelper helper(&gc, handleRadius());
-            if(m_complete && QRect(pt, QSize(5,5)).contains(m_lastCursorPos.toPoint())){
+            if((m_complete && QRect(pt, QSize(5,5)).contains(m_lastCursorPos.toPoint()))
+                    || (m_snapBound.contains(m_lastCursorPos) && pt == m_anchorPoints.first())){
                 helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
             }else{
                 helper.setHandleStyle(KisHandleStyle::primarySelection());

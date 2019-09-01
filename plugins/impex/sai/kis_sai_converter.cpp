@@ -19,6 +19,10 @@
 
 #include "sai.hpp"
 
+//Necessary for simd
+#include <emmintrin.h>
+#include <immintrin.h>
+
 #include <QVector>
 
 #include <KoColorSpace.h>
@@ -69,6 +73,7 @@ public:
         qDebug() << Entry.GetSize() << Entry.GetTimeStamp() << Entry.GetName();
         if (FolderDepth>0) {
             sai::Layer layerData = sai::Layer(Entry);
+            qDebug() << "adding layer" << layerData.LayerName();
 
             if (layerData.LayerType() == sai::LayerClass::Layer) {
                 KisPaintLayerSP layer = new KisPaintLayer(m_image, layerData.LayerName(), 255);
@@ -79,6 +84,8 @@ public:
                 layer->setCompositeOpId(BlendingMode(layerData.Blending()));
                 layer->setX(int(std::get<0>(layerData.Position())));
                 layer->setY(int(std::get<1>(layerData.Position())));
+
+                ReadRasterDataIntoLayer(layer, Entry, quint32(std::get<0>(layerData.Size())), quint32(std::get<1>(layerData.Size())));
                 // Bounds;
 
                 if (layerData.IsClipping() || !clippedLayers.isEmpty()) {
@@ -189,6 +196,141 @@ private:
         return s;
     }
 
+    void ReadRasterDataIntoLayer(KisPaintLayerSP layer, sai::VirtualFileEntry &entry, quint32 width, quint32 height) {
+        std::vector<std::uint8_t> BlockMap;
+        //TileData.resize((width / 32) * (height / 32));
+        entry.Read(BlockMap.data(), (width / 32) * (height / 32));
+
+
+        for( std::size_t y = 0; y < (height / 32); y++ ) {
+            for( std::size_t x = 0; x < (width / 32); x++ ) {
+                if( BlockMap[(width / 32) * y + x] ) {
+                    std::array<std::uint8_t, 0x800> CompressedTile;
+                    alignas(sizeof(__m128i)) std::array<std::uint8_t, 0x1000> DecompressedTile;
+                    std::uint8_t Channel = 0;
+                    std::uint16_t Size = 0;
+                    while( entry.Read<std::uint16_t>(Size) ) {
+                        entry.Read(CompressedTile.data(), Size);
+
+                        RLEDecompress32(
+                                            DecompressedTile.data(),
+                                            CompressedTile.data(),
+                                            Size,
+                                            1024,
+                                            Channel
+                                        );
+
+                        Channel++;
+                        if( Channel >= 4 ) {
+                            for( std::size_t i = 0; i < 4; i++ ) {
+                                std::uint16_t Size = entry.Read<std::uint16_t>();
+                                entry.Seek(entry.Tell() + Size);
+                            }
+                        }
+                    }
+                    /*
+                     * // Current 32x32 tile within final image
+                    std::uint32_t *ImageBlock = reinterpret_cast<std::uint32_t*>(LayerImage.data())
+                                                  + (x * 32)
+                                                  + ((y * LayerHead.Bounds.Width) * 32);
+                                                  */
+                    for( std::size_t i = 0; i < (32 * 32) / 4; i++ ) {
+                        __m128i QuadPixel = _mm_load_si128(reinterpret_cast<__m128i*>(DecompressedTile.data()) + i);
+                        // ABGR to ARGB, if you want.
+                        // Do your swizzling here
+                        QuadPixel = _mm_shuffle_epi8(QuadPixel,
+                                                     _mm_set_epi8(
+                                                         15, 12, 13, 14,
+                                                         11, 8, 9, 10,
+                                                         7, 4, 5, 6,
+                                                         3, 0, 1, 2));
+                        /// Alpha is pre-multiplied, convert to straight
+                        // Get Alpha into [0.0,1.0] range
+                        __m128 Scale = _mm_div_ps(
+                                    _mm_cvtepi32_ps(
+                                        _mm_shuffle_epi8(
+                                            QuadPixel,
+                                            _mm_set_epi8(
+                                                -1, -1, -1, 15,
+                                                -1, -1, -1, 11,
+                                                -1, -1, -1, 7,
+                                                -1, -1, -1, 3
+                                                )
+                                            )
+                                        ), _mm_set1_ps(255.0f));
+
+                        // Normalize each channel into straight color
+                        for( std::uint8_t i = 0; i < 3; i++ )
+                        {
+                            __m128i CurChannel = _mm_srli_epi32(QuadPixel, i * 8);
+                            CurChannel = _mm_and_si128(CurChannel, _mm_set1_epi32(0xFF));
+                            __m128 ChannelFloat = _mm_cvtepi32_ps(CurChannel);
+
+                            ChannelFloat = _mm_div_ps(ChannelFloat, _mm_set1_ps(255.0));// [0,255] to [0,1]
+                            ChannelFloat = _mm_div_ps(ChannelFloat, Scale);
+                            ChannelFloat = _mm_mul_ps(ChannelFloat, _mm_set1_ps(255.0));// [0,1] to [0,255]
+
+                            CurChannel = _mm_cvtps_epi32(ChannelFloat);
+                            CurChannel = _mm_and_si128(CurChannel, _mm_set1_epi32(0xff));
+                            CurChannel = _mm_slli_epi32(CurChannel, i * 8);
+
+                            QuadPixel = _mm_andnot_si128(_mm_set1_epi32(0xFF << (i * 8)), QuadPixel);
+                            QuadPixel = _mm_or_si128(QuadPixel, CurChannel);
+                        }
+
+                        // Write directly to final image
+                        /**
+                        _mm_store_si128(
+                                    reinterpret_cast<__m128i*>(ImageBlock) + (i % 8) + ((i / 8) * (LayerHead.Bounds.Width / 4)),
+                                    QuadPixel
+                                    );
+                                    */
+
+                    }
+                }
+
+            }
+        }
+    }
+    void RLEDecompress32(void* Destination, const std::uint8_t *Source, std::size_t SourceSize, std::size_t IntCount, std::size_t Channel)
+    {
+        std::uint8_t *Write = reinterpret_cast<std::uint8_t*>(Destination) + Channel;
+        std::size_t WriteCount = 0;
+
+        while( WriteCount < IntCount )
+        {
+            std::uint8_t Length = *Source++;
+            if( Length == 128 ) // No-op
+            {
+            }
+            else if( Length < 128 ) // Copy
+            {
+                // Copy the next Length+1 bytes
+                Length++;
+                WriteCount += Length;
+                while( Length )
+                {
+                    *Write = *Source++;
+                    Write += 4;
+                    Length--;
+                }
+            }
+            else if( Length > 128 ) // Repeating byte
+            {
+                // Repeat next byte exactly "-Length + 1" times
+                Length ^= 0xFF;
+                Length += 2;
+                WriteCount += Length;
+                std::uint8_t Value = *Source++;
+                while( Length )
+                {
+                    *Write = Value;
+                    Write += 4;
+                    Length--;
+                }
+            }
+        }
+    }
 };
 
 KisSaiConverter::KisSaiConverter(KisDocument *doc)

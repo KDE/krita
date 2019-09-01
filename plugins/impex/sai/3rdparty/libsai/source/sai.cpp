@@ -174,8 +174,8 @@ ifstreambuf::ifstreambuf(const std::uint32_t* Key)
 		nullptr
 	);
 
-	PageCache = std::make_unique<VirtualPage>();
-	TableCache = std::make_unique<VirtualPage>();
+	PageCache  = std::unique_ptr<VirtualPage>(new VirtualPage{});
+	TableCache = std::unique_ptr<VirtualPage>(new VirtualPage{});
 }
 
 ifstreambuf* ifstreambuf::open(const char* Name)
@@ -300,7 +300,7 @@ std::streambuf::int_type ifstreambuf::underflow()
 std::streambuf::pos_type ifstreambuf::seekoff(
 	std::streambuf::off_type Offset,
 	std::ios_base::seekdir Direction,
-    std::ios_base::openmode /*Mode*/
+	std::ios_base::openmode /*Mode*/
 )
 {
 	std::streambuf::pos_type Position;
@@ -592,7 +592,7 @@ std::unique_ptr<VirtualFileEntry> VirtualFileSystem::GetEntry(const char* Path)
 	);
 
 	std::string CurPath(Path);
-    const char* PathDelim = "./";
+	const char* PathDelim = "./";
 
 	const char* CurToken = std::strtok(&CurPath[0], PathDelim);
 
@@ -756,8 +756,7 @@ std::size_t VirtualFileEntry::Read(void* Destination, std::size_t Size)
 		// If you're reading this and have to work with this I'm so sorry.
 		//												- Wunkolo, 10/19/17
 		std::uint8_t* CurDest = reinterpret_cast<std::uint8_t*>(Destination);
-		std::size_t NextTableIndex = ((ReadPoint + (FATData.PageIndex * VirtualPage::PageSize)) / VirtualPage::PageSize & ~(
-			0x1FF)) + VirtualPage::TableSpan;
+		std::size_t NextTableIndex = ((ReadPoint + (FATData.PageIndex * VirtualPage::PageSize)) / VirtualPage::PageSize & ~(0x1FF)) + VirtualPage::TableSpan;
 		while( Size )
 		{
 			// Requested offset that we want to read from
@@ -815,6 +814,70 @@ std::tuple<std::uint32_t, std::uint32_t> Document::GetCanvasSize()
 		Canvas->Read(Alignment);
 		Canvas->Read(Width);
 		Canvas->Read(Height);
+
+        /**
+        std::uint32_t CurTag = 0;
+        std::uint32_t CurTagSize = 0;
+
+        Canvas->Read(CurTag);
+        while(CurTag)
+        {
+            Canvas->Read(CurTagSize);
+
+            switch (CurTag) {
+            case 'reso':{
+                // 16.16 fixed point integer
+                std::uint32_t DotsPerInch;
+                // 0 = pixels, 1 = inch, 2 = cm, 3 = mm
+                std::uint16_t SizeUnits;
+                // 0 = pixel/inch, 1 = pixel/cm
+                std::uint16_t ResolutionUnits;
+                Canvas->Read(DotsPerInch);
+                Canvas->Read(SizeUnits);
+                Canvas->Read(ResolutionUnits);
+                std::cout << "\nCanvas Resolution "<<int(DotsPerInch) << ", " << SizeUnits << ", " << ResolutionUnits;
+                break;
+            }
+            case 'wsrc':{
+                std::uint32_t Unknown0;
+                Canvas->Read(Unknown0);
+                std::cout << "\nwsrc "<< Unknown0;
+                break;
+            }
+            case 'lyid':{
+                std::uint32_t Unknown0;
+                Canvas->Read(Unknown0);
+                std::cout << "\nlyid "<< Unknown0;
+                break;
+            }
+            case 'layr':{
+                std::uint32_t SelectedLayerID;
+                Canvas->Read(SelectedLayerID);
+                std::cout << "\nSelected Layer ID "<< SelectedLayerID;
+                break;
+            }
+            default:
+            {
+                printf("%c%c%c%c | %u\n",
+                       reinterpret_cast<char*>(&CurTag)[3],
+                        reinterpret_cast<char*>(&CurTag)[2],
+                        reinterpret_cast<char*>(&CurTag)[1],
+                        reinterpret_cast<char*>(&CurTag)[0],
+                        CurTagSize
+                        );
+                // for any streams that we do not handle,
+                // we just skip forward in the stream
+                Canvas->Seek(Canvas->Tell() + CurTagSize);
+                break;
+            }
+
+            }
+
+            Canvas->Read(CurTag);
+        }
+        */
+
+
 		return std::make_tuple(Width, Height);
 	}
 	return std::make_tuple(0, 0);
@@ -833,14 +896,15 @@ std::tuple<
 		Thumbnail->Read(Header.Height);
 		Thumbnail->Read(Header.Magic);
 
-        if( Header.Magic != *(uint*)"23MB" )
+		if( Header.Magic != *(uint*)"23MB" )
 		{
 			return std::make_tuple(nullptr, 0, 0);
 		}
 
 		const std::size_t PixelCount = Header.Height * Header.Width;
-		std::unique_ptr<std::uint8_t[]> Pixels
-			= std::make_unique<std::uint8_t[]>(PixelCount * sizeof(std::uint32_t));
+		std::unique_ptr<std::uint8_t[]> Pixels(
+			new std::uint8_t[PixelCount * sizeof(std::uint32_t)]()
+		);
 
 		Thumbnail->Read(
 			Pixels.get(),
@@ -1034,7 +1098,12 @@ const std::uint32_t System[256] =
 }
 
 Layer::Layer(VirtualFileEntry &entry):
-    ParentLayer(0)
+    ParentLayer(0),
+    TexScale(100),
+    TexOpacity(20),
+    Effect(0),
+    EffectOpacity(100),
+    EffectWidth(1)
 {
     entry.Read<LayerHeader>(header);
 
@@ -1047,24 +1116,53 @@ Layer::Layer(VirtualFileEntry &entry):
         entry.Read(CurTagSize);
         switch( CurTag )
         {
-            //lorg
-            case 'name':
-            {
-                entry.Read(layerName);
-                break;
-            }
-            case 'pfid':
-            {
-                entry.Read(ParentLayer);
-                break;
-            }
-            default:
-            {
-                // for any streams that we do not handle,
-                // we just skip forward in the stream
-                entry.Seek(entry.Tell() + CurTagSize);
-                break;
-            }
+        case 'name':
+        {
+            entry.Read(layerName);
+            break;
+        }
+        case 'pfid':
+        case 'plid':
+        {
+            //pfid is parentfolder, for layers and folders, while plid is parentlayer, for masks.
+            entry.Read(ParentLayer);
+            break;
+        }
+        case 'texn':
+        {
+            // Texture name if there's a texture effect enabled.
+            entry.Read(TexName);
+            break;
+        }
+        case 'texp':
+        {
+            // Texture options
+            entry.Read(TexScale);
+            entry.Read(TexOpacity);
+            break;
+        }
+        case 'peff':
+        {
+            entry.Read(Effect);
+            entry.Read(EffectOpacity);
+            entry.Read(EffectWidth);
+            break;
+        }
+        default:
+        {
+            std::cout << layerName << header.Identifier;
+            printf("%c%c%c%c | %u\n",
+                   reinterpret_cast<char*>(&CurTag)[3],
+                    reinterpret_cast<char*>(&CurTag)[2],
+                    reinterpret_cast<char*>(&CurTag)[1],
+                    reinterpret_cast<char*>(&CurTag)[0],
+                    CurTagSize
+                    );
+            // for any streams that we do not handle,
+            // we just skip forward in the stream
+            entry.Seek(entry.Tell() + CurTagSize);
+            break;
+        }
         }
         entry.Read(CurTag);
     }
@@ -1129,6 +1227,36 @@ char *Layer::LayerName()
 uint32_t Layer::ParentID()
 {
     return ParentLayer;
+}
+
+char *Layer::TextureName()
+{
+    return TexName;
+}
+
+int Layer::TextureScale()
+{
+    return TexScale;
+}
+
+int Layer::TextureOpacity()
+{
+    return TexOpacity;
+}
+
+int Layer::LayerEffect()
+{
+    return Effect;
+}
+
+int Layer::LayerEffectOpacity()
+{
+    return EffectOpacity;
+}
+
+int Layer::LayerEffectWidth()
+{
+    return EffectWidth;
 }
 
 }

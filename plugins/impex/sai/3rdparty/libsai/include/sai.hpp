@@ -383,13 +383,38 @@ public:
     bool IsClipping();
     BlendingMode Blending();
 
+    //Layer name.
     char* LayerName();
+    //ID of the parent layer or folder.
     std::uint32_t ParentID();
+
+    //String representing the name of the texture used.
+    //If empty, no texture effect.
+    char* TextureName();
+    //Texture scaling in percentages going from 50 to 500%.
+    int TextureScale();
+    //Opacity of the texture effect.
+    int TextureOpacity();
+
+    //Boolean toggling whether the water color fringe is enabled.
+    //May have been intended to be an integer going over several effects.
+    int LayerEffect();
+    //Integer going from 0 to 100 representing the opacity of the effect.
+    int LayerEffectOpacity();
+    //Integer going from 0 to 15 presenting the width of the effect.
+    int LayerEffectWidth();
+
 private:
 
     LayerHeader header;
     char layerName[256];
     std::uint32_t ParentLayer;
+    char TexName[64];
+    std::uint16_t TexScale;
+    std::uint8_t TexOpacity;
+    std::uint8_t Effect;
+    std::uint8_t EffectOpacity;
+    std::uint8_t EffectWidth;
 };
 
 class Document : public VirtualFileSystem

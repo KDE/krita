@@ -455,16 +455,18 @@ std::uint16_t ResolutionUnits;
 ```
 
 - `wsrc`
+Layer marked as the selection source
 ```cpp
-std::uint32_t Unknown0;
-```
-
-- `lyid`
-```cpp
-std::uint32_t Unknown0; 
+std::uint32_t SelectionSourceID;
 ```
 
 - `layr`
+```cpp
+std::uint32_t SelectedLayerID;
+```
+
+- `lyid`
+Seems to be a duplication of `layr`
 ```cpp
 std::uint32_t SelectedLayerID;
 ```
@@ -577,13 +579,21 @@ std::uint8_t LayerName[256];
 ```
 - `pfid`
 
-Parent Set id. If this layer is a child of a folder this will be a layer identifier of the parent container layer.
+Parent Set ID. If this layer is a child of a folder this will be a layer identifier of the parent container layer.
 ```cpp
-std::uint32_t ParentLayer;
+std::uint32_t ParentSetID;
 ```
+
+- `plid`
+
+Parent Layer ID. If this layer is a child of another layer(ex, a mask-layer) this will be a layer identifier of the parent container layer.
+```cpp
+std::uint32_t ParentLayerID;
+```
+
 - `lmfl`
 ```cpp
-std::uint32_t Unknown0; // Bitflag 
+std::uint32_t Unknown0; // Bitflag
 ```
 
 - `fopn`
@@ -595,21 +605,29 @@ std::uint8_t Open;
 ```
 
 - `texn`
+
+Name of the overlay-texture assigned to a layer. Ex: `Watercolor A`
 ```cpp
-std::uint8_t Unknown0[64]; // UTF16 string
+std::uint8_t TextureName[64]; // UTF16 string
 ```
 
 - `texp`
+
+
 ```cpp
 std::uint16_t Unknown0;
 std::uint8_t Unknown2;
 ```
 
 - `peff`
+
+Options related to the overlay-texture assigned to a layer
 ```cpp
+// Has an overlay: 0, no overlay: 1 
+// 32-bit bool?
 std::uint8_t Unknown0;
-std::uint8_t Unknown1;
-std::uint8_t Unknown2;
+std::uint8_t Unknown1; // 100
+std::uint8_t Unknown2; // 1
 ```
 
 - `vmrk`
@@ -669,7 +687,7 @@ else if( CurHeader.Type == LayerType::Linework )
 
 ## Raster Layers
 
-Raster data is stored in a tiled format immediately after the header structure above. There is an array of `(LayerWidth / 32) * (LayerHeight / 32)` 8-bit boolean integer values stored before the compressed channel pixel data. Each boolean value within this `BlockMap` determines if the appropriately positioned `32x32` tile of bitmap data contains pixel data that varies from pure black transparency. If a tile is active(1), its pixel data is stored as four or more streams of Run-Length-Encoding compressed data for each color channel for that `32x32` tile. If a tile is not active(0), the tile is to be filled with a `32x32` fully transparent block of pixels(`0x00000000` for all pixels). If more than four streams exist, the extra streams may be safely ignored and skipped. Note that the RLE routine is the very same algorithm that Photoshop uses when compressing layer data and the same as the [PackBits](https://en.wikipedia.org/wiki/PackBits) algorithm that apple uses.
+Raster data is stored in a tiled format immediately after the header structure above. There is an array of `(LayerWidth / 32) * (LayerHeight / 32)` 8-bit boolean integer values stored before the compressed channel pixel data. Each boolean value within this `BlockMap` determines if the appropriately positioned `32x32` tile of bitmap data contains pixel data that varies from pure black transparency. If a tile is active(1), its pixel data is stored as four or more streams of Run-Length-Encoding compressed data for each color channel for that `32x32` tile. If a tile is not active(0), the tile is to be filled with a `32x32` fully transparent block of pixels(`0x00000000` for all pixels). If more than four streams exist, the extra streams may be safely ignored and skipped(I am not sure what the extra streams are, possible masking data?). Note that the RLE routine is the very same algorithm that Photoshop uses when compressing layer data and the same as the [PackBits](https://en.wikipedia.org/wiki/PackBits) algorithm that apple uses.
 
 RLE streams are prefixed with a 16-bit size integer for the amount of RLE stream bytes that follow. Compressed channel data will be at max `0x800` bytes. Decompressed data will be at most `0x1000` bytes. Use these as your buffer sizes when reading and decompressing in-place. Color data is stored with `premultiplied alpha` and should be converted to `straight` as soon as relavently needed. It is highly recommended to use SIMD intrinsics featured in C headers such as `emmintrin.h` and `tmmintrin.h` to speed up conversions and arithmetic upon pixel data. Internally Sai uses `MMX` for all of its SIMD speedups so many structures already lend themselves to more modern SIMD speedups(SSE,AVX,etc). Pixel data is stored in BGRA order
 

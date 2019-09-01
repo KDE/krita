@@ -29,6 +29,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOpRegistry.h>
 
+#include <kis_types.h>
 #include <KisDocument.h>
 
 #include <kis_transaction.h>
@@ -38,7 +39,7 @@
 #include <kis_transparency_mask.h>
 #include <kis_node.h>
 #include <kis_group_layer.h>
-
+#include <kis_random_accessor_ng.h>
 
 #include "kis_sai_converter.h"
 
@@ -52,9 +53,11 @@ public:
         , clippedLayers(QVector<KisNodeSP>())
     {
     }
+
     ~SaiLayerVisitor() override
     {
     }
+
     bool VisitFolderBegin(sai::VirtualFileEntry& Entry) override
     {
         qDebug() << "begin folder"
@@ -62,12 +65,14 @@ public:
         ++FolderDepth;
         return true;
     }
+
     bool VisitFolderEnd(sai::VirtualFileEntry& /*Entry*/) override
     {
         qDebug() << "end folder";
         --FolderDepth;
         return true;
     }
+
     bool VisitFile(sai::VirtualFileEntry& Entry) override
     {
         qDebug() << Entry.GetSize() << Entry.GetTimeStamp() << Entry.GetName();
@@ -139,7 +144,7 @@ public:
                 qDebug() << "unknown layer type";
             }
             if (!clippedLayers.isEmpty() && layerData.IsClipping() == false) {
-//XXX: Make translatable
+                //XXX: Make translatable
                 KisGroupLayerSP clipgroup = new KisGroupLayer(m_image, "Clipping Group", 255);
                 KisNodeSP clippedLayer;
                 while(!clippedLayers.isEmpty()) {
@@ -196,14 +201,24 @@ private:
         return s;
     }
 
-    void ReadRasterDataIntoLayer(KisPaintLayerSP layer, sai::VirtualFileEntry &entry, quint32 width, quint32 height) {
+    void ReadRasterDataIntoLayer(KisPaintLayerSP layer, sai::VirtualFileEntry &entry, quint32 width, quint32 height)
+    {
         std::vector<std::uint8_t> BlockMap;
         //TileData.resize((width / 32) * (height / 32));
         entry.Read(BlockMap.data(), (width / 32) * (height / 32));
 
+        KisRandomAccessorSP accessor = layer->paintDevice()->createRandomAccessorNG(0, 0);
+
+        std::size_t acc_x = 0;
+        std::size_t acc_y = 0;
 
         for( std::size_t y = 0; y < (height / 32); y++ ) {
             for( std::size_t x = 0; x < (width / 32); x++ ) {
+
+                // We know which real x and real y we have here
+                acc_x = x * 32;
+                acc_y = y * 32;
+
                 if( BlockMap[(width / 32) * y + x] ) {
                     std::array<std::uint8_t, 0x800> CompressedTile;
                     alignas(sizeof(__m128i)) std::array<std::uint8_t, 0x1000> DecompressedTile;
@@ -213,12 +228,12 @@ private:
                         entry.Read(CompressedTile.data(), Size);
 
                         RLEDecompress32(
-                                            DecompressedTile.data(),
-                                            CompressedTile.data(),
-                                            Size,
-                                            1024,
-                                            Channel
-                                        );
+                                    DecompressedTile.data(),
+                                    CompressedTile.data(),
+                                    Size,
+                                    1024,
+                                    Channel
+                                    );
 
                         Channel++;
                         if( Channel >= 4 ) {
@@ -235,6 +250,9 @@ private:
                                                   + ((y * LayerHead.Bounds.Width) * 32);
                                                   */
                     for( std::size_t i = 0; i < (32 * 32) / 4; i++ ) {
+
+                        // XXX: calculate it_x start of four pixels in a row
+
                         __m128i QuadPixel = _mm_load_si128(reinterpret_cast<__m128i*>(DecompressedTile.data()) + i);
                         // ABGR to ARGB, if you want.
                         // Do your swizzling here
@@ -279,6 +297,10 @@ private:
                         }
 
                         // Write directly to final image
+
+                        accessor->moveTo(acc_x, acc_y);
+                        memcpy(accessor->rawData(), reinterpret_cast<quint8*>(QuadPixel), 4);
+
                         /**
                         _mm_store_si128(
                                     reinterpret_cast<__m128i*>(ImageBlock) + (i % 8) + ((i / 8) * (LayerHead.Bounds.Width / 4)),
@@ -349,10 +371,10 @@ KisImportExportErrorCode KisSaiConverter::buildImage(const QString &filename)
     }
     std::tuple<std::uint32_t, std::uint32_t> size = saiFile.GetCanvasSize();
     m_image = new KisImage(m_doc->createUndoStore(),
-                                int(std::get<0>(size)),
-                                int(std::get<1>(size)),
-                                KoColorSpaceRegistry::instance()->rgb8(),
-                                "file");
+                           int(std::get<0>(size)),
+                           int(std::get<1>(size)),
+                           KoColorSpaceRegistry::instance()->rgb8(),
+                           "file");
 
     SaiLayerVisitor visitor(m_image);
     saiFile.IterateFileSystem(visitor);

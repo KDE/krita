@@ -23,7 +23,6 @@
 #include "KisSelectionToolFactoryBase.h"
 #include <kis_tool_select_base.h>
 #include <kis_icon.h>
-#include <kis_signal_compressor.h>
 #include "KisMagneticWorker.h"
 
 class QPainterPath;
@@ -74,12 +73,13 @@ private:
     bool m_continuedMode;
     QPointF m_lastCursorPos;
     QPoint m_lastAnchor;
-    bool m_complete;
+    bool m_complete, m_selected, m_finished;
     KisMagneticWorker m_worker;
-    int m_threshold, m_checkPoint, m_frequency;
+    int m_threshold, m_checkPoint, m_frequency, m_selectedAnchor;
     qreal m_radius;
     QRectF m_snapBound;
     KConfigGroup m_configGroup;
+    QVector<vQPointF> m_pointCollection;
 };
 
 class KisToolSelectMagneticFactory : public KisSelectionToolFactoryBase

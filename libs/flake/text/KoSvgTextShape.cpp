@@ -330,6 +330,8 @@ struct LayoutChunkWrapper
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(startPos == m_addedChars, currentTextPos);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(lastPos < m_layout->text().size(), currentTextPos);
 
+        qDebug() << m_layout->text();
+
         QTextLine line;
         std::swap(line, m_danglingLine);
 
@@ -352,7 +354,9 @@ struct LayoutChunkWrapper
 
             int charOffset = 0;
             while (line.textLength() < numChars) {
+                int tl = line.textLength();
                 line.setNumColumns(numChars + charOffset);
+                if (tl == line.textLength()) break;
                 charOffset++;
             }
 

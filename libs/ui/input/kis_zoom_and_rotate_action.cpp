@@ -27,8 +27,8 @@
 class KisZoomAndRotateAction::Private {
 public:
     Private(): zoomAction(new KisZoomAction), rotateAction(new KisRotateCanvasAction) {}
-    KisZoomAction *zoomAction;
-    KisRotateCanvasAction *rotateAction;
+    QScopedPointer<KisZoomAction> zoomAction;
+    QScopedPointer<KisRotateCanvasAction> rotateAction;
 };
 
 KisZoomAndRotateAction::KisZoomAndRotateAction()
@@ -36,6 +36,10 @@ KisZoomAndRotateAction::KisZoomAndRotateAction()
     , d(new Private)
 {
     setName(i18n("Zoom and Rotate Canvas"));
+}
+
+KisZoomAndRotateAction::~KisZoomAndRotateAction()
+{
 }
 
 int KisZoomAndRotateAction::priority() const

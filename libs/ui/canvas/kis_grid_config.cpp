@@ -48,7 +48,7 @@ void KisGridConfig::transform(const QTransform &transform)
 
 
 
-    if (m_gridType == 0) {
+    if (m_gridType == GRID_RECTANGULAR) {
         QTransform t = m.scaleTransform();
 
         const qreal eps = 1e-3;
@@ -119,7 +119,7 @@ bool KisGridConfig::loadDynamicDataFromXml(const QDomElement &gridElement)
     result &= KisDomUtils::loadValue(gridElement, "subdivision", &m_subdivision);
     result &= KisDomUtils::loadValue(gridElement, "angleLeft", &m_angleLeft);
     result &= KisDomUtils::loadValue(gridElement, "angleRight", &m_angleRight);
-    result &= KisDomUtils::loadValue(gridElement, "gridType", &m_gridType);
+    result &= KisDomUtils::loadValue(gridElement, "gridType", (int*)(&m_gridType));
 
     return result;
 }

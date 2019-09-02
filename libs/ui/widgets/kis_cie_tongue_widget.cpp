@@ -488,11 +488,10 @@ void KisCIETongueWidget::drawLabels()
  
         int ix = (x - 380) / 5;
  
-        QPointF * p = new QPointF(spectral_chromaticity[ix][0],
-                       spectral_chromaticity[ix][1]);
+        QPointF p(spectral_chromaticity[ix][0], spectral_chromaticity[ix][1]);
  
         int icx, icy;
-        mapPoint(icx, icy, * p);
+        mapPoint(icx, icy, p);
  
         tx = icx + ((x < 520) ? grids(-2) : ((x >= 535) ? grids(2) : 0));
         ty = icy + ((x < 520) ? 0 : ((x >= 535) ? grids(-1) : grids(-2)));

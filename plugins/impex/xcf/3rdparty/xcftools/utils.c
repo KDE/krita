@@ -27,7 +27,7 @@ int verboseFlag = 0 ;
 
 
 void
-vFatalGeneric(int status,const char *format,va_list args)
+vFatalGeneric(int status,const char *format, va_list args)
 {
   if( format ) {
     if( *format == '!' ) {
@@ -45,17 +45,21 @@ vFatalGeneric(int status,const char *format,va_list args)
 void
 FatalGeneric(int status,const char* format,...)
 {
-  va_list v; va_start(v,format);
+  va_list v;
+  va_start(v,format);
   if( format ) fprintf(stderr,"%s: ",progname);
   vFatalGeneric(status,format,v);
+  va_end(v);
 }
 
 void
 FatalUnexpected(const char* format,...)
 {
-  va_list v; va_start(v,format);
+  va_list v;
+  va_start(v, format);
   fprintf(stderr,"%s: ",progname);
-  vFatalGeneric(127,format,v) ;
+  vFatalGeneric(127, format, v);
+  va_end(v);
 }
 
 void
@@ -64,16 +68,19 @@ FatalBadXCF(const char* format,...)
   va_list v; va_start(v,format);
   fprintf(stderr,"%s: %s:\n ",progname,_("Corrupted or malformed XCF file"));
   vFatalGeneric(125,format,v) ;
+  va_end(v);
 }
 
 int
 xcfCheckspace(uint32_t addr,int spaceafter,const char *format,...)
 {
   if( xcf_length < spaceafter || addr > xcf_length - spaceafter ) {
-    va_list v; va_start(v,format);
+    va_list v;
+    va_start(v,format);
     fprintf(stderr,"%s: %s\n ",progname,_("Corrupted or truncated XCF file"));
     fprintf(stderr,"(0x%" PRIXPTR " bytes): ",(uintptr_t)xcf_length);
     vFatalGeneric(125,format,v) ;
+    va_end(v);
     return XCF_ERROR;
   }
   return XCF_OK;
@@ -83,10 +90,12 @@ xcfCheckspace(uint32_t addr,int spaceafter,const char *format,...)
 void
 FatalUnsupportedXCF(const char* format,...)
 {
-  va_list v; va_start(v,format);
+  va_list v;
+  va_start(v,format);
   fprintf(stderr,"%s: %s\n ",progname,
           _("The image contains features not understood by this program:"));
   vFatalGeneric(123,format,v) ;
+  va_end(v);
 }
 
 void

@@ -88,7 +88,8 @@ KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
     KisFilterConfigurationSP config = new KisFilterConfiguration("gradientmap", 2);
     KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer()->resources().first();
     KoStopGradient stopGradient;
-    stopGradient.fromQGradient(gradient->toQGradient());
+    QScopedPointer<QGradient> qGradient(gradient->toQGradient());
+    stopGradient.fromQGradient(qGradient.data());
     QDomDocument doc;
     QDomElement elt = doc.createElement("gradient");
     stopGradient.toXML(doc, elt);

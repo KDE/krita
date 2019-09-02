@@ -780,6 +780,18 @@ namespace KisLayerUtils {
                 KisNodeSP oldRoot = m_info->image->root();
                 KisNodeSP newRoot(new KisGroupLayer(m_info->image, "root", OPACITY_OPAQUE_U8));
 
+                // copy all fake nodes into the new image
+                KisLayerUtils::recursiveApplyNodes(oldRoot, [this, oldRoot, newRoot] (KisNodeSP node) {
+                    if (node->isFakeNode() && node->parent() == oldRoot) {
+                        addCommand(new KisImageLayerAddCommand(m_info->image,
+                                                               node->clone(),
+                                                               newRoot,
+                                                               KisNodeSP(),
+                                                               false, false));
+
+                    }
+                });
+
                 addCommand(new KisImageLayerAddCommand(m_info->image,
                                                        m_info->dstNode,
                                                        newRoot,

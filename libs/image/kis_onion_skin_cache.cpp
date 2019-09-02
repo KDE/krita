@@ -107,9 +107,9 @@ KisPaintDeviceSP KisOnionSkinCache::projection(KisPaintDeviceSP source)
              */
             const int lod = source->defaultBounds()->currentLevelOfDetail();
             if (lod > 0) {
-                KisPaintDevice::LodDataStruct *data = cachedProjection->createLodDataStruct(lod);
-                cachedProjection->updateLodDataStruct(data, extent);
-                cachedProjection->uploadLodDataStruct(data);
+                QScopedPointer<KisPaintDevice::LodDataStruct> data(cachedProjection->createLodDataStruct(lod));
+                cachedProjection->updateLodDataStruct(data.data(), extent);
+                cachedProjection->uploadLodDataStruct(data.data());
             }
 
             m_d->updateCacheMetrics(source, compositor);

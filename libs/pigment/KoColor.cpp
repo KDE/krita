@@ -58,6 +58,10 @@ struct DefaultKoColorInitializer
 #endif
     }
 
+    ~DefaultKoColorInitializer() {
+        delete value;
+    }
+
     KoColor *value = 0;
 };
 

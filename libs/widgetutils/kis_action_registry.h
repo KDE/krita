@@ -124,6 +124,7 @@ public:
      * Constructor.  Please don't touch!
      */
     KisActionRegistry();
+    ~KisActionRegistry();
 
     /**
      * @brief loadShortcutScheme
@@ -144,7 +145,7 @@ Q_SIGNALS:
 private:
 
     class Private;
-    Private * const d;
+    const QScopedPointer<Private> d;
 };
 
 #endif /* KIS_ACTION_REGISTRY_H */

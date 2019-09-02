@@ -554,7 +554,8 @@ void KisImageConfig::setFrameRenderingClones(int value)
 
 int KisImageConfig::fpsLimit(bool defaultValue) const
 {
-    return defaultValue ? 100 : m_config.readEntry("fpsLimit", 100);
+    int limit = defaultValue ? 100 : m_config.readEntry("fpsLimit", 100);
+    return limit > 0 ? limit : 1;
 }
 
 void KisImageConfig::setFpsLimit(int value)

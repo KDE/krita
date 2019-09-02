@@ -80,13 +80,8 @@ void KisWidgetChooser::updateArrowIcon()
     m_arrowButton->setIcon(QIcon(QPixmap::fromImage(image)));
 }
 
-void KisWidgetChooser::addWidget(const QString& id, const QString& label, QWidget* widget)
+void KisWidgetChooser::addLabelWidget(const QString& id, const QString& label, QWidget* widget)
 {
-    if(id.isEmpty()) {
-        delete widget;
-        return;
-    }
-
     removeWidget(id);
 
     if (label.isEmpty()) {

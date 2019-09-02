@@ -139,7 +139,7 @@ bool loadValue(const QDomElement &parent, const QString &tag, KisTimeRange *rang
     int end = toInt(e.attribute("to", "-1"));
 
     if (start == -1) {
-        range = new KisTimeRange();
+        *range = KisTimeRange();
     } else if (end == -1) {
         *range = KisTimeRange::infinite(start);
     } else {

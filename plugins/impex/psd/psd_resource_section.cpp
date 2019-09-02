@@ -54,7 +54,7 @@ bool PSDImageResourceSection::read(QIODevice* io)
     buf.open(QBuffer::ReadOnly);
 
     while (!buf.atEnd()) {
-        PSDResourceBlock* block = new PSDResourceBlock();
+        QScopedPointer<PSDResourceBlock> block(new PSDResourceBlock());
         if (!block->read(&buf)) {
             error = "Error reading block: " + block->error;
             dbgFile << error << ", skipping.";
@@ -65,7 +65,7 @@ bool PSDImageResourceSection::read(QIODevice* io)
                 << "size" << block->dataSize
                 << "," << buf.bytesAvailable() << "bytes to go";
 
-        resources[(PSDResourceID)block->identifier] = block;
+        resources[(PSDResourceID)block->identifier] = block.take();
     }
 
     dbgFile << "Read" << resources.size() << "Image Resource Blocks";

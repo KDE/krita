@@ -25,7 +25,7 @@ public:
 		++FolderDepth;
 		return true;
 	}
-    bool VisitFolderEnd(sai::VirtualFileEntry& /*Entry*/) override
+	bool VisitFolderEnd(sai::VirtualFileEntry& /*Entry*/) override
 	{
 		--FolderDepth;
 		return true;
@@ -185,27 +185,30 @@ int main(int argc, char* argv[])
 		std::puts(Help);
 		return EXIT_FAILURE;
 	}
-	sai::Document CurDocument(argv[1]);
 
-	if( !CurDocument.IsOpen() )
+	for( std::size_t i = 1; i < std::size_t(argc); ++i)
 	{
-		std::cout << "Error opening file for reading: " << argv[1] << std::endl;
-		return EXIT_FAILURE;
-	}
+		sai::Document CurDocument(argv[i]);
 
-	const auto Bench = Benchmark<std::chrono::nanoseconds>::Run(
-		[&CurDocument]() -> void
+		if( !CurDocument.IsOpen() )
 		{
-			SaiTreeView TreeVisitor;
-            std::tuple<std::uint32_t, std::uint32_t> size = CurDocument.GetCanvasSize();
-			CurDocument.IterateFileSystem(TreeVisitor);
+			std::cout << "Error opening file for reading: " << argv[i] << std::endl;
+			return EXIT_FAILURE;
 		}
-	);
-	std::printf(
-		"Iterated VFS of %s in %zu ns\n",
-		argv[1],
-		Bench.count()
-	);
+
+		const auto Bench = Benchmark<std::chrono::nanoseconds>::Run(
+			[&CurDocument]() -> void
+			{
+				SaiTreeView TreeVisitor;
+				CurDocument.IterateFileSystem(TreeVisitor);
+			}
+		);
+		std::printf(
+			"Iterated VFS of %s in %zu ns\n",
+			argv[i],
+			Bench.count()
+		);
+	}
 
 	return EXIT_SUCCESS;
 }

@@ -235,7 +235,7 @@ public:
 		const wchar_t* Path
 	);
 
-    // Similar to std::istream member functions
+	// Similar to ifstream member functions
 	void open(const char* FilePath) const;
 	void open(const std::string& FilePath) const;
 	void open(const wchar_t* FilePath) const;

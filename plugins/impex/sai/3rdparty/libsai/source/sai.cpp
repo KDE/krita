@@ -757,7 +757,8 @@ std::size_t VirtualFileEntry::Read(void* Destination, std::size_t Size)
 		//												- Wunkolo, 10/19/17
 		std::uint8_t* CurDest = reinterpret_cast<std::uint8_t*>(Destination);
 		std::size_t NextTableIndex = ((ReadPoint + (FATData.PageIndex * VirtualPage::PageSize)) / VirtualPage::PageSize & ~(0x1FF)) + VirtualPage::TableSpan;
-		while( Size )
+		std::size_t ToRead = Size;
+		while( ToRead && SaiStream )
 		{
 			// Requested offset that we want to read from
 			const std::size_t CurOffset = ReadPoint + (FATData.PageIndex * VirtualPage::PageSize);
@@ -772,19 +773,15 @@ std::size_t VirtualFileEntry::Read(void* Destination, std::size_t Size)
 			}
 			const std::size_t NextTableOffset = NextTableIndex * VirtualPage::PageSize;
 			const std::size_t CurStride = std::min<std::size_t>(
-				Size,
-				NextTableOffset - CurOffset
+				Size, NextTableOffset - CurOffset
 			);
 			SaiStream->seekg(CurOffset);
-			SaiStream->read(
-				reinterpret_cast<char*>(CurDest),
-				CurStride
-			);
+			SaiStream->read(reinterpret_cast<char*>(CurDest), CurStride);
 			ReadPoint += CurStride;
 			CurDest += CurStride;
-			Size -= CurStride;
+			ToRead -= CurStride;
 		}
-		return Size;
+		return Size - ToRead;
 	}
 	return 0;
 }

@@ -87,10 +87,11 @@ public:
                 quint8 opacity = qRound(layerData.Opacity() * 2.55);
                 layer->setOpacity(opacity);
                 layer->setCompositeOpId(BlendingMode(layerData.Blending()));
-                layer->setX(int(std::get<0>(layerData.Position())));
-                layer->setY(int(std::get<1>(layerData.Position())));
 
                 ReadRasterDataIntoLayer(layer, Entry, quint32(std::get<0>(layerData.Size())), quint32(std::get<1>(layerData.Size())));
+
+                layer->setX(int(std::get<0>(layerData.Position()))-8);
+                layer->setY(int(std::get<1>(layerData.Position()))-8);
                 // Bounds;
 
                 if (layerData.IsClipping() || !clippedLayers.isEmpty()) {
@@ -204,36 +205,40 @@ private:
     void ReadRasterDataIntoLayer(KisPaintLayerSP layer, sai::VirtualFileEntry &entry, quint32 width, quint32 height)
     {
         std::vector<std::uint8_t> BlockMap;
-        //TileData.resize((width / 32) * (height / 32));
-        entry.Read(BlockMap.data(), (width / 32) * (height / 32));
+        quint32 blocksWidth = width/32;
+        quint32 blocksHeight= height/32;
+        BlockMap.resize(blocksWidth * blocksHeight);
+        qDebug() << entry.Tell() << width << height;
+        entry.Read(BlockMap.data(), blocksWidth * blocksHeight);
 
         KisRandomAccessorSP accessor = layer->paintDevice()->createRandomAccessorNG(0, 0);
 
         std::size_t acc_x = 0;
         std::size_t acc_y = 0;
 
-        for( std::size_t y = 0; y < (height / 32); y++ ) {
-            for( std::size_t x = 0; x < (width / 32); x++ ) {
-
-                // We know which real x and real y we have here
-                acc_x = x * 32;
-                acc_y = y * 32;
-
-                if( BlockMap[(width / 32) * y + x] ) {
+        for( std::size_t y = 0; y < blocksHeight; y++ ) {
+            for( std::size_t x = 0; x < blocksWidth; x++ ) {
+                qDebug() << "block" << blocksWidth * y + x << "of" << blocksWidth*blocksHeight;
+                if( BlockMap[blocksWidth * y + x] ) {
                     std::array<std::uint8_t, 0x800> CompressedTile;
                     alignas(sizeof(__m128i)) std::array<std::uint8_t, 0x1000> DecompressedTile;
                     std::uint8_t Channel = 0;
                     std::uint16_t Size = 0;
-                    while( entry.Read<std::uint16_t>(Size) ) {
+
+                    while (entry.Read<std::uint16_t>(Size)>0) {
+
                         entry.Read(CompressedTile.data(), Size);
 
-                        RLEDecompress32(
-                                    DecompressedTile.data(),
-                                    CompressedTile.data(),
-                                    Size,
-                                    1024,
-                                    Channel
-                                    );
+
+                            RLEDecompress32(
+                                        DecompressedTile.data(),
+                                        CompressedTile.data(),
+                                        Size,
+                                        1024,
+                                        Channel
+                                        );
+
+
 
                         Channel++;
                         if( Channel >= 4 ) {
@@ -241,8 +246,11 @@ private:
                                 std::uint16_t Size = entry.Read<std::uint16_t>();
                                 entry.Seek(entry.Tell() + Size);
                             }
+                            break;
                         }
-                    }
+
+                    };
+
                     /*
                      * // Current 32x32 tile within final image
                     std::uint32_t *ImageBlock = reinterpret_cast<std::uint32_t*>(LayerImage.data())
@@ -250,20 +258,23 @@ private:
                                                   + ((y * LayerHead.Bounds.Width) * 32);
                                                   */
                     for( std::size_t i = 0; i < (32 * 32) / 4; i++ ) {
-
-                        // XXX: calculate it_x start of four pixels in a row
+                        // We know which real x and real y we have here
 
                         __m128i QuadPixel = _mm_load_si128(reinterpret_cast<__m128i*>(DecompressedTile.data()) + i);
                         // ABGR to ARGB, if you want.
                         // Do your swizzling here
+/*
                         QuadPixel = _mm_shuffle_epi8(QuadPixel,
                                                      _mm_set_epi8(
                                                          15, 12, 13, 14,
                                                          11, 8, 9, 10,
                                                          7, 4, 5, 6,
                                                          3, 0, 1, 2));
+*/
+
                         /// Alpha is pre-multiplied, convert to straight
                         // Get Alpha into [0.0,1.0] range
+
                         __m128 Scale = _mm_div_ps(
                                     _mm_cvtepi32_ps(
                                         _mm_shuffle_epi8(
@@ -276,6 +287,7 @@ private:
                                                 )
                                             )
                                         ), _mm_set1_ps(255.0f));
+
 
                         // Normalize each channel into straight color
                         for( std::uint8_t i = 0; i < 3; i++ )
@@ -298,15 +310,15 @@ private:
 
                         // Write directly to final image
 
-                        accessor->moveTo(acc_x, acc_y);
-                        memcpy(accessor->rawData(), reinterpret_cast<quint8*>(QuadPixel), 4);
+                        acc_x = (x * 32) + (i*4)%32;
+                        acc_y = (y * 32) + ((i*4)/32);
 
-                        /**
-                        _mm_store_si128(
-                                    reinterpret_cast<__m128i*>(ImageBlock) + (i % 8) + ((i / 8) * (LayerHead.Bounds.Width / 4)),
-                                    QuadPixel
-                                    );
-                                    */
+                        accessor->moveTo(acc_x, acc_y);
+                        quint8* currentPixel[4];
+                        _mm_store_si128(reinterpret_cast<__m128i*>(currentPixel),
+                                                                QuadPixel
+                                                                );
+                        memcpy(accessor->rawData(), currentPixel, layer->colorSpace()->pixelSize()*4);
 
                     }
                 }

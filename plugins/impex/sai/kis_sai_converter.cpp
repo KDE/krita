@@ -49,6 +49,7 @@ public:
     SaiLayerVisitor(KisImageSP image)
         : m_image(image)
         , FolderDepth(0)
+        , LastAddedLayerID(0)
         , parentNodeList(QMap<std::uint32_t, KisNodeSP>())
         , clippedLayers(QVector<KisNodeSP>())
     {
@@ -83,7 +84,6 @@ public:
             if (layerData.LayerType() == sai::LayerClass::Layer) {
                 KisPaintLayerSP layer = new KisPaintLayer(m_image, layerData.LayerName(), 255);
                 layer->setVisible(layerData.IsVisible());
-                layer->setAlphaLocked(layerData.IsPreserveOpacity());
                 quint8 opacity = qRound(layerData.Opacity() * 2.55);
                 layer->setOpacity(opacity);
                 layer->setCompositeOpId(BlendingMode(layerData.Blending()));
@@ -92,11 +92,18 @@ public:
 
                 layer->setX(int(std::get<0>(layerData.Position()))-8);
                 layer->setY(int(std::get<1>(layerData.Position()))-8);
+                layer->setAlphaLocked(layerData.IsPreserveOpacity());
                 // Bounds;
 
-                if (layerData.IsClipping() || !clippedLayers.isEmpty()) {
+                if (layerData.IsClipping()) {
                     //we should add it to a list so we can make a clipping group.
                     //All clipped layers and the first non-clipped layer go in the group.
+                    if (clippedLayers.isEmpty()) {
+                        qDebug() << "last nonclipped layer" << LastAddedLayerID;
+                        if (parentNodeList.contains(LastAddedLayerID)) {
+                            clippedLayers.append(parentNodeList.value(LastAddedLayerID));
+                        }
+                    }
                     layer->disableAlphaChannel(layerData.IsClipping());
                     clippedLayers.append(layer);
                 } else {
@@ -137,6 +144,7 @@ public:
 
             } else if (layerData.LayerType() == sai::LayerClass::Mask) {
                 KisTransparencyMaskSP layer = new KisTransparencyMask();
+                layer->setName(layerData.LayerName());
                 //only interesting thing here is identifying data and identifying parent layer.
                 if (parentNodeList.contains(layerData.ParentID())) {
                     m_image->addNode(layer, parentNodeList.value(layerData.ParentID()));
@@ -144,18 +152,22 @@ public:
             } else {
                 qDebug() << "unknown layer type";
             }
-            if (!clippedLayers.isEmpty() && layerData.IsClipping() == false) {
+            if (!clippedLayers.isEmpty() && layerData.IsClipping() == true) {
                 //XXX: Make translatable
                 KisGroupLayerSP clipgroup = new KisGroupLayer(m_image, "Clipping Group", 255);
-                KisNodeSP clippedLayer;
+                KisNodeSP clippedLayer = clippedLayers.takeFirst();
+                m_image->addNode(clipgroup, clippedLayer->parent(), clippedLayer);
+                m_image->removeNode(clippedLayer);
+                m_image->addNode(clippedLayer, clipgroup);
                 while(!clippedLayers.isEmpty()) {
-                    clippedLayer = clippedLayers.takeLast();
-                    qDebug() << clippedLayer->name();
+                    clippedLayer = clippedLayers.takeFirst();
+                    qDebug() << "adding to clipped layers" << clippedLayer->name();
                     m_image->addNode(clippedLayer, clipgroup);
                 }
-                m_image->addNode(clipgroup);
+
                 qDebug() <<clippedLayers.size();
             }
+            LastAddedLayerID = layerData.Identifier();
         }
 
 
@@ -165,6 +177,7 @@ public:
 private:
     KisImageSP m_image;
     std::uint32_t FolderDepth;
+    std::uint32_t LastAddedLayerID;
     QMap<std::uint32_t, KisNodeSP> parentNodeList;
     QVector<KisNodeSP> clippedLayers;
 
@@ -172,7 +185,7 @@ private:
         QString s = "";
         switch (mode) {
         case sai::BlendingMode::Shade:
-            s = COMPOSITE_SUBTRACT;
+            s = COMPOSITE_LINEAR_BURN;
             break;
         case sai::BlendingMode::Binary:
             s = COMPOSITE_DISSOLVE;

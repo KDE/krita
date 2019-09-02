@@ -76,7 +76,7 @@ public:
         return m_doubleWidgets[i]->value();
     }
 private:
-    KisDelayedActionDoubleInput** m_doubleWidgets;
+    QVector<KisDelayedActionDoubleInput*> m_doubleWidgets;
     qint32 m_nbdoubleWidgets;
     QString m_filterid;
 };

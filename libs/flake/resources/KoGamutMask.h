@@ -62,6 +62,7 @@ public:
     KoGamutMask(const QString &filename);
     KoGamutMask();
     KoGamutMask(KoGamutMask *rhs);
+    ~KoGamutMask() override;
 
     bool coordIsClear(const QPointF& coord, KoViewConverter& viewConverter, bool preview);
     bool load() override;

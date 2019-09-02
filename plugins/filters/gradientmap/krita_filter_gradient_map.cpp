@@ -63,7 +63,8 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
             qWarning() << "Could not find gradient" << config->getString("gradientName");
         }
         gradientAb = KoResourceServerProvider::instance()->gradientServer()->resources().first();
-        KoStopGradient::fromQGradient(gradientAb->toQGradient())->toXML(doc, elt);
+        QScopedPointer<QGradient> qGradient(gradientAb->toQGradient());
+        KoStopGradient::fromQGradient(qGradient.data())->toXML(doc, elt);
         doc.appendChild(elt);
     } else {
         doc.setContent(config->getString("gradientXML", ""));

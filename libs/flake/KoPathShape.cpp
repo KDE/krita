@@ -811,7 +811,10 @@ void KoPathShapePrivate::map(const QTransform &matrix)
     for (; pathIt != subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
         for (; it != (*pathIt)->constEnd(); ++it) {
-            (*it)->map(matrix);
+            // It's possible there are null points in the map...
+            if (*it) {
+                (*it)->map(matrix);
+            }
         }
     }
 }

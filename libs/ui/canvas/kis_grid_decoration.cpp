@@ -99,9 +99,9 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
 
     // for angles. This will later be a combobox to select different types of options
     // also add options to hide specific lines (vertical, horizonta, angle 1, etc
-    int gridType = m_d->config.gridType();
+    KisGridConfig::GridType gridType = m_d->config.gridType();
 
-    if (gridType == 0) { // rectangle
+    if (gridType == KisGridConfig::GRID_RECTANGULAR) {
 
         {
             // vertical lines
@@ -134,7 +134,7 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         }
     }
 
-    if (gridType== 1)  { // isometric
+    if (gridType == KisGridConfig::GRID_ISOMETRIC)  {
 
         const int offset = m_d->config.offset().x();
         const int offsetY = m_d->config.offset().y();

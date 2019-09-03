@@ -77,12 +77,26 @@ void KisSwatchGroup::setEntry(const KisSwatch &e, int column, int row)
 
 bool KisSwatchGroup::checkEntry(int column, int row) const
 {
-    if (row >= d->rowCount || column >= d->colorMatrix.size() || column < 0) {
+    if (row >= d->rowCount) {
         return false;
     }
-    if (!d->colorMatrix[column].contains(row)) {
+
+    if (column >= d->colorMatrix.size()){
         return false;
     }
+
+    if (column < 0) {
+        return false;
+    }
+
+    if (row >= d->colorMatrix[column].size()) {
+        return false;
+    }
+
+    if (!d->colorMatrix[column][row].isValid()) {
+        return false;
+    }
+
     return true;
 }
 

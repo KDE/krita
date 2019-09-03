@@ -27,6 +27,7 @@
 #include <QFile>
 #include <QLineF>
 
+
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 #include <KColorButton>
@@ -600,8 +601,16 @@ void KisAssistantTool::updateToolOptionsUI()
          // load custom color settings from assistant (this happens when changing assistant
          m_options.useCustomAssistantColor->setChecked(m_selectedAssistant->useCustomColor());
          m_options.customAssistantColorButton->setColor(m_selectedAssistant->assistantCustomColor());
-         float opacity = (float)m_selectedAssistant->assistantCustomColor().alpha()/255.0 * 100.0 ;
-         m_options.customColorOpacitySlider->setValue(opacity);
+
+
+         double opacity = (double)m_selectedAssistant->assistantCustomColor().alpha()/(double)255.00 * (double)100.00 ;
+         opacity = ceil(opacity); // helps keep the 0-100% slider from shifting
+
+         m_options.customColorOpacitySlider->blockSignals(true);
+         m_options.customColorOpacitySlider->setValue((double)opacity);
+         m_options.customColorOpacitySlider->blockSignals(false);
+
+
      } else {
          m_options.vanishingPointAngleSpinbox->setVisible(false); //
      }

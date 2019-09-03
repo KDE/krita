@@ -325,8 +325,8 @@ public:
     QColor globalAssistantsColor;
 
     KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
-
     QList<KoColorSetSP> paletteList;
+    bool ownsPaletteList = false;
 
     KisGridConfig gridConfig;
 
@@ -907,9 +907,9 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
                                            });
     }
 
-    KisNodeSP foundNode = KisLayerUtils::recursiveFindNode(image()->rootLayer(), [](KisNodeSP node) -> bool { return dynamic_cast<KisReferenceImagesLayer *>(node.data()); });
-    KisReferenceImagesLayer *refLayer = dynamic_cast<KisReferenceImagesLayer *>(foundNode.data());
-    setReferenceImagesLayer(refLayer, /* updateImage = */ false);
+    // reinitialize references' signal connection
+    KisReferenceImagesLayerSP referencesLayer = this->referenceImagesLayer();
+    setReferenceImagesLayer(referencesLayer, false);
 
     KisDecorationsWrapperLayerSP decorationsLayer =
         KisLayerUtils::findNodeByType<KisDecorationsWrapperLayer>(d->image->root());
@@ -2072,35 +2072,45 @@ void KisDocument::setAssistants(const QList<KisPaintingAssistantSP> &value)
     }
 }
 
-KisSharedPtr<KisReferenceImagesLayer> KisDocument::referenceImagesLayer() const
+KisReferenceImagesLayerSP KisDocument::referenceImagesLayer() const
 {
-    return d->referenceImagesLayer.data();
+    if (!d->image) return KisReferenceImagesLayerSP();
+
+    KisReferenceImagesLayerSP referencesLayer =
+        KisLayerUtils::findNodeByType<KisReferenceImagesLayer>(d->image->root());
+
+    return referencesLayer;
 }
 
 void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateImage)
 {
-    if (d->referenceImagesLayer == layer) {
+    KisReferenceImagesLayerSP currentReferenceLayer = referenceImagesLayer();
+
+    if (currentReferenceLayer == layer) {
         return;
     }
 
-    if (d->referenceImagesLayer) {
-        d->referenceImagesLayer->disconnect(this);
+    if (currentReferenceLayer) {
+        currentReferenceLayer->disconnect(this);
     }
 
     if (updateImage) {
+        if (currentReferenceLayer) {
+            d->image->removeNode(currentReferenceLayer);
+        }
+
         if (layer) {
             d->image->addNode(layer);
-        } else {
-            d->image->removeNode(d->referenceImagesLayer);
         }
     }
 
-    d->referenceImagesLayer = layer;
+    currentReferenceLayer = layer;
 
-    if (d->referenceImagesLayer) {
-        connect(d->referenceImagesLayer, SIGNAL(sigUpdateCanvas(QRectF)),
+    if (currentReferenceLayer) {
+        connect(currentReferenceLayer, SIGNAL(sigUpdateCanvas(QRectF)),
                 this, SIGNAL(sigReferenceImagesChanged()));
     }
+
     emit sigReferenceImagesLayerChanged(layer);
 }
 
@@ -2193,8 +2203,10 @@ QRectF KisDocument::documentBounds() const
 {
     QRectF bounds = d->image->bounds();
 
-    if (d->referenceImagesLayer) {
-        bounds |= d->referenceImagesLayer->boundingImageRect();
+    KisReferenceImagesLayerSP referenceImagesLayer = this->referenceImagesLayer();
+
+    if (referenceImagesLayer) {
+        bounds |= referenceImagesLayer->boundingImageRect();
     }
 
     return bounds;

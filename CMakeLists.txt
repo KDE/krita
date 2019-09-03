@@ -457,7 +457,7 @@ add_definitions(
 #else()
     add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50900)
 #endif()
-
+add_definitions(-DQT_DEPRECATED_WARNINGS)
 add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
 
 #

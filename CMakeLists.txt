@@ -5,11 +5,11 @@ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 
 set(MIN_QT_VERSION 5.9.0)
+set(MIN_FRAMEWORKS_VERSION 5.44.0)
+
 set( CMAKE_CXX_STANDARD 11 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
-
-set(MIN_FRAMEWORKS_VERSION 5.44.0)
 
 if (POLICY CMP0002)
     cmake_policy(SET CMP0002 OLD)
@@ -283,15 +283,6 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         WindowSystem
         Archive
 )
-
-# KConfig deprecated authorizeKAction. In order to be warning free,
-# compile with the updated function when the dependency is new enough.
-# Remove this (and the uses of the define) when the minimum KF5
-# version is >= 5.24.0.
-if (${KF5Config_VERSION} VERSION_LESS "5.24.0" )
-    message("Old KConfig (< 5.24.0) found.")
-    add_definitions(-DKCONFIG_BEFORE_5_24)
-endif()
 
 find_package(Qt5 ${MIN_QT_VERSION}
         REQUIRED COMPONENTS

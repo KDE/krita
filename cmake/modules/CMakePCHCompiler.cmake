@@ -63,18 +63,16 @@ function(target_precompiled_header) # target [...] header
 
 		if(ARGS_REUSE)
 			set(pch_target ${ARGS_REUSE}.pch)
-			set(target_dir
-				${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${pch_target}.dir
-				)
+                        get_target_property(target_dir_header ${ARGS_REUSE} TARGET_PCH_INCLUDE_FILE)
+                        get_target_property(header ${ARGS_REUSE} TARGET_PCH_SOURCE_HEADER)
 		else()
-			set(pch_target ${target}.pch)
+                        set(pch_target ${target}.pch)
 			set(target_dir
 				${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${pch_target}.dir
 				)
-		endif()
-
-		__compute_pch_build_path(header_build_path "${header}")
-		set(target_dir_header "${target_dir}/${header_build_path}")
+                        __compute_pch_build_path(header_build_path "${header}")
+                        set(target_dir_header "${target_dir}/${header_build_path}")
+                endif()
 
 		if(MSVC)
 			get_filename_component(abs_pch "${target_dir_header}.pch" ABSOLUTE)
@@ -121,6 +119,9 @@ function(target_precompiled_header) # target [...] header
 
 		add_dependencies(${target} ${pch_target})
 
+                set_property(TARGET ${target} PROPERTY TARGET_PCH_SOURCE_HEADER ${header})
+                set_property(TARGET ${target} PROPERTY TARGET_PCH_INCLUDE_FILE ${target_dir_header})
+
 		# add precompiled header insertion flags to regular target
 		if(MSVC)
 			# /Yu - use given include as precompiled header
@@ -132,7 +133,7 @@ function(target_precompiled_header) # target [...] header
 			target_sources(${target} PRIVATE $<TARGET_OBJECTS:${pch_target}>)
 			set(flags "/Yu${abs_header}")
 		else()
-			set(flags -include ${target_dir_header})
+                        set(flags -include ${target_dir_header})
 		endif()
 
 		if(CMAKE_VERSION VERSION_LESS 3.3)
@@ -378,16 +379,18 @@ endmacro()
 # derived from CMake source code FindCUDA.cmake module
 function(__compute_pch_build_path build_path path)
 	get_filename_component(path "${path}" ABSOLUTE)
-	string(FIND "${path}" "${CMAKE_CURRENT_BINARY_DIR}" binary_dir_pos)
-	string(FIND "${path}" "${CMAKE_CURRENT_SOURCE_DIR}" source_dir_pos)
+        string(FIND "${path}" "${CMAKE_BINARY_DIR}" binary_dir_pos)
+        string(FIND "${path}" "${CMAKE_SOURCE_DIR}" source_dir_pos)
 	# cmLocalGenerator::GetObjectFileNameWithoutTarget
 	# cmStateDirectory::ConvertToRelPathIfNotContained
 	# cmStateDirectory::ContainsBoth
-	if(binary_dir_pos EQUAL 0)
+
+        if(binary_dir_pos EQUAL 0)
 		file(RELATIVE_PATH path "${CMAKE_CURRENT_BINARY_DIR}" "${path}")
 	elseif(source_dir_pos EQUAL 0)
 		file(RELATIVE_PATH path "${CMAKE_CURRENT_SOURCE_DIR}" "${path}")
-	endif()
+        endif()
+
 	# cmLocalGenerator::CreateSafeUniqueObjectFileName
 	string(REGEX REPLACE "^[/]+" "" path "${path}")
 	string(REPLACE ":" "_" path "${path}")

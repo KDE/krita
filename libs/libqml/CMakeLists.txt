@@ -25,7 +25,7 @@ set(kritaqml_SRCS
 
 qt5_add_resources(kritaqml_SRCS qml/qml.qrc)
 
-add_library(kritaqml SHARED ${kritaqml_SRCS})
+kis_add_library(kritaqml SHARED ${kritaqml_SRCS})
 generate_export_header(kritaqml BASE_NAME krita_sketch)
 set_target_properties(kritaqml
     PROPERTIES VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

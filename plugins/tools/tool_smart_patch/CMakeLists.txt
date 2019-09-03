@@ -7,7 +7,7 @@ set(kritatoolSmartPatch_SOURCES
 
 ki18n_wrap_ui(kritatoolSmartPatch_SOURCES kis_tool_smart_patch_options_widget.ui)
 
-add_library(kritatoolSmartPatch MODULE ${kritatoolSmartPatch_SOURCES})
+kis_add_library(kritatoolSmartPatch MODULE ${kritatoolSmartPatch_SOURCES})
 
 generate_export_header(kritatoolSmartPatch BASE_NAME kritatoolSmartPatch)
 

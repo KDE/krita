@@ -10,7 +10,7 @@ set(kritadeformpaintop_SOURCES
 
 ki18n_wrap_ui(kritadeformpaintop_SOURCES wdgdeformoptions.ui )
 
-add_library(kritadeformpaintop MODULE ${kritadeformpaintop_SOURCES})
+kis_add_library(kritadeformpaintop MODULE ${kritadeformpaintop_SOURCES})
 
 target_link_libraries(kritadeformpaintop kritaui kritalibpaintop)
 

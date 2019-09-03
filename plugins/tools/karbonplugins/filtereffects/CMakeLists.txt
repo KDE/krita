@@ -36,7 +36,7 @@ set(karbon_filtereffects_SOURCES
     MatrixDataModel.cpp
     )
 
-add_library(krita_filtereffects MODULE ${karbon_filtereffects_SOURCES})
+kis_add_library(krita_filtereffects MODULE ${karbon_filtereffects_SOURCES})
 
 target_link_libraries(krita_filtereffects kritaflake kritawidgets kritaui KF5::Completion)
 

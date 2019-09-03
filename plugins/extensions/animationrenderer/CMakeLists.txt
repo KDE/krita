@@ -12,6 +12,6 @@ ki18n_wrap_ui(kritaanimationrenderer_SOURCES
     video_export_options_dialog.ui
     VideoHDRMetadataOptionsDialog.ui)
 
-add_library(kritaanimationrenderer MODULE ${kritaanimationrenderer_SOURCES})
+kis_add_library(kritaanimationrenderer MODULE ${kritaanimationrenderer_SOURCES})
 target_link_libraries(kritaanimationrenderer kritaui)
 install(TARGETS kritaanimationrenderer  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

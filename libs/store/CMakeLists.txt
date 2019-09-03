@@ -15,7 +15,7 @@ set(kritastore_LIB_SRCS
     StoreDebug.cpp
 )
 
-add_library(kritastore SHARED ${kritastore_LIB_SRCS})
+kis_add_core_library(kritastore SHARED ${kritastore_LIB_SRCS})
 generate_export_header(kritastore BASE_NAME kritastore)
 
 target_link_libraries(kritastore 

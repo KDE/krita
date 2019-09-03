@@ -18,7 +18,7 @@ set(kritalibkra_LIB_SRCS
     kis_kra_utils.h
 )
 
-add_library(kritalibkra SHARED ${kritalibkra_LIB_SRCS})
+kis_add_library(kritalibkra SHARED ${kritalibkra_LIB_SRCS})
 target_link_libraries(kritalibkra kritaui)
 generate_export_header(kritalibkra BASE_NAME kritalibkra)
 

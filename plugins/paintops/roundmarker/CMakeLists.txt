@@ -8,7 +8,7 @@ set(kritaroundmarkerpaintop_SOURCES
 
 ki18n_wrap_ui(kritaroundmarkerpaintop_SOURCES kis_roundmarker_option.ui )
 
-add_library(kritaroundmarkerpaintop MODULE ${kritaroundmarkerpaintop_SOURCES})
+kis_add_library(kritaroundmarkerpaintop MODULE ${kritaroundmarkerpaintop_SOURCES})
 target_link_libraries(kritaroundmarkerpaintop kritalibpaintop)
 
 

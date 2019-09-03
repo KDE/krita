@@ -11,6 +11,6 @@ set(KritaDesignerPlugin_SOURCES
     KritaDesignerPluginCollection.cpp
 )
 
-add_library(kritadesignerplugin MODULE ${KritaDesignerPlugin_SOURCES})
+kis_add_library(kritadesignerplugin MODULE ${KritaDesignerPlugin_SOURCES})
 
 target_link_libraries(kritadesignerplugin kritaui)

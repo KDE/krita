@@ -4,7 +4,7 @@ set(kritapngimport_SOURCES
     kis_png_import.cc
     )
 
-add_library(kritapngimport MODULE ${kritapngimport_SOURCES})
+kis_add_library(kritapngimport MODULE ${kritapngimport_SOURCES})
 
 include_directories(SYSTEM ${PNG_INCLUDE_DIR})
 
@@ -20,7 +20,7 @@ set(kritapngexport_SOURCES
 
 ki18n_wrap_ui(kritapngexport_SOURCES kis_wdg_options_png.ui )
 
-add_library(kritapngexport MODULE ${kritapngexport_SOURCES})
+kis_add_library(kritapngexport MODULE ${kritapngexport_SOURCES})
 
 target_link_libraries(kritapngexport kritaui kritaimpex ${PNG_LIBRARIES})
 

@@ -1,6 +1,6 @@
 set(kritacolorrange_SOURCES colorrange.cc dlg_colorrange.cc )
 ki18n_wrap_ui(kritacolorrange_SOURCES wdg_colorrange.ui )
-add_library(kritacolorrange MODULE ${kritacolorrange_SOURCES})
+kis_add_library(kritacolorrange MODULE ${kritacolorrange_SOURCES})
 target_link_libraries(kritacolorrange kritaui)
 install(TARGETS kritacolorrange  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES  colorrange.xmlgui  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

@@ -22,7 +22,7 @@ set(kritajpegimport_SOURCES
     ${libkritaconverter_LIB_SRCS}
     )
 
-add_library(kritajpegimport MODULE ${kritajpegimport_SOURCES})
+kis_add_library(kritajpegimport MODULE ${kritajpegimport_SOURCES})
 
 target_link_libraries(kritajpegimport kritaui  ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} LibExiv2::LibExiv2 )
 
@@ -35,7 +35,7 @@ set(kritajpegexport_SOURCES
 
 ki18n_wrap_ui(kritajpegexport_SOURCES kis_wdg_options_jpeg.ui )
 
-add_library(kritajpegexport MODULE ${kritajpegexport_SOURCES})
+kis_add_library(kritajpegexport MODULE ${kritajpegexport_SOURCES})
 
 target_link_libraries(kritajpegexport kritaui kritaimpex ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} LibExiv2::LibExiv2 )
 

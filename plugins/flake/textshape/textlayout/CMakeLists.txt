@@ -27,7 +27,7 @@ set(textlayout_LIB_SRCS
 )
 
 
-add_library(kritatextlayout SHARED ${textlayout_LIB_SRCS})
+kis_add_legacy_text_library(kritatextlayout SHARED ${textlayout_LIB_SRCS})
 generate_export_header(kritatextlayout BASE_NAME kritatextlayout)
 
 target_link_libraries(kritatextlayout kritatext)

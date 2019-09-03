@@ -1,5 +1,3 @@
-project(krita)
-
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
 cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
@@ -54,6 +52,12 @@ endif()
 if (POLICY CMP0071)
     cmake_policy(SET CMP0071 OLD)
 endif()
+
+LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/kde_macro")
+
+project(krita C CXX CXXPCH)
+
 
 if (APPLE)
     set(APPLE_SUPPRESS_X11_WARNING TRUE)
@@ -110,9 +114,6 @@ else()
 endif()
 set(GENERIC_KRITA_LIB_VERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}.0.0")
 set(GENERIC_KRITA_LIB_SOVERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}")
-
-LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
-LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/kde_macro")
 
 # fetch git revision for the current build
 
@@ -813,6 +814,23 @@ include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}
                            ${CMAKE_CURRENT_BINARY_DIR}
                            ${CMAKE_SOURCE_DIR}/interfaces
 )
+
+macro(kis_define_library_level_pch TARGET HEADER DEPS_LIST)
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.cpp "#include <${HEADER}>")
+    add_library(${TARGET} STATIC ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.cpp)
+    set_target_properties(${TARGET} PROPERTIES COMPILE_FLAGS "-Winvalid-pch" )
+    target_link_libraries(${TARGET} ${DEPS_LIST})
+    target_precompiled_header(${TARGET} ${HEADER} TYPE c++-header)
+endmacro()
+
+macro(kis_add_library_pch)
+    cmake_parse_arguments(LOCAL "" PCH_TARGET "" ${ARGV} )
+    add_library(${LOCAL_UNPARSED_ARGUMENTS})
+
+    list(GET LOCAL_UNPARSED_ARGUMENTS 0 NEW_LIBRARY_TARGET)
+    set_property(TARGET ${NEW_LIBRARY_TARGET} APPEND PROPERTY COMPILE_FLAGS "-Winvalid-pch" )
+    target_precompiled_header(${NEW_LIBRARY_TARGET} "fake-header.h" REUSE ${LOCAL_PCH_TARGET} TYPE c++-header)
+endmacro()
 
 add_subdirectory(libs)
 add_subdirectory(plugins)

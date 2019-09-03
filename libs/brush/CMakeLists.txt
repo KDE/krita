@@ -26,7 +26,7 @@ set(kritalibbrush_LIB_SRCS
     kis_text_brush_factory.cpp
 )
 
-add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )
+kis_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )
 generate_export_header(kritalibbrush BASE_NAME kritabrush EXPORT_MACRO_NAME BRUSH_EXPORT)
 
 if (WIN32)

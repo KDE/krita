@@ -47,7 +47,7 @@ ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_SOURCES
     wdg_animation_curves.ui
 )
 
-add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_SOURCES})
+kis_add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_SOURCES})
 
 generate_export_header(kritaanimationdocker BASE_NAME kritaanimationdocker EXPORT_MACRO_NAME KRITAANIMATIONDOCKER_EXPORT)
 target_link_libraries(kritaanimationdocker kritaui kritawidgets)

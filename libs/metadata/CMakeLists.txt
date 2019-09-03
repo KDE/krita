@@ -18,7 +18,7 @@ set(kritametadata_LIB_SRCS
     kis_meta_data_value.cc
 )
 
-add_library(kritametadata SHARED ${kritametadata_LIB_SRCS} )
+kis_add_core_library(kritametadata SHARED ${kritametadata_LIB_SRCS} )
 generate_export_header(kritametadata)
 
 target_link_libraries(kritametadata kritaversion kritaglobal kritaplugin kritawidgetutils)

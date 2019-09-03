@@ -12,7 +12,7 @@ set(kritaselectiontools_SOURCES
 
 qt5_add_resources(kritaselectiontools_SOURCES selectiontools.qrc)
 
-add_library(kritaselectiontools MODULE ${kritaselectiontools_SOURCES})
+kis_add_library(kritaselectiontools MODULE ${kritaselectiontools_SOURCES})
 
 target_link_libraries(kritaselectiontools kritaui kritabasicflakes)
 

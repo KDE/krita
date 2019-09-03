@@ -9,7 +9,7 @@ set(kritacolorsmudgepaintop_SOURCES
     kis_smudge_radius_option.cpp
 )
 
-add_library(kritacolorsmudgepaintop MODULE ${kritacolorsmudgepaintop_SOURCES})
+kis_add_library(kritacolorsmudgepaintop MODULE ${kritacolorsmudgepaintop_SOURCES})
 
 target_link_libraries(kritacolorsmudgepaintop kritalibpaintop)
 

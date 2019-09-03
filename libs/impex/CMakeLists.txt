@@ -4,7 +4,7 @@ set(kritaimpex_LIB_SRCS
     KisExportCheckRegistry.cpp
 )
 
-add_library(kritaimpex SHARED ${kritaimpex_HEADERS_MOC} ${kritaimpex_LIB_SRCS} )
+kis_add_library(kritaimpex SHARED ${kritaimpex_HEADERS_MOC} ${kritaimpex_LIB_SRCS} )
 
 generate_export_header(kritaimpex BASE_NAME kritaimpex)
 

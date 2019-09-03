@@ -4,7 +4,7 @@ set(kritatooldyna_SOURCES
     )
 
 
-add_library(kritatooldyna MODULE ${kritatooldyna_SOURCES})
+kis_add_library(kritatooldyna MODULE ${kritatooldyna_SOURCES})
 
 target_link_libraries(kritatooldyna kritaui)
 

@@ -4,7 +4,7 @@ set(kritaspriterexport_SOURCES
     kis_spriter_export.cpp
 )
 
-add_library(kritaspriterexport MODULE ${kritaspriterexport_SOURCES})
+kis_add_library(kritaspriterexport MODULE ${kritaspriterexport_SOURCES})
 
 target_link_libraries(kritaspriterexport kritaui kritaimpex)
 

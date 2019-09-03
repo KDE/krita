@@ -32,6 +32,12 @@ else()
   set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
 endif()
 
+add_library(kritaimageperarch OBJECT ${__per_arch_circle_mask_generator_objs})
+target_include_directories(kritaimageperarch
+    PRIVATE
+    $<TARGET_PROPERTY:kritapigment,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:kritaglobal,INTERFACE_INCLUDE_DIRECTORIES>)
+
 set(kritaimage_LIB_SRCS
     tiles3/kis_tile.cc
     tiles3/kis_tile_data.cc
@@ -226,7 +232,7 @@ set(kritaimage_LIB_SRCS
    kis_circle_mask_generator.cpp
    kis_gauss_circle_mask_generator.cpp
    kis_gauss_rect_mask_generator.cpp
-   ${__per_arch_circle_mask_generator_objs}
+   $<TARGET_OBJECTS:kritaimageperarch>
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp
    kis_math_toolbox.cpp
@@ -320,7 +326,8 @@ set(einspline_SRCS
    3rdparty/einspline/nugrid.cpp
 )
 
-add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
+kis_add_core_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
+
 generate_export_header(kritaimage BASE_NAME kritaimage)
 
 target_link_libraries(kritaimage 
@@ -376,3 +383,9 @@ set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritaimage  ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+kis_define_library_level_pch(krita_image_pch ${CMAKE_SOURCE_DIR}/pch/kis_image_pch.h kritaimage)
+
+macro(kis_add_library)
+    kis_add_library_pch(PCH_TARGET krita_image_pch ${ARGV})
+endmacro()

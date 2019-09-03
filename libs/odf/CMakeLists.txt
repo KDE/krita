@@ -34,7 +34,7 @@ set(kritaodf_LIB_SRCS
     OdfDebug.cpp
 )
 
-add_library(kritaodf SHARED ${kritaodf_LIB_SRCS})
+kis_add_core_library(kritaodf SHARED ${kritaodf_LIB_SRCS})
 generate_export_header(kritaodf BASE_NAME kritaodf)
 
 target_link_libraries(kritaodf kritaversion kritaplugin kritastore KF5::CoreAddons KF5::ConfigCore KF5::I18n Qt5::PrintSupport Qt5::Gui Qt5::Xml)

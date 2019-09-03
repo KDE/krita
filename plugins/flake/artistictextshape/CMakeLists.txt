@@ -35,7 +35,7 @@ ki18n_wrap_ui( ArtisticTextShape_SRCS
 
 qt5_add_resources(ArtisticTextShape_SRCS artistictextshape.qrc)
 
-add_library(krita_shape_artistictext MODULE ${ArtisticTextShape_SRCS} )
+kis_add_library(krita_shape_artistictext MODULE ${ArtisticTextShape_SRCS} )
 
 target_link_libraries(krita_shape_artistictext kritaflake kritaui)
 

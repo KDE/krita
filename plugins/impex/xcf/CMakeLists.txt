@@ -33,7 +33,7 @@ set(kritaxcfimport_SOURCES
     )
 
 
-add_library(kritaxcfimport MODULE ${kritaxcfimport_SOURCES})
+kis_add_library(kritaxcfimport MODULE ${kritaxcfimport_SOURCES})
 
 target_link_libraries(kritaxcfimport kritaui )
 

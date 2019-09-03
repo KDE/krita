@@ -9,7 +9,7 @@ set(kritacsvimport_SOURCES
     csv_layer_record.cpp
 )
 
-add_library(kritacsvimport MODULE ${kritacsvimport_SOURCES})
+kis_add_library(kritacsvimport MODULE ${kritacsvimport_SOURCES})
 
 target_link_libraries(kritacsvimport kritaui )
 
@@ -23,7 +23,7 @@ set(kritacsvexport_SOURCES
     csv_layer_record.cpp
 )
 
-add_library(kritacsvexport MODULE ${kritacsvexport_SOURCES})
+kis_add_library(kritacsvexport MODULE ${kritacsvexport_SOURCES})
 
 target_link_libraries(kritacsvexport kritaui kritaimpex)
 

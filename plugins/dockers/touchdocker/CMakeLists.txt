@@ -5,7 +5,7 @@ set(KRITA_TOUCHDOCKER_SOURCES
 
 qt5_add_resources(KRITA_TOUCHDOCKER_SOURCES touchdocker.qrc)
 
-add_library(kritatouchdocker MODULE ${KRITA_TOUCHDOCKER_SOURCES})
+kis_add_library(kritatouchdocker MODULE ${KRITA_TOUCHDOCKER_SOURCES})
 target_link_libraries(kritatouchdocker 
     kritaui 
     kritaqml

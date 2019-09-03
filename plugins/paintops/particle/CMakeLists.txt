@@ -9,7 +9,7 @@ set(kritaparticlepaintop_SOURCES
 
 ki18n_wrap_ui(kritaparticlepaintop_SOURCES wdgparticleoptions.ui )
 
-add_library(kritaparticlepaintop MODULE ${kritaparticlepaintop_SOURCES})
+kis_add_library(kritaparticlepaintop MODULE ${kritaparticlepaintop_SOURCES})
 
 target_link_libraries(kritaparticlepaintop kritalibpaintop)
 

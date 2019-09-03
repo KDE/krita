@@ -29,7 +29,7 @@ set(kritatooltransform_SOURCES
 qt5_add_resources(kritatooltransform_SOURCES tool_transform.qrc)
 ki18n_wrap_ui(kritatooltransform_SOURCES wdg_tool_transform.ui)
 
-add_library(kritatooltransform MODULE ${kritatooltransform_SOURCES})
+kis_add_library(kritatooltransform MODULE ${kritatooltransform_SOURCES})
 
 generate_export_header(kritatooltransform BASE_NAME kritatooltransform)
 

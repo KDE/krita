@@ -33,7 +33,7 @@ ki18n_wrap_ui(pathshapes_SOURCES
 
 qt5_add_resources(pathshapes_SOURCES pathshapes.qrc)
 
-add_library(krita_shape_paths MODULE ${pathshapes_SOURCES})
+kis_add_library(krita_shape_paths MODULE ${pathshapes_SOURCES})
 
 target_link_libraries(krita_shape_paths kritaflake kritawidgets kritaui)
 

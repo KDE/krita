@@ -10,7 +10,7 @@ ki18n_wrap_ui(kritaunsharpfilter_SOURCES
     wdgunsharp.ui
     )
 
-add_library(kritaunsharpfilter MODULE ${kritaunsharpfilter_SOURCES})
+kis_add_library(kritaunsharpfilter MODULE ${kritaunsharpfilter_SOURCES})
 
 target_link_libraries(kritaunsharpfilter kritaui)
 

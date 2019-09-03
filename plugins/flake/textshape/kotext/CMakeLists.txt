@@ -117,7 +117,7 @@ set(kritatext_LIB_SRCS
     TextDebug.cpp
 )
 
-add_library(kritatext SHARED ${kritatext_LIB_SRCS})
+kis_add_legacy_text_library(kritatext SHARED ${kritatext_LIB_SRCS})
 generate_export_header(kritatext BASE_NAME kritatext)
 
 target_link_libraries(kritatext kritaflake Qt5::Gui kritawidgetutils )

@@ -9,7 +9,7 @@ set(kritaheifimport_SOURCES
     HeifError.cpp
 )
 
-add_library(kritaheifimport MODULE ${kritaheifimport_SOURCES})
+kis_add_library(kritaheifimport MODULE ${kritaheifimport_SOURCES})
 
 target_link_libraries(kritaheifimport kritaui kritalibkra
     ${HEIF_LDFLAGS} ${HEIF_LIBRARIES}
@@ -24,7 +24,7 @@ set(kritaheifexport_SOURCES
 
 ki18n_wrap_ui(kritaheifexport_SOURCES WdgHeifExport.ui )
 
-add_library(kritaheifexport MODULE ${kritaheifexport_SOURCES})
+kis_add_library(kritaheifexport MODULE ${kritaheifexport_SOURCES})
 
 target_link_libraries(kritaheifexport kritaui kritalibkra kritaimpex ${HEIF_LDFLAGS} ${HEIF_LIBRARIES} )
 

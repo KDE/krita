@@ -11,7 +11,7 @@ set(kritasketchpaintop_SOURCES
 
 ki18n_wrap_ui(kritasketchpaintop_SOURCES wdgsketchoptions.ui )
 
-add_library(kritasketchpaintop MODULE ${kritasketchpaintop_SOURCES})
+kis_add_library(kritasketchpaintop MODULE ${kritasketchpaintop_SOURCES})
 
 target_link_libraries(kritasketchpaintop kritalibpaintop)
 

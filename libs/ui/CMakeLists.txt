@@ -563,7 +563,7 @@ if(WIN32)
 endif()
 
 
-add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
+kis_add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
 target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
@@ -612,7 +612,6 @@ set_target_properties(kritaui
     PROPERTIES VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
 
 if (APPLE)
     install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/krita)

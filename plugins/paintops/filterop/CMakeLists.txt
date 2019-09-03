@@ -6,7 +6,7 @@ set(kritafilterop_SOURCES
     )
 
 
-add_library(kritafilterop MODULE ${kritafilterop_SOURCES})
+kis_add_library(kritafilterop MODULE ${kritafilterop_SOURCES})
 
 target_link_libraries(kritafilterop kritalibpaintop)
 

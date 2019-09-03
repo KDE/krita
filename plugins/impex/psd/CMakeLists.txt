@@ -36,7 +36,7 @@ set(kritapsdimport_SOURCES
 )
 
 
-add_library(kritapsdimport MODULE ${kritapsdimport_SOURCES})
+kis_add_library(kritapsdimport MODULE ${kritapsdimport_SOURCES})
 
 target_link_libraries(kritapsdimport kritaglobal kritaui kritapsd KF5::I18n ${ZLIB_LIBRARIES})
 
@@ -52,7 +52,7 @@ set(kritapsdexport_SOURCES
     ${LIB_PSD_SRCS}
 )
 
-add_library(kritapsdexport MODULE ${kritapsdexport_SOURCES})
+kis_add_library(kritapsdexport MODULE ${kritapsdexport_SOURCES})
 
 if (MSVC)
     target_link_libraries(kritapsdexport kritaui kritapsd kritaimpex ${WIN32_PLATFORM_NET_LIBS} ${ZLIB_LIBRARIES})

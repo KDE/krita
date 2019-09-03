@@ -10,6 +10,6 @@ set(kritahistorydocker_SOURCES
     DlgConfigureHistoryDock.cpp
 )
 
-add_library(kritahistorydocker MODULE ${kritahistorydocker_SOURCES})
+kis_add_library(kritahistorydocker MODULE ${kritahistorydocker_SOURCES})
 target_link_libraries(kritahistorydocker kritaimage kritaui)
 install(TARGETS kritahistorydocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

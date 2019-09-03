@@ -5,7 +5,7 @@ set(KRITA_THROTTLEDOCKER_SOURCES
 
 qt5_add_resources(KRITA_THROTTLEDOCKER_SOURCES throttle.qrc)
 
-add_library(kritathrottledocker MODULE ${KRITA_THROTTLEDOCKER_SOURCES})
+kis_add_library(kritathrottledocker MODULE ${KRITA_THROTTLEDOCKER_SOURCES})
 target_link_libraries(kritathrottledocker
     kritaui 
     kritaqml

@@ -14,7 +14,7 @@ set(kritatiffimport_SOURCES
     )
 
 
-add_library(kritatiffimport MODULE ${kritatiffimport_SOURCES})
+kis_add_library(kritatiffimport MODULE ${kritatiffimport_SOURCES})
 
 target_link_libraries(kritatiffimport kritaui  ${TIFF_LIBRARIES})
 
@@ -28,7 +28,7 @@ set(kritatiffexport_SOURCES
 
 ki18n_wrap_ui(kritatiffexport_SOURCES kis_wdg_options_tiff.ui)
 
-add_library(kritatiffexport MODULE ${kritatiffexport_SOURCES})
+kis_add_library(kritatiffexport MODULE ${kritatiffexport_SOURCES})
 
 target_link_libraries(kritatiffexport kritaui kritaimpex  ${TIFF_LIBRARIES})
 

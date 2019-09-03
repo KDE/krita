@@ -1,5 +1,6 @@
 add_subdirectory( tests )
 
+
 include(CheckFunctionExists)
 check_function_exists(backtrace HAVE_BACKTRACE)
 configure_file(config-debug.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-debug.h)
@@ -51,9 +52,19 @@ target_link_libraries(kritaglobal
         KF5::I18n
 )
 
+set_property(TARGET kritaglobal APPEND PROPERTY COMPILE_FLAGS "-Winvalid-pch" )
+target_precompiled_header(kritaglobal ${CMAKE_SOURCE_DIR}/pch/kis_qt_only_pch.h TYPE c++-header)
+
 set_target_properties(kritaglobal PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 
 install(TARGETS kritaglobal  ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+kis_define_library_level_pch(krita_global_pch ${CMAKE_SOURCE_DIR}/pch/kis_global_pch.h "Qt5::Core;Qt5::Gui")
+
+macro(kis_add_core_library)
+    kis_add_library_pch(PCH_TARGET krita_global_pch ${ARGV})
+endmacro()
+
 

@@ -10,7 +10,7 @@ set(kritaheightmapimport_SOURCES
 
 ki18n_wrap_ui(kritaheightmapimport_SOURCES kis_wdg_options_heightmap.ui )
 
-add_library(kritaheightmapimport MODULE ${kritaheightmapimport_SOURCES})
+kis_add_library(kritaheightmapimport MODULE ${kritaheightmapimport_SOURCES})
 
 target_link_libraries(kritaheightmapimport kritaui )
 
@@ -24,7 +24,7 @@ set(kritaheightmapexport_SOURCES
 
 ki18n_wrap_ui(kritaheightmapexport_SOURCES kis_wdg_options_heightmap.ui )
 
-add_library(kritaheightmapexport MODULE ${kritaheightmapexport_SOURCES})
+kis_add_library(kritaheightmapexport MODULE ${kritaheightmapexport_SOURCES})
 
 target_link_libraries(kritaheightmapexport kritaui kritaimpex)
 

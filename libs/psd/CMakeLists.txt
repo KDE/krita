@@ -18,7 +18,7 @@ set(kritapsd_LIB_SRCS
     asl/kis_asl_writer.cpp
 )
 
-add_library(kritapsd SHARED ${kritapsd_LIB_SRCS} )
+kis_add_core_library(kritapsd SHARED ${kritapsd_LIB_SRCS} )
 generate_export_header(kritapsd BASE_NAME kritapsd)
 
 if (WIN32)

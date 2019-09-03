@@ -14,7 +14,7 @@ set(kritahatchingpaintop_SOURCES
 
 ki18n_wrap_ui(kritahatchingpaintop_SOURCES wdghatchingpreferences.ui wdghatchingoptions.ui)
 
-add_library(kritahatchingpaintop MODULE ${kritahatchingpaintop_SOURCES})
+kis_add_library(kritahatchingpaintop MODULE ${kritahatchingpaintop_SOURCES})
 
 target_link_libraries(kritahatchingpaintop kritalibpaintop)
 

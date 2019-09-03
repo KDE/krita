@@ -8,7 +8,7 @@ ki18n_wrap_ui(kritarandompickfilter_SOURCES
     wdgrandompickoptions.ui
     )
 
-add_library(kritarandompickfilter MODULE ${kritarandompickfilter_SOURCES})
+kis_add_library(kritarandompickfilter MODULE ${kritarandompickfilter_SOURCES})
 
 target_link_libraries(kritarandompickfilter kritaui)
 

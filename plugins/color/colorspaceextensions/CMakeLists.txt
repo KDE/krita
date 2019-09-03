@@ -11,6 +11,6 @@ set( extensions_plugin_SOURCES
     kis_desaturate_adjustment.cpp
 )
 
-add_library(krita_colorspaces_extensions MODULE ${extensions_plugin_SOURCES} )
+kis_add_core_library(krita_colorspaces_extensions MODULE ${extensions_plugin_SOURCES} )
 target_link_libraries(krita_colorspaces_extensions kritapigment kritaglobal ${OPENEXR_LIBRARIES} KF5::I18n KF5::CoreAddons)
 install( TARGETS krita_colorspaces_extensions DESTINATION ${KRITA_PLUGIN_INSTALL_DIR} )

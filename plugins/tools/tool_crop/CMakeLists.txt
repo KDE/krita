@@ -8,7 +8,7 @@ qt5_add_resources(kritatoolcrop_SOURCES toolcrop.qrc)
 
 ki18n_wrap_ui(kritatoolcrop_SOURCES wdg_tool_crop.ui)
 
-add_library(kritatoolcrop MODULE ${kritatoolcrop_SOURCES})
+kis_add_library(kritatoolcrop MODULE ${kritatoolcrop_SOURCES})
 
 target_link_libraries(kritatoolcrop kritaui)
 

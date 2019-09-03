@@ -16,7 +16,7 @@ ki18n_wrap_ui (
     WdgQMicSettings.ui
 )
 
-add_library(kritaqmic MODULE ${kritaqmic_SOURCES})
+kis_add_library(kritaqmic MODULE ${kritaqmic_SOURCES})
 target_link_libraries(kritaqmic kritaui)
 install(TARGETS kritaqmic  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

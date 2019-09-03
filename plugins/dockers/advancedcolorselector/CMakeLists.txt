@@ -34,7 +34,7 @@ qt5_add_resources(KRITA_COLORSELECTORNG_SOURCES
     advanced_color_selector.qrc
 )
 
-add_library(kritacolorselectorng MODULE ${KRITA_COLORSELECTORNG_SOURCES})
+kis_add_library(kritacolorselectorng MODULE ${KRITA_COLORSELECTORNG_SOURCES})
 
 target_link_libraries(kritacolorselectorng kritaui)
 

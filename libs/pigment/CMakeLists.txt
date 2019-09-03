@@ -22,15 +22,6 @@ endif()
 
 set(LINK_VC_LIB)
 
-if(HAVE_VC)
-    include_directories(SYSTEM ${Vc_INCLUDE_DIR})
-    set(LINK_VC_LIB ${Vc_LIBRARIES})
-    ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
-
-    message("Following objects are generated from the per-arch lib")
-    message("${__per_arch_factory_objs}")
-endif()
-
 add_subdirectory(tests)
 add_subdirectory(benchmarks)
 
@@ -73,7 +64,6 @@ set(kritapigment_SRCS
     compositeops/KoOptimizedCompositeOpFactory.cpp
     compositeops/KoOptimizedCompositeOpFactoryPerArch_Scalar.cpp
     compositeops/KoAlphaDarkenParamsWrapper.cpp
-    ${__per_arch_factory_objs}
     colorprofiles/KoDummyColorProfile.cpp
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp
@@ -86,6 +76,25 @@ set(kritapigment_SRCS
     resources/KoStopGradient.cpp
     resources/KoSegmentGradient.cpp
 )
+
+if(HAVE_VC)
+    include_directories(SYSTEM ${Vc_INCLUDE_DIR})
+    set(LINK_VC_LIB ${Vc_LIBRARIES})
+    ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
+
+    message("Following objects are generated from the per-arch lib")
+    message("${__per_arch_factory_objs}")
+
+    add_library(kritapigmentperarch OBJECT ${__per_arch_factory_objs})
+    target_include_directories(kritapigmentperarch
+        PRIVATE
+        $<TARGET_PROPERTY:kritaglobal,INTERFACE_INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/compositeops>)
+
+    set (kritapigment_SRCS ${kritapigment_SRCS} $<TARGET_OBJECTS:kritapigmentperarch>)
+endif()
+
 
 set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB} ${LINK_VC_LIB})
 
@@ -116,6 +125,9 @@ target_link_libraries( kritapigment
         Qt5::Xml
         ${WIN32_PLATFORM_NET_LIBS}
 )
+
+set_property(TARGET kritapigment APPEND PROPERTY COMPILE_FLAGS "-Winvalid-pch" )
+target_precompiled_header(kritapigment ${CMAKE_SOURCE_DIR}/pch/kis_global_pch.h TYPE c++-header)
 
 set_target_properties(kritapigment PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

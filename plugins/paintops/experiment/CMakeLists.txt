@@ -8,7 +8,7 @@ set(kritaexperimentpaintop_SOURCES
 
 ki18n_wrap_ui(kritaexperimentpaintop_SOURCES wdgexperimentoptions.ui )
 
-add_library(kritaexperimentpaintop MODULE ${kritaexperimentpaintop_SOURCES})
+kis_add_library(kritaexperimentpaintop MODULE ${kritaexperimentpaintop_SOURCES})
 
 target_link_libraries(kritaexperimentpaintop kritalibpaintop)
 

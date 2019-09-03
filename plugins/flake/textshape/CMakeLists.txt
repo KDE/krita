@@ -15,10 +15,13 @@ add_definitions(
   -DQT_DISABLE_DEPRECATED_BEFORE=0
 )
 
+kis_define_library_level_pch(krita_text_pch ${CMAKE_SOURCE_DIR}/pch/kis_qt_only_pch.h "Qt5::Core;Qt5::Gui")
+macro(kis_add_legacy_text_library)
+    kis_add_library_pch(PCH_TARGET krita_text_pch ${ARGV})
+endmacro()
+
 add_subdirectory( textlayout )
 add_subdirectory( kotext )
-
-
 
 set ( textshape_SRCS
     TextPlugin.cpp
@@ -123,11 +126,9 @@ ki18n_wrap_ui(textshape_SRCS
     dialogs/SectionsSplitDialog.ui
 
 )
-
 qt5_add_resources(textshape_SRCS textshape.qrc)
 
-
-add_library(krita_shape_text MODULE ${textshape_SRCS})
+kis_add_legacy_text_library(krita_shape_text MODULE ${textshape_SRCS})
 
 target_link_libraries(krita_shape_text kritatext kritatextlayout kritawidgetutils kritawidgets Qt5::Network KF5::Completion KF5::ItemViews KF5::WidgetsAddons
 )

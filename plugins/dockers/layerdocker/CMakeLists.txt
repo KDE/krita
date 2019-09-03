@@ -28,7 +28,7 @@ QT5_WRAP_CPP(kritalayerdocker_HEADERS_MOC
     SyncButtonAndAction.h
 )
 
-add_library(kritalayerdocker MODULE ${kritalayerdocker_SOURCES} 
+kis_add_library(kritalayerdocker MODULE ${kritalayerdocker_SOURCES} 
         ${kritalayerdocker_PART_HEADERS}
         ${kritalayerdocker_HEADERS_MOC}
 )

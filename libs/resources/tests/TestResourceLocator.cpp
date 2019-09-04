@@ -98,9 +98,9 @@ void TestResourceLocator::testStorageInitialization()
     QVERIFY(query.lastError() == QSqlError());
     query.first();
 
-//    Q_FOREACH(KisResourceStorageSP storage, m_locator->storages()) {
-//        qDebug() << storage;
-//    }
+    Q_FOREACH(KisResourceStorageSP storage, m_locator->storages()) {
+        qDebug() << storage;
+    }
 
     QCOMPARE(query.value(0).toInt(), m_locator->storages().count());
 }
@@ -175,8 +175,8 @@ void TestResourceLocator::testUpdateResource()
 
 void TestResourceLocator::cleanupTestCase()
 {
-//    ResourceTestHelper::rmTestDb();
-//    ResourceTestHelper::cleanDstLocation(m_dstLocation);
+    ResourceTestHelper::rmTestDb();
+    ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
 QTEST_MAIN(TestResourceLocator)

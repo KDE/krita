@@ -82,6 +82,7 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
 
     KConfigGroup cfg(KSharedConfig::openConfig(), "");
     d->resourceLocation = cfg.readEntry(resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    if (!d->resourceLocation.endsWith('/')) d->resourceLocation += '/';
 
     QFileInfo fi(d->resourceLocation);
 
@@ -270,7 +271,6 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
 
     // Update the resource in the cache
     QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + QFileInfo(resource->filename()).fileName());
-    qDebug() << key;
     d->resourceCache[key] = resource;
 
     return true;
@@ -432,6 +432,7 @@ KisResourceLocator::ResourceStorage KisResourceLocator::getResourceStorage(int r
         return rs;
     }
 
+
     q.bindValue(":resource_id", resourceId);
 
     r = q.exec();
@@ -450,7 +451,7 @@ KisResourceLocator::ResourceStorage KisResourceLocator::getResourceStorage(int r
         storageLocation = resourceLocationBase();
     }
     else {
-        storageLocation = resourceLocationBase() + '/' + storageLocation;
+        storageLocation = resourceLocationBase() + storageLocation;
     }
 
     rs.storageLocation = storageLocation;
@@ -464,6 +465,14 @@ QString KisResourceLocator::makeStorageLocationAbsolute(QString storageLocation)
 {
     if (storageLocation.isEmpty()) {
         storageLocation = resourceLocationBase();
+    }
+    if (!storageLocation.startsWith('/') && storageLocation != "memory") {
+        if (resourceLocationBase().endsWith('/')) {
+            storageLocation = resourceLocationBase() + storageLocation;
+        }
+        else {
+            storageLocation = resourceLocationBase() + '/' + storageLocation;
+        }
     }
     return storageLocation;
 }

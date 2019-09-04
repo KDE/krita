@@ -45,10 +45,10 @@ KisResourceStorage::KisResourceStorage(const QString &location)
     : d(new Private())
 {
     d->location = location;
+    d->name = QFileInfo(d->location).fileName();
     QFileInfo fi(d->location);
     if (fi.isDir()) {
         d->storagePlugin.reset(new KisFolderStorage(location));
-        d->name = location;
         d->storageType = StorageType::Folder;
         d->valid = fi.isWritable();
     }

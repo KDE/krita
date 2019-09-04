@@ -482,6 +482,7 @@ bool KisResourceLocator::synchronizeDb()
     d->errorMessages.clear();
     findStorages();
     Q_FOREACH(const KisResourceStorageSP storage, d->storages) {
+        if (storage->name() == "memory") continue;
         if (!KisResourceCacheDb::synchronizeStorage(storage)) {
             d->errorMessages.append(i18n("Could not synchronize %1 with the database").arg(storage->location()));
         }

@@ -111,6 +111,15 @@ bool KisResourceGridProxyModel::removeResource(KoResourceSP resource)
     return false;
 }
 
+bool KisResourceGridProxyModel::setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return source->setResourceMetaData(resource, metadata);
+    }
+    return false;
+}
+
 
 QModelIndex KisResourceGridProxyModel::index(int row, int column, const QModelIndex& parent) const
 {

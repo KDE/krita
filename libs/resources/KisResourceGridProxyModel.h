@@ -53,7 +53,7 @@ public:
     bool addResource(KoResourceSP resource, bool save = true) override;
     bool updateResource(KoResourceSP resource) override;
     bool removeResource(KoResourceSP resource) override;
-
+    bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
 
     // QAbstractItemModel interface
 public:

@@ -82,6 +82,13 @@ public:
      * @return
      */
     virtual bool removeResource(KoResourceSP resource) = 0;
+
+    /**
+     * @brief setResourceMetaData
+     * @param metadata
+     * @return
+     */
+    virtual bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) = 0;
 };
 
 /**
@@ -144,6 +151,7 @@ public:
     bool importResourceFile(const QString &filename) override;
     bool addResource(KoResourceSP resource, bool save = true) override;
     bool updateResource(KoResourceSP resource) override;
+    bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
 
 
 Q_SIGNALS:

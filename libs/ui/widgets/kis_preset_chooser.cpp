@@ -77,6 +77,7 @@ private:
 
 void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
+#if 0
     painter->save();
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
@@ -89,7 +90,10 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         return;
     }
 
+
     KoResourceSP resource = dynamic_cast<const KisResourceModel*>(index.model())->resourceForIndex(index);
+    Q_ASSERT(resource);
+    Q_ASSERT(resource->valid());
     KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(resource.data());
 
     if (!preset) {
@@ -153,6 +157,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
 
     painter->restore();
+#endif
 }
 
 class KisPresetChooser::PaintOpFilterModel : public QSortFilterProxyModel, public KisAbstractResourceModel
@@ -180,7 +185,7 @@ public:
     }
     // KisAbstractResourceModel interface
 public:
-    KoResourceSP resourceForIndex(QModelIndex index) const
+    KoResourceSP resourceForIndex(QModelIndex index) const override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
         if (source) {
@@ -189,7 +194,7 @@ public:
         return 0;
     }
 
-    QModelIndex indexFromResource(KoResourceSP resource) const
+    QModelIndex indexFromResource(KoResourceSP resource) const override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
         if (source) {
@@ -198,7 +203,7 @@ public:
         return QModelIndex();
     }
 
-    bool removeResource(const QModelIndex &index)
+    bool removeResource(const QModelIndex &index) override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
         if (source) {
@@ -207,7 +212,7 @@ public:
         return false;
     }
 
-    bool importResourceFile(const QString &filename)
+    bool importResourceFile(const QString &filename) override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
         if (source) {
@@ -216,7 +221,7 @@ public:
         return false;
     }
 
-    bool addResource(KoResourceSP resource, bool save)
+    bool addResource(KoResourceSP resource, bool save) override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
         if (source) {
@@ -225,7 +230,7 @@ public:
         return false;
     }
 
-    bool updateResource(KoResourceSP resource)
+    bool updateResource(KoResourceSP resource) override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
         if (source) {
@@ -234,7 +239,7 @@ public:
         return false;
     }
 
-    bool removeResource(KoResourceSP resource)
+    bool removeResource(KoResourceSP resource) override
     {
         KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
         if (source) {
@@ -243,11 +248,20 @@ public:
         return false;
     }
 
+    bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override
+    {
+        KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+        if (source) {
+            return source->setResourceMetaData(resource, metadata);
+        }
+        return false;
+    }
+
 
     // QSortFilterProxyModel interface
 protected:
 
-    QVariant data(const QModelIndex &index, int role) const
+    QVariant data(const QModelIndex &index, int role) const override
     {
         return sourceModel()->data(mapToSource(index), role);
     }

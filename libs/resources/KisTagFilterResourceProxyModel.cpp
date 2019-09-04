@@ -100,6 +100,15 @@ bool KisTagFilterResourceProxyModel::removeResource(KoResourceSP resource)
     return false;
 }
 
+bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata)
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    if (source) {
+        return source->setResourceMetaData(resource, metadata);
+    }
+    return false;
+}
+
 void KisTagFilterResourceProxyModel::setTag(const QString& tag)
 {
     d->tags = tag.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);

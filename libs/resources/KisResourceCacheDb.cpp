@@ -23,6 +23,7 @@
 #include <QDir>
 #include <QDirIterator>
 #include <QStringList>
+#include <QTime>
 
 #include <KritaVersionWrapper.h>
 #include <klocalizedstring.h>
@@ -781,6 +782,11 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
 
 bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 {
+    qDebug() << "Going to synchronize" << storage->location();
+
+    QTime t;
+    t.start();
+
     if (!s_valid) {
         qWarning() << "KisResourceCacheDb::addResource: The database is not valid";
         return false;
@@ -814,20 +820,20 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
     // Only check the time stamp for container storages, not the contents
     if (storage->type() != KisResourceStorage::StorageType::Folder) {
 
-//        qDebug() << storage->location() << "is not a folder, going to check timestamps. Database:"
-//                 << q.value(1).toInt() << ", File:" << storage->timestamp().toSecsSinceEpoch();
+        qDebug() << storage->location() << "is not a folder, going to check timestamps. Database:"
+                 << q.value(1).toInt() << ", File:" << storage->timestamp().toSecsSinceEpoch();
 
         if (!q.value(0).isValid()) {
             qWarning() << "Could not retrieve timestamp for storage" << makeRelative(storage->location());
             success = false;
         }
         if (storage->timestamp().toSecsSinceEpoch() > q.value(1).toInt()) {
-//            qDebug() << "Deleting" << storage->location();
+            qDebug() << "Deleting" << storage->location() << "because the one on disk is newer.";
             if (!deleteStorage(storage)) {
                 qWarning() << "Could not delete storage" << makeRelative(storage->location());
                 success = false;
             }
-//            qDebug() << "Inserting" << storage->location();
+            qDebug() << "Inserting" << storage->location();
             if (!addStorage(storage, q.value(2).toBool())) {
                 qWarning() << "Could not add storage" << makeRelative(storage->location());
                 success = false;
@@ -906,6 +912,9 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             }
         }
     }
+
+    qDebug() << "Synchronizing the storages took" << t.msec() << "milliseconds for" << storage->location();
+
     return success;
 }
 

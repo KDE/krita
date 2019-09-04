@@ -125,6 +125,7 @@ private:
     QToolButton *m_selectionStatus;
     KisMemoryReportButton *m_memoryReportBox;
     QLabel *m_pointerPositionLabel;
+    QToolButton *m_resetAngleButton;
 
     KSqueezedTextLabel *m_statusBarStatusLabel;
     KSqueezedTextLabel *m_statusBarProfileLabel;

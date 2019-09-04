@@ -36,6 +36,10 @@ public:
 private:
     void filterDevice(qreal radius, QRect &bounds);
     KisPaintDeviceSP m_dev;
+    QVector<QRect> m_tiles;
+    QVector<qreal> m_radiusRecord;
+    QSize m_tileSize;
+    int m_tilesPerRow;
 };
 
 #endif // ifndef KISMAGNETICWORKER_H

@@ -27,6 +27,7 @@
 #include <QPainter>
 
 #include <boost/graph/astar_search.hpp>
+#include <krita_utils.h>
 
 #include "KisMagneticGraph.h"
 
@@ -145,7 +146,17 @@ private:
 KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev)
 {
     m_dev = KisPainter::convertToAlphaAsGray(dev);
-    KisPainter::copyAreaOptimized(dev->exactBounds().topLeft(), dev, m_dev, dev->exactBounds());
+    QSize s = m_dev->exactBounds().size();
+    m_tileSize = KritaUtils::optimalPatchSize();
+    m_tilesPerRow = s.width()/m_tileSize.width();
+
+    for(int i=0; i < s.height(); i+= m_tileSize.height()){
+        for(int j=0; j< s.width(); j += m_tileSize.width()){
+            m_tiles.push_back(QRect(QPoint(i,j), m_tileSize));
+        }
+    }
+
+    m_radiusRecord = QVector<qreal>(m_tiles.size(), -1);
 }
 
 void KisMagneticWorker::filterDevice(qreal radius, QRect &bounds)
@@ -154,12 +165,26 @@ void KisMagneticWorker::filterDevice(qreal radius, QRect &bounds)
     KisLazyFillTools::normalizeAlpha8Device(m_dev, bounds);
 }
 
+QPoint divide2DVal(QPoint p, QSize s){
+    return QPoint(p.x()/s.width(), p.y()/s.height());
+}
+
 QVector<QPointF> KisMagneticWorker::computeEdge(int extraBounds, QPoint begin, QPoint end, qreal radius)
 {
     QRect rect;
     KisAlgebra2D::accumulateBounds(QVector<QPoint> { begin, end }, &rect);
     rect = kisGrowRect(rect, extraBounds);
-    filterDevice(radius, rect);
+
+    QPoint firstTile = divide2DVal(rect.topLeft(), m_tileSize);
+    QPoint lastTile = divide2DVal(rect.bottomRight(), m_tileSize);
+
+    for(int i=firstTile.y(); i < lastTile.y(); i++){
+        for(int j=lastTile.x(); j < lastTile.x(); j++){
+            if(radius != m_radiusRecord[i*m_tilesPerRow + j])
+                filterDevice(radius, m_tiles[i*m_tilesPerRow + j]);
+        }
+    }
+
     VertexDescriptor goal(end);
     VertexDescriptor start(begin);
 

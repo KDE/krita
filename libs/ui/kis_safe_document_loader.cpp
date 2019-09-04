@@ -160,10 +160,6 @@ void KisSafeDocumentLoader::reloadImage()
 void KisSafeDocumentLoader::fileChanged(QString path)
 {
     if (path == m_d->path) {
-        if (s_fileSystemWatcher->files().contains(path) == false && QFileInfo(path).exists()) {
-            //When a path is renamed it is removed, so we ought to readd it.
-            s_fileSystemWatcher->addPath(path);
-        }
         m_d->fileChangedFlag = true;
         m_d->fileChangedSignalCompressor.start();
     }
@@ -176,6 +172,14 @@ void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
     QFileInfo initialFileInfo(m_d->path);
     m_d->initialFileSize = initialFileInfo.size();
     m_d->initialFileTimeStamp = initialFileInfo.lastModified();
+
+    qDebug()<<"updating" << m_d->path;
+    qDebug() << s_fileSystemWatcher->files();
+
+    if (s_fileSystemWatcher->files().contains(m_d->path) == false && initialFileInfo.exists()) {
+        //When a path is renamed it is removed, so we ought to readd it.
+        s_fileSystemWatcher->addPath(m_d->path);
+    }
 
     // it may happen when the file is flushed by
     // so other application

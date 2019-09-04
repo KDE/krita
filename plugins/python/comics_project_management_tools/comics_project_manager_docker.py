@@ -28,7 +28,7 @@ import shutil
 import enum
 from math import floor
 import xml.etree.ElementTree as ET
-from PyQt5.QtCore import QElapsedTimer, QSize, Qt, QRect, QFileSystemWatcher
+from PyQt5.QtCore import QElapsedTimer, QSize, Qt, QRect, QFileSystemWatcher, QTimer
 from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics, QPainter, QPalette, QFont
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QListView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp, QSplitter, QSlider, QLabel, QStyledItemDelegate, QStyle, QMessageBox
 import math
@@ -198,6 +198,7 @@ class comics_project_manager_docker(DockWidget):
     stringName = i18n("Comics Manager")
     projecturl = None
     pagesWatcher = None
+    updateurl = str()
 
     def __init__(self):
         super().__init__()
@@ -335,7 +336,7 @@ class comics_project_manager_docker(DockWidget):
         self.page_viewer_dialog = comics_project_page_viewer.comics_project_page_viewer()
         
         self.pagesWatcher = QFileSystemWatcher()
-        self.pagesWatcher.fileChanged.connect(self.slot_check_for_page_update)
+        self.pagesWatcher.fileChanged.connect(self.slot_start_delayed_check_page_update)
 
         buttonLayout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.MinimumExpanding))
 
@@ -833,7 +834,13 @@ class comics_project_manager_docker(DockWidget):
     they save.
     """
 
-    def slot_check_for_page_update(self, url):
+    def slot_start_delayed_check_page_update(self, url):
+        self.updateurl = url
+        QTimer.singleShot(200, Qt.PreciseTimer, self.slot_check_for_page_update)
+         
+
+    def slot_check_for_page_update(self):
+        url = self.updateurl
         if "pages" in self.setupDictionary.keys():
             relUrl = os.path.relpath(url, self.projecturl)
             if relUrl in self.setupDictionary["pages"]:
@@ -861,6 +868,7 @@ class comics_project_manager_docker(DockWidget):
                     pageItem.setData(dataList[3], role = CPE.LASTEDIT)
                     pageItem.setData(dataList[4], role = CPE.EDITOR)
                     self.pagesModel.setItem(index.row(), index.column(), pageItem)
+        self.updateurl = str()
 
     """
     Resize all the pages in the pages list.

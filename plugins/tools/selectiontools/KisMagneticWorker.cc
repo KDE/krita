@@ -157,6 +157,8 @@ KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev)
     }
 
     m_radiusRecord = QVector<qreal>(m_tiles.size(), -1);
+
+    qDebug() << m_tileSize << m_tilesPerRow << m_tiles;
 }
 
 void KisMagneticWorker::filterDevice(qreal radius, QRect &bounds)
@@ -178,10 +180,13 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int extraBounds, QPoint begin, Q
     QPoint firstTile = divide2DVal(rect.topLeft(), m_tileSize);
     QPoint lastTile = divide2DVal(rect.bottomRight(), m_tileSize);
 
-    for(int i=firstTile.y(); i < lastTile.y(); i++){
-        for(int j=lastTile.x(); j < lastTile.x(); j++){
-            if(radius != m_radiusRecord[i*m_tilesPerRow + j])
+
+    for(int i=firstTile.y(); i <= lastTile.y(); i++){
+        for(int j=lastTile.x(); j <= lastTile.x(); j++){
+            if(radius != m_radiusRecord[i*m_tilesPerRow + j]){
                 filterDevice(radius, m_tiles[i*m_tilesPerRow + j]);
+                m_radiusRecord[i*m_tilesPerRow + j] = radius;
+            }
         }
     }
 

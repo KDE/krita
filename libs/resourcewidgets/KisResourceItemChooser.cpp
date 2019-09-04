@@ -394,8 +394,6 @@ void KisResourceItemChooser::activated(const QModelIndex &index)
         resource = resourceFromModelIndex(index);
     }
 
-    qDebug() << "resource" << resource << (resource ? resource->name() : "") << (resource ? QString("%1").arg(resource->valid()) : "");
-
     if (resource && resource->valid()) {
         d->updatesBlocked = true;
         emit resourceSelected(resource);

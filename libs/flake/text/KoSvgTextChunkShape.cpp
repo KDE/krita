@@ -661,7 +661,7 @@ bool KoSvgTextChunkShape::loadSvg(const KoXmlElement &e, SvgLoadingContext &cont
 namespace {
 
 QString cleanUpString(QString text) {
-    text.replace(QRegExp("[\\r\\n]"), "");
+    text.replace(QRegExp("[\\r\\n\u2028]"), "");
     text.replace(QRegExp(" {2,}"), " ");
     return text;
 }

@@ -329,6 +329,8 @@ struct LayoutChunkWrapper
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(startPos == m_addedChars, currentTextPos);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(lastPos < m_layout->text().size(), currentTextPos);
 
+//        qDebug() << m_layout->text();
+
         QTextLine line;
         std::swap(line, m_danglingLine);
 
@@ -350,8 +352,17 @@ struct LayoutChunkWrapper
             // grow to avoid missing glyphs
 
             int charOffset = 0;
+            int noChangeCount = 0;
             while (line.textLength() < numChars) {
+                int tl = line.textLength();
                 line.setNumColumns(numChars + charOffset);
+                if (tl == line.textLength()) {
+                    noChangeCount++;
+                    // 5 columns max are needed to discover tab char. Set to 10 to be safe.
+                    if (noChangeCount > 10) break;
+                } else {
+                    noChangeCount = 0;
+                }
                 charOffset++;
             }
 

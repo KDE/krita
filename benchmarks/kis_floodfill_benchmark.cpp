@@ -26,14 +26,13 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_image.h>
 
 #include "kis_floodfill_benchmark.h"
 
 #include <kis_fill_painter.h>
-
-#include <KoCompositeOps.h>
 
 void KisFloodFillBenchmark::initTestCase()
 {

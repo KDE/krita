@@ -29,7 +29,6 @@
 #include <kis_paint_device.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
-#include <KoCompositeOps.h>
 
 #include <kis_mask_generator.h>
 #include <kis_gaussian_kernel.h>
@@ -41,6 +40,7 @@
 #include <KoMixColorsOp.h>
 #include <kis_paint_device.h>
 #include "kis_lod_transform.h"
+#include <KoCompositeOpRegistry.h>
 
 #include "wdg_gaussianhighpass.h"
 #include "ui_wdggaussianhighpass.h"

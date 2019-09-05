@@ -51,6 +51,7 @@ public:
                 conversionFlags |= KoColorConversionTransformation::NoOptimization;
             }
         }
+        conversionFlags |= KoColorConversionTransformation::CopyAlpha;
 
         m_transform = cmsCreateTransform(srcProfile->lcmsProfile(),
                                          srcColorSpaceType,
@@ -73,19 +74,7 @@ public:
     {
         Q_ASSERT(m_transform);
 
-        qint32 srcPixelSize = srcColorSpace()->pixelSize();
-        qint32 dstPixelSize = dstColorSpace()->pixelSize();
-
         cmsDoTransform(m_transform, const_cast<quint8 *>(src), dst, numPixels);
-        // Lcms does nothing to the destination alpha channel so we must convert that manually.
-        while (numPixels > 0) {
-            qreal alpha = srcColorSpace()->opacityF(src);
-            dstColorSpace()->setOpacity(dst, alpha, 1);
-
-            src += srcPixelSize;
-            dst += dstPixelSize;
-            numPixels--;
-        }
 
     }
 private:
@@ -120,6 +109,7 @@ public:
                 conversionFlags |= KoColorConversionTransformation::NoOptimization;
             }
         }
+        conversionFlags |= KoColorConversionTransformation::CopyAlpha;
 
         quint16 alarm[cmsMAXCHANNELS];//this seems to be bgr???
         alarm[0] = (cmsUInt16Number)gamutWarning[2]*256;
@@ -152,21 +142,7 @@ public:
     {
         Q_ASSERT(m_transform);
 
-        qint32 srcPixelSize = srcColorSpace()->pixelSize();
-        qint32 dstPixelSize = dstColorSpace()->pixelSize();
-        //cmsSetAdaptationState(0);
-
         cmsDoTransform(m_transform, const_cast<quint8 *>(src), dst, numPixels);
-        // Lcms does nothing to the destination alpha channel so we must convert that manually.
-        while (numPixels > 0) {
-            qreal alpha = srcColorSpace()->opacityF(src);
-            dstColorSpace()->setOpacity(dst, alpha, 1);
-
-            src += srcPixelSize;
-            dst += dstPixelSize;
-            numPixels--;
-        }
-        //cmsSetAdaptationState(1);
 
     }
 private:

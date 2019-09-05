@@ -1,0 +1,214 @@
+From 34011eee4498a56db032120caad17d4a65ba8c5c Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Thu, 5 Sep 2019 10:23:08 +0300
+Subject: [PATCH] Fix QRandomGenerator initialization on AMD CPUs
+
+Some AMD CPUs (e.g. AMD A4-6250J and AMD Ryzen 3000-series) have a
+failing random generation instruction, which always returns
+0xffffffff, even when generation was "successful".
+
+This code checks if hardware random generator can generate four
+consecutive distinct numbers. If it fails the test, then we probably
+have a failing one and should disable it completely.
+
+Fixes: QTBUG-69423
+Change-Id: I38c87920ca2e8cce4143afbff5e453ce3845d11a
+---
+ src/corelib/global/qrandom.cpp | 40 +-------------------
+ src/corelib/global/qrandom_p.h |  8 ----
+ src/corelib/tools/qsimd.cpp    | 67 ++++++++++++++++++++++++++++++++++
+ src/corelib/tools/qsimd_p.h    | 11 ++++++
+ 4 files changed, 80 insertions(+), 46 deletions(-)
+
+diff --git a/src/corelib/global/qrandom.cpp b/src/corelib/global/qrandom.cpp
+index 90df8653..4c9ea605 100644
+--- a/src/corelib/global/qrandom.cpp
++++ b/src/corelib/global/qrandom.cpp
+@@ -90,42 +90,6 @@ DECLSPEC_IMPORT BOOLEAN WINAPI SystemFunction036(PVOID RandomBuffer, ULONG Rando
+ 
+ QT_BEGIN_NAMESPACE
+ 
+-#if defined(Q_PROCESSOR_X86) && QT_COMPILER_SUPPORTS_HERE(RDRND)
+-static qsizetype qt_random_cpu(void *buffer, qsizetype count) Q_DECL_NOTHROW;
+-
+-#  ifdef Q_PROCESSOR_X86_64
+-#    define _rdrandXX_step _rdrand64_step
+-#  else
+-#    define _rdrandXX_step _rdrand32_step
+-#  endif
+-
+-static QT_FUNCTION_TARGET(RDRND) qsizetype qt_random_cpu(void *buffer, qsizetype count) Q_DECL_NOTHROW
+-{
+-    unsigned *ptr = reinterpret_cast<unsigned *>(buffer);
+-    unsigned *end = ptr + count;
+-
+-    while (ptr + sizeof(qregisteruint)/sizeof(*ptr) <= end) {
+-        if (_rdrandXX_step(reinterpret_cast<qregisteruint *>(ptr)) == 0)
+-            goto out;
+-        ptr += sizeof(qregisteruint)/sizeof(*ptr);
+-    }
+-
+-    if (sizeof(*ptr) != sizeof(qregisteruint) && ptr != end) {
+-        if (_rdrand32_step(ptr))
+-            goto out;
+-        ++ptr;
+-    }
+-
+-out:
+-    return ptr - reinterpret_cast<unsigned *>(buffer);
+-}
+-#else
+-static qsizetype qt_random_cpu(void *, qsizetype)
+-{
+-    return 0;
+-}
+-#endif
+-
+ enum {
+     // may be "overridden" by a member enum
+     FillBufferNoexcept = true
+@@ -366,8 +330,8 @@ Q_NEVER_INLINE void QRandomGenerator::SystemGenerator::generate(quint32 *begin,
+     }
+ 
+     qsizetype filled = 0;
+-    if (qt_has_hwrng() && (uint(qt_randomdevice_control) & SkipHWRNG) == 0)
+-        filled += qt_random_cpu(buffer, count);
++    if (qHasHwrng() && (uint(qt_randomdevice_control) & SkipHWRNG) == 0)
++        filled += qRandomCpu(buffer, count);
+ 
+     if (filled != count && (uint(qt_randomdevice_control) & SkipSystemRNG) == 0) {
+         qsizetype bytesFilled =
+diff --git a/src/corelib/global/qrandom_p.h b/src/corelib/global/qrandom_p.h
+index 917a9109..4a0adff5 100644
+--- a/src/corelib/global/qrandom_p.h
++++ b/src/corelib/global/qrandom_p.h
+@@ -79,14 +79,6 @@ extern Q_CORE_EXPORT QBasicAtomicInteger<uint> qt_randomdevice_control;
+ enum { qt_randomdevice_control = 0 };
+ #endif
+ 
+-inline bool qt_has_hwrng()
+-{
+-#if defined(Q_PROCESSOR_X86) && QT_COMPILER_SUPPORTS_HERE(RDRND)
+-    return qCpuHasFeature(RDRND);
+-#else
+-    return false;
+-#endif
+-}
+ 
+ 
+ QT_END_NAMESPACE
+diff --git a/src/corelib/tools/qsimd.cpp b/src/corelib/tools/qsimd.cpp
+index e44307f2..0e8cb417 100644
+--- a/src/corelib/tools/qsimd.cpp
++++ b/src/corelib/tools/qsimd.cpp
+@@ -376,6 +376,37 @@ static quint64 detectProcessorFeatures()
+         features &= ~AllAVX512;
+     }
+ 
++#if defined(Q_PROCESSOR_X86) && QT_COMPILER_SUPPORTS_HERE(RDRND)
++    /**
++     * Some AMD CPUs (e.g. AMD A4-6250J and AMD Ryzen 3000-series) have a
++     * failing random generation instruction, which always returns
++     * 0xffffffff, even when generation was "successful".
++     *
++     * This code checks if hardware random generator can generate four
++     * consecutive distinct numbers. If it fails the test, then we probably
++     * have a failing one and should disable it completely.
++     *
++     * https://bugreports.qt.io/browse/QTBUG-69423
++     */
++    if (features & CpuFeatureRDRND) {
++        const qsizetype testBufferSize = 4;
++        unsigned testBuffer[4] = {};
++
++        const qsizetype generated = qRandomCpu(testBuffer, testBufferSize);
++
++        if (generated == testBufferSize &&
++             testBuffer[0] == testBuffer[1] &&
++             testBuffer[1] == testBuffer[2] &&
++             testBuffer[2] == testBuffer[3]) {
++
++            fprintf(stderr, "WARNING: CPU random generator seem to be failing, disable hardware random number generation\n");
++            fprintf(stderr, "WARNING: RDRND generated: 0x%x 0x%x 0x%x 0x%x\n", testBuffer[0], testBuffer[1], testBuffer[2], testBuffer[3]);
++
++            features &= ~CpuFeatureRDRND;
++        }
++    }
++#endif
++
+     return features;
+ }
+ 
+@@ -589,4 +620,40 @@ void qDumpCPUFeatures()
+     puts("");
+ }
+ 
++#if defined(Q_PROCESSOR_X86) && QT_COMPILER_SUPPORTS_HERE(RDRND)
++
++#  ifdef Q_PROCESSOR_X86_64
++#    define _rdrandXX_step _rdrand64_step
++#  else
++#    define _rdrandXX_step _rdrand32_step
++#  endif
++
++QT_FUNCTION_TARGET(RDRND) qsizetype qRandomCpu(void *buffer, qsizetype count) Q_DECL_NOTHROW
++{
++    unsigned *ptr = reinterpret_cast<unsigned *>(buffer);
++    unsigned *end = ptr + count;
++
++    while (ptr + sizeof(qregisteruint)/sizeof(*ptr) <= end) {
++        if (_rdrandXX_step(reinterpret_cast<qregisteruint *>(ptr)) == 0)
++            goto out;
++        ptr += sizeof(qregisteruint)/sizeof(*ptr);
++    }
++
++    if (sizeof(*ptr) != sizeof(qregisteruint) && ptr != end) {
++        if (_rdrand32_step(ptr))
++            goto out;
++        ++ptr;
++    }
++
++out:
++    return ptr - reinterpret_cast<unsigned *>(buffer);
++}
++#else
++static qsizetype qRandomCpu(void *, qsizetype) Q_DECL_NOTHROW
++{
++    return 0;
++}
++#endif
++
++
+ QT_END_NAMESPACE
+diff --git a/src/corelib/tools/qsimd_p.h b/src/corelib/tools/qsimd_p.h
+index 9f1321df..14220549 100644
+--- a/src/corelib/tools/qsimd_p.h
++++ b/src/corelib/tools/qsimd_p.h
+@@ -346,6 +346,8 @@ extern Q_CORE_EXPORT QBasicAtomicInteger<unsigned> qt_cpu_features[2];
+ #endif
+ Q_CORE_EXPORT void qDetectCpuFeatures();
+ 
++Q_CORE_EXPORT qsizetype qRandomCpu(void *, qsizetype) Q_DECL_NOTHROW;
++
+ static inline quint64 qCpuFeatures()
+ {
+     quint64 features = qt_cpu_features[0].load();
+@@ -366,6 +368,15 @@ static inline quint64 qCpuFeatures()
+ #define qCpuHasFeature(feature)     (((qCompilerCpuFeatures & CpuFeature ## feature) == CpuFeature ## feature) \
+                                      || ((qCpuFeatures() & CpuFeature ## feature) == CpuFeature ## feature))
+ 
++inline bool qHasHwrng()
++{
++#if defined(Q_PROCESSOR_X86) && QT_COMPILER_SUPPORTS_HERE(RDRND)
++    return qCpuHasFeature(RDRND);
++#else
++    return false;
++#endif
++}
++
+ #define ALIGNMENT_PROLOGUE_16BYTES(ptr, i, length) \
+     for (; i < static_cast<int>(qMin(static_cast<quintptr>(length), ((4 - ((reinterpret_cast<quintptr>(ptr) >> 2) & 0x3)) & 0x3))); ++i)
+ 
+-- 
+2.20.1.windows.1
+

@@ -95,7 +95,7 @@ void KisTiledDataManagerTest::testUndoingNewTiles()
 {
     // "growing extent bug"
 
-    const QRect nullRect(qint32_MAX,qint32_MAX,0,0);
+    const QRect nullRect;
 
     quint8 defaultPixel = 0;
     KisTiledDataManager srcDM(1, &defaultPixel);

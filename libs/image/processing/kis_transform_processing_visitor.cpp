@@ -208,17 +208,6 @@ void KisTransformProcessingVisitor::transformPaintDevice(KisPaintDeviceSP device
                                                      std::placeholders::_1,
                                                      helper.updater()));
 
-
-    return;
-
-    KisTransaction transaction(kundo2_i18n("Transform Layer"), device);
-
-    KisTransformWorker tw(device, m_sx, m_sy, m_shearx, m_sheary,
-                          m_shearOrigin.x(), m_shearOrigin.y(),
-                          m_angle, m_tx, m_ty, helper.updater(),
-                          m_filter);
-    tw.run();
-    transaction.commit(adapter);
 }
 
 void KisTransformProcessingVisitor::transformOneDevice(KisPaintDeviceSP device,

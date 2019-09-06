@@ -423,12 +423,9 @@ if (NOT WIN32 AND NOT APPLE)
     set(HAVE_X11 TRUE)
     add_definitions(-DHAVE_X11)
 
-    find_package(XCB COMPONENTS XCB ATOM)
-    set(HAVE_XCB ${XCB_FOUND})
 else()
     set(HAVE_DBUS FALSE)
     set(HAVE_X11 FALSE)
-    set(HAVE_XCB FALSE)
 endif()
 
 

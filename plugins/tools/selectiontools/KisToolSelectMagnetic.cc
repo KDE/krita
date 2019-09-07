@@ -248,7 +248,7 @@ void KisToolSelectMagnetic::updatePaintPath()
 void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
-
+    updatePaintPath();
     if ((mode() == KisTool::PAINT_MODE || m_continuedMode) &&
         !m_points.isEmpty())
     {

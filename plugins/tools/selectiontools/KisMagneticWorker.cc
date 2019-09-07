@@ -148,17 +148,28 @@ KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev)
     m_dev = KisPainter::convertToAlphaAsGray(dev);
     QSize s = m_dev->exactBounds().size();
     m_tileSize = KritaUtils::optimalPatchSize();
-    m_tilesPerRow = s.width()/m_tileSize.width();
+    m_tilesPerRow = std::ceil((double)s.width()/(double)m_tileSize.width());
 
-    for(int i=0; i < s.height(); i+= m_tileSize.height()){
-        for(int j=0; j< s.width(); j += m_tileSize.width()){
+    int i,j;
+    for(i=0; i < s.height(); i+= m_tileSize.height()){
+        for(j=0; j< s.width(); j += m_tileSize.width()){
             m_tiles.push_back(QRect(QPoint(i,j), m_tileSize));
+        }
+        if(j < s.width()){
+            m_tiles.push_back(QRect(QPoint(i,j+m_tileSize.width()), QSize(m_tileSize.height(), s.width()-j)));
+        }
+    }
+
+    if(i < s.height()){
+        for(j=0; j< s.width(); j += m_tileSize.width()){
+            m_tiles.push_back(QRect(QPoint(i,j), m_tileSize));
+        }
+        if(j < s.width()){
+            m_tiles.push_back(QRect(QPoint(i,j+m_tileSize.width()), QSize(m_tileSize.height(), s.width()-j)));
         }
     }
 
     m_radiusRecord = QVector<qreal>(m_tiles.size(), -1);
-
-    qDebug() << m_tileSize << m_tilesPerRow << m_tiles;
 }
 
 void KisMagneticWorker::filterDevice(qreal radius, QRect &bounds)
@@ -180,12 +191,11 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int extraBounds, QPoint begin, Q
     QPoint firstTile = divide2DVal(rect.topLeft(), m_tileSize);
     QPoint lastTile = divide2DVal(rect.bottomRight(), m_tileSize);
 
-
     for(int i=firstTile.y(); i <= lastTile.y(); i++){
-        for(int j=lastTile.x(); j <= lastTile.x(); j++){
-            if(radius != m_radiusRecord[i*m_tilesPerRow + j]){
-                filterDevice(radius, m_tiles[i*m_tilesPerRow + j]);
-                m_radiusRecord[i*m_tilesPerRow + j] = radius;
+        for(int j=firstTile.x(); j <= lastTile.x(); j++){
+            if(radius != m_radiusRecord[j*m_tilesPerRow + i]){
+                filterDevice(radius, m_tiles[j*m_tilesPerRow + i]);
+                m_radiusRecord[j*m_tilesPerRow + i] = radius;
             }
         }
     }
@@ -260,6 +270,11 @@ void KisMagneticWorker::saveTheImage(vQPointF points)
     gc.drawEllipse(points[0], 3, 3);
     gc.setPen(Qt::red);
     gc.drawEllipse(points[points.count() -1], 2, 2);
+
+    gc.setPen(Qt::red);
+    for(QRect &r : m_tiles){
+        gc.drawRect(r);
+    }
 
     img.save("result.png");
 }

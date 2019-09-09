@@ -97,7 +97,7 @@ private Q_SLOTS:
     KisLayerSP addPaintLayer(KisNodeSP activeNode);
     KisNodeSP addGroupLayer(KisNodeSP activeNode);
 
-    KisNodeSP addCloneLayer(KisNodeSP activeNode);
+    KisNodeSP addCloneLayer(KisNodeList nodes);
 
     KisNodeSP addShapeLayer(KisNodeSP activeNode);
 

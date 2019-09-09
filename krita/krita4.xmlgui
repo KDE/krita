@@ -177,6 +177,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Menu name="LayerNew">
         <text>New</text>
         <Action name="add_new_paint_layer"/>
+        <Action name="add_new_clone_layer"/>
         <Action name="new_from_visible"/>
         <Action name="duplicatelayer"/>
         <Separator/>

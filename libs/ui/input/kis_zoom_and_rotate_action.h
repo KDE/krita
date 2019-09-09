@@ -21,7 +21,7 @@
 #define KIS_ZOOM_AND_ROTATE_ACTION_H
 
 #include "kis_abstract_input_action.h"
-
+#include <QScopedPointer>
 
 /**
  * @brief This class merely deligates the actions to KisZoomAction
@@ -31,6 +31,8 @@ class KisZoomAndRotateAction : public KisAbstractInputAction
 {
 public:
     KisZoomAndRotateAction();
+    ~KisZoomAndRotateAction();
+
     int priority() const override;
 
     void activate(int shortcut) override;
@@ -42,7 +44,7 @@ public:
     KisInputActionGroup inputActionGroup(int shortcut) const override;
 private:
     class Private;
-    const Private *d;
+    const QScopedPointer<Private> d;
 };
 
 #endif // KIS_ZOOM_AND_ROTATE_ACTION_H

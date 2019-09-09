@@ -561,7 +561,9 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
     KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG(0,0);
 
     int optimalBufferSize = 64; // most common numContiguousColumns, tile size?
-    quint8 * floatRGBApixel = new quint8[rgbaFloat32bitcolorSpace->pixelSize() * optimalBufferSize];
+    QScopedArrayPointer<quint8> floatRGBApixelStorage(new quint8[rgbaFloat32bitcolorSpace->pixelSize() * optimalBufferSize]);
+    quint8 *floatRGBApixel = floatRGBApixelStorage.data();
+
     quint32 pixelSize = rgbaFloat32bitcolorSpace->pixelSize();
     int pos = 0;
     for (int y = 0; y < rc.height(); y++)
@@ -589,7 +591,6 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
             x += numContiguousColumns;
         }
     }
-    delete [] floatRGBApixel;
     delete pixelToGmicPixelFormat;
 }
 
@@ -613,7 +614,8 @@ void KisQmicSimpleConvertor::convertFromGmicImage(gmic_image<float>& gmicImage, 
     float r,g,b,a;
 
     int optimalBufferSize = 64; // most common numContiguousColumns, tile size?
-    quint8 * floatRGBApixel = new quint8[rgbaFloat32bitcolorSpace->pixelSize() * optimalBufferSize];
+    QScopedArrayPointer<quint8> floatRGBApixelStorage(new quint8[rgbaFloat32bitcolorSpace->pixelSize() * optimalBufferSize]);
+    quint8 * floatRGBApixel = floatRGBApixelStorage.data();
     quint32 pixelSize = rgbaFloat32bitcolorSpace->pixelSize();
 
     KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent();

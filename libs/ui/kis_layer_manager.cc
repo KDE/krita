@@ -530,7 +530,9 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
     QRect bounds = source->exactBounds();
-
+    if (bounds.isEmpty()) {
+        bounds = image->bounds();
+    }
     KisImageSP dst = new KisImage(doc->createUndoStore(),
                                   image->width(),
                                   image->height(),

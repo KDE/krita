@@ -85,6 +85,11 @@ KisImportExportErrorCode EXRExport::convert(KisDocument *document, QIODevice */*
         res = exrConverter.buildFile(filename(), image->rootLayer());
     }
 
+    if (!exrConverter.errorMessage().isNull()) {
+        document->setErrorMessage(exrConverter.errorMessage());
+    }
+
+
     dbgFile  << " Result =" << res;
     return res;
 }

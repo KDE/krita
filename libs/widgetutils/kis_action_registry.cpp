@@ -155,6 +155,10 @@ KisActionRegistry::KisActionRegistry()
     loadCustomShortcuts();
 }
 
+KisActionRegistry::~KisActionRegistry()
+{
+}
+
 KisActionRegistry::ActionCategory KisActionRegistry::fetchActionCategory(const QString &name) const
 {
     if (!d->actionInfoList.contains(name)) return ActionCategory();

@@ -400,6 +400,8 @@ set(kritaui_LIB_SRCS
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
     KisMouseClickEater.cpp
+
+    KisDecorationsWrapperLayer.cpp
 )
 
 if(WIN32)
@@ -575,8 +577,7 @@ endif()
 
 if (NOT WIN32 AND NOT APPLE)
   target_link_libraries(kritaui ${X11_X11_LIB}
-                                ${X11_Xinput_LIB}
-                                ${XCB_LIBRARIES})
+                                ${X11_Xinput_LIB})
 endif()
 
 if(APPLE)

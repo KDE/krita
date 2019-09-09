@@ -39,8 +39,9 @@ KUndo2MagicString KisSelectionFilter::name()
     return KUndo2MagicString();
 }
 
-QRect KisSelectionFilter::changeRect(const QRect& rect)
+QRect KisSelectionFilter::changeRect(const QRect &rect, KisDefaultBoundsBaseSP defaultBounds)
 {
+    Q_UNUSED(defaultBounds);
     return rect;
 }
 
@@ -120,8 +121,10 @@ KUndo2MagicString KisErodeSelectionFilter::name()
     return kundo2_i18n("Erode Selection");
 }
 
-QRect KisErodeSelectionFilter::changeRect(const QRect& rect)
+QRect KisErodeSelectionFilter::changeRect(const QRect& rect, KisDefaultBoundsBaseSP defaultBounds)
 {
+    Q_UNUSED(defaultBounds);
+
     const qint32 radius = 1;
     return rect.adjusted(-radius, -radius, radius, radius);
 }
@@ -184,8 +187,10 @@ KUndo2MagicString KisDilateSelectionFilter::name()
     return kundo2_i18n("Dilate Selection");
 }
 
-QRect KisDilateSelectionFilter::changeRect(const QRect& rect)
+QRect KisDilateSelectionFilter::changeRect(const QRect& rect, KisDefaultBoundsBaseSP defaultBounds)
 {
+    Q_UNUSED(defaultBounds);
+
     const qint32 radius = 1;
     return rect.adjusted(-radius, -radius, radius, radius);
 }
@@ -254,8 +259,10 @@ KUndo2MagicString KisBorderSelectionFilter::name()
     return kundo2_i18n("Border Selection");
 }
 
-QRect KisBorderSelectionFilter::changeRect(const QRect& rect)
+QRect KisBorderSelectionFilter::changeRect(const QRect& rect, KisDefaultBoundsBaseSP defaultBounds)
 {
+    Q_UNUSED(defaultBounds);
+
     return rect.adjusted(-m_xRadius, -m_yRadius, m_xRadius, m_yRadius);
 }
 
@@ -464,8 +471,10 @@ KUndo2MagicString KisFeatherSelectionFilter::name()
     return kundo2_i18n("Feather Selection");
 }
 
-QRect KisFeatherSelectionFilter::changeRect(const QRect& rect)
+QRect KisFeatherSelectionFilter::changeRect(const QRect& rect, KisDefaultBoundsBaseSP defaultBounds)
 {
+    Q_UNUSED(defaultBounds);
+
     return rect.adjusted(-m_radius, -m_radius,
                          m_radius, m_radius);
 }
@@ -511,8 +520,10 @@ KUndo2MagicString KisGrowSelectionFilter::name()
     return kundo2_i18n("Grow Selection");
 }
 
-QRect KisGrowSelectionFilter::changeRect(const QRect& rect)
+QRect KisGrowSelectionFilter::changeRect(const QRect& rect, KisDefaultBoundsBaseSP defaultBounds)
 {
+    Q_UNUSED(defaultBounds);
+
     return rect.adjusted(-m_xRadius, -m_yRadius, m_xRadius, m_yRadius);
 }
 
@@ -638,8 +649,9 @@ KUndo2MagicString KisShrinkSelectionFilter::name()
     return kundo2_i18n("Shrink Selection");
 }
 
-QRect KisShrinkSelectionFilter::changeRect(const QRect& rect)
+QRect KisShrinkSelectionFilter::changeRect(const QRect& rect, KisDefaultBoundsBaseSP defaultBounds)
 {
+    Q_UNUSED(defaultBounds);
     return rect.adjusted(-m_xRadius, -m_yRadius, m_xRadius, m_yRadius);
 }
 
@@ -781,8 +793,10 @@ KUndo2MagicString KisSmoothSelectionFilter::name()
     return kundo2_i18n("Smooth Selection");
 }
 
-QRect KisSmoothSelectionFilter::changeRect(const QRect& rect)
+QRect KisSmoothSelectionFilter::changeRect(const QRect& rect, KisDefaultBoundsBaseSP defaultBounds)
 {
+    Q_UNUSED(defaultBounds);
+
     const qint32 radius = 1;
     return rect.adjusted(-radius, -radius, radius, radius);
 }
@@ -842,10 +856,10 @@ KUndo2MagicString KisInvertSelectionFilter::name()
     return kundo2_i18n("Invert Selection");
 }
 
-QRect KisInvertSelectionFilter::changeRect(const QRect& rect)
+QRect KisInvertSelectionFilter::changeRect(const QRect &rect, KisDefaultBoundsBaseSP defaultBounds)
 {
     Q_UNUSED(rect);
-    return QRect();
+    return defaultBounds->bounds();
 }
 
 void KisInvertSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect& rect)

@@ -603,8 +603,8 @@ void AnimationDocker::setActions(KisActionManager *actionMan)
     m_addOpacityKeyframeAction = new KisAction(KisAnimationUtils::addOpacityKeyframeActionName);
     m_deleteOpacityKeyframeAction = new KisAction(KisAnimationUtils::removeOpacityKeyframeActionName);
 
-    m_addTransformKeyframeAction = new KisAction(KisAnimationUtils::addTransformKeyframeActionName);
-    m_deleteTransformKeyframeAction = new KisAction(KisAnimationUtils::removeTransformKeyframeActionName);
+    m_addTransformKeyframeAction = new KisAction(KisAnimationUtils::addTransformKeyframeActionName, this);
+    m_deleteTransformKeyframeAction = new KisAction(KisAnimationUtils::removeTransformKeyframeActionName, this);
 
 
     // other new stuff

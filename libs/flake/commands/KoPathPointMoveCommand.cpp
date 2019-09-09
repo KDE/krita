@@ -112,9 +112,10 @@ bool KoPathPointMoveCommand::mergeWith(const KUndo2Command *command)
 
 void KoPathPointMoveCommandPrivate::applyOffset(qreal factor)
 {
+    QMap<KoShape*, QRectF> oldDirtyRects;
+
     foreach (KoPathShape *path, paths) {
-        // repaint old bounding rect
-        path->update();
+        oldDirtyRects[path] = path->boundingRect();
     }
 
     QMap<KoPathPointData, QPointF>::iterator it(points.begin());
@@ -133,6 +134,6 @@ void KoPathPointMoveCommandPrivate::applyOffset(qreal factor)
     foreach (KoPathShape *path, paths) {
         path->normalize();
         // repaint new bounding rect
-        path->update();
+        path->updateAbsolute(oldDirtyRects[path] | path->boundingRect());
     }
 }

@@ -68,5 +68,7 @@ private:
     friend class ReferenceImagesCanvas;
 };
 
+typedef KisSharedPtr<KisReferenceImagesLayer> KisReferenceImagesLayerSP;
+
 
 #endif //KRITA_KISREFERENCEIMAGESLAYER_H

@@ -104,7 +104,7 @@ void KoGamutMaskShape::paintStroke(QPainter &painter, const KoViewConverter &vie
 
 }
 
-struct Q_DECL_HIDDEN KoGamutMask::Private {
+struct KoGamutMask::Private {
     QString name;
     QString title;
     QString description;
@@ -112,12 +112,12 @@ struct Q_DECL_HIDDEN KoGamutMask::Private {
     QVector<KoGamutMaskShape*> maskShapes;
     QVector<KoGamutMaskShape*> previewShapes;
     QSizeF maskSize;
-    int rotation;
+    int rotation {0};
 };
 
 KoGamutMask::KoGamutMask(const QString& filename)
     : KoResource(filename)
-    , d(new Private())
+    , d(new Private)
 {
     d->maskSize = QSizeF(144.0,144.0);
     setRotation(0);
@@ -125,7 +125,7 @@ KoGamutMask::KoGamutMask(const QString& filename)
 
 KoGamutMask::KoGamutMask()
     : KoResource(QString())
-    , d(new Private())
+    , d(new Private)
 {
     d->maskSize = QSizeF(144.0,144.0);
     setRotation(0);
@@ -134,7 +134,7 @@ KoGamutMask::KoGamutMask()
 KoGamutMask::KoGamutMask(KoGamutMask* rhs)
     : QObject(0)
     , KoResource(QString())
-    , d(new Private())
+    , d(new Private)
 {
     setFilename(rhs->filename());
     setTitle(rhs->title());
@@ -151,6 +151,11 @@ KoGamutMask::KoGamutMask(KoGamutMask* rhs)
     setValid(true);
 }
 
+
+KoGamutMask::~KoGamutMask()
+{
+    delete d;
+}
 
 bool KoGamutMask::coordIsClear(const QPointF& coord, KoViewConverter &viewConverter, bool preview)
 {

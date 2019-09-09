@@ -112,15 +112,15 @@ class Debugger(bdb.Bdb):
 
     @asyncio.coroutine
     def start(self):
-        yield self.display()
+        yield from self.display()
 
     @asyncio.coroutine
     def step(self):
         self.debugq.put("step")
-        yield self.display()
+        yield from self.display()
 
     @asyncio.coroutine
     def stop(self):
         self.debugq.put("stop")
         self.applicationq.put({"quit": True})
-        yield self.display()
+        yield from self.display()

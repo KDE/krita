@@ -76,6 +76,13 @@ KisImportExportErrorCode KisSaiConverter::buildImage(const QString &filename)
                 return true;
             }
         );
+    saiFile.IterateSubLayerFiles(
+            [&](sai::VirtualFileEntry& LayerFile)
+            {
+                KisSaiConverter::processLayerFile(LayerFile);
+                return true;
+            }
+        );
 
     return ImportExportCodes::OK;
 }
@@ -125,7 +132,7 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
         {
             std::uint32_t Options;
             LayerFile.Read(Options);
-            maskVisible = (Options & 1) != 0;
+            maskVisible = (Options & 2) != 0;
             //We have no use for linked to layer transform.
             break;
         }

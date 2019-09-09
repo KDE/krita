@@ -42,30 +42,26 @@ public:
      */
     QList<QPointF> callibrationInfo();
 
-    enum progressState {
-        WAITING = 0,
-        MEDIUM_STROKE,
-        HEAVY_STROKE,
-        LIGHT_STROKE,
-        DONE
-    };
-
 Q_SIGNALS:
     void callibrationDone();
+
 
 protected:
     void paintEvent(QPaintEvent *e) override;
     void tabletEvent(QTabletEvent *e) override;
+private Q_SLOTS:
+    void finalizeCallibration();
+    void resetEverything();
+    void updateCaption();
 
 private:
-
-    void UpdateCaption();
 
     QList<qreal> m_callibrationInfo;
     QPolygon m_currentPath;
     QTimer *m_callibrationTime;
     QString m_caption;
     int m_oldCaption;
+    bool m_callibrating;
 
 };
 

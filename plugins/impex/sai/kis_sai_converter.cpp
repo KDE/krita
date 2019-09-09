@@ -41,7 +41,9 @@
 #include <kis_layer.h>
 #include <kis_group_layer.h>
 #include <kis_shape_layer.h>
+#include <kis_psd_layer_style.h>
 #include <kis_random_accessor_ng.h>
+#include <KoPattern.h>
 
 #include "kis_sai_converter.h"
 
@@ -108,9 +110,9 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
     std::uint8_t TextureName[64] = {};
     std::uint16_t TextureScale = 0;
     std::uint8_t TextureOpacity= 0;
-    std::uint8_t Enabled = 0; // bool
-    std::uint8_t Opacity = 0; // 100
-    std::uint8_t Width = 0;   // 1 - 15
+    std::uint8_t FringeEnabled = 0; // bool
+    std::uint8_t FringeOpacity = 0; // 100
+    std::uint8_t FringeWidth = 0;   // 1 - 15
 
     while( LayerFile.Read<std::uint32_t>(CurTag) && CurTag )
     {
@@ -149,9 +151,9 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
         }
         case sai::Tag("peff"):
         {
-            LayerFile.Read(Enabled);
-            LayerFile.Read(Opacity);
-            LayerFile.Read(Width);
+            LayerFile.Read(FringeEnabled);
+            LayerFile.Read(FringeOpacity);
+            LayerFile.Read(FringeWidth);
             break;
         }
         default:
@@ -166,6 +168,33 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
     quint8 opacity = qRound(int(header.Opacity) * 2.55);
     QString blendingMode = BlendingMode(static_cast<sai::BlendingModes>(header.Blending));
 
+    KisPSDLayerStyleSP style = toQShared(new KisPSDLayerStyle());
+    if (!QString((char*)TextureName).isEmpty() ){
+        style->patternOverlay()->setSize(TextureScale);
+        style->patternOverlay()->setOpacity(TextureOpacity);
+        //TODO: Add pattern.
+        //style->patternOverlay()->setPattern(new KoPattern(QString((char*)TextureName)));
+        style->patternOverlay()->setEffectEnabled(true);
+    }
+    if (FringeEnabled) {
+        style->innerShadow()->setSize(FringeWidth);
+        style->innerShadow()->setOpacity(FringeOpacity);
+        style->innerShadow()->setDistance(0);
+        style->innerShadow()->setEffectEnabled(true);
+        /*
+        style->bevelAndEmboss()->setStyle(psd_bevel_inner_bevel);
+        style->bevelAndEmboss()->setTechnique(psd_technique_precise);
+        style->bevelAndEmboss()->setDepth(100);
+        style->bevelAndEmboss()->setDirection(psd_direction_up);
+        style->bevelAndEmboss()->setSize(FringeWidth);
+        style->bevelAndEmboss()->setAltitude(90);
+        style->bevelAndEmboss()->setHighlightOpacity(0);
+        style->bevelAndEmboss()->setShadowOpacity(FringeOpacity);
+        style->bevelAndEmboss()->setEffectEnabled(true);
+        */
+    }
+    style->setEnabled(true);
+
     switch( static_cast<sai::LayerType>(header.Type) ) {
 
     case sai::LayerType::Layer:
@@ -177,6 +206,7 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
         layer->setVisible(header.Visible);
         layer->setX(int(header.Bounds.X-8));
         layer->setY(int(header.Bounds.Y-8));
+        layer->setLayerStyle(style);
         handleAddingLayer(layer, header.Clipping, header.Identifier, ParentID);
         break;
     }
@@ -192,6 +222,7 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
         layer->setVisible(header.Visible);
         layer->setX(int(header.Bounds.X-8));
         layer->setY(int(header.Bounds.Y-8));
+        layer->setLayerStyle(style);
         handleAddingLayer(layer, header.Clipping, header.Identifier, ParentID);
         break;
     }
@@ -201,6 +232,7 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
         layer->setVisible(header.Visible);
         layer->setX(int(header.Bounds.X-8));
         layer->setY(int(header.Bounds.Y-8));
+        layer->setLayerStyle(style);
         handleAddingLayer(layer, header.Clipping, header.Identifier, ParentID);
         break;
     }

@@ -28,6 +28,8 @@
 #include <KisImportExportErrorCode.h>
 #include "kis_image.h"
 
+#include "sai.hpp"
+
 class KisDocument;
 class KisImage;
 
@@ -40,10 +42,23 @@ public:
     KisImportExportErrorCode buildImage(const QString &filename);
 
     KisImageSP image();
+    void processLayerFile(sai::VirtualFileEntry& LayerFile);
 
 private:
+
+
+    void ReadRasterDataIntoLayer(KisPaintLayerSP layer, sai::VirtualFileEntry &entry, quint32 width, quint32 height);
+
+    QString BlendingMode(sai::BlendingModes mode);
+    void RLEDecompress32(void* Destination, const std::uint8_t *Source, std::size_t SourceSize, std::size_t IntCount, std::size_t Channel);
+
+    void handleAddingLayer(KisLayerSP layer, bool clipping, quint32 layerID, quint32 parentLayerID);
+
     KisDocument *m_doc;
     KisImageSP m_image;
+    std::uint32_t LastAddedLayerID;
+    QMap<std::uint32_t, KisNodeSP> parentNodeList;
+    QVector<KisNodeSP> clippedLayers;
 };
 
 #endif // KIS_SAI_CONVERTER_H

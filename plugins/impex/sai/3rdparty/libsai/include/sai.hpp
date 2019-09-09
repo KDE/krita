@@ -1,9 +1,9 @@
 /*
-LibSai - Library for interfacing with SystemMax PaintTool Sai files
+libsai - Library for interfacing with SystemMax PaintTool Sai files
 
 LICENSE
 	MIT License
-	Copyright (c) 2017 Wunkolo
+	Copyright (c) 2017-2019 Wunkolo
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
 	in the Software without restriction, including without limitation the rights
@@ -29,9 +29,46 @@ LICENSE
 #include <array>
 #include <memory>
 #include <tuple>
+#include <functional>
 
 namespace sai
 {
+
+template<std::size_t N>
+inline constexpr std::uint32_t Tag(const char (&TagString)[N])
+{
+	static_assert(N == 5, "Tag must be 4 characters");
+	return
+		  (TagString[3] <<  0)
+		| (TagString[2] <<  8)
+		| (TagString[1] << 16)
+		| (TagString[0] << 24);
+}
+
+enum class LayerType
+{
+	RootLayer = 0x00, // Canvas pseudo-layer
+	Layer     = 0x03,
+	Unknown4  = 0x04,
+	Linework  = 0x05,
+	Mask      = 0x06,
+	Unknown7  = 0x07,
+	Set       = 0x08
+};
+
+enum class BlendingModes : std::uint32_t
+{
+	PassThrough = Tag("pass"),
+	Normal      = Tag("norm"),
+	Multiply    = Tag("mul\0"),
+	Screen      = Tag("scrn"),
+	Overlay     = Tag("over"),
+	Luminosity  = Tag("add\0"),
+	Shade       = Tag("sub\0"),
+	LumiShade   = Tag("adsb"),
+	Binary      = Tag("cbi\0")
+};
+
 #pragma pack(push, 1)
 
 struct FATEntry
@@ -52,70 +89,6 @@ struct FATEntry
 	std::uint32_t Size;
 	std::uint64_t TimeStamp; // Windows FILETIME
 	std::uint64_t UnknownB;
-};
-
-/// Internal Structures
-
-struct ThumbnailHeader
-{
-    std::uint32_t Width;
-    std::uint32_t Height;
-    std::uint32_t Magic; // BM32
-};
-
-enum BlendingMode : std::uint32_t
-{
-    PassThrough = 'pass',
-    Normal = 'norm',
-    Multiply = 'mul ',
-    Screen = 'scrn',
-    Overlay = 'over',
-    Luminosity = 'add ',
-    Shade = 'sub ',
-    LumiShade = 'adsb',
-    Binary = 'cbin'
-};
-
-enum class LayerClass : std::uint32_t
-{
-    RootLayer = 0x00,
-    // Parent Canvas layer object
-    Layer = 0x03,
-    Unknown4 = 0x4,
-    Linework = 0x05,
-    Mask = 0x06,
-    Unknown7 = 0x07,
-    Set = 0x08
-};
-
-struct LayerReference
-{
-    std::uint32_t Identifier;
-    std::uint16_t LayerClass;
-    // These all get added and sent as a windows message 0x80CA for some reason
-    std::uint16_t Unknown;
-};
-
-struct LayerBounds
-{
-    std::int32_t X; // (X / 32) * 32
-    std::int32_t Y; // (Y / 32) * 32
-    std::uint32_t Width; // Width - 31
-    std::uint32_t Height; // Height - 31
-};
-
-struct LayerHeader
-{
-    std::uint32_t LayerClass;
-    std::uint32_t Identifier;
-    LayerBounds Bounds;
-    std::uint32_t Unknown;
-    std::uint8_t Opacity;
-    std::uint8_t Visible;
-    std::uint8_t PreserveOpacity;
-    std::uint8_t Clipping;
-    std::uint8_t Unknown4;
-    std::uint32_t Blending;
 };
 
 union VirtualPage
@@ -146,6 +119,52 @@ union VirtualPage
 	To checksum a table be sure to do "u32[0] = 0" first
 	*/
 	std::uint32_t Checksum();
+};
+
+struct ThumbnailHeader
+{
+	std::uint32_t Width;
+	std::uint32_t Height;
+	std::uint32_t Magic; // BM32
+};
+
+using LayerID = std::uint32_t;
+
+struct LayerReference
+{
+	std::uint32_t Identifier;
+	std::uint16_t LayerType;
+	// These all get added and sent as a windows message 0x80CA for some reason
+	std::uint16_t Unknown;
+};
+
+struct LayerBounds
+{
+	std::int32_t X; // (X / 32) * 32
+	std::int32_t Y; // (Y / 32) * 32
+	std::uint32_t Width; // Width - 31
+	std::uint32_t Height; // Height - 31
+};
+
+struct LayerHeader
+{
+	std::uint32_t Type; // LayerType enum
+	LayerID Identifier;
+	LayerBounds Bounds;
+	std::uint32_t Unknown;
+	std::uint8_t Opacity;
+	std::uint8_t Visible;
+	std::uint8_t PreserveOpacity;
+	std::uint8_t Clipping;
+	std::uint8_t Unknown4;
+	std::uint32_t Blending;
+};
+
+struct LayerTableEntry
+{
+	LayerID Identifier;
+	std::uint16_t Type;     // LayerType enum
+	std::uint16_t Unknown6; // Gets sent as windows message 0x80CA for some reason
 };
 
 #pragma pack(pop)
@@ -199,10 +218,10 @@ private:
 
 	VirtualPage Buffer;
 
-    // Decryption Key
-    const std::uint32_t* Key;
+	// Decryption Key
+	const std::uint32_t* Key;
 
-    std::uint32_t CurrentPage;
+	std::uint32_t CurrentPage;
 
 	// Caching
 
@@ -214,7 +233,7 @@ private:
 	std::unique_ptr<VirtualPage> TableCache;
 	std::uint32_t TableCacheIndex;
 
-    std::uint32_t PageCount;
+	std::uint32_t PageCount;
 };
 
 class ifstream : public std::istream
@@ -359,64 +378,6 @@ private:
 	FATEntry FATData;
 };
 
-class Layer
-{
-public:
-    Layer(VirtualFileEntry& entry);
-    ~Layer();
-
-    LayerClass LayerType();
-    std::uint32_t Identifier();
-
-    std::tuple<
-        std::int32_t,
-        std::int32_t
-    > Position();
-    std::tuple<
-        std::uint32_t,
-        std::uint32_t
-    > Size();
-
-    int Opacity();
-    bool IsVisible();
-    bool IsPreserveOpacity();
-    bool IsClipping();
-    BlendingMode Blending();
-
-    //Layer name.
-    char* LayerName();
-    //ID of the parent layer or folder.
-    std::uint32_t ParentID();
-
-    //String representing the name of the texture used.
-    //If empty, no texture effect.
-    char* TextureName();
-    //Texture scaling in percentages going from 50 to 500%.
-    int TextureScale();
-    //Opacity of the texture effect.
-    int TextureOpacity();
-
-    //Boolean toggling whether the water color fringe is enabled.
-    //May have been intended to be an integer going over several effects.
-    int LayerEffect();
-    //Integer going from 0 to 100 representing the opacity of the effect.
-    int LayerEffectOpacity();
-    //Integer going from 0 to 15 presenting the width of the effect.
-    int LayerEffectWidth();
-
-private:
-
-    LayerHeader header;
-    char layerName[256];
-    std::uint32_t ParentLayer;
-    char TexName[64];
-    std::uint16_t TexScale;
-    std::uint8_t TexOpacity;
-    std::uint8_t Effect;
-    std::uint8_t EffectOpacity;
-    std::uint8_t EffectWidth;
-};
-
 class Document : public VirtualFileSystem
 {
 public:
@@ -442,6 +403,13 @@ public:
 		std::uint32_t,
 		std::uint32_t
 	> GetThumbnail();
+
+	void IterateLayerFiles(
+		const std::function<bool(VirtualFileEntry&)>& LayerProc
+	);
+	void IterateSubLayerFiles(
+		const std::function<bool(VirtualFileEntry&)>& SubLayerProc
+	);
 
 private:
 };

@@ -31,46 +31,8 @@ public:
 		return true;
 	}
 	bool VisitFile(sai::VirtualFileEntry& Entry) override
-    {
-        PrintVirtualFileEntry(Entry);
-        if (FolderDepth>0) {
-            sai::Layer layerData = sai::Layer(Entry);
-            PrintNestedFolder();
-            PrintNestedFolder();
-                std::cout  << " "
-                           <<"LayerType: "<< LayerType(layerData.LayerType())
-                           << ", ParentLayer: "<< layerData.ParentID()
-                           << ", LayerID: "<< layerData.Identifier()
-                         << ", LayerName: "<< layerData.LayerName()
-                           << "\n";
-            PrintNestedFolder();
-            PrintNestedFolder();
-                std::cout <<" Visibility:"
-                          << layerData.IsVisible()
-                          <<", Opacity:"
-                          << layerData.Opacity()
-                          << ", AlphaLock:"
-                          << layerData.IsPreserveOpacity()
-                          << ", Clipping:"
-                          << layerData.IsClipping()
-                          << "\n";
-                PrintNestedFolder();
-                PrintNestedFolder();
-                std::cout << " Position: ["
-                          << int(std::get<0>(layerData.Position()))
-                          << ", "
-                          << int(std::get<1>(layerData.Position()))
-                          << "], Size: ["
-                          << int(std::get<0>(layerData.Size()))
-                          <<","
-                          << int(std::get<1>(layerData.Size()))
-                          << "] Blending Mode: "
-                          << BlendingMode(layerData.Blending())
-                          << "\n";
-
-
-
-        }
+	{
+		PrintVirtualFileEntry(Entry);
 		return true;
 	}
 private:
@@ -102,80 +64,12 @@ private:
 			);
 		}
 	}
-
-    std::string LayerType(sai::LayerClass type) {
-        std::string s = "";
-        switch(type) {
-        case sai::LayerClass::Layer:
-            s = "RasterLayer";
-            break;
-        case sai::LayerClass::Linework:
-            s = "LineworkLayer";
-            break;
-        case sai::LayerClass::Set:
-            s = "Folder";
-            break;
-        case sai::LayerClass::Mask:
-            s = "Mask";
-            break;
-        case sai::LayerClass::RootLayer:
-            s = "RootLayer";
-            break;
-        default:
-            s = "unknown";
-            break;
-        }
-        return s;
-    }
-    std::string BlendingMode(sai::BlendingMode mode) {
-        std::string s = "";
-        switch (mode) {
-        case sai::BlendingMode::Shade:
-            s = "Shade";
-            break;
-        case sai::BlendingMode::Binary:
-            s = "Binary";
-            break;
-        case sai::BlendingMode::Normal:
-            s = "Normal";
-            break;
-        case sai::BlendingMode::Screen:
-            s = "Screen";
-            break;
-        case sai::BlendingMode::Multiply:
-            s = "Multiply";
-            break;
-        case sai::BlendingMode::LumiShade:
-            s = "LumiShade";
-            break;
-        case sai::BlendingMode::Luminosity:
-            s = "Luminosity";
-            break;
-        case sai::BlendingMode::PassThrough:
-            s = "Passthrough";
-            break;
-        case sai::BlendingMode::Overlay:
-            s = "Overlay";
-            break;
-        default:
-            s = "unknown blending mode";
-            std::cout << " unknown blending mode " << mode;
-            printf("|%c%c%c%c|\n",
-                reinterpret_cast<char*>(&mode)[3],
-                reinterpret_cast<char*>(&mode)[2],
-                reinterpret_cast<char*>(&mode)[1],
-                reinterpret_cast<char*>(&mode)[0]
-            );
-            break;
-        }
-        return s;
-    }
 	std::uint32_t FolderDepth;
 };
 
 const char* const Help =
 "Show virtual file system tree of a user-created .sai files:\n"
-"\tDecrypt.exe (filename)\n"
+"\t./Tree (filenames)\n"
 "\tWunkolo - Wunkolo@gmail.com";
 
 int main(int argc, char* argv[])

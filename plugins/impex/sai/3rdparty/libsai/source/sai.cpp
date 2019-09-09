@@ -1,3 +1,26 @@
+/*
+libsai - Library for interfacing with SystemMax PaintTool Sai files
+
+LICENSE
+	MIT License
+	Copyright (c) 2017-2019 Wunkolo
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+*/
+
 #include <sai.hpp>
 
 #include <fstream>
@@ -5,10 +28,6 @@
 #include <cstring>
 #include <codecvt>
 #include <locale>
-
-#include <string>
-#include <iostream>
-
 
 #include <immintrin.h>
 
@@ -163,16 +182,8 @@ ifstreambuf::ifstreambuf(const std::uint32_t* Key)
 	TableCacheIndex(-1),
 	PageCount(0)
 {
-	setg(
-		nullptr,
-		nullptr,
-		nullptr
-	);
-
-	setp(
-		nullptr,
-		nullptr
-	);
+	setg(nullptr, nullptr, nullptr);
+	setp(nullptr, nullptr);
 
 	PageCache  = std::unique_ptr<VirtualPage>(new VirtualPage{});
 	TableCache = std::unique_ptr<VirtualPage>(new VirtualPage{});
@@ -185,10 +196,7 @@ ifstreambuf* ifstreambuf::open(const char* Name)
 		return nullptr;
 	}
 
-	FileIn.open(
-		Name,
-		std::ios_base::binary | std::ios_base::ate
-	);
+	FileIn.open(Name, std::ios_base::binary | std::ios_base::ate);
 
 	if( FileIn.is_open() == false )
 	{
@@ -207,9 +215,7 @@ ifstreambuf* ifstreambuf::open(const char* Name)
 
 	PageCount = static_cast<std::uint32_t>(FileSize) / VirtualPage::PageSize;
 
-	seekpos(
-		0
-	);
+	seekpos(0);
 
 	return this;
 }
@@ -222,17 +228,11 @@ ifstreambuf* ifstreambuf::open(const wchar_t* Name)
 	}
 
 #if defined(_WIN32)
-	FileIn.open(
-		Name,
-		std::ios_base::binary | std::ios_base::ate
-	);
+	FileIn.open(Name, std::ios_base::binary | std::ios_base::ate);
 #else
 	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> Converter;
 	std::string Name8 = Converter.to_bytes(std::wstring(Name));
-	FileIn.open(
-		Name8,
-		std::ios_base::binary | std::ios_base::ate
-	);
+	FileIn.open(Name8, std::ios_base::binary | std::ios_base::ate);
 #endif
 
 	if( FileIn.is_open() == false )
@@ -252,9 +252,7 @@ ifstreambuf* ifstreambuf::open(const wchar_t* Name)
 
 	PageCount = static_cast<std::uint32_t>(FileSize) / VirtualPage::PageSize;
 
-	seekpos(
-		0
-	);
+	seekpos(0);
 
 	return this;
 }
@@ -298,8 +296,7 @@ std::streambuf::int_type ifstreambuf::underflow()
 }
 
 std::streambuf::pos_type ifstreambuf::seekoff(
-	std::streambuf::off_type Offset,
-	std::ios_base::seekdir Direction,
+	std::streambuf::off_type Offset, std::ios_base::seekdir Direction,
 	std::ios_base::openmode /*Mode*/
 )
 {
@@ -320,9 +317,7 @@ std::streambuf::pos_type ifstreambuf::seekoff(
 		Position = (PageCount * VirtualPage::PageSize) + Offset;
 	}
 
-	return seekpos(
-		Position
-	);
+	return seekpos(Position);
 }
 
 std::streambuf::pos_type ifstreambuf::seekpos(
@@ -347,11 +342,7 @@ std::streambuf::pos_type ifstreambuf::seekpos(
 			}
 		}
 	}
-	setg(
-		nullptr,
-		nullptr,
-	nullptr
-	);
+	setg(nullptr, nullptr, nullptr);
 	return std::streampos(std::streamoff(-1));
 }
 
@@ -369,22 +360,14 @@ bool ifstreambuf::FetchPage(std::uint32_t PageIndex, VirtualPage* Dest)
 			// Cache Hit
 			if( Dest != nullptr )
 			{
-				std::memcpy(
-					Dest,
-					TableCache.get(),
-					VirtualPage::PageSize
-				);
+				std::memcpy(Dest, TableCache.get(), VirtualPage::PageSize);
 			}
 			return true;
 		}
 
-		FileIn.seekg(
-			PageIndex * VirtualPage::PageSize,
-			std::ios_base::beg
-		);
+		FileIn.seekg(PageIndex * VirtualPage::PageSize, std::ios_base::beg);
 		FileIn.read(
-			reinterpret_cast<char*>(TableCache.get()),
-			VirtualPage::PageSize
+			reinterpret_cast<char*>(TableCache.get()), VirtualPage::PageSize
 		);
 		if( FileIn.fail() )
 		{
@@ -394,11 +377,7 @@ bool ifstreambuf::FetchPage(std::uint32_t PageIndex, VirtualPage* Dest)
 		TableCacheIndex = PageIndex;
 		if( Dest != nullptr )
 		{
-			std::memcpy(
-				Dest,
-				TableCache.get(),
-				VirtualPage::PageSize
-			);
+			std::memcpy(Dest, TableCache.get(), VirtualPage::PageSize);
 		}
 	}
 	else // Data Block
@@ -408,11 +387,7 @@ bool ifstreambuf::FetchPage(std::uint32_t PageIndex, VirtualPage* Dest)
 			// Cache Hit
 			if( Dest != nullptr )
 			{
-				std::memcpy(
-					Dest,
-					PageCache.get(),
-					VirtualPage::PageSize
-				);
+				std::memcpy(Dest, PageCache.get(), VirtualPage::PageSize);
 			}
 			return true;
 		}
@@ -427,12 +402,10 @@ bool ifstreambuf::FetchPage(std::uint32_t PageIndex, VirtualPage* Dest)
 			return false;
 		}
 		FileIn.seekg(
-			PageIndex * VirtualPage::PageSize,
-			std::ios_base::beg
+			PageIndex * VirtualPage::PageSize, std::ios_base::beg
 		);
 		FileIn.read(
-			reinterpret_cast<char*>(PageCache.get()),
-			VirtualPage::PageSize
+			reinterpret_cast<char*>(PageCache.get()), VirtualPage::PageSize
 		);
 		if( FileIn.fail() )
 		{
@@ -455,11 +428,7 @@ bool ifstreambuf::FetchPage(std::uint32_t PageIndex, VirtualPage* Dest)
 		PageCacheIndex = PageIndex;
 		if( Dest != nullptr )
 		{
-			std::memcpy(
-				Dest,
-				PageCache.get(),
-				VirtualPage::PageSize
-			);
+			std::memcpy(Dest, PageCache.get(), VirtualPage::PageSize);
 		}
 	}
 	return true;
@@ -469,41 +438,31 @@ bool ifstreambuf::FetchPage(std::uint32_t PageIndex, VirtualPage* Dest)
 ifstream::ifstream(const std::string& Path)
 	: std::istream(new ifstreambuf())
 {
-	reinterpret_cast<ifstreambuf*>(rdbuf())->open(
-		Path.c_str()
-	);
+	reinterpret_cast<ifstreambuf*>(rdbuf())->open(Path.c_str());
 }
 
 ifstream::ifstream(const char* Path)
 	: std::istream(new ifstreambuf())
 {
-	reinterpret_cast<ifstreambuf*>(rdbuf())->open(
-		Path
-	);
+	reinterpret_cast<ifstreambuf*>(rdbuf())->open(Path);
 }
 
 ifstream::ifstream(const std::wstring& Path)
 	: std::istream(new ifstreambuf())
 {
-	reinterpret_cast<ifstreambuf*>(rdbuf())->open(
-		Path.c_str()
-	);
+	reinterpret_cast<ifstreambuf*>(rdbuf())->open(Path.c_str());
 }
 
 ifstream::ifstream(const wchar_t* Path)
 	: std::istream(new ifstreambuf())
 {
-	reinterpret_cast<ifstreambuf*>(rdbuf())->open(
-		Path
-	);
+	reinterpret_cast<ifstreambuf*>(rdbuf())->open(Path);
 }
 
 void ifstream::open(const char* FilePath) const
 {
 	reinterpret_cast<ifstreambuf*>(rdbuf())->close();
-	reinterpret_cast<ifstreambuf*>(rdbuf())->open(
-		FilePath
-	);
+	reinterpret_cast<ifstreambuf*>(rdbuf())->open(FilePath);
 }
 
 void ifstream::open(const std::string& FilePath) const
@@ -514,9 +473,7 @@ void ifstream::open(const std::string& FilePath) const
 void ifstream::open(const wchar_t* FilePath) const
 {
 	reinterpret_cast<ifstreambuf*>(rdbuf())->close();
-	reinterpret_cast<ifstreambuf*>(rdbuf())->open(
-		FilePath
-	);
+	reinterpret_cast<ifstreambuf*>(rdbuf())->open(FilePath);
 }
 
 void ifstream::open(const std::wstring& FilePath) const
@@ -593,9 +550,7 @@ std::unique_ptr<VirtualFileEntry> VirtualFileSystem::GetEntry(const char* Path)
 
 	std::string CurPath(Path);
 	const char* PathDelim = "./";
-
 	const char* CurToken = std::strtok(&CurPath[0], PathDelim);
-
 	std::size_t CurEntry = 0;
 
 	while( CurEntry < 64 && CurPage.FATEntries[CurEntry].Flags && CurToken )
@@ -607,7 +562,6 @@ std::unique_ptr<VirtualFileEntry> VirtualFileSystem::GetEntry(const char* Path)
 			{
 				// No more tokens, done
 				std::unique_ptr<VirtualFileEntry> Entry(new VirtualFileEntry());
-
 				Entry->FATData = CurPage.FATEntries[CurEntry];
 				Entry->FileSystem = SaiStream;
 				return Entry;
@@ -632,36 +586,25 @@ std::unique_ptr<VirtualFileEntry> VirtualFileSystem::GetEntry(const char* Path)
 }
 
 std::size_t VirtualFileSystem::Read(
-	std::size_t Offset,
-	void* Destination,
-	std::size_t Size) const
+	std::size_t Offset, void* Destination, std::size_t Size
+) const
 {
 	SaiStream->seekg(Offset);
-	SaiStream->read(
-		reinterpret_cast<char*>(Destination),
-		Size
-	);
+	SaiStream->read(reinterpret_cast<char*>(Destination), Size);
 	return Size;
 }
 
 void VirtualFileSystem::IterateFileSystem(VirtualFileVisitor& Visitor)
 {
-	IterateFATBlock(
-		2,
-		Visitor
-	);
+	IterateFATBlock(2, Visitor);
 }
 
 void VirtualFileSystem::IterateFATBlock(
-	std::size_t PageIndex,
-	VirtualFileVisitor& Visitor
+	std::size_t PageIndex, VirtualFileVisitor& Visitor
 )
 {
 	VirtualPage CurPage = {};
-	Read(
-		PageIndex * VirtualPage::PageSize,
-		CurPage
-	);
+	Read(PageIndex * VirtualPage::PageSize, CurPage);
 
 	for(
 		std::size_t i = 0;
@@ -683,10 +626,7 @@ void VirtualFileSystem::IterateFATBlock(
 		case FATEntry::EntryType::Folder:
 		{
 			Visitor.VisitFolderBegin(CurEntry);
-			IterateFATBlock(
-				CurEntry.GetPageIndex(),
-				Visitor
-			);
+			IterateFATBlock(CurEntry.GetPageIndex(), Visitor);
 			Visitor.VisitFolderEnd(CurEntry);
 			break;
 		}
@@ -811,79 +751,13 @@ std::tuple<std::uint32_t, std::uint32_t> Document::GetCanvasSize()
 		Canvas->Read(Alignment);
 		Canvas->Read(Width);
 		Canvas->Read(Height);
-
-        /**
-        std::uint32_t CurTag = 0;
-        std::uint32_t CurTagSize = 0;
-
-        Canvas->Read(CurTag);
-        while(CurTag)
-        {
-            Canvas->Read(CurTagSize);
-
-            switch (CurTag) {
-            case 'reso':{
-                // 16.16 fixed point integer
-                std::uint32_t DotsPerInch;
-                // 0 = pixels, 1 = inch, 2 = cm, 3 = mm
-                std::uint16_t SizeUnits;
-                // 0 = pixel/inch, 1 = pixel/cm
-                std::uint16_t ResolutionUnits;
-                Canvas->Read(DotsPerInch);
-                Canvas->Read(SizeUnits);
-                Canvas->Read(ResolutionUnits);
-                std::cout << "\nCanvas Resolution "<<int(DotsPerInch) << ", " << SizeUnits << ", " << ResolutionUnits;
-                break;
-            }
-            case 'wsrc':{
-                std::uint32_t Unknown0;
-                Canvas->Read(Unknown0);
-                std::cout << "\nwsrc "<< Unknown0;
-                break;
-            }
-            case 'lyid':{
-                std::uint32_t Unknown0;
-                Canvas->Read(Unknown0);
-                std::cout << "\nlyid "<< Unknown0;
-                break;
-            }
-            case 'layr':{
-                std::uint32_t SelectedLayerID;
-                Canvas->Read(SelectedLayerID);
-                std::cout << "\nSelected Layer ID "<< SelectedLayerID;
-                break;
-            }
-            default:
-            {
-                printf("%c%c%c%c | %u\n",
-                       reinterpret_cast<char*>(&CurTag)[3],
-                        reinterpret_cast<char*>(&CurTag)[2],
-                        reinterpret_cast<char*>(&CurTag)[1],
-                        reinterpret_cast<char*>(&CurTag)[0],
-                        CurTagSize
-                        );
-                // for any streams that we do not handle,
-                // we just skip forward in the stream
-                Canvas->Seek(Canvas->Tell() + CurTagSize);
-                break;
-            }
-
-            }
-
-            Canvas->Read(CurTag);
-        }
-        */
-
-
 		return std::make_tuple(Width, Height);
 	}
 	return std::make_tuple(0, 0);
 }
 
 std::tuple<
-	std::unique_ptr<std::uint8_t[]>,
-	std::uint32_t,
-	std::uint32_t
+	std::unique_ptr<std::uint8_t[]>, std::uint32_t, std::uint32_t
 > Document::GetThumbnail()
 {
 	if( std::unique_ptr<VirtualFileEntry> Thumbnail = GetEntry("thumbnail") )
@@ -893,7 +767,7 @@ std::tuple<
 		Thumbnail->Read(Header.Height);
 		Thumbnail->Read(Header.Magic);
 
-		if( Header.Magic != *(uint*)"23MB" )
+		if( Header.Magic != sai::Tag("BM32") )
 		{
 			return std::make_tuple(nullptr, 0, 0);
 		}
@@ -903,10 +777,7 @@ std::tuple<
 			new std::uint8_t[PixelCount * sizeof(std::uint32_t)]()
 		);
 
-		Thumbnail->Read(
-			Pixels.get(),
-			PixelCount * sizeof(std::uint32_t)
-		);
+		Thumbnail->Read(Pixels.get(), PixelCount * sizeof(std::uint32_t));
 
 		//// BGRA to RGBA
 		//std::size_t i = 0;
@@ -943,7 +814,55 @@ std::tuple<
 
 		return std::make_tuple(std::move(Pixels), Header.Width, Header.Height);
 	}
-    return std::make_tuple(nullptr, 0, 0);
+	return std::make_tuple(nullptr, 0, 0);
+}
+
+void Document::IterateLayerFiles(
+	const std::function<bool(VirtualFileEntry&)>& LayerProc
+)
+{
+	if( auto LayerTableFile = GetEntry("laytbl") )
+	{
+		std::uint32_t LayerCount = LayerTableFile->Read<std::uint32_t>();
+		while( LayerCount-- ) // Read each layer entry
+		{
+			const LayerTableEntry CurLayerEntry
+				= LayerTableFile->Read<LayerTableEntry>();
+			char LayerPath[32] = {};
+			std::snprintf(
+				LayerPath, 32u, "/layers/%08x",
+				CurLayerEntry.Identifier
+			);
+			if( auto LayerFile = GetEntry(LayerPath) )
+			{
+				if( !LayerProc(*LayerFile) ) break;
+			}
+		}
+	}
+}
+
+void Document::IterateSubLayerFiles(
+	const std::function<bool(VirtualFileEntry&)>& SubLayerProc
+)
+{
+	if( auto SubLayerTableFile = GetEntry("subtbl") )
+	{
+		std::uint32_t SubLayerCount = SubLayerTableFile->Read<std::uint32_t>();
+		while( SubLayerCount-- ) // Read each layer entry
+		{
+			const LayerTableEntry CurSubLayerEntry
+				= SubLayerTableFile->Read<LayerTableEntry>();
+			char SubLayerPath[32] = {};
+			std::snprintf(
+				SubLayerPath, 32u, "/sublayers/%08x",
+				CurSubLayerEntry.Identifier
+			);
+			if( auto SubLayerFile = GetEntry(SubLayerPath) )
+			{
+				if( !SubLayerProc(*SubLayerFile) ) break;
+			}
+		}
+	}
 }
 
 /// Keys
@@ -1093,167 +1012,4 @@ const std::uint32_t System[256] =
 	0xE29AEF25,0x4984D7A2,0x051F247B,0x29AB9055,0xFD2101F4,0x96FB2E1C,0x5BF04327,0x3C8F1BEB,
 };
 }
-
-Layer::Layer(VirtualFileEntry &entry):
-    ParentLayer(0),
-    TexScale(100),
-    TexOpacity(20),
-    Effect(0),
-    EffectOpacity(100),
-    EffectWidth(1)
-{
-    entry.Read<LayerHeader>(header);
-
-    std::uint32_t CurTag = 0;
-    std::uint32_t CurTagSize = 0;
-    //std::cout << "starting tags" << entry.Tell();
-    entry.Read(CurTag);
-    while(CurTag)
-    {
-        entry.Read(CurTagSize);
-        switch( CurTag )
-        {
-        case 'name':
-        {
-            entry.Read(layerName);
-            break;
-        }
-        case 'pfid':
-        case 'plid':
-        {
-            //pfid is parentfolder, for layers and folders, while plid is parentlayer, for masks.
-            entry.Read(ParentLayer);
-            break;
-        }
-        case 'texn':
-        {
-            // Texture name if there's a texture effect enabled.
-            entry.Read(TexName);
-            break;
-        }
-        case 'texp':
-        {
-            // Texture options
-            entry.Read(TexScale);
-            entry.Read(TexOpacity);
-            break;
-        }
-        case 'peff':
-        {
-            entry.Read(Effect);
-            entry.Read(EffectOpacity);
-            entry.Read(EffectWidth);
-            break;
-        }
-        default:
-        {
-            std::cout << layerName << header.Identifier;
-            printf("%c%c%c%c | %u\n",
-                   reinterpret_cast<char*>(&CurTag)[3],
-                    reinterpret_cast<char*>(&CurTag)[2],
-                    reinterpret_cast<char*>(&CurTag)[1],
-                    reinterpret_cast<char*>(&CurTag)[0],
-                    CurTagSize
-                    );
-            // for any streams that we do not handle,
-            // we just skip forward in the stream
-            entry.Seek(entry.Tell() + CurTagSize);
-            break;
-        }
-        }
-        entry.Read(CurTag);
-    }
-    //std::cout << " end" << entry.Tell() << " ";
-}
-
-Layer::~Layer()
-{
-
-}
-
-sai::LayerClass Layer::LayerType()
-{
-    return sai::LayerClass(header.LayerClass);
-}
-
-uint32_t Layer::Identifier()
-{
-    return header.Identifier;
-}
-
-std::tuple<int32_t, int32_t> Layer::Position()
-{
-    return std::make_tuple(header.Bounds.X, header.Bounds.Y);
-}
-
-std::tuple<uint32_t, uint32_t> Layer::Size()
-{
-    return std::make_tuple(header.Bounds.Width, header.Bounds.Height);
-}
-
-int Layer::Opacity()
-{
-    return int(header.Opacity);
-}
-
-bool Layer::IsVisible()
-{
-    return bool(header.Visible);
-}
-
-bool Layer::IsPreserveOpacity()
-{
-    return bool(header.PreserveOpacity);
-}
-
-bool Layer::IsClipping()
-{
-    return bool(header.Clipping);
-}
-
-BlendingMode Layer::Blending()
-{
-    return BlendingMode(header.Blending);
-}
-
-char *Layer::LayerName()
-{
-    return layerName;
-}
-
-uint32_t Layer::ParentID()
-{
-    return ParentLayer;
-}
-
-char *Layer::TextureName()
-{
-    return TexName;
-}
-
-int Layer::TextureScale()
-{
-    return TexScale;
-}
-
-int Layer::TextureOpacity()
-{
-    return TexOpacity;
-}
-
-int Layer::LayerEffect()
-{
-    return Effect;
-}
-
-int Layer::LayerEffectOpacity()
-{
-    return EffectOpacity;
-}
-
-int Layer::LayerEffectWidth()
-{
-    return EffectWidth;
-}
-
 }

@@ -122,9 +122,9 @@ struct TableEntry
 ```
                                                    ~         ~
                              Table-Block           |         |
-                       +----------+----------+ <---+---------+
+                       +----------+----------+<----+---------+
                      0 |0xChecksum|0xPrelimin|     |XXXX|XXXX| Block 512
-Checksum used to +-->1 |0xChecksum|0xPrelimin|     |XXXX|XXXX| 0x200200
+Checksum used to+--> 1 |0xChecksum|0xPrelimin|     |XXXX|XXXX| 0x200200
 decrypt block 513    2 |0xChecksum|0xPrelimin|     |XXXX|XXXX|
                      3 |0xChecksum|0xPrelimin|     +---------+
                      4 |0xChecksum|0xPrelimin|    /|         | Block 513
@@ -132,8 +132,8 @@ decrypt block 513    2 |0xChecksum|0xPrelimin|     |XXXX|XXXX|
                      6 |0xChecksum|0xPrelimi.|  /  |         |
                      7 |0xChecksum|0xPrelim..| /   +---------+
                      8 |0xChecksum|0xPreli...|<    |         | Block 514
-                     8 |0xChecksum|0xPrel....|     |         | 0x200600
-                     9 |0xChecksu.|          |     |         |
+                     9 |0xChecksum|0xPrel....|     |         | 0x200600
+                    10 |0xChecksu.|          |     |         |
                        ~          ~          ~     +---------+
                                                    |         |
                                                    ~         ~
@@ -592,8 +592,12 @@ std::uint32_t ParentLayerID;
 ```
 
 - `lmfl`
+
+Only appears in mask layers
 ```cpp
-std::uint32_t Unknown0; // Bitflag
+// 0b01 = Nonzero blending mode?
+// 0b10 = Opacity is greater than 0
+std::uint32_t Unknown0; // Bitmask, only the bottom two bits are used
 ```
 
 - `fopn`
@@ -607,6 +611,7 @@ std::uint8_t Open;
 - `texn`
 
 Name of the overlay-texture assigned to a layer. Ex: `Watercolor A`
+Only appears in layers that have an overlay enabled
 ```cpp
 std::uint8_t TextureName[64]; // UTF16 string
 ```
@@ -614,20 +619,19 @@ std::uint8_t TextureName[64]; // UTF16 string
 - `texp`
 
 
+Options related to the overlay-texture
 ```cpp
-std::uint16_t Unknown0;
-std::uint8_t Unknown2;
+std::uint16_t TextureScale;
+std::uint8_t TextureOpacity;
 ```
 
 - `peff`
 
-Options related to the overlay-texture assigned to a layer
+Options related to the watercolor fringe assigned to a layer
 ```cpp
-// Has an overlay: 0, no overlay: 1 
-// 32-bit bool?
-std::uint8_t Unknown0;
-std::uint8_t Unknown1; // 100
-std::uint8_t Unknown2; // 1
+std::uint8_t Enabled; // bool
+std::uint8_t Opacity; // 100
+std::uint8_t Width;   // 1 - 15
 ```
 
 - `vmrk`
@@ -687,7 +691,7 @@ else if( CurHeader.Type == LayerType::Linework )
 
 ## Raster Layers
 
-Raster data is stored in a tiled format immediately after the header structure above. There is an array of `(LayerWidth / 32) * (LayerHeight / 32)` 8-bit boolean integer values stored before the compressed channel pixel data. Each boolean value within this `BlockMap` determines if the appropriately positioned `32x32` tile of bitmap data contains pixel data that varies from pure black transparency. If a tile is active(1), its pixel data is stored as four or more streams of Run-Length-Encoding compressed data for each color channel for that `32x32` tile. If a tile is not active(0), the tile is to be filled with a `32x32` fully transparent block of pixels(`0x00000000` for all pixels). If more than four streams exist, the extra streams may be safely ignored and skipped(I am not sure what the extra streams are, possible masking data?). Note that the RLE routine is the very same algorithm that Photoshop uses when compressing layer data and the same as the [PackBits](https://en.wikipedia.org/wiki/PackBits) algorithm that apple uses.
+Raster data is stored in a tiled format immediately after the header structure above. There is an array of `(LayerWidth / 32) * (LayerHeight / 32)` 8-bit boolean integer values stored before the compressed channel pixel data. Each boolean value within this `BlockMap` determines if the appropriately positioned `32x32` tile of bitmap data contains pixel data that varies from pure black transparency. If a tile is active(1), its pixel data is stored as four or more streams of Run-Length-Encoding compressed data for each color channel for that `32x32` tile. If a tile is not active(0), the tile is to be filled with a `32x32` fully transparent block of pixels(`0x00000000` for all pixels). If more than four streams exist, the extra streams may be safely ignored and skipped. Note that the RLE routine is the very same algorithm that Photoshop uses when compressing layer data and the same as the [PackBits](https://en.wikipedia.org/wiki/PackBits) algorithm that apple uses.
 
 RLE streams are prefixed with a 16-bit size integer for the amount of RLE stream bytes that follow. Compressed channel data will be at max `0x800` bytes. Decompressed data will be at most `0x1000` bytes. Use these as your buffer sizes when reading and decompressing in-place. Color data is stored with `premultiplied alpha` and should be converted to `straight` as soon as relavently needed. It is highly recommended to use SIMD intrinsics featured in C headers such as `emmintrin.h` and `tmmintrin.h` to speed up conversions and arithmetic upon pixel data. Internally Sai uses `MMX` for all of its SIMD speedups so many structures already lend themselves to more modern SIMD speedups(SSE,AVX,etc). Pixel data is stored in BGRA order
 

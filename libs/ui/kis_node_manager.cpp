@@ -569,7 +569,12 @@ KisNodeSP  KisNodeManager::createNode(const QString & nodeType, bool quiet, KisP
     } else if (nodeType == "KisShapeLayer") {
         return m_d->layerManager.addShapeLayer(activeNode);
     } else if (nodeType == "KisCloneLayer") {
-        return m_d->layerManager.addCloneLayer(activeNode);
+        KisNodeList nodes = selectedNodes();
+        if (nodes.isEmpty()) {
+            nodes.append(activeNode);
+        }
+
+        return m_d->layerManager.addCloneLayer(nodes);
     } else if (nodeType == "KisTransparencyMask") {
         return m_d->maskManager.createTransparencyMask(activeNode, copyFrom, false);
     } else if (nodeType == "KisFilterMask") {

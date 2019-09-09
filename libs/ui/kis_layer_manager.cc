@@ -626,18 +626,22 @@ KisNodeSP KisLayerManager::addGroupLayer(KisNodeSP activeNode)
     return group;
 }
 
-KisNodeSP KisLayerManager::addCloneLayer(KisNodeSP activeNode)
+KisNodeSP KisLayerManager::addCloneLayer(KisNodeList nodes)
 {
     KisImageWSP image = m_view->image();
-    KisNodeList selection = m_view->nodeManager()->selectedNodes();
 
-    KisNodeSP node, clonedNode;
-    Q_FOREACH (node, selection) {
-        KisNodeSP clonedNode = new KisCloneLayer(qobject_cast<KisLayer*>(node.data()), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
-        addLayerCommon(activeNode, clonedNode, true, 0 );
+    KisNodeList filteredNodes = KisLayerUtils::sortAndFilterMergableInternalNodes(nodes, false);
+    if (filteredNodes.isEmpty()) return KisNodeSP();
+
+    KisNodeSP newAbove = filteredNodes.last();
+
+    KisNodeSP node, lastClonedNode;
+    Q_FOREACH (node, filteredNodes) {
+        lastClonedNode = new KisCloneLayer(qobject_cast<KisLayer*>(node.data()), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
+        addLayerCommon(newAbove, lastClonedNode, true, 0 );
     }
 
-    return clonedNode;
+    return lastClonedNode;
 }
 
 KisNodeSP KisLayerManager::addShapeLayer(KisNodeSP activeNode)

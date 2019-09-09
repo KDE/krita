@@ -22,6 +22,7 @@
 #include <kritaui_export.h>
 #include <QTabletEvent>
 #include <QPolygon>
+#include <QTimer>
 /**
  * @brief The KisPressureCallibrationHelper class
  * This class helps users configure the tablet pressure.
@@ -58,13 +59,13 @@ protected:
 
 private:
 
-    void nextSection();
+    void UpdateCaption();
 
-    QList<QPointF> m_callibrationInfo;
-    qreal m_highestValue;
-    qreal m_lowestValue;
-    progressState m_progress;
+    QList<qreal> m_callibrationInfo;
     QPolygon m_currentPath;
+    QTimer *m_callibrationTime;
+    QString m_caption;
+    int m_oldCaption;
 
 };
 

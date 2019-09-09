@@ -21,14 +21,16 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QApplication>
+#include <QRandomGenerator>
 
 KisPressureCallibrationHelper::KisPressureCallibrationHelper(QWidget *parent) :
     QWidget(parent),
-    m_highestValue(0.0),
-    m_lowestValue(1.0),
-    m_progress(WAITING)
+    m_callibrationTime(new QTimer(this))
 {
     setMinimumHeight(256);
+    m_callibrationTime->setInterval(10000);
+    m_caption = "Please click to start callibrating tablet pressure.";
+    connect(m_callibrationTime, &QTimer::timeout, this, SIGNAL(callibrationDone()));
 }
 
 KisPressureCallibrationHelper::~KisPressureCallibrationHelper()
@@ -38,14 +40,17 @@ KisPressureCallibrationHelper::~KisPressureCallibrationHelper()
 
 QList<QPointF> KisPressureCallibrationHelper::callibrationInfo()
 {
+    QList<QPointF> callibrationInfo;
+
     if (!m_callibrationInfo.isEmpty()) {
-        return m_callibrationInfo;
+        //return m_callibrationInfo;
+    } else {
+        //Dummyvalues to avoid crashes.
+        callibrationInfo.append(QPointF(0.0, 0.0));
+        callibrationInfo.append(QPointF(0.5, 0.5));
+        callibrationInfo.append(QPointF(1.0, 1.0));
     }
-    QList<QPointF> dummy;
-    dummy.append(QPointF(0.0, 0.0));
-    dummy.append(QPointF(0.5, 0.5));
-    dummy.append(QPointF(1.0, 1.0));
-    return dummy;
+    return callibrationInfo;
 }
 
 void KisPressureCallibrationHelper::paintEvent(QPaintEvent *e)
@@ -56,23 +61,7 @@ void KisPressureCallibrationHelper::paintEvent(QPaintEvent *e)
     QPainter p(this);
     p.fillRect(0, 0, w, h, QApplication::palette().background());
     p.setBrush(QApplication::palette().foreground());
-    QString text = QString();
-    switch (m_progress) {
-    case WAITING:
-        text = "Please click to start callibrating tablet pressure.";
-    break;
-    case LIGHT_STROKE:
-        text = "Press as lightly as you can.";
-    break;
-    case MEDIUM_STROKE:
-        text = "Draw a medium stroke.";
-    break;
-    case HEAVY_STROKE:
-        text = "Press as hard as you hard.";
-    break;
-    case DONE:
-        text = "Done! Click me to start again.";
-    }
+    QString text = m_caption;
     int center = (w/2) - (this->fontMetrics().width(text)/2);
     QPoint o = QPoint(center, h/2);
 
@@ -85,55 +74,52 @@ void KisPressureCallibrationHelper::paintEvent(QPaintEvent *e)
 
 void KisPressureCallibrationHelper::tabletEvent(QTabletEvent *e)
 {
-    if(e->type() == QEvent::TabletRelease) {
-        if (m_progress == LIGHT_STROKE) {
-            m_callibrationInfo.append(QPointF(m_lowestValue, 0.0));
-        } else if (m_progress == MEDIUM_STROKE) {
-            m_callibrationInfo.append(QPointF((m_lowestValue+m_highestValue)/2, 0.5));
-        } else if (m_progress == HEAVY_STROKE) {
-            m_callibrationInfo.append(QPointF(m_highestValue, 1.0));
-        } else {
-            m_callibrationInfo.clear();
+    m_callibrationInfo.append(e->pressure());
+    if(e->type() == QEvent::TabletLeaveProximity) {
+        if (!m_callibrationTime->isActive()) {
+            m_caption = "Please click to start callibrating tablet pressure.";
         }
-        m_highestValue = 0.0;
-        m_lowestValue = 1.0;
-        nextSection();
+    }
+    if(e->type() == QEvent::TabletRelease) {
+        m_currentPath.clear();
+        if (m_callibrationTime->isActive()) {
+            UpdateCaption();
+        } else {
+            m_caption = "Done! Click again to start over.";
+        }
         return;
     }
+
     if(e->type() == QEvent::TabletPress || e->type() == QEvent::TabletMove) {
-        if (e->pressure() > m_highestValue) {
-            m_highestValue = e->pressure();
-        }
-        if (e->pressure() < m_lowestValue) {
-            m_lowestValue = e->pressure();
+        if (!m_callibrationTime->isActive()) {
+            m_callibrationInfo.clear();
+            m_callibrationTime->start();
         }
         m_currentPath.append(e->pos());
         repaint();
     }
-
-
 }
 
-void KisPressureCallibrationHelper::nextSection()
+void KisPressureCallibrationHelper::UpdateCaption()
 {
-    m_currentPath.clear();
-    switch (m_progress) {
-    case WAITING:
-        m_progress = LIGHT_STROKE;
-    break;
-    case LIGHT_STROKE:
-        m_progress = MEDIUM_STROKE;
-    break;
-    case MEDIUM_STROKE:
-        m_progress = HEAVY_STROKE;
-    break;
-    case HEAVY_STROKE:
-        m_progress = DONE;
-        emit(callibrationDone());
-    break;
-    case DONE:
-        m_progress = LIGHT_STROKE;
-    break;
+    int random = QRandomGenerator::global()->bounded(0, 2);
+    while (random == m_oldCaption) {
+        random = QRandomGenerator::global()->bounded(0, 2);
     }
-    repaint();
+
+    switch(random) {
+    case 1: {
+        m_caption = "Press as hard as you can.";
+        break;
+    }
+    case 2: {
+        m_caption = "Draw a medium stroke.";
+        break;
+    }
+    default: {
+        m_caption = "Press as lightly as you can.";
+    }
+    }
+
+    m_oldCaption = random;
 }

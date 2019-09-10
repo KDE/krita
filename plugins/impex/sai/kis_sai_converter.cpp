@@ -66,11 +66,57 @@ KisImportExportErrorCode KisSaiConverter::buildImage(const QString &filename)
         return ImportExportCodes::FileFormatIncorrect;
     }
     std::tuple<std::uint32_t, std::uint32_t> size = saiFile.GetCanvasSize();
+    std::uint32_t Width = std::get<0>(size);
+    std::uint32_t Height = std::get<1>(size);
+    std::uint16_t DotsPerInch = 72;
+    if( std::unique_ptr<sai::VirtualFileEntry> Canvas = saiFile.GetEntry("canvas") )
+    {
+        std::uint32_t Alignment; // Always seems to be 0x10, bpc? Alignment?
+
+
+        Canvas->Read(Alignment);
+        Canvas->Read(Width);
+        Canvas->Read(Height);
+
+        std::uint32_t CurTag;
+        std::uint32_t CurTagSize;
+        while( Canvas->Read<std::uint32_t>(CurTag) && CurTag )
+        {
+            Canvas->Read<std::uint32_t>(CurTagSize);
+            switch( CurTag )
+            {
+            case sai::Tag("reso"):
+            {
+                // 16.16 fixed point integer
+                std::uint16_t DotsPerInchX;
+                // 0 = pixels, 1 = inch, 2 = cm, 3 = mm
+                std::uint16_t SizeUnits;
+                // 0 = pixel/inch, 1 = pixel/cm
+                std::uint16_t ResolutionUnits;
+                Canvas->Read(DotsPerInchX);
+                Canvas->Read(DotsPerInch); //Actual resolution.
+                Canvas->Read(SizeUnits);
+                Canvas->Read(ResolutionUnits);
+
+                break;
+            }
+            default:
+            {
+                // for any streams that we do not handle,
+                // we just skip forward in the stream
+                Canvas->Seek(Canvas->Tell() + CurTagSize);
+                break;
+            }
+            }
+        }
+    }
+
     m_image = new KisImage(m_doc->createUndoStore(),
-                           int(std::get<0>(size)),
-                           int(std::get<1>(size)),
+                           int(Width),
+                           int(Height),
                            KoColorSpaceRegistry::instance()->rgb8(),
                            "file");
+    m_image->setResolution(qreal(DotsPerInch/72.0), qreal(DotsPerInch/72.0));
     saiFile.IterateLayerFiles(
             [&](sai::VirtualFileEntry& LayerFile)
             {
@@ -86,7 +132,6 @@ KisImportExportErrorCode KisSaiConverter::buildImage(const QString &filename)
             }
         );
     m_image->setDefaultProjectionColor(KoColor(Qt::white, m_image->colorSpace()));
-
     return ImportExportCodes::OK;
 }
 

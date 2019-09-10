@@ -48,9 +48,10 @@ private:
 
 
     void ReadRasterDataIntoLayer(KisPaintLayerSP layer, sai::VirtualFileEntry &entry, quint32 width, quint32 height);
+    void ReadRasterDataIntoMask(KisTransparencyMaskSP layer, sai::VirtualFileEntry &entry, quint32 width, quint32 height);
 
     QString BlendingMode(sai::BlendingModes mode);
-    void RLEDecompress32(void* Destination, const std::uint8_t *Source, std::size_t SourceSize, std::size_t IntCount, std::size_t Channel);
+    void RLEDecompressStride(std::uint8_t* Destination, const std::uint8_t *Source, std::size_t Stride, std::size_t StrideCount, std::size_t Channel);
 
     void handleAddingLayer(KisLayerSP layer, bool clipping, quint32 layerID, quint32 parentLayerID);
 

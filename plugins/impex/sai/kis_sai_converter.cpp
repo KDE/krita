@@ -240,14 +240,26 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
     //case sai::LayerType::Unknown7:
     case sai::LayerType::Mask: {
         KisTransparencyMaskSP layer = new KisTransparencyMask();
-        layer->setName(LayerName);
-        layer->setOpacity(opacity);
-        layer->setVisible(maskVisible);
-        layer->setCompositeOpId(blendingMode);
-        //only interesting thing here is identifying data and identifying parent layer.
         if (parentNodeList.contains(ParentID)) {
-            m_image->addNode(layer, parentNodeList.value(ParentID));
+            KisNodeSP p = parentNodeList.value(ParentID);
+            KisLayerSP parentLayer = qobject_cast<KisLayer*>(p.data());
+            if (parentLayer) {
+                m_image->addNode(layer, parentLayer);
+                layer->initSelection(parentLayer);
+                ReadRasterDataIntoMask(layer, LayerFile, header.Bounds.Width, header.Bounds.Height);
+                layer->setName(LayerName);
+                layer->setOpacity(opacity);
+                layer->setVisible(maskVisible);
+                layer->setCompositeOpId(blendingMode);
+                layer->setX(int(header.Bounds.X-8));
+                layer->setY(int(header.Bounds.Y-8));
+            }
+
         }
+
+
+        //only interesting thing here is identifying data and identifying parent layer.
+
         break;
     }
     default:
@@ -298,11 +310,10 @@ void KisSaiConverter::ReadRasterDataIntoLayer(KisPaintLayerSP layer, sai::Virtua
                     entry.Read(CompressedTile.data(), Size);
 
 
-                        RLEDecompress32(
+                        RLEDecompressStride(
                                     DecompressedTile.data(),
                                     CompressedTile.data(),
-                                    Size,
-                                    1024,
+                                    sizeof(std::uint32_t), 0x1000 / sizeof(std::uint32_t),
                                     Channel
                                     );
 
@@ -395,6 +406,47 @@ void KisSaiConverter::ReadRasterDataIntoLayer(KisPaintLayerSP layer, sai::Virtua
     }
 }
 
+void KisSaiConverter::ReadRasterDataIntoMask(KisTransparencyMaskSP layer, sai::VirtualFileEntry &entry, quint32 width, quint32 height) {
+    std::vector<std::uint8_t> BlockMap;
+    quint32 blocksWidth = width/32;
+    quint32 blocksHeight= height/32;
+    BlockMap.resize(blocksWidth * blocksHeight);
+    //qDebug() << entry.Tell() << width << height;
+    entry.Read(BlockMap.data(), blocksWidth * blocksHeight);
+
+    KisRandomAccessorSP accessor = layer->paintDevice()->createRandomAccessorNG(0, 0);
+
+    for( std::size_t y = 0; y < blocksHeight; y++ ) {
+        for( std::size_t x = 0; x < blocksWidth; x++ ) {
+            std::array<std::uint8_t, 0x400> CompressedTile = {};
+            std::array<std::uint8_t, 0x400> DecompressedTile = {};
+            std::uint8_t Channel = 0;
+            std::uint16_t Size = 0;
+            if (entry.Read<std::uint16_t>(Size) == sizeof(std::uint16_t)) {
+                entry.Read(CompressedTile.data(), Size);
+                RLEDecompressStride(
+                            DecompressedTile.data(),
+                            CompressedTile.data(),
+                            sizeof(std::uint8_t), 0x400/sizeof(std::uint8_t),
+                            Channel
+                            );
+            }
+
+            const std::uint8_t* ImageSource = reinterpret_cast<const std::uint8_t*>(DecompressedTile.data());
+            for( std::size_t i = 0; i < (32 * 32); i++ ) {
+                std::size_t acc_x = (x * 32) + (i%32);
+                std::size_t acc_y = (y * 32) + (i/32);
+                std::uint8_t CurPixel = ImageSource[i];
+                std::uint8_t* currentPixel[1];
+                accessor->moveTo(acc_x, acc_y);
+                memcpy(currentPixel, &CurPixel, sizeof(CurPixel));
+                memcpy(accessor->rawData(), currentPixel, layer->paintDevice()->colorSpace()->pixelSize());
+            }
+
+        }
+    }
+}
+
 QString KisSaiConverter::BlendingMode(sai::BlendingModes mode)
 {
     QString s = "";
@@ -430,45 +482,48 @@ QString KisSaiConverter::BlendingMode(sai::BlendingModes mode)
     return s;
 }
 
-void KisSaiConverter::RLEDecompress32(void* Destination, const std::uint8_t *Source, std::size_t SourceSize, std::size_t IntCount, std::size_t Channel)
-{
-    std::uint8_t *Write = reinterpret_cast<std::uint8_t*>(Destination) + Channel;
-    std::size_t WriteCount = 0;
-
-    while( WriteCount < IntCount )
+void KisSaiConverter::RLEDecompressStride(
+        std::uint8_t* Destination, const std::uint8_t *Source, std::size_t Stride,
+        std::size_t StrideCount, std::size_t Channel
+    )
     {
-        std::uint8_t Length = *Source++;
-        if( Length == 128 ) // No-op
+        Destination += Channel;
+        std::size_t WriteCount = 0;
+
+        while( WriteCount < StrideCount )
         {
-        }
-        else if( Length < 128 ) // Copy
-        {
-            // Copy the next Length+1 bytes
-            Length++;
-            WriteCount += Length;
-            while( Length )
+            std::uint8_t Length = *Source++;
+            if( Length == 128 ) // No-op
             {
-                *Write = *Source++;
-                Write += 4;
-                Length--;
             }
-        }
-        else if( Length > 128 ) // Repeating byte
-        {
-            // Repeat next byte exactly "-Length + 1" times
-            Length ^= 0xFF;
-            Length += 2;
-            WriteCount += Length;
-            std::uint8_t Value = *Source++;
-            while( Length )
+            else if( Length < 128 ) // Copy
             {
-                *Write = Value;
-                Write += 4;
-                Length--;
+                // Copy the next Length+1 bytes
+                Length++;
+                WriteCount += Length;
+                while( Length )
+                {
+                    *Destination = *Source++;
+                    Destination += Stride;
+                    Length--;
+                }
+            }
+            else if( Length > 128 ) // Repeating byte
+            {
+                // Repeat next byte exactly "-Length + 1" times
+                Length ^= 0xFF;
+                Length += 2;
+                WriteCount += Length;
+                std::uint8_t Value = *Source++;
+                while( Length )
+                {
+                    *Destination = Value;
+                    Destination += Stride;
+                    Length--;
+                }
             }
         }
     }
-}
 
 void KisSaiConverter::handleAddingLayer(KisLayerSP layer, bool clipping, quint32 layerID, quint32 parentLayerID)
 {

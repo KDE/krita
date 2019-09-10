@@ -668,6 +668,9 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
                 addActionToMenu(addLayerMenu, "add_new_colorize_mask");
                 addActionToMenu(addLayerMenu, "add_new_transform_mask");
                 addActionToMenu(addLayerMenu, "add_new_selection_mask");
+                addLayerMenu->addSeparator();
+                addActionToMenu(addLayerMenu, "add_new_clone_layer");
+
 
                 QMenu *convertToMenu = menu.addMenu(i18n("&Convert"));
                 addActionToMenu(convertToMenu, "convert_to_paint_layer");
@@ -680,6 +683,9 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
                 addActionToMenu(splitAlphaMenu, "split_alpha_into_mask");
                 addActionToMenu(splitAlphaMenu, "split_alpha_write");
                 addActionToMenu(splitAlphaMenu, "split_alpha_save_merged");
+            } else {
+                QMenu *addLayerMenu = menu.addMenu(i18n("&Add"));
+                addActionToMenu(addLayerMenu, "add_new_clone_layer");
             }
 
             menu.addSeparator();

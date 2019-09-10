@@ -103,6 +103,7 @@ public:
     bool supportsRelative() const override;
     bool hasColorants() const override;
     bool hasTRC() const override;
+    bool isLinear() const override;
     QVector <qreal> getColorantsXYZ() const override;
     QVector <qreal> getColorantsxyY() const override;
     QVector <qreal> getWhitePointXYZ() const override;

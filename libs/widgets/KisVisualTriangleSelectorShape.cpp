@@ -42,12 +42,11 @@
 
 KisVisualTriangleSelectorShape::KisVisualTriangleSelectorShape(QWidget *parent,
                                                                  Dimensions dimension,
-                                                                 ColorModel model,
                                                                  const KoColorSpace *cs,
                                                                  int channel1, int channel2,
                                                                  const KoColorDisplayRendererInterface *displayRenderer,
                                                                  int barwidth)
-    : KisVisualColorSelectorShape(parent, dimension, model, cs, channel1, channel2, displayRenderer)
+    : KisVisualColorSelectorShape(parent, dimension, cs, channel1, channel2, displayRenderer)
 {
     //qDebug() << "creating KisVisualTriangleSelectorShape" << this;
     m_barWidth = barwidth;
@@ -95,7 +94,7 @@ void KisVisualTriangleSelectorShape::setTriangle()
     m_radius = r.length();
 }
 
-QPointF KisVisualTriangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
+QPointF KisVisualTriangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const
 {
     qreal offset=7.0;//the offset is so we get a nice little border that allows selecting extreme colors better.
     qreal yOffset = (cos(kisDegreesToRadians(30))*offset)*2;
@@ -114,7 +113,7 @@ QPointF KisVisualTriangleSelectorShape::convertShapeCoordinateToWidgetCoordinate
     return QPointF(x,y);
 }
 
-QPointF KisVisualTriangleSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPoint coordinate)
+QPointF KisVisualTriangleSelectorShape::convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const
 {
     //default implementation: gotten from the kotrianglecolorselector/kis_color_selector_triangle.
     qreal x = 0.5;
@@ -147,11 +146,11 @@ QRegion KisVisualTriangleSelectorShape::getMaskMap()
     return mask;
 }
 
-void KisVisualTriangleSelectorShape::resizeEvent(QResizeEvent *)
+void KisVisualTriangleSelectorShape::resizeEvent(QResizeEvent *e)
 {
     //qDebug() << this << "KisVisualTriangleSelectorShape::resizeEvent(QResizeEvent *)";
     setTriangle();
-    forceImageUpdate();
+    KisVisualColorSelectorShape::resizeEvent(e);
 }
 
 void KisVisualTriangleSelectorShape::drawCursor()

@@ -26,9 +26,12 @@
 #include "KoColorSet.h"
 
 #include <QScopedPointer>
+#include <QDialog>
 
 #include "KisScreenColorPickerBase.h"
-#include "ui_WdgDlgInternalColorSelector.h"
+
+class Ui_WdgDlgInternalColorSelector;
+class KoColorPatch;
 
 /**
  * @brief The KisInternalColorSelector class
@@ -146,12 +149,6 @@ public Q_SLOTS:
     void reject() override;
 
 private Q_SLOTS:
-    /**
-     * @brief slotLockSelector
-     * This slot will prevent the color from being updated.
-     */
-    void slotLockSelector();
-
     /**
      * @brief slotConfigurationChanged
      * Wrapper slot for changes to the colorspace.

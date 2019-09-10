@@ -75,17 +75,12 @@ private:
     const QString analyticsString = "pk_campaign=startup-sceen&pk_kwd=";
 
 
-<<<<<<< HEAD
-=======
     // keeping track of link colors with theme change
     QColor textColor;
     QColor backgroundColor;
     QColor blendedColor;
     QString blendedStyle;
 
-
-
->>>>>>> 61d25bdecf... Let the clear files command also clear the welcome page widget
 private Q_SLOTS:
     void slotNewFileClicked();
     void slotOpenFileClicked();

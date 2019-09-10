@@ -60,13 +60,13 @@ enum class BlendingModes : std::uint32_t
 {
 	PassThrough = Tag("pass"),
 	Normal      = Tag("norm"),
-	Multiply    = Tag("mul\0"),
+	Multiply    = Tag("mul "),
 	Screen      = Tag("scrn"),
 	Overlay     = Tag("over"),
-	Luminosity  = Tag("add\0"),
-	Shade       = Tag("sub\0"),
+	Luminosity  = Tag("add "),
+	Shade       = Tag("sub "),
 	LumiShade   = Tag("adsb"),
-	Binary      = Tag("cbi\0")
+	Binary      = Tag("cbin")
 };
 
 #pragma pack(push, 1)
@@ -366,6 +366,7 @@ public:
 		return temp;
 	}
 
+	FATEntry FATData;
 private:
 	friend VirtualFileSystem;
 
@@ -375,7 +376,6 @@ private:
 
 	std::size_t ReadPoint;
 
-	FATEntry FATData;
 };
 
 class Document : public VirtualFileSystem

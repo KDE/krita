@@ -36,11 +36,11 @@ struct DistanceMap {
     typedef double data_type;
     typedef std::pair<key_type, data_type> value_type;
 
-    explicit DistanceMap(double const& dval)
+    explicit DistanceMap(double const &dval)
         : m_default(dval)
     { }
 
-    data_type &operator [] (key_type const& k)
+    data_type &operator [](key_type const &k)
     {
         if (m.find(k) == m.end())
             m[k] = m_default;
@@ -55,13 +55,13 @@ private:
 struct PredecessorMap {
     PredecessorMap() = default;
 
-    PredecessorMap(PredecessorMap const& that) = default;
+    PredecessorMap(PredecessorMap const &that) = default;
 
     typedef VertexDescriptor key_type;
     typedef VertexDescriptor value_type;
     typedef boost::read_write_property_map_tag category;
 
-    VertexDescriptor &operator [] (VertexDescriptor v)
+    VertexDescriptor &operator [](VertexDescriptor v)
     {
         return m_map[v];
     }
@@ -85,7 +85,8 @@ double EuclideanDistance(VertexDescriptor p1, VertexDescriptor p2)
     return std::sqrt(std::pow(p1.y - p2.y, 2) + std::pow(p1.x - p2.x, 2));
 }
 
-class AStarHeuristic : public boost::astar_heuristic<KisMagneticGraph, double> {
+class AStarHeuristic : public boost::astar_heuristic<KisMagneticGraph, double>
+{
 private:
     VertexDescriptor m_goal;
 
@@ -94,7 +95,7 @@ public:
         m_goal(goal)
     { }
 
-    double operator () (VertexDescriptor v)
+    double operator()(VertexDescriptor v)
     {
         return EuclideanDistance(v, m_goal);
     }
@@ -102,9 +103,10 @@ public:
 
 struct GoalFound { };
 
-class AStarGoalVisitor : public boost::default_astar_visitor {
+class AStarGoalVisitor : public boost::default_astar_visitor
+{
 public:
-    explicit AStarGoalVisitor(VertexDescriptor goal) : m_goal(goal){ }
+    explicit AStarGoalVisitor(VertexDescriptor goal) : m_goal(goal) { }
 
     void examine_vertex(VertexDescriptor u, KisMagneticGraph const &g)
     {
@@ -129,7 +131,7 @@ struct WeightMap {
         m_graph(g)
     { }
 
-    data_type& operator [] (key_type const& k)
+    data_type &operator [](key_type const &k)
     {
         if (m_map.find(k) == m_map.end()) {
             double edge_gradient = (m_graph.getIntensity(k.first) + m_graph.getIntensity(k.second)) / 2;
@@ -143,29 +145,21 @@ private:
     KisMagneticGraph              m_graph;
 };
 
-KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP& dev)
+KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP &dev)
 {
     m_dev = KisPainter::convertToAlphaAsGray(dev);
     QSize s = m_dev->exactBounds().size();
     m_tileSize = KritaUtils::optimalPatchSize();
-    m_tilesPerRow = std::ceil((double)s.width()/(double)m_tileSize.width());
+    m_tilesPerRow = std::ceil((double)s.width() / (double)m_tileSize.width());
+    int tilesPerColumn = std::ceil((double)s.height()/ (double)m_tileSize.height());
+    m_dev->setDefaultBounds(dev->defaultBounds());
 
-    int i,j;
-    for(i=0; i < s.height(); i+= m_tileSize.height()){
-        for(j=0; j< s.width(); j += m_tileSize.width()){
-            m_tiles.push_back(QRect(QPoint(i,j), m_tileSize));
-        }
-        if(j < s.width()){
-            m_tiles.push_back(QRect(QPoint(i,j+m_tileSize.width()), QSize(m_tileSize.height(), s.width()-j)));
-        }
-    }
-
-    if(i < s.height()){
-        for(j=0; j< s.width(); j += m_tileSize.width()){
-            m_tiles.push_back(QRect(QPoint(i,j), m_tileSize));
-        }
-        if(j < s.width()){
-            m_tiles.push_back(QRect(QPoint(i,j+m_tileSize.width()), QSize(m_tileSize.height(), s.width()-j)));
+    for(int i=0;i<tilesPerColumn; i++){
+        for(int j=0; j<m_tilesPerRow; j++){
+            int width = std::min(m_dev->exactBounds().width() - j * m_tileSize.width(), m_tileSize.width());
+            int height = std::min(m_dev->exactBounds().height() - i * m_tileSize.height(), m_tileSize.height());
+            QRect temp(j * m_tileSize.width(), i * m_tileSize.height(), width, height);
+            m_tiles.push_back(temp);
         }
     }
 
@@ -178,11 +172,13 @@ void KisMagneticWorker::filterDevice(qreal radius, QRect &bounds)
     KisLazyFillTools::normalizeAlpha8Device(m_dev, bounds);
 }
 
-QPoint divide2DVal(QPoint p, QSize s){
-    return QPoint(p.x()/s.width(), p.y()/s.height());
+QPoint divide2DVal(QPoint p, QSize s)
+{
+    return QPoint(p.x() / s.width(), p.y() / s.height());
 }
 
-QVector<QPointF> KisMagneticWorker::computeEdge(int extraBounds, QPoint begin, QPoint end, qreal radius)
+QVector<QPointF> KisMagneticWorker::computeEdge(int extraBounds, QPoint begin, QPoint end,
+                                                qreal radius)
 {
     QRect rect;
     KisAlgebra2D::accumulateBounds(QVector<QPoint> { begin, end }, &rect);
@@ -191,15 +187,15 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int extraBounds, QPoint begin, Q
     QPoint firstTile = divide2DVal(rect.topLeft(), m_tileSize);
     QPoint lastTile = divide2DVal(rect.bottomRight(), m_tileSize);
 
-    for(int i=firstTile.y(); i <= lastTile.y(); i++){
-        for(int j=firstTile.x(); j <= lastTile.x(); j++){
-            if(radius != m_radiusRecord[j*m_tilesPerRow + i]){
-                filterDevice(radius, m_tiles[j*m_tilesPerRow + i]);
-                m_radiusRecord[j*m_tilesPerRow + i] = radius;
+    for (int i = firstTile.y(); i <= lastTile.y(); i++) {
+        for (int j = firstTile.x(); j <= lastTile.x(); j++) {
+            int currentTile = i * m_tilesPerRow + j;
+            if (radius != m_radiusRecord[currentTile]) {
+                filterDevice(radius, m_tiles[currentTile]);
+                m_radiusRecord[currentTile] = radius;
             }
         }
     }
-
     VertexDescriptor goal(end);
     VertexDescriptor start(begin);
 
@@ -217,7 +213,7 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int extraBounds, QPoint begin, Q
     AStarHeuristic heuristic(goal);
     QVector<QPointF> result;
 
-    try{
+    try {
         boost::astar_search_no_init(
             m_graph, start, heuristic,
             boost::visitor(AStarGoalVisitor(goal))
@@ -226,11 +222,12 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int extraBounds, QPoint begin, Q
             .weight_map(boost::associative_property_map<WeightMap>(wmap))
             .vertex_index_map(boost::associative_property_map<std::map<VertexDescriptor, double> >(imap))
             .rank_map(boost::associative_property_map<std::map<VertexDescriptor, double> >(rmap))
-            .color_map(boost::associative_property_map<std::map<VertexDescriptor, boost::default_color_type> >(cmap))
+            .color_map(boost::associative_property_map<std::map<VertexDescriptor, boost::default_color_type> >
+                       (cmap))
             .distance_combine(std::plus<double>())
             .distance_compare(std::less<double>())
-            );
-    }catch (GoalFound const&) {
+        );
+    } catch (GoalFound const &) {
         for (VertexDescriptor u = goal; u != start; u = pmap[u]) {
             result.push_front(QPointF(u.x, u.y));
         }
@@ -269,10 +266,12 @@ void KisMagneticWorker::saveTheImage(vQPointF points)
     gc.setPen(Qt::green);
     gc.drawEllipse(points[0], 3, 3);
     gc.setPen(Qt::red);
-    gc.drawEllipse(points[points.count() -1], 2, 2);
+    gc.drawEllipse(points[points.count() - 1], 2, 2);
 
     gc.setPen(Qt::red);
-    for(QRect &r : m_tiles){
+    for (QRect &r: m_tiles) {
+        QString str = QString("%1x%2").arg(r.height()).arg(r.width());
+        gc.drawText(r, str);
         gc.drawRect(r);
     }
 

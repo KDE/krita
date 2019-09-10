@@ -46,7 +46,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     }
 
     if (!brush) {
-        brush = rServer->resources().first();
+        brush = rServer->firstResource();
     }
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(brush, 0);

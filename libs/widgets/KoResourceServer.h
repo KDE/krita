@@ -73,6 +73,11 @@ public:
         }
     }
 
+    // Return the first resource available
+    QSharedPointer<T> firstResource() const {
+        return m_resourceModel->resourceForIndex(m_resourceModel->index(0, 0)).dynamicCast<T>();
+    }
+
     int resourceCount() const {
         return m_resourceModel->rowCount();
     }

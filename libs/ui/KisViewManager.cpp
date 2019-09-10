@@ -441,7 +441,7 @@ void KisViewManager::setCurrentView(KisView *view)
             }
 
             if (!preset && !rserver->resources().isEmpty()) {
-                preset = rserver->resources().first();
+                preset = rserver->firstResource();
             }
             if (preset) {
                 paintOpBox()->restoreResource(preset);

@@ -84,7 +84,7 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
 
     KoColorSetSP defaultColorSet = rServer->resourceByName("Default");
     if (!defaultColorSet && rServer->resources().count() > 0) {
-        defaultColorSet = rServer->resources().first();
+        defaultColorSet = rServer->firstResource();
     }
     d->colorSetWidget->setColorSet(defaultColorSet);
 

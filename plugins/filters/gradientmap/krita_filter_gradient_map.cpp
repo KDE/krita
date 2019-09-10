@@ -62,7 +62,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
         if (!gradientAb) {
             qWarning() << "Could not find gradient" << config->getString("gradientName");
         }
-        gradientAb = KoResourceServerProvider::instance()->gradientServer()->resources().first();
+        gradientAb = KoResourceServerProvider::instance()->gradientServer()->firstResource();
         QScopedPointer<QGradient> qGradient(gradientAb->toQGradient());
         KoStopGradient::fromQGradient(qGradient.data())->toXML(doc, elt);
         doc.appendChild(elt);
@@ -115,7 +115,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
 KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("gradientmap", 2);
-    KoAbstractGradientSP gradient = KoResourceServerProvider::instance()->gradientServer()->resources().first();
+    KoAbstractGradientSP gradient = KoResourceServerProvider::instance()->gradientServer()->firstResource();
     KoStopGradient stopGradient;
     QScopedPointer<QGradient> qGradient(gradient->toQGradient());
     stopGradient.fromQGradient(qGradient.data());

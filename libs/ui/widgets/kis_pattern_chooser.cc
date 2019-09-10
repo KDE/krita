@@ -75,7 +75,7 @@ KoResourceSP  KisPatternChooser::currentResource()
         KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
         if (rserver->resources().size() > 0) {
             KisSignalsBlocker blocker(m_itemChooser);
-            m_itemChooser->setCurrentResource(rserver->resources().first());
+            m_itemChooser->setCurrentResource(rserver->firstResource());
         }
     }
     return m_itemChooser->currentResource();

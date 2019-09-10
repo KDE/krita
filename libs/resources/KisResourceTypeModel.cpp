@@ -49,8 +49,6 @@ int KisResourceTypeModel::rowCount(const QModelIndex &/*parent*/) const
         q.first();
 
         const_cast<KisResourceTypeModel*>(this)->d->cachedRowCount = q.value(0).toInt();
-
-        qDebug() << "KisResourceTypeModel::rowCount()" << d->cachedRowCount;
     }
     return d->cachedRowCount;
 }
@@ -62,7 +60,6 @@ int KisResourceTypeModel::columnCount(const QModelIndex &/*parent*/) const
 
 QVariant KisResourceTypeModel::data(const QModelIndex &index, int role) const
 {
-
     QVariant v;
     if (!index.isValid()) return v;
 
@@ -109,8 +106,8 @@ bool KisResourceTypeModel::prepareQuery()
 {
     beginResetModel();
     bool r = d->query.prepare("SELECT id\n"
-                       ",      name\n"
-                       "FROM   resource_types\n");
+                              ",      name\n"
+                              "FROM   resource_types\n");
     if (!r) {
         qWarning() << "Could not prepare KisResourceTypeModel query" << d->query.lastError();
     }

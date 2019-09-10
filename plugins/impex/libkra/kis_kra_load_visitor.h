@@ -32,6 +32,7 @@
 class KisFilterConfiguration;
 class KoStore;
 class KoShapeControllerBase;
+class KoColorProfile;
 
 class KRITALIBKRA_EXPORT KisKraLoadVisitor : public KisNodeVisitor
 {
@@ -104,6 +105,7 @@ private:
     QStringList m_errorMessages;
     QStringList m_warningMessages;
     KoShapeControllerBase *m_shapeController;
+    QMap<QByteArray, const KoColorProfile *> m_profileCache;
 };
 
 #endif // KIS_KRA_LOAD_VISITOR_H_

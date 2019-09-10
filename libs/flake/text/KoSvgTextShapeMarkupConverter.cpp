@@ -1095,7 +1095,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
     QTextCharFormat charFormat;
     charFormat.setTextOutline(currentCharFormat.textOutline());
     QTextBlockFormat blockFormat;
-    SvgGraphicsContext *context = new SvgGraphicsContext();
+    QScopedPointer<SvgGraphicsContext> context(new SvgGraphicsContext());
 
     for (int i=0; i<styles.size(); i++) {
         if (!styles.at(i).isEmpty()){
@@ -1108,7 +1108,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "font-size") {
-                qreal val = SvgUtil::parseUnitX(context, value);
+                qreal val = SvgUtil::parseUnitX(context.data(), value);
                 charFormat.setFontPointSize(val);
             }
 
@@ -1165,13 +1165,13 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "letter-spacing") {
-                qreal val = SvgUtil::parseUnitX(context, value);
+                qreal val = SvgUtil::parseUnitX(context.data(), value);
                 charFormat.setFontLetterSpacingType(QFont::AbsoluteSpacing);
                 charFormat.setFontLetterSpacing(val);
             }
 
             if (property == "word-spacing") {
-                qreal val = SvgUtil::parseUnitX(context, value);
+                qreal val = SvgUtil::parseUnitX(context.data(), value);
                 charFormat.setFontWordSpacing(val);
             }
 
@@ -1179,7 +1179,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
                 if (value=="normal") {
                     charFormat.setFontKerning(true);
                 } else {
-                    qreal val = SvgUtil::parseUnitX(context, value);
+                    qreal val = SvgUtil::parseUnitX(context.data(), value);
                     charFormat.setFontKerning(false);
                     charFormat.setFontLetterSpacingType(QFont::AbsoluteSpacing);
                     charFormat.setFontLetterSpacing(charFormat.fontLetterSpacing() + val);

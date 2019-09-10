@@ -38,7 +38,6 @@ public:
     enum singelDTypes{border, borderMirrored};
     explicit KisVisualEllipticalSelectorShape(QWidget *parent,
                                               Dimensions dimension,
-                                              ColorModel model,
                                               const KoColorSpace *cs,
                                               int channel1, int channel2,
                                               const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), int barWidth=20,
@@ -57,10 +56,11 @@ public:
     QRect getSpaceForCircle(QRect geom) override;
     QRect getSpaceForTriangle(QRect geom) override;
 protected:
-    void resizeEvent(QResizeEvent *) override;
+    virtual QImage renderBackground(const QVector4D &channelValues, quint32 pixelSize) const override;
+
 private:
-    QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) override;
-    QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) override;
+    QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const override;
+    QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const override;
 
 
     singelDTypes m_type;

@@ -168,7 +168,7 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
 
     ui->selectMainStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeMain()));
     ui->selectSubdivisionStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeSubdivision()));
-    ui->gridTypeCombobox->setCurrentIndex(m_d->gridConfig.gridType());
+    ui->gridTypeCombobox->setCurrentIndex(int(m_d->gridConfig.gridType()));
 
     ui->colorMain->setColor(m_d->gridConfig.colorMain());
     ui->colorSubdivision->setColor(m_d->gridConfig.colorSubdivision());
@@ -226,7 +226,7 @@ KisGridConfig GridConfigWidget::fetchGuiGridConfig() const
     config.setAngleLeft(ui->angleLeftSpinbox->value());
     config.setAngleRight(ui->angleRightSpinbox->value());
     config.setCellSpacing(ui->cellSpacingSpinbox->value());
-    config.setGridType(ui->gridTypeCombobox->currentIndex());
+    config.setGridType(KisGridConfig::GridType(ui->gridTypeCombobox->currentIndex()));
 
     config.setOffsetAspectLocked(ui->offsetAspectButton->keepAspectRatio());
     config.setSpacingAspectLocked(ui->spacingAspectButton->keepAspectRatio());

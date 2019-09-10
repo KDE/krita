@@ -38,6 +38,12 @@ public:
         LINE_DASHED,
         LINE_DOTTED
     };
+
+    enum GridType {
+        GRID_RECTANGULAR = 0,
+        GRID_ISOMETRIC
+    };
+
 public:
     KisGridConfig()
         : m_showGrid(false),
@@ -48,7 +54,7 @@ public:
           m_angleLeft(45),
           m_angleRight(45),
           m_cellSpacing(30),
-          m_gridType(0),
+          m_gridType(GRID_RECTANGULAR),
           m_subdivision(2),
           m_lineTypeMain(LINE_SOLID),
           m_lineTypeSubdivision(LINE_DOTTED),
@@ -135,10 +141,10 @@ public:
         m_cellSpacing = spacing;
     }
 
-    int gridType() const {
+    GridType gridType() const {
         return m_gridType;
     }
-    void setGridType(int type) {
+    void setGridType(GridType type) {
         m_gridType = type;
     }
 
@@ -229,7 +235,9 @@ private:
     int m_angleLeft;
     int m_angleRight;
     int m_cellSpacing;
-    int m_gridType; // 0 is rectangle, 1 is isometric
+
+
+    GridType m_gridType;
     int m_subdivision;
 
     QPoint m_offset;

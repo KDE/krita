@@ -50,6 +50,7 @@ public:
     bool suitableForOutput {false};
     bool hasColorants;
     bool hasTRC;
+    bool isLinear {false};
     bool adaptedFromD50;
     cmsCIEXYZ mediaWhitePoint;
     cmsCIExyY whitePoint;
@@ -215,11 +216,15 @@ bool LcmsColorProfileContainer::init()
             if (d->greenTRC) d->greenTRCReverse = cmsReverseToneCurve(d->greenTRC);
             if (d->blueTRC) d->blueTRCReverse = cmsReverseToneCurve(d->blueTRC);
             d->hasTRC = (d->redTRC && d->greenTRC && d->blueTRC && d->redTRCReverse && d->greenTRCReverse && d->blueTRCReverse);
+            if (d->hasTRC) d->isLinear = cmsIsToneCurveLinear(d->redTRC)
+                                      && cmsIsToneCurveLinear(d->greenTRC)
+                                      && cmsIsToneCurveLinear(d->blueTRC);
 
         } else if (cmsIsTag(d->profile, cmsSigGrayTRCTag)) {
             d->grayTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGrayTRCTag));
             if (d->grayTRC) d->grayTRCReverse = cmsReverseToneCurve(d->grayTRC);
             d->hasTRC = (d->grayTRC && d->grayTRCReverse);
+            if (d->hasTRC) d->isLinear = cmsIsToneCurveLinear(d->grayTRC);
         } else {
             d->hasTRC = false;
         }
@@ -319,6 +324,10 @@ bool LcmsColorProfileContainer::hasColorants() const
 bool LcmsColorProfileContainer::hasTRC() const
 {
     return d->hasTRC;
+}
+bool LcmsColorProfileContainer::isLinear() const
+{
+    return d->isLinear;
 }
 QVector <double> LcmsColorProfileContainer::getColorantsXYZ() const
 {

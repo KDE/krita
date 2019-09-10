@@ -246,7 +246,7 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
             if (parentLayer) {
                 m_image->addNode(layer, parentLayer);
                 layer->initSelection(parentLayer);
-                ReadRasterDataIntoMask(layer, LayerFile, header.Bounds.Width, header.Bounds.Height);
+                //ReadRasterDataIntoMask(layer, LayerFile, header.Bounds.Width, header.Bounds.Height);
                 layer->setName(LayerName);
                 layer->setOpacity(opacity);
                 layer->setVisible(maskVisible);

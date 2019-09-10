@@ -47,7 +47,6 @@
 
 class KoResource;
 
-
 /**
  * KoResourceServer manages the resources of one type. It stores,
  * loads and saves the resources.  To keep track of changes the server
@@ -73,8 +72,15 @@ public:
         }
     }
 
-    // Return the first resource available
-    QSharedPointer<T> firstResource() const {
+    /// @return the active resource model
+    KisResourceModel *resourceModel() const
+    {
+        return m_resourceModel;
+    }
+
+    /// Return the first resource available
+    QSharedPointer<T> firstResource() const
+    {
         return m_resourceModel->resourceForIndex(m_resourceModel->index(0, 0)).dynamicCast<T>();
     }
 

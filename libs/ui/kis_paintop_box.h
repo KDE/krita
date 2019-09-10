@@ -137,6 +137,7 @@ private:
     void setWidgetState(int flags);
     void setSliderValue(const QString& sliderID, qreal value);
     void sliderChanged(int n);
+    void findDefaultPresets();
 
 private Q_SLOTS:
 

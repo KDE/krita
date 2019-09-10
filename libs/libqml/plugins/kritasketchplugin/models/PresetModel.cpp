@@ -98,7 +98,7 @@ int PresetModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
-    return d->rserver->resources().count();
+    return d->rserver->resourceCount();
 }
 
 QVariant PresetModel::data(const QModelIndex &index, int role) const

@@ -115,7 +115,7 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         if (savedPal) {
             this->slotChangePalette(savedPal);
         } else {
-            if (rServer->resources().count()) {
+            if (rServer->resourceCount()) {
                 savedPal = rServer->firstResource();
                 if (savedPal) {
                     this->slotChangePalette(savedPal);

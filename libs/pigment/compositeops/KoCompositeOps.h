@@ -290,7 +290,7 @@ struct AddRGBOps<Traits, true>
         add<&cfSaturation        <HSVType,Arg> >(cs, COMPOSITE_SATURATION_HSV    , i18n("Saturation HSV")         , KoCompositeOp::categoryHSV());
         add<&cfIncreaseSaturation<HSVType,Arg> >(cs, COMPOSITE_INC_SATURATION_HSV, i18n("Increase Saturation HSV"), KoCompositeOp::categoryHSV());
         add<&cfDecreaseSaturation<HSVType,Arg> >(cs, COMPOSITE_DEC_SATURATION_HSV, i18n("Decrease Saturation HSV"), KoCompositeOp::categoryHSV());
-        add<&cfLightness         <HSVType,Arg> >(cs, COMPOSITE_VALUE             , i18nc("HSV Value","Value")                  , KoCompositeOp::categoryHSV());
+        add<&cfLightness         <HSVType,Arg> >(cs, COMPOSITE_VALUE             , i18nc("HSV Value","Value")     , KoCompositeOp::categoryHSV());
         add<&cfIncreaseLightness <HSVType,Arg> >(cs, COMPOSITE_INC_VALUE         , i18n("Increase Value")         , KoCompositeOp::categoryHSV());
         add<&cfDecreaseLightness <HSVType,Arg> >(cs, COMPOSITE_DEC_VALUE         , i18n("Decrease Value")         , KoCompositeOp::categoryHSV());
     }
@@ -320,7 +320,8 @@ struct AddGeneralAlphaOps<Traits, true>
 
     static void add(KoColorSpace* cs)
     {
-        add<&cfAdditionSAI <HSVType,Arg> >(cs, COMPOSITE_LUMINOSITY_SAI         , i18n("Luminosity/Shine (SAI)")         , KoCompositeOp::categoryHSV());
+        add<&cfAdditionSAI <HSVType,Arg> >(cs, COMPOSITE_LUMINOSITY_SAI, i18n("Luminosity/Shine (SAI)"), KoCompositeOp::categoryHSV());
+        add<&cfBinarySAI   <HSVType,Arg> >(cs, COMPOSITE_BINARY_SAI,     i18n("Binary (SAI)"),           KoCompositeOp::categoryHSV());
     }
 
 

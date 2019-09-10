@@ -947,6 +947,18 @@ inline void cfAdditionSAI(TReal src, TReal sa, TReal& dst, TReal& da)
     dst = clamp<TReal>(newsrc + dst);
 }
 
+template<class HSXType, class TReal>
+inline void cfBinarySAI(TReal src, TReal sa, TReal& dst, TReal& da)
+{
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<TReal>::compositetype composite_type;
+    Q_UNUSED(da);
+    Q_UNUSED(src);
+    if (sa > zeroValue<TReal>()) {
+        dst = 0.0;
+    }
+}
+
 
 
 #endif // KOCOMPOSITEOP_FUNCTIONS_H_

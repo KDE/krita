@@ -456,7 +456,7 @@ QString KisSaiConverter::BlendingMode(sai::BlendingModes mode)
         s = COMPOSITE_LINEAR_BURN;
         break;
     case sai::BlendingModes::Binary:
-        s = COMPOSITE_DISSOLVE;
+        s = COMPOSITE_BINARY_SAI;
         break;
     case sai::BlendingModes::Normal:
         s = COMPOSITE_OVER;

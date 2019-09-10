@@ -121,6 +121,7 @@ const QString COMPOSITE_TINT_IFS_ILLUSIONS = "tint_ifs_illusions";
 const QString COMPOSITE_FOG_LIGHTEN_IFS_ILLUSIONS = "fog_lighten_ifs_illusions";
 const QString COMPOSITE_EASY_DODGE        = "easy dodge";
 const QString COMPOSITE_LUMINOSITY_SAI        = "luminosity_sai";
+const QString COMPOSITE_BINARY_SAI = "binary_sai";
 
 
 const QString COMPOSITE_HUE            = "hue";

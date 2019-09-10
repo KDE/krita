@@ -85,6 +85,7 @@ KisImportExportErrorCode KisSaiConverter::buildImage(const QString &filename)
                 return true;
             }
         );
+    m_image->setDefaultProjectionColor(KoColor(Qt::white, m_image->colorSpace()));
 
     return ImportExportCodes::OK;
 }

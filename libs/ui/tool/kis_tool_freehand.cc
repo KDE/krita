@@ -246,6 +246,7 @@ void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
         static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->endStroke();
     }
 
+    notifyModified();
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     if (canvas2) {
         canvas2->viewManager()->enableControls();

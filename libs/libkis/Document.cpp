@@ -186,8 +186,7 @@ bool Document::setColorProfile(const QString &value)
     const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(value);
     if (!profile) return false;
     bool retval = d->document->image()->assignImageProfile(profile);
-    d->document->image()->setModified();
-    d->document->image()->initialRefreshGraph();
+    d->document->image()->waitForDone();
     return retval;
 }
 

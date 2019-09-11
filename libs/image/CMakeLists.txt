@@ -115,6 +115,7 @@ set(kritaimage_LIB_SRCS
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_convert_color_space_processing_visitor.cpp
+   processing/kis_assign_profile_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
    processing/kis_crop_selections_processing_visitor.cpp
    processing/kis_transform_processing_visitor.cpp

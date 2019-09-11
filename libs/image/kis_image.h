@@ -384,15 +384,23 @@ public:
     const KoColorProfile *  profile() const;
 
     /**
+     * Set the profile of the layer and all its children to the new profile.
+     * It doesn't do any pixel conversion.
+     *
+     * This is essential if you have loaded an image that didn't
+     * have an embedded profile to which you want to attach the right profile.
+     *
+     * @returns false if the profile could not be assigned
+     */
+    bool assignLayerProfile(KisNodeSP node, const KoColorProfile *profile);
+
+    /**
      * Set the profile of the image to the new profile and do the same for
      * all layers that have the same colorspace and profile of the image.
      * It doesn't do any pixel conversion.
      *
      * This is essential if you have loaded an image that didn't
      * have an embedded profile to which you want to attach the right profile.
-     *
-     * This does not create an undo action; only call it when creating or
-     * loading an image.
      *
      * @returns false if the profile could not be assigned
      */

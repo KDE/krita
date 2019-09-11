@@ -174,8 +174,9 @@ KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
             jpeg_destroy_decompress(&cinfo);
             return ImportExportCodes::FormatColorSpaceUnsupported;
         }
-        uchar* profile_data;
-        uint profile_len;
+
+        uchar* profile_data = 0;
+        uint profile_len = 0;
         const KoColorProfile* profile = 0;
         QByteArray profile_rawdata;
         if (read_icc_profile(&cinfo, &profile_data, &profile_len)) {
@@ -191,6 +192,8 @@ KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
                     dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
                 }
             }
+
+            free(profile_data);
         }
 
         const QString colorSpaceId =

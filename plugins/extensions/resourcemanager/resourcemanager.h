@@ -27,7 +27,7 @@
 #include <KoResourceServer.h>
 
 #include <KisActionPlugin.h>
-#include "KisResourceBundle.h"
+#include <KoResourceBundle.h>
 
 #include "dlg_create_bundle.h"
 
@@ -37,7 +37,7 @@ class ResourceManager : public KisActionPlugin
 public:
     ResourceManager(QObject *parent, const QVariantList &);
     ~ResourceManager() override;
-    KisResourceBundleSP saveBundle(const DlgCreateBundle &dlgCreateBundle);
+    KoResourceBundleSP saveBundle(const DlgCreateBundle &dlgCreateBundle);
 
 private Q_SLOTS:
     void slotCreateBundle();

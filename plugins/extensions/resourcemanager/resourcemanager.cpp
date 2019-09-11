@@ -132,18 +132,18 @@ void ResourceManager::slotCreateBundle()
     saveBundle(dlgCreateBundle);
 }
 
-KisResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateBundle)
+KoResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateBundle)
 {
     QString bundlePath =  dlgCreateBundle.saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle";
 
-    KisResourceBundleSP newBundle(new KisResourceBundle(bundlePath));
+    KoResourceBundleSP newBundle(new KoResourceBundle(bundlePath));
 
-    newBundle->addMeta("name", dlgCreateBundle.bundleName());
-    newBundle->addMeta("author", dlgCreateBundle.authorName());
-    newBundle->addMeta("email", dlgCreateBundle.email());
-    newBundle->addMeta("license", dlgCreateBundle.license());
-    newBundle->addMeta("website", dlgCreateBundle.website());
-    newBundle->addMeta("description", dlgCreateBundle.description());
+    newBundle->addMetaData("name", dlgCreateBundle.bundleName());
+    newBundle->addMetaData("author", dlgCreateBundle.authorName());
+    newBundle->addMetaData("email", dlgCreateBundle.email());
+    newBundle->addMetaData("license", dlgCreateBundle.license());
+    newBundle->addMetaData("website", dlgCreateBundle.website());
+    newBundle->addMetaData("description", dlgCreateBundle.description());
     newBundle->setThumbnail(dlgCreateBundle.previewImage());
 
     QStringList res = dlgCreateBundle.selectedBrushes();
@@ -203,22 +203,22 @@ KisResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreate
         newBundle->addResource(ResourceType::GamutMasks, res->filename(), d->gamutMaskServer->assignedTagsList(res), res->md5());
     }
 
-    newBundle->addMeta("fileName", bundlePath);
-    newBundle->addMeta("created", QDateTime::currentDateTime().toOffsetFromUtc(0).toString(Qt::ISODate));
+    newBundle->addMetaData("fileName", bundlePath);
+    newBundle->addMetaData("created", QDateTime::currentDateTime().toOffsetFromUtc(0).toString(Qt::ISODate));
 
     if (!newBundle->save()) {
         QMessageBox::critical(viewManager()->mainWindow(), i18nc("@title:window", "Krita"), i18n("Could not create the new bundle."));
     }
     else {
         newBundle->setValid(true);
-//        if (QDir(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation()) != QDir(QFileInfo(bundlePath).path())) {
-//            newBundle->setFilename(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle");
+//        if (QDir(KoResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation()) != QDir(QFileInfo(bundlePath).path())) {
+//            newBundle->setFilename(KoResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle");
 //        }
-//        if (KisResourceBundleServerProvider::instance()->resourceBundleServer()->resourceByName(newBundle->name())) {
-//            KisResourceBundleServerProvider::instance()->resourceBundleServer()->removeResourceFromServer(
-//                        KisResourceBundleServerProvider::instance()->resourceBundleServer()->resourceByName(newBundle->name()));
+//        if (KoResourceBundleServerProvider::instance()->resourceBundleServer()->resourceByName(newBundle->name())) {
+//            KoResourceBundleServerProvider::instance()->resourceBundleServer()->removeResourceFromServer(
+//                        KoResourceBundleServerProvider::instance()->resourceBundleServer()->resourceByName(newBundle->name()));
 //        }
-//        KisResourceBundleServerProvider::instance()->resourceBundleServer()->addResource(newBundle, true);
+//        KoResourceBundleServerProvider::instance()->resourceBundleServer()->addResource(newBundle, true);
         newBundle->load();
     }
 
@@ -275,7 +275,7 @@ void ResourceManager::slotImportBundles()
 {
 //    QStringList resources = importResources(i18n("Import Bundles"), QStringList() << "application/x-krita-bundle");
 //    Q_FOREACH (const QString &res, resources) {
-//        KisResourceBundleSP bundle = KisResourceBundleServerProvider::instance()->resourceBundleServer()->createResource(res);
+//        KoResourceBundleSP bundle = KoResourceBundleServerProvider::instance()->resourceBundleServer()->createResource(res);
 //        bundle->load();
 //        if (bundle->valid()) {
 //            if (!bundle->install()) {
@@ -287,17 +287,17 @@ void ResourceManager::slotImportBundles()
 //        }
 
 //        QFileInfo fi(res);
-//        QString newFilename = KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + bundle->defaultFileExtension();
+//        QString newFilename = KoResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + bundle->defaultFileExtension();
 //        QFileInfo fileInfo(newFilename);
 
 //        int i = 1;
 //        while (fileInfo.exists()) {
-//            fileInfo.setFile(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
+//            fileInfo.setFile(KoResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
 //            i++;
 //        }
 //        bundle->setFilename(fileInfo.filePath());
 //        QFile::copy(res, newFilename);
-//        KisResourceBundleServerProvider::instance()->resourceBundleServer()->addResource(bundle, false);
+//        KoResourceBundleServerProvider::instance()->resourceBundleServer()->addResource(bundle, false);
 //    }
 }
 

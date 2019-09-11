@@ -94,13 +94,13 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
 
 void DlgBundleManager::refreshListData()
 {
-//    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
+//    KoResourceServer<KoResourceBundle> *bundleServer = KoResourceBundleServerProvider::instance()->resourceBundleServer();
 
 //    m_ui->listInactive->clear();
 //    m_ui->listActive->clear();
 
 //    Q_FOREACH (const QString &f, bundleServer->blackListedFiles()) {
-//        KisResourceBundleSP bundle(new KisResourceBundle(f));
+//        KoResourceBundleSP bundle(new KoResourceBundle(f));
 //        bundle->load();
 //        if (bundle->valid()) {
 //            bundle->setInstalled(false);
@@ -109,7 +109,7 @@ void DlgBundleManager::refreshListData()
 //    }
 //    fillListWidget(m_blacklistedBundles.values(), m_ui->listInactive);
 
-//    Q_FOREACH (KisResourceBundleSP bundle, bundleServer->resources()) {
+//    Q_FOREACH (KoResourceBundleSP bundle, bundleServer->resources()) {
 //        if (bundle->valid()) {
 //            m_activeBundles[bundle->filename()] = bundle;
 //        }
@@ -119,20 +119,20 @@ void DlgBundleManager::refreshListData()
 
 void DlgBundleManager::accept()
 {
-//    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
+//    KoResourceServer<KoResourceBundle> *bundleServer = KoResourceBundleServerProvider::instance()->resourceBundleServer();
 
 //    for (int i = 0; i < m_ui->listActive->count(); ++i) {
 //        QListWidgetItem *item = m_ui->listActive->item(i);
 //        QByteArray ba = item->data(Qt::UserRole).toByteArray();
 //        QString name = item->text();
-//        KisResourceBundleSP bundle = bundleServer->resourceByMD5(ba);
+//        KoResourceBundleSP bundle = bundleServer->resourceByMD5(ba);
 //        QMessageBox bundleFeedback;
 //        bundleFeedback.setIcon(QMessageBox::Warning);
 //        QString feedback = "bundlefeedback";
 
 //        if (!bundle) {
 //            // Get it from the blacklisted bundles
-//            Q_FOREACH (KisResourceBundleSP b2, m_blacklistedBundles.values()) {
+//            Q_FOREACH (KoResourceBundleSP b2, m_blacklistedBundles.values()) {
 //                if (b2->md5() == ba) {
 //                    bundle = b2;
 //                    break;
@@ -184,7 +184,7 @@ void DlgBundleManager::accept()
 //    for (int i = 0; i < m_ui->listInactive->count(); ++i) {
 //        QListWidgetItem *item = m_ui->listInactive->item(i);
 //        QByteArray ba = item->data(Qt::UserRole).toByteArray();
-//        KisResourceBundleSP bundle = bundleServer->resourceByMD5(ba);
+//        KoResourceBundleSP bundle = bundleServer->resourceByMD5(ba);
 //        bool isKrits3Bundle = false;
 //        if (bundle) {
 //            if (bundle->filename().contains("Krita_3_Default_Resources.bundle")) {
@@ -239,12 +239,12 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
     else {
 
         QByteArray ba = current->data(Qt::UserRole).toByteArray();
-//        KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
-        KisResourceBundleSP bundle; // = bundleServer->resourceByMD5(ba);
+//        KoResourceServer<KoResourceBundle> *bundleServer = KoResourceBundleServerProvider::instance()->resourceBundleServer();
+        KoResourceBundleSP bundle; // = bundleServer->resourceByMD5(ba);
 
         if (!bundle) {
             // Get it from the blacklisted bundles
-            Q_FOREACH (KisResourceBundleSP b2, m_blacklistedBundles.values()) {
+            Q_FOREACH (KoResourceBundleSP b2, m_blacklistedBundles.values()) {
                 if (b2->md5() == ba) {
                     bundle = b2;
                     break;
@@ -260,24 +260,24 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
             m_ui->bnEditBundle->setEnabled(true);
 
             m_ui->lblName->setText(bundle->name());
-            m_ui->lblAuthor->setText(metrics.elidedText(bundle->getMeta("author"), Qt::ElideRight, m_ui->lblAuthor->width()));
-            m_ui->lblAuthor->setToolTip(bundle->getMeta("author"));
-            m_ui->lblEmail->setText(metrics.elidedText(bundle->getMeta("email"), Qt::ElideRight, m_ui->lblEmail->width()));
-            m_ui->lblEmail->setToolTip(bundle->getMeta("email"));
-            m_ui->lblLicense->setText(metrics.elidedText(bundle->getMeta("license"), Qt::ElideRight, m_ui->lblLicense->width()));
-            m_ui->lblLicense->setToolTip(bundle->getMeta("license"));
-            m_ui->lblWebsite->setText(metrics.elidedText(bundle->getMeta("website"), Qt::ElideRight, m_ui->lblWebsite->width()));
-            m_ui->lblWebsite->setToolTip(bundle->getMeta("website"));
-            m_ui->lblDescription->setPlainText(bundle->getMeta("description"));
-            if (QDateTime::fromString(bundle->getMeta("created"), Qt::ISODate).isValid()) {
-                m_ui->lblCreated->setText(QDateTime::fromString(bundle->getMeta("created"), Qt::ISODate).toLocalTime().toString(Qt::DefaultLocaleShortDate));
+            m_ui->lblAuthor->setText(metrics.elidedText(bundle->metaData("author"), Qt::ElideRight, m_ui->lblAuthor->width()));
+            m_ui->lblAuthor->setToolTip(bundle->metaData("author"));
+            m_ui->lblEmail->setText(metrics.elidedText(bundle->metaData("email"), Qt::ElideRight, m_ui->lblEmail->width()));
+            m_ui->lblEmail->setToolTip(bundle->metaData("email"));
+            m_ui->lblLicense->setText(metrics.elidedText(bundle->metaData("license"), Qt::ElideRight, m_ui->lblLicense->width()));
+            m_ui->lblLicense->setToolTip(bundle->metaData("license"));
+            m_ui->lblWebsite->setText(metrics.elidedText(bundle->metaData("website"), Qt::ElideRight, m_ui->lblWebsite->width()));
+            m_ui->lblWebsite->setToolTip(bundle->metaData("website"));
+            m_ui->lblDescription->setPlainText(bundle->metaData("description"));
+            if (QDateTime::fromString(bundle->metaData("created"), Qt::ISODate).isValid()) {
+                m_ui->lblCreated->setText(QDateTime::fromString(bundle->metaData("created"), Qt::ISODate).toLocalTime().toString(Qt::DefaultLocaleShortDate));
             } else {
-                m_ui->lblCreated->setText(QDate::fromString(bundle->getMeta("created"), "dd/MM/yyyy").toString(Qt::DefaultLocaleShortDate));
+                m_ui->lblCreated->setText(QDate::fromString(bundle->metaData("created"), "dd/MM/yyyy").toString(Qt::DefaultLocaleShortDate));
             }
-            if (QDateTime::fromString(bundle->getMeta("updated"), Qt::ISODate).isValid()) {
-                m_ui->lblUpdated->setText(QDateTime::fromString(bundle->getMeta("updated"), Qt::ISODate).toLocalTime().toString(Qt::DefaultLocaleShortDate));
+            if (QDateTime::fromString(bundle->metaData("updated"), Qt::ISODate).isValid()) {
+                m_ui->lblUpdated->setText(QDateTime::fromString(bundle->metaData("updated"), Qt::ISODate).toLocalTime().toString(Qt::DefaultLocaleShortDate));
             } else {
-                m_ui->lblUpdated->setText(QDate::fromString(bundle->getMeta("updated"), "dd/MM/yyyy").toString(Qt::DefaultLocaleShortDate));
+                m_ui->lblUpdated->setText(QDate::fromString(bundle->metaData("updated"), "dd/MM/yyyy").toString(Qt::DefaultLocaleShortDate));
             }
             m_ui->lblPreview->setPixmap(QPixmap::fromImage(bundle->image().scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
             m_ui->listBundleContents->clear();
@@ -310,14 +310,14 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
 
                 m_ui->listBundleContents->addTopLevelItem(toplevel);
 
-                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
-                    if (res) {
-                        QTreeWidgetItem *i = new QTreeWidgetItem();
-                        i->setIcon(0, QIcon(QPixmap::fromImage(res->image())));
-                        i->setText(0, res->name());
-                        toplevel->addChild(i);
-                    }
-                }
+//                Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
+//                    if (res) {
+//                        QTreeWidgetItem *i = new QTreeWidgetItem();
+//                        i->setIcon(0, QIcon(QPixmap::fromImage(res->image())));
+//                        i->setText(0, res->name());
+//                        toplevel->addChild(i);
+//                    }
+//                }
             }
         }
         else {
@@ -345,12 +345,12 @@ void DlgBundleManager::editBundle()
     }
 }
 
-void DlgBundleManager::fillListWidget(QList<KisResourceBundleSP> bundles, QListWidget *w)
+void DlgBundleManager::fillListWidget(QList<KoResourceBundleSP> bundles, QListWidget *w)
 {
     w->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     w->setSelectionMode(QAbstractItemView::MultiSelection);
 
-    Q_FOREACH (KisResourceBundleSP bundle, bundles) {
+    Q_FOREACH (KoResourceBundleSP bundle, bundles) {
         QPixmap pixmap(ICON_SIZE, ICON_SIZE);
         pixmap.fill(Qt::gray);
         if (!bundle->image().isNull()) {

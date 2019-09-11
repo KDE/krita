@@ -22,6 +22,7 @@
 
 #include <QSet>
 #include <QList>
+#include <QSharedPointer>
 
 #include <KoXmlWriter.h>
 
@@ -130,5 +131,7 @@ private:
     QString m_bundleVersion;
 
 };
+
+typedef QSharedPointer<KoResourceBundle> KoResourceBundleSP;
 
 #endif // KORESOURCEBUNDLE_H

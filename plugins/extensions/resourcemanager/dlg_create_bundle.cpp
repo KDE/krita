@@ -43,11 +43,9 @@
 
 #include <kis_config.h>
 
-#include "KisResourceBundle.h"
-
 #define ICON_SIZE 48
 
-DlgCreateBundle::DlgCreateBundle(KisResourceBundleSP bundle, QWidget *parent)
+DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
     : KoDialog(parent)
     , m_ui(new Ui::WdgDlgCreateBundle)
     , m_bundle(bundle)
@@ -68,7 +66,7 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundleSP bundle, QWidget *parent)
     if (bundle) {
 
         setCaption(i18n("Edit Resource Bundle"));
-
+#if 0
         m_ui->lblSaveLocation->setText(QFileInfo(bundle->filename()).absolutePath());
         m_ui->editBundleName->setText(bundle->name());
         m_ui->editAuthor->setText(bundle->getMeta("author"));
@@ -134,6 +132,7 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundleSP bundle, QWidget *parent)
                 }
             }
         }
+#endif
     }
     else {
 

@@ -149,19 +149,38 @@ void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
         QPoint nextAnchor     = m_selectedAnchor ==
                                 m_anchorPoints.count()
                                 - 1 ? m_anchorPoints.first() : m_anchorPoints[m_selectedAnchor + 1];
-        m_pointCollection[ m_selectedAnchor == 0 ? m_anchorPoints.count() - 1 : m_selectedAnchor - 1] = m_worker.computeEdge(m_frequency, previousAnchor, currentAnchor,
-                                                                       m_radius);
-        m_pointCollection[m_selectedAnchor] =
-            m_worker.computeEdge(m_frequency, currentAnchor, nextAnchor, m_radius);
+        if (!image()->bounds().contains(m_anchorPoints[m_selectedAnchor])) {
+            m_anchorPoints.remove(m_selectedAnchor);
+            m_pointCollection[ m_selectedAnchor ==
+                               0 ? m_anchorPoints.count() - 1 : m_selectedAnchor - 1] = m_worker.computeEdge(
+                m_frequency, previousAnchor,
+                nextAnchor,
+                m_radius);
+            m_pointCollection.remove(m_selectedAnchor);
+
+            if (m_selectedAnchor == 0) {
+                m_snapBound = QRect(m_anchorPoints.first(), QSize(5, 5));
+            }
+        } else {
+            m_pointCollection[ m_selectedAnchor ==
+                               0 ? m_anchorPoints.count() - 1 : m_selectedAnchor - 1] = m_worker.computeEdge(
+                m_frequency, previousAnchor,
+                currentAnchor,
+                m_radius);
+            m_pointCollection[m_selectedAnchor] =
+                m_worker.computeEdge(m_frequency, currentAnchor, nextAnchor, m_radius);
+        }
+
         m_points.clear();
         Q_FOREACH (const vQPointF vec, m_pointCollection) {
             m_points.append(vec);
         }
+
         updatePaintPath();
     }
     m_selected = false;
     KisToolSelectBase::endPrimaryAction(event);
-}
+} // KisToolSelectMagnetic::endPrimaryAction
 
 void KisToolSelectMagnetic::finishSelectionAction()
 {
@@ -173,7 +192,7 @@ void KisToolSelectMagnetic::finishSelectionAction()
     m_finished = true;
 
     // just for testing out
-    //m_worker.saveTheImage(m_points);
+    // m_worker.saveTheImage(m_points);
 
     QRectF boundingViewRect =
         pixelToView(KisAlgebra2D::accumulateBounds(m_points));

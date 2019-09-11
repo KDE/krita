@@ -68,6 +68,11 @@ private:
     void updateContinuedMode();
     void updateCanvas();
     void updatePaintPath();
+    void resetVariables();
+    void drawAnchors(QPainter &gc);
+    void checkIfAnchorIsSelected(QPointF pt);
+    vQPointF computeEdgeWrapper(QPoint a, QPoint b);
+    void reEvaluatePoints();
 
     QPainterPath m_paintPath;
     QVector<QPointF> m_points;

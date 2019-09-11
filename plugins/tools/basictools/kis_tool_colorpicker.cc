@@ -197,12 +197,12 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     if (m_config->addColorToCurrentPalette) {
-        KisSwatch ent;
-        ent.setColor(m_pickedColor);
+        KisSwatch swatch;
+        swatch.setColor(m_pickedColor);
         // We don't ask for a name, too intrusive here
 
         KoColorSet *palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
-        palette->add(ent);
+        palette->add(swatch);
 
         if (!palette->save()) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));

@@ -122,14 +122,6 @@ public:
     QPointer<KisDocument> document; // our KisDocument
     QWidget *tempActiveWidget = 0;
 
-    /**
-     * Signals the document has been deleted. Can't use document==0 since this
-     * only happens in ~QObject, and views get deleted by ~KisDocument.
-     * XXX: either provide a better justification to do things this way, or
-     * rework the mechanism.
-     */
-    bool documentDeleted = false;
-
     KActionCollection* actionCollection;
     KisCoordinatesConverter viewConverter;
     KisCanvasController canvasController;
@@ -631,22 +623,12 @@ KisDocument *KisView::document() const
     return d->document;
 }
 
-void KisView::setDocument(KisDocument *document)
+KisView *KisView::replaceBy(KisDocument *document)
 {
-    d->document->disconnect(this);
-    d->document = document;
-    QStatusBar *sb = statusBar();
-    if (sb) { // No statusbar in e.g. konqueror
-        connect(d->document, SIGNAL(statusBarMessage(QString,int)),
-                this, SLOT(slotSavingStatusMessage(QString,int)));
-        connect(d->document, SIGNAL(clearStatusBarMessage()),
-                this, SLOT(slotClearStatusText()));
-    }
-}
-
-void KisView::setDocumentDeleted()
-{
-    d->documentDeleted = true;
+    KisMainWindow *window = mainWindow();
+    QMdiSubWindow *subWindow = d->subWindow;
+    delete this;
+    return window->newView(document, subWindow);
 }
 
 QPrintDialog *KisView::createPrintDialog(KisPrintJob *printJob, QWidget *parent)

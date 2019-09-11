@@ -854,6 +854,7 @@ private:
     friend class Krita;
     friend class Window;
     friend class Filter;
+    friend class View;
     QPointer<KisDocument> document() const;
 
 

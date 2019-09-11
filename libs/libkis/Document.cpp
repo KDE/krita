@@ -158,6 +158,7 @@ Node *Document::nodeByName(const QString &name) const
 {
     if (!d->document) return 0;
     KisNodeSP node = d->document->image()->rootLayer()->findChildByName(name);
+    if (node.isNull()) return 0;
     return new Node(d->document->image(), node);
 }
 

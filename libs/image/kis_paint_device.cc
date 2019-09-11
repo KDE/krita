@@ -913,7 +913,6 @@ void KisPaintDevice::Private::convertColorSpace(const KoColorSpace * dstColorSpa
         void emitNotifications()
         {
             m_device->emitColorSpaceChanged();
-            m_device->setDirty();
         }
 
         void redo() override

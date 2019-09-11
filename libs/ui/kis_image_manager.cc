@@ -178,7 +178,9 @@ void KisImageManager::slotImageProperties()
 
     QPointer<KisDlgImageProperties> dlg = new KisDlgImageProperties(image, m_view->mainWindow());
     if (dlg->exec() == QDialog::Accepted) {
-        image->convertProjectionColorSpace(dlg->colorSpace());
+        image->convertImageColorSpace(dlg->colorSpace(),
+                                      KoColorConversionTransformation::internalRenderingIntent(),
+                                      KoColorConversionTransformation::internalConversionFlags());
     }
     delete dlg;
 }

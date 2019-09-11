@@ -83,6 +83,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
                 doc->image()->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb8(),
                                                     KoColorConversionTransformation::IntentAbsoluteColorimetric,
                                                     KoColorConversionTransformation::NoOptimization);
+                doc->image()->waitForDone();
             }
 
             qApp->processEvents();
@@ -316,7 +317,7 @@ void testExportToColorSpace(const QString& _dirname, QString mimetype, const KoC
 
     doc->setCurrentImage(p.image);
     doc->image()->convertImageColorSpace(space, KoColorConversionTransformation::Intent::IntentPerceptual, KoColorConversionTransformation::ConversionFlag::Empty);
-
+    doc->image()->waitForDone();
 
     if (useDocumentExport) {
         bool result = doc->exportDocumentSync(QUrl(QString("file:") + QString(colorspaceFilename)), mimetype.toUtf8());

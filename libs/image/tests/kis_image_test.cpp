@@ -195,6 +195,57 @@ void KisImageTest::testConvertImageColorSpace()
     image->refreshGraph();
 }
 
+void KisImageTest::testAssignImageProfile()
+{
+    const KoColorSpace *rgb8 = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *gray8 = KoColorSpaceRegistry::instance()->graya8();
+    KisImageSP image = new KisImage(0, 1000, 1000, rgb8, "stest");
+
+    KisPaintDeviceSP device1 = new KisPaintDevice(rgb8);
+    KisLayerSP paint1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
+
+    KisPaintDeviceSP device2 = new KisPaintDevice(gray8);
+    KisLayerSP paint2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8, device2);
+
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
+    Q_ASSERT(filter);
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration();
+    Q_ASSERT(configuration);
+
+    KisLayerSP blur1 = new KisAdjustmentLayer(image, "blur1", configuration, 0);
+
+    image->addNode(paint1, image->root());
+    image->addNode(paint2, image->root());
+    image->addNode(blur1, image->root());
+
+    QCOMPARE(*image->colorSpace(), *rgb8);
+    QCOMPARE(*image->colorSpace()->profile(), *KoColorSpaceRegistry::instance()->p709SRGBProfile());
+
+    QCOMPARE(*paint1->colorSpace(), *rgb8);
+    QCOMPARE(*paint1->colorSpace()->profile(), *KoColorSpaceRegistry::instance()->p709SRGBProfile());
+
+    QCOMPARE(*paint2->colorSpace(), *gray8);
+
+    QCOMPARE(*blur1->colorSpace(), *rgb8);
+    QCOMPARE(*blur1->colorSpace()->profile(), *KoColorSpaceRegistry::instance()->p709SRGBProfile());
+
+
+    image->assignImageProfile(KoColorSpaceRegistry::instance()->p2020G10Profile());
+    image->waitForDone();
+
+    QVERIFY(*image->colorSpace() != *rgb8);
+    QCOMPARE(*image->colorSpace()->profile(), *KoColorSpaceRegistry::instance()->p2020G10Profile());
+
+    QVERIFY(*paint1->colorSpace() != *rgb8);
+    QCOMPARE(*paint1->colorSpace()->profile(), *KoColorSpaceRegistry::instance()->p2020G10Profile());
+
+    QCOMPARE(*paint2->colorSpace(), *gray8);
+
+    QVERIFY(*blur1->colorSpace() != *rgb8);
+    QCOMPARE(*blur1->colorSpace()->profile(), *KoColorSpaceRegistry::instance()->p2020G10Profile());
+}
+
 void KisImageTest::testGlobalSelection()
 {
     const KoColorSpace *cs8 = KoColorSpaceRegistry::instance()->rgb8();
@@ -1233,6 +1284,4 @@ void KisImageTest::testPaintOverlayMask()
 
 }
 
-
-
-QTEST_MAIN(KisImageTest)
+KISTEST_MAIN(KisImageTest)

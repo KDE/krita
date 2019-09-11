@@ -397,12 +397,14 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
                 const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data);
                 if (profile && profile->valid()) {
                     res = image->assignImageProfile(profile);
+                    image->waitForDone();
                 }
                 if (!res) {
                     const QString defaultProfileId = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(image->colorSpace()->id());
                     profile = KoColorSpaceRegistry::instance()->profileByName(defaultProfileId);
                     Q_ASSERT(profile && profile->valid());
                     image->assignImageProfile(profile);
+                    image->waitForDone();
                 }
             }
         }

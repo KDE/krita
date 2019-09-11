@@ -257,12 +257,10 @@ private:
 };
 
 
-void KisColorizeMask::setProfile(const KoColorProfile *profile)
+void KisColorizeMask::setProfile(const KoColorProfile *profile, KUndo2Command *parentCommand)
 {
-    // WARNING: there is no undo information, used only while loading!
-
-    m_d->fakePaintDevice->setProfile(profile);
-    m_d->coloringProjection->setProfile(profile);
+    m_d->fakePaintDevice->setProfile(profile, parentCommand);
+    m_d->coloringProjection->setProfile(profile, parentCommand);
 
     for (auto stroke : m_d->keyStrokes) {
         stroke.color.setProfile(profile);

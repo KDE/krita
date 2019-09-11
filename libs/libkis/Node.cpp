@@ -25,7 +25,6 @@
 #include <KisDocument.h>
 #include <KisMimeDatabase.h>
 #include <KisPart.h>
-#include <kis_change_profile_visitor.h>
 #include <kis_image.h>
 #include <kis_types.h>
 #include <kis_node.h>
@@ -240,12 +239,9 @@ bool Node::setColorProfile(const QString &colorProfile)
     if (!d->node->inherits("KisLayer")) return false;
     KisLayer *layer = qobject_cast<KisLayer*>(d->node.data());
     const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(colorProfile);
-    const KoColorSpace *srcCS = layer->colorSpace();
-    const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(srcCS->colorModelId().id(),
-                                                                             srcCS->colorDepthId().id(),
-                                                                             profile);
-    KisChangeProfileVisitor v(srcCS, dstCs);
-    return layer->accept(v);
+    bool result = d->image->assignLayerProfile(layer, profile);
+    d->image->waitForDone();
+    return result;
 }
 
 bool Node::setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)

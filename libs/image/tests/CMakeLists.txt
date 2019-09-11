@@ -59,7 +59,6 @@ ecm_add_tests(
     kis_paint_layer_test.cpp
     kis_adjustment_layer_test.cpp
     kis_annotation_test.cpp
-    kis_change_profile_visitor_test.cpp
     kis_clone_layer_test.cpp
     kis_convolution_painter_test.cpp
     kis_crop_processing_visitor_test.cpp

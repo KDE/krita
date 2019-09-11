@@ -42,7 +42,6 @@
 
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
-#include "kis_change_profile_visitor.h"
 #include "kis_count_visitor.h"
 #include "kis_filter_strategy.h"
 #include "kis_group_layer.h"
@@ -77,6 +76,7 @@
 #include "processing/kis_crop_selections_processing_visitor.h"
 #include "processing/kis_transform_processing_visitor.h"
 #include "processing/kis_convert_color_space_processing_visitor.h"
+#include "processing/kis_assign_profile_processing_visitor.h"
 #include "commands_new/kis_image_resize_command.h"
 #include "commands_new/kis_image_set_resolution_command.h"
 #include "commands_new/kis_activate_selection_mask_command.h"
@@ -1044,22 +1044,69 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
     applicator.end();
 }
 
+bool KisImage::assignLayerProfile(KisNodeSP node, const KoColorProfile *profile)
+{
+    const KoColorSpace *srcColorSpace = node->colorSpace();
+
+    if (!node->projectionLeaf()->isLayer()) return false;
+    if (!profile || *srcColorSpace->profile() == *profile) return false;
+
+    KUndo2MagicString actionName = kundo2_i18n("Assign Profile to Layer");
+
+    KisImageSignalVector emitSignals;
+    emitSignals << ModifiedSignal;
+
+    const KoColorSpace *dstColorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
+    if (!dstColorSpace) return false;
+
+    KisProcessingApplicator applicator(this, node,
+                                       KisProcessingApplicator::RECURSIVE |
+                                       KisProcessingApplicator::NO_UI_UPDATES,
+                                       emitSignals, actionName);
+
+    applicator.applyVisitor(
+        new KisAssignProfileProcessingVisitor(
+            srcColorSpace, dstColorSpace),
+        KisStrokeJobData::CONCURRENT);
+
+    applicator.end();
+
+    return true;
+}
+
+
 bool KisImage::assignImageProfile(const KoColorProfile *profile)
 {
-    if (!profile) return false;
+    const KoColorSpace *srcColorSpace = m_d->colorSpace;
 
-    const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
-    const KoColorSpace *srcCs = colorSpace();
+    if (!profile || *srcColorSpace->profile() == *profile) return false;
 
-    if (!dstCs) return false;
+    KUndo2MagicString actionName = kundo2_i18n("Assign Profile");
 
-    m_d->colorSpace = dstCs;
+    KisImageSignalVector emitSignals;
+    emitSignals << ProfileChangedSignal;
+    emitSignals << ModifiedSignal;
 
-    KisChangeProfileVisitor visitor(srcCs, dstCs);
-    bool retval = m_d->rootLayer->accept(visitor);
-    m_d->signalRouter.emitNotification(ProfileChangedSignal);
-    return retval;
+    const KoColorSpace *dstColorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
+    if (!dstColorSpace) return false;
 
+    KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                       KisProcessingApplicator::RECURSIVE |
+                                       KisProcessingApplicator::NO_UI_UPDATES,
+                                       emitSignals, actionName);
+
+    applicator.applyCommand(
+        new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstColorSpace),
+                KisStrokeJobData::SEQUENTIAL);
+
+    applicator.applyVisitor(
+        new KisAssignProfileProcessingVisitor(
+            srcColorSpace, dstColorSpace),
+        KisStrokeJobData::CONCURRENT);
+
+    applicator.end();
+
+    return true;
 }
 
 void KisImage::setProjectionColorSpace(const KoColorSpace * colorSpace)

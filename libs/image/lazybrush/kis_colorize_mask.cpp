@@ -55,7 +55,7 @@ struct KisColorizeMask::Private
         : q(_q),
           coloringProjection(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
           fakePaintDevice(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
-          filteredSource(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
+          filteredSource(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())),
           needAddCurrentKeyStroke(false),
           showKeyStrokes(true),
           showColoring(true),
@@ -224,6 +224,7 @@ struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
         }
 
         m_node->setNeedsUpdate(true);
+        emit m_node->sigKeyStrokesListChanged();
     }
 
     void redo() override {
@@ -242,6 +243,7 @@ struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
         }
 
         m_node->setNeedsUpdate(true);
+        emit m_node->sigKeyStrokesListChanged();
     }
 
 private:

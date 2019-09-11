@@ -178,11 +178,10 @@ void KisImageTest::testConvertImageColorSpace()
     image->refreshGraph();
 
     const KoColorSpace *cs16 = KoColorSpaceRegistry::instance()->rgb16();
-    image->lock();
     image->convertImageColorSpace(cs16,
                                   KoColorConversionTransformation::internalRenderingIntent(),
                                   KoColorConversionTransformation::internalConversionFlags());
-    image->unlock();
+    image->waitForDone();
 
     QVERIFY(*cs16 == *image->colorSpace());
     QVERIFY(*cs16 == *image->root()->colorSpace());

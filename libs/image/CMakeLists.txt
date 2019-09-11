@@ -114,6 +114,7 @@ set(kritaimage_LIB_SRCS
    commands_new/KisHoldUIUpdatesCommand.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
+   processing/kis_convert_color_space_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
    processing/kis_crop_selections_processing_visitor.cpp
    processing/kis_transform_processing_visitor.cpp
@@ -146,7 +147,6 @@ set(kritaimage_LIB_SRCS
    kis_bookmarked_configuration_manager.cc
    kis_node_uuid_info.cpp
    kis_clone_layer.cpp
-   kis_colorspace_convert_visitor.cpp
    kis_config_widget.cpp
    kis_convolution_kernel.cc
    kis_convolution_painter.cc

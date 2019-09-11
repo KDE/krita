@@ -133,17 +133,18 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 {
-    if(m_complete){
+    if (m_complete) {
         QPointF temp = convertToPixelCoord(event);
-        int pointA=0, pointB=1;
+        int pointA = 0, pointB = 1;
         double dist = std::numeric_limits<double>::max();
-        int total = m_anchorPoints.count();
-        for(int i=0; i < total; i++){
-            double distToCompare = kisDistance(m_anchorPoints[i], temp) + kisDistance(temp, m_anchorPoints[(i+1)%total]);
-            if(dist > distToCompare){
+        int total   = m_anchorPoints.count();
+        for (int i = 0; i < total; i++) {
+            double distToCompare =
+                kisDistance(m_anchorPoints[i], temp) + kisDistance(temp, m_anchorPoints[(i + 1) % total]);
+            if (dist > distToCompare) {
                 pointA = i;
-                pointB = (i+1)%total;
-                dist = distToCompare;
+                pointB = (i + 1) % total;
+                dist   = distToCompare;
             }
         }
 
@@ -153,7 +154,6 @@ void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
         m_pointCollection[pointA] = path1;
         m_pointCollection.insert(pointB, path2);
         m_anchorPoints.insert(pointB, temp.toPoint());
-        qDebug() << pointA << pointB;
 
         m_points.clear();
         Q_FOREACH (const vQPointF vec, m_pointCollection) {

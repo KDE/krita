@@ -207,6 +207,7 @@ public:
      */
     void updateResource(QSharedPointer<T> resource)
     {
+        m_resourceModel->updateResource(resource);
         notifyResourceChanged(resource);
     }
 

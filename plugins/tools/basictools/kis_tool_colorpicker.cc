@@ -196,13 +196,13 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
     Q_UNUSED(event);
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    if (m_config->addPalette) {
-        KisSwatch ent;
-        ent.setColor(m_pickedColor);
+    if (m_config->addColorToCurrentPalette) {
+        KisSwatch swatch;
+        swatch.setColor(m_pickedColor);
         // We don't ask for a name, too intrusive here
 
         KoColorSetSP palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
-        palette->add(ent);
+        palette->add(swatch);
 
         if (!palette->save()) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
@@ -316,7 +316,7 @@ void KisToolColorPicker::updateOptionWidget()
     m_optionsWidget->cbNormaliseValues->setChecked(m_config->normaliseValues);
     m_optionsWidget->cbUpdateCurrentColor->setChecked(m_config->updateColor);
     m_optionsWidget->cmbSources->setCurrentIndex(SAMPLE_MERGED + !m_config->sampleMerged);
-    m_optionsWidget->cbPalette->setChecked(m_config->addPalette);
+    m_optionsWidget->cbPalette->setChecked(m_config->addColorToCurrentPalette);
     m_optionsWidget->radius->setValue(m_config->radius);
     m_optionsWidget->blend->setValue(m_config->blend);
 }
@@ -345,7 +345,7 @@ void KisToolColorPicker::slotSetNormaliseValues(bool state)
 
 void KisToolColorPicker::slotSetAddPalette(bool state)
 {
-    m_config->addPalette = state;
+    m_config->addColorToCurrentPalette = state;
 }
 
 void KisToolColorPicker::slotChangeRadius(int value)

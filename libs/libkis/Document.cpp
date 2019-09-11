@@ -23,7 +23,6 @@
 #include <KoColorSpaceConstants.h>
 #include <KoXmlReader.h>
 #include <KisDocument.h>
-#include <kis_colorspace_convert_visitor.h>
 #include <kis_image.h>
 #include <KisPart.h>
 #include <kis_paint_device.h>
@@ -203,8 +202,7 @@ bool Document::setColorSpace(const QString &colorModel, const QString &colorDept
                                                  KoColorConversionTransformation::IntentPerceptual,
                                                  KoColorConversionTransformation::HighQuality | KoColorConversionTransformation::NoOptimization);
 
-    d->document->image()->setModified();
-    d->document->image()->initialRefreshGraph();
+    d->document->image()->waitForDone();
     return true;
 }
 

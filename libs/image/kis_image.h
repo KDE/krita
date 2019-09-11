@@ -356,13 +356,13 @@ public:
                                 KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
-     * Set the color space of  the projection (and the root layer)
-     * to dstColorSpace. No conversion is done for other layers,
-     * their colorspace can differ.
-     * @note No conversion is done, only regeneration, so no rendering
-     * intent needed
+     * Convert layer and all its child layers to dstColorSpace
      */
-    void convertProjectionColorSpace(const KoColorSpace *dstColorSpace);
+    void convertLayerColorSpace(KisNodeSP node,
+                                const KoColorSpace *dstColorSpace,
+                                KoColorConversionTransformation::Intent renderingIntent,
+                                KoColorConversionTransformation::ConversionFlags conversionFlags);
+
 
     // Get the profile associated with this image
     const KoColorProfile *  profile() const;

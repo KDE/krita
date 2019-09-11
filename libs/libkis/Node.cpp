@@ -26,7 +26,6 @@
 #include <KisMimeDatabase.h>
 #include <KisPart.h>
 #include <kis_change_profile_visitor.h>
-#include <kis_colorspace_convert_visitor.h>
 #include <kis_image.h>
 #include <kis_types.h>
 #include <kis_node.h>
@@ -255,12 +254,12 @@ bool Node::setColorSpace(const QString &colorModel, const QString &colorDepth, c
     if (!d->node->inherits("KisLayer")) return false;
     KisLayer *layer = qobject_cast<KisLayer*>(d->node.data());
     const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(colorProfile);
-    const KoColorSpace *srcCS = layer->colorSpace();
     const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorModel,
                                                                              colorDepth,
                                                                              profile);
-    KisColorSpaceConvertVisitor v(d->image, srcCS, dstCs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-    return layer->accept(v);
+    d->image->convertLayerColorSpace(d->node, dstCs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    d->image->waitForDone();
+    return true;
 }
 
 bool Node::animated() const

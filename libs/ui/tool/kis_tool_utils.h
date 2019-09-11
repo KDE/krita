@@ -33,7 +33,7 @@ struct KRITAUI_EXPORT ColorPickerConfig {
 
     bool toForegroundColor;
     bool updateColor;
-    bool addPalette;
+    bool addColorToCurrentPalette;
     bool normaliseValues;
     bool sampleMerged;
     int radius;

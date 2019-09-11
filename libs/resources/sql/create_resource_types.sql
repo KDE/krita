@@ -1,4 +1,4 @@
 CREATE TABLE IF NOT EXISTS resource_types (
     id INTEGER PRIMARY KEY
-,   name TEXT
+,   name TEXT NOT NULL UNIQUE
 );

@@ -149,6 +149,9 @@ protected:
             if (m_resourceLoader) {
                 const_cast<FolderIterator*>(this)->m_resource = m_resourceLoader->load(m_dirIterator->filePath(), f);
             }
+            else {
+                qWarning() << "Could not get resource loader for type" << m_resourceType;
+            }
             f.close();
         }
         return !m_resource.isNull();

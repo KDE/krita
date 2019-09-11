@@ -142,23 +142,3 @@ QObject* Settings::customImageSettings() const
     return settings;
 }
 
-QString Settings::lastPreset() const
-{
-    KisConfig cfg(true);
-    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    QString defaultPresetName = "basic_tip_default";
-    bool foundTip = false;
-    for (int i=0; i<rserver->resourceCount(); i++) {
-        KisPaintOpPresetSP resource = rserver->resources().at(i);
-        if (resource->name().toLower().contains("basic_tip_default")) {
-            defaultPresetName = resource->name();
-            foundTip = true;
-        } else if (foundTip == false && (resource->name().toLower().contains("default") ||
-                                         resource->filename().toLower().contains("default"))) {
-            defaultPresetName = resource->name();
-            foundTip = true;
-        }
-    }
-    return cfg.readEntry("LastPreset", defaultPresetName);
-}
-

@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  Copyright (c) 2019 Kuntal Majumder <hellozee@disroot.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -130,6 +130,39 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
 
     updatePaintPath();
 } // KisToolSelectMagnetic::beginPrimaryAction
+
+void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
+{
+    if(m_complete){
+        QPointF temp = convertToPixelCoord(event);
+        int pointA=0, pointB=1;
+        double dist = std::numeric_limits<double>::max();
+        int total = m_anchorPoints.count();
+        for(int i=0; i < total; i++){
+            double distToCompare = kisDistance(m_anchorPoints[i], temp) + kisDistance(temp, m_anchorPoints[(i+1)%total]);
+            if(dist > distToCompare){
+                pointA = i;
+                pointB = (i+1)%total;
+                dist = distToCompare;
+            }
+        }
+
+        vQPointF path1 = m_worker.computeEdge(m_frequency, m_anchorPoints[pointA], temp.toPoint(), m_radius);
+        vQPointF path2 = m_worker.computeEdge(m_frequency, temp.toPoint(), m_anchorPoints[pointB], m_radius);
+
+        m_pointCollection[pointA] = path1;
+        m_pointCollection.insert(pointB, path2);
+        m_anchorPoints.insert(pointB, temp.toPoint());
+        qDebug() << pointA << pointB;
+
+        m_points.clear();
+        Q_FOREACH (const vQPointF vec, m_pointCollection) {
+            m_points.append(vec);
+        }
+
+        updatePaintPath();
+    }
+}
 
 // drag while primary mouse button is pressed
 void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)

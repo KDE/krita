@@ -49,7 +49,7 @@ class KoResource;
 
 /**
  * KoResourceServer manages the resources of one type. It stores,
- * loads and saves the resources.  To keep track of changes the server
+ * loads and saves the resources. To keep track of changes the server
  * can be observed with a KoResourceServerObserver
  */
 template <class T>
@@ -113,6 +113,7 @@ public:
     }
 
     QList<QSharedPointer<T>> resources() {
+        qDebug() << "KoResourceServer::resources()" << m_type;
         QList<QSharedPointer<T>> resourceList;
         for (int row = 0; row < m_resourceModel->rowCount(); ++row) {
             resourceList << m_resourceModel->resourceForIndex(m_resourceModel->index(row, 0)).dynamicCast<T>();
@@ -148,7 +149,6 @@ public:
         }
         removeResourceFromServer(resource);
     }
-
 
     /**
      * Addes an observer to the server

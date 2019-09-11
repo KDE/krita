@@ -514,6 +514,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
 bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString resourceType)
 {
+    QSqlDatabase::database().transaction();
     QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage->resources(resourceType);
     while(iter->hasNext()) {
         iter->next();
@@ -524,6 +525,7 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
             }
         }
     }
+    QSqlDatabase::database().commit();
     return true;
 }
 
@@ -659,6 +661,7 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString url, 
 
 bool KisResourceCacheDb::addTags(KisResourceStorageSP storage, QString resourceType)
 {
+    QSqlDatabase::database().transaction();
     QSharedPointer<KisResourceStorage::TagIterator> iter = storage->tags(resourceType);
     while(iter->hasNext()) {
         iter->next();
@@ -673,6 +676,7 @@ bool KisResourceCacheDb::addTags(KisResourceStorageSP storage, QString resourceT
             }
         }
     }
+    QSqlDatabase::database().commit();
     return true;
 }
 
@@ -898,6 +902,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             qWarning() << "Could not prepare delete Resources query";
         }
 
+        QSqlDatabase::database().transaction();
         Q_FOREACH(int id, resourceIdList) {
             deleteResourceVersions.bindValue(":id", id);
             if (!deleteResourceVersions.exec()) {
@@ -911,6 +916,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                 qWarning() << "Could not delete resource" << deleteResources.boundValues() << deleteResources.lastError();
             }
         }
+        QSqlDatabase::database().commit();
     }
 
     qDebug() << "Synchronizing the storages took" << t.msec() << "milliseconds for" << storage->location();

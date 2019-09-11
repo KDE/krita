@@ -343,11 +343,17 @@ bool KisResourceLocator::initializeDb()
 
     Q_FOREACH(KisResourceStorageSP storage, d->storages) {
 
+        QTime t;
+        t.start();
+
         if (!KisResourceCacheDb::addStorage(storage, (storage->type() == KisResourceStorage::StorageType::Folder ? false : true))) {
             d->errorMessages.append(i18n("Could not add storage %1 to the cache database").arg(storage->location()));
         }
 
+        qDebug() << "Adding storage" << storage->location() << "to the database took" << t.elapsed() << "ms";
+
         Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
+            t.start();
             emit progressMessage(i18n("Adding %1 resources to folder %2", resourceType, storage->location()));
             if (!KisResourceCacheDb::addResources(storage, resourceType)) {
                 d->errorMessages.append(i18n("Could not add resource type %1 to the cache database").arg(resourceType));
@@ -355,6 +361,8 @@ bool KisResourceLocator::initializeDb()
             if (!KisResourceCacheDb::addTags(storage, resourceType)) {
                 d->errorMessages.append(i18n("Could not add tags for resource type %1 to the cache database").arg(resourceType));
             }
+            qDebug() << "\tAdding resources of type" << resourceType << "to the database took" << t.elapsed() << "ms";
+
         }
     }
 

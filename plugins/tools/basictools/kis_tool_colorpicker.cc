@@ -200,7 +200,6 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
         KisSwatch swatch;
         swatch.setColor(m_pickedColor);
         // We don't ask for a name, too intrusive here
-
         KoColorSetSP palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
         palette->add(swatch);
 

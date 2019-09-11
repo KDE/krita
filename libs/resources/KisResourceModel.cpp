@@ -19,6 +19,7 @@
 
 #include "KisResourceModel.h"
 
+#include <QTime>
 #include <QBuffer>
 #include <QImage>
 #include <QtSql>
@@ -56,14 +57,11 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
                                        ",     storages.location\n"
                                        ",     resources.version\n"
                                        ",     resource_types.name as resource_type\n"
-                                       ",     versioned_resources.version as version\n"
                                        "FROM  resources\n"
                                        ",     resource_types\n"
                                        ",     storages\n"
-                                       ",     versioned_resources\n"
                                        "WHERE resources.resource_type_id = resource_types.id\n"
                                        "AND   resources.storage_id = storages.id\n"
-                                       ""
                                        "AND   resource_types.name = :resource_type\n"
                                        "AND   resources.status = 1\n"
                                        "AND   storages.active = 1");
@@ -353,6 +351,9 @@ bool KisResourceModel::setResourceMetaData(KoResourceSP resource, QMap<QString, 
 
 bool KisResourceModel::resetQuery()
 {
+    QTime t;
+    t.start();
+
     beginResetModel();
     bool r = d->resourcesQuery.exec();
     if (!r) {
@@ -361,6 +362,8 @@ bool KisResourceModel::resetQuery()
     d->cachedRowCount = -1;
     endResetModel();
     
+    qDebug() << "KisResourceModel::resetQuery for" << d->resourceType << "took" << t.elapsed() << "ms";
+
     return r;
 }
 

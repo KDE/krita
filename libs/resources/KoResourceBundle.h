@@ -129,8 +129,6 @@ private:
     QList<QByteArray> m_presetsMd5Installed;
     QString m_bundleVersion;
 
-    QMap<QString, KoResourceSP> m_resourceCache;
-
 };
 
 #endif // KORESOURCEBUNDLE_H

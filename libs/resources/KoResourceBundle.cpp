@@ -505,9 +505,6 @@ KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QStri
 {
     if (filename().isEmpty()) return 0;
 
-    if (m_resourceCache.contains(filepath)) {
-        return m_resourceCache[filepath];
-    }
 
     QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
 
@@ -528,7 +525,6 @@ KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QStri
     }
     KoResourceSP res = loader->load(filepath, *resourceStore->device());
     resourceStore->close();
-    m_resourceCache[filepath] = res;
 
     return res;
 }

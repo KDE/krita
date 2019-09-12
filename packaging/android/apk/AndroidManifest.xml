@@ -74,7 +74,7 @@
     </application>
 
     <supports-screens
-        android:xLargeScreens="true"
+        android:xlargeScreens="true"
         android:largeScreens="true"
         android:normalScreens="false"
         android:smallScreens="false"/>

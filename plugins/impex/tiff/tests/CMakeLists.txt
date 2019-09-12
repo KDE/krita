@@ -9,7 +9,7 @@ include(ECMAddTests)
 include(KritaAddBrokenUnitTest)
 macro_add_unittest_definitions()
 
-ecm_add_tests(
+krita_add_broken_unit_tests (
     kis_tiff_test.cpp
     NAME_PREFIX "krita-plugin-impex-tiff-"
     LINK_LIBRARIES kritaui Qt5::Test

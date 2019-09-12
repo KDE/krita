@@ -27,6 +27,12 @@ endif()
 ecm_add_tests(
     TestKoLcmsColorProfile.cpp
     TestColorSpaceRegistry.cpp
+    NAME_PREFIX "plugins-lcmsengine-"
+    LINK_LIBRARIES kritawidgets kritapigment KF5::I18n Qt5::Test ${LCMS2_LIBRARIES})
+
+krita_add_broken_unit_tests (
     TestLcmsRGBP2020PQColorSpace.cpp
     NAME_PREFIX "plugins-lcmsengine-"
     LINK_LIBRARIES kritawidgets kritapigment KF5::I18n Qt5::Test ${LCMS2_LIBRARIES})
+    
+    

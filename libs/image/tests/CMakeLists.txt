@@ -75,7 +75,6 @@ ecm_add_tests(
     kis_gradient_painter_test.cpp
     kis_image_commands_test.cpp
     kis_image_test.cpp
-    kis_image_signal_router_test.cpp
     kis_iterators_ng_test.cpp
     kis_iterator_benchmark.cpp
     kis_updater_context_test.cpp
@@ -129,7 +128,6 @@ ecm_add_tests(
     kis_transform_worker_test.cpp
     kis_perspective_transform_worker_test.cpp
     kis_cs_conversion_test.cpp
-    kis_processings_test.cpp
     kis_projection_leaf_test.cpp
     kis_histogram_test.cpp
     kis_onion_skin_compositor_test.cpp
@@ -151,7 +149,9 @@ krita_add_broken_unit_tests(
     kis_transform_mask_test.cpp
     kis_layer_styles_test.cpp
     kis_update_scheduler_test.cpp
-
+    kis_image_signal_router_test.cpp
+    kis_processings_test.cpp
+    
     LINK_LIBRARIES kritaimage Qt5::Test
     NAME_PREFIX "libs-image-"
 )

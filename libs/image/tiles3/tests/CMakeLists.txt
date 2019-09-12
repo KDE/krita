@@ -10,8 +10,13 @@ include_directories(SYSTEM
 
 macro_add_unittest_definitions()
 
-ecm_add_tests(
+krita_add_broken_unit_tests(
     kis_tiled_data_manager_test.cpp
+    
+    LINK_LIBRARIES kritaimage Qt5::Test
+    NAME_PREFIX "libs-image-tiles3-")
+
+ecm_add_tests(
     kis_low_memory_tests.cpp
     kis_lockless_stack_test.cpp
     kis_chunk_allocator_test.cpp

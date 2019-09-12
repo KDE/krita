@@ -11,7 +11,6 @@ ecm_add_tests(
     TestSelection.cpp
     TestPathTool.cpp
     TestShapeAt.cpp
-    TestShapePainting.cpp
     TestKoShapeFactory.cpp
     TestKoShapeRegistry.cpp
     TestShapeContainer.cpp
@@ -86,5 +85,12 @@ krita_add_broken_unit_test(
     TEST_NAME TestSvgTextRoundTrip
     LINK_LIBRARIES kritaflake Qt5::Test
     NAME_PREFIX "libs-flake-")
+    
 set_property(TARGET TestSvgTextRoundTrip
              PROPERTY COMPILE_DEFINITIONS USE_ROUND_TRIP)
+
+krita_add_broken_unit_test(
+    TestShapePainting.cpp
+    TEST_NAME TestShapePainting
+    LINK_LIBRARIES kritaflake Qt5::Test
+    NAME_PREFIX "libs-flake-")

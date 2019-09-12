@@ -5,7 +5,7 @@ include(KritaAddBrokenUnitTest)
 
 macro_add_unittest_definitions()
 
-ecm_add_test(kis_png_test.cpp
-    TEST_NAME kis_png_test
+krita_add_broken_unit_tests (
+    kis_png_test.cpp
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "plugins-impex-")

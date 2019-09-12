@@ -182,8 +182,8 @@ void KisPaletteEditor::removePalette(KoColorSet *cs)
     }
 
     if (cs->isGlobal()) {
-        m_d->rServer->removeResourceAndBlacklist(cs);
         QFile::remove(cs->filename());
+        m_d->rServer->removeResourceAndBlacklist(cs);
         return;
     }
     m_d->rServer->removeResourceFromServer(cs);

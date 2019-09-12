@@ -2444,7 +2444,7 @@ void KisMainWindow::checkSanity()
     }
 
     KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    if (rserver->resources().isEmpty()) {
+    if (rserver->resourceCount() == 0) {
         m_errorMessage = i18n("Krita cannot find any brush presets! Krita will quit now.");
         m_dieOnError = true;
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));

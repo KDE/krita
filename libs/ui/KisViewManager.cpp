@@ -440,7 +440,7 @@ void KisViewManager::setCurrentView(KisView *view)
                 preset = rserver->resourceByName(defaultPresetName);
             }
 
-            if (!preset && !rserver->resources().isEmpty()) {
+            if (!preset && rserver->resourceCount() > 0) {
                 preset = rserver->firstResource();
             }
             if (preset) {

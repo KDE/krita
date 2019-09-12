@@ -58,7 +58,7 @@ KisImportExportErrorCode KraExport::convert(KisDocument *document, QIODevice *io
     KisImageSP image = document->savingImage();
     KIS_ASSERT_RECOVER_RETURN_VALUE(image, ImportExportCodes::InternalError);
 
-    KraConverter kraConverter(document);
+    KraConverter kraConverter(document, updater());
     KisImportExportErrorCode res = kraConverter.buildFile(io, filename());
     dbgFile << "KraExport::convert result =" << res;
     return res;

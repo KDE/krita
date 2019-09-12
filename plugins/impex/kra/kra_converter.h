@@ -30,6 +30,10 @@
 #include <kis_types.h>
 #include <kis_kra_saver.h>
 #include <kis_kra_loader.h>
+#include <KoProgressUpdater.h>
+#include <QPointer>
+#include <KoUpdater.h>
+
 
 class KisDocument;
 
@@ -40,6 +44,7 @@ class KraConverter : public QObject
 public:
 
     KraConverter(KisDocument *doc);
+    KraConverter(KisDocument *doc, QPointer<KoUpdater> updater);
     ~KraConverter() override;
 
     KisImportExportErrorCode buildImage(QIODevice *io);
@@ -65,6 +70,8 @@ private:
     KisImportExportErrorCode loadXML(const KoXmlDocument &doc, KoStore *store);
     bool completeLoading(KoStore *store);
 
+    void setProgress(int progress);
+
     KisDocument *m_doc {0};
     KisImageSP m_image;
 
@@ -75,6 +82,7 @@ private:
     KoStore *m_store {0};
     KisKraSaver *m_kraSaver {0};
     KisKraLoader *m_kraLoader {0};
+    QPointer<KoUpdater> m_updater;
 };
 
 #endif

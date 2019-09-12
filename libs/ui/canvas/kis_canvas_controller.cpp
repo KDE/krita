@@ -104,9 +104,7 @@ KisCanvasController::~KisCanvasController()
 void KisCanvasController::setCanvas(KoCanvasBase *canvas)
 {
     if (canvas) {
-        KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(kritaCanvas);
-
+        KisCanvas2 *kritaCanvas = qobject_cast<KisCanvas2*>(canvas);
         m_d->coordinatesConverter =
             const_cast<KisCoordinatesConverter*>(kritaCanvas->coordinatesConverter());
     } else {

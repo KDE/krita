@@ -207,7 +207,10 @@ find_NUBcoefs_1d_s (NUBasis* restrict basis, BCtype_s bc,
   else {
     int M = basis->grid->num_points;
     // Setup boundary conditions
-    float bfuncs[4], dbfuncs[4], abcd_left[4], abcd_right[4];
+    float bfuncs[4] = {};
+    float dbfuncs[4] = {};
+    float abcd_left[4] = {};
+    float abcd_right[4] = {};
     // Left boundary
     if (bc.lCode == FLAT || bc.lCode == NATURAL)
       bc.lVal = 0.0;

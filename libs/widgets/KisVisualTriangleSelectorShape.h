@@ -35,7 +35,6 @@ class KisVisualTriangleSelectorShape : public KisVisualColorSelectorShape
 {
     Q_OBJECT
 public:
-    enum singelDTypes{border, borderMirrored};
     explicit KisVisualTriangleSelectorShape(QWidget *parent,
                                             Dimensions dimension,
                                             const KoColorSpace *cs,
@@ -65,7 +64,6 @@ private:
     QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const override;
     QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const override;
 
-    singelDTypes m_type;
     int m_barWidth;
     QPolygon m_triangle;
     QPointF m_center;

@@ -24,7 +24,7 @@
 #include <KoDocumentResourceManager.h>
 struct Shape::Private {
     Private() {}
-    KoShape *shape;
+    KoShape *shape {0};
 };
 
 Shape::Shape(KoShape *shape, QObject *parent)

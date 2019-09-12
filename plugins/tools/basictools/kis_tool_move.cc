@@ -242,7 +242,7 @@ void KisToolMove::notifyGuiAfterMove(bool showFloatingMessage)
     const bool showCoordinates = m_optionsWidget->showCoordinates();
 
     if (showCoordinates && showFloatingMessage) {
-        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        KisCanvas2 *kisCanvas = static_cast<KisCanvas2*>(canvas());
         kisCanvas->viewManager()->
             showFloatingMessage(
                 i18nc("floating message in move tool",

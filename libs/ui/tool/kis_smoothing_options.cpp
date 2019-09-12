@@ -21,7 +21,21 @@
 #include "kis_signal_compressor.h"
 
 struct KisSmoothingOptions::Private {
-    Private() : writeCompressor(500, KisSignalCompressor::FIRST_ACTIVE) {}
+    Private(bool useSavedSmoothing)
+        : writeCompressor(500, KisSignalCompressor::FIRST_ACTIVE)
+    {
+        KisConfig cfg(true);
+        smoothingType = (SmoothingType)cfg.lineSmoothingType(!useSavedSmoothing);
+        smoothnessDistance = cfg.lineSmoothingDistance(!useSavedSmoothing);
+        tailAggressiveness = cfg.lineSmoothingTailAggressiveness(!useSavedSmoothing);
+        smoothPressure = cfg.lineSmoothingSmoothPressure(!useSavedSmoothing);
+        useScalableDistance = cfg.lineSmoothingScalableDistance(!useSavedSmoothing);
+        delayDistance = cfg.lineSmoothingDelayDistance(!useSavedSmoothing);
+        useDelayDistance = cfg.lineSmoothingUseDelayDistance(!useSavedSmoothing);
+        finishStabilizedCurve = cfg.lineSmoothingFinishStabilizedCurve(!useSavedSmoothing);
+        stabilizeSensors = cfg.lineSmoothingStabilizeSensors(!useSavedSmoothing);
+    }
+
     KisSignalCompressor writeCompressor;
 
     SmoothingType smoothingType;
@@ -36,18 +50,8 @@ struct KisSmoothingOptions::Private {
 };
 
 KisSmoothingOptions::KisSmoothingOptions(bool useSavedSmoothing)
-    : m_d(new Private)
+    : m_d(new Private(useSavedSmoothing))
 {
-    KisConfig cfg(true);
-    m_d->smoothingType = (SmoothingType)cfg.lineSmoothingType(!useSavedSmoothing);
-    m_d->smoothnessDistance = cfg.lineSmoothingDistance(!useSavedSmoothing);
-    m_d->tailAggressiveness = cfg.lineSmoothingTailAggressiveness(!useSavedSmoothing);
-    m_d->smoothPressure = cfg.lineSmoothingSmoothPressure(!useSavedSmoothing);
-    m_d->useScalableDistance = cfg.lineSmoothingScalableDistance(!useSavedSmoothing);
-    m_d->delayDistance = cfg.lineSmoothingDelayDistance(!useSavedSmoothing);
-    m_d->useDelayDistance = cfg.lineSmoothingUseDelayDistance(!useSavedSmoothing);
-    m_d->finishStabilizedCurve = cfg.lineSmoothingFinishStabilizedCurve(!useSavedSmoothing);
-    m_d->stabilizeSensors = cfg.lineSmoothingStabilizeSensors(!useSavedSmoothing);
 
     connect(&m_d->writeCompressor, SIGNAL(timeout()), this, SLOT(slotWriteConfig()));
 }

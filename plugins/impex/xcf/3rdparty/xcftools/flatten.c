@@ -484,11 +484,13 @@ static struct Tile *
         flattenTopdown(struct FlattenSpec *spec, struct Tile *top,
                        unsigned nlayers, const struct rect *where)
 {
-    struct Tile *tile;
+    struct Tile *tile = 0;
 
     while( nlayers-- ) {
-        if( tileSummary(top) & TILESUMMARY_ALLFULL )
+        if( tileSummary(top) & TILESUMMARY_ALLFULL ) {
+            freeTile(tile);
             return top ;
+        }
         if( !spec->layers[nlayers].isVisible )
             continue ;
 

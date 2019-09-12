@@ -42,7 +42,7 @@ public:
     void readTemplateTree();
     void writeTemplateTree();
 
-    void add(KisTemplateGroup *g);
+    bool add(KisTemplateGroup *g);
     KisTemplateGroup *find(const QString &name) const;
 
     KisTemplateGroup *defaultGroup() const {

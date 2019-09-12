@@ -104,6 +104,7 @@ public:
     void setRealFilename(const QString &filename);
     void setMimeType(const QString &mime);
     void setUpdater(QPointer<KoUpdater> updater);
+    QPointer<KoUpdater> updater();
 
     /**
      * The filter chain calls this method to perform the actual conversion.

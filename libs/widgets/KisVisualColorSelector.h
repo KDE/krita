@@ -44,6 +44,7 @@ class KRITAWIDGETS_EXPORT KisVisualColorSelector : public KisColorSelectorInterf
 {
     Q_OBJECT
 public:
+    enum ColorModel{Channel, HSV, HSL, HSI, HSY, YUV};
 
     explicit KisVisualColorSelector(QWidget *parent = 0);
     ~KisVisualColorSelector() override;
@@ -57,28 +58,29 @@ public:
      */
     void setConfig(bool forceCircular, bool forceSelfUpdate) override;
     KoColor getCurrentColor() const override;
+    QVector4D getChannelValues() const;
+    KoColor convertShapeCoordsToKoColor(const QVector4D &coordinates) const;
+    QVector4D convertKoColorToShapeCoordinates(KoColor c) const;
 
 public Q_SLOTS:
 
     void slotSetColor(const KoColor &c) override;
     void slotsetColorSpace(const KoColorSpace *cs);
-    void slotRebuildSelectors();
     void configurationChanged();
     void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer) override;
 
 private Q_SLOTS:
-    void updateFromWidgets(KoColor c);
-    void HSXwrangler();
+    void slotCursorMoved(QPointF pos);
+    void slotDisplayConfigurationChanged();
+    void slotRebuildSelectors();
 
 protected:
-    void leaveEvent(QEvent *) override;
     void resizeEvent(QResizeEvent *) override;
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 
-    void updateSelectorElements(QObject *source);
     void drawGradients();
 
 };

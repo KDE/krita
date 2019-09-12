@@ -249,6 +249,11 @@ void KisImportExportFilter::setUpdater(QPointer<KoUpdater> updater)
     d->updater = updater;
 }
 
+QPointer<KoUpdater> KisImportExportFilter::updater()
+{
+    return d->updater;
+}
+
 void KisImportExportFilter::setProgress(int value)
 {
     if (d->updater) {

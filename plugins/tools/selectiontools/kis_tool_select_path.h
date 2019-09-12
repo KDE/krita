@@ -64,6 +64,13 @@ struct KisDelegatedSelectPathWrapper : public DelegatedSelectPathTool {
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
+    void beginPrimaryDoubleClickAction(KoPointerEvent *event) override;
+
+
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
 
     bool hasUserInteractionRunning() const;
 };
@@ -74,7 +81,6 @@ class KisToolSelectPath : public KisToolSelectBase<KisDelegatedSelectPathWrapper
     Q_OBJECT
 public:
     KisToolSelectPath(KoCanvasBase * canvas);
-    void mousePressEvent(KoPointerEvent* event) override;
     bool eventFilter(QObject *obj, QEvent *event) override;
     void resetCursorStyle() override;
 

@@ -47,6 +47,8 @@
 #include "kis_icon_utils.h"
 #include "KisSqueezedComboBox.h"
 
+#include "ui_WdgDlgInternalColorSelector.h"
+
 std::function<KisScreenColorPickerBase *(QWidget *)> KisDlgInternalColorSelector::s_screenColorPickerFactory = 0;
 
 struct KisDlgInternalColorSelector::Private
@@ -162,7 +164,6 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         }
     }
 
-    connect(this, SIGNAL(signalForegroundColorChosen(KoColor)), this, SLOT(slotLockSelector()));
     m_d->compressColorChanges = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this);
     connect(m_d->compressColorChanges, SIGNAL(timeout()), this, SLOT(endUpdateWithNewColor()));
 
@@ -179,8 +180,14 @@ KisDlgInternalColorSelector::~KisDlgInternalColorSelector()
 
 void KisDlgInternalColorSelector::slotColorUpdated(KoColor newColor)
 {
-    //if the update did not come from this selector...
-    if (m_d->allowUpdates || QObject::sender() == this->parent()) {
+    // not-so-nice solution: if someone calls this slot directly and that code was
+    // triggered by our compressor signal, our compressor is technically the sender()!
+    if (sender() == m_d->compressColorChanges) {
+        return;
+    }
+    // Do not accept external updates while a color update emit is pending;
+    // Note: Assumes external updates only come from parent(), a separate slot might be better
+    if (m_d->allowUpdates || (QObject::sender() && QObject::sender() != this->parent())) {
         // Enforce palette colors
         KConfigGroup group(KSharedConfig::openConfig(), "");
         if (group.readEntry("colorsettings/forcepalettecolors", false)) {
@@ -217,6 +224,9 @@ void KisDlgInternalColorSelector::colorSpaceChanged(const KoColorSpace *cs)
 void KisDlgInternalColorSelector::lockUsedColorSpace(const KoColorSpace *cs)
 {
     colorSpaceChanged(cs);
+    if (m_d->currentColor.colorSpace() != m_d->currentColorSpace) {
+        m_d->currentColor.convertTo(m_d->currentColorSpace);
+    }
     m_d->lockUsedCS = true;
 }
 
@@ -258,11 +268,6 @@ void KisDlgInternalColorSelector::slotConfigurationChanged()
     //slotColorSpaceChanged(m_d->canvas->image()->colorSpace());
 }
 
-void KisDlgInternalColorSelector::slotLockSelector()
-{
-    m_d->allowUpdates = false;
-}
-
 void KisDlgInternalColorSelector::setPreviousColor(KoColor c)
 {
     m_d->previousColor = c;
@@ -297,8 +302,8 @@ void KisDlgInternalColorSelector::updateAllElements(QObject *source)
 
     m_ui->currentColor->setColor(m_d->currentColor);
 
-    if (source != this->parent()) {
-        emit(signalForegroundColorChosen(m_d->currentColor));
+    if (source && source != this->parent()) {
+        m_d->allowUpdates = false;
         m_d->compressColorChanges->start();
     }
 
@@ -310,6 +315,7 @@ void KisDlgInternalColorSelector::updateAllElements(QObject *source)
 
 void KisDlgInternalColorSelector::endUpdateWithNewColor()
 {
+    emit signalForegroundColorChosen(m_d->currentColor);
     m_d->allowUpdates = true;
 }
 

@@ -167,7 +167,7 @@ namespace KisToolUtils {
     ColorPickerConfig::ColorPickerConfig()
         : toForegroundColor(true)
         , updateColor(true)
-        , addPalette(false)
+        , addColorToCurrentPalette(false)
         , normaliseValues(false)
         , sampleMerged(true)
         , radius(1)
@@ -185,7 +185,7 @@ namespace KisToolUtils {
         KisPropertiesConfiguration props;
         props.setProperty("toForegroundColor", toForegroundColor);
         props.setProperty("updateColor", updateColor);
-        props.setProperty("addPalette", addPalette);
+        props.setProperty("addPalette", addColorToCurrentPalette);
         props.setProperty("normaliseValues", normaliseValues);
         props.setProperty("sampleMerged", sampleMerged);
         props.setProperty("radius", radius);
@@ -205,7 +205,7 @@ namespace KisToolUtils {
 
         toForegroundColor = props.getBool("toForegroundColor", true);
         updateColor = props.getBool("updateColor", true);
-        addPalette = props.getBool("addPalette", false);
+        addColorToCurrentPalette = props.getBool("addPalette", false);
         normaliseValues = props.getBool("normaliseValues", false);
         sampleMerged = props.getBool("sampleMerged", !defaultActivation ? false : true);
         radius = props.getInt("radius", 1);

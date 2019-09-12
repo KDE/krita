@@ -38,7 +38,6 @@ public:
     enum singelDTypes{vertical, horizontal, border, borderMirrored};
     explicit KisVisualRectangleSelectorShape(QWidget *parent,
                                              Dimensions dimension,
-                                             ColorModel model,
                                              const KoColorSpace *cs,
                                              int channel1, int channel2,
                                              const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), int width=20,
@@ -56,11 +55,9 @@ public:
     QRect getSpaceForSquare(QRect geom) override;
     QRect getSpaceForCircle(QRect geom) override;
     QRect getSpaceForTriangle(QRect geom) override;
-protected:
-    void resizeEvent(QResizeEvent *) override;
 private:
-    QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) override;
-    QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) override;
+    QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const override;
+    QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) const override;
 
     singelDTypes m_type;
     int m_barWidth;

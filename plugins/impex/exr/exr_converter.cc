@@ -1140,7 +1140,7 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisPai
         if (!KisImportExportAdditionalChecks::isFileWritable(QFile::encodeName(filename))) {
             return ImportExportCodes::NoAccessToWrite;
         }
-        return ImportExportCodes::Failure;
+        return ImportExportCodes::ErrorWhileWriting;
     }
 
 }

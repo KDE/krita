@@ -216,13 +216,15 @@ void OverviewWidget::mouseReleaseEvent(QMouseEvent* event)
 
 void OverviewWidget::wheelEvent(QWheelEvent* event)
 {
-    float delta = event->delta();
+	if (m_canvas) {
+		float delta = event->delta();
 
-    if (delta > 0) {
-        m_canvas->viewManager()->zoomController()->zoomAction()->zoomIn();
-    } else {
-        m_canvas->viewManager()->zoomController()->zoomAction()->zoomOut();
-    }
+		if (delta > 0) {
+			m_canvas->viewManager()->zoomController()->zoomAction()->zoomIn();
+		} else {
+			m_canvas->viewManager()->zoomController()->zoomAction()->zoomOut();
+		}
+	}
 }
 
 void OverviewWidget::generateThumbnail()

@@ -18,18 +18,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_GUASSIANHIGHPASS_FILTER_H
-#define KIS_GUASSIANHIGHPASS_FILTER_H
+#ifndef KIS_GAUSSIANHIGHPASS_FILTER_H
+#define KIS_GAUSSIANHIGHPASS_FILTER_H
 
 #include "filter/kis_filter.h"
 #include "kis_cached_paint_device.h"
 
 
-class KisGuassianHighPassFilter : public KisFilter
+class KisGaussianHighPassFilter : public KisFilter
 {
 public:
 
-    KisGuassianHighPassFilter();
+    KisGaussianHighPassFilter();
 
     void processImpl(KisPaintDeviceSP device,
                      const QRect& applyRect,
@@ -38,7 +38,7 @@ public:
                      ) const override;
 
     static inline KoID id() {
-        return KoID("guassianhighpass", i18n("Guassian High Pass"));
+        return KoID("gaussianhighpass", i18n("Gaussian High Pass"));
     }
 
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;

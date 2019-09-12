@@ -393,6 +393,7 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
 void KisInvertSelectionOperation::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
 {
     KisSelectionFilter* filter = new KisInvertSelectionFilter();
+
     runFilter(filter, view, config);
 }
 

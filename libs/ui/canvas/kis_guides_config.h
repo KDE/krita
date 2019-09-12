@@ -121,6 +121,11 @@ public:
 
     bool isDefault() const;
 
+    /// Transform the guides using the given \p tranform. Please note that \p transform
+    /// should be in 'document' coordinate system.
+    /// Used with image-wide transformations.
+    void transform(const QTransform &transform);
+
 private:
     class Private;
     const QScopedPointer<Private> d;

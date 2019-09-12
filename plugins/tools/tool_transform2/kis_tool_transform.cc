@@ -281,7 +281,7 @@ void KisToolTransform::beginActionImpl(KoPointerEvent *event, bool usePrimaryAct
 
     if (!m_strokeId) {
         startStroke(m_currentArgs.mode(), false);
-    } else {
+    } else if (m_transaction.rootNode()) {
         bool result = false;
 
         if (usePrimaryAction) {

@@ -6,7 +6,7 @@ set(kritasvgimport_SOURCES
 
 add_library(kritasvgimport MODULE ${kritasvgimport_SOURCES})
 
-add_definitions(${SVG_DEFINITIONS} ${KDE4_ENABLE_EXCEPTIONS})
+add_definitions(${SVG_DEFINITIONS})
 
 target_link_libraries(kritasvgimport kritaui )
 

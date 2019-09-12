@@ -23,6 +23,7 @@
 #include "kis_paint_device_frames_interface.h"
 #include "kis_datamanager.h"
 #include "kis_image.h"
+#include "KoColor.h"
 
 //#define DEBUG_TRANSACTIONS
 
@@ -42,6 +43,9 @@ public:
     bool transactionFinished;
     QPoint oldOffset;
     QPoint newOffset;
+
+    KoColor oldDefaultPixel;
+    bool defaultPixelChanged = false;
 
     bool savedOutlineCacheValid;
     QPainterPath savedOutlineCache;
@@ -101,6 +105,7 @@ void KisTransactionData::init(KisPaintDeviceSP device)
     DEBUG_ACTION("Transaction started");
 
     m_d->oldOffset = QPoint(device->x(), device->y());
+    m_d->oldDefaultPixel = device->defaultPixel();
     m_d->firstRedo = true;
     m_d->transactionFinished = false;
     m_d->flattenUndoCommand = 0;
@@ -144,6 +149,7 @@ void KisTransactionData::endTransaction()
         m_d->transactionFinished = true;
         m_d->savedDataManager->commit();
         m_d->newOffset = QPoint(m_d->device->x(), m_d->device->y());
+        m_d->defaultPixelChanged = m_d->oldDefaultPixel != m_d->device->defaultPixel();
     }
 }
 
@@ -164,6 +170,10 @@ void KisTransactionData::startUpdates()
 
             rc = totalExtent.translated(m_d->oldOffset) |
                 totalExtent.translated(m_d->newOffset);
+        }
+
+        if (m_d->defaultPixelChanged) {
+            rc |= m_d->device->defaultBounds()->bounds();
         }
 
         m_d->device->setDirty(rc);

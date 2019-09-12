@@ -24,11 +24,11 @@
 #include <klocalizedstring.h>
 
 #include <KoUpdater.h>
-#include <KoCompositeOps.h>
 
 #include <filter/kis_filter_category_ids.h>
 #include "kis_filter_configuration.h"
 #include <kis_filter_registry.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_random_accessor_ng.h>
 #include <kis_sequential_iterator.h>

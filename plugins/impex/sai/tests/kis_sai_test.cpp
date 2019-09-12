@@ -116,7 +116,7 @@ void KisSaiTest::testLayerConfiguration()
     int fuzzyAlpha = 1;
     //Two for masks
     //Two for textures and layerstyles.
-    int maximumFailures = 4;
+    int maximumFailures = 2;
     if(!TestUtil::compareQImages(errpoint, qimage,
                                      doc->image()->projection()->convertToQImage(0, 0, 0, qimage.width(), qimage.height()), fuzzy, fuzzyAlpha, maximumFailures)) {
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());

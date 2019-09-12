@@ -292,7 +292,7 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
             if (parentLayer) {
                 m_image->addNode(layer, parentLayer);
                 layer->initSelection(parentLayer);
-                //ReadRasterDataIntoMask(layer, LayerFile, header.Bounds.Width, header.Bounds.Height);
+                ReadRasterDataIntoMask(layer, LayerFile, header.Bounds.Width, header.Bounds.Height);
                 layer->setName(LayerName);
                 layer->setOpacity(opacity);
                 layer->setVisible(maskVisible);
@@ -451,29 +451,33 @@ void KisSaiConverter::ReadRasterDataIntoMask(KisTransparencyMaskSP layer, sai::V
 
     for( std::size_t y = 0; y < blocksHeight; y++ ) {
         for( std::size_t x = 0; x < blocksWidth; x++ ) {
-            std::array<std::uint8_t, 0x400> CompressedTile = {};
-            std::array<std::uint8_t, 0x400> DecompressedTile = {};
+            std::array<std::uint8_t, 0x800> CompressedTile = {};
+            std::array<std::uint8_t, 0x800> DecompressedTile = {};
             std::uint8_t Channel = 0;
             std::uint16_t Size = 0;
-            if (entry.Read<std::uint16_t>(Size) == sizeof(std::uint16_t)) {
+            while (entry.Read<std::uint16_t>(Size) == sizeof(std::uint16_t)) {
                 entry.Read(CompressedTile.data(), Size);
                 RLEDecompressStride(
                             DecompressedTile.data(),
                             CompressedTile.data(),
-                            sizeof(std::uint8_t), 0x400/sizeof(std::uint8_t),
+                            sizeof(std::uint16_t), 0x800/sizeof(std::uint16_t),
                             Channel
                             );
+                Channel +=1;
+                if (Channel>=2) {
+                    break;
+                }
             }
 
-            const std::uint8_t* ImageSource = reinterpret_cast<const std::uint8_t*>(DecompressedTile.data());
+            const std::uint16_t* ImageSource = reinterpret_cast<const std::uint16_t*>(DecompressedTile.data());
             for( std::size_t i = 0; i < (32 * 32); i++ ) {
                 std::size_t acc_x = (x * 32) + (i%32);
                 std::size_t acc_y = (y * 32) + (i/32);
-                std::uint8_t CurPixel = ImageSource[i];
-                std::uint8_t* currentPixel[1];
+                std::uint16_t CurPixel = ImageSource[i];
+                std::uint8_t currentPixel = reinterpret_cast<quint8*>(&CurPixel)[1];
+                currentPixel = qMin(currentPixel*4, 255);
                 accessor->moveTo(acc_x, acc_y);
-                memcpy(currentPixel, &CurPixel, sizeof(CurPixel));
-                memcpy(accessor->rawData(), currentPixel, layer->paintDevice()->colorSpace()->pixelSize());
+                memcpy(accessor->rawData(), &currentPixel, layer->paintDevice()->colorSpace()->pixelSize());
             }
 
         }

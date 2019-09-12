@@ -71,9 +71,6 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisPaintOpSettingsSP settings, 
         m_originalPainter->setPattern(painter->pattern());        
         m_originalPainter->setFillStyle(m_fillStyle);
 
-
-
-
     }
     else {
         m_originalPainter = 0;

@@ -1480,6 +1480,7 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
     // page anchored shapes are handled differently
     if (anchor->anchorType() == KoShapeAnchor::AnchorPage) {
         // nothing else to do
+        delete anchor;
     } else if (anchor->anchorType() == KoShapeAnchor::AnchorAsCharacter) {
         KoAnchorInlineObject *anchorObject = new KoAnchorInlineObject(anchor);
 

@@ -32,10 +32,6 @@ else()
   set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
 endif()
 
-if (GSL_FOUND)
-    include_directories(${GSL_INCLUDE_DIR})
-endif()
-
 set(kritaimage_LIB_SRCS
     tiles3/kis_tile.cc
     tiles3/kis_tile_data.cc

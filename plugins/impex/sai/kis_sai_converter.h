@@ -27,6 +27,7 @@
 #include "kis_annotation.h"
 #include <KisImportExportErrorCode.h>
 #include "kis_image.h"
+#include <kis_group_layer.h>
 
 #include "sai.hpp"
 
@@ -57,9 +58,23 @@ private:
 
     KisDocument *m_doc;
     KisImageSP m_image;
+    /**
+     * The last added layer ID is for determining the last
+     * layer that is not clipped and should be...
+     */
     std::uint32_t LastAddedLayerID;
+    /**
+     * @brief parentNodeList
+     * keep track of the IDs each layer has so they can
+     * serve as parent to new layers.
+     */
     QMap<std::uint32_t, KisNodeSP> parentNodeList;
+    /**
+     * @brief clippedLayers
+     * list of layers that should be added to a clipping group.
+     */
     QVector<KisNodeSP> clippedLayers;
+    QMap<std::uint32_t, KisGroupLayerSP> clippingGroups;
 };
 
 #endif // KIS_SAI_CONVERTER_H

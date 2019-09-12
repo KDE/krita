@@ -39,7 +39,6 @@
 #include <kis_transparency_mask.h>
 #include <kis_node.h>
 #include <kis_layer.h>
-#include <kis_group_layer.h>
 #include <kis_shape_layer.h>
 #include <kis_psd_layer_style.h>
 #include <kis_random_accessor_ng.h>
@@ -215,12 +214,12 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
     QString blendingMode = BlendingMode(static_cast<sai::BlendingModes>(header.Blending));
 
     KisPSDLayerStyleSP style = toQShared(new KisPSDLayerStyle());
+    //TODO: Add pattern once resource rewrite is in.
     if (!QString((char*)TextureName).isEmpty() ){
-        style->patternOverlay()->setSize(TextureScale);
-        style->patternOverlay()->setOpacity(TextureOpacity);
-        //TODO: Add pattern.
+        //style->patternOverlay()->setSize(TextureScale);
+        //style->patternOverlay()->setOpacity(TextureOpacity);
         //style->patternOverlay()->setPattern(new KoPattern(QString((char*)TextureName)));
-        style->patternOverlay()->setEffectEnabled(true);
+        //style->patternOverlay()->setEffectEnabled(true);
     }
     if (FringeEnabled) {
         style->innerShadow()->setSize(FringeWidth);
@@ -312,19 +311,6 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
         break;
     }
 
-    //Setup the clipped layers.
-    if (!clippedLayers.isEmpty() && header.Clipping == true) {
-        //XXX: Make translatable
-        KisGroupLayerSP clipgroup = new KisGroupLayer(m_image, "Clipping Group", 255);
-        KisNodeSP clippedLayer = clippedLayers.takeFirst();
-        m_image->addNode(clipgroup, clippedLayer->parent(), clippedLayer);
-        m_image->removeNode(clippedLayer);
-        m_image->addNode(clippedLayer, clipgroup);
-        while(!clippedLayers.isEmpty()) {
-            clippedLayer = clippedLayers.takeFirst();
-            m_image->addNode(clippedLayer, clipgroup);
-        }
-    }
     LastAddedLayerID = header.Identifier;
 }
 
@@ -573,24 +559,35 @@ void KisSaiConverter::RLEDecompressStride(
 
 void KisSaiConverter::handleAddingLayer(KisLayerSP layer, bool clipping, quint32 layerID, quint32 parentLayerID)
 {
-    if (clipping) {
-        //we should add it to a list so we can make a clipping group.
-        //All clipped layers and the first non-clipped layer go in the group.
-        if (clippedLayers.isEmpty()) {
-            if (parentNodeList.contains(LastAddedLayerID)) {
-                clippedLayers.append(parentNodeList.value(LastAddedLayerID));
-            }
-        }
+    KisNodeSP node = parentNodeList.value(LastAddedLayerID);
+    KisLayerSP lastLayer = qobject_cast<KisLayer*>(node.data());
+    if (clipping && lastLayer) {
+
         layer->disableAlphaChannel(clipping);
-        clippedLayers.append(layer);
+
+        if (lastLayer->alphaChannelDisabled()) {
+            m_image->addNode(layer, lastLayer->parent());
+        } else {
+
+            KisGroupLayerSP clipgroup = new KisGroupLayer(m_image, "Clipping Group", 255);
+            m_image->removeNode(lastLayer);
+            m_image->addNode(lastLayer, clipgroup);
+            m_image->addNode(layer, clipgroup);
+
+            if (parentLayerID == 0) {
+                m_image->addNode(clipgroup);
+            } else if (parentNodeList.contains(parentLayerID)) {
+                m_image->addNode(clipgroup, parentNodeList.value(parentLayerID));
+
+            }
+
+        }
     } else {
 
         if (parentLayerID == 0) {
             m_image->addNode(layer);
-        } else {
-            if (parentNodeList.contains(parentLayerID)) {
+        } else if (parentNodeList.contains(parentLayerID)) {
                 m_image->addNode(layer, parentNodeList.value(parentLayerID));
-            }
         }
     }
     parentNodeList.insert(layerID, layer);

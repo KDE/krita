@@ -58,7 +58,7 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
-    m_continuedMode(false), m_complete(false), m_selected(false), m_finished(false), m_threshold(70),
+    m_continuedMode(false), m_complete(false), m_selected(false), m_finished(false), m_worker(image()->projection()), m_threshold(70),
     m_frequency(30), m_radius(3.0)
 { }
 
@@ -117,13 +117,14 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
         vQPointF edge = computeEdgeWrapper(m_anchorPoints.last(), temp.toPoint());
         m_points.append(edge);
         m_pointCollection.push_back(edge);
-        if (m_snapBound.contains(temp.toPoint())) {
+        if (m_snapBound.contains(temp)) {
             m_complete = true;
             return;
         }
     } else {
-        m_points.push_back(temp.toPoint());
-        m_snapBound = QRectF(temp.toPoint(), QSize(5, 5));
+        m_points.push_back(temp);
+        m_snapBound = QRectF(QPoint(0,0), QSize(5, 5));
+        m_snapBound.moveTo(temp);
     }
 
     m_lastAnchor = temp.toPoint();
@@ -137,7 +138,9 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
 void KisToolSelectMagnetic::checkIfAnchorIsSelected(QPointF temp)
 {
     Q_FOREACH (const QPoint pt, m_anchorPoints) {
-        if (QRect(pt, QSize(5, 5)).contains(temp.toPoint())) {
+        QRect r = QRect(QPoint(0,0), QSize(5, 5));
+        r.moveCenter(pt);
+        if (r.contains(temp.toPoint())) {
             m_selected       = true;
             m_selectedAnchor = m_anchorPoints.lastIndexOf(pt);
             return;
@@ -203,7 +206,7 @@ void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
             m_pointCollection.remove(m_selectedAnchor);
 
             if (m_selectedAnchor == 0)
-                m_snapBound = QRect(m_anchorPoints.first(), QSize(5, 5));
+                m_snapBound.moveCenter(m_anchorPoints.first());
         } else {
             m_pointCollection[checkIfZero()]    = computeEdgeWrapper(previousAnchor, currentAnchor);
             m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(currentAnchor, nextAnchor);
@@ -333,7 +336,9 @@ void KisToolSelectMagnetic::drawAnchors(QPainter &gc)
 {
     Q_FOREACH (const QPoint pt, m_anchorPoints) {
         KisHandlePainterHelper helper(&gc, handleRadius());
-        if ((m_complete && QRect(pt, QSize(5, 5)).contains(m_lastCursorPos.toPoint())) ||
+        QRect r(QPoint(0,0), QSize(5,5));
+        r.moveCenter(pt);
+        if ((m_complete && r.contains(m_lastCursorPos.toPoint())) ||
             (m_snapBound.contains(m_lastCursorPos) && pt == m_anchorPoints.first()))
         {
             helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
@@ -395,19 +400,8 @@ void KisToolSelectMagnetic::undoPoints()
     if (m_complete) return;
 
     m_anchorPoints.pop_back();
-
-    if (m_anchorPoints.size() == 1) {
-        m_points.resize(1);
-    } else {
-        int last = m_points.count() - 1;
-        for (; last >= 0; last--) {
-            if (m_points[last] == m_anchorPoints.last()) {
-                break;
-            }
-        }
-        m_points.resize(last);
-    }
-    updatePaintPath();
+    m_pointCollection.pop_back();
+    reEvaluatePoints();
 }
 
 void KisToolSelectMagnetic::requestStrokeEnd()

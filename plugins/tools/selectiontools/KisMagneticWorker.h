@@ -21,25 +21,29 @@
 #include <kis_paint_device.h>
 #include <kritaselectiontools_export.h>
 
+class KisMagneticLazyTiles{
+private:
+    QVector<QRect> m_tiles;
+    QVector<qreal> m_radiusRecord;
+    KisPaintDeviceSP m_dev;
+    QSize m_tileSize;
+    int m_tilesPerRow;
+
+public:
+    KisMagneticLazyTiles(KisPaintDeviceSP dev);
+    void filter(qreal radius, QRect &rect);
+    inline KisPaintDeviceSP device() { return m_dev; }
+};
+
 class KRITASELECTIONTOOLS_EXPORT KisMagneticWorker {
 public:
-    KisMagneticWorker()
-    {
-        // Do not use this, just for making the compiler happy
-    }
-
     KisMagneticWorker(const KisPaintDeviceSP &dev);
 
-    QVector<QPointF> computeEdge(int extraBounds, QPoint start, QPoint end, qreal radius);
+    QVector<QPointF> computeEdge(int bounds, QPoint start, QPoint end, qreal radius);
     void saveTheImage(vQPointF points);
 
 private:
-    void filterDevice(qreal radius, QRect &bounds);
-    KisPaintDeviceSP m_dev;
-    QVector<QRect> m_tiles;
-    QVector<qreal> m_radiusRecord;
-    QSize m_tileSize;
-    int m_tilesPerRow;
+    KisMagneticLazyTiles m_lazyTileFilter;
 };
 
 #endif // ifndef KISMAGNETICWORKER_H

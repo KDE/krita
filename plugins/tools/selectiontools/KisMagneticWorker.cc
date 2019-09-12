@@ -145,7 +145,7 @@ private:
     KisMagneticGraph              m_graph;
 };
 
-KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP &dev)
+KisMagneticLazyTiles::KisMagneticLazyTiles(KisPaintDeviceSP dev)
 {
     m_dev = KisPainter::convertToAlphaAsGray(dev);
     QSize s = m_dev->exactBounds().size();
@@ -166,40 +166,44 @@ KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP &dev)
     m_radiusRecord = QVector<qreal>(m_tiles.size(), -1);
 }
 
-void KisMagneticWorker::filterDevice(qreal radius, QRect &bounds)
+void KisMagneticLazyTiles::filter(qreal radius, QRect &rect)
 {
-    KisGaussianKernel::applyTightLoG(m_dev, bounds, radius, -1.0, QBitArray(), nullptr);
-    KisLazyFillTools::normalizeAlpha8Device(m_dev, bounds);
-}
+    auto divide = [](QPoint p, QSize s){
+        return QPoint(p.x() / s.width(), p.y() / s.height());
+    };
 
-QPoint divide2DVal(QPoint p, QSize s)
-{
-    return QPoint(p.x() / s.width(), p.y() / s.height());
-}
-
-QVector<QPointF> KisMagneticWorker::computeEdge(int extraBounds, QPoint begin, QPoint end,
-     qreal radius)
-{
-    QRect rect;
-    KisAlgebra2D::accumulateBounds(QVector<QPoint> { begin, end }, &rect);
-    rect = kisGrowRect(rect, extraBounds);
-
-    QPoint firstTile = divide2DVal(rect.topLeft(), m_tileSize);
-    QPoint lastTile  = divide2DVal(rect.bottomRight(), m_tileSize);
+    QPoint firstTile = divide(rect.topLeft(), m_tileSize);
+    QPoint lastTile  = divide(rect.bottomRight(), m_tileSize);
 
     for (int i = firstTile.y(); i <= lastTile.y(); i++) {
         for (int j = firstTile.x(); j <= lastTile.x(); j++) {
             int currentTile = i * m_tilesPerRow + j;
-            if (radius != m_radiusRecord[currentTile]) {
-                filterDevice(radius, m_tiles[currentTile]);
+            if (qFuzzyCompare(radius, m_radiusRecord[currentTile])) {
+                QRect bounds = m_tiles[currentTile];
+                KisGaussianKernel::applyTightLoG(m_dev, bounds, radius, -1.0, QBitArray(), nullptr);
+                KisLazyFillTools::normalizeAlpha8Device(m_dev, bounds);
                 m_radiusRecord[currentTile] = radius;
             }
         }
     }
+}
+
+KisMagneticWorker::KisMagneticWorker(const KisPaintDeviceSP &dev) :
+    m_lazyTileFilter(dev)
+{ }
+
+QVector<QPointF> KisMagneticWorker::computeEdge(int bounds, QPoint begin, QPoint end, qreal radius)
+{
+    QRect rect;
+    KisAlgebra2D::accumulateBounds(QVector<QPoint> { begin, end }, &rect);
+    rect = kisGrowRect(rect, bounds);
+
+    m_lazyTileFilter.filter(radius, rect);
+
     VertexDescriptor goal(end);
     VertexDescriptor start(begin);
 
-    KisMagneticGraph m_graph(m_dev, rect);
+    KisMagneticGraph m_graph(m_lazyTileFilter.device(), rect);
 
     // How many maps does it require?
     // Take a look here, if it doesn't make sense, https://www.boost.org/doc/libs/1_70_0/libs/graph/doc/astar_search.html
@@ -240,9 +244,9 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int extraBounds, QPoint begin, Q
 
 void KisMagneticWorker::saveTheImage(vQPointF points)
 {
-    QImage img = m_dev->convertToQImage(0, m_dev->exactBounds());
+    QImage img = m_lazyTileFilter.device()->convertToQImage(nullptr, m_lazyTileFilter.device()->exactBounds());
 
-    const QPointF offset = m_dev->exactBounds().topLeft();
+    const QPointF offset = m_lazyTileFilter.device()->exactBounds().topLeft();
     for (QPointF &pt : points) {
         pt -= offset;
     }
@@ -267,13 +271,6 @@ void KisMagneticWorker::saveTheImage(vQPointF points)
     gc.drawEllipse(points[0], 3, 3);
     gc.setPen(Qt::red);
     gc.drawEllipse(points[points.count() - 1], 2, 2);
-
-    gc.setPen(Qt::red);
-    for (QRect &r: m_tiles) {
-        QString str = QString("%1x%2").arg(r.height()).arg(r.width());
-        gc.drawText(r, str);
-        gc.drawRect(r);
-    }
 
     img.save("result.png");
 } // KisMagneticWorker::saveTheImage

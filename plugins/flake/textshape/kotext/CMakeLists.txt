@@ -61,7 +61,6 @@ set(kritatext_LIB_SRCS
     ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
     KoBibliographyInfo.cpp
-    BibliographyGenerator.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp

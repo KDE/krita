@@ -420,19 +420,23 @@ void KisViewManager::setCurrentView(KisView *view)
         // Restore the last used brush preset, color and background color.
         if (first) {
             KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+            KisResourceModel *resourceModel = rserver->resourceModel();
             QString defaultPresetName = "basic_tip_default";
-            bool foundTip = false;
-            for (int i=0; i<rserver->resourceCount(); i++) {
-                KisPaintOpPresetSP resource = rserver->resources().at(i);
-                if (resource->name().toLower().contains("basic_tip_default")) {
-                    defaultPresetName = resource->name();
-                    foundTip = true;
-                } else if (foundTip == false && (resource->name().toLower().contains("default") ||
-                                                 resource->filename().toLower().contains("default"))) {
-                    defaultPresetName = resource->name();
-                    foundTip = true;
+            for (int i = 0; i < resourceModel->rowCount(); i++) {
+
+                QModelIndex idx = resourceModel->index(i, 0);
+
+                QString resourceName = idx.data(Qt::UserRole + KisResourceModel::Name).toString().toLower();
+                QString fileName = idx.data(Qt::UserRole + KisResourceModel::Filename).toString().toLower();
+
+                if (resourceName.contains("basic_tip_default")) {
+                    defaultPresetName = resourceName;
+                }
+                else if (resourceName.contains("default") || fileName.contains("default")) {
+                    defaultPresetName = resourceName;
                 }
             }
+
             KisConfig cfg(true);
             QString lastPreset = cfg.readEntry("LastPreset", defaultPresetName);
             KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);

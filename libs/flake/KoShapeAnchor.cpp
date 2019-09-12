@@ -89,6 +89,7 @@ KoShapeAnchor::~KoShapeAnchor()
     if (d->placementStrategy != 0) {
         delete d->placementStrategy;
     }
+    delete d;
 }
 
 KoShape *KoShapeAnchor::shape() const

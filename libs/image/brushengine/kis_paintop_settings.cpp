@@ -138,6 +138,8 @@ bool KisPaintOpSettings::mouseReleaseEvent()
 
 void KisPaintOpSettings::setRandomOffset(const KisPaintInformation &paintInformation)
 {
+	bool disableDirtyBefore = d->disableDirtyNotifications;
+	d->disableDirtyNotifications = true;
     if (getBool("Texture/Pattern/Enabled")) {
         if (getBool("Texture/Pattern/isRandomOffsetX")) {
             setProperty("Texture/Pattern/OffsetX",
@@ -149,7 +151,7 @@ void KisPaintOpSettings::setRandomOffset(const KisPaintInformation &paintInforma
 
         }
     }
-
+	d->disableDirtyNotifications = disableDirtyBefore;
 }
 
 bool KisPaintOpSettings::hasMaskingSettings() const

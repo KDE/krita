@@ -257,6 +257,12 @@ public:
      */
     bool closingSession() const;
 
+    /**
+     * This function returns true if the instance has already been initialized,
+     * false otherwise. This to prevent premature initialization that causes crash
+     * on android see `1fbb25506a`
+     * @see QGlobalStatic::exists()
+     */
     static bool exists();
 
 private Q_SLOTS:

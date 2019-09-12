@@ -31,6 +31,7 @@
 
 #include <kis_types.h>
 #include <KisDocument.h>
+#include <klocalizedstring.h>
 
 #include <kis_transaction.h>
 #include <kis_paint_device.h>
@@ -569,7 +570,7 @@ void KisSaiConverter::handleAddingLayer(KisLayerSP layer, bool clipping, quint32
             m_image->addNode(layer, lastLayer->parent());
         } else {
 
-            KisGroupLayerSP clipgroup = new KisGroupLayer(m_image, "Clipping Group", 255);
+            KisGroupLayerSP clipgroup = new KisGroupLayer(m_image, i18n("Clipping Group"), 255);
             m_image->removeNode(lastLayer);
             m_image->addNode(lastLayer, clipgroup);
             m_image->addNode(layer, clipgroup);

@@ -160,7 +160,7 @@ void KisGradientSlider::resizeEvent(QResizeEvent *)
 
 void KisGradientSlider::mousePressEvent(QMouseEvent *e)
 {
-    eCursor closest_cursor;
+    eCursor closest_cursor = KisGradientSlider::None;
     int distance;
 
     if (e->button() != Qt::LeftButton)

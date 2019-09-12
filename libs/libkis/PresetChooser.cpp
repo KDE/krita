@@ -39,17 +39,15 @@ void PresetChooser::setCurrentPreset(Resource *resource)
 Resource *PresetChooser::currentPreset() const
 {
     KoResourceSP r = currentResource();
-    return new Resource(r);
+    return new Resource(r->resourceId(), "paintoppreset", r->name(), r->filename(), r->image());
 }
 
-void PresetChooser::slotResourceSelected(KoResourceSP resource)
+void PresetChooser::slotResourceSelected(KoResourceSP r)
 {
-    Resource *r = new Resource(resource);
-    emit presetSelected(r);
+    emit presetSelected(Resource(r->resourceId(), "paintoppreset", r->name(), r->filename(), r->image()));
 }
 
-void PresetChooser::slotResourceClicked(KoResourceSP resource)
+void PresetChooser::slotResourceClicked(KoResourceSP r)
 {
-    Resource *r = new Resource(resource);
-    emit presetClicked(r);
+    emit presetClicked(Resource(r->resourceId(), "paintoppreset", r->name(), r->filename(), r->image()));
 }

@@ -125,6 +125,9 @@ public:
     /// Get the version of the resource
     int version() const;
 
+    /// @return the unique id of the resource in the resource database
+    int resourceId() const;
+
 private:
 
     friend class KisResourceModel;
@@ -135,13 +138,7 @@ private:
     friend class KisFolderStorage;
 
     void setVersion(int version);
-
-
-    /// @return the unique id of the resource in the resource database
-    int resourceId() const;
     void setResourceId(int id);
-
-
     void setStorageLocation(const QString &location);
 
 protected:

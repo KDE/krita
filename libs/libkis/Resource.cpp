@@ -26,29 +26,58 @@
 #include <kis_paintop_preset.h>
 #include <KoColorSet.h>
 #include <kis_workspace_resource.h>
+#include <KisResourceLocator.h>
 
 struct Resource::Private {
-    Private(KoResourceSP _resource)
-        : resource(_resource)
-    {}
+    Private() {}
 
-    KoResourceSP resource {0};
+    int id {-1};
+    QString type;
+    QString name;
+    QString filename;
+    QImage image;
 };
 
-Resource::Resource(KoResourceSP resource, QObject *parent)
+Resource::Resource(int resourceId, const QString &type, const QString &name, const QString &filename, const QImage &image, QObject *parent)
     : QObject(parent)
-    , d(new Private(resource))
+    , d(new Private())
 {
+    d->id = resourceId;
+    d->type = type;
+    d->name = name;
+    d->filename = filename;
+    d->image = image;
+}
+
+Resource::Resource(KoResourceSP resource, const QString &type, QObject *parent)
+    : QObject(parent)
+    , d(new Private())
+{
+    d->id = resource->resourceId();
+    d->type = type;
+    d->name = resource->name();
+    d->filename = resource->filename();
+    d->image = resource->image();
 }
 
 Resource::~Resource()
 {
-    delete d;
+}
+
+Resource::Resource(const Resource &rhs)
+    : QObject()
+    , d(new Private())
+{
+    d->id = rhs.d->id;
+    d->type = rhs.d->type;
+    d->name = rhs.d->name;
+    d->filename = rhs.d->filename;
+    d->image = rhs.d->image;
 }
 
 bool Resource::operator==(const Resource &other) const
 {
-    return (d->resource == other.d->resource);
+    return (d->id == other.d->id);
 }
 
 bool Resource::operator!=(const Resource &other) const
@@ -56,71 +85,50 @@ bool Resource::operator!=(const Resource &other) const
     return !(operator==(other));
 }
 
+Resource Resource::operator=(const Resource &rhs)
+{
+    Resource res(rhs.d->id,
+                 rhs.d->type,
+                 rhs.d->name,
+                 rhs.d->filename,
+                 rhs.d->image);
+    return res;
+}
+
 QString Resource::type() const
 {
-    if (!d->resource) return QString();
-    if (d->resource.dynamicCast<KoPattern>()) return "pattern";
-    else if (d->resource.dynamicCast<KoAbstractGradient>()) return "gradient";
-    else if (d->resource.dynamicCast<KisBrush>()) return "brush";
-    else if (d->resource.dynamicCast<KisPaintOpPreset>()) return "preset";
-    else if (d->resource.dynamicCast<KoColorSet>()) return "palette";
-    else if (d->resource.dynamicCast<KisWorkspaceResource>()) return "workspace";
-    else return "";
+    return d->type;
 }
 
 QString Resource::name() const
 {
-    if (!d->resource) return QString();
-    return d->resource->name();
+    return d->name;
 }
 
 void Resource::setName(QString value)
 {
-    if (!d->resource) return;
-    d->resource->setName(value);
+    d->name = value;
 }
-
 
 QString Resource::filename() const
 {
-    if (!d->resource) return QString();
-    return d->resource->filename();
+    return d->filename;
 }
 
 
 QImage Resource::image() const
 {
-    if (!d->resource) return QImage();
-    return d->resource->image();
+    return d->image;
 }
 
 void Resource::setImage(QImage image)
 {
-    if (!d->resource) return;
-    d->resource->setImage(image);
-}
-
-QByteArray Resource::data() const
-{
-    QByteArray ba;
-
-    if (!d->resource) return ba;
-
-    QBuffer buf(&ba);
-    d->resource->saveToDevice(&buf);
-    return ba;
-}
-
-bool Resource::setData(QByteArray data)
-{
-    if (!d->resource) return false;
-    QBuffer buf(&data);
-    return d->resource->loadFromDevice(&buf);
+    d->image = image;
 }
 
 KoResourceSP Resource::resource() const
 {
-    return d->resource;
+    return KisResourceLocator::instance()->resourceForId(d->id);
 }
 
 

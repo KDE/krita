@@ -114,6 +114,7 @@ public:
 
     QList<QSharedPointer<T>> resources() {
         qDebug() << "KoResourceServer::resources()" << m_type;
+        Q_ASSERT(m_type != "paintoppresets");
         QList<QSharedPointer<T>> resourceList;
         for (int row = 0; row < m_resourceModel->rowCount(); ++row) {
             resourceList << m_resourceModel->resourceForIndex(m_resourceModel->index(row, 0)).dynamicCast<T>();

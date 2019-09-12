@@ -30,7 +30,7 @@
 #include <KisMainWindow.h>
 #include <KoCanvasBase.h>
 #include <kis_canvas2.h>
-
+#include <KisResourceTypes.h>
 #include "Document.h"
 #include "Canvas.h"
 #include "Window.h"
@@ -159,7 +159,7 @@ void View::setBackGroundColor(ManagedColor *color)
 Resource *View::currentBrushPreset() const
 {
     if (!d->view) return 0;
-    return new Resource(d->view->resourceProvider()->currentPreset());
+    return new Resource(d->view->resourceProvider()->currentPreset(), ResourceType::PaintOpPresets);
 }
 
 void View::setCurrentBrushPreset(Resource *resource)
@@ -170,7 +170,7 @@ void View::setCurrentBrushPreset(Resource *resource)
 Resource *View::currentPattern() const
 {
     if (!d->view) return 0;
-    return new Resource(d->view->resourceProvider()->currentPattern());
+    return new Resource(d->view->resourceProvider()->currentPattern(), ResourceType::Patterns);
 }
 
 void View::setCurrentPattern(Resource *resource)
@@ -181,7 +181,7 @@ void View::setCurrentPattern(Resource *resource)
 Resource *View::currentGradient() const
 {
     if (!d->view) return 0;
-    return new Resource(d->view->resourceProvider()->currentGradient());
+    return new Resource(d->view->resourceProvider()->currentGradient(), ResourceType::Gradients);
 }
 
 void View::setCurrentGradient(Resource *resource)

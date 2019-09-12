@@ -14,7 +14,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-    void presetSelected(Resource *resource) /Factory/;
-    void presetClicked(Resource *resource) /Factory/;
+    void presetSelected(Resource resource) /Factory/;
+    void presetClicked(Resource resource) /Factory/;
 
 };

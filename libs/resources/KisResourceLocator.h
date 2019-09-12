@@ -131,6 +131,7 @@ private:
     friend class KisResourceModel;
     friend class TestResourceLocator;
     friend class TestResourceModel;
+    friend class Resource;
 
     /// @return true if the resource is present in the cache, false if it hasn't been loaded
     bool resourceCached(QString storageLocation, const QString &resourceType, const QString &filename) const;

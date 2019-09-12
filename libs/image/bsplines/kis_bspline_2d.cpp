@@ -79,9 +79,13 @@ void KisBSpline2D::initializeSplineImpl(const QVector<float> &values)
 
     BCtype_s bctypeX;
     bctypeX.lCode = bctypeX.rCode = convertBorderType(m_d->bcX);
+    bctypeX.lVal = 0.0;
+    bctypeX.rVal = 0.0;
 
     BCtype_s bctypeY;
     bctypeY.lCode = bctypeY.rCode = convertBorderType(m_d->bcY);
+    bctypeY.lVal = 0.0;
+    bctypeY.rVal = 0.0;
 
     m_d->spline =
         create_UBspline_2d_s(xGrid, yGrid,

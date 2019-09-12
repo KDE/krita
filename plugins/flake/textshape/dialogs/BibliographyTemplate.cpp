@@ -20,7 +20,6 @@
 
 #include "BibliographyTemplate.h"
 
-#include <BibliographyGenerator.h>
 #include <KoBibliographyInfo.h>
 #include <KoOdfBibliographyConfiguration.h>
 #include <KoStyleManager.h>

@@ -31,6 +31,7 @@ private Q_SLOTS:
     void testBlendingModes();
     void testLayerConfiguration();
     void testClippingAndGroups();
+    void testLayerOffset();
 
     void testImportFromWriteonly();
     void testImportIncorrectFormat();

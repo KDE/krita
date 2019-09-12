@@ -142,6 +142,25 @@ void KisSaiTest::testClippingAndGroups()
     }
 }
 
+void KisSaiTest::testLayerOffset()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + QDir::separator() + "sai_test_layer_offset.sai");
+    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "sai_test_layer_offset.png");
+
+    Q_ASSERT(sourceFileInfo.exists());
+
+    QSharedPointer<KisDocument> doc = openSaiDocument(sourceFileInfo);
+    QVERIFY(doc->image());
+
+    QPoint errpoint;
+    int fuzzy = 1;
+    int fuzzyAlpha = 1;
+    if(!TestUtil::compareQImages(errpoint, qimage,
+                                     doc->image()->projection()->convertToQImage(0, 0, 0, qimage.width(), qimage.height()), fuzzy, fuzzyAlpha)) {
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+    }
+}
+
 void KisSaiTest::testImportFromWriteonly()
 {
     TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), SaiMimeType);

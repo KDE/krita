@@ -405,8 +405,10 @@ void KisScalarKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcCha
     KIS_ASSERT_RECOVER_RETURN(srcFrame);
 
     KisScalarKeyframe *dstKey = dynamic_cast<KisScalarKeyframe*>(dstFrame.data());
-    dstKey->value = srcChannel->scalarValue(srcFrame);
-    notifyKeyframeChanged(dstFrame);
+    if (dstKey) {
+        dstKey->value = srcChannel->scalarValue(srcFrame);
+        notifyKeyframeChanged(dstFrame);
+    }
 }
 
 QRect KisScalarKeyframeChannel::affectedRect(KisKeyframeSP key)

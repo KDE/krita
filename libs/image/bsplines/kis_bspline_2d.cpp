@@ -67,11 +67,15 @@ void KisBSpline2D::initializeSplineImpl(const QVector<float> &values)
     xGrid.start = m_xStart;
     xGrid.end = m_xEnd;
     xGrid.num = m_numSamplesX;
+    xGrid.delta = 0.0;
+    xGrid.delta_inv = 0.0;
 
     Ugrid yGrid;
     yGrid.start = m_yStart;
     yGrid.end = m_yEnd;
     yGrid.num = m_numSamplesY;
+    yGrid.delta = 0.0;
+    yGrid.delta_inv = 0.0;
 
     BCtype_s bctypeX;
     bctypeX.lCode = bctypeX.rCode = convertBorderType(m_d->bcX);

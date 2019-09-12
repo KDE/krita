@@ -292,6 +292,24 @@ QWidget* KisFloatColorInput::createInput()
     m_dblNumInput->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     m_dblNumInput->setMinimumWidth(60);
     m_dblNumInput->setMaximumWidth(60);
+    
+    quint8* data = m_color->data() + m_channelInfo->pos();
+    qreal value = 1.0;
+
+    switch (m_channelInfo->channelValueType()) {
+#ifdef HAVE_OPENEXR
+    case KoChannelInfo::FLOAT16:
+        value = *(reinterpret_cast<half*>(data));
+        break;
+#endif
+    case KoChannelInfo::FLOAT32:
+        value = *(reinterpret_cast<float*>(data));
+        break;
+    default:
+        Q_ASSERT(false);
+    }
+    m_dblNumInput->setValue(value);
+
     return m_dblNumInput;
 }
 
@@ -312,6 +330,7 @@ void KisFloatColorInput::update()
     qreal value = 1.0;
     m_minValue = m_displayRenderer->minVisibleFloatValue(m_channelInfo);
     m_maxValue = m_displayRenderer->maxVisibleFloatValue(m_channelInfo);
+    m_colorSlider->blockSignals(true);
 
     switch (m_channelInfo->channelValueType()) {
 #ifdef HAVE_OPENEXR
@@ -347,8 +366,8 @@ void KisFloatColorInput::update()
     m_colorSlider->setColors(min, max);
 
     const qreal floatRange = m_maxValue - m_minValue;
-    m_dblNumInput->setValue(value);
     m_colorSlider->setValue((value - m_minValue) / floatRange * 255);
+    m_colorSlider->blockSignals(false);
 }
 
 KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, bool usePercentage) :

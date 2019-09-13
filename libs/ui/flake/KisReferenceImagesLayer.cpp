@@ -191,6 +191,22 @@ bool KisReferenceImagesLayer::isFakeNode() const
     return true;
 }
 
+KUndo2Command *KisReferenceImagesLayer::setProfile(const KoColorProfile *profile)
+{
+    // references should not be converted with the image
+    Q_UNUSED(profile);
+    return 0;
+}
+
+KUndo2Command *KisReferenceImagesLayer::convertTo(const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+{
+    // references should not be converted with the image
+    Q_UNUSED(dstColorSpace);
+    Q_UNUSED(renderingIntent);
+    Q_UNUSED(conversionFlags);
+    return 0;
+}
+
 void KisReferenceImagesLayer::signalUpdate(const QRectF &rect)
 {
     emit sigUpdateCanvas(rect);

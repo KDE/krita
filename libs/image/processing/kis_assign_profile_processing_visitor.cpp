@@ -44,8 +44,7 @@ KisAssignProfileProcessingVisitor::KisAssignProfileProcessingVisitor(const KoCol
 
 void KisAssignProfileProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
 {
-    Q_UNUSED(layer);
-    Q_UNUSED(undoAdapter);
+    undoAdapter->addCommand(layer->setProfile(m_dstColorSpace->profile()));
 }
 
 void KisAssignProfileProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)

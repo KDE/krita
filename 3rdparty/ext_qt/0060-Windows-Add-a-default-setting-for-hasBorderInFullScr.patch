@@ -1,7 +1,7 @@
-From 16a8ff15243a9875fa509f10d1cd9d01df9d4c6d Mon Sep 17 00:00:00 2001
+From 28f0a9f55d129aa33ee2399a4b2dc0a6a9999542 Mon Sep 17 00:00:00 2001
 From: Friedemann Kleint <Friedemann.Kleint@qt.io>
 Date: Wed, 21 Nov 2018 09:06:50 +0100
-Subject: [PATCH 16/17] Windows: Add a default setting for
+Subject: [PATCH 17/19] Windows: Add a default setting for
  hasBorderInFullScreen
 
 The hasBorderInFullScreen only has an effect when set before
@@ -106,10 +106,10 @@ index 1c5be44150..42193baf46 100644
          return QFunctionPointer(QWindowsNativeInterface::setWindowActivationBehavior);
      if (function == QWindowsWindowFunctions::isTabletModeIdentifier())
 diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
-index 7597fcb64d..6949b9c669 100644
+index 716e461436..1d16741d9a 100644
 --- a/src/plugins/platforms/windows/qwindowswindow.cpp
 +++ b/src/plugins/platforms/windows/qwindowswindow.cpp
-@@ -1256,6 +1256,7 @@ void QWindowCreationContext::applyToMinMaxInfo(MINMAXINFO *mmi) const
+@@ -1258,6 +1258,7 @@ void QWindowCreationContext::applyToMinMaxInfo(MINMAXINFO *mmi) const
  
  const char *QWindowsWindow::embeddedNativeParentHandleProperty = "_q_embedded_native_parent_handle";
  const char *QWindowsWindow::hasBorderInFullScreenProperty = "_q_has_border_in_fullscreen";
@@ -117,7 +117,7 @@ index 7597fcb64d..6949b9c669 100644
  
  QWindowsWindow::QWindowsWindow(QWindow *aWindow, const QWindowsWindowData &data) :
      QWindowsBaseWindow(aWindow),
-@@ -1293,7 +1294,7 @@ QWindowsWindow::QWindowsWindow(QWindow *aWindow, const QWindowsWindowData &data)
+@@ -1295,7 +1296,7 @@ QWindowsWindow::QWindowsWindow(QWindow *aWindow, const QWindowsWindowData &data)
  
      if (aWindow->isTopLevel())
          setWindowIcon(aWindow->icon());
@@ -126,7 +126,7 @@ index 7597fcb64d..6949b9c669 100644
          setFlag(HasBorderInFullScreen);
      clearFlag(WithinCreate);
  }
-@@ -2956,6 +2957,11 @@ void QWindowsWindow::setHasBorderInFullScreenStatic(QWindow *window, bool border
+@@ -2957,6 +2958,11 @@ void QWindowsWindow::setHasBorderInFullScreenStatic(QWindow *window, bool border
          window->setProperty(hasBorderInFullScreenProperty, QVariant(border));
  }
  

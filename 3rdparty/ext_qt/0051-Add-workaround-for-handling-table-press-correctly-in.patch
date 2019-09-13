@@ -1,7 +1,7 @@
-From c37ff0abfed81284721ec00665579b73107a38ca Mon Sep 17 00:00:00 2001
+From 89a69b6c61df0bd758ffff258b456f21bf7a03cb Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Wed, 15 May 2019 19:54:52 +0300
-Subject: [PATCH 3/3] Add workaround for handling table press correctly in
+Subject: [PATCH 10/19] Add workaround for handling table press correctly in
  WinInk mode
 
 Original problem: widgets do not get synthesized mouse-down and
@@ -41,7 +41,7 @@ See bug: https://bugs.kde.org/show_bug.cgi?id=406668
  4 files changed, 99 insertions(+), 18 deletions(-)
 
 diff --git a/src/gui/kernel/qguiapplication.cpp b/src/gui/kernel/qguiapplication.cpp
-index a67214bd9a..d431f37d35 100644
+index 5014878bd2..d97ef36ece 100644
 --- a/src/gui/kernel/qguiapplication.cpp
 +++ b/src/gui/kernel/qguiapplication.cpp
 @@ -2537,6 +2537,7 @@ void QGuiApplicationPrivate::processTabletEvent(QWindowSystemInterfacePrivate::T
@@ -141,10 +141,10 @@ index bf98c33a1a..fdc5a2fb50 100644
                                                  qreal tangentialPressure, qreal rotation, int z, qint64 uid,
                                                  Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 diff --git a/src/plugins/platforms/windows/qwindowspointerhandler.cpp b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
-index bf201b87e0..60112f7610 100644
+index 71a09304c5..07a5722de9 100644
 --- a/src/plugins/platforms/windows/qwindowspointerhandler.cpp
 +++ b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
-@@ -541,6 +541,58 @@ bool QWindowsPointerHandler::translateTouchEvent(QWindow *window, HWND hwnd,
+@@ -543,6 +543,58 @@ bool QWindowsPointerHandler::translateTouchEvent(QWindow *window, HWND hwnd,
      return false; // Allow mouse messages to be generated.
  }
  
@@ -203,7 +203,7 @@ index bf201b87e0..60112f7610 100644
  bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWindows::WindowsEventType et,
                                                 MSG msg, PVOID vPenInfo)
  {
-@@ -631,10 +683,38 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
+@@ -633,10 +685,38 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
          }
          const Qt::KeyboardModifiers keyModifiers = QWindowsKeyMapper::queryKeyboardModifiers();
  

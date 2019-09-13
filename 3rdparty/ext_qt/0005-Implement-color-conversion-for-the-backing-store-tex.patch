@@ -1,7 +1,7 @@
-From d9e2e0e62952dfcae6922307555e08ef5bce0c84 Mon Sep 17 00:00:00 2001
+From e3d75d2db98224337c40b4fdc94d443693f57e15 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Thu, 22 Nov 2018 15:47:48 +0300
-Subject: [PATCH 05/17] Implement color conversion for the backing store
+Subject: [PATCH 13/19] Implement color conversion for the backing store
  texture
 
 If the window surface is not in sRGB mode, then the backing store
@@ -36,7 +36,7 @@ Change-Id: Icbf599952c93cc04de417d0c3790a65282741655
  9 files changed, 281 insertions(+), 26 deletions(-)
 
 diff --git a/src/gui/opengl/qopengltextureblitter.cpp b/src/gui/opengl/qopengltextureblitter.cpp
-index b65df9dc82..5f6dbff292 100644
+index b709f2f639..8b9142a0ef 100644
 --- a/src/gui/opengl/qopengltextureblitter.cpp
 +++ b/src/gui/opengl/qopengltextureblitter.cpp
 @@ -131,14 +131,85 @@ static const char vertex_shader[] =
@@ -277,7 +277,7 @@ index b65df9dc82..5f6dbff292 100644
      if (origin == QOpenGLTextureBlitter::OriginTopLeft) {
          if (program->textureMatrixUniformState != IdentityFlipped) {
              QMatrix3x3 flipped;
-@@ -408,6 +540,28 @@ bool QOpenGLTextureBlitter::create()
+@@ -411,6 +543,28 @@ bool QOpenGLTextureBlitter::create()
      } else {
          if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_2D, vertex_shader, fragment_shader))
              return false;
@@ -306,7 +306,7 @@ index b65df9dc82..5f6dbff292 100644
          if (supportsExternalOESTarget())
              if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_EXTERNAL_OES, vertex_shader, fragment_shader_external_oes))
                  return false;
-@@ -455,6 +609,8 @@ void QOpenGLTextureBlitter::destroy()
+@@ -458,6 +612,8 @@ void QOpenGLTextureBlitter::destroy()
          return;
      Q_D(QOpenGLTextureBlitter);
      d->programs[QOpenGLTextureBlitterPrivate::TEXTURE_2D].glProgram.reset();
@@ -315,7 +315,7 @@ index b65df9dc82..5f6dbff292 100644
      d->programs[QOpenGLTextureBlitterPrivate::TEXTURE_EXTERNAL_OES].glProgram.reset();
      d->vertexBuffer.destroy();
      d->textureBuffer.destroy();
-@@ -484,15 +640,26 @@ bool QOpenGLTextureBlitter::supportsExternalOESTarget() const
+@@ -487,15 +643,26 @@ bool QOpenGLTextureBlitter::supportsExternalOESTarget() const
  
      \sa release(), blit()
   */
@@ -344,7 +344,7 @@ index b65df9dc82..5f6dbff292 100644
      p->glProgram->bind();
  
      d->vertexBuffer.bind();
-@@ -506,6 +673,21 @@ void QOpenGLTextureBlitter::bind(GLenum target)
+@@ -509,6 +676,21 @@ void QOpenGLTextureBlitter::bind(GLenum target)
      d->textureBuffer.release();
  }
  
@@ -366,7 +366,7 @@ index b65df9dc82..5f6dbff292 100644
  /*!
      Unbinds the graphics resources used by the blitter.
  
-@@ -514,7 +696,7 @@ void QOpenGLTextureBlitter::bind(GLenum target)
+@@ -517,7 +699,7 @@ void QOpenGLTextureBlitter::bind(GLenum target)
  void QOpenGLTextureBlitter::release()
  {
      Q_D(QOpenGLTextureBlitter);
@@ -598,10 +598,10 @@ index 9eb4a9ba5a..eff2d9796d 100644
  
      void makeCurrent();
 diff --git a/src/widgets/kernel/qwidget_p.h b/src/widgets/kernel/qwidget_p.h
-index ae50624c04..67c43ca7a4 100644
+index 142d5ef9bb..e541cb70e4 100644
 --- a/src/widgets/kernel/qwidget_p.h
 +++ b/src/widgets/kernel/qwidget_p.h
-@@ -655,6 +655,7 @@ public:
+@@ -657,6 +657,7 @@ public:
              ? QPlatformTextureList::StacksOnTop
              : QPlatformTextureList::Flags(0);
      }
@@ -610,10 +610,10 @@ index ae50624c04..67c43ca7a4 100644
      virtual void beginBackingStorePainting() { }
      virtual void endBackingStorePainting() { }
 diff --git a/src/widgets/kernel/qwidgetbackingstore.cpp b/src/widgets/kernel/qwidgetbackingstore.cpp
-index a32eb2a03b..db60338034 100644
+index 24b8665013..0603137b8e 100644
 --- a/src/widgets/kernel/qwidgetbackingstore.cpp
 +++ b/src/widgets/kernel/qwidgetbackingstore.cpp
-@@ -1007,7 +1007,7 @@ static void findTextureWidgetsRecursively(QWidget *tlw, QWidget *widget, QPlatfo
+@@ -1012,7 +1012,7 @@ static void findTextureWidgetsRecursively(QWidget *tlw, QWidget *widget, QPlatfo
      if (wd->renderToTexture) {
          QPlatformTextureList::Flags flags = wd->textureListFlags();
          const QRect rect(widget->mapTo(tlw, QPoint()), widget->size());

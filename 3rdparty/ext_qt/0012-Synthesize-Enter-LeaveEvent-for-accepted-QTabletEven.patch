@@ -1,4 +1,4 @@
-From 0ae8de8731d39fd1e736c7d9012f87184299956e Mon Sep 17 00:00:00 2001
+From 79689ebfb428571845dc4deed73ecae3f1fc4781 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Mon, 11 Mar 2019 13:18:06 +0300
 Subject: [PATCH 1/2] Synthesize Enter/LeaveEvent for accepted QTabletEvent

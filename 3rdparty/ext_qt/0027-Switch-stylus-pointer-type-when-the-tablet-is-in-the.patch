@@ -1,7 +1,7 @@
-From dd25106c340d91d20432375a2a22b85779eddb18 Mon Sep 17 00:00:00 2001
+From 070eb69f2c8812bc62b50196117b6cd2a8d2f3de Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Wed, 17 Apr 2019 17:39:10 +0300
-Subject: [PATCH 14/17] Switch stylus pointer type when the tablet is in the
+Subject: [PATCH 08/19] Switch stylus pointer type when the tablet is in the
  tablet proximity
 
 Some convertible tablet devices have a special stylus button that

@@ -1480,6 +1480,7 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
     // page anchored shapes are handled differently
     if (anchor->anchorType() == KoShapeAnchor::AnchorPage) {
         // nothing else to do
+        delete anchor;
     } else if (anchor->anchorType() == KoShapeAnchor::AnchorAsCharacter) {
         KoAnchorInlineObject *anchorObject = new KoAnchorInlineObject(anchor);
 
@@ -1499,136 +1500,12 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
 }
 
 
-void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
+void KoTextLoader::loadTableOfContents(const KoXmlElement &/*element*/, QTextCursor &/*cursor*/)
 {
-    // make sure that the tag is table-of-content
-    Q_ASSERT(element.tagName() == "table-of-content");
-    QTextBlockFormat tocFormat;
-
-    // for "meta-information" about the TOC we use this class
-    KoTableOfContentsGeneratorInfo *info = new KoTableOfContentsGeneratorInfo();
-
-    // to store the contents we use an extrafor "meta-information" about the TOC we use this class
-    QTextDocument *tocDocument = new QTextDocument();
-    KoTextDocument(tocDocument).setStyleManager(d->styleManager);
-    KoTextDocument(tocDocument).setTextRangeManager(new KoTextRangeManager);
-
-    info->m_name = element.attribute("name");
-    info->m_styleName = element.attribute("style-name");
-
-    KoXmlElement e;
-    forEachElement(e, element) {
-        if (e.isNull() || e.namespaceURI() != KoXmlNS::text) {
-            continue;
-        }
-
-        if (e.localName() == "table-of-content-source" && e.namespaceURI() == KoXmlNS::text) {
-            info->loadOdf(d->textSharedData, e);
-            // uncomment to see what has been loaded
-            //info.tableOfContentData()->dump();
-            tocFormat.setProperty(KoParagraphStyle::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
-            tocFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(tocDocument) );
-            cursor.insertBlock(tocFormat);
-
-            // We'll just try to find displayable elements and add them as paragraphs
-        } else if (e.localName() == "index-body") {
-            QTextCursor cursorFrame = tocDocument->rootFrame()->lastCursorPosition();
-
-            bool firstTime = true;
-            KoXmlElement p;
-            forEachElement(p, e) {
-                // All elem will be "p" instead of the title, which is particular
-                if (p.isNull() || p.namespaceURI() != KoXmlNS::text)
-                    continue;
-
-                if (!firstTime) {
-                    // use empty formats to not inherit from the prev parag
-                    QTextBlockFormat bf;
-                    QTextCharFormat cf;
-                    cursorFrame.insertBlock(bf, cf);
-                }
-                firstTime = false;
-
-                QTextBlock current = cursorFrame.block();
-                QTextBlockFormat blockFormat;
-
-                if (p.localName() == "p") {
-                    loadParagraph(p, cursorFrame);
-                } else if (p.localName() == "index-title") {
-                    loadBody(p, cursorFrame);
-                }
-
-                QTextCursor c(current);
-                c.mergeBlockFormat(blockFormat);
-            }
-
-        }// index-body
-    }
 }
 
-void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cursor)
+void KoTextLoader::loadBibliography(const KoXmlElement &/*element*/, QTextCursor &/*cursor*/)
 {
-    // make sure that the tag is bibliography
-    Q_ASSERT(element.tagName() == "bibliography");
-    QTextBlockFormat bibFormat;
-
-    // for "meta-information" about the bibliography we use this class
-    KoBibliographyInfo *info = new KoBibliographyInfo();
-
-    QTextDocument *bibDocument = new QTextDocument();
-    KoTextDocument(bibDocument).setStyleManager(d->styleManager);
-    KoTextDocument(bibDocument).setTextRangeManager(new KoTextRangeManager);
-
-    info->m_name = element.attribute("name");
-    info->m_styleName = element.attribute("style-name");
-
-    KoXmlElement e;
-    forEachElement(e, element) {
-        if (e.isNull() || e.namespaceURI() != KoXmlNS::text) {
-            continue;
-        }
-
-        if (e.localName() == "bibliography-source" && e.namespaceURI() == KoXmlNS::text) {
-            info->loadOdf(d->textSharedData, e);
-
-            bibFormat.setProperty(KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(info));
-            bibFormat.setProperty(KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
-
-            cursor.insertBlock(bibFormat);
-            // We'll just try to find displayable elements and add them as paragraphs
-        } else if (e.localName() == "index-body") {
-            QTextCursor cursorFrame = bibDocument->rootFrame()->lastCursorPosition();
-
-            bool firstTime = true;
-            KoXmlElement p;
-            forEachElement(p, e) {
-                // All elem will be "p" instead of the title, which is particular
-                if (p.isNull() || p.namespaceURI() != KoXmlNS::text)
-                    continue;
-
-                if (!firstTime) {
-                    // use empty formats to not inherit from the prev parag
-                    QTextBlockFormat bf;
-                    QTextCharFormat cf;
-                    cursorFrame.insertBlock(bf, cf);
-                }
-                firstTime = false;
-
-                QTextBlock current = cursorFrame.block();
-                QTextBlockFormat blockFormat;
-
-                if (p.localName() == "p") {
-                    loadParagraph(p, cursorFrame);
-                } else if (p.localName() == "index-title") {
-                    loadBody(p, cursorFrame);
-                }
-
-                QTextCursor c(current);
-                c.mergeBlockFormat(blockFormat);
-            }
-
-        }// index-body
-    }
 }
 
 void KoTextLoader::startBody(int total)

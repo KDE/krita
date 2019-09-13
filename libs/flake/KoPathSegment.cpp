@@ -321,7 +321,9 @@ void KoPathSegment::Private::deCasteljau(qreal t, QPointF *p1, QPointF *p2, QPoi
         q[1] = first->controlPoint2();
         q[2] = second->controlPoint1();
     }
-    q[deg] = second->point();
+    if (deg >= 0) {
+        q[deg] = second->point();
+    }
 
     // points of the new segment after the split point
     QPointF p[3];

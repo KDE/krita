@@ -181,7 +181,6 @@ void KisPaletteEditor::removePalette(KoColorSetSP cs)
     if (!cs || !cs->isEditable()) {
         return;
     }
-
     m_d->rServer->removeResourceFromServer(cs);
     uploadPaletteList();
 }

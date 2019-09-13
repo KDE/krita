@@ -57,38 +57,38 @@ private:
     static QPainterPath applyDisplace(const QPainterPath& path, int speed);
 
 
-    bool m_displaceEnabled;
-    int m_displaceCoeff;
+    bool m_displaceEnabled {false};
+    int m_displaceCoeff {0};
     QPainterPath m_lastPaintedPath;
 
-    bool m_windingFill;
-    bool m_hardEdge;
+    bool m_windingFill {false};
+    bool m_hardEdge {false};
 
-    bool m_speedEnabled;
-    int m_speedMultiplier;
-    qreal m_savedSpeedCoeff;
+    bool m_speedEnabled {false};
+    int m_speedMultiplier {1};
+    qreal m_savedSpeedCoeff {1.0};
     QPointF m_savedSpeedPoint;
 
-    bool m_smoothingEnabled;
-    int m_smoothingThreshold;
+    bool m_smoothingEnabled {false};
+    int m_smoothingThreshold {1};
     QPointF m_savedSmoothingPoint;
-    int m_savedSmoothingDistance;
+    int m_savedSmoothingDistance {1};
 
-    int m_savedUpdateDistance;
+    int m_savedUpdateDistance {1};
     QVector<QPointF> m_savedPoints;
-    int m_lastPaintTime;
+    int m_lastPaintTime {0};
 
-    bool m_firstRun;
+    bool m_firstRun {true};
     QPointF m_center;
 
     QPainterPath m_path;
     ExperimentOption m_experimentOption;
 
-    bool m_useMirroring;
-    KisPainter *m_originalPainter;
+    bool m_useMirroring {false};
+    KisPainter *m_originalPainter {0};
     KisPaintDeviceSP m_originalDevice;
 
-    KisPainter::FillStyle m_fillStyle;
+    KisPainter::FillStyle m_fillStyle {KisPainter::FillStyleNone};
 };
 
 #endif // KIS_EXPERIMENT_PAINTOP_H_

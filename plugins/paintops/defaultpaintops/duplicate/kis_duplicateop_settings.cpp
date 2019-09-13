@@ -134,7 +134,7 @@ void KisDuplicateOpSettings::toXML(QDomDocument& doc, QDomElement& rootElt) cons
 KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
 {
     KisPaintOpSettingsSP setting = KisBrushBasedPaintOpSettings::clone();
-    KisDuplicateOpSettings* s = dynamic_cast<KisDuplicateOpSettings*>(setting.data());
+    KisDuplicateOpSettings* s = static_cast<KisDuplicateOpSettings*>(setting.data());
     s->m_offset = m_offset;
     s->m_isOffsetNotUptodate = m_isOffsetNotUptodate;
     s->m_position = m_position;

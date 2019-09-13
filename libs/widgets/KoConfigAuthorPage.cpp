@@ -102,7 +102,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     QStringList headerlabels;
     headerlabels<< i18n("Type") << i18n("Entry");
 
-    Ui::KoConfigAuthorPage *aUi = new Ui::KoConfigAuthorPage();
+    Ui::KoConfigAuthorPage *aUi = 0;
     QWidget *w = new QWidget;
     d->defaultAuthor = i18n("Anonymous");
 

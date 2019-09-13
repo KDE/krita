@@ -72,26 +72,33 @@ void KisMotionBlurFilter::processImpl(KisPaintDeviceSP device,
 {
     QPoint srcTopLeft = rect.topLeft();
 
-    Q_ASSERT(device != 0);
+    Q_ASSERT(device);
 
     KisFilterConfigurationSP config = _config ? _config : new KisFilterConfiguration(id().id(), 1);
 
     QVariant value;
-    config->getProperty("blurAngle", value);
-    uint blurAngle = value.toUInt();
+    uint blurAngle = 0;
+    if (config->getProperty("blurAngle", value)) {
+        blurAngle = value.toUInt();
+    }
 
     KisLodTransformScalar t(device);
 
-    config->getProperty("blurLength", value);
-    uint blurLength = t.scale(value.toUInt());
+    uint blurLength = 0;
+    if (config->getProperty("blurLength", value)) {
+        blurLength = t.scale(value.toUInt());
+    }
 
-    if (blurLength == 0)
+    if (blurLength == 0) {
         return;
+    }
 
     QBitArray channelFlags;
+
     if (config) {
         channelFlags = config->channelFlags();
     }
+
     if (channelFlags.isEmpty() || !config) {
         channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }

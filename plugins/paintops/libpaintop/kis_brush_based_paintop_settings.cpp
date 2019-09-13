@@ -302,20 +302,22 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                 [](KisUniformPaintOpProperty *prop) {
                     KisBrushBasedPaintOpSettings *s =
                         dynamic_cast<KisBrushBasedPaintOpSettings*>(prop->settings().data());
-
-                    const qreal value = s->autoSpacingActive() ?
-                        s->autoSpacingCoeff() : s->spacing();
-                    prop->setValue(value);
+                    if (s) {
+                        const qreal value = s->autoSpacingActive() ?
+                            s->autoSpacingCoeff() : s->spacing();
+                        prop->setValue(value);
+                    }
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
                     KisBrushBasedPaintOpSettings *s =
                         dynamic_cast<KisBrushBasedPaintOpSettings*>(prop->settings().data());
-
-                    if (s->autoSpacingActive()) {
-                        s->setAutoSpacing(true, prop->value().toReal());
-                    } else {
-                        s->setSpacing(prop->value().toReal());
+                    if (s) {
+                        if (s->autoSpacingActive()) {
+                            s->setAutoSpacing(true, prop->value().toReal());
+                        } else {
+                            s->setSpacing(prop->value().toReal());
+                        }
                     }
                 });
 

@@ -106,17 +106,19 @@ void KisTemplateTree::writeTemplateTree()
     }
 }
 
-void KisTemplateTree::add(KisTemplateGroup *g)
+bool KisTemplateTree::add(KisTemplateGroup *g)
 {
 
     KisTemplateGroup *group = find(g->name());
-    if (group == 0)
+    if (group == 0) {
         m_groups.append(g);
-    else {
-        group->addDir(g->dirs().first()); // "...there can be only one..." (Queen)
-        delete g;
-        g = 0;
+        return true;
     }
+
+    group->addDir(g->dirs().first()); // "...there can be only one..." (Queen)
+    delete g;
+    g = 0;
+    return false;
 }
 
 KisTemplateGroup *KisTemplateTree::find(const QString &name) const
@@ -160,9 +162,11 @@ void KisTemplateTree::readGroups()
                 sortingWeight = dg.readEntry("X-KDE-SortingWeight", 1000);
             }
             KisTemplateGroup *g = new KisTemplateGroup(name, templateDir.absolutePath() + QDir::separator(), sortingWeight);
-            add(g);
-            if (defaultTab == "true")
-                m_defaultGroup = g;
+            if (add(g)) {
+                if (defaultTab == "true") {
+                    m_defaultGroup = g;
+                }
+            }
         }
     }
 }

@@ -51,7 +51,7 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
         , collapsed(false)
         , supportsLodMoves(false)
         , animated(false)
-        , useInTimeline(false)
+        , useInTimeline(true)
         , image(image)
     {
     }

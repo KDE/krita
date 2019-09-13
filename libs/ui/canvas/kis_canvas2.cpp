@@ -155,6 +155,7 @@ public:
 
     KisSignalCompressor regionOfInterestUpdateCompressor;
     QRect regionOfInterest;
+    qreal regionOfInterestMargin = 0.25;
 
     QRect renderingLimit;
     int isBatchUpdateActive = 0;
@@ -222,6 +223,7 @@ void KisCanvas2::setup()
     KisConfig cfg(true);
     m_d->vastScrolling = cfg.vastScrolling();
     m_d->lodAllowedInImage = cfg.levelOfDetailEnabled();
+    m_d->regionOfInterestMargin = KisImageConfig(true).animationCacheRegionOfInterestMargin();
 
     createCanvas(cfg.useOpenGL());
 
@@ -959,12 +961,12 @@ void KisCanvas2::slotUpdateRegionOfInterest()
 {
     const QRect oldRegionOfInterest = m_d->regionOfInterest;
 
-    const qreal ratio = 0.25;
+    const qreal ratio = m_d->regionOfInterestMargin;
     const QRect proposedRoi = KisAlgebra2D::blowRect(m_d->coordinatesConverter->widgetRectInImagePixels(), ratio).toAlignedRect();
 
     const QRect imageRect = m_d->coordinatesConverter->imageRectInImagePixels();
 
-    m_d->regionOfInterest = imageRect.contains(proposedRoi) ? proposedRoi : imageRect;
+    m_d->regionOfInterest = proposedRoi & imageRect;
 
     if (m_d->regionOfInterest != oldRegionOfInterest) {
         emit sigRegionOfInterestChanged(m_d->regionOfInterest);
@@ -1073,6 +1075,7 @@ void KisCanvas2::slotConfigChanged()
 {
     KisConfig cfg(true);
     m_d->vastScrolling = cfg.vastScrolling();
+    m_d->regionOfInterestMargin = KisImageConfig(true).animationCacheRegionOfInterestMargin();
 
     resetCanvas(cfg.useOpenGL());
 

@@ -311,6 +311,8 @@ void TimelineFramesModel::slotImageContentChanged()
 
 void TimelineFramesModel::processUpdateQueue()
 {
+    if (!m_d->converter) return;
+
     Q_FOREACH (KisNodeDummy *dummy, m_d->updateQueue) {
         int row = m_d->converter->rowForDummy(dummy);
 

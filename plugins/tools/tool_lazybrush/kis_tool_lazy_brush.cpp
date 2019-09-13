@@ -49,7 +49,7 @@ struct KisToolLazyBrush::Private
     bool oldShowKeyStrokesValue = false;
     bool oldShowColoringValue = false;
 
-    KisNodeSP manuallyActivatedNode;
+    KisNodeWSP manuallyActivatedNode;
     KisSignalAutoConnectionsStore toolConnections;
 };
 
@@ -69,10 +69,15 @@ KisToolLazyBrush::~KisToolLazyBrush()
 
 void KisToolLazyBrush::tryDisableKeyStrokesOnMask()
 {
-    if (m_d->manuallyActivatedNode) {
-        KisLayerPropertiesIcons::setNodeProperty(m_d->manuallyActivatedNode, KisLayerPropertiesIcons::colorizeEditKeyStrokes, false, image());
-        m_d->manuallyActivatedNode = 0;
+    // upgrade to strong pointer
+    KisNodeSP manuallyActivatedNode = m_d->manuallyActivatedNode;
+
+    if (manuallyActivatedNode) {
+        KisLayerPropertiesIcons::setNodeProperty(manuallyActivatedNode, KisLayerPropertiesIcons::colorizeEditKeyStrokes, false, image());
+        manuallyActivatedNode = 0;
     }
+
+    m_d->manuallyActivatedNode = 0;
 }
 
 
@@ -101,7 +106,10 @@ void KisToolLazyBrush::deactivate()
 
 void KisToolLazyBrush::slotCurrentNodeChanged(KisNodeSP node)
 {
-    if (node != m_d->manuallyActivatedNode) {
+    // upgrade to strong pointer
+    KisNodeSP manuallyActivatedNode = m_d->manuallyActivatedNode;
+
+    if (node != manuallyActivatedNode) {
         tryDisableKeyStrokesOnMask();
 
         KisColorizeMask *mask = qobject_cast<KisColorizeMask*>(node.data());
@@ -190,10 +198,12 @@ void KisToolLazyBrush::beginPrimaryAction(KoPointerEvent *event)
         if (!colorizeMaskActive() && canCreateColorizeMask()) {
             tryCreateColorizeMask();
         } else if (shouldActivateKeyStrokes()) {
+            // upgrade to strong pointer
+            KisNodeSP manuallyActivatedNode = m_d->manuallyActivatedNode;
             KisNodeSP node = currentNode();
 
-            KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->manuallyActivatedNode ||
-                                         m_d->manuallyActivatedNode == node);
+            KIS_SAFE_ASSERT_RECOVER_NOOP(!manuallyActivatedNode ||
+                                         manuallyActivatedNode == node);
 
             KisLayerPropertiesIcons::setNodeProperty(node,
                                                      KisLayerPropertiesIcons::colorizeEditKeyStrokes,

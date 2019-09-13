@@ -62,6 +62,24 @@ public:
         return false;
     }
 
+    // assign color profile without conversion of pixel data (if applicable)
+    virtual KUndo2Command* setProfile(const KoColorProfile *profile) {
+        Q_UNUSED(profile);
+        return 0;
+    }
+
+    // convert pixel data of the layer into \p dstColorSpace (if applicable)
+    virtual KUndo2Command* convertTo(const KoColorSpace * dstColorSpace,
+                                         KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
+                                         KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags())
+    {
+        Q_UNUSED(dstColorSpace);
+        Q_UNUSED(renderingIntent);
+        Q_UNUSED(conversionFlags);
+        return 0;
+    }
+
+
 };
 
 #endif // KIS_EXTERNAL_IFACE_LAYER_IFACE_

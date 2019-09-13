@@ -44,11 +44,9 @@ KisConvertColorSpaceProcessingVisitor::KisConvertColorSpaceProcessingVisitor(con
 {
 }
 
-
 void KisConvertColorSpaceProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
 {
-    Q_UNUSED(layer);
-    Q_UNUSED(undoAdapter);
+    undoAdapter->addCommand(layer->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags));
 }
 
 void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)

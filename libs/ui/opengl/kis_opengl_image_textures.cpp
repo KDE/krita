@@ -573,10 +573,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
 
         if (cm != KisConfig::INTERNAL) {
             emit sigShowFloatingMessage(
-                i18n("You enabled OpenColorIO based color management, but your image is not an RGB image.\n"
-                     "OpenColorIO-based color management only works with RGB images.\n"
-                     "Please check the settings in the LUT docker.\n"
-                     "OpenColorIO will now be deactivated."), 5000, true);
+                i18n("OpenColorIO is disabled: image color space is not supported"), 5000, true);
         }
 
         warnUI << "WARNING: Internal color management was forcibly enabled";

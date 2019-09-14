@@ -1,160 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="32"
-   height="32"
-   viewBox="0 0 32 32.000001"
-   id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="light_krita_tool_grid.svg"
-   inkscape:export-filename="C:\dribbble\krita icons\Collaborate\1_flat\tools\light_krita_tool_grid.png"
-   inkscape:export-xdpi="45"
-   inkscape:export-ydpi="45">
+   id="svg2"
+   viewBox="0 0 32 32.000001"
+   height="32"
+   width="32">
   <defs
-     id="defs4">
-    <filter
-       style="color-interpolation-filters:sRGB;"
-       inkscape:label="Drop Shadow"
-       id="filter4429">
-      <feFlood
-         flood-opacity="0.501961"
-         flood-color="rgb(0,0,0)"
-         result="flood"
-         id="feFlood4431" />
-      <feComposite
-         in="flood"
-         in2="SourceGraphic"
-         operator="in"
-         result="composite1"
-         id="feComposite4433" />
-      <feGaussianBlur
-         in="composite1"
-         stdDeviation="0"
-         result="blur"
-         id="feGaussianBlur4435" />
-      <feOffset
-         dx="0"
-         dy="-2"
-         result="offset"
-         id="feOffset4437" />
-      <feComposite
-         in="SourceGraphic"
-         in2="offset"
-         operator="over"
-         result="composite2"
-         id="feComposite4439" />
-    </filter>
-    <filter
-       style="color-interpolation-filters:sRGB;"
-       inkscape:label="Drop Shadow"
-       id="filter4326">
-      <feFlood
-         flood-opacity="0.501961"
-         flood-color="rgb(0,0,0)"
-         result="flood"
-         id="feFlood4328" />
-      <feComposite
-         in="flood"
-         in2="SourceGraphic"
-         operator="in"
-         result="composite1"
-         id="feComposite4330" />
-      <feGaussianBlur
-         in="composite1"
-         stdDeviation="0"
-         result="blur"
-         id="feGaussianBlur4332" />
-      <feOffset
-         dx="0"
-         dy="-2"
-         result="offset"
-         id="feOffset4334" />
-      <feComposite
-         in="SourceGraphic"
-         in2="offset"
-         operator="over"
-         result="composite2"
-         id="feComposite4336" />
-    </filter>
-    <filter
-       style="color-interpolation-filters:sRGB;"
-       inkscape:label="Drop Shadow"
-       id="filter5712">
-      <feFlood
-         flood-opacity="0.501961"
-         flood-color="rgb(0,0,0)"
-         result="flood"
-         id="feFlood5714" />
-      <feComposite
-         in="flood"
-         in2="SourceGraphic"
-         operator="in"
-         result="composite1"
-         id="feComposite5716" />
-      <feGaussianBlur
-         in="composite1"
-         stdDeviation="0"
-         result="blur"
-         id="feGaussianBlur5718" />
-      <feOffset
-         dx="0"
-         dy="-2"
-         result="offset"
-         id="feOffset5720" />
-      <feComposite
-         in="SourceGraphic"
-         in2="offset"
-         operator="over"
-         result="composite2"
-         id="feComposite5722" />
-    </filter>
-  </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#474747"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="5.6568542"
-     inkscape:cx="13.944101"
-     inkscape:cy="20.922175"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer3"
-     showgrid="false"
-     units="px"
-     inkscape:showpageshadow="false"
-     showborder="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1028"
-     inkscape:window-x="1358"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     objecttolerance="20">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3336"
-       dotted="false"
-       empspacing="1"
-       snapvisiblegridlinesonly="true"
-       enabled="true"
-       visible="true"
-       empcolor="#aaaaff"
-       empopacity="0.25098039"
-       color="#7878ff"
-       opacity="0.1254902"
-       spacingx="2"
-       spacingy="2.0000001" />
-  </sodipodi:namedview>
+     id="defs4" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -169,68 +26,81 @@
             <dc:title>Andrei Rudenko</dc:title>
           </cc:Agent>
         </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:groupmode="layer"
-     id="layer3"
-     inkscape:label="Layer 3"
-     style="display:inline">
+     style="display:inline"
+     id="layer3">
     <path
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
+       id="rect4200"
        d="M 0 0 L 0 8 L 8 8 L 8 0 L 0 0 z M 12 0 L 12 8 L 20 8 L 20 0 L 12 0 z M 24 0 L 24 8 L 32 8 L 32 0 L 24 0 z M 0 12 L 0 20 L 8 20 L 8 12 L 0 12 z M 12 12 L 12 20 L 20 20 L 20 12 L 12 12 z M 24 12 L 24 20 L 32 20 L 32 12 L 24 12 z M 0 24 L 0 32 L 8 32 L 8 24 L 0 24 z M 12 24 L 12 32 L 20 32 L 20 24 L 12 24 z M 24 24 L 24 32 L 32 32 L 32 24 L 24 24 z "
-       id="rect4200" />
+       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
   </g>
   <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="v2"
-     style="display:none">
+     style="display:none"
+     id="layer1">
     <rect
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
-       id="rect4240"
-       width="4"
-       height="32"
+       y="-5.9999996e-007"
        x="0"
-       y="-5.9999996e-007" />
-    <rect
-       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
-       id="rect4240-9"
-       width="4"
        height="32"
+       width="4"
+       id="rect4240"
+       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+    <rect
+       y="-9.5367432e-007"
        x="14"
-       y="-9.5367432e-007" />
-    <rect
-       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
-       id="rect4240-97"
-       width="4"
        height="32"
+       width="4"
+       id="rect4240-9"
+       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+    <rect
+       y="-9.5367432e-007"
        x="28"
-       y="-9.5367432e-007" />
-    <rect
-       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
-       id="rect4240-4"
-       width="4"
        height="32"
-       x="-32"
+       width="4"
+       id="rect4240-97"
+       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+    <rect
+       transform="matrix(0,-1,1,0,0,0)"
        y="1.7683718e-007"
-       transform="matrix(0,-1,1,0,0,0)" />
-    <rect
-       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
-       id="rect4240-9-1"
-       width="4"
+       x="-32"
        height="32"
+       width="4"
+       id="rect4240-4"
+       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+    <rect
+       transform="matrix(0,-1,1,0,0,0)"
+       y="-1.7683718e-007"
        x="-18"
-       y="-1.7683718e-007"
-       transform="matrix(0,-1,1,0,0,0)" />
-    <rect
-       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
-       id="rect4240-97-8"
-       width="4"
        height="32"
-       x="-3.9999993"
+       width="4"
+       id="rect4240-9-1"
+       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
+    <rect
+       transform="matrix(0,-1,1,0,0,0)"
        y="-1.7683718e-007"
-       transform="matrix(0,-1,1,0,0,0)" />
+       x="-3.9999993"
+       height="32"
+       width="4"
+       id="rect4240-97-8"
+       style="display:inline;opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
   </g>
 </svg>

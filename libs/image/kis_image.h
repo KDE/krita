@@ -1142,7 +1142,6 @@ private:
     friend class KisImageResizeCommand;
     void setSize(const QSize& size);
 
-    friend class KisImageSetProjectionColorSpaceCommand;
     void setProjectionColorSpace(const KoColorSpace * colorSpace);
 
 

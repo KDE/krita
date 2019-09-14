@@ -30,6 +30,8 @@
 #include "kis_projection_leaf.h"
 #include "kis_paint_layer.h"
 #include "kis_time_range.h"
+#include <commands_new/KisChangeChannelFlagsCommand.h>
+#include <commands_new/KisChangeChannelLockFlagsCommand.h>
 
 
 KisConvertColorSpaceProcessingVisitor::KisConvertColorSpaceProcessingVisitor(const KoColorSpace *srcColorSpace,
@@ -50,25 +52,28 @@ void KisConvertColorSpaceProcessingVisitor::visitExternalLayer(KisExternalLayer 
 }
 
 void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
-{    if (!node->projectionLeaf()->isLayer()) return;
+{
+    if (!node->projectionLeaf()->isLayer()) return;
     if (*m_dstColorSpace == *node->colorSpace()) return;
 
     bool alphaLock = false;
+    bool alphaDisabled = false;
 
     KisLayer *layer = dynamic_cast<KisLayer*>(node);
 
     KisPaintLayer *paintLayer = 0;
 
-    // TODO: channel flags reset should be undoable
+    KUndo2Command *parentConversionCommand = new KUndo2Command();
+
     if (m_srcColorSpace->colorModelId() != m_dstColorSpace->colorModelId()) {
-        layer->setChannelFlags(QBitArray());
+        alphaDisabled = layer->alphaChannelDisabled();
+        new KisChangeChannelFlagsCommand(QBitArray(), layer, parentConversionCommand);
         if ((paintLayer = dynamic_cast<KisPaintLayer*>(layer))) {
             alphaLock = paintLayer->alphaLocked();
-            paintLayer->setChannelLockFlags(QBitArray());
+            new KisChangeChannelLockFlagsCommand(QBitArray(), paintLayer, parentConversionCommand);
         }
     }
 
-    KUndo2Command *parentConversionCommand = new KUndo2Command();
 
     if (layer->original()) {
         layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand);
@@ -82,11 +87,17 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
         layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand);
     }
 
-    undoAdapter->addCommand(parentConversionCommand);
-
-    if (paintLayer) {
-        paintLayer->setAlphaLocked(alphaLock);
+    if (layer && alphaDisabled) {
+        new KisChangeChannelFlagsCommand(m_dstColorSpace->channelFlags(true, false),
+                                         layer, parentConversionCommand);
     }
+
+    if (paintLayer && alphaLock) {
+        new KisChangeChannelLockFlagsCommand(m_dstColorSpace->channelFlags(true, false),
+                                             paintLayer, parentConversionCommand);
+    }
+
+    undoAdapter->addCommand(parentConversionCommand);
     layer->invalidateFrames(KisTimeRange::infinite(0), layer->extent());
 }
 

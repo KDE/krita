@@ -157,6 +157,10 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
                                                      colorConverter->renderingIntent(),
                                                      colorConverter->conversionFlags());
 
+    connect(d->openGLImageTextures.data(),
+            SIGNAL(sigShowFloatingMessage(QString, int, bool)),
+            SLOT(slotShowFloatingMessage(QString, int, bool)));
+
     setAcceptDrops(true);
     setAutoFillBackground(false);
 
@@ -896,6 +900,11 @@ void KisOpenGLCanvas2::slotPixelGridModeChanged()
     d->gridColor = cfg.getPixelGridColor();
 
     update();
+}
+
+void KisOpenGLCanvas2::slotShowFloatingMessage(const QString &message, int timeout, bool priority)
+{
+    canvas()->imageView()->showFloatingMessage(message, QIcon(), timeout, priority ? KisFloatingMessage::High : KisFloatingMessage::Medium);
 }
 
 QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const

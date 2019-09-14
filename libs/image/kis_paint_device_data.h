@@ -100,13 +100,12 @@ public:
         }
 
         void redo() override {
-            KUndo2Command::redo();
-
-            if (!m_firstRun) {
+            if (m_firstRun) {
                 m_firstRun = false;
                 return;
             }
 
+            KUndo2Command::redo();
             forcedRedo();
         }
 

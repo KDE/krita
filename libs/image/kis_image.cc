@@ -244,6 +244,8 @@ public:
     bool tryCancelCurrentStrokeAsync();
 
     void notifyProjectionUpdatedInPatches(const QRect &rc, QVector<KisRunnableStrokeJobData *> &jobs);
+
+    struct SetImageProjectionColorSpace;
 };
 
 KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name)
@@ -1128,6 +1130,29 @@ void KisImage::convertLayerColorSpace(KisNodeSP node,
     applicator.end();
 }
 
+struct KisImage::KisImagePrivate::SetImageProjectionColorSpace : public KisCommandUtils::FlipFlopCommand
+{
+    SetImageProjectionColorSpace(const KoColorSpace *cs, KisImageWSP image,
+                                 State initialState, KUndo2Command *parent = 0)
+        : KisCommandUtils::FlipFlopCommand(initialState, parent),
+          m_cs(cs),
+          m_image(image)
+    {
+    }
+
+    void partA() override {
+        KisImageSP image = m_image;
+
+        if (image) {
+            image->setProjectionColorSpace(m_cs);
+        }
+    }
+
+private:
+    const KoColorSpace *m_cs;
+    KisImageWSP m_image;
+};
+
 void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
                                       KoColorConversionTransformation::Intent renderingIntent,
                                       KoColorConversionTransformation::ConversionFlags conversionFlags)
@@ -1148,14 +1173,23 @@ void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
                                        emitSignals, actionName);
 
     applicator.applyCommand(
-        new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstColorSpace),
-                KisStrokeJobData::SEQUENTIAL);
+        new KisImagePrivate::SetImageProjectionColorSpace(dstColorSpace,
+                                                          KisImageWSP(this),
+                                                          KisCommandUtils::FlipFlopCommand::INITIALIZING),
+        KisStrokeJobData::BARRIER);
 
     applicator.applyVisitor(
         new KisConvertColorSpaceProcessingVisitor(
             srcColorSpace, dstColorSpace,
             renderingIntent, conversionFlags),
         KisStrokeJobData::CONCURRENT);
+
+    applicator.applyCommand(
+        new KisImagePrivate::SetImageProjectionColorSpace(srcColorSpace,
+                                                          KisImageWSP(this),
+                                                          KisCommandUtils::FlipFlopCommand::FINALIZING),
+        KisStrokeJobData::BARRIER);
+
 
     applicator.end();
 }
@@ -1212,13 +1246,22 @@ bool KisImage::assignImageProfile(const KoColorProfile *profile)
                                        emitSignals, actionName);
 
     applicator.applyCommand(
-        new KisImageSetProjectionColorSpaceCommand(KisImageWSP(this), dstColorSpace),
-                KisStrokeJobData::SEQUENTIAL);
+        new KisImagePrivate::SetImageProjectionColorSpace(dstColorSpace,
+                                                          KisImageWSP(this),
+                                                          KisCommandUtils::FlipFlopCommand::INITIALIZING),
+        KisStrokeJobData::BARRIER);
 
     applicator.applyVisitor(
         new KisAssignProfileProcessingVisitor(
             srcColorSpace, dstColorSpace),
         KisStrokeJobData::CONCURRENT);
+
+    applicator.applyCommand(
+        new KisImagePrivate::SetImageProjectionColorSpace(srcColorSpace,
+                                                          KisImageWSP(this),
+                                                          KisCommandUtils::FlipFlopCommand::FINALIZING),
+        KisStrokeJobData::BARRIER);
+
 
     applicator.end();
 

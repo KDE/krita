@@ -309,7 +309,7 @@ KisReferenceImage * KisReferenceImage::fromXml(const QDomElement &elem)
     qreal opacity = KisDomUtils::toDouble(elem.attribute("opacity", "1"));
     reference->setTransparency(1.0 - opacity);
 
-    qreal saturation = KisDomUtils::toDouble(elem.attribute("opacity", "1"));
+    qreal saturation = KisDomUtils::toDouble(elem.attribute("saturation", "1"));
     reference->setSaturation(saturation);
 
     return reference;

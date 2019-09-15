@@ -1,7 +1,7 @@
-From f83799913665e06e98c743326eafd47d78087477 Mon Sep 17 00:00:00 2001
+From e4579424942fdaf1f9877d36dda2e6b9f1796b03 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Thu, 18 Apr 2019 15:42:17 +0300
-Subject: [PATCH 15/17] Fix updating tablet pressure resolution on every
+Subject: [PATCH 09/19] Fix updating tablet pressure resolution on every
  proximity enter event
 
 The user can switch pressure sensitivity level in the driver,

@@ -1,7 +1,7 @@
-From 6644f33d9c9be580f3277792e304d20c4b973cdd Mon Sep 17 00:00:00 2001
+From bfa5d9ad432d3be6529d4c0d6fd79aecf8a8bdfa Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Wed, 19 Jun 2019 15:04:31 +0300
-Subject: [PATCH 01/17] Use fast path for unsupported mime types
+Subject: [PATCH 01/19] Use fast path for unsupported mime types
 
 We don't need to request the entire image every time
 Windows asks for the list of supported MIME types. That

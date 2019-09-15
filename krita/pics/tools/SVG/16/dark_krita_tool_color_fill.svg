@@ -1,129 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="32"
-   height="32"
-   viewBox="0 0 32 32.000001"
-   id="svg2"
    version="1.1"
-   inkscape:version="0.92.1 r15371"
-   sodipodi:docname="dark_krita_tool_color_fill.svg"
-   inkscape:export-filename="/run/media/andrei/C2942CC0942CB8B5/dribbble/krita icons/Collaborate/1_flat_dark/tools/light_krita_tool_color_fill.png"
-   inkscape:export-xdpi="45"
-   inkscape:export-ydpi="45">
+   id="svg2"
+   viewBox="0 0 32 32.000001"
+   height="32"
+   width="32">
   <defs
-     id="defs4">
-    <filter
-       style="color-interpolation-filters:sRGB;"
-       inkscape:label="Drop Shadow"
-       id="filter4429">
-      <feFlood
-         flood-opacity="0.501961"
-         flood-color="rgb(0,0,0)"
-         result="flood"
-         id="feFlood4431" />
-      <feComposite
-         in="flood"
-         in2="SourceGraphic"
-         operator="in"
-         result="composite1"
-         id="feComposite4433" />
-      <feGaussianBlur
-         in="composite1"
-         stdDeviation="0"
-         result="blur"
-         id="feGaussianBlur4435" />
-      <feOffset
-         dx="0"
-         dy="-2"
-         result="offset"
-         id="feOffset4437" />
-      <feComposite
-         in="SourceGraphic"
-         in2="offset"
-         operator="over"
-         result="composite2"
-         id="feComposite4439" />
-    </filter>
-    <filter
-       style="color-interpolation-filters:sRGB;"
-       inkscape:label="Drop Shadow"
-       id="filter4238">
-      <feFlood
-         flood-opacity="0.501961"
-         flood-color="rgb(0,0,0)"
-         result="flood"
-         id="feFlood4240" />
-      <feComposite
-         in="flood"
-         in2="SourceGraphic"
-         operator="in"
-         result="composite1"
-         id="feComposite4242" />
-      <feGaussianBlur
-         in="composite1"
-         stdDeviation="0"
-         result="blur"
-         id="feGaussianBlur4244" />
-      <feOffset
-         dx="0"
-         dy="-2"
-         result="offset"
-         id="feOffset4246" />
-      <feComposite
-         in="SourceGraphic"
-         in2="offset"
-         operator="over"
-         result="composite2"
-         id="feComposite4248" />
-    </filter>
-  </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#474747"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="8"
-     inkscape:cx="33.061193"
-     inkscape:cy="17.149489"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="false"
-     units="px"
-     inkscape:showpageshadow="false"
-     showborder="true"
-     inkscape:window-width="1287"
-     inkscape:window-height="696"
-     inkscape:window-x="1951"
-     inkscape:window-y="236"
-     inkscape:window-maximized="0"
-     objecttolerance="20"
-     showguides="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3336"
-       dotted="false"
-       empspacing="1"
-       snapvisiblegridlinesonly="true"
-       enabled="true"
-       visible="true"
-       empcolor="#aaaaff"
-       empopacity="0.25098039"
-       color="#7878ff"
-       opacity="0.1254902"
-       spacingx="2"
-       spacingy="2.0000001" />
-  </sodipodi:namedview>
+     id="defs4" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -132,52 +20,57 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
         <dc:creator>
           <cc:Agent>
             <dc:title>Andrei Rudenko</dc:title>
           </cc:Agent>
         </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:groupmode="layer"
-     id="layer4"
-     inkscape:label="v2"
-     style="display:none">
+     style="display:none"
+     id="layer4">
     <path
-       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1"
-       d="M 0,0 0,4 0,8 4,8 4,4 8,4 8,0 Z m 0,12 0,8 4,0 0,-8 z m 0,12 0,4 0,4 8,0 0,-4 -4,0 0,-4 z m 28,0 0,4 -4,0 0,4 8,0 0,-4 0,-4 z m -16,4 0,4 8,0 0,-4 z"
        id="rect4883"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccccccccccccccccccccccccccccccc" />
+       d="M 0,0 0,4 0,8 4,8 4,4 8,4 8,0 Z m 0,12 0,8 4,0 0,-8 z m 0,12 0,4 0,4 8,0 0,-4 -4,0 0,-4 z m 28,0 0,4 -4,0 0,4 8,0 0,-4 0,-4 z m -16,4 0,4 8,0 0,-4 z"
+       style="opacity:1;fill:#cacaca;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1;stroke-opacity:1" />
   </g>
   <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="v3">
+     id="layer1">
     <path
-       style="fill:#323232;fill-opacity:1;stroke:none;stroke-width:0.91642648px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 7.1876411,2.8971925 10.853347,1.0643394 29.181876,21.225722 h -5.498559 z"
        id="path869"
-       inkscape:connector-curvature="0" />
+       d="M 7.1876411,2.8971925 10.853347,1.0643394 29.181876,21.225722 h -5.498559 z"
+       style="fill:#323232;fill-opacity:1;stroke:none;stroke-width:0.91642648px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
-       style="fill:none;stroke:#323232;stroke-width:3.29913521;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 11.718133,7.6254541 2.553869,16.78972 13.550986,27.786838 22.715251,18.622573"
        id="path871"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccc" />
+       d="M 11.718133,7.6254541 2.553869,16.78972 13.550986,27.786838 22.715251,18.622573"
+       style="fill:none;stroke:#323232;stroke-width:3.29913521;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
-       style="fill:#323232;fill-opacity:1;stroke:none;stroke-width:0.85871017px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 28.33013,21.509226 c 0,0 1.819867,3.21066 2.495505,4.911691 0.675639,1.701029 0.762131,4.333575 -1.671316,4.293075 -2.433446,-0.0405 -2.982218,-2.370466 -2.326766,-3.959532 0.655451,-1.589065 1.502577,-5.245234 1.502577,-5.245234 z"
        id="path873"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="csssc" />
+       d="m 28.33013,21.509226 c 0,0 1.819867,3.21066 2.495505,4.911691 0.675639,1.701029 0.762131,4.333575 -1.671316,4.293075 -2.433446,-0.0405 -2.982218,-2.370466 -2.326766,-3.959532 0.655451,-1.589065 1.502577,-5.245234 1.502577,-5.245234 z"
+       style="fill:#323232;fill-opacity:1;stroke:none;stroke-width:0.85871017px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
-       style="fill:#323232;fill-opacity:1;stroke:none;stroke-width:0.91642648px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 4.3867219,16.78972 H 20.882398 l 1.832853,1.832853 -10.997118,9.164265 -9.164264,-9.164265 1.8328529,-1.832853"
        id="path875"
-       inkscape:connector-curvature="0" />
+       d="M 4.3867219,16.78972 H 20.882398 l 1.832853,1.832853 -10.997118,9.164265 -9.164264,-9.164265 1.8328529,-1.832853"
+       style="fill:#323232;fill-opacity:1;stroke:none;stroke-width:0.91642648px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
 </svg>

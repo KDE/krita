@@ -48,8 +48,8 @@ public:
     KisDistanceInformation* buddyDragDistance();
 
 private:
-    KisFreehandStrokeInfo *m_parentStrokeInfo;
-    KisFreehandStrokeInfo *m_childStrokeInfo;
+    KisFreehandStrokeInfo *m_parentStrokeInfo {0};
+    KisFreehandStrokeInfo *m_childStrokeInfo {0};
 };
 
 

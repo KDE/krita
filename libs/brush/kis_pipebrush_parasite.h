@@ -94,8 +94,8 @@ public:
     static int const MaxDim = 4;
 
     //qint32 step;
-    qint32 ncells;
-    qint32 dim;
+    qint32 ncells {0};
+    qint32 dim {0};
 
     // Apparently only used for editing a pipe brush, which we won't at the moment
     // qint32 cols, rows;
@@ -103,7 +103,7 @@ public:
     // Apparently the gimp doesn't use this anymore? Anyway it is a bit weird to
     // paint at someplace else than where your cursor displays it will...
     //Placement placement;
-    qint32 rank[MaxDim];
+    qint32 rank[MaxDim] {};
 
     KisParasite::SelectionMode selection[MaxDim];
     QString selectionMode; // for UI
@@ -115,6 +115,6 @@ public:
     qint32 index[MaxDim];
 
     /// If true, the brush won't be painted when there is no motion
-    bool needsMovement;
+    bool needsMovement {false};
 };
 #endif

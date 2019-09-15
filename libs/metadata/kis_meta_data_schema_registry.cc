@@ -58,8 +58,10 @@ SchemaRegistry::SchemaRegistry()
         schema->d->load(fileName);
         if (schemaFromUri(schema->uri())) {
             errMetaData << "Schema already exist uri: " << schema->uri();
+            delete schema;
         } else if (schemaFromPrefix(schema->prefix())) {
             errMetaData << "Schema already exist prefix: " << schema->prefix();
+            delete schema;
         } else {
             d->uri2Schema[schema->uri()] = schema;
             d->prefix2Schema[schema->prefix()] = schema;

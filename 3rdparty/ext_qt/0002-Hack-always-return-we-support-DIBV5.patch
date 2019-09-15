@@ -1,7 +1,7 @@
-From 835bb62519cc53976b8341c0d83a660674f66a92 Mon Sep 17 00:00:00 2001
+From e396f2274a8db88f9bb74a7bec95de76b63f1b33 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Tue, 21 Jun 2016 14:50:47 +0300
-Subject: [PATCH 02/17] Hack: always return we support DIBV5
+Subject: [PATCH 02/19] Hack: always return we support DIBV5
 
 Asking for the entire image may be too expensive
 

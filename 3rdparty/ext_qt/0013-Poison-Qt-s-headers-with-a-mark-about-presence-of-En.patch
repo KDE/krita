@@ -1,4 +1,4 @@
-From 82c789f75fc634ccbe5f1aad6d41895a6e6da17d Mon Sep 17 00:00:00 2001
+From 22c69acd5168dff36197b11edfc3fc0735253b91 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Mon, 11 Mar 2019 16:17:17 +0300
 Subject: [PATCH 2/2] Poison Qt's headers with a mark about presence of

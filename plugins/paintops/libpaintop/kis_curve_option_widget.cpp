@@ -60,7 +60,7 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QS
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SLOT(updateLabelsOfCurrentSensor()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateSensorCurveLabels(KisDynamicSensorSP)));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateCurve(KisDynamicSensorSP)));
-    connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(slotStateChanged()));
+    connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(slotUseSameCurveChanged()));
 
 
     // set all the icons for the curve preset shapes
@@ -113,9 +113,14 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP 
 
     m_curveOption->readOptionSetting(setting);
 
+    // Signals needs to be blocked, otherwise checking the checkbox will trigger
+    //   setting the common curve to the widget curve, which is incorrect in this case.
+    bool blockedBefore = m_curveOptionWidget->checkBoxUseSameCurve->blockSignals(true);
+    m_curveOptionWidget->checkBoxUseSameCurve->setChecked(m_curveOption->isSameCurveUsed());
+    m_curveOptionWidget->checkBoxUseSameCurve->blockSignals(blockedBefore);
+
     m_curveOptionWidget->checkBoxUseCurve->setChecked(m_curveOption->isCurveUsed());
     m_curveOptionWidget->strengthSlider->setValue(m_curveOption->value()*100);
-    m_curveOptionWidget->checkBoxUseSameCurve->setChecked(m_curveOption->isSameCurveUsed());
     m_curveOptionWidget->curveMode->setCurrentIndex(m_curveOption->getCurveMode());
 
     disableWidgets(!m_curveOption->isCurveUsed());
@@ -124,11 +129,6 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP 
     m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->activeSensors().first());
     updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
     updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
-
-    if (m_curveOption->isSameCurveUsed()) {
-        // make sure the curve is transfered to all sensors to avoid updating from a wrong curve later
-        transferCurve();
-    }
 }
 
 void KisCurveOptionWidget::lodLimitations(KisPaintopLodLimitations *l) const
@@ -163,18 +163,25 @@ QWidget* KisCurveOptionWidget::curveWidget()
 
 void KisCurveOptionWidget::slotModified()
 {
-    transferCurve();
+    if (!m_curveOption->isSameCurveUsed()) {
+        m_curveOptionWidget->sensorSelector->currentHighlighted()->setCurve(getWidgetCurve());
+    } else {
+        m_curveOption->setCommonCurve(getWidgetCurve());
+    }
+    emitSettingChanged();
 }
 
-void KisCurveOptionWidget::slotStateChanged()
+void KisCurveOptionWidget::slotUseSameCurveChanged()
 {
-    transferCurve();
-}
-
-
-void KisCurveOptionWidget::transferCurve()
-{
-    m_curveOptionWidget->sensorSelector->setCurrentCurve(m_curveOptionWidget->curveWidget->curve(), m_curveOptionWidget->checkBoxUseSameCurve->isChecked());
+    // this is a slot that answers on "Share Curve across all settings" checkbox
+    m_curveOption->setUseSameCurve(m_curveOptionWidget->checkBoxUseSameCurve->isChecked());
+    if (m_curveOption->isSameCurveUsed()) {
+        // !(UseSameCurve) => UseSameCurve
+        // set the current curve to the common curve
+        m_curveOption->setCommonCurve(getWidgetCurve());
+    } else {
+        updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
+    }
     emitSettingChanged();
 }
 
@@ -204,7 +211,8 @@ void KisCurveOptionWidget::updateCurve(KisDynamicSensorSP sensor)
 {
     if (sensor) {
         bool blockSignal = m_curveOptionWidget->curveWidget->blockSignals(true);
-        m_curveOptionWidget->curveWidget->setCurve(sensor->curve());
+        KisCubicCurve curve = m_curveOption->isSameCurveUsed() ? m_curveOption->getCommonCurve() : sensor->curve();
+        m_curveOptionWidget->curveWidget->setCurve(curve);
         m_curveOptionWidget->curveWidget->blockSignals(blockSignal);
     }
 }
@@ -338,3 +346,15 @@ void KisCurveOptionWidget::updateThemedIcons()
 
 }
 
+
+
+
+KisCubicCurve KisCurveOptionWidget::getWidgetCurve()
+{
+    return m_curveOptionWidget->curveWidget->curve();
+}
+
+KisCubicCurve KisCurveOptionWidget::getHighlightedSensorCurve()
+{
+    return m_curveOptionWidget->sensorSelector->currentHighlighted()->curve();
+}

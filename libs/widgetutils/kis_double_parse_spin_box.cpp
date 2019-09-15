@@ -128,12 +128,6 @@ QString KisDoubleParseSpinBox::textFromValue(double val) const
     }
     emit noMoreParsingError();
 
-    double v = KisNumericParser::parseSimpleMathExpr(veryCleanText());
-    v = QString("%1").arg(v, 0, 'f', decimals()).toDouble();
-    if (hasFocus() && (v == value() || (v > maximum() && value() == maximum()) || (v < minimum() && value() == minimum())) ) { //solve a very annoying bug where the formula can collapse while editing. With this trick the formula is not lost until focus is lost.
-        return veryCleanText();
-    }
-
     return QDoubleSpinBox::textFromValue(val);
 }
 

@@ -296,6 +296,7 @@ KisImportExportErrorCode KisXCFImport::convert(KisDocument *document, QIODevice 
                     want.r = want.l + TILE_WIDTH;
                     Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.mask, want);
                     if (tile == XCF_PTR_EMPTY) {
+                        delete tile;
                         return ImportExportCodes::FileFormatIncorrect;
                     }
                     KisHLineIteratorSP it = mask->paintDevice()->createHLineIteratorNG(x, y, TILE_WIDTH);
@@ -307,7 +308,7 @@ KisImportExportErrorCode KisXCFImport::convert(KisDocument *document, QIODevice 
                         } while (it->nextPixel());
                         it->nextRow();
                     }
-
+                    delete tile;
                 }
             }
             mask->paintDevice()->setX(left);

@@ -108,6 +108,9 @@ public Q_SLOTS:
     void slotConfigChanged();
     void slotPixelGridModeChanged();
 
+private Q_SLOTS:
+    void slotShowFloatingMessage(const QString &message, int timeout, bool priority);
+
 protected: // KisCanvasWidgetBase
     bool callFocusNextPrevChild(bool next) override;
 

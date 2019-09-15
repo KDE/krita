@@ -23,25 +23,21 @@
 
 
 KisFreehandStrokeInfo::KisFreehandStrokeInfo()
-    : painter(new KisPainter()),
-      dragDistance(new KisDistanceInformation()),
-      m_parentStrokeInfo(0),
-      m_childStrokeInfo(0)
+    : painter(new KisPainter())
+    , dragDistance(new KisDistanceInformation())
 {
 }
 
 KisFreehandStrokeInfo::KisFreehandStrokeInfo(const KisDistanceInformation &startDist)
-    : painter(new KisPainter()),
-      dragDistance(new KisDistanceInformation(startDist)),
-      m_parentStrokeInfo(0),
-      m_childStrokeInfo(0)
+    : painter(new KisPainter())
+    , dragDistance(new KisDistanceInformation(startDist))
 {
 }
 
 KisFreehandStrokeInfo::KisFreehandStrokeInfo(KisFreehandStrokeInfo *rhs, int levelOfDetail)
-    : painter(new KisPainter()),
-      dragDistance(new KisDistanceInformation(*rhs->dragDistance, levelOfDetail)),
-      m_parentStrokeInfo(rhs)
+    : painter(new KisPainter())
+    , dragDistance(new KisDistanceInformation(*rhs->dragDistance, levelOfDetail))
+    , m_parentStrokeInfo(rhs)
 {
     rhs->m_childStrokeInfo = this;
 }

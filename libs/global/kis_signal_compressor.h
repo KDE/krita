@@ -31,14 +31,14 @@ class QTimer;
  * where this is used is to limit the amount of expensive redraw activity on the
  * canvas.
  *
- * There are three behaviors to choose from.
+ * There are four behaviors to choose from.
  *
  * POSTPONE resets the timer after each call. Therefore if the calls are made
  * quickly enough, the timer will never be activated.
  *
  * FIRST_ACTIVE_POSTPONE_NEXT emits the first signal and postpones all
- * the other actions the other action like in POSTPONE. This mode is
- * used e.g.  in move/remove layer functionality. If you remove a
+ * the other actions like in POSTPONE. This mode is
+ * used e.g. in move/remove layer functionality. If you remove a
  * single layer, you'll see the result immediately. But if you want to
  * remove multiple layers, you should wait until all the actions are
  * finished.

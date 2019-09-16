@@ -546,19 +546,10 @@ void KisKeyframingTest::testCycles()
     KisKeyframeSP frame16 = channel->addKeyframe(16);
     channel->addKeyframe(20);
 
-    auto cmd = channel->createCycle({10, 19});
-    cmd->redo();
+    QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
+    channel->createRepeat(30, {10, 19}, cmd.data());
 
-    // Cycled range can be queried from by any frame within it
-    QCOMPARE(channel->cycledRangeAt(9), KisTimeSpan());
-    QCOMPARE(channel->cycledRangeAt(20), KisTimeSpan());
-    QCOMPARE(channel->cycledRangeAt(10), KisTimeSpan(10, 19));
-    QCOMPARE(channel->cycledRangeAt(19), KisTimeSpan(10, 19));
-
-    QSharedPointer<KisRepeatFrame> repeatFrame = toQShared(new KisRepeatFrame(channel, 30, {10, 19}));
-    KisReplaceKeyframeCommand(channel, 30, repeatFrame, nullptr).redo();
-
-    // Repeats also resolve to the original cycled range
+    // Repeats resolve to the original cycled range
     QCOMPARE(channel->cycledRangeAt(29), KisTimeSpan());
     QCOMPARE(channel->cycledRangeAt(30), KisTimeSpan(10, 19));
     QCOMPARE(channel->cycledRangeAt(50), KisTimeSpan(10, 19));

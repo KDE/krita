@@ -32,7 +32,6 @@
 
 class KisFrameSet;
 class KisTimeSpan;
-class KisAnimationCycle;
 class KisRepeatFrame;
 class KisRangedKeyframeIterator;
 class KisVisibleKeyframeIterator;
@@ -78,9 +77,7 @@ public:
     virtual KisKeyframeSP linkKeyframe(const KisKeyframeBaseSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
     KisKeyframeSP copyExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
 
-    KisDefineCycleCommand * createCycle(KisTimeSpan range, KUndo2Command *parentCommand = 0);
-    KUndo2Command * deleteCycle(QSharedPointer<KisAnimationCycle> cycle, KUndo2Command *parentCommand = 0);
-    QSharedPointer<KisRepeatFrame> addRepeat(QSharedPointer<KisAnimationCycle> cycle, int time, KUndo2Command *parentCommand);
+    QSharedPointer<KisRepeatFrame> createRepeat(int time, KisTimeSpan sourceRange, KUndo2Command *parentCommand);
 
     bool swapExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
 
@@ -105,19 +102,13 @@ public:
 
     KisVisibleKeyframeIterator visibleKeyframesFrom(int time) const;
 
-    QList<QSharedPointer<KisAnimationCycle>> cycles() const;
+    QList<QSharedPointer<KisRepeatFrame>> cycles() const;
 
     /**
      * Finds the original range of the cycle defined or repeated at the given time.
      * @arg time a time at any frame within the original cycle or any repeat of it.
      */
     KisTimeSpan cycledRangeAt(int time) const;
-
-    /**
-     * Finds the cycle defined at time, if any.
-     * @arg time a time within the original range of the cycle.
-     */
-    QSharedPointer<KisAnimationCycle> cycleAt(int time) const;
 
     /**
      * Finds the repeat of a cycle at the time, if any.
@@ -202,18 +193,13 @@ private:
     void moveKeyframeImpl(KisKeyframeBaseSP keyframe, int newTime);
     void swapKeyframesImpl(KisKeyframeBaseSP lhsKeyframe, KisKeyframeBaseSP rhsKeyframe);
 
-    void addCycle(QSharedPointer<KisAnimationCycle> cycle);
-    void removeCycle(QSharedPointer<KisAnimationCycle> cycle);
-
     friend class KisReplaceKeyframeCommand;
     friend class KisSwapFramesCommand;
-    friend class KisDefineCycleCommand;
-
     friend class KisRangedKeyframeIterator;
 
 private:
     KisKeyframeSP insertKeyframe(int time, const KisKeyframeBaseSP copySrc, KUndo2Command *parentCommand);
-    QSharedPointer<KisAnimationCycle> loadCycle(const QDomElement &cycleElement);
+    QSharedPointer<KisRepeatFrame> loadCycle(const QDomElement &cycleElement);
 
     struct Private;
     QScopedPointer<Private> m_d;

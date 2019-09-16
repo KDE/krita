@@ -5,9 +5,6 @@
 #include <kis_pointer_utils.h>
 #include <KisCollectionUtils.h>
 #include "kis_time_range.h"
-#include "kis_animation_cycle.h"
-
-using CycleSP = QSharedPointer<KisAnimationCycle>;
 
 KisReplaceKeyframeCommand::KisReplaceKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeBaseSP keyframe,
                                                      KUndo2Command *parentCommand)
@@ -80,38 +77,4 @@ void KisSwapFramesCommand::redo()
 void KisSwapFramesCommand::undo()
 {
     m_channel->swapKeyframesImpl(m_lhsFrame, m_rhsFrame);
-}
-
-KisDefineCycleCommand::KisDefineCycleCommand(CycleSP oldCycle, CycleSP newCycle, KUndo2Command *parentCommand)
-    : KUndo2Command(parentCommand)
-    , m_channel(oldCycle ? oldCycle->channel() : newCycle->channel())
-    , m_oldCycle(oldCycle)
-    , m_newCycle(newCycle)
-{}
-
-void KisDefineCycleCommand::redo()
-{
-    if (m_oldCycle) {
-        m_channel->removeCycle(m_oldCycle);
-    }
-
-    if (m_newCycle) {
-        m_channel->addCycle(m_newCycle);
-    }
-}
-
-void KisDefineCycleCommand::undo()
-{
-    if (m_newCycle) {
-        m_channel->removeCycle(m_newCycle);
-    }
-
-    if (m_oldCycle) {
-        m_channel->addCycle(m_oldCycle);
-    }
-}
-
-QSharedPointer<KisAnimationCycle> KisDefineCycleCommand::cycle() const
-{
-    return m_newCycle;
 }

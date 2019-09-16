@@ -65,9 +65,6 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
     if (configuration) {
         channelFlags = configuration->channelFlags();
     }
-    if (channelFlags.isEmpty() || !configuration) {
-        channelFlags = device->colorSpace()->channelFlags();
-    }
 
     KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobelVector;
     if (configuration->getString("type") == "prewitt") {

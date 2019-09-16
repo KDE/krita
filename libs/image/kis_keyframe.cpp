@@ -62,6 +62,14 @@ void KisKeyframeBase::setTime(int time)
     m_d->time = time;
 }
 
+int KisKeyframeBase::duration() const
+{
+    KisKeyframeBaseSP next = m_d->channel->nextItem(m_d->time);
+    if (!next) return -1;
+
+    return next->time() - m_d->time;
+}
+
 struct KisKeyframe::Private
 {
     InterpolationMode interpolationMode{Constant};

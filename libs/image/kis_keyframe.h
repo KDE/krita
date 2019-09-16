@@ -39,6 +39,7 @@ public:
     int time() const;
     void setTime(int time);
 
+    int duration() const;
     virtual QRect affectedRect() const = 0;
     virtual KisKeyframeSP getOriginalKeyframeFor(int time) const = 0;
 

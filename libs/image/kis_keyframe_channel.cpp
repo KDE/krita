@@ -532,6 +532,12 @@ KisKeyframeBaseSP KisKeyframeChannel::previousItem(const KisKeyframeBase &item) 
     return repeat;
 }
 
+KisKeyframeBaseSP KisKeyframeChannel::nextItem(int time) const
+{
+    const KisKeyframeBaseSP activeItem = activeItemAt(time);
+    return activeItem ? nextItem(*activeItem) : nullptr;
+}
+
 KisRangedKeyframeIterator KisKeyframeChannel::itemsWithin(KisTimeSpan range) const
 {
     return KisRangedKeyframeIterator(this, range);

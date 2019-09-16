@@ -101,6 +101,7 @@ public:
     KisKeyframeBaseSP nextItem(const KisKeyframeBase &item) const;
     KisKeyframeBaseSP previousItem(const KisKeyframeBase &item) const;
     KisRangedKeyframeIterator itemsWithin(KisTimeSpan range) const;
+    KisKeyframeBaseSP nextItem(int time) const;
 
     KisVisibleKeyframeIterator visibleKeyframesFrom(int time) const;
 

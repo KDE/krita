@@ -26,36 +26,6 @@ class KisTimeSpan;
 class KisFrameSet;
 class KisRepeatFrame;
 
-class KRITAIMAGE_EXPORT KisAnimationCycle {
-
-public:
-    KisAnimationCycle(KisKeyframeChannel *channel, KisTimeSpan sourceRange);
-    KisAnimationCycle(const KisAnimationCycle &cycle, KisTimeSpan newRange);
-
-    KisKeyframeChannel *channel() const;
-
-    /**
-     * The full source range repeated by the cycle.
-     */
-    KisTimeSpan originalRange() const;
-    int duration() const;
-
-    void addRepeat(QSharedPointer<KisRepeatFrame> repeat);
-    void removeRepeat(QSharedPointer<KisRepeatFrame> repeat);
-    const QVector<QWeakPointer<KisRepeatFrame>>& repeats() const;
-
-    QRect affectedRect() const;
-
-    KisFrameSet instancesWithin(KisKeyframeSP original, KisTimeSpan range) const;
-
-private:
-    friend class KisKeyframeChannel;
-
-    KisKeyframeChannel *m_channel;
-    KisTimeSpan m_range;
-    QVector<QWeakPointer<KisRepeatFrame>> m_repeats;
-};
-
 class KRITAIMAGE_EXPORT KisRepeatFrame : public KisKeyframeBase
 {
 public:

@@ -78,6 +78,13 @@ public:
     void setType(char type);
     char handleType() const;
 
+    /**
+     * Returns the pointer to the "chief" assistant,
+     * which is supposed to handle transformations of the
+     * handle, when all the assistants are transformed
+     */
+    KisPaintingAssistant* chiefAssistant() const;
+
 private:
     void registerAssistant(KisPaintingAssistant*);
     void unregisterAssistant(KisPaintingAssistant*);

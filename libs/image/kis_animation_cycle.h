@@ -59,17 +59,27 @@ private:
 class KRITAIMAGE_EXPORT KisRepeatFrame : public KisKeyframeBase
 {
 public:
-    KisRepeatFrame(KisKeyframeChannel *channel, int time, QSharedPointer<KisAnimationCycle> cycle);
-
-    QSharedPointer<KisAnimationCycle> cycle() const;
+    KisRepeatFrame(KisKeyframeChannel *channel, int time, KisTimeSpan sourceRange);
+    KisRepeatFrame(const KisRepeatFrame &rhs, KisTimeSpan newRange);
+    KisRepeatFrame(const KisRepeatFrame &rhs, KisKeyframeChannel *newChannel);
 
     QRect affectedRect() const override;
+
+    KisTimeSpan sourceRange() const;
 
     int getOriginalTimeFor(int time) const;
     KisKeyframeSP getOriginalKeyframeFor(int time) const override;
 
     /// Returns the earliest time the original frame appears in this repeat, or -1 if it never does.
     int firstInstanceOf(int originalTime) const;
+
+    /**
+     * Finds the frames on which the given original keyframe is displayed by the repeat.
+     * If a non-empty range is given, the result will contain only matching frames.
+     * If an empty range is given, the result may also contain other frames between repeated ones,
+     * such as when the repeat continues infinitely.
+     */
+    KisFrameSet instancesWithin(KisKeyframeSP original, KisTimeSpan range) const;
 
     /** Returns the time at which the previous frame within the repeat appears,
      * or -1 if time is at the first repeated frame.
@@ -90,7 +100,7 @@ public:
     int lastFrame() const;
 
 private:
-    QSharedPointer<KisAnimationCycle> m_cycle;
+    KisTimeSpan m_range;
 };
 
 #endif

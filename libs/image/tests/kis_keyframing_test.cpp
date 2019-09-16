@@ -555,7 +555,7 @@ void KisKeyframingTest::testCycles()
     QCOMPARE(channel->cycledRangeAt(10), KisTimeSpan(10, 19));
     QCOMPARE(channel->cycledRangeAt(19), KisTimeSpan(10, 19));
 
-    QSharedPointer<KisRepeatFrame> repeatFrame = toQShared(new KisRepeatFrame(channel, 30, channel->cycleAt(10)));
+    QSharedPointer<KisRepeatFrame> repeatFrame = toQShared(new KisRepeatFrame(channel, 30, {10, 19}));
     KisReplaceKeyframeCommand(channel, 30, repeatFrame, nullptr).redo();
 
     // Repeats also resolve to the original cycled range

@@ -100,7 +100,7 @@ struct KisKeyframeChannel::Private
     void add(KisKeyframeBaseSP item) {
         auto repeat = item.dynamicCast<KisRepeatFrame>();
         if (repeat) {
-            repeat->cycle()->addRepeat(repeat);
+            // repeat->cycle()->addRepeat(repeat);
             repeats.insert(repeat->time(), repeat);
         } else {
             auto keyframe = item.dynamicCast<KisKeyframe>();
@@ -112,7 +112,7 @@ struct KisKeyframeChannel::Private
     void remove(KisKeyframeBaseSP item) {
         auto repeat = item.dynamicCast<KisRepeatFrame>();
         if (repeat) {
-            repeat->cycle()->removeRepeat(repeat);
+            // repeat->cycle()->removeRepeat(repeat);
             repeats.remove(repeat->time());
         } else {
             keys.remove(item->time());
@@ -166,7 +166,7 @@ KisKeyframeChannel::KisKeyframeChannel(const KisKeyframeChannel &rhs, KisNode *n
         Q_FOREACH(auto rhsRepeatWP, rhsCycle->repeats()) {
             const QSharedPointer<KisRepeatFrame> rhsRepeat = rhsRepeatWP.toStrongRef();
             if (rhsRepeat) {
-                m_d->add(toQShared(new KisRepeatFrame(this, rhsRepeat->time(), cycle)));
+                m_d->add(toQShared(new KisRepeatFrame(this, rhsRepeat->time(), cycle->originalRange())));
             }
         }
 
@@ -556,7 +556,7 @@ QList<QSharedPointer<KisAnimationCycle>> KisKeyframeChannel::cycles() const
 KisTimeSpan KisKeyframeChannel::cycledRangeAt(int time) const
 {
     QSharedPointer<KisRepeatFrame> repeat = activeRepeatAt(time);
-    if (repeat) return repeat->cycle()->originalRange();
+    if (repeat) return repeat->sourceRange();
 
     QSharedPointer<KisAnimationCycle> cycle = cycleAt(time);
     if (cycle) return cycle->originalRange();
@@ -790,7 +790,7 @@ QSharedPointer<KisAnimationCycle> KisKeyframeChannel::loadCycle(const QDomElemen
     for (QDomElement grandChildNode = cycleElement.firstChildElement(); !grandChildNode.isNull(); grandChildNode = grandChildNode.nextSiblingElement()) {
         if (grandChildNode.nodeName().toUpper() == "REPEAT") {
             const int time = grandChildNode.attribute("time").toInt();
-            const QSharedPointer<KisRepeatFrame> repeat = toQShared(new KisRepeatFrame(this, time, cycle));
+            const QSharedPointer<KisRepeatFrame> repeat = toQShared(new KisRepeatFrame(this, time, cycle->originalRange()));
             m_d->add(repeat);
         }
     }
@@ -894,7 +894,7 @@ void KisKeyframeChannel::removeCycle(QSharedPointer<KisAnimationCycle> cycle)
 
 QSharedPointer<KisRepeatFrame> KisKeyframeChannel::addRepeat(QSharedPointer<KisAnimationCycle> cycle, int time, KUndo2Command *parentCommand)
 {
-    const QSharedPointer<KisRepeatFrame> repeatFrame = toQShared(new KisRepeatFrame(this, time, cycle));
+    const QSharedPointer<KisRepeatFrame> repeatFrame = toQShared(new KisRepeatFrame(this, time, cycle->originalRange()));
     KUndo2Command *cmd = new KisReplaceKeyframeCommand(this, time, repeatFrame, parentCommand);
     cmd->redo();
 

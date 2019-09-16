@@ -127,25 +127,42 @@ QRect KisAnimationCycle::affectedRect() const
     return rect;
 }
 
-KisRepeatFrame::KisRepeatFrame(KisKeyframeChannel *channel, int time, QSharedPointer<KisAnimationCycle> cycle)
+KisRepeatFrame::KisRepeatFrame(KisKeyframeChannel *channel, int time, KisTimeSpan sourceRange)
         : KisKeyframeBase(channel, time)
-        , m_cycle(cycle)
+        , m_range(sourceRange)
 {}
 
-QSharedPointer<KisAnimationCycle> KisRepeatFrame::cycle() const
-{
-    return m_cycle;
-}
+KisRepeatFrame::KisRepeatFrame(const KisRepeatFrame &rhs, KisTimeSpan newRange)
+    : KisRepeatFrame(rhs.channel(), rhs.time(), newRange)
+{}
+
+KisRepeatFrame::KisRepeatFrame(const KisRepeatFrame &rhs, KisKeyframeChannel *newChannel)
+    : KisRepeatFrame(newChannel, rhs.time(), rhs.m_range)
+{}
 
 QRect KisRepeatFrame::affectedRect() const
 {
-    return m_cycle->affectedRect();
+    QRect rect;
+
+    for (auto keyframe : channel()->itemsWithin(m_range)) {
+        const QSharedPointer<KisKeyframe> key = keyframe.dynamicCast<KisKeyframe>();
+        KIS_SAFE_ASSERT_RECOVER(key) { continue; }
+
+        rect |= key->affectedRect();
+    }
+
+    return rect;
+}
+
+KisTimeSpan KisRepeatFrame::sourceRange() const
+{
+    return m_range;
 }
 
 int KisRepeatFrame::getOriginalTimeFor(int time) const
 {
-    KisTimeSpan originalRange = m_cycle->originalRange();
-    int timeWithinCycle = (time - this->time()) % originalRange.duration();
+    KisTimeSpan originalRange = m_range;
+    const int timeWithinCycle = (time - this->time()) % originalRange.duration();
     return originalRange.start() + timeWithinCycle;
 }
 
@@ -156,15 +173,53 @@ KisKeyframeSP KisRepeatFrame::getOriginalKeyframeFor(int time) const
 
 int KisRepeatFrame::firstInstanceOf(int originalTime) const
 {
-    KisTimeSpan originalRange = m_cycle->originalRange();
-    const int timeWithinCycle = originalTime - originalRange.start();
+    const int timeWithinCycle = originalTime - m_range.start();
 
-    const int first = this->time() + timeWithinCycle;
+    if (timeWithinCycle < this->duration()) return -1;
 
-    const KisKeyframeSP next = channel()->nextKeyframe(time());
-    if (next && next->time() < first) return -1;
+    return this->time() + timeWithinCycle;
+}
 
-    return first;
+KisFrameSet KisRepeatFrame::instancesWithin(KisKeyframeSP original, KisTimeSpan range) const
+{
+    const int originalTime = original->time();
+    const int interval = m_range.duration();
+    const int lastOfCycle = lastFrame();
+
+    const int originalFrameDuration = original->duration();
+    const int repeatDuration = (originalTime + originalFrameDuration < m_range.end())
+        ? originalFrameDuration : (m_range.end() - originalTime);
+
+    QVector<KisTimeSpan> spans;
+
+    int firstInstance = firstInstanceOf(originalTime);
+
+    if (firstInstance == -1) {
+      return {};
+    } else if (range.isEmpty() && lastOfCycle == -1) {
+        return KisFrameSet::infiniteFrom(firstInstance);
+    } else {
+        // Determine the relevant range to consider, ie. the overlap of repeat and the given range (if any)
+        const int firstFrame = KisTime::max(range.start(), time());
+        const int lastFrame = KisTime::min(lastOfCycle, range.end());
+
+        // Skip to the first instance overlapping with the range
+        const int firstInstanceEnd = firstInstance + repeatDuration - 1;
+        if (firstInstanceEnd < firstFrame) {
+            const int repetitionsToSkip = (firstFrame - firstInstanceEnd) / interval;
+            firstInstance += interval * repetitionsToSkip;
+        }
+
+        // Find the range of each repeat
+        for (int repeatTime = firstInstance; repeatTime <= lastFrame; repeatTime += interval) {
+            const int repeatStartTime = (repeatTime >= firstFrame) ? repeatTime : firstFrame;
+            const bool endsWithinRange = repeatDuration != -1 && repeatTime + repeatDuration - 1 <= lastFrame;
+            const int repeatEndTime = endsWithinRange ? (repeatTime + repeatDuration - 1) : lastFrame;
+            spans.append(KisTimeSpan(repeatStartTime, repeatEndTime));
+        }
+    }
+
+    return KisFrameSet(spans);
 }
 
 int KisRepeatFrame::previousVisibleFrame(int time) const

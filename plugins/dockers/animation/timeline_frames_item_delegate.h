@@ -21,11 +21,12 @@
 
 #include <QItemDelegate>
 
+class TimelineCycleRange;
 
 class TimelineFramesItemDelegate : public QItemDelegate
 {
 public:
-    TimelineFramesItemDelegate(QObject *parent);
+    TimelineFramesItemDelegate(QObject *parent, TimelineCycleRange *cycleRangeDelegate);
     ~TimelineFramesItemDelegate() override;
 
     static void paintActiveFrameSelector(QPainter *painter, const QRect &rc, bool isCurrentFrame);
@@ -43,6 +44,7 @@ public:
 
 private:
     QVector<QColor> labelColors;
+    TimelineCycleRange *timelineCycleRange;
 
     void drawCycleMarker(QPainter *painter, const QRect &rc, const QColor &fgColor, const QColor &bgColor, int cycleMode) const;
 };

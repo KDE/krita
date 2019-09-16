@@ -65,7 +65,8 @@ struct TimelineFramesView::Private
           dragInProgress(false),
           dragWasSuccessful(false),
           modifiersCatcher(0),
-          selectionChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE)
+          selectionChangedCompressor(300, KisSignalCompressor::FIRST_INACTIVE),
+          timelineCycleRange(_q)
     {}
 
     TimelineFramesView *q;
@@ -109,6 +110,8 @@ struct TimelineFramesView::Private
     Qt::KeyboardModifiers lastPressedModifier;
     KisSignalCompressor selectionChangedCompressor;
 
+    TimelineCycleRange timelineCycleRange;
+
     QStyleOptionViewItem viewOptionsV4() const;
     QItemViewPaintPairs draggablePaintPairs(const QModelIndexList &indexes, QRect *r) const;
     QPixmap renderToPixmap(const QModelIndexList &indexes, QRect *r) const;
@@ -130,13 +133,15 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     setSelectionBehavior(QAbstractItemView::SelectItems);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    setItemDelegate(new TimelineFramesItemDelegate(this));
+    setItemDelegate(new TimelineFramesItemDelegate(this, &m_d->timelineCycleRange));
 
     setDragEnabled(true);
     setDragDropMode(QAbstractItemView::DragDrop);
     setAcceptDrops(true);
     setDropIndicatorShown(true);
     setDefaultDropAction(Qt::MoveAction);
+
+    setMouseTracking(true);
 
     m_d->horizontalRuler = new TimelineRulerHeader(this);
     this->setHorizontalHeader(m_d->horizontalRuler);
@@ -354,14 +359,8 @@ void TimelineFramesView::setActionManager(KisActionManager *actionManager)
         action = m_d->actionMan->createAction("update_playback_range");
         connect(action, SIGNAL(triggered()), SLOT(slotUpdatePlackbackRange()));
 
-        action = m_d->actionMan->createAction("define_animation_cycle");
-        connect(action, SIGNAL(triggered()), SLOT(slotDefineCycle()));
-
-        action = m_d->actionMan->createAction("delete_animation_cycle");
-        connect(action, SIGNAL(triggered()), SLOT(slotDeleteCycle()));
-
-        action = m_d->actionMan->createAction("add_animation_repeat");
-        connect(action, SIGNAL(triggered()), SLOT(slotAddRepeat()));
+        action = m_d->actionMan->createAction("create_animation_cycle");
+        connect(action, SIGNAL(triggered()), SLOT(slotCreateCycle()));
     }
 }
 
@@ -563,6 +562,8 @@ void TimelineFramesView::slotUpdateInfiniteFramesCount()
 
 void TimelineFramesView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
+    m_d->timelineCycleRange.updateRange();
+
     QTableView::currentChanged(current, previous);
 
     if (previous.column() != current.column()) {
@@ -932,14 +933,11 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
 
     if (selectionExists) {
         KisActionManager::safePopulateMenu(menu, "update_playback_range", m_d->actionMan);
-        KisActionManager::safePopulateMenu(menu, "define_animation_cycle", m_d->actionMan);
-        KisActionManager::safePopulateMenu(menu, "delete_animation_cycle", m_d->actionMan);
+        KisActionManager::safePopulateMenu(menu, "create_animation_cycle", m_d->actionMan);
     } else {
         KisActionManager::safePopulateMenu(menu, "set_start_time", m_d->actionMan);
         KisActionManager::safePopulateMenu(menu, "set_end_time", m_d->actionMan);
     }
-
-    KisActionManager::safePopulateMenu(menu, "add_animation_repeat", m_d->actionMan);
 
     menu->addSeparator();
 
@@ -1000,6 +998,10 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
         event->accept();
 
     } else if (event->button() == Qt::RightButton) {
+        if (m_d->timelineCycleRange.isAdjusting()) {
+            m_d->timelineCycleRange.cancelAdjustment();
+            return;
+        }
 
         int numSelectedItems = selectionModel()->selectedIndexes().size();
 
@@ -1012,7 +1014,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             setCurrentIndex(index);
 
             if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool() ||
-                    model()->data(index, TimelineFramesModel::SpecialKeyframeExists).toBool()) {
+                model()->data(index, TimelineFramesModel::SpecialKeyframeExists).toBool()) {
 
                 {
                     KisSignalsBlocker b(m_d->colorSelector);
@@ -1081,6 +1083,8 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             m_d->tip.showTip(this, event->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option, index);
         }
         event->accept();
+    } else if (m_d->timelineCycleRange.beginAdjustment(event->pos())) {
+        return;
     } else {
         if (index.isValid()) {
             m_d->model->setLastClickedIndex(index);
@@ -1117,18 +1121,32 @@ void TimelineFramesView::mouseMoveEvent(QMouseEvent *e)
             QStyleOptionViewItem option = viewOptions();
             option.rect = visualRect(index);
             // The offset of the headers is needed to get the correct position inside the view.
-            m_d->tip.showTip(this, e->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option, index);
+            m_d->tip.showTip(this, e->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option,
+                             index);
         }
         e->accept();
-    } else {
+    } else if (m_d->timelineCycleRange.isAdjusting()) {
+        m_d->timelineCycleRange.continueAdjustment(e->pos());
+    } else if (e->buttons() == Qt::LeftButton) {
         m_d->model->setScrubState(true);
         QTableView::mouseMoveEvent(e);
+    } else {
+        TimelineCycleRange::Handle cycleAdjustmentHandle = m_d->timelineCycleRange.handleAt(e->pos());
+        if (cycleAdjustmentHandle != TimelineCycleRange::Handle::None) {
+            setCursor(Qt::SizeHorCursor);
+        } else {
+            setCursor(Qt::ArrowCursor);
+        }
     }
 }
 
 void TimelineFramesView::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
+    if (m_d->timelineCycleRange.isAdjusting()) {
+        const QVariant range = qVariantFromValue(m_d->timelineCycleRange.range());
+        m_d->model->setData(currentIndex(), range, TimelineFramesModel::CycledRange);
+        m_d->timelineCycleRange.acceptAdjustment();
+    } else if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
         e->accept();
     } else {
         m_d->model->setScrubState(false);
@@ -1450,31 +1468,14 @@ void TimelineFramesView::slotMirrorFrames(bool entireColumn)
     }
 }
 
-void TimelineFramesView::slotDefineCycle()
+void TimelineFramesView::slotCreateCycle()
 {
     QSet<int> rows;
     int minColumn = 0, maxColumn = 0;
 
     calculateSelectionMetrics(minColumn, maxColumn, rows);
 
-    m_d->model->defineCycles(minColumn, maxColumn, rows);
-}
-
-void TimelineFramesView::slotDeleteCycle()
-{
-    QSet<int> rows;
-    int minColumn = 0, maxColumn = 0;
-
-    calculateSelectionMetrics(minColumn, maxColumn, rows);
-    m_d->model->deleteCycles(minColumn, maxColumn, rows);
-}
-
-void TimelineFramesView::slotAddRepeat()
-{
-    const QModelIndex current = currentIndex();
-    if (!current.isValid()) return;
-
-    m_d->model->addRepeatAt(currentIndex());
+    m_d->model->defineCycles(currentIndex().column() + 1, {minColumn, maxColumn}, rows);
 }
 
 void TimelineFramesView::cutCopyImpl(bool entireColumn, bool copy)
@@ -1540,4 +1541,112 @@ bool TimelineFramesView::viewportEvent(QEvent *event)
     }
 
     return QTableView::viewportEvent(event);
+}
+
+TimelineCycleRange::TimelineCycleRange(TimelineFramesView *view)
+    : m_view(view)
+{}
+
+KisTimeSpan TimelineCycleRange::range() const
+{
+    return m_currentRange;
+}
+
+int TimelineCycleRange::row() const
+{
+    return m_view->currentIndex().row();
+}
+
+bool TimelineCycleRange::isAdjusting() const
+{
+    return (m_activeHandle != Handle::None);
+}
+
+TimelineCycleRange::Handle TimelineCycleRange::handleAt(QPoint mousePosition) const
+{
+    Handle handle = Handle::None;
+
+    QModelIndex index = m_view->indexAt(mousePosition);
+    if (index.isValid() && index.row() == row()) {
+        const int time = index.column();
+        const QRect frameRect = m_view->visualRect(index);
+        const bool onLeft = mousePosition.x() < frameRect.left() + frameRect.width() / 3;
+        const bool onRight = mousePosition.x() > frameRect.right() - frameRect.width() / 3;
+
+        if (time == m_currentRange.start() && onLeft) {
+            handle = Handle::RangeStart;
+        } else if (time == m_currentRange.end() && onRight) {
+            handle = Handle::RangeEnd;
+        }
+    }
+
+    return handle;
+}
+
+void TimelineCycleRange::updateRange()
+{
+    const KisTimeSpan oldRange = m_currentRange;
+
+    const QModelIndex currentIndex = m_view->currentIndex();
+    if (!currentIndex.isValid()) {
+        m_currentRange = KisTimeSpan();
+    } else {
+        m_currentRange = currentIndex.data(TimelineFramesModel::CycledRange).value<KisTimeSpan>();
+    }
+
+    if (m_currentRange != oldRange) {
+        updateView(oldRange | m_currentRange);
+    }
+}
+
+bool TimelineCycleRange::beginAdjustment(QPoint mousePosition)
+{
+    m_activeHandle = handleAt(mousePosition);
+
+    return isAdjusting();
+}
+
+void TimelineCycleRange::continueAdjustment(QPoint mousePosition)
+{
+    const KisTimeSpan oldRange = m_currentRange;
+    
+    const int frameWidth = m_view->columnWidth(0);
+    const int newTime = m_view->columnAt(mousePosition.x() - frameWidth / 2);
+
+    switch (m_activeHandle) {
+        case Handle::None:
+            break;
+
+        case Handle::RangeStart:
+            m_currentRange = m_currentRange.startMoved(newTime);
+            break;
+
+        case Handle::RangeEnd:
+            m_currentRange = m_currentRange.endMoved(newTime);
+            break;
+
+    }
+
+    updateView(oldRange | m_currentRange);
+}
+
+void TimelineCycleRange::cancelAdjustment()
+{
+    m_activeHandle = Handle::None;
+
+    m_currentRange = m_view->currentIndex().data(TimelineFramesModel::CycledRange).value<KisTimeSpan>();
+}
+
+void TimelineCycleRange::acceptAdjustment()
+{
+    m_activeHandle = Handle::None;
+}
+
+void TimelineCycleRange::updateView(KisTimeSpan changedRange)
+{
+    const QAbstractItemModel *model = m_view->model();
+    const QModelIndex firstIndex = model->index(row(), changedRange.start(), QModelIndex());
+    const QModelIndex lastIndex = model->index(row(), changedRange.end(), QModelIndex());
+    const QRect rect = m_view->visualRect(firstIndex) | m_view->visualRect(lastIndex);
+    m_view->viewport()->update(rect);
 }

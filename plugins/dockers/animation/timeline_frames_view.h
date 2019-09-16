@@ -22,6 +22,8 @@
 
 #include <QScopedPointer>
 #include <QTableView>
+#include <libs/image/kis_time_range.h>
+#include <libs/image/kis_animation_cycle.h>
 #include "kis_action_manager.h"
 #include "kritaanimationdocker_export.h"
 
@@ -107,9 +109,7 @@ private Q_SLOTS:
     void slotMirrorFrames(bool entireColumn = false);
     void slotMirrorColumns() {slotMirrorFrames(true);}
 
-    void slotDefineCycle();
-    void slotDeleteCycle();
-    void slotAddRepeat();
+    void slotCreateCycle();
 
     // Copy-paste
     void slotCopyFrames() {cutCopyImpl(false, true);}
@@ -185,6 +185,35 @@ protected:
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
+};
+
+class TimelineCycleRange
+{
+public:
+    enum class Handle { None, RangeStart, RangeEnd };
+
+    explicit TimelineCycleRange(TimelineFramesView *view);
+
+    KisTimeSpan range() const;
+    int row() const;
+    bool isAdjusting() const;
+    Handle handleAt(QPoint mousePosition) const;
+
+    void updateRange();
+
+    bool beginAdjustment(QPoint mousePosition);
+    void continueAdjustment(QPoint mousePosition);
+    void cancelAdjustment();
+    void acceptAdjustment();
+
+private:
+    TimelineFramesView *m_view;
+
+    KisTimeSpan m_currentRange;
+
+    Handle m_activeHandle{Handle::None};
+
+    void updateView(KisTimeSpan changedRange);
 };
 
 #endif /* __TIMELINE_FRAMES_VIEW_H */

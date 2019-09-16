@@ -24,11 +24,13 @@
 #include "krita_utils.h"
 #include "timeline_frames_model.h"
 #include "timeline_color_scheme.h"
+#include "timeline_frames_view.h"
 
 #include "kis_node_view_color_scheme.h"
 
-TimelineFramesItemDelegate::TimelineFramesItemDelegate(QObject *parent)
+TimelineFramesItemDelegate::TimelineFramesItemDelegate(QObject *parent, TimelineCycleRange *cycleRangeDelegate)
     : QItemDelegate(parent)
+    , timelineCycleRange(cycleRangeDelegate)
 {
     KisNodeViewColorScheme scm;
     labelColors = scm.allColorLabels();
@@ -176,6 +178,18 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
 
     // pass of hold frame line
     int cycleMode = index.data(TimelineFramesModel::FrameCycleMode).toInt();
+
+    KisTimeSpan cycledRange;
+    if (timelineCycleRange->row() == index.row()) {
+        cycledRange = timelineCycleRange->range();
+
+        if (cycledRange.contains(index.column())) {
+            cycleMode =
+                    (index.column() == cycledRange.start()) ? TimelineFramesModel::CycleMode::BeginsCycle :
+                    (index.column() == cycledRange.end()) ? TimelineFramesModel::CycleMode::EndsCycle :
+                    TimelineFramesModel::CycleMode::ContinuesCycle;
+        }
+    }
 
     if (cycleMode != TimelineFramesModel::NoCycle) {
         const QColor bgColor = hasContentFrame && hasContent ? color : baseColor;

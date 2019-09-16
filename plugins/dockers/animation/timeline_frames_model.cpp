@@ -164,28 +164,50 @@ struct TimelineFramesModel::Private
         return dummy->node()->colorLabelIndex();
     }
 
-    CycleMode frameCycleMode(int row, int time) const{
+    CycleMode frameCycleMode(int row, int time, int activeFrame) const{
         KisKeyframeChannel *primaryChannel = getChannel(row, KisKeyframeChannel::Content.id());
         if (!primaryChannel) return NoCycle;
 
-        const QSharedPointer<KisAnimationCycle> cycle = primaryChannel->cycleAt(time);
         const QSharedPointer<KisRepeatFrame> repeat = primaryChannel->activeRepeatAt(time);
 
         if (repeat) {
-            const KisTimeSpan range = repeat->cycle()->originalRange();
+            const KisTimeSpan range = repeat->sourceRange();
             const int originalTime = repeat->getOriginalTimeFor(time);
             if (originalTime == range.start()) return BeginsRepeat;
             if (originalTime == range.end()) return EndsRepeat;
             return ContinuesRepeat;
-        } else if (cycle) {
-            const KisTimeSpan range = cycle->originalRange();
+        }
+
+        const QSharedPointer<KisRepeatFrame> playheadRepeat = primaryChannel->activeItemAt(
+                activeFrame).dynamicCast<KisRepeatFrame>();
+        if (playheadRepeat) {
+            const KisTimeSpan range = repeat->sourceRange();
             if (time == range.start()) return BeginsCycle;
             if (time == range.end()) return EndsCycle;
             return ContinuesCycle;
-        }
-
+        } 
+        
         return NoCycle;
     };
+
+    KisTimeSpan cycledRange(int row, int time) const {
+        KisKeyframeChannel *primaryChannel = getChannel(row, KisKeyframeChannel::Content.id());
+        if (!primaryChannel) return KisTimeSpan();
+
+        return primaryChannel->cycledRangeAt(time);
+    }
+
+    void setCycleRange(int row, int time, KisTimeSpan newRange) {
+        KisKeyframeChannel *channel = getChannel(row, KisKeyframeChannel::Content.id());
+        if (!channel) return;
+
+        const QSharedPointer<KisRepeatFrame> repeatFrame = channel->activeRepeatAt(time);
+        if (!repeatFrame) return;
+
+        QSharedPointer<KisRepeatFrame> newRepeat = toQShared(new KisRepeatFrame(*repeatFrame, newRange));
+        KUndo2Command *cmd = new KisReplaceKeyframeCommand(channel, repeatFrame->time(), newRepeat, nullptr);
+        KisProcessingApplicator::runSingleCommandStroke(image, cmd, KisStrokeJobData::BARRIER);
+    }
 
     QVariant layerProperties(int row) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
@@ -414,7 +436,11 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
         return label > 0 ? label : QVariant();
     }
     case FrameCycleMode: {
-        return m_d->frameCycleMode(index.row(), index.column());
+        return m_d->frameCycleMode(index.row(), index.column(), activeFrameIndex());
+    }
+    case CycledRange: {
+        const KisTimeSpan &range = m_d->cycledRange(index.row(), index.column());
+        return qVariantFromValue(range);
     }
     case Qt::DisplayRole: {
         return m_d->layerName(index.row());
@@ -471,6 +497,9 @@ bool TimelineFramesModel::setData(const QModelIndex &index, const QVariant &valu
     }
     case FrameColorLabelIndexRole: {
         m_d->setFrameColorLabel(index.row(), index.column(), value.toInt());
+    }
+    case CycledRange: {
+        m_d->setCycleRange(index.row(), index.column(), value.value<KisTimeSpan>());
     }
         break;
     }
@@ -751,7 +780,7 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
 
     if (!frameMoves.isEmpty()) {
         KisImageBarrierLockerWithFeedback locker(m_d->image);
-        cmd = KisAnimationUtils::createMoveKeyframesCommand(frameMoves, frameAction, false, 0);
+        cmd = KisAnimationUtils::createMoveKeyframesCommand(frameMoves, frameAction, true, 0);
     }
 
     if (cmd) {
@@ -984,7 +1013,7 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
     return true;
 }
 
-bool TimelineFramesModel::defineCycles(int timeFrom, int timeTo, QSet<int> rows)
+bool TimelineFramesModel::defineCycles(int time, KisTimeSpan sourceRange, QSet<int> rows)
 {
     KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Create animation cycle", "Create animation cycles", rows.size()));
 
@@ -993,7 +1022,7 @@ bool TimelineFramesModel::defineCycles(int timeFrom, int timeTo, QSet<int> rows)
         if (dummy) {
             KisKeyframeChannel *contentChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
             if (contentChannel) {
-                contentChannel->createCycle({timeFrom, timeTo}, parentCommand);
+                contentChannel->createRepeat(time, sourceRange, parentCommand);
             }
         }
     }
@@ -1001,64 +1030,6 @@ bool TimelineFramesModel::defineCycles(int timeFrom, int timeTo, QSet<int> rows)
     KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
 
     return true;
-}
-
-bool TimelineFramesModel::deleteCycles(int timeFrom, int timeTo, QSet<int> rows)
-{
-    QVector<QSharedPointer<KisAnimationCycle>> cycles;
-
-    Q_FOREACH(const int row, rows) {
-        KisNodeDummy *dummy = m_d->converter->dummyFromRow(row);
-        if (!dummy) continue;
-
-        KisKeyframeChannel *contentChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
-        if (!contentChannel) continue;
-
-        for (int time = timeFrom; time <= timeTo; time++) {
-            auto cycle = contentChannel->cycleAt(time);
-            if (!cycle.isNull()) {
-                KisTimeSpan cycleRange = cycle->originalRange();
-
-                if (cycleRange.contains(time)) {
-                    cycles.append(cycle);
-                    time = cycleRange.end();
-                }
-            }
-        }
-    }
-
-    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Delete animation cycle", "Delete animation cycles", cycles.size()));
-
-    Q_FOREACH(QSharedPointer<KisAnimationCycle> cycle, cycles) {
-        KisKeyframeChannel *channel = cycle->channel();
-        channel->deleteCycle(cycle, parentCommand);
-    }
-
-    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
-
-    return true;
-}
-
-void TimelineFramesModel::addRepeatAt(QModelIndex location)
-{
-    const int time = location.row();
-
-    KisNodeDummy *dummy = m_d->converter->dummyFromRow(time);
-    if (dummy) {
-        KisKeyframeChannel *contentChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
-        if (contentChannel) {
-            for (int t = location.column(); t >= 0; t--) {
-                const QSharedPointer<KisAnimationCycle> cycle = contentChannel->cycleAt(t);
-                if (cycle) {
-                    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Add animation repeat"));
-                    contentChannel->addRepeat(cycle, location.column(), parentCommand);
-                    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
-
-                    return;
-                }
-            }
-        }
-    }
 }
 
 QString TimelineFramesModel::audioChannelFileName() const

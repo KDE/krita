@@ -32,6 +32,7 @@
 class KisNodeDummy;
 class KisDummiesFacadeBase;
 class KisAnimationPlayer;
+class KisRepeatFrame;
 
 
 class KRITAANIMATIONDOCKER_EXPORT TimelineFramesModel : public TimelineNodeListKeeper::ModelWithExternalNotifications
@@ -74,9 +75,7 @@ public:
 
     bool insertHoldFrames(QModelIndexList selectedIndexes, int count);
 
-    bool defineCycles(int timeFrom, int timeTo, QSet<int> rows);
-    bool deleteCycles(int timeFrom, int timeTo, QSet<int> rows);
-    void addRepeatAt(QModelIndex location);
+    bool defineCycles(int time, KisTimeSpan sourceRange, QSet<int> rows);
 
     QString audioChannelFileName() const;
     void setAudioChannelFileName(const QString &fileName);
@@ -119,7 +118,8 @@ public:
         OtherLayersRole,
         LayerUsedInTimelineRole,
         FrameColorLabelIndexRole,
-        FrameCycleMode
+        FrameCycleMode,
+        CycledRange
     };
 
     // metatype is added by the original implementation

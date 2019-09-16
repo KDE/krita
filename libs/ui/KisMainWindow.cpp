@@ -487,6 +487,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     setXMLFile(":/kxmlgui5/krita4.xmlgui");
 
     guiFactory()->addClient(this);
+    connect(guiFactory(), SIGNAL(makingChanges(bool)), SLOT(slotXmlGuiMakingChanges(bool)));
 
     // Create and plug toolbar list for Settings menu
     QList<QAction *> toolbarList;
@@ -2711,6 +2712,13 @@ void KisMainWindow::windowScreenChanged(QScreen *screen)
     d->screenConnectionsStore.clear();
     d->screenConnectionsStore.addConnection(screen, SIGNAL(physicalDotsPerInchChanged(qreal)),
                                             this, SIGNAL(screenChanged()));
+}
+
+void KisMainWindow::slotXmlGuiMakingChanges(bool finished)
+{
+    if (finished) {
+        subWindowActivated();
+    }
 }
 
 

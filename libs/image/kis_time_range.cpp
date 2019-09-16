@@ -208,6 +208,20 @@ KisFrameSet& KisFrameSet::operator-=(const KisFrameSet &rhs)
     return *this;
 }
 
+int KisTime::min(int a, int b)
+{
+    if (a < 0) return b;
+    if (b < 0) return a;
+    return std::min(a, b);
+}
+
+int KisTime::max(int a, int b)
+{
+    if (a < 0) return b;
+    if (b < 0) return a;
+    return std::max(a, b);
+}
+
 bool areFramesIdentical(const KisNode *root, int time1, int time2)
 {
     bool identical = true;

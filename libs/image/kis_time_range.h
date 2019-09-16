@@ -68,16 +68,36 @@ public:
         return m_start <= other.m_end && other.m_start <= m_end;
     }
 
+    /** Returns the truncated span between the start of this one and the new end.
+     * Note: if end moves before the start, result will be empty.
+     */
     inline KisTimeSpan truncateLeft(int newEnd) const {
         if (newEnd < m_start) return KisTimeSpan();
         if (m_end <= newEnd) return *this;
         return KisTimeSpan(m_start, newEnd);
     }
 
+    /** Returns the truncated span between the new start and the end of this one.
+     * Note: if start moves beyond the end, result will be empty.
+     */
     inline KisTimeSpan truncateRight(int newStart) const {
         if (m_end < newStart) return KisTimeSpan();
         if (newStart <= m_start) return *this;
         return KisTimeSpan(newStart, m_end);
+    }
+
+    /** Returns the span between the new start and the end of this one.
+     * Note: if start moves beyond the end, ends get swapped to create a valid range.
+     */
+    inline KisTimeSpan startMoved(int newStart) const {
+        return { qMin(newStart, m_end), qMax(newStart, m_end) };
+    }
+
+    /** Returns the span between the start of this one and the new end.
+     * Note: if end moves before the start, ends get swapped to create a valid range.
+     */
+    inline KisTimeSpan endMoved(int newEnd) const {
+        return { qMin(newEnd, m_start), qMax(newEnd, m_start) };
     }
 
     bool operator==(const KisTimeSpan &rhs) const {
@@ -214,6 +234,20 @@ private:
     QVector<KisTimeSpan> m_spans;
     int m_firstFrameOfInfinity = -1;
 };
+
+namespace KisTime {
+    /**
+     * Returns the earlier time between a and b.
+     * If one of the arguments is negative, the other one is returned.
+     */
+    KRITAIMAGE_EXPORT int min(int a, int b);
+
+    /**
+     * Returns the latter time between a and b.
+     * If one of the arguments is negative, the other one is returned.
+     */
+    KRITAIMAGE_EXPORT int max(int a, int b);
+}
 
 /**
  * Recursively checks whether the two frames are identical in all layers

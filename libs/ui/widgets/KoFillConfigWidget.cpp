@@ -201,9 +201,6 @@ public:
     KisSignalCompressor shapeChangedCompressor;
     KoFlake::FillVariant fillVariant;
 
-
-    QList<KoShape*> previousShapeSelected;/// container to see if the selection has actually changed
-
     bool noSelectionTrackingMode;
 
     Ui_KoFillConfigWidget *ui;
@@ -795,13 +792,6 @@ void KoFillConfigWidget::shapeChanged()
     if (d->noSelectionTrackingMode) return;
 
     QList<KoShape*> shapes = currentShapes();
-
-    // check to see if the shape actually changed...or is still the same shape
-    if (d->previousShapeSelected == shapes) {
-        return;
-    } else {
-        d->previousShapeSelected = shapes;
-    }
 
     bool shouldUploadColorToResourceManager = false;
 

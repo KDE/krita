@@ -494,8 +494,6 @@ private:
                                  bool showWarnings,
                                  KisPropertiesConfigurationSP exportConfiguration);
 
-    bool initiateSavingSynchronously(const KritaUtils::ExportFileJob& job);
-
     /**
      * Activate/deactivate/configure the autosave feature.
      * @param delay in seconds, 0 to disable

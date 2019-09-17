@@ -435,6 +435,9 @@ private Q_SLOTS:
     void switchTab(int index);
 
     void windowScreenChanged(QScreen *screen);
+
+    void slotXmlGuiMakingChanges(bool finished);
+
 protected:
 
     void closeEvent(QCloseEvent * e) override;

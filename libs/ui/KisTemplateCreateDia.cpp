@@ -479,9 +479,9 @@ void KisTemplateCreateDia::slotRemove() {
     }
     delete item;
     item=0;
-    enableButtonOk(true);
     d->m_name->setFocus();
     d->m_changed=true;
+    d->m_tree.writeTemplateTree();
 }
 
 void KisTemplateCreateDia::updatePixmap() {

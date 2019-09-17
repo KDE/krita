@@ -132,6 +132,11 @@ public:
     virtual quint32 channelCount() const = 0;
 
     /**
+     * Position of the alpha channel in a pixel
+     */
+    virtual quint32 alphaPos() const = 0;
+
+    /**
      * The total number of color channels (excludes alpha) for a single
      * pixel in this color model.
      */

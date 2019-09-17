@@ -338,6 +338,100 @@ void hls_to_rgb(int h, int l, int s, quint8 * r, quint8 * g, quint8 * b)
     hls_to_rgb(hue, lightness, saturation, r, g, b);
 }
 
+#include "kis_debug.h"
+void HSLTransform(float *r, float *g, float *b, float dh, float ds, float dl)
+{
+    float h;
+    float l;
+
+    float v;
+    float m;
+    float r2, g2, b2;
+
+    v = qMax(*r, qMax(*g, *b));
+    m = qMin(*r, qMin(*g, *b));
+
+    float chroma = v - m;
+
+    l = (m + v) / 2.0f;
+
+    if (l < EPSILON || l > (1.0f - EPSILON)) {
+        chroma = 0.0f;
+        h = 0.0f;
+        l = qBound(0.0f, l + dl, 1.0f);
+    } else {
+
+        if (chroma > EPSILON) {
+            r2 = (v - *r) / chroma;
+            g2 = (v - *g) / chroma;
+            b2 = (v - *b) / chroma;
+
+            if (*r == v)
+                h = (*g == m ? 5.0 + b2 : 1.0 - g2);
+            else if (*g == v)
+                h = (*b == m ? 1.0 + r2 : 3.0 - b2);
+            else
+                h = (*r == m ? 3.0 + g2 : 5.0 - r2);
+
+            h *= 60;
+
+            h += dh * 180;
+
+            h = fmodf(h, 360.0);
+            chroma = qBound(0.0f, chroma * (ds + 1.0f), 1.0f);
+        } else {
+            h = 0.0f;
+        }
+
+
+        if (l >= 0.5) {
+            if (chroma > 2.0f - 2.0f * l) {
+                l = 1.0f - 0.5f * chroma;
+            }
+        } else {
+            if (chroma > 2.0f * l) {
+                l = 0.5f * chroma;
+            }
+        }
+
+        l = qBound(0.0f, l + dl, 1.0f);
+
+        if (l >= 0.5) {
+            chroma = qMin(chroma, 2.0f - 2.0f * l);
+        } else {
+            chroma = qMin(chroma, 2.0f * l);
+        }
+    }
+
+    v = l + 0.5f * chroma;
+    if (v <= 0) {
+        *r = *g = *b = 0.0;
+    } else {
+        float m;
+        float sv;
+        int sextant;
+        float fract, vsf, mid1, mid2;
+
+        m = l - 0.5f * chroma;
+        sv = (v - m) / v;
+        h /= 60.0;
+        sextant = static_cast<int>(h);
+        fract = h - sextant;
+        vsf = v * sv * fract;
+        mid1 = m + vsf;
+        mid2 = v - vsf;
+        switch (sextant) {
+        case 0: *r = v; *g = mid1; *b = m; break;
+        case 1: *r = mid2; *g = v; *b = m; break;
+        case 2: *r = m; *g = v; *b = mid1; break;
+        case 3: *r = m; *g = mid2; *b = v; break;
+        case 4: *r = mid1; *g = m; *b = v; break;
+        case 5: *r = v; *g = m; *b = mid2; break;
+        }
+    }
+
+}
+
 /*
 A Fast HSL-to-RGB Transform
 by Ken Fishkin

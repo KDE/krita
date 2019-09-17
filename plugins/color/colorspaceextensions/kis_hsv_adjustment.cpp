@@ -158,23 +158,30 @@ public:
                         HSVToRGB(h, s, v, &r, &g, &b);
                     } else if (m_type == 1) {
 
-                        RGBToHSL(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
-
-                        h += m_adj_h * 180;
-                        if (h > 360) h -= 360;
-                        if (h < 0) h += 360;
-
-                        s *= (m_adj_s + 1.0);
-                        if (s < 0.0) s = 0.0;
-                        if (s > 1.0) s = 1.0;
-
-                        if (m_adj_v < 0)
-                            v *= (m_adj_v + 1.0);
-                        else
-                            v += (m_adj_v * (1.0 - v));
+                        r = SCALE_TO_FLOAT(src->red);
+                        g = SCALE_TO_FLOAT(src->green);
+                        b = SCALE_TO_FLOAT(src->blue);
 
 
-                        HSLToRGB(h, s, v, &r, &g, &b);
+                        HSLTransform(&r, &g, &b, m_adj_h, m_adj_s, m_adj_v);
+
+//                        RGBToHSL(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
+
+//                        h += m_adj_h * 180;
+//                        if (h > 360) h -= 360;
+//                        if (h < 0) h += 360;
+
+//                        s *= (m_adj_s + 1.0);
+//                        if (s < 0.0) s = 0.0;
+//                        if (s > 1.0) s = 1.0;
+
+//                        if (m_adj_v < 0)
+//                            v *= (m_adj_v + 1.0);
+//                        else
+//                            v += (m_adj_v * (1.0 - v));
+
+
+//                        HSLToRGB(h, s, v, &r, &g, &b);
                     } else if (m_type == 2) {
 
                         qreal red = SCALE_TO_FLOAT(src->red);

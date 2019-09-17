@@ -37,6 +37,9 @@ KRITAPIGMENT_EXPORT void HSVToRGB(float h, float s, float v, float *r, float *g,
 KRITAPIGMENT_EXPORT void RGBToHSL(float r, float g, float b, float *h, float *s, float *l);
 KRITAPIGMENT_EXPORT void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b);
 
+KRITAPIGMENT_EXPORT void HSLTransform(float *r, float *g, float *b, float dh, float ds, float dl);
+
+
 KRITAPIGMENT_EXPORT void rgb_to_hls(quint8 r, quint8 g, quint8 b, float * h, float * l, float * s);
 
 KRITAPIGMENT_EXPORT float hue_value(float n1, float n2, float hue);

@@ -209,6 +209,8 @@ public:
     Ui_KoFillConfigWidget *ui;
 
     std::vector<KisAcyclicSignalConnector::Blocker> deactivationLocks;
+
+    boost::optional<KoColor> overriddenColorFromProvider;
 };
 
 KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVariant fillVariant, bool trackShapeSelection, QWidget *parent)
@@ -239,6 +241,10 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
          this, SIGNAL(sigInternalRequestColorToResourceManager()),
          this, SLOT(slotProposeCurrentColorToResourceManager()));
 
+    KisAcyclicSignalConnector *resetConnector = d->resourceManagerAcyclicConnector.createCoordinatedConnector();
+    resetConnector->connectForwardVoid(
+         this, SIGNAL(sigInternalRecoverColorInResourceManager()),
+         this, SLOT(slotRecoverColorInResourceManager()));
 
     // configure GUI
 
@@ -518,6 +524,8 @@ void KoFillConfigWidget::colorChanged()
         return;
     }
 
+    d->overriddenColorFromProvider = boost::none;
+
     KoShapeFillWrapper wrapper(selectedShapes, d->fillVariant);
 
 
@@ -573,6 +581,11 @@ void KoFillConfigWidget::slotProposeCurrentColorToResourceManager()
     }
 
     if (hasColor) {
+        if (!d->overriddenColorFromProvider) {
+            d->overriddenColorFromProvider =
+                d->canvas->resourceManager()->resource(colorSlot).value<KoColor>();
+        }
+
         /**
          * Don't let opacity leak to our resource manager system
          *
@@ -581,6 +594,19 @@ void KoFillConfigWidget::slotProposeCurrentColorToResourceManager()
          */
         color.setOpacity(OPACITY_OPAQUE_U8);
         d->canvas->resourceManager()->setResource(colorSlot, QVariant::fromValue(color));
+    }
+}
+
+void KoFillConfigWidget::slotRecoverColorInResourceManager()
+{
+    if (d->overriddenColorFromProvider) {
+        KoCanvasResourceProvider::CanvasResource colorSlot = KoCanvasResourceProvider::ForegroundColor;
+        if (d->fillVariant == KoFlake::StrokeFill) {
+            colorSlot = KoCanvasResourceProvider::BackgroundColor;
+        }
+
+        d->canvas->resourceManager()->setResource(colorSlot, QVariant::fromValue(*d->overriddenColorFromProvider));
+        d->overriddenColorFromProvider = boost::none;
     }
 }
 
@@ -777,6 +803,8 @@ void KoFillConfigWidget::shapeChanged()
         d->previousShapeSelected = shapes;
     }
 
+    bool shouldUploadColorToResourceManager = false;
+
     if (shapes.isEmpty() ||
         (shapes.size() > 1 && KoShapeFillWrapper(shapes, d->fillVariant).isMixedFill())) {
 
@@ -793,6 +821,8 @@ void KoFillConfigWidget::shapeChanged()
         KoShape *shape = shapes.first();
         updateFillIndexFromShape(shape);
         updateFillColorFromShape(shape); // updates tool options fields
+
+        shouldUploadColorToResourceManager = true;
     }
 
     // updates the UI
@@ -800,6 +830,12 @@ void KoFillConfigWidget::shapeChanged()
 
     updateWidgetComponentVisbility();
     slotUpdateFillTitle();
+
+    if (shouldUploadColorToResourceManager) {
+        emit sigInternalRequestColorToResourceManager();
+    } else {
+        emit sigInternalRecoverColorInResourceManager();
+    }
 }
 
 void KoFillConfigWidget::updateFillIndexFromShape(KoShape *shape)

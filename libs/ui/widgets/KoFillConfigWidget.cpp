@@ -351,6 +351,8 @@ void KoFillConfigWidget::activate()
 
 void KoFillConfigWidget::deactivate()
 {
+    emit sigInternalRecoverColorInResourceManager();
+
     KIS_SAFE_ASSERT_RECOVER_RETURN(d->deactivationLocks.empty());
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));

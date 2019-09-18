@@ -24,8 +24,8 @@
 #include "KisViewManager.h"
 #include "KoStrokeConfigWidget.h"
 #include "ui_wdgstrokeselectionproperties.h"
-#include <kis_painter.h>
 #include <kis_canvas2.h>
+#include <KisToolShapeUtils.h>
 
 class KoColorSpace;
 class KoColorPopupAction;
@@ -52,7 +52,7 @@ struct StrokeSelectionOptions {
     KoColor color;
     KoColor fillColor;
     KoColor customColor;
-    KisPainter::FillStyle fillStyle() const;
+    KisToolShapeUtils::FillStyle fillStyle() const;
     void lock();
 };
 

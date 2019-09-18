@@ -620,8 +620,8 @@ void KisSelectionManager::paintSelectedShapes()
                                        image,
                                        paintLayer.data(),
                                        m_view->canvasResourceProvider()->resourceManager(),
-                                       KisPainter::StrokeStyleBrush,
-                                       KisPainter::FillStyleNone);
+                                       KisToolShapeUtils::StrokeStyleForeground,
+                                       KisToolShapeUtils::FillStyleNone);
 
     Q_FOREACH (KoShape* shape, shapes) {
         QTransform matrix = shape->absoluteTransformation(0) * QTransform::fromScale(image->xRes(), image->yRes());

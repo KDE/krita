@@ -93,7 +93,7 @@ void MoveStrokeStrategy::initStrokeCallback()
 
     Q_FOREACH(KisNodeSP node, m_nodes) {
         saveInitialNodeOffsets(node);
-        handlesRect |= node->exactBounds();
+        handlesRect |= KisLayerUtils::recursiveNodeExactBounds(node);
     }
 
     KisStrokeStrategyUndoCommandBased::initStrokeCallback();

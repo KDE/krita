@@ -197,6 +197,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 });
 
                 clonedImage->refreshGraph();
+                KisLayerUtils::refreshHiddenAreaAsync(clonedImage, clonedGroup, clonedImage->bounds());
 
                 KisLayerUtils::forceAllDelayedNodesUpdate(clonedGroup);
                 clonedImage->waitForDone();

@@ -300,40 +300,10 @@ namespace KisLayerUtils {
                 m_info->image->bounds() : QRect();
 
             foreach (KisNodeSP node, m_info->allSrcNodes()) {
-                refreshHiddenAreaAsync(node, preparedRect);
+                refreshHiddenAreaAsync(m_info->image, node, preparedRect);
             }
         }
 
-    private:
-        QRect realNodeExactBounds(KisNodeSP rootNode, QRect currentRect = QRect()) {
-            KisNodeSP node = rootNode->firstChild();
-
-            while(node) {
-                currentRect |= realNodeExactBounds(node, currentRect);
-                node = node->nextSibling();
-            }
-
-            if (!rootNode->isFakeNode()) {
-                // TODO: it would be better to count up changeRect inside
-                // node's extent() method
-                currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds());
-            }
-
-            return currentRect;
-        }
-
-        void refreshHiddenAreaAsync(KisNodeSP rootNode, const QRect &preparedArea) {
-            QRect realNodeRect = realNodeExactBounds(rootNode);
-            if (!preparedArea.contains(realNodeRect)) {
-
-                QRegion dirtyRegion = realNodeRect;
-                dirtyRegion -= preparedArea;
-
-                foreach(const QRect &rc, dirtyRegion.rects()) {
-                    m_info->image->refreshGraphAsync(rootNode, rc, realNodeRect);
-                }
-            }
-        }
     private:
         MergeDownInfoBaseSP m_info;
     };
@@ -1590,6 +1560,47 @@ namespace KisLayerUtils {
         }
 
         return 0;
+    }
+
+    namespace Private {
+    QRect realNodeChangeRect(KisNodeSP rootNode, QRect currentRect = QRect()) {
+        KisNodeSP node = rootNode->firstChild();
+
+        while(node) {
+            currentRect |= realNodeChangeRect(node, currentRect);
+            node = node->nextSibling();
+        }
+
+        if (!rootNode->isFakeNode()) {
+            // TODO: it would be better to count up changeRect inside
+            // node's extent() method
+            currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds());
+        }
+
+        return currentRect;
+    }
+    }
+
+    void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea) {
+        QRect realNodeRect = Private::realNodeChangeRect(rootNode);
+        if (!preparedArea.contains(realNodeRect)) {
+
+            QRegion dirtyRegion = realNodeRect;
+            dirtyRegion -= preparedArea;
+
+            Q_FOREACH (const QRect &rc, dirtyRegion.rects()) {
+                image->refreshGraphAsync(rootNode, rc, realNodeRect);
+            }
+        }
+    }
+
+    QRect recursiveNodeExactBounds(KisNodeSP rootNode)
+    {
+        QRect exactBounds;
+        recursiveApplyNodes(rootNode, [&exactBounds] (KisNodeSP node) {
+            exactBounds |= node->exactBounds();
+        });
+        return exactBounds;
     }
 
 }

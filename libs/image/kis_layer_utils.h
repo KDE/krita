@@ -43,6 +43,8 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT KisNodeList sortAndFilterAnyMergableNodesSafe(const KisNodeList &nodes, KisImageSP image);
     KRITAIMAGE_EXPORT bool checkIsChildOf(KisNodeSP node, const KisNodeList &parents);
     KRITAIMAGE_EXPORT void filterUnlockedNodes(KisNodeList &nodes);
+    KRITAIMAGE_EXPORT void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea);
+    KRITAIMAGE_EXPORT QRect recursiveNodeExactBounds(KisNodeSP rootNode);
 
     /**
      * Returns true if:

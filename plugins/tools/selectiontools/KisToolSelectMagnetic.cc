@@ -123,8 +123,10 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
         }
     } else {
         m_points.push_back(temp);
-        m_snapBound = QRectF(QPoint(0,0), QSize(5, 5));
-        m_snapBound.moveTo(temp);
+        qreal zoomLevel = canvas()->viewConverter()->zoom();
+        int sides = (int) std::ceil(10.0/zoomLevel);
+        m_snapBound = QRectF(QPoint(0,0), QSize(sides, sides));
+        m_snapBound.moveCenter(temp);
     }
 
     m_lastAnchor = temp.toPoint();
@@ -138,7 +140,9 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
 void KisToolSelectMagnetic::checkIfAnchorIsSelected(QPointF temp)
 {
     Q_FOREACH (const QPoint pt, m_anchorPoints) {
-        QRect r = QRect(QPoint(0,0), QSize(5, 5));
+        qreal zoomLevel = canvas()->viewConverter()->zoom();
+        int sides = (int) std::ceil(10.0/zoomLevel);
+        QRect r = QRect(QPoint(0,0), QSize(sides, sides));
         r.moveCenter(pt);
         if (r.contains(temp.toPoint())) {
             m_selected       = true;
@@ -334,9 +338,15 @@ void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter
 
 void KisToolSelectMagnetic::drawAnchors(QPainter &gc)
 {
+    qreal zoomLevel = canvas()->viewConverter()->zoom();
+    int sides = (int) std::ceil(10.0/zoomLevel);
+    QSize realSize(sides, sides);
+    m_snapBound = QRectF(QPoint(0,0), realSize);
+    m_snapBound.moveCenter(m_anchorPoints.first());
+
     Q_FOREACH (const QPoint pt, m_anchorPoints) {
         KisHandlePainterHelper helper(&gc, handleRadius());
-        QRect r(QPoint(0,0), QSize(5,5));
+        QRect r(QPoint(0,0), QSize(sides,sides));
         r.moveCenter(pt);
         if ((m_complete && r.contains(m_lastCursorPos.toPoint())) ||
             (m_snapBound.contains(m_lastCursorPos) && pt == m_anchorPoints.first()))

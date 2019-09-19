@@ -52,6 +52,7 @@
 #include "commands/kis_node_property_list_command.h"
 #include "commands/kis_node_compositeop_command.h"
 #include <KisDelayedUpdateNodeInterface.h>
+#include <KisCroppedOriginalLayerInterface.h>
 #include "krita_utils.h"
 #include "kis_image_signal_router.h"
 
@@ -1534,6 +1535,18 @@ namespace KisLayerUtils {
 
                 return delayedUpdate ? delayedUpdate->hasPendingTimedUpdates() : false;
             });
+    }
+
+    void forceAllHiddenOriginalsUpdate(KisNodeSP root)
+    {
+        KisLayerUtils::recursiveApplyNodes(root,
+        [] (KisNodeSP node) {
+            KisCroppedOriginalLayerInterface *croppedUpdate =
+                    dynamic_cast<KisCroppedOriginalLayerInterface*>(node.data());
+            if (croppedUpdate) {
+                croppedUpdate->forceUpdateHiddenAreaOnOriginal();
+            }
+        });
     }
 
     KisImageSP findImageByHierarchy(KisNodeSP node)

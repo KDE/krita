@@ -565,6 +565,13 @@ void TransformStrokeStrategy::initStrokeCallback()
 
     KritaUtils::addJobSequential(extraInitJobs, [this]() {
         /**
+         * We must request shape layers to rerender areas outside image bounds
+         */
+        KisLayerUtils::forceAllHiddenOriginalsUpdate(m_rootNode);
+    });
+
+    KritaUtils::addJobBarrier(extraInitJobs, [this]() {
+        /**
          * We must ensure that the currently selected subtree
          * has finished all its updates.
          */

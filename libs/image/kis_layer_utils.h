@@ -57,6 +57,8 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT void forceAllDelayedNodesUpdate(KisNodeSP root);
     KRITAIMAGE_EXPORT bool hasDelayedNodeWithUpdates(KisNodeSP root);
 
+    KRITAIMAGE_EXPORT void forceAllHiddenOriginalsUpdate(KisNodeSP root);
+
     KRITAIMAGE_EXPORT KisNodeList sortAndFilterMergableInternalNodes(KisNodeList nodes, bool allowMasks = false);
 
     KRITAIMAGE_EXPORT void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy);

@@ -143,7 +143,6 @@ KisImageSP KisSaiConverter::image()
 void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
 {
     sai::LayerHeader header = LayerFile.Read<sai::LayerHeader>();
-    qDebug() << LayerFile.GetSize() << LayerFile.GetTimeStamp() << LayerFile.GetName();
 
     //sai::Layer layerData = sai::Layer(Entry);
     //qDebug() << "adding layer" << layerData.LayerName();
@@ -153,12 +152,14 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
     char LayerName[256] = {};
     std::uint32_t ParentID = 0;
     bool maskVisible = false;
+    bool maskLocked = false;
     std::uint8_t TextureName[64] = {};
     std::uint16_t TextureScale = 0;
     std::uint8_t TextureOpacity= 0;
     std::uint8_t FringeEnabled = 0; // bool
     std::uint8_t FringeOpacity = 0; // 100
     std::uint8_t FringeWidth = 0;   // 1 - 15
+    bool FolderOpen = false;
 
     while( LayerFile.Read<std::uint32_t>(CurTag) && CurTag )
     {
@@ -180,13 +181,20 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
         {
             std::uint32_t Options;
             LayerFile.Read(Options);
+            maskLocked = (Options & 1) == 0;
             maskVisible = (Options & 2) != 0;
-            //We have no use for linked to layer transform.
             break;
         }
         case sai::Tag("texn"):
         {
             LayerFile.Read(TextureName, 64);
+            break;
+        }
+        case sai::Tag("fopn"):
+        {
+            std::uint8_t folder;
+            LayerFile.Read(folder);
+            FolderOpen = folder>0;
             break;
         }
         case sai::Tag("texp"):
@@ -269,6 +277,7 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
         layer->setX(int(header.Bounds.X-8));
         layer->setY(int(header.Bounds.Y-8));
         layer->setLayerStyle(style);
+        layer->setCollapsed(!FolderOpen);
         handleAddingLayer(layer, header.Clipping, header.Identifier, ParentID);
         break;
     }
@@ -296,6 +305,7 @@ void KisSaiConverter::processLayerFile(sai::VirtualFileEntry &LayerFile)
                 layer->setName(LayerName);
                 layer->setOpacity(opacity);
                 layer->setVisible(maskVisible);
+                layer->setUserLocked(maskLocked);
                 layer->setCompositeOpId(blendingMode);
                 layer->setX(int(header.Bounds.X-8));
                 layer->setY(int(header.Bounds.Y-8));

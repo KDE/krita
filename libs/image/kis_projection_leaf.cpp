@@ -31,6 +31,7 @@
 #include "kis_refresh_subtree_walker.h"
 #include "kis_async_merger.h"
 #include "kis_node_graph_listener.h"
+#include "kis_clone_layer.h"
 
 
 struct Q_DECL_HIDDEN KisProjectionLeaf::Private
@@ -284,7 +285,7 @@ bool KisProjectionLeaf::dependsOnLowerNodes() const
 
 bool KisProjectionLeaf::visible() const
 {
-    if (m_d->isTemporaryHidden) return false;
+    if (m_d->isTemporaryHidden || isDroppedNode()) return false;
 
     // TODO: check opacity as well!
 
@@ -350,10 +351,29 @@ bool KisProjectionLeaf::hasClones() const
     return layer ? layer->hasClones() : false;
 }
 
-bool KisProjectionLeaf::isDroppedMask() const
+bool KisProjectionLeaf::isDroppedNode() const
 {
-    return qobject_cast<KisMask*>(m_d->node.data()) &&
-            m_d->checkParentPassThrough();
+    return dropReason() != NodeAvailable;
+}
+
+KisProjectionLeaf::NodeDropReason KisProjectionLeaf::dropReason() const
+{
+    if (qobject_cast<KisMask*>(m_d->node.data()) &&
+            m_d->checkParentPassThrough()) {
+
+        return DropPassThroughMask;
+    }
+
+    KisCloneLayer *cloneLayer = qobject_cast<KisCloneLayer*>(m_d->node.data());
+    if (cloneLayer && cloneLayer->copyFrom()) {
+        KisProjectionLeafSP leaf = cloneLayer->copyFrom()->projectionLeaf();
+
+        if (leaf->m_d->checkThisPassThrough()) {
+            return DropPassThroughClone;
+        }
+    }
+
+    return NodeAvailable;
 }
 
 bool KisProjectionLeaf::isOverlayProjectionLeaf() const

@@ -23,6 +23,7 @@
 #include "kritaui_export.h"
 #include <brushengine/kis_paint_information.h>
 #include "strokes/freehand_stroke.h"
+#include "KisToolShapeUtils.h"
 
 class KoCanvasResourceProvider;
 class KisStrokesFacade;
@@ -34,8 +35,8 @@ public:
                                 KisImageWSP image,
                                 KisNodeSP currentNode,
                                 KoCanvasResourceProvider *resourceManager,
-                                KisPainter::StrokeStyle strokeStyle,
-                                KisPainter::FillStyle fillStyle);
+                                KisToolShapeUtils::StrokeStyle strokeStyle,
+                                KisToolShapeUtils::FillStyle fillStyle);
     ~KisFigurePaintingToolHelper();
 
     void paintLine(const KisPaintInformation &pi0,
@@ -51,6 +52,11 @@ public:
     void setBrush(const KisPaintOpPresetSP &brush);
     void paintPainterPathQPen(const QPainterPath, const QPen &pen, const KoColor &color);
     void paintPainterPathQPenFill(const QPainterPath, const QPen &pen, const KoColor &color);
+
+private:
+    void setupPaintStyles(KisResourcesSnapshotSP resources,
+                          KisToolShapeUtils::StrokeStyle strokeStyle,
+                          KisToolShapeUtils::FillStyle fillStyle);
 
 private:
     KisStrokeId m_strokeId;

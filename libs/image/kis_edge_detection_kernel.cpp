@@ -237,6 +237,9 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
         KisSequentialIterator finalIt(device, rect);
         const int pixelSize = device->colorSpace()->pixelSize();
         const int channels = device->colorSpace()->channelCount();
+        const int alphaPos = device->colorSpace()->alphaPos();
+        KIS_SAFE_ASSERT_RECOVER_RETURN(alphaPos >= 0);
+
         QVector<float> yNormalised(channels);
         QVector<float> xNormalised(channels);
         QVector<float> finalNorm(channels);
@@ -269,6 +272,7 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
                 memcpy(finalIt.rawData(), col.data(), pixelSize);
             } else {
                 quint8* f = finalIt.rawData();
+                finalNorm[alphaPos] = 1.0;
                 device->colorSpace()->fromNormalisedChannelsValue(f, finalNorm);
                 memcpy(finalIt.rawData(), f, pixelSize);
             }
@@ -327,6 +331,13 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
                                 srcTopLeft - QPoint(0, ceil(center)),
                                 srcTopLeft - QPoint(0, ceil(center)),
                                 rect.size() + QSize(0, 2 * ceil(center)), BORDER_REPEAT);
+
+            KisSequentialIterator finalIt(device, rect);
+            int numConseqPixels = finalIt.nConseqPixels();
+            while (finalIt.nextPixels(numConseqPixels)) {
+                numConseqPixels = finalIt.nConseqPixels();
+                device->colorSpace()->setOpacity(finalIt.rawData(), 1.0, numConseqPixels);
+            }
         }
     }
 }
@@ -377,6 +388,9 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
     KisSequentialIterator finalIt(device, rect);
     const int pixelSize = device->colorSpace()->pixelSize();
     const int channels = device->colorSpace()->channelCount();
+    const int alphaPos = device->colorSpace()->alphaPos();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(alphaPos >= 0);
+
     QVector<float> yNormalised(channels);
     QVector<float> xNormalised(channels);
     QVector<float> finalNorm(channels);
@@ -395,6 +409,8 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
         for (int c = 0; c<3; c++) {
             finalNorm[device->colorSpace()->channels().at(channelOrder[c])->displayPosition()] = (normal[channelOrder[c]]/2)+0.5;
         }
+
+        finalNorm[alphaPos]= 1.0;
 
         quint8* pixel = finalIt.rawData();
         device->colorSpace()->fromNormalisedChannelsValue(pixel, finalNorm);

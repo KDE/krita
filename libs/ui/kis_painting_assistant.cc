@@ -76,6 +76,11 @@ char KisPaintingAssistantHandle::handleType() const
     return d->handle_type;
 }
 
+KisPaintingAssistant *KisPaintingAssistantHandle::chiefAssistant() const
+{
+    return !d->assistants.isEmpty() ? d->assistants.first() : 0;
+}
+
 KisPaintingAssistantHandle::~KisPaintingAssistantHandle()
 {
     Q_ASSERT(d->assistants.empty());
@@ -439,10 +444,14 @@ bool KisPaintingAssistant::isAssistantComplete() const
 void KisPaintingAssistant::transform(const QTransform &transform)
 {
     Q_FOREACH(KisPaintingAssistantHandleSP handle, handles()) {
+        if (handle->chiefAssistant() != this) continue;
+
         *handle = transform.map(*handle);
     }
 
     Q_FOREACH(KisPaintingAssistantHandleSP handle, sideHandles()) {
+        if (handle->chiefAssistant() != this) continue;
+
         *handle = transform.map(*handle);
     }
 

@@ -544,8 +544,8 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
     KisNodeSP currentNode = view->canvasResourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
     if (!currentNode->inherits("KisShapeLayer") && currentNode->paintDevice()) {
         KoCanvasResourceProvider * rManager = view->canvasResourceProvider()->resourceManager();
-        KisPainter::StrokeStyle strokeStyle =  KisPainter::StrokeStyleBrush;
-        KisPainter::FillStyle fillStyle =  params.fillStyle();
+        KisToolShapeUtils::StrokeStyle strokeStyle =  KisToolShapeUtils::StrokeStyleForeground;
+        KisToolShapeUtils::FillStyle fillStyle = params.fillStyle();
 
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polyline"),
                                        image,
@@ -603,8 +603,8 @@ void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelec
     {
         KoCanvasResourceProvider * rManager = view->canvasResourceProvider()->resourceManager();
         QPainterPath outline = pixelSelection->outlineCache();
-        KisPainter::StrokeStyle strokeStyle =  KisPainter::StrokeStyleBrush;
-        KisPainter::FillStyle fillStyle =  KisPainter::FillStyleNone;
+        KisToolShapeUtils::StrokeStyle strokeStyle =  KisToolShapeUtils::StrokeStyleForeground;
+        KisToolShapeUtils::FillStyle fillStyle =  KisToolShapeUtils::FillStyleNone;
         KoColor color = params.color;
 
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polyline"),

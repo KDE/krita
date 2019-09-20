@@ -476,7 +476,7 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
             KisNodeSP node = dummy->node();
 
             QFont baseFont;
-            if (node->projectionLeaf()->isDroppedMask()) {
+            if (node->projectionLeaf()->isDroppedNode()) {
                 baseFont.setStrikeOut(true);
             } else if (m_d->image && m_d->image->isolatedModeRoot() &&
                        KisNodeModel::belongsToIsolatedGroup(m_d->image, node, m_d->dummiesFacade)) {

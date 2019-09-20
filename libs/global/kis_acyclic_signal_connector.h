@@ -125,6 +125,12 @@ public:
     void unlock();
 
     /**
+     * \return true if the connector is locked by some signal or manually.
+     * Used for debugging purposes mostly.
+     */
+    bool isLocked() const;
+
+    /**
      * @brief create a coordinated connector that can be used for extending
      *        the number of self-locking connection.
      *

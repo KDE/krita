@@ -995,7 +995,7 @@ void KisImage::convertLayerColorSpace(KisNodeSP node,
     if (!dstColorSpace || *srcColorSpace == *dstColorSpace) return;
 
     KUndo2MagicString actionName =
-        kundo2_i18n("Convert Layer Type"); // TODO: in Krita 4.3 change Type -> Color Space
+        kundo2_i18n("Convert Layer Color Space");
 
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;

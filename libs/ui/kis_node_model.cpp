@@ -476,10 +476,10 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case Qt::SizeHintRole: return m_d->image->size(); // FIXME
     case Qt::TextColorRole:
         return belongsToIsolatedGroup(node) &&
-            !node->projectionLeaf()->isDroppedMask() ? QVariant() : QVariant(QColor(Qt::gray));
+            !node->projectionLeaf()->isDroppedNode() ? QVariant() : QVariant(QColor(Qt::gray));
     case Qt::FontRole: {
         QFont baseFont;
-        if (node->projectionLeaf()->isDroppedMask()) {
+        if (node->projectionLeaf()->isDroppedNode()) {
             baseFont.setStrikeOut(true);
         }
         if (m_d->activeNodeIndex == index) {

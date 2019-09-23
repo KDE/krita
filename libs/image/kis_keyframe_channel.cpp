@@ -642,20 +642,19 @@ KisFrameSet KisKeyframeChannel::identicalFrames(int time, const KisTimeSpan rang
     }
 
     const KeyframesMap::const_iterator active = KisCollectionUtils::lastBeforeOrAt(m_d->keys, time);
-    const KeyframesMap::const_iterator next = (active != m_d->keys.constEnd() ? (active + 1) : m_d->keys.constBegin());
+    const auto next = nextItem(*active.value());
 
     KisFrameSet frames;
 
     if (active == m_d->keys.constEnd()) {
         // No active keyframe, ie. time is before the first keyframe
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(next != m_d->keys.constEnd(), KisFrameSet());
-        frames = KisFrameSet::between(0, (*next)->time());
-    } else if (next == m_d->keys.constEnd()) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(next, KisFrameSet());
+        frames = KisFrameSet::between(0, next->time());
+    } else if (!next) {
         frames = KisFrameSet::infiniteFrom((*active)->time());
     } else {
         if (active->data()->interpolationMode() == KisKeyframe::Constant) {
-            KisKeyframeSP nextKeyframe = *next;
-            frames = KisFrameSet::between(time, nextKeyframe->time() - 1);
+            frames = KisFrameSet::between(time, next->time() - 1);
         } else {
             frames = KisFrameSet::between(time, time);
         }

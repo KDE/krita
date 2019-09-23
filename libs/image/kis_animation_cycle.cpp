@@ -82,7 +82,7 @@ KisFrameSet KisRepeatFrame::instancesWithin(KisKeyframeSP original, KisTimeSpan 
 
     const int originalFrameDuration = original->duration();
     const int repeatDuration = (originalTime + originalFrameDuration < m_range.end())
-        ? originalFrameDuration : (m_range.end() - originalTime);
+        ? originalFrameDuration : (m_range.end() - originalTime + 1);
 
     QVector<KisTimeSpan> spans;
 
@@ -97,16 +97,16 @@ KisFrameSet KisRepeatFrame::instancesWithin(KisKeyframeSP original, KisTimeSpan 
         const int firstFrame = KisTime::max(range.start(), time());
         const int lastFrame = KisTime::min(lastOfCycle, range.end());
 
-        // Skip to the first instance overlapping with the range
+        // Skip past the instances before the range
         const int firstInstanceEnd = firstInstance + repeatDuration - 1;
         if (firstInstanceEnd < firstFrame) {
-            const int repetitionsToSkip = (firstFrame - firstInstanceEnd) / interval;
+            const int repetitionsToSkip = 1 + (firstFrame - firstInstanceEnd - 1) / interval; // effectively: ceil((firstFrame - firstInstanceEnd) / interval)
             firstInstance += interval * repetitionsToSkip;
         }
 
         // Find the range of each repeat
         for (int repeatTime = firstInstance; repeatTime <= lastFrame; repeatTime += interval) {
-            const int repeatStartTime = (repeatTime >= firstFrame) ? repeatTime : firstFrame;
+            const int repeatStartTime = std::max(repeatTime, firstFrame);
             const bool endsWithinRange = repeatDuration != -1 && repeatTime + repeatDuration - 1 <= lastFrame;
             const int repeatEndTime = endsWithinRange ? (repeatTime + repeatDuration - 1) : lastFrame;
             spans.append(KisTimeSpan(repeatStartTime, repeatEndTime));

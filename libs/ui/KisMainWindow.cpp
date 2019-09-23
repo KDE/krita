@@ -2668,11 +2668,7 @@ void KisMainWindow::initializeGeometry()
     QByteArray geom = QByteArray::fromBase64(cfg.readEntry("ko_geometry", QByteArray()));
     if (!restoreGeometry(geom)) {
         const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-        QRect desk = QApplication::desktop()->availableGeometry(scnum);
-        // if the desktop is virtual then use virtual screen size
-        if (QApplication::desktop()->isVirtualDesktop()) {
-            desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen(scnum));
-        }
+        QRect desk = QGuiApplication::screens().at(scnum)->availableVirtualGeometry();
 
         quint32 x = desk.x();
         quint32 y = desk.y();

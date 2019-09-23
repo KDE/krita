@@ -554,22 +554,23 @@ static QRect screenRect(QWidget *widget, int screen)
 {
     QDesktopWidget *desktop = QApplication::desktop();
     KConfig gc("kdeglobals", KConfig::NoGlobals);
+    auto screens = QGuiApplication::screens();
     KConfigGroup cg(&gc, "Windows");
-    if (desktop->isVirtualDesktop() &&
+    if (QApplication::primaryScreen()->virtualSiblings().count() &&
             cg.readEntry("XineramaEnabled", true) &&
             cg.readEntry("XineramaPlacementEnabled", true)) {
 
-        if (screen < 0 || screen >= desktop->numScreens()) {
+        if (screen < 0 || screen >= screens.count()) {
             if (screen == -1) {
-                screen = desktop->primaryScreen();
+                return QGuiApplication::primaryScreen()->availableVirtualGeometry();
             } else if (screen == -3) {
-                screen = desktop->screenNumber(QCursor::pos());
+                return QGuiApplication::screenAt(QCursor::pos())->availableVirtualGeometry();
             } else {
                 screen = desktop->screenNumber(widget);
             }
         }
 
-        return desktop->availableGeometry(screen);
+        return QGuiApplication::screens().at(screen)->availableVirtualGeometry();
     } else {
         return desktop->geometry();
     }

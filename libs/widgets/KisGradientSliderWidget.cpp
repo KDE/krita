@@ -66,7 +66,7 @@ void KisGradientSliderWidget::paintEvent(QPaintEvent* pe)
 {
     QWidget::paintEvent(pe);
     QPainter painter(this);
-    painter.fillRect(rect(), palette().background());
+    painter.fillRect(rect(), palette().window());
     painter.setPen(Qt::black);
     painter.drawRect(MARGIN, MARGIN, width() - 2 * MARGIN, height() - 2 * MARGIN - HANDLE_SIZE);
     if (m_autogradientResource) {

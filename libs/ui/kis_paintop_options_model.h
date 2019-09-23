@@ -29,9 +29,7 @@
 
 struct KRITAUI_EXPORT KisOptionInfo
 {
-    KisOptionInfo()
-        : option(0)
-    {}
+    KisOptionInfo() = default;
 
     KisOptionInfo(KisPaintOpOption* o, int i, const QString &label)
         : label(label)
@@ -39,14 +37,10 @@ struct KRITAUI_EXPORT KisOptionInfo
         , index(i)
     {}
 
-    KisOptionInfo(const KisOptionInfo& info)
-        : label(info.label)
-        , option(info.option)
-        , index(info.index)
-    {}
+    KisOptionInfo(const KisOptionInfo &) = default;
 
     QString label;
-    KisPaintOpOption *option;
+    KisPaintOpOption *option {nullptr};
     int index;
 };
 

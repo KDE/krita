@@ -784,7 +784,7 @@ void SvgTextEditor::setSettings()
         textSettings.radioBoth->setChecked(true);
     }
 
-    QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().background().color());
+    QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().window().color());
     textSettings.colorEditorBackground->setColor(background);
     textSettings.colorEditorForeground->setColor(cfg.readEntry("colorEditorForeground", qApp->palette().text().color()));
 
@@ -1011,7 +1011,7 @@ void SvgTextEditor::applySettings()
 
     QPalette palette = m_textEditorWidget.svgTextEdit->palette();
 
-    QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().background().color());
+    QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().window().color());
     palette.setBrush(QPalette::Active, QPalette::Background, QBrush(background));
     m_textEditorWidget.richTextEdit->setStyleSheet(QString("background-color:%1").arg(background.name()));
     m_textEditorWidget.svgStylesEdit->setStyleSheet(QString("background-color:%1").arg(background.name()));

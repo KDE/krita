@@ -61,7 +61,7 @@ public:
         arrowBitmap.fill(Qt::transparent);
 
         QPainter p(&arrowBitmap);
-        p.setPen(dialogParent->palette().foreground().color());
+        p.setPen(dialogParent->palette().window().color());
 
         // arrow pointing left
         p.drawLine(0, 3, 7, 3);
@@ -321,7 +321,7 @@ void KoDualColorButton::mouseMoveEvent( QMouseEvent *event )
             KColorMimeData::createDrag( d->tmpSelection == Foreground ?
                                             getColorFromDisplayRenderer(d->foregroundColor) :
                                             getColorFromDisplayRenderer(d->backgroundColor),
-                                        this )->start();
+                                        this )->exec();
             d->dragFlag = true;
         }
     }

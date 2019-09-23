@@ -87,7 +87,7 @@ void KisGradientSlider::paintEvent(QPaintEvent *e)
     const int gradientHeight = qRound((double)wHeight / 7.0 * 2);
 
     QPainter p1(this);
-    p1.fillRect(rect(), palette().background());
+    p1.fillRect(rect(), palette().window());
     p1.setPen(Qt::black);
     p1.drawRect(MARGIN, MARGIN, wWidth, height() - 2 * MARGIN - HANDLE_SIZE);
 

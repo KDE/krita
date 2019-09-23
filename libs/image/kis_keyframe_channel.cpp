@@ -464,6 +464,18 @@ KisKeyframeSP KisKeyframeChannel::lastKeyframe() const
     return (m_d->keys.end()-1).value();
 }
 
+KisKeyframeBaseSP KisKeyframeChannel::firstItem() const
+{
+    KisKeyframeSP firstKey = firstKeyframe();
+
+    KisKeyframeBaseSP firstRepeat = m_d->repeats.isEmpty() ? nullptr : m_d->repeats.first();
+    if (firstRepeat && (!firstKey || firstKey->time() > firstRepeat->time())) {
+        return firstRepeat;
+    }
+
+    return firstKey;
+}
+
 KisKeyframeBaseSP KisKeyframeChannel::itemAt(int time) const
 {
     const KisKeyframeSP keyframe = keyframeAt(time);
@@ -642,7 +654,7 @@ KisFrameSet KisKeyframeChannel::identicalFrames(int time, const KisTimeSpan rang
     }
 
     const KeyframesMap::const_iterator active = KisCollectionUtils::lastBeforeOrAt(m_d->keys, time);
-    const auto next = nextItem(*active.value());
+    const KisKeyframeBaseSP next = (active != m_d->keys.constEnd()) ? nextItem(*active.value()) : firstItem();
 
     KisFrameSet frames;
 

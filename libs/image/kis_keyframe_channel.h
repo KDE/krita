@@ -93,6 +93,7 @@ public:
     KisKeyframeSP previousKeyframe(int time) const;
     KisKeyframeSP lastKeyframe() const;
 
+    KisKeyframeBaseSP firstItem() const;
     KisKeyframeBaseSP itemAt(int time) const;
     KisKeyframeBaseSP activeItemAt(int time) const;
     KisKeyframeBaseSP nextItem(const KisKeyframeBase &item) const;

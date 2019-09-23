@@ -515,11 +515,16 @@ void KisDynamicSensor::fromXML(const QDomElement& e)
 
 qreal KisDynamicSensor::parameter(const KisPaintInformation& info)
 {
+    return parameter(info, m_curve, m_customCurve);
+}
+
+qreal KisDynamicSensor::parameter(const KisPaintInformation& info, const KisCubicCurve curve, const bool customCurve)
+{
     const qreal val = value(info);
-    if (m_customCurve) {
+    if (customCurve) {
         qreal scaledVal = isAdditive() ? additiveToScaling(val) : val;
 
-        const QVector<qreal> transfer = m_curve.floatTransfer(256);
+        const QVector<qreal> transfer = curve.floatTransfer(256);
         scaledVal = KisCubicCurve::interpolateLinear(scaledVal, transfer);
 
         return isAdditive() ? scalingToAdditive(scaledVal) : scaledVal;

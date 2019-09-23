@@ -486,6 +486,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     setXMLFile(":/kxmlgui5/krita4.xmlgui");
 
     guiFactory()->addClient(this);
+    connect(guiFactory(), SIGNAL(makingChanges(bool)), SLOT(slotXmlGuiMakingChanges(bool)));
 
     // Create and plug toolbar list for Settings menu
     QList<QAction *> toolbarList;
@@ -1161,7 +1162,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
         //qDebug() << ">>>>>" << isExporting << d->lastExportLocation << d->lastExportedFormat << QString::fromLatin1(document->mimeType());
 
-        if (isExporting && !d->lastExportLocation.isEmpty()) {
+        if (isExporting && !d->lastExportLocation.isEmpty() && !d->lastExportLocation.contains(QDir::tempPath())) {
 
             // Use the location where we last exported to, if it's set, as the opening location for the file dialog
             QString proposedPath = QFileInfo(d->lastExportLocation).absolutePath();
@@ -2706,6 +2707,13 @@ void KisMainWindow::windowScreenChanged(QScreen *screen)
     d->screenConnectionsStore.clear();
     d->screenConnectionsStore.addConnection(screen, SIGNAL(physicalDotsPerInchChanged(qreal)),
                                             this, SIGNAL(screenChanged()));
+}
+
+void KisMainWindow::slotXmlGuiMakingChanges(bool finished)
+{
+    if (finished) {
+        subWindowActivated();
+    }
 }
 
 

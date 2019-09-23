@@ -289,25 +289,14 @@ void KoColorSet::clear()
 
 KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y) const
 {
-    int yInGroup = y;
-    KisSwatch e;
-    QString nameGroupFoundIn;
     for (const QString &groupName : d->groupNames) {
-        if (yInGroup < d->groups[groupName].rowCount()) {
-            nameGroupFoundIn = groupName;
-            break;
+        if (y < d->groups[groupName].rowCount()) {
+            return d->groups[groupName].getEntry(x, y);
         } else {
-            yInGroup -= d->groups[groupName].rowCount();
+            y -= d->groups[groupName].rowCount();
         }
     }
-    KisSwatchGroup &groupFoundIn = d->global();
-    if (nameGroupFoundIn != GLOBAL_GROUP_NAME) {
-        groupFoundIn = d->groups[nameGroupFoundIn];
-    }
-    if (groupFoundIn.checkEntry(x, yInGroup)) {
-        e = groupFoundIn.getEntry(x, yInGroup);
-    }
-    return e;
+    return KisSwatch();
 }
 
 KisSwatch KoColorSet::getColorGroup(quint32 x, quint32 y, QString groupName)

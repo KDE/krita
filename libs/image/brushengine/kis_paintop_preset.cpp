@@ -133,8 +133,8 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
         m_d->settings->setUpdateProxy(updateProxy());
 
         if (oldOptionsWidget) {
-            m_d->settings->setOptionsWidget(oldOptionsWidget);
             oldOptionsWidget->setConfigurationSafe(m_d->settings);
+            m_d->settings->setOptionsWidget(oldOptionsWidget);
         }
     }
 

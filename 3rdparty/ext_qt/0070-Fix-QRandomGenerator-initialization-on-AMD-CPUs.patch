@@ -1,7 +1,7 @@
-From 46e1d5280515002f5694ddf7a9aab0930e2867c1 Mon Sep 17 00:00:00 2001
+From b2f90e81f956fddf4d0115de30ac88a6b2c0bbd4 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Thu, 5 Sep 2019 10:23:08 +0300
-Subject: [PATCH] Fix QRandomGenerator initialization on AMD CPUs
+Subject: [PATCH 19/19] Fix QRandomGenerator initialization on AMD CPUs
 
 Some AMD CPUs (e.g. AMD A4-6250J and AMD Ryzen 3000-series) have a
 failing random generation instruction, which always returns
@@ -98,7 +98,7 @@ index 917a91098e..4a0adff51c 100644
  
  QT_END_NAMESPACE
 diff --git a/src/corelib/tools/qsimd.cpp b/src/corelib/tools/qsimd.cpp
-index ddd715f745..3d051df859 100644
+index e44307f28d..898af79b2c 100644
 --- a/src/corelib/tools/qsimd.cpp
 +++ b/src/corelib/tools/qsimd.cpp
 @@ -376,6 +376,37 @@ static quint64 detectProcessorFeatures()
@@ -139,7 +139,7 @@ index ddd715f745..3d051df859 100644
      return features;
  }
  
-@@ -590,4 +621,35 @@ void qDumpCPUFeatures()
+@@ -589,4 +620,35 @@ void qDumpCPUFeatures()
      puts("");
  }
  
@@ -176,12 +176,12 @@ index ddd715f745..3d051df859 100644
 +
  QT_END_NAMESPACE
 diff --git a/src/corelib/tools/qsimd_p.h b/src/corelib/tools/qsimd_p.h
-index c36e1e484f..d603631a24 100644
+index 9f1321df94..2130a1fbc0 100644
 --- a/src/corelib/tools/qsimd_p.h
 +++ b/src/corelib/tools/qsimd_p.h
 @@ -346,6 +346,15 @@ extern Q_CORE_EXPORT QBasicAtomicInteger<unsigned> qt_cpu_features[2];
  #endif
- Q_CORE_EXPORT quint64 qDetectCpuFeatures();
+ Q_CORE_EXPORT void qDetectCpuFeatures();
  
 +#if defined(Q_PROCESSOR_X86) && QT_COMPILER_SUPPORTS_HERE(RDRND)
 +Q_CORE_EXPORT qsizetype qRandomCpu(void *, qsizetype) Q_DECL_NOTHROW;
@@ -195,7 +195,7 @@ index c36e1e484f..d603631a24 100644
  static inline quint64 qCpuFeatures()
  {
      quint64 features = qt_cpu_features[0].load();
-@@ -362,6 +371,15 @@ static inline quint64 qCpuFeatures()
+@@ -366,6 +375,15 @@ static inline quint64 qCpuFeatures()
  #define qCpuHasFeature(feature)     (((qCompilerCpuFeatures & CpuFeature ## feature) == CpuFeature ## feature) \
                                       || ((qCpuFeatures() & CpuFeature ## feature) == CpuFeature ## feature))
  

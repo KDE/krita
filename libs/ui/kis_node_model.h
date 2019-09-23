@@ -94,6 +94,11 @@ public:
         // is passed via QVariant as integer
         SelectOpaqueRole,
 
+        // Returns a text explaining why the node has been excluded from
+        // projection rendering. If the node is not excluded, then empty
+        // string is returned
+        DropReasonRole,
+
         /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
         ReservedRole = Qt::UserRole + 99,
 

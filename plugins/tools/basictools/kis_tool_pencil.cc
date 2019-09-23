@@ -68,7 +68,7 @@ __KisToolPencilLocalTool::__KisToolPencilLocalTool(KoCanvasBase * canvas, KisToo
 
 void __KisToolPencilLocalTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (m_parentTool->strokeStyle() == KisPainter::StrokeStyleNone) {
+    if (m_parentTool->strokeStyle() == KisToolShapeUtils::StrokeStyleNone) {
         paintPath(path(), painter, converter);
     } else {
         KoPencilTool::paint(painter, converter);

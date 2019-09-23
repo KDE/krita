@@ -268,6 +268,9 @@ protected:
     KisImageWSP image() const;
     QCursor cursor() const;
 
+    /// Call this to set the document modified
+    void notifyModified() const;
+
     KisImageWSP currentImage();
     KoPatternSP currentPattern();
     KoAbstractGradientSP currentGradient();

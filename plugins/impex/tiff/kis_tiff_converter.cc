@@ -631,10 +631,10 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF* image)
         else {
             ps_buf = new tdata_t[nbchannels];
             uint32 * lineSizes = new uint32[nbchannels];
-            tmsize_t baseSize = TIFFTileSize(image) / nbchannels;
+            tmsize_t baseSize = TIFFTileSize(image);
             for (uint i = 0; i < nbchannels; i++) {
                 ps_buf[i] = _TIFFmalloc(baseSize);
-                lineSizes[i] = tileWidth; // baseSize / lineSizeCoeffs[i];
+                lineSizes[i] = tileWidth;;
             }
             tiffstream = new KisBufferStreamSeperate((uint8**) ps_buf, nbchannels, depth, lineSizes);
             delete [] lineSizes;

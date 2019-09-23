@@ -135,5 +135,5 @@ void TimelineFramesIndexConverter::notifyDummyRemoved(KisNodeDummy *dummy)
 
 bool TimelineFramesIndexConverter::isDummyVisible(KisNodeDummy *dummy) const
 {
-    return dummy->node()->useInTimeline() || dummy == m_activeDummy;
+    return (dummy->node()->useInTimeline() && dummy->parent()) || dummy == m_activeDummy;
 }

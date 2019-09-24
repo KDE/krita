@@ -360,6 +360,13 @@ void KisNode::baseNodeInvalidateAllFramesCallback()
     }
 }
 
+void KisNode::baseNodeCollapsedChangedCallback()
+{
+    if(m_d->graphListener) {
+        m_d->graphListener->nodeCollapsedChanged(this);
+    }
+}
+
 void KisNode::addKeyframeChannel(KisKeyframeChannel *channel)
 {
     channel->setNode(this);

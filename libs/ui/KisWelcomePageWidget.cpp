@@ -24,6 +24,7 @@
 #include <QMimeData>
 #include <QPixmap>
 #include <QImage>
+#include <QThread>
 
 #include "kis_action_manager.h"
 #include "kactioncollection.h"
@@ -44,15 +45,63 @@
 #include <KisPart.h>
 
 #include <kritaversion.h>
+#include <QSysInfo>
+#include <kis_config.h>
+#include <kis_image_config.h>
+#include "opengl/kis_opengl.h"
+
+
+
 
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
 
-#ifndef KRITA_BETA
-    lblSurveyLink->setVisible(false);
+#ifdef KRITA_BETA
+    lblSurveyLink->setVisible(true);
     lblSurveyLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
+
+    QString surveyId = "965214";
+
+    QString arguments;
+    arguments += "&KritaVersion=" + QStringLiteral(KRITA_VERSION_STRING);
+    arguments += "&BuildAbi=" + QSysInfo::buildAbi();
+    arguments += "&BuildCPUArchitecture=" + QSysInfo::buildCpuArchitecture();
+    arguments += "&CurrentCPUArchitecture=" + QSysInfo::currentCpuArchitecture();
+    arguments += "&KernelVersion=" + QSysInfo::kernelVersion();
+    arguments += "&ProductType=" + QSysInfo::productType();
+    arguments += "&ProductVersion=" + QSysInfo::productVersion();
+    arguments += "&InstantPreviewEnabled=" + QString(KisConfig(true).levelOfDetailEnabled( )? "true" : "false");
+    arguments += "&TotalMemorySize=" + QString::number(KisImageConfig(true).totalRAM());
+    arguments += "&SwapLocation=" + KisImageConfig(true).swapDir();
+    arguments += "&NumberOfCores=" + QString::number(QThread::idealThreadCount());
+    arguments += "&HiDPI=" + QString(QCoreApplication::testAttribute(Qt::AA_EnableHighDpiScaling) ? "true" : "false");
+    arguments += "&OpenGLRenderer=" + KisOpenGL::convertOpenGLRendererToConfig(KisOpenGL::getCurrentOpenGLRenderer());
+
+    QString openGLInfo = KisOpenGL::getDebugText();
+    QStringList infolines = openGLInfo.split("\n");
+    Q_FOREACH(const QString line, infolines) {
+        if (line.contains("Vendor")) {
+            arguments += "&GPUVendor=" + line.split(": ")[1].replace("\n", "");
+        }
+        if (line.contains("Version")) {
+            arguments += "&OpenGLVersion=" + line.split(": ")[1].replace("\n", "");
+        }
+        if (line.contains("Current Format")) {
+            arguments += "&OpenGLFormat=" + line.split(": ")[1].replace("\n", "");
+        }
+    }
+    QUrl url (arguments);
+
+    QString source = QString("<html><head/><body><p align=\"center\"><a href=\"https://survey.kde.org/index.php/%1?lang=en?%2\">"
+                             "<span style=\"font-size:18pt; font-weight:600; text-decoration: underline; color:#2980b9;\">"
+                             "Help Krita, do the survey!"
+                              "</span></a></p></body></html>").arg(surveyId).arg(QString::fromUtf8(url.toEncoded()));
+
+    lblSurveyLink->setText(source);
+#else
+    lblSurveyLink->setVisible(false);
 #endif
 
     recentDocumentsListView->setDragEnabled(false);

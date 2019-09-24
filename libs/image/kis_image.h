@@ -88,6 +88,7 @@ public: // KisNodeGraphListener implementation
     void nodeHasBeenAdded(KisNode *parent, int index) override;
     void aboutToRemoveANode(KisNode *parent, int index) override;
     void nodeChanged(KisNode * node) override;
+    void nodeCollapsedChanged(KisNode *node) override;
     void invalidateAllFrames() override;
     void notifySelectionChanged() override;
     void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
@@ -715,11 +716,6 @@ public:
      * \see setLevelOfDetailBlocked()
      */
     bool levelOfDetailBlocked() const;
-
-    /**
-     * Notifies that the node collapsed state has changed
-     */
-    void notifyNodeCollpasedChanged();
 
     KisImageAnimationInterface *animationInterface() const;
 

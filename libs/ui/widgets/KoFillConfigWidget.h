@@ -98,11 +98,13 @@ private Q_SLOTS:
     void slotGradientRepeatChanged();
 
     void slotProposeCurrentColorToResourceManager();
+    void slotRecoverColorInResourceManager();
 
 Q_SIGNALS:
     void sigFillChanged();
 
     void sigInternalRequestColorToResourceManager();
+    void sigInternalRecoverColorInResourceManager();
 
 private:
     void uploadNewGradientBackground(const QGradient *gradient);

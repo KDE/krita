@@ -137,6 +137,7 @@ void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
 
     } else if (xRadius > 0.0 && yRadius > 0.0) {
         KisPaintDeviceSP interm = new KisPaintDevice(device->colorSpace());
+        interm->prepareClone(device);
 
         KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(xRadius);
         KisConvolutionKernelSP kernelVertical = KisGaussianKernel::createVerticalKernel(yRadius);

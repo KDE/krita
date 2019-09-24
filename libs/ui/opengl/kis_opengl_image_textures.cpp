@@ -139,8 +139,8 @@ bool KisOpenGLImageTextures::imageCanShareTextures()
     KisConfig cfg(true);
     if (cfg.useOcio()) return false;
     if (KisPart::instance()->mainwindowCount() == 1) return true;
-    if (qApp->desktop()->screenCount() == 1) return true;
-    for (int i = 1; i < qApp->desktop()->screenCount(); i++) {
+    if (QGuiApplication::screens().count() == 1) return true;
+    for (int i = 1; i < QGuiApplication::screens().count(); i++) {
         if (cfg.displayProfile(i) != cfg.displayProfile(i - 1)) {
             return false;
         }

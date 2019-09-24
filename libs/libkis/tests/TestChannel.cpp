@@ -42,8 +42,8 @@ void TestChannel::testPixelDataU8()
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
     KisFillPainter gc(layer->paintDevice());
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::red, layer->colorSpace()));
-    Node node(image, layer);
-    QList<Channel*> channels = node.channels();
+    NodeSP node = NodeSP(Node::createNode(image, layer));
+    QList<Channel*> channels = node->channels();
     Q_FOREACH(Channel *channel, channels) {
         QVERIFY(channel->channelSize() == 1);
     }
@@ -56,8 +56,8 @@ void TestChannel::testPixelDataU16()
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
     KisFillPainter gc(layer->paintDevice());
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::red, layer->colorSpace()));
-    Node node(image, layer);
-    QList<Channel*> channels = node.channels();
+    NodeSP node = NodeSP(Node::createNode(image, layer));
+    QList<Channel*> channels = node->channels();
     Q_FOREACH(Channel *channel, channels) {
         QVERIFY(channel->channelSize() == 2);
     }
@@ -71,8 +71,8 @@ void TestChannel::testPixelDataF16()
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
     KisFillPainter gc(layer->paintDevice());
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::red, layer->colorSpace()));
-    Node node(image, layer);
-    QList<Channel*> channels = node.channels();
+    NodeSP node = NodeSP(Node::createNode(image, layer));
+    QList<Channel*> channels = node->channels();
     Q_FOREACH(Channel *channel, channels) {
         qDebug() << "channelsize" << channel->channelSize();
         QVERIFY(channel->channelSize() == 2);
@@ -86,8 +86,8 @@ void TestChannel::testPixelDataF32()
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
     KisFillPainter gc(layer->paintDevice());
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::red, layer->colorSpace()));
-    Node node(image, layer);
-    QList<Channel*> channels = node.channels();
+    NodeSP node = NodeSP(Node::createNode(image, layer));
+    QList<Channel*> channels = node->channels();
     Q_FOREACH(Channel *channel, channels) {
         QVERIFY(channel->channelSize() == 4);
     }
@@ -99,8 +99,8 @@ void TestChannel::testReadWritePixelData()
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
     KisFillPainter gc(layer->paintDevice());
     gc.fillRect(0, 0, 2, 2, KoColor(Qt::yellow, layer->colorSpace()));
-    Node node(image, layer);
-    QList<Channel*> channels = node.channels();
+    NodeSP node = NodeSP(Node::createNode(image, layer));
+    QList<Channel*> channels = node->channels();
     Channel *greenChan = channels[1];
     QVERIFY(greenChan->name() == "Green");
     QRect rc = greenChan->bounds();

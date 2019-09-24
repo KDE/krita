@@ -162,6 +162,11 @@ void KisAcyclicSignalConnector::unlock()
     }
 }
 
+bool KisAcyclicSignalConnector::isLocked() const
+{
+    return m_signalsBlocked;
+}
+
 void KisAcyclicSignalConnector::coordinatedLock()
 {
     m_signalsBlocked++;

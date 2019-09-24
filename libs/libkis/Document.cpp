@@ -158,7 +158,8 @@ Node *Document::nodeByName(const QString &name) const
 {
     if (!d->document) return 0;
     KisNodeSP node = d->document->image()->rootLayer()->findChildByName(name);
-    return new Node(d->document->image(), node);
+    if (node.isNull()) return 0;
+    return Node::createNode(d->document->image(), node);
 }
 
 
@@ -320,7 +321,7 @@ Node *Document::rootNode() const
     KisImageSP image = d->document->image();
     if (!image) return 0;
 
-    return new Node(image, image->root());
+    return Node::createNode(image, image->root());
 }
 
 Selection *Document::selection() const

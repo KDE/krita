@@ -151,6 +151,10 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
         const QRect requestedRect = QRect(srcPos, areaSize);
         QRect dataRect = requestedRect | boundsRect;
 
+        KIS_SAFE_ASSERT_RECOVER(boundsRect != KisDefaultBounds().bounds()) {
+            dataRect = requestedRect | src->exactBounds();
+        }
+
         /**
          * FIXME: Implementation can return empty destination device
          * on faults and has no way to report this. This will cause a crash

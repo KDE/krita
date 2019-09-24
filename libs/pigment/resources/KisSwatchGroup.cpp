@@ -24,20 +24,13 @@
 struct KisSwatchGroup::Private {
     typedef QMap<int, KisSwatch> Column;
 
-    Private()
-        : name(QString())
-        , colorMatrix(DEFAULT_COLUMN_COUNT)
-        , colorCount(0)
-        , rowCount(DEFAULT_ROW_COUNT)
-    { }
-
     static int DEFAULT_COLUMN_COUNT;
     static int DEFAULT_ROW_COUNT;
 
-    QString name;
-    QVector<Column> colorMatrix;
-    int colorCount;
-    int rowCount;
+    QString name {QString()};
+    QVector<Column> colorMatrix {DEFAULT_COLUMN_COUNT};
+    int colorCount {0};
+    int rowCount {DEFAULT_ROW_COUNT};
 };
 
 int KisSwatchGroup::Private::DEFAULT_COLUMN_COUNT = 16;
@@ -47,8 +40,7 @@ KisSwatchGroup::KisSwatchGroup()
     : d(new Private)
 { }
 
-KisSwatchGroup::~KisSwatchGroup()
-{ }
+KisSwatchGroup::~KisSwatchGroup() = default;
 
 KisSwatchGroup::KisSwatchGroup(const KisSwatchGroup &rhs)
     : d(new Private(*rhs.d))
@@ -89,7 +81,7 @@ bool KisSwatchGroup::checkEntry(int column, int row) const
         return false;
     }
 
-    if (row >= d->colorMatrix[column].size()) {
+    if (!d->colorMatrix[column].contains(row)) {
         return false;
     }
 
@@ -149,32 +141,17 @@ void KisSwatchGroup::addEntry(const KisSwatch &e)
         setColumnCount(Private::DEFAULT_COLUMN_COUNT);
     }
 
-    if (d->colorCount == 0) {
-        setEntry(e, 0, 0);
-        return;
-    }
-
     int y = 0;
-    for (const Private::Column &c : d->colorMatrix) {
-        if (c.isEmpty()) { continue; }
-        if (y < c.lastKey()) {
-            y = c.lastKey();
+    int x = 0;
+    while(checkEntry(x, y))
+    {
+        if(++x == d->colorMatrix.size())
+        {
+            x = 0;
+            ++y;
         }
     }
-    for (int x = d->colorMatrix.size() - 1; x >= 0; x--) {
-        if (checkEntry(x, y)) {
-            // if the last entry's at the rightmost column,
-            // add e to the leftmost column of the next row
-            // and increase row count
-            if (++x == d->colorMatrix.size()) {
-                x = 0;
-                y++;
-            }
-            // else just add it to the right
-            setEntry(e, x, y);
-            break;
-        }
-    }
+    setEntry(e, x, y);
 }
 
 void KisSwatchGroup::clear()

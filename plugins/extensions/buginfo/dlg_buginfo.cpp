@@ -33,6 +33,7 @@
 #include <QStandardPaths>
 
 #include "kis_document_aware_spin_box_unit_manager.h"
+#include <QScreen>
 
 DlgBugInfo::DlgBugInfo(QWidget *parent)
     : KoDialog(parent)
@@ -101,8 +102,7 @@ DlgBugInfo::DlgBugInfo(QWidget *parent)
     QFontMetrics fm = m_page->txtBugInfo->fontMetrics();
     int target_height = fm.height() * info.split('\n').size() + wheight;
 
-    QDesktopWidget dw;
-    QRect screen_rect = dw.availableGeometry(dw.primaryScreen());
+    QRect screen_rect = QGuiApplication::primaryScreen()->availableGeometry();
 
     resize(m_page->size().width(), target_height > screen_rect.height() ? screen_rect.height() : target_height);
 

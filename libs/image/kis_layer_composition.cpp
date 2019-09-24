@@ -162,7 +162,6 @@ void KisLayerComposition::apply()
     }
     KisCompositionVisitor visitor(this, KisCompositionVisitor::APPLY);
     m_image->rootLayer()->accept(visitor);
-    m_image->notifyNodeCollpasedChanged();
 }
 
 void KisLayerComposition::setExportEnabled ( bool enabled )

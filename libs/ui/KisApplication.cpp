@@ -502,7 +502,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
                 KisWorkspaceResourceSP workspace = rserver->resourceByName(args.workspace());
                 if (workspace) {
-                    d->mainWindow->restoreWorkspace(workspace);
+                    d->mainWindow->restoreWorkspace(workspace->resourceId());
                 }
             }
 

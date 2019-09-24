@@ -107,6 +107,8 @@
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisResourceLoaderRegistry.h>
+#include <KisResourceIterator.h>
+#include <KisResourceTypes.h>
 
 #include <brushengine/kis_paintop_settings.h>
 #include "dialogs/kis_about_application.h"
@@ -536,7 +538,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
         KisWorkspaceResourceSP workspace = rserver->resourceByName(currentWorkspace);
         if (workspace) {
-            restoreWorkspace(workspace);
+            restoreWorkspace(workspace->resourceId());
         }
         cfg.writeEntry("CanvasOnlyActive", false);
         menuBar()->setVisible(true);
@@ -1638,8 +1640,13 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
     return success;
 }
 
-bool KisMainWindow::restoreWorkspace(KisWorkspaceResourceSP workspace)
+bool KisMainWindow::restoreWorkspace(int workspaceId)
 {
+
+    KisWorkspaceResourceSP workspace =
+            KisResourceModelProvider::resourceModel(ResourceType::Workspaces)
+            ->resourceForId(workspaceId).dynamicCast<KisWorkspaceResource>();
+
     bool success = restoreWorkspaceState(workspace->dockerState());
 
     if (activeKisView()) {
@@ -2229,12 +2236,14 @@ void KisMainWindow::updateWindowMenu()
     QMenu *workspaceMenu = d->workspaceMenu->menu();
     workspaceMenu->clear();
 
-    auto workspaces = KisResourceServerProvider::instance()->workspaceServer()->resources();
-    auto m_this = this;
-    for (auto &w : workspaces) {
-        auto action = workspaceMenu->addAction(w->name());
+    KisResourceIterator resourceIterator(KisResourceModelProvider::resourceModel(ResourceType::Workspaces));
+    KisMainWindow *m_this = this;
+
+    while (resourceIterator.hasNext()) {
+        KisResourceItemSP resource = resourceIterator.next();
+        QAction *action = workspaceMenu->addAction(resource->name());
         connect(action, &QAction::triggered, this, [=]() {
-            m_this->restoreWorkspace(w);
+            m_this->restoreWorkspace(resource->id());
         });
     }
     workspaceMenu->addSeparator();

@@ -93,13 +93,10 @@ public:
         }
     }
 
-    void update(bool migrationInProgress)
+    void update()
     {
         releasePoolSafely(&m_pendingActions);
-
-        if (!migrationInProgress) {
-            releasePoolSafely(&m_migrationReclaimActions);
-        }
+        releasePoolSafely(&m_migrationReclaimActions);
     }
 
     void flush()
@@ -116,6 +113,10 @@ public:
     void unlockRawPointerAccess()
     {
         m_rawPointerUsers.deref();
+    }
+
+    bool sanityRawPointerAccessLocked() const {
+        return m_rawPointerUsers.loadAcquire();
     }
 };
 

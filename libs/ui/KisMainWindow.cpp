@@ -582,9 +582,9 @@ QUuid KisMainWindow::id() const {
     return d->id;
 }
 
-void KisMainWindow::addView(KisView *view)
+void KisMainWindow::addView(KisView *view, QMdiSubWindow *subWindow)
 {
-    if (d->activeView == view) return;
+    if (d->activeView == view && !subWindow) return;
 
     if (d->activeView) {
         d->activeView->disconnect(this);
@@ -593,7 +593,7 @@ void KisMainWindow::addView(KisView *view)
     // register the newly created view in the input manager
     viewManager()->inputManager()->addTrackedCanvas(view->canvasBase());
 
-    showView(view);
+    showView(view, subWindow);
     updateCaption();
     emit restoringDone();
 
@@ -617,7 +617,7 @@ void KisMainWindow::notifyChildViewDestroyed(KisView *view)
 }
 
 
-void KisMainWindow::showView(KisView *imageView)
+void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
 {
     if (imageView && activeView() != imageView) {
         // XXX: find a better way to initialize this!
@@ -626,7 +626,11 @@ void KisMainWindow::showView(KisView *imageView)
         imageView->canvasBase()->setFavoriteResourceManager(d->viewManager->paintOpBox()->favoriteResourcesManager());
         imageView->slotLoadingFinished();
 
-        QMdiSubWindow *subwin = d->mdiArea->addSubWindow(imageView);
+        if (!subwin) {
+            subwin = d->mdiArea->addSubWindow(imageView);
+        } else {
+            subwin->setWidget(imageView);
+        }
         imageView->setSubWindow(subwin);
         subwin->setAttribute(Qt::WA_DeleteOnClose, true);
         connect(subwin, SIGNAL(destroyed()), SLOT(updateWindowMenu()));
@@ -988,12 +992,13 @@ void KisMainWindow::showDocument(KisDocument *document) {
     addViewAndNotifyLoadingCompleted(document);
 }
 
-KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
+KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document,
+                                                         QMdiSubWindow *subWindow)
 {
     showWelcomeScreen(false); // see workaround in function header
 
     KisView *view = KisPart::instance()->createView(document, d->viewManager, this);
-    addView(view);
+    addView(view, subWindow);
 
     emit guiLoadingFinished();
 
@@ -2409,10 +2414,10 @@ void KisMainWindow::configChanged()
     d->mdiArea->update();
 }
 
-KisView* KisMainWindow::newView(QObject *document)
+KisView* KisMainWindow::newView(QObject *document, QMdiSubWindow *subWindow)
 {
     KisDocument *doc = qobject_cast<KisDocument*>(document);
-    KisView *view = addViewAndNotifyLoadingCompleted(doc);
+    KisView *view = addViewAndNotifyLoadingCompleted(doc, subWindow);
     d->actionManager()->updateGUI();
 
     return view;
@@ -2663,11 +2668,7 @@ void KisMainWindow::initializeGeometry()
     QByteArray geom = QByteArray::fromBase64(cfg.readEntry("ko_geometry", QByteArray()));
     if (!restoreGeometry(geom)) {
         const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-        QRect desk = QApplication::desktop()->availableGeometry(scnum);
-        // if the desktop is virtual then use virtual screen size
-        if (QApplication::desktop()->isVirtualDesktop()) {
-            desk = QApplication::desktop()->availableGeometry(QApplication::desktop()->screen(scnum));
-        }
+        QRect desk = QGuiApplication::screens().at(scnum)->availableVirtualGeometry();
 
         quint32 x = desk.x();
         quint32 y = desk.y();

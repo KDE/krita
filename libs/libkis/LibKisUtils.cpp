@@ -48,34 +48,7 @@ QList<Node *> LibKisUtils::createNodeList(KisNodeList kisnodes, KisImageWSP imag
 {
     QList <Node*> nodes;
     Q_FOREACH(KisNodeSP node, kisnodes) {
-        if (node->inherits("KisGroupLayer")) {
-            nodes << new GroupLayer(dynamic_cast<KisGroupLayer*>(node.data()));
-        }
-        else if (node->inherits("KisCloneLayer")) {
-            nodes << new CloneLayer(dynamic_cast<KisCloneLayer*>(node.data()));
-        }
-        else if (node->inherits("KisFileLayer")) {
-            nodes << new FileLayer(dynamic_cast<KisFileLayer*>(node.data()));
-        }
-        else if (node->inherits("KisAdjustmentLayer")) {
-            nodes << new FilterLayer(dynamic_cast<KisAdjustmentLayer*>(node.data()));
-        }
-        else if (node->inherits("KisGeneratorLayer")) {
-            nodes << new FillLayer(dynamic_cast<KisGeneratorLayer*>(node.data()));
-        }
-        else if (node->inherits("KisShapeLayer")) {
-            nodes << new VectorLayer(dynamic_cast<KisShapeLayer*>(node.data()));
-        }
-        else if (node->inherits("KisFilterMask")) {
-            nodes << new FilterMask(image, dynamic_cast<KisFilterMask*>(node.data()));
-        }
-        else if (node->inherits("KisSelectionMask")) {
-            nodes << new SelectionMask(image, dynamic_cast<KisSelectionMask*>(node.data()));
-        }
-        else {
-            nodes << new Node(image, node);
-        }
-
+        nodes << Node::createNode(image, node);
     }
     return nodes;
 }

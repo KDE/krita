@@ -36,7 +36,7 @@ class KRITALIBKIS_EXPORT Node : public QObject
     Q_DISABLE_COPY(Node)
 
 public:
-    explicit Node(KisImageSP image, KisNodeSP node, QObject *parent = 0);
+    static Node *createNode(KisImageSP image, KisNodeSP node, QObject *parent = 0);
     ~Node() override;
     bool operator==(const Node &other) const;
     bool operator!=(const Node &other) const;
@@ -557,6 +557,10 @@ private:
     friend class VectorLayer;
     friend class FilterMask;
     friend class SelectionMask;
+    friend class CloneLayer;
+
+    explicit Node(KisImageSP image, KisNodeSP node, QObject *parent = 0);
+
     /**
      * @brief paintDevice gives access to the internal paint device of this Node
      * @return the paintdevice or 0 if the node does not have an editable paint device.
@@ -569,5 +573,7 @@ private:
     Private *const d;
 
 };
+
+typedef QSharedPointer<Node> NodeSP;
 
 #endif // LIBKIS_NODE_H

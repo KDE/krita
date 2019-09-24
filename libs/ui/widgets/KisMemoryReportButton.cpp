@@ -90,14 +90,14 @@ void KisMemoryReportButton::paintEvent(QPaintEvent *e)
     currentBytes.setWidth(int(ratioCur*totalWidth));
     painter.setOpacity(0.5);
 
-    painter.drawRoundRect(currentBytes, 2, 2);
+    painter.drawRoundedRect(currentBytes, 2, 2);
 
     if (m_imgbytes<m_curbytes) {
         QRect imageSize = area;
         imageSize.setWidth(int((qreal(m_imgbytes)/qreal(m_maxbytes))*totalWidth));
 
         painter.setOpacity(1.0);
-        painter.drawRoundRect(imageSize, 2, 2);
+        painter.drawRoundedRect(imageSize, 2, 2);
     }
 
     QPushButton::paintEvent(e);

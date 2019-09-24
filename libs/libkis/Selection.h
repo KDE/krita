@@ -63,6 +63,11 @@ public:
 public Q_SLOTS:
 
     /**
+     * @return a duplicate of the seletion
+     */
+    Selection *duplicate() const;
+
+    /**
      * @return the width of the selection
      */
     int width() const;

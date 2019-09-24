@@ -104,6 +104,7 @@ void KisWaveletKernel::applyWavelet(KisPaintDeviceSP device,
 
     if (xRadius > 0.0 && yRadius > 0.0) {
         KisPaintDeviceSP interm = new KisPaintDevice(device->colorSpace());
+        interm->prepareClone(device);
 
         KisConvolutionKernelSP kernelHoriz = KisWaveletKernel::createHorizontalKernel(xRadius);
         KisConvolutionKernelSP kernelVertical = KisWaveletKernel::createVerticalKernel(yRadius);

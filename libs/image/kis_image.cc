@@ -2022,8 +2022,9 @@ bool KisImage::levelOfDetailBlocked() const
     return m_d->blockLevelOfDetail;
 }
 
-void KisImage::notifyNodeCollpasedChanged()
+void KisImage::nodeCollapsedChanged(KisNode * node)
 {
+    Q_UNUSED(node);
     emit sigNodeCollapsedChanged();
 }
 

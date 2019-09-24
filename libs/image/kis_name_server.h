@@ -18,15 +18,13 @@
 #ifndef KIS_NAMESERVER_H_
 #define KIS_NAMESERVER_H_
 
-#include <QString>
+#include <QtGlobal>
 #include <kritaimage_export.h>
 
 class KRITAIMAGE_EXPORT KisNameServer
 {
 public:
     KisNameServer(qint32 seed = 1);
-    KisNameServer(const KisNameServer &rhs);
-    ~KisNameServer();
 
     qint32 number();
     qint32 currentSeed() const;

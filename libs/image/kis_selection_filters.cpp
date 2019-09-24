@@ -497,6 +497,8 @@ void KisFeatherSelectionFilter::process(KisPixelSelectionSP pixelSelection, cons
     KisConvolutionKernelSP kernelVertical = KisConvolutionKernel::fromMatrix(gaussianMatrix.transpose(), 0, gaussianMatrix.sum());
 
     KisPaintDeviceSP interm = new KisPaintDevice(pixelSelection->colorSpace());
+    interm->prepareClone(pixelSelection);
+
     KisConvolutionPainter horizPainter(interm);
     horizPainter.setChannelFlags(interm->colorSpace()->channelFlags(false, true));
     horizPainter.applyMatrix(kernelHoriz, pixelSelection, rect.topLeft(), rect.topLeft(), rect.size(), BORDER_REPEAT);

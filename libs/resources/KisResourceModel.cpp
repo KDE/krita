@@ -237,6 +237,11 @@ KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
     return resource;
 }
 
+KoResourceSP KisResourceModel::resourceForId(int id) const
+{
+    return KisResourceLocator::instance()->resourceForId(id);
+}
+
 //static int s_i3 {0};
 
 QModelIndex KisResourceModel::indexFromResource(KoResourceSP resource) const

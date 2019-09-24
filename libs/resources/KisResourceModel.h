@@ -39,7 +39,6 @@ public:
      */
     virtual KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const = 0;
 
-
     /**
      * @brief indexFromResource
      * @param resource
@@ -145,6 +144,7 @@ public:
      * @brief resourceForIndex returns a properly versioned and id's resource object
      */
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
+    KoResourceSP resourceForId(int id) const;
     QModelIndex indexFromResource(KoResourceSP resource) const override;
     bool removeResource(const QModelIndex &index) override;
     bool removeResource(KoResourceSP resource) override;

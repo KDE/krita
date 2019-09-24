@@ -140,6 +140,12 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
     connect(chkShowNews, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
 
+#ifdef Q_OS_ANDROID
+    // checking this widgets crashes the app, so it is better for it to be hidden for now
+    newsWidget->hide();
+    helpTitleLabel_2->hide();
+    chkShowNews->hide();
+#endif
     // configure the News area
     KisConfig cfg(true);
     bool m_getNews = cfg.readEntry<bool>("FetchNews", false);

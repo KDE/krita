@@ -37,7 +37,7 @@ void KisDialogStateSaverTest::testSave()
     page.checkBox->setChecked(true);
     KisDialogStateSaver::saveState(&w, "StateSaverTest");
     KConfigGroup group(KSharedConfig::openConfig(), "StateSaverTest");
-    QCOMPARE(group.readEntry("lineEdit", QString()), "test");
+    QCOMPARE(group.readEntry("lineEdit", QString()), QString("test"));
     QCOMPARE(group.readEntry("spinBox", 0), 5);
     QCOMPARE(group.readEntry("doubleSpinBox", 0.0), 3.0);
     QCOMPARE(group.readEntry("verticalSlider", 0), 10);
@@ -55,7 +55,7 @@ void KisDialogStateSaverTest::testRestore()
 
     KisDialogStateSaver::restoreState(&w, "StateSaverTest", overrideMap);
 
-    QCOMPARE(page.lineEdit->text(), "test");
+    QCOMPARE(page.lineEdit->text(), QString("test"));
     QCOMPARE(page.spinBox->value(), 10);
     QCOMPARE(page.doubleSpinBox->value(), 3.0);
     QCOMPARE(page.verticalSlider->value(), 10);

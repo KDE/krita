@@ -72,7 +72,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     arguments += "&KernelVersion=" + QSysInfo::kernelVersion();
     arguments += "&ProductType=" + QSysInfo::productType();
     arguments += "&ProductVersion=" + QSysInfo::productVersion();
-    arguments += "&InstantPreviewEnabled=" + QString(KisConfig(true).levelOfDetailEnabled( )? "true" : "false");
+    arguments += "&InstantPreviewEnable=" + QString(KisConfig(true).levelOfDetailEnabled( )? "true" : "false");
     arguments += "&TotalMemorySize=" + QString::number(KisImageConfig(true).totalRAM());
     arguments += "&SwapLocation=" + KisImageConfig(true).swapDir();
     arguments += "&NumberOfCores=" + QString::number(QThread::idealThreadCount());

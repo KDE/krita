@@ -53,6 +53,10 @@ private:
 
 typedef QSharedPointer<KisResourceItem> KisResourceItemSP;
 
+/**
+ * @brief The KisResourceIterator class provides an iterator
+ * for a KisResourceModel.
+ */
 class KRITARESOURCES_EXPORT KisResourceIterator
 {
 public:

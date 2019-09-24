@@ -26,7 +26,7 @@
 
 #include <KoResource.h>
 
-class KisAbstractResourceModel {
+class KRITARESOURCES_EXPORT KisAbstractResourceModel {
 
 public:
 
@@ -156,7 +156,8 @@ public:
 
 Q_SIGNALS:
 
-    void beforeResourcesLayoutReset(QModelIndex);
+    // XXX: emit these signals
+    void beforeResourcesLayoutReset(QModelIndex activateAfterReformat);
     void afterResourcesLayoutReset();
 
 private:

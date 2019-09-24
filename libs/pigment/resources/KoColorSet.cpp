@@ -291,7 +291,7 @@ void KoColorSet::clear()
 KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y) const
 {
     for (const QString &groupName : d->groupNames) {
-        if (y < d->groups[groupName].rowCount()) {
+        if ((int)y < d->groups[groupName].rowCount()) {
             return d->groups[groupName].getEntry(x, y);
         } else {
             y -= d->groups[groupName].rowCount();

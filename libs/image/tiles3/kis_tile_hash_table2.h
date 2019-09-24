@@ -161,7 +161,7 @@ private:
 
         m_map.getGC().unlockRawPointerAccess();
 
-        m_map.getGC().update(m_map.migrationInProcess());
+        m_map.getGC().update();
     }
 
     inline bool erase(quint32 idx)
@@ -181,7 +181,7 @@ private:
 
         m_map.getGC().unlockRawPointerAccess();
 
-        m_map.getGC().update(m_map.migrationInProcess());
+        m_map.getGC().update();
         return wasDeleted;
     }
 
@@ -301,7 +301,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getE
     TileTypeSP tile = m_map.get(idx);
     m_map.getGC().unlockRawPointerAccess();
 
-    m_map.getGC().update(m_map.migrationInProcess());
+    m_map.getGC().update();
     return tile;
 }
 
@@ -369,7 +369,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
     }
     m_map.getGC().unlockRawPointerAccess();
 
-    m_map.getGC().update(m_map.migrationInProcess());
+    m_map.getGC().update();
     return tile;
 }
 
@@ -389,7 +389,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getR
         tile = new TileType(col, row, m_defaultTileData, 0);
     }
 
-    m_map.getGC().update(m_map.migrationInProcess());
+    m_map.getGC().update();
     return tile;
 }
 
@@ -439,7 +439,7 @@ void KisTileHashTableTraits2<T>::clear()
     }
 
     // garbage collection must **not** be run with locks held
-    m_map.getGC().update(false);
+    m_map.getGC().update();
 }
 
 template <class T>

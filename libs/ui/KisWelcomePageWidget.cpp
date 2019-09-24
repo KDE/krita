@@ -68,7 +68,6 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     arguments += "&KritaVersion=" + QStringLiteral(KRITA_VERSION_STRING);
     arguments += "&BuildAbi=" + QSysInfo::buildAbi();
     arguments += "&BuildCPUArchitecture=" + QSysInfo::buildCpuArchitecture();
-    arguments += "&CurrentCPUArchitecture=" + QSysInfo::currentCpuArchitecture();
     arguments += "&KernelVersion=" + QSysInfo::kernelVersion();
     arguments += "&ProductType=" + QSysInfo::productType();
     arguments += "&ProductVersion=" + QSysInfo::productVersion();
@@ -87,9 +86,6 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
         }
         if (line.contains("Version")) {
             arguments += "&OpenGLVersion=" + line.split(": ")[1].replace("\n", "");
-        }
-        if (line.contains("Current Format")) {
-            arguments += "&OpenGLFormat=" + line.split(": ")[1].replace("\n", "");
         }
     }
     QUrl url (arguments);

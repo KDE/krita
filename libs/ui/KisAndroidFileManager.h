@@ -28,6 +28,7 @@ class KisAndroidFileManager: public QObject
     Q_OBJECT
 public:
     KisAndroidFileManager();
+    ~KisAndroidFileManager();
 
     void openImportFile();
 

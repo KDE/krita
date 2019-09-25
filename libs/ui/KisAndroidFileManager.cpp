@@ -38,8 +38,9 @@ private:
     KisAndroidFileManager *_manager;
 };
 
-KisAndroidFileManager::KisAndroidFileManager()
-     : ACTION_OPEN_DOCUMENT(QAndroidJniObject::fromString("android.intent.action.OPEN_DOCUMENT"))
+KisAndroidFileManager::KisAndroidFileManager(KisMainWindow* mainWindow)
+     : QObject(mainWindow)
+     , ACTION_OPEN_DOCUMENT(QAndroidJniObject::fromString("android.intent.action.OPEN_DOCUMENT"))
      , ACTION_GET_CONTENT(QAndroidJniObject::fromString("android.intent.action.GET_CONTENT"))
      , ACTION_CREATE_DOCUMENT(QAndroidJniObject::fromString("android.intent.action.CREATE_DOCUMENT"))
      , genericMIME(QAndroidJniObject::fromString("*/*"))

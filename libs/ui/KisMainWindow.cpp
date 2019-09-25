@@ -190,7 +190,7 @@ public:
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
     #ifdef Q_OS_ANDROID
-        , fileManager(new KisAndroidFileManager)
+        , fileManager(new KisAndroidFileManager(parent))
     #endif
 
     {

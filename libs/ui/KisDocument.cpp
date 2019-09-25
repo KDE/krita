@@ -48,6 +48,7 @@
 #include <KoDialog.h>
 #include <KisImportExportErrorCode.h>
 #include <KoDocumentResourceManager.h>
+#include <KoMD5Generator.h>
 
 #include <KisUsageLogger.h>
 #include <klocalizedstring.h>
@@ -910,10 +911,14 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
     // unlock at the very end
     d->savingMutex.unlock();
 
-    KisUsageLogger::log(QString("Completed saving %1 (mime: %2). Result: %3")
+
+    QFileInfo fi(job.filePath);
+    KisUsageLogger::log(QString("Completed saving %1 (mime: %2). Result: %3. Size: %4. MD5 Hash: %5")
                         .arg(job.filePath)
                         .arg(QString::fromLatin1(job.mimeType))
-                        .arg(!status.isOk() ? exportErrorToUserMessage(status, errorMessage) : "OK"));
+                        .arg(!status.isOk() ? exportErrorToUserMessage(status, errorMessage) : "OK")
+                        .arg(fi.size())
+                        .arg(QString::fromLatin1(KoMD5Generator().generateHash(job.filePath).toHex())));
 
     emit sigCompleteBackgroundSaving(job, status, errorMessage);
 }

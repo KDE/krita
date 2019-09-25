@@ -370,7 +370,7 @@ KisToolShapeUtils::FillStyle StrokeSelectionOptions::fillStyle() const
     using namespace KisToolShapeUtils;
 
     colorFillSource tempColor = static_cast<colorFillSource>(_colorFillSource);
-    FillStyle style;
+    FillStyle style = FillStyleNone;
 
     switch (tempColor) {
     case colorFillSource::PaintColor:

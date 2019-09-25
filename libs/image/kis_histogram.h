@@ -56,7 +56,7 @@ public:
     class Calculations
     {
 
-        double m_max, m_min, m_mean, m_total, m_median, m_stddev;
+        double m_max, m_min, m_mean, m_total;
 
         quint32 m_high, m_low, m_count;
 
@@ -64,10 +64,15 @@ public:
 
     public:
 
-        Calculations() : m_max(0.0), m_min(0.0), m_mean(0.0), m_total(0.0), m_median(0.0),
-                m_stddev(0.0), m_high(0), m_low(0), m_count(0) {
-            Q_UNUSED(m_median);
-            Q_UNUSED(m_stddev);
+        Calculations()
+            : m_max(0.0),
+              m_min(0.0),
+              m_mean(0.0),
+              m_total(0.0),
+              m_high(0),
+              m_low(0),
+              m_count(0)
+        {
         }
         /**
          * This function return the maximum bound of the histogram

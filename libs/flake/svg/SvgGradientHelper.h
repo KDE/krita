@@ -64,7 +64,6 @@ private:
     QGradient * m_gradient;
     KoFlake::CoordinateSystem m_gradientUnits;
     QTransform m_gradientTransform;
-    QGradient::Spread m_spreadMode;
 };
 
 #endif // SVGGRADIENTHELPER_H

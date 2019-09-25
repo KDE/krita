@@ -23,11 +23,13 @@
 #include <QtAndroid>
 #include <QtAndroidExtras/QAndroidActivityResultReceiver>
 
+#include <KisMainWindow.h>
+
 class KisAndroidFileManager: public QObject
 {
     Q_OBJECT
 public:
-    KisAndroidFileManager();
+    KisAndroidFileManager(KisMainWindow* mainWindow);
     ~KisAndroidFileManager();
 
     void openImportFile();

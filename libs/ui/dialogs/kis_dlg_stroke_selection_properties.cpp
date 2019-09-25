@@ -365,29 +365,29 @@ StrokeSelectionOptions ::StrokeSelectionOptions():
     customColor.fromQColor(Qt::black);
 }
 
-KisPainter::FillStyle StrokeSelectionOptions::fillStyle() const
+KisToolShapeUtils::FillStyle StrokeSelectionOptions::fillStyle() const
 {
+    using namespace KisToolShapeUtils;
+
     colorFillSource tempColor = static_cast<colorFillSource>(_colorFillSource);
-    KisPainter::FillStyle style;
+    FillStyle style = FillStyleNone;
 
     switch (tempColor) {
     case colorFillSource::PaintColor:
-        style = KisPainter::FillStyleForegroundColor;
+        style = FillStyleForegroundColor;
         break;
     case colorFillSource::BGColor:
-        style = KisPainter::FillStyleBackgroundColor;
+        style = FillStyleBackgroundColor;
         break;
     case colorFillSource::CustomColor:
-        style = KisPainter::FillStyleBackgroundColor;
+        style = FillStyleBackgroundColor;
         break;
     case colorFillSource::None:
-        style = KisPainter::FillStyleNone;
+        style = FillStyleNone;
         break;
     case colorFillSource::FGColor:
-        style = KisPainter::FillStyleBackgroundColor;
+        style = FillStyleBackgroundColor;
         break;
-    default:
-        style = KisPainter::FillStyleBackgroundColor;
     }
     return style;
 }

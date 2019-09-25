@@ -85,8 +85,12 @@ void KisToolRectangle::finishRect(const QRectF &rect, qreal roundCornersX, qreal
         KoShape* shape = KisShapeToolHelper::createRectangleShape(r, docRoundCornersX, docRoundCornersY);
 
         KoShapeStrokeSP border;
-        if (strokeStyle() == KisPainter::StrokeStyleBrush) {
-            border = toQShared(new KoShapeStroke(currentStrokeWidth(), currentFgColor().toQColor()));
+        if (strokeStyle() != KisToolShapeUtils::StrokeStyleNone) {
+            const QColor color = strokeStyle() == KisToolShapeUtils::StrokeStyleForeground ?
+                        canvas()->resourceManager()->foregroundColor().toQColor() :
+                        canvas()->resourceManager()->backgroundColor().toQColor();
+
+            border = toQShared(new KoShapeStroke(currentStrokeWidth(), color));
         }
         shape->setStroke(border);
 

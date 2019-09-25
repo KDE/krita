@@ -28,6 +28,7 @@
 
 #include "kis_tool_paint.h"
 #include "KisSelectionToolFactoryBase.h"
+#include "KisToolShapeUtils.h"
 
 #include "ui_wdggeometryoptions.h"
 
@@ -67,8 +68,8 @@ public Q_SLOTS:
 protected:
     QWidget* createOptionWidget() override;
 
-    virtual KisPainter::FillStyle fillStyle();
-    KisPainter::StrokeStyle strokeStyle();
+    KisToolShapeUtils::FillStyle fillStyle();
+    KisToolShapeUtils::StrokeStyle strokeStyle();
 
     qreal currentStrokeWidth() const;
 

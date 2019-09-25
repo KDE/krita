@@ -209,6 +209,10 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
         KisPaintDeviceSP x_denormalised = new KisPaintDevice(device->colorSpace());
         KisPaintDeviceSP y_denormalised = new KisPaintDevice(device->colorSpace());
 
+        x_denormalised->prepareClone(device);
+        y_denormalised->prepareClone(device);
+
+
         KisConvolutionKernelSP kernelHorizLeftRight = KisEdgeDetectionKernel::createHorizontalKernel(xRadius, type);
         KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(yRadius, type);
 
@@ -298,6 +302,8 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
 
         if (writeToAlpha) {
             KisPaintDeviceSP denormalised = new KisPaintDevice(device->colorSpace());
+            denormalised->prepareClone(device);
+
             KisConvolutionPainter kernelP(denormalised);
             kernelP.setChannelFlags(channelFlags);
             kernelP.setProgress(progressUpdater);
@@ -359,6 +365,8 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
     finalPainter.setProgress(progressUpdater);
     KisPaintDeviceSP x_denormalised = new KisPaintDevice(device->colorSpace());
     KisPaintDeviceSP y_denormalised = new KisPaintDevice(device->colorSpace());
+    x_denormalised->prepareClone(device);
+    y_denormalised->prepareClone(device);
 
     KisConvolutionKernelSP kernelHorizLeftRight = KisEdgeDetectionKernel::createHorizontalKernel(yRadius, type, true, !channelFlip[1]);
     KisConvolutionKernelSP kernelVerticalTopBottom = KisEdgeDetectionKernel::createVerticalKernel(xRadius, type, true, !channelFlip[0]);

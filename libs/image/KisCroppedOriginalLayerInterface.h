@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2019 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,24 +15,24 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KISCROPPEDORIGINALLAYERINTERFACE_H
+#define KISCROPPEDORIGINALLAYERINTERFACE_H
 
-#include "kis_name_server.h"
+#include "kritaimage_export.h"
 
-KisNameServer::KisNameServer(qint32 seed) : m_generator(seed)
-{ }
-
-qint32 KisNameServer::currentSeed() const
+class KRITAIMAGE_EXPORT KisCroppedOriginalLayerInterface
 {
-    return m_generator;
-}
+public:
+    virtual ~KisCroppedOriginalLayerInterface();
 
-qint32 KisNameServer::number()
-{
-    return m_generator++;
-}
 
-void KisNameServer::rollback()
-{
-    m_generator--;
-}
+    /**
+     * Force regeneration of the hidden part of original() device
+     * (the one outside image bounds). After regeneration is completed,
+     * the layer will emit dirty signals itself, so no manual forced
+     * update is needed.
+     */
+    virtual void forceUpdateHiddenAreaOnOriginal() = 0;
+};
 
+#endif // KISCROPPEDORIGINALLAYERINTERFACE_H

@@ -84,6 +84,37 @@ Node::Node(KisImageSP image, KisNodeSP node, QObject *parent)
     d->node = node;
 }
 
+Node *Node::createNode(KisImageSP image, KisNodeSP node, QObject *parent)
+{
+    if (node->inherits("KisGroupLayer")) {
+        return new GroupLayer(dynamic_cast<KisGroupLayer*>(node.data()));
+    }
+    else if (node->inherits("KisCloneLayer")) {
+        return new CloneLayer(dynamic_cast<KisCloneLayer*>(node.data()));
+    }
+    else if (node->inherits("KisFileLayer")) {
+        return new FileLayer(dynamic_cast<KisFileLayer*>(node.data()));
+    }
+    else if (node->inherits("KisAdjustmentLayer")) {
+        return new FilterLayer(dynamic_cast<KisAdjustmentLayer*>(node.data()));
+    }
+    else if (node->inherits("KisGeneratorLayer")) {
+        return new FillLayer(dynamic_cast<KisGeneratorLayer*>(node.data()));
+    }
+    else if (node->inherits("KisShapeLayer")) {
+        return new VectorLayer(dynamic_cast<KisShapeLayer*>(node.data()));
+    }
+    else if (node->inherits("KisFilterMask")) {
+        return new FilterMask(image, dynamic_cast<KisFilterMask*>(node.data()));
+    }
+    else if (node->inherits("KisSelectionMask")) {
+        return new SelectionMask(image, dynamic_cast<KisSelectionMask*>(node.data()));
+    }
+    else {
+        return new Node(image, node, parent);
+    }
+}
+
 Node::~Node()
 {
     delete d;
@@ -103,7 +134,7 @@ bool Node::operator!=(const Node &other) const
 Node *Node::clone() const
 {
     KisNodeSP clone = d->node->clone();
-    Node *node = new Node(0, clone);
+    Node *node = Node::createNode(0, clone);
     return node;
 }
 
@@ -361,7 +392,7 @@ void Node::setOpacity(int value)
 Node* Node::parentNode() const
 {
     if (!d->node) return 0;
-    return new Node(d->image, d->node->parent());
+    return Node::createNode(d->image, d->node->parent());
 }
 
 QString Node::type() const
@@ -536,7 +567,7 @@ bool Node::remove()
 Node* Node::duplicate()
 {
     if (!d->node) return 0;
-    return new Node(d->image, d->node->clone());
+    return Node::createNode(d->image, d->node->clone());
 }
 
 bool Node::save(const QString &filename, double xRes, double yRes, const InfoObject &exportConfiguration, const QRect &exportRect)
@@ -580,7 +611,7 @@ Node* Node::mergeDown()
     d->image->mergeDown(qobject_cast<KisLayer*>(d->node.data()), KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
     d->image->waitForDone();
 
-    return new Node(d->image, d->node->prevSibling());
+    return Node::createNode(d->image, d->node->prevSibling());
 }
 
 void Node::scaleNode(QPointF origin, int width, int height, QString strategy)

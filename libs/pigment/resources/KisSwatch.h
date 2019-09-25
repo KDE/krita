@@ -29,7 +29,7 @@
 class KRITAPIGMENT_EXPORT KisSwatch
 {
 public:
-    KisSwatch();
+    KisSwatch() = default;
     KisSwatch(const KoColor &color, const QString &name = QString());
 
 public:
@@ -52,14 +52,12 @@ public:
         return m_color == rhs.m_color && m_name == rhs.m_name;
     }
 
-    KisSwatch &operator =(const KisSwatch &source);
-
 private:
     KoColor m_color;
     QString m_name;
     QString m_id;
-    bool m_spotColor;
-    bool m_valid;
+    bool m_spotColor {false};
+    bool m_valid {false};
 };
 
 #endif // KISSWATCH_H

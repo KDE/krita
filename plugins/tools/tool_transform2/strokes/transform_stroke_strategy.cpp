@@ -197,6 +197,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 });
 
                 clonedImage->refreshGraph();
+                KisLayerUtils::refreshHiddenAreaAsync(clonedImage, clonedGroup, clonedImage->bounds());
 
                 KisLayerUtils::forceAllDelayedNodesUpdate(clonedGroup);
                 clonedImage->waitForDone();
@@ -563,6 +564,13 @@ void TransformStrokeStrategy::initStrokeCallback()
     extraInitJobs << lastCommandUndoJobs;
 
     KritaUtils::addJobSequential(extraInitJobs, [this]() {
+        /**
+         * We must request shape layers to rerender areas outside image bounds
+         */
+        KisLayerUtils::forceAllHiddenOriginalsUpdate(m_rootNode);
+    });
+
+    KritaUtils::addJobBarrier(extraInitJobs, [this]() {
         /**
          * We must ensure that the currently selected subtree
          * has finished all its updates.

@@ -11,6 +11,7 @@ public:
 public Q_SLOTS:
     Window * window() const /Factory/;
     Document * document() const /Factory/;
+    void setDocument(Document *document);
     bool visible() const;
     void setVisible();
     Canvas * canvas() const /Factory/;

@@ -52,6 +52,7 @@
 #include "commands/kis_node_property_list_command.h"
 #include "commands/kis_node_compositeop_command.h"
 #include <KisDelayedUpdateNodeInterface.h>
+#include <KisCroppedOriginalLayerInterface.h>
 #include "krita_utils.h"
 #include "kis_image_signal_router.h"
 
@@ -300,40 +301,10 @@ namespace KisLayerUtils {
                 m_info->image->bounds() : QRect();
 
             foreach (KisNodeSP node, m_info->allSrcNodes()) {
-                refreshHiddenAreaAsync(node, preparedRect);
+                refreshHiddenAreaAsync(m_info->image, node, preparedRect);
             }
         }
 
-    private:
-        QRect realNodeExactBounds(KisNodeSP rootNode, QRect currentRect = QRect()) {
-            KisNodeSP node = rootNode->firstChild();
-
-            while(node) {
-                currentRect |= realNodeExactBounds(node, currentRect);
-                node = node->nextSibling();
-            }
-
-            if (!rootNode->isFakeNode()) {
-                // TODO: it would be better to count up changeRect inside
-                // node's extent() method
-                currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds());
-            }
-
-            return currentRect;
-        }
-
-        void refreshHiddenAreaAsync(KisNodeSP rootNode, const QRect &preparedArea) {
-            QRect realNodeRect = realNodeExactBounds(rootNode);
-            if (!preparedArea.contains(realNodeRect)) {
-
-                QRegion dirtyRegion = realNodeRect;
-                dirtyRegion -= preparedArea;
-
-                foreach(const QRect &rc, dirtyRegion.rects()) {
-                    m_info->image->refreshGraphAsync(rootNode, rc, realNodeRect);
-                }
-            }
-        }
     private:
         MergeDownInfoBaseSP m_info;
     };
@@ -962,6 +933,9 @@ namespace KisLayerUtils {
         }
     }
 
+    /**
+     * \see a comment in mergeMultipleLayersImpl()
+     */
     void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
     {
         if (!layer->prevSibling()) return;
@@ -1286,6 +1260,31 @@ namespace KisLayerUtils {
         applicator.end();
     }
 
+    /**
+     * There might be two approaches for merging multiple layers:
+     *
+     * 1) Consider the selected nodes as a distinct "group" and merge them
+     *    as if they were isolated from the rest of the image. The key point
+     *    of this approach is that the look of the image will change, when
+     *    merging "weird" layers, like adjustment layers or layers with
+     *    non-normal blending mode.
+     *
+     * 2) Merge layers in a way to keep the look of the image as unchanged as
+     *    possible. With this approach one uses a few heuristics:
+     *
+     *       * when merging multiple layers with non-normal (but equal) blending
+     *         mode, first merge these layers together using Normal blending mode,
+     *         then set blending mode of the result to the original blending mode
+     *
+     *       * when merging multiple layers with different blending modes or
+     *         layer styles, they are first rasterized, and then laid over each
+     *         other with their own composite op. The blending mode of the final
+     *         layer is set to Normal, so the user could clearly see that he should
+     *         choose the correct blending mode.
+     *
+     * Krita uses the second approach: after merge operation, the image should look
+     * as if nothing has happened (if it is technically possible).
+     */
     void mergeMultipleLayersImpl(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter,
                                            bool flattenSingleLayer, const KUndo2MagicString &actionName,
                                            bool cleanupNodes = true, const QString layerName = QString())
@@ -1578,6 +1577,18 @@ namespace KisLayerUtils {
             });
     }
 
+    void forceAllHiddenOriginalsUpdate(KisNodeSP root)
+    {
+        KisLayerUtils::recursiveApplyNodes(root,
+        [] (KisNodeSP node) {
+            KisCroppedOriginalLayerInterface *croppedUpdate =
+                    dynamic_cast<KisCroppedOriginalLayerInterface*>(node.data());
+            if (croppedUpdate) {
+                croppedUpdate->forceUpdateHiddenAreaOnOriginal();
+            }
+        });
+    }
+
     KisImageSP findImageByHierarchy(KisNodeSP node)
     {
         while (node) {
@@ -1590,6 +1601,47 @@ namespace KisLayerUtils {
         }
 
         return 0;
+    }
+
+    namespace Private {
+    QRect realNodeChangeRect(KisNodeSP rootNode, QRect currentRect = QRect()) {
+        KisNodeSP node = rootNode->firstChild();
+
+        while(node) {
+            currentRect |= realNodeChangeRect(node, currentRect);
+            node = node->nextSibling();
+        }
+
+        if (!rootNode->isFakeNode()) {
+            // TODO: it would be better to count up changeRect inside
+            // node's extent() method
+            currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds());
+        }
+
+        return currentRect;
+    }
+    }
+
+    void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea) {
+        QRect realNodeRect = Private::realNodeChangeRect(rootNode);
+        if (!preparedArea.contains(realNodeRect)) {
+
+            QRegion dirtyRegion = realNodeRect;
+            dirtyRegion -= preparedArea;
+
+            Q_FOREACH (const QRect &rc, dirtyRegion.rects()) {
+                image->refreshGraphAsync(rootNode, rc, realNodeRect);
+            }
+        }
+    }
+
+    QRect recursiveNodeExactBounds(KisNodeSP rootNode)
+    {
+        QRect exactBounds;
+        recursiveApplyNodes(rootNode, [&exactBounds] (KisNodeSP node) {
+            exactBounds |= node->exactBounds();
+        });
+        return exactBounds;
     }
 
 }

@@ -28,6 +28,7 @@
 #include <QThreadPool>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QScreen>
 
 #include <Eigen/Core>
 
@@ -345,7 +346,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
     QPointF offset = actualWidgetPosition - lastWidgetPosition;
 
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-    QRect screenRect = QApplication::desktop()->screenGeometry();
+    QRect screenRect = QGuiApplication::primaryScreen()->availableVirtualGeometry();
 
     qreal scaleX = 0;
     qreal scaleY = 0;

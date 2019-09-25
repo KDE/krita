@@ -57,6 +57,11 @@ public Q_SLOTS:
     Document* document() const;
 
     /**
+     * Reset the view to show @p document.
+     */
+    void setDocument(Document *document);
+
+    /**
      * @return true if the current view is visible, false if not.
      */
     bool visible() const;

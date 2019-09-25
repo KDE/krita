@@ -19,7 +19,7 @@
 #include "KisMoveBoundsCalculationJob.h"
 #include "kis_node.h"
 #include "kis_selection.h"
-
+#include "kis_layer_utils.h"
 
 KisMoveBoundsCalculationJob::KisMoveBoundsCalculationJob(KisNodeList nodes,
                                                          KisSelectionSP selection,
@@ -36,7 +36,7 @@ void KisMoveBoundsCalculationJob::run()
     QRect handlesRect;
 
     Q_FOREACH (KisNodeSP node, m_nodes) {
-        handlesRect |= node->exactBounds();
+        handlesRect |= KisLayerUtils::recursiveNodeExactBounds(node);
     }
 
     if (m_selection) {

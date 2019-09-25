@@ -21,16 +21,9 @@
 
 #include "KisSwatch.h"
 
-
-KisSwatch::KisSwatch()
-    : m_spotColor(false)
-    , m_valid(false)
-{ }
-
 KisSwatch::KisSwatch(const KoColor &color, const QString &name)
     : m_color(color)
     , m_name(name)
-    , m_spotColor(false)
     , m_valid(true)
 { }
 
@@ -56,16 +49,4 @@ void KisSwatch::setSpotColor(bool spotColor)
 {
     m_spotColor = spotColor;
     m_valid = true;
-}
-
-KisSwatch &KisSwatch::operator =(const KisSwatch &source)
-{
-    if (&source == this)
-        return *this;
-    m_color = source.m_color;
-    m_id = source.m_id;
-    m_name = source.m_name;
-    m_spotColor = source.m_spotColor;
-    m_valid = source.m_valid;
-    return *this;
 }

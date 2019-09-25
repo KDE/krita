@@ -418,6 +418,7 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
                 *handle += (newAdjustment - m_currentAdjustment);
             }
         }
+        m_assistantDrag->uncache();
         m_currentAdjustment = newAdjustment;
         m_canvas->updateCanvas();
 

@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>WdgGeometryOptions</class>
  <widget class="QWidget" name="WdgGeometryOptions">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>185</width>
+    <height>46</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>Geometry Options</string>
   </property>
@@ -50,6 +58,11 @@
      <item>
       <property name="text">
        <string>Brush</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Brush (Background Color)</string>
       </property>
      </item>
     </widget>

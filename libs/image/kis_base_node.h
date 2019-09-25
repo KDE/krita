@@ -541,6 +541,16 @@ protected:
     virtual void baseNodeChangedCallback() {
     }
 
+    /**
+     * This callback is called when collapsed state of the base node
+     * has changed. This signal is forwarded by the KisNode and
+     * KisNodeGraphListener to the model in KisLayerBox, so it can
+     * update its controls when information changes.
+     */
+    virtual void baseNodeCollapsedChangedCallback() {
+    }
+
+
     virtual void baseNodeInvalidateAllFramesCallback() {
     }
 

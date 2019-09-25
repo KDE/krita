@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2019 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,23 +16,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_name_server.h"
+#ifndef KISTOOLSHAPEUTILS_H
+#define KISTOOLSHAPEUTILS_H
 
-KisNameServer::KisNameServer(qint32 seed) : m_generator(seed)
-{ }
-
-qint32 KisNameServer::currentSeed() const
+namespace KisToolShapeUtils
 {
-    return m_generator;
+
+enum FillStyle {
+    FillStyleNone,
+    FillStyleForegroundColor,
+    FillStyleBackgroundColor,
+    FillStylePattern,
+};
+
+enum StrokeStyle {
+    StrokeStyleNone,
+    StrokeStyleForeground,
+    StrokeStyleBackground
+};
+
 }
 
-qint32 KisNameServer::number()
-{
-    return m_generator++;
-}
-
-void KisNameServer::rollback()
-{
-    m_generator--;
-}
-
+#endif // KISTOOLSHAPEUTILS_H

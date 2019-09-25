@@ -45,6 +45,7 @@
 #include "kis_assert.h"
 #include <QRegularExpression>
 #include <QSettings>
+#include <QScreen>
 
 #ifndef GL_RENDERER
 #  define GL_RENDERER 0x1F01
@@ -208,7 +209,7 @@ void KisOpenGL::initialize()
     if (openGLCheckResult->vendorString().toUpper().contains("NVIDIA")) {
         g_needsPixmapCacheWorkaround = true;
 
-        const QRect screenSize = QApplication::desktop()->screenGeometry();
+        const QRect screenSize = QGuiApplication::primaryScreen()->availableGeometry();
         const int minCacheSize = 20 * 1024;
         const int cacheSize = 2048 + 2 * 4 * screenSize.width() * screenSize.height() / 1024; //KiB
 

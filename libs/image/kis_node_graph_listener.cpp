@@ -78,6 +78,10 @@ void KisNodeGraphListener::nodeChanged(KisNode * /*node*/)
 {
 }
 
+void KisNodeGraphListener::nodeCollapsedChanged(KisNode * /*node*/)
+{
+}
+
 void KisNodeGraphListener::invalidateAllFrames()
 {
 }

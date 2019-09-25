@@ -47,6 +47,11 @@ KisAndroidFileManager::KisAndroidFileManager()
 {
 }
 
+KisAndroidFileManager::~KisAndroidFileManager()
+{
+    delete resultReceiver;
+}
+
 void KisAndroidFileManager::openImportFile()
 {
     QAndroidJniObject intent("android/content/Intent");

@@ -262,9 +262,7 @@ void KisAslLayerStyleSerializerTest::testWritingGlobalPatterns()
     KisPSDLayerStyleSP style(new KisPSDLayerStyle());
 
     KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
-    QList<KoPatternSP> sortedResources = server->sortedResources();
-
-    KoPatternSP pattern = sortedResources.first();
+    KoPatternSP pattern = server->firstResource();
     Q_ASSERT(pattern);
 
     dbgKrita << ppVar(pattern->name());

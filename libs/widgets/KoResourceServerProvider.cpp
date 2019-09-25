@@ -107,18 +107,6 @@ private:
         return grad;
     }
 
-    QList< KoAbstractGradientSP > sortedResources() override {
-        QList< KoAbstractGradientSP > resources = KoResourceServer<KoAbstractGradient>::sortedResources();
-        QList< KoAbstractGradientSP > sorted;
-        if (m_foregroundToTransparent && resources.contains(m_foregroundToTransparent)) {
-            sorted.append(resources.takeAt(resources.indexOf(m_foregroundToTransparent)));
-        }
-        if (m_foregroundToBackground && resources.contains(m_foregroundToBackground)) {
-            sorted.append(resources.takeAt(resources.indexOf(m_foregroundToBackground)));
-        }
-        return sorted + resources;
-    }
-
     KoAbstractGradientSP m_foregroundToTransparent;
     KoAbstractGradientSP m_foregroundToBackground;
 };

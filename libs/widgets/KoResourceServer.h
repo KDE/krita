@@ -231,16 +231,6 @@ public:
         return QStringList(); //m_tagStore->assignedTagsList(resource);
     }
 
-    /// Return the currently stored resources in alphabetical order, overwrite for customized sorting
-    virtual QList<QSharedPointer<T>> sortedResources()
-    {
-        QMap<QString, QSharedPointer<T>> sortedNames;
-//        Q_FOREACH (const QString &name, m_resourcesByName.keys()) {
-//            sortedNames.insert(name.toLower(), m_resourcesByName[name]);
-//        }
-        return sortedNames.values();
-    }
-
 protected:
 
     void notifyResourceAdded(QSharedPointer<T> resource)

@@ -366,8 +366,10 @@ bool KisResourceModel::resetQuery()
     }
     d->cachedRowCount = -1;
     endResetModel();
-    
+    emit afterResourcesLayoutReset();
+
     qDebug() << "KisResourceModel::resetQuery for" << d->resourceType << "took" << t.elapsed() << "ms";
+
 
     return r;
 }

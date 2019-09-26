@@ -296,7 +296,7 @@ qreal EnhancedPathFormula::evaluateFunction(Function function, const QList<qreal
         }
         break;
     default:
-        return 0.0;
+        ;
     }
 
     return 0.0;

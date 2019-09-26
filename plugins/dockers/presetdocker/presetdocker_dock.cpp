@@ -61,7 +61,7 @@ void PresetDockerDock::setCanvas(KoCanvasBase *canvas)
             m_canvas->viewManager()->paintOpBox(), SLOT(resourceSelected(KoResource*)));
     connect(m_presetChooser, SIGNAL(resourceClicked(KoResource*)),
             m_canvas->viewManager()->paintOpBox(), SLOT(resourceSelected(KoResource*)));
-    connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
             this, SLOT(canvasResourceChanged(int,QVariant)));
 
 

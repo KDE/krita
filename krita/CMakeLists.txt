@@ -11,6 +11,10 @@ add_subdirectory( integration )
 # Install the application icons following the the freedesktop icon theme spec
 add_subdirectory( pics/app )
 
+if (ANDROID)
+    include_directories (${Qt5AndroidExtras_INCLUDE_DIRS})
+endif()
+
 set(krita_SRCS main.cc)
 
 # Set the application icon on the application
@@ -67,7 +71,12 @@ set(krita_QRCS
 
 qt5_add_resources(krita_SRCS ${krita_QRCS})
 
-add_executable(krita ${krita_SRCS})
+if (ANDROID)
+    add_library(krita SHARED ${krita_SRCS})
+    target_link_libraries(krita PRIVATE Qt5::AndroidExtras)
+else()
+    add_executable(krita ${krita_SRCS})
+endif()
 target_link_libraries(krita 
     PRIVATE
                       kritaui 

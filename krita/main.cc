@@ -56,6 +56,10 @@
 #include <KisUsageLogger.h>
 #include <kis_image_config.h>
 
+#ifdef Q_OS_ANDROID
+#include <QtAndroid>
+#endif
+
 #if defined Q_OS_WIN
 #include "config_use_qt_tablet_windows.h"
 #include <windows.h>
@@ -72,7 +76,6 @@
 #endif
 #include <QLibrary>
 #endif
-
 #if defined HAVE_KCRASH
 #include <kcrash.h>
 #elif defined USE_DRMINGW
@@ -135,9 +138,32 @@ void resetRotation()
 } // namespace
 #endif
 
+#ifdef Q_OS_ANDROID
+extern "C" JNIEXPORT void JNICALL
+Java_org_krita_android_JNIWrappers_saveState(JNIEnv* /*env*/,
+                                             jobject /*obj*/,
+                                             jint    /*n*/)
+{
+    if (!KisPart::exists()) return;
+
+    KisPart *kisPart = KisPart::instance();
+    QList<QPointer<KisDocument>> list = kisPart->documents();
+    for (QPointer<KisDocument> &doc: list)
+    {
+        doc->autoSaveOnPause();
+    }
+
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    kritarc.setValue("canvasState", "OPENGL_SUCCESS");
+}
+#endif
+
+#ifdef Q_OS_ANDROID
+__attribute__ ((visibility ("default")))
+#endif
 extern "C" int main(int argc, char **argv)
 {
-
     // The global initialization of the random generator
     qsrand(time(0));
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
@@ -176,6 +202,21 @@ extern "C" int main(int argc, char **argv)
     // The default is set to RoundPreferFloor for better behaviour than before,
     // but can be overridden by the above environment variable.
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
+#endif
+
+#ifdef Q_OS_ANDROID
+    const QString write_permission = "android.permission.WRITE_EXTERNAL_STORAGE";
+    const QStringList permissions = { write_permission };
+    const QtAndroid::PermissionResultMap resultHash =
+            QtAndroid::requestPermissionsSync(QStringList(permissions));
+
+    if (resultHash[write_permission] == QtAndroid::PermissionResult::Denied) {
+        // TODO: show a dialog and graciously exit
+        dbgKrita << "Permission denied by the user";
+    }
+    else {
+        dbgKrita << "Permission granted";
+    }
 #endif
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);

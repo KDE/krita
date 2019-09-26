@@ -106,6 +106,10 @@
 #include <KoUpdater.h>
 #include <KoResourceModel.h>
 
+#ifdef Q_OS_ANDROID
+#include <KisAndroidFileManager.h>
+#endif
+
 #include <brushengine/kis_paintop_settings.h>
 #include "dialogs/kis_about_application.h"
 #include "dialogs/kis_delayed_save_dialog.h"
@@ -185,6 +189,10 @@ public:
         , mdiArea(new QMdiArea(parent))
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
+    #ifdef Q_OS_ANDROID
+        , fileManager(new KisAndroidFileManager(parent))
+    #endif
+
     {
         if (id.isNull()) this->id = QUuid::createUuid();
 
@@ -286,6 +294,10 @@ public:
 
     QUuid workspaceBorrowedBy;
     KisSignalAutoConnectionsStore screenConnectionsStore;
+
+#ifdef Q_OS_ANDROID
+    KisAndroidFileManager *fileManager;
+#endif
 
     KisActionManager * actionManager() {
         return viewManager->actionManager();
@@ -759,6 +771,22 @@ void KisMainWindow::setCanvasDetached(bool detach)
     }
 }
 
+void KisMainWindow::slotFileSelected(QString path)
+{
+    QString url = path;
+    if (!url.isEmpty()) {
+        bool res = openDocument(QUrl::fromLocalFile(url), Import);
+        if (!res) {
+            warnKrita << "Loading" << url << "failed";
+        }
+    }
+}
+
+void KisMainWindow::slotEmptyFilePath()
+{
+    QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The chosen file's location could not be found. Does it exist?"));
+}
+
 QWidget * KisMainWindow::canvasWindow() const
 {
     return d->canvasWindow;
@@ -833,7 +861,7 @@ QList<QUrl> KisMainWindow::recentFilesUrls()
 void KisMainWindow::clearRecentFiles()
 {
     d->recentFiles->clear();
-    d->welcomePage->slotClearRecentFiles();
+    d->welcomePage->populateRecentDocuments();
 }
 
 void KisMainWindow::removeRecentUrl(const QUrl &url)
@@ -1530,6 +1558,7 @@ void KisMainWindow::slotImportFile()
 
 void KisMainWindow::slotFileOpen(bool isImporting)
 {
+#ifndef Q_OS_ANDROID
     QStringList urls = showOpenFileDialog(isImporting);
 
     if (urls.isEmpty())
@@ -1545,6 +1574,13 @@ void KisMainWindow::slotFileOpen(bool isImporting)
             }
         }
     }
+#else
+    Q_UNUSED(isImporting)
+
+    d->fileManager->openImportFile();
+    connect(d->fileManager, SIGNAL(sigFileSelected(QString)), this, SLOT(slotFileSelected(QString)));
+    connect(d->fileManager, SIGNAL(sigEmptyFilePath()), this, SLOT(slotEmptyFilePath()));
+#endif
 }
 
 void KisMainWindow::slotFileOpenRecent(const QUrl &url)

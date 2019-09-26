@@ -110,12 +110,6 @@ public:
      * get list of URL strings for recent files
      */
     QList<QUrl> recentFilesUrls();
-
-    /**
-     * clears the list of the recent files
-     */
-    void clearRecentFiles();
-
     /**
      * removes the given url from the list of recent files
      */
@@ -241,6 +235,13 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
+
+    /**
+     * clears the list of the recent files
+     */
+    void clearRecentFiles();
+
+
     /**
      *  Slot for opening a new document.
      *
@@ -313,6 +314,8 @@ public Q_SLOTS:
      */
     void setCanvasDetached(bool detached);
 
+    void slotFileSelected(QString path);
+    void slotEmptyFilePath();
 private Q_SLOTS:
     /**
      * Save the list of recent files.
@@ -510,7 +513,6 @@ private:
 
     QString m_errorMessage;
     bool m_dieOnError;
-
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisMainWindow::OpenFlags)

@@ -21,6 +21,10 @@
 
 #include "KoConfig.h"
 
+#ifdef HAS_ONLY_OPENGL_ES
+#define GL_MULTISAMPLE 0x809D
+#endif
+
 #include <QPainter>
 #include <QToolButton>
 #include <QApplication>

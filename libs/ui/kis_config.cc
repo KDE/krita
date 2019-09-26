@@ -914,11 +914,16 @@ void KisConfig::saveSnapConfig(const KisSnapConfig &config)
 
 qint32 KisConfig::checkSize(bool defaultValue) const
 {
-    return (defaultValue ? 32 : m_cfg.readEntry("checksize", 32));
+    qint32 size = (defaultValue ? 32 : m_cfg.readEntry("checksize", 32));
+    if (size == 0) size = 32;
+    return size;
 }
 
 void KisConfig::setCheckSize(qint32 checksize) const
 {
+    if (checksize == 0) {
+        checksize = 32;
+    }
     m_cfg.writeEntry("checksize", checksize);
 }
 

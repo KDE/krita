@@ -285,7 +285,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
 
         // cold initialization
         m_d->showGlobalSelection = m_d->nodeDisplayModeAdapter->showGlobalSelectionMask();
-        m_d->showRootLayer = m_d->showRootLayer;
+        m_d->showRootLayer = false;
     }
 
     if (oldDummiesFacade && m_d->image) {

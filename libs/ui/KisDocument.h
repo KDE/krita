@@ -637,6 +637,10 @@ public:
      */
     QRectF documentBounds() const;
 
+    /**
+     * @brief Start saving when android activity is pushed to the background
+     */
+    void autoSaveOnPause();
 Q_SIGNALS:
 
     void completed();

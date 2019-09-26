@@ -1434,4 +1434,8 @@ void KisViewManager::slotResetFgBg()
     d->canvasResourceManager.setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
 }
 
-
+void KisViewManager::slotResetRotation()
+{
+    KisCanvasController *canvasController = d->currentImageView->canvasController();
+    canvasController->resetCanvasRotation();
+}

@@ -245,6 +245,7 @@ private Q_SLOTS:
     void slotSaveRulersTrackMouseState(bool value);
     void slotToggleFgBg();
     void slotResetFgBg();
+    void slotResetRotation();
 private:
     void createActions();
     void setupManagers();

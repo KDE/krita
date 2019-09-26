@@ -450,7 +450,7 @@ KisOpenGL::RendererConfig generateSurfaceConfig(KisOpenGL::OpenGLRenderer render
 #ifdef Q_OS_MACOS
     format.setVersion(3, 2);
     format.setProfile(QSurfaceFormat::CoreProfile);
-#else
+#elif !defined(Q_OS_ANDROID)
     // XXX This can be removed once we move to Qt5.7
     format.setVersion(3, 0);
     format.setProfile(QSurfaceFormat::CompatibilityProfile);

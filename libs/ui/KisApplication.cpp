@@ -409,7 +409,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     if (opengl == "OPENGL_NOT_TRIED" ) {
         cfg.setCanvasState("TRY_OPENGL");
     }
-    else if (opengl != "OPENGL_SUCCESS") {
+    else if (opengl != "OPENGL_SUCCESS" && opengl != "TRY_OPENGL") {
         cfg.setCanvasState("OPENGL_FAILED");
     }
 

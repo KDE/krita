@@ -124,7 +124,13 @@ QString getInstallationPrefix() {
     appdir.cdUp();
     return appdir.canonicalPath();
 #else
+#ifdef Q_OS_ANDROID
+    // qApp->applicationDirPath() isn't writable and android system won't allow
+    // any files other than libraries
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/";
+#else
     return qApp->applicationDirPath() + "/../";
+#endif
 #endif
 #endif
 }

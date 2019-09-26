@@ -937,7 +937,10 @@ QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMo
     return result;
 }
 
-QWidget* KisToolTransform::createOptionWidget() {
+QWidget* KisToolTransform::createOptionWidget()
+{
+    if (!m_canvas) return 0;
+
     m_optionsWidget = new KisToolTransformConfigWidget(&m_transaction, m_canvas, m_workRecursively, 0);
     Q_CHECK_PTR(m_optionsWidget);
     m_optionsWidget->setObjectName(toolId() + " option widget");

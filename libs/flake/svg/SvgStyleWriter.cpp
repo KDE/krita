@@ -242,18 +242,10 @@ void SvgStyleWriter::saveSvgMasking(KoShape *shape, SvgSavingContext &context)
 
     const QRectF rect = clipMask->maskRect();
 
-    // think funny duplication? please note the 'pt' suffix! :)
-    if (clipMask->coordinates() == KoFlake::ObjectBoundingBox) {
-        context.styleWriter().addAttribute("x", rect.x());
-        context.styleWriter().addAttribute("y", rect.y());
-        context.styleWriter().addAttribute("width", rect.width());
-        context.styleWriter().addAttribute("height", rect.height());
-    } else {
-        context.styleWriter().addAttribute("x", rect.x());
-        context.styleWriter().addAttribute("y", rect.y());
-        context.styleWriter().addAttribute("width", rect.width());
-        context.styleWriter().addAttribute("height", rect.height());
-    }
+    context.styleWriter().addAttribute("x", rect.x());
+    context.styleWriter().addAttribute("y", rect.y());
+    context.styleWriter().addAttribute("width", rect.width());
+    context.styleWriter().addAttribute("height", rect.height());
 
     embedShapes(clipMask->shapes(), context.styleWriter());
 

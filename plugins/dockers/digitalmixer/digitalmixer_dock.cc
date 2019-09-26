@@ -20,7 +20,7 @@
 
 #include <QGridLayout>
 #include <QToolButton>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 
 #include <klocalizedstring.h>
 
@@ -65,13 +65,13 @@ DigitalMixerDock::DigitalMixerDock( )
 
     // Create the sliders
 
-    QSignalMapper* signalMapperSelectColor = new QSignalMapper(this);
+    KisSignalMapper* signalMapperSelectColor = new KisSignalMapper(this);
     connect(signalMapperSelectColor, SIGNAL(mapped(int)), SLOT(popupColorChanged(int)));
 
-    QSignalMapper* signalMapperColorSlider = new QSignalMapper(this);
+    KisSignalMapper* signalMapperColorSlider = new KisSignalMapper(this);
     connect(signalMapperColorSlider, SIGNAL(mapped(int)), SLOT(colorSliderChanged(int)));
 
-    QSignalMapper* signalMapperTargetColor = new QSignalMapper(this);
+    KisSignalMapper* signalMapperTargetColor = new KisSignalMapper(this);
     connect(signalMapperTargetColor, SIGNAL(mapped(int)), SLOT(targetColorChanged(int)));
 
     for(int i = 0; i < 6; ++i)

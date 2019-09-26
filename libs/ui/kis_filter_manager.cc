@@ -21,7 +21,7 @@
 
 
 #include <QHash>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 
 #include <QMessageBox>
 #include <kactionmenu.h>
@@ -70,7 +70,7 @@ struct KisFilterManager::Private {
     KisStrokeId currentStrokeId;
     QRect initialApplyRect;
 
-    QSignalMapper actionsMapper;
+    KisSignalMapper actionsMapper;
 
     QPointer<KisDlgFilter> filterDialog;
 };

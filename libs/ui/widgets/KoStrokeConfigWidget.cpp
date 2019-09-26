@@ -38,7 +38,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSizePolicy>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 
 // KDE
 #include <klocalizedstring.h>
@@ -306,7 +306,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     connect(d->capNJoinMenu->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyJoinCapChanges()));
 
     { // Map the marker signals correctly
-        QSignalMapper *mapper = new QSignalMapper(this);
+        KisSignalMapper *mapper = new KisSignalMapper(this);
         connect(mapper, SIGNAL(mapped(int)), SLOT(applyMarkerChanges(int)));
 
         connect(d->startMarkerSelector,  SIGNAL(currentIndexChanged(int)), mapper, SLOT(map()));

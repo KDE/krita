@@ -204,7 +204,7 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event)
 void KarbonCalligraphyTool::setAngle(KoPointerEvent *event)
 {
     if (!m_useAngle) {
-        m_angle = (360 - m_customAngle + 90) / 180.0 * M_PI;
+        m_angle = (360.0 - m_customAngle + 90.0) / 180.0 * M_PI;
         return;
     }
 
@@ -217,18 +217,15 @@ void KarbonCalligraphyTool::setAngle(KoPointerEvent *event)
         if (event->xTilt() == 0 && event->yTilt() == 0) {
             return;    // leave as is
         }
-        qDebug() << "using tilt" << m_angle;
-
         if (event->x() == 0) {
-            m_angle = M_PI / 2;
+            m_angle = M_PI / 2.0;
             return;
         }
 
         // y is inverted in qt painting
-        m_angle = std::atan(static_cast<double>(-event->yTilt() / event->xTilt())) + M_PI / 2;
+        m_angle = std::atan(static_cast<double>(-event->yTilt()) / static_cast<double>(event->xTilt())) + M_PI / 2.0;
     } else {
-        m_angle = event->rotation() + M_PI / 2;
-        qDebug() << "using rotation" << m_angle;
+        m_angle = event->rotation() + M_PI / 2.0;
     }
 }
 

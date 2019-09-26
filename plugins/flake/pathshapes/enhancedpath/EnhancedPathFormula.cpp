@@ -429,7 +429,6 @@ TokenList EnhancedPathFormula::scan(const QString &formula) const
                 state = Start;
             }
             break;
-        case Bad:
         default:
             break;
         }

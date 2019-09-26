@@ -54,8 +54,6 @@ public Q_SLOTS:
 
     void slotUpdateVersionMessage();
 
-    void slotClearRecentFiles();
-
 protected:
 
     // QWidget overrides

@@ -133,7 +133,7 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         // until after the view manager is set
         connect(newFileLink, SIGNAL(clicked(bool)), this, SLOT(slotNewFileClicked()));
         connect(openFileLink, SIGNAL(clicked(bool)), this, SLOT(slotOpenFileClicked()));
-        connect(clearRecentFilesLink, SIGNAL(clicked(bool)), this, SLOT(slotClearRecentFiles()));
+        connect(clearRecentFilesLink, SIGNAL(clicked(bool)), mainWin, SLOT(clearRecentFiles()));
 
         slotUpdateThemeColors();
 
@@ -458,8 +458,3 @@ void KisWelcomePageWidget::slotOpenFileClicked()
     m_mainWindow->slotFileOpen();
 }
 
-void KisWelcomePageWidget::slotClearRecentFiles()
-{
-    m_mainWindow->clearRecentFiles();
-    populateRecentDocuments();
-}

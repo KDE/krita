@@ -46,7 +46,7 @@
 #include <QPrinter>
 #include <QPrintPreviewDialog>
 #include <QToolButton>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 #include <QTabBar>
 #include <QMoveEvent>
 #include <QUrl>
@@ -187,8 +187,8 @@ public:
         , welcomePage(new KisWelcomePageWidget(parent))
         , widgetStack(new QStackedWidget(parent))
         , mdiArea(new QMdiArea(parent))
-        , windowMapper(new QSignalMapper(parent))
-        , documentMapper(new QSignalMapper(parent))
+        , windowMapper(new KisSignalMapper(parent))
+        , documentMapper(new KisSignalMapper(parent))
     #ifdef Q_OS_ANDROID
         , fileManager(new KisAndroidFileManager(parent))
     #endif
@@ -282,8 +282,8 @@ public:
 
     QMdiArea *mdiArea;
     QMdiSubWindow *activeSubWindow  {0};
-    QSignalMapper *windowMapper;
-    QSignalMapper *documentMapper;
+    KisSignalMapper *windowMapper;
+    KisSignalMapper *documentMapper;
     KisCanvasWindow *canvasWindow {0};
 
     QByteArray lastExportedFormat;

@@ -49,7 +49,7 @@
 #include <QFlags>
 #include <QMenu>
 #include <QWidgetAction>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 
 #include <QDebug>
 
@@ -60,7 +60,7 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     , m_tool(tool)
     , m_directionButtonState(Auto)
     , m_thumbnailer(new KoStyleThumbnailer())
-    , m_mapper(new QSignalMapper(this))
+    , m_mapper(new KisSignalMapper(this))
     , m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle))
     , m_sortedStylesModel(new DockerStylesComboModel())
     , m_stylesDelegate(0)

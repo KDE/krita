@@ -50,8 +50,6 @@ public Q_SLOTS:
     /// have a preview, an icon is used that needs to be updated
     void populateRecentDocuments();
 
-    void slotClearRecentFiles();
-
 protected:
 
     // QWidget overrides

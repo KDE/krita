@@ -794,7 +794,7 @@ QList<QUrl> KisMainWindow::recentFilesUrls()
 void KisMainWindow::clearRecentFiles()
 {
     d->recentFiles->clear();
-    d->welcomePage->slotClearRecentFiles();
+    d->welcomePage->populateRecentDocuments();
 }
 
 void KisMainWindow::removeRecentUrl(const QUrl &url)

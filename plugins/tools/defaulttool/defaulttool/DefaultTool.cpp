@@ -534,8 +534,8 @@ qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdg
     case KoFlake::TopLeftHandle:
         rotation -= 225.0;
         break;
-    case KoFlake::NoHandle:
-        break;
+    default:
+        ;
     }
 
     if (rotation < 0.0) {

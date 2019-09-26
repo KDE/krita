@@ -41,6 +41,7 @@ public:
     static const QString resourceCacheDbFilename; ///< filename of the database
     static const QString databaseVersion; ///< current schema version
     static QStringList storageTypes; ///< kinds of places where resources can be stored
+    static QStringList disabledBundles; ///< the list of compatibility bundles that need to inactive by default
 
     /**
      * @brief isValid

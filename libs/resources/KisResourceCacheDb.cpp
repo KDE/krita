@@ -35,10 +35,11 @@
 
 const QString dbDriver = "QSQLITE";
 
-const QString KisResourceCacheDb::dbLocationKey {"ResourceCacheDbDirectory"};
-const QString KisResourceCacheDb::resourceCacheDbFilename {"resourcecache.sqlite"};
-const QString KisResourceCacheDb::databaseVersion {"0.0.2"};
+const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
+const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.2" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
+QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
 bool KisResourceCacheDb::s_valid {false};
 QString KisResourceCacheDb::s_lastError {QString()};
@@ -720,7 +721,7 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
         q.bindValue(":location", makeRelative(storage->location()));
         q.bindValue(":timestamp", storage->timestamp().toSecsSinceEpoch());
         q.bindValue(":pre_installed", preinstalled ? 1 : 0);
-        q.bindValue(":active", 1);
+        q.bindValue(":active", !disabledBundles.contains(storage->name()));
 
         r = q.exec();
 

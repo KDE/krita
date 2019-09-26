@@ -365,7 +365,6 @@ private:
                             token += ch;
                     }
                     break;
-                case Bad:
                 default:
                     break;
             }

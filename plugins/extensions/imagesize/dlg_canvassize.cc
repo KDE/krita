@@ -486,7 +486,7 @@ void DlgCanvasSize::updateOffset(int id)
 
 void DlgCanvasSize::expectedOffset(int id, double &xOffset, double &yOffset)
 {
-    const double xCoeff = (id % 3.0) * 0.5;
+    const double xCoeff = (id % 3) * 0.5;
     const double yCoeff = (id / 3.0) * 0.5;
 
     const int xDiff = m_newWidth - m_originalWidth;

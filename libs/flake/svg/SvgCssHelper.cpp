@@ -581,7 +581,6 @@ public:
                         tokenList.append(CssToken(SelectorToken, simpleSelector));
                     }
                     break;
-                case Bad:
                 default:
                     break;
             }

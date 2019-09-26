@@ -1238,6 +1238,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 
 #ifndef HAVE_HDR
     grpHDRSettings->setVisible(false);
+    tabWidget->removeTab(tabWidget->indexOf(tabHDR));
 #endif
 
     const QStringList openglWarnings = KisOpenGL::getOpenGLWarnings();

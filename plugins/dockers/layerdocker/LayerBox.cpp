@@ -964,9 +964,10 @@ void LayerBox::slotAboutToRemoveRows(const QModelIndex &parent, int start, int e
     if (currentIndex.isValid() && parent == currentIndex.parent()
             && currentIndex.row() >= start - 1 && currentIndex.row() <= end + 1) {
         QModelIndex old = currentIndex;
+
         if (model && end < model->rowCount(parent) - 1) // there are rows left below the change
             currentIndex = model->index(end + 1, old.column(), parent);
-        else if (start > 0) // there are rows left above the change
+        else if (model && start > 0) // there are rows left above the change
             currentIndex = model->index(start - 1, old.column(), parent);
         else // there are no rows left in the table
             currentIndex = QModelIndex();

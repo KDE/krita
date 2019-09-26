@@ -416,7 +416,7 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
         }
         // XXX: Save the style?
 
-    } else if (parent->isRootTextNode()) {
+    } else if (parent && parent->isRootTextNode()) {
         context.shapeWriter().startElement("p", false);
     } else {
         context.shapeWriter().startElement("span", false);

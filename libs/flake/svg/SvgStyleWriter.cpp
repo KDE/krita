@@ -500,17 +500,10 @@ QString SvgStyleWriter::saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackg
 
     const QRectF rect = pattern->referenceRect();
 
-    if (pattern->referenceCoordinates() == KoFlake::ObjectBoundingBox) {
-        context.styleWriter().addAttribute("x", rect.x());
-        context.styleWriter().addAttribute("y", rect.y());
-        context.styleWriter().addAttribute("width", rect.width());
-        context.styleWriter().addAttribute("height", rect.height());
-    } else {
-        context.styleWriter().addAttribute("x", rect.x());
-        context.styleWriter().addAttribute("y", rect.y());
-        context.styleWriter().addAttribute("width", rect.width());
-        context.styleWriter().addAttribute("height", rect.height());
-    }
+    context.styleWriter().addAttribute("x", rect.x());
+    context.styleWriter().addAttribute("y", rect.y());
+    context.styleWriter().addAttribute("width", rect.width());
+    context.styleWriter().addAttribute("height", rect.height());
 
     SvgUtil::writeTransformAttributeLazy("patternTransform", pattern->patternTransform(), context.styleWriter());
 

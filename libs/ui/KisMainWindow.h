@@ -111,12 +111,6 @@ public:
      * get list of URL strings for recent files
      */
     QList<QUrl> recentFilesUrls();
-
-    /**
-     * clears the list of the recent files
-     */
-    void clearRecentFiles();
-
     /**
      * removes the given url from the list of recent files
      */
@@ -234,6 +228,13 @@ Q_SIGNALS:
     void screenChanged();
 
 public Q_SLOTS:
+
+
+    /**
+     * clears the list of the recent files
+     */
+    void clearRecentFiles();
+
 
     /**
      *  Slot for opening a new document.

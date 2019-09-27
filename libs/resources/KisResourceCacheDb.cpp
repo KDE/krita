@@ -91,7 +91,8 @@ QSqlError initDb(const QString &location)
                                        << "resources"
                                        << "versioned_resources"
                                        << "resource_tags"
-                                       << "resource_metadata";
+                                       << "resource_metadata"
+                                       << "storage_metadata";
 
     QStringList dbTables;
     // Verify whether we should recreate the database

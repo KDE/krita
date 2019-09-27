@@ -1,6 +1,5 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-    <qresource>
+<RCC>
+    <qresource prefix="/">
         <file alias="create_version_information.sql">sql/create_version_information.sql</file>
         <file alias="fill_version_information.sql">sql/fill_version_information.sql</file>
         <file alias="create_storage_types.sql">sql/create_storage_types.sql</file>
@@ -19,5 +18,6 @@
         <file alias="select_resource_id.sql">sql/select_resource_id.sql</file>
         <file alias="select_tag.sql">sql/select_tag.sql</file>
         <file alias="update_from_001.sql">sql/update_from_001.sql</file>
+        <file alias="create_storage_metadata.sql">sql/create_storage_metadata.sql</file>
     </qresource>
 </RCC>

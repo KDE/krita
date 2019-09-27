@@ -27,7 +27,7 @@ if(Poppler_Qt5_FOUND)
     add_subdirectory(pdf)
 endif()
 
-if(OPENJPEG_FOUND)
+if(OpenJPEG_FOUND)
     add_subdirectory(jp2)
 endif()
 

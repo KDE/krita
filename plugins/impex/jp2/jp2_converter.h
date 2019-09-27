@@ -22,9 +22,13 @@
 #include <stdio.h>
 
 #include <QObject>
+#include <QVector>
 
 #include "kis_types.h"
-#include <KisImageBuilderResult.h>
+#include "kis_global.h"
+#include "kis_annotation.h"
+#include <KisImportExportErrorCode.h>
+
 class KisDocument;
 
 struct JP2ConvertOptions {
@@ -32,7 +36,7 @@ struct JP2ConvertOptions {
   int numberresolution;
 };
 
-class jp2Converter : public QObject
+class JP2Converter : public QObject
 {
     Q_OBJECT
 private:
@@ -42,21 +46,19 @@ private:
         JPT_CFMT = 2
     };
 public:
-    jp2Converter(KisDocument *doc);
-    virtual ~jp2Converter();
+    JP2Converter(KisDocument *doc);
+    virtual ~JP2Converter();
 public:
-    KisImageBuilder_Result buildImage(const QString &filename);
-    KisImageBuilder_Result buildFile(const QString &filename, KisPaintLayerSP layer, const JP2ConvertOptions& options);
+    KisImportExportErrorCode buildImage(const QString &filename);
+    KisImportExportErrorCode buildFile(const QString &filename, KisPaintLayerSP layer, const JP2ConvertOptions& options);
     /**
      * Retrieve the constructed image
      */
-    KisImageWSP getImage();
+    KisImageWSP image();
 private:
-    KisImageBuilder_Result decode(const QString &filename);
+    KisImportExportErrorCode decode(const QString &filename);
 public Q_SLOTS:
     virtual void cancel();
-private:
-    int getFileFormat(const QString &filename) const;
 private:
     KisImageWSP m_image;
     KisDocument *m_doc;

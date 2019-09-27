@@ -1,56 +1,29 @@
-# -*- cmake -*-
+# - Try to find OpenJPEG
+# Once done, this will define
+#
+#  OpenJPEG_FOUND - system has OpenJPEG
+#  OpenJPEG_INCLUDE_DIRS - the OpenJPEG include directories
+#  OpenJPEG_LIBRARIES - link these to use OpenJPEG
 
-# - Find OpenJPEG
-# Find the OpenJPEG includes and library
-# This module defines
-#  OPENJPEG_INCLUDE_DIR, where to find openjpeg.h, etc.
-#  OPENJPEG_LIBRARIES, the libraries needed to use OpenJPEG.
-#  OPENJPEG_FOUND, If false, do not try to use OpenJPEG.
-# also defined, but not for general use are
-#  OPENJPEG_LIBRARY, where to find the OpenJPEG library.
+include(LibFindMacros)
 
-find_path(OPENJPEG_INCLUDE_DIR openjpeg.h
-PATHS
-    /usr/local/include/openjpeg
-    /usr/local/include
-    /usr/include/openjpeg
-    /usr/include/openjpeg-1.5
-    /usr/include
-PATH_SUFFIXES
-    openjpeg-1.5
-    openjpeg
+# Use pkg-config to get hints about paths
+libfind_pkg_check_modules(OpenJPEG_PKGCONF libopenjp2)
+
+# Include dir
+find_path(OpenJPEG_INCLUDE_DIR
+  NAMES openjpeg.h
+  HINTS ${OpenJPEG_PKGCONF_INCLUDE_DIRS}
 )
 
-set(OPENJPEG_NAMES ${OPENJPEG_NAMES} openjpeg)
-find_library(OPENJPEG_LIBRARY
-  NAMES ${OPENJPEG_NAMES}
-  PATHS
-      /usr/lib /usr/local/lib
+# Finally the library itself
+find_library(OpenJPEG_LIBRARY
+  NAMES openjp2
+  HINTS ${OpenJPEG_PKGCONF_LIBRARY_DIRS}
 )
 
-if (OPENJPEG_LIBRARY AND OPENJPEG_INCLUDE_DIR)
-    set(OPENJPEG_LIBRARIES ${OPENJPEG_LIBRARY})
-    set(OPENJPEG_FOUND "YES")
-else ()
-  set(OPENJPEG_FOUND "NO")
-endif ()
-
-
-if (OPENJPEG_FOUND)
-   if (NOT OPENJPEG_FIND_QUIETLY)
-      message(STATUS "Found OpenJPEG: ${OPENJPEG_LIBRARIES}")
-   endif ()
-else ()
-   if (OPENJPEG_FIND_REQUIRED)
-      message(FATAL_ERROR "Could not find OpenJPEG library")
-   endif ()
-endif ()
-
-# Deprecated declarations.
-set (NATIVE_OPENJPEG_INCLUDE_PATH ${OPENJPEG_INCLUDE_DIR} )
-get_filename_component (NATIVE_OPENJPEG_LIB_PATH ${OPENJPEG_LIBRARY} PATH)
-
-mark_as_advanced(
-  OPENJPEG_LIBRARY
-  OPENJPEG_INCLUDE_DIR
-  )
+# Set the include dir variables and the libraries and let libfind_process do the rest.
+# NOTE: Singular variables for this library, plural for libraries this lib depends on.
+set(OpenJPEG_PROCESS_INCLUDES OpenJPEG_INCLUDE_DIR)
+set(OpenJPEG_PROCESS_LIBS OpenJPEG_LIBRARY)
+libfind_process(OpenJPEG)

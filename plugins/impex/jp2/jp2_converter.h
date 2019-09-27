@@ -60,7 +60,7 @@ private:
 public Q_SLOTS:
     virtual void cancel();
 private:
-    KisImageWSP m_image;
+    KisImageSP m_image;
     KisDocument *m_doc;
     bool m_stop;
 };

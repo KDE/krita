@@ -52,6 +52,7 @@
 #include "commands/kis_node_property_list_command.h"
 #include "commands/kis_node_compositeop_command.h"
 #include <KisDelayedUpdateNodeInterface.h>
+#include <KisCroppedOriginalLayerInterface.h>
 #include "krita_utils.h"
 #include "kis_image_signal_router.h"
 
@@ -61,12 +62,13 @@ namespace KisLayerUtils {
     void fetchSelectionMasks(KisNodeList mergedNodes, QVector<KisSelectionMaskSP> &selectionMasks)
     {
         foreach (KisNodeSP node, mergedNodes) {
-            KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
 
-            KisSelectionMaskSP mask;
+            Q_FOREACH(KisNodeSP child, node->childNodes(QStringList("KisSelectionMask"), KoProperties())) {
 
-            if (layer && (mask = layer->selectionMask())) {
-                selectionMasks.append(mask);
+                KisSelectionMaskSP mask = qobject_cast<KisSelectionMask*>(child.data());
+                if (mask) {
+                    selectionMasks.append(mask);
+                }
             }
         }
     }
@@ -299,38 +301,10 @@ namespace KisLayerUtils {
                 m_info->image->bounds() : QRect();
 
             foreach (KisNodeSP node, m_info->allSrcNodes()) {
-                refreshHiddenAreaAsync(node, preparedRect);
+                refreshHiddenAreaAsync(m_info->image, node, preparedRect);
             }
         }
 
-    private:
-        QRect realNodeExactBounds(KisNodeSP rootNode, QRect currentRect = QRect()) {
-            KisNodeSP node = rootNode->firstChild();
-
-            while(node) {
-                currentRect |= realNodeExactBounds(node, currentRect);
-                node = node->nextSibling();
-            }
-
-            // TODO: it would be better to count up changeRect inside
-            // node's extent() method
-            currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds());
-
-            return currentRect;
-        }
-
-        void refreshHiddenAreaAsync(KisNodeSP rootNode, const QRect &preparedArea) {
-            QRect realNodeRect = realNodeExactBounds(rootNode);
-            if (!preparedArea.contains(realNodeRect)) {
-
-                QRegion dirtyRegion = realNodeRect;
-                dirtyRegion -= preparedArea;
-
-                foreach(const QRect &rc, dirtyRegion.rects()) {
-                    m_info->image->refreshGraphAsync(rootNode, rc, realNodeRect);
-                }
-            }
-        }
     private:
         MergeDownInfoBaseSP m_info;
     };
@@ -425,7 +399,6 @@ namespace KisLayerUtils {
 
         void populateChildCommands() override {
             QString mergedLayerName;
-
             if (m_name.isEmpty()){
                 const QString mergedLayerSuffix = i18n("Merged");
                 mergedLayerName = m_info->mergedNodes.first()->name();
@@ -565,9 +538,9 @@ namespace KisLayerUtils {
     {
     }
 
-    void KeepNodesSelectedCommand::end() {
+    void KeepNodesSelectedCommand::partB() {
         KisImageSignalType type;
-        if (isFinalizing()) {
+        if (getState() == State::FINALIZING) {
             type = ComplexNodeReselectionSignal(m_activeAfter, m_selectedAfter);
         } else {
             type = ComplexNodeReselectionSignal(m_activeBefore, m_selectedBefore);
@@ -588,10 +561,6 @@ namespace KisLayerUtils {
 
     }
 
-    KisLayerSP constructDefaultLayer(KisImageSP image) {
-        return new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
-    }
-
     RemoveNodeHelper::~RemoveNodeHelper()
     {
     }
@@ -608,13 +577,22 @@ namespace KisLayerUtils {
     void RemoveNodeHelper::safeRemoveMultipleNodes(KisNodeList nodes, KisImageSP image) {
         const bool lastLayer = scanForLastLayer(image, nodes);
 
+        auto isNodeWeird = [] (KisNodeSP node) {
+            const bool normalCompositeMode = node->compositeOpId() == COMPOSITE_OVER;
+
+            KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+            const bool hasInheritAlpha = layer && layer->alphaChannelDisabled();
+            return !normalCompositeMode && !hasInheritAlpha;
+        };
+
         while (!nodes.isEmpty()) {
             KisNodeList::iterator it = nodes.begin();
 
             while (it != nodes.end()) {
                 if (!checkIsSourceForClone(*it, nodes)) {
                     KisNodeSP node = *it;
-                    addCommandImpl(new KisImageLayerRemoveCommand(image, node, false, true));
+
+                    addCommandImpl(new KisImageLayerRemoveCommand(image, node, !isNodeWeird(node), true));
                     it = nodes.erase(it);
                 } else {
                     ++it;
@@ -623,7 +601,7 @@ namespace KisLayerUtils {
         }
 
         if (lastLayer) {
-            KisLayerSP newLayer = constructDefaultLayer(image);
+            KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
             addCommandImpl(new KisImageLayerAddCommand(image, newLayer,
                                                        image->root(),
                                                        KisNodeSP(),
@@ -659,7 +637,8 @@ namespace KisLayerUtils {
         KisNodeSP node = image->root()->firstChild();
         while (node) {
             if (!nodesToRemove.contains(node) &&
-                qobject_cast<KisLayer*>(node.data())) {
+                qobject_cast<KisLayer*>(node.data()) &&
+                !node->isFakeNode()) {
 
                 lastLayer = false;
                 break;
@@ -719,12 +698,47 @@ namespace KisLayerUtils {
                 putAfter = nodesToDelete.last();
             }
 
-            // Add the new merged node on top of the active node -- checking
-            // whether the parent is going to be deleted
-            parent = putAfter->parent();
-            while (parent && nodesToDelete.contains(parent)) {
-                parent = parent->parent();
+            // Add the new merged node on top of the active node
+            // -- checking all parents if they are included in nodesToDelete
+            // Not every descendant is included in nodesToDelete even if in fact
+            //   they are going to be deleted, so we need to check it.
+            // If we consider the path from root to the putAfter node,
+            //    if there are any nodes marked for deletion, any node afterwards
+            //    is going to be deleted, too.
+            //   example:      root . . . . . ! ! . . ! ! ! ! . . . . putAfter
+            //   it should be: root . . . . . ! ! ! ! ! ! ! ! ! ! ! ! !putAfter
+            //   and here:     root . . . . X ! ! . . ! ! ! ! . . . . putAfter
+            //   you can see which node is "the perfect ancestor"
+            //   (marked X; called "parent" in the function arguments).
+            //   and here:     root . . . . . O ! . . ! ! ! ! . . . . putAfter
+            //   you can see which node is "the topmost deleted ancestor" (marked 'O')
+
+            KisNodeSP node = putAfter->parent();
+            bool foundDeletedAncestor = false;
+            KisNodeSP topmostAncestorToDelete = nullptr;
+
+            while (node) {
+
+                if (nodesToDelete.contains(node)
+                        && !nodesToDelete.contains(node->parent())) {
+                    foundDeletedAncestor = true;
+                    topmostAncestorToDelete = node;
+                    // Here node is to be deleted and its parent is not,
+                    // so its parent is the one of the first not deleted (="perfect") ancestors.
+                    // We need the one that is closest to the top (root)
+                }
+
+                node = node->parent();
             }
+
+            if (foundDeletedAncestor) {
+                parent = topmostAncestorToDelete->parent();
+                putAfter = topmostAncestorToDelete;
+            }
+            else {
+                parent = putAfter->parent(); // putAfter (and none of its ancestors) is to be deleted, so its parent is the first not deleted ancestor
+            }
+
         }
 
         void populateChildCommands() override {
@@ -737,6 +751,18 @@ namespace KisLayerUtils {
                 KisNodeSP oldRoot = m_info->image->root();
                 KisNodeSP newRoot(new KisGroupLayer(m_info->image, "root", OPACITY_OPAQUE_U8));
 
+                // copy all fake nodes into the new image
+                KisLayerUtils::recursiveApplyNodes(oldRoot, [this, oldRoot, newRoot] (KisNodeSP node) {
+                    if (node->isFakeNode() && node->parent() == oldRoot) {
+                        addCommand(new KisImageLayerAddCommand(m_info->image,
+                                                               node->clone(),
+                                                               newRoot,
+                                                               KisNodeSP(),
+                                                               false, false));
+
+                    }
+                });
+
                 addCommand(new KisImageLayerAddCommand(m_info->image,
                                                        m_info->dstNode,
                                                        newRoot,
@@ -746,20 +772,12 @@ namespace KisLayerUtils {
 
             }
             else {
-                if (parent == m_putAfter->parent()) {
-                    addCommand(new KisImageLayerAddCommand(m_info->image,
-                                                           m_info->dstNode,
-                                                           parent,
-                                                           m_putAfter,
-                                                           true, false));
-                }
-                else {
-                    addCommand(new KisImageLayerAddCommand(m_info->image,
-                                                           m_info->dstNode,
-                                                           parent,
-                                                           parent->lastChild(),
-                                                           true, false));
-                }
+                addCommand(new KisImageLayerAddCommand(m_info->image,
+                                                       m_info->dstNode,
+                                                       parent,
+                                                       m_putAfter,
+                                                       true, false));
+
 
                 /**
                  * We can merge selection masks, in this case dstLayer is not defined!
@@ -819,7 +837,7 @@ namespace KisLayerUtils {
 
     SwitchFrameCommand::~SwitchFrameCommand() {}
 
-    void SwitchFrameCommand::init() {
+    void SwitchFrameCommand::partA() {
         KisImageAnimationInterface *interface = m_image->animationInterface();
         const int currentTime = interface->currentTime();
         if (currentTime == m_newTime) {
@@ -831,7 +849,7 @@ namespace KisLayerUtils {
         interface->saveAndResetCurrentTime(m_newTime, &m_storage->value);
     }
 
-    void SwitchFrameCommand::end() {
+    void SwitchFrameCommand::partB() {
         KisImageAnimationInterface *interface = m_image->animationInterface();
         const int currentTime = interface->currentTime();
         if (currentTime == m_storage->value) {
@@ -915,6 +933,9 @@ namespace KisLayerUtils {
         }
     }
 
+    /**
+     * \see a comment in mergeMultipleLayersImpl()
+     */
     void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
     {
         if (!layer->prevSibling()) return;
@@ -953,7 +974,7 @@ namespace KisLayerUtils {
             applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
-            // in two-layer mode we disable pass trhough only when the destination layer
+            // in two-layer mode we disable pass through only when the destination layer
             // is not a group layer
             applicator.applyCommand(new DisablePassThroughForHeadsOnly(info, true));
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
@@ -1131,6 +1152,30 @@ namespace KisLayerUtils {
         return result;
     }
 
+    KisNodeList sortAndFilterAnyMergableNodesSafe(const KisNodeList &nodes, KisImageSP image) {
+        KisNodeList filteredNodes = nodes;
+        KisNodeList sortedNodes;
+
+        KisLayerUtils::filterMergableNodes(filteredNodes, true);
+
+        bool haveExternalNodes = false;
+        Q_FOREACH (KisNodeSP node, nodes) {
+            if (node->graphListener() != image->root()->graphListener()) {
+                haveExternalNodes = true;
+                break;
+            }
+        }
+
+        if (!haveExternalNodes) {
+            KisLayerUtils::sortMergableNodes(image->root(), filteredNodes, sortedNodes);
+        } else {
+            sortedNodes = filteredNodes;
+        }
+
+        return sortedNodes;
+    }
+
+
     void addCopyOfNameTag(KisNodeSP node)
     {
         const QString prefix = i18n("Copy of");
@@ -1186,6 +1231,19 @@ namespace KisLayerUtils {
         return visibleNodes;
     }
 
+    void filterUnlockedNodes(KisNodeList &nodes)
+    {
+        KisNodeList::iterator it = nodes.begin();
+
+        while (it != nodes.end()) {
+            if ((*it)->userLocked()) {
+                it = nodes.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    }
+
     void changeImageDefaultProjectionColor(KisImageSP image, const KoColor &color)
     {
         KisImageSignalVector emitSignals;
@@ -1202,6 +1260,31 @@ namespace KisLayerUtils {
         applicator.end();
     }
 
+    /**
+     * There might be two approaches for merging multiple layers:
+     *
+     * 1) Consider the selected nodes as a distinct "group" and merge them
+     *    as if they were isolated from the rest of the image. The key point
+     *    of this approach is that the look of the image will change, when
+     *    merging "weird" layers, like adjustment layers or layers with
+     *    non-normal blending mode.
+     *
+     * 2) Merge layers in a way to keep the look of the image as unchanged as
+     *    possible. With this approach one uses a few heuristics:
+     *
+     *       * when merging multiple layers with non-normal (but equal) blending
+     *         mode, first merge these layers together using Normal blending mode,
+     *         then set blending mode of the result to the original blending mode
+     *
+     *       * when merging multiple layers with different blending modes or
+     *         layer styles, they are first rasterized, and then laid over each
+     *         other with their own composite op. The blending mode of the final
+     *         layer is set to Normal, so the user could clearly see that he should
+     *         choose the correct blending mode.
+     *
+     * Krita uses the second approach: after merge operation, the image should look
+     * as if nothing has happened (if it is technically possible).
+     */
     void mergeMultipleLayersImpl(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter,
                                            bool flattenSingleLayer, const KUndo2MagicString &actionName,
                                            bool cleanupNodes = true, const QString layerName = QString())
@@ -1234,7 +1317,15 @@ namespace KisLayerUtils {
         KisNodeList invisibleNodes;
         mergedNodes = filterInvisibleNodes(originalNodes, &invisibleNodes, &putAfter);
 
-        if (!invisibleNodes.isEmpty()) {
+        if (!invisibleNodes.isEmpty() && !mergedNodes.isEmpty()) {
+            /* If the putAfter node is invisible,
+             * we should instead pick one of the nodes
+             * to be merged to avoid a null putAfter.
+             */
+            if (!putAfter->visible()){
+                putAfter = mergedNodes.first();
+            }
+
             applicator.applyCommand(
                 new SimpleRemoveLayers(invisibleNodes,
                                        image),
@@ -1258,7 +1349,7 @@ namespace KisLayerUtils {
             applicator.applyCommand(new DisableExtraCompositing(info));
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
-            if (info->frames.size() > 0) {
+            if (!info->frames.isEmpty()) {
                 foreach (int frame, info->frames) {
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
@@ -1285,6 +1376,7 @@ namespace KisLayerUtils {
                                             KisStrokeJobData::SEQUENTIAL,
                                         KisStrokeJobData::EXCLUSIVE);
             }
+
             applicator.applyCommand(new KeepMergedNodesSelected(info, putAfter, true));
         }
 
@@ -1425,7 +1517,7 @@ namespace KisLayerUtils {
           m_nodes(nodes)
     {
     }
-    void KisSimpleUpdateCommand::end()
+    void KisSimpleUpdateCommand::partB()
     {
         updateNodes(m_nodes);
     }
@@ -1474,6 +1566,29 @@ namespace KisLayerUtils {
         });
     }
 
+    bool hasDelayedNodeWithUpdates(KisNodeSP root)
+    {
+        return recursiveFindNode(root,
+            [] (KisNodeSP node) {
+                KisDelayedUpdateNodeInterface *delayedUpdate =
+                    dynamic_cast<KisDelayedUpdateNodeInterface*>(node.data());
+
+                return delayedUpdate ? delayedUpdate->hasPendingTimedUpdates() : false;
+            });
+    }
+
+    void forceAllHiddenOriginalsUpdate(KisNodeSP root)
+    {
+        KisLayerUtils::recursiveApplyNodes(root,
+        [] (KisNodeSP node) {
+            KisCroppedOriginalLayerInterface *croppedUpdate =
+                    dynamic_cast<KisCroppedOriginalLayerInterface*>(node.data());
+            if (croppedUpdate) {
+                croppedUpdate->forceUpdateHiddenAreaOnOriginal();
+            }
+        });
+    }
+
     KisImageSP findImageByHierarchy(KisNodeSP node)
     {
         while (node) {
@@ -1486,6 +1601,47 @@ namespace KisLayerUtils {
         }
 
         return 0;
+    }
+
+    namespace Private {
+    QRect realNodeChangeRect(KisNodeSP rootNode, QRect currentRect = QRect()) {
+        KisNodeSP node = rootNode->firstChild();
+
+        while(node) {
+            currentRect |= realNodeChangeRect(node, currentRect);
+            node = node->nextSibling();
+        }
+
+        if (!rootNode->isFakeNode()) {
+            // TODO: it would be better to count up changeRect inside
+            // node's extent() method
+            currentRect |= rootNode->projectionPlane()->changeRect(rootNode->exactBounds());
+        }
+
+        return currentRect;
+    }
+    }
+
+    void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea) {
+        QRect realNodeRect = Private::realNodeChangeRect(rootNode);
+        if (!preparedArea.contains(realNodeRect)) {
+
+            QRegion dirtyRegion = realNodeRect;
+            dirtyRegion -= preparedArea;
+
+            Q_FOREACH (const QRect &rc, dirtyRegion.rects()) {
+                image->refreshGraphAsync(rootNode, rc, realNodeRect);
+            }
+        }
+    }
+
+    QRect recursiveNodeExactBounds(KisNodeSP rootNode)
+    {
+        QRect exactBounds;
+        recursiveApplyNodes(rootNode, [&exactBounds] (KisNodeSP node) {
+            exactBounds |= node->exactBounds();
+        });
+        return exactBounds;
     }
 
 }

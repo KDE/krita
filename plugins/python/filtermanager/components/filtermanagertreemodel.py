@@ -1,18 +1,20 @@
-'''
-This script is licensed CC 0 1.0, so that you can learn from it.
+# This script is licensed CC 0 1.0, so that you can learn from it.
 
------- CC 0 1.0 ---------------
+# ------ CC 0 1.0 ---------------
 
-The person who associated a work with this deed has dedicated the work to the public domain by waiving all of his or her rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law.
+# The person who associated a work with this deed has dedicated the
+# work to the public domain by waiving all of his or her rights to the
+# work worldwide under copyright law, including all related and
+# neighboring rights, to the extent allowed by law.
 
-You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.
+# You can copy, modify, distribute and perform the work, even for
+# commercial purposes, all without asking permission.
 
-https://creativecommons.org/publicdomain/zero/1.0/legalcode
-'''
-from PyQt5.QtCore import QAbstractItemModel, QFile, QIODevice, QModelIndex, Qt
-from PyQt5.QtWidgets import QApplication, QTreeView
-from . import filtermanagertreeitem
+# https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
+from PyQt5.QtCore import QAbstractItemModel, QModelIndex, Qt
 from PyQt5.QtGui import QPixmap
+from . import filtermanagertreeitem
 
 
 class FilterManagerTreeModel(QAbstractItemModel):
@@ -24,7 +26,8 @@ class FilterManagerTreeModel(QAbstractItemModel):
     def __init__(self, uiFilterManager, parent=None):
         super(FilterManagerTreeModel, self).__init__(parent)
 
-        self.rootItem = filtermanagertreeitem.FilterManagerTreeItem(("Name", "Type", "Thumbnail"))
+        self.rootItem = filtermanagertreeitem.FilterManagerTreeItem(
+            (i18n("Name"), i18n("Type"), i18n("Thumbnail")))
         self.uiFilterManager = uiFilterManager
         self._loadTreeModel(self.rootItem)
 
@@ -111,7 +114,8 @@ class FilterManagerTreeModel(QAbstractItemModel):
                           "Document",
                           QPixmap.fromImage(document.thumbnail(30, 30)),
                           rootNode, index)
-            item = filtermanagertreeitem.FilterManagerTreeItem(columnData, parent)
+            item = filtermanagertreeitem.FilterManagerTreeItem(
+                columnData, parent)
             parent.appendChild(item)
 
             childNodes = rootNode.childNodes()
@@ -126,7 +130,8 @@ class FilterManagerTreeModel(QAbstractItemModel):
                           "Untyped" if nodeType == '' else nodeType,
                           QPixmap.fromImage(node.thumbnail(30, 30)),
                           node, documentIndex)
-            item = filtermanagertreeitem.FilterManagerTreeItem(columnData, parent)
+            item = filtermanagertreeitem.FilterManagerTreeItem(
+                columnData, parent)
             parent.appendChild(item)
 
             childNodes = node.childNodes()

@@ -54,14 +54,14 @@ public:
 
     KisDocumentAwareSpinBoxUnitManager(QObject *parent = 0, int pPixDir = PIX_DIR_X);
 
-    //! \reimp \see KisSpinBoxUnitManager
+    //! \see KisSpinBoxUnitManager
     qreal getConversionFactor(int dim, QString psymbol) const override;
-    //! \reimp \see KisSpinBoxUnitManager
+    //! \see KisSpinBoxUnitManager
     qreal getConversionConstant(int dim, QString symbol) const override;
 
 protected:
 
-    //! \reimp \see KisSpinBoxUnitManager
+    //! \see KisSpinBoxUnitManager
     virtual bool hasPercent(int unitDim) const override;
 
     PixDir pixDir;

@@ -36,6 +36,7 @@
 #include "filter/kis_filter_registry.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
+#include <sdk/tests/kistest.h>
 
 //#define DEBUG_VISITORS
 
@@ -330,7 +331,7 @@ void KisWalkersTest::testVisitingWithTopmostMask()
     KisFilterMaskSP filterMask1 = new KisFilterMask();
     filterMask1->initSelection(groupLayer);
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
-    Q_ASSERT(filter);
+    KIS_ASSERT(filter);
     KisFilterConfigurationSP configuration1 = filter->defaultConfiguration();
     filterMask1->setFilter(configuration1);
 
@@ -1289,5 +1290,5 @@ void KisWalkersTest::testGraphStructureChecksum()
     QCOMPARE(walker.checksumValid(), true);
 }
 
-QTEST_MAIN(KisWalkersTest)
+KISTEST_MAIN(KisWalkersTest)
 

@@ -55,6 +55,7 @@ TimelineRulerHeader::TimelineRulerHeader(QWidget *parent)
 {
     setSectionResizeMode(QHeaderView::Fixed);
     setDefaultSectionSize(18);
+    setMinimumSectionSize(8);
 }
 
 TimelineRulerHeader::~TimelineRulerHeader()
@@ -427,6 +428,16 @@ void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
         if (e->button() == Qt::RightButton) {
             if (numSelectedColumns <= 1) {
                 model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
+            }
+
+            /* Fix for safe-assert involving kis_animation_curve_docker.
+             * There should probably be a more elagant way for dealing
+             * with reused timeline_ruler_header instances in other
+             * timeline views instead of simply animation_frame_view.
+             *
+             * This works for now though... */
+            if(!m_d->actionMan){
+                return;
             }
 
             QMenu menu;

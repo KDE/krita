@@ -37,7 +37,7 @@ class QRect;
  * and every mode.
  *
  * It also manages the sequence number of the graph. This is a number
- * which can be used as a checksum for whether the graph has chenged
+ * which can be used as a checksum for whether the graph has changed
  * from some period of time or not. \see graphSequenceNumber()
  */
 class KRITAIMAGE_EXPORT KisNodeGraphListener
@@ -81,6 +81,8 @@ public:
     virtual void nodeHasBeenMoved(KisNode * node, int oldIndex, int newIndex);
 
     virtual void nodeChanged(KisNode * node);
+
+    virtual void nodeCollapsedChanged(KisNode * node);
 
     virtual void invalidateAllFrames();
 

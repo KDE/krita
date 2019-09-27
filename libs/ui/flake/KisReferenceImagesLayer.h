@@ -24,6 +24,8 @@
 
 #include <kis_types.h>
 
+class KisDocument;
+
 class KRITAUI_EXPORT KisReferenceImagesLayer : public KisShapeLayer
 {
     Q_OBJECT
@@ -50,6 +52,8 @@ public:
         return new KisReferenceImagesLayer(*this);
     }
 
+    bool isFakeNode() const override;
+
 Q_SIGNALS:
     /**
      * The content of the layer has changed, and the canvas decoration
@@ -63,6 +67,8 @@ private:
     friend struct RemoveReferenceImagesCommand;
     friend class ReferenceImagesCanvas;
 };
+
+typedef KisSharedPtr<KisReferenceImagesLayer> KisReferenceImagesLayerSP;
 
 
 #endif //KRITA_KISREFERENCEIMAGESLAYER_H

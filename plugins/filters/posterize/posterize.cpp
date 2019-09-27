@@ -68,9 +68,25 @@ KisPosterizeColorTransformation::KisPosterizeColorTransformation(int steps, cons
 {
     m_step = KoColorSpaceMathsTraits<quint16>::max / steps;
     m_halfStep = m_step / 2;
+    m_fromConversion = KoColorSpaceRegistry::instance()->createColorConverter(
+        m_colorSpace,
+        KoColorSpaceRegistry::instance()->rgb16("sRGB-elle-V2-srgbtrc.icc"),
+        KoColorConversionTransformation::internalRenderingIntent(),
+        KoColorConversionTransformation::internalConversionFlags());
+    m_toConversion = KoColorSpaceRegistry::instance()->createColorConverter(
+        KoColorSpaceRegistry::instance()->rgb16("sRGB-elle-V2-srgbtrc.icc"),
+        m_colorSpace,
+        KoColorConversionTransformation::internalRenderingIntent(),
+        KoColorConversionTransformation::internalConversionFlags());
 }
 
-KisConfigWidget* KisFilterPosterize::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisPosterizeColorTransformation::~KisPosterizeColorTransformation()
+{
+    delete m_fromConversion;
+    delete m_toConversion;
+}
+
+KisConfigWidget* KisFilterPosterize::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     vKisIntegerWidgetParam param;
@@ -89,8 +105,9 @@ void KisPosterizeColorTransformation::transform(const quint8* src, quint8* dst, 
 {
     quint16 m_rgba[4];
     quint16 m_mod[4];
+
     while (nPixels--) {
-        m_colorSpace->toRgbA16(src, reinterpret_cast<quint8 *>(m_rgba), 1);
+        m_fromConversion->transform(src, reinterpret_cast<quint8 *>(m_rgba), 1);
 
         m_mod[0] = m_rgba[0] % m_step;
         m_mod[1] = m_rgba[1] % m_step;
@@ -102,7 +119,7 @@ void KisPosterizeColorTransformation::transform(const quint8* src, quint8* dst, 
         m_rgba[2] = m_rgba[2] + (m_mod[2] > m_halfStep ? m_step - m_mod[2] : -m_mod[2]);
         m_rgba[3] = m_rgba[3] + (m_mod[3] > m_halfStep ? m_step - m_mod[3] : -m_mod[3]);
 
-        m_colorSpace->fromRgbA16(reinterpret_cast<quint8 *>(m_rgba), dst, 1);
+        m_toConversion->transform(reinterpret_cast<quint8 *>(m_rgba), dst, 1);
         src += m_psize;
         dst += m_psize;
     }

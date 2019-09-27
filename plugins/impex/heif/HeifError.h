@@ -23,9 +23,10 @@
 #include <KisDocument.h>
 
 #include "libheif/heif_cxx.h"
+#include <KisImportExportErrorCode.h>
 
 
-KisImportExportFilter::ConversionStatus setHeifError(KisDocument* document,
+KisImportExportErrorCode setHeifError(KisDocument* document,
                                                      heif::Error error);
 
 #endif

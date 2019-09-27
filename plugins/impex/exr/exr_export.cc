@@ -66,7 +66,7 @@ KisConfigWidget *EXRExport::createConfigurationWidget(QWidget *parent, const QBy
     return new KisWdgOptionsExr(parent);
 }
 
-KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode EXRExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
     Q_ASSERT(document);
     Q_ASSERT(configuration);
@@ -76,7 +76,7 @@ KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document
 
     EXRConverter exrConverter(document, !batchMode());
 
-    KisImageBuilder_Result res;
+    KisImportExportErrorCode res;
 
     if (configuration && configuration->getBool("flatten")) {
         res = exrConverter.buildFile(filename(), image->rootLayer(), true);
@@ -85,40 +85,13 @@ KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document
         res = exrConverter.buildFile(filename(), image->rootLayer());
     }
 
-    dbgFile  << " Result =" << res;
-    switch (res) {
-    case KisImageBuilder_RESULT_INVALID_ARG:
-        document->setErrorMessage(i18n("This layer cannot be saved to EXR."));
-        return KisImportExportFilter::WrongFormat;
-
-    case KisImageBuilder_RESULT_EMPTY:
-        document->setErrorMessage(i18n("The layer does not have an image associated with it."));
-        return KisImportExportFilter::WrongFormat;
-
-    case KisImageBuilder_RESULT_NO_URI:
-        document->setErrorMessage(i18n("The filename is empty."));
-        return KisImportExportFilter::CreationError;
-
-    case KisImageBuilder_RESULT_NOT_LOCAL:
-        document->setErrorMessage(i18n("EXR images cannot be saved remotely."));
-        return KisImportExportFilter::InternalError;
-
-    case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
-        document->setErrorMessage(i18n("Colorspace not supported: EXR images must be 16 or 32 bits floating point RGB."));
-        return KisImportExportFilter::WrongFormat;
-
-    case KisImageBuilder_RESULT_OK:
-        if (!exrConverter.errorMessage().isNull()) {
-            document->setErrorMessage(exrConverter.errorMessage());
-        }
-        return KisImportExportFilter::OK;
-    default:
-        break;
+    if (!exrConverter.errorMessage().isNull()) {
+        document->setErrorMessage(exrConverter.errorMessage());
     }
 
-    document->setErrorMessage(i18n("Internal Error"));
-    return KisImportExportFilter::InternalError;
 
+    dbgFile  << " Result =" << res;
+    return res;
 }
 
 void EXRExport::initializeCapabilities()

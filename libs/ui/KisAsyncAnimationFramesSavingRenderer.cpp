@@ -104,21 +104,16 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, co
 
     m_d->savingDevice->makeCloneFromRough(image->projection(), image->bounds());
 
-    KisTimeSpan range(frame, 1);
+    KisImportExportErrorCode status = ImportExportCodes::OK;
 
-    KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
+    QString frameNumber = QString("%1").arg(frame + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
+    QString filename = m_d->filenamePrefix + frameNumber + m_d->filenameSuffix;
 
-    for (int i = range.start(); i <= range.end(); i++) {
-        QString frameNumber = QString("%1").arg(i + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
-        QString filename = m_d->filenamePrefix + frameNumber + m_d->filenameSuffix;
-
-        if (!m_d->savingDoc->exportDocumentSync(QUrl::fromLocalFile(filename), m_d->outputMimeType, m_d->exportConfiguration)) {
-            status = KisImportExportFilter::InternalError;
-            break;
-        }
+    if (!m_d->savingDoc->exportDocumentSync(QUrl::fromLocalFile(filename), m_d->outputMimeType, m_d->exportConfiguration)) {
+        status = ImportExportCodes::InternalError;
     }
 
-    if (status == KisImportExportFilter::OK) {
+    if (status.isOk()) {
         emit sigCompleteRegenerationInternal(frame);
     } else {
         emit sigCancelRegenerationInternal(frame);

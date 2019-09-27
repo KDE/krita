@@ -107,11 +107,11 @@ void ColorSelectorItem::Private::commitColor(const KoColor& color, Acs::ColorRol
     if (!view->canvas())
         return;
 
-    KoColor currentColor = Acs::currentColor(view->resourceProvider(), role);
+    KoColor currentColor = Acs::currentColor(view->canvasResourceProvider(), role);
     if (color == currentColor) return;
 
     colorUpdateAllowed = false;
-    Acs::setCurrentColor(view->resourceProvider(), role, color);
+    Acs::setCurrentColor(view->canvasResourceProvider(), role, color);
     QColor qcolor = selector->converter()->toQColor(currentColor);
     emit q->colorChanged(qcolor, color.opacityF(), false);
     colorUpdateAllowed = true;
@@ -198,7 +198,7 @@ void ColorSelectorItem::geometryChanged(const QRectF& newGeometry, const QRectF&
 //    }
 
     if (d->view) {
-        d->selector->setColor(Acs::currentColor(d->view->resourceProvider(), d->colorRole));
+        d->selector->setColor(Acs::currentColor(d->view->canvasResourceProvider(), d->colorRole));
     }
 
     d->repaintTimer->start();
@@ -252,9 +252,9 @@ void ColorSelectorItem::setView(QObject* newView)
 {
     d->view = qobject_cast<KisViewManager*>( newView );
     if (d->view) {
-        connect(d->view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)),
+        connect(d->view->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)),
                 this, SLOT(fgColorChanged(KoColor)));
-        connect(d->view->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)),
+        connect(d->view->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)),
                 this, SLOT(bgColorChanged(KoColor)));
 
         d->commitColor(d->currentColor, d->colorRole);
@@ -277,7 +277,7 @@ void ColorSelectorItem::setChangeBackground(bool newChangeBackground)
         return;
 
 
-    d->currentColor = Acs::currentColor(d->view->resourceProvider(), d->colorRole);
+    d->currentColor = Acs::currentColor(d->view->canvasResourceProvider(), d->colorRole);
 
     d->main->setColor(d->currentColor);
     d->sub->setColor(d->currentColor);

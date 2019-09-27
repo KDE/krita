@@ -27,6 +27,17 @@ class KisTiffTest : public QObject
 private Q_SLOTS:
     void testFiles();
     void testRoundTripRGBF16();
+
+    void testSaveTiffColorSpace(QString colorModel, QString colorDepth, QString colorProfile);
+    void testSaveTiffRgbaColorSpace();
+    void testSaveTiffGreyAColorSpace();
+    void testSaveTiffCmykColorSpace();
+    void testSaveTiffLabColorSpace();
+    void testSaveTiffYCrCbAColorSpace();
+
+    void testImportFromWriteonly();
+    void testExportToReadonly();
+    void testImportIncorrectFormat();
 };
 
 #endif

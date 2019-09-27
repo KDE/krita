@@ -321,7 +321,9 @@ void KoPathSegment::Private::deCasteljau(qreal t, QPointF *p1, QPointF *p2, QPoi
         q[1] = first->controlPoint2();
         q[2] = second->controlPoint1();
     }
-    q[deg] = second->point();
+    if (deg >= 0) {
+        q[deg] = second->point();
+    }
 
     // points of the new segment after the split point
     QPointF p[3];
@@ -825,7 +827,7 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
      which forms another explicit bezier curve
      D(t) = (t,d(t)) = sum_i D_i B_{n,i}(t)
      now values of t for which P(t) lies outside of our fat line L
-     corrsponds to values of t for which D(t) lies above d = dmax or
+     corresponds to values of t for which D(t) lies above d = dmax or
      below d = dmin
      we can determine parameter ranges of t for which P(t) is guaranteed
      to lie outside of L by identifying ranges of t which the convex hull

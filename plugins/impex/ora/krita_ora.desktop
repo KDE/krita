@@ -1,8 +1,8 @@
 [Desktop Entry]
 Categories=Qt;KDE;Office;Graphics;
 Comment=
-Exec=krita %f
-Icon=calligrakrita
+Exec=krita %F
+Icon=krita
 MimeType=image/openraster;
 Name=Krita
 Name[af]=Krita
@@ -46,6 +46,7 @@ Name[nb]=Krita
 Name[nds]=Krita
 Name[ne]=क्रिता
 Name[nl]=Krita
+Name[nn]=Krita
 Name[pl]=Krita
 Name[pt]=Krita
 Name[pt_BR]=Krita

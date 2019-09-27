@@ -35,7 +35,7 @@
 KoJsonTrader::KoJsonTrader()
 {
     // Allow a command line variable KRITA_PLUGIN_PATH to override the automatic search
-    auto requestedPath = QProcessEnvironment::systemEnvironment().value("KRITA_PLUGIN_PATH");
+    QString requestedPath = QProcessEnvironment::systemEnvironment().value("KRITA_PLUGIN_PATH");
     if (!requestedPath.isEmpty()) {
         m_pluginPath = requestedPath;
     }
@@ -45,11 +45,15 @@ KoJsonTrader::KoJsonTrader()
 
         QDir appDir(qApp->applicationDirPath());
         appDir.cdUp();
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         // Help Krita run without deployment
         QDir d(appDir);
         d.cd("../../../");
         searchDirs << d;
+#endif
+
+#ifdef Q_OS_ANDROID
+        appDir.cdUp();
 #endif
         searchDirs << appDir;
         // help plugin trader find installed plugins when run from uninstalled tests
@@ -58,13 +62,13 @@ KoJsonTrader::KoJsonTrader()
 #endif
         Q_FOREACH (const QDir& dir, searchDirs) {
             const QStringList nameFilters = {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
                 "*PlugIns*",
 #endif
                 "lib*",
             };
             Q_FOREACH (const QFileInfo &info, dir.entryInfoList(nameFilters, QDir::Dirs | QDir::NoDotAndDotDot)) {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
                 if (info.fileName().contains("PlugIns")) {
                     m_pluginPath = info.absoluteFilePath();
                     break;
@@ -75,6 +79,11 @@ KoJsonTrader::KoJsonTrader()
 #endif
                     QDir libDir(info.absoluteFilePath());
 
+#ifdef Q_OS_ANDROID
+                    libDir.cd("arm");
+                    m_pluginPath = libDir.absolutePath();
+                    break;
+#else
                     // on many systems this will be the actual lib dir (and krita subdir contains plugins)
                     if (libDir.cd("kritaplugins")) {
                         m_pluginPath = libDir.absolutePath();
@@ -95,6 +104,7 @@ KoJsonTrader::KoJsonTrader()
                     if (!m_pluginPath.isEmpty()) {
                         break;
                     }
+#endif
                 }
             }
 
@@ -121,7 +131,12 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
     QDirIterator dirIter(m_pluginPath, QDirIterator::Subdirectories);
     while (dirIter.hasNext()) {
         dirIter.next();
+#ifdef Q_OS_ANDROID
+        // files starting with lib_krita are plugins, it is needed because of the loading rules in NDK
+        if (dirIter.fileInfo().isFile() && dirIter.fileName().startsWith("lib_krita")) {
+#else
         if (dirIter.fileInfo().isFile() && dirIter.fileName().startsWith("krita") && !dirIter.fileName().endsWith(".debug")) {
+#endif
             debugPlugin << dirIter.fileName();
             QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
             QJsonObject json = loader->metaData().value("MetaData").toObject();

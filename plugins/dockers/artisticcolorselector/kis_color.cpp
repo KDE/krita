@@ -76,16 +76,6 @@ KisColor::KisColor(Qt::GlobalColor color, KisDisplayColorConverter* converter,
     fromKoColor(koColor);
 }
 
-KisColor::KisColor(const KisColor& color)
-{
-    m_colorConverter = color.colorConverter();
-    m_lumaR = color.lumaR();
-    m_lumaG = color.lumaG();
-    m_lumaB = color.lumaB();
-    m_lumaGamma = color.lumaGamma();
-    initHSX(color.getType(), color.getH(), color.getS(), color.getX());
-}
-
 KisColor::KisColor(const KoColor &color, KisDisplayColorConverter* converter, KisColor::Type type,
                    qreal lR, qreal lG, qreal lB, qreal lGamma)
 {
@@ -98,10 +88,10 @@ KisColor::KisColor(const KoColor &color, KisDisplayColorConverter* converter, Ki
     fromKoColor(color);
 }
 
-KisColor::KisColor(const KisColor& color, KisColor::Type type,
+KisColor::KisColor(const KisColor& color, KisDisplayColorConverter* converter, KisColor::Type type,
                    qreal lR, qreal lG, qreal lB, qreal lGamma)
 {
-    m_colorConverter = color.colorConverter();
+    m_colorConverter = converter;
     m_type = type;
     m_lumaR = lR;
     m_lumaG = lG;

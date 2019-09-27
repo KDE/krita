@@ -33,9 +33,12 @@ public:
     virtual ~KisAbstractCompression();
 
     /**
-     * Compresses \a input buffer into \a output buffer.
+     * Compresses \p input buffer into \p output buffer.
      * WARNING: Be careful, output buffer must be at least
      * outputBufferSize(inputLength) size!
+     * \param input the input
+     * \param inputLength the input length
+     * \param output the output
      * \param outputLength is not used!
      * \return number of bytes written to the output buffer
      * and 0 if error occurred.
@@ -45,8 +48,11 @@ public:
     virtual qint32 compress(const quint8* input, qint32 inputLength, quint8* output, qint32 outputLength) = 0;
 
     /**
-     * Decompresses \a input buffer into \a output buffer.
+     * Decompresses \p input buffer into \p output buffer.
      * WARNING: output buffer must be able to fit the input data
+     * \param input the input
+     * \param inputLength the input length
+     * \param output the output
      * \param outputLength is not used!
      * \return number of bytes written to the output buffer
      * and 0 if error occurred.

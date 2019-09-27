@@ -46,7 +46,7 @@ public:
     struct PaletteInfo;
 
 public:
-    explicit KisPaletteEditor(QObject *parent = Q_NULLPTR);
+    explicit KisPaletteEditor(QObject *parent = 0);
     ~KisPaletteEditor();
 
     void setPaletteModel(KisPaletteModel *model);
@@ -70,7 +70,7 @@ public:
     QString oldNameFromNewName(const QString &newName) const;
     /**
      * @brief duplicateExistsFilename
-     * @param name
+     * @param filename the name of the file
      * @param global if this filename is going to be used for a global palette
      * @return true if the a palette in the resource system that has filename
      * name already exists else false
@@ -84,9 +84,7 @@ public:
 
     /**
      * @brief addGroup
-     * @param name original group name
-     * @param rowNumber
-     * @return new group's name if change accpeted, empty string if cancelled
+     * @return new group's name if change accepted, empty string if cancelled
      */
     QString addGroup();
     /**
@@ -131,7 +129,7 @@ private Q_SLOTS:
     void slotSetDocumentModified();
 
 private:
-    QString newPaletteFileName(bool isGlobal);
+    QString newPaletteFileName(bool isGlobal, const QString &filename = QString());
     QString newGroupName() const;
     void setNonGlobal();
     void setGlobal();

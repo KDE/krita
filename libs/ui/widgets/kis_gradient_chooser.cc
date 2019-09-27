@@ -29,6 +29,8 @@
 #include <resources/KoAbstractGradient.h>
 #include <resources/KoResource.h>
 #include <resources/KoSegmentGradient.h>
+#include <KoResourceItemView.h>
+#include <KisKineticScroller.h>
 #include <KoStopGradient.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoResourceItemChooser.h>
@@ -43,10 +45,9 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_stopgradient_editor.h"
 
-KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradient* gradient, QWidget * parent, const char *name)
-    : KoDialog(parent)
+KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradient* gradient, QWidget *parent, const char *name)
+    : KoDialog(parent, Qt::Dialog)
 {
-    setCaption(i18n("Custom Gradient"));
     setButtons(Close);
     setDefaultButton(Close);
     setObjectName(name);
@@ -54,12 +55,15 @@ KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradient* gradient, Q
 
     KoStopGradient* stopGradient = dynamic_cast<KoStopGradient*>(gradient);
     if (stopGradient) {
-        m_page = new KisStopGradientEditor(stopGradient, this, "autogradient", i18n("Custom Gradient"));
+        m_page = new KisStopGradientEditor(stopGradient, this, "autogradient", i18n("Custom Stop Gradient"));
     }
-    KoSegmentGradient* segmentedGradient = dynamic_cast<KoSegmentGradient*>(gradient);
-    if (segmentedGradient) {
-        m_page = new KisAutogradient(segmentedGradient, this, "autogradient", i18n("Custom Gradient"));
+    else {
+        KoSegmentGradient* segmentedGradient = dynamic_cast<KoSegmentGradient*>(gradient);
+        if (segmentedGradient) {
+            m_page = new KisAutogradientEditor(segmentedGradient, this, "autogradient", i18n("Custom Segmented Gradient"));
+        }
     }
+    setCaption(m_page->windowTitle());
     setMainWidget(m_page);
 }
 
@@ -77,11 +81,11 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setColumnCount(1);
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
-            this, SLOT(update(KoResource *)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SLOT(update(KoResource*)));
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
-            this, SIGNAL(resourceSelected(KoResource *)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SIGNAL(resourceSelected(KoResource*)));
 
     QWidget* buttonWidget = new QWidget(this);
     QHBoxLayout* buttonLayout = new QHBoxLayout(buttonWidget);
@@ -118,11 +122,6 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(m_itemChooser, 10);
     mainLayout->addWidget(buttonWidget);
-
-    KisConfig cfg(true);
-    m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
-                                             cfg.kineticScrollingSensitivity(),
-                                             cfg.kineticScrollingScrollbar());
 
     slotUpdateIcons();
     setLayout(mainLayout);
@@ -188,7 +187,7 @@ void KisGradientChooser::addGradient(KoAbstractGradient* gradient)
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
     QString saveLocation = rserver->saveLocation();
 
-    KisCustomGradientDialog dialog(gradient, this, "autogradient");
+    KisCustomGradientDialog dialog(gradient, this, "KisCustomGradientDialog");
     dialog.exec();
 
     gradient->setFilename(saveLocation + gradient->name() + gradient->defaultFileExtension());
@@ -199,8 +198,10 @@ void KisGradientChooser::addGradient(KoAbstractGradient* gradient)
 
 void KisGradientChooser::editGradient()
 {
-    KisCustomGradientDialog dialog(static_cast<KoAbstractGradient*>(currentResource()), this, "autogradient");
+    KisCustomGradientDialog dialog(static_cast<KoAbstractGradient*>(currentResource()), this, "KisCustomGradientDialog");
     dialog.exec();
+
+
 }
 
 

@@ -34,6 +34,9 @@
 #include "canvas/kis_canvas2.h"
 #include "KisViewManager.h"
 
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
 KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
 {
     m_page = new WdgSelectionOptions(this);
@@ -53,6 +56,7 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
     m_action->addButton(m_page->subtract, SELECTION_SUBTRACT);
     m_action->addButton(m_page->replace, SELECTION_REPLACE);
     m_action->addButton(m_page->intersect, SELECTION_INTERSECT);
+    m_action->addButton(m_page->symmetricdifference, SELECTION_SYMMETRICDIFFERENCE);
 
     m_page->pixel->setGroupPosition(KoGroupButton::GroupLeft);
     m_page->shape->setGroupPosition(KoGroupButton::GroupRight);
@@ -60,18 +64,23 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
     m_page->shape->setIcon(KisIconUtils::loadIcon("select_shape"));
 
     m_page->add->setGroupPosition(KoGroupButton::GroupCenter);
-    m_page->subtract->setGroupPosition(KoGroupButton::GroupRight);
+    m_page->subtract->setGroupPosition(KoGroupButton::GroupCenter);
     m_page->replace->setGroupPosition(KoGroupButton::GroupLeft);
     m_page->intersect->setGroupPosition(KoGroupButton::GroupCenter);
+    m_page->symmetricdifference->setGroupPosition(KoGroupButton::GroupRight);
     m_page->add->setIcon(KisIconUtils::loadIcon("selection_add"));
     m_page->subtract->setIcon(KisIconUtils::loadIcon("selection_subtract"));
     m_page->replace->setIcon(KisIconUtils::loadIcon("selection_replace"));
     m_page->intersect->setIcon(KisIconUtils::loadIcon("selection_intersect"));
+    m_page->symmetricdifference->setIcon(KisIconUtils::loadIcon("selection_symmetric_difference"));
 
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SIGNAL(modeChanged(int)));
     connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SLOT(hideActionsForSelectionMode(int)));
     connect(m_page->chkAntiAliasing, SIGNAL(toggled(bool)), this, SIGNAL(antiAliasSelectionChanged(bool)));
+
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
+    m_page->chkAntiAliasing->setChecked(cfg.readEntry("antiAliasSelection", true));
 }
 
 KisSelectionOptions::~KisSelectionOptions()
@@ -101,6 +110,12 @@ void KisSelectionOptions::setMode(int mode) {
 void KisSelectionOptions::setAntiAliasSelection(bool value)
 {
     m_page->chkAntiAliasing->setChecked(value);
+}
+
+void KisSelectionOptions::enablePixelOnlySelectionMode()
+{
+    setMode(PIXEL_SELECTION);
+    disableSelectionModeOption();
 }
 
 void KisSelectionOptions::updateActionButtonToolTip(int action, const QKeySequence &shortcut)
@@ -137,6 +152,15 @@ void KisSelectionOptions::updateActionButtonToolTip(int action, const QKeySequen
             i18nc("@info:tooltip", "Intersect (%1)", shortcutString);
 
         m_action->button(SELECTION_INTERSECT)->setToolTip(toolTipText);
+
+        break;
+        
+    case SELECTION_SYMMETRICDIFFERENCE:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Symmetric Difference") :
+            i18nc("@info:tooltip", "Symmetric Difference (%1)", shortcutString);
+
+        m_action->button(SELECTION_SYMMETRICDIFFERENCE)->setToolTip(toolTipText);
 
         break;
     }

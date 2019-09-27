@@ -23,10 +23,11 @@
 #include <QElapsedTimer>
 #include <QPushButton>
 #include <QSlider>
+#include <QGraphicsOpacityEffect>
 #include "KisViewManager.h"
 #include "kactioncollection.h"
 #include "kis_tool_button.h"
-#include "kis_highlighted_button.h"
+#include "KisHighlightedToolButton.h"
 #include <KisColorSelectorInterface.h>
 
 class KisFavoriteResourceManager;
@@ -38,6 +39,8 @@ class KisBrushHud;
 class KisRoundHudButton;
 class KisCanvasResourceProvider;
 class KisVisualColorSelector;
+class KisAcyclicSignalConnector;
+class KisMouseClickEater;
 
 class KisPopupPalette : public QWidget
 {
@@ -68,6 +71,7 @@ public:
 
 protected:
 
+    void showEvent(QShowEvent *event) override;
     void paintEvent(QPaintEvent*) override;
     void resizeEvent(QResizeEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
@@ -105,10 +109,6 @@ private:
     int m_hoveredColor {0};
     int m_selectedColor {0};
 
-    QElapsedTimer m_timeSinceOpening;
-    bool m_hadMousePressSinceOpening {false};
-
-
     KisCoordinatesConverter *m_coordinatesConverter;
 
     KisViewManager *m_viewManager;
@@ -124,7 +124,7 @@ private:
     KisBrushHud *m_brushHud {0};
     float m_popupPaletteSize {385.0};
     float m_colorHistoryInnerRadius {72.0};
-    float m_colorHistoryOuterRadius {92.0};
+    qreal m_colorHistoryOuterRadius {92.0};
 
     KisRoundHudButton *m_settingsButton {0};
     KisRoundHudButton *m_brushHudButton {0};
@@ -133,6 +133,8 @@ private:
     QRect m_resetCanvasRotationIndicatorRect;
     bool m_isOverCanvasRotationIndicator {false};
     bool m_isRotatingCanvasIndicator {false};
+    bool m_isZoomingCanvas {false};
+
 
     KisHighlightedToolButton *mirrorMode {0};
     KisHighlightedToolButton *canvasOnlyButton {0};
@@ -140,6 +142,14 @@ private:
     QSlider *zoomCanvasSlider {0};
     int zoomSliderMinValue {10};
     int zoomSliderMaxValue {200};
+    KisAcyclicSignalConnector *m_acyclicConnector = 0;
+
+    int m_cachedNumSlots {0};
+    qreal m_cachedRadius {0.0};
+
+    // updates the transparency and effects of the whole widget
+    QGraphicsOpacityEffect *opacityChange {0};
+    KisMouseClickEater *m_clicksEater;
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);
@@ -169,10 +179,12 @@ private Q_SLOTS:
     void slotHide() { showPopupPalette(false); }
     void slotShowTagsPopup();
     void showHudWidget(bool visible);
-    void slotmirroModeClicked();
-    void slotCanvasonlyModeClicked();
     void slotZoomToOneHundredPercentClicked();
     void slotZoomSliderChanged(int zoom);
+
+    void slotZoomSliderPressed();
+    void slotZoomSliderReleased();
+
 };
 
 #endif // KIS_POPUP_PALETTE_H

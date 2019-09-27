@@ -161,6 +161,14 @@ public:
         NONE = 10000
     };
 
+    enum NodePaintAbility {
+        VECTOR,
+        CLONE,
+        PAINT,
+        UNPAINTABLE
+    };
+    Q_ENUMS(NodePaintAbility)
+
     static AlternateAction actionToAlternateAction(ToolAction action);
 
     virtual void activateAlternateAction(AlternateAction action);
@@ -179,6 +187,8 @@ public:
     void mouseMoveEvent(KoPointerEvent *event) override;
 
     bool isActive() const;
+
+    KisTool::NodePaintAbility nodePaintAbility();
 
 public Q_SLOTS:
     void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
@@ -288,14 +298,15 @@ protected:
     void blockUntilOperationsFinishedForced();
 
 protected:
-    enum ToolMode {
+    enum ToolMode: int {
         HOVER_MODE,
         PAINT_MODE,
         SECONDARY_PAINT_MODE,
         MIRROR_AXIS_SETUP_MODE,
         GESTURE_MODE,
         PAN_MODE,
-        OTHER // not used now
+        OTHER, // tool-specific modes, like multibrush's symmetry axis setup
+        OTHER_1
     };
 
     virtual void setMode(ToolMode mode);
@@ -307,10 +318,6 @@ protected Q_SLOTS:
      * Called whenever the configuration settings change.
      */
     virtual void resetCursorStyle();
-
-private Q_SLOTS:
-    void slotToggleFgBg();
-    void slotResetFgBg();
 
 private:
     struct Private;

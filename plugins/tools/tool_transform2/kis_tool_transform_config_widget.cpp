@@ -54,6 +54,18 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     chkWorkRecursively->setChecked(workRecursively);
     connect(chkWorkRecursively, SIGNAL(toggled(bool)), this, SIGNAL(sigRestartTransform()));
 
+    // Granularity can only be specified in the power of 2's
+    QStringList granularityValues{"4","8","16","32"};
+    changeGranularity->addItems(granularityValues);
+    changeGranularity->setCurrentIndex(1);
+    granularityPreview->addItems(granularityValues);
+    granularityPreview->setCurrentIndex(2);
+
+    connect(changeGranularity,SIGNAL(currentIndexChanged(QString)),
+            this,SLOT(slotGranularityChanged(QString)));
+    connect(granularityPreview, SIGNAL(currentIndexChanged(QString)),
+            this,SLOT(slotPreviewGranularityChanged(QString)));
+
     // Init Filter  combo
     cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
     cmbFilter->setCurrent("Bicubic");
@@ -121,8 +133,6 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     translateYBox->setRange(-10000, 10000);
 
 
-    scaleXBox->setSuffix("%");
-    scaleYBox->setSuffix("%");
     scaleXBox->setRange(-10000, 10000);
     scaleYBox->setRange(-10000, 10000);
     scaleXBox->setValue(100.0);
@@ -216,7 +226,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     buidupModeComboBox->setCurrentIndex(0); // set to build-up mode by default
     connect(buidupModeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(liquifyBuildUpChanged(int)));
-    buidupModeComboBox->setToolTip(i18nc("@info:tooltip", "Switch between Build Up and Wash mode of painting. Build Up mode adds deformations one on top of the other without any limits. Wash mode gradually deforms the piece to the selected deformation level."));
+    buidupModeComboBox->setToolTip("<p>" + i18nc("@info:tooltip", "Switch between Build Up and Wash mode of painting. Build Up mode adds deformations one on top of the other without any limits. Wash mode gradually deforms the piece to the selected deformation level.") + "</p>");
 
     liquifySpacingSlider->setRange(0.0, 3.0, 2);
     liquifySizeSlider->setExponentRatio(3);
@@ -612,6 +622,9 @@ void KisToolTransformConfigWidget::updateConfig(const ToolTransformArgs &config)
                 cageAddEditRadio->setChecked(true);
             else
                  cageDeformRadio->setChecked(true);
+
+            changeGranularity->setCurrentIndex(log2(config.pixelPrecision()) - 2);
+            granularityPreview->setCurrentIndex(log2(config.previewPixelPrecision()) - 2);
 
         }
 
@@ -1150,40 +1163,9 @@ void KisToolTransformConfigWidget::slotSetWarpDensity(int value)
 
 void KisToolTransformConfigWidget::setDefaultWarpPoints(int pointsPerLine)
 {
-    if (pointsPerLine < 0) {
-        pointsPerLine = DEFAULT_POINTS_PER_LINE;
-    }
-
-    int nbPoints = pointsPerLine * pointsPerLine;
-    QVector<QPointF> origPoints(nbPoints);
-    QVector<QPointF> transfPoints(nbPoints);
-    qreal gridSpaceX, gridSpaceY;
-
-    if (nbPoints == 1) {
-        //there is actually no grid
-        origPoints[0] = m_transaction->originalCenterGeometric();
-        transfPoints[0] = m_transaction->originalCenterGeometric();
-    }
-    else if (nbPoints > 1) {
-        gridSpaceX = m_transaction->originalRect().width() / (pointsPerLine - 1);
-        gridSpaceY = m_transaction->originalRect().height() / (pointsPerLine - 1);
-        double y = m_transaction->originalRect().top();
-        for (int i = 0; i < pointsPerLine; ++i) {
-            double x = m_transaction->originalRect().left();
-            for (int j = 0 ; j < pointsPerLine; ++j) {
-                origPoints[i * pointsPerLine + j] = QPointF(x, y);
-                transfPoints[i * pointsPerLine + j] = QPointF(x, y);
-                x += gridSpaceX;
-            }
-            y += gridSpaceY;
-        }
-    }
-
     ToolTransformArgs *config = m_transaction->currentConfig();
 
-    config->setDefaultPoints(nbPoints > 0);
-    config->setPoints(origPoints, transfPoints);
-
+    KisTransformUtils::setDefaultWarpPoints(pointsPerLine, m_transaction, config);
     notifyConfigChanged();
 }
 
@@ -1293,5 +1275,23 @@ void KisToolTransformConfigWidget::slotEditCagePoints(bool value)
     config->refTransformedPoints() = config->origPoints();
 
     config->setEditingTransformPoints(value);
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotGranularityChanged(QString value)
+{
+    if (m_uiSlotsBlocked) return;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(value.toInt() > 1);
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setPixelPrecision(value.toInt());
+    notifyConfigChanged();
+}
+
+void KisToolTransformConfigWidget::slotPreviewGranularityChanged(QString value)
+{
+    if (m_uiSlotsBlocked) return;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(value.toInt() > 1);
+    ToolTransformArgs *config = m_transaction->currentConfig();
+    config->setPreviewPixelPrecision(value.toInt());
     notifyConfigChanged();
 }

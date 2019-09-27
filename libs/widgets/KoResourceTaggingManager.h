@@ -60,7 +60,7 @@ public:
     KoTagChooserWidget* tagChooserWidget();
 
 Q_SIGNALS:
-    void updateView();
+    void    updateView();
     
 private Q_SLOTS:
 

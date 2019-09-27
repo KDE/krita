@@ -165,7 +165,7 @@ KisVLineIterator2::~KisVLineIterator2()
 {
     for (int i = 0; i < m_tilesCacheSize; i++) {
         unlockTile(m_tilesCache[i].tile);
-        unlockTile(m_tilesCache[i].oldtile);
+        unlockOldTile(m_tilesCache[i].oldtile);
     }
 }
 
@@ -218,7 +218,7 @@ void KisVLineIterator2::preallocateTiles()
 {
     for (int i = 0; i < m_tilesCacheSize; ++i){
         unlockTile(m_tilesCache[i].tile);
-        unlockTile(m_tilesCache[i].oldtile);
+        unlockOldTile(m_tilesCache[i].oldtile);
         fetchTileDataForCache(m_tilesCache[i], m_column, m_topRow + i );
     }
 }

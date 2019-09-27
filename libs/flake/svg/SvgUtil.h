@@ -53,7 +53,7 @@ public:
 
     /**
      * Parses the given string containing a percentage number.
-     * @param s the input string containing the percentage
+     * @param value the input number containing the percentage
      * @return the percentage number normalized to 0..100
      */
     static QString toPercentage(qreal value);
@@ -92,7 +92,7 @@ public:
     static void writeTransformAttributeLazy(const QString &name, const QTransform &transform, KoXmlWriter &shapeWriter);
 
     /// Parses a viewbox attribute into an rectangle
-    static bool parseViewBox(SvgGraphicsContext *gc, const KoXmlElement &e, const QRectF &elementBounds, QRectF *_viewRect, QTransform *_viewTransform);
+    static bool parseViewBox(const KoXmlElement &e, const QRectF &elementBounds, QRectF *_viewRect, QTransform *_viewTransform);
 
     struct PreserveAspectRatioParser;
     static void parseAspectRatio(const PreserveAspectRatioParser &p, const QRectF &elementBounds, const QRectF &viewRect, QTransform *_viewTransform);

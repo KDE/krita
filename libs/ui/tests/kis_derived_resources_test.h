@@ -19,7 +19,7 @@
 #ifndef __KIS_DERIVED_RESOURCES_TEST_H
 #define __KIS_DERIVED_RESOURCES_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisDerivedResourcesTest : public QObject
 {

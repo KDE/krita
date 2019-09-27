@@ -26,6 +26,8 @@ class KisPngTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testFiles();
+    void testWriteonly();
+    void testSaveHDR();
 };
 
 #endif

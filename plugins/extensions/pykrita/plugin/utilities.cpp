@@ -88,6 +88,10 @@ namespace PyKrita
         Python::ensureInitialized();
         Python py = Python();
 
+        // NOTE: This code is not needed on Python 3.
+        //       This might also fail if private sip module for PyQt5 is used,
+        //       as required by newer PyQt5. It's fine since any exceptions
+        //       in this script will be ignored.
         PyRun_SimpleString(
                 "import sip\n"
                         "sip.setapi('QDate', 2)\n"

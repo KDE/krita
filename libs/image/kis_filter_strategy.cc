@@ -26,19 +26,22 @@
 #include <QGlobalStatic>
 
 #include "kis_debug.h"
+#include <QtMath>
 
 Q_GLOBAL_STATIC(KisFilterStrategyRegistry, s_instance)
 
-qreal KisHermiteFilterStrategy::valueAt(qreal t) const
+qreal KisHermiteFilterStrategy::valueAt(qreal t, qreal weightsPositionScale) const
 {
+    Q_UNUSED(weightsPositionScale);
     /* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
     if (t < 0.0) t = -t;
     if (t < 1.0) return((2.0 * t - 3.0) * t * t + 1.0);
     return(0.0);
 }
 
-qint32 KisHermiteFilterStrategy::intValueAt(qint32 t) const
+qint32 KisHermiteFilterStrategy::intValueAt(qint32 t, qreal weightsPositionScale) const
 {
+    Q_UNUSED(weightsPositionScale);
     /* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
     if (t < 0) t = -t;
     if (t < 256) {
@@ -55,8 +58,9 @@ qint32 KisHermiteFilterStrategy::intValueAt(qint32 t) const
     return(0);
 }
 
-qint32 KisBicubicFilterStrategy::intValueAt(qint32 t) const
+qint32 KisBicubicFilterStrategy::intValueAt(qint32 t, qreal weightsPositionScale) const
 {
+    Q_UNUSED(weightsPositionScale);
     /* f(t) = 1.5|t|^3 - 2.5|t|^2 + 1, -1 <= t <= 1 */
     if (t < 0) t = -t;
     if (t < 256) {
@@ -85,29 +89,42 @@ qint32 KisBicubicFilterStrategy::intValueAt(qint32 t) const
     return(0);
 }
 
-qreal KisBoxFilterStrategy::valueAt(qreal t) const
+qreal KisBoxFilterStrategy::valueAt(qreal t, qreal weightsPositionScale) const
 {
-    if ((t > -0.5) && (t <= 0.5)) return(1.0);
+    if ((t >= -0.5  * weightsPositionScale) && (t < 0.5 * weightsPositionScale)) return(1.0);
     return(0.0);
 }
 
-qint32 KisBoxFilterStrategy::intValueAt(qint32 t) const
+qint32 KisBoxFilterStrategy::intValueAt(qint32 t, qreal weightsPositionScale) const
 {
     /* f(t) = 1, -0.5 < t <= 0.5 */
-    if ((t > -128) && (t <= 128))
+    if ((t >= -128  * weightsPositionScale) && (t < 128 * weightsPositionScale))
         return 255;
     return 0;
 }
 
-qreal KisBilinearFilterStrategy::valueAt(qreal t) const
+
+qreal KisBoxFilterStrategy::support(qreal weightsPositionScale)
 {
+    return supportVal*weightsPositionScale;
+}
+
+qint32 KisBoxFilterStrategy::intSupport(qreal weightsPositionScale)
+{
+    return qCeil(intSupportVal*weightsPositionScale);
+}
+
+qreal KisBilinearFilterStrategy::valueAt(qreal t, qreal weightsPositionScale) const
+{
+    Q_UNUSED(weightsPositionScale);
     if (t < 0.0) t = -t;
     if (t < 1.0) return(1.0 - t);
     return(0.0);
 }
 
-qint32 KisBilinearFilterStrategy::intValueAt(qint32 t) const
+qint32 KisBilinearFilterStrategy::intValueAt(qint32 t, qreal weightsPositionScale) const
 {
+    Q_UNUSED(weightsPositionScale);
     /* f(t) = |t|, -1 <= t <= 1 */
     if (t < 0) t = -t;
     if (t < 256) {
@@ -119,8 +136,9 @@ qint32 KisBilinearFilterStrategy::intValueAt(qint32 t) const
 }
 
 
-qreal KisBellFilterStrategy::valueAt(qreal t) const
+qreal KisBellFilterStrategy::valueAt(qreal t, qreal weightsPositionScale) const
 {
+    Q_UNUSED(weightsPositionScale);
     if (t < 0) t = -t;
     if (t < .5) return(.75 - (t * t));
     if (t < 1.5) {
@@ -130,8 +148,9 @@ qreal KisBellFilterStrategy::valueAt(qreal t) const
     return(0.0);
 }
 
-qreal KisBSplineFilterStrategy::valueAt(qreal t) const
+qreal KisBSplineFilterStrategy::valueAt(qreal t, qreal weightsPositionScale) const
 {
+    Q_UNUSED(weightsPositionScale);
     qreal tt;
 
     if (t < 0) t = -t;
@@ -145,8 +164,9 @@ qreal KisBSplineFilterStrategy::valueAt(qreal t) const
     return(0.0);
 }
 
-qreal KisLanczos3FilterStrategy::valueAt(qreal t) const
+qreal KisLanczos3FilterStrategy::valueAt(qreal t, qreal weightsPositionScale) const
 {
+    Q_UNUSED(weightsPositionScale);
     if (t < 0) t = -t;
     if (t < 3.0) return(sinc(t) * sinc(t / 3.0));
     return(0.0);
@@ -160,8 +180,9 @@ qreal KisLanczos3FilterStrategy::sinc(qreal x) const
     return(1.0);
 }
 
-qreal KisMitchellFilterStrategy::valueAt(qreal t) const
+qreal KisMitchellFilterStrategy::valueAt(qreal t, qreal weightsPositionScale) const
 {
+    Q_UNUSED(weightsPositionScale);
     const qreal B = 1.0 / 3.0;
     const qreal C = 1.0 / 3.0;
     qreal tt;

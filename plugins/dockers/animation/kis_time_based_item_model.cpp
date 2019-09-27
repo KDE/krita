@@ -356,7 +356,9 @@ bool KisTimeBasedItemModel::removeFramesAndOffset(QModelIndexList indicesToRemov
                                         parentCommand);
     }
 
-    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand,
+                                                    KisStrokeJobData::BARRIER,
+                                                    KisStrokeJobData::EXCLUSIVE);
     return true;
 }
 
@@ -405,7 +407,8 @@ bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
 
     KisProcessingApplicator::runSingleCommandStroke(m_d->image,
                                                     new KisCommandUtils::SkipFirstRedoWrapper(parentCommand.take()),
-                                                    KisStrokeJobData::BARRIER);
+                                                    KisStrokeJobData::BARRIER,
+                                                    KisStrokeJobData::EXCLUSIVE);
     return true;
 }
 

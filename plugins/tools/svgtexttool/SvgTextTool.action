@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ActionCollection version="2" name="svg_Tools">
+<ActionCollection version="2" name="SVG Tools">
   <Actions category="Text Tool">
     <text>SVG Text Tool</text>
+    <Action name="SvgTextTool">
+      <icon></icon>
+      <text>Text Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Text Tool</toolTip>
+      <iconText>Text Tool</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
     <Action name="svg_format_textcolor">
       <iconText>Text Color</iconText>
       <shortcut/>
@@ -231,5 +241,15 @@
       <statusTip/>
       <isCheckable>false</isCheckable>
       <text>Settings...</text>
+    </Action></Actions>
+    <Action name="svg_pick_color">
+      <iconText>Colorpicker</iconText>
+      <shortcut></shortcut>
+      <toolTip>Pick a color from the screen</toolTip>
+      <icon></icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>false</isCheckable>
+      <text>Color Picker</text>
     </Action></Actions>
 </ActionCollection>

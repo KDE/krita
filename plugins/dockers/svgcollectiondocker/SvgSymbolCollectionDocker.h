@@ -27,6 +27,7 @@
 
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
+#include <KisKineticScroller.h>
 
 #include "ui_WdgSvgCollection.h"
 
@@ -74,6 +75,9 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
+public Q_SLOTS:
+    void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
+
 private Q_SLOTS:
 
     void collectionActivated(int index);
@@ -85,4 +89,4 @@ private:
     QSlider* m_iconSizeSlider;
 };
 
-#endif //KOSHAPECOLLECTIONDOCKER_H
+#endif

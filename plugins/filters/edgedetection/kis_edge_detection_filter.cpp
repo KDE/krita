@@ -75,9 +75,6 @@ void KisEdgeDetectionFilter::processImpl(KisPaintDeviceSP device, const QRect &r
     if (configuration) {
         channelFlags = configuration->channelFlags();
     }
-    if (channelFlags.isEmpty() || !configuration) {
-        channelFlags = device->colorSpace()->channelFlags();
-    }
 
     KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobelVector;
     if (config->getString("type") == "prewitt") {
@@ -123,7 +120,7 @@ KisFilterConfigurationSP KisEdgeDetectionFilter::factoryConfiguration() const
     return config;
 }
 
-KisConfigWidget *KisEdgeDetectionFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisEdgeDetectionFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     return new KisWdgEdgeDetection(parent);

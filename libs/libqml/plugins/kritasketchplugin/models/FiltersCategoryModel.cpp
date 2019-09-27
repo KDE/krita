@@ -225,7 +225,7 @@ void FiltersCategoryModel::filterConfigurationChanged(int index, FiltersModel* m
         KisFilterConfigurationSP config;
         KisFilter* filter = model->filter(index);
         if (filter->showConfigurationWidget() && filter->id() != QLatin1String("colortransfer")) {
-            KisConfigWidget* wdg = filter->createConfigurationWidget(0, d->view->activeNode()->original());
+            KisConfigWidget* wdg = filter->createConfigurationWidget(0, d->view->activeNode()->original(), false);
             wdg->deleteLater();
             config = KisFilterConfigurationSP(KisFilterRegistry::instance()->cloneConfiguration(dynamic_cast<KisFilterConfiguration*>(wdg->configuration().data())));
         }

@@ -85,9 +85,14 @@ namespace KisAnimationUtils {
                             //shortcut: clearing the image instead
                             KisPaintDeviceSP device = node->paintDevice();
                             if (device) {
+                                const QRect dirtyRect = device->extent();
+
                                 KisTransaction transaction(kundo2_i18n("Clear"), device, cmd.data());
                                 device->clear();
                                 (void) transaction.endAndTake(); // saved as 'parent'
+
+                                node->setDirty(dirtyRect);
+
                                 result = true;
                             }
                         }
@@ -105,7 +110,9 @@ namespace KisAnimationUtils {
 
     void createKeyframeLazy(KisImageSP image, KisNodeSP node, const QString &channelId, int time, bool copy) {
         KUndo2Command *cmd = createKeyframeCommand(image, node, channelId, time, copy);
-        KisProcessingApplicator::runSingleCommandStroke(image, cmd, KisStrokeJobData::BARRIER);
+        KisProcessingApplicator::runSingleCommandStroke(image, cmd,
+                                                        KisStrokeJobData::BARRIER,
+                                                        KisStrokeJobData::EXCLUSIVE);
     }
 
     void removeKeyframes(KisImageSP image, const FrameItemList &frames) {
@@ -141,7 +148,9 @@ namespace KisAnimationUtils {
                 return result ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.take()) : 0;
         });
 
-        KisProcessingApplicator::runSingleCommandStroke(image, cmd, KisStrokeJobData::BARRIER);
+        KisProcessingApplicator::runSingleCommandStroke(image, cmd,
+                                                        KisStrokeJobData::BARRIER,
+                                                        KisStrokeJobData::EXCLUSIVE);
     }
 
     void removeKeyframe(KisImageSP image, KisNodeSP node, const QString &channel, int time) {

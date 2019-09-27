@@ -40,7 +40,11 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT void sortMergableNodes(KisNodeSP root, QList<KisNodeSP> &inputNodes, QList<KisNodeSP> &outputNodes);
     KRITAIMAGE_EXPORT KisNodeList sortMergableNodes(KisNodeSP root, KisNodeList nodes);
     KRITAIMAGE_EXPORT void filterMergableNodes(KisNodeList &nodes, bool allowMasks = false);
+    KRITAIMAGE_EXPORT KisNodeList sortAndFilterAnyMergableNodesSafe(const KisNodeList &nodes, KisImageSP image);
     KRITAIMAGE_EXPORT bool checkIsChildOf(KisNodeSP node, const KisNodeList &parents);
+    KRITAIMAGE_EXPORT void filterUnlockedNodes(KisNodeList &nodes);
+    KRITAIMAGE_EXPORT void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea);
+    KRITAIMAGE_EXPORT QRect recursiveNodeExactBounds(KisNodeSP rootNode);
 
     /**
      * Returns true if:
@@ -51,6 +55,9 @@ namespace KisLayerUtils
      */
     KRITAIMAGE_EXPORT bool checkIsCloneOf(KisNodeSP node, const KisNodeList &nodes);
     KRITAIMAGE_EXPORT void forceAllDelayedNodesUpdate(KisNodeSP root);
+    KRITAIMAGE_EXPORT bool hasDelayedNodeWithUpdates(KisNodeSP root);
+
+    KRITAIMAGE_EXPORT void forceAllHiddenOriginalsUpdate(KisNodeSP root);
 
     KRITAIMAGE_EXPORT KisNodeList sortAndFilterMergableInternalNodes(KisNodeList nodes, bool allowMasks = false);
 
@@ -93,8 +100,8 @@ namespace KisLayerUtils
         ~SwitchFrameCommand() override;
 
     private:
-        void init() override;
-        void end() override;
+        void partA() override;
+        void partB() override;
 
     private:
         KisImageWSP m_image;
@@ -115,7 +122,7 @@ namespace KisLayerUtils
                              KisNodeSP activeAfter,
                              KisImageSP image,
                              bool finalize, KUndo2Command *parent = 0);
-    void end() override;
+    void partB() override;
 
     private:
         KisNodeList m_selectedBefore;
@@ -132,8 +139,6 @@ namespace KisLayerUtils
 
         KisImageSP m_image;
     };
-
-    KRITAIMAGE_EXPORT KisLayerSP constructDefaultLayer(KisImageSP image);
 
     class KRITAIMAGE_EXPORT RemoveNodeHelper {
     public:
@@ -167,7 +172,7 @@ namespace KisLayerUtils
     {
     public:
         KisSimpleUpdateCommand(KisNodeList nodes, bool finalize, KUndo2Command *parent = 0);
-        void end() override;
+        void partB() override;
         static void updateNodes(const KisNodeList &nodes);
     private:
         KisNodeList m_nodes;
@@ -221,6 +226,14 @@ namespace KisLayerUtils
     KisNodeSP KRITAIMAGE_EXPORT findNodeByUuid(KisNodeSP root, const QUuid &uuid);
 
     KisImageSP KRITAIMAGE_EXPORT findImageByHierarchy(KisNodeSP node);
-};
+
+    template <class T>
+    T* findNodeByType(KisNodeSP root) {
+        return dynamic_cast<T*>(recursiveFindNode(root, [] (KisNodeSP node) {
+            return bool(dynamic_cast<T*>(node.data()));
+        }).data());
+    }
+
+}
 
 #endif /* __KIS_LAYER_UTILS_H */

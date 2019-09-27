@@ -44,6 +44,7 @@
 
 #include "strokes/freehand_stroke.h"
 #include "strokes/KisFreehandStrokeInfo.h"
+#include "KisAsyncronousStrokeUpdateHelper.h"
 
 #include <math.h>
 
@@ -66,6 +67,7 @@ struct KisToolFreehandHelper::Private
 {
     KisPaintingInformationBuilder *infoBuilder;
     KisStrokesFacade *strokesFacade;
+    KisAsyncronousStrokeUpdateHelper asyncUpdateHelper;
 
     KUndo2MagicString transactionText;
 
@@ -109,11 +111,6 @@ struct KisToolFreehandHelper::Private
     KisStabilizedEventsSampler stabilizedSampler;
     KisStabilizerDelayedPaintHelper stabilizerDelayedPaintHelper;
 
-    QTimer asynchronousUpdatesThresholdTimer;
-
-    int canvasRotation;
-    bool canvasMirroredH;
-
     qreal effectiveSmoothnessDistance() const;
 };
 
@@ -127,7 +124,6 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
     m_d->transactionText = transactionText;
     m_d->smoothingOptions = KisSmoothingOptionsSP(
                 smoothingOptions ? smoothingOptions : new KisSmoothingOptions());
-    m_d->canvasRotation = 0;
 
     m_d->fakeDabRandomSource = new KisRandomSource();
     m_d->fakeStrokeRandomSource = new KisPerStrokeRandomSource();
@@ -135,7 +131,6 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
     m_d->strokeTimeoutTimer.setSingleShot(true);
     connect(&m_d->strokeTimeoutTimer, SIGNAL(timeout()), SLOT(finishStroke()));
     connect(&m_d->airbrushingTimer, SIGNAL(timeout()), SLOT(doAirbrushing()));
-    connect(&m_d->asynchronousUpdatesThresholdTimer, SIGNAL(timeout()), SLOT(doAsynchronousUpdate()));
     connect(&m_d->stabilizerPollTimer, SIGNAL(timeout()), SLOT(stabilizerPollAndPaint()));
     connect(m_d->smoothingOptions.data(), SIGNAL(sigSmoothingTypeChanged()), SLOT(slotSmoothingTypeChanged()));
 
@@ -173,8 +168,6 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
     KisPaintInformation info = m_d->infoBuilder->hover(savedCursorPos, event);
     QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(savedCursorPos);
     qreal startAngle = KisAlgebra2D::directionBetweenPoints(prevPoint, savedCursorPos, 0);
-    info.setCanvasRotation(m_d->canvasRotation);
-    info.setCanvasHorizontalMirrorState( m_d->canvasMirroredH );
     KisDistanceInformation distanceInfo(prevPoint, startAngle);
 
     if (!m_d->strokeInfos.isEmpty()) {
@@ -319,8 +312,7 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
         m_d->airbrushingTimer.setInterval(computeAirbrushTimerInterval());
         m_d->airbrushingTimer.start();
     } else if (m_d->resources->presetNeedsAsynchronousUpdates()) {
-        m_d->asynchronousUpdatesThresholdTimer.setInterval(80 /* msec */);
-        m_d->asynchronousUpdatesThresholdTimer.start();
+        m_d->asyncUpdateHelper.startUpdateStream(m_d->strokesFacade, m_d->strokeId);
     }
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
@@ -374,8 +366,8 @@ void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaint
             intersection.manhattanLength() > maxSanePoint) {
 
             intersection = 0.5 * (pi1.pos() + pi2.pos());
-//            dbgKrita << "WARINING: there is no intersection point "
-//                     << "in the basic smoothing algoriths";
+//            dbgKrita << "WARNING: there is no intersection point "
+//                     << "in the basic smoothing algorithms";
         }
 
         controlTarget1 = intersection;
@@ -440,9 +432,6 @@ void KisToolFreehandHelper::paintEvent(KoPointerEvent *event)
     KisPaintInformation info =
             m_d->infoBuilder->continueStroke(event,
                                              elapsedStrokeTime());
-    info.setCanvasRotation( m_d->canvasRotation );
-    info.setCanvasHorizontalMirrorState( m_d->canvasMirroredH );
-
     KisUpdateTimeMonitor::instance()->reportMouseMove(info.pos());
 
     paint(info);
@@ -624,12 +613,12 @@ void KisToolFreehandHelper::endPaint()
         m_d->airbrushingTimer.stop();
     }
 
-    if (m_d->asynchronousUpdatesThresholdTimer.isActive()) {
-        m_d->asynchronousUpdatesThresholdTimer.stop();
-    }
-
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
         stabilizerEnd();
+    }
+
+    if (m_d->asyncUpdateHelper.isActive()) {
+        m_d->asyncUpdateHelper.endUpdateStream();
     }
 
     /**
@@ -639,9 +628,6 @@ void KisToolFreehandHelper::endPaint()
      * is needed
      */
     m_d->strokeInfos.clear();
-
-    // last update to complete rendering if there is still something pending
-    doAsynchronousUpdate(true);
 
     m_d->strokesFacade->endStroke(m_d->strokeId);
     m_d->strokeId.clear();
@@ -657,8 +643,8 @@ void KisToolFreehandHelper::cancelPaint()
         m_d->airbrushingTimer.stop();
     }
 
-    if (m_d->asynchronousUpdatesThresholdTimer.isActive()) {
-        m_d->asynchronousUpdatesThresholdTimer.stop();
+    if (m_d->asyncUpdateHelper.isActive()) {
+        m_d->asyncUpdateHelper.cancelUpdateStream();
     }
 
     if (m_d->stabilizerPollTimer.isActive()) {
@@ -890,12 +876,6 @@ void KisToolFreehandHelper::doAirbrushing()
     }
 }
 
-void KisToolFreehandHelper::doAsynchronousUpdate(bool forceUpdate)
-{
-    m_d->strokesFacade->addJob(m_d->strokeId,
-                               new FreehandStrokeStrategy::UpdateData(forceUpdate));
-}
-
 int KisToolFreehandHelper::computeAirbrushTimerInterval() const
 {
     qreal realInterval = m_d->resources->airbrushingInterval() * AIRBRUSH_INTERVAL_FACTOR;
@@ -981,23 +961,4 @@ void KisToolFreehandHelper::paintBezierCurve(const KisPaintInformation &pi1,
                                              const KisPaintInformation &pi2)
 {
     paintBezierCurve(0, pi1, control1, control2, pi2);
-}
-
-int KisToolFreehandHelper::canvasRotation()
-{
-    return m_d->canvasRotation;
-}
-
-void KisToolFreehandHelper::setCanvasRotation(int rotation)
-{
-   m_d->canvasRotation = rotation;
-}
-bool KisToolFreehandHelper::canvasMirroredH()
-{
-    return m_d->canvasMirroredH;
-}
-
-void KisToolFreehandHelper::setCanvasHorizontalMirrorState(bool mirrored)
-{
-   m_d->canvasMirroredH = mirrored;
 }

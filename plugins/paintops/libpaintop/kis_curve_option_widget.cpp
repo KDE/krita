@@ -55,12 +55,12 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QS
     updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
     updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
 
-    connect(m_curveOptionWidget->curveWidget, SIGNAL(modified()), this, SLOT(transferCurve()));
+    connect(m_curveOptionWidget->curveWidget, SIGNAL(modified()), this, SLOT(slotModified()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SLOT(emitSettingChanged()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SLOT(updateLabelsOfCurrentSensor()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateSensorCurveLabels(KisDynamicSensorSP)));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateCurve(KisDynamicSensorSP)));
-    connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(transferCurve()));
+    connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(slotUseSameCurveChanged()));
 
 
     // set all the icons for the curve preset shapes
@@ -113,9 +113,14 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP 
 
     m_curveOption->readOptionSetting(setting);
 
+    // Signals needs to be blocked, otherwise checking the checkbox will trigger
+    //   setting the common curve to the widget curve, which is incorrect in this case.
+    bool blockedBefore = m_curveOptionWidget->checkBoxUseSameCurve->blockSignals(true);
+    m_curveOptionWidget->checkBoxUseSameCurve->setChecked(m_curveOption->isSameCurveUsed());
+    m_curveOptionWidget->checkBoxUseSameCurve->blockSignals(blockedBefore);
+
     m_curveOptionWidget->checkBoxUseCurve->setChecked(m_curveOption->isCurveUsed());
     m_curveOptionWidget->strengthSlider->setValue(m_curveOption->value()*100);
-    m_curveOptionWidget->checkBoxUseSameCurve->setChecked(m_curveOption->isSameCurveUsed());
     m_curveOptionWidget->curveMode->setCurrentIndex(m_curveOption->getCurveMode());
 
     disableWidgets(!m_curveOption->isCurveUsed());
@@ -156,9 +161,27 @@ QWidget* KisCurveOptionWidget::curveWidget()
     return m_widget;
 }
 
-void KisCurveOptionWidget::transferCurve()
+void KisCurveOptionWidget::slotModified()
 {
-    m_curveOptionWidget->sensorSelector->setCurrentCurve(m_curveOptionWidget->curveWidget->curve(), m_curveOptionWidget->checkBoxUseSameCurve->isChecked());
+    if (!m_curveOption->isSameCurveUsed()) {
+        m_curveOptionWidget->sensorSelector->currentHighlighted()->setCurve(getWidgetCurve());
+    } else {
+        m_curveOption->setCommonCurve(getWidgetCurve());
+    }
+    emitSettingChanged();
+}
+
+void KisCurveOptionWidget::slotUseSameCurveChanged()
+{
+    // this is a slot that answers on "Share Curve across all settings" checkbox
+    m_curveOption->setUseSameCurve(m_curveOptionWidget->checkBoxUseSameCurve->isChecked());
+    if (m_curveOption->isSameCurveUsed()) {
+        // !(UseSameCurve) => UseSameCurve
+        // set the current curve to the common curve
+        m_curveOption->setCommonCurve(getWidgetCurve());
+    } else {
+        updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
+    }
     emitSettingChanged();
 }
 
@@ -167,6 +190,20 @@ void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor)
     if (sensor) {
         m_curveOptionWidget->label_xmin->setText(KisDynamicSensor::minimumLabel(sensor->sensorType()));
         m_curveOptionWidget->label_xmax->setText(KisDynamicSensor::maximumLabel(sensor->sensorType(), sensor->length()));
+
+        int inMinValue = KisDynamicSensor::minimumValue(sensor->sensorType());
+        int inMaxValue = KisDynamicSensor::maximumValue(sensor->sensorType(), sensor->length());
+        QString inSuffix = KisDynamicSensor::valueSuffix(sensor->sensorType());
+
+        int outMinValue = m_curveOption->intMinValue();
+        int outMaxValue = m_curveOption->intMaxValue();
+        QString outSuffix = m_curveOption->valueSuffix();
+
+        m_curveOptionWidget->intIn->setSuffix(inSuffix);
+        m_curveOptionWidget->intOut->setSuffix(outSuffix);
+
+        m_curveOptionWidget->curveWidget->setupInOutControls(m_curveOptionWidget->intIn,m_curveOptionWidget->intOut,
+                                                         inMinValue,inMaxValue,outMinValue,outMaxValue);
     }
 }
 
@@ -174,7 +211,8 @@ void KisCurveOptionWidget::updateCurve(KisDynamicSensorSP sensor)
 {
     if (sensor) {
         bool blockSignal = m_curveOptionWidget->curveWidget->blockSignals(true);
-        m_curveOptionWidget->curveWidget->setCurve(sensor->curve());
+        KisCubicCurve curve = m_curveOption->isSameCurveUsed() ? m_curveOption->getCommonCurve() : sensor->curve();
+        m_curveOptionWidget->curveWidget->setCurve(curve);
         m_curveOptionWidget->curveWidget->blockSignals(blockSignal);
     }
 }
@@ -299,5 +337,24 @@ void KisCurveOptionWidget::updateThemedIcons()
     m_curveOptionWidget->reverseSCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-s-reverse"));
     m_curveOptionWidget->uCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-u"));
     m_curveOptionWidget->revUCurveButton->setIcon(KisIconUtils::loadIcon("curve-preset-arch"));
+
+    // this helps make the checkboxes show themselves on the dark color themes
+    QPalette pal = m_curveOptionWidget->sensorSelector->palette();
+    QPalette newPalette = pal;
+    newPalette.setColor(QPalette::Active, QPalette::Background, pal.text().color() );
+    m_curveOptionWidget->sensorSelector->setPalette(newPalette);
+
 }
 
+
+
+
+KisCubicCurve KisCurveOptionWidget::getWidgetCurve()
+{
+    return m_curveOptionWidget->curveWidget->curve();
+}
+
+KisCubicCurve KisCurveOptionWidget::getHighlightedSensorCurve()
+{
+    return m_curveOptionWidget->sensorSelector->currentHighlighted()->curve();
+}

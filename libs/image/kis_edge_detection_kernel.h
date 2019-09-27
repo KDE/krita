@@ -90,6 +90,7 @@ public:
      * have a different sampling for the eventual edge detection.
      * @param channelFlags the affected channels.
      * @param progressUpdater the progress updater if it exists.
+     * @param output the output mode.
      * @param writeToAlpha whether or not to have the result applied to the transparency than the color channels,
      * this is useful for fringe effects.
      */
@@ -103,7 +104,7 @@ public:
                               bool writeToAlpha = false);
     /**
      * @brief converToNormalMap
-     * Convert a channel of the device to a normal map. The channel will be interpretted as a heightmap.
+     * Convert a channel of the device to a normal map. The channel will be interpreted as a heightmap.
      * @param device the device
      * @param rect the rectangle to apply this to.
      * @param xRadius the xradius
@@ -111,7 +112,8 @@ public:
      * @param type the edge detection filter.
      * @param channelToConvert the channel to use as a grayscale.
      * @param channelOrder the order in which the xyz coordinates ought to be written to the pixels.
-     * @param channelFlags
+     * @param channelFlip whether to flip the channels
+     * @param channelFlags the channel flags
      * @param progressUpdater
      */
     static void convertToNormalMap(KisPaintDeviceSP device,

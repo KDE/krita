@@ -10,6 +10,7 @@ public:
     bool operator==(const Selection &other) const;
     bool operator!=(const Selection &other) const;
 public Q_SLOTS:
+    Selection *duplicate() /Factory/;
     int width() const;
     int height() const;
     int x() const;
@@ -35,6 +36,7 @@ public Q_SLOTS:
     void add(Selection *selection);
     void subtract(Selection *selection);
     void intersect(Selection *selection);
+    void symmetricdifference(Selection *selection);
     QByteArray pixelData(int x, int y, int w, int h) const;
     void setPixelData(QByteArray value, int x, int y, int w, int h);
 private:

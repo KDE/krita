@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -34,6 +35,7 @@
 #include "kis_paintop_presets_chooser_popup.h"
 #include "kis_canvas_resource_provider.h"
 #include "KisResourceServerProvider.h"
+#include <KisKineticScroller.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_types.h>
 
@@ -53,6 +55,11 @@ PresetHistoryDock::PresetHistoryDock( )
     m_presetHistory->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     setWidget(m_presetHistory);
 
+    QScroller* scroller = KisKineticScroller::createPreconfiguredScroller(m_presetHistory);
+    if( scroller ) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
+
     connect(m_presetHistory, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(presetSelected(QListWidgetItem*)));
 }
 
@@ -69,7 +76,7 @@ void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
 
     if (!m_canvas || !m_canvas->viewManager() || !m_canvas->resourceManager()) return;
 
-    connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)), SLOT(canvasResourceChanged(int,QVariant)));
+    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)), SLOT(canvasResourceChanged(int,QVariant)));
 
     if (!m_initialized) {
         KisConfig cfg(true);

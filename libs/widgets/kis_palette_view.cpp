@@ -30,7 +30,11 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <KLocalizedString>
+
 #include <kis_icon_utils.h>
+
+#include <KisKineticScroller.h>
+
 #include <KoDialog.h>
 #include <KoColorDisplayRendererInterface.h>
 
@@ -44,15 +48,13 @@ int KisPaletteView::MININUM_ROW_HEIGHT = 10;
 struct KisPaletteView::Private
 {
     QPointer<KisPaletteModel> model;
-    bool allowPaletteModification; // if modification is allowed from this widget
+    bool allowPaletteModification {false}; // if modification is allowed from this widget
 };
 
 KisPaletteView::KisPaletteView(QWidget *parent)
     : QTableView(parent)
     , m_d(new Private)
 {
-    m_d->allowPaletteModification = false;
-
     setItemDelegate(new KisPaletteDelegate(this));
 
     setShowGrid(true);
@@ -64,7 +66,7 @@ KisPaletteView::KisPaletteView(QWidget *parent)
 
     /*
      * without this, a cycle might be created:
-     * the view streches to right border, and this make it need a scroll bar;
+     * the view stretches to right border, and this make it need a scroll bar;
      * after the bar is added, the view shrinks to the bar, and this makes it
      * no longer need the bar any more, and the bar is removed again
      */
@@ -81,6 +83,14 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)),
             SLOT(slotHorizontalHeaderResized(int,int,int)));
     setAutoFillBackground(true);
+
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
+
+    connect(this, SIGNAL(clicked(QModelIndex)), SLOT(slotCurrentSelectionChanged(QModelIndex)));
 }
 
 KisPaletteView::~KisPaletteView()
@@ -191,7 +201,15 @@ void KisPaletteView::selectClosestColor(const KoColor &color)
 
     selectionModel()->clearSelection();
     QModelIndex index = m_d->model->indexForClosest(color);
+
     selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+}
+
+const KoColor KisPaletteView::closestColor(const KoColor &color) const
+{
+    QModelIndex index = m_d->model->indexForClosest(color);
+    KisSwatch swatch = m_d->model->getEntry(index);
+    return swatch.color();
 }
 
 void KisPaletteView::slotFGColorChanged(const KoColor &color)
@@ -202,18 +220,14 @@ void KisPaletteView::slotFGColorChanged(const KoColor &color)
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 {
     if (m_d->model) {
-        disconnect(m_d->model, Q_NULLPTR, this, Q_NULLPTR);
+        disconnect(m_d->model, 0, this, 0);
     }
     m_d->model = model;
     setModel(model);
     slotAdditionalGuiUpdate();
-    connect(model, SIGNAL(sigPaletteModified()),
-            SLOT(slotAdditionalGuiUpdate()));
-    connect(model, SIGNAL(sigPaletteChanged()),
-            SLOT(slotAdditionalGuiUpdate()));
 
-    connect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-            SLOT(slotCurrentSelectionChanged(QModelIndex)));
+    connect(model, SIGNAL(sigPaletteModified()), SLOT(slotAdditionalGuiUpdate()));
+    connect(model, SIGNAL(sigPaletteChanged()), SLOT(slotAdditionalGuiUpdate()));
 }
 
 KisPaletteModel* KisPaletteView::paletteModel() const
@@ -264,13 +278,18 @@ void KisPaletteView::slotCurrentSelectionChanged(const QModelIndex &newCurrent)
 {
     if (!newCurrent.isValid()) { return; }
 
+    const bool isGroupName = newCurrent.data(KisPaletteModel::IsGroupNameRole).toBool();
+    const bool isCheckSlot = newCurrent.data(KisPaletteModel::CheckSlotRole).toBool();
+
+    const KisSwatch newEntry = m_d->model->getEntry(newCurrent);
+
     emit sigIndexSelected(newCurrent);
-    if (qvariant_cast<bool>(newCurrent.data(KisPaletteModel::IsGroupNameRole))) {
+    if (isGroupName) {
         return;
     }
-    if (qvariant_cast<bool>(newCurrent.data(KisPaletteModel::CheckSlotRole))) {
-        KisSwatch entry = m_d->model->getEntry(newCurrent);
-        emit sigColorSelected(entry.color());
+
+    if (isCheckSlot) {
+        emit sigColorSelected(newEntry.color());
     }
 }
 

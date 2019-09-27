@@ -38,7 +38,7 @@
 #include "kis_double_parse_unit_spin_box.h"
 #include "kis_document_aware_spin_box_unit_manager.h"
 
-static const int maxImagePixelSize = 10000;
+static const int maxImagePixelSize = 100000000;
 
 static const QString pixelStr(KoUnit::unitDescription(KoUnit::Pixel));
 static const QString percentStr(i18n("Percent (%)"));
@@ -88,6 +88,8 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     m_page->pixelWidthDouble->setUnitManager(m_widthUnitManager);
     m_page->pixelHeightDouble->setUnitManager(m_heightUnitManager);
+    m_page->pixelWidthDouble->setMaximum(maxImagePixelSize);
+    m_page->pixelHeightDouble->setMaximum(maxImagePixelSize);
     m_page->pixelWidthDouble->changeValue(width);
     m_page->pixelHeightDouble->changeValue(height);
     m_page->pixelWidthDouble->setDisplayUnit(false);
@@ -244,7 +246,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     m_printSizeUnitManager->setApparentUnitFromSymbol(printSizeUnit);
 
-    setCurrentResilutionPPI(resolution);
+    setCurrentResolutionPPI(resolution);
     slotSyncPixelToPrintSize();
 
     /**
@@ -306,7 +308,8 @@ void DlgImageSize::slotSyncPrintToPixelSize()
         m_page->pixelWidthDouble->changeValue(m_page->printWidth->value() * currentResolutionPPI());
         m_page->pixelHeightDouble->changeValue(m_page->printHeight->value() * currentResolutionPPI());
     } else if (m_page->pixelWidthDouble->value() != 0.0) {
-        setCurrentResilutionPPI(m_page->pixelWidthDouble->value() / m_page->printWidth->value());
+        const qreal resolution = qMax(0.001, m_page->pixelWidthDouble->value() / m_page->printWidth->value());
+        setCurrentResolutionPPI(resolution);
     }
 }
 
@@ -395,7 +398,7 @@ qreal DlgImageSize::currentResolutionPPI() const
     return resolution;
 }
 
-void DlgImageSize::setCurrentResilutionPPI(qreal value)
+void DlgImageSize::setCurrentResolutionPPI(qreal value)
 {
     qreal newValue = value;
 

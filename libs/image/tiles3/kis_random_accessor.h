@@ -59,7 +59,15 @@ private:
     }
 
     inline void unlockTile(KisTileSP &tile) {
-        tile->unlock();
+        if (m_writable) {
+            tile->unlockForWrite();
+        } else {
+            tile->unlockForRead();
+        }
+    }
+
+    inline void unlockOldTile(KisTileSP &tile) {
+        tile->unlockForRead();
     }
 
     inline quint32 xToCol(quint32 x) const {

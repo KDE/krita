@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,7 +19,7 @@
 #include "smallcolorselector_dock.h"
 
 #include <klocalizedstring.h>
-#include <KoCanvasBase.h>
+#include "kis_canvas2.h"
 
 #include "kis_small_color_widget.h"
 #include "kis_canvas_resource_provider.h"
@@ -34,12 +35,17 @@ SmallColorSelectorDock::SmallColorSelectorDock()
     QWidget *page = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(page);
     m_smallColorWidget = new KisSmallColorWidget(this);
-    layout->addWidget(m_smallColorWidget);
-    layout->addStretch(1);
+    layout->addWidget(m_smallColorWidget, 1);
+    page->setLayout(layout);
+
     setWidget(page);
-    m_smallColorWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-    connect(m_smallColorWidget, SIGNAL(colorChanged(const QColor&)),
-            this, SLOT(colorChangedProxy(const QColor&)));
+
+    m_smallColorWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    connect(m_smallColorWidget, SIGNAL(colorChanged(KoColor)),
+            this, SLOT(colorChangedProxy(KoColor)));
+
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
+            m_smallColorWidget, SLOT(update()));
 
     setWindowTitle(i18n("Small Color Selector"));
 }
@@ -50,26 +56,30 @@ void SmallColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-        m_smallColorWidget->setQColor(Qt::black);
+        m_smallColorWidget->setColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
+        m_smallColorWidget->setDisplayColorConverter(0);
     }
     m_canvas = canvas;
     if (m_canvas && m_canvas->resourceManager()) {
-        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                this, SLOT(canvasResourceChanged(int, const QVariant&)));
-        m_smallColorWidget->setQColor(m_canvas->resourceManager()->foregroundColor().toQColor());
+        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+                this, SLOT(canvasResourceChanged(int,QVariant)));
+
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
+        m_smallColorWidget->setDisplayColorConverter(kisCanvas->displayColorConverter());
+        m_smallColorWidget->setColor(m_canvas->resourceManager()->foregroundColor());
     }
 }
 
-void SmallColorSelectorDock::colorChangedProxy(const QColor& c)
+void SmallColorSelectorDock::colorChangedProxy(const KoColor& c)
 {
     if (m_canvas)
-        m_canvas->resourceManager()->setForegroundColor(KoColor(c , KoColorSpaceRegistry::instance()->rgb8()));
+        m_canvas->resourceManager()->setForegroundColor(c);
 }
 
 void SmallColorSelectorDock::canvasResourceChanged(int key, const QVariant& v)
 {
     if (key == KoCanvasResourceProvider::ForegroundColor) {
-        m_smallColorWidget->setQColor(v.value<KoColor>().toQColor());
+        m_smallColorWidget->setColor(v.value<KoColor>());
     }
 }
 

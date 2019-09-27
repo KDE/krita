@@ -19,7 +19,7 @@
 #ifndef __KIS_STOP_GRADIENT_EDITOR_TEST_H
 #define __KIS_STOP_GRADIENT_EDITOR_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisStopGradientEditorTest : public QObject
 {

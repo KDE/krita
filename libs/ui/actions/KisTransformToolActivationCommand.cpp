@@ -47,5 +47,3 @@ void KisTransformToolActivationCommand::undo()
 {
 
 }
-
-#include "KisTransformToolActivationCommand.moc"

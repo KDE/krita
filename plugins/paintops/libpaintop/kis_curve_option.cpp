@@ -41,6 +41,16 @@ KisCurveOption::KisCurveOption(const QString& name, KisPaintOpOption::PaintopCat
 
     setValueRange(min, max);
     setValue(value);
+
+    QList<QPointF> points;
+    // needs to be set to something, weird curve is better for debugging
+    // it will be reset to the curve from the preset anyway though
+    points.push_back(QPointF(0,0));
+    points.push_back(QPointF(0.25,0.9));
+    points.push_back(QPointF(0.5,0));
+    points.push_back(QPointF(0.75,0.6));
+    points.push_back(QPointF(1,0));
+    m_commonCurve = KisCubicCurve(points);
 }
 
 KisCurveOption::~KisCurveOption()
@@ -107,12 +117,12 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfigurationSP setting) co
     setting->setProperty(m_name + "UseSameCurve", m_useSameCurve);
     setting->setProperty(m_name + "Value", m_value);
     setting->setProperty(m_name + "curveMode", m_curveMode);
+    setting->setProperty(m_name + "commonCurve", qVariantFromValue(m_commonCurve));
 
 }
 
 void KisCurveOption::readOptionSetting(KisPropertiesConfigurationSP setting)
 {
-    m_curveCache.clear();
     readNamedOptionSetting(m_name, setting);
 }
 
@@ -121,9 +131,27 @@ void KisCurveOption::lodLimitations(KisPaintopLodLimitations *l) const
     Q_UNUSED(l);
 }
 
+int KisCurveOption::intMinValue() const
+{
+    return 0;
+}
+
+int KisCurveOption::intMaxValue() const
+{
+    return 100;
+}
+
+QString KisCurveOption::valueSuffix() const
+{
+    return i18n("%");
+}
+
 void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting)
 {
     if (!setting) return;
+
+    KisCubicCurve commonCurve = m_commonCurve;
+
     //dbgKrita << "readNamedOptionSetting" << prefix;
     // setting->dump();
 
@@ -145,6 +173,7 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
         if (s) {
             replaceSensor(s);
             s->setActive(true);
+            commonCurve = s->curve();
             //dbgKrita << "\tsingle sensor" << s::id(s->sensorType()) << s->isActive() << "added";
         }
     }
@@ -161,6 +190,7 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
                     if (s) {
                         replaceSensor(s);
                         s->setActive(true);
+                        commonCurve = s->curve();
                         //dbgKrita << "\tchild sensor" << s::id(s->sensorType()) << s->isActive() << "added";
                     }
                 }
@@ -168,6 +198,9 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
             node = node.nextSibling();
         }
     }
+
+
+    m_useSameCurve = setting->getBool(m_name + "UseSameCurve", true);
 
     // Only load the old curve format if the curve wasn't saved by the sensor
     // This will give every sensor the same curve.
@@ -177,8 +210,13 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
         if (setting->getBool("Custom" + prefix, false)) {
             Q_FOREACH (KisDynamicSensorSP s, m_sensorMap.values()) {
                 s->setCurve(setting->getCubicCurve("Curve" + prefix));
+                commonCurve = s->curve();
             }
         }
+    }
+
+    if (m_useSameCurve) {
+        m_commonCurve = setting->getCubicCurve(prefix + "commonCurve", commonCurve);
     }
 
     // At least one sensor needs to be active
@@ -192,7 +230,7 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
     m_useCurve = setting->getBool(m_name + "UseCurve", true);
     //dbgKrita << "\t" + m_name + "UseCurve" << m_useSameCurve;
 
-    m_useSameCurve = setting->getBool(m_name + "UseSameCurve", true);
+
     //dbgKrita << "\t" + m_name + "UseSameCurve" << m_useSameCurve;
 
     m_curveMode = setting->getInt(m_name + "curveMode");
@@ -242,6 +280,11 @@ int KisCurveOption::getCurveMode() const
     return m_curveMode;
 }
 
+KisCubicCurve KisCurveOption::getCommonCurve() const
+{
+    return m_commonCurve;
+}
+
 void KisCurveOption::setSeparateCurveValue(bool separateCurveValue)
 {
     m_separateCurveValue = separateCurveValue;
@@ -272,14 +315,21 @@ void KisCurveOption::setCurveMode(int mode)
     m_curveMode = mode;
 }
 
+void KisCurveOption::setUseSameCurve(bool useSameCurve)
+{
+    m_useSameCurve = useSameCurve;
+}
+
+void KisCurveOption::setCommonCurve(KisCubicCurve curve)
+{
+    m_commonCurve = curve;
+}
+
 void KisCurveOption::setCurve(DynamicSensorType sensorType, bool useSameCurve, const KisCubicCurve &curve)
 {
-    // No switch in state, don't mess with the cache
     if (useSameCurve == m_useSameCurve) {
         if (useSameCurve) {
-            Q_FOREACH (KisDynamicSensorSP s, m_sensorMap.values()) {
-                s->setCurve(curve);
-            }
+            m_commonCurve = curve;
         }
         else {
             KisDynamicSensorSP s = sensor(sensorType, false);
@@ -290,36 +340,19 @@ void KisCurveOption::setCurve(DynamicSensorType sensorType, bool useSameCurve, c
         }
     }
     else {
-        // moving from not use same curve to use same curve: backup the custom curves
         if (!m_useSameCurve && useSameCurve) {
-            // Copy the custom curves to the cache and set the new curve on all sensors, active or not
-            m_curveCache.clear();
-            Q_FOREACH (KisDynamicSensorSP s, m_sensorMap.values()) {
-                m_curveCache[s->sensorType()] = s->curve();
-                s->setCurve(curve);
-            }
+            m_commonCurve = curve;
         }
         else { //if (m_useSameCurve && !useSameCurve)
-            // Restore the cached curves
             KisDynamicSensorSP s = 0;
-            Q_FOREACH (DynamicSensorType sensorType, m_curveCache.keys()) {
-                if (m_sensorMap.contains(sensorType)) {
-                    s = m_sensorMap[sensorType];
-                }
-                else {
-                    s = KisDynamicSensor::type2Sensor(sensorType, m_name);
-                }
-                s->setCurve(m_curveCache[sensorType]);
-                m_sensorMap[sensorType] = s;
-            }
-            s = 0;
             // And set the current sensor to the current curve
             if (!m_sensorMap.contains(sensorType)) {
                 s = KisDynamicSensor::type2Sensor(sensorType, m_name);
+            } else {
+                KisDynamicSensorSP s = sensor(sensorType, false);
             }
             if (s) {
                 s->setCurve(curve);
-                s->setCurve(m_curveCache[sensorType]);
             }
 
         }
@@ -349,14 +382,15 @@ KisCurveOption::ValueComponents KisCurveOption::computeValueComponents(const Kis
             KisDynamicSensorSP s(i.value());
 
             if (s->isActive()) {
+                qreal valueFromCurve = m_useSameCurve ? s->parameter(info, m_commonCurve, true) : s->parameter(info);
                 if (s->isAdditive()) {
-                    components.additive += s->parameter(info);
+                    components.additive += valueFromCurve;
                     components.hasAdditive = true;
                 } else if (s->isAbsoluteRotation()) {
-                    components.absoluteOffset = s->parameter(info);
+                    components.absoluteOffset = valueFromCurve;
                     components.hasAbsoluteOffset =true;
                 } else {
-                    sensorValues << s->parameter(info);
+                    sensorValues << valueFromCurve;
                     components.hasScaling = true;
                 }
             }

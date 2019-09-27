@@ -147,7 +147,7 @@ void KisEmbeddedPatternManagerTest::checkOneConfig(NameStatus nameStatus, bool h
     QVERIFY(pattern->name().startsWith(expectedName));
 
     QFileInfo info(pattern->filename());
-    QVERIFY(info.baseName().startsWith(expectedName));
+    QVERIFY(info.completeBaseName().startsWith(expectedName));
     QCOMPARE(info.dir().path(), QDir(KoResourceServerProvider::instance()->patternServer()->saveLocation()).path());
 
     // We can only find things on the server by name or by md5; the file path as an identifier does not work.

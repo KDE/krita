@@ -27,7 +27,7 @@
 #include <QPixmap>
 #include <QPair>
 #include <QHash>
-
+#include <KisSqueezedComboBox.h>
 #include <KisPaletteModel.h>
 
 class KisPaletteView;
@@ -37,7 +37,7 @@ class KisPaletteView;
  * A combobox used with KisPaletteView
  *
  */
-class KRITAWIDGETS_EXPORT KisPaletteComboBox : public QComboBox
+class KRITAWIDGETS_EXPORT KisPaletteComboBox : public KisSqueezedComboBox
 {
     Q_OBJECT
 private /* typedef */:
@@ -46,7 +46,7 @@ private /* typedef */:
     typedef QHash<SwatchPosType, int> PosIdxMapType;
 
 public:
-    explicit KisPaletteComboBox(QWidget *parent = Q_NULLPTR);
+    explicit KisPaletteComboBox(QWidget *parent = 0);
     ~KisPaletteComboBox();
 
 Q_SIGNALS:

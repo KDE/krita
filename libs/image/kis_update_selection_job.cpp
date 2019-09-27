@@ -30,7 +30,7 @@ KisUpdateSelectionJob::KisUpdateSelectionJob(KisSelectionSP selection, const QRe
      * projection. See a comment in KisUpdateSelectionJob::run().
      *
      * Right now, since this job accesses some projections for write, we
-     * shoudl declare it as exclusive
+     * should declare it as exclusive
      */
 
     setExclusive(true);

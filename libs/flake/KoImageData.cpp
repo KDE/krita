@@ -93,7 +93,7 @@ QPixmap KoImageData::pixmap(const QSize &size)
         }
         case KoImageDataPrivate::StateNotLoaded:
             image(); // forces load
-            // fall through
+            Q_FALLTHROUGH();
         case KoImageDataPrivate::StateImageLoaded:
         case KoImageDataPrivate::StateImageOnly:
             if (!d->image.isNull()) {
@@ -190,7 +190,11 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
         d->temporaryFile = 0;
         d->clear();
         d->suffix = "png"; // good default for non-lossy storage.
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
+        if (image.sizeInBytes() > MAX_MEMORY_IMAGESIZE) {
+#else
         if (image.byteCount() > MAX_MEMORY_IMAGESIZE) {
+#endif
             // store image
             QBuffer buffer;
             buffer.open(QIODevice::WriteOnly);

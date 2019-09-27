@@ -21,6 +21,7 @@
 #define KISINPUTCONFIGURATIONPAGE_H
 
 #include <QWidget>
+#include <KisKineticScroller.h>
 
 namespace Ui
 {
@@ -40,6 +41,7 @@ public Q_SLOTS:
     void saveChanges();
     void revertChanges();
     void setDefaults();
+    void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
 
 private Q_SLOTS:
     void editProfilesButtonClicked();

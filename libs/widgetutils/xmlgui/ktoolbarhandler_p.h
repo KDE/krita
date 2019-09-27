@@ -19,9 +19,9 @@
 #ifndef KTOOLBARHANDLER_H
 #define KTOOLBARHANDLER_H
 
-#include <QtCore/QLinkedList>
-#include <QtCore/QObject>
-#include <QtCore/QPointer>
+#include <QLinkedList>
+#include <QObject>
+#include <QPointer>
 
 #include <kxmlguiclient.h>
 
@@ -37,13 +37,13 @@ class ToolBarHandler : public QObject, public KXMLGUIClient
 public:
     /**
      * Creates a new tool bar handler for the supplied
-     * @param mainWindow.
+     * @p mainWindow.
      */
     explicit ToolBarHandler(KXmlGuiWindow *mainWindow);
 
     /**
      * Creates a new tool bar handler for the supplied
-     * @param mainWindow and with the supplied parent.
+     * @p mainWindow and with the supplied @p parent.
      */
     ToolBarHandler(KXmlGuiWindow *mainWindow, QObject *parent);
 

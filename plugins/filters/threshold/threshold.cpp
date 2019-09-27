@@ -109,7 +109,7 @@ KisFilterConfigurationSP KisFilterThreshold::factoryConfiguration() const
     return config;
 }
 
-KisConfigWidget *KisFilterThreshold::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisFilterThreshold::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KisThresholdConfigWidget(parent, dev);
 }

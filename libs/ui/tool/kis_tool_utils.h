@@ -33,7 +33,7 @@ struct KRITAUI_EXPORT ColorPickerConfig {
 
     bool toForegroundColor;
     bool updateColor;
-    bool addPalette;
+    bool addColorToCurrentPalette;
     bool normaliseValues;
     bool sampleMerged;
     int radius;
@@ -56,7 +56,7 @@ private:
  * blend       - Blend percentage. 100% all picked, 0% all blendColor.
  * pure        - Whether to bypass radius, blending, and active layer settings for pure picking.
  *
- * RETURN      - Returns true if a valid color was picked.
+ * RETURN      - Returns TRUE whenever a valid color is picked.
  */
 bool KRITAUI_EXPORT pickColor(KoColor &out_color, KisPaintDeviceSP dev, const QPoint &pos,
                               KoColor const *const blendColor = nullptr, int radius = 1,

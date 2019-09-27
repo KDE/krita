@@ -31,14 +31,16 @@
 
 #include "ui_wdg_gaussian_blur.h"
 
-KisWdgGaussianBlur::KisWdgGaussianBlur(QWidget * parent) : KisConfigWidget(parent)
+KisWdgGaussianBlur::KisWdgGaussianBlur(bool usedForMasks, QWidget * parent) : KisConfigWidget(parent)
 {
     m_widget = new Ui_WdgGaussianBlur();
     m_widget->setupUi(this);
 
     m_widget->aspectButton->setKeepAspectRatio(false);
 
-    m_widget->horizontalRadius->setRange(0.0, 1000.0, 2);
+    const qreal maxRadius = usedForMasks ? 100.0 : 1000.0;
+
+    m_widget->horizontalRadius->setRange(0.0, maxRadius, 2);
     m_widget->horizontalRadius->setSingleStep(0.2);
     m_widget->horizontalRadius->setValue(0.5);
     m_widget->horizontalRadius->setExponentRatio(3.0);
@@ -46,7 +48,7 @@ KisWdgGaussianBlur::KisWdgGaussianBlur(QWidget * parent) : KisConfigWidget(paren
 
     connect(m_widget->horizontalRadius, SIGNAL(valueChanged(qreal)), this, SLOT(horizontalRadiusChanged(qreal)));
 
-    m_widget->verticalRadius->setRange(0.0, 1000.0, 2);
+    m_widget->verticalRadius->setRange(0.0, maxRadius, 2);
     m_widget->verticalRadius->setSingleStep(0.2);
     m_widget->verticalRadius->setValue(0.5);
     m_widget->verticalRadius->setExponentRatio(3.0);

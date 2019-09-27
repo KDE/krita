@@ -163,7 +163,9 @@ void KoPencilTool::mouseReleaseEvent(KoPointerEvent *event)
     m_hoveredPoint = 0;
 
     // the original path may be different from the one added
-    canvas()->updateCanvas(m_shape->boundingRect());
+    if (canvas() && m_shape) {
+        canvas()->updateCanvas(m_shape->boundingRect());
+    }
     delete m_shape;
     m_shape = 0;
     m_points.clear();
@@ -446,6 +448,11 @@ KoShapeStrokeSP KoPencilTool::createStroke()
         stroke = m_strokeWidget->createShapeStroke();
     }
     return stroke;
+}
+
+KoPathShape * KoPencilTool::path()
+{
+    return m_shape;
 }
 
 KoPathPoint* KoPencilTool::endPointAtPosition(const QPointF &position)

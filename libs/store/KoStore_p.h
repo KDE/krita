@@ -48,7 +48,7 @@ public:
 
     /**
      * Conversion routine
-     * @param _internalNaming name used internally : "root", "tar:/0", ...
+     * @param internalNaming name used internally : "root", "tar:/0", ...
      * @return the name used in the file, more user-friendly ("maindoc.xml",
      *         "part0/maindoc.xml", ...)
      * Examples:
@@ -70,11 +70,7 @@ public:
     bool extractFile(const QString &sourceName, QIODevice &buffer);
 
     KoStore *q;
-    /**
-     * original URL of the remote file
-     * (undefined for a local file)
-     */
-    QUrl url;
+
     QString localFileName;
     QWidget *window;
 
@@ -102,6 +98,11 @@ public:
     QStack<QString> directoryStack;
 
     bool writeMimetype; ///< true if the backend is allowed to create "mimetype" automatically.
+
+    QString substituteThis;
+    QString substituteWith;
+
+    QUrl url;
 };
 
 #endif

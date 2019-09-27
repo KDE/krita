@@ -80,7 +80,7 @@ KisFilterConfigurationSP KisFilterNoise::factoryConfiguration() const
     return config;
 }
 
-KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     return new KisWdgNoise((KisFilter*)this, (QWidget*)parent);

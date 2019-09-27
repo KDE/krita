@@ -142,7 +142,6 @@ SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
 
 SvgParser::~SvgParser()
 {
-    qDeleteAll(m_symbols);
 }
 
 KoXmlDocument SvgParser::createDocumentFromSvg(QIODevice *device, QString *errorMsg, int *errorLine, int *errorColumn)
@@ -226,7 +225,7 @@ QList<KoShape*> SvgParser::shapes() const
 
 QVector<KoSvgSymbol *> SvgParser::takeSymbols()
 {
-    QVector<KoSvgSymbol*> symbols = m_symbols;
+    QVector<KoSvgSymbol*> symbols = m_symbols.values().toVector();
     m_symbols.clear();
     return symbols;
 }
@@ -731,7 +730,7 @@ bool SvgParser::parseSymbol(const KoXmlElement &e)
         return false;
     }
 
-    m_symbols << svgSymbol.take();
+    m_symbols.insert(id, svgSymbol.take());
 
     return true;
 }
@@ -1348,8 +1347,33 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF *fragmentSize)
 
     const QString w = e.attribute("width");
     const QString h = e.attribute("height");
-    const qreal width = w.isEmpty() ? 666.0 : parseUnitX(w);
-    const qreal height = h.isEmpty() ? 555.0 : parseUnitY(h);
+
+    qreal width = w.isEmpty() ? 666.0 : parseUnitX(w);
+    qreal height = h.isEmpty() ? 555.0 : parseUnitY(h);
+
+    if (w.isEmpty() || h.isEmpty()) {
+        QRectF viewRect;
+        QTransform viewTransform_unused;
+        QRectF fakeBoundingRect(0.0, 0.0, 1.0, 1.0);
+
+        if (SvgUtil::parseViewBox(e, fakeBoundingRect,
+                                  &viewRect, &viewTransform_unused)) {
+
+            QSizeF estimatedSize = viewRect.size();
+
+            if (estimatedSize.isValid()) {
+
+                if (!w.isEmpty()) {
+                    estimatedSize = QSizeF(width, width * estimatedSize.height() / estimatedSize.width());
+                } else if (!h.isEmpty()) {
+                    estimatedSize = QSizeF(height * estimatedSize.width() / estimatedSize.height(), height);
+                }
+
+                width = estimatedSize.width();
+                height = estimatedSize.height();
+            }
+        }
+    }
 
     QSizeF svgFragmentSize(QSizeF(width, height));
 
@@ -1408,7 +1432,7 @@ void SvgParser::applyViewBoxTransform(const KoXmlElement &element)
     QRectF viewRect = gc->currentBoundingBox;
     QTransform viewTransform;
 
-    if (SvgUtil::parseViewBox(gc, element, gc->currentBoundingBox,
+    if (SvgUtil::parseViewBox(element, gc->currentBoundingBox,
                               &viewRect, &viewTransform)) {
 
         gc->matrix = viewTransform * gc->matrix;
@@ -1530,7 +1554,10 @@ KoShape *SvgParser::parseTextElement(const KoXmlElement &e, KoSvgTextShape *merg
     uploadStyleToContext(e);
 
     KoSvgTextChunkShape *textChunk = rootTextShape ? rootTextShape : new KoSvgTextChunkShape();
-    textChunk->setZIndex(m_context.nextZIndex());
+
+    if (!mergeIntoShape) {
+        textChunk->setZIndex(m_context.nextZIndex());
+    }
 
     textChunk->loadSvg(e, m_context);
 

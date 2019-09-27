@@ -46,6 +46,19 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="cbResetSourcePoint">
+         <property name="toolTip">
+          <string>Reset the origin every time you make a new stroke.</string>
+         </property>
+         <property name="text">
+          <string>Source point reset before a new stroke</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCheckBox" name="chkCloneProjection">
          <property name="toolTip">
           <string>When checked, clone from all visible layers. Otherwise, clone from the active layer.</string>

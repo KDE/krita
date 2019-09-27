@@ -89,14 +89,20 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextR
 }
 
 TextShape::TextShape(const TextShape &rhs)
-    : KoShapeContainer(new KoShapeContainerPrivate(*reinterpret_cast<KoShapeContainerPrivate*>(rhs.d_ptr), this)),
-      KoFrameShape(rhs),
-      m_textShapeData(dynamic_cast<KoTextShapeData*>(rhs.m_textShapeData->clone())),
-      m_pageProvider(0),
-      m_imageCollection(0),
-      m_clip(rhs.m_clip)
+    : KoShapeContainer(rhs)
+    , KoFrameShape(rhs)
+    , m_textShapeData(dynamic_cast<KoTextShapeData*>(rhs.m_textShapeData->clone()))
+    , m_pageProvider(0)
+    , m_imageCollection(0)
+    , m_clip(rhs.m_clip)
 {
-    reinterpret_cast<KoShapeContainerPrivate*>(rhs.d_ptr)->model = new KoTextShapeContainerModel();
+    /// TODO: we need to clone the model
+    KoTextShapeContainerModel *origModel = dynamic_cast<KoTextShapeContainerModel *>(rhs.model());
+    if (origModel) {
+        setModel(new KoTextShapeContainerModel());
+    }
+    // XXX: ?
+    //reinterpret_cast<KoShapeContainerPrivate*>(rhs.d_ptr)->model = new KoTextShapeContainerModel();
 
     setShapeId(TextShape_SHAPEID);
     setUserData(m_textShapeData);
@@ -257,7 +263,7 @@ void TextShape::saveOdf(KoShapeSavingContext &context) const
     const_cast<TextShape *>(this)->removeAdditionalAttribute("fo:min-height");
     writer.startElement("draw:frame");
     // if the TextShape is wrapped in a shrink to fit container we need to save the geometry of the container as
-    // the geomerty of the shape might have been changed.
+    // the geometry of the shape might have been changed.
     if (ShrinkToFitShapeContainer *stf = dynamic_cast<ShrinkToFitShapeContainer *>(this->parent())) {
         stf->saveOdfAttributes(context, OdfSize | OdfPosition | OdfTransformation);
         saveOdfAttributes(context, OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements);

@@ -81,21 +81,16 @@ KisTemplatesPane::KisTemplatesPane(QWidget* parent, const QString& header,
         item->setData(preview, Qt::UserRole + 2);
         rootItem->appendRow(item);
 
-        if (d->m_alwaysUseTemplate == t->file()) {
-            selectItem = item;
-        }
-        else {
-            if (templateFileInfo.exists()) {
-                if (!selectItem && (t->file() == fullTemplateName)) {
-                    selectItem = item;
-                }
-            }
-            else {
-                if (!selectItem && QFileInfo(t->file()).fileName() == templateFileInfo.fileName()) {
-                    selectItem = item;
-                }
-            }
-        }
+		if (templateFileInfo.exists()) {
+			if (!selectItem && (t->file() == fullTemplateName)) {
+				selectItem = item;
+			}
+		}
+		else {
+			if (!selectItem && QFileInfo(t->file()).fileName() == templateFileInfo.fileName()) {
+				selectItem = item;
+			}
+		}
 
         if (defaultTemplate && (t->file() == defaultTemplate->file())) {
             defaultItem = item;
@@ -128,16 +123,13 @@ void KisTemplatesPane::selectionChanged(const QModelIndex& index)
         QStandardItem* item = model()->itemFromIndex(index);
         m_openButton->setEnabled(true);
         m_alwaysUseCheckBox->setEnabled(true);
-        m_titleLabel->setText(item->data(Qt::DisplayRole).toString());
-        m_previewLabel->setPixmap(item->data(Qt::UserRole + 2).value<QPixmap>());
+
         m_detailsLabel->setHtml(item->data(Qt::UserRole).toString());
         m_alwaysUseCheckBox->setChecked(item->data(Qt::UserRole + 1).toString() == d->m_alwaysUseTemplate);
     } else {
         m_openButton->setEnabled(false);
         m_alwaysUseCheckBox->setEnabled(false);
         m_alwaysUseCheckBox->setChecked(false);
-        m_titleLabel->clear();
-        m_previewLabel->setPixmap(QPixmap());
         m_detailsLabel->clear();
     }
 }

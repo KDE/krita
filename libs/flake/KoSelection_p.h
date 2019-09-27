@@ -19,26 +19,30 @@
 #ifndef KOSELECTIONPRIVATE_H
 #define KOSELECTIONPRIVATE_H
 
-#include "KoShape_p.h"
+#include <QSharedData>
 
-#include "kis_signal_compressor.h"
+#include "kis_thread_safe_signal_compressor.h"
 
 class KoShapeGroup;
 
-class KoSelectionPrivate : public KoShapePrivate
+class KoSelection::Private : public QSharedData
 {
 public:
-    explicit KoSelectionPrivate(KoSelection *parent)
-        : KoShapePrivate(parent),
-          activeLayer(0),
-          selectionChangedCompressor(1, KisSignalCompressor::FIRST_INACTIVE)
+    explicit Private()
+        : QSharedData()
+        , activeLayer(0)
+        , selectionChangedCompressor(1, KisSignalCompressor::FIRST_INACTIVE)
     {}
+    explicit Private(const Private &)
+        : QSharedData()
+        , activeLayer(0)
+        , selectionChangedCompressor(1, KisSignalCompressor::FIRST_INACTIVE)
+    {
+    }
     QList<KoShape*> selectedShapes;
     KoShapeLayer *activeLayer;
 
-    KisSignalCompressor selectionChangedCompressor;
-
-    Q_DECLARE_PUBLIC(KoSelection)
+    KisThreadSafeSignalCompressor selectionChangedCompressor;
 };
 
 #endif

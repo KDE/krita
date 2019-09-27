@@ -10,7 +10,7 @@ RCFILES=`find . -name \*.xmlgui                                               \
          `
 $EXTRACTRC $RCFILES >> rc.cpp
 
-ACTIONFILES=`find . -name \*.action`
+ACTIONFILES=`find . -name \*.action | grep -v '/tests/'`
 ./action_i18n.pl --context=action $ACTIONFILES >> rc.cpp
 
 # extracti18n.pl extracts additional data from brushes, palettes etc.

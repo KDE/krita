@@ -62,7 +62,7 @@ int PaletteColorsModel::rowCount(const QModelIndex &parent) const
     return d->colorSet->colorCount();
 }
 
-QVariant PaletteColorsModel::data(const QModelIndex &index, int role) const
+QVariant PaletteColorsModel::data(const QModelIndex &/*index*/, int /*role*/) const
 {
     QVariant result;
     /*
@@ -133,7 +133,7 @@ void PaletteColorsModel::setView(QObject* newView)
     emit viewChanged();
 }
 
-void PaletteColorsModel::activateColor(int index, bool setBackgroundColor)
+void PaletteColorsModel::activateColor(int index, bool /*setBackgroundColor*/)
 {
     if ( !d->view )
         return;

@@ -28,6 +28,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QDate>
 #include <QApplication>
 #include <QFile>
 #include <QDesktopServices>
@@ -35,7 +36,10 @@
 #include <klocalizedstring.h>
 
 #include "../../krita/data/splash/splash_screen.xpm"
+#include "../../krita/data/splash/splash_holidays.xpm"
 #include "../../krita/data/splash/splash_screen_x2.xpm"
+#include "../../krita/data/splash/splash_holidays_x2.xpm"
+
 #include "kis_splash_screen.h"
 
 KisAboutApplication::KisAboutApplication(QWidget *parent)
@@ -47,8 +51,17 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     vlayout->setMargin(0);
     QTabWidget *wdgTab = new QTabWidget;
     vlayout->addWidget(wdgTab);
+    KisSplashScreen *splash = 0;
 
-    KisSplashScreen *splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_screen_xpm), QPixmap(splash_screen_x2_xpm), true);
+    QDate currentDate = QDate::currentDate();
+    if (currentDate > QDate(currentDate.year(), 12, 4) ||
+            currentDate < QDate(currentDate.year(), 1, 9)) {
+        splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_holidays_xpm), QPixmap(splash_holidays_x2_xpm));
+    }
+    else {
+        splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_screen_xpm), QPixmap(splash_screen_x2_xpm));
+    }
+
     splash->setWindowFlags(Qt::Widget);
     splash->displayLinks(true);
     splash->setFixedSize(splash->sizeHint());
@@ -77,7 +90,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     authors.chop(2);
     authors.append(".</p></body></html>");
     lblAuthors->setText(authors);
-    wdgTab->addTab(lblAuthors, i18n("Authors"));
+    wdgTab->addTab(lblAuthors, i18nc("Heading for the list of Krita authors/developers", "Authors"));
 
     QTextEdit *lblKickstarter = new QTextEdit();
     lblKickstarter->setReadOnly(true);
@@ -90,11 +103,10 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     QFile fileBackers(":/backers.txt");
     Q_ASSERT(fileBackers.exists());
-    fileBackers.open(QIODevice::ReadOnly);
-    Q_FOREACH (const QByteArray &backer, fileBackers.readAll().split('\n')) {
-        backers.append(QString::fromUtf8(backer));
-        backers.append(", ");
-    }
+    fileBackers.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream backersText(&fileBackers);
+    backersText.setCodec("UTF-8");
+    backers.append(backersText.readAll().replace("\n", ", "));
     backers.chop(2);
     backers.append(i18n(".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"));
     lblKickstarter->setText(backers);

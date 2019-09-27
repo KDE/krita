@@ -33,10 +33,21 @@ namespace KisPaintOpPluginUtils {
  * from the provided configuration options. This function assumes a common configuration where
  * spacing and airbrush settings are configured through a KisPressureSpacingOption and
  * KisAirbrushOption. This type of configuration is used by several different paintops.
+ * @param dabWidth - The dab width.
+ * @param dabHeight - The dab height.
+ * @param isotropicSpacing - If @c true the spacing should be isotropic.
+ * @param rotation - The rotation angle in radians.
+ * @param axesFlipped - If @c true the axes should be flipped.
+ * @param spacingVal - The spacing value.
+ * @param autoSpacingActive - If @c true the autospacing will be activated.
+ * @param autoSpacingCoeff - The autospacing coefficient.
+ * @param lodScale - The level of details scale.
  * @param airbrushOption - The airbrushing option. Can be null for paintops that don't support
  *                         airbrushing.
  * @param spacingOption - The pressure-curve spacing option. Can be null for paintops that don't
  *                        support pressure-based spacing.
+ * @param pi - The paint information.
+ * @see KisPaintInformation
  */
 KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        qreal dabHeight,
@@ -76,6 +87,8 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
  *                         airbrushing.
  * @param rateOption - The pressure-curve airbrush rate option. Can be null for paintops that don't
  *                     support a pressure-based airbrush rate.
+ * @param pi - The paint information.
+ * @see KisPaintInformation
  */
 KisTimingInformation effectiveTiming(const KisAirbrushOptionProperties *airbrushOption,
                                      const KisPressureRateOption *rateOption,

@@ -62,9 +62,10 @@ public: // QWidget overrides
 
 public: // Implement kis_abstract_canvas_widget interface
     void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) override;
+    void notifyImageColorSpaceChanged(const KoColorSpace *cs) override;
     void setWrapAroundViewingMode(bool value) override;
     void channelSelectionChanged(const QBitArray &channelFlags) override;
-    void setDisplayProfile(KisDisplayColorConverter *colorConverter) override;
+    void setDisplayColorConverter(KisDisplayColorConverter *colorConverter) override;
     void finishResizingImage(qint32 w, qint32 h) override;
     KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags) override;
     QRect updateCanvasProjection(KisUpdateInfoSP info) override;

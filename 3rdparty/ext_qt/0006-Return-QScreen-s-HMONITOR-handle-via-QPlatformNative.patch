@@ -1,0 +1,95 @@
+From ca3018536c7625f76969fe0031e35ead039071ae Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Tue, 4 Dec 2018 20:11:34 +0300
+Subject: [PATCH 14/19] Return QScreen's HMONITOR handle via
+ QPlatformNativeInterface
+
+It is needed to be able to fetch extra information about the display via
+DXGI interface.
+
+Change-Id: Id83982eb07ade157719e430d0abcc2613409a343
+---
+ .../windows/qwindowsnativeinterface.cpp          | 16 ++++++++++++++++
+ .../platforms/windows/qwindowsnativeinterface.h  |  1 +
+ src/plugins/platforms/windows/qwindowsscreen.cpp |  5 +++++
+ src/plugins/platforms/windows/qwindowsscreen.h   |  2 ++
+ 4 files changed, 24 insertions(+)
+
+diff --git a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp b/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
+index ed945ec4b1..1c5be44150 100644
+--- a/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
++++ b/src/plugins/platforms/windows/qwindowsnativeinterface.cpp
+@@ -40,6 +40,7 @@
+ #include "qwindowsnativeinterface.h"
+ #include "qwindowsclipboard.h"
+ #include "qwindowswindow.h"
++#include "qwindowsscreen.h"
+ #include "qwindowscontext.h"
+ #include "qwindowscursor.h"
+ #include "qwindowsopenglcontext.h"
+@@ -124,6 +125,21 @@ void *QWindowsNativeInterface::nativeResourceForWindow(const QByteArray &resourc
+     return nullptr;
+ }
+ 
++void *QWindowsNativeInterface::nativeResourceForScreen(const QByteArray &resource, QScreen *screen)
++{
++    if (!screen || !screen->handle()) {
++        qWarning("%s: '%s' requested for null screen or screen without handle.", __FUNCTION__, resource.constData());
++        return 0;
++    }
++    QWindowsScreen *bs = static_cast<QWindowsScreen *>(screen->handle());
++    int type = resourceType(resource);
++    if (type == HandleType)
++        return bs->handle();
++
++    qWarning("%s: Invalid key '%s' requested.", __FUNCTION__, resource.constData());
++    return 0;
++}
++
+ #ifndef QT_NO_CURSOR
+ void *QWindowsNativeInterface::nativeResourceForCursor(const QByteArray &resource, const QCursor &cursor)
+ {
+diff --git a/src/plugins/platforms/windows/qwindowsnativeinterface.h b/src/plugins/platforms/windows/qwindowsnativeinterface.h
+index e6f8aae8fb..ce395dc5a4 100644
+--- a/src/plugins/platforms/windows/qwindowsnativeinterface.h
++++ b/src/plugins/platforms/windows/qwindowsnativeinterface.h
+@@ -74,6 +74,7 @@ public:
+     void *nativeResourceForContext(const QByteArray &resource, QOpenGLContext *context) override;
+ #endif
+     void *nativeResourceForWindow(const QByteArray &resource, QWindow *window) override;
++    void *nativeResourceForScreen(const QByteArray &resource, QScreen *screen) override;
+ #ifndef QT_NO_CURSOR
+     void *nativeResourceForCursor(const QByteArray &resource, const QCursor &cursor) override;
+ #endif
+diff --git a/src/plugins/platforms/windows/qwindowsscreen.cpp b/src/plugins/platforms/windows/qwindowsscreen.cpp
+index 4137a4bd9a..bc37263298 100644
+--- a/src/plugins/platforms/windows/qwindowsscreen.cpp
++++ b/src/plugins/platforms/windows/qwindowsscreen.cpp
+@@ -328,6 +328,11 @@ void QWindowsScreen::handleChanges(const QWindowsScreenData &newData)
+     }
+ }
+ 
++HMONITOR QWindowsScreen::handle() const
++{
++    return m_data.hMonitor;
++}
++
+ QRect QWindowsScreen::virtualGeometry(const QPlatformScreen *screen) // cf QScreen::virtualGeometry()
+ {
+     QRect result;
+diff --git a/src/plugins/platforms/windows/qwindowsscreen.h b/src/plugins/platforms/windows/qwindowsscreen.h
+index 8ad012512e..3eb2d35b27 100644
+--- a/src/plugins/platforms/windows/qwindowsscreen.h
++++ b/src/plugins/platforms/windows/qwindowsscreen.h
+@@ -104,6 +104,8 @@ public:
+ 
+     inline void handleChanges(const QWindowsScreenData &newData);
+ 
++    HMONITOR handle() const;
++
+ #ifndef QT_NO_CURSOR
+     QPlatformCursor *cursor() const override { return m_cursor.data(); }
+     const CursorPtr &cursorPtr() const { return m_cursor; }
+-- 
+2.20.1.windows.1
+

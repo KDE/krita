@@ -72,7 +72,7 @@ public:
      * @param manager the shapeManager that contains all the shapes that could have their indexes changed.
      * @param move the moving type.
      * @param parent the parent command for grouping purposes.
-     * @return command for reording the shapes or 0 if no reordering happened
+     * @return command for reordering the shapes or 0 if no reordering happened
      */
     static KoShapeReorderCommand *createCommand(const QList<KoShape*> &shapes, KoShapeManager *manager,
             MoveShapeType move, KUndo2Command *parent = 0);
@@ -85,8 +85,10 @@ public:
      *               is no difference.
      *        Note2: the collisions inside \p shapes are ignored. They are just
      *               adjusted to avoid collisions with \p newShape only
+     * @param shapes list of shapes
+     * @param newShape the new shape
      * @param parent the parent command for grouping purposes.
-     * @return command for reording the shapes or 0 if no reordering happened
+     * @return command for reordering the shapes or 0 if no reordering happened
      */
     static KoShapeReorderCommand *mergeInShape(QList<KoShape*> shapes, KoShape *newShape,
                                                KUndo2Command *parent = 0);

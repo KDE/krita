@@ -52,9 +52,9 @@ protected:
     KisMergeWalker(Flags flags) : m_flags(flags) {}
 
     /**
-     * Begins visiting nodes starting with @startWith.
+     * Begins visiting nodes starting with @p startWith.
      * First it climbs to the top of the graph, collecting
-     * changeRects (it calls @registerChangeRect for every node).
+     * changeRects (it calls @ref registerChangeRect for every node).
      * Then it goes down to the bottom collecting needRects
      * for every branch.
      */

@@ -30,6 +30,8 @@
 #include <KoColorSet.h>
 #include "kritawidgets_export.h"
 
+#include <KisKineticScroller.h>
+
 class KisPaletteModel;
 class QWheelEvent;
 class KoColorDisplayRendererInterface;
@@ -40,7 +42,7 @@ class KRITAWIDGETS_EXPORT KisPaletteView : public QTableView
 private:
     static int MININUM_ROW_HEIGHT;
 public:
-    explicit KisPaletteView(QWidget *parent = Q_NULLPTR);
+    explicit KisPaletteView(QWidget *parent = 0);
     ~KisPaletteView() override;
 
     void setPaletteModel(KisPaletteModel *model);
@@ -73,21 +75,29 @@ public:
     void selectClosestColor(const KoColor &color);
 
     /**
+     * @brief closestColor
+     * determines closest swatch in the active palette and returns it's color as KoColor
+     * @param color
+     * @return KoColor
+     */
+    const KoColor closestColor(const KoColor& color) const;
+
+    /**
      * add an entry with a dialog window.
      * @warning deprecated.
-     * kept for compatibility with @ref PaletteView in @ref libkis
+     * kept for compatibility with PaletteView in libkis
      */
     bool addEntryWithDialog(KoColor color);
     /**
      * remove entry with a dialog window.(Necessary for groups.
      * @warning deprecated.
-     * kept for compatibility with @ref PaletteView in @ref libkis
+     * kept for compatibility with PaletteView in libkis
      */
     bool removeEntryWithDialog(QModelIndex index);
     /**
      * add entry with a dialog window.
      * @warning deprecated.
-     * kept for compatibility with @ref PaletteView in @ref libkis
+     * kept for compatibility with PaletteView in libkis
      */
     bool addGroupWithDialog();
 
@@ -101,6 +111,8 @@ public Q_SLOTS:
      *  This doesn't update the foreground color, just the visual selection.
      */
     void slotFGColorChanged(const KoColor &);
+
+    void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
 
 private Q_SLOTS:
     void slotHorizontalHeaderResized(int, int, int newSize);

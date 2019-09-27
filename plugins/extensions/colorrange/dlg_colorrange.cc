@@ -156,7 +156,8 @@ void DlgColorRange::slotSelectClicked()
     KisPaintDeviceSP device = m_viewManager->activeDevice();
     KIS_ASSERT_RECOVER_RETURN(device);
 
-    QRect rc = device->exactBounds();
+    QRect rc = m_viewManager->image()->bounds();
+
     if (rc.isEmpty()) return;
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());

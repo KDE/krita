@@ -178,7 +178,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
         QHash<QString, QAction *> actions = plugin->actions();
         QHash<QString, QAction *>::iterator i = actions.begin();
         while (i != actions.end()) {
-            addAction(i.key(), i.value());
+//            addAction(i.key(), i.value());
             ++i;
         }
     }
@@ -196,7 +196,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
             connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
             signalMapper->setMapping(a, factory->id());
             m_contextMenu->addAction(a);
-            addAction(QString("apply_%1").arg(factory->id()), a);
+//            addAction(QString("apply_%1").arg(factory->id()), a);
         }
     }
 
@@ -219,57 +219,57 @@ void TextTool::createActions()
 
     // FIXME: find new icons for these
     m_actionConfigureSection = actionRegistry->makeQAction("configure_section", this);
-    addAction("configure_section", m_actionConfigureSection);
+//    addAction("configure_section", m_actionConfigureSection);
     connect(m_actionConfigureSection, SIGNAL(triggered(bool)), this, SLOT(configureSection()));
 
     m_actionInsertSection = actionRegistry->makeQAction("insert_section", this);
-    addAction("insert_section", m_actionInsertSection);
+//    addAction("insert_section", m_actionInsertSection);
     connect(m_actionInsertSection, SIGNAL(triggered(bool)), this, SLOT(insertNewSection()));
 
     m_actionSplitSections = actionRegistry->makeQAction("split_sections", this);
-    addAction("split_sections", m_actionSplitSections);
+//    addAction("split_sections", m_actionSplitSections);
     connect(m_actionSplitSections, SIGNAL(triggered(bool)), this, SLOT(splitSections()));
 
     m_actionPasteAsText  = actionRegistry->makeQAction("edit_paste_text", this);
-    addAction("edit_paste_text", m_actionPasteAsText);
+//    addAction("edit_paste_text", m_actionPasteAsText);
     connect(m_actionPasteAsText, SIGNAL(triggered(bool)), this, SLOT(pasteAsText()));
 
     m_actionFormatBold  = actionRegistry->makeQAction("format_bold", this);
-    addAction("format_bold", m_actionFormatBold);
+//    addAction("format_bold", m_actionFormatBold);
     m_actionFormatBold->setCheckable(true);
     connect(m_actionFormatBold, SIGNAL(triggered(bool)), this, SLOT(bold(bool)));
 
     m_actionFormatItalic  = actionRegistry->makeQAction("format_italic", this);
     m_actionFormatItalic->setCheckable(true);
-    addAction("format_italic", m_actionFormatItalic);
+//    addAction("format_italic", m_actionFormatItalic);
     connect(m_actionFormatItalic, SIGNAL(triggered(bool)), this, SLOT(italic(bool)));
 
     m_actionFormatUnderline  = actionRegistry->makeQAction("format_underline", this);
     m_actionFormatUnderline->setCheckable(true);
-    addAction("format_underline", m_actionFormatUnderline);
+//    addAction("format_underline", m_actionFormatUnderline);
     connect(m_actionFormatUnderline, SIGNAL(triggered(bool)), this, SLOT(underline(bool)));
 
     m_actionFormatStrikeOut  = actionRegistry->makeQAction("format_strike", this);
     m_actionFormatStrikeOut->setCheckable(true);
-    addAction("format_strike", m_actionFormatStrikeOut);
+//    addAction("format_strike", m_actionFormatStrikeOut);
     connect(m_actionFormatStrikeOut, SIGNAL(triggered(bool)), this, SLOT(strikeOut(bool)));
 
     QActionGroup *alignmentGroup = new QActionGroup(this);
     m_actionAlignLeft  = actionRegistry->makeQAction("format_alignleft", this);
     m_actionAlignLeft->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignLeft);
-    addAction("format_alignleft", m_actionAlignLeft);
+//    addAction("format_alignleft", m_actionAlignLeft);
     connect(m_actionAlignLeft, SIGNAL(triggered(bool)), this, SLOT(alignLeft()));
 
     m_actionAlignRight  = actionRegistry->makeQAction("format_alignright", this);
     m_actionAlignRight->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignRight);
-    addAction("format_alignright", m_actionAlignRight);
+//    addAction("format_alignright", m_actionAlignRight);
     connect(m_actionAlignRight, SIGNAL(triggered(bool)), this, SLOT(alignRight()));
 
     m_actionAlignCenter  = actionRegistry->makeQAction("format_aligncenter", this);
     m_actionAlignCenter->setCheckable(true);
-    addAction("format_aligncenter", m_actionAlignCenter);
+//    addAction("format_aligncenter", m_actionAlignCenter);
 
     alignmentGroup->addAction(m_actionAlignCenter);
     connect(m_actionAlignCenter, SIGNAL(triggered(bool)), this, SLOT(alignCenter()));
@@ -277,31 +277,31 @@ void TextTool::createActions()
     m_actionAlignBlock  = actionRegistry->makeQAction("format_alignblock", this);
     m_actionAlignBlock->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignBlock);
-    addAction("format_alignblock", m_actionAlignBlock);
+//    addAction("format_alignblock", m_actionAlignBlock);
     connect(m_actionAlignBlock, SIGNAL(triggered(bool)), this, SLOT(alignBlock()));
 
     m_actionChangeDirection = actionRegistry->makeQAction("change_text_direction", this);
     m_actionChangeDirection->setCheckable(true);
-    addAction("change_text_direction", m_actionChangeDirection);
+//    addAction("change_text_direction", m_actionChangeDirection);
     connect(m_actionChangeDirection, SIGNAL(triggered()), this, SLOT(textDirectionChanged()));
 
     m_actionFormatSuper = actionRegistry->makeQAction("format_super", this);
     m_actionFormatSuper->setCheckable(true);
-    addAction("format_super", m_actionFormatSuper);
+//    addAction("format_super", m_actionFormatSuper);
     connect(m_actionFormatSuper, SIGNAL(triggered(bool)), this, SLOT(superScript(bool)));
 
     m_actionFormatSub = actionRegistry->makeQAction("format_sub", this);
     m_actionFormatSub->setCheckable(true);
-    addAction("format_sub", m_actionFormatSub);
+//    addAction("format_sub", m_actionFormatSub);
     connect(m_actionFormatSub, SIGNAL(triggered(bool)), this, SLOT(subScript(bool)));
 
     // TODO: check these rtl-things work properly
     m_actionFormatIncreaseIndent = actionRegistry->makeQAction("format_increaseindent", this);
-    addAction("format_increaseindent", m_actionFormatIncreaseIndent);
+//    addAction("format_increaseindent", m_actionFormatIncreaseIndent);
     connect(m_actionFormatIncreaseIndent, SIGNAL(triggered()), this, SLOT(increaseIndent()));
 
     m_actionFormatDecreaseIndent = actionRegistry->makeQAction("format_decreaseindent", this);
-    addAction("format_decreaseindent", m_actionFormatDecreaseIndent);
+//    addAction("format_decreaseindent", m_actionFormatDecreaseIndent);
     connect(m_actionFormatDecreaseIndent, SIGNAL(triggered()), this, SLOT(decreaseIndent()));
 
     const char *const increaseIndentActionIconName =
@@ -313,154 +313,154 @@ void TextTool::createActions()
     m_actionFormatIncreaseIndent->setIcon(koIcon(decreaseIndentActionIconName));
 
     QAction *action = actionRegistry->makeQAction("format_bulletlist", this);
-    addAction("format_bulletlist", action);
+//    addAction("format_bulletlist", action);
 
     action = actionRegistry->makeQAction("format_numberlist", this);
-    addAction("format_numberlist", action);
+//    addAction("format_numberlist", action);
 
     action = actionRegistry->makeQAction("fontsizeup", this);
-    addAction("fontsizeup", action);
+//    addAction("fontsizeup", action);
     connect(action, SIGNAL(triggered()), this, SLOT(increaseFontSize()));
 
     action = actionRegistry->makeQAction("fontsizedown", this);
-    addAction("fontsizedown", action);
+//    addAction("fontsizedown", action);
     connect(action, SIGNAL(triggered()), this, SLOT(decreaseFontSize()));
 
     m_actionFormatFontFamily = new KoFontFamilyAction(this);
     m_actionFormatFontFamily->setText(i18n("Font Family"));
-    addAction("format_fontfamily", m_actionFormatFontFamily);
+//    addAction("format_fontfamily", m_actionFormatFontFamily);
     connect(m_actionFormatFontFamily, SIGNAL(triggered(QString)),
             this, SLOT(setFontFamily(QString)));
 
     m_variableMenu = new KActionMenu(i18n("Variable"), this);
-    addAction("insert_variable", m_variableMenu);
+//    addAction("insert_variable", m_variableMenu);
 
     // ------------------- Actions with a key binding and no GUI item
     action = actionRegistry->makeQAction("nonbreaking_space", this);
-    addAction("nonbreaking_space", action);
+//    addAction("nonbreaking_space", action);
     connect(action, SIGNAL(triggered()), this, SLOT(nonbreakingSpace()));
 
     action = actionRegistry->makeQAction("nonbreaking_hyphen", this);
-    addAction("nonbreaking_hyphen", action);
+//    addAction("nonbreaking_hyphen", action);
     connect(action, SIGNAL(triggered()), this, SLOT(nonbreakingHyphen()));
 
     action = actionRegistry->makeQAction("insert_index", this);
-    addAction("insert_index", action);
+//    addAction("insert_index", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertIndexMarker()));
 
     action = actionRegistry->makeQAction("soft_hyphen", this);
     // TODO: double check this one works, conflicts with "zoom out"
-    addAction("soft_hyphen", action);
+//    addAction("soft_hyphen", action);
     connect(action, SIGNAL(triggered()), this, SLOT(softHyphen()));
 
     if (useAdvancedText) {
         action  = actionRegistry->makeQAction("line_break", this);
-        addAction("line_break", action);
+//        addAction("line_break", action);
         connect(action, SIGNAL(triggered()), this, SLOT(lineBreak()));
 
         action  = actionRegistry->makeQAction("insert_framebreak", this);
-        addAction("insert_framebreak", action);
+//        addAction("insert_framebreak", action);
         connect(action, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
     }
 
     action = actionRegistry->makeQAction("format_font", this);
-    addAction("format_font", action);
+//    addAction("format_font", action);
     connect(action, SIGNAL(triggered()), this, SLOT(selectFont()));
 
     m_actionFormatFontSize = new FontSizeAction(i18n("Font Size"), this);
-    addAction("format_fontsize", m_actionFormatFontSize);
+//    addAction("format_fontsize", m_actionFormatFontSize);
     connect(m_actionFormatFontSize, SIGNAL(fontSizeChanged(qreal)), this, SLOT(setFontSize(qreal)));
 
     m_actionFormatTextColor = new KoColorPopupAction(this);
-    addAction("format_textcolor", m_actionFormatTextColor);
+//    addAction("format_textcolor", m_actionFormatTextColor);
     connect(m_actionFormatTextColor, SIGNAL(colorChanged(KoColor)), this, SLOT(setTextColor(KoColor)));
 
     m_actionFormatBackgroundColor = new KoColorPopupAction(this);
-    addAction("format_backgroundcolor", m_actionFormatBackgroundColor);
+//    addAction("format_backgroundcolor", m_actionFormatBackgroundColor);
     connect(m_actionFormatBackgroundColor, SIGNAL(colorChanged(KoColor)), this, SLOT(setBackgroundColor(KoColor)));
 
     m_growWidthAction = actionRegistry->makeQAction("grow_to_fit_width", this);
-    addAction("grow_to_fit_width", m_growWidthAction);
+//    addAction("grow_to_fit_width", m_growWidthAction);
     connect(m_growWidthAction, SIGNAL(triggered(bool)), this, SLOT(setGrowWidthToFit(bool)));
 
     m_growHeightAction = actionRegistry->makeQAction("grow_to_fit_height", this);
-    addAction("grow_to_fit_height", m_growHeightAction);
+//    addAction("grow_to_fit_height", m_growHeightAction);
     connect(m_growHeightAction, SIGNAL(triggered(bool)), this, SLOT(setGrowHeightToFit(bool)));
 
     m_shrinkToFitAction = actionRegistry->makeQAction("shrink_to_fit", this);
-    addAction("shrink_to_fit", m_shrinkToFitAction);
+//    addAction("shrink_to_fit", m_shrinkToFitAction);
     connect(m_shrinkToFitAction, SIGNAL(triggered(bool)), this, SLOT(setShrinkToFit(bool)));
 
     if (useAdvancedText) {
         action = actionRegistry->makeQAction("insert_table", this);
-        addAction("insert_table", action);
+//        addAction("insert_table", action);
         connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
 
         action  = actionRegistry->makeQAction("insert_tablerow_above", this);
-        addAction("insert_tablerow_above", action);
+//        addAction("insert_tablerow_above", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
 
         action  = actionRegistry->makeQAction("insert_tablerow_below", this);
-        addAction("insert_tablerow_below", action);
+//        addAction("insert_tablerow_below", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
 
         action  = actionRegistry->makeQAction("insert_tablecolumn_left", this);
-        addAction("insert_tablecolumn_left", action);
+//        addAction("insert_tablecolumn_left", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
 
         action  = actionRegistry->makeQAction("insert_tablecolumn_right", this);
-        addAction("insert_tablecolumn_right", action);
+//        addAction("insert_tablecolumn_right", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
 
         action  = actionRegistry->makeQAction("delete_tablecolumn", this);
-        addAction("delete_tablecolumn", action);
+//        addAction("delete_tablecolumn", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
 
         action  = actionRegistry->makeQAction("delete_tablerow", this);
-        addAction("delete_tablerow", action);
+//        addAction("delete_tablerow", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
 
         action  = actionRegistry->makeQAction("merge_tablecells", this);
-        addAction("merge_tablecells", action);
+//        addAction("merge_tablecells", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeTableCells()));
 
         action  = actionRegistry->makeQAction("split_tablecells", this);
-        addAction("split_tablecells", action);
+//        addAction("split_tablecells", action);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
 
         action = actionRegistry->makeQAction("activate_borderpainter", this);
-        addAction("activate_borderpainter", action);
+//        addAction("activate_borderpainter", action);
     }
 
     action = actionRegistry->makeQAction("format_paragraph", this);
-    addAction("format_paragraph", action);
+//    addAction("format_paragraph", action);
     connect(action, SIGNAL(triggered()), this, SLOT(formatParagraph()));
 
     action = actionRegistry->makeQAction("format_stylist", this);
-    addAction("format_stylist", action);
+//    addAction("format_stylist", action);
     connect(action, SIGNAL(triggered()), this, SLOT(showStyleManager()));
 
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
-    addAction("edit_select_all", action);
+//    addAction("edit_select_all", action);
 
     action = actionRegistry->makeQAction("insert_specialchar", this);
-    addAction("insert_specialchar", action);
+//    addAction("insert_specialchar", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertSpecialCharacter()));
 
     action = actionRegistry->makeQAction("repaint", this);
-    addAction("repaint", action);
+//    addAction("repaint", action);
     connect(action, SIGNAL(triggered()), this, SLOT(relayoutContent()));
 
     action = actionRegistry->makeQAction("insert_annotation", this);
-    addAction("insert_annotation", action);
+//    addAction("insert_annotation", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAnnotation()));
 
 #ifndef NDEBUG
     action = actionRegistry->makeQAction("detailed_debug_paragraphs", this);
-    addAction("detailed_debug_paragraphs", action);
+//    addAction("detailed_debug_paragraphs", action);
     connect(action, SIGNAL(triggered()), this, SLOT(debugTextDocument()));
     action = actionRegistry->makeQAction("detailed_debug_styles", this);
-    addAction("detailed_debug_styles", action);
+//    addAction("detailed_debug_styles", action);
     connect(action, SIGNAL(triggered()), this, SLOT(debugTextStyles()));
 #endif
 }
@@ -1081,7 +1081,7 @@ TextEditingPluginContainer *TextTool::textEditingPluginContainer()
             QHash<QString, QAction *> actions = plugin->actions();
             QHash<QString, QAction *>::iterator i = actions.begin();
             while (i != actions.end()) {
-                addAction(i.key(), i.value());
+//                addAction(i.key(), i.value());
                 ++i;
             }
         }
@@ -1653,7 +1653,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         } else if (hit(item, KStandardShortcut::ForwardWord)) {
             moveOperation = QTextCursor::WordRight;
         }
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         // Don't reject "alt" key, it may be used for typing text on Mac OS
         else if ((event->modifiers() & Qt::ControlModifier) || event->text().length() == 0) {
 #else
@@ -2666,7 +2666,7 @@ void TextTool::startMacro(const QString &title)
     };
 
     /**
-     * FIXME: The messages genearted by the Text Tool might not be
+     * FIXME: The messages generated by the Text Tool might not be
      *        properly translated, since we don't control it in
      *        type-safe way.
      *
@@ -3008,7 +3008,7 @@ void TextTool::debugTextDocument()
                 } else if (fragment.length() > charStyleShort.length()) {
                     fragmentText += charStyleShort;
                 } else if (fragment.length() >= 2) {
-                    fragmentText += QChar(8230);    // elipses
+                    fragmentText += QChar(8230);    // ellipses
                 }
 
                 int rest =  fragmentStart - (lastPrintedChar - CHARSPERLINE) + fragment.length() - fragmentText.length();

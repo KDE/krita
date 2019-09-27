@@ -36,12 +36,12 @@ void KisModelIndexConverterTest::init()
     addSelectionMasks();
 
     m_dummiesFacade->setImage(m_image);
-    m_nodeModel->setDummiesFacade(m_dummiesFacade, m_image, 0, 0, 0, 0, 0);
+    m_nodeModel->setDummiesFacade(m_dummiesFacade, m_image, 0, 0, 0);
 }
 
 void KisModelIndexConverterTest::cleanup()
 {
-    m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0, 0, 0);
+    m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
     m_dummiesFacade->setImage(0);
 
     cleanupBase();

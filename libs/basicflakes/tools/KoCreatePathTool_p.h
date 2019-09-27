@@ -83,7 +83,7 @@ struct PathConnectionPoint {
             reset();
             return;
         }
-        // check if path is still part of the docment
+        // check if path is still part of the document
         if (!canvas->shapeManager()->shapes().contains(path)) {
             reset();
             return;

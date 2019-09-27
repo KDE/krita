@@ -20,7 +20,6 @@
 
 #include "BibliographyTemplate.h"
 
-#include <BibliographyGenerator.h>
 #include <KoBibliographyInfo.h>
 #include <KoOdfBibliographyConfiguration.h>
 #include <KoStyleManager.h>
@@ -39,32 +38,6 @@ QList<KoBibliographyInfo *> BibliographyTemplate::templates()
     // when the bibliography is used the style will be automatically move to the usedStyle section
 
     QList<KoBibliographyInfo *> predefinedTemplates;
-    KoBibliographyInfo *firstTemplate = new KoBibliographyInfo();
-    firstTemplate->m_indexTitleTemplate.text = i18n("Bibliography");
-
-    firstTemplate->m_indexTitleTemplate.styleId = m_manager->defaultBibliographyTitleStyle()->styleId();
-    firstTemplate->m_indexTitleTemplate.styleName = m_manager->defaultBibliographyTitleStyle()->name();
-
-    Q_FOREACH (const QString &bibType, KoOdfBibliographyConfiguration::bibTypes) {
-        firstTemplate->m_entryTemplate[bibType].styleId = m_manager->defaultBibliographyEntryStyle(bibType)->styleId();
-        firstTemplate->m_entryTemplate[bibType].styleName = m_manager->defaultBibliographyEntryStyle(bibType)->name();
-    }
-    firstTemplate->m_entryTemplate = BibliographyGenerator::defaultBibliographyEntryTemplates();
-
-    KoBibliographyInfo *secondTemplate = new KoBibliographyInfo();
-    secondTemplate->m_indexTitleTemplate.text = i18n("References");
-
-    secondTemplate->m_indexTitleTemplate.styleId = m_manager->defaultBibliographyTitleStyle()->styleId();
-    secondTemplate->m_indexTitleTemplate.styleName = m_manager->defaultBibliographyTitleStyle()->name();
-
-    Q_FOREACH (const QString &bibType, KoOdfBibliographyConfiguration::bibTypes) {
-        secondTemplate->m_entryTemplate[bibType].styleId = m_manager->defaultBibliographyEntryStyle(bibType)->styleId();
-        secondTemplate->m_entryTemplate[bibType].styleName = m_manager->defaultBibliographyEntryStyle(bibType)->name();
-    }
-    secondTemplate->m_entryTemplate = BibliographyGenerator::defaultBibliographyEntryTemplates();
-
-    predefinedTemplates.append(firstTemplate);
-    predefinedTemplates.append(secondTemplate);
     return predefinedTemplates;
 }
 

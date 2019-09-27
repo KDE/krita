@@ -335,7 +335,9 @@ bool KisAnimationCurvesModel::adjustKeyframes(const QModelIndexList &indexes, in
         });
     }
 
-    KisProcessingApplicator::runSingleCommandStroke(image(), command.take(), KisStrokeJobData::BARRIER);
+    KisProcessingApplicator::runSingleCommandStroke(image(), command.take(),
+                                                    KisStrokeJobData::BARRIER,
+                                                    KisStrokeJobData::EXCLUSIVE);
 
     return true;
 }

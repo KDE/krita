@@ -78,7 +78,8 @@ public:
                       KisWarpTransformWorker::WarpType warpType,
                       double alpha,
                       bool defaultPoints,
-                      const QString &filterId);
+                      const QString &filterId,
+                      int pixelPrecision, int previewPixelPrecision);
     ~ToolTransformArgs();
     ToolTransformArgs& operator=(const ToolTransformArgs& args);
 
@@ -90,6 +91,22 @@ public:
     }
     inline void setMode(TransformMode mode) {
         m_mode = mode;
+    }
+
+    inline int pixelPrecision() const {
+        return m_pixelPrecision;
+    }
+
+    inline void setPixelPrecision(int precision) {
+        m_pixelPrecision = precision;
+    }
+
+    inline int previewPixelPrecision() const {
+        return m_previewPixelPrecision;
+    }
+
+    inline void setPreviewPixelPrecision(int precision) {
+        m_previewPixelPrecision = precision;
     }
 
     //warp-related
@@ -330,6 +347,10 @@ private:
      * operations should revert to it.
      */
     QScopedPointer<ToolTransformArgs> m_continuedTransformation;
+
+    //PixelPrecision should always be in powers of 2
+    int m_pixelPrecision;
+    int m_previewPixelPrecision;
 };
 
 #endif // TOOL_TRANSFORM_ARGS_H_

@@ -23,11 +23,14 @@
 #include "kis_paintop_settings.h"
 #include <strokes/freehand_stroke.h>
 #include <strokes/KisFreehandStrokeInfo.h>
+#include "KisAsyncronousStrokeUpdateHelper.h"
 #include <kis_brush.h>
 
-KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent): QGraphicsView(parent)
+KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent)
+    : QGraphicsView(parent),
+      m_updateCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
 {
-
+    connect(&m_updateCompressor, SIGNAL(timeout()), SLOT(updateStroke()));
 }
 
 KisPresetLivePreviewView::~KisPresetLivePreviewView()
@@ -70,27 +73,37 @@ void KisPresetLivePreviewView::setCurrentPreset(KisPaintOpPresetSP preset)
     m_currentPreset = preset;
 }
 
+void KisPresetLivePreviewView::requestUpdateStroke()
+{
+    m_updateCompressor.start();
+}
+
 void KisPresetLivePreviewView::updateStroke()
 {
-    paintBackground();
-
     // do not paint a stroke if we are any of these engines (they have some issue currently)
     if (m_currentPreset->paintOp().id() == "roundmarker" ||
             m_currentPreset->paintOp().id() == "experimentbrush" ||
             m_currentPreset->paintOp().id() == "duplicate") {
 
+        paintBackground();
+        slotPreviewGenerationCompleted();
         return;
     }
 
-    setupAndPaintStroke();
+    if (!m_previewGenerationInProgress) {
+        paintBackground();
+        setupAndPaintStroke();
+    } else {
+        m_updateCompressor.start();
+    }
+}
 
-
-    // crop the layer so a brush stroke won't go outside of the area
-    m_layer->paintDevice()->crop(0,0, m_layer->image()->width(), m_layer->image()->height());
+void KisPresetLivePreviewView::slotPreviewGenerationCompleted()
+{
+    m_previewGenerationInProgress = false;
 
     QImage m_temp_image;
-    m_temp_image = m_layer->paintDevice()->convertToQImage(0);
-
+    m_temp_image = m_layer->paintDevice()->convertToQImage(0, m_image->bounds());
 
     // only add the object once...then just update the pixmap so we can move the preview around
     if (!m_sceneImageItem) {
@@ -98,10 +111,7 @@ void KisPresetLivePreviewView::updateStroke()
     } else {
         m_sceneImageItem->setPixmap(QPixmap::fromImage(m_temp_image));
     }
-
 }
-
-
 
 void KisPresetLivePreviewView::paintBackground()
 {
@@ -175,6 +185,30 @@ void KisPresetLivePreviewView::paintBackground()
     }
 }
 
+class NotificationStroke : public QObject, public KisSimpleStrokeStrategy
+{
+  Q_OBJECT
+public:
+    NotificationStroke()
+    {
+        setClearsRedoOnStart(false);
+        this->enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER);
+        this->enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
+    }
+
+    void initStrokeCallback() {
+        emit timeout();
+    }
+
+    void cancelStrokeCallback() {
+        emit cancelled();
+    }
+
+Q_SIGNALS:
+    void timeout();
+    void cancelled();
+};
+
 void KisPresetLivePreviewView::setupAndPaintStroke()
 {
     // limit the brush stroke size. larger brush strokes just don't look good and are CPU intensive
@@ -191,7 +225,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
 
     KisPaintOpPresetSP proxy_preset = m_currentPreset->clone();
     KisPaintOpSettingsSP settings = proxy_preset->settings();
-    proxy_preset->settings()->setPaintOpSize(previewSize);
+    settings->setPaintOpSize(previewSize);
     int maxTextureSize = 200;
     int textureOffsetX = settings->getInt("Texture/Pattern/MaximumOffsetX")*2;
     int textureOffsetY = settings->getInt("Texture/Pattern/MaximumOffsetY")*2;
@@ -201,7 +235,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
         double result = qreal(maxTextureSize) / maxSize;
         settings->setProperty("Texture/Pattern/Scale", result);
     }
-    if (m_currentPreset->paintOp().id() == "spraybrush") {
+    if (proxy_preset->paintOp().id() == "spraybrush") {
 
         QDomElement element;
         QDomDocument d;
@@ -236,6 +270,17 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
             settings->setProperty("brush_definition", d.toString());
         }
     }
+
+    // Preset preview cannot display gradient color source: there is
+    // no resource manager for KisResourcesSnapshot, therefore gradient is nullptr.
+    // BUG: 385521 (Selecting "Gradient" in brush editor crashes krita)
+    if (proxy_preset->paintOp().id() == "paintbrush") {
+        QString colorSourceType = settings->getString("ColorSource/Type", "plain");
+        if (colorSourceType == "gradient") {
+            settings->setProperty("ColorSource/Type", "plain");
+        }
+    }
+
     proxy_preset->setSettings(settings);
 
 
@@ -252,16 +297,10 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
 
     KisStrokeId strokeId = m_image->startStroke(stroke);
 
-
-
-    //m_brushPreviewPainter->setPaintOpPreset(proxy_preset, m_layer, m_image);
-
-
-
     // paint the stroke. The sketchbrush gets a different shape than the others to show how it works
-    if (m_currentPreset->paintOp().id() == "sketchbrush"
-            || m_currentPreset->paintOp().id() == "curvebrush"
-            || m_currentPreset->paintOp().id() == "particlebrush") {
+    if (proxy_preset->paintOp().id() == "sketchbrush"
+            || proxy_preset->paintOp().id() == "curvebrush"
+            || proxy_preset->paintOp().id() == "particlebrush") {
         qreal startX = m_canvasCenterPoint.x() - (this->width()*0.4);
         qreal endX   = m_canvasCenterPoint.x() + (this->width()*0.4);
         qreal middle = m_canvasCenterPoint.y();
@@ -295,7 +334,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                                              QPointF(pointTwo.pos().x(),
                                                                      handleY),
                                                              pointTwo));
-            m_image->addJob(strokeId, new FreehandStrokeStrategy::UpdateData(true));
+            m_image->addJob(strokeId, new KisAsyncronousStrokeUpdateHelper::UpdateData(true));
         }
 
     } else {
@@ -319,15 +358,24 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                                          QPointF(m_canvasCenterPoint.x(),
                                                                  m_canvasCenterPoint.y()+this->height()),
                                                          m_curvePointPI2));
-        m_image->addJob(strokeId, new FreehandStrokeStrategy::UpdateData(true));
+        m_image->addJob(strokeId, new KisAsyncronousStrokeUpdateHelper::UpdateData(true));
     }
     m_image->endStroke(strokeId);
-    m_image->waitForDone();
+
+    m_previewGenerationInProgress = true;
+
+    NotificationStroke *notificationStroke = new NotificationStroke();
+    connect(notificationStroke, SIGNAL(timeout()), SLOT(slotPreviewGenerationCompleted()));
+    KisStrokeId notificationId = m_image->startStroke(notificationStroke);
+    m_image->endStroke(notificationId);
 
 
+    // TODO: if we don't have any regressions because of it until 4.2.8, then
+    //       just remove this code.
     // even though the brush is cloned, the proxy_preset still has some connection to the original preset which will mess brush sizing
     // we need to return brush size to normal.The normal brush sends out a lot of extra signals, so keeping the proxy for now
-    proxy_preset->settings()->setPaintOpSize(originalPresetSize);
+    //proxy_preset->settings()->setPaintOpSize(originalPresetSize);
 
 }
 
+#include "kis_preset_live_preview_view.moc"

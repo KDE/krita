@@ -33,7 +33,7 @@ KisIconWidget::KisIconWidget(QWidget *parent, const char *name)
     m_resource = 0;
 }
 
-void KisIconWidget::slotSetItem(KoResource * resource)
+void KisIconWidget::setResource(KoResource * resource)
 {
     m_resource = resource;
     update();
@@ -62,18 +62,16 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
     p.setClipRegion(clipRegion);
     p.setClipping(true);
 
-    p.setBrush(this->palette().background());
-    p.drawRect(QRect(0,0,cw,ch));
-
-    if (m_resource) {
+    p.setBrush(this->palette().window());
+    p.drawRect(QRect(0, 0, cw, ch));
+    if (m_resource && !m_resource->image().isNull()) {
         QImage img = QImage(iconWidth, iconHeight, QImage::Format_ARGB32);
         img.fill(Qt::transparent);
-        if (m_resource->image().width()<iconWidth ||
-                m_resource->image().height()<iconHeight) {
+        if (m_resource->image().width() < iconWidth ||  m_resource->image().height() < iconHeight) {
             QPainter paint2;
             paint2.begin(&img);
-            for (int x=0; x< iconWidth; x+=m_resource->image().width()) {
-                for (int y=0; y< iconHeight; y+=m_resource->image().height()) {
+            for (int x = 0; x < iconWidth; x += m_resource->image().width()) {
+                for (int y = 0; y < iconHeight; y += m_resource->image().height()) {
                     paint2.drawImage(x, y, m_resource->image());
                 }
             }
@@ -82,31 +80,9 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
         }
         p.drawImage(QRect(border, border, iconWidth, iconHeight), img);
     } else if (!icon().isNull()) {
-        int border2 = qRound((cw-16)*0.5);
+        int border2 = qRound((cw - 16) * 0.5);
         p.drawImage(QRect(border2, border2, 16, 16), icon().pixmap(16, 16).toImage());
     }
     p.setClipping(false);
 }
 
-void KisIconWidget::setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter> adapter)
-{
-    Q_ASSERT(adapter);
-    m_adapter = adapter;
-    m_adapter->connectToResourceServer();
-    connect(m_adapter.data(), SIGNAL(resourceChanged(KoResource*)), this, SLOT(slotAdapterResourceChanged(KoResource*)));
-    connect(m_adapter.data(), SIGNAL(removingResource(KoResource*)), this, SLOT(slotAdapterResourceRemoved(KoResource*)));
-}
-
-void KisIconWidget::slotAdapterResourceChanged(KoResource* resource)
-{
-    if (m_resource == resource) {
-        update();
-    }
-}
-
-void KisIconWidget::slotAdapterResourceRemoved(KoResource* resource)
-{
-    if (m_resource == resource) {
-        m_resource = 0;
-    }
-}

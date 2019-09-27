@@ -63,6 +63,11 @@ public:
 public Q_SLOTS:
 
     /**
+     * @return a duplicate of the seletion
+     */
+    Selection *duplicate() const;
+
+    /**
      * @return the width of the selection
      */
     int width() const;
@@ -195,6 +200,11 @@ public Q_SLOTS:
      * Intersect the given selection with this selection.
      */
     void intersect(Selection *selection);
+
+        /**
+     * Intersect with the inverse of the given selection with this selection.
+     */
+    void symmetricdifference(Selection *selection);
 
     /**
      * @brief pixelData reads the given rectangle from the Selection's mask and returns it as a

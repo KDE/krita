@@ -131,8 +131,15 @@ bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &paintInforma
     return true; // ignore the event by default
 }
 
+bool KisPaintOpSettings::mouseReleaseEvent()
+{
+    return true; // ignore the event by default
+}
+
 void KisPaintOpSettings::setRandomOffset(const KisPaintInformation &paintInformation)
 {
+	bool disableDirtyBefore = d->disableDirtyNotifications;
+	d->disableDirtyNotifications = true;
     if (getBool("Texture/Pattern/Enabled")) {
         if (getBool("Texture/Pattern/isRandomOffsetX")) {
             setProperty("Texture/Pattern/OffsetX",
@@ -144,7 +151,7 @@ void KisPaintOpSettings::setRandomOffset(const KisPaintInformation &paintInforma
 
         }
     }
-
+	d->disableDirtyNotifications = disableDirtyBefore;
 }
 
 bool KisPaintOpSettings::hasMaskingSettings() const
@@ -434,32 +441,13 @@ QPainterPath KisPaintOpSettings::makeTiltIndicator(KisPaintInformation const& in
     return ret;
 }
 
-void KisPaintOpSettings::setCanvasRotation(qreal angle)
-{
-    Private::DirtyNotificationsLocker locker(d.data());
-
-    setProperty("runtimeCanvasRotation", angle);
-    setPropertyNotSaved("runtimeCanvasRotation");
-}
-
-void KisPaintOpSettings::setCanvasMirroring(bool xAxisMirrored, bool yAxisMirrored)
-{
-    Private::DirtyNotificationsLocker locker(d.data());
-
-    setProperty("runtimeCanvasMirroredX", xAxisMirrored);
-    setPropertyNotSaved("runtimeCanvasMirroredX");
-
-    setProperty("runtimeCanvasMirroredY", yAxisMirrored);
-    setPropertyNotSaved("runtimeCanvasMirroredY");
-}
-
 void KisPaintOpSettings::setProperty(const QString & name, const QVariant & value)
 {
     if (value != KisPropertiesConfiguration::getProperty(name) &&
             !d->disableDirtyNotifications) {
         KisPaintOpPresetSP presetSP = preset().toStrongRef();
         if (presetSP) {
-            presetSP->setPresetDirty(true);
+            presetSP->setDirty(true);
         }
     }
 

@@ -35,7 +35,7 @@ KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
     : KisToolSelectBase<KisDelegatedSelectPathWrapper>(canvas,
                                                        KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
                                                        i18n("Select path"),
-                                                       (KisTool*) (new __KisToolSelectPathLocalTool(canvas, this)))
+                                                       new __KisToolSelectPathLocalTool(canvas, this))
 {
 }
 
@@ -47,12 +47,6 @@ void KisToolSelectPath::requestStrokeEnd()
 void KisToolSelectPath::requestStrokeCancellation()
 {
     localTool()->cancelPath();
-}
-
-void KisToolSelectPath::mousePressEvent(KoPointerEvent* event)
-{
-    if (!selectionEditable()) return;
-    DelegatedSelectPathTool::mousePressEvent(event);
 }
 
 // Install an event filter to catch right-click events.
@@ -91,27 +85,48 @@ QList<QPointer<QWidget> > KisToolSelectPath::createOptionWidgets()
 }
 
 void KisDelegatedSelectPathWrapper::beginPrimaryAction(KoPointerEvent *event) {
-    mousePressEvent(event);
+    DelegatedSelectPathTool::mousePressEvent(event);
 }
 
 void KisDelegatedSelectPathWrapper::continuePrimaryAction(KoPointerEvent *event){
-    mouseMoveEvent(event);
+    DelegatedSelectPathTool::mouseMoveEvent(event);
 }
 
 void KisDelegatedSelectPathWrapper::endPrimaryAction(KoPointerEvent *event) {
-    mouseReleaseEvent(event);
+    DelegatedSelectPathTool::mouseReleaseEvent(event);
+}
+
+void KisDelegatedSelectPathWrapper::beginPrimaryDoubleClickAction(KoPointerEvent *event)
+{
+    DelegatedSelectPathTool::mouseDoubleClickEvent(event);
+}
+
+void KisDelegatedSelectPathWrapper::mousePressEvent(KoPointerEvent *event)
+{
+    // this event will be forwarded using beginPrimaryAction
+    Q_UNUSED(event);
+}
+
+void KisDelegatedSelectPathWrapper::mouseMoveEvent(KoPointerEvent *event)
+{
+    DelegatedSelectPathTool::mouseMoveEvent(event);
+}
+
+void KisDelegatedSelectPathWrapper::mouseReleaseEvent(KoPointerEvent *event)
+{
+    // this event will be forwarded using continuePrimaryAction
+    Q_UNUSED(event);
+}
+
+void KisDelegatedSelectPathWrapper::mouseDoubleClickEvent(KoPointerEvent *event)
+{
+    // this event will be forwarded using endPrimaryAction
+    Q_UNUSED(event);
 }
 
 bool KisDelegatedSelectPathWrapper::hasUserInteractionRunning() const
 {
-    /**
-     * KoCreatePathTool doesn't support moving interventions from KisToolselectBase,
-     * because it doesn't use begin/continue/endPrimaryAction and uses direct event
-     * handling instead.
-     *
-     * TODO: refactor KoCreatePathTool and port it to action infrastructure
-     */
-    return true;
+    return localTool()->pathStarted();
 }
 
 

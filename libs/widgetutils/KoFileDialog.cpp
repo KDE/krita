@@ -122,7 +122,7 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString d
         QString suffix = KisMimeDatabase::suffixesForMimeType(defaultMimeType).first();
 
         if (!d->proposedFileName.isEmpty()) {
-            d->proposedFileName = QFileInfo(d->proposedFileName).baseName() + "." + suffix;
+            d->proposedFileName = QFileInfo(d->proposedFileName).completeBaseName() + "." + suffix;
         }
 
         QStringList defaultFilters = getFilterStringListFromMime(QStringList() << defaultMimeType, false);
@@ -163,7 +163,7 @@ void KoFileDialog::createFileDialog()
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
     d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, true);
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     QList<QUrl> urls = d->fileDialog->sidebarUrls();
     QUrl volumes = QUrl::fromLocalFile("/Volumes");
     if (!urls.contains(volumes)) {

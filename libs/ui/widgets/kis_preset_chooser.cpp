@@ -31,7 +31,7 @@
 
 #include <kis_config.h>
 #include <klocalizedstring.h>
-
+#include <KisKineticScroller.h>
 
 #include <KoIcon.h>
 #include <KoResourceItemChooser.h>
@@ -101,7 +101,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
         // Put an asterisk after the preset if it is dirty. This will help in case the pixmap icon is too small
          QString dirtyPresetIndicator = QString("");
-        if (m_useDirtyPresets && preset->isPresetDirty()) {
+        if (m_useDirtyPresets && preset->isDirty()) {
             dirtyPresetIndicator = QString("*");
         }
 
@@ -121,7 +121,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         painter->drawText(pixSize.width() + 40, option.rect.y() + option.rect.height() - 10, presetDisplayName.append(dirtyPresetIndicator));
 
     }
-    if (m_useDirtyPresets && preset->isPresetDirty()) {
+    if (m_useDirtyPresets && preset->isDirty()) {
         const QIcon icon = KisIconUtils::loadIcon(koIconName("dirty-preset"));
         QPixmap pixmap = icon.pixmap(QSize(15,15));
         painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
@@ -216,11 +216,13 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     m_chooser->setSynced(true);
     layout->addWidget(m_chooser);
 
-    KisConfig cfg(true);
-    m_chooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
-                                         cfg.kineticScrollingSensitivity(),
-                                         cfg.kineticScrollingScrollbar());
-
+    {
+        QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this->itemChooser()->itemView());
+        if (scroller) {
+            connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                    this, SLOT(slotScrollerStateChanged(QScroller::State)));
+        }
+    }
     connect(m_chooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
     connect(m_chooser, SIGNAL(resourceClicked(KoResource*)),
@@ -358,4 +360,9 @@ void KisPresetChooser::saveIconSize()
     // save icon size
     KisConfig cfg(false);
     cfg.setPresetIconSize(iconSize());
+}
+
+void KisPresetChooser::slotScrollerStateChanged(QScroller::State state)
+{
+    KisKineticScroller::updateCursor(this, state);
 }

@@ -55,7 +55,7 @@ public:
      * and handled by interaction strategies of type KoInteractionStrategy.
      * @param canvas the canvas this tool will be working for.
      */
-    explicit DefaultTool(KoCanvasBase *canvas);
+    explicit DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy = false);
     ~DefaultTool() override;
 
     enum CanvasResource {
@@ -92,8 +92,6 @@ public:
      */
     KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
 
-    /// similar to normal bounds handles, but checks to see if user wants to edit text
-    bool isSelectingTextEditorButton(const QPointF &point);
 
 public Q_SLOTS:
     void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
@@ -190,6 +188,12 @@ private:
     friend class SelectionHandler;
 
     DefaultToolTabbedWidget *m_tabbedOptionWidget;
+
+    QSignalMapper *m_alignSignalsMapper {0};
+    QSignalMapper *m_distributeSignalsMapper {0};
+    QSignalMapper *m_transformSignalsMapper {0};
+    QSignalMapper *m_booleanSignalsMapper {0};
 };
+
 
 #endif

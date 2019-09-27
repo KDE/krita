@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,11 +21,14 @@
 
 #include <QPointer>
 #include <QDockWidget>
+#include <kis_slider_spin_box.h>
 #include <KoCanvasObserverBase.h>
 
 #include <kis_canvas2.h>
 
 class QVBoxLayout;
+class QHBoxLayout;
+class QToolButton;
 class OverviewWidget;
 
 class OverviewDockerDock : public QDockWidget, public KoCanvasObserverBase {
@@ -35,10 +39,17 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
+public Q_SLOTS:
+    void rotateCanvasView(qreal rotation);
+    void updateSlider();
+
 private:
     QVBoxLayout *m_layout;
+    QHBoxLayout *m_horizontalLayout;
     OverviewWidget *m_overviewWidget;
     QWidget *m_zoomSlider;
+    KisDoubleSliderSpinBox *m_rotateSlider;
+    QToolButton *m_mirrorCanvas;
     QPointer<KisCanvas2> m_canvas;
 };
 

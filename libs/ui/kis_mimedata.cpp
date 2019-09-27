@@ -47,7 +47,6 @@
 #include <QBuffer>
 #include <QDomDocument>
 #include <QDomElement>
-#include <QTemporaryFile>
 #include <QDesktopWidget>
 #include <QDir>
 
@@ -102,6 +101,7 @@ KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
     }
 
     KisImageSP image = new KisImage(0, rc.width(), rc.height(), nodes.first()->colorSpace(), nodes.first()->name());
+    image->setAllowMasksOnRootNode(true);
 
     {
         KisImageBarrierLockerWithFeedbackAllowNull locker(srcImage);
@@ -294,7 +294,7 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         QBuffer buf(&ba);
         KisImportExportFilter *filter = tempDoc->importExportManager()->filterForMimeType(tempDoc->nativeFormatMimeType(), KisImportExportManager::Import);
         filter->setBatchMode(true);
-        bool result = (filter->convert(tempDoc, &buf) == KisImportExportFilter::OK);
+        bool result = (filter->convert(tempDoc, &buf).isOk());
 
         if (result) {
             KisImageWSP tempImage = tempDoc->image();

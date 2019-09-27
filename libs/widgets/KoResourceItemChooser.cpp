@@ -37,6 +37,7 @@
 #include <QSplitter>
 #include <QToolButton>
 #include <QWheelEvent>
+#include <QLineEdit>
 
 #include <klocalizedstring.h>
 
@@ -53,6 +54,7 @@
 #include "KoTagChooserWidget.h"
 #include "KoResourceItemChooserSync.h"
 #include "kis_assert.h"
+#include <KisKineticScroller.h>
 
 
 class Q_DECL_HIDDEN KoResourceItemChooser::Private
@@ -135,6 +137,11 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
 
         if (d->splitter->count() == 2) {
             d->splitter->setSizes(QList<int>() << 280 << 160);
+        }
+
+        QScroller* scroller = KisKineticScroller::createPreconfiguredScroller(d->previewScroller);
+        if (scroller) {
+            connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
         }
     }
 
@@ -520,7 +527,7 @@ void KoResourceItemChooser::baseLengthChanged(int length)
         while (cols <= maxColumns) {
             int size = width / cols;
             int rows = ceil(resourceCount / (double)cols);
-            if (rows * size < (d->view->height() - 5)) {
+            if (rows * size < (d->view->height())) {
                 break;
             }
             cols++;
@@ -544,61 +551,6 @@ bool KoResourceItemChooser::eventFilter(QObject *object, QEvent *event)
         }
     }
     return QObject::eventFilter(object, event);
-}
-
-void KoResourceItemChooser::configureKineticScrolling(int gesture, int sensitivity, bool scrollbar)
-{
-    QScroller::ScrollerGestureType gestureType;
-
-    switch (gesture) {
-    case 1: {
-        gestureType = QScroller::TouchGesture;
-        break;
-    }
-    case 2: {
-        gestureType = QScroller::LeftMouseButtonGesture;
-        break;
-    }
-    default:
-        return;
-    }
-
-    KoResourceItemView *view = itemView();
-
-    view->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    if (!scrollbar) {
-        view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    }
-
-    QScroller *scroller = QScroller::scroller(view);
-    scroller->grabGesture(view, gestureType);
-
-    QScrollerProperties sp;
-
-    // DragStartDistance seems to be based on meter per second; though it's
-    // not explicitly documented, other QScroller values are in that metric.
-
-    // To start kinetic scrolling, with minimal sensitity, we expect a drag
-    // of 10 mm, with minimum sensitity any > 0 mm.
-
-    const float mm = 0.001f; // 1 millimeter
-    const float resistance = 1.0f - (sensitivity / 100.0f);
-
-    sp.setScrollMetric(QScrollerProperties::DragStartDistance, resistance * 10.0f * mm);
-    sp.setScrollMetric(QScrollerProperties::DragVelocitySmoothingFactor, 1.0f);
-    sp.setScrollMetric(QScrollerProperties::MinimumVelocity, 0.0f);
-    sp.setScrollMetric(QScrollerProperties::AxisLockThreshold, 1.0f);
-    sp.setScrollMetric(QScrollerProperties::MaximumClickThroughVelocity, 0.0f);
-    sp.setScrollMetric(QScrollerProperties::MousePressEventDelay, 1.0f - 0.75f * resistance);
-    sp.setScrollMetric(QScrollerProperties::AcceleratingFlickSpeedupFactor, 1.5f);
-
-    sp.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOn);
-    sp.setScrollMetric(QScrollerProperties::OvershootDragResistanceFactor, 0.1);
-    sp.setScrollMetric(QScrollerProperties::OvershootDragDistanceFactor, 0.3);
-    sp.setScrollMetric(QScrollerProperties::OvershootScrollDistanceFactor, 0.1);
-    sp.setScrollMetric(QScrollerProperties::OvershootScrollTime, 0.4);
-
-    scroller->setScrollerProperties(sp);
 }
 
 void KoResourceItemChooser::resizeEvent(QResizeEvent *event)

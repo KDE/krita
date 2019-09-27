@@ -50,7 +50,6 @@ struct Q_DECL_HIDDEN KisRectangleMaskGenerator::Private {
     qreal transformedFadeY;
 
     bool copyOfAntialiasEdges;
-    bool noFading;
 
     QScopedPointer<KisBrushMaskApplicatorBase> applicator;
 };

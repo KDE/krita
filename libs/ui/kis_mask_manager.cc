@@ -109,7 +109,8 @@ void KisMaskManager::adjustMaskPosition(KisNodeSP node, KisNodeSP activeNode, bo
     if (!avoidActiveNode && activeNode->allowAsChild(node)) {
         parent = activeNode;
         above = activeNode->lastChild();
-    } else if (activeNode->parent() && activeNode->parent()->allowAsChild(node)) {
+    } else if (activeNode->parent() && activeNode->parent()->allowAsChild(node)
+               && activeNode->parent()->parent() /* we don't want to add masks to root */) {
         parent = activeNode->parent();
         above = activeNode;
     } else {
@@ -192,30 +193,43 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask,
     masksUpdated();
 }
 
-bool KisMaskManager::createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool convertActiveNode)
+KisNodeSP KisMaskManager::createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool convertActiveNode)
 {
+    if (!activeNode->isEditable()) {
+        return 0;
+    }
+
     KisSelectionMaskSP mask = new KisSelectionMask(m_view->image());
+
     createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Selection Mask"), "KisSelectionMask", i18n("Selection"), false, convertActiveNode, false);
     mask->setActive(true);
     if (convertActiveNode) {
         m_commandsAdapter->removeNode(activeNode);
     }
-    return true;
+    return mask;
 }
 
-bool KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool convertActiveNode)
+KisNodeSP KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool convertActiveNode)
 {
+    if (!activeNode->isEditable()) {
+        return 0;
+    }
+
     KisMaskSP mask = new KisTransparencyMask();
     createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Transparency Mask"), "KisTransparencyMask", i18n("Transparency Mask"), false, convertActiveNode);
     if (convertActiveNode) {
         m_commandsAdapter->removeNode(activeNode);
     }
-    return true;
+    return mask;
 }
 
 
-bool KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet, bool convertActiveNode)
+KisNodeSP KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet, bool convertActiveNode)
 {
+    if (!activeNode->isEditable()) {
+        return 0;
+    }
+
     KisFilterMaskSP mask = new KisFilterMask();
     createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Filter Mask"), "KisFilterMask", i18n("Filter Mask"), false, convertActiveNode);
 
@@ -233,7 +247,7 @@ bool KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
 
     KisDlgAdjustmentLayer dialog(mask, mask.data(), originalDevice,
                                  mask->name(), i18n("New Filter Mask"),
-                                 m_view);
+                                 m_view, qApp->activeWindow());
 
     // If we are supposed to not disturb the user, don't start asking them about things.
     if(quiet) {
@@ -242,10 +256,8 @@ bool KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
             mask->setFilter(filter);
             mask->setName(mask->name());
         }
-        return true;
+        return mask;
     }
-
-    bool result = false;
 
     if (dialog.exec() == QDialog::Accepted) {
         KisFilterConfigurationSP filter = dialog.filterConfiguration();
@@ -255,30 +267,40 @@ bool KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
             mask->setName(name);
         }
 
-        result = true;
+        return mask;
 
     } else {
         m_commandsAdapter->undoLastCommand();
     }
 
-    return result;
+    return 0;
 }
 
 
-void KisMaskManager::createColorizeMask(KisNodeSP activeNode)
+KisNodeSP KisMaskManager::createColorizeMask(KisNodeSP activeNode)
 {
+    if (!activeNode->isEditable()) {
+        return 0;
+    }
+
     KisColorizeMaskSP mask = new KisColorizeMask();
     createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Colorize Mask"), "KisColorizeMask", i18n("Colorize Mask"), true, false);
     mask->setImage(m_view->image());
     mask->initializeCompositeOp();
     delete mask->setColorSpace(mask->parent()->colorSpace());
+    return mask;
 }
 
 
-void KisMaskManager::createTransformMask(KisNodeSP activeNode)
+KisNodeSP KisMaskManager::createTransformMask(KisNodeSP activeNode)
 {
+    if (!activeNode->isEditable()) {
+        return 0;
+    }
+
     KisTransformMaskSP mask = new KisTransformMask();
     createMaskCommon(mask, activeNode, 0, kundo2_i18n("Add Transform Mask"), "KisTransformMask", i18n("Transform Mask"), true, false);
+    return mask;
 }
 
 void KisMaskManager::maskProperties()

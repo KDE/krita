@@ -1,0 +1,9 @@
+{
+    "Id": "Layer Docker",
+    "Type": "Service",
+    "X-KDE-Library": "kritalayerdocker",
+    "X-KDE-ServiceTypes": [
+        "Krita/Dock"
+    ],
+    "X-Krita-Version": "28"
+}

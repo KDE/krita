@@ -27,6 +27,34 @@
 #include "kis_debug.h"
 #include "kis_dom_utils.h"
 
+KisLiquifyProperties::KisLiquifyProperties(const KisLiquifyProperties &rhs)
+{
+    m_mode = rhs.m_mode;
+    m_size = rhs.m_size;
+    m_amount = rhs.m_amount;
+    m_spacing = rhs.m_spacing;
+    m_sizeHasPressure = rhs.m_sizeHasPressure;
+    m_amountHasPressure = rhs.m_amountHasPressure;
+    m_reverseDirection = rhs.m_reverseDirection;
+    m_useWashMode = rhs.m_useWashMode;
+    m_flow = rhs.m_flow;
+}
+
+KisLiquifyProperties &KisLiquifyProperties::operator=(const KisLiquifyProperties &rhs)
+{
+    m_mode = rhs.m_mode;
+    m_size = rhs.m_size;
+    m_amount = rhs.m_amount;
+    m_spacing = rhs.m_spacing;
+    m_sizeHasPressure = rhs.m_sizeHasPressure;
+    m_amountHasPressure = rhs.m_amountHasPressure;
+    m_reverseDirection = rhs.m_reverseDirection;
+    m_useWashMode = rhs.m_useWashMode;
+    m_flow = rhs.m_flow;
+
+    return *this;
+}
+
 bool KisLiquifyProperties::operator==(const KisLiquifyProperties &other) const
 {
     return

@@ -1,17 +1,26 @@
 SET(PREFIX_ext_python "${EXTPREFIX}" )
 if (UNIX)
     if (APPLE)
+    set(PYTHON_VERSION "3.5")
     ExternalProject_Add( ext_python
 	    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     	URL http://files.kde.org/krita/build/dependencies/Python-3.5.2.tar.gz
         URL_MD5 ea334d398990037a4b8be324bd475c83
         
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/pyport_osx.diff
+            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/osx_fixappinstall.diff
 
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure MACOSX_DEPLOYMENT_TARGET=10.11 -prefix=${PREFIX_ext_python}  ${GLOBAL_AUTOMAKE_PROFILE} --enable-shared
+        CONFIGURE_COMMAND <SOURCE_DIR>/configure MACOSX_DEPLOYMENT_TARGET=10.11 -prefix=${PREFIX_ext_python} ${GLOBAL_AUTOMAKE_PROFILE}
+            --with-cxx-main=/usr/bin/g++ --without-ensurepip --disable-tests --without-test --without-tests --enable-framework=${PREFIX_ext_python}/lib
         BUILD_COMMAND make
         INSTALL_COMMAND make install
-                        COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_python}/bin/python3 ${PREFIX_ext_python}/bin/python
+            COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_python}/bin/python3 ${PREFIX_ext_python}/bin/python
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sitecustomize.py ${PREFIX_ext_python}/lib/Python.framework/Versions/Current/lib/python${PYTHON_VERSION}/
+            COMMAND ${CMAKE_COMMAND} -E create_symlink ./lib/python${PYTHON_VERSION}/site-packages ${PREFIX_ext_python}/lib/Python.framework/Versions/Current/site-packages
+            # CMake FindPythonLib can't find framework libraries, lack of mantainer for Python
+            COMMAND find ${PREFIX_ext_python}/lib/Python.framework/Versions/Current/lib -type l -d 1
+            | grep -o "[^/]*$"
+            | xargs -I FILE ${CMAKE_COMMAND} -E create_symlink ./Python.framework/Python ${PREFIX_ext_python}/lib/FILE
 
         UPDATE_COMMAND ""
 	    ALWAYS 0

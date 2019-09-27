@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="420"
+version="430"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -53,6 +53,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="edit_paste"/>
       <Action name="paste_at"/>
       <Action name="paste_new"/>
+      <Action name="paste_as_reference"/>
       <Action name="clear"/>
       <Action name="fill_selection_foreground_color"/>
       <Action name="fill_selection_background_color"/>
@@ -73,6 +74,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <text>&amp;View</text>
       <Action name="view_show_canvas_only"/>
       <Action name="fullscreen"/>
+      <Action name="view_detached_canvas"/>
       <Action name="wrap_around_mode"/>
       <Action name="level_of_detail_mode"/>
       <Action name="softProof"/>
@@ -114,6 +116,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
         <text>&amp;Snap To</text>
         <Action name="view_snap_to_guides"/>
             <Action name="view_snap_to_grid"/>
+            <Action name="view_snap_to_pixel"/>
           <Action name="view_snap_orthogonal" />
             <Action name="view_snap_node" />
             <Action name="view_snap_extension" />
@@ -174,6 +177,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Menu name="LayerNew">
         <text>New</text>
         <Action name="add_new_paint_layer"/>
+        <Action name="add_new_clone_layer"/>
         <Action name="new_from_visible"/>
         <Action name="duplicatelayer"/>
         <Separator/>
@@ -201,7 +205,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
         <Action name="convert_to_transparency_mask"/>
         <Action name="convert_to_filter_mask"/>
         <Action name="convert_to_selection_mask"/>
-        <Action name="convert_layer_to_file_layer"/>
+        <Action name="convert_to_file_layer"/>
         <Action name="convert_group_to_animated"/>
         <Action name="layercolorspaceconversion"/>
       </Menu>
@@ -324,8 +328,8 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="color_filters"/>
       <Action name="decor_filters"/>
       <Action name="edge_filters"/>
-      <Action name="enhance_filters"/>
       <Action name="emboss_filters"/>
+      <Action name="enhance_filters"/>
       <Action name="map_filters"/>
       <Action name="nonphotorealistic_filters"/>
       <Action name="other_filters"/>

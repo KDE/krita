@@ -242,11 +242,6 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "pat";
         s_mimeDatabase << mimeType;
 
-        mimeType.mimeType = "application/x-karbon-gradient";
-        mimeType.description = i18nc("description of a file type", "Karbon Gradients");
-        mimeType.suffixes = QStringList() << "kgr";
-        s_mimeDatabase << mimeType;
-
         mimeType.mimeType = "application/x-krita-bundle";
         mimeType.description = i18nc("description of a file type", "Krita Resource Bundle");
         mimeType.suffixes = QStringList() << "bundle";
@@ -265,6 +260,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.mimeType = "application/x-krita-reference-images";
         mimeType.description = i18nc("description of a file type", "Krita Reference Image Collection");
         mimeType.suffixes = QStringList() << "krf";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-krita-shortcuts";
+        mimeType.description = i18nc("description of a file type", "Krita Shortcut Scheme");
+        mimeType.suffixes = QStringList() << "shortcuts";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "image/x-krita-raw";

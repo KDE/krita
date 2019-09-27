@@ -39,7 +39,7 @@ namespace KisLazyFillTools
 
     /**
      * Uses Boykov-Kolmogorov Max-Flow/Min-Cut algorithm to split the
-     * device \src into two parts. The first part is defined by \p
+     * device \p src into two parts. The first part is defined by \p
      * colorScribble and the second part --- by \p
      * backgroundScribble. In the result of the split the area defined
      * by \p colorScribble in \p resultDevice is filled with \p
@@ -93,6 +93,6 @@ namespace KisLazyFillTools
         qreal fuzzyRadius = 0;
         qreal cleanUpAmount = 0.0;
     };
-};
+}
 
 #endif /* __KIS_LAZY_FILL_TOOLS_H */

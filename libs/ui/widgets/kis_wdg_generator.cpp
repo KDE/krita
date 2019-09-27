@@ -92,6 +92,7 @@ void KisWdgGenerator::initialize(KisViewManager *view)
         KisGeneratorItem * item = new KisGeneratorItem(generator->name(),
                 d->uiWdgGenerators.lstGenerators,
                 QListWidgetItem::UserType + 1);
+
         item->generator = generator;
     }
     connect(d->uiWdgGenerators.lstGenerators, SIGNAL(currentRowChanged(int)),
@@ -116,6 +117,7 @@ void KisWdgGenerator::setConfiguration(const KisFilterConfigurationSP  config)
             if (wdg) {
                 wdg->setConfiguration(config);
             }
+
             return;
         }
     }
@@ -149,13 +151,16 @@ void KisWdgGenerator::slotGeneratorActivated(int row)
         delete d->centralWidget;
 
         KisConfigWidget* widget =
-            d->currentGenerator->createConfigurationWidget(d->uiWdgGenerators.centralWidgetHolder, d->dev);
+            d->currentGenerator->createConfigurationWidget(d->uiWdgGenerators.centralWidgetHolder, d->dev, true);
 
         if (!widget) { // No widget, so display a label instead
             d->centralWidget = new QLabel(i18n("No configuration options."),
                                           d->uiWdgGenerators.centralWidgetHolder);
         } else {
             d->centralWidget = widget;
+
+            connect( widget, SIGNAL(sigConfigurationUpdated()), this, SIGNAL(previewConfiguration()));
+
             widget->setView(d->view);
             widget->setConfiguration(d->currentGenerator->defaultConfiguration());
         }

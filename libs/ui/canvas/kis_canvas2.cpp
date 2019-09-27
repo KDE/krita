@@ -31,6 +31,8 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QDesktopWidget>
+#include <QScreen>
+#include <QWindow>
 
 #include <kis_debug.h>
 
@@ -42,6 +44,8 @@
 #include <KisDocument.h>
 #include <KoSelection.h>
 #include <KoShapeController.h>
+
+#include <KisUsageLogger.h>
 
 #include <kis_lod_transform.h>
 #include "kis_tool_proxy.h"
@@ -97,6 +101,8 @@
 #include "kis_algebra_2d.h"
 #include "kis_image_signal_router.h"
 
+#include "KisSnapPixelStrategy.h"
+
 
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
@@ -149,6 +155,7 @@ public:
 
     KisSignalCompressor regionOfInterestUpdateCompressor;
     QRect regionOfInterest;
+    qreal regionOfInterestMargin = 0.25;
 
     QRect renderingLimit;
     int isBatchUpdateActive = 0;
@@ -187,7 +194,7 @@ KoShapeManager* fetchShapeManagerFromNode(KisNodeSP node)
 }
 }
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceProvider *resourceManager, KisView *view, KoShapeControllerBase *sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceProvider *resourceManager, KisMainWindow *mainWindow, KisView *view, KoShapeControllerBase *sc)
     : KoCanvasBase(sc, resourceManager)
     , m_d(new KisCanvas2Private(this, coordConverter, view, resourceManager))
 {
@@ -197,7 +204,8 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
      * light.
      */
     m_d->bootstrapLodBlocked = true;
-    connect(view->mainWindow(), SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
+    connect(mainWindow, SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
+    connect(mainWindow, SIGNAL(screenChanged()), SLOT(slotConfigChanged()));
 
     KisImageConfig config(false);
 
@@ -206,6 +214,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
 
     m_d->frameRenderStartCompressor.setDelay(1000 / config.fpsLimit());
     m_d->frameRenderStartCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
+    snapGuide()->overrideSnapStrategy(KoSnapGuide::PixelSnapping, new KisSnapPixelStrategy());
 }
 
 void KisCanvas2::setup()
@@ -214,6 +223,7 @@ void KisCanvas2::setup()
     KisConfig cfg(true);
     m_d->vastScrolling = cfg.vastScrolling();
     m_d->lodAllowedInImage = cfg.levelOfDetailEnabled();
+    m_d->regionOfInterestMargin = KisImageConfig(true).animationCacheRegionOfInterestMargin();
 
     createCanvas(cfg.useOpenGL());
 
@@ -531,22 +541,25 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     KisConfig cfg(true);
     QDesktopWidget dw;
     const KoColorProfile *profile = cfg.displayProfile(dw.screenNumber(imageView()));
+    m_d->displayColorConverter.notifyOpenGLCanvasIsActive(useOpenGL && KisOpenGL::hasOpenGL());
     m_d->displayColorConverter.setMonitorProfile(profile);
 
+    if (useOpenGL && !KisOpenGL::hasOpenGL()) {
+        warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
+        useOpenGL = false;
+    }
+
+    m_d->displayColorConverter.notifyOpenGLCanvasIsActive(useOpenGL);
+
     if (useOpenGL) {
-        if (KisOpenGL::hasOpenGL()) {
-            createOpenGLCanvas();
-            if (cfg.canvasState() == "OPENGL_FAILED") {
-                // Creating the opengl canvas failed, fall back
-                warnKrita << "OpenGL Canvas initialization returned OPENGL_FAILED. Falling back to QPainter.";
-                createQPainterCanvas();
-            }
-        } else {
-            warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
+        createOpenGLCanvas();
+        if (cfg.canvasState() == "OPENGL_FAILED") {
+            // Creating the opengl canvas failed, fall back
+            warnKrita << "OpenGL Canvas initialization returned OPENGL_FAILED. Falling back to QPainter.";
+            m_d->displayColorConverter.notifyOpenGLCanvasIsActive(false);
             createQPainterCanvas();
         }
-    }
-    else {
+    } else {
         createQPainterCanvas();
     }
 
@@ -560,6 +573,7 @@ void KisCanvas2::initializeImage()
 {
     KisImageSP image = m_d->view->image();
 
+    m_d->displayColorConverter.setImageColorSpace(image->colorSpace());
     m_d->coordinatesConverter->setImage(image);
     m_d->toolProxy.initializeImage(image);
 
@@ -571,6 +585,9 @@ void KisCanvas2::initializeImage()
     connect(image, SIGNAL(sigProofingConfigChanged()), SLOT(slotChangeProofingConfig()));
     connect(image, SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(startResizingImage()), Qt::DirectConnection);
     connect(image->undoAdapter(), SIGNAL(selectionChanged()), SLOT(slotTrySwitchShapeManager()));
+
+    connect(image, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), SLOT(slotImageColorSpaceChanged()));
+    connect(image, SIGNAL(sigProfileChanged(const KoColorProfile*)), SLOT(slotImageColorSpaceChanged()));
 
     connectCurrentCanvas();
 }
@@ -612,6 +629,11 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
 
 void KisCanvas2::startUpdateInPatches(const QRect &imageRect)
 {
+    /**
+     * We don't do patched loading for openGL canvas, becasue it loads
+     * the tiles, which are bascially "patches". Therefore, big chunks
+     * of memory are never allocated.
+     */
     if (m_d->currentCanvasIsOpenGL) {
         startUpdateCanvasProjection(imageRect);
     } else {
@@ -645,6 +667,19 @@ QSharedPointer<KisDisplayFilter> KisCanvas2::displayFilter() const
     return m_d->displayColorConverter.displayFilter();
 }
 
+void KisCanvas2::slotImageColorSpaceChanged()
+{
+    KisImageSP image = this->image();
+
+    m_d->view->viewManager()->blockUntilOperationsFinishedForced(image);
+
+    m_d->displayColorConverter.setImageColorSpace(image->colorSpace());
+
+    image->barrierLock();
+    m_d->canvasWidget->notifyImageColorSpaceChanged(image->colorSpace());
+    image->unlock();
+}
+
 KisDisplayColorConverter* KisCanvas2::displayColorConverter() const
 {
     return &m_d->displayColorConverter;
@@ -663,31 +698,16 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
 {
     m_d->proofingConfig = this->image()->proofingConfiguration();
     if (!m_d->proofingConfig) {
-        qDebug()<<"Canvas: No proofing config found, generating one.";
         KisImageConfig cfg(false);
         m_d->proofingConfig = cfg.defaultProofingconfiguration();
     }
     KoColorConversionTransformation::ConversionFlags conversionFlags = m_d->proofingConfig->conversionFlags;
-#if QT_VERSION >= 0x050700
-
     if (this->image()->colorSpace()->colorDepthId().id().contains("U")) {
         conversionFlags.setFlag(KoColorConversionTransformation::SoftProofing, softProof);
         if (softProof) {
             conversionFlags.setFlag(KoColorConversionTransformation::GamutCheck, gamutCheck);
         }
     }
-#else
-    if (this->image()->colorSpace()->colorDepthId().id().contains("U")) {
-        conversionFlags |= KoColorConversionTransformation::SoftProofing;
-    } else {
-        conversionFlags = conversionFlags & ~KoColorConversionTransformation::SoftProofing;
-    }
-    if (gamutCheck && softProof && this->image()->colorSpace()->colorDepthId().id().contains("U")) {
-        conversionFlags |= KoColorConversionTransformation::GamutCheck;
-    } else {
-        conversionFlags = conversionFlags & ~KoColorConversionTransformation::GamutCheck;
-    }
-#endif
     m_d->proofingConfig->conversionFlags = conversionFlags;
 
     m_d->proofingConfigUpdated = true;
@@ -788,7 +808,15 @@ void KisCanvas2::updateCanvasProjection()
     bool shouldExplicitlyIssueUpdates = false;
 
     QVector<KisUpdateInfoSP> infoObjects;
-    while (KisUpdateInfoSP info = m_d->projectionUpdatesCompressor.takeUpdateInfo()) {
+    KisUpdateInfoList originalInfoObjects;
+    m_d->projectionUpdatesCompressor.takeUpdateInfo(originalInfoObjects);
+
+    for (auto it = originalInfoObjects.constBegin();
+         it != originalInfoObjects.constEnd();
+         ++it) {
+
+        KisUpdateInfoSP info = *it;
+
         const KisMarkerUpdateInfo *batchInfo = dynamic_cast<const KisMarkerUpdateInfo*>(info.data());
         if (batchInfo) {
             if (!infoObjects.isEmpty()) {
@@ -933,12 +961,12 @@ void KisCanvas2::slotUpdateRegionOfInterest()
 {
     const QRect oldRegionOfInterest = m_d->regionOfInterest;
 
-    const qreal ratio = 0.25;
+    const qreal ratio = m_d->regionOfInterestMargin;
     const QRect proposedRoi = KisAlgebra2D::blowRect(m_d->coordinatesConverter->widgetRectInImagePixels(), ratio).toAlignedRect();
 
     const QRect imageRect = m_d->coordinatesConverter->imageRectInImagePixels();
 
-    m_d->regionOfInterest = imageRect.contains(proposedRoi) ? proposedRoi : imageRect;
+    m_d->regionOfInterest = proposedRoi & imageRect;
 
     if (m_d->regionOfInterest != oldRegionOfInterest) {
         emit sigRegionOfInterestChanged(m_d->regionOfInterest);
@@ -1019,7 +1047,16 @@ KisImageWSP KisCanvas2::currentImage() const
 void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
 {
     QPointF offsetBefore = m_d->coordinatesConverter->imageRectInViewportPixels().topLeft();
-    m_d->coordinatesConverter->setDocumentOffset(documentOffset);
+
+    // The given offset is in widget logical pixels. In order to prevent fuzzy
+    // canvas rendering at 100% pixel-perfect zoom level when devicePixelRatio
+    // is not integral, we adjusts the offset to map to whole device pixels.
+    //
+    // FIXME: This is a temporary hack for fixing the canvas under fractional
+    //        DPI scaling before a new coordinate system is introduced.
+    QPointF offsetAdjusted = m_d->coordinatesConverter->snapToDevicePixel(documentOffset);
+
+    m_d->coordinatesConverter->setDocumentOffset(offsetAdjusted);
     QPointF offsetAfter = m_d->coordinatesConverter->imageRectInViewportPixels().topLeft();
 
     QPointF moveOffset = offsetAfter - offsetBefore;
@@ -1038,9 +1075,21 @@ void KisCanvas2::slotConfigChanged()
 {
     KisConfig cfg(true);
     m_d->vastScrolling = cfg.vastScrolling();
+    m_d->regionOfInterestMargin = KisImageConfig(true).animationCacheRegionOfInterestMargin();
 
     resetCanvas(cfg.useOpenGL());
-    slotSetDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(this->canvasWidget())));
+
+    // HACK: Sometimes screenNumber(this->canvasWidget()) is not able to get the
+    //       proper screenNumber when moving the window across screens. Using
+    //       the coordinates should be able to work around this.
+    // FIXME: We should change to associate the display profiles with the screen
+    //        model and serial number instead. See https://bugs.kde.org/show_bug.cgi?id=407498
+    int canvasScreenNumber = QApplication::desktop()->screenNumber(this->canvasWidget());
+    if (canvasScreenNumber != -1) {
+        setDisplayProfile(cfg.displayProfile(canvasScreenNumber));
+    } else {
+        warnUI << "Failed to get screenNumber for updating display profile.";
+    }
 
     initializeFpsDecoration();
 }
@@ -1052,7 +1101,7 @@ void KisCanvas2::refetchDataFromImage()
     startUpdateInPatches(image->bounds());
 }
 
-void KisCanvas2::slotSetDisplayProfile(const KoColorProfile *monitorProfile)
+void KisCanvas2::setDisplayProfile(const KoColorProfile *monitorProfile)
 {
     if (m_d->displayColorConverter.monitorProfile() == monitorProfile) return;
 
@@ -1061,7 +1110,7 @@ void KisCanvas2::slotSetDisplayProfile(const KoColorProfile *monitorProfile)
     {
         KisImageSP image = this->image();
         KisImageBarrierLocker l(image);
-        m_d->canvasWidget->setDisplayProfile(&m_d->displayColorConverter);
+        m_d->canvasWidget->setDisplayColorConverter(&m_d->displayColorConverter);
     }
 
     refetchDataFromImage();
@@ -1200,6 +1249,8 @@ void KisCanvas2::setLodAllowedInCanvas(bool value)
 
     KisConfig cfg(false);
     cfg.setLevelOfDetailEnabled(m_d->lodAllowedInImage);
+
+    KisUsageLogger::log(QString("Instant Preview Setting: %1").arg(m_d->lodAllowedInImage));
 }
 
 bool KisCanvas2::lodAllowedInCanvas() const

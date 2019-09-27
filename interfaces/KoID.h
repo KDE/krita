@@ -71,6 +71,15 @@ public:
         m_name = rhs.name();
     }
 
+    KoID &operator=(const KoID &rhs)
+    {
+        if (this != &rhs) {
+            m_id = rhs.m_id;
+            m_name = rhs.name();
+        }
+        return *this;
+    }
+
     QString id() const
     {
         return m_id;

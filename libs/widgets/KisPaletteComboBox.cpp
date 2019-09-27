@@ -29,8 +29,8 @@
 #include "KisPaletteComboBox.h"
 
 KisPaletteComboBox::KisPaletteComboBox(QWidget *parent)
-    : QComboBox(parent)
-    , m_model(Q_NULLPTR)
+    : KisSqueezedComboBox(parent)
+    , m_model(0)
 {
     setEditable(true);
     setInsertPolicy(NoInsert);
@@ -67,8 +67,6 @@ void KisPaletteComboBox::setCompanionView(KisPaletteView *view)
     setPaletteModel(view->paletteModel());
     connect(view, SIGNAL(sigIndexSelected(QModelIndex)),
             SLOT(slotSwatchSelected(QModelIndex)));
-    connect(this, SIGNAL(sigColorSelected(KoColor)),
-            view, SLOT(slotFGColorChanged(KoColor)));
 }
 
 void KisPaletteComboBox::slotPaletteChanged()
@@ -93,7 +91,7 @@ void KisPaletteComboBox::slotPaletteChanged()
             if (!swatch.id().isEmpty()){
                 name = swatch.id() + " - " + swatch.name();
             }
-            addItem(QIcon(createColorSquare(swatch)), name);
+            addSqueezedItem(QIcon(createColorSquare(swatch)), name);
             posIdxMap[SwatchPosType(info.column, info.row)] = count() - 1;
             m_idxSwatchMap.push_back(swatch);
         }

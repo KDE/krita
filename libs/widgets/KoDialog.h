@@ -1,4 +1,4 @@
-/*  This file is part of the KDE Libraries
+/*  This file is part of the KDE Librariesfsignals
  *  Copyright (C) 1998 Thomas Tanghus (tanghus@earthling.net)
  *  Additions 1999-2000 by Espen Sand (espen@kde.org)
  *                      and Holger Freyther <freyther@kde.org>
@@ -396,15 +396,16 @@ public:
     static int groupSpacingHint();
 
     /**
-     * @enum StandardCaptionFlag
+     * @enum CaptionFlag
      * Used to specify how to construct a window caption
      *
-     * @value AppName Indicates that the method shall include
+     * @var NoCaptionFlags Indicates that the method has no caption flags.
+     * @var AppNameCaption Indicates that the method shall include
      * the application name when making the caption string.
-     * @value Modified Causes a 'modified' sign will be included in the
+     * @var ModifiedCaption Causes a 'modified' sign will be included in the
      * returned string. This is useful when indicating that a file is
      * modified, i.e., it contains data that has not been saved.
-     * @value HIGCompliant The base minimum flags required to align a
+     * @var HIGCompliantCaption The base minimum flags required to align a
      * caption with the KDE Human Interface Guidelines
      */
     enum CaptionFlag {

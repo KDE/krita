@@ -133,12 +133,12 @@ public:
     void removeXMLGUIClient(KXMLGUIClient *client);
 
     /**
-     * Load state from an XML @param element, called by KXMLGUIBuilder.
+     * Load state from an XML @p element, called by KXMLGUIBuilder.
      */
     void loadState(const QDomElement &element);
 
     /**
-     * Save state into an XML @param element, called by KXMLGUIBuilder.
+     * Save state into an XML @p element, called by KXMLGUIBuilder.
      */
     void saveState(QDomElement &element) const;
 

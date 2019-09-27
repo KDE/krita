@@ -1,8 +1,8 @@
 [Desktop Entry]
 Categories=Qt;KDE;Office;Graphics;
-Exec=krita %f
+Exec=krita %F
 GenericName=
-Icon=calligrakrita
+Icon=krita
 MimeType=image/x-r16;
 Name=Krita
 Name[af]=Krita
@@ -46,6 +46,7 @@ Name[nb]=Krita
 Name[nds]=Krita
 Name[ne]=क्रिता
 Name[nl]=Krita
+Name[nn]=Krita
 Name[pl]=Krita
 Name[pt]=Krita
 Name[pt_BR]=Krita

@@ -24,6 +24,7 @@
 #include <mutex>
 
 class KisAcyclicSignalConnector;
+class KoColor;
 
 #include <QVector>
 #include <QPointer>
@@ -107,6 +108,12 @@ public:
     void connectBackwardResourcePair(QObject *sender, const char *signal,
                                      QObject *receiver, const char *method);
 
+    void connectForwardKoColor(QObject *sender, const char *signal,
+                               QObject *receiver, const char *method);
+
+    void connectBackwardKoColor(QObject *sender, const char *signal,
+                                QObject *receiver, const char *method);
+
     /**
      * Lock the connector and all its coordinated child connectors
      */
@@ -116,6 +123,12 @@ public:
      * Unlock the connector and all its coordinated child connectors
      */
     void unlock();
+
+    /**
+     * \return true if the connector is locked by some signal or manually.
+     * Used for debugging purposes mostly.
+     */
+    bool isLocked() const;
 
     /**
      * @brief create a coordinated connector that can be used for extending
@@ -161,6 +174,9 @@ private Q_SLOTS:
     void forwardSlotResourcePair(int key, const QVariant &resource);
     void backwardSlotResourcePair(int key, const QVariant &resource);
 
+    void forwardSlotKoColor(const KoColor &value);
+    void backwardSlotKoColor(const KoColor &value);
+
 Q_SIGNALS:
     void forwardSignalDouble(double value);
     void backwardSignalDouble(double value);
@@ -179,6 +195,9 @@ Q_SIGNALS:
 
     void forwardSignalResourcePair(int key, const QVariant &value);
     void backwardSignalResourcePair(int key, const QVariant &value);
+
+    void forwardSignalKoColor(const KoColor &value);
+    void backwardSignalKoColor(const KoColor &value);
 
 private:
     int m_signalsBlocked;

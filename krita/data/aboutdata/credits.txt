@@ -5,4 +5,6 @@ Ilya Portnov:MyPaint shade selector
 Martin Renold:MyPaint shade selector
 Saisho Kazuki:Japanese Animation template
 Pasquale D'Antuono:Donor
+David Gowers:Dither patterns
+
 

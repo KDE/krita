@@ -72,38 +72,38 @@ public /* methods */:
 
     /**
      * @brief checkEntry
-     * checks if position x and y has a valid entry
-     * both x and y start from 0
-     * @param x
-     * @param y
-     * @return true if there is a valid entry at position (x, y)
+     * checks if position @p column and @p row has a valid entry
+     * both @p column and @p row start from 0
+     * @param column
+     * @param row
+     * @return true if there is a valid entry at position (column, row)
      */
     bool checkEntry(int column, int row) const;
     /**
      * @brief setEntry
-     * sets the entry at position (x, y) to be e
+     * sets the entry at position (@p column, @p row) to be @p e
      * @param e
-     * @param x
-     * @param y
+     * @param column
+     * @param row
      */
     void setEntry(const KisSwatch &e, int column, int row);
     /**
      * @brief getEntry
-     * used to get the swatch entry at position (x, y)
+     * used to get the swatch entry at position (@p column, @p row)
      * there is an assertion to make sure that this position isn't empty,
      * so checkEntry(int, int) must be used before this method to ensure
      * a valid entry can be found
-     * @param x
-     * @param y
-     * @return the swatch entry at position (x, y)
+     * @param column
+     * @param row
+     * @return the swatch entry at position (column, row)
      */
     KisSwatch getEntry(int column, int row) const;
     /**
      * @brief removeEntry
-     * removes the entry at position (x, y)
-     * @param x
-     * @param y
-     * @return true if these is an entry at (x, y)
+     * removes the entry at position (@p column, @p row)
+     * @param column
+     * @param row
+     * @return true if these is an entry at (column, row)
      */
     bool removeEntry(int column, int row);
     /**

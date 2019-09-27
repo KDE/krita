@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -67,8 +68,8 @@ void SpecificColorSelectorDock::unsetCanvas()
 void SpecificColorSelectorDock::setViewManager(KisViewManager* kisview)
 {
     m_view = kisview;
-    connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSelector, SLOT(setColor(const KoColor&)));
-    connect(m_colorSelector, SIGNAL(colorChanged(const KoColor&)), m_view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
+    connect(m_view->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_colorSelector, SLOT(setColor(KoColor)));
+    connect(m_colorSelector, SIGNAL(colorChanged(KoColor)), m_view->canvasResourceProvider(), SLOT(slotSetFGColor(KoColor)));
 }
 
 #include "moc_specificcolorselector_dock.cpp"

@@ -61,11 +61,17 @@ public:
         else {
             m_tile->lockForWrite();
         }
+
+        m_type = type;
     }
 
     virtual ~KisTileDataWrapper()
     {
-        m_tile->unlock();
+        if (m_type == READ) {
+            m_tile->unlockForRead();
+        } else {
+            m_tile->unlockForWrite();
+        }
     }
 
     /**
@@ -103,5 +109,6 @@ private:
 
     KisTileSP m_tile;
     qint32 m_offset;
+    KisTileDataWrapper::accessType m_type;
 };
 #endif /* __KIS_TILE_DATA_WRAPPER_H */

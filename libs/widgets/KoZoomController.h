@@ -66,6 +66,7 @@ public:
     * @param controller the canvasController
     * @param zoomHandler the zoom handler (viewconverter with setter methods)
     * @param actionCollection the action collection where the KoZoomAction is added to
+    * @param parent the parent QObject
     */
     KoZoomController(KoCanvasController *controller,
                      KoZoomHandler *zoomHandler,
@@ -187,7 +188,8 @@ Q_SIGNALS:
     void zoomedToAll();
 
 protected:
-    virtual QSize documentToViewport(const QSizeF &size);
+    virtual QSizeF documentToViewport(const QSizeF &size);
+    QSize documentToViewportCeil(const QSizeF &size);
 
 private:
     Q_PRIVATE_SLOT(d, void setAvailableSize())

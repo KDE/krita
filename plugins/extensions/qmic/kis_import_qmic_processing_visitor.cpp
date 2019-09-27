@@ -31,6 +31,7 @@
 #include <KoCompositeOpRegistry.h>
 #include <kis_selection.h>
 #include <kis_types.h>
+#include <QtCore/QRegularExpression>
 
 #include "kis_import_qmic_processing_visitor.h"
 #include "gmic.h"
@@ -61,6 +62,16 @@ void KisImportQmicProcessingVisitor::gmicImageToPaintDevice(gmic_image<float>& s
     else {
         KisQmicSimpleConvertor::convertFromGmicFast(srcGmicImage, dst, 255.0f);
     }
+
+    // Some GMic filters encode layer position into the layer name.
+    // E.g. from extract foreground: "name([unnamed] [foreground]),pos(55,35)"
+    const QRegularExpression positionPattern(R"(\Wpos\((\d+),(\d+)\))");
+    const QRegularExpressionMatch match = positionPattern.match(srcGmicImage.name);
+    if (match.hasMatch()) {
+        int x = match.captured(1).toInt();
+        int y = match.captured(2).toInt();
+        dst->moveTo(x, y);
+    }
 }
 
 
@@ -68,13 +79,17 @@ void KisImportQmicProcessingVisitor::gmicImageToPaintDevice(gmic_image<float>& s
 void KisImportQmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
     int index = m_nodes->indexOf(node);
-    if (index >= 0) {
+    if (index >= 0 && index < m_images.size()) {
         gmic_image<float> *gimg = m_images[index];
         dbgPlugins << "Importing layer index" << index << "Size: "<< gimg->_width << "x" << gimg->_height << "colorchannels: " << gimg->_spectrum;
 
         KisPaintDeviceSP dst = node->paintDevice();
+
+        const KisLayer *layer = dynamic_cast<KisLayer*>(node);
+        const KisSelectionSP selection = layer ? layer->selection() : m_selection;
+        
         KisTransaction transaction(dst);
-        KisImportQmicProcessingVisitor::gmicImageToPaintDevice(*gimg, dst, m_selection, m_dstRect);
+        KisImportQmicProcessingVisitor::gmicImageToPaintDevice(*gimg, dst, selection, m_dstRect);
         if (undoAdapter) {
             transaction.commit(undoAdapter);
             node->setDirty(m_dstRect);

@@ -20,6 +20,7 @@
 #include "KoResourceItemDelegate.h"
 
 #include <resources/KoAbstractGradient.h>
+#include <resources/KoColorSet.h>
 #include <QPainter>
 
 KoResourceItemDelegate::KoResourceItemDelegate( QObject * parent )
@@ -44,6 +45,7 @@ void KoResourceItemDelegate::paint( QPainter * painter, const QStyleOptionViewIt
     QRect innerRect = option.rect.adjusted( 2, 1, -2, -1 );
 
     KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>( resource );
+    KoColorSet * palette = dynamic_cast<KoColorSet*>( resource );
     if (gradient) {
         QGradient * g = gradient->toQGradient();
 
@@ -56,6 +58,11 @@ void KoResourceItemDelegate::paint( QPainter * painter, const QStyleOptionViewIt
         painter->fillRect( innerRect, QBrush( paintGradient ) );
 
         delete g;
+    }
+    else if (palette) {
+        QImage thumbnail = index.data( Qt::DecorationRole ).value<QImage>();
+        painter->setRenderHint(QPainter::SmoothPixmapTransform, thumbnail.width() > innerRect.width() || thumbnail.height() > innerRect.height());
+        painter->drawImage(innerRect, thumbnail);
     }
     else {
         QImage thumbnail = index.data( Qt::DecorationRole ).value<QImage>();

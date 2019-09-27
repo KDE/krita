@@ -79,6 +79,7 @@ public:
      * @param channelValueType type of the numerical data used by the channel
      * @param size number of bytes (not bits) of the channel (if -1, it is deduced from the channelType)
      * @param color a color to represent that channel (for instance in an histogram)
+     * @param uiMinMax the UI range
      */
     KoChannelInfo(const QString & name,
                   qint32 npos,

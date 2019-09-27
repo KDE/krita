@@ -36,7 +36,7 @@ public:
 
     /**
      * The priority of the shortcut. The shortcut with the
-     * greatest value will be chosen for executution
+     * greatest value will be chosen for execution
      */
     virtual int priority() const = 0;
 

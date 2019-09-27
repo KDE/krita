@@ -33,13 +33,14 @@
 #include "kis_icon.h"
 #include "kis_image.h"
 #include "kis_wrapped_rect.h"
+#include "KisDocument.h"
 #include "KisPart.h"
+#include "KisReferenceImagesLayer.h"
 #include "KisScreenColorPicker.h"
 #include "KisDlgInternalColorSelector.h"
 
 struct KisScreenColorPicker::Private
 {
-
     QPushButton *screenColorPickerButton = 0;
     QLabel *lblScreenColorInfo = 0;
 
@@ -54,7 +55,7 @@ struct KisScreenColorPicker::Private
 #endif
 };
 
-KisScreenColorPicker::KisScreenColorPicker(QWidget *parent) : KisScreenColorPickerBase(parent), m_d(new Private)
+KisScreenColorPicker::KisScreenColorPicker(bool showInfoLabel, QWidget *parent) : KisScreenColorPickerBase(parent), m_d(new Private)
 {
     QVBoxLayout *layout = new QVBoxLayout();
     this->setLayout(layout);
@@ -62,8 +63,12 @@ KisScreenColorPicker::KisScreenColorPicker(QWidget *parent) : KisScreenColorPick
 
     m_d->screenColorPickerButton->setMinimumHeight(25);
     this->layout()->addWidget(m_d->screenColorPickerButton);
-    m_d->lblScreenColorInfo = new QLabel(QLatin1String("\n"));
-    this->layout()->addWidget(m_d->lblScreenColorInfo);
+
+    if (showInfoLabel) {
+        m_d->lblScreenColorInfo = new QLabel(QLatin1String("\n"));
+        this->layout()->addWidget(m_d->lblScreenColorInfo);
+    }
+
     connect(m_d->screenColorPickerButton, SIGNAL(clicked()), SLOT(pickScreenColor()));
 
     updateIcons();
@@ -114,8 +119,6 @@ void KisScreenColorPicker::pickScreenColor()
      */
     setMouseTracking(true);
 
-    //emit to the rest of the dialog to disable.
-    Q_EMIT sigPleaseDisableEverything(true);
     m_d->screenColorPickerButton->setDisabled(true);
 
     const QPoint globalPos = QCursor::pos();
@@ -132,14 +135,25 @@ KoColor KisScreenColorPicker::grabScreenColor(const QPoint &p)
 {
     // First check whether we're clicking on a Krita window for some real color picking
     Q_FOREACH(KisView *view, KisPart::instance()->views()) {
-        QWidget *canvasWidget = view->canvasBase()->canvasWidget();
+        const KisCanvas2 *canvas = view->canvasBase();
+        const QWidget *canvasWidget = canvas->canvasWidget();
         QPoint widgetPoint = canvasWidget->mapFromGlobal(p);
 
-        if (canvasWidget->rect().contains(widgetPoint)) {
-            QPointF imagePoint = view->canvasBase()->coordinatesConverter()->widgetToImage(widgetPoint);
+        if (canvasWidget->visibleRegion().contains(widgetPoint)) {
             KisImageWSP image = view->image();
 
             if (image) {
+                QPointF imagePoint = canvas->coordinatesConverter()->widgetToImage(widgetPoint);
+                // pick from reference images first
+                KisSharedPtr<KisReferenceImagesLayer> referenceImageLayer = view->document()->referenceImagesLayer();
+
+                if (referenceImageLayer && canvas->referenceImagesDecoration()->visible()) {
+                    QColor color = referenceImageLayer->getPixel(imagePoint);
+                    if (color.isValid()) {
+                        return KoColor(color, image->colorSpace());
+                    }
+                }
+
                 if (image->wrapAroundModePermitted()) {
                     imagePoint = KisWrappedRect::ptToWrappedPt(imagePoint.toPoint(), image->bounds());
                 }
@@ -162,11 +176,13 @@ KoColor KisScreenColorPicker::grabScreenColor(const QPoint &p)
 
 void KisScreenColorPicker::updateColorLabelText(const QPoint &globalPos)
 {
-    KoColor col = grabScreenColor(globalPos);
-    QString colname = KoColor::toQString(col);
-    QString location = QString::number(globalPos.x())+QString(", ")+QString::number(globalPos.y());
-    m_d->lblScreenColorInfo->setWordWrap(true);
-    m_d->lblScreenColorInfo->setText(location+QString(": ")+colname);
+    if (m_d->lblScreenColorInfo) {
+        KoColor col = grabScreenColor(globalPos);
+        QString colname = KoColor::toQString(col);
+        QString location = QString::number(globalPos.x())+QString(", ")+QString::number(globalPos.y());
+        m_d->lblScreenColorInfo->setWordWrap(true);
+        m_d->lblScreenColorInfo->setText(location+QString(": ")+colname);
+    }
 }
 
 bool KisScreenColorPicker::handleColorPickingMouseMove(QMouseEvent *e)
@@ -188,11 +204,7 @@ bool KisScreenColorPicker::handleColorPickingMouseButtonRelease(QMouseEvent *e)
 
 bool KisScreenColorPicker::handleColorPickingKeyPress(QKeyEvent *e)
 {
-#if QT_VERSION >= 0x050600
     if (e->matches(QKeySequence::Cancel)) {
-#else
-    if (e->key() == Qt::Key_Escape) {
-#endif
         releaseColorPicking();
         setCurrentColor(m_d->beforeScreenColorPicking);
     } else if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {
@@ -214,9 +226,11 @@ void KisScreenColorPicker::releaseColorPicking()
 #endif
     releaseKeyboard();
     setMouseTracking(false);
-    m_d->lblScreenColorInfo->setText(QLatin1String("\n"));
-    //emit enable signal
-    Q_EMIT sigPleaseDisableEverything(false);
+
+    if (m_d->lblScreenColorInfo) {
+        m_d->lblScreenColorInfo->setText(QLatin1String("\n"));
+    }
+
     m_d->screenColorPickerButton->setDisabled(false);
 }
 
@@ -248,7 +262,6 @@ void KisScreenColorPicker::continueUpdateColorPicking(const QPoint &globalPos)
     // otherwise it is not possible to pre-select a custom cell for assignment.
     setCurrentColor(color);
     updateColorLabelText(globalPos);
-
 }
 
 // Event filter to be installed on the dialog while in color-picking mode.
@@ -272,4 +285,13 @@ bool KisScreenColorPickingEventFilter::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
-std::function<KisScreenColorPickerBase *(QWidget *)> KisDlgInternalColorSelector::s_screenColorPickerFactory = KisScreenColorPicker::createScreenColorPicker;
+// Register the color picker factory with the internal color selector
+struct ColorPickerRegistrar {
+    ColorPickerRegistrar()
+    {
+        KisDlgInternalColorSelector::setScreenColorPickerFactory(KisScreenColorPicker::createScreenColorPicker);
+    }
+};
+
+static ColorPickerRegistrar s_colorPickerRegistrar;
+

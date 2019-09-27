@@ -120,6 +120,10 @@ public:
         return value.isValid() ? value.value<T>() : defaultValue;
     }
 
+    QString getPropertyLazy(const QString & name, const char *defaultValue) const {
+        return getPropertyLazy(name, QString(defaultValue));
+    }
+
     int getInt(const QString & name, int def = 0) const;
 
     double getDouble(const QString & name, double def = 0.0) const;

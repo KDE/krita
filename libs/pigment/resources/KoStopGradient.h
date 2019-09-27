@@ -29,8 +29,15 @@
 
 typedef QPair<qreal, KoColor> KoGradientStop;
 
+struct KoGradientStopValueSort
+{
+    inline bool operator() (const KoGradientStop& a, const KoGradientStop& b) {
+        return (a.second.toQColor().valueF() < b.second.toQColor().valueF());
+    }
+};
+
 /**
- * Resource for colorstop based gradients like Karbon gradients and SVG gradients
+ * Resource for colorstop based gradients like SVG gradients
  */
 class KRITAPIGMENT_EXPORT KoStopGradient : public KoAbstractGradient, public boost::equality_comparable<KoStopGradient>
 {
@@ -50,6 +57,9 @@ public:
 
     /// reimplemented
     QGradient* toQGradient() const override;
+
+    /// Find stops surrounding position, returns false if position outside gradient
+    bool stopsAt(KoGradientStop& leftStop, KoGradientStop& rightStop, qreal t) const;
 
     /// reimplemented
     void colorAt(KoColor&, qreal t) const override;
@@ -84,9 +94,6 @@ protected:
     QPointF m_focalPoint;
 
 private:
-
-    void loadKarbonGradient(QIODevice *file);
-    void parseKarbonGradient(const QDomElement& element);
 
     void loadSvgGradient(QIODevice *file);
     void parseSvgGradient(const QDomElement& element);

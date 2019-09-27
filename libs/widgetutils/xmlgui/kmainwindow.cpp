@@ -35,9 +35,9 @@
 #include "ktoolbar.h"
 
 #include <QApplication>
-#include <QtCore/QList>
-#include <QtCore/QObject>
-#include <QtCore/QTimer>
+#include <QList>
+#include <QObject>
+#include <QTimer>
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QDockWidget>
@@ -406,25 +406,6 @@ bool KMainWindow::restore(int , bool )
     return false;
 }
 
-void KMainWindow::setCaption(const QString &caption)
-{
-    setPlainCaption(caption);
-}
-
-void KMainWindow::setCaption(const QString &caption, bool modified)
-{
-    QString title = caption;
-    if (!title.contains(QStringLiteral("[*]")) && !title.isEmpty()) { // append the placeholder so that the modified mechanism works
-        title.append(QStringLiteral(" [*]"));
-    }
-    setPlainCaption(title);
-    setWindowModified(modified);
-}
-
-void KMainWindow::setPlainCaption(const QString &caption)
-{
-    setWindowTitle(caption);
-}
 
 void KMainWindow::appHelpActivated(void)
 {

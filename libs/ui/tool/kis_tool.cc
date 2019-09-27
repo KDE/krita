@@ -92,22 +92,6 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
     connect(this, SIGNAL(isActiveChanged(bool)), SLOT(resetCursorStyle()));
-
-    KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
-
-    if (!collection->action("toggle_fg_bg")) {
-        QAction *toggleFgBg = KisActionRegistry::instance()->makeQAction("toggle_fg_bg", collection);
-        collection->addAction("toggle_fg_bg", toggleFgBg);
-    }
-
-    if (!collection->action("reset_fg_bg")) {
-        QAction *toggleFgBg = KisActionRegistry::instance()->makeQAction("reset_fg_bg", collection);
-        collection->addAction("reset_fg_bg", toggleFgBg);
-    }
-
-    addAction("toggle_fg_bg", dynamic_cast<QAction *>(collection->action("toggle_fg_bg")));
-    addAction("reset_fg_bg", dynamic_cast<QAction *>(collection->action("reset_fg_bg")));
-
 }
 
 KisTool::~KisTool()
@@ -149,25 +133,12 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
         d->currentGenerator = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<KisFilterConfiguration*>();
     }
 
-    connect(action("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
-    connect(action("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
-
     d->m_isActive = true;
     emit isActiveChanged(true);
 }
 
 void KisTool::deactivate()
 {
-    bool result = true;
-
-    result &= disconnect(action("toggle_fg_bg"), 0, this, 0);
-    result &= disconnect(action("reset_fg_bg"), 0, this, 0);
-
-    if (!result) {
-        warnKrita << "WARNING: KisTool::deactivate() failed to disconnect"
-                   << "some signal connections. Your actions might be executed twice!";
-    }
-
     d->m_isActive = false;
     emit isActiveChanged(false);
 
@@ -189,7 +160,7 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
         d->currentBgColor = v.value<KoColor>();
         break;
     case(KisCanvasResourceProvider::CurrentPattern):
-        d->currentPattern = static_cast<KoPattern *>(v.value<void *>());
+        d->currentPattern = v.value<KoPattern*>();
         break;
     case(KisCanvasResourceProvider::CurrentGradient):
         d->currentGradient = static_cast<KoAbstractGradient *>(v.value<void *>());
@@ -321,11 +292,12 @@ QPointF KisTool::pixelToView(const QPointF &pixelCoord) const
 
 QRectF KisTool::pixelToView(const QRectF &pixelRect) const
 {
-    if (!image())
+    if (!image()) {
         return pixelRect;
+    }
     QPointF topLeft = pixelToView(pixelRect.topLeft());
     QPointF bottomRight = pixelToView(pixelRect.bottomRight());
-    return QRectF(topLeft, bottomRight);
+    return {topLeft, bottomRight};
 }
 
 QPainterPath KisTool::pixelToView(const QPainterPath &pixelPolygon) const
@@ -553,6 +525,25 @@ void KisTool::deleteSelection()
     }
 }
 
+KisTool::NodePaintAbility KisTool::nodePaintAbility()
+{
+    KisNodeSP node = currentNode();
+    if (!node) {
+        return NodePaintAbility::UNPAINTABLE;
+    }
+    if (node->inherits("KisShapeLayer")) {
+        return NodePaintAbility::VECTOR;
+    }
+    if (node->inherits("KisCloneLayer")) {
+        return NodePaintAbility::CLONE;
+    }
+    if (node->paintDevice()) {
+        return NodePaintAbility::PAINT;
+    }
+
+    return NodePaintAbility::UNPAINTABLE;
+}
+
 QWidget* KisTool::createOptionWidget()
 {
     d->optionWidget = new QLabel(i18n("No options"));
@@ -617,31 +608,6 @@ void KisTool::blockUntilOperationsFinishedForced()
 bool KisTool::isActive() const
 {
     return d->m_isActive;
-}
-
-void KisTool::slotToggleFgBg()
-{
-    KoCanvasResourceProvider* resourceManager = canvas()->resourceManager();
-    KoColor newFg = resourceManager->backgroundColor();
-    KoColor newBg = resourceManager->foregroundColor();
-
-    /**
-     * NOTE: Some of color selectors do not differentiate foreground
-     *       and background colors, so if one wants them to end up
-     *       being set up to foreground color, it should be set the
-     *       last.
-     */
-    resourceManager->setBackgroundColor(newBg);
-    resourceManager->setForegroundColor(newFg);
-}
-
-void KisTool::slotResetFgBg()
-{
-    KoCanvasResourceProvider* resourceManager = canvas()->resourceManager();
-
-    // see a comment in slotToggleFgBg()
-    resourceManager->setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
-    resourceManager->setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
 }
 
 bool KisTool::nodeEditable()

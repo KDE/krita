@@ -277,10 +277,9 @@ QWidget * KisToolDyna::createOptionWidget()
 {
 
     QWidget * optionsWidget = KisToolFreehand::createOptionWidget();
-    optionsWidget->setObjectName(toolId() + "option widget");
+    optionsWidget->setObjectName(toolId() + " option widget");
 
-    m_optionLayout = new QGridLayout(optionsWidget);
-    Q_CHECK_PTR(m_optionLayout);
+    m_optionLayout = new QGridLayout();
 
     m_optionLayout->setMargin(0);
     m_optionLayout->setSpacing(2);

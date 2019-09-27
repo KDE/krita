@@ -4,7 +4,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -38,7 +39,10 @@
 #include <kis_color_space_selector.h>
 #include <kis_signal_compressor.h>
 #include <kis_display_color_converter.h>
+#include <kis_popup_button.h>
+#include <kis_icon_utils.h>
 
+#include "ui_wdgSpecificColorSelectorWidget.h"
 
 KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     : QWidget(parent)
@@ -49,47 +53,51 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     , m_displayConverter(0)
 {
 
-    m_layout = new QVBoxLayout(this);
-    m_layout->setContentsMargins(0,0,0,0);
-    m_layout->setSpacing(1);
+    m_ui = new Ui_wdgSpecificColorSelectorWidget();
+    m_ui->setupUi(this);
+
     m_updateAllowed = true;
     connect(m_updateCompressor, SIGNAL(timeout()), SLOT(updateTimeout()));
 
     m_colorspaceSelector = new KisColorSpaceSelector(this);
-    m_colorspaceSelector->layout()->setSpacing(1);
     connect(m_colorspaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(setCustomColorSpace(const KoColorSpace*)));
 
-    m_chkShowColorSpaceSelector = new QCheckBox(i18n("Show Colorspace Selector"), this);
-    connect(m_chkShowColorSpaceSelector, SIGNAL(toggled(bool)), m_colorspaceSelector, SLOT(setVisible(bool)));
+    m_ui->colorspacePopupButton->setPopupWidget(m_colorspaceSelector);
 
-    m_chkUsePercentage = new QCheckBox(i18n("Use Percentage"), this);
-    connect(m_chkUsePercentage, SIGNAL(toggled(bool)), this, SLOT(onChkUsePercentageChanged(bool)));
+    connect(m_ui->chkUsePercentage, SIGNAL(toggled(bool)), this, SLOT(onChkUsePercentageChanged(bool)));
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group(QString());
-    m_chkShowColorSpaceSelector->setChecked(cfg.readEntry("SpecificColorSelector/ShowColorSpaceSelector", true));
-    m_chkUsePercentage->setChecked(cfg.readEntry("SpecificColorSelector/UsePercentage", false));
+    m_ui->chkUsePercentage->setChecked(cfg.readEntry("SpecificColorSelector/UsePercentage", false));
+    m_ui->chkUsePercentage->setIcon(KisIconUtils::loadIcon("ratio"));
 
-    m_colorspaceSelector->setVisible(m_chkShowColorSpaceSelector->isChecked());
     m_colorspaceSelector->showColorBrowserButton(false);
 
-    m_layout->addWidget(m_chkShowColorSpaceSelector);
-    m_layout->addWidget(m_chkUsePercentage);
-    m_layout->addWidget(m_colorspaceSelector);
-
     m_spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_layout->addItem(m_spacer);
+    m_ui->slidersLayout->addItem(m_spacer);
 }
 
 KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
 {
     KConfigGroup cfg =  KSharedConfig::openConfig()->group(QString());
-    cfg.writeEntry("SpecificColorSelector/ShowColorSpaceSelector", m_chkShowColorSpaceSelector->isChecked());
-    cfg.writeEntry("SpecificColorSelector/UsePercentage", m_chkUsePercentage->isChecked());
+    cfg.writeEntry("SpecificColorSelector/UsePercentage", m_ui->chkUsePercentage->isChecked());
 }
 
 bool KisSpecificColorSelectorWidget::customColorSpaceUsed()
 {
     return m_customColorSpaceSelected;
+}
+
+void KisSpecificColorSelectorWidget::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+
+    if (m_colorSpace) {
+        QString elidedColorspaceName = m_ui->colorspacePopupButton->fontMetrics().elidedText(
+                    m_colorSpace->name(), Qt::ElideRight,
+                    m_ui->colorspacePopupButton->width()
+                    );
+        m_ui->colorspacePopupButton->setText(elidedColorspaceName);
+    }
 }
 
 void KisSpecificColorSelectorWidget::setDisplayConverter(KisDisplayColorConverter *displayConverter)
@@ -100,7 +108,7 @@ void KisSpecificColorSelectorWidget::setDisplayConverter(KisDisplayColorConverte
 
     if (m_displayConverter) {
         m_converterConnection.clear();
-        m_converterConnection.addConnection(m_displayConverter, SIGNAL(displayConfigurationChanged()), this, SLOT(rereadCurrentColorSpace()));
+        m_converterConnection.addConnection(m_displayConverter, SIGNAL(displayConfigurationChanged()), this, SLOT(rereadCurrentColorSpace()), Qt::UniqueConnection);
     }
 
     rereadCurrentColorSpace(needsForceUpdate);
@@ -130,21 +138,28 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs, bool 
     }
 
     if (cs->colorDepthId() == Integer8BitsColorDepthID || cs->colorDepthId() == Integer16BitsColorDepthID) {
-        m_chkUsePercentage->setVisible(true);
+        m_ui->chkUsePercentage->setVisible(true);
     } else {
-        m_chkUsePercentage->setVisible(false);
+        m_ui->chkUsePercentage->setVisible(false);
     }
 
     m_colorSpace = KoColorSpaceRegistry::instance()->colorSpace(cs->colorModelId().id(), cs->colorDepthId().id(), cs->profile());
     Q_ASSERT(m_colorSpace);
     Q_ASSERT(*m_colorSpace == *cs);
+
+    QString elidedColorspaceName = m_ui->colorspacePopupButton->fontMetrics().elidedText(
+                m_colorSpace->name(), Qt::ElideRight,
+                m_ui->colorspacePopupButton->width()
+                );
+    m_ui->colorspacePopupButton->setText(elidedColorspaceName);
+
     m_color = KoColor(m_color, m_colorSpace);
     Q_FOREACH (KisColorInput* input, m_inputs) {
         delete input;
     }
     m_inputs.clear();
 
-    m_layout->removeItem(m_spacer);
+    m_ui->slidersLayout->removeItem(m_spacer);
 
     QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_colorSpace->channels());
 
@@ -160,7 +175,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs, bool 
             case KoChannelInfo::UINT8:
             case KoChannelInfo::UINT16:
             case KoChannelInfo::UINT32: {
-                input = new KisIntegerColorInput(this, channel, &m_color, displayRenderer, m_chkUsePercentage->isChecked());
+                input = new KisIntegerColorInput(this, channel, &m_color, displayRenderer, m_ui->chkUsePercentage->isChecked());
             }
             break;
             case KoChannelInfo::FLOAT16:
@@ -177,7 +192,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs, bool 
                 connect(this,  SIGNAL(updated()), input, SLOT(update()));
 
                 m_inputs.append(input);
-                m_layout->addWidget(input);
+                m_ui->slidersLayout->addWidget(input);
             }
         }
     }
@@ -205,11 +220,11 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs, bool 
     if (allChannels8Bit) {
         KisColorInput* input = new KisHexColorInput(this, &m_color, displayRenderer);
         m_inputs.append(input);
-        m_layout->addWidget(input);
+        m_ui->slidersLayout->addWidget(input);
         connect(input, SIGNAL(updated()), this,  SLOT(update()));
         connect(this,  SIGNAL(updated()), input, SLOT(update()));
     }
-    m_layout->addItem(m_spacer);
+    m_ui->slidersLayout->addItem(m_spacer);
 
     m_colorspaceSelector->blockSignals(true);
     m_colorspaceSelector->setCurrentColorSpace(cs);
@@ -253,4 +268,3 @@ void KisSpecificColorSelectorWidget::onChkUsePercentageChanged(bool isChecked)
     }
     emit(updated());
 }
-#include "moc_kis_specific_color_selector_widget.cpp"

@@ -1,0 +1,86 @@
+From 16a528dfc3ef30fee213026391c923d4d19fd4a0 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 11 Feb 2019 17:51:39 +0300
+Subject: [PATCH 1/4] disable wintab
+
+Change-Id: I10095ac8c486fcccb97f4a8d7036441eea6a1bc0
+---
+ .../platforms/windows/qwindowscontext.cpp     | 24 -------------------
+ 1 file changed, 24 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowscontext.cpp b/src/plugins/platforms/windows/qwindowscontext.cpp
+index 1f80ac5872..ded8130398 100644
+--- a/src/plugins/platforms/windows/qwindowscontext.cpp
++++ b/src/plugins/platforms/windows/qwindowscontext.cpp
+@@ -265,9 +265,6 @@ struct QWindowsContextPrivate {
+     QWindowsMimeConverter m_mimeConverter;
+     QWindowsScreenManager m_screenManager;
+     QSharedPointer<QWindowCreationContext> m_creationContext;
+-#if QT_CONFIG(tabletevent)
+-    QScopedPointer<QWindowsTabletSupport> m_tabletSupport;
+-#endif
+     const HRESULT m_oleInitializeResult;
+     QWindow *m_lastActiveWindow = nullptr;
+     bool m_asyncExpose = false;
+@@ -308,9 +305,6 @@ QWindowsContext::QWindowsContext() :
+ 
+ QWindowsContext::~QWindowsContext()
+ {
+-#if QT_CONFIG(tabletevent)
+-    d->m_tabletSupport.reset(); // Destroy internal window before unregistering classes.
+-#endif
+     unregisterWindowClasses();
+     if (d->m_oleInitializeResult == S_OK || d->m_oleInitializeResult == S_FALSE)
+         OleUninitialize();
+@@ -357,12 +351,7 @@ bool QWindowsContext::initTouch(unsigned integrationOptions)
+ bool QWindowsContext::initTablet(unsigned integrationOptions)
+ {
+     Q_UNUSED(integrationOptions);
+-#if QT_CONFIG(tabletevent)
+-    d->m_tabletSupport.reset(QWindowsTabletSupport::create());
+-    return true;
+-#else
+     return false;
+-#endif
+ }
+ 
+ bool QWindowsContext::initPointer(unsigned integrationOptions)
+@@ -383,12 +372,7 @@ bool QWindowsContext::initPointer(unsigned integrationOptions)
+ 
+ void QWindowsContext::setTabletAbsoluteRange(int a)
+ {
+-#if QT_CONFIG(tabletevent)
+-    if (!d->m_tabletSupport.isNull())
+-        d->m_tabletSupport->setAbsoluteRange(a);
+-#else
+     Q_UNUSED(a)
+-#endif
+ }
+ 
+ void QWindowsContext::setDetectAltGrModifier(bool a)
+@@ -799,11 +783,7 @@ QWindowsScreenManager &QWindowsContext::screenManager()
+ 
+ QWindowsTabletSupport *QWindowsContext::tabletSupport() const
+ {
+-#if QT_CONFIG(tabletevent)
+-    return d->m_tabletSupport.data();
+-#else
+     return 0;
+-#endif
+ }
+ 
+ /*!
+@@ -1288,10 +1268,6 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
+             *result = LRESULT(MA_NOACTIVATE);
+             return true;
+         }
+-#if QT_CONFIG(tabletevent)
+-        if (!d->m_tabletSupport.isNull())
+-            d->m_tabletSupport->notifyActivate();
+-#endif // QT_CONFIG(tabletevent)
+         if (platformWindow->testFlag(QWindowsWindow::BlockedByModal))
+             if (const QWindow *modalWindow = QGuiApplication::modalWindow()) {
+                 QWindowsWindow *platformWindow = QWindowsWindow::windowsWindowOf(modalWindow);
+-- 
+2.20.1.windows.1
+

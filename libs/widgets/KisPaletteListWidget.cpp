@@ -49,8 +49,6 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
                                      i18n("Import a new palette from file")));
     m_d->actExport.reset(new QAction(KisIconUtils::loadIcon("document-export"),
                                      i18n("Export current palette to file")));
-    m_d->model->setColumnCount(1);
-
     m_ui->setupUi(this);
     m_ui->bnAdd->setDefaultAction(m_d->actAdd.data());
     m_ui->bnRemove->setDefaultAction(m_d->actRemove.data());
@@ -75,7 +73,7 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     m_ui->viewPalette->setLayout(new QHBoxLayout(m_ui->viewPalette));
     m_ui->viewPalette->layout()->addWidget(m_d->itemChooser.data());
 
-    connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResource *)), SLOT(slotPaletteResourceSelected(KoResource*)));
+    connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResource*)), SLOT(slotPaletteResourceSelected(KoResource*)));
 }
 
 KisPaletteListWidget::~KisPaletteListWidget()
@@ -139,7 +137,6 @@ KisPaletteListWidgetPrivate::KisPaletteListWidgetPrivate(KisPaletteListWidget *a
     : c(a_c)
     , rAdapter(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer()))
     , itemChooser(new KoResourceItemChooser(rAdapter, a_c))
-    , model(new Model(rAdapter, a_c))
     , delegate(new Delegate(a_c))
 {  }
 

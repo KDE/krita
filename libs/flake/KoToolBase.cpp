@@ -32,6 +32,7 @@
 #include "KoShapeController.h"
 #include "KoShapeControllerBase.h"
 #include "KoToolSelection.h"
+#include "KoCanvasController.h"
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
@@ -56,48 +57,6 @@ KoToolBase::KoToolBase(KoToolBasePrivate &dd)
 
 KoToolBase::~KoToolBase()
 {
-// Enable this to easily generate action files for tools
-
-   //  if (actions().size() > 0) {
-
-   //     QDomDocument doc;
-   //     QDomElement e = doc.createElement("Actions");
-   //     e.setAttribute("name", toolId());
-   //     e.setAttribute("version", "2");
-   //     doc.appendChild(e);
-
-   //     Q_FOREACH (QAction *action, actions().values()) {
-   //         QDomElement a = doc.createElement("Action");
-   //         a.setAttribute("name", action->objectName());
-
-   //         // But seriously, XML is the worst format ever designed
-   //         auto addElement = [&](QString title, QString content) {
-   //             QDomElement newNode = doc.createElement(title);
-   //             QDomText    newText = doc.createTextNode(content);
-   //             newNode.appendChild(newText);
-   //             a.appendChild(newNode);
-   //         };
-
-   //         addElement("icon", action->icon().name());
-   //         addElement("text", action->text());
-   //         addElement("whatsThis" , action->whatsThis());
-   //         addElement("toolTip" , action->toolTip());
-   //         addElement("iconText" , action->iconText());
-   //         addElement("shortcut" , action->shortcut().toString());
-   //         addElement("isCheckable" , QString((action->isChecked() ? "true" : "false")));
-   //         addElement("statusTip", action->statusTip());
-   //         e.appendChild(a);
-   //     }
-   //     QFile f(toolId() + ".action");
-   //     f.open(QFile::WriteOnly);
-   //     f.write(doc.toString().toUtf8());
-   //     f.close();
-
-   // }
-
-//    else {
-//        debugFlake << "Tool" << toolId() << "has no actions";
-//    }
     qDeleteAll(d_ptr->optionWidgets);
     delete d_ptr;
 }
@@ -217,31 +176,20 @@ void KoToolBase::useCursor(const QCursor &cursor)
 QList<QPointer<QWidget> > KoToolBase::optionWidgets()
 {
     Q_D(KoToolBase);
-    if (d->optionWidgets.empty()) {
+    if (!d->optionWidgetsCreated) {
         d->optionWidgets = createOptionWidgets();
+        d->optionWidgetsCreated = true;
     }
     return d->optionWidgets;
-}
-
-void KoToolBase::addAction(const QString &name, QAction *action)
-{
-    Q_D(KoToolBase);
-    if (action->objectName().isEmpty()) {
-        action->setObjectName(name);
-    }
-    d->actions.insert(name, action);
-}
-
-QHash<QString, QAction *> KoToolBase::actions() const
-{
-    Q_D(const KoToolBase);
-    return d->actions;
 }
 
 QAction *KoToolBase::action(const QString &name) const
 {
     Q_D(const KoToolBase);
-    return d->actions.value(name);
+    if (d->canvas && d->canvas->canvasController() && d->canvas->canvasController()) {
+        return d->canvas->canvasController()->actionCollection()->action(name);
+    }
+    return 0;
 }
 
 QWidget * KoToolBase::createOptionWidget()
@@ -403,7 +351,7 @@ bool KoToolBase::isInTextMode() const
 void KoToolBase::requestUndoDuringStroke()
 {
     /**
-     * Default implementation just cancells the stroke
+     * Default implementation just cancels the stroke
      */
     requestStrokeCancellation();
 }

@@ -19,6 +19,8 @@ install(FILES
     sRGB-elle-V2-g10.icc
     sRGB-elle-V2-srgbtrc.icc
 
+    Rec2020-elle-V4-g10.icc
+
     Lab-D50-Identity-elle-V2.icc
     Lab-D50-Identity-elle-V4.icc
     XYZ-D50-Identity-elle-V4.icc

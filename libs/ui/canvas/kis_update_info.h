@@ -37,6 +37,7 @@ public:
     virtual QRect dirtyViewportRect();
     virtual QRect dirtyImageRect() const = 0;
     virtual int levelOfDetail() const = 0;
+    virtual bool canBeCompressed() const;
 };
 
 Q_DECLARE_METATYPE(KisUpdateInfoSP)
@@ -56,7 +57,7 @@ struct ConversionOptions {
 
 
     bool m_needsConversion;
-    const KoColorSpace *m_destinationColorSpace;
+    const KoColorSpace *m_destinationColorSpace = 0;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
 };
@@ -105,13 +106,13 @@ public:
     QRect dirtyImageRectVar;
 
     /**
-     * Rect of KisImage corresponding to @viewportRect.
+     * Rect of KisImage corresponding to @ref viewportRect .
      * It is cropped and aligned corresponding to the canvas.
      */
     QRect imageRect;
 
     /**
-     * Rect of canvas widget corresponding to @imageRect
+     * Rect of canvas widget corresponding to @ref imageRect
      */
     QRectF viewportRect;
 
@@ -136,7 +137,7 @@ public:
     qint32 borderWidth;
 
     /**
-     * Used for temporary sorage of KisImage's data
+     * Used for temporary storage of KisImage's data
      * by KisProjectionCache
      */
     KisImagePatch patch;
@@ -159,6 +160,7 @@ public:
 
     QRect dirtyImageRect() const override;
     int levelOfDetail() const override;
+    bool canBeCompressed() const override;
 
 private:
     Type m_type;

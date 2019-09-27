@@ -34,6 +34,7 @@ class KRITAFLAKE_EXPORT KoPathControlPointMoveCommand : public KUndo2Command
 public:
     /**
      * Command to move one control path point.
+     * @param pointData the data of the point to move
      * @param offset the offset by which the point is moved in document coordinates
      * @param pointType the type of the point to move
      * @param parent the parent command used for macro commands

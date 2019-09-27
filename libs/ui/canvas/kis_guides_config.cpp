@@ -27,6 +27,16 @@
 
 #include "kis_config.h"
 #include "kis_dom_utils.h"
+#include "kis_algebra_2d.h"
+#include "kis_global.h"
+
+
+struct KisGuidesConfigStaticRegistrar {
+    KisGuidesConfigStaticRegistrar() {
+        qRegisterMetaType<KisGuidesConfig>("KisGuidesConfig");
+    }
+};
+static KisGuidesConfigStaticRegistrar __registrar;
 
 
 class Q_DECL_HIDDEN KisGuidesConfig::Private
@@ -95,6 +105,12 @@ KisGuidesConfig& KisGuidesConfig::operator=(const KisGuidesConfig &rhs)
 bool KisGuidesConfig::operator==(const KisGuidesConfig &rhs) const
 {
     return *d == *rhs.d;
+}
+
+bool KisGuidesConfig::hasSamePositionAs(const KisGuidesConfig &rhs) const
+{
+    return horizontalGuideLines() == rhs.horizontalGuideLines() &&
+        verticalGuideLines() == rhs.verticalGuideLines();
 }
 
 void KisGuidesConfig::setHorizontalGuideLines(const QList<qreal> &lines)
@@ -293,4 +309,50 @@ bool KisGuidesConfig::isDefault() const
     defaultObject.loadStaticData();
 
     return *this == defaultObject;
+}
+
+void KisGuidesConfig::transform(const QTransform &transform)
+{
+    if (transform.type() >= QTransform::TxShear) return;
+
+    KisAlgebra2D::DecomposedMatix m(transform);
+
+    QTransform t = m.scaleTransform();
+
+    const qreal eps = 1e-3;
+    int numWraps = 0;
+    const qreal wrappedRotation = KisAlgebra2D::wrapValue(m.angle, 90.0);
+    if (wrappedRotation <= eps || wrappedRotation >= 90.0 - eps) {
+        t *= m.rotateTransform();
+        numWraps = qRound(normalizeAngleDegrees(m.angle) / 90.0);
+    }
+
+    t *= m.translateTransform();
+
+
+    QList<qreal> newHorzGuideLines;
+    QList<qreal> newVertGuideLines;
+
+    Q_FOREACH (qreal hRuler, d->horzGuideLines) {
+        const QPointF pt = t.map(QPointF(0, hRuler));
+
+        if (numWraps & 0x1) {
+            newVertGuideLines << pt.x();
+        } else {
+            newHorzGuideLines << pt.y();
+        }
+    }
+
+    Q_FOREACH (qreal vRuler, d->vertGuideLines) {
+        const QPointF pt = t.map(QPointF(vRuler, 0));
+
+        if (!(numWraps & 0x1)) {
+            newVertGuideLines << pt.x();
+        } else {
+            newHorzGuideLines << pt.y();
+        }
+    }
+
+    d->horzGuideLines = newHorzGuideLines;
+    d->vertGuideLines = newVertGuideLines;
 }

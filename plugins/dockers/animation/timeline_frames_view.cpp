@@ -29,12 +29,15 @@
 #include <QDropEvent>
 #include <QMenu>
 #include <QScrollBar>
+#include <QScroller>
 #include <QDrag>
 #include <QInputDialog>
 #include <QClipboard>
 #include <QMimeData>
+#include "config-qtmultimedia.h"
 
 #include "KSharedConfig"
+#include "KisKineticScroller.h"
 
 #include "kis_zoom_button.h"
 #include "kis_icon_utils.h"
@@ -44,6 +47,7 @@
 #include "kis_signal_compressor.h"
 #include "kis_time_range.h"
 #include "kis_color_label_selector_widget.h"
+#include "kis_keyframe_channel.h"
 #include "kis_slider_spin_box.h"
 #include <KisImportExportManager.h>
 #include <kis_signals_blocker.h>
@@ -230,7 +234,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     m_d->volumeSlider = new KisSliderSpinBox(this);
     m_d->volumeSlider->setRange(0, 100);
-    m_d->volumeSlider->setSuffix("%");
+    m_d->volumeSlider->setSuffix(i18n("%"));
     m_d->volumeSlider->setPrefix(i18nc("@item:inmenu, slider", "Volume:"));
     m_d->volumeSlider->setSingleStep(1);
     m_d->volumeSlider->setPageStep(10);
@@ -274,6 +278,14 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     setFramesPerSecond(12);
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+
+    {
+        QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+        if( scroller ) {
+            connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                    this, SLOT(slotScrollerStateChanged(QScroller::State)));
+        }
+    }
 
     connect(&m_d->selectionChangedCompressor, SIGNAL(timeout()),
             SLOT(slotSelectionChanged()));
@@ -558,6 +570,10 @@ void TimelineFramesView::slotUpdateInfiniteFramesCount()
              m_d->horizontalRuler->width() - 1) / sectionWidth;
 
     m_d->model->setLastVisibleFrame(calculatedIndex);
+}
+
+void TimelineFramesView::slotScrollerStateChanged( QScroller::State state ) {
+    KisKineticScroller::updateCursor(this, state);
 }
 
 void TimelineFramesView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
@@ -906,6 +922,9 @@ void TimelineFramesView::dropEvent(QDropEvent *event)
     m_d->dragInProgress = false;
     m_d->model->setScrubState(false);
 
+    if (event->keyboardModifiers() & Qt::ControlModifier) {
+        event->setDropAction(Qt::CopyAction);
+    }
     QAbstractItemView::dropEvent(event);
     m_d->dragWasSuccessful = event->isAccepted();
 }
@@ -1432,7 +1451,32 @@ void TimelineFramesView::insertOrRemoveHoldFrames(int count, bool entireColumn)
     }
 
     if (!indexes.isEmpty()) {
+
+        // add extra columns to the end of the timeline if we are adding hold frames
+        // they will be truncated if we don't do this
+        if (count > 0) {
+            // Scan all the layers and find out what layer has the most keyframes
+            // only keep a reference of layer that has the most keyframes
+            int keyframesInLayerNode = 0;
+            Q_FOREACH (const QModelIndex &index, indexes) {
+                KisNodeSP layerNode = m_d->model->nodeAt(index);
+
+                KisKeyframeChannel *channel = layerNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
+                if (!channel) continue;
+
+                if (keyframesInLayerNode < channel->allKeyframeIds().count()) {
+                   keyframesInLayerNode = channel->allKeyframeIds().count();
+                }
+            }
+            m_d->model->setLastVisibleFrame(m_d->model->columnCount() + count*keyframesInLayerNode);
+        }
+
+
         m_d->model->insertHoldFrames(indexes, count);
+
+        // bulk adding frames can add too many
+        // trim timeline to clean up extra frames that might have been added
+        slotUpdateInfiniteFramesCount();
     }
 }
 

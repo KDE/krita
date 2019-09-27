@@ -134,6 +134,19 @@ QSize KisBrushHud::sizeHint() const
 
 void KisBrushHud::updateIcons()
 {
+    this->setPalette(qApp->palette());
+    for(int i=0; i<this->children().size(); i++) {
+        QWidget *w = qobject_cast<QWidget*>(this->children().at(i));
+        if (w) {
+            w->setPalette(qApp->palette());
+        }
+    }
+    for(int i=0; i<m_d->wdgProperties->children().size(); i++) {
+        KisUniformPaintOpPropertyWidget *w = qobject_cast<KisUniformPaintOpPropertyWidget*>(m_d->wdgProperties->children().at(i));
+        if (w) {
+            w->slotThemeChanged(qApp->palette());
+        }
+    }
     m_d->btnConfigure->setIcon(KisIconUtils::loadIcon("applications-system"));
 }
 
@@ -212,6 +225,7 @@ void KisBrushHud::updateProperties()
     }
 
     m_d->propertiesLayout->addStretch();
+    resize(sizeHint());
 }
 
 void KisBrushHud::showEvent(QShowEvent *event)

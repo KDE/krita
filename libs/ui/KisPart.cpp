@@ -111,7 +111,7 @@ public:
             }
         }
 
-        return false;
+        return true;
     }
 };
 
@@ -222,24 +222,23 @@ KisMainWindow *KisPart::createMainWindow(QUuid id)
 }
 
 KisView *KisPart::createView(KisDocument *document,
-                             KoCanvasResourceProvider *resourceManager,
-                             KActionCollection *actionCollection,
+                             KisViewManager *viewManager,
                              QWidget *parent)
 {
     // If creating the canvas fails, record this and disable OpenGL next time
     KisConfig cfg(false);
     KConfigGroup grp( KSharedConfig::openConfig(), "crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {
-        cfg.setUseOpenGL(false);
+        cfg.disableOpenGL();
     }
     if (cfg.canvasState() == "OPENGL_FAILED") {
-        cfg.setUseOpenGL(false);
+        cfg.disableOpenGL();
     }
     grp.writeEntry("CreatingCanvas", true);
     grp.sync();
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    KisView *view  = new KisView(document, resourceManager, actionCollection, parent);
+    KisView *view = new KisView(document,  viewManager, parent);
     QApplication::restoreOverrideCursor();
 
     // Record successful canvas creation
@@ -318,6 +317,11 @@ int KisPart::viewCount(KisDocument *doc) const
 bool KisPart::closingSession() const
 {
     return d->closingSession;
+}
+
+bool KisPart::exists()
+{
+    return s_instance.exists();
 }
 
 bool KisPart::closeSession(bool keepWindows)
@@ -434,10 +438,6 @@ void KisPart::openExistingFile(const QUrl &url)
 void KisPart::updateShortcuts()
 {
     // Update any non-UI actionCollections.  That includes:
-    //  - Shortcuts called inside of tools
-    //  - Perhaps other things?
-    KoToolManager::instance()->updateToolShortcuts();
-
     // Now update the UI actions.
     Q_FOREACH (KisMainWindow *mainWindow, d->mainWindows) {
         KActionCollection *ac = mainWindow->actionCollection();
@@ -453,7 +453,7 @@ void KisPart::updateShortcuts()
             QString strippedTooltip = action->toolTip().remove(QRegExp("\\s\\(.*\\)"));
 
             // Now update the tooltips with the new shortcut info.
-            if(action->shortcut() == QKeySequence(0))
+            if (action->shortcut() == QKeySequence(0))
                 action->setToolTip(strippedTooltip);
             else
                 action->setToolTip( strippedTooltip + " (" + action->shortcut().toString() + ")");
@@ -476,6 +476,7 @@ void KisPart::openTemplate(const QUrl &url)
         mimeType.remove( QRegExp( "-template$" ) );
         document->setMimeTypeAfterLoading(mimeType);
         document->resetURL();
+        document->setReadWrite(true);
     }
     else {
         if (document->errorMessage().isEmpty()) {

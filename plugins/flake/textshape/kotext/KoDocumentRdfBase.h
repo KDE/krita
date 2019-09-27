@@ -48,7 +48,7 @@ namespace Soprano
  * A base class that provides the interface to many RDF features
  * but will not do anything if Soprano support is not built.
  * By having this "Base" class, code can call methods at points
- * where RDF handling is desired and can avoid #ifdef conditionals
+ * where RDF handling is desired and can avoid \#ifdef conditionals
  * because the base class interface is here and will be valid, even
  * if impotent when Soprano support is not built.
  */

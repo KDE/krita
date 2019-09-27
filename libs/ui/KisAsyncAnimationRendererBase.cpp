@@ -36,7 +36,7 @@ struct KRITAUI_NO_EXPORT KisAsyncAnimationRendererBase::Private
     bool isCancelled = false;
     QRegion requestedRegion;
 
-    static const int WAITING_FOR_FRAME_TIMEOUT = 10000;
+    static const int WAITING_FOR_FRAME_TIMEOUT = 30000;
 };
 
 KisAsyncAnimationRendererBase::KisAsyncAnimationRendererBase(QObject *parent)

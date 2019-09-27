@@ -30,6 +30,7 @@
 #include <kritawidgetutils_export.h>
 
 #include <QWidget>
+#include <KisKineticScroller.h>
 
 class KActionCollection;
 class KConfig;
@@ -118,7 +119,7 @@ public:
     ~KisShortcutsEditor() override;
 
     /**
-     * @ret true if there are unsaved changes.
+     * @return @c true if there are unsaved changes.
      */
     bool isModified() const;
 
@@ -141,6 +142,7 @@ public:
      * Insert an action collection, i.e. add all its actions to the ones
      * already associated with the KisShortcutsEditor object.
      *
+     * @param collection the action collection.
      * @param title subtree title of this collection of shortcut.
      */
     void addCollection(KActionCollection *, const QString &title = QString());
@@ -237,6 +239,8 @@ public Q_SLOTS:
      * Expand or collapse the tree view when the search text changes
      */
     void searchUpdated(QString s);
+
+    void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
 
 private:
     Q_PRIVATE_SLOT(d, void capturedShortcut(QVariant, const QModelIndex &))

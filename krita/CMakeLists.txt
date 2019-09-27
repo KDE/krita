@@ -8,25 +8,32 @@ include_directories(SYSTEM
 add_subdirectory( dtd )
 add_subdirectory( data )
 add_subdirectory( integration )
+# Install the application icons following the the freedesktop icon theme spec
 add_subdirectory( pics/app )
+
+if (ANDROID)
+    include_directories (${Qt5AndroidExtras_INCLUDE_DIRS})
+endif()
 
 set(krita_SRCS main.cc)
 
+# Set the application icon on the application
 if (NOT APPLE)
-    file(GLOB ICON_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakrita.png")
+    file(GLOB ICON_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-krita.png")
 else()
     set(ICON_SRCS
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/16-apps-calligrakrita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/32-apps-calligrakrita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/48-apps-calligrakrita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/128-apps-calligrakrita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/256-apps-calligrakrita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/512-apps-calligrakrita.png"
-         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/1024-apps-calligrakrita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/16-apps-krita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/32-apps-krita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/48-apps-krita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/128-apps-krita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/256-apps-krita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/512-apps-krita.png"
+         "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/1024-apps-krita.png"
     )
 endif() 
 ecm_add_app_icon(krita_SRCS ICONS ${ICON_SRCS})
 
+# Install the mimetype icons
 ecm_install_icons(ICONS
     "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/16-mimetypes-application-x-krita.png"
     "${CMAKE_CURRENT_SOURCE_DIR}/pics/mimetypes/22-mimetypes-application-x-krita.png"
@@ -64,7 +71,12 @@ set(krita_QRCS
 
 qt5_add_resources(krita_SRCS ${krita_QRCS})
 
-add_executable(krita ${krita_SRCS})
+if (ANDROID)
+    add_library(krita SHARED ${krita_SRCS})
+    target_link_libraries(krita PRIVATE Qt5::AndroidExtras)
+else()
+    add_executable(krita ${krita_SRCS})
+endif()
 target_link_libraries(krita 
     PRIVATE
                       kritaui 

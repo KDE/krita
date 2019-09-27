@@ -60,7 +60,7 @@ public:
         m_doc->setCurrentImage(m_image);
 
         m_mainWindow = KisPart::instance()->createMainWindow();
-        m_view = new KisView(m_doc, m_mainWindow->resourceManager(), m_mainWindow->actionCollection(), m_mainWindow);
+        m_view = new KisView(m_doc, m_mainWindow->viewManager(), m_mainWindow);
 
         m_image->refreshGraph();
 
@@ -280,7 +280,7 @@ bool KisZoomAndPanTest::checkZoomWithAction(ZoomAndPanTester &t, qreal newZoom, 
     QPoint oldOffset = t.coordinatesConverter()->documentOffset();
     QPointF oldPrefCenter = t.canvasController()->preferredCenter();
     qreal oldZoom = t.zoomController()->zoomAction()->effectiveZoom();
-    QSize oldDocumentSize = t.canvasController()->documentSize();
+    QSize oldDocumentSize = t.canvasController()->documentSize().toSize();
 
     t.zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom);
 
@@ -302,7 +302,7 @@ bool KisZoomAndPanTest::checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &wi
     QPoint oldOffset = t.coordinatesConverter()->documentOffset();
     QPointF oldPrefCenter = t.canvasController()->preferredCenter();
     qreal oldZoom = t.zoomController()->zoomAction()->effectiveZoom();
-    QSize oldDocumentSize = t.canvasController()->documentSize();
+    QSize oldDocumentSize = t.canvasController()->documentSize().toSize();
 
     t.canvasController()->zoomRelativeToPoint(widgetPoint, zoomCoeff);
 
@@ -332,13 +332,13 @@ void KisZoomAndPanTest::testZoom100ChangingWidgetSize()
     t.canvasController()->setPreferredCenter(QPoint(320,220));
 
     QCOMPARE(t.canvasWidget()->size(), QSize(983,983));
-    QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
+    QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize().toSize());
     QVERIFY(verifyOffset(t, QPoint(-171,-271)));
 
     t.canvasController()->resize(QSize(700,700));
 
     QCOMPARE(t.canvasWidget()->size(), QSize(683,683));
-    QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
+    QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize().toSize());
     QVERIFY(verifyOffset(t, QPoint(-171,-271)));
 
     t.canvasController()->setPreferredCenter(QPoint(320,220));
@@ -348,7 +348,7 @@ void KisZoomAndPanTest::testZoom100ChangingWidgetSize()
     t.canvasController()->resize(QSize(400,400));
 
     QCOMPARE(t.canvasWidget()->size(), QSize(383,383));
-    QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
+    QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize().toSize());
     QVERIFY(verifyOffset(t, QPoint(-21,-121)));
 
     t.canvasController()->setPreferredCenter(QPoint(320,220));
@@ -371,7 +371,7 @@ void KisZoomAndPanTest::initializeViewport(ZoomAndPanTester &t, bool fullscreenM
     t.canvasController()->setPreferredCenter(QPoint(320,220));
 
     QCOMPARE(t.canvasWidget()->size(), QSize(483,483));
-    QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
+    QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize().toSize());
     QVERIFY(verifyOffset(t, QPoint(79,-21)));
 
     if (fullscreenMode) {
@@ -386,7 +386,7 @@ void KisZoomAndPanTest::initializeViewport(ZoomAndPanTester &t, bool fullscreenM
 
         t.canvasController()->resize(QSize(483,483));
         QCOMPARE(t.canvasWidget()->size(), QSize(483,483));
-        QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
+        QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize().toSize());
         QVERIFY(verifyOffset(t, QPoint(79,-21)));
 
 
@@ -522,7 +522,7 @@ void KisZoomAndPanTest::testZoomOnBorderZoomLevels()
     ZoomAndPanTester t;
     initializeViewport(t, false, false, false);
 
-    QPoint widgetPoint(100,100);
+//    QPoint widgetPoint(100,100);
 
     warnKrita << "WARNING: testZoomOnBorderZoomLevels() is disabled due to some changes in KoZoomMode::minimum/maximumZoom()";
     return;
@@ -550,7 +550,7 @@ bool KisZoomAndPanTest::checkRotation(ZoomAndPanTester &t, qreal angle)
     QPointF oldCenteringCorrection = t.coordinatesConverter()->centeringCorrection();
     QPointF oldPreferredCenter = t.canvasController()->preferredCenter();
     QPointF oldRealCenterPoint = t.coordinatesConverter()->widgetToImage(t.coordinatesConverter()->widgetCenterPoint());
-    QSize oldDocumentSize = t.canvasController()->documentSize();
+    QSize oldDocumentSize = t.canvasController()->documentSize().toSize();
 
     qreal baseAngle = t.coordinatesConverter()->rotationAngle();
     t.canvasController()->rotateCanvas(angle);
@@ -560,7 +560,7 @@ bool KisZoomAndPanTest::checkRotation(ZoomAndPanTester &t, qreal angle)
     QPointF newCenteringCorrection = t.coordinatesConverter()->centeringCorrection();
     QPointF newPreferredCenter = t.canvasController()->preferredCenter();
     QPointF newRealCenterPoint = t.coordinatesConverter()->widgetToImage(t.coordinatesConverter()->widgetCenterPoint());
-    QSize newDocumentSize = t.canvasController()->documentSize();
+    QSize newDocumentSize = t.canvasController()->documentSize().toSize();
 
 
     // calculate theoretical preferred center
@@ -648,7 +648,7 @@ void KisZoomAndPanTest::testRotation(qreal vastScrolling, qreal zoom)
     t.canvasController()->setPreferredCenter(preferredCenter.toPoint());
 
     QCOMPARE(t.canvasWidget()->size(), QSize(483,483));
-    QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize());
+    QCOMPARE(t.canvasWidget()->size(), t.canvasController()->viewportSize().toSize());
 
     QPointF realCenterPoint = t.coordinatesConverter()->widgetToImage(t.coordinatesConverter()->widgetCenterPoint());
     QPointF expectedCenterPoint = QPointF(t.image()->bounds().center());

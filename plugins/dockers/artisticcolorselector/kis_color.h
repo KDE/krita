@@ -47,9 +47,7 @@ public:
              qreal lR = DEFAULT_LUMA_R, qreal lG = DEFAULT_LUMA_G,
              qreal lB = DEFAULT_LUMA_B, qreal lGamma = DEFAULT_LUMA_GAMMA);
 
-    KisColor(const KisColor& color);
-
-    KisColor(const KisColor& color, Type type,
+    KisColor(const KisColor& color, KisDisplayColorConverter *converter, Type type = HSY,
              qreal lR = DEFAULT_LUMA_R, qreal lG = DEFAULT_LUMA_G,
              qreal lB = DEFAULT_LUMA_B, qreal lGamma = DEFAULT_LUMA_GAMMA);
 
@@ -81,8 +79,6 @@ public:
         m_saturation = s;
         m_value = x;
     }
-
-    inline KisDisplayColorConverter* colorConverter() const { return m_colorConverter; }
     
 private:
     void initHSX(Type type, qreal h, qreal s, qreal x);

@@ -17,7 +17,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-//#define DEAD_TILES_SANITY_CHECK
 
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
@@ -39,10 +38,10 @@ void KisTile::init(qint32 col, qint32 row,
     m_tileData = defaultTileData;
     m_tileData->acquire();
 
-    m_mementoManager = mm;
-
-    if (m_mementoManager)
-        m_mementoManager->registerTileChange(this);
+    if (mm) {
+        mm->registerTileChange(this);
+    }
+    m_mementoManager.storeRelease(mm);
 }
 
 KisTile::KisTile(qint32 col, qint32 row,
@@ -71,26 +70,83 @@ KisTile::KisTile(const KisTile& rhs)
 
 KisTile::~KisTile()
 {
-    Q_ASSERT(!m_lockCounter);
-
 #ifdef DEAD_TILES_SANITY_CHECK
+    KIS_ASSERT(!m_lockCounter);
+
     /**
-     * We should have been disconnected from the memento manager in notifyDead().
-     * otherwise, there is a bug
+     * We should have been disconnected from the memento manager in
+     * notifyDetachedFromDataManager() or notifyDeadWithoutDetaching(),
+     * otherwise there is a bug
      */
-    Q_ASSERT(!m_mementoManager);
+
+    if (m_mementoManager) {
+        qDebug() << this << ppVar(m_sanityNumCOWHappened);
+        qDebug() << this << ppVar(m_sanityHasBeenDetached);
+        qDebug() << this << ppVar(m_sanityMMHasBeenInitializedManually);
+        qDebug() << this << ppVar(m_sanityIsDead);
+        KIS_ASSERT(0 && "m_mementoManager is still initialized during destruction");
+    }
 #endif
 
     m_tileData->release();
 }
 
-void KisTile::notifyDead()
+void KisTile::notifyDetachedFromDataManager()
 {
-    if (m_mementoManager) {
+#ifdef DEAD_TILES_SANITY_CHECK
+    sanityCheckIsNotLockedForWrite();
+#endif
+
+    if (m_mementoManager.loadAcquire()) {
         KisMementoManager *manager = m_mementoManager;
-        m_mementoManager = 0;
+        m_mementoManager.storeRelease(0);
         manager->registerTileDeleted(this);
     }
+
+#ifdef DEAD_TILES_SANITY_CHECK
+    m_sanityHasBeenDetached.ref();
+#endif
+}
+
+void KisTile::notifyDeadWithoutDetaching()
+{
+#ifdef DEAD_TILES_SANITY_CHECK
+    sanityCheckIsNotLockedForWrite();
+#endif
+
+    m_mementoManager.storeRelease(0);
+
+#ifdef DEAD_TILES_SANITY_CHECK
+    m_sanityIsDead.ref();
+#endif
+}
+
+void KisTile::notifyAttachedToDataManager(KisMementoManager *mm)
+{
+#ifdef DEAD_TILES_SANITY_CHECK
+    sanityCheckIsNotDestroyedYet();
+#endif
+
+    // TODO: check if we really need locking here
+    if (!m_mementoManager.loadAcquire()) {
+        QMutexLocker locker(&m_COWMutex);
+
+        if (!m_mementoManager.loadAcquire()) {
+
+            if (mm) {
+                mm->registerTileChange(this);
+            }
+            m_mementoManager.storeRelease(mm);
+
+#ifdef DEAD_TILES_SANITY_CHECK
+            m_sanityMMHasBeenInitializedManually.ref();
+#endif
+        }
+    }
+
+#ifdef DEAD_TILES_SANITY_CHECK
+    sanityCheckIsNotDestroyedYet();
+#endif
 }
 
 //#define DEBUG_TILE_LOCKING
@@ -162,6 +218,10 @@ inline void KisTile::safeReleaseOldTileData(KisTileData *td)
 
 void KisTile::lockForRead() const
 {
+#ifdef DEAD_TILES_SANITY_CHECK
+    m_sanityLockedForRead.ref();
+#endif
+
     DEBUG_LOG_ACTION("lock [R]");
     blockSwapping();
 }
@@ -171,6 +231,10 @@ void KisTile::lockForRead() const
 
 void KisTile::lockForWrite()
 {
+#ifdef DEAD_TILES_SANITY_CHECK
+    m_sanityLockedForWrite.ref();
+#endif
+
     blockSwapping();
 
     /* We are doing COW here */
@@ -193,19 +257,41 @@ void KisTile::lockForWrite()
 
             DEBUG_COWING(tileData);
 
-            if (m_mementoManager)
-                m_mementoManager->registerTileChange(this);
+            KisMementoManager *mm = m_mementoManager.load();
+            if (mm) {
+                mm->registerTileChange(this);
+            }
         }
         m_COWMutex.unlock();
+
+#ifdef DEAD_TILES_SANITY_CHECK
+        m_sanityNumCOWHappened.ref();
+#endif
     }
 
     DEBUG_LOG_ACTION("lock [W]");
 }
 
-void KisTile::unlock() const
+void KisTile::unlockForWrite()
 {
     unblockSwapping();
-    DEBUG_LOG_ACTION("unlock");
+    DEBUG_LOG_ACTION("unlock [W]");
+
+#ifdef DEAD_TILES_SANITY_CHECK
+    m_sanityLockedForWrite.deref();
+    KIS_ASSERT(m_sanityLockedForWrite.loadAcquire() >= 0);
+#endif
+}
+
+void KisTile::unlockForRead() const
+{
+    unblockSwapping();
+    DEBUG_LOG_ACTION("unlock [R]");
+
+#ifdef DEAD_TILES_SANITY_CHECK
+    m_sanityLockedForRead.deref();
+    KIS_ASSERT(m_sanityLockedForRead.loadAcquire() >= 0);
+#endif
 }
 
 
@@ -229,5 +315,31 @@ void KisTile::debugDumpTile()
             dbgTiles << data[(i*KisTileData::WIDTH+j)*pixelSize()];
         }
     }
-    unlock();
+    unlockForRead();
 }
+
+#ifdef DEAD_TILES_SANITY_CHECK
+
+void KisTile::sanityCheckIsNotDestroyedYet()
+{
+    if (m_lockCounter) {
+        qDebug() << this << ppVar(m_sanityLockedForRead);
+        qDebug() << this << ppVar(m_sanityLockedForWrite);
+        qDebug() << this << ppVar(m_lockCounter);
+
+        KIS_ASSERT(!m_lockCounter || !m_sanityLockedForWrite && "sanityCheckIsNotDestroyedYet() failed");
+    }
+}
+
+void KisTile::sanityCheckIsNotLockedForWrite()
+{
+    if (m_sanityHasBeenDetached.loadAcquire()) {
+        qDebug() << this << ppVar(m_sanityNumCOWHappened);
+        qDebug() << this << ppVar(m_sanityHasBeenDetached);
+        qDebug() << this << ppVar(m_sanityMMHasBeenInitializedManually);
+        qDebug() << this << ppVar(m_sanityIsDead);
+        KIS_ASSERT(0 && "sanityCheckIsNotLockedForWrite() failed");
+    }
+}
+
+#endif

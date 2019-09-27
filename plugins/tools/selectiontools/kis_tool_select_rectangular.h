@@ -23,7 +23,7 @@
 #ifndef KIS_TOOL_SELECT_RECTANGULAR_H_
 #define KIS_TOOL_SELECT_RECTANGULAR_H_
 
-#include "KoToolFactoryBase.h"
+#include "KisSelectionToolFactoryBase.h"
 #include "kis_tool_rectangle_base.h"
 #include <kis_tool_select_base.h>
 #include "kis_selection_tool_config_widget_helper.h"
@@ -55,15 +55,15 @@ class KisToolSelectRectangular : public KisToolSelectBase<__KisToolSelectRectang
 public:
     KisToolSelectRectangular(KoCanvasBase* canvas);
 
-    void resetCursorStyle();
+    void resetCursorStyle() override;
 };
 
-class KisToolSelectRectangularFactory : public KoToolFactoryBase
+class KisToolSelectRectangularFactory : public KisSelectionToolFactoryBase
 {
 
 public:
     KisToolSelectRectangularFactory()
-        : KoToolFactoryBase("KisToolSelectRectangular")
+        : KisSelectionToolFactoryBase("KisToolSelectRectangular")
     {
         setToolTip(i18n("Rectangular Selection Tool"));
         setSection(TOOL_TYPE_SELECTION);

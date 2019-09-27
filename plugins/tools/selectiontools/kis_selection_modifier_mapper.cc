@@ -39,7 +39,7 @@
 #include "kis_config_notifier.h"
 #include "kis_config.h"
 
-Q_GLOBAL_STATIC(KisSelectionModifierMapper, s_instance);
+Q_GLOBAL_STATIC(KisSelectionModifierMapper, s_instance)
 
 
 // This numerically serializes modifier flags... let's keep it around for later.
@@ -59,6 +59,7 @@ struct Q_DECL_HIDDEN KisSelectionModifierMapper::Private
     Qt::KeyboardModifiers intersectModifiers;
     Qt::KeyboardModifiers addModifiers;
     Qt::KeyboardModifiers subtractModifiers;
+    Qt::KeyboardModifiers symmetricdifferenceModifiers;
 };
 
 
@@ -94,10 +95,12 @@ void KisSelectionModifierMapper::Private::slotConfigChanged()
         replaceModifiers   = Qt::ControlModifier;
         intersectModifiers = (Qt::KeyboardModifiers)(Qt::AltModifier | Qt::ShiftModifier);
         subtractModifiers  = Qt::AltModifier;
+        symmetricdifferenceModifiers = (Qt::KeyboardModifiers)(Qt::ControlModifier | Qt::AltModifier);
     } else {
         replaceModifiers   = Qt::AltModifier;
         intersectModifiers = (Qt::KeyboardModifiers)(Qt::ControlModifier | Qt::ShiftModifier);
         subtractModifiers  = Qt::ControlModifier;
+        symmetricdifferenceModifiers = (Qt::KeyboardModifiers)(Qt::ShiftModifier | Qt::ControlModifier);
     }
 
     addModifiers = Qt::ShiftModifier;
@@ -119,6 +122,9 @@ SelectionAction KisSelectionModifierMapper::Private::map(Qt::KeyboardModifiers m
         newAction = SELECTION_ADD;
     } else if (m == subtractModifiers) {
         newAction = SELECTION_SUBTRACT;
+    } else if (m == symmetricdifferenceModifiers) {
+        newAction = SELECTION_SYMMETRICDIFFERENCE;
     }
+        
     return newAction;
 }

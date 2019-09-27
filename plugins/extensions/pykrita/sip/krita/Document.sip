@@ -68,7 +68,8 @@ public Q_SLOTS:
     FilterLayer *createFilterLayer(const QString &name, Filter &filter, Selection &selection) /Factory/;
     FillLayer *createFillLayer(const QString &name, const QString filterName, InfoObject &configuration, Selection &selection) /Factory/;
     VectorLayer *createVectorLayer(const QString &name) /Factory/;
-    FilterMask *createFilterMask(const QString &name, Filter &filter) /Factory/;
+    FilterMask *createFilterMask(const QString &name, Filter &filter, Selection &selection) /Factory/;
+    FilterMask *createFilterMask(const QString &name, Filter &filter, const Node *selection_source) /Factory/;
     SelectionMask *createSelectionMask(const QString &name) /Factory/;
     QImage projection(int x = 0, int y = 0, int w = 0, int h = 0) const;
     QImage thumbnail(int w, int h) const;
@@ -84,6 +85,20 @@ public Q_SLOTS:
     void setGuidesLocked(bool locked);
     bool modified() const;
     QRect bounds() const;
+    bool importAnimation(const QList<QString> &files, int firstFrame, int step);
+    int framesPerSecond();
+    void setFramesPerSecond(int fps);
+    void setFullClipRangeStartTime(int startTime);
+    int fullClipRangeStartTime();
+    void setFullClipRangeEndTime(int endTime);
+    int fullClipRangeEndTime();
+    int animationLength();
+    void setPlayBackRange(int start, int stop);
+    int playBackStartTime();
+    int playBackEndTime();
+    int currentTime();
+    void setCurrentTime(int time);
+
 private:
 
 };

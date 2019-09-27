@@ -26,7 +26,7 @@
 #include <QStyledItemDelegate>
 
 /**
- * This delegate draw categories using information from a \ref KCategorizedSortFilterProxyModel .
+ * This delegate draw categories using information from a QSortFilterProxyModel.
  */
 class KRITAUI_EXPORT KisCategorizedItemDelegate: public QStyledItemDelegate
 {

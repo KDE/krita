@@ -40,6 +40,8 @@ private Q_SLOTS:
     void testFromSymbol();
     void testListForUi_data();
     void testListForUi();
+    void testToUserValue_data();
+    void testToUserValue();
 };
 
 #endif

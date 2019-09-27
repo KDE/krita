@@ -303,7 +303,6 @@ private:
 
         // add terminator to string
         QString expr = m_token + QChar();
-        QChar ch;
         int i = 0;
         state = Start;
 
@@ -366,7 +365,6 @@ private:
                             token += ch;
                     }
                     break;
-                case Bad:
                 default:
                     break;
             }
@@ -526,7 +524,6 @@ public:
     {
         // add terminator to string
         QString expr = selector + QChar();
-        QChar lastCh;
         enum {
             Finish,
             Bad,
@@ -583,7 +580,6 @@ public:
                         tokenList.append(CssToken(SelectorToken, simpleSelector));
                     }
                     break;
-                case Bad:
                 default:
                     break;
             }

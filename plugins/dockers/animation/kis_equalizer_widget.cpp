@@ -51,6 +51,7 @@ KisEqualizerWidget::KisEqualizerWidget(int maxDistance, QWidget *parent)
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setSpacing(0);
+    layout->setMargin(0);
 
     for (int i = -m_d->maxDistance; i <= m_d->maxDistance; i++) {
         KisEqualizerColumn *c = new KisEqualizerColumn(this, i, QString::number(i));

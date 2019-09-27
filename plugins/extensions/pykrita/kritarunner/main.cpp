@@ -34,7 +34,7 @@ extern "C" int main(int argc, char **argv)
     qsrand(time(0));
     KLocalizedString::setApplicationDomain("kritarunner");
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
-    KisOpenGL::setDefaultFormat();
+    KisOpenGL::testingInitializeDefaultSurfaceFormat();
 
 
     // first create the application so we can create a pixmap
@@ -55,7 +55,7 @@ extern "C" int main(int argc, char **argv)
                                       "The function to call (by default __main__ is called).", "function", "__main__");
     parser.addOption(functionOption);
 
-    parser.addPositionalArgument("[argument(s)]", "The argumetns for the script");
+    parser.addPositionalArgument("[argument(s)]", "The arguments for the script");
     parser.process(app);
 
     if (!parser.isSet(scriptOption)) {

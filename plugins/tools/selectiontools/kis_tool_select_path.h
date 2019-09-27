@@ -21,7 +21,7 @@
 #define KIS_TOOL_SELECT_PATH_H_
 
 #include <KoCreatePathTool.h>
-#include <KoToolFactoryBase.h>
+#include <KisSelectionToolFactoryBase.h>
 #include "kis_tool_select_base.h"
 #include "kis_delegated_tool.h"
 
@@ -33,7 +33,7 @@ class KisToolSelectPath;
 
 class __KisToolSelectPathLocalTool : public KoCreatePathTool {
 public:
-    __KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool);
+    __KisToolSelectPathLocalTool(KoCanvasBase *canvas, KisToolSelectPath *parentTool);
     void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter) override;
     void addPathShape(KoPathShape* pathShape) override;
 
@@ -53,9 +53,10 @@ DeselectShapesActivationPolicy> DelegatedSelectPathTool;
 struct KisDelegatedSelectPathWrapper : public DelegatedSelectPathTool {
     KisDelegatedSelectPathWrapper(KoCanvasBase *canvas,
                                   const QCursor &cursor,
-                                  KisTool* delegateTool)
-        : DelegatedSelectPathTool(canvas, cursor, (__KisToolSelectPathLocalTool*) delegateTool)
+                                  KoToolBase *delegateTool)
+        : DelegatedSelectPathTool(canvas, cursor, dynamic_cast<__KisToolSelectPathLocalTool*>(delegateTool))
     {
+        Q_ASSERT(dynamic_cast<__KisToolSelectPathLocalTool*>(delegateTool));
     }
 
     // If an event is explicitly forwarded only as an action (e.g. shift-click is captured by "change size")
@@ -63,6 +64,13 @@ struct KisDelegatedSelectPathWrapper : public DelegatedSelectPathTool {
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
+    void beginPrimaryDoubleClickAction(KoPointerEvent *event) override;
+
+
+    void mousePressEvent(KoPointerEvent *event) override;
+    void mouseMoveEvent(KoPointerEvent *event) override;
+    void mouseReleaseEvent(KoPointerEvent *event) override;
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
 
     bool hasUserInteractionRunning() const;
 };
@@ -73,9 +81,8 @@ class KisToolSelectPath : public KisToolSelectBase<KisDelegatedSelectPathWrapper
     Q_OBJECT
 public:
     KisToolSelectPath(KoCanvasBase * canvas);
-    void mousePressEvent(KoPointerEvent* event) override;
     bool eventFilter(QObject *obj, QEvent *event) override;
-    void resetCursorStyle();
+    void resetCursorStyle() override;
 
 protected:
     void requestStrokeCancellation() override;
@@ -84,11 +91,11 @@ protected:
     QList<QPointer<QWidget> > createOptionWidgets() override;
 };
 
-class KisToolSelectPathFactory : public KoToolFactoryBase
+class KisToolSelectPathFactory : public KisSelectionToolFactoryBase
 {
 public:
     KisToolSelectPathFactory()
-        : KoToolFactoryBase("KisToolSelectPath") {
+        : KisSelectionToolFactoryBase("KisToolSelectPath") {
         setToolTip(i18n("Bezier Curve Selection Tool"));
         setSection(TOOL_TYPE_SELECTION);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

@@ -68,7 +68,7 @@ KisAsyncAnimationFramesSaveDialog::KisAsyncAnimationFramesSaveDialog(KisImageSP 
                                                                      const QString &baseFilename,
                                                                      int sequenceNumberingOffset,
                                                                      KisPropertiesConfigurationSP exportConfiguration)
-    : KisAsyncAnimationRenderDialogBase("Saving frames...", originalImage, 0),
+    : KisAsyncAnimationRenderDialogBase(i18n("Saving frames..."), originalImage, 0),
       m_d(new Private(originalImage, range, baseFilename, sequenceNumberingOffset, exportConfiguration))
 {
 

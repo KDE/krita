@@ -36,7 +36,7 @@ class KRITAUI_EXPORT KisScreenColorPicker : public KisScreenColorPickerBase
 {
     Q_OBJECT
 public:
-    explicit KisScreenColorPicker(QWidget *parent = 0);
+    explicit KisScreenColorPicker(bool showInfoLabel = false, QWidget *parent = 0);
     ~KisScreenColorPicker() override;
 
     KoColor currentColor();
@@ -52,7 +52,6 @@ public:
 
 Q_SIGNALS:
     void sigNewColorPicked(KoColor c);
-    void sigPleaseDisableEverything(bool disable);
 
 public Q_SLOTS:
     void pickScreenColor();

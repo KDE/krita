@@ -112,6 +112,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="chkForcePaletteColor">
+         <property name="text">
+          <string>Enforce palette colors: always select the nearest color from the active palette.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

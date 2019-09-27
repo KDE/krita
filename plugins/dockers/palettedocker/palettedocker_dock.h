@@ -36,6 +36,7 @@
 #include <kis_canvas2.h>
 #include <kis_mainwindow_observer.h>
 #include <KisView.h>
+#include <kis_signal_auto_connection.h>
 
 class KisViewManager;
 class KisCanvasResourceProvider;
@@ -82,6 +83,9 @@ private Q_SLOTS:
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
 
+    void slotFGColorResourceChanged(const KoColor& color);
+    void slotUpdatePaletteList(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList);
+
 private:
     void setEntryByForeground(const QModelIndex &index);
     void setFGColorByPalette(const KisSwatch &entry);
@@ -105,6 +109,10 @@ private /* member variables */:
     QScopedPointer<QAction> m_actModify;
     QScopedPointer<QAction> m_actEditPalette;
     QMenu m_viewContextMenu;
+
+    bool m_colorSelfUpdate;
+
+    KisSignalAutoConnectionsStore m_connections;
 };
 
 

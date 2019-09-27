@@ -43,8 +43,8 @@ public:
      * The createCommand will make sure that the group will have the z-index and the parent of the top most shape in the group.
      *
      * @param container the group to group the shapes under.
-     * @param parent the parent command if the resulting command is a compound undo command.
      * @param shapes a list of all the shapes that should be grouped.
+     * @param shouldNormalize whether the shapes should be normalized
      */
     static KoShapeGroupCommand *createCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, bool shouldNormalize = false);
 
@@ -52,10 +52,7 @@ public:
      * Command to group a set of shapes into a predefined container.
      * @param container the container to group the shapes under.
      * @param shapes a list of all the shapes that should be grouped.
-     * @param clipped shows whether the shapes should be clipped by the container
-     *      See KoShapeContainer::isClipped()
-     * @param inheritTransform shows whether the shapes should inherit the parent transformation
-     *      See KoShapeContainer::inheritsTransform()
+     * @param shouldNormalize shows whether the shapes should be normalized by the container
      * @param parent the parent command used for macro commands
      */
     KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, bool shouldNormalize, KUndo2Command *parent = 0);

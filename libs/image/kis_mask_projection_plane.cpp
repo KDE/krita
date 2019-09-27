@@ -79,3 +79,8 @@ QRect KisMaskProjectionPlane::accessRect(const QRect &rect, KisNode::PositionToF
     return m_d->mask->accessRect(rect, pos);
 }
 
+QRect KisMaskProjectionPlane::needRectForOriginal(const QRect &rect) const
+{
+    return rect;
+}
+

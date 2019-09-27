@@ -50,7 +50,7 @@ EnhancedPathShape::EnhancedPathShape(const QRect &viewBox)
 }
 
 EnhancedPathShape::EnhancedPathShape(const EnhancedPathShape &rhs)
-    : KoParameterShape(new KoParameterShapePrivate(*rhs.d_func(), this)),
+    : KoParameterShape(rhs),
       m_viewBox(rhs.m_viewBox),
       m_viewBound(rhs.m_viewBound),
       m_viewMatrix(rhs.m_viewMatrix),
@@ -66,7 +66,7 @@ EnhancedPathShape::EnhancedPathShape(const EnhancedPathShape &rhs)
       m_mirrorHorizontally(rhs.m_mirrorHorizontally),
       m_pathStretchPointX(rhs.m_pathStretchPointX),
       m_pathStretchPointY(rhs.m_pathStretchPointY),
-      m_resultChache(rhs.m_resultChache),
+      m_resultCache(rhs.m_resultCache),
       m_cacheResults(rhs.m_cacheResults)
 {
 }
@@ -110,8 +110,6 @@ void EnhancedPathShape::moveHandleAction(int handleId, const QPointF &point, Qt:
 
 void EnhancedPathShape::updatePath(const QSizeF &size)
 {
-    Q_D(KoParameterShape);
-
     if (isParametricShape()) {
         clear();
         enableResultCache(true);
@@ -140,7 +138,7 @@ void EnhancedPathShape::updatePath(const QSizeF &size)
         } else {
             matrix = m_mirrorMatrix * m_viewMatrix * matrix;
         }
-        foreach (KoSubpath *subpath, d->subpaths) {
+        foreach (KoSubpath *subpath, subpaths()) {
             foreach (KoPathPoint *point, *subpath) {
                 point->map(matrix);
             }
@@ -223,8 +221,8 @@ qreal EnhancedPathShape::evaluateReference(const QString &reference)
     // referenced formula
     case '?': {
         QString fname = reference.mid(1);
-        if (m_cacheResults && m_resultChache.contains(fname)) {
-            res = m_resultChache.value(fname);
+        if (m_cacheResults && m_resultCache.contains(fname)) {
+            res = m_resultCache.value(fname);
         } else {
             FormulaStore::const_iterator formulaIt = m_formulae.constFind(fname);
             if (formulaIt != m_formulae.constEnd()) {
@@ -232,7 +230,7 @@ qreal EnhancedPathShape::evaluateReference(const QString &reference)
                 if (formula) {
                     res = formula->evaluate();
                     if (m_cacheResults) {
-                        m_resultChache.insert(fname, res);
+                        m_resultCache.insert(fname, res);
                     }
                 }
             }
@@ -416,15 +414,13 @@ void EnhancedPathShape::addCommand(const QString &command, bool triggerUpdate)
 
 bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
 {
-    Q_D(KoParameterShape);
-
     bool retval = false;
     if (m_pathStretchPointX != -1 && m_pathStretchPointY != -1) {
         qreal scaleX = size.width();
         qreal scaleY = size.height();
         if (qreal(m_viewBox.width()) / m_viewBox.height() < qreal(scaleX) / scaleY) {
             qreal deltaX = (scaleX * m_viewBox.height()) / scaleY - m_viewBox.width();
-            foreach (KoSubpath *subpath, d->subpaths) {
+            foreach (KoSubpath *subpath, subpaths()) {
                 foreach (KoPathPoint *currPoint, *subpath) {
                     if (currPoint->point().x() >=  m_pathStretchPointX &&
                             currPoint->controlPoint1().x() >= m_pathStretchPointX &&
@@ -441,7 +437,7 @@ bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
             scale = scaleY / m_viewBox.height();
         } else if (qreal(m_viewBox.width()) / m_viewBox.height() > qreal(scaleX) / scaleY) {
             qreal deltaY = (m_viewBox.width() * scaleY) / scaleX - m_viewBox.height();
-            foreach (KoSubpath *subpath, d->subpaths) {
+            foreach (KoSubpath *subpath, subpaths()) {
                 foreach (KoPathPoint *currPoint, *subpath) {
                     if (currPoint->point().y() >=  m_pathStretchPointY &&
                             currPoint->controlPoint1().y() >= m_pathStretchPointY &&
@@ -723,7 +719,7 @@ void EnhancedPathShape::updateTextArea()
 
 void EnhancedPathShape::enableResultCache(bool enable)
 {
-    m_resultChache.clear();
+    m_resultCache.clear();
     m_cacheResults = enable;
 }
 

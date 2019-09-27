@@ -59,7 +59,14 @@ public:
     void cursorMoved(const QPointF &cursorPos);
 
     /**
-     * @param pixelCoords - The position of the KoPointerEvent, in pixel coordinates.
+     * @param event The event
+     * @param pixelCoords The position of the KoPointerEvent, in pixel coordinates.
+     * @param resourceManager The canvas resource manager
+     * @param image The image
+     * @param currentNode The current node
+     * @param strokesFacade The strokes facade
+     * @param overrideNode The override node
+     * @param bounds The bounds
      */
     void initPaint(KoPointerEvent *event,
                    const QPointF &pixelCoords,
@@ -76,10 +83,7 @@ public:
                                 const KoPointerEvent *event,
                                 const KisPaintOpSettingsSP globalSettings,
                                 KisPaintOpSettings::OutlineMode mode) const;
-    int canvasRotation();
-    void setCanvasRotation(int rotation = 0);
-    bool canvasMirroredH();
-    void setCanvasHorizontalMirrorState (bool mirrored = false);
+
 Q_SIGNALS:
     /**
      * The signal is emitted when the outline should be updated
@@ -147,7 +151,6 @@ private:
 private Q_SLOTS:
     void finishStroke();
     void doAirbrushing();
-    void doAsynchronousUpdate(bool forceUpdate = false);
     void stabilizerPollAndPaint();
     void slotSmoothingTypeChanged();
 

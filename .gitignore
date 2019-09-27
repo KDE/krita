@@ -1,5 +1,6 @@
 *.orig
 __pycache__
+*.egg-info
 *.trace
 build
 qtcreator-build
@@ -27,3 +28,5 @@ GSYMS
 BROWSE
 *.kate-swp
 /po/
+build_dir
+.flatpak-builder

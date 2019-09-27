@@ -59,7 +59,7 @@ void TestKoUnit::testPixelConstructor()
 {
     KoUnit unit(KoUnit::Pixel, 0.5);
     QCOMPARE(unit.type(), KoUnit::Pixel);
-    QCOMPARE(KoUnit::ptToUnit(100, unit), (qreal)50);
+    QCOMPARE(unit.toUserValue(100, false), (qreal)50);
 }
 
 void TestKoUnit::testAssignOperator_data()
@@ -157,6 +157,56 @@ void TestKoUnit::testListForUi()
     KoUnit unit = KoUnit::fromListForUi(index, listOptions);
 
     QCOMPARE(unit.indexInListForUi(listOptions), index);
+}
+
+
+void TestKoUnit::testToUserValue_data()
+{
+    // regression test to check whether changes in KoUnit changes the conversion output
+
+    QTest::addColumn<KoUnit::Type>("type");
+    QTest::addColumn<qreal>("value");
+    QTest::addColumn<qreal>("expected");
+    QTest::addColumn<qreal>("expectedRounded");
+
+
+    // 1000.0
+    QTest::newRow("point 1000") << KoUnit::Point << 1000.0 << 1000.0 << 1000.0;
+    QTest::newRow("pica 1000") << KoUnit::Pica  << 1000.0 << 83.3333330000 << 83.3333300000;
+    QTest::newRow("pixel 1000") << KoUnit::Pixel << 1000.0 << 1000.0 << 1000.0;
+    QTest::newRow("inch 1000") << KoUnit::Inch << 1000.0 << 13.8888888889 << 13.8888800000;
+    QTest::newRow("decimeter 1000") << KoUnit::Decimeter  << 1000.0 << 3.5277716700 << 3.5277000000;
+
+    // 1.37
+    QTest::newRow("point 1.37") << KoUnit::Point << 1.37 << 1.37 << 1.37;
+    QTest::newRow("pica 1.37") << KoUnit::Pica  << 1.37 << 0.114166666210 << 0.1141600000;
+    QTest::newRow("pixel 1.37") << KoUnit::Pixel << 1.37 << 1.37 << 1.37;
+    QTest::newRow("inch 1.37") << KoUnit::Inch << 1.37 << 0.019027777777779 << 0.019020000000;
+    QTest::newRow("decimeter 1.37") << KoUnit::Decimeter  << 1.37 <<  0.004833047187900 << 0.004800000000;
+
+    // 0.0001111
+    QTest::newRow("point 0.0001111") << KoUnit::Point << 0.0001111 << 0.000111100000  << 0.0 ;
+    QTest::newRow("pica 0.0001111") << KoUnit::Pica  << 0.0001111 << 0.00000925833329630 << 0.0;
+    QTest::newRow("pixel 0.0001111") << KoUnit::Pixel << 0.0001111 << 0.000111100000  << 0.000111100000 ;
+    QTest::newRow("inch 0.0001111") << KoUnit::Inch << 0.0001111 << 0.00000154305555555568 << 0.0;
+    QTest::newRow("decimeter 0.0001111") << KoUnit::Decimeter  << 0.0001111 << 0.00000039193543253700 << 0.0;
+}
+
+void TestKoUnit::testToUserValue()
+{
+    QFETCH(KoUnit::Type, type);
+    QFETCH(qreal, value);
+    QFETCH(qreal, expected);
+    QFETCH(qreal, expectedRounded);
+
+    KoUnit unit = KoUnit(type);
+
+    qreal exphere = unit.toUserValue(value, false);
+    qreal expRound = unit.toUserValue(value, true);
+
+    QCOMPARE(exphere, expected);
+    QCOMPARE(expRound, expectedRounded);
+
 }
 
 QTEST_GUILESS_MAIN(TestKoUnit)

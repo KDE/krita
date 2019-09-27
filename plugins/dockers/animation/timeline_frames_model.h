@@ -134,6 +134,7 @@ public:
         virtual ~NodeManipulationInterface() {}
         virtual KisLayerSP addPaintLayer() const = 0;
         virtual void removeNode(KisNodeSP node) const = 0;
+        virtual bool setNodeProperties(KisNodeSP node, KisImageSP image, KisBaseNode::PropertyList properties) const = 0;
     };
 
     /**
@@ -141,9 +142,9 @@ public:
      *       be deleted automatically later
      */
     void setNodeManipulationInterface(NodeManipulationInterface *iface);
+    KisNodeSP nodeAt(QModelIndex index) const override;
 
 protected:
-    KisNodeSP nodeAt(QModelIndex index) const override;
     QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const override;
 
 private Q_SLOTS:

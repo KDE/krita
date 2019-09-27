@@ -84,10 +84,6 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     m_gradientWidget = new KisIconWidget(parent, "gradients");
     m_gradientWidget->setToolTip(i18n("Gradients"));
     m_gradientWidget->setFixedSize(32, 32);
-
-    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
-    m_gradientWidget->setResourceAdapter(adapter);
 }
 
 void KisControlFrame::setup(QWidget *parent)
@@ -109,20 +105,20 @@ void KisControlFrame::setup(QWidget *parent)
     // XXX: KOMVC we don't have a canvas here yet, needs a setImageView
     const KoColorDisplayRendererInterface *displayRenderer = \
         KisDisplayColorConverter::dumbConverterInstance()->displayRendererInterface();
-    m_dual = new KoDualColorButton(m_viewManager->resourceProvider()->fgColor(),
-                                                     m_viewManager->resourceProvider()->bgColor(), displayRenderer,
+    m_dual = new KoDualColorButton(m_viewManager->canvasResourceProvider()->fgColor(),
+                                                     m_viewManager->canvasResourceProvider()->bgColor(), displayRenderer,
                                                      m_viewManager->mainWindow(), m_viewManager->mainWindow());
     m_dual->setPopDialog(true);
     action = new QWidgetAction(this);
     action->setText(i18n("&Color"));
     m_viewManager->actionCollection()->addAction("dual", action);
     action->setDefaultWidget(m_dual);
-    connect(m_dual, SIGNAL(foregroundColorChanged(KoColor)), m_viewManager->resourceProvider(), SLOT(slotSetFGColor(KoColor)));
-    connect(m_dual, SIGNAL(backgroundColorChanged(KoColor)), m_viewManager->resourceProvider(), SLOT(slotSetBGColor(KoColor)));
-    connect(m_viewManager->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_dual, SLOT(setForegroundColor(KoColor)));
-    connect(m_viewManager->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_dual, SLOT(setBackgroundColor(KoColor)));
-    connect(m_viewManager->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
-    connect(m_viewManager->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
+    connect(m_dual, SIGNAL(foregroundColorChanged(KoColor)), m_viewManager->canvasResourceProvider(), SLOT(slotSetFGColor(KoColor)));
+    connect(m_dual, SIGNAL(backgroundColorChanged(KoColor)), m_viewManager->canvasResourceProvider(), SLOT(slotSetBGColor(KoColor)));
+    connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_dual, SLOT(setForegroundColor(KoColor)));
+    connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_dual, SLOT(setBackgroundColor(KoColor)));
+    connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
+    connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
     m_dual->setFixedSize(28, 28);
     connect(m_viewManager, SIGNAL(viewChanged()), SLOT(slotUpdateDisplayRenderer()));
 
@@ -148,13 +144,13 @@ void KisControlFrame::slotUpdateDisplayRenderer()
 
 void KisControlFrame::slotSetPattern(KoPattern * pattern)
 {
-    m_patternWidget->slotSetItem(pattern);
+    m_patternWidget->setResource(pattern);
     m_patternChooser->setCurrentPattern(pattern);
 }
 
 void KisControlFrame::slotSetGradient(KoAbstractGradient * gradient)
 {
-    m_gradientWidget->slotSetItem(gradient);
+    m_gradientWidget->setResource(gradient);
 }
 
 void KisControlFrame::createPatternsChooser(KisViewManager * view)
@@ -184,17 +180,17 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
     m_patternsTab->addTab(customPatterns, i18n("Custom Pattern"));
 
     connect(m_patternChooser, SIGNAL(resourceSelected(KoResource*)),
-            view->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
+            view->canvasResourceProvider(), SLOT(slotPatternActivated(KoResource*)));
 
     connect(customPatterns, SIGNAL(activatedResource(KoResource*)),
-            view->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
+            view->canvasResourceProvider(), SLOT(slotPatternActivated(KoResource*)));
 
-    connect(view->resourceProvider(), SIGNAL(sigPatternChanged(KoPattern*)),
+    connect(view->canvasResourceProvider(), SIGNAL(sigPatternChanged(KoPattern*)),
             this, SLOT(slotSetPattern(KoPattern*)));
 
     m_patternChooser->setCurrentItem(0, 0);
-    if (m_patternChooser->currentResource() && view->resourceProvider()) {
-        view->resourceProvider()->slotPatternActivated(m_patternChooser->currentResource());
+    if (m_patternChooser->currentResource() && view->canvasResourceProvider()) {
+        view->canvasResourceProvider()->slotPatternActivated(m_patternChooser->currentResource());
     }
 
     m_patternWidget->setPopupWidget(m_patternChooserPopup);
@@ -225,16 +221,16 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
     m_gradientTab->addTab(m_gradientChooser, i18n("Gradients"));
 
     connect(m_gradientChooser, SIGNAL(resourceSelected(KoResource*)),
-            view->resourceProvider(), SLOT(slotGradientActivated(KoResource*)));
+            view->canvasResourceProvider(), SLOT(slotGradientActivated(KoResource*)));
 
     connect (view->mainWindow(), SIGNAL(themeChanged()), m_gradientChooser, SLOT(slotUpdateIcons()));
 
-    connect(view->resourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradient*)),
+    connect(view->canvasResourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradient*)),
             this, SLOT(slotSetGradient(KoAbstractGradient*)));
 
     m_gradientChooser->setCurrentItem(0, 0);
-    if (m_gradientChooser->currentResource() && view->resourceProvider())
-        view->resourceProvider()->slotGradientActivated(m_gradientChooser->currentResource());
+    if (m_gradientChooser->currentResource() && view->canvasResourceProvider())
+        view->canvasResourceProvider()->slotGradientActivated(m_gradientChooser->currentResource());
 
     m_gradientWidget->setPopupWidget(m_gradientChooserPopup);
 

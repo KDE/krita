@@ -97,7 +97,10 @@ void KoColorConversionSystem::insertColorSpace(const KoColorSpaceFactory* csf)
                 } else {
                     engineNode = insertEngine(engine);
                 }
-                connectToEngine(n, engineNode);
+
+                if (engine->supportsColorSpace(modelId, depthId, profile)) {
+                    connectToEngine(n, engineNode);
+                }
             }
         }
     }
@@ -138,7 +141,10 @@ void KoColorConversionSystem::insertColorProfile(const KoColorProfile* _profile)
             Q_ASSERT(engine);
             Node* engineNode = d->graph[ NodeKey(engine->id(), engine->id(), engine->id())];
             Q_ASSERT(engineNode);
-            connectToEngine(n, engineNode);
+
+            if (engine->supportsColorSpace(modelId, depthId, _profile)) {
+                connectToEngine(n, engineNode);
+            }
         }
         const QList<KoColorConversionTransformationFactory*> cctfs = factory->colorConversionLinks();
         Q_FOREACH (KoColorConversionTransformationFactory* cctf, cctfs) {

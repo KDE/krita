@@ -21,7 +21,7 @@
 #define KIS_OPENGL_CANVAS_2_H
 
 #include <QOpenGLWidget>
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
 #include <QOpenGLFunctions>
 #else
 #include <QOpenGLFunctions_3_2_Core>
@@ -38,7 +38,7 @@ class QOpenGLShaderProgram;
 class QPainterPath;
 
 #ifndef Q_MOC_RUN
-#ifndef Q_OS_OSX
+#ifndef Q_OS_MACOS
 #define GLFunctions QOpenGLFunctions
 #else
 #define GLFunctions QOpenGLFunctions_3_2_Core
@@ -83,9 +83,11 @@ public:
 
 public: // Implement kis_abstract_canvas_widget interface
     void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) override;
+    void notifyImageColorSpaceChanged(const KoColorSpace *cs) override;
+
     void setWrapAroundViewingMode(bool value) override;
     void channelSelectionChanged(const QBitArray &channelFlags) override;
-    void setDisplayProfile(KisDisplayColorConverter *colorConverter) override;
+    void setDisplayColorConverter(KisDisplayColorConverter *colorConverter) override;
     void finishResizingImage(qint32 w, qint32 h) override;
     KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags) override;
     QRect updateCanvasProjection(KisUpdateInfoSP info) override;
@@ -106,6 +108,9 @@ public Q_SLOTS:
     void slotConfigChanged();
     void slotPixelGridModeChanged();
 
+private Q_SLOTS:
+    void slotShowFloatingMessage(const QString &message, int timeout, bool priority);
+
 protected: // KisCanvasWidgetBase
     bool callFocusNextPrevChild(bool next) override;
 
@@ -117,6 +122,8 @@ private:
     void drawImage();
     void drawCheckers();
     void drawGrid();
+    QSize viewportDevicePixelSize() const;
+    QSizeF widgetSizeAlignedToDevicePixel() const;
 
 private:
 

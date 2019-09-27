@@ -53,22 +53,17 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->setSynced(true);
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
-            this, SLOT(update(KoResource *)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SLOT(update(KoResource*)));
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
-            this, SIGNAL(resourceSelected(KoResource *)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SIGNAL(resourceSelected(KoResource*)));
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     mainLayout->setMargin(0);
     mainLayout->addWidget(m_lblName);
     mainLayout->addWidget(m_itemChooser, 10);
-
-    KisConfig cfg(true);
-    m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
-                                             cfg.kineticScrollingSensitivity(),
-                                             cfg.kineticScrollingScrollbar());
 
     setLayout(mainLayout);
 }

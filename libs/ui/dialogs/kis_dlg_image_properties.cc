@@ -46,7 +46,7 @@
 #include <kis_image_config.h>
 
 #include "widgets/kis_cmb_idlist.h"
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 #include "kis_layer_utils.h"
 
 
@@ -163,14 +163,7 @@ void KisDlgImageProperties::setProofingConfig()
 
         m_proofingConfig->conversionFlags = KoColorConversionTransformation::HighQuality;
 
-#if QT_VERSION >= 0x050700
         m_proofingConfig->conversionFlags.setFlag(KoColorConversionTransformation::BlackpointCompensation, m_page->ckbBlackPointComp->isChecked());
-#else
-        m_page->ckbBlackPointComp->isChecked() ?
-            m_proofingConfig->conversionFlags |= KoColorConversionTransformation::BlackpointCompensation
-            : m_proofingConfig->conversionFlags = m_proofingConfig->conversionFlags & ~KoColorConversionTransformation::BlackpointCompensation;
-
-#endif
         m_proofingConfig->intent = (KoColorConversionTransformation::Intent)m_page->cmbIntent->currentIndex();
         m_proofingConfig->proofingProfile = m_page->proofSpaceSelector->currentColorSpace()->profile()->name();
         m_proofingConfig->proofingModel = m_page->proofSpaceSelector->currentColorSpace()->colorModelId().id();

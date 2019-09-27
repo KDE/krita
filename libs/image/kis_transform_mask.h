@@ -64,6 +64,7 @@ public:
 
     QRect extent() const override;
     QRect exactBounds() const override;
+    QRect sourceDataBounds() const;
 
     void setTransformParams(KisTransformMaskParamsInterfaceSP params);
     KisTransformMaskParamsInterfaceSP transformParams() const;
@@ -75,6 +76,7 @@ public:
     void setY(qint32 y) override;
 
     void forceUpdateTimedNode() override;
+    bool hasPendingTimedUpdates() const override;
 
     void threadSafeForceStaticImageUpdate();
 

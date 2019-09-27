@@ -38,7 +38,7 @@ void KRITAIMAGE_EXPORT kis_debug_save_device_incremental(KisPaintDeviceSP device
  * called. That is very convenient for debugging canvas updates:
  * adding this macro will let you track the whole history of updates.
  *
- * The files are saved with pattern: <counter>_<suffix>.png
+ * The files are saved with pattern: \<counter\>_\<suffix\>.png
  */
 #define KIS_DUMP_DEVICE_1(device, rc, suffix)                           \
     do {                                                                \
@@ -56,7 +56,7 @@ void KRITAIMAGE_EXPORT kis_debug_save_device_incremental(KisPaintDeviceSP device
  * The \p prefix parameter makes it easy to sort out dumps from
  * different functions.
  *
- * The files are saved with pattern: <prefix>_<counter>_<suffix>.png
+ * The files are saved with pattern: \<prefix\>_\<counter\>_\<suffix\>.png
  */
 #define KIS_DUMP_DEVICE_2(device, rc, suffix, prefix)                   \
     do {                                                                \

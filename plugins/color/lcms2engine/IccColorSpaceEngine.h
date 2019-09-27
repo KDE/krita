@@ -40,6 +40,8 @@ public:
             KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::Intent proofingIntent,
             KoColorConversionTransformation::ConversionFlags conversionFlags, quint8 *gamutWarning, double adaptationState) const override;
     quint32 computeColorSpaceType(const KoColorSpace *cs) const;
+
+    bool supportsColorSpace(const QString& colorModelId, const QString& colorDepthId, const KoColorProfile *profile) const override;
 private:
     struct Private;
     Private *const d;

@@ -122,13 +122,13 @@ void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument 
     QFont font(format.font(), pd);
     QTextLayout layout(d->value, font, pd);
     layout.setCacheEnabled(true);
-    QList<QTextLayout::FormatRange> layouts;
+    QVector<QTextLayout::FormatRange> layouts;
     QTextLayout::FormatRange range;
     range.start = 0;
     range.length = d->value.length();
     range.format = format;
     layouts.append(range);
-    layout.setAdditionalFormats(layouts);
+    layout.setFormats(layouts);
 
     QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
     if (object.isValid()) {

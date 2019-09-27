@@ -25,11 +25,10 @@
 
 #include "kis_tool_shape.h"
 #include "kis_types.h"
-#include "KoToolFactoryBase.h"
+#include "KisToolPaintFactoryBase.h"
 #include "flake/kis_node_shape.h"
 #include <kis_tool_ellipse_base.h>
 #include <kis_icon.h>
-
 
 
 class KoCanvasBase;
@@ -49,12 +48,12 @@ protected:
     void finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY) override;
 };
 
-class KisToolEllipseFactory : public KoToolFactoryBase
+class KisToolEllipseFactory : public KisToolPaintFactoryBase
 {
 
 public:
     KisToolEllipseFactory()
-            : KoToolFactoryBase("KritaShape/KisToolEllipse") {
+            : KisToolPaintFactoryBase("KritaShape/KisToolEllipse") {
         setToolTip(i18n("Ellipse Tool"));
         setSection(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

@@ -39,13 +39,16 @@
 #include "brushhud/kis_round_hud_button.h"
 #include "kis_signals_blocker.h"
 #include "kis_canvas_controller.h"
+#include "kis_acyclic_signal_connector.h"
+#include "KisMouseClickEater.h"
 
 class PopupColorTriangle : public KoTriangleColorSelector
 {
 public:
     PopupColorTriangle(const KoColorDisplayRendererInterface *displayRenderer, QWidget* parent)
         : KoTriangleColorSelector(displayRenderer, parent)
-        , m_dragging(false) {
+        , m_dragging(false)
+    {
     }
 
     ~PopupColorTriangle() override {}
@@ -53,29 +56,41 @@ public:
     void tabletEvent(QTabletEvent* event) override {
         event->accept();
         QMouseEvent* mouseEvent = 0;
-        switch (event->type()) {
-        case QEvent::TabletPress:
-            mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
-                                         Qt::LeftButton, Qt::LeftButton, event->modifiers());
-            m_dragging = true;
-            mousePressEvent(mouseEvent);
-            break;
-        case QEvent::TabletMove:
-            mouseEvent = new QMouseEvent(QEvent::MouseMove, event->pos(),
-                                         (m_dragging) ? Qt::LeftButton : Qt::NoButton,
-                                         (m_dragging) ? Qt::LeftButton : Qt::NoButton, event->modifiers());
-            mouseMoveEvent(mouseEvent);
-            break;
-        case QEvent::TabletRelease:
-            mouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, event->pos(),
-                                         Qt::LeftButton,
-                                         Qt::LeftButton,
-                                         event->modifiers());
-            m_dragging = false;
-            mouseReleaseEvent(mouseEvent);
-            break;
-        default: break;
+
+        // this will tell the pop-up palette widget to close
+        if(event->button() == Qt::RightButton) {
+            emit requestCloseContainer();
         }
+
+        // ignore any tablet events that are done with the right click
+        // Tablet move events don't return a "button", so catch that too
+        if(event->button() == Qt::LeftButton || event->type() == QEvent::TabletMove)
+        {
+            switch (event->type()) {
+                case QEvent::TabletPress:
+                    mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
+                                                 Qt::LeftButton, Qt::LeftButton, event->modifiers());
+                    m_dragging = true;
+                    mousePressEvent(mouseEvent);
+                    break;
+                case QEvent::TabletMove:
+                    mouseEvent = new QMouseEvent(QEvent::MouseMove, event->pos(),
+                                                 (m_dragging) ? Qt::LeftButton : Qt::NoButton,
+                                                 (m_dragging) ? Qt::LeftButton : Qt::NoButton, event->modifiers());
+                    mouseMoveEvent(mouseEvent);
+                    break;
+                case QEvent::TabletRelease:
+                    mouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, event->pos(),
+                                                 Qt::LeftButton,
+                                                 Qt::LeftButton,
+                                                 event->modifiers());
+                    m_dragging = false;
+                    mouseReleaseEvent(mouseEvent);
+                    break;
+                default: break;
+            }
+        }
+
         delete mouseEvent;
     }
 
@@ -93,6 +108,8 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     , m_displayRenderer(displayRenderer)
     , m_colorChangeCompressor(new KisSignalCompressor(50, KisSignalCompressor::POSTPONE))
     , m_actionCollection(viewManager->actionCollection())
+    , m_acyclicConnector(new KisAcyclicSignalConnector(this))
+    , m_clicksEater(new KisMouseClickEater(Qt::RightButton, 1, this))
 {
     // some UI controls are defined and created based off these variables
 
@@ -115,6 +132,15 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     }
     m_triangleColorSelector->slotSetColor(fgcolor);
 
+
+    /**
+     * Tablet support code generates a spurious right-click right after opening
+     * the window, so we should ignore it. Next right-click will be used for
+     * closing the popup palette
+     */
+    this->installEventFilter(m_clicksEater);
+    m_triangleColorSelector->installEventFilter(m_clicksEater);
+
     QRegion maskedRegion(0, 0, m_triangleColorSelector->width(), m_triangleColorSelector->height(), QRegion::Ellipse );
     m_triangleColorSelector->setMask(maskedRegion);
 
@@ -125,13 +151,15 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     connect(m_colorChangeCompressor.data(), SIGNAL(timeout()),
             SLOT(slotEmitColorChanged()));
 
+    connect(m_triangleColorSelector, SIGNAL(requestCloseContainer()), this, SLOT(slotHide()));
+
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_triangleColorSelector, SLOT(configurationChanged()));
 
-    connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)),
-            SLOT(slotExternalFgColorChanged(KoColor)));
-    connect(this, SIGNAL(sigChangefGColor(KoColor)),
-            m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
+    m_acyclicConnector->connectForwardKoColor(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)),
+                                              this, SLOT(slotExternalFgColorChanged(KoColor)));
 
+    m_acyclicConnector->connectBackwardKoColor(this, SIGNAL(sigChangefGColor(KoColor)),
+                                               m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
 
     connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
@@ -157,7 +185,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     setSelectedColor(-1);
 
     m_brushHud = new KisBrushHud(provider, parent);
-    m_brushHud->setMaximumHeight(m_popupPaletteSize);
+    m_brushHud->setFixedHeight(int(m_popupPaletteSize));
     m_brushHud->setVisible(false);
 
     const int auxButtonSize = 35;
@@ -191,19 +219,16 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     vLayout->addLayout(hLayout);
 
     mirrorMode = new KisHighlightedToolButton(this);
-    mirrorMode->setCheckable(true);
     mirrorMode->setFixedSize(35, 35);
 
     mirrorMode->setToolTip(i18n("Mirror Canvas"));
-    connect(mirrorMode, SIGNAL(clicked(bool)), this, SLOT(slotmirroModeClicked()));
-
+    mirrorMode->setDefaultAction(m_actionCollection->action("mirror_canvas"));
 
     canvasOnlyButton = new KisHighlightedToolButton(this);
-    canvasOnlyButton->setCheckable(true);
     canvasOnlyButton->setFixedSize(35, 35);
 
     canvasOnlyButton->setToolTip(i18n("Canvas Only"));
-    connect(canvasOnlyButton, SIGNAL(clicked(bool)), this, SLOT(slotCanvasonlyModeClicked()));
+    canvasOnlyButton->setDefaultAction(m_actionCollection->action("view_show_canvas_only"));
 
     zoomToOneHundredPercentButton = new QPushButton(this);
     zoomToOneHundredPercentButton->setText(i18n("100%"));
@@ -224,6 +249,8 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     zoomCanvasSlider->setPageStep(1);
 
     connect(zoomCanvasSlider, SIGNAL(valueChanged(int)), this, SLOT(slotZoomSliderChanged(int)));
+    connect(zoomCanvasSlider, SIGNAL(sliderPressed()), this, SLOT(slotZoomSliderPressed()));
+    connect(zoomCanvasSlider, SIGNAL(sliderReleased()), this, SLOT(slotZoomSliderReleased()));
 
     slotUpdateIcons();
 
@@ -234,6 +261,9 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     setVisible(true);
     setVisible(false);
+
+    opacityChange = new QGraphicsOpacityEffect(this);
+    setGraphicsEffect(opacityChange);
 
     // Prevent tablet events from being captured by the canvas
     setAttribute(Qt::WA_NoMousePropagation, true);
@@ -304,6 +334,16 @@ void KisPopupPalette::slotZoomSliderChanged(int zoom) {
     emit zoomLevelChanged(zoom);
 }
 
+void KisPopupPalette::slotZoomSliderPressed()
+{
+   m_isZoomingCanvas = true;
+}
+
+void KisPopupPalette::slotZoomSliderReleased()
+{
+    m_isZoomingCanvas = false;
+}
+
 void KisPopupPalette::adjustLayout(const QPoint &p)
 {
     KIS_ASSERT_RECOVER_RETURN(m_brushHud);
@@ -328,11 +368,17 @@ void KisPopupPalette::adjustLayout(const QPoint &p)
 
 void KisPopupPalette::slotUpdateIcons()
 {
-    zoomToOneHundredPercentButton->setIcon(KisIconUtils::loadIcon("zoom-original"));
-    canvasOnlyButton->setIcon(KisIconUtils::loadIcon("document-new"));
-    mirrorMode->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
-    m_settingsButton->setIcon(KisIconUtils::loadIcon("configure"));
+    this->setPalette(qApp->palette());
+
+    for(int i=0; i<this->children().size(); i++) {
+        QWidget *w = qobject_cast<QWidget*>(this->children().at(i));
+        if (w) {
+            w->setPalette(qApp->palette());
+        }
+    }
+    zoomToOneHundredPercentButton->setIcon(m_actionCollection->action("zoom_to_100pct")->icon());
     m_brushHud->updateIcons();
+    m_settingsButton->setIcon(KisIconUtils::loadIcon("tag"));
     m_brushHudButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-left"), KisIconUtils::loadIcon("arrow-right"));
 }
 
@@ -362,10 +408,6 @@ void KisPopupPalette::showPopupPalette(const QPoint &p)
 void KisPopupPalette::showPopupPalette(bool show)
 {
     if (show) {
-        m_hadMousePressSinceOpening = false;
-        m_timeSinceOpening.start();
-
-
         // don't set the zoom slider if we are outside of the zoom slider bounds. It will change the zoom level to within
         // the bounds and cause the canvas to jump between the slider's min and max
         if (m_coordinatesConverter->zoomInPercent() > zoomSliderMinValue &&
@@ -587,6 +629,15 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.rotate(selectedColor() * -1 * rotationAngle);
         }
     }
+
+
+    // if we are actively rotating the canvas or zooming, make the panel slightly transparent to see the canvas better
+    if(m_isRotatingCanvasIndicator || m_isZoomingCanvas) {
+        opacityChange->setOpacity(0.4);
+    } else {
+        opacityChange->setOpacity(1.0);
+    }
+
 }
 
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)
@@ -623,7 +674,7 @@ QPainterPath KisPopupPalette::drawRotationIndicator(qreal rotationAngle, bool ca
 
     QPainterPath canvasRotationIndicator;
     int canvasIndicatorSize = 15;
-    float canvasIndicatorMiddle = canvasIndicatorSize/2;
+    int canvasIndicatorMiddle = canvasIndicatorSize / 2;
     QRect indicatorRectangle = QRect( rotationDialXPosition - canvasIndicatorMiddle, rotationDialYPosition - canvasIndicatorMiddle,
                                       canvasIndicatorSize, canvasIndicatorSize );
 
@@ -681,6 +732,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
             dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
         canvasController->rotateCanvas(angleDifference);
 
+
         emit sigUpdateCanvas();
     }
 
@@ -711,15 +763,6 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
 {
     QPointF point = event->localPos();
     event->accept();
-
-    /**
-     * Tablet support code generates a spurious right-click right after opening
-     * the window, so we should ignore it. Next right-click will be used for
-     * closing the popup palette
-     */
-    if (!m_hadMousePressSinceOpening && m_timeSinceOpening.elapsed() > 100) {
-        m_hadMousePressSinceOpening = true;
-    }
 
     if (event->button() == Qt::LeftButton) {
 
@@ -774,22 +817,6 @@ void KisPopupPalette::slotShowTagsPopup()
     }
 }
 
-void KisPopupPalette::slotmirroModeClicked() {
-    QAction *action = m_actionCollection->action("mirror_canvas");
-
-    if (action) {
-        action->trigger();
-    }
-}
-
-void KisPopupPalette::slotCanvasonlyModeClicked() {
-    QAction *action = m_actionCollection->action("view_show_canvas_only");
-
-    if (action) {
-        action->trigger();
-    }
-}
-
 void KisPopupPalette::slotZoomToOneHundredPercentClicked() {
     QAction *action = m_actionCollection->action("zoom_to_100pct");
 
@@ -805,14 +832,18 @@ void KisPopupPalette::tabletEvent(QTabletEvent *event) {
     event->ignore();
 }
 
+void KisPopupPalette::showEvent(QShowEvent *event)
+{
+    m_clicksEater->reset();
+    QWidget::showEvent(event);
+}
+
 void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
 {
     QPointF point = event->localPos();
     event->accept();
 
-    // see a comment in KisPopupPalette::mousePressEvent
-    if (m_hadMousePressSinceOpening &&
-        event->buttons() == Qt::NoButton &&
+    if (event->buttons() == Qt::NoButton &&
         event->button() == Qt::RightButton) {
 
         showPopupPalette(false);
@@ -881,15 +912,58 @@ QPainterPath KisPopupPalette::createPathFromPresetIndex(int index)
     qreal startingAngle = -(index * angleSlice) + 90;
 
     // the radius will get smaller as the amount of presets shown increases. 10 slots == 41
-    qreal presetRadius = m_colorHistoryOuterRadius * qSin(qDegreesToRadians(angleSlice/2)) / (1-qSin(qDegreesToRadians(angleSlice/2)));
+    qreal radians = qDegreesToRadians((360.0/10)/2);
+    qreal maxRadius = (m_colorHistoryOuterRadius * qSin(radians) / (1-qSin(radians)))-2;
 
+    radians = qDegreesToRadians(angleSlice/2);
+    qreal presetRadius = m_colorHistoryOuterRadius * qSin(radians) / (1-qSin(radians));
+    //If we assume that circles will mesh like a hexagonal grid, then 3.5r is the size of two hexagons interlocking.
 
+    qreal length = m_colorHistoryOuterRadius + presetRadius;
+    // can we can fit in a second row? We don't want the preset icons to get too tiny.
+    if (maxRadius > presetRadius) {
+        //redo all calculations assuming a second row.
+        if (numSlots() % 2) {
+            angleSlice = 360.0/(numSlots()+1);
+            startingAngle = -(index * angleSlice) + 90;
+        }
+        if (numSlots() != m_cachedNumSlots){
+            qreal tempRadius = presetRadius;
+            qreal distance = 0;
+            do{
+                tempRadius+=0.1;
+
+                // Calculate the XY of two adjectant circles using this tempRadius.
+                qreal length1 = m_colorHistoryOuterRadius + tempRadius;
+                qreal length2 = m_colorHistoryOuterRadius + ((maxRadius*2)-tempRadius);
+                qreal pathX1 = length1 * qCos(qDegreesToRadians(startingAngle)) - tempRadius;
+                qreal pathY1 = -(length1) * qSin(qDegreesToRadians(startingAngle)) - tempRadius;
+                qreal startingAngle2 = -(index+1 * angleSlice) + 90;
+                qreal pathX2 = length2 * qCos(qDegreesToRadians(startingAngle2)) - tempRadius;
+                qreal pathY2 = -(length2) * qSin(qDegreesToRadians(startingAngle2)) - tempRadius;
+
+                // Use Pythagorean Theorem to calculate the distance between these two values.
+                qreal m1 = pathX2-pathX1;
+                qreal m2 = pathY2-pathY1;
+
+                distance = sqrt((m1*m1)+(m2*m2));
+            }
+            //As long at there's more distance than the radius of the two presets, continue increasing the radius.
+            while((tempRadius+1)*2 < distance);
+            m_cachedRadius = tempRadius;
+        }
+        m_cachedNumSlots = numSlots();
+        presetRadius = m_cachedRadius;
+        length = m_colorHistoryOuterRadius + presetRadius;
+        if (index % 2) {
+            length = m_colorHistoryOuterRadius + ((maxRadius*2)-presetRadius);
+        }
+    }
     QPainterPath path;
-    float pathX = (m_colorHistoryOuterRadius + presetRadius) * qCos(qDegreesToRadians(startingAngle)) - presetRadius;
-    float pathY = -(m_colorHistoryOuterRadius + presetRadius) * qSin(qDegreesToRadians(startingAngle)) - presetRadius;
-    float pathDiameter = 2 * presetRadius; // distance is used to calculate the X/Y in addition to the preset circle size
+    qreal pathX = length * qCos(qDegreesToRadians(startingAngle)) - presetRadius;
+    qreal pathY = -(length) * qSin(qDegreesToRadians(startingAngle)) - presetRadius;
+    qreal pathDiameter = 2 * presetRadius; // distance is used to calculate the X/Y in addition to the preset circle size
     path.addEllipse(pathX, pathY, pathDiameter, pathDiameter);
-
     return path;
 }
 

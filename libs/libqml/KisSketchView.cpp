@@ -108,7 +108,6 @@ KisSketchView::KisSketchView(QQuickItem* parent)
     setAcceptHoverEvents(true);
 
     d->actionCollection = new KActionCollection(this, "krita");
-    qDebug() << ">>>>>>>>>>>>>" << qApp->activeWindow();
     d->viewManager = 0; //new KisViewManager(qApp->activeWindow(), d->actionCollection);
 
     // QT5TODO
@@ -302,10 +301,7 @@ void KisSketchView::documentChanged()
 
     connect(d->doc, SIGNAL(modified(bool)), SIGNAL(modifiedChanged()));
 
-    QPointer<KisView> view = qobject_cast<KisView*>(KisPart::instance()->createView(d->doc,
-                                                                                    d->viewManager->resourceProvider()->resourceManager(),
-                                                                                    d->viewManager->actionCollection(),
-                                                                                    QApplication::activeWindow()));
+    QPointer<KisView> view = KisPart::instance()->createView(d->doc, d->viewManager, QApplication::activeWindow());
     view->setViewManager(d->viewManager);
     view->canvasBase()->setFavoriteResourceManager(d->viewManager->paintOpBox()->favoriteResourcesManager());
     view->slotLoadingFinished();

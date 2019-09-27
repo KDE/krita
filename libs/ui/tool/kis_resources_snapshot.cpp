@@ -71,6 +71,7 @@ struct KisResourcesSnapshot::Private {
     qreal effectiveZoom = 1.0;
     bool presetAllowsLod = false;
     KisSelectionSP selectionOverride;
+    bool hasOverrideSelection = false;
 };
 
 KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceProvider *resourceManager, KisDefaultBoundsBaseSP bounds)
@@ -87,8 +88,8 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->currentGradient = resourceManager->resource(KisCanvasResourceProvider::CurrentGradient).value<KoAbstractGradient*>();
 
     /**
-     * We should deep-copy the preset, so that long-runnign actions
-     * will have correct brush parameters. Theoretically this cloniong
+     * We should deep-copy the preset, so that long-running actions
+     * will have correct brush parameters. Theoretically this cloning
      * can be expensive, but according to measurements, it takes
      * something like 0.1 ms for an average preset.
      */
@@ -217,6 +218,8 @@ void KisResourcesSnapshot::setupMaskingBrushPainter(KisPainter *painter)
 
     painter->setMirrorInformation(m_d->axesCenter, m_d->mirrorMaskHorizontal, m_d->mirrorMaskVertical);
 
+    painter->setStrokeStyle(m_d->strokeStyle);
+
     /**
      * The paintOp should be initialized the last, because it may
      * ask the painter for some options while initialization
@@ -286,7 +289,7 @@ KisSelectionSP KisResourcesSnapshot::activeSelection() const
      * It is possible to have/use the snapshot without the image. Such
      * usecase is present for example in the scratchpad.
      */
-    if (m_d->selectionOverride) {
+    if (m_d->hasOverrideSelection) {
         return m_d->selectionOverride;
     }
 
@@ -407,6 +410,7 @@ void KisResourcesSnapshot::setBGColorOverride(const KoColor &color)
 void KisResourcesSnapshot::setSelectionOverride(KisSelectionSP selection)
 {
     m_d->selectionOverride = selection;
+    m_d->hasOverrideSelection = true; // needed if selection passed is null to ignore selection
 }
 
 void KisResourcesSnapshot::setBrush(const KisPaintOpPresetSP &brush)

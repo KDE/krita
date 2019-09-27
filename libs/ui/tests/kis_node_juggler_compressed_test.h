@@ -19,7 +19,7 @@
 #ifndef __KIS_NODE_JUGGLER_COMPRESSED_TEST_H
 #define __KIS_NODE_JUGGLER_COMPRESSED_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 #include "testutil.h"
 #include "kis_group_layer.h"
 

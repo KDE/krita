@@ -19,7 +19,8 @@
  */
 
 /**
- * @file this file is part of the Krita application in calligra
+ * @file kis_annotation.h
+ * @brief This file is part of the Krita application in calligra
  * @author Boudewijn Rempt
  * @author comments by hscott
  * @since 1.4 or 2005
@@ -34,7 +35,8 @@
 #include <QString>
 
 /**
- * @class KisAnnotation A data extension mechanism for Krita.
+ * @class KisAnnotation
+ * @brief A data extension mechanism for Krita.
  *
  * An annotation can be of something like a QByteArray or a QString or
  * a more specific datatype that can be attached to an image (or maybe

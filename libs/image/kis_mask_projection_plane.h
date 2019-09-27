@@ -28,7 +28,7 @@
  * layer object.
  *
  * Please note that recalculate() and apply() methods are not defined
- * for masks, because the KisLayer code still uses tranditional
+ * for masks, because the KisLayer code still uses traditional
  * methods of KisMask directly.
  */
 class KisMaskProjectionPlane : public KisAbstractProjectionPlane
@@ -43,6 +43,7 @@ public:
     QRect needRect(const QRect &rect, KisNode::PositionToFilthy pos) const override;
     QRect changeRect(const QRect &rect, KisNode::PositionToFilthy pos) const override;
     QRect accessRect(const QRect &rect, KisNode::PositionToFilthy pos) const override;
+    QRect needRectForOriginal(const QRect &rect) const override;
 
     KisPaintDeviceList getLodCapableDevices() const override;
 

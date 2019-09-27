@@ -38,7 +38,7 @@ class SvgLoadingContext;
  * the properties of the two shapes and distinguish, which properties were
  * inherited by text shape, and which are its own. It is needed to generate a
  * correct and clean SVG/markup code that can be edited by the user easily.
- * Otherwise, every <tspan> block will contain the full list of 20+ attributes,
+ * Otherwise, every \<tspan\> block will contain the full list of 20+ attributes,
  * which are not interesting for the user, since they are inherited or default.
  *
  * To achieve the goal, KoSvgTextProperties wraps all the SVG attributes into a
@@ -129,7 +129,7 @@ public:
     /**
      * Reset all non-inheritable properties to default values. The set of
      * non-inheritable properties is define by SVG 1.1. Used by the loading
-     * code for resetting state automata's properties on entering a <tspan>.
+     * code for resetting state automata's properties on entering a \<tspan\>.
      */
     void resetNonInheritableToDefault();
 

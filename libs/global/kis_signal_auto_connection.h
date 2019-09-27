@@ -23,7 +23,6 @@
 #include <QPointer>
 #include <QVector>
 
-
 /**
  * A special wrapper class that represents a connection between two QObject objects.
  * It creates the connection on the construction and disconnects it on destruction.
@@ -51,31 +50,24 @@ public:
     /**
      * Creates a connection object and starts the requested connection
      */
-    inline KisSignalAutoConnection(const QObject *sender, const char *signal,
-                                  const QObject *receiver, const char *method,
+    template<class Sender, class Signal, class Receiver, class Method>
+    inline KisSignalAutoConnection(Sender sender, Signal signal,
+                                  Receiver receiver, Method method,
                                   Qt::ConnectionType type = Qt::AutoConnection)
-        : m_sender(const_cast<QObject*>(sender)),
-          m_signal(signal),
-          m_receiver(const_cast<QObject*>(receiver)),
-          m_method(method)
+        : m_connection(QObject::connect(sender, signal, receiver, method, type))
     {
-        QObject::connect(m_sender, m_signal, m_receiver, m_method, type);
     }
+
     inline ~KisSignalAutoConnection()
     {
-        if (!m_sender.isNull() && !m_receiver.isNull()) {
-            QObject::disconnect(m_sender, m_signal, m_receiver, m_method);
-        }
+        QObject::disconnect(m_connection);
     }
 
 private:
     KisSignalAutoConnection(const KisSignalAutoConnection &rhs);
 
 private:
-    QPointer<QObject> m_sender;
-    const char *m_signal;
-    QPointer<QObject> m_receiver;
-    const char *m_method;
+    QMetaObject::Connection m_connection;
 };
 
 typedef QSharedPointer<KisSignalAutoConnection> KisSignalAutoConnectionSP;
@@ -97,8 +89,9 @@ public:
      *
      * \see addUniqueConnection()
      */
-    inline void addConnection(const QObject *sender, const char *signal,
-                              const QObject *receiver, const char *method,
+    template<class Sender, class Signal, class Receiver, class Method>
+    inline void addConnection(Sender sender, Signal signal,
+                              Receiver receiver, Method method,
                               Qt::ConnectionType type = Qt::AutoConnection)
     {
         m_connections.append(KisSignalAutoConnectionSP(
@@ -111,8 +104,9 @@ public:
      *
      * \see addConnection()
      */
-    inline void addUniqueConnection(const QObject *sender, const char *signal,
-                                    const QObject *receiver, const char *method)
+    template<class Sender, class Signal, class Receiver, class Method>
+    inline void addUniqueConnection(Sender sender, Signal signal,
+                                    Receiver receiver, Method method)
     {
         m_connections.append(KisSignalAutoConnectionSP(
                                  new KisSignalAutoConnection(sender, signal,
@@ -124,6 +118,10 @@ public:
      */
     inline void clear() {
         m_connections.clear();
+    }
+
+    inline bool isEmpty() {
+        return m_connections.isEmpty();
     }
 
 private:

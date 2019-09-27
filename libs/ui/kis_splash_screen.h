@@ -59,6 +59,7 @@ private:
     bool m_themed;
     QImage m_splashImage;
     int m_textTop;
+    qreal m_scaleFactor;
 };
 
 #endif // KIS_SPLASH_SCREEN_H

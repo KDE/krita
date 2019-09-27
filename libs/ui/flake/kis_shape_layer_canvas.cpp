@@ -111,6 +111,16 @@ KoUnit KisShapeLayerCanvasBase::unit() const
     return KoUnit(KoUnit::Point);
 }
 
+void KisShapeLayerCanvasBase::setUpdatesBlocked(bool value)
+{
+    m_updatesBlocked = value;
+}
+
+bool KisShapeLayerCanvasBase::updatesBlocked() const
+{
+    return m_updatesBlocked;
+}
+
 void KisShapeLayerCanvasBase::prepareForDestroying()
 {
     m_isDestroying = true;
@@ -126,6 +136,7 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
         : KisShapeLayerCanvasBase(parent, image)
         , m_projection(0)
         , m_parentLayer(parent)
+        , m_canvasUpdateCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
         , m_asyncUpdateSignalCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
 {
     /**
@@ -135,8 +146,9 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
     m_shapeManager->addShape(parent, KoShapeManager::AddWithoutRepaint);
     m_shapeManager->selection()->setActiveLayer(parent);
 
-    connect(this, SIGNAL(forwardRepaint()), SLOT(repaint()), Qt::QueuedConnection);
     connect(&m_asyncUpdateSignalCompressor, SIGNAL(timeout()), SLOT(slotStartAsyncRepaint()));
+    connect(this, SIGNAL(forwardRepaint()), &m_canvasUpdateCompressor, SLOT(start()));
+    connect(&m_canvasUpdateCompressor, SIGNAL(timeout()), this, SLOT(slotStartDirectSyncRepaint()));
 
     setImage(image);
 }
@@ -159,6 +171,8 @@ void KisShapeLayerCanvas::setImage(KisImageWSP image)
         connect(m_image, SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
         m_cachedImageRect = m_image->bounds();
     }
+
+    updateUpdateCompressorDelay();
 }
 
 
@@ -203,7 +217,7 @@ private:
 
 void KisShapeLayerCanvas::updateCanvas(const QVector<QRectF> &region)
 {
-    if (!m_parentLayer->image() || m_isDestroying) {
+    if (!m_parentLayer->image() || m_isDestroying || m_updatesBlocked) {
         return;
     }
 
@@ -224,7 +238,7 @@ void KisShapeLayerCanvas::updateCanvas(const QVector<QRectF> &region)
      *
      * Here we just avoid the most obvious conflict of threads:
      *
-     * 1) If the layer if modified by a non-gui (worker) thread, use a spontaneous jobs
+     * 1) If the layer is modified by a non-gui (worker) thread, use a spontaneous jobs
      *    to rerender the canvas. The job will be executed (almost) exclusively and it is
      *    the responsibility of the worker thread to add a barrier to wait until this job is
      *    completed, and not try to access the shapes concurrently.
@@ -236,6 +250,7 @@ void KisShapeLayerCanvas::updateCanvas(const QVector<QRectF> &region)
 
     if (qApp->thread() == QThread::currentThread()) {
         emit forwardRepaint();
+        m_hasDirectSyncRepaintInitiated = true;
     } else {
         m_asyncUpdateSignalCompressor.start();
         m_hasUpdateInCompressor = true;
@@ -254,6 +269,12 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
     m_image->addSpontaneousJob(new KisRepaintShapeLayerLayerJob(m_parentLayer, this));
 }
 
+void KisShapeLayerCanvas::slotStartDirectSyncRepaint()
+{
+    m_hasDirectSyncRepaintInitiated = false;
+    repaint();
+}
+
 void KisShapeLayerCanvas::slotImageSizeChanged()
 {
     QRegion dirtyCacheRegion;
@@ -268,47 +289,64 @@ void KisShapeLayerCanvas::slotImageSizeChanged()
     updateCanvas(dirtyRects);
 
     m_cachedImageRect = m_image->bounds();
+    updateUpdateCompressorDelay();
 }
 
 void KisShapeLayerCanvas::repaint()
 {
-
-    QRect r;
+    QRect repaintRect;
+    bool forceUpdateHiddenAreasOnly = false;
 
     {
         QMutexLocker locker(&m_dirtyRegionMutex);
-        r = m_dirtyRegion.boundingRect();
+        repaintRect = m_dirtyRegion.boundingRect();
+        forceUpdateHiddenAreasOnly = m_forceUpdateHiddenAreasOnly;
+
         m_dirtyRegion = QRegion();
+        m_forceUpdateHiddenAreasOnly = false;
     }
 
-    if (r.isEmpty()) return;
+    if (!forceUpdateHiddenAreasOnly) {
+        if (repaintRect.isEmpty()) {
+            return;
+        }
 
-    // Crop the update rect by the image bounds. We keep the cache consistent
-    // by tracking the size of the image in slotImageSizeChanged()
-    r = r.intersected(m_parentLayer->image()->bounds());
+        // Crop the update rect by the image bounds. We keep the cache consistent
+        // by tracking the size of the image in slotImageSizeChanged()
+        repaintRect = repaintRect.intersected(m_parentLayer->image()->bounds());
+    } else {
+        const QRectF shapesBounds = KoShape::boundingRect(m_shapeManager->shapes());
+        repaintRect = kisGrowRect(m_viewConverter->documentToView(shapesBounds).toAlignedRect(), 2);
+    }
 
-    QImage image(r.width(), r.height(), QImage::Format_ARGB32);
+    QImage image(repaintRect.width(), repaintRect.height(), QImage::Format_ARGB32);
     image.fill(0);
-    QPainter p(&image);
+    QPainter tempPainter(&image);
 
-    p.setRenderHint(QPainter::Antialiasing);
-    p.setRenderHint(QPainter::TextAntialiasing);
-    p.translate(-r.x(), -r.y());
-    p.setClipRect(r);
+    tempPainter.setRenderHint(QPainter::Antialiasing);
+    tempPainter.setRenderHint(QPainter::TextAntialiasing);
+    tempPainter.translate(-repaintRect.x(), -repaintRect.y());
+    tempPainter.setClipRect(repaintRect);
 #ifdef DEBUG_REPAINT
     QColor color = QColor(random() % 255, random() % 255, random() % 255);
-    p.fillRect(r, color);
+    tempPainter.fillRect(r, color);
 #endif
 
-    m_shapeManager->paint(p, *m_viewConverter, false);
-    p.end();
+    m_shapeManager->paint(tempPainter, *m_viewConverter, false);
+    tempPainter.end();
 
     KisPaintDeviceSP dev = new KisPaintDevice(m_projection->colorSpace());
     dev->convertFromQImage(image, 0);
 
-    KisPainter::copyAreaOptimized(r.topLeft(), dev, m_projection, QRect(QPoint(), r.size()));
+    if (forceUpdateHiddenAreasOnly) {
+        m_projection->clear();
+    }
 
-    m_parentLayer->setDirty(r);
+    KisPainter::copyAreaOptimized(repaintRect.topLeft(), dev, m_projection, QRect(QPoint(), repaintRect.size()));
+
+    m_projection->purgeDefaultPixels();
+
+    m_parentLayer->setDirty(repaintRect);
 
     m_hasChangedWhileBeingInvisible |= !m_parentLayer->visible(true);
 }
@@ -324,10 +362,30 @@ void KisShapeLayerCanvas::forceRepaint()
      * The only real solution to this is to port vector tools to strokes framework.
      */
 
-    if (m_hasUpdateInCompressor) {
+    if (hasPendingUpdates()) {
         m_asyncUpdateSignalCompressor.stop();
         slotStartAsyncRepaint();
     }
+}
+
+bool KisShapeLayerCanvas::hasPendingUpdates() const
+{
+    return m_hasUpdateInCompressor || m_hasDirectSyncRepaintInitiated;
+}
+
+void KisShapeLayerCanvas::forceRepaintWithHiddenAreas()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_parentLayer->image());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_isDestroying);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_updatesBlocked);
+
+    {
+        QMutexLocker locker(&m_dirtyRegionMutex);
+        m_forceUpdateHiddenAreasOnly = true;
+    }
+
+    m_asyncUpdateSignalCompressor.stop();
+    slotStartAsyncRepaint();
 }
 
 void KisShapeLayerCanvas::resetCache()
@@ -348,3 +406,13 @@ void KisShapeLayerCanvas::rerenderAfterBeingInvisible()
     resetCache();
 }
 
+void KisShapeLayerCanvas::updateUpdateCompressorDelay()
+{
+    if (m_cachedImageRect.width() * m_cachedImageRect.height() < 2480 * 3508) { // A4 300 DPI
+        m_canvasUpdateCompressor.setDelay(25);
+    } else if (m_cachedImageRect.width() * m_cachedImageRect.height() < 4961 * 7061) { // A4 600 DPI
+        m_canvasUpdateCompressor.setDelay(100);
+    } else { // Really big
+        m_canvasUpdateCompressor.setDelay(500);
+    }
+}

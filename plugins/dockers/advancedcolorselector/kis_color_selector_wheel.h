@@ -43,14 +43,13 @@ public:
 protected:
     KoColor selectColor(int x, int y) override;
     void paint(QPainter*) override;
-    void mouseEvent(int x, int y) override;
 
 private:
     friend class Acs::PixelCacheRenderer;
     KoColor colorAt(int x, int y, bool forceValid = false);
 
 private:
-    bool coordIsClear(int x, int y);
+    bool allowsColorSelectionAtPoint(const QPoint &pt) const override;
     QPointF m_lastClickPos;
     QImage m_pixelCache;
     QPoint m_pixelCacheOffset;

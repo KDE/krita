@@ -57,9 +57,10 @@ KisShadeSelectorLineComboBoxPopup::KisShadeSelectorLineComboBoxPopup(QWidget* pa
     layout->addWidget(new KisShadeSelectorLine(0.0, 0.5, 0.5, m_parentProxy.data(), this, -0.04));
     layout->addWidget(new KisShadeSelectorLine(0.0, 0.5, 0.5, m_parentProxy.data(), this, +0.04));
     layout->addWidget(new KisShadeSelectorLine(0.0, -0.5, 0.5, m_parentProxy.data(), this, -0.04));
-    layout->addWidget(new KisShadeSelectorLine(0.0, -0.5, 0.5, m_parentProxy.data(), this, +0.04));
 
-    m_lineEditor = new KisShadeSelectorLineEditor(this);
+    KisShadeSelectorLine* preview = new KisShadeSelectorLine(0.0, -0.5, 0.5, m_parentProxy.data(), this, +0.04);
+    m_lineEditor = new KisShadeSelectorLineEditor(this, preview);
+    layout->addWidget(preview);
     layout->addWidget(m_lineEditor);
 
     connect(m_lineEditor, SIGNAL(requestActivateLine(QWidget*)), SLOT(activateItem(QWidget*)));
@@ -155,16 +156,16 @@ void KisShadeSelectorLineComboBoxPopup::mousePressEvent(QMouseEvent* e)
             m_lineEditor->fromString(m_lastSelectedItem->toString());
             m_lineEditor->blockSignals(false);
         }
-
         updateSelectedArea(m_highlightedArea);
-    } else {
-        if (m_lastSelectedItem) {
-            KisShadeSelectorLineComboBox *parent = dynamic_cast<KisShadeSelectorLineComboBox*>(this->parent());
-            Q_ASSERT(parent);
-            parent->setConfiguration(m_lastSelectedItem->toString());
-        }
-        hide();
+    }
+    if (m_lastSelectedItem) {
+        KisShadeSelectorLineComboBox *parent = dynamic_cast<KisShadeSelectorLineComboBox*>(this->parent());
+        Q_ASSERT(parent);
+        parent->setConfiguration(m_lastSelectedItem->toString());
     }
     e->accept();
+
+    this->parentWidget()->update();
+    hide();
 }
 

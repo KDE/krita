@@ -49,7 +49,7 @@ DlgSeparate::DlgSeparate(const QString & imageCS,
     m_page->grpOutput->hide();
     connect(m_page->radioCurrentLayer, SIGNAL(toggled(bool)), this, SLOT(slotSetColorSpaceLabel()));
     connect(m_page->radioAllLayers, SIGNAL(toggled(bool)), this, SLOT(slotSetColorSpaceLabel()));
-    connect(m_page->chkColors, SIGNAL(toggled(bool)), m_page->chkDownscale, SLOT(setDisabled(bool)));
+    connect(m_page->chkColors, SIGNAL(toggled(bool)), this, SLOT(disableDownScaleIfPossible(bool)));
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(okClicked()));
@@ -101,6 +101,13 @@ void DlgSeparate::okClicked()
     accept();
 }
 
+void DlgSeparate::disableDownScaleIfPossible(bool disable)
+{
+    if (m_canDownScale) {
+        m_page->chkDownscale->setDisabled(disable);
+    }
+}
+
 void DlgSeparate::slotSetColorSpaceLabel()
 {
     if (m_page->radioCopyAlpha->isChecked()) {
@@ -111,6 +118,7 @@ void DlgSeparate::slotSetColorSpaceLabel()
 }
 void DlgSeparate::enableDownscale(bool enable)
 {
+    m_canDownScale = enable;
     m_page->chkDownscale->setEnabled(enable);
 }
 

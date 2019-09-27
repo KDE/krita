@@ -28,7 +28,7 @@
 #include "kis_image_config.h"
 #include "kis_raster_keyframe_channel.h"
 
-Q_GLOBAL_STATIC(KisOnionSkinCompositor, s_instance);
+Q_GLOBAL_STATIC(KisOnionSkinCompositor, s_instance)
 
 struct KisOnionSkinCompositor::Private
 {

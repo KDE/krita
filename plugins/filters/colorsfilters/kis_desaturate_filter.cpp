@@ -66,7 +66,7 @@ KisDesaturateFilter::~KisDesaturateFilter()
 {
 }
 
-KisConfigWidget *KisDesaturateFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisDesaturateFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     return new KisDesaturateConfigWidget(parent);

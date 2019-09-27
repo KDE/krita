@@ -74,7 +74,7 @@ KoColorTransformation* KisFilterIndexColors::createTransformation(const KoColorS
     return new KisIndexColorTransformation(pal, cs, config->getInt("alphaSteps"));
 }
 
-KisConfigWidget* KisFilterIndexColors::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget* KisFilterIndexColors::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     KisWdgIndexColors* w = new KisWdgIndexColors(parent);

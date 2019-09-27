@@ -216,7 +216,7 @@ private:
     QMap<QString, QExplicitlySharedDataPointer<KoMarker>> m_markers;
     KoDocumentResourceManager *m_documentResourceManager;
     QList<KoShape*> m_shapes;
-    QVector<KoSvgSymbol*> m_symbols;
+    QMap<QString, KoSvgSymbol*> m_symbols;
     QList<KoShape*> m_toplevelShapes;
     QList<KoShape*> m_defsShapes;
     bool m_isInsideTextSubtree = false;

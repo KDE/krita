@@ -32,6 +32,7 @@
 class KisFilterConfiguration;
 class KoStore;
 class KoShapeControllerBase;
+class KoColorProfile;
 
 class KRITALIBKRA_EXPORT KisKraLoadVisitor : public KisNodeVisitor
 {
@@ -76,6 +77,7 @@ private:
 
     bool loadProfile(KisPaintDeviceSP device,  const QString& location);
     bool loadFilterConfiguration(KisFilterConfigurationSP kfc, const QString& location);
+    void fixOldFilterConfigurations(KisFilterConfigurationSP kfc);
     bool loadMetaData(KisNode* node);
     void initSelectionForMask(KisMask *mask);
     bool loadSelection(const QString& location, KisSelectionSP dstSelection);
@@ -103,6 +105,7 @@ private:
     QStringList m_errorMessages;
     QStringList m_warningMessages;
     KoShapeControllerBase *m_shapeController;
+    QMap<QByteArray, const KoColorProfile *> m_profileCache;
 };
 
 #endif // KIS_KRA_LOAD_VISITOR_H_

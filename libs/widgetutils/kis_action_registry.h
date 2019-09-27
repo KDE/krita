@@ -79,7 +79,7 @@ public:
      *
      * N.B. this action will not be saved in the registry.
      */
-    QAction *makeQAction(const QString &name, QObject *parent);
+    QAction *makeQAction(const QString &name, QObject *parent = 0);
 
     /**
      * Fills the standard QAction properties of an action.
@@ -124,6 +124,7 @@ public:
      * Constructor.  Please don't touch!
      */
     KisActionRegistry();
+    ~KisActionRegistry();
 
     /**
      * @brief loadShortcutScheme
@@ -144,7 +145,7 @@ Q_SIGNALS:
 private:
 
     class Private;
-    Private * const d;
+    const QScopedPointer<Private> d;
 };
 
 #endif /* KIS_ACTION_REGISTRY_H */

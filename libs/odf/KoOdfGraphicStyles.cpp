@@ -338,7 +338,7 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader &s
         qreal border = 0.01 * e->attributeNS(KoXmlNS::draw, "border", "0").remove('%').toDouble();
         QGradientStops stops;
         if (type != "axial") {
-            // In case of radial gradients the colors are reversed, because OOo saves them as the oppsite of the SVG direction
+            // In case of radial gradients the colors are reversed, because OOo saves them as the opposite of the SVG direction
             // see bug 137639
             QGradientStop start;
             start.first = (type != "radial") ? border : 1.0 - border;

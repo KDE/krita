@@ -111,14 +111,14 @@ KisPropertiesConfigurationSP KisWdgColorToAlpha::configuration() const
 void KisWdgColorToAlpha::hideEvent(QHideEvent *)
 {
     if (m_view) {
-        disconnect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), this, SLOT(slotFgColorChanged(KoColor)));
+        disconnect(m_view->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), this, SLOT(slotFgColorChanged(KoColor)));
     }
 }
 
 void KisWdgColorToAlpha::showEvent(QShowEvent *)
 {
     if (m_view) {
-        connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), this, SLOT(slotFgColorChanged(KoColor)));
+        connect(m_view->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), this, SLOT(slotFgColorChanged(KoColor)));
     }
 }
 

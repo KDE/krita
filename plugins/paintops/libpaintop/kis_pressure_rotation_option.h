@@ -36,14 +36,13 @@ public:
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
     void applyFanCornersInfo(KisPaintOp *op);
 
+ // KisCurveOption interface
+public:
+    int intMinValue() const override;
+    int intMaxValue() const override;
+    QString valueSuffix() const override;
+
 private:
-    qreal m_defaultAngle;
-    bool m_canvasAxisXMirrored;
-    bool m_canvasAxisYMirrored;
-
-
-
-
 
 };
 

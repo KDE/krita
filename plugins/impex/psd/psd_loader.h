@@ -25,7 +25,7 @@
 #include <QFileInfo>
 
 #include "kis_types.h"
-#include <KisImageBuilderResult.h>
+#include <KisImportExportErrorCode.h>
 class KisDocument;
 
 class PSDLoader : public QObject {
@@ -37,7 +37,7 @@ public:
     PSDLoader(KisDocument *doc);
     ~PSDLoader() override;
 
-    KisImageBuilder_Result buildImage(QIODevice *io);
+    KisImportExportErrorCode buildImage(QIODevice *io);
 
     KisImageSP image();
 
@@ -47,7 +47,7 @@ public Q_SLOTS:
 
 private:
 
-    KisImageBuilder_Result decode(QIODevice *io);
+    KisImportExportErrorCode decode(QIODevice *io);
 
 private:
 

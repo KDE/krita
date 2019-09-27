@@ -24,6 +24,8 @@
 #include "KoDialog_p.h"
 
 #include <QApplication>
+#include <QScreen>
+#include <QGuiApplication>
 #include <QDesktopWidget>
 #include <QDialogButtonBox>
 #include <QHBoxLayout>
@@ -157,10 +159,8 @@ void KoDialogPrivate::appendButton(KoDialog::ButtonCode key, const KGuiItem &ite
     mButtonBox->addButton(button, role);
 
     mButtonList.insert(key, button);
-    mButtonSignalMapper.setMapping(button, key);
 
-    QObject::connect(button, SIGNAL(clicked()),
-                     &mButtonSignalMapper, SLOT(map()));
+    QObject::connect(button, &QPushButton::clicked, [=] { q->slotButtonClicked(key); });
 
     if (key == mDefaultButton) {
         // Now that it exists, set it as default
@@ -176,8 +176,6 @@ void KoDialogPrivate::init(KoDialog *q)
 
     q->setButtons(KoDialog::Ok | KoDialog::Cancel);
     q->setDefaultButton(KoDialog::Ok);
-
-    q->connect(&mButtonSignalMapper, SIGNAL(mapped(int)), q, SLOT(slotButtonClicked(int)));
 
     q->setPlainCaption(qApp->applicationDisplayName()); // set appropriate initial window title for case it gets not set later
 }
@@ -556,22 +554,27 @@ static QRect screenRect(QWidget *widget, int screen)
 {
     QDesktopWidget *desktop = QApplication::desktop();
     KConfig gc("kdeglobals", KConfig::NoGlobals);
+    auto screens = QGuiApplication::screens();
     KConfigGroup cg(&gc, "Windows");
-    if (desktop->isVirtualDesktop() &&
+    if (QApplication::primaryScreen()->virtualSiblings().count() &&
             cg.readEntry("XineramaEnabled", true) &&
             cg.readEntry("XineramaPlacementEnabled", true)) {
 
-        if (screen < 0 || screen >= desktop->numScreens()) {
+        if (screen < 0 || screen >= screens.count()) {
             if (screen == -1) {
-                screen = desktop->primaryScreen();
+                return QGuiApplication::primaryScreen()->availableVirtualGeometry();
             } else if (screen == -3) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+                return QGuiApplication::screenAt(QCursor::pos())->availableVirtualGeometry();
+#else
                 screen = desktop->screenNumber(QCursor::pos());
+#endif
             } else {
                 screen = desktop->screenNumber(widget);
             }
         }
 
-        return desktop->availableGeometry(screen);
+        return QGuiApplication::screens().at(screen)->availableVirtualGeometry();
     } else {
         return desktop->geometry();
     }

@@ -80,6 +80,11 @@ void KisToolPan::paint(QPainter &painter, const KoViewConverter &converter)
     Q_UNUSED(converter);
 }
 
+bool KisToolPan::wantsAutoScroll() const
+{
+    return false;
+}
+
 KisToolPanFactory::KisToolPanFactory()
     : KoToolFactoryBase("PanTool")
 {

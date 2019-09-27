@@ -56,7 +56,7 @@ public:
      * Add shapes to the shape controller, allowing it to be seen and saved.
      * The controller should add the shape to the ShapeManager instance(s) manually
      * if the shape is one that should be currently shown on screen.
-     * @param shape the new shape
+     * @param shapes the shapes to add
      */
     virtual void addShapes(const QList<KoShape*> shapes) = 0;
 
@@ -99,7 +99,7 @@ public:
     QRectF documentRect() const;
 
     /**
-     * Resolution of the rasterized representaiton of the document. Used to load SVG documents correctly.
+     * Resolution of the rasterized representation of the document. Used to load SVG documents correctly.
      */
     virtual qreal pixelsPerInch() const = 0;
 

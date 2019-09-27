@@ -31,13 +31,14 @@
 #include "kis_refresh_subtree_walker.h"
 #include "kis_async_merger.h"
 #include "kis_node_graph_listener.h"
+#include "kis_clone_layer.h"
 
 
 struct Q_DECL_HIDDEN KisProjectionLeaf::Private
 {
     Private(KisNode *_node) : node(_node) {}
 
-    KisNode* node;
+    KisNodeWSP node;
     bool isTemporaryHidden = false;
 
     static bool checkPassThrough(const KisNode *node) {
@@ -93,7 +94,7 @@ struct Q_DECL_HIDDEN KisProjectionLeaf::Private
     }
 
     void temporarySetPassThrough(bool value) {
-        KisGroupLayer *group = qobject_cast<KisGroupLayer*>(node);
+        KisGroupLayer *group = qobject_cast<KisGroupLayer*>(node.data());
         if (!group) return;
 
         group->setPassThroughMode(value);
@@ -262,27 +263,29 @@ bool KisProjectionLeaf::isRoot() const
 
 bool KisProjectionLeaf::isLayer() const
 {
-    return (bool)qobject_cast<const KisLayer*>(m_d->node);
+    return (bool)qobject_cast<const KisLayer*>(m_d->node.data()) &&
+        !m_d->node->isFakeNode();
 }
 
 bool KisProjectionLeaf::isMask() const
 {
-    return (bool)qobject_cast<const KisMask*>(m_d->node);
+    return (bool)qobject_cast<const KisMask*>(m_d->node.data()) &&
+        !m_d->node->isFakeNode();
 }
 
 bool KisProjectionLeaf::canHaveChildLayers() const
 {
-    return (bool)qobject_cast<const KisGroupLayer*>(m_d->node);
+    return (bool)qobject_cast<const KisGroupLayer*>(m_d->node.data());
 }
 
 bool KisProjectionLeaf::dependsOnLowerNodes() const
 {
-    return (bool)qobject_cast<const KisAdjustmentLayer*>(m_d->node);
+    return (bool)qobject_cast<const KisAdjustmentLayer*>(m_d->node.data());
 }
 
 bool KisProjectionLeaf::visible() const
 {
-    if (m_d->isTemporaryHidden) return false;
+    if (m_d->isTemporaryHidden || isDroppedNode()) return false;
 
     // TODO: check opacity as well!
 
@@ -316,7 +319,7 @@ QBitArray KisProjectionLeaf::channelFlags() const
 {
     QBitArray channelFlags;
 
-    KisLayer *layer = qobject_cast<KisLayer*>(m_d->node);
+    KisLayer *layer = qobject_cast<KisLayer*>(m_d->node.data());
     if (!layer) return channelFlags;
 
     channelFlags = layer->channelFlags();
@@ -342,10 +345,35 @@ bool KisProjectionLeaf::isStillInGraph() const
     return (bool)m_d->node->graphListener();
 }
 
-bool KisProjectionLeaf::isDroppedMask() const
+bool KisProjectionLeaf::hasClones() const
 {
-    return qobject_cast<KisMask*>(m_d->node) &&
-            m_d->checkParentPassThrough();
+    KisLayer *layer = qobject_cast<KisLayer*>(m_d->node.data());
+    return layer ? layer->hasClones() : false;
+}
+
+bool KisProjectionLeaf::isDroppedNode() const
+{
+    return dropReason() != NodeAvailable;
+}
+
+KisProjectionLeaf::NodeDropReason KisProjectionLeaf::dropReason() const
+{
+    if (qobject_cast<KisMask*>(m_d->node.data()) &&
+            m_d->checkParentPassThrough()) {
+
+        return DropPassThroughMask;
+    }
+
+    KisCloneLayer *cloneLayer = qobject_cast<KisCloneLayer*>(m_d->node.data());
+    if (cloneLayer && cloneLayer->copyFrom()) {
+        KisProjectionLeafSP leaf = cloneLayer->copyFrom()->projectionLeaf();
+
+        if (leaf->m_d->checkThisPassThrough()) {
+            return DropPassThroughClone;
+        }
+    }
+
+    return NodeAvailable;
 }
 
 bool KisProjectionLeaf::isOverlayProjectionLeaf() const

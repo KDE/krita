@@ -202,7 +202,7 @@ void utils::StrokeTester::testOneStroke(bool cancelled,
                                       externalLayer);
 
     dbgKrita << "Testcase:" << testName
-             << "(comare against " << (testUpdates ? "projection" : "layer") << ")";
+             << "(compare against " << (testUpdates ? "projection" : "layer") << ")";
 
     QImage resultImage;
     resultImage = doStroke(cancelled, externalLayer, testUpdates);

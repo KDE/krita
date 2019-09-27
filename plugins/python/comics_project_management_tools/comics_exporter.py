@@ -181,7 +181,7 @@ class comicsExporter():
                     export_success = exporters.EPUB.export(self.configDictionary, self.projectURL, self.pagesLocationList["EPUB"], self.acbfPageData)
                     print("CPMT: Exported to EPUB", export_success)
         else:
-            QMessageBox.warning(self, i18n("Export not Possible"), i18n("Nothing to export, URL not set."), QMessageBox.Ok)
+            QMessageBox.warning(None, i18n("Export not Possible"), i18n("Nothing to export, URL not set."), QMessageBox.Ok)
             print("CPMT: Nothing to export, url not set.")
 
         return export_success
@@ -215,6 +215,7 @@ class comicsExporter():
 
             # Check if there's export methods, and if so make sure the appropriate dictionaries are initialised.
             if len(sizesList.keys()) < 1:
+                QMessageBox.warning(None, i18n("Export not Possible"), i18n("Export failed because there's no export settings configured."), QMessageBox.Ok)
                 print("CPMT: Export failed because there's no export methods set.")
                 return False
             else:
@@ -330,7 +331,6 @@ class comicsExporter():
                     projectionOldSize = [projection.width(), projection.height()]
                     sizesCalc = sizesCalculator()
                     listScales = sizesCalc.get_scale_from_resize_config(config=w, listSizes=listScales)
-                    projection.unlock()
                     projection.scaleImage(listScales[0], listScales[1], listScales[2], listScales[3], "bicubic")
                     projection.waitForDone()
                     qApp.processEvents()
@@ -374,7 +374,7 @@ class comicsExporter():
             print("CPMT: Export has finished. If there are memory leaks, they are caused by file layers.")
             return True
         print("CPMT: Export not happening because there aren't any pages.")
-        QMessageBox.warning(self, i18n("Export not Possible"), i18n("Export not happening because there are no pages."), QMessageBox.Ok)
+        QMessageBox.warning(None, i18n("Export not Possible"), i18n("Export not happening because there are no pages."), QMessageBox.Ok)
         return False
 
     """
@@ -445,6 +445,8 @@ class comicsExporter():
         if "translate" in transform:
             transform = transform.replace('translate(', '')
             for c in transform[:-1].split(" "):
+                if "," in c:
+                    c = c.replace(",", "")
                 coord.append(float(c))
             if len(coord) < 2:
                 coord.append(coord[0])
@@ -452,6 +454,8 @@ class comicsExporter():
         if "matrix" in transform:
             transform = transform.replace('matrix(', '')
             for c in transform[:-1].split(" "):
+                if "," in c:
+                    c = c.replace(",", "")
                 coord.append(float(c))
             adjust = QTransform(coord[0], coord[1], coord[2], coord[3], coord[4], coord[5])
         path = QPainterPath()

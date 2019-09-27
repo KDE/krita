@@ -320,14 +320,11 @@ Document* Krita::createDocument(int width, int height, const QString &name, cons
     qc.setAlpha(0);
     KoColor bgColor(qc, cs);
 
-    if (!document->newImage(name, width, height, cs, bgColor, true, 1, "", double(resolution / 72) )) {
-        qDebug() << "Could not create a new image";
+    if (!document->newImage(name, width, height, cs, bgColor, KisConfig::RASTER_LAYER, 1, "", double(resolution / 72) )) {
         return 0;
     }
 
     Q_ASSERT(document->image());
-    qDebug() << document->image()->objectName();
-
     return new Document(document);
 }
 

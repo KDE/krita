@@ -24,7 +24,7 @@
 #ifndef KIS_TOOL_SELECT_POLYGONAL_H_
 #define KIS_TOOL_SELECT_POLYGONAL_H_
 
-#include "KoToolFactoryBase.h"
+#include "KisSelectionToolFactoryBase.h"
 #include "kis_tool_polyline_base.h"
 #include <kis_tool_select_base.h>
 #include "kis_selection_tool_config_widget_helper.h"
@@ -49,16 +49,16 @@ class KisToolSelectPolygonal : public KisToolSelectBase<__KisToolSelectPolygonal
     Q_OBJECT
 public:
     KisToolSelectPolygonal(KoCanvasBase* canvas);
-    void resetCursorStyle();
+    void resetCursorStyle() override;
 };
 
 
 
-class KisToolSelectPolygonalFactory : public KoToolFactoryBase
+class KisToolSelectPolygonalFactory : public KisSelectionToolFactoryBase
 {
 public:
     KisToolSelectPolygonalFactory()
-        : KoToolFactoryBase("KisToolSelectPolygonal")
+        : KisSelectionToolFactoryBase("KisToolSelectPolygonal")
     {
         setToolTip(i18n("Polygonal Selection Tool"));
         setSection(TOOL_TYPE_SELECTION);
@@ -72,6 +72,19 @@ public:
     KoToolBase * createTool(KoCanvasBase *canvas) override {
         return new KisToolSelectPolygonal(canvas);
     }
+
+    QList<QAction *> createActionsImpl() override
+    {
+        KisActionRegistry *actionRegistry = KisActionRegistry::instance();
+        QList<QAction *> actions = KisSelectionToolFactoryBase::createActionsImpl();
+
+        actions << actionRegistry->makeQAction("undo_polygon_selection");
+        actions << actionRegistry->makeQAction("selection_tool_mode_add");
+
+        return actions;
+    }
+
+
 };
 
 #endif //__selecttoolpolygonal_h__

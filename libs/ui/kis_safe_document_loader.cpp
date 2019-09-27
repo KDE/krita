@@ -25,8 +25,12 @@
 #include <QDir>
 #include <QUrl>
 
+#include <KoStore.h>
+
+#include <kis_paint_layer.h>
+#include <kis_group_layer.h>
 #include "KisDocument.h"
-#include "kis_image.h"
+#include <kis_image.h>
 #include "kis_signal_compressor.h"
 #include "KisPart.h"
 
@@ -103,9 +107,8 @@ struct KisSafeDocumentLoader::Private
     {
     }
 
-    QScopedPointer<KisDocument>  doc;
+    QScopedPointer<KisDocument> doc;
     KisSignalCompressor fileChangedSignalCompressor;
-    QTimer delayedLoadTimer;
     bool isLoading = false;
     bool fileChangedFlag = false;
     QString path;
@@ -124,12 +127,6 @@ KisSafeDocumentLoader::KisSafeDocumentLoader(const QString &path, QObject *paren
 
     connect(&m_d->fileChangedSignalCompressor, SIGNAL(timeout()),
             SLOT(fileChangedCompressed()));
-
-    connect(&m_d->delayedLoadTimer, SIGNAL(timeout()),
-            SLOT(delayedLoadStart()));
-
-    m_d->delayedLoadTimer.setSingleShot(true);
-    m_d->delayedLoadTimer.setInterval(100 /* ms */);
 
     setPath(path);
 }
@@ -163,10 +160,6 @@ void KisSafeDocumentLoader::reloadImage()
 void KisSafeDocumentLoader::fileChanged(QString path)
 {
     if (path == m_d->path) {
-        if (s_fileSystemWatcher->files().contains(path) == false && QFileInfo(path).exists()) {
-            //When a path is renamed it is removed, so we ought to readd it.
-            s_fileSystemWatcher->addPath(path);
-        }
         m_d->fileChangedFlag = true;
         m_d->fileChangedSignalCompressor.start();
     }
@@ -180,6 +173,11 @@ void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
     m_d->initialFileSize = initialFileInfo.size();
     m_d->initialFileTimeStamp = initialFileInfo.lastModified();
 
+    if (s_fileSystemWatcher->files().contains(m_d->path) == false && initialFileInfo.exists()) {
+        //When a path is renamed it is removed, so we ought to readd it.
+        s_fileSystemWatcher->addPath(m_d->path);
+    }
+
     // it may happen when the file is flushed by
     // so other application
     if (!m_d->initialFileSize) return;
@@ -188,17 +186,17 @@ void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
     m_d->fileChangedFlag = false;
 
     m_d->temporaryPath =
-        QDir::tempPath() + QDir::separator() +
-        QString("krita_file_layer_copy_%1_%2.%3")
-        .arg(QApplication::applicationPid())
-        .arg(qrand())
-        .arg(initialFileInfo.suffix());
+            QDir::tempPath() + QDir::separator() +
+            QString("krita_file_layer_copy_%1_%2.%3")
+            .arg(QApplication::applicationPid())
+            .arg(qrand())
+            .arg(initialFileInfo.suffix());
 
     QFile::copy(m_d->path, m_d->temporaryPath);
 
 
     if (!sync) {
-        m_d->delayedLoadTimer.start();
+        QTimer::singleShot(100, this, SLOT(delayedLoadStart()));
     } else {
         QApplication::processEvents();
         delayedLoadStart();
@@ -212,13 +210,41 @@ void KisSafeDocumentLoader::delayedLoadStart()
     bool successfullyLoaded = false;
 
     if (!m_d->fileChangedFlag &&
-        originalInfo.size() == m_d->initialFileSize &&
-        originalInfo.lastModified() == m_d->initialFileTimeStamp &&
-        tempInfo.size() == m_d->initialFileSize) {
+            originalInfo.size() == m_d->initialFileSize &&
+            originalInfo.lastModified() == m_d->initialFileTimeStamp &&
+            tempInfo.size() == m_d->initialFileSize) {
 
         m_d->doc.reset(KisPart::instance()->createDocument());
-        successfullyLoaded = m_d->doc->openUrl(QUrl::fromLocalFile(m_d->temporaryPath),
-                                               KisDocument::DontAddToRecent);
+
+        if (m_d->path.toLower().endsWith("ora") || m_d->path.toLower().endsWith("kra")) {
+            QScopedPointer<KoStore> store(KoStore::createStore(m_d->temporaryPath, KoStore::Read));
+            if (store && !store->bad()) {
+                if (store->open(QString("mergedimage.png"))) {
+                    QByteArray bytes = store->read(store->size());
+                    store->close();
+                    QImage mergedImage;
+                    mergedImage.loadFromData(bytes);
+                    Q_ASSERT(!mergedImage.isNull());
+                    KisImageSP image = new KisImage(0, mergedImage.width(), mergedImage.height(), KoColorSpaceRegistry::instance()->rgb8(), "");
+                    KisPaintLayerSP layer = new KisPaintLayer(image, "", OPACITY_OPAQUE_U8);
+                    layer->paintDevice()->convertFromQImage(mergedImage, 0);
+                    image->addNode(layer, image->rootLayer());
+                    image->initialRefreshGraph();
+                    m_d->doc->setCurrentImage(image);
+                    successfullyLoaded = true;
+                }
+                else {
+                    qWarning() << "delayedLoadStart: Could not open mergedimage.png";
+                }
+            }
+            else {
+                qWarning() << "delayedLoadStart: Store was bad";
+            }
+        }
+        else {
+            successfullyLoaded = m_d->doc->openUrl(QUrl::fromLocalFile(m_d->temporaryPath),
+                                                   KisDocument::DontAddToRecent);
+        }
     } else {
         dbgKrita << "File was modified externally. Restarting.";
         dbgKrita << ppVar(m_d->fileChangedFlag);

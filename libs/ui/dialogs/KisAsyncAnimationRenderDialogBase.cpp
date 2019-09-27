@@ -35,6 +35,8 @@
 #include "kis_image.h"
 #include "kis_image_config.h"
 #include "kis_memory_statistics_server.h"
+#include "kis_signal_compressor.h"
+#include <boost/optional.hpp>
 
 #include <vector>
 #include <memory>
@@ -66,7 +68,11 @@ int calculateNumberMemoryAllowedClones(KisImageSP image)
     const qint64 allowedMemory = 0.8 * stats.tilesHardLimit - stats.realMemorySize;
     const qint64 cloneSize = stats.projectionsSize;
 
-    return cloneSize > 0 ? allowedMemory / cloneSize : 0;
+    if (cloneSize > 0 && allowedMemory > 0) {
+        return allowedMemory / cloneSize;
+    }
+
+    return 0; // will become 1; either when the cloneSize = 0 or the allowedMemory is 0 or below
 }
 
 }
@@ -77,7 +83,8 @@ struct KisAsyncAnimationRenderDialogBase::Private
     Private(const QString &_actionTitle, KisImageSP _image, int _busyWait)
         : actionTitle(_actionTitle),
           image(_image),
-          busyWait(_busyWait)
+          busyWait(_busyWait),
+          progressDialogCompressor(40, KisSignalCompressor::FIRST_ACTIVE)
     {
     }
 
@@ -99,6 +106,12 @@ struct KisAsyncAnimationRenderDialogBase::Private
     Result result = RenderComplete;
     QRegion regionOfInterest;
 
+    KisSignalCompressor progressDialogCompressor;
+    using ProgressData = QPair<int, QString>;
+    boost::optional<ProgressData> progressData;
+    int progressDialogReentrancyCounter = 0;
+
+
     int numDirtyFramesLeft() const {
         return stillDirtyFrames.size() + framesInProgress.size();
     }
@@ -108,6 +121,8 @@ struct KisAsyncAnimationRenderDialogBase::Private
 KisAsyncAnimationRenderDialogBase::KisAsyncAnimationRenderDialogBase(const QString &actionTitle, KisImageSP image, int busyWait)
     : m_d(new Private(actionTitle, image, busyWait))
 {
+    connect(&m_d->progressDialogCompressor, SIGNAL(timeout()),
+            SLOT(slotUpdateCompressedProgressData()), Qt::QueuedConnection);
 }
 
 KisAsyncAnimationRenderDialogBase::~KisAsyncAnimationRenderDialogBase()
@@ -121,7 +136,7 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
         /**
          * Since this method can be called from the places where no
          * view manager is available, we need this manually crafted
-         * ugly construction to "try-lock-cance" the image.
+         * ugly construction to "try-lock-cancel" the image.
          */
 
         bool imageIsIdle = true;
@@ -312,7 +327,7 @@ void KisAsyncAnimationRenderDialogBase::updateProgressLabel()
     const QString estimatedTimeString = estimatedTime.toString(timeFormat);
 
     const QString memoryLimitMessage(
-        i18n("\n\nMemory limit is reached!\nThe number of clones is limited to %1\n\n",
+        i18n("\n\nThe memory limit has been reached.\nThe number of frames saved simultaneously is limited to %1\n\n",
              m_d->asyncRenderers.size()));
 
 
@@ -322,8 +337,13 @@ void KisAsyncAnimationRenderDialogBase::updateProgressLabel()
                                      estimatedTimeString,
                                      m_d->memoryLimitReached ? memoryLimitMessage : QString()));
     if (m_d->progressDialog) {
-        m_d->progressDialog->setLabelText(progressLabel);
-        m_d->progressDialog->setValue(processedFramesCount);
+        /**
+         * We should avoid reentrancy caused by explicit
+         * QApplication::processEvents() in QProgressDialog::setValue(), so use
+         * a compressor instead
+         */
+        m_d->progressData = Private::ProgressData(processedFramesCount, progressLabel);
+        m_d->progressDialogCompressor.start();
     }
 
     if (!m_d->numDirtyFramesLeft()) {
@@ -331,7 +351,32 @@ void KisAsyncAnimationRenderDialogBase::updateProgressLabel()
     }
 }
 
+void KisAsyncAnimationRenderDialogBase::slotUpdateCompressedProgressData()
+{
+    /**
+     * Qt's implementation of QProgressDialog is a bit weird: it calls
+     * QApplication::processEvents() from inside setValue(), which means
+     * that our update method may reenter multiple times.
+     *
+     * This code avoids reentering by using a compresson and an explicit
+     * entrance counter.
+     */
 
+    if (m_d->progressDialogReentrancyCounter > 0) {
+        m_d->progressDialogCompressor.start();
+        return;
+    }
+
+    if (m_d->progressDialog && m_d->progressData) {
+        m_d->progressDialogReentrancyCounter++;
+
+        m_d->progressDialog->setLabelText(m_d->progressData->second);
+        m_d->progressDialog->setValue(m_d->progressData->first);
+        m_d->progressData = boost::none;
+
+        m_d->progressDialogReentrancyCounter--;
+    }
+}
 
 void KisAsyncAnimationRenderDialogBase::setBatchMode(bool value)
 {

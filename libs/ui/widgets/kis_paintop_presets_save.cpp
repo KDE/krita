@@ -182,7 +182,7 @@ void KisPresetSaveWidget::savePreset()
         QString presetFilename = saveLocation + presetName.replace(" ", "_") + "_backup_" + currentDate + "-" + currentTime + oldPreset->defaultFileExtension();
         oldPreset->setFilename(presetFilename);
         oldPreset->setName(presetName);
-        oldPreset->setPresetDirty(false);
+        oldPreset->setDirty(false);
         oldPreset->setValid(true);
 
         // add backup resource to the blacklist
@@ -203,7 +203,7 @@ void KisPresetSaveWidget::savePreset()
         newPreset->setFilename(currentPresetFileName);
         newPreset->setName(presetName);
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
-        newPreset->setPresetDirty(false);
+        newPreset->setDirty(false);
         newPreset->setValid(true);
 
 

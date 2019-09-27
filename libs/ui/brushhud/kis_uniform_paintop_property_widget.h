@@ -31,6 +31,7 @@ class KisUniformPaintOpPropertyWidget : public QWidget
 public:
     KisUniformPaintOpPropertyWidget(KisUniformPaintOpPropertySP property, QWidget *parent);
     ~KisUniformPaintOpPropertyWidget() override;
+    void slotThemeChanged(QPalette pal);
 
 protected:
     KisUniformPaintOpPropertySP property() const;
@@ -49,10 +50,6 @@ private:
 class KisSliderSpinBox;
 class KisDoubleSliderSpinBox;
 class QCheckBox;
-
-template <typename T> class KisSliderBasedPaintOpProperty;
-typedef KisSliderBasedPaintOpProperty<int> KisIntSliderBasedPaintOpProperty;
-typedef KisSliderBasedPaintOpProperty<qreal> KisDoubleSliderBasedPaintOpProperty;
 
 class KisUniformPaintOpPropertyIntSlider : public KisUniformPaintOpPropertyWidget
 {

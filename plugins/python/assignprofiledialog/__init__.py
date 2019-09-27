@@ -1,2 +1,4 @@
-# let's make a module
-from .assignprofiledialog import *
+from .assignprofiledialog import AssignProfileDialog
+
+
+Scripter.addExtension(AssignProfileDialog(Application))

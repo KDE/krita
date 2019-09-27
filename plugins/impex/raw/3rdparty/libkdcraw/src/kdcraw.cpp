@@ -450,7 +450,9 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
     }
     else
     {
-        rawData.resize((int)(raw.imgdata.sizes.iwidth * raw.imgdata.sizes.iheight * sizeof(unsigned short)));
+        int w = raw.imgdata.sizes.iwidth;
+        int h = raw.imgdata.sizes.iheight;
+        rawData.resize(w * h * sizeof(unsigned short));
 
         unsigned short* output = reinterpret_cast<unsigned short*>(rawData.data());
 

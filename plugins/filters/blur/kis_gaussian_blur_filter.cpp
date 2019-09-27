@@ -49,9 +49,9 @@ KisGaussianBlurFilter::KisGaussianBlurFilter() : KisFilter(id(), FiltersCategory
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisGaussianBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisGaussianBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool usedForMasks) const
 {
-    return new KisWdgGaussianBlur(parent);
+    return new KisWdgGaussianBlur(usedForMasks, parent);
 }
 
 KisFilterConfigurationSP KisGaussianBlurFilter::factoryConfiguration() const
@@ -120,4 +120,29 @@ QRect KisGaussianBlurFilter::changedRect(const QRect & rect, const KisFilterConf
     const int halfHeight = _config->getProperty("vertRadius", value) ? KisGaussianKernel::kernelSizeFromRadius(t.scale(value.toFloat())) / 2 : 5;
 
     return rect.adjusted( -halfWidth, -halfHeight, halfWidth, halfHeight);
+}
+
+bool KisGaussianBlurFilter::configurationAllowedForMask(KisFilterConfigurationSP config) const
+{
+    //ENTER_FUNCTION() << config->getFloat("horizRadius", 5.0) << config->getFloat("vertRadius", 5.0);
+
+    const float maxRadiusForMask = 100.0;
+
+    return config->getFloat("horizRadius", 5.0) <= maxRadiusForMask &&
+            config->getFloat("vertRadius", 5.0) <= maxRadiusForMask;
+}
+
+void KisGaussianBlurFilter::fixLoadedFilterConfigurationForMasks(KisFilterConfigurationSP config) const
+{
+    ENTER_FUNCTION();
+
+    const float maxRadiusForMask = 100.0;
+
+    if (config->getFloat("horizRadius", 5.0) > maxRadiusForMask) {
+        config->setProperty("horizRadius", maxRadiusForMask);
+    }
+
+    if (config->getFloat("vertRadius", 5.0) > maxRadiusForMask) {
+        config->setProperty("vertRadius", maxRadiusForMask);
+    }
 }

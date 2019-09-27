@@ -205,7 +205,7 @@ public:
         }
     }
 
-    void emitFinalUpdates(bool undo) {
+    void emitFinalUpdates(KisCommandUtils::FlipFlopCommand::State state) {
         QMutexLocker l(&m_mutex);
 
         if (m_movedNodesUpdated.isEmpty()) return;
@@ -214,7 +214,7 @@ public:
         MovedNodesHash::const_iterator end = m_movedNodesUpdated.constEnd();
 
         for (; it != end; ++it) {
-            if (!undo) {
+            if (state == KisCommandUtils::FlipFlopCommand::State::FINALIZING) {
                 it.value()->doRedoUpdates();
             } else {
                 it.value()->doUndoUpdates();
@@ -238,8 +238,10 @@ public:
     {
     }
 
-    void end() override {
-        if (isFinalizing() && isFirstRedo()) {
+    void partB() override {
+        State currentState = getState();
+
+        if (currentState == FINALIZING && isFirstRedo()) {
             /**
              * When doing the first redo() some of the updates might
              * have already been executed by the juggler itself, so we
@@ -253,7 +255,7 @@ public:
              * that for us (juggler, which did it in the previous
              * case, might have already died).
              */
-            m_updateData->emitFinalUpdates(isFinalizing());
+            m_updateData->emitFinalUpdates(currentState);
         }
     }
 private:
@@ -275,10 +277,10 @@ public:
     {
     }
 
-    void init() override {
+    void partA() override {
         QList<KisSelectionMaskSP> *newActiveMasks;
 
-        if (isFinalizing()) {
+        if (getState() == FINALIZING) {
             newActiveMasks = &m_activeAfter;
         } else {
             newActiveMasks = &m_activeBefore;
@@ -289,10 +291,10 @@ public:
         }
     }
 
-    void end() override {
+    void partB() override {
         QList<KisSelectionMaskSP> *newActiveMasks;
 
-        if (isFinalizing()) {
+        if (getState() == FINALIZING) {
             newActiveMasks = &m_activeAfter;
         } else {
             newActiveMasks = &m_activeBefore;
@@ -308,28 +310,6 @@ private:
     QList<KisSelectionMaskSP> m_activeAfter;
 };
 
-KisNodeList sortAndFilterNodes(const KisNodeList &nodes, KisImageSP image) {
-    KisNodeList filteredNodes = nodes;
-    KisNodeList sortedNodes;
-
-    KisLayerUtils::filterMergableNodes(filteredNodes, true);
-
-    bool haveExternalNodes = false;
-    Q_FOREACH (KisNodeSP node, nodes) {
-        if (node->graphListener() != image->root()->graphListener()) {
-            haveExternalNodes = true;
-            break;
-        }
-    }
-
-    if (!haveExternalNodes) {
-        KisLayerUtils::sortMergableNodes(image->root(), filteredNodes, sortedNodes);
-    } else {
-        sortedNodes = filteredNodes;
-    }
-
-    return sortedNodes;
-}
 
 /**
  * A generalized command to muve up/down a set of layer
@@ -367,7 +347,7 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
     }
 
     void populateChildCommands() override {
-        KisNodeList sortedNodes = sortAndFilterNodes(m_nodes, m_image);
+        KisNodeList sortedNodes = KisLayerUtils::sortAndFilterAnyMergableNodesSafe(m_nodes, m_image);
         KisNodeSP headNode = m_lower ? sortedNodes.first() : sortedNodes.last();
         const NodesType nodesType = getNodesType(sortedNodes);
 
@@ -475,7 +455,6 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
         ADD
     };
 
-
     DuplicateLayers(BatchMoveUpdateDataSP updateData,
                     KisImageSP image,
                     const KisNodeList &nodes,
@@ -492,7 +471,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
           m_mode(mode) {}
 
     void populateChildCommands() override {
-        KisNodeList filteredNodes = sortAndFilterNodes(m_nodes, m_image);
+        KisNodeList filteredNodes = KisLayerUtils::sortAndFilterAnyMergableNodesSafe(m_nodes, m_image);
 
         if (filteredNodes.isEmpty()) return;
 
@@ -643,6 +622,7 @@ struct RemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommand
     void populateChildCommands() override {
         KisNodeList filteredNodes = m_nodes;
         KisLayerUtils::filterMergableNodes(filteredNodes, true);
+        KisLayerUtils::filterUnlockedNodes(filteredNodes);
 
         if (filteredNodes.isEmpty()) return;
 

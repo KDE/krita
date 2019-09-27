@@ -21,12 +21,17 @@
 
 #include "KoConfig.h"
 
+#ifdef HAS_ONLY_OPENGL_ES
+#define GL_MULTISAMPLE 0x809D
+#endif
+
 #include <QPainter>
 #include <QToolButton>
 #include <QApplication>
 #include <QPaintEngine>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
+#include <QAction>
 
 #include <kis_icon.h>
 
@@ -39,29 +44,25 @@
 #include "input/kis_input_manager.h"
 #include "kis_algebra_2d.h"
 
+#include <KisMirrorAxisConfig.h>
+#include <kis_signals_blocker.h>
+#include <kactioncollection.h>
+
 class KisMirrorAxis::Private
 {
 public:
     Private(KisMirrorAxis* qq)
         : q(qq)
         , resourceProvider(0)
-        , mirrorHorizontal(false)
-        , mirrorVertical(false)
-        , lockHorizontal(false)
-        , lockVertical(false)
-        , hideVerticalDecoration(false)
-        , hideHorizontalDecoration(false)
-        , handleSize(32.f)
         , xActive(false)
         , yActive(false)
-        , horizontalHandlePosition(64.f)
-        , verticalHandlePosition(64.f)
         , sideMargin(10.f)
         , minHandlePosition(10.f + 32.f)
         , horizontalContainsCursor(false)
         , verticalContainsCursor(false)
         , horizontalAxis(QLineF())
         , verticalAxis(QLineF())
+        , config(KisMirrorAxisConfig())
     { }
 
     void setAxisPosition(float x, float y);
@@ -71,28 +72,17 @@ public:
 
     KisCanvasResourceProvider* resourceProvider;
     KisImageWSP image;
-    bool mirrorHorizontal;
-    bool mirrorVertical;
 
-    bool lockHorizontal;
-    bool lockVertical;
-    bool hideVerticalDecoration;
-    bool hideHorizontalDecoration;
-
-
-
-    float handleSize;
     QPixmap horizontalHandleIcon;
     QPixmap verticalHandleIcon;
     QPixmap horizontalIcon;
     QPixmap verticalIcon;
-    QPointF axisPosition;
+
     QRectF horizontalHandle;
     QRectF verticalHandle;
     bool xActive;
     bool yActive;
-    float horizontalHandlePosition;
-    float verticalHandlePosition;
+
     float sideMargin;
     float minHandlePosition;
     bool horizontalContainsCursor;
@@ -100,6 +90,8 @@ public:
 
     QLineF horizontalAxis;
     QLineF verticalAxis;
+
+    KisMirrorAxisConfig config;
 };
 
 KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisView>parent)
@@ -111,38 +103,37 @@ KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisVi
     connect(d->resourceProvider, SIGNAL(moveMirrorVerticalCenter()), SLOT(moveVerticalAxisToCenter()));
     connect(d->resourceProvider, SIGNAL(moveMirrorHorizontalCenter()), SLOT(moveHorizontalAxisToCenter()));
 
-    d->mirrorHorizontal = d->resourceProvider->mirrorHorizontal();
-    d->mirrorVertical = d->resourceProvider->mirrorVertical();
-    d->horizontalIcon = KisIconUtils::loadIcon("mirrorAxis-HorizontalMove").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
-    d->verticalIcon = KisIconUtils::loadIcon("mirrorAxis-VerticalMove").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
-    d->horizontalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
-    d->verticalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
-    setVisible(d->mirrorHorizontal || d->mirrorVertical);
-
+    d->config.setMirrorHorizontal(d->resourceProvider->mirrorHorizontal());
+    d->config.setMirrorVertical(d->resourceProvider->mirrorVertical());
+    d->horizontalIcon = KisIconUtils::loadIcon("mirrorAxis-HorizontalMove").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
+    d->verticalIcon = KisIconUtils::loadIcon("mirrorAxis-VerticalMove").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
+    d->horizontalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
+    d->verticalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
+    setVisible(d->config.mirrorHorizontal() || d->config.mirrorVertical());
 
     d->image = parent->canvasBase()->image();
 }
 
 KisMirrorAxis::~KisMirrorAxis()
 {
-    delete d;
 }
 
 float KisMirrorAxis::handleSize() const
 {
-    return d->handleSize;
+    return d->config.handleSize();
 }
 
 void KisMirrorAxis::setHandleSize(float newSize)
 {
-    if(d->handleSize != newSize) {
-        d->handleSize = newSize;
-        d->horizontalIcon = KisIconUtils::loadIcon("symmetry-horyzontal").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
-        d->verticalIcon = KisIconUtils::loadIcon("symmetry-vertical").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
-        d->horizontalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
-        d->verticalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->handleSize, QIcon::Normal, QIcon::On);
+    if(d->config.handleSize() != newSize) {
+        d->config.setHandleSize(newSize);
+        d->horizontalIcon = KisIconUtils::loadIcon("symmetry-horizontal").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
+        d->verticalIcon = KisIconUtils::loadIcon("symmetry-vertical").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
+        d->horizontalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
+        d->verticalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
         d->minHandlePosition = d->sideMargin + newSize;
         emit handleSizeChanged();
+        emit sigConfigChanged();
     }
 }
 
@@ -152,44 +143,51 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     Q_UNUSED(converter);
     Q_UNUSED(canvas);
 
+    if (!view()->isCurrent()) {
+        return;
+    }
+
     gc.save();
     gc.setPen(QPen(QColor(0, 0, 0, 128), 1));
     gc.setBrush(Qt::white);
     gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
-    bool hasMultisample = ((gc.paintEngine()->type() == QPaintEngine::OpenGL2) &&
-                           (ctx->hasExtension("GL_ARB_multisample")));
+    bool hasMultisample = false;
+    if (ctx) {
+        hasMultisample = ((gc.paintEngine()->type() == QPaintEngine::OpenGL2) &&
+                               (ctx->hasExtension("GL_ARB_multisample")));
 
-    // QPainter cannot anti-alias the edges of circles etc. when using OpenGL
-    // So instead, use native OpenGL anti-aliasing when available.
-    if (hasMultisample) {
-        gc.beginNativePainting();
-        ctx->functions()->glEnable(GL_MULTISAMPLE);
-        gc.endNativePainting();
+        // QPainter cannot anti-alias the edges of circles etc. when using OpenGL
+        // So instead, use native OpenGL anti-aliasing when available.
+        if (hasMultisample) {
+            gc.beginNativePainting();
+            ctx->functions()->glEnable(GL_MULTISAMPLE);
+            gc.endNativePainting();
+        }
     }
 
-    float halfHandleSize = d->handleSize / 2;
+    float halfHandleSize = d->config.handleSize() / 2;
 
     d->recomputeVisibleAxes(gc.viewport());
 
-    if(d->mirrorHorizontal && !d->hideHorizontalDecoration) {
+    if(d->config.mirrorHorizontal() && !d->config.hideHorizontalDecoration()) {
         if (!d->horizontalAxis.isNull()) {
-           // QPointF horizontalIndicatorCenter = d->horizontalAxis.unitVector().pointAt(15);
-           // QRectF horizontalIndicator = QRectF(horizontalIndicatorCenter.x() - halfHandleSize, horizontalIndicatorCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
+            // QPointF horizontalIndicatorCenter = d->horizontalAxis.unitVector().pointAt(15);
+            // QRectF horizontalIndicator = QRectF(horizontalIndicatorCenter.x() - halfHandleSize, horizontalIndicatorCenter.y() - halfHandleSize, d->config.handleSize(), d->config.handleSize());
 
-            float horizontalHandlePosition = qBound<float>(d->minHandlePosition, d->horizontalHandlePosition, d->horizontalAxis.length() - d->minHandlePosition);
+            float horizontalHandlePosition = qBound<float>(d->minHandlePosition, d->config.horizontalHandlePosition(), d->horizontalAxis.length() - d->minHandlePosition);
             QPointF horizontalHandleCenter = d->horizontalAxis.unitVector().pointAt(horizontalHandlePosition);
-            d->horizontalHandle = QRectF(horizontalHandleCenter.x() - halfHandleSize, horizontalHandleCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
+            d->horizontalHandle = QRectF(horizontalHandleCenter.x() - halfHandleSize, horizontalHandleCenter.y() - halfHandleSize, d->config.handleSize(), d->config.handleSize());
 
             gc.setPen(QPen(QColor(0, 0, 0, 64), 2, Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
             gc.drawLine(d->horizontalAxis);
 
-           // gc.drawEllipse(horizontalIndicator);
-          //  gc.drawPixmap(horizontalIndicator.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
+            // gc.drawEllipse(horizontalIndicator);
+            //  gc.drawPixmap(horizontalIndicator.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
 
             // don't draw the handles if we are locking the axis for movement
-            if (!d->lockHorizontal) {
+            if (!d->config.lockHorizontal()) {
                 gc.setPen(QPen(QColor(0, 0, 0, 128), 2));
                 gc.drawEllipse(d->horizontalHandle);
                 gc.drawPixmap(d->horizontalHandle.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
@@ -200,22 +198,22 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
         }
     }
 
-    if(d->mirrorVertical && !d->hideVerticalDecoration) {
+    if(d->config.mirrorVertical() && !d->config.hideVerticalDecoration()) {
         if (!d->verticalAxis.isNull()) {
 
             gc.setPen(QPen(QColor(0, 0, 0, 64), 2, Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
             gc.drawLine(d->verticalAxis);
 
 
-           // QPointF verticalIndicatorCenter = d->verticalAxis.unitVector().pointAt(15);
-           // QRectF verticalIndicator = QRectF(verticalIndicatorCenter.x() - halfHandleSize, verticalIndicatorCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
+            // QPointF verticalIndicatorCenter = d->verticalAxis.unitVector().pointAt(15);
+            // QRectF verticalIndicator = QRectF(verticalIndicatorCenter.x() - halfHandleSize, verticalIndicatorCenter.y() - halfHandleSize, d->config.handleSize(), d->config.handleSize());
 
-            float verticalHandlePosition = qBound<float>(d->minHandlePosition, d->verticalHandlePosition, d->verticalAxis.length() - d->minHandlePosition);
+            float verticalHandlePosition = qBound<float>(d->minHandlePosition, d->config.verticalHandlePosition(), d->verticalAxis.length() - d->minHandlePosition);
             QPointF verticalHandleCenter = d->verticalAxis.unitVector().pointAt(verticalHandlePosition);
-            d->verticalHandle = QRectF(verticalHandleCenter.x() - halfHandleSize, verticalHandleCenter.y() - halfHandleSize, d->handleSize, d->handleSize);
+            d->verticalHandle = QRectF(verticalHandleCenter.x() - halfHandleSize, verticalHandleCenter.y() - halfHandleSize, d->config.handleSize(), d->config.handleSize());
 
             // don't draw the handles if we are locking the axis for movement
-            if (!d->lockVertical) {
+            if (!d->config.lockVertical()) {
                 gc.setPen(QPen(QColor(0, 0, 0, 128), 2));
                 gc.drawEllipse(d->verticalHandle);
                 gc.drawPixmap(d->verticalHandle.adjusted(5, 5, -5, -5).toRect(), d->verticalIcon);
@@ -241,7 +239,7 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
     if (!visible()) return false;
 
     QObject *expectedCanvasWidget = view() ?
-        view()->canvasBase()->canvasWidget() : 0;
+                view()->canvasBase()->canvasWidget() : 0;
 
     if (!expectedCanvasWidget || target != expectedCanvasWidget) return false;
 
@@ -250,17 +248,14 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
         QTabletEvent *te = dynamic_cast<QTabletEvent*>(event);
         QPoint pos = me ? me->pos() : (te ? te->pos() : QPoint(77,77));
 
-
-
-
-        if(d->mirrorHorizontal && d->horizontalHandle.contains(pos) && !d->lockHorizontal && !d->hideHorizontalDecoration ) {
+        if(d->config.mirrorHorizontal() && d->horizontalHandle.contains(pos) && !d->config.lockHorizontal() && !d->config.hideHorizontalDecoration() ) {
             d->xActive = true;
             QApplication::setOverrideCursor(Qt::ClosedHandCursor);
             event->accept();
             return true;
         }
 
-        if(d->mirrorVertical && d->verticalHandle.contains(pos) && !d->lockVertical && !d->hideVerticalDecoration) {
+        if(d->config.mirrorVertical() && d->verticalHandle.contains(pos) && !d->config.lockVertical() && !d->config.hideVerticalDecoration()) {
             d->yActive = true;
             QApplication::setOverrideCursor(Qt::ClosedHandCursor);
             event->accept();
@@ -276,8 +271,9 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
         if(d->xActive) {
             float axisX = view()->viewConverter()->widgetToImage<QPoint>(pos).x();
 
-            d->setAxisPosition(axisX, d->axisPosition.y());
-            d->horizontalHandlePosition = KisAlgebra2D::dotProduct<QPointF>(pos - d->horizontalAxis.p1(), d->horizontalAxis.unitVector().p2() - d->horizontalAxis.p1());
+            d->setAxisPosition(axisX, d->config.axisPosition().y());
+            d->config.setHorizontalHandlePosition(KisAlgebra2D::dotProduct<QPointF>(pos - d->horizontalAxis.p1(), d->horizontalAxis.unitVector().p2() - d->horizontalAxis.p1()));
+            emit sigConfigChanged();
 
             event->accept();
             return true;
@@ -285,14 +281,15 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
         if(d->yActive) {
             float axisY = view()->viewConverter()->widgetToImage<QPoint>(pos).y();
 
-            d->setAxisPosition(d->axisPosition.x(), axisY);
-            d->verticalHandlePosition = KisAlgebra2D::dotProduct<QPointF>(pos - d->verticalAxis.p1(), d->verticalAxis.unitVector().p2() - d->verticalAxis.p1());
+            d->setAxisPosition(d->config.axisPosition().x(), axisY);
+            d->config.setVerticalHandlePosition(KisAlgebra2D::dotProduct<QPointF>(pos - d->verticalAxis.p1(), d->verticalAxis.unitVector().p2() - d->verticalAxis.p1()));
+            emit sigConfigChanged();
 
             event->accept();
             return true;
         }
-        if(d->mirrorHorizontal && !d->hideHorizontalDecoration) {
-            if(d->horizontalHandle.contains(pos) && !d->lockHorizontal) {
+        if(d->config.mirrorHorizontal() && !d->config.hideHorizontalDecoration()) {
+            if(d->horizontalHandle.contains(pos) && !d->config.lockHorizontal()) {
                 if(!d->horizontalContainsCursor) {
                     QApplication::setOverrideCursor(Qt::OpenHandCursor);
                     d->horizontalContainsCursor = true;
@@ -302,8 +299,8 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
                 d->horizontalContainsCursor = false;
             }
         }
-        if(d->mirrorVertical && !d->hideVerticalDecoration) {
-            if(d->verticalHandle.contains(pos) && !d->lockVertical) {
+        if(d->config.mirrorVertical() && !d->config.hideVerticalDecoration()) {
+            if(d->verticalHandle.contains(pos) && !d->config.lockVertical()) {
                 if(!d->verticalContainsCursor) {
                     QApplication::setOverrideCursor(Qt::OpenHandCursor);
                     d->verticalContainsCursor = true;
@@ -335,17 +332,22 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
 
 void KisMirrorAxis::mirrorModeChanged()
 {
-    d->mirrorHorizontal = d->resourceProvider->mirrorHorizontal();
-    d->mirrorVertical = d->resourceProvider->mirrorVertical();
+    if (!view()->isCurrent()) {
+        return;
+    }
 
-    d->lockHorizontal = d->resourceProvider->mirrorHorizontalLock();
-    d->lockVertical = d->resourceProvider->mirrorVerticalLock();
+    d->config.setMirrorHorizontal(d->resourceProvider->mirrorHorizontal());
+    d->config.setMirrorVertical(d->resourceProvider->mirrorVertical());
 
-    d->hideHorizontalDecoration = d->resourceProvider->mirrorHorizontalHideDecorations();
-    d->hideVerticalDecoration = d->resourceProvider->mirrorVerticalHideDecorations();
+    d->config.setLockHorizontal(d->resourceProvider->mirrorHorizontalLock());
+    d->config.setLockVertical(d->resourceProvider->mirrorVerticalLock());
 
-    setVisible(d->mirrorHorizontal || d->mirrorVertical);
+    d->config.setHideHorizontalDecoration(d->resourceProvider->mirrorHorizontalHideDecorations());
+    d->config.setHideVerticalDecoration(d->resourceProvider->mirrorVerticalHideDecorations());
 
+    setVisible(d->config.mirrorHorizontal() || d->config.mirrorVertical());
+
+    emit sigConfigChanged();
 }
 
 void KisMirrorAxis::setVisible(bool v)
@@ -363,20 +365,87 @@ void KisMirrorAxis::setVisible(bool v)
     }
 }
 
+void KisMirrorAxis::setMirrorAxisConfig(const KisMirrorAxisConfig &config)
+{
+    if (config != d->config) {
+        KisSignalsBlocker blocker(d->resourceProvider);
+
+        d->config = config;
+
+        d->setAxisPosition(d->config.axisPosition().x(), d->config.axisPosition().y());
+
+        d->resourceProvider->setMirrorHorizontal(d->config.mirrorHorizontal());
+        d->resourceProvider->setMirrorVertical(d->config.mirrorVertical());
+
+        d->resourceProvider->setMirrorHorizontalLock(d->config.lockHorizontal());
+        d->resourceProvider->setMirrorVerticalLock(d->config.lockVertical());
+
+        d->resourceProvider->setMirrorHorizontal(d->config.mirrorHorizontal());
+        d->resourceProvider->setMirrorVertical(d->config.mirrorVertical());
+
+        d->resourceProvider->setMirrorHorizontalHideDecorations(d->config.hideHorizontalDecoration());
+        d->resourceProvider->setMirrorVerticalHideDecorations(d->config.hideVerticalDecoration());
+    }
+
+    toggleMirrorActions();
+    setVisible(d->config.mirrorHorizontal() || d->config.mirrorVertical());
+}
+
+const KisMirrorAxisConfig &KisMirrorAxis::mirrorAxisConfig() const
+{
+    return d->config;
+}
+
+void KisMirrorAxis::toggleMirrorActions()
+{
+    KActionCollection* collection = view()->viewManager()->actionCollection();
+    // first uncheck the action, then set according to config;
+    // otherwise the connected KisHighlightedToolButton's highlight color is not
+    // properly set
+    collection->action("hmirror_action")->setChecked(false);
+    collection->action("vmirror_action")->setChecked(false);
+
+    if (d->config.mirrorHorizontal()) {
+        collection->action("hmirror_action")->setChecked(d->config.mirrorHorizontal());
+    }
+
+    if (d->config.mirrorVertical()) {
+        collection->action("vmirror_action")->setChecked(d->config.mirrorVertical());
+    }
+
+    collection->action("mirrorX-lock")->setChecked(d->config.lockHorizontal());
+    collection->action("mirrorY-lock")->setChecked(d->config.lockVertical());
+
+    collection->action("mirrorX-hideDecorations")->setChecked(d->config.hideHorizontalDecoration());
+    collection->action("mirrorY-hideDecorations")->setChecked(d->config.hideVerticalDecoration());
+}
+
 void KisMirrorAxis::moveHorizontalAxisToCenter()
 {
-    d->setAxisPosition(d->image->width()/2, d->axisPosition.y());
+    if (!view()->isCurrent()) {
+        return;
+    }
+
+    d->setAxisPosition(d->image->width()/2, d->config.axisPosition().y());
+    emit sigConfigChanged();
 }
 
 void KisMirrorAxis::moveVerticalAxisToCenter()
 {
-    d->setAxisPosition(d->axisPosition.x(), d->image->height()/2 );
+    if (!view()->isCurrent()) {
+        return;
+    }
+
+    d->setAxisPosition(d->config.axisPosition().x(), d->image->height()/2 );
+    emit sigConfigChanged();
 }
 
 
 void KisMirrorAxis::Private::setAxisPosition(float x, float y)
 {
     QPointF newPosition = QPointF(x, y);
+
+    config.setAxisPosition(newPosition);
 
     const QPointF relativePosition = KisAlgebra2D::absoluteToRelative(newPosition, image->bounds());
     image->setMirrorAxesCenter(relativePosition);
@@ -389,15 +458,15 @@ void KisMirrorAxis::Private::recomputeVisibleAxes(QRect viewport)
 {
     KisCoordinatesConverter *converter = q->view()->viewConverter();
 
-    axisPosition = KisAlgebra2D::relativeToAbsolute(image->mirrorAxesCenter(), image->bounds());
+    config.setAxisPosition(KisAlgebra2D::relativeToAbsolute(image->mirrorAxesCenter(), image->bounds()));
 
-    QPointF samplePt1 = converter->imageToWidget<QPointF>(axisPosition);
-    QPointF samplePt2 = converter->imageToWidget<QPointF>(QPointF(axisPosition.x(), axisPosition.y() - 100));
+    QPointF samplePt1 = converter->imageToWidget<QPointF>(config.axisPosition());
+    QPointF samplePt2 = converter->imageToWidget<QPointF>(QPointF(config.axisPosition().x(), config.axisPosition().y() - 100));
 
     horizontalAxis = QLineF(samplePt1, samplePt2);
     if (!KisAlgebra2D::intersectLineRect(horizontalAxis, viewport)) horizontalAxis = QLineF();
 
-    samplePt2 = converter->imageToWidget<QPointF>(QPointF(axisPosition.x() - 100, axisPosition.y()));
+    samplePt2 = converter->imageToWidget<QPointF>(QPointF(config.axisPosition().x() - 100, config.axisPosition().y()));
     verticalAxis = QLineF(samplePt1, samplePt2);
     if (!KisAlgebra2D::intersectLineRect(verticalAxis, viewport)) verticalAxis = QLineF();
 }

@@ -19,8 +19,8 @@
 
 #include "kbugreport.h"
 
-#include <QtCore/QProcess>
-#include <QtCore/QCoreApplication>
+#include <QProcess>
+#include <QCoreApplication>
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QLayout>
@@ -189,7 +189,7 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
     d->_k_updateUrl();
 
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
-    okButton->setText(i18n("&Launch Bug Report Wizard"));
+    okButton->setText(i18n("&Submit Bug Report"));
     okButton->setIcon(KisIconUtils::loadIcon(QStringLiteral("tools-report-bug")));
     lay->addWidget(buttonBox);
     setMinimumHeight(sizeHint().height() + 20);   // WORKAROUND: prevent "cropped" qcombobox

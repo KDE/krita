@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -29,6 +30,7 @@
 #include <kis_canvas2.h>
 
 #include <defaulttool/DefaultTool.h>
+#include <defaulttool/DefaultToolFactory.h>
 
 class ToolReferenceImagesWidget;
 class KisReferenceImagesLayer;
@@ -64,6 +66,7 @@ public Q_SLOTS:
     void deactivate() override;
 
     void addReferenceImage();
+    void pasteReferenceImage();
     void removeAllReferenceImages();
     void saveReferenceImages();
     void loadReferenceImages();
@@ -81,11 +84,11 @@ private:
 };
 
 
-class ToolReferenceImagesFactory : public KoToolFactoryBase
+class ToolReferenceImagesFactory : public DefaultToolFactory
 {
 public:
     ToolReferenceImagesFactory()
-    : KoToolFactoryBase("ToolReferenceImages") {
+    : DefaultToolFactory("ToolReferenceImages") {
         setToolTip(i18n("Reference Images Tool"));
         setSection(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("krita_tool_reference_images"));
@@ -99,6 +102,8 @@ public:
     KoToolBase * createTool(KoCanvasBase * canvas) override {
         return new ToolReferenceImages(canvas);
     }
+
+    QList<QAction *> createActionsImpl() override;
 
 };
 

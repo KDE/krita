@@ -34,8 +34,6 @@
 #include <commands_new/kis_node_move_command2.h>
 #include <QMimeData>
 
-#include <QTemporaryFile>
-
 #include <kis_icon.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -177,12 +175,16 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* c
      */
     const QTransform thisInvertedTransform = this->absoluteTransformation(0).inverted();
 
+    m_d->canvas->setUpdatesBlocked(true);
+
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
         clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
         addShape(clonedShape);
     }
+
+    m_d->canvas->setUpdatesBlocked(false);
 }
 
 KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_addShapes)
@@ -290,7 +292,7 @@ void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller, KisPaintDe
     connect(m_d->canvas->selectedShapesProxy(), SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
-    connect(this, SIGNAL(sigMoveShapes(const QPointF&)), SLOT(slotMoveShapes(const QPointF&)));
+    connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
 }
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
@@ -475,6 +477,16 @@ bool KisShapeLayer::isShapeEditable(bool recursive) const
 void KisShapeLayer::forceUpdateTimedNode()
 {
     m_d->canvas->forceRepaint();
+}
+
+bool KisShapeLayer::hasPendingTimedUpdates() const
+{
+    return m_d->canvas->hasPendingUpdates();
+}
+
+void KisShapeLayer::forceUpdateHiddenAreaOnOriginal()
+{
+    m_d->canvas->forceRepaintWithHiddenAreas();
 }
 
 bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, const QSizeF &sizeInPt)

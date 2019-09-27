@@ -301,6 +301,9 @@ class KisLayerComposition;
 typedef QSharedPointer<KisLayerComposition> KisLayerCompositionSP;
 typedef QWeakPointer<KisLayerComposition> KisLayerCompositionWSP;
 
+class KisMirrorAxis;
+typedef KisSharedPtr<KisMirrorAxis> KisMirrorAxisSP;
+typedef KisWeakSharedPtr<KisMirrorAxis> KisMirrorAxisWSP;
 
 
 #include <QSharedPointer>

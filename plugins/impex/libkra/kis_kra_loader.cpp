@@ -87,6 +87,7 @@
 #include "KisProofingConfiguration.h"
 #include "kis_layer_properties_icons.h"
 #include "kis_node_view_color_scheme.h"
+#include "KisMirrorAxisConfig.h"
 
 /*
 
@@ -200,7 +201,6 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
 {
     QString attr;
     KisImageSP image = 0;
-    QString name;
     qint32 width;
     qint32 height;
     QString profileProductName;
@@ -297,10 +297,10 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
 
         if (m_d->document) {
-            image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
+            image = new KisImage(m_d->document->createUndoStore(), width, height, cs, m_d->imageName);
         }
         else {
-            image = new KisImage(0, width, height, cs, name);
+            image = new KisImage(0, width, height, cs, m_d->imageName);
         }
         image->setResolution(xres, yres);
         loadNodes(element, image, const_cast<KisGroupLayer*>(image->rootLayer().data()));
@@ -356,6 +356,8 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             loadGrid(e);
         } else if (e.tagName() == "guides") {
             loadGuides(e);
+        } else if (e.tagName() == MIRROR_AXIS) {
+            loadMirrorAxis(e);
         } else if (e.tagName() == "assistants") {
             loadAssistantsList(e);
         } else if (e.tagName() == "audio") {
@@ -538,6 +540,11 @@ QStringList KisKraLoader::errorMessages() const
 QStringList KisKraLoader::warningMessages() const
 {
     return m_d->warningMessages;
+}
+
+QString KisKraLoader::imageName() const
+{
+    return m_d->imageName;
 }
 
 
@@ -778,7 +785,10 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image)
     node->setUseInTimeline(timelineEnabled);
 
     if (node->inherits("KisPaintLayer")) {
-        KisPaintLayer* layer            = qobject_cast<KisPaintLayer*>(node.data());
+        KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(node.data());
+        QBitArray channelLockFlags = stringToFlags(element.attribute(CHANNEL_LOCK_FLAGS, ""), colorSpace->channelCount());
+        layer->setChannelLockFlags(channelLockFlags);
+
         bool onionEnabled = element.attribute(ONION_SKIN_ENABLED, "0") == "0" ? false : true;
         layer->setOnionSkinEnabled(onionEnabled);
     }
@@ -1175,6 +1185,17 @@ void KisKraLoader::loadGuides(const KoXmlElement& elem)
     KisGuidesConfig guides;
     guides.loadFromXml(domElement);
     m_d->document->setGuidesConfig(guides);
+}
+
+void KisKraLoader::loadMirrorAxis(const KoXmlElement &elem)
+{
+    QDomDocument dom;
+    KoXml::asQDomElement(dom, elem);
+    QDomElement domElement = dom.firstChildElement();
+
+    KisMirrorAxisConfig mirrorAxis;
+    mirrorAxis.loadFromXml(domElement);
+    m_d->document->setMirrorAxisConfig(mirrorAxis);
 }
 
 void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)

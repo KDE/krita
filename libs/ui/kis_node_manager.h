@@ -22,6 +22,7 @@
 #include <QList>
 
 #include "kis_types.h"
+#include "kis_base_node.h"
 #include <kritaui_export.h>
 
 class KActionCollection;
@@ -93,9 +94,14 @@ public:
     const KoColorSpace* activeColorSpace();
 
     /**
+     * Sets the name for the node in a universal way (masks/layers)
+     */
+    void setNodeName(KisNodeSP node, const QString &name);
+
+    /**
      * Sets opacity for the node in a universal way (masks/layers)
      */
-    void setNodeOpacity(KisNodeSP node, qint32 opacity, bool finalChange);
+    void setNodeOpacity(KisNodeSP node, qint32 opacity);
 
     /**
      * Sets compositeOp for the node in a universal way (masks/layers)
@@ -109,6 +115,8 @@ public:
     KisNodeDisplayModeAdapter* nodeDisplayModeAdapter() const;
 
     static bool isNodeHidden(KisNodeSP node, bool isGlobalSelectionHidden);
+
+    bool trySetNodeProperties(KisNodeSP node, KisImageSP image, KisBaseNode::PropertyList properties) const;
 
 public Q_SLOTS:
 
@@ -166,15 +174,18 @@ public Q_SLOTS:
 
     void toggleIsolateActiveNode();
     void toggleIsolateMode(bool checked);
+    void slotUpdateIsolateModeActionImageStatusChange();
     void slotUpdateIsolateModeAction();
     void slotTryRestartIsolatedMode();
 
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
-    void createNode(const QString& nodeType, bool quiet = false, KisPaintDeviceSP copyFrom = 0);
+    KisNodeSP createNode(const QString& nodeType, bool quiet = false, KisPaintDeviceSP copyFrom = 0);
     void convertNode(const QString &nodeType);
     void nodesUpdated();
     void nodeProperties(KisNodeSP node);
-    void nodeOpacityChanged(qreal opacity, bool finalChange);
+    /// pop up a window for changing the source of the selected Clone Layers
+    void changeCloneSource();
+    void nodeOpacityChanged(qreal opacity);
     void nodeCompositeOpChanged(const KoCompositeOp* op);
     void duplicateActiveNode();
     void removeNode();

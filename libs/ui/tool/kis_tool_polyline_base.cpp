@@ -31,6 +31,7 @@
 #include <KisViewManager.h>
 #include <kis_action.h>
 #include <kactioncollection.h>
+#include <kis_icon.h>
 
 #include "kis_action_registry.h"
 
@@ -44,9 +45,6 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas,  KisToolPolyline
       m_type(type),
       m_closeSnappingActivated(false)
 {
-    QAction *undo_polygon_selection =
-        KisActionRegistry::instance()->makeQAction("undo_polygon_selection", this);
-    addAction("undo_polygon_selection", undo_polygon_selection);
 }
 
 
@@ -81,9 +79,15 @@ bool KisToolPolylineBase::hasUserInteractionRunning() const
 void KisToolPolylineBase::beginPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);
-
-    if ((m_type == PAINT && (!nodeEditable() || nodePaintAbility() == NONE)) ||
+    NodePaintAbility paintability = nodePaintAbility();
+    if ((m_type == PAINT && (!nodeEditable() || paintability == UNPAINTABLE || paintability  == KisToolPaint::CLONE)) ||
         (m_type == SELECT && !selectionEditable())) {
+
+        if (paintability == KisToolPaint::CLONE){
+            KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+            QString message = i18n("This tool cannot paint on clone layers.  Please select a paint or vector layer or mask.");
+            kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
+        }
 
         event->ignore();
         return;
@@ -168,7 +172,6 @@ void KisToolPolylineBase::undoSelection()
         if (m_points.size() > 2) {
             rect = pixelToView(QRectF(m_points.last(), m_points.at(m_points.size()-2)).normalized());
             rect.adjust(-PREVIEW_LINE_WIDTH, -PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH);
-            rect |= rect;
             updateCanvasViewRect(rect);
         }
         if (m_points.size() > 0) {

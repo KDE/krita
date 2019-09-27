@@ -59,7 +59,6 @@ public:
     void setShape(KoSvgTextShape *shape);
 
 private Q_SLOTS:
-
     /**
      * switch the text editor tab.
      */
@@ -72,15 +71,20 @@ private Q_SLOTS:
      */
     void checkFormat();
 
+    void slotFixUpEmptyTextBlock();
+
     void save();
 
     void undo();
     void redo();
+
     void cut();
     void copy();
     void paste();
+
     void selectAll();
     void deselect();
+
     void find();
     void findNext();
     void findPrev();
@@ -109,6 +113,7 @@ private Q_SLOTS:
     void decreaseTextSize();
 
     void setLineHeight(double lineHeightPercentage);
+    void setLetterSpacing(double letterSpacing);
     void alignLeft();
     void alignRight();
     void alignCenter();
@@ -128,16 +133,18 @@ private Q_SLOTS:
     void dialogButtonClicked(QAbstractButton *button);
 
 Q_SIGNALS:
-
     void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextPreferred);
     void textEditorClosed();
 
 protected:
-
     void wheelEvent(QWheelEvent *event) override;
+    /**
+     * Selects all if there is no selection
+     * @returns a copy of the previous cursor.
+     */
+    QTextCursor setTextSelection();
 
 private:
-
     void applySettings();
 
     QAction *createAction(const QString &name,
@@ -145,8 +152,6 @@ private:
     void createActions();
     void enableRichTextActions(bool enable);
     void enableSvgTextActions(bool enable);
-
-
 
     Ui_WdgSvgTextEditor m_textEditorWidget;
     QTextEdit *m_currentEditor {0};

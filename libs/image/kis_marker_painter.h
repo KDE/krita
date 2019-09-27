@@ -30,6 +30,10 @@ class KoColor;
 class KRITAIMAGE_EXPORT KisMarkerPainter
 {
 public:
+    /// Any number bigger than this or lower than -this is considered invalid
+    static const qint32 ValidNumberRangeValue = 2140000000; // bit less than max value of int
+
+
     KisMarkerPainter(KisPaintDeviceSP device, const KoColor &color);
     ~KisMarkerPainter();
 
@@ -43,6 +47,22 @@ public:
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
+
+    /// This method is to check whether the number is not infinite
+    /// or negative infinite with some epsilon
+    /// (@see ValidNumberRangeValue)
+    /// @param number value entered by the user
+    /// @return true if number is in range, false otherwise
+    bool isNumberInValidRange(qint32 number);
+
+
+    /// This method is to check whether the rectangle has only valid numbers
+    /// as values for x, y, height and width.
+    /// If values are not valid, Sequential Iterator can give incorrect values.
+    /// (@see isNumberInValidRange, ValidNumberRangeValue)
+    /// @param number value entered by the user
+    /// @return true if rect's values is in range, false otherwise
+    bool isRectInValidRange(const QRect &rect);
 };
 
 #endif /* __KIS_MARKER_PAINTER_H */

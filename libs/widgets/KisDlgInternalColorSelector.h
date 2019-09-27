@@ -26,9 +26,12 @@
 #include "KoColorSet.h"
 
 #include <QScopedPointer>
+#include <QDialog>
 
 #include "KisScreenColorPickerBase.h"
-#include "ui_WdgDlgInternalColorSelector.h"
+
+class Ui_WdgDlgInternalColorSelector;
+class KoColorPatch;
 
 /**
  * @brief The KisInternalColorSelector class
@@ -39,11 +42,13 @@ class KRITAWIDGETS_EXPORT KisDlgInternalColorSelector : public QDialog
 {
     Q_OBJECT
 
-public:
-
-
     static std::function<KisScreenColorPickerBase *(QWidget *)> s_screenColorPickerFactory;
 
+public:
+
+    static void setScreenColorPickerFactory(std::function<KisScreenColorPickerBase *(QWidget *)> f) {
+        s_screenColorPickerFactory = f;
+    }
 
     struct Config
     {
@@ -93,9 +98,10 @@ public:
      * the KoColor you want.
      * @param color - The current color. Make sure this is in the color space you want your
      * end color to be in.
-     * @param chooseAlpha - Whether or not the alpha-choosing functionality should be used.
+     * @param parent parent widget.
+     * @param caption the dialog caption.
      */
-    static KoColor getModalColorDialog(const KoColor color, QWidget* parent = Q_NULLPTR, QString caption = QString());
+    static KoColor getModalColorDialog(const KoColor color, QWidget* parent = 0, QString caption = QString());
 
     /**
      * @brief getCurrentColor
@@ -116,6 +122,7 @@ Q_SIGNALS:
      */
 
     void signalForegroundColorChosen(KoColor color);
+
 public Q_SLOTS:
     /**
      * @brief slotColorUpdated
@@ -142,13 +149,6 @@ public Q_SLOTS:
     void reject() override;
 
 private Q_SLOTS:
-
-    /**
-     * @brief slotLockSelector
-     * This slot will prevent the color from being updated.
-     */
-    void slotLockSelector();
-
     /**
      * @brief slotConfigurationChanged
      * Wrapper slot for changes to the colorspace.

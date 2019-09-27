@@ -297,17 +297,17 @@ struct DefaultButtonsConverter
                 if (convertedButton == Qt::NoButton) {
 
                     /**
-                     * Sometimes the driver-handled sortcuts are just
+                     * Sometimes the driver-handled shortcuts are just
                      * keyboard modifiers, so ideally we should handle
                      * them as well. The problem is that we cannot
                      * know if the shortcut was a pan/zoom action or a
-                     * shortcut. So here we use a "hackish" approash.
+                     * shortcut. So here we use a "hackish" approach.
                      * We just check if any modifier has been pressed
                      * and, if so, pass the button to Krita. Of
                      * course, if the driver uses some really complex
                      * shortcuts like "Shift + stylus btn" to generate
                      * some recorded shortcut, it will not work. But I
-                     * guess it will be ok for th emost of the
+                     * guess it will be ok for the most of the
                      * usecases.
                      *
                      * WARNING: this hack will *not* work if you bind
@@ -403,7 +403,7 @@ inline QPointF QWindowsTabletDeviceData::scaleCoordinates(int coordX, int coordY
 
 
 /*!
-  \class QWindowsWinTab32DLL QWindowsTabletSupport
+  \class QWindowsWinTab32DLL
   \brief Functions from wintabl32.dll shipped with WACOM tablets used by QWindowsTabletSupport.
 
   \internal
@@ -938,7 +938,7 @@ void QWindowsTabletSupport::tabletUpdateCursor(const int pkCursor)
 #ifdef UNICODE
     if (!isSurfacePro3) {
         /**
-         * Some really "nice" tablet drivers don't know that trhey are
+         * Some really "nice" tablet drivers don't know that they are
          * supposed to return their name length when the buffer is
          * null and they try to write into it effectively causing a
          * suicide. So we cannot rely on it :(

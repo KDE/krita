@@ -75,51 +75,27 @@ class KisToolSelectBase : public BaseClass
 public:
 
     KisToolSelectBase(KoCanvasBase* canvas, const QString toolName)
-        :BaseClass(canvas),
-         m_widgetHelper(toolName),
-         m_selectionActionAlternate(SELECTION_DEFAULT)
+        : BaseClass(canvas)
+        , m_widgetHelper(toolName)
+        , m_selectionActionAlternate(SELECTION_DEFAULT)
     {
         KisSelectionModifierMapper::instance();
-        initShortcuts();
     }
 
     KisToolSelectBase(KoCanvasBase* canvas, const QCursor cursor, const QString toolName)
-        :BaseClass(canvas, cursor),
-         m_widgetHelper(toolName),
-         m_selectionActionAlternate(SELECTION_DEFAULT)
+        : BaseClass(canvas, cursor)
+        , m_widgetHelper(toolName)
+        , m_selectionActionAlternate(SELECTION_DEFAULT)
     {
         KisSelectionModifierMapper::instance();
-        initShortcuts();
     }
 
-    KisToolSelectBase(KoCanvasBase* canvas, QCursor cursor, QString toolName, KisTool *delegateTool)
-        :BaseClass(canvas, cursor, delegateTool),
-         m_widgetHelper(toolName),
-         m_selectionActionAlternate(SELECTION_DEFAULT)
+    KisToolSelectBase(KoCanvasBase* canvas, QCursor cursor, QString toolName, KoToolBase *delegateTool)
+        : BaseClass(canvas, cursor, delegateTool)
+        , m_widgetHelper(toolName)
+        , m_selectionActionAlternate(SELECTION_DEFAULT)
     {
         KisSelectionModifierMapper::instance();
-        initShortcuts();
-    }
-
-    void initShortcuts()
-    {
-        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-        KisViewManager* viewManager = kiscanvas->viewManager();
-        KisActionManager *manager = viewManager->actionManager();
-
-        KisAction *action = 0;
-
-        action = manager->createAction("selection_tool_mode_add");
-        this->addAction(action->objectName(), action);
-
-        action = manager->createAction("selection_tool_mode_replace");
-        this->addAction(action->objectName(), action);
-
-        action = manager->createAction("selection_tool_mode_subtract");
-        this->addAction(action->objectName(), action);
-
-        action = manager->createAction("selection_tool_mode_intersect");
-        this->addAction(action->objectName(), action);
     }
 
     void updateActionShortcutToolTips() {
@@ -161,6 +137,10 @@ public:
             &m_widgetHelper, SLOT(slotIntersectModeRequested()));
 
         updateActionShortcutToolTips();
+
+        if (isPixelOnly() && m_widgetHelper.optionWidget()) {
+            m_widgetHelper.optionWidget()->enablePixelOnlySelectionMode();
+        }
     }
 
     void deactivate()
@@ -179,6 +159,9 @@ public:
         this->connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(resetCursorStyle()));
 
         updateActionShortcutToolTips();
+        if (isPixelOnly() && m_widgetHelper.optionWidget()) {
+            m_widgetHelper.optionWidget()->enablePixelOnlySelectionMode();
+        }
 
         return m_widgetHelper.optionWidget();
     }
@@ -252,12 +235,19 @@ public:
 
         KisSelectionSP selection = canvas->viewManager()->selection();
         if (selection &&
-            selection->outlineCacheValid() &&
-            selection->outlineCache().contains(pos)) {
+            selection->outlineCacheValid()) {
 
-            KisNodeSP parent = selection->parentNode();
-            if (parent && parent->isEditable()) {
-                return parent;
+            const qreal handleRadius = qreal(this->handleRadius()) / canvas->coordinatesConverter()->effectiveZoom();
+            QPainterPath samplePath;
+            samplePath.addEllipse(pos, handleRadius, handleRadius);
+
+            const QPainterPath selectionPath = selection->outlineCache();
+
+            if (selectionPath.intersects(samplePath) && !selectionPath.contains(samplePath)) {
+                KisNodeSP parent = selection->parentNode();
+                if (parent && parent->isEditable()) {
+                    return parent;
+                }
             }
         }
 
@@ -287,7 +277,7 @@ public:
             const QPointF pos = this->convertToPixelCoord(event->point);
             KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos, event->modifiers());
             if (selectionMask) {
-                this->useCursor(KisCursor::moveCursor());
+                this->useCursor(KisCursor::moveSelectionCursor());
             } else {
                 setAlternateSelectionAction(KisSelectionModifierMapper::map(event->modifiers()));
                 this->resetCursorStyle();
@@ -310,11 +300,11 @@ public:
                 KisStrokeStrategy *strategy = new MoveStrokeStrategy({selectionMask}, this->image().data(), this->image().data());
                 m_moveStrokeId = this->image()->startStroke(strategy);
                 m_dragStartPos = pos;
-
+                m_didMove = true;
                 return;
             }
         }
-
+        m_didMove = false;
         keysAtStart = event->modifiers();
 
         setAlternateSelectionAction(KisSelectionModifierMapper::map(keysAtStart));
@@ -366,6 +356,10 @@ public:
         return m_moveStrokeId;
     }
 
+    bool selectionDidMove() const {
+        return m_didMove;
+    }
+
     QMenu* popupActionsMenu() {
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, 0);
@@ -379,11 +373,16 @@ protected:
     KisSelectionToolConfigWidgetHelper m_widgetHelper;
     SelectionAction m_selectionActionAlternate;
 
+    virtual bool isPixelOnly() const {
+        return false;
+    }
+
 private:
     Qt::KeyboardModifiers keysAtStart;
 
     QPointF m_dragStartPos;
     KisStrokeId m_moveStrokeId;
+    bool m_didMove = false;
 
     KisSignalAutoConnectionsStore m_modeConnections;
 };

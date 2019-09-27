@@ -35,7 +35,6 @@
 #include "KoConvolutionOpImpl.h"
 #include "KoInvertColorTransformation.h"
 
-
 /**
  * This in an implementation of KoColorSpace which can be used as a base for colorspaces with as many
  * different channels of the same type.
@@ -49,6 +48,9 @@
 template<class _CSTrait>
 class KoColorSpaceAbstract : public KoColorSpace
 {
+public:
+    typedef _CSTrait ColorSpaceTraits;
+
 public:
     KoColorSpaceAbstract(const QString &id, const QString &name) :
         KoColorSpace(id, name, new KoMixColorsOpImpl< _CSTrait>(), new KoConvolutionOpImpl< _CSTrait>()) {
@@ -64,6 +66,11 @@ public:
     quint32 channelCount() const override {
         return _CSTrait::channels_nb;
     }
+
+    quint32 alphaPos() const override {
+        return _CSTrait::alpha_pos;
+    }
+
 
     quint32 pixelSize() const override {
         return _CSTrait::pixelSize;
@@ -137,7 +144,7 @@ public:
     }
 
     KoColorTransformation* createInvertTransformation() const override {
-        return new KoInvertColorTransformation(this);
+        return KoInvertColorTransformation::getTransformator(this);
     }
 
     KoColorTransformation *createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const override {

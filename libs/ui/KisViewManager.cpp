@@ -214,6 +214,8 @@ public:
     KisAction *zoomOut;
     KisAction *softProof;
     KisAction *gamutCheck;
+    KisAction *toggleFgBg;
+    KisAction *resetFgBg;
 
     KisSelectionManager selectionManager;
     KisGuidesManager guidesManager;
@@ -302,7 +304,7 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
             d->controlFrame.paintopBox(), SLOT(slotToolChanged(KoCanvasController*,int)));
 
     connect(&d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
-            resourceProvider(), SLOT(slotNodeActivated(KisNodeSP)));
+            canvasResourceProvider(), SLOT(slotNodeActivated(KisNodeSP)));
 
     connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(slotViewAdded(KisView*)));
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(slotViewRemoved(KisView*)));
@@ -319,24 +321,19 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     d->canvasResourceProvider.setFGColor(cfg.readKoColor("LastForeGroundColor",foreground));
     KoColor background(Qt::white, cs);
     d->canvasResourceProvider.setBGColor(cfg.readKoColor("LastBackGroundColor",background));
-
-
-
 }
 
 
 KisViewManager::~KisViewManager()
 {
     KisConfig cfg(false);
-    if (resourceProvider() && resourceProvider()->currentPreset()) {
-        cfg.writeEntry("LastPreset", resourceProvider()->currentPreset()->name());
-        cfg.writeKoColor("LastForeGroundColor",resourceProvider()->fgColor());
-        cfg.writeKoColor("LastBackGroundColor",resourceProvider()->bgColor());
-
+    if (canvasResourceProvider() && canvasResourceProvider()->currentPreset()) {
+        cfg.writeKoColor("LastForeGroundColor",canvasResourceProvider()->fgColor());
+        cfg.writeKoColor("LastBackGroundColor",canvasResourceProvider()->bgColor());
     }
 
     cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
-
+    cfg.writeEntry("CanvasOnlyActive", false); // We never restart in CavnasOnlyMode
     delete d;
 }
 
@@ -379,6 +376,11 @@ void KisViewManager::slotViewRemoved(KisView *view)
     if (viewCount() == 0) {
         d->statusBar.hideAllStatusBarItems();
     }
+
+    KisConfig cfg(false);
+    if (canvasResourceProvider() && canvasResourceProvider()->currentPreset()) {
+        cfg.writeEntry("LastPreset", canvasResourceProvider()->currentPreset()->name());
+    }
 }
 
 void KisViewManager::setCurrentView(KisView *view)
@@ -407,7 +409,7 @@ void KisViewManager::setCurrentView(KisView *view)
         d->gamutCheck->setChecked(imageView->gamutCheck());
 
         // Wait for the async image to have loaded
-        KisDocument* doc = view->document();
+        KisDocument* doc = imageView->document();
 
         if (KisConfig(true).readEntry<bool>("EnablePositionLabel", false)) {
             connect(d->currentImageView->canvasController()->proxyObject,
@@ -444,6 +446,7 @@ void KisViewManager::setCurrentView(KisView *view)
             }
             if (preset) {
                 paintOpBox()->restoreResource(preset.data());
+                canvasResourceProvider()->setCurrentCompositeOp(preset->settings()->paintOpCompositeOp());
             }
         }
 
@@ -501,11 +504,11 @@ void KisViewManager::setCurrentView(KisView *view)
 
         d->viewConnections.addUniqueConnection(
                     image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),
-                    resourceProvider(), SLOT(slotImageSizeChanged()));
+                    canvasResourceProvider(), SLOT(slotImageSizeChanged()));
 
         d->viewConnections.addUniqueConnection(
                     image(), SIGNAL(sigResolutionChanged(double,double)),
-                    resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+                    canvasResourceProvider(), SLOT(slotOnScreenResolutionChanged()));
 
         d->viewConnections.addUniqueConnection(
                     image(), SIGNAL(sigNodeChanged(KisNodeSP)),
@@ -514,14 +517,14 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(
                     d->currentImageView->zoomManager()->zoomController(),
                     SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
-                    resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+                    canvasResourceProvider(), SLOT(slotOnScreenResolutionChanged()));
 
     }
 
     d->actionManager.updateGUI();
 
-    resourceProvider()->slotImageSizeChanged();
-    resourceProvider()->slotOnScreenResolutionChanged();
+    canvasResourceProvider()->slotImageSizeChanged();
+    canvasResourceProvider()->slotOnScreenResolutionChanged();
 
     Q_EMIT viewChanged();
 }
@@ -543,7 +546,7 @@ KisImageWSP KisViewManager::image() const
     return 0;
 }
 
-KisCanvasResourceProvider * KisViewManager::resourceProvider()
+KisCanvasResourceProvider * KisViewManager::canvasResourceProvider()
 {
     return &d->canvasResourceProvider;
 }
@@ -732,6 +735,13 @@ void KisViewManager::createActions()
 
     d->showPixelGrid = actionManager()->createAction("view_pixel_grid");
     slotUpdatePixelGridAction();
+
+    d->toggleFgBg = actionManager()->createAction("toggle_fg_bg");
+    connect(d->toggleFgBg, SIGNAL(triggered(bool)), this, SLOT(slotToggleFgBg()));
+
+    d->resetFgBg =  actionManager()->createAction("reset_fg_bg");
+    connect(d->resetFgBg, SIGNAL(triggered(bool)), this, SLOT(slotResetFgBg()));
+
 }
 
 void KisViewManager::setupManagers()
@@ -1132,12 +1142,14 @@ void KisViewManager::showStatusBar(bool toggled)
 void KisViewManager::switchCanvasOnly(bool toggled)
 {
     KisConfig cfg(false);
-    KisMainWindow* main = mainWindow();
+    KisMainWindow *main = mainWindow();
 
     if(!main) {
         dbgUI << "Unable to switch to canvas-only mode, main window not found";
         return;
     }
+
+    cfg.writeEntry("CanvasOnlyActive", toggled);
 
     if (toggled) {
         d->canvasState = qtMainWindow()->saveState();
@@ -1287,7 +1299,7 @@ void KisViewManager::guiUpdateTimeout()
 void KisViewManager::showFloatingMessage(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
 {
     if (!d->currentImageView) return;
-    d->currentImageView->showFloatingMessageImpl(message, icon, timeout, priority, alignment);
+    d->currentImageView->showFloatingMessage(message, icon, timeout, priority, alignment);
 
     emit floatingMessageRequested(message, icon.name());
 }
@@ -1403,4 +1415,33 @@ void KisViewManager::slotActivateTransformTool()
     }
 
     KoToolManager::instance()->switchToolRequested("KisToolTransform");
+}
+
+void KisViewManager::slotToggleFgBg()
+{
+
+    KoColor newFg = d->canvasResourceManager.backgroundColor();
+    KoColor newBg = d->canvasResourceManager.foregroundColor();
+
+    /**
+     * NOTE: Some of color selectors do not differentiate foreground
+     *       and background colors, so if one wants them to end up
+     *       being set up to foreground color, it should be set the
+     *       last.
+     */
+    d->canvasResourceManager.setBackgroundColor(newBg);
+    d->canvasResourceManager.setForegroundColor(newFg);
+}
+
+void KisViewManager::slotResetFgBg()
+{
+    // see a comment in slotToggleFgBg()
+    d->canvasResourceManager.setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
+    d->canvasResourceManager.setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
+}
+
+void KisViewManager::slotResetRotation()
+{
+    KisCanvasController *canvasController = d->currentImageView->canvasController();
+    canvasController->resetCanvasRotation();
 }

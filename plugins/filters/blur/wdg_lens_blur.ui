@@ -37,32 +37,32 @@
        <widget class="QComboBox" name="irisShapeCombo">
         <item>
          <property name="text">
-          <string notr="true">Triangle</string>
+          <string>Triangle</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string notr="true">Quadrilateral (4)</string>
+          <string>Quadrilateral (4)</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string notr="true">Pentagon (5)</string>
+          <string>Pentagon (5)</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string notr="true">Hexagon (6)</string>
+          <string>Hexagon (6)</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string notr="true">Heptagon (7)</string>
+          <string>Heptagon (7)</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string notr="true">Octagon (8)</string>
+          <string>Octagon (8)</string>
          </property>
         </item>
        </widget>

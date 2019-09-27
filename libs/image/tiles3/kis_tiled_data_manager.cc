@@ -286,7 +286,7 @@ void KisTiledDataManager::purge(const QRect& area)
                 if(memcmp(defaultData, tile->data(), tileDataSize) == 0) {
                     tilesToDelete.push_back(tile);
                 }
-                tile->unlock();
+                tile->unlockForRead();
             }
             iter.next();
         }
@@ -294,8 +294,9 @@ void KisTiledDataManager::purge(const QRect& area)
         tileData->unblockSwapping();
     }
     Q_FOREACH (KisTileSP tile, tilesToDelete) {
-        m_extentManager.notifyTileRemoved(tile->col(), tile->row());
-        m_hashTable->deleteTile(tile);
+        if (m_hashTable->deleteTile(tile)) {
+            m_extentManager.notifyTileRemoved(tile->col(), tile->row());
+        }
     }
 }
 
@@ -475,7 +476,7 @@ void KisTiledDataManager::bitBltImpl(KisTiledDataManager *srcDM, const QRect &re
                      srcTile->lockForRead();
                      KisTileData *td = srcTile->tileData();
                      KisTileSP clonedTile = KisTileSP(new KisTile(column, row, td, m_mementoManager));
-                     srcTile->unlock();
+                     srcTile->unlockForRead();
 
                      m_hashTable->addTile(clonedTile);
 
@@ -506,7 +507,7 @@ void KisTiledDataManager::bitBltImpl(KisTiledDataManager *srcDM, const QRect &re
                     rowsRemaining--;
                 }
 
-                srcTile->unlock();
+                srcTile->unlockForRead();
             }
         }
     }
@@ -549,7 +550,7 @@ void KisTiledDataManager::bitBltRoughImpl(KisTiledDataManager *srcDM, const QRec
                 srcTile->lockForRead();
                 KisTileData *td = srcTile->tileData();
                 KisTileSP clonedTile = KisTileSP(new KisTile(column, row, td, m_mementoManager));
-                srcTile->unlock();
+                srcTile->unlockForRead();
 
                 m_hashTable->addTile(clonedTile);
 
@@ -628,7 +629,7 @@ void KisTiledDataManager::setExtent(QRect newRect)
                         }
                     }
                 }
-                tile->unlock();
+                tile->unlockForWrite();
                 iter.next();
             } else {
                 m_extentManager.notifyTileRemoved(tile->col(), tile->row());

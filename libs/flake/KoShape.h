@@ -30,6 +30,7 @@
 #include <QSharedPointer>
 #include <QSet>
 #include <QMetaType>
+#include <QSharedDataPointer>
 
 #include <KoXmlReaderForward.h>
 
@@ -49,7 +50,6 @@ class KoShapeSavingContext;
 class KoShapeLoadingContext;
 class KoGenStyle;
 class KoShapeShadow;
-class KoShapePrivate;
 class KoFilterEffectStack;
 class KoSnapData;
 class KoClipPath;
@@ -60,10 +60,9 @@ class KoBorder;
 struct KoInsets;
 class KoShapeBackground;
 class KisHandlePainterHelper;
-
+class KoShapeManager;
 
 /**
- *
  * Base class for all flake shapes. Shapes extend this class
  * to allow themselves to be manipulated. This class just represents
  * a graphical shape in the document and can be manipulated by some default
@@ -183,7 +182,7 @@ public:
      * This can be done with a method like:
      * <code>
        painter.fillRect(converter.normalToView(QRectF(QPointF(0.0,0.0), size())), background());</code>
-     * Or equavalent for non-square objects.
+     * Or equivalent for non-square objects.
      * Do note that a shape's top-left is always at coordinate 0,0. Even if the shape itself is rotated
      * or translated.
      * @param painter used for painting the shape
@@ -414,7 +413,7 @@ public:
     /**
      * Set the side text should flow around this shape.
      * @param side the requested side
-     * @param runThrought run through the foreground or background or...
+     * @param runThrough run through the foreground or background or...
      */
     void setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrough = Background);
 
@@ -507,7 +506,7 @@ public:
     /**
      * Set the minimum height of the shape.
      * Currently it's not respected but only for informational purpose
-     * @param minimumShapeHeight the minimum height of the frame.
+     * @param height the minimum height of the frame.
      */
     void setMinimumHeight(qreal height);
 
@@ -1044,8 +1043,9 @@ public:
      * In this case it can be shown on screen probably partially but it should really not be printed
      * until it is fully done processing.
      * Warning! This method can be blocking for a long time
+     * @param converter    The converter
      * @param asynchronous If set to true the processing will can take place in a different thread and the
-     *                     function will not block until the shape is finised.
+     *                     function will not block until the shape is finished.
      *                     In case of printing Flake will call this method from a non-main thread and only
      *                     start printing it when the in case of printing method returned.
      *                     If set to false the processing needs to be done synchronously and will
@@ -1178,12 +1178,6 @@ public:
      */
     void setHyperLink(const QString &hyperLink);
 
-    /**
-     * \internal
-     * Returns the private object for use within the flake lib
-     */
-    KoShapePrivate *priv();
-
 public:
 
     struct KRITAFLAKE_EXPORT ShapeChangeListener {
@@ -1192,7 +1186,6 @@ public:
 
     private:
         friend class KoShape;
-        friend class KoShapePrivate;
         void registerShape(KoShape *shape);
         void unregisterShape(KoShape *shape);
         void notifyShapeChangedImpl(ChangeType type, KoShape *shape);
@@ -1203,12 +1196,15 @@ public:
     void addShapeChangeListener(ShapeChangeListener *listener);
     void removeShapeChangeListener(ShapeChangeListener *listener);
 
+protected:
+    QList<ShapeChangeListener *> listeners() const;
+    void setSizeImpl(const QSizeF &size) const;
+
 public:
     static QList<KoShape*> linearizeSubtree(const QList<KoShape*> &shapes);
 
 protected:
-    /// constructor
-    KoShape(KoShapePrivate *);
+    KoShape(const KoShape &rhs);
 
     /* ** loading saving helper methods */
     /// attributes from ODF 1.1 chapter 9.2.15 Common Drawing Shape Attributes
@@ -1288,16 +1284,28 @@ protected:
      * A hook that allows inheriting classes to do something after a KoShape property changed
      * This is called whenever the shape, position rotation or scale properties were altered.
      * @param type an indicator which type was changed.
+     * @param shape the shape.
      */
     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
 
     /// return the current matrix that contains the rotation/scale/position of this shape
     QTransform transform() const;
 
-    KoShapePrivate *d_ptr;
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
+
+protected:
+    /**
+     * Notify the shape that a change was done. To be used by inheriting shapes.
+     * @param type the change type
+     */
+    void shapeChangedPriv(KoShape::ChangeType type);
 
 private:
-    Q_DECLARE_PRIVATE(KoShape)
+    void addShapeManager(KoShapeManager *manager);
+    void removeShapeManager(KoShapeManager *manager);
+    friend class KoShapeManager;
 };
 
 Q_DECLARE_METATYPE(KoShape*)

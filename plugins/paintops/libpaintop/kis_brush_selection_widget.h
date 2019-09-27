@@ -82,12 +82,14 @@ private Q_SLOTS:
     void buttonClicked(int id);
     void precisionChanged(int value);
     void setAutoPrecisionEnabled(int value);
+    void refreshAutoPrecision(qreal value);
     void setSizeToStartFrom(double value);
     void setDeltaValue(double value);
 
 private:
     void setCurrentWidget(QWidget * widget);
     void addChooser(const QString & text, QWidget * widget, int id, KoGroupButton::GroupPosition pos);
+    void updatePrecisionByType(int id);
 
 private:
     enum Type {

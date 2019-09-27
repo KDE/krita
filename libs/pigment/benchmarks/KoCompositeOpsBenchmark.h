@@ -31,11 +31,13 @@ private Q_SLOTS:
     void cleanupTestCase();
     
     void benchmarkCompositeOver();
-    void benchmarkCompositeAlphaDarken();
+    void benchmarkCompositeAlphaDarkenHard();
+    void benchmarkCompositeAlphaDarkenCreamy();
 
 private:
     quint8 * m_dstBuffer;
     quint8 * m_srcBuffer;
+    quint8 * m_mskBuffer;
         
 
 };

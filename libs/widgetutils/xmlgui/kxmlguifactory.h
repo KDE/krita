@@ -22,7 +22,7 @@
 
 #include <kritawidgetutils_export.h>
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class QAction;
 class KXMLGUIFactoryPrivate;

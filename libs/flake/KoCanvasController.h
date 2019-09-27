@@ -48,7 +48,7 @@ class KoCanvasControllerProxyObject;
  * Flake does not provide a canvas, the application will have to
  * implement a canvas themselves. You canvas can be QWidget-based
  * or something we haven't invented yet -- as long the class that holds the canvas
- * imlements KoCanvasController, tools, scrolling and zooming will work.
+ * implements KoCanvasController, tools, scrolling and zooming will work.
  *
  * A KoCanvasController implementation acts as a decorator around the canvas widget
  * and provides a way to scroll the canvas, allows the canvas to be centered
@@ -101,7 +101,7 @@ public:
     /**
      * @return the size of the viewport
      */
-    virtual QSize viewportSize() const = 0;
+    virtual QSizeF viewportSize() const = 0;
 
     /**
      * Set the new canvas to be shown as a child
@@ -273,7 +273,7 @@ public:
      * @param recalculateCenter if true the offset in the document we center on after calling
      *      recenterPreferred() will be recalculated for the new document size so the visual offset stays the same.
      */
-    virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter) = 0;
+    virtual void updateDocumentSize(const QSizeF &sz, bool recalculateCenter) = 0;
 
     /**
      * Set mouse wheel to zoom behaviour
@@ -293,10 +293,10 @@ public:
     virtual void setVastScrolling(qreal factor) = 0;
 
    /**
-     * Returns the action collection for the canvas
-     * @returns action collection for this canvas, can be 0
+     * Returns the action collection for the window
+     * @returns action collection for this window, can be 0
      */
-    virtual KActionCollection* actionCollection() const;
+    KActionCollection* actionCollection() const;
 
     QPoint documentOffset() const;
 
@@ -307,8 +307,8 @@ public:
     virtual QPointF currentCursorPosition() const = 0;
 
 protected:
-    void setDocumentSize(const QSize &sz);
-    QSize documentSize() const;
+    void setDocumentSize(const QSizeF &sz);
+    QSizeF documentSize() const;
 
     void setPreferredCenterFractionX(qreal);
     qreal preferredCenterFractionX() const;
@@ -449,7 +449,7 @@ public:
 
 
     void scrollContentsBy(int /*dx*/, int /*dy*/) override {}
-    QSize viewportSize() const override { return QSize(); }
+    QSizeF viewportSize() const override { return QSizeF(); }
     void setCanvas(KoCanvasBase *canvas) override {Q_UNUSED(canvas)}
     KoCanvasBase *canvas() const override {return 0;}
     int visibleHeight() const override {return 0;}
@@ -473,7 +473,7 @@ public:
     QPoint scrollBarValue() const override {return QPoint();}
     void setScrollBarValue(const QPoint &/*value*/) override {}
     void resetScrollBars() override {}
-    void updateDocumentSize(const QSize &/*sz*/, bool /*recalculateCenter*/) override {}
+    void updateDocumentSize(const QSizeF &/*sz*/, bool /*recalculateCenter*/) override {}
     void setZoomWithWheel(bool /*zoom*/) override {}
     void setVastScrolling(qreal /*factor*/) override {}
     QPointF currentCursorPosition() const override { return QPointF(); }

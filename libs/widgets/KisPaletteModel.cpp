@@ -33,7 +33,7 @@
 
 KisPaletteModel::KisPaletteModel(QObject* parent)
     : QAbstractTableModel(parent)
-    , m_colorSet(Q_NULLPTR)
+    , m_colorSet(0)
     , m_displayRenderer(KoDumbColorDisplayRenderer::instance())
 {
     connect(this, SIGNAL(sigPaletteModified()), SLOT(slotPaletteModified()));
@@ -461,7 +461,7 @@ void KisPaletteModel::setDisplayRenderer(const KoColorDisplayRendererInterface *
         }
         m_displayRenderer = displayRenderer;
         connect(m_displayRenderer, SIGNAL(displayConfigurationChanged()),
-                SLOT(slotDisplayConfigurationChanged()));
+                SLOT(slotDisplayConfigurationChanged()), Qt::UniqueConnection);
     } else {
         m_displayRenderer = KoDumbColorDisplayRenderer::instance();
     }

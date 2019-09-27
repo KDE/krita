@@ -1,59 +1,44 @@
 name: krita
-version: 3.0.91-snap15
+version: 4.2.2
 summary: Krita is the digital painting studio for artists
 description: Krita is a creative application for raster images. Whether you want to create
  from scratch or work with existing images, Krita is for you. You can work with
  photos or scanned images, or start with a blank slate. Krita supports most
  graphics tablets out of the box.
-
+base: core18
 
 apps:
   krita:
     command: qt5-launch usr/bin/krita
-    plugs: [x11, unity7, home, opengl, network, network-bind, removable-media]
+    plugs: [x11, unity7, home, opengl, network, network-bind, removable-media, desktop, desktop-legacy]
+    desktop: usr/share/applications/org.kde.krita.desktop
+
+layout:
+  /usr/bin/ffmpeg:
+    bind-file: $SNAP/usr/bin/ffmpeg
 
 parts:
-  qt:
-    plugin: nil
-    stage-packages:
-        - libqt5concurrent5
-        - libqt5core5a
-        - libqt5dbus5
-        - libqt5gui5
-        - libqt5network5
-        - libqt5printsupport5
-        - libqt5svg5
-        - libqt5widgets5
-        - libqt5x11extras5
-        - libqt5xml5
-    
-  kdeframeworks:
-    plugin: nil
-    stage-packages:
-        - libkf5archive5
-        - libkf5completion5
-        - libkf5configcore5
-        - libkf5configgui5
-        - libkf5coreaddons5
-        - libkf5guiaddons5
-        - libkf5i18n5
-        - libkf5itemviews5
-        - libkf5widgetsaddons5
-        - libkf5windowsystem5
-        - libkf5crash5
-    after: [qt]
-    
   krita:
     plugin: cmake
-# Using -DKDE_NO_DEBUG_OUTPUT was causing compilation failure for some reason
-#    configflags: [-DCMAKE_INSTALL_PREFIX=/usr, -DQT_NO_DEBUG=1, -DCMAKE_CXX_FLAGS="-DKDE_NO_DEBUG_OUTPUT"]
-    configflags: [-DCMAKE_INSTALL_PREFIX=/usr, -DQT_NO_DEBUG=1]
-    source: http://download.kde.org/unstable/krita/3.0.91/krita-3.0.91.tar.gz
+    configflags:
+    - "-DCMAKE_INSTALL_PREFIX=/usr"
+    - "-DCMAKE_BUILD_TYPE=Release"
+    - "-DENABLE_TESTING=OFF"
+    - "-DBUILD_TESTING=OFF"
+    - "-DHIDE_SAFE_ASSERTS=OFF"
+    - "-DKDE_SKIP_TEST_SETTINGS=ON"
+    source: https://download.kde.org/stable/krita/4.2.2/krita-4.2.2.tar.xz
 # Use these instead to build from the git source
-#    source: git://anongit.kde.org/krita.git
+#    source: https://anongit.kde.org/krita.git
 #    source-type: git
-#    source-branch: krita/3.0
+#    source-branch: master
+    override-stage: |
+      # Stage the part
+      snapcraftctl stage
+      # Modify the .desktop file in the stage to point to where the icon will be in the installed snap
+      sed -i 's|Icon=\(.*\)|Icon=${SNAP}/usr/share/icons/hicolor/1024x1024/apps/\1.png|' usr/share/applications/org.kde.krita.desktop
     build-packages:
+        - gettext
         - build-essential
         - cmake
         - libboost-dev
@@ -72,8 +57,8 @@ parts:
         - libjpeg-dev
         - liblcms2-dev
         - libopenexr-dev
-        - libpng12-dev
-        - libpoppler-qt4-dev
+        - libpng-dev
+        - libpoppler-qt5-dev
         - libtiff5-dev
         - libvc-dev
         - libopencolorio-dev
@@ -82,10 +67,9 @@ parts:
         - libxslt1-dev
         - libxi-dev
         - pkg-config
-        - pkg-kde-tools
         - vc-dev
         - zlib1g-dev
-        - libkdcraw-dev
+        - libkf5kdcraw-dev
         - shared-mime-info
         - libopenimageio-dev
         - extra-cmake-modules
@@ -103,39 +87,90 @@ parts:
         - libqt5svg5-dev
         - libqt5x11extras5-dev
         - libqt5opengl5-dev
-    stage-packages:      
-        - libboost-system1.58.0
-        - libexiv2-14
+        - libquazip5-dev
+        - qtmultimedia5-dev
+        - qtdeclarative5-dev
+        - libkf5crash-dev
+
+  runtime:
+    plugin: nil
+    stage-packages:
+        - libexiv2-27
         - libfftw3-double3
         - libgomp1
-        - libgsl2
+        - libgsl23
         - libilmbase12
         - libjpeg8
         - liblcms2-2
         - libopencolorio1v5
         - libopenexr22
-        - libpng12-0
+        - libpng16-16
         - libstdc++6
         - libtiff5
         - libx11-6
         - libxcb1
         - libxi6
         - zlib1g
-        - libraw15
-        - libkf5crash5
         - libpoppler-qt5-1
-    after: [qt, kdeframeworks]
-    
-  integration:
+        - shared-mime-info
+        - libboost-system1.65.1
+        - librtmp1
+        - libqt5quickwidgets5
+        - libkf5archive5
+        - libkf5completion5
+        - libkf5configcore5
+        - libkf5configgui5
+        - libkf5coreaddons5
+        - libkf5guiaddons5
+        - libkf5i18n5
+        - libkf5itemviews5
+        - libkf5widgetsaddons5
+        - libkf5windowsystem5
+        - libkf5crash5
+        - libqt5concurrent5
+        - libqt5core5a
+        - libqt5dbus5
+        - libqt5gui5
+        - libqt5network5
+        - libqt5printsupport5
+        - libqt5svg5
+        - libqt5widgets5
+        - libqt5x11extras5
+        - libqt5xml5
+        - locales
+        - libc-bin
+        - libquazip5-1
+        - libqt5quick5
+        - libqt5quickparticles5
+        - libqt5quickshapes5
+        - qt5-qmltooling-plugins
+        - libqt5qml5
+        - libqt5multimedia5
+        - libqt5multimediagsttools5
+        - libqt5multimediaquick5
+        - libqt5multimediawidgets5
+        # Required for rendering animations
+        - ffmpeg
+        - libglu1-mesa
+        - libslang2
+    prime:
+    - "-usr/share/wallpapers/*"
+    - "-usr/share/fonts/*"
+
+  plasma-integration:
     plugin: nil
     stage-packages:
-      - ttf-ubuntu-font-family
-    snap:
-      - usr/share
-      - -usr/share/doc
+    - plasma-integration
+    - kde-style-breeze
+    - breeze-icon-theme
+    - kio # runtime slaves for kio
+    prime:
+    - "-usr/share/wallpapers/*"
+    - "-usr/share/fonts/*"
 
   launcher:
-    plugin: copy
-    files:
+    plugin: dump
+    source: .
+    organize:
       qt5-launch: bin/qt5-launch
-
+      kf5-locale-gen: bin/kf5-locale-gen

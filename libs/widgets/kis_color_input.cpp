@@ -5,7 +5,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -152,6 +153,13 @@ QWidget* KisIntegerColorInput::createInput()
     m_intNumInput = new KisIntParseSpinBox(this);
     m_intNumInput->setMinimum(0);
     m_colorSlider->setMinimum(0);
+
+    if (m_usePercentage) {
+        m_intNumInput->setSuffix(i18n("%"));
+    } else {
+        m_intNumInput->setSuffix("");
+    }
+
     switch (m_channelInfo->channelValueType()) {
     case KoChannelInfo::UINT8:
         if (m_usePercentage) {
@@ -183,6 +191,17 @@ QWidget* KisIntegerColorInput::createInput()
     connect(m_colorSlider, SIGNAL(valueChanged(int)), this, SLOT(onColorSliderChanged(int)));
     connect(m_intNumInput, SIGNAL(valueChanged(int)), this, SLOT(onNumInputChanged(int)));
     return m_intNumInput;
+}
+
+void KisIntegerColorInput::setPercentageWise(bool val)
+{
+    m_usePercentage = val;
+
+    if (m_usePercentage) {
+        m_intNumInput->setSuffix(i18n("%"));
+    } else {
+        m_intNumInput->setSuffix("");
+    }
 }
 
 void KisIntegerColorInput::onColorSliderChanged(int val)
@@ -273,6 +292,24 @@ QWidget* KisFloatColorInput::createInput()
     m_dblNumInput->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     m_dblNumInput->setMinimumWidth(60);
     m_dblNumInput->setMaximumWidth(60);
+    
+    quint8* data = m_color->data() + m_channelInfo->pos();
+    qreal value = 1.0;
+
+    switch (m_channelInfo->channelValueType()) {
+#ifdef HAVE_OPENEXR
+    case KoChannelInfo::FLOAT16:
+        value = *(reinterpret_cast<half*>(data));
+        break;
+#endif
+    case KoChannelInfo::FLOAT32:
+        value = *(reinterpret_cast<float*>(data));
+        break;
+    default:
+        Q_ASSERT(false);
+    }
+    m_dblNumInput->setValue(value);
+
     return m_dblNumInput;
 }
 
@@ -293,6 +330,7 @@ void KisFloatColorInput::update()
     qreal value = 1.0;
     m_minValue = m_displayRenderer->minVisibleFloatValue(m_channelInfo);
     m_maxValue = m_displayRenderer->maxVisibleFloatValue(m_channelInfo);
+    m_colorSlider->blockSignals(true);
 
     switch (m_channelInfo->channelValueType()) {
 #ifdef HAVE_OPENEXR
@@ -328,8 +366,8 @@ void KisFloatColorInput::update()
     m_colorSlider->setColors(min, max);
 
     const qreal floatRange = m_maxValue - m_minValue;
-    m_dblNumInput->setValue(value);
     m_colorSlider->setValue((value - m_minValue) / floatRange * 255);
+    m_colorSlider->blockSignals(false);
 }
 
 KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, bool usePercentage) :
@@ -387,6 +425,7 @@ void KisHexColorInput::update()
 QWidget* KisHexColorInput::createInput()
 {
     m_hexInput = new QLineEdit(this);
+    m_hexInput->setAlignment(Qt::AlignRight);
 
     int digits = 2*m_color->colorSpace()->colorChannelCount();
     QString pattern = QString("#?[a-fA-F0-9]{%1,%2}").arg(digits).arg(digits);

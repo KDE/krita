@@ -245,9 +245,8 @@ void KisToolSmartPatch::paint(QPainter &painter, const KoViewConverter &converte
     Q_UNUSED(converter);
 
     painter.save();
-    painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-    painter.setPen(QColor(128, 255, 128));
-    painter.drawPath(pixelToView(m_d->brushOutline));
+    QPainterPath path = pixelToView(m_d->brushOutline);
+    paintToolOutline(&painter, path);
     painter.restore();
 
     painter.save();
@@ -263,7 +262,7 @@ QWidget * KisToolSmartPatch::createOptionWidget()
 {
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
 
-    m_d->optionsWidget = new KisToolSmartPatchOptionsWidget(kiscanvas->viewManager()->resourceProvider(), 0);
+    m_d->optionsWidget = new KisToolSmartPatchOptionsWidget(kiscanvas->viewManager()->canvasResourceProvider(), 0);
     m_d->optionsWidget->setObjectName(toolId() + "option widget");
 
     return m_d->optionsWidget;

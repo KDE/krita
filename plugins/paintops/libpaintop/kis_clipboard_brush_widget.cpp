@@ -36,8 +36,8 @@
 #include "kis_gbr_brush.h"
 #include "kis_brush_server.h"
 
-KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString &caption, KisImageWSP image)
-    : KisWdgClipboardBrush(parent), m_image(image)
+KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString &caption, KisImageWSP /*image*/)
+    : KisWdgClipboardBrush(parent)
 {
     setWindowTitle(caption);
     preview->setScaledContents(true);

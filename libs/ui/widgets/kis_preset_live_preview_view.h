@@ -34,6 +34,7 @@
 #include <kis_image.h>
 #include <kis_types.h>
 #include <KoColor.h>
+#include "kis_signal_compressor.h"
 
 /**
  * Widget for displaying a live brush preview of your
@@ -62,11 +63,14 @@ public:
     /**
      * @brief set the current preset from resource manager for the live preview to use.
      * Good to call this every stroke update in case the preset has changed
-     * @param the current preset from the resource manager
+     * @param preset the current preset from the resource manager
      */
     void setCurrentPreset(KisPaintOpPresetSP preset);
-    void updateStroke();
+    void requestUpdateStroke();
 
+private Q_SLOTS:
+    void updateStroke();
+    void slotPreviewGenerationCompleted();
 
 private:
 
@@ -119,6 +123,9 @@ private:
     /// used to check if our brush size has changed
     /// do zooming and other things internally if it has changed
     float m_currentBrushSize = 1.0;
+
+    bool m_previewGenerationInProgress = false;
+    KisSignalCompressor m_updateCompressor;
 
     /// the range of brush sizes that will control zooming in/out
     const float m_minBrushVal = 10.0;

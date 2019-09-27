@@ -43,7 +43,7 @@ class KRITAWIDGETS_EXPORT KisPaletteModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit KisPaletteModel(QObject* parent = Q_NULLPTR);
+    explicit KisPaletteModel(QObject* parent = 0);
     ~KisPaletteModel() override;
 
     enum AdditionalRoles {
@@ -53,7 +53,7 @@ public:
         RowInGroupRole
     };
 
-public /* overriden methods */: // QAbstractTableModel
+public /* overridden methods */: // QAbstractTableModel
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -126,8 +126,9 @@ public /* methods */:
     /**
      * @brief removeEntry
      * proper function to remove the colorsetentry at the given index.
-     * The consolidtes both removeentry and removegroup.
-     * @param keepColors: This bool determines whether, when deleting a group,
+     * The consolidates both removeentry and removegroup.
+     * @param index the given index
+     * @param keepColors This bool determines whether, when deleting a group,
      * the colors should be added to the default group. This is usually desirable,
      * so hence the default is true.
      * @return if successful

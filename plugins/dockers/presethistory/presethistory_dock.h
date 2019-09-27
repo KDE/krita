@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,6 +21,7 @@
 
 #include <QDockWidget>
 #include <QPointer>
+#include <KisKineticScroller.h>
 
 #include <KoCanvasObserverBase.h>
 
@@ -36,7 +38,8 @@ public:
     QString observerName() override { return "PresetHistoryDock"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
-
+public Q_SLOTS:
+    void slotScrollerStateChanged(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
 private Q_SLOTS:
     void presetSelected(QListWidgetItem* item);
     void canvasResourceChanged(int key, const QVariant& v);

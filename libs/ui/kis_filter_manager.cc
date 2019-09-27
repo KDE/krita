@@ -47,6 +47,7 @@
 #include "dialogs/kis_dlg_filter.h"
 #include "strokes/kis_filter_stroke_strategy.h"
 #include "krita_utils.h"
+#include "kis_icon_utils.h"
 
 
 struct KisFilterManager::Private {
@@ -102,7 +103,7 @@ void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionMan
     d->reapplyAction->setEnabled(false);
     connect(d->reapplyAction, SIGNAL(triggered()), SLOT(reapplyLastFilter()));
 
-    connect(&d->actionsMapper, SIGNAL(mapped(const QString&)), SLOT(showFilterDialog(const QString&)));
+    connect(&d->actionsMapper, SIGNAL(mapped(QString)), SLOT(showFilterDialog(QString)));
 
     // Setup list of filters
     QStringList keys = KisFilterRegistry::instance()->keys();
@@ -111,7 +112,7 @@ void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionMan
         insertFilter(filterName);
     }
 
-    connect(KisFilterRegistry::instance(), SIGNAL(filterAdded(QString)), SLOT(insertFilter(const QString &)));
+    connect(KisFilterRegistry::instance(), SIGNAL(filterAdded(QString)), SLOT(insertFilter(QString)));
 }
 
 void KisFilterManager::insertFilter(const QString & filterName)
@@ -177,6 +178,12 @@ void KisFilterManager::reapplyLastFilter()
 
 void KisFilterManager::showFilterDialog(const QString &filterId)
 {
+    if (!d->view->activeNode()->isEditable()) {
+        d->view->showFloatingMessage(i18n("Cannot apply filter to locked layer."),
+                                      KisIconUtils::loadIcon("object-locked"));
+        return;
+    }
+
     if (d->filterDialog && d->filterDialog->isVisible()) {
         KisFilterSP filter = KisFilterRegistry::instance()->value(filterId);
         d->filterDialog->setFilter(filter);
@@ -270,7 +277,7 @@ void KisFilterManager::apply(KisFilterConfigurationSP filterConfig)
     }
 
     KoCanvasResourceProvider *resourceManager =
-        d->view->resourceProvider()->resourceManager();
+        d->view->canvasResourceProvider()->resourceManager();
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image,

@@ -44,6 +44,7 @@ const QString PALETTE_PATH = "/palettes/";
 
 const QString ADJUSTMENT_LAYER = "adjustmentlayer";
 const QString CHANNEL_FLAGS = "channelflags";
+const QString CHANNEL_LOCK_FLAGS = "channellockflags";
 const QString CLONE_FROM = "clonefrom";
 const QString CLONE_FROM_UUID = "clonefromuuid";
 const QString CLONE_LAYER = "clonelayer";
@@ -136,6 +137,7 @@ const QString COLORBYTEDATA = "ColorData";
 const QString SIMPLECOLORDATA = "SimpleColorData"; // easier 8-bit color data that works well with XML
 const QString GLOBALASSISTANTSCOLOR = "GlobalAssistantsColor";
 const QString PALETTES = "Palettes";
+const QString MIRROR_AXIS = "MirrorAxis";
 }
 
 

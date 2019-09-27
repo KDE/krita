@@ -204,7 +204,7 @@ KisResourceBundle *ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
     }
 
     newBundle->addMeta("fileName", bundlePath);
-    newBundle->addMeta("created", QDate::currentDate().toString("dd/MM/yyyy"));
+    newBundle->addMeta("created", QDateTime::currentDateTime().toOffsetFromUtc(0).toString(Qt::ISODate));
 
     if (!newBundle->save()) {
         QMessageBox::critical(viewManager()->mainWindow(), i18nc("@title:window", "Krita"), i18n("Could not create the new bundle."));
@@ -265,8 +265,7 @@ void ResourceManager::slotImportPresets()
 void ResourceManager::slotImportGradients()
 {
     QStringList resources = importResources(i18n("Import Gradients"), QStringList() << "image/svg+xml"
-                                   << "application/x-gimp-gradient"
-                                   << "applicaition/x-karbon-gradient");
+                                   << "application/x-gimp-gradient");
     Q_FOREACH (const QString &res, resources) {
         d->gradientServer->importResourceFile(res);
     }
@@ -288,12 +287,12 @@ void ResourceManager::slotImportBundles()
         }
 
         QFileInfo fi(res);
-        QString newFilename = KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + bundle->defaultFileExtension();
+        QString newFilename = KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.completeBaseName() + bundle->defaultFileExtension();
         QFileInfo fileInfo(newFilename);
 
         int i = 1;
         while (fileInfo.exists()) {
-            fileInfo.setFile(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.baseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
+            fileInfo.setFile(KisResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + fi.completeBaseName() + QString("%1").arg(i) + bundle->defaultFileExtension());
             i++;
         }
         bundle->setFilename(fileInfo.filePath());

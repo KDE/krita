@@ -1,131 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="34.133335"
-   height="34.133335"
-   viewBox="0 0 32 32.000001"
-   id="svg2"
    version="1.1"
-   inkscape:version="0.92.1 r15371"
-   sodipodi:docname="dark_krita_tool_color_picker.svg"
-   inkscape:export-filename="/run/media/andrei/C2942CC0942CB8B5/dribbble/krita icons/Collaborate/1_flat_dark/tools/light_krita_tool_color_picker.png"
-   inkscape:export-xdpi="45"
-   inkscape:export-ydpi="45">
+   id="svg2"
+   viewBox="0 0 32 32.000001"
+   height="34.133335"
+   width="34.133335">
   <defs
-     id="defs4">
-    <filter
-       style="color-interpolation-filters:sRGB"
-       inkscape:label="Drop Shadow"
-       id="filter4429">
-      <feFlood
-         flood-opacity="0.501961"
-         flood-color="rgb(0,0,0)"
-         result="flood"
-         id="feFlood4431" />
-      <feComposite
-         in="flood"
-         in2="SourceGraphic"
-         operator="in"
-         result="composite1"
-         id="feComposite4433" />
-      <feGaussianBlur
-         in="composite1"
-         stdDeviation="0"
-         result="blur"
-         id="feGaussianBlur4435" />
-      <feOffset
-         dx="0"
-         dy="-2"
-         result="offset"
-         id="feOffset4437" />
-      <feComposite
-         in="SourceGraphic"
-         in2="offset"
-         operator="over"
-         result="composite2"
-         id="feComposite4439" />
-    </filter>
-    <filter
-       style="color-interpolation-filters:sRGB"
-       inkscape:label="Drop Shadow"
-       id="filter4238">
-      <feFlood
-         flood-opacity="0.501961"
-         flood-color="rgb(0,0,0)"
-         result="flood"
-         id="feFlood4240" />
-      <feComposite
-         in="flood"
-         in2="SourceGraphic"
-         operator="in"
-         result="composite1"
-         id="feComposite4242" />
-      <feGaussianBlur
-         in="composite1"
-         stdDeviation="0"
-         result="blur"
-         id="feGaussianBlur4244" />
-      <feOffset
-         dx="0"
-         dy="-2"
-         result="offset"
-         id="feOffset4246" />
-      <feComposite
-         in="SourceGraphic"
-         in2="offset"
-         operator="over"
-         result="composite2"
-         id="feComposite4248" />
-    </filter>
-  </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#474747"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="5.6568542"
-     inkscape:cx="47.748596"
-     inkscape:cy="24.969048"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="false"
-     units="px"
-     inkscape:showpageshadow="false"
-     showborder="true"
-     inkscape:window-width="1434"
-     inkscape:window-height="750"
-     inkscape:window-x="1940"
-     inkscape:window-y="195"
-     inkscape:window-maximized="0"
-     objecttolerance="20"
-     showguides="false">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3336"
-       dotted="false"
-       empspacing="1"
-       snapvisiblegridlinesonly="true"
-       enabled="true"
-       visible="true"
-       empcolor="#aaaaff"
-       empopacity="0.25098039"
-       color="#7878ff"
-       opacity="0.1254902"
-       spacingx="2"
-       spacingy="2.0000001"
-       originx="0"
-       originy="0" />
-  </sodipodi:namedview>
+     id="defs4" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -134,48 +20,59 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
         <dc:creator>
           <cc:Agent>
             <dc:title>Andrei Rudenko</dc:title>
           </cc:Agent>
         </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="v3"
-     style="display:inline">
+     style="display:inline"
+     id="layer1">
     <rect
-       style="opacity:0.98000004;fill:#323232;fill-opacity:1;stroke:#323232;stroke-width:3.07752299;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect933"
-       width="16.764055"
-       height="3.0593331"
-       x="15.320097"
-       y="-7.4384551"
-       transform="matrix(0.69975369,0.71438419,-0.66216925,0.74935431,0,0)" />
-    <rect
-       style="opacity:0.98000004;fill:#323232;fill-opacity:1;stroke:#323232;stroke-width:3.07752299;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect933-7"
-       width="7.3118258"
-       height="10.123693"
-       x="20.099665"
-       y="-15.974326"
        transform="matrix(0.69975369,0.71438419,-0.66216925,0.74935431,0,0)"
-       ry="0" />
+       y="-7.4384551"
+       x="15.320097"
+       height="3.0593331"
+       width="16.764055"
+       id="rect933"
+       style="opacity:0.98000004;fill:#323232;fill-opacity:1;stroke:#323232;stroke-width:3.07752299;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <rect
+       ry="0"
+       transform="matrix(0.69975369,0.71438419,-0.66216925,0.74935431,0,0)"
+       y="-15.974326"
+       x="20.099665"
+       height="10.123693"
+       width="7.3118258"
+       id="rect933-7"
+       style="opacity:0.98000004;fill:#323232;fill-opacity:1;stroke:#323232;stroke-width:3.07752299;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
-       style="fill:none;stroke:#323232;stroke-width:2.67079163;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 20.597301,16.076505 7.3026933,29.371112 2.3918943,30.000624 3.5042341,25.572653 16.798842,12.278046"
        id="path965"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
+       d="M 20.597301,16.076505 7.3026933,29.371112 2.3918943,30.000624 3.5042341,25.572653 16.798842,12.278046"
+       style="fill:none;stroke:#323232;stroke-width:2.67079163;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
-       style="fill:#323232;fill-opacity:1;stroke:none;stroke-width:0.8902638px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 7.3026933,21.774195 H 14.899612 L 6.8055089,30.19311 3.5042341,31.270343 v -5.69769 z"
        id="path969"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccc" />
+       d="M 7.3026933,21.774195 H 14.899612 L 6.8055089,30.19311 3.5042341,31.270343 v -5.69769 z"
+       style="fill:#323232;fill-opacity:1;stroke:none;stroke-width:0.8902638px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
 </svg>

@@ -28,6 +28,7 @@
 #include <QComboBox>
 #include <QDomDocument>
 #include <QHBoxLayout>
+#include <QMessageBox>
 
 #include "KoChannelInfo.h"
 #include "KoBasicHistogramProducers.h"
@@ -255,12 +256,14 @@ void addParamNode(QDomDocument& doc,
 void KisMultiChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
 {
     /**
+     * @code
      * <params version=1>
      *       <param name="nTransfers">3</param>
      *       <param name="curve0">0,0;0.5,0.5;1,1;</param>
      *       <param name="curve1">0,0;1,1;</param>
      *       <param name="curve2">0,0;1,1;</param>
      * </params>
+     * @endcode
      */
 
     root.setAttribute("version", version());
@@ -380,6 +383,7 @@ void KisMultiChannelConfigWidget::setConfiguration(const KisPropertiesConfigurat
             return;
         }
     } else if (cfg->curves().size() > m_virtualChannels.size()) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The current configuration was created for a different colorspace and cannot be used. All curves will be reset."));
         warnKrita << "WARNING: trying to load a curve with invalid number of channels!";
         warnKrita << "WARNING:   expected:" << m_virtualChannels.size();
         warnKrita << "WARNING:        got:" << cfg->curves().size();

@@ -188,7 +188,7 @@ void ThemeManager::slotChangePalette()
     qApp->setProperty("KDE_COLOR_SCHEME_PATH", filename);
     qApp->setPalette(palette);
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     if (theme == "Krita bright" || theme.isEmpty()) {
         qApp->setStyle("Macintosh");
         qApp->style()->polish(qApp);
@@ -235,7 +235,7 @@ void ThemeManager::populateThemeMenu()
         KSharedConfigPtr config = KSharedConfig::openConfig(filename);
         QIcon icon = createSchemePreviewIcon(config);
         KConfigGroup group(config, "General");
-        const QString name = group.readEntry("Name", info.baseName());
+        const QString name = group.readEntry("Name", info.completeBaseName());
         action = new QAction(name, d->themeMenuActionGroup);
         action->setIcon(icon);
         action->setCheckable(true);
@@ -302,7 +302,7 @@ void ThemeManager::populateThemeMap()
         const QFileInfo info(filename);
         KSharedConfigPtr config = KSharedConfig::openConfig(filename);
         KConfigGroup group(config, "General");
-        const QString name = group.readEntry("Name", info.baseName());
+        const QString name = group.readEntry("Name", info.completeBaseName());
         d->themeMap.insert(name, filename);
     }
 

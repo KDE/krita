@@ -19,7 +19,7 @@
 #ifndef _KISGRADIENTSLIDERPLUGIN_H_
 #define _KISGRADIENTSLIDERPLUGIN_H_
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QtUiPlugin/QDesignerCustomWidgetInterface>
 
 class KisGradientSliderPlugin : public QObject, public QDesignerCustomWidgetInterface

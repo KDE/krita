@@ -26,6 +26,7 @@
 
 #include <KoPathShape.h>
 
+#include "kis_algebra_2d.h"
 #include "kis_painter.h"
 #include <brushengine/kis_paintop_registry.h>
 #include "kis_selection_options.h"
@@ -52,7 +53,13 @@ void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &point
     if (!kisCanvas)
         return;
 
+    const QRectF boundingViewRect = pixelToView(KisAlgebra2D::accumulateBounds(points));
+
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Polygon"));
+
+    if (helper.tryDeselectCurrentSelection(pixelToView(boundingViewRect), selectionAction())) {
+        return;
+    }
 
     const SelectionMode mode =
         helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),

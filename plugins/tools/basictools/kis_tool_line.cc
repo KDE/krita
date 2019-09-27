@@ -172,7 +172,7 @@ void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
 {
     NodePaintAbility nodeAbility = nodePaintAbility();
-    if (nodeAbility == NONE || !nodeEditable()) {
+    if (nodeAbility == UNPAINTABLE || !nodeEditable()) {
         event->ignore();
         return;
     }
@@ -263,7 +263,8 @@ void KisToolLine::endStroke()
 {
     NodePaintAbility nodeAbility = nodePaintAbility();
 
-    if (!m_strokeIsRunning || m_startPoint == m_endPoint || nodeAbility == NONE) {
+    if (!m_strokeIsRunning || m_startPoint == m_endPoint || nodeAbility == UNPAINTABLE) {
+        m_helper->clearPoints();
         return;
     }
 

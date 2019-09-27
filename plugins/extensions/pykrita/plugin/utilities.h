@@ -132,11 +132,13 @@ public:
      * Print and save (see @ref lastTraceback()) the current traceback in a
      * form approximating what Python would print:
      *
+     * @verbatim
      * Traceback (most recent call last):
      *   File "/home/shahhaqu/.kde/share/apps/krita/pykrita/pluginmgr.py", line 13, in <module>
      *     import kdeui
      * ImportError: No module named kdeui
      * Could not import pluginmgr.
+     * @endverbatim
      */
     void traceback(const QString& description);
 
@@ -178,7 +180,7 @@ public:
     /**
      * Get the Actions defined by a module. The returned object is
      * [ { function, ( text, icon, shortcut, menu ) }... ] for each module
-     * function decorated with @action.
+     * function decorated with @c action.
      *
      * @return 0 or a new reference to the result.
      */
@@ -187,7 +189,7 @@ public:
     /**
      * Get the ConfigPages defined by a module. The returned object is
      * [ { function, callable, ( name, fullName, icon ) }... ] for each module
-     * function decorated with @configPage.
+     * function decorated with @c configPage.
      *
      * @return 0 or a new reference to the result.
      */

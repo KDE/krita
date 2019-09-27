@@ -54,7 +54,7 @@ public:
     void setConfiguration(Parameter param, Type type);
 
     /// set the color, blibs etc
-    virtual void setColor(const KoColor& color) = 0;
+    virtual void setColor(const KoColor& color);
 
     /// force subsequent redraw of the component
     void setDirty();
@@ -78,10 +78,10 @@ Q_SIGNALS:
     void paramChanged(qreal hue, qreal hsvSaturation, qreal value, qreal hslSaturation, qreal lightness, qreal hsiSaturation, qreal intensity, qreal hsySaturation, qreal luma);
 protected:
     const KoColorSpace* colorSpace() const;
-    /// returns true, if ether the colour space, the size or the parameters have changed since the last paint event
+    /// returns true, if ether the color space, the size or the parameters have changed since the last paint event
     bool isDirty() const;
 
-    /// this method must be overloaded to return the colour at position x/y and draw a marker on that position
+    /// this method must be overloaded to return the color at position x/y and draw a marker on that position
     virtual KoColor selectColor(int x, int y) = 0;
 
     /// paint component using given painter
@@ -92,6 +92,11 @@ protected:
     /// a subclass can implement this method, the default returns true if the coordinates are in the component rect
     /// values for the subclasses are provided in component coordinates, eg (0,0) is top left of component
     virtual bool containsPointInComponentCoords(int x, int y) const;
+
+    /// a subclass can implement this method to note that the point, although it is in
+    /// containsPointInComponentCoords area, still cannot be selected as a color (e.g.
+    /// it is masked out). Default implementation always returns true.
+    virtual bool allowsColorSelectionAtPoint(const QPoint &) const;
 
     // Workaround for Bug 287001
     void setLastMousePosition(int x, int y);
@@ -120,6 +125,7 @@ private:
     int m_height;
     bool m_dirty;
     const KoColorSpace* m_lastColorSpace;
+    KoColor m_lastSelectedColor;
 };
 
 #endif // KIS_COLOR_SELECTOR_COMPONENT_H

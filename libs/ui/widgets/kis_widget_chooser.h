@@ -35,11 +35,11 @@ class KRITAUI_EXPORT KisWidgetChooser: public QFrame
     struct Data
     {
         Data(const QString& ID):
-            id(ID), widget(0), label(0), choosen(false) { }
+            id(ID), widget(0), label(0), chosen(false) { }
         Data(const Data& d):
-            id(d.id), widget(d.widget), label(d.label), choosen(d.choosen) { }
+            id(d.id), widget(d.widget), label(d.label), chosen(d.chosen) { }
         Data(const QString& ID, QWidget* w, QLabel* l):
-            id(ID), widget(w), label(l), choosen(false) { }
+            id(ID), widget(w), label(l), chosen(false) { }
             
         friend bool operator == (const Data& a, const Data& b) {
             return a.id == b.id;
@@ -48,7 +48,7 @@ class KRITAUI_EXPORT KisWidgetChooser: public QFrame
         QString  id;
         QWidget* widget;
         QLabel*  label;
-        bool     choosen;
+        bool     chosen;
     };
     
     typedef QList<Data>::iterator       Iterator;
@@ -59,13 +59,17 @@ public:
     ~KisWidgetChooser() override;
     
     QWidget* chooseWidget(const QString& id);
-    void     addWidget(const QString& id, const QString& label, QWidget* widget);
+    void     addLabelWidget(const QString& id, const QString& label, QWidget* widget);
     QWidget* getWidget(const QString& id) const;
     
     template<class TWidget>
     TWidget* addWidget(const QString& id, const QString& label = "") {
+        if (id.isEmpty()) {
+            return 0;
+        }
+
         TWidget* widget = new TWidget();
-        addWidget(id, label, widget);
+        addLabelWidget(id, label, widget);
         return widget;
     }
     
@@ -86,7 +90,7 @@ private:
     
 protected Q_SLOTS:
     void slotButtonPressed();
-    void slotWidgetChoosen(int index);
+    void slotWidgetChosen(int index);
 
     // QWidget interface
 protected:
@@ -98,7 +102,7 @@ private:
     QToolButton*  m_arrowButton;
     QButtonGroup* m_buttons;
     QFrame*       m_popup;
-    QString       m_choosenID;
+    QString       m_chosenID;
     QList<Data>   m_widgets;
 };
 

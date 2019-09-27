@@ -1,0 +1,73 @@
+From 4ba47aed42464e1c39d6f10282f0ebd166abcd1c Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Wed, 3 Apr 2019 18:37:56 +0300
+Subject: [PATCH 04/19] Implement a switch for tablet API on Windows
+
+Qt has support for two tablet APIs: WinTab and Windows Pointer API.
+The former one is used in professional graphical tablet devices,
+like Wacom, Huion and etc. The latter is mostly used in two-in-one
+convertible laptops, like Surface Pro. By default Qt prefers Windows
+Pointer API, if it is available.
+
+The problem is that some devices (e.g. Huion tablets) do not
+support Windows Pointer API. More than that, even devices, which
+support Pointer API, must limit their capabilities to fit it:
+
+1) Winodws Pointer API doesn't support more than one stylus barrel
+   buttons, but all professional devices have at least two buttons.
+
+2) Winodws Pointer API limits pressure resolution to 1024 levels,
+   but even entry-level Wacom devices have at least 2048 levels.
+   Professional-level devices have 4096 levels.
+
+Therefore painting applications should be able to choose, which API
+they prefer.
+
+This patch implements a special application attribute
+Qt::AA_MSWindowsUseWinTabAPI. Application should set it before creation
+of QApplication to force selection of WinTab API.
+
+When running, application can check currently running API by
+testing this attribute.
+---
+ src/corelib/global/qnamespace.h                       | 1 +
+ src/plugins/platforms/windows/qwindowsintegration.cpp | 8 +++++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/corelib/global/qnamespace.h b/src/corelib/global/qnamespace.h
+index dec2c44637..3ab9921986 100644
+--- a/src/corelib/global/qnamespace.h
++++ b/src/corelib/global/qnamespace.h
+@@ -525,6 +525,7 @@ public:
+         AA_DontShowShortcutsInContextMenus = 28,
+         AA_CompressTabletEvents = 29,
+         AA_DisableWindowContextHelpButton = 30, // ### Qt 6: remove me
++        AA_MSWindowsUseWinTabAPI = 31, // Win only
+ 
+         // Add new attributes before this line
+         AA_AttributeCount
+diff --git a/src/plugins/platforms/windows/qwindowsintegration.cpp b/src/plugins/platforms/windows/qwindowsintegration.cpp
+index 5c1fa00088..d2d12ff7e5 100644
+--- a/src/plugins/platforms/windows/qwindowsintegration.cpp
++++ b/src/plugins/platforms/windows/qwindowsintegration.cpp
+@@ -236,10 +236,16 @@ QWindowsIntegrationPrivate::QWindowsIntegrationPrivate(const QStringList &paramL
+     m_options = parseOptions(paramList, &tabletAbsoluteRange, &dpiAwareness);
+     QWindowsFontDatabase::setFontOptions(m_options);
+ 
++    if (QCoreApplication::testAttribute(Qt::AA_MSWindowsUseWinTabAPI)) {
++        m_options |= QWindowsIntegration::DontUseWMPointer;
++    }
++
+     if (m_context.initPointer(m_options)) {
+         QCoreApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents);
+     } else {
+-        m_context.initTablet(m_options);
++        if (m_context.initTablet(m_options))
++            QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI);
++
+         if (tabletAbsoluteRange >= 0)
+             m_context.setTabletAbsoluteRange(tabletAbsoluteRange);
+     }
+-- 
+2.20.1.windows.1
+

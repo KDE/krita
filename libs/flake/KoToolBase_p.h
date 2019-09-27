@@ -76,8 +76,8 @@ public:
     }
 
     QList<QPointer<QWidget> > optionWidgets; ///< the optionwidgets associated with this tool
+    bool optionWidgetsCreated {false};
     QCursor currentCursor;
-    QHash<QString, QAction *> actions;
     QString toolId;
     KoToolBase *q;
     KoCanvasBase *canvas; ///< the canvas interface this tool will work for.

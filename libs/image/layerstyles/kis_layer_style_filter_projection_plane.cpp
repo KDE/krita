@@ -135,3 +135,8 @@ QRect KisLayerStyleFilterProjectionPlane::accessRect(const QRect &rect, KisLayer
     return needRect(rect, pos);
 }
 
+QRect KisLayerStyleFilterProjectionPlane::needRectForOriginal(const QRect &rect) const
+{
+    return needRect(rect, KisLayer::N_ABOVE_FILTHY);
+}
+

@@ -229,10 +229,6 @@ private:
 
 struct KoSvgCharChunkFormat : public QTextCharFormat
 {
-    KoSvgCharChunkFormat() {}
-    KoSvgCharChunkFormat(const KoSvgCharChunkFormat &rhs) : QTextCharFormat(rhs) {}
-    KoSvgCharChunkFormat(const QTextCharFormat &rhs) : QTextCharFormat(rhs) {}
-
     enum SvgCharProperty {
         TextAnchor = UserProperty + 1,
         AssociatedShape

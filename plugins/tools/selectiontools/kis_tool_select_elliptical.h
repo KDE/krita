@@ -24,7 +24,7 @@
 #ifndef __KIS_TOOL_SELECT_ELLIPTICAL_H__
 #define __KIS_TOOL_SELECT_ELLIPTICAL_H__
 
-#include "KoToolFactoryBase.h"
+#include "KisSelectionToolFactoryBase.h"
 #include "kis_tool_ellipse_base.h"
 #include <kis_tool_select_base.h>
 #include "kis_selection_tool_config_widget_helper.h"
@@ -62,14 +62,14 @@ class KisToolSelectElliptical : public KisToolSelectEllipticalTemplate
     Q_OBJECT
 public:
     KisToolSelectElliptical(KoCanvasBase* canvas);
-    void resetCursorStyle();
+    void resetCursorStyle() override;
 };
 
-class KisToolSelectEllipticalFactory : public KoToolFactoryBase
+class KisToolSelectEllipticalFactory : public KisSelectionToolFactoryBase
 {
 public:
     KisToolSelectEllipticalFactory()
-        : KoToolFactoryBase("KisToolSelectElliptical")
+        : KisSelectionToolFactoryBase("KisToolSelectElliptical")
     {
         setToolTip(i18n("Elliptical Selection Tool"));
         setSection(TOOL_TYPE_SELECTION);

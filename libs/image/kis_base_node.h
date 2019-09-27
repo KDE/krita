@@ -92,24 +92,25 @@ public:
         bool stateInStasis;
 
         bool operator==(const Property &rhs) const {
-            return rhs.name == name && rhs.state == state;
+            return rhs.name == name && rhs.state == state && isInStasis == rhs.isInStasis;
         }
 
-        Property(): isMutable( false ) { }
+        Property(): isMutable( false ), isInStasis(false) { }
 
         /// Constructor for a mutable property.
         Property( const KoID &n, const QIcon &on, const QIcon &off, bool isOn )
-                : id(n.id()), name( n.name() ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ), canHaveStasis( false ) { }
+                : id(n.id()), name( n.name() ), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ),
+                  canHaveStasis( false ), isInStasis(false) { }
 
         /** Constructor for a mutable property accepting stasis */
         Property( const KoID &n, const QIcon &on, const QIcon &off, bool isOn,
-                  bool _isInStasis, bool _stateInStasis )
+                  bool _isInStasis, bool _stateInStasis = false )
                 : id(n.id()), name(n.name()), isMutable( true ), onIcon( on ), offIcon( off ), state( isOn ),
                   canHaveStasis( true ), isInStasis( _isInStasis ), stateInStasis( _stateInStasis ) { }
 
         /// Constructor for a nonmutable property.
         Property( const KoID &n, const QString &s )
-                : id(n.id()), name(n.name()), isMutable( false ), state( s ) { }
+                : id(n.id()), name(n.name()), isMutable( false ), state( s ), isInStasis(false) { }
     };
 
     /** Return this type for PropertiesRole. */
@@ -121,7 +122,7 @@ public:
      * Create a new, empty base node. The node is unnamed, unlocked
      * visible and unlinked.
      */
-    KisBaseNode();
+    KisBaseNode(KisImageWSP image);
 
     /**
      * Create a copy of this node.
@@ -502,6 +503,14 @@ public:
     void enableAnimation();
 
     virtual void setImage(KisImageWSP image);
+    KisImageWSP image() const;
+
+
+    /**
+     * Fake node is not present in the layer stack and is not used
+     * for normal projection rendering algorithms.
+     */
+    virtual bool isFakeNode() const;
 
 protected:
 
@@ -531,6 +540,16 @@ protected:
      */
     virtual void baseNodeChangedCallback() {
     }
+
+    /**
+     * This callback is called when collapsed state of the base node
+     * has changed. This signal is forwarded by the KisNode and
+     * KisNodeGraphListener to the model in KisLayerBox, so it can
+     * update its controls when information changes.
+     */
+    virtual void baseNodeCollapsedChangedCallback() {
+    }
+
 
     virtual void baseNodeInvalidateAllFramesCallback() {
     }

@@ -35,22 +35,22 @@
 #include "TextDebug.h"
 
 /** Calligra's undo/redo framework.
-    The @class KoTextEditor undo/redo framework sits between the @class QTextDocument and the apllication's undo/redo stack.
+    The @c KoTextEditor undo/redo framework sits between the @c QTextDocument and the application's undo/redo stack.
 
-    When the @class QTextDocument is changed by an editing action, it internally creates an undo/redo command. When doing so a signal (undoCommandAdded()) is emitted by the @class QTextDocument in order for applications to update their undo/redo stack accordingly.
-    Each @class QTextDocument used in Calligra is handled by a specific @class KoTextEditor. It is responsible for on the one hand edit the @class QTextDocument, and on the other hand to listen for the QTextDocument's signal.
+    When the @c QTextDocument is changed by an editing action, it internally creates an undo/redo command. When doing so a signal (undoCommandAdded()) is emitted by the @c QTextDocument in order for applications to update their undo/redo stack accordingly.
+    Each @c QTextDocument used in Calligra is handled by a specific @c KoTextEditor. It is responsible for on the one hand edit the @c QTextDocument, and on the other hand to listen for the QTextDocument's signal.
 
-    Calligra uses a @class KUndo2Stack as its application undo/redo stack. This stack is populated by @class KUndo2Command or sub-classes of it.
+    Calligra uses a @c KUndo2Stack as its application undo/redo stack. This stack is populated by @c KUndo2Command or sub-classes of it.
 
     In order to limit the number of command sub-classes, KoTextEditor provides a framework which uses a generic command.
 
-    The framework is based on a sort of state machine. The KoTextEditor can be in several different states (see @enum KoTextEditor::Private::State).
+    The framework is based on a sort of state machine. The KoTextEditor can be in several different states (see @ref KoTextEditor::Private::State ).
     These are:
-    NoOp: this states indicates that the KoTextEditor is not editing the QTextDocument.
-    KeyPress: this state indicates that the user is typing text. All text typed in succession should correspond to one undo command. To be used when entering text outside of an insertTextCommand.
-    Delete: this state indicates that the user is deleting characters. All deletions done in succession should correspond to one undo command. To be used for deleting outside a deleteCommand. Currently not in use, our deltion is done through a command because of inline objects.
-    Format: this state indicates that we are formatting text. To be used when formatting outside of a command.
-    Custom: this state indicates that the QTextDocument is changed through a KUndo2Command.
+    @c NoOp : this states indicates that the KoTextEditor is not editing the QTextDocument.
+    @c KeyPress : this state indicates that the user is typing text. All text typed in succession should correspond to one undo command. To be used when entering text outside of an insertTextCommand.
+    @c Delete : this state indicates that the user is deleting characters. All deletions done in succession should correspond to one undo command. To be used for deleting outside a deleteCommand. Currently not in use, our deletion is done through a command because of inline objects.
+    @c Format : this state indicates that we are formatting text. To be used when formatting outside of a command.
+    @c Custom : this state indicates that the QTextDocument is changed through a KUndo2Command.
 
     KoTextEditor reacts differently when receiving the QTextDocument's signal, depending on its state.
 

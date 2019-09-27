@@ -52,7 +52,10 @@
 
 #include "kis_node_view_color_scheme.h"
 #include "krita_utils.h"
+#include "KisPart.h"
 #include <QApplication>
+#include "KisDocument.h"
+#include "KisViewManager.h"
 #include "kis_processing_applicator.h"
 #include <KisImageBarrierLockerWithFeedback.h>
 #include "kis_node_uuid_info.h"
@@ -221,7 +224,7 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
 
-        KisNodePropertyListCommand::setNodePropertiesNoUndo(dummy->node(), image, props);
+        nodeInterface->setNodeProperties(dummy->node(), image, props);
         return true;
     }
 
@@ -363,6 +366,8 @@ void TimelineFramesModel::slotImageContentChanged()
 
 void TimelineFramesModel::processUpdateQueue()
 {
+    if (!m_d->converter) return;
+
     Q_FOREACH (KisNodeDummy *dummy, m_d->updateQueue) {
         int row = m_d->converter->rowForDummy(dummy);
 
@@ -539,7 +544,7 @@ QVariant TimelineFramesModel::headerData(int section, Qt::Orientation orientatio
             KisNodeSP node = dummy->node();
 
             QFont baseFont;
-            if (node->projectionLeaf()->isDroppedMask()) {
+            if (node->projectionLeaf()->isDroppedNode()) {
                 baseFont.setStrikeOut(true);
             } else if (m_d->image && m_d->image->isolatedModeRoot() &&
                        KisNodeModel::belongsToIsolatedGroup(m_d->image, node, m_d->dummiesFacade)) {
@@ -650,6 +655,10 @@ QMimeData *TimelineFramesModel::mimeDataExtended(const QModelIndexList &indexes,
     const int baseRow = baseIndex.row();
     const int baseColumn = baseIndex.column();
 
+    const QByteArray uuidDataRoot = m_d->image->root()->uuid().toRfc4122();
+    stream << int(uuidDataRoot.size());
+    stream.writeRawData(uuidDataRoot.data(), uuidDataRoot.size());
+
     stream << indexes.size();
     stream << baseRow << baseColumn;
 
@@ -707,6 +716,32 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
     QByteArray encoded = data->data("application/x-krita-frame");
     QDataStream stream(&encoded, QIODevice::ReadOnly);
 
+    int uuidLenRoot = 0;
+    stream >> uuidLenRoot;
+    QByteArray uuidDataRoot(uuidLenRoot, '\0');
+    stream.readRawData(uuidDataRoot.data(), uuidLenRoot);
+    QUuid nodeUuidRoot = QUuid::fromRfc4122(uuidDataRoot);
+
+    KisPart *partInstance = KisPart::instance();
+    QList<QPointer<KisDocument>> documents = partInstance->documents();
+
+    KisImageSP srcImage = 0;
+    Q_FOREACH(KisDocument *doc, documents) {
+        KisImageSP tmpSrcImage = doc->image();
+        if (tmpSrcImage->root()->uuid() == nodeUuidRoot) {
+            srcImage = tmpSrcImage;
+            break;
+        }
+    }
+
+    if (!srcImage) {
+        KisPart *kisPartInstance = KisPart::instance();
+        kisPartInstance->currentMainwindow()->viewManager()->showFloatingMessage(
+                    i18n("Dropped frames are not available in this Krita instance")
+                    , QIcon());
+        return false;
+    }
+
     int size, baseRow, baseColumn;
     stream >> size >> baseRow >> baseColumn;
 
@@ -731,7 +766,7 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
 
         if (!nodeUuid.isNull()) {
             KisNodeUuidInfo nodeInfo(nodeUuid);
-            srcNode = nodeInfo.findNode(m_d->image->root());
+            srcNode = nodeInfo.findNode(srcImage->root());
         } else {
             QModelIndex index = this->index(srcRow, srcColumn);
             srcNode = nodeAt(index);
@@ -739,15 +774,15 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
 
         KIS_SAFE_ASSERT_RECOVER(srcNode) { continue; }
 
-        const QModelIndex dstIndex = this->index(srcRow + offset.y(), srcColumn + offset.x());
-        if (!dstIndex.isValid()) continue;
+        const QModelIndex dstRowIndex = this->index(srcRow + offset.y(), 0);
+        if (!dstRowIndex.isValid()) continue;
 
-        KisNodeSP dstNode = nodeAt(dstIndex);
+        KisNodeSP dstNode = nodeAt(dstRowIndex);
         KIS_SAFE_ASSERT_RECOVER(dstNode) { continue; }
 
         Q_FOREACH (KisKeyframeChannel *channel, srcNode->keyframeChannels().values()) {
             KisAnimationUtils::FrameItem srcItem(srcNode, channel->id(), srcColumn);
-            KisAnimationUtils::FrameItem dstItem(dstNode, channel->id(), dstIndex.column());
+            KisAnimationUtils::FrameItem dstItem(dstNode, channel->id(), srcColumn + offset.x());
             frameMoves << std::make_pair(srcItem, dstItem);
         }
     }
@@ -784,7 +819,9 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
     }
 
     if (cmd) {
-        KisProcessingApplicator::runSingleCommandStroke(m_d->image, cmd, KisStrokeJobData::BARRIER);
+        KisProcessingApplicator::runSingleCommandStroke(m_d->image, cmd,
+                                                        KisStrokeJobData::BARRIER,
+                                                        KisStrokeJobData::EXCLUSIVE);
     }
 
     return cmd;
@@ -911,7 +948,9 @@ bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows,
                                         newTime, parentCommand);
     }
 
-    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand,
+                                                    KisStrokeJobData::BARRIER,
+                                                    KisStrokeJobData::EXCLUSIVE);
 
     return true;
 }
@@ -1009,7 +1048,9 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
     }
 
 
-    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.take(), KisStrokeJobData::BARRIER);
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.take(),
+                                                    KisStrokeJobData::BARRIER,
+                                                    KisStrokeJobData::EXCLUSIVE);
     return true;
 }
 

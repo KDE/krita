@@ -1,14 +1,17 @@
-'''
-This script is licensed CC 0 1.0, so that you can learn from it.
+# This script is licensed CC 0 1.0, so that you can learn from it.
 
------- CC 0 1.0 ---------------
+# ------ CC 0 1.0 ---------------
 
-The person who associated a work with this deed has dedicated the work to the public domain by waiving all of his or her rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law.
+# The person who associated a work with this deed has dedicated the
+# work to the public domain by waiving all of his or her rights to the
+# work worldwide under copyright law, including all related and
+# neighboring rights, to the extent allowed by law.
 
-You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.
+# You can copy, modify, distribute and perform the work, even for
+# commercial purposes, all without asking permission.
 
-https://creativecommons.org/publicdomain/zero/1.0/legalcode
-'''
+# https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
 import sys
 
 from PyQt5.QtWidgets import QMessageBox
@@ -43,7 +46,8 @@ class TenScriptsExtension(krita.Extension):
         self.uitenscripts.initialize(self)
 
     def readSettings(self):
-        self.scripts = Application.readSetting("tenscripts", "scripts", "").split(',')
+        self.scripts = Application.readSetting(
+            "tenscripts", "scripts", "").split(',')
 
     def writeSettings(self):
         saved_scripts = self.uitenscripts.saved_scripts()
@@ -51,11 +55,16 @@ class TenScriptsExtension(krita.Extension):
         for index, script in enumerate(saved_scripts):
             self.actions[index].script = script
 
-        Application.writeSetting("tenscripts", "scripts", ','.join(map(str, saved_scripts)))
+        Application.writeSetting(
+            "tenscripts", "scripts", ','.join(map(str, saved_scripts)))
 
     def loadActions(self, window):
-        for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']):
-            action = window.createAction("execute_script_" + item, str(i18n("Execute Script {num}")).format(num=item), "")
+        for index, item in enumerate(['1', '2', '3', '4', '5',
+                                      '6', '7', '8', '9', '10']):
+            action = window.createAction(
+                "execute_script_" + item,
+                str(i18n("Execute Script {num}")).format(num=item),
+                "")
             action.script = None
             action.triggered.connect(self._executeScript)
 
@@ -69,25 +78,26 @@ class TenScriptsExtension(krita.Extension):
         if script:
             try:
                 if sys.version_info[0] > 2:
-                    spec = importlib.util.spec_from_file_location("users_script", script)
+                    spec = importlib.util.spec_from_file_location(
+                        "users_script", script)
                     users_module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(users_module)
                 else:
                     users_module = imp.load_source("users_script", script)
 
-                if hasattr(users_module, 'main') and callable(users_module.main):
+                if (hasattr(users_module, 'main')
+                        and callable(users_module.main)):
                     users_module.main()
 
-                self.showMessage(str(i18n("Script {0} executed")).format(self.sender().script))
+                self.showMessage(
+                    str(i18n("Script {0} executed")).format(script))
             except Exception as e:
                 self.showMessage(str(e))
         else:
-            self.showMessage(i18n("You did not assign a script to that action"))
+            self.showMessage(
+                i18n("You did not assign a script to that action"))
 
     def showMessage(self, message):
-        self.msgBox  = QMessageBox(Application.activeWindow().qwindow())
+        self.msgBox = QMessageBox(Application.activeWindow().qwindow())
         self.msgBox.setText(message)
         self.msgBox.exec_()
-
-
-Scripter.addExtension(TenScriptsExtension(Application))

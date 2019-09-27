@@ -97,6 +97,12 @@
    </item>
    <item row="9" column="0">
     <widget class="QTreeWidget" name="listViewChannels">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -213,7 +219,7 @@
       </widget>
      </item>
      <item>
-      <widget class="SqueezedComboBox" name="cmbPalette"/>
+      <widget class="KisSqueezedComboBox" name="cmbPalette"/>
      </item>
     </layout>
    </item>
@@ -253,9 +259,9 @@
    <header>kis_slider_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>SqueezedComboBox</class>
+   <class>KisSqueezedComboBox</class>
    <extends>QComboBox</extends>
-   <header>squeezedcombobox.h</header>
+   <header>KisSqueezedComboBox.h</header>
   </customwidget>
   <customwidget>
    <class>KisIntParseSpinBox</class>

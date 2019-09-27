@@ -108,7 +108,7 @@ public:
     KisPaintDeviceStrategy* currentStrategy();
 
     void init(const KoColorSpace *cs, const quint8 *defaultPixel);
-    KUndo2Command* convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
+    void convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand);
     bool assignProfile(const KoColorProfile * profile);
 
     inline const KoColorSpace* colorSpace() const
@@ -161,13 +161,13 @@ public:
             if (m_data) {
                 m_data->prepareClone(rhs->currentNonLodData(), true);
             } else {
-                m_data = toQShared(new KisPaintDeviceData(rhs->currentNonLodData(), true));
+                m_data = toQShared(new KisPaintDeviceData(q, rhs->currentNonLodData(), true));
             }
         } else {
             if (m_data && !rhs->m_data) {
                 m_data.clear();
             } else if (!m_data && rhs->m_data) {
-                m_data = toQShared(new KisPaintDeviceData(rhs->m_data.data(), true));
+                m_data = toQShared(new KisPaintDeviceData(q, rhs->m_data.data(), true));
             } else if (m_data && rhs->m_data) {
                 m_data->prepareClone(rhs->m_data.data(), true);
             }
@@ -177,7 +177,7 @@ public:
                 FramesHash::const_iterator end = rhs->m_frames.constEnd();
 
                 for (; it != end; ++it) {
-                    DataSP data = toQShared(new KisPaintDeviceData(it.value().data(), true));
+                    DataSP data = toQShared(new KisPaintDeviceData(q, it.value().data(), true));
                     m_frames.insert(it.key(), data);
                 }
             }
@@ -185,7 +185,7 @@ public:
         }
 
         if (rhs->m_lodData) {
-            m_lodData.reset(new KisPaintDeviceData(rhs->m_lodData.data(), true));
+            m_lodData.reset(new KisPaintDeviceData(q, rhs->m_lodData.data(), true));
         }
     }
 
@@ -292,17 +292,17 @@ public:
              * new frame and clear m_data to make the "background" for
              * the areas where there is no frame at all.
              */
-            data = toQShared(new Data(m_data.data(), true));
+            data = toQShared(new Data(q, m_data.data(), true));
             m_data->dataManager()->clear();
             m_data->cache()->invalidate();
             initialFrame = true;
 
         } else if (copy) {
             DataSP srcData = m_frames[copySrc];
-            data = toQShared(new Data(srcData.data(), true));
+            data = toQShared(new Data(q, srcData.data(), true));
         } else {
             DataSP srcData = m_frames.begin().value();
-            data = toQShared(new Data(srcData.data(), false));
+            data = toQShared(new Data(q, srcData.data(), false));
         }
 
         if (!initialFrame && !copy) {
@@ -487,7 +487,7 @@ private:
             if (!m_externalFrameData) {
                 QMutexLocker l(&m_dataSwitchLock);
                 if (!m_externalFrameData) {
-                    m_externalFrameData.reset(new Data(m_data.data(), false));
+                    m_externalFrameData.reset(new Data(q, m_data.data(), false));
                 }
             }
             data = m_externalFrameData.data();
@@ -503,7 +503,7 @@ private:
 
             QMutexLocker l(&m_dataSwitchLock);
             if (!m_lodData) {
-                m_lodData.reset(new Data(srcData, false));
+                m_lodData.reset(new Data(q, srcData, false));
             }
         }
     }
@@ -660,7 +660,7 @@ KisPaintDevice::LodDataStruct* KisPaintDevice::Private::createLodDataStruct(int 
 
     Data *srcData = currentNonLodData();
 
-    Data *lodData = new Data(srcData, false);
+    Data *lodData = new Data(q, srcData, false);
     LodDataStruct *lodStruct = new LodDataStructImpl(lodData);
 
     int expectedX = KisLodTransform::coordToLodCoord(srcData->x(), newLod);
@@ -698,6 +698,8 @@ void KisPaintDevice::Private::updateLodDataManager(KisDataManager *srcDataManage
                                                    const QRect &originalRect,
                                                    int lod)
 {
+    if (originalRect.isEmpty()) return;
+
     const int srcStepSize = 1 << lod;
 
     KIS_ASSERT_RECOVER_RETURN(lod > 0);
@@ -871,7 +873,7 @@ void KisPaintDevice::Private::uploadFrameData(DataSP srcData, DataSP dstData)
 
         KUndo2Command tempCommand;
 
-        srcData = toQShared(new Data(srcData.data(), true));
+        srcData = toQShared(new Data(q, srcData.data(), true));
         srcData->convertDataColorSpace(dstData->colorSpace(),
                                        KoColorConversionTransformation::internalRenderingIntent(),
                                        KoColorConversionTransformation::internalConversionFlags(),
@@ -895,14 +897,15 @@ void KisPaintDevice::Private::tesingFetchLodDevice(KisPaintDeviceSP targetDevice
     transferFromData(data, targetDevice);
 }
 
-KUndo2Command* KisPaintDevice::Private::convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+void KisPaintDevice::Private::convertColorSpace(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand)
 {
 
     class DeviceChangeColorSpaceCommand : public KUndo2Command
     {
     public:
-        DeviceChangeColorSpaceCommand(KisPaintDeviceSP device)
-            : m_firstRun(true),
+        DeviceChangeColorSpaceCommand(KisPaintDeviceSP device, KUndo2Command *parent = 0)
+            : KUndo2Command(parent),
+              m_firstRun(true),
               m_device(device)
         {
         }
@@ -937,25 +940,19 @@ KUndo2Command* KisPaintDevice::Private::convertColorSpace(const KoColorSpace * d
     };
 
 
-    KUndo2Command *parentCommand = new DeviceChangeColorSpaceCommand(q);
-
     QList<Data*> dataObjects = allDataObjects();
+    if (dataObjects.isEmpty()) return;
+
+    KUndo2Command *mainCommand =
+        parentCommand ? new DeviceChangeColorSpaceCommand(q, parentCommand) : 0;
 
     Q_FOREACH (Data *data, dataObjects) {
         if (!data) continue;
 
-        data->convertDataColorSpace(dstColorSpace, renderingIntent, conversionFlags, parentCommand);
+        data->convertDataColorSpace(dstColorSpace, renderingIntent, conversionFlags, mainCommand);
     }
 
-    if (!parentCommand->childCount()) {
-        delete parentCommand;
-        parentCommand = 0;
-    } else {
-        q->emitColorSpaceChanged();
-    }
-
-    return parentCommand;
-
+    q->emitColorSpaceChanged();
 }
 
 bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile)
@@ -1034,22 +1031,27 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs, KritaUtils::DeviceCopy
     , m_d(new Private(this))
 {
     if (this != &rhs) {
-        // temporary def. bounds object for the initialization phase only
-        m_d->defaultBounds = m_d->transitionalDefaultBounds;
-
-        // copy data objects with or without frames
-        m_d->cloneAllDataObjects(rhs.m_d, copyMode == KritaUtils::CopyAllFrames);
-
-        if (copyMode == KritaUtils::CopyAllFrames && rhs.m_d->framesInterface) {
-            KIS_ASSERT_RECOVER_RETURN(rhs.m_d->framesInterface);
-            KIS_ASSERT_RECOVER_RETURN(rhs.m_d->contentChannel);
-            m_d->framesInterface.reset(new KisPaintDeviceFramesInterface(this));
-            m_d->contentChannel.reset(new KisRasterKeyframeChannel(*rhs.m_d->contentChannel.data(), newParentNode, this));
-        }
-
-        setDefaultBounds(rhs.m_d->defaultBounds);
-        setParentNode(newParentNode);
+        makeFullCopyFrom(rhs, copyMode, newParentNode);
     }
+}
+
+void KisPaintDevice::makeFullCopyFrom(const KisPaintDevice &rhs, KritaUtils::DeviceCopyMode copyMode, KisNode *newParentNode)
+{
+    // temporary def. bounds object for the initialization phase only
+    m_d->defaultBounds = m_d->transitionalDefaultBounds;
+
+    // copy data objects with or without frames
+    m_d->cloneAllDataObjects(rhs.m_d, copyMode == KritaUtils::CopyAllFrames);
+
+    if (copyMode == KritaUtils::CopyAllFrames && rhs.m_d->framesInterface) {
+        KIS_ASSERT_RECOVER_RETURN(rhs.m_d->framesInterface);
+        KIS_ASSERT_RECOVER_RETURN(rhs.m_d->contentChannel);
+        m_d->framesInterface.reset(new KisPaintDeviceFramesInterface(this));
+        m_d->contentChannel.reset(new KisRasterKeyframeChannel(*rhs.m_d->contentChannel.data(), newParentNode, this));
+    }
+
+    setDefaultBounds(rhs.m_d->defaultBounds);
+    setParentNode(newParentNode);
 }
 
 KisPaintDevice::~KisPaintDevice()
@@ -1511,10 +1513,9 @@ void KisPaintDevice::emitProfileChanged()
     emit profileChanged(m_d->colorSpace()->profile());
 }
 
-KUndo2Command* KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+void KisPaintDevice::convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags, KUndo2Command *parentCommand)
 {
-    KUndo2Command *command = m_d->convertColorSpace(dstColorSpace, renderingIntent, conversionFlags);
-    return command;
+    m_d->convertColorSpace(dstColorSpace, renderingIntent, conversionFlags, parentCommand);
 }
 
 bool KisPaintDevice::setProfile(const KoColorProfile * profile)
@@ -1799,28 +1800,33 @@ KisRandomSubAccessorSP KisPaintDevice::createRandomSubAccessor() const
 void KisPaintDevice::clearSelection(KisSelectionSP selection)
 {
     const KoColorSpace *colorSpace = m_d->colorSpace();
-    QRect r = selection->selectedExactRect() & m_d->defaultBounds->bounds();
+    const QRect r = selection->selectedExactRect();
 
     if (r.isValid()) {
 
-        KisHLineIteratorSP devIt = createHLineIteratorNG(r.x(), r.y(), r.width());
-        KisHLineConstIteratorSP selectionIt = selection->projection()->createHLineConstIteratorNG(r.x(), r.y(), r.width());
+        {
+            KisHLineIteratorSP devIt = createHLineIteratorNG(r.x(), r.y(), r.width());
+            KisHLineConstIteratorSP selectionIt = selection->projection()->createHLineConstIteratorNG(r.x(), r.y(), r.width());
 
-        const KoColor defaultPixel = this->defaultPixel();
-        bool transparentDefault = (defaultPixel.opacityU8() == OPACITY_TRANSPARENT_U8);
-        for (qint32 y = 0; y < r.height(); y++) {
+            const KoColor defaultPixel = this->defaultPixel();
+            bool transparentDefault = (defaultPixel.opacityU8() == OPACITY_TRANSPARENT_U8);
+            for (qint32 y = 0; y < r.height(); y++) {
 
-            do {
-                // XXX: Optimize by using stretches
-                colorSpace->applyInverseAlphaU8Mask(devIt->rawData(), selectionIt->rawDataConst(), 1);
-                if (transparentDefault && colorSpace->opacityU8(devIt->rawData()) == OPACITY_TRANSPARENT_U8) {
-                    memcpy(devIt->rawData(), defaultPixel.data(), colorSpace->pixelSize());
-                }
-            } while (devIt->nextPixel() && selectionIt->nextPixel());
-            devIt->nextRow();
-            selectionIt->nextRow();
+                do {
+                    // XXX: Optimize by using stretches
+                    colorSpace->applyInverseAlphaU8Mask(devIt->rawData(), selectionIt->rawDataConst(), 1);
+                    if (transparentDefault && colorSpace->opacityU8(devIt->rawData()) == OPACITY_TRANSPARENT_U8) {
+                        memcpy(devIt->rawData(), defaultPixel.data(), colorSpace->pixelSize());
+                    }
+                } while (devIt->nextPixel() && selectionIt->nextPixel());
+                devIt->nextRow();
+                selectionIt->nextRow();
+            }
         }
+
+        // purge() must be executed **after** all iterators have been destroyed!
         m_d->dataManager()->purge(r.translated(-m_d->x(), -m_d->y()));
+
         setDirty(r);
     }
 }

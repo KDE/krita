@@ -284,7 +284,11 @@ public:
      * paint device. If the specified area is larger than the paint
      * device's extent, the default pixel will be read.
      *
-     * @param channelsize a vector with for every channel its size in bytes
+     * @param channelsizes a vector with for every channel its size in bytes
+     * @param x x coordinate of the top left corner
+     * @param y y coordinate of the top left corner
+     * @param w width
+     * @param h height
      */
     QVector<quint8*> readPlanarBytes(QVector<qint32> channelsizes, qint32 x, qint32 y, qint32 w, qint32 h) const {
         return ACTUAL_DATAMGR::readPlanarBytes(channelsizes, x, y, w, h);
@@ -302,8 +306,12 @@ public:
      * read. Krita may also crash.
      *
      * @param planes a vector with a byte array for every plane
-     * @param channelsize a vector with for every channel its size in
+     * @param channelsizes a vector with for every channel its size in
      * bytes
+     * @param x x coordinate of the top left corner
+     * @param y y coordinate of the top left corner
+     * @param w width
+     * @param h height
      *
      * XXX: what about undo?
      */

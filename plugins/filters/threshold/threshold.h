@@ -60,7 +60,7 @@ public:
 
     KisFilterConfigurationSP factoryConfiguration() const override;
 
-    KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const override;
+    KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 
 };
 

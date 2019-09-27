@@ -58,7 +58,8 @@ public:
         BlackpointCompensation  = 0x2000,
         NoWhiteOnWhiteFixup     = 0x0004,    // Don't fix scum dot
         HighQuality             = 0x0400,    // Use more memory to give better accuracy
-        LowQuality              = 0x0800    // Use less memory to minimize resources
+        LowQuality              = 0x0800,    // Use less memory to minimize resources
+        CopyAlpha               = 0x04000000 //Let LCMS handle the alpha. Should always be on.
     };
     Q_DECLARE_FLAGS(ConversionFlags, ConversionFlag)
 
@@ -116,10 +117,18 @@ public:
     ConversionFlags conversionFlags() const;
 
     /**
-     * perform the color conversion between two buffers.
+     * perform the color conversion between two buffers. Make sure that
+     * \p src is not the same as \p dst!
      * @param nPixels the number of pixels in the buffers.
      */
     void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const override = 0;
+
+    /**
+     * perform the color conversion between two or one buffer. This is a convenience
+     * function that allows doing the conversion in-place
+     * @param nPixels the number of pixels in the buffers.
+     */
+    void transformInPlace(const quint8 *src, quint8 *dst, qint32 nPixels) const;
 
     /**
      * @return false if the  transformation is not valid

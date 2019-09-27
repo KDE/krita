@@ -59,15 +59,16 @@ public Q_SLOTS:
     void slotAddModeRequested();
     void slotSubtractModeRequested();
     void slotIntersectModeRequested();
+    void slotSymmetricDifferenceModeRequested();
 
 private:
     KisSelectionOptions* m_optionsWidget;
 
     QString m_windowTitle;
 
-    SelectionMode m_selectionMode;
-    SelectionAction m_selectionAction;
-    bool m_antiAliasSelection = true;
+    SelectionMode m_selectionMode {SHAPE_PROTECTION};
+    SelectionAction m_selectionAction {SELECTION_DEFAULT};
+    bool m_antiAliasSelection {true};
 };
 
 #endif /* __KIS_SELECTION_TOOL_CONFIG_WIDGET_HELPER_H */

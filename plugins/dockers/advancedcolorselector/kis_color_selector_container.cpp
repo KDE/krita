@@ -50,6 +50,7 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     m_minimalShadeSelector(new KisMinimalShadeSelector(this)),
     m_shadeSelector(m_myPaintShadeSelector),
     m_gamutMaskToolbar(new KisGamutMaskToolbar(this)),
+    m_showColorSelector(true),
     m_canvas(0)
 {
     m_widgetLayout = new QBoxLayout(QBoxLayout::TopToBottom, this);
@@ -144,19 +145,19 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
             connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
         }
 
-        connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
-                m_colorSelector, SLOT(slotGamutMaskSet(KoGamutMask*)));
+        connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
+                m_colorSelector, SLOT(slotGamutMaskSet(KoGamutMask*)), Qt::UniqueConnection);
 
-        connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskUnset()),
-                m_colorSelector, SLOT(slotGamutMaskUnset()));
+        connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigGamutMaskUnset()),
+                m_colorSelector, SLOT(slotGamutMaskUnset()), Qt::UniqueConnection);
 
-        connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskPreviewUpdate()),
-                m_colorSelector, SLOT(slotGamutMaskPreviewUpdate()));
+        connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigGamutMaskPreviewUpdate()),
+                m_colorSelector, SLOT(slotGamutMaskPreviewUpdate()), Qt::UniqueConnection);
 
-        m_gamutMaskToolbar->connectMaskSignals(m_canvas->viewManager()->resourceProvider());
+        connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigGamutMaskDeactivated()),
+                m_colorSelector, SLOT(slotGamutMaskDeactivate()), Qt::UniqueConnection);
 
-        // gamut mask connections
-        connect(m_gamutMaskToolbar, SIGNAL(sigGamutMaskToggle(bool)), m_colorSelector, SLOT(slotGamutMaskToggle(bool)));
+        m_gamutMaskToolbar->connectMaskSignals(m_canvas->viewManager()->canvasResourceProvider());
 
         KActionCollection* actionCollection = canvas->viewManager()->actionCollection();
         actionCollection->addAction("show_color_selector", m_colorSelAction);
@@ -169,6 +170,20 @@ void KisColorSelectorContainer::updateSettings()
 {
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     m_onDockerResizeSetting =  (int)cfg.readEntry("onDockerResize", 0);
+    m_showColorSelector = (bool) cfg.readEntry("showColorSelector", true);
+
+    if (m_showColorSelector) {
+        m_colorSelector->show();
+
+        if (m_colorSelector->configuration().mainType == KisColorSelectorConfiguration::Wheel) {
+            m_gamutMaskToolbar->show();
+        } else {
+            m_gamutMaskToolbar->hide();
+        }
+    } else {
+        m_colorSelector->hide();
+        m_gamutMaskToolbar->hide();
+    }
 
     QString type = cfg.readEntry("shadeSelectorType", "Minimal");
 
@@ -189,20 +204,12 @@ void KisColorSelectorContainer::updateSettings()
 
     if(m_shadeSelector!=0)
         m_shadeSelector->show();
-
-
-    if (m_colorSelector->configuration().mainType == KisColorSelectorConfiguration::Wheel) {
-        m_gamutMaskToolbar->show();
-    } else {
-        m_gamutMaskToolbar->hide();
-    }
-
 }
 
 void KisColorSelectorContainer::reactOnLayerChange()
 {
     if (m_canvas) {
-        KisNodeSP node = m_canvas->viewManager()->resourceProvider()->currentNode();
+        KisNodeSP node = m_canvas->viewManager()->canvasResourceProvider()->currentNode();
         if (node) {
             KisPaintDeviceSP device = node->paintDevice();
             if (device) {

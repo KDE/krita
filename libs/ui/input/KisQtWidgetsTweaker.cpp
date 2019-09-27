@@ -99,6 +99,7 @@ public:
         }
         return false;
     }
+
     virtual DecisionOnShortcutOverride handleEvent(QObject *receiver, QKeyEvent *event)  override
     {
         Q_UNUSED(event);
@@ -114,10 +115,10 @@ public:
     }
 };
 
-class SpingboxShortcutOverrider : public ShortcutOverriderBase
+class SpinboxShortcutOverrider : public ShortcutOverriderBase
 {
 public:
-    constexpr SpingboxShortcutOverrider() = default;
+    constexpr SpinboxShortcutOverrider() = default;
 
     virtual bool interestedInEvent(QKeyEvent *event) override
     {
@@ -198,7 +199,7 @@ private:
 //for some reason I can't just populate constexpr
 //pointer array using "new"
 LineTextEditingShortcutOverrider overrider0;
-SpingboxShortcutOverrider overrider1;
+SpinboxShortcutOverrider overrider1;
 TabShortcutOverrider overrider2;
 
 constexpr ShortcutOverriderBase *allShortcutOverriders[] = {
@@ -304,7 +305,7 @@ bool KisQtWidgetsTweaker::eventFilter(QObject *receiver, QEvent *event)
             break;
         case ShortcutOverriderBase::DecisionOnShortcutOverride::overrideShortcut:
             event->accept();
-            //once shortcutoverride acepted, qt stop asking everyone
+            //once shortcutoverride accepted, qt stop asking everyone
             //about it and proceed to handling next event
             d->lastKeyPressProcessingComplete = true;
             retval = true;

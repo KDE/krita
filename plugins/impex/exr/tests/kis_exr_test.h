@@ -26,6 +26,9 @@ class KisExrTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testFiles();
+    void testImportFromWriteonly();
+    void testExportToReadonly();
+    void testImportIncorrectFormat();
     void testRoundTrip();
 };
 

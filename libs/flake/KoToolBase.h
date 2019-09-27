@@ -110,15 +110,9 @@ public:
     QList<QPointer<QWidget> > optionWidgets();
 
     /**
-     * Retrieves the entire collection of actions for the tool.
-     */
-    QHash<QString, QAction *> actions() const;
-
-    /**
      * Retrieve an action by name.
      */
     QAction *action(const QString &name) const;
-
 
     /**
      * Called when (one of) the mouse or stylus buttons is pressed.
@@ -185,7 +179,7 @@ public:
      * able to support complex input method operations as support for surrounding
      * text and reconversions.
      * Default implementation returns simple defaults, for tools that want to provide
-     * a more responsive text entry experience for CJK languages it would be good to reimplemnt.
+     * a more responsive text entry experience for CJK languages it would be good to reimplement.
      * @param query specifies which property is queried.
      * @param converter the view converter for the current canvas.
      */
@@ -460,19 +454,6 @@ protected:
     virtual QWidget *createOptionWidget();
     virtual QList<QPointer<QWidget> > createOptionWidgets();
 
-    /**
-     * Add an action under the given name to the collection.
-     *
-     * Inserting an action under a name that is already used for another action will replace
-     * the other action in the collection.
-     *
-     * @param name The name by which the action be retrieved again from the collection.
-     * @param action The action to add.
-     * @param readWrite set this to ReadOnlyAction to keep the action available on
-     *      read-only documents
-     */
-    void addAction(const QString &name, QAction *action);
-
     /// Convenience function to get the current handle radius
     uint handleRadius() const;
 
@@ -531,8 +512,6 @@ private:
      * @see KoToolFactoryBase::id()
      */
     void setToolId(const QString &id);
-
-
 
     KoToolBase();
     KoToolBase(const KoToolBase&);

@@ -80,7 +80,7 @@ public:
             }
             case 3: // average
             {
-                gray = (r + g + b) / 2;
+                gray = (r + g + b) / 3;
                 break;
             }
             case 4: // min

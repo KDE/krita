@@ -5,7 +5,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -32,6 +33,18 @@
 
 ConcentricEllipseAssistant::ConcentricEllipseAssistant()
         : KisPaintingAssistant("concentric ellipse", i18n("Concentric Ellipse assistant"))
+{
+}
+
+KisPaintingAssistantSP ConcentricEllipseAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+{
+    return KisPaintingAssistantSP(new ConcentricEllipseAssistant(*this, handleMap));
+}
+
+ConcentricEllipseAssistant::ConcentricEllipseAssistant(const ConcentricEllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : KisPaintingAssistant(rhs, handleMap)
+    , m_ellipse(rhs.m_ellipse)
+    , m_extraEllipse(rhs.m_extraEllipse)
 {
 }
 
@@ -160,7 +173,7 @@ QRect ConcentricEllipseAssistant::boundingRect() const
     }
 }
 
-QPointF ConcentricEllipseAssistant::buttonPosition() const
+QPointF ConcentricEllipseAssistant::getEditorPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
 }
@@ -170,6 +183,25 @@ bool ConcentricEllipseAssistant::isAssistantComplete() const
     return handles().size() >= 3;
 }
 
+void ConcentricEllipseAssistant::transform(const QTransform &transform)
+{
+    m_ellipse.set(*handles()[0], *handles()[1], *handles()[2]);
+
+    QPointF newAxes;
+    QTransform newTransform;
+
+    std::tie(newAxes, newTransform) = KisAlgebra2D::transformEllipse(QPointF(m_ellipse.semiMajor(), m_ellipse.semiMinor()), m_ellipse.getInverse() * transform);
+
+    const QPointF p1 = newTransform.map(QPointF(newAxes.x(), 0));
+    const QPointF p2 = newTransform.map(QPointF(-newAxes.x(), 0));
+    const QPointF p3 = newTransform.map(QPointF(0, newAxes.y()));
+
+    *handles()[0] = p1;
+    *handles()[1] = p2;
+    *handles()[2] = p3;
+
+    uncache();
+}
 
 ConcentricEllipseAssistantFactory::ConcentricEllipseAssistantFactory()
 {

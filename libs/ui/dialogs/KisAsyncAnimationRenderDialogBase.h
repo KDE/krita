@@ -39,7 +39,7 @@ class KisViewManager;
  *   - fetch the list of dirtly frames using calcDirtyFrames()
  *   - create some clones of the image according to the user's settings
  *     to facilitate multithreaded rendering and processing of the frames
- *   - if the user doesn't have anough RAM, the clones will not be created
+ *   - if the user doesn't have enough RAM, the clones will not be created
  *     (the memory overhead is calculated using "projections" metric of the
  *      statistics server).
  *   - feed the images/threads with dirty frames until the all the frames
@@ -115,6 +115,7 @@ private Q_SLOTS:
     void slotFrameCancelled(int frame);
 
     void slotCancelRegeneration();
+    void slotUpdateCompressedProgressData();
 
 private:
     void tryInitiateFrameRegeneration();

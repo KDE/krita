@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -60,22 +61,23 @@ void PresetDockerDock::setCanvas(KoCanvasBase *canvas)
             m_canvas->viewManager()->paintOpBox(), SLOT(resourceSelected(KoResource*)));
     connect(m_presetChooser, SIGNAL(resourceClicked(KoResource*)),
             m_canvas->viewManager()->paintOpBox(), SLOT(resourceSelected(KoResource*)));
-    connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
             this, SLOT(canvasResourceChanged(int,QVariant)));
 
 
     connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), m_presetChooser, SLOT(slotThemeChanged()));
 
+    canvasResourceChanged();
 }
 
 void PresetDockerDock::canvasResourceChanged(int /*key*/, const QVariant& /*v*/)
 {
     if (m_canvas && m_canvas->resourceManager()) {
-        sender()->blockSignals(true);
+        if (sender()) sender()->blockSignals(true);
         KisPaintOpPresetSP preset = m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         if(preset)
             m_presetChooser->canvasResourceChanged(preset);
-        sender()->blockSignals(false);
+        if (sender()) sender()->blockSignals(false);
         m_presetChooser->updateViewSettings();
     }
 }

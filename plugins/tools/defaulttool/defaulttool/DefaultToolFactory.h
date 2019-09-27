@@ -29,8 +29,10 @@ class DefaultToolFactory : public KoToolFactoryBase
 public:
     /// constructor
     DefaultToolFactory();
+    DefaultToolFactory(const QString &id);
     ~DefaultToolFactory() override;
 
     KoToolBase *createTool(KoCanvasBase *canvas) override;
+    QList<QAction *> createActionsImpl() override;
 };
 #endif

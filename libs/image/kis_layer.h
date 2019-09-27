@@ -169,9 +169,6 @@ public:
      */
     void setTemporary(bool t);
 
-    /// returns the image this layer belongs to, or null if there is no image
-    KisImageWSP image() const;
-
     /**
      * Set the image this layer belongs to.
      */
@@ -349,6 +346,21 @@ protected:
      * \see incomingChangeRect()
      */
     virtual QRect outgoingChangeRect(const QRect &rect) const;
+
+    /**
+     * Return need rect that should be prepared on original()
+     * device of the layer to get \p rect on its projection.
+     *
+     * This method is used either for layers that can have other
+     * layers as children (yes, KisGroupLayer, I'm looking at you!),
+     * or for layers that depend on the lower nodes (it's you,
+     * KisAdjustmentLayer!).
+     *
+     * These layers may have some filter masks that need a bit
+     * more pixels than requested, therefore child nodes should do
+     * a bit more work to prepare them.
+     */
+    QRect needRectForOriginal(const QRect &rect) const;
 
     /**
      * @param rectVariesFlag (out param) a flag, showing whether

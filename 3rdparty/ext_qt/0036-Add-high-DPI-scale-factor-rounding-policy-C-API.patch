@@ -1,0 +1,314 @@
+From 8f8d32fd20b774f4857b557be665a243870edd8d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
+Date: Sat, 7 Oct 2017 01:35:29 +0200
+Subject: [PATCH 27/27] Add high-DPI scale factor rounding policy C++ API
+
+This API enables tuning of how Qt rounds fractional scale factors, and
+corresponds to the QT_SCALE_FACTOR_ROUNDING_POLICY environment
+variable
+
+New API:
+	Qt::HighDPiScaleFactorRoundingPolicy
+	QGuiApplication::setHighDpiScaleFactorRoundingPolicy()
+	QGuiApplication::highDpiScaleFactorRoundingPolicy()
+
+Done-with: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Task-number: QTBUG-53022
+Change-Id: Ic360f26a173caa757e4ebde35ce08a6b74290b7d
+---
+ src/corelib/global/qnamespace.h    | 10 +++++++
+ src/corelib/global/qnamespace.qdoc | 22 ++++++++++++++
+ src/gui/kernel/qguiapplication.cpp | 44 ++++++++++++++++++++++++++++
+ src/gui/kernel/qguiapplication.h   |  3 ++
+ src/gui/kernel/qguiapplication_p.h |  1 +
+ src/gui/kernel/qhighdpiscaling.cpp | 47 +++++++++++++++++-------------
+ src/gui/kernel/qhighdpiscaling_p.h | 10 -------
+ 7 files changed, 106 insertions(+), 31 deletions(-)
+
+diff --git a/src/corelib/global/qnamespace.h b/src/corelib/global/qnamespace.h
+index 3ab99219..fea3d4d8 100644
+--- a/src/corelib/global/qnamespace.h
++++ b/src/corelib/global/qnamespace.h
+@@ -1728,6 +1728,15 @@ public:
+         ChecksumItuV41
+     };
+ 
++    enum class HighDpiScaleFactorRoundingPolicy {
++        NotSet,
++        Round,
++        Ceil,
++        Floor,
++        RoundPreferFloor,
++        PassThrough
++    };
++
+ #ifndef Q_QDOC
+     // NOTE: Generally, do not add QT_Q_ENUM if a corresponding Q_Q_FLAG exists.
+     QT_Q_ENUM(ScrollBarPolicy)
+@@ -1813,6 +1822,7 @@ public:
+     QT_Q_ENUM(MouseEventSource)
+     QT_Q_FLAG(MouseEventFlag)
+     QT_Q_ENUM(ChecksumType)
++    QT_Q_ENUM(HighDpiScaleFactorRoundingPolicy)
+     QT_Q_ENUM(TabFocusBehavior)
+ #endif // Q_DOC
+ 
+diff --git a/src/corelib/global/qnamespace.qdoc b/src/corelib/global/qnamespace.qdoc
+index 5bba8c5f..a3ca70a7 100644
+--- a/src/corelib/global/qnamespace.qdoc
++++ b/src/corelib/global/qnamespace.qdoc
+@@ -3252,3 +3252,25 @@
+ 
+   \value ChecksumItuV41 Checksum calculation based on ITU-V.41.
+ */
++
++/*!
++  \enum Qt::HighDpiScaleFactorRoundingPolicy
++  \since 5.14
++
++  This enum describes the possible High-DPI scale factor rounding policies, which
++  decide how non-integer scale factors (such as Windows 150%) are handled.
++
++  The active policy is set by calling QGuiApplication::setHighDdpiScaleFactorRoundingPolicy() before
++  the application object is created, or by setting the QT_SCALE_FACTOR_ROUNDING_POLICY
++  environment variable.
++
++  \sa QGuiApplication::setHighDdpiScaleFactorRoundingPolicy()
++  \sa AA_EnableHighDpiScaling.
++
++  \omitvalue NotSet
++  \value Round Round up for .5 and above.
++  \value Ceil Always round up.
++  \value Floor Always round down.
++  \value RoundPreferFloor Round up for .75 and above.
++  \value PassThrough Don't round.
++*/
+diff --git a/src/gui/kernel/qguiapplication.cpp b/src/gui/kernel/qguiapplication.cpp
+index 4d61d9fd..681cbd85 100644
+--- a/src/gui/kernel/qguiapplication.cpp
++++ b/src/gui/kernel/qguiapplication.cpp
+@@ -146,6 +146,8 @@ QString QGuiApplicationPrivate::styleOverride;
+ 
+ Qt::ApplicationState QGuiApplicationPrivate::applicationState = Qt::ApplicationInactive;
+ 
++Qt::HighDpiScaleFactorRoundingPolicy QGuiApplicationPrivate::highDpiScaleFactorRoundingPolicy =
++    Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor;
+ bool QGuiApplicationPrivate::highDpiScalingUpdated = false;
+ 
+ QPointer<QWindow> QGuiApplicationPrivate::currentDragWindow;
+@@ -677,6 +679,8 @@ QGuiApplication::~QGuiApplication()
+     QGuiApplicationPrivate::lastCursorPosition = {qInf(), qInf()};
+     QGuiApplicationPrivate::currentMousePressWindow = QGuiApplicationPrivate::currentMouseWindow = nullptr;
+     QGuiApplicationPrivate::applicationState = Qt::ApplicationInactive;
++    QGuiApplicationPrivate::highDpiScaleFactorRoundingPolicy =
++        Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor;
+     QGuiApplicationPrivate::highDpiScalingUpdated = false;
+     QGuiApplicationPrivate::currentDragWindow = nullptr;
+     QGuiApplicationPrivate::tabletDevicePoints.clear();
+@@ -3449,6 +3453,46 @@ Qt::ApplicationState QGuiApplication::applicationState()
+     return QGuiApplicationPrivate::applicationState;
+ }
+ 
++/*!
++    \since 5.14
++
++    Sets the high-DPI scale factor rounding policy for the application. The
++    policy decides how non-integer scale factors (such as Windows 150%) are
++    handled, for applications that have AA_EnableHighDpiScaling enabled.
++
++    The two principal options are whether fractional scale factors should
++    be rounded to an integer or not. Keeping the scale factor as-is will
++    make the user interface size match the OS setting exactly, but may cause
++    painting errors, for example with the Windows style.
++
++    If rounding is wanted, then which type of rounding should be decided
++    next. Mathematically correct rounding is supported but may not give
++    the best visual results: Consider if you want to render 1.5x as 1x
++    ("small UI") or as 2x ("large UI"). See the Qt::HighDpiScaleFactorRoundingPolicy
++    enum for a complete list of all options.
++
++    This function must be called before creating the application object,
++    and can be overridden by setting the QT_SCALE_FACTOR_ROUNDING_POLICY
++    environment variable. The QGuiApplication::highDpiScaleFactorRoundingPolicy()
++    accessor will reflect the environment, if set.
++
++    The default value is Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor.
++*/
++void QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy policy)
++{
++    QGuiApplicationPrivate::highDpiScaleFactorRoundingPolicy = policy;
++}
++
++/*!
++  \since 5.14
++
++  Returns the high-DPI scale factor rounding policy.
++*/
++Qt::HighDpiScaleFactorRoundingPolicy QGuiApplication::highDpiScaleFactorRoundingPolicy()
++{
++    return QGuiApplicationPrivate::highDpiScaleFactorRoundingPolicy;
++}
++
+ /*!
+     \since 5.2
+     \fn void QGuiApplication::applicationStateChanged(Qt::ApplicationState state)
+diff --git a/src/gui/kernel/qguiapplication.h b/src/gui/kernel/qguiapplication.h
+index 02dffef0..2814ba1d 100644
+--- a/src/gui/kernel/qguiapplication.h
++++ b/src/gui/kernel/qguiapplication.h
+@@ -156,6 +156,9 @@ public:
+ 
+     static Qt::ApplicationState applicationState();
+ 
++    static void setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy policy);
++    static Qt::HighDpiScaleFactorRoundingPolicy highDpiScaleFactorRoundingPolicy();
++
+     static int exec();
+     bool notify(QObject *, QEvent *) override;
+ 
+diff --git a/src/gui/kernel/qguiapplication_p.h b/src/gui/kernel/qguiapplication_p.h
+index 042a36c3..7962bb01 100644
+--- a/src/gui/kernel/qguiapplication_p.h
++++ b/src/gui/kernel/qguiapplication_p.h
+@@ -216,6 +216,7 @@ public:
+     static QWindow *currentMouseWindow;
+     static QWindow *currentMousePressWindow;
+     static Qt::ApplicationState applicationState;
++    static Qt::HighDpiScaleFactorRoundingPolicy highDpiScaleFactorRoundingPolicy;
+     static bool highDpiScalingUpdated;
+     static QPointer<QWindow> currentDragWindow;
+ 
+diff --git a/src/gui/kernel/qhighdpiscaling.cpp b/src/gui/kernel/qhighdpiscaling.cpp
+index 52c0665b..29b6d7e7 100644
+--- a/src/gui/kernel/qhighdpiscaling.cpp
++++ b/src/gui/kernel/qhighdpiscaling.cpp
+@@ -329,24 +329,24 @@ static QByteArray joinEnumValues(const EnumLookup<EnumType> *i1, const EnumLooku
+     return result;
+ }
+ 
+-using ScaleFactorRoundingPolicyLookup = EnumLookup<QHighDpiScaling::HighDpiScaleFactorRoundingPolicy>;
++using ScaleFactorRoundingPolicyLookup = EnumLookup<Qt::HighDpiScaleFactorRoundingPolicy>;
+ 
+ static const ScaleFactorRoundingPolicyLookup scaleFactorRoundingPolicyLookup[] =
+ {
+-    {"Round", QHighDpiScaling::HighDpiScaleFactorRoundingPolicy::Round},
+-    {"Ceil", QHighDpiScaling::HighDpiScaleFactorRoundingPolicy::Ceil},
+-    {"Floor", QHighDpiScaling::HighDpiScaleFactorRoundingPolicy::Floor},
+-    {"RoundPreferFloor", QHighDpiScaling::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor},
+-    {"PassThrough", QHighDpiScaling::HighDpiScaleFactorRoundingPolicy::PassThrough}
++    {"Round", Qt::HighDpiScaleFactorRoundingPolicy::Round},
++    {"Ceil", Qt::HighDpiScaleFactorRoundingPolicy::Ceil},
++    {"Floor", Qt::HighDpiScaleFactorRoundingPolicy::Floor},
++    {"RoundPreferFloor", Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor},
++    {"PassThrough", Qt::HighDpiScaleFactorRoundingPolicy::PassThrough}
+ };
+ 
+-static QHighDpiScaling::HighDpiScaleFactorRoundingPolicy
++static Qt::HighDpiScaleFactorRoundingPolicy
+     lookupScaleFactorRoundingPolicy(const QByteArray &v)
+ {
+     auto end = std::end(scaleFactorRoundingPolicyLookup);
+     auto it = std::find(std::begin(scaleFactorRoundingPolicyLookup), end,
+-                        ScaleFactorRoundingPolicyLookup{v.constData(), QHighDpiScaling::HighDpiScaleFactorRoundingPolicy::NotSet});
+-    return it != end ? it->value : QHighDpiScaling::HighDpiScaleFactorRoundingPolicy::NotSet;
++                        ScaleFactorRoundingPolicyLookup{v.constData(), Qt::HighDpiScaleFactorRoundingPolicy::NotSet});
++    return it != end ? it->value : Qt::HighDpiScaleFactorRoundingPolicy::NotSet;
+ }
+ 
+ using DpiAdjustmentPolicyLookup = EnumLookup<QHighDpiScaling::DpiAdjustmentPolicy>;
+@@ -375,15 +375,15 @@ qreal QHighDpiScaling::roundScaleFactor(qreal rawFactor)
+     // sizes that are smaller than the ideal size, and opposite for rounding up.
+     // Rounding down is then preferable since "small UI" is a more acceptable
+     // high-DPI experience than "large UI".
+-    static auto scaleFactorRoundingPolicy = HighDpiScaleFactorRoundingPolicy::NotSet;
++    static auto scaleFactorRoundingPolicy = Qt::HighDpiScaleFactorRoundingPolicy::NotSet;
+ 
+     // Determine rounding policy
+-    if (scaleFactorRoundingPolicy == HighDpiScaleFactorRoundingPolicy::NotSet) {
++    if (scaleFactorRoundingPolicy == Qt::HighDpiScaleFactorRoundingPolicy::NotSet) {
+         // Check environment
+         if (qEnvironmentVariableIsSet(scaleFactorRoundingPolicyEnvVar)) {
+             QByteArray policyText = qgetenv(scaleFactorRoundingPolicyEnvVar);
+             auto policyEnumValue = lookupScaleFactorRoundingPolicy(policyText);
+-            if (policyEnumValue != HighDpiScaleFactorRoundingPolicy::NotSet) {
++            if (policyEnumValue != Qt::HighDpiScaleFactorRoundingPolicy::NotSet) {
+                 scaleFactorRoundingPolicy = policyEnumValue;
+             } else {
+                 auto values = joinEnumValues(std::begin(scaleFactorRoundingPolicyLookup),
+@@ -391,38 +391,43 @@ qreal QHighDpiScaling::roundScaleFactor(qreal rawFactor)
+                 qWarning("Unknown scale factor rounding policy: %s. Supported values are: %s.",
+                          policyText.constData(), values.constData());
+             }
++        }
++
++        // Check application object if no environment value was set.
++        if (scaleFactorRoundingPolicy == Qt::HighDpiScaleFactorRoundingPolicy::NotSet) {
++            scaleFactorRoundingPolicy = QGuiApplication::highDpiScaleFactorRoundingPolicy();
+         } else {
+-            // Set default policy if no environment variable is set.
+-            scaleFactorRoundingPolicy = HighDpiScaleFactorRoundingPolicy::RoundPreferFloor;
++            // Make application setting reflect environment
++            QGuiApplication::setHighDpiScaleFactorRoundingPolicy(scaleFactorRoundingPolicy);
+         }
+     }
+ 
+     // Apply rounding policy.
+     qreal roundedFactor = rawFactor;
+     switch (scaleFactorRoundingPolicy) {
+-    case HighDpiScaleFactorRoundingPolicy::Round:
++    case Qt::HighDpiScaleFactorRoundingPolicy::Round:
+         roundedFactor = qRound(rawFactor);
+         break;
+-    case HighDpiScaleFactorRoundingPolicy::Ceil:
++    case Qt::HighDpiScaleFactorRoundingPolicy::Ceil:
+         roundedFactor = qCeil(rawFactor);
+         break;
+-    case HighDpiScaleFactorRoundingPolicy::Floor:
++    case Qt::HighDpiScaleFactorRoundingPolicy::Floor:
+         roundedFactor = qFloor(rawFactor);
+         break;
+-    case HighDpiScaleFactorRoundingPolicy::RoundPreferFloor:
++    case Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor:
+         // Round up for .75 and higher. This favors "small UI" over "large UI".
+         roundedFactor = rawFactor - qFloor(rawFactor) < 0.75
+             ? qFloor(rawFactor) : qCeil(rawFactor);
+         break;
+-    case HighDpiScaleFactorRoundingPolicy::PassThrough:
+-    case HighDpiScaleFactorRoundingPolicy::NotSet:
++    case Qt::HighDpiScaleFactorRoundingPolicy::PassThrough:
++    case Qt::HighDpiScaleFactorRoundingPolicy::NotSet:
+         break;
+     }
+ 
+     // Don't round down to to zero; clamp the minimum (rounded) factor to 1.
+     // This is not a common case but can happen if a display reports a very
+     // low DPI.
+-    if (scaleFactorRoundingPolicy != HighDpiScaleFactorRoundingPolicy::PassThrough)
++    if (scaleFactorRoundingPolicy != Qt::HighDpiScaleFactorRoundingPolicy::PassThrough)
+         roundedFactor = qMax(roundedFactor, qreal(1));
+ 
+     return roundedFactor;
+diff --git a/src/gui/kernel/qhighdpiscaling_p.h b/src/gui/kernel/qhighdpiscaling_p.h
+index d3f71854..ae361a9d 100644
+--- a/src/gui/kernel/qhighdpiscaling_p.h
++++ b/src/gui/kernel/qhighdpiscaling_p.h
+@@ -73,16 +73,6 @@ typedef QPair<qreal, qreal> QDpi;
+ class Q_GUI_EXPORT QHighDpiScaling {
+     Q_GADGET
+ public:
+-    enum class HighDpiScaleFactorRoundingPolicy {
+-        NotSet,
+-        Round,
+-        Ceil,
+-        Floor,
+-        RoundPreferFloor,
+-        PassThrough
+-    };
+-    Q_ENUM(HighDpiScaleFactorRoundingPolicy)
+-
+     enum class DpiAdjustmentPolicy {
+         NotSet,
+         Enabled,
+-- 
+2.22.0.windows.1
+

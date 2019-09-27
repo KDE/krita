@@ -17,8 +17,8 @@
  */
 #include <KisSessionResource.h>
 #include <KisResourceServerProvider.h>
-#include <QtWidgets/QInputDialog>
-#include <QtWidgets/QMessageBox>
+#include <QInputDialog>
+#include <QMessageBox>
 #include <KisPart.h>
 #include "KisSessionManagerDialog.h"
 
@@ -71,6 +71,8 @@ void KisSessionManagerDialog::slotNewSession()
     session->storeCurrentWindows();
 
     server->addResource(session);
+
+    KisPart::instance()->setCurrentSession(session);
 
     updateSessionList();
 }
@@ -130,6 +132,7 @@ void KisSessionManagerDialog::slotDeleteSession()
         QString(i18n("Permanently delete session %1?", session->name())),
         QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
 
+        KisPart::instance()->setCurrentSession(0);
         const QString filename = session->filename();
 
         KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();

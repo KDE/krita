@@ -40,7 +40,7 @@ public:
                                   const QTransform &shapesCorrection = QTransform());
 
     void setSelection(KisSelectionSP selection);
-    KUndo2Command *createInitCommand();
+    KUndo2Command *createInitCommand() override;
 
 
     void visit(KisNode *node, KisUndoAdapter *undoAdapter) override;

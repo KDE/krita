@@ -39,6 +39,8 @@
 #include "kis_layer_style_filter_environment.h"
 #include "kis_selection_filters.h"
 #include "kis_multiple_projection.h"
+#include "kis_pixel_selection.h"
+#include "kis_default_bounds_base.h"
 
 
 namespace KisLsUtils
@@ -50,11 +52,11 @@ namespace KisLsUtils
 
         if (growSize > 0) {
             KisGrowSelectionFilter filter(growSize, growSize);
-            changeRect = filter.changeRect(applyRect);
+            changeRect = filter.changeRect(applyRect, selection->defaultBounds());
             filter.process(selection, applyRect);
         } else if (growSize < 0) {
             KisShrinkSelectionFilter filter(qAbs(growSize), qAbs(growSize), false);
-            changeRect = filter.changeRect(applyRect);
+            changeRect = filter.changeRect(applyRect, selection->defaultBounds());
             filter.process(selection, applyRect);
         }
 
@@ -387,6 +389,7 @@ namespace KisLsUtils
         if (scale != 100) {
             warnKrita << "KisLsOverlayFilter::applyOverlay(): Pattern scaling is NOT implemented!";
         }
+        KIS_SAFE_ASSERT_RECOVER_RETURN(pattern);
 
         QSize psize(pattern->width(), pattern->height());
 

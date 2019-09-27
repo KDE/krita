@@ -66,7 +66,7 @@ KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), Filte
 }
 
 
-KisConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisFilterFastColorTransfer::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     return new KisWdgFastColorTransfer(parent);
@@ -101,9 +101,7 @@ void KisFilterFastColorTransfer::processImpl(KisPaintDeviceSP device,
     const KoColorSpace* oldCS = device->colorSpace();
     KisPaintDeviceSP srcLAB = new KisPaintDevice(*device.data());
     dbgPlugins << "srcLab : " << srcLAB->extent();
-    KUndo2Command* cmd = srcLAB->convertTo(labCS, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-    delete cmd;
-
+    srcLAB->convertTo(labCS, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
 
     KoProgressUpdater compositeUpdater(progressUpdater, KoProgressUpdater::Unthreaded);
     KoUpdater *updaterStats = compositeUpdater.startSubtask(1);

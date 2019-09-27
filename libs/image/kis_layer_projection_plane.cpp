@@ -119,3 +119,8 @@ QRect KisLayerProjectionPlane::accessRect(const QRect &rect, KisLayer::PositionT
     return m_d->layer->accessRect(rect, pos);
 }
 
+QRect KisLayerProjectionPlane::needRectForOriginal(const QRect &rect) const
+{
+    return m_d->layer->needRectForOriginal(rect);
+}
+

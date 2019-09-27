@@ -1,5 +1,3 @@
-class KisSwatch;
-
 class Palette : QObject
 {
 %TypeHeaderCode
@@ -17,10 +15,9 @@ public:
     bool addGroup(QString name);
     bool removeGroup(QString name, bool keepColors);
     int colorsCountTotal();
-    KisSwatch colorSetEntryByIndex(int index);
-    KisSwatch colorSetEntryFromGroup(int index, const QString &groupName);
-    ManagedColor *colorForEntry(KisSwatch entry) /Factory/;
-    void addEntry(KisSwatch entry, QString groupName);
+    Swatch *colorSetEntryByIndex(int index) /Factory/;
+    Swatch *colorSetEntryFromGroup(int index, const QString &groupName) /Factory/;
+    void addEntry(Swatch entry, QString groupName);
     void removeEntry(int index, const QString &groupName);
     bool changeGroupName(QString oldGroupName, QString newGroupName);
     bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore);

@@ -43,7 +43,7 @@
 #include "kis_config.h"
 #include "kis_signal_compressor.h"
 #include "widgets/kis_cmb_idlist.h"
-#include <squeezedcombobox.h>
+#include <KisSqueezedComboBox.h>
 #include "kis_layer_utils.h"
 #include <kis_ls_utils.h>
 #include "kis_canvas_resource_provider.h"
@@ -66,9 +66,7 @@ KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    QString filterConfig = KisConfig(true).exportConfiguration("StrokeSelection");
-    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
-    cfg->fromXML(filterConfig);
+    KisPropertiesConfigurationSP cfg = KisConfig(true).exportConfiguration("StrokeSelection");
 
     auto &m_options = m_page->m_options;
     m_options.color = cfg->getColor("color");
@@ -252,10 +250,10 @@ int KisDlgStrokeSelection::getLineSize() const
 {
     int value = m_page->lineSize->value();
 
-    if (m_page->sizeBox->currentText() == "px") {
+    if (m_page->sizeBox->currentText() == i18n("px")) {
         return value;
     }
-    else if (m_page->sizeBox->currentText() == "mm"){
+    else if (m_page->sizeBox->currentText() == i18n("mm")) {
              int pixels =  static_cast<int>(KoUnit::convertFromUnitToUnit(value,KoUnit(KoUnit::Millimeter), KoUnit(KoUnit::Pixel)));
              return pixels;
     }
@@ -367,29 +365,29 @@ StrokeSelectionOptions ::StrokeSelectionOptions():
     customColor.fromQColor(Qt::black);
 }
 
-KisPainter::FillStyle StrokeSelectionOptions::fillStyle() const
+KisToolShapeUtils::FillStyle StrokeSelectionOptions::fillStyle() const
 {
+    using namespace KisToolShapeUtils;
+
     colorFillSource tempColor = static_cast<colorFillSource>(_colorFillSource);
-    KisPainter::FillStyle style;
+    FillStyle style = FillStyleNone;
 
     switch (tempColor) {
     case colorFillSource::PaintColor:
-        style = KisPainter::FillStyleForegroundColor;
+        style = FillStyleForegroundColor;
         break;
     case colorFillSource::BGColor:
-        style = KisPainter::FillStyleBackgroundColor;
+        style = FillStyleBackgroundColor;
         break;
     case colorFillSource::CustomColor:
-        style = KisPainter::FillStyleBackgroundColor;
+        style = FillStyleBackgroundColor;
         break;
     case colorFillSource::None:
-        style = KisPainter::FillStyleNone;
+        style = FillStyleNone;
         break;
     case colorFillSource::FGColor:
-        style = KisPainter::FillStyleBackgroundColor;
+        style = FillStyleBackgroundColor;
         break;
-    default:
-        style = KisPainter::FillStyleBackgroundColor;
     }
     return style;
 }

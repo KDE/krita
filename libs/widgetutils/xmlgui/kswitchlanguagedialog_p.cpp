@@ -25,8 +25,8 @@
 #include <QLayout>
 #include <QLabel>
 #include <QPushButton>
-#include <QtCore/QEvent>
-#include <QtCore/QMap>
+#include <QEvent>
+#include <QMap>
 #include <QSettings>
 #include <QSharedPointer>
 #include <QStandardPaths>
@@ -288,23 +288,7 @@ void KSwitchLanguageDialog::slotOk()
 
 void KSwitchLanguageDialog::slotDefault()
 {
-    const QStringList defaultLanguages = d->applicationLanguageList();
-
     setApplicationSpecificLanguage(QByteArray());
-
-    // read back the new default
-    QString language = QString::fromLatin1(getApplicationSpecificLanguage("en_US"));
-
-    if (defaultLanguages != (QStringList() << language)) {
-
-        KMessageBox::information(
-            this,
-            i18n("The language for this application has been changed. The change will take effect the next time the application is started."), //text
-            i18n("Application Language Changed"), //caption
-            QStringLiteral("ApplicationLanguageChangedWarning") //dontShowAgainName
-        );
-    }
-
     accept();
 }
 

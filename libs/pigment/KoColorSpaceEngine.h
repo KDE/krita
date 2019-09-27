@@ -49,6 +49,11 @@ public:
     virtual const KoColorProfile* addProfile(const QByteArray &data) = 0;
     virtual void removeProfile(const QString &filename) = 0;
 
+    /**
+     * \return true if the color space can be converted via this engine
+     */
+    virtual bool supportsColorSpace(const QString& colorModelId, const QString& colorDepthId, const KoColorProfile *profile) const;
+
 private:
     struct Private;
     Private* const d;

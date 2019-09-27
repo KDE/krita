@@ -51,6 +51,10 @@ KisColorSelector::KisColorSelector(QWidget* parent, KisColor::Type type)
     , m_currentGamutMask(nullptr)
     , m_maskPreviewActive(true)
     , m_widgetUpdatesSelf(false)
+    , m_isDirtyWheel(false)
+    , m_isDirtyLightStrip(false)
+    , m_isDirtyGamutMask(false)
+    , m_isDirtyColorPreview(false)
 {
     m_viewConverter = new KisGamutMaskViewConverter();
 
@@ -68,7 +72,10 @@ KisColorSelector::KisColorSelector(QWidget* parent, KisColor::Type type)
 void KisColorSelector::setColorSpace(KisColor::Type type)
 {
     m_colorSpace    = type;
-    m_selectedColor = KisColor(m_selectedColor, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
+    m_selectedColor = KisColor(m_selectedColor, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
+
+    m_isDirtyLightStrip = true;
+    m_isDirtyWheel = true;
 
 #ifdef DEBUG_ARC_SELECTOR
         dbgPlugins << "KisColorSelector::setColorSpace: set to:" << m_colorSpace;
@@ -80,6 +87,11 @@ void KisColorSelector::setColorSpace(KisColor::Type type)
 void KisColorSelector::setColorConverter(KisDisplayColorConverter *colorConverter)
 {
     m_colorConverter = colorConverter;
+
+    m_selectedColor = KisColor(m_selectedColor, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
+    m_fgColor = KisColor(m_fgColor, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
+    m_bgColor = KisColor(m_bgColor, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
+
     update();
 }
 
@@ -121,7 +133,7 @@ void KisColorSelector::setNumRings(int num)
 
 void KisColorSelector::selectColor(const KisColor& color)
 {
-    m_selectedColor      = KisColor(color, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
+    m_selectedColor      = KisColor(color, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
     m_selectedPiece      = getHueIndex(m_selectedColor.getH() * PI2);
     m_selectedRing       = getSaturationIndex(m_selectedColor.getS());
     m_selectedLightPiece = getLightIndex(m_selectedColor.getX());
@@ -134,6 +146,9 @@ void KisColorSelector::setFgColor(const KoColor& fgColor)
         m_fgColor = KisColor(fgColor, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
         m_selectedColor = KisColor(fgColor, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
 
+        m_isDirtyWheel = true;
+        m_isDirtyLightStrip = true;
+        m_isDirtyColorPreview = true;
 #ifdef DEBUG_ARC_SELECTOR
         dbgPlugins << "KisColorSelector::setFgColor: m_fgColor set to:"
                    << "H:" << m_fgColor.getH()
@@ -153,6 +168,9 @@ void KisColorSelector::setBgColor(const KoColor& bgColor)
 {
     if (!m_widgetUpdatesSelf) {
         m_bgColor = KisColor(bgColor, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
+
+        m_isDirtyColorPreview = true;
+
 #ifdef DEBUG_ARC_SELECTOR
         dbgPlugins << "KisColorSelector::setBgColor: m_bgColor set to:"
                    << "H:" << m_bgColor.getH()
@@ -167,6 +185,7 @@ void KisColorSelector::setLight(qreal light)
 {
     m_selectedColor.setX(qBound(0.0, light, 1.0));
     m_selectedLightPiece = getLightIndex(m_selectedColor.getX());
+    m_isDirtyLightStrip = true;
     update();
 }
 
@@ -175,14 +194,12 @@ void KisColorSelector::setLumaCoefficients(qreal lR, qreal lG, qreal lB, qreal l
     m_lumaR = lR;
     m_lumaG = lG;
     m_lumaB = lB;
+    m_lumaGamma = lGamma;
 
-    if (m_colorSpace == KisColor::HSY) {
-        m_lumaGamma = lGamma;
-    } else {
-        m_lumaGamma = 1.0;
-    }
+    m_selectedColor = KisColor(m_selectedColor, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
 
-    m_selectedColor = KisColor(m_selectedColor, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
+    m_isDirtyLightStrip = true;
+    m_isDirtyWheel = true;
 
 #ifdef DEBUG_ARC_SELECTOR
         dbgPlugins << "KisColorSelector::setLumaCoefficients: " << m_lumaR
@@ -211,6 +228,23 @@ void KisColorSelector::setGamutMask(KoGamutMask* gamutMask)
     m_currentGamutMask = gamutMask;
     m_viewConverter->setViewSize(m_renderAreaSize);
     m_viewConverter->setMaskSize(m_currentGamutMask->maskSize());
+
+    if (m_enforceGamutMask) {
+        m_isDirtyWheel = true;
+    } else {
+        m_isDirtyGamutMask = true;
+    }
+
+    update();
+}
+
+void KisColorSelector::setDirty()
+{
+    m_isDirtyWheel = true;
+    m_isDirtyLightStrip = true;
+    m_isDirtyGamutMask = true;
+    m_isDirtyColorPreview = true;
+
     update();
 }
 
@@ -229,6 +263,13 @@ void KisColorSelector::setGamutMaskOn(bool gamutMaskOn)
 {
     if (m_currentGamutMask) {
         m_gamutMaskOn = gamutMaskOn;
+
+        if (m_enforceGamutMask) {
+            m_isDirtyWheel = true;
+        } else {
+            m_isDirtyGamutMask = true;
+        }
+
         update();
     }
 }
@@ -236,6 +277,8 @@ void KisColorSelector::setGamutMaskOn(bool gamutMaskOn)
 void KisColorSelector::setEnforceGamutMask(bool enforce)
 {
     m_enforceGamutMask = enforce;
+    m_isDirtyGamutMask = true;
+    m_isDirtyWheel = true;
     update();
 }
 
@@ -371,8 +414,8 @@ qreal KisColorSelector::getSaturation(int saturationIdx) const
 
 void KisColorSelector::recalculateAreas(quint8 numLightPieces)
 {
-
     qreal LIGHT_STRIP_RATIO = 0.075;
+
     if (m_showValueScaleNumbers) {
         LIGHT_STRIP_RATIO = 0.25;
     }
@@ -392,12 +435,21 @@ void KisColorSelector::recalculateAreas(quint8 numLightPieces)
     m_renderAreaSize = QSize(size,size);
     m_viewConverter->setViewSize(m_renderAreaSize);
 
+    m_widgetArea     = QRect(0, 0, QWidget::width(), QWidget::height());
     m_renderArea     = QRect(x+stripThick, y, size, size);
     m_lightStripArea = QRect(0, 0, stripThick, QWidget::height());
 
     m_renderBuffer   = QImage(size, size, QImage::Format_ARGB32_Premultiplied);
+    m_colorPreviewBuffer   = QImage(QWidget::width(), QWidget::height(), QImage::Format_ARGB32_Premultiplied);
     m_maskBuffer   = QImage(size, size, QImage::Format_ARGB32_Premultiplied);
+    m_lightStripBuffer = QImage(stripThick, QWidget::height(), QImage::Format_ARGB32_Premultiplied);
+
     m_numLightPieces = numLightPieces;
+
+    m_isDirtyGamutMask = true;
+    m_isDirtyLightStrip = true;
+    m_isDirtyWheel = true;
+    m_isDirtyColorPreview = true;
 }
 
 void KisColorSelector::recalculateRings(quint8 numRings, quint8 numPieces)
@@ -413,6 +465,8 @@ void KisColorSelector::recalculateRings(quint8 numRings, quint8 numPieces)
         createRing(m_colorRings[i], numPieces, innerRadius, outerRadius+0.001);
         m_colorRings[i].saturation = m_inverseSaturation ? (1.0 - saturation) : saturation;
     }
+
+    m_isDirtyWheel = true;
 }
 
 void KisColorSelector::createRing(ColorRing& ring, quint8 numPieces, qreal innerRadius, qreal outerRadius)
@@ -470,6 +524,7 @@ void KisColorSelector::requestUpdateColorAndPreview(const KisColor &color, Acs::
                << "S:" << color.getS()
                << "X:" << color.getX();
 #endif
+
     m_updateColorCompressor->start(qMakePair(color, role));
 }
 
@@ -477,10 +532,17 @@ void KisColorSelector::slotUpdateColorAndPreview(QPair<KisColor, Acs::ColorRole>
 {
     const bool selectAsFgColor = color.second == Acs::Foreground;
 
-    if (selectAsFgColor) { m_fgColor = color.first; }
-    else                 { m_bgColor = color.first; }
+    if (selectAsFgColor) {
+        m_fgColor = KisColor(color.first, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
+    } else {
+        m_bgColor = KisColor(color.first, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
+    }
 
-    m_selectedColor     = color.first;
+    m_selectedColor = KisColor(color.first, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
+
+    m_isDirtyLightStrip = true;
+    m_isDirtyColorPreview = true;
+    m_isDirtyWheel = true;
 
 #ifdef DEBUG_ARC_SELECTOR
     dbgPlugins << "KisColorSelector::slotUpdateColorAndPreview: m_selectedColor set to:"
@@ -563,6 +625,8 @@ void KisColorSelector::drawRing(QPainter& painter, KisColorSelector::ColorRing& 
 
 void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
 {
+    painter.save();
+
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.resetTransform();
     painter.translate(rect.x() + rect.width()/2, rect.y() + rect.height()/2);
@@ -616,6 +680,8 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
             painter.drawLine(QPointF(lineCoords.x()*iRad, lineCoords.y()*iRad), QPointF(lineCoords.x()*oRad, lineCoords.y()*oRad));
         }
     }
+
+    painter.restore();
 }
 
 void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
@@ -624,12 +690,12 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
     qreal    penSizeSmall = penSize / 1.2;
     QPen selectedPen;
 
-    KisColor valueScaleColor(m_selectedColor, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
+    KisColor valueScaleColor(m_selectedColor, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
     KisColor grayScaleColor(Qt::gray, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
     int rectSize = rect.height();
 
-    painter.resetTransform();
     painter.save();
+    painter.resetTransform();
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     QTransform matrix;
@@ -705,10 +771,12 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
 
         QFont font = painter.font();
         QFontMetrics fm = painter.fontMetrics();
-        while (fm.boundingRect("100%").width() > rect.width()*rectColorLeftX) {
+        int retries = 10; // limit number of font size searches to prevent endless cycles
+        while ((retries > 0) && (fm.boundingRect("100%").width() > rect.width()*rectColorLeftX)) {
             font.setPointSize(font.pointSize() - 1);
             painter.setFont(font);
             fm = painter.fontMetrics();
+            retries--;
         }
 
         for(int i=0; i<valueScalePieces; ++i) {
@@ -724,20 +792,24 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
 
             painter.fillRect(rectValue, grayScaleColor.toQColor());
 
-            int valueNumber = 0;
-            if (m_colorSpace == KisColor::HSY) {
-                valueNumber = 100 - round(pow(pow(grayScaleColor.getX(), m_lumaGamma), 1.0/2.2)*100);
-            } else {
-                valueNumber = 100 - grayScaleColor.getX()*100;
-            }
+            // if the right font size was not found in time,
+            // skip drawing the numbers
+            if (retries > 0) {
+                int valueNumber = 0;
+                if (m_colorSpace == KisColor::HSY) {
+                    valueNumber = 100 - round(pow(pow(grayScaleColor.getX(), m_lumaGamma), 1.0/2.2)*100);
+                } else {
+                    valueNumber = 100 - grayScaleColor.getX()*100;
+                }
 
-            if (valueNumber < 55) {
-                painter.setPen(QPen(QBrush(COLOR_DARK), penSize));
-            } else {
-                painter.setPen(QPen(QBrush(COLOR_LIGHT), penSize));
-            }
+                if (valueNumber < 55) {
+                    painter.setPen(QPen(QBrush(COLOR_DARK), penSize));
+                } else {
+                    painter.setPen(QPen(QBrush(COLOR_LIGHT), penSize));
+                }
 
-            painter.drawText(rectValue, Qt::AlignRight|Qt::AlignBottom, QString("%1%").arg(QString::number(valueNumber)));
+                painter.drawText(rectValue, Qt::AlignRight|Qt::AlignBottom, QString("%1%").arg(QString::number(valueNumber)));
+            }
         }
     }
 
@@ -746,6 +818,8 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
 
 void KisColorSelector::drawBlip(QPainter& painter, const QRect& rect)
 {
+    painter.save();
+
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.resetTransform();
     painter.translate(rect.x() + rect.width()/2, rect.y() + rect.height()/2);
@@ -763,8 +837,9 @@ void KisColorSelector::drawBlip(QPainter& painter, const QRect& rect)
     painter.drawEllipse(fgColorPos, 0.05, 0.05);
 
     painter.setPen(QPen(QBrush(COLOR_SELECTED_LIGHT), 0.01));
-    painter.setBrush(m_fgColor.toQColor());
     painter.drawEllipse(fgColorPos, 0.04, 0.04);
+
+    painter.restore();
 }
 
 void KisColorSelector::drawGamutMaskShape(QPainter &painter, const QRect &rect)
@@ -792,49 +867,57 @@ void KisColorSelector::drawGamutMaskShape(QPainter &painter, const QRect &rect)
     painter.restore();
 }
 
-void KisColorSelector::paintEvent(QPaintEvent* /*event*/)
+void KisColorSelector::drawColorPreview(QPainter &painter, const QRect &rect)
 {
-    // 0 red    -> (1,0,0)
-    // 1 yellow -> (1,1,0)
-    // 2 green  -> (0,1,0)
-    // 3 cyan   -> (0,1,1)
-    // 4 blue   -> (0,0,1)
-    // 5 maenta -> (1,0,1)
-    // 6 red    -> (1,0,0)
+    painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
 
-    m_renderBuffer.fill(0);
+    painter.fillRect(rect, m_fgColor.toQColor());
 
-    QPainter imgPainter(&m_renderBuffer);
-    QPainter wdgPainter(this);
-
-    // draw the fg and bg color previews
-    // QPainter settings must be saved and restored afterwards, otherwise the wheel drawing is totally broken
-    wdgPainter.save();
-    wdgPainter.setRenderHint(QPainter::Antialiasing, true);
-
-    QRect fgRect(0, 0, QWidget::width(), QWidget::height());
-    wdgPainter.fillRect(fgRect, m_fgColor.toQColor());
-
-    int bgSide = qMin(QWidget::width()*0.15,QWidget::height()*0.15);
+    int bgSide = qMin(rect.width()*0.15,rect.height()*0.15);
 
     if (m_showBgColor) {
         QPointF bgPolyPoints[3] = {
-            QPointF(QWidget::width(), QWidget::height()),
-            QPointF(QWidget::width()-bgSide, QWidget::height()),
-            QPointF(QWidget::width(), QWidget::height()-bgSide)
+            QPointF(rect.width(), rect.height()),
+            QPointF(rect.width()-bgSide, rect.height()),
+            QPointF(rect.width(), rect.height()-bgSide)
         };
 
-        wdgPainter.setBrush(m_bgColor.toQColor());
-        wdgPainter.setPen(m_bgColor.toQColor());
-        wdgPainter.drawPolygon(bgPolyPoints, 3);
+        painter.setBrush(m_bgColor.toQColor());
+        painter.setPen(m_bgColor.toQColor());
+        painter.drawPolygon(bgPolyPoints, 3);
     }
 
-    wdgPainter.restore();
+    painter.restore();
+}
 
-    for(int i=0; i<m_colorRings.size(); ++i)
-        drawRing(imgPainter, m_colorRings[i], m_renderArea);
+void KisColorSelector::paintEvent(QPaintEvent* /*event*/)
+{
+    QPainter wdgPainter(this);
 
+    // draw the fg and bg color previews
+    if (m_isDirtyColorPreview) {
+        m_colorPreviewBuffer.fill(Qt::transparent);
+        QPainter colorPreviewPainter(&m_colorPreviewBuffer);
+        drawColorPreview(colorPreviewPainter, m_widgetArea);
+
+        m_isDirtyColorPreview = false;
+    }
+    wdgPainter.drawImage(m_widgetArea, m_colorPreviewBuffer);
+    // draw the fg and bg color previews
+
+    // draw the wheel
+    if (m_isDirtyWheel) {
+        m_renderBuffer.fill(Qt::transparent);
+        QPainter wheelPainter(&m_renderBuffer);
+
+        for(int i=0; i<m_colorRings.size(); ++i)
+            drawRing(wheelPainter, m_colorRings[i], m_renderArea);
+
+        m_isDirtyWheel = false;
+    }
     wdgPainter.drawImage(m_renderArea, m_renderBuffer);
+    // draw the wheel
 
     // draw the mask either in continuous mode or in discrete mode when enforcing is turned off
     // if enforcing is turned on in discrete mode,
@@ -842,16 +925,31 @@ void KisColorSelector::paintEvent(QPaintEvent* /*event*/)
     if (m_gamutMaskOn
             && ((getNumPieces() == 1) || (!m_enforceGamutMask))) {
 
-        m_maskBuffer.fill(0);
-        QPainter maskPainter(&m_maskBuffer);
-        drawGamutMaskShape(maskPainter, m_renderArea);
+        if (m_isDirtyGamutMask) {
+            m_maskBuffer.fill(Qt::transparent);
+            QPainter maskPainter(&m_maskBuffer);
+            drawGamutMaskShape(maskPainter, m_renderArea);
 
+            m_isDirtyGamutMask = false;
+        }
         wdgPainter.drawImage(m_renderArea, m_maskBuffer);
     }
+    // draw gamut mask
 
-    drawOutline   (wdgPainter, m_renderArea);
-    drawLightStrip(wdgPainter, m_lightStripArea);
-    drawBlip (wdgPainter, m_renderArea);
+    drawOutline(wdgPainter, m_renderArea);
+
+    // draw light strip
+    if (m_isDirtyLightStrip) {
+        m_lightStripBuffer.fill(Qt::transparent);
+        QPainter lightStripPainter(&m_lightStripBuffer);
+
+        drawLightStrip(lightStripPainter, m_lightStripArea);
+        m_isDirtyLightStrip = false;
+    }
+    wdgPainter.drawImage(m_lightStripArea, m_lightStripBuffer);
+    // draw light strip
+
+    drawBlip(wdgPainter, m_renderArea);
 }
 
 void KisColorSelector::mousePressEvent(QMouseEvent* event)
@@ -1075,6 +1173,7 @@ void KisColorSelector::setDefaultValueScaleSteps(int num)
 void KisColorSelector::setShowBgColor(bool value)
 {
     m_showBgColor = value;
+    m_isDirtyColorPreview = true;
     update();
 }
 
@@ -1083,12 +1182,5 @@ void KisColorSelector::setShowValueScaleNumbers(bool value)
     m_showValueScaleNumbers = value;
     recalculateAreas(quint8(getNumLightPieces()));
     update();
-}
-
-bool KisColorSelector::saturationIsInvertible()
-{
-    if (!m_gamutMaskOn) return true;
-    bool b = (m_enforceGamutMask && getNumPieces() == 1) ? false : true;
-    return b;
 }
 

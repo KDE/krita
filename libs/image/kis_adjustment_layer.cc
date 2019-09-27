@@ -46,6 +46,9 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageWSP image,
     // https://bugs.kde.org/show_bug.cgi?id=324505
     // https://bugs.kde.org/show_bug.cgi?id=294122
     // demand the opposite from each other...
+    //
+    // also see a comment in KisLayerUtils::mergeMultipleLayersImpl()
+
     setCompositeOpId(COMPOSITE_COPY);
     setUseSelectionInProjection(false);
 }
@@ -104,7 +107,10 @@ QRect KisAdjustmentLayer::needRect(const QRect& rect, PositionToFilthy pos) cons
      * That's why simply we do not call
      * KisSelectionBasedLayer::needRect here :)
      */
-    return filter->neededRect(rect, filterConfig.data(), projection()->defaultBounds()->currentLevelOfDetail());
+    QRect needRect;
+    needRect |= needRectForOriginal(needRect);
+    needRect = filter->neededRect(rect, filterConfig.data(), projection()->defaultBounds()->currentLevelOfDetail());
+    return needRect;
 }
 
 bool KisAdjustmentLayer::accept(KisNodeVisitor & v)

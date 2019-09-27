@@ -149,20 +149,25 @@ int KisNodeViewColorScheme::indentation() const
         border();
 }
 
+QRect KisNodeViewColorScheme::relVisibilityRect() const
+{
+    return QRect(0, 0,
+                 visibilitySize() + 2 * visibilityMargin() + 2 * border(),
+                 visibilitySize() + 2 * visibilityMargin() + 1 * border());
+}
+
 QRect KisNodeViewColorScheme::relThumbnailRect() const
 {
-    return QRect(-indentation(),
-                 border(),
-                 thumbnailSize() + 2 * thumbnailMargin(),
-                 thumbnailSize() + 2 * thumbnailMargin());
+    return QRect(0, 0,
+                 thumbnailSize() + 2 * thumbnailMargin() + 2 * border(),
+                 thumbnailSize() + 2 * thumbnailMargin() + 1 * border());
 }
 
 QRect KisNodeViewColorScheme::relDecorationRect() const
 {
-    return QRect(border() + decorationMargin(),
-                 border() + decorationMargin(),
-                 decorationSize(),
-                 decorationSize());
+    return QRect(0, 0,
+                 decorationSize() + 2 * decorationMargin() + 2 * border(),
+                 decorationSize() + 2 * decorationMargin() + 1 * border());
 }
 
 QRect KisNodeViewColorScheme::relExpandButtonRect() const

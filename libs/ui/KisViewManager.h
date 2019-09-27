@@ -65,8 +65,8 @@ class KRITAUI_EXPORT KisViewManager : public QObject
 public:
     /**
      * Construct a new view on the krita document.
-     * @param document   the document we show.
      * @param parent   a parent widget we show ourselves in.
+     * @param actionCollection an action collection.
      */
     KisViewManager(QWidget *parent, KActionCollection *actionCollection);
     ~KisViewManager() override;
@@ -87,7 +87,7 @@ public:  // Krita specific interfaces
 
     /// The resource provider contains all per-view settings, such as
     /// current color, current paint op etc.
-    KisCanvasResourceProvider *resourceProvider();
+    KisCanvasResourceProvider *canvasResourceProvider();
 
     /// Return the canvasbase class
     KisCanvas2 *canvasBase() const;
@@ -215,6 +215,10 @@ public Q_SLOTS:
     
     void slotActivateTransformTool();
 
+    // Change and update author
+    void changeAuthorProfile(const QString &profileName);
+    void slotUpdateAuthorProfileActions();
+
 Q_SIGNALS:
 
     void floatingMessageRequested(const QString &message, const QString &iconName);
@@ -237,12 +241,12 @@ private Q_SLOTS:
     void openResourcesDirectory();
     void initializeStatusBarVisibility();
     void guiUpdateTimeout();
-    void changeAuthorProfile(const QString &profileName);
-    void slotUpdateAuthorProfileActions();
     void slotUpdatePixelGridAction();
     void slotSaveShowRulersState(bool value);
     void slotSaveRulersTrackMouseState(bool value);
-
+    void slotToggleFgBg();
+    void slotResetFgBg();
+    void slotResetRotation();
 private:
     void createActions();
     void setupManagers();

@@ -20,6 +20,7 @@
 #define KIS_CANVAS_CONTROLLER_H
 
 #include <KoCanvasControllerWidget.h>
+#include <libs/flake/KoCanvasSupervisor.h>
 
 #include "kritaui_export.h"
 #include "kis_types.h"
@@ -32,14 +33,14 @@ class KRITAUI_EXPORT KisCanvasController : public KoCanvasControllerWidget
     Q_OBJECT
 
 public:
-    KisCanvasController(QPointer<KisView>parent, KActionCollection * actionCollection);
+    KisCanvasController(QPointer<KisView>parent, KoCanvasSupervisor *observerProvider, KActionCollection * actionCollection);
     ~KisCanvasController() override;
 
     void setCanvas(KoCanvasBase *canvas) override;
     void keyPressEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
-    void updateDocumentSize(const QSize &sz, bool recalculateCenter) override;
+    void updateDocumentSize(const QSizeF &sz, bool recalculateCenter) override;
     void activate() override;
 
     QPointF currentCursorPosition() const override;

@@ -80,6 +80,9 @@ KisSelection::KisSelection(const KisPaintDeviceSP source, KritaUtils::DeviceCopy
 
     m_d->defaultBounds = defaultBounds;
     m_d->pixelSelection = new KisPixelSelection(source, copyMode);
+    m_d->pixelSelection->setParentSelection(this);
+    m_d->pixelSelection->setParentNode(m_d->parentNode);
+    m_d->pixelSelection->setDefaultBounds(m_d->defaultBounds);
 }
 
 KisSelection &KisSelection::operator=(const KisSelection &rhs)

@@ -116,7 +116,7 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
         channelValues[2] = r;//red
     }
 
-    quint8 data[4];
+    quint8 data[MAX_PIXEL_SIZE];
     rgbColorSpace->fromNormalisedChannelsValue(data, channelValues);
     KoColor color(data, rgbColorSpace);//Should be default RGB(0.5,0.5,1.0)
     //draw stuff here, return kisspacinginformation.

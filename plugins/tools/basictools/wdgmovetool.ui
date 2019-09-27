@@ -121,10 +121,7 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>Number of pixels to move after move shortcut keypress.</string>
-        </property>
-        <property name="suffix">
-         <string> px</string>
+         <string>Number of units to move after move shortcut keypress.</string>
         </property>
         <property name="minimum">
          <double>1.000000000000000</double>

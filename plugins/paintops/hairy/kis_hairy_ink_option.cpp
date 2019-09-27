@@ -42,19 +42,19 @@ KisHairyInkOption::KisHairyInkOption()
     // init values for slider
     m_options->pressureSlider->setRange(0.0, 100, 0);
     m_options->pressureSlider->setValue(50);
-    m_options->pressureSlider->setSuffix("%");
+    m_options->pressureSlider->setSuffix(i18n("%"));
 
     m_options->bristleLengthSlider->setRange(0, 100, 0);
     m_options->bristleLengthSlider->setValue(50);
-    m_options->bristleLengthSlider->setSuffix("%");
+    m_options->bristleLengthSlider->setSuffix(i18n("%"));
 
     m_options->bristleInkAmountSlider->setRange(0, 100, 0);
     m_options->bristleInkAmountSlider->setValue(50);
-    m_options->bristleInkAmountSlider->setSuffix("%");
+    m_options->bristleInkAmountSlider->setSuffix(i18n("%"));
 
     m_options->inkDepletionSlider->setRange(0, 100, 0);
     m_options->inkDepletionSlider->setValue(50);
-    m_options->inkDepletionSlider->setSuffix("%");
+    m_options->inkDepletionSlider->setSuffix(i18n("%"));
 
 
     connect(m_options->inkAmountSpinBox, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));

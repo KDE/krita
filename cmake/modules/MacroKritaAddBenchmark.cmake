@@ -49,7 +49,7 @@ macro (KRITA_ADD_BENCHMARK _test_NAME)
       # .bat because of rpath handling
       set(_executable "${loc}.bat")
     else()
-      if (Q_OS_OSX AND NOT _nogui)
+      if (Q_OS_MACOS AND NOT _nogui)
         set(_executable ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME}.app/Contents/MacOS/${_test_NAME})
       else ()
         # .shell because of rpath handling

@@ -194,7 +194,7 @@ void TestKoShapeRegistry::testFramedSvgShapes()
     QScopedPointer<MockCanvas> canvas(new MockCanvas(document.data()));
 
     QScopedPointer<KoShapeController> shapeController(new KoShapeController(canvas.data(), document.data()));
-    resourceManager->setShapeController(shapeController.data());
+    resourceManager->setGlobalShapeController(shapeController.data());
 
 
     KoOdfLoadingContext odfContext(stylesReader, store.data());

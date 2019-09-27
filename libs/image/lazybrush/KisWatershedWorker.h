@@ -30,7 +30,7 @@ class KRITAIMAGE_EXPORT KisWatershedWorker
 {
 public:
     /**
-     * Creates an empty watershed worker withouth any strokes attached. The strokes
+     * Creates an empty watershed worker without any strokes attached. The strokes
      * should be attached manually with addKeyStroke() call.
      *
      * @param heightMap prefiltered height map in alpha8 colorspace, with "0" meaning
@@ -39,6 +39,7 @@ public:
      * @param dst destination device where the result will be written
      * @param boundingRect the worker refuses to fill outside the bounding rect, considering
      *                     that outer area as having +inf height
+     * @param progress  the progress value
      */
     KisWatershedWorker(KisPaintDeviceSP heightMap,
                        KisPaintDeviceSP dst,

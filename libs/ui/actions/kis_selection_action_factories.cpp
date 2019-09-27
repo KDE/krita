@@ -217,7 +217,7 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
                                        kundo2_i18n("Flood Fill Layer"));
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(view->image(), node, view->resourceProvider()->resourceManager());
+        new KisResourcesSnapshot(view->image(), node, view->canvasResourceProvider()->resourceManager());
     if (!fillSource.contains("opacity")) {
         resources->setOpacity(1.0);
     }
@@ -240,6 +240,8 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
                             KisStrokeJobData::EXCLUSIVE);
 
     applicator.end();
+
+    view->canvasResourceProvider()->slotPainting();
 }
 
 void KisClearActionFactory::run(KisViewManager *view)
@@ -387,40 +389,10 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
-void KisPasteNewActionFactory::run(KisViewManager *viewManager)
-{
-    Q_UNUSED(viewManager);
-
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
-    if (!clip) return;
-
-    QRect rect = clip->exactBounds();
-    if (rect.isEmpty()) return;
-
-    KisDocument *doc = KisPart::instance()->createDocument();
-    doc->documentInfo()->setAboutInfo("title", i18n("Untitled"));
-    KisImageSP image = new KisImage(doc->createUndoStore(),
-                                    rect.width(),
-                                    rect.height(),
-                                    clip->colorSpace(),
-                                    i18n("Pasted"));
-    KisPaintLayerSP layer =
-        new KisPaintLayer(image.data(), image->nextLayerName() + " " + i18n("(pasted)"),
-                          OPACITY_OPAQUE_U8, clip->colorSpace());
-
-    KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), rect);
-
-    image->addNode(layer.data(), image->rootLayer());
-    doc->setCurrentImage(image);
-    KisPart::instance()->addDocument(doc);
-
-    KisMainWindow *win = viewManager->mainWindow();
-    win->addViewAndNotifyLoadingCompleted(doc);
-}
-
 void KisInvertSelectionOperation::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
 {
     KisSelectionFilter* filter = new KisInvertSelectionFilter();
+
     runFilter(filter, view, config);
 }
 
@@ -568,11 +540,11 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
     QPainterPath outline = pixelSelection->outlineCache();
     QColor color = params.color.toQColor();
 
-    KisNodeSP currentNode = view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
+    KisNodeSP currentNode = view->canvasResourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
     if (!currentNode->inherits("KisShapeLayer") && currentNode->paintDevice()) {
-        KoCanvasResourceProvider * rManager = view->resourceProvider()->resourceManager();
-        KisPainter::StrokeStyle strokeStyle =  KisPainter::StrokeStyleBrush;
-        KisPainter::FillStyle fillStyle =  params.fillStyle();
+        KoCanvasResourceProvider * rManager = view->canvasResourceProvider()->resourceManager();
+        KisToolShapeUtils::StrokeStyle strokeStyle =  KisToolShapeUtils::StrokeStyleForeground;
+        KisToolShapeUtils::FillStyle fillStyle = params.fillStyle();
 
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polyline"),
                                        image,
@@ -585,7 +557,7 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
         QPen pen(Qt::red, size);
         pen.setJoinStyle(Qt::RoundJoin);
 
-        if (fillStyle != KisPainter::FillStyleNone) {
+        if (fillStyle != KisToolShapeUtils::FillStyleNone) {
             helper.paintPainterPathQPenFill(outline, pen, params.fillColor);
         }
         else {
@@ -625,19 +597,19 @@ void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelec
         pixelSelection->recalculateOutlineCache();
     }
 
-    KisNodeSP currentNode = view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
+    KisNodeSP currentNode = view->canvasResourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
     if (!currentNode->inherits("KisShapeLayer") && currentNode->paintDevice())
     {
-        KoCanvasResourceProvider * rManager = view->resourceProvider()->resourceManager();
+        KoCanvasResourceProvider * rManager = view->canvasResourceProvider()->resourceManager();
         QPainterPath outline = pixelSelection->outlineCache();
-        KisPainter::StrokeStyle strokeStyle =  KisPainter::StrokeStyleBrush;
-        KisPainter::FillStyle fillStyle =  KisPainter::FillStyleNone;
+        KisToolShapeUtils::StrokeStyle strokeStyle =  KisToolShapeUtils::StrokeStyleForeground;
+        KisToolShapeUtils::FillStyle fillStyle =  KisToolShapeUtils::FillStyleNone;
         KoColor color = params.color;
 
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polyline"),
                                        image,
                                        currentNode,
-                                       rManager ,
+                                       rManager,
                                        strokeStyle,
                                        fillStyle);
         helper.setFGColorOverride(color);

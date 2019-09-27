@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,6 +24,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QVector>
+#include <QAction>
 
 #include <KoSelection.h>
 #include <KoShapeRegistry.h>
@@ -30,6 +32,7 @@
 #include <KoShapeController.h>
 #include <KoFileDialog.h>
 
+#include <kis_action_registry.h>
 #include <kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
 #include <KisViewManager.h>
@@ -41,7 +44,7 @@
 #include "KisReferenceImageCollection.h"
 
 ToolReferenceImages::ToolReferenceImages(KoCanvasBase * canvas)
-    : DefaultTool(canvas)
+    : DefaultTool(canvas, false)
 {
     setObjectName("ToolReferenceImages");
 }
@@ -56,6 +59,7 @@ void ToolReferenceImages::activate(ToolActivation toolActivation, const QSet<KoS
 
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     connect(kisCanvas->image(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));
+    connect(kisCanvas->imageView()->document(), &KisDocument::sigReferenceImagesLayerChanged, this, &ToolReferenceImages::slotNodeAdded);
 
     auto referenceImageLayer = document()->referenceImagesLayer();
     if (referenceImageLayer) {
@@ -88,7 +92,7 @@ void ToolReferenceImages::addReferenceImage()
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas)
 
-    KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImage");
+            KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImage");
     dialog.setCaption(i18n("Select a Reference Image"));
 
     QStringList locations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
@@ -108,6 +112,20 @@ void ToolReferenceImages::addReferenceImage()
     }
 }
 
+void ToolReferenceImages::pasteReferenceImage()
+{
+    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas)
+
+            KisReferenceImage* reference = KisReferenceImage::fromClipboard(*kisCanvas->coordinatesConverter());
+    if(reference) {
+        KisDocument *doc = document();
+        doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
+    }
+}
+
+
+
 void ToolReferenceImages::removeAllReferenceImages()
 {
     auto layer = m_layer.toStrongRef();
@@ -121,7 +139,7 @@ void ToolReferenceImages::loadReferenceImages()
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas)
 
-    KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImageCollection");
+            KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImageCollection");
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-reference-images");
     dialog.setCaption(i18n("Load Reference Images"));
 
@@ -163,7 +181,7 @@ void ToolReferenceImages::saveReferenceImages()
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas)
 
-    KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::SaveFile, "SaveReferenceImageCollection");
+            KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::SaveFile, "SaveReferenceImageCollection");
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-reference-images");
     dialog.setCaption(i18n("Save Reference Images"));
 
@@ -216,7 +234,7 @@ QWidget *ToolReferenceImages::createOptionWidget()
         m_optionsWidget->layout()->addWidget(specialSpacer);
     }
     return m_optionsWidget;
- }
+}
 
 bool ToolReferenceImages::isValidForCurrentLayer() const
 {
@@ -261,4 +279,29 @@ KisDocument *ToolReferenceImages::document() const
 {
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     return kisCanvas->imageView()->document();
+}
+
+QList<QAction *> ToolReferenceImagesFactory::createActionsImpl()
+{
+    QList<QAction *> defaultActions = DefaultToolFactory::createActionsImpl();
+    QList<QAction *> actions;
+
+    QStringList actionNames;
+    actionNames << "object_order_front"
+                << "object_order_raise"
+                << "object_order_lower"
+                << "object_order_back"
+                << "object_transform_rotate_90_cw"
+                << "object_transform_rotate_90_ccw"
+                << "object_transform_rotate_180"
+                << "object_transform_mirror_horizontally"
+                << "object_transform_mirror_vertically"
+                << "object_transform_reset";
+
+    Q_FOREACH(QAction *action, defaultActions) {
+        if (actionNames.contains(action->objectName())) {
+            actions << action;
+        }
+    }
+    return actions;
 }

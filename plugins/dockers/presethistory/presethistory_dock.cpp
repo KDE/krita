@@ -76,7 +76,7 @@ void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
 
     if (!m_canvas || !m_canvas->viewManager() || !m_canvas->resourceManager()) return;
 
-    connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)), SLOT(canvasResourceChanged(int,QVariant)));
+    connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)), SLOT(canvasResourceChanged(int,QVariant)));
 
     if (!m_initialized) {
         KisConfig cfg(true);

@@ -146,13 +146,18 @@ bool KisInputProfileManager::renameProfile(const QString &oldName, const QString
     }
 
     KisInputProfile *profile = d->profiles.value(oldName);
-    d->profiles.remove(oldName);
-    profile->setName(newName);
-    d->profiles.insert(newName, profile);
+    if (profile) {
+        d->profiles.remove(oldName);
+        profile->setName(newName);
+        d->profiles.insert(newName, profile);
 
-    emit profilesChanged();
+        emit profilesChanged();
 
-    return true;
+
+        return true;
+    }
+
+    return false;
 }
 
 void KisInputProfileManager::duplicateProfile(const QString &name, const QString &newName)

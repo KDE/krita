@@ -88,11 +88,10 @@ public:
                 KIS_ASSERT(m_atomicType == Type::STROKE ||
                            m_atomicType == Type::SPONTANEOUS);
 
-                m_runnableJob->run();
+                if (m_runnableJob) m_runnableJob->run();
             }
 
             setDone();
-
 
             m_updaterContext->doSomeUsefulWork();
 

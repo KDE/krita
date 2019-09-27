@@ -789,23 +789,24 @@ void KisAssistantTool::loadAssistants()
                     errors = true;
                 }
 
+                if (assistant) {
+                    // load custom shared assistant properties
+                    if (xml.attributes().hasAttribute("useCustomColor")) {
+                        QStringRef useCustomColor = xml.attributes().value("useCustomColor");
 
-               // load custom shared assistant properties
-               if ( xml.attributes().hasAttribute("useCustomColor")) {
-                   QStringRef useCustomColor = xml.attributes().value("useCustomColor");
+                        bool usingColor = false;
+                        if (useCustomColor.toString() == "1") {
+                            usingColor = true;
+                        }
+                        assistant->setUseCustomColor(usingColor);
+                    }
 
-                   bool usingColor = false;
-                   if (useCustomColor.toString() == "1") {
-                       usingColor = true;
-                   }
-                   assistant->setUseCustomColor(usingColor);
-               }
+                    if ( xml.attributes().hasAttribute("useCustomColor")) {
+                        QStringRef customColor = xml.attributes().value("customColor");
+                        assistant->setAssistantCustomColor( KisDomUtils::qStringToQColor(customColor.toString()) );
 
-               if ( xml.attributes().hasAttribute("useCustomColor")) {
-                   QStringRef customColor = xml.attributes().value("customColor");
-                   assistant->setAssistantCustomColor( KisDomUtils::qStringToQColor(customColor.toString()) );
-
-               }
+                    }
+                }
            }
 
             if (assistant) {

@@ -216,7 +216,7 @@ public:
 
             SANITY_ZEROS();
 
-            if (sum != 255) {
+            if (sum != 255 && sum > 0) {
                 qreal fixFactor = 255.0 / sum;
                 sum = 0;
 

@@ -677,7 +677,7 @@ QPainterPath KisPopupPalette::drawRotationIndicator(qreal rotationAngle, bool ca
 
     QPainterPath canvasRotationIndicator;
     int canvasIndicatorSize = 15;
-    float canvasIndicatorMiddle = canvasIndicatorSize/2;
+    int canvasIndicatorMiddle = canvasIndicatorSize / 2;
     QRect indicatorRectangle = QRect( rotationDialXPosition - canvasIndicatorMiddle, rotationDialYPosition - canvasIndicatorMiddle,
                                       canvasIndicatorSize, canvasIndicatorSize );
 

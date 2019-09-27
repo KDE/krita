@@ -564,7 +564,11 @@ static QRect screenRect(QWidget *widget, int screen)
             if (screen == -1) {
                 return QGuiApplication::primaryScreen()->availableVirtualGeometry();
             } else if (screen == -3) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
                 return QGuiApplication::screenAt(QCursor::pos())->availableVirtualGeometry();
+#else
+                screen = desktop->screenNumber(QCursor::pos());
+#endif
             } else {
                 screen = desktop->screenNumber(widget);
             }

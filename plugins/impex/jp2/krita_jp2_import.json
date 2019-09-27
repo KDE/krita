@@ -1,8 +1,7 @@
 {
-    "Icon": "",
-    "Id": "Krita jp2 Import Filter",
+    "Id": "Krita jpeg2000 Import Filter",
+    "NoDisplay": "true",
     "Type": "Service",
-    "X-KDE-Export": "application/x-krita",
     "X-KDE-Import": "image/jp2",
     "X-KDE-Library": "kritajp2import",
     "X-KDE-ServiceTypes": [

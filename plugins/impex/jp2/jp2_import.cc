@@ -21,8 +21,6 @@
 #include <kpluginfactory.h>
 #include <QFileInfo>
 
-#include <KisFilterChain.h>
-
 #include <KisDocument.h>
 #include <kis_image.h>
 
@@ -38,53 +36,14 @@ jp2Import::~jp2Import()
 {
 }
 
-KisImportExportFilter::ConversionStatus jp2Import::convert(const QByteArray&, const QByteArray& to)
+KisImportExportErrorCode jp2Import::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    dbgFile << "Importing using JP2Import!";
-
-    if (to != "application/x-krita")
-        return KisImportExportFilter::BadMimeType;
-
-    KisDocument * doc = outputDocument();
-
-    if (!doc)
-        return KisImportExportFilter::NoDocumentCreated;
-
-    QString filename = inputFile();
-
-    doc->prepareForImport();
-
-    if (!filename.isEmpty()) {
-
-        jp2Converter ib(doc);
-
-        switch (ib.buildImage(filename)) {
-        case KisImageBuilder_RESULT_UNSUPPORTED:
-            return KisImportExportFilter::NotImplemented;
-            break;
-        case KisImageBuilder_RESULT_INVALID_ARG:
-            return KisImportExportFilter::BadMimeType;
-            break;
-        case KisImageBuilder_RESULT_NO_URI:
-        case KisImageBuilder_RESULT_NOT_LOCAL:
-            return KisImportExportFilter::FileNotFound;
-            break;
-        case KisImageBuilder_RESULT_BAD_FETCH:
-        case KisImageBuilder_RESULT_EMPTY:
-            return KisImportExportFilter::ParsingError;
-            break;
-        case KisImageBuilder_RESULT_FAILURE:
-            return KisImportExportFilter::InternalError;
-            break;
-        case KisImageBuilder_RESULT_OK:
-            doc -> setCurrentImage(ib.getImage());
-            return KisImportExportFilter::OK;
-        default:
-            break;
-        }
-
+    JP2Converter converter(document);
+    KisImportExportErrorCode result = converter.buildImage(filename());
+    if (result.isOk()) {
+        document->setCurrentImage(converter.image());
     }
-    return KisImportExportFilter::StorageCreationError;
+    return result;
 }
 
 #include <jp2_import.moc>

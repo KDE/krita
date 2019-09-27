@@ -433,7 +433,7 @@ void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeSpan &range, cons
 KisFrameSet KisAnimationFrameCache::cachedFramesWithin(const KisTimeSpan range)
 {
     auto it = m_d->constIteratorFrom(range.start());
-    if (it == m_d->cachedFrames.constEnd()) return KisFrameSet(range);
+    if (it == m_d->cachedFrames.constEnd()) return KisFrameSet();
 
     QVector<KisTimeSpan> cachedSpans;
     int firstOfInfinite = -1;

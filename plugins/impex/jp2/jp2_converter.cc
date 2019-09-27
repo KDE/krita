@@ -65,16 +65,16 @@ KisImportExportErrorCode JP2Converter::buildImage(const QString &filename)
     m_image = new KisImage(m_doc->createUndoStore(), width, height, cs, "built image");
 
     // Create a layer
-    KisPaintLayer* layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), quint8_MAX);
+    KisPaintLayerSP layer = new KisPaintLayer(m_image, m_image -> nextLayerName(), quint8_MAX);
 
     // Fill the layer with pixels
     // ...
 
     // Set the layer on the image
-    m_image->addNode(KisNodeSP(layer), m_image->rootLayer().data());
+    m_image->addNode(layer);
 
     // And report the status
-    return ImportExportCodes::Failure;
+    return ImportExportCodes::OK;
 }
 
 

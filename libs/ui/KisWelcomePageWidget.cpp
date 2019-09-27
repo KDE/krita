@@ -143,12 +143,6 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
     }
 }
 
-bool KisWelcomePageWidget::isDevelopmentBuild()
-{
-    // dev builds contain GIT hash in it and the word git
-    // stable versions do not contain this
-    return qApp->applicationVersion().contains("git");
-}
 
 void KisWelcomePageWidget::showDropAreaIndicator(bool show)
 {
@@ -349,8 +343,10 @@ void KisWelcomePageWidget::slotUpdateVersionMessage()
     alertIcon->setIcon(KisIconUtils::loadIcon("warning"));
     alertIcon->setVisible(false);
 
-    // find out if we need an update...or if this is a development version
-    if (isDevelopmentBuild()) {
+    // find out if we need an update...or if this is a development version:
+    // dev builds contain GIT hash in it and the word git
+    // stable versions do not contain this.
+    if (qApp->applicationVersion().contains("git")) {
         // Development build
         QString versionLabelText = QString("<a style=\"color: " +
                                            blendedColor.name() +

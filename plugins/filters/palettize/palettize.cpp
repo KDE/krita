@@ -26,7 +26,6 @@
 #include <kis_filter_registry.h>
 #include <kis_filter_configuration.h>
 #include <kis_filter_category_ids.h>
-#include <kis_filter_configuration.h>
 #include <KoUpdater.h>
 #include <KisSequentialIteratorProgress.h>
 #include <KoResourceServerProvider.h>

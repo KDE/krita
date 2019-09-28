@@ -38,7 +38,6 @@
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QRadioButton>
-#include <QGroupBox>
 #include <QMdiArea>
 #include <QMessageBox>
 #include <QDesktopWidget>

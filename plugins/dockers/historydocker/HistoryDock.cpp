@@ -59,7 +59,7 @@ void HistoryDock::setCanvas(KoCanvasBase *canvas)
             && myCanvas->shapeController()
             && myCanvas->shapeController()->resourceManager()
             && myCanvas->shapeController()->resourceManager()->undoStack()) {
-        KUndo2Stack* undoStack = canvas->shapeController()->resourceManager()->undoStack();
+        KUndo2Stack* undoStack = myCanvas->shapeController()->resourceManager()->undoStack();
 
         m_undoView->setStack(undoStack);
         KisConfig cfg(true);

@@ -11,6 +11,11 @@ apps:
   krita:
     command: qt5-launch usr/bin/krita
     plugs: [x11, unity7, home, opengl, network, network-bind, removable-media, desktop, desktop-legacy]
+    desktop: usr/share/applications/org.kde.krita.desktop
+
+layout:
+  /usr/bin/ffmpeg:
+    bind-file: $SNAP/usr/bin/ffmpeg
 
 parts:
   krita:
@@ -27,6 +32,11 @@ parts:
 #    source: https://anongit.kde.org/krita.git
 #    source-type: git
 #    source-branch: master
+    override-stage: |
+      # Stage the part
+      snapcraftctl stage
+      # Modify the .desktop file in the stage to point to where the icon will be in the installed snap
+      sed -i 's|Icon=\(.*\)|Icon=${SNAP}/usr/share/icons/hicolor/1024x1024/apps/\1.png|' usr/share/applications/org.kde.krita.desktop
     build-packages:
         - gettext
         - build-essential
@@ -85,7 +95,7 @@ parts:
   runtime:
     plugin: nil
     stage-packages:
-        - libexiv2-26
+        - libexiv2-27
         - libfftw3-double3
         - libgomp1
         - libgsl23
@@ -139,6 +149,10 @@ parts:
         - libqt5multimediagsttools5
         - libqt5multimediaquick5
         - libqt5multimediawidgets5
+        # Required for rendering animations
+        - ffmpeg
+        - libglu1-mesa
+        - libslang2
     prime:
     - "-usr/share/wallpapers/*"
     - "-usr/share/fonts/*"

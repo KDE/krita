@@ -179,7 +179,7 @@ void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type
     dp += description_length;
     *dp++ = '\n';
 
-    formatString(dp, allocated_length - strlen(text[0].text), "%8lu ", profile_data.length());
+    formatString(dp, allocated_length - strlen(text[0].text), "%8lu ", (unsigned long)profile_data.length());
 
     dp += 8;
 

@@ -1,4 +1,5 @@
 *.orig
+*.rej
 __pycache__
 *.egg-info
 *.trace

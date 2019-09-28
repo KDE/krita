@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>617</width>
-    <height>373</height>
+    <width>651</width>
+    <height>422</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -203,7 +203,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="tabHDR">
       <attribute name="title">
        <string>HDR Settings</string>
       </attribute>

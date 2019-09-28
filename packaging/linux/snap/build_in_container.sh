@@ -2,7 +2,7 @@
 
 set -ex
 
-cd /workspace
+cd /workspace/snap
 
 ping -c1 networkcheck.kde.org
 

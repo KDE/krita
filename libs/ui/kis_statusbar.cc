@@ -98,6 +98,7 @@ void KisStatusBar::setup()
     addStatusBarItem(m_resetAngleButton);
 
     connect(m_resetAngleButton, SIGNAL(clicked()), m_viewManager, SLOT(slotResetRotation()));
+    m_resetAngleButton->setVisible(false);
 
     m_statusBarStatusLabel = new KSqueezedTextLabel();
     m_statusBarStatusLabel->setObjectName("statsBarStatusLabel");
@@ -165,7 +166,7 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
 
     if (imageView) {
         m_imageView = imageView;
-
+        m_resetAngleButton->setVisible(true);
         connect(m_imageView, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)),
                 this, SLOT(updateStatusBarProfileLabel()));
         connect(m_imageView, SIGNAL(sigProfileChanged(const KoColorProfile*)),
@@ -174,6 +175,9 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
                 this, SLOT(imageSizeChanged()));
         updateStatusBarProfileLabel();
         addStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
+    }
+    else {
+        m_resetAngleButton->setVisible(false);
     }
 
     imageSizeChanged();

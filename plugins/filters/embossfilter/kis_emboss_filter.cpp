@@ -96,8 +96,8 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
     //with the actual pixel data.
 
     float Depth = embossdepth / 10.0;
-    int    R = 0, G = 0, B = 0;
-    uchar  Gray = 0;
+    int R = 0, G = 0, B = 0;
+    uchar Gray = 0;
     int Width = applyRect.width();
     int Height = applyRect.height();
 
@@ -113,9 +113,9 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
 
         device->colorSpace()->toQColor(acc->oldRawData(), &color2);
 
-        R = abs((int)((color1.red() - color2.red()) * Depth + (quint8_MAX / 2)));
-        G = abs((int)((color1.green() - color2.green()) * Depth + (quint8_MAX / 2)));
-        B = abs((int)((color1.blue() - color2.blue()) * Depth + (quint8_MAX / 2)));
+        R = abs((int)((color1.red() - color2.red()) * (int)Depth + (quint8_MAX / 2)));
+        G = abs((int)((color1.green() - color2.green()) * (int)Depth + (quint8_MAX / 2)));
+        B = abs((int)((color1.blue() - color2.blue()) * (int)Depth + (quint8_MAX / 2)));
 
         Gray = CLAMP((R + G + B) / 3, 0, quint8_MAX);
 

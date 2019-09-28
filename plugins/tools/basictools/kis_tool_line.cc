@@ -38,11 +38,13 @@
 #include <kis_debug.h>
 #include <kis_cursor.h>
 #include <brushengine/kis_paintop_registry.h>
-#include "kis_figure_painting_tool_helper.h"
-#include "kis_canvas2.h"
+#include <kis_figure_painting_tool_helper.h>
+#include <kis_canvas2.h>
+#include <kis_action_registry.h>
+#include <kis_painting_information_builder.h>
 
-#include "kis_painting_information_builder.h"
 #include "kis_tool_line_helper.h"
+
 
 const KisCoordinatesConverter* getCoordinatesConverter(KoCanvasBase * canvas)
 {
@@ -365,5 +367,3 @@ QString KisToolLine::quickHelp() const
 {
     return i18n("Alt+Drag will move the origin of the currently displayed line around, Shift+Drag will force you to draw straight lines");
 }
-
-

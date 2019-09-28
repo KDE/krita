@@ -32,37 +32,38 @@
 class KisDocument;
 
 struct JP2ConvertOptions {
-  int rate;
-  int numberresolution;
+	int rate;
+	int numberresolution;
 };
 
-class JP2Converter : public QObject
-{
-    Q_OBJECT
-private:
-    enum {
-        J2K_CFMT = 0,
-        JP2_CFMT = 1,
-        JPT_CFMT = 2
-    };
+class JP2Converter: public QObject {
+Q_OBJECT
 public:
-    JP2Converter(KisDocument *doc);
-    virtual ~JP2Converter();
+	JP2Converter(KisDocument *doc);
+	virtual ~JP2Converter();
 public:
-    KisImportExportErrorCode buildImage(const QString &filename);
-    KisImportExportErrorCode buildFile(const QString &filename, KisPaintLayerSP layer, const JP2ConvertOptions& options);
-    /**
-     * Retrieve the constructed image
-     */
-    KisImageWSP image();
+	KisImportExportErrorCode buildImage(const QString &filename);
+	KisImportExportErrorCode buildFile(const QString &filename,
+			KisPaintLayerSP layer, const JP2ConvertOptions &options);
+	/**
+	 * Retrieve the constructed image
+	 */
+	KisImageWSP image();
+	void addErrorString(const std::string&  str);
+	void addWarningString(const std::string&  str);
+	void addInfoString(const std::string&  str);
+
 private:
-    KisImportExportErrorCode decode(const QString &filename);
+	KisImportExportErrorCode decode(const QString &filename);
+	int infile_format(const char *fname);
 public Q_SLOTS:
-    virtual void cancel();
+	virtual void cancel();
 private:
-    KisImageSP m_image;
-    KisDocument *m_doc;
-    bool m_stop;
+	KisImageSP m_image;
+	KisDocument *m_doc;
+	bool m_stop;
+	std::string err;
+	std::string warn;
 };
 
 #endif

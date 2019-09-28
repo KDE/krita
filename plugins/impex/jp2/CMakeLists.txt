@@ -1,3 +1,5 @@
+add_subdirectory(tests)
+
 include_directories(SYSTEM ${OpenJPEG_INCLUDE_DIR})
 
 set(libkritaconverter_LIB_SRCS

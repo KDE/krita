@@ -557,7 +557,7 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
         QPen pen(Qt::red, size);
         pen.setJoinStyle(Qt::RoundJoin);
 
-        if (fillStyle != KisToolShapeUtils::FillStyleNone) {
+        if (fillStyle != KisPainter::FillStyleNone) {
             helper.paintPainterPathQPenFill(outline, pen, params.fillColor);
         }
         else {

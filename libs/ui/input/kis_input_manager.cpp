@@ -440,9 +440,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             //Make sure the input actions know we are active.
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.wheelEvent(action, wheelEvent);
-            d->accumulatedScrollDelta -=
-                KisAlgebra2D::signPZ(d->accumulatedScrollDelta) *
-                QWheelEvent::DefaultDeltasPerStep;
+            d->accumulatedScrollDelta -= KisAlgebra2D::signPZ(d->accumulatedScrollDelta);
             wasScrolled = true;
         }
 

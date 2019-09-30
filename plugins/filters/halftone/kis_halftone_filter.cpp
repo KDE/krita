@@ -114,9 +114,9 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     if (progressUpdater) {
         progressUpdater->setRange(0, (applyRect.height()/cellSpacingV+3)*(applyRect.width()/cellSpacingH+3));
     }
-    KisRandomConstAccessorSP itterator = device->createRandomConstAccessorNG( 0, 0);
-    //itterator->numContiguousColumns(qCeil(cellSize));
-    //itterator->numContiguousRows(qCeil(cellSize));
+    KisRandomConstAccessorSP iterator = device->createRandomConstAccessorNG( 0, 0);
+    //iterator->numContiguousColumns(qCeil(cellSize));
+    //iterator->numContiguousRows(qCeil(cellSize));
     KisPainter painter(device);
     painter.setCompositeOp(device->colorSpace()->compositeOp(COMPOSITE_OVER));
     KisPaintDeviceSP dab = device->createCompositionSourceDevice();
@@ -141,8 +141,8 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
             qint32 ydifference = qFloor(samplePoint.y())- applyRect.top();
             QPoint center(qBound(applyRect.left()+1, qFloor(samplePoint.x())+qCeil(cellSize*0.5), applyRect.right()-1),
                           qBound(applyRect.top()+1, qFloor(samplePoint.y())+qCeil(cellSize*0.5), applyRect.bottom()-1));
-            itterator->moveTo(center.x(), center.y());
-            quint8 intensity = device->colorSpace()->intensity8(itterator->oldRawData());
+            iterator->moveTo(center.x(), center.y());
+            quint8 intensity = device->colorSpace()->intensity8(iterator->oldRawData());
             qreal size = diameter*((qAbs(intensity-eightbit))/255.0);
             QPoint sPoint(qMax(qFloor(samplePoint.x()), applyRect.left()),
                           qMax(qFloor(samplePoint.y()), applyRect.top()));

@@ -318,7 +318,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
     TileTypeSP tile = m_map.get(idx);
 
     while (!tile) {
-        // we shouldn't try to aquire **any** lock with
+        // we shouldn't try to acquire **any** lock with
         // raw-pointer lock held
         m_map.getGC().unlockRawPointerAccess();
 

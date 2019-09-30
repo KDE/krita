@@ -119,7 +119,7 @@ class LcmsRGBP2020PQColorSpaceFactoryWrapper : public BaseColorSpaceFactory
 
         /**
          * We explicitly disable direct conversions to/from integer color spaces, because
-         * they may cause the the conversion system to choose them as an intermediate
+         * they may cause the conversion system to choose them as an intermediate
          * color space for the conversion chain, e.g.
          * p709-g10 F32 -> p2020-g10 U16 -> Rec2020-pq U16, which is incorrect and loses
          * all the HDR data

@@ -188,7 +188,6 @@ void KisToolColorPicker::continuePrimaryAction(KoPointerEvent *event)
     displayPickedColor();
 }
 
-#include "kis_canvas2.h"
 #include "kis_display_color_converter.h"
 
 void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)

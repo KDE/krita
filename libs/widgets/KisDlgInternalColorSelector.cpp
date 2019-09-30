@@ -47,8 +47,6 @@
 #include "kis_icon_utils.h"
 #include "KisSqueezedComboBox.h"
 
-#include "ui_WdgDlgInternalColorSelector.h"
-
 std::function<KisScreenColorPickerBase *(QWidget *)> KisDlgInternalColorSelector::s_screenColorPickerFactory = 0;
 
 struct KisDlgInternalColorSelector::Private

@@ -39,7 +39,6 @@
 #include "kis_layer_style_filter_environment.h"
 #include "kis_selection_filters.h"
 #include "kis_multiple_projection.h"
-#include "kis_pixel_selection.h"
 #include "kis_default_bounds_base.h"
 
 

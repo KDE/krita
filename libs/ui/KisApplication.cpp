@@ -251,6 +251,7 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType(ResourceType::Palettes, "data", "/palettes/", true);
     KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
     KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
+    KoResourcePaths::addResourceType("kis_actions", "data", "/pykrita");
     KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
     KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
     KoResourcePaths::addResourceType(ResourceType::FilterEffects, "data", "/effects/");

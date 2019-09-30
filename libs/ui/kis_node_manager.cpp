@@ -22,7 +22,6 @@
 #include <QMessageBox>
 #include <QSignalMapper>
 #include <QApplication>
-#include <QMessageBox>
 
 #include <kactioncollection.h>
 

@@ -59,6 +59,10 @@ public Q_SLOTS:
     void slotSetThreshold(int);
     void slotSetSearchRadius(int);
     void slotSetAnchorGap(int);
+    void slotSetInteractiveMode(int);
+
+Q_SIGNALS:
+    void setInteractiveModeEnable(bool);
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
@@ -78,7 +82,7 @@ private:
     QPainterPath m_paintPath;
     QVector<QPointF> m_points;
     QVector<QPoint> m_anchorPoints;
-    bool m_continuedMode;
+    bool m_continuedMode, m_interactiveMode;
     QPointF m_lastCursorPos;
     QPoint m_lastAnchor;
     bool m_complete, m_selected, m_finished;

@@ -58,8 +58,8 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
-    m_continuedMode(false), m_complete(false), m_selected(false), m_finished(false), m_worker(image()->projection()), m_threshold(70),
-    m_searchRadius(30), m_filterRadius(3.0)
+    m_continuedMode(false), m_interactiveMode(false), m_complete(false), m_selected(false), m_finished(false),
+    m_worker(image()->projection()), m_threshold(70), m_searchRadius(30), m_filterRadius(3.0)
 { }
 
 void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)
@@ -104,9 +104,11 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
     setMode(KisTool::PAINT_MODE);
     QPointF temp(convertToPixelCoord(event));
 
-    if(!image()->bounds().contains(temp.toPoint())){
+    if (!image()->bounds().contains(temp.toPoint())) {
         return;
     }
+
+    if (m_interactiveMode) { }
 
     if (m_complete) {
         checkIfAnchorIsSelected(temp);
@@ -124,9 +126,10 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
     } else {
         m_points.push_back(temp);
         qreal zoomLevel = canvas()->viewConverter()->zoom();
-        int sides = (int) std::ceil(10.0/zoomLevel);
-        m_snapBound = QRectF(QPoint(0,0), QSize(sides, sides));
+        int sides       = (int) std::ceil(10.0 / zoomLevel);
+        m_snapBound = QRectF(QPoint(0, 0), QSize(sides, sides));
         m_snapBound.moveCenter(temp);
+        emit setInteractiveModeEnable(false);
     }
 
     m_lastAnchor = temp.toPoint();
@@ -141,8 +144,8 @@ void KisToolSelectMagnetic::checkIfAnchorIsSelected(QPointF temp)
 {
     Q_FOREACH (const QPoint pt, m_anchorPoints) {
         qreal zoomLevel = canvas()->viewConverter()->zoom();
-        int sides = (int) std::ceil(10.0/zoomLevel);
-        QRect r = QRect(QPoint(0,0), QSize(sides, sides));
+        int sides       = (int) std::ceil(10.0 / zoomLevel);
+        QRect r         = QRect(QPoint(0, 0), QSize(sides, sides));
         r.moveCenter(pt);
         if (r.contains(temp.toPoint())) {
             m_selected       = true;
@@ -156,15 +159,14 @@ void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 {
     if (m_complete) {
         QPointF temp = convertToPixelCoord(event);
-        if(!image()->bounds().contains(temp.toPoint())){
+        if (!image()->bounds().contains(temp.toPoint())) {
             return;
         }
 
         checkIfAnchorIsSelected(temp);
 
-        if(m_selected){
+        if (m_selected) {
             int prev = m_selectedAnchor == 0 ? m_anchorPoints.count() - 1 : m_selectedAnchor - 1;
-            QPoint currentAnchor  = m_anchorPoints[m_selectedAnchor];
             QPoint previousAnchor = m_anchorPoints[prev];
             QPoint nextAnchor     = m_anchorPoints[(m_selectedAnchor + 1) % m_anchorPoints.count()];
 
@@ -201,11 +203,15 @@ void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 
         reEvaluatePoints();
     }
-}
+} // KisToolSelectMagnetic::beginPrimaryDoubleClickAction
 
 // drag while primary mouse button is pressed
 void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 {
+    if (m_interactiveMode) {
+        return;
+    }
+
     if (m_selected) {
         m_anchorPoints[m_selectedAnchor] = convertToPixelCoord(event).toPoint();
     }
@@ -215,6 +221,11 @@ void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 // release primary mouse button
 void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
 {
+    if (m_interactiveMode) {
+        finishSelectionAction();
+        return;
+    }
+
     if (m_selected) {
         int prev = m_selectedAnchor == 0 ? m_anchorPoints.count() - 1 : m_selectedAnchor - 1;
 
@@ -230,7 +241,7 @@ void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
             if (m_selectedAnchor == 0)
                 m_snapBound.moveCenter(m_anchorPoints.first());
         } else {
-            m_pointCollection[prev]    = computeEdgeWrapper(previousAnchor, currentAnchor);
+            m_pointCollection[prev] = computeEdgeWrapper(previousAnchor, currentAnchor);
             m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(currentAnchor, nextAnchor);
         }
         reEvaluatePoints();
@@ -309,6 +320,7 @@ void KisToolSelectMagnetic::finishSelectionAction()
     }
 
     resetVariables();
+    emit setInteractiveModeEnable(true);
 } // KisToolSelectMagnetic::finishSelectionAction
 
 void KisToolSelectMagnetic::resetVariables()
@@ -357,14 +369,14 @@ void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter
 void KisToolSelectMagnetic::drawAnchors(QPainter &gc)
 {
     qreal zoomLevel = canvas()->viewConverter()->zoom();
-    int sides = (int) std::ceil(10.0/zoomLevel);
+    int sides       = (int) std::ceil(10.0 / zoomLevel);
     QSize realSize(sides, sides);
-    m_snapBound = QRectF(QPoint(0,0), realSize);
+    m_snapBound = QRectF(QPoint(0, 0), realSize);
     m_snapBound.moveCenter(m_anchorPoints.first());
 
     Q_FOREACH (const QPoint pt, m_anchorPoints) {
         KisHandlePainterHelper helper(&gc, handleRadius());
-        QRect r(QPoint(0,0), QSize(sides,sides));
+        QRect r(QPoint(0, 0), QSize(sides, sides));
         r.moveCenter(pt);
         if ((m_complete && r.contains(m_lastCursorPos.toPoint())) ||
             (m_snapBound.contains(m_lastCursorPos) && pt == m_anchorPoints.first()))
@@ -454,7 +466,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
     QHBoxLayout *f1 = new QHBoxLayout();
-    QLabel *filterRadiusLabel  = new QLabel(i18n("Filter Radius: "), selectionWidget);
+    QLabel *filterRadiusLabel = new QLabel(i18n("Filter Radius: "), selectionWidget);
     f1->addWidget(filterRadiusLabel);
 
     KisDoubleSliderSpinBox *filterRadiusInput = new KisDoubleSliderSpinBox(selectionWidget);
@@ -465,7 +477,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     f1->addWidget(filterRadiusInput);
     connect(filterRadiusInput, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetFilterRadius(qreal)));
 
-    QHBoxLayout *f2      = new QHBoxLayout();
+    QHBoxLayout *f2        = new QHBoxLayout();
     QLabel *thresholdLabel = new QLabel(i18n("Threshold: "), selectionWidget);
     f2->addWidget(thresholdLabel);
 
@@ -477,7 +489,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     f2->addWidget(thresholdInput);
     connect(thresholdInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 
-    QHBoxLayout *f3     = new QHBoxLayout();
+    QHBoxLayout *f3 = new QHBoxLayout();
     QLabel *searchRadiusLabel = new QLabel(i18n("Search Radius: "), selectionWidget);
     f3->addWidget(searchRadiusLabel);
 
@@ -494,8 +506,9 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     QCheckBox *interactiveModeCheckBox = new QCheckBox(i18n("Interactive Mode: "), selectionWidget);
     f4->addWidget(interactiveModeCheckBox);
     interactiveModeCheckBox->setCheckState(Qt::Unchecked);
+    connect(interactiveModeCheckBox, SIGNAL(stateChanged(int)), this, SLOT(slotSetInteractiveMode(int)));
 
-    QHBoxLayout *f5 = new QHBoxLayout();
+    QHBoxLayout *f5        = new QHBoxLayout();
     QLabel *anchorGapLabel = new QLabel(i18n("Anchor Gap: "), selectionWidget);
     f5->addWidget(anchorGapLabel);
 
@@ -511,6 +524,8 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     connect(interactiveModeCheckBox, &QCheckBox::stateChanged, [anchorGapInput](int state){
         anchorGapInput->setEnabled(state);
     });
+
+    connect(this, SIGNAL(setInteractiveModeEnable(bool)), interactiveModeCheckBox, SLOT(setEnabled(bool)));
 
     connect(anchorGapInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetAnchorGap(int)));
 
@@ -552,6 +567,11 @@ void KisToolSelectMagnetic::slotSetAnchorGap(int g)
 {
     m_anchorGap = g;
     m_configGroup.writeEntry("anchorgap", g);
+}
+
+void KisToolSelectMagnetic::slotSetInteractiveMode(int i)
+{
+    m_interactiveMode = i ? true : false;
 }
 
 void KisToolSelectMagnetic::resetCursorStyle()

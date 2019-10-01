@@ -922,7 +922,11 @@ void TimelineFramesView::dropEvent(QDropEvent *event)
     m_d->dragInProgress = false;
     m_d->model->setScrubState(false);
 
-    if (event->keyboardModifiers() & Qt::ControlModifier) {
+    const bool control = event->keyboardModifiers() & Qt::ControlModifier;
+    const bool shift = event->keyboardModifiers() & Qt::ShiftModifier;
+    if (control && shift) {
+        event->setDropAction(Qt::LinkAction);
+    } else if (control) {
         event->setDropAction(Qt::CopyAction);
     }
     QAbstractItemView::dropEvent(event);

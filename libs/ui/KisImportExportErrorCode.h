@@ -37,7 +37,7 @@ namespace ImportExportCodes
         // Reading
         FileNotExist, // there is no file with that name in that location,
         NoAccessToRead, // Krita has no reading access to the file,
-        ErrorWhileReading, // there was an error that occured during reading,
+        ErrorWhileReading, // there was an error that occurred during reading,
         FileFormatIncorrect, // file format cannot be parsed,
         FormatFeaturesUnsupported, // file format can be parsed, but some features are unsupported,
         FormatColorSpaceUnsupported, // file format can be parsed, but color space of the image is unsupported
@@ -46,7 +46,7 @@ namespace ImportExportCodes
         // Writing
         CannotCreateFile, // file cannot be created
         NoAccessToWrite, // Krita has no writing access to the file
-        ErrorWhileWriting, // there was an error that occured during writing (can be insufficient memory, too, just we don't know)
+        ErrorWhileWriting, // there was an error that occurred during writing (can be insufficient memory, too, just we don't know)
         InsufficientMemory, // there is not enough memory left
 
         // Both

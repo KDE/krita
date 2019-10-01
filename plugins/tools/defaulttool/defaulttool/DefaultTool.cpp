@@ -70,7 +70,7 @@
 #include <QPointer>
 #include <QAction>
 #include <QKeyEvent>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 #include <KoResourcePaths.h>
 
 #include <KoCanvasController.h>
@@ -378,7 +378,7 @@ bool DefaultTool::wantsAutoScroll() const
     return true;
 }
 
-void DefaultTool::addMappedAction(QSignalMapper *mapper, const QString &actionId, int commandType)
+void DefaultTool::addMappedAction(KisSignalMapper *mapper, const QString &actionId, int commandType)
 {
     QAction *a =action(actionId);
     connect(a, SIGNAL(triggered()), mapper, SLOT(map()));
@@ -387,7 +387,7 @@ void DefaultTool::addMappedAction(QSignalMapper *mapper, const QString &actionId
 
 void DefaultTool::setupActions()
 {
-    m_alignSignalsMapper = new QSignalMapper(this);
+    m_alignSignalsMapper = new KisSignalMapper(this);
 
     addMappedAction(m_alignSignalsMapper, "object_align_horizontal_left", KoShapeAlignCommand::HorizontalLeftAlignment);
     addMappedAction(m_alignSignalsMapper, "object_align_horizontal_center", KoShapeAlignCommand::HorizontalCenterAlignment);
@@ -396,7 +396,7 @@ void DefaultTool::setupActions()
     addMappedAction(m_alignSignalsMapper, "object_align_vertical_center", KoShapeAlignCommand::VerticalCenterAlignment);
     addMappedAction(m_alignSignalsMapper, "object_align_vertical_bottom", KoShapeAlignCommand::VerticalBottomAlignment);
 
-    m_distributeSignalsMapper = new QSignalMapper(this);
+    m_distributeSignalsMapper = new KisSignalMapper(this);
 
     addMappedAction(m_distributeSignalsMapper, "object_distribute_horizontal_left", KoShapeDistributeCommand::HorizontalLeftDistribution);
     addMappedAction(m_distributeSignalsMapper, "object_distribute_horizontal_center", KoShapeDistributeCommand::HorizontalCenterDistribution);
@@ -408,7 +408,7 @@ void DefaultTool::setupActions()
     addMappedAction(m_distributeSignalsMapper, "object_distribute_vertical_bottom", KoShapeDistributeCommand::VerticalBottomDistribution);
     addMappedAction(m_distributeSignalsMapper, "object_distribute_vertical_gaps", KoShapeDistributeCommand::VerticalGapsDistribution);
 
-    m_transformSignalsMapper = new QSignalMapper(this);
+    m_transformSignalsMapper = new KisSignalMapper(this);
 
     addMappedAction(m_transformSignalsMapper, "object_transform_rotate_90_cw", TransformRotate90CW);
     addMappedAction(m_transformSignalsMapper, "object_transform_rotate_90_ccw", TransformRotate90CCW);
@@ -417,7 +417,7 @@ void DefaultTool::setupActions()
     addMappedAction(m_transformSignalsMapper, "object_transform_mirror_vertically", TransformMirrorY);
     addMappedAction(m_transformSignalsMapper, "object_transform_reset", TransformReset);
 
-    m_booleanSignalsMapper = new QSignalMapper(this);
+    m_booleanSignalsMapper = new KisSignalMapper(this);
 
     addMappedAction(m_booleanSignalsMapper, "object_unite", BooleanUnion);
     addMappedAction(m_booleanSignalsMapper, "object_intersect", BooleanIntersection);

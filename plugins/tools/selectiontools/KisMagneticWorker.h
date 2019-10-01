@@ -33,6 +33,7 @@ public:
     KisMagneticLazyTiles(KisPaintDeviceSP dev);
     void filter(qreal radius, QRect &rect);
     inline KisPaintDeviceSP device() { return m_dev; }
+    inline QVector<QRect> tiles() { return m_tiles; }
 };
 
 class KRITASELECTIONTOOLS_EXPORT KisMagneticWorker {

@@ -174,11 +174,10 @@ void KisMagneticLazyTiles::filter(qreal radius, QRect &rect)
 
     QPoint firstTile = divide(rect.topLeft(), m_tileSize);
     QPoint lastTile  = divide(rect.bottomRight(), m_tileSize);
-
     for (int i = firstTile.y(); i <= lastTile.y(); i++) {
         for (int j = firstTile.x(); j <= lastTile.x(); j++) {
             int currentTile = i * m_tilesPerRow + j;
-            if (qFuzzyCompare(radius, m_radiusRecord[currentTile])) {
+            if (radius != m_radiusRecord[currentTile]) {
                 QRect bounds = m_tiles[currentTile];
                 KisGaussianKernel::applyTightLoG(m_dev, bounds, radius, -1.0, QBitArray(), nullptr);
                 KisLazyFillTools::normalizeAlpha8Device(m_dev, bounds);
@@ -271,6 +270,10 @@ void KisMagneticWorker::saveTheImage(vQPointF points)
     gc.drawEllipse(points[0], 3, 3);
     gc.setPen(Qt::red);
     gc.drawEllipse(points[points.count() - 1], 2, 2);
+
+    for(QRect &r : m_lazyTileFilter.tiles() ){
+        gc.drawRect(r);
+    }
 
     img.save("result.png");
 } // KisMagneticWorker::saveTheImage

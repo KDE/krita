@@ -46,7 +46,7 @@
 #include "KisOpenGLModeProber.h"
 #include <KoColorModelStandardIds.h>
 
-#ifndef Q_OS_MACOS
+#if !defined(Q_OS_MACOS) && !defined(HAS_ONLY_OPENGL_ES)
 #include <QOpenGLFunctions_2_1>
 #endif
 
@@ -104,7 +104,7 @@ public:
     QVector3D vertices[6];
     QVector2D texCoords[6];
 
-#ifndef Q_OS_MACOS
+#if !defined(Q_OS_MACOS) && !defined(HAS_ONLY_OPENGL_ES)
     QOpenGLFunctions_2_1 *glFn201;
 #endif
 
@@ -156,6 +156,10 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
                                                      colorConverter->openGLCanvasSurfaceProfile(),
                                                      colorConverter->renderingIntent(),
                                                      colorConverter->conversionFlags());
+
+    connect(d->openGLImageTextures.data(),
+            SIGNAL(sigShowFloatingMessage(QString, int, bool)),
+            SLOT(slotShowFloatingMessage(QString, int, bool)));
 
     setAcceptDrops(true);
     setAutoFillBackground(false);
@@ -267,7 +271,7 @@ void KisOpenGLCanvas2::initializeGL()
 {
     KisOpenGL::initializeContext(context());
     initializeOpenGLFunctions();
-#ifndef Q_OS_MACOS
+#if !defined(Q_OS_MACOS) && !defined(HAS_ONLY_OPENGL_ES)
     if (!KisOpenGL::hasOpenGLES()) {
         d->glFn201 = context()->versionFunctions<QOpenGLFunctions_2_1>();
         if (!d->glFn201) {
@@ -439,6 +443,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     d->solidColorShader->setUniformValue(d->solidColorShader->location(Uniform::ModelViewProjection), modelMatrix);
 
     if (!KisOpenGL::hasOpenGLES()) {
+#ifndef HAS_ONLY_OPENGL_ES
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
         glEnable(GL_COLOR_LOGIC_OP);
@@ -448,7 +453,12 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         }
 #else
         glLogicOp(GL_XOR);
-#endif
+#endif  // Q_OS_OSX
+
+#else   // HAS_ONLY_OPENGL_ES
+        KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",
+                "Unexpected KisOpenGL::hasOpenGLES returned false");
+#endif // HAS_ONLY_OPENGL_ES
     } else {
         glEnable(GL_BLEND);
         glBlendFuncSeparate(GL_ONE_MINUS_DST_COLOR, GL_ZERO, GL_ONE, GL_ONE);
@@ -494,7 +504,12 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     }
 
     if (!KisOpenGL::hasOpenGLES()) {
+#ifndef HAS_ONLY_OPENGL_ES
         glDisable(GL_COLOR_LOGIC_OP);
+#else
+        KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",
+                "Unexpected KisOpenGL::hasOpenGLES returned false");
+#endif
     } else {
         glDisable(GL_BLEND);
     }
@@ -896,6 +911,11 @@ void KisOpenGLCanvas2::slotPixelGridModeChanged()
     d->gridColor = cfg.getPixelGridColor();
 
     update();
+}
+
+void KisOpenGLCanvas2::slotShowFloatingMessage(const QString &message, int timeout, bool priority)
+{
+    canvas()->imageView()->showFloatingMessage(message, QIcon(), timeout, priority ? KisFloatingMessage::High : KisFloatingMessage::Medium);
 }
 
 QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const

@@ -564,6 +564,7 @@ getLayerTile(struct xcfLayer *layer,const struct rect *where)
   if( layer->hasMask ) {
     struct Tile *mask = getMaskOrLayerTile(&layer->dim,&layer->mask,*where);
     if (mask == XCF_PTR_EMPTY) { /* error */
+        freeTile(data);
         return XCF_PTR_EMPTY;
     }
     applyMask(data,mask);

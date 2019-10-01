@@ -128,7 +128,7 @@ private:
     KisRandomAccessorSP m_it;
 
     KoColor m_sourceColor;
-    const quint8 *m_data;
+    const quint8 *m_data {0};
     int m_pixelSize;
 };
 

@@ -83,6 +83,10 @@ public:
     inline void setState(enumState st);
     inline enumState state() const;
 
+    /**
+     * Compresses the modified() signals
+     */
+    KisThreadSafeSignalCompressor m_modifiedSignalsCompressor;
 
 
     /*** Internal routines ***/
@@ -136,6 +140,7 @@ public:
 };
 
 KisCurveWidget::Private::Private(KisCurveWidget *parent)
+    : m_modifiedSignalsCompressor(100, KisSignalCompressor::Mode::FIRST_INACTIVE)
 {
     m_curveWidget = parent;
 }
@@ -247,13 +252,12 @@ void KisCurveWidget::Private::syncIOControls()
 
 void KisCurveWidget::Private::setCurveModified(bool rewriteSpinBoxesValues = true)
 {
-
     if (rewriteSpinBoxesValues) {
         syncIOControls();
     }
     m_splineDirty = true;
     m_curveWidget->update();
-    m_curveWidget->emit modified();
+    m_curveWidget->emit compressorShouldEmitModified();
 }
 
 void KisCurveWidget::Private::setCurveRepaint()

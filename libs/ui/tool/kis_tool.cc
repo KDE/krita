@@ -345,6 +345,13 @@ QCursor KisTool::cursor() const
     return d->cursor;
 }
 
+void KisTool::notifyModified() const
+{
+    if (image()) {
+        image()->setModified();
+    }
+}
+
 KoPattern * KisTool::currentPattern()
 {
     return d->currentPattern;

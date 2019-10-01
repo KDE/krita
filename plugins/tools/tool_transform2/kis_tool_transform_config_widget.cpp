@@ -21,7 +21,7 @@
 #include <kis_icon.h>
 #include "rotation_icons.h"
 #include "kis_canvas2.h"
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 #include "kis_liquify_properties.h"
 
 #include "KisMainWindow.h"
@@ -247,7 +247,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(liquifyReverseDirectionChk, SIGNAL(toggled(bool)), this, SLOT(liquifyReverseDirectionChanged(bool)));
     liquifyReverseDirectionChk->setToolTip(i18nc("@info:tooltip", "Reverse direction of the current deformation tool"));
 
-    QSignalMapper *liquifyModeMapper = new QSignalMapper(this);
+    KisSignalMapper *liquifyModeMapper = new KisSignalMapper(this);
     connect(liquifyMove, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
     connect(liquifyScale, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));
     connect(liquifyRotate, SIGNAL(toggled(bool)), liquifyModeMapper, SLOT(map()));

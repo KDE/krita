@@ -91,9 +91,9 @@ public:
     bool eventFilter(QObject*, QEvent *event) override;
 
 private:
-    bool m_hidden;
+    bool m_hidden {false};
     QSize m_size;
-    KisSizeGroupPrivate* m_group;
+    KisSizeGroupPrivate* m_group {0};
 };
 
 #endif // KISSIZEGROUPPRIVATE_H

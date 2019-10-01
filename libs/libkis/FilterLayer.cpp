@@ -47,9 +47,12 @@ QString FilterLayer::type() const
 
 void FilterLayer::setFilter(Filter &filter)
 {
+    if (!this->node()) return;
     KisAdjustmentLayer *layer = dynamic_cast<KisAdjustmentLayer*>(this->node().data());
     //getting the default configuration here avoids trouble with versioning.
-    layer->setFilter(filter.filterConfig());
+    if (layer) {
+        layer->setFilter(filter.filterConfig());
+    }
 }
 
 Filter * FilterLayer::filter()

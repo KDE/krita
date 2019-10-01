@@ -59,7 +59,11 @@ void KisSelectionFilter::computeBorder(qint32* circ, qint32 xradius, qint32 yrad
         else
             tmp = 0.0;
 
-        circ[i] = (qint32) RINT(yradius / (double) xradius * sqrt(xradius * xradius - tmp * tmp));
+        double divisor = (double) xradius * sqrt(xradius * xradius - tmp * tmp);
+        if (divisor == 0.0) {
+            divisor = 1.0;
+        }
+        circ[i] = (qint32) RINT(yradius / divisor);
     }
 }
 
@@ -497,6 +501,8 @@ void KisFeatherSelectionFilter::process(KisPixelSelectionSP pixelSelection, cons
     KisConvolutionKernelSP kernelVertical = KisConvolutionKernel::fromMatrix(gaussianMatrix.transpose(), 0, gaussianMatrix.sum());
 
     KisPaintDeviceSP interm = new KisPaintDevice(pixelSelection->colorSpace());
+    interm->prepareClone(pixelSelection);
+
     KisConvolutionPainter horizPainter(interm);
     horizPainter.setChannelFlags(interm->colorSpace()->channelFlags(false, true));
     horizPainter.applyMatrix(kernelHoriz, pixelSelection, rect.topLeft(), rect.topLeft(), rect.size(), BORDER_REPEAT);

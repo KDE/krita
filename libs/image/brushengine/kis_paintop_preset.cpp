@@ -142,8 +142,8 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
         m_d->settings->setPreset(KisPaintOpPresetWSP(this));
 
         if (oldOptionsWidget) {
-            m_d->settings->setOptionsWidget(oldOptionsWidget);
             oldOptionsWidget->setConfigurationSafe(m_d->settings);
+            m_d->settings->setOptionsWidget(oldOptionsWidget);
         }
     }
 

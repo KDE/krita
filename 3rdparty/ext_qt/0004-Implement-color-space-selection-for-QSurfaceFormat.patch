@@ -1,7 +1,7 @@
-From 806fae9657a13559332796ade9cf1b302d014e46 Mon Sep 17 00:00:00 2001
+From 32171690fab4ae1eb80b50d31f97cde5f1250cc9 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Wed, 13 Feb 2019 16:56:11 +0300
-Subject: [PATCH 04/17] Implement color space selection for QSurfaceFormat
+Subject: [PATCH 12/19] Implement color space selection for QSurfaceFormat
 
 With the patch one can select color space of openGL surface
 which is used a a root surface of the underlying native window.
@@ -43,7 +43,7 @@ Change-Id: I5f4945db9798d542f19c8ff1af1effa34f7745fd
  7 files changed, 83 insertions(+), 12 deletions(-)
 
 diff --git a/src/gui/kernel/qsurfaceformat.cpp b/src/gui/kernel/qsurfaceformat.cpp
-index 1a814ec21f..fc8b9c4f43 100644
+index 4e2bcad50f..d8e4c62ddc 100644
 --- a/src/gui/kernel/qsurfaceformat.cpp
 +++ b/src/gui/kernel/qsurfaceformat.cpp
 @@ -221,6 +221,17 @@ public:
@@ -252,10 +252,10 @@ index cc6d93d35e..61c0e28767 100644
  
  protected:
 diff --git a/src/plugins/platforms/windows/qwindowswindow.cpp b/src/plugins/platforms/windows/qwindowswindow.cpp
-index 3bf424d0ac..7597fcb64d 100644
+index 7d511bf0d7..716e461436 100644
 --- a/src/plugins/platforms/windows/qwindowswindow.cpp
 +++ b/src/plugins/platforms/windows/qwindowswindow.cpp
-@@ -2874,9 +2874,13 @@ void *QWindowsWindow::surface(void *nativeConfig, int *err)
+@@ -2875,9 +2875,13 @@ void *QWindowsWindow::surface(void *nativeConfig, int *err)
      return 0;
  #endif
  #ifndef QT_NO_OPENGL

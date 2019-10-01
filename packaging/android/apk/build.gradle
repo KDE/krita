@@ -1,0 +1,116 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.0'
+    }
+}
+
+repositories {
+    google()
+    jcenter()
+}
+
+apply plugin: 'com.android.application'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+}
+
+ext {
+    abi = System.getenv('ANDROID_ABI')
+    installPrefix = '../krita-android-build'
+}
+
+task configure() {
+    doLast {
+        if (abi == null && !project.hasProperty("abi")) {
+            logger.error('ANDROID_ABI not specified using the default one instead: armeabi-v7a')
+            abi = 'armeabi-v7a'
+        }
+
+        // if user specified the ABI through environment then overwrite the one in gradle.properties
+        if (System.getenv('ANDROID_ABI') != null) {
+            def f = file('gradle.properties')
+            def lines = f.readLines()
+            f.write("")
+            for (line in lines) {
+                if (line.matches('abi=.+'))
+                    continue
+                f.append("$line\n")
+            }
+            f.append("abi=${abi}\n")
+        }
+
+        def libs = new File(installPrefix, 'lib')
+        if (!libs.exists()) {
+            throw new GradleException('Krita libraires not found, please check if -p=krita-bin finished without errors')
+        }
+    }
+}
+
+// copy libs(plugins) which start with krita*.so and rename
+// them to start with `lib_`
+task copyLibs(type: Copy) {
+    from "$installPrefix/lib"
+    into "libs/${abi ?: 'armeabi-v7a'}"
+    rename ('^krita(.*).so$', 'lib_krita$1.so')
+}
+
+task copyAssets(type: Copy) {
+    from "$installPrefix/share/"
+    into 'assets/'
+    include '**'
+}
+
+copyLibs.dependsOn configure
+
+android {
+    /*******************************************************
+     * The following variables:
+     * - androidBuildToolsVersion,
+     * - androidCompileSdkVersion
+     * - qt5AndroidDir - holds the path to qt android files
+     *                   needed to build any Qt application
+     *                   on Android.
+     *
+     * are defined in gradle.properties file. This file is
+     * updated by QtCreator and androiddeployqt tools.
+     * Changing them manually might break the compilation!
+     *******************************************************/
+
+    compileSdkVersion androidCompileSdkVersion.toInteger()
+
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = [qt5AndroidDir + '/src', 'src', 'java']
+            aidl.srcDirs = [qt5AndroidDir + '/src', 'src', 'aidl']
+            res.srcDirs = [qt5AndroidDir + '/res', 'res']
+            resources.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs', 'lib']
+       }
+    }
+
+    // This is needed because, gradle by default ignores hidden assets.
+    aaptOptions {
+        ignoreAssetsPattern "!.foajasoie"
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+	defaultConfig {
+        targetSdkVersion 26
+        minSdkVersion 21
+    }
+
+    preBuild.dependsOn(copyLibs)
+    preBuild.dependsOn(copyAssets)
+}

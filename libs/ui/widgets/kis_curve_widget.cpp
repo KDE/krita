@@ -47,6 +47,10 @@
 #include <kis_config.h>
 #include <klocalizedstring.h>
 
+#include <kis_signal_compressor.h>
+#include <kis_thread_safe_signal_compressor.h>
+
+
 // Local includes.
 
 #include "widgets/kis_curve_widget.h"
@@ -73,13 +77,15 @@ KisCurveWidget::KisCurveWidget(QWidget *parent, Qt::WindowFlags f)
     d->m_intIn = 0;
     d->m_intOut = 0;
 
+    connect(&d->m_modifiedSignalsCompressor, SIGNAL(timeout()), SLOT(notifyModified()));
+    connect(this, SIGNAL(compressorShouldEmitModified()), SLOT(slotCompressorShouldEmitModified()));
+
     setMouseTracking(true);
     setAutoFillBackground(false);
     setAttribute(Qt::WA_OpaquePaintEvent);
     setMinimumSize(150, 50);
     setMaximumSize(250, 250);
 
-    d->setCurveModified();
 
     setFocusPolicy(Qt::StrongFocus);
 }
@@ -92,6 +98,8 @@ KisCurveWidget::~KisCurveWidget()
 
 void KisCurveWidget::setupInOutControls(QSpinBox *in, QSpinBox *out, int inMin, int inMax, int outMin, int outMax)
 {
+    dropInOutControls();
+
     d->m_intIn = in;
     d->m_intOut = out;
 
@@ -533,3 +541,12 @@ void KisCurveWidget::leaveEvent(QEvent *)
 {
 }
 
+void KisCurveWidget::notifyModified()
+{
+    emit modified();
+}
+
+void KisCurveWidget::slotCompressorShouldEmitModified()
+{
+    d->m_modifiedSignalsCompressor.start();
+}

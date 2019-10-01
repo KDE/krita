@@ -114,21 +114,21 @@ void KisToolShape::fillSettingChanged(int value)
     m_configGroup.writeEntry("fillType", value);
 }
 
-KisPainter::FillStyle KisToolShape::fillStyle(void)
+KisToolShapeUtils::FillStyle KisToolShape::fillStyle()
 {
     if (m_shapeOptionsWidget) {
-        return static_cast<KisPainter::FillStyle>(m_shapeOptionsWidget->cmbFill->currentIndex());
+        return static_cast<KisToolShapeUtils::FillStyle>(m_shapeOptionsWidget->cmbFill->currentIndex());
     } else {
-        return KisPainter::FillStyleNone;
+        return KisToolShapeUtils::FillStyleNone;
     }
 }
 
-KisPainter::StrokeStyle KisToolShape::strokeStyle(void)
+KisToolShapeUtils::StrokeStyle KisToolShape::strokeStyle()
 {
     if (m_shapeOptionsWidget) {
-        return static_cast<KisPainter::StrokeStyle>(m_shapeOptionsWidget->cmbOutline->currentIndex());
+        return static_cast<KisToolShapeUtils::StrokeStyle>(m_shapeOptionsWidget->cmbOutline->currentIndex());
     } else {
-        return KisPainter::StrokeStyleNone;
+        return KisToolShapeUtils::StrokeStyleNone;
     }
 }
 
@@ -165,15 +165,17 @@ void KisToolShape::ShapeAddInfo::markAsSelectionShapeIfNeeded(KoShape *shape) co
 
 void KisToolShape::addShape(KoShape* shape)
 {
+    using namespace KisToolShapeUtils;
+
     KoImageCollection* imageCollection = canvas()->shapeController()->resourceManager()->imageCollection();
     switch(fillStyle()) {
-        case KisPainter::FillStyleForegroundColor:
+        case FillStyleForegroundColor:
             shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(currentFgColor().toQColor())));
             break;
-        case KisPainter::FillStyleBackgroundColor:
+        case FillStyleBackgroundColor:
             shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(currentBgColor().toQColor())));
             break;
-        case KisPainter::FillStylePattern:
+        case FillStylePattern:
             if (imageCollection) {
                 QSharedPointer<KoPatternBackground> fill(new KoPatternBackground(imageCollection));
                 if (currentPattern()) {
@@ -184,29 +186,23 @@ void KisToolShape::addShape(KoShape* shape)
                 shape->setBackground(QSharedPointer<KoShapeBackground>(0));
             }
             break;
-        case KisPainter::FillStyleGradient:
-            {
-                QLinearGradient *gradient = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
-                gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
-                gradient->setStops(currentGradient()->toQGradient()->stops());
-                QSharedPointer<KoGradientBackground>  gradientFill(new KoGradientBackground(gradient));
-                shape->setBackground(gradientFill);
-            }
-            break;
-        case KisPainter::FillStyleNone:
-        default:
+        case FillStyleNone:
             shape->setBackground(QSharedPointer<KoShapeBackground>(0));
             break;
     }
 
     switch (strokeStyle()) {
-    case KisPainter::StrokeStyleNone:
+    case KisToolShapeUtils::StrokeStyleNone:
         shape->setStroke(KoShapeStrokeModelSP());
         break;
-    case KisPainter::StrokeStyleBrush: {
+    case KisToolShapeUtils::StrokeStyleForeground:
+    case KisToolShapeUtils::StrokeStyleBackground: {
         KoShapeStrokeSP stroke(new KoShapeStroke());
         stroke->setLineWidth(currentStrokeWidth());
-        stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
+        const QColor color = strokeStyle() == KisToolShapeUtils::StrokeStyleForeground ?
+                    canvas()->resourceManager()->foregroundColor().toQColor() :
+                    canvas()->resourceManager()->backgroundColor().toQColor();
+        stroke->setColor(color);
         shape->setStroke(stroke);
         break;
     }

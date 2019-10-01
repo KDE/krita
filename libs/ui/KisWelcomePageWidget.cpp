@@ -95,6 +95,13 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
     connect(newsWidget, SIGNAL(newsDataChanged()), this, SLOT(slotUpdateVersionMessage()));
 
+#ifdef Q_OS_ANDROID
+    // checking this widgets crashes the app, so it is better for it to be hidden for now
+    newsWidget->hide();
+    helpTitleLabel_2->hide();
+    chkShowNews->hide();
+#endif
+
 
     // configure the News area
     KisConfig cfg(true);
@@ -126,7 +133,7 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         // until after the view manager is set
         connect(newFileLink, SIGNAL(clicked(bool)), this, SLOT(slotNewFileClicked()));
         connect(openFileLink, SIGNAL(clicked(bool)), this, SLOT(slotOpenFileClicked()));
-        connect(clearRecentFilesLink, SIGNAL(clicked(bool)), this, SLOT(slotClearRecentFiles()));
+        connect(clearRecentFilesLink, SIGNAL(clicked(bool)), mainWin, SLOT(clearRecentFiles()));
 
         slotUpdateThemeColors();
 
@@ -136,12 +143,6 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
     }
 }
 
-bool KisWelcomePageWidget::isDevelopmentBuild()
-{
-    // dev builds contain GIT hash in it and the word git
-    // stable versions do not contain this
-    return qApp->applicationVersion().contains("git");
-}
 
 void KisWelcomePageWidget::showDropAreaIndicator(bool show)
 {
@@ -342,8 +343,10 @@ void KisWelcomePageWidget::slotUpdateVersionMessage()
     alertIcon->setIcon(KisIconUtils::loadIcon("warning"));
     alertIcon->setVisible(false);
 
-    // find out if we need an update...or if this is a development version
-    if (isDevelopmentBuild()) {
+    // find out if we need an update...or if this is a development version:
+    // dev builds contain GIT hash in it and the word git
+    // stable versions do not contain this.
+    if (qApp->applicationVersion().contains("git")) {
         // Development build
         QString versionLabelText = QString("<a style=\"color: " +
                                            blendedColor.name() +
@@ -451,8 +454,3 @@ void KisWelcomePageWidget::slotOpenFileClicked()
     m_mainWindow->slotFileOpen();
 }
 
-void KisWelcomePageWidget::slotClearRecentFiles()
-{
-    m_mainWindow->clearRecentFiles();
-    populateRecentDocuments();
-}

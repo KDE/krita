@@ -51,7 +51,7 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
         , collapsed(false)
         , supportsLodMoves(false)
         , animated(false)
-        , useInTimeline(false)
+        , useInTimeline(true)
         , image(image)
     {
     }
@@ -321,7 +321,13 @@ bool KisBaseNode::hasEditablePaintDevice() const
 
 void KisBaseNode::setCollapsed(bool collapsed)
 {
+    const bool oldCollapsed = m_d->collapsed;
+
     m_d->collapsed = collapsed;
+
+    if (oldCollapsed != collapsed) {
+        baseNodeCollapsedChangedCallback();
+    }
 }
 
 bool KisBaseNode::collapsed() const

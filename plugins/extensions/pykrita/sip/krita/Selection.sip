@@ -10,6 +10,7 @@ public:
     bool operator==(const Selection &other) const;
     bool operator!=(const Selection &other) const;
 public Q_SLOTS:
+    Selection *duplicate() /Factory/;
     int width() const;
     int height() const;
     int x() const;

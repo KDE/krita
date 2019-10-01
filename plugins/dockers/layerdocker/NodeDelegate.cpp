@@ -264,11 +264,11 @@ void NodeDelegate::drawFrame(QPainter *p, const QStyleOptionViewItem &option, co
     p->drawLine(bottomLeftPoint.x(), bottomY,
                 bottomRightPoint.x(), bottomY);
 
-    // visiblity icon vertical line - left
+    // visibility icon vertical line - left
     p->drawLine(visibilityRect.topLeft().x()-1, topY,
                 visibilityRect.bottomLeft().x()-1, bottomY);
 
-    // visiblity icon vertical line - right
+    // visibility icon vertical line - right
     p->drawLine(visibilityRect.topRight().x()+1, topY,
                 visibilityRect.bottomRight().x()+1, bottomY);
 

@@ -169,8 +169,6 @@ void KisTangentTiltOption::apply(const KisPaintInformation& info,qreal *r,qreal 
         elevation= (info.tiltElevation(info, 60.0, 60.0, true)*90.0);
     }
 
-    const qreal oldDirection = direction;
-
     //subtract/add the rotation of the canvas.
     if (directionType() != 1) {
         direction = normalizeAngleDegrees(direction - info.canvasRotation());

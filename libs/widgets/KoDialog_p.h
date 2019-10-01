@@ -22,7 +22,7 @@
 
 #include "KoDialog.h"
 #include <QPointer>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 #include <QSize>
 #include <QHash>
 

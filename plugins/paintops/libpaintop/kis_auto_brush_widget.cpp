@@ -113,7 +113,11 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     KisCubicCurve topLeftBottomRightLinearCurve;
     topLeftBottomRightLinearCurve.setPoint(0, QPointF(0.0, 1.0));
     topLeftBottomRightLinearCurve.setPoint(1, QPointF(1.0, 0.0));
+
+    bool blockedBefore = softnessCurve->blockSignals(true);
     softnessCurve->setCurve(topLeftBottomRightLinearCurve);
+    softnessCurve->blockSignals(blockedBefore);
+
     connect(softnessCurve, SIGNAL(modified()), m_updateCompressor.data(), SLOT(start()));
 
     m_brush = QImage(1, 1, QImage::Format_RGB32);

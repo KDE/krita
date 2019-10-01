@@ -38,7 +38,6 @@
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QRadioButton>
-#include <QGroupBox>
 #include <QMdiArea>
 #include <QMessageBox>
 #include <QDesktopWidget>
@@ -525,7 +524,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
 
     QFormLayout *monitorProfileGrid = new QFormLayout(m_page->monitorprofileholder);
-    for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+    for(int i = 0; i < QGuiApplication::screens().count(); ++i) {
         QLabel *lbl = new QLabel(i18nc("The number of the screen", "Screen %1:", i + 1));
         m_monitorProfileLabels << lbl;
         KisSqueezedComboBox *cmb = new KisSqueezedComboBox();
@@ -543,7 +542,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     refillMonitorProfiles(KoID("RGBA"));
 
-    for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+    for(int i = 0; i < QApplication::screens().count(); ++i) {
         if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
             m_monitorProfileWidgets[i]->setCurrent(cfg.monitorProfile(i));
         }
@@ -615,7 +614,7 @@ void ColorSettingsTab::installProfile()
     KisConfig cfg(true);
     refillMonitorProfiles(KoID("RGBA"));
 
-    for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+    for(int i = 0; i < QApplication::screens().count(); ++i) {
         if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
             m_monitorProfileWidgets[i]->setCurrent(cfg.monitorProfile(i));
         }
@@ -629,8 +628,8 @@ void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
 
     if (useSystemProfile) {
         QStringList devices = KisColorManager::instance()->devices();
-        if (devices.size() == QApplication::desktop()->screenCount()) {
-            for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+        if (devices.size() == QApplication::screens().count()) {
+            for(int i = 0; i < QApplication::screens().count(); ++i) {
                 m_monitorProfileWidgets[i]->clear();
                 QString monitorForScreen = cfg.monitorForScreen(i, devices[i]);
                 Q_FOREACH (const QString &device, devices) {
@@ -646,7 +645,7 @@ void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
     else {
         refillMonitorProfiles(KoID("RGBA"));
 
-        for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+        for(int i = 0; i < QApplication::screens().count(); ++i) {
             if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
                 m_monitorProfileWidgets[i]->setCurrent(cfg.monitorProfile(i));
             }
@@ -691,7 +690,7 @@ void ColorSettingsTab::setDefault()
 
 void ColorSettingsTab::refillMonitorProfiles(const KoID & colorSpaceId)
 {
-    for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+    for (int i = 0; i < QApplication::screens().count(); ++i) {
         m_monitorProfileWidgets[i]->clear();
     }
 
@@ -703,13 +702,13 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & colorSpaceId)
     Q_FOREACH (const KoColorProfile *profile, profileList.values()) {
         //qDebug() << "Profile" << profile->name() << profile->isSuitableForDisplay() << csf->defaultProfile();
         if (profile->isSuitableForDisplay()) {
-            for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+            for (int i = 0; i < QApplication::screens().count(); ++i) {
                 m_monitorProfileWidgets[i]->addSqueezedItem(profile->name());
             }
         }
     }
 
-    for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+    for (int i = 0; i < QApplication::screens().count(); ++i) {
         m_monitorProfileLabels[i]->setText(i18nc("The number of the screen", "Screen %1:", i + 1));
         m_monitorProfileWidgets[i]->setCurrent(KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId.id()));
     }
@@ -901,7 +900,7 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
 
     sliderThreadsLimit->setRange(1, QThread::idealThreadCount());
     sliderFrameClonesLimit->setRange(1, QThread::idealThreadCount());
-    sliderFpsLimit->setRange(20, 100);
+    sliderFpsLimit->setRange(20, 300);
     sliderFpsLimit->setSuffix(i18n(" fps"));
 
     connect(sliderThreadsLimit, SIGNAL(valueChanged(int)), SLOT(slotThreadsLimitChanged(int)));
@@ -1238,6 +1237,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 
 #ifndef HAVE_HDR
     grpHDRSettings->setVisible(false);
+    tabWidget->removeTab(tabWidget->indexOf(tabHDR));
 #endif
 
     const QStringList openglWarnings = KisOpenGL::getOpenGLWarnings();
@@ -1657,7 +1657,7 @@ bool KisDlgPreferences::editPreferences()
 
         // Color settings
         cfg.setUseSystemMonitorProfile(dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
-        for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
+        for (int i = 0; i < QApplication::screens().count(); ++i) {
             if (dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked()) {
                 int currentIndex = dialog->m_colorSettings->m_monitorProfileWidgets[i]->currentIndex();
                 QString monitorid = dialog->m_colorSettings->m_monitorProfileWidgets[i]->itemData(currentIndex).toString();

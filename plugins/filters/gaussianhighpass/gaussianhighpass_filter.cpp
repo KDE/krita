@@ -38,7 +38,6 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <KoMixColorsOp.h>
-#include <kis_paint_device.h>
 #include "kis_lod_transform.h"
 #include <KoCompositeOpRegistry.h>
 

@@ -59,7 +59,15 @@ public:
     bool isStillInGraph() const;
     bool hasClones() const;
 
-    bool isDroppedMask() const;
+    bool isDroppedNode() const;
+
+    enum NodeDropReason {
+        NodeAvailable,
+        DropPassThroughMask,
+        DropPassThroughClone
+    };
+    NodeDropReason dropReason() const;
+
     bool isOverlayProjectionLeaf() const;
 
     /**

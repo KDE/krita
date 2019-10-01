@@ -1204,7 +1204,7 @@ void KToolBar::mouseMoveEvent(QMouseEvent *event)
 
     drag->setMimeData(mimeData);
 
-    Qt::DropAction dropAction = drag->start(Qt::MoveAction);
+    Qt::DropAction dropAction = drag->exec(Qt::MoveAction);
 
     if (dropAction == Qt::MoveAction)
         // Only remove from this toolbar if it was moved to another toolbar

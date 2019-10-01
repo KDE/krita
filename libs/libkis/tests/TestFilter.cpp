@@ -49,14 +49,14 @@ void TestFilter::testApply()
     image->addNode(layer);
     kisdoc->setCurrentImage(image);
     Document d(kisdoc);
-    Node node(image, layer);
+    NodeSP node = NodeSP(Node::createNode(image, layer));
 
     Filter f;
     f.setName("invert");
     QVERIFY(f.configuration());
 
     d.lock();
-    f.apply(&node, 0, 0, 100, 100);
+    f.apply(node.data(), 0, 0, 100, 100);
     d.unlock();
     d.refreshProjection();
 
@@ -80,13 +80,13 @@ void TestFilter::testStartFilter()
     image->addNode(layer);
     kisdoc->setCurrentImage(image);
     Document d(kisdoc);
-    Node node(image, layer);
+    NodeSP node = NodeSP(Node::createNode(image, layer));
 
     Filter f;
     f.setName("invert");
     QVERIFY(f.configuration());
 
-    f.startFilter(&node, 0, 0, 100, 100);
+    f.startFilter(node.data(), 0, 0, 100, 100);
     image->waitForDone();
 
     for (int i = 0; i < 100 ; i++) {

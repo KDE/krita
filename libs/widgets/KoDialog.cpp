@@ -24,9 +24,7 @@
 #include "KoDialog_p.h"
 
 #include <QApplication>
-#include <QScreen>
 #include <QGuiApplication>
-#include <QDesktopWidget>
 #include <QDialogButtonBox>
 #include <QHBoxLayout>
 #include <QHideEvent>
@@ -548,99 +546,6 @@ void KoDialog::resizeLayout(QLayout *layout, int margin, int spacing)   //static
         layout->layout()->setMargin(margin);
         layout->layout()->setSpacing(spacing);
     }
-}
-
-static QRect screenRect(QWidget *widget, int screen)
-{
-    QDesktopWidget *desktop = QApplication::desktop();
-    KConfig gc("kdeglobals", KConfig::NoGlobals);
-    KConfigGroup cg(&gc, "Windows");
-    if (desktop->isVirtualDesktop() &&
-            cg.readEntry("XineramaEnabled", true) &&
-            cg.readEntry("XineramaPlacementEnabled", true)) {
-
-        if (screen < 0 || screen >= desktop->numScreens()) {
-            if (screen == -1) {
-                screen = desktop->primaryScreen();
-            } else if (screen == -3) {
-                screen = desktop->screenNumber(QCursor::pos());
-            } else {
-                screen = desktop->screenNumber(widget);
-            }
-        }
-
-        return desktop->availableGeometry(screen);
-    } else {
-        return desktop->geometry();
-    }
-}
-
-void KoDialog::centerOnScreen(QWidget *widget, int screen)
-{
-    if (!widget) {
-        return;
-    }
-
-    QRect rect = screenRect(widget, screen);
-
-    widget->move(rect.center().x() - widget->width() / 2,
-                 rect.center().y() - widget->height() / 2);
-}
-
-bool KoDialog::avoidArea(QWidget *widget, const QRect &area, int screen)
-{
-    if (!widget) {
-        return false;
-    }
-
-    QRect fg = widget->frameGeometry();
-    if (!fg.intersects(area)) {
-        return true;    // nothing to do.
-    }
-
-    const QRect scr = screenRect(widget, screen);
-    QRect avoid(area);   // let's add some margin
-    avoid.translate(-5, -5);
-    avoid.setRight(avoid.right() + 10);
-    avoid.setBottom(avoid.bottom() + 10);
-
-    if (qMax(fg.top(), avoid.top()) <= qMin(fg.bottom(), avoid.bottom())) {
-        // We need to move the widget up or down
-        int spaceAbove = qMax(0, avoid.top() - scr.top());
-        int spaceBelow = qMax(0, scr.bottom() - avoid.bottom());
-        if (spaceAbove > spaceBelow)   // where's the biggest side?
-            if (fg.height() <= spaceAbove) { // big enough?
-                fg.setY(avoid.top() - fg.height());
-            } else {
-                return false;
-            }
-        else if (fg.height() <= spaceBelow) { // big enough?
-            fg.setY(avoid.bottom());
-        } else {
-            return false;
-        }
-    }
-
-    if (qMax(fg.left(), avoid.left()) <= qMin(fg.right(), avoid.right())) {
-        // We need to move the widget left or right
-        const int spaceLeft = qMax(0, avoid.left() - scr.left());
-        const int spaceRight = qMax(0, scr.right() - avoid.right());
-        if (spaceLeft > spaceRight)   // where's the biggest side?
-            if (fg.width() <= spaceLeft) { // big enough?
-                fg.setX(avoid.left() - fg.width());
-            } else {
-                return false;
-            }
-        else if (fg.width() <= spaceRight) { // big enough?
-            fg.setX(avoid.right());
-        } else {
-            return false;
-        }
-    }
-
-    widget->move(fg.x(), fg.y());
-
-    return true;
 }
 
 void KoDialog::showButtonSeparator(bool state)

@@ -20,9 +20,8 @@
 
 #include <QStandardPaths>
 #include <QMessageBox>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 #include <QApplication>
-#include <QMessageBox>
 
 #include <kactioncollection.h>
 
@@ -123,8 +122,8 @@ struct KisNodeManager::Private {
 
     bool activateNodeImpl(KisNodeSP node);
 
-    QSignalMapper nodeCreationSignalMapper;
-    QSignalMapper nodeConversionSignalMapper;
+    KisSignalMapper nodeCreationSignalMapper;
+    KisSignalMapper nodeConversionSignalMapper;
 
     bool lastRequestedIsolatedModeStatus;
 

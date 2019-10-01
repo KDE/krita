@@ -26,6 +26,10 @@
 #include "kis_layer_utils.h"
 #include "krita_utils.h"
 
+#include "KisRunnableStrokeJobData.h"
+#include "KisRunnableStrokeJobUtils.h"
+#include "KisRunnableStrokeJobsInterface.h"
+
 
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeList nodes,
                                        KisUpdatesFacade *updatesFacade,
@@ -89,17 +93,35 @@ void MoveStrokeStrategy::saveInitialNodeOffsets(KisNodeSP node)
 
 void MoveStrokeStrategy::initStrokeCallback()
 {
-    QRect handlesRect;
+    QVector<KisRunnableStrokeJobData*> jobs;
 
-    Q_FOREACH(KisNodeSP node, m_nodes) {
-        saveInitialNodeOffsets(node);
-        handlesRect |= node->exactBounds();
-    }
+    KritaUtils::addJobBarrier(jobs, [this]() {
+        Q_FOREACH(KisNodeSP node, m_nodes) {
+            KisLayerUtils::forceAllHiddenOriginalsUpdate(node);
+        }
+    });
 
-    KisStrokeStrategyUndoCommandBased::initStrokeCallback();
+    KritaUtils::addJobBarrier(jobs, [this]() {
+        Q_FOREACH(KisNodeSP node, m_nodes) {
+            KisLayerUtils::forceAllDelayedNodesUpdate(node);
+        }
+    });
 
-    emit sigHandlesRectCalculated(handlesRect);
-    m_updateTimer.start();
+    KritaUtils::addJobBarrier(jobs, [this]() {
+        QRect handlesRect;
+
+        Q_FOREACH(KisNodeSP node, m_nodes) {
+            saveInitialNodeOffsets(node);
+            handlesRect |= KisLayerUtils::recursiveNodeExactBounds(node);
+        }
+
+        KisStrokeStrategyUndoCommandBased::initStrokeCallback();
+
+        emit this->sigHandlesRectCalculated(handlesRect);
+        m_updateTimer.start();
+    });
+
+    runnableJobsInterface()->addRunnableJobs(jobs);
 }
 
 void MoveStrokeStrategy::finishStrokeCallback()

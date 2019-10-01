@@ -35,6 +35,7 @@ set(kritaglobal_LIB_SRCS
     KisDeleteLaterWrapper.cpp
     KisUsageLogger.cpp
     KisFileUtils.cpp
+    KisSignalMapper.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )

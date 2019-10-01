@@ -64,6 +64,12 @@ bool Selection::operator!=(const Selection &other) const
     return !(operator==(other));
 }
 
+Selection *Selection::duplicate() const
+{
+    return new Selection(d->selection ? new KisSelection(*d->selection)
+                         : new KisSelection());
+}
+
 int Selection::width() const
 {
     if (!d->selection) return 0;

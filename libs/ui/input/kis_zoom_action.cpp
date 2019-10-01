@@ -208,9 +208,11 @@ void KisZoomAction::inputEvent( QEvent* event )
             Q_FOREACH (const QTouchEvent::TouchPoint &point, tevent->touchPoints()) {
                 if (point.state() != Qt::TouchPointReleased) {
                     count++;
-
                     dist += (point.pos() - center).manhattanLength();
                 }
+            }
+            if (count == 0) {
+                count = 1;
             }
 
             dist /= count;

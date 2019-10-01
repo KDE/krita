@@ -45,6 +45,7 @@
 #include "kis_assert.h"
 #include <QRegularExpression>
 #include <QSettings>
+#include <QScreen>
 
 #ifndef GL_RENDERER
 #  define GL_RENDERER 0x1F01
@@ -208,7 +209,7 @@ void KisOpenGL::initialize()
     if (openGLCheckResult->vendorString().toUpper().contains("NVIDIA")) {
         g_needsPixmapCacheWorkaround = true;
 
-        const QRect screenSize = QApplication::desktop()->screenGeometry();
+        const QRect screenSize = QGuiApplication::primaryScreen()->availableGeometry();
         const int minCacheSize = 20 * 1024;
         const int cacheSize = 2048 + 2 * 4 * screenSize.width() * screenSize.height() / 1024; //KiB
 
@@ -449,7 +450,7 @@ KisOpenGL::RendererConfig generateSurfaceConfig(KisOpenGL::OpenGLRenderer render
 #ifdef Q_OS_MACOS
     format.setVersion(3, 2);
     format.setProfile(QSurfaceFormat::CoreProfile);
-#else
+#elif !defined(Q_OS_ANDROID)
     // XXX This can be removed once we move to Qt5.7
     format.setVersion(3, 0);
     format.setProfile(QSurfaceFormat::CompatibilityProfile);

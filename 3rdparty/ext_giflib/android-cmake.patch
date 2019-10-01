@@ -1,0 +1,22 @@
+--- /dev/null
++++ b/CMakeLists.txt
+@@ -0,0 +1,19 @@
++cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)
++
++add_library (gif SHARED
++	lib/dgif_lib.c
++	lib/egif_lib.c
++	lib/gifalloc.c
++	lib/gif_err.c
++	lib/gif_font.c
++	lib/gif_hash.c
++	lib/openbsd-reallocarray.c
++	lib/quantize.c
++)
++
++add_definitions (-DSIZE_MAX=0xffffffff -DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -DS_IEXEC=S_IXUSR)
++
++
++install (TARGETS gif LIBRARY DESTINATION lib)
++install (FILES lib/gif_lib.h DESTINATION include)
++

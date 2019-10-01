@@ -172,10 +172,10 @@ void KoColor::setColor(const quint8 * data, const KoColorSpace * colorSpace)
 {
     Q_ASSERT(colorSpace);
 
-    const size_t size = colorSpace->pixelSize();
-    Q_ASSERT(size <= MAX_PIXEL_SIZE);
+    m_size = colorSpace->pixelSize();
+    Q_ASSERT(m_size <= MAX_PIXEL_SIZE);
 
-    memcpy(m_data, data, size);
+    memcpy(m_data, data, m_size);
     m_colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(colorSpace);
 }
 

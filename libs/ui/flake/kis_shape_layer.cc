@@ -484,6 +484,11 @@ bool KisShapeLayer::hasPendingTimedUpdates() const
     return m_d->canvas->hasPendingUpdates();
 }
 
+void KisShapeLayer::forceUpdateHiddenAreaOnOriginal()
+{
+    m_d->canvas->forceRepaintWithHiddenAreas();
+}
+
 bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, const QSizeF &sizeInPt)
 {
     if (!store->open("content.svg")) {

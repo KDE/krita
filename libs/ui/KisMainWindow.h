@@ -86,11 +86,10 @@ public:
     QUuid id() const;
 
     /**
-     * @brief showView shows the given view. Override this if you want to show
-     * the view in a different way than by making it the central widget, for instance
-     * as an QMdiSubWindow
+     * @brief showView shows the given view, in @p subWindow if not
+     * null, in a new tab otherwise.
      */
-    virtual void showView(KisView *view);
+    virtual void showView(KisView *view, QMdiSubWindow *subWindow = 0);
 
     /**
      * @returns the currently active view
@@ -111,12 +110,6 @@ public:
      * get list of URL strings for recent files
      */
     QList<QUrl> recentFilesUrls();
-
-    /**
-     * clears the list of the recent files
-     */
-    void clearRecentFiles();
-
     /**
      * removes the given url from the list of recent files
      */
@@ -188,7 +181,8 @@ public:
 
     KisViewManager *viewManager() const;
 
-    KisView *addViewAndNotifyLoadingCompleted(KisDocument *document);
+    KisView *addViewAndNotifyLoadingCompleted(KisDocument *document,
+                                              QMdiSubWindow *subWindow = 0);
 
     QStringList showOpenFileDialog(bool isImporting);
 
@@ -241,6 +235,13 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
+
+    /**
+     * clears the list of the recent files
+     */
+    void clearRecentFiles();
+
+
     /**
      *  Slot for opening a new document.
      *
@@ -292,7 +293,7 @@ public Q_SLOTS:
      */
     void newOptionWidgets(KoCanvasController *controller, const QList<QPointer<QWidget> > & optionWidgetList);
 
-    KisView *newView(QObject *document);
+    KisView *newView(QObject *document, QMdiSubWindow *subWindow = 0);
 
     void notifyChildViewDestroyed(KisView *view);
 
@@ -313,6 +314,8 @@ public Q_SLOTS:
      */
     void setCanvasDetached(bool detached);
 
+    void slotFileSelected(QString path);
+    void slotEmptyFilePath();
 private Q_SLOTS:
     /**
      * Save the list of recent files.
@@ -434,6 +437,8 @@ private Q_SLOTS:
 
     void windowScreenChanged(QScreen *screen);
 
+    void slotXmlGuiMakingChanges(bool finished);
+
 protected:
 
     void closeEvent(QCloseEvent * e) override;
@@ -454,7 +459,7 @@ private:
      * This is a private implementation. For public usage please use
      * newView() and addViewAndNotifyLoadingCompleted().
      */
-    void addView(KisView *view);
+    void addView(KisView *view, QMdiSubWindow *subWindow = 0);
 
     friend class KisPart;
 
@@ -508,7 +513,6 @@ private:
 
     QString m_errorMessage;
     bool m_dieOnError;
-
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisMainWindow::OpenFlags)

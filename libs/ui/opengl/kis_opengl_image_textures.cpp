@@ -18,7 +18,13 @@
 
 #include "opengl/kis_opengl_image_textures.h"
 
+#ifdef HAS_ONLY_OPENGL_ES
+#include <qopengl.h>
+#endif
+
+#ifndef HAS_ONLY_OPENGL_ES
 #include <QOpenGLFunctions>
+#endif
 #include <QOpenGLContext>
 
 #include <QMessageBox>
@@ -139,8 +145,8 @@ bool KisOpenGLImageTextures::imageCanShareTextures()
     KisConfig cfg(true);
     if (cfg.useOcio()) return false;
     if (KisPart::instance()->mainwindowCount() == 1) return true;
-    if (qApp->desktop()->screenCount() == 1) return true;
-    for (int i = 1; i < qApp->desktop()->screenCount(); i++) {
+    if (QGuiApplication::screens().count() == 1) return true;
+    for (int i = 1; i < QGuiApplication::screens().count(); i++) {
         if (cfg.displayProfile(i) != cfg.displayProfile(i - 1)) {
             return false;
         }
@@ -297,6 +303,9 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
         if (checkImage.width() != BACKGROUND_TEXTURE_SIZE || checkImage.height() != BACKGROUND_TEXTURE_SIZE) {
             img = checkImage.scaled(BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE);
         }
+#ifdef HAS_ONLY_OPENGL_ES
+        GLint format = GL_RGBA, internalFormat = GL_RGBA8;
+#else
         GLint format = GL_BGRA, internalFormat = GL_RGBA8;
         if (KisOpenGL::hasOpenGLES()) {
             if (ctx->hasExtension(QByteArrayLiteral("GL_EXT_texture_format_BGRA8888"))) {
@@ -306,6 +315,7 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
                 format = GL_RGBA;
             }
         }
+#endif
         f->glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
                         0, format, GL_UNSIGNED_BYTE, img.constBits());
     }
@@ -458,12 +468,18 @@ void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesI
         texturesInfo.internalFormat = GL_RGBA16F;
         dbgUI << "Using half (GLES or GL3)";
     } else if (ctx->hasExtension("GL_ARB_texture_float")) {
+#ifndef HAS_ONLY_OPENGL_ES
         texturesInfo.internalFormat = GL_RGBA16F_ARB;
         dbgUI << "Using ARB half";
     }
     else if (ctx->hasExtension("GL_ATI_texture_float")) {
         texturesInfo.internalFormat = GL_RGBA_FLOAT16_ATI;
         dbgUI << "Using ATI half";
+#else
+        KIS_ASSERT_X(false, "initializeRGBA16FTextures",
+                "Unexpected KisOpenGL::hasOpenGLES and \
+                 KisOpenGL::hasOpenGL3 returned false");
+#endif
     }
 
     bool haveBuiltInOpenExr = false;
@@ -476,6 +492,7 @@ void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesI
         destinationColorDepthId = Float16BitsColorDepthID;
         dbgUI << "Pixel type half (GLES or GL3)";
     } else if (haveBuiltInOpenExr && ctx->hasExtension("GL_ARB_half_float_pixel")) {
+#ifndef HAS_ONLY_OPENGL_ES
         texturesInfo.type = GL_HALF_FLOAT_ARB;
         destinationColorDepthId = Float16BitsColorDepthID;
         dbgUI << "Pixel type half";
@@ -483,6 +500,11 @@ void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesI
         texturesInfo.type = GL_FLOAT;
         destinationColorDepthId = Float32BitsColorDepthID;
         dbgUI << "Pixel type float";
+#else
+        KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",
+                "Unexpected KisOpenGL::hasOpenGLES and \
+                 KisOpenGL::hasOpenGL3 returned false");
+#endif
     }
     texturesInfo.format = GL_RGBA;
 }
@@ -494,10 +516,20 @@ void KisOpenGLImageTextures::updateTextureFormat()
     if (!(m_image && ctx)) return;
 
     if (!KisOpenGL::hasOpenGLES()) {
+#ifndef HAS_ONLY_OPENGL_ES
         m_texturesInfo.internalFormat = GL_RGBA8;
         m_texturesInfo.type = GL_UNSIGNED_BYTE;
         m_texturesInfo.format = GL_BGRA;
+#else
+        KIS_ASSERT_X(false, "KisOpenGLImageTextures::updateTextureFormat",
+                "Unexpected KisOpenGL::hasOpenGLES returned false");
+#endif
     } else {
+#ifdef HAS_ONLY_OPENGL_ES
+        m_texturesInfo.internalFormat = GL_RGBA8;
+        m_texturesInfo.type = GL_UNSIGNED_BYTE;
+        m_texturesInfo.format = GL_RGBA;
+#else
         m_texturesInfo.internalFormat = GL_BGRA8_EXT;
         m_texturesInfo.type = GL_UNSIGNED_BYTE;
         m_texturesInfo.format = GL_BGRA_EXT;
@@ -508,6 +540,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
             m_texturesInfo.type = GL_UNSIGNED_BYTE;
             m_texturesInfo.format = GL_RGBA;
         }
+#endif
     }
 
     const bool useHDRMode = KisOpenGLModeProber::instance()->useHDRMode();
@@ -528,11 +561,17 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 m_texturesInfo.internalFormat = GL_RGBA32F;
                 dbgUI << "Using float (GLES or GL3)";
             } else if (ctx->hasExtension("GL_ARB_texture_float")) {
+#ifndef HAS_ONLY_OPENGL_ES
                 m_texturesInfo.internalFormat = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";
             } else if (ctx->hasExtension("GL_ATI_texture_float")) {
                 m_texturesInfo.internalFormat = GL_RGBA_FLOAT32_ATI;
                 dbgUI << "Using ATI float";
+#else
+        KIS_ASSERT_X(false, "KisOpenGLCanvas2::updateTextureFormat",
+                "Unexpected KisOpenGL::hasOpenGLES and \
+                 KisOpenGL::hasOpenGL3 returned false");
+#endif
             }
 
             m_texturesInfo.type = GL_FLOAT;
@@ -540,6 +579,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
             destinationColorDepthId = Float32BitsColorDepthID;
         }
         else if (colorDepthId == Integer16BitsColorDepthID) {
+#ifndef HAS_ONLY_OPENGL_ES
             if (!KisOpenGL::hasOpenGLES()) {
                 m_texturesInfo.internalFormat = GL_RGBA16;
                 m_texturesInfo.type = GL_UNSIGNED_SHORT;
@@ -547,17 +587,23 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 destinationColorDepthId = Integer16BitsColorDepthID;
                 dbgUI << "Using 16 bits rgba";
             }
+#endif
             // TODO: for ANGLE, see if we can convert to 16f to support 10-bit display
         }
     }
     else {
         // We will convert the colorspace to 16 bits rgba, instead of 8 bits
         if (colorDepthId == Integer16BitsColorDepthID && !KisOpenGL::hasOpenGLES()) {
+#ifndef HAS_ONLY_OPENGL_ES
             m_texturesInfo.internalFormat = GL_RGBA16;
             m_texturesInfo.type = GL_UNSIGNED_SHORT;
             m_texturesInfo.format = GL_BGRA;
             destinationColorDepthId = Integer16BitsColorDepthID;
             dbgUI << "Using conversion to 16 bits rgba";
+#else
+            KIS_ASSERT_X(false, "KisOpenGLCanvas2::updateTextureFormat",
+                    "Unexpected KisOpenGL::hasOpenGLES returned false");
+#endif
         } else if (colorDepthId == Float16BitsColorDepthID && KisOpenGL::hasOpenGLES()) {
             // TODO: try removing opengl es limit
             initializeRGBA16FTextures(ctx, m_texturesInfo, destinationColorDepthId);
@@ -572,12 +618,8 @@ void KisOpenGLImageTextures::updateTextureFormat()
         KisConfig::OcioColorManagementMode cm = cfg.ocioColorManagementMode();
 
         if (cm != KisConfig::INTERNAL) {
-            QMessageBox::critical(0,
-                                  i18nc("@title:window", "Krita"),
-                                  i18n("You enabled OpenColorIO based color management, but your image is not an RGB image.\n"
-                                       "OpenColorIO-based color management only works with RGB images.\n"
-                                       "Please check the settings in the LUT docker.\n"
-                                       "OpenColorIO will now be deactivated."));
+            emit sigShowFloatingMessage(
+                i18n("OpenColorIO is disabled: image color space is not supported"), 5000, true);
         }
 
         warnUI << "WARNING: Internal color management was forcibly enabled";

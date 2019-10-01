@@ -1,7 +1,7 @@
-From 71466f90b0b554987a60e5c797d38d6c28f8ebef Mon Sep 17 00:00:00 2001
+From e0556c3526f9f082758a57426d94796992904320 Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Sat, 13 Apr 2019 23:24:01 +0300
-Subject: [PATCH 13/17] Fetch mapped screen size from the Wintab driver
+Subject: [PATCH 07/19] Fetch mapped screen size from the Wintab driver
 
 Some devices, like Microsoft Surface Pro 5, don't map tablet's
 input range to the entire virtual screen area, but map it to

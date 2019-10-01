@@ -412,7 +412,7 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
         }
         // XXX: Save the style?
 
-    } else if (parent->isRootTextNode()) {
+    } else if (parent && parent->isRootTextNode()) {
         context.shapeWriter().startElement("p", false);
     } else {
         context.shapeWriter().startElement("span", false);
@@ -651,7 +651,7 @@ bool KoSvgTextChunkShape::loadSvg(const KoXmlElement &e, SvgLoadingContext &cont
 namespace {
 
 QString cleanUpString(QString text) {
-    text.replace(QRegExp("[\\r\\n]"), "");
+    text.replace(QRegExp("[\\r\\n\u2028]"), "");
     text.replace(QRegExp(" {2,}"), " ");
     return text;
 }

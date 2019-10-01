@@ -122,12 +122,14 @@ void blendAndOffsetSatinSelection(KisPixelSelectionSP dstSelection,
         quint8 *src2PixelPtr = srcIt2.rawData();
 
         if (!invert) {
-            *dstPixelPtr = *dstPixelPtr * qAbs(*src1PixelPtr - *src2PixelPtr) >> 8;
+            *dstPixelPtr = qAbs(*src1PixelPtr - *src2PixelPtr);
         } else {
-            *dstPixelPtr = *dstPixelPtr * (255 - qAbs(*src1PixelPtr - *src2PixelPtr)) >> 8;
+            *dstPixelPtr = (255 - qAbs(*src1PixelPtr - *src2PixelPtr));
         }
     }
 }
+
+//#include "kis_paint_device_debug_utils.h"
 
 void applySatin(KisPaintDeviceSP srcDevice,
                 KisMultipleProjection *dst,
@@ -145,18 +147,13 @@ void applySatin(KisPaintDeviceSP srcDevice,
 
     KisPixelSelectionSP selection = baseSelection->pixelSelection();
 
-    //selection->convertToQImage(0, QRect(0,0,300,300)).save("0_selection_initial.png");
-
-    KisPixelSelectionSP knockOutSelection = new KisPixelSelection(*selection);
-    knockOutSelection->invert();
-
-    //knockOutSelection->convertToQImage(0, QRect(0,0,300,300)).save("1_saved_knockout_selection.png");
-
     KisPixelSelectionSP tempSelection = new KisPixelSelection(*selection);
+
+    //KIS_DUMP_DEVICE_2(tempSelection, QRect(0,0,64,64), "00_selection", "dd");
 
     KisLsUtils::applyGaussianWithTransaction(tempSelection, d.satinNeedRect, d.blur_size);
 
-    //tempSelection->convertToQImage(0, QRect(0,0,300,300)).save("2_selection_blurred.png");
+    //KIS_DUMP_DEVICE_2(tempSelection, QRect(0,0,64,64), "01_gauss", "dd");
 
     /**
      * Contour correction
@@ -167,7 +164,7 @@ void applySatin(KisPaintDeviceSP srcDevice,
                                        config->antiAliased(),
                                        config->edgeHidden());
 
-    //tempSelection->convertToQImage(0, QRect(0,0,300,300)).save("3_selection_contour.png");
+    //KIS_DUMP_DEVICE_2(tempSelection, QRect(0,0,64,64), "02_contour", "dd");
 
     blendAndOffsetSatinSelection(selection,
                                  tempSelection,
@@ -175,20 +172,7 @@ void applySatin(KisPaintDeviceSP srcDevice,
                                  d.offset,
                                  d.dstRect);
 
-    //selection->convertToQImage(0, QRect(0,0,300,300)).save("3_selection_satin_applied.png");
-
-    /**
-     * Knock-out original outline of the device from the resulting shade
-     */
-    if (config->knocksOut()) {
-        KisLsUtils::knockOutSelection(selection,
-                                      knockOutSelection,
-                                      d.srcRect,
-                                      d.dstRect,
-                                      d.finalNeedRect(),
-                                      config->invertsSelection());
-    }
-    //selection->convertToQImage(0, QRect(0,0,300,300)).save("5_selection_knocked_out.png");
+    //KIS_DUMP_DEVICE_2(selection, QRect(0,0,64,64), "03_blended", "dd");
 
     KisLsUtils::applyFinalSelection(KisMultipleProjection::defaultProjectionId(),
                                     baseSelection,
@@ -199,8 +183,6 @@ void applySatin(KisPaintDeviceSP srcDevice,
                                     context,
                                     config,
                                     env);
-
-    //dstDevice->convertToQImage(0, QRect(0,0,300,300)).save("6_dst_final.png");
 }
 
 void KisLsSatinFilter::processDirectly(KisPaintDeviceSP src,

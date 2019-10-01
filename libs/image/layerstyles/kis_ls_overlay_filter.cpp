@@ -71,11 +71,8 @@ void KisLsOverlayFilter::applyOverlay(KisPaintDeviceSP srcDevice,
 {
     if (applyRect.isEmpty()) return;
 
-    KisPaintDeviceSP overlayDevice = m_cachedDevices.getDevice(srcDevice);
-    KisLsUtils::fillOverlayDevice(overlayDevice, applyRect, config, env);
-
     const QString compositeOp = config->blendMode();
-    const quint8 opacityU8 = 255.0 / 100.0 * config->opacity();
+    const quint8 opacityU8 = quint8(qRound(255.0 / 100.0 * config->opacity()));
 
     KisPaintDeviceSP dstDevice = dst->getProjection(KisMultipleProjection::defaultProjectionId(),
                                                     compositeOp,
@@ -83,17 +80,7 @@ void KisLsOverlayFilter::applyOverlay(KisPaintDeviceSP srcDevice,
                                                     QBitArray(),
                                                     srcDevice);
 
-    KisPainter::copyAreaOptimized(applyRect.topLeft(), srcDevice, dstDevice, applyRect);
-
-    KisPainter gc(dstDevice);
-    gc.setCompositeOp(COMPOSITE_OVER);
-
-    const QBitArray channelFlags = srcDevice->colorSpace()->channelFlags(true, false);
-    gc.setChannelFlags(channelFlags);
-    gc.bitBlt(applyRect.topLeft(), overlayDevice, applyRect);
-    gc.end();
-
-    m_cachedDevices.putDevice(overlayDevice);
+    KisLsUtils::fillOverlayDevice(dstDevice, applyRect, config, env);
 }
 
 const psd_layer_effects_overlay_base*

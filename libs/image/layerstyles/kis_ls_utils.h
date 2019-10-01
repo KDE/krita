@@ -20,6 +20,7 @@
 #define __KIS_LS_UTILS_H
 
 #include "kis_types.h"
+#include "kritaimage_export.h"
 
 #include "kis_lod_transform.h"
 
@@ -37,8 +38,8 @@ namespace KisLsUtils
 
     QRect growSelectionUniform(KisPixelSelectionSP selection, int growSize, const QRect &applyRect);
 
-    KisSelectionSP selectionFromAlphaChannel(KisPaintDeviceSP device,
-                                             const QRect &srcRect);
+    KRITAIMAGE_EXPORT KisSelectionSP selectionFromAlphaChannel(KisPaintDeviceSP device,
+                                                               const QRect &srcRect);
 
     void findEdge(KisPixelSelectionSP selection, const QRect &applyRect, const bool edgeHidden);
     QRect growRectFromRadius(const QRect &rc, int radius);

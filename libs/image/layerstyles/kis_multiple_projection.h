@@ -44,6 +44,8 @@ public:
 
     KisPaintDeviceList getLodCapableDevices() const;
 
+    bool isEmpty() const;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

@@ -108,6 +108,11 @@ KisPaintDeviceList KisLayerStyleFilterProjectionPlane::getLodCapableDevices() co
     return m_d->projection.getLodCapableDevices();
 }
 
+bool KisLayerStyleFilterProjectionPlane::isEmpty() const
+{
+    return m_d->projection.isEmpty();
+}
+
 QRect KisLayerStyleFilterProjectionPlane::needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
 {
     if (!m_d->sourceLayer || !m_d->filter) {

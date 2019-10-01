@@ -159,6 +159,26 @@ void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
         if(!image()->bounds().contains(temp.toPoint())){
             return;
         }
+
+        checkIfAnchorIsSelected(temp);
+
+        if(m_selected){
+            int prev = m_selectedAnchor == 0 ? m_anchorPoints.count() - 1 : m_selectedAnchor - 1;
+            QPoint currentAnchor  = m_anchorPoints[m_selectedAnchor];
+            QPoint previousAnchor = m_anchorPoints[prev];
+            QPoint nextAnchor     = m_anchorPoints[(m_selectedAnchor + 1) % m_anchorPoints.count()];
+
+            m_anchorPoints.remove(m_selectedAnchor);
+            m_pointCollection[prev] = computeEdgeWrapper(previousAnchor, nextAnchor);
+            m_pointCollection.remove(m_selectedAnchor);
+
+            if (m_selectedAnchor == 0)
+                m_snapBound.moveCenter(m_anchorPoints.first());
+            m_selected = false;
+            reEvaluatePoints();
+            return;
+        }
+
         int pointA = 0, pointB = 1;
         double dist = std::numeric_limits<double>::max();
         int total   = m_anchorPoints.count();
@@ -196,23 +216,21 @@ void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
 {
     if (m_selected) {
-        auto checkIfZero = [ = ](){
-                               return m_selectedAnchor == 0 ? m_anchorPoints.count() - 1 : m_selectedAnchor - 1;
-                           };
+        int prev = m_selectedAnchor == 0 ? m_anchorPoints.count() - 1 : m_selectedAnchor - 1;
 
         QPoint currentAnchor  = m_anchorPoints[m_selectedAnchor];
-        QPoint previousAnchor = m_anchorPoints[checkIfZero()];
+        QPoint previousAnchor = m_anchorPoints[prev];
         QPoint nextAnchor     = m_anchorPoints[(m_selectedAnchor + 1) % m_anchorPoints.count()];
 
         if (!image()->bounds().contains(m_anchorPoints[m_selectedAnchor])) {
             m_anchorPoints.remove(m_selectedAnchor);
-            m_pointCollection[checkIfZero()] = computeEdgeWrapper(previousAnchor, nextAnchor);
+            m_pointCollection[prev] = computeEdgeWrapper(previousAnchor, nextAnchor);
             m_pointCollection.remove(m_selectedAnchor);
 
             if (m_selectedAnchor == 0)
                 m_snapBound.moveCenter(m_anchorPoints.first());
         } else {
-            m_pointCollection[checkIfZero()]    = computeEdgeWrapper(previousAnchor, currentAnchor);
+            m_pointCollection[prev]    = computeEdgeWrapper(previousAnchor, currentAnchor);
             m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(currentAnchor, nextAnchor);
         }
         reEvaluatePoints();

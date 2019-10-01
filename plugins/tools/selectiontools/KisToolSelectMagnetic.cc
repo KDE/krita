@@ -59,7 +59,7 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
     m_continuedMode(false), m_complete(false), m_selected(false), m_finished(false), m_worker(image()->projection()), m_threshold(70),
-    m_frequency(30), m_radius(3.0)
+    m_searchRadius(30), m_filterRadius(3.0)
 { }
 
 void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)
@@ -87,7 +87,7 @@ void KisToolSelectMagnetic::keyReleaseEvent(QKeyEvent *event)
 
 vQPointF KisToolSelectMagnetic::computeEdgeWrapper(QPoint a, QPoint b)
 {
-    return m_worker.computeEdge(m_frequency, a, b, m_radius);
+    return m_worker.computeEdge(m_searchRadius, a, b, m_filterRadius);
 }
 
 // the cursor is still tracked even when no mousebutton is pressed
@@ -454,58 +454,86 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
     QHBoxLayout *f1 = new QHBoxLayout();
-    QLabel *lblRad  = new QLabel(i18n("Filter Radius: "), selectionWidget);
-    f1->addWidget(lblRad);
+    QLabel *filterRadiusLabel  = new QLabel(i18n("Filter Radius: "), selectionWidget);
+    f1->addWidget(filterRadiusLabel);
 
-    KisDoubleSliderSpinBox *radInput = new KisDoubleSliderSpinBox(selectionWidget);
-    radInput->setObjectName("radius");
-    radInput->setRange(2.5, 100.0, 2);
-    radInput->setSingleStep(0.5);
-    radInput->setToolTip("Radius of the filter for the detecting edges, might take some time to calculate");
-    f1->addWidget(radInput);
-    connect(radInput, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetRadius(qreal)));
+    KisDoubleSliderSpinBox *filterRadiusInput = new KisDoubleSliderSpinBox(selectionWidget);
+    filterRadiusInput->setObjectName("radius");
+    filterRadiusInput->setRange(2.5, 100.0, 2);
+    filterRadiusInput->setSingleStep(0.5);
+    filterRadiusInput->setToolTip("Radius of the filter for the detecting edges, might take some time to calculate");
+    f1->addWidget(filterRadiusInput);
+    connect(filterRadiusInput, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetFilterRadius(qreal)));
 
     QHBoxLayout *f2      = new QHBoxLayout();
-    QLabel *lblThreshold = new QLabel(i18n("Threshold: "), selectionWidget);
-    f2->addWidget(lblThreshold);
+    QLabel *thresholdLabel = new QLabel(i18n("Threshold: "), selectionWidget);
+    f2->addWidget(thresholdLabel);
 
-    KisSliderSpinBox *threshInput = new KisSliderSpinBox(selectionWidget);
-    threshInput->setObjectName("threshold");
-    threshInput->setRange(1, 255);
-    threshInput->setSingleStep(10);
-    threshInput->setToolTip("Threshold for determining the minimum intensity of the edges");
-    f2->addWidget(threshInput);
-    connect(threshInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
+    KisSliderSpinBox *thresholdInput = new KisSliderSpinBox(selectionWidget);
+    thresholdInput->setObjectName("threshold");
+    thresholdInput->setRange(1, 255);
+    thresholdInput->setSingleStep(10);
+    thresholdInput->setToolTip("Threshold for determining the minimum intensity of the edges");
+    f2->addWidget(thresholdInput);
+    connect(thresholdInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 
     QHBoxLayout *f3     = new QHBoxLayout();
-    QLabel *lblFrquency = new QLabel(i18n("Search Radius: "), selectionWidget);
-    f3->addWidget(lblFrquency);
+    QLabel *searchRadiusLabel = new QLabel(i18n("Search Radius: "), selectionWidget);
+    f3->addWidget(searchRadiusLabel);
 
-    KisSliderSpinBox *freqInput = new KisSliderSpinBox(selectionWidget);
-    freqInput->setObjectName("frequency");
-    freqInput->setRange(20, 200);
-    freqInput->setSingleStep(10);
-    freqInput->setToolTip("Extra area to be searched");
-    freqInput->setSuffix(" px");
-    f3->addWidget(freqInput);
-    connect(freqInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetFrequency(int)));
+    KisSliderSpinBox *searchRadiusInput = new KisSliderSpinBox(selectionWidget);
+    searchRadiusInput->setObjectName("frequency");
+    searchRadiusInput->setRange(20, 200);
+    searchRadiusInput->setSingleStep(10);
+    searchRadiusInput->setToolTip("Extra area to be searched");
+    searchRadiusInput->setSuffix(" px");
+    f3->addWidget(searchRadiusInput);
+    connect(searchRadiusInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetSearchRadius(int)));
+
+    QHBoxLayout *f4 = new QHBoxLayout();
+    QCheckBox *interactiveModeCheckBox = new QCheckBox(i18n("Interactive Mode: "), selectionWidget);
+    f4->addWidget(interactiveModeCheckBox);
+    interactiveModeCheckBox->setCheckState(Qt::Unchecked);
+
+    QHBoxLayout *f5 = new QHBoxLayout();
+    QLabel *anchorGapLabel = new QLabel(i18n("Anchor Gap: "), selectionWidget);
+    f5->addWidget(anchorGapLabel);
+
+    KisSliderSpinBox *anchorGapInput = new KisSliderSpinBox(selectionWidget);
+    anchorGapInput->setObjectName("anchorgap");
+    anchorGapInput->setRange(20, 200);
+    anchorGapInput->setSingleStep(10);
+    anchorGapInput->setToolTip("Gap between 2 anchors in interative mode");
+    anchorGapInput->setSuffix(" px");
+    f5->addWidget(anchorGapInput);
+    anchorGapInput->setEnabled(interactiveModeCheckBox->checkState());
+
+    connect(interactiveModeCheckBox, &QCheckBox::stateChanged, [anchorGapInput](int state){
+        anchorGapInput->setEnabled(state);
+    });
+
+    connect(anchorGapInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetAnchorGap(int)));
 
     QVBoxLayout *l = dynamic_cast<QVBoxLayout *>(selectionWidget->layout());
 
     l->insertLayout(1, f1);
     l->insertLayout(2, f2);
     l->insertLayout(3, f3);
+    l->insertLayout(4, f4);
+    l->insertLayout(5, f5);
 
-    radInput->setValue(m_configGroup.readEntry("radius", 3.0));
-    threshInput->setValue(m_configGroup.readEntry("threshold", 100));
-    freqInput->setValue(m_configGroup.readEntry("frequency", 30));
+    filterRadiusInput->setValue(m_configGroup.readEntry("filterradius", 3.0));
+    thresholdInput->setValue(m_configGroup.readEntry("threshold", 100));
+    searchRadiusInput->setValue(m_configGroup.readEntry("searchradius", 30));
+    anchorGapInput->setValue(m_configGroup.readEntry("anchorgap", 20));
+
     return selectionWidget;
 } // KisToolSelectMagnetic::createOptionWidget
 
-void KisToolSelectMagnetic::slotSetRadius(qreal r)
+void KisToolSelectMagnetic::slotSetFilterRadius(qreal r)
 {
-    m_radius = r;
-    m_configGroup.writeEntry("radius", r);
+    m_filterRadius = r;
+    m_configGroup.writeEntry("filterradius", r);
 }
 
 void KisToolSelectMagnetic::slotSetThreshold(int t)
@@ -514,10 +542,16 @@ void KisToolSelectMagnetic::slotSetThreshold(int t)
     m_configGroup.writeEntry("threshold", t);
 }
 
-void KisToolSelectMagnetic::slotSetFrequency(int f)
+void KisToolSelectMagnetic::slotSetSearchRadius(int r)
 {
-    m_frequency = f;
-    m_configGroup.writeEntry("frequency", f);
+    m_searchRadius = r;
+    m_configGroup.writeEntry("searchradius", r);
+}
+
+void KisToolSelectMagnetic::slotSetAnchorGap(int g)
+{
+    m_anchorGap = g;
+    m_configGroup.writeEntry("anchorgap", g);
 }
 
 void KisToolSelectMagnetic::resetCursorStyle()

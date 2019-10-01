@@ -55,9 +55,10 @@ public Q_SLOTS:
     void deactivate() override;
     void activate(KoToolBase::ToolActivation activation, const QSet<KoShape *> &shapes) override;
     void undoPoints();
-    void slotSetRadius(qreal);
+    void slotSetFilterRadius(qreal);
     void slotSetThreshold(int);
-    void slotSetFrequency(int);
+    void slotSetSearchRadius(int);
+    void slotSetAnchorGap(int);
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
@@ -82,8 +83,8 @@ private:
     QPoint m_lastAnchor;
     bool m_complete, m_selected, m_finished;
     KisMagneticWorker m_worker;
-    int m_threshold, m_frequency, m_selectedAnchor;
-    qreal m_radius;
+    int m_threshold, m_searchRadius, m_selectedAnchor, m_anchorGap;
+    qreal m_filterRadius;
     QRectF m_snapBound;
     KConfigGroup m_configGroup;
     QVector<vQPointF> m_pointCollection;

@@ -44,6 +44,14 @@ public:
 
 private:
     KisLsSatinFilter(const KisLsSatinFilter &rhs);
+
+
+    void applySatin(KisPaintDeviceSP srcDevice,
+                    KisMultipleProjection *dst,
+                    const QRect &applyRect,
+                    const psd_layer_effects_context *context,
+                    const psd_layer_effects_satin *config,
+                    KisLayerStyleFilterEnvironment *env) const;
 };
 
 #endif

@@ -40,7 +40,7 @@
 #include "kis_selection_filters.h"
 #include "kis_multiple_projection.h"
 #include "kis_default_bounds_base.h"
-
+#include "kis_cached_paint_device.h"
 
 namespace KisLsUtils
 {
@@ -62,15 +62,16 @@ namespace KisLsUtils
         return changeRect;
     }
 
-    KisSelectionSP selectionFromAlphaChannel(KisPaintDeviceSP device,
-                                             const QRect &srcRect)
+    void selectionFromAlphaChannel(KisPaintDeviceSP srcDevice,
+                                      KisSelectionSP dstSelection,
+                                      const QRect &srcRect)
     {
-        const KoColorSpace *cs = device->colorSpace();
+        const KoColorSpace *cs = srcDevice->colorSpace();
 
-        KisSelectionSP baseSelection = new KisSelection(new KisSelectionEmptyBounds(0));
-        KisPixelSelectionSP selection = baseSelection->pixelSelection();
 
-        KisSequentialConstIterator srcIt(device, srcRect);
+        KisPixelSelectionSP selection = dstSelection->pixelSelection();
+
+        KisSequentialConstIterator srcIt(srcDevice, srcRect);
         KisSequentialIterator dstIt(selection, srcRect);
 
         while (srcIt.nextPixel() && dstIt.nextPixel()) {
@@ -79,7 +80,6 @@ namespace KisLsUtils
             *dstPtr = cs->opacityU8(srcPtr);
         }
 
-        return baseSelection;
     }
 
     void findEdge(KisPixelSelectionSP selection, const QRect &applyRect, const bool edgeHidden)
@@ -246,14 +246,17 @@ namespace KisLsUtils
                     const QRect &applyRect,
                     int noise,
                     const psd_layer_effects_context *context,
-                    const KisLayerStyleFilterEnvironment *env)
+                    KisLayerStyleFilterEnvironment *env)
     {
         Q_UNUSED(context);
 
         const QRect overlayRect = kisGrowRect(applyRect, noiseNeedBorder);
 
         KisPixelSelectionSP randomSelection = env->cachedRandomSelection(overlayRect);
-        KisPixelSelectionSP randomOverlay = new KisPixelSelection();
+
+
+        KisCachedSelection::Guard s1(*env->cachedSelection());
+        KisPixelSelectionSP randomOverlay = s1.selection()->pixelSelection();
 
         KisSequentialConstIterator noiseIt(randomSelection, overlayRect);
         KisSequentialConstIterator srcIt(selection, overlayRect);

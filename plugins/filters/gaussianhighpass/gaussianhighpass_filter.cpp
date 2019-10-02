@@ -85,7 +85,8 @@ void KisGaussianHighPassFilter::processImpl(KisPaintDeviceSP device,
 
     const QRect gaussNeedRect = this->neededRect(applyRect, config, device->defaultBounds()->currentLevelOfDetail());
 
-    KisPaintDeviceSP blur = m_cachedPaintDevice.getDevice(device);
+    KisCachedPaintDevice::Guard d1(device, m_cachedPaintDevice);
+    KisPaintDeviceSP blur = d1.device();
     KisPainter::copyAreaOptimizedOldData(gaussNeedRect.topLeft(), device, blur, gaussNeedRect);
     KisGaussianKernel::applyGaussian(blur, applyRect,
                                      blurAmount, blurAmount,
@@ -97,8 +98,6 @@ void KisGaussianHighPassFilter::processImpl(KisPaintDeviceSP device,
     painter.setCompositeOp(blur->colorSpace()->compositeOp(COMPOSITE_GRAIN_EXTRACT));
     painter.bitBlt(applyRect.topLeft(), blur, applyRect);
     painter.end();
-
-    m_cachedPaintDevice.putDevice(blur);
 }
 
 

@@ -575,7 +575,8 @@ void KisLayerStyleProjectionPlaneTest::testBlending()
 
     KisPaintDeviceSP originalBg = new KisPaintDevice(*bg);
 
-    KisSelectionSP selection = KisLsUtils::selectionFromAlphaChannel(layer, rc);
+    KisSelectionSP selection = new KisSelection();
+    KisLsUtils::selectionFromAlphaChannel(layer, selection, rc);
 
     {
         KisSequentialIterator it(layer, rc);

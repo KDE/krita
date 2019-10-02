@@ -50,6 +50,7 @@
 #include "gimp_bump_map.h"
 #include "kis_transaction.h"
 #include "kis_multiple_projection.h"
+#include "kis_cached_paint_device.h"
 
 
 KisLsBevelEmbossFilter::KisLsBevelEmbossFilter()
@@ -72,14 +73,17 @@ void paintBevelSelection(KisPixelSelectionSP srcSelection,
                          const QRect &applyRect,
                          int size,
                          int initialSize,
-                         bool invert)
+                         bool invert,
+                         KisLayerStyleFilterEnvironment *env)
 {
-    KisSelectionSP tmpBaseSelection = new KisSelection(new KisSelectionEmptyBounds(0));
+    KisCachedSelection::Guard s1(*env->cachedSelection());
+    KisSelectionSP tmpBaseSelection = s1.selection();
     KisPixelSelectionSP tmpSelection = tmpBaseSelection->pixelSelection();
 
     // NOTE: we are not using createCompositionSourceDevice() intentionally,
     //       because the source device doesn't have alpha channel
-    KisPixelSelectionSP fillDevice = new KisPixelSelection();
+    KisCachedSelection::Guard s2(*env->cachedSelection());
+    KisPixelSelectionSP fillDevice = s2.selection()->pixelSelection();
 
     KisPainter gc(dstSelection);
     gc.setCompositeOp(COMPOSITE_COPY);
@@ -276,7 +280,10 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 
     BevelEmbossRectCalculator d(applyRect, config);
 
-    KisSelectionSP baseSelection = KisLsUtils::selectionFromAlphaChannel(srcDevice, d.initialFetchRect);
+    KisCachedSelection::Guard s1(*env->cachedSelection());
+    KisSelectionSP baseSelection = s1.selection();
+    KisLsUtils::selectionFromAlphaChannel(srcDevice, baseSelection, d.initialFetchRect);
+
     KisPixelSelectionSP selection = baseSelection->pixelSelection();
 
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("0_selection_initial.png");
@@ -284,20 +291,21 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
     const int size = config->size();
 
     int limitingGrowSize = 0;
-    KisPixelSelectionSP bumpmapSelection = new KisPixelSelection(new KisSelectionEmptyBounds(0));
+    KisCachedSelection::Guard s2(*env->cachedSelection());
+    KisPixelSelectionSP bumpmapSelection = s2.selection()->pixelSelection();
 
     switch (config->style()) {
     case psd_bevel_outer_bevel:
-        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, size, size, false);
+        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, size, size, false, env);
         limitingGrowSize = size;
         break;
     case psd_bevel_inner_bevel:
-        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, size, 0, false);
+        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, size, 0, false, env);
         limitingGrowSize = 0;
         break;
     case psd_bevel_emboss: {
         const int initialSize = std::ceil(qreal(size) / 2.0);
-        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, size, initialSize, false);
+        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, size, initialSize, false, env);
         limitingGrowSize = initialSize;
         break;
     }
@@ -305,8 +313,8 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
         const int halfSizeF = std::floor(qreal(size) / 2.0);
         const int halfSizeC = std::ceil(qreal(size) / 2.0);
         // TODO: probably not correct!
-        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, halfSizeC, halfSizeC, false);
-        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, halfSizeF, 0, true);
+        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, halfSizeC, halfSizeC, false, env);
+        paintBevelSelection(selection, bumpmapSelection, d.applyBevelRect, halfSizeF, 0, true, env);
         limitingGrowSize = halfSizeC;
         break;
     }
@@ -315,7 +323,9 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
         return;
     }
 
-    KisPixelSelectionSP limitingSelection = new KisPixelSelection(*selection);
+    KisCachedSelection::Guard s3(*env->cachedSelection());
+    KisPixelSelectionSP limitingSelection = s3.selection()->pixelSelection();
+    limitingSelection->makeCloneFromRough(selection, selection->selectedRect());
     {
         QRect changeRectUnused =
             KisLsUtils::growSelectionUniform(limitingSelection,
@@ -327,7 +337,8 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
     //bumpmapSelection->convertToQImage(0, QRect(0,0,300,300)).save("1_selection_xconv.png");
 
     if (config->textureEnabled()) {
-        KisPixelSelectionSP textureSelection = new KisPixelSelection(new KisSelectionEmptyBounds(0));
+        KisCachedSelection::Guard s4(*env->cachedSelection());
+        KisPixelSelectionSP textureSelection = s4.selection()->pixelSelection();
 
         KisLsUtils::fillPattern(textureSelection, d.applyTextureRect, env,
                                 config->textureScale(),
@@ -434,7 +445,9 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 
         const KoColor fillColor(config->shadowColor(), dstDevice->colorSpace());
         const QRect &fillRect = d.shadowHighlightsFinalRect;
-        KisPaintDeviceSP fillDevice = new KisPaintDevice(dstDevice->colorSpace());
+
+        KisCachedPaintDevice::Guard d1(dstDevice, *env->cachedPaintDevice());
+        KisPaintDeviceSP fillDevice = d1.device();
         fillDevice->setDefaultPixel(fillColor);
 
         KisPainter::copyAreaOptimized(fillRect.topLeft(), fillDevice, dstDevice, fillRect, baseSelection);
@@ -456,7 +469,9 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 
         const KoColor fillColor(config->highlightColor(), dstDevice->colorSpace());
         const QRect &fillRect = d.shadowHighlightsFinalRect;
-        KisPaintDeviceSP fillDevice = new KisPaintDevice(dstDevice->colorSpace());
+
+        KisCachedPaintDevice::Guard d1(dstDevice, *env->cachedPaintDevice());
+        KisPaintDeviceSP fillDevice = d1.device();
         fillDevice->setDefaultPixel(fillColor);
 
         KisPainter::copyAreaOptimized(fillRect.topLeft(), fillDevice, dstDevice, fillRect, baseSelection);

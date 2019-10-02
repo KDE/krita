@@ -43,6 +43,7 @@ struct Q_DECL_HIDDEN KisLayerStyleProjectionPlane::Private
     QVector<KisLayerStyleFilterProjectionPlaneSP> stylesOverlay;
 
     KisCachedPaintDevice cachedPaintDevice;
+    KisCachedSelection cachedSelection;
     KisLayer *sourceLayer = 0;
 
 
@@ -213,15 +214,17 @@ void KisLayerStyleProjectionPlane::apply(KisPainter *painter, const QRect &rect)
     if (m_d->style->isEnabled()) {
         if (m_d->hasOverlayStylesReady()) {
 
-            KisPaintDeviceSP originalClone = m_d->cachedPaintDevice.getDevice(painter->device());
+            KisCachedPaintDevice::Guard d1(painter->device(), m_d->cachedPaintDevice);
+            KisPaintDeviceSP originalClone = d1.device();
             originalClone->makeCloneFromRough(painter->device(), rect);
 
             Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
                 plane->apply(painter, rect);
             }
 
-            // TODO: cache selection device
-            KisSelectionSP knockoutSelection = KisLsUtils::selectionFromAlphaChannel(m_d->sourceLayer->projection(), rect);
+            KisCachedSelection::Guard s1(m_d->cachedSelection);
+            KisSelectionSP knockoutSelection = s1.selection();
+            KisLsUtils::selectionFromAlphaChannel(m_d->sourceLayer->projection(), knockoutSelection, rect);
 
             {
                 KisPainter overlayPainter(originalClone);
@@ -241,8 +244,6 @@ void KisLayerStyleProjectionPlane::apply(KisPainter *painter, const QRect &rect)
             Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
                 plane->apply(painter, rect);
             }
-
-            m_d->cachedPaintDevice.putDevice(originalClone);
 
         } else {
             Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {

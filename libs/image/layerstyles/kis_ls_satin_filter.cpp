@@ -40,6 +40,7 @@
 #include "kis_multiple_projection.h"
 #include "kis_ls_utils.h"
 #include "kis_layer_style_filter_environment.h"
+#include "kis_cached_paint_device.h"
 
 
 KisLsSatinFilter::KisLsSatinFilter()
@@ -131,23 +132,26 @@ void blendAndOffsetSatinSelection(KisPixelSelectionSP dstSelection,
 
 //#include "kis_paint_device_debug_utils.h"
 
-void applySatin(KisPaintDeviceSP srcDevice,
-                KisMultipleProjection *dst,
-                const QRect &applyRect,
-                const psd_layer_effects_context *context,
-                const psd_layer_effects_satin *config,
-                const KisLayerStyleFilterEnvironment *env)
+void KisLsSatinFilter::applySatin(KisPaintDeviceSP srcDevice,
+                                  KisMultipleProjection *dst,
+                                  const QRect &applyRect,
+                                  const psd_layer_effects_context *context,
+                                  const psd_layer_effects_satin *config,
+                                  KisLayerStyleFilterEnvironment *env) const
 {
     if (applyRect.isEmpty()) return;
 
     SatinRectsData d(applyRect, context, config, SatinRectsData::NEED_RECT);
 
-    KisSelectionSP baseSelection =
-        KisLsUtils::selectionFromAlphaChannel(srcDevice, d.blurNeedRect);
+    KisCachedSelection::Guard s1(*env->cachedSelection());
+    KisSelectionSP baseSelection = s1.selection();
+    KisLsUtils::selectionFromAlphaChannel(srcDevice, baseSelection, d.blurNeedRect);
 
     KisPixelSelectionSP selection = baseSelection->pixelSelection();
 
-    KisPixelSelectionSP tempSelection = new KisPixelSelection(*selection);
+    KisCachedSelection::Guard s2(*env->cachedSelection());
+    KisPixelSelectionSP tempSelection = s2.selection()->pixelSelection();
+    tempSelection->makeCloneFromRough(selection, selection->selectedRect());
 
     //KIS_DUMP_DEVICE_2(tempSelection, QRect(0,0,64,64), "00_selection", "dd");
 

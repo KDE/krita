@@ -41,6 +41,7 @@
 #include "kis_multiple_projection.h"
 #include "kis_ls_utils.h"
 #include "kis_layer_style_filter_environment.h"
+#include "kis_cached_paint_device.h"
 
 
 
@@ -119,19 +120,20 @@ struct ShadowRectsData
     QRect spreadNeedRect;
 };
 
-void applyDropShadow(KisPaintDeviceSP srcDevice,
-                     KisMultipleProjection *dst,
-                     const QRect &applyRect,
-                     const psd_layer_effects_context *context,
-                     const psd_layer_effects_shadow_base *shadow,
-                     const KisLayerStyleFilterEnvironment *env)
+void KisLsDropShadowFilter::applyDropShadow(KisPaintDeviceSP srcDevice,
+                                            KisMultipleProjection *dst,
+                                            const QRect &applyRect,
+                                            const psd_layer_effects_context *context,
+                                            const psd_layer_effects_shadow_base *shadow,
+                                            KisLayerStyleFilterEnvironment *env) const
 {
     if (applyRect.isEmpty()) return;
 
     ShadowRectsData d(applyRect, context, shadow, ShadowRectsData::NEED_RECT);
 
-    KisSelectionSP baseSelection =
-        KisLsUtils::selectionFromAlphaChannel(srcDevice, d.spreadNeedRect);
+    KisCachedSelection::Guard s1(*env->cachedSelection());
+    KisSelectionSP baseSelection = s1.selection();
+    KisLsUtils::selectionFromAlphaChannel(srcDevice, baseSelection, d.spreadNeedRect);
 
     KisPixelSelectionSP selection = baseSelection->pixelSelection();
 
@@ -144,9 +146,11 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
     /**
      * Copy selection which will be erased from the original later
      */
+    KisCachedSelection::Guard s2(*env->cachedSelection());
     KisPixelSelectionSP knockOutSelection;
     if (shadow->knocksOut()) {
-        knockOutSelection = new KisPixelSelection(*selection);
+        knockOutSelection = s2.selection()->pixelSelection();
+        knockOutSelection->makeCloneFromRough(selection, selection->selectedRect());
     }
 
     if (shadow->technique() == psd_technique_precise) {

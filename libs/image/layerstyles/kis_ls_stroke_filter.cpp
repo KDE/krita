@@ -43,6 +43,7 @@
 
 #include "kis_ls_utils.h"
 #include "kis_multiple_projection.h"
+#include "kis_cached_paint_device.h"
 
 namespace {
 
@@ -93,11 +94,14 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
 
     const QRect needRect = kisGrowRect(applyRect, borderSize(config->position(), config->size()));
 
-    KisSelectionSP baseSelection = KisLsUtils::selectionFromAlphaChannel(srcDevice, needRect);
+    KisCachedSelection::Guard s1(*env->cachedSelection());
+    KisSelectionSP baseSelection = s1.selection();
+    KisLsUtils::selectionFromAlphaChannel(srcDevice, baseSelection, needRect);
     KisPixelSelectionSP selection = baseSelection->pixelSelection();
 
     {
-        KisPixelSelectionSP knockOutSelection = new KisPixelSelection(new KisSelectionEmptyBounds(0));
+        KisCachedSelection::Guard s2(*env->cachedSelection());
+        KisPixelSelectionSP knockOutSelection = s2.selection()->pixelSelection();
         knockOutSelection->makeCloneFromRough(selection, needRect);
 
         if (config->position() == psd_stroke_outside) {
@@ -115,9 +119,9 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
         gc.end();
     }
 
-    KisPaintDeviceSP fillDevice = new KisPaintDevice(srcDevice->colorSpace());
+    KisCachedPaintDevice::Guard d1(srcDevice, *env->cachedPaintDevice());
+    KisPaintDeviceSP fillDevice = d1.device();
     KisLsUtils::fillOverlayDevice(fillDevice, applyRect, config, env);
-
 
     const QString compositeOp = config->blendMode();
     const quint8 opacityU8 = quint8(qRound(255.0 / 100.0 * config->opacity()));

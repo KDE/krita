@@ -548,7 +548,7 @@ namespace KisLsUtils
 
         const QRect effectRect(dstRect);
         const QString compositeOp = config->blendMode();
-        const quint8 opacityU8 = 255.0 / 100.0 * config->opacity();
+        const quint8 opacityU8 = quint8(qRound(255.0 / 100.0 * config->opacity()));
         KisPaintDeviceSP dstDevice = dst->getProjection(projectionId, compositeOp, opacityU8, QBitArray(), srcDevice);
 
         if (config->fillType() == psd_fill_solid_color) {

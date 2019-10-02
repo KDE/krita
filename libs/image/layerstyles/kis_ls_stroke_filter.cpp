@@ -120,7 +120,7 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
 
 
     const QString compositeOp = config->blendMode();
-    const quint8 opacityU8 = 255.0 / 100.0 * config->opacity();
+    const quint8 opacityU8 = quint8(qRound(255.0 / 100.0 * config->opacity()));
     KisPaintDeviceSP dstDevice = dst->getProjection(KisMultipleProjection::defaultProjectionId(),
                                                     compositeOp,
                                                     opacityU8,

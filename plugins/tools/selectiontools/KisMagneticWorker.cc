@@ -169,8 +169,8 @@ KisMagneticLazyTiles::KisMagneticLazyTiles(KisPaintDeviceSP dev)
 void KisMagneticLazyTiles::filter(qreal radius, QRect &rect)
 {
     auto divide = [](QPoint p, QSize s){
-        return QPoint(p.x() / s.width(), p.y() / s.height());
-    };
+                      return QPoint(p.x() / s.width(), p.y() / s.height());
+                  };
 
     QPoint firstTile = divide(rect.topLeft(), m_tileSize);
     QPoint lastTile  = divide(rect.bottomRight(), m_tileSize);
@@ -202,7 +202,7 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int bounds, QPoint begin, QPoint
     VertexDescriptor goal(end);
     VertexDescriptor start(begin);
 
-    KisMagneticGraph m_graph(m_lazyTileFilter.device(), rect);
+    m_graph = new KisMagneticGraph(m_lazyTileFilter.device(), rect);
 
     // How many maps does it require?
     // Take a look here, if it doesn't make sense, https://www.boost.org/doc/libs/1_70_0/libs/graph/doc/astar_search.html
@@ -212,13 +212,13 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int bounds, QPoint begin, QPoint
     std::map<VertexDescriptor, double> rmap;
     std::map<VertexDescriptor, boost::default_color_type> cmap;
     std::map<VertexDescriptor, double> imap;
-    WeightMap wmap(m_graph);
+    WeightMap wmap(*m_graph);
     AStarHeuristic heuristic(goal);
     QVector<QPointF> result;
 
     try {
         boost::astar_search_no_init(
-            m_graph, start, heuristic,
+            *m_graph, start, heuristic,
             boost::visitor(AStarGoalVisitor(goal))
             .distance_map(boost::associative_property_map<DistanceMap>(dmap))
             .predecessor_map(boost::ref(pmap))
@@ -240,6 +240,11 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int bounds, QPoint begin, QPoint
 
     return result;
 } // KisMagneticWorker::computeEdge
+
+qreal KisMagneticWorker::intensity(QPoint pt)
+{
+    return m_graph->getIntensity(VertexDescriptor(pt));
+}
 
 void KisMagneticWorker::saveTheImage(vQPointF points)
 {
@@ -271,7 +276,7 @@ void KisMagneticWorker::saveTheImage(vQPointF points)
     gc.setPen(Qt::red);
     gc.drawEllipse(points[points.count() - 1], 2, 2);
 
-    for(QRect &r : m_lazyTileFilter.tiles() ){
+    for (QRect &r : m_lazyTileFilter.tiles() ) {
         gc.drawRect(r);
     }
 

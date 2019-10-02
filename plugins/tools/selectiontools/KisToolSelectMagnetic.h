@@ -78,6 +78,7 @@ private:
     void checkIfAnchorIsSelected(QPointF pt);
     vQPointF computeEdgeWrapper(QPoint a, QPoint b);
     void reEvaluatePoints();
+    void calculateCheckPoints();
 
     QPainterPath m_paintPath;
     QVector<QPointF> m_points;
@@ -87,7 +88,7 @@ private:
     QPoint m_lastAnchor;
     bool m_complete, m_selected, m_finished;
     KisMagneticWorker m_worker;
-    int m_threshold, m_searchRadius, m_selectedAnchor, m_anchorGap;
+    int m_threshold, m_searchRadius, m_selectedAnchor, m_anchorGap, m_checkPoint;
     qreal m_filterRadius;
     QRectF m_snapBound;
     KConfigGroup m_configGroup;

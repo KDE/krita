@@ -28,6 +28,9 @@
 #include <KoResourcePaths.h>
 #include <KoResourceServer.h>
 
+#include <QApplication>
+#include <QThread>
+
 #include <kis_debug.h>
 
 #define BLACKLISTED "blacklisted" ///< xml tag for blacklisted tags
@@ -55,7 +58,6 @@ KoResourceTagStore::KoResourceTagStore(KoResourceServerBase *resourceServer)
 
 KoResourceTagStore::~KoResourceTagStore()
 {
-    serializeTags();
     delete d;
 }
 
@@ -288,7 +290,6 @@ void KoResourceTagStore::writeXMLFile(const QString &tagstore)
             root.appendChild(resourceEl);
         }
     }
-
     QTextStream metastream(&f);
     metastream.setCodec("UTF-8");
     metastream << doc.toString();

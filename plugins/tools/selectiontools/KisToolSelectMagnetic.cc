@@ -553,6 +553,20 @@ void KisToolSelectMagnetic::undoPoints()
 {
     if (m_complete) return;
 
+    if(m_interactiveMode){
+        m_anchorPoints.pop_back();
+        m_lastAnchor = m_anchorPoints.last();
+        for(int i=m_points.count()-1; i >= 0; i--){
+            if(m_points[i] == m_anchorPoints.last()){
+                m_checkPoint = i;
+                break;
+            }
+        }
+        updateCanvasPixelRect(image()->bounds());
+
+        return;
+    }
+
     m_anchorPoints.pop_back();
     m_pointCollection.pop_back();
     reEvaluatePoints();

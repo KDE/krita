@@ -562,10 +562,24 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
         QString suffix = cfg.readEntry<QString>("backupfilesuffix", "~");
 
         if (numOfBackupsKept == 1) {
-            KBackup::simpleBackupFile(job.filePath, backupDir, suffix);
+            if (!KBackup::simpleBackupFile(job.filePath, backupDir, suffix)) {
+                qWarning() << "Failed to create simple backup file!" << job.filePath << backupDir << suffix;
+                KisUsageLogger::log(QString("Failed to create a simple backup for %1 in %2.").arg(job.filePath).arg(backupDir.isEmpty() ? "the same location as the file" : backupDir));
+                return false;
+            }
+            else {
+                KisUsageLogger::log(QString("Create a simple backup for %1 in %2.").arg(job.filePath).arg(backupDir.isEmpty() ? "the same location as the file" : backupDir));
+            }
         }
         else if (numOfBackupsKept > 2) {
-            KBackup::numberedBackupFile(job.filePath, backupDir, suffix, numOfBackupsKept);
+            if (!KBackup::numberedBackupFile(job.filePath, backupDir, suffix, numOfBackupsKept)) {
+                qWarning() << "Failed to create numbered backup file!" << job.filePath << backupDir << suffix;
+                KisUsageLogger::log(QString("Failed to create a numbered backup for %2.").arg(job.filePath).arg(backupDir.isEmpty() ? "the same location as the file" : backupDir));
+                return false;
+            }
+            else {
+                KisUsageLogger::log(QString("Create a simple backup for %1 in %2.").arg(job.filePath).arg(backupDir.isEmpty() ? "the same location as the file" : backupDir));
+            }
         }
     }
 
@@ -929,6 +943,8 @@ void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalCloned
     const QString autoSaveFileName = generateAutoSaveFileName(localFilePath());
 
     emit statusBarMessage(i18n("Autosaving... %1", autoSaveFileName), successMessageTimeout);
+
+    KisUsageLogger::log(QString("Autosaving: %1").arg(autoSaveFileName));
 
     const bool hadClonedDocument = bool(optionalClonedDocument);
     bool started = false;

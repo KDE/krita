@@ -59,7 +59,9 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
     m_continuedMode(false), m_interactiveMode(false), m_complete(false), m_selected(false), m_finished(false),
-    m_worker(image()->projection()), m_threshold(70), m_searchRadius(30), m_checkPoint(-1), m_filterRadius(3.0)
+    m_worker(image()->projection()), m_threshold(70), m_searchRadius(30), m_checkPoint(-1), m_filterRadius(3.0),
+    m_mouseHoverCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
+
 { }
 
 void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)
@@ -291,27 +293,8 @@ void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 {
     if (m_interactiveMode) {
-        QPoint current = m_lastCursorPos.toPoint();
-
-        vQPointF pointSet = computeEdgeWrapper(m_lastAnchor, current);
-        m_points.resize(m_checkPoint);
-        m_points.append(pointSet);
-
-        calculateCheckPoints();
-
-        m_paintPath = QPainterPath();
-        m_paintPath.moveTo(pixelToView(m_points[0]));
-
-        for (int i = 1; i < m_points.count(); i++) {
-            m_paintPath.lineTo(pixelToView(m_points[i]));
-        }
-
-        updateFeedback();
-
-        if (m_continuedMode && mode() != PAINT_MODE) {
-            updateContinuedMode();
-        }
-
+        m_lastCursorPos = convertToPixelCoord(event);
+        m_mouseHoverCompressor.start();
         return;
     }
 
@@ -319,6 +302,32 @@ void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
         m_anchorPoints[m_selectedAnchor] = convertToPixelCoord(event).toPoint();
     }
     KisToolSelectBase::continuePrimaryAction(event);
+}
+
+void KisToolSelectMagnetic::slotCalculateEdge()
+{
+    QPoint current = m_lastCursorPos.toPoint();
+
+    vQPointF pointSet = computeEdgeWrapper(m_lastAnchor, current);
+    m_points.resize(m_checkPoint);
+    m_points.append(pointSet);
+
+    calculateCheckPoints();
+
+    m_paintPath = QPainterPath();
+    m_paintPath.moveTo(pixelToView(m_points[0]));
+
+    for (int i = 1; i < m_points.count(); i++) {
+        m_paintPath.lineTo(pixelToView(m_points[i]));
+    }
+
+    updateFeedback();
+
+    if (m_continuedMode && mode() != PAINT_MODE) {
+        updateContinuedMode();
+    }
+
+    return;
 }
 
 // release primary mouse button
@@ -522,6 +531,7 @@ void KisToolSelectMagnetic::activate(KoToolBase::ToolActivation activation, cons
     m_worker      = KisMagneticWorker(image()->projection());
     m_configGroup = KSharedConfig::openConfig()->group(toolId());
     connect(action("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoPoints()), Qt::UniqueConnection);
+    connect(&m_mouseHoverCompressor, SIGNAL(timeout()), this, SLOT(slotCalculateEdge()));
     KisToolSelect::activate(activation, shapes);
 }
 

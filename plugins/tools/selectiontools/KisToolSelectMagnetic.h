@@ -22,6 +22,7 @@
 #include <QPoint>
 #include "KisSelectionToolFactoryBase.h"
 #include <kis_tool_select_base.h>
+#include <kis_signal_compressor.h>
 #include <kis_icon.h>
 #include "KisMagneticWorker.h"
 
@@ -60,6 +61,7 @@ public Q_SLOTS:
     void slotSetSearchRadius(int);
     void slotSetAnchorGap(int);
     void slotSetInteractiveMode(int);
+    void slotCalculateEdge();
 
 Q_SIGNALS:
     void setInteractiveModeEnable(bool);
@@ -93,6 +95,7 @@ private:
     QRectF m_snapBound;
     KConfigGroup m_configGroup;
     QVector<vQPointF> m_pointCollection;
+    KisSignalCompressor m_mouseHoverCompressor;
 };
 
 class KisToolSelectMagneticFactory : public KisSelectionToolFactoryBase

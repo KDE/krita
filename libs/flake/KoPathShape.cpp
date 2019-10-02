@@ -1697,18 +1697,6 @@ QPainterPath KoPathShape::pathStroke(const QPen &pen) const
     QPainterPathStroker stroker;
     stroker.setWidth(0);
     stroker.setJoinStyle(Qt::MiterJoin);
-
-    QPair<KoPathSegment, KoPathSegment> firstSegments;
-    QPair<KoPathSegment, KoPathSegment> lastSegments;
-
-    // TODO: these variables are never(!) initialized!
-    KoPathPoint *firstPoint = 0;
-    KoPathPoint *lastPoint = 0;
-    KoPathPoint *secondPoint = 0;
-    KoPathPoint *preLastPoint = 0;
-
-    KoSubpath *firstSubpath = d->subpaths.first();
-
     stroker.setWidth(pen.widthF());
     stroker.setJoinStyle(pen.joinStyle());
     stroker.setMiterLimit(pen.miterLimit());
@@ -1716,36 +1704,7 @@ QPainterPath KoPathShape::pathStroke(const QPen &pen) const
     stroker.setDashOffset(pen.dashOffset());
     stroker.setDashPattern(pen.dashPattern());
 
-    // shortent the path to make it look nice
-    // replace the point temporarily in case there is an arrow
-    // BE AWARE: this changes the content of the path so that outline give the correct values.
-    if (firstPoint) {
-        firstSubpath->first() = firstSegments.second.first();
-        if (secondPoint) {
-            (*firstSubpath)[1] = firstSegments.second.second();
-        }
-    }
-    if (lastPoint) {
-        if (preLastPoint) {
-            (*firstSubpath)[firstSubpath->count() - 2] = lastSegments.first.first();
-        }
-        firstSubpath->last() = lastSegments.first.second();
-    }
-
     QPainterPath path = stroker.createStroke(outline());
-
-    if (firstPoint) {
-        firstSubpath->first() = firstPoint;
-        if (secondPoint) {
-            (*firstSubpath)[1] = secondPoint;
-        }
-    }
-    if (lastPoint) {
-        if (preLastPoint) {
-            (*firstSubpath)[firstSubpath->count() - 2] = preLastPoint;
-        }
-        firstSubpath->last() = lastPoint;
-    }
 
     pathOutline.addPath(path);
     pathOutline.setFillRule(Qt::WindingFill);

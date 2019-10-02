@@ -569,6 +569,8 @@ extern "C" int main(int argc, char **argv)
     KisUsageLogger::write(QString("  Number of Cores: %1").arg(QThread::idealThreadCount()));
     KisUsageLogger::write(QString("  Swap Location: %1\n").arg(KisImageConfig(true).swapDir()));
 
+    KisConfig(true).logImportantSettings();
+
     int state = app.exec();
 
     {

@@ -90,6 +90,11 @@ void KisUsageLogger::write(const QString &message)
     s_instance->d->logFile.flush();
 }
 
+void KisUsageLogger::writeSectionHeader()
+{
+    s_instance->d->logFile.write(s_sectionHeader.toUtf8());
+}
+
 void KisUsageLogger::writeHeader()
 {
     Q_ASSERT(s_instance->d->logFile.isOpen());
@@ -137,7 +142,7 @@ void KisUsageLogger::writeHeader()
     systemInfo.append("\n  Product Version: ").append(QSysInfo::productVersion());
     systemInfo.append("\n\n");
 
-    s_instance->d->logFile.write(s_sectionHeader.toUtf8());
+    writeSectionHeader();
     s_instance->d->logFile.write(sessionHeader.toUtf8());
     s_instance->d->logFile.write(disclaimer.toUtf8());
     s_instance->d->logFile.write(systemInfo.toUtf8());

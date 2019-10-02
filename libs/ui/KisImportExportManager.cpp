@@ -636,6 +636,10 @@ KisImportExportErrorCode KisImportExportManager::doExport(const QString &locatio
 }
 
 // Temporary workaround until QTBUG-57299 is fixed.
+// 02-10-2019 update: the bug is closed, but we've still seen this issue.
+//                    and without using QSaveFile the issue can still occur
+//                    when QFile::copy fails because Dropbox/Google/OneDrive
+//                    locks the target file.
 #ifndef Q_OS_WIN
 #define USE_QSAVEFILE
 #endif

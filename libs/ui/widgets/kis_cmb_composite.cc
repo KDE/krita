@@ -33,7 +33,7 @@
 
 KisCompositeOpListWidget::KisCompositeOpListWidget(QWidget* parent):
     KisCategorizedListView(parent),
-    m_model(new KisSortedCompositeOpListModel(this))
+    m_model(new KisSortedCompositeOpListModel(false, this))
 {
     setModel(m_model);
     setItemDelegate(new KisCategorizedItemDelegate(this));
@@ -56,10 +56,15 @@ KoID KisCompositeOpListWidget::selectedCompositeOp() const {
 //////////////////////////////////////////////////////////////////////////////////////////
 // ---- KisCompositeOpComboBox -------------------------------------------------------- //
 
-KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
-    KisSqueezedComboBox(parent),
-    m_model(new KisSortedCompositeOpListModel(this)),
-    m_allowToHidePopup(true)
+KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent)
+    : KisCompositeOpComboBox(false, parent)
+{
+}
+
+KisCompositeOpComboBox::KisCompositeOpComboBox(bool limitToLayerStyles, QWidget* parent)
+    : KisSqueezedComboBox(parent),
+      m_model(new KisSortedCompositeOpListModel(limitToLayerStyles, this)),
+      m_allowToHidePopup(true)
 {
     m_view = new KisCategorizedListView();
     m_view->setCompositeBoxControl(true);
@@ -274,7 +279,6 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     connect(action, SIGNAL(triggered()), SLOT(slotLuminosity()));
     m_actions << action;
 
-
 }
 
 KisCompositeOpComboBox::~KisCompositeOpComboBox()
@@ -479,4 +483,9 @@ void KisCompositeOpComboBox::slotColor()
 void KisCompositeOpComboBox::slotLuminosity()
 {
     selectCompositeOp(KoCompositeOpRegistry::instance().getKoID(COMPOSITE_LUMINIZE));
+}
+
+KisLayerStyleCompositeOpComboBox::KisLayerStyleCompositeOpComboBox(QWidget* parent)
+    : KisCompositeOpComboBox(true, parent)
+{
 }

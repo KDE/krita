@@ -35,8 +35,8 @@ class KisAction;
 class KRITAUI_EXPORT KisCompositeOpListWidget: public KisCategorizedListView
 {
 public:
-     KisCompositeOpListWidget(QWidget* parent=0);
-    ~KisCompositeOpListWidget() override;
+     KisCompositeOpListWidget(QWidget* parent = 0);
+     ~KisCompositeOpListWidget() override;
 
     KoID selectedCompositeOp() const;
 
@@ -49,7 +49,8 @@ class KRITAUI_EXPORT KisCompositeOpComboBox: public KisSqueezedComboBox
 {
     Q_OBJECT
 public:
-     KisCompositeOpComboBox(QWidget* parent=0);
+     KisCompositeOpComboBox(QWidget* parent = 0);
+     KisCompositeOpComboBox(bool limitToLayerStyles, QWidget* parent = 0);
     ~KisCompositeOpComboBox() override;
 
     void hidePopup() override;
@@ -100,6 +101,12 @@ private:
     KisCategorizedListView *m_view;
     bool m_allowToHidePopup;
     QList<KisAction *> m_actions;
+};
+
+class KRITAUI_EXPORT KisLayerStyleCompositeOpComboBox: public KisCompositeOpComboBox
+{
+public:
+    KisLayerStyleCompositeOpComboBox(QWidget* parent = 0);
 };
 
 #endif // KIS_COMPOSITEOP_WIDGETS_H_

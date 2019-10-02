@@ -83,6 +83,16 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(bool limitToLayerStyles, QWidget*
     connect(m_view, SIGNAL(sigEntryChecked(QModelIndex)), SLOT(slotEntryChecked(QModelIndex)));
 
     selectCompositeOp(KoCompositeOpRegistry::instance().getDefaultCompositeOp());
+}
+
+KisCompositeOpComboBox::~KisCompositeOpComboBox()
+{
+    delete m_view;
+}
+
+QList<KisAction *> KisCompositeOpComboBox::createBlendmodeActions()
+{
+    QList<KisAction *> actions;
 
     KisAction *action = 0;
 //    //    Cycle through blending modes
@@ -102,188 +112,184 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(bool limitToLayerStyles, QWidget*
     action = new KisAction(i18n("Select Normal Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_N));
     connect(action, SIGNAL(triggered()), SLOT(slotNormal()));
-    m_actions << action;
+    actions << action;
 
     //    Dissolve
     //    Shift + Alt + I
     action = new KisAction(i18n("Select Dissolve Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_I));
     connect(action, SIGNAL(triggered()), SLOT(slotDissolve()));
-    m_actions << action;
+    actions << action;
 
     //    Behind (Brush tool only)
     //    Shift + Alt + Q
     action = new KisAction(i18n("Select Behind Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_Q));
     connect(action, SIGNAL(triggered()), SLOT(slotBehind()));
-    m_actions << action;
+    actions << action;
 
     //    Clear (Brush tool only)
     //    Shift + Alt + R
     action = new KisAction(i18n("Select Clear Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_R));
     connect(action, SIGNAL(triggered()), SLOT(slotClear()));
-    m_actions << action;
+    actions << action;
 
     //    Darken
     //    Shift + Alt + K
     action = new KisAction(i18n("Select Darken Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_K));
     connect(action, SIGNAL(triggered()), SLOT(slotDarken()));
-    m_actions << action;
+    actions << action;
 
     //    Multiply
     //    Shift + Alt + M
     action = new KisAction(i18n("Select Multiply Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_M));
     connect(action, SIGNAL(triggered()), SLOT(slotMultiply()));
-    m_actions << action;
+    actions << action;
 
     //    Color Burn
     //    Shift + Alt + B
     action = new KisAction(i18n("Select Color Burn Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_B));
     connect(action, SIGNAL(triggered()), SLOT(slotColorBurn()));
-    m_actions << action;
+    actions << action;
 
     //    Linear Burn
     //    Shift + Alt + A
     action = new KisAction(i18n("Select Linear Burn Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_A));
     connect(action, SIGNAL(triggered()), SLOT(slotLinearBurn()));
-    m_actions << action;
+    actions << action;
 
     //    Lighten
     //    Shift + Alt + G
     action = new KisAction(i18n("Select Lighten Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_G));
     connect(action, SIGNAL(triggered()), SLOT(slotLighten()));
-    m_actions << action;
+    actions << action;
 
     //    Screen
     //    Shift + Alt + S
     action = new KisAction(i18n("Select Screen Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_S));
     connect(action, SIGNAL(triggered()), SLOT(slotScreen()));
-    m_actions << action;
+    actions << action;
 
     //    Color Dodge
     //    Shift + Alt + D
     action = new KisAction(i18n("Select Color Dodge Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_D));
     connect(action, SIGNAL(triggered()), SLOT(slotColorDodge()));
-    m_actions << action;
+    actions << action;
 
     //    Linear Dodge
     //    Shift + Alt + W
     action = new KisAction(i18n("Select Linear Dodge Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_W));
     connect(action, SIGNAL(triggered()), SLOT(slotLinearDodge()));
-    m_actions << action;
+    actions << action;
 
     //    Overlay
     //    Shift + Alt + O
     action = new KisAction(i18n("Select Overlay Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_O));
     connect(action, SIGNAL(triggered()), SLOT(slotOverlay()));
-    m_actions << action;
+    actions << action;
 
     //    Hard Overlay
     //    Shift + Alt + P
     action = new KisAction(i18n("Select Hard Overlay Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_P));
     connect(action, SIGNAL(triggered()), SLOT(slotHardOverlay()));
-    m_actions << action;
+    actions << action;
 
     //    Soft Light
     //    Shift + Alt + F
     action = new KisAction(i18n("Select Soft Light Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_F));
     connect(action, SIGNAL(triggered()), SLOT(slotSoftLight()));
-    m_actions << action;
+    actions << action;
 
     //    Hard Light
     //    Shift + Alt + H
     action = new KisAction(i18n("Select Hard Light Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_H));
     connect(action, SIGNAL(triggered()), SLOT(slotHardLight()));
-    m_actions << action;
+    actions << action;
 
     //    Vivid Light
     //    Shift + Alt + V
     action = new KisAction(i18n("Select Vivid Light Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_V));
     connect(action, SIGNAL(triggered()), SLOT(slotVividLight()));
-    m_actions << action;
+    actions << action;
 
     //    Linear Light
     //    Shift + Alt + J
     action = new KisAction(i18n("Select Linear Light Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_J));
     connect(action, SIGNAL(triggered()), SLOT(slotLinearLight()));
-    m_actions << action;
+    actions << action;
 
     //    Pin Light
     //    Shift + Alt + Z
     action = new KisAction(i18n("Select Pin Light Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_Z));
     connect(action, SIGNAL(triggered()), SLOT(slotPinLight()));
-    m_actions << action;
+    actions << action;
 
     //    Hard Mix
     //    Shift + Alt + L
     action = new KisAction(i18n("Select Hard Mix Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_L));
     connect(action, SIGNAL(triggered()), SLOT(slotHardMix()));
-    m_actions << action;
+    actions << action;
 
     //    Difference
     //    Shift + Alt + E
     action = new KisAction(i18n("Select Difference Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_E));
     connect(action, SIGNAL(triggered()), SLOT(slotDifference()));
-    m_actions << action;
+    actions << action;
 
     //    Exclusion
     //    Shift + Alt + X
     action = new KisAction(i18n("Select Exclusion Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_X));
     connect(action, SIGNAL(triggered()), SLOT(slotExclusion()));
-    m_actions << action;
+    actions << action;
 
     //    Hue
     //    Shift + Alt + U
     action = new KisAction(i18n("Select Hue Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_U));
     connect(action, SIGNAL(triggered()), SLOT(slotHue()));
-    m_actions << action;
+    actions << action;
 
     //    Saturation
     //    Shift + Alt + T
     action = new KisAction(i18n("Select Saturation Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_T));
     connect(action, SIGNAL(triggered()), SLOT(slotSaturation()));
-    m_actions << action;
+    actions << action;
 
     //    Color
     //    Shift + Alt + C
     action = new KisAction(i18n("Select Color Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_C));
     connect(action, SIGNAL(triggered()), SLOT(slotColor()));
-    m_actions << action;
+    actions << action;
 
     //    Luminosity
     //    Shift + Alt + Y
     action = new KisAction(i18n("Select Luminosity Blending Mode"), this);
     action->setDefaultShortcut(QKeySequence(Qt::SHIFT + Qt::ALT + Qt::Key_Y));
     connect(action, SIGNAL(triggered()), SLOT(slotLuminosity()));
-    m_actions << action;
+    actions << action;
 
-}
-
-KisCompositeOpComboBox::~KisCompositeOpComboBox()
-{
-    delete m_view;
+    return actions;
 }
 
 void KisCompositeOpComboBox::validate(const KoColorSpace *cs) {
@@ -302,12 +308,6 @@ KoID KisCompositeOpComboBox::selectedCompositeOp() const {
         return op;
     }
     return KoCompositeOpRegistry::instance().getDefaultCompositeOp();
-}
-
-
-QList<KisAction *> KisCompositeOpComboBox::blendmodeActions() const
-{
-    return m_actions;
 }
 
 void KisCompositeOpComboBox::slotCategoryToggled(const QModelIndex& index, bool toggled)

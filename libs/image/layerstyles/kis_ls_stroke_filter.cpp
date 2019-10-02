@@ -44,6 +44,7 @@
 #include "kis_ls_utils.h"
 #include "kis_multiple_projection.h"
 #include "kis_cached_paint_device.h"
+#include "krita_utils.h"
 
 namespace {
 
@@ -53,10 +54,10 @@ int borderSize(psd_stroke_position position, int size)
 
     switch (position) {
     case psd_stroke_outside:
-        border = 2 * size + 1;
+        border = size + 1;
         break;
     case psd_stroke_center:
-        border = size + 1;
+        border = qCeil(0.5 * size) + 1;
         break;
     case psd_stroke_inside:
         border = 1;
@@ -99,18 +100,24 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
     KisLsUtils::selectionFromAlphaChannel(srcDevice, baseSelection, needRect);
     KisPixelSelectionSP selection = baseSelection->pixelSelection();
 
+//    KritaUtils::filterAlpha8Device(selection, needRect,
+//                                   [](quint8 pixel) {
+//                                       return pixel > 0 ? 255 : 0;
+//                                   });
+//    KisGaussianKernel::applyGaussian(selection, needRect, 1.0, 1.0, QBitArray(), 0);
+
     {
         KisCachedSelection::Guard s2(*env->cachedSelection());
         KisPixelSelectionSP knockOutSelection = s2.selection()->pixelSelection();
         knockOutSelection->makeCloneFromRough(selection, needRect);
 
         if (config->position() == psd_stroke_outside) {
-            KisGaussianKernel::applyDilate(selection, needRect, 2 * config->size(), QBitArray(), 0, true);
-        } else if (config->position() == psd_stroke_inside) {
-            KisGaussianKernel::applyErodeU8(knockOutSelection, needRect, 2 * config->size(), QBitArray(), 0, true);
-        } else if (config->position() == psd_stroke_center) {
             KisGaussianKernel::applyDilate(selection, needRect, config->size(), QBitArray(), 0, true);
+        } else if (config->position() == psd_stroke_inside) {
             KisGaussianKernel::applyErodeU8(knockOutSelection, needRect, config->size(), QBitArray(), 0, true);
+        } else if (config->position() == psd_stroke_center) {
+            KisGaussianKernel::applyDilate(selection, needRect, 0.5 * config->size(), QBitArray(), 0, true);
+            KisGaussianKernel::applyErodeU8(knockOutSelection, needRect, 0.5 * config->size(), QBitArray(), 0, true);
         }
 
         KisPainter gc(selection);

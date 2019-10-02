@@ -28,9 +28,6 @@
 #include <KoResourcePaths.h>
 #include <KoResourceServer.h>
 
-#include <QApplication>
-#include <QThread>
-
 #include <kis_debug.h>
 
 #define BLACKLISTED "blacklisted" ///< xml tag for blacklisted tags

@@ -354,12 +354,31 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         // async importing is not yet supported!
         KIS_SAFE_ASSERT_RECOVER_NOOP(!isAsync);
 
+        // FIXME: Dmitry says "this progress reporting code never worked. Initial idea was to implement it his way, but I stopped and didn't finish it"
         if (0 && !batchMode()) {
             KisAsyncActionFeedback f(i18n("Opening document..."), 0);
             result = f.runAction(std::bind(&KisImportExportManager::doImport, this, location, filter));
         } else {
             result = doImport(location, filter);
         }
+        if (result.status().isOk()) {
+            KisImageSP image = m_document->image();
+            KisUsageLogger::log(QString("Loaded image from %1. Size: %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
+                                .arg(QString::fromLatin1(from))
+                                .arg(image->width())
+                                .arg(image->height())
+                                .arg(image->xRes())
+                                .arg(image->colorSpace()->colorModelId().name())
+                                .arg(image->colorSpace()->colorDepthId().name())
+                                .arg(image->colorSpace()->profile()->name())
+                                .arg(image->nlayers()));
+
+
+        }
+        else {
+            KisUsageLogger::log(QString("Failed to load image from %1").arg(QString::fromLatin1(from)));
+        }
+
     }
     else /* if (direction == Export) */ {
         if (!exportConfiguration) {

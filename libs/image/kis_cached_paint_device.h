@@ -83,6 +83,7 @@ public:
     void putSelection(KisSelectionSP selection) {
         selection->clear();
         selection->setDefaultBounds(new KisSelectionEmptyBounds(0));
+        selection->pixelSelection()->moveTo(QPoint());
         m_stack.push(selection);
     }
 

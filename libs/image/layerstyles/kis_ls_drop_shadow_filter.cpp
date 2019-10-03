@@ -211,8 +211,7 @@ void KisLsDropShadowFilter::applyDropShadow(KisPaintDeviceSP srcDevice,
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("4_selection_noise.png");
 
     if (!d.offset.isNull()) {
-        selection->setX(d.offset.x());
-        selection->setY(d.offset.y());
+        selection->moveTo(selection->offset() + d.offset);
     }
 
     /**

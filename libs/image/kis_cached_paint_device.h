@@ -82,7 +82,7 @@ public:
 
     void putSelection(KisSelectionSP selection) {
         selection->clear();
-        selection->setDefaultBounds(new KisDefaultBounds());
+        selection->setDefaultBounds(new KisSelectionEmptyBounds(0));
         m_stack.push(selection);
     }
 

@@ -330,7 +330,7 @@ struct LayoutChunkWrapper
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(startPos == m_addedChars, currentTextPos);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(lastPos < m_layout->text().size(), currentTextPos);
 
-//        qDebug() << m_layout->text();
+        //        qDebug() << m_layout->text();
 
         QTextLine line;
         std::swap(line, m_danglingLine);
@@ -387,17 +387,17 @@ struct LayoutChunkWrapper
 private:
     qreal skipSpaceCharacter(int pos) {
         const QTextCharFormat format =
-            formatForPos(pos, m_layout->formats());
+                formatForPos(pos, m_layout->formats());
 
         const QChar skippedChar = m_layout->text()[pos];
         KIS_SAFE_ASSERT_RECOVER_NOOP(skippedChar.isSpace() || !skippedChar.isPrint());
 
         QFontMetrics metrics(format.font());
-        #if QT_VERSION >= 0x051100
-            return metrics.horizontalAdvance(skippedChar);
-        #else
-            return metrics.width(skippedChar);
-        #endif
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+        return metrics.horizontalAdvance(skippedChar);
+#else
+        return metrics.width(skippedChar);
+#endif
     }
 
     static QTextCharFormat formatForPos(int pos, const QVector<QTextLayout::FormatRange> &formats)
@@ -461,9 +461,9 @@ void KoSvgTextShape::relayout()
             const bool isFinalPass = i == chunk.offsets.size();
 
             const int length =
-                !isFinalPass ?
-                chunk.offsets[i].start - lastSubChunkStart :
-                chunk.text.size() - lastSubChunkStart;
+                    !isFinalPass ?
+                        chunk.offsets[i].start - lastSubChunkStart :
+                        chunk.text.size() - lastSubChunkStart;
 
             if (length > 0) {
                 currentTextPos += lastSubChunkOffset;
@@ -508,7 +508,7 @@ void KoSvgTextShape::relayout()
 
         Q_FOREACH (const QTextLayout::FormatRange &range, layout.formats()) {
             const KoSvgCharChunkFormat &format =
-                static_cast<const KoSvgCharChunkFormat&>(range.format);
+                    static_cast<const KoSvgCharChunkFormat&>(range.format);
             AssociatedShapeWrapper wrapper = format.associatedShapeWrapper();
 
             const int rangeStart = range.start;

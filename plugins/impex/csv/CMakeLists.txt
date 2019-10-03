@@ -13,7 +13,7 @@ add_library(kritacsvimport MODULE ${kritacsvimport_SOURCES})
 
 target_link_libraries(kritacsvimport kritaui )
 
-install(TARGETS kritacsvimport DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
+#install(TARGETS kritacsvimport DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 # export
 
@@ -29,4 +29,4 @@ target_link_libraries(kritacsvexport kritaui kritaimpex)
 
 install(TARGETS kritacsvexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( PROGRAMS  krita_csv.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+#install( PROGRAMS  krita_csv.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

@@ -191,10 +191,12 @@ void KisLsSatinFilter::applySatin(KisPaintDeviceSP srcDevice,
 
 void KisLsSatinFilter::processDirectly(KisPaintDeviceSP src,
                                        KisMultipleProjection *dst,
+                                       KisLayerStyleKnockoutBlower *blower,
                                        const QRect &applyRect,
                                        KisPSDLayerStyleSP style,
                                        KisLayerStyleFilterEnvironment *env) const
 {
+    Q_UNUSED(blower);
     KIS_ASSERT_RECOVER_RETURN(style);
 
     const psd_layer_effects_satin *config = style->satin();

@@ -480,11 +480,13 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 
 void KisLsBevelEmbossFilter::processDirectly(KisPaintDeviceSP src,
                                              KisMultipleProjection *dst,
-                                         const QRect &applyRect,
-                                         KisPSDLayerStyleSP style,
-                                         KisLayerStyleFilterEnvironment *env) const
+                                             KisLayerStyleKnockoutBlower *blower,
+                                             const QRect &applyRect,
+                                             KisPSDLayerStyleSP style,
+                                             KisLayerStyleFilterEnvironment *env) const
 {
     Q_UNUSED(env);
+    Q_UNUSED(blower);
     KIS_ASSERT_RECOVER_RETURN(style);
 
     const psd_layer_effects_bevel_emboss *config = style->bevelAndEmboss();

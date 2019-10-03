@@ -32,6 +32,7 @@
 #include "kis_cached_paint_device.h"
 #include "kis_painter.h"
 #include "kis_ls_utils.h"
+#include "KisLayerStyleKnockoutBlower.h"
 
 
 struct Q_DECL_HIDDEN KisLayerStyleProjectionPlane::Private
@@ -63,13 +64,30 @@ struct Q_DECL_HIDDEN KisLayerStyleProjectionPlane::Private
         return stylesBefore + stylesOverlay + stylesAfter;
     }
 
-    bool hasOverlayStylesReady() const {
+    bool hasOverlayStyles() const {
         Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, stylesOverlay) {
             if (!plane->isEmpty()) return true;
         }
 
         return false;
     }
+
+    bool hasKnockoutStyles() const {
+        Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, stylesBefore) {
+            if (!plane->knockoutBlower()->isEmpty()) return true;
+        }
+
+        Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, stylesAfter) {
+            if (!plane->knockoutBlower()->isEmpty()) return true;
+        }
+
+        return false;
+    }
+
+    void applyComplexPlane(KisPainter *painter,
+                           KisLayerStyleFilterProjectionPlaneSP plane,
+                           const QRect &rect,
+                           KisPaintDeviceSP originalClone);
 };
 
 KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer)
@@ -207,44 +225,69 @@ QRect KisLayerStyleProjectionPlane::recalculate(const QRect& rect, KisNodeSP fil
     return result;
 }
 
+void KisLayerStyleProjectionPlane::Private::applyComplexPlane(KisPainter *painter,
+                                                              KisLayerStyleFilterProjectionPlaneSP plane,
+                                                              const QRect &rect,
+                                                              KisPaintDeviceSP originalClone)
+{
+    if (plane->isEmpty()) return;
+
+    if (!plane->knockoutBlower()->isEmpty()) {
+        KisCachedPaintDevice::Guard d1(originalClone, cachedPaintDevice);
+        KisPaintDeviceSP mergedStyle = d1.device();
+        mergedStyle->makeCloneFromRough(originalClone, rect);
+
+        KisPainter overlayPainter(mergedStyle);
+        plane->apply(&overlayPainter, rect);
+        plane->knockoutBlower()->apply(painter, mergedStyle, rect);
+
+    } else {
+        plane->apply(painter, rect);
+    }
+}
+
 void KisLayerStyleProjectionPlane::apply(KisPainter *painter, const QRect &rect)
 {
     KisLayerProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
 
     if (m_d->style->isEnabled()) {
-        if (m_d->hasOverlayStylesReady()) {
-
+        if (m_d->hasOverlayStyles() || m_d->hasKnockoutStyles()) {
             KisCachedPaintDevice::Guard d1(painter->device(), m_d->cachedPaintDevice);
             KisPaintDeviceSP originalClone = d1.device();
             originalClone->makeCloneFromRough(painter->device(), rect);
 
-            Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
-                plane->apply(painter, rect);
+            Q_FOREACH (const KisLayerStyleFilterProjectionPlaneSP plane, m_d->stylesBefore) {
+                m_d->applyComplexPlane(painter, plane, rect, originalClone);
             }
 
-            KisCachedSelection::Guard s1(m_d->cachedSelection);
-            KisSelectionSP knockoutSelection = s1.selection();
-            KisLsUtils::selectionFromAlphaChannel(m_d->sourceLayer->projection(), knockoutSelection, rect);
+            if (m_d->hasOverlayStyles()) {
+                KisCachedSelection::Guard s1(m_d->cachedSelection);
+                KisSelectionSP knockoutSelection = s1.selection();
+                KisLsUtils::selectionFromAlphaChannel(m_d->sourceLayer->projection(), knockoutSelection, rect);
 
-            {
-                KisPainter overlayPainter(originalClone);
-                sourcePlane->applyMaxOutAlpha(&overlayPainter, rect);
+                KisCachedPaintDevice::Guard d2(painter->device(), m_d->cachedPaintDevice);
+                KisPaintDeviceSP sourceProjection = d2.device();
+                sourceProjection->makeCloneFromRough(painter->device(), rect);
 
-                Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesOverlay) {
-                    plane->apply(&overlayPainter, rect);
+                {
+                    KisPainter overlayPainter(sourceProjection);
+                    sourcePlane->applyMaxOutAlpha(&overlayPainter, rect);
+
+                    Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesOverlay) {
+                        plane->apply(&overlayPainter, rect);
+                    }
                 }
+
+                KisLayerStyleKnockoutBlower blower;
+                blower.setKnockoutSelection(knockoutSelection);
+                blower.apply(painter, sourceProjection, rect);
+            } else {
+                sourcePlane->apply(painter, rect);
             }
 
-            painter->setOpacity(OPACITY_OPAQUE_U8);
-            painter->setChannelFlags(QBitArray());
-            painter->setCompositeOp(COMPOSITE_COPY);
-            painter->setSelection(knockoutSelection);
-            painter->bitBlt(rect.topLeft(), originalClone, rect);
-
-            Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
-                plane->apply(painter, rect);
+            Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, m_d->stylesAfter) {
+                m_d->applyComplexPlane(painter, plane, rect, originalClone);
             }
-
         } else {
             Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
                 plane->apply(painter, rect);

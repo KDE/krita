@@ -101,11 +101,13 @@ KisLsOverlayFilter::getOverlayStruct(KisPSDLayerStyleSP style) const
 
 void KisLsOverlayFilter::processDirectly(KisPaintDeviceSP src,
                                          KisMultipleProjection *dst,
+                                         KisLayerStyleKnockoutBlower *blower,
                                          const QRect &applyRect,
                                          KisPSDLayerStyleSP style,
                                          KisLayerStyleFilterEnvironment *env) const
 {
     Q_UNUSED(env);
+    Q_UNUSED(blower);
     KIS_ASSERT_RECOVER_RETURN(style);
 
     const psd_layer_effects_overlay_base *config = getOverlayStruct(style);

@@ -25,6 +25,8 @@
 
 #include "kis_types.h"
 
+class KisLayerStyleKnockoutBlower;
+
 
 class KisLayerStyleFilterProjectionPlane : public KisAbstractProjectionPlane
 {
@@ -52,6 +54,7 @@ public:
      */
     bool isEmpty() const;
 
+    KisLayerStyleKnockoutBlower *knockoutBlower() const;
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

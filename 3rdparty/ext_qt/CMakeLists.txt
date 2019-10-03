@@ -65,6 +65,7 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-Return-QScreen-s-HMONITOR-handle-via-QPlatformNative.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-Implement-a-manual-test-for-checking-is-HDR-features.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-Fix-notification-of-QDockWidget-when-it-gets-undocke.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0009-Fix-Rec2020-display-format.patch
             )
 
     # AMD random generation patch

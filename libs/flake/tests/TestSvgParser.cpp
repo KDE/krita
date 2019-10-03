@@ -1199,6 +1199,7 @@ void TestSvgParser::testRenderFillLinearGradientUserCoord()
 {
     const QString data =
             "<svg width=\"30px\" height=\"30px\" viewBox=\"60 70 60 90\""
+            "        preserveAspectRatio=\"none meet\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
             "<linearGradient id=\"testGrad\" x1=\"70\" y1=\"115\" x2=\"90\" y2=\"115\""
@@ -1262,6 +1263,7 @@ void TestSvgParser::testRenderFillLinearGradientTransformUserCoord()
 {
     const QString data =
             "<svg width=\"30px\" height=\"30px\" viewBox=\"60 70 60 90\""
+            "        preserveAspectRatio=\"none meet\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
             "<linearGradient id=\"testGrad\" x1=\"70\" y1=\"115\" x2=\"90\" y2=\"115\""
@@ -1314,6 +1316,7 @@ void TestSvgParser::testRenderFillLinearGradientRotatedShapeUserCoord()
 
     const QString data =
             "<svg width=\"30px\" height=\"30px\" viewBox=\"60 70 60 90\""
+            "        preserveAspectRatio=\"none meet\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
             "<linearGradient id=\"testGrad\" x1=\"70\" y1=\"115\" x2=\"90\" y2=\"115\""
@@ -1379,6 +1382,7 @@ void TestSvgParser::testRenderFillLinearGradientUserCoordPercent()
 {
     const QString data =
             "<svg width=\"30px\" height=\"30px\" viewBox=\"60 70 60 90\""
+            "        preserveAspectRatio=\"none meet\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
             "<linearGradient id=\"testGrad\" x1=\"116.667%\" y1=\"127.778%\" x2=\"150%\" y2=\"127.778%\""
@@ -1878,6 +1882,7 @@ void TestSvgParser::testRenderPattern_r_User_c_View()
             "<defs>"
             "    <pattern id=\"TestPattern\" patternUnits=\"userSpaceOnUse\""
             "        viewBox=\"10 10 60 90\""
+            "        preserveAspectRatio=\"none meet\""
             "        x=\"60\" y=\"0\" width=\"30\" height=\"20\">"
 
             "        <g id=\"patternRect\">"
@@ -1949,6 +1954,7 @@ void TestSvgParser::testRenderPattern_r_User_c_View_Rotated()
             "<defs>"
             "    <pattern id=\"TestPattern\" patternUnits=\"userSpaceOnUse\""
             "        viewBox=\"10 10 60 90\""
+            "        preserveAspectRatio=\"none meet\""
             "        x=\"60\" y=\"0\" width=\"30\" height=\"20\""
             "        patternTransform=\"translate(40 10) rotate(90)\">"
 
@@ -1993,6 +1999,7 @@ void TestSvgParser::testRenderPattern_r_Obb_c_View_Rotated()
             "<defs>"
             "    <pattern id=\"TestPattern\" patternUnits=\"objectBoundingBox\""
             "        viewBox=\"10 10 60 90\""
+            "        preserveAspectRatio=\"none meet\""
             "        x=\"0\" y=\"0\" width=\"0.5\" height=\"0.333\""
             "        patternTransform=\"translate(0 0) rotate(90)\">"
 

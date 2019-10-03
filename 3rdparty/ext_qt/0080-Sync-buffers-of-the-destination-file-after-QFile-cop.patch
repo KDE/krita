@@ -1,0 +1,44 @@
+From dc661e2f61cb37998a457a21ca786f9b0186ece2 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Thu, 3 Oct 2019 19:20:07 +0300
+Subject: [PATCH] Sync buffers of the destination file after QFile::copy()
+
+After doing native file copying operating system (tested on Windows)
+doesn't sync the buffers of the file for some time. That is, if the
+user faces ome power outage, the file will be lost.
+
+Actually, the other (non-native) copying option already has buffers
+syncing code. So this patch also makes behavior a bit more consistent.
+
+Change-Id: Id1b716ae86f68303ef6a9745a3275628d91e2d93
+---
+ src/corelib/io/qfile.cpp | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/src/corelib/io/qfile.cpp b/src/corelib/io/qfile.cpp
+index 37de4450cc..6400df5727 100644
+--- a/src/corelib/io/qfile.cpp
++++ b/src/corelib/io/qfile.cpp
+@@ -796,6 +796,19 @@ QFile::copy(const QString &newName)
+     close();
+     if(error() == QFile::NoError) {
+         if (d->engine()->copy(newName)) {
++            /**
++             * Force copied file to be synched to disk, like we do it in
++             * alternative approach
++             */
++            QFile out(newName);
++            if (out.open(QIODevice::ReadWrite)) {
++                bool result = out.d_func()->engine()->syncToDisk();
++                out.close();
++            } else {
++                d->setError(QFile::CopyError, tr("Cannot open %1 for output").arg(newName));
++                return false;
++            }
++
+             unsetError();
+             return true;
+         } else {
+-- 
+2.20.1.windows.1
+

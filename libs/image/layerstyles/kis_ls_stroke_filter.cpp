@@ -98,11 +98,8 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
 
     const QRect needRect = kisGrowRect(applyRect, borderSize(config->position(), config->size()));
 
-    KisSelectionSP baseSelection = blower->knockoutSelection();
-    if (!baseSelection) {
-        baseSelection = new KisSelection(new KisSelectionEmptyBounds(0));
-        blower->setKnockoutSelection(baseSelection);
-    }
+    KisSelectionSP baseSelection = blower->knockoutSelectionLazy();
+
     KisLsUtils::selectionFromAlphaChannel(srcDevice, baseSelection, needRect);
     KisPixelSelectionSP selection = baseSelection->pixelSelection();
 

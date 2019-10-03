@@ -281,6 +281,8 @@ void KisLayerStyleProjectionPlane::apply(KisPainter *painter, const QRect &rect)
                 KisLayerStyleKnockoutBlower blower;
                 blower.setKnockoutSelection(knockoutSelection);
                 blower.apply(painter, sourceProjection, rect);
+
+                blower.resetKnockoutSelection();
             } else {
                 sourcePlane->apply(painter, rect);
             }

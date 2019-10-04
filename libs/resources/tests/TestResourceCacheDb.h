@@ -29,6 +29,7 @@ private Q_SLOTS:
     void initTestCase();
     void testCreateDatabase();
     void testLookupTables();
+    void testMetaData();
     void cleanupTestCase();
 private:
 };

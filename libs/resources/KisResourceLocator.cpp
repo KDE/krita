@@ -276,6 +276,11 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     return true;
 }
 
+QMap<QString, QVariant> KisResourceLocator::metaDataForResource(int id) const
+{
+    return KisResourceCacheDb::metaDataForId(id, "resources");
+}
+
 void KisResourceLocator::purge()
 {
     d->resourceCache.clear();

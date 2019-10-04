@@ -107,6 +107,24 @@ private:
     /// Delete all resources marked temporary
     static void deleteTemporaryResources();
 
+    /**
+     * @brief metaDataForId
+     * @param id
+     * @param tableName
+     * @return
+     */
+    static QMap<QString, QVariant> metaDataForId(int id, const QString &tableName);
+
+    /**
+     * @brief setMetaDataForId removes all metadata for the given id and table name,
+     *  and inserts the metadata in the metadata table.
+     * @param id
+     * @param tableName
+     * @return true if succesful, false if not
+     */
+    static bool updateMetaDataForId(const QMap<QString, QVariant> map, int id, const QString &tableName);
+
+
     static bool s_valid;
     static QString s_lastError;
 };

@@ -85,37 +85,6 @@ public:
      */
     QString resourceLocationBase() const;
 
-    /**
-     * @brief removeResource
-     * @param resourceId
-     * @return
-     */
-    bool removeResource(int resourceId);
-
-    /**
-     * @brief importResourceFromFile
-     * @param resourceType
-     * @param fileName
-     * @return
-     */
-    bool importResourceFromFile(const QString &resourceType, const QString &fileName);
-
-    /**
-     * @brief addResource
-     * @param resourceType
-     * @param resource
-     * @param save
-     * @return
-     */
-    bool addResource(const QString &resourceType, const KoResourceSP resource, bool save = true);
-
-    /**
-     * @brief updateResource
-     * @param resourceType
-     * @param resource
-     * @return
-     */
-    bool updateResource(const QString &resourceType, const KoResourceSP resource);
 
     /**
      * @brief purge purges the local resource cache
@@ -157,6 +126,46 @@ private:
      * @param resourceId the id
      */
     KoResourceSP resourceForId(int resourceId);
+
+    /**
+     * @brief removeResource
+     * @param resourceId
+     * @return
+     */
+    bool removeResource(int resourceId);
+
+    /**
+     * @brief importResourceFromFile
+     * @param resourceType
+     * @param fileName
+     * @return
+     */
+    bool importResourceFromFile(const QString &resourceType, const QString &fileName);
+
+    /**
+     * @brief addResource
+     * @param resourceType
+     * @param resource
+     * @param save
+     * @return
+     */
+    bool addResource(const QString &resourceType, const KoResourceSP resource, bool save = true);
+
+    /**
+     * @brief updateResource
+     * @param resourceType
+     * @param resource
+     * @return
+     */
+    bool updateResource(const QString &resourceType, const KoResourceSP resource);
+
+    /**
+     * @brief metaDataForResource
+     * @param id
+     * @return
+     */
+    QMap<QString, QVariant> metaDataForResource(int id) const;
+
 
     KisResourceLocator(QObject *parent);
     KisResourceLocator(const KisResourceLocator&);

@@ -24,6 +24,8 @@
 #include <QDirIterator>
 #include <QStringList>
 #include <QTime>
+#include <QDataStream>
+#include <QByteArray>
 
 #include <KritaVersionWrapper.h>
 #include <klocalizedstring.h>
@@ -91,8 +93,7 @@ QSqlError initDb(const QString &location)
                                        << "resources"
                                        << "versioned_resources"
                                        << "resource_tags"
-                                       << "resource_metadata"
-                                       << "storage_metadata";
+                                       << "metadata";
 
     QStringList dbTables;
     // Verify whether we should recreate the database
@@ -149,7 +150,7 @@ QSqlError initDb(const QString &location)
         if (f.open(QFile::ReadOnly)) {
             QSqlQuery q;
             if (!q.exec(f.readAll())) {
-                qWarning() << "Could not create table" << table;
+                qWarning() << "Could not create table" << table << q.lastError();
                 return db.lastError();
             }
             infoResources << "Created table" << table;
@@ -954,5 +955,103 @@ void KisResourceCacheDb::deleteTemporaryResources()
     if (!q.exec()) {
         qWarning() << "Could not execute delete temporary resources query." << q.lastError();
     }
+}
+
+QMap<QString, QVariant> KisResourceCacheDb::metaDataForId(int id, const QString &tableName)
+{
+    QMap<QString, QVariant> map;
+
+    QSqlQuery q;
+    if (!q.prepare("SELECT key\n"
+                   ",      value\n"
+                   "FROM   metadata\n"
+                   "WHERE  foreign_id = :id\n"
+                   "AND    table_name = :table")) {
+        qWarning() << "Could not prepare metadata query" << q.lastError();
+        return map;
+    }
+
+    q.bindValue(":id", id);
+    q.bindValue(":table", tableName);
+
+    if (!q.exec()) {
+        qWarning() << "Could not execute metadata query" << q.lastError();
+        return map;
+    }
+
+    while (q.next()) {
+        QString key = q.value(0).toString();
+        QByteArray ba = q.value(1).toByteArray();
+        QDataStream ds(QByteArray::fromBase64(ba));
+        QVariant value;
+        ds >> value;
+        map[key] = value;
+    }
+
+    return map;
+}
+
+bool KisResourceCacheDb::updateMetaDataForId(const QMap<QString, QVariant> map, int id, const QString &tableName)
+{
+    QSqlDatabase::database().transaction();
+
+    {
+        QSqlQuery q;
+        if (!q.prepare("DELETE FROM metadata\n"
+                       "WHERE  foreign_id = :id\n"
+                       "AND    table_name = :table\n")) {
+            qWarning() << "Could not prepare delete metadata query" << q.lastError();
+            return false;
+        }
+
+        q.bindValue(":id", id);
+        q.bindValue(":table", tableName);
+
+        if (!q.exec()) {
+            QSqlDatabase::database().rollback();
+            qWarning() << "Could not execute delete metadata query" << q.lastError();
+            return false;
+
+        }
+    }
+
+    {
+        QSqlQuery q;
+        if (!q.prepare("INSERT INTO metadata\n"
+                       "(foreign_id, table_name, key, value)\n"
+                       "VALUES\n"
+                       "(:id, :table, :key, :value)")) {
+            QSqlDatabase::database().rollback();
+            qWarning() << "Could not create insert metadata query" << q.lastError();
+            return false;
+        }
+
+        QMap<QString, QVariant>::const_iterator iter = map.cbegin();
+        while (iter != map.cend()) {
+            q.bindValue(":id", id);
+            q.bindValue(":table", tableName);
+            q.bindValue(":key", iter.key());
+
+            QVariant v = iter.value();
+            QByteArray ba;
+            QDataStream ds(&ba, QIODevice::WriteOnly);
+            ds << v;
+            ba = ba.toBase64();
+            q.bindValue(":value", QString::fromLatin1(ba));
+
+            if (!q.exec()) {
+                QSqlDatabase::database().rollback();
+                qWarning() << "Could not insert metadata" << q.lastError();
+                return false;
+            }
+
+            ++iter;
+        }
+    }
+
+    QSqlDatabase::database().commit();
+    return true;
+
+
 }
 

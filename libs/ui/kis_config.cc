@@ -27,6 +27,7 @@
 #include <QStringList>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QDebug>
 
 #include <kconfig.h>
 
@@ -48,6 +49,8 @@
 
 #include <kis_color_manager.h>
 #include <KisOcioConfiguration.h>
+#include <KisUsageLogger.h>
+#include <kis_image_config.h>
 
 #ifdef Q_OS_WIN
 #include "config_use_qt_tablet_windows.h"
@@ -74,6 +77,44 @@ KisConfig::~KisConfig()
     m_cfg.sync();
 }
 
+void KisConfig::logImportantSettings() const
+{
+
+    KisUsageLogger::writeSectionHeader();
+    KisUsageLogger::log("Current Settings\n");
+    KisUsageLogger::write(QString("Current Swap Location: %1").arg(KisImageConfig(true).swapDir()));
+    KisUsageLogger::write(QString("Undo Enabled: %1").arg(undoEnabled()));
+    KisUsageLogger::write(QString("Undo Stack Limit: %1").arg(undoStackLimit()));
+    KisUsageLogger::write(QString("Use OpenGL: %1").arg(useOpenGL()));
+    KisUsageLogger::write(QString("Use OpenGL Texture Buffer: %1").arg(useOpenGLTextureBuffer()));
+    KisUsageLogger::write(QString("Use AMD Vectorization Workaround: %1").arg(enableAmdVectorizationWorkaround()));
+    KisUsageLogger::write(QString("Canvas State: %1").arg(canvasState()));
+    KisUsageLogger::write(QString("Autosave Interval: %1").arg(autoSaveInterval()));
+    KisUsageLogger::write(QString("Use Backup Files: %1").arg(backupFile()));
+    KisUsageLogger::write(QString("Number of Backups Kept: %1").arg(m_cfg.readEntry("numberofbackupfiles", 1)));
+    KisUsageLogger::write(QString("Backup File Suffix: %1").arg(m_cfg.readEntry("backupfilesuffix", "~")));
+
+    QString backupDir;
+    switch(m_cfg.readEntry("backupfilelocation", 0)) {
+    case 1:
+        backupDir = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+        break;
+    case 2:
+        backupDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+        break;
+    default:
+        // Do nothing: the empty string is user file location
+        backupDir = "Same Folder as the File";
+    }
+    KisUsageLogger::write(QString("Backup Location: %1").arg(backupDir));
+
+    KisUsageLogger::write(QString("Use Win8 Pointer Input: %1").arg(useWin8PointerInput()));
+    KisUsageLogger::write(QString("Use RightMiddleTabletButton Workaround: %1").arg(useRightMiddleTabletButtonWorkaround()));
+    KisUsageLogger::write(QString("Levels of Detail Enabled: %1").arg(levelOfDetailEnabled()));
+    KisUsageLogger::write(QString("Use Zip64: %1").arg(useZip64()));
+
+    KisUsageLogger::write("\n");
+}
 
 bool KisConfig::disableTouchOnCanvas(bool defaultValue) const
 {

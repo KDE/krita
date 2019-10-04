@@ -183,10 +183,9 @@ bool SvgUtil::parseViewBox(const KoXmlElement &e,
             QTransform::fromTranslate(elementBounds.x(), elementBounds.y());
 
     const QString aspectString = e.attribute("preserveAspectRatio");
-    if (!aspectString.isEmpty()) {
-        PreserveAspectRatioParser p(aspectString);
-        parseAspectRatio(p, elementBounds, viewBoxRect, &viewBoxTransform);
-    }
+    // give initial value if value not defined
+    PreserveAspectRatioParser p( (!aspectString.isEmpty())? aspectString : QString("xMidYMid meet"));
+    parseAspectRatio(p, elementBounds, viewBoxRect, &viewBoxTransform);
 
     *_viewRect = viewBoxRect;
     *_viewTransform = viewBoxTransform;

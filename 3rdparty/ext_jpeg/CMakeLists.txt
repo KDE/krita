@@ -26,9 +26,9 @@ ExternalProject_Add( ext_jpeg
     URL https://github.com/libjpeg-turbo/libjpeg-turbo/archive/2.0.2.tar.gz
     URL_MD5 8badea1368f489ac4c520f01b1bc045b
   
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_jpeg}  ${GLOBAL_AUTOMAKE_PROFILE} --without-simd
-    BUILD_COMMAND make
-    INSTALL_COMMAND make install      
+    INSTALL_DIR ${PREFIX_ext_jpeg}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_jpeg} -DWITH_SIMD=OFF _DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+
 
     UPDATE_COMMAND ""
 )

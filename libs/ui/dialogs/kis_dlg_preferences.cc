@@ -1746,6 +1746,8 @@ bool KisDlgPreferences::editPreferences()
 
         dialog->m_authorPage->apply();
 
+        cfg.logImportantSettings();
+
     }
     delete dialog;
     return baccept;

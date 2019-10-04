@@ -166,6 +166,7 @@ private:
      */
     QMap<QString, QVariant> metaDataForResource(int id) const;
 
+    bool setMetaDataForResource(int id, QMap<QString, QVariant> map) const;
 
     KisResourceLocator(QObject *parent);
     KisResourceLocator(const KisResourceLocator&);

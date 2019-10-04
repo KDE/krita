@@ -199,9 +199,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
         }
         case Qt::UserRole + MetaData:
         {
-            //qDebug() << "REMINDER: implement KoResource::Metadata properly!";
             QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForResource(d->resourcesQuery.value("id").toInt());
-            r.insert("paintopid", "paintbrush");
             return r;
         }
             
@@ -350,8 +348,7 @@ bool KisResourceModel::updateResource(KoResourceSP resource)
 bool KisResourceModel::setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata)
 {
     //qDebug() << "KisResourceModel::setResourceMetaData" << s_i9 << d->resourceType; s_i9++;
-
-    return true;
+    return KisResourceLocator::instance()->setMetaDataForResource(resource->resourceId(), metadata);
 }
 
 bool KisResourceModel::resetQuery()

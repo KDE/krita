@@ -281,6 +281,11 @@ QMap<QString, QVariant> KisResourceLocator::metaDataForResource(int id) const
     return KisResourceCacheDb::metaDataForId(id, "resources");
 }
 
+bool KisResourceLocator::setMetaDataForResource(int id, QMap<QString, QVariant> map) const
+{
+    return KisResourceCacheDb::updateMetaDataForId(map, id, "resources");
+}
+
 void KisResourceLocator::purge()
 {
     d->resourceCache.clear();

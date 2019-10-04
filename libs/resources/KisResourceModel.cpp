@@ -348,6 +348,7 @@ bool KisResourceModel::updateResource(KoResourceSP resource)
 bool KisResourceModel::setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata)
 {
     //qDebug() << "KisResourceModel::setResourceMetaData" << s_i9 << d->resourceType; s_i9++;
+    Q_ASSERT(resource->resourceId() > -1);
     return KisResourceLocator::instance()->setMetaDataForResource(resource->resourceId(), metadata);
 }
 

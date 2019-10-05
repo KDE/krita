@@ -157,9 +157,18 @@ Java_org_krita_android_JNIWrappers_saveState(JNIEnv* /*env*/,
     QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
     kritarc.setValue("canvasState", "OPENGL_SUCCESS");
 }
-#endif
 
-#ifdef Q_OS_ANDROID
+extern "C" JNIEXPORT void JNICALL
+Java_org_krita_android_JNIWrappers_exitFullScreen(JNIEnv* /*env*/,
+                                                  jobject /*obj*/,
+                                                  jint    /*n*/)
+{
+    if (!KisPart::exists()) return;
+
+    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    mainWindow->viewFullscreen(false);
+}
+
 __attribute__ ((visibility ("default")))
 #endif
 extern "C" int main(int argc, char **argv)

@@ -307,6 +307,7 @@ public Q_SLOTS:
 
 
     void slotFileSelected(QString path);
+
 private Q_SLOTS:
     /**
      * Save the list of recent files.

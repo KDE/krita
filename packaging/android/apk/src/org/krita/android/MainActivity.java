@@ -19,10 +19,11 @@
 
 package org.krita.android;
 
-import android.os.Bundle;
-import android.view.WindowManager;
+ import android.os.Bundle;
+ import android.view.KeyEvent;
+ import android.view.WindowManager;
 
-import org.qtproject.qt5.android.bindings.QtActivity;
+ import org.qtproject.qt5.android.bindings.QtActivity;
 
 public class MainActivity extends QtActivity {
 
@@ -48,5 +49,16 @@ public class MainActivity extends QtActivity {
 		else {
 			isStartup = false;
 		}
+	}
+
+	@Override
+	public boolean onKeyUp(final int keyCode, final KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && getActionBar() != null &&
+		    !getActionBar().isShowing()) {
+			JNIWrappers.exitFullScreen();
+			return true;
+		}
+
+		return super.onKeyUp(keyCode, event);
 	}
 }

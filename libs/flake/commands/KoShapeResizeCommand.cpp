@@ -20,6 +20,7 @@
 
 #include <KoShape.h>
 #include "kis_command_ids.h"
+#include "kis_assert.h"
 
 
 struct Q_DECL_HIDDEN KoShapeResizeCommand::Private
@@ -67,6 +68,26 @@ KoShapeResizeCommand::~KoShapeResizeCommand()
 
 void KoShapeResizeCommand::redoImpl()
 {
+    QMap<KoShape*, QRectF> updates = redoNoUpdate();
+
+    for (auto it = updates.begin(); it != updates.end(); ++it) {
+        it.key()->updateAbsolute(it.value());
+    }
+}
+
+void KoShapeResizeCommand::undoImpl()
+{
+    QMap<KoShape*, QRectF> updates = undoNoUpdate();
+
+    for (auto it = updates.begin(); it != updates.end(); ++it) {
+        it.key()->updateAbsolute(it.value());
+    }
+}
+
+QMap<KoShape*, QRectF> KoShapeResizeCommand::redoNoUpdate()
+{
+    QMap<KoShape*,QRectF> updates;
+
     Q_FOREACH (KoShape *shape, m_d->shapes) {
         const QRectF oldDirtyRect = shape->boundingRect();
 
@@ -77,20 +98,27 @@ void KoShapeResizeCommand::redoImpl()
                              m_d->usePostScaling,
                              m_d->postScalingCoveringTransform);
 
-        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
+        updates[shape] = oldDirtyRect | shape->boundingRect();
     }
+
+    return updates;
 }
 
-void KoShapeResizeCommand::undoImpl()
+QMap<KoShape*, QRectF> KoShapeResizeCommand::undoNoUpdate()
 {
+    QMap<KoShape*,QRectF> updates;
+
     for (int i = 0; i < m_d->shapes.size(); i++) {
         KoShape *shape = m_d->shapes[i];
 
         const QRectF oldDirtyRect = shape->boundingRect();
         shape->setSize(m_d->oldSizes[i]);
         shape->setTransformation(m_d->oldTransforms[i]);
-        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
+
+        updates[shape] = oldDirtyRect | shape->boundingRect();
     }
+
+    return updates;
 }
 
 int KoShapeResizeCommand::id() const
@@ -124,4 +152,22 @@ bool KoShapeResizeCommand::mergeWith(const KUndo2Command *command)
     m_d->scaleX *= other->m_d->scaleX;
     m_d->scaleY *= other->m_d->scaleY;
     return true;
+}
+
+void KoShapeResizeCommand::replaceResizeAction(qreal scaleX, qreal scaleY, const QPointF &absoluteStillPoint)
+{
+    const QMap<KoShape*, QRectF> undoUpdates = undoNoUpdate();
+
+    m_d->scaleX = scaleX;
+    m_d->scaleY = scaleY;
+    m_d->absoluteStillPoint = absoluteStillPoint;
+
+    const QMap<KoShape*, QRectF> redoUpdates = redoNoUpdate();
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(undoUpdates.size() == redoUpdates.size());
+
+    for (auto it = undoUpdates.begin(); it != undoUpdates.end(); ++it) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(redoUpdates.contains(it.key()));
+        it.key()->updateAbsolute(it.value() | redoUpdates[it.key()]);
+    }
 }

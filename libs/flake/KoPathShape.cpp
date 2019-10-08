@@ -488,12 +488,14 @@ QPainterPath KoPathShape::outline() const
     Q_D(const KoPathShape);
 
     QPainterPath path;
-    Q_FOREACH (KoSubpath * subpath, d->subpaths) {
-        KoPathPoint * lastPoint = subpath->first();
+    for (auto subpathIt = d->subpaths.constBegin(); subpathIt != d->subpaths.constEnd(); ++subpathIt) {
+        const KoSubpath * subpath = *subpathIt;
+        const KoPathPoint * lastPoint = subpath->constFirst();
         bool activeCP = false;
-        Q_FOREACH (KoPathPoint * currPoint, *subpath) {
+        for (auto pointIt = subpath->constBegin(); pointIt != subpath->constEnd(); ++pointIt) {
+            const KoPathPoint * currPoint = *pointIt;
             KoPathPoint::PointProperties currProperties = currPoint->properties();
-            if (currPoint == subpath->first()) {
+            if (currPoint == subpath->constFirst()) {
                 if (currProperties & KoPathPoint::StartSubpath) {
                     Q_ASSERT(!qIsNaNPoint(currPoint->point()));
                     path.moveTo(currPoint->point());

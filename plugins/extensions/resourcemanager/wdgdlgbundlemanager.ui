@@ -6,240 +6,75 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>835</width>
-    <height>712</height>
+    <width>778</width>
+    <height>572</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QGroupBox" name="groupBox">
-       <property name="title">
-        <string>Active Bundles</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_6">
-        <item>
-         <widget class="QListWidget" name="listActive">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>200</height>
-           </size>
-          </property>
-          <property name="alternatingRowColors">
-           <bool>true</bool>
-          </property>
-          <property name="selectionMode">
-           <enum>QAbstractItemView::ExtendedSelection</enum>
-          </property>
-          <property name="spacing">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="createBundleButton">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Create New Bundle</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="1">
+  <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <spacer name="verticalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
+      <widget class="QListView" name="listView"/>
      </item>
      <item>
-      <widget class="QToolButton" name="bnAdd">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="bnRemove">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QToolButton" name="bnAdd">
+         <property name="toolTip">
+          <string>Import a resource library</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset theme="new"/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="bnNew">
+         <property name="toolTip">
+          <string>Create a resource library</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset theme="add"/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="bnDelete">
+         <property name="toolTip">
+          <string>Delete a resource library</string>
+         </property>
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset theme="delete"/>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
-   <item row="0" column="2">
-    <layout class="QVBoxLayout" name="verticalLayout_3">
-     <item>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="title">
-        <string>Inactive Bundles</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_7">
-        <item>
-         <widget class="QListWidget" name="listInactive">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>200</height>
-           </size>
-          </property>
-          <property name="selectionMode">
-           <enum>QAbstractItemView::ExtendedSelection</enum>
-          </property>
-          <property name="spacing">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="3">
-    <layout class="QVBoxLayout" name="verticalLayout_5">
-     <item>
-      <widget class="QPushButton" name="bnImportBundles">
-       <property name="text">
-        <string>Import Bundles</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bnImportBrushes">
-       <property name="text">
-        <string>Import Brushes</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bnImportPatterns">
-       <property name="text">
-        <string>Import Patterns</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bnImportGradients">
-       <property name="text">
-        <string>Import Gradients</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bnImportPresets">
-       <property name="text">
-        <string>Import Presets</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bnImportPalettes">
-       <property name="text">
-        <string>Import Palettes</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bnImportWorkspaces">
-       <property name="text">
-        <string>Import Workspaces</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="deleteBackupFilesButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Delete Backup Files</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="openResourceFolderButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Open Resource Folder</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>18</width>
-         <height>17</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0" colspan="4">
+   <item>
     <widget class="QGroupBox" name="BundleSelectedGroupBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -254,7 +89,7 @@
       </size>
      </property>
      <property name="title">
-      <string>Selected Bundle</string>
+      <string/>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_8">
       <item>
@@ -288,16 +123,6 @@
               </property>
               <property name="textFormat">
                <enum>Qt::AutoText</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="bnEditBundle">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>&amp;Edit bundle...</string>
               </property>
              </widget>
             </item>
@@ -360,7 +185,10 @@
                  </size>
                 </property>
                 <property name="frameShape">
-                 <enum>QFrame::Box</enum>
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Plain</enum>
                 </property>
                 <property name="text">
                  <string/>
@@ -508,25 +336,6 @@
           </item>
          </layout>
         </widget>
-        <widget class="QTreeWidget" name="listBundleContents">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>0</height>
-          </size>
-         </property>
-         <column>
-          <property name="text">
-           <string notr="true">1</string>
-          </property>
-         </column>
-        </widget>
        </widget>
       </item>
      </layout>
@@ -534,6 +343,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>listView</tabstop>
+  <tabstop>bnAdd</tabstop>
+  <tabstop>bnNew</tabstop>
+  <tabstop>bnDelete</tabstop>
+  <tabstop>lblDescription</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

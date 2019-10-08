@@ -20,16 +20,9 @@
 #define DLG_BUNDLE_MANAGER_H
 
 #include <QWidget>
-
 #include <KoDialog.h>
-#include "kis_action_manager.h"
-#include "resourcemanager.h"
 
-#include <KoResourceBundle.h>
-
-class KoResourceBundle;
-class QListWidget;
-class QListWidgetItem;
+class KisStorageModel;
 
 namespace Ui
 {
@@ -40,34 +33,20 @@ class DlgBundleManager : public KoDialog
 {
     Q_OBJECT
 public:
-    explicit DlgBundleManager(ResourceManager *resourceManager, KisActionManager* actionMgr, QWidget *parent = 0);
+    explicit DlgBundleManager(QWidget *parent = 0);
 
 private Q_SLOTS:
 
-    void accept() override;
-    void addSelected();
-    void removeSelected();
-    void itemSelected(QListWidgetItem *current, QListWidgetItem *previous);
-    void itemSelected(QListWidgetItem *current);
-    void editBundle();
-    void slotImportResource();
-    void slotCreateBundle();
-    void slotOpenResourceFolder();
+    void addBundle();
+    void createBundle();
+    void deleteBundle();
 
 private:
 
+    KisStorageModel *m_storageModel;
+
     QWidget *m_page;
     Ui::WdgDlgBundleManager *m_ui;
-
-    void fillListWidget(QList<KoResourceBundleSP> bundles, QListWidget *w);
-    void refreshListData();
-
-    QMap<QString, KoResourceBundleSP> m_blacklistedBundles;
-    QMap<QString, KoResourceBundleSP> m_activeBundles;
-
-    KoResourceBundleSP m_currentBundle;
-    KisActionManager *m_actionManager;
-    ResourceManager *m_resourceManager;
 };
 
 #endif // DLG_BUNDLE_MANAGER_H

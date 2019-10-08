@@ -227,10 +227,8 @@ KoResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
 
 void ResourceManager::slotManageBundles()
 {
-    DlgBundleManager* dlg = new DlgBundleManager(this, viewManager()->actionManager());
-    if (dlg->exec() != QDialog::Accepted) {
-        return;
-    }
+    QPointer<DlgBundleManager> dlg = new DlgBundleManager();
+    dlg->exec();
 }
 
 QStringList ResourceManager::importResources(const QString &title, const QStringList &mimes) const

@@ -203,14 +203,9 @@ void KisShapeController::addShapes(const QList<KoShape*> shapes)
                 image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(image(), shapeLayer, image()->rootLayer(), image()->rootLayer()->childCount()));
             }
 
-            QRectF updateRect;
-
             Q_FOREACH(KoShape *shape, shapes) {
                 shapeLayer->addShape(shape);
-                updateRect |= shape->boundingRect();
             }
-
-            canvas->shapeManager()->update(updateRect);
         }
     }
 

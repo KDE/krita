@@ -120,65 +120,6 @@ QByteArray KisImportExportFilter::mimeType() const
     return d->mime;
 }
 
-QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
-{
-    QString msg;
-    switch (status) {
-    case OK: break;
-
-    case FilterCreationError:
-        msg = i18n("Krita does not support this file format"); break;
-
-    case CreationError:
-        msg = i18n("Could not create the output document"); break;
-
-    case FileNotFound:
-        msg = i18n("File not found"); break;
-
-    case StorageCreationError:
-        msg = i18n("Cannot create storage"); break;
-
-    case BadMimeType:
-        msg = i18n("Bad MIME type"); break;
-
-    case WrongFormat:
-        msg = i18n("Format not recognized"); break;
-
-    case NotImplemented:
-        msg = i18n("Not implemented"); break;
-
-    case ParsingError:
-        msg = i18n("Parsing error"); break;
-
-    case InvalidFormat:
-        msg = i18n("Invalid file format"); break;
-
-    case InternalError:
-    case UsageError:
-        msg = i18n("Internal error"); break;
-
-    case ProgressCancelled:
-        msg = i18n("Cancelled by user"); break;
-
-    case BadConversionGraph:
-
-        msg = i18n("Unknown file type"); break;
-
-    case UnsupportedVersion:
-
-        msg = i18n("Unsupported file version"); break;
-
-    case UserCancelled:
-
-        // intentionally we do not prompt the error message here
-        break;
-
-
-    default: msg = i18n("Unknown error"); break;
-    }
-    return msg;
-}
-
 KisPropertiesConfigurationSP KisImportExportFilter::defaultConfiguration(const QByteArray &from, const QByteArray &to) const
 {
     Q_UNUSED(from);

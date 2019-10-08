@@ -58,7 +58,7 @@ KisRainDropsFilter::KisRainDropsFilter()
 {
     setSupportsPainting(false);
     setSupportsThreading(false);
-    setSupportsAdjustmentLayers(true);
+    setSupportsAdjustmentLayers(false);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

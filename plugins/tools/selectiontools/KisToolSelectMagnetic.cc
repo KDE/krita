@@ -58,8 +58,8 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
-    m_continuedMode(false), m_interactiveMode(false), m_complete(false), m_selected(false), m_finished(false),
-    m_worker(image()->projection()), m_threshold(70), m_searchRadius(30), m_checkPoint(-1), m_filterRadius(3.0),
+    m_continuedMode(false), m_complete(false), m_selected(false), m_finished(false),
+    m_worker(image()->projection()), m_threshold(70), m_searchRadius(30), m_filterRadius(3.0),
     m_mouseHoverCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
 
 { }
@@ -79,16 +79,17 @@ void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)
  * Takes 3 point, min, median and max, searches for an edge point from median to max, if fails,
  * searches for the same from median to min, if fails, median becomes that edge point.
  */
-void KisToolSelectMagnetic::calculateCheckPoints()
+void KisToolSelectMagnetic::calculateCheckPoints(vQPointF points)
 {
     qreal totalDistance = 0.0;
-    int finalPoint      = m_checkPoint + 2;
-    int midPoint        = m_checkPoint + 1;
-    int minPoint        = m_checkPoint;
+    int checkPoint      = 0;
+    int finalPoint      = 2;
+    int midPoint        = 1;
+    int minPoint        = 0;
     qreal maxFactor     = 2;
 
-    for (; finalPoint < m_points.count(); finalPoint++) {
-        totalDistance += kisDistance(m_points[finalPoint], m_points[finalPoint - 1]);
+    for (; finalPoint < points.count(); finalPoint++) {
+        totalDistance += kisDistance(points[finalPoint], points[finalPoint - 1]);
 
         if (totalDistance <= m_anchorGap / 3) {
             minPoint = finalPoint;
@@ -107,43 +108,65 @@ void KisToolSelectMagnetic::calculateCheckPoints()
         bool foundSomething = false;
 
         for (int i = midPoint; i < finalPoint; i++) {
-            if (m_worker.intensity(m_points.at(i).toPoint()) >= m_threshold) {
-                m_checkPoint = i;
-                m_lastAnchor = m_points.at(i).toPoint();
+            if (m_worker.intensity(points.at(i).toPoint()) >= m_threshold) {
+                m_lastAnchor = points.at(i).toPoint();
                 m_anchorPoints.push_back(m_lastAnchor);
+
+                vQPointF temp;
+                for (int j = 0; j <= i; j++) {
+                    temp.push_back(points[j]);
+                }
+
+                m_pointCollection.push_back(temp);
                 foundSomething = true;
+                checkPoint     = i;
                 break;
             }
         }
 
         if (!foundSomething) {
             for (int i = midPoint - 1; i >= minPoint; i--) {
-                if (m_worker.intensity(m_points.at(i).toPoint()) >= m_threshold) {
-                    m_checkPoint = i;
-                    m_lastAnchor = m_points.at(i).toPoint();
+                if (m_worker.intensity(points.at(i).toPoint()) >= m_threshold) {
+                    m_lastAnchor = points.at(i).toPoint();
                     m_anchorPoints.push_back(m_lastAnchor);
+                    vQPointF temp;
+                    for (int j = midPoint - 1; j >= i; j--) {
+                        temp.push_front(points[j]);
+                    }
+
+                    m_pointCollection.push_back(temp);
                     foundSomething = true;
+                    checkPoint     = i;
                     break;
                 }
             }
         }
 
-        if (!foundSomething && m_checkPoint >= 0) {
-            m_checkPoint = midPoint;
-            m_lastAnchor = m_points.at(m_checkPoint).toPoint();
+        if (!foundSomething) {
+            m_lastAnchor = points[midPoint].toPoint();
             m_anchorPoints.push_back(m_lastAnchor);
+            vQPointF temp;
+
+            for (int j = 0; j <= midPoint; j++) {
+                temp.push_back(points[j]);
+            }
+
+            m_pointCollection.push_back(temp);
+            checkPoint     = midPoint;
             foundSomething = true;
         }
     }
 
     totalDistance = 0.0;
 
-    for (; finalPoint < m_points.count(); finalPoint++) {
-        totalDistance += kisDistance(m_points[finalPoint], m_points[m_checkPoint]);
+    reEvaluatePoints();
 
+    for (; finalPoint < points.count(); finalPoint++) {
+        totalDistance += kisDistance(points[finalPoint], points[checkPoint]);
         if (totalDistance > maxFactor * m_anchorGap) {
-            calculateCheckPoints();
-            totalDistance = 0.0;
+            points.remove(0, checkPoint + 1);
+            calculateCheckPoints(points);
+            break;
         }
     }
 } // KisToolSelectMagnetic::calculateCheckPoints
@@ -182,15 +205,6 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
     QPointF temp(convertToPixelCoord(event));
 
     if (!image()->bounds().contains(temp.toPoint())) {
-        return;
-    }
-
-    if (m_interactiveMode) {
-        m_lastAnchor = QPoint((int) temp.x(), (int) temp.y());
-        m_checkPoint = m_points.count() == 0 ? 0 : m_points.count() - 1;
-        m_anchorPoints.push_back(m_lastAnchor);
-        m_complete = false;
-        updateCanvasPixelRect(image()->bounds());
         return;
     }
 
@@ -292,14 +306,11 @@ void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 // drag while primary mouse button is pressed
 void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 {
-    if (m_interactiveMode) {
-        m_lastCursorPos = convertToPixelCoord(event);
-        m_mouseHoverCompressor.start();
-        return;
-    }
-
     if (m_selected) {
         m_anchorPoints[m_selectedAnchor] = convertToPixelCoord(event).toPoint();
+    } else  {
+        m_lastCursorPos = convertToPixelCoord(event);
+        m_mouseHoverCompressor.start();
     }
     KisToolSelectBase::continuePrimaryAction(event);
 }
@@ -309,36 +320,13 @@ void KisToolSelectMagnetic::slotCalculateEdge()
     QPoint current = m_lastCursorPos.toPoint();
 
     vQPointF pointSet = computeEdgeWrapper(m_lastAnchor, current);
-    m_points.resize(m_checkPoint);
-    m_points.append(pointSet);
 
-    calculateCheckPoints();
-
-    m_paintPath = QPainterPath();
-    m_paintPath.moveTo(pixelToView(m_points[0]));
-
-    for (int i = 1; i < m_points.count(); i++) {
-        m_paintPath.lineTo(pixelToView(m_points[i]));
-    }
-
-    updateFeedback();
-
-    if (m_continuedMode && mode() != PAINT_MODE) {
-        updateContinuedMode();
-    }
-
-    return;
+    calculateCheckPoints(pointSet);
 }
 
 // release primary mouse button
 void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
 {
-    if (m_interactiveMode) {
-        finishSelectionAction();
-        m_finished = false;
-        return;
-    }
-
     if (m_selected) {
         int prev = m_selectedAnchor == 0 ? m_anchorPoints.count() - 1 : m_selectedAnchor - 1;
 
@@ -376,7 +364,7 @@ void KisToolSelectMagnetic::reEvaluatePoints()
 void KisToolSelectMagnetic::finishSelectionAction()
 {
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas)
     kisCanvas->updateCanvas();
     setMode(KisTool::HOVER_MODE);
     m_complete = false;
@@ -465,7 +453,7 @@ void KisToolSelectMagnetic::updatePaintPath()
 
 void KisToolSelectMagnetic::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    Q_UNUSED(converter);
+    Q_UNUSED(converter)
     updatePaintPath();
     if ((mode() == KisTool::PAINT_MODE || m_continuedMode) &&
         !m_points.isEmpty())
@@ -538,7 +526,7 @@ void KisToolSelectMagnetic::activate(KoToolBase::ToolActivation activation, cons
 void KisToolSelectMagnetic::deactivate()
 {
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas)
     kisCanvas->updateCanvas();
 
     m_continuedMode = false;
@@ -552,20 +540,6 @@ void KisToolSelectMagnetic::deactivate()
 void KisToolSelectMagnetic::undoPoints()
 {
     if (m_complete) return;
-
-    if(m_interactiveMode){
-        m_anchorPoints.pop_back();
-        m_lastAnchor = m_anchorPoints.last();
-        for(int i=m_points.count()-1; i >= 0; i--){
-            if(m_points[i] == m_anchorPoints.last()){
-                m_checkPoint = i;
-                break;
-            }
-        }
-        updateCanvasPixelRect(image()->bounds());
-
-        return;
-    }
 
     m_anchorPoints.pop_back();
     m_pointCollection.pop_back();
@@ -630,15 +604,9 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     f3->addWidget(searchRadiusInput);
     connect(searchRadiusInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetSearchRadius(int)));
 
-    QHBoxLayout *f4 = new QHBoxLayout();
-    QCheckBox *interactiveModeCheckBox = new QCheckBox(i18n("Interactive Mode: "), selectionWidget);
-    f4->addWidget(interactiveModeCheckBox);
-    interactiveModeCheckBox->setCheckState(Qt::Unchecked);
-    connect(interactiveModeCheckBox, SIGNAL(stateChanged(int)), this, SLOT(slotSetInteractiveMode(int)));
-
-    QHBoxLayout *f5        = new QHBoxLayout();
+    QHBoxLayout *f4        = new QHBoxLayout();
     QLabel *anchorGapLabel = new QLabel(i18n("Anchor Gap: "), selectionWidget);
-    f5->addWidget(anchorGapLabel);
+    f4->addWidget(anchorGapLabel);
 
     KisSliderSpinBox *anchorGapInput = new KisSliderSpinBox(selectionWidget);
     anchorGapInput->setObjectName("anchorgap");
@@ -646,14 +614,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     anchorGapInput->setSingleStep(10);
     anchorGapInput->setToolTip("Gap between 2 anchors in interative mode");
     anchorGapInput->setSuffix(" px");
-    f5->addWidget(anchorGapInput);
-    anchorGapInput->setEnabled(interactiveModeCheckBox->checkState());
-
-    connect(interactiveModeCheckBox, &QCheckBox::stateChanged, [anchorGapInput](int state){
-        anchorGapInput->setEnabled(state);
-    });
-
-    connect(this, SIGNAL(setInteractiveModeEnable(bool)), interactiveModeCheckBox, SLOT(setEnabled(bool)));
+    f4->addWidget(anchorGapInput);
 
     connect(anchorGapInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetAnchorGap(int)));
 
@@ -662,8 +623,7 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
     l->insertLayout(1, f1);
     l->insertLayout(2, f2);
     l->insertLayout(3, f3);
-    l->insertLayout(4, f4);
-    l->insertLayout(5, f5);
+    l->insertLayout(5, f4);
 
     filterRadiusInput->setValue(m_configGroup.readEntry("filterradius", 3.0));
     thresholdInput->setValue(m_configGroup.readEntry("threshold", 100));
@@ -695,11 +655,6 @@ void KisToolSelectMagnetic::slotSetAnchorGap(int g)
 {
     m_anchorGap = g;
     m_configGroup.writeEntry("anchorgap", g);
-}
-
-void KisToolSelectMagnetic::slotSetInteractiveMode(int i)
-{
-    m_interactiveMode = i ? true : false;
 }
 
 void KisToolSelectMagnetic::resetCursorStyle()

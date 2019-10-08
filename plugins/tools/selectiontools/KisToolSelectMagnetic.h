@@ -60,7 +60,6 @@ public Q_SLOTS:
     void slotSetThreshold(int);
     void slotSetSearchRadius(int);
     void slotSetAnchorGap(int);
-    void slotSetInteractiveMode(int);
     void slotCalculateEdge();
 
 Q_SIGNALS:
@@ -80,17 +79,17 @@ private:
     void checkIfAnchorIsSelected(QPointF pt);
     vQPointF computeEdgeWrapper(QPoint a, QPoint b);
     void reEvaluatePoints();
-    void calculateCheckPoints();
+    void calculateCheckPoints(vQPointF points);
 
     QPainterPath m_paintPath;
     QVector<QPointF> m_points;
     QVector<QPoint> m_anchorPoints;
-    bool m_continuedMode, m_interactiveMode;
+    bool m_continuedMode;
     QPointF m_lastCursorPos;
     QPoint m_lastAnchor;
     bool m_complete, m_selected, m_finished;
     KisMagneticWorker m_worker;
-    int m_threshold, m_searchRadius, m_selectedAnchor, m_anchorGap, m_checkPoint;
+    int m_threshold, m_searchRadius, m_selectedAnchor, m_anchorGap;
     qreal m_filterRadius;
     QRectF m_snapBound;
     KConfigGroup m_configGroup;

@@ -346,6 +346,11 @@ void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
             m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(currentAnchor, nextAnchor);
         }
         reEvaluatePoints();
+    }else{
+        if(m_mouseHoverCompressor.isActive()){
+            m_mouseHoverCompressor.stop();
+            slotCalculateEdge();
+        }
     }
     m_selected = false;
     KisToolSelectBase::endPrimaryAction(event);

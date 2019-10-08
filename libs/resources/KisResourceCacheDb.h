@@ -123,7 +123,7 @@ private:
      * @return true if succesful, false if not
      */
     static bool updateMetaDataForId(const QMap<QString, QVariant> map, int id, const QString &tableName);
-
+    static bool addMetaDataForId(const QMap<QString, QVariant> map, int id, const QString &tableName);
 
     static bool s_valid;
     static QString s_lastError;

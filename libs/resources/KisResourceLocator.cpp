@@ -357,7 +357,7 @@ bool KisResourceLocator::initializeDb()
         t.start();
 
         if (!KisResourceCacheDb::addStorage(storage, (storage->type() == KisResourceStorage::StorageType::Folder ? false : true))) {
-            d->errorMessages.append(i18n("Could not add storage %1 to the cache database").arg(storage->location()));
+            d->errorMessages.append(i18n("Could not add storage %1 to the cache database", storage->location()));
         }
 
         qDebug() << "Adding storage" << storage->location() << "to the database took" << t.elapsed() << "ms";
@@ -366,10 +366,10 @@ bool KisResourceLocator::initializeDb()
             t.start();
             emit progressMessage(i18n("Adding %1 resources to folder %2", resourceType, storage->location()));
             if (!KisResourceCacheDb::addResources(storage, resourceType)) {
-                d->errorMessages.append(i18n("Could not add resource type %1 to the cache database").arg(resourceType));
+                d->errorMessages.append(i18n("Could not add resource type %1 to the cache database", resourceType));
             }
             if (!KisResourceCacheDb::addTags(storage, resourceType)) {
-                d->errorMessages.append(i18n("Could not add tags for resource type %1 to the cache database").arg(resourceType));
+                d->errorMessages.append(i18n("Could not add tags for resource type %1 to the cache database", resourceType));
             }
             qDebug() << "\tAdding resources of type" << resourceType << "to the database took" << t.elapsed() << "ms";
 

@@ -52,7 +52,7 @@ KoResourceBundle::KoResourceBundle(QString const& fileName)
       m_bundleVersion("1")
 {
     setName(QFileInfo(fileName).baseName());
-    m_metadata[KisStoragePlugin::s_meta_generator] = "Krita (" + KritaVersionWrapper::versionString(true) + ")";
+    m_metadata[KisResourceStorage::s_meta_generator] = "Krita (" + KritaVersionWrapper::versionString(true) + ")";
 
 }
 
@@ -124,7 +124,7 @@ bool KoResourceBundle::load()
          * doesn't not correspond to a file the bundle is "broken", in both cases we need to recreate the bundle.
          */
         if (!versionFound) {
-            m_metadata.insert(KisStoragePlugin::s_meta_version, "1");
+            m_metadata.insert(KisResourceStorage::s_meta_version, "1");
         }
 
         setValid(true);
@@ -199,7 +199,7 @@ bool KoResourceBundle::save()
 {
     if (filename().isEmpty()) return false;
 
-    setMetaData(KisStoragePlugin::s_meta_dc_date, QDate::currentDate().toString("dd/MM/yyyy"));
+    setMetaData(KisResourceStorage::s_meta_dc_date, QDate::currentDate().toString("dd/MM/yyyy"));
 
     QDir bundleDir = KoResourcePaths::saveLocation("data", "bundles");
     bundleDir.cdUp();
@@ -449,26 +449,26 @@ void KoResourceBundle::saveMetadata(QScopedPointer<KoStore> &store)
     metaWriter.startDocument("office:document-meta");
     metaWriter.startElement("meta:meta");
 
-    writeMeta(KisStoragePlugin::s_meta_generator, &metaWriter);
+    writeMeta(KisResourceStorage::s_meta_generator, &metaWriter);
 
-    metaWriter.startElement(KisStoragePlugin::s_meta_version.toUtf8());
+    metaWriter.startElement(KisResourceStorage::s_meta_version.toUtf8());
     metaWriter.addTextNode(m_bundleVersion.toUtf8());
     metaWriter.endElement();
 
-    writeMeta(KisStoragePlugin::s_meta_author, &metaWriter);
-    writeMeta(KisStoragePlugin::s_meta_title,  &metaWriter);
-    writeMeta(KisStoragePlugin::s_meta_description, &metaWriter);
-    writeMeta(KisStoragePlugin::s_meta_initial_creator,  &metaWriter);
-    writeMeta(KisStoragePlugin::s_meta_creator, &metaWriter);
-    writeMeta(KisStoragePlugin::s_meta_creation_date, &metaWriter);
-    writeMeta(KisStoragePlugin::s_meta_dc_date, &metaWriter);
+    writeMeta(KisResourceStorage::s_meta_author, &metaWriter);
+    writeMeta(KisResourceStorage::s_meta_title,  &metaWriter);
+    writeMeta(KisResourceStorage::s_meta_description, &metaWriter);
+    writeMeta(KisResourceStorage::s_meta_initial_creator,  &metaWriter);
+    writeMeta(KisResourceStorage::s_meta_creator, &metaWriter);
+    writeMeta(KisResourceStorage::s_meta_creation_date, &metaWriter);
+    writeMeta(KisResourceStorage::s_meta_dc_date, &metaWriter);
     writeUserDefinedMeta("email", &metaWriter);
     writeUserDefinedMeta("license", &metaWriter);
     writeUserDefinedMeta("website", &metaWriter);
     Q_FOREACH (const QString &tag, m_bundletags) {
-        metaWriter.startElement(KisStoragePlugin::s_meta_user_defined.toUtf8());
-        metaWriter.addAttribute(KisStoragePlugin::s_meta_name.toUtf8(), "tag");
-        metaWriter.addAttribute(KisStoragePlugin::s_meta_value.toUtf8(), tag);
+        metaWriter.startElement(KisResourceStorage::s_meta_user_defined.toUtf8());
+        metaWriter.addAttribute(KisResourceStorage::s_meta_name.toUtf8(), "tag");
+        metaWriter.addAttribute(KisResourceStorage::s_meta_value.toUtf8(), tag);
         metaWriter.endElement();
     }
 

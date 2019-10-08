@@ -731,6 +731,52 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
 
     }
 
+    {
+        QSqlQuery q;
+
+        q.prepare("SELECT COUNT(*) FROM storages");
+        q.exec();
+        q.first();
+        qDebug() << "number of storages" << q.value(0);
+
+        q.prepare("SELECT MAX(id) FROM storages");
+        q.exec();
+        q.first();
+        qDebug() << "max rowid of storages" << q.value(0);
+
+        q.prepare("SELECT seq FROM sqlite_sequence WHERE name = \"storages\"");
+        q.exec();
+        q.first();
+        qDebug() << "rowid from sqlite_sequence" << q.value(0);
+
+    }
+
+    {
+        QStringList keys = storage->metaDataKeys();
+        if (keys.size() > 0) {
+
+            QSqlQuery q;
+            if (!q.prepare("SELECT MAX(id)\n"
+                           "FROM   storages\n")) {
+                qWarning() << "Could not create select storages query for metadata" << q.lastError();
+            }
+
+            if (!q.exec()) {
+                qWarning() << "Could not execute select storages query for metadata" << q.lastError();
+            }
+
+            q.first();
+            int id = q.value(0).toInt();
+
+            QMap<QString, QVariant> metadata;
+
+            Q_FOREACH(const QString &key, storage->metaDataKeys()) {
+                metadata[key] = storage->metaData(key);
+            }
+
+            addMetaDataForId(metadata, id, "storages");
+        }
+    }
     return r;
 }
 
@@ -1015,43 +1061,47 @@ bool KisResourceCacheDb::updateMetaDataForId(const QMap<QString, QVariant> map, 
         }
     }
 
-    {
-        QSqlQuery q;
-        if (!q.prepare("INSERT INTO metadata\n"
-                       "(foreign_id, table_name, key, value)\n"
-                       "VALUES\n"
-                       "(:id, :table, :key, :value)")) {
-            QSqlDatabase::database().rollback();
-            qWarning() << "Could not create insert metadata query" << q.lastError();
+    if (addMetaDataForId(map, id, tableName)) {
+        QSqlDatabase::database().commit();
+    }
+    else {
+        QSqlDatabase::database().rollback();
+    }
+    return true;
+}
+
+bool KisResourceCacheDb::addMetaDataForId(const QMap<QString, QVariant> map, int id, const QString &tableName)
+{
+
+    QSqlQuery q;
+    if (!q.prepare("INSERT INTO metadata\n"
+                   "(foreign_id, table_name, key, value)\n"
+                   "VALUES\n"
+                   "(:id, :table, :key, :value)")) {
+        QSqlDatabase::database().rollback();
+        qWarning() << "Could not create insert metadata query" << q.lastError();
+        return false;
+    }
+
+    QMap<QString, QVariant>::const_iterator iter = map.cbegin();
+    while (iter != map.cend()) {
+        q.bindValue(":id", id);
+        q.bindValue(":table", tableName);
+        q.bindValue(":key", iter.key());
+
+        QVariant v = iter.value();
+        QByteArray ba;
+        QDataStream ds(&ba, QIODevice::WriteOnly);
+        ds << v;
+        ba = ba.toBase64();
+        q.bindValue(":value", QString::fromLatin1(ba));
+
+        if (!q.exec()) {
+            qWarning() << "Could not insert metadata" << q.lastError();
             return false;
         }
 
-        QMap<QString, QVariant>::const_iterator iter = map.cbegin();
-        while (iter != map.cend()) {
-            q.bindValue(":id", id);
-            q.bindValue(":table", tableName);
-            q.bindValue(":key", iter.key());
-
-            QVariant v = iter.value();
-            QByteArray ba;
-            QDataStream ds(&ba, QIODevice::WriteOnly);
-            ds << v;
-            ba = ba.toBase64();
-            q.bindValue(":value", QString::fromLatin1(ba));
-
-            if (!q.exec()) {
-                QSqlDatabase::database().rollback();
-                qWarning() << "Could not insert metadata" << q.lastError();
-                return false;
-            }
-
-            ++iter;
-        }
+        ++iter;
     }
-
-    QSqlDatabase::database().commit();
     return true;
-
-
 }
-

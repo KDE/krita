@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS storages (
-    id INTEGER PRIMARY KEY
+    id INTEGER PRIMARY KEY AUTOINCREMENT
 ,   storage_type_id INTEGER
 ,   location TEXT
 ,   timestamp INTEGER

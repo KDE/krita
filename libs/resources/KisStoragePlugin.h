@@ -48,19 +48,7 @@ public:
 
     virtual QImage thumbnail() const { return QImage(); }
 
-    static const QString s_meta_generator;
-    static const QString s_meta_author;
-    static const QString s_meta_title;
-    static const QString s_meta_description;
-    static const QString s_meta_initial_creator;
-    static const QString s_meta_creator;
-    static const QString s_meta_creation_date;
-    static const QString s_meta_dc_date;
-    static const QString s_meta_user_defined;
-    static const QString s_meta_name;
-    static const QString s_meta_value;
-    static const QString s_meta_version;
-
+    virtual QStringList metaDataKeys() const { return QStringList(); }
     virtual QString metaData(const QString &key) const { Q_UNUSED(key); return QString(); }
 
 protected:

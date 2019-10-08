@@ -31,6 +31,21 @@
 #include "KisAslStorage.h"
 #include "KisMemoryStorage.h"
 
+const QString KisResourceStorage::s_meta_generator("meta:generator");
+const QString KisResourceStorage::s_meta_author("dc:author");
+const QString KisResourceStorage::s_meta_title("dc:title");
+const QString KisResourceStorage::s_meta_description("dc:description");
+const QString KisResourceStorage::s_meta_initial_creator("meta:initial-creator");
+const QString KisResourceStorage::s_meta_creator("cd:creator");
+const QString KisResourceStorage::s_meta_creation_date("meta:creation-data");
+const QString KisResourceStorage::s_meta_dc_date("meta:dc-date");
+const QString KisResourceStorage::s_meta_user_defined("meta:meta-userdefined");
+const QString KisResourceStorage::s_meta_name("meta:name");
+const QString KisResourceStorage::s_meta_value("meta:value");
+const QString KisResourceStorage::s_meta_version("meta:bundle-version");
+
+
+
 class KisResourceStorage::Private {
 public:
     QString name;
@@ -135,4 +150,14 @@ bool KisResourceStorage::addResource(const QString &resourceType, KoResourceSP r
 bool KisResourceStorage::valid() const
 {
     return d->valid;
+}
+
+QStringList KisResourceStorage::metaDataKeys() const
+{
+    return d->storagePlugin->metaDataKeys();
+}
+
+QVariant KisResourceStorage::metaData(const QString &key) const
+{
+    return d->storagePlugin->metaData(key);
 }

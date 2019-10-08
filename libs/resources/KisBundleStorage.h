@@ -33,7 +33,8 @@ public:
     KoResourceSP resource(const QString &url) override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
-    virtual QImage thumbnail() const;
+    QImage thumbnail() const override;
+    QStringList metaDataKeys() const override;
     QString metaData(const QString &key) const override;
 
 private:

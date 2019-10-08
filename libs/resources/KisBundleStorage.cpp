@@ -182,6 +182,24 @@ QImage KisBundleStorage::thumbnail() const
     return d->bundle->image();
 }
 
+QStringList KisBundleStorage::metaDataKeys() const
+{
+
+    return QStringList() << KisResourceStorage::s_meta_generator
+                         << KisResourceStorage::s_meta_author
+                         << KisResourceStorage::s_meta_title
+                         << KisResourceStorage::s_meta_description
+                         << KisResourceStorage::s_meta_initial_creator
+                         << KisResourceStorage::s_meta_creator
+                         << KisResourceStorage::s_meta_creation_date
+                         << KisResourceStorage::s_meta_dc_date
+                         << KisResourceStorage::s_meta_user_defined
+                         << KisResourceStorage::s_meta_name
+                         << KisResourceStorage::s_meta_value
+                         << KisResourceStorage::s_meta_version;
+
+}
+
 QString KisBundleStorage::metaData(const QString &key) const
 {
     return d->bundle->metaData(key);

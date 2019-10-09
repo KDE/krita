@@ -254,7 +254,7 @@ void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
         return;
     }
 
-    if(m_complete){
+    if (m_complete) {
         if (!image()->bounds().contains(temp.toPoint())) {
             return;
         }
@@ -288,7 +288,7 @@ void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 {
     if (m_selected) {
         m_anchorPoints[m_selectedAnchor] = convertToPixelCoord(event).toPoint();
-    } else  {
+    } else {
         m_lastCursorPos = convertToPixelCoord(event);
         m_mouseHoverCompressor.start();
     }
@@ -297,7 +297,7 @@ void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolSelectMagnetic::slotCalculateEdge()
 {
-    QPoint current = m_lastCursorPos.toPoint();
+    QPoint current    = m_lastCursorPos.toPoint();
     vQPointF pointSet = computeEdgeWrapper(m_lastAnchor, current);
     calculateCheckPoints(pointSet);
 }
@@ -305,16 +305,13 @@ void KisToolSelectMagnetic::slotCalculateEdge()
 // release primary mouse button
 void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
 {
-    qDebug() << convertToPixelCoord(event) << m_cursorOnPress;
     if (m_selected && convertToPixelCoord(event) != m_cursorOnPress) {
         if (!image()->bounds().contains(m_anchorPoints[m_selectedAnchor])) {
             deleteSelectedAnchor();
         } else {
             updateSelectedAnchor();
         }
-
-        qDebug() << "dragged";
-    }else if(m_selected){
+    } else if (m_selected) {
         QPointF temp(convertToPixelCoord(event));
         if (m_snapBound.contains(temp) && m_anchorPoints.count() > 1) {
             vQPointF edge = computeEdgeWrapper(m_anchorPoints.last(), temp.toPoint());
@@ -323,7 +320,7 @@ void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
             m_complete = true;
         }
     }
-    if(m_mouseHoverCompressor.isActive()){
+    if (m_mouseHoverCompressor.isActive()) {
         m_mouseHoverCompressor.stop();
         slotCalculateEdge();
     }
@@ -333,70 +330,74 @@ void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
 
 void KisToolSelectMagnetic::deleteSelectedAnchor()
 {
-    if(m_anchorPoints.isEmpty())
+    if (m_anchorPoints.isEmpty())
         return;
 
-    //if it is the initial anchor
-    if(m_selectedAnchor == 0){
+    // if it is the initial anchor
+    if (m_selectedAnchor == 0) {
         m_anchorPoints.pop_front();
-        if(m_anchorPoints.isEmpty()){
-            //it was the only point lol
+        if (m_anchorPoints.isEmpty()) {
+            // it was the only point lol
             reEvaluatePoints();
             return;
         }
         m_pointCollection.pop_front();
-        if(m_complete){
-           m_pointCollection[0] = computeEdgeWrapper(m_anchorPoints.first(), m_anchorPoints.last());
+        if (m_complete) {
+            m_pointCollection[0] = computeEdgeWrapper(m_anchorPoints.first(), m_anchorPoints.last());
         }
         reEvaluatePoints();
         return;
     }
 
-    //if it is the last anchor
-    if(m_selectedAnchor == m_anchorPoints.count() - 1){
+    // if it is the last anchor
+    if (m_selectedAnchor == m_anchorPoints.count() - 1) {
         m_anchorPoints.pop_back();
         m_pointCollection.pop_back();
-        if(m_complete){
+        if (m_complete) {
             m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(m_anchorPoints.last(), m_anchorPoints.first());
         }
         reEvaluatePoints();
         return;
     }
 
-    //it is in the middle
+    // it is in the middle
     m_anchorPoints.remove(m_selectedAnchor);
     m_pointCollection.remove(m_selectedAnchor);
-    m_pointCollection[m_selectedAnchor-1] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor-1], m_anchorPoints[m_selectedAnchor]);
+    m_pointCollection[m_selectedAnchor
+                      - 1] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor - 1], m_anchorPoints[m_selectedAnchor]);
     reEvaluatePoints();
-}
+} // KisToolSelectMagnetic::deleteSelectedAnchor
 
 void KisToolSelectMagnetic::updateSelectedAnchor()
 {
-    //initial
-    if(m_selectedAnchor == 0 && m_anchorPoints.count() > 1){
+    // initial
+    if (m_selectedAnchor == 0 && m_anchorPoints.count() > 1) {
         m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(m_anchorPoints[0], m_anchorPoints[1]);
-        if(m_complete){
-            m_pointCollection[m_anchorPoints.count() - 1] = computeEdgeWrapper(m_anchorPoints.last(), m_anchorPoints.first());
+        if (m_complete) {
+            m_pointCollection[m_anchorPoints.count() - 1] = computeEdgeWrapper(
+                m_anchorPoints.last(), m_anchorPoints.first());
         }
         reEvaluatePoints();
         return;
     }
 
-    //last
-    if(m_selectedAnchor == m_anchorPoints.count() - 1){
-        m_pointCollection[m_selectedAnchor-1] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor-1], m_anchorPoints.last());
-        if(m_complete){
+    // last
+    if (m_selectedAnchor == m_anchorPoints.count() - 1) {
+        m_pointCollection[m_selectedAnchor - 1] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor - 1],
+                                                                     m_anchorPoints.last());
+        if (m_complete) {
             m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(m_anchorPoints.last(), m_anchorPoints.first());
         }
         reEvaluatePoints();
         return;
     }
 
-    //middle
-    m_pointCollection[m_selectedAnchor-1] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor-1], m_anchorPoints[m_selectedAnchor]);
-    m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor], m_anchorPoints[m_selectedAnchor+1]);
+    // middle
+    m_pointCollection[m_selectedAnchor
+                      - 1] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor - 1], m_anchorPoints[m_selectedAnchor]);
+    m_pointCollection[m_selectedAnchor] =
+        computeEdgeWrapper(m_anchorPoints[m_selectedAnchor], m_anchorPoints[m_selectedAnchor + 1]);
     reEvaluatePoints();
-    return;
 }
 
 int KisToolSelectMagnetic::updateInitialAnchorBounds(QPoint pt)

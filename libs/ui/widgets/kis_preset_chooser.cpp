@@ -77,28 +77,25 @@ private:
 
 void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
-#if 0
     painter->save();
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-    if (! index.isValid())
+    if (!index.isValid()) {
+        qDebug() << "KisPresetDelegate::paint: index is invalid";
+        painter->restore();
         return;
+    }
 
     bool dirty = index.data(Qt::UserRole + KisResourceModel::Dirty).toBool();
+
     QImage preview = index.data(Qt::DecorationRole).value<QImage>();
     if (preview.isNull()) {
+        qDebug() << "KisPresetDelegate::paint:  Preview is null";
+        painter->restore();
         return;
     }
 
-
-    KoResourceSP resource = dynamic_cast<const KisResourceModel*>(index.model())->resourceForIndex(index);
-    Q_ASSERT(resource);
-    Q_ASSERT(resource->valid());
-    KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(resource.data());
-
-    if (!preset) {
-        return;
-    }
+    QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisResourceModel::MetaData).value<QMap<QString, QVariant>>();
 
     QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
     if (!m_showText) {
@@ -117,32 +114,33 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
             dirtyPresetIndicator = QString("*");
         }
 
-        qreal brushSize = preset->settings()->paintOpSize();
-        QString brushSizeText;
+//        qreal brushSize = metaData["paintopSize"].toReal();
+//        QString brushSizeText;
 
-        // Disable displayed decimal precision beyond a certain brush size
-        if (brushSize < 100) {
-            brushSizeText = QString::number(brushSize, 'g', 3);
-        } else {
-            brushSizeText = QString::number(brushSize, 'f', 0);
-        }
+//        // Disable displayed decimal precision beyond a certain brush size
+//        if (brushSize < 100) {
+//            brushSizeText = QString::number(brushSize, 'g', 3);
+//        } else {
+//            brushSizeText = QString::number(brushSize, 'f', 0);
+//        }
 
-        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, brushSizeText); // brush size
+//        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, brushSizeText); // brush size
 
         QString presetDisplayName = index.data(Qt::UserRole + KisResourceModel::Name).toString().replace("_", " "); // don't need underscores that might be part of the file name
         painter->drawText(pixSize.width() + 40, option.rect.y() + option.rect.height() - 10, presetDisplayName.append(dirtyPresetIndicator));
 
     }
+
     if (m_useDirtyPresets && dirty) {
         const QIcon icon = KisIconUtils::loadIcon(koIconName("dirty-preset"));
         QPixmap pixmap = icon.pixmap(QSize(15,15));
         painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
     }
 
-    if (!preset->settings() || !preset->settings()->isValid()) {
-        const QIcon icon = KisIconUtils::loadIcon("broken-preset");
-        icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
-    }
+//    if (!preset->settings() || !preset->settings()->isValid()) {
+//        const QIcon icon = KisIconUtils::loadIcon("broken-preset");
+//        icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
+//    }
 
     if (option.state & QStyle::State_Selected) {
         painter->setCompositionMode(QPainter::CompositionMode_HardLight);
@@ -157,7 +155,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
 
     painter->restore();
-#endif
+
 }
 
 class KisPresetChooser::PaintOpFilterModel : public QSortFilterProxyModel, public KisAbstractResourceModel

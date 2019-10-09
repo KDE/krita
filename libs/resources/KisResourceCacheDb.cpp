@@ -283,6 +283,7 @@ bool KisResourceCacheDb::initialize(const QString &location)
 
 int KisResourceCacheDb::resourceIdForResource(const QString &resourceName, const QString &resourceType, const QString &storageLocation)
 {
+    Q_ASSERT(QThread::currentThread() == qApp->thread());
     QFile f(":/select_resource_id.sql");
     f.open(QFile::ReadOnly);
     QSqlQuery q;

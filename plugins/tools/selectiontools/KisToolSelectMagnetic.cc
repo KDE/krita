@@ -607,10 +607,8 @@ void KisToolSelectMagnetic::requestStrokeEnd()
 void KisToolSelectMagnetic::requestStrokeCancellation()
 {
     m_complete = false;
-    m_points.clear();
-    m_anchorPoints.clear();
-    m_paintPath = QPainterPath();
-    updatePaintPath();
+    m_finished = false;
+    resetVariables();
 }
 
 QWidget * KisToolSelectMagnetic::createOptionWidget()

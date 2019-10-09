@@ -59,8 +59,8 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
                     KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
                     i18n("Magnetic Selection")),
     m_continuedMode(false), m_complete(false), m_selected(false), m_finished(false),
-    m_worker(image()->projection()), m_threshold(70), m_searchRadius(30), m_filterRadius(3.0),
-    m_mouseHoverCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
+    m_worker(image()->projection()), m_threshold(70), m_searchRadius(30), m_anchorGap(30),
+    m_filterRadius(3.0), m_mouseHoverCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
 
 { }
 
@@ -224,9 +224,9 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
 
     m_lastAnchor = temp.toPoint();
     m_anchorPoints.push_back(m_lastAnchor);
-    updateCanvasPixelRect(image()->bounds());
     m_lastCursorPos = temp;
     reEvaluatePoints();
+    updateCanvasPixelRect(image()->bounds());
 } // KisToolSelectMagnetic::beginPrimaryAction
 
 void KisToolSelectMagnetic::checkIfAnchorIsSelected(QPointF temp)
@@ -263,8 +263,8 @@ void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
         double dist = std::numeric_limits<double>::max();
         int total   = m_anchorPoints.count();
         for (int i = 0; i < total; i++) {
-            double distToCompare =
-                kisDistance(m_anchorPoints[i], temp) + kisDistance(temp, m_anchorPoints[(i + 1) % total]);
+            double distToCompare = kisDistance(m_anchorPoints[i], temp) +
+                                   kisDistance(temp, m_anchorPoints[(i + 1) % total]);
             if (dist > distToCompare) {
                 pointA = i;
                 pointB = (i + 1) % total;
@@ -363,8 +363,8 @@ void KisToolSelectMagnetic::deleteSelectedAnchor()
     // it is in the middle
     m_anchorPoints.remove(m_selectedAnchor);
     m_pointCollection.remove(m_selectedAnchor);
-    m_pointCollection[m_selectedAnchor
-                      - 1] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor - 1], m_anchorPoints[m_selectedAnchor]);
+    m_pointCollection[m_selectedAnchor - 1] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor - 1],
+                                                                 m_anchorPoints[m_selectedAnchor]);
     reEvaluatePoints();
 } // KisToolSelectMagnetic::deleteSelectedAnchor
 
@@ -374,8 +374,8 @@ void KisToolSelectMagnetic::updateSelectedAnchor()
     if (m_selectedAnchor == 0 && m_anchorPoints.count() > 1) {
         m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(m_anchorPoints[0], m_anchorPoints[1]);
         if (m_complete) {
-            m_pointCollection[m_anchorPoints.count() - 1] = computeEdgeWrapper(
-                m_anchorPoints.last(), m_anchorPoints.first());
+            m_pointCollection[m_anchorPoints.count() - 1] = computeEdgeWrapper(m_anchorPoints.last(),
+                                                                               m_anchorPoints.first());
         }
         reEvaluatePoints();
         return;
@@ -393,10 +393,10 @@ void KisToolSelectMagnetic::updateSelectedAnchor()
     }
 
     // middle
-    m_pointCollection[m_selectedAnchor
-                      - 1] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor - 1], m_anchorPoints[m_selectedAnchor]);
-    m_pointCollection[m_selectedAnchor] =
-        computeEdgeWrapper(m_anchorPoints[m_selectedAnchor], m_anchorPoints[m_selectedAnchor + 1]);
+    m_pointCollection[m_selectedAnchor - 1] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor - 1],
+                                                                 m_anchorPoints[m_selectedAnchor]);
+    m_pointCollection[m_selectedAnchor] = computeEdgeWrapper(m_anchorPoints[m_selectedAnchor],
+                                                             m_anchorPoints[m_selectedAnchor + 1]);
     reEvaluatePoints();
 }
 

@@ -30,6 +30,8 @@
 #include <QList>
 #include <QFileInfo>
 #include <QDir>
+#include <QApplication>
+#include <QThread>
 
 #include <QTemporaryFile>
 #include <QDomDocument>
@@ -63,6 +65,7 @@ public:
         : m_resourceModel(KisResourceModelProvider::resourceModel(type))
         , m_type(type)
     {
+        Q_ASSERT(QThread::currentThread() == qApp->thread());
     }
 
     virtual ~KoResourceServer()
@@ -75,21 +78,25 @@ public:
     /// @return the active resource model
     KisResourceModel *resourceModel() const
     {
+        Q_ASSERT(QThread::currentThread() == qApp->thread());
         return m_resourceModel;
     }
 
     /// Return the first resource available
     QSharedPointer<T> firstResource() const
     {
+        Q_ASSERT(QThread::currentThread() == qApp->thread());
         return m_resourceModel->resourceForIndex(m_resourceModel->index(0, 0)).dynamicCast<T>();
     }
 
     int resourceCount() const {
+        Q_ASSERT(QThread::currentThread() == qApp->thread());
         return m_resourceModel->rowCount();
     }
 
     /// Adds an already loaded resource to the server
     bool addResource(QSharedPointer<T> resource, bool save = true) {
+        Q_ASSERT(QThread::currentThread() == qApp->thread());
         if (!resource->valid()) {
             warnWidgets << "Tried to add an invalid resource!";
             return false;
@@ -105,6 +112,7 @@ public:
 
     /// Remove a resource from Resource Server but not from a file
     bool removeResourceFromServer(QSharedPointer<T> resource){
+        Q_ASSERT(QThread::currentThread() == qApp->thread());
         if (m_resourceModel->removeResource(resource)) {
             notifyRemovingResource(resource);
             return true;
@@ -114,6 +122,7 @@ public:
 
     QList<QSharedPointer<T>> resources() {
         qDebug() << "KoResourceServer::resources()" << m_type;
+        Q_ASSERT(QThread::currentThread() == qApp->thread());
         Q_ASSERT(m_type != "paintoppresets");
         QList<QSharedPointer<T>> resourceList;
         for (int row = 0; row < m_resourceModel->rowCount(); ++row) {
@@ -135,6 +144,7 @@ public:
      */
     bool importResourceFile(const QString &filename)
     {
+        Q_ASSERT(QThread::currentThread() == qApp->thread());
         return m_resourceModel->importResourceFile(filename);
     }
 
@@ -208,6 +218,7 @@ public:
      */
     void updateResource(QSharedPointer<T> resource)
     {
+        Q_ASSERT(QThread::currentThread() == qApp->thread());
         m_resourceModel->updateResource(resource);
         notifyResourceChanged(resource);
     }

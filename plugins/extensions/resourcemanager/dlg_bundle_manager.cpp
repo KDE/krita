@@ -52,7 +52,7 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     connect(m_ui->bnAdd, SIGNAL(clicked(bool)), SLOT(addBundle()));
 
     m_ui->bnNew->setIcon(KisIconUtils::loadIcon("document-new"));
-    connect(m_ui->bnNew, SIGNAL(clicked(bool)), SLOT(newBundle()));
+    connect(m_ui->bnNew, SIGNAL(clicked(bool)), SLOT(createBundle()));
 
     m_ui->bnDelete->setIcon(KisIconUtils::loadIcon("edit-delete"));
     connect(m_ui->bnDelete, SIGNAL(clicked(bool)), SLOT(deleteBundle()));
@@ -60,7 +60,7 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
     setButtons(Close);
 
     m_storageModel = new KisStorageModel();
-    m_ui->listView->setModel(m_storageModel);
+    m_ui->tableView->setModel(m_storageModel);
 
 }
 

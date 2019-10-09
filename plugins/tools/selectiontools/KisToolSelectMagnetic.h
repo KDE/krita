@@ -62,9 +62,6 @@ public Q_SLOTS:
     void slotSetAnchorGap(int);
     void slotCalculateEdge();
 
-Q_SIGNALS:
-    void setInteractiveModeEnable(bool);
-
 protected:
     using KisToolSelectBase::m_widgetHelper;
 
@@ -80,12 +77,15 @@ private:
     vQPointF computeEdgeWrapper(QPoint a, QPoint b);
     void reEvaluatePoints();
     void calculateCheckPoints(vQPointF points);
+    void deleteSelectedAnchor();
+    void updateSelectedAnchor();
+    int updateInitialAnchorBounds(QPoint pt);
 
     QPainterPath m_paintPath;
     QVector<QPointF> m_points;
     QVector<QPoint> m_anchorPoints;
     bool m_continuedMode;
-    QPointF m_lastCursorPos;
+    QPointF m_lastCursorPos, m_cursorOnPress;
     QPoint m_lastAnchor;
     bool m_complete, m_selected, m_finished;
     KisMagneticWorker m_worker;

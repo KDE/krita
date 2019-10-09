@@ -1,6 +1,5 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-    <qresource>
+<RCC>
+    <qresource prefix="/">
         <file>tool_contiguous_selection_cursor_add.png</file>
         <file>tool_contiguous_selection_cursor.png</file>
         <file>tool_contiguous_selection_cursor_sub.png</file>
@@ -20,5 +19,8 @@
         <file>tool_similar_selection_cursor_add.png</file>
         <file>tool_similar_selection_cursor.png</file>
         <file>tool_similar_selection_cursor_sub.png</file>
+        <file>tool_magnetic_selection_cursor.png</file>
+        <file>tool_magnetic_selection_cursor_sub.png</file>
+        <file>tool_magnetic_selection_cursor_add.png</file>
     </qresource>
 </RCC>

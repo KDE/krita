@@ -54,7 +54,7 @@ public:
                               KoUpdater *updater,
                               bool createTransaction = false);
 
-    static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> createLoGMatrix(qreal radius, qreal coeff = 1.0);
+    static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> createLoGMatrix(qreal radius, qreal coeff, bool zeroCentered, bool includeWrappedArea);
 
     static void applyLoG(KisPaintDeviceSP device,
                          const QRect& rect,
@@ -62,6 +62,13 @@ public:
                          qreal coeff,
                          const QBitArray &channelFlags,
                          KoUpdater *progressUpdater);
+
+    static void applyTightLoG(KisPaintDeviceSP device,
+                              const QRect& rect,
+                              qreal radius, qreal coeff,
+                              const QBitArray &channelFlags,
+                              KoUpdater *progressUpdater);
+
 
     static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> createDilateMatrix(qreal radius);
 

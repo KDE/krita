@@ -314,6 +314,10 @@ void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
     } else if (m_selected) {
         QPointF temp(convertToPixelCoord(event));
         if (m_snapBound.contains(temp) && m_anchorPoints.count() > 1) {
+            if(m_complete){
+                finishSelectionAction();
+                return;
+            }
             vQPointF edge = computeEdgeWrapper(m_anchorPoints.last(), temp.toPoint());
             m_points.append(edge);
             m_pointCollection.push_back(edge);

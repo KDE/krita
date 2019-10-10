@@ -33,6 +33,7 @@ class KisFilterConfiguration;
 class KoStore;
 class KoShapeControllerBase;
 class KoColorProfile;
+class KisNodeFilterInterface;
 
 class KRITALIBKRA_EXPORT KisKraLoadVisitor : public KisNodeVisitor
 {
@@ -76,7 +77,7 @@ private:
     bool loadPaintDeviceFrame(KisPaintDeviceSP device, const QString &location, DevicePolicy policy);
 
     bool loadProfile(KisPaintDeviceSP device,  const QString& location);
-    bool loadFilterConfiguration(KisFilterConfigurationSP kfc, const QString& location);
+    bool loadFilterConfiguration(KisNodeFilterInterface *nodeInterface, const QString& location);
     void fixOldFilterConfigurations(KisFilterConfigurationSP kfc);
     bool loadMetaData(KisNode* node);
     void initSelectionForMask(KisMask *mask);

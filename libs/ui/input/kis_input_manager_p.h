@@ -79,6 +79,11 @@ public:
     PriorityList priorityEventFilter;
     int priorityEventFilterSeqNo;
 
+    bool touchStrokeStarted = false;
+
+    QPointF previousPos;
+    bool buttonPressed = false;
+
     void blockMouseEvents();
     void allowMouseEvents();
     void eatOneMousePress();

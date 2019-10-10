@@ -90,8 +90,7 @@ QSize KisSqueezedComboBox::sizeHint() const
 {
     ensurePolished();
     QFontMetrics fm = fontMetrics();
-
-    int maxW = count() ? 18 : 7 * fm.width(QChar('x')) + 18;
+    int maxW = count() ? 18 : 7 * fm.boundingRect(QChar('x')).width() + 18;
     int maxH = qMax(fm.lineSpacing(), 14) + 2;
 
     QStyleOptionComboBox options;
@@ -151,14 +150,14 @@ QString KisSqueezedComboBox::squeezeText(const QString& original, const QWidget 
     QFontMetrics fm(widget->fontMetrics());
 
     // If we can fit the full text, return that.
-    if (fm.width(original) < widgetSize)
+    if (fm.boundingRect(original).width() < widgetSize)
         return(original);
 
     // We need to squeeze.
     QString sqItem = original; // prevent empty return value;
-    widgetSize = widgetSize - fm.width("...");
+    widgetSize = widgetSize - fm.boundingRect("...").width();
     for (int i = 0 ; i != original.length(); ++i) {
-        if ((int)fm.width(original.right(i)) > widgetSize) {
+        if ((int)fm.boundingRect(original.right(i)).width() > widgetSize) {
             sqItem = QString("..." + original.right(--i));
             break;
         }
@@ -166,7 +165,7 @@ QString KisSqueezedComboBox::squeezeText(const QString& original, const QWidget 
     return sqItem;
 }
 
-QString KisSqueezedComboBox::itemHighlighted()
+QString KisSqueezedComboBox::currentUnsqueezedText()
 {
     int curItem = currentIndex();
     return m_originalItems[curItem];

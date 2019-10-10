@@ -90,7 +90,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     authors.chop(2);
     authors.append(".</p></body></html>");
     lblAuthors->setText(authors);
-    wdgTab->addTab(lblAuthors, i18n("Authors"));
+    wdgTab->addTab(lblAuthors, i18nc("Heading for the list of Krita authors/developers", "Authors"));
 
     QTextEdit *lblKickstarter = new QTextEdit();
     lblKickstarter->setReadOnly(true);
@@ -103,11 +103,10 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     QFile fileBackers(":/backers.txt");
     Q_ASSERT(fileBackers.exists());
-    fileBackers.open(QIODevice::ReadOnly);
-    Q_FOREACH (const QByteArray &backer, fileBackers.readAll().split('\n')) {
-        backers.append(QString::fromUtf8(backer));
-        backers.append(", ");
-    }
+    fileBackers.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream backersText(&fileBackers);
+    backersText.setCodec("UTF-8");
+    backers.append(backersText.readAll().replace("\n", ", "));
     backers.chop(2);
     backers.append(i18n(".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"));
     lblKickstarter->setText(backers);

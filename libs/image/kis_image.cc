@@ -104,6 +104,11 @@
 
 #include "kis_time_range.h"
 
+#include "KisRunnableBasedStrokeStrategy.h"
+#include "KisRunnableStrokeJobData.h"
+#include "KisRunnableStrokeJobUtils.h"
+#include "KisRunnableStrokeJobsInterface.h"
+
 // #define SANITY_CHECKS
 
 #ifdef SANITY_CHECKS
@@ -238,7 +243,7 @@ public:
 
     bool tryCancelCurrentStrokeAsync();
 
-    void notifyProjectionUpdatedInPatches(const QRect &rc);
+    void notifyProjectionUpdatedInPatches(const QRect &rc, QVector<KisRunnableStrokeJobData *> &jobs);
 };
 
 KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name)
@@ -269,34 +274,122 @@ KisImage::~KisImage()
     disconnect(); // in case Qt gets confused
 }
 
+KisImageSP KisImage::fromQImage(const QImage &image, KisUndoStore *undoStore)
+{
+    const KoColorSpace *colorSpace = 0;
+
+    switch (image.format()) {
+    case QImage::Format_Invalid:
+    case QImage::Format_Mono:
+    case QImage::Format_MonoLSB:
+        colorSpace = KoColorSpaceRegistry::instance()->graya8();
+        break;
+    case QImage::Format_Indexed8:
+    case QImage::Format_RGB32:
+    case QImage::Format_ARGB32:
+    case QImage::Format_ARGB32_Premultiplied:
+        colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+        break;
+    case QImage::Format_RGB16:
+        colorSpace = KoColorSpaceRegistry::instance()->rgb16();
+        break;
+    case QImage::Format_ARGB8565_Premultiplied:
+    case QImage::Format_RGB666:
+    case QImage::Format_ARGB6666_Premultiplied:
+    case QImage::Format_RGB555:
+    case QImage::Format_ARGB8555_Premultiplied:
+    case QImage::Format_RGB888:
+    case QImage::Format_RGB444:
+    case QImage::Format_ARGB4444_Premultiplied:
+    case QImage::Format_RGBX8888:
+    case QImage::Format_RGBA8888:
+    case QImage::Format_RGBA8888_Premultiplied:
+        colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+        break;
+    case QImage::Format_BGR30:
+    case QImage::Format_A2BGR30_Premultiplied:
+    case QImage::Format_RGB30:
+    case QImage::Format_A2RGB30_Premultiplied:
+        colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+        break;
+    case QImage::Format_Alpha8:
+        colorSpace = KoColorSpaceRegistry::instance()->alpha8();
+        break;
+    case QImage::Format_Grayscale8:
+        colorSpace = KoColorSpaceRegistry::instance()->graya8();
+        break;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+    case QImage::Format_Grayscale16:
+        colorSpace = KoColorSpaceRegistry::instance()->graya16();
+        break;
+#endif
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+    case QImage::Format_RGBX64:
+    case QImage::Format_RGBA64:
+    case QImage::Format_RGBA64_Premultiplied:
+        colorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
+        break;
+#endif
+    default:
+        colorSpace = 0;
+    }
+
+    KisImageSP img = new KisImage(undoStore, image.width(), image.height(), colorSpace, i18n("Imported Image"));
+    KisPaintLayerSP layer = new KisPaintLayer(img, img->nextLayerName(), 255);
+    layer->paintDevice()->convertFromQImage(image, 0, 0, 0);
+    img->addNode(layer.data(), img->rootLayer().data());
+
+    return img;
+}
+
 KisImage *KisImage::clone(bool exactCopy)
 {
     return new KisImage(*this, 0, exactCopy);
 }
 
-KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
-    : KisNodeFacade(),
-      KisNodeGraphListener(),
-      KisShared(),
-      m_d(new KisImagePrivate(this,
-                              rhs.width(), rhs.height(),
-                              rhs.colorSpace(),
-                              undoStore ? undoStore : new KisDumbUndoStore(),
-                              new KisImageAnimationInterface(*rhs.animationInterface(), this)))
+void KisImage::copyFromImage(const KisImage &rhs)
 {
-    // make sure KisImage belongs to the GUI thread
-    moveToThread(qApp->thread());
-    connect(this, SIGNAL(sigInternalStopIsolatedModeRequested()), SLOT(stopIsolatedMode()));
+    copyFromImageImpl(rhs, REPLACE);
+}
 
+void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
+{
+    // make sure we choose exactly one from REPLACE and CONSTRUCT
+    KIS_ASSERT_RECOVER_RETURN((policy & REPLACE) != (policy & CONSTRUCT));
+
+    // only when replacing do we need to emit signals
+#define EMIT_IF_NEEDED if (!(policy & REPLACE)) {} else emit
+
+    if (policy & REPLACE) { // if we are constructing the image, these are already set
+        if (m_d->width != rhs.width() || m_d->height != rhs.height()) {
+            m_d->width = rhs.width();
+            m_d->height = rhs.height();
+            emit sigSizeChanged(QPointF(), QPointF());
+        }
+        if (m_d->colorSpace != rhs.colorSpace()) {
+            m_d->colorSpace = rhs.colorSpace();
+            emit sigColorSpaceChanged(m_d->colorSpace);
+        }
+    }
+
+    // from KisImage::KisImage(const KisImage &, KisUndoStore *, bool)
     setObjectName(rhs.objectName());
 
-    m_d->xres = rhs.m_d->xres;
-    m_d->yres = rhs.m_d->yres;
+    if (m_d->xres != rhs.m_d->xres || m_d->yres != rhs.m_d->yres) {
+        m_d->xres = rhs.m_d->xres;
+        m_d->yres = rhs.m_d->yres;
+        EMIT_IF_NEEDED sigResolutionChanged(m_d->xres, m_d->yres);
+    }
 
     m_d->allowMasksOnRootNode = rhs.m_d->allowMasksOnRootNode;
 
     if (rhs.m_d->proofingConfig) {
-        m_d->proofingConfig = toQShared(new KisProofingConfiguration(*rhs.m_d->proofingConfig));
+        KisProofingConfigurationSP proofingConfig(new KisProofingConfiguration(*rhs.m_d->proofingConfig));
+        if (policy & REPLACE) {
+            setProofingConfiguration(proofingConfig);
+        } else {
+            m_d->proofingConfig = proofingConfig;
+        }
     }
 
     KisNodeSP newRoot = rhs.root()->clone();
@@ -305,33 +398,43 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
     m_d->rootLayer = dynamic_cast<KisGroupLayer*>(newRoot.data());
     setRoot(newRoot);
 
+    bool exactCopy = policy & EXACT_COPY;
+
     if (exactCopy || rhs.m_d->isolatedRootNode) {
         QQueue<KisNodeSP> linearizedNodes;
         KisLayerUtils::recursiveApplyNodes(rhs.root(),
-            [&linearizedNodes](KisNodeSP node) {
-                linearizedNodes.enqueue(node);
-            });
+                                           [&linearizedNodes](KisNodeSP node) {
+                                               linearizedNodes.enqueue(node);
+                                           });
         KisLayerUtils::recursiveApplyNodes(newRoot,
-            [&linearizedNodes, exactCopy, &rhs, this](KisNodeSP node) {
-                KisNodeSP refNode = linearizedNodes.dequeue();
+                                           [&linearizedNodes, exactCopy, &rhs, this](KisNodeSP node) {
+                                               KisNodeSP refNode = linearizedNodes.dequeue();
 
-                if (exactCopy) {
-                    node->setUuid(refNode->uuid());
-                }
+                                               if (exactCopy) {
+                                                   node->setUuid(refNode->uuid());
+                                               }
 
-                if (rhs.m_d->isolatedRootNode &&
-                    rhs.m_d->isolatedRootNode == refNode) {
-
-                    m_d->isolatedRootNode = node;
-                }
-            });
+                                               if (rhs.m_d->isolatedRootNode &&
+                                                   rhs.m_d->isolatedRootNode == refNode) {
+                                                   m_d->isolatedRootNode = node;
+                                               }
+                                           });
     }
+
+    KisLayerUtils::recursiveApplyNodes(newRoot,
+                                       [](KisNodeSP node) {
+                                           dbgImage << "Node: " << (void *)node.data();
+                                       });
+
+    m_d->compositions.clear();
 
     Q_FOREACH (KisLayerCompositionSP comp, rhs.m_d->compositions) {
         m_d->compositions << toQShared(new KisLayerComposition(*comp, this));
     }
 
-    rhs.m_d->nserver = KisNameServer(rhs.m_d->nserver);
+    EMIT_IF_NEEDED sigLayersChangedAsync();
+
+    m_d->nserver = rhs.m_d->nserver;
 
     vKisAnnotationSP newAnnotations;
     Q_FOREACH (KisAnnotationSP annotation, rhs.m_d->annotations) {
@@ -352,6 +455,24 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
         const QRect dirtyRect = rhs.m_d->overlaySelectionMask->extent();
         m_d->rootLayer->setDirty(dirtyRect);
     }
+#undef EMIT_IF_NEEDED
+}
+
+KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
+    : KisNodeFacade(),
+      KisNodeGraphListener(),
+      KisShared(),
+      m_d(new KisImagePrivate(this,
+                              rhs.width(), rhs.height(),
+                              rhs.colorSpace(),
+                              undoStore ? undoStore : new KisDumbUndoStore(),
+                              new KisImageAnimationInterface(*rhs.animationInterface(), this)))
+{
+    // make sure KisImage belongs to the GUI thread
+    moveToThread(qApp->thread());
+    connect(this, SIGNAL(sigInternalStopIsolatedModeRequested()), SLOT(stopIsolatedMode()));
+
+    copyFromImageImpl(rhs, CONSTRUCT | (exactCopy ? EXACT_COPY : 0));
 }
 
 void KisImage::aboutToAddANode(KisNode *parent, int index)
@@ -1253,6 +1374,11 @@ KisPostExecutionUndoAdapter* KisImage::postExecutionUndoAdapter() const
         &m_d->postExecutionUndoAdapter;
 }
 
+const KUndo2Command* KisImage::lastExecutedCommand() const
+{
+    return m_d->undoStore->presentCommand();
+}
+
 void KisImage::setUndoStore(KisUndoStore *undoStore)
 {
 
@@ -1399,7 +1525,7 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
     return m_d->scheduler.startStroke(strokeStrategy);
 }
 
-void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc)
+void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc, QVector<KisRunnableStrokeJobData*> &jobs)
 {
     KisImageConfig imageConfig(true);
     int patchWidth = imageConfig.updatePatchWidth();
@@ -1410,20 +1536,21 @@ void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc
             QRect patchRect(x, y, patchWidth, patchHeight);
             patchRect &= rc;
 
-            QtConcurrent::run(std::bind(&KisImage::notifyProjectionUpdated, q, patchRect));
+            KritaUtils::addJobConcurrent(jobs, std::bind(&KisImage::notifyProjectionUpdated, q, patchRect));
         }
     }
 }
 
 bool KisImage::startIsolatedMode(KisNodeSP node)
 {
-    struct StartIsolatedModeStroke : public KisSimpleStrokeStrategy {
+    struct StartIsolatedModeStroke : public KisRunnableBasedStrokeStrategy {
         StartIsolatedModeStroke(KisNodeSP node, KisImageSP image)
-            : KisSimpleStrokeStrategy("start-isolated-mode", kundo2_noi18n("start-isolated-mode")),
+            : KisRunnableBasedStrokeStrategy("start-isolated-mode", kundo2_noi18n("start-isolated-mode")),
               m_node(node),
               m_image(image)
         {
             this->enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+            this->enableJob(JOB_DOSTROKE, true);
             setClearsRedoOnStart(false);
         }
 
@@ -1437,7 +1564,10 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
 
             // the GUI uses our thread to do the color space conversion so we
             // need to emit this signal in multiple threads
-            m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds());
+            QVector<KisRunnableStrokeJobData*> jobs;
+            m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds(), jobs);
+            this->runnableJobsInterface()->addRunnableJobs(jobs);
+
 
             m_image->invalidateAllFrames();
         }
@@ -1457,12 +1587,13 @@ void KisImage::stopIsolatedMode()
 {
     if (!m_d->isolatedRootNode)  return;
 
-    struct StopIsolatedModeStroke : public KisSimpleStrokeStrategy {
+    struct StopIsolatedModeStroke : public KisRunnableBasedStrokeStrategy {
         StopIsolatedModeStroke(KisImageSP image)
-            : KisSimpleStrokeStrategy("stop-isolated-mode", kundo2_noi18n("stop-isolated-mode")),
+            : KisRunnableBasedStrokeStrategy("stop-isolated-mode", kundo2_noi18n("stop-isolated-mode")),
               m_image(image)
         {
             this->enableJob(JOB_INIT);
+            this->enableJob(JOB_DOSTROKE, true);
             setClearsRedoOnStart(false);
         }
 
@@ -1474,10 +1605,13 @@ void KisImage::stopIsolatedMode()
 
             emit m_image->sigIsolatedModeChanged();
 
+            m_image->invalidateAllFrames();
+
             // the GUI uses our thread to do the color space conversion so we
             // need to emit this signal in multiple threads
-            m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds());
-            m_image->invalidateAllFrames();
+            QVector<KisRunnableStrokeJobData*> jobs;
+            m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds(), jobs);
+            this->runnableJobsInterface()->addRunnableJobs(jobs);
 
             // TODO: Substitute notifyProjectionUpdated() with this code
             // when update optimization is implemented
@@ -1603,6 +1737,11 @@ void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
     m_d->scheduler.addSpontaneousJob(spontaneousJob);
 }
 
+bool KisImage::hasUpdatesRunning() const
+{
+    return m_d->scheduler.hasUpdatesRunning();
+}
+
 void KisImage::setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter)
 {
     // update filters are *not* recursive!
@@ -1629,6 +1768,21 @@ void KisImage::enableDirtyRequests()
 void KisImage::disableUIUpdates()
 {
     m_d->disableUIUpdateSignals.ref();
+}
+
+void KisImage::notifyBatchUpdateStarted()
+{
+    m_d->signalRouter.emitNotifyBatchUpdateStarted();
+}
+
+void KisImage::notifyBatchUpdateEnded()
+{
+    m_d->signalRouter.emitNotifyBatchUpdateEnded();
+}
+
+void KisImage::notifyUIUpdateCompleted(const QRect &rc)
+{
+    notifyProjectionUpdated(rc);
 }
 
 QVector<QRect> KisImage::enableUIUpdates()
@@ -1868,8 +2022,9 @@ bool KisImage::levelOfDetailBlocked() const
     return m_d->blockLevelOfDetail;
 }
 
-void KisImage::notifyNodeCollpasedChanged()
+void KisImage::nodeCollapsedChanged(KisNode * node)
 {
+    Q_UNUSED(node);
     emit sigNodeCollapsedChanged();
 }
 

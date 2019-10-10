@@ -51,24 +51,26 @@ public:
 
     enumSepAlphaOptions getAlphaOptions();
     enumSepSource getSource();
-    enumSepOutput getOutput();
 
     bool getDownscale();
     void enableDownscale(bool enable);
 
     bool getToColor();
+    bool getActivateCurrentChannel();
 
 
 private Q_SLOTS:
 
     void slotSetColorSpaceLabel();
     void okClicked();
+    void separateToColorActivated(bool disable);
 
 private:
 
     WdgSeparations * m_page;
     QString m_imageCS;
     QString m_layerCS;
+    bool m_canDownScale {true};
 
 };
 

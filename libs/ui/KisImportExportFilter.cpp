@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 #include "KisImportExportFilter.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <kis_debug.h>
 #include <QStack>
 #include "KisImportExportManager.h"
@@ -31,6 +32,8 @@ Boston, MA 02110-1301, USA.
 #include "KoUpdater.h"
 #include <klocalizedstring.h>
 #include "kis_config.h"
+#include <KoStore.h>
+#include <KisDocument.h>
 
 const QString KisImportExportFilter::ImageContainsTransparencyTag = "ImageContainsTransparency";
 const QString KisImportExportFilter::ColorModelIDTag = "ColorModelID";
@@ -117,65 +120,6 @@ QByteArray KisImportExportFilter::mimeType() const
     return d->mime;
 }
 
-QString KisImportExportFilter::conversionStatusString(ConversionStatus status)
-{
-    QString msg;
-    switch (status) {
-    case OK: break;
-
-    case FilterCreationError:
-        msg = i18n("Krita does not support this file format"); break;
-
-    case CreationError:
-        msg = i18n("Could not create the output document"); break;
-
-    case FileNotFound:
-        msg = i18n("File not found"); break;
-
-    case StorageCreationError:
-        msg = i18n("Cannot create storage"); break;
-
-    case BadMimeType:
-        msg = i18n("Bad MIME type"); break;
-
-    case WrongFormat:
-        msg = i18n("Format not recognized"); break;
-
-    case NotImplemented:
-        msg = i18n("Not implemented"); break;
-
-    case ParsingError:
-        msg = i18n("Parsing error"); break;
-
-    case InvalidFormat:
-        msg = i18n("Invalid file format"); break;
-
-    case InternalError:
-    case UsageError:
-        msg = i18n("Internal error"); break;
-
-    case ProgressCancelled:
-        msg = i18n("Cancelled by user"); break;
-
-    case BadConversionGraph:
-
-        msg = i18n("Unknown file type"); break;
-
-    case UnsupportedVersion:
-
-        msg = i18n("Unsupported file version"); break;
-
-    case UserCancelled:
-
-        // intentionally we do not prompt the error message here
-        break;
-
-
-    default: msg = i18n("Unknown error"); break;
-    }
-    return msg;
-}
-
 KisPropertiesConfigurationSP KisImportExportFilter::defaultConfiguration(const QByteArray &from, const QByteArray &to) const
 {
     Q_UNUSED(from);
@@ -207,9 +151,48 @@ QMap<QString, KisExportCheckBase *> KisImportExportFilter::exportChecks()
     return d->capabilities;
 }
 
+QString KisImportExportFilter::verify(const QString &fileName) const
+{
+    QFileInfo fi(fileName);
+
+    if (!fi.exists()) {
+        return i18n("%1 does not exist after writing. Try saving again under a different name, in another location.", fileName);
+    }
+
+    if (!fi.isReadable()) {
+        return i18n("%1 is not readable", fileName);
+    }
+
+    if (fi.size() < 10)  {
+        return i18n("%1 is smaller than 10 bytes, it must be corrupt. Try saving again under a different name, in another location.", fileName);
+    }
+
+    QFile f(fileName);
+    f.open(QFile::ReadOnly);
+    QByteArray ba = f.read(std::min(f.size(), (qint64)1000));
+    bool found = false;
+    for(int i = 0; i < ba.size(); ++i) {
+        if (ba.at(i) > 0) {
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        return i18n("%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try saving again under a different name, in another location.", fileName);
+    }
+
+    return QString();
+}
+
 void KisImportExportFilter::setUpdater(QPointer<KoUpdater> updater)
 {
     d->updater = updater;
+}
+
+QPointer<KoUpdater> KisImportExportFilter::updater()
+{
+    return d->updater;
 }
 
 void KisImportExportFilter::setProgress(int value)
@@ -286,4 +269,22 @@ void KisImportExportFilter::addSupportedColorModels(QList<QPair<KoID, KoID> > su
             }
         }
     }
+}
+
+QString KisImportExportFilter::verifyZiPBasedFiles(const QString &fileName, const QStringList &filesToCheck) const
+{
+    QScopedPointer<KoStore> store(KoStore::createStore(fileName, KoStore::Read, KIS_MIME_TYPE, KoStore::Zip));
+
+    if (!store || store->bad()) {
+        return i18n("Could not open the saved file %1. Please try to save again in a different location.", fileName);
+    }
+
+    Q_FOREACH(const QString &file, filesToCheck) {
+        if (!store->hasFile(file)) {
+            return i18n("File %1 is missing in %2 and is broken. Please try to save again in a different location.", file, fileName);
+        }
+    }
+
+    return QString();
+
 }

@@ -95,7 +95,7 @@ void KisTiledDataManagerTest::testUndoingNewTiles()
 {
     // "growing extent bug"
 
-    const QRect nullRect(qint32_MAX,qint32_MAX,0,0);
+    const QRect nullRect;
 
     quint8 defaultPixel = 0;
     KisTiledDataManager srcDM(1, &defaultPixel);
@@ -283,7 +283,6 @@ void KisTiledDataManagerTest::testBitBltOldData()
 
     QRect rect(0,0,512,512);
     QRect cloneRect(81,80,250,250);
-    QRect tilesRect(2,2,3,3);
 
     quint8 *buffer = new quint8[rect.width()*rect.height()];
 

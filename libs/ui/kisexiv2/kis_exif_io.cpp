@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -228,8 +229,7 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
     QByteArray array;
 
     const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
-    if(dvalue)
-    {
+    if (dvalue) {
         array.resize(dvalue->count());
         dvalue->copy((Exiv2::byte*)array.data());
     } else {
@@ -247,6 +247,7 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
     for (int index = 4; index < array.size(); )
     {
         const int lastIndex = array.indexOf(null, index);
+        if (lastIndex < 0) break; // Data is not a String, ignore
         const int numChars = (lastIndex - index) / 2; // including trailing zero
 
         QString setting = QString::fromUtf16((ushort*)(void*)( array.data() + index), numChars);

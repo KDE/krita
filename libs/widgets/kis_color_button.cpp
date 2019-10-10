@@ -250,7 +250,7 @@ void KisColorButton::paintEvent(QPaintEvent *)
         QStyleOptionFocusRect focusOpt;
         focusOpt.init(this);
         focusOpt.rect            = focusRect;
-        focusOpt.backgroundColor = palette().background().color();
+        focusOpt.backgroundColor = palette().window().color();
         style->drawPrimitive(QStyle::PE_FrameFocusRect, &focusOpt, &painter, this);
     }
 }
@@ -314,7 +314,7 @@ void KisColorButton::mouseMoveEvent(QMouseEvent *e)
 {
     if ((e->buttons() & Qt::LeftButton) &&
             (e->pos() - d->mPos).manhattanLength() > QApplication::startDragDistance()) {
-        _k_createDrag(color(), this)->start();
+        _k_createDrag(color(), this)->exec();
         setDown(false);
     }
 }

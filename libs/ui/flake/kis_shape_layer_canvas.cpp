@@ -295,42 +295,69 @@ void KisShapeLayerCanvas::slotImageSizeChanged()
 void KisShapeLayerCanvas::repaint()
 {
     QRect repaintRect;
+    bool forceUpdateHiddenAreasOnly = false;
 
     {
         QMutexLocker locker(&m_dirtyRegionMutex);
         repaintRect = m_dirtyRegion.boundingRect();
+        forceUpdateHiddenAreasOnly = m_forceUpdateHiddenAreasOnly;
+
         m_dirtyRegion = QRegion();
+        m_forceUpdateHiddenAreasOnly = false;
     }
 
-    if (repaintRect.isEmpty()) {
-        return;
+    if (!forceUpdateHiddenAreasOnly) {
+        if (repaintRect.isEmpty()) {
+            return;
+        }
+
+        // Crop the update rect by the image bounds. We keep the cache consistent
+        // by tracking the size of the image in slotImageSizeChanged()
+        repaintRect = repaintRect.intersected(m_parentLayer->image()->bounds());
+    } else {
+        const QRectF shapesBounds = KoShape::boundingRect(m_shapeManager->shapes());
+        repaintRect = kisGrowRect(m_viewConverter->documentToView(shapesBounds).toAlignedRect(), 2);
     }
 
-    // Crop the update rect by the image bounds. We keep the cache consistent
-    // by tracking the size of the image in slotImageSizeChanged()
-    repaintRect = repaintRect.intersected(m_parentLayer->image()->bounds());
+    const QRect r = repaintRect;
+    const qint32 MASK_IMAGE_WIDTH = 256;
+    const qint32 MASK_IMAGE_HEIGHT = 256;
 
-    QImage image(repaintRect.width(), repaintRect.height(), QImage::Format_ARGB32);
-    image.fill(0);
+    QImage image(MASK_IMAGE_WIDTH, MASK_IMAGE_HEIGHT, QImage::Format_ARGB32);
     QPainter tempPainter(&image);
 
     tempPainter.setRenderHint(QPainter::Antialiasing);
     tempPainter.setRenderHint(QPainter::TextAntialiasing);
-    tempPainter.translate(-repaintRect.x(), -repaintRect.y());
-    tempPainter.setClipRect(repaintRect);
-#ifdef DEBUG_REPAINT
-    QColor color = QColor(random() % 255, random() % 255, random() % 255);
-    tempPainter.fillRect(r, color);
-#endif
 
-    m_shapeManager->paint(tempPainter, *m_viewConverter, false);
-    tempPainter.end();
+    quint8 * dstData = new quint8[MASK_IMAGE_WIDTH * MASK_IMAGE_HEIGHT * m_projection->pixelSize()];
 
-    KisPaintDeviceSP dev = new KisPaintDevice(m_projection->colorSpace());
-    dev->convertFromQImage(image, 0);
+    for (qint32 x = r.x(); x < r.x() + r.width(); x += MASK_IMAGE_WIDTH) {
+        for (qint32 y = r.y(); y < r.y() + r.height(); y += MASK_IMAGE_HEIGHT) {
 
-    KisPainter::copyAreaOptimized(repaintRect.topLeft(), dev, m_projection, QRect(QPoint(), repaintRect.size()));
+            image.fill(0);
+            tempPainter.translate(-x, -y);
+            tempPainter.setClipRect(QRect(x,y,MASK_IMAGE_WIDTH,MASK_IMAGE_HEIGHT));
 
+            #ifdef DEBUG_REPAINT
+                QColor color = QColor(random() % 255, random() % 255, random() % 255);
+                maskPainter.fillRect(srcRect, color);
+            #endif
+
+            m_shapeManager->paint(tempPainter, *m_viewConverter, false);
+
+            tempPainter.translate(x, y);
+
+            KoColorSpaceRegistry::instance()->rgb8()
+            ->convertPixelsTo(image.constBits(), dstData, m_projection->colorSpace(),
+                              MASK_IMAGE_WIDTH * MASK_IMAGE_HEIGHT,
+                              KoColorConversionTransformation::internalRenderingIntent(),
+                              KoColorConversionTransformation::internalConversionFlags());
+
+            m_projection->writeBytes(dstData, x, y, MASK_IMAGE_WIDTH, MASK_IMAGE_HEIGHT);
+        }
+    }
+    delete[] dstData;
+    m_projection->purgeDefaultPixels();
     m_parentLayer->setDirty(repaintRect);
 
     m_hasChangedWhileBeingInvisible |= !m_parentLayer->visible(true);
@@ -356,6 +383,21 @@ void KisShapeLayerCanvas::forceRepaint()
 bool KisShapeLayerCanvas::hasPendingUpdates() const
 {
     return m_hasUpdateInCompressor || m_hasDirectSyncRepaintInitiated;
+}
+
+void KisShapeLayerCanvas::forceRepaintWithHiddenAreas()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_parentLayer->image());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_isDestroying);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_updatesBlocked);
+
+    {
+        QMutexLocker locker(&m_dirtyRegionMutex);
+        m_forceUpdateHiddenAreasOnly = true;
+    }
+
+    m_asyncUpdateSignalCompressor.stop();
+    slotStartAsyncRepaint();
 }
 
 void KisShapeLayerCanvas::resetCache()

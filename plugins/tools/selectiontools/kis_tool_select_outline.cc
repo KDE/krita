@@ -75,7 +75,6 @@ void KisToolSelectOutline::keyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key_Control) {
         m_continuedMode = true;
     }
-
     KisToolSelect::keyPressEvent(event);
 }
 
@@ -95,19 +94,24 @@ void KisToolSelectOutline::keyReleaseEvent(QKeyEvent *event)
 
 void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
 {
-    KisToolSelect::mouseMoveEvent(event);
     if (selectionDragInProgress()) return;
 
     m_lastCursorPos = convertToPixelCoord(event);
     if (m_continuedMode && mode() != PAINT_MODE) {
         updateContinuedMode();
+    } else {
+        KisToolSelect::mouseMoveEvent(event);
     }
+
+    KisToolSelect::mouseMoveEvent(event);
 }
 
 void KisToolSelectOutline::beginPrimaryAction(KoPointerEvent *event)
 {
     KisToolSelectBase::beginPrimaryAction(event);
-    if (selectionDragInProgress()) return;
+    if (selectionDragInProgress()) {
+        return;
+    }
 
     if (!selectionEditable()) {
         event->ignore();
@@ -126,9 +130,11 @@ void KisToolSelectOutline::beginPrimaryAction(KoPointerEvent *event)
 }
 
 void KisToolSelectOutline::continuePrimaryAction(KoPointerEvent *event)
-{
-    KisToolSelectBase::continuePrimaryAction(event);
-    if (selectionDragInProgress()) return;
+{    
+    if (selectionDragInProgress()) {
+        KisToolSelectBase::continuePrimaryAction(event);
+        return;
+    }
 
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
@@ -136,21 +142,21 @@ void KisToolSelectOutline::continuePrimaryAction(KoPointerEvent *event)
     m_paintPath.lineTo(pixelToView(point));
     m_points.append(point);
     updateFeedback();
-
-
 }
 
 void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
 {
-    const bool hadMoveInProgress = selectionDragInProgress();
-    KisToolSelectBase::endPrimaryAction(event);
-    if (hadMoveInProgress) return;
+    if (selectionDragInProgress()) {
+        KisToolSelectBase::endPrimaryAction(event);
+        return;
+    }
 
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     if (!m_continuedMode) {
         finishSelectionAction();
+        m_points.clear(); // ensure points are always cleared
     }
 }
 

@@ -46,6 +46,9 @@ KisAdjustmentLayer::KisAdjustmentLayer(KisImageWSP image,
     // https://bugs.kde.org/show_bug.cgi?id=324505
     // https://bugs.kde.org/show_bug.cgi?id=294122
     // demand the opposite from each other...
+    //
+    // also see a comment in KisLayerUtils::mergeMultipleLayersImpl()
+
     setCompositeOpId(COMPOSITE_COPY);
     setUseSelectionInProjection(false);
 }

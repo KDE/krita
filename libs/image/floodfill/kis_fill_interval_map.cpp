@@ -97,12 +97,20 @@ void KisFillIntervalMap::cropInterval(KisFillInterval *interval)
 #ifdef ENABLE_FILL_SANITY_CHECKS
         else if (it->start > interval->start && it->end < interval->end) {
             SANITY_ASSERT_MSG(0, "FATAL: The backward interval cannot fully reside inside the forward interval");
-            it->invalidate();
             interval->invalidate();
+            it->invalidate();
+            it = range.rowMapIt->erase(it);
+            needsIncrement = false;
         }
 
-        SANITY_ASSERT_MSG(it == range.endIt || it->isValid(), "FATAL: The backward interval cannot become invalid during the crop action");
-
+        // The code above should have removed the invalidated backward interval,
+        // just verify that
+        KIS_SAFE_ASSERT_RECOVER((it == range.endIt || it->isValid()) &&
+                                "FATAL: The backward interval cannot become "
+                                "invalid during the crop action") {
+            it = range.rowMapIt->erase(it);
+            needsIncrement = false;
+        }
 #endif /* ENABLE_FILL_SANITY_CHECKS */
 
         if (needsIncrement) {

@@ -125,7 +125,7 @@ private Q_SLOTS:
 
     void activatePickColorDelayed();
 
-    void slotColorPickingFinished(const KoColor &color);
+    void slotColorPickingFinished(KoColor color);
 
 protected:
     quint8 m_opacity;

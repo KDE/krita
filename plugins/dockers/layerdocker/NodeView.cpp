@@ -149,6 +149,7 @@ void NodeView::addPropertyActions(QMenu *menu, const QModelIndex &index)
 void NodeView::updateNode(const QModelIndex &index)
 {
     dataChanged(index, index);
+    d->delegate.resetVisibilityStasis();
 }
 
 QItemSelectionModel::SelectionFlags NodeView::selectionCommand(const QModelIndex &index,

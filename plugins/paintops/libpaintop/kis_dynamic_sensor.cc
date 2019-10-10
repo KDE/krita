@@ -4,7 +4,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -514,11 +515,16 @@ void KisDynamicSensor::fromXML(const QDomElement& e)
 
 qreal KisDynamicSensor::parameter(const KisPaintInformation& info)
 {
+    return parameter(info, m_curve, m_customCurve);
+}
+
+qreal KisDynamicSensor::parameter(const KisPaintInformation& info, const KisCubicCurve curve, const bool customCurve)
+{
     const qreal val = value(info);
-    if (m_customCurve) {
+    if (customCurve) {
         qreal scaledVal = isAdditive() ? additiveToScaling(val) : val;
 
-        const QVector<qreal> transfer = m_curve.floatTransfer(256);
+        const QVector<qreal> transfer = curve.floatTransfer(256);
         scaledVal = KisCubicCurve::interpolateLinear(scaledVal, transfer);
 
         return isAdditive() ? scalingToAdditive(scaledVal) : scaledVal;

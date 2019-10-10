@@ -75,7 +75,7 @@ KisMultiDoubleFilterWidget::KisMultiDoubleFilterWidget(const QString & filterid,
     widgetLayout->setContentsMargins(0,0,0,0);
     widgetLayout->setHorizontalSpacing(0);
 
-    m_doubleWidgets = new KisDelayedActionDoubleInput*[ m_nbdoubleWidgets ];
+    m_doubleWidgets.resize(m_nbdoubleWidgets);
 
     for (qint32 i = 0; i < m_nbdoubleWidgets; ++i) {
         m_doubleWidgets[i] = new KisDelayedActionDoubleInput(this, dwparam[i].name);

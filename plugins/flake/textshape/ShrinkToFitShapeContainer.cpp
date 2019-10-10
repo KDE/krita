@@ -24,10 +24,10 @@
 #include <KoTextLayoutRootArea.h>
 
 ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoDocumentResourceManager *documentResources)
-    : KoShapeContainer(new ShrinkToFitShapeContainerPrivate(this, childShape))
+    : KoShapeContainer()
+    , d(new Private(childShape))
 {
     Q_UNUSED(documentResources);
-    Q_D(ShrinkToFitShapeContainer);
 
     setPosition(childShape->position());
     setSize(childShape->size());
@@ -44,7 +44,7 @@ ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoDocu
     childShape->setPosition(QPointF(0.0, 0.0)); // since its relative to my position, this won't move it
     childShape->setSelectable(false); // our ShrinkToFitShapeContainer will handle that from now on
 
-    d->model = new ShrinkToFitShapeContainerModel(this, d);
+    setModel(new ShrinkToFitShapeContainerModel(this));
     addShape(childShape);
 
     QSet<KoShape *> delegates;
@@ -55,7 +55,7 @@ ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoDocu
     Q_ASSERT(data);
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout *>(data->document()->documentLayout());
     Q_ASSERT(lay);
-    QObject::connect(lay, SIGNAL(finishedLayout()), static_cast<ShrinkToFitShapeContainerModel *>(d->model), SLOT(finishedLayout()));
+    QObject::connect(lay, SIGNAL(finishedLayout()), static_cast<ShrinkToFitShapeContainerModel *>(model()), SLOT(finishedLayout()));
 }
 
 ShrinkToFitShapeContainer::~ShrinkToFitShapeContainer()
@@ -78,7 +78,6 @@ bool ShrinkToFitShapeContainer::loadOdf(const KoXmlElement &element, KoShapeLoad
 
 void ShrinkToFitShapeContainer::saveOdf(KoShapeSavingContext &context) const
 {
-    Q_D(const ShrinkToFitShapeContainer);
     d->childShape->saveOdf(context);
 }
 
@@ -122,9 +121,8 @@ void ShrinkToFitShapeContainer::unwrapShape(KoShape *shape)
     shape->setSelectable(true);
 }
 
-ShrinkToFitShapeContainerModel::ShrinkToFitShapeContainerModel(ShrinkToFitShapeContainer *q, ShrinkToFitShapeContainerPrivate *d)
+ShrinkToFitShapeContainerModel::ShrinkToFitShapeContainerModel(ShrinkToFitShapeContainer *q)
     : q(q)
-    , d(d)
     , m_scale(1.0)
     , m_dirty(10)
     , m_maybeUpdate(false)
@@ -142,7 +140,7 @@ void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *containe
 {
     Q_ASSERT(container == q); Q_UNUSED(container);
     if (type == KoShape::SizeChanged) {
-        KoTextShapeData *data = dynamic_cast<KoTextShapeData *>(d->childShape->userData());
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData *>(q->d->childShape->userData());
         Q_ASSERT(data);
         KoTextLayoutRootArea *rootArea = data->rootArea();
         Q_ASSERT(rootArea);
@@ -172,22 +170,22 @@ void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *containe
         }
 
         QSizeF newSize(shapeSize.width() / m_scale, shapeSize.height() / m_scale);
-        d->childShape->setSize(newSize);
+        q->d->childShape->setSize(newSize);
 
         QTransform m;
         m.scale(m_scale, m_scale);
-        d->childShape->setTransformation(m);
+        q->d->childShape->setTransformation(m);
     }
 }
 
 bool ShrinkToFitShapeContainerModel::inheritsTransform(const KoShape *child) const
 {
-    Q_ASSERT(child == d->childShape); Q_UNUSED(child);
+    Q_ASSERT(child == q->d->childShape); Q_UNUSED(child);
     return true;
 }
 
 bool ShrinkToFitShapeContainerModel::isClipped(const KoShape *child) const
 {
-    Q_ASSERT(child == d->childShape); Q_UNUSED(child);
+    Q_ASSERT(child == q->d->childShape); Q_UNUSED(child);
     return false;
 }

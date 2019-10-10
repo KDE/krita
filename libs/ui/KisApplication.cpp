@@ -152,7 +152,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
     QString version = KritaVersionWrapper::versionString(true);
     setApplicationVersion(version);
-    setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
+    setWindowIcon(KisIconUtils::loadIcon("krita"));
 
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
         QStringList styles = QStringList() /*<< "breeze"*/ << "fusion" << "plastique";
@@ -236,6 +236,7 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("ko_palettes", "data", "/palettes/", true);
     KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
     KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
+    KoResourcePaths::addResourceType("kis_actions", "data", "/pykrita");
     KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
     KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
     KoResourcePaths::addResourceType("ko_effects", "data", "/effects/");
@@ -378,7 +379,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     if (opengl == "OPENGL_NOT_TRIED" ) {
         cfg.setCanvasState("TRY_OPENGL");
     }
-    else if (opengl != "OPENGL_SUCCESS") {
+    else if (opengl != "OPENGL_SUCCESS" && opengl != "TRY_OPENGL") {
         cfg.setCanvasState("OPENGL_FAILED");
     }
 
@@ -534,7 +535,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     QString outputMimetype = KisMimeDatabase::mimeTypeForFile(exportFileName, false);
                     if (outputMimetype == "application/octetstream") {
                         dbgKrita << i18n("Mimetype not found, try using the -mimetype option") << endl;
-                        return 1;
+                        return false;
                     }
 
                     KisDocument *doc = kisPart->createDocument();
@@ -544,13 +545,13 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     if (!result) {
                         errKrita << "Could not load " << fileName << ":" << doc->errorMessage();
                         QTimer::singleShot(0, this, SLOT(quit()));
-                        return 1;
+                        return false;
                     }
 
                     if (exportFileName.isEmpty()) {
                         errKrita << "Export destination is not specified for" << fileName << "Please specify export destination with --export-filename option";
                         QTimer::singleShot(0, this, SLOT(quit()));
-                        return 1;
+                        return false;
                     }
 
                     qApp->processEvents(); // For vector layers to be updated
@@ -560,7 +561,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                         errKrita << "Could not export " << fileName << "to" << exportFileName << ":" << doc->errorMessage();
                     }
                     QTimer::singleShot(0, this, SLOT(quit()));
-                    return 0;
+                    return true;
                 }
                 else if (exportSequence) {
                     KisDocument *doc = kisPart->createDocument();
@@ -571,7 +572,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     if (!doc->image()->animationInterface()->hasAnimation()) {
                         errKrita << "This file has no animation." << endl;
                         QTimer::singleShot(0, this, SLOT(quit()));
-                        return 1;
+                        return false;
                     }
 
                     doc->setFileBatchMode(true);
@@ -589,7 +590,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                         errKrita << i18n("Failed to render animation frames!") << endl;
                     }
                     QTimer::singleShot(0, this, SLOT(quit()));
-                    return 0;
+                    return true;
                 }
                 else if (d->mainWindow) {
                     if (fileName.endsWith(".bundle")) {

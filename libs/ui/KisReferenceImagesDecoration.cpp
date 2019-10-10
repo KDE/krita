@@ -101,6 +101,7 @@ KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> par
     , d(new Private(this))
 {
     connect(document->image().data(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));
+    connect(document, &KisDocument::sigReferenceImagesLayerChanged, this, &KisReferenceImagesDecoration::slotNodeAdded);
 
     auto referenceImageLayer = document->referenceImagesLayer();
     if (referenceImageLayer) {
@@ -165,9 +166,15 @@ void KisReferenceImagesDecoration::slotReferenceImagesChanged(const QRectF &dirt
 
 void KisReferenceImagesDecoration::setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer)
 {
-    d->layer = layer;
-    connect(
-            layer.data(), SIGNAL(sigUpdateCanvas(QRectF)),
-            this, SLOT(slotReferenceImagesChanged(QRectF))
-    );
+    if (d->layer.data() != layer.data()) {
+        if (d->layer) {
+            d->layer->disconnect(this);
+        }
+        d->layer = layer;
+        connect(layer.data(), SIGNAL(sigUpdateCanvas(QRectF)),
+                this, SLOT(slotReferenceImagesChanged(QRectF)));
+        if (layer->extent() != QRectF()) { // in case the reference layer is just being loaded from the .kra file
+            slotReferenceImagesChanged(layer->extent());
+        }
+    }
 }

@@ -58,7 +58,7 @@ KisImportExportErrorCode KraExport::convert(KisDocument *document, QIODevice *io
     KisImageSP image = document->savingImage();
     KIS_ASSERT_RECOVER_RETURN_VALUE(image, ImportExportCodes::InternalError);
 
-    KraConverter kraConverter(document);
+    KraConverter kraConverter(document, updater());
     KisImportExportErrorCode res = kraConverter.buildFile(io, filename());
     dbgFile << "KraExport::convert result =" << res;
     return res;
@@ -73,6 +73,21 @@ void KraExport::initializeCapabilities()
         addCapability(factory->create(KisExportCheckBase::SUPPORTED));
     }
 }
+
+QString KraExport::verify(const QString &fileName) const
+{
+    QString error = KisImportExportFilter::verify(fileName);
+    if (error.isEmpty()) {
+        return KisImportExportFilter::verifyZiPBasedFiles(fileName,
+                                                          QStringList()
+                                                          << "mimetype"
+                                                          << "documentinfo.xml"
+                                                          << "maindoc.xml"
+                                                          << "preview.png");
+    }
+    return error;
+}
+
 
 #include <kra_export.moc>
 

@@ -81,9 +81,8 @@ void KisCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
     d->ycoef = 2.0 / effectiveSrcHeight();
     d->xfadecoef = qFuzzyCompare(horizontalFade(), 0) ? 1 : (2.0 / (horizontalFade() * effectiveSrcWidth()));
     d->yfadecoef = qFuzzyCompare(verticalFade()  , 0) ? 1 : (2.0 / (verticalFade() * effectiveSrcHeight()));
-    d->transformedFadeX = KisMaskGenerator::softness() * d->xfadecoef;
-    d->transformedFadeY = KisMaskGenerator::softness() * d->yfadecoef;
-
+    d->transformedFadeX = d->xfadecoef * d->safeSoftnessCoeff;
+    d->transformedFadeY = d->yfadecoef * d->safeSoftnessCoeff;
 }
 
 KisCircleMaskGenerator::~KisCircleMaskGenerator()
@@ -131,10 +130,10 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
 void KisCircleMaskGenerator::setSoftness(qreal softness)
 {
     KisMaskGenerator::setSoftness(softness);
-    qreal safeSoftnessCoeff = qreal(1.0) / qMax(qreal(0.01), softness);
+    d->safeSoftnessCoeff = qreal(1.0) / qMax(qreal(0.01), softness);
 
-    d->transformedFadeX = d->xfadecoef * safeSoftnessCoeff;
-    d->transformedFadeY = d->yfadecoef * safeSoftnessCoeff;
+    d->transformedFadeX = d->xfadecoef * d->safeSoftnessCoeff;
+    d->transformedFadeY = d->yfadecoef * d->safeSoftnessCoeff;
 }
 
 void KisCircleMaskGenerator::resetMaskApplicator(bool forceScalar)

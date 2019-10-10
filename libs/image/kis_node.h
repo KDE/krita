@@ -383,6 +383,7 @@ protected:
     void notifyParentVisibilityChanged(bool value) override;
     void baseNodeChangedCallback() override;
     void baseNodeInvalidateAllFramesCallback() override;
+    void baseNodeCollapsedChangedCallback() override;
 
 protected:
     void addKeyframeChannel(KisKeyframeChannel* channel) override;

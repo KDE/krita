@@ -30,6 +30,7 @@
 #include <KisMainWindow.h>
 #include <KoCanvasBase.h>
 #include <kis_canvas2.h>
+#include <KisDocument.h>
 
 #include "Document.h"
 #include "Canvas.h"
@@ -80,6 +81,12 @@ Document* View::document() const
     if (!d->view) return 0;
     Document *doc = new Document(d->view->document());
     return doc;
+}
+
+void View::setDocument(Document *document)
+{
+    if (!d->view || !document || !document->document()) return;
+    d->view = d->view->replaceBy(document->document());
 }
 
 bool View::visible() const
@@ -270,4 +277,3 @@ QList<Node *> View::selectedNodes() const
     KisNodeList selectedNodes = d->view->viewManager()->nodeManager()->selectedNodes();
     return LibKisUtils::createNodeList(selectedNodes, d->view->image());
 }
-

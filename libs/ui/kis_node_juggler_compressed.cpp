@@ -310,28 +310,6 @@ private:
     QList<KisSelectionMaskSP> m_activeAfter;
 };
 
-KisNodeList sortAndFilterNodes(const KisNodeList &nodes, KisImageSP image) {
-    KisNodeList filteredNodes = nodes;
-    KisNodeList sortedNodes;
-
-    KisLayerUtils::filterMergableNodes(filteredNodes, true);
-
-    bool haveExternalNodes = false;
-    Q_FOREACH (KisNodeSP node, nodes) {
-        if (node->graphListener() != image->root()->graphListener()) {
-            haveExternalNodes = true;
-            break;
-        }
-    }
-
-    if (!haveExternalNodes) {
-        KisLayerUtils::sortMergableNodes(image->root(), filteredNodes, sortedNodes);
-    } else {
-        sortedNodes = filteredNodes;
-    }
-
-    return sortedNodes;
-}
 
 /**
  * A generalized command to muve up/down a set of layer
@@ -369,7 +347,7 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
     }
 
     void populateChildCommands() override {
-        KisNodeList sortedNodes = sortAndFilterNodes(m_nodes, m_image);
+        KisNodeList sortedNodes = KisLayerUtils::sortAndFilterAnyMergableNodesSafe(m_nodes, m_image);
         KisNodeSP headNode = m_lower ? sortedNodes.first() : sortedNodes.last();
         const NodesType nodesType = getNodesType(sortedNodes);
 
@@ -493,7 +471,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
           m_mode(mode) {}
 
     void populateChildCommands() override {
-        KisNodeList filteredNodes = sortAndFilterNodes(m_nodes, m_image);
+        KisNodeList filteredNodes = KisLayerUtils::sortAndFilterAnyMergableNodesSafe(m_nodes, m_image);
 
         if (filteredNodes.isEmpty()) return;
 

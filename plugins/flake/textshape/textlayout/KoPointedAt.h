@@ -46,16 +46,16 @@ public:
         , RowDivider
     };
     int position;
-    KoBookmark *bookmark;
+    KoBookmark *bookmark {0};
     QString externalHRef;
-    KoInlineNote *note;
-    int noteReference;
-    QTextTable *table;
-    TableHit tableHit;
-    int tableRowDivider;
-    int tableColumnDivider;
-    qreal tableLeadSize;
-    qreal tableTrailSize;
+    KoInlineNote *note {0};
+    int noteReference {0};
+    QTextTable *table {0};
+    TableHit tableHit {None};
+    int tableRowDivider {0};
+    int tableColumnDivider {0};
+    qreal tableLeadSize {0.0};
+    qreal tableTrailSize {0.0};
     QPointF tableDividerPos;
 
 };

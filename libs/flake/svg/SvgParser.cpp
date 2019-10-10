@@ -142,7 +142,6 @@ SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
 
 SvgParser::~SvgParser()
 {
-    qDeleteAll(m_symbols);
 }
 
 KoXmlDocument SvgParser::createDocumentFromSvg(QIODevice *device, QString *errorMsg, int *errorLine, int *errorColumn)
@@ -226,7 +225,7 @@ QList<KoShape*> SvgParser::shapes() const
 
 QVector<KoSvgSymbol *> SvgParser::takeSymbols()
 {
-    QVector<KoSvgSymbol*> symbols = m_symbols;
+    QVector<KoSvgSymbol*> symbols = m_symbols.values().toVector();
     m_symbols.clear();
     return symbols;
 }
@@ -731,7 +730,7 @@ bool SvgParser::parseSymbol(const KoXmlElement &e)
         return false;
     }
 
-    m_symbols << svgSymbol.take();
+    m_symbols.insert(id, svgSymbol.take());
 
     return true;
 }
@@ -1555,7 +1554,10 @@ KoShape *SvgParser::parseTextElement(const KoXmlElement &e, KoSvgTextShape *merg
     uploadStyleToContext(e);
 
     KoSvgTextChunkShape *textChunk = rootTextShape ? rootTextShape : new KoSvgTextChunkShape();
-    textChunk->setZIndex(m_context.nextZIndex());
+
+    if (!mergeIntoShape) {
+        textChunk->setZIndex(m_context.nextZIndex());
+    }
 
     textChunk->loadSvg(e, m_context);
 

@@ -140,11 +140,6 @@ QString KisIntParseSpinBox::textFromValue(int val) const
 
     emit noMoreParsingError();
 
-    int v = KisNumericParser::parseIntegerMathExpr(cleanText());
-    if (hasFocus() && (v == value() || (v >= maximum() && value() == maximum()) || (v <= minimum() && value() == minimum())) ) { //solve a very annoying bug where the formula can collapse while editing. With this trick the formula is not lost until focus is lost.
-        return cleanText();
-    }
-
     return QSpinBox::textFromValue(val);
 
 }

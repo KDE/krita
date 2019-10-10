@@ -1,9 +1,0 @@
-{
-    "Id": "Edge Detection Filter",
-    "Type": "Service",
-    "X-KDE-Library": "kritaguassianhighpass",
-    "X-KDE-ServiceTypes": [
-        "Krita/Filter"
-    ],
-    "X-Krita-Version": "40"
-}

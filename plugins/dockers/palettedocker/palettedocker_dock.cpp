@@ -203,6 +203,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
     }
 
     if (m_activeDocument) {
+        m_connections.clear();
         for (KoColorSet * &cs : m_activeDocument->paletteList()) {
             KoColorSet *tmpAddr = cs;
             cs = new KoColorSet(*cs);
@@ -217,6 +218,8 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
         for (KoColorSet *cs : m_activeDocument->paletteList()) {
             m_rServer->addResource(cs);
         }
+        m_connections.addConnection(m_activeDocument, &KisDocument::sigPaletteListChanged,
+                                    this, &PaletteDockerDock::slotUpdatePaletteList);
     }
 
     if (!m_currentColorSet) {
@@ -328,7 +331,7 @@ void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResource* workspace)
 void PaletteDockerDock::slotFGColorResourceChanged(const KoColor &color)
 {
     if (!m_colorSelfUpdate) {
-        m_ui->paletteView->slotFGColorResourceChanged(color);
+        m_ui->paletteView->slotFGColorChanged(color);
     }
 }
 
@@ -381,4 +384,19 @@ void PaletteDockerDock::slotNameListSelection(const KoColor &color)
     m_ui->paletteView->selectClosestColor(color);
     m_resourceProvider->setFGColor(color);
     m_colorSelfUpdate = false;
+}
+
+void PaletteDockerDock::slotUpdatePaletteList(const QList<KoColorSet *> &oldPaletteList, const QList<KoColorSet *> &newPaletteList)
+{
+    for (KoColorSet *cs : oldPaletteList) {
+        m_rServer->removeResourceFromServer(cs);
+    }
+
+    for (KoColorSet *cs : newPaletteList) {
+        m_rServer->addResource(cs);
+    }
+
+    if (!m_currentColorSet) {
+        slotSetColorSet(0);
+    }
 }

@@ -23,7 +23,7 @@
 #include "timeline_frames_index_converter.h"
 
 #include <QSet>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 #include "kis_keyframe_channel.h"
 
 
@@ -46,7 +46,7 @@ struct TimelineNodeListKeeper::Private
     TimelineFramesIndexConverter converter;
 
     QVector<KisNodeDummy*> dummiesList;
-    QSignalMapper dummiesUpdateMapper;
+    KisSignalMapper dummiesUpdateMapper;
     QSet<KisNodeDummy*> connectionsSet;
 
     void populateDummiesList() {

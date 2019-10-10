@@ -82,12 +82,15 @@ public:
     KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace, const QString& name);
     ~KisImage() override;
 
+    static KisImageSP fromQImage(const QImage &image, KisUndoStore *undoStore);
+
 public: // KisNodeGraphListener implementation
 
     void aboutToAddANode(KisNode *parent, int index) override;
     void nodeHasBeenAdded(KisNode *parent, int index) override;
     void aboutToRemoveANode(KisNode *parent, int index) override;
     void nodeChanged(KisNode * node) override;
+    void nodeCollapsedChanged(KisNode *node) override;
     void invalidateAllFrames() override;
     void notifySelectionChanged() override;
     void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
@@ -121,6 +124,21 @@ public:
      * this option if you plan to work with the copied image later.
      */
     KisImage *clone(bool exactCopy = false);
+
+    void copyFromImage(const KisImage &rhs);
+
+private:
+
+    // must specify exactly one from CONSTRUCT or REPLACE.
+    enum CopyPolicy {
+        CONSTRUCT = 1, ///< we are copy-constructing a new KisImage
+        REPLACE = 2, ///< we are replacing the current KisImage with another
+        EXACT_COPY = 4, /// we need an exact copy of the original image
+    };
+
+    void copyFromImageImpl(const KisImage &rhs, int policy);
+
+public:
 
     /**
      * Render the projection onto a QImage.
@@ -399,6 +417,12 @@ public:
     KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const override;
 
     /**
+     * Return the lastly executed LoD0 command. It is effectively the same
+     * as to call undoAdapter()->presentCommand();
+     */
+    const KUndo2Command* lastExecutedCommand() const override;
+
+    /**
      * Replace current undo store with the new one. The old store
      * will be deleted.
      * This method is used by KisDocument for dropping all the commands
@@ -546,7 +570,7 @@ public:
     void mergeMultipleLayers(QList<KisNodeSP> mergedLayers, KisNodeSP putAfter);
 
     /// @return the exact bounds of the image in pixel coordinates.
-    QRect bounds() const;
+    QRect bounds() const override;
 
     /**
      * Returns the actual bounds of the image, taking LevelOfDetail
@@ -709,11 +733,6 @@ public:
      * \see setLevelOfDetailBlocked()
      */
     bool levelOfDetailBlocked() const;
-
-    /**
-     * Notifies that the node collapsed state has changed
-     */
-    void notifyNodeCollpasedChanged();
 
     KisImageAnimationInterface *animationInterface() const;
 
@@ -958,6 +977,29 @@ public Q_SLOTS:
     void disableUIUpdates() override;
 
     /**
+     * Notify GUI about a bunch of updates planned. GUI is expected to wait
+     * until all the updates are completed, and render them on screen only
+     * in the very and of the batch.
+     */
+    void notifyBatchUpdateStarted() override;
+
+    /**
+     * Notify GUI that batch update has been completed. Now GUI can start
+     * showing all of them on screen.
+     */
+    void notifyBatchUpdateEnded() override;
+
+    /**
+     * Notify GUI that rect \p rc is now prepared in the image and
+     * GUI can read data from it.
+     *
+     * WARNING: GUI will read the data right in the handler of this
+     *          signal, so exclusive access to the area must be guaranteed
+     *          by the caller.
+     */
+    void notifyUIUpdateCompleted(const QRect &rc) override;
+
+    /**
      * \see disableUIUpdates
      */
     QVector<QRect> enableUIUpdates() override;
@@ -1027,6 +1069,14 @@ public Q_SLOTS:
      * from the existing paint devices.
      */
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
+
+    /**
+     * \return true if there are some updates in the updates queue
+     * Please note, that is doesn't guarantee that there are no updates
+     * running in in the updater context at the very moment. To guarantee that
+     * there are no updates left at all, please use barrier jobs instead.
+     */
+    bool hasUpdatesRunning() const override;
 
     /**
      * This method is called by the UI (*not* by the creator of the

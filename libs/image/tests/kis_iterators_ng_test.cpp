@@ -65,7 +65,7 @@ void KisIteratorNGTest::writeBytes(const KoColorSpace * colorSpace)
 
     KisPaintDevice dev(colorSpace);
 
-    QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    QCOMPARE(dev.extent(), QRect());
 
     // Check allocation on tile boundaries
 
@@ -80,7 +80,7 @@ void KisIteratorNGTest::writeBytes(const KoColorSpace * colorSpace)
     QCOMPARE(dev.exactBounds(), QRect(0, 0, 64 * 5, 64 * 2));
 
     dev.clear();
-    QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    QCOMPARE(dev.extent(), QRect());
 
     dev.clear();
     // Covers three by three tiles
@@ -102,7 +102,7 @@ void KisIteratorNGTest::fill(const KoColorSpace * colorSpace)
 
     KisPaintDevice dev(colorSpace);
 
-    QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    QCOMPARE(dev.extent(), QRect());
 
     QScopedArrayPointer<quint8> bytes(allocatePixels(colorSpace, 1));
 
@@ -131,13 +131,13 @@ void KisIteratorNGTest::sequentialIter(const KoColorSpace * colorSpace)
 
     KisPaintDeviceSP dev = new KisPaintDevice(colorSpace);
 
-    QCOMPARE(dev->extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    QCOMPARE(dev->extent(), QRect());
 
     // Const does not extend the extent
     {
         KisSequentialConstIterator it(dev, QRect(0, 0, 128, 128));
         while (it.nextPixel());
-        QCOMPARE(dev->extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+        QCOMPARE(dev->extent(), QRect());
         QCOMPARE(dev->exactBounds(), QRect(QPoint(0, 0), QPoint(-1, -1)));
     }
 
@@ -264,11 +264,11 @@ void KisIteratorNGTest::hLineIter(const KoColorSpace * colorSpace)
 
     QScopedArrayPointer<quint8> bytes(allocatePixels(colorSpace, 1));
 
-    QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    QCOMPARE(dev.extent(), QRect());
 
     KisHLineConstIteratorSP cit = dev.createHLineConstIteratorNG(0, 0, 128);
     while (!cit->nextPixel());
-    QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    QCOMPARE(dev.extent(), QRect());
     QCOMPARE(dev.exactBounds(), QRect(QPoint(0, 0), QPoint(-1, -1)));
 
     dev.clear();
@@ -333,11 +333,11 @@ void KisIteratorNGTest::vLineIter(const KoColorSpace * colorSpace)
     KisPaintDevice dev(colorSpace);
     QScopedArrayPointer<quint8> bytes(allocatePixels(colorSpace, 1));
 
-    QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    QCOMPARE(dev.extent(), QRect());
 
     KisVLineConstIteratorSP cit = dev.createVLineConstIteratorNG(0, 0, 128);
     while (cit->nextPixel());
-    QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    QCOMPARE(dev.extent(), QRect());
     QCOMPARE(dev.exactBounds(), QRect(QPoint(0, 0), QPoint(-1, -1)));
     cit.clear();
 
@@ -383,7 +383,7 @@ void KisIteratorNGTest::randomAccessor(const KoColorSpace * colorSpace)
     KisPaintDevice dev(colorSpace);
     QScopedArrayPointer<quint8> bytes(allocatePixels(colorSpace, 1));
 
-    QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    QCOMPARE(dev.extent(), QRect());
 
     KisRandomConstAccessorSP acc = dev.createRandomConstAccessorNG(0, 0);
     for (int y = 0; y < 128; ++y) {
@@ -391,7 +391,7 @@ void KisIteratorNGTest::randomAccessor(const KoColorSpace * colorSpace)
             acc->moveTo(x, y);
         }
     }
-    QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
+    QCOMPARE(dev.extent(), QRect());
 
     KisRandomAccessorSP ac = dev.createRandomAccessorNG(0, 0);
     for (int y = 0; y < 128; ++y) {

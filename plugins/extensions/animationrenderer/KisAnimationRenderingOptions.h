@@ -23,8 +23,9 @@
 #include <QString>
 #include "kis_properties_configuration.h"
 
-struct KisAnimationRenderingOptions
+class KisAnimationRenderingOptions
 {
+public:
     KisAnimationRenderingOptions();
 
     QString lastDocuemntPath;

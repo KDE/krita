@@ -1,0 +1,1200 @@
+From 9934be5bc72e3fd1c9094ce54df5ae522d6dad4f Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sat, 8 Dec 2018 15:35:43 +0300
+Subject: [PATCH 11/19] Implement openGL surface color space selection in Angle
+
+WARNING: this patch actually means that the library must be build on
+         the system with at least DXGI 1.4 (DirectX 12 API) present
+         in SDK. Mingw64 7.3 supports that.
+
+1) D3D11 implementation of angle now supports GL_RGB10_A2 format
+
+2) Technically, Angle's EGL implementation now supports the following
+   display extensions:
+     * EGL_KHR_gl_colorspace
+     * EGL_EXT_gl_colorspace_scrgb_linear
+     * EGL_EXT_gl_colorspace_bt2020_pq
+
+3) D3D11 implementation of angle now supports GL_COLOR_SPACE attribute,
+   which allows selection one of four color modes:
+     * Linear --- just pass-through data to GPU
+     * sRGB --- p709-g22 color space. WARNING: in 8-bit mode the system
+       becomes clever and automatically converts linear framebuffer
+       attachments to sRGB space, as per EGL_KHR_gl_colorspace definition.
+       It is not possible to select sRGB without this extra "feature".
+     * scRGB --- p709-g10 color space. This mode is the only mode
+       supported in f16-bit mode (and it is also not supported in other
+       bit depths).
+     * bt2020-pq --- p2020-pq color space. Supported only in 10-bit mode.
+
+5) SwapChain is now created in DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL mode:
+     * because non-flip mode is considered deprecated and HDR is not
+       supported in it;
+     * because in flip-discard mode partial updates from
+       SwapChain11::present() are not supported and return an error,
+       which is never checked :)
+
+6) As a fallback, SwapChain uses old DXGI_SWAP_EFFECT_DISCARD, because
+   flip modes are not available on Windows 7 and such old systems.
+
+Notes:
+
+eglCreatePixmapSurface() is not implemented in Angle, so the support is
+not added.
+
+eglCreatePlatformWindowSurface() and eglCreatePlatformPixmapSurface()
+do not have support for color spaces according to the extension wording
+(and they are also not supported by Angle :) )
+
+Change-Id: I68204a5db6bbd7066a83a8d1d021ce76cd1cf6f6
+---
+ src/3rdparty/angle/src/common/platform.h      |  14 +-
+ src/3rdparty/angle/src/libANGLE/Caps.cpp      |   8 +-
+ src/3rdparty/angle/src/libANGLE/Caps.h        |   9 +
+ .../src/libANGLE/renderer/d3d/RendererD3D.h   |   3 +-
+ .../src/libANGLE/renderer/d3d/SurfaceD3D.cpp  |  26 +-
+ .../src/libANGLE/renderer/d3d/SurfaceD3D.h    |   1 +
+ .../renderer/d3d/d3d11/Renderer11.cpp         |  16 +-
+ .../libANGLE/renderer/d3d/d3d11/Renderer11.h  |   4 +-
+ .../renderer/d3d/d3d11/SwapChain11.cpp        |  91 ++-
+ .../libANGLE/renderer/d3d/d3d11/SwapChain11.h |   4 +-
+ .../d3d/d3d11/win32/NativeWindow11Win32.cpp   |  19 +-
+ .../libANGLE/renderer/d3d/d3d9/Renderer9.cpp  |   4 +-
+ .../libANGLE/renderer/d3d/d3d9/Renderer9.h    |   3 +-
+ .../angle/src/libANGLE/validationEGL.cpp      |  53 ++
+ ...-surface-color-space-selection-in-An.patch | 596 ++++++++++++++++++
+ 15 files changed, 831 insertions(+), 20 deletions(-)
+ create mode 100644 src/angle/patches/0013-Implement-openGL-surface-color-space-selection-in-An.patch
+
+diff --git a/src/3rdparty/angle/src/common/platform.h b/src/3rdparty/angle/src/common/platform.h
+index fb251da579..2e17994557 100644
+--- a/src/3rdparty/angle/src/common/platform.h
++++ b/src/3rdparty/angle/src/common/platform.h
+@@ -59,12 +59,14 @@
+ #   endif
+ 
+ #   if defined(ANGLE_ENABLE_D3D11)
+-#include <d3d10_1.h>
+-#include <d3d11.h>
+-#include <d3d11_3.h>
+-#include <d3dcompiler.h>
+-#include <dxgi.h>
+-#include <dxgi1_2.h>
++#       include <d3d10_1.h>
++#       include <d3d11.h>
++#       include <dxgi.h>
++#       include <d3d11_1.h>
++#       include <d3d11_3.h>
++#       include <dxgi1_2.h>
++#       include <dxgi1_4.h> // WARNING: This is actually D3D12!
++#       include <d3dcompiler.h>
+ #   endif
+ 
+ #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
+diff --git a/src/3rdparty/angle/src/libANGLE/Caps.cpp b/src/3rdparty/angle/src/libANGLE/Caps.cpp
+index 44da2bbe27..2088457458 100644
+--- a/src/3rdparty/angle/src/libANGLE/Caps.cpp
++++ b/src/3rdparty/angle/src/libANGLE/Caps.cpp
+@@ -1101,7 +1101,10 @@ DisplayExtensions::DisplayExtensions()
+       displayTextureShareGroup(false),
+       createContextClientArrays(false),
+       programCacheControl(false),
+-      robustResourceInitialization(false)
++      robustResourceInitialization(false),
++      colorspaceSRGB(false),
++      colorspaceSCRGBLinear(false),
++      colorspaceBt2020PQ(false)
+ {
+ }
+ 
+@@ -1146,6 +1149,9 @@ std::vector<std::string> DisplayExtensions::getStrings() const
+     InsertExtensionString("EGL_ANGLE_create_context_client_arrays",              createContextClientArrays,          &extensionStrings);
+     InsertExtensionString("EGL_ANGLE_program_cache_control",                     programCacheControl,                &extensionStrings);
+     InsertExtensionString("EGL_ANGLE_robust_resource_initialization",            robustResourceInitialization,       &extensionStrings);
++    InsertExtensionString("EGL_KHR_gl_colorspace",                               colorspaceSRGB,                     &extensionStrings);
++    InsertExtensionString("EGL_EXT_gl_colorspace_scrgb_linear",                  colorspaceSCRGBLinear,              &extensionStrings);
++    InsertExtensionString("EGL_EXT_gl_colorspace_bt2020_pq",                     colorspaceBt2020PQ,                 &extensionStrings);
+     // TODO(jmadill): Enable this when complete.
+     //InsertExtensionString("KHR_create_context_no_error",                       createContextNoError,               &extensionStrings);
+     // clang-format on
+diff --git a/src/3rdparty/angle/src/libANGLE/Caps.h b/src/3rdparty/angle/src/libANGLE/Caps.h
+index 64bdf97112..8157af5800 100644
+--- a/src/3rdparty/angle/src/libANGLE/Caps.h
++++ b/src/3rdparty/angle/src/libANGLE/Caps.h
+@@ -692,6 +692,15 @@ struct DisplayExtensions
+ 
+     // EGL_ANGLE_robust_resource_initialization
+     bool robustResourceInitialization;
++
++    // EGL_KHR_gl_colorspace
++    bool colorspaceSRGB;
++
++    // EGL_EXT_gl_colorspace_scrgb_linear
++    bool colorspaceSCRGBLinear;
++
++    // EGL_EXT_gl_colorspace_bt2020_pq
++    bool colorspaceBt2020PQ;
+ };
+ 
+ struct DeviceExtensions
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
+index dcc98f2ec6..b8ee635625 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
+@@ -130,7 +130,8 @@ class RendererD3D : public BufferFactoryD3D, public MultisampleTextureInitialize
+                                           GLenum backBufferFormat,
+                                           GLenum depthBufferFormat,
+                                           EGLint orientation,
+-                                          EGLint samples) = 0;
++                                          EGLint samples,
++                                          EGLint colorSpace) = 0;
+     virtual egl::Error getD3DTextureInfo(const egl::Config *configuration,
+                                          IUnknown *d3dTexture,
+                                          EGLint *width,
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
+index 7657aef79e..efd4dd1a24 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
+@@ -22,6 +22,27 @@
+ namespace rx
+ {
+ 
++GLenum renderTargetFormatFromColorSpace(egl::Display *display, GLenum baseFormat, EGLint colorSpace)
++{
++    GLenum result = baseFormat;
++
++    /**
++     * If sRGB extension is supported, we should change the surface format
++     * to a specific one that does support automated gamma conversion.
++     *
++     * TODO: openGL doesn't support BGRA-sRGB texture format, so creation of
++     *       textures in this format technically is not supported!
++     */
++    if (display->getExtensions().colorspaceSRGB &&
++        baseFormat == GL_RGBA8_OES &&
++        colorSpace == EGL_GL_COLORSPACE_SRGB_KHR)
++    {
++        result = GL_SRGB8_ALPHA8;
++    }
++
++    return result;
++}
++
+ SurfaceD3D::SurfaceD3D(const egl::SurfaceState &state,
+                        RendererD3D *renderer,
+                        egl::Display *display,
+@@ -34,7 +55,8 @@ SurfaceD3D::SurfaceD3D(const egl::SurfaceState &state,
+       mDisplay(display),
+       mFixedSize(window == nullptr || attribs.get(EGL_FIXED_SIZE_ANGLE, EGL_FALSE) == EGL_TRUE),
+       mOrientation(static_cast<EGLint>(attribs.get(EGL_SURFACE_ORIENTATION_ANGLE, 0))),
+-      mRenderTargetFormat(state.config->renderTargetFormat),
++      mColorSpace(static_cast<EGLint>(attribs.get(EGL_GL_COLORSPACE_KHR, EGL_GL_COLORSPACE_LINEAR_KHR))),
++      mRenderTargetFormat(renderTargetFormatFromColorSpace(display, state.config->renderTargetFormat, mColorSpace)),
+       mDepthStencilFormat(state.config->depthStencilFormat),
+       mSwapChain(nullptr),
+       mSwapIntervalDirty(true),
+@@ -148,7 +170,7 @@ egl::Error SurfaceD3D::resetSwapChain(const egl::Display *display)
+ 
+     mSwapChain =
+         mRenderer->createSwapChain(mNativeWindow, mShareHandle, mD3DTexture, mRenderTargetFormat,
+-                                   mDepthStencilFormat, mOrientation, mState.config->samples);
++                                   mDepthStencilFormat, mOrientation, mState.config->samples, mColorSpace);
+     if (!mSwapChain)
+     {
+         return egl::EglBadAlloc();
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
+index 01d2573244..ccb793d423 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
+@@ -90,6 +90,7 @@ class SurfaceD3D : public SurfaceImpl
+ 
+     bool mFixedSize;
+     GLint mOrientation;
++    EGLint mColorSpace;
+ 
+     GLenum mRenderTargetFormat;
+     GLenum mDepthStencilFormat;
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+index b0ef9abddc..f0e497b52f 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+@@ -465,6 +465,7 @@ Renderer11::Renderer11(egl::Display *display)
+     mRenderer11DeviceCaps.supportsConstantBufferOffsets = false;
+     mRenderer11DeviceCaps.supportsVpRtIndexWriteFromVertexShader = false;
+     mRenderer11DeviceCaps.supportsDXGI1_2               = false;
++    mRenderer11DeviceCaps.supportsDXGI1_4               = false;
+     mRenderer11DeviceCaps.B5G6R5support                 = 0;
+     mRenderer11DeviceCaps.B4G4R4A4support               = 0;
+     mRenderer11DeviceCaps.B5G5R5A1support               = 0;
+@@ -918,6 +919,7 @@ egl::Error Renderer11::initializeDevice()
+ 
+     // Gather stats on DXGI and D3D feature level
+     ANGLE_HISTOGRAM_BOOLEAN("GPU.ANGLE.SupportsDXGI1_2", mRenderer11DeviceCaps.supportsDXGI1_2);
++    ANGLE_HISTOGRAM_BOOLEAN("GPU.ANGLE.SupportsDXGI1_4", mRenderer11DeviceCaps.supportsDXGI1_4);
+ 
+     ANGLEFeatureLevel angleFeatureLevel = GetANGLEFeatureLevel(mRenderer11DeviceCaps.featureLevel);
+ 
+@@ -1002,6 +1004,10 @@ void Renderer11::populateRenderer11DeviceCaps()
+     IDXGIAdapter2 *dxgiAdapter2 = d3d11::DynamicCastComObject<IDXGIAdapter2>(mDxgiAdapter);
+     mRenderer11DeviceCaps.supportsDXGI1_2 = (dxgiAdapter2 != nullptr);
+     SafeRelease(dxgiAdapter2);
++
++    IDXGIAdapter3 *dxgiAdapter3 = d3d11::DynamicCastComObject<IDXGIAdapter3>(mDxgiAdapter);
++    mRenderer11DeviceCaps.supportsDXGI1_4 = (dxgiAdapter3 != nullptr);
++    SafeRelease(dxgiAdapter3);
+ }
+ 
+ gl::SupportedSampleSet Renderer11::generateSampleSetForEGLConfig(
+@@ -1241,6 +1247,11 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
+ 
+     // All D3D feature levels support robust resource init
+     outExtensions->robustResourceInitialization = true;
++
++    // color space selection supported in DXGI 1.4 only
++    outExtensions->colorspaceSRGB = mRenderer11DeviceCaps.supportsDXGI1_4;
++    outExtensions->colorspaceSCRGBLinear = mRenderer11DeviceCaps.supportsDXGI1_4;
++    outExtensions->colorspaceBt2020PQ = mRenderer11DeviceCaps.supportsDXGI1_4;
+ }
+ 
+ gl::Error Renderer11::flush()
+@@ -1436,10 +1447,11 @@ SwapChainD3D *Renderer11::createSwapChain(NativeWindowD3D *nativeWindow,
+                                           GLenum backBufferFormat,
+                                           GLenum depthBufferFormat,
+                                           EGLint orientation,
+-                                          EGLint samples)
++                                          EGLint samples,
++                                          EGLint colorSpace)
+ {
+     return new SwapChain11(this, GetAs<NativeWindow11>(nativeWindow), shareHandle, d3dTexture,
+-                           backBufferFormat, depthBufferFormat, orientation, samples);
++                           backBufferFormat, depthBufferFormat, orientation, samples, colorSpace);
+ }
+ 
+ void *Renderer11::getD3DDevice()
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
+index a8c24e681b..3516bf779d 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
+@@ -49,6 +49,7 @@ struct Renderer11DeviceCaps
+ 
+     D3D_FEATURE_LEVEL featureLevel;
+     bool supportsDXGI1_2;                // Support for DXGI 1.2
++    bool supportsDXGI1_4;               // Support for DXGI 1.4
+     bool supportsClearView;              // Support for ID3D11DeviceContext1::ClearView
+     bool supportsConstantBufferOffsets;  // Support for Constant buffer offset
+     bool supportsVpRtIndexWriteFromVertexShader;  // VP/RT can be selected in the Vertex Shader
+@@ -138,7 +139,8 @@ class Renderer11 : public RendererD3D
+                                   GLenum backBufferFormat,
+                                   GLenum depthBufferFormat,
+                                   EGLint orientation,
+-                                  EGLint samples) override;
++                                  EGLint samples,
++                                  EGLint colorSpace) override;
+     egl::Error getD3DTextureInfo(const egl::Config *configuration,
+                                  IUnknown *d3dTexture,
+                                  EGLint *width,
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+index e8f13b388f..e59114bb88 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+@@ -18,6 +18,11 @@
+ #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
+ #include "third_party/trace_event/trace_event.h"
+ 
++#if 0
++// used only for HDR metadata configuration options
++#include <dxgi1_5.h>
++#endif
++
+ // Precompiled shaders
+ #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough2d11vs.h"
+ #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2d11ps.h"
+@@ -56,12 +61,14 @@ SwapChain11::SwapChain11(Renderer11 *renderer,
+                          GLenum backBufferFormat,
+                          GLenum depthBufferFormat,
+                          EGLint orientation,
+-                         EGLint samples)
++                         EGLint samples,
++                         EGLint colorSpace)
+     : SwapChainD3D(shareHandle, d3dTexture, backBufferFormat, depthBufferFormat),
+       mRenderer(renderer),
+       mWidth(-1),
+       mHeight(-1),
+       mOrientation(orientation),
++      mColorSpace(colorSpace),
+       mAppCreatedShareHandle(mShareHandle != nullptr),
+       mSwapInterval(0),
+       mPassThroughResourcesInit(false),
+@@ -624,10 +631,92 @@ EGLint SwapChain11::reset(const gl::Context *context,
+             mSwapChain1 = d3d11::DynamicCastComObject<IDXGISwapChain1>(mSwapChain);
+         }
+ 
++        if (mRenderer->getRenderer11DeviceCaps().supportsDXGI1_4)
++        {
++            IDXGISwapChain3 *swapChain3 = d3d11::DynamicCastComObject<IDXGISwapChain3>(mSwapChain);
++
++            printf("*** EGL colorSpace: 0x%X\n", mColorSpace);
++            printf("*** EGL format: 0x%X\n", mOffscreenRenderTargetFormat);
++            printf("*** Native format: 0x%X\n", getSwapChainNativeFormat());
++
++            if (mColorSpace != EGL_GL_COLORSPACE_LINEAR_KHR) {
++                DXGI_COLOR_SPACE_TYPE nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709;
++                switch (mColorSpace)
++                {
++                case EGL_GL_COLORSPACE_SRGB_KHR:
++                    nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709;
++                    break;
++                case EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT:
++                    nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709;
++                    break;
++                case EGL_GL_COLORSPACE_BT2020_PQ_EXT:
++                    nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020;
++                    break;
++                default:
++                    ASSERT(0 && "Unsupported colorspace requested");
++                }
++
++                printf("*** Native colorSpace: 0x%X\n", nativeColorSpace);
++
++                UINT supported = 0;
++                result = swapChain3->CheckColorSpaceSupport(nativeColorSpace, &supported);
++                ASSERT(SUCCEEDED(result));
++                if (!(supported & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT)) {
++                    SafeRelease(swapChain3);
++                    return EGL_BAD_MATCH;
++                }
++
++                result = swapChain3->SetColorSpace1(nativeColorSpace);
++                ASSERT(SUCCEEDED(result));
++            }
++
++            SafeRelease(swapChain3);
++
++#if 0
++
++            IDXGISwapChain4 *swapChain4 = d3d11::DynamicCastComObject<IDXGISwapChain4>(mSwapChain);
++
++            DXGI_HDR_METADATA_HDR10 md;
++            md.RedPrimary[0] = 0.680 * 50000;
++            md.RedPrimary[1] = 0.320 * 50000;
++            md.GreenPrimary[0] = 0.265 * 50000;
++            md.GreenPrimary[1] = 0.690 * 50000;
++            md.BluePrimary[0] = 0.150 * 50000;
++            md.BluePrimary[1] = 0.060 * 50000;
++            md.WhitePoint[0] = 0.3127 * 50000;
++            md.WhitePoint[1] = 0.3290 * 50000;
++            md.MaxMasteringLuminance = 1000 * 10000;
++            md.MinMasteringLuminance = 0.001 * 10000;
++            md.MaxContentLightLevel = 1000;
++            md.MaxFrameAverageLightLevel = 200;
++            result = swapChain4->SetHDRMetaData(DXGI_HDR_METADATA_TYPE_HDR10, sizeof(md), &md);
++            printf("*** Result hdr 0x%X\n", result);
++            SafeRelease(swapChain4);
++#endif
++        }
++
+         ID3D11Texture2D *backbufferTex = nullptr;
+         result                         = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
+                                        reinterpret_cast<LPVOID *>(&backbufferTex));
+         ASSERT(SUCCEEDED(result));
++
++        // TODO: recover rendering to sRGB
++        //
++        // D3D11_RENDER_TARGET_VIEW_DESC offscreenRTVDesc;
++        // offscreenRTVDesc.Format = getSwapChainNativeFormat();
++        //
++        // if (mColorSpace == EGL_GL_COLORSPACE_SRGB_KHR) {
++        //     if (offscreenRTVDesc.Format == DXGI_FORMAT_R8G8B8A8_UNORM) {
++        //         offscreenRTVDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
++        //     }
++        //
++        //     if (offscreenRTVDesc.Format == DXGI_FORMAT_B8G8R8A8_UNORM) {
++        //         offscreenRTVDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
++        //     }
++        // }
++        //
++        // printf("*** Render target format: 0x%X\n", offscreenRTVDesc.Format);
++
+         const auto &format =
+             d3d11::Format::Get(mOffscreenRenderTargetFormat, mRenderer->getRenderer11DeviceCaps());
+         mBackBufferTexture.set(backbufferTex, format);
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
+index eca068210b..2a4b9ba274 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
+@@ -28,7 +28,8 @@ class SwapChain11 final : public SwapChainD3D
+                 GLenum backBufferFormat,
+                 GLenum depthBufferFormat,
+                 EGLint orientation,
+-                EGLint samples);
++                EGLint samples,
++                EGLint colorSpace);
+     ~SwapChain11() override;
+ 
+     EGLint resize(const gl::Context *context,
+@@ -93,6 +94,7 @@ class SwapChain11 final : public SwapChainD3D
+     EGLint mWidth;
+     EGLint mHeight;
+     const EGLint mOrientation;
++    EGLint mColorSpace;
+     bool mAppCreatedShareHandle;
+     unsigned int mSwapInterval;
+     bool mPassThroughResourcesInit;
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
+index 5394e3d3e7..af52c41d00 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
+@@ -146,6 +146,9 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
+ 
+     // Use IDXGIFactory2::CreateSwapChainForHwnd if DXGI 1.2 is available to create a
+     // DXGI_SWAP_EFFECT_SEQUENTIAL swap chain.
++    //
++    // NOTE: in non-flip mode HDR rendering is not supported, so use it
++    //       by default
+     IDXGIFactory2 *factory2 = d3d11::DynamicCastComObject<IDXGIFactory2>(factory);
+     if (factory2 != nullptr)
+     {
+@@ -158,9 +161,9 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
+         swapChainDesc.SampleDesc.Quality    = 0;
+         swapChainDesc.BufferUsage =
+             DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT | DXGI_USAGE_BACK_BUFFER;
+-        swapChainDesc.BufferCount   = 1;
++        swapChainDesc.BufferCount   = 2;
+         swapChainDesc.Scaling       = DXGI_SCALING_STRETCH;
+-        swapChainDesc.SwapEffect    = DXGI_SWAP_EFFECT_SEQUENTIAL;
++        swapChainDesc.SwapEffect    = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+         swapChainDesc.AlphaMode     = DXGI_ALPHA_MODE_UNSPECIFIED;
+         swapChainDesc.Flags         = 0;
+         IDXGISwapChain1 *swapChain1 = nullptr;
+@@ -176,7 +179,7 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
+     }
+ 
+     DXGI_SWAP_CHAIN_DESC swapChainDesc               = {};
+-    swapChainDesc.BufferCount                        = 1;
++    swapChainDesc.BufferCount                        = 2;
+     swapChainDesc.BufferDesc.Format                  = format;
+     swapChainDesc.BufferDesc.Width                   = width;
+     swapChainDesc.BufferDesc.Height                  = height;
+@@ -191,6 +194,16 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
+     swapChainDesc.SampleDesc.Count   = samples;
+     swapChainDesc.SampleDesc.Quality = 0;
+     swapChainDesc.Windowed           = TRUE;
++
++    /**
++     * NOTE1: in discard mode the swap chain doesn't support partial
++     *        presentatiopn with Present1() call. Though it is not a big
++     *        problem, because in case DXGI 1.2 is supported this code is
++     *        unreachable.
++     *
++     * NOTE2: Flip modes are not supported on Windows 7 and the like,
++     *        so use a legacy mode as a fallback
++     */
+     swapChainDesc.SwapEffect         = DXGI_SWAP_EFFECT_DISCARD;
+ 
+     HRESULT result = factory->CreateSwapChain(device, &swapChainDesc, swapChain);
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
+index 75c6298868..58596169a8 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
+@@ -718,8 +718,10 @@ SwapChainD3D *Renderer9::createSwapChain(NativeWindowD3D *nativeWindow,
+                                          GLenum backBufferFormat,
+                                          GLenum depthBufferFormat,
+                                          EGLint orientation,
+-                                         EGLint samples)
++                                         EGLint samples,
++                                         EGLint colorSpace)
+ {
++    UNUSED_VARIABLE(colorSpace);
+     return new SwapChain9(this, GetAs<NativeWindow9>(nativeWindow), shareHandle, d3dTexture,
+                           backBufferFormat, depthBufferFormat, orientation);
+ }
+diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
+index 9ddee45f0f..ce4bb201e5 100644
+--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
+@@ -92,7 +92,8 @@ class Renderer9 : public RendererD3D
+                                   GLenum backBufferFormat,
+                                   GLenum depthBufferFormat,
+                                   EGLint orientation,
+-                                  EGLint samples) override;
++                                  EGLint samples,
++                                  EGLint colorSpace) override;
+     egl::Error getD3DTextureInfo(const egl::Config *configuration,
+                                  IUnknown *d3dTexture,
+                                  EGLint *width,
+diff --git a/src/3rdparty/angle/src/libANGLE/validationEGL.cpp b/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
+index 13a3a9e280..858d7ee929 100644
+--- a/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
++++ b/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
+@@ -885,6 +885,32 @@ Error ValidateCreateWindowSurface(Display *display, Config *config, EGLNativeWin
+                                               "either EGL_TRUE or EGL_FALSE.";
+               }
+               break;
++          case EGL_GL_COLORSPACE:
++
++              if (!displayExtensions.colorspaceSRGB)
++              {
++                  return EglBadAttribute() << "EGL_KHR_gl_colorspace is not supported on this platform.";
++              }
++
++              if (value == EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT)
++              {
++                  if (!displayExtensions.colorspaceSCRGBLinear)
++                  {
++                      return EglBadAttribute() << "EGL_EXT_gl_colorspace_scrgb_linear is not supported on this platform.";
++                  }
++              }
++              else if (value == EGL_GL_COLORSPACE_BT2020_PQ_EXT)
++              {
++                  if (!displayExtensions.colorspaceBt2020PQ)
++                  {
++                      return EglBadAttribute() << "EGL_EXT_gl_colorspace_bt2020_pq is not supported on this platform.";
++                  }
++              }
++              else if (value != EGL_GL_COLORSPACE_SRGB_KHR && value != EGL_GL_COLORSPACE_LINEAR_KHR)
++              {
++                  return EglBadAttribute() << "Unknown EGL color space requested";
++              }
++              break;
+ 
+           default:
+               return EglBadAttribute();
+@@ -977,6 +1003,33 @@ Error ValidateCreatePbufferSurface(Display *display, Config *config, const Attri
+               }
+               break;
+ 
++        case EGL_GL_COLORSPACE:
++
++            if (!displayExtensions.colorspaceSRGB)
++            {
++                return EglBadAttribute() << "EGL_KHR_gl_colorspace is not supported on this platform.";
++            }
++
++            if (value == EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT)
++            {
++                if (!displayExtensions.colorspaceSCRGBLinear)
++                {
++                    return EglBadAttribute() << "EGL_EXT_gl_colorspace_scrgb_linear is not supported on this platform.";
++                }
++            }
++            else if (value == EGL_GL_COLORSPACE_BT2020_PQ_EXT)
++            {
++                if (!displayExtensions.colorspaceBt2020PQ)
++                {
++                    return EglBadAttribute() << "EGL_EXT_gl_colorspace_bt2020_pq is not supported on this platform.";
++                }
++            }
++            else if (value != EGL_GL_COLORSPACE_SRGB_KHR && value != EGL_GL_COLORSPACE_LINEAR_KHR)
++            {
++                return EglBadAttribute() << "Unknown EGL color space requested";
++            }
++            break;
++
+           default:
+               return EglBadAttribute();
+         }
+diff --git a/src/angle/patches/0013-Implement-openGL-surface-color-space-selection-in-An.patch b/src/angle/patches/0013-Implement-openGL-surface-color-space-selection-in-An.patch
+new file mode 100644
+index 0000000000..dfbe362690
+--- /dev/null
++++ b/src/angle/patches/0013-Implement-openGL-surface-color-space-selection-in-An.patch
+@@ -0,0 +1,596 @@
++From 05082a2affad3428e2ba4475a5c083e81a7730ab Mon Sep 17 00:00:00 2001
++From: Dmitry Kazakov <dimula73@gmail.com>
++Date: Sat, 8 Dec 2018 15:35:43 +0300
++Subject: [PATCH] Implement openGL surface color space selection in Angle
++
++WARNING: this patch actually means that the library must be build on
++         the system with at least DXGI 1.4 (DirectX 12 API) present
++         in SDK. Mingw64 7.3 supports that.
++
++1) D3D11 implementation of angle now supports GL_RGB10_A2 format
++
++2) Technically, Angle's EGL implementation now supports the following
++   display extensions:
++     * EGL_KHR_gl_colorspace
++     * EGL_EXT_gl_colorspace_scrgb_linear
++     * EGL_EXT_gl_colorspace_bt2020_pq
++
++3) D3D11 implementation of angle now supports GL_COLOR_SPACE attribute,
++   which allows selection one of four color modes:
++     * Linear --- just pass-through data to GPU
++     * sRGB --- p709-g22 color space. WARNING: in 8-bit mode the system
++       becomes clever and automatically converts linear framebuffer
++       attachments to sRGB space, as per EGL_KHR_gl_colorspace definition.
++       It is not possible to select sRGB without this extra "feature".
++     * scRGB --- p709-g10 color space. This mode is the only mode
++       supported in f16-bit mode (and it is also not supported in other
++       bit depths).
++     * bt2020-pq --- p2020-pq color space. Supported only in 10-bit mode.
++
++5) SwapChain is now created in DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL mode:
++     * because non-flip mode is considered deprecated and HDR is not
++       supported in it;
++     * because in flip-discard mode partial updates from
++       SwapChain11::present() are not supported and return an error,
++       which is never checked :)
++
++6) As a fallback, SwapChain uses old DXGI_SWAP_EFFECT_DISCARD, because
++   flip modes are not available on Windows 7 and such old systems.
++
++Notes:
++
++eglCreatePixmapSurface() is not implemented in Angle, so the support is
++not added.
++
++eglCreatePlatformWindowSurface() and eglCreatePlatformPixmapSurface()
++do not have support for color spaces according to the extension wording
++(and they are also not supported by Angle :) )
++
++Change-Id: I68204a5db6bbd7066a83a8d1d021ce76cd1cf6f6
++---
++ src/3rdparty/angle/src/common/platform.h      | 14 +--
++ src/3rdparty/angle/src/libANGLE/Caps.cpp      |  8 +-
++ src/3rdparty/angle/src/libANGLE/Caps.h        |  9 ++
++ .../src/libANGLE/renderer/d3d/RendererD3D.h   |  3 +-
++ .../src/libANGLE/renderer/d3d/SurfaceD3D.cpp  | 26 +++++-
++ .../src/libANGLE/renderer/d3d/SurfaceD3D.h    |  1 +
++ .../renderer/d3d/d3d11/Renderer11.cpp         | 16 +++-
++ .../libANGLE/renderer/d3d/d3d11/Renderer11.h  |  4 +-
++ .../renderer/d3d/d3d11/SwapChain11.cpp        | 91 ++++++++++++++++++-
++ .../libANGLE/renderer/d3d/d3d11/SwapChain11.h |  4 +-
++ .../d3d/d3d11/win32/NativeWindow11Win32.cpp   | 19 +++-
++ .../libANGLE/renderer/d3d/d3d9/Renderer9.cpp  |  4 +-
++ .../libANGLE/renderer/d3d/d3d9/Renderer9.h    |  3 +-
++ .../angle/src/libANGLE/validationEGL.cpp      | 53 +++++++++++
++ 14 files changed, 235 insertions(+), 20 deletions(-)
++
++diff --git a/src/3rdparty/angle/src/common/platform.h b/src/3rdparty/angle/src/common/platform.h
++index fb251da579..2e17994557 100644
++--- a/src/3rdparty/angle/src/common/platform.h
+++++ b/src/3rdparty/angle/src/common/platform.h
++@@ -59,12 +59,14 @@
++ #   endif
++ 
++ #   if defined(ANGLE_ENABLE_D3D11)
++-#include <d3d10_1.h>
++-#include <d3d11.h>
++-#include <d3d11_3.h>
++-#include <d3dcompiler.h>
++-#include <dxgi.h>
++-#include <dxgi1_2.h>
+++#       include <d3d10_1.h>
+++#       include <d3d11.h>
+++#       include <dxgi.h>
+++#       include <d3d11_1.h>
+++#       include <d3d11_3.h>
+++#       include <dxgi1_2.h>
+++#       include <dxgi1_4.h> // WARNING: This is actually D3D12!
+++#       include <d3dcompiler.h>
++ #   endif
++ 
++ #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
++diff --git a/src/3rdparty/angle/src/libANGLE/Caps.cpp b/src/3rdparty/angle/src/libANGLE/Caps.cpp
++index 44da2bbe27..2088457458 100644
++--- a/src/3rdparty/angle/src/libANGLE/Caps.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/Caps.cpp
++@@ -1101,7 +1101,10 @@ DisplayExtensions::DisplayExtensions()
++       displayTextureShareGroup(false),
++       createContextClientArrays(false),
++       programCacheControl(false),
++-      robustResourceInitialization(false)
+++      robustResourceInitialization(false),
+++      colorspaceSRGB(false),
+++      colorspaceSCRGBLinear(false),
+++      colorspaceBt2020PQ(false)
++ {
++ }
++ 
++@@ -1146,6 +1149,9 @@ std::vector<std::string> DisplayExtensions::getStrings() const
++     InsertExtensionString("EGL_ANGLE_create_context_client_arrays",              createContextClientArrays,          &extensionStrings);
++     InsertExtensionString("EGL_ANGLE_program_cache_control",                     programCacheControl,                &extensionStrings);
++     InsertExtensionString("EGL_ANGLE_robust_resource_initialization",            robustResourceInitialization,       &extensionStrings);
+++    InsertExtensionString("EGL_KHR_gl_colorspace",                               colorspaceSRGB,                     &extensionStrings);
+++    InsertExtensionString("EGL_EXT_gl_colorspace_scrgb_linear",                  colorspaceSCRGBLinear,              &extensionStrings);
+++    InsertExtensionString("EGL_EXT_gl_colorspace_bt2020_pq",                     colorspaceBt2020PQ,                 &extensionStrings);
++     // TODO(jmadill): Enable this when complete.
++     //InsertExtensionString("KHR_create_context_no_error",                       createContextNoError,               &extensionStrings);
++     // clang-format on
++diff --git a/src/3rdparty/angle/src/libANGLE/Caps.h b/src/3rdparty/angle/src/libANGLE/Caps.h
++index 64bdf97112..8157af5800 100644
++--- a/src/3rdparty/angle/src/libANGLE/Caps.h
+++++ b/src/3rdparty/angle/src/libANGLE/Caps.h
++@@ -692,6 +692,15 @@ struct DisplayExtensions
++ 
++     // EGL_ANGLE_robust_resource_initialization
++     bool robustResourceInitialization;
+++
+++    // EGL_KHR_gl_colorspace
+++    bool colorspaceSRGB;
+++
+++    // EGL_EXT_gl_colorspace_scrgb_linear
+++    bool colorspaceSCRGBLinear;
+++
+++    // EGL_EXT_gl_colorspace_bt2020_pq
+++    bool colorspaceBt2020PQ;
++ };
++ 
++ struct DeviceExtensions
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
++index dcc98f2ec6..b8ee635625 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/RendererD3D.h
++@@ -130,7 +130,8 @@ class RendererD3D : public BufferFactoryD3D, public MultisampleTextureInitialize
++                                           GLenum backBufferFormat,
++                                           GLenum depthBufferFormat,
++                                           EGLint orientation,
++-                                          EGLint samples) = 0;
+++                                          EGLint samples,
+++                                          EGLint colorSpace) = 0;
++     virtual egl::Error getD3DTextureInfo(const egl::Config *configuration,
++                                          IUnknown *d3dTexture,
++                                          EGLint *width,
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
++index 7657aef79e..efd4dd1a24 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
++@@ -22,6 +22,27 @@
++ namespace rx
++ {
++ 
+++GLenum renderTargetFormatFromColorSpace(egl::Display *display, GLenum baseFormat, EGLint colorSpace)
+++{
+++    GLenum result = baseFormat;
+++
+++    /**
+++     * If sRGB extension is supported, we should change the surface format
+++     * to a specific one that does support automated gamma conversion.
+++     *
+++     * TODO: openGL doesn't support BGRA-sRGB texture format, so creation of
+++     *       textures in this format technically is not supported!
+++     */
+++    if (display->getExtensions().colorspaceSRGB &&
+++        baseFormat == GL_RGBA8_OES &&
+++        colorSpace == EGL_GL_COLORSPACE_SRGB_KHR)
+++    {
+++        result = GL_SRGB8_ALPHA8;
+++    }
+++
+++    return result;
+++}
+++
++ SurfaceD3D::SurfaceD3D(const egl::SurfaceState &state,
++                        RendererD3D *renderer,
++                        egl::Display *display,
++@@ -34,7 +55,8 @@ SurfaceD3D::SurfaceD3D(const egl::SurfaceState &state,
++       mDisplay(display),
++       mFixedSize(window == nullptr || attribs.get(EGL_FIXED_SIZE_ANGLE, EGL_FALSE) == EGL_TRUE),
++       mOrientation(static_cast<EGLint>(attribs.get(EGL_SURFACE_ORIENTATION_ANGLE, 0))),
++-      mRenderTargetFormat(state.config->renderTargetFormat),
+++      mColorSpace(static_cast<EGLint>(attribs.get(EGL_GL_COLORSPACE_KHR, EGL_GL_COLORSPACE_LINEAR_KHR))),
+++      mRenderTargetFormat(renderTargetFormatFromColorSpace(display, state.config->renderTargetFormat, mColorSpace)),
++       mDepthStencilFormat(state.config->depthStencilFormat),
++       mSwapChain(nullptr),
++       mSwapIntervalDirty(true),
++@@ -148,7 +170,7 @@ egl::Error SurfaceD3D::resetSwapChain(const egl::Display *display)
++ 
++     mSwapChain =
++         mRenderer->createSwapChain(mNativeWindow, mShareHandle, mD3DTexture, mRenderTargetFormat,
++-                                   mDepthStencilFormat, mOrientation, mState.config->samples);
+++                                   mDepthStencilFormat, mOrientation, mState.config->samples, mColorSpace);
++     if (!mSwapChain)
++     {
++         return egl::EglBadAlloc();
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
++index 01d2573244..ccb793d423 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/SurfaceD3D.h
++@@ -90,6 +90,7 @@ class SurfaceD3D : public SurfaceImpl
++ 
++     bool mFixedSize;
++     GLint mOrientation;
+++    EGLint mColorSpace;
++ 
++     GLenum mRenderTargetFormat;
++     GLenum mDepthStencilFormat;
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
++index b0ef9abddc..f0e497b52f 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
++@@ -465,6 +465,7 @@ Renderer11::Renderer11(egl::Display *display)
++     mRenderer11DeviceCaps.supportsConstantBufferOffsets = false;
++     mRenderer11DeviceCaps.supportsVpRtIndexWriteFromVertexShader = false;
++     mRenderer11DeviceCaps.supportsDXGI1_2               = false;
+++    mRenderer11DeviceCaps.supportsDXGI1_4               = false;
++     mRenderer11DeviceCaps.B5G6R5support                 = 0;
++     mRenderer11DeviceCaps.B4G4R4A4support               = 0;
++     mRenderer11DeviceCaps.B5G5R5A1support               = 0;
++@@ -918,6 +919,7 @@ egl::Error Renderer11::initializeDevice()
++ 
++     // Gather stats on DXGI and D3D feature level
++     ANGLE_HISTOGRAM_BOOLEAN("GPU.ANGLE.SupportsDXGI1_2", mRenderer11DeviceCaps.supportsDXGI1_2);
+++    ANGLE_HISTOGRAM_BOOLEAN("GPU.ANGLE.SupportsDXGI1_4", mRenderer11DeviceCaps.supportsDXGI1_4);
++ 
++     ANGLEFeatureLevel angleFeatureLevel = GetANGLEFeatureLevel(mRenderer11DeviceCaps.featureLevel);
++ 
++@@ -1002,6 +1004,10 @@ void Renderer11::populateRenderer11DeviceCaps()
++     IDXGIAdapter2 *dxgiAdapter2 = d3d11::DynamicCastComObject<IDXGIAdapter2>(mDxgiAdapter);
++     mRenderer11DeviceCaps.supportsDXGI1_2 = (dxgiAdapter2 != nullptr);
++     SafeRelease(dxgiAdapter2);
+++
+++    IDXGIAdapter3 *dxgiAdapter3 = d3d11::DynamicCastComObject<IDXGIAdapter3>(mDxgiAdapter);
+++    mRenderer11DeviceCaps.supportsDXGI1_4 = (dxgiAdapter3 != nullptr);
+++    SafeRelease(dxgiAdapter3);
++ }
++ 
++ gl::SupportedSampleSet Renderer11::generateSampleSetForEGLConfig(
++@@ -1241,6 +1247,11 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
++ 
++     // All D3D feature levels support robust resource init
++     outExtensions->robustResourceInitialization = true;
+++
+++    // color space selection supported in DXGI 1.4 only
+++    outExtensions->colorspaceSRGB = mRenderer11DeviceCaps.supportsDXGI1_4;
+++    outExtensions->colorspaceSCRGBLinear = mRenderer11DeviceCaps.supportsDXGI1_4;
+++    outExtensions->colorspaceBt2020PQ = mRenderer11DeviceCaps.supportsDXGI1_4;
++ }
++ 
++ gl::Error Renderer11::flush()
++@@ -1436,10 +1447,11 @@ SwapChainD3D *Renderer11::createSwapChain(NativeWindowD3D *nativeWindow,
++                                           GLenum backBufferFormat,
++                                           GLenum depthBufferFormat,
++                                           EGLint orientation,
++-                                          EGLint samples)
+++                                          EGLint samples,
+++                                          EGLint colorSpace)
++ {
++     return new SwapChain11(this, GetAs<NativeWindow11>(nativeWindow), shareHandle, d3dTexture,
++-                           backBufferFormat, depthBufferFormat, orientation, samples);
+++                           backBufferFormat, depthBufferFormat, orientation, samples, colorSpace);
++ }
++ 
++ void *Renderer11::getD3DDevice()
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
++index a8c24e681b..3516bf779d 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/Renderer11.h
++@@ -49,6 +49,7 @@ struct Renderer11DeviceCaps
++ 
++     D3D_FEATURE_LEVEL featureLevel;
++     bool supportsDXGI1_2;                // Support for DXGI 1.2
+++    bool supportsDXGI1_4;               // Support for DXGI 1.4
++     bool supportsClearView;              // Support for ID3D11DeviceContext1::ClearView
++     bool supportsConstantBufferOffsets;  // Support for Constant buffer offset
++     bool supportsVpRtIndexWriteFromVertexShader;  // VP/RT can be selected in the Vertex Shader
++@@ -138,7 +139,8 @@ class Renderer11 : public RendererD3D
++                                   GLenum backBufferFormat,
++                                   GLenum depthBufferFormat,
++                                   EGLint orientation,
++-                                  EGLint samples) override;
+++                                  EGLint samples,
+++                                  EGLint colorSpace) override;
++     egl::Error getD3DTextureInfo(const egl::Config *configuration,
++                                  IUnknown *d3dTexture,
++                                  EGLint *width,
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
++index dcfd06484d..fc967b90d0 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
++@@ -18,6 +18,11 @@
++ #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
++ #include "third_party/trace_event/trace_event.h"
++ 
+++#if 0
+++// used only for HDR metadata configuration options
+++#include <dxgi1_5.h>
+++#endif
+++
++ // Precompiled shaders
++ #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough2d11vs.h"
++ #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthroughrgba2d11ps.h"
++@@ -56,12 +61,14 @@ SwapChain11::SwapChain11(Renderer11 *renderer,
++                          GLenum backBufferFormat,
++                          GLenum depthBufferFormat,
++                          EGLint orientation,
++-                         EGLint samples)
+++                         EGLint samples,
+++                         EGLint colorSpace)
++     : SwapChainD3D(shareHandle, d3dTexture, backBufferFormat, depthBufferFormat),
++       mRenderer(renderer),
++       mWidth(-1),
++       mHeight(-1),
++       mOrientation(orientation),
+++      mColorSpace(colorSpace),
++       mAppCreatedShareHandle(mShareHandle != nullptr),
++       mSwapInterval(0),
++       mPassThroughResourcesInit(false),
++@@ -620,10 +627,92 @@ EGLint SwapChain11::reset(const gl::Context *context,
++             mSwapChain1 = d3d11::DynamicCastComObject<IDXGISwapChain1>(mSwapChain);
++         }
++ 
+++        if (mRenderer->getRenderer11DeviceCaps().supportsDXGI1_4)
+++        {
+++            IDXGISwapChain3 *swapChain3 = d3d11::DynamicCastComObject<IDXGISwapChain3>(mSwapChain);
+++
+++            printf("*** EGL colorSpace: 0x%X\n", mColorSpace);
+++            printf("*** EGL format: 0x%X\n", mOffscreenRenderTargetFormat);
+++            printf("*** Native format: 0x%X\n", getSwapChainNativeFormat());
+++
+++            if (mColorSpace != EGL_GL_COLORSPACE_LINEAR_KHR) {
+++                DXGI_COLOR_SPACE_TYPE nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709;
+++                switch (mColorSpace)
+++                {
+++                case EGL_GL_COLORSPACE_SRGB_KHR:
+++                    nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709;
+++                    break;
+++                case EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT:
+++                    nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709;
+++                    break;
+++                case EGL_GL_COLORSPACE_BT2020_PQ_EXT:
+++                    nativeColorSpace = DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020;
+++                    break;
+++                default:
+++                    ASSERT(0 && "Unsupported colorspace requested");
+++                }
+++
+++                printf("*** Native colorSpace: 0x%X\n", nativeColorSpace);
+++
+++                UINT supported = 0;
+++                result = swapChain3->CheckColorSpaceSupport(nativeColorSpace, &supported);
+++                ASSERT(SUCCEEDED(result));
+++                if (!(supported & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT)) {
+++                    SafeRelease(swapChain3);
+++                    return EGL_BAD_MATCH;
+++                }
+++
+++                result = swapChain3->SetColorSpace1(nativeColorSpace);
+++                ASSERT(SUCCEEDED(result));
+++            }
+++
+++            SafeRelease(swapChain3);
+++
+++#if 0
+++
+++            IDXGISwapChain4 *swapChain4 = d3d11::DynamicCastComObject<IDXGISwapChain4>(mSwapChain);
+++
+++            DXGI_HDR_METADATA_HDR10 md;
+++            md.RedPrimary[0] = 0.680 * 50000;
+++            md.RedPrimary[1] = 0.320 * 50000;
+++            md.GreenPrimary[0] = 0.265 * 50000;
+++            md.GreenPrimary[1] = 0.690 * 50000;
+++            md.BluePrimary[0] = 0.150 * 50000;
+++            md.BluePrimary[1] = 0.060 * 50000;
+++            md.WhitePoint[0] = 0.3127 * 50000;
+++            md.WhitePoint[1] = 0.3290 * 50000;
+++            md.MaxMasteringLuminance = 1000 * 10000;
+++            md.MinMasteringLuminance = 0.001 * 10000;
+++            md.MaxContentLightLevel = 1000;
+++            md.MaxFrameAverageLightLevel = 200;
+++            result = swapChain4->SetHDRMetaData(DXGI_HDR_METADATA_TYPE_HDR10, sizeof(md), &md);
+++            printf("*** Result hdr 0x%X\n", result);
+++            SafeRelease(swapChain4);
+++#endif
+++        }
+++
++         ID3D11Texture2D *backbufferTex = nullptr;
++         result                         = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
++                                        reinterpret_cast<LPVOID *>(&backbufferTex));
++         ASSERT(SUCCEEDED(result));
+++
+++        // TODO: recover rendering to sRGB
+++        //
+++        // D3D11_RENDER_TARGET_VIEW_DESC offscreenRTVDesc;
+++        // offscreenRTVDesc.Format = getSwapChainNativeFormat();
+++        //
+++        // if (mColorSpace == EGL_GL_COLORSPACE_SRGB_KHR) {
+++        //     if (offscreenRTVDesc.Format == DXGI_FORMAT_R8G8B8A8_UNORM) {
+++        //         offscreenRTVDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+++        //     }
+++        //
+++        //     if (offscreenRTVDesc.Format == DXGI_FORMAT_B8G8R8A8_UNORM) {
+++        //         offscreenRTVDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
+++        //     }
+++        // }
+++        //
+++        // printf("*** Render target format: 0x%X\n", offscreenRTVDesc.Format);
+++
++         const auto &format =
++             d3d11::Format::Get(mOffscreenRenderTargetFormat, mRenderer->getRenderer11DeviceCaps());
++         mBackBufferTexture.set(backbufferTex, format);
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
++index eca068210b..2a4b9ba274 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
++@@ -28,7 +28,8 @@ class SwapChain11 final : public SwapChainD3D
++                 GLenum backBufferFormat,
++                 GLenum depthBufferFormat,
++                 EGLint orientation,
++-                EGLint samples);
+++                EGLint samples,
+++                EGLint colorSpace);
++     ~SwapChain11() override;
++ 
++     EGLint resize(const gl::Context *context,
++@@ -93,6 +94,7 @@ class SwapChain11 final : public SwapChainD3D
++     EGLint mWidth;
++     EGLint mHeight;
++     const EGLint mOrientation;
+++    EGLint mColorSpace;
++     bool mAppCreatedShareHandle;
++     unsigned int mSwapInterval;
++     bool mPassThroughResourcesInit;
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
++index 5394e3d3e7..af52c41d00 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d11/win32/NativeWindow11Win32.cpp
++@@ -146,6 +146,9 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
++ 
++     // Use IDXGIFactory2::CreateSwapChainForHwnd if DXGI 1.2 is available to create a
++     // DXGI_SWAP_EFFECT_SEQUENTIAL swap chain.
+++    //
+++    // NOTE: in non-flip mode HDR rendering is not supported, so use it
+++    //       by default
++     IDXGIFactory2 *factory2 = d3d11::DynamicCastComObject<IDXGIFactory2>(factory);
++     if (factory2 != nullptr)
++     {
++@@ -158,9 +161,9 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
++         swapChainDesc.SampleDesc.Quality    = 0;
++         swapChainDesc.BufferUsage =
++             DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT | DXGI_USAGE_BACK_BUFFER;
++-        swapChainDesc.BufferCount   = 1;
+++        swapChainDesc.BufferCount   = 2;
++         swapChainDesc.Scaling       = DXGI_SCALING_STRETCH;
++-        swapChainDesc.SwapEffect    = DXGI_SWAP_EFFECT_SEQUENTIAL;
+++        swapChainDesc.SwapEffect    = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
++         swapChainDesc.AlphaMode     = DXGI_ALPHA_MODE_UNSPECIFIED;
++         swapChainDesc.Flags         = 0;
++         IDXGISwapChain1 *swapChain1 = nullptr;
++@@ -176,7 +179,7 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
++     }
++ 
++     DXGI_SWAP_CHAIN_DESC swapChainDesc               = {};
++-    swapChainDesc.BufferCount                        = 1;
+++    swapChainDesc.BufferCount                        = 2;
++     swapChainDesc.BufferDesc.Format                  = format;
++     swapChainDesc.BufferDesc.Width                   = width;
++     swapChainDesc.BufferDesc.Height                  = height;
++@@ -191,6 +194,16 @@ HRESULT NativeWindow11Win32::createSwapChain(ID3D11Device *device,
++     swapChainDesc.SampleDesc.Count   = samples;
++     swapChainDesc.SampleDesc.Quality = 0;
++     swapChainDesc.Windowed           = TRUE;
+++
+++    /**
+++     * NOTE1: in discard mode the swap chain doesn't support partial
+++     *        presentatiopn with Present1() call. Though it is not a big
+++     *        problem, because in case DXGI 1.2 is supported this code is
+++     *        unreachable.
+++     *
+++     * NOTE2: Flip modes are not supported on Windows 7 and the like,
+++     *        so use a legacy mode as a fallback
+++     */
++     swapChainDesc.SwapEffect         = DXGI_SWAP_EFFECT_DISCARD;
++ 
++     HRESULT result = factory->CreateSwapChain(device, &swapChainDesc, swapChain);
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
++index 75c6298868..58596169a8 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp
++@@ -718,8 +718,10 @@ SwapChainD3D *Renderer9::createSwapChain(NativeWindowD3D *nativeWindow,
++                                          GLenum backBufferFormat,
++                                          GLenum depthBufferFormat,
++                                          EGLint orientation,
++-                                         EGLint samples)
+++                                         EGLint samples,
+++                                         EGLint colorSpace)
++ {
+++    UNUSED_VARIABLE(colorSpace);
++     return new SwapChain9(this, GetAs<NativeWindow9>(nativeWindow), shareHandle, d3dTexture,
++                           backBufferFormat, depthBufferFormat, orientation);
++ }
++diff --git a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
++index 9ddee45f0f..ce4bb201e5 100644
++--- a/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
+++++ b/src/3rdparty/angle/src/libANGLE/renderer/d3d/d3d9/Renderer9.h
++@@ -92,7 +92,8 @@ class Renderer9 : public RendererD3D
++                                   GLenum backBufferFormat,
++                                   GLenum depthBufferFormat,
++                                   EGLint orientation,
++-                                  EGLint samples) override;
+++                                  EGLint samples,
+++                                  EGLint colorSpace) override;
++     egl::Error getD3DTextureInfo(const egl::Config *configuration,
++                                  IUnknown *d3dTexture,
++                                  EGLint *width,
++diff --git a/src/3rdparty/angle/src/libANGLE/validationEGL.cpp b/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
++index 13a3a9e280..858d7ee929 100644
++--- a/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
+++++ b/src/3rdparty/angle/src/libANGLE/validationEGL.cpp
++@@ -885,6 +885,32 @@ Error ValidateCreateWindowSurface(Display *display, Config *config, EGLNativeWin
++                                               "either EGL_TRUE or EGL_FALSE.";
++               }
++               break;
+++          case EGL_GL_COLORSPACE:
+++
+++              if (!displayExtensions.colorspaceSRGB)
+++              {
+++                  return EglBadAttribute() << "EGL_KHR_gl_colorspace is not supported on this platform.";
+++              }
+++
+++              if (value == EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT)
+++              {
+++                  if (!displayExtensions.colorspaceSCRGBLinear)
+++                  {
+++                      return EglBadAttribute() << "EGL_EXT_gl_colorspace_scrgb_linear is not supported on this platform.";
+++                  }
+++              }
+++              else if (value == EGL_GL_COLORSPACE_BT2020_PQ_EXT)
+++              {
+++                  if (!displayExtensions.colorspaceBt2020PQ)
+++                  {
+++                      return EglBadAttribute() << "EGL_EXT_gl_colorspace_bt2020_pq is not supported on this platform.";
+++                  }
+++              }
+++              else if (value != EGL_GL_COLORSPACE_SRGB_KHR && value != EGL_GL_COLORSPACE_LINEAR_KHR)
+++              {
+++                  return EglBadAttribute() << "Unknown EGL color space requested";
+++              }
+++              break;
++ 
++           default:
++               return EglBadAttribute();
++@@ -977,6 +1003,33 @@ Error ValidateCreatePbufferSurface(Display *display, Config *config, const Attri
++               }
++               break;
++ 
+++        case EGL_GL_COLORSPACE:
+++
+++            if (!displayExtensions.colorspaceSRGB)
+++            {
+++                return EglBadAttribute() << "EGL_KHR_gl_colorspace is not supported on this platform.";
+++            }
+++
+++            if (value == EGL_GL_COLORSPACE_SCRGB_LINEAR_EXT)
+++            {
+++                if (!displayExtensions.colorspaceSCRGBLinear)
+++                {
+++                    return EglBadAttribute() << "EGL_EXT_gl_colorspace_scrgb_linear is not supported on this platform.";
+++                }
+++            }
+++            else if (value == EGL_GL_COLORSPACE_BT2020_PQ_EXT)
+++            {
+++                if (!displayExtensions.colorspaceBt2020PQ)
+++                {
+++                    return EglBadAttribute() << "EGL_EXT_gl_colorspace_bt2020_pq is not supported on this platform.";
+++                }
+++            }
+++            else if (value != EGL_GL_COLORSPACE_SRGB_KHR && value != EGL_GL_COLORSPACE_LINEAR_KHR)
+++            {
+++                return EglBadAttribute() << "Unknown EGL color space requested";
+++            }
+++            break;
+++
++           default:
++               return EglBadAttribute();
++         }
++-- 
++2.20.1.windows.1
++
+-- 
+2.20.1.windows.1
+

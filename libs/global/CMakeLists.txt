@@ -8,6 +8,10 @@ option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in 
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
+include_directories(SYSTEM
+    ${EIGEN3_INCLUDE_DIR}
+)
+
 set(kritaglobal_LIB_SRCS
     kis_assert.cpp
     kis_debug.cpp
@@ -18,7 +22,6 @@ set(kritaglobal_LIB_SRCS
     kis_painting_tweaks.cpp
     KisHandlePainterHelper.cpp
     KisHandleStyle.cpp
-    kis_relaxed_timer.cpp
     kis_signal_compressor.cpp
     kis_signal_compressor_with_param.cpp
     kis_thread_safe_signal_compressor.cpp
@@ -32,6 +35,7 @@ set(kritaglobal_LIB_SRCS
     KisDeleteLaterWrapper.cpp
     KisUsageLogger.cpp
     KisFileUtils.cpp
+    KisSignalMapper.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )

@@ -26,10 +26,9 @@ KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint
 {
     x -= m_offsetX;
     y -= m_offsetY;
-    Q_ASSERT(dataManager != 0);
+    Q_ASSERT(dataManager);
 
-    Q_ASSERT(w > 0); // for us, to warn us when abusing the iterators
-    if (w < 1) w = 1;  // for release mode, to make sure there's always at least one pixel read.
+    if (w < 1) w = 1;  // To make sure there's always at least one pixel read.
 
     m_x = x;
     m_y = y;

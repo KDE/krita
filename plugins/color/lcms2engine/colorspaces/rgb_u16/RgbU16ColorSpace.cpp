@@ -26,6 +26,7 @@
 #include "compositeops/KoCompositeOps.h"
 #include "compositeops/RgbCompositeOps.h"
 #include "kis_dom_utils.h"
+#include <KoColorConversions.h>
 
 RgbU16ColorSpace::RgbU16ColorSpace(const QString &name, KoColorProfile *p) :
     LcmsColorSpace<KoBgrU16Traits>(colorSpaceId(), name, TYPE_BGRA_16, cmsSigRgbData, p)

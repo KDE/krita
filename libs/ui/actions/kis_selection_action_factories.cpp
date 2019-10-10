@@ -393,6 +393,7 @@ void KisCopyMergedActionFactory::run(KisViewManager *view)
 void KisInvertSelectionOperation::runFromXML(KisViewManager* view, const KisOperationConfiguration& config)
 {
     KisSelectionFilter* filter = new KisInvertSelectionFilter();
+
     runFilter(filter, view, config);
 }
 
@@ -543,8 +544,8 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
     KisNodeSP currentNode = view->canvasResourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
     if (!currentNode->inherits("KisShapeLayer") && currentNode->paintDevice()) {
         KoCanvasResourceProvider * rManager = view->canvasResourceProvider()->resourceManager();
-        KisPainter::StrokeStyle strokeStyle =  KisPainter::StrokeStyleBrush;
-        KisPainter::FillStyle fillStyle =  params.fillStyle();
+        KisToolShapeUtils::StrokeStyle strokeStyle =  KisToolShapeUtils::StrokeStyleForeground;
+        KisToolShapeUtils::FillStyle fillStyle = params.fillStyle();
 
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polyline"),
                                        image,
@@ -557,7 +558,7 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
         QPen pen(Qt::red, size);
         pen.setJoinStyle(Qt::RoundJoin);
 
-        if (fillStyle != KisPainter::FillStyleNone) {
+        if (fillStyle != KisToolShapeUtils::FillStyleNone) {
             helper.paintPainterPathQPenFill(outline, pen, params.fillColor);
         }
         else {
@@ -602,14 +603,14 @@ void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelec
     {
         KoCanvasResourceProvider * rManager = view->canvasResourceProvider()->resourceManager();
         QPainterPath outline = pixelSelection->outlineCache();
-        KisPainter::StrokeStyle strokeStyle =  KisPainter::StrokeStyleBrush;
-        KisPainter::FillStyle fillStyle =  KisPainter::FillStyleNone;
+        KisToolShapeUtils::StrokeStyle strokeStyle =  KisToolShapeUtils::StrokeStyleForeground;
+        KisToolShapeUtils::FillStyle fillStyle =  KisToolShapeUtils::FillStyleNone;
         KoColor color = params.color;
 
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polyline"),
                                        image,
                                        currentNode,
-                                       rManager ,
+                                       rManager,
                                        strokeStyle,
                                        fillStyle);
         helper.setFGColorOverride(color);

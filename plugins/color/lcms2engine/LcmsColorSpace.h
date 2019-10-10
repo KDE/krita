@@ -27,6 +27,9 @@
 #include <QMutex>
 #include <QMutexLocker>
 
+#include "kis_assert.h"
+
+
 class LcmsColorProfileContainer;
 
 class KoLcmsInfo
@@ -202,7 +205,7 @@ protected:
         d->qcolordata = new quint8[3];
         Q_CHECK_PTR(d->qcolordata);
 
-        Q_ASSERT(d->profile);
+        KIS_ASSERT(d->profile);
 
         if (KoLcmsDefaultTransformations::s_RGBProfile == 0) {
             KoLcmsDefaultTransformations::s_RGBProfile = cmsCreate_sRGBProfile();
@@ -216,14 +219,15 @@ protected:
                                                  this->colorSpaceType(),
                                                  KoColorConversionTransformation::internalRenderingIntent(),
                                                  KoColorConversionTransformation::internalConversionFlags());
-            Q_ASSERT(d->defaultTransformations->fromRGB);
+            KIS_SAFE_ASSERT_RECOVER_NOOP(d->defaultTransformations->fromRGB || !d->colorProfile->isSuitableForOutput());
+
             d->defaultTransformations->toRGB = cmsCreateTransform(d->profile->lcmsProfile(),
                                                this->colorSpaceType(),
                                                KoLcmsDefaultTransformations::s_RGBProfile,
                                                TYPE_BGR_8,
                                                KoColorConversionTransformation::internalRenderingIntent(),
                                                KoColorConversionTransformation::internalConversionFlags());
-            Q_ASSERT(d->defaultTransformations->toRGB);
+            KIS_SAFE_ASSERT_RECOVER_NOOP(d->defaultTransformations->toRGB);
             KoLcmsDefaultTransformations::s_transformations[ this->id()][ d->profile ] = d->defaultTransformations;
         }
     }
@@ -256,7 +260,7 @@ public:
         LcmsColorProfileContainer *profile = asLcmsProfile(koprofile);
         if (profile == 0) {
             // Default sRGB
-            Q_ASSERT(d->defaultTransformations && d->defaultTransformations->fromRGB);
+            KIS_ASSERT(d->defaultTransformations && d->defaultTransformations->fromRGB);
 
             cmsDoTransform(d->defaultTransformations->fromRGB, d->qcolordata, dst, 1);
         } else {
@@ -270,6 +274,7 @@ public:
                 d->lastRGBProfile = profile->lcmsProfile();
 
             }
+            KIS_ASSERT(d->lastFromRGB);
             cmsDoTransform(d->lastFromRGB, d->qcolordata, dst, 1);
         }
 

@@ -5,7 +5,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,6 +26,7 @@
 #include <QStandardPaths>
 #include <QFile>
 #include <QLineF>
+
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
@@ -100,7 +102,7 @@ void KisAssistantTool::deactivate()
 void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
 {
     setMode(KisTool::PAINT_MODE);
-    m_origAssistantList = cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants());
+    m_origAssistantList = KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants());
 
     bool newAssistantAllowed = true;
 
@@ -274,13 +276,13 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
             } else if (m_handleDrag == assistant->handles()[1]) {
                 m_dragStart = *assistant->handles()[0];
             } else if (m_handleDrag == assistant->handles()[2]) {
-                m_dragStart = assistant->buttonPosition();
+                m_dragStart = assistant->getEditorPosition();
                 m_radius = QLineF(m_dragStart, *assistant->handles()[0]);
                 m_snapIsRadial = true;
             }
 
         } else {
-            m_dragStart = assistant->buttonPosition();
+            m_dragStart = assistant->getEditorPosition();
             m_snapIsRadial = false;
         }
     }
@@ -299,21 +301,20 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
     m_assistantDrag.clear();
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
 
-        // This code contains the click event behavior.
-        QTransform initialTransform = m_canvas->coordinatesConverter()->documentToWidgetTransform();
-        QPointF actionsPosition = initialTransform.map(assistant->buttonPosition());
+        AssistantEditorData editorShared; // shared position data between assistant tool and decoration
+        const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
 
+        // This code contains the click event behavior.
+        QTransform initialTransform = converter->documentToWidgetTransform();
+        QPointF actionsPosition = initialTransform.map(assistant->viewportConstrainedEditorPosition(converter, editorShared.boundingSize));
 
         // for UI editor widget controls with move, show, and delete -- disregard document transforms like rotating and mirroring.
         // otherwise the UI controls get awkward to use when they are at 45 degree angles or the order of controls gets flipped backwards
-        QPointF uiMousePosition = initialTransform.map( canvasDecoration->snapToGuide(event, QPointF(), false));
-
-        AssistantEditorData editorShared; // shared position data between assistant tool and decoration
+        QPointF uiMousePosition = initialTransform.map(canvasDecoration->snapToGuide(event, QPointF(), false));
 
         QPointF iconMovePosition(actionsPosition + editorShared.moveIconPosition);
         QPointF iconSnapPosition(actionsPosition + editorShared.snapIconPosition);
         QPointF iconDeletePosition(actionsPosition + editorShared.deleteIconPosition);
-
 
         QRectF deleteRect(iconDeletePosition, QSizeF(editorShared.deleteIconSize, editorShared.deleteIconSize));
         QRectF visibleRect(iconSnapPosition, QSizeF(editorShared.snapIconSize, editorShared.snapIconSize));
@@ -417,6 +418,7 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
                 *handle += (newAdjustment - m_currentAdjustment);
             }
         }
+        m_assistantDrag->uncache();
         m_currentAdjustment = newAdjustment;
         m_canvas->updateCanvas();
 
@@ -524,7 +526,7 @@ void KisAssistantTool::endPrimaryAction(KoPointerEvent *event)
             m_assistantDrag.clear();
         }
         dbgUI << "creating undo command...";
-        KUndo2Command *command = new EditAssistantsCommand(m_canvas, m_origAssistantList, cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()));
+        KUndo2Command *command = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()));
         m_canvas->viewManager()->undoAdapter()->addCommand(command);
         dbgUI << "done";
     } else if(m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
@@ -538,18 +540,6 @@ void KisAssistantTool::endPrimaryAction(KoPointerEvent *event)
     m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
 }
 
-QList<KisPaintingAssistantSP> KisAssistantTool::cloneAssistantList(const QList<KisPaintingAssistantSP> &list) const
-{
-    QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> handleMap;
-    QList<KisPaintingAssistantSP> clonedList;
-    dbgUI << "cloning assistants...";
-    for (auto i = list.begin(); i != list.end(); ++i) {
-        clonedList << (*i)->clone(handleMap);
-    }
-    dbgUI << "done";
-    return clonedList;
-}
-
 void KisAssistantTool::addAssistant()
 {
     m_canvas->paintingAssistantsDecoration()->addAssistant(m_newAssistant);
@@ -560,7 +550,7 @@ void KisAssistantTool::addAssistant()
     }
 
     QList<KisPaintingAssistantSP> assistants = m_canvas->paintingAssistantsDecoration()->assistants();
-    KUndo2Command *addAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, cloneAssistantList(assistants), EditAssistantsCommand::ADD, assistants.indexOf(m_newAssistant));
+    KUndo2Command *addAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(assistants), EditAssistantsCommand::ADD, assistants.indexOf(m_newAssistant));
     m_canvas->viewManager()->undoAdapter()->addCommand(addAssistantCmd);
 
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
@@ -580,7 +570,7 @@ void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
     }
     m_canvas->paintingAssistantsDecoration()->removeAssistant(assistant);
 
-    KUndo2Command *removeAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()), EditAssistantsCommand::REMOVE, assistants.indexOf(assistant));
+    KUndo2Command *removeAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()), EditAssistantsCommand::REMOVE, assistants.indexOf(assistant));
     m_canvas->viewManager()->undoAdapter()->addCommand(removeAssistantCmd);
 
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
@@ -612,8 +602,16 @@ void KisAssistantTool::updateToolOptionsUI()
          // load custom color settings from assistant (this happens when changing assistant
          m_options.useCustomAssistantColor->setChecked(m_selectedAssistant->useCustomColor());
          m_options.customAssistantColorButton->setColor(m_selectedAssistant->assistantCustomColor());
-         float opacity = (float)m_selectedAssistant->assistantCustomColor().alpha()/255.0 * 100.0 ;
-         m_options.customColorOpacitySlider->setValue(opacity);
+
+
+         double opacity = (double)m_selectedAssistant->assistantCustomColor().alpha()/(double)255.00 * (double)100.00 ;
+         opacity = ceil(opacity); // helps keep the 0-100% slider from shifting
+
+         m_options.customColorOpacitySlider->blockSignals(true);
+         m_options.customColorOpacitySlider->setValue((double)opacity);
+         m_options.customColorOpacitySlider->blockSignals(false);
+
+
      } else {
          m_options.vanishingPointAngleSpinbox->setVisible(false); //
      }
@@ -791,23 +789,24 @@ void KisAssistantTool::loadAssistants()
                     errors = true;
                 }
 
+                if (assistant) {
+                    // load custom shared assistant properties
+                    if (xml.attributes().hasAttribute("useCustomColor")) {
+                        QStringRef useCustomColor = xml.attributes().value("useCustomColor");
 
-               // load custom shared assistant properties
-               if ( xml.attributes().hasAttribute("useCustomColor")) {
-                   QStringRef useCustomColor = xml.attributes().value("useCustomColor");
+                        bool usingColor = false;
+                        if (useCustomColor.toString() == "1") {
+                            usingColor = true;
+                        }
+                        assistant->setUseCustomColor(usingColor);
+                    }
 
-                   bool usingColor = false;
-                   if (useCustomColor.toString() == "1") {
-                       usingColor = true;
-                   }
-                   assistant->setUseCustomColor(usingColor);
-               }
+                    if ( xml.attributes().hasAttribute("useCustomColor")) {
+                        QStringRef customColor = xml.attributes().value("customColor");
+                        assistant->setAssistantCustomColor( KisDomUtils::qStringToQColor(customColor.toString()) );
 
-               if ( xml.attributes().hasAttribute("useCustomColor")) {
-                   QStringRef customColor = xml.attributes().value("customColor");
-                   assistant->setAssistantCustomColor( KisDomUtils::qStringToQColor(customColor.toString()) );
-
-               }
+                    }
+                }
            }
 
             if (assistant) {

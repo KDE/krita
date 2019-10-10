@@ -32,7 +32,6 @@
 #include "KoInlineTextObjectManager.h"
 #include "KoInlineNote.h"
 #include "KoInlineCite.h"
-#include "BibliographyGenerator.h"
 #include <KoTextShapeDataBase.h>
 #include <KoSelection.h>
 #include <KoShapeController.h>
@@ -1202,8 +1201,6 @@ void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
     d->caret.movePosition(QTextCursor::Left);
     d->caret.insertBlock(bibFormat);
     d->caret.movePosition(QTextCursor::Right);
-
-    new BibliographyGenerator(bibDocument, block(), newBibInfo);
 
     if (hasSelection) {
         d->caret.endEditBlock();

@@ -33,6 +33,7 @@
 #include <QTimer>
 #include <QMenu>
 #include <QAction>
+#include <QScreen>
 
 #include <klocalizedstring.h>
 #include <WidgetsDebug.h>
@@ -46,7 +47,7 @@
 
 static int buttonSize(int screen)
 {
-    QRect rc = qApp->desktop()->screenGeometry(screen);
+    QRect rc = QGuiApplication::screens().at(screen)->availableGeometry();
     if (rc.width() <= 1024) {
         return 12;
     }

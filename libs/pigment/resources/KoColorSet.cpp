@@ -259,7 +259,7 @@ void KoColorSet::setPaletteType(PaletteType paletteType)
 
 quint32 KoColorSet::colorCount() const
 {
-    int colorCount = d->groups[GLOBAL_GROUP_NAME].colorCount();
+    int colorCount = 0;
     for (KisSwatchGroup &g : d->groups.values()) {
         colorCount += g.colorCount();
     }
@@ -290,20 +290,14 @@ void KoColorSet::clear()
 
 KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y) const
 {
-    int yInGroup = y;
-    QString nameGroupFoundIn;
     for (const QString &groupName : d->groupNames) {
-        if (yInGroup < d->groups[groupName].rowCount()) {
-            nameGroupFoundIn = groupName;
-            break;
+        if ((int)y < d->groups[groupName].rowCount()) {
+            return d->groups[groupName].getEntry(x, y);
         } else {
-            yInGroup -= d->groups[groupName].rowCount();
+            y -= d->groups[groupName].rowCount();
         }
     }
-    const KisSwatchGroup &groupFoundIn = nameGroupFoundIn == GLOBAL_GROUP_NAME
-            ? d->global() : d->groups[nameGroupFoundIn];
-    Q_ASSERT(groupFoundIn.checkEntry(x, yInGroup));
-    return groupFoundIn.getEntry(x, yInGroup);
+    return KisSwatch();
 }
 
 KisSwatch KoColorSet::getColorGroup(quint32 x, quint32 y, QString groupName)
@@ -495,8 +489,6 @@ KisSwatchGroup::SwatchInfo KoColorSet::getClosestColorInfo(KoColor compare, bool
 
 KoColorSet::Private::Private(KoColorSet *a_colorSet)
     : colorSet(a_colorSet)
-    , isGlobal(true)
-    , isEditable(false)
 {
     groups[KoColorSet::GLOBAL_GROUP_NAME] = KisSwatchGroup();
     groupNames.append(KoColorSet::GLOBAL_GROUP_NAME);
@@ -832,7 +824,7 @@ bool KoColorSet::Private::loadGpl()
                 a.pop_front();
             }
             QString name = a.join(" ");
-            e.setName(name.isEmpty() ? i18n("Untitled") : name);
+            e.setName(name.isEmpty() || name == "Untitled" ? i18n("Untitled") : name);
 
             global().addEntry(e);
         }
@@ -848,7 +840,7 @@ bool KoColorSet::Private::loadGpl()
 bool KoColorSet::Private::loadAct()
 {
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
     KisSwatch e;
     for (int i = 0; i < data.size(); i += 3) {
         quint8 r = data[i];
@@ -864,7 +856,7 @@ bool KoColorSet::Private::loadRiff()
 {
     // http://worms2d.info/Palette_file
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
     KisSwatch e;
 
     RiffHeader header;
@@ -887,7 +879,7 @@ bool KoColorSet::Private::loadRiff()
 bool KoColorSet::Private::loadPsp()
 {
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
     KisSwatch e;
     qint32 r, g, b;
 
@@ -1005,7 +997,7 @@ bool KoColorSet::Private::loadKpl()
 bool KoColorSet::Private::loadAco()
 {
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.baseName());
+    colorSet->setName(info.completeBaseName());
 
     QBuffer buf(&data);
     buf.open(QBuffer::ReadOnly);

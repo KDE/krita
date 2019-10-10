@@ -110,7 +110,7 @@ qlonglong KMainWindowInterface::winId()
 void KMainWindowInterface::grabWindowToClipBoard()
 {
     QClipboard *clipboard = QApplication::clipboard();
-    clipboard->setPixmap(QPixmap::grabWidget(m_MainWindow));
+    clipboard->setPixmap(m_MainWindow->grab());
 }
 
 #include "moc_kmainwindowiface_p.cpp"

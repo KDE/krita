@@ -1,0 +1,33 @@
+From bfa5d9ad432d3be6529d4c0d6fd79aecf8a8bdfa Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Wed, 19 Jun 2019 15:04:31 +0300
+Subject: [PATCH 01/19] Use fast path for unsupported mime types
+
+We don't need to request the entire image every time
+Windows asks for the list of supported MIME types. That
+can make graphical applications very slow (because the image
+might be quite big)
+
+Change-Id: I84223417661eceffa1362f8045c89e260b68e0a7
+---
+ src/plugins/platforms/windows/qwindowsmime.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/plugins/platforms/windows/qwindowsmime.cpp b/src/plugins/platforms/windows/qwindowsmime.cpp
+index 030d8d1e0f..b4f325736b 100644
+--- a/src/plugins/platforms/windows/qwindowsmime.cpp
++++ b/src/plugins/platforms/windows/qwindowsmime.cpp
+@@ -1082,6 +1082,10 @@ bool QWindowsMimeImage::canConvertToMime(const QString &mimeType, IDataObject *p
+ bool QWindowsMimeImage::canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const
+ {
+     int cf = getCf(formatetc);
++
++    if (cf != CF_DIBV5 && cf != CF_DIB && cf != CF_PNG)
++        return false;
++
+     if (!mimeData->hasImage())
+         return false;
+     const QImage image = qvariant_cast<QImage>(mimeData->imageData());
+-- 
+2.20.1.windows.1
+

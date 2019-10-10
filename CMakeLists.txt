@@ -2,11 +2,14 @@ project(krita)
 
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 
 set(MIN_QT_VERSION 5.9.0)
+set(MIN_FRAMEWORKS_VERSION 5.44.0)
 
-set(MIN_FRAMEWORKS_VERSION 5.18.0)
+set( CMAKE_CXX_STANDARD 11 )
+set( CMAKE_CXX_STANDARD_REQUIRED ON )
+
 
 if (POLICY CMP0002)
     cmake_policy(SET CMP0002 OLD)
@@ -57,11 +60,11 @@ if (APPLE)
     set(KDE_SKIP_RPATH_SETTINGS TRUE)
     set(CMAKE_MACOSX_RPATH 1)
     set(BUILD_WITH_INSTALL_RPATH 1)
-    add_definitions(-mmacosx-version-min=10.11 -Wno-macro-redefined -Wno-deprecated-register)
+    add_definitions(-mmacosx-version-min=10.12 -Wno-macro-redefined -Wno-deprecated-register)
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
-    add_definitions(-Wno-suggest-override)
+    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-Wno-suggest-override> -Wextra)
 endif()
 
  ######################
@@ -281,15 +284,6 @@ find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS
         Archive
 )
 
-# KConfig deprecated authorizeKAction. In order to be warning free,
-# compile with the updated function when the dependency is new enough.
-# Remove this (and the uses of the define) when the minimum KF5
-# version is >= 5.24.0.
-if (${KF5Config_VERSION} VERSION_LESS "5.24.0" )
-    message("Old KConfig (< 5.24.0) found.")
-    add_definitions(-DKCONFIG_BEFORE_5_24)
-endif()
-
 find_package(Qt5 ${MIN_QT_VERSION}
         REQUIRED COMPONENTS
         Core
@@ -302,6 +296,13 @@ find_package(Qt5 ${MIN_QT_VERSION}
         Test
         Concurrent
 )
+
+if (ANDROID)
+    find_package(Qt5 ${MIN_QT_VERSION}
+        REQUIRED COMPONENTS
+        AndroidExtras
+    )
+endif()
 
 if (WIN32)
     set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS})
@@ -405,7 +406,7 @@ set_package_properties(Qt5QuickWidgets PROPERTIES
         PURPOSE "Optionally used for the touch gui for Krita")
 endif()
 
-if (NOT WIN32 AND NOT APPLE)
+if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
 
     find_package(Qt5 ${MIN_QT_VERSION} REQUIRED X11Extras)
 
@@ -429,12 +430,9 @@ if (NOT WIN32 AND NOT APPLE)
     set(HAVE_X11 TRUE)
     add_definitions(-DHAVE_X11)
 
-    find_package(XCB COMPONENTS XCB ATOM)
-    set(HAVE_XCB ${XCB_FOUND})
 else()
     set(HAVE_DBUS FALSE)
     set(HAVE_X11 FALSE)
-    set(HAVE_XCB FALSE)
 endif()
 
 
@@ -443,18 +441,27 @@ add_definitions(
   -DQT_STRICT_ITERATORS
   -DQT_NO_SIGNALS_SLOTS_KEYWORDS
   -DQT_NO_URL_CAST_FROM_STRING
+  -DQT_USE_FAST_CONCATENATION 
+  -DQT_USE_FAST_OPERATOR_PLUS
 )
 
-if (${Qt5_VERSION} VERSION_GREATER "5.8.0" )
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50900)
-elseif(${Qt5_VERSION} VERSION_GREATER "5.7.0" )
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50800)
-elseif(${Qt5_VERSION} VERSION_GREATER "5.6.0" )
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
-else()
-    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50600)
-endif()
 
+#if (${Qt5_VERSION} VERSION_GREATER "5.14.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50F00)
+#elseif (${Qt5_VERSION} VERSION_GREATER "5.13.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50E00)
+#elseif (${Qt5_VERSION} VERSION_GREATER "5.12.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50D00)
+#elseif (${Qt5_VERSION} VERSION_GREATER "5.11.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50C00)
+#if(${Qt5_VERSION} VERSION_GREATER "5.10.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50B00)
+#if(${Qt5_VERSION} VERSION_GREATER "5.9.0" )
+#    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50A00)
+#else()
+    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50900)
+#endif()
+add_definitions(-DQT_DEPRECATED_WARNINGS)
 add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
 
 #
@@ -522,7 +529,18 @@ if(WIN32)
 endif()
 
 # set custom krita plugin installdir
-set(KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/kritaplugins)
+if (ANDROID)
+    # use default ABI
+    if (NOT ANDROID_ABI)
+        set (ANDROID_ABI armeabi-v7a)
+    endif()
+    set (ANDROID_SDK_ROOT $ENV{ANDROID_SDK_ROOT})
+    set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR})
+    # set (DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/assets)
+else()
+    set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/kritaplugins)
+endif()
+
 
  ###########################
 ############################
@@ -530,7 +548,15 @@ set(KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/kritaplugins)
 ############################
 ###########################
 
+# FIXME: Still hardcoded
+if (ANDROID)
+    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_69)
+    set (Boost_LIBRARY_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/lib)
+    set (KF5_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/kf5/kde/install/lib)
+endif()
+
 find_package(PNG REQUIRED)
+list (APPEND ANDROID_EXTRA_LIBS ${PNG_LIBRARY})
 
 if (APPLE)
     # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
@@ -550,13 +576,15 @@ set_package_properties(GSL PROPERTIES
     PURPOSE "Required by Krita's Transform tool.")
 macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
+if (GSL_FOUND)
+    list (APPEND ANDROID_EXTRA_LIBS ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+endif()
 
  ###########################
 ############################
 ## Optional dependencies  ##
 ############################
 ###########################
-
 
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES
@@ -586,6 +614,9 @@ set_package_properties(TIFF PROPERTIES
     URL "http://www.remotesensing.org/libtiff"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita TIFF filter")
+if (TIFF_FOUND)
+    list (APPEND ANDROID_EXTRA_LIBS ${TIFF_LIBRARY})
+endif()
 
 find_package(JPEG)
 set_package_properties(JPEG PROPERTIES
@@ -593,6 +624,9 @@ set_package_properties(JPEG PROPERTIES
     URL "http://www.libjpeg-turbo.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita JPEG filter")
+if (JPEG_FOUND)
+    list (APPEND ANDROID_EXTRA_LIBS ${JPEG_LIBRARY})
+endif()
 
 find_package(GIF)
 set_package_properties(GIF PROPERTIES
@@ -600,6 +634,9 @@ set_package_properties(GIF PROPERTIES
     URL "http://giflib.sourceforge.net/"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita GIF filter")
+if (GIF_FOUND)
+    list (APPEND ANDROID_EXTRA_LIBS ${GIF_LIBRARY})
+endif()
 
 find_package(HEIF "1.3.0")
 set_package_properties(HEIF PROPERTIES
@@ -623,6 +660,9 @@ set_package_properties(FFTW3 PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita for fast convolution operators and some G'Mic features")
 macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+if (FFTW3_FOUND)
+    list (APPEND ANDROID_EXTRA_LIBS ${FFTW3_LIBRARY})
+endif()
 
 find_package(OCIO)
 set_package_properties(OCIO PROPERTIES
@@ -679,6 +719,12 @@ set_package_properties(Eigen3 PROPERTIES
 ## Test for exiv2
 ##
 find_package(LibExiv2 0.16 REQUIRED)
+if (ANDROID)
+    list (APPEND ANDROID_EXTRA_LIBS ${LibExiv2_LIBRARIES})
+    # because libexiv2 depends on libexpat and it is installed in the same folder
+    get_filename_component (_base_dir ${LibExiv2_LIBRARIES} DIRECTORY)
+    list (APPEND ANDROID_EXTRA_LIBS ${_base_dir}/libexpat.so)
+endif()
 
 ##
 ## Test for lcms
@@ -696,6 +742,7 @@ if(LCMS2_FOUND)
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
 endif()
+list (APPEND ANDROID_EXTRA_LIBS ${LCMS2_LIBRARIES})
 
 ##
 ## Test for Vc
@@ -735,14 +782,6 @@ if(HAVE_VC)
         endif()
     endif()
 
-    #Handle Vc master
-    if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
-        AddCompilerFlag("-std=c++11" _ok)
-        if(NOT _ok)
-            AddCompilerFlag("-std=c++0x" _ok)
-        endif()
-    endif()
-
     macro(ko_compile_for_all_implementations_no_scalar _objs _src)
         vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
     endmacro()
@@ -774,7 +813,7 @@ set_package_properties(Poppler PROPERTIES
 
 ##
 ## Test for quazip
-## 
+##
 find_package(QuaZip 0.6)
 set_package_properties(QuaZip PROPERTIES
     DESCRIPTION "A library for reading and writing zip files"
@@ -783,6 +822,20 @@ set_package_properties(QuaZip PROPERTIES
     PURPOSE "Needed for reading and writing KRA and ORA files"
 )
 
+# FIXME: better way to do this?
+list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
+                                ${EXPAT_LIBRARY}
+                                ${KF5_LIBRARIES}/libKF5Completion.so
+                                ${KF5_LIBRARIES}/libKF5WindowSystem.so
+                                ${KF5_LIBRARIES}/libKF5WidgetsAddons.so
+                                ${KF5_LIBRARIES}/libKF5ItemViews.so
+                                ${KF5_LIBRARIES}/libKF5ItemModels.so
+                                ${KF5_LIBRARIES}/libKF5GuiAddons.so
+                                ${KF5_LIBRARIES}/libKF5I18n.so
+                                ${KF5_LIBRARIES}/libKF5CoreAddons.so
+                                ${KF5_LIBRARIES}/libKF5ConfigGui.so
+                                ${KF5_LIBRARIES}/libKF5ConfigCore.so
+                                ${KF5_LIBRARIES}/libKF5Archive.so)
 
 
 ##
@@ -839,3 +892,28 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/p
   find_package(KF5I18n CONFIG REQUIRED)
   ki18n_install(po)
 endif()
+
+
+if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
+    set (_CMAKE_ANDROID_DIR "${ECM_DIR}/../toolchain")
+    list(LENGTH QTANDROID_EXPORTED_TARGET targetsCount)
+    include(${_CMAKE_ANDROID_DIR}/ECMAndroidDeployQt.cmake)
+
+    math(EXPR last "${targetsCount}-1")
+    foreach(idx RANGE 0 ${last})
+        list(GET QTANDROID_EXPORTED_TARGET ${idx} exportedTarget)
+        list(GET ANDROID_APK_DIR ${idx} APK_DIR)
+        if(APK_DIR AND NOT EXISTS "${ANDROID_APK_DIR}/AndroidManifest.xml" AND IS_ABSOLUTE ANDROID_APK_DIR)
+            message(FATAL_ERROR "Cannot find ${APK_DIR}/AndroidManifest.xml according to ANDROID_APK_DIR. ${ANDROID_APK_DIR} ${exportedTarget}")
+        elseif(NOT APK_DIR)
+            get_filename_component(_qt5Core_install_prefix "${Qt5Core_DIR}/../../../" ABSOLUTE)
+            set(APK_DIR "${_qt5Core_install_prefix}/src/android/templates/")
+        endif()
+
+        ecm_androiddeployqt("${exportedTarget}" "${ECM_ADDITIONAL_FIND_ROOT_PATH}")
+        set_target_properties(create-apk-${exportedTarget} PROPERTIES ANDROID_APK_DIR "${APK_DIR}")
+    endforeach()
+elseif(ANDROID)
+    message(STATUS "You can export a target by specifying -DQTANDROID_EXPORTED_TARGET=<targetname> and -DANDROID_APK_DIR=<paths>")
+endif()
+

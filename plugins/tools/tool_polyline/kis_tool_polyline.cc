@@ -54,8 +54,6 @@ QWidget* KisToolPolyline::createOptionWidget()
 
 void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
 {
-    if (!blockUntilOperationsFinished()) return;
-
     const KisToolShape::ShapeAddInfo info =
         shouldAddShape(currentNode());
 
@@ -80,6 +78,5 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
 
         addShape(path);
     }
-    notifyModified();
 }
 

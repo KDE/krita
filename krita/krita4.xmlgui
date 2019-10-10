@@ -74,6 +74,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <text>&amp;View</text>
       <Action name="view_show_canvas_only"/>
       <Action name="fullscreen"/>
+      <Action name="view_detached_canvas"/>
       <Action name="wrap_around_mode"/>
       <Action name="level_of_detail_mode"/>
       <Action name="softProof"/>
@@ -176,6 +177,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Menu name="LayerNew">
         <text>New</text>
         <Action name="add_new_paint_layer"/>
+        <Action name="add_new_clone_layer"/>
         <Action name="new_from_visible"/>
         <Action name="duplicatelayer"/>
         <Separator/>
@@ -326,8 +328,8 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="color_filters"/>
       <Action name="decor_filters"/>
       <Action name="edge_filters"/>
-      <Action name="enhance_filters"/>
       <Action name="emboss_filters"/>
+      <Action name="enhance_filters"/>
       <Action name="map_filters"/>
       <Action name="nonphotorealistic_filters"/>
       <Action name="other_filters"/>

@@ -31,7 +31,7 @@
 #include <QPolygonF>
 #include <QTime>
 
-class QSignalMapper;
+class KisSignalMapper;
 class KoInteractionStrategy;
 class KoShapeMoveCommand;
 class KoSelection;
@@ -159,7 +159,7 @@ private:
     /// Returns rotation angle of given handle of the current selection
     qreal rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdgeRotation);
 
-    void addMappedAction(QSignalMapper *mapper, const QString &actionId, int type);
+    void addMappedAction(KisSignalMapper *mapper, const QString &actionId, int type);
 
     void selectionReorder(KoShapeReorderCommand::MoveShapeType order);
     bool moveSelection(int direction, Qt::KeyboardModifiers modifiers);
@@ -189,10 +189,10 @@ private:
 
     DefaultToolTabbedWidget *m_tabbedOptionWidget;
 
-    QSignalMapper *m_alignSignalsMapper {0};
-    QSignalMapper *m_distributeSignalsMapper {0};
-    QSignalMapper *m_transformSignalsMapper {0};
-    QSignalMapper *m_booleanSignalsMapper {0};
+    KisSignalMapper *m_alignSignalsMapper {0};
+    KisSignalMapper *m_distributeSignalsMapper {0};
+    KisSignalMapper *m_transformSignalsMapper {0};
+    KisSignalMapper *m_booleanSignalsMapper {0};
 };
 
 

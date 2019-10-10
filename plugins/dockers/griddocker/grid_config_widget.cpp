@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -146,13 +147,17 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
     m_d->gridConfig = value;
     m_d->guiSignalsBlocked = true;
 
+    if (!m_d->gridConfig.offset().isNull()) {
+        ui->chkOffset->setChecked(true);
+    }
+
     ui->offsetAspectButton->setKeepAspectRatio(m_d->gridConfig.offsetAspectLocked());
     ui->spacingAspectButton->setKeepAspectRatio(m_d->gridConfig.spacingAspectLocked());
     ui->chkShowGrid->setChecked(m_d->gridConfig.showGrid());
-    ui->intHSpacing->setValue(m_d->gridConfig.spacing().x());
     ui->intHSpacing->setMaximum(std::numeric_limits<int>::max());
-    ui->intVSpacing->setValue(m_d->gridConfig.spacing().y());
     ui->intVSpacing->setMaximum(std::numeric_limits<int>::max());
+    ui->intHSpacing->setValue(m_d->gridConfig.spacing().x());
+    ui->intVSpacing->setValue(m_d->gridConfig.spacing().y());
     ui->intXOffset->setValue(m_d->gridConfig.offset().x());
     ui->intYOffset->setValue(m_d->gridConfig.offset().y());
     ui->intSubdivision->setValue(m_d->gridConfig.subdivision());
@@ -161,10 +166,9 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
     ui->angleRightSpinbox->setValue(m_d->gridConfig.angleRight());
     ui->cellSpacingSpinbox->setValue(m_d->gridConfig.cellSpacing());
 
-
     ui->selectMainStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeMain()));
     ui->selectSubdivisionStyle->setCurrentIndex(int(m_d->gridConfig.lineTypeSubdivision()));
-    ui->gridTypeCombobox->setCurrentIndex(m_d->gridConfig.gridType());
+    ui->gridTypeCombobox->setCurrentIndex(int(m_d->gridConfig.gridType()));
 
     ui->colorMain->setColor(m_d->gridConfig.colorMain());
     ui->colorSubdivision->setColor(m_d->gridConfig.colorSubdivision());
@@ -222,7 +226,7 @@ KisGridConfig GridConfigWidget::fetchGuiGridConfig() const
     config.setAngleLeft(ui->angleLeftSpinbox->value());
     config.setAngleRight(ui->angleRightSpinbox->value());
     config.setCellSpacing(ui->cellSpacingSpinbox->value());
-    config.setGridType(ui->gridTypeCombobox->currentIndex());
+    config.setGridType(KisGridConfig::GridType(ui->gridTypeCombobox->currentIndex()));
 
     config.setOffsetAspectLocked(ui->offsetAspectButton->keepAspectRatio());
     config.setSpacingAspectLocked(ui->spacingAspectButton->keepAspectRatio());

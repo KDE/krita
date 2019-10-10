@@ -27,6 +27,11 @@ TabletTester::TabletTester(QWidget *parent)
 {
 }
 
+QSize TabletTester::sizeHint() const
+{
+    return QSize(500, 200);
+}
+
 void TabletTester::clear()
 {
     m_mousePath.clear();

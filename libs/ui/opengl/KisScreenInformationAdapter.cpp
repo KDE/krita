@@ -80,7 +80,9 @@ struct KisScreenInformationAdapter::Private
 KisScreenInformationAdapter::KisScreenInformationAdapter(QOpenGLContext *context)
     : m_d(new Private)
 {
-    m_d->initialize(context);
+    if (context) {
+        m_d->initialize(context);
+    }
 }
 
 KisScreenInformationAdapter::~KisScreenInformationAdapter()

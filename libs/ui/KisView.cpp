@@ -104,13 +104,13 @@ class Q_DECL_HIDDEN KisView::Private
 public:
     Private(KisView *_q,
             KisDocument *document,
-            KoCanvasResourceProvider *resourceManager,
-            KActionCollection *actionCollection)
-        : actionCollection(actionCollection)
+            KisViewManager *viewManager)
+        : actionCollection(viewManager->actionCollection())
         , viewConverter()
-        , canvasController(_q, actionCollection)
-        , canvas(&viewConverter, resourceManager, _q, document->shapeController())
+        , canvasController(_q, viewManager->mainWindow(), viewManager->actionCollection())
+        , canvas(&viewConverter, viewManager->canvasResourceProvider()->resourceManager(), viewManager->mainWindow(), _q, document->shapeController())
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
+        , viewManager(viewManager)
         , paintingAssistantsDecoration(new KisPaintingAssistantsDecoration(_q))
         , referenceImagesDecoration(new KisReferenceImagesDecoration(_q, document))
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
@@ -121,14 +121,6 @@ public:
 
     QPointer<KisDocument> document; // our KisDocument
     QWidget *tempActiveWidget = 0;
-
-    /**
-     * Signals the document has been deleted. Can't use document==0 since this
-     * only happens in ~QObject, and views get deleted by ~KisDocument.
-     * XXX: either provide a better justification to do things this way, or
-     * rework the mechanism.
-     */
-    bool documentDeleted = false;
 
     KActionCollection* actionCollection;
     KisCoordinatesConverter viewConverter;
@@ -206,9 +198,9 @@ public:
 
 };
 
-KisView::KisView(KisDocument *document, KoCanvasResourceProvider *resourceManager, KActionCollection *actionCollection, QWidget *parent)
+KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *parent)
     : QWidget(parent)
-    , d(new Private(this, document, resourceManager, actionCollection))
+    , d(new Private(this, document, viewManager))
 {
     Q_ASSERT(document);
     connect(document, SIGNAL(titleModified(QString,bool)), this, SIGNAL(titleModified(QString,bool)));
@@ -631,22 +623,12 @@ KisDocument *KisView::document() const
     return d->document;
 }
 
-void KisView::setDocument(KisDocument *document)
+KisView *KisView::replaceBy(KisDocument *document)
 {
-    d->document->disconnect(this);
-    d->document = document;
-    QStatusBar *sb = statusBar();
-    if (sb) { // No statusbar in e.g. konqueror
-        connect(d->document, SIGNAL(statusBarMessage(QString,int)),
-                this, SLOT(slotSavingStatusMessage(QString,int)));
-        connect(d->document, SIGNAL(clearStatusBarMessage()),
-                this, SLOT(slotClearStatusText()));
-    }
-}
-
-void KisView::setDocumentDeleted()
-{
-    d->documentDeleted = true;
+    KisMainWindow *window = mainWindow();
+    QMdiSubWindow *subWindow = d->subWindow;
+    delete this;
+    return window->newView(document, subWindow);
 }
 
 QPrintDialog *KisView::createPrintDialog(KisPrintJob *printJob, QWidget *parent)
@@ -661,7 +643,7 @@ QPrintDialog *KisView::createPrintDialog(KisPrintJob *printJob, QWidget *parent)
 
 KisMainWindow * KisView::mainWindow() const
 {
-    return dynamic_cast<KisMainWindow *>(window());
+    return d->viewManager->mainWindow();
 }
 
 void KisView::setSubWindow(QMdiSubWindow *subWindow)

@@ -57,7 +57,7 @@ bool KisToolPath::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
     if (event->type() == QEvent::MouseButtonPress ||
-        event->type() == QEvent::MouseButtonDblClick) {
+            event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         if (mouseEvent->button() == Qt::RightButton) {
             localTool()->removeLastPoint();
@@ -74,17 +74,17 @@ bool KisToolPath::eventFilter(QObject *obj, QEvent *event)
 }
 
 void KisToolPath::beginAlternateAction(KoPointerEvent *event, AlternateAction action) {
- Q_UNUSED(action)
- mousePressEvent(event);
+    Q_UNUSED(action)
+    mousePressEvent(event);
 }
 void KisToolPath::continueAlternateAction(KoPointerEvent *event, AlternateAction action){
- Q_UNUSED(action)
- mouseMoveEvent(event);
+    Q_UNUSED(action)
+    mouseMoveEvent(event);
 }
 
 void KisToolPath::endAlternateAction(KoPointerEvent *event, AlternateAction action) {
- Q_UNUSED(action)
- mouseReleaseEvent(event);
+    Q_UNUSED(action)
+    mouseReleaseEvent(event);
 }
 
 QList<QPointer<QWidget> > KisToolPath::createOptionWidgets()
@@ -95,7 +95,8 @@ QList<QPointer<QWidget> > KisToolPath::createOptionWidgets()
 
 
 __KisToolPathLocalTool::__KisToolPathLocalTool(KoCanvasBase * canvas, KisToolPath* parentTool)
-        : KoCreatePathTool(canvas), m_parentTool(parentTool) {}
+    : KoCreatePathTool(canvas)
+    , m_parentTool(parentTool) {}
 
 void __KisToolPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
 {

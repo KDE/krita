@@ -72,11 +72,13 @@ bool KisInMemoryFrameCacheSwapper::hasFrame(int frameId) const
 int KisInMemoryFrameCacheSwapper::frameLevelOfDetail(int frameId) const
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->framesMap.contains(frameId), 0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!m_d->framesMap[frameId].isNull(), 0);
     return m_d->framesMap[frameId]->levelOfDetail();
 }
 
 QRect KisInMemoryFrameCacheSwapper::frameDirtyRect(int frameId) const
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->framesMap.contains(frameId), QRect());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!m_d->framesMap[frameId].isNull(), QRect());
     return m_d->framesMap[frameId]->dirtyImageRect();
 }

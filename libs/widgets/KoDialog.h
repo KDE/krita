@@ -1,4 +1,4 @@
-/*  This file is part of the KDE Libraries
+/*  This file is part of the KDE Librariesfsignals
  *  Copyright (C) 1998 Thomas Tanghus (tanghus@earthling.net)
  *  Additions 1999-2000 by Espen Sand (espen@kde.org)
  *                      and Holger Freyther <freyther@kde.org>
@@ -465,27 +465,6 @@ public:
      * layouts.
      */
     static void resizeLayout(QLayout *lay, int margin, int spacing);
-
-    /**
-     * Centers @p widget on the desktop, taking multi-head setups into
-     * account. If @p screen is -1, @p widget will be centered on its
-     * current screen (if it was shown already) or on the primary screen.
-     * If @p screen is -3, @p widget will be centered on the screen that
-     * currently contains the mouse pointer.
-     * @p screen will be ignored if a merged display (like Xinerama) is not
-     * in use, or merged display placement is not enabled in kdeglobals.
-     */
-    static void centerOnScreen(QWidget *widget, int screen = -1);
-
-    /**
-     * Places @p widget so that it doesn't cover a certain @p area of the screen.
-     * This is typically used by the "find dialog" so that the match it finds can
-     * be read.
-     * For @p screen, see centerOnScreen
-     * @return true on success (widget doesn't cover area anymore, or never did),
-     * false on failure (not enough space found)
-     */
-    static bool avoidArea(QWidget *widget, const QRect &area, int screen = -1);
 
     /**
      * Sets the main widget of the dialog.

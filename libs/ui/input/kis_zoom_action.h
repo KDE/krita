@@ -53,9 +53,10 @@ public:
 
     void begin(int shortcut, QEvent *event = 0) override;
     void inputEvent(QEvent* event) override;
-    void cursorMoved(const QPointF &lastPos, const QPointF &pos) override;
+    void cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos) override;
 
     bool isShortcutRequired(int shortcut) const override;
+    bool supportsHiResInputEvents() const override;
 
     KisInputActionGroup inputActionGroup(int shortcut) const override;
 

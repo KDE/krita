@@ -54,7 +54,6 @@ KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
     d->comboBox->setToolTip(i18n("Tag"));
     d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed );
 
-
     QGridLayout* comboLayout = new QGridLayout(this);
 
     comboLayout->addWidget(d->comboBox, 0, 0);
@@ -68,8 +67,7 @@ KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
     this->setEnabled(true);
     clear();
 
-    connect(d->comboBox, SIGNAL(currentTextChanged(QString)),
-            this, SIGNAL(tagChosen(QString)));
+    connect(d->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(tagChanged(int)));
 
     connect(d->tagToolButton, SIGNAL(popupMenuAboutToShow()),
             this, SLOT (tagOptionsContextMenuAboutToShow()));
@@ -97,6 +95,11 @@ void KoTagChooserWidget::contextDeleteCurrentTag()
         return;
     }
     emit tagDeletionRequested(currentlySelectedTag());
+}
+
+void KoTagChooserWidget::tagChanged(int)
+{
+    emit tagChosen(d->comboBox->currentUnsqueezedText());
 }
 
 void KoTagChooserWidget::tagRenamingRequested(const QString& newName)
@@ -145,7 +148,7 @@ void KoTagChooserWidget::insertItem(QString tagName)
 
 QString KoTagChooserWidget::currentlySelectedTag()
 {
-    return d->comboBox->itemHighlighted();
+    return d->comboBox->currentUnsqueezedText();
 }
 
 QStringList KoTagChooserWidget::allTags()
@@ -155,7 +158,7 @@ QStringList KoTagChooserWidget::allTags()
 
 bool KoTagChooserWidget::selectedTagIsReadOnly()
 {
-    return d->readOnlyTags.contains(d->comboBox->itemHighlighted()) ;
+    return d->readOnlyTags.contains(d->comboBox->currentUnsqueezedText()) ;
 }
 
 void KoTagChooserWidget::addItems(QStringList tagNames)

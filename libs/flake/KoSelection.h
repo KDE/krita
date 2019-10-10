@@ -54,7 +54,7 @@ class KRITAFLAKE_EXPORT KoSelection : public QObject, public KoShape, public KoS
 
 public:
 
-    KoSelection();
+    KoSelection(QObject *parent = 0);
     ~KoSelection() override;
 
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
@@ -159,7 +159,12 @@ private:
     void saveOdf(KoShapeSavingContext &) const override;
     bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override;
 
-    Q_DECLARE_PRIVATE_D(KoShape::d_ptr, KoSelection)
+protected:
+    KoSelection(const KoSelection &rhs);
+
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 #endif

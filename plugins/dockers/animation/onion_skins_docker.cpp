@@ -53,7 +53,7 @@ OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
     ui->doubleTintFactor->setMinimum(0);
     ui->doubleTintFactor->setMaximum(100);
     ui->doubleTintFactor->setPrefix(i18n("Tint: "));
-    ui->doubleTintFactor->setSuffix("%");
+    ui->doubleTintFactor->setSuffix(i18n("%"));
 
     ui->btnBackwardColor->setToolTip(i18n("Tint color for past frames"));
     ui->btnForwardColor->setToolTip(i18n("Tint color for future frames"));

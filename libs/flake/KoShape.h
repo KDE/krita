@@ -30,6 +30,7 @@
 #include <QSharedPointer>
 #include <QSet>
 #include <QMetaType>
+#include <QSharedDataPointer>
 
 #include <KoXmlReaderForward.h>
 
@@ -49,7 +50,6 @@ class KoShapeSavingContext;
 class KoShapeLoadingContext;
 class KoGenStyle;
 class KoShapeShadow;
-class KoShapePrivate;
 class KoFilterEffectStack;
 class KoSnapData;
 class KoClipPath;
@@ -60,6 +60,7 @@ class KoBorder;
 struct KoInsets;
 class KoShapeBackground;
 class KisHandlePainterHelper;
+class KoShapeManager;
 
 /**
  * Base class for all flake shapes. Shapes extend this class
@@ -1177,12 +1178,6 @@ public:
      */
     void setHyperLink(const QString &hyperLink);
 
-    /**
-     * \internal
-     * Returns the private object for use within the flake lib
-     */
-    KoShapePrivate *priv();
-
 public:
 
     struct KRITAFLAKE_EXPORT ShapeChangeListener {
@@ -1191,7 +1186,6 @@ public:
 
     private:
         friend class KoShape;
-        friend class KoShapePrivate;
         void registerShape(KoShape *shape);
         void unregisterShape(KoShape *shape);
         void notifyShapeChangedImpl(ChangeType type, KoShape *shape);
@@ -1202,12 +1196,15 @@ public:
     void addShapeChangeListener(ShapeChangeListener *listener);
     void removeShapeChangeListener(ShapeChangeListener *listener);
 
+protected:
+    QList<ShapeChangeListener *> listeners() const;
+    void setSizeImpl(const QSizeF &size) const;
+
 public:
     static QList<KoShape*> linearizeSubtree(const QList<KoShape*> &shapes);
 
 protected:
-    /// constructor
-    KoShape(KoShapePrivate *);
+    KoShape(const KoShape &rhs);
 
     /* ** loading saving helper methods */
     /// attributes from ODF 1.1 chapter 9.2.15 Common Drawing Shape Attributes
@@ -1294,10 +1291,21 @@ protected:
     /// return the current matrix that contains the rotation/scale/position of this shape
     QTransform transform() const;
 
-    KoShapePrivate *d_ptr;
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
+
+protected:
+    /**
+     * Notify the shape that a change was done. To be used by inheriting shapes.
+     * @param type the change type
+     */
+    void shapeChangedPriv(KoShape::ChangeType type);
 
 private:
-    Q_DECLARE_PRIVATE(KoShape)
+    void addShapeManager(KoShapeManager *manager);
+    void removeShapeManager(KoShapeManager *manager);
+    friend class KoShapeManager;
 };
 
 Q_DECLARE_METATYPE(KoShape*)

@@ -46,6 +46,8 @@ private Q_SLOTS:
 
     void testBevel();
 
+    void testBlending();
+
 private:
     void test(KisPSDLayerStyleSP style, const QString testName);
 };

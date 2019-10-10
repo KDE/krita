@@ -34,9 +34,7 @@
 #include <QMessageBox>
 #include <QThread>
 
-#if QT_VERSION >= 0x050900
 #include <QOperatingSystemVersion>
-#endif
 
 #include <time.h>
 
@@ -58,6 +56,10 @@
 #include <KisUsageLogger.h>
 #include <kis_image_config.h>
 
+#ifdef Q_OS_ANDROID
+#include <QtAndroid>
+#endif
+
 #if defined Q_OS_WIN
 #include "config_use_qt_tablet_windows.h"
 #include <windows.h>
@@ -74,7 +76,6 @@
 #endif
 #include <QLibrary>
 #endif
-
 #if defined HAVE_KCRASH
 #include <kcrash.h>
 #elif defined USE_DRMINGW
@@ -137,9 +138,32 @@ void resetRotation()
 } // namespace
 #endif
 
+#ifdef Q_OS_ANDROID
+extern "C" JNIEXPORT void JNICALL
+Java_org_krita_android_JNIWrappers_saveState(JNIEnv* /*env*/,
+                                             jobject /*obj*/,
+                                             jint    /*n*/)
+{
+    if (!KisPart::exists()) return;
+
+    KisPart *kisPart = KisPart::instance();
+    QList<QPointer<KisDocument>> list = kisPart->documents();
+    for (QPointer<KisDocument> &doc: list)
+    {
+        doc->autoSaveOnPause();
+    }
+
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    kritarc.setValue("canvasState", "OPENGL_SUCCESS");
+}
+#endif
+
+#ifdef Q_OS_ANDROID
+__attribute__ ((visibility ("default")))
+#endif
 extern "C" int main(int argc, char **argv)
 {
-
     // The global initialization of the random generator
     qsrand(time(0));
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
@@ -160,9 +184,7 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
-#if QT_VERSION >= 0x050900
     QCoreApplication::setAttribute(Qt::AA_DisableShaderDiskCache, true);
-#endif
 
 #ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
     // This rounding policy depends on a series of patches to Qt related to
@@ -180,6 +202,21 @@ extern "C" int main(int argc, char **argv)
     // The default is set to RoundPreferFloor for better behaviour than before,
     // but can be overridden by the above environment variable.
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
+#endif
+
+#ifdef Q_OS_ANDROID
+    const QString write_permission = "android.permission.WRITE_EXTERNAL_STORAGE";
+    const QStringList permissions = { write_permission };
+    const QtAndroid::PermissionResultMap resultHash =
+            QtAndroid::requestPermissionsSync(QStringList(permissions));
+
+    if (resultHash[write_permission] == QtAndroid::PermissionResult::Denied) {
+        // TODO: show a dialog and graciously exit
+        dbgKrita << "Permission denied by the user";
+    }
+    else {
+        dbgKrita << "Permission granted";
+    }
 #endif
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
@@ -218,24 +255,17 @@ extern "C" int main(int argc, char **argv)
 
         logUsage = kritarc.value("LogUsage", true).toBool();
 
+#ifdef Q_OS_WIN
+        const QString preferredRendererString = kritarc.value("OpenGLRenderer", "angle").toString();
+#else
         const QString preferredRendererString = kritarc.value("OpenGLRenderer", "auto").toString();
+#endif
         preferredRenderer = KisOpenGL::convertConfigToOpenGLRenderer(preferredRendererString);
 
-#ifdef Q_OS_WIN
-        // Force ANGLE to use Direct3D11. D3D9 doesn't support OpenGL ES 3 and WARP
-        //  might get weird crashes atm.
-        qputenv("QT_ANGLE_PLATFORM", "d3d11");
-#endif
+        const KisOpenGL::RendererConfig config =
+            KisOpenGL::selectSurfaceConfig(preferredRenderer, rootSurfaceFormat, enableOpenGLDebug);
 
-        const QSurfaceFormat format =
-            KisOpenGL::selectSurfaceFormat(preferredRenderer, rootSurfaceFormat, enableOpenGLDebug);
-
-        if (format.renderableType() == QSurfaceFormat::OpenGLES) {
-            QCoreApplication::setAttribute(Qt::AA_UseOpenGLES, true);
-        } else {
-            QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL, true);
-        }
-        KisOpenGL::setDefaultSurfaceFormat(format);
+        KisOpenGL::setDefaultSurfaceConfig(config);
         KisOpenGL::setDebugSynchronous(openGLDebugSynchronous);
 
 #ifdef Q_OS_WIN
@@ -450,7 +480,6 @@ extern "C" int main(int argc, char **argv)
 #if defined Q_OS_WIN
     KisConfig cfg(false);
     bool supportedWindowsVersion = true;
-#if QT_VERSION >= 0x050900
     QOperatingSystemVersion osVersion = QOperatingSystemVersion::current();
     if (osVersion.type() == QOperatingSystemVersion::Windows) {
         if (osVersion.majorVersion() >= QOperatingSystemVersion::Windows7.majorVersion()) {
@@ -469,7 +498,6 @@ extern "C" int main(int argc, char **argv)
             }
         }
     }
-#endif
 #ifndef USE_QT_TABLET_WINDOWS
     {
         if (cfg.useWin8PointerInput() && !KisTabletSupportWin8::isAvailable()) {
@@ -525,9 +553,7 @@ extern "C" int main(int argc, char **argv)
         return 1;
     }
 
-#if QT_VERSION >= 0x050700
     app.setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
-#endif
 
     // Set up remote arguments.
     QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
@@ -542,6 +568,8 @@ extern "C" int main(int argc, char **argv)
     KisUsageLogger::write(QString("  Memory: %1 Mb").arg(KisImageConfig(true).totalRAM()));
     KisUsageLogger::write(QString("  Number of Cores: %1").arg(QThread::idealThreadCount()));
     KisUsageLogger::write(QString("  Swap Location: %1\n").arg(KisImageConfig(true).swapDir()));
+
+    KisConfig(true).logImportantSettings();
 
     int state = app.exec();
 

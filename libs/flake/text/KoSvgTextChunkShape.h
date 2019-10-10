@@ -23,6 +23,7 @@
 
 #include <KoShapeContainer.h>
 #include <SvgShape.h>
+#include <KoSvgText.h>
 
 class HtmlSavingContext;
 class KoSvgTextProperties;
@@ -168,7 +169,13 @@ protected:
     KoSvgTextChunkShape(KoSvgTextChunkShapePrivate *dd);
 
 private:
-    Q_DECLARE_PRIVATE(KoSvgTextChunkShape)
+    KoSvgText::KoSvgCharChunkFormat fetchCharFormat() const;
+
+    void applyParentCharTransformations(const QVector<KoSvgText::CharTransformation> transformations);
+
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 #endif // KOSVGTEXTCHUNKSHAPE_H

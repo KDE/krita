@@ -31,6 +31,7 @@
 #include "layerstyles/kis_ls_drop_shadow_filter.h"
 #include "kis_psd_layer_style.h"
 #include "layerstyles/kis_multiple_projection.h"
+#include "layerstyles/KisLayerStyleKnockoutBlower.h"
 
 
 struct TestConfig {
@@ -105,10 +106,14 @@ void testDropShadowImpl(const TestConfig &config,
 
     TestUtil::MaskParent parent;
     KisLayerStyleFilterEnvironment env(parent.layer.data());
+    KisLayerStyleKnockoutBlower blower;
 
     Q_FOREACH (const QRect &rc, applyRects) {
-        lsFilter.processDirectly(dev, &projection, rc, style, &env);
+        lsFilter.processDirectly(dev, &projection, &blower, rc, style, &env);
     }
+
+    // drop shadow doesn't use global knockout
+    QVERIFY(blower.isEmpty());
 
 
     KisPaintDeviceSP dst = new KisPaintDevice(cs);

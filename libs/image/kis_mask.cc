@@ -192,7 +192,10 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
 
         KisPixelSelectionSP pixelSelection = selection->pixelSelection();
         if (pixelSelection->framesInterface()) {
-            q->addKeyframeChannel(pixelSelection->keyframeChannel());
+            KisRasterKeyframeChannel *keyframeChannel = pixelSelection->keyframeChannel();
+            keyframeChannel->setFilenameSuffix(".pixelselection");
+
+            q->addKeyframeChannel(keyframeChannel);
             q->enableAnimation();
         }
     } else {
@@ -333,7 +336,8 @@ void KisMask::mergeInMaskInternal(KisPaintDeviceSP projection,
                                   const QRect &preparedNeedRect,
                                   KisNode::PositionToFilthy maskPos) const
 {
-    KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
+    KisCachedPaintDevice::Guard d1(projection, m_d->paintDeviceCache);
+    KisPaintDeviceSP cacheDevice = d1.device();
 
     if (effectiveSelection) {
         QRect updatedRect = decorateRect(projection, cacheDevice, applyRect, maskPos);
@@ -347,8 +351,6 @@ void KisMask::mergeInMaskInternal(KisPaintDeviceSP projection,
 
         decorateRect(cacheDevice, projection, applyRect, maskPos);
     }
-
-    m_d->paintDeviceCache.putDevice(cacheDevice);
 }
 
 void KisMask::flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const

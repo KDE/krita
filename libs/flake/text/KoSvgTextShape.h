@@ -26,7 +26,6 @@
 #include <SvgShape.h>
 
 class KoSvgTextProperties;
-class KoSvgTextShapePrivate;
 
 #define KoSvgTextShape_SHAPEID "KoSvgTextShapeID"
 /**
@@ -71,7 +70,8 @@ protected:
     void shapeChanged(ChangeType type, KoShape *shape) override;
 
 private:
-    Q_DECLARE_PRIVATE(KoSvgTextShape)
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 class KoSvgTextShapeFactory : public KoShapeFactoryBase

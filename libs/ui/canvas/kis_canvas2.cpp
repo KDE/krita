@@ -45,6 +45,8 @@
 #include <KoSelection.h>
 #include <KoShapeController.h>
 
+#include <KisUsageLogger.h>
+
 #include <kis_lod_transform.h>
 #include "kis_tool_proxy.h"
 #include "kis_coordinates_converter.h"
@@ -153,6 +155,7 @@ public:
 
     KisSignalCompressor regionOfInterestUpdateCompressor;
     QRect regionOfInterest;
+    qreal regionOfInterestMargin = 0.25;
 
     QRect renderingLimit;
     int isBatchUpdateActive = 0;
@@ -191,7 +194,7 @@ KoShapeManager* fetchShapeManagerFromNode(KisNodeSP node)
 }
 }
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceProvider *resourceManager, KisView *view, KoShapeControllerBase *sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceProvider *resourceManager, KisMainWindow *mainWindow, KisView *view, KoShapeControllerBase *sc)
     : KoCanvasBase(sc, resourceManager)
     , m_d(new KisCanvas2Private(this, coordConverter, view, resourceManager))
 {
@@ -201,8 +204,8 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
      * light.
      */
     m_d->bootstrapLodBlocked = true;
-    connect(view->mainWindow(), SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
-    connect(view->mainWindow(), SIGNAL(screenChanged()), SLOT(slotConfigChanged()));
+    connect(mainWindow, SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
+    connect(mainWindow, SIGNAL(screenChanged()), SLOT(slotConfigChanged()));
 
     KisImageConfig config(false);
 
@@ -220,6 +223,7 @@ void KisCanvas2::setup()
     KisConfig cfg(true);
     m_d->vastScrolling = cfg.vastScrolling();
     m_d->lodAllowedInImage = cfg.levelOfDetailEnabled();
+    m_d->regionOfInterestMargin = KisImageConfig(true).animationCacheRegionOfInterestMargin();
 
     createCanvas(cfg.useOpenGL());
 
@@ -698,26 +702,12 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
         m_d->proofingConfig = cfg.defaultProofingconfiguration();
     }
     KoColorConversionTransformation::ConversionFlags conversionFlags = m_d->proofingConfig->conversionFlags;
-#if QT_VERSION >= 0x050700
-
     if (this->image()->colorSpace()->colorDepthId().id().contains("U")) {
         conversionFlags.setFlag(KoColorConversionTransformation::SoftProofing, softProof);
         if (softProof) {
             conversionFlags.setFlag(KoColorConversionTransformation::GamutCheck, gamutCheck);
         }
     }
-#else
-    if (this->image()->colorSpace()->colorDepthId().id().contains("U")) {
-        conversionFlags |= KoColorConversionTransformation::SoftProofing;
-    } else {
-        conversionFlags = conversionFlags & ~KoColorConversionTransformation::SoftProofing;
-    }
-    if (gamutCheck && softProof && this->image()->colorSpace()->colorDepthId().id().contains("U")) {
-        conversionFlags |= KoColorConversionTransformation::GamutCheck;
-    } else {
-        conversionFlags = conversionFlags & ~KoColorConversionTransformation::GamutCheck;
-    }
-#endif
     m_d->proofingConfig->conversionFlags = conversionFlags;
 
     m_d->proofingConfigUpdated = true;
@@ -971,12 +961,12 @@ void KisCanvas2::slotUpdateRegionOfInterest()
 {
     const QRect oldRegionOfInterest = m_d->regionOfInterest;
 
-    const qreal ratio = 0.25;
+    const qreal ratio = m_d->regionOfInterestMargin;
     const QRect proposedRoi = KisAlgebra2D::blowRect(m_d->coordinatesConverter->widgetRectInImagePixels(), ratio).toAlignedRect();
 
     const QRect imageRect = m_d->coordinatesConverter->imageRectInImagePixels();
 
-    m_d->regionOfInterest = imageRect.contains(proposedRoi) ? proposedRoi : imageRect;
+    m_d->regionOfInterest = proposedRoi & imageRect;
 
     if (m_d->regionOfInterest != oldRegionOfInterest) {
         emit sigRegionOfInterestChanged(m_d->regionOfInterest);
@@ -1085,6 +1075,7 @@ void KisCanvas2::slotConfigChanged()
 {
     KisConfig cfg(true);
     m_d->vastScrolling = cfg.vastScrolling();
+    m_d->regionOfInterestMargin = KisImageConfig(true).animationCacheRegionOfInterestMargin();
 
     resetCanvas(cfg.useOpenGL());
 
@@ -1093,13 +1084,7 @@ void KisCanvas2::slotConfigChanged()
     //       the coordinates should be able to work around this.
     // FIXME: We should change to associate the display profiles with the screen
     //        model and serial number instead. See https://bugs.kde.org/show_bug.cgi?id=407498
-    QScreen *canvasScreen = this->canvasWidget()->window()->windowHandle()->screen();
-    QPoint canvasScreenCenter = canvasScreen->geometry().center();
-    int canvasScreenNumber = QApplication::desktop()->screenNumber(canvasScreenCenter);
-    if (canvasScreenNumber == -1) {
-        // Fall back to the old way of getting the screenNumber
-        canvasScreenNumber = QApplication::desktop()->screenNumber(this->canvasWidget());
-    }
+    int canvasScreenNumber = QApplication::desktop()->screenNumber(this->canvasWidget());
     if (canvasScreenNumber != -1) {
         setDisplayProfile(cfg.displayProfile(canvasScreenNumber));
     } else {
@@ -1264,6 +1249,8 @@ void KisCanvas2::setLodAllowedInCanvas(bool value)
 
     KisConfig cfg(false);
     cfg.setLevelOfDetailEnabled(m_d->lodAllowedInImage);
+
+    KisUsageLogger::log(QString("Instant Preview Setting: %1").arg(m_d->lodAllowedInImage));
 }
 
 bool KisCanvas2::lodAllowedInCanvas() const

@@ -103,6 +103,7 @@ Juan Luis Boya García
 Juan Palacios
 Jure Repinc
 Kai-Uwe Behrmann
+Karl Ove Hufthammer
 Kevin Krammer
 Kevin Ottens
 Kurt Pfeifle

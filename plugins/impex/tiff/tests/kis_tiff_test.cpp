@@ -29,6 +29,7 @@
 
 #include "kisexiv2/kis_exiv2.h"
 #include  <sdk/tests/kistest.h>
+#include <KoColorModelStandardIdsUtils.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
@@ -116,6 +117,66 @@ void KisTiffTest::testRoundTripRGBF16()
     QCOMPARE(ref0, ref1);
 #endif
 }
+
+void KisTiffTest::testSaveTiffColorSpace(QString colorModel, QString colorDepth, QString colorProfile)
+{
+    const KoColorSpace *space = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, colorProfile);
+    if (space) {
+        TestUtil::testExportToColorSpace(QString(FILES_DATA_DIR), TiffMimetype, space, ImportExportCodes::OK, true);
+    }
+}
+
+void KisTiffTest::testSaveTiffRgbaColorSpace()
+{
+    QString profile = "sRGB-elle-V2-srgbtrc";
+    testSaveTiffColorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+    profile = "sRGB-elle-V2-g10";
+    testSaveTiffColorSpace(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), profile);
+    testSaveTiffColorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id(), profile);
+    testSaveTiffColorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), profile);
+}
+
+void KisTiffTest::testSaveTiffGreyAColorSpace()
+{
+    QString profile = "Gray-D50-elle-V2-srgbtrc";
+    testSaveTiffColorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+    profile = "Gray-D50-elle-V2-g10";
+    testSaveTiffColorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), profile);
+    testSaveTiffColorSpace(GrayAColorModelID.id(), Float16BitsColorDepthID.id(), profile);
+    testSaveTiffColorSpace(GrayAColorModelID.id(), Float32BitsColorDepthID.id(), profile);
+
+}
+
+
+void KisTiffTest::testSaveTiffCmykColorSpace()
+{
+    QString profile = "Chemical proof";
+    testSaveTiffColorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+    testSaveTiffColorSpace(CMYKAColorModelID.id(), Integer16BitsColorDepthID.id(), profile);
+    testSaveTiffColorSpace(CMYKAColorModelID.id(), Float32BitsColorDepthID.id(), profile);
+}
+
+void KisTiffTest::testSaveTiffLabColorSpace()
+{
+    const QString profile = "Lab identity build-in";
+    testSaveTiffColorSpace(LABAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+    testSaveTiffColorSpace(LABAColorModelID.id(), Integer16BitsColorDepthID.id(), profile);
+    testSaveTiffColorSpace(LABAColorModelID.id(), Float32BitsColorDepthID.id(), profile);
+}
+
+
+void KisTiffTest::testSaveTiffYCrCbAColorSpace()
+{
+    /*
+     * There is no public/open profile for YCrCbA, so no way to test it...
+     *
+    const QString profile = "";
+    testSaveTiffColorSpace(YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+    testSaveTiffColorSpace(YCbCrAColorModelID.id(), Integer16BitsColorDepthID.id(), profile);
+    testSaveTiffColorSpace(YCbCrAColorModelID.id(), Float32BitsColorDepthID.id(), profile);
+    */
+}
+
 
 
 void KisTiffTest::testImportFromWriteonly()

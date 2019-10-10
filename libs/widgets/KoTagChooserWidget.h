@@ -62,6 +62,7 @@ private Q_SLOTS:
     void tagRenamingRequested(const QString &newName);
     void tagOptionsContextMenuAboutToShow();
     void contextDeleteCurrentTag();
+    void tagChanged(int index);
 
 private:
     class Private;

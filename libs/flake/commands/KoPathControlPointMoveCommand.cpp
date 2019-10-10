@@ -48,7 +48,7 @@ void KoPathControlPointMoveCommand::redo()
     KoPathShape * pathShape = m_pointData.pathShape;
     KoPathPoint * point = pathShape->pointByIndex(m_pointData.pointIndex);
     if (point) {
-        pathShape->update();
+        const QRectF oldDirtyRect = pathShape->boundingRect();
 
         if (m_pointType == KoPathPoint::ControlPoint1) {
             point->setControlPoint1(point->controlPoint1() + m_offset);
@@ -83,7 +83,7 @@ void KoPathControlPointMoveCommand::redo()
         }
 
         pathShape->normalize();
-        pathShape->update();
+        pathShape->updateAbsolute(oldDirtyRect | pathShape->boundingRect());
     }
 }
 

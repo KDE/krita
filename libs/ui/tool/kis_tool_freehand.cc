@@ -28,6 +28,7 @@
 #include <QThreadPool>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QScreen>
 
 #include <Eigen/Core>
 
@@ -176,12 +177,6 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
 
 void KisToolFreehand::doStroke(KoPointerEvent *event)
 {
-    //set canvas information here?//
-    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-    if (canvas2) {
-        m_helper->setCanvasHorizontalMirrorState(canvas2->xAxisMirrored());
-        m_helper->setCanvasRotation(canvas2->rotationAngle());
-    }
     m_helper->paintEvent(event);
 }
 
@@ -216,6 +211,8 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
 
         return;
     }
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_helper->isRunning());
 
     setMode(KisTool::PAINT_MODE);
 
@@ -349,7 +346,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
     QPointF offset = actualWidgetPosition - lastWidgetPosition;
 
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
-    QRect screenRect = QApplication::desktop()->screenGeometry();
+    QRect screenRect = QGuiApplication::primaryScreen()->availableVirtualGeometry();
 
     qreal scaleX = 0;
     qreal scaleY = 0;

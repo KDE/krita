@@ -80,12 +80,6 @@ enum OldCursorStyle {
     OLD_CURSOR_STYLE_OUTLINE_TRIANGLE_LEFTHANDED = 11
 };
 
-/*
- * Most wacom pads have 512 levels of pressure; Qt only supports 256, and even
- * this is downscaled to 127 levels because the line would be too jittery, and
- * the amount of masks take too much memory otherwise.
- */
-const qint32 PRESSURE_LEVELS = 127;
 const double PRESSURE_MIN = 0.0;
 const double PRESSURE_MAX = 1.0;
 const double PRESSURE_DEFAULT = PRESSURE_MAX;

@@ -43,13 +43,16 @@
 #include <KisDocument.h>
 
 #include "kis_node_manager.h"
+#include "kis_selection_manager.h"
 #include "kis_signals_blocker.h"
 #include <boost/operators.hpp>
+#include "KisMoveBoundsCalculationJob.h"
+
 
 struct KisToolMoveState : KisToolChangesTrackerData, boost::equality_comparable<KisToolMoveState>
 {
     KisToolMoveState(QPoint _accumulatedOffset) : accumulatedOffset(_accumulatedOffset) {}
-    KisToolChangesTrackerData* clone() const { return new KisToolMoveState(*this); }
+    KisToolChangesTrackerData* clone() const override { return new KisToolMoveState(*this); }
 
     bool operator ==(const KisToolMoveState &rhs) {
         return accumulatedOffset == rhs.accumulatedOffset;
@@ -90,6 +93,7 @@ KisToolMove::KisToolMove(KoCanvasBase *canvas)
     connect(this, SIGNAL(moveInNewPosition(QPoint)), m_optionsWidget, SLOT(slotSetTranslate(QPoint)), Qt::UniqueConnection);
 
     connect(qobject_cast<KisCanvas2*>(canvas)->viewManager()->nodeManager(), SIGNAL(sigUiNeedChangeSelectedNodes(KisNodeList)), this, SLOT(slotNodeChanged(KisNodeList)), Qt::UniqueConnection);
+    connect(qobject_cast<KisCanvas2*>(canvas)->viewManager()->selectionManager(), SIGNAL(currentSelectionChanged()), this, SLOT(slotSelectionChanged()), Qt::UniqueConnection);
 }
 
 KisToolMove::~KisToolMove()
@@ -165,43 +169,51 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
         return true;
     }
 
-    /**
-     * FIXME: The move tool is not completely asynchronous, it
-     * needs the content of the layer and/or selection to calculate
-     * the bounding rectange. Technically, we can move its calculation
-     * into the stroke itself and pass it back to the tool via a signal.
-     *
-     * But currently, we will just disable starting a new stroke
-     * asynchronously.
-     */
-    if (!blockUntilOperationsFinished()) {
-        return false;
-    }
-
-    initHandles(nodes);
-
     KisStrokeStrategy *strategy;
 
     KisPaintLayerSP paintLayer = node ?
         dynamic_cast<KisPaintLayer*>(node.data()) : 0;
 
+    bool isMoveSelection = false;
+
     if (paintLayer && selection &&
         (!selection->selectedRect().isEmpty() &&
          !selection->selectedExactRect().isEmpty())) {
 
-        strategy =
+        MoveSelectionStrokeStrategy *moveStrategy =
             new MoveSelectionStrokeStrategy(paintLayer,
                                             selection,
                                             image.data(),
                                             image.data());
+
+        connect(moveStrategy,
+                SIGNAL(sigHandlesRectCalculated(const QRect&)),
+                SLOT(slotHandlesRectCalculated(const QRect&)));
+
+        strategy = moveStrategy;
+        isMoveSelection = true;
+
     } else {
-        strategy =
+
+        MoveStrokeStrategy *moveStrategy =
             new MoveStrokeStrategy(nodes, image.data(), image.data());
+        connect(moveStrategy,
+                SIGNAL(sigHandlesRectCalculated(const QRect&)),
+                SLOT(slotHandlesRectCalculated(const QRect&)));
+
+        strategy = moveStrategy;
     }
 
+    // disable outline feedback until the stroke calcualtes
+    // correct bounding rect
+    m_handlesRect = QRect();
     m_strokeId = image->startStroke(strategy);
     m_currentlyProcessingNodes = nodes;
     m_accumulatedOffset = QPoint();
+
+    if (!isMoveSelection) {
+        m_asyncUpdateHelper.startUpdateStream(image.data(), m_strokeId);
+    }
 
     KIS_SAFE_ASSERT_RECOVER(m_changesTracker.isEmpty()) {
         m_changesTracker.reset();
@@ -219,6 +231,7 @@ QPoint KisToolMove::currentOffset() const
 void KisToolMove::notifyGuiAfterMove(bool showFloatingMessage)
 {
     if (!m_optionsWidget) return;
+    if (m_handlesRect.isEmpty()) return;
 
     const QPoint currentTopLeft = m_handlesRect.topLeft() + currentOffset();
 
@@ -229,18 +242,18 @@ void KisToolMove::notifyGuiAfterMove(bool showFloatingMessage)
     const bool showCoordinates = m_optionsWidget->showCoordinates();
 
     if (showCoordinates && showFloatingMessage) {
-        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        KisCanvas2 *kisCanvas = static_cast<KisCanvas2*>(canvas());
         kisCanvas->viewManager()->
             showFloatingMessage(
                 i18nc("floating message in move tool",
                       "X: %1 px, Y: %2 px",
-                      currentTopLeft.x(),
-                      currentTopLeft.y()),
+                      QLocale().toString(currentTopLeft.x()),
+                      QLocale().toString(currentTopLeft.y())),
                 QIcon(), 1000, KisFloatingMessage::High);
     }
 }
 
-bool KisToolMove::tryEndPreviousStroke(KisNodeList nodes)
+bool KisToolMove::tryEndPreviousStroke(const KisNodeList &nodes)
 {
     if (!m_strokeId) return false;
 
@@ -263,6 +276,12 @@ void KisToolMove::commitChanges()
     if (lastState && *lastState == *newState) return;
 
     m_changesTracker.commitConfig(newState);
+}
+
+void KisToolMove::slotHandlesRectCalculated(const QRect &handlesRect)
+{
+    m_handlesRect = handlesRect;
+    notifyGuiAfterMove(false);
 }
 
 void KisToolMove::moveDiscrete(MoveDirection direction, bool big)
@@ -333,30 +352,12 @@ void KisToolMove::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
-    if (m_strokeId) {
+    if (m_strokeId && !m_handlesRect.isEmpty()) {
         QPainterPath handles;
         handles.addRect(m_handlesRect.translated(currentOffset()));
 
         QPainterPath path = pixelToView(handles);
         paintToolOutline(&gc, path);
-    }
-}
-
-void KisToolMove::initHandles(const KisNodeList &nodes)
-{
-    /**
-     * The handles should be initialized only once, **before** the start of
-     * the stroke. If the nodes change, we should restart the stroke.
-     */
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_strokeId);
-
-    m_handlesRect = QRect();
-    for (KisNodeSP node : nodes) {
-        node->exactBounds();
-        m_handlesRect |= node->exactBounds();
-    }
-    if (image()->globalSelection()) {
-        m_handlesRect &= image()->globalSelection()->selectedExactRect();
     }
 }
 
@@ -513,6 +514,10 @@ void KisToolMove::endStroke()
 {
     if (!m_strokeId) return;
 
+    if (m_asyncUpdateHelper.isActive()) {
+        m_asyncUpdateHelper.endUpdateStream();
+    }
+
     KisImageSP image = currentImage();
     image->endStroke(m_strokeId);
     m_strokeId.clear();
@@ -578,6 +583,10 @@ void KisToolMove::slotMoveDiscreteDownMore()
 void KisToolMove::cancelStroke()
 {
     if (!m_strokeId) return;
+
+    if (m_asyncUpdateHelper.isActive()) {
+        m_asyncUpdateHelper.cancelUpdateStream();
+    }
 
     KisImageSP image = currentImage();
     image->cancelStroke(m_strokeId);
@@ -653,14 +662,36 @@ void KisToolMove::moveBySpinY(int newY)
     setMode(KisTool::HOVER_MODE);
 }
 
-void KisToolMove::slotNodeChanged(KisNodeList nodes)
+void KisToolMove::requestHandlesRectUpdate()
+{
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image(), currentNode(), canvas()->resourceManager());
+    KisSelectionSP selection = resources->activeSelection();
+
+    KisMoveBoundsCalculationJob *job = new KisMoveBoundsCalculationJob(this->selectedNodes(),
+                                                                       selection, this);
+    connect(job,
+            SIGNAL(sigCalcualtionFinished(const QRect&)),
+            SLOT(slotHandlesRectCalculated(const QRect &)));
+
+    KisImageSP image = this->image();
+    image->addSpontaneousJob(job);
+
+    notifyGuiAfterMove(false);
+}
+
+void KisToolMove::slotNodeChanged(const KisNodeList &nodes)
 {
     if (m_strokeId && !tryEndPreviousStroke(nodes)) {
         return;
     }
+    requestHandlesRectUpdate();
+}
 
-    initHandles(nodes);
-    notifyGuiAfterMove(false);
+void KisToolMove::slotSelectionChanged()
+{
+    if (m_strokeId) return;
+    requestHandlesRectUpdate();
 }
 
 QList<QAction *> KisToolMoveFactory::createActionsImpl()

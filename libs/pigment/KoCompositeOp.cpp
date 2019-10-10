@@ -46,9 +46,9 @@ QString KoCompositeOp::categoryMisc()       { return i18n("Misc");       }
 QString KoCompositeOp::categoryQuadratic()  { return i18n("Quadratic");  }
 
 KoCompositeOp::ParameterInfo::ParameterInfo()
-    : opacity(1.0f),
-      flow(1.0f),
-      lastOpacity(&opacity)
+    : opacity(1.0f)
+    , flow(1.0f)
+    , lastOpacity(&opacity)
 {
 }
 

@@ -55,7 +55,6 @@ KoResourceTagStore::KoResourceTagStore(KoResourceServerBase *resourceServer)
 
 KoResourceTagStore::~KoResourceTagStore()
 {
-    serializeTags();
     delete d;
 }
 
@@ -288,7 +287,6 @@ void KoResourceTagStore::writeXMLFile(const QString &tagstore)
             root.appendChild(resourceEl);
         }
     }
-
     QTextStream metastream(&f);
     metastream.setCodec("UTF-8");
     metastream << doc.toString();

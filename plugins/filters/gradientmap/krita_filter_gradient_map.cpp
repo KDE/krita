@@ -33,6 +33,7 @@
 #include <KoStopGradient.h>
 #include <KoColorSet.h>
 #include "gradientmap.h"
+#include <KisDitherUtil.h>
 
 #include <KisSequentialIteratorProgress.h>
 
@@ -62,20 +63,48 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
             qWarning() << "Could not find gradient" << config->getString("gradientName");
         }
         gradientAb = KoResourceServerProvider::instance()->gradientServer()->resources().first();
-        KoStopGradient::fromQGradient(gradientAb->toQGradient())->toXML(doc, elt);
+        QScopedPointer<QGradient> qGradient(gradientAb->toQGradient());
+        KoStopGradient::fromQGradient(qGradient.data())->toXML(doc, elt);
         doc.appendChild(elt);
     } else {
         doc.setContent(config->getString("gradientXML", ""));
     }
     KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
 
+    const ColorMode colorMode = ColorMode(config->getInt("colorMode"));
+    KisDitherUtil ditherUtil;
+    if (colorMode == ColorMode::Dither) ditherUtil.setConfiguration(*config, "dither/");
+
     KoColor outColor(Qt::white, device->colorSpace());
     KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
-    quint8 grey;
+    qreal grey;
     const int pixelSize = device->colorSpace()->pixelSize();
     while (it.nextPixel()) {
-        grey = device->colorSpace()->intensity8(it.oldRawData());
-        gradient.colorAt(outColor,(qreal)grey/255);
+        grey = qreal(device->colorSpace()->intensity8(it.oldRawData())) / 255;
+        if (colorMode == ColorMode::Nearest) {
+            KoGradientStop leftStop, rightStop;
+            if (!gradient.stopsAt(leftStop, rightStop, grey)) continue;
+            if (std::abs(grey - leftStop.first) < std::abs(grey - rightStop.first)) {
+                outColor = leftStop.second;
+            }
+            else {
+                outColor = rightStop.second;
+            }
+        }
+        else if (colorMode == ColorMode::Dither) {
+            KoGradientStop leftStop, rightStop;
+            if (!gradient.stopsAt(leftStop, rightStop, grey)) continue;
+            qreal localT = (grey - leftStop.first) / (rightStop.first - leftStop.first);
+            if (localT < ditherUtil.threshold(QPoint(it.x(), it.y()))) {
+                outColor = leftStop.second;
+            }
+            else {
+                outColor = rightStop.second;
+            }
+        }
+        else {
+            gradient.colorAt(outColor, grey);
+        }
         outColor.setOpacity(qMin(KoColor(it.oldRawData(), device->colorSpace()).opacityF(), outColor.opacityF()));
         outColor.convertTo(device->colorSpace());
         memcpy(it.rawData(), outColor.data(), pixelSize);
@@ -88,12 +117,17 @@ KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
     KisFilterConfigurationSP config = new KisFilterConfiguration("gradientmap", 2);
     KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer()->resources().first();
     KoStopGradient stopGradient;
-    stopGradient.fromQGradient(gradient->toQGradient());
+    QScopedPointer<QGradient> qGradient(gradient->toQGradient());
+    stopGradient.fromQGradient(qGradient.data());
     QDomDocument doc;
     QDomElement elt = doc.createElement("gradient");
     stopGradient.toXML(doc, elt);
     doc.appendChild(elt);
     config->setProperty("gradientXML", doc.toString());
+
+    config->setProperty("colorMode", false);
+    KisDitherWidget::factoryConfiguration(*config, "dither/");
+
     return config;
 }
 

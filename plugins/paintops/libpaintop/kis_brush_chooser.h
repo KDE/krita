@@ -40,7 +40,7 @@ class KoResourceItemChooser;
 class KoResource;
 
 
-class PAINTOP_EXPORT KisPredefinedBrushChooser : public QWidget, Ui::WdgPredefinedBrushChooser
+class PAINTOP_EXPORT KisPredefinedBrushChooser : public QWidget, public Ui::WdgPredefinedBrushChooser
 {
 
     Q_OBJECT

@@ -75,7 +75,7 @@ public:
     /**
      * Creates a new view for the document.
      */
-    KisView(KisDocument *document, KoCanvasResourceProvider *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
+    KisView(KisDocument *document, KisViewManager *viewManager, QWidget *parent = 0);
     ~KisView() override;
 
     // Temporary while teasing apart view and mainwindow
@@ -90,14 +90,12 @@ public:
     KisDocument *document() const;
 
     /**
-     * Reset the view to show the given document.
+     * Deletes the view and creates a new one, displaying @p document,
+     * in the same sub-window.
+     *
+     * @return the new view
      */
-    void setDocument(KisDocument *document);
-
-    /**
-     * Tells this view that its document has got deleted (called internally)
-     */
-    void setDocumentDeleted();
+    KisView *replaceBy(KisDocument *document);
 
     /**
      * In order to print the document represented by this view a new print job should

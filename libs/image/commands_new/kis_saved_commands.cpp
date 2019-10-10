@@ -158,6 +158,9 @@ struct KisSavedMacroCommand::Private
 
     QVector<SavedCommand> commands;
     int macroId = -1;
+
+    const KisSavedMacroCommand *overriddenCommand = 0;
+    QVector<const KUndo2Command*> skipWhenOverride;
 };
 
 KisSavedMacroCommand::KisSavedMacroCommand(const KUndo2MagicString &name,
@@ -187,9 +190,26 @@ bool KisSavedMacroCommand::mergeWith(const KUndo2Command* command)
     const KisSavedMacroCommand *other =
         dynamic_cast<const KisSavedMacroCommand*>(command);
 
-    if (!other || other->id() != id()) return false;
+    if (!other || other->id() != id() || id() < 0 || other->id() < 0) return false;
 
     QVector<Private::SavedCommand> &otherCommands = other->m_d->commands;
+
+    if (other->m_d->overriddenCommand == this) {
+        m_d->commands.clear();
+
+        Q_FOREACH (Private::SavedCommand cmd, other->m_d->commands) {
+            if (!other->m_d->skipWhenOverride.contains(cmd.command.data())) {
+                m_d->commands.append(cmd);
+            }
+        }
+
+        if (other->extraData()) {
+            setExtraData(other->extraData()->clone());
+        } else {
+            setExtraData(0);
+        }
+        return true;
+    }
 
     if (m_d->commands.size() != otherCommands.size()) return false;
 
@@ -201,7 +221,9 @@ bool KisSavedMacroCommand::mergeWith(const KUndo2Command* command)
 
     bool sameCommands = true;
     while (it != end && otherIt != otherEnd) {
-        if (it->command->id() != otherIt->command->id() ||
+        if (it->command->id() < 0 ||
+            otherIt->command->id() < 0 ||
+            it->command->id() != otherIt->command->id() ||
             it->sequentiality != otherIt->sequentiality ||
             it->exclusivity != otherIt->exclusivity) {
 
@@ -226,6 +248,12 @@ bool KisSavedMacroCommand::mergeWith(const KUndo2Command* command)
         ++otherIt;
     }
 
+    if (other->extraData()) {
+        setExtraData(other->extraData()->clone());
+    } else {
+        setExtraData(0);
+    }
+
     return true;
 }
 
@@ -246,30 +274,44 @@ void KisSavedMacroCommand::performCancel(KisStrokeId id, bool strokeUndo)
     addCommands(id, !strokeUndo);
 }
 
-void KisSavedMacroCommand::addCommands(KisStrokeId id, bool undo)
+void KisSavedMacroCommand::getCommandExecutionJobs(QVector<KisStrokeJobData *> *jobs, bool undo) const
 {
     QVector<Private::SavedCommand>::iterator it;
 
     if(!undo) {
         for(it = m_d->commands.begin(); it != m_d->commands.end(); it++) {
-            strokesFacade()->
-                addJob(id, new KisStrokeStrategyUndoCommandBased::
+            *jobs << new KisStrokeStrategyUndoCommandBased::
                        Data(it->command,
                             undo,
                             it->sequentiality,
-                            it->exclusivity));
+                            it->exclusivity);
         }
     }
     else {
         for(it = m_d->commands.end(); it != m_d->commands.begin();) {
             --it;
 
-            strokesFacade()->
-                addJob(id, new KisStrokeStrategyUndoCommandBased::
-                       Data(it->command,
-                            undo,
-                            it->sequentiality,
-                            it->exclusivity));
+            *jobs << new KisStrokeStrategyUndoCommandBased::
+                     Data(it->command,
+                          undo,
+                          it->sequentiality,
+                          it->exclusivity);
         }
+    }
+}
+
+void KisSavedMacroCommand::setOverrideInfo(const KisSavedMacroCommand *overriddenCommand, const QVector<const KUndo2Command*> &skipWhileOverride)
+{
+    m_d->overriddenCommand = overriddenCommand;
+    m_d->skipWhenOverride = skipWhileOverride;
+}
+
+void KisSavedMacroCommand::addCommands(KisStrokeId id, bool undo)
+{
+    QVector<KisStrokeJobData *> jobs;
+    getCommandExecutionJobs(&jobs, undo);
+
+    Q_FOREACH (KisStrokeJobData *job, jobs) {
+        strokesFacade()->addJob(id, job);
     }
 }

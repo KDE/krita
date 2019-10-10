@@ -57,6 +57,10 @@ namespace
 
 QPair<QString, QString> getColorSpaceForColorType(uint16 sampletype, uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 &nbchannels, uint16 &extrasamplescount, uint8 &destDepth)
 {
+    const int bits32 = 32;
+    const int bits16 = 16;
+    const int bits8 = 8;
+
     if (color_type == PHOTOMETRIC_MINISWHITE || color_type == PHOTOMETRIC_MINISBLACK) {
         if (nbchannels == 0) nbchannels = 1;
         extrasamplescount = nbchannels - 1; // FIX the extrasamples count in case of
@@ -74,7 +78,7 @@ QPair<QString, QString> getColorSpaceForColorType(uint16 sampletype, uint16 colo
             destDepth = 8;
             return QPair<QString, QString>(GrayAColorModelID.id(), Integer8BitsColorDepthID.id());
         }
-        else {
+        else /* if (color_nb_bits == bits16) */ {
             destDepth = 16;
             return QPair<QString, QString>(GrayAColorModelID.id(), Integer16BitsColorDepthID.id());
         }
@@ -91,14 +95,13 @@ QPair<QString, QString> getColorSpaceForColorType(uint16 sampletype, uint16 colo
                 destDepth = 32;
                 return QPair<QString, QString>(RGBAColorModelID.id(), Float32BitsColorDepthID.id());
             }
-            return QPair<QString, QString>();
+            return QPair<QString, QString>(); // sanity check; no support for float of higher or lower bit depth
         }
         else {
             if (color_nb_bits <= 8) {
                 destDepth = 8;
                 return QPair<QString, QString>(RGBAColorModelID.id(), Integer8BitsColorDepthID.id());
-            }
-            else {
+            } else /* if (color_nb_bits == bits16) */ {
                 destDepth = 16;
                 return QPair<QString, QString>(RGBAColorModelID.id(), Integer16BitsColorDepthID.id());
             }
@@ -106,13 +109,18 @@ QPair<QString, QString> getColorSpaceForColorType(uint16 sampletype, uint16 colo
     } else if (color_type == PHOTOMETRIC_YCBCR) {
         if (nbchannels == 0) nbchannels = 3;
         extrasamplescount = nbchannels - 3; // FIX the extrasamples count in case of
+        if (sampletype == SAMPLEFORMAT_IEEEFP) {
+            return QPair<QString, QString>(); // sanity check; no support for float
+        }
         if (color_nb_bits <= 8) {
             destDepth = 8;
             return QPair<QString, QString>(YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id());
         }
-        else {
+        else if (color_nb_bits == bits16) {
             destDepth = 16;
             return QPair<QString, QString>(YCbCrAColorModelID.id(), Integer16BitsColorDepthID.id());
+        } else {
+            return QPair<QString, QString>(); // sanity check; no support integers of higher bit depth
         }
     }
     else if (color_type == PHOTOMETRIC_SEPARATED) {
@@ -139,22 +147,48 @@ QPair<QString, QString> getColorSpaceForColorType(uint16 sampletype, uint16 colo
                 if (nbchannels - extrasamplescount != 4) {
                     return QPair<QString, QString>();
                 }
+                // else - assume it's CMYK and proceed
             }
         }
         if (color_nb_bits <= 8) {
             destDepth = 8;
             return QPair<QString, QString>(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id());
-        }
-        else {
+        } else if (color_nb_bits == 16) {
             destDepth = 16;
             return QPair<QString, QString>(CMYKAColorModelID.id(), Integer16BitsColorDepthID.id());
+        } else if (sampletype == SAMPLEFORMAT_IEEEFP) {
+            destDepth = bits32;
+            return QPair<QString, QString>(CMYKAColorModelID.id(), Float32BitsColorDepthID.id());
+        } else {
+            return QPair<QString, QString>(); // no support for other bit depths
         }
     }
     else if (color_type == PHOTOMETRIC_CIELAB || color_type == PHOTOMETRIC_ICCLAB) {
-        destDepth = 16;
         if (nbchannels == 0) nbchannels = 3;
         extrasamplescount = nbchannels - 3; // FIX the extrasamples count
-        return QPair<QString, QString>(LABAColorModelID.id(), Integer16BitsColorDepthID.id());
+
+        switch(color_nb_bits) {
+        case bits32: {
+            destDepth = bits32;
+            return QPair<QString, QString>(LABAColorModelID.id(), Float32BitsColorDepthID.id());
+        }
+        case bits16: {
+            destDepth = bits16;
+            if (sampletype == SAMPLEFORMAT_IEEEFP) {
+                return QPair<QString, QString>(LABAColorModelID.id(), Float16BitsColorDepthID.id());
+            }
+            else {
+                return QPair<QString, QString>(LABAColorModelID.id(), Integer16BitsColorDepthID.id());
+            }
+        }
+        case bits8: {
+            destDepth = bits8;
+            return QPair<QString, QString>(LABAColorModelID.id(), Integer8BitsColorDepthID.id());
+        }
+        default: {
+            return QPair<QString, QString>();
+        }
+        }
     }
     else if (color_type ==  PHOTOMETRIC_PALETTE) {
         destDepth = 16;
@@ -356,10 +390,18 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF* image)
     // Do not use the linear gamma profile for 16 bits/channel by default, tiff files are usually created with
     // gamma correction. XXX: Should we ask the user?
     if (!profile) {
+        dbgFile << "No profile found; trying to assign a default one.";
         if (colorSpaceIdTag.first == RGBAColorModelID.id()) {
             profile = KoColorSpaceRegistry::instance()->profileByName("sRGB-elle-V2-srgbtrc.icc");
         } else if (colorSpaceIdTag.first == GrayAColorModelID.id()) {
             profile = KoColorSpaceRegistry::instance()->profileByName("Gray-D50-elle-V2-srgbtrc.icc");
+        } else if (colorSpaceIdTag.first == CMYKAColorModelID.id()) {
+            profile = KoColorSpaceRegistry::instance()->profileByName("Chemical proof");
+        } else if (colorSpaceIdTag.first == LABAColorModelID.id()) {
+            profile = KoColorSpaceRegistry::instance()->profileByName("Lab identity build-in");
+        }
+        if (!profile) {
+            dbgFile << "No suitable default profile found.";
         }
     }
 
@@ -589,10 +631,10 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF* image)
         else {
             ps_buf = new tdata_t[nbchannels];
             uint32 * lineSizes = new uint32[nbchannels];
-            tmsize_t baseSize = TIFFTileSize(image) / nbchannels;
+            tmsize_t baseSize = TIFFTileSize(image);
             for (uint i = 0; i < nbchannels; i++) {
                 ps_buf[i] = _TIFFmalloc(baseSize);
-                lineSizes[i] = tileWidth; // baseSize / lineSizeCoeffs[i];
+                lineSizes[i] = tileWidth;;
             }
             tiffstream = new KisBufferStreamSeperate((uint8**) ps_buf, nbchannels, depth, lineSizes);
             delete [] lineSizes;

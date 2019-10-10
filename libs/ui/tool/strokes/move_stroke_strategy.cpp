@@ -26,6 +26,10 @@
 #include "kis_layer_utils.h"
 #include "krita_utils.h"
 
+#include "KisRunnableStrokeJobData.h"
+#include "KisRunnableStrokeJobUtils.h"
+#include "KisRunnableStrokeJobsInterface.h"
+
 
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeList nodes,
                                        KisUpdatesFacade *updatesFacade,
@@ -57,10 +61,13 @@ MoveStrokeStrategy::MoveStrokeStrategy(KisNodeList nodes,
     }
 
     setSupportsWrapAroundMode(true);
+
+    enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER);
 }
 
 MoveStrokeStrategy::MoveStrokeStrategy(const MoveStrokeStrategy &rhs)
-    : KisStrokeStrategyUndoCommandBased(rhs),
+    : QObject(),
+      KisStrokeStrategyUndoCommandBased(rhs),
       m_nodes(rhs.m_nodes),
       m_blacklistedNodes(rhs.m_blacklistedNodes),
       m_updatesFacade(rhs.m_updatesFacade),
@@ -86,11 +93,35 @@ void MoveStrokeStrategy::saveInitialNodeOffsets(KisNodeSP node)
 
 void MoveStrokeStrategy::initStrokeCallback()
 {
-    Q_FOREACH(KisNodeSP node, m_nodes) {
-        saveInitialNodeOffsets(node);
-    }
+    QVector<KisRunnableStrokeJobData*> jobs;
 
-    KisStrokeStrategyUndoCommandBased::initStrokeCallback();
+    KritaUtils::addJobBarrier(jobs, [this]() {
+        Q_FOREACH(KisNodeSP node, m_nodes) {
+            KisLayerUtils::forceAllHiddenOriginalsUpdate(node);
+        }
+    });
+
+    KritaUtils::addJobBarrier(jobs, [this]() {
+        Q_FOREACH(KisNodeSP node, m_nodes) {
+            KisLayerUtils::forceAllDelayedNodesUpdate(node);
+        }
+    });
+
+    KritaUtils::addJobBarrier(jobs, [this]() {
+        QRect handlesRect;
+
+        Q_FOREACH(KisNodeSP node, m_nodes) {
+            saveInitialNodeOffsets(node);
+            handlesRect |= KisLayerUtils::recursiveNodeExactBounds(node);
+        }
+
+        KisStrokeStrategyUndoCommandBased::initStrokeCallback();
+
+        emit this->sigHandlesRectCalculated(handlesRect);
+        m_updateTimer.start();
+    });
+
+    runnableJobsInterface()->addRunnableJobs(jobs);
 }
 
 void MoveStrokeStrategy::finishStrokeCallback()
@@ -118,29 +149,50 @@ void MoveStrokeStrategy::finishStrokeCallback()
 void MoveStrokeStrategy::cancelStrokeCallback()
 {
     if (!m_nodes.isEmpty()) {
-        // FIXME: make cancel job exclusive instead
-        m_updatesFacade->blockUpdates();
-        moveAndUpdate(QPoint());
-        m_updatesFacade->unblockUpdates();
+        m_finalOffset = QPoint();
+        m_hasPostponedJob = true;
+        tryPostUpdateJob(true);
     }
 
     KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
+}
+
+void MoveStrokeStrategy::tryPostUpdateJob(bool forceUpdate)
+{
+    if (!m_hasPostponedJob) return;
+
+    if (forceUpdate ||
+        (m_updateTimer.elapsed() > m_updateInterval &&
+         !m_updatesFacade->hasUpdatesRunning())) {
+
+        addMutatedJob(new BarrierUpdateData(forceUpdate));
+    }
 }
 
 void MoveStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     Data *d = dynamic_cast<Data*>(data);
 
-    if(!m_nodes.isEmpty() && d) {
-        moveAndUpdate(d->offset);
-
+    if (!m_nodes.isEmpty() && d) {
         /**
          * NOTE: we do not care about threading here, because
          * all our jobs are declared sequential
          */
         m_finalOffset = d->offset;
-    }
-    else {
+        m_hasPostponedJob = true;
+        tryPostUpdateJob(false);
+
+    } else if (BarrierUpdateData *barrierData =
+               dynamic_cast<BarrierUpdateData*>(data)) {
+
+        doCanvasUpdate(barrierData->forceUpdate);
+
+    } else if (KisAsyncronousStrokeUpdateHelper::UpdateData *updateData =
+               dynamic_cast<KisAsyncronousStrokeUpdateHelper::UpdateData*>(data)) {
+
+        tryPostUpdateJob(updateData->forceUpdate);
+
+    } else {
         KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
     }
 }
@@ -148,10 +200,19 @@ void MoveStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 #include "kis_selection_mask.h"
 #include "kis_selection.h"
 
-void MoveStrokeStrategy::moveAndUpdate(QPoint offset)
+void MoveStrokeStrategy::doCanvasUpdate(bool forceUpdate)
 {
+    if (!forceUpdate &&
+            (m_updateTimer.elapsed() < m_updateInterval ||
+             m_updatesFacade->hasUpdatesRunning())) {
+
+        return;
+    }
+
+    if (!m_hasPostponedJob) return;
+
     Q_FOREACH (KisNodeSP node, m_nodes) {
-        QRect dirtyRect = moveNode(node, offset);
+        QRect dirtyRect = moveNode(node, m_finalOffset);
         m_dirtyRects[node] |= dirtyRect;
 
         if (m_updatesEnabled) {
@@ -163,6 +224,9 @@ void MoveStrokeStrategy::moveAndUpdate(QPoint offset)
             //mask->selection()->notifySelectionChanged();
         }
     }
+
+    m_hasPostponedJob = false;
+    m_updateTimer.restart();
 }
 
 QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)

@@ -23,7 +23,6 @@
 #include "KoCompositeOpAlphaDarken.h"
 #include "KoAlphaDarkenParamsWrapper.h"
 #include "KoCompositeOpOver.h"
-#include "KoCompositeOps.h"
 
 template<>
 template<>

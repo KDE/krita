@@ -14,7 +14,7 @@
 
 [General]
 name=Krita Default
-version=3
+version=4
 
 [Pan Canvas]
 0={0;4;[];0;0;2}
@@ -68,3 +68,6 @@ version=3
 7={7;2;[1000021,20];1;0;0}
 8={6;1;[33];0;0;0}
 9={8;2;[1000021,1000023,20];1;0;0}
+
+[Zoom and Rotate Canvas]
+0={0;4;[];0;0;5}

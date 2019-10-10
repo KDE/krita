@@ -48,6 +48,11 @@ TableOfContentsStyleModel::TableOfContentsStyleModel(const KoStyleManager *manag
 
 }
 
+TableOfContentsStyleModel::~TableOfContentsStyleModel()
+{
+    delete m_styleThumbnailer;
+}
+
 QModelIndex TableOfContentsStyleModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (row < 0 || column < 0 || column > 1) {

@@ -203,14 +203,9 @@ void KisShapeController::addShapes(const QList<KoShape*> shapes)
                 image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(image(), shapeLayer, image()->rootLayer(), image()->rootLayer()->childCount()));
             }
 
-            QRectF updateRect;
-
             Q_FOREACH(KoShape *shape, shapes) {
                 shapeLayer->addShape(shape);
-                updateRect |= shape->boundingRect();
             }
-
-            canvas->shapeManager()->update(updateRect);
         }
     }
 
@@ -268,9 +263,10 @@ void KisShapeController::setImage(KisImageWSP image)
 {
     m_d->imageConnections.clear();
 
-    m_d->imageConnections.addConnection(m_d->doc->image(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotUpdateDocumentResolution()));
-    m_d->imageConnections.addConnection(m_d->doc->image(), SIGNAL(sigSizeChanged(QPointF, QPointF)), this, SLOT(slotUpdateDocumentSize()));
-
+    if (image) {
+        m_d->imageConnections.addConnection(image, SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotUpdateDocumentResolution()));
+        m_d->imageConnections.addConnection(image, SIGNAL(sigSizeChanged(QPointF, QPointF)), this, SLOT(slotUpdateDocumentSize()));
+    }
     slotUpdateDocumentResolution();
     slotUpdateDocumentSize();
 

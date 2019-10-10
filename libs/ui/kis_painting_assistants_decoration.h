@@ -43,6 +43,7 @@ struct AssistantEditorData {
     const QPointF moveIconPosition = QPointF(15, 15);
     const QPointF snapIconPosition = QPointF(54, 20);
     const QPointF deleteIconPosition = QPointF(83, 18);
+    const QSize boundingSize = QSize(110, 40);
 };
 
 /**

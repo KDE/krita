@@ -311,6 +311,9 @@ QMenu* KisSelectionToolHelper::getSelectionContextMenu(KisCanvas2* canvas)
 
     KActionCollection *actionCollection = canvas->viewManager()->actionCollection();
 
+    m_contextMenu->addSection(i18n("Selection Actions"));
+    m_contextMenu->addSeparator();
+
     m_contextMenu->addAction(actionCollection->action("deselect"));
     m_contextMenu->addAction(actionCollection->action("invert"));
     m_contextMenu->addAction(actionCollection->action("select_all"));

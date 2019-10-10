@@ -64,7 +64,11 @@ public:
   Reader_QIODevice(QIODevice* device) : m_device(device) { m_total_length=m_device->bytesAvailable(); }
 
   int64_t get_position() const { return m_device->pos(); }
-  int read(void* data, size_t size) { return m_device->read((char*)data,size) != size; }
+  int read(void* data, size_t size)
+  {
+      qint64 readSize = m_device->read((char*)data, (qint64)size);
+      return (readSize > 0 && (quint64)readSize != size);
+  }
   int seek(int64_t position) { return !m_device->seek(position); }
   heif_reader_grow_status wait_for_file_size(int64_t target_size) {
     return (target_size > m_total_length) ? heif_reader_grow_status_size_beyond_eof : heif_reader_grow_status_size_reached;

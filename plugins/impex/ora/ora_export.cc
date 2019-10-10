@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,7 +24,7 @@
 #include <kpluginfactory.h>
 #include <QFileInfo>
 #include <QApplication>
-
+#include <KoStore.h>
 #include <KisImportExportManager.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpace.h>
@@ -95,6 +96,20 @@ void OraExport::initializeCapabilities()
             << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
             << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID);
     addSupportedColorModels(supportedColorModels, "OpenRaster");
+}
+
+QString OraExport::verify(const QString &fileName) const
+{
+    QString error = KisImportExportFilter::verify(fileName);
+    if (error.isEmpty()) {
+        return KisImportExportFilter::verifyZiPBasedFiles(fileName,
+                                                          QStringList()
+                                                          << "mimetype"
+                                                          << "stack.xml"
+                                                          << "mergedimage.png");
+    }
+
+    return error;
 }
 
 

@@ -209,6 +209,7 @@ private:
     class Private;
     Private * const d;
     Q_PRIVATE_SLOT(d, void updateTree())
+    Q_PRIVATE_SLOT(d, void forwardCompressedUdpate())
 };
 
 #endif

@@ -111,6 +111,7 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_change_projection_color_command.cpp
    commands_new/kis_activate_selection_mask_command.cpp
    commands_new/kis_transaction_based_command.cpp
+   commands_new/KisHoldUIUpdatesCommand.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
@@ -136,6 +137,7 @@ set(kritaimage_LIB_SRCS
    lazybrush/kis_colorize_mask.cpp
    lazybrush/kis_colorize_stroke_strategy.cpp
    KisDelayedUpdateNodeInterface.cpp
+   KisCroppedOriginalLayerInterface.cpp
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
    kis_node_filter_interface.cpp
@@ -304,6 +306,7 @@ set(kritaimage_LIB_SRCS
    layerstyles/kis_ls_overlay_filter.cpp
    layerstyles/kis_ls_utils.cpp
    layerstyles/gimp_bump_map.cpp
+   layerstyles/KisLayerStyleKnockoutBlower.cpp
 
    KisProofingConfiguration.cpp
 

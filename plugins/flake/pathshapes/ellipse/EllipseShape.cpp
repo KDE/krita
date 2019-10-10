@@ -56,7 +56,7 @@ EllipseShape::EllipseShape()
 }
 
 EllipseShape::EllipseShape(const EllipseShape &rhs)
-    : KoParameterShape(new KoParameterShapePrivate(*rhs.d_func(), this)),
+    : KoParameterShape(rhs),
       m_startAngle(rhs.m_startAngle),
       m_endAngle(rhs.m_endAngle),
       m_kindAngle(rhs.m_kindAngle),
@@ -248,8 +248,6 @@ void EllipseShape::moveHandleAction(int handleId, const QPointF &point, Qt::Keyb
 
 void EllipseShape::updatePath(const QSizeF &size)
 {
-    Q_D(KoParameterShape);
-
     Q_UNUSED(size);
     QPointF startpoint(handles()[0]);
 
@@ -271,7 +269,7 @@ void EllipseShape::updatePath(const QSizeF &size)
 
     createPoints(requiredPointCount);
 
-    KoSubpath &points = *d->subpaths[0];
+    KoSubpath &points = *subpaths()[0];
 
     int curveIndex = 0;
     points[0]->setPoint(startpoint);
@@ -297,13 +295,13 @@ void EllipseShape::updatePath(const QSizeF &size)
         points[i]->unsetProperty(KoPathPoint::StopSubpath);
         points[i]->unsetProperty(KoPathPoint::CloseSubpath);
     }
-    d->subpaths[0]->last()->setProperty(KoPathPoint::StopSubpath);
+    subpaths()[0]->last()->setProperty(KoPathPoint::StopSubpath);
     if (m_type == Arc && !sameAngles) {
-        d->subpaths[0]->first()->unsetProperty(KoPathPoint::CloseSubpath);
-        d->subpaths[0]->last()->unsetProperty(KoPathPoint::CloseSubpath);
+        subpaths()[0]->first()->unsetProperty(KoPathPoint::CloseSubpath);
+        subpaths()[0]->last()->unsetProperty(KoPathPoint::CloseSubpath);
     } else {
-        d->subpaths[0]->first()->setProperty(KoPathPoint::CloseSubpath);
-        d->subpaths[0]->last()->setProperty(KoPathPoint::CloseSubpath);
+        subpaths()[0]->first()->setProperty(KoPathPoint::CloseSubpath);
+        subpaths()[0]->last()->setProperty(KoPathPoint::CloseSubpath);
     }
 
     notifyPointsChanged();
@@ -313,21 +311,19 @@ void EllipseShape::updatePath(const QSizeF &size)
 
 void EllipseShape::createPoints(int requiredPointCount)
 {
-    Q_D(KoParameterShape);
-
-    if (d->subpaths.count() != 1) {
+    if (subpaths().count() != 1) {
         clear();
-        d->subpaths.append(new KoSubpath());
+        subpaths().append(new KoSubpath());
     }
-    int currentPointCount = d->subpaths[0]->count();
+    int currentPointCount = subpaths()[0]->count();
     if (currentPointCount > requiredPointCount) {
         for (int i = 0; i < currentPointCount - requiredPointCount; ++i) {
-            delete d->subpaths[0]->front();
-            d->subpaths[0]->pop_front();
+            delete subpaths()[0]->front();
+            subpaths()[0]->pop_front();
         }
     } else if (requiredPointCount > currentPointCount) {
         for (int i = 0; i < requiredPointCount - currentPointCount; ++i) {
-            d->subpaths[0]->append(new KoPathPoint(this, QPointF()));
+            subpaths()[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
 

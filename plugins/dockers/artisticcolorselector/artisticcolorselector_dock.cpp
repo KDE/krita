@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -211,9 +212,6 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     connect(m_selectorUI->colorSelector         , SIGNAL(sigFgColorChanged(KisColor))     , SLOT(slotFgColorChanged(KisColor)));
     connect(m_selectorUI->colorSelector         , SIGNAL(sigBgColorChanged(KisColor))     , SLOT(slotBgColorChanged(KisColor)));
 
-    // gamut mask connections
-    connect(m_selectorUI->gamutMaskToolbar, SIGNAL(sigGamutMaskToggle(bool)), SLOT(slotGamutMaskToggle(bool)));
-
     connect(m_hsxButtons                        , SIGNAL(buttonClicked(int))                     , SLOT(slotColorSpaceSelected()));
 
     setWidget(m_selectorUI);
@@ -239,6 +237,9 @@ void ArtisticColorSelectorDock::setViewManager(KisViewManager* kisview)
 
     connect(m_resourceProvider, SIGNAL(sigGamutMaskPreviewUpdate()),
             this, SLOT(slotGamutMaskPreviewUpdate()), Qt::UniqueConnection);
+
+    connect(m_resourceProvider, SIGNAL(sigGamutMaskDeactivated()),
+            this, SLOT(slotGamutMaskDeactivate()), Qt::UniqueConnection);
 
     m_selectorUI->gamutMaskToolbar->connectMaskSignals(m_resourceProvider);
 }
@@ -451,6 +452,11 @@ void ArtisticColorSelectorDock::slotGamutMaskUnset()
 void ArtisticColorSelectorDock::slotGamutMaskPreviewUpdate()
 {
     m_selectorUI->colorSelector->setDirty();
+}
+
+void ArtisticColorSelectorDock::slotGamutMaskDeactivate()
+{
+    slotGamutMaskToggle(false);
 }
 
 void ArtisticColorSelectorDock::slotSelectorSettingsChanged()

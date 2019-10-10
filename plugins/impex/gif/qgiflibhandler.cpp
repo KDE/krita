@@ -73,7 +73,7 @@ bool QGIFLibHandler::read ( QImage * image )
     GifRecordType recordType;
     ColorMapObject* ColorMap;
 
-    int	i, row, imageNum = 0, topRow, leftCol, width, height;
+    int	i, row, imageNum = 0, topRow, width, height;
     int transColor = -1;
     do
     {
@@ -87,10 +87,9 @@ bool QGIFLibHandler::read ( QImage * image )
                 return false;
             }
             topRow = gifFile->Image.Top; /* Image Position relative to Screen. */
-            leftCol = gifFile->Image.Left;
             width = gifFile->Image.Width;
             height = gifFile->Image.Height;
-            //qDebug("Image %d at (%d, %d) [%dx%d]", ++imageNum, leftCol, topRow, width, height);
+            //qDebug("Image %d at (%d, %d) [%dx%d]", ++imageNum, gifFile->Image.Left, topRow, width, height);
             if (gifFile->Image.Left + width > gifFile->SWidth ||
                     gifFile->Image.Top + height > gifFile->SHeight)
             {

@@ -89,10 +89,10 @@ void SvgGradientHelper::setTransform(const QTransform &transform)
 
 QGradient::Spread SvgGradientHelper::spreadMode() const
 {
-    return m_spreadMode;
+    return m_gradient->spread();
 }
 
 void SvgGradientHelper::setSpreadMode(const QGradient::Spread &spreadMode)
 {
-    m_spreadMode = spreadMode;
+    m_gradient->setSpread(spreadMode);
 }

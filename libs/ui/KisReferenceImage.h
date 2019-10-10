@@ -20,7 +20,7 @@
 #ifndef KISREFERENCEIMAGE_H
 #define KISREFERENCEIMAGE_H
 
-#include <QScopedPointer>
+#include <QSharedDataPointer>
 
 #include <kundo2command.h>
 #include <kritaui_export.h>
@@ -91,7 +91,7 @@ public:
 
 private:
     struct Private;
-    const QScopedPointer<Private> d;
+    QSharedDataPointer<Private> d;
 };
 
 #endif // KISREFERENCEIMAGE_H

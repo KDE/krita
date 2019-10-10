@@ -113,6 +113,7 @@ void KisSelectionBasedLayer::slotImageSizeChanged()
 void KisSelectionBasedLayer::setImage(KisImageWSP image)
 {
     m_d->paintDevice->setDefaultBounds(KisDefaultBoundsSP(new KisDefaultBounds(image)));
+    m_d->selection->pixelSelection()->setDefaultBounds(KisDefaultBoundsSP(new KisDefaultBounds(image)));
     KisLayer::setImage(image);
 
     connect(image.data(), SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));

@@ -33,6 +33,8 @@
 #include "kis_input_profile_manager.h"
 #include "kis_extended_modifiers_mapper.h"
 
+#include "kis_zoom_and_rotate_action.h"
+
 /**
  * This hungry class EventEater encapsulates event masking logic.
  *
@@ -379,7 +381,7 @@ bool KisInputManager::Private::ProximityNotifier::eventFilter(QObject* object, Q
      * To avoid this problem we should explicitly ignore all the tablet events.
      */
 #if defined Q_OS_LINUX && \
-    QT_VERSION >= QT_VERSION_CHECK(5, 7, 0) && \
+    QT_VERSION >= QT_VERSION_CHECK(5, 9, 0) && \
     QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
 
     if (event->type() == QEvent::TabletMove ||
@@ -500,9 +502,14 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
 
 void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture)
 {
-    KisTouchShortcut *shortcut = new KisTouchShortcut(action, index);
+    KisTouchShortcut *shortcut = new KisTouchShortcut(action, index, gesture);
+    dbgKrita << "TouchAction:" << action->name();
     switch(gesture) {
+    case KisShortcutConfiguration::RotateGesture:
     case KisShortcutConfiguration::PinchGesture:
+#ifndef Q_OS_MACOS
+    case KisShortcutConfiguration::ZoomAndRotateGesture:
+#endif
         shortcut->setMinimumTouchPoints(2);
         shortcut->setMaximumTouchPoints(2);
         break;

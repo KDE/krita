@@ -1,4 +1,5 @@
 *.orig
+*.rej
 __pycache__
 *.egg-info
 *.trace
@@ -28,3 +29,5 @@ GSYMS
 BROWSE
 *.kate-swp
 /po/
+build_dir
+.flatpak-builder

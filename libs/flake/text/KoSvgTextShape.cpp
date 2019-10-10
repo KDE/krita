@@ -54,15 +54,18 @@
 
 #include <FlakeDebug.h>
 
-class KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
+#include <QSharedData>
+
+class KoSvgTextShape::Private : public QSharedData
 {
-    KoSvgTextShapePrivate(KoSvgTextShape *_q)
-        : KoSvgTextChunkShapePrivate(_q)
+public:
+    Private()
+        : QSharedData()
     {
     }
 
-    KoSvgTextShapePrivate(const KoSvgTextShapePrivate &rhs, KoSvgTextShape *q)
-        : KoSvgTextChunkShapePrivate(rhs, q)
+    Private(const Private &)
+        : QSharedData()
     {
     }
 
@@ -73,18 +76,18 @@ class KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
 
     void clearAssociatedOutlines(KoShape *rootShape);
 
-
-    Q_DECLARE_PUBLIC(KoSvgTextShape)
 };
 
 KoSvgTextShape::KoSvgTextShape()
-    : KoSvgTextChunkShape(new KoSvgTextShapePrivate(this))
+    : KoSvgTextChunkShape()
+    , d(new Private)
 {
     setShapeId(KoSvgTextShape_SHAPEID);
 }
 
 KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
-    : KoSvgTextChunkShape(new KoSvgTextShapePrivate(*rhs.d_func(), this))
+    : KoSvgTextChunkShape(rhs)
+    , d(rhs.d)
 {
     setShapeId(KoSvgTextShape_SHAPEID);
     // QTextLayout has no copy-ctor, so just relayout everything!
@@ -111,7 +114,6 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
 
 void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
-    Q_D(KoSvgTextShape);
 
     Q_UNUSED(paintContext);
 
@@ -156,7 +158,6 @@ void KoSvgTextShape::paintStroke(QPainter &painter, const KoViewConverter &conve
 
 QPainterPath KoSvgTextShape::textOutline()
 {
-    Q_D(KoSvgTextShape);
 
     QPainterPath result;
     result.setFillRule(Qt::WindingFill);
@@ -329,6 +330,8 @@ struct LayoutChunkWrapper
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(startPos == m_addedChars, currentTextPos);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(lastPos < m_layout->text().size(), currentTextPos);
 
+        //        qDebug() << m_layout->text();
+
         QTextLine line;
         std::swap(line, m_danglingLine);
 
@@ -350,8 +353,17 @@ struct LayoutChunkWrapper
             // grow to avoid missing glyphs
 
             int charOffset = 0;
+            int noChangeCount = 0;
             while (line.textLength() < numChars) {
+                int tl = line.textLength();
                 line.setNumColumns(numChars + charOffset);
+                if (tl == line.textLength()) {
+                    noChangeCount++;
+                    // 5 columns max are needed to discover tab char. Set to 10 to be safe.
+                    if (noChangeCount > 10) break;
+                } else {
+                    noChangeCount = 0;
+                }
                 charOffset++;
             }
 
@@ -375,13 +387,17 @@ struct LayoutChunkWrapper
 private:
     qreal skipSpaceCharacter(int pos) {
         const QTextCharFormat format =
-            formatForPos(pos, m_layout->formats());
+                formatForPos(pos, m_layout->formats());
 
         const QChar skippedChar = m_layout->text()[pos];
         KIS_SAFE_ASSERT_RECOVER_NOOP(skippedChar.isSpace() || !skippedChar.isPrint());
 
         QFontMetrics metrics(format.font());
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+        return metrics.horizontalAdvance(skippedChar);
+#else
         return metrics.width(skippedChar);
+#endif
     }
 
     static QTextCharFormat formatForPos(int pos, const QVector<QTextLayout::FormatRange> &formats)
@@ -405,7 +421,6 @@ private:
 
 void KoSvgTextShape::relayout()
 {
-    Q_D(KoSvgTextShape);
 
     d->cachedLayouts.clear();
     d->cachedLayoutsOffsets.clear();
@@ -446,9 +461,9 @@ void KoSvgTextShape::relayout()
             const bool isFinalPass = i == chunk.offsets.size();
 
             const int length =
-                !isFinalPass ?
-                chunk.offsets[i].start - lastSubChunkStart :
-                chunk.text.size() - lastSubChunkStart;
+                    !isFinalPass ?
+                        chunk.offsets[i].start - lastSubChunkStart :
+                        chunk.text.size() - lastSubChunkStart;
 
             if (length > 0) {
                 currentTextPos += lastSubChunkOffset;
@@ -493,7 +508,7 @@ void KoSvgTextShape::relayout()
 
         Q_FOREACH (const QTextLayout::FormatRange &range, layout.formats()) {
             const KoSvgCharChunkFormat &format =
-                static_cast<const KoSvgCharChunkFormat&>(range.format);
+                    static_cast<const KoSvgCharChunkFormat&>(range.format);
             AssociatedShapeWrapper wrapper = format.associatedShapeWrapper();
 
             const int rangeStart = range.start;
@@ -553,7 +568,7 @@ void KoSvgTextShape::relayout()
     }
 }
 
-void KoSvgTextShapePrivate::clearAssociatedOutlines(KoShape *rootShape)
+void KoSvgTextShape::Private::clearAssociatedOutlines(KoShape *rootShape)
 {
     KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);

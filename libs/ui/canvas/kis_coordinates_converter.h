@@ -59,6 +59,8 @@ public:
     KisCoordinatesConverter();
     ~KisCoordinatesConverter() override;
 
+    QSizeF getCanvasWidgetSize() const;
+
     void setCanvasWidgetSize(QSizeF size);
     void setDevicePixelRatio(qreal value);
     void setImage(KisImageWSP image);

@@ -46,21 +46,36 @@ public:
         TrilinearFilterMode, // LINEAR_MIPMAP_LINEAR
         HighQualityFiltering // Mipmaps + custom shader
     };
-public:
 
     enum OpenGLRenderer {
         RendererNone = 0x00,
         RendererAuto = 0x01,
         RendererDesktopGL = 0x02,
         RendererOpenGLES = 0x04,
+        RendererSoftware = 0x08
     };
-    Q_DECLARE_FLAGS(OpenGLRenderers, OpenGLRenderer);
+    Q_DECLARE_FLAGS(OpenGLRenderers, OpenGLRenderer)
 
-    static QSurfaceFormat selectSurfaceFormat(KisOpenGL::OpenGLRenderer preferredRenderer,
+    enum AngleRenderer {
+        AngleRendererDefault    = 0x0000,
+        AngleRendererD3d11      = 0x0002,
+        AngleRendererD3d9       = 0x0004,
+        AngleRendererD3d11Warp  = 0x0008, // "Windows Advanced Rasterization Platform"
+    };
+
+    struct RendererConfig {
+        QSurfaceFormat format;
+        AngleRenderer angleRenderer = AngleRendererDefault;
+
+        OpenGLRenderer rendererId() const;
+    };
+
+public:
+    static RendererConfig selectSurfaceConfig(KisOpenGL::OpenGLRenderer preferredRenderer,
                                               KisConfig::RootSurfaceFormat preferredRootSurfaceFormat,
                                               bool enableDebug);
 
-    static void setDefaultSurfaceFormat(const QSurfaceFormat &format);
+    static void setDefaultSurfaceConfig(const RendererConfig &config);
 
     static OpenGLRenderer getCurrentOpenGLRenderer();
     static OpenGLRenderer getQtPreferredOpenGLRenderer();

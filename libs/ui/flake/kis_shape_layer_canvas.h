@@ -48,6 +48,8 @@ public:
     virtual void forceRepaint() = 0;
     virtual bool hasPendingUpdates() const = 0;
 
+    virtual void forceRepaintWithHiddenAreas() { forceRepaint(); }
+
     bool hasChangedWhileBeingInvisible();
     virtual void rerenderAfterBeingInvisible() = 0;
     virtual void resetCache() = 0;
@@ -104,6 +106,8 @@ public:
     void forceRepaint() override;
     bool hasPendingUpdates() const override;
 
+    void forceRepaintWithHiddenAreas() override;
+
     void resetCache() override;
     void rerenderAfterBeingInvisible() override;
 
@@ -129,6 +133,7 @@ private:
     volatile bool m_hasUpdateInCompressor = false;
     volatile bool m_hasDirectSyncRepaintInitiated = false;
 
+    bool m_forceUpdateHiddenAreasOnly = false;
     QRegion m_dirtyRegion;
     QMutex m_dirtyRegionMutex;
 

@@ -202,11 +202,12 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
 {
     setMode(KisTool::PAINT_MODE);
     QPointF temp(convertToPixelCoord(event));
-    m_cursorOnPress = temp;
 
     if (!image()->bounds().contains(temp.toPoint())) {
         return;
     }
+
+    m_cursorOnPress = temp;
 
     checkIfAnchorIsSelected(temp);
 
@@ -247,6 +248,11 @@ void KisToolSelectMagnetic::checkIfAnchorIsSelected(QPointF temp)
 void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 {
     QPointF temp = convertToPixelCoord(event);
+
+    if (!image()->bounds().contains(temp.toPoint())) {
+        return;
+    }
+
     checkIfAnchorIsSelected(temp);
 
     if (m_selected) {
@@ -255,10 +261,6 @@ void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
     }
 
     if (m_complete) {
-        if (!image()->bounds().contains(temp.toPoint())) {
-            return;
-        }
-
         int pointA = 0, pointB = 1;
         double dist = std::numeric_limits<double>::max();
         int total   = m_anchorPoints.count();
@@ -298,6 +300,9 @@ void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 void KisToolSelectMagnetic::slotCalculateEdge()
 {
     QPoint current    = m_lastCursorPos.toPoint();
+    if (!image()->bounds().contains(current)) {
+        return;
+    }
     vQPointF pointSet = computeEdgeWrapper(m_lastAnchor, current);
     calculateCheckPoints(pointSet);
 }
@@ -313,6 +318,11 @@ void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
         }
     } else if (m_selected) {
         QPointF temp(convertToPixelCoord(event));
+
+        if (!image()->bounds().contains(temp.toPoint())) {
+            return;
+        }
+
         if (m_snapBound.contains(temp) && m_anchorPoints.count() > 1) {
             if(m_complete){
                 finishSelectionAction();

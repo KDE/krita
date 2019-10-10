@@ -41,6 +41,8 @@ class QBitArray;
 class KisCloneLayer;
 class KisPSDLayerStyle;
 class KisAbstractProjectionPlane;
+class KisLayerProjectionPlane;
+typedef QSharedPointer<KisLayerProjectionPlane> KisLayerProjectionPlaneSP;
 
 
 namespace KisMetaData
@@ -94,7 +96,7 @@ public:
      * styles or anything else. It is used by the layer styles projection
      * plane to stack up the planes.
      */
-    virtual KisAbstractProjectionPlaneSP internalProjectionPlane() const;
+    virtual KisLayerProjectionPlaneSP internalProjectionPlane() const;
 
     QRect partialChangeRect(KisNodeSP lastNode, const QRect& rect);
     void buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP lastNode, const QRect& rect);

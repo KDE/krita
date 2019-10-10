@@ -25,6 +25,8 @@
 
 #include "kis_types.h"
 
+class KisLayerStyleKnockoutBlower;
+
 
 class KisLayerStyleFilterProjectionPlane : public KisAbstractProjectionPlane
 {
@@ -45,6 +47,14 @@ public:
 
     KisPaintDeviceList getLodCapableDevices() const override;
 
+    /**
+     * \returns true if a call to apply() will actually paint anything. Basically,
+     * it is a cached version of isEnabled(), though the state may change after calling
+     * to recalculate().
+     */
+    bool isEmpty() const;
+
+    KisLayerStyleKnockoutBlower *knockoutBlower() const;
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

@@ -337,10 +337,10 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisGaussianKernel::createDi
 
             qreal value = 1.0;
 
-            if (distance >= radius) {
+            if (distance > radius + 1e-3) {
                 value = 0.0;
             } else if (distance > fadeStart) {
-                value = radius - distance;
+                value = qMax(0.0, radius - distance);
             }
 
             matrix(x, y) = value;

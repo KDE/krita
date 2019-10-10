@@ -60,11 +60,11 @@
 #include <KisMimeDatabase.h>
 
 KisChannelSeparator::KisChannelSeparator(KisViewManager * view)
-        : m_viewManager(view)
+    : m_viewManager(view)
 {
 }
 
-void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor)
+void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, bool downscale, bool toColor, bool activateCurrentChannel)
 {
     KisImageSP image = m_viewManager->image();
     if (!image) return;
@@ -93,19 +93,15 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
     quint32 numberOfChannels = src->channelCount();
     const KoColorSpace * srcCs  = src->colorSpace();
     QList<KoChannelInfo *> channels = srcCs->channels();
-    vKisPaintDeviceSP layers;
-
-    QList<KoChannelInfo *>::const_iterator begin = channels.constBegin();
-    QList<KoChannelInfo *>::const_iterator end = channels.constEnd();
+    vKisPaintDeviceSP paintDevices;
 
     QRect rect = src->exactBounds();
 
     image->lock();
     int i = 0;
-    for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it) {
+    for (QList<KoChannelInfo *>::const_iterator it =  channels.constBegin(); it != channels.constEnd(); ++it) {
 
-        KoChannelInfo * ch = (*it);
-
+        KoChannelInfo *ch = (*it);
         if (ch->channelType() == KoChannelInfo::ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
             continue;
         }
@@ -118,7 +114,8 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         if (toColor) {
             // We don't downscale if we separate to color channels
             dev = new KisPaintDevice(srcCs);
-        } else {
+        }
+        else {
             if (channelSize == 1 || downscale) {
                 dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), 0));
             } else {
@@ -129,7 +126,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
         dstCs = dev->colorSpace();
 
-        layers.push_back(dev);
+        paintDevices.push_back(dev);
 
         KisHLineConstIteratorSP srcIt = src->createHLineConstIteratorNG(rect.x(), rect.y(), rect.width());
         KisHLineIteratorSP dstIt = dev->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
@@ -199,74 +196,47 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         }
     }
 
-    vKisPaintDeviceSP_it deviceIt = layers.begin();
-
-    progressUpdater->setProgress(100);
+    vKisPaintDeviceSP::const_iterator paintDeviceIterator = paintDevices.cbegin();
 
     if (!progressUpdater->interrupted()) {
-
-        KisUndoAdapter * undo = image->undoAdapter();
-        if (outputOps == TO_LAYERS) {
-            undo->beginMacro(kundo2_i18n("Separate Image"));
-        }
+        KisNodeCommandsAdapter adapter(m_viewManager);
+        adapter.beginMacro(kundo2_i18n("Separate Image"));
 
         // Flatten the image if required
-        switch (sourceOps) {
-        case(ALL_LAYERS):
+        if (sourceOps == ALL_LAYERS) {
             image->flatten(0);
-            break;
-        default:
-            break;
         }
-        KisNodeCommandsAdapter adapter(m_viewManager);
 
-        for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it) {
+        for (QList<KoChannelInfo *>::const_iterator it =  channels.constBegin(); it != channels.constEnd(); ++it) {
 
-            KoChannelInfo * ch = (*it);
-
+            KoChannelInfo *ch = (*it);
             if (ch->channelType() == KoChannelInfo::ALPHA && alphaOps != CREATE_ALPHA_SEPARATION) {
                 // Don't make an separate separation of the alpha channel if the user didn't ask for it.
                 continue;
             }
 
-            if (outputOps == TO_LAYERS) {
-                KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
-                adapter.addNode(l.data(), image->rootLayer(), 0);
-            }
-            else {
-                KoFileDialog dialog(m_viewManager->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
-                dialog.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
-                dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
-                dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export));
-                QUrl url = QUrl::fromUserInput(dialog.filename());
+            KisPaintLayerSP l = new KisPaintLayer(image, ch->name(), OPACITY_OPAQUE_U8, *paintDeviceIterator);
 
-                if (url.isEmpty())
-                    return;
-
-                const QString mimeType = KisMimeDatabase::mimeTypeForFile(url.toLocalFile(), false);
-
-                KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(image.data(), ch->name(), OPACITY_OPAQUE_U8, *deviceIt));
-                QRect r = l->exactBounds();
-
-                KisDocument *d = KisPart::instance()->createDocument();
-
-                KisImageWSP dst = KisImageWSP(new KisImage(d->createUndoStore(), r.width(), r.height(), (*deviceIt)->colorSpace(), l->name()));
-                d->setCurrentImage(dst);
-                dst->addNode(l->clone().data(), dst->rootLayer());
-
-                d->exportDocumentSync(url, mimeType.toLatin1());
-
-                delete d;
-
+            if (toColor && activateCurrentChannel) {
+                QBitArray channelFlags(channels.count());
+                int i = 0;
+                for (QList<KoChannelInfo *>::const_iterator it2 =  channels.constBegin(); it2 != channels.constEnd(); ++it2) {
+                    channelFlags.setBit(i, (it == it2));
+                    i++;
+                }
+                l->setChannelFlags(channelFlags);
             }
 
-            ++deviceIt;
+            adapter.addNode(l.data(), image->rootLayer(), 0);
+            ++paintDeviceIterator;
         }
 
-        if (outputOps == TO_LAYERS) {
-            undo->endMacro();
-        }
-        image->unlock();
+        adapter.endMacro();
         image->setModified();
     }
+    image->unlock();
+
+    progressUpdater->setProgress(100);
+
+
 }

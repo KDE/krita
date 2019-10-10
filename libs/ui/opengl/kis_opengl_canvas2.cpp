@@ -922,12 +922,18 @@ void KisOpenGLCanvas2::renderCanvasGL()
     {
         // Draw the border (that is, clear the whole widget to the border color)
         QColor widgetBackgroundColor = borderColor();
-        KoColor convertedBackgroudColor =
-            canvas()->displayColorConverter()->applyDisplayFiltering(
-                KoColor(widgetBackgroundColor, KoColorSpaceRegistry::instance()->rgb8()),
-                Float32BitsColorDepthID);
-        const float *pixel = reinterpret_cast<const float*>(convertedBackgroudColor.data());
-        glClearColor(pixel[0], pixel[1], pixel[2], 1.0);
+
+        const KoColorSpace *finalColorSpace =
+               KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
+                                                            d->openGLImageTextures->updateInfoBuilder().destinationColorSpace()->colorDepthId().id(),
+                                                            d->openGLImageTextures->monitorProfile());
+
+        KoColor convertedBackgroudColor = KoColor(widgetBackgroundColor, KoColorSpaceRegistry::instance()->rgb8());
+        convertedBackgroudColor.convertTo(finalColorSpace);
+
+        QVector<float> channels = QVector<float>(4);
+        convertedBackgroudColor.colorSpace()->normalisedChannelsValue(convertedBackgroudColor.data(), channels);
+        glClearColor(channels[0], channels[1], channels[2], 1.0);
     }
 
     glClear(GL_COLOR_BUFFER_BIT);

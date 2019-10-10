@@ -363,6 +363,11 @@ KisOpenGLUpdateInfoBuilder &KisOpenGLImageTextures::updateInfoBuilder()
     return m_updateInfoBuilder;
 }
 
+const KoColorProfile *KisOpenGLImageTextures::monitorProfile()
+{
+    return m_monitorProfile;
+}
+
 void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     //dbgUI << "Setting monitor profile to" << monitorProfile->name() << renderingIntent << conversionFlags;

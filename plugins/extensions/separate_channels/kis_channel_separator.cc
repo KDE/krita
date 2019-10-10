@@ -202,11 +202,6 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         KisNodeCommandsAdapter adapter(m_viewManager);
         adapter.beginMacro(kundo2_i18n("Separate Image"));
 
-        // Flatten the image if required
-        if (sourceOps == ALL_LAYERS) {
-            image->flatten(0);
-        }
-
         for (QList<KoChannelInfo *>::const_iterator it =  channels.constBegin(); it != channels.constEnd(); ++it) {
 
             KoChannelInfo *ch = (*it);

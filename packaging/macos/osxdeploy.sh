@@ -50,6 +50,11 @@ print_msg() {
     # printf "%s\n" "${1}" >> ${OUPUT_LOG}
 }
 
+# print error
+print_error() {
+    printf "\e[31m%s %s\e[0m\n" "Error:" "${1}"
+}
+
 get_script_dir() {
     script_source="${BASH_SOURCE[0]}"
     # go to target until finding root.
@@ -179,7 +184,7 @@ NOTARIZE="false"
 if [[ -z "${CODE_SIGNATURE}" ]]; then
     echo "WARNING: No code signature provided, Code will not be signed"
 else
-    print_msg 'Code will be signed with "%s"' "${CODE_SIGNATURE}"
+    print_msg "Code will be signed with %s" "${CODE_SIGNATURE}"
     ### NOTARIZATION
 
     if [[ -n "${NOTARIZE_ACC}" ]]; then
@@ -573,7 +578,7 @@ notarize_build() {
     local NOT_SRC_FILE=${2}
 
     if [[ ${NOTARIZE} = "true" ]]; then
-        printf "performing notarization of %s" "${2}"
+        printf "performing notarization of %s\n" "${2}"
         cd "${NOT_SRC_DIR}"
         
         if [[ -z "${NOTARIZE_PASS}" ]]; then
@@ -583,8 +588,20 @@ notarize_build() {
         ditto -c -k --sequesterRsrc --keepParent "${NOT_SRC_FILE}" "${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip"
 
         # echo "xcrun altool --notarize-app --primary-bundle-id \"org.krita\" --username \"${NOTARIZE_ACC}\" --password \"${NOTARIZE_PASS}\" --file \"${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip\""
-        local uuid=$(xcrun altool --notarize-app --primary-bundle-id "org.krita" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" --file "${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip" 2>&1 | grep 'RequestUUID' | awk '{ print $3 }')
-        echo "RequestUUID = $uuid" # Display identifier string
+        local altoolResponse="$(xcrun altool --notarize-app --primary-bundle-id "org.krita" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" --file "${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip" 2>&1)"
+
+        if [[ -n "$(grep 'Error' <<< ${altoolResponse})" ]]; then
+            printf "ERROR: xcrun altool exited with the following error! \n\n%s\n\n" "${altoolResponse}"
+            printf "This could mean there is an error in AppleID autentication!\n"
+            printf "aborting notarization\n"
+            NOTARIZE="false"
+            return
+        else
+            printf "Response:\n\n%s\n\n" "${altoolResponse}"
+        fi
+
+        local uuid="$(grep 'RequestUUID' <<< ${altoolResponse} | awk '{ print $3 }')"
+        echo "RequestUUID = ${uuid}" # Display identifier string
 
         waiting_fixed "Waiting to retrieve notarize status" 15
 
@@ -682,6 +699,18 @@ fi
 
 notarize_build ${KRITA_DMG} krita.app
 
-# Create DMG from files insiede ${KRITA_DMG} folder
+# Create DMG from files inside ${KRITA_DMG} folder
 createDMG
 
+if [[ "${NOTARIZE}" = "false" ]]; then
+    macosVersion="$(sw_vers | grep ProductVersion | awk '
+       BEGIN { FS = "[ .\t]" }
+             { print $3}
+    ')"
+    if (( ${macosVersion} == 15 )); then
+        print_error "Build not notarized! Needed for macOS versions above 10.14"
+    fi
+fi
+
+# signal end of script
+tpul bel

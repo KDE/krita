@@ -172,7 +172,6 @@ set(kritaflake_SRCS
     html/HtmlSavingContext.cpp
     html/HtmlWriter.cpp
 
-    tools/KoCreateShapeStrategy.cpp
     tools/KoPathToolFactory.cpp
     tools/KoPathTool.cpp
     tools/KoPathToolSelection.cpp
@@ -190,8 +189,6 @@ set(kritaflake_SRCS
     tools/KoInteractionTool.cpp
     tools/KoInteractionStrategy.cpp
     tools/KoInteractionStrategyFactory.cpp
-    tools/KoCreateShapesTool.cpp
-    tools/KoCreateShapesToolFactory.cpp
     tools/KoShapeRubberSelectStrategy.cpp
     tools/KoPathSegmentChangeStrategy.cpp
 

@@ -1001,7 +1001,7 @@ void KisImage::convertLayerColorSpace(KisNodeSP node,
     if (!dstColorSpace || *srcColorSpace == *dstColorSpace) return;
 
     KUndo2MagicString actionName =
-        kundo2_i18n("Convert Layer Color Space");
+        kundo2_i18n("Convert Layer Type"); // restored old name for 4.2 branch
 
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;

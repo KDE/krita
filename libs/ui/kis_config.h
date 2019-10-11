@@ -602,6 +602,9 @@ public:
     bool useZip64(bool defaultValue = false) const;
     void setUseZip64(bool value);
 
+    bool convertLayerColorSpaceInProperties(bool defaultValue = false) const;
+    void setConvertLayerColorSpaceInProperties(bool value);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

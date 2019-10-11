@@ -80,6 +80,7 @@
 #include "commands_new/kis_image_resize_command.h"
 #include "commands_new/kis_image_set_resolution_command.h"
 #include "commands_new/kis_activate_selection_mask_command.h"
+#include "kis_do_something_command.h"
 #include "kis_composite_progress_proxy.h"
 #include "kis_layer_composition.h"
 #include "kis_wrapped_rect.h"
@@ -244,6 +245,11 @@ public:
     bool tryCancelCurrentStrokeAsync();
 
     void notifyProjectionUpdatedInPatches(const QRect &rc, QVector<KisRunnableStrokeJobData *> &jobs);
+
+    void convertImageColorSpaceImpl(const KoColorSpace *dstColorSpace,
+                                    bool convertLayers,
+                                    KoColorConversionTransformation::Intent renderingIntent,
+                                    KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     struct SetImageProjectionColorSpace;
 };
@@ -1153,46 +1159,76 @@ private:
     KisImageWSP m_image;
 };
 
-void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
-                                      KoColorConversionTransformation::Intent renderingIntent,
-                                      KoColorConversionTransformation::ConversionFlags conversionFlags)
+void KisImage::KisImagePrivate::convertImageColorSpaceImpl(const KoColorSpace *dstColorSpace,
+                                                           bool convertLayers,
+                                                           KoColorConversionTransformation::Intent renderingIntent,
+                                                           KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    const KoColorSpace *srcColorSpace = m_d->colorSpace;
+    const KoColorSpace *srcColorSpace = this->colorSpace;
 
     if (!dstColorSpace || *srcColorSpace == *dstColorSpace) return;
 
-    KUndo2MagicString actionName = kundo2_i18n("Convert Image Color Space");
+    const KUndo2MagicString actionName =
+        convertLayers ?
+        kundo2_i18n("Convert Image Color Space") :
+        kundo2_i18n("Convert Projection Color Space");
 
     KisImageSignalVector emitSignals;
     emitSignals << ColorSpaceChangedSignal;
     emitSignals << ModifiedSignal;
 
-    KisProcessingApplicator applicator(this, m_d->rootLayer,
+    KisProcessingApplicator applicator(q, this->rootLayer,
                                        KisProcessingApplicator::RECURSIVE |
                                        KisProcessingApplicator::NO_UI_UPDATES,
                                        emitSignals, actionName);
 
     applicator.applyCommand(
         new KisImagePrivate::SetImageProjectionColorSpace(dstColorSpace,
-                                                          KisImageWSP(this),
+                                                          KisImageWSP(q),
                                                           KisCommandUtils::FlipFlopCommand::INITIALIZING),
         KisStrokeJobData::BARRIER);
 
-    applicator.applyVisitor(
-        new KisConvertColorSpaceProcessingVisitor(
-            srcColorSpace, dstColorSpace,
-            renderingIntent, conversionFlags),
-        KisStrokeJobData::CONCURRENT);
+    if (convertLayers) {
+        applicator.applyVisitor(
+                    new KisConvertColorSpaceProcessingVisitor(
+                        srcColorSpace, dstColorSpace,
+                        renderingIntent, conversionFlags),
+                    KisStrokeJobData::CONCURRENT);
+    } else {
+        applicator.applyCommand(
+            new KisDoSomethingCommand<
+                    KisDoSomethingCommandOps::ResetOp, KisGroupLayerSP>
+                    (this->rootLayer, false));
+        applicator.applyCommand(
+            new KisDoSomethingCommand<
+                    KisDoSomethingCommandOps::ResetOp, KisGroupLayerSP>
+                    (this->rootLayer, true));
+    }
 
     applicator.applyCommand(
         new KisImagePrivate::SetImageProjectionColorSpace(srcColorSpace,
-                                                          KisImageWSP(this),
+                                                          KisImageWSP(q),
                                                           KisCommandUtils::FlipFlopCommand::FINALIZING),
         KisStrokeJobData::BARRIER);
 
 
     applicator.end();
 }
+
+void KisImage::convertImageColorSpace(const KoColorSpace *dstColorSpace,
+                                      KoColorConversionTransformation::Intent renderingIntent,
+                                      KoColorConversionTransformation::ConversionFlags conversionFlags)
+{
+    m_d->convertImageColorSpaceImpl(dstColorSpace, true, renderingIntent, conversionFlags);
+}
+
+void KisImage::convertImageProjectionColorSpace(const KoColorSpace *dstColorSpace)
+{
+    m_d->convertImageColorSpaceImpl(dstColorSpace, false,
+                                    KoColorConversionTransformation::internalRenderingIntent(),
+                                    KoColorConversionTransformation::internalConversionFlags());
+}
+
 
 bool KisImage::assignLayerProfile(KisNodeSP node, const KoColorProfile *profile)
 {

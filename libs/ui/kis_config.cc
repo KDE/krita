@@ -2120,6 +2120,16 @@ void KisConfig::setUseZip64(bool value)
     m_cfg.writeEntry("UseZip64", value);
 }
 
+bool KisConfig::convertLayerColorSpaceInProperties(bool defaultValue) const
+{
+    return defaultValue ? true : m_cfg.readEntry("convertLayerColorSpaceInProperties", true);
+}
+
+void KisConfig::setConvertLayerColorSpaceInProperties(bool value)
+{
+    m_cfg.writeEntry("convertLayerColorSpaceInProperties", value);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

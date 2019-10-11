@@ -349,6 +349,11 @@ public:
     void shearNode(KisNodeSP node, double angleX, double angleY, KisSelectionSP selection);
 
     /**
+     * Convert image projection to \p dstColorSpace, keeping all the layers intouched.
+     */
+    void convertImageProjectionColorSpace(const KoColorSpace *dstColorSpace);
+
+    /**
      * Convert the image and all its layers to the dstColorSpace
      */
     void convertImageColorSpace(const KoColorSpace *dstColorSpace,

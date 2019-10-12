@@ -713,4 +713,4 @@ if [[ "${NOTARIZE}" = "false" ]]; then
 fi
 
 # signal end of script
-tpul bel
+tput bel

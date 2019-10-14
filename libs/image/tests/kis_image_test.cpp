@@ -1200,7 +1200,7 @@ void KisImageTest::testPaintOverlayMask()
     layer1->paintDevice()->fill(fillRect, KoColor(Qt::yellow, layer1->colorSpace()));
 
     KisSelectionMaskSP mask = new KisSelectionMask(p.image);
-    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(layer1->paintDevice(), p.image));
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(layer1->paintDevice()));
 
     selection->pixelSelection()->select(selectionRect, 128);
     selection->pixelSelection()->select(KisAlgebra2D::blowRect(selectionRect,-0.3), 255);

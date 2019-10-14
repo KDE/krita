@@ -89,9 +89,8 @@ struct Q_DECL_HIDDEN KisSelectionDefaultBounds::Private
     KisPaintDeviceWSP parentDevice;
 };
 
-KisSelectionDefaultBounds::KisSelectionDefaultBounds(KisPaintDeviceSP parentDevice, KisImageWSP image)
-    : KisDefaultBounds(image),
-      m_d(new Private())
+KisSelectionDefaultBounds::KisSelectionDefaultBounds(KisPaintDeviceSP parentDevice)
+    : m_d(new Private())
 {
     m_d->parentDevice = parentDevice;
 }
@@ -103,8 +102,32 @@ KisSelectionDefaultBounds::~KisSelectionDefaultBounds()
 
 QRect KisSelectionDefaultBounds::bounds() const
 {
-    QRect additionalRect = m_d->parentDevice ? m_d->parentDevice->extent() : QRect();
-    return additionalRect | KisDefaultBounds::bounds();
+    return m_d->parentDevice ?
+        m_d->parentDevice->extent() | m_d->parentDevice->defaultBounds()->bounds() : QRect();
+}
+
+bool KisSelectionDefaultBounds::wrapAroundMode() const
+{
+    return m_d->parentDevice ?
+        m_d->parentDevice->defaultBounds()->wrapAroundMode() : false;
+}
+
+int KisSelectionDefaultBounds::currentLevelOfDetail() const
+{
+    return m_d->parentDevice ?
+        m_d->parentDevice->defaultBounds()->currentLevelOfDetail() : 0;
+}
+
+int KisSelectionDefaultBounds::currentTime() const
+{
+    return m_d->parentDevice ?
+        m_d->parentDevice->defaultBounds()->currentTime() : 0;
+}
+
+bool KisSelectionDefaultBounds::externalFrameActive() const
+{
+    return m_d->parentDevice ?
+        m_d->parentDevice->defaultBounds()->externalFrameActive() : false;
 }
 
 /******************************************************************/

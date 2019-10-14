@@ -115,7 +115,7 @@ KisMask::~KisMask()
 void KisMask::setImage(KisImageWSP image)
 {
     KisPaintDeviceSP parentPaintDevice = parent() ? parent()->original() : 0;
-    KisDefaultBoundsBaseSP defaultBounds = new KisSelectionDefaultBounds(parentPaintDevice, image);
+    KisDefaultBoundsBaseSP defaultBounds = new KisSelectionDefaultBounds(parentPaintDevice);
     if (m_d->selection) {
         m_d->selection->setDefaultBounds(defaultBounds);
     }
@@ -179,7 +179,7 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
          * We can't use setSelection as we may not have parent() yet
          */
         selection = new KisSelection(*copyFrom);
-        selection->setDefaultBounds(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        selection->setDefaultBounds(new KisSelectionDefaultBounds(parentPaintDevice));
         if (copyFrom->hasShapeSelection()) {
             delete selection->flatten();
         }
@@ -188,7 +188,7 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
             q->inherits("KisFilterMask") || q->inherits("KisTransparencyMask") ?
             KritaUtils::CopyAllFrames : KritaUtils::CopySnapshot;
 
-        selection = new KisSelection(copyFromDevice, copyMode, new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        selection = new KisSelection(copyFromDevice, copyMode, new KisSelectionDefaultBounds(parentPaintDevice));
 
         KisPixelSelectionSP pixelSelection = selection->pixelSelection();
         if (pixelSelection->framesInterface()) {
@@ -199,7 +199,7 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
             q->enableAnimation();
         }
     } else {
-        selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice));
         selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, selection->pixelSelection()->colorSpace()));
 
         if (deferredSelectionOffset) {
@@ -479,7 +479,7 @@ QImage KisMask::createThumbnail(qint32 w, qint32 h)
 void KisMask::testingInitSelection(const QRect &rect, KisLayerSP parentLayer)
 {
     if (parentLayer) {
-        m_d->selection = new KisSelection(new KisSelectionDefaultBounds(parentLayer->paintDevice(), parentLayer->image()));
+        m_d->selection = new KisSelection(new KisSelectionDefaultBounds(parentLayer->paintDevice()));
     } else {
         m_d->selection = new KisSelection();
     }

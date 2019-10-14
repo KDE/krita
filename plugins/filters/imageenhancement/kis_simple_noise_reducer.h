@@ -41,6 +41,10 @@ public:
     static inline KoID id() {
         return KoID("gaussiannoisereducer", i18n("Gaussian Noise Reducer"));
     }
+
+    QRect changedRect(const QRect &rect, const KisFilterConfigurationSP _config, int lod) const override;
+    QRect neededRect(const QRect &rect, const KisFilterConfigurationSP _config, int lod) const override;
+
 protected:
     KisFilterConfigurationSP  factoryConfiguration() const override;
 };

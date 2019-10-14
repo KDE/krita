@@ -36,6 +36,10 @@ public:
                      const QRect& applyRect,
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater) const override;
+
+    QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const override;
+    QRect changedRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const override;
+
 protected:
     void setIgnoreAlpha(bool v);
 

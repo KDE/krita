@@ -239,7 +239,7 @@
    <item row="10" column="1">
     <widget class="QCheckBox" name="chkCompatibilityMode">
      <property name="text">
-      <string>Compatibility Mode</string>
+      <string>Legacy mode (before Krita 4.3)</string>
      </property>
     </widget>
    </item>

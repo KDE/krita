@@ -161,7 +161,7 @@ void KoFileDialog::createFileDialog()
 
     d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, group.readEntry("DontUseNativeFileDialog", dontUseNative));
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
-    d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, true);
+    d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, dontUseNative ? true : false);
 
 #ifdef Q_OS_MACOS
     QList<QUrl> urls = d->fileDialog->sidebarUrls();

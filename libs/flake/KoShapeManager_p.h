@@ -125,6 +125,8 @@ public:
     KisThreadSafeSignalCompressor updateCompressor;
     QRectF compressedUpdate;
     QSet<const KoShape*> compressedUpdatedShapes;
+
+    bool updatesBlocked = false;
 };
 
 #endif

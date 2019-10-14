@@ -68,16 +68,12 @@ public:
     void updateInputMethodInfo() override {}
     void setCursor(const QCursor &) override {}
 
-    void setUpdatesBlocked(bool value);
-    bool updatesBlocked() const;
-
 protected:
     QScopedPointer<KisImageViewConverter> m_viewConverter;
     QScopedPointer<KoShapeManager> m_shapeManager;
     QScopedPointer<KoSelectedShapesProxy> m_selectedShapesProxy;
     bool m_hasChangedWhileBeingInvisible {false};
     bool m_isDestroying {false};
-    bool m_updatesBlocked {false};
 };
 
 /**

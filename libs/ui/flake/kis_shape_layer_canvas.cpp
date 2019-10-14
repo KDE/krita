@@ -111,16 +111,6 @@ KoUnit KisShapeLayerCanvasBase::unit() const
     return KoUnit(KoUnit::Point);
 }
 
-void KisShapeLayerCanvasBase::setUpdatesBlocked(bool value)
-{
-    m_updatesBlocked = value;
-}
-
-bool KisShapeLayerCanvasBase::updatesBlocked() const
-{
-    return m_updatesBlocked;
-}
-
 void KisShapeLayerCanvasBase::prepareForDestroying()
 {
     m_isDestroying = true;
@@ -217,7 +207,7 @@ private:
 
 void KisShapeLayerCanvas::updateCanvas(const QVector<QRectF> &region)
 {
-    if (!m_parentLayer->image() || m_isDestroying || m_updatesBlocked) {
+    if (!m_parentLayer->image() || m_isDestroying) {
         return;
     }
 
@@ -389,7 +379,6 @@ void KisShapeLayerCanvas::forceRepaintWithHiddenAreas()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_parentLayer->image());
     KIS_SAFE_ASSERT_RECOVER_RETURN(!m_isDestroying);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(!m_updatesBlocked);
 
     {
         QMutexLocker locker(&m_dirtyRegionMutex);

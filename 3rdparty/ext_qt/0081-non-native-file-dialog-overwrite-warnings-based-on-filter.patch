@@ -1,0 +1,123 @@
+Enables warnings for overwriting files in case the name comes from the selected filter.
+See bug 412651.
+
+
+diff --git a/src/widgets/dialogs/qfiledialog.cpp b/src/widgets/dialogs/qfiledialog.cpp
+index eb3479b3e..b84441ce2 100644
+--- a/src/widgets/dialogs/qfiledialog.cpp
++++ b/src/widgets/dialogs/qfiledialog.cpp
+@@ -1160,6 +1160,19 @@ Q_AUTOTEST_EXPORT QString qt_tildeExpansion(const QString &path)
+ }
+ #endif
+ 
++static inline QString selectedNameFilterSuffix(const QFileDialog *dialog)
++{
++    const QString nameFilter = dialog->selectedNameFilter();
++    if (nameFilter.isEmpty())
++        return QString();
++    foreach (const QString &filter, QPlatformFileDialogHelper::cleanFilterList(nameFilter)) {
++
++        if (filter.startsWith(QLatin1String("*.")) && filter.indexOf(QLatin1Char('*'), 2) < 0)
++            return filter.right(filter.size() - 2);
++    }
++    return QString();
++}
++
+ /**
+     Returns the text in the line edit which can be one or more file names
+   */
+@@ -1198,7 +1211,11 @@ QStringList QFileDialogPrivate::typedFiles() const
+ #endif
+         }
+     }
+-    return addDefaultSuffixToFiles(files);
++
++    QString suffix = q->defaultSuffix();
++    if (suffix.isNull()) // Intended, setting an empty string should suppress the name filter.
++        suffix = selectedNameFilterSuffix(q);
++    return addSuffixToFiles(files, suffix);
+ }
+ 
+ // Return selected files without defaulting to the root of the file system model
+@@ -1209,7 +1226,7 @@ QList<QUrl> QFileDialogPrivate::userSelectedFiles() const
+     QList<QUrl> files;
+ 
+     if (!usingWidgets())
+-        return addDefaultSuffixToUrls(selectedFiles_sys());
++        return addSuffixToUrls(selectedFiles_sys(), options->defaultSuffix());
+ 
+     const QModelIndexList selectedRows = qFileDialogUi->listView->selectionModel()->selectedRows();
+     files.reserve(selectedRows.size());
+@@ -1226,16 +1243,16 @@ QList<QUrl> QFileDialogPrivate::userSelectedFiles() const
+     return files;
+ }
+ 
+-QStringList QFileDialogPrivate::addDefaultSuffixToFiles(const QStringList &filesToFix) const
++QStringList QFileDialogPrivate::addSuffixToFiles(const QStringList &filesToFix, const QString &suffix) const
+ {
+     QStringList files;
+     for (int i=0; i<filesToFix.size(); ++i) {
+         QString name = toInternal(filesToFix.at(i));
+         QFileInfo info(name);
+-        // if the filename has no suffix, add the default suffix
+-        const QString defaultSuffix = options->defaultSuffix();
+-        if (!defaultSuffix.isEmpty() && !info.isDir() && name.lastIndexOf(QLatin1Char('.')) == -1)
+-            name += QLatin1Char('.') + defaultSuffix;
++        // if the filename has no suffix, add the desired suffix
++        if (!suffix.isEmpty() && !info.isDir() && name.lastIndexOf(QLatin1Char('.')) == -1) {
++            name += QLatin1Char('.') + suffix;
++		}
+         if (info.isAbsolute()) {
+             files.append(name);
+         } else {
+@@ -1252,17 +1269,17 @@ QStringList QFileDialogPrivate::addDefaultSuffixToFiles(const QStringList &files
+     return files;
+ }
+ 
+-QList<QUrl> QFileDialogPrivate::addDefaultSuffixToUrls(const QList<QUrl> &urlsToFix) const
++QList<QUrl> QFileDialogPrivate::addSuffixToUrls(const QList<QUrl> &urlsToFix, const QString suffix) const
+ {
+     QList<QUrl> urls;
+     const int numUrlsToFix = urlsToFix.size();
+     urls.reserve(numUrlsToFix);
+     for (int i = 0; i < numUrlsToFix; ++i) {
+         QUrl url = urlsToFix.at(i);
+-        // if the filename has no suffix, add the default suffix
+-        const QString defaultSuffix = options->defaultSuffix();
+-        if (!defaultSuffix.isEmpty() && !url.path().endsWith(QLatin1Char('/')) && url.path().lastIndexOf(QLatin1Char('.')) == -1)
+-            url.setPath(url.path() + QLatin1Char('.') + defaultSuffix);
++		// if the filename has no suffix, add the desired suffix
++        if (!suffix.isEmpty() && !url.path().endsWith(QLatin1Char('/')) && url.path().lastIndexOf(QLatin1Char('.')) == -1) {
++            url.setPath(url.path() + QLatin1Char('.') + suffix);
++		}
+         urls.append(url);
+     }
+     return urls;
+@@ -1929,6 +1946,12 @@ bool QFileDialog::confirmOverwrite() const
+     file).
+ 
+     If the first character is a dot ('.'), it is removed.
++
++    If the suffix is not set, the first usable suffix of the selected name
++    filter is appended. This can be suppressed by the property to a non-null,
++    empty string.
++
++    \sa selectedNameFilter(), QString::isNull()
+ */
+ void QFileDialog::setDefaultSuffix(const QString &suffix)
+ {
+diff --git a/src/widgets/dialogs/qfiledialog_p.h b/src/widgets/dialogs/qfiledialog_p.h
+index 2e49696b7..0a029efaa 100644
+--- a/src/widgets/dialogs/qfiledialog_p.h
++++ b/src/widgets/dialogs/qfiledialog_p.h
+@@ -133,8 +133,8 @@ public:
+     static QString initialSelection(const QUrl &path);
+     QStringList typedFiles() const;
+     QList<QUrl> userSelectedFiles() const;
+-    QStringList addDefaultSuffixToFiles(const QStringList &filesToFix) const;
+-    QList<QUrl> addDefaultSuffixToUrls(const QList<QUrl> &urlsToFix) const;
++    QStringList addSuffixToFiles(const QStringList &filesToFix, const QString& suffix) const;
++    QList<QUrl> addSuffixToUrls(const QList<QUrl> &urlsToFix, const QString suffix) const;
+     bool removeDirectory(const QString &path);
+     void setLabelTextControl(QFileDialog::DialogLabel label, const QString &text);
+     inline void updateLookInLabel();

@@ -80,6 +80,7 @@ if (WIN32)
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0061-Hack-to-hide-1px-border-with-OpenGL-fullscreen-hack.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qttools -i ${CMAKE_CURRENT_SOURCE_DIR}/windeployqt-force-allow-debug-info.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0080-Sync-buffers-of-the-destination-file-after-QFile-cop.patch
+		COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0081-non-native-file-dialog-overwrite-warnings-based-on-filter.patch
 #        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0031-Compute-logical-DPI-on-a-per-screen-basis.patch
 #        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0032-Update-Dpi-and-scale-factor-computation.patch
 #        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0033-Move-QT_FONT_DPI-to-cross-platform-code.patch
@@ -117,6 +118,7 @@ elseif (NOT APPLE)
       PATCH_COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0012-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0013-Poison-Qt-s-headers-with-a-mark-about-presence-of-En.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0070-Fix-QRandomGenerator-initialization-on-AMD-CPUs.patch
+			COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0081-non-native-file-dialog-overwrite-warnings-based-on-filter.patch
 
       CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
 
@@ -223,6 +225,7 @@ else( APPLE )
                 COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0012-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch
                 COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0013-Poison-Qt-s-headers-with-a-mark-about-presence-of-En.patch
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0070-Fix-QRandomGenerator-initialization-on-AMD-CPUs.patch
+				COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0081-non-native-file-dialog-overwrite-warnings-based-on-filter.patch
 
                 #COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase/mkspecs/features/mac -i ${CMAKE_CURRENT_SOURCE_DIR}/mac-default.patch
             )
@@ -232,6 +235,7 @@ else( APPLE )
         # NOTE: defaults for some untested scenarios like xcrun fails and xcode_version < 8.
         # NOTE: that is uncharted territory and (hopefully) a very unlikely scenario...
         set(ext_qt_PATCH_COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0012-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch
+			COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0081-non-native-file-dialog-overwrite-warnings-based-on-filter.patch
             )
       endif()
 

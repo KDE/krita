@@ -50,7 +50,6 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     void updateLayout();
-    void reactOnLayerChange();
 
 private:
     KisColorSelectorContainer* m_colorSelectorContainer;

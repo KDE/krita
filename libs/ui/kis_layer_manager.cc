@@ -148,7 +148,6 @@ KisPaintDeviceSP KisLayerManager::activeDevice()
 void KisLayerManager::activateLayer(KisLayerSP layer)
 {
     if (m_imageView) {
-        emit sigLayerActivated(layer);
         layersUpdated();
         if (layer) {
             m_view->canvasResourceProvider()->slotNodeActivated(layer.data());

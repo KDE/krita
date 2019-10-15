@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>570</width>
+    <width>498</width>
     <height>392</height>
    </rect>
   </property>
@@ -78,32 +78,6 @@
        </layout>
       </widget>
      </item>
-     <item>
-      <widget class="QGroupBox" name="grpOutput">
-       <property name="title">
-        <string>Output</string>
-       </property>
-       <layout class="QGridLayout">
-        <item row="0" column="0">
-         <widget class="QRadioButton" name="radioLayers">
-          <property name="text">
-           <string>To layers</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QRadioButton" name="radioImages">
-          <property name="text">
-           <string>To images</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>
@@ -154,6 +128,16 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="chkActivateCurrentChannel">
+     <property name="toolTip">
+      <string>Activate only the current channel for the new node, deactivate all other channels.</string>
+     </property>
+     <property name="text">
+      <string>Activate the current channel</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -173,7 +157,6 @@
  </widget>
  <tabstops>
   <tabstop>radioCurrentLayer</tabstop>
-  <tabstop>radioLayers</tabstop>
   <tabstop>radioDiscardAlpha</tabstop>
   <tabstop>chkDownscale</tabstop>
   <tabstop>chkColors</tabstop>

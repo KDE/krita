@@ -502,7 +502,7 @@ class KRITAPSD_EXPORT psd_layer_effects_inner_shadow : public psd_layer_effects_
 {
 public:
     psd_layer_effects_inner_shadow() {
-        setKnocksOut(true);
+        setKnocksOut(false);
         setInvertsSelection(true);
         setEdgeHidden(false);
     }
@@ -552,6 +552,7 @@ public:
         : m_source(psd_glow_edge) {
         setInvertsSelection(true);
         setEdgeHidden(false);
+        setKnocksOut(false);
     }
 
     psd_glow_source source() const {

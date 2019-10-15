@@ -77,6 +77,289 @@ void clamp<float>(float* r, float* g, float* b)
     Q_UNUSED(b);
 }
 
+#include "kis_global.h"
+
+struct AddPolicy
+{
+    static inline float adjustValue(float v, float dv) {
+        return v + dv;
+    }
+};
+
+
+struct MultiplyPolicy
+{
+    static inline float adjustValue(float v, float dv) {
+        if (dv < 0) {
+            v *= dv + 1.0f;
+        } else {
+            v += dv * (1.0f - v);
+        }
+        return v;
+    }
+};
+
+static inline void writeRGBSimple(float *r, float *g, float *b,
+                                  int sextant,
+                                  float x, float m, float M)
+{
+    switch (sextant) {
+    case 0: *r = M; *g = x + m; *b = m; break;
+    case 1: *r = x + m; *g = M; *b = m; break;
+    case 2: *r = m; *g = M; *b = x + m; break;
+    case 3: *r = m; *g = x + m; *b = M; break;
+    case 4: *r = x + m; *g = m; *b = M; break;
+    case 5: *r = M; *g = m; *b = x + m; break;
+    }
+}
+
+struct HSVPolicy
+{
+    inline bool hasChroma(float v) {
+        static const float EPSILON = 1e-9f;
+        return v > EPSILON;
+    }
+
+    inline float valueFromRGB(float r, float g, float b, float m, float M) {
+        Q_UNUSED(r);
+        Q_UNUSED(g);
+        Q_UNUSED(b);
+        Q_UNUSED(m);
+        return M;
+    }
+
+    inline float fixupValueAfterChroma(float c, float v) {
+        return qMax(v, c);
+    }
+
+    inline float fixupChromaAfterValue(float c, float v) {
+        return qMin(v, c);
+    }
+
+    inline void writeRGB(float *r, float *g, float *b,
+                                int sextant,
+                                float x, float c, float v) {
+
+        const float m = v - c;
+        writeRGBSimple(r, g, b, sextant, x, m, v);
+    }
+};
+
+struct HSLPolicy
+{
+    inline bool hasChroma(float v) {
+        static const float EPSILON = 1e-9f;
+        return v > EPSILON && v < 1.0f - EPSILON;
+    }
+
+    inline float valueFromRGB(float r, float g, float b, float m, float M) {
+        Q_UNUSED(r);
+        Q_UNUSED(g);
+        Q_UNUSED(b);
+        return 0.5f * (M + m);
+    }
+
+    inline float fixupValueAfterChroma(float c, float v) {
+        if (v >= 0.5f) {
+            if (c > 2.0f - 2.0f * v) {
+                v = 1.0f - 0.5f * c;
+            }
+        } else {
+            if (c > 2.0f * v) {
+                v = 0.5f * c;
+            }
+        }
+        return v;
+    }
+
+    inline float fixupChromaAfterValue(float c, float v) {
+        if (v >= 0.5f) {
+            c = qMin(c, 2.0f - 2.0f * v);
+        } else {
+            c = qMin(c, 2.0f * v);
+        }
+
+        return c;
+    }
+
+    inline void writeRGB(float *r, float *g, float *b,
+                                int sextant,
+                                float x, float c, float v) {
+
+        const float M = v + 0.5f * c;
+        const float m = v - 0.5f * c;
+
+        writeRGBSimple(r, g, b, sextant, x, m, M);
+    }
+};
+
+struct HCIPolicy
+{
+    inline bool hasChroma(float v) {
+        static const float EPSILON = 1e-9f;
+        return v > EPSILON && v < 1.0f - EPSILON;
+    }
+
+    inline float valueFromRGB(float r, float g, float b, float m, float M) {
+        Q_UNUSED(m);
+        Q_UNUSED(M);
+        return (r + g + b) / 3.0f;
+    }
+
+    inline float fixupValueAfterChroma(float c, float v) {
+        static const float oneThird = 1.0f / 3.0f;
+        static const float twoThirds = 2.0f / 3.0f;
+
+        if (v >= oneThird) {
+            v = qMin(v, 1.0f - twoThirds * c);
+        } else {
+            v = qMax(v, oneThird * c);
+        }
+        return v;
+    }
+
+    inline float fixupChromaAfterValue(float c, float v) {
+        static const float oneThird = 1.0f / 3.0f;
+
+        if (v >= oneThird) {
+            c = qMin(c, 1.5f * (1.0f - v));
+        } else {
+            c = qMin(c, 3.0f * v);
+        }
+
+        return c;
+    }
+
+    inline void writeRGB(float *r, float *g, float *b,
+                                int sextant,
+                                float x, float c, float v) {
+
+        static const float oneThird = 1.0f / 3.0f;
+
+        const float m = v - oneThird * (c + x);
+        const float M = c + m;
+
+        writeRGBSimple(r, g, b, sextant, x, m, M);
+    }
+};
+
+struct HCYPolicy
+{
+    HCYPolicy(float _rCoeff = 0.299f, float _gCoeff = 0.587f, float _bCoeff = 0.114f)
+        : rCoeff(_rCoeff),
+          gCoeff(_gCoeff),
+          bCoeff(_bCoeff)
+    {
+    }
+
+    const float rCoeff = 0.299f;
+    const float gCoeff = 0.587f;
+    const float bCoeff = 0.114f;
+
+    inline bool hasChroma(float v) {
+        static const float EPSILON = 1e-9f;
+        return v > EPSILON && v < 1.0f - EPSILON;
+    }
+
+    inline float valueFromRGB(float r, float g, float b, float m, float M) {
+        Q_UNUSED(m);
+        Q_UNUSED(M);
+        return rCoeff * r + gCoeff * g + bCoeff * b;
+    }
+
+    inline float fixupValueAfterChroma(float c, float v) {
+        // NOTE: no sliding in HCY, because the shape of the triangle
+        //       depends on Hue, which complicated code a lot. And it
+        //       seems to work fine without it :)
+        return v;
+    }
+
+    inline float fixupChromaAfterValue(float c, float v) {
+        // NOTE: no sliding in HCY, because the shape of the triangle
+        //       depends on Hue, which complicated code a lot. And it
+        //       seems to work fine without it :)
+        return c;
+    }
+
+    inline void writeRGB(float *r, float *g, float *b,
+                         int sextant,
+                         float x, float c, float v) {
+
+
+        switch (sextant) {
+        case 0: *r = c; *g = x; *b = 0; break;
+        case 1: *r = x; *g = c; *b = 0; break;
+        case 2: *r = 0; *g = c; *b = x; break;
+        case 3: *r = 0; *g = x; *b = c; break;
+        case 4: *r = x; *g = 0; *b = c; break;
+        case 5: *r = c; *g = 0; *b = x; break;
+        }
+
+        const float m = v - *r * rCoeff - *g * gCoeff - *b * bCoeff;
+        *r += m;
+        *g += m;
+        *b += m;
+    }
+};
+
+template <class ValueAdjustPolicy, class ValuePolicy>
+void HSVTransform(float *r, float *g, float *b, float dh, float ds, float dv, ValuePolicy valuePolicy)
+{
+    static const float EPSILON = 1e-9f;
+
+    float h;
+
+    float M = qMax(*r, qMax(*g, *b));
+    float m = qMin(*r, qMin(*g, *b));
+
+    float chroma = M - m;
+
+    float v = valuePolicy.valueFromRGB(*r, *g, *b, m, M);
+
+    if (!valuePolicy.hasChroma(v)) {
+        chroma = 0.0f;
+        h = 0.0f;
+        v = qBound(0.0f, ValueAdjustPolicy::adjustValue(v, dv), 1.0f);
+    } else {
+        if (chroma > EPSILON) {
+            if (*r == M)
+                h = (*g - *b) / chroma;
+            else if (*g == M)
+                h = 2 + (*b - *r) / chroma;
+            else
+                h = 4 + (*r - *g) / chroma;
+
+            h *= 60;
+            h += dh * 180;
+
+            h = normalizeAngleDegrees(h);
+            chroma = qBound(0.0f, chroma * (ds + 1.0f), 1.0f);
+        } else {
+            h = 0.0f;
+        }
+
+        v = valuePolicy.fixupValueAfterChroma(chroma, v);
+        v = ValueAdjustPolicy::adjustValue(v, dv);
+        v = qBound(0.0f, v, 1.0f);
+        chroma = valuePolicy.fixupChromaAfterValue(chroma, v);
+    }
+
+    if (v <= EPSILON) {
+        *r = *g = *b = 0.0;
+    } else {
+        h /= 60.0f;
+        const int sextant = static_cast<int>(h);
+        const float fract = h - sextant;
+
+        const float x =
+            sextant & 0x1 ?
+            chroma - chroma * fract :
+            chroma * fract;
+
+        valuePolicy.writeRGB(r, g, b, sextant, x, chroma, v);
+    }
+}
+
 
 template<typename _channel_type_,typename traits>
 class KisHSVAdjustment : public KoColorTransformation
@@ -93,7 +376,8 @@ public:
         m_lumaGreen(0.0),
         m_lumaBlue(0.0),
         m_type(0),
-        m_colorize(false)
+        m_colorize(false),
+        m_compatibilityMode(true)
     {
     }
 
@@ -149,80 +433,90 @@ public:
                 } else {
 
                     if (m_type == 0) {
-                        RGBToHSV(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
-                        h += m_adj_h * 180;
-                        if (h > 360) h -= 360;
-                        if (h < 0) h += 360;
-                        s += m_adj_s;
-                        v += m_adj_v;
-                        HSVToRGB(h, s, v, &r, &g, &b);
+                        if (!m_compatibilityMode) {
+                            r = SCALE_TO_FLOAT(src->red);
+                            g = SCALE_TO_FLOAT(src->green);
+                            b = SCALE_TO_FLOAT(src->blue);
+                            HSVTransform<MultiplyPolicy>(&r, &g, &b, m_adj_h, m_adj_s, m_adj_v, HSVPolicy());
+                        } else {
+                            RGBToHSV(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
+                            h += m_adj_h * 180;
+                            h = normalizeAngleDegrees(h);
+                            s += m_adj_s;
+                            v += m_adj_v;
+                            HSVToRGB(h, s, v, &r, &g, &b);
+                        }
                     } else if (m_type == 1) {
 
-                        RGBToHSL(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
+                        if (!m_compatibilityMode) {
+                            r = SCALE_TO_FLOAT(src->red);
+                            g = SCALE_TO_FLOAT(src->green);
+                            b = SCALE_TO_FLOAT(src->blue);
+                            HSVTransform<MultiplyPolicy>(&r, &g, &b, m_adj_h, m_adj_s, m_adj_v, HSLPolicy());
+                        } else {
+                            RGBToHSL(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
 
-                        h += m_adj_h * 180;
-                        if (h > 360) h -= 360;
-                        if (h < 0) h += 360;
-
-                        s *= (m_adj_s + 1.0);
-                        if (s < 0.0) s = 0.0;
-                        if (s > 1.0) s = 1.0;
-
-                        if (m_adj_v < 0)
-                            v *= (m_adj_v + 1.0);
-                        else
-                            v += (m_adj_v * (1.0 - v));
-
-
-                        HSLToRGB(h, s, v, &r, &g, &b);
+                            h += m_adj_h * 180;
+                            h = normalizeAngleDegrees(h);
+                            s *= (m_adj_s + 1.0);
+                            if (m_adj_v < 0) {
+                                v *= (m_adj_v + 1.0);
+                            } else {
+                                v += (m_adj_v * (1.0 - v));
+                            }
+                            HSLToRGB(h, s, v, &r, &g, &b);
+                        }
                     } else if (m_type == 2) {
 
-                        qreal red = SCALE_TO_FLOAT(src->red);
-                        qreal green = SCALE_TO_FLOAT(src->green);
-                        qreal blue = SCALE_TO_FLOAT(src->blue);
-                        qreal hue, sat, intensity;
-                        RGBToHCI(red, green, blue, &hue, &sat, &intensity);
+                        if (!m_compatibilityMode) {
+                            r = SCALE_TO_FLOAT(src->red);
+                            g = SCALE_TO_FLOAT(src->green);
+                            b = SCALE_TO_FLOAT(src->blue);
+                            HSVTransform<MultiplyPolicy>(&r, &g, &b, m_adj_h, m_adj_s, m_adj_v, HCIPolicy());
+                        } else {
+                            qreal red = SCALE_TO_FLOAT(src->red);
+                            qreal green = SCALE_TO_FLOAT(src->green);
+                            qreal blue = SCALE_TO_FLOAT(src->blue);
+                            qreal hue, sat, intensity;
+                            RGBToHCI(red, green, blue, &hue, &sat, &intensity);
 
-                        hue *=360.0;
-                        hue += m_adj_h * 180;
-                        //if (intensity+m_adj_v>1.0){hue+=180.0;}
-                        if (hue < 0) hue += 360;
-                        hue = fmod(hue, 360.0);
+                            hue *= 360.0;
+                            hue += m_adj_h * 180;
+                            hue = normalizeAngleDegrees(hue);
+                            sat *= (m_adj_s + 1.0);
+                            intensity += m_adj_v;
 
-                        sat *= (m_adj_s + 1.0);
-                        //sat = qBound(0.0, sat, 1.0);
+                            HCIToRGB(hue/360.0, sat, intensity, &red, &green, &blue);
 
-                        intensity += (m_adj_v);
-
-                        HCIToRGB(hue/360.0, sat, intensity, &red, &green, &blue);
-
-                        r = red;
-                        g = green;
-                        b = blue;
+                            r = red;
+                            g = green;
+                            b = blue;
+                        }
                     } else if (m_type == 3) {
 
-                        qreal red = SCALE_TO_FLOAT(src->red);
-                        qreal green = SCALE_TO_FLOAT(src->green);
-                        qreal blue = SCALE_TO_FLOAT(src->blue);
-                        qreal hue, sat, luma;
-                        RGBToHCY(red, green, blue, &hue, &sat, &luma, lumaR, lumaG, lumaB);
+                        if (!m_compatibilityMode) {
+                            r = SCALE_TO_FLOAT(src->red);
+                            g = SCALE_TO_FLOAT(src->green);
+                            b = SCALE_TO_FLOAT(src->blue);
+                            HSVTransform<MultiplyPolicy>(&r, &g, &b, m_adj_h, m_adj_s, m_adj_v, HCYPolicy(lumaR, lumaG, lumaB));
+                        } else {
+                            qreal red = SCALE_TO_FLOAT(src->red);
+                            qreal green = SCALE_TO_FLOAT(src->green);
+                            qreal blue = SCALE_TO_FLOAT(src->blue);
+                            qreal hue, sat, luma;
+                            RGBToHCY(red, green, blue, &hue, &sat, &luma, lumaR, lumaG, lumaB);
 
-                        hue *=360.0;
-                        hue += m_adj_h * 180;
-                        //if (luma+m_adj_v>1.0){hue+=180.0;}
-                        if (hue < 0) hue += 360;
-                        hue = fmod(hue, 360.0);
+                            hue *= 360.0;
+                            hue += m_adj_h * 180;
+                            hue = normalizeAngleDegrees(hue);
+                            sat *= (m_adj_s + 1.0);
+                            luma += m_adj_v;
 
-                        sat *= (m_adj_s + 1.0);
-                        //sat = qBound(0.0, sat, 1.0);
-
-                        luma += m_adj_v;
-
-
-                        HCYToRGB(hue/360.0, sat, luma, &red, &green, &blue, lumaR, lumaG, lumaB);
-                        r = red;
-                        g = green;
-                        b = blue;
+                            HCYToRGB(hue/360.0, sat, luma, &red, &green, &blue, lumaR, lumaG, lumaB);
+                            r = red;
+                            g = green;
+                            b = blue;
+                        }
 
                     } else if (m_type == 4) {
 
@@ -233,13 +527,8 @@ public:
                         RGBToYUV(red, green, blue, &y, &cb, &cr, lumaR, lumaG, lumaB);
 
                         cb *= (m_adj_h + 1.0);
-                        //cb = qBound(0.0, cb, 1.0);
-
                         cr *= (m_adj_s + 1.0);
-                        //cr = qBound(0.0, cr, 1.0);
-
                         y += (m_adj_v);
-
 
                         YUVToRGB(y, cb, cr, &red, &green, &blue, lumaR, lumaG, lumaB);
                         r = red;
@@ -308,7 +597,7 @@ public:
     QList<QString> parameters() const override
     {
       QList<QString> list;
-      list << "h" << "s" << "v" << "type" << "colorize" << "lumaRed" << "lumaGreen"<< "lumaBlue";
+      list << "h" << "s" << "v" << "type" << "colorize" << "lumaRed" << "lumaGreen"<< "lumaBlue" << "compatibilityMode";
       return list;
     }
 
@@ -330,6 +619,8 @@ public:
             return 6;
         } else if (name == "lumaBlue") {
             return 7;
+        } else if (name == "compatibilityMode") {
+            return 8;
         }
         return -1;
     }
@@ -371,6 +662,9 @@ public:
         case 7:
             m_lumaBlue = parameter.toDouble();
             break;
+        case 8:
+            m_compatibilityMode = parameter.toBool();
+            break;
         default:
             KIS_ASSERT_RECOVER_NOOP(false && "Unknown parameter ID. Ignored!");
             ;
@@ -383,6 +677,7 @@ private:
     qreal m_lumaRed, m_lumaGreen, m_lumaBlue;
     int m_type;
     bool m_colorize;
+    bool m_compatibilityMode;
 };
 
 template<typename _channel_type_,typename traits>

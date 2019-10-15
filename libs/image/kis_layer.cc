@@ -184,7 +184,7 @@ struct Q_DECL_HIDDEN KisLayer::Private
     KisPSDLayerStyleSP layerStyle;
     KisLayerStyleProjectionPlaneSP layerStyleProjectionPlane;
 
-    KisAbstractProjectionPlaneSP projectionPlane;
+    KisLayerProjectionPlaneSP projectionPlane;
     KisSafeNodeProjectionStoreSP safeProjection;
 
     KisLayerMasksCache masksCache;
@@ -793,10 +793,11 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 KisAbstractProjectionPlaneSP KisLayer::projectionPlane() const
 {
     return m_d->layerStyleProjectionPlane ?
-        KisAbstractProjectionPlaneSP(m_d->layerStyleProjectionPlane) : m_d->projectionPlane;
+        KisAbstractProjectionPlaneSP(m_d->layerStyleProjectionPlane) :
+        KisAbstractProjectionPlaneSP(m_d->projectionPlane);
 }
 
-KisAbstractProjectionPlaneSP KisLayer::internalProjectionPlane() const
+KisLayerProjectionPlaneSP KisLayer::internalProjectionPlane() const
 {
     return m_d->projectionPlane;
 }

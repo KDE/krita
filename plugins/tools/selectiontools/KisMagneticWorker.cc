@@ -148,21 +148,20 @@ private:
 KisMagneticLazyTiles::KisMagneticLazyTiles(KisPaintDeviceSP dev)
 {
     m_dev = KisPainter::convertToAlphaAsGray(dev);
-    QSize s = m_dev->exactBounds().size();
+    QSize s = dev->defaultBounds()->bounds().size();
     m_tileSize    = KritaUtils::optimalPatchSize();
-    m_tilesPerRow = std::ceil((double) s.width() / (double) m_tileSize.width());
-    int tilesPerColumn = std::ceil((double) s.height() / (double) m_tileSize.height());
+    m_tilesPerRow = (int) std::ceil((double) s.width() / (double) m_tileSize.width());
+    int tilesPerColumn = (int) std::ceil((double) s.height() / (double) m_tileSize.height());
     m_dev->setDefaultBounds(dev->defaultBounds());
 
     for (int i = 0; i < tilesPerColumn; i++) {
         for (int j = 0; j < m_tilesPerRow; j++) {
-            int width  = std::min(m_dev->exactBounds().width() - j * m_tileSize.width(), m_tileSize.width());
-            int height = std::min(m_dev->exactBounds().height() - i * m_tileSize.height(), m_tileSize.height());
+            int width  = std::min(s.width() - j * m_tileSize.width(), m_tileSize.width());
+            int height = std::min(s.height() - i * m_tileSize.height(), m_tileSize.height());
             QRect temp(j *m_tileSize.width(), i *m_tileSize.height(), width, height);
             m_tiles.push_back(temp);
         }
     }
-
     m_radiusRecord = QVector<qreal>(m_tiles.size(), -1);
 }
 
@@ -196,7 +195,6 @@ QVector<QPointF> KisMagneticWorker::computeEdge(int bounds, QPoint begin, QPoint
     QRect rect;
     KisAlgebra2D::accumulateBounds(QVector<QPoint> { begin, end }, &rect);
     rect = kisGrowRect(rect, bounds);
-
     m_lazyTileFilter.filter(radius, rect);
 
     VertexDescriptor goal(end);

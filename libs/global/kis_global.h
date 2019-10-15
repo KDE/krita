@@ -99,21 +99,25 @@ const double PRESSURE_THRESHOLD = 5.0 / 255.0;
 
 
 // converts \p a to [0, 2 * M_PI) range
-inline qreal normalizeAngle(qreal a) {
-    if (a < 0.0) {
-        a = 2 * M_PI + fmod(a, 2 * M_PI);
+template<typename T>
+typename std::enable_if<std::is_floating_point<T>::value, T>::type
+normalizeAngle(T a) {
+    if (a < T(0.0)) {
+        a = T(2 * M_PI) + std::fmod(a, T(2 * M_PI));
     }
 
-    return a >= 2 * M_PI ? fmod(a, 2 * M_PI) : a;
+    return a >= T(2 * M_PI) ? std::fmod(a, T(2 * M_PI)) : a;
 }
 
 // converts \p a to [0, 360.0) range
-inline qreal normalizeAngleDegrees(qreal a) {
-    if (a < 0.0) {
-        a = 360.0 + fmod(a, 360.0);
+template<typename T>
+typename std::enable_if<std::is_floating_point<T>::value, T>::type
+normalizeAngleDegrees(T a) {
+    if (a < T(0.0)) {
+        a = T(360.0) + std::fmod(a, T(360.0));
     }
 
-    return a >= 360.0 ? fmod(a, 360.0) : a;
+    return a >= T(360.0) ? std::fmod(a, T(360.0)) : a;
 }
 
 inline qreal shortestAngularDistance(qreal a, qreal b) {

@@ -496,4 +496,122 @@ void KisLayerStyleProjectionPlaneTest::testBevel()
     style->bevelAndEmboss()->setSoften(3);
     test(style, "bevel_pillow_up_soft");
 }
+
+#include "kis_ls_utils.h"
+
+void KisLayerStyleProjectionPlaneTest::testBlending()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP layer = new KisPaintDevice(cs);
+    KisPaintDeviceSP overlay = new KisPaintDevice(cs);
+    KisPaintDeviceSP bg = new KisPaintDevice(cs);
+    KisPaintDeviceSP result = new KisPaintDevice(cs);
+
+    const int width = 20;
+    KoColor color(Qt::transparent, cs);
+
+    QVector<QColor> layerColors;
+    QVector<QColor> overlayColors;
+    QVector<QColor> bgColors;
+
+    layerColors << QColor(0,   255, 0);
+    layerColors << QColor(128, 255, 64);
+
+    overlayColors << QColor(255,   0, 0);
+    overlayColors << QColor(255, 128, 64);
+
+    bgColors << QColor(0, 0, 0, 0);
+    bgColors << QColor(0, 0, 0, 255);
+    bgColors << QColor(255, 255, 255, 255);
+    bgColors << QColor(64, 128, 255, 255);
+
+    bgColors << QColor(0, 0, 0, 128);
+    bgColors << QColor(255, 255, 255, 128);
+    bgColors << QColor(64, 128, 255, 128);
+
+    const int overlayOpacity = 255;
+    const int layerOpacity = 255;
+    int y = 1;
+    Q_FOREACH(const QColor &layerColor, layerColors) {
+        Q_FOREACH(const QColor &overlayColor, overlayColors) {
+            Q_FOREACH(const QColor &bgColor, bgColors) {
+                bg->setPixel(0, y, layerColor);
+                bg->setPixel(1, y, overlayColor);
+                bg->setPixel(2, y, bgColor);
+                bg->setPixel(3, y, QColor(layerOpacity, layerOpacity, layerOpacity, 255));
+                bg->setPixel(4, y, QColor(overlayOpacity, overlayOpacity, overlayOpacity, 255));
+
+                for (int i = 5; i < width; i++) {
+                    bg->setPixel(i, y, bgColor);
+                }
+
+                for (int i = 0; i <= 10; i++) {
+                    const quint8 alpha = i == 0 ? 71 : qRound(255 * qreal(i) / 10);
+
+                    {
+                        QColor c(layerColor);
+                        c.setAlpha(alpha);
+                        layer->setPixel(7 + i, y, c);
+                    }
+
+                    {
+                        QColor c(overlayColor);
+                        c.setAlpha(alpha);
+                        overlay->setPixel(7 + i, y, c);
+                    }
+                }
+
+                y++;
+            }
+        }
+    }
+
+    const QRect rc = bg->exactBounds() | layer->exactBounds();
+
+
+    KIS_DUMP_DEVICE_2(layer, rc, "00_layer", "dd");
+    KIS_DUMP_DEVICE_2(overlay, rc, "01_overlay", "dd");
+    KIS_DUMP_DEVICE_2(bg, rc, "02_bg", "dd");
+
+    KisPaintDeviceSP originalBg = new KisPaintDevice(*bg);
+
+    KisSelectionSP selection = new KisSelection();
+    KisLsUtils::selectionFromAlphaChannel(layer, selection, rc);
+
+    {
+        KisSequentialIterator it(layer, rc);
+        while (it.nextPixel()) {
+            cs->setOpacity(it.rawData(), quint8(255), 1);
+        }
+    }
+
+    {
+        KisSequentialIterator it(overlay, rc);
+        while (it.nextPixel()) {
+            cs->setOpacity(it.rawData(), quint8(255), 1);
+        }
+    }
+
+    KisPainter painter(bg);
+
+    painter.setOpacity(layerOpacity);
+    painter.setCompositeOp(COMPOSITE_OVER);
+
+    painter.bitBlt(rc.topLeft(), layer, rc);
+
+    painter.setOpacity(overlayOpacity);
+    painter.setCompositeOp(COMPOSITE_ADD);
+
+    painter.bitBlt(rc.topLeft(), overlay, rc);
+
+    KIS_DUMP_DEVICE_2(bg, rc, "03_result", "dd");
+
+    KisPainter bgPainter(originalBg);
+    bgPainter.setCompositeOp(COMPOSITE_COPY);
+    bgPainter.setSelection(selection);
+    bgPainter.bitBlt(rc.topLeft(), bg, rc);
+
+    KIS_DUMP_DEVICE_2(originalBg, rc, "04_knockout", "dd");
+}
+
 QTEST_MAIN(KisLayerStyleProjectionPlaneTest)

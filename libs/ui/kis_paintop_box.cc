@@ -278,7 +278,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     m_cmbCompositeOp = new KisCompositeOpComboBox();
     m_cmbCompositeOp->setFixedHeight(iconsize);
-    Q_FOREACH (KisAction * a, m_cmbCompositeOp->blendmodeActions()) {
+    Q_FOREACH (KisAction * a, m_cmbCompositeOp->createBlendmodeActions()) {
         m_viewManager->actionManager()->addAction(a->text(), a);
     }
 

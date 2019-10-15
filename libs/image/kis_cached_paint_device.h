@@ -43,6 +43,26 @@ public:
         m_stack.push(device);
     }
 
+    struct Guard {
+        Guard(KisPaintDeviceSP prototype, KisCachedPaintDevice &parent)
+            : m_parent(parent)
+        {
+            m_device = m_parent.getDevice(prototype);
+        }
+
+        ~Guard() {
+            m_parent.putDevice(m_device);
+        }
+
+        KisPaintDeviceSP device() const {
+            return m_device;
+        }
+
+        private:
+        KisCachedPaintDevice &m_parent;
+        KisPaintDeviceSP m_device;
+    };
+
 private:
     KisLocklessStack<KisPaintDeviceSP> m_stack;
 };
@@ -54,7 +74,7 @@ public:
         KisSelectionSP selection;
 
         if(!m_stack.pop(selection)) {
-            selection = new KisSelection();
+            selection = new KisSelection(new KisSelectionEmptyBounds(0));
         }
 
         return selection;
@@ -62,9 +82,30 @@ public:
 
     void putSelection(KisSelectionSP selection) {
         selection->clear();
-        selection->setDefaultBounds(new KisDefaultBounds());
+        selection->setDefaultBounds(new KisSelectionEmptyBounds(0));
+        selection->pixelSelection()->moveTo(QPoint());
         m_stack.push(selection);
     }
+
+    struct Guard {
+        Guard(KisCachedSelection &parent)
+            : m_parent(parent)
+        {
+            m_selection = m_parent.getSelection();
+        }
+
+        ~Guard() {
+            m_parent.putSelection(m_selection);
+        }
+
+        KisSelectionSP selection() const {
+            return m_selection;
+        }
+
+        private:
+        KisCachedSelection &m_parent;
+        KisSelectionSP m_selection;
+    };
 
 private:
     KisLocklessStack<KisSelectionSP> m_stack;

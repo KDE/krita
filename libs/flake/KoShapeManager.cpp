@@ -661,6 +661,8 @@ QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenSha
 
 void KoShapeManager::update(const QRectF &rect, const KoShape *shape, bool selectionHandles)
 {
+    if (d->updatesBlocked) return;
+
     {
         QMutexLocker l(&d->shapesMutex);
 
@@ -672,6 +674,16 @@ void KoShapeManager::update(const QRectF &rect, const KoShape *shape, bool selec
     }
 
     d->updateCompressor.start();
+}
+
+void KoShapeManager::setUpdatesBlocked(bool value)
+{
+    d->updatesBlocked = value;
+}
+
+bool KoShapeManager::updatesBlocked() const
+{
+    return d->updatesBlocked;
 }
 void KoShapeManager::notifyShapeChanged(KoShape *shape)
 {

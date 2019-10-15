@@ -713,4 +713,6 @@ if [[ "${NOTARIZE}" = "false" ]]; then
 fi
 
 # signal end of script
-tput bel
+if [[ -n "$TERM" ]]; then
+    tput bel
+fi

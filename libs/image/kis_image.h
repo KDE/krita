@@ -393,7 +393,7 @@ public:
      *
      * @returns false if the profile could not be assigned
      */
-    bool assignImageProfile(const KoColorProfile *profile);
+    bool assignImageProfile(const KoColorProfile *profile, bool blockAllUpdates = false);
 
     /**
      * Returns the current undo adapter. You can add new commands to the

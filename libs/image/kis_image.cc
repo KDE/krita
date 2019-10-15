@@ -1145,7 +1145,7 @@ bool KisImage::assignLayerProfile(KisNodeSP node, const KoColorProfile *profile)
 }
 
 
-bool KisImage::assignImageProfile(const KoColorProfile *profile)
+bool KisImage::assignImageProfile(const KoColorProfile *profile, bool blockAllUpdates)
 {
     const KoColorSpace *srcColorSpace = m_d->colorSpace;
 
@@ -1162,7 +1162,9 @@ bool KisImage::assignImageProfile(const KoColorProfile *profile)
 
     KisProcessingApplicator applicator(this, m_d->rootLayer,
                                        KisProcessingApplicator::RECURSIVE |
-                                       KisProcessingApplicator::NO_UI_UPDATES,
+                                       (!blockAllUpdates ?
+                                            KisProcessingApplicator::NO_UI_UPDATES :
+                                            KisProcessingApplicator::NO_IMAGE_UPDATES),
                                        emitSignals, actionName);
 
     applicator.applyCommand(

@@ -711,8 +711,3 @@ if [[ "${NOTARIZE}" = "false" ]]; then
         print_error "Build not notarized! Needed for macOS versions above 10.14"
     fi
 fi
-
-# signal end of script
-if [[ -n "$TERM" ]]; then
-    tput bel
-fi

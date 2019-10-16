@@ -189,9 +189,9 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     if (progressUpdater) progressUpdater->setProgress(100);
 }
 
-KisFilterConfigurationSP KisFilterPhongBumpmap::factoryConfiguration() const
+KisFilterConfigurationSP KisFilterPhongBumpmap::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(id(), 2);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty(PHONG_AMBIENT_REFLECTIVITY, 0.2);
     config->setProperty(PHONG_DIFFUSE_REFLECTIVITY, 0.5);
     config->setProperty(PHONG_SPECULAR_REFLECTIVITY, 0.3);

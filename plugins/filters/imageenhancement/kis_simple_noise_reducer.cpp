@@ -59,9 +59,9 @@ KisConfigWidget * KisSimpleNoiseReducer::createConfigurationWidget(QWidget* pare
     return new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
 }
 
-KisFilterConfigurationSP  KisSimpleNoiseReducer::factoryConfiguration() const
+KisFilterConfigurationSP  KisSimpleNoiseReducer::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 0);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("threshold", 15);
     config->setProperty("windowsize", 1);
     return config;

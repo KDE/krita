@@ -58,7 +58,7 @@ public:
                      const KisFilterConfigurationSP config,
                      KoUpdater *progressUpdater) const override;
 
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration() const override;
 
     KisConfigWidget *createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 

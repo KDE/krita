@@ -85,9 +85,9 @@ KisConfigWidget* KisFilterIndexColors::createConfigurationWidget(QWidget* parent
     return w;
 }
 
-KisFilterConfigurationSP KisFilterIndexColors::factoryConfiguration() const
+KisFilterConfigurationSP KisFilterIndexColors::defaultConfiguration() const
 {
-    KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 0);
+    KisFilterConfigurationSP config = factoryConfiguration();
 
     PaletteGeneratorConfig palCfg; // Default constructor is factory config
     config->setProperty("paletteGen",     palCfg.toByteArray());

@@ -114,7 +114,12 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
 
 KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("gradientmap", 2);
+    return new KisFilterConfiguration(id().id(), 2);
+}
+
+KisFilterConfigurationSP KritaFilterGradientMap::defaultConfiguration() const
+{
+    KisFilterConfigurationSP config = factoryConfiguration();
     KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer()->resources().first();
     KoStopGradient stopGradient;
     QScopedPointer<QGradient> qGradient(gradient->toQGradient());

@@ -290,7 +290,7 @@ void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 {
     if (m_selected) {
         m_anchorPoints[m_selectedAnchor] = convertToPixelCoord(event).toPoint();
-    } else {
+    } else if (!m_complete) {
         m_lastCursorPos = convertToPixelCoord(event);
         m_mouseHoverCompressor.start();
     }
@@ -352,6 +352,7 @@ void KisToolSelectMagnetic::deleteSelectedAnchor()
         m_anchorPoints.pop_front();
         if (m_anchorPoints.isEmpty()) {
             // it was the only point lol
+            resetVariables();
             reEvaluatePoints();
             return;
         }

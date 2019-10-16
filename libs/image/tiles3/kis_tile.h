@@ -44,7 +44,7 @@ class KisMementoManager;
 /**
  * Provides abstraction to a tile.
  * + A tile contains a part of a PaintDevice,
- *   but only the individual pixels are accesable
+ *   but only the individual pixels are accessible
  *   and that only via iterators.
  * + Actual tile data is stored in KisTileData that can be
  *   shared between many tiles

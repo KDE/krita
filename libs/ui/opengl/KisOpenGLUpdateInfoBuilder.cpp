@@ -104,7 +104,7 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
     /**
      * Why the rect is artificial? That's easy!
      * It does not represent any real piece of the image. It is
-     * intentionally stretched to get through the overlappping
+     * intentionally stretched to get through the overlapping
      * stripes of neutrality and poke neighbouring tiles.
      * Thanks to the rect we get the coordinates of all the tiles
      * involved into update process

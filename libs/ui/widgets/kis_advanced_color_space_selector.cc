@@ -662,7 +662,7 @@ QString KisAdvancedColorSpaceSelector::nameWhitePoint(QVector <double> whitePoin
         return name;
     }
     //B   (0.34980, 0.35270) (4874K) (Direct Sunlight at noon)(obsolete)
-    //C   (0.31039, 0.31905) (6774K) (avarage/north sky daylight)(obsolete)
+    //C   (0.31039, 0.31905) (6774K) (average/north sky daylight)(obsolete)
     //D50 (0.34773, 0.35952) (5003K) (Horizon Light, default color of white paper, ICC profile standard illuminant)
     if ((whitePoint[0]>0.34773-0.005 && whitePoint[0]<0.34773 + 0.005) &&
             (whitePoint[1]>0.35952-0.005 && whitePoint[1]<0.35952 + 0.005)){

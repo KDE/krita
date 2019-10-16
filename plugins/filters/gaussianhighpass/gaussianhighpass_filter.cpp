@@ -92,7 +92,7 @@ void KisGaussianHighPassFilter::processImpl(KisPaintDeviceSP device,
                                      blurAmount, blurAmount,
                                      channelFlags,
                                      convolutionUpdater,
-                                     true); // make sure we cerate an internal transaction on temp device
+                                     true); // make sure we craate an internal transaction on temp device
     
     KisPainter painter(device);
     painter.setCompositeOp(blur->colorSpace()->compositeOp(COMPOSITE_GRAIN_EXTRACT));

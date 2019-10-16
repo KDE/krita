@@ -50,7 +50,7 @@ class KRITAUI_EXPORT KisNodeDummy : public QObject
 
 public:
     /**
-     * Take care tha KisNodeDummy does not take ownership over
+     * Take care that KisNodeDummy does not take ownership over
      * the \p nodeShape since the handling of the removal of the
      * children of the shape is done by flake. So please handle it
      * manually.

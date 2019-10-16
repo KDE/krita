@@ -108,7 +108,7 @@ print_if_error() {
     fi
 }
 
-# print status messges
+# print status messages
 print_msg() {
     printf "\e[32m%s\e[0m\n" "${1}"
     printf "%s\n" "${1}" >> ${OUPUT_LOG}
@@ -476,7 +476,7 @@ print_usage () {
     printf "BUILDSTEPS:\t\t"
     printf "\n builddeps \t\t Run cmake step for 3rd party dependencies, optionally takes a [pkg] arg"
     printf "\n rebuilddeps \t\t Rerun make and make install step for 3rd party deps, optionally takes a [pkg] arg
-    \t\t\t usefull for cleaning install directory and quickly reinstall all deps."
+    \t\t\t useful for cleaning install directory and quickly reinstall all deps."
     printf "\n fixboost \t\t Fixes broken boost \@rpath on OSX"
     printf "\n build \t\t\t Builds krita"
     printf "\n buildtarball \t\t\t Builds krita from provided [file] tarball"

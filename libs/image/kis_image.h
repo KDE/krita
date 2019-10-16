@@ -971,7 +971,7 @@ public Q_SLOTS:
      * image will be reloaded into UI by sigSizeChanged(), so there is
      * no need to inform the UI about individual dirty rects.
      *
-     * The last call to enableUIUpdates() will return the list of udpates
+     * The last call to enableUIUpdates() will return the list of updates
      * that were requested while they were blocked.
      */
     void disableUIUpdates() override;

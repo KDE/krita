@@ -62,7 +62,7 @@ KisVLineIterator2::KisVLineIterator2(KisDataManager *dataManager, qint32 x, qint
 
     m_tileSize = m_lineStride * KisTileData::HEIGHT;
 
-    // let's prealocate first row
+    // let's preallocate first row
     for (int i = 0; i < m_tilesCacheSize; i++){
         fetchTileDataForCache(m_tilesCache[i], m_column, m_topRow + i);
     }

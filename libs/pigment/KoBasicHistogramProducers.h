@@ -79,7 +79,7 @@ protected:
     /**
      * The order in which channels() returns is not the same as the internal representation,
      * that of the pixel internally. This method converts external usage to internal usage.
-     * This method uses some basic assumtpions about the layout of the pixel, so _extremely_
+     * This method uses some basic assumptions about the layout of the pixel, so _extremely_
      * exotic spaces might want to override this (see makeExternalToInternal source for
      * those assumptions)
      **/

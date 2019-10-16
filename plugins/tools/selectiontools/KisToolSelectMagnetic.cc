@@ -267,7 +267,7 @@ void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
         for (int i = 0; i < total; i++) {
             double distToCompare = kisDistance(m_anchorPoints[i], temp) +
                                    kisDistance(temp, m_anchorPoints[(i + 1) % total]);
-            if (dist > distToCompare) {
+            if (distToCompare < dist) {
                 pointA = i;
                 pointB = (i + 1) % total;
                 dist   = distToCompare;
@@ -604,6 +604,11 @@ void KisToolSelectMagnetic::deactivate()
 void KisToolSelectMagnetic::undoPoints()
 {
     if (m_complete) return;
+
+    if(m_anchorPoints.count() <= 1){
+        resetVariables();
+        return;
+    }
 
     m_anchorPoints.pop_back();
     m_pointCollection.pop_back();

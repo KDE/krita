@@ -1,5 +1,5 @@
 name: krita
-version: 4.2.2
+version: 4.2.7.1
 summary: Krita is the digital painting studio for artists
 description: Krita is a creative application for raster images. Whether you want to create
  from scratch or work with existing images, Krita is for you. You can work with
@@ -9,7 +9,9 @@ base: core18
 
 apps:
   krita:
-    command: qt5-launch usr/bin/krita
+    command: usr/bin/krita
+    command-chain:
+      - bin/qt5-launch
     plugs: [x11, unity7, home, opengl, network, network-bind, removable-media, desktop, desktop-legacy]
     desktop: usr/share/applications/org.kde.krita.desktop
 
@@ -27,7 +29,7 @@ parts:
     - "-DBUILD_TESTING=OFF"
     - "-DHIDE_SAFE_ASSERTS=OFF"
     - "-DKDE_SKIP_TEST_SETTINGS=ON"
-    source: https://download.kde.org/stable/krita/4.2.2/krita-4.2.2.tar.xz
+    source: https://download.kde.org/stable/krita/4.2.7.1/krita-4.2.7.1.tar.xz
 # Use these instead to build from the git source
 #    source: https://anongit.kde.org/krita.git
 #    source-type: git
@@ -170,7 +172,7 @@ parts:
 
   launcher:
     plugin: dump
-    source: .
+    source: scripts
     organize:
       qt5-launch: bin/qt5-launch
       kf5-locale-gen: bin/kf5-locale-gen

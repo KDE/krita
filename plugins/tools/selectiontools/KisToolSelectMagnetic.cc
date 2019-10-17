@@ -593,10 +593,8 @@ void KisToolSelectMagnetic::deactivate()
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas)
     kisCanvas->updateCanvas();
-
+    resetVariables();
     m_continuedMode = false;
-    m_complete      = true;
-
     disconnect(action("undo_polygon_selection"), nullptr, this, nullptr);
 
     KisTool::deactivate();

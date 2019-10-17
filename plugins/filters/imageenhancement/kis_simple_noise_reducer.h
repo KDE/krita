@@ -46,7 +46,7 @@ public:
     QRect neededRect(const QRect &rect, const KisFilterConfigurationSP _config, int lod) const override;
 
 protected:
-    KisFilterConfigurationSP  factoryConfiguration() const override;
+    KisFilterConfigurationSP  defaultConfiguration() const override;
 };
 
 #endif

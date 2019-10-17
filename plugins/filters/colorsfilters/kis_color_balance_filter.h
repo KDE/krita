@@ -53,7 +53,7 @@ public:
         return KoID("colorbalance", i18n("Color Balance"));
 	}
 
-    KisFilterConfigurationSP  factoryConfiguration() const override;
+    KisFilterConfigurationSP  defaultConfiguration() const override;
 
 };
 

@@ -755,7 +755,7 @@ void KisApplication::checkAutosaveFiles()
     // all autosave files for our application
     QStringList autosaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
 
-    // Visibile autosave files
+    // Visible autosave files
     filters = QStringList() << QString("krita-*-*-autosave.kra");
     autosaveFiles += dir.entryList(filters, QDir::Files);
 

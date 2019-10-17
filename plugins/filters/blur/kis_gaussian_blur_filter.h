@@ -40,7 +40,7 @@ public:
         return KoID("gaussian blur", i18n("Gaussian Blur"));
     }
 
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration() const override;
 public:
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
     QRect neededRect(const QRect & rect, const KisFilterConfigurationSP _config, int lod) const override;

@@ -1025,7 +1025,7 @@ QVector<QRect> KisOpenGLCanvas2::updateCanvasProjection(const QVector<KisUpdateI
 {
 #ifdef Q_OS_MACOS
     /**
-     * On OSX openGL defferent (shared) contexts have different execution queues.
+     * On OSX openGL different (shared) contexts have different execution queues.
      * It means that the textures uploading and their painting can be easily reordered.
      * To overcome the issue, we should ensure that the textures are uploaded in the
      * same openGL context as the painting is done.

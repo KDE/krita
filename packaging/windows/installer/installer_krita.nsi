@@ -513,7 +513,7 @@ Function .onInit
 		${ElseIf} $R0 == 1
 			# Upgrade
 			${If} $KritaNsisBitness == ${KRITA_INSTALLER_BITNESS}
-				# Slient about upgrade
+				# Silent about upgrade
 			${Else}
 				# Upgrade but different arch
 				${IfNot} ${Silent}

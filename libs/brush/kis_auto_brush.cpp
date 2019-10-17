@@ -120,7 +120,7 @@ KisBrushSP KisAutoBrush::clone() const
     return KisBrushSP(new KisAutoBrush(*this));
 }
 
-/* It's difficult to predict the mask height when exaclty when there are
+/* It's difficult to predict the mask height when exactly when there are
  * more than 2 spikes, so we return an upperbound instead. */
 static KisDabShape lieAboutDabShape(KisDabShape const& shape)
 {

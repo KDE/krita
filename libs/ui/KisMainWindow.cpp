@@ -621,7 +621,7 @@ void KisMainWindow::notifyChildViewDestroyed(KisView *view)
 {
     /**
      * If we are the last view of the window, Qt will not activate another tab
-     * before destroying tab/window. In ths case we should clear oll the dangling
+     * before destroying tab/window. In this case we should clear all the dangling
      * pointers manually by setting the current view to null
      */
     viewManager()->inputManager()->removeTrackedCanvas(view->canvasBase());
@@ -2422,7 +2422,7 @@ void KisMainWindow::configChanged()
          * Dirty workaround for a bug in Qt (checked on Qt 5.6.1):
          *
          * If you make a window "Show on top" and then switch to the tabbed mode
-         * the window will contiue to be painted in its initial "mid-screen"
+         * the window will continue to be painted in its initial "mid-screen"
          * position. It will persist here until you explicitly switch to its tab.
          */
         if (viewMode == QMdiArea::TabbedView) {

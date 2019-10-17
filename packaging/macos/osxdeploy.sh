@@ -9,7 +9,7 @@
 # A short explanation of what it does:
 
 # - Copies krita.app contents to kritadmg folder
-# - Copies i/share to Contents/Resources excluding unnecesary files
+# - Copies i/share to Contents/Resources excluding unnecessary files
 # - Copies translations, qml and quicklook PlugIns
 # - Copies i/plugins and i/lib/plugins to Contents/PlugIns
 
@@ -21,13 +21,13 @@
 #       make install
 
 #     the script changes dir to installation/bin to run macdeployqt as it can be buggy
-#     if not runned from the same folder as the binary is on.
+#     if not run from the same folder as the binary is on.
 
 # - Fix rpath from krita bin
-# - Find missing libraries from plugins and copy to Framworks or plugins.
+# - Find missing libraries from plugins and copy to Frameworks or plugins.
 #     This uses oTool iterative to find all unique libraries, then it searches each
 #     library fond in <kritadmg> folder, and if not found attempts to copy contents
-#     to the appropiate folder, either Frameworks (if frameworks is in namefile, or
+#     to the appropriate folder, either Frameworks (if frameworks is in namefile, or
 #         library has plugin isnot in path), or plugin if otherwise.
 
 # - Builds DMG
@@ -44,7 +44,7 @@ if test -z ${BUILDROOT}; then
     exit
 fi
 
-# print status messges
+# print status messages
 print_msg() {
     printf "\e[32m${1}\e[0m\n" "${@:2}"
     # printf "%s\n" "${1}" >> ${OUPUT_LOG}
@@ -101,14 +101,14 @@ print_usage () {
 
 \t\t\t   security add-generic-password -a \"AC_USERNAME\" -w <secret_password> -s \"KRITA_AC_PASS\"
 
-    -notarize-pass \t If given, the Apple acount password. Otherwise an attempt will be macdeployqt_exists
+    -notarize-pass \t If given, the Apple account password. Otherwise an attempt will be macdeployqt_exists
 \t\t\t to get the password from keychain using the account given in <notarize-ac> option.
 
     -style \t\t Style file defined from 'dmgstyle.sh' output
 
     -bg \t\t Set a background image for dmg folder.
 \t\t\t osxdeploy needs an input image to attach to the dmg background
-\t\t\t image recomended size is at least 950x500
+\t\t\t image recommended size is at least 950x500
 "
 }
 
@@ -253,7 +253,7 @@ add_lib_to_list() {
 # Add to libs_used
 # converts absolute buildroot path to @rpath
 find_needed_libs () {
-    # echo "Analizing libraries with oTool..." >&2
+    # echo "Analyzing libraries with oTool..." >&2
     local libs_used="" # input lib_lists founded
 
     for libFile in ${@}; do
@@ -334,7 +334,7 @@ krita_findmissinglibs() {
 strip_python_dmginstall() {
     # reduce size of framework python
     # Removes tests, installers, pyenv, distutils
-    echo "Removing unnecesary files from Python.Framework to be packaged..."
+    echo "Removing unnecessary files from Python.Framework to be packaged..."
     PythonFrameworkBase="${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework"
 
     cd ${PythonFrameworkBase}
@@ -545,7 +545,7 @@ signBundle() {
 
     # sign Frameworks and libs
     cd ${KRITA_DMG}/krita.app/Contents/Frameworks
-    # remove debug version as both versions cant be signed.
+    # remove debug version as both versions can't be signed.
     rm ${KRITA_DMG}/krita.app/Contents/Frameworks/QtScript.framework/Versions/Current/QtScript_debug
     find . -type f -perm 755 -or -name "*.dylib" -or -name "*.so" | batch_codesign
     find . -type d -name "*.framework" | xargs printf "%s/Versions/Current\n" | batch_codesign
@@ -592,7 +592,7 @@ notarize_build() {
 
         if [[ -n "$(grep 'Error' <<< ${altoolResponse})" ]]; then
             printf "ERROR: xcrun altool exited with the following error! \n\n%s\n\n" "${altoolResponse}"
-            printf "This could mean there is an error in AppleID autentication!\n"
+            printf "This could mean there is an error in AppleID authentication!\n"
             printf "aborting notarization\n"
             NOTARIZE="false"
             return
@@ -664,7 +664,7 @@ createDMG () {
     
     chmod -Rf go-w "/Volumes/${DMG_title}"
 
-    # ensure all writting operations to dmg are over
+    # ensure all writing operations to dmg are over
     sync
 
     hdiutil detach $device
@@ -689,7 +689,7 @@ createDMG () {
 #######################
 # Program starts!!
 ########################
-# Run deploy command, instalation is assumed to exist in BUILDROOT/i
+# Run deploy command, installation is assumed to exist in BUILDROOT/i
 krita_deploy
 
 # Code sign krita.app if signature given
@@ -711,6 +711,3 @@ if [[ "${NOTARIZE}" = "false" ]]; then
         print_error "Build not notarized! Needed for macOS versions above 10.14"
     fi
 fi
-
-# signal end of script
-tput bel

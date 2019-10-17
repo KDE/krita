@@ -208,7 +208,7 @@ KisUpdateInfoSP KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
     }
 
     /**
-     * We needn't this stuff ouside KisImage's area. We're not displaying
+     * We needn't this stuff outside KisImage's area. We're not displaying
      * anything painted outside the image anyway.
      */
     QRect croppedImageRect = dirtyImageRect & m_d->image->bounds();

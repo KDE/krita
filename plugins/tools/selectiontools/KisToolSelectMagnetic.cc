@@ -267,7 +267,7 @@ void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
         for (int i = 0; i < total; i++) {
             double distToCompare = kisDistance(m_anchorPoints[i], temp) +
                                    kisDistance(temp, m_anchorPoints[(i + 1) % total]);
-            if (dist > distToCompare) {
+            if (distToCompare < dist) {
                 pointA = i;
                 pointB = (i + 1) % total;
                 dist   = distToCompare;
@@ -290,7 +290,7 @@ void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 {
     if (m_selected) {
         m_anchorPoints[m_selectedAnchor] = convertToPixelCoord(event).toPoint();
-    } else {
+    } else if (!m_complete) {
         m_lastCursorPos = convertToPixelCoord(event);
         m_mouseHoverCompressor.start();
     }
@@ -352,6 +352,7 @@ void KisToolSelectMagnetic::deleteSelectedAnchor()
         m_anchorPoints.pop_front();
         if (m_anchorPoints.isEmpty()) {
             // it was the only point lol
+            resetVariables();
             reEvaluatePoints();
             return;
         }
@@ -604,6 +605,11 @@ void KisToolSelectMagnetic::deactivate()
 void KisToolSelectMagnetic::undoPoints()
 {
     if (m_complete) return;
+
+    if(m_anchorPoints.count() <= 1){
+        resetVariables();
+        return;
+    }
 
     m_anchorPoints.pop_back();
     m_pointCollection.pop_back();

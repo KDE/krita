@@ -52,7 +52,9 @@
 #include "compositionmodel.h"
 
 
-CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions")), m_canvas(0)
+CompositionDockerDock::CompositionDockerDock( )
+    : QDockWidget(i18n("Compositions"))
+    , m_canvas(0)
 {
     QWidget* widget = new QWidget(this);
     setupUi(widget);
@@ -201,20 +203,24 @@ void CompositionDockerDock::exportClicked()
             path.append('/');
         }
 
-        KisImageWSP image = m_canvas->viewManager()->image();
+        KisImageSP image = m_canvas->viewManager()->image();
         QString filename = m_canvas->viewManager()->document()->localFilePath();
         if (!filename.isEmpty()) {
             QFileInfo info(filename);
             path += info.completeBaseName() + '_';
         }
 
-        Q_FOREACH (KisLayerCompositionSP composition, m_canvas->viewManager()->image()->compositions()) {
+        KisLayerCompositionSP currentComposition = toQShared(new KisLayerComposition(image, "temp"));
+        currentComposition->store();
+
+        Q_FOREACH (KisLayerCompositionSP composition, image->compositions()) {
             if (!composition->isExportEnabled()) {
                 continue;
             }
 
             composition->apply();
-            image->lock();
+            image->waitForDone();
+            image->refreshGraph();
 
             QRect r = image->bounds();
 
@@ -228,7 +234,8 @@ void CompositionDockerDock::exportClicked()
             gc.bitBlt(QPoint(0, 0), image->rootLayer()->projection(), r);
             dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
 
-            dst->initialRefreshGraph();
+            dst->refreshGraph();
+            dst->waitForDone();
 
             d->setFileBatchMode(true);
 
@@ -236,9 +243,12 @@ void CompositionDockerDock::exportClicked()
             d->exportDocumentSync(QUrl::fromLocalFile(path + composition->name() + ".png"), "image/png");
             d->deleteLater();
 
-            image->unlock();
         }
+        currentComposition->apply();
+        image->waitForDone();
+        image->refreshGraph();
     }
+
 }
 
 bool CompositionDockerDock::eventFilter(QObject* obj, QEvent* event)

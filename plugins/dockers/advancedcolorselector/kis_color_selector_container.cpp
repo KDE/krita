@@ -141,9 +141,6 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
 
 
     if (m_canvas && m_canvas->viewManager()) {
-        if (m_canvas->viewManager()->nodeManager()) {
-            connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
-        }
 
         connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigGamutMaskChanged(KoGamutMaskSP)),
                 m_colorSelector, SLOT(slotGamutMaskSet(KoGamutMaskSP)), Qt::UniqueConnection);
@@ -206,25 +203,6 @@ void KisColorSelectorContainer::updateSettings()
         m_shadeSelector->show();
 }
 
-void KisColorSelectorContainer::reactOnLayerChange()
-{
-    if (m_canvas) {
-        KisNodeSP node = m_canvas->viewManager()->canvasResourceProvider()->currentNode();
-        if (node) {
-            KisPaintDeviceSP device = node->paintDevice();
-            if (device) {
-                m_colorSelAction->setEnabled(true);
-                m_mypaintAction->setEnabled(true);
-                m_minimalAction->setEnabled(true);
-            }
-            else {
-                //            m_colorSelAction->setEnabled(false);
-                //            m_mypaintAction->setEnabled(false);
-                //            m_minimalAction->setEnabled(false);
-            }
-        }
-    }
-}
 
 void KisColorSelectorContainer::resizeEvent(QResizeEvent * e)
 {

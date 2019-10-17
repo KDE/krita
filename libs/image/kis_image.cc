@@ -1828,7 +1828,7 @@ int KisImage::workingThreadsLimit() const
 void KisImage::notifySelectionChanged()
 {
     /**
-     * The selection is calculated asynchromously, so it is not
+     * The selection is calculated asynchronously, so it is not
      * handled by disableUIUpdates() and other special signals of
      * KisImageSignalRouter
      */

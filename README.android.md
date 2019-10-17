@@ -1,19 +1,19 @@
 # Building Krita for Android
 
 First of all, I use linux to do my builds and testing. Although,
-they _should_ work on Windows/macOS, I cannott give any guarentee 
+they _should_ work on Windows/macOS, I cannot give any guarantee 
 that it will.
 
 ## Setting up Android SDK and NDK
 
-We right now use android ndk version `r18b` to do our builds. So,
+We right now use Android NDK version `r18b` to do our builds. So,
 I would recommend to use that. Download it from [google's website](https://developer.android.com/ndk/downloads/older_releases.html)
 then extract it.
 
 Next, Android SDK. You can either download Android Studio or just
 the `sdk-tools`. Both could be downloaded from [google's website](https://developer.android.com/studio).
 
-If you downloaded Android Studio then open sdk manager and download
+If you downloaded Android Studio then open SDK manager and download
 `Android SDK Build-Tools`.
 (more info: https://developer.android.com/studio/intro/update#sdk-manager)
 

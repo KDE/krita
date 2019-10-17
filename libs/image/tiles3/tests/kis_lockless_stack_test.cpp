@@ -48,7 +48,7 @@ void KisLocklessStackTest::testOperations()
 
 }
 
-/************ BENCHMARKING INFRASTRACTURE ************************/
+/************ BENCHMARKING INFRASTRUCTURE ************************/
 
 #define NUM_TYPES 2
 

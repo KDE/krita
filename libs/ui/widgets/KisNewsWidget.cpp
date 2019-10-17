@@ -207,7 +207,7 @@ void KisNewsWidget::calculateVersionUpdateStatus()
      }
 
      // minor versions are the same, so maybe bugfix version is different
-     // sometimes we don't communicate this, implictly make 0 if it doesn't exist
+     // sometimes we don't communicate this, implicitly make 0 if it doesn't exist
      if (onlineReleaseAnnouncement[2].isNull()) {
          onlineReleaseAnnouncement[2] = "0";
      }

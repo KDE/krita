@@ -45,7 +45,7 @@ public:
     int baseLength();
 
     /// Set the base length 
-    /// @param length base length for the items, will be clamped if ouside range
+    /// @param length base length for the items, will be clamped if outside range
     void setBaseLength(int length);
     
 Q_SIGNALS:

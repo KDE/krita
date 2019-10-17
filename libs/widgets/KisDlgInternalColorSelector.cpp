@@ -103,7 +103,7 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     connect(m_d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSetSP)), this, SLOT(slotChangePalette(KoColorSetSP)));
     connect(m_ui->cmbNameList, SIGNAL(sigColorSelected(KoColor)), SLOT(slotColorUpdated(KoColor)));
 
-    // For some bizare reason, the modal dialog doesn't like having the colorset set, so let's not.
+    // For some bizarre reason, the modal dialog doesn't like having the colorset set, so let's not.
     if (config.paletteBox) {
         //TODO: Add disable signal as well. Might be not necessary...?
         KConfigGroup cfg(KSharedConfig::openConfig()->group(""));

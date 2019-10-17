@@ -62,9 +62,6 @@ Q_SIGNALS:
     /// emitted whenever a node is selected.
     void sigNodeActivated(KisNodeSP node);
 
-    /// emitted whenever a different layer is selected.
-    void sigLayerActivated(KisLayerSP layer);
-
     /// for the layer box: this sets the current node in the layerbox
     /// without telling the node manager that the node is activated,
     /// preventing loops (I think...)

@@ -638,7 +638,7 @@ FillLayer *Document::createFillLayer(const QString &name, const QString generato
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(generatorName);
     if (generator) {
 
-        KisFilterConfigurationSP config = generator->defaultConfiguration();
+        KisFilterConfigurationSP config = generator->factoryConfiguration();
         Q_FOREACH(const QString property, configuration.properties().keys()) {
             config->setProperty(property, configuration.property(property));
         }

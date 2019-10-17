@@ -75,7 +75,7 @@ public:
         /// Use to communicate a progress report to the section delegate on an action (a value of -1 or a QVariant() disable the progress bar
         ProgressRole,
 
-        /// Speacial activation role which is emitted when the user Atl-clicks on a section
+        /// Special activation role which is emitted when the user Atl-clicks on a section
         /// The item is first activated with ActiveRole, then a separate AlternateActiveRole comes
         AlternateActiveRole,
 

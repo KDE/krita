@@ -369,7 +369,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
             curveX = d->m_curve.points().at(i).x();
             curveY = d->m_curve.points().at(i).y();
 
-            int handleSize = 12; // how big should control points be (diamater size)
+            int handleSize = 12; // how big should control points be (diameter size)
 
             if (i == d->m_grab_point_index) {
                 // active point is slightly more "bold"

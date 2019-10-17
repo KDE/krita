@@ -50,9 +50,9 @@ KisConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, cons
     return new KisWdgBlur(parent);
 }
 
-KisFilterConfigurationSP KisBlurFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisBlurFilter::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("halfWidth", 5);
     config->setProperty("halfHeight", 5);
     config->setProperty("rotate", 0);

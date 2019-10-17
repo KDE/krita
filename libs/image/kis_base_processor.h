@@ -72,7 +72,7 @@ public:
      *
      * @return the default configuration of this widget
      */
-    KisFilterConfigurationSP  defaultConfiguration() const;
+    virtual KisFilterConfigurationSP  defaultConfiguration() const;
 
     /**
      * @return the bookmark manager for this processor
@@ -140,7 +140,8 @@ public:
      */
     ColorSpaceIndependence colorSpaceIndependence() const;
 
-    /// @return the default configuration as defined by whoever wrote the plugin
+    /// @return the default configuration object as defined by whoever wrote the plugin.
+    /// This object must be filled in with fromXML after that.
     virtual KisFilterConfigurationSP factoryConfiguration() const;
 
 protected:

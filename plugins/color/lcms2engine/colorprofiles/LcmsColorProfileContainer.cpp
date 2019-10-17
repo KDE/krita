@@ -170,7 +170,7 @@ bool LcmsColorProfileContainer::init()
                 double d3dummy [3] = {d->mediaWhitePoint.X, d->mediaWhitePoint.Y, d->mediaWhitePoint.Z};
                 QGenericMatrix<1, 3, double> whitePointMatrix(d3dummy);
                 QTransform invertDummy(CAM1[0].X, CAM1[0].Y, CAM1[0].Z, CAM1[1].X, CAM1[1].Y, CAM1[1].Z, CAM1[2].X, CAM1[2].Y, CAM1[2].Z);
-                //we then abuse QTransform's invert function because it probably does matrix invertion 20 times better than I can program.
+                //we then abuse QTransform's invert function because it probably does matrix inversion 20 times better than I can program.
                 //if the matrix is uninvertable, invertedDummy will be an identity matrix, which for us means that it won't give any noticeble
                 //effect when we start multiplying.
                 QTransform invertedDummy = invertDummy.inverted();

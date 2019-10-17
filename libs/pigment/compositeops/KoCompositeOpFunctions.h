@@ -793,7 +793,7 @@ inline T cfShadeIFSIllusions(T src, T dst) {
 template<class T>
 inline T cfFogLightenIFSIllusions(T src, T dst) {
     using namespace Arithmetic;
-    //Known as Bright Blending mode found in IFS Illusions. Picked this name because the shading reminds me of fog when overlaying with a gradientt.
+    //Known as Bright Blending mode found in IFS Illusions. Picked this name because the shading reminds me of fog when overlaying with a gradient.
     
     qreal fsrc = scale<qreal>(src);
     qreal fdst = scale<qreal>(dst);
@@ -844,7 +844,7 @@ inline T cfModuloShift(T src, T dst) {
 template<class T>
 inline T cfModuloShiftContinuous(T src, T dst) {
     using namespace Arithmetic;
-    //This blending mode do not behave like difference/equilavent with destination layer inverted if you use group layer on addition while the content of group layer contains several addition-mode layers, it works as expected on float images. So, no need to change this.
+    //This blending mode do not behave like difference/equivalent with destination layer inverted if you use group layer on addition while the content of group layer contains several addition-mode layers, it works as expected on float images. So, no need to change this.
     qreal fsrc = scale<qreal>(src);
     qreal fdst = scale<qreal>(dst);
     

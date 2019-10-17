@@ -52,7 +52,7 @@ public:
     static inline KoID id() {
         return KoID("pattern", i18n("Pattern"));
     }
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration() const override;
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 };
 

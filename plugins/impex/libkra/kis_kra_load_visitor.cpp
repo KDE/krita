@@ -586,7 +586,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
 
 bool KisKraLoadVisitor::loadFilterConfiguration(KisNodeFilterInterface *nodeInterface, const QString& location)
 {
-    KisFilterConfigurationSP kfc = new KisFilterConfiguration(nodeInterface->filter()->name(), nodeInterface->filter()->version());
+    KisFilterConfigurationSP kfc = nodeInterface->filter();
 
     if (m_store->hasFile(location)) {
         QByteArray data;
@@ -603,7 +603,6 @@ bool KisKraLoadVisitor::loadFilterConfiguration(KisNodeFilterInterface *nodeInte
                 kfc->fromXML(e);
             }
             loadDeprecatedFilter(kfc);
-            nodeInterface->setFilter(kfc);
             return true;
         }
     }

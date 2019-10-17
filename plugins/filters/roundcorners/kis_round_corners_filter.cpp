@@ -147,9 +147,9 @@ KisConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* pare
 
 }
 
-KisFilterConfigurationSP KisRoundCornersFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisRoundCornersFilter::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("roundcorners", 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("radius", 30);
     return config;
 }

@@ -43,7 +43,7 @@ public:
         return KoID("posterize", i18n("Posterize"));
     }
 protected:
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration() const override;
 };
 
 class KisPosterizeColorTransformation : public KoColorTransformation

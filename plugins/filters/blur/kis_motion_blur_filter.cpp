@@ -55,9 +55,9 @@ KisConfigWidget * KisMotionBlurFilter::createConfigurationWidget(QWidget* parent
     return new KisWdgMotionBlur(parent);
 }
 
-KisFilterConfigurationSP KisMotionBlurFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisMotionBlurFilter::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("blurAngle", 0);
     config->setProperty("blurLength", 5);
 

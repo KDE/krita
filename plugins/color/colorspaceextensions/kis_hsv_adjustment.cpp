@@ -79,26 +79,6 @@ void clamp<float>(float* r, float* g, float* b)
 
 #include "kis_global.h"
 
-struct AddPolicy
-{
-    static inline float adjustValue(float v, float dv) {
-        return v + dv;
-    }
-};
-
-
-struct MultiplyPolicy
-{
-    static inline float adjustValue(float v, float dv) {
-        if (dv < 0) {
-            v *= dv + 1.0f;
-        } else {
-            v += dv * (1.0f - v);
-        }
-        return v;
-    }
-};
-
 static inline void writeRGBSimple(float *r, float *g, float *b,
                                   int sextant,
                                   float x, float m, float M)
@@ -128,11 +108,7 @@ struct HSVPolicy
         return M;
     }
 
-    inline float fixupValueAfterChroma(float c, float v) {
-        return qMax(v, c);
-    }
-
-    inline float fixupChromaAfterValue(float c, float v) {
+    inline float fixupChroma(float c, float v) {
         return qMin(v, c);
     }
 
@@ -159,20 +135,7 @@ struct HSLPolicy
         return 0.5f * (M + m);
     }
 
-    inline float fixupValueAfterChroma(float c, float v) {
-        if (v >= 0.5f) {
-            if (c > 2.0f - 2.0f * v) {
-                v = 1.0f - 0.5f * c;
-            }
-        } else {
-            if (c > 2.0f * v) {
-                v = 0.5f * c;
-            }
-        }
-        return v;
-    }
-
-    inline float fixupChromaAfterValue(float c, float v) {
+    inline float fixupChroma(float c, float v) {
         if (v >= 0.5f) {
             c = qMin(c, 2.0f - 2.0f * v);
         } else {
@@ -206,19 +169,7 @@ struct HCIPolicy
         return (r + g + b) / 3.0f;
     }
 
-    inline float fixupValueAfterChroma(float c, float v) {
-        static const float oneThird = 1.0f / 3.0f;
-        static const float twoThirds = 2.0f / 3.0f;
-
-        if (v >= oneThird) {
-            v = qMin(v, 1.0f - twoThirds * c);
-        } else {
-            v = qMax(v, oneThird * c);
-        }
-        return v;
-    }
-
-    inline float fixupChromaAfterValue(float c, float v) {
+    inline float fixupChroma(float c, float v) {
         static const float oneThird = 1.0f / 3.0f;
 
         if (v >= oneThird) {
@@ -267,14 +218,8 @@ struct HCYPolicy
         return rCoeff * r + gCoeff * g + bCoeff * b;
     }
 
-    inline float fixupValueAfterChroma(float c, float v) {
-        // NOTE: no sliding in HCY, because the shape of the triangle
-        //       depends on Hue, which complicated code a lot. And it
-        //       seems to work fine without it :)
-        return v;
-    }
-
-    inline float fixupChromaAfterValue(float c, float v) {
+    inline float fixupChroma(float c, float v) {
+        Q_UNUSED(v);
         // NOTE: no sliding in HCY, because the shape of the triangle
         //       depends on Hue, which complicated code a lot. And it
         //       seems to work fine without it :)
@@ -302,7 +247,7 @@ struct HCYPolicy
     }
 };
 
-template <class ValueAdjustPolicy, class ValuePolicy>
+template <class ValuePolicy>
 void HSVTransform(float *r, float *g, float *b, float dh, float ds, float dv, ValuePolicy valuePolicy)
 {
     static const float EPSILON = 1e-9f;
@@ -319,7 +264,11 @@ void HSVTransform(float *r, float *g, float *b, float dh, float ds, float dv, Va
     if (!valuePolicy.hasChroma(v)) {
         chroma = 0.0f;
         h = 0.0f;
-        v = qBound(0.0f, ValueAdjustPolicy::adjustValue(v, dv), 1.0f);
+        if (dv < 0) {
+            v *= dv + 1.0f;
+        } else {
+            v += dv * (1.0f - v);
+        }
     } else {
         if (chroma > EPSILON) {
             if (*r == M)
@@ -333,15 +282,34 @@ void HSVTransform(float *r, float *g, float *b, float dh, float ds, float dv, Va
             h += dh * 180;
 
             h = normalizeAngleDegrees(h);
-            chroma = qBound(0.0f, chroma * (ds + 1.0f), 1.0f);
+
+            if (ds > 0) {
+                /// approximation of a nonlinear slider:
+                /// ds = 0.0 -> chroma *= 1.0;
+                /// ds = 0.5 -> chroma *= 2.0;
+                /// ds = 1.0 -> chroma *= 4.0;
+
+                chroma = qMin(1.0f, chroma * (1.0f + ds + 2.0f * pow2(ds)));
+            } else {
+                chroma *= ds + 1.0f;
+            }
+
         } else {
             h = 0.0f;
         }
 
-        v = valuePolicy.fixupValueAfterChroma(chroma, v);
-        v = ValueAdjustPolicy::adjustValue(v, dv);
+        {
+            const float dstV = dv > 0.0f ? 1.0f : 0.0f;
+            const float vCoeff = dstV - v;
+            const float chromaCoeff = 0 - chroma;
+            const float movement = std::abs(dv);
+
+            v += movement * vCoeff;
+            chroma += movement * chromaCoeff;
+        }
+
         v = qBound(0.0f, v, 1.0f);
-        chroma = valuePolicy.fixupChromaAfterValue(chroma, v);
+        chroma = valuePolicy.fixupChroma(chroma, v);
     }
 
     if (v <= EPSILON) {
@@ -437,7 +405,7 @@ public:
                             r = SCALE_TO_FLOAT(src->red);
                             g = SCALE_TO_FLOAT(src->green);
                             b = SCALE_TO_FLOAT(src->blue);
-                            HSVTransform<MultiplyPolicy>(&r, &g, &b, m_adj_h, m_adj_s, m_adj_v, HSVPolicy());
+                            HSVTransform(&r, &g, &b, m_adj_h, m_adj_s, m_adj_v, HSVPolicy());
                         } else {
                             RGBToHSV(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
                             h += m_adj_h * 180;
@@ -452,7 +420,7 @@ public:
                             r = SCALE_TO_FLOAT(src->red);
                             g = SCALE_TO_FLOAT(src->green);
                             b = SCALE_TO_FLOAT(src->blue);
-                            HSVTransform<MultiplyPolicy>(&r, &g, &b, m_adj_h, m_adj_s, m_adj_v, HSLPolicy());
+                            HSVTransform(&r, &g, &b, m_adj_h, m_adj_s, m_adj_v, HSLPolicy());
                         } else {
                             RGBToHSL(SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue), &h, &s, &v);
 
@@ -472,7 +440,7 @@ public:
                             r = SCALE_TO_FLOAT(src->red);
                             g = SCALE_TO_FLOAT(src->green);
                             b = SCALE_TO_FLOAT(src->blue);
-                            HSVTransform<MultiplyPolicy>(&r, &g, &b, m_adj_h, m_adj_s, m_adj_v, HCIPolicy());
+                            HSVTransform(&r, &g, &b, m_adj_h, m_adj_s, m_adj_v, HCIPolicy());
                         } else {
                             qreal red = SCALE_TO_FLOAT(src->red);
                             qreal green = SCALE_TO_FLOAT(src->green);
@@ -498,7 +466,7 @@ public:
                             r = SCALE_TO_FLOAT(src->red);
                             g = SCALE_TO_FLOAT(src->green);
                             b = SCALE_TO_FLOAT(src->blue);
-                            HSVTransform<MultiplyPolicy>(&r, &g, &b, m_adj_h, m_adj_s, m_adj_v, HCYPolicy(lumaR, lumaG, lumaB));
+                            HSVTransform(&r, &g, &b, m_adj_h, m_adj_s, m_adj_v, HCYPolicy(lumaR, lumaG, lumaB));
                         } else {
                             qreal red = SCALE_TO_FLOAT(src->red);
                             qreal green = SCALE_TO_FLOAT(src->green);

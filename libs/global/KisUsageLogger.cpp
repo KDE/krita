@@ -52,6 +52,7 @@ KisUsageLogger::KisUsageLogger()
 KisUsageLogger::~KisUsageLogger()
 {
     if (d->active) {
+        log(QString("CLOSING SESSION: %1").arg(QDateTime::currentDateTime().toString(Qt::RFC2822Date)));
         close();
     }
 }

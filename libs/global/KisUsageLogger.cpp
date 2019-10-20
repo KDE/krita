@@ -23,6 +23,7 @@
 #include <QSysInfo>
 #include <QStandardPaths>
 #include <QFile>
+#include <QFileInfo>
 #include <QDesktopWidget>
 #include <QClipboard>
 #include <QThread>
@@ -52,7 +53,6 @@ KisUsageLogger::KisUsageLogger()
 KisUsageLogger::~KisUsageLogger()
 {
     if (d->active) {
-        log(QString("CLOSING SESSION: %1").arg(QDateTime::currentDateTime().toString(Qt::RFC2822Date)));
         close();
     }
 }
@@ -64,7 +64,7 @@ void KisUsageLogger::initialize()
 
 void KisUsageLogger::close()
 {
-    log("Closing.");
+    log("CLOSING SESSION");
     s_instance->d->active = false;
     s_instance->d->logFile.flush();
     s_instance->d->logFile.close();
@@ -154,19 +154,53 @@ void KisUsageLogger::writeHeader()
 void KisUsageLogger::rotateLog()
 {
     if (d->logFile.exists()) {
-        d->logFile.open(QFile::ReadOnly);
-        QString log = QString::fromUtf8(d->logFile.readAll());
-        int sectionCount = log.count(s_sectionHeader);
-        int nextSectionIndex = log.indexOf(s_sectionHeader, s_sectionHeader.length());
-        while(sectionCount >= s_maxLogs) {
-            log = log.remove(0, log.indexOf(s_sectionHeader, nextSectionIndex));
-            nextSectionIndex = log.indexOf(s_sectionHeader, s_sectionHeader.length());
-            sectionCount = log.count(s_sectionHeader);
+        {
+            // Check for CLOSING SESSION
+            d->logFile.open(QFile::ReadOnly);
+            QString log = QString::fromUtf8(d->logFile.readAll());
+            if (!log.split("\n").last().contains("CLOSING SESSION")) {
+                log.append("\nKRITA DID NOT CLOSE CORRECTLY\n");
+                QString crashLog = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/kritacrash.log");
+                if (QFileInfo(crashLog).exists()) {
+                    QFile f(crashLog);
+                    f.open(QFile::ReadOnly);
+                    QString crashes = QString::fromUtf8(f.readAll());
+                    f.close();
+
+                    QStringList crashlist = crashes.split("-------------------");
+                    log.append(QString("\nThere were %1 crashes in total in the crash log.\n").arg(crashlist.size()));
+
+                    if (crashes.size() > 0) {
+                        log.append(crashlist.last());
+                    }
+                }
+                d->logFile.close();
+                d->logFile.open(QFile::WriteOnly);
+                d->logFile.write(log.toUtf8());
+            }
+            d->logFile.flush();
+            d->logFile.close();
         }
-        d->logFile.close();
-        d->logFile.open(QFile::WriteOnly);
-        d->logFile.write(log.toUtf8());
-        d->logFile.close();
+
+        {
+            // Rotate
+            d->logFile.open(QFile::ReadOnly);
+            QString log = QString::fromUtf8(d->logFile.readAll());
+            int sectionCount = log.count(s_sectionHeader);
+            int nextSectionIndex = log.indexOf(s_sectionHeader, s_sectionHeader.length());
+            while(sectionCount >= s_maxLogs) {
+                log = log.remove(0, log.indexOf(s_sectionHeader, nextSectionIndex));
+                nextSectionIndex = log.indexOf(s_sectionHeader, s_sectionHeader.length());
+                sectionCount = log.count(s_sectionHeader);
+            }
+            d->logFile.close();
+            d->logFile.open(QFile::WriteOnly);
+            d->logFile.write(log.toUtf8());
+            d->logFile.flush();
+            d->logFile.close();
+        }
+
+
     }
 }
 

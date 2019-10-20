@@ -1387,7 +1387,7 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
         if (QFile::exists(asf)) {
             KisApplication *kisApp = static_cast<KisApplication*>(qApp);
             kisApp->hideSplashScreen();
-            //dbgUI <<"asf=" << asf;
+            //qDebug() <<"asf=" << asf;
             // ## TODO compare timestamps ?
             int res = QMessageBox::warning(0,
                                            i18nc("@title:window", "Krita"),
@@ -1399,7 +1399,7 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
                 autosaveOpened = true;
                 break;
             case QMessageBox::No :
-                KisUsageLogger::log(QString("Removing autosave file: ").arg(asf));
+                KisUsageLogger::log(QString("Removing autosave file: %1").arg(asf));
                 QFile::remove(asf);
                 break;
             default: // Cancel
@@ -1724,15 +1724,14 @@ void KisDocument::removeAutoSaveFiles(const QString &autosaveBaseName, bool wasR
 {
     // Eliminate any auto-save file
     QString asf = generateAutoSaveFileName(autosaveBaseName);   // the one in the current dir
-
     if (QFile::exists(asf)) {
-        KisUsageLogger::log(QString("Removing autosave file: ").arg(asf));
+        KisUsageLogger::log(QString("Removing autosave file: %1").arg(asf));
         QFile::remove(asf);
     }
     asf = generateAutoSaveFileName(QString());   // and the one in $HOME
 
     if (QFile::exists(asf)) {
-        KisUsageLogger::log(QString("Removing autosave file: ").arg(asf));
+        KisUsageLogger::log(QString("Removing autosave file: %1").arg(asf));
         QFile::remove(asf);
     }
 
@@ -1747,7 +1746,7 @@ void KisDocument::removeAutoSaveFiles(const QString &autosaveBaseName, bool wasR
                 rex.match(QFileInfo(autosaveBaseName).fileName()).hasMatch() &&
                 QFile::exists(autosaveBaseName)) {
 
-            KisUsageLogger::log(QString("Removing autosave file: ").arg(autosaveBaseName));
+            KisUsageLogger::log(QString("Removing autosave file: %1").arg(autosaveBaseName));
             QFile::remove(autosaveBaseName);
         }
     }

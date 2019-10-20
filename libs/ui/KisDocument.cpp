@@ -1861,13 +1861,14 @@ bool KisDocument::newImage(const QString& name,
     cfg.setDefaultColorDepth(image->colorSpace()->colorDepthId().id());
     cfg.defColorProfile(image->colorSpace()->profile()->name());
 
-    KisUsageLogger::log(i18n("Created image \"%1\", %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8"
-                             , name
-                             , width, height
-                             , imageResolution * 72.0
-                             , image->colorSpace()->colorModelId().name(), image->colorSpace()->colorDepthId().name()
-                             , image->colorSpace()->profile()->name()
-                             , numberOfLayers));
+    KisUsageLogger::log(QString("Created image \"%1\", %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
+                             .arg(name)
+                             .arg(width).arg(height)
+                             .arg(imageResolution * 72.0)
+                             .arg(image->colorSpace()->colorModelId().name())
+                             .arg(image->colorSpace()->colorDepthId().name())
+                             .arg(image->colorSpace()->profile()->name())
+                             .arg(numberOfLayers));
 
     QApplication::restoreOverrideCursor();
 

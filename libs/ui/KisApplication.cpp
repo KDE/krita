@@ -172,8 +172,6 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     else {
         qDebug() << "Style override disabled, using" << style()->objectName();
     }
-
-    KisOpenGL::initialize();
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)

@@ -1,30 +1,31 @@
 /* This file is part of the KDE project
  *
-   Copyright 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+ * Copyright 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
 #ifndef KIS_FONT_FAMILY_COMBO_BOX_H
 #define KIS_FONT_FAMILY_COMBO_BOX_H
 
-#include<QObject>
-#include<KisSqueezedComboBox.h>
-#include<QList>
-#include<QFont>
-#include<QFontDatabase>
+#include <QObject>
+#include <KisSqueezedComboBox.h>
+#include <QList>
+#include <QFont>
+#include <QFontDatabase>
+#include <QStyledItemDelegate>
 
 /**
  * @brief The KisFontComboBoxes class
@@ -49,10 +50,11 @@ public:
     void setCurrentFamily(const QString family);
     void setCurrentStyle(QString style);
 
-    //Current family name.
+    // Current family name.
     QString currentFamily() const;
-    //Current style
+    // Current style
     QString currentStyle() const;
+
     /**
      * @brief currentFont the current QFont from both family and style combinations
      * @param pointSize as this widget has no idea about point size, input desired point size.
@@ -61,6 +63,8 @@ public:
     QFont currentFont(int pointSize = 10) const;
 
     void refillComboBox(QVector<QFontDatabase::WritingSystem> writingSystems = QVector<QFontDatabase::WritingSystem>());
+    void setInitialized();
+
 Q_SIGNALS:
     void fontChanged(QString);
 private Q_SLOTS:
@@ -69,6 +73,20 @@ private Q_SLOTS:
 private:
     QComboBox *m_family;
     QComboBox *m_styles;
+};
+
+class PinnedFontsSeparator : public QStyledItemDelegate {
+public:
+    PinnedFontsSeparator(QAbstractItemDelegate *_default, QWidget *parent = nullptr);
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    void setSeparatorIndex(int index);
+    void setSeparatorAdded();
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+
+private:
+    int m_separatorIndex;
+    bool m_separatorAdded;
+    QAbstractItemDelegate *m_defaultDelegate;
 };
 
 /**
@@ -84,13 +102,16 @@ class KisFontFamilyComboBox : public QComboBox
 public:
     KisFontFamilyComboBox(QWidget *parent = 0);
 
-    //List of writing systems to use. If empty will default to "all"
+    // List of writing systems to use. If empty will default to "all"
     void refillComboBox(QVector<QFontDatabase::WritingSystem> writingSystems = QVector<QFontDatabase::WritingSystem>());
+    void setTopFont(const QString &family);
+    void setInitialized();
 
 private:
-
-    QStringList m_blacklistedFonts;
-
+    QStringList m_pinnedFonts, m_blacklistedFonts;
+    bool m_initilized, m_initializeFromConfig;
+    int m_separatorIndex;
+    PinnedFontsSeparator *m_fontSeparator;
 };
 
 #endif // KIS_FONT_FAMILY_COMBO_BOX_H

@@ -189,7 +189,8 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
             QMessageBox::warning(this, i18n("Conversion failed"), "Could not get svg text from the shape:\n" + converter.errors().join('\n') + "\n" + converter.warnings().join('\n'));
         }
     }
-
+    KisFontComboBoxes* fontComboBox = qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget());
+    fontComboBox->setInitialized();
 }
 
 void SvgTextEditor::save()

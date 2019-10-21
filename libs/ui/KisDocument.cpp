@@ -1383,7 +1383,7 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
         if (QFile::exists(asf)) {
             KisApplication *kisApp = static_cast<KisApplication*>(qApp);
             kisApp->hideSplashScreen();
-            //dbgUI <<"asf=" << asf;
+            //qDebug() <<"asf=" << asf;
             // ## TODO compare timestamps ?
             int res = QMessageBox::warning(0,
                                            i18nc("@title:window", "Krita"),
@@ -1395,6 +1395,7 @@ bool KisDocument::openUrl(const QUrl &_url, OpenFlags flags)
                 autosaveOpened = true;
                 break;
             case QMessageBox::No :
+                KisUsageLogger::log(QString("Removing autosave file: %1").arg(asf));
                 QFile::remove(asf);
                 break;
             default: // Cancel
@@ -1717,20 +1718,16 @@ QString KisDocument::warningMessage() const
 
 void KisDocument::removeAutoSaveFiles(const QString &autosaveBaseName, bool wasRecovered)
 {
-    //qDebug() << "removeAutoSaveFiles";
     // Eliminate any auto-save file
     QString asf = generateAutoSaveFileName(autosaveBaseName);   // the one in the current dir
-
-    //qDebug() << "\tfilename:" << asf << "exists:" << QFile::exists(asf);
     if (QFile::exists(asf)) {
-        //qDebug() << "\tremoving autosavefile" << asf;
+        KisUsageLogger::log(QString("Removing autosave file: %1").arg(asf));
         QFile::remove(asf);
     }
     asf = generateAutoSaveFileName(QString());   // and the one in $HOME
 
-    //qDebug() << "Autsavefile in $home" << asf;
     if (QFile::exists(asf)) {
-        //qDebug() << "\tremoving autsavefile 2" << asf;
+        KisUsageLogger::log(QString("Removing autosave file: %1").arg(asf));
         QFile::remove(asf);
     }
 
@@ -1745,6 +1742,7 @@ void KisDocument::removeAutoSaveFiles(const QString &autosaveBaseName, bool wasR
                 rex.match(QFileInfo(autosaveBaseName).fileName()).hasMatch() &&
                 QFile::exists(autosaveBaseName)) {
 
+            KisUsageLogger::log(QString("Removing autosave file: %1").arg(autosaveBaseName));
             QFile::remove(autosaveBaseName);
         }
     }
@@ -2059,13 +2057,14 @@ bool KisDocument::newImage(const QString& name,
     cfg.setDefaultColorDepth(image->colorSpace()->colorDepthId().id());
     cfg.defColorProfile(image->colorSpace()->profile()->name());
 
-    KisUsageLogger::log(i18n("Created image \"%1\", %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8"
-                             , name
-                             , width, height
-                             , imageResolution * 72.0
-                             , image->colorSpace()->colorModelId().name(), image->colorSpace()->colorDepthId().name()
-                             , image->colorSpace()->profile()->name()
-                             , numberOfLayers));
+    KisUsageLogger::log(QString("Created image \"%1\", %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
+                             .arg(name)
+                             .arg(width).arg(height)
+                             .arg(imageResolution * 72.0)
+                             .arg(image->colorSpace()->colorModelId().name())
+                             .arg(image->colorSpace()->colorDepthId().name())
+                             .arg(image->colorSpace()->profile()->name())
+                             .arg(numberOfLayers));
 
     QApplication::restoreOverrideCursor();
 

@@ -387,6 +387,8 @@ extern "C" int main(int argc, char **argv)
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+    KisUsageLogger::writeHeader();
+    KisOpenGL::initialize();
 
 #ifdef HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
     if (QCoreApplication::testAttribute(Qt::AA_UseDesktopOpenGL)) {
@@ -394,7 +396,6 @@ extern "C" int main(int argc, char **argv)
     }
 #endif
 
-    KisUsageLogger::writeHeader();
 
     if (!language.isEmpty()) {
         if (rightToLeft) {
@@ -548,11 +549,6 @@ extern "C" int main(int argc, char **argv)
 
 #endif
 #endif
-
-    if (!app.start(args)) {
-        return 1;
-    }
-
     app.setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
 
     // Set up remote arguments.
@@ -570,6 +566,11 @@ extern "C" int main(int argc, char **argv)
     KisUsageLogger::write(QString("  Swap Location: %1\n").arg(KisImageConfig(true).swapDir()));
 
     KisConfig(true).logImportantSettings();
+
+    if (!app.start(args)) {
+        KisUsageLogger::log("Could not start Krita Application");
+        return 1;
+    }
 
     int state = app.exec();
 

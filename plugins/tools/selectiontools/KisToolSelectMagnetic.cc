@@ -292,7 +292,8 @@ void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
         m_anchorPoints[m_selectedAnchor] = convertToPixelCoord(event).toPoint();
     } else if (!m_complete) {
         m_lastCursorPos = convertToPixelCoord(event);
-        m_mouseHoverCompressor.start();
+        if(kisDistance(m_lastCursorPos, m_cursorOnPress) >= m_anchorGap)
+            m_mouseHoverCompressor.start();
     }
     KisToolSelectBase::continuePrimaryAction(event);
 }
@@ -300,9 +301,12 @@ void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 void KisToolSelectMagnetic::slotCalculateEdge()
 {
     QPoint current    = m_lastCursorPos.toPoint();
-    if (!image()->bounds().contains(current)) {
+    if (!image()->bounds().contains(current))
         return;
-    }
+
+    if(kisDistance(m_lastAnchor, current) < m_anchorGap)
+        return;
+
     vQPointF pointSet = computeEdgeWrapper(m_lastAnchor, current);
     calculateCheckPoints(pointSet);
 }
@@ -593,10 +597,8 @@ void KisToolSelectMagnetic::deactivate()
     KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas)
     kisCanvas->updateCanvas();
-
+    resetVariables();
     m_continuedMode = false;
-    m_complete      = true;
-
     disconnect(action("undo_polygon_selection"), nullptr, this, nullptr);
 
     KisTool::deactivate();

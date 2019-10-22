@@ -484,7 +484,7 @@
           <item>
            <widget class="QCheckBox" name="m_chkKineticScrollingHideScrollbars">
             <property name="text">
-             <string>Hide Scrollbars</string>
+             <string>Hide docker scrollbars if kinetic scrolling is enabled (needs restart)</string>
             </property>
             <property name="checked">
              <bool>false</bool>

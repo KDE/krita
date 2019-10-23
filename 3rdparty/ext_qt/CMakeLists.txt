@@ -90,10 +90,10 @@ if (WIN32)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-      URL https://download.qt.io/official_releases/qt/5.12/5.12.5/single/qt-everywhere-src-5.12.5.zip
-      URL_MD5 157fa5d9c897737ce06ba4f9a20151e0
+      URL https://download.qt.io/development_releases/qt/5.14/5.14.0-beta1/single/qt-everywhere-src-5.14.0-beta1.zip
+#      URL_MD5 157fa5d9c897737ce06ba4f9a20151e0
 
-      PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
+#      PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
 
       INSTALL_DIR ${EXTPREFIX_qt}
       CONFIGURE_COMMAND <SOURCE_DIR>/configure.bat ${_QT_conf}

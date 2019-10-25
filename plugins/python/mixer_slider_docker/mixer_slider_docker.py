@@ -46,8 +46,9 @@ class MixerSliderDocker(DockWidget):
         self.main_layout = QHBoxLayout()
         self.top_layout.addLayout(self.main_layout)
         self.top_layout.addStretch(0)
-        # The text on the button for settings
-        self.settings_button = QPushButton(i18n('S'))
+        self.settings_button = QPushButton()
+        icon = main_program.icon("configure")
+        self.settings_button.setIcon(icon)
         self.settings_button.setToolTip(i18n('Change settings'))
         self.settings_button.setMaximumSize(30, 30)
         self.main_layout.addWidget(self.settings_button)

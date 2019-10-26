@@ -187,7 +187,7 @@ void KisGradientChooser::addGradient(KoAbstractGradientSP gradient)
     KisCustomGradientDialog dialog(gradient, this, "KisCustomGradientDialog");
     dialog.exec();
 
-    gradient->setFilename(saveLocation + gradient->name() + gradient->defaultFileExtension());
+    gradient->setFilename(gradient->name() + gradient->defaultFileExtension());
     gradient->setValid(true);
     rserver->addResource(gradient);
     m_itemChooser->setCurrentResource(gradient);

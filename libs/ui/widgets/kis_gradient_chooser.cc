@@ -167,6 +167,7 @@ void KisGradientChooser::addStopGradient()
     QList<KoGradientStop> stops;
     stops << KoGradientStop(0.0, KoColor(QColor(250, 250, 0), KoColorSpaceRegistry::instance()->rgb8())) << KoGradientStop(1.0,  KoColor(QColor(255, 0, 0, 255), KoColorSpaceRegistry::instance()->rgb8()));
     gradient->setType(QGradient::LinearGradient);
+    gradient->setName(i18n("unnamed"));
     gradient->setStops(stops);
     addGradient(gradient);
 }

@@ -108,11 +108,13 @@ void KisCustomPattern::slotAddPredefined()
     QString dir = KoResourceServerProvider::instance()->patternServer()->saveLocation();
 
     QString tempFileName;
+
+
     {
-        QTemporaryFile file(dir +  QLatin1String("/krita_XXXXXX") + QLatin1String(".pat") );
+        QTemporaryFile file(dir +  QLatin1String("/krita_XXXXXX") + m_pattern->defaultFileExtension() );
         file.setAutoRemove(false);
         file.open();
-        tempFileName = file.fileName();
+        tempFileName = file.fileName().split("/").last();
     }
 
     // Save it to that file

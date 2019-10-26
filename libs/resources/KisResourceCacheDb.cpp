@@ -345,6 +345,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
 {
     bool r = false;
 
+
     // Create the new version. The resource is expected to have an updated version number, or
     // this will fail on the unique index on resource_id, storage_id and version.
     {
@@ -426,7 +427,8 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
 
     if (!resource || !resource->valid()) {
         qWarning() << "KisResourceCacheDb::addResource: The resource is not valid";
-        return false;
+        // We don't care about invalid resources and will just ignore them.
+        return true;
     }
 
     // Check whether it already exists

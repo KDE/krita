@@ -46,37 +46,38 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
     QImage thumbnail = index.data(Qt::DecorationRole).value<QImage>();
     QSize imageSize = thumbnail.size();
 
-    if (imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width()) {
-        qreal scaleW = static_cast<qreal>(innerRect.width()) / static_cast<qreal>(imageSize.width());
-        qreal scaleH = static_cast<qreal>(innerRect.height()) / static_cast<qreal>(imageSize.height());
-
-        qreal scale = qMin(scaleW, scaleH);
-
-        int thumbW = static_cast<int>(imageSize.width() * scale);
-        int thumbH = static_cast<int>(imageSize.height() * scale);
-        thumbnail = thumbnail.scaled(thumbW, thumbH, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    }
-
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
     QString resourceType = index.data(Qt::UserRole + KisResourceModel::ResourceType).toString();
     // XXX: don't use a hardcoded string here to identify the resource type
     if (resourceType == ResourceType::Gradients) {
         m_checkerPainter.paint(*painter, innerRect);
+        thumbnail = thumbnail.scaled(innerRect.width(), innerRect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        painter->drawImage(innerRect.topLeft(), thumbnail);
+    }
+    else if (resourceType == ResourceType::Patterns) {
+        painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
+        if (imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width()) {
+            thumbnail = thumbnail.scaled(innerRect.width(), innerRect.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
+        painter->fillRect(innerRect, QBrush(thumbnail));
     }
     else {
         painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
+        if (imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width()) {
+            thumbnail = thumbnail.scaled(innerRect.width(), innerRect.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
+        QPoint topleft(innerRect.topLeft());
+
+        if (thumbnail.width() < innerRect.width()) {
+            topleft.setX(topleft.x() + (innerRect.width() - thumbnail.width()) / 2);
+        }
+        if (thumbnail.height() < innerRect.height()) {
+            topleft.setY(topleft.y() + (innerRect.height() - thumbnail.height()) / 2);
+        }
+        painter->drawImage(topleft, thumbnail);
     }
 
-    QPoint topleft(innerRect.topLeft());
-
-    if (thumbnail.width() < innerRect.width()) {
-        topleft.setX(topleft.x() + (innerRect.width() - thumbnail.width()) / 2);
-    }
-    if (thumbnail.height() < innerRect.height()) {
-        topleft.setY(topleft.y() + (innerRect.height() - thumbnail.height()) / 2);
-    }
-    painter->drawImage(topleft, thumbnail);
 
     painter->restore();
 }

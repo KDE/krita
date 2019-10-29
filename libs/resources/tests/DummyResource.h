@@ -20,10 +20,24 @@
 
 #include "KoResource.h"
 #include <QDebug>
+#include <QRandomGenerator64>
+#include <KoHashGenerator.h>
+#include <KoHashGeneratorProvider.h>
 
 class DummyResource : public KoResource {
 public:
-    DummyResource(const QString &f) : KoResource(f) {}
+    DummyResource(const QString &f) : KoResource(f)
+    {
+        QRandomGenerator64 qrg;
+        QByteArray ba(1024, '0');
+        for (int i = 0; i < 1024 / 8; i+=8) {
+            quint64 v = qrg.generate64();
+            ba[i] = v;
+        }
+        KoHashGenerator *hashGenerator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
+        QByteArray hash = hashGenerator->generateHash(ba);
+        setMD5(hash);
+    }
 
     bool load() override
     {

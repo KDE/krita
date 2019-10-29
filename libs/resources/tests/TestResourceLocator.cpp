@@ -30,13 +30,18 @@
 #include <ksharedconfig.h>
 
 #include <KritaVersionWrapper.h>
-#include <KisResourceCacheDb.h>
 
+#include <KisResourceCacheDb.h>
 #include <KisResourceLocator.h>
 #include <KisResourceLoaderRegistry.h>
+#include <KisMemoryStorage.h>
+#include <KisResourceModelProvider.h>
+#include <KisResourceModel.h>
+#include <KisResourceTypes.h>
 
 #include <DummyResource.h>
 #include <ResourceTestHelper.h>
+
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
@@ -138,14 +143,14 @@ void TestResourceLocator::testResourceLocationBase()
 
 void TestResourceLocator::testResource()
 {
-    KoResourceSP res = m_locator->resource("", "paintoppresets", "test0.kpp");
+    KoResourceSP res = m_locator->resource("", ResourceType::PaintOpPresets, "test0.kpp");
     QVERIFY(res);
 }
 
 void TestResourceLocator::testResourceForId()
 {
-    KoResourceSP res = m_locator->resource("", "paintoppresets", "test0.kpp");
-    int resourceId = KisResourceCacheDb::resourceIdForResource("test0.kpp", "paintoppresets", "");
+    KoResourceSP res = m_locator->resource("", ResourceType::PaintOpPresets, "test0.kpp");
+    int resourceId = KisResourceCacheDb::resourceIdForResource("test0.kpp", ResourceType::PaintOpPresets, "");
     QVERIFY(resourceId > -1);
     KoResourceSP res2 = m_locator->resourceForId(resourceId);
     QCOMPARE(res, res2);
@@ -169,6 +174,23 @@ void TestResourceLocator::testAddResource()
 void TestResourceLocator::testUpdateResource()
 {
 
+}
+
+void TestResourceLocator::testDocumentStorage()
+{
+    const QString &documentName("document");
+
+    KisResourceModel *model = KisResourceModelProvider::resourceModel(ResourceType::PaintOpPresets);
+    int rowcount = model->rowCount();
+    KisResourceStorageSP documentStorage = QSharedPointer<KisResourceStorage>::create(documentName);
+    KoResourceSP resource(new DummyResource("test"));
+    documentStorage->addResource(ResourceType::PaintOpPresets, resource);
+    m_locator->addDocumentStorage(documentName, documentStorage);
+    QVERIFY(model->rowCount() > rowcount);
+    QVERIFY(m_locator->hasDocumentStorage(documentName));
+    m_locator->removeDocumentStorage(documentName);
+    QVERIFY(!m_locator->hasDocumentStorage(documentName));
+    QVERIFY(model->rowCount() == rowcount);
 }
 
 

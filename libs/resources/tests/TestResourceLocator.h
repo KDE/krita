@@ -44,6 +44,8 @@ private Q_SLOTS:
     void testAddResource();
     void testUpdateResource();
 
+    void testDocumentStorage();
+
     void cleanupTestCase();
 
 private:

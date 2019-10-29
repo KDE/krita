@@ -44,6 +44,7 @@
 #include "KisResourceCacheDb.h"
 #include "KisResourceLoaderRegistry.h"
 #include "KisMemoryStorage.h"
+#include "KisResourceModelProvider.h"
 
 
 const QString KisResourceLocator::resourceLocationKey {"ResourceDirectory"};
@@ -289,6 +290,51 @@ bool KisResourceLocator::setMetaDataForResource(int id, QMap<QString, QVariant> 
 void KisResourceLocator::purge()
 {
     d->resourceCache.clear();
+}
+
+bool KisResourceLocator::addDocumentStorage(const QString &document, KisResourceStorageSP storage)
+{
+    Q_ASSERT(!d->storages.contains(document));
+    d->storages[document] = storage;
+    if (!KisResourceCacheDb::addStorage(storage, false)) {
+        d->errorMessages.append(i18n("Could not synchronize %1 with the database", storage->location()));
+        return false;
+    }
+    QMap<QString, QStringList> typeResourceMap;
+    Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
+        typeResourceMap.insert(resourceType, QStringList());
+        QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage->resources(resourceType);
+        while (iter->hasNext()) {
+            iter->next();
+            KoResourceSP resource = iter->resource();
+            typeResourceMap[resourceType] << iter->url();
+            if (resource) {
+                if (!KisResourceCacheDb::addResource(storage, iter->lastModified(), resource, iter->type())) {
+                    qWarning() << "Could not add/update resource" << resource->filename() << "to the database";
+                }
+            }
+        }
+    }
+    KisResourceModelProvider::resetAllModels();
+    return true;
+}
+
+bool KisResourceLocator::removeDocumentStorage(const QString &document)
+{
+    purge();
+    Q_ASSERT(d->storages.contains(document));
+    KisResourceStorageSP storage = d->storages.take(document);
+    if (!KisResourceCacheDb::deleteStorage(storage)) {
+        d->errorMessages.append(i18n("Could not remove storage %1 from the database", storage->location()));
+        return false;
+    }
+    KisResourceModelProvider::resetAllModels();
+    return true;
+}
+
+bool KisResourceLocator::hasDocumentStorage(const QString &document)
+{
+    return d->storages.contains(document);
 }
 
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation)

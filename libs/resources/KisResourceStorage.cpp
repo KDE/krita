@@ -67,29 +67,25 @@ KisResourceStorage::KisResourceStorage(const QString &location)
         d->storageType = StorageType::Folder;
         d->valid = fi.isWritable();
     }
-    else if (location == "memory") {
-        d->storagePlugin.reset(new KisMemoryStorage);
-        d->name = "memory";
-        d->storageType = StorageType::Memory;
-        d->valid = true;
-    }
-    else {
-        if (d->location.endsWith(".bundle")) {
+    else if (d->location.endsWith(".bundle")) {
             d->storagePlugin.reset(new KisBundleStorage(location));
             d->storageType = StorageType::Bundle;
             // XXX: should we also check whether there's a valid metadata entry? Or is this enough?
             d->valid = (fi.isReadable() && QuaZip(d->location).open(QuaZip::mdUnzip));
-        }
-        else if (d->location.endsWith(".abr")) {
+    } else if (d->location.endsWith(".abr")) {
             d->storagePlugin.reset(new KisAbrStorage(location));
             d->storageType = StorageType::AdobeBrushLibrary;
             d->valid = fi.isReadable();
-        }
-        else if (d->location.endsWith(".asl")) {
+    } else if (d->location.endsWith(".asl")) {
             d->storagePlugin.reset(new KisAslStorage(location));
             d->storageType = StorageType::AdobeStyleLibrary;
             d->valid = fi.isReadable();
-        }
+    }
+    else if (!d->location.isEmpty()) {
+        d->storagePlugin.reset(new KisMemoryStorage);
+        d->name = location;
+        d->storageType = StorageType::Memory;
+        d->valid = true;
     }
 }
 

@@ -31,6 +31,7 @@ public:
     ~KisResourceModelProvider();
 
     static KisResourceModel *resourceModel(const QString &resourceType);
+    static void resetAllModels();
 
 private:
 

@@ -29,6 +29,7 @@
 
 #include <KisResourceStorage.h>
 
+
 /**
  * The KisResourceLocator class locates all resource storages (folders,
  * bundles, various adobe resource libraries) in the resource location.
@@ -85,11 +86,32 @@ public:
      */
     QString resourceLocationBase() const;
 
-
     /**
      * @brief purge purges the local resource cache
      */
     void purge();
+
+    /**
+     * @brief addDocumentStorage Adds a temporary resource storage to the database
+     * @param document a unique name for the given storage
+     * @param storage a storage that contains the resources stored in the document
+     * @return true if the storage has been added succesfully
+     */
+    bool addDocumentStorage(const QString &document, KisResourceStorageSP storage);
+
+    /**
+     * @brief removeDocumentStorage removes the temporary storage from the database
+     * @param document the unique name of the document
+     * @return true is succesful.
+     */
+    bool removeDocumentStorage(const QString &document);
+
+    /**
+     * @brief hasDocumentStorage can be used to check whether the given document storage already exists
+     * @param document the name of the storage
+     * @return true if the document is known
+     */
+    bool hasDocumentStorage(const QString &document);
 
 Q_SIGNALS:
 

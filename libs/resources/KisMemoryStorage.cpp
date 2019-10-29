@@ -132,8 +132,8 @@ private:
 };
 
 
-KisMemoryStorage::KisMemoryStorage()
-    : KisStoragePlugin("memory")
+KisMemoryStorage::KisMemoryStorage(const QString &name)
+    : KisStoragePlugin(name)
     , d(new Private())
 {
 }

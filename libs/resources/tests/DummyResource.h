@@ -26,7 +26,8 @@
 
 class DummyResource : public KoResource {
 public:
-    DummyResource(const QString &f) : KoResource(f)
+    DummyResource(const QString &f)
+        : KoResource(f)
     {
         QRandomGenerator64 qrg;
         QByteArray ba(1024, '0');

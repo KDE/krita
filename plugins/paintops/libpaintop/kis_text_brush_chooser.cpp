@@ -76,7 +76,6 @@ void KisTextBrushChooser::rebuildTextBrush()
     textBrush->updateBrush();
 
     emit sigBrushChanged();
-    emit fontSizeChanged(m_font.pointSize());
 }
 
 void KisTextBrushChooser::setBrush(KisBrushSP brush)

@@ -53,17 +53,14 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     m_layout = new QGridLayout(uiWdgBrushChooser.settingsFrame);
     m_autoBrushWidget = new KisAutoBrushWidget(this, "autobrush");
     connect(m_autoBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    connect(m_autoBrushWidget->inputRadius, SIGNAL(valueChanged(qreal)), SLOT(refreshAutoPrecision(qreal)));
     addChooser(i18n("Auto"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
 
     m_predefinedBrushWidget = new KisPredefinedBrushChooser(this);
     connect(m_predefinedBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    connect(m_predefinedBrushWidget->brushSizeSpinBox, SIGNAL(valueChanged(qreal)), SLOT(refreshAutoPrecision(qreal)));
     addChooser(i18n("Predefined"), m_predefinedBrushWidget, PREDEFINEDBRUSH, KoGroupButton::GroupCenter);
 
     m_textBrushWidget = new KisTextBrushChooser(this, "textbrush", i18n("Text"));
     connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
-    connect(m_textBrushWidget, SIGNAL(fontSizeChanged(qreal)), SLOT(refreshAutoPrecision(qreal)));
     addChooser(i18n("Text"), m_textBrushWidget, TEXTBRUSH, KoGroupButton::GroupRight);
 
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonClicked(int)));
@@ -79,17 +76,8 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     uiWdgBrushChooser.sliderPrecision->setPageStep(1);
     connect(uiWdgBrushChooser.sliderPrecision, SIGNAL(valueChanged(int)), SLOT(precisionChanged(int)));
     connect(uiWdgBrushChooser.autoPrecisionCheckBox, SIGNAL(stateChanged(int)), SLOT(setAutoPrecisionEnabled(int)));
-    connect(uiWdgBrushChooser.deltaValueSpinBox, SIGNAL(valueChanged(double)), SLOT(setDeltaValue(double)));
-    connect(uiWdgBrushChooser.sizeToStartFromSpinBox, SIGNAL(valueChanged(double)), SLOT(setSizeToStartFrom(double)));
-    uiWdgBrushChooser.sliderPrecision->setValue(4);
+    uiWdgBrushChooser.sliderPrecision->setValue(5);
     setPrecisionEnabled(false);
-    uiWdgBrushChooser.label->setVisible(false);
-    uiWdgBrushChooser.label_2->setVisible(false);
-    uiWdgBrushChooser.deltaValueSpinBox->setVisible(false);
-    uiWdgBrushChooser.sizeToStartFromSpinBox->setVisible(false);
-    uiWdgBrushChooser.lblPrecisionValue->setVisible(false);
-    uiWdgBrushChooser.label ->setToolTip(i18n("Use to set the size from which the Automatic Precision Setting should begin. \nThe Precision will remain 5 before this value."));
-    uiWdgBrushChooser.label_2 ->setToolTip(i18n("Use to set the interval at which the Automatic Precision will change. \nThe Precision will decrease as brush size increases."));
 
     m_presetIsValid = true;
 }
@@ -123,24 +111,6 @@ KisBrushSP KisBrushSelectionWidget::brush() const
     return theBrush;
 
 }
-
-void KisBrushSelectionWidget::updatePrecisionByType(int id)
-{
-    switch (id) {
-    case AUTOBRUSH:
-        refreshAutoPrecision(m_autoBrushWidget->inputRadius->value());
-        break;
-    case PREDEFINEDBRUSH:
-        refreshAutoPrecision(m_predefinedBrushWidget->brushSizeSpinBox->value());
-        break;
-    case TEXTBRUSH:
-        refreshAutoPrecision(m_textBrushWidget->fontInfo().pixelSize());
-        break;
-    default:
-        ;
-    }
-}
-
 
 void KisBrushSelectionWidget::setAutoBrush(bool on)
 {
@@ -198,7 +168,6 @@ void KisBrushSelectionWidget::setCurrentBrush(KisBrushSP brush)
 void KisBrushSelectionWidget::buttonClicked(int id)
 {
     setCurrentWidget(m_chooserMap[id]);
-    updatePrecisionByType(id);
     emit sigBrushChanged();
 }
 
@@ -264,12 +233,11 @@ void KisBrushSelectionWidget::readOptionSetting(const KisPropertiesConfiguration
     m_precisionOption.readOptionSetting(setting);
     uiWdgBrushChooser.sliderPrecision->setValue(m_precisionOption.precisionLevel());
     uiWdgBrushChooser.autoPrecisionCheckBox->setChecked(m_precisionOption.autoPrecisionEnabled());
-    uiWdgBrushChooser.deltaValueSpinBox ->setValue(m_precisionOption.deltaValue());
-    uiWdgBrushChooser.sizeToStartFromSpinBox ->setValue(m_precisionOption.sizeToStartFrom());
 }
 
 void KisBrushSelectionWidget::setPrecisionEnabled(bool value)
 {
+    uiWdgBrushChooser.autoPrecisionCheckBox->setVisible(value);
     uiWdgBrushChooser.sliderPrecision->setVisible(value);
     uiWdgBrushChooser.lblPrecision->setVisible(value);
 }
@@ -343,47 +311,15 @@ void KisBrushSelectionWidget::setAutoPrecisionEnabled(int value)
 {
     m_precisionOption.setAutoPrecisionEnabled(value);
     if (m_precisionOption.autoPrecisionEnabled()) {
-        m_precisionOption.setAutoPrecision(brush()->userEffectiveSize());
-        setPrecisionEnabled(false);
         precisionChanged(m_precisionOption.precisionLevel());
-        uiWdgBrushChooser.label->setVisible(true);
-        uiWdgBrushChooser.label_2->setVisible(true);
-        uiWdgBrushChooser.deltaValueSpinBox->setVisible(true);
-        uiWdgBrushChooser.sizeToStartFromSpinBox->setVisible(true);
-        uiWdgBrushChooser.lblPrecisionValue->setVisible(true);
-        uiWdgBrushChooser.lblPrecisionValue->setText(i18n("Precision: %1", m_precisionOption.precisionLevel()));
-
+        uiWdgBrushChooser.sliderPrecision->setEnabled(false);
+        uiWdgBrushChooser.lblPrecision->setEnabled(false);
     } else {
-        setPrecisionEnabled(true);
-        uiWdgBrushChooser.label->setVisible(false);
-        uiWdgBrushChooser.label_2->setVisible(false);
-        uiWdgBrushChooser.deltaValueSpinBox->setVisible(false);
-        uiWdgBrushChooser.sizeToStartFromSpinBox->setVisible(false);
-        uiWdgBrushChooser.lblPrecisionValue->setVisible(false);
+        uiWdgBrushChooser.sliderPrecision->setEnabled(true);
+        uiWdgBrushChooser.lblPrecision->setEnabled(true);
     }
+
     emit sigPrecisionChanged();
-}
-
-void KisBrushSelectionWidget::refreshAutoPrecision(qreal value)
-{
-    if (m_precisionOption.autoPrecisionEnabled() && value > 0) {
-        m_precisionOption.setAutoPrecision(value);
-        precisionChanged(m_precisionOption.precisionLevel());
-        uiWdgBrushChooser.lblPrecisionValue->setText(i18n("Precision: %1", m_precisionOption.precisionLevel()));
-    }
-}
-
-void KisBrushSelectionWidget::setSizeToStartFrom(double value)
-{
-    m_precisionOption.setSizeToStartFrom(value);
-    emit sigPrecisionChanged();
-}
-
-void KisBrushSelectionWidget::setDeltaValue(double value)
-{
-    m_precisionOption.setDeltaValue(value);
-    emit sigPrecisionChanged();
-
 }
 
 #include "moc_kis_brush_selection_widget.cpp"

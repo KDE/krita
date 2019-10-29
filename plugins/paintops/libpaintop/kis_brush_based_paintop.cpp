@@ -105,6 +105,10 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPropertiesConfigurationSP se
 
     m_textureProperties.fillProperties(settings);
     m_dabCache->setTexturePostprocessing(&m_textureProperties);
+
+    m_precisionOption.setHasImprecisePositionOptions(
+        m_precisionOption.hasImprecisePositionOptions() |
+        m_mirrorOption.isChecked() | m_textureProperties.m_enabled);
 }
 
 KisBrushBasedPaintOp::~KisBrushBasedPaintOp()

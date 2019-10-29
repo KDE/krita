@@ -102,6 +102,9 @@ QByteArray KoResource::generateMD5() const
             buf.close();
             hash = hashGenerator->generateHash(ba);
         }
+        else {
+            qWarning() << "Could not create md5sum for resource" << d->filename;
+        }
     }
     return hash;
 }

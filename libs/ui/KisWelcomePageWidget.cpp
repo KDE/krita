@@ -25,6 +25,7 @@
 #include <QPixmap>
 #include <QImage>
 
+#include <KisMimeDatabase.h>
 #include "kis_action_manager.h"
 #include "kactioncollection.h"
 #include "kis_action.h"
@@ -260,7 +261,9 @@ void KisWelcomePageWidget::populateRecentDocuments()
             QFileInfo fi(recentFileUrlPath);
 
             if (fi.exists()) {
-                if (fi.suffix() == "ora" || fi.suffix() == "kra") {
+                QString mimeType = KisMimeDatabase::mimeTypeForFile(recentFileUrlPath);
+                if (mimeType == KisDocument::nativeFormatMimeType()
+                       || mimeType == "image/openraster") {
 
                     QScopedPointer<KoStore> store(KoStore::createStore(recentFileUrlPath, KoStore::Read));
                     if (store) {
@@ -286,7 +289,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
                         brokenUrls << m_mainWindow->recentFilesUrls().at(i);
                     }
                 }
-                else if (fi.suffix() == "tiff" || fi.suffix() == "tif") {
+                else if (mimeType == "image/tiff" || mimeType == "image/x-tiff") {
                     // Workaround for a bug in Qt tiff QImageIO plugin
                     QScopedPointer<KisDocument> doc;
                     doc.reset(KisPart::instance()->createDocument());

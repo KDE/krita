@@ -351,7 +351,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
     {
         QSqlQuery q;
         r = q.prepare("INSERT INTO versioned_resources \n"
-                      "(resource_id, storage_id, version, location, timestamp)\n"
+                      "(resource_id, storage_id, version, location, timestamp, md5sum)\n"
                       "VALUES\n"
                       "( :resource_id\n"
                       ", (SELECT id \n"
@@ -360,6 +360,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
                       ", :version\n"
                       ", :location\n"
                       ", :timestamp\n"
+                      ", :md5sum\n"
                       ");");
 
         if (!r) {
@@ -372,7 +373,8 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
         q.bindValue(":version", resource->version() + 1);
         q.bindValue(":location", makeRelative(resource->filename()));
         q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
-
+        Q_ASSERT(!resource->md5().isEmpty());
+        q.bindValue(":md5sum", resource->md5().toHex());
         r = q.exec();
         if (!r) {
             qWarning() << "Could not execute addResourceVersion statement" << q.boundValues() << q.lastError();
@@ -439,68 +441,68 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
         }
         return true;
     }
-    else {
-        QSqlQuery q;
-        r = q.prepare("INSERT INTO resources \n"
-                      "(storage_id, resource_type_id, name, filename, tooltip, thumbnail, status, temporary) \n"
-                      "VALUES \n"
-                      "((SELECT id "
-                      "  FROM storages "
-                      "  WHERE location = :storage_location)\n"
-                      ", (SELECT id\n"
-                      "   FROM resource_types\n"
-                      "   WHERE name = :resource_type)\n"
-                      ", :name\n"
-                      ", :filename\n"
-                      ", :tooltip\n"
-                      ", :thumbnail\n"
-                      ", :status\n"
-                      ", :temporary);");
 
-        if (!r) {
-            qWarning() << "Could not prepare addResource statement" << q.lastError();
-            return r;
-        }
-
-        q.bindValue(":storage_location", makeRelative(storage->location()));
-        q.bindValue(":resource_type", resourceType);
-        q.bindValue(":name", resource->name());
-        q.bindValue(":filename", makeRelative(resource->filename()));
-        q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
-
-        QByteArray ba;
-        QBuffer buf(&ba);
-        buf.open(QBuffer::WriteOnly);
-        resource->image().save(&buf, "PNG");
-        buf.close();
-        q.bindValue(":thumbnail", ba);
-
-        q.bindValue(":status", 1);
-        q.bindValue(":temporary", (temporary ? 1 : 0));
-
-        r = q.exec();
-        if (!r) {
-            qWarning() << "Could not execute addResource statement" << q.boundValues() << q.lastError();
-            return r;
-        }
-
-        resourceId = resourceIdForResource(resource->name(), resourceType, makeRelative(storage->location()));
-    }
-    // Then add a new version
     QSqlQuery q;
-    r = q.prepare("INSERT INTO versioned_resources "
-                  "(resource_id, storage_id, version, location, timestamp) "
-                  "VALUES "
-                  "(:resource_id "
-                  ",    (SELECT id FROM storages "
-                  "      WHERE location = :storage_location) "
-                  ", :version "
-                  ", :location "
-                  ", :timestamp "
+    r = q.prepare("INSERT INTO resources \n"
+                  "(storage_id, resource_type_id, name, filename, tooltip, thumbnail, status, temporary) \n"
+                  "VALUES \n"
+                  "((SELECT id "
+                  "  FROM storages "
+                  "  WHERE location = :storage_location)\n"
+                  ", (SELECT id\n"
+                  "   FROM resource_types\n"
+                  "   WHERE name = :resource_type)\n"
+                  ", :name\n"
+                  ", :filename\n"
+                  ", :tooltip\n"
+                  ", :thumbnail\n"
+                  ", :status\n"
+                  ", :temporary);");
+
+    if (!r) {
+        qWarning() << "Could not prepare addResource statement" << q.lastError();
+        return r;
+    }
+
+    q.bindValue(":storage_location", makeRelative(storage->location()));
+    q.bindValue(":resource_type", resourceType);
+    q.bindValue(":name", resource->name());
+    q.bindValue(":filename", makeRelative(resource->filename()));
+    q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
+
+    QByteArray ba;
+    QBuffer buf(&ba);
+    buf.open(QBuffer::WriteOnly);
+    resource->image().save(&buf, "PNG");
+    buf.close();
+    q.bindValue(":thumbnail", ba);
+
+    q.bindValue(":status", 1);
+    q.bindValue(":temporary", (temporary ? 1 : 0));
+
+    r = q.exec();
+    if (!r) {
+        qWarning() << "Could not execute addResource statement" << q.boundValues() << q.lastError();
+        return r;
+    }
+
+    resourceId = resourceIdForResource(resource->name(), resourceType, makeRelative(storage->location()));
+
+    // Then add a new version
+    r = q.prepare("INSERT INTO versioned_resources\n"
+                  "(resource_id, storage_id, version, location, timestamp, md5sum)\n"
+                  "VALUES\n"
+                  "(:resource_id\n"
+                  ",    (SELECT id FROM storages\n"
+                  "      WHERE location = :storage_location)\n"
+                  ", :version\n"
+                  ", :location\n"
+                  ", :timestamp\n"
+                  ", :md5sum\n"
                   ");");
 
     if (!r) {
-        qWarning() << "Could not prepare addResourceVersion statement" << q.lastError();
+        qWarning() << "Could not prepare intitial addResourceVersion statement" << q.lastError();
         return r;
     }
 
@@ -509,6 +511,8 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     q.bindValue(":version", resource->version());
     q.bindValue(":location", makeRelative(resource->filename()));
     q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
+    Q_ASSERT(!resource->md5().isEmpty());
+    q.bindValue(":md5sum", resource->md5().toHex());
 
     r = q.exec();
     if (!r) {
@@ -525,7 +529,7 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
     while(iter->hasNext()) {
         iter->next();
         KoResourceSP resource = iter->resource();
-        if (resource) {
+        if (resource && resource->valid()) {
             if (!addResource(storage, iter->lastModified(), resource, iter->type())) {
                 qWarning() << "Could not add resource" << makeRelative(resource->filename()) << "to the database";
             }
@@ -734,25 +738,25 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
 
     }
 
-    {
-        QSqlQuery q;
+//    {
+//        QSqlQuery q;
 
-        q.prepare("SELECT COUNT(*) FROM storages");
-        q.exec();
-        q.first();
-        qDebug() << "number of storages" << q.value(0);
+//        q.prepare("SELECT COUNT(*) FROM storages");
+//        q.exec();
+//        q.first();
+//        qDebug() << "number of storages" << q.value(0);
 
-        q.prepare("SELECT MAX(id) FROM storages");
-        q.exec();
-        q.first();
-        qDebug() << "max rowid of storages" << q.value(0);
+//        q.prepare("SELECT MAX(id) FROM storages");
+//        q.exec();
+//        q.first();
+//        qDebug() << "max rowid of storages" << q.value(0);
 
-        q.prepare("SELECT seq FROM sqlite_sequence WHERE name = \"storages\"");
-        q.exec();
-        q.first();
-        qDebug() << "rowid from sqlite_sequence" << q.value(0);
+//        q.prepare("SELECT seq FROM sqlite_sequence WHERE name = \"storages\"");
+//        q.exec();
+//        q.first();
+//        qDebug() << "rowid from sqlite_sequence" << q.value(0);
 
-    }
+//    }
 
     {
         QStringList keys = storage->metaDataKeys();

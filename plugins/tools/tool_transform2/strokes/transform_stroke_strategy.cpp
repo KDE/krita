@@ -136,19 +136,10 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
 
     if (runAllData) {
+        // here we only save the passed args, actual
+        // transformation will be performed during
+        // finish job
         m_savedTransformArgs = runAllData->config;
-
-        QVector<KisStrokeJobData *> mutatedJobs;
-        Q_FOREACH (KisNodeSP node, m_processedNodes) {
-            mutatedJobs << new TransformData(TransformData::PAINT_DEVICE,
-                                             runAllData->config,
-                                             node);
-        }
-        mutatedJobs << new TransformData(TransformData::SELECTION,
-                                         runAllData->config,
-                                         m_rootNode);
-        addMutatedJobs(mutatedJobs);
-
     } else if (ppd) {
         KisNodeSP rootNode = m_rootNode;
         KisNodeList processedNodes = m_processedNodes;
@@ -411,8 +402,10 @@ struct TransformExtraData : public KUndo2CommandExtraData
 
 void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_savedTransformArgs);
+
     TransformExtraData *data = new TransformExtraData();
-    data->savedTransformArgs = m_savedTransformArgs;
+    data->savedTransformArgs = *m_savedTransformArgs;
     data->rootNode = m_rootNode;
     data->transformedNodes = m_processedNodes;
 
@@ -603,7 +596,8 @@ void TransformStrokeStrategy::initStrokeCallback()
             initialTransformArgs = KisTransformUtils::resetArgsForMode(m_mode, m_filterId, transaction);
         }
 
-        emit this->sigTransactionGenerated(transaction, initialTransformArgs);
+        this->m_initialTransformArgs = initialTransformArgs;
+        emit this->sigTransactionGenerated(transaction, initialTransformArgs, this);
     });
 
     extraInitJobs << new PreparePreviewData();
@@ -617,28 +611,61 @@ void TransformStrokeStrategy::initStrokeCallback()
     addMutatedJobs(extraInitJobs);
 }
 
+void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTransformArgs &args)
+{
+    QVector<KisStrokeJobData *> mutatedJobs;
+
+    if (applyTransform) {
+        Q_FOREACH (KisNodeSP node, m_processedNodes) {
+            mutatedJobs << new TransformData(TransformData::PAINT_DEVICE,
+                                             args,
+                                             node);
+        }
+        mutatedJobs << new TransformData(TransformData::SELECTION,
+                                         args,
+                                         m_rootNode);
+    }
+
+    KritaUtils::addJobBarrier(mutatedJobs, [this, applyTransform]() {
+
+        if (!applyTransform) {
+            KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
+        }
+
+        Q_FOREACH (KisSelectionSP selection, m_deactivatedSelections) {
+            selection->setVisible(true);
+        }
+
+        Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
+            node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
+        }
+
+        if (applyTransform) {
+            KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
+        }
+    });
+
+    addMutatedJobs(mutatedJobs);
+}
+
 void TransformStrokeStrategy::finishStrokeCallback()
 {
-    Q_FOREACH (KisSelectionSP selection, m_deactivatedSelections) {
-        selection->setVisible(true);
+    if (!m_savedTransformArgs || m_savedTransformArgs->isIdentity()) {
+        cancelStrokeCallback();
+        return;
     }
 
-    Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
-        node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
-    }
-
-    KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
+    finishStrokeImpl(true, *m_savedTransformArgs);
 }
 
 void TransformStrokeStrategy::cancelStrokeCallback()
 {
-    KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
+    const bool shouldRecoverSavedInitialState =
+        !m_initialTransformArgs.isIdentity();
 
-    Q_FOREACH (KisSelectionSP selection, m_deactivatedSelections) {
-        selection->setVisible(true);
+    if (shouldRecoverSavedInitialState) {
+        m_savedTransformArgs = m_initialTransformArgs;
     }
 
-    Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
-        node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
-    }
+    finishStrokeImpl(shouldRecoverSavedInitialState, *m_savedTransformArgs);
 }

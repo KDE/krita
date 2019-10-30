@@ -60,10 +60,17 @@ void KisSessionManagerDialog::slotNewSession()
     KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
     QString saveLocation = server->saveLocation();
     QFileInfo fileInfo(saveLocation + name + session->defaultFileExtension());
-    int i = 1;
     while (fileInfo.exists()) {
-        fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + session->defaultFileExtension());
-        i++;
+        name = QInputDialog::getText(this,
+                i18n("Create session"),
+                i18n("The name '%1' is already in use, please choose a new session name:", name),
+                QLineEdit::Normal
+            );
+        if (!name.isNull() || !name.isEmpty()) {
+            fileInfo = QFileInfo(saveLocation + name + session->defaultFileExtension());
+        } else {
+            return;
+        }
     }
 
     session->setFilename(fileInfo.fileName());

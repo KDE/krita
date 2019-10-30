@@ -44,6 +44,7 @@
 #include <QTimer>
 #include <QWidget>
 #include <QImageReader>
+#include <QImageWriter>
 
 #include <klocalizedstring.h>
 #include <kdesktopfile.h>
@@ -322,7 +323,9 @@ bool KisApplication::registerResources()
     QList<QByteArray> src = QImageReader::supportedMimeTypes();
     QStringList allImageMimes;
     Q_FOREACH(const QByteArray ba, src) {
-        allImageMimes << QString::fromUtf8(ba);
+        if (QImageWriter::supportedMimeTypes().contains(ba)) {
+            allImageMimes << QString::fromUtf8(ba);
+        }
     }
     allImageMimes << KisMimeDatabase::mimeTypeForSuffix("pat");
 

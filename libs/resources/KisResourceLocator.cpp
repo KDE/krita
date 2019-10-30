@@ -359,7 +359,7 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
                 QFile f(dir.canonicalPath() + '/'+ entry);
                 if (!QFileInfo(d->resourceLocation + '/' + folder + '/' + entry).exists()) {
                     if (!f.copy(d->resourceLocation + '/' + folder + '/' + entry)) {
-                        d->errorMessages << i18n("Could not copy resource %1 to %2").arg(f.fileName()).arg(d->resourceLocation + '/' + folder + '/' + entry);
+                        d->errorMessages << i18n("Could not copy resource %1 to %2", f.fileName(), d->resourceLocation + '/' + folder + '/' + entry);
                     }
                 }
             }
@@ -375,7 +375,7 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
         QFile f(iter.filePath());
         Q_ASSERT(f.exists());
         if (!f.copy(d->resourceLocation + '/' + iter.fileName())) {
-            d->errorMessages << i18n("Could not copy resource %1 to %2").arg(f.fileName()).arg(d->resourceLocation);
+            d->errorMessages << i18n("Could not copy resource %1 to %2", f.fileName(), d->resourceLocation);
         }
     }
 

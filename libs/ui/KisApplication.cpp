@@ -1,4 +1,4 @@
-/*
+\/*
  * Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
  * Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
  *

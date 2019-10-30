@@ -33,16 +33,10 @@ private Q_SLOTS:
     void testLocatorInitalization();
     void testStorageInitialization();
     void testLocatorSynchronization();
-    void testResources();
-    void testTags();
 
     void testResourceLocationBase();
     void testResource();
     void testResourceForId();
-    void testRemoveResource();
-    void testImportResourceFromFile();
-    void testAddResource();
-    void testUpdateResource();
 
     void testDocumentStorage();
 

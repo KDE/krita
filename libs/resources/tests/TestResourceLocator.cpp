@@ -102,39 +102,30 @@ void TestResourceLocator::testStorageInitialization()
     QVERIFY(r);
     QVERIFY(query.lastError() == QSqlError());
     query.first();
-
-    Q_FOREACH(KisResourceStorageSP storage, m_locator->storages()) {
-        qDebug() << storage;
-    }
-
     QCOMPARE(query.value(0).toInt(), m_locator->storages().count());
 }
 
 void TestResourceLocator::testLocatorSynchronization()
 {
     QVERIFY(m_locator->synchronizeDb());
-}
+    {
+        QSqlQuery query;
+        bool r = query.exec("SELECT COUNT(*) FROM resources");
+        QVERIFY(r);
+        QVERIFY(query.lastError() == QSqlError());
+        query.first();
+        QCOMPARE(query.value(0).toInt(), 7);
+    }
 
-void TestResourceLocator::testResources()
-{
-    QSqlQuery query;
-    bool r = query.exec("SELECT COUNT(*) FROM resources");
-    QVERIFY(r);
-    QVERIFY(query.lastError() == QSqlError());
-    query.first();
-    QCOMPARE(query.value(0).toInt(), 7);
+    {
+        QSqlQuery query;
+        bool r = query.exec("SELECT COUNT(*) FROM tags");
+        QVERIFY(r);
+        QVERIFY(query.lastError() == QSqlError());
+        query.first();
+        QCOMPARE(query.value(0).toInt(), 1);
+    }
 }
-
-void TestResourceLocator::testTags()
-{
-    QSqlQuery query;
-    bool r = query.exec("SELECT COUNT(*) FROM tags");
-    QVERIFY(r);
-    QVERIFY(query.lastError() == QSqlError());
-    query.first();
-    QCOMPARE(query.value(0).toInt(), 1);
-}
-
 
 void TestResourceLocator::testResourceLocationBase()
 {
@@ -156,25 +147,6 @@ void TestResourceLocator::testResourceForId()
     QCOMPARE(res, res2);
 }
 
-void TestResourceLocator::testRemoveResource()
-{
-
-}
-
-void TestResourceLocator::testImportResourceFromFile()
-{
-
-}
-
-void TestResourceLocator::testAddResource()
-{
-
-}
-
-void TestResourceLocator::testUpdateResource()
-{
-
-}
 
 void TestResourceLocator::testDocumentStorage()
 {

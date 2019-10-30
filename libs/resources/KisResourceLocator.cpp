@@ -174,6 +174,7 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
             d->resourceCache[key] = resource;
         }
     }
+    Q_ASSERT(resource);
     resource->setStorageLocation(storageLocation);
     Q_ASSERT(!resource->storageLocation().isEmpty());
     return resource;
@@ -183,6 +184,7 @@ KoResourceSP KisResourceLocator::resourceForId(int resourceId)
 {
     ResourceStorage rs = getResourceStorage(resourceId);
     KoResourceSP r = resource(rs.storageLocation, rs.resourceType, rs.resourceFileName);
+    Q_ASSERT(r);
     r->setResourceId(resourceId);
 
     return r;
@@ -301,7 +303,7 @@ bool KisResourceLocator::addDocumentStorage(const QString &document, KisResource
 {
     Q_ASSERT(!d->storages.contains(document));
     d->storages[document] = storage;
-    if (!KisResourceCacheDb::addStorage(storage, false)) {
+    if (!KisResourceCacheDb::synchronizeStorage(storage)) {
         d->errorMessages.append(i18n("Could not synchronize %1 with the database", storage->location()));
         return false;
     }

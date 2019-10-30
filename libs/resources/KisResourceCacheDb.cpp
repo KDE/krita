@@ -58,12 +58,16 @@ QString KisResourceCacheDb::lastError()
 
 QSqlError initDb(const QString &location)
 {
+    // NOTE: if the id's of Unknown and Memory in the database
+    //       will change, and that will break the queries that
+    //       remove Unknown and Memory storages on start-up.
     KisResourceCacheDb::storageTypes << i18n("Unknown")
+                                     << i18n("Memory")
                                      << i18n("Folder")
                                      << i18n("Bundle")
                                      << i18n("Abobe Brush Library")
                                      << i18n("Adobe Style Library")
-                                     << i18n("Memory");
+                                     ;
 
     if (!QSqlDatabase::connectionNames().isEmpty()) {
         infoResources << "Already connected to resource cache database";
@@ -81,7 +85,7 @@ QSqlError initDb(const QString &location)
     //qDebug() << "QuerySize supported" << db.driver()->hasFeature(QSqlDriver::QuerySize);
 
     if (!db.open()) {
-        infoResources << "Could not connect to resource cache database";
+        qWarning() << "Could not connect to resource cache database";
         return db.lastError();
     }
 
@@ -275,6 +279,8 @@ bool KisResourceCacheDb::initialize(const QString &location)
         s_lastError = QString("Could not initialize the resource cache database. Unknown error: %1").arg(err.text());
         break;
     }
+
+    // Delete all storages that are no longer known to the resource locator (including the memory storages)
 
     deleteTemporaryResources();
 
@@ -526,7 +532,7 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
 {
     QSqlDatabase::database().transaction();
     QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage->resources(resourceType);
-    while(iter->hasNext()) {
+    while (iter->hasNext()) {
         iter->next();
         KoResourceSP resource = iter->resource();
         if (resource && resource->valid()) {
@@ -738,25 +744,6 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
 
     }
 
-//    {
-//        QSqlQuery q;
-
-//        q.prepare("SELECT COUNT(*) FROM storages");
-//        q.exec();
-//        q.first();
-//        qDebug() << "number of storages" << q.value(0);
-
-//        q.prepare("SELECT MAX(id) FROM storages");
-//        q.exec();
-//        q.first();
-//        qDebug() << "max rowid of storages" << q.value(0);
-
-//        q.prepare("SELECT seq FROM sqlite_sequence WHERE name = \"storages\"");
-//        q.exec();
-//        q.first();
-//        qDebug() << "rowid from sqlite_sequence" << q.value(0);
-
-//    }
 
     {
         QStringList keys = storage->metaDataKeys();
@@ -910,7 +897,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             while (iter->hasNext()) {
                 iter->next();
                 KoResourceSP resource = iter->resource();
-                typeResourceMap[resourceType] << iter->url();
+                typeResourceMap[resourceType] << makeRelative(iter->url());
                 if (resource) {
                     if (!addResource(storage, iter->lastModified(), resource, iter->type())) {
                         qWarning() << "Could not add/update resource" << makeRelative(resource->filename()) << "to the database";
@@ -920,30 +907,52 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             }
         }
 
+
+        {
+            QSqlQuery q;
+            q.prepare("select count(id) from resources");
+            q.exec();
+            q.first();
+            qDebug() << "We've got" << q.value(0).toInt() << "resources";
+        }
+
         // Remove everything from the database which is no longer in the storage
         QList<int> resourceIdList;
         Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
+
+            qDebug() << "Checking for" << resourceType << ":" << typeResourceMap[resourceType];
+
             QSqlQuery q;
+            q.setForwardOnly(true);
             if (!q.prepare("SELECT resources.id, resources.filename\n"
                            "FROM   resources\n"
                            ",      resource_types\n"
                            "WHERE  resources.resource_type_id = resource_types.id\n"
-                           "AND    resource_types.name == :resource_type;")) {
+                           "AND    resource_types.name = :resource_type")) {
                 qWarning() << "Could not prepare resource by type query" << q.lastError();
                 success = false;
                 continue;
             }
+
             q.bindValue(":resource_type", resourceType);
+
             if (!q.exec()) {
                 qWarning() << "Could not exec resource by type query" << q.boundValues() << q.lastError();
                 success = false;
                 continue;
             }
-            while (q.nextResult()) {
+
+            q.first();
+
+            while (q.next()) {
+                qDebug() << "\t" << q.value(0) << q.value(1);
                 if (!typeResourceMap[resourceType].contains(q.value(1).toString())) {
                     resourceIdList << q.value(0).toInt();
                 }
             }
+
+            qDebug() << "Got" << q.size() << "rows";
+
         }
 
         QSqlQuery deleteResources;
@@ -987,12 +996,40 @@ QString KisResourceCacheDb::makeRelative(QString location)
 
 void KisResourceCacheDb::deleteTemporaryResources()
 {
+
+    QSqlDatabase::database().transaction();
+
     QSqlQuery q;
+
+    if (!q.prepare("DELETE FROM versioned_resources\n"
+                   "WHERE  storage_id in (SELECT id\n"
+                   "                      FROM   storages\n"
+                   "                      WHERE  storage_type_id < 3)"))
+    {
+        qWarning() << "Could not prepare delete versioned resources from Unknown or Memory storages query." << q.lastError();
+    }
+
+    if (!q.exec()) {
+        qWarning() << "Could not execute delete versioned resources from Unknown or Memory storages query." << q.lastError();
+    }
+
+    if (!q.prepare("DELETE FROM resources\n"
+                   "WHERE  storage_id in (SELECT id\n"
+                   "                      FROM   storages\n"
+                   "                      WHERE  storage_type_id < 3)"))
+    {
+        qWarning() << "Could not prepare delete resources from Unknown or Memory storages query." << q.lastError();
+    }
+
+    if (!q.exec()) {
+        qWarning() << "Could not execute delete resources from Unknown or Memory storages query." << q.lastError();
+    }
+
+
     if (!q.prepare("DELETE FROM versioned_resources\n"
                    "WHERE resource_id IN (SELECT id FROM resources\n"
                    "                      WHERE  temporary = 1)")) {
         qWarning() << "Could not prepare delete temporary versioned resources query." << q.lastError();
-        return;
     }
 
     if (!q.exec()) {
@@ -1008,6 +1045,19 @@ void KisResourceCacheDb::deleteTemporaryResources()
     if (!q.exec()) {
         qWarning() << "Could not execute delete temporary resources query." << q.lastError();
     }
+
+    if (!q.prepare("DELETE FROM storages\n"
+                   "WHERE  storage_type_id < 3\n"))
+    {
+        qWarning() << "Could not prepare delete Unknown or Memory storages query." << q.lastError();
+    }
+
+    if (!q.exec()) {
+        qWarning() << "Could not execute delete Unknown or Memory storages query." << q.lastError();
+    }
+
+
+    QSqlDatabase::database().commit();
 }
 
 QMap<QString, QVariant> KisResourceCacheDb::metaDataForId(int id, const QString &tableName)
@@ -1015,6 +1065,7 @@ QMap<QString, QVariant> KisResourceCacheDb::metaDataForId(int id, const QString 
     QMap<QString, QVariant> map;
 
     QSqlQuery q;
+    q.setForwardOnly(true);
     if (!q.prepare("SELECT key\n"
                    ",      value\n"
                    "FROM   metadata\n"

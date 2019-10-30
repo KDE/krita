@@ -259,6 +259,7 @@ private:
 
     KisPaintDeviceSP m_selectedPortionCache;
     KisStrokeId m_strokeId;
+    void *m_strokeStrategyCookie = 0;
 
     bool m_workRecursively;
 
@@ -313,7 +314,7 @@ private Q_SLOTS:
     void slotRestartTransform();
     void slotEditingFinished();
 
-    void slotTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args);
+    void slotTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *strokeStrategyCookie);
     void slotPreviewDeviceGenerated(KisPaintDeviceSP device, const QPainterPath &selectionOutline);
 
     // context menu options for updating the transform type

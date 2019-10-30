@@ -27,6 +27,7 @@
 #include "tool_transform_args.h"
 #include <kis_processing_visitor.h>
 #include <kritatooltransform_export.h>
+#include <boost/optional.hpp>
 
 
 class KisPostExecutionUndoAdapter;
@@ -105,7 +106,7 @@ public:
     static bool fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode, KisNodeList *transformedNodes);
 
 Q_SIGNALS:
-    void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args);
+    void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *cookie);
     void sigPreviewDeviceReady(KisPaintDeviceSP device, const QPainterPath &selectionOutline);
 
 protected:
@@ -143,6 +144,8 @@ private:
                                         KisNodeSP currentNode,
                                         KisNodeList selectedNodes, QVector<KisStrokeJobData *> *undoJobs);
 
+    void finishStrokeImpl(bool applyTransform,
+                          const ToolTransformArgs &args);
 
 private:
     KisUpdatesFacade *m_updatesFacade;
@@ -158,7 +161,8 @@ private:
 
     KisTransformMaskSP writeToTransformMask;
 
-    ToolTransformArgs m_savedTransformArgs;
+    ToolTransformArgs m_initialTransformArgs;
+    boost::optional<ToolTransformArgs> m_savedTransformArgs;
     KisNodeSP m_rootNode;
     KisNodeList m_processedNodes;
     QList<KisSelectionSP> m_deactivatedSelections;

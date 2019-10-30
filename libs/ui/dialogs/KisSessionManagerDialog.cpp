@@ -66,7 +66,7 @@ void KisSessionManagerDialog::slotNewSession()
         i++;
     }
 
-    session->setFilename(fileInfo.filePath());
+    session->setFilename(fileInfo.fileName());
     session->setName(name);
     session->storeCurrentWindows();
 

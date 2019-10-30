@@ -218,11 +218,6 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 {
     event->accept();
 
-
-//this boolean here is to check if the color selector is updating the resource, so it won't update itself when the resource is updated//
-   if (m_colorUpdateSelf==false)
-   {m_colorUpdateSelf=true;}
-
     if(!m_isPopup && m_popupOnMouseClick &&
        event->button() == Qt::MidButton) {
 
@@ -244,6 +239,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
         if(y+m_popup->height()>availRect.y()+availRect.height())
             y = availRect.y()+availRect.height()-m_popup->height();
 
+        m_colorUpdateSelf=false;
         m_popup->move(x, y);
         m_popup->setHidingTime(200);
         showPopup(DontMove);
@@ -254,6 +250,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
         }
         hide();
     } else {
+        m_colorUpdateSelf=true;
         showColorPreview();
         event->ignore();
     }

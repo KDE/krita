@@ -2311,22 +2311,21 @@ void KisMainWindow::updateWindowMenu()
         workspace->setValid(true);
         QString saveLocation = rserver->saveLocation();
 
-        bool newName = false;
-        if(name.isEmpty()) {
-            newName = true;
-            name = i18n("Workspace");
-        }
         QFileInfo fileInfo(saveLocation + name + workspace->defaultFileExtension());
 
-        int i = 1;
         while (fileInfo.exists()) {
-            fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + workspace->defaultFileExtension());
-            i++;
+            name = QInputDialog::getText(this,
+                    i18n("New Workspace..."),
+                    i18n("The name '%1' is already in use, please choose a new workspace name:", name),
+                    QLineEdit::Normal
+                );
+            if (!name.isNull() || !name.isEmpty()) {
+                fileInfo = QFileInfo(saveLocation + name + workspace->defaultFileExtension());
+            } else {
+                return;
+            }
         }
-        workspace->setFilename(fileInfo.filePath());
-        if(newName) {
-            name = i18n("Workspace %1", i);
-        }
+        workspace->setFilename(fileInfo.fileName());
         workspace->setName(name);
         rserver->addResource(workspace);
     });

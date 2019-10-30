@@ -175,7 +175,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* c
      */
     const QTransform thisInvertedTransform = this->absoluteTransformation(0).inverted();
 
-    m_d->canvas->setUpdatesBlocked(true);
+    m_d->canvas->shapeManager()->setUpdatesBlocked(true);
 
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
@@ -184,7 +184,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* c
         addShape(clonedShape);
     }
 
-    m_d->canvas->setUpdatesBlocked(false);
+    m_d->canvas->shapeManager()->setUpdatesBlocked(false);
 }
 
 KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_addShapes)

@@ -127,9 +127,9 @@ KisConfigWidget * KisFilterRandomPick::createConfigurationWidget(QWidget* parent
     return new KisWdgRandomPick((KisFilter*)this, (QWidget*)parent);
 }
 
-KisFilterConfigurationSP KisFilterRandomPick::factoryConfiguration() const
+KisFilterConfigurationSP KisFilterRandomPick::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("randompick", 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("level", 50);
     config->setProperty("windowsize", 2.5);
     config->setProperty("opacity", 100);

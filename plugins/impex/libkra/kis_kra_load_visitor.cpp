@@ -265,7 +265,7 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         return false;
     }
 
-    loadFilterConfiguration(layer->filter(), getLocation(layer, DOT_FILTERCONFIG));
+    loadFilterConfiguration(layer, getLocation(layer, DOT_FILTERCONFIG));
     fixOldFilterConfigurations(layer->filter());
 
     result = visitAll(layer);
@@ -284,9 +284,8 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer *layer)
 
     // HACK ALERT: we set the same filter again to ensure the layer
     // is correctly updated
-    KisFilterConfigurationSP filter = layer->filter();
-    result = loadFilterConfiguration(filter.data(), getLocation(layer, DOT_FILTERCONFIG));
-    layer->setFilter(filter);
+    result = loadFilterConfiguration(layer, getLocation(layer, DOT_FILTERCONFIG));
+    layer->setFilter(layer->filter());
 
     result = visitAll(layer);
     return result;
@@ -339,7 +338,7 @@ bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 
     bool result = true;
     result = loadSelection(getLocation(mask), mask->selection());
-    result = loadFilterConfiguration(mask->filter(), getLocation(mask, DOT_FILTERCONFIG));
+    result = loadFilterConfiguration(mask, getLocation(mask, DOT_FILTERCONFIG));
     fixOldFilterConfigurations(mask->filter());
     return result;
 }
@@ -585,8 +584,10 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
     return true;
 }
 
-bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, const QString& location)
+bool KisKraLoadVisitor::loadFilterConfiguration(KisNodeFilterInterface *nodeInterface, const QString& location)
 {
+    KisFilterConfigurationSP kfc = nodeInterface->filter();
+
     if (m_store->hasFile(location)) {
         QByteArray data;
         m_store->open(location);

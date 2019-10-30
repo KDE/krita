@@ -630,8 +630,8 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
 void KisCanvas2::startUpdateInPatches(const QRect &imageRect)
 {
     /**
-     * We don't do patched loading for openGL canvas, becasue it loads
-     * the tiles, which are bascially "patches". Therefore, big chunks
+     * We don't do patched loading for openGL canvas, because it loads
+     * the tiles, which are basically "patches". Therefore, big chunks
      * of memory are never allocated.
      */
     if (m_d->currentCanvasIsOpenGL) {
@@ -1249,8 +1249,6 @@ void KisCanvas2::setLodAllowedInCanvas(bool value)
 
     KisConfig cfg(false);
     cfg.setLevelOfDetailEnabled(m_d->lodAllowedInImage);
-
-    KisUsageLogger::log(QString("Instant Preview Setting: %1").arg(m_d->lodAllowedInImage));
 }
 
 bool KisCanvas2::lodAllowedInCanvas() const

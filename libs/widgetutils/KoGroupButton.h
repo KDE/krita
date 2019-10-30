@@ -29,7 +29,7 @@
  * 
  * The group can thus look like one solid bar: ( button1 | button2 | button3 )
  * 
- * For groupping layout can be used. For exclusive checkable behaviour assign QButtonGroup on the buttons.
+ * For grouping layout can be used. For exclusive checkable behaviour assign QButtonGroup on the buttons.
  */
 class KRITAWIDGETUTILS_EXPORT KoGroupButton : public KisHighlightedToolButton
 {

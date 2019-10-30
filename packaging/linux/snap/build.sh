@@ -18,4 +18,5 @@ trap at_exit INT TERM EXIT
 
 lxc file push -p --recursive . $CONTAINER/workspace
 lxc exec $CONTAINER -- /workspace/snap/build_in_container.sh
-lxc file pull --recursive $CONTAINER/workspace/snap/result .
+rm -r result
+lxc file pull --recursive $CONTAINER/workspace/result .

@@ -148,7 +148,6 @@ KisPaintDeviceSP KisLayerManager::activeDevice()
 void KisLayerManager::activateLayer(KisLayerSP layer)
 {
     if (m_imageView) {
-        emit sigLayerActivated(layer);
         layersUpdated();
         if (layer) {
             m_view->canvasResourceProvider()->slotNodeActivated(layer.data());
@@ -505,14 +504,6 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
         const QString proposedFileName = QDir(location.absoluteFilePath()).absoluteFilePath(source->name() + ".png");
         urlRequester->setFileName(proposedFileName);
     }
-
-    // We don't want .kra files as file layers, Krita cannot handle the load.
-    QStringList mimes = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
-    int i = mimes.indexOf(KIS_MIME_TYPE);
-    if (i >= 0 && i < mimes.size()) {
-        mimes.removeAt(i);
-    }
-    urlRequester->setMimeTypeFilters(mimes);
 
     layout->addWidget(urlRequester);
     if (!dlg.exec()) return;

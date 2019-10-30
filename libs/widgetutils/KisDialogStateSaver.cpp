@@ -27,6 +27,8 @@
 #include <QAbstractSlider>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
+#include <QGroupBox>
+#include <QRadioButton>
 
 #include "kis_int_parse_spin_box.h"
 #include "kis_double_parse_spin_box.h"
@@ -70,9 +72,12 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName)
             else if (qobject_cast<QDoubleSpinBox*>(widget)) {
                 group.writeEntry(widget->objectName(), qobject_cast<QDoubleSpinBox*>(widget)->value());
             }
+            else if (qobject_cast<QRadioButton*>(widget)) {
+                group.writeEntry(widget->objectName(), qobject_cast<QRadioButton*>(widget)->isChecked());
+            }
 
             else {
-                qWarning() << "Cannot save state for object" << widget;
+                //qWarning() << "Cannot save state for object" << widget;
             }
         }
         else {
@@ -171,8 +176,16 @@ void KisDialogStateSaver::restoreState(QWidget *parent, const QString &dialogNam
                 else {
                     qobject_cast<QDoubleSpinBox*>(widget)->setValue(group.readEntry<int>(widgetName, qobject_cast<QDoubleSpinBox*>(widget)->value()));
                 }
-
             }
+            else if (qobject_cast<QRadioButton*>(widget)) {
+                if (defaultValue.isValid()) {
+                    qobject_cast<QRadioButton*>(widget)->setChecked(defaultValue.toBool());
+                }
+                else {
+                    qobject_cast<QRadioButton*>(widget)->setChecked(group.readEntry<bool>(widgetName, qobject_cast<QRadioButton*>(widget)->isChecked()));
+                }
+            }
+
             else {
                 //qWarning() << "Cannot restore state for object" << widget;
             }

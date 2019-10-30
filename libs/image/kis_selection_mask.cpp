@@ -125,13 +125,15 @@ void KisSelectionMask::mergeInMaskInternal(KisPaintDeviceSP projection,
         }
     }
 
-    KisPaintDeviceSP fillDevice = m_d->paintDeviceCache.getDevice(projection);
+    KisCachedPaintDevice::Guard d1(projection, m_d->paintDeviceCache);
+    KisPaintDeviceSP fillDevice = d1.device();
     fillDevice->setDefaultPixel(m_d->maskColor);
 
     const QRect selectionExtent = effectiveSelection->selectedRect();
 
     if (selectionExtent.contains(applyRect) || selectionExtent.intersects(applyRect)) {
-        KisSelectionSP invertedSelection = m_d->cachedSelection.getSelection();
+        KisCachedSelection::Guard s1(m_d->cachedSelection);
+        KisSelectionSP invertedSelection = s1.selection();
 
         invertedSelection->pixelSelection()->makeCloneFromRough(effectiveSelection->pixelSelection(), applyRect);
         invertedSelection->pixelSelection()->invert();
@@ -140,14 +142,10 @@ void KisSelectionMask::mergeInMaskInternal(KisPaintDeviceSP projection,
         gc.setSelection(invertedSelection);
         gc.bitBlt(applyRect.topLeft(), fillDevice, applyRect);
 
-        m_d->cachedSelection.putSelection(invertedSelection);
-
     } else {
         KisPainter gc(projection);
         gc.bitBlt(applyRect.topLeft(), fillDevice, applyRect);
     }
-
-    m_d->paintDeviceCache.putDevice(fillDevice);
 }
 
 bool KisSelectionMask::paintsOutsideSelection() const

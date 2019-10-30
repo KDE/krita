@@ -269,7 +269,7 @@ QString KisImportExportManager::askForAudioFileName(const QString &defaultDir, Q
     mimeTypes << "audio/flac";
 
     dialog.setMimeTypeFilters(mimeTypes);
-    dialog.setCaption(i18nc("@titile:window", "Open Audio"));
+    dialog.setCaption(i18nc("@title:window", "Open Audio"));
 
     return dialog.filename();
 }

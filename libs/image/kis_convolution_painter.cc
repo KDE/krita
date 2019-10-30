@@ -58,7 +58,7 @@
 #endif
 
 
-bool KisConvolutionPainter::useFFTImplemenation(const KisConvolutionKernelSP kernel) const
+bool KisConvolutionPainter::useFFTImplementation(const KisConvolutionKernelSP kernel) const
 {
     bool result = false;
 
@@ -85,7 +85,7 @@ KisConvolutionWorker<factory>* KisConvolutionPainter::createWorker(const KisConv
     KisConvolutionWorker<factory> *worker;
 
 #ifdef HAVE_FFTW3
-    if (useFFTImplemenation(kernel)) {
+    if (useFFTImplementation(kernel)) {
         worker = new KisConvolutionWorkerFFT<factory>(painter, progress);
     } else {
         worker = new KisConvolutionWorkerSpatial<factory>(painter, progress);
@@ -185,5 +185,5 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
 
 bool KisConvolutionPainter::needsTransaction(const KisConvolutionKernelSP kernel) const
 {
-    return !useFFTImplemenation(kernel);
+    return !useFFTImplementation(kernel);
 }

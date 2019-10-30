@@ -88,6 +88,7 @@
 #include "kis_document_aware_spin_box_unit_manager.h"
 #include "KisViewManager.h"
 #include "kis_workspace_resource.h"
+#include <KisUsageLogger.h>
 
 #include <KritaVersionWrapper.h>
 #include <dialogs/KisSessionManagerDialog.h>
@@ -171,8 +172,6 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     else {
         qDebug() << "Style override disabled, using" << style()->objectName();
     }
-
-    KisOpenGL::initialize();
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
@@ -726,7 +725,7 @@ void KisApplication::checkAutosaveFiles()
     // all autosave files for our application
     QStringList autosaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
 
-    // Visibile autosave files
+    // Visible autosave files
     filters = QStringList() << QString("krita-*-*-autosave.kra");
     autosaveFiles += dir.entryList(filters, QDir::Files);
 
@@ -743,6 +742,7 @@ void KisApplication::checkAutosaveFiles()
             QStringList filesToRecover = d->autosaveDialog->recoverableFiles();
             Q_FOREACH (const QString &autosaveFile, autosaveFiles) {
                 if (!filesToRecover.contains(autosaveFile)) {
+                    KisUsageLogger::log(QString("Removing autosave file %1").arg(dir.absolutePath() + "/" + autosaveFile));
                     QFile::remove(dir.absolutePath() + "/" + autosaveFile);
                 }
             }

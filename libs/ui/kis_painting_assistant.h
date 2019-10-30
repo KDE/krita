@@ -186,7 +186,7 @@ public:
     /// it will return false if we are in the middle of creating the assistant.
     virtual bool isAssistantComplete() const;
 
-    /// Transform the assistant using the given \p tranform. Please note that \p transform
+    /// Transform the assistant using the given \p transform. Please note that \p transform
     /// should be in 'document' coordinate system.
     /// Used with image-wide transformations.
     virtual void transform(const QTransform &transform);

@@ -24,8 +24,6 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
-#include "tools/KoCreateShapesToolFactory.h"
-#include "tools/KoCreateShapesTool.h"
 #include "tools/KoPathToolFactory.h"
 #include "tools/KoZoomTool.h"
 #include "tools/KoZoomToolFactory.h"
@@ -52,7 +50,6 @@ void KoToolRegistry::init()
                                      config);
 
     // register generic tools
-    add(new KoCreateShapesToolFactory());
     add(new KoPathToolFactory());
     add(new KoZoomToolFactory());
 

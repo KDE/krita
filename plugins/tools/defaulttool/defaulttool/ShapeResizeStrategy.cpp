@@ -214,20 +214,19 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
 
 void ShapeResizeStrategy::resizeBy(const QPointF &stillPoint, qreal zoomX, qreal zoomY)
 {
-    if (m_executedCommand) {
-        m_executedCommand->undo();
-        m_executedCommand.reset();
+    if (!m_executedCommand) {
+        const bool usePostScaling = m_selectedShapes.size() > 1 || m_forceUniformScalingMode;
+
+        m_executedCommand.reset(
+                    new KoShapeResizeCommand(
+                        m_selectedShapes,
+                        zoomX, zoomY,
+                        stillPoint,
+                        false, usePostScaling, m_postScalingCoveringTransform));
+        m_executedCommand->redo();
+    } else {
+        m_executedCommand->replaceResizeAction(zoomX, zoomY, stillPoint);
     }
-
-    const bool usePostScaling = m_selectedShapes.size() > 1 || m_forceUniformScalingMode;
-
-    m_executedCommand.reset(
-         new KoShapeResizeCommand(
-                    m_selectedShapes,
-                    zoomX, zoomY,
-                    stillPoint,
-                    false, usePostScaling, m_postScalingCoveringTransform));
-    m_executedCommand->redo();
 }
 
 KUndo2Command *ShapeResizeStrategy::createCommand()

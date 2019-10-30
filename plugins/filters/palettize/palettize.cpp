@@ -145,9 +145,9 @@ KisConfigWidget* KisFilterPalettize::createConfigurationWidget(QWidget *parent, 
     return new KisPalettizeWidget(parent);
 }
 
-KisFilterConfigurationSP KisFilterPalettize::factoryConfiguration() const
+KisFilterConfigurationSP KisFilterPalettize::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("palettize", 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
 
     config->setProperty("palette", "Default");
     config->setProperty("colorspace", Colorspace::Lab);

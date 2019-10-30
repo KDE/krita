@@ -102,7 +102,7 @@ public Q_SLOTS:
     /**
      * Change the internal data of the resource to the given byte 
      * array. If the byte array is not valid, setData returns
-     * false, otherwwise true.
+     * false, otherwise true.
      */
     bool setData(QByteArray data);
 

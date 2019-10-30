@@ -9,7 +9,7 @@
 # A short explanation of what it does:
 
 # - Copies krita.app contents to kritadmg folder
-# - Copies i/share to Contents/Resources excluding unnecesary files
+# - Copies i/share to Contents/Resources excluding unnecessary files
 # - Copies translations, qml and quicklook PlugIns
 # - Copies i/plugins and i/lib/plugins to Contents/PlugIns
 
@@ -21,13 +21,13 @@
 #       make install
 
 #     the script changes dir to installation/bin to run macdeployqt as it can be buggy
-#     if not runned from the same folder as the binary is on.
+#     if not run from the same folder as the binary is on.
 
 # - Fix rpath from krita bin
-# - Find missing libraries from plugins and copy to Framworks or plugins.
+# - Find missing libraries from plugins and copy to Frameworks or plugins.
 #     This uses oTool iterative to find all unique libraries, then it searches each
 #     library fond in <kritadmg> folder, and if not found attempts to copy contents
-#     to the appropiate folder, either Frameworks (if frameworks is in namefile, or
+#     to the appropriate folder, either Frameworks (if frameworks is in namefile, or
 #         library has plugin isnot in path), or plugin if otherwise.
 
 # - Builds DMG
@@ -43,6 +43,17 @@ if test -z ${BUILDROOT}; then
     echo "exiting..."
     exit
 fi
+
+# print status messages
+print_msg() {
+    printf "\e[32m${1}\e[0m\n" "${@:2}"
+    # printf "%s\n" "${1}" >> ${OUPUT_LOG}
+}
+
+# print error
+print_error() {
+    printf "\e[31m%s %s\e[0m\n" "Error:" "${1}"
+}
 
 get_script_dir() {
     script_source="${BASH_SOURCE[0]}"
@@ -77,22 +88,29 @@ export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 export MACOSX_DEPLOYMENT_TARGET=10.11
 export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.11
 
-# Attempt to find python_version
-local_PY_MAYOR_VERSION=$(python -c "import sys; print(sys.version_info[0])")
-local_PY_MINOR_VERSION=$(python -c "import sys; print(sys.version_info[1])")
-PY_VERSION="${local_PY_MAYOR_VERSION}.${local_PY_MINOR_VERSION}"
-echo "Detected Python ${PY_VERSION}"
 
 print_usage () {
-    echo "USAGE: osxdeploy.sh [-s=<identity>] [-style=<style.txt>] [-bg=<background-image>]"
-    echo "\t -s Code sign identity for codesign"
-    echo "\t -style Style file defined from 'dmgstyle.sh' output"
-    echo "\t -bg Set a background image for dmg folder"
-    echo "\t osxdeploy needs an input image to add to the dmg background
-    \t image recomended size is at least 950x500\n"
+    printf "USAGE: 
+  osxdeploy.sh [-s=<identity>] [-notarize-ac=<apple-account>] [-style=<style.txt>] [-bg=<background-image>]
+
+    -s \t\t\t Code sign identity for codesign
+
+    -notarize-ac \t Apple account name for notarization purposes
+\t\t\t script will attempt to get password from keychain, if fails provide one with
+\t\t\t the -notarize-pass option: To add a password run 
+
+\t\t\t   security add-generic-password -a \"AC_USERNAME\" -w <secret_password> -s \"KRITA_AC_PASS\"
+
+    -notarize-pass \t If given, the Apple account password. Otherwise an attempt will be macdeployqt_exists
+\t\t\t to get the password from keychain using the account given in <notarize-ac> option.
+
+    -style \t\t Style file defined from 'dmgstyle.sh' output
+
+    -bg \t\t Set a background image for dmg folder.
+\t\t\t osxdeploy needs an input image to attach to the dmg background
+\t\t\t image recommended size is at least 950x500
+"
 }
-
-
 
 # Attempt to detach previous mouted DMG
 if [[ -d "/Volumes/${DMG_title}" ]]; then
@@ -105,7 +123,7 @@ if [[ -d "/Volumes/${DMG_title}" ]]; then
     echo "Success!"
 fi
 
-# Parse input args
+# -- Parse input args
 for arg in "${@}"; do
     if [ "${arg}" = -bg=* -a -f "${arg#*=}" ]; then
         DMG_validBG=0
@@ -131,6 +149,14 @@ for arg in "${@}"; do
         CODE_SIGNATURE="${arg#*=}"
     fi
 
+    if [[ ${arg} = -notarize-ac=* ]]; then
+        NOTARIZE_ACC="${arg#*=}"
+    fi
+
+    if [[ ${arg} = -notarize-pass=* ]]; then
+        NOTARIZE_PASS="${arg#*=}"
+    fi
+
     if [[ ${arg} = -style=* ]]; then
         style_filename="${arg#*=}"
         if [[ -f "${style_filename}" ]]; then
@@ -144,22 +170,54 @@ for arg in "${@}"; do
     fi
 done
 
+# -- Checks and messages
+
+### PYTHONAttempt to find python_version
+local_PY_MAYOR_VERSION=$(python -c "import sys; print(sys.version_info[0])")
+local_PY_MINOR_VERSION=$(python -c "import sys; print(sys.version_info[1])")
+PY_VERSION="${local_PY_MAYOR_VERSION}.${local_PY_MINOR_VERSION}"
+
+print_msg "Detected Python %s" "${PY_VERSION}"
+
+### Code Signature & NOTARIZATION
+NOTARIZE="false"
+if [[ -z "${CODE_SIGNATURE}" ]]; then
+    echo "WARNING: No code signature provided, Code will not be signed"
+else
+    print_msg "Code will be signed with %s" "${CODE_SIGNATURE}"
+    ### NOTARIZATION
+
+    if [[ -n "${NOTARIZE_ACC}" ]]; then
+        security find-generic-password -s "KRITA_AC_PASS" > /dev/null 2>&1
+        if [[ ${?} -eq 0 || -n "${NOTARIZE_PASS}" ]]; then
+            NOTARIZE="true"
+        else
+            echo "No password given for notarization or KRITA_AC_PASS missig in keychain"
+        fi
+    fi
+fi
+
+if [[ ${NOTARIZE} = "true" ]]; then
+    print_msg "Notarization checks complete, This build will be notarized"
+else
+    echo "WARNING: Account information missing, Notarization will not be performed"
+fi
+
+### STYLE for DMG
 if [[ ! ${DMG_STYLE} ]]; then
     DMG_STYLE="${SCRIPT_SOURCE_DIR}/default.style"
 fi
-echo "Using style from: ${DMG_STYLE}"
 
+print_msg "Using style from: %s" "${DMG_STYLE}"
+
+### Background for DMG
 if [[ ${DMG_validBG} -eq 0 ]]; then
     echo "No jpg or png valid file detected!!"
     echo "Using default style"
     DMG_background="${SCRIPT_SOURCE_DIR}/krita_dmgBG.jpg"
 fi
 
-if [[ -z "${CODE_SIGNATURE}" ]]; then
-    echo "WARNING: No signature provided, Code will not be signed"
-else
-    printf 'Code will be signed with "%s"\n' "${CODE_SIGNATURE}"
-fi
+
 
 # Helper functions
 countArgs () {
@@ -168,6 +226,19 @@ countArgs () {
 
 stringContains () {
     echo "$(grep "${2}" <<< "${1}")"
+}
+
+waiting_fixed() {
+    local message="${1}"
+    local waitTime=${2}
+
+    for i in $(seq ${waitTime}); do
+        sleep 1
+        printf -v dots '%*s' ${i}
+        printf -v spaces '%*s' $((${waitTime} - $i))
+        printf "\r%s [%s%s]" "${message}" "${dots// /.}" "${spaces}"
+    done
+    printf "\n"
 }
 
 add_lib_to_list() {
@@ -182,7 +253,7 @@ add_lib_to_list() {
 # Add to libs_used
 # converts absolute buildroot path to @rpath
 find_needed_libs () {
-    # echo "Analizing libraries with oTool..." >&2
+    # echo "Analyzing libraries with oTool..." >&2
     local libs_used="" # input lib_lists founded
 
     for libFile in ${@}; do
@@ -263,7 +334,7 @@ krita_findmissinglibs() {
 strip_python_dmginstall() {
     # reduce size of framework python
     # Removes tests, installers, pyenv, distutils
-    echo "Removing unnecesary files from Python.Framework to be packaged..."
+    echo "Removing unnecessary files from Python.Framework to be packaged..."
     PythonFrameworkBase="${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework"
 
     cd ${PythonFrameworkBase}
@@ -463,9 +534,10 @@ krita_deploy () {
 
 }
 
+
 # helper to define function only once
 batch_codesign() {
-    xargs -P4 -I FILE codesign -f -s "${CODE_SIGNATURE}" FILE
+    xargs -P4 -I FILE codesign --options runtime --timestamp -f -s "${CODE_SIGNATURE}" FILE
 }
 # Code sign must be done as recommended by apple "sign code inside out in individual stages"
 signBundle() {
@@ -473,7 +545,7 @@ signBundle() {
 
     # sign Frameworks and libs
     cd ${KRITA_DMG}/krita.app/Contents/Frameworks
-    # remove debug version as both versions cant be signed.
+    # remove debug version as both versions can't be signed.
     rm ${KRITA_DMG}/krita.app/Contents/Frameworks/QtScript.framework/Versions/Current/QtScript_debug
     find . -type f -perm 755 -or -name "*.dylib" -or -name "*.so" | batch_codesign
     find . -type d -name "*.framework" | xargs printf "%s/Versions/Current\n" | batch_codesign
@@ -497,6 +569,60 @@ signBundle() {
     #Finally sign krita and krita.app
     printf "${KRITA_DMG}/krita.app/Contents/MacOS/krita" | batch_codesign
     printf "${KRITA_DMG}/krita.app" | batch_codesign
+}
+
+# Notarize build on macOS servers
+# based on https://github.com/Beep6581/RawTherapee/blob/6fa533c40b34dec527f1176d47cc6c683422a73f/tools/osx/macosx_bundle.sh#L225-L250
+notarize_build() {
+    local NOT_SRC_DIR=${1}
+    local NOT_SRC_FILE=${2}
+
+    if [[ ${NOTARIZE} = "true" ]]; then
+        printf "performing notarization of %s\n" "${2}"
+        cd "${NOT_SRC_DIR}"
+        
+        if [[ -z "${NOTARIZE_PASS}" ]]; then
+            NOTARIZE_PASS="@keychain:KRITA_AC_PASS"
+        fi
+
+        ditto -c -k --sequesterRsrc --keepParent "${NOT_SRC_FILE}" "${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip"
+
+        # echo "xcrun altool --notarize-app --primary-bundle-id \"org.krita\" --username \"${NOTARIZE_ACC}\" --password \"${NOTARIZE_PASS}\" --file \"${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip\""
+        local altoolResponse="$(xcrun altool --notarize-app --primary-bundle-id "org.krita" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" --file "${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip" 2>&1)"
+
+        if [[ -n "$(grep 'Error' <<< ${altoolResponse})" ]]; then
+            printf "ERROR: xcrun altool exited with the following error! \n\n%s\n\n" "${altoolResponse}"
+            printf "This could mean there is an error in AppleID authentication!\n"
+            printf "aborting notarization\n"
+            NOTARIZE="false"
+            return
+        else
+            printf "Response:\n\n%s\n\n" "${altoolResponse}"
+        fi
+
+        local uuid="$(grep 'RequestUUID' <<< ${altoolResponse} | awk '{ print $3 }')"
+        echo "RequestUUID = ${uuid}" # Display identifier string
+
+        waiting_fixed "Waiting to retrieve notarize status" 15
+
+        while true ; do
+            fullstatus=$(xcrun altool --notarization-info "${uuid}" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" 2>&1)  # get the status
+            notarize_status=`echo "${fullstatus}" | grep 'Status\:' | awk '{ print $2 }'`
+            echo "${fullstatus}"
+            if [[ "${notarize_status}" = "success" ]]; then
+                xcrun stapler staple "${NOT_SRC_FILE}"   #staple the ticket
+                xcrun stapler validate -v "${NOT_SRC_FILE}"
+                print_msg "Notarization success!"
+                break
+            elif [[ "${notarize_status}" = "in" ]]; then
+                waiting_fixed "Notarization still in progress, sleeping for 15 seconds and trying again" 15
+            else
+                echo "Notarization failed! full status below"
+                echo "${fullstatus}"
+                exit 1
+            fi
+        done
+    fi
 }
 
 createDMG () {
@@ -538,7 +664,7 @@ createDMG () {
     
     chmod -Rf go-w "/Volumes/${DMG_title}"
 
-    # ensure all writting operations to dmg are over
+    # ensure all writing operations to dmg are over
     sync
 
     hdiutil detach $device
@@ -555,18 +681,33 @@ createDMG () {
         printf "krita-nightly_${GIT_SHA}.dmg" | batch_codesign
     fi
 
+    notarize_build ${BUILDROOT} "krita-nightly_${GIT_SHA}.dmg"
+
     echo "dmg done!"
 }
 
 #######################
 # Program starts!!
 ########################
-# Run deploy command, instalation is assumed to exist in BUILDROOT/i
+# Run deploy command, installation is assumed to exist in BUILDROOT/i
 krita_deploy
 
 # Code sign krita.app if signature given
 if [[ -n "${CODE_SIGNATURE}" ]]; then
     signBundle
 fi
-# Create DMG from files insiede ${KRITA_DMG} folder
+
+notarize_build ${KRITA_DMG} krita.app
+
+# Create DMG from files inside ${KRITA_DMG} folder
 createDMG
+
+if [[ "${NOTARIZE}" = "false" ]]; then
+    macosVersion="$(sw_vers | grep ProductVersion | awk '
+       BEGIN { FS = "[ .\t]" }
+             { print $3}
+    ')"
+    if (( ${macosVersion} == 15 )); then
+        print_error "Build not notarized! Needed for macOS versions above 10.14"
+    fi
+fi

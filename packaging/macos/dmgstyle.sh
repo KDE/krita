@@ -100,7 +100,7 @@ out is designed to be copy pasted into osxdeploy.sh in the osasrcipt section
 
 USAGE: dmgstyle.sh [option] <args>
 Options:
-<empty>     No option fetchs dummy design window state for paste in osxdeploy
+<empty>     No option fetches dummy design window state for paste in osxdeploy
 set         set default values changing the background to image in <args>
 "
 }

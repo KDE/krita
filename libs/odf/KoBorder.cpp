@@ -570,7 +570,7 @@ void KoBorder::paintBorderSide(QPainter &painter, QPointF lineStart, QPointF lin
             lineEnd.setY(lineEnd.y() + inwardsAcross * displacement);
         }
 
-        // Adjust for neigboring inner lines.
+        // Adjust for neighboring inner lines.
         if (neighbour1 && neighbour1->style == BorderDouble) {
             displacement = neighbour1->outerPen.widthF() + neighbour1->spacing;
             if (isVertical) {

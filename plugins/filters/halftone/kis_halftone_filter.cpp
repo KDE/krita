@@ -172,9 +172,9 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     device->clearSelection(alpha);
 }
 
-KisFilterConfigurationSP KisHalftoneFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisHalftoneFilter::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("halftone", 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("cellSize", 8.0);
     config->setProperty("patternAngle", 45.0);
     QVariant v;

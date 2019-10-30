@@ -174,7 +174,7 @@ void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
     m_d->initialFileTimeStamp = initialFileInfo.lastModified();
 
     if (s_fileSystemWatcher->files().contains(m_d->path) == false && initialFileInfo.exists()) {
-        //When a path is renamed it is removed, so we ought to readd it.
+        //When a path is renamed it is removed, so we ought to re-add it.
         s_fileSystemWatcher->addPath(m_d->path);
     }
 

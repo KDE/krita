@@ -157,7 +157,7 @@ The PyDev integration can be configured to visually highlight portions of the co
 as well as run autopep8 via shortcuts.
 
 pep8.py and autopep8.py can suppress select rules via the "--ignore" command line argument.
-To ignore the 79 charachers per line rule, pep8.py can be called like this:
+To ignore the 79 characters per line rule, pep8.py can be called like this:
 
 pep8.py --ignore=E501
 

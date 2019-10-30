@@ -226,6 +226,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     KisPaintOpPresetSP proxy_preset = m_currentPreset->clone();
     KisPaintOpSettingsSP settings = proxy_preset->settings();
     settings->setPaintOpSize(previewSize);
+
     int maxTextureSize = 200;
     int textureOffsetX = settings->getInt("Texture/Pattern/MaximumOffsetX")*2;
     int textureOffsetY = settings->getInt("Texture/Pattern/MaximumOffsetY")*2;
@@ -287,6 +288,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(m_image,
                                      m_layer);
+    resources->setOpacity(settings->paintOpOpacity());
 
     resources->setBrush(proxy_preset);
     resources->setFGColorOverride(m_paintColor);

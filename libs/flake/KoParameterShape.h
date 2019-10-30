@@ -101,7 +101,7 @@ public:
      *
      * It is no longer a parametric shape when the path was manipulated
      *
-     * @return true if it is a parametic shape, false otherwise
+     * @return true if it is a parametric shape, false otherwise
      */
     bool isParametricShape() const;
 

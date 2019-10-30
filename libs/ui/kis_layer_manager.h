@@ -51,8 +51,6 @@ public:
 
 Q_SIGNALS:
 
-    void sigLayerActivated(KisLayerSP layer);
-
 private:
 
     friend class KisNodeManager;

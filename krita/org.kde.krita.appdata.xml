@@ -361,4 +361,7 @@
   <releases>
     <release date="2019-09-25" version="4.2.7.0-beta1"/>
   </releases>
+  <custom>
+    <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>
+  </custom>
 </component>

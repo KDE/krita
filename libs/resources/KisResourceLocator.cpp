@@ -227,6 +227,11 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
     if (save) {
         KisResourceStorageSP storage = d->storages[d->resourceLocation];
         Q_ASSERT(storage);
+
+        //If we have gotten this far and the resource still doesn't have a filename to save to, we should generate one.
+        if (resource->filename().isEmpty()) {
+            resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension() );
+        }
         if (!storage->addResource(resourceType, resource)) {
             qWarning() << "Could not add resource" << resource->filename() << "to the folder storage";
             return false;

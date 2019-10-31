@@ -63,6 +63,7 @@ private Q_SLOTS:
     void slotUpdateCurrentBrush(int i = 0); // To connect with activated(int)
     void slotSpacingChanged();
     void slotUpdateUseColorAsMask(bool useColorAsMask);
+    void slotUpdateSaveButton();
 
 Q_SIGNALS:
     void sigNewPredefinedBrush(KoResourceSP );

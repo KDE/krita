@@ -25,7 +25,7 @@
 #include <QPixmap>
 #include <QShowEvent>
 #include <QPushButton>
-
+#include <QDialogButtonBox>
 
 #include <KoResourcePaths.h>
 
@@ -35,6 +35,7 @@
 #include "kis_paint_device.h"
 #include "kis_gbr_brush.h"
 #include "KisBrushServerProvider.h"
+#include "kis_icon.h"
 
 KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString &caption, KisImageWSP /*image*/)
     : KisWdgClipboardBrush(parent)
@@ -54,6 +55,7 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
     connect(m_clipboard, SIGNAL(clipChanged()), this, SLOT(slotCreateBrush()));
     connect(colorAsmask, SIGNAL(toggled(bool)), this, SLOT(slotUpdateUseColorAsMask(bool)));
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(slotAddPredefined()));
+    connect(nameEdit, SIGNAL(textEdited(const QString&)), this, SLOT(slotUpdateSaveButton()));
 
     spacingWidget->setSpacing(true, 1.0);
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
@@ -124,20 +126,8 @@ void KisClipboardBrushWidget::slotAddPredefined()
     QString extension = ".gbr";
     QString name = nameEdit->text();
 
-    QString tempFileName;
-    QFileInfo fileInfo;
-    fileInfo.setFile(dir + name + extension);
-
-    int i = 1;
-    while (fileInfo.exists()) {
-        fileInfo.setFile(dir + name + QString("%1").arg(i) + extension);
-        i++;
-    }
-    tempFileName = fileInfo.filePath();
-
     if (m_rServer) {
         KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
-        resource->setFilename(tempFileName);
 
         if (nameEdit->text().isEmpty()) {
             resource->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
@@ -145,6 +135,9 @@ void KisClipboardBrushWidget::slotAddPredefined()
         else {
             resource->setName(name);
         }
+
+        resource->setFilename(resource->name().split(" ").join("_") + extension);
+
 
         if (colorAsmask->isChecked()) {
             resource->makeMaskImage();
@@ -154,6 +147,16 @@ void KisClipboardBrushWidget::slotAddPredefined()
     }
 
     close();
+}
+
+void KisClipboardBrushWidget::slotUpdateSaveButton()
+{
+    if (QFileInfo(m_rServer->saveLocation() + "/" + nameEdit->text().split(" ").join("_")
+                  + ".gbr").exists()) {
+        buttonBox->button(QDialogButtonBox::Save)->setText(i18n("Overwrite"));
+    } else {
+        buttonBox->button(QDialogButtonBox::Save)->setText(i18n("Save"));
+    }
 }
 
 #include "moc_kis_clipboard_brush_widget.cpp"

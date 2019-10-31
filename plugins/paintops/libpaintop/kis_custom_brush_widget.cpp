@@ -132,6 +132,20 @@ void KisCustomBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
     }
 }
 
+void KisCustomBrushWidget::slotUpdateSaveButton()
+{
+    QString suffix = ".gbr";
+    if (brushStyle->currentIndex() != 0) {
+        suffix = ".gih";
+    }
+    if (QFileInfo(m_rServer->saveLocation() + "/" + nameLineEdit->text().split(" ").join("_")
+                  + suffix).exists()) {
+        buttonBox->button(QDialogButtonBox::Save)->setText(i18n("Overwrite"));
+    } else {
+        buttonBox->button(QDialogButtonBox::Save)->setText(i18n("Save"));
+    }
+}
+
 
 void KisCustomBrushWidget::slotAddPredefined()
 {
@@ -146,26 +160,12 @@ void KisCustomBrushWidget::slotAddPredefined()
     }
 
     QString name = nameLineEdit->text();
-    QString tempFileName;
-    {
-        QFileInfo fileInfo;
-        fileInfo.setFile(dir + name + extension);
-
-        int i = 1;
-        while (fileInfo.exists()) {
-            fileInfo.setFile(dir + name + QString("%1").arg(i) + extension);
-            i++;
-        }
-
-        tempFileName = fileInfo.filePath();
-    }
 
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
     if (m_rServer && m_brush) {
         qDebug() << "m_brush" << m_brush;
         KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
-        resource->setFilename(tempFileName);
 
         if (nameLineEdit->text().isEmpty()) {
             resource->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
@@ -173,6 +173,8 @@ void KisCustomBrushWidget::slotAddPredefined()
         else {
             resource->setName(name);
         }
+
+        resource->setFilename(resource->name().split(" ").join("_") + extension);
 
         if (colorAsMask->isChecked()) {
             resource->makeMaskImage();

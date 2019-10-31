@@ -42,6 +42,7 @@
 #include <QRegularExpression>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QInputDialog>
 
 #include "gamutmask_dock.h"
 #include <KisViewManager.h>
@@ -357,39 +358,38 @@ KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QStrin
         newMask->setImage(QImage(defaultPreviewPath, "PNG"));
     }
 
-    QPair<QString,QFileInfo> maskFile = resolveMaskTitle(newTitle);
-    QString maskTitle = maskFile.first;
-    QFileInfo fileInfo = maskFile.second;
-
-    newMask->setTitle(maskTitle);
-    newMask->setFilename(fileInfo.filePath());
-
-    newMask->setValid(true);
-
     KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
-    //rServer->removeFromBlacklist(newMask);
+
+    QString saveLocation = rServer->saveLocation();
+    QString name = newTitle;
+
+    QFileInfo fileInfo(saveLocation + name + newMask->defaultFileExtension());
+    bool fileOverWriteAccepted = false;
+
+    while(!fileOverWriteAccepted) {
+        name = QInputDialog::getText(this, i18nc("@title:window", "New Gamut Mask..."),
+                                                    i18nc("@label:textbox", "Name:"));
+        if (name.isNull() || name.isEmpty()) {
+            QMessageBox::warning(this, i18nc("@title:window", "Name invalid"), i18n("Please enter a name"));
+        } else {
+            fileInfo = QFileInfo(saveLocation + name.split(" ").join("_") + newMask->defaultFileExtension());
+            if (fileInfo.exists()) {
+                int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
+                                                            , i18n("The name '%1' already exists, do you wish to overwrite it?", name)
+                                                            , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                if (res == QMessageBox::Yes) fileOverWriteAccepted = true;
+            } else {
+                fileOverWriteAccepted = true;
+            }
+        }
+    }
+
+    newMask->setTitle(name);
+    newMask->setFilename(fileInfo.fileName());
+    newMask->setValid(true);
     rServer->addResource(newMask, false);
 
     return newMask;
-}
-
-QPair<QString, QFileInfo> GamutMaskDock::resolveMaskTitle(QString suggestedTitle)
-{
-    KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
-    QString saveLocation = rServer->saveLocation();
-    QString processedTitle = suggestedTitle.trimmed();
-
-    QString resourceName = processedTitle;
-    while (rServer->resourceByName(resourceName)) {
-        resourceName = resourceName + QString(" (Copy)");
-    }
-
-    QString maskTitle = resourceName;
-    QString maskFile = maskTitle + ".kgm";
-    QString path = saveLocation + maskFile.replace(QRegularExpression("\\s+"), "_");
-    QFileInfo fileInfo(path);
-
-    return QPair<QString, QFileInfo>(maskTitle, fileInfo);
 }
 
 void GamutMaskDock::closeMaskDocument()
@@ -566,7 +566,7 @@ void GamutMaskDock::slotGamutMaskDuplicate()
         return;
     }
 
-    KoGamutMaskSP newMask = createMaskResource(m_selectedMask, m_selectedMask->title());
+    KoGamutMaskSP newMask = createMaskResource(m_selectedMask, m_selectedMask->title() + QString(" (Copy)"));
     selectMask(newMask);
 
     bool editorOpened = openMaskEditor();
@@ -576,7 +576,7 @@ void GamutMaskDock::slotGamutMaskDuplicate()
 }
 
 void GamutMaskDock::slotGamutMaskDelete()
-{   
+{
     if (!m_selectedMask) {
         return;
     }

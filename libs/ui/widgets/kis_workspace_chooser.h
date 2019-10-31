@@ -39,9 +39,11 @@ public:
 
 private Q_SLOTS:
     void slotSaveWorkspace();
+    void slotUpdateWorkspaceSaveButton();
     void workspaceSelected( KoResourceSP resource );
 
     void slotSaveWindowLayout();
+    void slotUpdateWindowLayoutSaveButton();
     void windowLayoutSelected( KoResourceSP resource );
 
 private:
@@ -57,6 +59,9 @@ private:
     QGridLayout* m_layout;
     ChooserWidgets m_workspaceWidgets;
     ChooserWidgets m_windowLayoutWidgets;
+
+    QString m_workspaceSaveLocation;
+    QString m_windowLayoutSaveLocation;
 
     ChooserWidgets createChooserWidgets(const QString &resourceType, const QString &title);
 };

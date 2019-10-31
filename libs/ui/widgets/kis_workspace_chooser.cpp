@@ -35,7 +35,7 @@
 #include <KisResourceItemView.h>
 #include <KoResource.h>
 #include <KisResourceModel.h>
-#include <KisResourceModelProvider.h>
+#include <KisResourceServerProvider.h>
 
 #include "kis_workspace_resource.h"
 #include "KisViewManager.h"
@@ -45,6 +45,7 @@
 #include "KisWindowLayoutManager.h"
 #include "dialogs/KisNewWindowLayoutDialog.h"
 #include "kis_config.h"
+#include <kis_icon.h>
 
 class KisWorkspaceDelegate : public QAbstractItemDelegate
 {
@@ -89,10 +90,12 @@ KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent)
     connect(m_workspaceWidgets.itemChooser, SIGNAL(resourceSelected(KoResourceSP )),
             this, SLOT(workspaceSelected(KoResourceSP )));
     connect(m_workspaceWidgets.saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSaveWorkspace()));
+    connect(m_workspaceWidgets.nameEdit, SIGNAL(textEdited(const QString&)), this, SLOT(slotUpdateWorkspaceSaveButton()));
 
     connect(m_windowLayoutWidgets.itemChooser, SIGNAL(resourceSelected(KoResourceSP )),
             this, SLOT(windowLayoutSelected(KoResourceSP )));
     connect(m_windowLayoutWidgets.saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSaveWindowLayout()));
+    connect(m_windowLayoutWidgets.nameEdit, SIGNAL(textEdited(const QString&)), this, SLOT(slotUpdateWindowLayoutSaveButton()));
 }
 
 KisWorkspaceChooser::ChooserWidgets KisWorkspaceChooser::createChooserWidgets(const QString &resourceType, const QString &title)
@@ -104,6 +107,9 @@ KisWorkspaceChooser::ChooserWidgets KisWorkspaceChooser::createChooserWidgets(co
     titleFont.setBold(true);
     titleLabel->setFont(titleFont);
     titleLabel->setText(title);
+
+    m_workspaceSaveLocation = KisResourceServerProvider::instance()->workspaceServer()->saveLocation();
+    m_windowLayoutSaveLocation = KisResourceServerProvider::instance()->windowLayoutServer()->saveLocation();
 
     widgets.itemChooser = new KisResourceItemChooser(resourceType, false, this);
     widgets.itemChooser->setItemDelegate(new KisWorkspaceDelegate(this));
@@ -144,15 +150,23 @@ void KisWorkspaceChooser::slotSaveWorkspace()
 
     QString name = m_workspaceWidgets.nameEdit->text();
 
-    if (name.isEmpty()) {
-        name = i18n("Workspace");
-    }
-
     workspace->setName(name);
     workspace->setFilename(name.split(" ").join("_")+workspace->defaultFileExtension());
 
-
     KisResourceModelProvider::resourceModel(ResourceType::Workspaces)->addResource(workspace);
+}
+
+void KisWorkspaceChooser::slotUpdateWorkspaceSaveButton()
+{
+    if (QFileInfo(m_workspaceSaveLocation + m_workspaceWidgets.nameEdit->text().split(" ").join("_") + ".kws").exists()) {
+        m_workspaceWidgets.saveButton->setIcon(KisIconUtils::loadIcon("warning"));
+        m_workspaceWidgets.saveButton->setToolTip(i18n("File name already in use. Saving will overwrite the original Workspace."));
+        //m_workspaceWidgets.saveButton->setText(i18n("Overwrite"));
+    } else {
+        m_workspaceWidgets.saveButton->setIcon(QIcon());
+        m_workspaceWidgets.saveButton->setToolTip(i18n("Save current workspace."));
+        //m_workspaceWidgets.saveButton->setText(i18n("Save"));
+    }
 }
 
 void KisWorkspaceChooser::workspaceSelected(KoResourceSP resource)
@@ -195,6 +209,17 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
     layout->setName(name);
     layout->setFilename(name.split(" ").join("_") + layout->defaultFileExtension());
     KisResourceModelProvider::resourceModel(ResourceType::WindowLayouts)->addResource(layout);
+}
+
+void KisWorkspaceChooser::slotUpdateWindowLayoutSaveButton()
+{
+    if (QFileInfo(m_windowLayoutSaveLocation + m_windowLayoutWidgets.nameEdit->text().split(" ").join("_") + ".kwl").exists()) {
+        m_windowLayoutWidgets.saveButton->setIcon(KisIconUtils::loadIcon("warning"));
+        m_workspaceWidgets.saveButton->setToolTip(i18n("File name already in use. Saving will overwrite the original window layout."));
+    } else {
+        m_windowLayoutWidgets.saveButton->setIcon(QIcon());
+        m_workspaceWidgets.saveButton->setToolTip(i18n("Save current window layout."));
+    }
 }
 
 void KisWorkspaceChooser::windowLayoutSelected(KoResourceSP resource)

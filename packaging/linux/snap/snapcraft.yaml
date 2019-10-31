@@ -61,6 +61,7 @@ parts:
         - libopenexr-dev
         - libpng-dev
         - libpoppler-qt5-dev
+        - libopenjpeg-dev
         - libtiff5-dev
         - libvc-dev
         - libopencolorio-dev

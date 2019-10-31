@@ -317,6 +317,12 @@ public Q_SLOTS:
 
     void slotFileSelected(QString path);
     void slotEmptyFilePath();
+
+    /**
+     * Toggle full screen on/off.
+     */
+    void viewFullscreen(bool fullScreen);
+
 private Q_SLOTS:
     /**
      * Save the list of recent files.
@@ -383,11 +389,6 @@ private Q_SLOTS:
      *  Shows or hides a toolbar
      */
     void slotToolbarToggled(bool toggle);
-
-    /**
-     * Toggle full screen on/off.
-     */
-    void viewFullscreen(bool fullScreen);
 
     /**
      * Reload file

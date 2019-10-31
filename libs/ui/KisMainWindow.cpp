@@ -1996,6 +1996,7 @@ void KisMainWindow::viewFullscreen(bool fullScreen)
     } else {
         setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
     }
+    d->fullScreenMode->setChecked(isFullScreen());
 }
 
 void KisMainWindow::setMaxRecentItems(uint _number)

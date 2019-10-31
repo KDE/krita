@@ -646,6 +646,13 @@ set_package_properties(HEIF PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita HEIF filter")
 
+find_package(OpenJPEG "2.3.0")
+set_package_properties(OpenJPEG PROPERTIES
+    DESCRIPTION "Library for loading and saving jp2000 files."
+    URL "http://www.openjpeg.org/"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita JP2000 filter")
+
 set(LIBRAW_MIN_VERSION  "0.16")
 find_package(LibRaw ${LIBRAW_MIN_VERSION})
 set_package_properties(LibRaw PROPERTIES

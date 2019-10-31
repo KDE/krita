@@ -375,4 +375,7 @@
   <releases>
     <release date="2019-05-29" version="4.3.0.0"/>
   </releases>
+  <custom>
+    <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>
+  </custom>
 </component>

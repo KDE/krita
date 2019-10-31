@@ -29,6 +29,7 @@
 #include <QBitmap>
 #include <QAction>
 #include <QSharedPointer>
+#include <QMessageBox>
 
 #include <klocalizedstring.h>
 
@@ -610,25 +611,31 @@ void KoFillConfigWidget::slotSavePredefinedGradientClicked()
     const QString saveLocation = server->saveLocation();
 
     QString name = d->activeGradient->name().isEmpty() ? defaultGradientNamePrefix : d->activeGradient->name();
-    name = QInputDialog::getText(this, i18nc("@title:window", "Save Gradient"), i18n("Enter gradient name:"), QLineEdit::Normal, name);
-    if (name.isNull() || name.isEmpty()) return;
+    QFileInfo fileInfo(saveLocation + name.split(" ").join("_") + d->activeGradient->defaultFileExtension());
+    bool fileOverWriteAccepted = false;
 
-    QFileInfo fileInfo(saveLocation + "/" + name.split(" ").join("_") + d->activeGradient->defaultFileExtension());
-
-    while(fileInfo.exists()) {
+    while(!fileOverWriteAccepted) {
         name = QInputDialog::getText(this,
                                      i18nc("@title:window", "Save Gradient"),
-                                     i18n("The name '%1' is already in use, please choose a new gradient name:", name),
+                                     i18n("Enter gradient name:"),
                                      QLineEdit::Normal, name);
         if (name.isNull() || name.isEmpty()) {
             return;
         } else {
-            fileInfo = QFileInfo(saveLocation + "/" + name.split(" ").join("_") + d->activeGradient->defaultFileExtension());
+            fileInfo = QFileInfo(saveLocation + name.split(" ").join("_") + d->activeGradient->defaultFileExtension());
+            if (fileInfo.exists()) {
+                int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
+                                                            , i18n("The name '%1' already exists, do you wish to overwrite it?", name)
+                                                            , QMessageBox::Yes | QMessageBox::No);
+                if (res == QMessageBox::Yes) fileOverWriteAccepted = true;
+            } else {
+                fileOverWriteAccepted = true;
+            }
         }
     }
 
     d->activeGradient->setName(name);
-    d->activeGradient->setFilename(d->activeGradient->name() + d->activeGradient->defaultFileExtension());
+    d->activeGradient->setFilename(name.split(" ").join("_") + d->activeGradient->defaultFileExtension());
 
     KoAbstractGradientSP newGradient = d->activeGradient->clone();
     server->addResource(newGradient);

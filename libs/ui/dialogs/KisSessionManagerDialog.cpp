@@ -49,27 +49,33 @@ void KisSessionManagerDialog::updateSessionList() {
 
 void KisSessionManagerDialog::slotNewSession()
 {
-    QString name = QInputDialog::getText(this,
-        i18n("Create session"),
-        i18n("Session name:"), QLineEdit::Normal
-    );
-    if (name.isNull() || name.isEmpty()) return;
+    QString name;
 
     KisSessionResourceSP session(new KisSessionResource(QString()));
 
     KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
     QString saveLocation = server->saveLocation();
-    QFileInfo fileInfo(saveLocation + name + session->defaultFileExtension());
-    while (fileInfo.exists()) {
+    QFileInfo fileInfo(saveLocation + name.split(" ").join("_") + session->defaultFileExtension());
+
+    bool fileOverwriteAccepted = false;
+
+    while(!fileOverwriteAccepted) {
         name = QInputDialog::getText(this,
-                i18n("Create session"),
-                i18n("The name '%1' is already in use, please choose a new session name:", name),
-                QLineEdit::Normal
-            );
-        if (!name.isNull() || !name.isEmpty()) {
-            fileInfo = QFileInfo(saveLocation + name + session->defaultFileExtension());
-        } else {
+                                     i18n("Create session"),
+                                     i18n("Session name:"), QLineEdit::Normal,
+                                     name);
+        if (name.isNull() || name.isEmpty()) {
             return;
+        } else {
+            fileInfo = QFileInfo(saveLocation + name.split(" ").join("_") + session->defaultFileExtension());
+            if (fileInfo.exists()) {
+                int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
+                                                        , i18n("The name '%1' already exists, do you wish to overwrite it?", name)
+                                                        , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                if (res == QMessageBox::Yes) fileOverwriteAccepted = true;
+            } else {
+                fileOverwriteAccepted = true;
+            }
         }
     }
 

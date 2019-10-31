@@ -25,6 +25,7 @@
 #include <QPainter>
 #include <QInputDialog>
 #include <QAction>
+#include <QMessageBox>
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
@@ -173,9 +174,7 @@ void TasksetDockerDock::recordClicked()
 void TasksetDockerDock::saveClicked()
 {
     bool ok;
-    QString name = QInputDialog::getText(this, i18n("Taskset Name"),
-                                         i18n("Name:"), QLineEdit::Normal,
-                                         QString(), &ok);
+    QString name;
     if (!ok) {
         return;
     }
@@ -197,16 +196,29 @@ void TasksetDockerDock::saveClicked()
     }
     QFileInfo fileInfo(saveLocation + name + taskset->defaultFileExtension());
 
-    int i = 1;
-    while (fileInfo.exists()) {
-        fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + taskset->defaultFileExtension());
-        i++;
+    bool fileOverwriteAccepted = false;
+
+    while(!fileOverwriteAccepted) {
+        name = QInputDialog::getText(this, i18n("Taskset Name"),
+                                     i18n("Name:"), QLineEdit::Normal,
+                                     QString(), &ok);
+        if (name.isNull() || name.isEmpty()) {
+            return;
+        } else {
+            fileInfo = QFileInfo(saveLocation + name.split(" ").join("_") + taskset->defaultFileExtension());
+            if (fileInfo.exists()) {
+                int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
+                                                        , i18n("The name '%1' already exists, do you wish to overwrite it?", name)
+                                                        , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                if (res == QMessageBox::Yes) fileOverwriteAccepted = true;
+            } else {
+                fileOverwriteAccepted = true;
+            }
+        }
     }
-    taskset->setFilename(fileInfo.filePath());
-    if(newName) {
-        name = i18n("Taskset %1", i);
-    }
+
     taskset->setName(name);
+    taskset->setFilename(fileInfo.fileName());
     m_rserver->addResource(taskset);
 }
 

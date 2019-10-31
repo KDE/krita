@@ -267,7 +267,7 @@ bool GamutMaskDock::saveSelectedMaskResource()
             m_selectedMask->setDescription(m_dockerUI->maskDescriptionEdit->toPlainText());
 
             m_selectedMask->clearPreview();
-            m_selectedMask->save();
+            KoResourceServerProvider::instance()->gamutMaskServer()->addResource(m_selectedMask);
             maskSaved = true;
         } else {
             getUserFeedback(i18n("Saving of gamut mask '%1' was aborted.", m_selectedMask->title()),
@@ -281,6 +281,7 @@ bool GamutMaskDock::saveSelectedMaskResource()
                             QMessageBox::Ok, QMessageBox::Ok);
         }
     }
+
 
     return maskSaved;
 }

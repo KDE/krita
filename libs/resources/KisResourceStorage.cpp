@@ -110,6 +110,8 @@ KisResourceStorage::StorageType KisResourceStorage::type() const
 
 QDateTime KisResourceStorage::timestamp() const
 {
+    if (d->storageType == StorageType::Memory) return QDateTime();
+
     return QFileInfo(d->location).lastModified();
 }
 

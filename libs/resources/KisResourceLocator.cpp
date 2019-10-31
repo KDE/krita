@@ -302,26 +302,14 @@ void KisResourceLocator::purge()
 bool KisResourceLocator::addDocumentStorage(const QString &document, KisResourceStorageSP storage)
 {
     Q_ASSERT(!d->storages.contains(document));
+
     d->storages[document] = storage;
-    if (!KisResourceCacheDb::synchronizeStorage(storage)) {
-        d->errorMessages.append(i18n("Could not synchronize %1 with the database", storage->location()));
+
+    if (!KisResourceCacheDb::addStorage(storage, false)) {
+        d->errorMessages.append(i18n("Could not add %1 to the database", storage->location()));
         return false;
     }
-    QMap<QString, QStringList> typeResourceMap;
-    Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
-        typeResourceMap.insert(resourceType, QStringList());
-        QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage->resources(resourceType);
-        while (iter->hasNext()) {
-            iter->next();
-            KoResourceSP resource = iter->resource();
-            typeResourceMap[resourceType] << iter->url();
-            if (resource) {
-                if (!KisResourceCacheDb::addResource(storage, iter->lastModified(), resource, iter->type())) {
-                    qWarning() << "Could not add/update resource" << resource->filename() << "to the database";
-                }
-            }
-        }
-    }
+
     KisResourceModelProvider::resetAllModels();
     return true;
 }
@@ -414,19 +402,6 @@ bool KisResourceLocator::initializeDb()
         }
 
         qDebug() << "Adding storage" << storage->location() << "to the database took" << t.elapsed() << "ms";
-
-        Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
-            t.start();
-            emit progressMessage(i18n("Adding %1 resources to folder %2", resourceType, storage->location()));
-            if (!KisResourceCacheDb::addResources(storage, resourceType)) {
-                d->errorMessages.append(i18n("Could not add resource type %1 to the cache database", resourceType));
-            }
-            if (!KisResourceCacheDb::addTags(storage, resourceType)) {
-                d->errorMessages.append(i18n("Could not add tags for resource type %1 to the cache database", resourceType));
-            }
-            qDebug() << "\tAdding resources of type" << resourceType << "to the database took" << t.elapsed() << "ms";
-
-        }
     }
 
     return (d->errorMessages.isEmpty());
@@ -553,7 +528,6 @@ bool KisResourceLocator::synchronizeDb()
     d->errorMessages.clear();
     findStorages();
     Q_FOREACH(const KisResourceStorageSP storage, d->storages) {
-        if (storage->name() == "memory") continue;
         if (!KisResourceCacheDb::synchronizeStorage(storage)) {
             d->errorMessages.append(i18n("Could not synchronize %1 with the database", storage->location()));
         }

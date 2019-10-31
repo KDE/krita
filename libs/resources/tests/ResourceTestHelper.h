@@ -41,20 +41,10 @@
 
 namespace ResourceTestHelper {
 
-void initTestDb() {
-    QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    if (dbLocation.exists()) {
-        QFile(dbLocation.path() + "/" + KisResourceCacheDb::resourceCacheDbFilename).remove();
-        dbLocation.rmpath(dbLocation.path());
-    }
-}
-
 void rmTestDb() {
     QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    bool res = QFile(dbLocation.path() + "/" + KisResourceCacheDb::resourceCacheDbFilename).remove();
-    Q_ASSERT(res);
-    res = dbLocation.rmpath(dbLocation.path());
-    Q_ASSERT(res);
+    QFile(dbLocation.path() + "/" + KisResourceCacheDb::resourceCacheDbFilename).remove();
+    dbLocation.rmpath(dbLocation.path());
 }
 
 void createDummyLoaderRegistry() {
@@ -118,6 +108,12 @@ bool cleanDstLocation(const QString &dstLocation)
         return QDir().rmpath(dstLocation);
     }
     return true;
+}
+
+void initTestDb()
+{
+    rmTestDb();
+    cleanDstLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
 }
 
 

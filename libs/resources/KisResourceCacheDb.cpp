@@ -715,10 +715,12 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
             return r;
         }
         if (q.first()) {
+            qDebug() << "Storage already exists" << storage;
             return true;
         }
     }
 
+    // Insert the storage;
     {
         QSqlQuery q;
 
@@ -744,7 +746,7 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
 
     }
 
-
+    // Insert the metadata
     {
         QStringList keys = storage->metaDataKeys();
         if (keys.size() > 0) {
@@ -771,6 +773,17 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
             addMetaDataForId(metadata, id, "storages");
         }
     }
+
+    Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
+        if (!KisResourceCacheDb::addResources(storage, resourceType)) {
+            qWarning() << "Failed to add all resources for storage" << storage;
+            r = false;
+        }
+        if (!KisResourceCacheDb::addTags(storage, resourceType)) {
+            qWarning() << "Failed to add all tags for storage" << storage;
+        }
+    }
+
     return r;
 }
 
@@ -834,6 +847,8 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
     QTime t;
     t.start();
 
+    QSqlDatabase::database().transaction();
+
     if (!s_valid) {
         qWarning() << "KisResourceCacheDb::addResource: The database is not valid";
         return false;
@@ -858,11 +873,14 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 
     if (!q.first()) {
         // This is a new storage, the user must have dropped it in the path before restarting Krita, so add it.
+        qDebug() << "Adding storage to the database:" << storage;
         if (!addStorage(storage, false)) {
             qWarning() << "Could not add new storage" << storage->name() << "to the database";
             success = false;
         }
+        return true;
     }
+
 
     // Only check the time stamp for container storages, not the contents
     if (storage->type() != KisResourceStorage::StorageType::Folder) {
@@ -886,18 +904,23 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                 success = false;
             }
         }
-
     }
     else {
+       // This is a folder, we need to check what's on disk and what's in the database
+
         // Check whether everything in the storage is in the database
-        QMap<QString, QStringList> typeResourceMap;
+        QList<int> resourcesToBeDeleted;
+
         Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
-            typeResourceMap.insert(resourceType, QStringList());
+            QStringList resourcesOnDisk;
+
+            // Check the folder
             QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage->resources(resourceType);
             while (iter->hasNext()) {
                 iter->next();
+                qDebug() << "\tadding resources" << iter->url();
                 KoResourceSP resource = iter->resource();
-                typeResourceMap[resourceType] << makeRelative(iter->url());
+                resourcesOnDisk << makeRelative(iter->url());
                 if (resource) {
                     if (!addResource(storage, iter->lastModified(), resource, iter->type())) {
                         qWarning() << "Could not add/update resource" << makeRelative(resource->filename()) << "to the database";
@@ -905,22 +928,8 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                     }
                 }
             }
-        }
 
-
-        {
-            QSqlQuery q;
-            q.prepare("select count(id) from resources");
-            q.exec();
-            q.first();
-            qDebug() << "We've got" << q.value(0).toInt() << "resources";
-        }
-
-        // Remove everything from the database which is no longer in the storage
-        QList<int> resourceIdList;
-        Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
-
-            qDebug() << "Checking for" << resourceType << ":" << typeResourceMap[resourceType];
+            qDebug() << "Checking for" << resourceType << ":" << resourcesOnDisk;
 
             QSqlQuery q;
             q.setForwardOnly(true);
@@ -942,17 +951,12 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                 continue;
             }
 
-            q.first();
-
             while (q.next()) {
-                qDebug() << "\t" << q.value(0) << q.value(1);
-                if (!typeResourceMap[resourceType].contains(q.value(1).toString())) {
-                    resourceIdList << q.value(0).toInt();
+                qDebug() << "\tFound in database" << q.value(0) << q.value(1) << "is in resources on disk" << resourcesOnDisk.contains(q.value(1).toString());
+                if (!resourcesOnDisk.contains(q.value(1).toString())) {
+                    resourcesToBeDeleted << q.value(0).toInt();
                 }
             }
-
-            qDebug() << "Got" << q.size() << "rows";
-
         }
 
         QSqlQuery deleteResources;
@@ -967,8 +971,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             qWarning() << "Could not prepare delete Resources query";
         }
 
-        QSqlDatabase::database().transaction();
-        Q_FOREACH(int id, resourceIdList) {
+        Q_FOREACH(int id, resourcesToBeDeleted) {
             deleteResourceVersions.bindValue(":id", id);
             if (!deleteResourceVersions.exec()) {
                 success = false;
@@ -981,9 +984,8 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                 qWarning() << "Could not delete resource" << deleteResources.boundValues() << deleteResources.lastError();
             }
         }
-        QSqlDatabase::database().commit();
     }
-
+    QSqlDatabase::database().commit();
     qDebug() << "Synchronizing the storages took" << t.msec() << "milliseconds for" << storage->location();
 
     return success;

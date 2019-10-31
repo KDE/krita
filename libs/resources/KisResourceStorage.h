@@ -57,6 +57,7 @@ public:
     public:
         virtual ~TagIterator() {}
         virtual bool hasNext() const = 0;
+        /// The iterator is only valid if next() has been called at least once.
         virtual void next() const = 0;
 
         /// The untranslated name of the tag, to be used for making connections to resources
@@ -77,6 +78,7 @@ public:
         virtual ~ResourceIterator() {}
 
         virtual bool hasNext() const = 0;
+        /// The iterator is only valid if next() has been called at least once.
         virtual void next() const = 0;
 
         virtual QString url() const = 0;

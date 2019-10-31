@@ -26,6 +26,7 @@
 #include <kis_debug.h>
 #include <KisTag.h>
 #include <KisResourceLoaderRegistry.h>
+#include <KisResourceStorage.h>
 
 class KisMemoryStorage::Private {
 public:
@@ -119,8 +120,8 @@ public:
 
     KoResourceSP resource() const override
     {
-        if (m_currentPosition >= m_resources.size()) return 0;
-        return m_resources.at(m_currentPosition);
+        if (m_currentPosition > m_resources.size()) return 0;
+        return m_resources.at(m_currentPosition - 1);
     }
 
 private:

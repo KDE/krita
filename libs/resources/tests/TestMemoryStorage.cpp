@@ -44,9 +44,10 @@ void TestMemoryStorage ::testStorage()
     int count = 0;
     while (iter->hasNext()) {
         iter->next();
+        QVERIFY(iter->resource());
         count++;
     }
-    QVERIFY(count == 1);
+    QCOMPARE(count, 1);
 }
 
 void TestMemoryStorage::testTagIterator()

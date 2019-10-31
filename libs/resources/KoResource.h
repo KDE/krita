@@ -173,12 +173,16 @@ Q_DECLARE_METATYPE(QSharedPointer<KoResource>)
 
 inline QDebug operator<<(QDebug dbg, const KoResourceSP res)
 {
-    dbg.nospace() << "[RESOURCE] Name: " << res->name()
-                  << " Version: " << res->version()
-                  << " Filename: " << res->filename()
-                  << " Valid: " << res->valid()
-                  << " Storage: " << res->storageLocation();
-
+    if (!res) {
+        dbg.noquote() << "NULL Resource";
+    }
+    else {
+        dbg.nospace() << "[RESOURCE] Name: " << res->name()
+                      << " Version: " << res->version()
+                      << " Filename: " << res->filename()
+                      << " Valid: " << res->valid()
+                    << " Storage: " << res->storageLocation();
+    }
     return dbg.space();
 }
 

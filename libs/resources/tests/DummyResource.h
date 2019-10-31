@@ -38,6 +38,7 @@ public:
         KoHashGenerator *hashGenerator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
         QByteArray hash = hashGenerator->generateHash(ba);
         setMD5(hash);
+        setValid(true);
     }
 
     bool load() override

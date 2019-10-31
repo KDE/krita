@@ -601,43 +601,34 @@ void KoFillConfigWidget::slotRecoverColorInResourceManager()
     }
 }
 
-template <class ResourceServer>
-QString findFirstAvailableResourceName(const QString &baseName, ResourceServer *server)
-{
-    if (!server->resourceByName(baseName)) return baseName;
-
-    int counter = 1;
-    QString result;
-    while ((result = QString("%1%2").arg(baseName).arg(counter)),
-           server->resourceByName(result)) {
-
-        counter++;
-    }
-
-    return result;
-}
-
-
 void KoFillConfigWidget::slotSavePredefinedGradientClicked()
 {
     KoResourceServerProvider *serverProvider = KoResourceServerProvider::instance();
     auto server = serverProvider->gradientServer();
 
     const QString defaultGradientNamePrefix = i18nc("default prefix for the saved gradient", "gradient");
+    const QString saveLocation = server->saveLocation();
 
     QString name = d->activeGradient->name().isEmpty() ? defaultGradientNamePrefix : d->activeGradient->name();
-    name = findFirstAvailableResourceName(name, server);
     name = QInputDialog::getText(this, i18nc("@title:window", "Save Gradient"), i18n("Enter gradient name:"), QLineEdit::Normal, name);
+    if (name.isNull() || name.isEmpty()) return;
 
-    // TODO: currently we do not allow the user to
-    //       create two resources with the same name!
-    //       Please add some feedback for it!
-    name = findFirstAvailableResourceName(name, server);
+    QFileInfo fileInfo(saveLocation + "/" + name.split(" ").join("_") + d->activeGradient->defaultFileExtension());
+
+    while(fileInfo.exists()) {
+        name = QInputDialog::getText(this,
+                                     i18nc("@title:window", "Save Gradient"),
+                                     i18n("The name '%1' is already in use, please choose a new gradient name:", name),
+                                     QLineEdit::Normal, name);
+        if (name.isNull() || name.isEmpty()) {
+            return;
+        } else {
+            fileInfo = QFileInfo(saveLocation + "/" + name.split(" ").join("_") + d->activeGradient->defaultFileExtension());
+        }
+    }
 
     d->activeGradient->setName(name);
-
-    const QString saveLocation = server->saveLocation();
-    d->activeGradient->setFilename(saveLocation + d->activeGradient->name() + d->activeGradient->defaultFileExtension());
+    d->activeGradient->setFilename(d->activeGradient->name() + d->activeGradient->defaultFileExtension());
 
     KoAbstractGradientSP newGradient = d->activeGradient->clone();
     server->addResource(newGradient);

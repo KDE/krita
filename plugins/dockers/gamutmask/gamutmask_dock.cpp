@@ -368,7 +368,7 @@ KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QStrin
 
     while(!fileOverWriteAccepted) {
         name = QInputDialog::getText(this, i18nc("@title:window", "New Gamut Mask..."),
-                                                    i18nc("@label:textbox", "Name:"));
+                                                    i18nc("@label:textbox", "Name:"), QLineEdit::Normal, name);
         if (name.isNull() || name.isEmpty()) {
             QMessageBox::warning(this, i18nc("@title:window", "Name invalid"), i18n("Please enter a name"));
         } else {
@@ -387,7 +387,7 @@ KoGamutMaskSP GamutMaskDock::createMaskResource(KoGamutMaskSP sourceMask, QStrin
     newMask->setTitle(name);
     newMask->setFilename(fileInfo.fileName());
     newMask->setValid(true);
-    rServer->addResource(newMask, false);
+    rServer->addResource(newMask, true);
 
     return newMask;
 }

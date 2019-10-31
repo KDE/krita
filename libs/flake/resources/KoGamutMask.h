@@ -79,6 +79,8 @@ public:
     QString description();
     void setDescription(QString description);
 
+    QString defaultFileExtension() const override;
+
     int rotation();
     void setRotation(int rotation);
 

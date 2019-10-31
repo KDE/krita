@@ -395,6 +395,11 @@ void KoGamutMask::setDescription(QString description)
     d->description = description;
 }
 
+QString KoGamutMask::defaultFileExtension() const
+{
+    return ".kgm";
+}
+
 int KoGamutMask::rotation()
 {
     return d->rotation;

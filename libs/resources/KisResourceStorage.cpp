@@ -24,10 +24,8 @@
 
 #include <quazip.h>
 
-#include "KisStoragePlugin.h"
 #include "KisFolderStorage.h"
 #include "KisBundleStorage.h"
-#include "KisAbrStorage.h"
 #include "KisAslStorage.h"
 #include "KisMemoryStorage.h"
 
@@ -44,7 +42,25 @@ const QString KisResourceStorage::s_meta_name("meta:name");
 const QString KisResourceStorage::s_meta_value("meta:value");
 const QString KisResourceStorage::s_meta_version("meta:bundle-version");
 
+Q_GLOBAL_STATIC(KisStoragePluginRegistry, s_instance);
 
+KisStoragePluginRegistry::KisStoragePluginRegistry()
+{
+    m_storageFactoryMap[KisResourceStorage::StorageType::Folder] = new KisStoragePluginFactory<KisFolderStorage>();
+    m_storageFactoryMap[KisResourceStorage::StorageType::Memory] = new KisStoragePluginFactory<KisMemoryStorage>();
+    m_storageFactoryMap[KisResourceStorage::StorageType::Bundle] = new KisStoragePluginFactory<KisBundleStorage>();
+    m_storageFactoryMap[KisResourceStorage::StorageType::AdobeStyleLibrary] = new KisStoragePluginFactory<KisAslStorage>();
+}
+
+void KisStoragePluginRegistry::addStoragePluginFactory(KisResourceStorage::StorageType storageType, KisStoragePluginFactoryBase *factory)
+{
+    m_storageFactoryMap[storageType] = factory;
+}
+
+KisStoragePluginRegistry *KisStoragePluginRegistry::instance()
+{
+    return s_instance;
+}
 
 class KisResourceStorage::Private {
 public:
@@ -55,34 +71,39 @@ public:
     QSharedPointer<KisStoragePlugin> storagePlugin;
 };
 
-
 KisResourceStorage::KisResourceStorage(const QString &location)
     : d(new Private())
 {
+    Q_ASSERT(KisStoragePluginRegistry::instance()->m_storageFactoryMap.contains(StorageType::Folder));
+    Q_ASSERT(KisStoragePluginRegistry::instance()->m_storageFactoryMap.contains(StorageType::Bundle));
+    Q_ASSERT(KisStoragePluginRegistry::instance()->m_storageFactoryMap.contains(StorageType::Memory));
+    Q_ASSERT(KisStoragePluginRegistry::instance()->m_storageFactoryMap.contains(StorageType::AdobeBrushLibrary));
+    Q_ASSERT(KisStoragePluginRegistry::instance()->m_storageFactoryMap.contains(StorageType::AdobeStyleLibrary));
+
     d->location = location;
     d->name = QFileInfo(d->location).fileName();
     QFileInfo fi(d->location);
     if (fi.isDir()) {
-        d->storagePlugin.reset(new KisFolderStorage(location));
+        d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Folder]->create(location));
         d->storageType = StorageType::Folder;
         d->valid = fi.isWritable();
     }
     else if (d->location.endsWith(".bundle")) {
-            d->storagePlugin.reset(new KisBundleStorage(location));
+            d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Bundle]->create(location));
             d->storageType = StorageType::Bundle;
             // XXX: should we also check whether there's a valid metadata entry? Or is this enough?
             d->valid = (fi.isReadable() && QuaZip(d->location).open(QuaZip::mdUnzip));
     } else if (d->location.endsWith(".abr")) {
-            d->storagePlugin.reset(new KisAbrStorage(location));
+            d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::AdobeBrushLibrary]->create(location));
             d->storageType = StorageType::AdobeBrushLibrary;
             d->valid = fi.isReadable();
     } else if (d->location.endsWith(".asl")) {
-            d->storagePlugin.reset(new KisAslStorage(location));
+            d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::AdobeStyleLibrary]->create(location));
             d->storageType = StorageType::AdobeStyleLibrary;
             d->valid = fi.isReadable();
     }
     else if (!d->location.isEmpty()) {
-        d->storagePlugin.reset(new KisMemoryStorage);
+        d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Memory]->create(location));
         d->name = location;
         d->storageType = StorageType::Memory;
         d->valid = true;
@@ -159,3 +180,4 @@ QVariant KisResourceStorage::metaData(const QString &key) const
 {
     return d->storagePlugin->metaData(key);
 }
+

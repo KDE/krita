@@ -24,6 +24,7 @@ set(kritalibbrush_LIB_SRCS
     kis_text_brush.cpp
     kis_auto_brush_factory.cpp
     kis_text_brush_factory.cpp
+    KisAbrStorage.cpp
 )
 
 add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )

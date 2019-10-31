@@ -20,6 +20,14 @@
 #include "KisAbrStorage.h"
 #include "KisResourceStorage.h"
 
+struct KisAbrStorageStaticRegistrar {
+    KisAbrStorageStaticRegistrar() {
+        KisStoragePluginRegistry::instance()->addStoragePluginFactory(KisResourceStorage::StorageType::AdobeBrushLibrary, new KisStoragePluginFactory<KisAbrStorage>());
+    }
+};
+static KisAbrStorageStaticRegistrar s_registrar;
+
+
 class AbrTagIterator : public KisResourceStorage::TagIterator
 {
 public:

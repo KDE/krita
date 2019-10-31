@@ -24,12 +24,30 @@
 #include <QScopedPointer>
 #include <QString>
 #include <QDateTime>
+#include <QMap>
 
 #include <KoResource.h>
-
 #include <KisTag.h>
 
 #include <kritaresources_export.h>
+
+class KisStoragePlugin;
+
+class KRITARESOURCES_EXPORT KisStoragePluginFactoryBase
+{
+public:
+    virtual ~KisStoragePluginFactoryBase(){}
+    virtual KisStoragePlugin *create(const QString &/*location*/) { return 0; }
+};
+
+template<typename T>
+class KRITARESOURCES_EXPORT KisStoragePluginFactory : public KisStoragePluginFactoryBase
+{
+public:
+    KisStoragePlugin *create(const QString &location) override {
+        return new T(location);
+    }
+};
 
 
 /**
@@ -150,9 +168,8 @@ public:
     QStringList metaDataKeys() const;
     QVariant metaData(const QString &key) const;
 
-
-
 private:
+
     class Private;
     QScopedPointer<Private> d;
 };
@@ -170,6 +187,18 @@ inline QDebug operator<<(QDebug dbg, const KisResourceStorageSP storage)
 
     return dbg.space();
 }
+
+class KRITARESOURCES_EXPORT KisStoragePluginRegistry {
+public:
+    KisStoragePluginRegistry();
+    void addStoragePluginFactory(KisResourceStorage::StorageType storageType, KisStoragePluginFactoryBase *factory);
+    static KisStoragePluginRegistry *instance();
+private:
+    friend class KisResourceStorage;
+    QMap<KisResourceStorage::StorageType, KisStoragePluginFactoryBase*> m_storageFactoryMap;
+
+};
+
 
 
 #endif // KISRESOURCESTORAGE_H

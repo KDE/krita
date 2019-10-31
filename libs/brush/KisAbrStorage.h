@@ -22,7 +22,10 @@
 
 #include <KisStoragePlugin.h>
 
-class KisAbrStorage : public KisStoragePlugin
+#include <kritabrush_export.h>
+
+
+class BRUSH_EXPORT KisAbrStorage : public KisStoragePlugin
 {
 public:
     KisAbrStorage(const QString &location);

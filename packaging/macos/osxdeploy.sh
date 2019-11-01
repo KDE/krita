@@ -104,6 +104,8 @@ print_usage () {
     -notarize-pass \t If given, the Apple account password. Otherwise an attempt will be macdeployqt_exists
 \t\t\t to get the password from keychain using the account given in <notarize-ac> option.
 
+    -asc-provider \t some AppleIds might need this option pass the <shortname>
+
     -style \t\t Style file defined from 'dmgstyle.sh' output
 
     -bg \t\t Set a background image for dmg folder.
@@ -162,6 +164,10 @@ for arg in "${@}"; do
         if [[ -f "${style_filename}" ]]; then
             DMG_STYLE="${style_filename}"
         fi
+    fi
+
+    if [[ ${arg} = -asc-provider=* ]]; then
+        ASC_PROVIDER="${arg#*=}"
     fi
 
     if [[ ${arg} = "-h" || ${arg} = "--help" ]]; then
@@ -585,10 +591,15 @@ notarize_build() {
             NOTARIZE_PASS="@keychain:KRITA_AC_PASS"
         fi
 
+        ASC_PROVIDER_OP=""
+        if [[ -n "${ASC_PROVIDER}" ]]; then
+            ASC_PROVIDER_OP="--asc-provider ${ASC_PROVIDER}"
+        fi
+
         ditto -c -k --sequesterRsrc --keepParent "${NOT_SRC_FILE}" "${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip"
 
         # echo "xcrun altool --notarize-app --primary-bundle-id \"org.krita\" --username \"${NOTARIZE_ACC}\" --password \"${NOTARIZE_PASS}\" --file \"${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip\""
-        local altoolResponse="$(xcrun altool --notarize-app --primary-bundle-id "org.krita" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" --file "${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip" 2>&1)"
+        local altoolResponse="$(xcrun altool --notarize-app --primary-bundle-id "org.krita" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP} --file "${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip" 2>&1)"
 
         if [[ -n "$(grep 'Error' <<< ${altoolResponse})" ]]; then
             printf "ERROR: xcrun altool exited with the following error! \n\n%s\n\n" "${altoolResponse}"
@@ -600,13 +611,13 @@ notarize_build() {
             printf "Response:\n\n%s\n\n" "${altoolResponse}"
         fi
 
-        local uuid="$(grep 'RequestUUID' <<< ${altoolResponse} | awk '{ print $3 }')"
+        local uuid="$(grep 'RequestUUID' <<< ${altoolResponse} | awk '{ print $NF }')"
         echo "RequestUUID = ${uuid}" # Display identifier string
 
-        waiting_fixed "Waiting to retrieve notarize status" 15
+        waiting_fixed "Waiting to retrieve notarize status" 30
 
         while true ; do
-            fullstatus=$(xcrun altool --notarization-info "${uuid}" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" 2>&1)  # get the status
+            fullstatus=$(xcrun altool --notarization-info "${uuid}" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP} 2>&1)  # get the status
             notarize_status=`echo "${fullstatus}" | grep 'Status\:' | awk '{ print $2 }'`
             echo "${fullstatus}"
             if [[ "${notarize_status}" = "success" ]]; then
@@ -615,7 +626,7 @@ notarize_build() {
                 print_msg "Notarization success!"
                 break
             elif [[ "${notarize_status}" = "in" ]]; then
-                waiting_fixed "Notarization still in progress, sleeping for 15 seconds and trying again" 15
+                waiting_fixed "Notarization still in progress, sleeping for 20 seconds and trying again" 20
             else
                 echo "Notarization failed! full status below"
                 echo "${fullstatus}"

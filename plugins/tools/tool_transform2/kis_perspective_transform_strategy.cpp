@@ -52,7 +52,8 @@ struct KisPerspectiveTransformStrategy::Private
           converter(_converter),
           currentArgs(_currentArgs),
           transaction(_transaction),
-          imageTooBig(false)
+          imageTooBig(false),
+          isTransforming(false)
     {
     }
 
@@ -99,6 +100,7 @@ struct KisPerspectiveTransformStrategy::Private
 
     QPointF clickPos;
     ToolTransformArgs clickArgs;
+    bool isTransforming;
 
     QCursor getScaleCursor(const QPointF &handlePt);
     QCursor getShearCursor(const QPointF &start, const QPointF &end);
@@ -238,6 +240,10 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
     addHandleRectFunc(m_d->transaction.originalBottomRight());
 
     gc.save();
+
+    if (m_d->isTransforming) {
+        gc.setOpacity(0.1);
+    }
 
     /**
      * WARNING: we cannot install a transform to paint the handles here!
@@ -458,6 +464,8 @@ void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mouse
     Q_UNUSED(shiftModifierActve);
     Q_UNUSED(altModifierActive);
 
+    m_d->isTransforming = true;
+
     switch (m_d->function) {
     case NONE:
         break;
@@ -605,6 +613,7 @@ void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mouse
 bool KisPerspectiveTransformStrategy::endPrimaryAction()
 {
     bool shouldSave = !m_d->imageTooBig;
+    m_d->isTransforming = false;
 
     if (m_d->imageTooBig) {
         m_d->currentArgs = m_d->clickArgs;

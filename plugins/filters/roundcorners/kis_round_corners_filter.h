@@ -38,9 +38,9 @@ public:
     static inline KoID id() {
         return KoID("roundcorners", i18n("Round Corners"));
     }
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration() const override;
 public:
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 private:
 };
 

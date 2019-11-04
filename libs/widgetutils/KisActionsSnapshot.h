@@ -49,7 +49,7 @@ public:
     /**
      * Returns all action collections of the current snapshot
      *
-     * WARNING: the collections are owned by the shapshot! Don't destroy
+     * WARNING: the collections are owned by the snapshot! Don't destroy
      *          the snapshot before you are done with the collections!
      */
     QMap<QString, KActionCollection*> actionCollections();

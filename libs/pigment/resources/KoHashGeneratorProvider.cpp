@@ -24,7 +24,7 @@
 #include "KoMD5Generator.h"
 
 KoHashGeneratorProvider *KoHashGeneratorProvider::instance_var = 0;
-Q_GLOBAL_STATIC(KoHashGeneratorProvider, s_instance);
+Q_GLOBAL_STATIC(KoHashGeneratorProvider, s_instance)
     
 KoHashGeneratorProvider::KoHashGeneratorProvider()
 {

@@ -21,7 +21,7 @@ class ScaleTool(QWidget):
     def __init__(self, mainDialog, parent=None):
         super(ScaleTool, self).__init__(parent)
 
-        self.setObjectName("Scale")
+        self.setObjectName(i18n("Scale"))
 
         self.layout = QFormLayout()
         self.resolutionLayout = QVBoxLayout()

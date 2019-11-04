@@ -43,18 +43,18 @@ class RunAction(QAction):
         self.scripter = scripter
 
         self.editor = self.scripter.uicontroller.editor
-        self.output = self.scripter.uicontroller.findTabWidget('OutPut', 'OutPutTextEdit')
+        self.output = self.scripter.uicontroller.findTabWidget(i18n('Output'), 'OutPutTextEdit')
 
         self.triggered.connect(self.run)
 
         self.setText(i18n("Run"))
-        self.setToolTip('Run Ctrl+R')
+        self.setToolTip(i18n('Run Ctrl+R'))
         self.setIcon(QIcon(':/icons/run.svg'))
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_R))
 
     @property
     def parent(self):
-        return 'toolBar'
+        return 'toolBar',
 
     def run(self):
         """ This method execute python code from an activeDocument (file) or direct
@@ -65,7 +65,7 @@ class RunAction(QAction):
             this script to bytecode and we execute this in an empty scope. That's
             faster than use exec directly and cleaner, because we are using an empty scope. """
 
-        self.scripter.uicontroller.setActiveWidget('OutPut')
+        self.scripter.uicontroller.setActiveWidget(i18n('Output'))
         stdout = sys.stdout
         stderr = sys.stderr
         output = docwrapper.DocWrapper(self.output.document())

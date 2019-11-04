@@ -21,6 +21,10 @@
 
 #include "KoConfig.h"
 
+#ifdef HAS_ONLY_OPENGL_ES
+#define GL_MULTISAMPLE 0x809D
+#endif
+
 #include <QPainter>
 #include <QToolButton>
 #include <QApplication>
@@ -112,7 +116,6 @@ KisMirrorAxis::KisMirrorAxis(KisCanvasResourceProvider* provider, QPointer<KisVi
 
 KisMirrorAxis::~KisMirrorAxis()
 {
-    delete d;
 }
 
 float KisMirrorAxis::handleSize() const
@@ -124,7 +127,7 @@ void KisMirrorAxis::setHandleSize(float newSize)
 {
     if(d->config.handleSize() != newSize) {
         d->config.setHandleSize(newSize);
-        d->horizontalIcon = KisIconUtils::loadIcon("symmetry-horyzontal").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
+        d->horizontalIcon = KisIconUtils::loadIcon("symmetry-horizontal").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
         d->verticalIcon = KisIconUtils::loadIcon("symmetry-vertical").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
         d->horizontalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
         d->verticalHandleIcon = KisIconUtils::loadIcon("transform-move").pixmap(d->config.handleSize(), QIcon::Normal, QIcon::On);
@@ -150,15 +153,18 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
-    bool hasMultisample = ((gc.paintEngine()->type() == QPaintEngine::OpenGL2) &&
-                           (ctx->hasExtension("GL_ARB_multisample")));
+    bool hasMultisample = false;
+    if (ctx) {
+        hasMultisample = ((gc.paintEngine()->type() == QPaintEngine::OpenGL2) &&
+                               (ctx->hasExtension("GL_ARB_multisample")));
 
-    // QPainter cannot anti-alias the edges of circles etc. when using OpenGL
-    // So instead, use native OpenGL anti-aliasing when available.
-    if (hasMultisample) {
-        gc.beginNativePainting();
-        ctx->functions()->glEnable(GL_MULTISAMPLE);
-        gc.endNativePainting();
+        // QPainter cannot anti-alias the edges of circles etc. when using OpenGL
+        // So instead, use native OpenGL anti-aliasing when available.
+        if (hasMultisample) {
+            gc.beginNativePainting();
+            ctx->functions()->glEnable(GL_MULTISAMPLE);
+            gc.endNativePainting();
+        }
     }
 
     float halfHandleSize = d->config.handleSize() / 2;
@@ -167,8 +173,8 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
     if(d->config.mirrorHorizontal() && !d->config.hideHorizontalDecoration()) {
         if (!d->horizontalAxis.isNull()) {
-           // QPointF horizontalIndicatorCenter = d->horizontalAxis.unitVector().pointAt(15);
-           // QRectF horizontalIndicator = QRectF(horizontalIndicatorCenter.x() - halfHandleSize, horizontalIndicatorCenter.y() - halfHandleSize, d->config.handleSize(), d->config.handleSize());
+            // QPointF horizontalIndicatorCenter = d->horizontalAxis.unitVector().pointAt(15);
+            // QRectF horizontalIndicator = QRectF(horizontalIndicatorCenter.x() - halfHandleSize, horizontalIndicatorCenter.y() - halfHandleSize, d->config.handleSize(), d->config.handleSize());
 
             float horizontalHandlePosition = qBound<float>(d->minHandlePosition, d->config.horizontalHandlePosition(), d->horizontalAxis.length() - d->minHandlePosition);
             QPointF horizontalHandleCenter = d->horizontalAxis.unitVector().pointAt(horizontalHandlePosition);
@@ -177,8 +183,8 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
             gc.setPen(QPen(QColor(0, 0, 0, 64), 2, Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
             gc.drawLine(d->horizontalAxis);
 
-           // gc.drawEllipse(horizontalIndicator);
-          //  gc.drawPixmap(horizontalIndicator.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
+            // gc.drawEllipse(horizontalIndicator);
+            //  gc.drawPixmap(horizontalIndicator.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
 
             // don't draw the handles if we are locking the axis for movement
             if (!d->config.lockHorizontal()) {
@@ -199,8 +205,8 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
             gc.drawLine(d->verticalAxis);
 
 
-           // QPointF verticalIndicatorCenter = d->verticalAxis.unitVector().pointAt(15);
-           // QRectF verticalIndicator = QRectF(verticalIndicatorCenter.x() - halfHandleSize, verticalIndicatorCenter.y() - halfHandleSize, d->config.handleSize(), d->config.handleSize());
+            // QPointF verticalIndicatorCenter = d->verticalAxis.unitVector().pointAt(15);
+            // QRectF verticalIndicator = QRectF(verticalIndicatorCenter.x() - halfHandleSize, verticalIndicatorCenter.y() - halfHandleSize, d->config.handleSize(), d->config.handleSize());
 
             float verticalHandlePosition = qBound<float>(d->minHandlePosition, d->config.verticalHandlePosition(), d->verticalAxis.length() - d->minHandlePosition);
             QPointF verticalHandleCenter = d->verticalAxis.unitVector().pointAt(verticalHandlePosition);
@@ -233,7 +239,7 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
     if (!visible()) return false;
 
     QObject *expectedCanvasWidget = view() ?
-        view()->canvasBase()->canvasWidget() : 0;
+                view()->canvasBase()->canvasWidget() : 0;
 
     if (!expectedCanvasWidget || target != expectedCanvasWidget) return false;
 

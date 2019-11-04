@@ -24,6 +24,8 @@
 #include <QTimer>
 #include <kundo2command.h>
 #include <QMimeData>
+#include <QApplication>
+#include <QThread>
 
 #include <KoShapeStroke.h>
 #include <KoPathShape.h>
@@ -109,6 +111,12 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
 
 KisSelectionComponent* KisShapeSelection::clone(KisSelection* selection)
 {
+    /**
+     * TODO: make cloning of vector selections safe! Right now it crashes
+     * on Windows because of manipulations with timers from non-gui thread.
+     */
+    KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == qApp->thread());
+
     return new KisShapeSelection(*this, selection);
 }
 
@@ -296,13 +304,23 @@ void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection, const QR
     renderSelection(projection, r);
 }
 
-void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect& r)
+void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect& requestedRect)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(projection);
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_image);
 
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;
+
+    const QPainterPath selectionOutline = outlineCache();
+
+    if (*projection->defaultPixel().data() == OPACITY_TRANSPARENT_U8) {
+        projection->clear(requestedRect);
+    } else {
+        KoColor transparentColor(Qt::transparent, projection->colorSpace());
+        projection->fill(requestedRect, transparentColor);
+    }
+    const QRect r = requestedRect & selectionOutline.boundingRect().toAlignedRect();
 
     QImage polygonMaskImage(MASK_IMAGE_WIDTH, MASK_IMAGE_HEIGHT, QImage::Format_ARGB32);
     QPainter maskPainter(&polygonMaskImage);
@@ -314,7 +332,7 @@ void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect
 
             maskPainter.fillRect(polygonMaskImage.rect(), Qt::black);
             maskPainter.translate(-x, -y);
-            maskPainter.fillPath(outlineCache(), Qt::white);
+            maskPainter.fillPath(selectionOutline, Qt::white);
             maskPainter.translate(x, y);
 
             qint32 rectWidth = qMin(r.x() + r.width() - x, MASK_IMAGE_WIDTH);

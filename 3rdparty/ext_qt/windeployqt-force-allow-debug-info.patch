@@ -1,0 +1,20 @@
+diff --git a/src/shared/winutils/utils.cpp b/src/shared/winutils/utils.cpp
+index 00a20543..6467dee8 100644
+--- a/src/shared/winutils/utils.cpp
++++ b/src/shared/winutils/utils.cpp
+@@ -126,6 +126,7 @@ QStringList findSharedLibraries(const QDir &directory, Platform platform,
+             if (readPeExecutable(dllPath, &errorMessage, 0, 0, &debugDll,
+                                  (platform == WindowsDesktopMinGW))) {
+                 matches = debugDll == (debugMatchMode == MatchDebug);
++                matches = true;
+             } else {
+                 std::wcerr << "Warning: Unable to read " << QDir::toNativeSeparators(dllPath)
+                            << ": " << errorMessage;
+@@ -826,6 +827,7 @@ inline void determineDebugAndDependentLibs(const ImageNtHeader *nth, const void
+         if (isMinGW) {
+             // Use logic that's used e.g. in objdump / pfd library
+             *isDebugIn = !(nth->FileHeader.Characteristics & IMAGE_FILE_DEBUG_STRIPPED);
++            *isDebugIn = false;
+         } else {
+             // When an MSVC debug entry is present, check whether the debug runtime
+             // is actually used to detect -release / -force-debug-info builds.

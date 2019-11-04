@@ -131,7 +131,7 @@ void QMic::slotQMic(bool again)
     m_localServer->listen(m_key);
     connect(m_localServer, SIGNAL(newConnection()), SLOT(connected()));
     m_pluginProcess = new QProcess(this);
-    connect(viewManager(), SIGNAL(destroyed(QObject*o)), m_pluginProcess, SLOT(terminate()));
+    connect(viewManager(), SIGNAL(destroyed(QObject*)), m_pluginProcess, SLOT(terminate()));
     m_pluginProcess->setProcessChannelMode(QProcess::ForwardedChannels);
     connect(m_pluginProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(pluginFinished(int,QProcess::ExitStatus)));
     connect(m_pluginProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(pluginStateChanged(QProcess::ProcessState)));
@@ -385,7 +385,6 @@ void QMic::slotStartApplicator(QStringList gmicImages)
 
     m_gmicApplicator->setProperties(viewManager()->image(), rootNode, images, actionName, layers);
     m_gmicApplicator->apply();
-    m_gmicApplicator->finish();
 }
 
 bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)

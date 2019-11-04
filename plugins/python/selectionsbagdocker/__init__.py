@@ -1,4 +1,7 @@
-from krita import *
-from .selectionsbagdocker import *
+from krita import Krita, DockWidgetFactory
+from .selectionsbagdocker import SelectionsBagDocker
 
-Krita.instance().addDockWidgetFactory(DockWidgetFactory("SelectionsBagDocker", DockWidgetFactory.DockRight, SelectionsBagDocker))
+Krita.instance().addDockWidgetFactory(
+    DockWidgetFactory("SelectionsBagDocker",
+                      DockWidgetFactory.DockRight,
+                      SelectionsBagDocker))

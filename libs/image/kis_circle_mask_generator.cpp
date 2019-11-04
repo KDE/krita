@@ -79,14 +79,10 @@ void KisCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
 
     d->xcoef = 2.0 / effectiveSrcWidth();
     d->ycoef = 2.0 / effectiveSrcHeight();
-    d->xfadecoef = (horizontalFade() == 0) ? 1 : (2.0 / (horizontalFade() * effectiveSrcWidth()));
-    d->yfadecoef = (verticalFade() == 0)   ? 1 : (2.0 / (verticalFade() * effectiveSrcHeight()));
-    d->transformedFadeX = KisMaskGenerator::softness() * d->xfadecoef;
-    d->transformedFadeY = KisMaskGenerator::softness() * d->yfadecoef;
-
-    d->noFading = !d->copyOfAntialiasEdges &&
-        qFuzzyCompare(d->xcoef, d->transformedFadeX) &&
-        qFuzzyCompare(d->ycoef, d->transformedFadeY);
+    d->xfadecoef = qFuzzyCompare(horizontalFade(), 0) ? 1 : (2.0 / (horizontalFade() * effectiveSrcWidth()));
+    d->yfadecoef = qFuzzyCompare(verticalFade()  , 0) ? 1 : (2.0 / (verticalFade() * effectiveSrcHeight()));
+    d->transformedFadeX = d->xfadecoef * d->safeSoftnessCoeff;
+    d->transformedFadeY = d->yfadecoef * d->safeSoftnessCoeff;
 }
 
 KisCircleMaskGenerator::~KisCircleMaskGenerator()
@@ -134,10 +130,10 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
 void KisCircleMaskGenerator::setSoftness(qreal softness)
 {
     KisMaskGenerator::setSoftness(softness);
-    qreal safeSoftnessCoeff = qreal(1.0) / qMax(qreal(0.01), softness);
+    d->safeSoftnessCoeff = qreal(1.0) / qMax(qreal(0.01), softness);
 
-    d->transformedFadeX = d->xfadecoef * safeSoftnessCoeff;
-    d->transformedFadeY = d->yfadecoef * safeSoftnessCoeff;
+    d->transformedFadeX = d->xfadecoef * d->safeSoftnessCoeff;
+    d->transformedFadeY = d->yfadecoef * d->safeSoftnessCoeff;
 }
 
 void KisCircleMaskGenerator::resetMaskApplicator(bool forceScalar)

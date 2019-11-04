@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,7 +20,7 @@
 
 #include <QGridLayout>
 #include <QToolButton>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 
 #include <klocalizedstring.h>
 
@@ -64,13 +65,13 @@ DigitalMixerDock::DigitalMixerDock( )
 
     // Create the sliders
 
-    QSignalMapper* signalMapperSelectColor = new QSignalMapper(this);
+    KisSignalMapper* signalMapperSelectColor = new KisSignalMapper(this);
     connect(signalMapperSelectColor, SIGNAL(mapped(int)), SLOT(popupColorChanged(int)));
 
-    QSignalMapper* signalMapperColorSlider = new QSignalMapper(this);
+    KisSignalMapper* signalMapperColorSlider = new KisSignalMapper(this);
     connect(signalMapperColorSlider, SIGNAL(mapped(int)), SLOT(colorSliderChanged(int)));
 
-    QSignalMapper* signalMapperTargetColor = new QSignalMapper(this);
+    KisSignalMapper* signalMapperTargetColor = new KisSignalMapper(this);
     connect(signalMapperTargetColor, SIGNAL(mapped(int)), SLOT(targetColorChanged(int)));
 
     for(int i = 0; i < 6; ++i)

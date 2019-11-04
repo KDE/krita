@@ -25,6 +25,8 @@
 #include <QLabel>
 #include <QComboBox>
 
+#include <KisDialogStateSaver.h>
+
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 DlgSeparate::DlgSeparate(const QString & imageCS,
@@ -46,17 +48,19 @@ DlgSeparate::DlgSeparate(const QString & imageCS,
     resize(m_page->sizeHint());
 
     m_page->lblColormodel->setText(layerCS);
-    m_page->grpOutput->hide();
     connect(m_page->radioCurrentLayer, SIGNAL(toggled(bool)), this, SLOT(slotSetColorSpaceLabel()));
     connect(m_page->radioAllLayers, SIGNAL(toggled(bool)), this, SLOT(slotSetColorSpaceLabel()));
-    connect(m_page->chkColors, SIGNAL(toggled(bool)), m_page->chkDownscale, SLOT(setDisabled(bool)));
+    connect(m_page->chkColors, SIGNAL(toggled(bool)), this, SLOT(separateToColorActivated(bool)));
 
     connect(this, SIGNAL(okClicked()),
             this, SLOT(okClicked()));
+
+    KisDialogStateSaver::restoreState(m_page, "krita/separate channels");
 }
 
 DlgSeparate::~DlgSeparate()
 {
+    KisDialogStateSaver::saveState(m_page, "krita/separate channels");
     delete m_page;
 }
 enumSepAlphaOptions DlgSeparate::getAlphaOptions()
@@ -72,19 +76,8 @@ enumSepSource DlgSeparate::getSource()
 {
     if (m_page->radioCurrentLayer->isChecked()) return CURRENT_LAYER;
     if (m_page->radioAllLayers->isChecked()) return ALL_LAYERS;
-    //if (XXX) return VISIBLE_LAYERS;
-
     return CURRENT_LAYER;
 }
-
-enumSepOutput DlgSeparate::getOutput()
-{
-    if (m_page->radioLayers->isChecked()) return TO_LAYERS;
-    if (m_page->radioImages->isChecked()) return TO_IMAGES;
-
-    return TO_LAYERS;
-}
-
 
 bool DlgSeparate::getDownscale()
 {
@@ -96,9 +89,22 @@ bool DlgSeparate::getToColor()
     return m_page->chkColors->isChecked();
 }
 
+bool DlgSeparate::getActivateCurrentChannel()
+{
+    return m_page->chkActivateCurrentChannel->isChecked();
+}
+
 void DlgSeparate::okClicked()
 {
     accept();
+}
+
+void DlgSeparate::separateToColorActivated(bool disable)
+{
+    if (m_canDownScale) {
+        m_page->chkDownscale->setDisabled(disable);
+    }
+    m_page->chkActivateCurrentChannel->setDisabled(!disable);
 }
 
 void DlgSeparate::slotSetColorSpaceLabel()
@@ -111,6 +117,7 @@ void DlgSeparate::slotSetColorSpaceLabel()
 }
 void DlgSeparate::enableDownscale(bool enable)
 {
+    m_canDownScale = enable;
     m_page->chkDownscale->setEnabled(enable);
 }
 

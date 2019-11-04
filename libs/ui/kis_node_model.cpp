@@ -48,28 +48,32 @@
 #include "kis_model_index_converter_show_all.h"
 #include "kis_node_selection_adapter.h"
 #include "kis_node_insertion_adapter.h"
+#include "kis_node_manager.h"
 #include <KisSelectionActionsAdapter.h>
 #include <KisNodeDisplayModeAdapter.h>
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-#include <QTimer>
 #include "kis_signal_auto_connection.h"
+#include "kis_signal_compressor.h"
 
 
 struct KisNodeModel::Private
 {
+    Private() : updateCompressor(100, KisSignalCompressor::FIRST_ACTIVE) {}
+
     KisImageWSP image;
     KisShapeController *shapeController = 0;
     KisNodeSelectionAdapter *nodeSelectionAdapter = 0;
     KisNodeInsertionAdapter *nodeInsertionAdapter = 0;
     KisSelectionActionsAdapter *selectionActionsAdapter = 0;
     KisNodeDisplayModeAdapter *nodeDisplayModeAdapter = 0;
+    KisNodeManager *nodeManager = 0;
 
     KisSignalAutoConnectionsStore nodeDisplayModeAdapterConnections;
 
     QList<KisNodeDummy*> updateQueue;
-    QTimer updateTimer;
+    KisSignalCompressor updateCompressor;
 
     KisModelIndexConverterBase *indexConverter = 0;
     QPointer<KisDummiesFacadeBase> dummiesFacade = 0;
@@ -88,8 +92,7 @@ KisNodeModel::KisNodeModel(QObject * parent)
         : QAbstractItemModel(parent)
         , m_d(new Private)
 {
-    m_d->updateTimer.setSingleShot(true);
-    connect(&m_d->updateTimer, SIGNAL(timeout()), SLOT(processUpdateQueue()));
+    connect(&m_d->updateCompressor, SIGNAL(timeout()), SLOT(processUpdateQueue()));
 }
 
 KisNodeModel::~KisNodeModel()
@@ -261,21 +264,20 @@ void KisNodeModel::connectDummies(KisNodeDummy *dummy, bool needConnect)
 void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
                                     KisImageWSP image,
                                     KisShapeController *shapeController,
-                                    KisNodeSelectionAdapter *nodeSelectionAdapter,
-                                    KisNodeInsertionAdapter *nodeInsertionAdapter,
                                     KisSelectionActionsAdapter *selectionActionsAdapter,
-                                    KisNodeDisplayModeAdapter *nodeDisplayModeAdapter)
+                                    KisNodeManager *nodeManager)
 {
     QPointer<KisDummiesFacadeBase> oldDummiesFacade(m_d->dummiesFacade);
     KisShapeController  *oldShapeController = m_d->shapeController;
 
     m_d->shapeController = shapeController;
-    m_d->nodeSelectionAdapter = nodeSelectionAdapter;
-    m_d->nodeInsertionAdapter = nodeInsertionAdapter;
+    m_d->nodeManager = nodeManager;
+    m_d->nodeSelectionAdapter = nodeManager ? nodeManager->nodeSelectionAdapter() : nullptr;
+    m_d->nodeInsertionAdapter = nodeManager ? nodeManager->nodeInsertionAdapter() : nullptr;
     m_d->selectionActionsAdapter = selectionActionsAdapter;
 
     m_d->nodeDisplayModeAdapterConnections.clear();
-    m_d->nodeDisplayModeAdapter = nodeDisplayModeAdapter;
+    m_d->nodeDisplayModeAdapter = nodeManager ? nodeManager->nodeDisplayModeAdapter() : nullptr;
     if (m_d->nodeDisplayModeAdapter) {
         m_d->nodeDisplayModeAdapterConnections.addConnection(
             m_d->nodeDisplayModeAdapter, SIGNAL(sigNodeDisplayModeChanged(bool,bool)),
@@ -283,7 +285,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
 
         // cold initialization
         m_d->showGlobalSelection = m_d->nodeDisplayModeAdapter->showGlobalSelectionMask();
-        m_d->showRootLayer = m_d->showRootLayer;
+        m_d->showRootLayer = false;
     }
 
     if (oldDummiesFacade && m_d->image) {
@@ -356,7 +358,7 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
     if (!dummy) return;
 
     // FIXME: is it really what we want?
-    m_d->updateTimer.stop();
+    m_d->updateCompressor.stop();
     m_d->updateQueue.clear();
 
     m_d->parentOfRemovedNode = dummy->parent();
@@ -388,7 +390,7 @@ void KisNodeModel::slotDummyChanged(KisNodeDummy *dummy)
     if (!m_d->updateQueue.contains(dummy)) {
         m_d->updateQueue.append(dummy);
     }
-    m_d->updateTimer.start(1000);
+    m_d->updateCompressor.start();
 }
 
 void addChangedIndex(const QModelIndex &idx, QSet<QModelIndex> *indexes)
@@ -474,10 +476,10 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case Qt::SizeHintRole: return m_d->image->size(); // FIXME
     case Qt::TextColorRole:
         return belongsToIsolatedGroup(node) &&
-            !node->projectionLeaf()->isDroppedMask() ? QVariant() : QVariant(QColor(Qt::gray));
+            !node->projectionLeaf()->isDroppedNode() ? QVariant() : QVariant(QColor(Qt::gray));
     case Qt::FontRole: {
         QFont baseFont;
-        if (node->projectionLeaf()->isDroppedMask()) {
+        if (node->projectionLeaf()->isDroppedNode()) {
             baseFont.setStrikeOut(true);
         }
         if (m_d->activeNodeIndex == index) {
@@ -499,6 +501,18 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     }
     case KisNodeModel::ColorLabelIndexRole: {
         return node->colorLabelIndex();
+    }
+    case KisNodeModel::DropReasonRole: {
+        QString result;
+        KisProjectionLeaf::NodeDropReason reason = node->projectionLeaf()->dropReason();
+
+        if (reason == KisProjectionLeaf::DropPassThroughMask) {
+            result = i18nc("@info:tooltip", "Disabled: masks on pass-through groups are not supported!");
+        } else if (reason == KisProjectionLeaf::DropPassThroughClone) {
+            result = i18nc("@info:tooltip", "Disabled: cloning pass-through groups is not supported!");
+        }
+
+        return result;
     }
     default:
         if (role >= int(KisNodeModel::BeginThumbnailRole) && belongsToIsolatedGroup(node)) {
@@ -590,13 +604,13 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     switch (role) {
     case Qt::DisplayRole:
     case Qt::EditRole:
-        node->setName(value.toString());
+        m_d->nodeManager->setNodeName(node, value.toString());
         break;
     case KisNodeModel::PropertiesRole:
         {
             // don't record undo/redo for visibility, locked or alpha locked changes
             KisBaseNode::PropertyList proplist = value.value<KisBaseNode::PropertyList>();
-            KisNodePropertyListCommand::setNodePropertiesNoUndo(node, m_d->image, proplist);
+            m_d->nodeManager->trySetNodeProperties(node, m_d->image, proplist);
             shouldUpdateRecursively = true;
 
             break;

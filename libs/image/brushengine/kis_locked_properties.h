@@ -46,7 +46,7 @@ public:
     KisPropertiesConfigurationSP lockedProperties();
 
 private:
-    Q_DISABLE_COPY(KisLockedProperties);
+    Q_DISABLE_COPY(KisLockedProperties)
     KisPropertiesConfigurationSP m_lockedProperties;
 };
 

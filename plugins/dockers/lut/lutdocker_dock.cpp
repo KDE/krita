@@ -31,6 +31,8 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QToolButton>
+#include <QDir>
+
 
 #include <klocalizedstring.h>
 
@@ -243,10 +245,19 @@ bool LutDockerDock::canChangeExposureAndGamma() const
     const bool externalColorManagementEnabled =
         m_colorManagement->currentIndex() != (int)KisOcioConfiguration::INTERNAL;
 
+
+#ifdef HAVE_HDR
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    KisSurfaceColorSpace currentColorSpace = KisOpenGLModeProber::instance()->surfaceformatInUse().colorSpace();
+#else
+    KisSurfaceColorSpace currentColorSpace = KisSurfaceColorSpace::DefaultColorSpace;
+#endif
+#endif
+
     const bool exposureManagementEnabled =
         externalColorManagementEnabled
 #ifdef HAVE_HDR
-            || KisOpenGLModeProber::instance()->surfaceformatInUse().colorSpace() == QSurfaceFormat::scRGBColorSpace
+            || currentColorSpace == KisSurfaceColorSpace::scRGBColorSpace
 #endif
             ;
 
@@ -455,10 +466,10 @@ void LutDockerDock::writeControls()
     ocioOptions.mode = (KisOcioConfiguration::Mode)m_colorManagement->currentIndex();
     ocioOptions.configurationPath = m_txtConfigurationPath->text();
     ocioOptions.lutPath = m_txtLut->text();
-    ocioOptions.inputColorSpace = m_cmbInputColorSpace->itemHighlighted();
-    ocioOptions.displayDevice = m_cmbDisplayDevice->itemHighlighted();
-    ocioOptions.displayView = m_cmbView->itemHighlighted();
-    ocioOptions.look = m_cmbLook->itemHighlighted();
+    ocioOptions.inputColorSpace = m_cmbInputColorSpace->currentUnsqueezedText();
+    ocioOptions.displayDevice = m_cmbDisplayDevice->currentUnsqueezedText();
+    ocioOptions.displayView = m_cmbView->currentUnsqueezedText();
+    ocioOptions.look = m_cmbLook->currentUnsqueezedText();
 
     KisConfig cfg(false);
     cfg.setUseOcio(m_chkUseOcio->isChecked());
@@ -479,7 +490,7 @@ void LutDockerDock::selectOcioConfiguration()
 
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "lutdocker");
     dialog.setCaption(i18n("Select OpenColorIO Configuration"));
-    dialog.setDefaultDir(QDir::cleanPath(filename));
+    dialog.setDefaultDir(QDir::cleanPath(filename.isEmpty() ? QDir::homePath() : filename));
     dialog.setMimeTypeFilters(QStringList() << "application/x-opencolorio-configuration");
     filename = dialog.filename();
     QFile f(filename);

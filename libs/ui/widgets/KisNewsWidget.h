@@ -44,14 +44,36 @@ class KisNewsWidget : public QWidget, public Ui::KisNewsPage
 public:
     explicit KisNewsWidget(QWidget *parent = nullptr);
 
+    void setAnalyticsTracking(QString text);
 
+    bool hasUpdateAvailable();
+    QString versionNumber();
+    QString versionLink();
+
+Q_SIGNALS:
+    void newsDataChanged();
 
 private Q_SLOTS:
     void toggleNews(bool toggle);
     void itemSelected(const QModelIndex &idx);
+    void rssDataChanged();
+
 private:
-    bool m_getNews {false};
-    MultiFeedRssModel *m_rssModel {0};
+    // do version compare to see if there is a new version available
+    void calculateVersionUpdateStatus();
+
+private:
+    bool m_getNews;
+    MultiFeedRssModel *m_rssModel;
+    QString m_analyticsTrackingParameters;
+
+    /// for new Krita version notification
+    QString m_newVersionNumber;
+    QString m_newVersionLink;
+
+    // version checking logic tells us we need to update our Krita
+    bool m_needsVersionUpdate;
+
 };
 
 #endif // KISNEWSWIDGET_H

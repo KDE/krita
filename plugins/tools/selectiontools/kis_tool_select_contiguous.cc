@@ -86,6 +86,10 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
         return;
     }
 
+    if (KisToolSelect::selectionDidMove()) {
+        return;
+    }
+
     QApplication::setOverrideCursor(KisCursor::waitCursor());
 
 
@@ -164,7 +168,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
 
-    selectionWidget->disableSelectionModeOption();
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);

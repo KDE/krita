@@ -58,18 +58,22 @@ QSurfaceFormat KisOpenGLModeProber::surfaceformatInUse() const
 
 const KoColorProfile *KisOpenGLModeProber::rootSurfaceColorProfile() const
 {
-    const QSurfaceFormat::ColorSpace surfaceColorSpace = surfaceformatInUse().colorSpace();
     const KoColorProfile *profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
 
-    if (surfaceColorSpace == QSurfaceFormat::sRGBColorSpace) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+
+    const KisSurfaceColorSpace surfaceColorSpace = surfaceformatInUse().colorSpace();
+    if (surfaceColorSpace == KisSurfaceColorSpace::sRGBColorSpace) {
         // use the default one!
 #ifdef HAVE_HDR
-    } else if (surfaceColorSpace == QSurfaceFormat::scRGBColorSpace) {
+    } else if (surfaceColorSpace == KisSurfaceColorSpace::scRGBColorSpace) {
         profile = KoColorSpaceRegistry::instance()->p709G10Profile();
-    } else if (surfaceColorSpace == QSurfaceFormat::bt2020PQColorSpace) {
+    } else if (surfaceColorSpace == KisSurfaceColorSpace::bt2020PQColorSpace) {
         profile = KoColorSpaceRegistry::instance()->p2020PQProfile();
 #endif
     }
+
+#endif
 
     return profile;
 }
@@ -109,16 +113,61 @@ private:
     QSurfaceFormat m_oldFormat;
 };
 
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+QString qEnvironmentVariable(const char *varName) {
+    return qgetenv(varName);
+}
+#endif
+
+struct EnvironmentSetter
+{
+    EnvironmentSetter(const QLatin1String &env, const QString &value)
+        : m_env(env)
+    {
+        if (qEnvironmentVariableIsEmpty(m_env.latin1())) {
+            m_oldValue = qgetenv(env.latin1());
+        }
+        if (!value.isEmpty()) {
+            qputenv(env.latin1(), value.toLatin1());
+        } else {
+            qunsetenv(env.latin1());
+        }
+    }
+
+    ~EnvironmentSetter() {
+        if (m_oldValue) {
+            qputenv(m_env.latin1(), (*m_oldValue).toLatin1());
+        } else {
+            qunsetenv(m_env.latin1());
+        }
+    }
+
+private:
+    const QLatin1String m_env;
+    boost::optional<QString> m_oldValue;
+};
+
 }
 
 boost::optional<KisOpenGLModeProber::Result>
-KisOpenGLModeProber::probeFormat(const QSurfaceFormat &format, bool adjustGlobalState)
+KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig,
+                                 bool adjustGlobalState)
 {
+    const QSurfaceFormat &format = rendererConfig.format;
+
     QScopedPointer<AppAttributeSetter> sharedContextSetter;
     QScopedPointer<AppAttributeSetter> glSetter;
     QScopedPointer<AppAttributeSetter> glesSetter;
     QScopedPointer<SurfaceFormatSetter> formatSetter;
-    QScopedPointer<QApplication> application;
+    QScopedPointer<EnvironmentSetter> rendererSetter;
+    QScopedPointer<QGuiApplication> application;
+
+    int argc = 1;
+    QByteArray probeAppName("krita");
+    char *argv = probeAppName.data();
+
+
 
     if (adjustGlobalState) {
         sharedContextSetter.reset(new AppAttributeSetter(Qt::AA_ShareOpenGLContexts, false));
@@ -128,12 +177,12 @@ KisOpenGLModeProber::probeFormat(const QSurfaceFormat &format, bool adjustGlobal
             glesSetter.reset(new AppAttributeSetter(Qt::AA_UseOpenGLES, format.renderableType() == QSurfaceFormat::OpenGLES));
         }
 
+        rendererSetter.reset(new EnvironmentSetter(QLatin1String("QT_ANGLE_PLATFORM"), angleRendererToString(rendererConfig.angleRenderer)));
         formatSetter.reset(new SurfaceFormatSetter(format));
 
-        int argc = 1;
-        QByteArray data("krita");
-        char *argv = data.data();
-        application.reset(new QApplication(argc, &argv));
+        QGuiApplication::setDesktopSettingsAware(false);
+        application.reset(new QGuiApplication(argc, &argv));
+        QGuiApplication::setDesktopSettingsAware(true);
     }
 
     QWindow surface;
@@ -157,21 +206,23 @@ KisOpenGLModeProber::probeFormat(const QSurfaceFormat &format, bool adjustGlobal
         return boost::none;
     }
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     if (!fuzzyCompareColorSpaces(context.format().colorSpace(), format.colorSpace())) {
         dbgOpenGL << "Failed to create an OpenGL context with requested color space. Requested:" << format.colorSpace() << "Actual:" << context.format().colorSpace();
         return boost::none;
     }
+#endif
 
     return Result(context);
 }
 
-bool KisOpenGLModeProber::fuzzyCompareColorSpaces(const QSurfaceFormat::ColorSpace &lhs, const QSurfaceFormat::ColorSpace &rhs)
+bool KisOpenGLModeProber::fuzzyCompareColorSpaces(const KisSurfaceColorSpace &lhs, const KisSurfaceColorSpace &rhs)
 {
     return lhs == rhs ||
-        ((lhs == QSurfaceFormat::DefaultColorSpace ||
-          lhs == QSurfaceFormat::sRGBColorSpace) &&
-         (rhs == QSurfaceFormat::DefaultColorSpace ||
-          rhs == QSurfaceFormat::sRGBColorSpace));
+        ((lhs == KisSurfaceColorSpace::DefaultColorSpace ||
+          lhs == KisSurfaceColorSpace::sRGBColorSpace) &&
+         (rhs == KisSurfaceColorSpace::DefaultColorSpace ||
+          rhs == KisSurfaceColorSpace::sRGBColorSpace));
 }
 
 void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceFormat config,
@@ -184,13 +235,13 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
         format->setGreenBufferSize(10);
         format->setBlueBufferSize(10);
         format->setAlphaBufferSize(2);
-        format->setColorSpace(QSurfaceFormat::bt2020PQColorSpace);
+        format->setColorSpace(KisSurfaceColorSpace::bt2020PQColorSpace);
     } else if (config == KisConfig::BT709_G10) {
         format->setRedBufferSize(16);
         format->setGreenBufferSize(16);
         format->setBlueBufferSize(16);
         format->setAlphaBufferSize(16);
-        format->setColorSpace(QSurfaceFormat::scRGBColorSpace);
+        format->setColorSpace(KisSurfaceColorSpace::scRGBColorSpace);
     } else
 #else
     if (config == KisConfig::BT2020_PQ) {
@@ -204,9 +255,16 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
         format->setRedBufferSize(8);
         format->setGreenBufferSize(8);
         format->setBlueBufferSize(8);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         format->setAlphaBufferSize(8);
+#else
+        format->setAlphaBufferSize(0);
+#endif
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         // TODO: check if we can use real sRGB space here
-        format->setColorSpace(QSurfaceFormat::DefaultColorSpace);
+        format->setColorSpace(KisSurfaceColorSpace::DefaultColorSpace);
+#endif
     }
 }
 
@@ -215,14 +273,14 @@ bool KisOpenGLModeProber::isFormatHDR(const QSurfaceFormat &format)
 #ifdef HAVE_HDR
 
     bool isBt2020PQ =
-        format.colorSpace() == QSurfaceFormat::bt2020PQColorSpace &&
+        format.colorSpace() == KisSurfaceColorSpace::bt2020PQColorSpace &&
         format.redBufferSize() == 10 &&
         format.greenBufferSize() == 10 &&
         format.blueBufferSize() == 10 &&
         format.alphaBufferSize() == 2;
 
     bool isBt709G10 =
-        format.colorSpace() == QSurfaceFormat::scRGBColorSpace &&
+        format.colorSpace() == KisSurfaceColorSpace::scRGBColorSpace &&
         format.redBufferSize() == 16 &&
         format.greenBufferSize() == 16 &&
         format.blueBufferSize() == 16 &&
@@ -230,8 +288,30 @@ bool KisOpenGLModeProber::isFormatHDR(const QSurfaceFormat &format)
 
     return isBt2020PQ || isBt709G10;
 #else
+    Q_UNUSED(format);
     return false;
 #endif
+}
+
+QString KisOpenGLModeProber::angleRendererToString(KisOpenGL::AngleRenderer renderer)
+{
+    QString value;
+
+    switch (renderer) {
+    case KisOpenGL::AngleRendererDefault:
+        break;
+    case KisOpenGL::AngleRendererD3d9:
+        value = "d3d9";
+        break;
+    case KisOpenGL::AngleRendererD3d11:
+        value = "d3d11";
+        break;
+    case KisOpenGL::AngleRendererD3d11Warp:
+        value = "warp";
+        break;
+    };
+
+    return value;
 }
 
 KisOpenGLModeProber::Result::Result(QOpenGLContext &context) {

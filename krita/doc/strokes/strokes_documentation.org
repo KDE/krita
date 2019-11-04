@@ -688,11 +688,11 @@
    The fact that a processing visitor does a really simple task
    (processes a single node) that is very easy to report progress
    using progress bars in the layer box. We just need to use progress
-   pxoxy of the node we process (=KisNodeProgressProxy=). Our
-   processings framework provides even easier way of doing this. You
-   just need to instantiate a =ProgressHelper= object and ask it to
-   create a =KoUpdater= object for you. And all is done. You can see
-   an example in =KisTransformProcessingVisitor= class.
+   proxy of the node we process (=KisNodeProgressProxy=). Our
+   processings framework provides an even easier way of doing this.
+   You just need to instantiate a =ProgressHelper= object and ask it
+   to create a =KoUpdater= object for you. And all is done. You can
+   see an example in =KisTransformProcessingVisitor= class.
 
 ** Testing
    Usage of a common framework makes testing really simple. There is a

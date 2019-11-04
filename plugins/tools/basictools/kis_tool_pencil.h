@@ -30,11 +30,13 @@
 class KoCanvasBase;
 class KisToolPencil;
 
+///
 
 class __KisToolPencilLocalTool : public KoPencilTool {
 public:
     __KisToolPencilLocalTool(KoCanvasBase * canvas, KisToolPencil* parentTool);
-    virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
+    virtual void paintPath(KoPathShape * path, QPainter &painter, const KoViewConverter &converter);
     void addPathShape(KoPathShape* pathShape, bool closePath) override;
 
     using KoPencilTool::createOptionWidgets;

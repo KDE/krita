@@ -31,7 +31,7 @@ KisColorBalanceFilter::KisColorBalanceFilter()
 	setSupportsPainting(true);
 }
 
-KisConfigWidget * KisColorBalanceFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisColorBalanceFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     return new KisColorBalanceConfigWidget(parent);
@@ -58,9 +58,9 @@ KoColorTransformation * KisColorBalanceFilter::createTransformation(const KoColo
     return cs->createColorTransformation("ColorBalance" , params);
 }
 
-KisFilterConfigurationSP KisColorBalanceFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisColorBalanceFilter::defaultConfiguration() const
 {
-    KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 0);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("cyan_red_midtones", 0);
     config->setProperty("yellow_green_midtones", 0);
     config->setProperty("magenta_blue_midtones", 0);

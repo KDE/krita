@@ -228,6 +228,42 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="create_snapshot">
+      <icon></icon>
+      <text>Create Snapshot</text>
+      <whatsThis></whatsThis>
+      <toolTip>Create Snapshot</toolTip>
+      <iconText></iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="switchto_snapshot">
+      <icon></icon>
+      <text>Switch to Selected Snapshot</text>
+      <whatsThis></whatsThis>
+      <toolTip>Switch to selected snapshot</toolTip>
+      <iconText></iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="remove_snapshot">
+      <icon></icon>
+      <text>Remove Selected Snapshot</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove Selected Snapshot</toolTip>
+      <iconText></iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
 
   </Actions>
 
@@ -474,7 +510,7 @@
     </Action>
    <Action name="mirrorX-moveToCenter">
       <icon></icon>
-      <text>Move to Canvas Center</text>
+      <text>Move to Canvas Center X</text>
       <whatsThis></whatsThis>
       <toolTip>Move to Canvas Center X</toolTip>
       <iconText>Move to Canvas Center X</iconText>
@@ -1409,7 +1445,7 @@
       <icon></icon>
       <text>Bezier Curve Selection Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Select a </toolTip>
+      <toolTip>Bezier Curve Selection Tool</toolTip>
       <iconText>Bezier Curve Selection Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -1419,7 +1455,7 @@
       <icon></icon>
       <text>Similar Color Selection Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Select a </toolTip>
+      <toolTip>Similar Color Selection Tool</toolTip>
       <iconText>Similar Color Selection Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
@@ -3016,6 +3052,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+        <Action name="convert_to_animated">
+      <icon></icon>
+      <text>Convert to &amp;animated layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Convert layer into animation frames</toolTip>
+      <iconText>Convert layer into animation frames</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="convert_to_file_layer">
       <icon>fileLayer</icon>
       <text>to &amp;File Layer</text>
@@ -3585,6 +3633,18 @@
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut>F3</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="set-copy-from">
+      <icon></icon>
+      <text>Set Copy F&amp;rom...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Set the source for the selected clone layer(s).</toolTip>
+      <iconText>Set Copy From</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

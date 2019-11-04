@@ -54,13 +54,14 @@ KoColorTransformation *KisFilterASCCDL::createTransformation(const KoColorSpace 
                                                              const KisFilterConfigurationSP config) const
 {
     KoColor black(Qt::black, cs);
+    KoColor white(Qt::white, cs);
     return new KisASCCDLTransformation(cs,
                                        config->getColor("slope", black),
-                                       config->getColor("offset", black),
+                                       config->getColor("offset", white),
                                        config->getColor("power", black));
 }
 
-KisConfigWidget *KisFilterASCCDL::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisFilterASCCDL::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KisASCCDLConfigWidget(parent, dev->colorSpace());
 }
@@ -76,9 +77,9 @@ bool KisFilterASCCDL::needsTransparentPixels(const KisFilterConfigurationSP conf
     return false;
 }
 
-KisFilterConfigurationSP KisFilterASCCDL::factoryConfiguration() const
+KisFilterConfigurationSP KisFilterASCCDL::defaultConfiguration() const
 {
-    KisColorTransformationConfigurationSP config = new KisColorTransformationConfiguration(id().id(), 0);
+    KisFilterConfigurationSP config = factoryConfiguration();
     QVariant colorVariant("KoColor");
     KoColor black;
     black.fromQColor(QColor(Qt::black));

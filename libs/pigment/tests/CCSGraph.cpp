@@ -110,7 +110,7 @@ int main(int argc, char** argv)
         file.close();
 
         if (QProcess::execute(cmd) != 0) {
-            errorPigment << "An error has occurred when executing : '" << cmd << "' the most likely cause is that 'dot' command is missing, and that you should install graphviz (from http://www.graphiz.org)";
+            errorPigment << "An error has occurred when executing : '" << cmd << "' the most likely cause is that 'dot' command is missing, and that you should install graphviz (from http://www.graphviz.org)";
         }
     } else {
         errorPigment << "Unknown output type : " << outputType;

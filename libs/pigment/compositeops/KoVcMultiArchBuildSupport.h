@@ -72,10 +72,12 @@ createOptimizedClass(typename FactoryType::ParamType param)
 {
     static bool isConfigInitialized = false;
     static bool useVectorization = true;
+    static bool disableAVXOptimizations = false;
 
     if (!isConfigInitialized) {
         KConfigGroup cfg = KSharedConfig::openConfig()->group("");
         useVectorization = !cfg.readEntry("amdDisableVectorWorkaround", false);
+        disableAVXOptimizations = cfg.readEntry("disableAVXOptimizations", false);
         isConfigInitialized = true;
     }
 
@@ -83,16 +85,24 @@ createOptimizedClass(typename FactoryType::ParamType param)
         qWarning() << "WARNING: vector instructions disabled by \'amdDisableVectorWorkaround\' option!";
         return FactoryType::template create<Vc::ScalarImpl>(param);
     }
+
 #ifdef HAVE_VC
+    if (disableAVXOptimizations &&
+        (Vc::isImplementationSupported(Vc::AVXImpl) ||
+         Vc::isImplementationSupported(Vc::AVX2Impl))) {
+
+        qWarning() << "WARNING: AVX and AVX2 optimizations are disabled by \'disableAVXOptimizations\' option!";
+    }
+
     /**
      * We use SSE2, SSSE3, SSE4.1, AVX and AVX2.
      * The rest are integer and string instructions mostly.
      *
      * TODO: Add FMA3/4 when it is adopted by Vc
      */
-    if (Vc::isImplementationSupported(Vc::AVX2Impl)) {
+    if (!disableAVXOptimizations && Vc::isImplementationSupported(Vc::AVX2Impl)) {
         return FactoryType::template create<Vc::AVX2Impl>(param);
-    } else if (Vc::isImplementationSupported(Vc::AVXImpl)) {
+    } else if (!disableAVXOptimizations && Vc::isImplementationSupported(Vc::AVXImpl)) {
         return FactoryType::template create<Vc::AVXImpl>(param);
     } else if (Vc::isImplementationSupported(Vc::SSE41Impl)) {
         return FactoryType::template create<Vc::SSE41Impl>(param);

@@ -94,7 +94,7 @@
 #include <QTabWidget>
 #include <QTextDocumentFragment>
 #include <QToolTip>
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 #include <QLinearGradient>
 #include <QBitmap>
 #include <QDrag>
@@ -186,7 +186,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_contextMenu.reset(new QMenu());
 
     // setup the context list.
-    QSignalMapper *signalMapper = new QSignalMapper(this);
+    KisSignalMapper *signalMapper = new KisSignalMapper(this);
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
     m_contextMenu->addAction(this->action("format_font"));
     foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
@@ -1653,7 +1653,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         } else if (hit(item, KStandardShortcut::ForwardWord)) {
             moveOperation = QTextCursor::WordRight;
         }
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         // Don't reject "alt" key, it may be used for typing text on Mac OS
         else if ((event->modifiers() & Qt::ControlModifier) || event->text().length() == 0) {
 #else

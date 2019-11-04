@@ -59,13 +59,17 @@ public:
     ~KisWidgetChooser() override;
     
     QWidget* chooseWidget(const QString& id);
-    void     addWidget(const QString& id, const QString& label, QWidget* widget);
+    void     addLabelWidget(const QString& id, const QString& label, QWidget* widget);
     QWidget* getWidget(const QString& id) const;
     
     template<class TWidget>
     TWidget* addWidget(const QString& id, const QString& label = "") {
+        if (id.isEmpty()) {
+            return 0;
+        }
+
         TWidget* widget = new TWidget();
-        addWidget(id, label, widget);
+        addLabelWidget(id, label, widget);
         return widget;
     }
     

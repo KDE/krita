@@ -36,9 +36,9 @@ void TestNode::testSetColorSpace()
 {
     KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
-    Node node(image, layer);
+    NodeSP node = NodeSP(Node::createNode(image, layer));
     QStringList profiles = Krita().profiles("GRAYA", "U16");
-    node.setColorSpace("GRAYA", "U16", profiles.first());
+    node->setColorSpace("GRAYA", "U16", profiles.first());
     QVERIFY(layer->colorSpace()->colorModelId().id() == "GRAYA");
     QVERIFY(layer->colorSpace()->colorDepthId().id() == "U16");
     QVERIFY(layer->colorSpace()->profile()->name() == "gray built-in");
@@ -48,10 +48,10 @@ void TestNode::testSetColorProfile()
 {
     KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
-    Node node(image, layer);
+    NodeSP node = NodeSP(Node::createNode(image, layer));
     QStringList profiles = Krita().profiles("RGBA", "U8");
     Q_FOREACH(const QString &profile, profiles) {
-        node.setColorProfile(profile);
+        node->setColorProfile(profile);
         QVERIFY(layer->colorSpace()->profile()->name() == profile);
     }
 }
@@ -62,8 +62,8 @@ void TestNode::testPixelData()
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
     KisFillPainter gc(layer->paintDevice());
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::red, layer->colorSpace()));
-    Node node(image, layer);
-    QByteArray ba = node.pixelData(0, 0, 100, 100);
+    NodeSP node = NodeSP(Node::createNode(image, layer));
+    QByteArray ba = node->pixelData(0, 0, 100, 100);
     QDataStream ds(ba);
     do {
         quint8 channelvalue;
@@ -85,7 +85,7 @@ void TestNode::testPixelData()
         ds2 << 255;
     }
 
-    node.setPixelData(ba, 0, 0, 100, 100);
+    node->setPixelData(ba, 0, 0, 100, 100);
     for (int i = 0; i < 100 ; i++) {
         for (int j = 0; j < 100 ; j++) {
             QColor pixel;
@@ -101,8 +101,8 @@ void TestNode::testProjectionPixelData()
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
     KisFillPainter gc(layer->paintDevice());
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::gray, layer->colorSpace()));
-    Node node(image, layer);
-    QByteArray ba = node.projectionPixelData(0, 0, 100, 100);
+    NodeSP node = NodeSP(Node::createNode(image, layer));
+    QByteArray ba = node->projectionPixelData(0, 0, 100, 100);
     QDataStream ds(ba);
     for (int i = 0; i < 100 * 100; i++) {
         quint8 channelvalue;
@@ -123,8 +123,8 @@ void TestNode::testThumbnail()
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
     KisFillPainter gc(layer->paintDevice());
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::gray, layer->colorSpace()));
-    Node node(image, layer);
-    QImage thumb = node.thumbnail(10, 10);
+    NodeSP node = NodeSP(Node::createNode(image, layer));
+    QImage thumb = node->thumbnail(10, 10);
     thumb.save("thumb.png");
     QVERIFY(thumb.width() == 10);
     QVERIFY(thumb.height() == 10);
@@ -132,11 +132,7 @@ void TestNode::testThumbnail()
     // it makes it 10x10 empty, then puts 8x8 pixels in there... Not a bug in the Node class
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
             QVERIFY(thumb.pixelColor(i, j) == QColor(Qt::gray));
-#else
-            QVERIFY(QColor(thumb.pixel(i, j)) == QColor(Qt::gray));
-#endif
         }
     }
 }
@@ -158,8 +154,8 @@ void TestNode::testMergeDown()
         gc.fillRect(0, 0, 100, 100, KoColor(Qt::gray, layer2->colorSpace()));
     }
     image->addNode(layer2);
-    Node n1(image, layer);
-    Node *n2 = n1.mergeDown();
+    NodeSP n1 = NodeSP(Node::createNode(image, layer));
+    Node *n2 = n1->mergeDown();
     delete n2;
 }
 

@@ -79,6 +79,8 @@ private Q_SLOTS:
     void testCopyPaintDeviceWithFrames();
 
     void testCompositionAssociativity();
+
+    void stressTestMemoryFragmentation();
 };
 
 #endif

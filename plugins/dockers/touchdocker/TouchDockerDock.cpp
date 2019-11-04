@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -313,10 +314,10 @@ void TouchDockerDock::showFileOpenDialog()
 
 void TouchDockerDock::showFileSaveAsDialog()
 {
-    if (!d->openDialog) {
-        d->openDialog = createDialog("qrc:/saveasdialog.qml");
+    if (!d->saveAsDialog) {
+        d->saveAsDialog = createDialog("qrc:/saveasdialog.qml");
     }
-    d->openDialog->exec();
+    d->saveAsDialog->exec();
 }
 
 void TouchDockerDock::changeEvent(QEvent *event)
@@ -327,6 +328,23 @@ void TouchDockerDock::changeEvent(QEvent *event)
     } else {
         event->ignore();
     }
+}
+
+void TouchDockerDock::tabletEvent(QTabletEvent *event)
+{
+#ifdef Q_OS_WIN
+    /**
+     * On Windows (only in WinInk mode), unless we accept the tablet event,
+     * OS will start windows gestures, like click+hold for right click.
+     * It will block any mouse events generation.
+     *
+     * In our own (hacky) implementation, if we accept the event, we block
+     * the gesture, but still generate a fake mouse event.
+     */
+    event->accept();
+#else
+    QDockWidget::tabletEvent(event);
+#endif
 }
 
 KoDialog *TouchDockerDock::createDialog(const QString qml)

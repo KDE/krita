@@ -34,8 +34,9 @@
 
 #include "kis_global.h"
 #include <cmath>
+#include <QTemporaryFile>
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
 #include <errno.h>
 #endif
 
@@ -46,7 +47,7 @@ KisImageConfig::KisImageConfig(bool readOnly)
     if (!readOnly) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
     }
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     // clear /var/folders/ swap path set by old broken Krita swap implementation in order to use new default swap dir.
     QString swap = m_config.readEntry("swaplocation", "");
     if (swap.startsWith("/var/folders/")) {
@@ -231,7 +232,7 @@ void KisImageConfig::setMemoryPoolLimitPercent(qreal value)
 
 QString KisImageConfig::safelyGetWritableTempLocation(const QString &suffix, const QString &configKey, bool requestDefault) const
 {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     // On OSX, QDir::tempPath() gives us a folder we cannot reply upon (usually
     // something like /var/folders/.../...) and that will have vanished when we
     // try to create the tmp file in KisMemoryWindow::KisMemoryWindow using
@@ -258,7 +259,40 @@ QString KisImageConfig::safelyGetWritableTempLocation(const QString &suffix, con
     if (!configuredSwap.isEmpty()) {
         swap = configuredSwap;
     }
-    return swap;
+
+    QString chosenLocation;
+    QStringList proposedSwapLocations;
+    proposedSwapLocations << swap;
+    proposedSwapLocations << QDir::tempPath();
+    proposedSwapLocations << QDir::homePath();
+
+    Q_FOREACH (const QString location, proposedSwapLocations) {
+        if (!QFileInfo(location).isWritable()) continue;
+
+        /**
+         * On NTFS, isWritable() doesn't check for attributes due to performance
+         * reasons, so we should try it in a brute-force way...
+         * (yes, there is a hacky-global-variable workaround, but let's be safe)
+         */
+        QTemporaryFile tempFile;
+        tempFile.setFileTemplate(location + QDir::separator() + "krita_test_swap_location");
+        if (tempFile.open() && !tempFile.fileName().isEmpty()) {
+            chosenLocation = location;
+            break;
+        }
+    }
+
+    if (chosenLocation.isEmpty()) {
+        qCritical() << "CRITICAL: no writable location for a swap file found! Tried the following paths:" << proposedSwapLocations;
+        qCritical() << "CRITICAL: hope I don't crash...";
+        chosenLocation = swap;
+    }
+
+    if (chosenLocation != swap) {
+        qWarning() << "WARNING: configured swap location is not writable, using a fall-back location" << swap << "->" << chosenLocation;
+    }
+
+    return chosenLocation;
 }
 
 
@@ -359,7 +393,7 @@ void KisImageConfig::setLazyFrameCreationEnabled(bool value)
 #include <sys/sysctl.h>
 #elif defined Q_OS_WIN
 #include <windows.h>
-#elif defined Q_OS_OSX
+#elif defined Q_OS_MACOS
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #endif
@@ -403,7 +437,7 @@ int KisImageConfig::totalRAM()
 #   if defined ENV32BIT
     totalMemory = qMin(totalMemory, 2000);
 #   endif
-#elif defined Q_OS_OSX
+#elif defined Q_OS_MACOS
     int mib[2] = { CTL_HW, HW_MEMSIZE };
     u_int namelen = sizeof(mib) / sizeof(mib[0]);
     uint64_t size;
@@ -520,7 +554,8 @@ void KisImageConfig::setFrameRenderingClones(int value)
 
 int KisImageConfig::fpsLimit(bool defaultValue) const
 {
-    return defaultValue ? 100 : m_config.readEntry("fpsLimit", 100);
+    int limit = defaultValue ? 100 : m_config.readEntry("fpsLimit", 100);
+    return limit > 0 ? limit : 1;
 }
 
 void KisImageConfig::setFpsLimit(int value)

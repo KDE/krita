@@ -57,7 +57,7 @@ Width & Thinning
 ================
 This pair of options control the width of your pen.
 Since pen width is changed often, you can adjust it without going to the docker, using the left and right arrow keys. The best thing about these keys is that they work while you're drawing, so you can change the width of your pen gradually in the middle of the stroke.
-  <image3 (stroke of differend widths)>
+  <image3 (stroke of different widths)>
 Pen width may also depend on the velocity, as controlled by the thinning parameter. This parameter can take values from -1 to 1; zero means the width is independent of velocity, positive values make faster strokes thinner, negative values make faster strokes broader. Here are a few examples, the two left strokes having positive thinning, and the right two negative thinning, all strokes are drawn with the same width.
   <image4 (examples of positive and negative thinning)>
 For fun, set the thinning to 1 (maximum) and draw with jerky movements to get strangely naturalistic, neuron-like shapes:

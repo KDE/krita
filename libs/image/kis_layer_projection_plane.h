@@ -36,16 +36,25 @@ public:
 
     QRect recalculate(const QRect& rect, KisNodeSP filthyNode) override;
     void apply(KisPainter *painter, const QRect &rect) override;
+    void applyMaxOutAlpha(KisPainter *painter, const QRect &rect);
 
     QRect needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
     QRect changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
     QRect accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;
+    QRect needRectForOriginal(const QRect &rect) const override;
 
     KisPaintDeviceList getLodCapableDevices() const override;
+
+private:
+    void applyImpl(KisPainter *painter, const QRect &rect, bool maxOutAlpha);
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
+
+typedef QSharedPointer<KisLayerProjectionPlane> KisLayerProjectionPlaneSP;
+typedef QWeakPointer<KisLayerProjectionPlane> KisLayerProjectionPlaneWSP;
+
 
 #endif /* __KIS_LAYER_PROJECTION_PLANE_H */

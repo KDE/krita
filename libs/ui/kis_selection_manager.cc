@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
@@ -85,7 +86,7 @@
 #include "dialogs/kis_dlg_stroke_selection_properties.h"
 
 #include "actions/kis_selection_action_factories.h"
-#include "actions/KisPasteActionFactory.h"
+#include "actions/KisPasteActionFactories.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "operations/kis_operation_configuration.h"
@@ -140,6 +141,9 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
 
     m_pasteAt = actionManager->createAction("paste_at");
     connect(m_pasteAt, SIGNAL(triggered()), this, SLOT(pasteAt()));
+
+    m_pasteAsReference = actionManager->createAction("paste_as_reference");
+    connect(m_pasteAsReference, SIGNAL(triggered()), this, SLOT(pasteAsReference()));
 
     m_copyMerged = actionManager->createAction("copy_merged");
     connect(m_copyMerged, SIGNAL(triggered()), this, SLOT(copyMerged()));
@@ -327,6 +331,7 @@ void KisSelectionManager::updateGUI()
     m_pasteAt->setEnabled(havePixelsInClipboard || haveShapesInClipboard);
     // FIXME: how about pasting shapes?
     m_pasteNew->setEnabled(havePixelsInClipboard);
+    m_pasteAsReference->setEnabled(haveDevice);
 
     m_selectAll->setEnabled(true);
     m_deselect->setEnabled(canDeselect);
@@ -392,6 +397,12 @@ void KisSelectionManager::pasteAt()
 {
     KisPasteActionFactory factory;
     factory.run(true, m_view);
+}
+
+void KisSelectionManager::pasteAsReference()
+{
+    KisPasteReferenceActionFactory factory;
+    factory.run(m_view);
 }
 
 void KisSelectionManager::pasteNew()
@@ -609,8 +620,8 @@ void KisSelectionManager::paintSelectedShapes()
                                        image,
                                        paintLayer.data(),
                                        m_view->canvasResourceProvider()->resourceManager(),
-                                       KisPainter::StrokeStyleBrush,
-                                       KisPainter::FillStyleNone);
+                                       KisToolShapeUtils::StrokeStyleForeground,
+                                       KisToolShapeUtils::FillStyleNone);
 
     Q_FOREACH (KoShape* shape, shapes) {
         QTransform matrix = shape->absoluteTransformation(0) * QTransform::fromScale(image->xRes(), image->yRes());
@@ -643,10 +654,10 @@ void KisSelectionManager::slotStrokeSelection()
 {
     KisImageWSP image = m_view->image();
 
-    if (!image )     {
-
+    if (!image ) {
         return;
     }
+
     KisNodeSP currentNode = m_view->canvasResourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
     bool isVectorLayer = false;
     if (currentNode->inherits("KisShapeLayer")) {
@@ -693,10 +704,13 @@ void KisSelectionManager::selectOpaqueOnNode(KisNodeSP node, SelectionAction act
         KisPaintDeviceSP device = node->projection();
         if (!device) device = node->paintDevice();
         if (!device) device = node->original();
-        KIS_ASSERT_RECOVER_RETURN(canvas && device);
+
+        if (!device) return;
 
         QRect rc = device->exactBounds();
         if (rc.isEmpty()) return;
+
+        KIS_ASSERT_RECOVER_RETURN(canvas);
 
         /**
          * If there is nothing selected, just create a new selection

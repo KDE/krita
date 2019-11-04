@@ -260,14 +260,14 @@ RGBtoHSV(rgba rgb,struct HSV *hsv)
 /* merge_exotic() destructively updates bot.
  * merge_exotic() reads but does not free top.
  */
-static void __ATTRIBUTE__((noinline))
+static int __ATTRIBUTE__((noinline))
 merge_exotic(struct Tile *bot, const struct Tile *top,
              GimpLayerModeEffects mode)
 {
     unsigned i ;
     assertTileCompatibility(bot,top);
-    if( (bot->summary & TILESUMMARY_ALLNULL) != 0 ) return ;
-    if( (top->summary & TILESUMMARY_ALLNULL) != 0 ) return ;
+    if( (bot->summary & TILESUMMARY_ALLNULL) != 0 ) return XCF_OK;
+    if( (top->summary & TILESUMMARY_ALLNULL) != 0 ) return XCF_OK;
     assert( bot->refcount == 1 );
     /* The transparency status of bot never changes */
 
@@ -288,7 +288,10 @@ merge_exotic(struct Tile *bot, const struct Tile *top,
         switch( mode ) {
         case GIMP_NORMAL_MODE:
         case GIMP_DISSOLVE_MODE:
-            FatalUnexpected("Normal and Dissolve mode can't happen here!");
+            {
+                FatalUnexpected("Normal and Dissolve mode can't happen here!");
+                return XCF_ERROR;
+            }
             UNIFORM(ADDITION);
             UNIFORM(SUBTRACT);
             UNIFORM(LIGHTEN_ONLY);
@@ -379,14 +382,20 @@ merge_exotic(struct Tile *bot, const struct Tile *top,
             HEXTANT(GREEN,BLUE,RED);
             HEXTANT(GREEN,RED,BLUE);
 #undef HEXTANT
-            default:
-                FatalUnexpected("Hue hextant is %d", hsvBot.hue);
+            default: {
+
+                    FatalUnexpected("Hue hextant is %d", hsvBot.hue);
+                    return XCF_ERROR;
+                }
             }
             break ;
         }
         default:
-            FatalUnsupportedXCF(_("'%s' layer mode"),
+            {
+                FatalUnsupportedXCF(_("'%s' layer mode"),
                                 _(showGimpLayerModeEffects(mode)));
+                return XCF_ERROR;
+            }
         }
         if( FULLALPHA(bot->pixels[i] & top->pixels[i]) )
             bot->pixels[i] = (bot->pixels[i] & (255 << ALPHA_SHIFT)) +
@@ -417,7 +426,7 @@ merge_exotic(struct Tile *bot, const struct Tile *top,
                     ((rgba)scaletable[255^tfrac][255&(bp>>BLUE_SHIFT )] << BLUE_SHIFT ) ;
         }
     }
-    return ;
+    return XCF_OK;
 }
 
 static void
@@ -475,15 +484,20 @@ static struct Tile *
         flattenTopdown(struct FlattenSpec *spec, struct Tile *top,
                        unsigned nlayers, const struct rect *where)
 {
-    struct Tile *tile;
+    struct Tile *tile = 0;
 
     while( nlayers-- ) {
-        if( tileSummary(top) & TILESUMMARY_ALLFULL )
+        if( tileSummary(top) & TILESUMMARY_ALLFULL ) {
+            freeTile(tile);
             return top ;
+        }
         if( !spec->layers[nlayers].isVisible )
             continue ;
 
         tile = getLayerTile(&spec->layers[nlayers],where);
+        if (tile == XCF_PTR_EMPTY) {
+            return XCF_PTR_EMPTY;
+        }
 
         if( tile->summary & TILESUMMARY_ALLNULL )
             continue ; /* Simulate a tail call */
@@ -521,6 +535,9 @@ static struct Tile *
             /* Create a dummy top for the layers below this */
             if( top->summary & TILESUMMARY_CRISP ) {
                 above = forkTile(top);
+                if(above == XCF_PTR_EMPTY) {
+                    return XCF_PTR_EMPTY;
+                }
             } else {
                 summary_t summary = TILESUMMARY_ALLNULL ;
                 above = newTile(*where);
@@ -533,8 +550,13 @@ static struct Tile *
                 above->summary = TILESUMMARY_UPTODATE + TILESUMMARY_CRISP + summary;
             }
             below = flattenTopdown(spec, above, nlayers, where);
+            if (below == XCF_PTR_EMPTY) {
+                return XCF_PTR_EMPTY;
+            }
             if( below->refcount > 1 ) {
-                assert( below == top );
+                if (below != top) {
+                    return XCF_PTR_EMPTY;
+                }
                 /* This can only happen if 'below' is a copy of 'top'
            * THROUGH 'above', which in turn means that none of all
            * this is visible after all. So just free it and return 'top'.
@@ -542,7 +564,9 @@ static struct Tile *
                 freeTile(below);
                 return top ;
             }
-            merge_exotic(below,tile,spec->layers[nlayers].mode);
+            if (merge_exotic(below,tile,spec->layers[nlayers].mode) != XCF_OK) {
+                return XCF_PTR_EMPTY;
+            }
             freeTile(tile);
             top = merge_normal(below,top);
             return top ;
@@ -552,18 +576,20 @@ static struct Tile *
     return top ;
 }
 
-static void
+static int
 addBackground(struct FlattenSpec *spec, struct Tile *tile, unsigned ncols)
 {
     unsigned i ;
 
     if( tileSummary(tile) & TILESUMMARY_ALLFULL )
-        return ;
+        return XCF_OK;
 
     switch( spec->partial_transparency_mode ) {
     case FORBID_PARTIAL_TRANSPARENCY:
-        if( !(tileSummary(tile) & TILESUMMARY_CRISP) )
+        if( !(tileSummary(tile) & TILESUMMARY_CRISP) ) {
             FatalGeneric(102,_("Flattened image has partially transparent pixels"));
+            return XCF_ERROR;
+        }
         break ;
     case DISSOLVE_PARTIAL_TRANSPARENCY:
         dissolveTile(tile);
@@ -586,9 +612,9 @@ addBackground(struct FlattenSpec *spec, struct Tile *tile, unsigned ncols)
             }
         tile->summary = TILESUMMARY_UPTODATE +
                 TILESUMMARY_ALLFULL + TILESUMMARY_CRISP ;
-        return ;
+        return XCF_OK;
     }
-    if( !FULLALPHA(spec->default_pixel) )  return ;
+    if( !FULLALPHA(spec->default_pixel) )  return XCF_OK;
     if( tileSummary(tile) & TILESUMMARY_ALLNULL ) {
         fillTile(tile,spec->default_pixel);
     } else {
@@ -604,9 +630,10 @@ addBackground(struct FlattenSpec *spec, struct Tile *tile, unsigned ncols)
         tile->summary = TILESUMMARY_UPTODATE +
                 TILESUMMARY_ALLFULL + TILESUMMARY_CRISP ;
     }
+    return XCF_OK;
 }
 
-void
+int
 flattenIncrementally(struct FlattenSpec *spec,lineCallback callback)
 {
     rgba *rows[TILE_HEIGHT] ;
@@ -635,8 +662,13 @@ flattenIncrementally(struct FlattenSpec *spec,lineCallback callback)
             assert( toptile.summary == TILESUMMARY_UPTODATE +
                     TILESUMMARY_ALLNULL + TILESUMMARY_CRISP );
             tile = flattenTopdown(spec,&toptile,spec->numLayers,&where) ;
+            if (tile == XCF_PTR_EMPTY) {
+                return XCF_ERROR;
+            }
             toptile.refcount-- ; /* addBackground may change destructively */
-            addBackground(spec,tile,ncols);
+            if (addBackground(spec,tile,ncols) != XCF_OK) {
+                return XCF_ERROR;
+            }
 
             for( i = 0 ; i < tile->count ; i++ )
                 if( NULLALPHA(tile->pixels[i]) )
@@ -654,6 +686,7 @@ flattenIncrementally(struct FlattenSpec *spec,lineCallback callback)
         for( y = 0 ; y < nrows ; y++ )
             callback(spec->dim.width,rows[y]);
     }
+    return XCF_OK;
 }
 
 static rgba **collectPointer ;
@@ -672,7 +705,11 @@ flattenAll(struct FlattenSpec *spec)
     if( verboseFlag )
         fprintf(stderr,_("Flattening image ..."));
     collectPointer = rows ;
-    flattenIncrementally(spec,collector);
+    if (flattenIncrementally(spec,collector) != XCF_OK) {
+        xcffree(rows);
+        collectPointer = XCF_PTR_EMPTY;
+        return XCF_PTR_EMPTY;
+    }
     if( verboseFlag )
         fprintf(stderr,"\n");
     return rows ;

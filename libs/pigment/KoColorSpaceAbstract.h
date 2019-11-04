@@ -67,6 +67,11 @@ public:
         return _CSTrait::channels_nb;
     }
 
+    quint32 alphaPos() const override {
+        return _CSTrait::alpha_pos;
+    }
+
+
     quint32 pixelSize() const override {
         return _CSTrait::pixelSize;
     }

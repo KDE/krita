@@ -22,7 +22,7 @@
 
 #include <QObject>
 #include <QPointer>
-#include <QScopedPointer>
+#include <kis_types.h>
 
 #include "KisView.h"
 
@@ -40,7 +40,6 @@ public:
     ~KisMirrorManager() override;
 
     void setup(KActionCollection* collection);
-
     void setView(QPointer<KisView> imageView);
 
 private Q_SLOTS:
@@ -49,13 +48,10 @@ private Q_SLOTS:
     void slotMirrorAxisConfigChanged();
 
 private:
-    class Private;
-    const QScopedPointer<Private> d;
-
     QPointer<KisView> m_imageView;
     QAction *m_mirrorCanvas;
-    KisMirrorAxis* hasDecoration();
     void setDecorationConfig();
+    KisMirrorAxisSP decoration() const;
 };
 
-#endif // KIS__MANAGER_H
+#endif // KIS_MIRROR_MANAGER_H

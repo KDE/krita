@@ -252,6 +252,8 @@ public Q_SLOTS:
     void notifyGuiConfigChanged();
     void notifyPredefinedStyleSelected(KisPSDLayerStyleSP style);
 
+    void slotBevelAndEmbossChanged(QListWidgetItem*);
+
     void changePage(QListWidgetItem *, QListWidgetItem*);
 
     void slotNotifyOnAccept();

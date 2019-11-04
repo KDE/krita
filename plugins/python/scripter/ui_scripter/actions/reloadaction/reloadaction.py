@@ -16,7 +16,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 """
 from PyQt5.QtWidgets import QAction, QMessageBox
-from PyQt5.QtGui import QKeySequence
+from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtCore import Qt
 import krita
 
@@ -34,9 +34,12 @@ class ReloadAction(QAction):
         self.setObjectName('reloadfile')
         self.setShortcut(QKeySequence(Qt.ALT + Qt.Key_R))
 
+        self.setToolTip(i18n('Reload File Alt+R'))
+        self.setIcon(QIcon(':/icons/reload_script.svg'))
+
     @property
     def parent(self):
-        return 'File'
+        return 'File', 'toolBar'
 
     def reloadFile(self):
         # get the currently open document's path

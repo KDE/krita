@@ -27,9 +27,11 @@
 #include <QObject>
 #include <QColor>
 #include <QXmlStreamWriter>
+#include <QMap>
 
 #include <kritaui_export.h>
 #include <kis_shared.h>
+#include <kis_types.h>
 
 class QPainter;
 class QRect;
@@ -74,12 +76,19 @@ public:
     void uncache();
     KisPaintingAssistantHandle& operator=(const QPointF&);
     void setType(char type);
-    char handleType();
+    char handleType() const;
+
+    /**
+     * Returns the pointer to the "chief" assistant,
+     * which is supposed to handle transformations of the
+     * handle, when all the assistants are transformed
+     */
+    KisPaintingAssistant* chiefAssistant() const;
 
 private:
     void registerAssistant(KisPaintingAssistant*);
     void unregisterAssistant(KisPaintingAssistant*);
-    bool containsAssistant(KisPaintingAssistant*);
+    bool containsAssistant(KisPaintingAssistant*) const;
 
 private:
     struct Private;
@@ -95,6 +104,7 @@ class KRITAUI_EXPORT KisPaintingAssistant
 public:
     KisPaintingAssistant(const QString& id, const QString& name);
     virtual ~KisPaintingAssistant();
+    virtual KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const = 0;
     const QString& id() const;
     const QString& name() const;
     bool isSnappingActive() const;
@@ -108,24 +118,20 @@ public:
      */
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) = 0;
     virtual void endStroke() { }
-    virtual QPointF buttonPosition() const = 0;
+    virtual QPointF getEditorPosition() const = 0; // Returns editor widget position in document-space coordinates.
     virtual int numHandles() const = 0;
 
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle, HandleType type);
 
-    QColor effectiveAssistantColor() const;
+    QPointF viewportConstrainedEditorPosition(const KisCoordinatesConverter* converter, const QSize editorSize);
 
-    /// should this assistant use a custom color for the display? global color will be used if this is false
+    QColor effectiveAssistantColor() const;
     bool useCustomColor();
     void setUseCustomColor(bool useCustomColor);
-
-    /// getter and setter for assistant's custom color
     void setAssistantCustomColor(QColor color);
     QColor assistantCustomColor();
-
     void setAssistantGlobalColorCache(const QColor &color);
-
 
     virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true,KisCanvas2 *canvas=0, bool assistantVisible=true, bool previewVisible=true);
     void uncache();
@@ -180,6 +186,11 @@ public:
     /// it will return false if we are in the middle of creating the assistant.
     virtual bool isAssistantComplete() const;
 
+    /// Transform the assistant using the given \p transform. Please note that \p transform
+    /// should be in 'document' coordinate system.
+    /// Used with image-wide transformations.
+    virtual void transform(const QTransform &transform);
+
 public:
     /**
      * This will render the final output. The drawCache does rendering most of the time so be sure to check that
@@ -189,6 +200,8 @@ public:
     static double norm2(const QPointF& p);
 
 protected:
+    explicit KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
+
     virtual QRect boundingRect() const;
 
     /// performance layer where the graphics can be drawn from a cache instead of generated every render update
@@ -198,6 +211,11 @@ protected:
     QList<KisPaintingAssistantHandleSP> m_handles;
 
     QPointF pixelToView(const QPoint pixelCoords) const;
+public:
+    /// clones the list of assistants
+    /// the originally shared handles will still be shared
+    /// the cloned assistants do not share any handle with the original assistants
+    static QList<KisPaintingAssistantSP> cloneAssistantList(const QList<KisPaintingAssistantSP> &list);
 
 private:
     struct Private;

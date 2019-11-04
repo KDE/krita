@@ -392,7 +392,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                     "<b><a href=\"https://en.wikipedia.org/wiki/Grayscale\">Grayscale</a></b> only allows for "
                                                                     "gray values and transparent values. Grayscale images use half "
                                                                     "the memory and disk space compared to an RGB image of the same bit-depth.<br/>"
-                                                                    "Grayscale is useful for inking and greyscale images. In "
+                                                                    "Grayscale is useful for inking and grayscale images. In "
                                                                     "Krita, you can mix Grayscale and RGB layers in the same image.")+"</p>");
     } else if (currentModelStr == "LABA") {
         d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("If the selected model is LAB",
@@ -559,12 +559,14 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                         "gamut to include all printable and most real world colors. It includes some imaginary colors "
                                                                         "and excludes some of the real world blues and violet blues that can be captured by digital "
                                                                         "cameras. It also excludes some very saturated 'camera-captured' yellows as interpreted by "
-                                                                        "some (and probably many) camera matrix input profiles.<p>"
+                                                                        "some (and probably many) camera matrix input profiles.</p><p>"
                                                                         "The ProPhotoRGB primaries are "
                                                                         "hard-coded into Adobe products such as Lightroom and the Dng-DCP camera 'profiles'. However, "
                                                                         "other than being large enough to hold a lot of colors, ProPhotoRGB has no particular merit "
-                                                                        "as an RGB working space. Personally and for most editing purposes, I recommend BetaRGB, Rec2020, "
-                                                                        "or the ACEScg profiles ProPhotoRGB.</p>"));
+                                                                        "as an RGB working space. Personally I recommend the Rec.2020 or ACEScg profiles over "
+                                                                        "ProPhotoRGB. But if you have an already well-established workflow using ProPhotoRGB, you "
+                                                                        "might find a shift to another RGB working space a little odd, at least at first, and so you "
+                                                                        "have to weight the pros and cons of changing your workflow.</p>"));
         }
         if (profileName.contains("Rec2020-")) {
 
@@ -621,9 +623,9 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                         "should be done on perceptually uniform RGB. Make sure you use the V4 versions for editing high bit depth "
                                                                         "images.</p>"));
         }
-        if (profileName.contains("-srgbtrc") || profileName.contains("-g22") || profileName.contains("-g18") || profileName.contains("-bt709")) {
+        if (profileName.contains("-srgbtrc") || profileName.contains("-g22") || profileName.contains("-g18") || profileName.contains("-rec709")) {
             d->colorSpaceSelector->textProfileDescription->append(i18nc("From Elle's notes.",
-                                                                        "<p>The profiles that end in '-srgbtrc.icc', '-g22.icc', and '-bt709.icc' have approximately but not exactly "
+                                                                        "<p>The profiles that end in '-srgbtrc.icc', '-g22.icc', and '-rec709.icc' have approximately but not exactly "
                                                                         "perceptually uniform TRCs. ProPhotoRGB's gamma=1.8 TRC is not quite as close to being perceptually uniform.</p>"));
         }
         if (d->colorSpaceSelector->cmbColorDepth->currentItem().id()=="U8") {
@@ -660,7 +662,7 @@ QString KisAdvancedColorSpaceSelector::nameWhitePoint(QVector <double> whitePoin
         return name;
     }
     //B   (0.34980, 0.35270) (4874K) (Direct Sunlight at noon)(obsolete)
-    //C   (0.31039, 0.31905) (6774K) (avarage/north sky daylight)(obsolete)
+    //C   (0.31039, 0.31905) (6774K) (average/north sky daylight)(obsolete)
     //D50 (0.34773, 0.35952) (5003K) (Horizon Light, default color of white paper, ICC profile standard illuminant)
     if ((whitePoint[0]>0.34773-0.005 && whitePoint[0]<0.34773 + 0.005) &&
             (whitePoint[1]>0.35952-0.005 && whitePoint[1]<0.35952 + 0.005)){

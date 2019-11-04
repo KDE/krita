@@ -98,9 +98,19 @@ public:
         releaseTileData();
     }
 
-    void notifyDead() {
-        // just to resemple KisTile...
+    void notifyDetachedFromDataManager() {
+        // just to resemble KisTile...
     }
+
+    void notifyDeadWithoutDetaching() {
+        // just to resemble KisTile...
+    }
+
+    void notifyAttachedToDataManager(KisMementoManager *mm) {
+        Q_UNUSED(mm);
+        // just to resemble KisTile...
+    }
+
 
     void reset() {
         releaseTileData();

@@ -49,7 +49,7 @@ class KCheckAcceleratorsInitializer : public QObject
 {
     Q_OBJECT
 public:
-    explicit KCheckAcceleratorsInitializer(QObject *parent = Q_NULLPTR)
+    explicit KCheckAcceleratorsInitializer(QObject *parent = 0)
         : QObject(parent)
     {
     }
@@ -113,7 +113,7 @@ bool KCheckAccelerators::eventFilter(QObject *obj, QEvent *e)
         return false;
     }
 
-    switch (e->type()) {   // just simplify debuggin
+    switch (e->type()) {   // just simplify debugging
     case QEvent::ShortcutOverride:
         if (key && (static_cast<QKeyEvent *>(e)->key() == key)) {
             block = true;

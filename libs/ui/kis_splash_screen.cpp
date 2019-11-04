@@ -24,6 +24,8 @@
 #include <QCheckBox>
 #include <kis_debug.h>
 #include <QFile>
+#include <QScreen>
+#include <QWindow>
 
 #include <KisPart.h>
 #include <KisApplication.h>
@@ -46,13 +48,25 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 {
 
     setupUi(this);
-    setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
+    setWindowIcon(KisIconUtils::loadIcon("krita"));
 
-    QImage img = pixmap.toImage();
-    if (devicePixelRatio() > 1) {
+    QImage img;
+
+    if (devicePixelRatioF() > 1.01) {
         img = pixmap_x2.toImage();
         img.setDevicePixelRatio(devicePixelRatioF());
+
+        // actual size : image size (x1)
+        m_scaleFactor = 2 / devicePixelRatioF();
+    } else {
+        img = pixmap.toImage();
+        m_scaleFactor = 1;
     }
+
+    setFixedWidth(pixmap.width() * m_scaleFactor);
+    setFixedHeight(pixmap.height() * m_scaleFactor);
+    lblSplash->setFixedWidth(pixmap.width() * m_scaleFactor);
+    lblSplash->setFixedHeight(pixmap.height() * m_scaleFactor);
 
     QFont font = this->font();
     font.setPointSize(11);
@@ -65,16 +79,16 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 
     // positioning of the text over the image (version)
     // also see setLoadingText() for positiong (loading progress text)
-    int leftEdge = 475-metrics.width(version);
-    int topEdge = 58+metrics.ascent();
+    qreal leftEdge = 475 * m_scaleFactor - metrics.width(version);
+    qreal topEdge = 58 * m_scaleFactor + metrics.ascent();
 
     //draw shadow
     QPen pen(QColor(0, 0, 0, 80));
     p.setPen(pen);
-    p.drawText(leftEdge+1, topEdge+1, version);
+    p.drawText(QPointF(leftEdge+1, topEdge+1), version);
     //draw main text
     p.setPen(QPen(QColor(255, 255, 255, 255)));
-    p.drawText(leftEdge, topEdge, version);
+    p.drawText(QPointF(leftEdge, topEdge), version);
     p.end();
 
 
@@ -84,7 +98,6 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 
     // Maintain the aspect ratio on high DPI screens when scaling
     lblSplash->setPixmap(QPixmap::fromImage(img));
-    setFixedWidth(pixmap.width());
 
     bnClose->hide();
     connect(bnClose, SIGNAL(clicked()), this, SLOT(close()));
@@ -209,16 +222,16 @@ void KisSplashScreen::setLoadingText(QString text)
     p.setRenderHint(QPainter::Antialiasing);
 
     // position text for loading text
-    int leftEdge = 475-metrics.width(text);
-    int topEdge = m_textTop;
+    qreal leftEdge = 475 *  m_scaleFactor - metrics.width(text);
+    qreal topEdge = m_textTop;
 
     //draw shadow
     QPen pen(QColor(0, 0, 0, 80));
     p.setPen(pen);
-    p.drawText(leftEdge+1, topEdge+1, text);
+    p.drawText(QPointF(leftEdge+1, topEdge+1), text);
     //draw main text
     p.setPen(QPen(QColor(255, 255, 255, 255)));
-    p.drawText(leftEdge, topEdge, text);
+    p.drawText(QPointF(leftEdge, topEdge), text);
     p.end();
     lblSplash->setPixmap(QPixmap::fromImage(img));
 }
@@ -246,7 +259,17 @@ void KisSplashScreen::show()
 {
     QRect r(QPoint(), sizeHint());
     resize(r.size());
-    move(QApplication::desktop()->availableGeometry().center() - r.center());
+    if (!this->parentWidget()) {
+        this->winId(); // Force creation of native window
+        if (this->windowHandle()) {
+            // At least on Windows, the window may be created on a non-primary
+            // screen with a different scale factor. If we don't explicitly
+            // move it to the primary screen, the position will be scaled with
+            // the wrong factor and the splash will be offset.
+            this->windowHandle()->setScreen(QApplication::primaryScreen());
+        }
+    }
+    move(QApplication::primaryScreen()->availableGeometry().center() - r.center());
     if (isVisible()) {
         repaint();
     }

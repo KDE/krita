@@ -409,7 +409,7 @@ void KisViewManager::setCurrentView(KisView *view)
         d->gamutCheck->setChecked(imageView->gamutCheck());
 
         // Wait for the async image to have loaded
-        KisDocument* doc = view->document();
+        KisDocument* doc = imageView->document();
 
         if (KisConfig(true).readEntry<bool>("EnablePositionLabel", false)) {
             connect(d->currentImageView->canvasController()->proxyObject,
@@ -446,6 +446,7 @@ void KisViewManager::setCurrentView(KisView *view)
             }
             if (preset) {
                 paintOpBox()->restoreResource(preset.data());
+                canvasResourceProvider()->setCurrentCompositeOp(preset->settings()->paintOpCompositeOp());
             }
         }
 
@@ -1439,4 +1440,8 @@ void KisViewManager::slotResetFgBg()
     d->canvasResourceManager.setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
 }
 
-
+void KisViewManager::slotResetRotation()
+{
+    KisCanvasController *canvasController = d->currentImageView->canvasController();
+    canvasController->resetCanvasRotation();
+}

@@ -97,7 +97,7 @@ void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,
     gc.end();
 }
 
-KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(2, 5, 1, i18n("Number of tiles"), "numberOfTiles"));
@@ -105,9 +105,9 @@ KisConfigWidget * KisSmallTilesFilter::createConfigurationWidget(QWidget* parent
 
 }
 
-KisFilterConfigurationSP KisSmallTilesFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisSmallTilesFilter::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("smalltiles", 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("numberOfTiles", 2);
     return config;
 }

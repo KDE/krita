@@ -68,7 +68,7 @@ KisBrushSizeOption::KisBrushSizeOption()
 
     m_options->densityBox->setRange(0.0, 100.0, 0);
     m_options->densityBox->setValue(100);
-    m_options->densityBox->setSuffix("%");
+    m_options->densityBox->setSuffix(i18n("%"));
 
 
     m_options->jitterMove->setRange(0.0, 5.0, 2);

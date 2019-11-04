@@ -793,7 +793,7 @@ inline T cfShadeIFSIllusions(T src, T dst) {
 template<class T>
 inline T cfFogLightenIFSIllusions(T src, T dst) {
     using namespace Arithmetic;
-    //Known as Bright Blending mode found in IFS Illusions. Picked this name because the shading reminds me of fog when overlaying with a gradientt.
+    //Known as Bright Blending mode found in IFS Illusions. Picked this name because the shading reminds me of fog when overlaying with a gradient.
     
     qreal fsrc = scale<qreal>(src);
     qreal fdst = scale<qreal>(dst);
@@ -844,15 +844,15 @@ inline T cfModuloShift(T src, T dst) {
 template<class T>
 inline T cfModuloShiftContinuous(T src, T dst) {
     using namespace Arithmetic;
-    //This blending mode do not behave like difference/equilavent with destination layer inverted if you use group layer on addition while the content of group layer contains several addition-mode layers, it works as expected on float images. So, no need to change this.
+    //This blending mode do not behave like difference/equivalent with destination layer inverted if you use group layer on addition while the content of group layer contains several addition-mode layers, it works as expected on float images. So, no need to change this.
     qreal fsrc = scale<qreal>(src);
     qreal fdst = scale<qreal>(dst);
     
     if (fsrc == 1.0 && fdst == 0.0) {
-    return scale<T>(0.0);
+    return scale<T>(1.0);
     }  
     
-    return scale<T>((int(ceil(fdst+fsrc)) % 2 != 0) || (fdst == zeroValue<T>()) ? inv(cfModuloShift(fsrc,fdst)) : cfModuloShift(fsrc,fdst)); 
+    return scale<T>((int(ceil(fdst+fsrc)) % 2 != 0) || (fdst == zeroValue<T>()) ? cfModuloShift(fsrc,fdst) : inv(cfModuloShift(fsrc,fdst))); 
 }
 
 template<class T>
@@ -933,4 +933,20 @@ inline T cfFlatLight(T src, T dst) {
     
     return clamp<T>(cfHardMixPhotoshop(inv(src),dst)==unitValue<T>() ? cfPenumbraB(src,dst) : cfPenumbraA(src,dst)); 
 }
+
+
+template<class HSXType, class TReal>
+inline void cfAdditionSAI(TReal src, TReal sa, TReal& dst, TReal& da)
+{
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<TReal>::compositetype composite_type;
+
+    Q_UNUSED(da);
+    composite_type newsrc;
+    newsrc = mul(src, sa);
+    dst = clamp<TReal>(newsrc + dst);
+}
+
+
+
 #endif // KOCOMPOSITEOP_FUNCTIONS_H_

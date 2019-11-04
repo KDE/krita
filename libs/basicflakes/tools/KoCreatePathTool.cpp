@@ -129,11 +129,12 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
     }
 
     const bool isOverFirstPoint = d->shape &&
-                                  handleGrabRect(d->firstPoint->point()).contains(event->point);
+            handleGrabRect(d->firstPoint->point()).contains(event->point);
 
-    const bool haveCloseModifier = d->enableClosePathShortcut &&
-        d->shape && d->shape->pointCount() > 2 &&
-        (event->modifiers() & Qt::ShiftModifier);
+    const bool haveCloseModifier = d->enableClosePathShortcut
+            && d->shape
+            && d->shape->pointCount() > 2
+            && (event->modifiers() & Qt::ShiftModifier);
 
     if ((event->button() == Qt::LeftButton) && haveCloseModifier && !isOverFirstPoint) {
         endPathWithoutLastPoint();
@@ -142,7 +143,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 
     d->finishAfterThisPoint = false;
 
-    if (pathStarted()) {
+    if (d->shape && pathStarted()) {
         if (isOverFirstPoint) {
             d->activePoint->setPoint(d->firstPoint->point());
             canvas()->updateCanvas(d->shape->boundingRect());

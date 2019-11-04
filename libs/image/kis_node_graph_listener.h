@@ -82,6 +82,8 @@ public:
 
     virtual void nodeChanged(KisNode * node);
 
+    virtual void nodeCollapsedChanged(KisNode * node);
+
     virtual void invalidateAllFrames();
 
     /**

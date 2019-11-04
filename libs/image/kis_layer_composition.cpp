@@ -41,7 +41,9 @@ public:
         APPLY
     };
     
-    KisCompositionVisitor(KisLayerComposition* layerComposition, Mode mode) : m_layerComposition(layerComposition), m_mode(mode)
+    KisCompositionVisitor(KisLayerComposition* layerComposition, Mode mode)
+        : m_layerComposition(layerComposition)
+        , m_mode(mode)
     {        
     }
 
@@ -90,7 +92,10 @@ private:
     Mode m_mode;
 };
 
-KisLayerComposition::KisLayerComposition(KisImageWSP image, const QString& name): m_image(image), m_name(name), m_exportEnabled(true)
+KisLayerComposition::KisLayerComposition(KisImageWSP image, const QString& name)
+    : m_image(image)
+    , m_name(name)
+    , m_exportEnabled(true)
 {
 
 }
@@ -157,12 +162,11 @@ void KisLayerComposition::store()
 
 void KisLayerComposition::apply()
 {
-    if(m_image.isNull()) {
+    if (m_image.isNull()) {
         return;
     }
     KisCompositionVisitor visitor(this, KisCompositionVisitor::APPLY);
     m_image->rootLayer()->accept(visitor);
-    m_image->notifyNodeCollpasedChanged();
 }
 
 void KisLayerComposition::setExportEnabled ( bool enabled )

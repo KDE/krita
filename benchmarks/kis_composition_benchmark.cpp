@@ -47,7 +47,8 @@
 #include <KoColorSpaceTraits.h>
 #include <KoCompositeOpAlphaDarken.h>
 #include <KoCompositeOpOver.h>
-#include "KoOptimizedCompositeOpFactory.h"
+#include <KoOptimizedCompositeOpFactory.h>
+#include <KoAlphaDarkenParamsWrapper.h>
 
 // for posix_memalign()
 #include <stdlib.h>
@@ -61,8 +62,6 @@
 #define MEMALIGN_ALLOC(p, a, s) posix_memalign((p), (a), (s))
 #define MEMALIGN_FREE(p) free((p))
 #endif
-
-const int alpha_pos = 3;
 
 enum AlphaRange {
     ALPHA_ZERO,
@@ -189,14 +188,14 @@ void generateDataLine(uint seed, int numPixels, quint8 *srcPixels, quint8 *dstPi
 void printData(int numPixels, quint8 *srcPixels, quint8 *dstPixels, quint8 *mask)
 {
     for (int i = 0; i < numPixels; i++) {
-        dbgKrita << "Src: "
+        qDebug() << "Src: "
                  << srcPixels[i*4] << "\t"
                  << srcPixels[i*4+1] << "\t"
                  << srcPixels[i*4+2] << "\t"
                  << srcPixels[i*4+3] << "\t"
                  << "Msk:" << mask[i];
 
-        dbgKrita << "Dst: "
+        qDebug() << "Dst: "
                  << dstPixels[i*4] << "\t"
                  << dstPixels[i*4+1] << "\t"
                  << dstPixels[i*4+2] << "\t"
@@ -300,19 +299,19 @@ bool compareTwoOpsPixels(QVector<Tile> &tiles, channel_type prec) {
 
     for (int i = 0; i < numPixels; i++) {
         if (!comparePixels<channel_type>(dst1, dst2, prec)) {
-            dbgKrita << "Wrong result:" << i;
-            dbgKrita << "Act: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
-            dbgKrita << "Exp: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
-            dbgKrita << "Dif: " << dst1[0] - dst2[0] << dst1[1] - dst2[1] << dst1[2] - dst2[2] << dst1[3] - dst2[3];
+            qDebug() << "Wrong result:" << i;
+            qDebug() << "Act: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
+            qDebug() << "Exp: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
+            qDebug() << "Dif: " << dst1[0] - dst2[0] << dst1[1] - dst2[1] << dst1[2] - dst2[2] << dst1[3] - dst2[3];
 
             channel_type *s1 = src1 + 4 * i;
             channel_type *s2 = src2 + 4 * i;
 
-            dbgKrita << "SrcA:" << s1[0] << s1[1] << s1[2] << s1[3];
-            dbgKrita << "SrcE:" << s2[0] << s2[1] << s2[2] << s2[3];
+            qDebug() << "SrcA:" << s1[0] << s1[1] << s1[2] << s1[3];
+            qDebug() << "SrcE:" << s2[0] << s2[1] << s2[2] << s2[3];
 
-            dbgKrita << "MskA:" << tiles[0].mask[i];
-            dbgKrita << "MskE:" << tiles[1].mask[i];
+            qDebug() << "MskA:" << tiles[0].mask[i];
+            qDebug() << "MskE:" << tiles[1].mask[i];
 
             return false;
         }
@@ -431,14 +430,14 @@ void benchmarkCompositeOp(const KoCompositeOp *op,
         op->composite(params);
     }
 
-    dbgKrita << testName << "RESULT:" << timer.elapsed() << "msec";
+    qDebug() << testName << "RESULT:" << timer.elapsed() << "msec";
 
     freeTiles(tiles, srcAlignmentShift, dstAlignmentShift);
 }
 
 void benchmarkCompositeOp(const KoCompositeOp *op, const QString &postfix)
 {
-    dbgKrita << "Testing Composite Op:" << op->id() << "(" << postfix << ")";
+    qDebug() << "Testing Composite Op:" << op->id() << "(" << postfix << ")";
 
     benchmarkCompositeOp(op, true, 0.5, 0.3, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM);
     benchmarkCompositeOp(op, true, 0.5, 0.3, 8, 0, ALPHA_RANDOM, ALPHA_RANDOM);
@@ -503,9 +502,9 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
         for (int j = 0; j < vecSize; j++) {
 
             //if (8 * i + j == 7080) {
-            //    dbgKrita << "src: " << src2[0] << src2[1] << src2[2] << src2[3];
-            //    dbgKrita << "dst: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
-            //    dbgKrita << "msk:" << msk2[0];
+            //    qDebug() << "src: " << src2[0] << src2[1] << src2[2] << src2[3];
+            //    qDebug() << "dst: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
+            //    qDebug() << "msk:" << msk2[0];
             //}
 
             Compositor::template compositeOnePixelScalar<true, Vc::CurrentImplementation::current()>(src2, dst2, msk2, params.opacity, paramsWrapper);
@@ -529,12 +528,12 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
             }
 
             if(!compareResult || errorcount > 1) {
-                dbgKrita << "Wrong rounding in pixel:" << 8 * i + j;
-                dbgKrita << "Vector version: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
-                dbgKrita << "Scalar version: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
+                qDebug() << "Wrong rounding in pixel:" << 8 * i + j;
+                qDebug() << "Vector version: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
+                qDebug() << "Scalar version: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
 
-                dbgKrita << "src:" << src1[0] << src1[1] << src1[2] << src1[3];
-                dbgKrita << "msk:" << msk1[0];
+                qDebug() << "src:" << src1[0] << src1[1] << src1[2] << src1[3];
+                qDebug() << "msk:" << msk1[0];
 
                 QFAIL("Wrong rounding");
             }
@@ -557,35 +556,35 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_03()
 {
 #ifdef HAVE_VC
-    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,0.3);
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,0.3);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_05()
 {
 #ifdef HAVE_VC
-    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,0.5);
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,0.5);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_07()
 {
 #ifdef HAVE_VC
-    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,0.7);
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,0.7);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_10()
 {
 #ifdef HAVE_VC
-    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,1.0);
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,1.0);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_10_08()
 {
 #ifdef HAVE_VC
-    checkRounding<AlphaDarkenCompositor32<quint8, quint32> >(0.5,1.0,0.8);
+    checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,1.0,0.8);
 #endif
 }
 
@@ -641,7 +640,7 @@ void KisCompositionBenchmark::checkRoundingOverRgbaF32()
 void KisCompositionBenchmark::compareAlphaDarkenOps()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy32(cs);
     KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoBgrU8Traits, KoAlphaDarkenParamsWrapperCreamy>(cs);
 
     QVERIFY(compareTwoOps(true, opAct, opExp));
@@ -653,7 +652,7 @@ void KisCompositionBenchmark::compareAlphaDarkenOps()
 void KisCompositionBenchmark::compareRgbF32AlphaDarkenOps()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
-    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenOp128(cs);
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy128(cs);
     KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoRgbF32Traits, KoAlphaDarkenParamsWrapperCreamy>(cs);
 
     QVERIFY(compareTwoOps(true, opAct, opExp));
@@ -665,7 +664,7 @@ void KisCompositionBenchmark::compareRgbF32AlphaDarkenOps()
 void KisCompositionBenchmark::compareAlphaDarkenOpsNoMask()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
+    KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy32(cs);
     KoCompositeOp *opExp = new KoCompositeOpAlphaDarken<KoBgrU8Traits, KoAlphaDarkenParamsWrapperCreamy>(cs);
 
     QVERIFY(compareTwoOps(false, opAct, opExp));
@@ -721,7 +720,7 @@ void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenLegacy()
 void KisCompositionBenchmark::testRgb8CompositeAlphaDarkenOptimized()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(cs);
+    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy32(cs);
     benchmarkCompositeOp(op, "Optimized");
     delete op;
 }
@@ -753,7 +752,7 @@ void KisCompositionBenchmark::testRgbF32CompositeAlphaDarkenLegacy()
 void KisCompositionBenchmark::testRgbF32CompositeAlphaDarkenOptimized()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F32", "");
-    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createAlphaDarkenOp128(cs);
+    KoCompositeOp *op = KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy128(cs);
     benchmarkCompositeOp(op, "Optimized");
     delete op;
 }

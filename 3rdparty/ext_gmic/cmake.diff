@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index dd8ecb8..be0c1c7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -53,7 +53,7 @@
+ #  knowledge of the CeCILL and CeCILL-C licenses and that you accept its terms.
+ #
+ 
+-cmake_minimum_required(VERSION 3.8)
++cmake_minimum_required(VERSION 3.5)
+ cmake_policy(SET CMP0046 OLD)
+ 
+ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)

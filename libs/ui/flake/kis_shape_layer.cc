@@ -175,12 +175,16 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* c
      */
     const QTransform thisInvertedTransform = this->absoluteTransformation(0).inverted();
 
+    m_d->canvas->shapeManager()->setUpdatesBlocked(true);
+
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
         clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
         addShape(clonedShape);
     }
+
+    m_d->canvas->shapeManager()->setUpdatesBlocked(false);
 }
 
 KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_addShapes)
@@ -473,6 +477,16 @@ bool KisShapeLayer::isShapeEditable(bool recursive) const
 void KisShapeLayer::forceUpdateTimedNode()
 {
     m_d->canvas->forceRepaint();
+}
+
+bool KisShapeLayer::hasPendingTimedUpdates() const
+{
+    return m_d->canvas->hasPendingUpdates();
+}
+
+void KisShapeLayer::forceUpdateHiddenAreaOnOriginal()
+{
+    m_d->canvas->forceRepaintWithHiddenAreas();
 }
 
 bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, const QSizeF &sizeInPt)

@@ -49,22 +49,23 @@ void PhongPixelProcessor::initialize(const KisPropertiesConfigurationSP config)
 
     for (int i = 0; i < PHONG_TOTAL_ILLUMINANTS; i++) {
         if (config->getBool(PHONG_ILLUMINANT_IS_ENABLED[i])) {
-            config->getProperty(PHONG_ILLUMINANT_COLOR[i], guiLight[i]);
-            light[i].RGBvalue << guiLight[i].value<QColor>().redF();
-            light[i].RGBvalue << guiLight[i].value<QColor>().greenF();
-            light[i].RGBvalue << guiLight[i].value<QColor>().blueF();
+            if (config->getProperty(PHONG_ILLUMINANT_COLOR[i], guiLight[i])) {
+                light[i].RGBvalue << guiLight[i].value<QColor>().redF();
+                light[i].RGBvalue << guiLight[i].value<QColor>().greenF();
+                light[i].RGBvalue << guiLight[i].value<QColor>().blueF();
 
-            azimuth = config->getInt(PHONG_ILLUMINANT_AZIMUTH[i]) - 90;
-            inclination = config->getInt(PHONG_ILLUMINANT_INCLINATION[i]);
-            
-            qreal m; //2D vector magnitude
-            light[i].lightVector.setZ( sin( inclination * M_PI / 180 ) );
-            m = cos( inclination * M_PI / 180);
+                azimuth = config->getInt(PHONG_ILLUMINANT_AZIMUTH[i]) - 90;
+                inclination = config->getInt(PHONG_ILLUMINANT_INCLINATION[i]);
 
-            light[i].lightVector.setX( cos( azimuth * M_PI / 180 ) * m  );
-            light[i].lightVector.setY( sin( azimuth * M_PI / 180 ) * m  );
-            //Pay close attention to this, indexes will move in this line
-            lightSources.append(light[i]);
+                qreal m; //2D vector magnitude
+                light[i].lightVector.setZ( sin( inclination * M_PI / 180 ) );
+                m = cos( inclination * M_PI / 180);
+
+                light[i].lightVector.setX( cos( azimuth * M_PI / 180 ) * m  );
+                light[i].lightVector.setY( sin( azimuth * M_PI / 180 ) * m  );
+                //Pay close attention to this, indexes will move in this line
+                lightSources.append(light[i]);
+            }
         }
     }
 
@@ -121,8 +122,8 @@ QVector<quint16> PhongPixelProcessor::IlluminatePixelFromHeightmap(quint32 posup
     finalPixel = IlluminatePixel();
     
     return finalPixel;
- }
- 
+}
+
 QVector<quint16> PhongPixelProcessor::IlluminatePixel()
 {
     qreal temp;
@@ -178,10 +179,10 @@ QVector<quint16> PhongPixelProcessor::IlluminatePixel()
     finalPixel[0] = quint16(computation[2] * 0xFFFF);
     
     return finalPixel;
- }
- 
+}
+
 QVector<quint16> PhongPixelProcessor::IlluminatePixelFromNormalmap(qreal r, qreal g, qreal b)
- {
+{
     QVector<quint16> finalPixel(4, 0xFFFF);
 
     if (lightSources.size() == 0)
@@ -199,4 +200,4 @@ QVector<quint16> PhongPixelProcessor::IlluminatePixelFromNormalmap(qreal r, qrea
     finalPixel = IlluminatePixel();
     
     return finalPixel;
- }
+}

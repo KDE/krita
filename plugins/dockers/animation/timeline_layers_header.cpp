@@ -154,8 +154,12 @@ void TimelineLayersHeader::paintSection(QPainter *painter, const QRect &rect, in
 
         const bool isActive = p->state.toBool();
         QIcon icon = isActive ? p->onIcon : p->offIcon;
+        if (!isActive) {
+            painter->setOpacity(0.35);
+        }
         QRect rc = m_d->iconRect(logicalIndex, i).translated(rect.topLeft());
         icon.paint(painter, rc);
+        painter->setOpacity(1.0);
     }
 }
 

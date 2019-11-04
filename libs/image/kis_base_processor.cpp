@@ -32,7 +32,7 @@ public:
     KisBaseProcessorConfigurationFactory(KisBaseProcessor* _generator) : m_generator(_generator) {}
     ~KisBaseProcessorConfigurationFactory() override {}
     KisSerializableConfigurationSP createDefault() override {
-        return m_generator->factoryConfiguration();
+        return m_generator->defaultConfiguration();
     }
     KisSerializableConfigurationSP create(const QDomElement& e) override {
         KisSerializableConfigurationSP config = m_generator->factoryConfiguration();
@@ -87,7 +87,7 @@ KisBaseProcessor::~KisBaseProcessor()
 
 KisFilterConfigurationSP KisBaseProcessor::factoryConfiguration() const
 {
-    return new KisFilterConfiguration(id(), 0);
+    return new KisFilterConfiguration(id(), 1);
 }
 
 KisFilterConfigurationSP KisBaseProcessor::defaultConfiguration() const
@@ -95,7 +95,7 @@ KisFilterConfigurationSP KisBaseProcessor::defaultConfiguration() const
     return factoryConfiguration();
 }
 
-KisConfigWidget * KisBaseProcessor::createConfigurationWidget(QWidget *, const KisPaintDeviceSP) const
+KisConfigWidget * KisBaseProcessor::createConfigurationWidget(QWidget *, const KisPaintDeviceSP, bool) const
 {
     return 0;
 }

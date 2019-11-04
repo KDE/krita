@@ -27,6 +27,7 @@
 #include <QOpenGLBuffer>
 #include <QTransform>
 #include <KisGLImageF16.h>
+#include <opengl/KisSurfaceColorSpace.h>
 
 
 class KisGLImageWidget : public QOpenGLWidget, protected QOpenGLFunctions
@@ -34,18 +35,20 @@ class KisGLImageWidget : public QOpenGLWidget, protected QOpenGLFunctions
     Q_OBJECT
 public:
     KisGLImageWidget(QWidget *parent = nullptr);
-    KisGLImageWidget(QSurfaceFormat::ColorSpace colorSpace,
+    KisGLImageWidget(KisSurfaceColorSpace colorSpace,
                      QWidget *parent = nullptr);
 
-    void initializeGL();
-    void paintGL();
+    ~KisGLImageWidget();
+
+    void initializeGL() override;
+    void paintGL() override;
 
     void loadImage(const KisGLImageF16 &image);
 
     void paintEvent(QPaintEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 public Q_SLOTS:
 

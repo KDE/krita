@@ -54,7 +54,7 @@ void KisToolEllipse::finishRect(const QRectF& rect, qreal roundCornersX, qreal r
     Q_UNUSED(roundCornersX);
     Q_UNUSED(roundCornersY);
 
-    if (rect.isEmpty() || !blockUntilOperationsFinished())
+    if (rect.isEmpty())
         return;
 
     const KisToolShape::ShapeAddInfo info =
@@ -78,6 +78,5 @@ void KisToolEllipse::finishRect(const QRectF& rect, qreal roundCornersX, qreal r
 
         addShape(shape);
     }
-    notifyModified();
 }
 

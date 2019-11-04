@@ -26,6 +26,8 @@
 #include <kis_properties_configuration.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+#include "kis_command_utils.h"
+#include "kis_processing_applicator.h"
 
 namespace KisToolUtils {
 
@@ -135,24 +137,26 @@ namespace KisToolUtils {
     bool clearImage(KisImageSP image, KisNodeSP node, KisSelectionSP selection)
     {
         if(node && node->hasEditablePaintDevice()) {
-            KisPaintDeviceSP device = node->paintDevice();
+            KUndo2Command *cmd =
+                new KisCommandUtils::LambdaCommand(kundo2_i18n("Clear"),
+                    [node, selection] () {
+                        KisPaintDeviceSP device = node->paintDevice();
 
-            image->barrierLock();
-            KisTransaction transaction(kundo2_i18n("Clear"), device);
+                        KisTransaction transaction(kundo2_noi18n("internal-clear-command"), device);
 
-            QRect dirtyRect;
-            if (selection) {
-                dirtyRect = selection->selectedRect();
-                device->clearSelection(selection);
-            }
-            else {
-                dirtyRect = device->extent();
-                device->clear();
-            }
+                        QRect dirtyRect;
+                        if (selection) {
+                            dirtyRect = selection->selectedRect();
+                            device->clearSelection(selection);
+                        } else {
+                            dirtyRect = device->extent();
+                            device->clear();
+                        }
 
-            transaction.commit(image->undoAdapter());
-            device->setDirty(dirtyRect);
-            image->unlock();
+                        device->setDirty(dirtyRect);
+                        return transaction.endAndTake();
+                    });
+            KisProcessingApplicator::runSingleCommandStroke(image, cmd);
             return true;
         }
         return false;
@@ -163,7 +167,7 @@ namespace KisToolUtils {
     ColorPickerConfig::ColorPickerConfig()
         : toForegroundColor(true)
         , updateColor(true)
-        , addPalette(false)
+        , addColorToCurrentPalette(false)
         , normaliseValues(false)
         , sampleMerged(true)
         , radius(1)
@@ -181,7 +185,7 @@ namespace KisToolUtils {
         KisPropertiesConfiguration props;
         props.setProperty("toForegroundColor", toForegroundColor);
         props.setProperty("updateColor", updateColor);
-        props.setProperty("addPalette", addPalette);
+        props.setProperty("addPalette", addColorToCurrentPalette);
         props.setProperty("normaliseValues", normaliseValues);
         props.setProperty("sampleMerged", sampleMerged);
         props.setProperty("radius", radius);
@@ -201,7 +205,7 @@ namespace KisToolUtils {
 
         toForegroundColor = props.getBool("toForegroundColor", true);
         updateColor = props.getBool("updateColor", true);
-        addPalette = props.getBool("addPalette", false);
+        addColorToCurrentPalette = props.getBool("addPalette", false);
         normaliseValues = props.getBool("normaliseValues", false);
         sampleMerged = props.getBool("sampleMerged", !defaultActivation ? false : true);
         radius = props.getInt("radius", 1);

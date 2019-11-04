@@ -149,7 +149,6 @@ public:
     void endActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
     QMenu* popupActionsMenu() override;
 
-
     void activatePrimaryAction() override;
     void deactivatePrimaryAction() override;
     void beginPrimaryAction(KoPointerEvent *event) override;
@@ -233,9 +232,6 @@ private:
     QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive);
     QScopedPointer<QMenu> m_contextMenu;
 
-    bool clearDevices(const QList<KisNodeSP> &nodes);
-    void transformClearedDevices();
-
     void startStroke(ToolTransformArgs::TransformMode mode, bool forceReset);
     void endStroke();
     void cancelStroke();
@@ -249,19 +245,12 @@ private:
 
     void commitChanges();
 
-
-    bool tryInitArgsFromNode(KisNodeSP node);
-    bool tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, ToolTransformArgs::TransformMode mode, KisNodeSP currentNode);
-
-    void resetArgsForMode(ToolTransformArgs::TransformMode mode);
     void initTransformMode(ToolTransformArgs::TransformMode mode);
     void initGuiAfterTransformMode();
 
     void initThumbnailImage(KisPaintDeviceSP previewDevice);
-    void updateSelectionPath();
+    void updateSelectionPath(const QPainterPath &selectionOutline);
     void updateApplyResetAvailability();
-
-    void forceRepaintDelayedLayers(KisNodeSP root);
 
 private:
     ToolTransformArgs m_currentArgs;
@@ -269,25 +258,7 @@ private:
     bool m_actuallyMoveWhileSelected; // true <=> selection has been moved while clicked
 
     KisPaintDeviceSP m_selectedPortionCache;
-
-    struct StrokeData {
-        StrokeData() {}
-        StrokeData(KisStrokeId strokeId) : m_strokeId(strokeId) {}
-
-        void clear() {
-            m_strokeId.clear();
-            m_clearedNodes.clear();
-        }
-
-        const KisStrokeId strokeId() const { return m_strokeId; }
-        void addClearedNode(KisNodeSP node) { m_clearedNodes.append(node); }
-        const QVector<KisNodeWSP>& clearedNodes() const { return m_clearedNodes; }
-
-    private:
-        KisStrokeId m_strokeId;
-        QVector<KisNodeWSP> m_clearedNodes;
-    };
-    StrokeData m_strokeData;
+    KisStrokeId m_strokeId;
 
     bool m_workRecursively;
 
@@ -342,7 +313,8 @@ private Q_SLOTS:
     void slotRestartTransform();
     void slotEditingFinished();
 
-    void slotPreviewDeviceGenerated(KisPaintDeviceSP device);
+    void slotTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args);
+    void slotPreviewDeviceGenerated(KisPaintDeviceSP device, const QPainterPath &selectionOutline);
 
     // context menu options for updating the transform type
     // this is to help with discoverability since come people can't find the tool options

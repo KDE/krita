@@ -42,7 +42,7 @@ KisRandomAccessor2::~KisRandomAccessor2()
 {
     for (uint i = 0; i < m_tilesCacheSize; i++) {
         unlockTile(m_tilesCache[i]->tile);
-        unlockTile(m_tilesCache[i]->oldtile);
+        unlockOldTile(m_tilesCache[i]->oldtile);
         delete m_tilesCache[i];
     }
     delete [] m_tilesCache;
@@ -79,7 +79,7 @@ void KisRandomAccessor2::moveTo(qint32 x, qint32 y)
     // The tile wasn't in cache
     if (m_tilesCacheSize == KisRandomAccessor2::CACHESIZE) { // Remove last element of cache
         unlockTile(m_tilesCache[CACHESIZE-1]->tile);
-        unlockTile(m_tilesCache[CACHESIZE-1]->oldtile);
+        unlockOldTile(m_tilesCache[CACHESIZE-1]->oldtile);
         delete m_tilesCache[CACHESIZE-1];
     } else {
         m_tilesCacheSize++;

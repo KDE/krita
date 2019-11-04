@@ -1,0 +1,9 @@
+{
+    "Id": "Simplex Noise Generator",
+    "Type": "Service",
+    "X-KDE-Library": "kritasimplexnoisegenerator",
+    "X-KDE-ServiceTypes": [
+        "Krita/Generator"
+    ],
+    "X-Krita-Version": "28"
+}

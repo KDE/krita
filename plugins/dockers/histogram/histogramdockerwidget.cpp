@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -79,12 +80,13 @@ void HistogramDockerWidget::receiveNewHistogram(HistVector *histogramData)
 
 void HistogramDockerWidget::paintEvent(QPaintEvent *event)
 {
-    if (!m_histogramData.empty()) {
+    if (m_paintDevice && !m_histogramData.empty()) {
         int nBins = m_histogramData.at(0).size();
         const KoColorSpace* cs = m_paintDevice->colorSpace();
 
         QLabel::paintEvent(event);
         QPainter painter(this);
+        painter.fillRect(0, 0, this->width(), this->height(), this->palette().dark().color());
         painter.setPen(this->palette().light().color());
 
         const int NGRID = 4;

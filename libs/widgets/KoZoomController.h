@@ -188,7 +188,8 @@ Q_SIGNALS:
     void zoomedToAll();
 
 protected:
-    virtual QSize documentToViewport(const QSizeF &size);
+    virtual QSizeF documentToViewport(const QSizeF &size);
+    QSize documentToViewportCeil(const QSizeF &size);
 
 private:
     Q_PRIVATE_SLOT(d, void setAvailableSize())

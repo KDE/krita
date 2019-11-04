@@ -89,7 +89,7 @@ void KColorSchemeModel::init()
     Q_FOREACH (const QString &schemeFile, schemeFiles) {
         KSharedConfigPtr config = KSharedConfig::openConfig(schemeFile);
         KConfigGroup group(config, QStringLiteral("General"));
-        const QString name = group.readEntry("Name", QFileInfo(schemeFile).baseName());
+        const QString name = group.readEntry("Name", QFileInfo(schemeFile).completeBaseName());
         const KColorSchemeModelData data = {name, schemeFile, createPreview(schemeFile)};
         m_data.append(data);
     }

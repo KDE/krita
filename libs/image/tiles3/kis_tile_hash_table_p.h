@@ -174,7 +174,7 @@ bool KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row, qint32 idx)
              * explicitly
              */
             tile->setNext(TileTypeSP());
-            tile->notifyDead();
+            tile->notifyDetachedFromDataManager();
             tile.clear();
 
             m_numTiles--;
@@ -318,7 +318,7 @@ void KisTileHashTableTraits<T>::clear()
              */
 
             tmp->setNext(TileTypeSP());
-            tmp->notifyDead();
+            tmp->notifyDetachedFromDataManager();
             tmp = 0;
 
             m_numTiles--;

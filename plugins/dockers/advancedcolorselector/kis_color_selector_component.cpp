@@ -77,7 +77,7 @@ void KisColorSelectorComponent::mouseEvent(int x, int y)
     int newX=qBound(0, (x-m_x), width());
     int newY=qBound(0, (y-m_y), height());
 
-    if (allowsColorSelectionAtPoint(QPoint(x, y))) {
+    if (allowsColorSelectionAtPoint(QPoint(newX, newY))) {
         m_lastSelectedColor = selectColor(newX, newY);
         m_lastX=newX;
         m_lastY=newY;
@@ -136,7 +136,7 @@ bool KisColorSelectorComponent::containsPointInComponentCoords(int x, int y) con
         return false;
 }
 
-bool KisColorSelectorComponent::allowsColorSelectionAtPoint(const QPoint &pt) const
+bool KisColorSelectorComponent::allowsColorSelectionAtPoint(const QPoint & /*pt*/) const
 {
     return true;
 }

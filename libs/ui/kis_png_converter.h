@@ -29,7 +29,7 @@
 #include "kis_global.h"
 #include "kis_annotation.h"
 #include <kritaui_export.h>
-#include <KisImageBuilderResult.h>
+#include <KisImportExportErrorCode.h>
 
 class KoStore;
 class KisDocument;
@@ -97,12 +97,12 @@ public:
      * temporary location.
      * @param filename the file name of the image
      */
-    KisImageBuilder_Result buildImage(const QString &filename);
+    KisImportExportErrorCode buildImage(const QString &filename);
     /**
      * Load an image from a QIODevice.
      * @param iod device to access the data
      */
-    KisImageBuilder_Result buildImage(QIODevice* iod);
+    KisImportExportErrorCode buildImage(QIODevice* iod);
     /**
      * Save a layer to a PNG
      * @param filename the name of the destination file
@@ -115,8 +115,8 @@ public:
      * @param options PNG formatting options
      * @param metaData image metadata
      */
-    KisImageBuilder_Result buildFile(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
-    KisImageBuilder_Result buildFile(QIODevice*, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
+    KisImportExportErrorCode buildFile(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
+    KisImportExportErrorCode buildFile(QIODevice*, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData);
     /**
      * Retrieve the constructed image
      */

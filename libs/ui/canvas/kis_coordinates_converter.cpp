@@ -21,6 +21,7 @@
 
 #include "kis_coordinates_converter.h"
 
+#include <QtMath>
 #include <QTransform>
 #include <KoViewConverter.h>
 
@@ -105,8 +106,8 @@ QPointF KisCoordinatesConverter::centeringCorrection() const
 
 void KisCoordinatesConverter::correctOffsetToTransformation()
 {
-    m_d->documentOffset = -(imageRectInWidgetPixels().topLeft() -
-          centeringCorrection()).toPoint();
+    m_d->documentOffset = snapToDevicePixel(-(imageRectInWidgetPixels().topLeft() -
+          centeringCorrection()));
 }
 
 void KisCoordinatesConverter::correctTransformationToOffset()
@@ -150,7 +151,12 @@ KisCoordinatesConverter::~KisCoordinatesConverter()
     delete m_d;
 }
 
-void KisCoordinatesConverter::setCanvasWidgetSize(QSize size)
+QSizeF KisCoordinatesConverter::getCanvasWidgetSize() const
+{
+    return m_d->canvasWidgetSize;
+}
+
+void KisCoordinatesConverter::setCanvasWidgetSize(QSizeF size)
 {
     m_d->canvasWidgetSize = size;
     recalculateTransformations();
@@ -167,13 +173,18 @@ void KisCoordinatesConverter::setImage(KisImageWSP image)
     recalculateTransformations();
 }
 
-void KisCoordinatesConverter::setDocumentOffset(const QPoint& offset)
+void KisCoordinatesConverter::setDocumentOffset(const QPointF& offset)
 {
     QPointF diff = m_d->documentOffset - offset;
 
     m_d->documentOffset = offset;
     m_d->flakeToWidget *= QTransform::fromTranslate(diff.x(), diff.y());
     recalculateTransformations();
+}
+
+qreal KisCoordinatesConverter::devicePixelRatio() const
+{
+    return m_d->devicePixelRatio;
 }
 
 QPoint KisCoordinatesConverter::documentOffset() const
@@ -288,7 +299,7 @@ QPoint KisCoordinatesConverter::resetRotation(QPointF center)
     return m_d->documentOffset.toPoint();
 }
 
-QTransform KisCoordinatesConverter::imageToWidgetTransform() const{
+QTransform KisCoordinatesConverter::imageToWidgetTransform() const {
     return m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToWidget;
 }
 
@@ -304,8 +315,7 @@ QTransform KisCoordinatesConverter::flakeToWidgetTransform() const {
     return m_d->flakeToWidget;
 }
 
-QTransform KisCoordinatesConverter::documentToWidgetTransform() const
-{
+QTransform KisCoordinatesConverter::documentToWidgetTransform() const {
     return m_d->documentToFlake * m_d->flakeToWidget;
 }
 
@@ -461,4 +471,20 @@ void KisCoordinatesConverter::imagePhysicalScale(qreal *scaleX, qreal *scaleY) c
     imageScale(scaleX, scaleY);
     *scaleX *= m_d->devicePixelRatio;
     *scaleY *= m_d->devicePixelRatio;
+}
+
+/**
+ * @brief Adjust a given pair of coordinates to the nearest device pixel
+ *        according to the value of `devicePixelRatio`.
+ * @param point a point in logical pixel space
+ * @return The point in logical pixel space but adjusted to the nearest device
+ *         pixel
+ */
+
+QPointF KisCoordinatesConverter::snapToDevicePixel(const QPointF &point) const
+{
+    QPoint devicePixel = (point * m_d->devicePixelRatio).toPoint();
+    // These adjusted coords will be in logical pixel but is aligned in device
+    // pixel space for pixel-perfect rendering.
+    return QPointF(devicePixel) / m_d->devicePixelRatio;
 }

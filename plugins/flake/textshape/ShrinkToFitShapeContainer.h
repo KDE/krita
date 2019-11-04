@@ -37,17 +37,6 @@
 #include <KoDocumentResourceManager.h>
 
 /**
- * \internal d-pointer class for the \a ShrinkToFitShapeContainer class.
- */
-class ShrinkToFitShapeContainerPrivate : public KoShapeContainerPrivate
-{
-public:
-    explicit ShrinkToFitShapeContainerPrivate(KoShapeContainer *q, KoShape *childShape) : KoShapeContainerPrivate(q), childShape(childShape) {}
-    ~ShrinkToFitShapeContainerPrivate() override {}
-    KoShape *childShape; // the original shape not owned by us
-};
-
-/**
  * Container that is used to wrap a shape and shrink a text-shape to fit the content.
  */
 class ShrinkToFitShapeContainer : public KoShapeContainer
@@ -79,7 +68,20 @@ public:
     void unwrapShape(KoShape *shape);
 
 private:
-    Q_DECLARE_PRIVATE(ShrinkToFitShapeContainer)
+    friend class ShrinkToFitShapeContainerModel;
+    class Private;
+    QSharedDataPointer<Private> d;
+};
+
+/**
+ * \internal d-pointer class for the \a ShrinkToFitShapeContainer class.
+ */
+class ShrinkToFitShapeContainer::Private : public QSharedData
+{
+public:
+    explicit Private(KoShape *childShape) : childShape(childShape) {}
+    virtual ~Private() = default;
+    KoShape *childShape; // the original shape not owned by us
 };
 
 /**
@@ -91,7 +93,7 @@ class ShrinkToFitShapeContainerModel : public QObject, public SimpleShapeContain
     Q_OBJECT
     friend class ShrinkToFitShapeContainer;
 public:
-    ShrinkToFitShapeContainerModel(ShrinkToFitShapeContainer *q, ShrinkToFitShapeContainerPrivate *d);
+    ShrinkToFitShapeContainerModel(ShrinkToFitShapeContainer *q);
 
     // reimplemented
     void containerChanged(KoShapeContainer *container, KoShape::ChangeType type) override;
@@ -105,7 +107,6 @@ private Q_SLOTS:
 
 private:
     ShrinkToFitShapeContainer *q;
-    ShrinkToFitShapeContainerPrivate *d;
     qreal m_scale;
     QSizeF m_shapeSize, m_documentSize;
     int m_dirty;

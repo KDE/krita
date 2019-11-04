@@ -74,6 +74,7 @@
         QGridLayout *widgetLayout {};
         KisViewManager *view{};
         bool showFilterGallery {true};
+        bool usedForMask {false};
     };
 
     KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent)
@@ -123,6 +124,7 @@
 
         if (d->filtersModel) delete d->filtersModel;
 
+        d->usedForMask = !showAll;
         d->paintDevice = _paintDevice;
         d->thumb = d->paintDevice->createThumbnailDevice(100, 100);
         d->thumb->setDefaultBounds(new ThumbnailBounds());
@@ -208,7 +210,7 @@
         }
 
         KisConfigWidget* widget =
-                d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice);
+                d->currentFilter->createConfigurationWidget(d->uiFilterSelector.centralWidgetHolder, d->paintDevice, d->usedForMask);
 
         if (!widget) { // No widget, so display a label instead
             d->uiFilterSelector.comboBoxPresets->setEnabled(false);

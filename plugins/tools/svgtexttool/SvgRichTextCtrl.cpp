@@ -22,7 +22,7 @@
 #include <QMimeData>
 
 SvgRichTextCtrl::SvgRichTextCtrl(QWidget* parent /*= nullptr*/)
-: QTextEdit(parent)
+    : QTextEdit(parent)
 {
 }
 

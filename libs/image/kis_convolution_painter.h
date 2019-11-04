@@ -47,6 +47,15 @@ public:
     KisConvolutionPainter(KisPaintDeviceSP device);
     KisConvolutionPainter(KisPaintDeviceSP device, KisSelectionSP selection);
 
+    enum TestingEnginePreference {
+        NONE,
+        SPATIAL,
+        FFTW
+    };
+
+
+    KisConvolutionPainter(KisPaintDeviceSP device, TestingEnginePreference enginePreference);
+
     /**
      * Convolve all channels in src using the specified kernel; there is only one kernel for all
      * channels possible. By default the border pixels are not convolved, that is, convolving
@@ -74,16 +83,11 @@ public:
      */
     bool needsTransaction(const KisConvolutionKernelSP kernel) const;
 
+    static bool supportsFFTW();
+
 protected:
     friend class KisConvolutionPainterTest;
-    enum TestingEnginePreference {
-        NONE,
-        SPATIAL,
-        FFTW
-    };
 
-
-    KisConvolutionPainter(KisPaintDeviceSP device, TestingEnginePreference enginePreference);
 
 
 private:
@@ -92,7 +96,7 @@ private:
                                                     KisPainter *painter,
                                                     KoUpdater *progress);
 
-     bool useFFTImplemenation(const KisConvolutionKernelSP kernel) const;
+     bool useFFTImplementation(const KisConvolutionKernelSP kernel) const;
 
 private:
     TestingEnginePreference m_enginePreference;

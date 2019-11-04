@@ -40,9 +40,9 @@ public:
     }
 
 public:
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 protected:
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration() const override;
 
 private:
     inline int Lim_Max(int Now, int Up, int Max) const;

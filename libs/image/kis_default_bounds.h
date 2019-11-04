@@ -53,13 +53,17 @@ private:
     Private * const m_d;
 };
 
-class KRITAIMAGE_EXPORT KisSelectionDefaultBounds : public KisDefaultBounds
+class KRITAIMAGE_EXPORT KisSelectionDefaultBounds : public KisDefaultBoundsBase
 {
 public:
-    KisSelectionDefaultBounds(KisPaintDeviceSP parentPaintDevice, KisImageWSP image = 0);
+    KisSelectionDefaultBounds(KisPaintDeviceSP parentPaintDevice);
     ~KisSelectionDefaultBounds() override;
 
     QRect bounds() const override;
+    bool wrapAroundMode() const override;
+    int currentLevelOfDetail() const override;
+    int currentTime() const override;
+    bool externalFrameActive() const override;
 
 private:
     Q_DISABLE_COPY(KisSelectionDefaultBounds)

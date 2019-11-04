@@ -97,7 +97,7 @@ private:
      * The rect that was requested during creation
      * of the patch. It equals to patchRect withount
      * borders
-     * These borders are introdused for more accurate
+     * These borders are introduced for more accurate
      * smooth scaling to reduce border effects
      * (IN m_image PIXELS, relative to m_image's topLeft);
 

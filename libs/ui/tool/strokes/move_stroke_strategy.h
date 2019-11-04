@@ -20,24 +20,28 @@
 #define __MOVE_STROKE_STRATEGY_H
 
 #include <QHash>
+#include <QObject>
 
 #include "kritaui_export.h"
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_types.h"
 #include "kis_lod_transform.h"
+#include <QElapsedTimer>
+#include "KisAsyncronousStrokeUpdateHelper.h"
 
 
 class KisUpdatesFacade;
 class KisPostExecutionUndoAdapter;
 
 
-class KRITAUI_EXPORT MoveStrokeStrategy : public KisStrokeStrategyUndoCommandBased
+class KRITAUI_EXPORT MoveStrokeStrategy : public QObject, public KisStrokeStrategyUndoCommandBased
 {
+    Q_OBJECT
 public:
     class Data : public KisStrokeJobData {
     public:
         Data(QPoint _offset)
-            : KisStrokeJobData(SEQUENTIAL, EXCLUSIVE),
+            : KisStrokeJobData(SEQUENTIAL, NORMAL),
               offset(_offset)
         {
         }
@@ -57,6 +61,13 @@ public:
         }
     };
 
+    struct BarrierUpdateData : public KisAsyncronousStrokeUpdateHelper::UpdateData
+    {
+        BarrierUpdateData(bool forceUpdate)
+            : KisAsyncronousStrokeUpdateHelper::UpdateData(forceUpdate, BARRIER, EXCLUSIVE)
+        {}
+    };
+
 public:
     MoveStrokeStrategy(KisNodeList nodes, KisUpdatesFacade *updatesFacade,
                        KisStrokeUndoFacade *undoFacade);
@@ -68,15 +79,19 @@ public:
 
     KisStrokeStrategy* createLodClone(int levelOfDetail) override;
 
+Q_SIGNALS:
+    void sigHandlesRectCalculated(const QRect &handlesRect);
+
 private:
     MoveStrokeStrategy(const MoveStrokeStrategy &rhs);
     void setUndoEnabled(bool value);
     void setUpdatesEnabled(bool value);
 private:
-    void moveAndUpdate(QPoint offset);
     QRect moveNode(KisNodeSP node, QPoint offset);
     void addMoveCommands(KisNodeSP node, KUndo2Command *parent);
     void saveInitialNodeOffsets(KisNodeSP node);
+    void doCanvasUpdate(bool forceUpdate = false);
+    void tryPostUpdateJob(bool forceUpdate);
 
 private:
     KisNodeList m_nodes;
@@ -87,6 +102,10 @@ private:
     QHash<KisNodeSP, QRect> m_dirtyRects;
     bool m_updatesEnabled;
     QHash<KisNodeSP, QPoint> m_initialNodeOffsets;
+
+    QElapsedTimer m_updateTimer;
+    bool m_hasPostponedJob = false;
+    const int m_updateInterval = 30;
 };
 
 #endif /* __MOVE_STROKE_STRATEGY_H */

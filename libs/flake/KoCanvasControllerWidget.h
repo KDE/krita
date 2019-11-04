@@ -32,7 +32,7 @@
 
 class KoShape;
 class KoCanvasBase;
-
+class KoCanvasSupervisor;
 /**
  * KoCanvasController implementation for QWidget based canvases
  */
@@ -46,7 +46,7 @@ public:
      * @param actionCollection the action collection for this widget
      * @param parent the parent this widget will belong to
      */
-    explicit KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent = 0);
+    explicit KoCanvasControllerWidget(KActionCollection * actionCollection, KoCanvasSupervisor *observerProvider, QWidget *parent = 0);
     ~KoCanvasControllerWidget() override;
 
     /**
@@ -54,7 +54,7 @@ public:
      */
     void scrollContentsBy(int dx, int dy) override;
 
-    QSize viewportSize() const override;
+    QSizeF viewportSize() const override;
 
     /// Reimplemented from KoCanvasController
 
@@ -134,7 +134,7 @@ public:
      */
     void setScrollBarValue(const QPoint &value) override;
 
-    void updateDocumentSize(const QSize &sz, bool recalculateCenter = true) override;
+    void updateDocumentSize(const QSizeF &sz, bool recalculateCenter = true) override;
 
     /**
      * Set mouse wheel to zoom behaviour

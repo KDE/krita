@@ -30,6 +30,10 @@
 #include <kis_types.h>
 #include <kis_kra_saver.h>
 #include <kis_kra_loader.h>
+#include <KoProgressUpdater.h>
+#include <QPointer>
+#include <KoUpdater.h>
+
 
 class KisDocument;
 
@@ -40,10 +44,11 @@ class KraConverter : public QObject
 public:
 
     KraConverter(KisDocument *doc);
+    KraConverter(KisDocument *doc, QPointer<KoUpdater> updater);
     ~KraConverter() override;
 
-    KisImageBuilder_Result buildImage(QIODevice *io);
-    KisImageBuilder_Result buildFile(QIODevice *io, const QString &filename);
+    KisImportExportErrorCode buildImage(QIODevice *io);
+    KisImportExportErrorCode buildFile(QIODevice *io, const QString &filename);
     /**
      * Retrieve the constructed image
      */
@@ -57,13 +62,15 @@ public Q_SLOTS:
 
 private:
 
-    bool saveRootDocuments(KoStore *store);
+    KisImportExportErrorCode saveRootDocuments(KoStore *store);
     bool saveToStream(QIODevice *dev);
     QDomDocument createDomDocument();
-    bool savePreview(KoStore *store);
-    bool oldLoadAndParse(KoStore *store, const QString &filename, KoXmlDocument &xmldoc);
-    bool loadXML(const KoXmlDocument &doc, KoStore *store);
+    KisImportExportErrorCode savePreview(KoStore *store);
+    KisImportExportErrorCode oldLoadAndParse(KoStore *store, const QString &filename, KoXmlDocument &xmldoc);
+    KisImportExportErrorCode loadXML(const KoXmlDocument &doc, KoStore *store);
     bool completeLoading(KoStore *store);
+
+    void setProgress(int progress);
 
     KisDocument *m_doc {0};
     KisImageSP m_image;
@@ -75,6 +82,7 @@ private:
     KoStore *m_store {0};
     KisKraSaver *m_kraSaver {0};
     KisKraLoader *m_kraLoader {0};
+    QPointer<KoUpdater> m_updater;
 };
 
 #endif

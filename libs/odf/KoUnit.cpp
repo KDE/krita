@@ -135,32 +135,46 @@ int KoUnit::indexInListForUi(ListOptions listOptions) const
     return result;
 }
 
-qreal KoUnit::toUserValue(qreal ptValue) const
+
+
+qreal KoUnit::toUserValueRounded(const qreal value) const
 {
+    qreal userValue = toUserValuePrecise(value);
+    qreal rounding = 1.0;
+
     switch (m_type) {
-    case Millimeter:
-        return toMillimeter(ptValue);
-    case Centimeter:
-        return toCentimeter(ptValue);
-    case Decimeter:
-        return toDecimeter(ptValue);
-    case Inch:
-        return toInch(ptValue);
-    case Pica:
-        return toPica(ptValue);
-    case Cicero:
-        return toCicero(ptValue);
     case Pixel:
-        return ptValue * m_pixelConversion;
+        return userValue; // no rounding for Pixel value
+    case Millimeter:
+        rounding = MM_ROUNDING;
+        break;
+    case Centimeter:
+        rounding = CM_ROUNDING;
+        break;
+    case Decimeter:
+        rounding = DM_ROUNDING;
+        break;
+    case Inch:
+        rounding = IN_ROUNDING;
+        break;
+    case Pica:
+        rounding = PI_ROUNDING;
+        break;
+    case Cicero:
+        rounding = CC_ROUNDING;
+        break;
     case Point:
     default:
-        return toPoint(ptValue);
+        rounding = PT_ROUNDING;
     }
+
+
+    return floor(userValue * rounding) / rounding;
 }
 
-qreal KoUnit::ptToUnit(const qreal ptValue, const KoUnit &unit)
+qreal KoUnit::toUserValuePrecise(const qreal ptValue) const
 {
-    switch (unit.m_type) {
+    switch (m_type) {
     case Millimeter:
         return POINT_TO_MM(ptValue);
     case Centimeter:
@@ -174,10 +188,22 @@ qreal KoUnit::ptToUnit(const qreal ptValue, const KoUnit &unit)
     case Cicero:
         return POINT_TO_CC(ptValue);
     case Pixel:
-        return ptValue * unit.m_pixelConversion;
+        return ptValue * m_pixelConversion;
     case Point:
     default:
         return ptValue;
+    }
+}
+
+
+
+qreal KoUnit::toUserValue(qreal ptValue, bool rounding) const
+{
+    if (rounding) {
+        return toUserValueRounded(ptValue);
+    }
+    else {
+        return toUserValuePrecise(ptValue);
     }
 }
 

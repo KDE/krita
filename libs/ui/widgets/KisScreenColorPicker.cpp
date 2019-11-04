@@ -33,7 +33,9 @@
 #include "kis_icon.h"
 #include "kis_image.h"
 #include "kis_wrapped_rect.h"
+#include "KisDocument.h"
 #include "KisPart.h"
+#include "KisReferenceImagesLayer.h"
 #include "KisScreenColorPicker.h"
 #include "KisDlgInternalColorSelector.h"
 
@@ -133,14 +135,25 @@ KoColor KisScreenColorPicker::grabScreenColor(const QPoint &p)
 {
     // First check whether we're clicking on a Krita window for some real color picking
     Q_FOREACH(KisView *view, KisPart::instance()->views()) {
-        QWidget *canvasWidget = view->canvasBase()->canvasWidget();
+        const KisCanvas2 *canvas = view->canvasBase();
+        const QWidget *canvasWidget = canvas->canvasWidget();
         QPoint widgetPoint = canvasWidget->mapFromGlobal(p);
 
-        if (canvasWidget->rect().contains(widgetPoint)) {
-            QPointF imagePoint = view->canvasBase()->coordinatesConverter()->widgetToImage(widgetPoint);
+        if (canvasWidget->visibleRegion().contains(widgetPoint)) {
             KisImageWSP image = view->image();
 
             if (image) {
+                QPointF imagePoint = canvas->coordinatesConverter()->widgetToImage(widgetPoint);
+                // pick from reference images first
+                KisSharedPtr<KisReferenceImagesLayer> referenceImageLayer = view->document()->referenceImagesLayer();
+
+                if (referenceImageLayer && canvas->referenceImagesDecoration()->visible()) {
+                    QColor color = referenceImageLayer->getPixel(imagePoint);
+                    if (color.isValid()) {
+                        return KoColor(color, image->colorSpace());
+                    }
+                }
+
                 if (image->wrapAroundModePermitted()) {
                     imagePoint = KisWrappedRect::ptToWrappedPt(imagePoint.toPoint(), image->bounds());
                 }
@@ -191,11 +204,7 @@ bool KisScreenColorPicker::handleColorPickingMouseButtonRelease(QMouseEvent *e)
 
 bool KisScreenColorPicker::handleColorPickingKeyPress(QKeyEvent *e)
 {
-#if QT_VERSION >= 0x050600
     if (e->matches(QKeySequence::Cancel)) {
-#else
-    if (e->key() == Qt::Key_Escape) {
-#endif
         releaseColorPicking();
         setCurrentColor(m_d->beforeScreenColorPicking);
     } else if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {

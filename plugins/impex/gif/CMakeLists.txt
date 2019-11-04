@@ -1,3 +1,5 @@
+add_subdirectory(tests)
+
 set(kritagifexport_SOURCES
     kis_gif_export.cpp
     qgiflibhandler.cpp

@@ -150,6 +150,17 @@ public:
     void update(const QRectF &rect, const KoShape *shape = 0, bool selectionHandles = false);
 
     /**
+     * Block all updates initiated with update() call. The incoming updates will
+     * be dropped completely.
+     */
+    void setUpdatesBlocked(bool value);
+
+    /**
+     * \see setUpdatesBlocked()
+     */
+    bool updatesBlocked() const;
+
+    /**
      * Update the tree for finding the shapes.
      * This will remove the shape from the tree and will reinsert it again.
      * The update to the tree will be posponed until it is needed so that successive calls
@@ -209,6 +220,7 @@ private:
     class Private;
     Private * const d;
     Q_PRIVATE_SLOT(d, void updateTree())
+    Q_PRIVATE_SLOT(d, void forwardCompressedUdpate())
 };
 
 #endif

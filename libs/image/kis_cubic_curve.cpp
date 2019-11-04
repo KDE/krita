@@ -411,9 +411,14 @@ void KisCubicCurve::removePoint(int idx)
 bool KisCubicCurve::isIdentity() const
 {
     const QList<QPointF> &points = d->data->points;
+    const int size = points.size();
 
-    Q_FOREACH (const QPointF &pt, points) {
-        if (!qFuzzyCompare(pt.x(), pt.y())) {
+    if (points[0] != QPointF(0,0) || points[size-1] != QPointF(1,1)) {
+        return false;
+    }
+
+    for (int i = 1; i < size-1; i++) {
+        if (!qFuzzyCompare(points[i].x(), points[i].y())) {
             return false;
         }
     }

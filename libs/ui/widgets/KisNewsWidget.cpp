@@ -27,6 +27,7 @@
 
 #include "kis_config.h"
 #include "KisMultiFeedRSSModel.h"
+#include "QRegularExpression"
 
 
 KisNewsDelegate::KisNewsDelegate(QObject *parent)
@@ -78,15 +79,40 @@ QSize KisNewsDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
 
 KisNewsWidget::KisNewsWidget(QWidget *parent)
     : QWidget(parent)
+    , m_getNews(false)
+    , m_rssModel(0)
+    , m_needsVersionUpdate(false)
 {
     setupUi(this);
     m_rssModel = new MultiFeedRssModel(this);
+    connect(m_rssModel, SIGNAL(feedDataChanged()), this, SLOT(rssDataChanged()));
+
 
     setCursor(Qt::PointingHandCursor);
 
     listNews->setModel(m_rssModel);
     listNews->setItemDelegate(new KisNewsDelegate(listNews));
     connect(listNews, SIGNAL(clicked(QModelIndex)), this, SLOT(itemSelected(QModelIndex)));
+}
+
+void KisNewsWidget::setAnalyticsTracking(QString text)
+{
+    m_analyticsTrackingParameters = text;
+}
+
+bool KisNewsWidget::hasUpdateAvailable()
+{
+    return m_needsVersionUpdate;
+}
+
+QString KisNewsWidget::versionNumber()
+{
+    return m_newVersionNumber;
+}
+
+QString KisNewsWidget::versionLink()
+{
+    return m_newVersionLink;
 }
 
 void KisNewsWidget::toggleNews(bool toggle)
@@ -106,6 +132,98 @@ void KisNewsWidget::itemSelected(const QModelIndex &idx)
 {
     if (idx.isValid()) {
         QString link = idx.data(RssRoles::LinkRole).toString();
-        QDesktopServices::openUrl(QUrl(link));
+
+        // append query string for analytics tracking if we set it
+        if (m_analyticsTrackingParameters != "") {
+
+            // use title in analytics query string
+            QString linkTitle = idx.data(RssRoles::TitleRole).toString();
+            linkTitle = linkTitle.simplified(); // trims and makes 1 white space
+            linkTitle = linkTitle.replace(" ", "");
+
+            m_analyticsTrackingParameters = m_analyticsTrackingParameters.append(linkTitle);
+            QDesktopServices::openUrl(QUrl(link.append(m_analyticsTrackingParameters)));
+
+        } else {
+            QDesktopServices::openUrl(QUrl(link));
+        }
+
+
+    }
+}
+
+void KisNewsWidget::rssDataChanged()
+{
+
+    // grab the latest release post and URL for reference later
+    // if we need to update
+    for (int i = 0; i < m_rssModel->rowCount(); i++)
+    {
+       const QModelIndex &idx = m_rssModel->index(i);
+
+       if (idx.isValid()) {
+
+           // only use official release announcements to get version number
+           if ( idx.data(RssRoles::CategoryRole).toString() !=  "Official Release") {
+               continue;
+           }
+
+           QString linkTitle = idx.data(RssRoles::TitleRole).toString();
+
+           // regex to capture version number
+           QRegularExpression versionRegex("\\d\\.\\d\\.?\\d?\\.?\\d");
+           QRegularExpressionMatch matched = versionRegex.match(linkTitle);
+
+           // only take the top match for release version since that is the newest
+           if (matched.hasMatch()) {
+               m_newVersionNumber = matched.captured(0);
+               m_newVersionLink = idx.data(RssRoles::LinkRole).toString();
+               break;
+           }
+       }
+    }
+
+    // see if we need to update our version, or we are on a dev version
+    calculateVersionUpdateStatus();
+
+    emit newsDataChanged();
+}
+
+void KisNewsWidget::calculateVersionUpdateStatus()
+{
+    // do nothing if we are in dev version.
+    QString currentVersionString = qApp->applicationVersion();
+    if (currentVersionString.contains("git")) {
+        return;
+    }
+
+    QList<int> currentVersionParts;
+    Q_FOREACH (QString number, currentVersionString.split(".")) {
+        currentVersionParts.append(number.toInt());
+    }
+
+    QList<int> onlineReleaseAnnouncement;
+    Q_FOREACH (QString number, m_newVersionNumber.split(".")) {
+        onlineReleaseAnnouncement.append(number.toInt());
+    }
+
+    while (onlineReleaseAnnouncement.size() < 4) {
+        onlineReleaseAnnouncement.append(0);
+    }
+
+    while (currentVersionParts.size() < 4) {
+        currentVersionParts.append(0);
+    }
+
+    // Check versions from mayor to minor
+    // We don't assume onlineRelease version is always equal or higher.
+    bool makeUpdate = true;
+    for (int i = 0; i <= 3; i++) {
+        if (onlineReleaseAnnouncement.at(i) > currentVersionParts.at(i)) {
+            m_needsVersionUpdate = (true & makeUpdate);
+            return;
+        } else if (onlineReleaseAnnouncement.at(i) < currentVersionParts.at(i)) {
+            makeUpdate &= false;
+        }
     }
 }

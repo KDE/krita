@@ -121,7 +121,7 @@ void KisStrokeSpeedMonitor::notifyStrokeFinished(qreal cursorSpeed, qreal render
         m_d->lastPresetName == preset->name() &&
         qFuzzyCompare(m_d->lastPresetSize, preset->settings()->paintOpSize());
 
-    ENTER_FUNCTION() << ppVar(isSamePreset);
+    //ENTER_FUNCTION() << ppVar(isSamePreset);
 
     if (!isSamePreset) {
         resetAccumulatedValues();

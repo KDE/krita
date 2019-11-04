@@ -24,11 +24,14 @@
 #include <KoCompositeOpRegistry.h>
 #include "kis_painter.h"
 #include "kis_projection_leaf.h"
+#include "kis_cached_paint_device.h"
+#include "kis_sequential_iterator.h"
 
 
 struct KisLayerProjectionPlane::Private
 {
     KisLayer *layer;
+    KisCachedPaintDevice cachedDevice;
 };
 
 
@@ -47,7 +50,7 @@ QRect KisLayerProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNo
     return m_d->layer->updateProjection(rect, filthyNode);
 }
 
-void KisLayerProjectionPlane::apply(KisPainter *painter, const QRect &rect)
+void KisLayerProjectionPlane::applyImpl(KisPainter *painter, const QRect &rect, bool maxOutAlpha)
 {
     KisPaintDeviceSP device = m_d->layer->projection();
     if (!device) return;
@@ -93,10 +96,39 @@ void KisLayerProjectionPlane::apply(KisPainter *painter, const QRect &rect)
         }
     }
 
+    if (maxOutAlpha) {
+        KisPaintDeviceSP tmp = m_d->cachedDevice.getDevice(device);
+        tmp->makeCloneFromRough(device, needRect);
+        const KoColorSpace *cs = tmp->colorSpace();
+
+        KisSequentialIterator it(tmp, needRect);
+        int numConseqPixels = it.nConseqPixels();
+        while (it.nextPixels(numConseqPixels)) {
+            numConseqPixels = it.nConseqPixels();
+            cs->setOpacity(it.rawData(), quint8(255), numConseqPixels);
+        }
+
+        device = tmp;
+    }
+
     painter->setChannelFlags(channelFlags);
     painter->setCompositeOp(m_d->layer->compositeOpId());
     painter->setOpacity(m_d->layer->projectionLeaf()->opacity());
     painter->bitBlt(needRect.topLeft(), device, needRect);
+
+    if (maxOutAlpha) {
+        m_d->cachedDevice.putDevice(device);
+    }
+}
+
+void KisLayerProjectionPlane::apply(KisPainter *painter, const QRect &rect)
+{
+    applyImpl(painter, rect, false);
+}
+
+void KisLayerProjectionPlane::applyMaxOutAlpha(KisPainter *painter, const QRect &rect)
+{
+    applyImpl(painter, rect, true);
 }
 
 KisPaintDeviceList KisLayerProjectionPlane::getLodCapableDevices() const
@@ -117,5 +149,10 @@ QRect KisLayerProjectionPlane::changeRect(const QRect &rect, KisLayer::PositionT
 QRect KisLayerProjectionPlane::accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
 {
     return m_d->layer->accessRect(rect, pos);
+}
+
+QRect KisLayerProjectionPlane::needRectForOriginal(const QRect &rect) const
+{
+    return m_d->layer->needRectForOriginal(rect);
 }
 

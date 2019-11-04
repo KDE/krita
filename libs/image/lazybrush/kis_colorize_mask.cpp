@@ -110,7 +110,6 @@ struct KisColorizeMask::Private
     bool showColoring;
 
     KisCachedSelection cachedSelection;
-    KisCachedSelection cachedConversionSelection;
 
     bool needsUpdate;
     int originalSequenceNumber;
@@ -276,8 +275,8 @@ KUndo2Command* KisColorizeMask::setColorSpace(const KoColorSpace * dstColorSpace
 
     CompositeCommand *composite = new CompositeCommand();
 
-    composite->addCommand(m_d->fakePaintDevice->convertTo(dstColorSpace, renderingIntent, conversionFlags));
-    composite->addCommand(m_d->coloringProjection->convertTo(dstColorSpace, renderingIntent, conversionFlags));
+    m_d->fakePaintDevice->convertTo(dstColorSpace, renderingIntent, conversionFlags, composite);
+    m_d->coloringProjection->convertTo(dstColorSpace, renderingIntent, conversionFlags, composite);
 
     KUndo2Command *strokesConversionCommand =
         new SetKeyStrokesColorSpaceCommand(
@@ -377,7 +376,15 @@ void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
 
 void KisColorizeMask::slotUpdateOnDirtyParent()
 {
-    KIS_ASSERT_RECOVER_RETURN(parent());
+    if (!parent()) {
+        // When the colorize mask is being merged,
+        // the update is performed for all the layers,
+        // so the invisible areas around the canvas are included in the merged layer.
+        // Colorize Mask gets the info that its parent is "dirty" (needs updating),
+        // but when it arrives, the parent doesn't exists anymore and is set to null.
+        // Colorize Mask doesn't work outside of the canvas anyway (at least in time of writing).
+        return;
+    }
     KisPaintDeviceSP src = parent()->original();
     KIS_ASSERT_RECOVER_RETURN(src);
 
@@ -545,9 +552,11 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
     if (m_d->showKeyStrokes) {
         KisIndirectPaintingSupport::ReadLocker locker(this);
 
-        KisSelectionSP selection = m_d->cachedSelection.getSelection();
-        KisSelectionSP conversionSelection = m_d->cachedConversionSelection.getSelection();
-        KisPixelSelectionSP tempSelection = conversionSelection->pixelSelection();
+        KisCachedSelection::Guard s1(m_d->cachedSelection);
+        KisCachedSelection::Guard s2(m_d->cachedSelection);
+
+        KisSelectionSP selection = s1.selection();
+        KisPixelSelectionSP tempSelection = s2.selection()->pixelSelection();
 
         KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
         const bool isTemporaryTargetErasing = temporaryCompositeOp() == COMPOSITE_ERASE;
@@ -584,9 +593,6 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
 
             gc.fillSelection(rect, stroke.color);
         }
-
-        m_d->cachedSelection.putSelection(selection);
-        m_d->cachedSelection.putSelection(conversionSelection);
     }
 
     return rect;
@@ -815,14 +821,13 @@ void KisColorizeMask::writeMergeData(KisPainter *painter, KisPaintDeviceSP src)
             painter->bitBlt(rc.topLeft(), src, rc);
         }
     } else {
-        KisSelectionSP conversionSelection = m_d->cachedConversionSelection.getSelection();
-        KisPixelSelectionSP tempSelection = conversionSelection->pixelSelection();
+        KisCachedSelection::Guard s1(m_d->cachedSelection);
+        KisPixelSelectionSP tempSelection = s1.selection()->pixelSelection();
 
         Q_FOREACH (const QRect &rc, src->region().rects()) {
             tempSelection->copyAlphaFrom(src, rc);
             painter->bitBlt(rc.topLeft(), tempSelection, rc);
         }
-        m_d->cachedSelection.putSelection(conversionSelection);
     }
 }
 
@@ -1058,7 +1063,8 @@ void KisColorizeMask::rerenderFakePaintDevice()
     m_d->fakePaintDevice->clear();
     KisFillPainter gc(m_d->fakePaintDevice);
 
-    KisSelectionSP selection = m_d->cachedSelection.getSelection();
+    KisCachedSelection::Guard s1(m_d->cachedSelection);
+    KisSelectionSP selection = s1.selection();
 
     Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
         const QRect rect = stroke.dev->extent();
@@ -1067,8 +1073,6 @@ void KisColorizeMask::rerenderFakePaintDevice()
         gc.setSelection(selection);
         gc.fillSelection(rect, stroke.color);
     }
-
-    m_d->cachedSelection.putSelection(selection);
 }
 
 void KisColorizeMask::testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent)

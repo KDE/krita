@@ -38,7 +38,6 @@
 #include "KoInputDeviceHandlerRegistry.h"
 #include "KoInputDeviceHandlerEvent.h"
 #include "KoPointerEvent.h"
-#include "tools/KoCreateShapesTool.h"
 #include "tools/KoZoomTool.h"
 #include "kis_action_registry.h"
 #include "KoToolFactoryBase.h"
@@ -216,8 +215,6 @@ QList<KoToolAction*> KoToolManager::toolActionList() const
     QList<KoToolAction*> answer;
     answer.reserve(d->tools.count());
     Q_FOREACH (ToolHelper *tool, d->tools) {
-        if (tool->id() == KoCreateShapesTool_ID)
-            continue; // don't show this one.
         answer.append(tool->toolAction());
     }
     return answer;
@@ -323,21 +320,6 @@ void KoToolManager::switchBackRequested()
     d->switchTool(d->canvasData->stack.pop(), false);
 }
 
-KoCreateShapesTool * KoToolManager::shapeCreatorTool(KoCanvasBase *canvas) const
-{
-    Q_ASSERT(canvas);
-    Q_FOREACH (KoCanvasController *controller, d->canvasses.keys()) {
-        if (controller->canvas() == canvas) {
-            KoCreateShapesTool *createTool = dynamic_cast<KoCreateShapesTool*>
-                    (d->canvasData->allTools.value(KoCreateShapesTool_ID));
-            Q_ASSERT(createTool /* ID changed? */);
-            return createTool;
-        }
-    }
-    Q_ASSERT(0);   // this should not happen
-    return 0;
-}
-
 KoToolBase *KoToolManager::toolById(KoCanvasBase *canvas, const QString &id) const
 {
     Q_ASSERT(canvas);
@@ -365,7 +347,6 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
     QString toolType = KoInteractionTool_ID;
     int prio = INT_MAX;
     Q_FOREACH (ToolHelper *helper, d->tools) {
-        if (helper->id() == KoCreateShapesTool_ID) continue;
         if (helper->priority() >= prio)
             continue;
 
@@ -464,10 +445,6 @@ CanvasData *KoToolManager::Private::createCanvasData(KoCanvasController *control
             toolsHash.insert(toolPair.first, toolPair.second);
         }
     }
-    KoCreateShapesTool *createShapesTool = dynamic_cast<KoCreateShapesTool*>(toolsHash.value(KoCreateShapesTool_ID));
-    KIS_ASSERT(createShapesTool);
-    QString id = KoShapeRegistry::instance()->keys()[0];
-    createShapesTool->setShapeId(id);
 
     CanvasData *cd = new CanvasData(controller, device);
     cd->allTools = toolsHash;
@@ -727,6 +704,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
         if (newCanvas) {
             switchCanvasData(canvasses.value(newCanvas).first());
         } else {
+            disconnectActiveTool();
             emit q->toolOptionWidgetsChanged(controller, QList<QPointer<QWidget> >());
             // as a last resort just set a blank one
             canvasData = 0;

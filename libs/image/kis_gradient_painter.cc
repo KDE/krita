@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (c) 2019 Miguel Lopez <reptillia39@live.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -365,6 +366,106 @@ double ConicalSymetricGradientStrategy::valueAt(double x, double y) const
     return t;
 }
 
+class SpiralGradientStrategy : public KisGradientShapeStrategy
+{
+public:
+   SpiralGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
+
+   double valueAt(double x, double y) const override;
+
+protected:
+   double m_vectorAngle;
+    double m_radius;
+};
+
+SpiralGradientStrategy::SpiralGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
+       : KisGradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
+{
+    double dx = gradientVectorEnd.x() - gradientVectorStart.x();
+    double dy = gradientVectorEnd.y() - gradientVectorStart.y();
+
+    // Get angle from 0 to 2 PI.
+    m_vectorAngle = atan2(dy, dx) + M_PI;
+    m_radius = sqrt((dx * dx) + (dy * dy));
+};
+
+double SpiralGradientStrategy::valueAt(double x, double y) const
+{
+    double dx = x - m_gradientVectorStart.x();
+    double dy = y - m_gradientVectorStart.y();
+
+    double distance = sqrt((dx * dx) + (dy * dy));
+    double angle = atan2(dy, dx) + M_PI;
+
+    double t;
+    angle -= m_vectorAngle;
+
+    if (m_radius < DBL_EPSILON) {
+        t = 0;
+    } else {
+        t = distance / m_radius;
+    }
+
+    if (angle < 0) {
+        angle += 2 * M_PI;
+    }
+
+    t += angle / (2 * M_PI);
+
+    return t;
+
+};
+
+class ReverseSpiralGradientStrategy : public KisGradientShapeStrategy
+{
+public:
+   ReverseSpiralGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd);
+
+   double valueAt(double x, double y) const override;
+
+protected:
+   double m_vectorAngle;
+    double m_radius;
+};
+
+ReverseSpiralGradientStrategy::ReverseSpiralGradientStrategy(const QPointF& gradientVectorStart, const QPointF& gradientVectorEnd)
+       : KisGradientShapeStrategy(gradientVectorStart, gradientVectorEnd)
+{
+    double dx = gradientVectorEnd.x() - gradientVectorStart.x();
+    double dy = gradientVectorEnd.y() - gradientVectorStart.y();
+
+    // Get angle from 0 to 2 PI.
+    m_vectorAngle = atan2(dy, dx) + M_PI;
+    m_radius = sqrt((dx * dx) + (dy * dy));
+};
+
+double ReverseSpiralGradientStrategy::valueAt(double x, double y) const
+{
+    double dx = x - m_gradientVectorStart.x();
+    double dy = y - m_gradientVectorStart.y();
+
+    double distance = sqrt((dx * dx) + (dy * dy));
+    double angle = atan2(dy, dx) + M_PI;
+
+    double t;
+    angle -= m_vectorAngle;
+
+    if (m_radius < DBL_EPSILON) {
+        t = 0;
+    } else {
+        t = distance / m_radius;
+    }
+
+    if (angle < 0) {
+        angle += 2 * M_PI;
+    }
+
+    //Reverse direction of spiral gradient
+    t += 1 - (angle / (2 * M_PI));
+
+    return t;
+
+};
 
 class GradientRepeatStrategy
 {
@@ -497,6 +598,50 @@ double GradientRepeatAlternateStrategy::valueAt(double t) const
     }
 
     return value;
+}
+//Had to create this class to solve alternating mode for cases where values should be repeated for every HalfValues like for example, spirals...
+class GradientRepeatModuloDivisiveContinuousHalfStrategy : public GradientRepeatStrategy
+{
+public:
+    static GradientRepeatModuloDivisiveContinuousHalfStrategy *instance();
+
+    double valueAt(double t) const override;
+
+private:
+    GradientRepeatModuloDivisiveContinuousHalfStrategy() {}
+
+    static GradientRepeatModuloDivisiveContinuousHalfStrategy *m_instance;
+};
+
+GradientRepeatModuloDivisiveContinuousHalfStrategy *GradientRepeatModuloDivisiveContinuousHalfStrategy::m_instance = 0;
+
+GradientRepeatModuloDivisiveContinuousHalfStrategy *GradientRepeatModuloDivisiveContinuousHalfStrategy::instance()
+{
+    if (m_instance == 0) {
+        m_instance = new GradientRepeatModuloDivisiveContinuousHalfStrategy();
+        Q_CHECK_PTR(m_instance);
+    }
+
+    return m_instance;
+}
+
+// Output is 0 to 1, 1 to 0, 0 to 1, 1 to 0 per HalfValues
+double GradientRepeatModuloDivisiveContinuousHalfStrategy::valueAt(double t) const
+{
+    if (t < 0) {
+        t = -t;
+    }
+
+    int i = static_cast<int>(t*2);
+    int ti = static_cast<int>(t);
+
+    double value = t - ti;
+
+    if (i % 2 == 1) {
+        value = 1 - value;
+    }
+
+    return value*2;
 }
 }
 
@@ -678,6 +823,20 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         m_d->processRegions << r;
         break;
     }
+    case GradientShapeSpiral: {
+        Private::ProcessRegion r(toQShared(new SpiralGradientStrategy(gradientVectorStart, gradientVectorEnd)),
+                                 requestedRect);
+        m_d->processRegions.clear();
+        m_d->processRegions << r;
+        break;
+    }
+    case GradientShapeReverseSpiral: {
+        Private::ProcessRegion r(toQShared(new ReverseSpiralGradientStrategy(gradientVectorStart, gradientVectorEnd)),
+                                 requestedRect);
+        m_d->processRegions.clear();
+        m_d->processRegions << r;
+        break;
+    }
     case GradientShapePolygonal:
         precalculateShape();
         repeat = GradientRepeatNone;
@@ -694,7 +853,8 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
         repeatStrategy = GradientRepeatForwardsStrategy::instance();
         break;
     case GradientRepeatAlternate:
-        repeatStrategy = GradientRepeatAlternateStrategy::instance();
+        if (m_d->shape == GradientShapeSpiral || m_d->shape == GradientShapeReverseSpiral) {repeatStrategy = GradientRepeatModuloDivisiveContinuousHalfStrategy::instance();}
+        else {repeatStrategy = GradientRepeatAlternateStrategy::instance();}
         break;
     }
     Q_ASSERT(repeatStrategy != 0);

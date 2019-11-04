@@ -569,26 +569,29 @@ void KKeySequenceWidgetPrivate::updateShortcutDisplay()
             if (!s.isEmpty()) {
                 s.append(QLatin1Char(','));
             }
-            if (modifierKeys & Qt::META) {
-                s += KKeyServer::modToStringUser(Qt::META) + QLatin1Char('+');
+            if (modifierKeys & Qt::MetaModifier) {
+                s += QKeySequence(Qt::MetaModifier).toString(QKeySequence::NativeText);
             }
-#if defined(Q_OS_OSX)
-            if (modifierKeys & Qt::ALT) {
-                s += KKeyServer::modToStringUser(Qt::ALT) + QLatin1Char('+');
+#if defined(Q_OS_MAC)
+            if (modifierKeys & Qt::AltModifier) {
+                s += QKeySequence(Qt::AltModifier).toString(QKeySequence::NativeText);
             }
-            if (modifierKeys & Qt::CTRL) {
-                s += KKeyServer::modToStringUser(Qt::CTRL) + QLatin1Char('+');
+            if (modifierKeys & Qt::ControlModifier) {
+                s += QKeySequence(Qt::ControlModifier).toString(QKeySequence::NativeText);
             }
 #else
-            if (modifierKeys & Qt::CTRL) {
-                s += KKeyServer::modToStringUser(Qt::CTRL) + QLatin1Char('+');
+            if (modifierKeys & Qt::ControlModifier) {
+                s += QKeySequence(Qt::ControlModifier).toString(QKeySequence::NativeText);
             }
-            if (modifierKeys & Qt::ALT) {
-                s += KKeyServer::modToStringUser(Qt::ALT) + QLatin1Char('+');
+            if (modifierKeys & Qt::AltModifier) {
+                s += QKeySequence(Qt::AltModifier).toString(QKeySequence::NativeText);
             }
 #endif
-            if (modifierKeys & Qt::SHIFT) {
-                s += KKeyServer::modToStringUser(Qt::SHIFT) + QLatin1Char('+');
+            if (modifierKeys & Qt::ShiftModifier) {
+                s += QKeySequence(Qt::ShiftModifier).toString(QKeySequence::NativeText);
+            }
+            if (modifierKeys & Qt::KeypadModifier) {
+                s += QKeySequence(Qt::KeypadModifier).toString(QKeySequence::NativeText);
             }
 
         } else if (nKey == 0) {
@@ -605,6 +608,7 @@ void KKeySequenceWidgetPrivate::updateShortcutDisplay()
     s.prepend(QLatin1Char(' '));
     s.append(QLatin1Char(' '));
     keyButton->setText(s);
+
 }
 
 KKeySequenceButton::~KKeySequenceButton()

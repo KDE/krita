@@ -67,6 +67,8 @@
 #include <kis_cursor_override_hijacker.h>
 #include "kis_undo_stores.h"
 
+#include <kis_assert.h>
+
 namespace
 {
 
@@ -177,7 +179,7 @@ void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type
     dp += description_length;
     *dp++ = '\n';
 
-    formatString(dp, allocated_length - strlen(text[0].text), "%8lu ", profile_data.length());
+    formatString(dp, allocated_length - strlen(text[0].text), "%8lu ", (unsigned long)profile_data.length());
 
     dp += 8;
 
@@ -408,7 +410,7 @@ void _flush_fn(png_structp png_ptr)
     Q_UNUSED(png_ptr);
 }
 
-KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
+KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
 {
     dbgFile << "Start decoding PNG File";
 
@@ -421,7 +423,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     if (png_sig_cmp(signature, 0, 8) != 0) {
 #endif
         iod->close();
-        return (KisImageBuilder_RESULT_BAD_FETCH);
+        return (ImportExportCodes::FileFormatIncorrect);
     }
 
     // Initialize the internal structures
@@ -434,21 +436,21 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     if (!info_ptr) {
         png_destroy_read_struct(&png_ptr, (png_infopp)0, (png_infopp)0);
         iod->close();
-        return (KisImageBuilder_RESULT_FAILURE);
+        return (ImportExportCodes::Failure);
     }
 
     png_infop end_info = png_create_info_struct(png_ptr);
     if (!end_info) {
         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)0);
         iod->close();
-        return (KisImageBuilder_RESULT_FAILURE);
+        return (ImportExportCodes::Failure);
     }
 
     // Catch errors
     if (setjmp(png_jmpbuf(png_ptr))) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         iod->close();
-        return (KisImageBuilder_RESULT_FAILURE);
+        return (ImportExportCodes::Failure);
     }
 
     // Initialize the special
@@ -493,7 +495,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     if (csName.first.isEmpty()) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         iod->close();
-        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+        return ImportExportCodes::FormatColorSpaceUnsupported;
     }
     bool hasalpha = (color_type == PNG_COLOR_TYPE_RGB_ALPHA || color_type == PNG_COLOR_TYPE_GRAY_ALPHA);
 
@@ -633,7 +635,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
     if (cs == 0) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+        return ImportExportCodes::FormatColorSpaceUnsupported;
     }
 
     // Creating the KisImageSP
@@ -697,7 +699,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         dbgFile << "bad alloc: " << e.what();
         // Free only the already allocated png_byte instances.
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-        return (KisImageBuilder_RESULT_FAILURE);
+        return (ImportExportCodes::Failure);
     }
 
     // Read the palette if the file is indexed
@@ -801,7 +803,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         }
             break;
         default:
-            return KisImageBuilder_RESULT_UNSUPPORTED;
+            return ImportExportCodes::FormatFeaturesUnsupported;
         }
     }
     m_image->addNode(layer.data(), m_image->rootLayer().data());
@@ -811,11 +813,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
     // Freeing memory
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-    return KisImageBuilder_RESULT_OK;
+    return ImportExportCodes::OK;
 
 }
 
-KisImageBuilder_Result KisPNGConverter::buildImage(const QString &filename)
+KisImportExportErrorCode KisPNGConverter::buildImage(const QString &filename)
 {
     m_path = filename;
 
@@ -823,12 +825,12 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const QString &filename)
     if (fp.exists()) {
         if (!fp.open(QIODevice::ReadOnly)) {
             dbgFile << "Failed to open PNG File";
-            return (KisImageBuilder_RESULT_FAILURE);
+            return (ImportExportCodes::FileFormatIncorrect);
         }
 
         return buildImage(&fp);
     }
-    return (KisImageBuilder_RESULT_NOT_EXIST);
+    return (ImportExportCodes::FileNotExist);
 
 }
 
@@ -861,12 +863,11 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &im
 
         if (dev->colorSpace()->id() != "RGBA") {
             dev = new KisPaintDevice(*dev.data());
-            KUndo2Command *cmd = dev->convertTo(KoColorSpaceRegistry::instance()->rgb8());
-            delete cmd;
+            dev->convertTo(KoColorSpaceRegistry::instance()->rgb8());
         }
 
-        bool success = pngconv.buildFile(&io, imageRect, xRes, yRes, dev, annotIt, annotIt, options, metaDataStore);
-        if (success != KisImageBuilder_RESULT_OK) {
+        KisImportExportErrorCode success = pngconv.buildFile(&io, imageRect, xRes, yRes, dev, annotIt, annotIt, options, metaDataStore);
+        if (!success.isOk()) {
             dbgFile << "Saving PNG failed:" << filename;
             delete metaDataStore;
             return false;
@@ -885,25 +886,24 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &im
 }
 
 
-KisImageBuilder_Result KisPNGConverter::buildFile(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
+KisImportExportErrorCode KisPNGConverter::buildFile(const QString &filename, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
     dbgFile << "Start writing PNG File " << filename;
     // Open a QIODevice for writing
     QFile fp (filename);
     if (!fp.open(QIODevice::WriteOnly)) {
         dbgFile << "Failed to open PNG File for writing";
-        return (KisImageBuilder_RESULT_FAILURE);
+        return (KisImportExportErrorCannotWrite(fp.error()));
     }
 
-    KisImageBuilder_Result result = buildFile(&fp, imageRect, xRes, yRes, device, annotationsStart, annotationsEnd, options, metaData);
+    KisImportExportErrorCode result = buildFile(&fp, imageRect, xRes, yRes, device, annotationsStart, annotationsEnd, options, metaData);
 
     return result;
 }
 
-KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
+KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const QRect &imageRect, const qreal xRes, const qreal yRes, KisPaintDeviceSP device, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisPNGOptions options, KisMetaData::Store* metaData)
 {
-    if (!device)
-        return KisImageBuilder_RESULT_INVALID_ARG;
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(device, ImportExportCodes::InternalError);
 
     if (!options.alpha) {
         KisPaintDeviceSP tmp = new KisPaintDevice(device->colorSpace());
@@ -936,7 +936,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
         KisPaintDeviceSP tmp = new KisPaintDevice(device->colorSpace());
         tmp->makeCloneFromRough(device, imageRect);
-        delete tmp->convertTo(dstCS);
+        tmp->convertTo(dstCS);
 
         device = tmp;
 
@@ -954,14 +954,13 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     if (options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
         device = new KisPaintDevice(*device);
-        KUndo2Command *cmd = device->convertTo(cs);
-        delete cmd;
+        device->convertTo(cs);
     }
 
     // Initialize structures
     png_structp png_ptr =  png_create_write_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
     if (!png_ptr) {
-        return (KisImageBuilder_RESULT_FAILURE);
+        return (ImportExportCodes::Failure);
     }
 
 #if defined(PNG_SKIP_sRGB_CHECK_PROFILE) && defined(PNG_SET_OPTION_SUPPORTED)
@@ -976,13 +975,13 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
         png_destroy_write_struct(&png_ptr, (png_infopp)0);
-        return (KisImageBuilder_RESULT_FAILURE);
+        return (ImportExportCodes::Failure);
     }
 
     // If an error occurs during writing, libpng will jump here
     if (setjmp(png_jmpbuf(png_ptr))) {
         png_destroy_write_struct(&png_ptr, &info_ptr);
-        return (KisImageBuilder_RESULT_FAILURE);
+        return (ImportExportCodes::Failure);
     }
     // Initialize the writing
     //     png_init_io(png_ptr, fp);
@@ -1058,7 +1057,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
     int interlacetype = options.interlace ? PNG_INTERLACE_ADAM7 : PNG_INTERLACE_NONE;
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(color_type >= 0, KisImageBuilder_RESULT_FAILURE);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(color_type >= 0, ImportExportCodes::Failure);
 
     png_set_IHDR(png_ptr, info_ptr,
                  imageRect.width(),
@@ -1114,7 +1113,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
 
     // we should ensure we don't access non-existing palette object
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(palette || color_type != PNG_COLOR_TYPE_PALETTE, KisImageBuilder_RESULT_FAILURE);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(palette || color_type != PNG_COLOR_TYPE_PALETTE, ImportExportCodes::Failure);
 
     // set the palette
     if (color_type == PNG_COLOR_TYPE_PALETTE) {
@@ -1361,7 +1360,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
         }
             break;
         default:
-            return KisImageBuilder_RESULT_UNSUPPORTED;
+            return ImportExportCodes::FormatColorSpaceUnsupported;
         }
     }
 
@@ -1372,7 +1371,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
     // Free memory
     png_destroy_write_struct(&png_ptr, &info_ptr);
-    return KisImageBuilder_RESULT_OK;
+    return ImportExportCodes::OK;
 }
 
 

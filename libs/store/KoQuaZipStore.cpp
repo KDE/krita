@@ -56,7 +56,6 @@ KoQuaZipStore::KoQuaZipStore(const QString &_filename, KoStore::Mode _mode, cons
     , dd(new Private())
 {
     Q_D(KoStore);
-    debugStore << "KoQuaZipStore" << _filename;
     d->localFileName = _filename;
     dd->archive = new QuaZip(_filename);
     init(appIdentification);
@@ -67,8 +66,6 @@ KoQuaZipStore::KoQuaZipStore(QIODevice *dev, KoStore::Mode _mode, const QByteArr
     : KoStore(_mode, writeMimetype)
     , dd(new Private())
 {
-    Q_D(KoStore);
-    debugStore << "KoQuaZipStore" << dev;
     dd->archive = new QuaZip(dev);
     init(appIdentification);
 }
@@ -124,7 +121,6 @@ qint64 KoQuaZipStore::write(const char *_data, qint64 _len)
 
 QStringList KoQuaZipStore::directoryList() const
 {
-    debugStore << dd->archive->getFileNameList();
     return dd->archive->getFileNameList();
 }
 
@@ -136,6 +132,7 @@ void KoQuaZipStore::init(const QByteArray &appIdentification)
     if (appIdentification == "application/x-krita") {
         enableZip64 = KSharedConfig::openConfig()->group("").readEntry<bool>("UseZip64", false);
     }
+
     dd->archive->setZip64Enabled(enableZip64);
     dd->archive->setFileNameCodec("UTF-8");
     dd->usingSaveFile = dd->archive->getIoDevice() && dd->archive->getIoDevice()->inherits("QSaveFile");
@@ -219,10 +216,12 @@ bool KoQuaZipStore::openRead(const QString &name)
         fixedPath = currentPath() + '/' + fixedPath;
     }
 
-    debugStore << "openRead" << name << fixedPath << currentPath();
+    if (!d->substituteThis.isEmpty()) {
+        fixedPath = fixedPath.replace(d->substituteThis, d->substituteWith);
+    }
 
     if (!dd->archive->setCurrentFile(fixedPath)) {
-        //qWarning() << "\t\tCould not set current file" << dd->archive->getZipError() << fixedPath;
+        qWarning() << "\t\tCould not set current file" << dd->archive->getZipError() << fixedPath;
         return false;
     }
 
@@ -258,32 +257,35 @@ bool KoQuaZipStore::closeRead()
     return true;
 }
 
-bool KoQuaZipStore::enterRelativeDirectory(const QString &path)
+bool KoQuaZipStore::enterRelativeDirectory(const QString & /*path*/)
 {
-    debugStore << "enterRelativeDirectory()" << path;
     return true;
 }
 
 bool KoQuaZipStore::enterAbsoluteDirectory(const QString &path)
 {
-    debugStore << "enterAbsoluteDirectory()" << path;
-
     QString fixedPath = path;
     fixedPath.replace("//", "/");
 
     if (fixedPath.isEmpty()) {
         fixedPath = "/";
     }
+
     QuaZipDir currentDir (dd->archive, fixedPath);
+
     return currentDir.exists();
 }
 
 bool KoQuaZipStore::fileExists(const QString &absPath) const
 {
+    Q_D(const KoStore);
+
     QString fixedPath = absPath;
     fixedPath.replace("//", "/");
 
-    debugStore << "fileExists()" << fixedPath << dd->archive->getFileNameList().contains(fixedPath);
+    if (!d->substituteThis.isEmpty()) {
+        fixedPath = fixedPath.replace(d->substituteThis, d->substituteWith);
+    }
 
     return dd->archive->getFileNameList().contains(fixedPath);
 }

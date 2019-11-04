@@ -32,6 +32,8 @@
 #include <QRadioButton>
 #include "KisToolChangesTracker.h"
 #include "kis_signal_compressor.h"
+#include "kis_signal_auto_connection.h"
+#include "KisAsyncronousStrokeUpdateHelper.h"
 
 #include "kis_canvas2.h"
 
@@ -101,7 +103,6 @@ public:
     void endAction(KoPointerEvent *event);
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
-    void initHandles(const KisNodeList &nodes);
 
     QWidget *createOptionWidget() override;
     void updateUIUnit(int newUnit);
@@ -116,8 +117,11 @@ public Q_SLOTS:
     void moveBySpinX(int newX);
     void moveBySpinY(int newY);
 
-    void slotNodeChanged(KisNodeList nodes);
+    void slotNodeChanged(const KisNodeList &nodes);
+    void slotSelectionChanged();
     void commitChanges();
+
+    void slotHandlesRectCalculated(const QRect &handlesRect);
 
 Q_SIGNALS:
     void moveToolModeChanged();
@@ -132,13 +136,23 @@ private:
 
     QPoint currentOffset() const;
     void notifyGuiAfterMove(bool showFloatingMessage = true);
-    bool tryEndPreviousStroke(KisNodeList nodes);
+    bool tryEndPreviousStroke(const KisNodeList &nodes);
     KisNodeList fetchSelectedNodes(MoveToolMode mode, const QPoint *pixelPoint, KisSelectionSP selection);
+    void requestHandlesRectUpdate();
 
 
 private Q_SLOTS:
     void endStroke();
     void slotTrackerChangedConfig(KisToolChangesTrackerDataSP state);
+
+    void slotMoveDiscreteLeft();
+    void slotMoveDiscreteRight();
+    void slotMoveDiscreteUp();
+    void slotMoveDiscreteDown();
+    void slotMoveDiscreteLeftMore();
+    void slotMoveDiscreteRightMore();
+    void slotMoveDiscreteUpMore();
+    void slotMoveDiscreteDownMore();
 
 private:
 
@@ -161,6 +175,9 @@ private:
 
     QPoint m_lastCursorPos;
     KisSignalCompressor m_updateCursorCompressor;
+    KisSignalAutoConnectionsStore m_actionConnections;
+
+    KisAsyncronousStrokeUpdateHelper m_asyncUpdateHelper;
 };
 
 

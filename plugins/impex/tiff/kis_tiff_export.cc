@@ -37,6 +37,7 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_config.h>
+#include "kis_layer_utils.h"
 
 #include "kis_tiff_converter.h"
 #include "kis_dlg_options_tiff.h"
@@ -52,7 +53,7 @@ KisTIFFExport::~KisTIFFExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
+KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
     // If a configuration object was passed to the convert method, we use that, otherwise we load from the settings
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
@@ -69,6 +70,15 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *docu
 
     KisTIFFOptions options;
     options.fromProperties(configuration);
+
+    if (!options.flatten) {
+        const bool hasGroupLayers =
+            KisLayerUtils::recursiveFindNode(document->savingImage()->root(),
+                [] (KisNodeSP node) {
+                    return node->parent() && node->inherits("KisGroupLayer");
+                });
+        options.flatten = hasGroupLayers;
+    }
 
     if ((cs->channels()[0]->channelValueType() == KoChannelInfo::FLOAT16
          || cs->channels()[0]->channelValueType() == KoChannelInfo::FLOAT32) && options.predictor == 2) {
@@ -89,14 +99,8 @@ KisImportExportFilter::ConversionStatus KisTIFFExport::convert(KisDocument *docu
     }
 
     KisTIFFConverter tiffConverter(document);
-    KisImageBuilder_Result res;
-    if ((res = tiffConverter.buildFile(filename(), image, options)) == KisImageBuilder_RESULT_OK) {
-        dbgFile << "success !";
-        return KisImportExportFilter::OK;
-    }
-
-    dbgFile << " Result =" << res;
-    return KisImportExportFilter::InternalError;
+    KisImportExportErrorCode res = tiffConverter.buildFile(filename(), image, options);
+    return res;
 }
 
 KisPropertiesConfigurationSP KisTIFFExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
@@ -112,7 +116,6 @@ KisConfigWidget *KisTIFFExport::createConfigurationWidget(QWidget *parent, const
 
 void KisTIFFExport::initializeCapabilities()
 {
-    addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisGroupLayer")->create(KisExportCheckBase::UNSUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
 

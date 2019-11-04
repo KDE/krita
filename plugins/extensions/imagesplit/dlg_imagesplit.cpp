@@ -41,9 +41,6 @@ DlgImagesplit::DlgImagesplit(KisViewManager* view, const QString &suffix, QStrin
 
     setMainWidget(m_page);
     m_page->lineEdit->setText(suffix);
-    m_page->setMinimumWidth(200);
-    m_page->setMinimumHeight(160);
-    resize(m_page->sizeHint());
     m_page->cmbFileType->clear();
     m_page->cmbFileType->addItems(listMimeFilter);
     m_page->cmbFileType->setCurrentIndex(defaultMimeIndex);

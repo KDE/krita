@@ -51,8 +51,13 @@ private:
     QVector<QPointF> m_startPoints;
     QVector<QPointF> m_endPoints;
 
+    QVector<QPoint> m_rectangleLeftLowerCorners;
+    QVector<QPoint> m_rectangleRightUpperCorners;
+
+
     void initCurvePoints(int width, int height);
     void initLines(int width, int height);
+    void initRectangles(int width, int height);
 
     QString m_dataPath;
     QString m_outputPath;
@@ -62,6 +67,7 @@ private:
         inline void benchmarkStroke(QString presetFileName);
         inline void benchmarkLine(QString presetFileName);
         inline void benchmarkCircle(QString presetFileName);
+        inline void benchmarkRectangle(QString presetFileName);
 
 private Q_SLOTS:
     void initTestCase();
@@ -120,6 +126,15 @@ private Q_SLOTS:
 
     void colorsmudge();
     void colorsmudgeRL();
+
+    void roundMarker();
+    void roundMarkerRandomLines();
+    void roundMarkerRectangle();
+
+    void roundMarkerHalfPixel();
+    void roundMarkerRandomLinesHalfPixel();
+    void roundMarkerRectangleHalfPixel();
+
 /*
     void predefinedBrush();
     void predefinedBrushRL();

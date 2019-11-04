@@ -1,0 +1,28 @@
+From 2b7638032c20b8534c27778d0f2ca46ffbb3fedc Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Sat, 13 Apr 2019 20:29:14 +0300
+Subject: [PATCH 06/19] Disable tablet relative mode in Qt
+
+---
+ src/plugins/platforms/windows/qwindowstabletsupport.cpp | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/plugins/platforms/windows/qwindowstabletsupport.cpp b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+index 44b94d044d..6a9fe28e75 100644
+--- a/src/plugins/platforms/windows/qwindowstabletsupport.cpp
++++ b/src/plugins/platforms/windows/qwindowstabletsupport.cpp
+@@ -564,6 +564,11 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
+             m_state = PenDown;
+             m_mode = (mouseLocation - globalPosF).manhattanLength() > m_absoluteRange
+                 ? MouseMode : PenMode;
++
++            // Krita doesn't support mouse mode. And this code may break
++            // normal painting, so we just disable it.
++            m_mode = PenMode;
++
+             qCDebug(lcQpaTablet) << __FUNCTION__ << "mode=" << m_mode << "pen:"
+                 << globalPosF << "mouse:" << mouseLocation;
+         }
+-- 
+2.20.1.windows.1
+

@@ -145,7 +145,7 @@ namespace KisDomUtils {
 
 
 
-Q_DECLARE_METATYPE(KisTimeRange);
+Q_DECLARE_METATYPE(KisTimeRange)
 
 KRITAIMAGE_EXPORT QDebug operator<<(QDebug dbg, const KisTimeRange &r);
 

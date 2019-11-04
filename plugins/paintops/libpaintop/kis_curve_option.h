@@ -85,6 +85,12 @@ public:
 
     int getCurveMode() const;
 
+    /**
+     * Returns the curve that is being used instead of sensor ones
+     * in case "Use the same curve" is checked.
+     */
+    KisCubicCurve getCommonCurve() const;
+
     void setSeparateCurveValue(bool separateCurveValue);
 
     void setChecked(bool checked);
@@ -92,6 +98,17 @@ public:
     void setCurve(DynamicSensorType sensorType, bool useSameCurve, const KisCubicCurve &curve);
     void setValue(qreal value);
     void setCurveMode(int mode);
+
+    /**
+     * Sets the bool indicating whether "Share curve across all settings" is checked.
+     */
+    void setUseSameCurve(bool useSameCurve);
+
+    /**
+     * Sets the curve that is being used instead of sensor ones
+     * in case "Share curve across all settings" is checked.
+     */
+    void setCommonCurve(KisCubicCurve curve);
 
     struct ValueComponents {
 
@@ -130,7 +147,7 @@ public:
             const qreal realScalingPart = hasScaling ? KisDynamicSensor::scalingToAdditive(scaling) : 0.0;
             const qreal realAdditivePart = hasAdditive ? additive : 0;
 
-            qreal value = wrapInRange(2 * offset + constant * realScalingPart + realAdditivePart, -1.0, 1.0);
+            qreal value = wrapInRange(2 * offset + constant * (realScalingPart + realAdditivePart), -1.0, 1.0);
             if (qIsNaN(value)) {
                 qWarning() << "rotationLikeValue returns NaN!" << normalizedBaseAngle << absoluteAxesFlipped;
                 value = 0;
@@ -198,10 +215,15 @@ protected:
     bool m_useSameCurve;
     bool m_separateCurveValue;
 
+    /**
+     * Curve that is being used instead of sensors' internal ones
+     * in case "Use the same curve" is checked.
+     */
+    KisCubicCurve m_commonCurve;
+
     int m_curveMode;
 
     QMap<DynamicSensorType, KisDynamicSensorSP> m_sensorMap;
-    QMap<DynamicSensorType, KisCubicCurve> m_curveCache;
 
 private:
 

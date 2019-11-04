@@ -39,7 +39,7 @@ class KisDocument;
 class KisConfigWidget;
 
 #include "kritaui_export.h"
-
+#include "KisImportExportErrorCode.h"
 
 /**
  * @brief The base class for import and export filters.
@@ -70,30 +70,6 @@ public:
     static const QString ColorDepthIDTag;
     static const QString sRGBTag;
 public:
-    /**
-     * This enum is used to signal the return state of your filter.
-     * Return OK in @ref convert() in case everything worked as expected.
-     * Feel free to add some more error conditions @em before the last item
-     * if it's needed.
-     */
-    enum ConversionStatus { OK,
-                            UsageError,
-                            CreationError,
-                            FileNotFound,
-                            StorageCreationError,
-                            BadMimeType,
-                            BadConversionGraph,
-                            WrongFormat,
-                            NotImplemented,
-                            ParsingError,
-                            InternalError,
-                            UserCancelled,
-                            InvalidFormat,
-                            FilterCreationError,
-                            ProgressCancelled,
-                            UnsupportedVersion,
-                            JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
-                          };
 
     ~KisImportExportFilter() override;
 
@@ -102,6 +78,7 @@ public:
     void setRealFilename(const QString &filename);
     void setMimeType(const QString &mime);
     void setUpdater(QPointer<KoUpdater> updater);
+    QPointer<KoUpdater> updater();
 
     /**
      * The filter chain calls this method to perform the actual conversion.
@@ -112,12 +89,7 @@ public:
      * @return The error status, see the @ref #ConversionStatus enum.
      *         KisImportExportFilter::OK means that everything is alright.
      */
-    virtual ConversionStatus convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration = 0) = 0;
-
-    /**
-     * Get the text version of the status value
-     */
-    static QString conversionStatusString(ConversionStatus status);
+    virtual KisImportExportErrorCode convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration = 0) = 0;
 
     /**
      * @brief defaultConfiguration defines the default settings for the given import export filter
@@ -154,6 +126,9 @@ public:
     /// Override and return false for the filters that use a library that cannot handle file handles, only file names.
     virtual bool supportsIO() const { return true; }
 
+    /// Verify whether the given file is correct and readable
+    virtual QString verify(const QString &fileName) const;
+
 protected:
     /**
      * This is the constructor your filter has to call, obviously.
@@ -169,6 +144,8 @@ protected:
     virtual void initializeCapabilities();
     void addCapability(KisExportCheckBase *capability);
     void addSupportedColorModels(QList<QPair<KoID, KoID> > supportedColorModels, const QString &name, KisExportCheckBase::Level level = KisExportCheckBase::PARTIALLY);
+
+    QString verifyZiPBasedFiles(const QString &fileName, const QStringList &filesToCheck) const;
 
 private:
 

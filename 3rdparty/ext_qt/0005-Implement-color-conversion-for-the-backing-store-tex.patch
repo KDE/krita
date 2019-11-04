@@ -1,0 +1,627 @@
+From e3d75d2db98224337c40b4fdc94d443693f57e15 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Thu, 22 Nov 2018 15:47:48 +0300
+Subject: [PATCH 13/19] Implement color conversion for the backing store
+ texture
+
+If the window surface is not in sRGB mode, then the backing store
+surface should be converted into the destinations color space.
+
+This patch adds the most popular color space transitions into
+QOpenGLTextureBlitter.
+
+The patch also implements QOpenGLWidget::setTextureColorSpace(),
+which notifies the compositor about the color space of non-native
+openGL widgets, so that the data could be converted correctly.
+
+TODO: should we implement the same for QOpenGLWindow::
+      setTextureColorSpace()?
+
+Note:
+The channels should be swizzled into RGBA *before* applying the
+color space conversion matrix. Otherwise the colors will be skewed,
+because the conversion function for R and B channels is not the same.
+
+Change-Id: Icbf599952c93cc04de417d0c3790a65282741655
+---
+ src/gui/opengl/qopengltextureblitter.cpp      | 222 ++++++++++++++++--
+ src/gui/opengl/qopengltextureblitter.h        |  12 +-
+ src/gui/painting/qplatformbackingstore.cpp    |  16 +-
+ src/gui/painting/qplatformbackingstore.h      |   4 +-
+ .../qopenglcompositorbackingstore.cpp         |   2 +-
+ src/widgets/kernel/qopenglwidget.cpp          |  45 +++-
+ src/widgets/kernel/qopenglwidget.h            |   3 +
+ src/widgets/kernel/qwidget_p.h                |   1 +
+ src/widgets/kernel/qwidgetbackingstore.cpp    |   2 +-
+ 9 files changed, 281 insertions(+), 26 deletions(-)
+
+diff --git a/src/gui/opengl/qopengltextureblitter.cpp b/src/gui/opengl/qopengltextureblitter.cpp
+index b709f2f639..8b9142a0ef 100644
+--- a/src/gui/opengl/qopengltextureblitter.cpp
++++ b/src/gui/opengl/qopengltextureblitter.cpp
+@@ -131,14 +131,85 @@ static const char vertex_shader[] =
+     "}";
+ 
+ static const char fragment_shader[] =
+-    "varying highp vec2 uv;"
+-    "uniform sampler2D textureSampler;"
+-    "uniform bool swizzle;"
+-    "uniform highp float opacity;"
++    "varying highp vec2 uv;\n"
++    "uniform sampler2D textureSampler;\n"
++    "uniform bool swizzle;\n"
++    "uniform highp float opacity;\n"
++    "#if defined SCRGB_TO_SRGB\n"
++    "highp vec4 linearToSRGB(highp vec4 value)\n"
++    "{\n"
++    "   bvec4 cutoff = lessThan(value, vec4(0.0031308));\n"
++    "   const highp vec2 a1 = vec2(0.055, 0.0);\n"
++    "   const highp vec2 c2 = vec2(1.055, 1.0);\n"
++    "   const highp vec2 m3 = vec2(2.4, 1.0);\n"
++    "   const highp vec2 c4 = vec2(12.92, 1.0);\n"
++    "   highp vec4 higher = c2.xxxy * pow(value, 1.0 / m3.xxxy) - a1.xxxy;\n"
++    "   highp vec4 lower = value * c4.xxxy;\n"
++    "   return mix(higher, lower, vec4(cutoff));\n"
++    "}\n"
++    "#endif\n"
++    "#if defined SRGB_TO_SCRGB || defined SRGB_TO_BT2020PQ || defined SCRGB_TO_BT2020PQ\n"
++    "highp vec4 sRgbToLinear(highp vec4 sRGB)\n"
++    "{\n"
++    "   bvec4 cutoff = lessThan(sRGB, vec4(0.04045));\n"
++    "   const highp vec2 a1 = vec2(0.055, 0.0);\n"
++    "   const highp vec2 c2 = vec2(1.055, 1.0);\n"
++    "   const highp vec2 m3 = vec2(2.4, 1.0);\n"
++    "   const highp vec2 c4 = vec2(12.92, 1.0);\n"
++    "   highp vec4 higher = pow((sRGB + a1.xxxy) / c2.xxxy, m3.xxxy);\n"
++    "   highp vec4 lower = sRGB / c4.xxxy;\n"
++    "   return mix(higher, lower, vec4(cutoff));\n"
++    "}\n"
++    "#endif\n"
++    "#if defined SRGB_TO_BT2020PQ || defined SCRGB_TO_BT2020PQ\n"
++    "highp vec4 applySmpte2084Curve(highp vec4 L)\n"
++    "{"
++    "   const highp vec2 m1 = vec2(2610.0 / 4096.0 / 4.0, 1.0);\n"
++    "   const highp vec2 m2 = vec2(2523.0 / 4096.0 * 128.0, 1.0);\n"
++    "   const highp vec2 a1 = vec2(3424.0 / 4096.0, 0.0);\n"
++    "   const highp vec2 c2 = vec2(2413.0 / 4096.0 * 32.0, 1.0);\n"
++    "   const highp vec2 c3 = vec2(2392.0 / 4096.0 * 32.0, 1.0);\n"
++    "   const highp vec2 a4 = vec2(1.0, 0.0);\n"
++    "   highp vec4 Lp = pow(L, m1.xxxy);\n"
++    "   highp vec4 res = pow((a1.xxxy + c2.xxxy * Lp) / (a4.xxxy + c3.xxxy * Lp), m2.xxxy);\n"
++    "   return res;"
++    "}\n"
++    "#endif\n"
++    "#if defined SRGB_TO_BT2020PQ || defined SCRGB_TO_BT2020PQ\n"
++    "highp vec4 scRgbToBt2020pq(highp vec4 value)\n"
++    "{\n"
++    "   const highp mat4 convMat = "
++    "      mat4(0.627402, 0.069095, 0.016394, 0.0,"
++    "           0.329292, 0.919544, 0.088028, 0.0,"
++    "           0.043306, 0.011360, 0.895578, 0.0,"
++    "           0.0,      0.0,      0.0,      1.0);"
++    ""
++    "   value = convMat * value;\n"
++    "   return applySmpte2084Curve(0.008 * value);"
++    "}\n"
++    "#endif\n"
++    "#if defined SRGB_TO_BT2020PQ\n"
++    "highp vec4 sRgbToBt2020pq(highp vec4 value)\n"
++    "{\n"
++    "   value = sRgbToLinear(value);"
++    "   return scRgbToBt2020pq(value);"
++    "}\n"
++    "#endif\n"
++    "\n"
+     "void main() {"
+     "   highp vec4 tmpFragColor = texture2D(textureSampler,uv);"
+-    "   tmpFragColor.a *= opacity;"
+-    "   gl_FragColor = swizzle ? tmpFragColor.bgra : tmpFragColor;"
++    "   tmpFragColor.a *= opacity;\n"
++    "   tmpFragColor = swizzle ? tmpFragColor.bgra : tmpFragColor;\n"
++    "#if defined SRGB_TO_SCRGB\n"
++    "   tmpFragColor = sRgbToLinear(tmpFragColor);\n"
++    "#elif defined SRGB_TO_BT2020PQ\n"
++    "   tmpFragColor = sRgbToBt2020pq(tmpFragColor);\n"
++    "#elif defined SCRGB_TO_BT2020PQ\n"
++    "   tmpFragColor = scRgbToBt2020pq(tmpFragColor);\n"
++    "#elif defined SCRGB_TO_SRGB\n"
++    "   tmpFragColor = linearToSRGB(tmpFragColor);\n"
++    "#endif\n"
++    "   gl_FragColor = tmpFragColor;"
+     "}";
+ 
+ static const char fragment_shader_external_oes[] =
+@@ -187,6 +258,23 @@ private:
+     GLenum m_target;
+ };
+ 
++class ColorSpaceConversion : public QPair<QSurfaceFormat::ColorSpace, QSurfaceFormat::ColorSpace>
++{
++public:
++    ColorSpaceConversion() { };
++    ColorSpaceConversion(QSurfaceFormat::ColorSpace srcColorSpace,
++                         QSurfaceFormat::ColorSpace dstColorSpace)
++        : QPair(srcColorSpace, dstColorSpace)
++    { }
++
++    QSurfaceFormat::ColorSpace source() const {
++        return first;
++    }
++    QSurfaceFormat::ColorSpace destination() const {
++        return second;
++    }
++};
++
+ class QOpenGLTextureBlitterPrivate
+ {
+ public:
+@@ -197,16 +285,29 @@ public:
+     };
+ 
+     enum ProgramIndex {
+-        TEXTURE_2D,
+-        TEXTURE_EXTERNAL_OES
++        TEXTURE_2D = 0,
++        TEXTURE_2D_SRGB_TO_SCRGB,
++        TEXTURE_2D_SCRGB_TO_SRGB,
++        TEXTURE_2D_SRGB_TO_BT2020PQ,
++        TEXTURE_2D_SCRGB_TO_BT2020PQ,
++        TEXTURE_EXTERNAL_OES,
++
++        PROGRAM_COUNT
+     };
+ 
+     QOpenGLTextureBlitterPrivate() :
+         swizzle(false),
+         opacity(1.0f),
+         vao(new QOpenGLVertexArrayObject),
+-        currentTarget(TEXTURE_2D)
+-    { }
++        currentTarget(GL_NONE),
++        colorSpaceConversion(0)
++    {
++        supportedColorSpaceConversions << ColorSpaceConversion(QSurfaceFormat::DefaultColorSpace, QSurfaceFormat::DefaultColorSpace);
++        supportedColorSpaceConversions << ColorSpaceConversion(QSurfaceFormat::sRGBColorSpace, QSurfaceFormat::scRGBColorSpace);
++        supportedColorSpaceConversions << ColorSpaceConversion(QSurfaceFormat::scRGBColorSpace, QSurfaceFormat::sRGBColorSpace);
++        supportedColorSpaceConversions << ColorSpaceConversion(QSurfaceFormat::sRGBColorSpace, QSurfaceFormat::bt2020PQColorSpace);
++        supportedColorSpaceConversions << ColorSpaceConversion(QSurfaceFormat::scRGBColorSpace, QSurfaceFormat::bt2020PQColorSpace);
++    }
+ 
+     bool buildProgram(ProgramIndex idx, const char *vs, const char *fs);
+ 
+@@ -214,6 +315,7 @@ public:
+     void blit(GLuint texture, const QMatrix4x4 &vertexTransform, QOpenGLTextureBlitter::Origin origin);
+ 
+     void prepareProgram(const QMatrix4x4 &vertexTransform);
++    int calcColorSpaceConversionIndex(QSurfaceFormat::ColorSpace srcColorSpace, QSurfaceFormat::ColorSpace dstColorSpace);
+ 
+     QOpenGLBuffer vertexBuffer;
+     QOpenGLBuffer textureBuffer;
+@@ -239,18 +341,48 @@ public:
+         bool swizzle;
+         float opacity;
+         TextureMatrixUniform textureMatrixUniformState;
+-    } programs[2];
++    } programs[PROGRAM_COUNT];
+     bool swizzle;
+     float opacity;
+     QScopedPointer<QOpenGLVertexArrayObject> vao;
+     GLenum currentTarget;
++
++    int colorSpaceConversion;
++    QVector<ColorSpaceConversion> supportedColorSpaceConversions;
+ };
+ 
+-static inline QOpenGLTextureBlitterPrivate::ProgramIndex targetToProgramIndex(GLenum target)
++int QOpenGLTextureBlitterPrivate::calcColorSpaceConversionIndex(QSurfaceFormat::ColorSpace srcColorSpace, QSurfaceFormat::ColorSpace dstColorSpace)
++{
++    // TODO: auto-detect destination color space of the surface
++    //       in case of default color space
++
++    // disable color management if at least one of the color
++    // spaces is declared as default
++    if (srcColorSpace == QSurfaceFormat::DefaultColorSpace ||
++        dstColorSpace == QSurfaceFormat::DefaultColorSpace) {
++
++        return 0;
++    }
++
++    // disable color management if source and destination color
++    // spaces are the same
++    if (srcColorSpace == dstColorSpace) {
++        return 0;
++    }
++
++    ColorSpaceConversion conversion(srcColorSpace, dstColorSpace);
++    return supportedColorSpaceConversions.indexOf(conversion);
++}
++
++static inline QOpenGLTextureBlitterPrivate::ProgramIndex targetToProgramIndex(GLenum target, int colorSpaceConversion)
+ {
+     switch (target) {
+-    case GL_TEXTURE_2D:
+-        return QOpenGLTextureBlitterPrivate::TEXTURE_2D;
++    case GL_TEXTURE_2D: {
++        QOpenGLTextureBlitterPrivate::ProgramIndex index =
++            QOpenGLTextureBlitterPrivate::ProgramIndex(
++                int(QOpenGLTextureBlitterPrivate::TEXTURE_2D) + colorSpaceConversion);
++        return index;
++    }
+     case GL_TEXTURE_EXTERNAL_OES:
+         return QOpenGLTextureBlitterPrivate::TEXTURE_EXTERNAL_OES;
+     default:
+@@ -261,7 +393,7 @@ static inline QOpenGLTextureBlitterPrivate::ProgramIndex targetToProgramIndex(GL
+ 
+ void QOpenGLTextureBlitterPrivate::prepareProgram(const QMatrix4x4 &vertexTransform)
+ {
+-    Program *program = &programs[targetToProgramIndex(currentTarget)];
++    Program *program = &programs[targetToProgramIndex(currentTarget, colorSpaceConversion)];
+ 
+     vertexBuffer.bind();
+     program->glProgram->setAttributeBuffer(program->vertexCoordAttribPos, GL_FLOAT, 0, 3, 0);
+@@ -293,7 +425,7 @@ void QOpenGLTextureBlitterPrivate::blit(GLuint texture,
+     TextureBinder binder(currentTarget, texture);
+     prepareProgram(vertexTransform);
+ 
+-    Program *program = &programs[targetToProgramIndex(currentTarget)];
++    Program *program = &programs[targetToProgramIndex(currentTarget, colorSpaceConversion)];
+     program->glProgram->setUniformValue(program->textureTransformUniformPos, textureTransform);
+     program->textureMatrixUniformState = User;
+ 
+@@ -307,7 +439,7 @@ void QOpenGLTextureBlitterPrivate::blit(GLuint texture,
+     TextureBinder binder(currentTarget, texture);
+     prepareProgram(vertexTransform);
+ 
+-    Program *program = &programs[targetToProgramIndex(currentTarget)];
++    Program *program = &programs[targetToProgramIndex(currentTarget, colorSpaceConversion)];
+     if (origin == QOpenGLTextureBlitter::OriginTopLeft) {
+         if (program->textureMatrixUniformState != IdentityFlipped) {
+             QMatrix3x3 flipped;
+@@ -411,6 +543,28 @@ bool QOpenGLTextureBlitter::create()
+     } else {
+         if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_2D, vertex_shader, fragment_shader))
+             return false;
++
++        // TODO: create non-default transformations on-demand
++        {
++            const QString shader = QString("#define SRGB_TO_SCRGB\n %1").arg(fragment_shader);
++            if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_2D_SRGB_TO_SCRGB, vertex_shader, shader.toLatin1().constData()))
++                return false;
++        }
++        {
++            const QString shader = QString("#define SCRGB_TO_SRGB\n %1").arg(fragment_shader);
++            if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_2D_SCRGB_TO_SRGB, vertex_shader, shader.toLatin1().constData()))
++                return false;
++        }
++        {
++            const QString shader = QString("#define SRGB_TO_BT2020PQ\n %1").arg(fragment_shader);
++            if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_2D_SRGB_TO_BT2020PQ, vertex_shader, shader.toLatin1().constData()))
++                return false;
++        }
++        {
++            const QString shader = QString("#define SCRGB_TO_BT2020PQ\n %1").arg(fragment_shader);
++            if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_2D_SCRGB_TO_BT2020PQ, vertex_shader, shader.toLatin1().constData()))
++                return false;
++        }
+         if (supportsExternalOESTarget())
+             if (!d->buildProgram(QOpenGLTextureBlitterPrivate::TEXTURE_EXTERNAL_OES, vertex_shader, fragment_shader_external_oes))
+                 return false;
+@@ -458,6 +612,8 @@ void QOpenGLTextureBlitter::destroy()
+         return;
+     Q_D(QOpenGLTextureBlitter);
+     d->programs[QOpenGLTextureBlitterPrivate::TEXTURE_2D].glProgram.reset();
++    d->programs[QOpenGLTextureBlitterPrivate::TEXTURE_2D_SRGB_TO_SCRGB].glProgram.reset();
++    d->programs[QOpenGLTextureBlitterPrivate::TEXTURE_2D_SRGB_TO_BT2020PQ].glProgram.reset();
+     d->programs[QOpenGLTextureBlitterPrivate::TEXTURE_EXTERNAL_OES].glProgram.reset();
+     d->vertexBuffer.destroy();
+     d->textureBuffer.destroy();
+@@ -487,15 +643,26 @@ bool QOpenGLTextureBlitter::supportsExternalOESTarget() const
+ 
+     \sa release(), blit()
+  */
+-void QOpenGLTextureBlitter::bind(GLenum target)
++void QOpenGLTextureBlitter::bind(GLenum target,
++                                 QSurfaceFormat::ColorSpace srcColorSpace,
++                                 QSurfaceFormat::ColorSpace dstColorSpace)
+ {
+     Q_D(QOpenGLTextureBlitter);
+ 
+     if (d->vao->isCreated())
+         d->vao->bind();
+ 
++    const int index = d->calcColorSpaceConversionIndex(srcColorSpace, dstColorSpace);
++
++    if (index >= 0) {
++        d->colorSpaceConversion = index;
++    } else {
++        qWarning() << "QOpenGLTextureBlitter::bind(): color space conversion is not supported" << srcColorSpace << dstColorSpace;
++        d->colorSpaceConversion = 0; // noop conversion
++    }
++
+     d->currentTarget = target;
+-    QOpenGLTextureBlitterPrivate::Program *p = &d->programs[targetToProgramIndex(target)];
++    QOpenGLTextureBlitterPrivate::Program *p = &d->programs[targetToProgramIndex(target, d->colorSpaceConversion)];
+     p->glProgram->bind();
+ 
+     d->vertexBuffer.bind();
+@@ -509,6 +676,21 @@ void QOpenGLTextureBlitter::bind(GLenum target)
+     d->textureBuffer.release();
+ }
+ 
++void QOpenGLTextureBlitter::rebind(GLenum target, QSurfaceFormat::ColorSpace srcColorSpace, QSurfaceFormat::ColorSpace dstColorSpace)
++{
++    Q_D(QOpenGLTextureBlitter);
++
++    if (d->vao->isCreated() &&
++        d->currentTarget == target &&
++        d->colorSpaceConversion == d->calcColorSpaceConversionIndex(srcColorSpace, dstColorSpace)) {
++
++        // the blitter is already configured in the correct state, so just skip it
++        return;
++    }
++
++    bind(target, srcColorSpace, dstColorSpace);
++}
++
+ /*!
+     Unbinds the graphics resources used by the blitter.
+ 
+@@ -517,7 +699,7 @@ void QOpenGLTextureBlitter::bind(GLenum target)
+ void QOpenGLTextureBlitter::release()
+ {
+     Q_D(QOpenGLTextureBlitter);
+-    d->programs[targetToProgramIndex(d->currentTarget)].glProgram->release();
++    d->programs[targetToProgramIndex(d->currentTarget, d->colorSpaceConversion)].glProgram->release();
+     if (d->vao->isCreated())
+         d->vao->release();
+ }
+diff --git a/src/gui/opengl/qopengltextureblitter.h b/src/gui/opengl/qopengltextureblitter.h
+index 2f7c6b1a0a..3c87e4e2b5 100644
+--- a/src/gui/opengl/qopengltextureblitter.h
++++ b/src/gui/opengl/qopengltextureblitter.h
+@@ -48,6 +48,9 @@
+ #include <QtGui/QMatrix3x3>
+ #include <QtGui/QMatrix4x4>
+ 
++// TODO: less includes!!!
++#include <QSurfaceFormat>
++
+ QT_BEGIN_NAMESPACE
+ 
+ class QOpenGLTextureBlitterPrivate;
+@@ -69,7 +72,14 @@ public:
+ 
+     bool supportsExternalOESTarget() const;
+ 
+-    void bind(GLenum target = GL_TEXTURE_2D);
++    void bind(GLenum target = GL_TEXTURE_2D,
++              QSurfaceFormat::ColorSpace srcColorSpace = QSurfaceFormat::DefaultColorSpace,
++              QSurfaceFormat::ColorSpace dstColorSpace = QSurfaceFormat::DefaultColorSpace);
++
++    void rebind(GLenum target = GL_TEXTURE_2D,
++                QSurfaceFormat::ColorSpace srcColorSpace = QSurfaceFormat::DefaultColorSpace,
++                QSurfaceFormat::ColorSpace dstColorSpace = QSurfaceFormat::DefaultColorSpace);
++
+     void release();
+ 
+     void setRedBlueSwizzle(bool swizzle);
+diff --git a/src/gui/painting/qplatformbackingstore.cpp b/src/gui/painting/qplatformbackingstore.cpp
+index c71d82546a..8dd96a66bd 100644
+--- a/src/gui/painting/qplatformbackingstore.cpp
++++ b/src/gui/painting/qplatformbackingstore.cpp
+@@ -132,6 +132,7 @@ struct QBackingstoreTextureInfo
+     QRect rect;
+     QRect clipRect;
+     QPlatformTextureList::Flags flags;
++    QSurfaceFormat::ColorSpace colorSpace;
+ };
+ 
+ Q_DECLARE_TYPEINFO(QBackingstoreTextureInfo, Q_MOVABLE_TYPE);
+@@ -181,6 +182,12 @@ QPlatformTextureList::Flags QPlatformTextureList::flags(int index) const
+     return d->textures.at(index).flags;
+ }
+ 
++QSurfaceFormat::ColorSpace QPlatformTextureList::colorSpace(int index) const
++{
++    Q_D(const QPlatformTextureList);
++    return d->textures.at(index).colorSpace;
++}
++
+ QRect QPlatformTextureList::geometry(int index) const
+ {
+     Q_D(const QPlatformTextureList);
+@@ -209,7 +216,7 @@ bool QPlatformTextureList::isLocked() const
+ }
+ 
+ void QPlatformTextureList::appendTexture(void *source, GLuint textureId, const QRect &geometry,
+-                                         const QRect &clipRect, Flags flags)
++                                         const QRect &clipRect, Flags flags, QSurfaceFormat::ColorSpace colorSpace)
+ {
+     Q_D(QPlatformTextureList);
+     QBackingstoreTextureInfo bi;
+@@ -218,6 +225,7 @@ void QPlatformTextureList::appendTexture(void *source, GLuint textureId, const Q
+     bi.rect = geometry;
+     bi.clipRect = clipRect;
+     bi.flags = flags;
++    bi.colorSpace = colorSpace;
+     d->textures.append(bi);
+ }
+ 
+@@ -300,6 +308,7 @@ static void blitTextureForWidget(const QPlatformTextureList *textures, int idx,
+     if (srgb && canUseSrgb)
+         funcs->glEnable(GL_FRAMEBUFFER_SRGB);
+ 
++    blitter->rebind(GL_TEXTURE_2D, textures->colorSpace(idx), window->format().colorSpace());
+     blitter->blit(textures->textureId(idx), target, source);
+ 
+     if (srgb && canUseSrgb)
+@@ -433,6 +442,11 @@ void QPlatformBackingStore::composeAndFlush(QWindow *window, const QRegion &regi
+         funcs->glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+ 
+     if (textureId) {
++        // GUI texture is always in sRGB color space
++        d_ptr->blitter->rebind(GL_TEXTURE_2D,
++                               QSurfaceFormat::sRGBColorSpace,
++                               window->format().colorSpace());
++
+         if (d_ptr->needsSwizzle)
+             d_ptr->blitter->setRedBlueSwizzle(true);
+         // The backingstore is for the entire tlw.
+diff --git a/src/gui/painting/qplatformbackingstore.h b/src/gui/painting/qplatformbackingstore.h
+index de5ba964dc..f8887bd4cd 100644
+--- a/src/gui/painting/qplatformbackingstore.h
++++ b/src/gui/painting/qplatformbackingstore.h
+@@ -95,11 +95,13 @@ public:
+     QRect clipRect(int index) const;
+     void *source(int index);
+     Flags flags(int index) const;
++    QSurfaceFormat::ColorSpace colorSpace(int index) const;
+     void lock(bool on);
+     bool isLocked() const;
+ 
+     void appendTexture(void *source, GLuint textureId, const QRect &geometry,
+-                       const QRect &clipRect = QRect(), Flags flags = 0);
++                       const QRect &clipRect = QRect(), Flags flags = 0,
++                       QSurfaceFormat::ColorSpace colorSpace = QSurfaceFormat::DefaultColorSpace);
+     void clear();
+ 
+  Q_SIGNALS:
+diff --git a/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp b/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp
+index 40400e2a19..5d44e62455 100644
+--- a/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp
++++ b/src/platformsupport/platformcompositor/qopenglcompositorbackingstore.cpp
+@@ -230,7 +230,7 @@ void QOpenGLCompositorBackingStore::composeAndFlush(QWindow *window, const QRegi
+     m_textures->clear();
+     for (int i = 0; i < textures->count(); ++i)
+         m_textures->appendTexture(textures->source(i), textures->textureId(i), textures->geometry(i),
+-                                  textures->clipRect(i), textures->flags(i));
++                                  textures->clipRect(i), textures->flags(i), textures->colorSpace(i));
+ 
+     updateTexture();
+     m_textures->appendTexture(nullptr, m_bsTexture, window->geometry());
+diff --git a/src/widgets/kernel/qopenglwidget.cpp b/src/widgets/kernel/qopenglwidget.cpp
+index 7aef74c507..787445a4d9 100644
+--- a/src/widgets/kernel/qopenglwidget.cpp
++++ b/src/widgets/kernel/qopenglwidget.cpp
+@@ -568,7 +568,8 @@ public:
+           updateBehavior(QOpenGLWidget::NoPartialUpdate),
+           requestedSamples(0),
+           inPaintGL(false),
+-          textureFormat(0)
++          textureFormat(0),
++          textureColorSpace(QSurfaceFormat::DefaultColorSpace)
+     {
+         requestedFormat = QSurfaceFormat::defaultFormat();
+     }
+@@ -578,6 +579,7 @@ public:
+ 
+     GLuint textureId() const override;
+     QPlatformTextureList::Flags textureListFlags() override;
++    QSurfaceFormat::ColorSpace colorSpace() const override;
+ 
+     void initialize();
+     void invokeUserPaint();
+@@ -609,6 +611,7 @@ public:
+     int requestedSamples;
+     bool inPaintGL;
+     GLenum textureFormat;
++    QSurfaceFormat::ColorSpace textureColorSpace;
+ };
+ 
+ void QOpenGLWidgetPaintDevicePrivate::beginPaint()
+@@ -695,6 +698,11 @@ QPlatformTextureList::Flags QOpenGLWidgetPrivate::textureListFlags()
+     return flags;
+ }
+ 
++QSurfaceFormat::ColorSpace QOpenGLWidgetPrivate::colorSpace() const
++{
++    return textureColorSpace;
++}
++
+ void QOpenGLWidgetPrivate::reset()
+ {
+     Q_Q(QOpenGLWidget);
+@@ -1115,6 +1123,41 @@ void QOpenGLWidget::setTextureFormat(GLenum texFormat)
+     d->textureFormat = texFormat;
+ }
+ 
++/*!
++    \return the declared color space of the internal texture of the widget.
++
++    The texture's color space will be used when composing the widget
++    into the root window surface.
++
++    \note when the color space is set to QSurfaceFormat::DefaultColorSpace,
++    color conversion is effectively disabled.
++
++    \since 5.99
++ */
++QSurfaceFormat::ColorSpace QOpenGLWidget::textureColorSpace() const
++{
++    Q_D(const QOpenGLWidget);
++    return d->textureColorSpace;
++}
++
++/*!
++    Sets a custom color space for the internal texture of the widget
++
++    The color space of the texture will be compared against the color
++    space of the root surface and conversion will be performed if needed.
++
++    \note setting the color space to QSurfaceFormat::DefaultColorSpace will
++    effectively disable color conversion when composing this texture on
++    screen.
++
++    \since 5.99
++ */
++void QOpenGLWidget::setTextureColorSpace(QSurfaceFormat::ColorSpace colorSpace)
++{
++    Q_D(QOpenGLWidget);
++    d->textureColorSpace = colorSpace;
++}
++
+ /*!
+     \return the active internal texture format if the widget has already
+     initialized, the requested format if one was set but the widget has not yet
+diff --git a/src/widgets/kernel/qopenglwidget.h b/src/widgets/kernel/qopenglwidget.h
+index 9eb4a9ba5a..eff2d9796d 100644
+--- a/src/widgets/kernel/qopenglwidget.h
++++ b/src/widgets/kernel/qopenglwidget.h
+@@ -75,6 +75,9 @@ public:
+     GLenum textureFormat() const;
+     void setTextureFormat(GLenum texFormat);
+ 
++    QSurfaceFormat::ColorSpace textureColorSpace() const;
++    void setTextureColorSpace(QSurfaceFormat::ColorSpace colorSpace);
++
+     bool isValid() const;
+ 
+     void makeCurrent();
+diff --git a/src/widgets/kernel/qwidget_p.h b/src/widgets/kernel/qwidget_p.h
+index 142d5ef9bb..e541cb70e4 100644
+--- a/src/widgets/kernel/qwidget_p.h
++++ b/src/widgets/kernel/qwidget_p.h
+@@ -657,6 +657,7 @@ public:
+             ? QPlatformTextureList::StacksOnTop
+             : QPlatformTextureList::Flags(0);
+     }
++    virtual QSurfaceFormat::ColorSpace colorSpace() const { return QSurfaceFormat::DefaultColorSpace; }
+     virtual QImage grabFramebuffer() { return QImage(); }
+     virtual void beginBackingStorePainting() { }
+     virtual void endBackingStorePainting() { }
+diff --git a/src/widgets/kernel/qwidgetbackingstore.cpp b/src/widgets/kernel/qwidgetbackingstore.cpp
+index 24b8665013..0603137b8e 100644
+--- a/src/widgets/kernel/qwidgetbackingstore.cpp
++++ b/src/widgets/kernel/qwidgetbackingstore.cpp
+@@ -1012,7 +1012,7 @@ static void findTextureWidgetsRecursively(QWidget *tlw, QWidget *widget, QPlatfo
+     if (wd->renderToTexture) {
+         QPlatformTextureList::Flags flags = wd->textureListFlags();
+         const QRect rect(widget->mapTo(tlw, QPoint()), widget->size());
+-        widgetTextures->appendTexture(widget, wd->textureId(), rect, wd->clipRect(), flags);
++        widgetTextures->appendTexture(widget, wd->textureId(), rect, wd->clipRect(), flags, wd->colorSpace());
+     }
+ 
+     for (int i = 0; i < wd->children.size(); ++i) {
+-- 
+2.20.1.windows.1
+

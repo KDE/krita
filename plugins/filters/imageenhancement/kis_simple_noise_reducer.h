@@ -36,13 +36,17 @@ public:
                      const KisFilterConfigurationSP config,
                      KoUpdater* progressUpdater
                      ) const override;
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 
     static inline KoID id() {
         return KoID("gaussiannoisereducer", i18n("Gaussian Noise Reducer"));
     }
+
+    QRect changedRect(const QRect &rect, const KisFilterConfigurationSP _config, int lod) const override;
+    QRect neededRect(const QRect &rect, const KisFilterConfigurationSP _config, int lod) const override;
+
 protected:
-    KisFilterConfigurationSP  factoryConfiguration() const override;
+    KisFilterConfigurationSP  defaultConfiguration() const override;
 };
 
 #endif

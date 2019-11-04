@@ -30,7 +30,7 @@
 #include "kis_debug.h"
 
 
-Q_GLOBAL_STATIC(KoResourcePaths, s_instance);
+Q_GLOBAL_STATIC(KoResourcePaths, s_instance)
 
 static QString cleanup(const QString &path)
 {
@@ -79,14 +79,14 @@ static const Qt::CaseSensitivity cs = Qt::CaseInsensitive;
 static const Qt::CaseSensitivity cs = Qt::CaseSensitive;
 #endif
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
 #include <ApplicationServices/ApplicationServices.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <CoreServices/CoreServices.h>
 #endif
 
 QString getInstallationPrefix() {
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
     QString appPath = qApp->applicationDirPath();
 
     dbgResources << "1" << appPath;
@@ -128,7 +128,13 @@ QString getInstallationPrefix() {
     appdir.cdUp();
     return appdir.canonicalPath();
 #else
+#ifdef Q_OS_ANDROID
+    // qApp->applicationDirPath() isn't writable and android system won't allow
+    // any files other than libraries
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/";
+#else
     return qApp->applicationDirPath() + "/../";
+#endif
 #endif
 #endif
 }
@@ -408,7 +414,7 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type)
                 QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias + '/', QStandardPaths::LocateDirectory);
         appendResources(&dirs, aliasDirs, true);
 
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
         dbgResources << "MAC:" << getApplicationRoot();
         QStringList bundlePaths;
         bundlePaths << getApplicationRoot() + "/share/krita/" + alias;

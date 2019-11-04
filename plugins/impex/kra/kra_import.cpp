@@ -37,28 +37,11 @@ KraImport::~KraImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KraImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KraImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KraConverter kraConverter(document);
-    switch (kraConverter.buildImage(io)) {
-    case KisImageBuilder_RESULT_UNSUPPORTED:
-        return KisImportExportFilter::NotImplemented;
-        break;
-    case KisImageBuilder_RESULT_INVALID_ARG:
-        return KisImportExportFilter::BadMimeType;
-        break;
-    case KisImageBuilder_RESULT_NO_URI:
-    case KisImageBuilder_RESULT_NOT_LOCAL:
-        return KisImportExportFilter::FileNotFound;
-        break;
-    case KisImageBuilder_RESULT_BAD_FETCH:
-    case KisImageBuilder_RESULT_EMPTY:
-        return KisImportExportFilter::ParsingError;
-        break;
-    case KisImageBuilder_RESULT_FAILURE:
-        return KisImportExportFilter::InvalidFormat;
-        break;
-    case KisImageBuilder_RESULT_OK:
+    KisImportExportErrorCode result = kraConverter.buildImage(io);
+    if (result.isOk()) {
         document->setCurrentImage(kraConverter.image());
         if (kraConverter.activeNodes().size() > 0) {
             document->setPreActivatedNode(kraConverter.activeNodes()[0]);
@@ -66,11 +49,8 @@ KisImportExportFilter::ConversionStatus KraImport::convert(KisDocument *document
         if (kraConverter.assistants().size() > 0) {
             document->setAssistants(kraConverter.assistants());
         }
-        return KisImportExportFilter::OK;
-    default:
-        break;
     }
-    return KisImportExportFilter::InternalError;
+    return result;
 }
 
 #include <kra_import.moc>

@@ -92,7 +92,7 @@ public:
     static void writeTransformAttributeLazy(const QString &name, const QTransform &transform, KoXmlWriter &shapeWriter);
 
     /// Parses a viewbox attribute into an rectangle
-    static bool parseViewBox(SvgGraphicsContext *gc, const KoXmlElement &e, const QRectF &elementBounds, QRectF *_viewRect, QTransform *_viewTransform);
+    static bool parseViewBox(const KoXmlElement &e, const QRectF &elementBounds, QRectF *_viewRect, QTransform *_viewTransform);
 
     struct PreserveAspectRatioParser;
     static void parseAspectRatio(const PreserveAspectRatioParser &p, const QRectF &elementBounds, const QRectF &viewRect, QTransform *_viewTransform);

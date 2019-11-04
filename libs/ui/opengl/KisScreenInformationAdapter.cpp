@@ -26,19 +26,10 @@
 
 #include <config-hdr.h>
 
-#ifdef Q_OS_WIN
-#if (QT_VERSION == QT_VERSION_CHECK(5, 11, 2))
-#include <QtGui/5.11.2/QtGui/qpa/qplatformnativeinterface.h>
-#elif (QT_VERSION == QT_VERSION_CHECK(5, 12, 0))
-#include <QtGui/5.12.0/QtGui/qpa/qplatformnativeinterface.h>
-#elif (QT_VERSION == QT_VERSION_CHECK(5, 12, 1))
-#include <QtGui/5.12.1/QtGui/qpa/qplatformnativeinterface.h>
-#elif (QT_VERSION == QT_VERSION_CHECK(5, 12, 2))
-#include <QtGui/5.12.2/QtGui/qpa/qplatformnativeinterface.h>
-#elif (QT_VERSION == QT_VERSION_CHECK(5, 13, 0))
-#include <QtGui/5.13.0/QtGui/qpa/qplatformnativeinterface.h>
-#endif
 
+
+#ifdef Q_OS_WIN
+#include <qpa/qplatformnativeinterface.h>
 #include <d3d11.h>
 #include <wrl/client.h>
 #include <dxgi1_6.h>
@@ -89,7 +80,9 @@ struct KisScreenInformationAdapter::Private
 KisScreenInformationAdapter::KisScreenInformationAdapter(QOpenGLContext *context)
     : m_d(new Private)
 {
-    m_d->initialize(context);
+    if (context) {
+        m_d->initialize(context);
+    }
 }
 
 KisScreenInformationAdapter::~KisScreenInformationAdapter()
@@ -103,7 +96,7 @@ void KisScreenInformationAdapter::Private::initialize(QOpenGLContext *newContext
 
     try {
 
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN && QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 
         if (!context->isOpenGLES()) {
             throw EGLException("the context is not OpenGL ES");
@@ -210,7 +203,7 @@ KisScreenInformationAdapter::ScreenInfo KisScreenInformationAdapter::infoForScre
 {
     ScreenInfo info;
 
-#ifdef Q_OS_WIN
+#if defined Q_OS_WIN && QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 
     QPlatformNativeInterface *nativeInterface = qGuiApp->platformNativeInterface();
     HMONITOR monitor = reinterpret_cast<HMONITOR>(nativeInterface->nativeResourceForScreen("handle", screen));
@@ -249,19 +242,19 @@ KisScreenInformationAdapter::ScreenInfo KisScreenInformationAdapter::infoForScre
                 info.maxLuminance = desc.MaxLuminance;
                 info.maxFullFrameLuminance = desc.MaxFullFrameLuminance;
 
-                info.colorSpace = QSurfaceFormat::DefaultColorSpace;
+                info.colorSpace = KisSurfaceColorSpace::DefaultColorSpace;
 
                 if (desc.ColorSpace == DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709) {
-                    info.colorSpace = QSurfaceFormat::sRGBColorSpace;
+                    info.colorSpace = KisSurfaceColorSpace::sRGBColorSpace;
                 } else if (desc.ColorSpace == DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709) {
 #ifdef HAVE_HDR
-                    info.colorSpace = QSurfaceFormat::scRGBColorSpace;
+                    info.colorSpace = KisSurfaceColorSpace::scRGBColorSpace;
 #else
                     qWarning("WARNING: scRGB display color space is not supported by Qt's build");
 #endif
                 } else if (desc.ColorSpace == DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020) {
 #ifdef HAVE_HDR
-                    info.colorSpace = QSurfaceFormat::bt2020PQColorSpace;
+                    info.colorSpace = KisSurfaceColorSpace::bt2020PQColorSpace;
 #else
                     qWarning("WARNING: bt2020-pq display color space is not supported by Qt's build");
 #endif

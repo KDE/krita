@@ -238,7 +238,7 @@ void KisTiledExtentManager::Data::updateMax()
 KisTiledExtentManager::KisTiledExtentManager()
 {
     QWriteLocker l(&m_extentLock);
-    m_currentExtent = QRect(qint32_MAX, qint32_MAX, 0, 0);
+    m_currentExtent = QRect();
 }
 
 void KisTiledExtentManager::notifyTileAdded(qint32 col, qint32 row)
@@ -286,7 +286,7 @@ void KisTiledExtentManager::clear()
     m_rowsData.clear();
 
     QWriteLocker lock(&m_extentLock);
-    m_currentExtent = QRect(qint32_MAX, qint32_MAX, 0, 0);
+    m_currentExtent = QRect();
 }
 
 QRect KisTiledExtentManager::extent() const
@@ -297,17 +297,17 @@ QRect KisTiledExtentManager::extent() const
 
 void KisTiledExtentManager::updateExtent()
 {
-    qint32 minX, maxX, minY, maxY;
+    qint32 minX, width, minY, height;
 
     {
         QReadLocker cl(&m_colsData.m_extentLock);
 
         if (m_colsData.isEmpty()) {
-            minX = qint32_MAX;
-            maxX = 0;
+            minX = 0;
+            width = 0;
         } else {
             minX = m_colsData.min() * KisTileData::WIDTH;
-            maxX = (m_colsData.max() + 1) * KisTileData::WIDTH - minX;
+            width = (m_colsData.max() + 1) * KisTileData::WIDTH - minX;
         }
     }
 
@@ -315,14 +315,14 @@ void KisTiledExtentManager::updateExtent()
         QReadLocker rl(&m_rowsData.m_extentLock);
 
         if (m_rowsData.isEmpty()) {
-            minY = qint32_MAX;
-            maxY = 0;
+            minY = 0;
+            height = 0;
         } else {
             minY = m_rowsData.min() * KisTileData::HEIGHT;
-            maxY = (m_rowsData.max() + 1) * KisTileData::HEIGHT - minY;
+            height = (m_rowsData.max() + 1) * KisTileData::HEIGHT - minY;
         }
     }
 
     QWriteLocker lock(&m_extentLock);
-    m_currentExtent = QRect(minX, minY, maxX, maxY);
+    m_currentExtent = QRect(minX, minY, width, height);
 }

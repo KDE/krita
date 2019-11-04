@@ -23,10 +23,11 @@
 #include <QSysInfo>
 #include <QStandardPaths>
 #include <QFile>
+#include <QFileInfo>
 #include <QDesktopWidget>
 #include <QClipboard>
 #include <QThread>
-
+#include <QApplication>
 #include <klocalizedstring.h>
 #include <KritaVersionWrapper.h>
 
@@ -46,8 +47,7 @@ KisUsageLogger::KisUsageLogger()
     d->logFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log");
 
     rotateLog();
-    d->logFile.open(QFile::Append);
-    writeHeader();
+    d->logFile.open(QFile::Append | QFile::Text);
 }
 
 KisUsageLogger::~KisUsageLogger()
@@ -64,7 +64,7 @@ void KisUsageLogger::initialize()
 
 void KisUsageLogger::close()
 {
-    log("Closing.");
+    log("CLOSING SESSION");
     s_instance->d->active = false;
     s_instance->d->logFile.flush();
     s_instance->d->logFile.close();
@@ -91,11 +91,19 @@ void KisUsageLogger::write(const QString &message)
     s_instance->d->logFile.flush();
 }
 
+void KisUsageLogger::writeSectionHeader()
+{
+    s_instance->d->logFile.write(s_sectionHeader.toUtf8());
+}
+
 void KisUsageLogger::writeHeader()
 {
-    Q_ASSERT(d->logFile.isOpen());
+    Q_ASSERT(s_instance->d->logFile.isOpen());
 
-    QString sessionHeader = QString("SESSION: %1\n\n").arg(QDateTime::currentDateTime().toString(Qt::RFC2822Date));
+    QString sessionHeader = QString("SESSION: %1. Executing %2\n\n")
+            .arg(QDateTime::currentDateTime().toString(Qt::RFC2822Date))
+            .arg(qApp->arguments().join(' '));
+
     QString disclaimer = i18n("WARNING: This file contains information about your system and the\n"
                               "images you have been working with.\n"
                               "\n"
@@ -113,7 +121,9 @@ void KisUsageLogger::writeHeader()
 
     // Krita version info
     systemInfo.append("Krita\n");
-    systemInfo.append("\n  Version: ").append(KritaVersionWrapper::versionString(true));
+    systemInfo.append("\n Version: ").append(KritaVersionWrapper::versionString(true));
+    systemInfo.append("\n Languages: ").append(KLocalizedString::languages().join(", "));
+    systemInfo.append("\n Hidpi: ").append(QCoreApplication::testAttribute(Qt::AA_EnableHighDpiScaling) ? "true" : "false");
     systemInfo.append("\n\n");
 
     systemInfo.append("Qt\n");
@@ -133,28 +143,64 @@ void KisUsageLogger::writeHeader()
     systemInfo.append("\n  Product Version: ").append(QSysInfo::productVersion());
     systemInfo.append("\n\n");
 
-    d->logFile.write(s_sectionHeader.toUtf8());
-    d->logFile.write(sessionHeader.toUtf8());
-    d->logFile.write(disclaimer.toUtf8());
-    d->logFile.write(systemInfo.toUtf8());
+    writeSectionHeader();
+    s_instance->d->logFile.write(sessionHeader.toUtf8());
+    s_instance->d->logFile.write(disclaimer.toUtf8());
+    s_instance->d->logFile.write(systemInfo.toUtf8());
 
 
 }
 
 void KisUsageLogger::rotateLog()
 {
-    d->logFile.open(QFile::ReadOnly);
-    QString log = QString::fromUtf8(d->logFile.readAll());
-    int sectionCount = log.count(s_sectionHeader);
-    int nextSectionIndex = log.indexOf(s_sectionHeader, s_sectionHeader.length());
-    while(sectionCount >= s_maxLogs) {
-        log = log.remove(0, log.indexOf(s_sectionHeader, nextSectionIndex));
-        nextSectionIndex = log.indexOf(s_sectionHeader, s_sectionHeader.length());
-        sectionCount = log.count(s_sectionHeader);
+    if (d->logFile.exists()) {
+        {
+            // Check for CLOSING SESSION
+            d->logFile.open(QFile::ReadOnly);
+            QString log = QString::fromUtf8(d->logFile.readAll());
+            if (!log.split("\n").last().contains("CLOSING SESSION")) {
+                log.append("\nKRITA DID NOT CLOSE CORRECTLY\n");
+                QString crashLog = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/kritacrash.log");
+                if (QFileInfo(crashLog).exists()) {
+                    QFile f(crashLog);
+                    f.open(QFile::ReadOnly);
+                    QString crashes = QString::fromUtf8(f.readAll());
+                    f.close();
+
+                    QStringList crashlist = crashes.split("-------------------");
+                    log.append(QString("\nThere were %1 crashes in total in the crash log.\n").arg(crashlist.size()));
+
+                    if (crashes.size() > 0) {
+                        log.append(crashlist.last());
+                    }
+                }
+                d->logFile.close();
+                d->logFile.open(QFile::WriteOnly);
+                d->logFile.write(log.toUtf8());
+            }
+            d->logFile.flush();
+            d->logFile.close();
+        }
+
+        {
+            // Rotate
+            d->logFile.open(QFile::ReadOnly);
+            QString log = QString::fromUtf8(d->logFile.readAll());
+            int sectionCount = log.count(s_sectionHeader);
+            int nextSectionIndex = log.indexOf(s_sectionHeader, s_sectionHeader.length());
+            while(sectionCount >= s_maxLogs) {
+                log = log.remove(0, log.indexOf(s_sectionHeader, nextSectionIndex));
+                nextSectionIndex = log.indexOf(s_sectionHeader, s_sectionHeader.length());
+                sectionCount = log.count(s_sectionHeader);
+            }
+            d->logFile.close();
+            d->logFile.open(QFile::WriteOnly);
+            d->logFile.write(log.toUtf8());
+            d->logFile.flush();
+            d->logFile.close();
+        }
+
+
     }
-    d->logFile.close();
-    d->logFile.open(QFile::WriteOnly);
-    d->logFile.write(log.toUtf8());
-    d->logFile.close();
 }
 

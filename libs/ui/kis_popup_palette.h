@@ -27,7 +27,7 @@
 #include "KisViewManager.h"
 #include "kactioncollection.h"
 #include "kis_tool_button.h"
-#include "kis_highlighted_button.h"
+#include "KisHighlightedToolButton.h"
 #include <KisColorSelectorInterface.h>
 
 class KisFavoriteResourceManager;
@@ -40,6 +40,7 @@ class KisRoundHudButton;
 class KisCanvasResourceProvider;
 class KisVisualColorSelector;
 class KisAcyclicSignalConnector;
+class KisMouseClickEater;
 
 class KisPopupPalette : public QWidget
 {
@@ -70,6 +71,7 @@ public:
 
 protected:
 
+    void showEvent(QShowEvent *event) override;
     void paintEvent(QPaintEvent*) override;
     void resizeEvent(QResizeEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
@@ -107,10 +109,6 @@ private:
     int m_hoveredColor {0};
     int m_selectedColor {0};
 
-    QElapsedTimer m_timeSinceOpening;
-    bool m_hadMousePressSinceOpening {false};
-
-
     KisCoordinatesConverter *m_coordinatesConverter;
 
     KisViewManager *m_viewManager;
@@ -126,7 +124,7 @@ private:
     KisBrushHud *m_brushHud {0};
     float m_popupPaletteSize {385.0};
     float m_colorHistoryInnerRadius {72.0};
-    float m_colorHistoryOuterRadius {92.0};
+    qreal m_colorHistoryOuterRadius {92.0};
 
     KisRoundHudButton *m_settingsButton {0};
     KisRoundHudButton *m_brushHudButton {0};
@@ -146,8 +144,12 @@ private:
     int zoomSliderMaxValue {200};
     KisAcyclicSignalConnector *m_acyclicConnector = 0;
 
+    int m_cachedNumSlots {0};
+    qreal m_cachedRadius {0.0};
+
     // updates the transparency and effects of the whole widget
     QGraphicsOpacityEffect *opacityChange {0};
+    KisMouseClickEater *m_clicksEater;
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);

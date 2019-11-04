@@ -104,9 +104,9 @@ KisFilterWave::KisFilterWave() : KisFilter(id(), FiltersCategoryOtherId, i18n("&
 
 }
 
-KisFilterConfigurationSP KisFilterWave::factoryConfiguration() const
+KisFilterConfigurationSP KisFilterWave::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("wave", 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("horizontalwavelength", 50);
     config->setProperty("horizontalshift", 50);
     config->setProperty("horizontalamplitude", 4);
@@ -118,7 +118,7 @@ KisFilterConfigurationSP KisFilterWave::factoryConfiguration() const
     return config;
 }
 
-KisConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     return new KisWdgWave((KisFilter*)this, (QWidget*)parent);
 }

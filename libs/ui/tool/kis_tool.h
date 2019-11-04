@@ -87,7 +87,7 @@ public:
     /**
      * Called by KisToolProxy when the primary is no longer possible
      * to be started now, e.g. when its modifiers and released. The
-     * tool is supposed revert all the preparetions it has doen in
+     * tool is supposed to revert all the preparations it has done in
      * activatePrimaryAction().
      */
     virtual void deactivatePrimaryAction();
@@ -161,6 +161,14 @@ public:
         NONE = 10000
     };
 
+    enum NodePaintAbility {
+        VECTOR,
+        CLONE,
+        PAINT,
+        UNPAINTABLE
+    };
+    Q_ENUMS(NodePaintAbility)
+
     static AlternateAction actionToAlternateAction(ToolAction action);
 
     virtual void activateAlternateAction(AlternateAction action);
@@ -179,6 +187,8 @@ public:
     void mouseMoveEvent(KoPointerEvent *event) override;
 
     bool isActive() const;
+
+    KisTool::NodePaintAbility nodePaintAbility();
 
 public Q_SLOTS:
     void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;

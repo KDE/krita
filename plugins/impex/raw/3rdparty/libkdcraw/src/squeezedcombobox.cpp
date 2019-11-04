@@ -182,7 +182,7 @@ void SqueezedComboBox::slotUpdateToolTip(int index)
      setToolTip(d->originalItems[index]);
 }
 
-QString SqueezedComboBox::itemHighlighted() const
+QString SqueezedComboBox::currentUnsqueezedText() const
 {
     int curItem = currentIndex();
     return d->originalItems[curItem];

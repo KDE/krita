@@ -51,6 +51,7 @@
 
 // plugins's headers
 #include "kis_pdf_import_widget.h"
+#include <KisImportExportErrorCode.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(PDFImportFactory, "krita_pdf_import.json",
                            registerPlugin<KisPDFImport>();)
@@ -64,13 +65,13 @@ KisPDFImport::~KisPDFImport()
 {
 }
 
-KisPDFImport::ConversionStatus KisPDFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode KisPDFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     Poppler::Document* pdoc = Poppler::Document::loadFromData(io->readAll());
 
     if (!pdoc) {
         dbgFile << "Error when reading the PDF";
-        return KisImportExportFilter::StorageCreationError;
+        return ImportExportCodes::ErrorWhileReading;
     }
 
     pdoc->setRenderHint(Poppler::Document::Antialiasing, true);
@@ -82,7 +83,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(KisDocument *document, QIOD
         dlg.setWindowTitle(i18n("A password is required to read that pdf"));
         if (dlg.exec() != QDialog::Accepted) {
             dbgFile << "Password canceled";
-            return KisImportExportFilter::StorageCreationError;
+            return ImportExportCodes::Cancelled;
         } else
             pdoc->unlock(dlg.password().toLocal8Bit(), dlg.password().toLocal8Bit());
     }
@@ -97,7 +98,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(KisDocument *document, QIOD
     if (kdb->exec() == QDialog::Rejected) {
         delete pdoc;
         delete kdb;
-        return KisImportExportFilter::StorageCreationError; // FIXME Cancel doesn't exist :(
+        return ImportExportCodes::Cancelled;
     }
 
     // Create the krita image
@@ -129,7 +130,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(KisDocument *document, QIOD
 
     delete pdoc;
     delete kdb;
-    return KisImportExportFilter::OK;
+    return ImportExportCodes::OK;
 }
 
 #include "kis_pdf_import.moc"

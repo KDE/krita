@@ -1,2 +1,3 @@
-# let's make a module
-from .tenbrushes import *
+from .tenbrushes import TenBrushesExtension
+
+Scripter.addExtension(TenBrushesExtension(Application))

@@ -351,23 +351,27 @@ public Q_SLOTS:
     void setYOffset(int y);
 
     /**
-     * @return xRes the horizontal resolution of the image in pixels per pt (there are 72 pts to an inch)
+     * @return xRes the horizontal resolution of the image in pixels
+     * per inch
      */
 
     double xRes() const;
 
     /**
-     * @brief setXRes set the horizontal resolution of the image to xRes in pixels per pt. (there are 72 pts to an inch)
+     * @brief setXRes set the horizontal resolution of the image to
+     * xRes in pixels per inch
      */
     void setXRes(double xRes) const;
 
     /**
-     * @return yRes the vertical resolution of the image in pixels per pt (there are 72 pts to an inch)
+     * @return yRes the vertical resolution of the image in pixels per
+     * inch
      */
     double yRes() const;
 
     /**
-     * @brief setYRes set the vertical resolution of the image to yRes in pixels per pt. (there are 72 pts to an inch)
+     * @brief setYRes set the vertical resolution of the image to yRes
+     * in pixels per inch
      */
     void setYRes(double yRes) const;
 
@@ -648,9 +652,20 @@ print(root.childNodes())
      * Creates a filter mask object that much like a filterlayer can apply a filter non-destructively.
      * @param name the name of the layer.
      * @param filter the filter assigned.
+     * @param selection the selection to be used by the filter mask
      * @return a FilterMask
      */
-    FilterMask* createFilterMask(const QString &name, Filter &filter);
+    FilterMask* createFilterMask(const QString &name, Filter &filter, Selection &selection);
+
+    /**
+     * @brief createFilterMask
+     * Creates a filter mask object that much like a filterlayer can apply a filter non-destructively.
+     * @param name the name of the layer.
+     * @param filter the filter assigned.
+     * @param selection_source a node from which the selection should be initialized
+     * @return a FilterMask
+     */
+    FilterMask* createFilterMask(const QString &name, Filter &filter, const Node* selection_source);
 
     /**
      * @brief createSelectionMask
@@ -843,6 +858,7 @@ private:
     friend class Krita;
     friend class Window;
     friend class Filter;
+    friend class View;
     QPointer<KisDocument> document() const;
 
 

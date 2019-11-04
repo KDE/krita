@@ -167,12 +167,13 @@ public:
         KisFixedPoint supportDst;
 
         if (realScale < 1.0) {
-            supportSrc.from256Frac(filterStrategy->intSupport() / realScale);
-            supportDst.from256Frac(filterStrategy->intSupport());
             m_weightsPositionScale = KisFixedPoint(realScale);
+            supportSrc.from256Frac(filterStrategy->intSupport(m_weightsPositionScale.toFloat()) / realScale);
+            supportDst.from256Frac(filterStrategy->intSupport(m_weightsPositionScale.toFloat()));
+
         } else {
-            supportSrc.from256Frac(filterStrategy->intSupport());
-            supportDst.from256Frac(filterStrategy->intSupport());
+            supportSrc.from256Frac(filterStrategy->intSupport(m_weightsPositionScale.toFloat()));
+            supportDst.from256Frac(filterStrategy->intSupport(m_weightsPositionScale.toFloat()));
         }
 
         for (int i = 0; i < 256; i++) {
@@ -203,7 +204,7 @@ public:
 
             int sum = 0;
             for (int j = 0; j < span; j++) {
-                int t = filterStrategy->intValueAt(scaledIter.to256Frac());
+                int t = filterStrategy->intValueAt(scaledIter.to256Frac(), m_weightsPositionScale.toFloat());
                 m_filterWeights[i].weight[j] = t;
                 sum += t;
 
@@ -215,7 +216,7 @@ public:
 
             SANITY_ZEROS();
 
-            if (sum != 255) {
+            if (sum != 255 && sum > 0) {
                 qreal fixFactor = 255.0 / sum;
                 sum = 0;
 

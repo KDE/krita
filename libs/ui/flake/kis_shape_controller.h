@@ -54,10 +54,16 @@ public:
     KoShapeLayer* shapeForNode(KisNodeSP layer) const;
     void setInitialShapeForCanvas(KisCanvas2 *canvas);
 
+    void setImage(KisImageWSP image) override;
+
 
 private:
     void addNodeImpl(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis) override;
     void removeNodeImpl(KisNodeSP node) override;
+
+private Q_SLOTS:
+    void slotUpdateDocumentResolution();
+    void slotUpdateDocumentSize();
 
 Q_SIGNALS:
     /**

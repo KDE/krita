@@ -4,7 +4,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -32,6 +33,16 @@
 
 RulerAssistant::RulerAssistant()
         : KisPaintingAssistant("ruler", i18n("Ruler assistant"))
+{
+}
+
+KisPaintingAssistantSP RulerAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
+{
+    return KisPaintingAssistantSP(new RulerAssistant(*this, handleMap));
+}
+
+RulerAssistant::RulerAssistant(const RulerAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : KisPaintingAssistant(rhs, handleMap)
 {
 }
 
@@ -132,7 +143,7 @@ void RulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *conv
     drawPath(gc, path, isSnappingActive());
 }
 
-QPointF RulerAssistant::buttonPosition() const
+QPointF RulerAssistant::getEditorPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
 }

@@ -24,7 +24,9 @@
 #include "kritaui_export.h"
 #include "kis_config.h"
 #include <QSurfaceFormat>
+#include "KisSurfaceColorSpace.h"
 #include <boost/optional.hpp>
+#include "kis_opengl.h"
 
 class KoColorProfile;
 
@@ -44,11 +46,12 @@ public:
 
     const KoColorProfile *rootSurfaceColorProfile() const;
 
-    boost::optional<Result> probeFormat(const QSurfaceFormat &format,
+    boost::optional<Result> probeFormat(const KisOpenGL::RendererConfig &rendererConfig,
                                         bool adjustGlobalState = true);
 
-    static bool fuzzyCompareColorSpaces(const QSurfaceFormat::ColorSpace &lhs,
-                                        const QSurfaceFormat::ColorSpace &rhs);
+    static bool fuzzyCompareColorSpaces(const KisSurfaceColorSpace &lhs,
+                                        const KisSurfaceColorSpace &rhs);
+    static QString angleRendererToString(KisOpenGL::AngleRenderer renderer);
 
 public:
     static void initSurfaceFormatFromConfig(KisConfig::RootSurfaceFormat config,
@@ -86,7 +89,7 @@ public:
 
     bool isSupportedVersion() const {
         return
-#ifdef Q_OS_OSX
+#ifdef Q_OS_MACOS
                 ((m_glMajorVersion * 100 + m_glMinorVersion) >= 302)
 #else
                 (m_glMajorVersion >= 3 && (m_supportsDeprecatedFunctions || m_isOpenGLES)) ||

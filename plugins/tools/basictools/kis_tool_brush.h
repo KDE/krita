@@ -21,7 +21,7 @@
 
 #include "kis_tool_freehand.h"
 
-#include <QSignalMapper>
+#include <KisSignalMapper.h>
 
 #include "KisToolPaintFactoryBase.h"
 
@@ -132,7 +132,7 @@ private:
     KisDoubleSliderSpinBox *m_sliderDelayDistance {0};
 
     QCheckBox *m_chkFinishStabilizedCurve {0};
-    QSignalMapper m_signalMapper;
+    KisSignalMapper m_signalMapper;
 };
 
 

@@ -47,14 +47,14 @@ KisFilterColorToAlpha::KisFilterColorToAlpha()
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisFilterColorToAlpha::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     return new KisWdgColorToAlpha(parent);
 }
 
-KisFilterConfigurationSP KisFilterColorToAlpha::factoryConfiguration() const
+KisFilterConfigurationSP KisFilterColorToAlpha::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("colortoalpha", 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("targetcolor", QColor(255, 255, 255));
     config->setProperty("threshold", 100);
     return config;

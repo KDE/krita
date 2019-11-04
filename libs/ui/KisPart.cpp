@@ -222,24 +222,23 @@ KisMainWindow *KisPart::createMainWindow(QUuid id)
 }
 
 KisView *KisPart::createView(KisDocument *document,
-                             KoCanvasResourceProvider *resourceManager,
-                             KActionCollection *actionCollection,
+                             KisViewManager *viewManager,
                              QWidget *parent)
 {
     // If creating the canvas fails, record this and disable OpenGL next time
     KisConfig cfg(false);
     KConfigGroup grp( KSharedConfig::openConfig(), "crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {
-        cfg.setUseOpenGL(false);
+        cfg.disableOpenGL();
     }
     if (cfg.canvasState() == "OPENGL_FAILED") {
-        cfg.setUseOpenGL(false);
+        cfg.disableOpenGL();
     }
     grp.writeEntry("CreatingCanvas", true);
     grp.sync();
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    KisView *view  = new KisView(document, resourceManager, actionCollection, parent);
+    KisView *view = new KisView(document,  viewManager, parent);
     QApplication::restoreOverrideCursor();
 
     // Record successful canvas creation
@@ -318,6 +317,11 @@ int KisPart::viewCount(KisDocument *doc) const
 bool KisPart::closingSession() const
 {
     return d->closingSession;
+}
+
+bool KisPart::exists()
+{
+    return s_instance.exists();
 }
 
 bool KisPart::closeSession(bool keepWindows)
@@ -472,6 +476,7 @@ void KisPart::openTemplate(const QUrl &url)
         mimeType.remove( QRegExp( "-template$" ) );
         document->setMimeTypeAfterLoading(mimeType);
         document->resetURL();
+        document->setReadWrite(true);
     }
     else {
         if (document->errorMessage().isEmpty()) {

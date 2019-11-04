@@ -45,8 +45,9 @@ void KisFilterSelectionOperation::runFilter(KisSelectionFilter* filter, KisViewM
         KUndo2Command* paint() override {
             KisPixelSelectionSP mergedSelection = m_sel->pixelSelection();
             KisTransaction transaction(mergedSelection);
-            QRect processingRect = m_filter->changeRect(mergedSelection->selectedExactRect());
+            QRect processingRect = m_filter->changeRect(mergedSelection->selectedExactRect(), mergedSelection->defaultBounds());
             m_filter->process(mergedSelection, processingRect);
+            mergedSelection->setDirty(processingRect);
             return transaction.endAndTake();
         }
     };

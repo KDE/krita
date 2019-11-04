@@ -41,8 +41,9 @@
 #include "kis_select_layer_action.h"
 #include "kis_gamma_exposure_action.h"
 #include "kis_change_frame_action.h"
+#include "kis_zoom_and_rotate_action.h"
 
-#define PROFILE_VERSION 3
+#define PROFILE_VERSION 4
 
 
 class Q_DECL_HIDDEN KisInputProfileManager::Private
@@ -145,13 +146,18 @@ bool KisInputProfileManager::renameProfile(const QString &oldName, const QString
     }
 
     KisInputProfile *profile = d->profiles.value(oldName);
-    d->profiles.remove(oldName);
-    profile->setName(newName);
-    d->profiles.insert(newName, profile);
+    if (profile) {
+        d->profiles.remove(oldName);
+        profile->setName(newName);
+        d->profiles.insert(newName, profile);
 
-    emit profilesChanged();
+        emit profilesChanged();
 
-    return true;
+
+        return true;
+    }
+
+    return false;
 }
 
 void KisInputProfileManager::duplicateProfile(const QString &name, const QString &newName)
@@ -369,6 +375,7 @@ void KisInputProfileManager::Private::createActions()
     actions.append(new KisSelectLayerAction());
     actions.append(new KisGammaExposureAction());
     actions.append(new KisChangeFrameAction());
+    actions.append(new KisZoomAndRotateAction());
 }
 
 QString KisInputProfileManager::Private::profileFileName(const QString &profileName)

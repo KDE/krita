@@ -2,7 +2,7 @@
 
 set -ex
 
-cd /workspace
+cd /workspace/snap
 
 ping -c1 networkcheck.kde.org
 
@@ -15,5 +15,5 @@ snap install --edge --classic snapcraft
 snapcraft --version
 snapcraft --destructive-mode
 
-mkdir -p result
-mv *.snap result/
+mkdir -p /workspace/result
+mv *.snap /workspace/result/

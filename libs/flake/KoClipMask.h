@@ -22,8 +22,8 @@
 #include "kritaflake_export.h"
 
 #include <KoFlakeCoordinateSystem.h>
-#include <QScopedPointer>
 #include <QList>
+#include <QSharedDataPointer>
 
 class KoShape;
 class QRectF;
@@ -59,10 +59,8 @@ public:
     void drawMask(QPainter *painter, KoShape *shape);
 
 private:
-    KoClipMask(const KoClipMask &rhs);
-
     struct Private;
-    const QScopedPointer<Private> m_d;
+    QSharedDataPointer<Private> m_d;
 };
 
 #endif // KOCLIPMASK_H

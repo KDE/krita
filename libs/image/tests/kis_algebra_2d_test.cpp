@@ -210,4 +210,55 @@ void KisAlgebra2DTest::testDivisionWithFloor()
     }
 }
 
+#include <QPainter>
+
+void KisAlgebra2DTest::testDrawEllipse()
+{
+    QImage image(QSize(300,300), QImage::Format_ARGB32);
+    image.fill(255);
+
+    QPainter gc(&image);
+
+    QTransform rot;
+    rot.rotate(-30);
+
+    QTransform shear;
+    shear.shear(0.5, 0.3);
+
+    const QTransform transform =
+        rot * QTransform::fromTranslate(10, 30) * shear * QTransform::fromTranslate(150, 150);
+
+    const qreal a = 100;
+    const qreal b = 50;
+
+    gc.setTransform(transform);
+    gc.setPen(Qt::black);
+    gc.drawEllipse(QPointF(0,0), a, b);
+
+    gc.setPen(Qt::blue);
+    gc.drawEllipse(QPointF(a, 0), 3, 3);
+
+    gc.setPen(Qt::red);
+    gc.drawEllipse(QPointF(0, b), 3, 3);
+
+    QPointF newAxes;
+    QTransform newTransform;
+
+    std::tie(newAxes, newTransform) = KisAlgebra2D::transformEllipse(QPointF(a, b), transform);
+
+    gc.setOpacity(50);
+    gc.resetTransform();
+    gc.setTransform(newTransform);
+    gc.setPen(QPen(Qt::blue, 2));
+    gc.drawEllipse(QPointF(0,0), newAxes.x(), newAxes.y());
+
+    gc.setPen(QPen(Qt::green, 2));
+    gc.drawEllipse(QPointF(newAxes.x(), 0), 5, 5);
+
+    gc.setPen(Qt::yellow);
+    gc.drawEllipse(QPointF(0, newAxes.y()), 5, 5);
+
+    image.save("ellipse_result.png");
+}
+
 QTEST_MAIN(KisAlgebra2DTest)

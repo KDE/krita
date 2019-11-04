@@ -25,7 +25,6 @@
 
 #include <QFile>
 #include <QFileInfo>
-#include <QSettings>
 #include <KoResourcePaths.h>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KDesktopFile>

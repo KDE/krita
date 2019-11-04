@@ -75,6 +75,7 @@ private Q_SLOTS:
     void styleButtonPressed(int buttonId);
 
     void noColorSelected();
+     void shapeChanged();
 
     /// apply color changes to the selected shape
     void colorChanged();
@@ -82,7 +83,7 @@ private Q_SLOTS:
     /// the pattern of the fill changed, apply the changes
     void patternChanged(QSharedPointer<KoShapeBackground> background);
 
-    void shapeChanged();
+
 
     void slotUpdateFillTitle();
 
@@ -97,16 +98,15 @@ private Q_SLOTS:
     void slotGradientRepeatChanged();
 
     void slotProposeCurrentColorToResourceManager();
+    void slotRecoverColorInResourceManager();
 
 Q_SIGNALS:
     void sigFillChanged();
 
     void sigInternalRequestColorToResourceManager();
+    void sigInternalRecoverColorInResourceManager();
 
 private:
-    /// update the widget with the KoShape background
-    void updateWidget(KoShape *shape);
-
     void uploadNewGradientBackground(const QGradient *gradient);
     void setNewGradientBackgroundToShape();
     void updateGradientSaveButtonAvailability();
@@ -114,7 +114,10 @@ private:
 
     void updateWidgetComponentVisbility();
 
-    bool checkNewFillModeIsSame(const KoShapeFillWrapper &w) const;
+    /// update the widget with the KoShape background
+    void updateFillIndexFromShape(KoShape *shape);
+
+    void updateFillColorFromShape(KoShape *shape);
 
     class Private;
     Private * const d;

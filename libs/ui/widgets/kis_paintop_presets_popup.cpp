@@ -136,7 +136,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     QMenu* menu = new QMenu(this);
 
     menu->setStyleSheet("margin: 6px");
-    menu->addSection(i18n("Display"));
+    menu->addSection(i18nc("@title Which elements to display (e.g., thumbnails or details)", "Display"));
 
     QActionGroup *actionGroup = new QActionGroup(this);
 
@@ -845,6 +845,6 @@ void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
     // don't update the live preview if the widget is not visible.
     if (m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->isVisible()) {
         m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setCurrentPreset(m_d->resourceProvider->currentPreset());
-        m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->updateStroke();
+        m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->requestUpdateStroke();
     }
 }

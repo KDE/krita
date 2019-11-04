@@ -53,6 +53,7 @@
 #include <kis_guides_config.h>
 #include <kis_coordinates_converter.h>
 #include <kis_time_range.h>
+#include <KisImportExportErrorCode.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -157,7 +158,8 @@ Node *Document::nodeByName(const QString &name) const
 {
     if (!d->document) return 0;
     KisNodeSP node = d->document->image()->rootLayer()->findChildByName(name);
-    return new Node(d->document->image(), node);
+    if (node.isNull()) return 0;
+    return Node::createNode(d->document->image(), node);
 }
 
 
@@ -319,7 +321,7 @@ Node *Document::rootNode() const
     KisImageSP image = d->document->image();
     if (!image) return 0;
 
-    return new Node(image, image->root());
+    return Node::createNode(image, image->root());
 }
 
 Selection *Document::selection() const
@@ -636,7 +638,7 @@ FillLayer *Document::createFillLayer(const QString &name, const QString generato
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(generatorName);
     if (generator) {
 
-        KisFilterConfigurationSP config = generator->defaultConfiguration();
+        KisFilterConfigurationSP config = generator->factoryConfiguration();
         Q_FOREACH(const QString property, configuration.properties().keys()) {
             config->setProperty(property, configuration.property(property));
         }
@@ -665,13 +667,41 @@ VectorLayer *Document::createVectorLayer(const QString &name)
     return new VectorLayer(d->document->shapeController(), image, name);
 }
 
-FilterMask *Document::createFilterMask(const QString &name, Filter &filter)
+FilterMask *Document::createFilterMask(const QString &name, Filter &filter, const Node *selection_source)
 {
-    if (!d->document) return 0;
-    if (!d->document->image()) return 0;
-    KisImageSP image = d->document->image();
+    if (!d->document)
+        return 0;
 
-    return new FilterMask(image, name, filter);
+    if (!d->document->image())
+        return 0;
+
+    if(!selection_source)
+        return 0;
+
+    KisLayerSP layer = qobject_cast<KisLayer*>(selection_source->node().data());
+    if(layer.isNull())
+        return 0;
+
+    KisImageSP image = d->document->image();
+    FilterMask* mask = new FilterMask(image, name, filter);
+    qobject_cast<KisMask*>(mask->node().data())->initSelection(layer);
+
+    return mask;
+}
+
+FilterMask *Document::createFilterMask(const QString &name, Filter &filter, Selection &selection)
+{
+    if (!d->document)
+        return 0;
+
+    if (!d->document->image())
+        return 0;
+
+    KisImageSP image = d->document->image();
+    FilterMask* mask = new FilterMask(image, name, filter);
+    qobject_cast<KisMask*>(mask->node().data())->setSelection(selection.selection());
+
+    return mask;
 }
 
 SelectionMask *Document::createSelectionMask(const QString &name)
@@ -765,12 +795,12 @@ QList<qreal> Document::verticalGuides() const
 
 bool Document::guidesVisible() const
 {
-    return d->document->guidesConfig().lockGuides();
+    return d->document->guidesConfig().showGuides();
 }
 
 bool Document::guidesLocked() const
 {
-    return d->document->guidesConfig().showGuides();
+    return d->document->guidesConfig().lockGuides();
 }
 
 Document *Document::clone() const
@@ -859,9 +889,9 @@ bool Document::importAnimation(const QList<QString> &files, int firstFrame, int 
     }
 
     KisAnimationImporter importer(d->document->image(), updater);
-    KisImportExportFilter::ConversionStatus status = importer.import(files, firstFrame, step);
+    KisImportExportErrorCode status = importer.import(files, firstFrame, step);
 
-    return (status == KisImportExportFilter::OK);
+    return status.isOk();
 }
 
 int Document::framesPerSecond()

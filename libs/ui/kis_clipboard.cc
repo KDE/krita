@@ -36,6 +36,8 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
 
+#include <KisMimeDatabase.h>
+
 // kritaimage
 #include <kis_types.h>
 #include <kis_paint_device.h>
@@ -44,6 +46,7 @@
 #include <kis_node.h>
 #include <kis_image.h>
 #include <kis_time_range.h>
+#include <utils/KisClipboardUtil.h>
 
 // local
 #include "kis_config.h"
@@ -273,10 +276,12 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
     }
 
     if (!clip) {
-        QImage qimage = cb->image();
 
-        if (qimage.isNull())
+        QImage qimage = KisClipboardUtil::getImageFromClipboard();
+
+        if (qimage.isNull()) {
             return KisPaintDeviceSP(0);
+        }
 
         KisConfig cfg(true);
         quint32 behaviour = cfg.pasteBehaviour();
@@ -290,8 +295,6 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
 
             dontPrompt.blockSignals(true);
 
-
-
             mb.setWindowTitle(i18nc("@title:window", "Missing Color Profile"));
             mb.setText(i18n("The image data you are trying to paste has no color profile information. How do you want to interpret these data? \n\n As Web (sRGB) -  Use standard colors that are displayed from computer monitors.  This is the most common way that images are stored. \n\nAs on Monitor - If you know a bit about color management and want to use your monitor to determine the color profile.\n\n"));
 
@@ -300,8 +303,6 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
             mb.addButton(i18n("As on &Monitor"), QMessageBox::AcceptRole);
             mb.addButton(i18n("Cancel"), QMessageBox::RejectRole);
             mb.addButton(&dontPrompt, QMessageBox::ActionRole);
-
-
 
             behaviour = mb.exec();
 
@@ -350,14 +351,14 @@ void KisClipboard::clipboardDataChanged()
         m_hasClip = false;
         QClipboard *cb = QApplication::clipboard();
         if (cb->mimeData()->hasImage()) {
-            QImage qimage = cb->image();
-            const QMimeData *cbData = cb->mimeData();
-            QByteArray mimeType("application/x-krita-selection");
 
-            if (cbData && cbData->hasFormat(mimeType))
+            QImage qimage = cb->image();
+            if (!qimage.isNull())
                 m_hasClip = true;
 
-            if (!qimage.isNull())
+            const QMimeData *cbData = cb->mimeData();
+            QByteArray mimeType("application/x-krita-selection");
+            if (cbData && cbData->hasFormat(mimeType))
                 m_hasClip = true;
         }
     }

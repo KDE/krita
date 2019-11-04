@@ -55,7 +55,7 @@ class KisToolSelectRectangular : public KisToolSelectBase<__KisToolSelectRectang
 public:
     KisToolSelectRectangular(KoCanvasBase* canvas);
 
-    void resetCursorStyle();
+    void resetCursorStyle() override;
 };
 
 class KisToolSelectRectangularFactory : public KisSelectionToolFactoryBase

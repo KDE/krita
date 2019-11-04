@@ -42,7 +42,7 @@ public:
     /// Provides access to the shape writer
     KoXmlWriter &shapeWriter();
 private:
-    Q_DISABLE_COPY(HtmlSavingContext);
+    Q_DISABLE_COPY(HtmlSavingContext)
 private:
     struct Private;
     const QScopedPointer<Private> d;

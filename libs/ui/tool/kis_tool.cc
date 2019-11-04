@@ -160,7 +160,7 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
         d->currentBgColor = v.value<KoColor>();
         break;
     case(KisCanvasResourceProvider::CurrentPattern):
-        d->currentPattern = static_cast<KoPattern *>(v.value<void *>());
+        d->currentPattern = v.value<KoPattern*>();
         break;
     case(KisCanvasResourceProvider::CurrentGradient):
         d->currentGradient = static_cast<KoAbstractGradient *>(v.value<void *>());
@@ -292,11 +292,12 @@ QPointF KisTool::pixelToView(const QPointF &pixelCoord) const
 
 QRectF KisTool::pixelToView(const QRectF &pixelRect) const
 {
-    if (!image())
+    if (!image()) {
         return pixelRect;
+    }
     QPointF topLeft = pixelToView(pixelRect.topLeft());
     QPointF bottomRight = pixelToView(pixelRect.bottomRight());
-    return QRectF(topLeft, bottomRight);
+    return {topLeft, bottomRight};
 }
 
 QPainterPath KisTool::pixelToView(const QPainterPath &pixelPolygon) const
@@ -522,6 +523,25 @@ void KisTool::deleteSelection()
     if (!KisToolUtils::clearImage(image(), resources->currentNode(), resources->activeSelection())) {
         KoToolBase::deleteSelection();
     }
+}
+
+KisTool::NodePaintAbility KisTool::nodePaintAbility()
+{
+    KisNodeSP node = currentNode();
+    if (!node) {
+        return NodePaintAbility::UNPAINTABLE;
+    }
+    if (node->inherits("KisShapeLayer")) {
+        return NodePaintAbility::VECTOR;
+    }
+    if (node->inherits("KisCloneLayer")) {
+        return NodePaintAbility::CLONE;
+    }
+    if (node->paintDevice()) {
+        return NodePaintAbility::PAINT;
+    }
+
+    return NodePaintAbility::UNPAINTABLE;
 }
 
 QWidget* KisTool::createOptionWidget()

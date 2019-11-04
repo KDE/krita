@@ -79,12 +79,12 @@ void TestKisSwatchGroup::testAddEntry()
     g2.setColumnCount(3);
     g2.setRowCount(1);
     for (int i = 0; i != 3; i++) {
-        g2.addEntry(KisSwatch());
+        g2.addEntry(KisSwatch(KoColor()));
     }
     QCOMPARE(g2.rowCount(), 1);
     QCOMPARE(g2.columnCount(), 3);
     QCOMPARE(g2.colorCount(), 3);
-    g2.addEntry(KisSwatch());
+    g2.addEntry(KisSwatch(KoColor()));
     QCOMPARE(g2.rowCount(), 2);
     QCOMPARE(g2.columnCount(), 3);
     QCOMPARE(g2.colorCount(), 4);
@@ -93,7 +93,7 @@ void TestKisSwatchGroup::testAddEntry()
     QCOMPARE(g2.columnCount(), 3);
     QCOMPARE(g2.colorCount(), 3);
     for (int i = 0; i != 4; i++) {
-        g2.addEntry(KisSwatch());
+        g2.addEntry(KisSwatch(KoColor()));
     }
     QCOMPARE(g2.rowCount(), 3);
     QCOMPARE(g2.columnCount(), 3);

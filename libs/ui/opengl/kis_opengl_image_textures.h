@@ -40,11 +40,13 @@ typedef QSharedPointer<KisTextureTileInfoPool> KisTextureTileInfoPoolSP;
 class KisProofingConfiguration;
 typedef QSharedPointer<KisProofingConfiguration> KisProofingConfigurationSP;
 
+
 /**
  * A set of OpenGL textures that contains the projection of a KisImage.
  */
-class KRITAUI_EXPORT KisOpenGLImageTextures : public KisShared
+class KRITAUI_EXPORT KisOpenGLImageTextures : public QObject, public KisShared
 {
+    Q_OBJECT
 public:
     /**
      * Obtain a KisOpenGLImageTextures object for the given image.
@@ -150,6 +152,10 @@ public:
     void slotImageSizeChanged(qint32 w, qint32 h);
 
     KisOpenGLUpdateInfoBuilder& updateInfoBuilder();
+    const KoColorProfile* monitorProfile();
+
+Q_SIGNALS:
+    void sigShowFloatingMessage(const QString &message, int timeout, bool priority);
 
 protected:
 

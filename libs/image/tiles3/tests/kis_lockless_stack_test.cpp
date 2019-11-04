@@ -22,6 +22,7 @@
 #include "kis_debug.h"
 
 #include "tiles3/kis_lockless_stack.h"
+#include "config-limit-long-tests.h"
 
 void KisLocklessStackTest::testOperations()
 {
@@ -47,7 +48,7 @@ void KisLocklessStackTest::testOperations()
 
 }
 
-/************ BENCHMARKING INFRASTRACTURE ************************/
+/************ BENCHMARKING INFRASTRUCTURE ************************/
 
 #define NUM_TYPES 2
 
@@ -287,6 +288,64 @@ void KisLocklessStackTest::stressTestClear()
 
     stack.clear();
     QVERIFY(stack.isEmpty());
+}
+
+class KisStressBulkPopJob : public QRunnable
+{
+public:
+    KisStressBulkPopJob(KisLocklessStack<int> &stack, qint64 &removedCheckSum)
+        : m_stack(stack), m_removedCheckSum(removedCheckSum)
+    {
+    }
+
+    void run() override {
+        int value = 0;
+        while (m_stack.pop(value)) {
+            m_removedCheckSum += value;
+        }
+    }
+
+private:
+    KisLocklessStack<int> &m_stack;
+    qint64 &m_removedCheckSum;
+};
+
+void KisLocklessStackTest::stressTestBulkPop()
+{
+    qsrand(10);
+
+    KisLocklessStack<int> stack;
+
+#ifdef LIMIT_LONG_TESTS
+    const int numThreads = 3;
+    const int numObjects = 10000000;
+#else
+    const int numThreads = 3;
+    const int numObjects = 10000000;
+#endif
+
+    QThreadPool pool;
+    pool.setMaxThreadCount(numThreads);
+
+    qint64 expectedSum = 0;
+    for (int i = 0; i < numObjects; i++) {
+        const int value = i % 3 + 1;
+        expectedSum += value;
+        stack.push(value);
+    }
+
+    QVector<qint64> partialSums(numThreads);
+
+    for(qint32 i = 0; i < numThreads; i++) {
+        KisStressBulkPopJob *job = new KisStressBulkPopJob(stack, partialSums[i]);
+        pool.start(job);
+    }
+    pool.waitForDone();
+
+    QVERIFY(stack.isEmpty());
+
+    const qint64 realSum = std::accumulate(partialSums.begin(), partialSums.end(), 0);
+    QCOMPARE(realSum, expectedSum);
 }
 
 QTEST_MAIN(KisLocklessStackTest)

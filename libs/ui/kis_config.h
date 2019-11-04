@@ -22,6 +22,7 @@
 #include <QStringList>
 #include <QList>
 #include <QColor>
+#include <QObject>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -48,9 +49,18 @@ public:
 
     ~KisConfig();
 
+public Q_SLOTS:
+    /// Log the most interesting settings to the usage log
+    void logImportantSettings() const;
+public:
+
     bool disableTouchOnCanvas(bool defaultValue = false) const;
     void setDisableTouchOnCanvas(bool value) const;
 
+    bool disableTouchRotation(bool defaultValue = false) const;
+    void setDisableTouchRotation(bool value) const;
+
+    // XXX Unused?
     bool useProjections(bool defaultValue = false) const;
     void setUseProjections(bool useProj) const;
 
@@ -178,7 +188,7 @@ public:
     void setRenderIntent(qint32 monitorRenderIntent) const;
 
     bool useOpenGL(bool defaultValue = false) const;
-    void setUseOpenGL(bool useOpenGL) const;
+    void disableOpenGL() const;
 
     int openGLFilteringMode(bool defaultValue = false) const;
     void setOpenGLFilteringMode(int filteringMode);
@@ -186,6 +196,7 @@ public:
     bool useOpenGLTextureBuffer(bool defaultValue = false) const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 
+    // XXX Unused?
     bool disableVSync(bool defaultValue = false) const;
     void setDisableVSync(bool disableVSync);
 
@@ -305,7 +316,13 @@ public:
     void setPressureTabletCurve(const QString& curveString) const;
 
     bool useWin8PointerInput(bool defaultValue = false) const;
-    void setUseWin8PointerInput(bool value) const;
+    void setUseWin8PointerInput(bool value);
+
+    static bool useWin8PointerInputNoApp(QSettings *settings, bool defaultValue = false);
+    static void setUseWin8PointerInputNoApp(QSettings *settings, bool value);
+
+    bool useRightMiddleTabletButtonWorkaround(bool defaultValue = false) const;
+    void setUseRightMiddleTabletButtonWorkaround(bool value);
 
     qreal vastScrolling(bool defaultValue = false) const;
     void setVastScrolling(const qreal factor) const;
@@ -432,7 +449,7 @@ public:
     void setDefaultBackgroundOpacity(quint8 value);
 
     QColor defaultBackgroundColor(bool defaultValue = false) const;
-    void setDefaultBackgroundColor(QColor value);
+    void setDefaultBackgroundColor(const QColor &value);
 
     enum BackgroundStyle {
         RASTER_LAYER = 0,
@@ -496,8 +513,8 @@ public:
     bool useEraserBrushOpacity(bool defaultValue = false) const;
     void setUseEraserBrushOpacity(bool value);
 
-    QColor getMDIBackgroundColor(bool defaultValue = false) const;
-    void setMDIBackgroundColor(const QColor & v) const;
+    QString getMDIBackgroundColor(bool defaultValue = false) const;
+    void setMDIBackgroundColor(const QString & v) const;
 
     QString getMDIBackgroundImage(bool defaultValue = false) const;
     void setMDIBackgroundImage(const QString & fileName) const;
@@ -533,6 +550,9 @@ public:
 
     void setEnableAmdVectorizationWorkaround(bool value);
     bool enableAmdVectorizationWorkaround(bool defaultValue = false) const;
+
+    void setDisableAVXOptimizations(bool value);
+    bool disableAVXOptimizations(bool defaultValue = false) const;
 
     bool animationDropFrames(bool defaultValue = false) const;
     void setAnimationDropFrames(bool value);

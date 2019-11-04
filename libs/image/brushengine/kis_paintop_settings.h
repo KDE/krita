@@ -86,11 +86,18 @@ public:
     /**
      * This function is called by a tool when the mouse is pressed. It's useful if
      * the paintop needs mouse interaction for instance in the case of the clone op.
-     * If the tool is supposed to ignore the event, the paint op should return false
-     * and if the tool is supposed to use the event, return true.
+     * If the tool is supposed to ignore the event, the paint op should return true
+     * and if the tool is supposed to use the event, return false.
+     * See kis_tool_freehand:tryPickByPaintOp()
      */
     virtual bool mousePressEvent(const KisPaintInformation &paintInformation, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode);
-
+    /**
+     * This function is called by a tool when the mouse is released. It's useful if
+     * the paintop needs mouse interaction for instance in the case of the clone op.
+     * If the tool is supposed to ignore the event, the paint op should return true
+     * and if the tool is supposed to use the event, return false.
+     */
+    virtual bool mouseReleaseEvent();
     /**
      * Clone the current settings object. Override this if your settings instance doesn't
      * store everything as properties.
@@ -274,15 +281,6 @@ public:
     /// Overwrite if the settings can do some kind of fallback
     /// @return loadable state of the settings, by default implementation return the same as isValid()
     virtual bool isLoadable();
-
-    /**
-     * These methods are populating properties with runtime
-     * information about canvas rotation/mirroring. This information
-     * is set directly by KisToolFreehand. Later the data is accessed
-     * by the pressure options to make a final decision.
-     */
-    void setCanvasRotation(qreal angle);
-    void setCanvasMirroring(bool xAxisMirrored, bool yAxisMirrored);
 
     /**
      * Overrides the method in KisPropertiesCofiguration to allow

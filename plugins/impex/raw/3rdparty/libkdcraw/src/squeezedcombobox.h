@@ -118,7 +118,7 @@ public:
      * highlighted item.
      * @return full text of the highlighted item
      */
-    QString itemHighlighted() const;
+    QString currentUnsqueezedText() const;
 
     /**
      * This method returns the full text (not squeezed) for the index.

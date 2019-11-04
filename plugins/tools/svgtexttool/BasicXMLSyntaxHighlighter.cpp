@@ -103,7 +103,7 @@ void BasicXMLSyntaxHighlighter::setRegexes()
 void BasicXMLSyntaxHighlighter::setFormats()
 {
     KConfigGroup cfg(KSharedConfig::openConfig(), "SvgTextTool");
-    QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().background().color());
+    QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().window().color());
 
     m_xmlKeywordFormat.setForeground(cfg.readEntry("colorKeyword", QColor(background.value() < 100 ? Qt::cyan : Qt::blue)));
     m_xmlKeywordFormat.setFontWeight(cfg.readEntry("BoldKeyword", true) ? QFont::Bold : QFont::Normal);

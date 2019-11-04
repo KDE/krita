@@ -101,7 +101,7 @@ void KisImportCatcher::slotLoadingFinished()
     KisImageWSP importedImage = m_d->doc->image();
     importedImage->waitForDone();
 
-    if (importedImage && importedImage->projection()->exactBounds().isValid()) {
+    if (importedImage && importedImage->bounds().isValid()) {
         if (m_d->layerType == "KisPaintLayer") {
             KisPaintDeviceSP dev = importedImage->projection();
             adaptClipToImageColorSpace(dev, m_d->view->image());
@@ -143,8 +143,7 @@ void KisImportCatcher::adaptClipToImageColorSpace(KisPaintDeviceSP dev, KisImage
     KisConfig cfg(true);
     if (cfg.convertToImageColorspaceOnImport() && *dev->colorSpace() != *image->colorSpace()) {
         /// XXX: do we need intent here?
-        KUndo2Command* cmd = dev->convertTo(image->colorSpace());
-        delete cmd;
+        dev->convertTo(image->colorSpace());
     }
 }
 

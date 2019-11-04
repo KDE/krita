@@ -60,9 +60,11 @@ public:
     }
 
 protected:
-    QSize documentToViewport(const QSizeF &size) override {
+    QSizeF documentToViewport(const QSizeF &size) override {
         QRectF docRect(QPointF(), size);
-        return m_converter->documentToWidget(docRect).toRect().size();
+        QSizeF viewport = m_converter->documentToWidget(docRect).size();
+        QPointF adjustedViewport = m_converter->snapToDevicePixel(QPointF(viewport.width(), viewport.height()));
+        return QSizeF(adjustedViewport.x(), adjustedViewport.y());
     }
 
 private:
@@ -229,10 +231,10 @@ void KisZoomManager::updateMouseTrackingConnections()
     m_mouseTrackingConnections.clear();
 
     if (value) {
-        connect(m_canvasController->proxyObject,
+        m_mouseTrackingConnections.addConnection(m_canvasController->proxyObject,
                 SIGNAL(canvasMousePositionChanged(QPoint)),
+                this,
                 SLOT(mousePositionChanged(QPoint)));
-
     }
 }
 
@@ -360,7 +362,10 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
 {
     KisImageWSP image = m_view->image();
 
-    const KoZoomMode::Mode newMode = KoZoomMode::ZOOM_CONSTANT;
+    // changeAspectMode is called with the same aspectMode when the window is
+    // moved across screens. Preserve the old zoomMode if this is the case.
+    const KoZoomMode::Mode newMode =
+            aspectMode == m_aspectMode ? m_zoomHandler->zoomMode() : KoZoomMode::ZOOM_CONSTANT;
     const qreal newZoom = m_zoomHandler->zoom();
 
     const qreal resolutionX =

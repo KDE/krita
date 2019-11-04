@@ -45,14 +45,14 @@ KisBlurFilter::KisBlurFilter() : KisFilter(id(), FiltersCategoryBlurId, i18n("&B
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }
 
-KisConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisBlurFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     return new KisWdgBlur(parent);
 }
 
-KisFilterConfigurationSP KisBlurFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisBlurFilter::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("halfWidth", 5);
     config->setProperty("halfHeight", 5);
     config->setProperty("rotate", 0);

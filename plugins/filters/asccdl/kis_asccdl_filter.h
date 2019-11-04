@@ -40,10 +40,10 @@ public:
         return KoID("asc-cdl", i18n("Slope, Offset, Power(ASC-CDL)"));
     }
     KoColorTransformation *createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
-    KisConfigWidget *createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisConfigWidget *createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
     bool needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const override;
 protected:
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration() const override;
 };
 
 class KisASCCDLTransformation : public KoColorTransformation

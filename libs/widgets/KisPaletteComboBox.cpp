@@ -30,7 +30,7 @@
 
 KisPaletteComboBox::KisPaletteComboBox(QWidget *parent)
     : KisSqueezedComboBox(parent)
-    , m_model(Q_NULLPTR)
+    , m_model(0)
 {
     setEditable(true);
     setInsertPolicy(NoInsert);
@@ -67,8 +67,6 @@ void KisPaletteComboBox::setCompanionView(KisPaletteView *view)
     setPaletteModel(view->paletteModel());
     connect(view, SIGNAL(sigIndexSelected(QModelIndex)),
             SLOT(slotSwatchSelected(QModelIndex)));
-    connect(this, SIGNAL(sigColorSelected(KoColor)),
-            view, SLOT(slotSelectColor(KoColor)));
 }
 
 void KisPaletteComboBox::slotPaletteChanged()

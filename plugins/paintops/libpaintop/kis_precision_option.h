@@ -36,21 +36,21 @@ public:
     void writeOptionSetting(KisPropertiesConfigurationSP settings) const;
     void readOptionSetting(const KisPropertiesConfigurationSP settings);
 
+    int effectivePrecisionLevel(qreal effectiveDabSize) const;
+    void setHasImprecisePositionOptions(bool value);
+    bool hasImprecisePositionOptions() const;
+
     int precisionLevel() const;
     void setPrecisionLevel(int precisionLevel);
     void setAutoPrecisionEnabled(int);
-    void setDeltaValue(double);
-    void setSizeToStartFrom(double);
     bool autoPrecisionEnabled();
-    double deltaValue();
-    double sizeToStartFrom();
-    void setAutoPrecision(double brushSize);
 
 private:
     int m_precisionLevel;
     bool m_autoPrecisionEnabled;
     double m_sizeToStartFrom;
     double m_deltaValue;
+    bool m_hasImprecisePositionOptions = false;
 };
 
 #endif /* __KIS_PRECISION_OPTION_H */

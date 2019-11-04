@@ -50,6 +50,7 @@ public:
     KisGuidesConfig(const KisGuidesConfig &rhs);
     KisGuidesConfig& operator=(const KisGuidesConfig &rhs);
     bool operator==(const KisGuidesConfig &rhs) const;
+    bool hasSamePositionAs(const KisGuidesConfig &rhs) const;
 
     /**
      * @brief Set the positions of the horizontal guide lines
@@ -119,6 +120,11 @@ public:
     bool loadFromXml(const QDomElement &parent);
 
     bool isDefault() const;
+
+    /// Transform the guides using the given \p transform. Please note that \p transform
+    /// should be in 'document' coordinate system.
+    /// Used with image-wide transformations.
+    void transform(const QTransform &transform);
 
 private:
     class Private;

@@ -57,6 +57,8 @@ void TimelineModelTest::init()
     //m_nodeModel = new KisNodeModel(0);
 
     initBase();
+
+    m_doc->setCurrentImage(m_image);
 }
 
 void TimelineModelTest::cleanup()
@@ -145,6 +147,11 @@ struct TestingInterface : TimelineFramesModel::NodeManipulationInterface
     void removeNode(KisNodeSP node) const override {
         m_image->undoAdapter()->addCommand(
             new KisImageLayerRemoveCommand(m_image, node));
+    }
+
+    bool setNodeProperties(KisNodeSP, KisImageSP, KisBaseNode::PropertyList) const override
+    {
+        return false;
     }
 
 private:

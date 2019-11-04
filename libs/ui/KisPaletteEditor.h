@@ -46,7 +46,7 @@ public:
     struct PaletteInfo;
 
 public:
-    explicit KisPaletteEditor(QObject *parent = Q_NULLPTR);
+    explicit KisPaletteEditor(QObject *parent = 0);
     ~KisPaletteEditor();
 
     void setPaletteModel(KisPaletteModel *model);
@@ -96,7 +96,7 @@ public:
     /**
      * @brief renameGroup
      * @param oldName
-     * @return new name if change accpeted, empty string if cancelled
+     * @return new name if change accepted, empty string if cancelled
      */
     QString renameGroup(const QString &oldName);
     void changeGroupRowCount(const QString &name, int newRowCount);
@@ -129,7 +129,7 @@ private Q_SLOTS:
     void slotSetDocumentModified();
 
 private:
-    QString newPaletteFileName(bool isGlobal);
+    QString newPaletteFileName(bool isGlobal, const QString &filename = QString());
     QString newGroupName() const;
     void setNonGlobal();
     void setGlobal();

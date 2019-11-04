@@ -1,0 +1,39 @@
+From 79689ebfb428571845dc4deed73ecae3f1fc4781 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 11 Mar 2019 13:18:06 +0300
+Subject: [PATCH 1/2] Synthesize Enter/LeaveEvent for accepted QTabletEvent
+
+When the tablet event is accepted, then Qt doesn't synthesize a mouse
+event, it means that QApplicationPrivate::sendMouseEvent() will not be
+called, and, therefore, enter/leave events will not be dispatched.
+
+The patch looks a bit hackish. Ideally, the synthesize should happen
+in QGuiApplicationPrivate::processTabletEvent(), which takes the decision
+about synthesizing mouse events. But there is not enough information
+on this level: neither qt_last_mouse_receiver nor the receiver widget
+are known at this stage.
+
+Change-Id: Ifbad6284483ee282ad129db54606f5d0d9ddd633
+---
+ src/widgets/kernel/qwidgetwindow.cpp | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/widgets/kernel/qwidgetwindow.cpp b/src/widgets/kernel/qwidgetwindow.cpp
+index fbc71cd0ea..25cb486915 100644
+--- a/src/widgets/kernel/qwidgetwindow.cpp
++++ b/src/widgets/kernel/qwidgetwindow.cpp
+@@ -1051,6 +1051,11 @@ void QWidgetWindow::handleTabletEvent(QTabletEvent *event)
+         event->setAccepted(ev.isAccepted());
+     }
+ 
++    if (event->isAccepted() && widget != qt_last_mouse_receiver) {
++        QApplicationPrivate::dispatchEnterLeave(widget, qt_last_mouse_receiver, event->globalPos());
++        qt_last_mouse_receiver = widget;
++    }
++
+     if (event->type() == QEvent::TabletRelease && event->buttons() == Qt::NoButton)
+         qt_tablet_target = 0;
+ }
+-- 
+2.20.1.windows.1
+

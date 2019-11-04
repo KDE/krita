@@ -46,9 +46,7 @@ class KisAnimationCachePopulator;
 class KisSessionResource;
 
 /**
- * KisPart is the Great Deku Tree of Krita.
- *
- * It is a singleton class which provides the main entry point to the application.
+ * KisPart a singleton class which provides the main entry point to the application.
  * Krita supports multiple documents, multiple main windows, and multiple
  * components.  KisPart manages these resources and provides them to the rest of
  * Krita.  It manages lists of Actions and shortcuts as well.
@@ -207,8 +205,7 @@ public:
      * views, and if the document wasn't known yet, it's registered as well.
      */
     KisView *createView(KisDocument *document,
-                        KoCanvasResourceProvider *resourceManager,
-                        KActionCollection *actionCollection,
+                        KisViewManager *viewManager,
                         QWidget *parent);
 
     /**
@@ -259,6 +256,14 @@ public:
      * Are we in the process of closing the application through closeSession().
      */
     bool closingSession() const;
+
+    /**
+     * This function returns true if the instance has already been initialized,
+     * false otherwise. This to prevent premature initialization that causes crash
+     * on android see `1fbb25506a`
+     * @see QGlobalStatic::exists()
+     */
+    static bool exists();
 
 private Q_SLOTS:
 

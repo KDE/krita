@@ -45,6 +45,7 @@
 #include "kis_assert.h"
 #include <QRegularExpression>
 #include <QSettings>
+#include <QScreen>
 
 #ifndef GL_RENDERER
 #  define GL_RENDERER 0x1F01
@@ -78,6 +79,25 @@ namespace
 
     void openglOnMessageLogged(const QOpenGLDebugMessage& debugMessage) {
         qDebug() << "OpenGL:" << debugMessage;
+    }
+
+    KisOpenGL::OpenGLRenderer getRendererFromProbeResult(KisOpenGLModeProber::Result info) {
+
+        KisOpenGL::OpenGLRenderer result = KisOpenGL::RendererDesktopGL;
+
+        if (info.isOpenGLES()) {
+            const QString rendererString = info.rendererString().toLower();
+
+            if (rendererString.contains("basic render driver") ||
+                rendererString.contains("software")) {
+
+                result = KisOpenGL::RendererSoftware;
+            } else {
+                result = KisOpenGL::RendererOpenGLES;
+            }
+        }
+
+        return result;
     }
 }
 
@@ -113,23 +133,29 @@ void KisOpenGL::initialize()
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(g_sanityDefaultFormatIsSet);
 
+    KisOpenGL::RendererConfig config;
+    config.format = QSurfaceFormat::defaultFormat();
+
     openGLCheckResult =
-        KisOpenGLModeProber::instance()->probeFormat(QSurfaceFormat::defaultFormat(), false);
+        KisOpenGLModeProber::instance()->probeFormat(config, false);
 
     g_debugText.clear();
     QDebug debugOut(&g_debugText);
     debugOut << "OpenGL Info\n";
-    debugOut << "\n  Vendor: " << openGLCheckResult->vendorString();
-    debugOut << "\n  Renderer: " << openGLCheckResult->rendererString();
-    debugOut << "\n  Version: " << openGLCheckResult->driverVersionString();
-    debugOut << "\n  Shading language: " << openGLCheckResult->shadingLanguageString();
-    debugOut << "\n  Requested format: " << QSurfaceFormat::defaultFormat();
-    debugOut << "\n  Current format:   " << openGLCheckResult->format();
-    debugOut.nospace();
-    debugOut << "\n     Version: " << openGLCheckResult->glMajorVersion() << "." << openGLCheckResult->glMinorVersion();
-    debugOut.resetFormat();
-    debugOut << "\n     Supports deprecated functions" << openGLCheckResult->supportsDeprecatedFunctions();
-    debugOut << "\n     is OpenGL ES:" << openGLCheckResult->isOpenGLES();
+
+    if (openGLCheckResult) {
+        debugOut << "\n  Vendor: " << openGLCheckResult->vendorString();
+        debugOut << "\n  Renderer: " << openGLCheckResult->rendererString();
+        debugOut << "\n  Version: " << openGLCheckResult->driverVersionString();
+        debugOut << "\n  Shading language: " << openGLCheckResult->shadingLanguageString();
+        debugOut << "\n  Requested format: " << QSurfaceFormat::defaultFormat();
+        debugOut << "\n  Current format:   " << openGLCheckResult->format();
+        debugOut.nospace();
+        debugOut << "\n     Version: " << openGLCheckResult->glMajorVersion() << "." << openGLCheckResult->glMinorVersion();
+        debugOut.resetFormat();
+        debugOut << "\n     Supports deprecated functions" << openGLCheckResult->supportsDeprecatedFunctions();
+        debugOut << "\n     is OpenGL ES:" << openGLCheckResult->isOpenGLES();
+    }
 
     debugOut << "\n\nQPA OpenGL Detection Info";
     debugOut << "\n  supportsDesktopGL:" << bool(g_supportedRenderers & RendererDesktopGL);
@@ -140,14 +166,19 @@ void KisOpenGL::initialize()
     debugOut << "\n  supportsOpenGLES:" << bool(g_supportedRenderers & RendererOpenGLES);
     debugOut << "\n  isQtPreferOpenGLES:" << bool(g_rendererPreferredByQt == RendererOpenGLES);
 #endif
-    debugOut << "\n== log ==\n";
-    debugOut.noquote();
-    debugOut << g_surfaceFormatDetectionLog;
-    debugOut.resetFormat();
-    debugOut << "\n== end log ==";
+//    debugOut << "\n== log ==\n";
+//    debugOut.noquote();
+//    debugOut << g_surfaceFormatDetectionLog;
+//    debugOut.resetFormat();
+//    debugOut << "\n== end log ==";
 
     dbgOpenGL.noquote().nospace() << g_debugText;
     KisUsageLogger::write(g_debugText);
+
+    if (!openGLCheckResult) {
+        return;
+    }
+
 
     // Check if we have a bugged driver that needs fence workaround
     bool isOnX11 = false;
@@ -178,7 +209,7 @@ void KisOpenGL::initialize()
     if (openGLCheckResult->vendorString().toUpper().contains("NVIDIA")) {
         g_needsPixmapCacheWorkaround = true;
 
-        const QRect screenSize = QApplication::desktop()->screenGeometry();
+        const QRect screenSize = QGuiApplication::primaryScreen()->availableGeometry();
         const int minCacheSize = 20 * 1024;
         const int cacheSize = 2048 + 2 * 4 * screenSize.width() * screenSize.height() / 1024; //KiB
 
@@ -247,25 +278,25 @@ QStringList KisOpenGL::getOpenGLWarnings() {
 bool KisOpenGL::supportsLoD()
 {
     initialize();
-    return openGLCheckResult->supportsLoD();
+    return openGLCheckResult && openGLCheckResult->supportsLoD();
 }
 
 bool KisOpenGL::hasOpenGL3()
 {
     initialize();
-    return openGLCheckResult->hasOpenGL3();
+    return openGLCheckResult && openGLCheckResult->hasOpenGL3();
 }
 
 bool KisOpenGL::hasOpenGLES()
 {
     initialize();
-    return openGLCheckResult->isOpenGLES();
+    return openGLCheckResult && openGLCheckResult->isOpenGLES();
 }
 
 bool KisOpenGL::supportsFenceSync()
 {
     initialize();
-    return openGLCheckResult->supportsFenceSync();
+    return openGLCheckResult && openGLCheckResult->supportsFenceSync();
 }
 
 bool KisOpenGL::needsFenceWorkaround()
@@ -282,7 +313,7 @@ bool KisOpenGL::needsPixmapCacheWorkaround()
 
 void KisOpenGL::testingInitializeDefaultSurfaceFormat()
 {
-    setDefaultSurfaceFormat(selectSurfaceFormat(KisOpenGL::RendererAuto, KisConfig::BT709_G22, false));
+    setDefaultSurfaceConfig(selectSurfaceConfig(KisOpenGL::RendererAuto, KisConfig::BT709_G22, false));
 }
 
 void KisOpenGL::setDebugSynchronous(bool value)
@@ -292,11 +323,8 @@ void KisOpenGL::setDebugSynchronous(bool value)
 
 KisOpenGL::OpenGLRenderer KisOpenGL::getCurrentOpenGLRenderer()
 {
-    const QSurfaceFormat::RenderableType renderer = QSurfaceFormat::defaultFormat().renderableType();
-
-    return renderer == QSurfaceFormat::OpenGLES ? RendererOpenGLES :
-           renderer == QSurfaceFormat::OpenGL ? RendererDesktopGL :
-           RendererAuto;
+    if (!openGLCheckResult) return RendererAuto;
+    return getRendererFromProbeResult(*openGLCheckResult);
 }
 
 KisOpenGL::OpenGLRenderer KisOpenGL::getQtPreferredOpenGLRenderer()
@@ -326,6 +354,10 @@ void KisOpenGL::setUserPreferredOpenGLRendererConfig(KisOpenGL::OpenGLRenderer r
 QString KisOpenGL::convertOpenGLRendererToConfig(KisOpenGL::OpenGLRenderer renderer)
 {
     switch (renderer) {
+    case RendererNone:
+        return QStringLiteral("none");
+    case RendererSoftware:
+        return QStringLiteral("software");
     case RendererDesktopGL:
         return QStringLiteral("desktop");
     case RendererOpenGLES:
@@ -341,22 +373,84 @@ KisOpenGL::OpenGLRenderer KisOpenGL::convertConfigToOpenGLRenderer(QString rende
         return RendererDesktopGL;
     } else if (renderer == "angle") {
         return RendererOpenGLES;
+    } else if (renderer == "software") {
+        return RendererSoftware;
+    } else if (renderer == "none") {
+        return RendererNone;
     } else {
         return RendererAuto;
     }
 }
 
+KisOpenGL::OpenGLRenderer KisOpenGL::RendererConfig::rendererId() const
+{
+    KisOpenGL::OpenGLRenderer result = RendererAuto;
+
+    if (format.renderableType() == QSurfaceFormat::OpenGLES &&
+        angleRenderer == AngleRendererD3d11Warp) {
+
+        result = RendererSoftware;
+
+    } else if (format.renderableType() == QSurfaceFormat::OpenGLES &&
+               angleRenderer == AngleRendererD3d11) {
+
+        result = RendererOpenGLES;
+    } else if (format.renderableType() == QSurfaceFormat::OpenGL) {
+        result = RendererDesktopGL;
+    } else if (format.renderableType() == QSurfaceFormat::DefaultRenderableType &&
+               angleRenderer == AngleRendererD3d11) {
+        // noop
+    } else {
+        qWarning() << "WARNING: unsupported combination of OpenGL renderer" << ppVar(format.renderableType()) << ppVar(angleRenderer);
+    }
+
+    return result;
+}
+
 namespace {
 
-QSurfaceFormat generateSurfaceFormat(QSurfaceFormat::RenderableType renderer,
-                                     KisConfig::RootSurfaceFormat rootSurfaceFormat,
-                                     bool debugContext)
+typedef std::pair<QSurfaceFormat::RenderableType, KisOpenGL::AngleRenderer> RendererInfo;
+
+RendererInfo getRendererInfo(KisOpenGL::OpenGLRenderer renderer)
 {
-    QSurfaceFormat format;
-#ifdef Q_OS_OSX
+    RendererInfo info = {QSurfaceFormat::DefaultRenderableType,
+                         KisOpenGL::AngleRendererD3d11};
+
+    switch (renderer) {
+    case KisOpenGL::RendererNone:
+        info = {QSurfaceFormat::DefaultRenderableType, KisOpenGL::AngleRendererDefault};
+        break;
+    case KisOpenGL::RendererAuto:
+        break;
+    case KisOpenGL::RendererDesktopGL:
+        info = {QSurfaceFormat::OpenGL, KisOpenGL::AngleRendererD3d11};
+        break;
+    case KisOpenGL::RendererOpenGLES:
+        info = {QSurfaceFormat::OpenGLES, KisOpenGL::AngleRendererD3d11};
+        break;
+    case KisOpenGL::RendererSoftware:
+        info = {QSurfaceFormat::OpenGLES, KisOpenGL::AngleRendererD3d11Warp};
+        break;
+    }
+
+    return info;
+}
+
+
+KisOpenGL::RendererConfig generateSurfaceConfig(KisOpenGL::OpenGLRenderer renderer,
+                                                KisConfig::RootSurfaceFormat rootSurfaceFormat,
+                                                bool debugContext)
+{
+    RendererInfo info = getRendererInfo(renderer);
+
+    KisOpenGL::RendererConfig config;
+    config.angleRenderer = info.second;
+
+    QSurfaceFormat &format = config.format;
+#ifdef Q_OS_MACOS
     format.setVersion(3, 2);
     format.setProfile(QSurfaceFormat::CoreProfile);
-#else
+#elif !defined(Q_OS_ANDROID)
     // XXX This can be removed once we move to Qt5.7
     format.setVersion(3, 0);
     format.setProfile(QSurfaceFormat::CompatibilityProfile);
@@ -367,14 +461,14 @@ QSurfaceFormat generateSurfaceFormat(QSurfaceFormat::RenderableType renderer,
 
     KisOpenGLModeProber::initSurfaceFormatFromConfig(rootSurfaceFormat, &format);
 
-    format.setRenderableType(renderer);
+    format.setRenderableType(info.first);
     format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
     format.setSwapInterval(0); // Disable vertical refresh syncing
     if (debugContext) {
         format.setOption(QSurfaceFormat::DebugContext, true);
     }
 
-    return format;
+    return config;
 }
 
 bool isOpenGLRendererBlacklisted(const QString &rendererString,
@@ -382,7 +476,11 @@ bool isOpenGLRendererBlacklisted(const QString &rendererString,
                                  QVector<KLocalizedString> *warningMessage)
 {
     bool isBlacklisted = false;
-
+#ifndef Q_OS_WIN
+    Q_UNUSED(rendererString);
+    Q_UNUSED(driverVersionString);
+    Q_UNUSED(warningMessage);
+#else
     // Special blacklisting of OpenGL/ANGLE is tracked on:
     // https://phabricator.kde.org/T7411
 
@@ -394,7 +492,7 @@ bool isOpenGLRendererBlacklisted(const QString &rendererString,
             "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used by default. "
             "You may manually switch to OpenGL but it is not guaranteed to work properly."
         );
-        QRegularExpression regex("\\b\\d{2}\\.\\d{2}\\.\\d{2}\\.(\\d{4})\\b");
+        QRegularExpression regex("\\b\\d{1,2}\\.\\d{2}\\.\\d{1,3}\\.(\\d{4})\\b");
         QRegularExpressionMatch match = regex.match(driverVersionString);
         if (match.hasMatch()) {
             int driverBuild = match.captured(1).toInt();
@@ -420,9 +518,15 @@ bool isOpenGLRendererBlacklisted(const QString &rendererString,
                 isBlacklisted = true;
                 *warningMessage << grossIntelWarning;
             }
+        } else {
+            // In case Intel changed the driver version format to something that
+            // we don't understand, we still select ANGLE.
+            qDebug() << "Detected Intel driver with unknown version format, making ANGLE the preferred renderer";
+            isBlacklisted = true;
+            *warningMessage << grossIntelWarning;
         }
     }
-
+#endif
     return isBlacklisted;
 }
 
@@ -444,57 +548,62 @@ public:
     {
     }
 
-    bool operator()(const QSurfaceFormat &lhs, const QSurfaceFormat &rhs) const {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(m_preferredColorSpace != QSurfaceFormat::DefaultColorSpace);
+    bool operator()(const KisOpenGL::RendererConfig &lhs, const KisOpenGL::RendererConfig &rhs) const {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_preferredColorSpace != KisSurfaceColorSpace::DefaultColorSpace);
 
-        ORDER_BY(isPreferredColorSpace(lhs.colorSpace()),
-                 isPreferredColorSpace(rhs.colorSpace()));
+        if (m_preferredRendererByUser != KisOpenGL::RendererSoftware) {
+            ORDER_BY(!isFallbackOnly(lhs.rendererId()), !isFallbackOnly(rhs.rendererId()));
+        }
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+        ORDER_BY(isPreferredColorSpace(lhs.format.colorSpace()),
+                 isPreferredColorSpace(rhs.format.colorSpace()));
+#endif
 
         if (doPreferHDR()) {
-            ORDER_BY(isHDRFormat(lhs), isHDRFormat(rhs));
+            ORDER_BY(isHDRFormat(lhs.format), isHDRFormat(rhs.format));
         } else {
-            ORDER_BY(!isHDRFormat(lhs), !isHDRFormat(rhs));
+            ORDER_BY(!isHDRFormat(lhs.format), !isHDRFormat(rhs.format));
         }
 
-        if (m_preferredRendererByUser != QSurfaceFormat::DefaultRenderableType) {
-            ORDER_BY(lhs.renderableType() == m_preferredRendererByUser,
-                     rhs.renderableType() == m_preferredRendererByUser);
+        if (m_preferredRendererByUser != KisOpenGL::RendererAuto) {
+            ORDER_BY(lhs.rendererId() == m_preferredRendererByUser,
+                     rhs.rendererId() == m_preferredRendererByUser);
         }
 
-        ORDER_BY(!isBlacklisted(lhs), !isBlacklisted(rhs));
+        ORDER_BY(!isBlacklisted(lhs.rendererId()), !isBlacklisted(rhs.rendererId()));
 
         if (doPreferHDR() &&
-            m_preferredRendererByHDR != QSurfaceFormat::DefaultRenderableType) {
+            m_preferredRendererByHDR != KisOpenGL::RendererAuto) {
 
-            ORDER_BY(lhs.renderableType() == m_preferredRendererByHDR,
-                     rhs.renderableType() == m_preferredRendererByHDR);
+            ORDER_BY(lhs.rendererId() == m_preferredRendererByHDR,
+                     rhs.rendererId() == m_preferredRendererByHDR);
 
         }
 
-        KIS_SAFE_ASSERT_RECOVER_NOOP(m_preferredRendererByQt != QSurfaceFormat::DefaultRenderableType);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_preferredRendererByQt != KisOpenGL::RendererAuto);
 
-        ORDER_BY(lhs.renderableType() == m_preferredRendererByQt,
-                 rhs.renderableType() == m_preferredRendererByQt);
+        ORDER_BY(lhs.rendererId() == m_preferredRendererByQt,
+                 rhs.rendererId() == m_preferredRendererByQt);
 
         return false;
     }
 
 
 public:
-    void setPreferredColorSpace(const QSurfaceFormat::ColorSpace &preferredColorSpace) {
+    void setPreferredColorSpace(const KisSurfaceColorSpace &preferredColorSpace) {
         m_preferredColorSpace = preferredColorSpace;
     }
 
-    void setPreferredRendererByQt(const QSurfaceFormat::RenderableType &preferredRendererByQt) {
+    void setPreferredRendererByQt(const KisOpenGL::OpenGLRenderer &preferredRendererByQt) {
         m_preferredRendererByQt = preferredRendererByQt;
     }
 
-    void setPreferredRendererByUser(const QSurfaceFormat::RenderableType &preferredRendererByUser) {
+    void setPreferredRendererByUser(const KisOpenGL::OpenGLRenderer &preferredRendererByUser) {
         m_preferredRendererByUser = preferredRendererByUser;
     }
 
-    void setPreferredRendererByHDR(const QSurfaceFormat::RenderableType &preferredRendererByHDR) {
+    void setPreferredRendererByHDR(const KisOpenGL::OpenGLRenderer &preferredRendererByHDR) {
         m_preferredRendererByHDR = preferredRendererByHDR;
     }
 
@@ -506,52 +615,68 @@ public:
         m_openGLESBlacklisted = openGLESBlacklisted;
     }
 
-    QSurfaceFormat::ColorSpace preferredColorSpace() const {
+    bool isOpenGLBlacklisted() const {
+        return m_openGLBlacklisted;
+    }
+
+    bool isOpenGLESBlacklisted() const {
+        return m_openGLESBlacklisted;
+    }
+
+    KisSurfaceColorSpace preferredColorSpace() const {
         return m_preferredColorSpace;
     }
 
-    QSurfaceFormat::RenderableType preferredRendererByUser() const {
+    KisOpenGL::OpenGLRenderer preferredRendererByUser() const {
         return m_preferredRendererByUser;
     }
 
 private:
     bool isHDRFormat(const QSurfaceFormat &f) const {
 #ifdef HAVE_HDR
-        return f.colorSpace() == QSurfaceFormat::bt2020PQColorSpace ||
-            f.colorSpace() == QSurfaceFormat::scRGBColorSpace;
+        return f.colorSpace() == KisSurfaceColorSpace::bt2020PQColorSpace ||
+            f.colorSpace() == KisSurfaceColorSpace::scRGBColorSpace;
 #else
         Q_UNUSED(f);
         return false;
 #endif
     }
 
-    bool isBlacklisted(const QSurfaceFormat &f) const {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(f.renderableType() == QSurfaceFormat::OpenGL ||
-                                     f.renderableType() == QSurfaceFormat::OpenGLES);
+    bool isFallbackOnly(KisOpenGL::OpenGLRenderer r) const {
+        return r == KisOpenGL::RendererSoftware;
+    }
 
-        return (f.renderableType() == QSurfaceFormat::OpenGL && m_openGLBlacklisted) ||
-            (f.renderableType() == QSurfaceFormat::OpenGLES && m_openGLESBlacklisted);
+    bool isBlacklisted(KisOpenGL::OpenGLRenderer r) const {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(r == KisOpenGL::RendererAuto ||
+                                     r == KisOpenGL::RendererDesktopGL ||
+                                     r == KisOpenGL::RendererOpenGLES ||
+                                     r == KisOpenGL::RendererSoftware ||
+                                     r == KisOpenGL::RendererNone);
+
+        return (r == KisOpenGL::RendererDesktopGL && m_openGLBlacklisted) ||
+            (r == KisOpenGL::RendererOpenGLES && m_openGLESBlacklisted) ||
+            (r == KisOpenGL::RendererSoftware && m_openGLESBlacklisted);
     }
 
     bool doPreferHDR() const {
 #ifdef HAVE_HDR
-        return m_preferredColorSpace == QSurfaceFormat::bt2020PQColorSpace ||
-            m_preferredColorSpace == QSurfaceFormat::scRGBColorSpace;
+        return m_preferredColorSpace == KisSurfaceColorSpace::bt2020PQColorSpace ||
+            m_preferredColorSpace == KisSurfaceColorSpace::scRGBColorSpace;
 #else
         return false;
 #endif
     }
 
-    bool isPreferredColorSpace(const QSurfaceFormat::ColorSpace cs) const {
+    bool isPreferredColorSpace(const KisSurfaceColorSpace cs) const {
         return KisOpenGLModeProber::fuzzyCompareColorSpaces(m_preferredColorSpace, cs);
         return false;
     }
 
 private:
-    QSurfaceFormat::ColorSpace m_preferredColorSpace = QSurfaceFormat::DefaultColorSpace;
-    QSurfaceFormat::RenderableType m_preferredRendererByQt = QSurfaceFormat::OpenGL;
-    QSurfaceFormat::RenderableType m_preferredRendererByUser = QSurfaceFormat::DefaultRenderableType;
-    QSurfaceFormat::RenderableType m_preferredRendererByHDR = QSurfaceFormat::DefaultRenderableType;
+    KisSurfaceColorSpace m_preferredColorSpace = KisSurfaceColorSpace::DefaultColorSpace;
+    KisOpenGL::OpenGLRenderer m_preferredRendererByQt = KisOpenGL::RendererDesktopGL;
+    KisOpenGL::OpenGLRenderer m_preferredRendererByUser = KisOpenGL::RendererAuto;
+    KisOpenGL::OpenGLRenderer m_preferredRendererByHDR = KisOpenGL::RendererAuto;
     bool m_openGLBlacklisted = false;
     bool m_openGLESBlacklisted = false;
 };
@@ -572,15 +697,22 @@ struct DetectionDebug : public QDebug
 
 #define dbgDetection() DetectionDebug(&g_surfaceFormatDetectionLog)
 
-QSurfaceFormat KisOpenGL::selectSurfaceFormat(KisOpenGL::OpenGLRenderer preferredRenderer,
-                                              KisConfig::RootSurfaceFormat preferredRootSurfaceFormat,
-                                              bool enableDebug)
+KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRenderer preferredRenderer,
+                                                         KisConfig::RootSurfaceFormat preferredRootSurfaceFormat,
+                                                         bool enableDebug)
 {
     QVector<KLocalizedString> warningMessages;
 
     using Info = boost::optional<KisOpenGLModeProber::Result>;
 
-    QVector<QSurfaceFormat::RenderableType> renderers({QSurfaceFormat::OpenGLES, QSurfaceFormat::OpenGL});
+    QHash<OpenGLRenderer, Info> renderersToTest;
+    renderersToTest.insert(RendererDesktopGL, Info());
+    renderersToTest.insert(RendererOpenGLES, Info());
+
+#ifdef Q_OS_WIN
+    renderersToTest.insert(RendererSoftware, Info());
+#endif
+
 
 #ifdef HAVE_HDR
     QVector<KisConfig::RootSurfaceFormat> formatSymbols({KisConfig::BT709_G22, KisConfig::BT709_G10, KisConfig::BT2020_PQ});
@@ -588,144 +720,191 @@ QSurfaceFormat KisOpenGL::selectSurfaceFormat(KisOpenGL::OpenGLRenderer preferre
     QVector<KisConfig::RootSurfaceFormat> formatSymbols({KisConfig::BT709_G22});
 #endif
 
-    QVector<QSurfaceFormat> preferredFormats;
-    Q_FOREACH (const QSurfaceFormat::RenderableType renderer, renderers) {
-        Q_FOREACH (const KisConfig::RootSurfaceFormat formatSymbol, formatSymbols) {
-            preferredFormats << generateSurfaceFormat(renderer, formatSymbol, enableDebug);
+    KisOpenGL::RendererConfig defaultConfig = generateSurfaceConfig(KisOpenGL::RendererAuto,
+                                                                    KisConfig::BT709_G22, false);
+    Info info = KisOpenGLModeProber::instance()->probeFormat(defaultConfig);
+
+#ifdef Q_OS_WIN
+    if (!info) {
+        // try software rasterizer (WARP)
+        defaultConfig = generateSurfaceConfig(KisOpenGL::RendererSoftware,
+                                              KisConfig::BT709_G22, false);
+        info = KisOpenGLModeProber::instance()->probeFormat(defaultConfig);
+
+        if (!info) {
+            renderersToTest.remove(RendererSoftware);
         }
     }
+#endif
 
-    QSurfaceFormat defaultFormat = generateSurfaceFormat(QSurfaceFormat::DefaultRenderableType,
-                                                         KisConfig::BT709_G22, false);
-    Info info = KisOpenGLModeProber::instance()->probeFormat(defaultFormat);
+    if (!info) return KisOpenGL::RendererConfig();
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(info, QSurfaceFormat());
+    const OpenGLRenderer defaultRenderer = getRendererFromProbeResult(*info);
+
+    OpenGLRenderers supportedRenderers = RendererNone;
 
     FormatPositionLess compareOp;
-    compareOp.setPreferredRendererByQt(info->isOpenGLES() ? QSurfaceFormat::OpenGLES : QSurfaceFormat::OpenGL);
+    compareOp.setPreferredRendererByQt(defaultRenderer);
 
 #ifdef HAVE_HDR
     compareOp.setPreferredColorSpace(
-        preferredRootSurfaceFormat == KisConfig::BT709_G22 ? QSurfaceFormat::sRGBColorSpace :
-        preferredRootSurfaceFormat == KisConfig::BT709_G10 ? QSurfaceFormat::scRGBColorSpace :
-        QSurfaceFormat::bt2020PQColorSpace);
+        preferredRootSurfaceFormat == KisConfig::BT709_G22 ? KisSurfaceColorSpace::sRGBColorSpace :
+        preferredRootSurfaceFormat == KisConfig::BT709_G10 ? KisSurfaceColorSpace::scRGBColorSpace :
+        KisSurfaceColorSpace::bt2020PQColorSpace);
 #else
     Q_UNUSED(preferredRootSurfaceFormat);
-    compareOp.setPreferredColorSpace(QSurfaceFormat::sRGBColorSpace);
+    compareOp.setPreferredColorSpace(KisSurfaceColorSpace::sRGBColorSpace);
 #endif
 
 #ifdef Q_OS_WIN
-    compareOp.setPreferredRendererByHDR(QSurfaceFormat::OpenGLES);
+    compareOp.setPreferredRendererByHDR(KisOpenGL::RendererOpenGLES);
 #endif
-    compareOp.setPreferredRendererByUser(preferredRenderer == KisOpenGL::RendererDesktopGL ? QSurfaceFormat::OpenGL :
-                                         preferredRenderer == KisOpenGL::RendererOpenGLES ? QSurfaceFormat::OpenGLES :
-                                         QSurfaceFormat::DefaultRenderableType);
+    compareOp.setPreferredRendererByUser(preferredRenderer);
     compareOp.setOpenGLESBlacklisted(false); // We cannot blacklist ES drivers atm
 
-    OpenGLRenderers supportedRenderers = RendererNone;
-    OpenGLRenderer preferredByQt = info->isOpenGLES() ? RendererOpenGLES : RendererDesktopGL;
 
-    if (!info->isOpenGLES()) {
-        compareOp.setOpenGLBlacklisted(isOpenGLRendererBlacklisted(info->rendererString(),
-                                                                   info->driverVersionString(),
-                                                                   &warningMessages));
+    renderersToTest[defaultRenderer] = info;
 
-        supportedRenderers |= RendererDesktopGL;
+    for (auto it = renderersToTest.begin(); it != renderersToTest.end(); ++it) {
+        Info info = it.value();
 
-        info = KisOpenGLModeProber::instance()->
-            probeFormat(generateSurfaceFormat(QSurfaceFormat::OpenGLES,
-                                              KisConfig::BT709_G22, false));
-        if (info) {
-            supportedRenderers |= RendererOpenGLES;
+        if (!info) {
+            info = KisOpenGLModeProber::instance()->
+                    probeFormat(generateSurfaceConfig(it.key(),
+                                                      KisConfig::BT709_G22, false));
+            *it = info;
         }
-    } else {
-        supportedRenderers |= RendererOpenGLES;
 
-        info = KisOpenGLModeProber::instance()->
-            probeFormat(generateSurfaceFormat(QSurfaceFormat::OpenGL,
-                                              KisConfig::BT709_G22, false));
+        compareOp.setOpenGLBlacklisted(
+            !info ||
+            isOpenGLRendererBlacklisted(info->rendererString(),
+                                        info->driverVersionString(),
+                                        &warningMessages));
 
-        if (!info || info->isOpenGLES()) {
-            compareOp.setOpenGLBlacklisted(true);
-        } else {
-            compareOp.setOpenGLBlacklisted(isOpenGLRendererBlacklisted(info->rendererString(),
-                                                                       info->driverVersionString(),
-                                                                       &warningMessages));
-
-            supportedRenderers |= RendererDesktopGL;
+        if (info && info->isSupportedVersion()) {
+            supportedRenderers |= it.key();
         }
     }
 
-    std::stable_sort(preferredFormats.begin(), preferredFormats.end(), compareOp);
+    OpenGLRenderer preferredByQt = defaultRenderer;
+
+    if (preferredByQt == RendererDesktopGL &&
+        supportedRenderers & RendererDesktopGL &&
+        compareOp.isOpenGLBlacklisted()) {
+
+        preferredByQt = RendererOpenGLES;
+
+    } else if (preferredByQt == RendererOpenGLES &&
+               supportedRenderers & RendererOpenGLES &&
+               compareOp.isOpenGLESBlacklisted()) {
+
+        preferredByQt = RendererDesktopGL;
+    }
+
+    QVector<RendererConfig> preferredConfigs;
+    for (auto it = renderersToTest.begin(); it != renderersToTest.end(); ++it) {
+        // if default mode of the renderer doesn't work, then custom won't either
+        if (!it.value()) continue;
+
+        Q_FOREACH (const KisConfig::RootSurfaceFormat formatSymbol, formatSymbols) {
+            preferredConfigs << generateSurfaceConfig(it.key(), formatSymbol, enableDebug);
+        }
+    }
+
+    std::stable_sort(preferredConfigs.begin(), preferredConfigs.end(), compareOp);
 
     dbgDetection() << "Supported renderers:" << supportedRenderers;
 
     dbgDetection() << "Surface format preference list:";
-    Q_FOREACH (const QSurfaceFormat &format, preferredFormats) {
-        dbgDetection() << "*" << format;
-        dbgDetection() << "   " << format.renderableType();
+    Q_FOREACH (const KisOpenGL::RendererConfig &config, preferredConfigs) {
+        dbgDetection() << "*" << config.format;
+        dbgDetection() << "   " << config.rendererId();
     }
 
-    QSurfaceFormat resultFormat = defaultFormat;
+    KisOpenGL::RendererConfig resultConfig = defaultConfig;
 
-    Q_FOREACH (const QSurfaceFormat &format, preferredFormats) {
-        dbgDetection() <<"Probing format..." << format.colorSpace() << format.renderableType();
+    if (preferredRenderer != RendererNone) {
+        Q_FOREACH (const KisOpenGL::RendererConfig &config, preferredConfigs) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+            dbgDetection() <<"Probing format..." << config.format.colorSpace() << config.rendererId();
+#else
+            dbgDetection() <<"Probing format..." << config.rendererId();
+#endif
+            Info info = KisOpenGLModeProber::instance()->probeFormat(config);
 
-        Info info = KisOpenGLModeProber::instance()->probeFormat(format);
-
-        if (info && info->isSupportedVersion()) {
+            if (info && info->isSupportedVersion()) {
 
 #ifdef Q_OS_WIN
-            // HACK: Block ANGLE with Direct3D9
-            //       Direct3D9 does not give OpenGL ES 3.0
-            //       Some versions of ANGLE returns OpenGL version 3.0 incorrectly
+                // HACK: Block ANGLE with Direct3D9
+                //       Direct3D9 does not give OpenGL ES 3.0
+                //       Some versions of ANGLE returns OpenGL version 3.0 incorrectly
 
-            if (info->isUsingAngle() &&
-                info->rendererString().contains("Direct3D9", Qt::CaseInsensitive)) {
+                if (info->isUsingAngle() &&
+                        info->rendererString().contains("Direct3D9", Qt::CaseInsensitive)) {
 
-                dbgDetection() << "Skipping Direct3D 9 Angle implementation, it shouldn't have happened.";
+                    dbgDetection() << "Skipping Direct3D 9 Angle implementation, it shouldn't have happened.";
 
-                continue;
-            }
+                    continue;
+                }
 #endif
 
-            dbgDetection() << "Found format:" << format;
-            dbgDetection() << "   " << format.renderableType();
+                dbgDetection() << "Found format:" << config.format;
+                dbgDetection() << "   " << config.rendererId();
 
-            resultFormat = format;
-            break;
-        }
-    }
-
-    {
-        const bool colorSpaceIsCorrect =
-            KisOpenGLModeProber::fuzzyCompareColorSpaces(compareOp.preferredColorSpace(),
-                                                         resultFormat.colorSpace());
-
-        const bool rendererIsCorrect =
-            compareOp.preferredRendererByUser() == QSurfaceFormat::DefaultRenderableType ||
-            compareOp.preferredRendererByUser() == resultFormat.renderableType();
-
-        if (!rendererIsCorrect && colorSpaceIsCorrect) {
-            warningMessages << ki18n("Preferred renderer doesn't support requested surface format. Another renderer has been selected.");
-        } else if (!colorSpaceIsCorrect) {
-            warningMessages << ki18n("Preferred output format is not supported by available renderers");
+                resultConfig = config;
+                break;
+            }
         }
 
+        {
+            const bool colorSpaceIsCorrect =
+        #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+                    KisOpenGLModeProber::fuzzyCompareColorSpaces(compareOp.preferredColorSpace(),
+                                                                 resultConfig.format.colorSpace());
+#else
+                    true;
+#endif
+
+            const bool rendererIsCorrect =
+                    compareOp.preferredRendererByUser() == KisOpenGL::RendererAuto ||
+                    compareOp.preferredRendererByUser() == resultConfig.rendererId();
+
+            if (!rendererIsCorrect && colorSpaceIsCorrect) {
+                warningMessages << ki18n("Preferred renderer doesn't support requested surface format. Another renderer has been selected.");
+            } else if (!colorSpaceIsCorrect) {
+                warningMessages << ki18n("Preferred output format is not supported by available renderers");
+            }
+
+        }
+    } else {
+        resultConfig.format = QSurfaceFormat();
+        resultConfig.angleRenderer = AngleRendererDefault;
     }
 
     overrideSupportedRenderers(supportedRenderers, preferredByQt);
     overrideOpenGLWarningString(warningMessages);
 
-    return resultFormat;
+    return resultConfig;
 }
 
-void KisOpenGL::setDefaultSurfaceFormat(const QSurfaceFormat &format)
+void KisOpenGL::setDefaultSurfaceConfig(const KisOpenGL::RendererConfig &config)
 {
     KIS_SAFE_ASSERT_RECOVER_NOOP(!g_sanityDefaultFormatIsSet);
 
     g_sanityDefaultFormatIsSet = true;
-    QSurfaceFormat::setDefaultFormat(format);
+    QSurfaceFormat::setDefaultFormat(config.format);
+
+#ifdef Q_OS_WIN
+    // Force ANGLE to use Direct3D11. D3D9 doesn't support OpenGL ES 3 and WARP
+    //  might get weird crashes atm.
+    qputenv("QT_ANGLE_PLATFORM", KisOpenGLModeProber::angleRendererToString(config.angleRenderer).toLatin1());
+#endif
+
+    if (config.format.renderableType() == QSurfaceFormat::OpenGLES) {
+        QCoreApplication::setAttribute(Qt::AA_UseOpenGLES, true);
+    } else if (config.format.renderableType() == QSurfaceFormat::OpenGL) {
+        QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL, true);
+    }
 }
 
 bool KisOpenGL::hasOpenGL()

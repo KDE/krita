@@ -58,19 +58,19 @@ struct FlattenSpec {
 
 void init_flatspec(struct FlattenSpec *);
 
-void add_layer_request(struct FlattenSpec *,const char *name);
+int add_layer_request(struct FlattenSpec *,const char *name);
 struct xcfLayer *lastlayerspec(struct FlattenSpec *,const char *option);
 
 typedef enum out_color_mode (*guesser) (struct FlattenSpec *,rgba **);
 
 /* Call this after processing options, and after opening the XCF file */
-void complete_flatspec(struct FlattenSpec *,guesser);
-void analyse_colormode(struct FlattenSpec *,rgba **allPixels,guesser);
+int complete_flatspec(struct FlattenSpec *,guesser);
+int analyse_colormode(struct FlattenSpec *,rgba **allPixels,guesser);
 
 /* From flatten.c */
 
 typedef void (*lineCallback)(unsigned num,rgba *pixels);
-void flattenIncrementally(struct FlattenSpec *,lineCallback);
+int flattenIncrementally(struct FlattenSpec *,lineCallback);
 rgba **flattenAll(struct FlattenSpec*);
 void shipoutWithCallback(struct FlattenSpec *,rgba **pixels,lineCallback);
 

@@ -26,9 +26,12 @@
 #include "KoColorSet.h"
 
 #include <QScopedPointer>
+#include <QDialog>
 
 #include "KisScreenColorPickerBase.h"
-#include "ui_WdgDlgInternalColorSelector.h"
+
+class Ui_WdgDlgInternalColorSelector;
+class KoColorPatch;
 
 /**
  * @brief The KisInternalColorSelector class
@@ -98,7 +101,7 @@ public:
      * @param parent parent widget.
      * @param caption the dialog caption.
      */
-    static KoColor getModalColorDialog(const KoColor color, QWidget* parent = Q_NULLPTR, QString caption = QString());
+    static KoColor getModalColorDialog(const KoColor color, QWidget* parent = 0, QString caption = QString());
 
     /**
      * @brief getCurrentColor
@@ -146,12 +149,6 @@ public Q_SLOTS:
     void reject() override;
 
 private Q_SLOTS:
-    /**
-     * @brief slotLockSelector
-     * This slot will prevent the color from being updated.
-     */
-    void slotLockSelector();
-
     /**
      * @brief slotConfigurationChanged
      * Wrapper slot for changes to the colorspace.

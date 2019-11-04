@@ -139,7 +139,7 @@ void KisRoundCornersFilter::processImpl(KisPaintDeviceSP device,
     }
 }
 
-KisConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(2, 100, 30, i18n("Radius"), "radius"));
@@ -147,9 +147,9 @@ KisConfigWidget * KisRoundCornersFilter::createConfigurationWidget(QWidget* pare
 
 }
 
-KisFilterConfigurationSP KisRoundCornersFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisRoundCornersFilter::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("roundcorners", 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("radius", 30);
     return config;
 }

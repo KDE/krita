@@ -4,7 +4,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -80,7 +81,7 @@ OverviewWidget::OverviewWidget(QWidget * parent)
 {
     setMouseTracking(true);
     KisConfig cfg(true);
-    m_outlineColor = qApp->palette().color(QPalette::Highlight);
+    slotThemeChanged();
 }
 
 OverviewWidget::~OverviewWidget()
@@ -104,6 +105,7 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
         connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),SLOT(startUpdateCanvasProjection()));
 
         connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
+        connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()));
         generateThumbnail();
     }
 }
@@ -214,13 +216,15 @@ void OverviewWidget::mouseReleaseEvent(QMouseEvent* event)
 
 void OverviewWidget::wheelEvent(QWheelEvent* event)
 {
-    float delta = event->delta();
+	if (m_canvas) {
+		float delta = event->delta();
 
-    if (delta > 0) {
-        m_canvas->viewManager()->zoomController()->zoomAction()->zoomIn();
-    } else {
-        m_canvas->viewManager()->zoomController()->zoomAction()->zoomOut();
-    }
+		if (delta > 0) {
+			m_canvas->viewManager()->zoomController()->zoomAction()->zoomIn();
+		} else {
+			m_canvas->viewManager()->zoomController()->zoomAction()->zoomOut();
+		}
+	}
 }
 
 void OverviewWidget::generateThumbnail()
@@ -262,6 +266,11 @@ void OverviewWidget::updateThumbnail(QImage pixmap)
     m_pixmap = QPixmap::fromImage(pixmap);
     m_oldPixmap = m_pixmap.copy();
     update();
+}
+
+void OverviewWidget::slotThemeChanged()
+{
+    m_outlineColor = qApp->palette().color(QPalette::Highlight);
 }
 
 

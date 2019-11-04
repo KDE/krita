@@ -1,5 +1,5 @@
 name: krita
-version: 4.1.7.101
+version: 4.2.7.1
 summary: Krita is the digital painting studio for artists
 description: Krita is a creative application for raster images. Whether you want to create
  from scratch or work with existing images, Krita is for you. You can work with
@@ -9,8 +9,15 @@ base: core18
 
 apps:
   krita:
-    command: qt5-launch usr/bin/krita
+    command: usr/bin/krita
+    command-chain:
+      - bin/qt5-launch
     plugs: [x11, unity7, home, opengl, network, network-bind, removable-media, desktop, desktop-legacy]
+    desktop: usr/share/applications/org.kde.krita.desktop
+
+layout:
+  /usr/bin/ffmpeg:
+    bind-file: $SNAP/usr/bin/ffmpeg
 
 parts:
   krita:
@@ -20,12 +27,18 @@ parts:
     - "-DCMAKE_BUILD_TYPE=Release"
     - "-DENABLE_TESTING=OFF"
     - "-DBUILD_TESTING=OFF"
+    - "-DHIDE_SAFE_ASSERTS=OFF"
     - "-DKDE_SKIP_TEST_SETTINGS=ON"
-    source: https://download.kde.org/stable/krita/4.1.7/krita-4.1.7.101.tar.gz
+    source: https://download.kde.org/stable/krita/4.2.7.1/krita-4.2.7.1.tar.xz
 # Use these instead to build from the git source
 #    source: https://anongit.kde.org/krita.git
 #    source-type: git
 #    source-branch: master
+    override-stage: |
+      # Stage the part
+      snapcraftctl stage
+      # Modify the .desktop file in the stage to point to where the icon will be in the installed snap
+      sed -i 's|Icon=\(.*\)|Icon=${SNAP}/usr/share/icons/hicolor/1024x1024/apps/\1.png|' usr/share/applications/org.kde.krita.desktop
     build-packages:
         - gettext
         - build-essential
@@ -48,6 +61,7 @@ parts:
         - libopenexr-dev
         - libpng-dev
         - libpoppler-qt5-dev
+        - libopenjpeg-dev
         - libtiff5-dev
         - libvc-dev
         - libopencolorio-dev
@@ -76,11 +90,15 @@ parts:
         - libqt5svg5-dev
         - libqt5x11extras5-dev
         - libqt5opengl5-dev
+        - libquazip5-dev
+        - qtmultimedia5-dev
+        - qtdeclarative5-dev
+        - libkf5crash-dev
 
   runtime:
     plugin: nil
     stage-packages:
-        - libexiv2-26
+        - libexiv2-27
         - libfftw3-double3
         - libgomp1
         - libgsl23
@@ -100,7 +118,6 @@ parts:
         - shared-mime-info
         - libboost-system1.65.1
         - librtmp1
-        - libqt5multimedia5
         - libqt5quickwidgets5
         - libkf5archive5
         - libkf5completion5
@@ -125,6 +142,20 @@ parts:
         - libqt5xml5
         - locales
         - libc-bin
+        - libquazip5-1
+        - libqt5quick5
+        - libqt5quickparticles5
+        - libqt5quickshapes5
+        - qt5-qmltooling-plugins
+        - libqt5qml5
+        - libqt5multimedia5
+        - libqt5multimediagsttools5
+        - libqt5multimediaquick5
+        - libqt5multimediawidgets5
+        # Required for rendering animations
+        - ffmpeg
+        - libglu1-mesa
+        - libslang2
     prime:
     - "-usr/share/wallpapers/*"
     - "-usr/share/fonts/*"
@@ -142,7 +173,7 @@ parts:
 
   launcher:
     plugin: dump
-    source: .
+    source: scripts
     organize:
       qt5-launch: bin/qt5-launch
       kf5-locale-gen: bin/kf5-locale-gen

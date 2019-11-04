@@ -205,6 +205,11 @@ void KisUpdateScheduler::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
     processQueues();
 }
 
+bool KisUpdateScheduler::hasUpdatesRunning() const
+{
+    return !m_d->updatesQueue.isEmpty();
+}
+
 KisStrokeId KisUpdateScheduler::startStroke(KisStrokeStrategy *strokeStrategy)
 {
     KisStrokeId id  = m_d->strokesQueue.startStroke(strokeStrategy);

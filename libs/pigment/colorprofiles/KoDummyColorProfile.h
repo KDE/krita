@@ -39,6 +39,7 @@ public:
     bool supportsRelative() const override;
     bool hasColorants() const override;
     bool hasTRC() const override;
+    bool isLinear() const override;
     QVector <double> getColorantsXYZ() const override;
     QVector <double> getColorantsxyY() const override;
     QVector <double> getWhitePointXYZ() const override;

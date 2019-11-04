@@ -94,9 +94,20 @@ template<>
 struct OptimizedOpsSelector<KoRgbF32Traits>
 {
     static KoCompositeOp* createAlphaDarkenOp(const KoColorSpace *cs) {
-        return useCreamyAlphaDarken() ?
-            KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy128(cs) :
-            KoOptimizedCompositeOpFactory::createAlphaDarkenOpHard128(cs);
+
+        // TODO: optimized code is disabled for 4.2 release,
+        // because it causes bug https://bugs.kde.org/show_bug.cgi?id=404133
+        if (useCreamyAlphaDarken()) {
+            return new KoCompositeOpAlphaDarken<KoRgbF32Traits, KoAlphaDarkenParamsWrapperCreamy>(cs);
+        } else {
+            return new KoCompositeOpAlphaDarken<KoRgbF32Traits, KoAlphaDarkenParamsWrapperHard>(cs);
+        }
+
+        // TODO: please restore this optimized version when the bug is fixed
+        //        return useCreamyAlphaDarken() ?
+        //            KoOptimizedCompositeOpFactory::createAlphaDarkenOpCreamy128(cs) :
+        //            KoOptimizedCompositeOpFactory::createAlphaDarkenOpHard128(cs);
+
     }
     static KoCompositeOp* createOverOp(const KoColorSpace *cs) {
         return KoOptimizedCompositeOpFactory::createOverOp128(cs);
@@ -285,7 +296,45 @@ struct AddRGBOps<Traits, true>
     }
 };
 
+
+
+
+template<class Traits, bool flag>
+struct AddGeneralAlphaOps
+{
+    static void add(KoColorSpace* cs) { Q_UNUSED(cs); }
+};
+
+template<class Traits>
+struct AddGeneralAlphaOps<Traits, true>
+{
+    typedef float Arg;
+    static const qint32 alpha_pos  = Traits::alpha_pos;
+    template<void compositeFunc(Arg, Arg, Arg&, Arg&)>
+
+
+    static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category)
+    {
+        cs->addCompositeOp(new KoCompositeOpGenericSCAlpha<Traits, compositeFunc>(cs, id, description, category));
+    }
+
+    static void add(KoColorSpace* cs)
+    {
+        add<&cfAdditionSAI <HSVType,Arg> >(cs, COMPOSITE_LUMINOSITY_SAI         , i18n("Luminosity/Shine (SAI)")         , KoCompositeOp::categoryHSV());
+    }
+
+
+};
+
+
+
+
+
 }
+
+
+
+
 
 /**
  * This function add to the colorspace all the composite ops defined by
@@ -300,8 +349,10 @@ void addStandardCompositeOps(KoColorSpace* cs)
     static const bool useRGBOps = (boost::is_base_of<KoBgrTraits<channels_type>, _Traits_>::value
                                 || boost::is_base_of<KoRgbTraits<channels_type>, _Traits_>::value);
 
-    _Private::AddGeneralOps<_Traits_, useGeneralOps>::add(cs);
-    _Private::AddRGBOps    <_Traits_, useRGBOps    >::add(cs);
+    _Private::AddGeneralOps      <_Traits_, useGeneralOps>::add(cs);
+    _Private::AddRGBOps          <_Traits_, useRGBOps    >::add(cs);
+    _Private::AddGeneralAlphaOps <_Traits_, useGeneralOps>::add(cs);
+
 }
 
 template<class _Traits_>

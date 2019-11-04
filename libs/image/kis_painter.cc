@@ -1099,6 +1099,8 @@ void KisPainter::paintPolyline(const vQPointF &points,
         fillPolygon(points, d->fillStyle);
     }
 
+    if (d->strokeStyle == StrokeStyleNone) return;
+
     if (index >= points.count())
         return;
 
@@ -1110,11 +1112,12 @@ void KisPainter::paintPolyline(const vQPointF &points,
 
     if (numPoints > 1) {
         KisDistanceInformation saveDist(points[0],
-                                        KisAlgebra2D::directionBetweenPoints(points[0], points[1], 0.0));
+                KisAlgebra2D::directionBetweenPoints(points[0], points[1], 0.0));
         for (int i = index; i < index + numPoints - 1; i++) {
             paintLine(points [i], points [i + 1], &saveDist);
         }
     }
+
 }
 
 static void getBezierCurvePoints(const KisVector2D &pos1,
@@ -1397,13 +1400,6 @@ void KisPainter::Private::fillPainterPathImpl(const QPainterPath& path, const QR
     switch (fillStyle) {
     default:
         Q_FALLTHROUGH();
-    case FillStyleGradient:
-        // Currently unsupported
-        Q_FALLTHROUGH();
-    case FillStyleStrokes:
-        // Currently unsupported
-        warnImage << "Unknown or unsupported fill style in fillPolygon\n";
-        Q_FALLTHROUGH();
     case FillStyleForegroundColor:
         fillPainter->fillRect(fillRect, q->paintColor(), OPACITY_OPAQUE_U8);
         break;
@@ -1466,11 +1462,13 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen)
     drawPainterPath(path, pen, QRect());
 }
 
-void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& pen, const QRect &requestedRect)
+void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& _pen, const QRect &requestedRect)
 {
     // we are drawing mask, it has to be white
     // color of the path is given by paintColor()
-    Q_ASSERT(pen.color() == Qt::white);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(_pen.color() == Qt::white);
+    QPen pen(_pen);
+    pen.setColor(Qt::white);
 
     if (!d->fillPainter) {
         d->polygon = d->device->createCompositionSourceDevice();
@@ -2956,30 +2954,61 @@ void KisPainter::mirrorDab(Qt::Orientation direction, KisRenderedDab *dab) const
     KritaUtils::mirrorDab(direction, effectiveAxesCenter, dab);
 }
 
-const QVector<QRect> KisPainter::calculateAllMirroredRects(const QRect &rc)
+namespace {
+
+inline void mirrorOneObject(Qt::Orientation dir, const QPoint &center, QRect *rc) {
+    KritaUtils::mirrorRect(dir, center, rc);
+}
+
+inline void mirrorOneObject(Qt::Orientation dir, const QPoint &center, QPointF *pt) {
+    KritaUtils::mirrorPoint(dir, center, pt);
+}
+
+inline void mirrorOneObject(Qt::Orientation dir, const QPoint &center, QPair<QPointF, QPointF> *pair) {
+    KritaUtils::mirrorPoint(dir, center, &pair->first);
+    KritaUtils::mirrorPoint(dir, center, &pair->second);
+}
+}
+
+template<class T> QVector<T> KisPainter::Private::calculateMirroredObjects(const T &object)
 {
-    QVector<QRect> rects;
+    QVector<T> result;
 
-    KisLodTransform t(d->device);
-    QPoint effectiveAxesCenter = t.map(d->axesCenter).toPoint();
+    KisLodTransform t(this->device);
+    const QPoint effectiveAxesCenter = t.map(this->axesCenter).toPoint();
 
-    QRect baseRect = rc;
-    rects << baseRect;
+    T baseObject = object;
+    result << baseObject;
 
-    if (d->mirrorHorizontally && d->mirrorVertically){
-        KritaUtils::mirrorRect(Qt::Horizontal, effectiveAxesCenter, &baseRect);
-        rects << baseRect;
-        KritaUtils::mirrorRect(Qt::Vertical, effectiveAxesCenter, &baseRect);
-        rects << baseRect;
-        KritaUtils::mirrorRect(Qt::Horizontal, effectiveAxesCenter, &baseRect);
-        rects << baseRect;
-    } else if (d->mirrorHorizontally) {
-        KritaUtils::mirrorRect(Qt::Horizontal, effectiveAxesCenter, &baseRect);
-        rects << baseRect;
-    } else if (d->mirrorVertically) {
-        KritaUtils::mirrorRect(Qt::Vertical, effectiveAxesCenter, &baseRect);
-        rects << baseRect;
+    if (this->mirrorHorizontally && this->mirrorVertically){
+        mirrorOneObject(Qt::Horizontal, effectiveAxesCenter, &baseObject);
+        result << baseObject;
+        mirrorOneObject(Qt::Vertical, effectiveAxesCenter, &baseObject);
+        result << baseObject;
+        mirrorOneObject(Qt::Horizontal, effectiveAxesCenter, &baseObject);
+        result << baseObject;
+    } else if (this->mirrorHorizontally) {
+        mirrorOneObject(Qt::Horizontal, effectiveAxesCenter, &baseObject);
+        result << baseObject;
+    } else if (this->mirrorVertically) {
+        mirrorOneObject(Qt::Vertical, effectiveAxesCenter, &baseObject);
+        result << baseObject;
     }
 
-    return rects;
+    return result;
+}
+
+const QVector<QRect> KisPainter::calculateAllMirroredRects(const QRect &rc)
+{
+    return d->calculateMirroredObjects(rc);
+}
+
+const QVector<QPointF> KisPainter::calculateAllMirroredPoints(const QPointF &pos)
+{
+    return d->calculateMirroredObjects(pos);
+}
+
+const QVector<QPair<QPointF, QPointF>> KisPainter::calculateAllMirroredPoints(const QPair<QPointF, QPointF> &pair)
+{
+    return d->calculateMirroredObjects(pair);
 }

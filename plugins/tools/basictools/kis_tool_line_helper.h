@@ -43,6 +43,7 @@ public:
     void translatePoints(const QPointF &offset);
     void end();
     void cancel();
+    void clearPoints();
     void clearPaint();
 
     using KisToolFreehandHelper::isRunning;

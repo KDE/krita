@@ -102,14 +102,14 @@ void KisFilterThreshold::processImpl(KisPaintDeviceSP device,
 }
 
 
-KisFilterConfigurationSP KisFilterThreshold::factoryConfiguration() const
+KisFilterConfigurationSP KisFilterThreshold::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("threshold", 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("threshold", 128);
     return config;
 }
 
-KisConfigWidget *KisFilterThreshold::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisFilterThreshold::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KisThresholdConfigWidget(parent, dev);
 }

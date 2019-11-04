@@ -112,6 +112,12 @@ void KisSelectionOptions::setAntiAliasSelection(bool value)
     m_page->chkAntiAliasing->setChecked(value);
 }
 
+void KisSelectionOptions::enablePixelOnlySelectionMode()
+{
+    setMode(PIXEL_SELECTION);
+    disableSelectionModeOption();
+}
+
 void KisSelectionOptions::updateActionButtonToolTip(int action, const QKeySequence &shortcut)
 {
     const QString shortcutString = shortcut.toString(QKeySequence::NativeText);

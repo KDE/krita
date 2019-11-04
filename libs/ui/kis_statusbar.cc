@@ -89,6 +89,17 @@ void KisStatusBar::setup()
     addStatusBarItem(m_selectionStatus);
     m_selectionStatus->setVisible(false);
 
+    m_resetAngleButton = new QToolButton;
+    m_resetAngleButton->setObjectName("Reset Rotation");
+    m_resetAngleButton->setCheckable(false);
+    m_resetAngleButton->setToolTip(i18n("Reset Rotation"));
+    m_resetAngleButton->setAutoRaise(true);
+    m_resetAngleButton->setIcon(KisIconUtils::loadIcon("rotate-canvas-left"));
+    addStatusBarItem(m_resetAngleButton);
+
+    connect(m_resetAngleButton, SIGNAL(clicked()), m_viewManager, SLOT(slotResetRotation()));
+    m_resetAngleButton->setVisible(false);
+
     m_statusBarStatusLabel = new KSqueezedTextLabel();
     m_statusBarStatusLabel->setObjectName("statsBarStatusLabel");
     m_statusBarStatusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -155,7 +166,7 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
 
     if (imageView) {
         m_imageView = imageView;
-
+        m_resetAngleButton->setVisible(true);
         connect(m_imageView, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)),
                 this, SLOT(updateStatusBarProfileLabel()));
         connect(m_imageView, SIGNAL(sigProfileChanged(const KoColorProfile*)),
@@ -164,6 +175,9 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
                 this, SLOT(imageSizeChanged()));
         updateStatusBarProfileLabel();
         addStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
+    }
+    else {
+        m_resetAngleButton->setVisible(false);
     }
 
     imageSizeChanged();
@@ -220,7 +234,7 @@ void KisStatusBar::documentMousePositionChanged(const QPointF &pos)
 
     pixelPos.setX(qBound(0, pixelPos.x(), m_viewManager->image()->width() - 1));
     pixelPos.setY(qBound(0, pixelPos.y(), m_viewManager->image()->height() - 1));
-    m_pointerPositionLabel->setText(QString("%1, %2").arg(pixelPos.x()).arg(pixelPos.y()));
+    m_pointerPositionLabel->setText(i18nc("@info mouse position (x, y)", "%1, %2", pixelPos.x(), pixelPos.y()));
 }
 
 void KisStatusBar::imageSizeChanged()
@@ -232,7 +246,7 @@ void KisStatusBar::imageSizeChanged()
     if (image) {
         qint32 w = image->width();
         qint32 h = image->height();
-        sizeText = QString("%1 &x %2 (%3)").arg(w).arg(h).arg(m_shortMemoryTag);
+        sizeText = i18nc("@info:status width x height (file size)", "%1 &x %2 (%3)", w, h, m_shortMemoryTag);
     } else {
         sizeText = m_shortMemoryTag;
     }
@@ -375,7 +389,7 @@ void KisStatusBar::setProfile(KisImageWSP image)
     if (image->profile() == 0) {
         m_statusBarProfileLabel->setText(i18n("No profile"));
     } else {
-        m_statusBarProfileLabel->setText(image->colorSpace()->name() + "  " + image->profile()->name());
+        m_statusBarProfileLabel->setText(i18nc("<color space> <image profile>", "%1  %2", image->colorSpace()->name(), image->profile()->name()));
     }
 
 }

@@ -49,9 +49,9 @@ public:
         return KoID("randompick", i18n("Random Pick"));
     }
 
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration() const override;
 public:
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 
     QRect neededRect(const QRect& rect, const KisFilterConfigurationSP config, int lod = 0) const override;
     QRect changedRect(const QRect& rect, const KisFilterConfigurationSP config, int lod = 0) const override;

@@ -540,7 +540,7 @@ private:
 
     bool m_autoStyleInStylesDotXml;
     bool m_defaultStyle;
-    short m_unused2;
+    short m_unused2 {0};
 
     // For insert()
     friend class KoGenStyles;

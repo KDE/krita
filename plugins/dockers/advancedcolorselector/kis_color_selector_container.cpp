@@ -141,9 +141,6 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
 
 
     if (m_canvas && m_canvas->viewManager()) {
-        if (m_canvas->viewManager()->nodeManager()) {
-            connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
-        }
 
         connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
                 m_colorSelector, SLOT(slotGamutMaskSet(KoGamutMask*)), Qt::UniqueConnection);
@@ -154,10 +151,10 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
         connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigGamutMaskPreviewUpdate()),
                 m_colorSelector, SLOT(slotGamutMaskPreviewUpdate()), Qt::UniqueConnection);
 
-        m_gamutMaskToolbar->connectMaskSignals(m_canvas->viewManager()->canvasResourceProvider());
+        connect(m_canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigGamutMaskDeactivated()),
+                m_colorSelector, SLOT(slotGamutMaskDeactivate()), Qt::UniqueConnection);
 
-        // gamut mask connections
-        connect(m_gamutMaskToolbar, SIGNAL(sigGamutMaskToggle(bool)), m_colorSelector, SLOT(slotGamutMaskToggle(bool)), Qt::UniqueConnection);
+        m_gamutMaskToolbar->connectMaskSignals(m_canvas->viewManager()->canvasResourceProvider());
 
         KActionCollection* actionCollection = canvas->viewManager()->actionCollection();
         actionCollection->addAction("show_color_selector", m_colorSelAction);
@@ -206,25 +203,6 @@ void KisColorSelectorContainer::updateSettings()
         m_shadeSelector->show();
 }
 
-void KisColorSelectorContainer::reactOnLayerChange()
-{
-    if (m_canvas) {
-        KisNodeSP node = m_canvas->viewManager()->canvasResourceProvider()->currentNode();
-        if (node) {
-            KisPaintDeviceSP device = node->paintDevice();
-            if (device) {
-                m_colorSelAction->setEnabled(true);
-                m_mypaintAction->setEnabled(true);
-                m_minimalAction->setEnabled(true);
-            }
-            else {
-                //            m_colorSelAction->setEnabled(false);
-                //            m_mypaintAction->setEnabled(false);
-                //            m_minimalAction->setEnabled(false);
-            }
-        }
-    }
-}
 
 void KisColorSelectorContainer::resizeEvent(QResizeEvent * e)
 {

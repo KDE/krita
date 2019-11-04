@@ -103,6 +103,7 @@ private Q_SLOTS:
     void slotRaiseClicked();
     void slotLowerClicked();
     void slotPropertiesClicked();
+    void slotChangeCloneSourceClicked();
 
     void slotCompositeOpChanged(int index);
     void slotOpacityChanged();
@@ -162,6 +163,7 @@ private:
     QVector<KisAction*> m_actions;
     KisAction* m_removeAction;
     KisAction* m_propertiesAction;
+    KisAction* m_changeCloneSourceAction;
     KisSignalCompressor m_thumbnailCompressor;
     KisSignalCompressor m_colorLabelCompressor;
     KisSignalCompressor m_thumbnailSizeCompressor;
@@ -180,7 +182,7 @@ public:
     LayerBoxFactory() { }
 
     QString id() const override {
-        return QString("LayerBox");
+        return QString("KisLayerBox");
     }
 
     QDockWidget* createDockWidget() override {

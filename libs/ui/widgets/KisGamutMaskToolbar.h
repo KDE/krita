@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -36,12 +37,13 @@ public:
     void connectMaskSignals(KisCanvasResourceProvider* resourceProvider);
 
 Q_SIGNALS:
-    void sigGamutMaskToggle(bool state);
     void sigGamutMaskChanged(KoGamutMask*);
+    void sigGamutMaskDeactivated();
 
 public Q_SLOTS:
     void slotGamutMaskSet(KoGamutMask* mask);
     void slotGamutMaskUnset();
+    void slotGamutMaskDeactivate();
 
 private Q_SLOTS:
     void slotGamutMaskToggle(bool state);
@@ -56,6 +58,8 @@ private:
 
     QString m_textNoMask;
     QString m_textMaskDisabled;
+
+    bool m_selfUpdate;
 };
 
 #endif // KISGAMUTMASKTOOLBAR_H

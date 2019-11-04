@@ -120,7 +120,7 @@ KisBrush* KisAutoBrush::clone() const
     return new KisAutoBrush(*this);
 }
 
-/* It's difficult to predict the mask height when exaclty when there are
+/* It's difficult to predict the mask height when exactly when there are
  * more than 2 spikes, so we return an upperbound instead. */
 static KisDabShape lieAboutDabShape(KisDabShape const& shape)
 {
@@ -272,8 +272,8 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     double centerX = hotSpot.x() - 0.5 + subPixelX;
     double centerY = hotSpot.y() - 0.5 + subPixelY;
 
+    d->shape->setSoftness(softnessFactor); // softness must be set first
     d->shape->setScale(shape.scaleX(), shape.scaleY());
-    d->shape->setSoftness(softnessFactor);
 
     if (coloringInformation) {
         if (color && pixelSize == 4) {

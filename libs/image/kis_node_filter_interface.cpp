@@ -85,7 +85,7 @@ void KisNodeFilterInterface::setFilter(KisFilterConfigurationSP filterConfig)
 {
     SANITY_RELEASE_FILTER(m_filter);
 
-    Q_ASSERT(filterConfig);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
     m_filter = filterConfig;
 
     SANITY_ACQUIRE_FILTER(m_filter);

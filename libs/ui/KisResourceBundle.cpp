@@ -51,7 +51,7 @@ KisResourceBundle::KisResourceBundle(QString const& fileName)
     : KoResource(fileName),
       m_bundleVersion("1")
 {
-    setName(QFileInfo(fileName).baseName());
+    setName(QFileInfo(fileName).completeBaseName());
     m_metadata["generator"] = "Krita (" + KritaVersionWrapper::versionString(true) + ")";
 
 }
@@ -280,7 +280,7 @@ bool KisResourceBundle::save()
 {
     if (filename().isEmpty()) return false;
 
-    addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
+    addMeta("updated", QDateTime::currentDateTime().toOffsetFromUtc(0).toString(Qt::ISODate));
 
     QDir bundleDir = KoResourcePaths::saveLocation("data", "bundles");
     bundleDir.cdUp();
@@ -1046,7 +1046,7 @@ void KisResourceBundle::recreateBundle(QScopedPointer<KoStore> &oldStore)
         KoHashGenerator *generator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
         KisResourceBundleManifest newManifest;
 
-        addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
+        addMeta("updated", QDateTime::currentDateTime().toString(Qt::ISODate));
 
         Q_FOREACH (KisResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
             // Wrong manifest entry found, skip it

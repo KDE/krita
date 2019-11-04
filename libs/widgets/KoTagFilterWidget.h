@@ -38,7 +38,6 @@ public:
     void allowSave(bool allow);
     void clear();
 
-    class QLineEdit* searchField();
 Q_SIGNALS:
     void filterTextChanged(const QString &filterText);
     void saveButtonClicked();

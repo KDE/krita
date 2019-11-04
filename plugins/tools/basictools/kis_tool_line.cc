@@ -38,11 +38,13 @@
 #include <kis_debug.h>
 #include <kis_cursor.h>
 #include <brushengine/kis_paintop_registry.h>
-#include "kis_figure_painting_tool_helper.h"
-#include "kis_canvas2.h"
+#include <kis_figure_painting_tool_helper.h>
+#include <kis_canvas2.h>
+#include <kis_action_registry.h>
+#include <kis_painting_information_builder.h>
 
-#include "kis_painting_information_builder.h"
 #include "kis_tool_line_helper.h"
+
 
 const KisCoordinatesConverter* getCoordinatesConverter(KoCanvasBase * canvas)
 {
@@ -172,7 +174,7 @@ void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
 {
     NodePaintAbility nodeAbility = nodePaintAbility();
-    if (nodeAbility == NONE || !nodeEditable()) {
+    if (nodeAbility == UNPAINTABLE || !nodeEditable()) {
         event->ignore();
         return;
     }
@@ -263,7 +265,8 @@ void KisToolLine::endStroke()
 {
     NodePaintAbility nodeAbility = nodePaintAbility();
 
-    if (!m_strokeIsRunning || m_startPoint == m_endPoint || nodeAbility == NONE) {
+    if (!m_strokeIsRunning || m_startPoint == m_endPoint || nodeAbility == UNPAINTABLE) {
+        m_helper->clearPoints();
         return;
     }
 
@@ -364,5 +367,3 @@ QString KisToolLine::quickHelp() const
 {
     return i18n("Alt+Drag will move the origin of the currently displayed line around, Shift+Drag will force you to draw straight lines");
 }
-
-

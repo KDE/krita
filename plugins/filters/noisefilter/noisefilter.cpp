@@ -68,9 +68,9 @@ KisFilterNoise::KisFilterNoise() : KisFilter(id(), FiltersCategoryOtherId, i18n(
     setSupportsPainting(true);
 }
 
-KisFilterConfigurationSP KisFilterNoise::factoryConfiguration() const
+KisFilterConfigurationSP KisFilterNoise::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("noise", 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("level", 50);
     config->setProperty("opacity", 100);
     config->setProperty("seedThreshold", rand());
@@ -80,7 +80,7 @@ KisFilterConfigurationSP KisFilterNoise::factoryConfiguration() const
     return config;
 }
 
-KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool) const
 {
     Q_UNUSED(dev);
     return new KisWdgNoise((KisFilter*)this, (QWidget*)parent);

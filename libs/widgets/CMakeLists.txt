@@ -3,7 +3,6 @@ add_subdirectory( tests )
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set(kritawidgets_LIB_SRCS
-    KoGradientEditWidget.cpp
     KoVBox.cpp
     KoDialog.cpp
     KoZoomWidget.cpp
@@ -67,10 +66,6 @@ set(kritawidgets_LIB_SRCS
     WidgetsDebug.cpp
 
     kis_file_name_requester.cpp
-
-    kis_double_parse_spin_box.cpp
-    kis_double_parse_unit_spin_box.cpp
-    kis_int_parse_spin_box.cpp
 
     KisColorSelectorInterface.cpp
     KoAnchorSelectionWidget.cpp

@@ -29,7 +29,13 @@ const QString EXPERIMENT_SPEED_ENABLED = "Experiment/speedEnabled";
 const QString EXPERIMENT_SPEED_VALUE = "Experiment/speed";
 const QString EXPERIMENT_WINDING_FILL = "Experiment/windingFill";
 const QString EXPERIMENT_HARD_EDGE = "Experiment/hardEdge";
+const QString EXPERIMENT_FILL_TYPE = "Experiment/fillType";
 
+
+enum ExperimentFillType {
+    SolidColor,
+    Pattern
+};
 
 
 class KisExperimentOpOptionsWidget;
@@ -68,6 +74,7 @@ public:
     qreal smoothing;
     bool windingFill;
     bool hardEdge;
+    ExperimentFillType fillType;
 
     void readOptionSetting(const KisPropertiesConfigurationSP setting) {
         isDisplacementEnabled = setting->getBool(EXPERIMENT_DISPLACEMENT_ENABLED);
@@ -78,6 +85,7 @@ public:
         smoothing = setting->getDouble(EXPERIMENT_SMOOTHING_VALUE, 20.0);
         windingFill = setting->getBool(EXPERIMENT_WINDING_FILL);
         hardEdge = setting->getBool(EXPERIMENT_HARD_EDGE);
+        fillType = (ExperimentFillType)setting->getInt(EXPERIMENT_FILL_TYPE, 0); // default to solid color
     }
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
@@ -89,6 +97,7 @@ public:
         setting->setProperty(EXPERIMENT_SMOOTHING_VALUE, smoothing);
         setting->setProperty(EXPERIMENT_WINDING_FILL, windingFill);
         setting->setProperty(EXPERIMENT_HARD_EDGE, hardEdge);
+        setting->setProperty(EXPERIMENT_FILL_TYPE, fillType);
     }
 
 

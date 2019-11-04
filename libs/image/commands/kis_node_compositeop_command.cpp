@@ -21,8 +21,6 @@
 #include <KoCompositeOp.h>
 #include "kis_node.h"
 #include "commands/kis_node_commands.h"
-#include "kis_paint_device.h"
-
 
 KisNodeCompositeOpCommand::KisNodeCompositeOpCommand(KisNodeSP node, const QString& oldCompositeOp,
         const QString& newCompositeOp) :

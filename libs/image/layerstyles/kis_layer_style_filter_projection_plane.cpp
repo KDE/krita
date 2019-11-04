@@ -28,6 +28,7 @@
 
 #include "kis_painter.h"
 #include "kis_multiple_projection.h"
+#include "KisLayerStyleKnockoutBlower.h"
 
 
 struct KisLayerStyleFilterProjectionPlane::Private
@@ -55,6 +56,7 @@ struct KisLayerStyleFilterProjectionPlane::Private
     QScopedPointer<KisLayerStyleFilter> filter;
     KisPSDLayerStyleSP style;
     QScopedPointer<KisLayerStyleFilterEnvironment> environment;
+    KisLayerStyleKnockoutBlower knockoutBlower;
 
     KisMultipleProjection projection;
 };
@@ -92,6 +94,7 @@ QRect KisLayerStyleFilterProjectionPlane::recalculate(const QRect& rect, KisNode
     m_d->projection.clear(rect);
     m_d->filter->processDirectly(m_d->sourceLayer->projection(),
                                  &m_d->projection,
+                                 &m_d->knockoutBlower,
                                  rect,
                                  m_d->style,
                                  m_d->environment.data());
@@ -106,6 +109,16 @@ void KisLayerStyleFilterProjectionPlane::apply(KisPainter *painter, const QRect 
 KisPaintDeviceList KisLayerStyleFilterProjectionPlane::getLodCapableDevices() const
 {
     return m_d->projection.getLodCapableDevices();
+}
+
+bool KisLayerStyleFilterProjectionPlane::isEmpty() const
+{
+    return m_d->projection.isEmpty();
+}
+
+KisLayerStyleKnockoutBlower *KisLayerStyleFilterProjectionPlane::knockoutBlower() const
+{
+    return &m_d->knockoutBlower;
 }
 
 QRect KisLayerStyleFilterProjectionPlane::needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
@@ -133,5 +146,10 @@ QRect KisLayerStyleFilterProjectionPlane::changeRect(const QRect &rect, KisLayer
 QRect KisLayerStyleFilterProjectionPlane::accessRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
 {
     return needRect(rect, pos);
+}
+
+QRect KisLayerStyleFilterProjectionPlane::needRectForOriginal(const QRect &rect) const
+{
+    return needRect(rect, KisLayer::N_ABOVE_FILTHY);
 }
 

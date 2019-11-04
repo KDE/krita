@@ -28,7 +28,6 @@ class SvgRichTextCtrl : public QTextEdit
 {
 public:
     SvgRichTextCtrl(QWidget* parent = nullptr);
-
 protected:
     void insertFromMimeData(const QMimeData* source) override;
 };

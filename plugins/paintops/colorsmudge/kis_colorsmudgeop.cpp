@@ -107,7 +107,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     }
     m_rotationOption.applyFanCornersInfo(this);
 
-    if(m_overlayModeOption.isChecked()){
+    if (m_overlayModeOption.isChecked() && m_image && m_image->projection()){
         m_preciseImageDeviceWrapper.reset(new KisPrecisePaintDeviceWrapper(m_image->projection()));
     }
 }

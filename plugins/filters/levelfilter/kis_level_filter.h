@@ -44,7 +44,7 @@ public:
 public:
 
 //     virtual KisFilterConfigurationSP factoryConfiguration() const;
-    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
 
     KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
 
@@ -67,7 +67,7 @@ public:
     Ui::WdgLevel m_page;
 
 protected Q_SLOTS:
-    void slotDrawHistogram(bool logarithmic = false);
+    void slotDrawHistogram(bool isLogarithmic);
 
     void slotModifyInBlackLimit(int);
     void slotModifyInWhiteLimit(int);
@@ -81,7 +81,7 @@ protected Q_SLOTS:
 
 protected:
     QScopedPointer<KisHistogram> m_histogram;
-    bool m_histlog;
+    bool m_isLogarithmic;
     bool m_inverted;
 };
 

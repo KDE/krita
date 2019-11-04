@@ -46,6 +46,7 @@
 #include "KisQPainterStateSaver.h"
 #include "KoSvgTextChunkShape.h"
 #include "KoSvgTextShape.h"
+#include <QApplication>
 
 #include <QPainter>
 #include <QTimer>
@@ -64,6 +65,8 @@ bool KoShapeManager::Private::shapeUsedInRenderingTree(KoShape *shape)
 
 void KoShapeManager::Private::updateTree()
 {
+    QMutexLocker l(&this->treeMutex);
+
     // for detecting collisions between shapes.
     DetectCollision detector;
     bool selectionModified = false;
@@ -99,6 +102,35 @@ void KoShapeManager::Private::updateTree()
     }
 }
 
+void KoShapeManager::Private::forwardCompressedUdpate()
+{
+    bool shouldUpdateDecorations = false;
+    QRectF scheduledUpdate;
+
+    {
+        QMutexLocker l(&shapesMutex);
+
+        if (!compressedUpdate.isEmpty()) {
+            scheduledUpdate = compressedUpdate;
+            compressedUpdate = QRect();
+        }
+
+        Q_FOREACH (const KoShape *shape, compressedUpdatedShapes) {
+            if (selection->isSelected(shape)) {
+                shouldUpdateDecorations = true;
+                break;
+            }
+        }
+        compressedUpdatedShapes.clear();
+    }
+
+    if (shouldUpdateDecorations && canvas->toolProxy()) {
+        canvas->toolProxy()->repaintDecorations();
+    }
+    canvas->updateCanvas(scheduledUpdate);
+
+}
+
 void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     QList<KoShape*> shapes = group->shapes();
@@ -124,6 +156,14 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &sha
     Q_ASSERT(d->canvas); // not optional.
     connect(d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
     setShapes(shapes);
+
+    /**
+     * Shape manager uses signal compressors with timers, therefore
+     * it might handle queued signals, therefore it should belong
+     * to the GUI thread.
+     */
+    this->moveToThread(qApp->thread());
+    connect(&d->updateCompressor, SIGNAL(timeout()), this, SLOT(forwardCompressedUdpate()));
 }
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
@@ -131,12 +171,16 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
 {
     Q_ASSERT(d->canvas); // not optional.
     connect(d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
+
+    // see a comment in another constructor
+    this->moveToThread(qApp->thread());
+    connect(&d->updateCompressor, SIGNAL(timeout()), this, SLOT(forwardCompressedUdpate()));
 }
 
 void KoShapeManager::Private::unlinkFromShapesRecursively(const QList<KoShape*> &shapes)
 {
     Q_FOREACH (KoShape *shape, shapes) {
-        shape->priv()->removeShapeManager(q);
+        shape->removeShapeManager(q);
 
         KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
         if (container) {
@@ -155,12 +199,20 @@ KoShapeManager::~KoShapeManager()
 
 void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
 {
-    //clear selection
-    d->selection->deselectAll();
-    d->unlinkFromShapesRecursively(d->shapes);
-    d->aggregate4update.clear();
-    d->tree.clear();
-    d->shapes.clear();
+    {
+        QMutexLocker l1(&d->shapesMutex);
+        QMutexLocker l2(&d->treeMutex);
+
+        //clear selection
+        d->selection->deselectAll();
+        d->unlinkFromShapesRecursively(d->shapes);
+        d->compressedUpdate = QRect();
+        d->compressedUpdatedShapes.clear();
+        d->aggregate4update.clear();
+        d->shapeIndexesBeforeUpdate.clear();
+        d->tree.clear();
+        d->shapes.clear();
+    }
 
     Q_FOREACH (KoShape *shape, shapes) {
         addShape(shape, repaint);
@@ -169,14 +221,20 @@ void KoShapeManager::setShapes(const QList<KoShape *> &shapes, Repaint repaint)
 
 void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
 {
-    if (d->shapes.contains(shape))
-        return;
-    shape->priv()->addShapeManager(this);
-    d->shapes.append(shape);
+    {
+        QMutexLocker l1(&d->shapesMutex);
 
-    if (d->shapeUsedInRenderingTree(shape)) {
-        QRectF br(shape->boundingRect());
-        d->tree.insert(br, shape);
+        if (d->shapes.contains(shape))
+            return;
+        shape->addShapeManager(this);
+        d->shapes.append(shape);
+
+        if (d->shapeUsedInRenderingTree(shape)) {
+            QMutexLocker l2(&d->treeMutex);
+
+            QRectF br(shape->boundingRect());
+            d->tree.insert(br, shape);
+        }
     }
 
     if (repaint == PaintShapeOnAdd) {
@@ -192,26 +250,42 @@ void KoShapeManager::addShape(KoShape *shape, Repaint repaint)
         }
     }
 
-    Private::DetectCollision detector;
-    detector.detect(d->tree, shape, shape->zIndex());
-    detector.fireSignals();
+    {
+        QMutexLocker l(&d->treeMutex);
+
+        Private::DetectCollision detector;
+        detector.detect(d->tree, shape, shape->zIndex());
+        detector.fireSignals();
+    }
 }
 
 void KoShapeManager::remove(KoShape *shape)
 {
-    Private::DetectCollision detector;
-    detector.detect(d->tree, shape, shape->zIndex());
-    detector.fireSignals();
+    QRectF dirtyRect;
+    {
+        QMutexLocker l1(&d->shapesMutex);
+        QMutexLocker l2(&d->treeMutex);
 
-    shape->update();
-    shape->priv()->removeShapeManager(this);
-    d->selection->deselect(shape);
-    d->aggregate4update.remove(shape);
+        Private::DetectCollision detector;
+        detector.detect(d->tree, shape, shape->zIndex());
+        detector.fireSignals();
 
-    if (d->shapeUsedInRenderingTree(shape)) {
-        d->tree.remove(shape);
+        dirtyRect = shape->absoluteOutlineRect();
+
+        shape->removeShapeManager(this);
+        d->selection->deselect(shape);
+        d->aggregate4update.remove(shape);
+        d->compressedUpdatedShapes.remove(shape);
+
+        if (d->shapeUsedInRenderingTree(shape)) {
+            d->tree.remove(shape);
+        }
+        d->shapes.removeAll(shape);
     }
-    d->shapes.removeAll(shape);
+
+    if (!dirtyRect.isEmpty()) {
+        d->canvas->updateCanvas(dirtyRect);
+    }
 
     // remove the children of a KoShapeContainer
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
@@ -229,8 +303,12 @@ KoShapeManager::ShapeInterface::ShapeInterface(KoShapeManager *_q)
 
 void KoShapeManager::ShapeInterface::notifyShapeDestructed(KoShape *shape)
 {
+    QMutexLocker l1(&q->d->shapesMutex);
+    QMutexLocker l2(&q->d->treeMutex);
+
     q->d->selection->deselect(shape);
     q->d->aggregate4update.remove(shape);
+    q->d->compressedUpdatedShapes.remove(shape);
 
     // we cannot access RTTI of the semi-destructed shape, so just
     // unlink it lazily
@@ -250,16 +328,20 @@ KoShapeManager::ShapeInterface *KoShapeManager::shapeInterface()
 
 void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, bool forPrint)
 {
+    QMutexLocker l1(&d->shapesMutex);
+
     d->updateTree();
     painter.setPen(Qt::NoPen);  // painters by default have a black stroke, lets turn that off.
     painter.setBrush(Qt::NoBrush);
 
     QList<KoShape*> unsortedShapes;
     if (painter.hasClipping()) {
+        QMutexLocker l(&d->treeMutex);
+
         QRectF rect = converter.viewToDocument(KisPaintingTweaks::safeClipBoundingRect(painter));
         unsortedShapes = d->tree.intersects(rect);
     } else {
-        unsortedShapes = shapes();
+        unsortedShapes = d->shapes;
         warnFlake << "KoShapeManager::paint  Painting with a painter that has no clipping will lead to too much being painted!";
     }
 
@@ -482,8 +564,16 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
 
 KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelection selection, bool omitHiddenShapes)
 {
+    QMutexLocker l(&d->shapesMutex);
+
     d->updateTree();
-    QList<KoShape*> sortedShapes(d->tree.contains(position));
+    QList<KoShape*> sortedShapes;
+
+    {
+        QMutexLocker l(&d->treeMutex);
+        sortedShapes = d->tree.contains(position);
+    }
+
     std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     KoShape *firstUnselectedShape = 0;
     for (int count = sortedShapes.count() - 1; count >= 0; count--) {
@@ -532,8 +622,15 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
 
 QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenShapes, bool containedMode)
 {
+    QMutexLocker l(&d->shapesMutex);
+
     d->updateTree();
-    QList<KoShape*> shapes(containedMode ? d->tree.contained(rect) : d->tree.intersects(rect));
+    QList<KoShape*> shapes;
+
+    {
+        QMutexLocker l(&d->treeMutex);
+        shapes = containedMode ? d->tree.contained(rect) : d->tree.intersects(rect);
+    }
 
     for (int count = shapes.count() - 1; count >= 0; count--) {
 
@@ -564,41 +661,62 @@ QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenSha
 
 void KoShapeManager::update(const QRectF &rect, const KoShape *shape, bool selectionHandles)
 {
-    d->canvas->updateCanvas(rect);
-    if (selectionHandles && d->selection->isSelected(shape)) {
-        if (d->canvas->toolProxy())
-            d->canvas->toolProxy()->repaintDecorations();
+    if (d->updatesBlocked) return;
+
+    {
+        QMutexLocker l(&d->shapesMutex);
+
+        d->compressedUpdate |= rect;
+
+        if (selectionHandles) {
+            d->compressedUpdatedShapes.insert(shape);
+        }
     }
+
+    d->updateCompressor.start();
 }
 
+void KoShapeManager::setUpdatesBlocked(bool value)
+{
+    d->updatesBlocked = value;
+}
+
+bool KoShapeManager::updatesBlocked() const
+{
+    return d->updatesBlocked;
+}
 void KoShapeManager::notifyShapeChanged(KoShape *shape)
 {
-    Q_ASSERT(shape);
-    if (d->aggregate4update.contains(shape)) {
-        return;
+    {
+        QMutexLocker l(&d->treeMutex);
+
+        Q_ASSERT(shape);
+        if (d->aggregate4update.contains(shape)) {
+            return;
+        }
+
+        d->aggregate4update.insert(shape);
+        d->shapeIndexesBeforeUpdate.insert(shape, shape->zIndex());
     }
-    const bool wasEmpty = d->aggregate4update.isEmpty();
-    d->aggregate4update.insert(shape);
-    d->shapeIndexesBeforeUpdate.insert(shape, shape->zIndex());
 
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
     if (container) {
         Q_FOREACH (KoShape *child, container->shapes())
             notifyShapeChanged(child);
     }
-
-    if (wasEmpty && !d->aggregate4update.isEmpty()) {
-        d->updateTreeCompressor.start();
-    }
 }
 
 QList<KoShape*> KoShapeManager::shapes() const
 {
+    QMutexLocker l(&d->shapesMutex);
+
     return d->shapes;
 }
 
 QList<KoShape*> KoShapeManager::topLevelShapes() const
 {
+    QMutexLocker l(&d->shapesMutex);
+
     QList<KoShape*> shapes;
     // get all toplevel shapes
     Q_FOREACH (KoShape *shape, d->shapes) {

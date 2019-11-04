@@ -221,7 +221,7 @@ KisCrossChannelFilter::KisCrossChannelFilter() : KisMultiChannelFilter(id(), i18
 KisCrossChannelFilter::~KisCrossChannelFilter()
 {}
 
-KisConfigWidget * KisCrossChannelFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget * KisCrossChannelFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KisCrossChannelConfigWidget(parent, dev);
 }

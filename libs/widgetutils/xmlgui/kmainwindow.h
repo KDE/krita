@@ -333,32 +333,6 @@ public:
     QString dbusName() const;
 
 public Q_SLOTS:
-    /**
-     * Makes a KDE compliant caption (window title).
-     *
-     * @param caption Your caption. @em Do @em not include the application name
-     * in this string. It will be added automatically according to the KDE
-     * standard.
-     */
-    virtual void setCaption(const QString &caption);
-    /**
-     * Makes a KDE compliant caption.
-     *
-     * @param caption Your caption. @em Do @em not include the application name
-     * in this string. It will be added automatically according to the KDE
-     * standard.
-     * @param modified Specify whether the document is modified. This displays
-     * an additional sign in the title bar, usually "**".
-     */
-    virtual void setCaption(const QString &caption, bool modified);
-
-    /**
-     * Make a plain caption without any modifications.
-     *
-     * @param caption Your caption. This is the string that will be
-     * displayed in the window title.
-     */
-    virtual void setPlainCaption(const QString &caption);
 
     /**
      * Open the help page for the application.

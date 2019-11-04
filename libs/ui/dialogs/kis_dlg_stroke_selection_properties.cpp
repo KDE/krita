@@ -250,10 +250,10 @@ int KisDlgStrokeSelection::getLineSize() const
 {
     int value = m_page->lineSize->value();
 
-    if (m_page->sizeBox->currentText() == "px") {
+    if (m_page->sizeBox->currentText() == i18n("px")) {
         return value;
     }
-    else if (m_page->sizeBox->currentText() == "mm"){
+    else if (m_page->sizeBox->currentText() == i18n("mm")) {
              int pixels =  static_cast<int>(KoUnit::convertFromUnitToUnit(value,KoUnit(KoUnit::Millimeter), KoUnit(KoUnit::Pixel)));
              return pixels;
     }
@@ -365,29 +365,29 @@ StrokeSelectionOptions ::StrokeSelectionOptions():
     customColor.fromQColor(Qt::black);
 }
 
-KisPainter::FillStyle StrokeSelectionOptions::fillStyle() const
+KisToolShapeUtils::FillStyle StrokeSelectionOptions::fillStyle() const
 {
+    using namespace KisToolShapeUtils;
+
     colorFillSource tempColor = static_cast<colorFillSource>(_colorFillSource);
-    KisPainter::FillStyle style;
+    FillStyle style = FillStyleNone;
 
     switch (tempColor) {
     case colorFillSource::PaintColor:
-        style = KisPainter::FillStyleForegroundColor;
+        style = FillStyleForegroundColor;
         break;
     case colorFillSource::BGColor:
-        style = KisPainter::FillStyleBackgroundColor;
+        style = FillStyleBackgroundColor;
         break;
     case colorFillSource::CustomColor:
-        style = KisPainter::FillStyleBackgroundColor;
+        style = FillStyleBackgroundColor;
         break;
     case colorFillSource::None:
-        style = KisPainter::FillStyleNone;
+        style = FillStyleNone;
         break;
     case colorFillSource::FGColor:
-        style = KisPainter::FillStyleBackgroundColor;
+        style = FillStyleBackgroundColor;
         break;
-    default:
-        style = KisPainter::FillStyleBackgroundColor;
     }
     return style;
 }

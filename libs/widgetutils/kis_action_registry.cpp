@@ -155,6 +155,10 @@ KisActionRegistry::KisActionRegistry()
     loadCustomShortcuts();
 }
 
+KisActionRegistry::~KisActionRegistry()
+{
+}
+
 KisActionRegistry::ActionCategory KisActionRegistry::fetchActionCategory(const QString &name) const
 {
     if (!d->actionInfoList.contains(name)) return ActionCategory();
@@ -276,7 +280,9 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
         bool isCheckable  = getChildContent(actionXml, "isCheckable") == QString("true");
 
         a->setObjectName(name); // This is helpful, should be added more places in Krita
-        a->setIcon(KisIconUtils::loadIcon(icon.toLatin1()));
+        if (!icon.isEmpty()) {
+            a->setIcon(KisIconUtils::loadIcon(icon.toLatin1()));
+        }
         a->setText(text);
         a->setObjectName(name);
         a->setWhatsThis(whatsthis);

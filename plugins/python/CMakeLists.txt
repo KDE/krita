@@ -87,7 +87,7 @@ install_pykrita_plugin(exportlayers)
 #install_pykrita_plugin(highpass)
 install_pykrita_plugin(tenbrushes)
 install_pykrita_plugin(tenscripts)
-install_pykrita_plugin(palette_docker)
+#install_pykrita_plugin(palette_docker)  # Needs fixing -> bug 405194
 install_pykrita_plugin(quick_settings_docker)
 install_pykrita_plugin(lastdocumentsdocker)
 # install_pykrita_plugin(scriptdocker)

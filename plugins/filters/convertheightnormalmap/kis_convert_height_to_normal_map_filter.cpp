@@ -49,24 +49,25 @@ KisConvertHeightToNormalMapFilter::KisConvertHeightToNormalMapFilter(): KisFilte
 
 void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, const QRect &rect, const KisFilterConfigurationSP config, KoUpdater *progressUpdater) const
 {
-    Q_ASSERT(device != 0);
+    Q_ASSERT(device);
 
     KisFilterConfigurationSP configuration = config ? config : new KisFilterConfiguration(id().id(), 1);
 
     KisLodTransformScalar t(device);
 
     QVariant value;
-    configuration->getProperty("horizRadius", value);
-    float horizontalRadius = t.scale(value.toFloat());
-    configuration->getProperty("vertRadius", value);
-    float verticalRadius = t.scale(value.toFloat());
+    float horizontalRadius = 1.0;
+    if (configuration->getProperty("horizRadius", value)) {
+        horizontalRadius = t.scale(value.toFloat());
+    }
+    float verticalRadius = 1.0;
+    if (configuration->getProperty("vertRadius", value)) {
+        verticalRadius = t.scale(value.toFloat());
+    }
 
     QBitArray channelFlags;
     if (configuration) {
         channelFlags = configuration->channelFlags();
-    }
-    if (channelFlags.isEmpty() || !configuration) {
-        channelFlags = device->colorSpace()->channelFlags();
     }
 
     KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobelVector;
@@ -120,9 +121,9 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
                                               progressUpdater);
 }
 
-KisFilterConfigurationSP KisConvertHeightToNormalMapFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisConvertHeightToNormalMapFilter::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("horizRadius", 1);
     config->setProperty("vertRadius", 1);
     config->setProperty("type", "sobol");
@@ -135,7 +136,7 @@ KisFilterConfigurationSP KisConvertHeightToNormalMapFilter::factoryConfiguration
     return config;
 }
 
-KisConfigWidget *KisConvertHeightToNormalMapFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisConvertHeightToNormalMapFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KisWdgConvertHeightToNormalMap(parent, dev->colorSpace());
 }

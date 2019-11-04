@@ -56,7 +56,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
 
     connect((QObject*)comboBoxShape, SIGNAL(activated(int)), m_updateCompressor.data(), SLOT(start()));
 
-    inputRadius->setRange(0, KSharedConfig::openConfig()->group("").readEntry("maximumBrushSize", 1000), 2);
+    inputRadius->setRange(0.01, KSharedConfig::openConfig()->group("").readEntry("maximumBrushSize", 1000), 2);
     inputRadius->setExponentRatio(3.0);
     inputRadius->setSingleStep(1);
     inputRadius->setValue(5);
@@ -106,14 +106,18 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     density->setRange(0, 100, 0);
     density->setSingleStep(1);
     density->setValue(100);
-    density->setSuffix("%");
+    density->setSuffix(i18n("%"));
     density->setBlockUpdateSignalOnDrag(true);
     connect(density, SIGNAL(valueChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
     KisCubicCurve topLeftBottomRightLinearCurve;
     topLeftBottomRightLinearCurve.setPoint(0, QPointF(0.0, 1.0));
     topLeftBottomRightLinearCurve.setPoint(1, QPointF(1.0, 0.0));
+
+    bool blockedBefore = softnessCurve->blockSignals(true);
     softnessCurve->setCurve(topLeftBottomRightLinearCurve);
+    softnessCurve->blockSignals(blockedBefore);
+
     connect(softnessCurve, SIGNAL(modified()), m_updateCompressor.data(), SLOT(start()));
 
     m_brush = QImage(1, 1, QImage::Format_RGB32);

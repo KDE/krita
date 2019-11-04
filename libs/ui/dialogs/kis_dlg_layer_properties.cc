@@ -106,7 +106,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
     connect(d->page->editName, SIGNAL(textChanged(QString)), SLOT(slotNameValueChangedExternally()));
 
     d->page->intOpacity->setRange(0, 100);
-    d->page->intOpacity->setSuffix("%");
+    d->page->intOpacity->setSuffix(i18n("%"));
     d->opacityProperty.reset(new KisMultinodeOpacityProperty(nodes));
     d->opacityProperty->connectIgnoreCheckBox(d->page->chkOpacity);
     d->opacityProperty->connectAutoEnableWidget(d->page->intOpacity);

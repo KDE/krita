@@ -89,14 +89,20 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextR
 }
 
 TextShape::TextShape(const TextShape &rhs)
-    : KoShapeContainer(new KoShapeContainerPrivate(*reinterpret_cast<KoShapeContainerPrivate*>(rhs.d_ptr), this)),
-      KoFrameShape(rhs),
-      m_textShapeData(dynamic_cast<KoTextShapeData*>(rhs.m_textShapeData->clone())),
-      m_pageProvider(0),
-      m_imageCollection(0),
-      m_clip(rhs.m_clip)
+    : KoShapeContainer(rhs)
+    , KoFrameShape(rhs)
+    , m_textShapeData(dynamic_cast<KoTextShapeData*>(rhs.m_textShapeData->clone()))
+    , m_pageProvider(0)
+    , m_imageCollection(0)
+    , m_clip(rhs.m_clip)
 {
-    reinterpret_cast<KoShapeContainerPrivate*>(rhs.d_ptr)->model = new KoTextShapeContainerModel();
+    /// TODO: we need to clone the model
+    KoTextShapeContainerModel *origModel = dynamic_cast<KoTextShapeContainerModel *>(rhs.model());
+    if (origModel) {
+        setModel(new KoTextShapeContainerModel());
+    }
+    // XXX: ?
+    //reinterpret_cast<KoShapeContainerPrivate*>(rhs.d_ptr)->model = new KoTextShapeContainerModel();
 
     setShapeId(TextShape_SHAPEID);
     setUserData(m_textShapeData);

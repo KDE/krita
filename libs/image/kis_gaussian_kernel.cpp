@@ -100,6 +100,17 @@ KisGaussianKernel::createVerticalKernel(qreal radius)
     return KisConvolutionKernel::fromMatrix(matrix, 0, matrix.sum());
 }
 
+KisConvolutionKernelSP
+KisGaussianKernel::createUniform2DKernel(qreal xRadius, qreal yRadius)
+{
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> h = createHorizontalMatrix(xRadius);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> v = createVerticalMatrix(yRadius);
+
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> uni = v * h;
+    return KisConvolutionKernel::fromMatrix(uni, 0, uni.sum());
+}
+
+
 void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
                                       const QRect& rect,
                                       qreal xRadius, qreal yRadius,
@@ -109,8 +120,24 @@ void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
 {
     QPoint srcTopLeft = rect.topLeft();
 
-    if (xRadius > 0.0 && yRadius > 0.0) {
+
+    if (KisConvolutionPainter::supportsFFTW()) {
+        KisConvolutionPainter painter(device, KisConvolutionPainter::FFTW);
+        painter.setChannelFlags(channelFlags);
+        painter.setProgress(progressUpdater);
+
+        KisConvolutionKernelSP kernel2D = KisGaussianKernel::createUniform2DKernel(xRadius, yRadius);
+
+        QScopedPointer<KisTransaction> transaction;
+        if (createTransaction && painter.needsTransaction(kernel2D)) {
+            transaction.reset(new KisTransaction(device));
+        }
+
+        painter.applyMatrix(kernel2D, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+
+    } else if (xRadius > 0.0 && yRadius > 0.0) {
         KisPaintDeviceSP interm = new KisPaintDevice(device->colorSpace());
+        interm->prepareClone(device);
 
         KisConvolutionKernelSP kernelHoriz = KisGaussianKernel::createHorizontalKernel(xRadius);
         KisConvolutionKernelSP kernelVertical = KisGaussianKernel::createVerticalKernel(yRadius);
@@ -162,9 +189,9 @@ void KisGaussianKernel::applyGaussian(KisPaintDeviceSP device,
 }
 
 Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic>
-KisGaussianKernel::createLoGMatrix(qreal radius, qreal coeff)
+KisGaussianKernel::createLoGMatrix(qreal radius, qreal coeff, bool zeroCentered, bool includeWrappedArea)
 {
-    int kernelSize = 4 * std::ceil(radius) + 1;
+    int kernelSize = 2 * (includeWrappedArea ? 2 : 1) * std::ceil(radius) + 1;
     Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix(kernelSize, kernelSize);
 
     const qreal sigma = radius/* / sqrt(2)*/;
@@ -194,13 +221,30 @@ KisGaussianKernel::createLoGMatrix(qreal radius, qreal coeff)
     qreal lateral = matrix.sum() - matrix(center, center);
     matrix(center, center) = -lateral;
 
+    qreal totalSum = 0;
+
+    if (zeroCentered) {
+        for (int y = 0; y < kernelSize; y++) {
+            for (int x = 0; x < kernelSize; x++) {
+                const qreal value = matrix(x, y);
+                totalSum += value;
+            }
+        }
+    }
+
     qreal positiveSum = 0;
     qreal sideSum = 0;
     qreal quarterSum = 0;
+    totalSum = 0;
+
+    const qreal offset = totalSum / pow2(qreal(kernelSize));
 
     for (int y = 0; y < kernelSize; y++) {
         for (int x = 0; x < kernelSize; x++) {
-            const qreal value = matrix(x, y);
+            qreal value = matrix(x, y);
+            value -= offset;
+            matrix(x, y) = value;
+
             if (value > 0) {
                 positiveSum += value;
             }
@@ -210,6 +254,7 @@ KisGaussianKernel::createLoGMatrix(qreal radius, qreal coeff)
             if (x > center && y > center) {
                 quarterSum += value;
             }
+            totalSum += value;
         }
     }
 
@@ -237,7 +282,30 @@ void KisGaussianKernel::applyLoG(KisPaintDeviceSP device,
     painter.setChannelFlags(channelFlags);
     painter.setProgress(progressUpdater);
 
-    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix = createLoGMatrix(radius, coeff);
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix =
+        createLoGMatrix(radius, coeff, false, true);
+    KisConvolutionKernelSP kernel =
+        KisConvolutionKernel::fromMatrix(matrix,
+                                         0,
+                                         0);
+
+    painter.applyMatrix(kernel, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
+}
+
+void KisGaussianKernel::applyTightLoG(KisPaintDeviceSP device,
+                                      const QRect& rect,
+                                      qreal radius, qreal coeff,
+                                      const QBitArray &channelFlags,
+                                      KoUpdater *progressUpdater)
+{
+    QPoint srcTopLeft = rect.topLeft();
+
+    KisConvolutionPainter painter(device);
+    painter.setChannelFlags(channelFlags);
+    painter.setProgress(progressUpdater);
+
+    Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> matrix =
+        createLoGMatrix(radius, coeff, true, false);
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(matrix,
                                          0,
@@ -269,10 +337,10 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisGaussianKernel::createDi
 
             qreal value = 1.0;
 
-            if (distance >= radius) {
+            if (distance > radius + 1e-3) {
                 value = 0.0;
             } else if (distance > fadeStart) {
-                value = radius - distance;
+                value = qMax(0.0, radius - distance);
             }
 
             matrix(x, y) = value;

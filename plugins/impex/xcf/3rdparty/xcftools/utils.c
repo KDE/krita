@@ -26,9 +26,10 @@ const char *progname = "$0" ;
 int verboseFlag = 0 ;
 
 
-static void  __ATTRIBUTE__((noreturn))
-vFatalGeneric(int status,const char *format,va_list args)
+void
+vFatalGeneric(int status,const char *format, va_list args)
 {
+  (void) status; /* mark as unused */
   if( format ) {
     if( *format == '!' ) {
       vfprintf(stderr,format+1,args);
@@ -38,23 +39,28 @@ vFatalGeneric(int status,const char *format,va_list args)
       fputc('\n',stderr);
     }
   }
-  exit(status);
+  /* don't exit here - Krita can't handle errors otherwise */
+  /* exit(status); */
 }
 
 void
 FatalGeneric(int status,const char* format,...)
 {
-  va_list v; va_start(v,format);
+  va_list v;
+  va_start(v,format);
   if( format ) fprintf(stderr,"%s: ",progname);
   vFatalGeneric(status,format,v);
+  va_end(v);
 }
 
 void
 FatalUnexpected(const char* format,...)
 {
-  va_list v; va_start(v,format);
+  va_list v;
+  va_start(v, format);
   fprintf(stderr,"%s: ",progname);
-  vFatalGeneric(127,format,v) ;
+  vFatalGeneric(127, format, v);
+  va_end(v);
 }
 
 void
@@ -63,27 +69,34 @@ FatalBadXCF(const char* format,...)
   va_list v; va_start(v,format);
   fprintf(stderr,"%s: %s:\n ",progname,_("Corrupted or malformed XCF file"));
   vFatalGeneric(125,format,v) ;
+  va_end(v);
 }
 
-void
+int
 xcfCheckspace(uint32_t addr,int spaceafter,const char *format,...)
 {
   if( xcf_length < spaceafter || addr > xcf_length - spaceafter ) {
-    va_list v; va_start(v,format);
+    va_list v;
+    va_start(v,format);
     fprintf(stderr,"%s: %s\n ",progname,_("Corrupted or truncated XCF file"));
     fprintf(stderr,"(0x%" PRIXPTR " bytes): ",(uintptr_t)xcf_length);
     vFatalGeneric(125,format,v) ;
+    va_end(v);
+    return XCF_ERROR;
   }
+  return XCF_OK;
 }
 
 
 void
 FatalUnsupportedXCF(const char* format,...)
 {
-  va_list v; va_start(v,format);
+  va_list v;
+  va_start(v,format);
   fprintf(stderr,"%s: %s\n ",progname,
           _("The image contains features not understood by this program:"));
   vFatalGeneric(123,format,v) ;
+  va_end(v);
 }
 
 void
@@ -92,7 +105,8 @@ gpl_blurb(void)
   fprintf(stderr,PACKAGE_STRING "\n");
   fprintf(stderr,
           _("Type \"%s -h\" to get an option summary.\n"),progname);
-  exit(1) ;
+  /* don't exit here - Krita will close otherwise */
+  /* exit(1) ; */
 }
 
 /* ******************************************************* */
@@ -101,8 +115,10 @@ void *
 xcfmalloc(size_t size)
 {
   void *ptr = malloc(size);
-  if( !ptr )
+  if( !ptr ) {
     FatalUnexpected(_("Out of memory"));
+    return XCF_PTR_EMPTY;
+  }
   return ptr ;
 }
 
@@ -126,21 +142,23 @@ openout(const char *name)
   if( strcmp(name,"-") == 0 )
     return stdout ;
   newfile = fopen(name,"wb") ;
-  if( newfile == NULL )
+  if( newfile == NULL ) {
     FatalUnexpected(_("!Cannot create file %s"),name);
+    return XCF_PTR_EMPTY;
+  }
   return newfile ;
 }
 
-void
+int
 closeout(FILE *f,const char *name)
 {
   if( f == NULL )
-    return ;
+    return XCF_OK;
   if( fflush(f) == 0 ) {
     errno = 0 ;
     if( !ferror(f) ) {
       if( fclose(f) == 0 )
-        return ;
+        return XCF_OK;
     } else if( errno == 0 ) {
       /* Attempt to coax a valid errno out of the standard library,
        * following an idea by Bruno Haible
@@ -152,6 +170,7 @@ closeout(FILE *f,const char *name)
     }
   }
   FatalUnexpected(_("!Error writing file %s"),name);
+  return XCF_ERROR;
 }
 
         

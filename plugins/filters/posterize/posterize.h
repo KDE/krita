@@ -38,24 +38,27 @@ public:
     KisFilterPosterize();
 public:
     KoColorTransformation* createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const override;
-    KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev) const override;
+    KisConfigWidget* createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
     static inline KoID id() {
         return KoID("posterize", i18n("Posterize"));
     }
 protected:
-    KisFilterConfigurationSP factoryConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration() const override;
 };
 
 class KisPosterizeColorTransformation : public KoColorTransformation
 {
 public:
     KisPosterizeColorTransformation(int steps, const KoColorSpace* cs);
+    ~KisPosterizeColorTransformation() override;
     void transform(const quint8* src, quint8* dst, qint32 nPixels) const override;
 private:
     const KoColorSpace* m_colorSpace;
     quint32 m_psize;
     quint16 m_step;
     quint16 m_halfStep;
+    KoColorConversionTransformation* m_fromConversion;
+    KoColorConversionTransformation* m_toConversion;
 };
 
 #endif

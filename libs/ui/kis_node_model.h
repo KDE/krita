@@ -36,6 +36,7 @@ class KisNodeSelectionAdapter;
 class KisNodeInsertionAdapter;
 class KisSelectionActionsAdapter;
 class KisNodeDisplayModeAdapter;
+class KisNodeManager;
 
 /**
  * KisNodeModel offers a Qt model-view compatible view of the node
@@ -74,7 +75,7 @@ public:
         /// Use to communicate a progress report to the section delegate on an action (a value of -1 or a QVariant() disable the progress bar
         ProgressRole,
 
-        /// Speacial activation role which is emitted when the user Atl-clicks on a section
+        /// Special activation role which is emitted when the user Atl-clicks on a section
         /// The item is first activated with ActiveRole, then a separate AlternateActiveRole comes
         AlternateActiveRole,
 
@@ -92,6 +93,11 @@ public:
         // the selection action (of type SelectionAction) value
         // is passed via QVariant as integer
         SelectOpaqueRole,
+
+        // Returns a text explaining why the node has been excluded from
+        // projection rendering. If the node is not excluded, then empty
+        // string is returned
+        DropReasonRole,
 
         /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
         ReservedRole = Qt::UserRole + 99,
@@ -113,10 +119,8 @@ public: // from QAbstractItemModel
     void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
                           KisImageWSP image,
                           KisShapeController *shapeController,
-                          KisNodeSelectionAdapter *nodeSelectionAdapter,
-                          KisNodeInsertionAdapter *nodeInsertionAdapter,
                           KisSelectionActionsAdapter *selectionActionsAdapter,
-                          KisNodeDisplayModeAdapter *nodeDisplayModeAdapter);
+                          KisNodeManager *nodeManager);
     KisNodeSP nodeFromIndex(const QModelIndex &index) const;
     QModelIndex indexFromNode(KisNodeSP node) const;
 

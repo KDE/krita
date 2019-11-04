@@ -1,0 +1,49 @@
+diff --git a/configure b/configure
+old mode 100755
+new mode 100644
+index c892a99..97c8f0d
+--- a/configure
++++ b/configure
+@@ -3207,7 +3207,7 @@ if test "${enable_framework+set}" = set; then :
+ 		FRAMEWORKINSTALLLAST="frameworkinstallmaclib frameworkinstallapps frameworkinstallunixtools"
+ 		FRAMEWORKALTINSTALLLAST="frameworkinstallmaclib frameworkinstallapps frameworkaltinstallunixtools"
+ 		FRAMEWORKPYTHONW="frameworkpythonw"
+-		FRAMEWORKINSTALLAPPSPREFIX="/Applications"
++		FRAMEWORKINSTALLAPPSPREFIX="${prefix}/Applications"
+ 
+ 		if test "x${prefix}" = "xNONE" ; then
+ 			FRAMEWORKUNIXTOOLSPREFIX="${ac_default_prefix}"
+@@ -3218,7 +3218,7 @@ if test "${enable_framework+set}" = set; then :
+ 
+ 		case "${enableval}" in
+ 		/System*)
+-			FRAMEWORKINSTALLAPPSPREFIX="/Applications"
++			FRAMEWORKINSTALLAPPSPREFIX="${prefix}/Applications"
+ 			if test "${prefix}" = "NONE" ; then
+ 				# See below
+ 				FRAMEWORKUNIXTOOLSPREFIX="/usr"
+@@ -3226,13 +3226,13 @@ if test "${enable_framework+set}" = set; then :
+ 			;;
+ 
+ 		/Library*)
+-			FRAMEWORKINSTALLAPPSPREFIX="/Applications"
++			FRAMEWORKINSTALLAPPSPREFIX="${prefix}/Applications"
+ 			;;
+ 
+ 		*/Library/Frameworks)
+ 			MDIR="`dirname "${enableval}"`"
+ 			MDIR="`dirname "${MDIR}"`"
+-			FRAMEWORKINSTALLAPPSPREFIX="${MDIR}/Applications"
++			FRAMEWORKINSTALLAPPSPREFIX="${MDIR}${prefix}/Applications"
+ 
+ 			if test "${prefix}" = "NONE"; then
+ 				# User hasn't specified the
+@@ -3246,7 +3246,7 @@ if test "${enable_framework+set}" = set; then :
+ 			;;
+ 
+ 		*)
+-			FRAMEWORKINSTALLAPPSPREFIX="/Applications"
++			FRAMEWORKINSTALLAPPSPREFIX="${prefix}/Applications"
+ 			;;
+ 		esac
+ 

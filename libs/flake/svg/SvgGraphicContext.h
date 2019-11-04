@@ -38,6 +38,8 @@ public:
     };
 
     SvgGraphicsContext();
+    SvgGraphicsContext(const SvgGraphicsContext &gc);
+
     void workaroundClearInheritedFillProperties();
 
     StyleType     fillType  {Solid};  ///< the current fill type
@@ -79,6 +81,8 @@ public:
     bool autoFillMarkers {false};
 
     KoSvgTextProperties textProperties;
+private:
+    SvgGraphicsContext& operator=(const SvgGraphicsContext &gc) = default; ///< used by copy constructor, shouldn't be public
 };
 
 #endif // SVGGRAPHICCONTEXT_H

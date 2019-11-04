@@ -484,8 +484,6 @@ const KoColorSpace * KoColorSpaceRegistry::Private::colorSpace1(const QString &c
         const KoColorProfile *profile =
             profileForCsIdWithFallbackImpl(csID, profileName);
 
-        // until kis_asert.h is not available in 3.1, use this combo
-        Q_ASSERT(profile);
         if (!profile) return 0;
 
         cs = lazyCreateColorSpaceImpl(csID, profile);
@@ -577,6 +575,52 @@ const KoColorSpace * KoColorSpaceRegistry::alpha32f()
     }
     Q_ASSERT(d->alphaF32Cs);
     return d->alphaF32Cs;
+}
+
+const KoColorSpace *KoColorSpaceRegistry::graya8(const QString &profile)
+{
+
+    if (profile.isEmpty()) {
+        KoColorSpaceFactory* factory = d->colorSpaceFactoryRegistry.get(GrayAColorModelID.id());
+        return KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), factory->defaultProfile());
+    }
+    else {
+        return KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+    }
+
+}
+
+const KoColorSpace *KoColorSpaceRegistry::graya8(const KoColorProfile *profile)
+{
+    if (!profile) {
+        return graya8();
+    }
+    else {
+        return KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+    }
+
+}
+
+const KoColorSpace *KoColorSpaceRegistry::graya16(const QString &profile)
+{
+    if (profile.isEmpty()) {
+        KoColorSpaceFactory* factory = d->colorSpaceFactoryRegistry.get(GrayAColorModelID.id());
+        return KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), factory->defaultProfile());
+    }
+    else {
+        return KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), profile);
+    }
+
+}
+
+const KoColorSpace *KoColorSpaceRegistry::graya16(const KoColorProfile *profile)
+{
+    if (!profile) {
+        return graya8();
+    }
+    else {
+        return KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+    }
 }
 
 

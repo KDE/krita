@@ -1,0 +1,115 @@
+From 44d40db1bd8a101ee28414edd27f4fa7e73fbc97 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
+Date: Mon, 25 Apr 2016 09:27:48 +0200
+Subject: [PATCH 22/27] Compute logical DPI on a per-screen basis
+
+The logical DPI reported to applications is the platform screen
+logical DPI divided by the platform screen scale factor.
+
+Use the screen in question when calculating the DPI instead of
+the values from the main screen.
+
+QHighDpiScaling::logicalDpi now takes a QScreen pointer.
+
+Done-with: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Task-number: QTBUG-53022
+Change-Id: I0f62b5878c37e3488e9a8cc48aef183ff822d0c4
+---
+ src/gui/kernel/qhighdpiscaling.cpp | 20 +++++++++-----------
+ src/gui/kernel/qhighdpiscaling_p.h |  2 +-
+ src/gui/kernel/qscreen.cpp         |  6 +++---
+ 3 files changed, 13 insertions(+), 15 deletions(-)
+
+diff --git a/src/gui/kernel/qhighdpiscaling.cpp b/src/gui/kernel/qhighdpiscaling.cpp
+index 22e46e08..541d4f12 100644
+--- a/src/gui/kernel/qhighdpiscaling.cpp
++++ b/src/gui/kernel/qhighdpiscaling.cpp
+@@ -224,7 +224,6 @@ bool QHighDpiScaling::m_usePixelDensity = false; // use scale factor from platfo
+ bool QHighDpiScaling::m_pixelDensityScalingActive = false; // pixel density scale factor > 1
+ bool QHighDpiScaling::m_globalScalingActive = false; // global scale factor is active
+ bool QHighDpiScaling::m_screenFactorSet = false; // QHighDpiScaling::setScreenFactor has been used
+-QDpi QHighDpiScaling::m_logicalDpi = QDpi(-1,-1); // The scaled logical DPI of the primary screen
+ 
+ /*
+     Initializes the QHighDpiScaling global variables. Called before the
+@@ -312,14 +311,6 @@ void QHighDpiScaling::updateHighDpiScaling()
+         }
+     }
+     m_active = m_globalScalingActive || m_screenFactorSet || m_pixelDensityScalingActive;
+-
+-    QScreen *primaryScreen = QGuiApplication::primaryScreen();
+-    if (!primaryScreen)
+-        return;
+-    QPlatformScreen *platformScreen = primaryScreen->handle();
+-    qreal sf = screenSubfactor(platformScreen);
+-    QDpi primaryDpi = platformScreen->logicalDpi();
+-    m_logicalDpi = QDpi(primaryDpi.first / sf, primaryDpi.second / sf);
+ }
+ 
+ /*
+@@ -405,9 +396,16 @@ qreal QHighDpiScaling::screenSubfactor(const QPlatformScreen *screen)
+     return factor;
+ }
+ 
+-QDpi QHighDpiScaling::logicalDpi()
++QDpi QHighDpiScaling::logicalDpi(const QScreen *screen)
+ {
+-    return m_logicalDpi;
++    // (Note: m_active test is performed at call site.)
++    if (!screen)
++        return QDpi(96, 96);
++
++    qreal platformScreenfactor = screenSubfactor(screen->handle());
++    QDpi platformScreenDpi = screen->handle()->logicalDpi();
++    return QDpi(platformScreenDpi.first / platformScreenfactor,
++                platformScreenDpi.second / platformScreenfactor);
+ }
+ 
+ qreal QHighDpiScaling::factor(const QScreen *screen)
+diff --git a/src/gui/kernel/qhighdpiscaling_p.h b/src/gui/kernel/qhighdpiscaling_p.h
+index 83fc9452..ecd9ed65 100644
+--- a/src/gui/kernel/qhighdpiscaling_p.h
++++ b/src/gui/kernel/qhighdpiscaling_p.h
+@@ -85,7 +85,7 @@ public:
+     static QPoint origin(const QPlatformScreen *platformScreen);
+     static QPoint mapPositionFromNative(const QPoint &pos, const QPlatformScreen *platformScreen);
+     static QPoint mapPositionToNative(const QPoint &pos, const QPlatformScreen *platformScreen);
+-    static QDpi logicalDpi();
++    static QDpi logicalDpi(const QScreen *screen);
+ 
+ private:
+     static qreal screenSubfactor(const QPlatformScreen *screen);
+diff --git a/src/gui/kernel/qscreen.cpp b/src/gui/kernel/qscreen.cpp
+index f208eb02..82ee62e6 100644
+--- a/src/gui/kernel/qscreen.cpp
++++ b/src/gui/kernel/qscreen.cpp
+@@ -279,7 +279,7 @@ qreal QScreen::logicalDotsPerInchX() const
+ {
+     Q_D(const QScreen);
+     if (QHighDpiScaling::isActive())
+-        return QHighDpiScaling::logicalDpi().first;
++        return QHighDpiScaling::logicalDpi(this).first;
+     return d->logicalDpi.first;
+ }
+ 
+@@ -295,7 +295,7 @@ qreal QScreen::logicalDotsPerInchY() const
+ {
+     Q_D(const QScreen);
+     if (QHighDpiScaling::isActive())
+-        return QHighDpiScaling::logicalDpi().second;
++        return QHighDpiScaling::logicalDpi(this).second;
+     return d->logicalDpi.second;
+ }
+ 
+@@ -314,7 +314,7 @@ qreal QScreen::logicalDotsPerInchY() const
+ qreal QScreen::logicalDotsPerInch() const
+ {
+     Q_D(const QScreen);
+-    QDpi dpi = QHighDpiScaling::isActive() ? QHighDpiScaling::logicalDpi() : d->logicalDpi;
++    QDpi dpi = QHighDpiScaling::isActive() ? QHighDpiScaling::logicalDpi(this) : d->logicalDpi;
+     return (dpi.first + dpi.second) * qreal(0.5);
+ }
+ 
+-- 
+2.22.0.windows.1
+

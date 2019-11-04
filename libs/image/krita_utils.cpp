@@ -182,7 +182,7 @@ namespace KritaUtils
 
     QString KRITAIMAGE_EXPORT prettyFormatReal(qreal value)
     {
-        return QString("%1").arg(value, 6, 'f', 1);
+        return QLocale().toString(value, 'f', 1);
     }
 
     qreal KRITAIMAGE_EXPORT maxDimensionPortion(const QRectF &bounds, qreal portion, qreal minValue)
@@ -473,6 +473,15 @@ namespace KritaUtils
         } else /* if (dir == Qt::Vertical) */ {
             const int mirrorY = -((rc->y() + rc->height()) - center.y()) + center.y();
             rc->moveTop(mirrorY);
+        }
+    }
+
+    void mirrorPoint(Qt::Orientation dir, const QPoint &center, QPointF *pt)
+    {
+        if (dir == Qt::Horizontal) {
+            pt->rx() = -(pt->x() - qreal(center.x())) + center.x();
+        } else /* if (dir == Qt::Vertical) */ {
+            pt->ry() = -(pt->y() - qreal(center.y())) + center.y();
         }
     }
 

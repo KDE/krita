@@ -72,7 +72,7 @@ public:
      *
      * @return the default configuration of this widget
      */
-    KisFilterConfigurationSP  defaultConfiguration() const;
+    virtual KisFilterConfigurationSP  defaultConfiguration() const;
 
     /**
      * @return the bookmark manager for this processor
@@ -108,8 +108,10 @@ public:
      *
      * @param parent the Qt owner widget of this widget
      * @param dev the paintdevice this filter will act on
+     * @param useForMasks shown if the filer is going to be used in a mask. Some filters
+     *        may provide limited options when applied as a mask (e.g. Gaussian Blur)
      */
-    virtual KisConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev) const;
+    virtual KisConfigWidget * createConfigurationWidget(QWidget * parent, const KisPaintDeviceSP dev, bool useForMasks) const;
     // "Support" functions
 public:
     /**
@@ -138,7 +140,8 @@ public:
      */
     ColorSpaceIndependence colorSpaceIndependence() const;
 
-    /// @return the default configuration as defined by whoever wrote the plugin
+    /// @return the default configuration object as defined by whoever wrote the plugin.
+    /// This object must be filled in with fromXML after that.
     virtual KisFilterConfigurationSP factoryConfiguration() const;
 
 protected:

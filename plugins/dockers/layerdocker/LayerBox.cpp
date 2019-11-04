@@ -194,7 +194,7 @@ LayerBox::LayerBox()
         m_wdgLayerBox->doubleOpacity->setPrefix(QString("%1:  ").arg(i18n("Opacity")));
     }
     m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
-    m_wdgLayerBox->doubleOpacity->setSuffix("%");
+    m_wdgLayerBox->doubleOpacity->setSuffix(i18n("%"));
 
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
     connect(&m_opacityDelayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
@@ -284,6 +284,7 @@ LayerBox::LayerBox()
 
     connect(thumbnailSizeSlider, SIGNAL(sliderMoved(int)), &m_thumbnailSizeCompressor, SLOT(start()));
     connect(&m_thumbnailSizeCompressor, SIGNAL(timeout()), SLOT(slotUpdateThumbnailIconSize()));
+
 }
 
 LayerBox::~LayerBox()
@@ -367,6 +368,11 @@ void LayerBox::setViewManager(KisViewManager* kisview)
     Q_ASSERT(action);
     new SyncButtonAndAction(action, m_wdgLayerBox->bnLower, this);
     connect(action, SIGNAL(triggered()), this, SLOT(slotLowerClicked()));
+
+    m_changeCloneSourceAction = actionManager->createAction("set-copy-from");
+    Q_ASSERT(m_changeCloneSourceAction);
+    connect(m_changeCloneSourceAction, &KisAction::triggered,
+            this, &LayerBox::slotChangeCloneSourceClicked);
 }
 
 void LayerBox::setCanvas(KoCanvasBase *canvas)
@@ -378,7 +384,7 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-        m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0, 0, 0);
+        m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
         m_selectionActionsAdapter.reset();
 
         if (m_image) {
@@ -409,10 +415,8 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
         m_nodeModel->setDummiesFacade(kritaDummiesFacade,
                                       m_image,
                                       kritaShapeController,
-                                      m_nodeManager->nodeSelectionAdapter(),
-                                      m_nodeManager->nodeInsertionAdapter(),
                                       m_selectionActionsAdapter.data(),
-                                      m_nodeManager->nodeDisplayModeAdapter());
+                                      m_nodeManager);
 
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
         connect(m_image, SIGNAL(sigNodeCollapsedChanged()), SLOT(slotNodeCollapsedChanged()));
@@ -521,7 +525,9 @@ void LayerBox::updateUI()
 
             m_wdgLayerBox->doubleOpacity->setEnabled(true);
 
-            slotSetOpacity(activeNode->opacity() * 100.0 / 255);
+            if (!m_wdgLayerBox->doubleOpacity->isDragging()) {
+                slotSetOpacity(activeNode->opacity() * 100.0 / 255);
+            }
 
             const KoCompositeOp* compositeOp = activeNode->compositeOp();
             if (compositeOp) {
@@ -609,6 +615,13 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
                 addActionToMenu(&menu, "layer_style");
             }
 
+            Q_FOREACH(KisNodeSP node, nodes) {
+                if (node && node->inherits("KisCloneLayer")) {
+                    menu.addAction(m_changeCloneSourceAction);
+                    break;
+                }
+            }
+
             {
                 KisSignalsBlocker b(m_colorSelector);
                 m_colorSelector->setCurrentIndex(singleLayer ? activeNode->colorLabelIndex() : -1);
@@ -623,6 +636,8 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
             menu.addAction(m_removeAction);
             addActionToMenu(&menu, "duplicatelayer");
             addActionToMenu(&menu, "merge_layer");
+            addActionToMenu(&menu, "new_from_visible");
+
 
             if (singleLayer) {
                 addActionToMenu(&menu, "flatten_image");
@@ -653,6 +668,9 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
                 addActionToMenu(addLayerMenu, "add_new_colorize_mask");
                 addActionToMenu(addLayerMenu, "add_new_transform_mask");
                 addActionToMenu(addLayerMenu, "add_new_selection_mask");
+                addLayerMenu->addSeparator();
+                addActionToMenu(addLayerMenu, "add_new_clone_layer");
+
 
                 QMenu *convertToMenu = menu.addMenu(i18n("&Convert"));
                 addActionToMenu(convertToMenu, "convert_to_paint_layer");
@@ -665,6 +683,9 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
                 addActionToMenu(splitAlphaMenu, "split_alpha_into_mask");
                 addActionToMenu(splitAlphaMenu, "split_alpha_write");
                 addActionToMenu(splitAlphaMenu, "split_alpha_save_merged");
+            } else {
+                QMenu *addLayerMenu = menu.addMenu(i18n("&Add"));
+                addActionToMenu(addLayerMenu, "add_new_clone_layer");
             }
 
             menu.addSeparator();
@@ -678,6 +699,7 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
                 }
 
                 addActionToMenu(&menu, "selectopaque");
+
             }
         }
         menu.exec(pos);
@@ -725,6 +747,12 @@ void LayerBox::slotPropertiesClicked()
     }
 }
 
+void LayerBox::slotChangeCloneSourceClicked()
+{
+    if (!m_canvas) return;
+    m_nodeManager->changeCloneSource();
+}
+
 void LayerBox::slotCompositeOpChanged(int index)
 {
     Q_UNUSED(index);
@@ -738,7 +766,7 @@ void LayerBox::slotOpacityChanged()
 {
     if (!m_canvas) return;
     m_blockOpacityUpdate = true;
-    m_nodeManager->nodeOpacityChanged(m_newOpacity, true);
+    m_nodeManager->nodeOpacityChanged(m_newOpacity);
     m_blockOpacityUpdate = false;
 }
 
@@ -942,9 +970,10 @@ void LayerBox::slotAboutToRemoveRows(const QModelIndex &parent, int start, int e
     if (currentIndex.isValid() && parent == currentIndex.parent()
             && currentIndex.row() >= start - 1 && currentIndex.row() <= end + 1) {
         QModelIndex old = currentIndex;
+
         if (model && end < model->rowCount(parent) - 1) // there are rows left below the change
             currentIndex = model->index(end + 1, old.column(), parent);
-        else if (start > 0) // there are rows left above the change
+        else if (model && start > 0) // there are rows left above the change
             currentIndex = model->index(start - 1, old.column(), parent);
         else // there are no rows left in the table
             currentIndex = QModelIndex();

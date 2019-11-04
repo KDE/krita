@@ -217,7 +217,6 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             return KisImageSP(0);
         }
 
-
         if ((attr = element.attribute(WIDTH)).isNull()) {
             m_d->errorMessages << i18n("Image does not specify a width.");
             return KisImageSP(0);
@@ -541,6 +540,11 @@ QStringList KisKraLoader::errorMessages() const
 QStringList KisKraLoader::warningMessages() const
 {
     return m_d->warningMessages;
+}
+
+QString KisKraLoader::imageName() const
+{
+    return m_d->imageName;
 }
 
 
@@ -929,7 +933,7 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImag
         return 0; // XXX: We don't have this filter. We should warn about it!
     }
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->factoryConfiguration();
     kfc->setProperty("legacy", legacy);
     if (legacy=="brightnesscontrast") {
         kfc->setProperty("colorModel", cs->colorModelId().id());
@@ -986,7 +990,7 @@ KisNodeSP KisKraLoader::loadGeneratorLayer(const KoXmlElement& element, KisImage
         return 0; // XXX: We don't have this generator. We should warn about it!
     }
 
-    KisFilterConfigurationSP  kgc = generator->defaultConfiguration();
+    KisFilterConfigurationSP  kgc = generator->factoryConfiguration();
 
     // We'll load the configuration and the selection later.
     layer = new KisGeneratorLayer(image, name, kgc, 0);
@@ -1047,7 +1051,7 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element)
         return 0; // XXX: We don't have this filter. We should warn about it!
     }
 
-    KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    KisFilterConfigurationSP  kfc = f->factoryConfiguration();
 
     // We'll load the configuration and the selection later.
     mask = new KisFilterMask();

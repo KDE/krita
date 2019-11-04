@@ -799,13 +799,13 @@ void KoPathTool::keyPressEvent(QKeyEvent *event)
     } else {
         switch (event->key()) {
 #ifndef NDEBUG
-        case Qt::Key_D:
-            if (m_pointSelection.objectCount() == 1) {
-                QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
-                KoPathShapePrivate *p = static_cast<KoPathShapePrivate*>(selectedPoints[0].pathShape->priv());
-                p->debugPath();
-            }
-            break;
+//        case Qt::Key_D:
+//            if (m_pointSelection.objectCount() == 1) {
+//                QList<KoPathPointData> selectedPoints = m_pointSelection.selectedPointsData();
+//                KoPathShapePrivate *p = static_cast<KoPathShapePrivate*>(selectedPoints[0].pathShape->priv());
+//                p->debugPath();
+//            }
+//            break;
 #endif
         case Qt::Key_B:
             if (m_pointSelection.size() == 1)

@@ -31,10 +31,26 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
 
+const QString ExrMimetype = "application/x-extension-exr";
 
 void KisExrTest::testFiles()
 {
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), 5);
+}
+
+void KisExrTest::testImportFromWriteonly()
+{
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), ExrMimetype);
+}
+
+void KisExrTest::testExportToReadonly()
+{
+    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), ExrMimetype, true);
+}
+
+void KisExrTest::testImportIncorrectFormat()
+{
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), ExrMimetype);
 }
 
 void KisExrTest::testRoundTrip()

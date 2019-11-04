@@ -1,6 +1,6 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
-include_directories(${CMAKE_SOURCE_DIR}/libs/image/metadata 
+include_directories(${CMAKE_SOURCE_DIR}/libs/image/metadata
                     ${CMAKE_SOURCE_DIR}/sdk/tests )
 
 include(ECMAddTests)
@@ -14,7 +14,6 @@ ecm_add_tests(
     kis_coordinates_converter_test.cpp
     kis_grid_config_test.cpp
     kis_stabilized_events_sampler_test.cpp
-    kis_derived_resources_test.cpp
     kis_brush_hud_properties_config_test.cpp
     kis_shape_commands_test.cpp
     kis_shape_layer_test.cpp
@@ -27,6 +26,8 @@ ecm_add_tests(
     kis_prescaled_projection_test.cpp
     kis_asl_layer_style_serializer_test.cpp
     kis_animation_importer_test.cpp
+    KisSpinBoxSplineUnitConverterTest.cpp
+    KisDocumentReplaceTest.cpp
 
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-"
@@ -175,3 +176,8 @@ krita_add_broken_unit_test(
     NAME_PREFIX "libs-ui-")
 
 
+krita_add_broken_unit_test(
+    kis_derived_resources_test.cpp
+    TEST_NAME kis_derived_resources_test
+    LINK_LIBRARIES kritaui Qt5::Test
+    NAME_PREFIX "libs-ui-")

@@ -21,18 +21,18 @@
 #include <QTransform>
 #include <KoShape.h>
 #include <KoShapePainter.h>
-#include "KoShapeBackground_p.h"
 #include <KoBakedShapeRenderer.h>
 #include <KoViewConverter.h>
 
-class KoVectorPatternBackgroundPrivate : public KoShapeBackgroundPrivate
+class KoVectorPatternBackground::Private : public QSharedData
 {
 public:
-    KoVectorPatternBackgroundPrivate()
+    Private()
+        : QSharedData()
     {
     }
 
-    ~KoVectorPatternBackgroundPrivate() override
+    ~Private()
     {
         qDeleteAll(shapes);
         shapes.clear();
@@ -48,7 +48,8 @@ public:
 };
 
 KoVectorPatternBackground::KoVectorPatternBackground()
-    : KoShapeBackground(*(new KoVectorPatternBackgroundPrivate()))
+    : KoShapeBackground()
+    , d(new Private)
 {
 }
 
@@ -65,55 +66,46 @@ bool KoVectorPatternBackground::compareTo(const KoShapeBackground *other) const
 
 void KoVectorPatternBackground::setReferenceCoordinates(KoFlake::CoordinateSystem value)
 {
-    Q_D(KoVectorPatternBackground);
     d->referenceCoordinates = value;
 }
 
 KoFlake::CoordinateSystem KoVectorPatternBackground::referenceCoordinates() const
 {
-    Q_D(const KoVectorPatternBackground);
     return d->referenceCoordinates;
 }
 
 void KoVectorPatternBackground::setContentCoordinates(KoFlake::CoordinateSystem value)
 {
-    Q_D(KoVectorPatternBackground);
     d->contentCoordinates = value;
 }
 
 KoFlake::CoordinateSystem KoVectorPatternBackground::contentCoordinates() const
 {
-    Q_D(const KoVectorPatternBackground);
     return d->contentCoordinates;
 }
 
 void KoVectorPatternBackground::setReferenceRect(const QRectF &value)
 {
-    Q_D(KoVectorPatternBackground);
     d->referenceRect = value;
 }
 
 QRectF KoVectorPatternBackground::referenceRect() const
 {
-    Q_D(const KoVectorPatternBackground);
     return d->referenceRect;
 }
 
 void KoVectorPatternBackground::setPatternTransform(const QTransform &value)
 {
-    Q_D(KoVectorPatternBackground);
     d->patternTransform = value;
 }
 
 QTransform KoVectorPatternBackground::patternTransform() const
 {
-    Q_D(const KoVectorPatternBackground);
     return d->patternTransform;
 }
 
 void KoVectorPatternBackground::setShapes(const QList<KoShape*> value)
 {
-    Q_D(KoVectorPatternBackground);
     qDeleteAll(d->shapes);
     d->shapes.clear();
 
@@ -122,7 +114,6 @@ void KoVectorPatternBackground::setShapes(const QList<KoShape*> value)
 
 QList<KoShape *> KoVectorPatternBackground::shapes() const
 {
-    Q_D(const KoVectorPatternBackground);
     return d->shapes;
 }
 
@@ -130,8 +121,6 @@ void KoVectorPatternBackground::paint(QPainter &painter, const KoViewConverter &
 {
     Q_UNUSED(context_Unused);
     Q_UNUSED(converter_Unused);
-
-    Q_D(const KoVectorPatternBackground);
 
     const QPainterPath dstShapeOutline = fillPath;
     const QRectF dstShapeBoundingBox = dstShapeOutline.boundingRect();

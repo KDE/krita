@@ -197,6 +197,18 @@ public:
      */
     KoShapeContainerModel *model() const;
 
+protected:
+
+    /**
+     * set the model for this container
+     */
+    void setModel(KoShapeContainerModel *model);
+    /**
+     * set the model, and take control of all its children
+     */
+    void setModelInit(KoShapeContainerModel *model);
+
+public:
 
     /**
      * A special interface for KoShape to use during setParent call. Don't use
@@ -232,6 +244,8 @@ public:
     ShapeInterface* shapeInterface();
 
 protected:
+    KoShapeContainer(const KoShapeContainer &rhs);
+
     /**
      * This hook is for inheriting classes that need to do something on adding/removing
      * of children.
@@ -242,11 +256,9 @@ protected:
 
     void shapeChanged(ChangeType type, KoShape *shape = 0) override;
 
-    /// constructor
-    KoShapeContainer(KoShapeContainerPrivate *);
-
 private:
-    Q_DECLARE_PRIVATE(KoShapeContainer)
+    class Private;
+    QScopedPointer<Private> d;
 };
 
 #endif

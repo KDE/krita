@@ -3,7 +3,8 @@
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; version 2.1 of the License.
+ *  the Free Software Foundation; version 2 of the License, or
+ *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -125,7 +126,7 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
 
     }
 
-    const QSurfaceFormat::ColorSpace colorSpace = QSurfaceFormat::DefaultColorSpace;
+    const KisSurfaceColorSpace colorSpace = KisSurfaceColorSpace::DefaultColorSpace;
 
     d->hueWidget = new KisClickableGLImageWidget(colorSpace, this);
     d->hueWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -264,8 +265,8 @@ void KisSmallColorWidget::slotUpdatePalettes()
 
 namespace {
 struct FillHPolicy {
-    static inline void getRGB(qreal hue, float xPortionCoeff, float yPortionCoeff,
-                              int x, int y, float *r, float *g, float *b) {
+    static inline void getRGB(qreal /*hue*/, float xPortionCoeff, float /*yPortionCoeff*/,
+                              int x, int /*y*/, float *r, float *g, float *b) {
 
         HSVToRGB(xPortionCoeff * x * 360.0f, 1.0, 1.0, r, g, b);
     }

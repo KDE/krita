@@ -23,6 +23,7 @@
 #include <QResizeEvent>
 #include "kis_debug.h"
 #include <config-hdr.h>
+#include <opengl/kis_opengl.h>
 
 #include "KisGLImageF16.h"
 
@@ -49,22 +50,32 @@ inline void rectToTexCoords(QVector2D* texCoords, const QRectF &rc)
 }
 
 KisGLImageWidget::KisGLImageWidget(QWidget *parent)
-    : KisGLImageWidget(QSurfaceFormat::sRGBColorSpace, parent)
+    : KisGLImageWidget(KisSurfaceColorSpace::sRGBColorSpace, parent)
 {
 }
 
-KisGLImageWidget::KisGLImageWidget(QSurfaceFormat::ColorSpace colorSpace,
+KisGLImageWidget::KisGLImageWidget(KisSurfaceColorSpace colorSpace,
                                    QWidget *parent)
     : QOpenGLWidget(parent),
       m_texture(QOpenGLTexture::Target2D)
 {
+    Q_UNUSED(colorSpace)
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     setTextureFormat(GL_RGBA16F);
+#endif
 
 #ifdef HAVE_HDR
     setTextureColorSpace(colorSpace);
 #endif
 
     setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
+}
+
+KisGLImageWidget::~KisGLImageWidget()
+{
+    // force releasing the reourses on destruction
+    slotOpenGLContextDestroyed();
 }
 
 void KisGLImageWidget::initializeGL()
@@ -91,7 +102,11 @@ void KisGLImageWidget::initializeGL()
         vertSource.prepend(versionDefinition);
         fragSource.prepend(versionDefinition);
     } else {
-        const char *versionDefinition = "#version 330 core\n";
+#ifdef Q_OS_MACOS
+        const char *versionDefinition = KisOpenGL::supportsLoD() ? "#version 150\n" : "#version 120\n";
+#else
+        const char *versionDefinition = KisOpenGL::supportsLoD() ? "#version 130\n" : "#version 120\n";
+#endif
         vertSource.prepend(versionDefinition);
         fragSource.prepend(versionDefinition);
     }
@@ -174,9 +189,9 @@ void KisGLImageWidget::updateVerticesBuffer(const QRect &rect)
 
 void KisGLImageWidget::paintGL()
 {
-    const QColor bgColor = palette().background().color();
     // TODO: fix conversion to the destination surface space
-    //glClearColor(bgColor.redF(), bgColor.greenF(), bgColor.blueF(), 1.0f);
+    // Fill with bright color as as default for debugging purposes
+    // glClearColor(bgColor.redF(), bgColor.greenF(), bgColor.blueF(), 1.0f);
     glClearColor(0.3, 0.2, 0.8, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 

@@ -98,6 +98,7 @@ set(kritaimage_LIB_SRCS
    commands/kis_reselect_global_selection_command.cpp
    commands/KisReselectActiveSelectionCommand.cpp
    commands/kis_set_global_selection_command.cpp
+   commands/KisNodeRenameCommand.cpp
    commands_new/kis_saved_commands.cpp
    commands_new/kis_processing_command.cpp
    commands_new/kis_image_resize_command.cpp
@@ -110,6 +111,7 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_change_projection_color_command.cpp
    commands_new/kis_activate_selection_mask_command.cpp
    commands_new/kis_transaction_based_command.cpp
+   commands_new/KisHoldUIUpdatesCommand.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_crop_processing_visitor.cpp
@@ -135,6 +137,7 @@ set(kritaimage_LIB_SRCS
    lazybrush/kis_colorize_mask.cpp
    lazybrush/kis_colorize_stroke_strategy.cpp
    KisDelayedUpdateNodeInterface.cpp
+   KisCroppedOriginalLayerInterface.cpp
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
    kis_node_filter_interface.cpp
@@ -217,6 +220,7 @@ set(kritaimage_LIB_SRCS
    kis_layer_utils.cpp
    kis_mask_projection_plane.cpp
    kis_projection_leaf.cpp
+   KisSafeNodeProjectionStore.cpp
    kis_mask.cc
    kis_base_mask_generator.cpp
    kis_rect_mask_generator.cpp
@@ -276,6 +280,7 @@ set(kritaimage_LIB_SRCS
    kis_layer_composition.cpp
    kis_selection_filters.cpp
    KisProofingConfiguration.h
+   KisRecycleProjectionsJob.cpp
 
    kis_keyframe.cpp
    kis_keyframe_channel.cpp
@@ -301,6 +306,7 @@ set(kritaimage_LIB_SRCS
    layerstyles/kis_ls_overlay_filter.cpp
    layerstyles/kis_ls_utils.cpp
    layerstyles/gimp_bump_map.cpp
+   layerstyles/KisLayerStyleKnockoutBlower.cpp
 
    KisProofingConfiguration.cpp
 

@@ -20,6 +20,7 @@
 
 
 #include <kundo2command.h>
+#include <kactioncollection.h>
 
 #include <KoShapeController.h>
 #include <KoPathShape.h>
@@ -98,8 +99,11 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
 
         KUndo2Command* paint() override {
 
-            KisPixelSelectionSP pixelSelection = m_view->selection()->pixelSelection();
-            KIS_ASSERT_RECOVER(pixelSelection) { return 0; }
+            KisSelectionSP selection = m_view->selection();
+            KIS_SAFE_ASSERT_RECOVER(selection) { return 0; }
+
+            KisPixelSelectionSP pixelSelection = selection->pixelSelection();
+            KIS_SAFE_ASSERT_RECOVER(pixelSelection) { return 0; }
 
             bool hasSelection = !pixelSelection->isEmpty();
 
@@ -305,47 +309,51 @@ QMenu* KisSelectionToolHelper::getSelectionContextMenu(KisCanvas2* canvas)
 {
     QMenu *m_contextMenu = new QMenu();
 
-    KisActionManager * actionMan = canvas->viewManager()->actionManager();
+    KActionCollection *actionCollection = canvas->viewManager()->actionCollection();
 
-    m_contextMenu->addAction(actionMan->actionByName("deselect"));
-    m_contextMenu->addAction(actionMan->actionByName("invert"));
-    m_contextMenu->addAction(actionMan->actionByName("select_all"));
+    m_contextMenu->addSection(i18n("Selection Actions"));
+    m_contextMenu->addSeparator();
+
+    m_contextMenu->addAction(actionCollection->action("deselect"));
+    m_contextMenu->addAction(actionCollection->action("invert"));
+    m_contextMenu->addAction(actionCollection->action("select_all"));
 
     m_contextMenu->addSeparator();
 
-    m_contextMenu->addAction(actionMan->actionByName("cut_selection_to_new_layer"));
-    m_contextMenu->addAction(actionMan->actionByName("copy_selection_to_new_layer"));
+    m_contextMenu->addAction(actionCollection->action("cut_selection_to_new_layer"));
+    m_contextMenu->addAction(actionCollection->action("copy_selection_to_new_layer"));
 
     m_contextMenu->addSeparator();
 
     KisSelectionSP selection = canvas->viewManager()->selection();
     if (selection && canvas->viewManager()->selectionEditable()) {
-        m_contextMenu->addAction(actionMan->actionByName("edit_selection"));
+        m_contextMenu->addAction(actionCollection->action("edit_selection"));
 
         if (!selection->hasShapeSelection()) {
-            m_contextMenu->addAction(actionMan->actionByName("convert_to_vector_selection"));
+            m_contextMenu->addAction(actionCollection->action("convert_to_vector_selection"));
         } else {
-            m_contextMenu->addAction(actionMan->actionByName("convert_to_raster_selection"));
+            m_contextMenu->addAction(actionCollection->action("convert_to_raster_selection"));
         }
 
         QMenu *transformMenu = m_contextMenu->addMenu(i18n("Transform"));
-        transformMenu->addAction(actionMan->actionByName("selectionscale"));
-        transformMenu->addAction(actionMan->actionByName("growselection"));
-        transformMenu->addAction(actionMan->actionByName("shrinkselection"));
-        transformMenu->addAction(actionMan->actionByName("borderselection"));
-        transformMenu->addAction(actionMan->actionByName("smoothselection"));
-        transformMenu->addAction(actionMan->actionByName("featherselection"));
-        transformMenu->addAction(actionMan->actionByName("stroke_selection"));
+        transformMenu->addAction(actionCollection->action("KisToolTransform"));
+        transformMenu->addAction(actionCollection->action("selectionscale"));
+        transformMenu->addAction(actionCollection->action("growselection"));
+        transformMenu->addAction(actionCollection->action("shrinkselection"));
+        transformMenu->addAction(actionCollection->action("borderselection"));
+        transformMenu->addAction(actionCollection->action("smoothselection"));
+        transformMenu->addAction(actionCollection->action("featherselection"));
+        transformMenu->addAction(actionCollection->action("stroke_selection"));
 
         m_contextMenu->addSeparator();
     }
 
-    m_contextMenu->addAction(actionMan->actionByName("resizeimagetoselection"));
+    m_contextMenu->addAction(actionCollection->action("resizeimagetoselection"));
 
     m_contextMenu->addSeparator();
 
-    m_contextMenu->addAction(actionMan->actionByName("toggle_display_selection"));
-    m_contextMenu->addAction(actionMan->actionByName("show-global-selection-mask"));
+    m_contextMenu->addAction(actionCollection->action("toggle_display_selection"));
+    m_contextMenu->addAction(actionCollection->action("show-global-selection-mask"));
 
     return m_contextMenu;
 }

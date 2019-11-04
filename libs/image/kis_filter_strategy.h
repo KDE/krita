@@ -39,16 +39,20 @@ public:
     QString name() {
         return m_id.name();
     }
-    virtual qreal valueAt(qreal /*t*/) const {
+    virtual qreal valueAt(qreal t, qreal weightsPositionScale) const {
+        Q_UNUSED(t);
+        Q_UNUSED(weightsPositionScale);
         return 0;
     }
-    virtual qint32 intValueAt(qint32 t) const {
-        return qint32(255*valueAt(t / 256.0));
+    virtual qint32 intValueAt(qint32 t, qreal weightsPositionScale) const {
+        return qint32(255*valueAt(t / 256.0, weightsPositionScale));
     }
-    qreal support() {
+    virtual qreal support(qreal weightsPositionScale) {
+        Q_UNUSED(weightsPositionScale);
         return supportVal;
     }
-    qint32 intSupport() {
+    virtual qint32 intSupport(qreal weightsPositionScale) {
+        Q_UNUSED(weightsPositionScale);
         return intSupportVal;
     }
     virtual QString description() {
@@ -69,8 +73,8 @@ public:
     }
     ~KisHermiteFilterStrategy() override {}
 
-    qint32 intValueAt(qint32 t) const override;
-    qreal valueAt(qreal t) const override;
+    qint32 intValueAt(qint32 t, qreal weightsPositionScale) const override;
+    qreal valueAt(qreal t, qreal weightsPositionScale) const override;
 };
 
 class KRITAIMAGE_EXPORT KisBicubicFilterStrategy : public KisFilterStrategy
@@ -85,13 +89,15 @@ public:
         return i18n("Adds pixels using the color of surrounding pixels. Produces smoother tonal gradations than Bilinear.");
     }
 
-    qint32 intValueAt(qint32 t) const override;
+    qint32 intValueAt(qint32 t, qreal weightsPositionScale) const override;
 };
 class KRITAIMAGE_EXPORT KisBoxFilterStrategy : public KisFilterStrategy
 {
 public:
     KisBoxFilterStrategy() : KisFilterStrategy(KoID("NearestNeighbor", i18n("Nearest Neighbor"))) {
-        supportVal = 0.5; intSupportVal = 128;
+        // 0.5 and 128, but with a bit of margin to ensure the correct pixel will be used
+        // even in case of calculation errors
+        supportVal = 0.51; intSupportVal = 129;
     }
     ~KisBoxFilterStrategy() override {}
 
@@ -99,8 +105,12 @@ public:
         return i18n("Replicate pixels in the image. Preserves all the original detail, but can produce jagged effects.");
     }
 
-    qint32 intValueAt(qint32 t) const override;
-    qreal valueAt(qreal t) const override;
+    virtual qreal support(qreal weightsPositionScale) override;
+    virtual qint32 intSupport(qreal weightsPositionScale) override;
+
+
+    qint32 intValueAt(qint32 t, qreal weightsPositionScale) const override;
+    qreal valueAt(qreal t, qreal weightsPositionScale) const override;
 };
 
 class KRITAIMAGE_EXPORT KisBilinearFilterStrategy : public KisFilterStrategy
@@ -115,8 +125,8 @@ public:
         return i18n("Adds pixels averaging the color values of surrounding pixels. Produces medium quality results when the image is scaled from half to two times the original size.");
     }
 
-    qint32 intValueAt(qint32 t) const override;
-    qreal valueAt(qreal t) const override;
+    qint32 intValueAt(qint32 t, qreal weightsPositionScale) const override;
+    qreal valueAt(qreal t, qreal weightsPositionScale) const override;
 };
 
 class KRITAIMAGE_EXPORT KisBellFilterStrategy : public KisFilterStrategy
@@ -127,7 +137,7 @@ public:
     }
     ~KisBellFilterStrategy() override {}
 
-    qreal valueAt(qreal t) const override;
+    qreal valueAt(qreal t, qreal weightsPositionScale) const override;
 };
 
 class KRITAIMAGE_EXPORT KisBSplineFilterStrategy : public KisFilterStrategy
@@ -138,7 +148,7 @@ public:
     }
     ~KisBSplineFilterStrategy() override {}
 
-    qreal valueAt(qreal t) const override;
+    qreal valueAt(qreal t, qreal weightsPositionScale) const override;
 };
 
 class KRITAIMAGE_EXPORT KisLanczos3FilterStrategy : public KisFilterStrategy
@@ -153,7 +163,7 @@ public:
         return i18n("Offers similar results than Bicubic, but maybe a little bit sharper. Can produce light and dark halos along strong edges.");
     }
 
-    qreal valueAt(qreal t) const override;
+    qreal valueAt(qreal t, qreal weightsPositionScale) const override;
 private:
     qreal sinc(qreal x) const;
 };
@@ -166,7 +176,7 @@ public:
     }
     ~KisMitchellFilterStrategy() override {}
 
-    qreal valueAt(qreal t) const override;
+    qreal valueAt(qreal t, qreal weightsPositionScale) const override;
 };
 
 class KRITAIMAGE_EXPORT KisFilterStrategyRegistry : public KoGenericRegistry<KisFilterStrategy *>

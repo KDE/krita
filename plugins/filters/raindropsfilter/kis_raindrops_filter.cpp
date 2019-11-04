@@ -58,7 +58,7 @@ KisRainDropsFilter::KisRainDropsFilter()
 {
     setSupportsPainting(false);
     setSupportsThreading(false);
-    setSupportsAdjustmentLayers(true);
+    setSupportsAdjustmentLayers(false);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -373,20 +373,20 @@ uchar KisRainDropsFilter::LimitValues(int ColorValue) const
     return ((uchar) ColorValue);
 }
 
-KisConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisRainDropsFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     vKisIntegerWidgetParam param;
     param.push_back(KisIntegerWidgetParam(1, 200, 80, i18n("Drop size"), "dropsize"));
-    param.push_back(KisIntegerWidgetParam(1, 500, 80, i18n("Number"), "number"));
+    param.push_back(KisIntegerWidgetParam(1, 500, 80, i18n("Number of drops"), "number"));
     param.push_back(KisIntegerWidgetParam(1, 100, 30, i18n("Fish eyes"), "fishEyes"));
     KisMultiIntegerFilterWidget * w = new KisMultiIntegerFilterWidget(id().id(), parent, id().id(), param);
-    w->setConfiguration(factoryConfiguration());
+    w->setConfiguration(defaultConfiguration());
     return w;
 }
 
-KisFilterConfigurationSP KisRainDropsFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisRainDropsFilter::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("raindrops", 2);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("dropsize", 80);
     config->setProperty("number", 80);
     config->setProperty("fishEyes", 30);

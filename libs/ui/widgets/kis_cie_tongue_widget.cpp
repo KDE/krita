@@ -351,26 +351,24 @@ void KisCIETongueWidget::outlineTongue()
     int lx=0, ly=0;
     int fx=0, fy=0;
  
-    for (int x = 380; x <= 700; x += 5)
-    {
+    for (int x = 380; x <= 700; x += 5) {
         int ix = (x - 380) / 5;
 
-        QPointF * p = new QPointF(spectral_chromaticity[ix][0], spectral_chromaticity[ix][1]);
+        QPointF p(spectral_chromaticity[ix][0], spectral_chromaticity[ix][1]);
         int icx, icy;
-        mapPoint(icx, icy, * p);
+        mapPoint(icx, icy, p);
  
-        if (x > 380)
-        {
+        if (x > 380) {
             biasedLine(lx, ly, icx, icy);
         }
-        else
-        {
+        else {
             fx = icx;
             fy = icy;
         }
  
         lx = icx;
         ly = icy;
+
     }
  
     biasedLine(lx, ly, fx, fy);
@@ -488,11 +486,10 @@ void KisCIETongueWidget::drawLabels()
  
         int ix = (x - 380) / 5;
  
-        QPointF * p = new QPointF(spectral_chromaticity[ix][0],
-                       spectral_chromaticity[ix][1]);
+        QPointF p(spectral_chromaticity[ix][0], spectral_chromaticity[ix][1]);
  
         int icx, icy;
-        mapPoint(icx, icy, * p);
+        mapPoint(icx, icy, p);
  
         tx = icx + ((x < 520) ? grids(-2) : ((x >= 535) ? grids(2) : 0));
         ty = icy + ((x < 520) ? 0 : ((x >= 535) ? grids(-1) : grids(-2)));

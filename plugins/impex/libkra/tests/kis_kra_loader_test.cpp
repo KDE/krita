@@ -37,7 +37,12 @@
 #include "kis_keyframe_channel.h"
 #include "kis_time_range.h"
 
+#include <filestest.h>
+
 #include  <sdk/tests/kistest.h>
+
+
+const QString KraMimetype = "application/x-krita";
 
 void KisKraLoaderTest::initTestCase()
 {
@@ -168,6 +173,20 @@ void KisKraLoaderTest::testLoadAnimated()
     QCOMPARE(dev->y(), -10);
     QCOMPARE(dev->defaultPixel(), red);
 }
+
+
+
+void KisKraLoaderTest::testImportFromWriteonly()
+{
+    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), KraMimetype);
+}
+
+
+void KisKraLoaderTest::testImportIncorrectFormat()
+{
+    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), KraMimetype);
+}
+
 
 
 KISTEST_MAIN(KisKraLoaderTest)

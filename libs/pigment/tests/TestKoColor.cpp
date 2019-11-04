@@ -87,4 +87,14 @@ void TestKoColor::testConversion()
     kc.convertTo(csDst);
 }
 
+void TestKoColor::testSimpleSerialization()
+{
+    QColor c = Qt::green;
+    KoColor k;
+    k.fromQColor(c);
+    QString xml = k.toXML();
+    KoColor k2 = KoColor::fromXML(xml);
+    QVERIFY(k2.colorSpace() == k.colorSpace());
+}
+
 KISTEST_MAIN(TestKoColor)

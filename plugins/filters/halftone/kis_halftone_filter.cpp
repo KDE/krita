@@ -24,11 +24,11 @@
 #include <klocalizedstring.h>
 
 #include <KoUpdater.h>
-#include <KoCompositeOps.h>
 
 #include <filter/kis_filter_category_ids.h>
 #include "kis_filter_configuration.h"
 #include <kis_filter_registry.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <kis_random_accessor_ng.h>
 #include <kis_sequential_iterator.h>
@@ -114,14 +114,14 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     if (progressUpdater) {
         progressUpdater->setRange(0, (applyRect.height()/cellSpacingV+3)*(applyRect.width()/cellSpacingH+3));
     }
-    KisRandomConstAccessorSP itterator = device->createRandomConstAccessorNG( 0, 0);
-    //itterator->numContiguousColumns(qCeil(cellSize));
-    //itterator->numContiguousRows(qCeil(cellSize));
+    KisRandomConstAccessorSP iterator = device->createRandomConstAccessorNG( 0, 0);
+    //iterator->numContiguousColumns(qCeil(cellSize));
+    //iterator->numContiguousRows(qCeil(cellSize));
     KisPainter painter(device);
     painter.setCompositeOp(device->colorSpace()->compositeOp(COMPOSITE_OVER));
     KisPaintDeviceSP dab = device->createCompositionSourceDevice();
     KisPainter dbPainter(dab);
-    KisSelectionSP alpha = new KisSelection();
+    KisSelectionSP alpha = new KisSelection(new KisSelectionEmptyBounds(0));
     alpha->pixelSelection()->copyAlphaFrom(device, applyRect);
     device->fill(applyRect, backgroundC);
     dbPainter.setAntiAliasPolygonFill(config->getBool("antiAliasing", true));
@@ -141,8 +141,8 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
             qint32 ydifference = qFloor(samplePoint.y())- applyRect.top();
             QPoint center(qBound(applyRect.left()+1, qFloor(samplePoint.x())+qCeil(cellSize*0.5), applyRect.right()-1),
                           qBound(applyRect.top()+1, qFloor(samplePoint.y())+qCeil(cellSize*0.5), applyRect.bottom()-1));
-            itterator->moveTo(center.x(), center.y());
-            quint8 intensity = device->colorSpace()->intensity8(itterator->oldRawData());
+            iterator->moveTo(center.x(), center.y());
+            quint8 intensity = device->colorSpace()->intensity8(iterator->oldRawData());
             qreal size = diameter*((qAbs(intensity-eightbit))/255.0);
             QPoint sPoint(qMax(qFloor(samplePoint.x()), applyRect.left()),
                           qMax(qFloor(samplePoint.y()), applyRect.top()));
@@ -172,9 +172,9 @@ void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
     device->clearSelection(alpha);
 }
 
-KisFilterConfigurationSP KisHalftoneFilter::factoryConfiguration() const
+KisFilterConfigurationSP KisHalftoneFilter::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration("halftone", 1);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("cellSize", 8.0);
     config->setProperty("patternAngle", 45.0);
     QVariant v;
@@ -192,7 +192,7 @@ KisFilterConfigurationSP KisHalftoneFilter::factoryConfiguration() const
     return config;
 }
 
-KisConfigWidget *KisHalftoneFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev) const
+KisConfigWidget *KisHalftoneFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool) const
 {
     return new KisHalftoneConfigWidget(parent, dev);
 }

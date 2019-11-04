@@ -54,10 +54,20 @@ public:
     }
 
     inline void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) {
-        x = m_extentMinX;
-        y = m_extentMinY;
-        w = (m_extentMaxX >= m_extentMinX) ? m_extentMaxX - m_extentMinX + 1 : 0;
-        h = (m_extentMaxY >= m_extentMinY) ? m_extentMaxY - m_extentMinY + 1 : 0;
+        const bool extentIsValid =
+            m_extentMaxX >= m_extentMinX && m_extentMaxY >= m_extentMinY;
+
+        if (extentIsValid) {
+            x = m_extentMinX;
+            y = m_extentMinY;
+            w = m_extentMaxX - m_extentMinX + 1;
+            h = m_extentMaxY - m_extentMinY + 1;
+        } else {
+            x = 0;
+            y = 0;
+            w = 0;
+            h = 0;
+        }
     }
 
     inline QRect extent() {

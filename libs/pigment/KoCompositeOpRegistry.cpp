@@ -28,6 +28,8 @@
 #include "KoCompositeOp.h"
 #include "KoColorSpace.h"
 
+#include "kis_assert.h"
+
 Q_GLOBAL_STATIC(KoCompositeOpRegistry, registry)
 
 
@@ -96,6 +98,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[3], KoID(COMPOSITE_TINT_IFS_ILLUSIONS, i18n("Tint (IFS Illusions)")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_FOG_LIGHTEN_IFS_ILLUSIONS, i18n("Fog Lighten (IFS Illusions)")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_EASY_DODGE       , i18n("Easy Dodge")));
+    m_map.insert(m_categories[3], KoID(COMPOSITE_LUMINOSITY_SAI       , i18n("Luminosity/Shine (SAI)")));
     
     m_map.insert(m_categories[4], KoID(COMPOSITE_MOD              , i18n("Modulo")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_MOD_CON          , i18n("Modulo - Continuous")));
@@ -209,6 +212,52 @@ KoID KoCompositeOpRegistry::getKoID(const QString& compositeOpID) const
 KoCompositeOpRegistry::KoIDMap KoCompositeOpRegistry::getCompositeOps() const
 {
     return m_map;
+}
+
+KoCompositeOpRegistry::KoIDMap KoCompositeOpRegistry::getLayerStylesCompositeOps() const
+{
+    QVector<QString> ids;
+
+    // not available via the blending modes list in Krita
+    // ids << COMPOSITE_PASS_THROUGH;
+
+    ids << COMPOSITE_OVER;
+    ids << COMPOSITE_DISSOLVE;
+    ids << COMPOSITE_DARKEN;
+    ids << COMPOSITE_MULT;
+    ids << COMPOSITE_BURN;
+    ids << COMPOSITE_LINEAR_BURN;
+    ids << COMPOSITE_DARKER_COLOR;
+    ids << COMPOSITE_LIGHTEN;
+    ids << COMPOSITE_SCREEN;
+    ids << COMPOSITE_DODGE;
+    ids << COMPOSITE_LINEAR_DODGE;
+    ids << COMPOSITE_LIGHTER_COLOR;
+    ids << COMPOSITE_OVERLAY;
+    ids << COMPOSITE_SOFT_LIGHT_PHOTOSHOP;
+    ids << COMPOSITE_HARD_LIGHT;
+    ids << COMPOSITE_VIVID_LIGHT;
+    ids << COMPOSITE_LINEAR_LIGHT;
+    ids << COMPOSITE_PIN_LIGHT;
+    ids << COMPOSITE_HARD_MIX_PHOTOSHOP;
+    ids << COMPOSITE_DIFF;
+    ids << COMPOSITE_EXCLUSION;
+    ids << COMPOSITE_SUBTRACT;
+    ids << COMPOSITE_DIVIDE;
+    ids << COMPOSITE_HUE;
+    ids << COMPOSITE_SATURATION;
+    ids << COMPOSITE_COLOR;
+    ids << COMPOSITE_LUMINIZE;
+
+    KoIDMap result;
+    Q_FOREACH (const QString &id, ids) {
+        KoIDMap::const_iterator iter = std::find(m_map.begin(), m_map.end(), KoID(id));
+        KIS_SAFE_ASSERT_RECOVER(iter != m_map.end()) { continue; }
+
+        result.insert(iter.key(), iter.value());
+    }
+
+    return result;
 }
 
 KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCategories() const

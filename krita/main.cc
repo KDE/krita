@@ -34,9 +34,7 @@
 #include <QMessageBox>
 #include <QThread>
 
-#if QT_VERSION >= 0x050900
 #include <QOperatingSystemVersion>
-#endif
 
 #include <time.h>
 
@@ -58,19 +56,26 @@
 #include <KisUsageLogger.h>
 #include <kis_image_config.h>
 
+#ifdef Q_OS_ANDROID
+#include <QtAndroid>
+#endif
+
 #if defined Q_OS_WIN
+#include "config_use_qt_tablet_windows.h"
 #include <windows.h>
+#ifndef USE_QT_TABLET_WINDOWS
 #include <kis_tablet_support_win.h>
 #include <kis_tablet_support_win8.h>
+#else
+#include <dialogs/KisDlgCustomTabletResolution.h>
+#endif
+#include "config-high-dpi-scale-factor-rounding-policy.h"
+#include "config-set-has-border-in-full-screen-default.h"
+#ifdef HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
+#include <QtPlatformHeaders/QWindowsWindowFunctions>
+#endif
 #include <QLibrary>
-
-#elif defined HAVE_X11
-#include "config_use_qt_xcb.h"
-#ifndef USE_QT_XCB
-#include <kis_xi2_event_filter.h>
 #endif
-#endif
-
 #if defined HAVE_KCRASH
 #include <kcrash.h>
 #elif defined USE_DRMINGW
@@ -98,7 +103,12 @@ void tryInitDrMingw()
     QString logFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation).replace(L'/', L'\\') + QStringLiteral("\\kritacrash.log");
     myExcHndlSetLogFileNameA(logFile.toLocal8Bit());
 }
+} // namespace
+#endif
 
+#ifdef Q_OS_WIN
+namespace
+{
 typedef enum ORIENTATION_PREFERENCE {
     ORIENTATION_PREFERENCE_NONE = 0x0,
     ORIENTATION_PREFERENCE_LANDSCAPE = 0x1,
@@ -127,9 +137,42 @@ void resetRotation()
 }
 } // namespace
 #endif
+
+#ifdef Q_OS_ANDROID
+extern "C" JNIEXPORT void JNICALL
+Java_org_krita_android_JNIWrappers_saveState(JNIEnv* /*env*/,
+                                             jobject /*obj*/,
+                                             jint    /*n*/)
+{
+    if (!KisPart::exists()) return;
+
+    KisPart *kisPart = KisPart::instance();
+    QList<QPointer<KisDocument>> list = kisPart->documents();
+    for (QPointer<KisDocument> &doc: list)
+    {
+        doc->autoSaveOnPause();
+    }
+
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    kritarc.setValue("canvasState", "OPENGL_SUCCESS");
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_org_krita_android_JNIWrappers_exitFullScreen(JNIEnv* /*env*/,
+                                                  jobject /*obj*/,
+                                                  jint    /*n*/)
+{
+    if (!KisPart::exists()) return;
+
+    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    mainWindow->viewFullscreen(false);
+}
+
+__attribute__ ((visibility ("default")))
+#endif
 extern "C" int main(int argc, char **argv)
 {
-
     // The global initialization of the random generator
     qsrand(time(0));
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
@@ -150,8 +193,39 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
-#if QT_VERSION >= 0x050900
     QCoreApplication::setAttribute(Qt::AA_DisableShaderDiskCache, true);
+
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+    // This rounding policy depends on a series of patches to Qt related to
+    // https://bugreports.qt.io/browse/QTBUG-53022. These patches are applied
+    // in ext_qt for WIndows (patches 0031-0036).
+    //
+    // The rounding policy can be set externally by setting the environment
+    // variable `QT_SCALE_FACTOR_ROUNDING_POLICY` to one of the following:
+    //   Round:            Round up for .5 and above.
+    //   Ceil:             Always round up.
+    //   Floor:            Always round down.
+    //   RoundPreferFloor: Round up for .75 and above.
+    //   PassThrough:      Don't round.
+    //
+    // The default is set to RoundPreferFloor for better behaviour than before,
+    // but can be overridden by the above environment variable.
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
+#endif
+
+#ifdef Q_OS_ANDROID
+    const QString write_permission = "android.permission.WRITE_EXTERNAL_STORAGE";
+    const QStringList permissions = { write_permission };
+    const QtAndroid::PermissionResultMap resultHash =
+            QtAndroid::requestPermissionsSync(QStringList(permissions));
+
+    if (resultHash[write_permission] == QtAndroid::PermissionResult::Denied) {
+        // TODO: show a dialog and graciously exit
+        dbgKrita << "Permission denied by the user";
+    }
+    else {
+        dbgKrita << "Permission granted";
+    }
 #endif
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
@@ -170,6 +244,11 @@ extern "C" int main(int argc, char **argv)
         if (!qgetenv("KRITA_HIDPI").isEmpty()) {
             QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
         }
+#ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
+        if (kritarc.value("EnableHiDPIFractionalScaling", true).toBool()) {
+            QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+        }
+#endif
 
         if (!qgetenv("KRITA_OPENGL_DEBUG").isEmpty()) {
             enableOpenGLDebug = true;
@@ -185,24 +264,17 @@ extern "C" int main(int argc, char **argv)
 
         logUsage = kritarc.value("LogUsage", true).toBool();
 
+#ifdef Q_OS_WIN
+        const QString preferredRendererString = kritarc.value("OpenGLRenderer", "angle").toString();
+#else
         const QString preferredRendererString = kritarc.value("OpenGLRenderer", "auto").toString();
+#endif
         preferredRenderer = KisOpenGL::convertConfigToOpenGLRenderer(preferredRendererString);
 
-#ifdef Q_OS_WIN
-        // Force ANGLE to use Direct3D11. D3D9 doesn't support OpenGL ES 3 and WARP
-        //  might get weird crashes atm.
-        qputenv("QT_ANGLE_PLATFORM", "d3d11");
-#endif
+        const KisOpenGL::RendererConfig config =
+            KisOpenGL::selectSurfaceConfig(preferredRenderer, rootSurfaceFormat, enableOpenGLDebug);
 
-        const QSurfaceFormat format =
-            KisOpenGL::selectSurfaceFormat(preferredRenderer, rootSurfaceFormat, enableOpenGLDebug);
-
-        if (format.renderableType() == QSurfaceFormat::OpenGLES) {
-            QCoreApplication::setAttribute(Qt::AA_UseOpenGLES, true);
-        } else {
-            QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL, true);
-        }
-        KisOpenGL::setDefaultSurfaceFormat(format);
+        KisOpenGL::setDefaultSurfaceConfig(config);
         KisOpenGL::setDebugSynchronous(openGLDebugSynchronous);
 
 #ifdef Q_OS_WIN
@@ -308,8 +380,32 @@ extern "C" int main(int argc, char **argv)
         }
     }
 
+#if defined Q_OS_WIN && defined USE_QT_TABLET_WINDOWS && defined QT_HAS_WINTAB_SWITCH
+    const bool forceWinTab = !KisConfig::useWin8PointerInputNoApp(&kritarc);
+    QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI, forceWinTab);
+
+    if (qEnvironmentVariableIsEmpty("QT_WINTAB_DESKTOP_RECT") &&
+        qEnvironmentVariableIsEmpty("QT_IGNORE_WINTAB_MAPPING")) {
+
+        QRect customTabletRect;
+        KisDlgCustomTabletResolution::Mode tabletMode =
+            KisDlgCustomTabletResolution::getTabletMode(&customTabletRect);
+        KisDlgCustomTabletResolution::applyConfiguration(tabletMode, customTabletRect);
+    }
+#endif
+
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+    KisUsageLogger::writeHeader();
+    KisOpenGL::initialize();
+
+#ifdef HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
+    if (QCoreApplication::testAttribute(Qt::AA_UseDesktopOpenGL)) {
+        QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
+    }
+#endif
+
+
     if (!language.isEmpty()) {
         if (rightToLeft) {
             app.setLayoutDirection(Qt::RightToLeft);
@@ -357,7 +453,7 @@ extern "C" int main(int argc, char **argv)
     if (singleApplication && app.isRunning()) {
         // only pass arguments to main instance if they are not for batch processing
         // any batch processing would be done in this separate instance
-        const bool batchRun = args.exportAs();
+        const bool batchRun = args.exportAs() || args.exportSequence();
 
         if (!batchRun) {
             QByteArray ba = args.serialize();
@@ -372,14 +468,7 @@ extern "C" int main(int argc, char **argv)
         app.setAttribute(Qt::AA_DontShowIconsInMenus);
     }
 
-#if defined HAVE_X11
-#ifndef USE_QT_XCB
-    app.installNativeEventFilter(KisXi2EventFilter::instance());
-#endif
-#endif
-
     app.installEventFilter(KisQtWidgetsTweaker::instance());
-
 
     if (!args.noSplash()) {
         // then create the pixmap from an xpm: we cannot get the
@@ -401,7 +490,6 @@ extern "C" int main(int argc, char **argv)
 #if defined Q_OS_WIN
     KisConfig cfg(false);
     bool supportedWindowsVersion = true;
-#if QT_VERSION >= 0x050900
     QOperatingSystemVersion osVersion = QOperatingSystemVersion::current();
     if (osVersion.type() == QOperatingSystemVersion::Windows) {
         if (osVersion.majorVersion() >= QOperatingSystemVersion::Windows7.majorVersion()) {
@@ -420,8 +508,7 @@ extern "C" int main(int argc, char **argv)
             }
         }
     }
-#endif
-
+#ifndef USE_QT_TABLET_WINDOWS
     {
         if (cfg.useWin8PointerInput() && !KisTabletSupportWin8::isAvailable()) {
             cfg.setUseWin8PointerInput(false);
@@ -460,15 +547,18 @@ extern "C" int main(int argc, char **argv)
             }
         }
     }
-#endif
+#elif defined QT_HAS_WINTAB_SWITCH
 
-    if (!app.start(args)) {
-        return 1;
+    // Check if WinTab/WinInk has actually activated
+    const bool useWinTabAPI = app.testAttribute(Qt::AA_MSWindowsUseWinTabAPI);
+
+    if (useWinTabAPI != !cfg.useWin8PointerInput()) {
+        cfg.setUseWin8PointerInput(useWinTabAPI);
     }
 
-#if QT_VERSION >= 0x050700
-    app.setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
 #endif
+#endif
+    app.setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
 
     // Set up remote arguments.
     QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
@@ -483,6 +573,13 @@ extern "C" int main(int argc, char **argv)
     KisUsageLogger::write(QString("  Memory: %1 Mb").arg(KisImageConfig(true).totalRAM()));
     KisUsageLogger::write(QString("  Number of Cores: %1").arg(QThread::idealThreadCount()));
     KisUsageLogger::write(QString("  Swap Location: %1\n").arg(KisImageConfig(true).swapDir()));
+
+    KisConfig(true).logImportantSettings();
+
+    if (!app.start(args)) {
+        KisUsageLogger::log("Could not start Krita Application");
+        return 1;
+    }
 
     int state = app.exec();
 

@@ -340,13 +340,20 @@
         </widget>
        </item>
        <item row="7" column="1">
+        <widget class="QCheckBox" name="m_chkHiDPIFractionalScaling">
+         <property name="text">
+          <string>(Hi-DPI) Enable fractional scale factor</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
         <widget class="QCheckBox" name="m_chkSingleApplication">
          <property name="text">
           <string>Allow only one instance of Krita</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="0" colspan="2">
+       <item row="9" column="0" colspan="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -439,6 +446,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="chkEnableTouchRotation">
+         <property name="text">
+          <string>Enable Touch Rotation</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="m_groupBoxKineticScrollingSettings">
          <property name="title">
           <string>Kinetic Scrolling (needs restart)</string>
@@ -470,7 +484,7 @@
           <item>
            <widget class="QCheckBox" name="m_chkKineticScrollingHideScrollbars">
             <property name="text">
-             <string>Hide Scrollbars</string>
+             <string>Hide docker scrollbars if kinetic scrolling is enabled (needs restart)</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -707,6 +721,13 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="chkSaveSessionOnQuit">
+         <property name="text">
+          <string>Save session when Krita closes</string>
+         </property>
+        </widget>
+       </item>
        <item row="3" column="1">
         <widget class="QCheckBox" name="m_chkConvertOnImport">
          <property name="text">
@@ -721,6 +742,9 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Only applies to new or newly opened images.</string>
          </property>
          <property name="text">
           <string>Undo stack size:</string>
@@ -743,6 +767,9 @@
            <width>75</width>
            <height>0</height>
           </size>
+         </property>
+         <property name="toolTip">
+          <string>Only applies to new or newly opened images.</string>
          </property>
          <property name="minimum">
           <number>0</number>
@@ -878,13 +905,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="2" column="1">
-        <widget class="QCheckBox" name="chkSaveSessionOnQuit">
-         <property name="text">
-          <string>Save session when Krita closes</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>

@@ -50,6 +50,7 @@ public:
     bool suitableForOutput {false};
     bool hasColorants;
     bool hasTRC;
+    bool isLinear {false};
     bool adaptedFromD50;
     cmsCIEXYZ mediaWhitePoint;
     cmsCIExyY whitePoint;
@@ -126,6 +127,7 @@ bool LcmsColorProfileContainer::init()
 
     d->profile = cmsOpenProfileFromMem((void *)d->data->rawData().constData(), d->data->rawData().size());
 
+
 #ifndef NDEBUG
     if (d->data->rawData().size() == 4096) {
         qWarning() << "Profile has a size of 4096, which is suspicious and indicates a possible misuse of QIODevice::read(int), check your code.";
@@ -168,7 +170,7 @@ bool LcmsColorProfileContainer::init()
                 double d3dummy [3] = {d->mediaWhitePoint.X, d->mediaWhitePoint.Y, d->mediaWhitePoint.Z};
                 QGenericMatrix<1, 3, double> whitePointMatrix(d3dummy);
                 QTransform invertDummy(CAM1[0].X, CAM1[0].Y, CAM1[0].Z, CAM1[1].X, CAM1[1].Y, CAM1[1].Z, CAM1[2].X, CAM1[2].Y, CAM1[2].Z);
-                //we then abuse QTransform's invert function because it probably does matrix invertion 20 times better than I can program.
+                //we then abuse QTransform's invert function because it probably does matrix inversion 20 times better than I can program.
                 //if the matrix is uninvertable, invertedDummy will be an identity matrix, which for us means that it won't give any noticeble
                 //effect when we start multiplying.
                 QTransform invertedDummy = invertDummy.inverted();
@@ -210,15 +212,19 @@ bool LcmsColorProfileContainer::init()
             d->redTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigRedTRCTag));
             d->greenTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGreenTRCTag));
             d->blueTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigBlueTRCTag));
-            d->redTRCReverse = cmsReverseToneCurve(d->redTRC);
-            d->greenTRCReverse = cmsReverseToneCurve(d->greenTRC);
-            d->blueTRCReverse = cmsReverseToneCurve(d->blueTRC);
-            d->hasTRC = true;
+            if (d->redTRC) d->redTRCReverse = cmsReverseToneCurve(d->redTRC);
+            if (d->greenTRC) d->greenTRCReverse = cmsReverseToneCurve(d->greenTRC);
+            if (d->blueTRC) d->blueTRCReverse = cmsReverseToneCurve(d->blueTRC);
+            d->hasTRC = (d->redTRC && d->greenTRC && d->blueTRC && d->redTRCReverse && d->greenTRCReverse && d->blueTRCReverse);
+            if (d->hasTRC) d->isLinear = cmsIsToneCurveLinear(d->redTRC)
+                                      && cmsIsToneCurveLinear(d->greenTRC)
+                                      && cmsIsToneCurveLinear(d->blueTRC);
 
         } else if (cmsIsTag(d->profile, cmsSigGrayTRCTag)) {
             d->grayTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGrayTRCTag));
-            d->grayTRCReverse = cmsReverseToneCurve(d->grayTRC);
-            d->hasTRC = true;
+            if (d->grayTRC) d->grayTRCReverse = cmsReverseToneCurve(d->grayTRC);
+            d->hasTRC = (d->grayTRC && d->grayTRCReverse);
+            if (d->hasTRC) d->isLinear = cmsIsToneCurveLinear(d->grayTRC);
         } else {
             d->hasTRC = false;
         }
@@ -318,6 +324,10 @@ bool LcmsColorProfileContainer::hasColorants() const
 bool LcmsColorProfileContainer::hasTRC() const
 {
     return d->hasTRC;
+}
+bool LcmsColorProfileContainer::isLinear() const
+{
+    return d->isLinear;
 }
 QVector <double> LcmsColorProfileContainer::getColorantsXYZ() const
 {

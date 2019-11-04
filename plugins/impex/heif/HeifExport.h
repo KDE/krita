@@ -36,6 +36,7 @@ public:
     {
         setupUi(this);
         connect(chkLossless, SIGNAL(toggled(bool)), SLOT(toggleQualitySlider(bool)));
+        sliderQuality->setRange(0, 100, 0);
     }
 
     void setConfiguration(const KisPropertiesConfigurationSP  cfg) override;
@@ -44,6 +45,9 @@ public:
 private Q_SLOTS:
 
     void toggleQualitySlider(bool toggle);
+private:
+
+    bool m_hasAlpha {false};
 
 };
 
@@ -58,7 +62,7 @@ public:
     // This should return true if the library can work with a QIODevice, and doesn't want to open the file by itself
     bool supportsIO() const override { return true; }
 
-    KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
     KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const override;
     KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const override;
     void initializeCapabilities() override;

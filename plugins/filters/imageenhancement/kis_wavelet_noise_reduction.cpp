@@ -46,16 +46,16 @@ KisWaveletNoiseReduction::~KisWaveletNoiseReduction()
 {
 }
 
-KisConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP) const
+KisConfigWidget * KisWaveletNoiseReduction::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     vKisDoubleWidgetParam param;
     param.push_back(KisDoubleWidgetParam(0.0, 256.0, BEST_WAVELET_THRESHOLD_VALUE, i18n("Threshold"), "threshold"));
     return new KisMultiDoubleFilterWidget(id().id(), parent, id().id(), param);
 }
 
-KisFilterConfigurationSP KisWaveletNoiseReduction::factoryConfiguration() const
+KisFilterConfigurationSP KisWaveletNoiseReduction::defaultConfiguration() const
 {
-    KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 0);
+    KisFilterConfigurationSP config = factoryConfiguration();
     config->setProperty("threshold", BEST_WAVELET_THRESHOLD_VALUE);
     return config;
 }

@@ -60,7 +60,7 @@ def writeJson(configDictionary = {}):
                 role = str(authorDict["role"]).title()
                 if "editor" in role.lower():
                     role = "Editor"
-                if "cover" in role.lower:
+                if "cover" in role.lower():
                     role = "Cover"
                 if role in listOfRoles:
                     author["role"] = role

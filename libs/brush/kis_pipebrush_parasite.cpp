@@ -62,6 +62,9 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
                 else if (selectionMode == "ytilt") {
                     selection[selIndex] = KisParasite::TiltY;
                 }
+                else if (selectionMode == "velocity") {
+                    selection[selIndex] = KisParasite::Velocity;
+                }
                 else {
                     selection[selIndex] = KisParasite::Constant;
                 }

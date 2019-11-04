@@ -415,6 +415,7 @@ qreal KisColorSelector::getSaturation(int saturationIdx) const
 void KisColorSelector::recalculateAreas(quint8 numLightPieces)
 {
     qreal LIGHT_STRIP_RATIO = 0.075;
+
     if (m_showValueScaleNumbers) {
         LIGHT_STRIP_RATIO = 0.25;
     }

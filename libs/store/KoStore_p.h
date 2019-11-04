@@ -98,6 +98,11 @@ public:
     QStack<QString> directoryStack;
 
     bool writeMimetype; ///< true if the backend is allowed to create "mimetype" automatically.
+
+    QString substituteThis;
+    QString substituteWith;
+
+    QUrl url;
 };
 
 #endif

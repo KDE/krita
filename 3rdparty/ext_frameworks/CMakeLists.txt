@@ -12,14 +12,15 @@ SET(EXTPREFIX_frameworks "${EXTPREFIX}" )
 #        ItemModels 
 #        ItemViews
 #        WindowSystem
+#        kimageformats
 # On Linux:
 #        KCrash
 
 ExternalProject_Add(
     ext_extra_cmake_modules
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.kde.org/stable/frameworks/5.44/extra-cmake-modules-5.44.0.zip
-    URL_MD5 74aa8fc501e27024390b01c81f2925eb
+    URL http://download.kde.org/stable/frameworks/5.60/extra-cmake-modules-5.60.0.zip
+    URL_MD5 c205e17d89028ab0b034e68081d5ebfb
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ecm_install_to_share.diff
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
@@ -34,8 +35,8 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_karchive
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.kde.org/stable/frameworks/5.44/karchive-5.44.0.zip
-    URL_MD5 c60a8e22b88cc7328610041638459689
+    URL http://download.kde.org/stable/frameworks/5.60/karchive-5.60.0.zip
+    URL_MD5 50ae1495ef5b19898a06e43160d9b84d
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/karchive.diff
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
@@ -51,15 +52,16 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_kconfig
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.kde.org/stable/frameworks/5.44/kconfig-5.44.0.zip
-    URL_MD5 d0223ea471bbf463ec42c2a2355a5183
+    URL http://download.kde.org/stable/frameworks/5.60/kconfig-5.60.0.zip
+    URL_MD5 db96fdd78a574d07b09abb720dae1a06
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kconfig.diff
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
-            -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
-                ${GLOBAL_PROFILE}
-                -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
-                -DBUILD_TESTING=false
+               -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
+               ${GLOBAL_PROFILE}
+               -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
+               -DBUILD_TESTING=false
+               -DKCONFIG_USE_DBUS=off
     UPDATE_COMMAND ""
     DEPENDS ext_karchive
 )
@@ -68,10 +70,10 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_kwidgetsaddons
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.kde.org/stable/frameworks/5.44/kwidgetsaddons-5.44.0.zip
-    URL_MD5 a9911d8d0f8aaf7a7afd84c41c8f80a1
+    URL http://download.kde.org/stable/frameworks/5.60/kwidgetsaddons-5.60.0.zip
+    URL_MD5 1b09306fe482dd5665b16a243eb2be94
     INSTALL_DIR ${EXTPREFIX_frameworks}
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kwidgetsaddons.diff
+#    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kwidgetsaddons.diff
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
                 ${GLOBAL_PROFILE}
@@ -85,8 +87,8 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_kcompletion
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.kde.org/stable/frameworks/5.44/kcompletion-5.44.0.zip
-    URL_MD5 0647885a702c338a1b656eb4f311ad16
+    URL http://download.kde.org/stable/frameworks/5.60/kcompletion-5.60.0.zip
+    URL_MD5 a9848cb26ff96246769c56244f0db25f
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
@@ -101,8 +103,8 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_kcoreaddons
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.kde.org/stable/frameworks/5.44/kcoreaddons-5.44.0.zip
-    URL_MD5 16a7379f3e2941d1c19d6f80939f15e8
+    URL http://download.kde.org/stable/frameworks/5.60/kcoreaddons-5.60.0.zip
+    URL_MD5 da21c1532042c2c8a7e56f444c581196
     INSTALL_DIR ${EXTPREFIX_frameworks}
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/desktoptojson.diff
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
@@ -118,8 +120,8 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_kguiaddons
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.kde.org/stable/frameworks/5.44/kguiaddons-5.44.0.zip
-    URL_MD5 440eefbf5abcafc492dcf857f7e4eaf5
+    URL http://download.kde.org/stable/frameworks/5.60/kguiaddons-5.60.0.zip
+    URL_MD5 f8aeea516e264c80df470efafab6ded0
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
@@ -134,8 +136,8 @@ if(APPLE)
 ExternalProject_Add(
     ext_ki18n
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://download.kde.org/stable/frameworks/5.44/ki18n-5.44.0.zip
-    URL_MD5 333ab0a3f65a298e928d746144d4dc8e
+        URL http://download.kde.org/stable/frameworks/5.60/ki18n-5.60.0.zip
+    URL_MD5 e53f479f22ea17629319fec710dda036
     INSTALL_DIR ${EXTPREFIX_frameworks}
     PATCH_COMMAND COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ki18n-appdatalocation.diff
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
@@ -150,8 +152,8 @@ else()
 ExternalProject_Add(
     ext_ki18n
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://download.kde.org/stable/frameworks/5.44/ki18n-5.44.0.zip
-    URL_MD5 333ab0a3f65a298e928d746144d4dc8e
+        URL http://download.kde.org/stable/frameworks/5.60/ki18n-5.60.0.zip
+    URL_MD5 e53f479f22ea17629319fec710dda036
     INSTALL_DIR ${EXTPREFIX_frameworks}
     PATCH_COMMAND COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ki18n-appdatalocation.diff
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
@@ -167,8 +169,8 @@ endif()
 ExternalProject_Add(
     ext_kitemmodels
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.kde.org/stable/frameworks/5.44/kitemmodels-5.44.0.zip
-    URL_MD5 ea43a5e2cc7033eb672796b108d7403b
+    URL http://download.kde.org/stable/frameworks/5.60/kitemmodels-5.60.0.zip
+    URL_MD5 c8f02881a65d496d6114bb2155cdfc36
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
@@ -182,8 +184,8 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_kitemviews
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.kde.org/stable/frameworks/5.44/kitemviews-5.44.0.zip
-    URL_MD5 8b15c703313c7a790c7db897ef17de7d
+    URL http://download.kde.org/stable/frameworks/5.60/kitemviews-5.60.0.zip
+    URL_MD5 9d94b8da72f43fac39aa782f7efd941e
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
@@ -197,8 +199,8 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_kimageformats
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.kde.org/stable/frameworks/5.44/kimageformats-5.44.0.zip
-    URL_MD5 02a98b682f9cb655592148d7ebcc05e7
+    URL http://download.kde.org/stable/frameworks/5.60/kimageformats-5.60.0.zip
+    URL_MD5 a8b413560d12cd956d689784a056d6e0
     INSTALL_DIR ${EXTPREFIX_frameworks}
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kimageformats.diff
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
@@ -213,8 +215,8 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_kwindowsystem
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.kde.org/stable/frameworks/5.44/kwindowsystem-5.44.0.zip
-    URL_MD5 75329f47cf8cd413fa1d15a57c298563
+    URL http://download.kde.org/stable/frameworks/5.60/kwindowsystem-5.60.0.zip
+    URL_MD5 c15c29141b5edca67143b735a94d3f43
     INSTALL_DIR ${EXTPREFIX_frameworks}
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kwindowsystem-x11.diff
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
@@ -229,8 +231,8 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_kcrash
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://download.kde.org/stable/frameworks/5.44/kcrash-5.44.0.zip
-    URL_MD5 61adc0e125c65288968d958acf25f4aa
+    URL http://download.kde.org/stable/frameworks/5.60/kcrash-5.60.0.zip
+    URL_MD5 7449a6f2b314b944ab2bed00124fe69b
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
             -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 

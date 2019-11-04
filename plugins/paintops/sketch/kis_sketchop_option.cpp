@@ -47,11 +47,11 @@ KisSketchOpOption::KisSketchOpOption()
 
     m_options->offsetSPBox->setRange(0.0, 200.0, 0);
     m_options->offsetSPBox->setValue(30.0);
-    m_options->offsetSPBox->setSuffix("%");
+    m_options->offsetSPBox->setSuffix(i18n("%"));
 
     m_options->densitySPBox->setRange(0.0, 100.0, 0);
     m_options->densitySPBox->setValue(50.0);
-    m_options->densitySPBox->setSuffix("%");
+    m_options->densitySPBox->setSuffix(i18n("%"));
 
 
     connect(m_options->offsetSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));

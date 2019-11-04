@@ -63,7 +63,7 @@ void KisStopGradientSliderWidget::updateHandleSize()
 int KisStopGradientSliderWidget::handleClickTolerance() const
 {
     // the size of the default text!
-    return m_handleSize.height();
+    return m_handleSize.width();
 }
 
 void KisStopGradientSliderWidget::setGradientResource(KoStopGradient* gradient)
@@ -160,6 +160,11 @@ int findNearestHandle(qreal t, const qreal tolerance, const QList<KoGradientStop
 void KisStopGradientSliderWidget::mousePressEvent(QMouseEvent * e)
 {
     if (!allowedClickRegion(handleClickTolerance()).contains(e->pos())) {
+        QWidget::mousePressEvent(e);
+        return;
+    }
+
+    if (e->buttons() != Qt::LeftButton ) {
         QWidget::mousePressEvent(e);
         return;
     }

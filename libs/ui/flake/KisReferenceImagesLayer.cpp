@@ -115,9 +115,17 @@ public:
         m_layer->signalUpdate(m_layer->boundingImageRect());
     }
 
+    bool hasPendingUpdates() const override
+    {
+        return false;
+    }
+
     void rerenderAfterBeingInvisible() override {}
     void resetCache() override {}
-    void setImage(KisImageWSP /*image*/) override {}
+    void setImage(KisImageWSP image) override
+    {
+        m_viewConverter->setImage(image);
+    }
 
 private:
     KisReferenceImagesLayer *m_layer;
@@ -176,6 +184,11 @@ bool KisReferenceImagesLayer::accept(KisNodeVisitor &visitor)
 void KisReferenceImagesLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
 {
     visitor.visit(this, undoAdapter);
+}
+
+bool KisReferenceImagesLayer::isFakeNode() const
+{
+    return true;
 }
 
 void KisReferenceImagesLayer::signalUpdate(const QRectF &rect)

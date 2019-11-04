@@ -457,6 +457,11 @@ bool Leapfrog<Map>::TableMigration::migrateRange(Table* srcTable, quint64 startI
 template <class Map>
 void Leapfrog<Map>::TableMigration::run()
 {
+#ifdef SANITY_CHECK
+    KIS_ASSERT_RECOVER_NOOP(m_map.getGC().sanityRawPointerAccessLocked());
+#endif // SANITY_CHECK
+
+
     // Conditionally increment the shared # of workers.
     quint64 probeStatus = m_workerStatus.load(Relaxed);
     do {

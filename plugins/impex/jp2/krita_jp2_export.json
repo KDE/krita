@@ -1,0 +1,12 @@
+{
+    "Id": "Krita jpeg2000 Export Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "image/jp2",
+    "X-KDE-Library": "kritajp2export",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": "1",
+    "X-KDE-Extensions" : "jp2"
+}

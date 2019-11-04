@@ -59,53 +59,8 @@
 #include "kis_layer_properties_icons.h"
 #include "kis_layer_utils.h"
 #include "kis_projection_leaf.h"
+#include "KisSafeNodeProjectionStore.h"
 
-
-class KisSafeProjection {
-public:
-    KisPaintDeviceSP getDeviceLazy(KisPaintDeviceSP prototype) {
-        QMutexLocker locker(&m_lock);
-
-        if (!m_reusablePaintDevice) {
-            m_reusablePaintDevice = new KisPaintDevice(*prototype);
-        }
-        if(!m_projection ||
-           *m_projection->colorSpace() != *prototype->colorSpace()) {
-            m_projection = m_reusablePaintDevice;
-            m_projection->makeCloneFromRough(prototype, prototype->extent());
-            m_projection->setProjectionDevice(true);
-        }
-
-        return m_projection;
-    }
-
-    void tryCopyFrom(const KisSafeProjection &rhs) {
-        QMutexLocker locker(&m_lock);
-
-        if (!rhs.m_projection) return;
-
-        if (!m_reusablePaintDevice) {
-            m_reusablePaintDevice = new KisPaintDevice(*rhs.m_projection);
-            m_projection = m_reusablePaintDevice;
-        } else {
-            m_projection = m_reusablePaintDevice;
-            m_projection->makeCloneFromRough(rhs.m_projection, rhs.m_projection->extent());
-        }
-    }
-
-    void freeDevice() {
-        QMutexLocker locker(&m_lock);
-        m_projection = 0;
-        if(m_reusablePaintDevice) {
-            m_reusablePaintDevice->clear();
-        }
-    }
-
-private:
-    QMutex m_lock;
-    KisPaintDeviceSP m_projection;
-    KisPaintDeviceSP m_reusablePaintDevice;
-};
 
 class KisCloneLayersList {
 public:
@@ -217,32 +172,35 @@ private:
 
 struct Q_DECL_HIDDEN KisLayer::Private
 {
-    Private(KisLayer *q) : masksCache(q) {}
+    Private(KisLayer *q)
+        : masksCache(q)
+    {
+    }
 
-    KisImageWSP image;
     QBitArray channelFlags;
     KisMetaData::Store* metaDataStore;
-    KisSafeProjection safeProjection;
     KisCloneLayersList clonesList;
 
     KisPSDLayerStyleSP layerStyle;
     KisLayerStyleProjectionPlaneSP layerStyleProjectionPlane;
 
-    KisAbstractProjectionPlaneSP projectionPlane;
+    KisLayerProjectionPlaneSP projectionPlane;
+    KisSafeNodeProjectionStoreSP safeProjection;
 
     KisLayerMasksCache masksCache;
 };
 
 
 KisLayer::KisLayer(KisImageWSP image, const QString &name, quint8 opacity)
-        : KisNode()
+        : KisNode(image)
         , m_d(new Private(this))
 {
     setName(name);
     setOpacity(opacity);
-    m_d->image = image;
     m_d->metaDataStore = new KisMetaData::Store();
     m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
+    m_d->safeProjection = new KisSafeNodeProjectionStore();
+    m_d->safeProjection->setImage(image);
 }
 
 KisLayer::KisLayer(const KisLayer& rhs)
@@ -250,14 +208,13 @@ KisLayer::KisLayer(const KisLayer& rhs)
         , m_d(new Private(this))
 {
     if (this != &rhs) {
-        m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
         m_d->channelFlags = rhs.m_d->channelFlags;
 
-        m_d->safeProjection.tryCopyFrom(rhs.m_d->safeProjection);
-
         setName(rhs.name());
         m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
+        m_d->safeProjection = new KisSafeNodeProjectionStore(*rhs.m_d->safeProjection);
+        m_d->safeProjection->setImage(image());
 
         if (rhs.m_d->layerStyle) {
             m_d->layerStyle = rhs.m_d->layerStyle->clone();
@@ -280,7 +237,7 @@ KisLayer::~KisLayer()
 
 const KoColorSpace * KisLayer::colorSpace() const
 {
-    KisImageSP image = m_d->image.toStrongRef();
+    KisImageSP image = this->image();
     if (!image) {
         return nullptr;
     }
@@ -425,30 +382,16 @@ void KisLayer::setTemporary(bool t)
     setNodeProperty("temporary", t);
 }
 
-KisImageWSP KisLayer::image() const
-{
-    return m_d->image;
-}
-
 void KisLayer::setImage(KisImageWSP image)
 {
-    m_d->image = image;
-
     // we own the projection device, so we should take care about it
     KisPaintDeviceSP projection = this->projection();
     if (projection && projection != original()) {
         projection->setDefaultBounds(new KisDefaultBounds(image));
     }
+    m_d->safeProjection->setImage(image);
 
-    KisNodeSP node = firstChild();
-    while (node) {
-        KisLayerUtils::recursiveApplyNodes(node,
-                                           [image] (KisNodeSP node) {
-                                               node->setImage(image);
-                                           });
-
-        node = node->nextSibling();
-    }
+    KisNode::setImage(image);
 }
 
 bool KisLayer::canMergeAndKeepBlendOptions(KisLayerSP otherLayer)
@@ -568,7 +511,7 @@ KisSelectionSP KisLayer::selection() const
         return mask->selection();
     }
 
-    KisImageSP image = m_d->image.toStrongRef();
+    KisImageSP image = this->image();
     if (image) {
         return image->globalSelection();
     }
@@ -791,17 +734,15 @@ QRect KisLayer::updateProjection(const QRect& rect, KisNodeSP filthyNode)
     QRect updatedRect = rect;
     KisPaintDeviceSP originalDevice = original();
     if (!rect.isValid() ||
-            !visible() ||
-            !originalDevice) return QRect();
+        (!visible() && !hasClones()) ||
+        !originalDevice) return QRect();
 
     if (!needProjection() && !hasEffectMasks()) {
-        m_d->safeProjection.freeDevice();
+        m_d->safeProjection->releaseDevice();
     } else {
 
         if (!updatedRect.isEmpty()) {
-            KisPaintDeviceSP projection =
-                m_d->safeProjection.getDeviceLazy(originalDevice);
-
+            KisPaintDeviceSP projection = m_d->safeProjection->getDeviceLazy(originalDevice);
             updatedRect = applyMasks(originalDevice, projection,
                                      updatedRect, filthyNode, 0);
         }
@@ -852,10 +793,11 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 KisAbstractProjectionPlaneSP KisLayer::projectionPlane() const
 {
     return m_d->layerStyleProjectionPlane ?
-        KisAbstractProjectionPlaneSP(m_d->layerStyleProjectionPlane) : m_d->projectionPlane;
+        KisAbstractProjectionPlaneSP(m_d->layerStyleProjectionPlane) :
+        KisAbstractProjectionPlaneSP(m_d->projectionPlane);
 }
 
-KisAbstractProjectionPlaneSP KisLayer::internalProjectionPlane() const
+KisLayerProjectionPlaneSP KisLayer::internalProjectionPlane() const
 {
     return m_d->projectionPlane;
 }
@@ -865,7 +807,7 @@ KisPaintDeviceSP KisLayer::projection() const
     KisPaintDeviceSP originalDevice = original();
 
     return needProjection() || hasEffectMasks() ?
-        m_d->safeProjection.getDeviceLazy(originalDevice) : originalDevice;
+        m_d->safeProjection->getDeviceLazy(originalDevice) : originalDevice;
 }
 
 QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
@@ -920,6 +862,23 @@ QRect KisLayer::incomingChangeRect(const QRect &rect) const
 QRect KisLayer::outgoingChangeRect(const QRect &rect) const
 {
     return rect;
+}
+
+QRect KisLayer::needRectForOriginal(const QRect &rect) const
+{
+    QRect needRect = rect;
+
+    const QList<KisEffectMaskSP> masks = effectMasks();
+
+    if (!masks.isEmpty()) {
+        QStack<QRect> applyRects;
+        bool needRectVaries;
+
+        needRect = masksNeedRect(masks, rect,
+                                 applyRects, needRectVaries);
+    }
+
+    return needRect;
 }
 
 QImage KisLayer::createThumbnail(qint32 w, qint32 h)

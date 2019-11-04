@@ -18,5 +18,5 @@ target_link_libraries(kritadbexplorer
         Qt5::Sql
 )
 install(TARGETS kritadbexplorer DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-install( FILES  dbexplorer.xmlgui DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
-install(FILES  dbexplorer.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
+install(FILES dbexplorer.xmlgui DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install(FILES dbexplorer.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)

@@ -56,7 +56,7 @@ QString KisResourceCacheDb::lastError()
     return s_lastError;
 }
 
-QSqlError initDb(const QString &location)
+QSqlError createDatabase(const QString &location)
 {
     // NOTE: if the id's of Unknown and Memory in the database
     //       will change, and that will break the queries that
@@ -259,7 +259,7 @@ QSqlError initDb(const QString &location)
 
 bool KisResourceCacheDb::initialize(const QString &location)
 {
-    QSqlError err = initDb(location);
+    QSqlError err = createDatabase(location);
 
     s_valid = !err.isValid();
     switch (err.type()) {

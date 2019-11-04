@@ -45,6 +45,11 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
     doc->addResource(QTextDocument::ImageResource, QUrl("data:thumbnail"), thumb);
 
     QString name = index.data(Qt::DisplayRole).toString();
+    QString presetDisplayName = index.data(Qt::UserRole + KisResourceModel::Name).toString().replace("_", " ");
+    //This is to ensure that the other uses of this class don't get an empty string, while resource management should get a nice string.
+    if (!presetDisplayName.isEmpty()) {
+        name = presetDisplayName;
+    }
 
     QString tags;
     QString tagsData = index.data(Qt::UserRole + KisResourceModel::Tags).toStringList().join(", ");

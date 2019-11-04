@@ -140,6 +140,9 @@ int KisResourceGridProxyModel::rowCount(const QModelIndex& parent) const
     int row;
     int col;
     proxyRow(sourceModel()->rowCount(parent), row, col);
+    if (col>0) {
+        row += 1;
+    }
     return row;
 }
 

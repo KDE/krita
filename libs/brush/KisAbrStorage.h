@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2019 Agata Cacko <cacko.azh@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +24,9 @@
 #include <KisStoragePlugin.h>
 
 #include <kritabrush_export.h>
+#include <kis_abr_brush_collection.h>
+
+
 
 
 class BRUSH_EXPORT KisAbrStorage : public KisStoragePlugin
@@ -36,6 +40,8 @@ public:
     KoResourceSP resource(const QString &url) override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
+
+    KisAbrBrushCollectionSP m_brushCollection;
 
 };
 

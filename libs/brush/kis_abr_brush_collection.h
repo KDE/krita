@@ -64,6 +64,8 @@ public:
 
     bool saveToDevice(QIODevice* dev) const override;
 
+    bool isLoaded() const;
+
     /**
      * @return a preview of the brush
      */
@@ -74,8 +76,23 @@ public:
      */
     QString defaultFileExtension() const override;
 
-    QList<KisAbrBrushSP> brushes() {
-        return m_abrBrushes.values();
+    QList<KisAbrBrushSP> brushes() const {
+        return m_abrBrushes->values();
+    }
+
+    QSharedPointer<QMap<QString, KisAbrBrushSP>> brushesMap() const {
+        return m_abrBrushes;
+    }
+
+    KisAbrBrushSP brushByName(QString name) const {
+        if (m_abrBrushes->contains(name)) {
+            return m_abrBrushes.data()->operator[](name);
+        }
+        return KisAbrBrushSP();
+    }
+
+    QDateTime lastModified() const {
+        return m_lastModified;
     }
 
 protected:
@@ -88,8 +105,12 @@ private:
     qint32 abr_brush_load(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
     qint32 abr_brush_load_v12(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
     quint32 abr_brush_load_v6(QDataStream & abr, AbrInfo *abr_hdr, const QString filename, qint32 image_ID, qint32 id);
-    QMap<QString, KisAbrBrushSP> m_abrBrushes;
+    QSharedPointer<QMap<QString, KisAbrBrushSP>> m_abrBrushes;
+    bool m_isLoaded;
+    QDateTime m_lastModified;
 };
+
+typedef QSharedPointer<KisAbrBrushCollection> KisAbrBrushCollectionSP;
 
 #endif
 

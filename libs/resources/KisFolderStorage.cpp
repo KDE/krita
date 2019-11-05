@@ -45,7 +45,7 @@ public:
         return m_dirIterator->hasNext();
     }
 
-    void next() const override
+    void next() override
     {
         m_dirIterator->next();
         const_cast<FolderTagIterator*>(this)->m_tag.reset(new KisTag);
@@ -109,7 +109,7 @@ public:
         return m_dirIterator->hasNext();
     }
 
-    void next() const override
+    void next() override
     {
         m_dirIterator->next();
     }

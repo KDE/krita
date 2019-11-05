@@ -30,7 +30,7 @@ public:
     {}
 
     bool hasNext() const override {return false; }
-    void next() const override {}
+    void next() override {}
 
     QString url() const override { return QString(); }
     QString name() const override { return QString(); }
@@ -48,7 +48,7 @@ class AslIterator : public KisResourceStorage::ResourceIterator
 {
 public:
     bool hasNext() const override {return false; }
-    void next() const override {}
+    void next() override {}
 
     QString url() const override { return QString(); }
     QString type() const override { return QString(); }

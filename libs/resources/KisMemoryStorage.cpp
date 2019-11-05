@@ -49,7 +49,7 @@ public:
         return m_currentPosition < m_tags.size();
     }
 
-    void next() const override
+    void next() override
     {
         const_cast<MemoryTagIterator*>(this)->m_currentPosition += 1;
     }
@@ -95,7 +95,7 @@ public:
         return m_currentPosition < m_resources.size();
     }
 
-    void next() const override
+    void next() override
     {
         const_cast<MemoryIterator*>(this)->m_currentPosition++;
     }

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2019 Agata Cacko <cacko.azh@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +21,8 @@
 #include "KisAbrStorage.h"
 #include "KisResourceStorage.h"
 
+#include <QFileInfo>
+
 struct KisAbrStorageStaticRegistrar {
     KisAbrStorageStaticRegistrar() {
         KisStoragePluginRegistry::instance()->addStoragePluginFactory(KisResourceStorage::StorageType::AdobeBrushLibrary, new KisStoragePluginFactory<KisAbrStorage>());
@@ -37,7 +40,7 @@ public:
     {}
 
     bool hasNext() const override {return false; }
-    void next() const override {}
+    void next() override {}
 
     QString url() const override { return QString(); }
     QString name() const override { return QString(); }
@@ -52,18 +55,58 @@ private:
 class AbrIterator : public KisResourceStorage::ResourceIterator
 {
 public:
-    bool hasNext() const override {return false; }
-    void next() const override {}
+    KisAbrBrushCollectionSP m_brushCollection;
+    QSharedPointer<QMap<QString, KisAbrBrushSP>> m_brushesMap;
+    QMap<QString, KisAbrBrushSP>::const_key_value_iterator m_brushCollectionIterator;
+    KisAbrBrushSP m_currentResource;
+    bool isLoaded;
+    QString m_currentUrl;
 
-    QString url() const override { return QString(); }
-    QString type() const override { return QString(); }
-    QDateTime lastModified() const override { return QDateTime(); }
-    /// This only loads the resource when called
-    KoResourceSP resource() const override { return 0; }
+
+    AbrIterator(KisAbrBrushCollectionSP brushCollection)
+        : m_brushCollection(brushCollection)
+        , isLoaded(false)
+    {
+    }
+
+    bool hasNext() const override
+    {
+        if (!isLoaded) {
+            bool success = m_brushCollection->load();
+            Q_UNUSED(success); // brush collection will be empty
+            const_cast<AbrIterator*>(this)->m_brushesMap = m_brushCollection->brushesMap();
+            const_cast<AbrIterator*>(this)->m_brushCollectionIterator = m_brushesMap->constKeyValueBegin();
+            const_cast<AbrIterator*>(this)->isLoaded = true;
+        }
+
+        const_cast<AbrIterator*>(this)->m_brushCollectionIterator++;
+        bool hasNext = (m_brushCollectionIterator != m_brushesMap->constKeyValueEnd());
+        const_cast<AbrIterator*>(this)->m_brushCollectionIterator--;
+
+        return hasNext;
+    }
+
+    void next() override
+    {
+        m_brushCollectionIterator++;
+        std::pair<QString, KisAbrBrushSP> resourcePair = *m_brushCollectionIterator;
+        m_currentResource = resourcePair.second;
+        m_currentUrl = resourcePair.first;
+    }
+
+    QString url() const override { return m_currentUrl; }
+    QString type() const override { return ResourceType::Brushes; }
+    QDateTime lastModified() const override { return m_brushCollection->lastModified(); }
+
+    KoResourceSP resource() const override
+    {
+        return m_currentResource;
+    }
 };
 
 KisAbrStorage::KisAbrStorage(const QString &location)
     : KisStoragePlugin(location)
+    , m_brushCollection(new KisAbrBrushCollection(location))
 {
 
 }
@@ -73,20 +116,33 @@ KisAbrStorage::~KisAbrStorage()
 
 }
 
-KisResourceStorage::ResourceItem KisAbrStorage::resourceItem(const QString &/*url*/)
+KisResourceStorage::ResourceItem KisAbrStorage::resourceItem(const QString &url)
 {
-    return KisResourceStorage::ResourceItem();
+    KisResourceStorage::ResourceItem item;
+    item.url = url;
+    // last "_" with index is the suffix added by abr_collection
+    int indexOfUnderscore = url.lastIndexOf("_");
+    QString filenameUrl = url;
+    // filenameUrl contains the name of the collection (filename without .abr, brush name without index)
+    filenameUrl.remove(indexOfUnderscore, url.length() - indexOfUnderscore);
+    item.folder = filenameUrl;
+    item.resourceType = ResourceType::Brushes;
+    item.lastModified = QFileInfo(m_brushCollection->filename()).lastModified();
+    return item;
 }
 
 
-KoResourceSP KisAbrStorage::resource(const QString &/*url*/)
+KoResourceSP KisAbrStorage::resource(const QString &url)
 {
-    return 0;
+    if (!m_brushCollection->isLoaded()) {
+        m_brushCollection->load();
+    }
+    return m_brushCollection->brushByName(url);
 }
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisAbrStorage::resources(const QString &/*resourceType*/)
 {
-    return QSharedPointer<KisResourceStorage::ResourceIterator>(new AbrIterator);
+    return QSharedPointer<KisResourceStorage::ResourceIterator>(new AbrIterator(m_brushCollection));
 }
 
 QSharedPointer<KisResourceStorage::TagIterator> KisAbrStorage::tags(const QString &resourceType)

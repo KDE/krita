@@ -57,7 +57,7 @@ public:
         return m_tagIterator->hasNext();
     }
 
-    void next() const override
+    void next() override
     {
         const_cast<BundleTagIterator*>(this)->m_tag = m_tagIterator->next();
     }
@@ -91,7 +91,7 @@ public:
         return m_entriesIterator->hasNext();
     }
 
-    void next() const override
+    void next() override
     {
         KoResourceBundleManifest::ResourceReference ref = m_entriesIterator->next();
         const_cast<BundleIterator*>(this)->m_resourceReference = ref;

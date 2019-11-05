@@ -42,6 +42,9 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
     QTextDocument *doc = new QTextDocument(this);
 
     QImage thumb = index.data(Qt::DecorationRole).value<QImage>();
+    if (thumb.isNull()) {
+        thumb = index.data(Qt::UserRole + KisResourceModel::Image).value<QImage>();
+    }
     doc->addResource(QTextDocument::ImageResource, QUrl("data:thumbnail"), thumb);
 
     QString name = index.data(Qt::DisplayRole).toString();

@@ -197,7 +197,9 @@ void KisTransformMask::recaclulateStaticImage()
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent().data());
     KIS_ASSERT_RECOVER_RETURN(parentLayer);
 
-    if (!m_d->staticCacheDevice) {
+    if (!m_d->staticCacheDevice ||
+        *m_d->staticCacheDevice->colorSpace() != *parentLayer->original()->colorSpace()) {
+
         m_d->staticCacheDevice =
             new KisPaintDevice(parentLayer->original()->colorSpace());
     }

@@ -35,6 +35,7 @@
 #include <KoCanvasBase.h>
 #include <KisResourceItemChooser.h>
 #include <KisResourceLoader.h>
+#include <KisResourceItemListView.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisViewManager.h>
 #include <kis_canvas2.h>
@@ -103,7 +104,7 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     itemChooser->setItemDelegate(new KisTasksetResourceDelegate(this));
     itemChooser->setFixedSize(500, 250);
     itemChooser->setRowHeight(30);
-    itemChooser->setColumnCount(1);
+    itemChooser->itemView()->setViewMode(QListView::ListMode);
     itemChooser->showTaggingBar(true);
     chooserButton->setPopupWidget(itemChooser);
 

@@ -25,7 +25,7 @@ KisTextureChooser::KisTextureChooser(QWidget *parent)
     setupUi(this);
 
     textureSelectorWidget->setGrayscalePreview(true);
-    textureSelectorWidget->setCurrentItem(0, 0);
+    textureSelectorWidget->setCurrentItem(0);
 
     scaleSlider->setRange(0.0, 2.0, 2);
     scaleSlider->setValue(1.0);

@@ -27,12 +27,13 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QLabel>
+#include <QListView>
 #include <KisKineticScroller.h>
 
 #include <klocalizedstring.h>
 
 #include <KisResourceItemChooser.h>
-#include <KisResourceItemView.h>
+#include <KisResourceItemListView.h>
 #include <KoResource.h>
 #include <KisResourceModel.h>
 #include <KisResourceServerProvider.h>
@@ -115,7 +116,7 @@ KisWorkspaceChooser::ChooserWidgets KisWorkspaceChooser::createChooserWidgets(co
     widgets.itemChooser->setItemDelegate(new KisWorkspaceDelegate(this));
     widgets.itemChooser->setFixedSize(250, 250);
     widgets.itemChooser->setRowHeight(30);
-    widgets.itemChooser->setColumnCount(1);
+    widgets.itemChooser->itemView()->setViewMode(QListView::ListMode);
     widgets.itemChooser->showTaggingBar(false);
     widgets.saveButton = new QPushButton(i18n("Save"));
 

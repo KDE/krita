@@ -29,7 +29,7 @@
 #include <resources/KoAbstractGradient.h>
 #include <KoResource.h>
 #include <resources/KoSegmentGradient.h>
-#include <KisResourceItemView.h>
+#include <KisResourceItemListView.h>
 #include <KisKineticScroller.h>
 #include <KoStopGradient.h>
 #include <KoColorSpaceRegistry.h>
@@ -76,7 +76,7 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
 
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->setFixedSize(250, 250);
-    m_itemChooser->setColumnCount(1);
+    m_itemChooser->itemView()->setViewMode(QListView::ListMode);
 
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResourceSP )),
             this, SLOT(update(KoResourceSP )));
@@ -138,9 +138,9 @@ void KisGradientChooser::setCurrentResource(KoResourceSP resource)
     m_itemChooser->setCurrentResource(resource);
 }
 
-void KisGradientChooser::setCurrentItem(int row, int column)
+void KisGradientChooser::setCurrentItem(int row)
 {
-    m_itemChooser->setCurrentItem(row, column);
+    m_itemChooser->setCurrentItem(row);
     if (currentResource())
         update(currentResource());
 }

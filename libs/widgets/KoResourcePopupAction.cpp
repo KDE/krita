@@ -21,7 +21,7 @@
 
 #include "KoResourcePopupAction.h"
 
-#include <KisResourceItemView.h>
+#include <KisResourceItemListView.h>
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisResourceItemDelegate.h>
@@ -49,7 +49,7 @@ class KoResourcePopupAction::Private
 public:
     QMenu *menu = 0;
     KisResourceModel *model = 0;
-    KisResourceItemView *resourceList = 0;
+    KisResourceItemListView *resourceList = 0;
     QSharedPointer<KoShapeBackground> background;
     KoImageCollection *imageCollection = 0;
     KoCheckerBoardPainter checkerPainter {4};
@@ -63,12 +63,15 @@ KoResourcePopupAction::KoResourcePopupAction(const QString &resourceType, QObjec
     QWidget *widget = new QWidget();
     QWidgetAction *wdgAction = new QWidgetAction(this);
 
-    d->resourceList = new KisResourceItemView(widget);
+    d->resourceList = new KisResourceItemListView(widget);
 
     d->model = KisResourceModelProvider::resourceModel(resourceType);
     d->resourceList->setModel(d->model);
     d->resourceList->setItemDelegate(new KisResourceItemDelegate(widget));
     d->resourceList->setCurrentIndex(d->model->index(0, 0));
+    if (resourceType==ResourceType::Gradients) {
+        d->resourceList->setViewMode(QListView::ListMode);
+    }
     indexChanged(d->resourceList->currentIndex());
     QHBoxLayout *layout = new QHBoxLayout(widget);
     layout->addWidget(d->resourceList);

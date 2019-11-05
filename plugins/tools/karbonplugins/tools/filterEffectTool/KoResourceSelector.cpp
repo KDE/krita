@@ -20,9 +20,8 @@
 #include "KoResourceSelector.h"
 
 #include <KisResourceModel.h>
-#include <KisResourceGridProxyModel.h>
 #include <KisResourceModelProvider.h>
-#include <KisResourceItemView.h>
+#include <KisResourceItemListView.h>
 #include <KisResourceItemDelegate.h>
 #include <QPainter>
 #include <QTableView>
@@ -39,7 +38,6 @@ public:
     Private() : displayMode(ImageMode) {}
     DisplayMode displayMode;
     KisResourceModel *model;
-    KisResourceGridProxyModel *proxyModel;
 
     void updateIndex( KoResourceSelector * me )
     {
@@ -65,11 +63,9 @@ public:
 KoResourceSelector::KoResourceSelector(QWidget * parent )
     : QComboBox(parent), d(new Private())
 {
-    setView(new KisResourceItemView(this));
+    setView(new KisResourceItemListView(this));
     d->model = KisResourceModelProvider::resourceModel(ResourceType::FilterEffects);
-    d->proxyModel = new KisResourceGridProxyModel(this);
-    d->proxyModel->setSourceModel(d->model);
-    setModel(d->proxyModel);
+    setModel(d->model);
     setItemDelegate(new KisResourceItemDelegate(this));
     setMouseTracking(true);
     d->updateIndex(this);
@@ -147,7 +143,7 @@ void KoResourceSelector::setDisplayMode(DisplayMode mode)
     switch(mode) {
     case ImageMode:
         setItemDelegate(new KisResourceItemDelegate(this));
-        setView( new KisResourceItemView(this) );
+        setView( new KisResourceItemListView(this) );
         break;
     case TextMode:
         setItemDelegate(new QStyledItemDelegate(this));
@@ -159,16 +155,26 @@ void KoResourceSelector::setDisplayMode(DisplayMode mode)
     d->updateIndex(this);
 }
 
-void KoResourceSelector::setColumnCount( int columnCount )
-{
-    d->proxyModel->setRowStride(columnCount);
+void KoResourceSelector::setSingleColumn(bool singleColumn) {
+    qDebug() << "setting single column" << singleColumn;
+    KisResourceItemListView * listView = qobject_cast<KisResourceItemListView*>(view());
+    if (!listView) return;
+    if (singleColumn) {
+        qDebug() << "resource item view exists and is set single column";
+        listView->setViewMode(QListView::ListMode);
+        listView->setItemSize(QSize(listView->viewport()->width(),listView->iconSize().height()));
+    } else {
+        listView->setViewMode(QListView::IconMode);
+        listView->setItemSize(QSize(listView->iconSize().height(), listView->iconSize().height()));
+    }
 }
 
 void KoResourceSelector::setRowHeight( int rowHeight )
 {
-    QTableView * tableView = qobject_cast<QTableView*>(view());
-    if (tableView)
-        tableView->verticalHeader()->setDefaultSectionSize( rowHeight );
+    KisResourceItemListView * listView = qobject_cast<KisResourceItemListView*>(view());
+    if (listView) {
+        listView->setItemSize(QSize(listView->iconSize().width(), rowHeight));
+    }
 }
 
 void KoResourceSelector::indexChanged( int )
@@ -177,7 +183,7 @@ void KoResourceSelector::indexChanged( int )
     if(!index.isValid()) {
         return;
     }
-    KoResourceSP resource = d->model->resourceForIndex(d->proxyModel->mapToSource(index));
+    KoResourceSP resource = d->model->resourceForIndex(index);
     if (resource) {
         emit resourceSelected( resource );
     }

@@ -86,9 +86,9 @@ void KisPatternChooser::setCurrentPattern(KoResourceSP resource)
     m_itemChooser->setCurrentResource(resource);
 }
 
-void KisPatternChooser::setCurrentItem(int row, int column)
+void KisPatternChooser::setCurrentItem(int row)
 {
-    m_itemChooser->setCurrentItem(row, column);
+    m_itemChooser->setCurrentItem(row);
     if (currentResource()) {
         update(currentResource());
     }

@@ -133,10 +133,9 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     m_itemChooser->setObjectName("brush_selector");
 
     m_itemChooser->showTaggingBar(true);
-    m_itemChooser->setColumnCount(10);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
-    m_itemChooser->setCurrentItem(0, 0);
+    m_itemChooser->setCurrentItem(0);
     m_itemChooser->setSynced(true);
     m_itemChooser->setMinimumWidth(100);
     m_itemChooser->setMinimumHeight(150);

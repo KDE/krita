@@ -65,7 +65,7 @@ public:
     KoResourceSP currentResource();
     void setCurrentResource(KoResourceSP resource);
 
-    void setCurrentItem(int row, int column);
+    void setCurrentItem(int row);
 
 Q_SIGNALS:
     /// Emitted when a resource was selected

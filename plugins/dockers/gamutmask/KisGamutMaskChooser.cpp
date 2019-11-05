@@ -29,6 +29,7 @@
 #include <QTextLayout>
 
 #include <KisResourceItemChooser.h>
+#include <KisResourceItemListView.h>
 #include <kis_icon_utils.h>
 #include <kis_config.h>
 
@@ -153,7 +154,6 @@ KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
     m_itemChooser->setItemDelegate(m_delegate);
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->showButtons(false);
-    m_itemChooser->setColumnCount(4);
     m_itemChooser->setSynced(true);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -225,7 +225,7 @@ void KisGamutMaskChooser::updateViewSettings()
         m_delegate->setViewMode(m_mode);
     } else if (m_mode == KisGamutMaskChooser::DETAIL) {
         m_itemChooser->setSynced(false);
-        m_itemChooser->setColumnCount(1);
+        m_itemChooser->itemView()->setViewMode(QListView::ListMode);
         m_itemChooser->setRowHeight(this->fontMetrics().lineSpacing()*4);
         m_itemChooser->setColumnWidth(m_itemChooser->width());
         m_delegate->setViewMode(m_mode);

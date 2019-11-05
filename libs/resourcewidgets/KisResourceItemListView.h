@@ -25,6 +25,8 @@
 
 #include <KisKineticScroller.h>
 
+#include "KisIconToolTip.h"
+
 #include "kritaresourcewidgets_export.h"
 
 class KRITARESOURCEWIDGETS_EXPORT KisResourceItemListView : public QListView
@@ -49,12 +51,21 @@ Q_SIGNALS:
 
     void sigSizeChanged();
 
-Q_SIGNALS:
-
     void currentResourceChanged(const QModelIndex &);
     void currentResourceClicked(const QModelIndex &);
 
     void contextMenuRequested(const QPoint &);
+
+protected:
+    friend class KisResourceItemChooser;
+
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
+
+    bool viewportEvent(QEvent *event) override;
+
+private:
+    KisIconToolTip m_tip;
 };
 
 #endif // KISRESOURCEITEMLISTVIEW_H

@@ -40,7 +40,7 @@ class QAbstractItemDelegate;
 class QAbstractButton;
 class QToolButton;
 class QSortFilterProxyModel;
-class KisResourceItemView;
+class KisResourceItemListView;
 
 #include "kritaresourcewidgets_export.h"
 
@@ -60,14 +60,8 @@ public:
     explicit KisResourceItemChooser(const QString &resourceType, bool usePreview = false, QWidget *parent = 0, QSortFilterProxyModel *extraFilterProxy = 0);
     ~KisResourceItemChooser() override;
 
-    /// Sets number of columns in the view and causes the number of rows to be calculated accordingly
-    void setColumnCount(int columnCount);
-
     /// return the number of rows in the view
     int rowCount() const;
-
-    /// Sets number of rows in the view and causes the number of columns to be calculated accordingly
-    void setRowCount(int rowCount);
 
     /// Sets the height of the view rows
     void setRowHeight(int rowHeight);
@@ -90,7 +84,7 @@ public:
      * @param row row of the item
      * @param column column of the item
      */
-    void setCurrentItem(int row, int column);
+    void setCurrentItem(int row);
 
     void showButtons(bool show);
 
@@ -108,7 +102,7 @@ public:
 
     QSize viewSize() const;
 
-    KisResourceItemView *itemView() const;
+    KisResourceItemListView *itemView() const;
 
     void setViewModeButtonVisible(bool visible);
     QToolButton *viewModeButton() const;

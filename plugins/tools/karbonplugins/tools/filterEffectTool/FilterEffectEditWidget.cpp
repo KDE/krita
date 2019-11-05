@@ -52,7 +52,7 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     setupUi(this);
 
     presets->setDisplayMode(KoResourceSelector::TextMode);
-    presets->setColumnCount(1);
+    presets->setSingleColumn(true);
 
     connect(presets, SIGNAL(resourceSelected(KoResourceSP )),
             this, SLOT(presetSelected(KoResourceSP )));

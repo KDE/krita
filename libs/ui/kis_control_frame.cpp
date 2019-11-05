@@ -187,7 +187,7 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
     connect(view->canvasResourceProvider(), SIGNAL(sigPatternChanged(KoPatternSP)),
             this, SLOT(slotSetPattern(KoPatternSP)));
 
-    m_patternChooser->setCurrentItem(0, 0);
+    m_patternChooser->setCurrentItem(0);
     if (m_patternChooser->currentResource() && view->canvasResourceProvider()) {
         view->canvasResourceProvider()->slotPatternActivated(m_patternChooser->currentResource());
     }
@@ -235,7 +235,7 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
     connect(view->canvasResourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradientSP)),
             this, SLOT(slotSetGradient(KoAbstractGradientSP)));
 
-    m_gradientChooser->setCurrentItem(0, 0);
+    m_gradientChooser->setCurrentItem(0);
     if (m_gradientChooser->currentResource() && view->canvasResourceProvider())
         view->canvasResourceProvider()->slotGradientActivated(m_gradientChooser->currentResource());
 

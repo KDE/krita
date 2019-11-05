@@ -52,7 +52,7 @@
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceLoaderRegistry.h>
 
-#include "KisResourceItemView.h"
+#include "KisResourceItemListView.h"
 #include "KisResourceItemDelegate.h"
 #include "KisTagFilterWidget.h"
 #include "KisTagChooserWidget.h"
@@ -73,12 +73,11 @@ public:
     QString resourceType;
 
     KisResourceModel *resourceModel {0};
-    KisResourceGridProxyModel *resourceGridProxyModel {0};
     KisTagFilterResourceProxyModel *tagFilterProxyModel {0};
     QSortFilterProxyModel *extraFilterModel {0};
 
     KisResourceTaggingManager *tagManager {0};
-    KisResourceItemView *view {0};
+    KisResourceItemListView *view {0};
     QButtonGroup *buttonGroup {0};
     QToolButton *viewModeButton {0};
 
@@ -106,10 +105,10 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     : QWidget(parent)
     , d(new Private(resourceType))
 {
-    d->extraFilterModel = extraFilterProxy;
-    if (d->extraFilterModel) {
-        d->extraFilterModel->setParent(this);
-    }
+    //d->extraFilterModel = extraFilterProxy;
+    //if (d->extraFilterModel) {
+    //    d->extraFilterModel->setParent(this);
+    //}
 
     d->splitter = new QSplitter(this);
 
@@ -118,24 +117,18 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(this);
     d->tagFilterProxyModel->setSourceModel(d->resourceModel);
 
-    d->resourceGridProxyModel = new KisResourceGridProxyModel(this);
-
-    if (d->extraFilterModel) {
-        d->extraFilterModel->setSourceModel(d->resourceModel);
-        d->resourceGridProxyModel->setSourceModel(d->extraFilterModel);
-    }
-    else {
-        d->resourceGridProxyModel->setSourceModel(d->tagFilterProxyModel);
-    }
-
-    d->resourceGridProxyModel->setRowStride(10);
-
     connect(d->resourceModel, SIGNAL(beforeResourcesLayoutReset(QModelIndex)), SLOT(slotBeforeResourcesLayoutReset(QModelIndex)));
     connect(d->resourceModel, SIGNAL(afterResourcesLayoutReset()), SLOT(slotAfterResourcesLayoutReset()));
 
-    d->view = new KisResourceItemView(this);
+    d->view = new KisResourceItemListView(this);
     d->view->setObjectName("ResourceItemview");
-    d->view->setModel(d->resourceGridProxyModel);
+    //if (d->extraFilterModel) {
+    //    d->extraFilterModel->setSourceModel(d->resourceModel);
+    //    d->view->setModel(d->extraFilterModel);
+    //}
+    //else {
+        d->view->setModel(d->tagFilterProxyModel);
+    //}
     d->view->setItemDelegate(new KisResourceItemDelegate(this));
     d->view->setSelectionMode(QAbstractItemView::SingleSelection);
     d->view->viewport()->installEventFilter(this);
@@ -219,7 +212,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
 
     updateButtonState();
     showTaggingBar(false);
-    activated(d->resourceGridProxyModel->index(0, 0));
+    activated(d->view->model()->index(0, 0));
 }
 
 KisResourceItemChooser::~KisResourceItemChooser()
@@ -237,26 +230,20 @@ void KisResourceItemChooser::slotButtonClicked(int button)
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         Q_FOREACH(const QString &filename, dialog.filenames()) {
             if (QFileInfo(filename).exists() && QFileInfo(filename).isReadable()) {
-                d->resourceGridProxyModel->importResourceFile(filename);
+                d->tagFilterProxyModel->importResourceFile(filename);
             }
         }
     }
     else if (button == Button_Remove) {
         QModelIndex index = d->view->currentIndex();
         if (index.isValid()) {
-            d->resourceGridProxyModel->removeResource(index);
+            d->tagFilterProxyModel->removeResource(index);
         }
         int row = index.row();
-        int column = index.column();
-
-        if (column == 0) {
-            int rowMin = --row;
-            row = qBound(0, rowMin, row);
-        }
-        int columnMin = --column;
-        column = qBound(0, columnMin, column);
-        setCurrentItem(row, column);
-        activated(d->resourceGridProxyModel->index(row, column));
+        int rowMin = --row;
+        row = qBound(0, rowMin, row);
+        setCurrentItem(row);
+        activated(d->tagFilterProxyModel->index(row, index.column()));
     }
     updateButtonState();
 }
@@ -285,35 +272,19 @@ void KisResourceItemChooser::showTaggingBar(bool show)
 
 }
 
-void KisResourceItemChooser::setRowCount(int rowCount)
-{
-    int resourceCount = d->resourceModel->rowCount();
-    d->resourceGridProxyModel->setRowStride(static_cast<qreal>(resourceCount) / rowCount);
-    //Force an update to get the right row height (in theory)
-    QRect geometry = d->view->geometry();
-    d->view->setViewMode(KisResourceItemView::FIXED_ROWS);
-    d->view->setGeometry(geometry.adjusted(0, 0, 0, 1));
-    d->view->setGeometry(geometry);
-}
-
-void KisResourceItemChooser::setColumnCount(int columnCount)
-{
-    d->resourceGridProxyModel->setRowStride(columnCount);
-}
-
 int KisResourceItemChooser::rowCount() const
 {
-    return d->resourceGridProxyModel->rowCount();
+    return d->view->model()->rowCount();
 }
 
 void KisResourceItemChooser::setRowHeight(int rowHeight)
 {
-    d->view->verticalHeader()->setDefaultSectionSize(rowHeight);
+    d->view->setItemSize(QSize(d->view->gridSize().width(), rowHeight));
 }
 
 void KisResourceItemChooser::setColumnWidth(int columnWidth)
 {
-    d->view->horizontalHeader()->setDefaultSectionSize(columnWidth);
+    d->view->setItemSize(QSize(columnWidth, d->view->gridSize().height()));
 }
 
 void KisResourceItemChooser::setItemDelegate(QAbstractItemDelegate *delegate)
@@ -343,7 +314,7 @@ void KisResourceItemChooser::setCurrentResource(KoResourceSP resource)
 
 void KisResourceItemChooser::slotBeforeResourcesLayoutReset(QModelIndex activateAfterReset)
 {
-    QModelIndex proxyIndex = d->resourceGridProxyModel->mapFromSource(d->tagFilterProxyModel->mapFromSource(activateAfterReset));
+    QModelIndex proxyIndex = d->tagFilterProxyModel->mapFromSource(d->tagFilterProxyModel->mapFromSource(activateAfterReset));
     d->savedResourceWhileReset = proxyIndex.isValid() ? proxyIndex : d->view->currentIndex();
 }
 
@@ -351,7 +322,7 @@ void KisResourceItemChooser::slotAfterResourcesLayoutReset()
 {
     if (d->savedResourceWhileReset.isValid()) {
         this->blockSignals(true);
-        setCurrentItem(d->savedResourceWhileReset.row(), d->savedResourceWhileReset.column());
+        setCurrentItem(d->savedResourceWhileReset.row());
         this->blockSignals(false);
     }
     d->savedResourceWhileReset = QModelIndex();
@@ -372,9 +343,9 @@ void KisResourceItemChooser::setGrayscalePreview(bool grayscale)
     d->grayscalePreview = grayscale;
 }
 
-void KisResourceItemChooser::setCurrentItem(int row, int column)
+void KisResourceItemChooser::setCurrentItem(int row)
 {
-    QModelIndex index = d->resourceModel->index(row, column);
+    QModelIndex index = d->view->model()->index(row, 0);
     if (!index.isValid())
         return;
 
@@ -479,7 +450,7 @@ KoResourceSP KisResourceItemChooser::resourceFromModelIndex(const QModelIndex &i
     if (!index.isValid()) {
         return 0;
     }
-    KoResourceSP r = d->resourceGridProxyModel->resourceForIndex(index);
+    KoResourceSP r = d->tagFilterProxyModel->resourceForIndex(index);
     return r;
 }
 
@@ -488,7 +459,7 @@ QSize KisResourceItemChooser::viewSize() const
     return d->view->size();
 }
 
-KisResourceItemView *KisResourceItemChooser::itemView() const
+KisResourceItemListView *KisResourceItemChooser::itemView() const
 {
     return d->view;
 }
@@ -526,21 +497,8 @@ void KisResourceItemChooser::setSynced(bool sync)
 void KisResourceItemChooser::baseLengthChanged(int length)
 {
     if (d->synced) {
-        int resourceCount = d->resourceModel->rowCount();
-        int width = d->view->width();
-        int maxColumns = width / length;
-        int cols = width / (2 * length) + 1;
-        while (cols <= maxColumns) {
-            int size = width / cols;
-            int rows = ceil(resourceCount / (double)cols);
-            if (rows * size < (d->view->height())) {
-                break;
-            }
-            cols++;
-        }
-        setColumnCount(cols);
+        d->view->setItemSize(QSize(length, length));
     }
-    d->view->updateView();
 }
 
 bool KisResourceItemChooser::eventFilter(QObject *object, QEvent *event)

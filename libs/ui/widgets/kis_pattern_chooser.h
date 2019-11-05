@@ -41,7 +41,7 @@ public:
     /// @returns the selected resource, 0 is no resource is selected
     KoResourceSP currentResource();
     void setCurrentPattern(KoResourceSP resource);
-    void setCurrentItem(int row, int column);
+    void setCurrentItem(int row);
     void setGrayscalePreview(bool grayscale);
     /// determines whether the preview right or below the splitter
     void setPreviewOrientation(Qt::Orientation orientation);

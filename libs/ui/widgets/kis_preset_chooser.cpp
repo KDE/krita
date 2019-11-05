@@ -37,7 +37,7 @@
 #include <KoIcon.h>
 #include <KisResourceItemChooser.h>
 #include <KisResourceItemChooserSync.h>
-#include <KisResourceItemView.h>
+#include <KisResourceItemListView.h>
 #include <KisResourceModel.h>
 #include <KisResourceLocator.h>
 
@@ -89,6 +89,9 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     bool dirty = index.data(Qt::UserRole + KisResourceModel::Dirty).toBool();
 
     QImage preview = index.data(Qt::DecorationRole).value<QImage>();
+    if (preview.isNull()) {
+        preview = index.data(Qt::UserRole + KisResourceModel::Image).value<QImage>();
+    }
     if (preview.isNull()) {
         qDebug() << "KisPresetDelegate::paint:  Preview is null";
         painter->restore();
@@ -305,7 +308,6 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
 
     m_chooser = new KisResourceItemChooser(ResourceType::PaintOpPresets, false, this, m_paintOpFilterModel);
     m_chooser->setObjectName("ResourceChooser");
-    m_chooser->setColumnCount(10);
     m_chooser->setRowHeight(50);
     m_delegate = new KisPresetDelegate(this);
     m_chooser->setItemDelegate(m_delegate);
@@ -368,10 +370,13 @@ void KisPresetChooser::updateViewSettings()
     if (m_mode == THUMBNAIL) {
         m_chooser->setSynced(true);
         m_delegate->setShowText(false);
+        m_chooser->itemView()->setViewMode(QListView::IconMode);
+        m_chooser->itemView()->setFlow(QListView::LeftToRight);
     }
     else if (m_mode == DETAIL) {
         m_chooser->setSynced(false);
-        m_chooser->setColumnCount(1);
+        m_chooser->itemView()->setViewMode(QListView::ListMode);
+        m_chooser->itemView()->setFlow(QListView::TopToBottom);
         m_chooser->setColumnWidth(m_chooser->width());
 
         KisResourceItemChooserSync* chooserSync = KisResourceItemChooserSync::instance();
@@ -380,9 +385,8 @@ void KisPresetChooser::updateViewSettings()
     }
     else if (m_mode == STRIP) {
         m_chooser->setSynced(false);
-        m_chooser->setRowCount(1);
-        m_chooser->itemView()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        m_chooser->itemView()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        m_chooser->itemView()->setViewMode(QListView::ListMode);
+        m_chooser->itemView()->setFlow(QListView::LeftToRight);
         // An offset of 7 keeps the cell exactly square, TODO: use constants, not hardcoded numbers
         m_chooser->setColumnWidth(m_chooser->viewSize().height() - 7);
         m_delegate->setShowText(false);

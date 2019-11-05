@@ -49,8 +49,8 @@ public:
     /// Sets the display mode
     void setDisplayMode(DisplayMode mode);
 
-    /// Sets number of columns to display in the popup view
-    void setColumnCount( int columnCount );
+    //Whether to use single column mode;
+    void setSingleColumn(bool singleColumn);
 
     /// Sets the height of the popup view rows
     void setRowHeight( int rowHeight );

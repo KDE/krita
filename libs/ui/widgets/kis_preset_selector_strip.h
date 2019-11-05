@@ -22,7 +22,7 @@
 #include <QWidget>
 #include "ui_wdgpresetselectorstrip.h"
 
-class KisResourceItemView;
+class KisResourceItemListView;
 
 /**
 *
@@ -76,7 +76,7 @@ private:
     * This is a workaround to access members of KisPresetChooser using the QObject tree
     * instead of class methods
     */
-    KisResourceItemView* m_resourceItemView;
+    KisResourceItemListView* m_resourceItemView;
     QString m_currentPaintopID;
 };
 

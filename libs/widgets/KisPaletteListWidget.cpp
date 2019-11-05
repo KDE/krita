@@ -31,6 +31,7 @@
 #include <KoFileDialog.h>
 
 #include <KisResourceModel.h>
+#include <KisResourceItemListView.h>
 
 #include <ui_WdgPaletteListWidget.h>
 #include "KisPaletteListWidget.h"
@@ -69,7 +70,7 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
 
     m_d->itemChooser->setItemDelegate(m_d->delegate.data());
     m_d->itemChooser->setRowHeight(40);
-    m_d->itemChooser->setColumnCount(1);
+    m_d->itemChooser->itemView()->setViewMode(QListView::ListMode);
     m_d->itemChooser->showButtons(false);
     m_d->itemChooser->showTaggingBar(true);
     m_ui->viewPalette->setLayout(new QHBoxLayout(m_ui->viewPalette));
@@ -97,7 +98,7 @@ void KisPaletteListWidget::slotAdd()
 {
     if (!m_d->allowModification) { return; }
     emit sigAddPalette();
-    m_d->itemChooser->setCurrentItem(m_d->itemChooser->rowCount() - 1, 0);
+    m_d->itemChooser->setCurrentItem(m_d->itemChooser->rowCount() - 1);
 }
 
 void KisPaletteListWidget::slotRemove()
@@ -107,14 +108,14 @@ void KisPaletteListWidget::slotRemove()
         KoColorSetSP cs = m_d->itemChooser->currentResource().staticCast<KoColorSet>();
         emit sigRemovePalette(cs);
     }
-    m_d->itemChooser->setCurrentItem(0, 0);
+    m_d->itemChooser->setCurrentItem(0);
 }
 
 void KisPaletteListWidget::slotImport()
 {
     if (!m_d->allowModification) { return; }
     emit sigImportPalette();
-    m_d->itemChooser->setCurrentItem(m_d->itemChooser->rowCount() - 1, 0);
+    m_d->itemChooser->setCurrentItem(m_d->itemChooser->rowCount() - 1);
 }
 
 void KisPaletteListWidget::slotExport()

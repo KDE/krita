@@ -466,7 +466,7 @@ QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
     d->filterSelector = new KoResourceSelector(addFilterWidget);
 
     d->filterSelector->setDisplayMode(KoResourceSelector::TextMode);
-    d->filterSelector->setColumnCount(1);
+    d->filterSelector->setSingleColumn(true);
     addFilterLayout->addWidget(new QLabel(i18n("Effects"), addFilterWidget), 0, 0);
     addFilterLayout->addWidget(d->filterSelector, 0, 1);
     connect(d->filterSelector, SIGNAL(resourceSelected(KoResourceSP )),

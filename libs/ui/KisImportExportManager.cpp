@@ -665,7 +665,7 @@ KisImportExportErrorCode KisImportExportManager::doExportImpl(const QString &loc
     if (filter->supportsIO() && !file.open(QFile::WriteOnly)) {
 #else
     QFileInfo fi(location);
-    QTemporaryFile file(fi.absolutePath() + ".XXXXXX.kra");
+    QTemporaryFile file(fi.absolutePath() + "/.XXXXXX.kra");
     if (filter->supportsIO() && !file.open()) {
 #endif
         KisImportExportErrorCannotWrite result(file.error());

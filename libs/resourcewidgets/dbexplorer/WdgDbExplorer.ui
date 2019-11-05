@@ -174,14 +174,7 @@
         </layout>
        </item>
        <item>
-        <widget class="KisResourceItemView" name="resourceItemView" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>2</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
+        <widget class="KisResourceItemListView" name="resourceItemView"/>
        </item>
        <item>
         <spacer name="verticalSpacer">
@@ -209,10 +202,9 @@
    <header location="global">kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KisResourceItemView</class>
-   <extends>QWidget</extends>
-   <header location="global">KisResourceItemView.h</header>
-   <container>1</container>
+   <class>KisResourceItemListView</class>
+   <extends>QListView</extends>
+   <header location="global">KisResourceItemListView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

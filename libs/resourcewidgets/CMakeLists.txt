@@ -6,6 +6,7 @@ set(kritaresourcewidgets_LIB_SRCS
     KisResourceItemChooser.cpp
     KisResourceItemChooserSync.cpp
     KisResourceItemDelegate.cpp
+    KisResourceItemListView.cpp
     KisResourceItemView.cpp
     KisTagChooserWidget.cpp
     KisTagFilterWidget.cpp

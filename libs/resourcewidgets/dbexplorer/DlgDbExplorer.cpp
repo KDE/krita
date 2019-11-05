@@ -34,6 +34,7 @@
 #include <KisResourceTypeModel.h>
 #include <KisTagModel.h>
 #include <KisResourceItemDelegate.h>
+#include <KisResourceItemListView.h>
 
 DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     : KoDialog(parent)
@@ -71,7 +72,7 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         m_page->tableStorages->setModel(storagesModel);
         m_page->tableStorages->hideColumn(0);
         m_page->tableStorages->setItemDelegate(storagesDelegate);
-        m_page->tableStorages->setSelectionMode(QAbstractItemView::SingleSelection);;
+        m_page->tableStorages->setSelectionMode(QAbstractItemView::SingleSelection);
         m_page->tableStorages->resizeColumnsToContents();
     }
 
@@ -79,7 +80,7 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
         KisResourceModel *resourcesModel = KisResourceModelProvider::resourceModel(ResourceType::Gradients);
         m_page->tableResources->setModel(resourcesModel);
         m_page->tableResources->hideColumn(0);
-        m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);;
+        m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);
 
         m_page->cmbResourceTypes->setModel(KisResourceModelProvider::resourceModel(ResourceType::Gradients));
         m_page->cmbResourceTypes->setModelColumn(KisResourceTypeModel::Name);
@@ -158,12 +159,12 @@ void DlgDbExplorer::slotRvResourceTypeSelected(int index)
     KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(this);
     tagFilterModel->setSourceModel(resourceModel);
 
-    KisResourceGridProxyModel *resourceProxyModel = new KisResourceGridProxyModel(this);
-    resourceProxyModel->setSourceModel(tagFilterModel);
-    resourceProxyModel->setRowStride(10);
+    //KisResourceGridProxyModel *resourceProxyModel = new KisResourceGridProxyModel(this);
+    //resourceProxyModel->setSourceModel(tagFilterModel);
+    //resourceProxyModel->setRowStride(10);
 
 
-    m_page->resourceItemView->setModel(resourceProxyModel);
+    m_page->resourceItemView->setModel(tagFilterModel);
 }
 
 void DlgDbExplorer::slotRvTagSelected(int index)

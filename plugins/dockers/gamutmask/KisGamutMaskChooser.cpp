@@ -30,6 +30,7 @@
 
 #include <KisResourceItemChooser.h>
 #include <KisResourceItemListView.h>
+#include <KisResourceModel.h>
 #include <kis_icon_utils.h>
 #include <kis_config.h>
 
@@ -65,15 +66,8 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     if (!index.isValid())
         return;
 
-    KoResourceSP resource = KoResourceSP(static_cast<KoResource*>(index.internalPointer()));
-
-    KoGamutMaskSP mask = resource.staticCast<KoGamutMask>();
-
-    if (!mask) {
-        return;
-    }
-
-    QImage preview = mask->image();
+    QImage preview = index.data(Qt::UserRole + KisResourceModel::Image).value<QImage>();
+    QString name = index.data(Qt::UserRole + KisResourceModel::Name).value<QString>();
 
     if(preview.isNull()) {
         return;
@@ -111,10 +105,11 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
                        QPointF(paintRect.width() - rightMargin, paintRect.y() + descOffset + painter->fontMetrics().lineSpacing()));
         painter->drawText(titleRect, Qt::AlignLeft,
                           painter->fontMetrics().elidedText(
-                              mask->title(), Qt::ElideRight, titleRect.width()
+                              name, Qt::ElideRight, titleRect.width()
                               )
                           );
-
+/*
+ * We currently cannot actually get the mask description, so lets stop this for now.
         if (!mask->description().isEmpty() && !mask->description().isNull()) {
             font.setPointSize(font.pointSize()-1);
             font.setBold(false);
@@ -139,7 +134,7 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
                 QString elidedText = painter->fontMetrics().elidedText(mask->description(), Qt::ElideRight, elideWidth);
                 painter->drawText(descRect, Qt::AlignLeft|Qt::TextWordWrap, elidedText);
             }
-        }
+        }*/
     }
 
     painter->restore();

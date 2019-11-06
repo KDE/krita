@@ -64,6 +64,9 @@ public:
 
     bool acceptsClicks() const override;
 
+private:
+    Q_PRIVATE_SLOT(m_d, void recalculateTransformations());
+
 Q_SIGNALS:
     void requestCanvasUpdate();
 

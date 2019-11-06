@@ -105,30 +105,28 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     : QWidget(parent)
     , d(new Private(resourceType))
 {
-    //d->extraFilterModel = extraFilterProxy;
-    //if (d->extraFilterModel) {
-    //    d->extraFilterModel->setParent(this);
-    //}
-
     d->splitter = new QSplitter(this);
 
     d->resourceModel = KisResourceModelProvider::resourceModel(resourceType);
 
     d->tagFilterProxyModel = new KisTagFilterResourceProxyModel(this);
-    d->tagFilterProxyModel->setSourceModel(d->resourceModel);
+
+    d->extraFilterModel = extraFilterProxy;
+    if (d->extraFilterModel) {
+        d->extraFilterModel->setParent(this);
+        d->extraFilterModel->setSourceModel(d->resourceModel);
+        d->tagFilterProxyModel->setSourceModel(d->extraFilterModel);
+    } else {
+        d->tagFilterProxyModel->setSourceModel(d->resourceModel);
+    }
 
     connect(d->resourceModel, SIGNAL(beforeResourcesLayoutReset(QModelIndex)), SLOT(slotBeforeResourcesLayoutReset(QModelIndex)));
     connect(d->resourceModel, SIGNAL(afterResourcesLayoutReset()), SLOT(slotAfterResourcesLayoutReset()));
 
     d->view = new KisResourceItemListView(this);
     d->view->setObjectName("ResourceItemview");
-    //if (d->extraFilterModel) {
-    //    d->extraFilterModel->setSourceModel(d->resourceModel);
-    //    d->view->setModel(d->extraFilterModel);
-    //}
-    //else {
-        d->view->setModel(d->tagFilterProxyModel);
-    //}
+
+    d->view->setModel(d->tagFilterProxyModel);
     d->view->setItemDelegate(new KisResourceItemDelegate(this));
     d->view->setSelectionMode(QAbstractItemView::SingleSelection);
     d->view->viewport()->installEventFilter(this);

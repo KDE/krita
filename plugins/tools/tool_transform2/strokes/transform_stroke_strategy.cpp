@@ -507,16 +507,11 @@ bool TransformStrokeStrategy::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *
             const KisSavedMacroCommand *command = dynamic_cast<const KisSavedMacroCommand*>(lastCommand);
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(command, false);
 
-            command->getCommandExecutionJobs(undoJobs, true);
-
+            // the jobs are fetched as !shouldGoToHistory,
+            // so there is no need to put them into
+            // m_skippedWhileMergeCommands
+            command->getCommandExecutionJobs(undoJobs, true, false);
             m_overriddenCommand = command;
-            Q_FOREACH (KisStrokeJobData *commonData, *undoJobs) {
-                Data *data = dynamic_cast<Data*>(commonData);
-                KIS_SAFE_ASSERT_RECOVER(data) { continue; }
-
-                m_skippedWhileMergeCommands << data->command.data();
-            }
-
 
             result = true;
         }
@@ -608,11 +603,32 @@ void TransformStrokeStrategy::initStrokeCallback()
 
     extraInitJobs << new Data(toQShared(new KisHoldUIUpdatesCommand(m_updatesFacade, KisCommandUtils::FlipFlopCommand::FINALIZING)), false, KisStrokeJobData::BARRIER);
 
+    if (!lastCommandUndoJobs.isEmpty()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_overriddenCommand);
+
+        for (auto it = extraInitJobs.begin(); it != extraInitJobs.end(); ++it) {
+            (*it)->setCancellable(false);
+        }
+    }
+
     addMutatedJobs(extraInitJobs);
 }
 
 void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTransformArgs &args)
 {
+    /**
+     * Since our finishStrokeCallback() initiates new jobs,
+     * cancellation request may come even after
+     * finishStrokeCallback() (cancellations may be called
+     * until there are no jobs left in the stroke's queue).
+     *
+     * Therefore we should check for double-entry here and
+     * make sure the finilizing jobs are no cancellable.
+     */
+
+    if (m_finalizingActionsStarted) return;
+    m_finalizingActionsStarted = true;
+
     QVector<KisStrokeJobData *> mutatedJobs;
 
     if (applyTransform) {
@@ -627,11 +643,6 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
     }
 
     KritaUtils::addJobBarrier(mutatedJobs, [this, applyTransform]() {
-
-        if (!applyTransform) {
-            KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
-        }
-
         Q_FOREACH (KisSelectionSP selection, m_deactivatedSelections) {
             selection->setVisible(true);
         }
@@ -642,8 +653,14 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
 
         if (applyTransform) {
             KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
+        } else {
+            KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
         }
     });
+
+    for (auto it = mutatedJobs.begin(); it != mutatedJobs.end(); ++it) {
+        (*it)->setCancellable(false);
+    }
 
     addMutatedJobs(mutatedJobs);
 }

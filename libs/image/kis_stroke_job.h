@@ -68,7 +68,8 @@ public:
     }
 
     bool isCancellable() const {
-        return m_isOwnJob;
+        return m_isOwnJob &&
+            (!m_dabData || m_dabData->isCancellable());
     }
 
     bool isOwnJob() const {

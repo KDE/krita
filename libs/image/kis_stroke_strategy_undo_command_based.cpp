@@ -122,7 +122,11 @@ void KisStrokeStrategyUndoCommandBased::doStrokeCallback(KisStrokeJobData *data)
 
     if (d) {
         executeCommand(d->command, d->undo);
-        notifyCommandDone(d->command, d->sequentiality(), d->exclusivity());
+        if (d->shouldGoToHistory) {
+            notifyCommandDone(d->command,
+                              d->sequentiality(),
+                              d->exclusivity());
+        }
     } else {
         KisRunnableBasedStrokeStrategy::doStrokeCallback(data);
     }

@@ -170,6 +170,8 @@ private:
 
     const KisSavedMacroCommand *m_overriddenCommand = 0;
     QVector<const KUndo2Command*> m_skippedWhileMergeCommands;
+
+    bool m_finalizingActionsStarted = false;
 };
 
 #endif /* __TRANSFORM_STROKE_STRATEGY_H */

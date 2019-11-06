@@ -51,12 +51,16 @@ public:
 
     virtual KisStrokeJobData* createLodClone(int levelOfDetail);
 
+    bool isCancellable() const;
+    void setCancellable(bool value);
+
 protected:
     KisStrokeJobData(const KisStrokeJobData &rhs);
 
 private:
     Sequentiality m_sequentiality;
     Exclusivity m_exclusivity;
+    bool m_isCancellable;
 };
 
 

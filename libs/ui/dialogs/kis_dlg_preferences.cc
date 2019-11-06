@@ -262,6 +262,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 #ifdef Q_OS_WIN
     dontUseNative = false;
 #endif
+#ifdef Q_OS_MACOS
+    m_chkNativeFileDialog->setVisible(false);
+#endif
     m_chkNativeFileDialog->setChecked(!group.readEntry("DontUseNativeFileDialog", dontUseNative));
 
     intMaxBrushSize->setValue(cfg.readEntry("maximumBrushSize", 1000));

@@ -24,6 +24,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QMenu>
+#include <QMessageBox>
 
 #include <klocalizedstring.h>
 #include <resources/KoAbstractGradient.h>
@@ -47,10 +48,13 @@
 KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient, QWidget *parent, const char *name)
     : KoDialog(parent, Qt::Dialog)
 {
-    setButtons(Close);
-    setDefaultButton(Close);
+    setButtons(Ok|Cancel);
+    setDefaultButton(Ok);
     setObjectName(name);
     setModal(false);
+
+    connect(this, SIGNAL(okClicked()), this, SLOT(accept()));
+    connect(this, SIGNAL(cancelClicked()), this, SLOT(reject()));
 
     KoStopGradientSP stopGradient = gradient.dynamicCast<KoStopGradient>();
     if (stopGradient) {
@@ -180,24 +184,54 @@ void KisGradientChooser::addSegmentedGradient()
     addGradient(gradient);
 }
 
-void KisGradientChooser::addGradient(KoAbstractGradientSP gradient)
+void KisGradientChooser::addGradient(KoAbstractGradientSP gradient, bool editGradient)
 {
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
     QString saveLocation = rserver->saveLocation();
 
     KisCustomGradientDialog dialog(gradient, this, "KisCustomGradientDialog");
-    dialog.exec();
 
+    QFileInfo fileInfo(saveLocation + gradient->name().split(" ").join("_") + gradient->defaultFileExtension());
+
+    bool fileOverwriteAccepted = false;
+
+    QString oldname = gradient->name();
+
+    while(!fileOverwriteAccepted) {
+        if (dialog.exec() == KoDialog::Accepted) {
+
+            if (gradient->name().isEmpty()) {
+                return;
+            }
+
+            if (editGradient && oldname == gradient->name()) {
+                fileOverwriteAccepted = true;
+                continue;
+            }
+
+            fileInfo = QFileInfo(saveLocation + gradient->name().split(" ").join("_") + gradient->defaultFileExtension());
+            if (fileInfo.exists()) {
+                int res = QMessageBox::warning(this, i18nc("@title:window", "Name Already Exists")
+                                               , i18n("The name '%1' already exists, do you wish to overwrite it?", gradient->name())
+                                               , QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                if (res == QMessageBox::Yes) fileOverwriteAccepted = true;
+            } else {
+                fileOverwriteAccepted = true;
+            }
+        } else {
+            return;
+        }
+    }
     gradient->setFilename(gradient->name() + gradient->defaultFileExtension());
     gradient->setValid(true);
     rserver->addResource(gradient);
-    m_itemChooser->setCurrentResource(gradient);
+    //TODO: select the right gradient from the resource server. Right now this is not possible :(
+    m_itemChooser->setCurrentItem(0);
 }
 
 void KisGradientChooser::editGradient()
 {
-    KisCustomGradientDialog dialog(currentResource().staticCast<KoAbstractGradient>(), this, "KisCustomGradientDialog");
-    dialog.exec();
+    addGradient(currentResource().staticCast<KoAbstractGradient>(), true);
 }
 
 

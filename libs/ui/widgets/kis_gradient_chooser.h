@@ -81,7 +81,7 @@ private Q_SLOTS:
     void editGradient();
 
 private:
-      void addGradient(KoAbstractGradientSP gradient);
+      void addGradient(KoAbstractGradientSP gradient, bool editGradient = false);
 private:
     QLabel *m_lbName;
     KisResourceItemChooser * m_itemChooser;

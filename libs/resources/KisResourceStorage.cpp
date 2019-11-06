@@ -77,7 +77,6 @@ KisResourceStorage::KisResourceStorage(const QString &location)
     Q_ASSERT(KisStoragePluginRegistry::instance()->m_storageFactoryMap.contains(StorageType::Folder));
     Q_ASSERT(KisStoragePluginRegistry::instance()->m_storageFactoryMap.contains(StorageType::Bundle));
     Q_ASSERT(KisStoragePluginRegistry::instance()->m_storageFactoryMap.contains(StorageType::Memory));
-    Q_ASSERT(KisStoragePluginRegistry::instance()->m_storageFactoryMap.contains(StorageType::AdobeBrushLibrary));
     Q_ASSERT(KisStoragePluginRegistry::instance()->m_storageFactoryMap.contains(StorageType::AdobeStyleLibrary));
 
     d->location = location;

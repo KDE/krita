@@ -59,7 +59,7 @@ KoAbstractGradientSP fetchGradientLazy(KoAbstractGradientSP gradient,
 KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     : KoDialog(parent)
     , m_layerStyle(layerStyle)
-    , m_initialLayerStyle(layerStyle->clone())
+    , m_initialLayerStyle(layerStyle->clone().dynamicCast<KisPSDLayerStyle>())
     , m_isSwitchingPredefinedStyle(false)
     , m_sanityLayerStyleDirty(false)
 {
@@ -290,7 +290,7 @@ void KisDlgLayerStyle::slotNewStyle()
     KisPSDLayerStyleSP style = this->style();
     style->setName(selectAvailableStyleName(styleName));
 
-    m_stylesSelector->addNewStyle(style->clone());
+    m_stylesSelector->addNewStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
 }
 
 void KisDlgLayerStyle::slotLoadStyle()
@@ -318,7 +318,7 @@ void KisDlgLayerStyle::slotSaveStyle()
     QScopedPointer<KisPSDLayerStyleCollectionResource> collection(
         new KisPSDLayerStyleCollectionResource(filename));
 
-    KisPSDLayerStyleSP newStyle = style()->clone();
+    KisPSDLayerStyleSP newStyle = style()->clone().dynamicCast<KisPSDLayerStyle>();
     newStyle->setName(QFileInfo(filename).completeBaseName());
 
     KisPSDLayerStyleCollectionResource::StylesVector vector = collection->layerStyles();

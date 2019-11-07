@@ -42,6 +42,7 @@ void KisAslPatternsWriter::writePatterns()
 {
     KisAslCallbackObjectCatcher c;
     c.subscribePattern("/Patterns/KisPattern", std::bind(&KisAslPatternsWriter::addPattern, this, std::placeholders::_1));
+    c.subscribePattern("/patterns/KisPattern", std::bind(&KisAslPatternsWriter::addPattern, this, std::placeholders::_1));
 
     KisAslXmlParser parser;
     parser.parseXML(m_doc, c);

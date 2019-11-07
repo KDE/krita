@@ -963,7 +963,7 @@ KisNodeSP KisLayerManager::addFileLayer(KisNodeSP activeNode)
 
 void updateLayerStyles(KisLayerSP layer, KisDlgLayerStyle *dlg)
 {
-    KisSetLayerStyleCommand::updateLayerStyle(layer, dlg->style()->clone());
+    KisSetLayerStyleCommand::updateLayerStyle(layer, dlg->style()->clone().dynamicCast<KisPSDLayerStyle>());
 }
 
 void KisLayerManager::layerStyle()
@@ -978,13 +978,13 @@ void KisLayerManager::layerStyle()
 
     KisPSDLayerStyleSP oldStyle;
     if (layer->layerStyle()) {
-        oldStyle = layer->layerStyle()->clone();
+        oldStyle = layer->layerStyle()->clone().dynamicCast<KisPSDLayerStyle>();
     }
     else {
         oldStyle = toQShared(new KisPSDLayerStyle());
     }
 
-    KisDlgLayerStyle dlg(oldStyle->clone(), m_view->canvasResourceProvider());
+    KisDlgLayerStyle dlg(oldStyle->clone().dynamicCast<KisPSDLayerStyle>(), m_view->canvasResourceProvider());
 
     std::function<void ()> updateCall(std::bind(updateLayerStyles, layer, &dlg));
     SignalToFunctionProxy proxy(updateCall);

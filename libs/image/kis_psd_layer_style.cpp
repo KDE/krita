@@ -94,7 +94,8 @@ struct Q_DECL_HIDDEN KisPSDLayerStyle::Private
 };
 
 KisPSDLayerStyle::KisPSDLayerStyle()
-    : d(new Private())
+    : KoResource(QString())
+    , d(new Private())
 {
     d->name = i18n("Unnamed");
     d->version = 7;
@@ -106,8 +107,10 @@ KisPSDLayerStyle::~KisPSDLayerStyle()
 }
 
 KisPSDLayerStyle::KisPSDLayerStyle(const KisPSDLayerStyle &rhs)
-    : d(new Private(*rhs.d))
+    : KoResource(QString())
+    , d(new Private(*rhs.d))
 {
+    setValid(valid());
 }
 
 KisPSDLayerStyle KisPSDLayerStyle::operator=(const KisPSDLayerStyle &rhs)
@@ -128,9 +131,9 @@ void KisPSDLayerStyle::setEnabled(bool value)
     d->effectEnabled = value;
 }
 
-KisPSDLayerStyleSP KisPSDLayerStyle::clone() const
+KoResourceSP KisPSDLayerStyle::clone() const
 {
-    return toQShared(new KisPSDLayerStyle(*this));
+    return toQShared(new KisPSDLayerStyle(*this)).dynamicCast<KoResource>();
 }
 
 void KisPSDLayerStyle::clear()
@@ -160,6 +163,7 @@ QString KisPSDLayerStyle::name() const
 void KisPSDLayerStyle::setName(const QString &value)
 {
     d->name = value;
+    dynamic_cast<KoResource*>(this)->setName(value);
 }
 
 QUuid KisPSDLayerStyle::uuid() const
@@ -185,6 +189,30 @@ void KisPSDLayerStyle::setPsdUuid(const QString &value) const
 {
     setUuid(QUuid(QString("{%1}").arg(value)));
 }
+
+bool KisPSDLayerStyle::load()
+{
+    return true;
+}
+
+bool KisPSDLayerStyle::loadFromDevice(QIODevice *dev)
+{
+    Q_UNUSED(dev);
+    return true;
+}
+
+bool KisPSDLayerStyle::save()
+{
+    return true;
+}
+
+bool KisPSDLayerStyle::saveToDevice(QIODevice *dev) const
+{
+    Q_UNUSED(dev);
+    return true;
+}
+
+
 
 const psd_layer_effects_context* KisPSDLayerStyle::context() const
 {

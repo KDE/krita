@@ -26,7 +26,6 @@
 
 #include "KisFolderStorage.h"
 #include "KisBundleStorage.h"
-#include "KisAslStorage.h"
 #include "KisMemoryStorage.h"
 
 const QString KisResourceStorage::s_meta_generator("meta:generator");
@@ -49,7 +48,7 @@ KisStoragePluginRegistry::KisStoragePluginRegistry()
     m_storageFactoryMap[KisResourceStorage::StorageType::Folder] = new KisStoragePluginFactory<KisFolderStorage>();
     m_storageFactoryMap[KisResourceStorage::StorageType::Memory] = new KisStoragePluginFactory<KisMemoryStorage>();
     m_storageFactoryMap[KisResourceStorage::StorageType::Bundle] = new KisStoragePluginFactory<KisBundleStorage>();
-    m_storageFactoryMap[KisResourceStorage::StorageType::AdobeStyleLibrary] = new KisStoragePluginFactory<KisAslStorage>();
+    //m_storageFactoryMap[KisResourceStorage::StorageType::AdobeStyleLibrary] = new KisStoragePluginFactory<KisAslStorage>();
 }
 
 void KisStoragePluginRegistry::addStoragePluginFactory(KisResourceStorage::StorageType storageType, KisStoragePluginFactoryBase *factory)

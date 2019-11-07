@@ -19,7 +19,7 @@
 #ifndef __KIS_ASL_LAYER_STYLE_SERIALIZER_H
 #define __KIS_ASL_LAYER_STYLE_SERIALIZER_H
 
-#include "kritaui_export.h"
+#include "kritapsd_export.h"
 
 class QIODevice;
 class KoPattern;
@@ -28,7 +28,7 @@ class KoPattern;
 #include "asl/kis_asl_callback_object_catcher.h"
 
 
-class KRITAUI_EXPORT KisAslLayerStyleSerializer
+class KRITAPSD_EXPORT KisAslLayerStyleSerializer
 {
 public:
     KisAslLayerStyleSerializer();
@@ -36,9 +36,14 @@ public:
 
     void saveToDevice(QIODevice *device);
     void readFromDevice(QIODevice *device);
+    bool readFromFile(const QString& filename);
 
     QVector<KisPSDLayerStyleSP> styles() const;
     void setStyles(const QVector<KisPSDLayerStyleSP> &styles);
+
+    QHash<QString, KoPatternSP> patterns() const;
+    QHash<QString, KisPSDLayerStyleSP> stylesHash();
+
 
     void registerPSDPattern(const QDomDocument &doc);
     void readFromPSDXML(const QDomDocument &doc);
@@ -46,9 +51,13 @@ public:
     QDomDocument formXmlDocument() const;
     QDomDocument formPsdXmlDocument() const;
 
+    bool isInitialized() {
+        return m_initialized;
+    }
+
 
 private:
-    void registerPatternObject(const KoPatternSP pattern);
+    void registerPatternObject(const KoPatternSP pattern, const  QString& patternUuid);
 
     void assignPatternObject(const QString &patternUuid,
                              const QString &patternName,
@@ -64,6 +73,8 @@ private:
 
     KisAslCallbackObjectCatcher m_catcher;
     QVector<KisPSDLayerStyleSP> m_stylesVector;
+    QHash<QString, KisPSDLayerStyleSP> m_stylesHash;
+    bool m_initialized;
 };
 
 #endif /* __KIS_ASL_LAYER_STYLE_SERIALIZER_H */

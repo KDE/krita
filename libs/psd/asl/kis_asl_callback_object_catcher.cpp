@@ -101,6 +101,18 @@ inline void passToCallback(const QString &path, const HashType &hash, const T &v
     }
 }
 
+template <class HashType, typename T1, typename T2>
+inline void passToCallback(const QString &path, const HashType &hash, const T1 &value1, const T2 &value2)
+{
+    typename HashType::const_iterator it = hash.constFind(path);
+    if (it != hash.constEnd()) {
+        (*it)(value1, value2);
+    }
+    else {
+        warnKrita << "Couldn't find a callback, even though the non-empty catcher is used";
+    }
+}
+
 void KisAslCallbackObjectCatcher::addDouble(const QString &path, double value)
 {
     passToCallback(path, m_d->mapDouble, value);
@@ -163,9 +175,9 @@ void KisAslCallbackObjectCatcher::addCurve(const QString &path, const QString &n
     }
 }
 
-void KisAslCallbackObjectCatcher::addPattern(const QString &path, const KoPatternSP value)
+void KisAslCallbackObjectCatcher::addPattern(const QString &path, const KoPatternSP value, const QString& patternUuid)
 {
-    passToCallback(path, m_d->mapPattern, value);
+    passToCallback(path, m_d->mapPattern, value, patternUuid);
 }
 
 void KisAslCallbackObjectCatcher::addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName)

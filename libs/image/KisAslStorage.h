@@ -20,9 +20,15 @@
 #ifndef KISASLSTORAGE_H
 #define KISASLSTORAGE_H
 
-#include <KisStoragePlugin.h>
+#include <kritaimage_export.h>
 
-class KisAslStorage : public KisStoragePlugin
+#include <KisStoragePlugin.h>
+#include <kis_asl_layer_style_serializer.h>
+
+
+
+
+class KRITAIMAGE_EXPORT KisAslStorage : public KisStoragePlugin
 {
 public:
     KisAslStorage(const QString &location);
@@ -32,6 +38,8 @@ public:
     KoResourceSP resource(const QString &url) override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
+
+    QSharedPointer<KisAslLayerStyleSerializer> m_aslSerializer;
 };
 
 #endif // KISASLSTORAGE_H

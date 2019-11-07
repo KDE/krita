@@ -48,7 +48,7 @@ public:
     virtual void addColor(const QString &path, const QColor &value);
     virtual void addPoint(const QString &path, const QPointF &value);
     virtual void addCurve(const QString &path, const QString &name, const QVector<QPointF> &points);
-    virtual void addPattern(const QString &path, const KoPatternSP pattern);
+    virtual void addPattern(const QString &path, const KoPatternSP pattern, const QString &patternUuid);
     virtual void addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName);
     virtual void addGradient(const QString &path, KoAbstractGradientSP gradient);
 

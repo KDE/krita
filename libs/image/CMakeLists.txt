@@ -293,7 +293,6 @@ set(kritaimage_LIB_SRCS
    kis_onion_skin_cache.cpp
    kis_idle_watcher.cpp
 
-   kis_psd_layer_style.cpp
    kis_layer_properties_icons.cpp
 
    layerstyles/kis_multiple_projection.cpp
@@ -313,6 +312,12 @@ set(kritaimage_LIB_SRCS
    KisProofingConfiguration.cpp
 
    kis_node_query_path.cc
+
+
+    kis_asl_layer_style_serializer.cpp
+    kis_psd_layer_style_resource.cpp
+    KisAslStorage.cpp
+    kis_psd_layer_style.cpp
 )
 
 set(einspline_SRCS

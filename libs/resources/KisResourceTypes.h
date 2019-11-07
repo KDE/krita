@@ -39,6 +39,7 @@ namespace ResourceType {
     static const QString GamutMasks {"gamutmasks"};
     static const QString FilterEffects {"ko_effects"};
     static const QString TaskSets {"tasksets"};
+    static const QString LayerStyles {"layerstyles"};
 }
 
 namespace ResourceSubType {

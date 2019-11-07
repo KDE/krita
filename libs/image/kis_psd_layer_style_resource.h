@@ -21,13 +21,13 @@
 #include <KoResource.h>
 #include <QVector>
 
-#include <kritaui_export.h>
+#include <kritapsd_export.h>
 #include "kis_psd_layer_style.h"
 
 /**
  * @brief The KisPSDLayerStyleResource class represents an ASL file type resource.
  */
-class KRITAUI_EXPORT KisPSDLayerStyleCollectionResource : public KoResource
+class KRITAPSD_EXPORT KisPSDLayerStyleCollectionResource : public KoResource
 {
 public:
     typedef QVector<KisPSDLayerStyleSP> StylesVector;

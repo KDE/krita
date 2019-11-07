@@ -240,15 +240,15 @@ void KisKraSaverTest::testRoundTripLayerStyles()
 
     style->dropShadow()->setAngle(-90);
     style->dropShadow()->setUseGlobalLight(false);
-    layer1->setLayerStyle(style->clone());
+    layer1->setLayerStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
 
     style->dropShadow()->setAngle(180);
     style->dropShadow()->setUseGlobalLight(true);
-    layer2->setLayerStyle(style->clone());
+    layer2->setLayerStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
 
     style->dropShadow()->setAngle(90);
     style->dropShadow()->setUseGlobalLight(false);
-    layer3->setLayerStyle(style->clone());
+    layer3->setLayerStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
 
     image->initialRefreshGraph();
     chk.checkImage(image, "00_initial_layers");

@@ -217,7 +217,7 @@ KisLayer::KisLayer(const KisLayer& rhs)
         m_d->safeProjection->setImage(image());
 
         if (rhs.m_d->layerStyle) {
-            m_d->layerStyle = rhs.m_d->layerStyle->clone();
+            m_d->layerStyle = rhs.m_d->layerStyle->clone().dynamicCast<KisPSDLayerStyle>();
 
             if (rhs.m_d->layerStyleProjectionPlane) {
                 m_d->layerStyleProjectionPlane = toQShared(

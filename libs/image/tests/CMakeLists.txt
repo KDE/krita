@@ -140,6 +140,8 @@ ecm_add_tests(
     kis_random_generator_test.cpp
     kis_keyframing_test.cpp
     kis_filter_mask_test.cpp
+    kis_asl_layer_style_serializer_test.cpp
+    TestAslStorage.cpp
 
     LINK_LIBRARIES kritaimage Qt5::Test
     NAME_PREFIX "libs-image-"

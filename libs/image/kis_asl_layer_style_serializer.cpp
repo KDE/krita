@@ -43,6 +43,9 @@
 using namespace std::placeholders;
 
 KisAslLayerStyleSerializer::KisAslLayerStyleSerializer()
+    : m_stylesVector()
+    , m_initialized(false)
+    , m_stylesHash()
 {
 }
 
@@ -58,6 +61,26 @@ QVector<KisPSDLayerStyleSP> KisAslLayerStyleSerializer::styles() const
 void KisAslLayerStyleSerializer::setStyles(const QVector<KisPSDLayerStyleSP> &styles)
 {
     m_stylesVector = styles;
+    Q_FOREACH(const KisPSDLayerStyleSP style, styles) {
+        m_stylesHash.insert(style->psdUuid(), style);
+    }
+    m_initialized = true;
+}
+
+QHash<QString, KoPatternSP> KisAslLayerStyleSerializer::patterns() const
+{
+    return m_patternsStore;
+}
+
+QHash<QString, KisPSDLayerStyleSP> KisAslLayerStyleSerializer::stylesHash()
+{
+    if (m_stylesHash.count() == 0 && m_stylesVector.count() != 0) {
+        // build the hash
+        Q_FOREACH(KisPSDLayerStyleSP style, m_stylesVector) {
+            m_stylesHash.insert(style->psdUuid(), style);
+        }
+    }
+    return m_stylesHash;
 }
 
 QString compositeOpToBlendMode(const QString &compositeOp)
@@ -853,21 +876,13 @@ inline QString _prepaddr(const QString &pref, const QString &addr) {
         m_catcher.subscribePatternRef(_prepaddr(prefix, addr), std::bind(&KisAslLayerStyleSerializer::assignPatternObject, this, _1, _2, setter)); \
     }
 
-void KisAslLayerStyleSerializer::registerPatternObject(const KoPatternSP pattern) {
-    QString uuid = KisAslWriterUtils::getPatternUuidLazy(pattern);
+void KisAslLayerStyleSerializer::registerPatternObject(const KoPatternSP pattern, const QString& patternUuid) {
 
-    if (m_patternsStore.contains(uuid)) {
-        warnKrita << "WARNING: ASL style contains a duplicated pattern!" << ppVar(pattern->name()) << ppVar(m_patternsStore[uuid]->name());
+    if (m_patternsStore.contains(patternUuid)) {
+        warnKrita << "WARNING: ASL style contains a duplicated pattern!" << ppVar(pattern->name()) << ppVar(m_patternsStore[patternUuid]->name());
     } else {
-        KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
-        KoPatternSP patternToAdd = server->resourceByMD5(pattern->md5());
-
-        if (!patternToAdd) {
-            patternToAdd = pattern->clone().dynamicCast<KoPattern>();
-            server->addResource(patternToAdd, false);
-        }
-
-        m_patternsStore.insert(uuid, patternToAdd);
+        pattern->setFilename(patternUuid + QString("_pattern"));
+        m_patternsStore.insert(patternUuid, pattern);
     }
 }
 
@@ -885,7 +900,7 @@ void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid,
         QImage dumbImage(32, 32, QImage::Format_ARGB32);
         dumbImage.fill(Qt::red);
         KoPatternSP dumbPattern(new KoPattern(dumbImage, "invalid", ""));
-        registerPatternObject(dumbPattern);
+        registerPatternObject(dumbPattern, patternUuid + QString("_invalid"));
         pattern = dumbPattern;
     }
 
@@ -1171,20 +1186,38 @@ void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style, 
 void KisAslLayerStyleSerializer::newStyleStarted(bool isPsdStructure)
 {
     m_stylesVector.append(toQShared(new KisPSDLayerStyle()));
-    KisPSDLayerStyle *currentStyle = m_stylesVector.last().data();
+    KisPSDLayerStyleSP currentStyleSP = m_stylesVector.last();
+    KisPSDLayerStyle *currentStyle = currentStyleSP.data();
 
-    psd_layer_effects_context *context = currentStyle->context();
+    psd_layer_effects_context *context = currentStyleSP->context();
     context->keep_original = 0;
 
     QString prefix = isPsdStructure ? "/null" : "/Styl/Lefx";
     connectCatcherToStyle(currentStyle, prefix);
 }
 
+bool KisAslLayerStyleSerializer::readFromFile(const QString& filename)
+{
+    QFile file(filename);
+    if (file.size() == 0) return false;
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        dbgKrita << "Can't open file " << filename;
+        return false;
+    }
+    readFromDevice(&file);
+    m_initialized = true;
+    file.close();
+
+    return true;
+}
+
 void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
 {
     m_stylesVector.clear();
 
-    m_catcher.subscribePattern("/Patterns/KisPattern", std::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
+    m_catcher.subscribePattern("/patterns/KisPattern", std::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1, _2));
+    m_catcher.subscribePattern("/Patterns/KisPattern", std::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1, _2));
     m_catcher.subscribeNewStyleStarted(std::bind(&KisAslLayerStyleSerializer::newStyleStarted, this, false));
 
     KisAslReader reader;
@@ -1199,13 +1232,19 @@ void KisAslLayerStyleSerializer::readFromDevice(QIODevice *device)
     // correct all the layer styles
     Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
         FillStylesCorrector::correct(style.data());
+        style->setValid(!style->isEmpty());
+
+        style->setFilename(style->psdUuid() + QString("_style"));
     }
+
+    m_initialized = true;
 }
 
 void KisAslLayerStyleSerializer::registerPSDPattern(const QDomDocument &doc)
 {
     KisAslCallbackObjectCatcher catcher;
-    catcher.subscribePattern("/Patterns/KisPattern", std::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1));
+    catcher.subscribePattern("/Patterns/KisPattern", std::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1, _2));
+    catcher.subscribePattern("/patterns/KisPattern", std::bind(&KisAslLayerStyleSerializer::registerPatternObject, this, _1, _2));
 
     //KisAslObjectCatcher c2;
     KisAslXmlParser parser;

@@ -71,9 +71,9 @@ void KisAslObjectCatcher::addCurve(const QString &path, const QString &name, con
     dbgKrita << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "curve" << name << ppVar(points.size());
 }
 
-void KisAslObjectCatcher::addPattern(const QString &path, const KoPatternSP value)
+void KisAslObjectCatcher::addPattern(const QString &path, const KoPatternSP value, const QString& patternUuid)
 {
-    dbgKrita << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "pattern" << value;
+    dbgKrita << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "pattern" << value << " uuid " << patternUuid;
 }
 
 void KisAslObjectCatcher::addPatternRef(const QString &path, const QString &patternUuid, const QString &patternName)

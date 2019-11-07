@@ -340,8 +340,6 @@ set(kritaui_LIB_SRCS
     input/config/kis_wheel_input_editor.cpp
     input/config/kis_key_input_editor.cpp
     processing/fill_processing_visitor.cpp
-    kis_asl_layer_style_serializer.cpp
-    kis_psd_layer_style_resource.cpp
     canvas/kis_mirror_axis.cpp
 
     kis_abstract_perspective_grid.cpp

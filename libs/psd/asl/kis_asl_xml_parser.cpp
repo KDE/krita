@@ -359,6 +359,7 @@ bool tryParseDescriptor(const QDomElement &el,
         }
 
         if (!patternUuid.isEmpty() && !patternData.isEmpty()) {
+
             QString fileName = QString("%1.pat").arg(patternUuid);
 
             QSharedPointer<KoPattern> pattern(new KoPattern(fileName));
@@ -368,7 +369,7 @@ bool tryParseDescriptor(const QDomElement &el,
 
             pattern->loadPatFromDevice(&buffer);
 
-            catcher.addPattern(path, pattern);
+            catcher.addPattern(path, pattern, patternUuid);
         } else {
             warnKrita << "WARNING: failed to load KisPattern XML section!" << ppVar(patternUuid);
         }
@@ -376,6 +377,7 @@ bool tryParseDescriptor(const QDomElement &el,
     } else if (classId == "Ptrn") { // reference to an existing pattern
         QString patternUuid;
         QString patternName;
+
 
         QDomNode child = el.firstChild();
         while (!child.isNull()) {

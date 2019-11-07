@@ -317,6 +317,7 @@ void KisAslParserTest::testParserWithPatterns()
         KisAslCallbackObjectCatcher c;
 
         c.subscribePattern("/Patterns/KisPattern", std::bind(&CallbackVerifier::setPattern, &verifier, std::placeholders::_1));
+        c.subscribePattern("/patterns/KisPattern", std::bind(&CallbackVerifier::setPattern, &verifier, std::placeholders::_1));
 
         KisAslXmlParser parser;
         parser.parseXML(doc, c);

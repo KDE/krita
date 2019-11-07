@@ -26,7 +26,7 @@ class QUuid;
 #include <psd.h>
 
 #include "kis_types.h"
-#include "kritaimage_export.h"
+#include "kritapsd_export.h"
 
 class KisPSDLayerStyle;
 typedef QSharedPointer<KisPSDLayerStyle> KisPSDLayerStyleSP;
@@ -39,7 +39,7 @@ typedef QSharedPointer<KisPSDLayerStyle> KisPSDLayerStyleSP;
  * See http://www.tonton-pixel.com/Photoshop%20Additional%20File%20Formats/styles-file-format.html
  *
  */
-class KRITAIMAGE_EXPORT KisPSDLayerStyle
+class KRITAPSD_EXPORT KisPSDLayerStyle : public KoResource
 {
 
 public:
@@ -48,18 +48,31 @@ public:
     KisPSDLayerStyle(const KisPSDLayerStyle& rhs);
     KisPSDLayerStyle operator=(const KisPSDLayerStyle& rhs);
 
-    KisPSDLayerStyleSP clone() const;
+    KoResourceSP clone() const;
 
     void clear();
 
     QString name() const;
     void setName(const QString &value);
 
+
+
     QUuid uuid() const;
     void setUuid(const QUuid &value) const;
 
     QString psdUuid() const;
     void setPsdUuid(const QString &value) const;
+
+    /*
+     * KoResource functions
+     * they do nothing, just return true
+     */
+    bool load() override;
+    bool loadFromDevice(QIODevice *dev) override;
+    bool save() override;
+    bool saveToDevice(QIODevice* dev) const override;
+
+
 
     /**
      * \return true if all the styles are disabled

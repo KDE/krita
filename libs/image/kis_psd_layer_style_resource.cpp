@@ -134,7 +134,7 @@ void KisPSDLayerStyleCollectionResource::collectAllLayerStyles(KisNodeSP root)
     KisLayer* layer = qobject_cast<KisLayer*>(root.data());
 
     if (layer && layer->layerStyle()) {
-        KisPSDLayerStyleSP clone = layer->layerStyle()->clone();
+        KisPSDLayerStyleSP clone = layer->layerStyle()->clone().dynamicCast<KisPSDLayerStyle>();
         clone->setName(i18nc("Auto-generated layer style name for embedded styles (style itself)", "<%1> (embedded)", layer->name()));
         m_layerStyles << clone;
         setValid(true);
@@ -158,7 +158,7 @@ void KisPSDLayerStyleCollectionResource::assignAllLayerStyles(KisNodeSP root)
 
         Q_FOREACH (KisPSDLayerStyleSP style, m_layerStyles) {
             if (style->uuid() == uuid) {
-                layer->setLayerStyle(style->clone());
+                layer->setLayerStyle(style->clone().dynamicCast<KisPSDLayerStyle>());
                 found = true;
                 break;
             }

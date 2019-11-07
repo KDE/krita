@@ -334,7 +334,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice *io)
                 layerStyle->setName(layer->name());
 
                 allStylesForServer << layerStyle;
-                layer->setLayerStyle(layerStyle->clone());
+                layer->setLayerStyle(layerStyle->clone().dynamicCast<KisPSDLayerStyle>());
             } else {
                 warnKrita << "WARNING: Couldn't read layer style!" << ppVar(serializer.styles());
             }

@@ -21,25 +21,26 @@
 
 #include <QTimer>
 
-
 #include <kis_debug.h>
-#include <kpluginfactory.h>
 #include <klocalizedstring.h>
+#include <kpluginfactory.h>
 
 #include <KoDockFactoryBase.h>
 
+#include "KisViewManager.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "kis_global.h"
 #include "kis_types.h"
-#include "KisViewManager.h"
 
 #include "recorderdocker_dock.h"
 #include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(RecorderDockerPluginFactory, "krita_recorderdocker.json", registerPlugin<RecorderDockerPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(RecorderDockerPluginFactory, "krita_recorderdocker.json",
+                           registerPlugin<RecorderDockerPlugin>();)
 
-class RecorderDockerDockFactory : public KoDockFactoryBase {
+class RecorderDockerDockFactory : public KoDockFactoryBase
+{
 public:
     RecorderDockerDockFactory()
     {
@@ -47,7 +48,7 @@ public:
 
     QString id() const override
     {
-        return QString( "RecorderDocker" );
+        return QString("RecorderDocker");
     }
 
     virtual Qt::DockWidgetArea defaultDockWidgetArea() const
@@ -57,7 +58,7 @@ public:
 
     QDockWidget* createDockWidget() override
     {
-        RecorderDockerDock * dockWidget = new RecorderDockerDock();
+        RecorderDockerDock* dockWidget = new RecorderDockerDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -67,13 +68,11 @@ public:
     {
         return DockMinimized;
     }
+
 private:
-
-
 };
 
-
-RecorderDockerPlugin::RecorderDockerPlugin(QObject *parent, const QVariantList &)
+RecorderDockerPlugin::RecorderDockerPlugin(QObject* parent, const QVariantList&)
     : QObject(parent)
 {
     KoDockRegistry::instance()->add(new RecorderDockerDockFactory());

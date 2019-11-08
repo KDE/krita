@@ -25,23 +25,30 @@
 #include <QSet>
 #include <QSignalMapper>
 #include "kis_keyframe_channel.h"
+#include "KisNodeDisplayModeAdapter.h"
 
 
 struct TimelineNodeListKeeper::Private
 {
     Private(TimelineNodeListKeeper *_q,
             ModelWithExternalNotifications *_model,
-            KisDummiesFacadeBase *_dummiesFacade)
+            KisDummiesFacadeBase *_dummiesFacade,
+            KisNodeDisplayModeAdapter *_displayModeAdapter)
         : q(_q),
           model(_model),
           dummiesFacade(_dummiesFacade),
+          displayModeAdapter(_displayModeAdapter),
+          showGlobalSelectionMask(_displayModeAdapter->showGlobalSelectionMask()),
           converter(dummiesFacade)
     {
+        converter.setShowGlobalSelectionMask(showGlobalSelectionMask);
     }
 
     TimelineNodeListKeeper *q;
     ModelWithExternalNotifications *model;
     KisDummiesFacadeBase *dummiesFacade;
+    KisNodeDisplayModeAdapter *displayModeAdapter;
+    bool showGlobalSelectionMask;
 
     TimelineFramesIndexConverter converter;
 
@@ -61,10 +68,17 @@ struct TimelineNodeListKeeper::Private
 
     void tryConnectDummy(KisNodeDummy *dummy);
     void disconnectDummy(KisNodeDummy *dummy);
+
+    void findOtherLayers(KisNodeDummy *root,
+                         TimelineNodeListKeeper::OtherLayersList *list,
+                         const QString &prefix);
+
 };
 
-TimelineNodeListKeeper::TimelineNodeListKeeper(ModelWithExternalNotifications *model, KisDummiesFacadeBase *dummiesFacade)
-    : m_d(new Private(this, model, dummiesFacade))
+TimelineNodeListKeeper::TimelineNodeListKeeper(ModelWithExternalNotifications *model,
+                                               KisDummiesFacadeBase *dummiesFacade,
+                                               KisNodeDisplayModeAdapter *displayModeAdapter)
+    : m_d(new Private(this, model, dummiesFacade, displayModeAdapter))
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->dummiesFacade);
 
@@ -78,6 +92,8 @@ TimelineNodeListKeeper::TimelineNodeListKeeper(ModelWithExternalNotifications *m
     m_d->populateDummiesList();
 
     connect(&m_d->dummiesUpdateMapper, SIGNAL(mapped(QObject*)), SLOT(slotUpdateDummyContent(QObject*)));
+
+    connect(m_d->displayModeAdapter, SIGNAL(sigNodeDisplayModeChanged(bool, bool)), SLOT(slotDisplayModeChanged()));
 }
 
 TimelineNodeListKeeper::~TimelineNodeListKeeper()
@@ -220,13 +236,35 @@ void TimelineNodeListKeeper::slotDummyChanged(KisNodeDummy *dummy)
     }
 }
 
-void findOtherLayers(KisNodeDummy *root,
-                     TimelineNodeListKeeper::OtherLayersList *list,
-                     const QString &prefix)
+void TimelineNodeListKeeper::slotDisplayModeChanged()
+{
+    if (m_d->showGlobalSelectionMask != m_d->displayModeAdapter->showGlobalSelectionMask()) {
+
+        m_d->model->callBeginResetModel();
+
+        Q_FOREACH (KisNodeDummy *dummy, m_d->dummiesList) {
+            m_d->disconnectDummy(dummy);
+        }
+        m_d->dummiesList.clear();
+
+        m_d->showGlobalSelectionMask = m_d->displayModeAdapter->showGlobalSelectionMask();
+        m_d->converter.setShowGlobalSelectionMask(m_d->showGlobalSelectionMask);
+
+        m_d->populateDummiesList();
+
+        m_d->model->callEndResetModel();
+    }
+}
+
+void TimelineNodeListKeeper::Private::findOtherLayers(KisNodeDummy *root,
+                                                      TimelineNodeListKeeper::OtherLayersList *list,
+                                                      const QString &prefix)
 {
     KisNodeSP node = root->node();
 
-    if (root->parent() && !node->useInTimeline()) {
+    if (converter.isDummyAvailableForTimeline(root) &&
+        !root->node()->useInTimeline()) {
+
         *list <<
             TimelineNodeListKeeper::OtherLayer(
                 QString(prefix + node->name()),
@@ -244,6 +282,6 @@ TimelineNodeListKeeper::OtherLayersList
 TimelineNodeListKeeper::otherLayersList() const
 {
     OtherLayersList list;
-    findOtherLayers(m_d->dummiesFacade->rootDummy(), &list, "");
+    m_d->findOtherLayers(m_d->dummiesFacade->rootDummy(), &list, "");
     return list;
 }

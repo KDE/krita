@@ -39,7 +39,9 @@ public:
     void updateActiveDummy(KisNodeDummy *dummy, bool *oldRemoved, bool *newAdded);
     void notifyDummyRemoved(KisNodeDummy *dummy);
 
+    void setShowGlobalSelectionMask(bool value);
 
+    bool isDummyAvailableForTimeline(KisNodeDummy *dummy) const;
     bool isDummyVisible(KisNodeDummy *dummy) const;
 
 private:
@@ -49,6 +51,7 @@ private:
 private:
     KisDummiesFacadeBase *m_dummiesFacade;
     KisNodeDummy *m_activeDummy;
+    bool m_showGlobalSelectionMask;
 };
 
 #endif /* __TIMELINE_FRAMES_INDEX_CONVERTER_H */

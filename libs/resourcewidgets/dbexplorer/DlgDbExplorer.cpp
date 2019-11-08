@@ -77,13 +77,16 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     }
 
     {
-        KisResourceModel *resourcesModel = KisResourceModelProvider::resourceModel(ResourceType::Gradients);
+        KisResourceModel *resourcesModel = KisResourceModelProvider::resourceModel(ResourceType::Brushes);
         m_page->tableResources->setModel(resourcesModel);
         m_page->tableResources->hideColumn(0);
         m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);
 
-        m_page->cmbResourceTypes->setModel(KisResourceModelProvider::resourceModel(ResourceType::Gradients));
+        m_page->cmbResourceTypes->setModel(m_resourceTypeModel);
         m_page->cmbResourceTypes->setModelColumn(KisResourceTypeModel::Name);
+
+        connect(m_page->cmbResourceTypes, SIGNAL(activated(int)), SLOT(slotTbResourceTypeSelected(int)));
+        connect(m_page->tableResources, SIGNAL(clicked(QModelIndex)), SLOT(slotTbResourceItemSelected()));
     }
 
     {
@@ -149,7 +152,7 @@ DlgDbExplorer::~DlgDbExplorer()
 
 void DlgDbExplorer::slotRvResourceTypeSelected(int index)
 {
-    QModelIndex idx = m_page->cmbRvResourceTypes->model()->index(index, KisResourceTypeModel::ResourceType);
+    QModelIndex idx = m_page->cmbResourceTypes->model()->index(index, KisResourceTypeModel::ResourceType);
     QString resourceType = idx.data(Qt::DisplayRole).toString();
     qDebug() << resourceType;
     m_tagModel->setResourceType(idx.data(Qt::DisplayRole).toString());
@@ -159,12 +162,34 @@ void DlgDbExplorer::slotRvResourceTypeSelected(int index)
     KisTagFilterResourceProxyModel *tagFilterModel = new KisTagFilterResourceProxyModel(this);
     tagFilterModel->setSourceModel(resourceModel);
 
-    //KisResourceGridProxyModel *resourceProxyModel = new KisResourceGridProxyModel(this);
-    //resourceProxyModel->setSourceModel(tagFilterModel);
-    //resourceProxyModel->setRowStride(10);
-
-
     m_page->resourceItemView->setModel(tagFilterModel);
+}
+
+void DlgDbExplorer::slotTbResourceTypeSelected(int index)
+{
+    QModelIndex idx = m_page->cmbRvResourceTypes->model()->index(index, KisResourceTypeModel::ResourceType);
+    QString resourceType = idx.data(Qt::DisplayRole).toString();
+    qDebug() << resourceType;
+
+    KisResourceModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
+    m_page->tableResources->setModel(resourceModel);
+    m_page->tableResources->setCurrentIndex(m_page->tableResources->model()->index(0, 0));
+    slotTbResourceItemSelected();
+    m_page->tableResources->resizeColumnsToContents();
+}
+
+void DlgDbExplorer::slotTbResourceItemSelected()
+{
+    QModelIndex idx = m_page->tableResources->selectionModel()->selectedIndexes().first();
+
+    QImage thumb = idx.data(Qt::UserRole + KisResourceModel::Image).value<QImage>();
+    Qt::TransformationMode mode = Qt::SmoothTransformation;
+    if (thumb.size().width() < 100 && thumb.size().height() < 100) {
+        mode = Qt::FastTransformation;
+    }
+
+    m_page->lblThumbnail->setPixmap(QPixmap::fromImage(thumb.scaled(100, 100, Qt::KeepAspectRatio, mode)));
+    //If we could get a list of versions for a given resource, this would be the moment to add them...
 }
 
 void DlgDbExplorer::slotRvTagSelected(int index)

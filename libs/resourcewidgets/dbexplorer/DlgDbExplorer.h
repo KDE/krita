@@ -48,6 +48,9 @@ public:
 
 private Q_SLOTS:
 
+    void slotTbResourceTypeSelected(int index);
+    void slotTbResourceItemSelected();
+
     void slotRvResourceTypeSelected(int index);
     void slotRvTagSelected(int index);
 

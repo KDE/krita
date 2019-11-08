@@ -38,7 +38,7 @@ KisModelIndexConverter::KisModelIndexConverter(KisDummiesFacadeBase *dummiesFaca
 
 inline bool KisModelIndexConverter::checkDummyType(KisNodeDummy *dummy)
 {
-    return !KisNodeManager::isNodeHidden(dummy->node(), !m_showGlobalSelection);
+    return dummy->isGUIVisible(m_showGlobalSelection);
 }
 
 inline bool KisModelIndexConverter::checkDummyMetaObjectType(const QString &type)

@@ -32,6 +32,7 @@
 class KisNodeDummy;
 class KisDummiesFacadeBase;
 class KisAnimationPlayer;
+class KisNodeDisplayModeAdapter;
 
 
 class KRITAANIMATIONDOCKER_EXPORT TimelineFramesModel : public TimelineNodeListKeeper::ModelWithExternalNotifications
@@ -51,7 +52,9 @@ public:
 
     bool hasConnectionToCanvas() const;
 
-    void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageSP image);
+    void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
+                          KisImageSP image,
+                          KisNodeDisplayModeAdapter *displayModeAdapter);
 
     bool canDropFrameData(const QMimeData *data, const QModelIndex &index);
     bool insertOtherLayer(int index, int dstRow);

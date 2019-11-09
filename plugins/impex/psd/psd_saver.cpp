@@ -130,6 +130,7 @@ KisImportExportErrorCode PSDSaver::buildFile(QIODevice *io)
 
     if (colordef.first == COLORMODE_UNKNOWN || colordef.second == 0 || colordef.second == 32) {
         m_image->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb16(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        m_image->waitForDone();
         colordef = colormodelid_to_psd_colormode(m_image->colorSpace()->colorModelId().id(), m_image->colorSpace()->colorDepthId().id());
     }
     header.colormode = colordef.first;

@@ -566,7 +566,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
         QByteArray hash = hashGenerator->generateHash(data);
 
         if (m_profileCache.contains(hash)) {
-            if (device->setProfile(m_profileCache[hash])) {
+            if (device->setProfile(m_profileCache[hash], 0)) {
                 return true;
             }
         }
@@ -574,7 +574,7 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
             // Create a colorspace with the embedded profile
             const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), data);
             m_profileCache[hash] = profile;
-            if (device->setProfile(profile)) {
+            if (device->setProfile(profile, 0)) {
                 return true;
             }
 

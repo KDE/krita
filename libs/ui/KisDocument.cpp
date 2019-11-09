@@ -2008,6 +2008,8 @@ bool KisDocument::newImage(const QString& name,
     image->setResolution(imageResolution, imageResolution);
 
     image->assignImageProfile(cs->profile());
+    image->waitForDone();
+
     documentInfo()->setAboutInfo("title", name);
     documentInfo()->setAboutInfo("abstract", description);
 

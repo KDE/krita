@@ -726,7 +726,7 @@ void KisToolTransform::deactivate()
 
 void KisToolTransform::requestUndoDuringStroke()
 {
-    if (!m_strokeId) return;
+    if (!m_strokeId || !m_transaction.rootNode()) return;
 
     if (m_changesTracker.isEmpty()) {
         cancelStroke();
@@ -742,7 +742,7 @@ void KisToolTransform::requestStrokeEnd()
 
 void KisToolTransform::requestStrokeCancellation()
 {
-    if (m_currentArgs.isIdentity()) {
+    if (!m_transaction.rootNode() || m_currentArgs.isIdentity()) {
         cancelStroke();
     } else {
         slotResetTransform();
@@ -801,8 +801,13 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
 
     TransformStrokeStrategy *strategy = new TransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data());
     connect(strategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP, QPainterPath)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP, QPainterPath)));
-    connect(strategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs)));
+    connect(strategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
 
+    // save unique identifier of the stroke so we could
+    // recognize it when sigTransactionGenerated() is
+    // recieved (theoretically, the user can start two
+    // strokes at the same time, if he is quick enough)
+    m_strokeStrategyCookie = strategy;
     m_strokeId = image()->startStroke(strategy);
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
@@ -814,22 +819,23 @@ void KisToolTransform::endStroke()
 {
     if (!m_strokeId) return;
 
-    if (!m_currentArgs.isIdentity()) {
+    if (m_transaction.rootNode() && !m_currentArgs.isIdentity()) {
         image()->addJob(m_strokeId,
                         new TransformStrokeStrategy::TransformAllData(m_currentArgs));
-        image()->endStroke(m_strokeId);
-    } else {
-        image()->cancelStroke(m_strokeId);
     }
+    image()->endStroke(m_strokeId);
 
+    m_strokeStrategyCookie = 0;
     m_strokeId.clear();
     m_changesTracker.reset();
     m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
     outlineChanged();
 }
 
-void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args)
+void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *strokeStrategyCookie)
 {
+    if (!m_strokeId || strokeStrategyCookie != m_strokeStrategyCookie) return;
+
     if (transaction.transformedNodes().isEmpty()) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         kisCanvas->viewManager()->
@@ -883,21 +889,17 @@ void KisToolTransform::cancelStroke()
 {
     if (!m_strokeId) return;
 
-    if (m_currentArgs.continuedTransform()) {
-        m_currentArgs.restoreContinuedState();
-        endStroke();
-    } else {
-        image()->cancelStroke(m_strokeId);
-        m_strokeId.clear();
-        m_changesTracker.reset();
-        m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
-        outlineChanged();
-    }
+    image()->cancelStroke(m_strokeId);
+    m_strokeStrategyCookie = 0;
+    m_strokeId.clear();
+    m_changesTracker.reset();
+    m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
+    outlineChanged();
 }
 
 void KisToolTransform::commitChanges()
 {
-    if (!m_strokeId) return;
+    if (!m_strokeId || !m_transaction.rootNode()) return;
 
     m_changesTracker.commitConfig(toQShared(m_currentArgs.clone()));
 }
@@ -1033,6 +1035,8 @@ void KisToolTransform::slotApplyTransform()
 
 void KisToolTransform::slotResetTransform()
 {
+    if (!m_strokeId || !m_transaction.rootNode()) return;
+
     if (m_currentArgs.continuedTransform()) {
         ToolTransformArgs::TransformMode savedMode = m_currentArgs.mode();
 
@@ -1068,7 +1072,7 @@ void KisToolTransform::slotResetTransform()
 
 void KisToolTransform::slotRestartTransform()
 {
-    if (!m_strokeId) return;
+    if (!m_strokeId || !m_transaction.rootNode()) return;
 
     KisNodeSP root = m_transaction.rootNode();
     KIS_ASSERT_RECOVER_RETURN(root); // the stroke is guaranteed to be started by an 'if' above

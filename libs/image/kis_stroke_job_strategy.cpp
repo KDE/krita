@@ -24,13 +24,15 @@
 KisStrokeJobData::KisStrokeJobData(Sequentiality sequentiality,
                                    Exclusivity exclusivity)
     : m_sequentiality(sequentiality),
-      m_exclusivity(exclusivity)
+      m_exclusivity(exclusivity),
+      m_isCancellable(true)
 {
 }
 
 KisStrokeJobData::KisStrokeJobData(const KisStrokeJobData &rhs)
     : m_sequentiality(rhs.m_sequentiality),
-      m_exclusivity(rhs.m_exclusivity)
+      m_exclusivity(rhs.m_exclusivity),
+      m_isCancellable(rhs.m_isCancellable)
 {
 }
 
@@ -57,6 +59,16 @@ KisStrokeJobData* KisStrokeJobData::createLodClone(int levelOfDetail)
 {
     Q_UNUSED(levelOfDetail);
     return 0;
+}
+
+bool KisStrokeJobData::isCancellable() const
+{
+    return m_isCancellable;
+}
+
+void KisStrokeJobData::setCancellable(bool value)
+{
+    m_isCancellable = value;
 }
 
 KisStrokeJobStrategy::KisStrokeJobStrategy()

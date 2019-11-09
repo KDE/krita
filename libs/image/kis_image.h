@@ -366,6 +366,11 @@ public:
     void shearNode(KisNodeSP node, double angleX, double angleY, KisSelectionSP selection);
 
     /**
+     * Convert image projection to \p dstColorSpace, keeping all the layers intouched.
+     */
+    void convertImageProjectionColorSpace(const KoColorSpace *dstColorSpace);
+
+    /**
      * Convert the image and all its layers to the dstColorSpace
      */
     void convertImageColorSpace(const KoColorSpace *dstColorSpace,
@@ -373,16 +378,27 @@ public:
                                 KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
-     * Set the color space of  the projection (and the root layer)
-     * to dstColorSpace. No conversion is done for other layers,
-     * their colorspace can differ.
-     * @note No conversion is done, only regeneration, so no rendering
-     * intent needed
+     * Convert layer and all its child layers to dstColorSpace
      */
-    void convertProjectionColorSpace(const KoColorSpace *dstColorSpace);
+    void convertLayerColorSpace(KisNodeSP node,
+                                const KoColorSpace *dstColorSpace,
+                                KoColorConversionTransformation::Intent renderingIntent,
+                                KoColorConversionTransformation::ConversionFlags conversionFlags);
+
 
     // Get the profile associated with this image
     const KoColorProfile *  profile() const;
+
+    /**
+     * Set the profile of the layer and all its children to the new profile.
+     * It doesn't do any pixel conversion.
+     *
+     * This is essential if you have loaded an image that didn't
+     * have an embedded profile to which you want to attach the right profile.
+     *
+     * @returns false if the profile could not be assigned
+     */
+    bool assignLayerProfile(KisNodeSP node, const KoColorProfile *profile);
 
     /**
      * Set the profile of the image to the new profile and do the same for
@@ -392,12 +408,9 @@ public:
      * This is essential if you have loaded an image that didn't
      * have an embedded profile to which you want to attach the right profile.
      *
-     * This does not create an undo action; only call it when creating or
-     * loading an image.
-     *
      * @returns false if the profile could not be assigned
      */
-    bool assignImageProfile(const KoColorProfile *profile);
+    bool assignImageProfile(const KoColorProfile *profile, bool blockAllUpdates = false);
 
     /**
      * Returns the current undo adapter. You can add new commands to the
@@ -1151,7 +1164,6 @@ private:
     friend class KisImageResizeCommand;
     void setSize(const QSize& size);
 
-    friend class KisImageSetProjectionColorSpaceCommand;
     void setProjectionColorSpace(const KoColorSpace * colorSpace);
 
 

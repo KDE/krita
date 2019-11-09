@@ -492,7 +492,7 @@ public:
      * Changes the profile of the colorspace of this paint device to the given
      * profile. If the given profile is 0, nothing happens.
      */
-    bool setProfile(const KoColorProfile * profile);
+    bool setProfile(const KoColorProfile * profile, KUndo2Command *parentCommand);
 
     /**
      * Fill this paint device with the data from image; starting at (offsetX, offsetY)

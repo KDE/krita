@@ -55,7 +55,7 @@ struct KisColorizeMask::Private
         : q(_q),
           coloringProjection(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
           fakePaintDevice(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
-          filteredSource(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
+          filteredSource(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8())),
           needAddCurrentKeyStroke(false),
           showKeyStrokes(true),
           showColoring(true),
@@ -223,6 +223,7 @@ struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
         }
 
         m_node->setNeedsUpdate(true);
+        emit m_node->sigKeyStrokesListChanged();
     }
 
     void redo() override {
@@ -241,6 +242,7 @@ struct SetKeyStrokesColorSpaceCommand : public KUndo2Command {
         }
 
         m_node->setNeedsUpdate(true);
+        emit m_node->sigKeyStrokesListChanged();
     }
 
 private:
@@ -255,12 +257,10 @@ private:
 };
 
 
-void KisColorizeMask::setProfile(const KoColorProfile *profile)
+void KisColorizeMask::setProfile(const KoColorProfile *profile, KUndo2Command *parentCommand)
 {
-    // WARNING: there is no undo information, used only while loading!
-
-    m_d->fakePaintDevice->setProfile(profile);
-    m_d->coloringProjection->setProfile(profile);
+    m_d->fakePaintDevice->setProfile(profile, parentCommand);
+    m_d->coloringProjection->setProfile(profile, parentCommand);
 
     for (auto stroke : m_d->keyStrokes) {
         stroke.color.setProfile(profile);

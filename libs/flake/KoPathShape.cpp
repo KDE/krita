@@ -60,8 +60,8 @@ static bool qIsNaNPoint(const QPointF &p) {
 
 KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
     : KoTosContainerPrivate(q),
-    fillRule(Qt::OddEvenFill),
-    autoFillMarkers(false)
+      fillRule(Qt::OddEvenFill),
+      autoFillMarkers(false)
 {
 }
 
@@ -505,15 +505,15 @@ QPainterPath KoPathShape::outline() const
                 Q_ASSERT(!qIsNaNPoint(currPoint->controlPoint1()));
                 Q_ASSERT(!qIsNaNPoint(currPoint->point()));
                 path.cubicTo(
-                    lastPoint->controlPoint2(),
-                    currPoint->controlPoint1(),
-                    currPoint->point());
+                            lastPoint->controlPoint2(),
+                            currPoint->controlPoint1(),
+                            currPoint->point());
             } else if (activeCP || currPoint->activeControlPoint1()) {
                 Q_ASSERT(!qIsNaNPoint(lastPoint->controlPoint2()));
                 Q_ASSERT(!qIsNaNPoint(currPoint->controlPoint1()));
                 path.quadTo(
-                    activeCP ? lastPoint->controlPoint2() : currPoint->controlPoint1(),
-                    currPoint->point());
+                            activeCP ? lastPoint->controlPoint2() : currPoint->controlPoint1(),
+                            currPoint->point());
             } else {
                 Q_ASSERT(!qIsNaNPoint(currPoint->point()));
                 path.lineTo(currPoint->point());
@@ -524,16 +524,16 @@ QPainterPath KoPathShape::outline() const
                 Q_ASSERT(!qIsNaNPoint(firstPoint->point()));
                 if (currPoint->activeControlPoint2() && firstPoint->activeControlPoint1()) {
                     path.cubicTo(
-                        currPoint->controlPoint2(),
-                        firstPoint->controlPoint1(),
-                        firstPoint->point());
+                                currPoint->controlPoint2(),
+                                firstPoint->controlPoint1(),
+                                firstPoint->point());
                 }
                 else if (currPoint->activeControlPoint2() || firstPoint->activeControlPoint1()) {
                     Q_ASSERT(!qIsNaNPoint(currPoint->point()));
                     Q_ASSERT(!qIsNaNPoint(currPoint->controlPoint1()));
                     path.quadTo(
-                        currPoint->activeControlPoint2() ? currPoint->controlPoint2() : firstPoint->controlPoint1(),
-                        firstPoint->point());
+                                currPoint->activeControlPoint2() ? currPoint->controlPoint2() : firstPoint->controlPoint1(),
+                                firstPoint->point());
                 }
                 path.closeSubpath();
             }
@@ -1078,7 +1078,7 @@ bool KoPathShape::breakAfter(const KoPathPointIndex &pointIndex)
     KoSubpath *subpath = d->subPath(pointIndex.first);
 
     if (!subpath || pointIndex.second < 0 || pointIndex.second > subpath->size() - 2
-        || isClosedSubpath(pointIndex.first))
+            || isClosedSubpath(pointIndex.first))
         return false;
 
     KoSubpath * newSubpath = new KoSubpath;
@@ -1183,7 +1183,7 @@ KoPathPointIndex KoPathShape::closeSubpath(const KoPathPointIndex &pointIndex)
     KoSubpath *subpath = d->subPath(pointIndex.first);
 
     if (!subpath || pointIndex.second < 0 || pointIndex.second >= subpath->size()
-        || isClosedSubpath(pointIndex.first))
+            || isClosedSubpath(pointIndex.first))
         return KoPathPointIndex(-1, -1);
 
     KoPathPoint * oldStartPoint = subpath->first();
@@ -1438,13 +1438,15 @@ QString KoPathShape::toString(const QTransform &matrix) const
                 const bool isCubic = activeControlPoint2 && currPoint->activeControlPoint1();
                 KoPathSegment cubicSeg = isCubic ? KoPathSegment(lastPoint, currPoint)
                                                  : KoPathSegment(lastPoint, currPoint).toCubic();
-                const QPointF cp1 = matrix.map(cubicSeg.first()->controlPoint2());
-                const QPointF cp2 = matrix.map(cubicSeg.second()->controlPoint1());
-                const QPointF p = matrix.map(cubicSeg.second()->point());
-                pathString += QString("C%1 %2 %3 %4 %5 %6")
-                     .arg(cp1.x()).arg(cp1.y())
-                     .arg(cp2.x()).arg(cp2.y())
-                     .arg(p.x()).arg(p.y());
+                if (cubicSeg.first()  && cubicSeg.second()) {
+                    const QPointF cp1 = matrix.map(cubicSeg.first()->controlPoint2());
+                    const QPointF cp2 = matrix.map(cubicSeg.second()->controlPoint1());
+                    const QPointF p = matrix.map(cubicSeg.second()->point());
+                    pathString += QString("C%1 %2 %3 %4 %5 %6")
+                            .arg(cp1.x()).arg(cp1.y())
+                            .arg(cp2.x()).arg(cp2.y())
+                            .arg(p.x()).arg(p.y());
+                }
             }
             // end point of line segment!
             else {
@@ -1460,13 +1462,16 @@ QString KoPathShape::toString(const QTransform &matrix) const
                     const bool isCubic = currPoint->activeControlPoint2() && firstPoint->activeControlPoint1();
                     KoPathSegment cubicSeg = isCubic ? KoPathSegment(currPoint, firstPoint)
                                                      : KoPathSegment(currPoint, firstPoint).toCubic();
-                    const QPointF cp1 = matrix.map(cubicSeg.first()->controlPoint2());
-                    const QPointF cp2 = matrix.map(cubicSeg.second()->controlPoint1());
-                    const QPointF p = matrix.map(cubicSeg.second()->point());
-                    pathString += QString("C%1 %2 %3 %4 %5 %6")
-                         .arg(cp1.x()).arg(cp1.y())
-                         .arg(cp2.x()).arg(cp2.y())
-                         .arg(p.x()).arg(p.y());
+                    if (cubicSeg.first()  && cubicSeg.second()) {
+                        const QPointF cp1 = matrix.map(cubicSeg.first()->controlPoint2());
+                        const QPointF cp2 = matrix.map(cubicSeg.second()->controlPoint1());
+
+                        const QPointF p = matrix.map(cubicSeg.second()->point());
+                        pathString += QString("C%1 %2 %3 %4 %5 %6")
+                                .arg(cp1.x()).arg(cp1.y())
+                                .arg(cp2.x()).arg(cp2.y())
+                                .arg(p.x()).arg(p.y());
+                    }
                 }
                 pathString += QString("Z");
             }
@@ -1507,7 +1512,7 @@ QString KoPathShapePrivate::nodeTypes() const
             }
 
             if ((*it)->properties() & KoPathPoint::StopSubpath
-                && (*it)->properties() & KoPathPoint::CloseSubpath) {
+                    && (*it)->properties() & KoPathPoint::CloseSubpath) {
                 KoPathPoint * firstPoint = (*pathIt)->first();
                 types.append(nodeType(firstPoint));
             }
@@ -1546,7 +1551,7 @@ void KoPathShapePrivate::loadNodeTypes(const KoXmlElement &element)
                 }
 
                 if ((*it)->properties() & KoPathPoint::StopSubpath
-                    && (*it)->properties() & KoPathPoint::CloseSubpath) {
+                        && (*it)->properties() & KoPathPoint::CloseSubpath) {
                     ++nIt;
                     updateNodeType((*pathIt)->first(), *nIt);
                 }

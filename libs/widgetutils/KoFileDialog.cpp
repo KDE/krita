@@ -164,7 +164,7 @@ void KoFileDialog::createFileDialog()
     d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, dontUseNative ? true : false);
 
 #ifdef Q_OS_MACOS
-    d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, true));
+    d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, true);
     QList<QUrl> urls = d->fileDialog->sidebarUrls();
     QUrl volumes = QUrl::fromLocalFile("/Volumes");
     if (!urls.contains(volumes)) {

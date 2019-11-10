@@ -39,6 +39,11 @@ class KisColorButton::KisColorButtonPrivate
 {
 public:
     KisColorButtonPrivate(KisColorButton *q);
+    ~KisColorButtonPrivate() {
+        if (dialogPtr) {
+            dialogPtr.data()->close();
+        }
+    }
 
     void _k_chooseColor();
     void _k_colorChosen();

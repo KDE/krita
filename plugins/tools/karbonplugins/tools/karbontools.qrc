@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
         <file alias="calligraphy.png">22-actions-calligraphy.png</file>
-        <file alias="pattern.png">22-actions-pattern.png</file>
-        <file alias="tool_imageeffects.png">32-actions-tool_imageeffects.png</file>
     </qresource>
 </RCC>

@@ -37,7 +37,6 @@ public:
     void resetRotationCenterButtons();
     void setDefaultWarpPoints(int pointsPerLine = -1);
     void setTooBigLabelVisible(bool value);
-    bool showDecorations() const;
     bool workRecursively() const;
 
 public Q_SLOTS:

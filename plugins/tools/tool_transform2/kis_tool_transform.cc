@@ -213,13 +213,6 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
         currentStrategy()->externalConfigChanged();
     }
 
-    gc.save();
-    if (m_optionsWidget && m_optionsWidget->showDecorations()) {
-        gc.setOpacity(0.3);
-        gc.fillPath(m_selectionPath, Qt::black);
-    }
-    gc.restore();
-
     currentStrategy()->paint(gc);
 
 
@@ -651,16 +644,6 @@ void KisToolTransform::initGuiAfterTransformMode()
     setFunctionalCursor();
 }
 
-void KisToolTransform::updateSelectionPath(const QPainterPath &selectionOutline)
-{
-    m_selectionPath = selectionOutline;
-
-    const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
-    QTransform i2f = converter->imageToDocumentTransform() * converter->documentToFlakeTransform();
-
-    m_selectionPath = i2f.map(selectionOutline);
-}
-
 void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
 {
     QImage origImg;
@@ -800,7 +783,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
     }
 
     TransformStrokeStrategy *strategy = new TransformStrokeStrategy(mode, m_workRecursively, m_currentArgs.filterId(), forceReset, currentNode, selection, image().data(), image().data());
-    connect(strategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP, QPainterPath)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP, QPainterPath)));
+    connect(strategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP)));
     connect(strategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
 
     // save unique identifier of the stroke so we could
@@ -812,7 +795,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_changesTracker.isEmpty());
 
-    slotPreviewDeviceGenerated(0, QPainterPath());
+    slotPreviewDeviceGenerated(0);
 }
 
 void KisToolTransform::endStroke()
@@ -867,7 +850,7 @@ void KisToolTransform::slotTransactionGenerated(TransformTransactionProperties t
     }
 }
 
-void KisToolTransform::slotPreviewDeviceGenerated(KisPaintDeviceSP device, const QPainterPath &selectionOutline)
+void KisToolTransform::slotPreviewDeviceGenerated(KisPaintDeviceSP device)
 {
     if (device && device->exactBounds().isEmpty()) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -880,7 +863,6 @@ void KisToolTransform::slotPreviewDeviceGenerated(KisPaintDeviceSP device, const
         cancelStroke();
     } else {
         initThumbnailImage(device);
-        updateSelectionPath(selectionOutline);
         initGuiAfterTransformMode();
     }
 }

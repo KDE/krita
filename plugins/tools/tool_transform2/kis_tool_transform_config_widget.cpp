@@ -44,7 +44,6 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
       m_configChanged(false)
 {
     setupUi(this);
-    showDecorationsBox->setIcon(KisIconUtils::loadIcon("krita_tool_transform"));
     chkWorkRecursively->setIcon(KisIconUtils::loadIcon("krita_tool_transform_recursive"));
     flipXButton->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_x"));
     flipYButton->setIcon(KisIconUtils::loadIcon("transform_icons_mirror_y"));
@@ -299,9 +298,6 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(cageButton, SIGNAL(clicked(bool)), this, SLOT(slotSetCageModeButtonClicked(bool)));
     connect(perspectiveTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetPerspectiveModeButtonClicked(bool)));
     connect(liquifyButton, SIGNAL(clicked(bool)), this, SLOT(slotSetLiquifyModeButtonClicked(bool)));
-
-    // Connect Decorations switcher
-    connect(showDecorationsBox, SIGNAL(toggled(bool)), canvas, SLOT(updateCanvas()));
 
     tooBigLabelWidget->hide();
 
@@ -703,11 +699,6 @@ bool KisToolTransformConfigWidget::workRecursively() const
 void KisToolTransformConfigWidget::setTooBigLabelVisible(bool value)
 {
     tooBigLabelWidget->setVisible(value);
-}
-
-bool KisToolTransformConfigWidget::showDecorations() const
-{
-    return showDecorationsBox->isChecked();
 }
 
 void KisToolTransformConfigWidget::blockNotifications()

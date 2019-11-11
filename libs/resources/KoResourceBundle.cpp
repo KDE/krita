@@ -48,12 +48,10 @@
 #include <kis_debug.h>
 
 KoResourceBundle::KoResourceBundle(QString const& fileName)
-    : KoResource(fileName),
+    : m_filename(fileName),
       m_bundleVersion("1")
 {
-    setName(QFileInfo(fileName).baseName());
     m_metadata[KisResourceStorage::s_meta_generator] = "Krita (" + KritaVersionWrapper::versionString(true) + ")";
-
 }
 
 KoResourceBundle::~KoResourceBundle()
@@ -67,12 +65,11 @@ QString KoResourceBundle::defaultFileExtension() const
 
 bool KoResourceBundle::load()
 {
-    if (filename().isEmpty()) return false;
-    QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+    if (m_filename.isEmpty()) return false;
+    QScopedPointer<KoStore> resourceStore(KoStore::createStore(m_filename, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
 
     if (!resourceStore || resourceStore->bad()) {
-        qWarning() << "Could not open store on bundle" << filename();
-        setValid(false);
+        qWarning() << "Could not open store on bundle" << m_filename;
         return false;
 
     }
@@ -82,7 +79,7 @@ bool KoResourceBundle::load()
 
         if (resourceStore->open("META-INF/manifest.xml")) {
             if (!m_manifest.load(resourceStore->device())) {
-                qWarning() << "Could not open manifest for bundle" << filename();
+                qWarning() << "Could not open manifest for bundle" << m_filename;
                 return false;
             }
             resourceStore->close();
@@ -127,8 +124,6 @@ bool KoResourceBundle::load()
             m_metadata.insert(KisResourceStorage::s_meta_version, "1");
         }
 
-        setValid(true);
-        setImage(m_thumbnail);
     }
 
     return true;
@@ -197,14 +192,14 @@ bool saveResourceToStore(KoResourceSP resource, KoStore *store, const QString &r
 
 bool KoResourceBundle::save()
 {
-    if (filename().isEmpty()) return false;
+    if (m_filename.isEmpty()) return false;
 
     setMetaData(KisResourceStorage::s_meta_dc_date, QDate::currentDate().toString("dd/MM/yyyy"));
 
     QDir bundleDir = KoResourcePaths::saveLocation("data", "bundles");
     bundleDir.cdUp();
 
-    QScopedPointer<KoStore> store(KoStore::createStore(filename(), KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));
+    QScopedPointer<KoStore> store(KoStore::createStore(m_filename, KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));
 
     if (!store || store->bad()) return false;
 
@@ -214,13 +209,13 @@ bool KoResourceBundle::save()
     //            KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
     //            Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
     //                KoResourceSP res = gradientServer->resourceByMD5(ref.md5sum);
-    //                if (!res) res = gradientServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
+    //                if (!res) res = gradientServer->resourceByFilename(QFileInfo(ref.resourcePath).m_filename);
     //                if (!saveResourceToStore(res, store.data(), ResourceType::Gradients)) {
     //                    if (res) {
     //                        qWarning() << "Could not save resource" << resType << res->name();
     //                    }
     //                    else {
-    //                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+    //                        qWarning() << "could not find resource for" << QFileInfo(ref.resourcePath).m_filename;
     //                    }
     //                }
     //            }
@@ -229,7 +224,7 @@ bool KoResourceBundle::save()
     //            KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
     //            Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
     //                KoResourceSP res = patternServer->resourceByMD5(ref.md5sum);
-    //                if (!res) res = patternServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
+    //                if (!res) res = patternServer->resourceByFilename(QFileInfo(ref.resourcePath).m_filename);
     //                if (!saveResourceToStore(res, store.data(), ResourceType::Patterns)) {
     //                    if (res) {
     //                        qWarning() << "Could not save resource" << resType << res->name();
@@ -368,8 +363,6 @@ void KoResourceBundle::setThumbnail(QString filename)
         gc.fillRect(0, 0, 256, 256, Qt::red);
         gc.end();
     }
-
-    setImage(m_thumbnail);
 }
 
 void KoResourceBundle::writeMeta(const QString &metaTag, KoXmlWriter *writer)
@@ -396,7 +389,7 @@ bool KoResourceBundle::readMetaData(KoStore *resourceStore)
     if (resourceStore->open("meta.xml")) {
         KoXmlDocument doc;
         if (!doc.setContent(resourceStore->device())) {
-            qWarning() << "Could not parse meta.xml for" << filename();
+            qWarning() << "Could not parse meta.xml for" << m_filename;
             return false;
         }
         // First find the manifest:manifest node.
@@ -411,7 +404,7 @@ bool KoResourceBundle::readMetaData(KoStore *resourceStore)
         }
 
         if (n.isNull()) {
-            qWarning() << "Could not find manifest node for bundle" << filename();
+            qWarning() << "Could not find manifest node for bundle" << m_filename;
             return false;
         }
 
@@ -503,13 +496,13 @@ KoResourceBundleManifest &KoResourceBundle::manifest()
 
 KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QString &filepath)
 {
-    if (filename().isEmpty()) return 0;
+    if (m_filename.isEmpty()) return 0;
 
 
-    QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+    QScopedPointer<KoStore> resourceStore(KoStore::createStore(m_filename, KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
 
     if (!resourceStore || resourceStore->bad()) {
-        qWarning() << "Could not open store on bundle" << filename();
+        qWarning() << "Could not open store on bundle" << m_filename;
         return 0;
     }
 
@@ -527,4 +520,14 @@ KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QStri
     resourceStore->close();
 
     return res;
+}
+
+QImage KoResourceBundle::image() const
+{
+    return m_thumbnail;
+}
+
+QString KoResourceBundle::filename() const
+{
+    return m_filename;
 }

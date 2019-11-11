@@ -38,7 +38,7 @@ class KoStore;
  * some metadata about the creator of the bundle and a manifest file
  * that lists the contained resources.
  */
-class KRITARESOURCES_EXPORT KoResourceBundle : public KoResource
+class KRITARESOURCES_EXPORT KoResourceBundle
 {
 
 public:
@@ -50,28 +50,28 @@ public:
     /**
      * @brief ~ResourceBundle : Dtor
      */
-    ~KoResourceBundle() override;
+    virtual ~KoResourceBundle();
 
     /**
      * @brief defaultFileExtension
      * @return the default file extension which should be when saving the resource
      */
-    QString defaultFileExtension() const override;
+    QString defaultFileExtension() const;
 
     /**
      * @brief load : Load this resource.
      * @return true if succeed, false otherwise.
      */
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
+    bool load();
+    bool loadFromDevice(QIODevice *dev);
 
     /**
      * @brief save : Save this resource.
      * @return true if succeed, false otherwise.
      */
-    bool save() override;
+    bool save();
 
-    bool saveToDevice(QIODevice* dev) const override;
+    bool saveToDevice(QIODevice* dev) const;
 
     /**
      * @brief addMeta : Add a Metadata to the resource
@@ -111,6 +111,10 @@ public:
 
     KoResourceSP resource(const QString &resourceType, const QString &filepath);
 
+    QImage image() const;
+
+    QString filename() const;
+
 private:
 
     void writeMeta(const QString &metaTag, KoXmlWriter *writer);
@@ -128,6 +132,7 @@ private:
     QList<QByteArray> m_palettesMd5Installed;
     QList<QByteArray> m_workspacesMd5Installed;
     QList<QByteArray> m_presetsMd5Installed;
+    QString m_filename;
     QString m_bundleVersion;
 
 };

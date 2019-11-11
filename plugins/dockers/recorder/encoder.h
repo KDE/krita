@@ -24,27 +24,52 @@
 #include <string.h>
 #include <unistd.h>
 #include <vpx/vpx_encoder.h>
+#include <array>
+#include <QSemaphore>
+#include <QThread>
+#include <atomic>
 
-class Encoder
+class Encoder : QThread
 {
-    int m_width;
-    int m_height;
+    Q_OBJECT
+    class RingBufferItem
+    {
+    public:
+        enum class Command{
+            Payload,
+            Finish
+        };
+
+        Command m_command;
+        uint8_t *m_payload;
+    };
+
+    unsigned int m_width;
+    unsigned int m_height;
     vpx_codec_ctx m_codec;
     vpx_image_t m_raw;
-    vpx_codec_err_t m_res;
     vpx_codec_enc_cfg_t m_cfg;
     int m_frameCount = 0;
     int m_keyframeInterval = 4;
-    FILE* m_file = nullptr;
+    static constexpr int m_ringBufferSize = 5;
+    std::array<RingBufferItem, m_ringBufferSize> m_ringBuffer;
+    int m_head = 0;
+    int m_tail = 0;
+    QSemaphore m_full;
+    QSemaphore m_empty;
+    QString m_filename;
+    std::atomic<bool> *m_shouldFinish;
 
 public:
     Encoder()
     {
     }
 
-    void init(const char* filename, int width, int height);
+    void run() override;
 
-    void pushFrame(uint8_t* data[3], uint32_t size);
+    void init(const QString &filename, unsigned int width, unsigned int height);
+
+    void pushFrame(uint8_t* data, unsigned int m_width, unsigned int m_height, uint32_t size);
 
     void finish();
 };

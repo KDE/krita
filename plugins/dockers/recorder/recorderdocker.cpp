@@ -80,7 +80,7 @@ RecorderDockerPlugin::RecorderDockerPlugin(QObject* parent, const QVariantList&)
 
 RecorderDockerPlugin::~RecorderDockerPlugin()
 {
-    m_view = 0;
+    m_view = nullptr;
 }
 
 #include "recorderdocker.moc"

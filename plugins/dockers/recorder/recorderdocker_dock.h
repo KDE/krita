@@ -30,6 +30,7 @@
 #include <QPointer>
 #include <QPushButton>
 #include <QSpacerItem>
+#include <QHash>
 
 class QVBoxLayout;
 class RecorderWidget;
@@ -65,6 +66,7 @@ private:
     QMutex m_saveMutex;
     QMutex m_eventMutex;
     Encoder* m_encoder;
+    quint8* m_data = nullptr;
 
     bool m_recordEnabled;
     int m_recordCounter;

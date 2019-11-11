@@ -33,7 +33,6 @@
 #include <kis_icon_utils.h>
 #include <kis_zoom_manager.h>
 #include <klocalizedstring.h>
-#include <libyuv.h>
 #include <QDir>
 #include <QFileDialog>
 #include <QRegExp>
@@ -45,7 +44,7 @@
 
 RecorderDockerDock::RecorderDockerDock()
     : QDockWidget(i18n("Recorder"))
-    , m_canvas(0)
+    , m_canvas(nullptr)
     , m_imageIdleWatcher(1000)
     , m_recordEnabled(false)
     , m_recordCounter(0)
@@ -108,7 +107,7 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
     if (m_canvas == canvas)
         return;
 
-    setEnabled(canvas != 0);
+    setEnabled(canvas != nullptr);
 
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
@@ -133,7 +132,7 @@ void RecorderDockerDock::startUpdateCanvasProjection()
 void RecorderDockerDock::unsetCanvas()
 {
     setEnabled(false);
-    m_canvas = 0;
+    m_canvas = nullptr;
 }
 
 void RecorderDockerDock::onRecordButtonToggled(bool enabled)
@@ -201,6 +200,9 @@ void RecorderDockerDock::enableRecord(bool& enabled, const QString& path)
             m_encoder = new Encoder();
             m_encoder->init(finalFileName.toStdString().c_str(), m_canvas->image()->width(),
                             m_canvas->image()->height());
+
+            size_t size = m_canvas->image()->width() * m_canvas->image()->height() * 4;
+            m_data = new quint8[size];
             startUpdateCanvasProjection();
         } else {
             enabled = m_recordEnabled = false;
@@ -209,7 +211,13 @@ void RecorderDockerDock::enableRecord(bool& enabled, const QString& path)
     } else {
         if (m_encoder) {
             m_encoder->finish();
+            delete m_encoder;
             m_encoder = nullptr;
+            if (m_data)
+            {
+                delete [] m_data;
+                m_data = nullptr;
+            }
         }
     }
 }
@@ -225,25 +233,8 @@ void RecorderDockerDock::generateThumbnail()
                 image->barrierLock();
                 KisPaintDeviceSP dev = image->projection();
                 image->unlock();
-                quint8* data = nullptr;
-                size_t size = image->width() * image->height() * dev->pixelSize();
-                data = (quint8*)malloc(size);
-                dev->readBytes(data, 0, 0, image->width(), image->height());
-
-                uint8_t* yuv[3];
-                yuv[0] = new uint8_t[image->width() * image->height()];
-                yuv[1] = new uint8_t[image->width() * image->height() / 4];
-                yuv[2] = new uint8_t[image->width() * image->height() / 4];
-
-                libyuv::ABGRToI420(data, image->width() * dev->pixelSize(), yuv[0], image->width(), yuv[1],
-                                   image->width() / 2, yuv[2], image->width() / 2, image->width(), image->height());
-
-                m_encoder->pushFrame(yuv, size);
-                delete[] yuv[0];
-                delete[] yuv[1];
-                delete[] yuv[2];
-
-                free(data);
+                dev->readBytes(m_data, 0, 0, image->width(), image->height());
+                m_encoder->pushFrame(m_data, image->width(), image->height(), image->width()*image->height()*dev->pixelSize());
             }
 
             connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this,

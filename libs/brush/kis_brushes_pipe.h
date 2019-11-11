@@ -32,7 +32,7 @@ public:
     KisBrushesPipe(const KisBrushesPipe &rhs) {
         m_brushes.clear();
         Q_FOREACH (QSharedPointer<BrushType> brush, rhs.m_brushes) {
-            KisBrushSP clonedBrush = brush->clone();
+            KoResourceSP clonedBrush = brush->clone();
             QSharedPointer<BrushType> actualClonedBrush = clonedBrush.dynamicCast<BrushType>();
             m_brushes.append(actualClonedBrush );
             KIS_ASSERT_RECOVER(clonedBrush) {continue;}

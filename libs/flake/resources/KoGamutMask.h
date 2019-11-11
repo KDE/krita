@@ -62,6 +62,9 @@ public:
     KoGamutMask(const QString &filename);
     KoGamutMask();
     KoGamutMask(KoGamutMask *rhs);
+    KoGamutMask(const KoGamutMask &rhs);
+    KoGamutMask &operator=(const KoGamutMask &rhs);
+    KoResourceSP clone() const override;
     ~KoGamutMask() override;
 
     bool coordIsClear(const QPointF& coord, KoViewConverter& viewConverter, bool preview);
@@ -73,10 +76,10 @@ public:
     void paint(QPainter &painter, KoViewConverter& viewConverter, bool preview);
     void paintStroke(QPainter &painter, KoViewConverter& viewConverter, bool preview);
 
-    QString title();
+    QString title() const;
     void setTitle(QString title);
 
-    QString description();
+    QString description() const;
     void setDescription(QString description);
 
     QString defaultFileExtension() const override;

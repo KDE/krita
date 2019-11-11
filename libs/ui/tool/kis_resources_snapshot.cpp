@@ -95,7 +95,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
      */
     KisPaintOpPresetSP p = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     if (p) {
-        m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->clone();
+        m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->clone().dynamicCast<KisPaintOpPreset>();
     }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND

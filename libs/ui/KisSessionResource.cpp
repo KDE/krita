@@ -56,6 +56,27 @@ KisSessionResource::KisSessionResource(const QString &filename)
 KisSessionResource::~KisSessionResource()
 {}
 
+KisSessionResource::KisSessionResource(const KisSessionResource &rhs)
+    : KisWindowLayoutResource(rhs)
+    , d(new Private)
+{
+    *this = rhs;
+}
+
+KisSessionResource &KisSessionResource::operator=(const KisSessionResource &rhs)
+{
+    if (*this != rhs) {
+        d->views = rhs.d->views;
+        d->profileName = rhs.d->profileName;
+    }
+    return *this;
+}
+
+KoResourceSP KisSessionResource::clone() const
+{
+    return KoResourceSP(new KisSessionResource(*this));
+}
+
 void KisSessionResource::restore()
 {
     auto *kisPart = KisPart::instance();

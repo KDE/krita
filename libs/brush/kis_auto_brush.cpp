@@ -57,15 +57,19 @@ inline double drand48()
 
 struct KisAutoBrush::Private {
     Private()
-        : randomness(0), density(1.0), idealThreadCountCached(1) {}
+        : randomness(0)
+        , density(1.0)
+        , idealThreadCountCached(1)
+    {}
 
     Private(const Private &rhs)
-        : shape(rhs.shape->clone()),
-          randomness(rhs.randomness),
-          density(rhs.density),
-          idealThreadCountCached(rhs.idealThreadCountCached)
+        : shape(rhs.shape->clone())
+        , randomness(rhs.randomness)
+        , density(rhs.density)
+        , idealThreadCountCached(rhs.idealThreadCountCached)
     {
     }
+
 
     QScopedPointer<KisMaskGenerator> shape;
     qreal randomness;
@@ -110,14 +114,25 @@ void KisAutoBrush::setUserEffectiveSize(qreal value)
 }
 
 KisAutoBrush::KisAutoBrush(const KisAutoBrush& rhs)
-    : KisBrush(rhs),
-      d(new Private(*rhs.d))
+    : KisBrush(rhs)
+    , d(new Private(*rhs.d))
 {
 }
 
-KisBrushSP KisAutoBrush::clone() const
+KisAutoBrush &KisAutoBrush::operator=(const KisAutoBrush &rhs)
 {
-    return KisBrushSP(new KisAutoBrush(*this));
+    if (*this != rhs) {
+        d->shape.reset(rhs.d->shape->clone());
+        d->randomness = rhs.d->randomness;
+        d->density = rhs.d->density;
+        d->idealThreadCountCached = rhs.d->idealThreadCountCached;
+    }
+    return *this;
+}
+
+KoResourceSP KisAutoBrush::clone() const
+{
+    return KoResourceSP(new KisAutoBrush(*this));
 }
 
 /* It's difficult to predict the mask height when exactly when there are

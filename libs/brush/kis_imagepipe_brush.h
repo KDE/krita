@@ -62,6 +62,13 @@ public:
 
     ~KisImagePipeBrush() override;
 
+    /// Will call KisBrush's saveToDevice as well
+    KisImagePipeBrush(const KisImagePipeBrush& rhs);
+
+    KisImagePipeBrush &operator=(const KisImagePipeBrush &rhs);
+
+    KoResourceSP clone() const override;
+
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;
@@ -88,7 +95,6 @@ public:
 
     void makeMaskImage() override;
 
-    KisBrushSP clone() const override;
 
     QString defaultFileExtension() const override;
     void setAngle(qreal _angle) override;
@@ -119,10 +125,6 @@ public:
 protected:
     void setBrushType(enumBrushType type) override;
     void setHasColor(bool hasColor) override;
-    /// Will call KisBrush's saveToDevice as well
-
-    KisImagePipeBrush(const KisImagePipeBrush& rhs);
-
 private:
     friend class KisImagePipeBrushTest;
 
@@ -135,7 +137,7 @@ private:
 
 private:
     struct Private;
-    Private * const m_d;
+    Private * const d;
 };
 
 typedef QSharedPointer<KisImagePipeBrush> KisImagePipeBrushSP;

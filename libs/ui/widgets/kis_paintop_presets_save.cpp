@@ -165,7 +165,7 @@ void KisPresetSaveWidget::savePreset()
 
     m_favoriteResourceManager->setBlockUpdates(true);
 
-    KisPaintOpPresetSP oldPreset = curPreset->clone(); // tags are not cloned with this
+    KisPaintOpPresetSP oldPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>(); // tags are not cloned with this
     oldPreset->load();
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
@@ -200,7 +200,7 @@ void KisPresetSaveWidget::savePreset()
 
 
     if (m_useNewBrushDialog) {
-        KisPaintOpPresetSP newPreset = curPreset->clone();
+        KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
         newPreset->setFilename(currentPresetFileName);
         newPreset->setName(presetName);
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());

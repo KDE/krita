@@ -54,9 +54,27 @@ KoResource::~KoResource()
 }
 
 KoResource::KoResource(const KoResource &rhs)
-    : d(new Private(*rhs.d))
+    : d(new Private)
 {
-    qDebug() << "Copying a resource!" << filename() << name() << valid();
+    *this = rhs;
+}
+
+KoResource &KoResource::operator=(const KoResource &rhs)
+{
+    if (this != &rhs) {
+        d->name = rhs.d->name;
+        d->filename= rhs.d->filename;
+        d->valid = rhs.d->valid;
+        d->md5 = rhs.d->md5;
+        d->image = rhs.d->image;
+        d->permanent = rhs.d->permanent;
+        d->resourceId = rhs.d->resourceId;
+        d->storageLocation = rhs.d->storageLocation;
+        d->dirty = rhs.d->dirty;
+        d->metadata = rhs.d->metadata;
+        d->version = rhs.d->version;
+    }
+    return *this;
 }
 
 bool KoResource::saveToDevice(QIODevice *dev) const

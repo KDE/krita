@@ -36,6 +36,8 @@ public:
     explicit KisPSDLayerStyleCollectionResource(const QString &filename);
     ~KisPSDLayerStyleCollectionResource() override;
 
+    KoResourceSP clone() const override;
+
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
 

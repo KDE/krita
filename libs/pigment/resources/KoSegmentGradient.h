@@ -260,8 +260,9 @@ class KRITAPIGMENT_EXPORT KoSegmentGradient : public KoAbstractGradient
 public:
     explicit KoSegmentGradient(const QString &file = QString());
     ~KoSegmentGradient() override;
-
-    KoAbstractGradientSP clone() const override;
+    KoSegmentGradient(const KoSegmentGradient &rhs);
+    KoSegmentGradient &operator=(const KoSegmentGradient &rhs);
+    KoResourceSP clone() const override;
 
     /// reimplemented
     bool load() override;
@@ -415,7 +416,6 @@ public:
     const QList<KoGradientSegment *>& segments() const;
 
 protected:
-    KoSegmentGradient(const KoSegmentGradient &rhs);
 
     inline void pushSegment(KoGradientSegment* segment) {
         m_segments.push_back(segment);
@@ -423,7 +423,7 @@ protected:
 
     QList<KoGradientSegment *> m_segments;
 
-    private:
+private:
     bool init();
 };
 

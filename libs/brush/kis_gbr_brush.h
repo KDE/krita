@@ -57,9 +57,13 @@ public:
     /// Load brush as a copy from the specified QImage (handy when you need to copy a brush!)
     KisGbrBrush(const QImage& image, const QString& name = QString());
 
+    ~KisGbrBrush() override;
+
     KisGbrBrush(const KisGbrBrush& rhs);
 
-    ~KisGbrBrush() override;
+    KoResourceSP clone() const override;
+
+    KisGbrBrush &operator=(const KisGbrBrush &rhs);
 
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
@@ -87,10 +91,6 @@ public:
 
     enumBrushType brushType() const override;
 
-    /**
-     * Makes a copy of this brush.
-     */
-    KisBrushSP clone() const override;
 
     /**
      * @return default file extension for saving the brush

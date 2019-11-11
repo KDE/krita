@@ -392,7 +392,7 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
 
 
     // create a new brush preset with the name specified and add to resource provider
-    KisPaintOpPresetSP newPreset = curPreset->clone();
+    KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
     newPreset->setFilename(renamedPresetPathAndFile); // this also contains the path
     newPreset->setName(renamedPresetName);
     newPreset->setImage(curPreset->image()); // use existing thumbnail (might not need to do this)

@@ -44,7 +44,7 @@ QVariant KisLockedPropertiesProxy::getProperty(const QString &name) const
 
     // restores the dirty state on returns automagically
     // XXX: This is extremely dirty
-    KisResourceDirtyStateSaver dirtyStateSaver(qobject_cast<KisPaintOpPreset*>(t->updateProxy()->parent()));
+    KisResourceDirtyStateSaver dirtyStateSaver(qobject_cast<ProxyParent*>(t->updateProxy()->parent())->m_preset);
     Q_UNUSED(dirtyStateSaver);
 
     if (m_lockedProperties->lockedProperties()) {
@@ -80,7 +80,7 @@ void KisLockedPropertiesProxy::setProperty(const QString & name, const QVariant 
             if (!m_parent->hasProperty(name + "_previous")) {
                 // restores the dirty state on returns automagically
                 // XXX: This is extremely dirty
-                KisResourceDirtyStateSaver dirtyStateSaver(qobject_cast<KisPaintOpPreset*>(t->updateProxy()->parent()));
+                KisResourceDirtyStateSaver dirtyStateSaver(qobject_cast<ProxyParent*>(t->updateProxy()->parent())->m_preset);
                 m_parent->setProperty(name + "_previous", m_parent->getProperty(name));
             }
             return;

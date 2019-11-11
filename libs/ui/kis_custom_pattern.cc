@@ -27,7 +27,7 @@
 #include <QComboBox>
 #include <QPixmap>
 #include <QShowEvent>
-
+#include <QSharedPointer>
 
 #include <QTemporaryFile>
 
@@ -129,7 +129,7 @@ void KisCustomPattern::slotUsePattern()
 {
     if (!m_pattern)
         return;
-    KoPatternSP copy = m_pattern->clone();
+    KoPatternSP copy = m_pattern->clone().dynamicCast<KoPattern>();
     emit(activatedResource(copy));
 }
 

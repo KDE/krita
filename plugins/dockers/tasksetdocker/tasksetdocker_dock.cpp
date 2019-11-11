@@ -174,11 +174,7 @@ void TasksetDockerDock::recordClicked()
 
 void TasksetDockerDock::saveClicked()
 {
-    bool ok;
     QString name;
-    if (!ok) {
-        return;
-    }
 
     TasksetResourceSP taskset(new TasksetResource(QString()));
 
@@ -191,13 +187,14 @@ void TasksetDockerDock::saveClicked()
     QString saveLocation = m_rserver->saveLocation();
 
     bool newName = false;
-    if(name.isEmpty()) {
+    if (name.isEmpty()) {
         newName = true;
         name = i18n("Taskset");
     }
     QFileInfo fileInfo(saveLocation + name + taskset->defaultFileExtension());
 
     bool fileOverwriteAccepted = false;
+    bool ok = false;
 
     while(!fileOverwriteAccepted) {
         name = QInputDialog::getText(this, i18n("Taskset Name"),

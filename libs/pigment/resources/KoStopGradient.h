@@ -45,10 +45,10 @@ class KRITAPIGMENT_EXPORT KoStopGradient : public KoAbstractGradient, public boo
 public:
     explicit KoStopGradient(const QString &filename = QString());
     ~KoStopGradient() override;
-
+    KoStopGradient(const KoStopGradient &rhs);
     bool operator==(const KoStopGradient &rhs) const;
-
-    KoAbstractGradientSP clone() const override;
+    KoStopGradient &operator=(const KoStopGradient &rhs);
+    KoResourceSP clone() const override;
 
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;

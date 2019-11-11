@@ -27,13 +27,7 @@
 #include <KisResourceLoader.h>
 #include <KoResource.h>
 
-class DummyResource : public KoResource {
-public:
-    DummyResource(const QString &f) : KoResource(f) {}
-    bool load() override { return true; }
-    bool loadFromDevice(QIODevice *) override { return true; }
-    bool save() override { return true; }
-};
+#include "DummyResource.h"
 
 void TestResourceLoaderRegistry::testRegistry()
 {

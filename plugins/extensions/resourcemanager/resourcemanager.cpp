@@ -138,12 +138,12 @@ KoResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
 
     KoResourceBundleSP newBundle(new KoResourceBundle(bundlePath));
 
-    newBundle->addMetaData("name", dlgCreateBundle.bundleName());
-    newBundle->addMetaData("author", dlgCreateBundle.authorName());
-    newBundle->addMetaData("email", dlgCreateBundle.email());
-    newBundle->addMetaData("license", dlgCreateBundle.license());
-    newBundle->addMetaData("website", dlgCreateBundle.website());
-    newBundle->addMetaData("description", dlgCreateBundle.description());
+    newBundle->setMetaData("name", dlgCreateBundle.bundleName());
+    newBundle->setMetaData("author", dlgCreateBundle.authorName());
+    newBundle->setMetaData("email", dlgCreateBundle.email());
+    newBundle->setMetaData("license", dlgCreateBundle.license());
+    newBundle->setMetaData("website", dlgCreateBundle.website());
+    newBundle->setMetaData("description", dlgCreateBundle.description());
     newBundle->setThumbnail(dlgCreateBundle.previewImage());
 
     QStringList res = dlgCreateBundle.selectedBrushes();
@@ -203,14 +203,13 @@ KoResourceBundleSP ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
         newBundle->addResource(ResourceType::GamutMasks, res->filename(), d->gamutMaskServer->assignedTagsList(res), res->md5());
     }
 
-    newBundle->addMetaData("fileName", bundlePath);
-    newBundle->addMetaData("created", QDateTime::currentDateTime().toOffsetFromUtc(0).toString(Qt::ISODate));
+    newBundle->setMetaData("fileName", bundlePath);
+    newBundle->setMetaData("created", QDateTime::currentDateTime().toOffsetFromUtc(0).toString(Qt::ISODate));
 
     if (!newBundle->save()) {
         QMessageBox::critical(viewManager()->mainWindow(), i18nc("@title:window", "Krita"), i18n("Could not create the new bundle."));
     }
     else {
-        newBundle->setValid(true);
 //        if (QDir(KoResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation()) != QDir(QFileInfo(bundlePath).path())) {
 //            newBundle->setFilename(KoResourceBundleServerProvider::instance()->resourceBundleServer()->saveLocation() + "/" + dlgCreateBundle.bundleName() + ".bundle");
 //        }

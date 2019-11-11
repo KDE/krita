@@ -41,6 +41,25 @@ public:
         setValid(true);
     }
 
+    DummyResource(const DummyResource &rhs)
+        : KoResource(rhs)
+    {
+        *this = rhs;
+    }
+
+    DummyResource &operator=(const DummyResource &rhs)
+    {
+        if (*this != rhs) {
+            m_something = rhs.m_something;
+        }
+        return *this;
+    }
+
+    KoResourceSP clone() const override
+    {
+        return KoResourceSP(new DummyResource(*this));
+    }
+
     bool load() override
     {
         Q_ASSERT(false);

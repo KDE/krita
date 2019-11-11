@@ -31,6 +31,10 @@ public:
     TasksetResource(const QString& filename);
     ~TasksetResource() override;
 
+    TasksetResource(const TasksetResource &rhs);
+    TasksetResource &operator=(const TasksetResource &rhs);
+    KoResourceSP clone() const override;
+
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;

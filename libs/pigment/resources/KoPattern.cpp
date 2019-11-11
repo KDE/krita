@@ -83,6 +83,28 @@ KoPattern::~KoPattern()
 {
 }
 
+KoPattern::KoPattern(const KoPattern &rhs)
+    : KoResource(rhs)
+{
+    *this = rhs;
+}
+
+KoPattern &KoPattern::operator=(const KoPattern &rhs)
+{
+    if (*this != rhs) {
+        m_pattern = rhs.m_pattern;
+        m_md5 = rhs.m_md5;
+    }
+    return *this;
+}
+
+
+KoResourceSP KoPattern::clone() const
+{
+    return KoResourceSP(new KoPattern(*this));
+}
+
+
 bool KoPattern::load()
 {
     QFile file(filename());
@@ -371,26 +393,12 @@ void KoPattern::setPatternImage(const QImage& image)
     setValid(true);
 }
 
-KoPattern& KoPattern::operator=(const KoPattern & pattern)
-{
-    setFilename(pattern.filename());
-    setPatternImage(pattern.pattern());
-    setValid(true);
-    return *this;
-}
 
 QString KoPattern::defaultFileExtension() const
 {
     return QString(".pat");
 }
 
-KoPatternSP KoPattern::clone() const
-{
-    KoPatternSP pat(new KoPattern(filename()));
-    pat->setPatternImage(pattern());
-    pat->setName(name());
-    return pat;
-}
 
 QImage KoPattern::pattern() const
 {

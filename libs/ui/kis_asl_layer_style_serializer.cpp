@@ -863,7 +863,7 @@ void KisAslLayerStyleSerializer::registerPatternObject(const KoPatternSP pattern
         KoPatternSP patternToAdd = server->resourceByMD5(pattern->md5());
 
         if (!patternToAdd) {
-            patternToAdd = pattern->clone();
+            patternToAdd = pattern->clone().dynamicCast<KoPattern>();
             server->addResource(patternToAdd, false);
         }
 

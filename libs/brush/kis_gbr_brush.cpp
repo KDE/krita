@@ -70,8 +70,6 @@ quint32 const GimpV2BrushMagic = ('G' << 24) + ('I' << 16) + ('M' << 8) + ('P' <
 struct KisGbrBrush::Private {
 
     QByteArray data;
-    bool ownData;         /* seems to indicate that @ref data is owned by the brush, but in Qt4.x this is already guaranteed... so in reality it seems more to indicate whether the data is loaded from file (ownData = true) or memory (ownData = false) */
-
     bool useColorAsMask;
 
     quint32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
@@ -87,19 +85,17 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
     : KisScalingSizeBrush(filename)
     , d(new Private)
 {
-    d->ownData = true;
     d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
 }
 
-KisGbrBrush::KisGbrBrush(const QString& filename,
-                         const QByteArray& data,
-                         qint32 & dataPos)
+KisGbrBrush::KisGbrBrush(const QString &filename,
+                         const QByteArray &data,
+                         qint32 &dataPos)
     : KisScalingSizeBrush(filename)
     , d(new Private)
 {
-    d->ownData = false;
     d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
@@ -114,7 +110,6 @@ KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
     : KisScalingSizeBrush()
     , d(new Private)
 {
-    d->ownData = true;
     d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
@@ -125,7 +120,6 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
     : KisScalingSizeBrush()
     , d(new Private)
 {
-    d->ownData = false;
     d->useColorAsMask = false;
     setHasColor(false);
     setSpacing(DEFAULT_SPACING);
@@ -139,6 +133,19 @@ KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
     , d(new Private(*rhs.d))
 {
     d->data = QByteArray();
+}
+
+KoResourceSP KisGbrBrush::clone() const
+{
+    return KoResourceSP(new KisGbrBrush(*this));
+}
+
+KisGbrBrush &KisGbrBrush::operator=(const KisGbrBrush &rhs)
+{
+    if (*this != rhs) {
+        d->useColorAsMask = rhs.d->useColorAsMask;
+    }
+    return *this;
 }
 
 KisGbrBrush::~KisGbrBrush()
@@ -159,7 +166,7 @@ bool KisGbrBrush::load()
 
 bool KisGbrBrush::loadFromDevice(QIODevice *dev)
 {
-    if (d->ownData) {
+    if (!d->data.isEmpty()) {
         d->data = dev->readAll();
     }
     return init();
@@ -288,7 +295,7 @@ bool KisGbrBrush::init()
 
     setWidth(image.width());
     setHeight(image.height());
-    if (d->ownData) {
+    if (!d->data.isEmpty()) {
         d->data.resize(0); // Save some memory, we're using enough of it as it is.
     }
     setValid(image.width() != 0 && image.height() != 0);
@@ -461,11 +468,6 @@ void KisGbrBrush::makeMaskImage()
     setUseColorAsMask(false);
     resetBoundary();
     clearBrushPyramid();
-}
-
-KisBrushSP KisGbrBrush::clone() const
-{
-    return KisBrushSP(new KisGbrBrush(*this));
 }
 
 void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const

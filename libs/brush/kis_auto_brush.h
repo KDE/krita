@@ -20,6 +20,8 @@
 #define _KIS_AUTOBRUSH_RESOURCE_H_
 
 #include "kritabrush_export.h"
+
+#include <KoResource.h>
 #include "kis_brush.h"
 
 #include <QScopedPointer>
@@ -34,9 +36,10 @@ class BRUSH_EXPORT KisAutoBrush : public KisBrush
 
 public:
 
-    KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, qreal density = 1.0);
-    KisAutoBrush(const KisAutoBrush& rhs);
-    KisBrushSP clone() const override;
+    KisAutoBrush(KisMaskGenerator *as, qreal angle, qreal randomness, qreal density = 1.0);
+    KisAutoBrush(const KisAutoBrush &rhs);
+    KisAutoBrush &operator=(const KisAutoBrush &rhs);
+    KoResourceSP clone() const override;
 
     ~KisAutoBrush() override;
 

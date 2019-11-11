@@ -136,21 +136,37 @@ KoGamutMask::KoGamutMask(KoGamutMask* rhs)
     , KoResource(QString())
     , d(new Private)
 {
-    setFilename(rhs->filename());
-    setTitle(rhs->title());
-    setDescription(rhs->description());
-    d->maskSize = rhs->d->maskSize;
-
-    QList<KoShape*> newShapes;
-    for(KoShape* sh: rhs->koShapes()) {
-        newShapes.append(sh->cloneShape());
-    }
-
-    setMaskShapes(newShapes);
-
-    setValid(true);
+    *this = *rhs;
 }
 
+KoGamutMask::KoGamutMask(const KoGamutMask &rhs)
+    : QObject(0)
+    , KoResource(rhs)
+    , d(new Private)
+{
+    *this = rhs;
+}
+
+KoGamutMask &KoGamutMask::operator=(const KoGamutMask &rhs)
+{
+    if (*this != rhs) {
+        setTitle(rhs.title());
+        setDescription(rhs.description());
+        d->maskSize = rhs.d->maskSize;
+
+        QList<KoShape*> newShapes;
+        for(KoShape* sh: rhs.koShapes()) {
+            newShapes.append(sh->cloneShape());
+        }
+        setMaskShapes(newShapes);
+    }
+    return *this;
+}
+
+KoResourceSP KoGamutMask::clone() const
+{
+    return KoResourceSP(new KoGamutMask(*this));
+}
 
 KoGamutMask::~KoGamutMask()
 {
@@ -374,7 +390,7 @@ bool KoGamutMask::saveToDevice(QIODevice *dev) const
     return store->finalize();
 }
 
-QString KoGamutMask::title()
+QString KoGamutMask::title() const
 {
     return d->title;
 }
@@ -385,7 +401,7 @@ void KoGamutMask::setTitle(QString title)
     setName(title);
 }
 
-QString KoGamutMask::description()
+QString KoGamutMask::description() const
 {
     return d->description;
 }

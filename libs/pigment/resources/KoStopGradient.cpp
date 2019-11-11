@@ -48,6 +48,12 @@ KoStopGradient::~KoStopGradient()
 {
 }
 
+KoStopGradient::KoStopGradient(const KoStopGradient &rhs)
+    : KoAbstractGradient(rhs)
+{
+    *this = rhs;
+}
+
 bool KoStopGradient::operator==(const KoStopGradient &rhs) const
 {
     return
@@ -57,12 +63,23 @@ bool KoStopGradient::operator==(const KoStopGradient &rhs) const
         m_start == rhs.m_start &&
         m_stop == rhs.m_stop &&
         m_focalPoint == rhs.m_focalPoint &&
-        m_stops == rhs.m_stops;
+            m_stops == rhs.m_stops;
 }
 
-KoAbstractGradientSP KoStopGradient::clone() const
+KoStopGradient &KoStopGradient::operator=(const KoStopGradient &rhs)
 {
-    return KoAbstractGradientSP(new KoStopGradient(*this));
+    if (*this != rhs) {
+        m_stops = rhs.m_stops;
+        m_start = rhs.m_start;
+        m_stop = rhs.m_stop;
+        m_focalPoint = rhs.m_focalPoint;
+    }
+    return *this;
+}
+
+KoResourceSP KoStopGradient::clone() const
+{
+    return KoResourceSP(new KoStopGradient(*this));
 }
 
 bool KoStopGradient::load()

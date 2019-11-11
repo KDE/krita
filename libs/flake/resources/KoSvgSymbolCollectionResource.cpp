@@ -110,13 +110,25 @@ KoSvgSymbolCollectionResource::KoSvgSymbolCollectionResource()
 }
 
 KoSvgSymbolCollectionResource::KoSvgSymbolCollectionResource(const KoSvgSymbolCollectionResource& rhs)
-    : QObject(0)
-    , KoResource(QString())
+    : KoResource(QString())
     , d(new Private())
 {
-    setFilename(rhs.filename());
-    d->symbols = rhs.d->symbols;
-    setValid(true);
+    *this = rhs;
+}
+
+KoSvgSymbolCollectionResource &KoSvgSymbolCollectionResource::operator=(const KoSvgSymbolCollectionResource &rhs)
+{
+    if (*this != rhs) {
+        d->symbols = rhs.d->symbols;
+        d->title = rhs.d->title;
+        d->description = rhs.d->description;
+    }
+    return *this;
+}
+
+KoResourceSP KoSvgSymbolCollectionResource::clone() const
+{
+    return KoResourceSP(new KoSvgSymbolCollectionResource(*this));
 }
 
 KoSvgSymbolCollectionResource::~KoSvgSymbolCollectionResource()

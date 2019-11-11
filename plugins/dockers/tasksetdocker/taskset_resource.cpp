@@ -37,6 +37,25 @@ TasksetResource::~TasksetResource()
 {
 }
 
+TasksetResource::TasksetResource(const TasksetResource &rhs)
+    : KoResource(rhs)
+{
+    *this = rhs;
+}
+
+TasksetResource &TasksetResource::operator=(const TasksetResource &rhs)
+{
+    if (*this != rhs) {
+        m_actions = rhs.m_actions;
+    }
+    return *this;
+}
+
+KoResourceSP TasksetResource::clone() const
+{
+    return KoResourceSP(new TasksetResource(*this));
+}
+
 bool TasksetResource::save()
 {
     if (filename().isEmpty())

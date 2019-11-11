@@ -26,9 +26,6 @@
 #include <kritabrush_export.h>
 #include <kis_abr_brush_collection.h>
 
-
-
-
 class BRUSH_EXPORT KisAbrStorage : public KisStoragePlugin
 {
 public:
@@ -42,7 +39,6 @@ public:
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
 
     KisAbrBrushCollectionSP m_brushCollection;
-
 };
 
 #endif // KISABRSTORAGE_H

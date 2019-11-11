@@ -34,6 +34,27 @@ KisWorkspaceResource::~KisWorkspaceResource()
 {
 }
 
+KisWorkspaceResource::KisWorkspaceResource(const KisWorkspaceResource &rhs)
+    : KoResource(rhs)
+    , KisPropertiesConfiguration(rhs)
+{
+    *this = rhs;
+}
+
+KisWorkspaceResource &KisWorkspaceResource::operator=(const KisWorkspaceResource &rhs)
+{
+    if (*this != rhs) {
+        m_dockerState = rhs.m_dockerState;
+    }
+    return *this;
+}
+
+KoResourceSP KisWorkspaceResource::clone() const
+{
+    return KoResourceSP(new KisWorkspaceResource(*this));
+}
+
+
 bool KisWorkspaceResource::save()
 {
     if (filename().isEmpty())

@@ -39,9 +39,17 @@ KisSvgBrush::KisSvgBrush(const KisSvgBrush& rhs)
 {
 }
 
-KisBrushSP KisSvgBrush::clone() const
+KisSvgBrush &KisSvgBrush::operator=(const KisSvgBrush &rhs)
 {
-    return KisBrushSP(new KisSvgBrush(*this));
+    if (*this != rhs) {
+        m_svg = rhs.m_svg;
+    }
+    return *this;
+}
+
+KoResourceSP KisSvgBrush::clone() const
+{
+    return KoResourceSP(new KisSvgBrush(*this));
 }
 
 bool KisSvgBrush::load()

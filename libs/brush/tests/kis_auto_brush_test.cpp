@@ -184,7 +184,7 @@ void KisAutoBrushTest::testClone()
     brush->mask(fdev1, KoColor(Qt::black, cs), KisDabShape(0.8, 1.0, 8.0), info);
     QImage res1 = fdev1->convertToQImage(0);
 
-    KisBrushSP clone = brush->clone();
+    KisBrushSP clone = brush->clone().dynamicCast<KisBrush>();
 
     KisFixedPaintDeviceSP fdev2 = new KisFixedPaintDevice(cs);
     clone->mask(fdev2, KoColor(Qt::black, cs), KisDabShape(0.8, 1.0, 8.0), info);

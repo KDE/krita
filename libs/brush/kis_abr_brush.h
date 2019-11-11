@@ -46,7 +46,9 @@ public:
     KisAbrBrush(const QString& filename, KisAbrBrushCollection *parent);
     KisAbrBrush(const KisAbrBrush& rhs);
     KisAbrBrush(const KisAbrBrush& rhs, KisAbrBrushCollection *parent);
-    KisBrushSP clone() const override;
+    KisAbrBrush &operator=(const KisAbrBrush &rhs);
+    KoResourceSP clone() const override;
+
 
     bool load() override;
 

@@ -49,9 +49,9 @@ KisPngBrush::KisPngBrush(const KisPngBrush &rhs)
     }
 }
 
-KisBrushSP KisPngBrush::clone() const
+KoResourceSP KisPngBrush::clone() const
 {
-    return KisBrushSP(new KisPngBrush(*this));
+    return KoResourceSP(new KisPngBrush(*this));
 }
 
 bool KisPngBrush::load()

@@ -222,6 +222,29 @@ KisWindowLayoutResource::KisWindowLayoutResource(const QString &filename)
 KisWindowLayoutResource::~KisWindowLayoutResource()
 {}
 
+KisWindowLayoutResource::KisWindowLayoutResource(const KisWindowLayoutResource &rhs)
+    : KoResource(rhs)
+    , d(new Private)
+{
+    *this = rhs;
+}
+
+KisWindowLayoutResource &KisWindowLayoutResource::operator=(const KisWindowLayoutResource &rhs)
+{
+    if (*this != rhs) {
+        d->windows = rhs.d->windows;
+        d->primaryWindow = rhs.d->primaryWindow;
+        d->showImageInAllWindows = rhs.d->showImageInAllWindows;
+        d->primaryWorkspaceFollowsFocus = rhs.d->primaryWorkspaceFollowsFocus;
+    }
+    return *this;
+}
+
+KoResourceSP KisWindowLayoutResource::clone() const
+{
+    return KoResourceSP(new KisWindowLayoutResource(*this));
+}
+
 KisWindowLayoutResourceSP KisWindowLayoutResource::fromCurrentWindows(
     const QString &filename, const QList<QPointer<KisMainWindow>> &mainWindows, bool showImageInAllWindows,
     bool primaryWorkspaceFollowsFocus, KisMainWindow *primaryWindow

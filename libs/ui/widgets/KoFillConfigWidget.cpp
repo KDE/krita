@@ -637,7 +637,7 @@ void KoFillConfigWidget::slotSavePredefinedGradientClicked()
     d->activeGradient->setName(name);
     d->activeGradient->setFilename(name.split(" ").join("_") + d->activeGradient->defaultFileExtension());
 
-    KoAbstractGradientSP newGradient = d->activeGradient->clone();
+    KoAbstractGradientSP newGradient = d->activeGradient->clone().dynamicCast<KoAbstractGradient>();
     server->addResource(newGradient);
 
     d->gradientAction->setCurrentResource(newGradient);

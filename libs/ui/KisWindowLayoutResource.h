@@ -30,6 +30,9 @@ class KisWindowLayoutResource : public KoResource
 public:
     explicit KisWindowLayoutResource(const QString &filename);
     ~KisWindowLayoutResource() override;
+    KisWindowLayoutResource(const KisWindowLayoutResource &rhs);
+    KisWindowLayoutResource &operator=(const KisWindowLayoutResource &rhs);
+    KoResourceSP clone() const override;
 
     static KisWindowLayoutResourceSP fromCurrentWindows (
             const QString &filename, const QList<QPointer<KisMainWindow>> &mainWindows,

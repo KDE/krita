@@ -43,6 +43,11 @@ public:
     KoPattern(const QImage &image, const QString &name, const QString &folderName);
     ~KoPattern() override;
 
+    KoPattern(const KoPattern &rhs);
+    KoPattern& operator=(const KoPattern& rhs);
+    KoResourceSP clone() const;
+
+
 public:
 
     bool load() override;
@@ -57,10 +62,6 @@ public:
     qint32 height() const;
 
     QString defaultFileExtension() const override;
-
-    KoPattern& operator=(const KoPattern& pattern);
-
-    KoPatternSP clone() const;
 
     /**
      * @brief pattern the actual pattern image

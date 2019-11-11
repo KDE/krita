@@ -942,7 +942,7 @@ class GradientPointerConverter
 {
 public:
     static KoAbstractGradientSP resourceToStyle(KoAbstractGradientSP gradient) {
-        return gradient ? KoAbstractGradientSP(gradient->clone()) : KoAbstractGradientSP();
+        return gradient ? KoAbstractGradientSP(gradient->clone().dynamicCast<KoAbstractGradient>()) : KoAbstractGradientSP();
     }
 
     static KoAbstractGradientSP styleToResource(KoAbstractGradientSP gradient) {
@@ -952,7 +952,7 @@ public:
         KoAbstractGradientSP resource = server->resourceByMD5(gradient->md5());
 
         if (!resource) {
-            KoAbstractGradientSP clone = gradient->clone();
+            KoAbstractGradientSP clone = gradient->clone().dynamicCast<KoAbstractGradient>();
             clone->setName(findAvailableName(gradient->name()));
             server->addResource(clone, false);
             resource = clone;

@@ -32,6 +32,9 @@
 class QDomDocument;
 class QDomElement;
 
+class KoResource;
+typedef QSharedPointer<KoResource> KoResourceSP;
+
 /**
  * The KoResource class provides a representation of resources.  This
  * includes, but not limited to, brushes and patterns.
@@ -53,6 +56,15 @@ public:
      */
     explicit KoResource(const QString &filename);
     virtual ~KoResource();
+    KoResource(const KoResource &rhs);
+    KoResource &operator=(const KoResource &rhs);
+
+    virtual KoResourceSP clone() const = 0;
+
+    bool operator !=(const KoResource &other) const
+    {
+        return &other != this;
+    }
 
     bool operator ==(const KoResource &other) const
     {
@@ -149,8 +161,6 @@ protected:
     /// call this when the contents of the resource change so the md5 needs to be recalculated
     void setMD5(const QByteArray &md5);
 
-protected:
-    KoResource(const KoResource &rhs);
 
 private:
     struct Private;
@@ -167,8 +177,6 @@ static inline uint qHash(const KoResource &resource)
     return qHash(resource.md5());
 }
 
-
-typedef QSharedPointer<KoResource> KoResourceSP;
 Q_DECLARE_METATYPE(QSharedPointer<KoResource>)
 
 inline QDebug operator<<(QDebug dbg, const KoResourceSP res)

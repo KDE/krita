@@ -59,9 +59,8 @@ struct KRITAFLAKE_EXPORT KoSvgSymbol {
 /**
  * Loads an svg file that contains "symbol" objects and creates a collection of those objects.
  */
-class KRITAFLAKE_EXPORT KoSvgSymbolCollectionResource : public QObject, public KoResource
+class KRITAFLAKE_EXPORT KoSvgSymbolCollectionResource : public KoResource
 {
-    Q_OBJECT
 public:
 
     /**
@@ -70,11 +69,11 @@ public:
 
     /// Create an empty color set
     KoSvgSymbolCollectionResource();
-
-    /// Explicit copy constructor (KoResource copy constructor is private)
-    KoSvgSymbolCollectionResource(const KoSvgSymbolCollectionResource& rhs);
-
     ~KoSvgSymbolCollectionResource() override;
+
+    KoSvgSymbolCollectionResource(const KoSvgSymbolCollectionResource &rhs);
+    KoSvgSymbolCollectionResource &operator=(const KoSvgSymbolCollectionResource &rhs);
+    KoResourceSP clone() const override;
 
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;

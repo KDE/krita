@@ -84,11 +84,13 @@ public:
      */
     explicit KoColorSet(const QString &filename = QString());
 
-    // Explicit copy constructor (KoResource copy constructor is private)
     KoColorSet(const KoColorSet& rhs);
 
-public /* overridden methods */: // KoResource
     ~KoColorSet() override;
+
+    KoColorSet &operator=(const KoColorSet &rhs);
+
+    KoResourceSP clone() const override;
 
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
@@ -96,8 +98,6 @@ public /* overridden methods */: // KoResource
     bool saveToDevice(QIODevice* dev) const override;
     QString defaultFileExtension() const override;
 
-
-public /* methods */:
     void setColumnCount(int columns);
     int columnCount() const;
 

@@ -46,6 +46,12 @@ KisPSDLayerStyleCollectionResource::~KisPSDLayerStyleCollectionResource()
     m_layerStyles.clear();
 }
 
+KoResourceSP KisPSDLayerStyleCollectionResource::clone() const
+{
+    Q_ASSERT(0);
+    return 0;
+}
+
 bool KisPSDLayerStyleCollectionResource::load()
 {
     QFile file(filename());

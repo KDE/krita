@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2019 boud <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,28 +15,16 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef TESTRESOURCE_H
+#define TESTRESOURCE_H
 
-#ifndef KIS_PNG_BRUSH_
-#define KIS_PNG_BRUSH_
+#include <QObject>
 
-#include "kis_scaling_size_brush.h"
-
-class BRUSH_EXPORT  KisPngBrush : public KisScalingSizeBrush
+class TestResource : public QObject
 {
-public:
-    /// Construct brush to load filename later as brush
-    KisPngBrush(const QString& filename);
-    KisPngBrush(const KisPngBrush &rhs);
-    KoResourceSP clone() const override;
-    // No operator= needed, because there's no local data in KisPngBrush
-
-    bool load() override;
-    bool loadFromDevice(QIODevice *dev) override;
-    bool save() override;
-    bool saveToDevice(QIODevice *dev) const override;
-    QString defaultFileExtension() const override;
-    void toXML(QDomDocument& d, QDomElement& e) const override;
-
+    Q_OBJECT
+private Q_SLOTS:
+    void testCopyResource();
 };
 
-#endif
+#endif // TESTRESOURCE_H

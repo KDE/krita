@@ -52,7 +52,7 @@ KisBrushSP KisPredefinedBrushFactory::createBrush(const QDomElement& brushDefini
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(brush, 0);
 
     // we always return a copy of the brush!
-    brush = brush->clone();
+    brush = brush->clone().dynamicCast<KisBrush>();
 
     double spacing = KisDomUtils::toDouble(brushDefinition.attribute("spacing", "0.25"));
     brush->setSpacing(spacing);

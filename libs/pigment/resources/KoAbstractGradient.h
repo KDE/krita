@@ -39,8 +39,6 @@ public:
     explicit KoAbstractGradient(const QString &filename);
     ~KoAbstractGradient() override;
 
-    virtual KoAbstractGradientSP clone() const = 0;
-
     bool load() override {
         return false;
     }

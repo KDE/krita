@@ -31,6 +31,10 @@ class KRITAUI_EXPORT KisWorkspaceResource : public KoResource , public KisProper
 public:
     KisWorkspaceResource(const QString& filename);
     ~KisWorkspaceResource() override;
+    KisWorkspaceResource(const KisWorkspaceResource &rhs);
+    KisWorkspaceResource &operator=(const KisWorkspaceResource &rhs);
+    KoResourceSP clone() const override;
+
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;

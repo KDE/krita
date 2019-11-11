@@ -32,7 +32,8 @@
 #include <QString>
 #include <QBuffer>
 #include <QFileInfo>
-
+#include <KoHashGeneratorProvider.h>
+#include <KoHashGenerator.h>
 #include <klocalizedstring.h>
 
 #include <KoColor.h>
@@ -524,16 +525,15 @@ qint32 KisAbrBrushCollection::abr_brush_load(QDataStream & abr, AbrInfo *abr_hdr
 
 
 KisAbrBrushCollection::KisAbrBrushCollection(const QString& filename)
-    : KisScalingSizeBrush(filename)
-    , m_abrBrushes(new QMap<QString, KisAbrBrushSP>())
-    , m_isLoaded(false)
+    : m_isLoaded(false)
     , m_lastModified()
+    , m_filename(filename)
+    , m_abrBrushes(new QMap<QString, KisAbrBrushSP>())
 {
 }
 
 KisAbrBrushCollection::KisAbrBrushCollection(const KisAbrBrushCollection& rhs)
-    : KisScalingSizeBrush(rhs)
-    , m_isLoaded(rhs.m_isLoaded)
+    : m_isLoaded(rhs.m_isLoaded)
     , m_lastModified(rhs.m_lastModified)
 {
     m_abrBrushes.reset(new QMap<QString, KisAbrBrushSP>());
@@ -543,11 +543,6 @@ KisAbrBrushCollection::KisAbrBrushCollection(const KisAbrBrushCollection& rhs)
 
         m_abrBrushes->insert(it.key(), KisAbrBrushSP(new KisAbrBrush(*it.value(), this)));
     }
-}
-
-KisBrushSP KisAbrBrushCollection::clone() const
-{
-    return KisBrushSP(new KisAbrBrushCollection(*this));
 }
 
 bool KisAbrBrushCollection::load()
@@ -577,6 +572,10 @@ bool KisAbrBrushCollection::loadFromDevice(QIODevice *dev)
     qint32 layer_ID;
 
     QByteArray ba = dev->readAll();
+
+    KoHashGenerator *hashGenerator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
+    m_md5 = hashGenerator->generateHash(ba);
+
     QBuffer buf(&ba);
     buf.open(QIODevice::ReadOnly);
     QDataStream abr(&buf);
@@ -600,7 +599,7 @@ bool KisAbrBrushCollection::loadFromDevice(QIODevice *dev)
     image_ID = 123456;
 
     for (i = 0; i < abr_hdr.count; i++) {
-        layer_ID = abr_brush_load(abr, &abr_hdr, shortFilename(), image_ID, i + 1);
+        layer_ID = abr_brush_load(abr, &abr_hdr, QFileInfo(filename()).fileName(), image_ID, i + 1);
         if (layer_ID == -1) {
             warnKrita << "Warning: problem loading brush #" << i << " in " << filename();
         }

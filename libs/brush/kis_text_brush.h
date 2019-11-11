@@ -36,6 +36,11 @@ public:
     KisTextBrush(const KisTextBrush &rhs);
     ~KisTextBrush() override;
 
+    KisTextBrush &operator=(const KisTextBrush &rhs);
+
+    KoResourceSP clone() const override;
+
+
     void notifyStrokeStarted() override;
     void notifyCachedDabPainted(const KisPaintInformation& info) override;
     void prepareForSeqNo(const KisPaintInformation& info, int seqNo) override;
@@ -82,8 +87,6 @@ public:
     void setAngle(qreal _angle) override;
     void setScale(qreal _scale) override;
     void setSpacing(double _spacing) override;
-
-    KisBrushSP clone() const override;
 
 private:
     QFont m_font;

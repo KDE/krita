@@ -41,10 +41,12 @@
 #include <KoStore.h>
 
 struct Q_DECL_HIDDEN KisPaintOpPreset::Private {
-    Private()
+    Private(KisPaintOpPreset *q)
     {
+        proxyParent = new ProxyParent(q);
     }
 
+    QPointer<ProxyParent> proxyParent{0};
     KisPaintOpSettingsSP settings {0};
     QPointer<KisPaintopSettingsUpdateProxy> updateProxy {0};
 };
@@ -52,61 +54,70 @@ struct Q_DECL_HIDDEN KisPaintOpPreset::Private {
 
 KisPaintOpPreset::KisPaintOpPreset()
     : KoResource(QString())
-    , m_d(new Private)
+    , d(new Private(this))
 {
 }
 
 KisPaintOpPreset::KisPaintOpPreset(const QString & fileName)
     : KoResource(fileName)
-    , m_d(new Private)
+    , d(new Private(this))
 {
 }
 
 KisPaintOpPreset::~KisPaintOpPreset()
 {
-    delete m_d;
+    delete d;
 }
 
-KisPaintOpPresetSP KisPaintOpPreset::clone() const
+KisPaintOpPreset::KisPaintOpPreset(const KisPaintOpPreset &rhs)
+    : KoResource(rhs)
+    , d(new Private(this))
 {
-    KisPaintOpPresetSP preset(new KisPaintOpPreset());
+    *this = rhs;
+}
 
-    if (settings()) {
-        preset->setSettings(settings()); // the settings are cloned inside!
+KisPaintOpPreset &KisPaintOpPreset::operator=(const KisPaintOpPreset &rhs)
+{
+    if (*this != rhs) {
+        if (rhs.settings()) {
+            setSettings(rhs.settings()); // the settings are cloned inside!
+        }
+        setDirty(isDirty());
+        // only valid if we could clone the settings
+        setValid(rhs.settings());
+
+        setPaintOp(rhs.paintOp());
+        setName(rhs.name());
+        setImage(rhs.image());
+        settings()->setUpdateProxy(rhs.updateProxy());
     }
-    preset->setDirty(isDirty());
-    // only valid if we could clone the settings
-    preset->setValid(settings());
+    return *this;
+}
 
-    preset->setPaintOp(paintOp());
-    preset->setName(name());
-    preset->setImage(image());
-    preset->settings()->setUpdateProxy(updateProxy());
-
-    Q_ASSERT(preset->valid());
-
-    return preset;
+KoResourceSP KisPaintOpPreset::clone() const
+{
+    return KoResourceSP(new KisPaintOpPreset(*this));
 }
 
 void KisPaintOpPreset::setPaintOp(const KoID & paintOp)
 {
-    Q_ASSERT(m_d->settings);
-    m_d->settings->setProperty("paintop", paintOp.id());
+    Q_ASSERT(d->settings);
+    d->settings->setProperty("paintop", paintOp.id());
 }
 
 KoID KisPaintOpPreset::paintOp() const
 {
-    Q_ASSERT(m_d->settings);
-    return KoID(m_d->settings->getString("paintop"));
+    Q_ASSERT(d->settings);
+    return KoID(d->settings->getString("paintop"));
 }
 
 void KisPaintOpPreset::setOptionsWidget(KisPaintOpConfigWidget* widget)
 {
-    if (m_d->settings) {
-        m_d->settings->setOptionsWidget(widget);
+    if (d->settings) {
+        d->settings->setOptionsWidget(widget);
 
         if (widget) {
-            widget->setConfigurationSafe(m_d->settings);
+            widget->setConfigurationSafe(d->settings);
         }
     }
 }
@@ -121,37 +132,37 @@ void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 
     KisPaintOpConfigWidget *oldOptionsWidget = 0;
 
-    if (m_d->settings) {
-        oldOptionsWidget = m_d->settings->optionsWidget();
-        m_d->settings->setOptionsWidget(0);
-        m_d->settings->setUpdateProxy(updateProxy());
-        m_d->settings = 0;
+    if (d->settings) {
+        oldOptionsWidget = d->settings->optionsWidget();
+        d->settings->setOptionsWidget(0);
+        d->settings->setUpdateProxy(updateProxy());
+        d->settings = 0;
     }
 
     if (settings) {
-        m_d->settings = settings->clone();
-        m_d->settings->setUpdateProxy(updateProxy());
+        d->settings = settings->clone();
+        d->settings->setUpdateProxy(updateProxy());
 
         if (oldOptionsWidget) {
-            oldOptionsWidget->setConfigurationSafe(m_d->settings);
-            m_d->settings->setOptionsWidget(oldOptionsWidget);
+            oldOptionsWidget->setConfigurationSafe(d->settings);
+            d->settings->setOptionsWidget(oldOptionsWidget);
         }
     }
 
-    setValid(m_d->settings);
+    setValid(d->settings);
 
-    if (m_d->updateProxy) {
-        m_d->updateProxy->notifyUniformPropertiesChanged();
-        m_d->updateProxy->notifySettingsChanged();
+    if (d->updateProxy) {
+        d->updateProxy->notifyUniformPropertiesChanged();
+        d->updateProxy->notifySettingsChanged();
     }
 }
 
 KisPaintOpSettingsSP KisPaintOpPreset::settings() const
 {
-    Q_ASSERT(m_d->settings);
-    Q_ASSERT(!m_d->settings->getString("paintop", QString()).isEmpty());
+    Q_ASSERT(d->settings);
+    Q_ASSERT(!d->settings->getString("paintop", QString()).isEmpty());
 
-    return m_d->settings;
+    return d->settings;
 }
 
 bool KisPaintOpPreset::load()
@@ -247,7 +258,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev)
 
     fromXML(doc.documentElement());
 
-    if (!m_d->settings) {
+    if (!d->settings) {
         return false;
     }
 
@@ -263,7 +274,7 @@ bool KisPaintOpPreset::save()
     if (filename().isEmpty())
         return false;
 
-    QString paintopid = m_d->settings->getString("paintop", QString());
+    QString paintopid = d->settings->getString("paintop", QString());
 
     if (paintopid.isEmpty())
         return false;
@@ -276,22 +287,22 @@ bool KisPaintOpPreset::save()
 
 void KisPaintOpPreset::toXML(QDomDocument& doc, QDomElement& elt) const
 {
-    QString paintopid = m_d->settings->getString("paintop", QString());
+    QString paintopid = d->settings->getString("paintop", QString());
 
     elt.setAttribute("paintopid", paintopid);
     elt.setAttribute("name", name());
 
     // sanitize the settings
-    bool hasTexture = m_d->settings->getBool("Texture/Pattern/Enabled");
+    bool hasTexture = d->settings->getBool("Texture/Pattern/Enabled");
     if (!hasTexture) {
-        Q_FOREACH (const QString & key, m_d->settings->getProperties().keys()) {
+        Q_FOREACH (const QString & key, d->settings->getProperties().keys()) {
             if (key.startsWith("Texture") && key != "Texture/Pattern/Enabled") {
-                m_d->settings->removeProperty(key);
+                d->settings->removeProperty(key);
             }
         }
     }
 
-    m_d->settings->toXML(doc, elt);
+    d->settings->toXML(doc, elt);
 }
 
 void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
@@ -364,34 +375,34 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
 
 QPointer<KisPaintopSettingsUpdateProxy> KisPaintOpPreset::updateProxy() const
 {
-    if (!m_d->updateProxy) {
-        m_d->updateProxy = new KisPaintopSettingsUpdateProxy(const_cast<KisPaintOpPreset*>(this));
+    if (!d->updateProxy) {
+        d->updateProxy = new KisPaintopSettingsUpdateProxy(d->proxyParent);
     }
-    return m_d->updateProxy;
+    return d->updateProxy;
 }
 
 QPointer<KisPaintopSettingsUpdateProxy> KisPaintOpPreset::updateProxyNoCreate() const
 {
-    return m_d->updateProxy;
+    return d->updateProxy;
 }
 
 QList<KisUniformPaintOpPropertySP> KisPaintOpPreset::uniformProperties()
 {
-    return m_d->settings->uniformProperties(m_d->settings);
+    return d->settings->uniformProperties(d->settings);
 }
 
 bool KisPaintOpPreset::hasMaskingPreset() const
 {
-    return m_d->settings && m_d->settings->hasMaskingSettings();
+    return d->settings && d->settings->hasMaskingSettings();
 }
 
 KisPaintOpPresetSP KisPaintOpPreset::createMaskingPreset() const
 {
     KisPaintOpPresetSP result;
 
-    if (m_d->settings && m_d->settings->hasMaskingSettings()) {
+    if (d->settings && d->settings->hasMaskingSettings()) {
         result.reset(new KisPaintOpPreset());
-        result->setSettings(m_d->settings->createMaskingSettings());
+        result->setSettings(d->settings->createMaskingSettings());
         if (!result->valid()) {
             result.clear();
         }

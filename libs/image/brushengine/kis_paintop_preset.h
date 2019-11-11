@@ -32,6 +32,19 @@
 
 class KisPaintOpConfigWidget;
 
+
+class ProxyParent : public QObject
+{
+    Q_OBJECT
+public:
+    ProxyParent(KisPaintOpPreset *preset)
+    {
+        m_preset = preset;
+    }
+
+    KisPaintOpPreset *m_preset {0};
+};
+
 /**
  * A KisPaintOpPreset contains a particular set of settings
  * associated with a paintop, like brush, paintopsettings.
@@ -39,9 +52,9 @@ class KisPaintOpConfigWidget;
  * user can now temporarily save any tweaks in the Preset throughout
  * the session. The Dirty Preset setting/unsetting is handled by KisPaintOpPresetSettings
  */
-class KRITAIMAGE_EXPORT KisPaintOpPreset : public QObject, public KoResource
+class KRITAIMAGE_EXPORT KisPaintOpPreset : public KoResource
 {
-    Q_OBJECT
+
 public:
 
     /**
@@ -66,7 +79,9 @@ public:
 
     ~KisPaintOpPreset() override;
 
-    KisPaintOpPresetSP clone() const;
+    KisPaintOpPreset(const KisPaintOpPreset &rhs);
+    KisPaintOpPreset &operator=(const KisPaintOpPreset &rhs);
+    KoResourceSP clone() const override;
 
     /// set the id of the paintop plugin
     void setPaintOp(const KoID & paintOp);
@@ -123,7 +138,7 @@ public:
 private:
 
     struct Private;
-    Private * const m_d;
+    Private * const d;
 };
 
 Q_DECLARE_METATYPE(KisPaintOpPresetSP)

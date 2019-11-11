@@ -69,14 +69,22 @@ KoSegmentGradient::~KoSegmentGradient()
 KoSegmentGradient::KoSegmentGradient(const KoSegmentGradient &rhs)
     : KoAbstractGradient(rhs)
 {
-    Q_FOREACH (KoGradientSegment *segment, rhs.m_segments) {
-        pushSegment(new KoGradientSegment(*segment));
-    }
+    *this = rhs;
 }
 
-KoAbstractGradientSP KoSegmentGradient::clone() const
+KoSegmentGradient &KoSegmentGradient::operator=(const KoSegmentGradient &rhs)
 {
-    return KoAbstractGradientSP(new KoSegmentGradient(*this));
+    if (*this != rhs) {
+        Q_FOREACH (KoGradientSegment *segment, rhs.m_segments) {
+            pushSegment(new KoGradientSegment(*segment));
+        }
+    }
+    return *this;
+}
+
+KoResourceSP KoSegmentGradient::clone() const
+{
+    return KoResourceSP(new KoSegmentGradient(*this));
 }
 
 bool KoSegmentGradient::load()

@@ -26,6 +26,9 @@ class KisSessionResource : public KisWindowLayoutResource
 public:
     KisSessionResource(const QString &filename);
     ~KisSessionResource();
+    KisSessionResource(const KisSessionResource &rhs);
+    KisSessionResource &operator=(const KisSessionResource &rhs);
+    KoResourceSP clone() const override;
 
     void storeCurrentWindows();
     void restore();

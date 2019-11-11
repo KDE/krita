@@ -49,21 +49,29 @@ KisAbrBrush::KisAbrBrush(const QString& filename, KisAbrBrushCollection *parent)
 }
 
 KisAbrBrush::KisAbrBrush(const KisAbrBrush& rhs)
-    : KisScalingSizeBrush(rhs),
-      m_parent(0)
+    : KisScalingSizeBrush(rhs)
+    , m_parent(0)
 {
-    // Warning! The brush became detached from the parent!
+    // Warning! The brush became detached from the parent collection!
 }
 
 KisAbrBrush::KisAbrBrush(const KisAbrBrush& rhs, KisAbrBrushCollection *parent)
-    : KisScalingSizeBrush(rhs),
-      m_parent(parent)
+    : KisScalingSizeBrush(rhs)
+    , m_parent(parent)
 {
 }
 
-KisBrushSP KisAbrBrush::clone() const
+KisAbrBrush &KisAbrBrush::operator=(const KisAbrBrush &rhs)
 {
-    return KisBrushSP(new KisAbrBrush(*this));
+    if (*this != rhs) {
+        m_parent = rhs.m_parent; // XXX: should this also be zero as in the first copy constructor?
+    }
+    return *this;
+}
+
+KoResourceSP KisAbrBrush::clone() const
+{
+    return KoResourceSP(new KisAbrBrush(*this));
 }
 
 bool KisAbrBrush::load()

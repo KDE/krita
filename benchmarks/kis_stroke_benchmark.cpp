@@ -625,7 +625,7 @@ void KisStrokeBenchmark::becnhmarkPresetCloning()
     KIS_ASSERT_RECOVER_RETURN(preset->settings());
 
     QBENCHMARK {
-        KisPaintOpPresetSP other = preset->clone();
+        KisPaintOpPresetSP other = preset->clone().dynamicCast<KisPaintOpPreset>();
         other->settings()->setPaintOpOpacity(0.3);
     }
 }

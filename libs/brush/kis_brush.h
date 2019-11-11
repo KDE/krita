@@ -68,7 +68,7 @@ typedef QSharedPointer<KisBrush> KisBrushSP;
  * XXX: This api is still a big mess -- it needs a good refactoring.
  * And the whole KoResource architecture is way over-designed.
  */
-class BRUSH_EXPORT KisBrush : public KoResource, public KisShared
+class BRUSH_EXPORT KisBrush : public KoResource
 {
 
 
@@ -117,8 +117,10 @@ public:
 
     KisBrush();
     KisBrush(const QString& filename);
-
     ~KisBrush() override;
+
+    KisBrush(const KisBrush &rhs);
+    KisBrush &operator=(const KisBrush &rhs);
 
     virtual qreal userEffectiveSize() const = 0;
     virtual void setUserEffectiveSize(qreal value) = 0;
@@ -339,11 +341,7 @@ public:
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
-    virtual KisBrushSP clone() const = 0;
-
 protected:
-
-    KisBrush(const KisBrush& rhs);
 
     void setWidth(qint32 width);
 

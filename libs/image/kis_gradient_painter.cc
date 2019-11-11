@@ -59,8 +59,8 @@ public:
 
     ~CachedGradient() override {}
 
-    KoAbstractGradientSP clone() const override {
-        return KoAbstractGradientSP(new CachedGradient(m_subject, m_max + 1, m_colorSpace));
+    KoResourceSP clone() const override {
+        return KoResourceSP(new CachedGradient(m_subject, m_max + 1, m_colorSpace));
     }
 
     /**

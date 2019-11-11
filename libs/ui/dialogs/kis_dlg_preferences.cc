@@ -1565,6 +1565,13 @@ void KisDlgPreferences::showEvent(QShowEvent *event){
     button(QDialogButtonBox::RestoreDefaults)->setDefault(false);
 }
 
+void KisDlgPreferences::slotButtonClicked(QAbstractButton *button)
+{
+    if (buttonBox()->buttonRole(button) == QDialogButtonBox::RejectRole) {
+        m_cancelClicked = true;
+    }
+}
+
 void KisDlgPreferences::slotDefault()
 {
     if (currentPage()->objectName() == "general") {
@@ -1595,99 +1602,98 @@ void KisDlgPreferences::slotDefault()
 
 bool KisDlgPreferences::editPreferences()
 {
-    KisDlgPreferences* dialog;
+    connect(this->buttonBox(), SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonClicked(QAbstractButton*)));
 
-    dialog = new KisDlgPreferences();
-    bool baccept = (dialog->exec() == Accepted);
-    if (baccept) {
+    int retval = exec();
+
+    if (!m_cancelClicked) {
         // General settings
         KisConfig cfg(false);
-        cfg.setNewCursorStyle(dialog->m_general->cursorStyle());
-        cfg.setNewOutlineStyle(dialog->m_general->outlineStyle());
-        cfg.setShowRootLayer(dialog->m_general->showRootLayer());
-        cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
-        cfg.setForceAlwaysFullSizedOutline(!dialog->m_general->m_changeBrushOutline->isChecked());
-        cfg.setSessionOnStartup(dialog->m_general->sessionOnStartup());
-        cfg.setSaveSessionOnQuit(dialog->m_general->saveSessionOnQuit());
+        cfg.setNewCursorStyle(m_general->cursorStyle());
+        cfg.setNewOutlineStyle(m_general->outlineStyle());
+        cfg.setShowRootLayer(m_general->showRootLayer());
+        cfg.setShowOutlineWhilePainting(m_general->showOutlineWhilePainting());
+        cfg.setForceAlwaysFullSizedOutline(!m_general->m_changeBrushOutline->isChecked());
+        cfg.setSessionOnStartup(m_general->sessionOnStartup());
+        cfg.setSaveSessionOnQuit(m_general->saveSessionOnQuit());
 
         KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
-        group.writeEntry("DontUseNativeFileDialog", !dialog->m_general->m_chkNativeFileDialog->isChecked());
+        group.writeEntry("DontUseNativeFileDialog", !m_general->m_chkNativeFileDialog->isChecked());
 
-        cfg.writeEntry<int>("maximumBrushSize", dialog->m_general->intMaxBrushSize->value());
+        cfg.writeEntry<int>("maximumBrushSize", m_general->intMaxBrushSize->value());
 
-        cfg.writeEntry<int>("mdi_viewmode", dialog->m_general->mdiMode());
-        cfg.setMDIBackgroundColor(dialog->m_general->m_mdiColor->color().toXML());
-        cfg.setMDIBackgroundImage(dialog->m_general->m_backgroundimage->text());
-        cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
-        cfg.writeEntry("autosavefileshidden", dialog->m_general->chkHideAutosaveFiles->isChecked());
+        cfg.writeEntry<int>("mdi_viewmode", m_general->mdiMode());
+        cfg.setMDIBackgroundColor(m_general->m_mdiColor->color().toXML());
+        cfg.setMDIBackgroundImage(m_general->m_backgroundimage->text());
+        cfg.setAutoSaveInterval(m_general->autoSaveInterval());
+        cfg.writeEntry("autosavefileshidden", m_general->chkHideAutosaveFiles->isChecked());
 
-        cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-        cfg.writeEntry("backupfilelocation", dialog->m_general->cmbBackupFileLocation->currentIndex());
-        cfg.writeEntry("backupfilesuffix", dialog->m_general->txtBackupFileSuffix->text());
-        cfg.writeEntry("numberofbackupfiles", dialog->m_general->intNumBackupFiles->value());
+        cfg.setBackupFile(m_general->m_backupFileCheckBox->isChecked());
+        cfg.writeEntry("backupfilelocation", m_general->cmbBackupFileLocation->currentIndex());
+        cfg.writeEntry("backupfilesuffix", m_general->txtBackupFileSuffix->text());
+        cfg.writeEntry("numberofbackupfiles", m_general->intNumBackupFiles->value());
 
-        cfg.setShowCanvasMessages(dialog->m_general->showCanvasMessages());
-        cfg.setCompressKra(dialog->m_general->compressKra());
-        cfg.setUseZip64(dialog->m_general->useZip64());
+        cfg.setShowCanvasMessages(m_general->showCanvasMessages());
+        cfg.setCompressKra(m_general->compressKra());
+        cfg.setUseZip64(m_general->useZip64());
 
         const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
         QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
-        kritarc.setValue("EnableHiDPI", dialog->m_general->m_chkHiDPI->isChecked());
+        kritarc.setValue("EnableHiDPI", m_general->m_chkHiDPI->isChecked());
 #ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
-        kritarc.setValue("EnableHiDPIFractionalScaling", dialog->m_general->m_chkHiDPIFractionalScaling->isChecked());
+        kritarc.setValue("EnableHiDPIFractionalScaling", m_general->m_chkHiDPIFractionalScaling->isChecked());
 #endif
-        kritarc.setValue("EnableSingleApplication", dialog->m_general->m_chkSingleApplication->isChecked());
-        kritarc.setValue("LogUsage", dialog->m_general->chkUsageLogging->isChecked());
+        kritarc.setValue("EnableSingleApplication", m_general->m_chkSingleApplication->isChecked());
+        kritarc.setValue("LogUsage", m_general->chkUsageLogging->isChecked());
 
-        cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
+        cfg.setToolOptionsInDocker(m_general->toolOptionsInDocker());
 
-        cfg.writeEntry<bool>("useCreamyAlphaDarken", (bool)!dialog->m_general->cmbFlowMode->currentIndex());
+        cfg.writeEntry<bool>("useCreamyAlphaDarken", (bool)!m_general->cmbFlowMode->currentIndex());
 
-        cfg.setKineticScrollingEnabled(dialog->m_general->kineticScrollingEnabled());
-        cfg.setKineticScrollingGesture(dialog->m_general->kineticScrollingGesture());
-        cfg.setKineticScrollingSensitivity(dialog->m_general->kineticScrollingSensitivity());
-        cfg.setKineticScrollingHideScrollbars(dialog->m_general->kineticScrollingHiddenScrollbars());
+        cfg.setKineticScrollingEnabled(m_general->kineticScrollingEnabled());
+        cfg.setKineticScrollingGesture(m_general->kineticScrollingGesture());
+        cfg.setKineticScrollingSensitivity(m_general->kineticScrollingSensitivity());
+        cfg.setKineticScrollingHideScrollbars(m_general->kineticScrollingHiddenScrollbars());
 
-        cfg.setSwitchSelectionCtrlAlt(dialog->m_general->switchSelectionCtrlAlt());
-        cfg.setDisableTouchOnCanvas(!dialog->m_general->chkEnableTouch->isChecked());
-        cfg.setDisableTouchRotation(!dialog->m_general->chkEnableTouchRotation->isChecked());
-        cfg.setActivateTransformToolAfterPaste(dialog->m_general->chkEnableTranformToolAfterPaste->isChecked());
-        cfg.setConvertToImageColorspaceOnImport(dialog->m_general->convertToImageColorspaceOnImport());
-        cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
-        cfg.setFavoritePresets(dialog->m_general->favoritePresets());
+        cfg.setSwitchSelectionCtrlAlt(m_general->switchSelectionCtrlAlt());
+        cfg.setDisableTouchOnCanvas(!m_general->chkEnableTouch->isChecked());
+        cfg.setDisableTouchRotation(!m_general->chkEnableTouchRotation->isChecked());
+        cfg.setActivateTransformToolAfterPaste(m_general->chkEnableTranformToolAfterPaste->isChecked());
+        cfg.setConvertToImageColorspaceOnImport(m_general->convertToImageColorspaceOnImport());
+        cfg.setUndoStackLimit(m_general->undoStackSize());
+        cfg.setFavoritePresets(m_general->favoritePresets());
 
-        // Color settings
-        cfg.setUseSystemMonitorProfile(dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
-        for (int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
-            if (dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked()) {
-                int currentIndex = dialog->m_colorSettings->m_monitorProfileWidgets[i]->currentIndex();
-                QString monitorid = dialog->m_colorSettings->m_monitorProfileWidgets[i]->itemData(currentIndex).toString();
+        cfg.setUseSystemMonitorProfile(m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
+        for (int i = 0; i < QApplication::screens().count(); ++i) {
+            if (m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked()) {
+                int currentIndex = m_colorSettings->m_monitorProfileWidgets[i]->currentIndex();
+                QString monitorid = m_colorSettings->m_monitorProfileWidgets[i]->itemData(currentIndex).toString();
                 cfg.setMonitorForScreen(i, monitorid);
             }
             else {
                 cfg.setMonitorProfile(i,
-                                      dialog->m_colorSettings->m_monitorProfileWidgets[i]->currentUnsqueezedText(),
-                                      dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
+                                      m_colorSettings->m_monitorProfileWidgets[i]->currentUnsqueezedText(),
+                                      m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
             }
         }
-        cfg.setWorkingColorSpace(dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
+        cfg.setWorkingColorSpace(m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
 
         KisImageConfig cfgImage(false);
-        cfgImage.setDefaultProofingConfig(dialog->m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(),
-                                          dialog->m_colorSettings->m_page->cmbProofingIntent->currentIndex(),
-                                          dialog->m_colorSettings->m_page->ckbProofBlackPoint->isChecked(),
-                                          dialog->m_colorSettings->m_page->gamutAlarm->color(),
-                                          (double)dialog->m_colorSettings->m_page->sldAdaptationState->value()/20);
-        cfg.setUseBlackPointCompensation(dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
-        cfg.setAllowLCMSOptimization(dialog->m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
-        cfg.setForcePaletteColors(dialog->m_colorSettings->m_page->chkForcePaletteColor->isChecked());
-        cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());
-        cfg.setRenderIntent(dialog->m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
+        cfgImage.setDefaultProofingConfig(m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(),
+                                          m_colorSettings->m_page->cmbProofingIntent->currentIndex(),
+                                          m_colorSettings->m_page->ckbProofBlackPoint->isChecked(),
+                                          m_colorSettings->m_page->gamutAlarm->color(),
+                                          (double)m_colorSettings->m_page->sldAdaptationState->value()/20);
+        cfg.setUseBlackPointCompensation(m_colorSettings->m_page->chkBlackpoint->isChecked());
+        cfg.setAllowLCMSOptimization(m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
+        cfg.setForcePaletteColors(m_colorSettings->m_page->chkForcePaletteColor->isChecked());
+        cfg.setPasteBehaviour(m_colorSettings->m_pasteBehaviourGroup.checkedId());
+        cfg.setRenderIntent(m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
 
         // Tablet settings
-        cfg.setPressureTabletCurve( dialog->m_tabletSettings->m_page->pressureCurve->curve().toString() );
+        cfg.setPressureTabletCurve( m_tabletSettings->m_page->pressureCurve->curve().toString() );
         cfg.setUseRightMiddleTabletButtonWorkaround(
-            dialog->m_tabletSettings->m_page->chkUseRightMiddleClickWorkaround->isChecked());
+            m_tabletSettings->m_page->chkUseRightMiddleClickWorkaround->isChecked());
 
 #if defined Q_OS_WIN && (!defined USE_QT_TABLET_WINDOWS || defined QT_HAS_WINTAB_SWITCH)
 #ifdef USE_QT_TABLET_WINDOWS
@@ -1697,60 +1703,60 @@ bool KisDlgPreferences::editPreferences()
         const bool isWinInkAvailable = KisTabletSupportWin8::isAvailable();
 #endif
         if (isWinInkAvailable) {
-            cfg.setUseWin8PointerInput(dialog->m_tabletSettings->m_page->radioWin8PointerInput->isChecked());
+            cfg.setUseWin8PointerInput(m_tabletSettings->m_page->radioWin8PointerInput->isChecked());
         }
 #endif
 
-        dialog->m_performanceSettings->save();
+        m_performanceSettings->save();
 
-        if (!cfg.useOpenGL() && dialog->m_displaySettings->grpOpenGL->isChecked())
+        if (!cfg.useOpenGL() && m_displaySettings->grpOpenGL->isChecked())
             cfg.setCanvasState("TRY_OPENGL");
 
-        if (dialog->m_displaySettings->grpOpenGL->isChecked()) {
+        if (m_displaySettings->grpOpenGL->isChecked()) {
             KisOpenGL::OpenGLRenderer renderer = static_cast<KisOpenGL::OpenGLRenderer>(
-                    dialog->m_displaySettings->cmbPreferredRenderer->itemData(
-                            dialog->m_displaySettings->cmbPreferredRenderer->currentIndex()).toInt());
+                    m_displaySettings->cmbPreferredRenderer->itemData(
+                            m_displaySettings->cmbPreferredRenderer->currentIndex()).toInt());
             KisOpenGL::setUserPreferredOpenGLRendererConfig(renderer);
         } else {
             KisOpenGL::setUserPreferredOpenGLRendererConfig(KisOpenGL::RendererNone);
         }
 
-        cfg.setUseOpenGLTextureBuffer(dialog->m_displaySettings->chkUseTextureBuffer->isChecked());
-        cfg.setOpenGLFilteringMode(dialog->m_displaySettings->cmbFilterMode->currentIndex());
-        cfg.setDisableVSync(dialog->m_displaySettings->chkDisableVsync->isChecked());
-        cfg.setRootSurfaceFormat(&kritarc, indexToFormat(dialog->m_displaySettings->cmbPreferedRootSurfaceFormat->currentIndex()));
+        cfg.setUseOpenGLTextureBuffer(m_displaySettings->chkUseTextureBuffer->isChecked());
+        cfg.setOpenGLFilteringMode(m_displaySettings->cmbFilterMode->currentIndex());
+        cfg.setDisableVSync(m_displaySettings->chkDisableVsync->isChecked());
+        cfg.setRootSurfaceFormat(&kritarc, indexToFormat(m_displaySettings->cmbPreferedRootSurfaceFormat->currentIndex()));
 
-        cfg.setCheckSize(dialog->m_displaySettings->intCheckSize->value());
-        cfg.setScrollingCheckers(dialog->m_displaySettings->chkMoving->isChecked());
-        cfg.setCheckersColor1(dialog->m_displaySettings->colorChecks1->color().toQColor());
-        cfg.setCheckersColor2(dialog->m_displaySettings->colorChecks2->color().toQColor());
-        cfg.setCanvasBorderColor(dialog->m_displaySettings->canvasBorder->color().toQColor());
-        cfg.setHideScrollbars(dialog->m_displaySettings->hideScrollbars->isChecked());
-        KoColor c = dialog->m_displaySettings->btnSelectionOverlayColor->color();
-        c.setOpacity(dialog->m_displaySettings->sldSelectionOverlayOpacity->value());
+        cfg.setCheckSize(m_displaySettings->intCheckSize->value());
+        cfg.setScrollingCheckers(m_displaySettings->chkMoving->isChecked());
+        cfg.setCheckersColor1(m_displaySettings->colorChecks1->color().toQColor());
+        cfg.setCheckersColor2(m_displaySettings->colorChecks2->color().toQColor());
+        cfg.setCanvasBorderColor(m_displaySettings->canvasBorder->color().toQColor());
+        cfg.setHideScrollbars(m_displaySettings->hideScrollbars->isChecked());
+        KoColor c = m_displaySettings->btnSelectionOverlayColor->color();
+        c.setOpacity(m_displaySettings->sldSelectionOverlayOpacity->value());
         cfgImage.setSelectionOverlayMaskColor(c.toQColor());
-        cfg.setAntialiasCurves(dialog->m_displaySettings->chkCurveAntialiasing->isChecked());
-        cfg.setAntialiasSelectionOutline(dialog->m_displaySettings->chkSelectionOutlineAntialiasing->isChecked());
-        cfg.setShowSingleChannelAsColor(dialog->m_displaySettings->chkChannelsAsColor->isChecked());
-        cfg.setHidePopups(dialog->m_displaySettings->chkHidePopups->isChecked());
+        cfg.setAntialiasCurves(m_displaySettings->chkCurveAntialiasing->isChecked());
+        cfg.setAntialiasSelectionOutline(m_displaySettings->chkSelectionOutlineAntialiasing->isChecked());
+        cfg.setShowSingleChannelAsColor(m_displaySettings->chkChannelsAsColor->isChecked());
+        cfg.setHidePopups(m_displaySettings->chkHidePopups->isChecked());
 
-        cfg.setHideDockersFullscreen(dialog->m_fullscreenSettings->chkDockers->checkState());
-        cfg.setHideMenuFullscreen(dialog->m_fullscreenSettings->chkMenu->checkState());
-        cfg.setHideScrollbarsFullscreen(dialog->m_fullscreenSettings->chkScrollbars->checkState());
-        cfg.setHideStatusbarFullscreen(dialog->m_fullscreenSettings->chkStatusbar->checkState());
-        cfg.setHideTitlebarFullscreen(dialog->m_fullscreenSettings->chkTitlebar->checkState());
-        cfg.setHideToolbarFullscreen(dialog->m_fullscreenSettings->chkToolbar->checkState());
+        cfg.setHideDockersFullscreen(m_fullscreenSettings->chkDockers->checkState());
+        cfg.setHideMenuFullscreen(m_fullscreenSettings->chkMenu->checkState());
+        cfg.setHideScrollbarsFullscreen(m_fullscreenSettings->chkScrollbars->checkState());
+        cfg.setHideStatusbarFullscreen(m_fullscreenSettings->chkStatusbar->checkState());
+        cfg.setHideTitlebarFullscreen(m_fullscreenSettings->chkTitlebar->checkState());
+        cfg.setHideToolbarFullscreen(m_fullscreenSettings->chkToolbar->checkState());
 
-        cfg.setCursorMainColor(dialog->m_general->cursorColorBtutton->color().toQColor());
-        cfg.setPixelGridColor(dialog->m_displaySettings->pixelGridColorButton->color().toQColor());
-        cfg.setPixelGridDrawingThreshold(dialog->m_displaySettings->pixelGridDrawingThresholdBox->value() / 100);
+        cfg.setCursorMainColor(m_general->cursorColorBtutton->color().toQColor());
+        cfg.setPixelGridColor(m_displaySettings->pixelGridColorButton->color().toQColor());
+        cfg.setPixelGridDrawingThreshold(m_displaySettings->pixelGridDrawingThresholdBox->value() / 100);
 
-        dialog->m_authorPage->apply();
+        m_authorPage->apply();
 
         cfg.logImportantSettings();
 
     }
-    delete dialog;
-    return baccept;
+
+    return !m_cancelClicked;
 }
 

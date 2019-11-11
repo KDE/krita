@@ -2140,34 +2140,6 @@
       <number>6</number>
      </property>
      <item>
-      <widget class="QPushButton" name="showDecorationsBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>32</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Show Decorations</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="chkWorkRecursively">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -2258,8 +2230,8 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="freeTransformRadioGroup"/>
   <buttongroup name="cageTransformButtonGroup"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="freeTransformRadioGroup"/>
  </buttongroups>
 </ui>

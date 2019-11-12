@@ -88,10 +88,8 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
     bool dirty = index.data(Qt::UserRole + KisResourceModel::Dirty).toBool();
 
-    QImage preview = index.data(Qt::DecorationRole).value<QImage>();
-    if (preview.isNull()) {
-        preview = index.data(Qt::UserRole + KisResourceModel::Image).value<QImage>();
-    }
+    QImage preview = index.data(Qt::UserRole + KisResourceModel::Image).value<QImage>();
+
     if (preview.isNull()) {
         qDebug() << "KisPresetDelegate::paint:  Preview is null";
         painter->restore();

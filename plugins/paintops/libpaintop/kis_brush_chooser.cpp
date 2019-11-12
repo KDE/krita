@@ -77,7 +77,8 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
 {
     if (! index.isValid())
         return;
-    QImage thumbnail = index.data(Qt::DecorationRole).value<QImage>();
+
+    QImage thumbnail = index.data(Qt::UserRole + KisResourceModel::Image).value<QImage>();
 
     QRect itemRect = option.rect;
 

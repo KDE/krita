@@ -48,18 +48,6 @@ void TestResourceStorage ::testStorage()
     }
 
     {
-        KisResourceStorage storage(QString(FILES_DATA_DIR) + "/abr/test.abr");
-        QVERIFY(storage.type() == KisResourceStorage::StorageType::AdobeBrushLibrary);
-        QVERIFY(storage.valid());
-    }
-
-    {
-        KisResourceStorage storage(QString(FILES_DATA_DIR) + "/brushes/test.gbr");
-        QVERIFY(storage.type() == KisResourceStorage::StorageType::Memory);
-        QVERIFY(storage.valid());
-    }
-
-    {
         KisResourceStorage storage("");
         QVERIFY(storage.type() == KisResourceStorage::StorageType::Unknown);
         QVERIFY(!storage.valid());

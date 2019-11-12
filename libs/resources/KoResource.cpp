@@ -111,18 +111,16 @@ void KoResource::setMD5(const QByteArray &md5)
 QByteArray KoResource::generateMD5() const
 {
     KoHashGenerator *hashGenerator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
-    QByteArray hash = hashGenerator->generateHash(d->filename);
-    if (hash.isEmpty()) {
-        QByteArray ba;
-        QBuffer buf(&ba);
-        buf.open(QBuffer::WriteOnly);
-        if (saveToDevice(&buf)) {
-            buf.close();
-            hash = hashGenerator->generateHash(ba);
-        }
-        else {
-            qWarning() << "Could not create md5sum for resource" << d->filename;
-        }
+    QByteArray hash;
+    QByteArray ba;
+    QBuffer buf(&ba);
+    buf.open(QBuffer::WriteOnly);
+    if (saveToDevice(&buf)) {
+        buf.close();
+        hash = hashGenerator->generateHash(ba);
+    }
+    else {
+        qWarning() << "Could not create md5sum for resource" << d->filename;
     }
     return hash;
 }
@@ -137,15 +135,9 @@ void KoResource::setFilename(const QString& filename)
     d->filename = filename;
 }
 
-QString KoResource::shortFilename() const
-{
-    QFileInfo fileInfo(d->filename);
-    return fileInfo.fileName();
-}
-
 QString KoResource::name() const
 {
-    return (!d->name.isEmpty() ? d->name : shortFilename());
+    return (!d->name.isEmpty() ? d->name : filename());
 }
 
 void KoResource::setName(const QString& name)

@@ -38,7 +38,7 @@ void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration
     setting->setProperty("brush_definition", d.toString());
 
     QString brushFileName  = !m_brush->filename().isEmpty() ?
-                            m_brush->shortFilename() : QString();
+                            m_brush->filename() : QString();
 
     setting->setProperty(KisPaintOpUtils::RequiredBrushFileTag, brushFileName);
 

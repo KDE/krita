@@ -194,7 +194,7 @@ void KisPredefinedBrushChooser::setBrush(KisBrushSP brush)
      */
 
     KoResourceServer<KisBrush>* server = KisBrushServerProvider::instance()->brushServer();
-    KoResourceSP resource = server->resourceByFilename(brush->shortFilename());
+    KoResourceSP resource = server->resourceByFilename(brush->filename());
 
     if (!resource) {
         resource = server->resourceByName(brush->name());

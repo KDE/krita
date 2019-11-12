@@ -97,12 +97,9 @@ public:
     /// @return the md5sum calculated over the contents of the resource.
     QByteArray md5() const;
 
-    /// @return the full path to this resource
+    /// @return the unique identifier of this resource within the container (folder, bundle, ...)
     QString filename() const;
     void setFilename(const QString& filename);
-
-    /// @return the name of the file without the path
-    QString shortFilename() const;
 
     /// @return the user-visible name of the resource
     QString name() const;

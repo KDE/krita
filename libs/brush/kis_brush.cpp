@@ -340,7 +340,7 @@ enumBrushType KisBrush::brushType() const
 void KisBrush::predefinedBrushToXML(const QString &type, QDomElement& e) const
 {
     e.setAttribute("type", type);
-    e.setAttribute("filename", shortFilename());
+    e.setAttribute("filename", filename());
     e.setAttribute("spacing", QString::number(spacing()));
     e.setAttribute("useAutoSpacing", QString::number(autoSpacingActive()));
     e.setAttribute("autoSpacingCoeff", QString::number(autoSpacingCoeff()));

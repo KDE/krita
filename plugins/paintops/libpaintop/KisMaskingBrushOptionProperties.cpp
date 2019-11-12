@@ -55,7 +55,7 @@ void KisMaskingBrushOptionProperties::write(KisPropertiesConfiguration *setting,
 
         setting->setPrefixedProperties(KisPaintOpUtils::MaskingBrushPresetPrefix, embeddedConfig);
 
-        const QString brushFileName = brush->shortFilename();
+        const QString brushFileName = brush->filename();
 
         if (!brushFileName.isEmpty()) {
             QStringList requiredFiles =

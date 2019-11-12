@@ -80,7 +80,7 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
             if (resType == ResourceType::Gradients) {
                 Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
-                        m_selectedGradients << res->shortFilename();
+                        m_selectedGradients << res->filename();
                     }
                 }
 
@@ -88,7 +88,7 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
             else if (resType  == ResourceType::Patterns) {
                 Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
-                        m_selectedPatterns << res->shortFilename();
+                        m_selectedPatterns << res->filename();
                     }
                 }
 
@@ -96,7 +96,7 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
             else if (resType  == ResourceType::Brushes) {
                 Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
-                        m_selectedBrushes << res->shortFilename();
+                        m_selectedBrushes << res->filename();
                     }
                 }
 
@@ -104,7 +104,7 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
             else if (resType  == ResourceType::Palettes) {
                 Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
-                        m_selectedPalettes << res->shortFilename();
+                        m_selectedPalettes << res->filename();
                     }
                 }
 
@@ -112,7 +112,7 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
             else if (resType  == ResourceType::Workspaces) {
                 Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
-                        m_selectedWorkspaces << res->shortFilename();
+                        m_selectedWorkspaces << res->filename();
                     }
                 }
 
@@ -120,14 +120,14 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
             else if (resType  == ResourceType::PaintOpPresets) {
                 Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
-                        m_selectedPresets << res->shortFilename();
+                        m_selectedPresets << res->filename();
                     }
                 }
             }
             else if (resType  == ResourceType::GamutMasks) {
                 Q_FOREACH (const KoResourceSP res, bundle->resources(resType)) {
                     if (res) {
-                        m_selectedGamutMasks << res->shortFilename();
+                        m_selectedGamutMasks << res->filename();
                     }
                 }
             }
@@ -349,9 +349,9 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
         KoResourceServer<KisBrush> *server = KisBrushServerProvider::instance()->brushServer();
         Q_FOREACH (KisBrushSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->shortFilename());
+            item->setData(Qt::UserRole, res->filename());
 
-            if (m_selectedBrushes.contains(res->shortFilename())) {
+            if (m_selectedBrushes.contains(res->filename())) {
                 m_ui->tableSelected->addItem(item);
             }
             else {
@@ -363,9 +363,9 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
         KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
         Q_FOREACH (KisPaintOpPresetSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->shortFilename());
+            item->setData(Qt::UserRole, res->filename());
 
-            if (m_selectedPresets.contains(res->shortFilename())) {
+            if (m_selectedPresets.contains(res->filename())) {
                 m_ui->tableSelected->addItem(item);
             }
             else {
@@ -380,9 +380,9 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
             //technically we should read from the file-name whether or not the file can be opened, but this works for now. The problem is making sure that bundle-resource know where they are stored.//
             //dbgKrita<<res->filename();
                 QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-                item->setData(Qt::UserRole, res->shortFilename());
+                item->setData(Qt::UserRole, res->filename());
 
-                if (m_selectedGradients.contains(res->shortFilename())) {
+                if (m_selectedGradients.contains(res->filename())) {
                     m_ui->tableSelected->addItem(item);
                 }
                 else {
@@ -395,9 +395,9 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
         KoResourceServer<KoPattern>* server = KoResourceServerProvider::instance()->patternServer();
         Q_FOREACH (KoResourceSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->shortFilename());
+            item->setData(Qt::UserRole, res->filename());
 
-            if (m_selectedPatterns.contains(res->shortFilename())) {
+            if (m_selectedPatterns.contains(res->filename())) {
                 m_ui->tableSelected->addItem(item);
             }
             else {
@@ -409,9 +409,9 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
         KoResourceServer<KoColorSet>* server = KoResourceServerProvider::instance()->paletteServer();
         Q_FOREACH (KoResourceSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->shortFilename());
+            item->setData(Qt::UserRole, res->filename());
 
-            if (m_selectedPalettes.contains(res->shortFilename())) {
+            if (m_selectedPalettes.contains(res->filename())) {
                 m_ui->tableSelected->addItem(item);
             }
             else {
@@ -423,9 +423,9 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
         KoResourceServer<KisWorkspaceResource>* server = KisResourceServerProvider::instance()->workspaceServer();
         Q_FOREACH (KoResourceSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->shortFilename());
+            item->setData(Qt::UserRole, res->filename());
 
-            if (m_selectedWorkspaces.contains(res->shortFilename())) {
+            if (m_selectedWorkspaces.contains(res->filename())) {
                 m_ui->tableSelected->addItem(item);
             }
             else {
@@ -437,9 +437,9 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
         KoResourceServer<KoGamutMask>* server = KoResourceServerProvider::instance()->gamutMaskServer();
         Q_FOREACH (KoResourceSP res, server->resources()) {
             QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
-            item->setData(Qt::UserRole, res->shortFilename());
+            item->setData(Qt::UserRole, res->filename());
 
-            if (m_selectedGamutMasks.contains(res->shortFilename())) {
+            if (m_selectedGamutMasks.contains(res->filename())) {
                 m_ui->tableSelected->addItem(item);
             }
             else {

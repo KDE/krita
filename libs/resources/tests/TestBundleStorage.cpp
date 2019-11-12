@@ -65,6 +65,7 @@ void TestBundleStorage::testResourceIterator()
     int count = 0;
     while (iter->hasNext()) {
         iter->next();
+        qDebug() << iter->url();
         KoResourceSP res = iter->resource();
         QVERIFY(res);
         count++;
@@ -79,6 +80,7 @@ void TestBundleStorage::testTagIterator()
     QVERIFY(iter->hasNext());
     int count = 0;
     while (iter->hasNext()) {
+        //qDebug() << iter->url() << iter->name() << iter->tag();
         iter->next();
         count++;
     }

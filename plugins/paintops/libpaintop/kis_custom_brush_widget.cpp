@@ -196,6 +196,7 @@ void KisCustomBrushWidget::createBrush()
 
     if (brushStyle->currentIndex() == 0) {
         KisSelectionSP selection = m_image->globalSelection();
+
         // create copy of the data
         m_image->lock();
         KisPaintDeviceSP dev = new KisPaintDevice(*m_image->projection());
@@ -207,7 +208,6 @@ void KisCustomBrushWidget::createBrush()
         else {
             // apply selection mask
             QRect r = selection->selectedExactRect();
-            dev->crop(r);
 
             KisHLineIteratorSP pixelIt = dev->createHLineIteratorNG(r.x(), r.top(), r.width());
             KisHLineConstIteratorSP maskIt = selection->projection()->createHLineIteratorNG(r.x(), r.top(), r.width());
@@ -221,9 +221,7 @@ void KisCustomBrushWidget::createBrush()
                 pixelIt->nextRow();
                 maskIt->nextRow();
             }
-
-            QRect rc = dev->exactBounds();
-            m_brush = KisBrushSP(new KisGbrBrush(dev, rc.x(), rc.y(), rc.width(), rc.height()));
+            m_brush = KisBrushSP(new KisGbrBrush(dev, r.x(), r.y(), r.width(), r.height()));
         }
 
     }

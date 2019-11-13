@@ -401,7 +401,7 @@ void KisShapeLayerCanvas::resetCache()
 
 void KisShapeLayerCanvas::rerenderAfterBeingInvisible()
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_parentLayer->visible(true))
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_parentLayer->visible(true));
 
     m_hasChangedWhileBeingInvisible = false;
     resetCache();

@@ -479,7 +479,7 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
 bool KisSaveXmlVisitor::saveReferenceImagesLayer(KisExternalLayer *layer)
 {
     auto *referencesLayer = dynamic_cast<KisReferenceImagesLayer*>(layer);
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(referencesLayer, false)
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(referencesLayer, false);
 
     QDomElement layerElement = m_doc.createElement(LAYER);
     layerElement.setAttribute(NODE_TYPE, REFERENCE_IMAGES_LAYER);

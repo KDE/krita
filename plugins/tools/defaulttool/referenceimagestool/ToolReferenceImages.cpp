@@ -89,7 +89,7 @@ void ToolReferenceImages::setReferenceImageLayer(KisSharedPtr<KisReferenceImages
 void ToolReferenceImages::addReferenceImage()
 {
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas)
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
 
             KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImage");
     dialog.setCaption(i18n("Select a Reference Image"));
@@ -114,7 +114,7 @@ void ToolReferenceImages::addReferenceImage()
 void ToolReferenceImages::pasteReferenceImage()
 {
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas)
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
 
             KisReferenceImage* reference = KisReferenceImage::fromClipboard(*kisCanvas->coordinatesConverter());
     if(reference) {
@@ -136,7 +136,7 @@ void ToolReferenceImages::removeAllReferenceImages()
 void ToolReferenceImages::loadReferenceImages()
 {
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas)
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
 
             KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImageCollection");
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-reference-images");
@@ -178,7 +178,7 @@ void ToolReferenceImages::saveReferenceImages()
     if (!layer || layer->shapeCount() == 0) return;
 
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas)
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
 
             KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::SaveFile, "SaveReferenceImageCollection");
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-reference-images");

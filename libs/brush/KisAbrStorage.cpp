@@ -79,6 +79,10 @@ public:
             const_cast<AbrIterator*>(this)->isLoaded = true;
         }
 
+        if (m_brushCollectionIterator == m_brushesMap->constKeyValueEnd()) {
+            return false;
+        }
+
         const_cast<AbrIterator*>(this)->m_brushCollectionIterator++;
         bool hasNext = (m_brushCollectionIterator != m_brushesMap->constKeyValueEnd());
         const_cast<AbrIterator*>(this)->m_brushCollectionIterator--;

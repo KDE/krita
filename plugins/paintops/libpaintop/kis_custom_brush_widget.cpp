@@ -165,7 +165,7 @@ void KisCustomBrushWidget::slotAddPredefined()
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
     if (m_rServer && m_brush) {
-        qDebug() << "m_brush" << m_brush;
+        //XXX: once cloned brushtips is fixed, this also needs to be fixed, because this can also be gih.
         KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
 
         if (nameLineEdit->text().isEmpty()) {

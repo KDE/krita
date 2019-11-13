@@ -326,6 +326,10 @@ bool KisGbrBrush::save()
 
 bool KisGbrBrush::saveToDevice(QIODevice* dev) const
 {
+    if (!valid() || brushTipImage().isNull()) {
+        qWarning() << "this brush is not valid, set a brush tip image" << filename();
+        return false;
+    }
     GimpBrushHeader bh;
     QByteArray utf8Name = name().toUtf8(); // Names in v2 brushes are in UTF-8
     char const* name = utf8Name.data();
@@ -367,16 +371,16 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
 
     if (!hasColor()) {
         bytes.resize(width() * height());
-        for (qint32 y = 0; y < height(); y++) {
-            for (qint32 x = 0; x < width(); x++) {
+        for (qint32 y = 0; y < image.height(); y++) {
+            for (qint32 x = 0; x < image.width(); x++) {
                 QRgb c = image.pixel(x, y);
                 bytes[k++] = static_cast<char>(255 - qRed(c)); // red == blue == green
             }
         }
     } else {
         bytes.resize(width() * height() * 4);
-        for (qint32 y = 0; y < height(); y++) {
-            for (qint32 x = 0; x < width(); x++) {
+        for (qint32 y = 0; y < image.height(); y++) {
+            for (qint32 x = 0; x < image.width(); x++) {
                 // order for gimp brushes, v2 is: RGBA
                 QRgb pixel = image.pixel(x, y);
                 bytes[k++] = static_cast<char>(qRed(pixel));
@@ -400,13 +404,14 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
 QImage KisGbrBrush::brushTipImage() const
 {
     QImage image = KisBrush::brushTipImage();
-    if (hasColor() && useColorAsMask()) {
+    if (hasColor() && useColorAsMask() && !image.isNull()) {
         for (int y = 0; y < image.height(); y++) {
             QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
             for (int x = 0; x < image.width(); x++) {
                 QRgb c = pixel[x];
-                int a = qGray(c);
-                pixel[x] = qRgba(a, a, a, qAlpha(c));
+                float alpha = qAlpha(c) / 255.0f;
+                int a = 255 + int(alpha * (qGray(c) - 255));
+                pixel[x] = qRgba(a, a, a, 255);
             }
         }
     }
@@ -439,8 +444,8 @@ void KisGbrBrush::makeMaskImage()
     QImage brushTip = brushTipImage();
 
     if (brushTip.width() == width() && brushTip.height() == height()) {
-        int imageWidth = width();
-        int imageHeight = height();
+        int imageWidth = brushTip.width();
+        int imageHeight = brushTip.height();
         QImage image(imageWidth, imageHeight, QImage::Format_Indexed8);
         QVector<QRgb> table;
         for (int i = 0; i < 256; ++i) {
@@ -457,7 +462,7 @@ void KisGbrBrush::makeMaskImage()
                 // linear interpolation with maximum gray value which is transparent in the mask
                 //int a = (qGray(c) * alpha) + ((1.0 - alpha) * 255);
                 // single multiplication version
-                int a = 255 + alpha * (qGray(c) - 255);
+                int a = 255 + int(alpha * (qGray(c) - 255));
                 dstPixel[x] = (uchar)a;
             }
         }

@@ -100,13 +100,21 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
     m_shapeControllerBase = rhs.m_shapeControllerBase;
     m_converter = new KisImageViewConverter(m_image);
     m_canvas = new KisShapeSelectionCanvas(m_shapeControllerBase);
-    m_canvas->shapeManager()->addShape(this);
 
+    // TODO: refactor shape selection to pass signals
+    //       via KoShapeManager, not via the model
+    m_canvas->shapeManager()->setUpdatesBlocked(true);
+    m_model->setUpdatesEnabled(false);
+
+    m_canvas->shapeManager()->addShape(this);
     Q_FOREACH (KoShape *shape, rhs.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
         this->addShape(clonedShape);
     }
+
+    m_canvas->shapeManager()->setUpdatesBlocked(false);
+    m_model->setUpdatesEnabled(true);
 }
 
 KisSelectionComponent* KisShapeSelection::clone(KisSelection* selection)

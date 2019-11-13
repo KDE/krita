@@ -1263,9 +1263,21 @@ bool KisImage::assignLayerProfile(KisNodeSP node, const KoColorProfile *profile)
 
 bool KisImage::assignImageProfile(const KoColorProfile *profile, bool blockAllUpdates)
 {
-    const KoColorSpace *srcColorSpace = m_d->colorSpace;
+    if (!profile) return false;
 
-    if (!profile || *srcColorSpace->profile() == *profile) return false;
+    const KoColorSpace *srcColorSpace = m_d->colorSpace;
+    bool imageProfileIsSame = *srcColorSpace->profile() == *profile;
+
+    imageProfileIsSame &=
+        !KisLayerUtils::recursiveFindNode(m_d->rootLayer,
+            [profile] (KisNodeSP node) {
+                return *node->colorSpace()->profile() != *profile;
+            });
+
+    if (imageProfileIsSame) {
+        dbgImage << "Trying to set the same image profile again" << ppVar(srcColorSpace->profile()->name()) << ppVar(profile->name());
+        return true;
+    }
 
     KUndo2MagicString actionName = kundo2_i18n("Assign Profile");
 

@@ -107,7 +107,7 @@ public:
 
 Q_SIGNALS:
     void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *cookie);
-    void sigPreviewDeviceReady(KisPaintDeviceSP device, const QPainterPath &selectionOutline);
+    void sigPreviewDeviceReady(KisPaintDeviceSP device);
 
 protected:
     void postProcessToplevelCommand(KUndo2Command *command) override;

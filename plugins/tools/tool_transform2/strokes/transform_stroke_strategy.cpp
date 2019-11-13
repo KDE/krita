@@ -247,14 +247,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             putDeviceCache(rootNode->paintDevice(), cacheDevice);
         }
 
-        QPainterPath selectionOutline;
-        if (m_selection && m_selection->outlineCacheValid()) {
-            selectionOutline = m_selection->outlineCache();
-        } else if (previewDevice) {
-            selectionOutline.addRect(previewDevice->exactBounds());
-        }
-
-        emit sigPreviewDeviceReady(previewDevice, selectionOutline);
+        emit sigPreviewDeviceReady(previewDevice);
     } else if(td) {
         if (td->destination == TransformData::PAINT_DEVICE) {
             QRect oldExtent = td->node->extent();

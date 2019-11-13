@@ -151,37 +151,39 @@ void KisCustomBrushWidget::slotUpdateSaveButton()
 void KisCustomBrushWidget::slotAddPredefined()
 {
     QString dir = KoResourcePaths::saveLocation("data", ResourceType::Brushes);
-    QString extension;
-
-    if (brushStyle->currentIndex() == 0) {
-        extension = ".gbr";
-    }
-    else {
-        extension = ".gih";
-    }
 
     QString name = nameLineEdit->text();
+
+    if (nameLineEdit->text().isEmpty()) {
+        name = (QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
+    }
 
     // Add it to the brush server, so that it automatically gets to the mediators, and
     // so to the other brush choosers can pick it up, if they want to
     if (m_rServer && m_brush) {
-        //XXX: once cloned brushtips is fixed, this also needs to be fixed, because this can also be gih.
-        KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
 
-        if (nameLineEdit->text().isEmpty()) {
-            resource->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
+
+        if (m_brush->clone().dynamicCast<KisGbrBrush>()) {
+            KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
+            resource->setName(name);
+            resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
+            if (colorAsMask->isChecked()) {
+                resource->makeMaskImage();
+            }
+            m_rServer->addResource(resource.dynamicCast<KisBrush>());
+            emit sigNewPredefinedBrush(resource);
         }
         else {
+            KisImagePipeBrushSP resource = m_brush->clone().dynamicCast<KisImagePipeBrush>();
             resource->setName(name);
+            resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
+            if (colorAsMask->isChecked()) {
+                resource->makeMaskImage();
+            }
+            m_rServer->addResource(resource.dynamicCast<KisBrush>());
+            emit sigNewPredefinedBrush(resource);
         }
 
-        resource->setFilename(resource->name().split(" ").join("_") + extension);
-
-        if (colorAsMask->isChecked()) {
-            resource->makeMaskImage();
-        }
-        m_rServer->addResource(resource.dynamicCast<KisBrush>());
-        emit sigNewPredefinedBrush(resource);
     }
 
     close();

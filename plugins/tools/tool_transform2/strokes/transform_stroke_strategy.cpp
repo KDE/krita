@@ -522,6 +522,15 @@ void TransformStrokeStrategy::initStrokeCallback()
         m_deactivatedSelections.append(m_selection);
     }
 
+    KisSelectionMaskSP overlaySelectionMask =
+        dynamic_cast<KisSelectionMask*>(m_rootNode->graphListener()->graphOverlayNode());
+    if (overlaySelectionMask) {
+        overlaySelectionMask->selection()->setVisible(false);
+        overlaySelectionMask->setDirty();
+        m_deactivatedOverlaySelectionMask = overlaySelectionMask;
+    }
+
+
     ToolTransformArgs initialTransformArgs;
     m_processedNodes = fetchNodesList(m_mode, m_rootNode, m_workRecursively);
 
@@ -573,6 +582,8 @@ void TransformStrokeStrategy::initStrokeCallback()
 
                 if (const KisTransformMask *mask = dynamic_cast<const KisTransformMask*>(node.data())) {
                     srcRect |= mask->sourceDataBounds();
+                } else if (const KisSelectionMask *mask = dynamic_cast<const KisSelectionMask*>(node.data())) {
+                    srcRect |= mask->selection()->selectedExactRect();
                 } else {
                     srcRect |= node->exactBounds();
                 }
@@ -642,6 +653,11 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
 
         Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
             node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
+        }
+
+        if (m_deactivatedOverlaySelectionMask) {
+            m_deactivatedOverlaySelectionMask->selection()->setVisible(true);
+            m_deactivatedOverlaySelectionMask->setDirty();
         }
 
         if (applyTransform) {

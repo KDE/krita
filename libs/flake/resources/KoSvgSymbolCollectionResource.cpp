@@ -40,6 +40,8 @@
 #include <KoViewConverter.h>
 #include <KoShapePaintingContext.h>
 #include <SvgParser.h>
+#include <KoHashGenerator.h>
+#include <KoHashGeneratorProvider.h>
 
 #include <FlakeDebug.h>
 
@@ -151,7 +153,15 @@ bool KoSvgSymbolCollectionResource::load()
 
 bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
 {
-    if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
+    if (!dev->isOpen()) {
+        dev->open(QIODevice::ReadOnly);
+    }
+
+    QByteArray ba = dev->readAll();
+    KoHashGenerator *hashGenerator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
+    setMD5(hashGenerator->generateHash(ba));
+
+    dev->seek(0);
 
     QString errorMsg;
     int errorLine = 0;

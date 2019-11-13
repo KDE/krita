@@ -29,17 +29,17 @@
 #include "KoHashGeneratorProvider.h"
 
 struct Q_DECL_HIDDEN KoResource::Private {
+    int version {0};
+    int resourceId {-1};
+    bool valid {false};
+    bool permanent {false};
+    bool dirty {false};
     QString name;
     QString filename;
-    bool valid {false};
+    QString storageLocation;
     QByteArray md5;
     QImage image;
-    bool permanent {false};
-    int resourceId {-1};
-    QString storageLocation;
-    bool dirty;
     QMap<QString, QVariant> metadata;
-    int version {0};
 };
 
 KoResource::KoResource(const QString& filename)

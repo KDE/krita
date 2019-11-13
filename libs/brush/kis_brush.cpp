@@ -170,6 +170,7 @@ KisBrush &KisBrush::operator=(const KisBrush &rhs)
         d->autoSpacingActive = rhs.d->autoSpacingActive;
         d->autoSpacingCoeff = rhs.d->autoSpacingCoeff;
         d->threadingAllowed = rhs.d->threadingAllowed;
+        d->brushTipImage = rhs.d->brushTipImage;
 
         /**
          * Be careful! The pyramid is shared between two brush objects,

@@ -93,11 +93,11 @@ public:
                 if (m_runnableJob) {
 #ifdef DEBUG_JOBS_SEQUENCE
                     if (m_atomicType == Type::STROKE) {
-                        qDebug() << "running: stroke" << m_runnableJob->id();
+                        qDebug() << "running: stroke" << m_runnableJob->debugName();
                     } else if (m_atomicType == Type::SPONTANEOUS) {
-                        qDebug() << "running: spont " << m_runnableJob->id();
+                        qDebug() << "running: spont " << m_runnableJob->debugName();
                     } else {
-                        qDebug() << "running: unkn. " << m_runnableJob->id();
+                        qDebug() << "running: unkn. " << m_runnableJob->debugName();
                     }
 #endif
 

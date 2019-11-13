@@ -57,7 +57,7 @@ public:
     KUndo2Command* setProfile(const KoColorProfile *profile) override;
     KUndo2Command* convertTo(const KoColorSpace * dstColorSpace,
                                  KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::internalRenderingIntent(),
-                                 KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags());
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::internalConversionFlags()) override;
 
 
 Q_SIGNALS:

@@ -46,3 +46,8 @@ int KisRecycleProjectionsJob::levelOfDetail() const
 {
     return 0;
 }
+
+QString KisRecycleProjectionsJob::debugName() const
+{
+    return "KisRecycleProjectionsJob";
+}

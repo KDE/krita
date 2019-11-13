@@ -34,7 +34,7 @@ struct KRITAIMAGE_NO_EXPORT KisCloneDocumentStroke::Private
 };
 
 KisCloneDocumentStroke::KisCloneDocumentStroke(KisDocument *document)
-    : KisSimpleStrokeStrategy("clone-document-stroke", kundo2_i18n("Clone Document")),
+    : KisSimpleStrokeStrategy(QLatin1String("clone-document-stroke"), kundo2_i18n("Clone Document")),
       m_d(new Private(document))
 {
     setClearsRedoOnStart(false);

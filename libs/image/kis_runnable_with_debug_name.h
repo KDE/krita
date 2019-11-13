@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2019 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,28 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_UPDATE_OUTLINE_JOB_H
-#define __KIS_UPDATE_OUTLINE_JOB_H
+#ifndef KIS_RUNNABLE_WITH_DEBUG_NAME_H
+#define KIS_RUNNABLE_WITH_DEBUG_NAME_H
 
-#include <QColor>
+#include "kis_runnable.h"
+#include <QString>
 
-#include "kis_spontaneous_job.h"
-#include "kis_selection.h"
-
-class KRITAIMAGE_EXPORT KisUpdateOutlineJob : public KisSpontaneousJob
+class KRITAIMAGE_EXPORT KisRunnableWithDebugName : public KisRunnable
 {
 public:
-    KisUpdateOutlineJob(KisSelectionSP selection, bool updateThumbnail, const QColor &maskColor);
-
-    bool overrides(const KisSpontaneousJob *otherJob) override;
-    void run() override;
-    int levelOfDetail() const override;
-    QString debugName() const override;
-
-private:
-    KisSelectionSP m_selection;
-    bool m_updateThumbnail;
-    QColor m_maskColor;
+    virtual QString debugName() const = 0;
 };
 
-#endif /* __KIS_UPDATE_OUTLINE_JOB_H */
+#endif // KIS_RUNNABLE_WITH_DEBUG_NAME_H

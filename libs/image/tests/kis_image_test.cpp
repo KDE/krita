@@ -89,7 +89,8 @@ class ForbiddenLodStrokeStrategy : public KisStrokeStrategy
 {
 public:
     ForbiddenLodStrokeStrategy(std::function<void()> lodCallback)
-        : m_lodCallback(lodCallback)
+        : KisStrokeStrategy(QLatin1String("ForbiddenLodStrokeStrategy")),
+          m_lodCallback(lodCallback)
     {
     }
 

@@ -30,7 +30,7 @@ KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
                                   KisStrokeUndoFacade *undoFacade,
                                   KUndo2CommandSP initCommand,
                                   KUndo2CommandSP finishCommand)
-  : KisRunnableBasedStrokeStrategy("STROKE_UNDO_COMMAND_BASED", name),
+  : KisRunnableBasedStrokeStrategy(QLatin1String("STROKE_UNDO_COMMAND_BASED"), name),
     m_undo(undo),
     m_initCommand(initCommand),
     m_finishCommand(finishCommand),

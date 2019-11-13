@@ -381,7 +381,8 @@ void KisDocument::Private::syncDecorationsWrapperLayerState()
 
     struct SyncDecorationsWrapperStroke : public KisSimpleStrokeStrategy {
         SyncDecorationsWrapperStroke(KisDocument *document, bool needsDecorationsWrapper)
-            : KisSimpleStrokeStrategy("sync-decorations-wrapper", kundo2_noi18n("start-isolated-mode")),
+            : KisSimpleStrokeStrategy(QLatin1String("sync-decorations-wrapper"),
+                                      kundo2_noi18n("start-isolated-mode")),
               m_document(document),
               m_needsDecorationsWrapper(needsDecorationsWrapper)
         {

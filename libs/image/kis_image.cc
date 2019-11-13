@@ -532,7 +532,7 @@ void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
 
     struct UpdateOverlaySelectionStroke : public KisSimpleStrokeStrategy {
         UpdateOverlaySelectionStroke(KisImageSP image)
-            : KisSimpleStrokeStrategy("update-overlay-selection-mask", kundo2_noi18n("update-overlay-selection-mask")),
+            : KisSimpleStrokeStrategy(QLatin1String("update-overlay-selection-mask"), kundo2_noi18n("update-overlay-selection-mask")),
               m_image(image)
         {
             this->enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
@@ -1712,7 +1712,8 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
 {
     struct StartIsolatedModeStroke : public KisRunnableBasedStrokeStrategy {
         StartIsolatedModeStroke(KisNodeSP node, KisImageSP image)
-            : KisRunnableBasedStrokeStrategy("start-isolated-mode", kundo2_noi18n("start-isolated-mode")),
+            : KisRunnableBasedStrokeStrategy(QLatin1String("start-isolated-mode"),
+                                             kundo2_noi18n("start-isolated-mode")),
               m_node(node),
               m_image(image)
         {
@@ -1756,7 +1757,7 @@ void KisImage::stopIsolatedMode()
 
     struct StopIsolatedModeStroke : public KisRunnableBasedStrokeStrategy {
         StopIsolatedModeStroke(KisImageSP image)
-            : KisRunnableBasedStrokeStrategy("stop-isolated-mode", kundo2_noi18n("stop-isolated-mode")),
+            : KisRunnableBasedStrokeStrategy(QLatin1String("stop-isolated-mode"), kundo2_noi18n("stop-isolated-mode")),
               m_image(image)
         {
             this->enableJob(JOB_INIT);

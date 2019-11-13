@@ -303,7 +303,8 @@ void OverviewWidget::paintEvent(QPaintEvent* event)
 }
 
 OverviewThumbnailStrokeStrategy::OverviewThumbnailStrokeStrategy(KisImageWSP image)
-    : KisSimpleStrokeStrategy("OverviewThumbnail"), m_image(image)
+    : KisSimpleStrokeStrategy(QLatin1String("OverviewThumbnail")),
+      m_image(image)
 {
     enableJob(KisSimpleStrokeStrategy::JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);

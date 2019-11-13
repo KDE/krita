@@ -34,7 +34,10 @@ public:
     KisMemoryStorage(const QString &location = QString("memory"));
     virtual ~KisMemoryStorage();
 
+    /// Copying the memory storage clones all contained resources and tags
     KisMemoryStorage(const KisMemoryStorage &rhs);
+
+    /// This clones all contained resources and tags from rhs
     KisMemoryStorage &operator=(const KisMemoryStorage &rhs);
 
     bool addTag(const QString &resourceType, KisTagSP tag);

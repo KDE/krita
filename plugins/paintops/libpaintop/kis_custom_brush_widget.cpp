@@ -97,7 +97,8 @@ void KisCustomBrushWidget::updatePreviewImage()
     QImage brushImage = m_brush ? m_brush->brushTipImage() : QImage();
 
     if (!brushImage.isNull()) {
-        brushImage = brushImage.scaled(preview->size(), Qt::KeepAspectRatio);
+        int w = preview->size().width() - 10; // 10 for the padding...
+        brushImage = brushImage.scaled(w, w, Qt::KeepAspectRatio);
     }
 
     preview->setPixmap(QPixmap::fromImage(brushImage));

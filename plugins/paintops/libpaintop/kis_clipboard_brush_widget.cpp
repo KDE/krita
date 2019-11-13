@@ -41,7 +41,7 @@ KisClipboardBrushWidget::KisClipboardBrushWidget(QWidget *parent, const QString 
     : KisWdgClipboardBrush(parent)
 {
     setWindowTitle(caption);
-    preview->setScaledContents(true);
+    preview->setScaledContents(false);
     preview->setFixedSize(preview->size());
     preview->setStyleSheet("border: 2px solid #222; border-radius: 4px; padding: 5px; font: normal 10px;");
 
@@ -67,7 +67,6 @@ KisClipboardBrushWidget::~KisClipboardBrushWidget()
 
 void KisClipboardBrushWidget::slotCreateBrush()
 {
-    qDebug() << "starting slow create brush";
     // do nothing if it's hidden otherwise it can break the active brush is something is copied
     if (m_clipboard->hasClip() && !isHidden()) {
 
@@ -83,7 +82,8 @@ void KisClipboardBrushWidget::slotCreateBrush()
             m_brush->setName(TEMPORARY_CLIPBOARD_BRUSH_NAME);
             m_brush->setValid(true);
 
-            preview->setPixmap(QPixmap::fromImage(m_brush->image()));
+            int w = preview->size().width()-10;
+            preview->setPixmap(QPixmap::fromImage(m_brush->image().scaled(w, w, Qt::KeepAspectRatio)));
         }
     } else {
         preview->setText(i18n("Nothing copied\n to Clipboard"));
@@ -114,7 +114,8 @@ void KisClipboardBrushWidget::slotUpdateUseColorAsMask(bool useColorAsMask)
 {
     if (m_brush) {
         static_cast<KisGbrBrush*>(m_brush.data())->setUseColorAsMask(useColorAsMask);
-        preview->setPixmap(QPixmap::fromImage(m_brush->brushTipImage()));
+        int w = preview->size().width()-10;
+        preview->setPixmap(QPixmap::fromImage(m_brush->image().scaled(w, w, Qt::KeepAspectRatio)));
     }
 }
 

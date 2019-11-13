@@ -61,12 +61,12 @@ QSqlError createDatabase(const QString &location)
     // NOTE: if the id's of Unknown and Memory in the database
     //       will change, and that will break the queries that
     //       remove Unknown and Memory storages on start-up.
-    KisResourceCacheDb::storageTypes << i18n("Unknown")
-                                     << i18n("Memory")
-                                     << i18n("Folder")
-                                     << i18n("Bundle")
-                                     << i18n("Abobe Brush Library")
-                                     << i18n("Adobe Style Library")
+    KisResourceCacheDb::storageTypes << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(1))
+                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(2))
+                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(3))
+                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(4))
+                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(5))
+                                     << KisResourceStorage::storageTypeToString(KisResourceStorage::StorageType(6))
                                      ;
 
     if (!QSqlDatabase::connectionNames().isEmpty()) {

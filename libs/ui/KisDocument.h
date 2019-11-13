@@ -111,6 +111,15 @@ public:
     ~KisDocument() override;
 
     /**
+     * @brief uniqueID is a temporary unique ID that identifies the document. It is
+     * generated on creation and can be used to uniquely associated temporary objects
+     * with this document.
+     *
+     * @return the temporary unique id for this document.
+     */
+    QString uniqueID() const;
+
+    /**
      * @brief reload Reloads the document from the original url
      * @return the result of loading the document
      */

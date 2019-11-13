@@ -49,6 +49,7 @@
 #include <KisImportExportErrorCode.h>
 #include <KoDocumentResourceManager.h>
 #include <KoMD5Generator.h>
+#include <KisMemoryStorage.h>
 
 #include <KisUsageLogger.h>
 #include <klocalizedstring.h>
@@ -79,6 +80,7 @@
 #include <QWidget>
 #include <QFuture>
 #include <QFutureWatcher>
+#include <QUuid>
 
 // Krita Image
 #include <kis_image_animation_interface.h>
@@ -265,6 +267,7 @@ public:
         , preActivatedNode(0) // the node is from another hierarchy!
         , imageIdleWatcher(2000 /*ms*/)
         , savingLock(&savingMutex)
+        , documentResourceStorage(_q->url().toLocalFile())
     {
         copyFromImpl(rhs, _q, CONSTRUCT);
     }
@@ -342,6 +345,10 @@ public:
     bool isRecovered = false;
 
     bool batchMode { false };
+
+    QString uniqueID {QUuid::createUuid().toString()};
+    KisMemoryStorage documentResourceStorage {KisMemoryStorage(uniqueID)};
+
 
     void syncDecorationsWrapperLayerState();
 
@@ -595,6 +602,11 @@ KisDocument::~KisDocument()
     }
 
     delete d;
+}
+
+QString KisDocument::uniqueID() const
+{
+    return d->uniqueID;
 }
 
 bool KisDocument::reload()

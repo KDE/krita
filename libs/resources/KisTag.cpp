@@ -59,6 +59,30 @@ KisTag::~KisTag()
 {
 }
 
+KisTag::KisTag(const KisTag &rhs)
+    : d(new Private)
+{
+    *this = rhs;
+}
+
+KisTag &KisTag::operator=(const KisTag &rhs)
+{
+    if (this != &rhs) {
+        d->valid = rhs.d->valid;
+        d->url = rhs.d->url;
+        d->name = rhs.d->name;
+        d->comment = rhs.d->comment;
+        d->defaultResources = rhs.d->defaultResources;
+        d->map = rhs.d->map;
+    }
+    return *this;
+}
+
+KisTagSP KisTag::clone() const
+{
+    return KisTagSP(new KisTag(*this));
+}
+
 bool KisTag::valid() const
 {
     return d->valid;

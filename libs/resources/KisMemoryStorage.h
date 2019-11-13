@@ -31,8 +31,11 @@
 class KRITARESOURCES_EXPORT KisMemoryStorage : public KisStoragePlugin
 {
 public:
-    KisMemoryStorage(const QString &name = QString("memory"));
+    KisMemoryStorage(const QString &location = QString("memory"));
     virtual ~KisMemoryStorage();
+
+    KisMemoryStorage(const KisMemoryStorage &rhs);
+    KisMemoryStorage &operator=(const KisMemoryStorage &rhs);
 
     bool addTag(const QString &resourceType, KisTagSP tag);
     bool addResource(const QString &resourceType, KoResourceSP resource);

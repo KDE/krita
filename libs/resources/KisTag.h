@@ -29,6 +29,10 @@ class QIODevice;
 
 #include "kritaresources_export.h"
 
+class KisTag;
+typedef QSharedPointer<KisTag> KisTagSP;
+
+
 /**
  * @brief The KisTag loads a tag from a .tag file.
  * A .tag file is a .desktop file. The following fields
@@ -44,6 +48,9 @@ class KRITARESOURCES_EXPORT KisTag
 public:
     KisTag();
     virtual ~KisTag();
+    KisTag(const KisTag &rhs);
+    KisTag &operator=(const KisTag &rhs);
+    KisTagSP clone() const;
 
     bool valid() const;
 
@@ -75,7 +82,6 @@ private:
     QScopedPointer<Private> d;
 };
 
-typedef QSharedPointer<KisTag> KisTagSP;
 
 inline QDebug operator<<(QDebug dbg, const KisTagSP tag)
 {

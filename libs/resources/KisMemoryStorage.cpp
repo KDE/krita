@@ -28,11 +28,6 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceStorage.h>
 
-class KisMemoryStorage::Private {
-public:
-    QHash<QString, QVector<KoResourceSP> > resources;
-    QHash<QString, QVector<KisTagSP> > tags;
-};
 
 class MemoryTagIterator : public KisResourceStorage::TagIterator
 {
@@ -132,15 +127,51 @@ private:
 
 };
 
+class KisMemoryStorage::Private {
+public:
+    QHash<QString, QVector<KoResourceSP> > resources;
+    QHash<QString, QVector<KisTagSP> > tags;
+};
 
-KisMemoryStorage::KisMemoryStorage(const QString &name)
-    : KisStoragePlugin(name)
-    , d(new Private())
+
+KisMemoryStorage::KisMemoryStorage(const QString &location)
+    : KisStoragePlugin(location)
+    , d(new Private)
 {
 }
 
 KisMemoryStorage::~KisMemoryStorage()
 {
+}
+
+KisMemoryStorage::KisMemoryStorage(const KisMemoryStorage &rhs)
+    : KisStoragePlugin(rhs.location())
+    , d(new Private)
+{
+    *this = rhs;
+}
+
+KisMemoryStorage &KisMemoryStorage::operator=(const KisMemoryStorage &rhs)
+{
+    if (this != &rhs) {
+        Q_FOREACH(const QString &key, rhs.d->resources.keys()) {
+            Q_FOREACH(const KoResourceSP resource, rhs.d->resources[key]) {
+                if (!d->resources.contains(key)) {
+                    d->resources[key] = QVector<KoResourceSP>();
+                }
+                d->resources[key] << resource->clone();
+            }
+        }
+        Q_FOREACH(const QString &key, rhs.d->tags.keys()) {
+            Q_FOREACH(const KisTagSP tag, rhs.d->tags[key]) {
+                if (!d->tags.contains(key)) {
+                    d->tags[key] = QVector<KisTagSP>();
+                }
+                d->tags[key] << tag->clone();
+            }
+        }
+    }
+    return *this;
 }
 
 bool KisMemoryStorage::addTag(const QString &resourceType, KisTagSP tag)

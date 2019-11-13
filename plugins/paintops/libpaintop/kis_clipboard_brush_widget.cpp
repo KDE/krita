@@ -67,6 +67,7 @@ KisClipboardBrushWidget::~KisClipboardBrushWidget()
 
 void KisClipboardBrushWidget::slotCreateBrush()
 {
+    qDebug() << "starting slow create brush";
     // do nothing if it's hidden otherwise it can break the active brush is something is copied
     if (m_clipboard->hasClip() && !isHidden()) {
 
@@ -89,9 +90,9 @@ void KisClipboardBrushWidget::slotCreateBrush()
     }
 
     if (!m_brush) {
-        buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-    } else {        
-        buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+        buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
+    } else {
+        buttonBox->button(QDialogButtonBox::Save)->setEnabled(true);
         colorAsmask->setChecked(true); // initializing this has to happen here since we need a valid brush for it to work
     }
 }

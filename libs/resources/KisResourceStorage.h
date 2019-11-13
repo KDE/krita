@@ -29,6 +29,8 @@
 #include <KoResource.h>
 #include <KisTag.h>
 
+#include <klocalizedstring.h>
+
 #include <kritaresources_export.h>
 
 class KisStoragePlugin;
@@ -48,6 +50,9 @@ public:
         return new T(location);
     }
 };
+
+class KisResourceStorage;
+typedef QSharedPointer<KisResourceStorage> KisResourceStorageSP;
 
 
 /**
@@ -118,25 +123,28 @@ public:
     static QString storageTypeToString(StorageType storageType) {
         switch (storageType) {
         case StorageType::Unknown:
-            return "Unknown";
+            return i18n("Unknown");
         case StorageType::Folder:
-            return "Folder";
+            return i18n("Folder");
         case StorageType::Bundle:
-            return "Bundle";
+            return i18n("Bundle");
         case StorageType::AdobeBrushLibrary:
-            return "Adobe Brush Library";
+            return i18n("Adobe Brush Library");
         case StorageType::AdobeStyleLibrary:
-            return "Adobe Style Library";
+            return i18n("Adobe Style Library");
         case StorageType::Memory:
-            return "Memory";
+            return i18n("Memory");
         default:
-            return "Invalid";
+            return i18n("Invalid");
         }
     }
 
 
     KisResourceStorage(const QString &location);
     ~KisResourceStorage();
+    KisResourceStorage(const KisResourceStorage &rhs);
+    KisResourceStorage &operator=(const KisResourceStorage &rhs);
+    KisResourceStorageSP clone() const;
 
     QString name() const;
     QString location() const;
@@ -175,7 +183,6 @@ private:
 };
 
 
-typedef QSharedPointer<KisResourceStorage> KisResourceStorageSP;
 
 inline QDebug operator<<(QDebug dbg, const KisResourceStorageSP storage)
 {

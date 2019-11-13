@@ -50,6 +50,8 @@
 #include <KoDocumentResourceManager.h>
 #include <KoMD5Generator.h>
 #include <KisMemoryStorage.h>
+#include <KisResourceStorage.h>
+#include <KisResourceLocator.h>
 
 #include <KisUsageLogger.h>
 #include <klocalizedstring.h>
@@ -267,7 +269,6 @@ public:
         , preActivatedNode(0) // the node is from another hierarchy!
         , imageIdleWatcher(2000 /*ms*/)
         , savingLock(&savingMutex)
-        , documentResourceStorage(_q->url().toLocalFile())
     {
         copyFromImpl(rhs, _q, CONSTRUCT);
     }
@@ -347,7 +348,7 @@ public:
     bool batchMode { false };
 
     QString uniqueID {QUuid::createUuid().toString()};
-    KisMemoryStorage documentResourceStorage {KisMemoryStorage(uniqueID)};
+    KisResourceStorageSP documentResourceStorage {new KisResourceStorage(uniqueID)};
 
 
     void syncDecorationsWrapperLayerState();
@@ -465,6 +466,11 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
     }
 
     batchMode = rhs.batchMode;
+
+    // Clone the resources, but don't add them to the database, only the editable
+    // version of the document should have those resources in the database.
+    documentResourceStorage = rhs.documentResourceStorage->clone();
+
 }
 
 QList<KoColorSetSP> KisDocument::Private::clonePaletteList(const QList<KoColorSetSP> &oldList)
@@ -530,6 +536,8 @@ KisDocument::KisDocument()
     connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(slotUndoStackCleanChanged(bool)));
     connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setObjectName(newObjectName());
+
+    KisResourceLocator::instance()->addDocumentStorage(d->uniqueID, d->documentResourceStorage);
 
     // preload the krita resources
     KisResourceServerProvider::instance();

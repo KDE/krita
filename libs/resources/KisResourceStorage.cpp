@@ -74,11 +74,6 @@ public:
 KisResourceStorage::KisResourceStorage(const QString &location)
     : d(new Private())
 {
-    Q_ASSERT(KisStoragePluginRegistry::instance()->m_storageFactoryMap.contains(StorageType::Folder));
-    Q_ASSERT(KisStoragePluginRegistry::instance()->m_storageFactoryMap.contains(StorageType::Bundle));
-    Q_ASSERT(KisStoragePluginRegistry::instance()->m_storageFactoryMap.contains(StorageType::Memory));
-    Q_ASSERT(KisStoragePluginRegistry::instance()->m_storageFactoryMap.contains(StorageType::AdobeStyleLibrary));
-
     d->location = location;
     d->name = QFileInfo(d->location).fileName();
     QFileInfo fi(d->location);
@@ -111,6 +106,31 @@ KisResourceStorage::KisResourceStorage(const QString &location)
 
 KisResourceStorage::~KisResourceStorage()
 {
+}
+
+KisResourceStorage::KisResourceStorage(const KisResourceStorage &rhs)
+    : d(new Private)
+{
+    *this = rhs;
+}
+
+KisResourceStorage &KisResourceStorage::operator=(const KisResourceStorage &rhs)
+{
+    if (this != &rhs) {
+        d->name = rhs.d->name;
+        d->location = rhs.d->location;
+        d->storageType = rhs.d->storageType;
+        if (d->storageType == StorageType::Memory) {
+            d->storagePlugin = QSharedPointer<KisMemoryStorage>(new KisMemoryStorage(*dynamic_cast<KisMemoryStorage*>(rhs.d->storagePlugin.data())));
+        }
+        d->valid = false;
+    }
+    return *this;
+}
+
+KisResourceStorageSP KisResourceStorage::clone() const
+{
+    return KisResourceStorageSP(new KisResourceStorage(*this));
 }
 
 QString KisResourceStorage::name() const

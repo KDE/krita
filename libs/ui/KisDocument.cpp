@@ -97,6 +97,7 @@
 #include <kis_signal_auto_connection.h>
 #include <kis_canvas_widget_base.h>
 #include "kis_layer_utils.h"
+#include "kis_selection_mask.h"
 
 // Local
 #include "KisViewManager.h"
@@ -852,6 +853,11 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
             KisLayerUtils::forceAllDelayedNodesUpdate(newRoot);
             waitForImage(clonedDocument->image());
         }
+    }
+
+    if (clonedDocument->image()->hasOverlaySelectionMask()) {
+        clonedDocument->image()->setOverlaySelectionMask(0);
+        waitForImage(clonedDocument->image());
     }
 
     KIS_SAFE_ASSERT_RECOVER(clonedDocument->image()->isIdle()) {

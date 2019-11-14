@@ -318,7 +318,7 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
     m_d->rootLayer = dynamic_cast<KisGroupLayer*>(newRoot.data());
     setRoot(newRoot);
 
-    if (exactCopy || rhs.m_d->isolatedRootNode) {
+    if (exactCopy || rhs.m_d->isolatedRootNode || rhs.m_d->overlaySelectionMask) {
         QQueue<KisNodeSP> linearizedNodes;
         KisLayerUtils::recursiveApplyNodes(rhs.root(),
             [&linearizedNodes](KisNodeSP node) {
@@ -337,9 +337,18 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
 
                     m_d->isolatedRootNode = node;
                 }
-            });
+
+                if (rhs.m_d->overlaySelectionMask &&
+                    KisNodeSP(rhs.m_d->overlaySelectionMask) == refNode) {
+
+                    m_d->targetOverlaySelectionMask = dynamic_cast<KisSelectionMask*>(node.data());
+                    m_d->overlaySelectionMask = m_d->targetOverlaySelectionMask;
+                    m_d->rootLayer->notifyChildMaskChanged();
+                }
+        });
     }
 
+    m_d->compositions.clear();
     Q_FOREACH (KisLayerCompositionSP comp, rhs.m_d->compositions) {
         m_d->compositions << toQShared(new KisLayerComposition(*comp, this));
     }

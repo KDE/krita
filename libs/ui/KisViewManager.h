@@ -247,6 +247,7 @@ private Q_SLOTS:
     void slotToggleFgBg();
     void slotResetFgBg();
     void slotResetRotation();
+    void slotToggleFullscreen();
 private:
     void createActions();
     void setupManagers();

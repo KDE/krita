@@ -100,6 +100,17 @@ void KisStatusBar::setup()
     connect(m_resetAngleButton, SIGNAL(clicked()), m_viewManager, SLOT(slotResetRotation()));
     m_resetAngleButton->setVisible(false);
 
+    m_fullscreenToggle = new QToolButton;
+    m_fullscreenToggle->setObjectName("Toggle Fullscreen");
+    m_fullscreenToggle->setCheckable(false);
+    m_fullscreenToggle->setToolTip(i18n("Toggle Fullscreen"));
+    m_fullscreenToggle->setAutoRaise(true);
+    m_fullscreenToggle->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
+    addStatusBarItem(m_fullscreenToggle);
+    m_fullscreenToggle->setVisible(true);
+    connect(m_fullscreenToggle, SIGNAL(clicked()), m_viewManager, SLOT(slotToggleFullscreen()));
+
+
     m_statusBarStatusLabel = new KSqueezedTextLabel();
     m_statusBarStatusLabel->setObjectName("statsBarStatusLabel");
     m_statusBarStatusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));

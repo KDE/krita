@@ -126,6 +126,7 @@ private:
     KisMemoryReportButton *m_memoryReportBox;
     QLabel *m_pointerPositionLabel;
     QToolButton *m_resetAngleButton;
+    QToolButton *m_fullscreenToggle;
 
     KSqueezedTextLabel *m_statusBarStatusLabel;
     KSqueezedTextLabel *m_statusBarProfileLabel;

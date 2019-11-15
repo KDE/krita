@@ -24,6 +24,7 @@
 
 #include <KisResourceLocator.h>
 #include <KisResourceCacheDb.h>
+#include <KisTag.h>
 
 struct KisTagModel::Private {
     QSqlQuery query;
@@ -131,6 +132,173 @@ void KisTagModel::setResourceType(const QString &resourceType)
     d->resourceType = resourceType;
     prepareQuery();
 }
+
+KisTagSP KisTagModel::tagForIndex(QModelIndex index) const
+{
+    KisTagSP tag = 0;
+    if (!index.isValid()) return tag;
+    if (index.row() > rowCount()) return tag;
+    if (index.column() > columnCount()) return tag;
+
+    bool pos = const_cast<KisTagModel*>(this)->d->query.seek(index.row());
+    if (pos) {
+
+        tag.reset(new KisTag());
+        tag->setUrl(d->query.value("url").toString());
+        tag->setName(d->query.value("name").toString());
+        tag->setComment(d->query.value("comment").toString());
+        tag->setId(d->query.value("id").toInt());
+        tag->setActive(d->query.value("active").toBool());
+    }
+
+    return tag;
+}
+
+bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
+{
+    if (!tag) return false;
+    if (!tag->valid()) return false;
+    // A new tag doesn't have an ID yet, that comes from the database
+    if (tag->id() >= 0) return false;
+
+    if (!KisResourceCacheDb::hasTag(tag->url(), d->resourceType)) {
+         if (!KisResourceCacheDb::addTag(d->resourceType, tag->url(), tag->name(), tag->comment())) {
+            qWarning() << "Could not add tag" << tag;
+            return false;
+        }
+    } else {
+        QSqlQuery q;
+        if (!q.prepare("UPDATE tags\n"
+                       "SET    active = 1\n"
+                       "WHERE  url = :url\n"
+                       "AND    resource_type_id = (SELECT id\n"
+                       "                           FROM   resource_types\n"
+                       "                           WHERE  name = :resource_type\n)")) {
+            qWarning() << "Couild not prepare make existing tag active query" << tag << q.lastError();
+            return false;
+        }
+        q.bindValue("url", tag->url());
+        q.bindValue("resource_type", d->resourceType);
+
+        if (!q.exec()) {
+            qWarning() << "Couild not execute make existing tag active query" << q.boundValues(), q.lastError();
+            return false;
+        }
+    }
+
+
+    Q_FOREACH(const KoResourceSP resource, taggedResouces) {
+
+        if (!resource) continue;
+        if (!resource->valid()) continue;
+        if (resource->resourceId() < 0) continue;
+
+        tagResource(tag, resource);
+    }
+
+    return prepareQuery();
+}
+
+bool KisTagModel::removeTag(const KisTagSP tag)
+{
+    if (!tag) return false;
+    if (!tag->valid()) return false;
+    if (tag->id() < 0) return false;
+
+    QSqlQuery q;
+    if (!q.prepare("UPDATE tags\n"
+                   "WHERE  id = :id\n"
+                   "SET    active = 0")) {
+        qWarning() << "Could not prepare remove tag query" << q.lastError();
+        return false;
+    }
+
+    q.bindValue(":id", tag->id());
+
+    if (!q.exec()) {
+        qWarning() << "Could not execute remove tag query" << q.lastError();
+        return false;
+    }
+
+    return prepareQuery();
+}
+
+bool KisTagModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
+{
+    if (!tag) return false;
+    if (!tag->valid()) return false;
+    if (tag->id() < 0) return false;
+
+    if (!resource) return false;
+    if (!resource->valid()) return false;
+    if (resource->resourceId() < 0) return false;
+
+    QSqlQuery q;
+    bool r = q.prepare("INSERT INTO resource_tags\n"
+                  "(resource_id, tag_id)\n"
+                  "VALUES\n"
+                  "( (SELECT id\n"
+                  "  FROM   resources\n"
+                  "  WHERE  id = :resource_id)\n"
+                      ", (SELECT id\n"
+                  "   FROM   tags\n"
+                  "   WHERE  url = :url\n"
+                  "   AND    name = :name\n"
+                  "   AND    comment = :comment\n"
+                  "   AND    resource_type_id = (SELECT id\n"
+                  "                              FROM   resource_types\n"
+                  "                              WHERE  name = :resource_type"
+                  "                             \n)"
+                  "  )\n"
+                  ")\n");
+    if (!r) {
+        qWarning() << "Could not prepare insert into resource tags statement" << q.lastError();
+        return false;
+    }
+
+    q.bindValue(":resource_id", resource->resourceId());
+    q.bindValue(":url", tag->url());
+    q.bindValue("name", tag->name());
+    q.bindValue(":comment", tag->comment());
+    q.bindValue(":resource_type", d->resourceType);
+
+    if (!q.exec()) {
+        qWarning() << "Could not execute insert into resource tags statement" << q.boundValues() << q.lastError();
+        return false;
+    }
+
+    return prepareQuery();
+}
+
+bool KisTagModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
+{
+    if (!tag) return false;
+    if (!tag->valid()) return false;
+
+    if (!resource) return false;
+    if (!resource->valid()) return false;
+    if (resource->resourceId() < 0) return false;
+
+    bool r = d->query.prepare("DELETE FROM resource_tags.id\n"
+                              "WHERE   resource_id = :resource_id\n"
+                              "AND     tag_id in (SELECT id\n"
+                              "                   FROM   tags where ");
+
+    if (!r) {
+        qWarning() << "Could not prepare KisTagModel query" << d->query.lastError();
+    }
+
+    d->query.bindValue(":resource_type", d->resourceType);
+
+    r = d->query.exec();
+
+    if (!r) {
+        qWarning() << "Could not select tags" << d->query.lastError();
+    }
+
+    return prepareQuery();
+}
+
 
 bool KisTagModel::prepareQuery()
 {

@@ -54,6 +54,9 @@ public:
 
     bool valid() const;
 
+    int id() const;
+    bool active() const;
+
     QString name() const;
     void setName(const QString &name);
 
@@ -70,6 +73,10 @@ public:
     bool save(QIODevice &io);
 
 private:
+
+    friend class KisTagModel;
+    void setId(int id);
+    void setActive(bool active);
 
     static const QByteArray s_group;
     static const QByteArray s_type;

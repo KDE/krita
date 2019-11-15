@@ -68,6 +68,7 @@ private:
     friend class KisResourceLocator;
     friend class TestResourceLocator;
     friend class TestResourceCacheDb;
+    friend class KisTagModel;
 
     explicit KisResourceCacheDb(); // Deleted
     ~KisResourceCacheDb(); // Deleted

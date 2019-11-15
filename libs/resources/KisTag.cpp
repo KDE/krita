@@ -48,6 +48,8 @@ public:
     QString comment; // The translated tag comment
     QStringList defaultResources; // The list of resources as defined in the tag file
     KEntryMap map;
+    int id {-1};
+    bool active{true};
 };
 
 KisTag::KisTag()
@@ -86,6 +88,16 @@ KisTagSP KisTag::clone() const
 bool KisTag::valid() const
 {
     return d->valid;
+}
+
+int KisTag::id() const
+{
+    return d->id;
+}
+
+bool KisTag::active() const
+{
+    return d->active;
 }
 
 QString KisTag::name() const
@@ -171,5 +183,15 @@ bool KisTag::save(QIODevice &io)
 
     ini.writeEntries(QLocale().name().toUtf8(), io, d->map);
     return true;
+}
+
+void KisTag::setId(int id)
+{
+    d->id = id;
+}
+
+void KisTag::setActive(bool active)
+{
+    d->active = active;
 }
 

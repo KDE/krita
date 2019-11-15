@@ -21,7 +21,11 @@
 #include <QObject>
 #include <QAbstractTableModel>
 
+#include <KisTag.h>
+#include <KoResource.h>
+
 #include "kritaresources_export.h"
+
 
 class KRITARESOURCES_EXPORT KisTagModel : public QAbstractTableModel
 {
@@ -46,6 +50,13 @@ public:
 // KisTagModel API
 
     void setResourceType(const QString &resourceType);
+
+    KisTagSP tagForIndex(QModelIndex index = QModelIndex()) const;
+
+    bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>());
+    bool removeTag(const KisTagSP tag);
+    bool tagResource(const KisTagSP tag, const KoResourceSP resource);
+    bool untagResource(const KisTagSP tag, const KoResourceSP resource);
 
 private:
 

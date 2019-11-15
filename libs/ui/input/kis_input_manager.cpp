@@ -453,6 +453,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         retval = !wasScrolled;
         break;
     }
+#ifndef Q_OS_ANDROID
     case QEvent::Enter:
         d->debugEvent<QEvent, false>(event);
         //Make sure the input actions know we are active.
@@ -479,6 +480,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         d->matcher.leaveEvent();
         break;
+#endif
     case QEvent::FocusIn:
         d->debugEvent<QEvent, false>(event);
         KisAbstractInputAction::setInputManager(this);

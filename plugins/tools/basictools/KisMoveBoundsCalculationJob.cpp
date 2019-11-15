@@ -58,3 +58,11 @@ int KisMoveBoundsCalculationJob::levelOfDetail() const
 {
     return 0;
 }
+
+QString KisMoveBoundsCalculationJob::debugName() const
+{
+    QString result;
+    QDebug dbg(&result);
+    dbg << "KisMoveBoundsCalculationJob" << ppVar(m_requestedBy) << m_nodes;
+    return result;
+}

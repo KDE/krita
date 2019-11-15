@@ -37,7 +37,7 @@ struct AddReferenceImagesCommand : KoShapeCreateCommand
 
     void redo() override {
         auto layer = m_document->referenceImagesLayer();
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!layer || layer == m_layer)
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!layer || layer == m_layer);
 
         if (!layer) {
             m_document->setReferenceImagesLayer(m_layer, true);
@@ -78,7 +78,7 @@ struct RemoveReferenceImagesCommand : KoShapeDeleteCommand
 
     void undo() override {
         auto layer = m_document->referenceImagesLayer();
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!layer || layer == m_layer)
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!layer || layer == m_layer);
 
         if (!layer) {
             m_document->setReferenceImagesLayer(m_layer, true);

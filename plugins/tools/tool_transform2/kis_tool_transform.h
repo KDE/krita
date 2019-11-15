@@ -249,7 +249,6 @@ private:
     void initGuiAfterTransformMode();
 
     void initThumbnailImage(KisPaintDeviceSP previewDevice);
-    void updateSelectionPath(const QPainterPath &selectionOutline);
     void updateApplyResetAvailability();
 
 private:
@@ -315,7 +314,7 @@ private Q_SLOTS:
     void slotEditingFinished();
 
     void slotTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *strokeStrategyCookie);
-    void slotPreviewDeviceGenerated(KisPaintDeviceSP device, const QPainterPath &selectionOutline);
+    void slotPreviewDeviceGenerated(KisPaintDeviceSP device);
 
     // context menu options for updating the transform type
     // this is to help with discoverability since come people can't find the tool options

@@ -25,6 +25,7 @@
 
 #include "kritaplugin_export.h"
 
+#ifndef Q_MOC_RUN
 /**
  * The pluginloader singleton is responsible for loading the plugins
  * that it's asked to load. It keeps track of which servicetypes it
@@ -59,6 +60,7 @@ MyPlugin::MyPlugin( QObject *parent, const QVariantList& ) : QObject(parent) {
 #include <MyPlugin.moc>
 @endcode
  */
+#endif
 class KRITAPLUGIN_EXPORT KoPluginLoader : public QObject
 {
 

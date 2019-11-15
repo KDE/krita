@@ -30,6 +30,8 @@
 #include "kis_async_merger.h"
 #include "kis_updater_context.h"
 
+//#define DEBUG_JOBS_SEQUENCE
+
 
 class KisUpdateJobItem :  public QObject, public QRunnable
 {
@@ -88,7 +90,19 @@ public:
                 KIS_ASSERT(m_atomicType == Type::STROKE ||
                            m_atomicType == Type::SPONTANEOUS);
 
-                if (m_runnableJob) m_runnableJob->run();
+                if (m_runnableJob) {
+#ifdef DEBUG_JOBS_SEQUENCE
+                    if (m_atomicType == Type::STROKE) {
+                        qDebug() << "running: stroke" << m_runnableJob->debugName();
+                    } else if (m_atomicType == Type::SPONTANEOUS) {
+                        qDebug() << "running: spont " << m_runnableJob->debugName();
+                    } else {
+                        qDebug() << "running: unkn. " << m_runnableJob->debugName();
+                    }
+#endif
+
+                    m_runnableJob->run();
+                }
             }
 
             setDone();
@@ -114,6 +128,12 @@ public:
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_walker);
         // dbgKrita << "Executing merge job" << m_walker->changeRect()
         //          << "on thread" << QThread::currentThreadId();
+
+#ifdef DEBUG_JOBS_SEQUENCE
+        qDebug() << "running: merge " << m_walker->startNode() << m_walker->changeRect();
+
+#endif
+
         m_merger.startMerge(*m_walker);
 
         QRect changeRect = m_walker->changeRect();
@@ -230,7 +250,7 @@ private:
      * Runnable jobs part
      * The job is owned by the context and deleted after completion
      */
-    KisRunnable *m_runnableJob;
+    KisRunnableWithDebugName *m_runnableJob;
 
     /**
      * Merge jobs part

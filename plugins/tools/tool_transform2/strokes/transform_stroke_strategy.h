@@ -107,7 +107,7 @@ public:
 
 Q_SIGNALS:
     void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *cookie);
-    void sigPreviewDeviceReady(KisPaintDeviceSP device, const QPainterPath &selectionOutline);
+    void sigPreviewDeviceReady(KisPaintDeviceSP device);
 
 protected:
     void postProcessToplevelCommand(KUndo2Command *command) override;
@@ -167,6 +167,7 @@ private:
     KisNodeList m_processedNodes;
     QList<KisSelectionSP> m_deactivatedSelections;
     QList<KisNodeSP> m_hiddenProjectionLeaves;
+    KisSelectionMaskSP m_deactivatedOverlaySelectionMask;
 
     const KisSavedMacroCommand *m_overriddenCommand = 0;
     QVector<const KUndo2Command*> m_skippedWhileMergeCommands;

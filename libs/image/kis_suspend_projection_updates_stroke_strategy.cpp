@@ -359,7 +359,9 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 };
 
 KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP image, bool suspend)
-    : KisRunnableBasedStrokeStrategy(suspend ? "suspend_stroke_strategy" : "resume_stroke_strategy"),
+    : KisRunnableBasedStrokeStrategy(suspend ?
+                                     QLatin1String("suspend_stroke_strategy") :
+                                     QLatin1String("resume_stroke_strategy")),
       m_d(new Private)
 {
     m_d->image = image;

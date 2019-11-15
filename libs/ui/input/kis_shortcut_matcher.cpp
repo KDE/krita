@@ -132,7 +132,9 @@ public:
 
     inline bool actionsSuppressed() const {
 #ifndef Q_OS_ANDROID
-        return suppressAllActions || !cursorEntered;
+        return (suppressAllActions || !cursorEntered)
+                && KisConfig(true).disableTouchOnCanvas();
+
 #else
         // when S-pen is not pointing the canvas, actions on canvas are disabled, till it points back to canvas.
         return false;

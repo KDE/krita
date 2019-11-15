@@ -40,13 +40,14 @@
 #include <KisWindowLayoutResource.h>
 #include <KisSessionResource.h>
 
-#include <kis_psd_layer_style_resource.h>
+#include <kis_psd_layer_style.h>
 
 #include <KoResourceServer.h>
 
 Q_GLOBAL_STATIC(KisResourceServerProvider, s_instance)
 
 typedef KoResourceServer<KisPaintOpPreset> KisPaintOpPresetResourceServer;
+typedef KoResourceServer<KisPSDLayerStyle> KisPSDLayerStyleServer;
 
 KisResourceServerProvider::KisResourceServerProvider()
 {
@@ -54,7 +55,7 @@ KisResourceServerProvider::KisResourceServerProvider()
     m_workspaceServer = new KoResourceServer<KisWorkspaceResource>(ResourceType::Workspaces);
     m_windowLayoutServer = new KoResourceServer<KisWindowLayoutResource>(ResourceType::WindowLayouts);
     m_sessionServer = new KoResourceServer<KisSessionResource>(ResourceType::Sessions);
-    m_layerStyleCollectionServer = new KoResourceServer<KisPSDLayerStyleCollectionResource>("psd_layer_style_collections");
+    m_layerStyleServer = new KisPSDLayerStyleServer(ResourceType::LayerStyles);
 }
 
 KisResourceServerProvider::~KisResourceServerProvider()
@@ -63,7 +64,7 @@ KisResourceServerProvider::~KisResourceServerProvider()
     delete m_workspaceServer;
     delete m_sessionServer;
     delete m_windowLayoutServer;
-    delete m_layerStyleCollectionServer;
+    delete m_layerStyleServer;
 }
 
 KisResourceServerProvider* KisResourceServerProvider::instance()
@@ -92,8 +93,8 @@ KoResourceServer< KisSessionResource >* KisResourceServerProvider::sessionServer
     return m_sessionServer;
 }
 
-KoResourceServer<KisPSDLayerStyleCollectionResource> *KisResourceServerProvider::layerStyleCollectionServer()
+KoResourceServer<KisPSDLayerStyle> *KisResourceServerProvider::layerStyleServer()
 {
-    return m_layerStyleCollectionServer;
+    return m_layerStyleServer;
 }
 

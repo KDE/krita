@@ -37,7 +37,6 @@
 #include "kis_cmb_contour.h"
 #include "kis_cmb_gradient.h"
 #include "KisResourceServerProvider.h"
-#include "kis_psd_layer_style_resource.h"
 #include "kis_psd_layer_style.h"
 
 #include "kis_signals_blocker.h"
@@ -45,7 +44,7 @@
 #include "kis_canvas_resource_provider.h"
 
 #include <KoFileDialog.h>
-
+#include <QMessageBox>
 
 KoAbstractGradientSP fetchGradientLazy(KoAbstractGradientSP gradient,
                                       KisCanvasResourceProvider *resourceProvider)
@@ -247,20 +246,12 @@ bool checkCustomNameAvailable(const QString &name)
 {
     const QString customName = "CustomStyles.asl";
 
-    KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
+    KoResourceServer<KisPSDLayerStyle> *server = KisResourceServerProvider::instance()->layerStyleServer();
 
     KoResourceSP resource = server->resourceByName(customName);
-    if (!resource) return true;
 
-    KisPSDLayerStyleCollectionResourceSP collection = resource.dynamicCast<KisPSDLayerStyleCollectionResource>();
+    return !resource;
 
-    Q_FOREACH (KisPSDLayerStyleSP style, collection->layerStyles()) {
-        if (style->name() == name) {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 QString selectAvailableStyleName(const QString &name)
@@ -295,6 +286,12 @@ void KisDlgLayerStyle::slotNewStyle()
 
 void KisDlgLayerStyle::slotLoadStyle()
 {
+    // TODO: RESOURCES: switch to loading the storage
+    QMessageBox dialog;
+    dialog.setText("Asl files cannot be loaded until AslStorage creating is sorted out.");
+    dialog.exec();
+
+    /*
     QString filename; // default value?
 
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "layerstyle");
@@ -302,12 +299,18 @@ void KisDlgLayerStyle::slotLoadStyle()
     dialog.setMimeTypeFilters(QStringList() << "application/x-photoshop-style-library", "application/x-photoshop-style-library");
     filename = dialog.filename();
 
+
     m_stylesSelector->loadCollection(filename);
     wdgLayerStyles.lstStyleSelector->setCurrentRow(0);
+    */
 }
 
 void KisDlgLayerStyle::slotSaveStyle()
 {
+    // TODO RESOURCES: needs figuring out
+    warnKrita << "Layer style cannot be saved; needs figuring out what to do here";
+
+    /*
     QString filename; // default value?
 
     KoFileDialog dialog(this, KoFileDialog::SaveFile, "layerstyle");
@@ -325,6 +328,7 @@ void KisDlgLayerStyle::slotSaveStyle()
     vector << newStyle;
     collection->setLayerStyles(vector);
     collection->save();
+    */
 }
 
 void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *previous)
@@ -490,9 +494,15 @@ void StylesSelector::refillCollections()
     QString previousCollection = ui.cmbStyleCollections->currentText();
 
     ui.cmbStyleCollections->clear();
-    Q_FOREACH (KoResourceSP res, KisResourceServerProvider::instance()->layerStyleCollectionServer()->resources()) {
-        ui.cmbStyleCollections->addItem(res->name());
+    ui.cmbStyleCollections->addItem("All Styles");
+    // TODO: RESOURCES: should we differentiate asl layer styles by storage location?
+    // (like it was before)
+
+    /*
+    Q_FOREACH (KoResourceSP res, KisResourceServerProvider::instance()->layerStyleServer()->resources()) {
+        //ui.cmbStyleCollections->addItem(res->name());
     }
+    */
 
     if (!previousCollection.isEmpty()) {
         KisSignalsBlocker blocker(this);
@@ -500,6 +510,7 @@ void StylesSelector::refillCollections()
         int index = ui.cmbStyleCollections->findText(previousCollection);
         ui.cmbStyleCollections->setCurrentIndex(index);
     }
+
 }
 
 void StylesSelector::notifyExternalStyleChanged(const QString &name, const QUuid &uuid)
@@ -530,13 +541,10 @@ void StylesSelector::notifyExternalStyleChanged(const QString &name, const QUuid
 void StylesSelector::loadStyles(const QString &name)
 {
     ui.listStyles->clear();
-    KoResourceSP res = KisResourceServerProvider::instance()->layerStyleCollectionServer()->resourceByName(name);
-    KisPSDLayerStyleCollectionResourceSP collection = res.dynamicCast<KisPSDLayerStyleCollectionResource>();
-    if (collection) {
-        Q_FOREACH (KisPSDLayerStyleSP style, collection->layerStyles()) {
-            // XXX: also use the preview image, when we have one
-            ui.listStyles->addItem(new StyleItem(style));
-        }
+    KoResourceServer<KisPSDLayerStyle>* server = KisResourceServerProvider::instance()->layerStyleServer();
+    server->resources();
+    Q_FOREACH(KisPSDLayerStyleSP style, server->resources()) {
+        ui.listStyles->addItem(new StyleItem(style));
     }
 }
 
@@ -550,6 +558,10 @@ void StylesSelector::selectStyle(QListWidgetItem *current, QListWidgetItem* /*pr
 
 void StylesSelector::loadCollection(const QString &fileName)
 {
+    // TODO: RESOURCES: implement or remove
+    warnKrita << "Collection cannot be loaded, because we do not use collections now; please use KisAslStorage instead.";
+
+    /*
     if (!QFileInfo(fileName).exists()) {
         warnKrita << "Loaded style collection doesn't exist!";
         return;
@@ -568,11 +580,19 @@ void StylesSelector::loadCollection(const QString &fileName)
     int index = ui.cmbStyleCollections->findText(collection->name());
     ui.cmbStyleCollections->setCurrentIndex(index);
     loadStyles(collection->name());
+    */
 }
 
 void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
 {
-    KoResourceServer<KisPSDLayerStyleCollectionResource> *server = KisResourceServerProvider::instance()->layerStyleCollectionServer();
+    KoResourceServer<KisPSDLayerStyle> *server = KisResourceServerProvider::instance()->layerStyleServer();
+    server->addResource(style);
+
+    // TODO: RESOURCES: what about adding only to CustomStyles.asl
+
+
+    /*
+    //server->resourceByName(style->name())
 
     // NOTE: not translatable, since it is a key!
     const QString customName = "CustomStyles.asl";
@@ -580,10 +600,10 @@ void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
     const QString fullFilename = saveLocation + customName;
 
     KoResourceSP resource = server->resourceByName(customName);
-    KisPSDLayerStyleCollectionResourceSP collection;
+    KisPSDLayerStyleSP style;
 
     if (!resource) {
-        collection = KisPSDLayerStyleCollectionResourceSP(new KisPSDLayerStyleCollectionResource(""));
+        collection = KisPSDLayerStyleSP(new KisPSDLayerStyle(""));
         collection->setName(customName);
         collection->setFilename(fullFilename);
 
@@ -596,22 +616,24 @@ void StylesSelector::addNewStyle(KisPSDLayerStyleSP style)
     else {
         collection = resource.dynamicCast<KisPSDLayerStyleCollectionResource>();
 
-        KisPSDLayerStyleCollectionResource::StylesVector vector;
+        //KisPSDLayerStyle::StylesVector vector;
         vector = collection->layerStyles();
         vector << style;
         collection->setLayerStyles(vector);
         collection->save();
     }
+    */
 
     refillCollections();
 
     // select in gui
 
-    int index = ui.cmbStyleCollections->findText(customName);
+    //int index = ui.cmbStyleCollections->findText(customName);
+    int index = 0;
     KIS_ASSERT_RECOVER_RETURN(index >= 0);
     ui.cmbStyleCollections->setCurrentIndex(index);
 
-    loadStyles(customName);
+    loadStyles("");
 
     notifyExternalStyleChanged(style->name(), style->uuid());
 }

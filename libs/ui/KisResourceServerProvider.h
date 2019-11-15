@@ -32,7 +32,7 @@
 
 class KisWorkspaceResource;
 class KisSessionResource;
-class KisPSDLayerStyleCollectionResource;
+class KisPSDLayerStyle;
 
 typedef KoResourceServer<KisPaintOpPreset> KisPaintOpPresetResourceServer;
 
@@ -50,7 +50,7 @@ public:
     KoResourceServer<KisWorkspaceResource>* workspaceServer();
     KoResourceServer<KisWindowLayoutResource>* windowLayoutServer();
     KoResourceServer<KisSessionResource>* sessionServer();
-    KoResourceServer<KisPSDLayerStyleCollectionResource>* layerStyleCollectionServer();
+    KoResourceServer<KisPSDLayerStyle>* layerStyleServer();
 
 private:
 
@@ -61,7 +61,7 @@ private:
     KoResourceServer<KisWorkspaceResource> *m_workspaceServer;
     KoResourceServer<KisWindowLayoutResource> *m_windowLayoutServer;
     KoResourceServer<KisSessionResource> *m_sessionServer;
-    KoResourceServer<KisPSDLayerStyleCollectionResource> *m_layerStyleCollectionServer;
+    KoResourceServer<KisPSDLayerStyle> *m_layerStyleServer;
 };
 
 #endif // KIS_RESOURCESERVERPROVIDER_H_

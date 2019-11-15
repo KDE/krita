@@ -315,7 +315,6 @@ set(kritaimage_LIB_SRCS
 
 
     kis_asl_layer_style_serializer.cpp
-    kis_psd_layer_style_resource.cpp
     KisAslStorage.cpp
     kis_psd_layer_style.cpp
 )

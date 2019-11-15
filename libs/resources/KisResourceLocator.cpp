@@ -517,6 +517,7 @@ QString KisResourceLocator::makeStorageLocationAbsolute(QString storageLocation)
         storageLocation = resourceLocationBase();
     }
     if (!storageLocation.startsWith('/') && storageLocation != "memory") {
+
         if (resourceLocationBase().endsWith('/')) {
             storageLocation = resourceLocationBase() + storageLocation;
         }

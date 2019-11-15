@@ -50,7 +50,6 @@
 #include <kis_adjustment_layer.h>
 #include <kis_layer_composition.h>
 #include <kis_painting_assistants_decoration.h>
-#include <kis_psd_layer_style_resource.h>
 #include "kis_png_converter.h"
 #include "kis_keyframe_channel.h"
 #include <kis_time_range.h>
@@ -312,6 +311,10 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
     }
 
     {
+        warnKrita << "WARNING: Asl Layer Styles cannot be written (part of resource rewrite).";
+        // TODO: RESOURCES: needs implementation
+
+        /*
         KisPSDLayerStyleCollectionResource collection("not-nexists.asl");
         KIS_ASSERT_RECOVER_NOOP(!collection.valid());
         collection.collectAllLayerStyles(image->root());
@@ -329,6 +332,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageSP image, const QString
                 store->close();
             }
         }
+        */
     }
 
     if (!autosave) {

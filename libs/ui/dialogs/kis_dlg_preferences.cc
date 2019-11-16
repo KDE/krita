@@ -1,4 +1,4 @@
-
+/*
  *  preferencesdlg.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>

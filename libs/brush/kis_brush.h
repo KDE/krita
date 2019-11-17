@@ -142,6 +142,10 @@ public:
         return false;
     }
 
+    QString resourceType() const override {
+        return ResourceType::Brushes;
+    }
+
     /**
      * @brief brushImage the image the brush tip can paint with. Not all brush types have a single
      * image.

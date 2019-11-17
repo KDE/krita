@@ -82,6 +82,11 @@ public:
 
     QString defaultFileExtension() const override;
 
+    QString resourceType() const override
+    {
+        return ResourceType::Symbols;
+    }
+
     QString title() const;
     QString description() const;
     QString creator() const;

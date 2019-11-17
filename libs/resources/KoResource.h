@@ -137,6 +137,9 @@ public:
     /// @return the unique id of the resource in the resource database
     int resourceId() const;
 
+    /// @return the resource type
+    virtual QString resourceType() const = 0;
+
 private:
 
     friend class KisResourceModel;

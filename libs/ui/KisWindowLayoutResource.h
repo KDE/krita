@@ -49,6 +49,12 @@ public:
     bool saveToDevice(QIODevice *dev) const override;
     bool loadFromDevice(QIODevice *dev) override;
 
+
+    QString resourceType() const override
+    {
+        return ResourceType::WindowLayouts;
+    }
+
     QString defaultFileExtension() const override;
 
 protected:

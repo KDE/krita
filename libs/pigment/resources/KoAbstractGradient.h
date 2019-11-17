@@ -81,6 +81,8 @@ public:
 
     KoAbstractGradient(const KoAbstractGradient &rhs);
 
+    QString resourceType() const override { return ResourceType::Gradients; }
+
 private:
     struct Private;
     Private* const d;

@@ -97,6 +97,10 @@ public:
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
     QString defaultFileExtension() const override;
+    QString resourceType() const override
+    {
+        return ResourceType::Palettes;
+    }
 
     void setColumnCount(int columns);
     int columnCount() const;

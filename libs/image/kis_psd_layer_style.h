@@ -73,6 +73,10 @@ public:
     bool saveToDevice(QIODevice* dev) const override;
 
 
+    QString resourceType() const override
+    {
+        return ResourceType::LayerStyles;
+    }
 
     /**
      * \return true if all the styles are disabled

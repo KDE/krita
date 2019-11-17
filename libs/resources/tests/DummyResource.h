@@ -102,6 +102,11 @@ public:
         return m_something;
     }
 
+    QString resourceType() const override
+    {
+        return "";
+    }
+
 private:
 
     QString m_something;

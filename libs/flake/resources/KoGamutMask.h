@@ -73,6 +73,11 @@ public:
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
 
+    QString resourceType() const override
+    {
+        return ResourceType::GamutMasks;
+    }
+
     void paint(QPainter &painter, KoViewConverter& viewConverter, bool preview);
     void paintStroke(QPainter &painter, KoViewConverter& viewConverter, bool preview);
 

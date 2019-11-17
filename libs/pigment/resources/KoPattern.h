@@ -63,6 +63,11 @@ public:
 
     QString defaultFileExtension() const override;
 
+    QString resourceType() const override
+    {
+        return ResourceType::Patterns;
+    }
+
     /**
      * @brief pattern the actual pattern image
      * @return a valid QImage. There are no guarantees to the image format.

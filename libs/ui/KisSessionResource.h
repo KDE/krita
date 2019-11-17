@@ -40,6 +40,11 @@ protected:
 
     void loadXml(const QDomElement &root) const override;
 
+    QString resourceType() const override
+    {
+        return ResourceType::Sessions;
+    }
+
 private:
     struct Private;
     QScopedPointer<Private> d;

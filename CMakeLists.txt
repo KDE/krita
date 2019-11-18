@@ -703,21 +703,30 @@ set_package_properties(PyQt5 PROPERTIES
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)
 
-find_package(VPX "1.7.0")
-set_package_properties(VPX PROPERTIES
-    DESCRIPTION "libvpx video encoder."
-    URL "https://www.webmproject.org/"
+find_package(GSTREAMER "1.5.2")
+set_package_properties(GSTREAMER PROPERTIES
+    DESCRIPTION "gstreamer video encoder."
+    URL "https://gstreamer.freedesktop.org/"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita recorder plugin")
-macro_bool_to_01(VPX_FOUND HAVE_VPX)
+macro_bool_to_01(GSTREAMER_FOUND HAVE_GSTREAMER)
 
-find_package(YUV)
-set_package_properties(YUV PROPERTIES
-    DESCRIPTION "libyuv."
-    URL "https://chromium.googlesource.com/libyuv/libyuv/"
+find_package(GLIB "2.0")
+set_package_properties(GLIB PROPERTIES
+    DESCRIPTION "glib."
+    URL "https://www.gtk.org/"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita recorder plugin")
-macro_bool_to_01(YUV_FOUND HAVE_YUV)
+macro_bool_to_01(GLIB_FOUND HAVE_GLIB)
+
+find_package(GOBJECT "2.0")
+set_package_properties(GOBJECT PROPERTIES
+    DESCRIPTION "gobject."
+    URL "https://www.gtk.org/"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita recorder plugin")
+macro_bool_to_01(GOBJECT_FOUND HAVE_GOBJECT)
+
 
 ##
 ## Look for OpenGL

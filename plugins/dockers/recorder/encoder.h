@@ -20,57 +20,45 @@
 #define ENCODER_H
 
 #include <fstream>
+
+#include <gst/app/gstappsrc.h>
+#include <gst/gst.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <vpx/vpx_encoder.h>
-#include <array>
-#include <QSemaphore>
-#include <QThread>
-#include <atomic>
 
-class Encoder : QThread
+class Encoder
 {
-    Q_OBJECT
-    class RingBufferItem
-    {
-    public:
-        enum class Command{
-            Payload,
-            Finish
-        };
-
-        Command m_command;
-        uint8_t *m_payload;
-    };
-
-    unsigned int m_width;
-    unsigned int m_height;
-    vpx_codec_ctx m_codec;
-    vpx_image_t m_raw;
-    vpx_codec_enc_cfg_t m_cfg;
-    int m_frameCount = 0;
-    int m_keyframeInterval = 4;
-    static constexpr int m_ringBufferSize = 5;
-    std::array<RingBufferItem, m_ringBufferSize> m_ringBuffer;
-    int m_head = 0;
-    int m_tail = 0;
-    QSemaphore m_full;
-    QSemaphore m_empty;
-    QString m_filename;
-    std::atomic<bool> *m_shouldFinish;
+    GstPipeline* m_pipeline;
+    GstAppSrc* m_src;
+    GstElement* m_filter1;
+    GstElement* m_encoder;
+    GstElement* m_videoconvert;
+    GstElement* m_queue;
+    GstElement* m_webmmux;
+    GstElement* m_sink;
+    int m_width;
+    int m_height;
+    GstClockTime m_timestamp;
+    std::string m_filename;
+    int m_frameCount;
 
 public:
     Encoder()
+        : m_pipeline(nullptr)
+        , m_src(nullptr)
+        , m_filter1(nullptr)
+        , m_encoder(nullptr)
+        , m_videoconvert(nullptr)
+        , m_queue(nullptr)
+        , m_webmmux(nullptr)
+        , m_sink(nullptr)
+        , m_filename()
     {
     }
 
-    void run() override;
-
-    void init(const QString &filename, unsigned int width, unsigned int height);
-
-    void pushFrame(uint8_t* data, unsigned int m_width, unsigned int m_height, uint32_t size);
-
+    void init(const std::string &filename, int width, int height);
+    void pushFrame(gpointer data, gsize size);
     void finish();
 };
 

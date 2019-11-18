@@ -19,7 +19,6 @@
 #ifndef _RECORDER_DOCK_H_
 #define _RECORDER_DOCK_H_
 
-#include "encoder.h"
 #include "kis_idle_watcher.h"
 #include <KoCanvasObserverBase.h>
 #include <kis_canvas2.h>
@@ -34,6 +33,7 @@
 
 class QVBoxLayout;
 class RecorderWidget;
+class Encoder;
 
 class RecorderDockerDock : public QDockWidget, public KoCanvasObserverBase
 {
@@ -66,7 +66,6 @@ private:
     QMutex m_saveMutex;
     QMutex m_eventMutex;
     Encoder* m_encoder;
-    quint8* m_data = nullptr;
 
     bool m_recordEnabled;
     int m_recordCounter;

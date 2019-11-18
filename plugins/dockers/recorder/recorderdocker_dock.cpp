@@ -177,9 +177,9 @@ void RecorderDockerDock::enableRecord(bool& enabled, const QString& path)
             }
         }
 
-        QFileInfoList images = dir.entryInfoList({filename % "_*.vp9"});
+        QFileInfoList images = dir.entryInfoList({filename % "_*.webm"});
 
-        QRegularExpression namePattern("^" % filename % "_([0-9]{7}).vp9$");
+        QRegularExpression namePattern("^" % filename % "_([0-9]{7}).webm$");
         m_recordCounter = -1;
         Q_FOREACH (auto info, images) {
             QRegularExpressionMatch match = namePattern.match(info.fileName());
@@ -196,13 +196,10 @@ void RecorderDockerDock::enableRecord(bool& enabled, const QString& path)
         if (m_canvas) {
             m_recordingCanvas = m_canvas;
 
-            QString finalFileName = QString(m_recordPath % "_%1.vp9").arg(++m_recordCounter, 7, 10, QChar('0'));
+            QString finalFileName = QString(m_recordPath % "_%1.webm").arg(++m_recordCounter, 7, 10, QChar('0'));
             m_encoder = new Encoder();
             m_encoder->init(finalFileName.toStdString().c_str(), m_canvas->image()->width(),
                             m_canvas->image()->height());
-
-            size_t size = m_canvas->image()->width() * m_canvas->image()->height() * 4;
-            m_data = new quint8[size];
             startUpdateCanvasProjection();
         } else {
             enabled = m_recordEnabled = false;
@@ -213,11 +210,6 @@ void RecorderDockerDock::enableRecord(bool& enabled, const QString& path)
             m_encoder->finish();
             delete m_encoder;
             m_encoder = nullptr;
-            if (m_data)
-            {
-                delete [] m_data;
-                m_data = nullptr;
-            }
         }
     }
 }
@@ -230,11 +222,14 @@ void RecorderDockerDock::generateThumbnail()
                        &RecorderDockerDock::generateThumbnail);
             if (m_encoder) {
                 KisImageSP image = m_canvas->image();
+                gpointer data;
+                gsize size = image->width() * image->height() * 4;
+                data = g_malloc(size);
                 image->barrierLock();
                 KisPaintDeviceSP dev = image->projection();
+                dev->readBytes((quint8*)data, 0, 0, image->width(), image->height());
                 image->unlock();
-                dev->readBytes(m_data, 0, 0, image->width(), image->height());
-                m_encoder->pushFrame(m_data, image->width(), image->height(), image->width()*image->height()*dev->pixelSize());
+                m_encoder->pushFrame(data, size);
             }
 
             connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this,

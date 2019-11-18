@@ -880,6 +880,7 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
 
 
     connect(intPoolLimit, SIGNAL(valueChanged(int)), sync3, SLOT(slotParentValueChanged()));
+    connect(intMemoryLimit, SIGNAL(valueChanged(int)), sync3, SLOT(slotParentValueChanged()));
     sync3->slotParentValueChanged();
     m_syncs << sync3;
 

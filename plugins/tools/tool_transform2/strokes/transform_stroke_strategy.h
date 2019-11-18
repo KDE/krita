@@ -33,6 +33,7 @@
 class KisPostExecutionUndoAdapter;
 class TransformTransactionProperties;
 class KisUpdatesFacade;
+class KisDecoratedNodeInterface;
 
 
 class TransformStrokeStrategy : public QObject, public KisStrokeStrategyUndoCommandBased
@@ -168,6 +169,7 @@ private:
     QList<KisSelectionSP> m_deactivatedSelections;
     QList<KisNodeSP> m_hiddenProjectionLeaves;
     KisSelectionMaskSP m_deactivatedOverlaySelectionMask;
+    QVector<KisDecoratedNodeInterface*> m_disabledDecoratedNodes;
 
     const KisSavedMacroCommand *m_overriddenCommand = 0;
     QVector<const KUndo2Command*> m_skippedWhileMergeCommands;

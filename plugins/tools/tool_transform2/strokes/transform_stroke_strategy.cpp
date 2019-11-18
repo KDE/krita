@@ -51,6 +51,7 @@
 #include "kis_command_ids.h"
 #include "KisRunnableStrokeJobUtils.h"
 #include "commands_new/KisHoldUIUpdatesCommand.h"
+#include "KisDecoratedNodeInterface.h"
 
 
 TransformStrokeStrategy::TransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
@@ -525,11 +526,9 @@ void TransformStrokeStrategy::initStrokeCallback()
     KisSelectionMaskSP overlaySelectionMask =
         dynamic_cast<KisSelectionMask*>(m_rootNode->graphListener()->graphOverlayNode());
     if (overlaySelectionMask) {
-        overlaySelectionMask->selection()->setVisible(false);
-        overlaySelectionMask->setDirty();
+        overlaySelectionMask->setDecorationsVisible(false);
         m_deactivatedOverlaySelectionMask = overlaySelectionMask;
     }
-
 
     ToolTransformArgs initialTransformArgs;
     m_processedNodes = fetchNodesList(m_mode, m_rootNode, m_workRecursively);
@@ -568,6 +567,19 @@ void TransformStrokeStrategy::initStrokeCallback()
         KisLayerUtils::forceAllDelayedNodesUpdate(m_rootNode);
     });
 
+    /// Disable all decorated nodes to generate outline
+    /// and preview correctly. We will enable them back
+    /// as soon as preview generation is finished.
+    KritaUtils::addJobBarrier(extraInitJobs, [this]() {
+        Q_FOREACH (KisNodeSP node, m_processedNodes) {
+            KisDecoratedNodeInterface *decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(node.data());
+            if (decoratedNode && decoratedNode->decorationsVisible()) {
+                decoratedNode->setDecorationsVisible(false);
+                m_disabledDecoratedNodes << decoratedNode;
+            }
+        }
+    });
+
     KritaUtils::addJobBarrier(extraInitJobs, [this, initialTransformArgs, argsAreInitialized]() mutable {
         QRect srcRect;
 
@@ -604,6 +616,14 @@ void TransformStrokeStrategy::initStrokeCallback()
     Q_FOREACH (KisNodeSP node, m_processedNodes) {
         extraInitJobs << new ClearSelectionData(node);
     }
+
+    /// recover back visibility of decorated nodes
+    KritaUtils::addJobBarrier(extraInitJobs, [this]() {
+        Q_FOREACH (KisDecoratedNodeInterface *decoratedNode, m_disabledDecoratedNodes) {
+            decoratedNode->setDecorationsVisible(true);
+        }
+        m_disabledDecoratedNodes.clear();
+    });
 
     extraInitJobs << new Data(toQShared(new KisHoldUIUpdatesCommand(m_updatesFacade, KisCommandUtils::FlipFlopCommand::FINALIZING)), false, KisStrokeJobData::BARRIER);
 

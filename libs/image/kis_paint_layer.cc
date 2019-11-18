@@ -362,7 +362,7 @@ void KisPaintLayer::setDecorationsVisible(bool value, bool update)
 
     m_d->onionSkinVisibleOverride = value;
 
-    if (update) {
+    if (update && onionSkinEnabled()) {
         setDirty(oldExtent | extent());
     }
 }

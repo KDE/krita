@@ -1687,8 +1687,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUndoStackLimit(m_general->undoStackSize());
         cfg.setFavoritePresets(m_general->favoritePresets());
 
-        cfg.writeEntry(KisResourceCacheDb::dbLocationKey, dialog->m_general->m_urlCacheDbLocation->fileName());
-        cfg.writeEntry(KisResourceLocator::resourceLocationKey, dialog->m_general->m_urlResourceFolder->fileName());
+        cfg.writeEntry(KisResourceCacheDb::dbLocationKey, m_general->m_urlCacheDbLocation->fileName());
+        cfg.writeEntry(KisResourceLocator::resourceLocationKey, m_general->m_urlResourceFolder->fileName());
 
         // Color settings
         cfg.setUseSystemMonitorProfile(m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());

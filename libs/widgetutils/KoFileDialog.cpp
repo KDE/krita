@@ -159,7 +159,8 @@ void KoFileDialog::createFileDialog()
     dontUseNative = false;
 #endif
 
-    d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, group.readEntry("DontUseNativeFileDialog", dontUseNative));
+    bool optionDontUseNative = group.readEntry("DontUseNativeFileDialog", dontUseNative);
+    d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, optionDontUseNative);
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
     d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, dontUseNative ? true : false);
 
@@ -217,7 +218,15 @@ void KoFileDialog::createFileDialog()
     if (d->type == ImportDirectory ||
             d->type == ImportFile || d->type == ImportFiles ||
             d->type == SaveFile) {
-        d->fileDialog->setWindowModality(Qt::WindowModal);
+
+        bool allowModal = true;
+// MacOS do not declare native file dialog as modal BUG:413241.
+#ifdef Q_OS_MACOS
+        allowModal = optionDontUseNative;
+#endif
+        if (allowModal) {
+            d->fileDialog->setWindowModality(Qt::WindowModal);
+        }
     }
 }
 

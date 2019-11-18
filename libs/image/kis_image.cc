@@ -408,7 +408,7 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
 
     bool exactCopy = policy & EXACT_COPY;
 
-    if (exactCopy || rhs.m_d->isolatedRootNode) {
+    if (exactCopy || rhs.m_d->isolatedRootNode || rhs.m_d->overlaySelectionMask) {
         QQueue<KisNodeSP> linearizedNodes;
         KisLayerUtils::recursiveApplyNodes(rhs.root(),
                                            [&linearizedNodes](KisNodeSP node) {
@@ -425,6 +425,13 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
                                                if (rhs.m_d->isolatedRootNode &&
                                                    rhs.m_d->isolatedRootNode == refNode) {
                                                    m_d->isolatedRootNode = node;
+                                               }
+
+                                               if (rhs.m_d->overlaySelectionMask &&
+                                                   KisNodeSP(rhs.m_d->overlaySelectionMask) == refNode) {
+                                                   m_d->targetOverlaySelectionMask = dynamic_cast<KisSelectionMask*>(node.data());
+                                                   m_d->overlaySelectionMask = m_d->targetOverlaySelectionMask;
+                                                   m_d->rootLayer->notifyChildMaskChanged();
                                                }
                                            });
     }
@@ -456,13 +463,6 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
 
     m_d->blockLevelOfDetail = rhs.m_d->blockLevelOfDetail;
 
-    /**
-     * The overlay device is not inherited when cloning the image!
-     */
-    if (rhs.m_d->overlaySelectionMask) {
-        const QRect dirtyRect = rhs.m_d->overlaySelectionMask->extent();
-        m_d->rootLayer->setDirty(dirtyRect);
-    }
 #undef EMIT_IF_NEEDED
 }
 
@@ -532,7 +532,7 @@ void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
 
     struct UpdateOverlaySelectionStroke : public KisSimpleStrokeStrategy {
         UpdateOverlaySelectionStroke(KisImageSP image)
-            : KisSimpleStrokeStrategy("update-overlay-selection-mask", kundo2_noi18n("update-overlay-selection-mask")),
+            : KisSimpleStrokeStrategy(QLatin1String("update-overlay-selection-mask"), kundo2_noi18n("update-overlay-selection-mask")),
               m_image(image)
         {
             this->enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
@@ -1263,9 +1263,21 @@ bool KisImage::assignLayerProfile(KisNodeSP node, const KoColorProfile *profile)
 
 bool KisImage::assignImageProfile(const KoColorProfile *profile, bool blockAllUpdates)
 {
-    const KoColorSpace *srcColorSpace = m_d->colorSpace;
+    if (!profile) return false;
 
-    if (!profile || *srcColorSpace->profile() == *profile) return false;
+    const KoColorSpace *srcColorSpace = m_d->colorSpace;
+    bool imageProfileIsSame = *srcColorSpace->profile() == *profile;
+
+    imageProfileIsSame &=
+        !KisLayerUtils::recursiveFindNode(m_d->rootLayer,
+            [profile] (KisNodeSP node) {
+                return *node->colorSpace()->profile() != *profile;
+            });
+
+    if (imageProfileIsSame) {
+        dbgImage << "Trying to set the same image profile again" << ppVar(srcColorSpace->profile()->name()) << ppVar(profile->name());
+        return true;
+    }
 
     KUndo2MagicString actionName = kundo2_i18n("Assign Profile");
 
@@ -1700,7 +1712,8 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
 {
     struct StartIsolatedModeStroke : public KisRunnableBasedStrokeStrategy {
         StartIsolatedModeStroke(KisNodeSP node, KisImageSP image)
-            : KisRunnableBasedStrokeStrategy("start-isolated-mode", kundo2_noi18n("start-isolated-mode")),
+            : KisRunnableBasedStrokeStrategy(QLatin1String("start-isolated-mode"),
+                                             kundo2_noi18n("start-isolated-mode")),
               m_node(node),
               m_image(image)
         {
@@ -1744,7 +1757,7 @@ void KisImage::stopIsolatedMode()
 
     struct StopIsolatedModeStroke : public KisRunnableBasedStrokeStrategy {
         StopIsolatedModeStroke(KisImageSP image)
-            : KisRunnableBasedStrokeStrategy("stop-isolated-mode", kundo2_noi18n("stop-isolated-mode")),
+            : KisRunnableBasedStrokeStrategy(QLatin1String("stop-isolated-mode"), kundo2_noi18n("stop-isolated-mode")),
               m_image(image)
         {
             this->enableJob(JOB_INIT);

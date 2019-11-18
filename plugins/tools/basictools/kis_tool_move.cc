@@ -91,9 +91,6 @@ KisToolMove::KisToolMove(KoCanvasBase *canvas)
     connect(m_optionsWidget, SIGNAL(sigRequestCommitOffsetChanges()), this, SLOT(commitChanges()), Qt::UniqueConnection);
 
     connect(this, SIGNAL(moveInNewPosition(QPoint)), m_optionsWidget, SLOT(slotSetTranslate(QPoint)), Qt::UniqueConnection);
-
-    connect(qobject_cast<KisCanvas2*>(canvas)->viewManager()->nodeManager(), SIGNAL(sigUiNeedChangeSelectedNodes(KisNodeList)), this, SLOT(slotNodeChanged(KisNodeList)), Qt::UniqueConnection);
-    connect(qobject_cast<KisCanvas2*>(canvas)->viewManager()->selectionManager(), SIGNAL(currentSelectionChanged()), this, SLOT(slotSelectionChanged()), Qt::UniqueConnection);
 }
 
 KisToolMove::~KisToolMove()
@@ -335,6 +332,9 @@ void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     m_actionConnections.addConnection(action("movetool-move-right-more"), SIGNAL(triggered(bool)),
                                       this, SLOT(slotMoveDiscreteRightMore()));
 
+    m_canvasConnections.addUniqueConnection(qobject_cast<KisCanvas2*>(canvas())->viewManager()->nodeManager(), SIGNAL(sigUiNeedChangeSelectedNodes(KisNodeList)), this, SLOT(slotNodeChanged(KisNodeList)));
+    m_canvasConnections.addUniqueConnection(qobject_cast<KisCanvas2*>(canvas())->viewManager()->selectionManager(), SIGNAL(currentSelectionChanged()), this, SLOT(slotSelectionChanged()));
+
     connect(m_showCoordinatesAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(setShowCoordinates(bool)), Qt::UniqueConnection);
     connect(m_optionsWidget, SIGNAL(showCoordinatesChanged(bool)), m_showCoordinatesAction, SLOT(setChecked(bool)), Qt::UniqueConnection);
 
@@ -364,6 +364,7 @@ void KisToolMove::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolMove::deactivate()
 {
     m_actionConnections.clear();
+    m_canvasConnections.clear();
 
     disconnect(m_showCoordinatesAction, 0, this, 0);
     disconnect(m_optionsWidget, 0, this, 0);

@@ -73,6 +73,8 @@ public:
 
     KisNodeSP node() const;
 
+    bool isGUIVisible(bool showGlobalSelection) const;
+
 private:
     friend class KisNodeShapesGraph; // for ::nodeShape() method
     friend class KisNodeShapesGraphTest;

@@ -44,3 +44,8 @@ int KisUpdateOutlineJob::levelOfDetail() const
 {
     return 0;
 }
+
+QString KisUpdateOutlineJob::debugName() const
+{
+    return "KisUpdateOutlineJob";
+}

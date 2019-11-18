@@ -32,6 +32,8 @@ public:
     void run() override;
     int levelOfDetail() const override;
 
+    QString debugName() const override;
+
 private:
     KisGeneratorLayerSP m_layer;
 };

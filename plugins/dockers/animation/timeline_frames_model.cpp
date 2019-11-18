@@ -34,6 +34,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_node_dummies_graph.h"
 #include "kis_dummies_facade_base.h"
+#include "KisNodeDisplayModeAdapter.h"
 #include "kis_signal_compressor.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_keyframe_channel.h"
@@ -251,7 +252,9 @@ QMap<QString, KisKeyframeChannel*> TimelineFramesModel::channelsAt(QModelIndex i
     return srcDummy->node()->keyframeChannels();
 }
 
-void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageSP image)
+void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
+                                           KisImageSP image,
+                                           KisNodeDisplayModeAdapter *displayModeAdapter)
 {
     KisDummiesFacadeBase *oldDummiesFacade = m_d->dummiesFacade;
 
@@ -268,7 +271,7 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
     m_d->converter.reset();
 
     if (m_d->dummiesFacade) {
-        m_d->converter.reset(new TimelineNodeListKeeper(this, m_d->dummiesFacade));
+        m_d->converter.reset(new TimelineNodeListKeeper(this, m_d->dummiesFacade, displayModeAdapter));
         connect(m_d->dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
                 SLOT(slotDummyChanged(KisNodeDummy*)));
         connect(m_d->image->animationInterface(),

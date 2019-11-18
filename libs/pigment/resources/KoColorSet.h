@@ -159,7 +159,7 @@ public /* methods */:
      * @brief getGroupNames
      * @return returns a list of group names, excluding the unsorted group.
      */
-    QStringList getGroupNames();
+    QStringList getGroupNames() const;
 
     /**
      * @brief getGroup

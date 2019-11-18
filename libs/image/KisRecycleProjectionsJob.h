@@ -41,6 +41,8 @@ public:
     void run() override;
     int levelOfDetail() const override;
 
+    QString debugName() const override;
+
 private:
     KisSafeNodeProjectionStoreBaseWSP m_projectionStore;
 };

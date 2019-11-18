@@ -190,6 +190,7 @@ class NotificationStroke : public QObject, public KisSimpleStrokeStrategy
   Q_OBJECT
 public:
     NotificationStroke()
+        : KisSimpleStrokeStrategy(QLatin1String("NotificationStroke"))
     {
         setClearsRedoOnStart(false);
         this->enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER);

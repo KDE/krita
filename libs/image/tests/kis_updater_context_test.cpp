@@ -203,6 +203,10 @@ public:
         m_counter.deref();
     }
 
+    QString debugId() const override {
+        return "ExclusivenessCheckerStrategy";
+    }
+
 private:
     QAtomicInt &m_counter;
     QAtomicInt &m_hadConcurrency;

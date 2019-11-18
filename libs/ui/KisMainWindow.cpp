@@ -697,7 +697,9 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
 
 void KisMainWindow::slotPreferences()
 {
-    if (KisDlgPreferences::editPreferences()) {
+    QScopedPointer<KisDlgPreferences> dlgPreferences(new KisDlgPreferences(this));
+
+    if (!dlgPreferences->editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
         KisConfigNotifier::instance()->notifyPixelGridModeChanged();
         KisImageConfigNotifier::instance()->notifyConfigChanged();

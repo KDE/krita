@@ -30,6 +30,7 @@ public:
     bool overrides(const KisSpontaneousJob *otherJob) override;
     void run() override;
     int levelOfDetail() const override;
+    QString debugName() const override;
 
 private:
     KisSelectionSP m_selection;

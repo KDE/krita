@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2019 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,15 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_spontaneous_job.h"
+#ifndef KIS_RUNNABLE_WITH_DEBUG_NAME_H
+#define KIS_RUNNABLE_WITH_DEBUG_NAME_H
 
+#include "kis_runnable.h"
+#include <QString>
 
-bool KisSpontaneousJob::isExclusive() const
+class KRITAIMAGE_EXPORT KisRunnableWithDebugName : public KisRunnable
 {
-    return m_isExclusive;
-}
+public:
+    virtual QString debugName() const = 0;
+};
 
-void KisSpontaneousJob::setExclusive(bool value)
-{
-
-}
+#endif // KIS_RUNNABLE_WITH_DEBUG_NAME_H

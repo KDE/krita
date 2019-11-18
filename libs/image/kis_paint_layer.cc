@@ -59,6 +59,8 @@ public:
 
     KisSignalAutoConnectionsStore onionSkinConnection;
     KisOnionSkinCache onionSkinCache;
+
+    bool onionSkinVisibleOverride = true;
 };
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
@@ -163,6 +165,7 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     if (m_d->contentChannel &&
             m_d->contentChannel->keyframeCount() > 1 &&
             onionSkinEnabled() &&
+            m_d->onionSkinVisibleOverride &&
             !m_d->paintDevice->defaultBounds()->externalFrameActive()) {
 
         KisPaintDeviceSP skins = m_d->onionSkinCache.projection(m_d->paintDevice);
@@ -248,7 +251,7 @@ QRect KisPaintLayer::extent() const
 {
     KisPaintDeviceSP t = temporaryTarget();
     QRect rect = t ? t->extent() : QRect();
-    if (onionSkinEnabled()) rect |= KisOnionSkinCompositor::instance()->calculateExtent(m_d->paintDevice);
+    if (onionSkinEnabled() && m_d->onionSkinVisibleOverride) rect |= KisOnionSkinCompositor::instance()->calculateExtent(m_d->paintDevice);
     return rect | KisLayer::extent();
 }
 
@@ -256,7 +259,7 @@ QRect KisPaintLayer::exactBounds() const
 {
     KisPaintDeviceSP t = temporaryTarget();
     QRect rect = t ? t->extent() : QRect();
-    if (onionSkinEnabled()) rect |= KisOnionSkinCompositor::instance()->calculateExtent(m_d->paintDevice);
+    if (onionSkinEnabled() && m_d->onionSkinVisibleOverride) rect |= KisOnionSkinCompositor::instance()->calculateExtent(m_d->paintDevice);
     return rect | KisLayer::exactBounds();
 }
 
@@ -344,4 +347,22 @@ KisPaintDeviceList KisPaintLayer::getLodCapableDevices() const
     }
 
     return list;
+}
+
+bool KisPaintLayer::decorationsVisible() const
+{
+    return m_d->onionSkinVisibleOverride;
+}
+
+void KisPaintLayer::setDecorationsVisible(bool value, bool update)
+{
+    if (value == decorationsVisible()) return;
+
+    const QRect oldExtent = extent();
+
+    m_d->onionSkinVisibleOverride = value;
+
+    if (update) {
+        setDirty(oldExtent | extent());
+    }
 }

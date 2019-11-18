@@ -177,6 +177,7 @@ bool KisGbrBrush::init()
     GimpBrushHeader bh;
 
     if (sizeof(GimpBrushHeader) > (uint)d->data.size()) {
+        qWarning() << "GBR could not be loaded: expected header size larger than bytearray size. Header Size:" << sizeof(GimpBrushHeader) << "Byte array size" << d->data.size();
         return false;
     }
 
@@ -204,6 +205,7 @@ bool KisGbrBrush::init()
         bh.spacing = qFromBigEndian(bh.spacing);
 
         if (bh.spacing > 1000) {
+            qWarning() << "GBR could not be loaded, spacing above 1000. Spacing:" << bh.spacing;
             return false;
         }
     }
@@ -211,6 +213,7 @@ bool KisGbrBrush::init()
     setSpacing(bh.spacing / 100.0);
 
     if (bh.header_size > (uint)d->data.size() || bh.header_size == 0) {
+        qWarning() << "GBR could not be loaded: header size larger than bytearray size. Header Size:" << bh.header_size << "Byte array size" << d->data.size();
         return false;
     }
 
@@ -232,6 +235,7 @@ bool KisGbrBrush::init()
     setName(name);
 
     if (bh.width == 0 || bh.height == 0) {
+        qWarning() << "GBR loading failed: width or height is 0" << bh.width << bh.height;
         return false;
     }
 
@@ -246,6 +250,8 @@ bool KisGbrBrush::init()
     QImage image(QImage(bh.width, bh.height, imageFormat));
 
     if (image.isNull()) {
+        qWarning() << "GBR loading failed; image could not be created from following dimensions" << bh.width << bh.height
+                   << "QImage::Format" << imageFormat;
         return false;
     }
 
@@ -258,6 +264,8 @@ bool KisGbrBrush::init()
         // Grayscale
 
         if (static_cast<qint32>(k + bh.width * bh.height) > d->data.size()) {
+            qWarning() << "GBR file dimensions bigger than bytearray size. Header:"<< k << "Width:" << bh.width << "height" << bh.height
+                       << "expected byte array size:" << (k + (bh.width * bh.height)) << "actual byte array size" << d->data.size();
             return false;
         }
 
@@ -275,6 +283,8 @@ bool KisGbrBrush::init()
         // RGBA
 
         if (static_cast<qint32>(k + (bh.width * bh.height * 4)) > d->data.size()) {
+            qWarning() << "GBR file dimensions bigger than bytearray size. Header:"<< k << "Width:" << bh.width << "height" << bh.height
+                       << "expected byte array size:" << (k + (bh.width * bh.height * 4)) << "actual byte array size" << d->data.size();
             return false;
         }
 
@@ -371,16 +381,16 @@ bool KisGbrBrush::saveToDevice(QIODevice* dev) const
 
     if (!hasColor()) {
         bytes.resize(width() * height());
-        for (qint32 y = 0; y < image.height(); y++) {
-            for (qint32 x = 0; x < image.width(); x++) {
+        for (qint32 y = 0; y < height(); y++) {
+            for (qint32 x = 0; x < width(); x++) {
                 QRgb c = image.pixel(x, y);
                 bytes[k++] = static_cast<char>(255 - qRed(c)); // red == blue == green
             }
         }
     } else {
         bytes.resize(width() * height() * 4);
-        for (qint32 y = 0; y < image.height(); y++) {
-            for (qint32 x = 0; x < image.width(); x++) {
+        for (qint32 y = 0; y < height(); y++) {
+            for (qint32 x = 0; x < width(); x++) {
                 // order for gimp brushes, v2 is: RGBA
                 QRgb pixel = image.pixel(x, y);
                 bytes[k++] = static_cast<char>(qRed(pixel));

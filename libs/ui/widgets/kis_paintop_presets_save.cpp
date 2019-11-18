@@ -165,57 +165,20 @@ void KisPresetSaveWidget::savePreset()
 
     m_favoriteResourceManager->setBlockUpdates(true);
 
-    KisPaintOpPresetSP oldPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>(); // tags are not cloned with this
-    oldPreset->load();
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
 
     // if we are saving a new brush, use what we type in for the input
     QString presetName = m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name();
     QString currentPresetFileName = saveLocation + presetName.replace(" ", "_") + curPreset->defaultFileExtension();
-    bool isSavingOverExistingPreset = rServer->resourceByName(presetName);
-
-    // make a back up of the existing preset if we are saving over it
-    if (isSavingOverExistingPreset) {
-        QString currentDate = QDate::currentDate().toString(Qt::ISODate);
-        QString currentTime = QTime::currentTime().toString(Qt::ISODate).remove(QChar(':'));
-        QString presetFilename = saveLocation + presetName.replace(" ", "_") + "_backup_" + currentDate + "-" + currentTime + oldPreset->defaultFileExtension();
-        oldPreset->setFilename(presetFilename);
-        oldPreset->setName(presetName);
-        oldPreset->setDirty(false);
-        oldPreset->setValid(true);
-
-        // add backup resource to the blacklist
-        qDebug() << "Broken stuff going on in KisPresetSaveWidget::savePreset";
-//        rServer->addResource(oldPreset);
-//        rServer->removeResource(oldPreset);
-
-
-        QStringList tags;
-        tags = rServer->assignedTagsList(curPreset);
-        Q_FOREACH (const QString & tag, tags) {
-            rServer->addTag(oldPreset, tag);
-        }
-    }
-
 
     if (m_useNewBrushDialog) {
         KisPaintOpPresetSP newPreset = curPreset->clone().dynamicCast<KisPaintOpPreset>();
-        newPreset->setFilename(currentPresetFileName);
+        newPreset->setFilename(currentPresetFileName.split("/").last());
         newPreset->setName(presetName);
         newPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
         newPreset->setDirty(false);
         newPreset->setValid(true);
-
-
-        // keep tags if we are saving over existing preset
-        if (isSavingOverExistingPreset) {
-            QStringList tags;
-            tags = rServer->assignedTagsList(curPreset);
-            Q_FOREACH (const QString & tag, tags) {
-                rServer->addTag(newPreset, tag);
-            }
-        }
 
         rServer->addResource(newPreset);
 
@@ -224,24 +187,14 @@ void KisPresetSaveWidget::savePreset()
     }
     else { // saving a preset that is replacing an existing one
 
-        qDebug() << "KisPresetSaveWidget::save: broken resource stuff going on. Manual blacklisting and updating or resources";
-        if (curPreset->filename().contains(saveLocation) == false || curPreset->filename().contains(presetName) == false) {
-            rServer->removeResourceFromServer(curPreset);
-            curPreset->setFilename(currentPresetFileName);
-            curPreset->setName(presetName);
-        }
+        curPreset->setFilename(currentPresetFileName.split("/").last());
+        curPreset->setName(presetName);
 
-        if (!rServer->resourceByFilename(curPreset->filename())){
-            //this is necessary so that we can get the preset afterwards.
-            rServer->addResource(curPreset, false);
-        }
         if (curPreset->image().isNull()) {
             curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
         }
 
-        // we should not load() the brush right after saving because it will reset all our saved
-        // eraser size and opacity values
-        curPreset->save();
+        rServer->addResource(curPreset);
     }
 
 

@@ -49,8 +49,6 @@ public:
 
 // KisTagModel API
 
-    void setResourceType(const QString &resourceType);
-
     KisTagSP tagForIndex(QModelIndex index = QModelIndex()) const;
 
     bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>());
@@ -59,6 +57,10 @@ public:
     bool untagResource(const KisTagSP tag, const KoResourceSP resource);
 
 private:
+
+    friend class DlgDbExplorer;
+    void setResourceType(const QString &resourceType);
+
 
     bool prepareQuery();
 

@@ -63,8 +63,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     lblSurveyLink->setVisible(true);
     lblSurveyLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
 
-    QString surveyId = "965214";
-
+    QString surveyId = "786736";
     QString arguments;
     arguments += "&KritaVersion=" + QStringLiteral(KRITA_VERSION_STRING);
     arguments += "&BuildAbi=" + QSysInfo::buildAbi();

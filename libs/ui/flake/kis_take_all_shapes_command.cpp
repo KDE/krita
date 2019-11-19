@@ -23,10 +23,11 @@
 #include <kis_image.h>
 
 
-KisTakeAllShapesCommand::KisTakeAllShapesCommand(KisShapeSelection *shapeSelection, bool takeSilently)
+KisTakeAllShapesCommand::KisTakeAllShapesCommand(KisShapeSelection *shapeSelection, bool takeSilently, bool restoreSilently)
     : KUndo2Command(kundo2_i18n("Clear Vector Selection")),
       m_shapeSelection(shapeSelection),
-      m_takeSilently(takeSilently)
+      m_takeSilently(takeSilently),
+      m_restoreSilently(restoreSilently)
 {
 }
 
@@ -56,7 +57,7 @@ void KisTakeAllShapesCommand::redo()
 
 void KisTakeAllShapesCommand::undo()
 {
-    if (m_takeSilently) {
+    if (m_restoreSilently) {
         m_shapeSelection->setUpdatesEnabled(false);
     }
 
@@ -66,7 +67,7 @@ void KisTakeAllShapesCommand::undo()
 
     m_shapes.clear();
 
-    if (m_takeSilently) {
+    if (m_restoreSilently) {
         m_shapeSelection->setUpdatesEnabled(true);
     }
 }

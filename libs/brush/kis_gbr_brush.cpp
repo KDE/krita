@@ -166,9 +166,7 @@ bool KisGbrBrush::load()
 
 bool KisGbrBrush::loadFromDevice(QIODevice *dev)
 {
-    if (!d->data.isEmpty()) {
-        d->data = dev->readAll();
-    }
+    d->data = dev->readAll();
     return init();
 }
 

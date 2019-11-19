@@ -84,3 +84,8 @@ QRect KisMaskProjectionPlane::needRectForOriginal(const QRect &rect) const
     return rect;
 }
 
+QRect KisMaskProjectionPlane::tightUserVisibleBounds() const
+{
+    return QRect();
+}
+

@@ -211,6 +211,10 @@ bool KisResourceLocator::importResourceFromFile(const QString &resourceType, con
     }
 
     KoResourceSP resource = loader->load(QFileInfo(fileName).fileName(), f);
+    if (!resource) {
+        qWarning() << "Could not import" << fileName << ": resource doesn't load.";
+        return false;
+    }
 
     KisResourceStorageSP storage = d->storages[d->resourceLocation];
     Q_ASSERT(storage);

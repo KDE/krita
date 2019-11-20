@@ -30,12 +30,23 @@ public:
     virtual ~KisBundleStorage();
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
+
+    /// Note: this should find resources in a folder that override a resource in the bundle first
     KoResourceSP resource(const QString &url) override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
     QImage thumbnail() const override;
     QStringList metaDataKeys() const override;
     QString metaData(const QString &key) const override;
+
+    /// Add a tag to this bundle: note, the bundle itself should NOT be rewritten, but we need to
+    /// put these tags in a place in the file system
+    bool addTag(const QString &resourceType, KisTagSP tag) override {Q_UNUSED(resourceType); Q_UNUSED(tag); return false;}
+
+    /// Add a resource to this bundle: note, the bundle itself should NOT be rewritten, but we need to
+    /// put these tags in a place in the file system
+    bool addResource(const QString &resourceType, KoResourceSP resource) override {Q_UNUSED(resourceType); Q_UNUSED(resource); return false;}
+
 
 private:
     class Private;

@@ -350,7 +350,6 @@ public:
     QString uniqueID {QUuid::createUuid().toString()};
     KisResourceStorageSP documentResourceStorage {new KisResourceStorage(uniqueID)};
 
-
     void syncDecorationsWrapperLayerState();
 
     void setImageAndInitIdleWatcher(KisImageSP _image) {
@@ -609,6 +608,7 @@ KisDocument::~KisDocument()
         // check if the image has actually been deleted
         KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
     }
+    KisResourceLocator::instance()->removeDocumentStorage(d->uniqueID);
 
     delete d;
 }

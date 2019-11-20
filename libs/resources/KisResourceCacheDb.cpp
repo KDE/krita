@@ -378,7 +378,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
         q.bindValue(":resource_id", resourceId);
         q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
         q.bindValue(":version", resource->version() + 1);
-        q.bindValue(":location", KisResourceLocator::instance()->makeStorageLocationRelative(resource->filename()));
+        q.bindValue(":location", QFileInfo(resource->filename()).fileName());
         q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
         Q_ASSERT(!resource->md5().isEmpty());
         q.bindValue(":md5sum", resource->md5().toHex());
@@ -403,7 +403,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
             return r;
         }
         q.bindValue(":name", resource->name());
-        q.bindValue(":filename", KisResourceLocator::instance()->makeStorageLocationRelative(resource->filename()));
+        q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
         q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
         q.bindValue(":version", resource->version());
 

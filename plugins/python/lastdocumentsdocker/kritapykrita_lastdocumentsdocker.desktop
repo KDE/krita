@@ -44,5 +44,5 @@ Comment[sv]=Ett Python-baserat dockningsfönster för att visa miniatyrbilder f�
 Comment[tr]=Son on belgenin küçük resmini göstermek için Python-tabanlı bir dok
 Comment[uk]=Бічна панель на основі Python для показу мініатюр останніх десяти документів
 Comment[x-test]=xxA Python-based docker for show thumbnails to last ten documentsxx
-Comment[zh_CN]=基于 Python 的工具面板，显示最近十个文档的缩略图
+Comment[zh_CN]=这是一个基于 Python 的工具面板插件，它可以显示最近十个文档的缩略图
 Comment[zh_TW]=基於 Python 的面板，用於顯示最後 10 個檔案縮圖

@@ -43,5 +43,5 @@ Comment[sv]=Ett Python-baserat dockningsfönster för att skapa åtgärder och p
 Comment[tr]=Eylemler oluşturmak ve Python betiklerine yönlendirmek için Python-tabanlı bir dok
 Comment[uk]=Бічна панель для створення дій і керування скриптами на основі Python.
 Comment[x-test]=xxA Python-based docker for create actions and point to Python scriptsxx
-Comment[zh_CN]=基于 Python 的用于创建动作并指向 Python 脚本的工具面板
+Comment[zh_CN]=这是一个基于 Python 的工具面板，用于创建操作，并将他们指向 Python 脚本。
 Comment[zh_TW]=基於 Python 的面板，用於建立動作並指向 Python 指令稿

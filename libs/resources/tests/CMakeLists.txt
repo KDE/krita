@@ -17,7 +17,6 @@ ecm_add_tests(
     TestTag
     TestBundleStorage
     TestResourceModel
-    TestResourceProxyModel
     TestTagFilterResourceProxyModel
     TestTagModel
     TestResourceTypeModel

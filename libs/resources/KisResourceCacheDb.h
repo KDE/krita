@@ -102,9 +102,6 @@ private:
     static bool deleteStorage(KisResourceStorageSP storage);
     static bool synchronizeStorage(KisResourceStorageSP storage);
 
-    /// Returns only the filename of the resource
-    static QString makeRelative(QString location);
-
     /// Delete all storages that are Unknown or Memory and all resources that are marked temporary or belong to Unknown or Memory storages
     static void deleteTemporaryResources();
 

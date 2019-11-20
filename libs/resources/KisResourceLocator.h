@@ -123,6 +123,7 @@ private:
     friend class TestResourceLocator;
     friend class TestResourceModel;
     friend class Resource;
+    friend class KisResourceCacheDb;
 
     /// @return true if the resource is present in the cache, false if it hasn't been loaded
     bool resourceCached(QString storageLocation, const QString &resourceType, const QString &filename) const;
@@ -225,6 +226,8 @@ private:
 
     ResourceStorage getResourceStorage(int resourceId) const;
     QString makeStorageLocationAbsolute(QString storageLocation) const;
+    QString makeStorageLocationRelative(QString location) const;
+
 
     class Private;
     QScopedPointer<Private> d;

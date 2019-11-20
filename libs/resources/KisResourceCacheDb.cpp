@@ -32,6 +32,7 @@
 #include <kis_debug.h>
 #include <KisUsageLogger.h>
 
+#include "KisResourceLocator.h"
 #include "KisResourceCacheDb.h"
 #include "KisResourceLoaderRegistry.h"
 
@@ -375,9 +376,9 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
         }
 
         q.bindValue(":resource_id", resourceId);
-        q.bindValue(":storage_location", makeRelative(storage->location()));
+        q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
         q.bindValue(":version", resource->version() + 1);
-        q.bindValue(":location", makeRelative(resource->filename()));
+        q.bindValue(":location", KisResourceLocator::instance()->makeStorageLocationRelative(resource->filename()));
         q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
         Q_ASSERT(!resource->md5().isEmpty());
         q.bindValue(":md5sum", resource->md5().toHex());
@@ -402,7 +403,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
             return r;
         }
         q.bindValue(":name", resource->name());
-        q.bindValue(":filename", makeRelative(resource->filename()));
+        q.bindValue(":filename", KisResourceLocator::instance()->makeStorageLocationRelative(resource->filename()));
         q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
         q.bindValue(":version", resource->version());
 
@@ -440,7 +441,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     }
 
     // Check whether it already exists
-    int resourceId = resourceIdForResource(resource->name(), resourceType, makeRelative(storage->location()));
+    int resourceId = resourceIdForResource(resource->name(), resourceType, KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
     if (resourceId > -1) {
         if (resourceNeedsUpdating(resourceId, timestamp)) {
             r = addResourceVersion(resourceId, timestamp, storage, resource);
@@ -470,10 +471,10 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
         return r;
     }
 
-    q.bindValue(":storage_location", makeRelative(storage->location()));
+    q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
     q.bindValue(":resource_type", resourceType);
     q.bindValue(":name", resource->name());
-    q.bindValue(":filename", makeRelative(resource->filename()));
+    q.bindValue(":filename", QFileInfo(resource->filename()).fileName());
     q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
 
     QByteArray ba;
@@ -492,7 +493,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
         return r;
     }
 
-    resourceId = resourceIdForResource(resource->name(), resourceType, makeRelative(storage->location()));
+    resourceId = resourceIdForResource(resource->name(), resourceType, KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
 
     // Then add a new version
     r = q.prepare("INSERT INTO versioned_resources\n"
@@ -513,9 +514,9 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     }
 
     q.bindValue(":resource_id", resourceId);
-    q.bindValue(":storage_location", makeRelative(storage->location()));
+    q.bindValue(":storage_location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
     q.bindValue(":version", resource->version());
-    q.bindValue(":location", makeRelative(resource->filename()));
+    q.bindValue(":location", QFileInfo(resource->filename()).fileName());
     q.bindValue(":timestamp", timestamp.toSecsSinceEpoch());
     //Q_ASSERT(!resource->md5().isEmpty());
     if (resource->md5().isEmpty()) {
@@ -540,7 +541,7 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
         KoResourceSP resource = iter->resource();
         if (resource && resource->valid()) {
             if (!addResource(storage, iter->lastModified(), resource, iter->type())) {
-                qWarning() << "Could not add resource" << makeRelative(resource->filename()) << "to the database";
+                qWarning() << "Could not add resource" << QFileInfo(resource->filename()).fileName() << "to the database";
             }
         }
     }
@@ -573,10 +574,10 @@ bool KisResourceCacheDb::removeResource(int resourceId)
 bool KisResourceCacheDb::tagResource(KisResourceStorageSP storage, const QString resourceName, KisTagSP tag, const QString &resourceType)
 {
     // Get resource id
-    int resourceId = resourceIdForResource(resourceName, resourceType, makeRelative(storage->location()));
+    int resourceId = resourceIdForResource(resourceName, resourceType, KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
 
     if (resourceId < 0) {
-        qWarning() << "Could not find resource to tag" << makeRelative(storage->location())  << resourceName << resourceType;
+        qWarning() << "Could not find resource to tag" << KisResourceLocator::instance()->makeStorageLocationRelative(storage->location())  << resourceName << resourceType;
         return false;
     }
 
@@ -711,7 +712,7 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
     {
         QSqlQuery q;
         r = q.prepare("SELECT * FROM storages WHERE location = :location");
-        q.bindValue(":location", makeRelative(storage->location()));
+        q.bindValue(":location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
         r = q.exec();
         if (!r) {
             qWarning() << "Could not select from storages";
@@ -738,7 +739,7 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
         }
 
         q.bindValue(":storage_type_id", static_cast<int>(storage->type()));
-        q.bindValue(":location", makeRelative(storage->location()));
+        q.bindValue(":location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
         q.bindValue(":timestamp", storage->timestamp().toSecsSinceEpoch());
         q.bindValue(":pre_installed", preinstalled ? 1 : 0);
         q.bindValue(":active", !disabledBundles.contains(storage->name()));
@@ -804,7 +805,7 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
             qWarning() << "Could not prepare delete resources query in deleteStorage" << q.lastError();
             return false;
         }
-        q.bindValue(":location", makeRelative(storage->location()));
+        q.bindValue(":location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
         if (!q.exec()) {
             qWarning() << "Could not execute delete resources query in deleteStorage" << q.lastError();
             return false;
@@ -820,7 +821,7 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
             qWarning() << "Could not prepare delete versioned_resources query" << q.lastError();
             return false;
         }
-        q.bindValue(":location", makeRelative(storage->location()));
+        q.bindValue(":location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
         if (!q.exec()) {
             qWarning() << "Could not execute delete versioned_resources query" << q.lastError();
             return false;
@@ -834,7 +835,7 @@ bool KisResourceCacheDb::deleteStorage(KisResourceStorageSP storage)
             qWarning() << "Could not prepare delete storages query" << q.lastError();
             return false;
         }
-        q.bindValue(":location", makeRelative(storage->location()));
+        q.bindValue(":location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
         if (!q.exec()) {
             qWarning() << "Could not execute delete storages query" << q.lastError();
             return false;
@@ -869,7 +870,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
         qWarning() << "Could not prepare storage timestamp statement" << q.lastError();
     }
 
-    q.bindValue(":location", makeRelative(storage->location()));
+    q.bindValue(":location", KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));
     if (!q.exec()) {
         qWarning() << "Could not execute storage timestamp statement" << q.boundValues() << q.lastError();
     }
@@ -892,18 +893,18 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                  << q.value(1).toInt() << ", File:" << storage->timestamp().toSecsSinceEpoch();
 
         if (!q.value(0).isValid()) {
-            qWarning() << "Could not retrieve timestamp for storage" << makeRelative(storage->location());
+            qWarning() << "Could not retrieve timestamp for storage" << KisResourceLocator::instance()->makeStorageLocationRelative(storage->location());
             success = false;
         }
         if (storage->timestamp().toSecsSinceEpoch() > q.value(1).toInt()) {
             qDebug() << "Deleting" << storage->location() << "because the one on disk is newer.";
             if (!deleteStorage(storage)) {
-                qWarning() << "Could not delete storage" << makeRelative(storage->location());
+                qWarning() << "Could not delete storage" << KisResourceLocator::instance()->makeStorageLocationRelative(storage->location());
                 success = false;
             }
             qDebug() << "Inserting" << storage->location();
             if (!addStorage(storage, q.value(2).toBool())) {
-                qWarning() << "Could not add storage" << makeRelative(storage->location());
+                qWarning() << "Could not add storage" << KisResourceLocator::instance()->makeStorageLocationRelative(storage->location());
                 success = false;
             }
         }
@@ -923,10 +924,10 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                 iter->next();
                 qDebug() << "\tadding resources" << iter->url();
                 KoResourceSP resource = iter->resource();
-                resourcesOnDisk << makeRelative(iter->url());
+                resourcesOnDisk << QFileInfo(iter->url()).fileName();
                 if (resource) {
                     if (!addResource(storage, iter->lastModified(), resource, iter->type())) {
-                        qWarning() << "Could not add/update resource" << makeRelative(resource->filename()) << "to the database";
+                        qWarning() << "Could not add/update resource" << QFileInfo(resource->filename()).fileName() << "to the database";
                         success = false;
                     }
                 }
@@ -992,11 +993,6 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
     qDebug() << "Synchronizing the storages took" << t.msec() << "milliseconds for" << storage->location();
 
     return success;
-}
-
-QString KisResourceCacheDb::makeRelative(QString location)
-{
-    return QFileInfo(location).fileName();
 }
 
 void KisResourceCacheDb::deleteTemporaryResources()

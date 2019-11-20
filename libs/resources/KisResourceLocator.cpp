@@ -163,7 +163,6 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
         resource = d->resourceCache[key];
     }
     else {
-        Q_ASSERT(d->storages.contains(storageLocation));
         KisResourceStorageSP storage = d->storages[storageLocation];
         Q_ASSERT(storage);
 
@@ -537,4 +536,10 @@ bool KisResourceLocator::synchronizeDb()
         }
     }
     return d->errorMessages.isEmpty();
+}
+
+
+QString KisResourceLocator::makeStorageLocationRelative(QString location) const
+{
+    return location.remove(resourceLocationBase());
 }

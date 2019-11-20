@@ -43,6 +43,10 @@ public:
         m_stack.push(device);
     }
 
+    bool isEmpty() const {
+        return m_stack.isEmpty();
+    }
+
     struct Guard {
         Guard(KisPaintDeviceSP prototype, KisCachedPaintDevice &parent)
             : m_parent(parent)
@@ -85,6 +89,10 @@ public:
         selection->setDefaultBounds(new KisSelectionEmptyBounds(0));
         selection->pixelSelection()->moveTo(QPoint());
         m_stack.push(selection);
+    }
+
+    bool isEmpty() const {
+        return m_stack.isEmpty();
     }
 
     struct Guard {

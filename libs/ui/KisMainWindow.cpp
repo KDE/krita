@@ -889,6 +889,10 @@ void KisMainWindow::updateCaption()
         KisDocument *doc = d->activeView->document();
 
         QString caption(doc->caption());
+
+        caption = "RESOURCES REWRITE GOING ON " + caption;
+
+
         if (d->readOnly) {
             caption += " [" + i18n("Write Protected") + "] ";
         }

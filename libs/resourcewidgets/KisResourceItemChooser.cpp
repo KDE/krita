@@ -48,7 +48,6 @@
 
 #include <KisResourceModelProvider.h>
 #include <KisResourceModel.h>
-#include <KisResourceGridProxyModel.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceLoaderRegistry.h>
 

@@ -28,7 +28,6 @@
 
 #include <TableModel.h>
 #include <KisResourceModel.h>
-#include <KisResourceGridProxyModel.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisResourceTypeModel.h>

@@ -468,6 +468,8 @@ extern "C" int main(int argc, char **argv)
         app.setAttribute(Qt::AA_DontShowIconsInMenus);
     }
 
+    app.setAttribute(Qt::AA_DisableWindowContextHelpButton);
+
     app.installEventFilter(KisQtWidgetsTweaker::instance());
 
     if (!args.noSplash()) {

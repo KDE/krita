@@ -24,6 +24,7 @@
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 #include "kis_painting_assistant.h"
+#include "kis_default_bounds.h"
 
 struct KisDecorationsWrapperLayer::Private
 {
@@ -37,6 +38,7 @@ KisDecorationsWrapperLayer::KisDecorationsWrapperLayer(KisDocument *document)
 {
     m_d->document = document;
     m_d->fakeOriginalDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    m_d->fakeOriginalDevice->setDefaultBounds(new KisDefaultBounds(document->image()));
 }
 
 
@@ -45,7 +47,7 @@ KisDecorationsWrapperLayer::KisDecorationsWrapperLayer(const KisDecorationsWrapp
       m_d(new Private)
 {
     m_d->document = rhs.m_d->document;
-    m_d->fakeOriginalDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    m_d->fakeOriginalDevice = new KisPaintDevice(*rhs.m_d->fakeOriginalDevice);
 }
 
 KisDecorationsWrapperLayer::~KisDecorationsWrapperLayer()
@@ -102,6 +104,12 @@ bool KisDecorationsWrapperLayer::isFakeNode() const
 bool KisDecorationsWrapperLayer::supportsPerspectiveTransform() const
 {
     return false;
+}
+
+void KisDecorationsWrapperLayer::setImage(KisImageWSP image)
+{
+    m_d->fakeOriginalDevice->setDefaultBounds(new KisDefaultBounds(image));
+    KisExternalLayer::setImage(image);
 }
 
 KUndo2Command *KisDecorationsWrapperLayer::crop(const QRect &rect)

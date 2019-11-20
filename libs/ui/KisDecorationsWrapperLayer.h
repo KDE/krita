@@ -62,6 +62,8 @@ public:
 
     bool supportsPerspectiveTransform() const override;
 
+    void setImage(KisImageWSP image) override;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

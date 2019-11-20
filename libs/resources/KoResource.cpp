@@ -137,7 +137,7 @@ void KoResource::setFilename(const QString& filename)
 
 QString KoResource::name() const
 {
-    return (!d->name.isEmpty() ? d->name : filename());
+    return (!d->name.isEmpty() ? d->name : QFileInfo(filename()).fileName());
 }
 
 void KoResource::setName(const QString& name)

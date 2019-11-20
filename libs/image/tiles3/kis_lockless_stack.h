@@ -168,11 +168,11 @@ public:
      * in highly concurrent environment. So we return approximate
      * value! Do not rely on this value much!
      */
-    qint32 size() {
+    qint32 size() const {
         return m_numNodes;
     }
 
-    bool isEmpty() {
+    bool isEmpty() const {
         return !m_numNodes;
     }
 

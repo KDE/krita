@@ -72,7 +72,7 @@ private:
 
     explicit KisResourceCacheDb(); // Deleted
     ~KisResourceCacheDb(); // Deleted
-    KisResourceCacheDb operator=(const KisResourceCacheDb&); //Deleted
+    KisResourceCacheDb operator=(const KisResourceCacheDb&); // Deleted
 
     static int resourceIdForResource(const QString &resourceName, const QString &resourceType, const QString &storageLocation);
     static bool resourceNeedsUpdating(int resourceId, QDateTime timestamp);

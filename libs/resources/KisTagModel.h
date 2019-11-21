@@ -30,6 +30,11 @@
 class KRITARESOURCES_EXPORT KisTagModel : public QAbstractTableModel
 {
     Q_OBJECT
+
+private:
+
+    KisTagModel(const QString &resourceType, QObject *parent = 0);
+
 public:
 
     enum Columns {
@@ -40,7 +45,7 @@ public:
         ResourceType
     };
 
-    KisTagModel(const QString &resourceType, QObject *parent = 0);
+
     ~KisTagModel() override;
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -60,6 +65,9 @@ public:
 private:
 
     friend class DlgDbExplorer;
+    friend class KisTagModelProvider;
+    friend class TestTagModel;
+
     void setResourceType(const QString &resourceType);
 
 

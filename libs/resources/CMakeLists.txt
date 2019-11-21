@@ -22,6 +22,7 @@ set(kritaresources_LIB_SRCS
 
     KisTag.cpp
     KisTagModel.cpp
+    KisTagModelProvider.cpp
 
     KoResource.cpp
     KoResourceBundle.cpp

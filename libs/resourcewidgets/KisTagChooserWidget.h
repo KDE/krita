@@ -30,12 +30,15 @@
 #include <QWidget>
 #include "kritaresourcewidgets_export.h"
 
+#include <KisTag.h>
+#include <KisTagModel.h>
+
 class KRITARESOURCEWIDGETS_EXPORT KisTagChooserWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit KisTagChooserWidget(QWidget* parent);
+    explicit KisTagChooserWidget(KisTagModel* model, QWidget* parent);
     ~KisTagChooserWidget() override;
     void setCurrentIndex(int index);
     int findIndexOf(QString tagName);

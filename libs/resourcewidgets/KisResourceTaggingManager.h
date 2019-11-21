@@ -30,6 +30,8 @@
 #include <QObject>
 
 #include <KoResource.h>
+#include <KisTag.h>
+#include <KisTagModel.h>
 
 class QWidget;
 class QStringList;
@@ -51,7 +53,7 @@ class KisResourceTaggingManager : public QObject
 
 public:
 
-    explicit KisResourceTaggingManager(KisTagFilterResourceProxyModel *model, QWidget *parent);
+    explicit KisResourceTaggingManager(KisTagModel* tagModel, KisTagFilterResourceProxyModel *model, QWidget *parent);
     ~KisResourceTaggingManager() override;
     void showTaggingBar(bool show);
     QStringList availableTags() const;

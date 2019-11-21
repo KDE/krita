@@ -74,13 +74,13 @@ public:
 };
 
 
-KisResourceTaggingManager::KisResourceTaggingManager(KisTagFilterResourceProxyModel *model, QWidget *parent)
+KisResourceTaggingManager::KisResourceTaggingManager(KisTagModel* tagModel, KisTagFilterResourceProxyModel *model, QWidget *parent)
     : QObject(parent)
     , d(new Private())
 {
     d->model = model;
 
-    d->tagChooser = new KisTagChooserWidget(parent);
+    d->tagChooser = new KisTagChooserWidget(tagModel, parent);
     d->tagChooser->addReadOnlyItem("All"); // not translatable until other tags made translatable!
     //d->tagChooser->addItems(d->model->tagNamesList());
 

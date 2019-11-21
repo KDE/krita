@@ -36,6 +36,8 @@
 
 #include "KisResourceItemChooserContextMenu.h"
 #include "KisTagToolButton.h"
+#include <kis_debug.h>
+
 
 class Q_DECL_HIDDEN KisTagChooserWidget::Private
 {
@@ -46,13 +48,26 @@ public:
     QStringList tags;
 };
 
-KisTagChooserWidget::KisTagChooserWidget(QWidget* parent)
+KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
     : QWidget(parent)
     , d(new Private())
 {
     d->comboBox = new KisSqueezedComboBox(this);
     d->comboBox->setToolTip(i18n("Tag"));
     d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed );
+
+    QStringList list;
+
+    for (int i = 0; i < model->rowCount(); i++) {
+        QModelIndex index = model->index(i, 0);
+        KisTagSP tag = model->tagForIndex(index);
+        if (!tag.isNull()) {
+            list << tag->name();
+        }
+    }
+
+    d->comboBox->insertItems(0, list);
+    d->tags = list;
 
     QGridLayout* comboLayout = new QGridLayout(this);
 

@@ -57,6 +57,7 @@
 #include "KisTagChooserWidget.h"
 #include "KisResourceItemChooserSync.h"
 #include "KisResourceTaggingManager.h"
+#include "KisTagModelProvider.h"
 
 
 #include "kis_assert.h"
@@ -194,7 +195,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->viewModeButton->setPopupMode(QToolButton::InstantPopup);
     d->viewModeButton->setVisible(false);
 
-    d->tagManager = new KisResourceTaggingManager(d->tagFilterProxyModel, this);
+    d->tagManager = new KisResourceTaggingManager(KisTagModelProvider::tagModel(resourceType), d->tagFilterProxyModel, this);
     connect(d->tagManager, SIGNAL(updateView()), this, SLOT(updateView()));
 
     layout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);

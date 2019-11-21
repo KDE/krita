@@ -63,9 +63,8 @@ public:
 
     QString defaultFileExtension() const override;
 
-    QString resourceType() const override
-    {
-        return ResourceType::Patterns;
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Patterns, "");
     }
 
     /**

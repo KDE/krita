@@ -43,6 +43,7 @@ namespace ResourceType {
 }
 
 namespace ResourceSubType {
+    static const QString AbrBrushes {"abr_brushes"};
     static const QString GbrBrushes {"gbr_brushes"};
     static const QString GihBrushes {"gih_brushes"};
     static const QString SvgBrushes {"svg_brushes"};

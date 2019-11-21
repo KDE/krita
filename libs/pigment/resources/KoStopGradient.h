@@ -55,6 +55,10 @@ public:
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
 
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Gradients, ResourceSubType::StopGradients);
+    }
+
     /// reimplemented
     QGradient* toQGradient() const override;
 

@@ -73,9 +73,9 @@ public:
     bool saveToDevice(QIODevice* dev) const override;
 
 
-    QString resourceType() const override
+    QPair<QString, QString> resourceType() const override
     {
-        return ResourceType::LayerStyles;
+        return QPair<QString, QString>(ResourceType::LayerStyles, "");
     }
 
     /**

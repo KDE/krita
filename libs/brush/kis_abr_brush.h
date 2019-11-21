@@ -58,6 +58,10 @@ public:
 
     bool saveToDevice(QIODevice* dev) const override;
 
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Brushes, ResourceSubType::AbrBrushes);
+    }
+
     /**
      * @return default file extension for saving the brush
      */

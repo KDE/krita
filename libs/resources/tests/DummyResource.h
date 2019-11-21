@@ -102,9 +102,8 @@ public:
         return m_something;
     }
 
-    QString resourceType() const override
-    {
-        return "";
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>("", "");
     }
 
 private:

@@ -42,9 +42,9 @@ public:
 
     QString defaultFileExtension() const override;
 
-    QString resourceType() const override
+    QPair<QString, QString> resourceType() const override
     {
-        return ResourceType::TaskSets;
+        return QPair<QString, QString>(ResourceType::TaskSets, "");
     }
 
     void setActionList(const QStringList actions);

@@ -97,9 +97,9 @@ public:
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
     QString defaultFileExtension() const override;
-    QString resourceType() const override
+    QPair<QString, QString> resourceType() const override
     {
-        return ResourceType::Palettes;
+        return QPair<QString, QString>(ResourceType::Palettes, "");
     }
 
     void setColumnCount(int columns);

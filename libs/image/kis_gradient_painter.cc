@@ -72,6 +72,9 @@ public:
         return m_subject->toQGradient();
     }
 
+    QPair<QString, QString> resourceType() const override {
+        return m_subject->resourceType();
+    }
 
     /// gets the color data at position 0 <= t <= 1
     const quint8 *cachedAt(qreal t) const

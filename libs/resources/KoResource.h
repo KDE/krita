@@ -138,7 +138,7 @@ public:
     int resourceId() const;
 
     /// @return the resource type
-    virtual QString resourceType() const = 0;
+    virtual QPair<QString, QString> resourceType() const = 0;
 
 private:
 

@@ -70,6 +70,10 @@ public:
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
 
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Brushes, ResourceSubType::GbrBrushes);
+    }
+
     /**
      * @return a preview of the brush
      */

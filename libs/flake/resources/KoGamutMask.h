@@ -73,9 +73,9 @@ public:
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
 
-    QString resourceType() const override
+    QPair<QString, QString> resourceType() const override
     {
-        return ResourceType::GamutMasks;
+        return QPair<QString, QString>(ResourceType::GamutMasks, "");
     }
 
     void paint(QPainter &painter, KoViewConverter& viewConverter, bool preview);

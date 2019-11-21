@@ -37,6 +37,10 @@ public:
     QString defaultFileExtension() const override;
     void toXML(QDomDocument& d, QDomElement& e) const override;
 
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Brushes, ResourceSubType::PngBrushes);
+    }
+
 };
 
 #endif

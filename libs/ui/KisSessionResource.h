@@ -40,9 +40,9 @@ protected:
 
     void loadXml(const QDomElement &root) const override;
 
-    QString resourceType() const override
+    QPair<QString, QString> resourceType() const override
     {
-        return ResourceType::Sessions;
+        return QPair<QString, QString>(ResourceType::Sessions, "");
     }
 
 private:

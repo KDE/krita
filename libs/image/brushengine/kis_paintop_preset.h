@@ -103,9 +103,9 @@ public:
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
 
-    QString resourceType() const override
+    QPair<QString, QString> resourceType() const override
     {
-        return ResourceType::PaintOpPresets;
+        return QPair<QString, QString>(ResourceType::PaintOpPresets, "");
     }
 
     void toXML(QDomDocument& doc, QDomElement& elt) const;

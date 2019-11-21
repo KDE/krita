@@ -142,8 +142,8 @@ public:
         return false;
     }
 
-    QString resourceType() const override {
-        return ResourceType::Brushes;
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Brushes, "");
     }
 
     /**

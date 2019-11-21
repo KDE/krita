@@ -40,9 +40,9 @@ public:
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
     QString defaultFileExtension() const override;
-    QString resourceType() const override
+    QPair<QString, QString> resourceType() const override
     {
-        return ResourceType::Workspaces;
+        return QPair<QString, QString>(ResourceType::Workspaces, "");
     }
 
     void setDockerState(const QByteArray& state);

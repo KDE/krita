@@ -50,9 +50,9 @@ public:
     bool loadFromDevice(QIODevice *dev) override;
 
 
-    QString resourceType() const override
+    QPair<QString, QString> resourceType() const override
     {
-        return ResourceType::WindowLayouts;
+        return QPair<QString, QString>(ResourceType::WindowLayouts, "");
     }
 
     QString defaultFileExtension() const override;

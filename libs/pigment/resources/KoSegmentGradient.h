@@ -85,6 +85,7 @@ public:
     void setColorInterpolation(int colorInterpolationType);
 
     bool isValid() const;
+
 protected:
 
     class ColorInterpolationStrategy
@@ -271,6 +272,10 @@ public:
     /// not implemented
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
+
+    QPair<QString, QString> resourceType() const override {
+        return QPair<QString, QString>(ResourceType::Gradients, ResourceSubType::SegmentedGradients);
+    }
 
     /// reimplemented
     void colorAt(KoColor& dst, qreal t) const override;

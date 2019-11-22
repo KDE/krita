@@ -55,6 +55,7 @@ public:
     bool removeTag(const KisTagSP tag);
     bool tagResource(const KisTagSP tag, const KoResourceSP resource);
     bool untagResource(const KisTagSP tag, const KoResourceSP resource);
+    bool renameTag(const KisTagSP tag, const QString &name);
 
 private:
 

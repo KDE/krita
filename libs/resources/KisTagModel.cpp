@@ -177,8 +177,8 @@ bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouce
             qWarning() << "Couild not prepare make existing tag active query" << tag << q.lastError();
             return false;
         }
-        q.bindValue("url", tag->url());
-        q.bindValue("resource_type", d->resourceType);
+        q.bindValue(":url", tag->url());
+        q.bindValue(":resource_type", d->resourceType);
 
         if (!q.exec()) {
             qWarning() << "Couild not execute make existing tag active query" << q.boundValues(), q.lastError();
@@ -258,7 +258,7 @@ bool KisTagModel::tagResource(const KisTagSP tag, const KoResourceSP resource)
 
     q.bindValue(":resource_id", resource->resourceId());
     q.bindValue(":url", tag->url());
-    q.bindValue("name", tag->name());
+    q.bindValue(":name", tag->name());
     q.bindValue(":comment", tag->comment());
     q.bindValue(":resource_type", d->resourceType);
 
@@ -274,6 +274,7 @@ bool KisTagModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
 {
     if (!tag) return false;
     if (!tag->valid()) return false;
+    if (!tag->id()) return false;
 
     if (!resource) return false;
     if (!resource->valid()) return false;
@@ -299,11 +300,42 @@ bool KisTagModel::untagResource(const KisTagSP tag, const KoResourceSP resource)
     return prepareQuery();
 }
 
+bool KisTagModel::renameTag(const KisTagSP tag, const QString &name)
+{
+    if (!tag) return false;
+    if (!tag->valid()) return false;
+
+    if (name.isEmpty()) return false;
+
+    QSqlQuery q;
+    if (!q.prepare("UPDATE tags\n"
+                   "SET    name = :name\n"
+                   "WHERE  url = :url\n"
+                   "AND    resource_type_id = (SELECT id\n"
+                   "                           FROM   resource_types\n"
+                   "                           WHERE  name = :resource_type\n)")) {
+        qWarning() << "Couild not prepare make existing tag active query" << tag << q.lastError();
+        return false;
+    }
+
+    q.bindValue(":name", name);
+    q.bindValue(":url", tag->url());
+    q.bindValue(":resource_type", d->resourceType);
+
+    if (!q.exec()) {
+        qWarning() << "Couild not execute make existing tag active query" << q.boundValues(), q.lastError();
+        return false;
+    }
+
+    return prepareQuery();
+
+}
+
 
 bool KisTagModel::prepareQuery()
 {
     beginResetModel();
-    bool r = d->query.prepare("SELECT tags.id\n"
+    bool r = d->query.prepare("SELECT  tags.id\n"
                               ",       tags.url\n"
                               ",       tags.name\n"
                               ",       tags.comment\n"

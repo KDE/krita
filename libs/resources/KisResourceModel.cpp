@@ -76,13 +76,11 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
                             ",      tags.url\n"
                             ",      tags.name\n"
                             ",      tags.comment\n"
-                            ",      resource_types.name as resource_type\n"
                             "FROM   tags\n"
                             ",      resource_tags\n"
-                            "WHERE  tags.active > 0\n"
-                            "AND    tags.id = resource_tags.tag_id\n"
-                            "AND    resource_tags.resource_id = :resource_id\n"
-                            "AND    tags.resource_type_id = resource_types.id\n");
+                            "WHERE  tags.active > 0\n"                               // make sure the tag is active
+                            "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
+                            "AND    resource_tags.resource_id = :resource_id\n");    // make sure we're looking for tags for a specific resource
     if (!r)  {
         qWarning() << "Could not prepare TagsForResource query" << d->tagQuery.lastError();
     }

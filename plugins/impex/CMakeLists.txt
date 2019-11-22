@@ -27,7 +27,7 @@ if(Poppler_Qt5_FOUND)
     add_subdirectory(pdf)
 endif()
 
-if(OpenJPEG_FOUND)
+if(OpenJPEG_FOUND AND NOT ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
     add_subdirectory(jp2)
 endif()
 

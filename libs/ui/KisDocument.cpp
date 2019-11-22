@@ -608,7 +608,9 @@ KisDocument::~KisDocument()
         // check if the image has actually been deleted
         KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
     }
-    KisResourceLocator::instance()->removeDocumentStorage(d->uniqueID);
+    if (KisResourceLocator::instance()->hasDocumentStorage(d->uniqueID)) {
+        KisResourceLocator::instance()->removeDocumentStorage(d->uniqueID);
+    }
 
     delete d;
 }

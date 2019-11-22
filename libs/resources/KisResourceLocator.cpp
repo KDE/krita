@@ -320,8 +320,10 @@ bool KisResourceLocator::addDocumentStorage(const QString &document, KisResource
 
 bool KisResourceLocator::removeDocumentStorage(const QString &document)
 {
+    // Cloned documents have a document storage, but that isn't in the locator.
+    if (!d->storages.contains(document)) return true;
+
     purge();
-    Q_ASSERT(d->storages.contains(document));
     KisResourceStorageSP storage = d->storages.take(document);
     if (!KisResourceCacheDb::deleteStorage(storage)) {
         d->errorMessages.append(i18n("Could not remove storage %1 from the database", storage->location()));

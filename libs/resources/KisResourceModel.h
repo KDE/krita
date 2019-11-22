@@ -25,6 +25,7 @@
 #include <kritaresources_export.h>
 
 #include <KoResource.h>
+#include <KisTag.h>
 
 class KRITARESOURCES_EXPORT KisAbstractResourceModel {
 
@@ -152,6 +153,7 @@ public:
     bool addResource(KoResourceSP resource, bool save = true) override;
     bool updateResource(KoResourceSP resource) override;
     bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
+    QVector<KisTagSP> tagsForResource(int resourceId) const;
 
 
 Q_SIGNALS:
@@ -163,7 +165,6 @@ Q_SIGNALS:
 private:
 
     bool resetQuery();
-    QStringList tagsForResource(int resourceId) const;
 
     struct Private;
     Private *const d;

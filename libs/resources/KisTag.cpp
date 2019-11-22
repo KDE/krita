@@ -195,3 +195,8 @@ void KisTag::setActive(bool active)
     d->active = active;
 }
 
+void KisTag::setValid(bool valid)
+{
+    d->valid = valid;
+}
+

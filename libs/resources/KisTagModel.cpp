@@ -149,6 +149,7 @@ KisTagSP KisTagModel::tagForIndex(QModelIndex index) const
         tag->setComment(d->query.value("comment").toString());
         tag->setId(d->query.value("id").toInt());
         tag->setActive(d->query.value("active").toBool());
+        tag->setValid(true);
     }
 
     return tag;

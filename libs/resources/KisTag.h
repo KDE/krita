@@ -75,9 +75,10 @@ public:
 private:
 
     friend class KisTagModel;
+    friend class KisResourceModel;
     void setId(int id);
     void setActive(bool active);
-
+    void setValid(bool valid);
     static const QByteArray s_group;
     static const QByteArray s_type;
     static const QByteArray s_tag;

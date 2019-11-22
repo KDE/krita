@@ -48,23 +48,23 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
     d->resourceType = resourceType;
     
     bool r = d->resourcesQuery.prepare("SELECT resources.id\n"
-                                       ",     resources.storage_id\n"
-                                       ",     resources.name\n"
-                                       ",     resources.filename\n"
-                                       ",     resources.tooltip\n"
-                                       ",     resources.thumbnail\n"
-                                       ",     resources.status\n"
-                                       ",     storages.location\n"
-                                       ",     resources.version\n"
-                                       ",     resource_types.name as resource_type\n"
-                                       "FROM  resources\n"
-                                       ",     resource_types\n"
-                                       ",     storages\n"
-                                       "WHERE resources.resource_type_id = resource_types.id\n"
-                                       "AND   resources.storage_id = storages.id\n"
-                                       "AND   resource_types.name = :resource_type\n"
-                                       "AND   resources.status = 1\n"
-                                       "AND   storages.active = 1");
+                                       ",      resources.storage_id\n"
+                                       ",      resources.name\n"
+                                       ",      resources.filename\n"
+                                       ",      resources.tooltip\n"
+                                       ",      resources.thumbnail\n"
+                                       ",      resources.status\n"
+                                       ",      storages.location\n"
+                                       ",      resources.version\n"
+                                       ",      resource_types.name as resource_type\n"
+                                       "FROM   resources\n"
+                                       ",      resource_types\n"
+                                       ",      storages\n"
+                                       "WHERE  resources.resource_type_id = resource_types.id\n"
+                                       "AND    resources.storage_id = storages.id\n"
+                                       "AND    resource_types.name = :resource_type\n"
+                                       "AND    resources.status = 1\n"
+                                       "AND    storages.active = 1");
     if (!r) {
         qWarning() << "Could not prepare KisResourceModel query" << d->resourcesQuery.lastError();
     }
@@ -72,14 +72,17 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
     
     resetQuery();
     
-    r = d->tagQuery.prepare("SELECT tags.url\n"
+    r = d->tagQuery.prepare("SELECT tags.id\n"
+                            ",      tags.url\n"
                             ",      tags.name\n"
                             ",      tags.comment\n"
+                            ",      resource_types.name as resource_type\n"
                             "FROM   tags\n"
                             ",      resource_tags\n"
                             "WHERE  tags.active > 0\n"
                             "AND    tags.id = resource_tags.tag_id\n"
-                            "AND    resource_tags.resource_id = :resource_id\n");
+                            "AND    resource_tags.resource_id = :resource_id\n"
+                            "AND    tags.resource_type_id = resource_types.id\n");
     if (!r)  {
         qWarning() << "Could not prepare TagsForResource query" << d->tagQuery.lastError();
     }
@@ -179,8 +182,12 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
             return d->resourcesQuery.value("resource_type");
         case Qt::UserRole + Tags:
         {
-            QStringList tags = tagsForResource(d->resourcesQuery.value("id").toInt());
-            return tags;
+            QVector<KisTagSP> tags = tagsForResource(d->resourcesQuery.value("id").toInt());
+            QStringList tagNames;
+            Q_FOREACH(const KisTagSP tag, tags) {
+                tagNames << tag->name();
+            }
+            return tagNames;
         }
         case Qt::UserRole + Dirty:
         {
@@ -372,17 +379,24 @@ bool KisResourceModel::resetQuery()
     return r;
 }
 
-QStringList KisResourceModel::tagsForResource(int resourceId) const
+QVector<KisTagSP> KisResourceModel::tagsForResource(int resourceId) const
 {
     d->tagQuery.bindValue(":resource_id", resourceId);
     bool r = d->tagQuery.exec();
     if (!r) {
         qWarning() << "Could not select tags for" << resourceId << d->tagQuery.lastError() << d->tagQuery.boundValues();
     }
-    QStringList tags;
+    QVector<KisTagSP> tags;
     while (d->tagQuery.next()) {
         //qDebug() << d->tagQuery.value(0).toString() << d->tagQuery.value(1).toString() << d->tagQuery.value(2).toString();
-        tags << d->tagQuery.value(1).toString();
+        KisTagSP tag(new KisTag());
+        tag->setId(d->tagQuery.value("id").toInt());
+        tag->setUrl(d->tagQuery.value("url").toString());
+        tag->setName(d->tagQuery.value("name").toString());
+        tag->setComment(d->tagQuery.value("comment").toString());
+        tag->setValid(true);
+        tag->setActive(true);
+        tags << tag;
     }
     return tags;
 }

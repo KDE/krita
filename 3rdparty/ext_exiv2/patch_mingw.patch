@@ -2,7 +2,7 @@ diff --git a/src/http.cpp b/src/http.cpp
 index 86b7ebb..cc8caf0 100644
 --- a/src/http.cpp
 +++ b/src/http.cpp
-@@ -59,7 +59,7 @@
+@@ -54,7 +54,7 @@
  #include <string.h>
  #include <windows.h>
  #include <io.h>

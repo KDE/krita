@@ -1,0 +1,19 @@
+diff --git a/cmake/FindIconv.cmake b/cmake/FindIconv.cmake
+index d5d0919..2d3c2ce 100644
+--- a/cmake/FindIconv.cmake
++++ b/cmake/FindIconv.cmake
+@@ -102,9 +102,11 @@ else()
+   set(Iconv_LIBRARY_NAMES "c")
+ endif()
+ 
+-find_library(Iconv_LIBRARY
+-  NAMES ${Iconv_LIBRARY_NAMES}
+-  DOC "iconv library (potentially the C library)")
++if(NOT Iconv_LIBRARY)
++    find_library(Iconv_LIBRARY
++    NAMES ${Iconv_LIBRARY_NAMES}
++    DOC "iconv library (potentially the C library)")
++endif()
+ 
+ mark_as_advanced(Iconv_INCLUDE_DIR)
+ mark_as_advanced(Iconv_LIBRARY)

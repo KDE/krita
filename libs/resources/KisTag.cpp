@@ -143,6 +143,21 @@ void KisTag::setDefaultResources(const QStringList &defaultResources)
     d->defaultResources = defaultResources;
 }
 
+bool KisTag::compareNamesAndUrls(KisTagSP left, KisTagSP right)
+{
+    if (left.isNull() && !right.isNull()) {
+        return true;
+    }
+    if (right.isNull()) {
+        return false;
+    }
+    if (left->name() != right->name()) {
+        return left->name().compare(right->name()) > 0;
+    }
+
+    return left->url().compare(right->url()) > 0;
+}
+
 bool KisTag::load(QIODevice &io)
 {
     if (!io.isOpen()) {

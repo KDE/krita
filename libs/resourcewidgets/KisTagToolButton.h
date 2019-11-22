@@ -27,6 +27,7 @@
 #define KISTAGTOOLBUTTON_H
 
 #include <QWidget>
+#include <KisTag.h>
 
 class KisTagToolButton : public QWidget
 {
@@ -36,13 +37,13 @@ private:
     explicit KisTagToolButton(QWidget* parent = 0);
     ~KisTagToolButton() override;
     void readOnlyMode(bool activate);
-    void setUndeletionCandidate(const QString &deletedTagName);
+    void setUndeletionCandidate(const KisTagSP deletedTag);
 
 Q_SIGNALS:
-    void newTagRequested(const QString &tagname);
-    void renamingOfCurrentTagRequested(const QString &tagname);
+    void newTagRequested(const KisTagSP tag);
+    void renamingOfCurrentTagRequested(const KisTagSP tag);
     void deletionOfCurrentTagRequested();
-    void undeletionOfTagRequested(const QString &tagname);
+    void undeletionOfTagRequested(const KisTagSP tag);
     void purgingOfTagUndeleteListRequested();
     void popupMenuAboutToShow();
 

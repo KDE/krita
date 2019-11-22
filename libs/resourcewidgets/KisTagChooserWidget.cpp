@@ -28,6 +28,7 @@
 #include <QDebug>
 #include <QToolButton>
 #include <QGridLayout>
+#include <QComboBox>
 
 #include <klocalizedstring.h>
 #include <KisSqueezedComboBox.h>
@@ -36,38 +37,39 @@
 
 #include "KisResourceItemChooserContextMenu.h"
 #include "KisTagToolButton.h"
-#include <kis_debug.h>
-
+#include "kis_debug.h"
+#include <KisActiveFilterTagProxyModel.h>
 
 class Q_DECL_HIDDEN KisTagChooserWidget::Private
 {
 public:
-    KisSqueezedComboBox *comboBox;
+    QComboBox *comboBox;
     KisTagToolButton *tagToolButton;
-    QStringList readOnlyTags;
-    QStringList tags;
+    QList<KisTagSP> readOnlyTags;
+    QList<KisTagSP> tags;
+    KisTagModel* model;
+    QScopedPointer<KisActiveFilterTagProxyModel> activeFilterModel;
+
+    Private(KisTagModel* model)
+        : activeFilterModel(new KisActiveFilterTagProxyModel(model))
+    {
+
+    }
 };
 
 KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
     : QWidget(parent)
-    , d(new Private())
+    , d(new Private(model))
 {
-    d->comboBox = new KisSqueezedComboBox(this);
+    d->comboBox = new QComboBox(this);
+
     d->comboBox->setToolTip(i18n("Tag"));
     d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed );
 
-    QStringList list;
+    //d->comboBox->setModel(d->activeFilterModel.get());
+    d->comboBox->setModel(model);
 
-    for (int i = 0; i < model->rowCount(); i++) {
-        QModelIndex index = model->index(i, 0);
-        KisTagSP tag = model->tagForIndex(index);
-        if (!tag.isNull()) {
-            list << tag->name();
-        }
-    }
-
-    d->comboBox->insertItems(0, list);
-    d->tags = list;
+    d->model = model;
 
     QGridLayout* comboLayout = new QGridLayout(this);
 
@@ -80,20 +82,22 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel* model, QWidget* parent)
     comboLayout->setMargin(0);
     comboLayout->setColumnStretch(0, 3);
     this->setEnabled(true);
-    clear();
 
-    connect(d->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(tagChanged(int)));
+    connect(d->comboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(tagChanged(int)));
 
     connect(d->tagToolButton, SIGNAL(popupMenuAboutToShow()),
             this, SLOT (tagOptionsContextMenuAboutToShow()));
-    connect(d->tagToolButton, SIGNAL(newTagRequested(QString)),
-            this, SIGNAL(newTagRequested(QString)));
+
+    connect(d->tagToolButton, SIGNAL(newTagRequested(KisTagSP)),
+            this, SLOT(insertItem(KisTagSP)));
     connect(d->tagToolButton, SIGNAL(deletionOfCurrentTagRequested()),
             this, SLOT(contextDeleteCurrentTag()));
-    connect(d->tagToolButton, SIGNAL(renamingOfCurrentTagRequested(QString)),
-            this, SLOT(tagRenamingRequested(QString)));
-    connect(d->tagToolButton, SIGNAL(undeletionOfTagRequested(QString)),
-            this, SIGNAL(tagUndeletionRequested(QString)));
+
+    connect(d->tagToolButton, SIGNAL(renamingOfCurrentTagRequested(KisTagSP)),
+            this, SLOT(tagRenamingRequested(KisTagSP)));
+    connect(d->tagToolButton, SIGNAL(undeletionOfTagRequested(KisTagSP)),
+            this, SIGNAL(tagUndeletionRequested(KisTagSP)));
     connect(d->tagToolButton, SIGNAL(purgingOfTagUndeleteListRequested()),
             this, SIGNAL(tagUndeletionListPurgeRequested()));
 
@@ -106,106 +110,120 @@ KisTagChooserWidget::~KisTagChooserWidget()
 
 void KisTagChooserWidget::contextDeleteCurrentTag()
 {
-    if (selectedTagIsReadOnly()) {
-        return;
-    }
-    emit tagDeletionRequested(currentlySelectedTag());
+    ENTER_FUNCTION();
+    KisTagSP currentTag = currentlySelectedTag();
+    d->model->removeTag(currentTag);
 }
 
 void KisTagChooserWidget::tagChanged(int)
 {
-    emit tagChosen(d->comboBox->currentUnsqueezedText());
+    ENTER_FUNCTION();
+    emit tagChosen(currentlySelectedTag());
 }
 
-void KisTagChooserWidget::tagRenamingRequested(const QString& newName)
+void KisTagChooserWidget::tagRenamingRequested(const KisTagSP newName)
 {
-    if (newName.isEmpty() || selectedTagIsReadOnly()) {
-        return;
-    }
-    emit tagRenamingRequested(currentlySelectedTag(), newName);
+    ENTER_FUNCTION();
+    // TODO: RESOURCES: implement renaming (implement update in KisTagModel?)
+    warnKrita << "Renaming of tags not implemented";
 }
 
-void KisTagChooserWidget::setUndeletionCandidate(const QString& tag)
+void KisTagChooserWidget::setUndeletionCandidate(const KisTagSP tag)
 {
+    ENTER_FUNCTION();
     d->tagToolButton->setUndeletionCandidate(tag);
 }
 
 void KisTagChooserWidget::setCurrentIndex(int index)
 {
+    ENTER_FUNCTION();
     d->comboBox->setCurrentIndex(index);
 }
 
-int KisTagChooserWidget::findIndexOf(QString tagName)
+int KisTagChooserWidget::findIndexOf(KisTagSP tagName)
 {
-    return d->comboBox->findOriginalText(tagName);
+    ENTER_FUNCTION();
+    return -1;
+    //return d->comboBox->findOriginalText(tagName);
 }
 
-void KisTagChooserWidget::addReadOnlyItem(QString tagName)
+void KisTagChooserWidget::addReadOnlyItem(KisTagSP tag)
 {
-    d->readOnlyTags.append(tagName);
+    d->model->addTag(tag);
+    ENTER_FUNCTION();
 }
 
-void KisTagChooserWidget::insertItem(QString tagName)
+void KisTagChooserWidget::insertItem(KisTagSP tag)
 {
-    QStringList tags = allTags();
-    tags.append(tagName);
-    tags.sort();
-    foreach (QString readOnlyTag, d->readOnlyTags) {
-        tags.prepend(readOnlyTag);
-    }
-
-    int index = tags.indexOf(tagName);
-    if (d->comboBox->findOriginalText(tagName) == -1) {
-        d->comboBox->insertSqueezedItem(tagName, index);
-        d->tags.append(tagName);
-    }
+    fprintf(stderr, "inserting item!!! %s\n", tag->name().toUtf8().toStdString().c_str());
+    tag->setUrl(tag->name());
+    tag->setComment(tag->name());
+    tag->setActive(true);
+    tag->setValid(true);
+    ENTER_FUNCTION();
+    bool added = d->model->addTag(tag);
+    fprintf(stderr, "added = %d\n", added);
 }
 
-QString KisTagChooserWidget::currentlySelectedTag()
+KisTagSP KisTagChooserWidget::currentlySelectedTag()
 {
-    return d->comboBox->currentUnsqueezedText();
+    int row = d->comboBox->currentIndex();
+    // TODO: RESOURCES: there shouldn't be any +1 for "All", of course;
+    //d->comboBox->currentData();
+    fprintf(stderr, "current data type = %s", d->comboBox->currentData().typeName());
+
+    QModelIndex index = d->model->index(row - 1, 0);
+    KisTagSP tag =  d->model->tagForIndex(index);
+    ENTER_FUNCTION() << tag;
+    return tag;
 }
 
-QStringList KisTagChooserWidget::allTags()
+QList<KisTagSP> KisTagChooserWidget::allTags()
 {
-    return d->tags;
+    ENTER_FUNCTION();
+    QList<KisTagSP> list;
+    for (int i = 0; i < d->model->rowCount(); i++) {
+        QModelIndex index = d->model->index(i, 0);
+        KisTagSP tag = d->model->tagForIndex(index);
+         if (!tag.isNull()) {
+             list << tag;
+         }
+     }
+
+    return list;
 }
 
 bool KisTagChooserWidget::selectedTagIsReadOnly()
 {
-    return d->readOnlyTags.contains(d->comboBox->currentUnsqueezedText()) ;
+    ENTER_FUNCTION();
+    return false;
 }
 
-void KisTagChooserWidget::addItems(QStringList tagNames)
+void KisTagChooserWidget::addItems(QList<KisTagSP> tags)
 {
-    d->tags.append(tagNames);
-    d->tags.removeDuplicates();
-    d->tags.sort();
-    d->readOnlyTags.sort();
+    ENTER_FUNCTION();
+    warnKrita << "not implemented";
 
-    QStringList items = d->readOnlyTags + d->tags;
-
-    items.removeDuplicates();
-
-    d->comboBox->resetOriginalTexts(items);
+    Q_FOREACH(KisTagSP tag, tags) {
+        insertItem(tag);
+    }
 }
 
 void KisTagChooserWidget::clear()
 {
-    d->comboBox->resetOriginalTexts(QStringList());
+    ENTER_FUNCTION();
 }
 
-void KisTagChooserWidget::removeItem(QString item)
+void KisTagChooserWidget::removeItem(KisTagSP item)
 {
-    int pos = findIndexOf(item);
-    if (pos >= 0) {
-        d->comboBox->removeSqueezedItem(pos);
-        d->tags.removeOne(item);
-    }
+    fprintf(stderr, "removing item: %s\n", item->name().toUtf8().toStdString().c_str());
+    ENTER_FUNCTION();
+    d->model->removeTag(item);
 }
 
 void KisTagChooserWidget::tagOptionsContextMenuAboutToShow()
 {
+    ENTER_FUNCTION();
     /* only enable the save button if the selected tag set is editable */
     d->tagToolButton->readOnlyMode(selectedTagIsReadOnly());
     emit popupMenuAboutToShow();
@@ -213,5 +231,6 @@ void KisTagChooserWidget::tagOptionsContextMenuAboutToShow()
 
 void KisTagChooserWidget::showTagToolButton(bool show)
 {
+    ENTER_FUNCTION();
     d->tagToolButton->setVisible(show);
 }

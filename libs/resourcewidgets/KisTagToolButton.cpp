@@ -33,6 +33,7 @@
 #include <KoIcon.h>
 
 #include "KisResourceItemChooserContextMenu.h"
+#include "kis_debug.h"
 
 class KisTagToolButton::Private
 {
@@ -42,12 +43,13 @@ public:
     QAction* action_deleteTag;
     KoLineEditAction* action_renameTag;
     QAction* action_purgeTagUndeleteList;
-    QString undeleteCandidate;
+    KisTagSP undeleteCandidate;
 };
 
 KisTagToolButton::KisTagToolButton(QWidget* parent)
     :QWidget(parent), d(new Private())
 {
+
     QGridLayout* buttonLayout = new QGridLayout(this);
     buttonLayout->setMargin(0);
     buttonLayout->setSpacing(0);
@@ -68,8 +70,8 @@ KisTagToolButton::KisTagToolButton(QWidget* parent)
     addTagAction->closeParentOnTrigger(true);
     popup->addAction(addTagAction);
 
-    connect(addTagAction, SIGNAL(triggered(QString)),
-            this, SIGNAL(newTagRequested(QString)));
+    connect(addTagAction, SIGNAL(triggered(KisTagSP)),
+            this, SIGNAL(newTagRequested(KisTagSP)));
 
     d->action_renameTag = new KoLineEditAction(popup);
     d->action_renameTag->setPlaceholderText(i18n("Rename tag"));
@@ -77,8 +79,8 @@ KisTagToolButton::KisTagToolButton(QWidget* parent)
     d->action_renameTag->closeParentOnTrigger(true);
     popup->addAction(d->action_renameTag);
 
-    connect(d->action_renameTag, SIGNAL(triggered(QString)),
-            this, SIGNAL(renamingOfCurrentTagRequested(QString)));
+    connect(d->action_renameTag, SIGNAL(triggered(KisTagSP)),
+            this, SIGNAL(renamingOfCurrentTagRequested(KisTagSP)));
 
     popup->addSeparator();
 
@@ -123,21 +125,24 @@ KisTagToolButton::~KisTagToolButton()
 
 void KisTagToolButton::readOnlyMode(bool activate)
 {
+    ENTER_FUNCTION();
     activate = !activate;
     d->action_renameTag->setVisible(activate);
     d->action_deleteTag->setVisible(activate);
 }
 
-void KisTagToolButton::setUndeletionCandidate(const QString& deletedTagName)
+void KisTagToolButton::setUndeletionCandidate(const KisTagSP deletedTag)
 {
-    d->undeleteCandidate = deletedTagName;
-    d->action_undeleteTag->setText(i18n("Undelete") +" "+ deletedTagName);
-    d->action_undeleteTag->setVisible(!deletedTagName.isEmpty());
-    d->action_purgeTagUndeleteList->setVisible(!deletedTagName.isEmpty());
+    ENTER_FUNCTION();
+    d->undeleteCandidate = deletedTag;
+    d->action_undeleteTag->setText(i18n("Undelete") +" "+ deletedTag->name());
+    d->action_undeleteTag->setVisible(!deletedTag->name().isEmpty());
+    d->action_purgeTagUndeleteList->setVisible(!deletedTag->name().isEmpty());
 }
 
 void KisTagToolButton::onTagUndeleteClicked()
 {
+    ENTER_FUNCTION();
     emit undeletionOfTagRequested(d->undeleteCandidate);
 }
 

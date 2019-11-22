@@ -26,8 +26,11 @@
 
 #include <KoIcon.h>
 #include <klocalizedstring.h>
-
 #include <KoResource.h>
+
+#include <KisTag.h>
+
+#include "kis_debug.h"
 
 KoLineEditAction::KoLineEditAction(QObject* parent)
     : QWidgetAction(parent)
@@ -73,8 +76,13 @@ bool KoLineEditAction::closeParentOnTrigger()
 
 void KoLineEditAction::onTriggered()
 {
+    ENTER_FUNCTION();
     if (! m_editBox->text().isEmpty()) {
-        emit triggered( m_editBox->text());
+        // TODO: RESOURCES: what about "remove existing tag" action?
+        KisTagSP tag(new KisTag());
+        tag->setName(m_editBox->text());
+        tag->setUrl(m_editBox->text());
+        emit triggered(tag);
         m_editBox->text().clear();
 
         if (m_closeParentOnTrigger) {
@@ -91,6 +99,7 @@ void KoLineEditAction::setPlaceholderText(const QString& clickMessage)
 
 void KoLineEditAction::setText(const QString& text)
 {
+    ENTER_FUNCTION();
     m_editBox->setText(text);
 }
 
@@ -106,12 +115,12 @@ void KoLineEditAction::setVisible(bool showAction)
     defaultWidget()->setVisible(showAction);
 }
 
-ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResourceSP resource, QString tag, QObject* parent)
+ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResourceSP resource, KisTagSP tag, QObject* parent)
     : QAction(parent)
     , m_resource(resource)
     , m_tag(tag)
 {
-    setText(tag);
+    setText(tag->name());
     connect (this, SIGNAL(triggered()),
              this, SLOT(onTriggered()));
 }
@@ -122,6 +131,7 @@ ContextMenuExistingTagAction::~ContextMenuExistingTagAction()
 
 void ContextMenuExistingTagAction::onTriggered()
 {
+    ENTER_FUNCTION();
     emit triggered(m_resource, m_tag);
 }
 NewTagAction::~NewTagAction()
@@ -136,20 +146,22 @@ NewTagAction::NewTagAction(KoResourceSP resource, QMenu* parent)
     setPlaceholderText(i18n("New tag"));
     closeParentOnTrigger(true);
 
-    connect (this, SIGNAL(triggered(QString)),
-             this, SLOT(onTriggered(QString)));
+    connect (this, SIGNAL(triggered(KisTagSP)),
+             this, SLOT(onTriggered(KisTagSP)));
 }
 
-void NewTagAction::onTriggered(const QString & tagName)
+void NewTagAction::onTriggered(const KisTagSP tag)
 {
-    emit triggered(m_resource,tagName);
+    ENTER_FUNCTION();
+    emit triggered(m_resource,tag);
 }
 
 KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceSP resource,
-                                                                   const QStringList& resourceTags,
-                                                                   const QString& currentlySelectedTag,
-                                                                   const QStringList& allTags)
+                                                                   const QList<KisTagSP> resourceTags,
+                                                                   const KisTagSP currentlySelectedTag,
+                                                                   const QList<KisTagSP> allTags)
 {
+
     QImage image = resource->image();
     QIcon icon(QPixmap::fromImage(image));
     QAction * label = new QAction(resource->name(), this);
@@ -160,54 +172,71 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
     QMenu * removableTagsMenu;
     QMenu * assignableTagsMenu;
 
-    QStringList removables = resourceTags;
-    QStringList assignables = allTags;
+    QList<KisTagSP> removables = resourceTags;
+    QList<KisTagSP> assignables = allTags;
 
-    removables.sort();
-    assignables.sort();
+
+    std::sort(removables.begin(), removables.end(), KisTag::compareNamesAndUrls);
+    std::sort(assignables.begin(), assignables.end(), KisTag::compareNamesAndUrls);
+
 
     assignableTagsMenu = addMenu(koIcon("list-add"),i18n("Assign to tag"));
 
+
     if (!removables.isEmpty()) {
         addSeparator();
-        QString currentTag = currentlySelectedTag;
-        if (removables.contains(currentTag)) {
-            assignables.removeAll(currentTag);
-            removables.removeAll(currentTag);
+        KisTagSP currentTag = currentlySelectedTag;
+
+        if (!currentTag.isNull() && removables.contains(currentTag)) {
+            //assignables.remove(currentTag);
+            //removables.remove(currentTag);
             ContextMenuExistingTagAction * removeTagAction = new ContextMenuExistingTagAction(resource, currentTag, this);
             removeTagAction->setText(i18n("Remove from this tag"));
             removeTagAction->setIcon(koIcon("list-remove"));
 
-            connect(removeTagAction, SIGNAL(triggered(KoResourceSP,QString)),
-                    this, SIGNAL(resourceTagRemovalRequested(KoResourceSP,QString)));
+            connect(removeTagAction, SIGNAL(triggered(KoResourceSP,KisTagSP)),
+                    this, SIGNAL(resourceTagRemovalRequested(KoResourceSP,KisTagSP)));
             addAction(removeTagAction);
         }
+
         if (!removables.isEmpty()) {
             removableTagsMenu = addMenu(koIcon("list-remove"),i18n("Remove from other tag"));
-            foreach (const QString &tag, removables) {
-                assignables.removeAll(tag);
+            foreach (const KisTagSP tag, removables) {
+                //assignables.remove(tag);
+                if (tag.isNull()) {
+                    continue;
+                }
+
                 ContextMenuExistingTagAction * removeTagAction = new ContextMenuExistingTagAction(resource, tag, this);
 
-                connect(removeTagAction, SIGNAL(triggered(KoResourceSP,QString)),
-                        this, SIGNAL(resourceTagRemovalRequested(KoResourceSP,QString)));
+                connect(removeTagAction, SIGNAL(triggered(KoResourceSP,KisTagSP)),
+                        this, SIGNAL(resourceTagRemovalRequested(KoResourceSP,KisTagSP)));
                 removableTagsMenu->addAction(removeTagAction);
             }
         }
+
     }
 
-    foreach (const QString &tag, assignables) {
+
+    foreach (const KisTagSP &tag, assignables) {
+        if (tag.isNull()) {
+            continue;
+        }
+
         ContextMenuExistingTagAction * addTagAction = new ContextMenuExistingTagAction(resource, tag, this);
 
-        connect(addTagAction, SIGNAL(triggered(KoResourceSP,QString)),
-                this, SIGNAL(resourceTagAdditionRequested(KoResourceSP,QString)));
+        connect(addTagAction, SIGNAL(triggered(KoResourceSP, KisTagSP)),
+                this, SIGNAL(resourceTagAdditionRequested(KoResourceSP, KisTagSP)));
         assignableTagsMenu->addAction(addTagAction);
     }
+    /*
     assignableTagsMenu->addSeparator();
 
     NewTagAction * addTagAction = new NewTagAction(resource, this);
-    connect(addTagAction, SIGNAL(triggered(KoResourceSP,QString)),
-            this, SIGNAL(resourceAssignmentToNewTagRequested(KoResourceSP,QString)));
+    connect(addTagAction, SIGNAL(triggered(KoResourceSP, KisTagSP)),
+            this, SIGNAL(resourceAssignmentToNewTagRequested(KoResourceSP, KisTagSP)));
     assignableTagsMenu->addAction(addTagAction);
+    */
 }
 
 KisResourceItemChooserContextMenu::~KisResourceItemChooserContextMenu()

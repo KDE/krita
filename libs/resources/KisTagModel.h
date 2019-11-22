@@ -55,6 +55,7 @@ public:
 // KisTagModel API
 
     KisTagSP tagForIndex(QModelIndex index = QModelIndex()) const;
+    QList<KisTagSP> allTags() const;
 
     bool addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces = QVector<KoResourceSP>());
     bool removeTag(const KisTagSP tag);
@@ -78,4 +79,6 @@ private:
 
 };
 
-#endif // KOTAGMODEL_H
+typedef QSharedPointer<KisTagModel> KisTagModelSP;
+
+#endif // KISTAGMODEL_H

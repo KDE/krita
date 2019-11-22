@@ -20,10 +20,11 @@
 
 #include <QDebug>
 #include <KisResourceModel.h>
+#include <kis_debug.h>
 
 struct KisTagFilterResourceProxyModel::Private
 {
-    QStringList tags;
+    QList<KisTagSP> tags;
 };
 
 KisTagFilterResourceProxyModel::KisTagFilterResourceProxyModel(QObject *parent)
@@ -109,9 +110,14 @@ bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, 
     return false;
 }
 
-void KisTagFilterResourceProxyModel::setTag(const QString& tag)
+void KisTagFilterResourceProxyModel::setTag(const KisTagSP tag)
 {
-    d->tags = tag.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
+    fprintf(stderr, "we're setting a tag!: %s\n", tag->name().toUtf8().toStdString().c_str());
+    ENTER_FUNCTION();
+    //d->tags = tag.split(QRegExp("[,]\\s*"), QString::SkipEmptyParts);
+    d->tags.clear();
+    d->tags << tag;
+    invalidateFilter();
 }
 
 bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, const QModelIndex &/*source_parent*/) const
@@ -121,22 +127,40 @@ bool KisTagFilterResourceProxyModel::filterAcceptsColumn(int /*source_column*/, 
 
 bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
-    if (d->tags.isEmpty()) return true;
+    if (d->tags.isEmpty()) {
+        return true;
+    }
 
     QModelIndex idx = sourceModel()->index(source_row, KisResourceModel::Name, source_parent);
 
     QStringList tags = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Tags).toStringList();
+
+
+    //QString name = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Tags).toString();
+
+
+    // TODO: RESOURCES: proper filtering by tag
+    if (!d->tags.first().isNull() && tags.contains(d->tags.first()->name())) {
+        return true;
+    }
+
+    return false;
+
+    //sourceModel()->data(idx, )
+
+    /*
     QSet<QString> tagResult = tags.toSet().subtract(tags.toSet());
     if (!tagResult.isEmpty()) {
         return true;
     }
 
     QString name = sourceModel()->data(idx, Qt::UserRole + KisResourceModel::Name).toString();
-    Q_FOREACH(const QString &tag, d->tags) {
+    Q_FOREACH(const KisTagSP &tag, d->tags) {
         if (name.startsWith(tag)) {
             return true;
         }
     }
+    */
 
     return false;
 }

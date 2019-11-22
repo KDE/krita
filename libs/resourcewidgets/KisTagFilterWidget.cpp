@@ -33,6 +33,8 @@
 
 #include <KoIcon.h>
 
+#include <kis_debug.h>
+
 class KisTagFilterWidget::Private
 {
 public:
@@ -124,12 +126,14 @@ void KisTagFilterWidget::clear()
 
 void KisTagFilterWidget::onTextChanged(const QString& lineEditText)
 {
+    ENTER_FUNCTION() << ppVar(lineEditText);
     d->tagSearchSaveButton->setEnabled(!lineEditText.isEmpty());
     emit filterTextChanged(lineEditText);
 }
 
 void KisTagFilterWidget::onSaveButtonClicked()
 {
+    ENTER_FUNCTION() << ppVar(d->tagSearchLineEdit->text());
     emit saveButtonClicked();
     clear();
 }

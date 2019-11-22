@@ -33,6 +33,9 @@
 #include <KisTag.h>
 #include <KisTagModel.h>
 
+#include <kis_debug.h>
+#include <KisTag.h>
+
 class QWidget;
 class QStringList;
 class QString;
@@ -41,6 +44,7 @@ class QPoint;
 class KisTagFilterWidget;
 class KisTagChooserWidget;
 class KisTagFilterResourceProxyModel;
+
 
 /**
  * @brief The KisResourceTaggingManager class is ...
@@ -69,27 +73,27 @@ Q_SIGNALS:
     
 private Q_SLOTS:
 
-    void undeleteTag(const QString& tagToUndelete);
+    void undeleteTag(const KisTagSP tagToUndelete);
     void purgeTagUndeleteList();
-    void contextCreateNewTag(KoResourceSP resource, const QString& tag);
-    void contextCreateNewTag(const QString& tag);
-    void syncTagBoxEntryRemoval(const QString& tag);
-    void syncTagBoxEntryAddition(const QString& tag);
+    void contextCreateNewTag(KoResourceSP resource, const KisTagSP tag);
+    void contextCreateNewTag(const KisTagSP tag);
+    void syncTagBoxEntryRemoval(const KisTagSP tag);
+    void syncTagBoxEntryAddition(const KisTagSP tag);
     void syncTagBoxEntries();
     void tagSaveButtonPressed();
-    void contextRemoveTagFromResource(KoResourceSP resource, const QString& tag);
-    void contextAddTagToResource(KoResourceSP resource, const QString& tag);
-    void renameTag(const QString &oldName, const QString &newName);
-    void tagChooserIndexChanged(const QString& lineEditText);
-    void tagSearchLineEditTextChanged(const QString& lineEditText);
-    void removeTagFromComboBox(const QString& tag);
+    void contextRemoveTagFromResource(KoResourceSP resource, const KisTagSP tag);
+    void contextAddTagToResource(KoResourceSP resource, const KisTagSP tag);
+    void renameTag(const KisTagSP oldName, const KisTagSP newName);
+    void tagChooserIndexChanged(const KisTagSP lineEditText);
+    void tagSearchLineEditTextChanged(const QString &lineEditText);
+    void removeTagFromComboBox(const KisTagSP tag);
 
 private:
 
-    void contextMenuRequested(KoResourceSP resource, const QStringList& resourceTags, const QPoint& pos);
+    void contextMenuRequested(KoResourceSP resource, const QList<KisTagSP> resourceTags, const QPoint& pos);
     void enableContextMenu(bool enable);
-    void removeResourceTag(KoResourceSP resource, const QString& tagName);
-    void addResourceTag(KoResourceSP resource, const QString& tagName);
+    void removeResourceTag(KoResourceSP resource, const KisTagSP tagName);
+    void addResourceTag(KoResourceSP resource, const KisTagSP tagName);
     void updateTaggedResourceView();
 
     class Private;

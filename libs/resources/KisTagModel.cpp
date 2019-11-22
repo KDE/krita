@@ -157,11 +157,13 @@ KisTagSP KisTagModel::tagForIndex(QModelIndex index) const
 
 bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouces)
 {
+    if (tag.isNull()) return false;
     if (!tag) return false;
     if (!tag->valid()) return false;
     // A new tag doesn't have an ID yet, that comes from the database
     if (tag->id() >= 0) return false;
 
+    /*
     if (!KisResourceCacheDb::hasTag(tag->url(), d->resourceType)) {
          if (!KisResourceCacheDb::addTag(d->resourceType, tag->url(), tag->name(), tag->comment())) {
             qWarning() << "Could not add tag" << tag;
@@ -196,6 +198,7 @@ bool KisTagModel::addTag(const KisTagSP tag, QVector<KoResourceSP> taggedResouce
 
         tagResource(tag, resource);
     }
+    */
 
     return prepareQuery();
 }

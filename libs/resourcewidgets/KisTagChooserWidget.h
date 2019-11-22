@@ -41,32 +41,38 @@ public:
     explicit KisTagChooserWidget(KisTagModel* model, QWidget* parent);
     ~KisTagChooserWidget() override;
     void setCurrentIndex(int index);
-    int findIndexOf(QString tagName);
-    void insertItem(QString tagName);
-    QString currentlySelectedTag();
-    QStringList allTags();
+    int findIndexOf(KisTagSP tagName);
+
+    KisTagSP currentlySelectedTag();
+    QList<KisTagSP> allTags();
     bool selectedTagIsReadOnly();
-    void removeItem(QString item);
-    void addItems(QStringList tagNames);
-    void addReadOnlyItem(QString tagName);
+    void removeItem(KisTagSP item);
+    void addItems(QList<KisTagSP> tagNames);
+    void addReadOnlyItem(KisTagSP tagName);
     void clear();
-    void setUndeletionCandidate(const QString &tag);
+    void setUndeletionCandidate(const KisTagSP tag);
     void showTagToolButton(bool show);
 
 Q_SIGNALS:
-    void newTagRequested(const QString &tagname);
-    void tagDeletionRequested(const QString &tagname);
-    void tagRenamingRequested(const QString &oldTagname, const QString &newTagname);
-    void tagUndeletionRequested(const QString &tagname);
+    void newTagRequested(const KisTagSP tag);
+    void tagDeletionRequested(const KisTagSP tag);
+    void tagRenamingRequested(const KisTagSP oldTag, const KisTagSP newTag);
+    void tagUndeletionRequested(const KisTagSP tag);
     void tagUndeletionListPurgeRequested();
     void popupMenuAboutToShow();
-    void tagChosen(const QString &tag);
+    void tagChosen(const KisTagSP tag);
+
+public Q_SLOTS:
+    void insertItem(KisTagSP tag);
+    void tagChanged(int index);
+
 
 private Q_SLOTS:
-    void tagRenamingRequested(const QString &newName);
+    void tagRenamingRequested(const KisTagSP newName);
     void tagOptionsContextMenuAboutToShow();
     void contextDeleteCurrentTag();
-    void tagChanged(int index);
+
+
 
 private:
     class Private;

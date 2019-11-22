@@ -30,22 +30,24 @@
 
 #include <KoResource.h>
 
+#include <KisTag.h>
+
 class ContextMenuExistingTagAction : public QAction
 {
     Q_OBJECT
 public:
-    explicit ContextMenuExistingTagAction( KoResourceSP resource, QString tag, QObject* parent = 0);
+    explicit ContextMenuExistingTagAction( KoResourceSP resource, KisTagSP tag, QObject* parent = 0);
     ~ContextMenuExistingTagAction() override;
 
 Q_SIGNALS:
-    void triggered(KoResourceSP resource, QString tag);
+    void triggered(KoResourceSP resource, KisTagSP tag);
 
 protected Q_SLOTS:
     void onTriggered();
 
 private:
     KoResourceSP m_resource;
-    QString m_tag;
+    KisTagSP m_tag;
 };
 
 /*!
@@ -66,7 +68,7 @@ public:
     void setVisible(bool showAction);
 
     Q_SIGNALS:
-    void triggered(const QString &tag);
+    void triggered(const KisTagSP tag);
 
 protected Q_SLOTS:
     void onTriggered();
@@ -86,10 +88,10 @@ public:
     ~NewTagAction() override;
 
     Q_SIGNALS:
-    void triggered(KoResourceSP resource, const QString &tag);
+    void triggered(KoResourceSP resource, const KisTagSP &tag);
 
 protected Q_SLOTS:
-    void onTriggered(const QString& tagName);
+    void onTriggered(const KisTagSP tagName);
 
 private:
     KoResourceSP m_resource;
@@ -102,19 +104,19 @@ public:
     explicit KisResourceItemChooserContextMenu
     (
         KoResourceSP resource,
-        const QStringList& resourceTags,
-        const QString& currentlySelectedTag,
-        const QStringList& allTags
+        const QList<KisTagSP> resourceTags,
+        const KisTagSP currentlySelectedTag,
+        const QList<KisTagSP> allTags
     );
     ~KisResourceItemChooserContextMenu() override;
 
 Q_SIGNALS:
     /// Emitted when a resource should be added to an existing tag.
-    void resourceTagAdditionRequested(KoResourceSP resource, const QString& tag);
+    void resourceTagAdditionRequested(KoResourceSP resource, const KisTagSP tag);
     /// Emitted when a resource should be removed from an existing tag.
-    void resourceTagRemovalRequested(KoResourceSP resource, const QString& tag);
+    void resourceTagRemovalRequested(KoResourceSP resource, const KisTagSP tag);
     /// Emitted when a resource should be added to a new tag, which will need to be created.
-    void resourceAssignmentToNewTagRequested(KoResourceSP resource, const QString& tag);
+    void resourceAssignmentToNewTagRequested(KoResourceSP resource, const KisTagSP tag);
 
 };
 

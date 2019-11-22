@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2019 Agata Cacko <cacko.azh@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,44 +17,25 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISTAGFILTERRESOURCEPROXYMODEL_H
-#define KISTAGFILTERRESOURCEPROXYMODEL_H
+#ifndef KIS_ACTIVE_FILTER_TAG_PROXY_MODEL_H
+#define KIS_ACTIVE_FILTER_TAG_PROXY_MODEL_H
+
 
 #include <QSortFilterProxyModel>
 #include <QObject>
 #include <KoResource.h>
-#include <KisResourceModel.h>
 #include <KisTag.h>
 
 #include "kritaresources_export.h"
 
-class KRITARESOURCES_EXPORT KisTagFilterResourceProxyModel : public QSortFilterProxyModel, public KisAbstractResourceModel
+class KRITARESOURCES_EXPORT KisActiveFilterTagProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    KisTagFilterResourceProxyModel(QObject *parent = 0);
-    ~KisTagFilterResourceProxyModel() override;
-
-    // KisAbstractResourceModel interface
-public:
-    KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
-    QModelIndex indexFromResource(KoResourceSP resource) const override;
-    bool removeResource(const QModelIndex &index) override;
-    bool importResourceFile(const QString &filename) override;
-    bool addResource(KoResourceSP resource, bool save = true) override;
-    bool updateResource(KoResourceSP resource) override;
-    bool removeResource(KoResourceSP resource) override;
-    bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) override;
-
-    /**
-     * @brief setTag
-     * @param tag
-     */
-    void setTag(const KisTagSP tag);
+    KisActiveFilterTagProxyModel(QObject *parent);
+    ~KisActiveFilterTagProxyModel() override;
 
 protected:
-
-
 
     bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const override;
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
@@ -63,7 +44,7 @@ private:
     struct Private;
     Private *const d;
 
-    Q_DISABLE_COPY(KisTagFilterResourceProxyModel)
+    Q_DISABLE_COPY(KisActiveFilterTagProxyModel)
 };
 
-#endif // KISTAGFILTERRESOURCEPROXYMODEL_H
+#endif // KIS_ACTIVE_FILTER_TAG_PROXY_MODEL_H

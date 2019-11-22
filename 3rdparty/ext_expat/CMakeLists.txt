@@ -3,12 +3,12 @@ SET(PREFIX_ext_expat "${EXTPREFIX}" )
 if (WIN32)
 ExternalProject_Add( ext_expat
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://files.kde.org/krita/build/dependencies/expat-2.1.0.tar.gz
-	URL_MD5 dd7dab7a5fea97d2a6a43f511449b7cd
+	URL https://api.github.com/repos/libexpat/libexpat/tarball/R_2_2_9
+	URL_MD5 045c3b3ea0fc55f3565cb117e1669493
 
-	PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/expat-2.1.0-20130311.diff
+	PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/expat-2.2.9-b9bd355.diff
 	INSTALL_DIR ${PREFIX_ext_expat}
-	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_expat} -DBUILD_tests=OFF -DBUILD_examples=OFF -DBUILD_tools=OFF -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+	CONFIGURE_COMMAND ${CMAKE_COMMAND} CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_expat} -DBUILD_tests=OFF -DBUILD_examples=OFF -DBUILD_tools=OFF -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} <SOURCE_DIR>/expat
 	UPDATE_COMMAND ""
 
 	DEPENDS ext_patch
@@ -17,11 +17,11 @@ ExternalProject_Add( ext_expat
 elseif (ANDROID)
 ExternalProject_Add( ext_expat
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://files.kde.org/krita/build/dependencies/expat-2.1.0.tar.gz
-	URL_MD5 dd7dab7a5fea97d2a6a43f511449b7cd
+	URL https://api.github.com/repos/libexpat/libexpat/tarball/R_2_2_9
+	URL_MD5 045c3b3ea0fc55f3565cb117e1669493
 
 	INSTALL_DIR ${PREFIX_ext_expat}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_expat} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_expat} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} <SOURCE_DIR>/expat
 	BUILD_COMMAND make
 	INSTALL_COMMAND make install
 
@@ -32,11 +32,11 @@ else()
 
 ExternalProject_Add( ext_expat
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://files.kde.org/krita/build/dependencies/expat-2.1.0.tar.gz
-	URL_MD5 dd7dab7a5fea97d2a6a43f511449b7cd
+	URL https://api.github.com/repos/libexpat/libexpat/tarball/R_2_2_9
+	URL_MD5 045c3b3ea0fc55f3565cb117e1669493
 
 	INSTALL_DIR ${PREFIX_ext_expat}
-	CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_expat}  ${GLOBAL_AUTOMAKE_PROFILE}
+	CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_expat} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} <SOURCE_DIR>/expat
 	BUILD_COMMAND make
 	INSTALL_COMMAND make install
 

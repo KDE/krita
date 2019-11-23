@@ -57,7 +57,7 @@
   <customwidget>
    <class>KisPopupButton</class>
    <extends>QWidget</extends>
-   <header>kis_popup_button.h</header>
+   <header>KisPopupButton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

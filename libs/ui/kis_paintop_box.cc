@@ -69,7 +69,7 @@
 #include "kis_favorite_resource_manager.h"
 #include "kis_config.h"
 
-#include "kis_popup_button.h"
+#include "KisPopupButton.h"
 #include "widgets/kis_iconwidget.h"
 #include "widgets/kis_tool_options_popup.h"
 #include "widgets/kis_paintop_presets_popup.h"

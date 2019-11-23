@@ -40,7 +40,7 @@
 #include <klocalizedstring.h>
 #include <WidgetsDebug.h>
 #include <KoResourceServer.h>
-#include <kis_popup_button.h>
+#include <KisPopupButton.h>
 #include <KisPaletteListWidget.h>
 #include <KisPaletteComboBox.h>
 

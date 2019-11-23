@@ -60,7 +60,7 @@
 #include "kis_painter.h"
 #include "kis_guides_config.h"
 #include "kis_grid_config.h"
-#include "kis_popup_button.h"
+#include "KisPopupButton.h"
 #include <kis_iterator_ng.h>
 #include "kis_async_action_feedback.h"
 #include "KisReferenceImagesLayer.h"

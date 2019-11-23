@@ -26,6 +26,7 @@ set(kritawidgetutils_LIB_SRCS
     KoItemToolTip.cpp
     KisSqueezedComboBox.cpp
     KisDialogStateSaver.cpp
+    KisPopupButton.cpp
     
     kis_double_parse_spin_box.cpp
     kis_double_parse_unit_spin_box.cpp

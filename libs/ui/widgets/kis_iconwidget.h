@@ -20,7 +20,7 @@
 #ifndef KIS_ICONWIDGET_H_
 #define KIS_ICONWIDGET_H_
 
-#include <kis_popup_button.h>
+#include <KisPopupButton.h>
 #include <kritaui_export.h>
 
 #include <KoResource.h>

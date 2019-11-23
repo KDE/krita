@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kis_popup_button.h"
+#include "KisPopupButton.h"
 
 #include <QPointer>
 #include <QApplication>

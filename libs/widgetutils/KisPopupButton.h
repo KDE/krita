@@ -22,13 +22,13 @@
 
 #include <QPushButton>
 
-#include <kritawidgets_export.h>
+#include <kritawidgetutils_export.h>
 
 /**
  * This class is a convenience class for a button that
  * when clicked displays a popup widget.
  */
-class KRITAWIDGETS_EXPORT KisPopupButton : public QPushButton
+class KRITAWIDGETUTILS_EXPORT KisPopupButton : public QPushButton
 {
 
     Q_OBJECT

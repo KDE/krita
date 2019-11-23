@@ -18,7 +18,7 @@
 #ifndef KIS_CMB_GRADIENT_H
 #define KIS_CMB_GRADIENT_H
 
-#include <kis_popup_button.h>
+#include <KisPopupButton.h>
 
 #include <KoAbstractGradient.h>
 

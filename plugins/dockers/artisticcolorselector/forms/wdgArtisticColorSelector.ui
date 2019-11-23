@@ -116,7 +116,7 @@
   <customwidget>
    <class>KisPopupButton</class>
    <extends>QPushButton</extends>
-   <header>kis_popup_button.h</header>
+   <header>KisPopupButton.h</header>
   </customwidget>
   <customwidget>
    <class>KisColorSelector</class>

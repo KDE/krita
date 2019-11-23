@@ -31,6 +31,7 @@ KisStorageModel::KisStorageModel(QObject *parent)
     : QAbstractTableModel(parent)
     , d(new Private())
 {
+    prepareQuery();
 }
 
 KisStorageModel *KisStorageModel::instance()
@@ -145,7 +146,7 @@ Qt::ItemFlags KisStorageModel::flags(const QModelIndex &index) const
 bool KisStorageModel::prepareQuery()
 {
     beginResetModel();
-    bool r = d->query.prepare("SELECT storages.id\n"
+    bool r = d->query.prepare("SELECT storages.id as id\n"
                               ",      storage_types.name as storage_type\n"
                               ",      location\n"
                               ",      timestamp\n"

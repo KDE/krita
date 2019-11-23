@@ -43,8 +43,6 @@ private Q_SLOTS:
 
 private:
 
-    KisStorageModel *m_storageModel;
-
     QWidget *m_page;
     Ui::WdgDlgBundleManager *m_ui;
 };

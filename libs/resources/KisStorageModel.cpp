@@ -19,6 +19,9 @@
 
 #include <QtSql>
 
+
+Q_GLOBAL_STATIC(KisStorageModel, s_instance)
+
 struct KisStorageModel::Private {
     int cachedRowCount {-1};
     QSqlQuery query;
@@ -28,12 +31,15 @@ KisStorageModel::KisStorageModel(QObject *parent)
     : QAbstractTableModel(parent)
     , d(new Private())
 {
+}
 
+KisStorageModel *KisStorageModel::instance()
+{
+    return s_instance;
 }
 
 KisStorageModel::~KisStorageModel()
 {
-
 }
 
 int KisStorageModel::rowCount(const QModelIndex & /*parent*/) const

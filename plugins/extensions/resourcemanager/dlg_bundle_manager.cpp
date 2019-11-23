@@ -59,8 +59,7 @@ DlgBundleManager::DlgBundleManager(QWidget *parent)
 
     setButtons(Close);
 
-    m_storageModel = new KisStorageModel();
-    m_ui->tableView->setModel(m_storageModel);
+    m_ui->tableView->setModel(KisStorageModel::instance());
 
 }
 

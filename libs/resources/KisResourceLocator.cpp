@@ -66,6 +66,8 @@ KisResourceLocator::KisResourceLocator(QObject *parent)
 
 KisResourceLocator *KisResourceLocator::instance()
 {
+    // Not a regular Q_GLOBAL_STATIC, because we want this deleted as
+    // part of the app destructor.
     KisResourceLocator *locator = qApp->findChild<KisResourceLocator *>(QString());
     if (!locator) {
         locator = new KisResourceLocator(qApp);

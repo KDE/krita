@@ -29,6 +29,7 @@ private Q_SLOTS:
     void testRowCount();
     void testSetActive();
     void cleanupTestCase();
+
 private:
 
     QString m_srcLocation;

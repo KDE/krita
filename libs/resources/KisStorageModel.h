@@ -37,6 +37,8 @@ public:
         Active
     };
 
+    static KisStorageModel * instance();
+
     KisStorageModel(QObject *parent = 0);
     ~KisStorageModel() override;
 
@@ -47,6 +49,9 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
 private:
+
+    KisStorageModel(const KisStorageModel&);
+    KisStorageModel operator=(const KisStorageModel&);
 
     bool prepareQuery();
 

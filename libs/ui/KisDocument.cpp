@@ -537,7 +537,7 @@ KisDocument::KisDocument()
     connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setObjectName(newObjectName());
 
-    KisResourceLocator::instance()->addDocumentStorage(d->uniqueID, d->documentResourceStorage);
+    KisResourceLocator::instance()->addStorage(d->uniqueID, d->documentResourceStorage);
 
     // preload the krita resources
     KisResourceServerProvider::instance();
@@ -608,8 +608,8 @@ KisDocument::~KisDocument()
         // check if the image has actually been deleted
         KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
     }
-    if (KisResourceLocator::instance()->hasDocumentStorage(d->uniqueID)) {
-        KisResourceLocator::instance()->removeDocumentStorage(d->uniqueID);
+    if (KisResourceLocator::instance()->hasStorage(d->uniqueID)) {
+        KisResourceLocator::instance()->removeStorage(d->uniqueID);
     }
 
     delete d;

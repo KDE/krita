@@ -179,9 +179,9 @@ bool KisResourceStorage::addTag(const QString &resourceType, KisTagSP tag)
     return d->storagePlugin->addTag(resourceType, tag);
 }
 
-bool KisResourceStorage::addResource(const QString &resourceType, KoResourceSP resource)
+bool KisResourceStorage::addResource(KoResourceSP resource)
 {
-    return d->storagePlugin->addResource(resourceType, resource);
+    return d->storagePlugin->addResource(resource->resourceType().first, resource);
 }
 
 bool KisResourceStorage::valid() const

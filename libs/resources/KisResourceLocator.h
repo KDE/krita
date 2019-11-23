@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -92,26 +92,27 @@ public:
     void purge();
 
     /**
-     * @brief addDocumentStorage Adds a temporary resource storage to the database
-     * @param document a unique name for the given storage
-     * @param storage a storage that contains the resources stored in the document
+     * @brief addStorage Adds a new resource storage to the database. The storage is
+     * will be marked as not pre-installed.
+     * @param storageLocation a unique name for the given storage
+     * @param storage a storage object
      * @return true if the storage has been added succesfully
      */
-    bool addDocumentStorage(const QString &document, KisResourceStorageSP storage);
+    bool addStorage(const QString &storageLocation, KisResourceStorageSP storage);
 
     /**
-     * @brief removeDocumentStorage removes the temporary storage from the database
+     * @brief removeStorage removes the temporary storage from the database
      * @param document the unique name of the document
      * @return true is succesful.
      */
-    bool removeDocumentStorage(const QString &document);
+    bool removeStorage(const QString &storageLocation);
 
     /**
-     * @brief hasDocumentStorage can be used to check whether the given document storage already exists
-     * @param document the name of the storage
-     * @return true if the document is known
+     * @brief hasStorage can be used to check whether the given storage already exists
+     * @param storageLocation the name of the storage
+     * @return true if the storage is known
      */
-    bool hasDocumentStorage(const QString &document);
+    bool hasStorage(const QString &storageLocation);
 
 Q_SIGNALS:
 
@@ -153,26 +154,28 @@ private:
     /**
      * @brief removeResource
      * @param resourceId
+     * @param optional: the storage that contains the given resource
      * @return
      */
-    bool removeResource(int resourceId);
+    bool removeResource(int resourceId, const QString &storageLocation = QString());
 
     /**
      * @brief importResourceFromFile
      * @param resourceType
      * @param fileName
+     * @param storageLocation: optional, the storage where the resource will be stored. Empty means in the default Folder storage.
      * @return
      */
-    bool importResourceFromFile(const QString &resourceType, const QString &fileName);
+    bool importResourceFromFile(const QString &resourceType, const QString &fileName, const QString &storageLocation = QString());
 
     /**
-     * @brief addResource
-     * @param resourceType
-     * @param resource
-     * @param save
-     * @return
+     * @brief addResource adds the given resource to the database and potentially a storage
+     * @param resourceType the type of the resource
+     * @param resource the actual resource object
+     * @param storageLocation the storage where the resource will be saved. By default this is the the default folder storage.
+     * @return true if succesfull
      */
-    bool addResource(const QString &resourceType, const KoResourceSP resource, bool save = true);
+    bool addResource(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation = QString());
 
     /**
      * @brief updateResource

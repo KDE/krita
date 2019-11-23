@@ -323,7 +323,7 @@ bool KisResourceModel::addResource(KoResourceSP resource, bool save)
 
     //qDebug() << "KisResourceModel::addResource" << s_i7 << d->resourceType; s_i7++;
 
-    if (!KisResourceLocator::instance()->addResource(d->resourceType, resource, save)) {
+    if (!KisResourceLocator::instance()->addResource(d->resourceType, resource, save ? "memory" : "")) {
         qWarning() << "Failed to add resource" << resource->name();
         return false;
     }

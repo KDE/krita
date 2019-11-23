@@ -157,14 +157,14 @@ void TestResourceLocator::testDocumentStorage()
 
     KisResourceStorageSP documentStorage = QSharedPointer<KisResourceStorage>::create(documentName);
     KoResourceSP resource(new DummyResource("test"));
-    documentStorage->addResource(ResourceType::PaintOpPresets, resource);
+    documentStorage->addResource(resource);
 
-    m_locator->addDocumentStorage(documentName, documentStorage);
+    m_locator->addStorage(documentName, documentStorage);
 
     QVERIFY(model->rowCount() > rowcount);
-    QVERIFY(m_locator->hasDocumentStorage(documentName));
-    m_locator->removeDocumentStorage(documentName);
-    QVERIFY(!m_locator->hasDocumentStorage(documentName));
+    QVERIFY(m_locator->hasStorage(documentName));
+    m_locator->removeStorage(documentName);
+    QVERIFY(!m_locator->hasStorage(documentName));
     QVERIFY(model->rowCount() == rowcount);
 }
 

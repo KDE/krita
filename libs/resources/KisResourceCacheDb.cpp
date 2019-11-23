@@ -424,7 +424,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
     return r;
 }
 
-bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType, bool temporary)
+bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType)
 {
     bool r = false;
 
@@ -438,6 +438,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
         // We don't care about invalid resources and will just ignore them.
         return true;
     }
+    bool temporary = (storage->type() == KisResourceStorage::StorageType::Memory);
 
     // Check whether it already exists
     int resourceId = resourceIdForResource(resource->name(), resourceType, KisResourceLocator::instance()->makeStorageLocationRelative(storage->location()));

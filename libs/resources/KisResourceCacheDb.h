@@ -90,7 +90,7 @@ private:
      * @return true if the database was succesfully updated
      */
     static bool addResourceVersion(int resourceId, QDateTime timestamp, KisResourceStorageSP storage, KoResourceSP resource);
-    static bool addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType, bool temporary = false);
+    static bool addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType);
     static bool addResources(KisResourceStorageSP storage, QString resourceType);
 
     /// Make this resource inactive; this does not remove the resource from disk or from the database

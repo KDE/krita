@@ -146,19 +146,42 @@ public:
     KisResourceStorage &operator=(const KisResourceStorage &rhs);
     KisResourceStorageSP clone() const;
 
+    /// The filename of the storage if it's a bundle or Adobe Library. This can
+    /// also be empty (for the folder storage) or "memory" for the storage for
+    /// temporary resources, a UUID for storages associated with documents.
     QString name() const;
+
+    /// The absolute location of the storage
     QString location() const;
+
+    /// true if the storage exists and can be used
     bool valid() const;
+
+    /// The type of the storage
     StorageType type() const;
+
+    /// The time and date when the storage was last modified, or created
+    /// for memory storages.
     QDateTime timestamp() const;
 
+    /// And entry in the storage; this is not the loaded resource
     ResourceItem resourceItem(const QString &url);
+
+    /// The loaded resource for an entry in the storage
     KoResourceSP resource(const QString &url);
+
+    /// An iterator over all the resources in the storage
     QSharedPointer<ResourceIterator> resources(const QString &resourceType) const;
+
+    /// An iterator over all the tags in the resource
     QSharedPointer<TagIterator> tags(const QString &resourceType) const;
 
+    /// Adds a tag to the storage, however, it does not store the links between
+    /// tags and resources.
     bool addTag(const QString &resourceType, KisTagSP tag);
-    bool addResource(const QString &resourceType, KoResourceSP resource);
+
+    /// Adds the given resource to the storage.
+    bool addResource(KoResourceSP resource);
 
     static const QString s_meta_generator;
     static const QString s_meta_author;

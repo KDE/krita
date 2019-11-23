@@ -77,7 +77,6 @@ KisResourceLocator *KisResourceLocator::instance()
 
 KisResourceLocator::~KisResourceLocator()
 {
-    KisResourceCacheDb::deleteTemporaryResources();
 }
 
 KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &installationResourcesLocation)

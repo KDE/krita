@@ -282,7 +282,6 @@ bool KisResourceCacheDb::initialize(const QString &location)
     }
 
     // Delete all storages that are no longer known to the resource locator (including the memory storages)
-
     deleteTemporaryResources();
 
     return s_valid;

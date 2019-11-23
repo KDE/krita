@@ -63,6 +63,9 @@ public:
      */
     static bool initialize(const QString &location);
 
+    /// Delete all storages that are Unknown or Memory and all resources that are marked temporary or belong to Unknown or Memory storages
+    static void deleteTemporaryResources();
+
 private:
 
     friend class KisResourceLocator;
@@ -101,9 +104,6 @@ private:
     static bool addStorage(KisResourceStorageSP storage, bool preinstalled);
     static bool deleteStorage(KisResourceStorageSP storage);
     static bool synchronizeStorage(KisResourceStorageSP storage);
-
-    /// Delete all storages that are Unknown or Memory and all resources that are marked temporary or belong to Unknown or Memory storages
-    static void deleteTemporaryResources();
 
     /**
      * @brief metaDataForId

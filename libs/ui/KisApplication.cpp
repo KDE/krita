@@ -657,6 +657,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
 KisApplication::~KisApplication()
 {
+    KisResourceCacheDb::deleteTemporaryResources();
 }
 
 void KisApplication::setSplashScreen(QWidget *splashScreen)

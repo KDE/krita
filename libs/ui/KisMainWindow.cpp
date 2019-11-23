@@ -109,6 +109,7 @@
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceIterator.h>
 #include <KisResourceTypes.h>
+#include <KisResourceCacheDb.h>
 
 #ifdef Q_OS_ANDROID
 #include <KisAndroidFileManager.h>

@@ -38,6 +38,7 @@
 #include <QToolButton>
 #include <QWheelEvent>
 #include <QLineEdit>
+#include <QComboBox>
 
 #include <klocalizedstring.h>
 
@@ -59,7 +60,7 @@
 #include "KisResourceTaggingManager.h"
 #include "KisTagModelProvider.h"
 
-
+#include "KisStorageChooserWidget.h"
 #include "kis_assert.h"
 
 
@@ -80,6 +81,7 @@ public:
     KisResourceItemListView *view {0};
     QButtonGroup *buttonGroup {0};
     QToolButton *viewModeButton {0};
+    KisStorageChooserWidget *storagePopupButton {0};
 
     QScrollArea *previewScroller {0};
     QLabel *previewLabel {0};
@@ -195,13 +197,17 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->viewModeButton->setPopupMode(QToolButton::InstantPopup);
     d->viewModeButton->setVisible(false);
     d->tagManager = new KisResourceTaggingManager(KisTagModelProvider::tagModel(resourceType), d->tagFilterProxyModel, this);
+
+    d->storagePopupButton = new KisStorageChooserWidget(this);
+
     connect(d->tagManager, SIGNAL(updateView()), this, SLOT(updateView()));
 
     layout->addWidget(d->tagManager->tagChooserWidget(), 0, 0);
     layout->addWidget(d->viewModeButton, 0, 1);
-    layout->addWidget(d->splitter, 1, 0, 1, 2);
-    layout->addWidget(d->tagManager->tagFilterWidget(), 2, 0, 1, 2);
-    layout->addLayout(d->buttonLayout, 3, 0, 1, 2);
+    layout->addWidget(d->storagePopupButton, 0, 2);
+    layout->addWidget(d->splitter, 1, 0, 1, 3);
+    layout->addWidget(d->tagManager->tagFilterWidget(), 2, 0, 1, 3);
+    layout->addLayout(d->buttonLayout, 3, 0, 1, 3);
     layout->setMargin(0);
     layout->setSpacing(0);
 
@@ -538,4 +544,5 @@ void KisResourceItemChooser::updateView()
     d->viewModeButton->setIcon(koIcon("view-choose"));
     d->importButton->setIcon(koIcon("document-open"));
     d->deleteButton->setIcon(koIcon("trash-empty"));
+    d->storagePopupButton->setIcon(koIcon("bundle_archive"));
 }

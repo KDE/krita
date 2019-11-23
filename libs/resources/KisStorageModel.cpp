@@ -114,8 +114,10 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
 
 bool KisStorageModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    qDebug() << "attempting to set data..." << index;
     if (index.isValid()) {
         if (role == Qt::CheckStateRole) {
+            qDebug() << "checkstate role" << value.toBool();
             QSqlQuery q;
             bool r = q.prepare("UPDATE storages\n"
                                "SET    active = :active\n"

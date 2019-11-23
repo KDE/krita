@@ -12,6 +12,7 @@ set(kritaresourcewidgets_LIB_SRCS
     KisTagFilterWidget.cpp
     KisTagToolButton.cpp
     KisResourceTaggingManager.cpp
+    KisStorageChooserWidget.cpp
 )
 
 add_library(kritaresourcewidgets SHARED ${kritaresourcewidgets_LIB_SRCS})

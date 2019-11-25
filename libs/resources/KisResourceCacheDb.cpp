@@ -956,7 +956,6 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             }
 
             while (q.next()) {
-                qDebug() << "\tFound in database" << q.value(0) << q.value(1) << "is in resources on disk" << resourcesOnDisk.contains(q.value(1).toString());
                 if (!resourcesOnDisk.contains(q.value(1).toString())) {
                     resourcesToBeDeleted << q.value(0).toInt();
                 }
@@ -997,7 +996,6 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 
 void KisResourceCacheDb::deleteTemporaryResources()
 {
-
     QSqlDatabase::database().transaction();
 
     QSqlQuery q;
@@ -1005,10 +1003,12 @@ void KisResourceCacheDb::deleteTemporaryResources()
     if (!q.prepare("DELETE FROM versioned_resources\n"
                    "WHERE  storage_id in (SELECT id\n"
                    "                      FROM   storages\n"
-                   "                      WHERE  storage_type_id < 3)"))
+                   "                      WHERE  storage_type_id == :storage_type)"))
     {
         qWarning() << "Could not prepare delete versioned resources from Unknown or Memory storages query." << q.lastError();
     }
+
+    q.bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
 
     if (!q.exec()) {
         qWarning() << "Could not execute delete versioned resources from Unknown or Memory storages query." << q.lastError();
@@ -1017,10 +1017,12 @@ void KisResourceCacheDb::deleteTemporaryResources()
     if (!q.prepare("DELETE FROM resources\n"
                    "WHERE  storage_id in (SELECT id\n"
                    "                      FROM   storages\n"
-                   "                      WHERE  storage_type_id < 3)"))
+                   "                      WHERE  storage_type_id  == :storage_type)"))
     {
         qWarning() << "Could not prepare delete resources from Unknown or Memory storages query." << q.lastError();
     }
+
+    q.bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
 
     if (!q.exec()) {
         qWarning() << "Could not execute delete resources from Unknown or Memory storages query." << q.lastError();
@@ -1048,10 +1050,12 @@ void KisResourceCacheDb::deleteTemporaryResources()
     }
 
     if (!q.prepare("DELETE FROM storages\n"
-                   "WHERE  storage_type_id < 3\n"))
+                   "WHERE  storage_type_id  == :storage_type\n"))
     {
         qWarning() << "Could not prepare delete Unknown or Memory storages query." << q.lastError();
     }
+
+    q.bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
 
     if (!q.exec()) {
         qWarning() << "Could not execute delete Unknown or Memory storages query." << q.lastError();

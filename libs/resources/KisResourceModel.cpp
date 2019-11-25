@@ -222,6 +222,49 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
     return v;
 }
 
+QVariant KisResourceModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    QVariant v = QVariant();
+    if (role != Qt::DisplayRole) {
+        return v;
+    }
+    if (orientation == Qt::Horizontal) {
+        switch(section) {
+        case Id:
+            v = i18n("Id");
+            break;
+        case StorageId:
+            v = i18n("Storage ID");
+            break;
+        case Name:
+            v = i18n("Name");
+            break;
+        case Filename:
+            v = i18n("File Name");
+            break;
+        case Tooltip:
+            v = i18n("Tooltip");
+            break;
+        case Image:
+            v = i18n("Image");
+            break;
+        case Status:
+            v = i18n("Status");
+            break;
+        case Location:
+            v = i18n("Location");
+            break;
+        case ResourceType:
+            v = i18n("Resource Type");
+            break;
+        default:
+            v = QString::number(section);
+        }
+        return v;
+    }
+    return QAbstractItemModel::headerData(section, orientation, role);
+}
+
 //static int s_i2 {0};
 
 KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const

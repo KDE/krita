@@ -37,13 +37,15 @@ KisStorageChooserDelegate::KisStorageChooserDelegate(QObject *parent)
 
 void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    if (!index.isValid()) return;
+
+    painter->save();
+
     QString location = index.data(Qt::UserRole + KisStorageModel::Location).value<QString>();
+    location = location.split("/").last();
+    location = location.split(".").first();
+    location = location.split("_").join(" ");
     bool active = index.data(Qt::UserRole + KisStorageModel::Active).value<bool>();
-
-    if (option.state & QStyle::State_Selected) {
-        painter->fillRect(option.rect, option.palette.highlight());
-    }
-
     QString storageType = index.data(Qt::UserRole + KisStorageModel::StorageType).value<QString>();
     QPixmap picture = QPixmap(option.decorationSize);
     if (storageType == "Folder") {
@@ -59,17 +61,24 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
     if (location.isEmpty()) {
         location = QString::number(index.row());
     }
+
     QColor penColor(option.palette.text().color());
-    if (!active) {
-        penColor.setAlphaF(0.6);
+
+    QStyleOptionViewItem opt = option;
+
+    if (active) {
+        opt.state = QStyle::State_Sunken;
     }
+
+    QApplication::style()->drawPrimitive(QStyle::PE_PanelButtonTool, &opt, painter);
+
     painter->setPen(penColor);
-    painter->drawText(option.rect, 0, location);
+    painter->drawImage(option.rect.topLeft(), picture.toImage(), picture.rect());
+    QRect text = option.rect;
+    text.setLeft(text.left()+option.decorationSize.width()+2);
+    painter->drawText(text, 0, location);
 
-    if (!active) {
-        QApplication::style()->drawControl(QStyle::CE_PushButton, &option, painter, 0);
-    }
-
+    painter->restore();
 }
 
 QSize KisStorageChooserDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -83,7 +92,7 @@ KisStorageChooserWidget::KisStorageChooserWidget(QWidget *parent) : KisPopupButt
 {
     QListView *view = new QListView(this);
     view->setModel(KisStorageModel::instance());
-    view->setIconSize(QSize(32, 32));
+    view->setIconSize(QSize(64, 64));
     view->setItemDelegate(new KisStorageChooserDelegate(this));
     view->setSelectionMode(QAbstractItemView::SingleSelection);
     connect(view, SIGNAL(clicked(QModelIndex)), this, SLOT(activated(QModelIndex)));

@@ -52,6 +52,8 @@ public:
 
     KisResourceStorageSP storageForId(const QModelIndex &index) const;
 
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+
 private:
 
     KisStorageModel(const KisStorageModel&);

@@ -21,6 +21,12 @@
          <height>48</height>
         </size>
        </property>
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderStretchLastSection">
+        <bool>true</bool>
+       </attribute>
       </widget>
      </item>
      <item>
@@ -47,7 +53,8 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset theme="new"/>
+          <iconset theme="new">
+           <normaloff>.</normaloff>.</iconset>
          </property>
         </widget>
        </item>
@@ -60,7 +67,8 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset theme="add"/>
+          <iconset theme="add">
+           <normaloff>.</normaloff>.</iconset>
          </property>
         </widget>
        </item>
@@ -73,7 +81,8 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset theme="delete"/>
+          <iconset theme="delete">
+           <normaloff>.</normaloff>.</iconset>
          </property>
         </widget>
        </item>

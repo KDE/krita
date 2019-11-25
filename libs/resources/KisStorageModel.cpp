@@ -167,6 +167,43 @@ KisResourceStorageSP KisStorageModel::storageForId(const QModelIndex &index) con
     return KisResourceLocator::instance()->storageByLocation(index.data(Qt::UserRole + Location).toString());
 }
 
+QVariant KisStorageModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    QVariant v = QVariant();
+    if (role != Qt::DisplayRole) {
+        return v;
+    }
+    if (orientation == Qt::Horizontal) {
+        switch(section) {
+        case 0:
+            v = i18n("Id");
+            break;
+        case 1:
+            v = i18n("Type");
+            break;
+        case 2:
+            v = i18n("Location");
+            break;
+        case 3:
+            v = i18n("Creation Date");
+            break;
+        case 4:
+            v = i18n("Preinstalled");
+            break;
+        case 5:
+            v = i18n("Active");
+            break;
+        case 6:
+            v = i18n("Thumbnail");
+            break;
+        default:
+            v = QString::number(section);
+        }
+        return v;
+    }
+    return QAbstractTableModel::headerData(section, orientation, role);
+}
+
 bool KisStorageModel::prepareQuery()
 {
     beginResetModel();

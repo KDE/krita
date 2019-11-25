@@ -125,9 +125,9 @@ void KisStorageChooserDelegate::toggleStorage(bool toggle)
 KisStorageChooserWidget::KisStorageChooserWidget(QWidget *parent) : KisPopupButton(parent)
 {
     QListView *view = new QListView(this);
-    view->setModel(KisStorageModel::instance());
-    view->setIconSize(QSize(80, 80));
-    view->setItemDelegate(new KisStorageChooserDelegate(view, this));
+//    view->setModel(KisStorageModel::instance());
+//    view->setIconSize(QSize(80, 80));
+//    view->setItemDelegate(new KisStorageChooserDelegate(view, this));
     this->setPopupWidget(view);
 }
 

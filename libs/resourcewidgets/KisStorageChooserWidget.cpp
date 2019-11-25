@@ -47,19 +47,36 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
     location = location.split("_").join(" ");
     bool active = index.data(Qt::UserRole + KisStorageModel::Active).value<bool>();
     QString storageType = index.data(Qt::UserRole + KisStorageModel::StorageType).value<QString>();
-    QPixmap picture = QPixmap(option.decorationSize);
-    if (storageType == "Folder") {
-        picture = koIcon("document-open").pixmap(option.decorationSize);
-    }
-    else if (storageType == "Memory") {
-        picture = koIcon("document-new").pixmap(option.decorationSize);
-    }
-    else {
-        picture = koIcon("bundle_archive").pixmap(option.decorationSize);
-    }
 
-    if (location.isEmpty()) {
-        location = QString::number(index.row());
+    QImage thumbnail = index.data(Qt::UserRole +  + KisStorageModel::Thumbnail).value<QImage>();
+
+    if (thumbnail.isNull()) {
+        //fallback on cute icons.
+        thumbnail = koIcon("warning").pixmap(option.decorationSize).toImage();
+        if (storageType == "Folder") {
+            thumbnail = koIcon("document-open").pixmap(option.decorationSize).toImage();
+        }
+        else if (storageType == "Adobe Style Library") {
+            thumbnail = koIcon("layer-style-enabled").pixmap(option.decorationSize).toImage();
+            thumbnail = thumbnail.scaled(option.decorationSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+        }
+        else if (storageType == "Adobe Brush Library") {
+            thumbnail = koIcon("select-all").pixmap(option.decorationSize).toImage();
+        }
+        else if (storageType == "Memory") {
+            if (location.startsWith("{")) {
+                thumbnail = koIcon("document-new").pixmap(option.decorationSize).toImage();
+            } else {
+                thumbnail = koIcon("drive-harddisk").pixmap(option.decorationSize).toImage();
+            }
+
+        }
+        else if (storageType == "Bundle") {
+            thumbnail = koIcon("bundle_archive").pixmap(option.decorationSize).toImage();
+        }
+
+    } else {
+        thumbnail = thumbnail.scaled(option.decorationSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
     QColor penColor(option.palette.text().color());
@@ -73,9 +90,10 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
     QApplication::style()->drawPrimitive(QStyle::PE_PanelButtonTool, &opt, painter);
 
     painter->setPen(penColor);
-    painter->drawImage(option.rect.topLeft(), picture.toImage(), picture.rect());
+    painter->drawImage(option.rect.topLeft()+QPoint(4, 4), thumbnail, thumbnail.rect());
     QRect text = option.rect;
-    text.setLeft(text.left()+option.decorationSize.width()+2);
+    text.setLeft(text.left()+option.decorationSize.width()+8);
+    text.setTop(text.top()+4);
     painter->drawText(text, 0, location);
 
     painter->restore();
@@ -84,7 +102,7 @@ void KisStorageChooserDelegate::paint(QPainter *painter, const QStyleOptionViewI
 QSize KisStorageChooserDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     int w = 400;
-    int h = option.decorationSize.height();
+    int h = option.decorationSize.height()+8;
     return QSize(w, h);
 }
 

@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QScopedPointer>
 
+#include "KisResourceStorage.h"
 #include "kritaresources_export.h"
 
 class KRITARESOURCES_EXPORT KisStorageModel : public QAbstractTableModel
@@ -48,6 +49,8 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
+
+    KisResourceStorageSP storageForId(const QModelIndex &index) const;
 
 private:
 

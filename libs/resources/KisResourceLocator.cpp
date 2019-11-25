@@ -441,15 +441,15 @@ QList<KisResourceStorageSP> KisResourceLocator::storages() const
     return d->storages.values();
 }
 
-KisResourceStorageSP KisResourceLocator::storageByName(const QString &name) const
+KisResourceStorageSP KisResourceLocator::storageByLocation(const QString &location) const
 {
-    if (!d->storages.contains(name)) {
-        qWarning() << "No" << name << "storage defined";
+    if (!d->storages.contains(location)) {
+        qWarning() << "No" << location << "storage defined";
         return 0;
     }
-    KisResourceStorageSP storage = d->storages[name];
+    KisResourceStorageSP storage = d->storages[location];
     if (!storage || !storage->valid()) {
-        qWarning() << "Could not retrieve the" << name << "storage object or the object is not valid";
+        qWarning() << "Could not retrieve the" << location << "storage object or the object is not valid";
         return 0;
     }
 
@@ -458,12 +458,12 @@ KisResourceStorageSP KisResourceLocator::storageByName(const QString &name) cons
 
 KisResourceStorageSP KisResourceLocator::folderStorage() const
 {
-    return storageByName(d->resourceLocation);
+    return storageByLocation(d->resourceLocation);
 }
 
 KisResourceStorageSP KisResourceLocator::memoryStorage() const
 {
-    return storageByName("memory");
+    return storageByLocation("memory");
 }
 
 KisResourceLocator::ResourceStorage KisResourceLocator::getResourceStorage(int resourceId) const

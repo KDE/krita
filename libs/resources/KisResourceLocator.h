@@ -121,6 +121,7 @@ Q_SIGNALS:
 private:
 
     friend class KisResourceModel;
+    friend class KisStorageModel;
     friend class TestResourceLocator;
     friend class TestResourceModel;
     friend class Resource;
@@ -217,7 +218,7 @@ private:
     void findStorages();
     QList<KisResourceStorageSP> storages() const;
 
-    KisResourceStorageSP storageByName(const QString &name) const;
+    KisResourceStorageSP storageByLocation(const QString &location) const;
     KisResourceStorageSP folderStorage() const;
     KisResourceStorageSP memoryStorage() const;
 

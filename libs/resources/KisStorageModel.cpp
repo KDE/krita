@@ -19,6 +19,7 @@
 
 #include <QtSql>
 
+#include <KisResourceLocator.h>
 
 Q_GLOBAL_STATIC(KisStorageModel, s_instance)
 
@@ -159,6 +160,11 @@ bool KisStorageModel::setData(const QModelIndex &index, const QVariant &value, i
 Qt::ItemFlags KisStorageModel::flags(const QModelIndex &index) const
 {
     return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+}
+
+KisResourceStorageSP KisStorageModel::storageForId(const QModelIndex &index) const
+{
+    return KisResourceLocator::instance()->storageByLocation(index.data(Qt::UserRole + Location).toString());
 }
 
 bool KisStorageModel::prepareQuery()
